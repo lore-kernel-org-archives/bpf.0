@@ -1,301 +1,152 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DDA32F748
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 10:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB653BE156
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 11:23:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784199413; cv=pass; b=iXwbiPfWtt2SVAPAr8xKOFs8KEUieZ6HEbrb4FQVkGXwW/bfY7Eh/hJgygoCB5eECupFTLpRu2fnuNKJ3+ZkIH/Cfo/+tDJw//Le2sito7MNiV3n47uec1HWY+M7qvFm8YTkWEHIjzM1JNCcr4vRKLNujjQKKYQUCKdEMACxF/w=
+	t=1784200986; cv=pass; b=WoxZOEkXaseP7xVqNGiUiV0QFyK5FXOZY13JLvgJezYGBTGmw/vX9QOS2MGtCuc/LEwcw1qqpCyaoYehgdB9/mDWejQA/TI8JkxdKuukYsctZjb9ZtS8nwb7+ibf8riANxATrUBenu6f1871k+DYgdLA89S7z2jfaZ9eX2euCiM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784199413; c=relaxed/simple;
-	bh=srL+cMZ1i8YbUEmu2TLX2hhU2kykZPNHq92qtJXugo0=;
+	s=arc-20240116; t=1784200986; c=relaxed/simple;
+	bh=oYH+zCykP3nxD+dABR4pixhBxWPbhrc9AVW3gh7xOi8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dwQ2hKMcOSwkVbi7yhtJCgkMG0IcOHIzq0mpAuwOA+gNTAxWt6epAcjW5UXAOwX2/yp2xH20054akBPGqgBurnvxj+UtZWwyZdn/W7EhDL93iBk7q64mDpoDq6NAqZCb40cWfnD0Wz6FrOb1o+/Teu7x3Qkuo5tWVrzNGlAc+ok=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XRw4Iwtb; arc=pass smtp.client-ip=209.85.167.46
+	 To:Cc:Content-Type; b=rGAvQ2M4JPr+Skw85f000GJB6+5sEIPHesVS/+vwOyC29bvH63k9C5IRBhkG+QNoeOQQzq1hG/mkXQRFhgo2LVbmmUZ51EGOELzhtaLwV7pajoNp8nos4WoLUhek4B220id39NzChh+AGTQYk/ul+KSo+rgTg59RcHs70VZW3CI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qMK/DjKM; arc=pass smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XRw4Iwtb"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5aeae771c49so7458368e87.3
-        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 03:56:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784199409; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qMK/DjKM"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38dcbade417so4687218a91.1
+        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 04:23:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784200984; cv=none;
         d=google.com; s=arc-20260327;
-        b=miB4pPqRBSdVwz6f2CiwLgSKSjZUy0C2s2ES0HrlV3lTumJvwiXv7hfFF5KmdHt5YG
-         vddCjE9ypCNQ0/9hNvjDhNc+9hqLT4htyi3/8wbaVR2XuzaxcWlRewjRji7k93eN2kn9
-         znKHsCzumtJFfagoqwOAFaMNTiVzBCGdOJ5W7JQt9PN9hXWqyijF9tAt0C6lrzfrpG/O
-         6rSt0lPUgKqBKtfwpTUaR7ohX3H5Cw5sf2BJnUKLlHAre5YExesf51NTPTnl6meBAmZv
-         lxMH0TGLltgWn/4iBMusu8IRSHiZHVCwRX7SQPeyO79p2b/1fTj3c6JaKbl5vTCeIgkB
-         mAjA==
+        b=lQmB6i3pfpjSAnhUjtoj1z5ozrQ2WsIDyp8a7/FJLLmtzdYddDeaqpO+3k82tFtTVF
+         UfeL3agE/1SEyI4ty5RuGnnF5VC/cwqPjNEDVLJiTRv1YCEMTbM9qNuXF+ci1/C4h0kH
+         uiD2CFMZUHpcDYdYZxSBTAR3d7TH3R4bbwlXTz5A/G2srdM9//jaqQQ/F22kedXFpn/M
+         g2kxzHyJMhnTUestOdanEg/oOLxwdUgjhhM3uhAJ2ZMXyGg5onXOwUeNbzdouncZchK1
+         d0h4ptnmkCPC+Mw+xf6xlV26ogt+/Gu1oTD1P+A7G07N1aEzImCO+0fdeGqhLNMAcUaD
+         CD9Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=tp7+ky3jAc/0xnKfAUPh02vFiCwKWR3+WZ4dapoaCZg=;
-        fh=LYkPcyzN465ry+l2S4SUrNGR0ixHtWnDL+2GfAXf+zg=;
-        b=hGx5aiKsiCjA6NggrRIyJne2gE6zeM83HS9bf7EZAWah7+TSzH2XFcB6dCv3jcTPl+
-         aBI+Ak/17BPGGByLIgy9uPstGjMtF6GF1e4YpVwa7AhAYTClUb4bfZkLqgDSNWRHP1RX
-         Yzc/rLkX2cXINsxcLnn5B3a1B6L50Pro81q+Elv0rzrT8T87wCxVX6EXSIUGMjH2NUxA
-         joDh/cFcenS57+ZhikeVbmBj9uT+g7d+VI9l1z/axQsW9Kr7vCZOmnTsgY7einUXn0nz
-         MU5hqMmMB8qc6ckQOPyzRdEqbG6fSQgsDvzYnbVcE/T6wMk71xDZQlESEx1cJ3TWuL+P
-         tHmA==;
+        bh=bbRrcnov8km991My2tmYBPDRYU7T4Dy2j7rkUM4ZkWo=;
+        fh=HuzHeZfWtiomWHa9eMt2D76xEOcDr0r8L9UgCgKCFWY=;
+        b=OuerK1wdUfga6g/1Fl8KnId+PiSbV8oT/vKK9UVY0IkpPEUSTz161VDzEJBld6Aoze
+         RdXQow8LQHGbCqsLao6IP+3i6gOJRIlhRXrkSjZt7DY6n9vd/ZAKx2yb5BxDx2NYU3a5
+         Fy8bkZr3cM90HL5PRUwamdXZHxtsvfZeHa7C0mUaVzMVqJeB51BA4ya4/D/lU4APA1tr
+         GTbzNYRiY313QcOkDcyOO0vOqEUc3El4FrbUoCWGyFxy6wRb5YV00tidifrIie9Q6quF
+         dTKpfdnFQZYvH8JqqOSYhgFO722TMSgjhtZ/3hC5XMEH+hRqCmOT0Y+zBvEYXi0g/NSv
+         Yakw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784199409; x=1784804209; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784200984; x=1784805784; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=tp7+ky3jAc/0xnKfAUPh02vFiCwKWR3+WZ4dapoaCZg=;
-        b=XRw4IwtbxnubJvWrrosOYHFARQlvi4jOJsxV8TGTIG/7w1n9yqaDMc9+6B8hsgXCjK
-         nO1MgfMCRqnujffypX2byoFi2gIeII/wiAx90RjqTSxGV9Mkh/tlcosIp6DfFPsDgG9t
-         0hbU36TgqOZx+CQgfTS63sfpBNJTkFdC7uoF6KfXpoXWlQJHIYkogi22z7HYT00Ya1Od
-         dMJ8R14F3zM1mPIihJ9RHj06xf/R3gO4MUkidH+ZFjeujDbW3Jun55UvaGEZpEnSbS8F
-         C8rkANu+rU4zF8VCe0bIUNr+dcmH+nINLBljwMygRGeQnLUGUtOkQ9Mv4Wrk3Qsl4TyG
-         yftA==
+        bh=bbRrcnov8km991My2tmYBPDRYU7T4Dy2j7rkUM4ZkWo=;
+        b=qMK/DjKMBAQMAfvWlS4z7kSfmd3mkSWCFVreY3MyVWlLsBv9TkG+nHTqT/m55aNTWa
+         3d12mpAb0ToCmlMxALLYr82NYP2WW+7CnBNdUbhpenF8pf0KV2qSbHWikY7zX9O0OIi3
+         88pTVkXvswicG+ixEnAEgdAV3GuM9adrV8ymq+lZAtCbBHgH/Uzl5EWEQ1DhoBNiQROn
+         keYFmqKiNv0SlAEIRHrZ7ugMEKR+9HM1Fwn4u6p3ir02jpiQWV6fEklnN+MXk55xHdno
+         7ukWW29lLW9iEBmJYwYiMBaXkrifpiiN3klYI4aOsmHomOxQIZKlOUcGB2i4dEKw6+XO
+         S+nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784199409; x=1784804209;
+        d=1e100.net; s=20251104; t=1784200984; x=1784805784;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=tp7+ky3jAc/0xnKfAUPh02vFiCwKWR3+WZ4dapoaCZg=;
-        b=fvgQn5ZzlPJn72dI7BGPh+pSG6R3pl0Ry47i4inxA60+cC0pQUf2jWNSv3ckvpB3Eo
-         i12y74+It5tlLYvJH3qHs8WwpYzLmql9xUugu8wY8HDW9A/mtCW27RQAwr7c9Uy4nyHj
-         Jts7BI15oo+Ex+ISwphaaGnYo5WqifX7lYviJfnbhGhafEto9qul5U3dN5LkaNp8ah9e
-         hmjsyTw4CnSKS/5fLwkDDMCv5wMZ70KqpJQSNb5huP6Hg9U1BgufR5ilV2L4rnfAXqd5
-         ktucpHao/LkmslpyzEskt/V0twIwlLFHFKSAcSffPhfYtct6SnI3MOEJayJMu5iiPydc
-         dM+Q==
-X-Forwarded-Encrypted: i=1; AHgh+RoMDZ1BNEo1gBVoDz2TqCPMvBjSeISeAewBofAgDGzEZAcDQv5Ts26d17dlFDhFW5bTNVE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9xFnfMoykGYnmgPA8crhiAuluqv8dst5/V6jj6wC8kMsrsnxc
-	TAWzSjpK6vgVfBYw+FPYBxWxmVlOCudYPHqOHyvK+FT73kSVdNvZ/AcsnvHPW+WkjnHrCWFmNEe
-	g+ROyQi6Og93gRcNbnzrQu4MLqF9Qu1OTqMjqfk0=
-X-Gm-Gg: AfdE7cl/6IvclGFIEAlh8oLNuon6v8wdbLkKi2gWbikZMT5lo2W3xZlWFuhxf9XKy7P
-	GQ2ayyQyzTFHzsIx9lKFMnjvyMxyghCcgbvaQmPleennbCK3MM4zHzgN77DbbDnlxnkI183UVfy
-	rjKvs57u2cTKkYsIYAXB3IHnXZ9wZAVYg2GOFSMZijfygIiiHsRdw/xfn0Gm5nPwLeBzGmyHUpj
-	KJNEHFBuPagelt5r2xoLyw4vR0buiBt/2vORBue8ZoDNy36Pv7dDmviEkCZdf3cSI8vFlvQfdGt
-	IH2bvEYS1KL+nFqsp0PoBLkejxk5nITFZ2czLodfWSg+hijHsyrJneVteom0ZFCveuBa7cPJrgE
-	Pqg==
-X-Received: by 2002:a05:6512:340a:b0:5ae:a9eb:c5c6 with SMTP id
- 2adb3069b0e04-5b15d7c3534mr1385587e87.64.1784199408688; Thu, 16 Jul 2026
- 03:56:48 -0700 (PDT)
+        bh=bbRrcnov8km991My2tmYBPDRYU7T4Dy2j7rkUM4ZkWo=;
+        b=GEMAoj1p1Hr/7Z7KpaVMWb4M4XnfkEwIjFmtNtCPnung6gxflrIHZk+4M+dM10OSYk
+         ynHh5hENF+8ldpzPqfE/lrcV/kZr8DD2rdjgzE/EIKTjHyDb353Hml3mDzrmX06d8Vz3
+         kX0X2TFyMEnT5ESGOjEn1Um380VU66sJlk6A1Jw8cfOWAunjYFZTH5LjeMG4d2aFOdGt
+         +TFGRtCeXC/MBUgCJhLiLCwt9PyUPdQ7uoKGFnyB55aqcOgt29Sv5YVRvcBuOdGMzTsL
+         HzA+687RUnKVImRMXutLVElg5sTvVR2O5js5d3VbvFR+RV62nXbGEJuTlOjGdUhMzkFY
+         3nFQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrTgv765T9p2ERjs4iZ0bjNKgWWktba5e6mMEv4azvzlyitho2z19hbHzeSmLP6BbFsnEk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZ8jbj36ZWLfh7JgOcn1V+2QaFvv2Bj+b1y6XtWc0Pv5tdJfhl
+	GzzGAm3/pzMbcJcaKmyk5ld9AK0Nzft0oJQhA1EBaUO2RWdSc15ghIMawSPe8hMQY4PD7/Anvfs
+	wbqohiiVQqD65y/dxrvph8te/cO7RQv4=
+X-Gm-Gg: AfdE7cmP49byQJZLxEYqe1e1HB2gxqrfJM/Ghgk+Rro6Wt1oMxmSkUaMOFKPgBO21tV
+	KDTUjfifJE6ql2Q2JFnkIYF19y6Awx0P4ag7Ve3ywvl6WfwUiVwTBligDjvHYSlZZ/XFtfG/k+O
+	qS3TNW1ikQZmtO7DVrdoA/JZxqTJQ86KKC8tmPk0TKFUR0N98e3r9AHrm7J4uYOmOigufzdwqHL
+	Da94GToseF394DmsAv48Evkd8oGYbCOrIPwPyo9o0RN2VObHf+apfuU/cWLoWbkmzsNDxrbxqss
+	LL9Xio62D4ZfflWrgHE4QHadhbuB8xowAiWCGzTc3fkw/eg1IDzvJTlPOrq8p3ZpQkSu2kgxldd
+	zA/U5JhQpxwXB
+X-Received: by 2002:a05:6a21:101:b0:3c3:9b44:982d with SMTP id
+ adf61e73a8af0-3c39b44f10dmr569369637.42.1784200984341; Thu, 16 Jul 2026
+ 04:23:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260714140722.111645-1-maciej.fijalkowski@intel.com>
- <20260714140722.111645-4-maciej.fijalkowski@intel.com> <CAL+tcoDc-a=Tx3VGfjnPoLq2hWaGCBjUe+NzHeaz=QPvjWEXjA@mail.gmail.com>
- <ali2v31fXqzAKrEP@boxer>
-In-Reply-To: <ali2v31fXqzAKrEP@boxer>
+References: <20260714140722.111645-1-maciej.fijalkowski@intel.com> <20260714140722.111645-2-maciej.fijalkowski@intel.com>
+In-Reply-To: <20260714140722.111645-2-maciej.fijalkowski@intel.com>
 From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Thu, 16 Jul 2026 12:56:09 +0200
-X-Gm-Features: AUfX_mz__VkFdg_WzWWar6G58ddWy9DG0HBXZ2xyYCunyozJ5vc0rXUcXfibzfk
-Message-ID: <CAL+tcoA=OiOMGc7TvubFTCNA9y7MK4UpqCsGfH19YbA_DUKXSw@mail.gmail.com>
-Subject: Re: [PATCH v3 net 3/6] xsk: provide sufficient space in pool->tx_descs
+Date: Thu, 16 Jul 2026 13:22:24 +0200
+X-Gm-Features: AUfX_mxz84KquZjL3HAxXADNfyK7IXrd8-N61IqEcDyytdV68gZc2xvlnpmcRes
+Message-ID: <CAL+tcoAc7d8MSCqK23_pmL2G8tSS-MpfM53brijPntv5A+BA2Q@mail.gmail.com>
+Subject: Re: [PATCH v3 net 1/6] xsk: fix buffer leak in xsk_drop_skb() for
+ AF_XDP multi-buffer Tx
 To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
 	stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	bjorn@kernel.org
+	bjorn@kernel.org, Jason Xing <kernelxing@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 16, 2026 at 12:47=E2=80=AFPM Maciej Fijalkowski
+On Tue, Jul 14, 2026 at 4:08=E2=80=AFPM Maciej Fijalkowski
 <maciej.fijalkowski@intel.com> wrote:
 >
-> On Thu, Jul 16, 2026 at 11:29:49AM +0200, Jason Xing wrote:
-> > On Tue, Jul 14, 2026 at 4:08=E2=80=AFPM Maciej Fijalkowski
-> > <maciej.fijalkowski@intel.com> wrote:
-> > >
-> > > The temporary Tx descriptor array in an XSK buffer pool is currently
-> > > sized from the Tx ring of the socket that creates the pool.
-> > >
-> > > This is insufficient for shared-UMEM Tx. A later socket may have a
-> > > larger Tx ring and submit a valid multi-buffer packet containing more
-> > > descriptors than the first socket's ring, while still remaining withi=
-n
-> > > the device's xdp_zc_max_segs limit.
-> > >
-> > > A packet-framed batch parser bounded by the temporary array cannot re=
-ach
-> > > the end-of-packet descriptor in that case. It leaves the packet on th=
-e
-> > > Tx ring and encounters the same packet on every subsequent attempt,
-> > > stalling Tx processing for that socket.
-> > >
-> > > Size the temporary descriptor array to the larger of the first Tx rin=
-g
-> > > and the device's xdp_zc_max_segs capability. This keeps the array lar=
-ge
-> > > enough to inspect one maximum-sized valid packet. Larger shared Tx ri=
-ngs
-> > > do not require further resizing, as they can be processed over multip=
-le
-> > > batches.
-> > >
-> > > Following commit will actually address the data path side.
-> > >
-> > > Fixes: d5581966040f ("xsk: support ZC Tx multi-buffer in batch API")
-> > > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> >
-> > Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
-> >
-> > I noticed there is one interesting comment[1] from sashiko, which
-> > actually I think is valid. Probably we don't need to do it in the fix,
-> > but we might need to target -next branch. Now the tx_descs is limited
-> > by the first tx ring.
-> >
-> > [1]:
-> > "...since tx_descs is not
-> > reallocated if it already exists, the array size is permanently frozen
-> > to the first socket's size.
-> >
-> > Should the array be resized to accommodate the largest shared ring, or
-> > should the batch readers be updated to cap their reads to the array's
-> > actual size?"
+> From: Jason Xing <kernelxing@tencent.com>
 >
-> My take here is that this set will not break the user space by providing
-> at least pool->xdp_zc_max_segs at pool->tx_descs. Let us rely at least a
-> bit on user's intelligence here - if you would attach one short ring for
-> whatever reason among with bigger ring to the very same umem and whine
-> your performance suck, then I'd say it's on you :P
+> This patch is inspired by the check[1] from sashiko. It says when
+> overflow happens, the address of cq to be published is invalid.
+> Actually the severer thing is the whole process of publishing the
+> address of cq in this particular case is not right: it should truely
+> publish the address and advance the cached_prod in cq as long as it
+> reads descriptors from txq.
 >
-> Hope this makes sense!
+> The following is the full analysis.
+> xsk_drop_skb() is called in three places, which all discard a partially
+> built multi-buffer skb:
+> 1) xsk_build_skb() -EOVERFLOW error path: packet exceeds MAX_SKB_FRAGS
+> 2) __xsk_generic_xmit() post-loop cleanup: an invalid descriptor in
+>    the TX ring prevents the partial packet from completing
+> 3) xsk_release(): socket close while xs->skb holds an incomplete packet
+>
+> In all three cases, the TX descriptors for the already-processed frags
+> have been consumed from the TX ring (xskq_cons_release), and CQ slots
+> have been reserved. However, xsk_drop_skb() calls xsk_consume_skb()
+> which cancels the CQ reservations via xsk_cq_cancel_locked(). Since
+> the buffer addresses never appear in the completion queue, userspace
+> permanently loses track of these buffers.
+>
+> Fix this by letting consume_skb() trigger the existing xsk_destruct_skb
+> destructor, which already submits buffer addresses to the CQ via
+> xsk_cq_submit_addr_locked().
+>
+> Note that cancelling the descriptors back to the TX ring (via
+> xskq_cons_cancel_n) is not a appropriate option because an oversized
+> packet that always exceeds MAX_SKB_FRAGS would be retried indefinitely,
+> which is an obviously deadlock bug in the TX path.
+>
+> Also move the desc->addr assignment in xsk_build_skb() above the
+> overflow check so that the current descriptor's address is recorded
+> before a potential -EOVERFLOW jump to free_err, consistent with the
+> zerocopy path in xsk_build_skb_zerocopy().
+>
+> [1]: https://lore.kernel.org/all/20260425041726.85FB3C2BCB2@smtp.kernel.o=
+rg/
+>
+> Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on Tx path=
+")
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
 
-Sure, unless someone else is screaming at me :)
+Maciej, maybe your tag is missing here?
 
 Thanks,
 Jason
-
->
-> >
-> > Thanks,
-> > Jason
-> >
-> > > ---
-> > >  include/net/xsk_buff_pool.h |  6 ++++--
-> > >  net/xdp/xsk.c               | 10 +++++++---
-> > >  net/xdp/xsk_buff_pool.c     | 12 ++++++++----
-> > >  3 files changed, 19 insertions(+), 9 deletions(-)
-> > >
-> > > diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.=
-h
-> > > index ccb3b350001f..f5e737a83055 100644
-> > > --- a/include/net/xsk_buff_pool.h
-> > > +++ b/include/net/xsk_buff_pool.h
-> > > @@ -102,12 +102,14 @@ struct xsk_buff_pool {
-> > >
-> > >  /* AF_XDP core. */
-> > >  struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
-> > > -                                               struct xdp_umem *umem=
-);
-> > > +                                               struct xdp_umem *umem=
-,
-> > > +                                               u32 max_segs);
-> > >  int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *dev=
-,
-> > >                   u16 queue_id, u16 flags);
-> > >  int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock=
- *umem_xs,
-> > >                          struct net_device *dev, u16 queue_id);
-> > > -int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *x=
-s);
-> > > +int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *x=
-s,
-> > > +                     u32 max_segs);
-> > >  void xp_destroy(struct xsk_buff_pool *pool);
-> > >  void xp_get_pool(struct xsk_buff_pool *pool);
-> > >  bool xp_put_pool(struct xsk_buff_pool *pool);
-> > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > > index 43791647cf18..385a3f4a1b32 100644
-> > > --- a/net/xdp/xsk.c
-> > > +++ b/net/xdp/xsk.c
-> > > @@ -1525,7 +1525,8 @@ static int xsk_bind(struct socket *sock, struct=
- sockaddr_unsized *addr, int addr
-> > >                          * and/or device.
-> > >                          */
-> > >                         xs->pool =3D xp_create_and_assign_umem(xs,
-> > > -                                                            umem_xs-=
->umem);
-> > > +                                                            umem_xs-=
->umem,
-> > > +                                                            dev->xdp=
-_zc_max_segs);
-> > >                         if (!xs->pool) {
-> > >                                 err =3D -ENOMEM;
-> > >                                 sockfd_put(sock);
-> > > @@ -1557,7 +1558,8 @@ static int xsk_bind(struct socket *sock, struct=
- sockaddr_unsized *addr, int addr
-> > >                          * utilizes
-> > >                          */
-> > >                         if (xs->tx && !xs->pool->tx_descs) {
-> > > -                               err =3D xp_alloc_tx_descs(xs->pool, x=
-s);
-> > > +                               err =3D xp_alloc_tx_descs(xs->pool, x=
-s,
-> > > +                                                       dev->xdp_zc_m=
-ax_segs);
-> > >                                 if (err) {
-> > >                                         xp_put_pool(xs->pool);
-> > >                                         xs->pool =3D NULL;
-> > > @@ -1575,7 +1577,9 @@ static int xsk_bind(struct socket *sock, struct=
- sockaddr_unsized *addr, int addr
-> > >                 goto out_unlock;
-> > >         } else {
-> > >                 /* This xsk has its own umem. */
-> > > -               xs->pool =3D xp_create_and_assign_umem(xs, xs->umem);
-> > > +               xs->pool =3D xp_create_and_assign_umem(xs, xs->umem,
-> > > +                                                    dev->xdp_zc_max_=
-segs);
-> > > +
-> > >                 if (!xs->pool) {
-> > >                         err =3D -ENOMEM;
-> > >                         goto out_unlock;
-> > > diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> > > index 1f28a9641571..12c9fb29af05 100644
-> > > --- a/net/xdp/xsk_buff_pool.c
-> > > +++ b/net/xdp/xsk_buff_pool.c
-> > > @@ -42,9 +42,12 @@ void xp_destroy(struct xsk_buff_pool *pool)
-> > >         kvfree(pool);
-> > >  }
-> > >
-> > > -int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *x=
-s)
-> > > +int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *x=
-s,
-> > > +                     u32 max_segs)
-> > >  {
-> > > -       pool->tx_descs =3D kvzalloc_objs(*pool->tx_descs, xs->tx->nen=
-tries);
-> > > +       u32 nentries =3D max(xs->tx->nentries, max_segs);
-> > > +
-> > > +       pool->tx_descs =3D kvzalloc_objs(*pool->tx_descs, nentries);
-> > >         if (!pool->tx_descs)
-> > >                 return -ENOMEM;
-> > >
-> > > @@ -52,7 +55,8 @@ int xp_alloc_tx_descs(struct xsk_buff_pool *pool, s=
-truct xdp_sock *xs)
-> > >  }
-> > >
-> > >  struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
-> > > -                                               struct xdp_umem *umem=
-)
-> > > +                                               struct xdp_umem *umem=
-,
-> > > +                                               u32 max_segs)
-> > >  {
-> > >         bool unaligned =3D umem->flags & XDP_UMEM_UNALIGNED_CHUNK_FLA=
-G;
-> > >         struct xsk_buff_pool *pool;
-> > > @@ -69,7 +73,7 @@ struct xsk_buff_pool *xp_create_and_assign_umem(str=
-uct xdp_sock *xs,
-> > >                 goto out;
-> > >
-> > >         if (xs->tx)
-> > > -               if (xp_alloc_tx_descs(pool, xs))
-> > > +               if (xp_alloc_tx_descs(pool, xs, max_segs))
-> > >                         goto out;
-> > >
-> > >         pool->chunk_mask =3D ~((u64)umem->chunk_size - 1);
-> > > --
-> > > 2.43.0
-> > >
