@@ -1,32 +1,32 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EFB42F71F
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 14:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C8542D76F
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 14:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784212148; cv=none; b=FwgdEFUCOHrZ9eDt9yiHoaBqoXzgvzNhZSEAIZFb+ZnH3zh9XTZnkTJbcNqXUqL4k1woBxCG+MPaNCk2b/TeGAWsv9BP2dVBb/9enDkMZK/9qsnqbItEpqDkoj+W3H7KcoV+Kwpcajh9cIXw3hH6yTqKD7fWyf3KTXFdBKh9UjI=
+	t=1784212197; cv=none; b=NaVBfHndeN3+B7f81fs+OVw3Km4/3ROll993Pr1sG7LzECwDycSy625vZyfZ5Z/UTjEOPggjBzlxoQxBLqpmfbh4gsB3lmQzHlwCC+U/vk55A2PuwZIbK0/fGS9nm92p/ovaXO0oZcETrDENtfsYHBovgBBXFdC/idU27l5wkp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784212148; c=relaxed/simple;
-	bh=m2dzVoqI8XAWj2ycfPSQkIQLOjCvq6cIUNWx365btec=;
+	s=arc-20240116; t=1784212197; c=relaxed/simple;
+	bh=BxxAqyrCeGCBpKdz8J5FEt2zbeWNR4gQoleYdcIgo9k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FBQwoO/UwiOkL2FzR88zsWzsbbVXRNt0YSmGkcamXYB42dmDv+LbxDu1OEJCT1muPpak3WHY1UBIF/n6pZeul97lsQ2VsgATjUSnuxyJrddeHWONeNn2b/MVhV5dGXaqyIRz0t06jIyrXUFdBBJhI0dhxr47njw30Rsuk2Jj2Bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gT6wB3S0; arc=none smtp.client-ip=95.215.58.178
+	 MIME-Version; b=ZFjiJ6s0ovw5K7hW9C+pvzJR7nGJ7MUSP91utLsXryxA+x3jY9QqlPobTpY//kExlbbDx6cHThtqr+0k5YN0wQgToMh6AorP6Vx8XnB4gYg3zOycegRWKrE1KHLMzf+SNri8CqehV/J6bNuI6FY31Vs8zd+JAsoM4jAPEdsMOXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Pg5jj6Xz; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gT6wB3S0"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Pg5jj6Xz"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784212143;
+	t=1784212193;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uoY/N/ojtKzgaX5M5kqWpsRSKeYM7+C0F5rloiA8XWo=;
-	b=gT6wB3S0aIz17LheDmG0eppQnm+V6GWaAP744H/GDsf3i+wzSDCKGTpnnRKZB4APYqO88j
-	y5LmP6jys50UmB93zBhZQEQ9FDDZc1XgL76YitCQFK3sw30qcOgj2B7uClapcctHjNh83c
-	h0E0HCoFhz9BCdq9me627fi12a/LdWU=
+	bh=plL3HlABGOEsUMf+ise3vo4iORw/dt9juCk3f8Huqvk=;
+	b=Pg5jj6XzDHjqPeNr+qBMawEEos7qWCrpY7VZHl3OojDj4zI24sPWgb5tJjjaNreWc6VUJn
+	4v3abesDzHRftzcK8VyFrnNAhUMAwwo13lCXaHzrQ7OQLrjpOH5F1UhP27Xv2PIAvuC5ds
+	0wORqEe482fuWWcTRAv3dAWvp0XQvrM=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org,
 	memxor@gmail.com
@@ -47,9 +47,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 2/3] selftests/bpf: Run arena tests serially
-Date: Thu, 16 Jul 2026 22:24:59 +0800
-Message-ID: <20260716142746.8794-2-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Add tests for memory usage for arena
+Date: Thu, 16 Jul 2026 22:25:00 +0800
+Message-ID: <20260716142746.8794-3-jiayuan.chen@linux.dev>
 In-Reply-To: <20260716142746.8794-1-jiayuan.chen@linux.dev>
 References: <20260716142746.8794-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -61,129 +61,198 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Every arena reserves a 4GB kernel vmalloc region at creation. On a KASAN
-build that eagerly populates ~512MB of shadow memory per arena. Running the
-arena tests in parallel keeps several arenas alive at once, which exhausts
-the memory of a small CI VM and trips the OOM killer during map creation.
+Allocate and free arena pages, both from BPF and via user-space fault-in,
+and check that the map's memlock in fdinfo tracks the number of pages that
+are actually populated.
 
-Make the arena tests serial so at most one arena is alive at a time.
+Like the other arena tests it runs serially.
+
+test:
+  ./test_progs -a arena_mem_usage
+  #5       arena_mem_usage:OK
+  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
 
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- tools/testing/selftests/bpf/prog_tests/arena_atomics.c      | 2 +-
- tools/testing/selftests/bpf/prog_tests/arena_direct_value.c | 2 +-
- tools/testing/selftests/bpf/prog_tests/arena_htab.c         | 2 +-
- tools/testing/selftests/bpf/prog_tests/arena_list.c         | 2 +-
- tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c    | 2 +-
- tools/testing/selftests/bpf/prog_tests/arena_strsearch.c    | 2 +-
- tools/testing/selftests/bpf/prog_tests/libarena.c           | 2 +-
- tools/testing/selftests/bpf/prog_tests/libarena_asan.c      | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
+ .../bpf/prog_tests/arena_mem_usage.c          | 122 ++++++++++++++++++
+ .../selftests/bpf/progs/arena_mem_usage.c     |  39 ++++++
+ 2 files changed, 161 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_mem_usage.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_atomics.c b/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
-index d98577a6babc..1ad5d03d07ad 100644
---- a/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
-@@ -222,7 +222,7 @@ static void test_store_release(struct arena_atomics *skel)
- 		  "store_release64_result");
- }
- 
--void test_arena_atomics(void)
-+void serial_test_arena_atomics(void)
- {
- 	struct arena_atomics *skel;
- 	int err;
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
-index 4b4adb3f4b71..01fcf4965ea4 100644
---- a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
-@@ -66,7 +66,7 @@ static void test_arena_direct_value_one_past_end(void)
- 	close(map_fd);
- }
- 
--void test_arena_direct_value(void)
-+void serial_test_arena_direct_value(void)
- {
- 	if (test__start_subtest("one_past_end"))
- 		test_arena_direct_value_one_past_end();
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_htab.c b/tools/testing/selftests/bpf/prog_tests/arena_htab.c
-index d69fd2465f53..91ccf0402980 100644
---- a/tools/testing/selftests/bpf/prog_tests/arena_htab.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_htab.c
-@@ -81,7 +81,7 @@ static void test_arena_htab_asm(void)
- 	arena_htab_asm__destroy(skel);
- }
- 
--void test_arena_htab(void)
-+void serial_test_arena_htab(void)
- {
- 	if (test__start_subtest("arena_htab_llvm"))
- 		test_arena_htab_llvm();
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_list.c b/tools/testing/selftests/bpf/prog_tests/arena_list.c
-index 4f2866a615ce..2648e06f53d0 100644
---- a/tools/testing/selftests/bpf/prog_tests/arena_list.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_list.c
-@@ -68,7 +68,7 @@ static void test_arena_list_add_del(int cnt, bool nonsleepable)
- 	arena_list__destroy(skel);
- }
- 
--void test_arena_list(void)
-+void serial_test_arena_list(void)
- {
- 	if (test__start_subtest("arena_list_1"))
- 		test_arena_list_add_del(1, false);
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
-index acb9d53b5973..545b05d7a0aa 100644
---- a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
-@@ -101,7 +101,7 @@ static void test_arena_spin_lock_size(int size)
- 	return;
- }
- 
--void test_arena_spin_lock(void)
-+void serial_test_arena_spin_lock(void)
- {
- 	repeat = 1000;
- 	if (test__start_subtest("arena_spin_lock_1"))
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_strsearch.c b/tools/testing/selftests/bpf/prog_tests/arena_strsearch.c
-index f81a0c066505..0c1c6cbfa0f1 100644
---- a/tools/testing/selftests/bpf/prog_tests/arena_strsearch.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_strsearch.c
-@@ -23,7 +23,7 @@ static void test_arena_str(void)
- 	arena_strsearch__destroy(skel);
- }
- 
--void test_arena_strsearch(void)
-+void serial_test_arena_strsearch(void)
- {
- 	if (test__start_subtest("arena_strsearch"))
- 		test_arena_str();
-diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/testing/selftests/bpf/prog_tests/libarena.c
-index ba5a5a50f7c0..df7e4b8dc394 100644
---- a/tools/testing/selftests/bpf/prog_tests/libarena.c
-+++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
-@@ -202,7 +202,7 @@ static void run_libarena_parallel_test(struct libarena *skel, struct bpf_program
- 	run_libarena_parallel_fini(skel, name, prefixlen);
- }
- 
--void test_libarena(void)
-+void serial_test_libarena(void)
- {
- 	struct arena_alloc_reserve_args args;
- 	struct libarena *skel;
-diff --git a/tools/testing/selftests/bpf/prog_tests/libarena_asan.c b/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
-index f897405f701d..9c31b17dbf39 100644
---- a/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
-+++ b/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
-@@ -85,7 +85,7 @@ static void run_test(void)
-  * Run the test depending on whether LLVM can compile arena ASAN
-  * programs.
-  */
--void test_libarena_asan(void)
-+void serial_test_libarena_asan(void)
- {
- #ifdef HAS_BPF_ARENA_ASAN
- 	run_test();
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c b/tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c
+new file mode 100644
+index 000000000000..14c2d1a1d673
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c
+@@ -0,0 +1,122 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <sys/user.h>
++#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
++#include <unistd.h>
++#define PAGE_SIZE getpagesize()
++#endif
++
++#include "arena_mem_usage.skel.h"
++
++/*
++ * arena_map_mem_usage() is surfaced to user space through the map's
++ * /proc/<pid>/fdinfo/<fd> "memlock:" line (the same value bpftool map show
++ * prints). Read it directly so the test has no external dependency.
++ */
++static long map_memlock(int map_fd)
++{
++	char path[64], line[128];
++	long memlock = -1;
++	FILE *f;
++
++	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", map_fd);
++	f = fopen(path, "r");
++	if (!ASSERT_OK_PTR(f, "open_fdinfo"))
++		return -1;
++	while (fgets(line, sizeof(line), f)) {
++		if (sscanf(line, "memlock:\t%ld", &memlock) == 1)
++			break;
++	}
++	fclose(f);
++	ASSERT_NEQ(memlock, -1, "parse_memlock");
++	return memlock;
++}
++
++static int run(struct bpf_program *prog, const char *name)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	int err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
++
++	if (!ASSERT_OK(err, name))
++		return -1;
++	if (!ASSERT_OK(opts.retval, name))
++		return -1;
++	return 0;
++}
++
++void serial_test_arena_mem_usage(void)
++{
++	struct arena_mem_usage *skel;
++	const long ps = PAGE_SIZE;
++	char *base;
++	size_t sz;
++	int fd, i;
++
++	skel = arena_mem_usage__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_load"))
++		return;
++	fd = bpf_map__fd(skel->maps.arena);
++
++	/* Fresh arena: no data pages, and the scratch page is not counted. */
++	ASSERT_EQ(map_memlock(fd), 0, "initial");
++
++	/* BPF-side allocation of 17 pages. */
++	skel->bss->alloc_cnt = 17;
++	if (run(skel->progs.alloc, "alloc"))
++		goto out;
++	/*
++	 * A NULL ptr means bpf_arena_alloc_pages() itself failed (e.g. the host
++	 * is under memory pressure), not a miscount -- flag it distinctly so a
++	 * red CI run is not mistaken for a counting bug.
++	 */
++	if (!ASSERT_OK_PTR(skel->bss->ptr, "arena_alloc_pages"))
++		goto out;
++	ASSERT_EQ(map_memlock(fd), 17 * ps, "after_alloc");
++
++	/* Free a single page (arena_free_pages page_cnt==1 path). */
++	skel->bss->free_byte_off = 0;
++	skel->bss->free_cnt = 1;
++	if (run(skel->progs.free_pages, "free_one"))
++		goto out;
++	ASSERT_EQ(map_memlock(fd), 16 * ps, "after_free_one");
++
++	/* Free ten pages in one call (bulk path); only the freed pages count. */
++	skel->bss->free_byte_off = 1 * ps;
++	skel->bss->free_cnt = 10;
++	if (run(skel->progs.free_pages, "free_bulk"))
++		goto out;
++	ASSERT_EQ(map_memlock(fd), 6 * ps, "after_free_bulk");
++
++	/* Free the remaining six -> arena empty again. */
++	skel->bss->free_byte_off = 11 * ps;
++	skel->bss->free_cnt = 6;
++	if (run(skel->progs.free_pages, "free_rest"))
++		goto out;
++	ASSERT_EQ(map_memlock(fd), 0, "after_free_rest");
++
++	/*
++	 * User-space fault-in: touching unallocated arena pages allocates them
++	 * through arena_vm_fault(). libbpf mmap()s the arena at map_extra during
++	 * load, so bpf_map__initial_value() hands back that base.
++	 */
++	base = bpf_map__initial_value(skel->maps.arena, &sz);
++	if (!ASSERT_OK_PTR(base, "arena_base"))
++		goto out;
++	for (i = 0; i < 8; i++)
++		base[i * ps] = 1;
++	ASSERT_EQ(map_memlock(fd), 8 * ps, "after_faultin");
++
++	/*
++	 * Free the faulted-in pages from BPF. They are mapped into the user vma
++	 * (elevated refcount), so this also exercises the zap path.
++	 */
++	skel->bss->ptr = base;
++	skel->bss->free_byte_off = 0;
++	skel->bss->free_cnt = 8;
++	if (run(skel->progs.free_pages, "free_faulted"))
++		goto out;
++	ASSERT_EQ(map_memlock(fd), 0, "after_free_faulted");
++out:
++	arena_mem_usage__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/arena_mem_usage.c b/tools/testing/selftests/bpf/progs/arena_mem_usage.c
+new file mode 100644
+index 000000000000..50d9d6ac86f6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_mem_usage.c
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_arena_common.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 1000); /* number of pages */
++#ifdef __TARGET_ARCH_arm64
++	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
++#else
++	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
++#endif
++} arena SEC(".maps");
++
++void __arena *ptr;
++int alloc_cnt;		/* in:  pages to allocate */
++long free_byte_off;	/* in:  byte offset within ptr to start freeing */
++int free_cnt;		/* in:  pages to free */
++
++SEC("syscall")
++int alloc(void *ctx)
++{
++	ptr = bpf_arena_alloc_pages(&arena, NULL, alloc_cnt, NUMA_NO_NODE, 0);
++	return ptr ? 0 : 1;
++}
++
++SEC("syscall")
++int free_pages(void *ctx)
++{
++	if (!ptr)
++		return 1;
++	bpf_arena_free_pages(&arena, (char __arena *)ptr + free_byte_off, free_cnt);
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
