@@ -1,140 +1,107 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA25C386575;
-	Thu, 16 Jul 2026 07:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1ECD38AC90;
+	Thu, 16 Jul 2026 07:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784187673; cv=none; b=S1CCFnC5eerkUEnMqZbx3kQ8Yp8RgKptPMWjdn3M8uxzRTPnvQoaoqCDiodkJ/ruKl2YWqLGvv8MlCaT1W7mKQaI4qjLfe3Ithgge+BmxtXYcRDd2A4MzAZASWBJaRnFFLOX9nFM+anEi7PxIfkuraVPzOH2zF0AGSK0bAYeKx0=
+	t=1784188312; cv=none; b=p+xRUyqFGCiZRj4eD8RAwIiSfEt0wWz8y21mTj4hNpNU0G2FjWURJEwQCh9mBVFYOlf3/uqoW2UQBeLbMHTFrzxNbeZVlmHMpWX+SuEXO+H9AIRj1p3Wh7jwbSnN+3yazF1BjzuTo6o1jn/o5coufULz7j8EQASO0HKiCMW2agA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784187673; c=relaxed/simple;
-	bh=CPasxW6bFRdLma9I5DJcbcNl+2UHOaRXpdpD3+smO20=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=a+pFWpdNKpm1cfobdwbJIIyVj8Fb9n7YGcZ14T5uRkwV5ZIURVHvMowO1ZdaFOd36x4tXVPdQxHOQVAuZjd+nVV3ZbYlrAZ4o/FVZj02kPRxJz+08DTVWHX3JZjxUlTsa/uiwFkTubmkzh/3GfL1SCt993f/ai4hlzVQGU3Gmx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Kfr6p+jl; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1784188312; c=relaxed/simple;
+	bh=5Fd4+eK9E6eGfW7e6mF7U9Cj3d2x2DrKQzkF77OObNc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Q6YkRVKFQMgxlu2tlFN3mhH9TdEhwJNFy4kv7WMYFZgKj9UFNLsouJ9ohYbe2dtqI6qyWmspdHRHoxma/adWVEy6uFnXHn6MZ3wbBYveS0GGKp4zqkMZg4ZYX6orbIGkLKVppySS4NGEKIEOhfoNLm5ZIndmgcAIFWYkBUulqkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fUXd1JVq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Kfr6p+jl"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 27565C2B9DC;
-	Thu, 16 Jul 2026 07:41:26 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id BCD5B602B8;
-	Thu, 16 Jul 2026 07:41:08 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4E1ED11BD1CD7;
-	Thu, 16 Jul 2026 09:41:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1784187667; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Ew/fD4jWBVAQDnPravt+reICzwd3JTPlrxsci8ADgg8=;
-	b=Kfr6p+jl4q6Z9eE2gdJZ1Nxao/8Y5nJ4EOT3tRcczKgoHoFMoS6TWScZJ7DXORKu8Y86Wn
-	7+SSWG3JPjl62ArNqCUvu6OVXw4hKDmRkIubOfm6E9ZnEFZA98ljM9nokujm/2VQGXFLAf
-	1g7qGl4Ny7wg/iaX0PxZfrcSV2+76pI3dW7GDOzr04UYZAcy3sKBrnuiAkhEBWVjgCd2e6
-	gcjzlXBibADXojNLXmvJpPvyTs9gEGZtwooUOHZSTX6Rp9WUPHJv2mYGpYMIi1YrdSioii
-	lxDW4rSXZM+dWi/cNubYRf1tGV1Vp33qY7FqS0qpsSIHtIpwppzrUxmusuU9jw==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fUXd1JVq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538CF1F00A3D;
+	Thu, 16 Jul 2026 07:51:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784188305;
+	bh=K0q4iQ8vXEaQKfG3l11G3u2R60hLYqiFlU6seI3ml1I=;
+	h=From:Subject:Date:To:Cc;
+	b=fUXd1JVqXFDPnj8QOBtPJtiP6A2yMszY4qJW4W1rOlQj5xVB2ON2hyS0+UiksxXGa
+	 fknB4ezYhROdKZOAQbIB+xikYYPQthHda565MBVgXEk3mkzvFciHpJHi2Gpa5LVoT4
+	 1grvWMUELOhnAnjCM2y1FDOoOB9/ya41UrjTB4qFiRlx3OSmiYtwEJlZZZXcitOLNF
+	 tN6AOWoma3gTbL7oWAQKemS7CKfOEENgZOjSu5d77tBqyUHlKa6NbjbJGUmpaE9ZEg
+	 PsErQkijdfiasDmy56G7M+9/ITlKhGleL06OsrFFEVtJcks8O6qU6oHm952U4PATnu
+	 WckbAAe5evdaA==
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Subject: [PATCH bpf-next v3 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for BPF
+ allocations
+Date: Thu, 16 Jul 2026 10:51:34 +0300
+Message-Id: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 16 Jul 2026 09:41:00 +0200
-Message-Id: <DJZTQNZDG8G7.3GLNML4I7INNS@bootlin.com>
-Subject: Re: [PATCH bpf-next v5 04/10] bpf, x86: add helper to emit kasan
- checks in x86 JITed programs
-Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
- <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter
- Anvin" <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Ingo Molnar"
- <mingo@redhat.com>, "Andrey Konovalov" <andreyknvl@gmail.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
- <20260709-kasan-v5-4-1c64af8e4e1e@bootlin.com>
- <5f38c9a5-a8a3-4bed-bb8c-b7260a1c1a11@linux.dev>
-In-Reply-To: <5f38c9a5-a8a3-4bed-bb8c-b7260a1c1a11@linux.dev>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIaNWGoC/4WOwY7CIBRFf8Ww9jmALaOu/A/jAsrDMlpqHpVgT
+ P/dUjOZuDCzvO+de3IfLCJ5jGy3eDDC5KPvwxTWywVrWh1OCN5OmUkuFVdSAWZsOuwgbxRQn8F
+ cHSQOppKV0BY33Do2la+EzudZfGCFCZgHdnx94s38YDMUb2GNjgiGdGjacvqlvzodB6RCtD4OP
+ d3nlUnMzv8GJQEcqlpzw9FWDrf7M1LAy6qn07wjyT/PtxAfPXLyGGe3tbLrWoh3zziOT0+brxt
+ DAQAA
+X-Change-ID: 20260626-execmem-x86-rox-bpf-v0-b4241ade80df
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
+ Borislav Petkov <bp@alien8.de>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Ingo Molnar <mingo@redhat.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Mike Rapoport <rppt@kernel.org>, 
+ "H. Peter Anvin" <hpa@zytor.com>, Yonghong Song <yonghong.song@linux.dev>, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
+X-Mailer: b4 0.16-dev
 
-On Wed Jul 15, 2026 at 2:53 AM CEST, Ihor Solodrai wrote:
-> On 7/9/26 3:01 AM, Alexis Lothor=C3=83=C2=A9 (eBPF Foundation) wrote:
->> Add the emit_kasan_check() function that emits KASAN shadow memory
->> checks before memory accesses in JIT-compiled BPF programs. The
->> implementation relies on the existing __asan_{load,store}X functions
->> from KASAN subsystem. The helper:
->> - ensures that the kasan instrumention is actually needed: if the
->>   instruction being processed accesses the program stack, we skip the
->>   instrumentation, as those accesses are already protected with page
->>   guards
->> - saves registers. This includes caller-saved registers, but also
->>   temporary registers, as those were possibly used by the
->>   affected program. Theoretically, r10 and r11 should be saved as well,
->>   but the number of called function and their scope being limited, they
->>   are skipped for the sake of reducing the overhead
->
-> My clanker got very excited about r10 and r11 not being saved, just
-> like sashiko. So I looked at this a bit closer. TL;DR it's fine
->
-> I built the kernel with gcc 11.5, gcc 15.2 and clang 22 and
-> disassembled __asan_{load,store}{1,2,4,8}: none of them touch r10 or
-> r11. gcc goes up to r8, clang uses nothing above rdi.
+Hi,
 
-Thanks for the double-check, my observations are aligned with yours :)
+BPF allocations of executable memory on x86 are essentially read-only. Most
+paths that call bpf_jit_alloc_exec() immediately make it ROX with
+set_memory_rox().
 
-(https://lore.kernel.org/all/DJ5HDX2K5CTF.YRZ9TDI6QCII@bootlin.com/)
+The code generation, at least on x86, uses separately allocated writable
+buffers and then updates the actual text memory with text_poke().
 
-> However, kasan_check_range() does use r10/r11.  And looks like we are
-> ok only because the fixed-size helpers inline the shadow check and
-> never call kasan_check_range().
->
-> If any of the fixed-size 1/2/4/8 helpers ever actually call
-> kasan_check_range(), r10 may get clobbered.
->
-> Maybe we should leave a comment on emit_kasan_check() about this?..
+These patches do several small adjustments to how BPF allocates executable
+memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
 
-Ok, I'll add a comment about this in emit_kasan_check.
+---
+v3 changes:
+* replace vmalloc() with vzalloc() in bpf_dispatcher_change_prog()
+* rebase on the current bpf-next
 
-[...]
+v2: https://patch.msgid.link/20260711-execmem-x86-rox-bpf-v0-v2-0-bfd956d35119@kernel.org
+* rebase on the current bpf-next
 
->>  static bool all_callee_regs_used[4] =3D {true, true, true, true};
->> =20
->>  static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
->> @@ -1110,6 +1121,90 @@ static void maybe_emit_1mod(u8 **pprog, u32 reg, =
-bool is64)
->>  	*pprog =3D prog;
->>  }
->> =20
->> +static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
->> +			    u32 addr_reg, struct bpf_insn *insn, u8 *ip,
->> +			    bool is_write, bool accesses_stack_only)
->
->
-> nit: IMO it's not nice to introduce functions with no caller as a
-> separate patch: it triggers -Wunused-function on this commit, which
-> may or may not be used in a build. I'd fold this in patch #6 where the
-> function is actually called.
+v1: https://patch.msgid.link/20260626-execmem-x86-rox-bpf-v0-v1-0-45a0b0ed4fe9@kernel.org
 
-Ok, I'll fold it in the commit actually using the helper.
+---
 
-Thanks,
+---
+Mike Rapoport (Microsoft) (5):
+      bpf: dispatcher: allocate bpf_dispatcher->rw_image with vzalloc()
+      bpf: drop __weak from bpf_jit_alloc_exec() and bpf_jit_free_exec()
+      bpf: alloc_prog_pack(): skip ROX management for already ROX memory
+      bpf, x86: make sure allocation in arch_bpf_trampoline_size() is writable
+      x86/bpf: enable EXECMEM_ROX_CACHE for BPF allocations
 
-Alexis
+ arch/x86/mm/init.c          |  4 ++--
+ arch/x86/net/bpf_jit_comp.c |  5 ++---
+ include/linux/filter.h      |  1 +
+ kernel/bpf/core.c           | 30 +++++++++++++++++++++---------
+ kernel/bpf/dispatcher.c     |  5 ++++-
+ 5 files changed, 30 insertions(+), 15 deletions(-)
+---
+base-commit: d1f4b56417a3dc1a0600f960b14f46bd25eda89d
+change-id: 20260626-execmem-x86-rox-bpf-v0-b4241ade80df
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--
+Sincerely yours,
+Mike.
 
