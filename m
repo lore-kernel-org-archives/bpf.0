@@ -1,105 +1,118 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F8B41D651;
-	Thu, 16 Jul 2026 11:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F8632BF4B
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 12:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784203064; cv=none; b=rsjwDBMt350BS7VFEBa9mXUEu4OQfeJjXOgXCFTJcMjToP1GTRenXNn8ZXNumoYJqlEaNA/SsD0SJxLQDQ0z0KsLMaVPUDPD0iSxBMeceRCaJ+fTXOt7/5zo4UEMUtLvKaMTg8feh18oHqAoYnzb4b3sNdtT5G1RVBWDT9RzSYs=
+	t=1784203876; cv=none; b=bCU0XoEpOLSyd/kVJmUgC0L4eZm7nwaEkX7Xc/FbvStvx4EAL1w5t/9MeaSytwiD6wEzThn6HvzbY7b5bLAD1y+StgvmEUI7Kl8aqGPFnsPyenHT9DW47L464eQ+HzfaOL8Z7dSmVtJnjU0cwbeu0fuohqtfKmqtF6OORrXXPUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784203064; c=relaxed/simple;
-	bh=Mgv1FTh+js0Gq/7VL7h0wzNpDtA2yvRbwEycmfzhnCM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=doJTTDzO21xqbByRaXImFFeNWBHoe5umjHw0VJQaxUFAcRTtqHpCgYqkIjFhjZOKfhND9vMnAITUY/2dcQ4JsAQY5e50mcEDguKQep/04j9fKtsjlsdApl2xR4fhAp4Hi+lSIi/XTylSxGgg4YcESzcOYDr5VRo63ZxTfvxxjhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h1BNn4KhmzYQtt8;
-	Thu, 16 Jul 2026 19:57:13 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 479FE40592;
-	Thu, 16 Jul 2026 19:57:32 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgC3x3Mqx1hqeWi+BQ--.49322S2;
-	Thu, 16 Jul 2026 19:57:32 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next v3 0/3] Fixes for tailcall with subprog and callback
-Date: Thu, 16 Jul 2026 12:01:54 +0000
-Message-Id: <20260716120157.835937-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1784203876; c=relaxed/simple;
+	bh=0/jYEiLDQhmQXkAbacNSDZFJVz5uTydZ9E0R4O+c7bM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=MigRYP3CeoDjkXYtHW2oMiQO9vDZbiN9UbKIuYIfLiIZnvrc1Mbg75Ftz9K7fJ8jxl6C9suEBKa9c+XBsBWyiiac3aQf7Y88+yOT8cFlhaqxs6/4k0ltIRfqB2M4+sUUe9Fcku2suuiyyUkPM46QQ0YwyVceuXN69ng7uJASwFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lqjEjrpf; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lqjEjrpf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53BBB1F000E9;
+	Thu, 16 Jul 2026 12:11:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784203875;
+	bh=egzxVvJM14fDjKdWGTzIc/OD1bHdxxB17LIB849HGmg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=lqjEjrpfSUWGFVSS3k9LxaLJzUOZQ2UyYaKroPGKXs2zmMDjJoOB6QtkfIEUczlkU
+	 mAqjgMbdSqq5tS7HkkDNkUHJXipHeDjFW7NsZwj8Ao/phRLA9ZSpQdH638DeeEwsgo
+	 TB9iTSiyegJFqlxIH3CSp1Ii4JWldPttNovE7QOcalM3qtl7A/o10cgmDocx0Ku8ij
+	 NU1DJp/GqgZUUXtKLFbhuiARyKr6J//4qm2maEhwTxO0oPEVZ6Zw8AczHEEE6WVVG+
+	 yhf34W+OS7BNJP7ClS4HPoqp2oAxtgEUEi0t4c0WrBhiMHdkMTY7GDORjpz9ZGVDtI
+	 nNRP47SnS65Zg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 2/3] bpf: Reject callback subprogs invoke
+ tailcall
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pu Lehui" <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260716120157.835937-3-pulehui@huaweicloud.com>
+References: <20260716120157.835937-1-pulehui@huaweicloud.com>
+ <20260716120157.835937-3-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 16 Jul 2026 12:11:15 +0000
+Message-Id: <20260716121115.53BBB1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgC3x3Mqx1hqeWi+BQ--.49322S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKw4UAw4UAw4xZFyUtw4ktFb_yoWkJrc_A3
-	yYqryDtrsxAF9Fka18Cr1rCryjk3yUW348JF4UtF97Gw4xXw1kuan3Wr43urnYqF95ZrZ3
-	ta1DArW0qw4agjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-	n2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-	AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-	17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-	IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4l
-	IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-	C2KfnxnUUI43ZEXa7VUbGQ6JUUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Direct tail calls inside async and exception callbacks are no long=
+er rejected, bypassing the Tail Call Counter (TCC) limit and potentially ca=
+using infinite tail calls or crashes.
+--
 
-This series fix two issues related to tailcall:
+--- Patch [2]: [PATCH bpf-next v3 2/3] bpf: Reject callback subprogs invoke=
+ tailcall ---
+commit 99ae0587c85d574b41c654707864af3b7ff51fa8
+Author: Pu Lehui <pulehui@huawei.com>
 
-patch 1: Fix tail_call_reachable state leak across call branches.
-patch 2: Reject callback subprogs invoke tailcall.
-patch 3: testcases for patch 1 and 2.
+    bpf: Reject callback subprogs invoke tailcall
 
-v3:
-- Fix tail_call_reachable state leak across call branches. (Sashiko)
-- Add testcase for the above issue.
+This commit aims to fix infinite tailcalls by rejecting tailcalls inside
+all subprograms of synchronous callbacks. It also consolidates the existing
+async and exception callback checks into a single unified check.
 
-v2:
-https://lore.kernel.org/bpf/20260714024459.420075-1-pulehui@huaweicloud.com
-- Remove redantant testcase.
-- Add ACK tag by Eduard.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 782d939c38cdc..62d46b4c9962f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -5237,10 +5237,6 @@ static int check_max_stack_depth_subprog(struct bp=
+f_verifier_env *env, int idx,
+>  		if (verifier_bug_if(sidx < 0, env, "callee not found at insn %d", next=
+_insn))
+>  			return -EFAULT;
+>  		if (subprog[sidx].is_async_cb) {
+> -			if (subprog[sidx].has_tail_call) {
+> -				verifier_bug(env, "subprog has tail_call and async cb");
+> -				return -EFAULT;
+> -			}
 
-v1:
-https://lore.kernel.org/bpf/20260711104727.4023420-1-pulehui@huaweicloud.com
+[Severity: High]
+Does removing this explicit check allow direct tailcalls inside async and
+exception callbacks to bypass validation?
 
-Pu Lehui (3):
-  bpf: Sync tail_call_reachable with callee state on entry
-  bpf: Reject callback subprogs invoke tailcall
-  selftests/bpf: Add testcases for callback with tailcall
+If an async or exception callback does not make any subprogram calls (acting
+as a root subprogram), the local variable tail_call_reachable will remain
+false, as it is only set to true when traversing into or returning from a
+callee subprogram.
 
- kernel/bpf/verifier.c                         | 12 +--
- .../selftests/bpf/prog_tests/tailcalls.c      |  7 ++
- .../selftests/bpf/progs/tailcall_callback.c   | 81 +++++++++++++++++++
- 3 files changed, 92 insertions(+), 8 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall_callback.c
+>  			/* async callbacks don't increase bpf prog stack size unless called d=
+irectly */
+>  			if (!bpf_pseudo_call(insn + i))
+>  				continue;
+> @@ -5281,8 +5277,8 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx,
+>  	 */
+>  	if (tail_call_reachable) {
+>  		for (tmp =3D idx; tmp >=3D 0; tmp =3D dinfo[tmp].caller) {
+> -			if (subprog[tmp].is_exception_cb) {
+> -				verbose(env, "cannot tail call within exception cb\n");
+> +			if (subprog[tmp].is_cb) {
 
--- 
-2.34.1
+Because tail_call_reachable evaluates to false for callbacks without
+subprogram calls, will this unified check be completely bypassed?
 
+Since these callbacks are invoked directly by the kernel rather than via a
+BPF-to-BPF call, the Tail Call Counter register might be uninitialized. Cou=
+ld
+this bypass the TCC limit and lead to infinite tailcalls?
+
+> +				verbose(env, "cannot tail call within callback\n");
+>  				return -EINVAL;
+>  			}
+>  			if (subprog[tmp].stack_arg_cnt) {
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260716120157.8359=
+37-1-pulehui@huaweicloud.com?part=3D2
