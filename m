@@ -1,90 +1,148 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A4E3B9DAE;
-	Thu, 16 Jul 2026 07:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F27626E70E;
+	Thu, 16 Jul 2026 07:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784188344; cv=none; b=cqZigA++LP3wkpGdHCwwjbnhZ4msQ4ZSpiITjanh8PgbXtDnHp7tdKoIG891ORiwv4A3pyZd4vCFyac4Xj3bFhd3HE+LAPUq2mBH/t+SuvI6PWDLoTYLysINqMVxqXJ3eg4CqENEbLQMZ4Nuld4u0NxgvLOanP4kzEI2Mc4rhZM=
+	t=1784188553; cv=none; b=btp5ThP9CeJVLrc5RRnX91uApqbeTmcNrvlNpwqvgkdvmM2vSunnAKZaeAcaZiMkEaQhtgqS1FA07sY6oNKTfoU2nz2cg90/MUVod5gZgXUDY3KoQ+rchLjYH3HGfZOiv/AuOn8AzpPFwC4Z8nG2EbeFmh1Ny36wHwI5YG1Eth8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784188344; c=relaxed/simple;
-	bh=0ezK9nb6wN4qDm7eVfl3gFFuWiuh/XD1Fu96JdsDZY4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sjKiaCTKEDxKOiT829sOUpfnDcPoFo5me/wSsJPsrnVRHs7QLyvbv6Qrfps26U98k1GUyEK2Lz8JIyZuOeeiI/hJ8fiynBDpj2168x4WdUHEnY+I1V/HVL3zEbzbTKURGe98IsLosJ6Xg1xFoL001IMqyECPl6/l0eg1UBWCfFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FLqo7RJt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784188553; c=relaxed/simple;
+	bh=eKaNFoGTqTDvYqIO6Mptf6n5JgA3ChR+7r9P9xayAdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JyFWUyarDRZNrvXJRWaMjiS2ahtdhNwQ4zAkRFmdjXuSBKrWN9bH9T3ZCah5XWJat6cZa+Fhb9XZTg6iOvmfd194bFmQI4+zFt/ehLIgEhrcbCU6I5RnSKvGrEXA43NUqIp7FFEIwemfuy565JpluPTJAhWaYWLsEGHyV0mxE3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kR1Do7AK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FLqo7RJt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A42F81F000E9;
-	Thu, 16 Jul 2026 07:52:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kR1Do7AK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB221F000E9;
+	Thu, 16 Jul 2026 07:55:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784188331;
-	bh=bsCkJeKP215VVn4x62ogxT2jAVvGPVAbWkkJgMSjygg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=FLqo7RJtwC07gO35hWIR42JynRXwkaCrCzlN46P8eQEPNFxltJM2mrr1Pb63xqMFT
-	 ytcILU7+Yprwnf045Mo/px5ocK+HMSav8TpxQ+lNpOWSH5zCW3le8Da6YaLV34/vVx
-	 vDBPSRoJWWJ4JEpJEigG08SphOPRB0AsCPzxmGnDMMlZqwYd63C+WkQ1UAdKziHwZm
-	 QpsDvaIKo9BmRR//qVs6G7hiAqNZ5OoRFlGm3r4pkACKPbaPDWFKGSGb8uXGHc0Eb9
-	 47DgLmaEJFzHyBmZR+wcCvLoDC6NouCT7l0oP92cAQK9daeAqUC/5NggniwJXCFKrF
-	 6GWWJcoQZLUUw==
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Date: Thu, 16 Jul 2026 10:51:39 +0300
-Subject: [PATCH bpf-next v3 5/5] x86/bpf: enable EXECMEM_ROX_CACHE for BPF
- allocations
+	s=k20260515; t=1784188551;
+	bh=ec3GakrzuOxIMF5BbZJZobzJEBZ8RKWdHBnwK3o9c+w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=kR1Do7AKckjucgHlz16PsWqd9WNJVg5K+3jZqfvIUotZfPCNRutiFv9oq6qQTgySq
+	 LvME9w0C7ydv8RrykaDkgJqvRNmETQJj6WHjHdfDOPpl96ZXKxu5jgR8RmAmG7NMfD
+	 kJTtTGP/EMbhPwDXm/VZ1b3vXY+mufEbHlArXjzevb3hMQB/Dj6Ro2XPjRXBytZTHZ
+	 mu5Awkc5gEf5efY+AzVzzGcbVj0MJN7u2woqDCjfGSwhr0jFswXNIm6DxDfdnhJGwa
+	 TiZpqHDGQc7hFnWURzcvgGky2dyILaurYjrDf8VOUAGTDGJaOfdQIZbPwvn+4wl8cL
+	 iGW7+d5KC3yaQ==
+Date: Thu, 16 Jul 2026 09:55:45 +0200
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: "Theodore Tso" <tytso@mit.edu>
+Cc: Nicolas Dufresne <nicolas@ndufresne.ca>, Laurent Pinchart
+ <laurent.pinchart@ideasonboard.com>, Ihor Solodrai
+ <ihor.solodrai@linux.dev>, Roman Gushchin <roman.gushchin@linux.dev>, Derek
+ Barbosa <debarbos@redhat.com>, Matthieu Baerts <matttbe@kernel.org>,
+ Konstantin Ryabitsev <konstantin@linuxfoundation.org>, Jason Gunthorpe
+ <jgg@ziepe.ca>, Steven Rostedt <rostedt@goodmis.org>, users@kernel.org,
+ Linux Media Mailing List <linux-media@vger.kernel.org>, Stephen Finucane
+ <stephenfin@redhat.com>, bpf <bpf@vger.kernel.org>, Chris Mason
+ <clm@meta.com>, Christian Brauner <brauner@kernel.org>, Alexei Starovoitov
+ <alexei.starovoitov@gmail.com>
+Subject: Re: Linking Patchwork with Sashiko?
+Message-ID: <20260716095545.63f49e85@foz.lan>
+In-Reply-To: <alhMB7vGodoewjcz@mit.edu>
+References: <20260713094120.GD1127719@killaraus.ideasonboard.com>
+	<20260713220427.582b28bf@foz.lan>
+	<7ia4mrvtrxjl.fsf@castle.c.googlers.com>
+	<20260715005909.GF1656185@killaraus.ideasonboard.com>
+	<00a244f8-5be6-4ee7-b5b1-e4cbdcd4fc77@linux.dev>
+	<20260715163921.GH1778116@killaraus.ideasonboard.com>
+	<153db0fa-65ac-49de-9bf5-456c9639954c@linux.dev>
+	<20260715190654.GK1778116@killaraus.ideasonboard.com>
+	<alfwOgVRgUJYOGtU@mit.edu>
+	<ef9f77c613a05c5745941587099eeb4f159d5e31.camel@ndufresne.ca>
+	<alhMB7vGodoewjcz@mit.edu>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260716-execmem-x86-rox-bpf-v0-v3-5-4e76158c01c5@kernel.org>
-References: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
-In-Reply-To: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
- Borislav Petkov <bp@alien8.de>, Daniel Borkmann <daniel@iogearbox.net>, 
- Dave Hansen <dave.hansen@linux.intel.com>, 
- Eduard Zingerman <eddyz87@gmail.com>, Ingo Molnar <mingo@redhat.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Mike Rapoport <rppt@kernel.org>, 
- "H. Peter Anvin" <hpa@zytor.com>, Yonghong Song <yonghong.song@linux.dev>, 
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
-X-Mailer: b4 0.16-dev
 
-BPF core and x86 JIT use text poking and temporary writable buffers and
-thus can handle ROX memory.
+On Wed, 15 Jul 2026 23:53:55 -0400
+"Theodore Tso" <tytso@mit.edu> wrote:
 
-Enable ROX cache for EXECMEM_BPF when configuration and CPU features allow
-that.
+> On Wed, Jul 15, 2026 at 11:00:54PM -0500, Nicolas Dufresne wrote:
+> > In V4L2 m2m notably, there is a "job" in the background, which allow
+> > to safely (at least this is the theory) chain up work, and
+> > synchronize against pending work. But Sashiko (and other AI) seems
+> > to not get it and state with confidence and long explanation that
+> > the drivers are racy and should do X/Y/Z more on top (and never
+> > blames the framework).  
+> 
+> Is there actually a race which is allowed by the framework?  Or is
+> Sashiko's proposed race actually not possible?
+> 
+> Or is it a case where it actually *is* racy, but it's something we
+> really don't care about?  I've seen this happen with KCSAN where
+> technically it really *is* a data race, but it's actually not
+> important --- so we just have to mark it with the data_race() macro[1].
+> 
+> [1] https://docs.kernel.org/dev-tools/lkmm/docs/access-marking.html
+> 
+> This sort of thing can happen any time we introduce a new tool,
+> whether it's KCSAN or lockdep.  
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- arch/x86/mm/init.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Lockdep warnings are particularly tricky and hard to fix. We did
+have false-positive lockdep warnings ("hallucinations") in the past
+at subsystem level, which took years and a lot of work to find better
+ways to fix them.
 
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index fb67217fddcd..079f8c7e9e3c 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1107,10 +1107,10 @@ struct execmem_info __init *execmem_arch_setup(void)
- 				.alignment = MODULE_ALIGN,
- 			},
- 			[EXECMEM_BPF] = {
--				.flags	= EXECMEM_KASAN_SHADOW,
-+				.flags	= flags,
- 				.start	= start,
- 				.end	= MODULES_END,
--				.pgprot	= PAGE_KERNEL,
-+				.pgprot	= pgprot,
- 				.alignment = MODULE_ALIGN,
- 			},
- 			[EXECMEM_MODULE_DATA] = {
+> It's not necesarily unique to AI
+> reviews.  In both AI and non-AI tools, we can have developers who fix
+> the problem in the wrong way, or where the fix actually makes things
+> worse than the putative "bug".
 
--- 
-2.53.0
+Very true.
 
+> > This is why I recommended not forwarding the reviews to the linux
+> > media list just yet during the summit. Now, the tricky part will be
+> > to find time to try and help narrow this down, I never checked the
+> > implementation, but I suppose you can add more layers of prompts to
+> > force into looking deeper ?  
+> 
+> Has a bug been filed with the Shashiko folks?  I can imagine any
+> number of solutions, including adding comments in the source, or some
+> kind of marker much like the data_race() macro to shut up KCSAN
+> warnings, or __attribute__((unused)) to shut up gcc or Clang warnings.
+> Yet another solution might be to add some kind of a AGENTS.md file in
+> the explains why a particular construct is safe.  Personally, I
+> consider it to be the less desirable solution, since having something
+> inline in the sources is likely to get out of sync with future code
+> changes, and having the annotation in the sources will hopefully be
+> useful to humans, not just AI bots.
+> 
+> But the exact solution is going to be very specific exact warning and
+> why the AI bot thinks there is a problem when it really isn't.
+
+Agreed.
+
+Just like any tool, LLM can produce very wrong or very good results
+depending on how one uses it. I'm pretty much convinced that media
+needs a custom set of prompts to avoid it to report false positives
+and to make it point things that are more relevant to us.
+
+> 
+>     	       	      	       	 	 - Ted
+> 
+> P.S.  There was a recent thread[1] where using Clang's context
+> analysis resulted in a false positive, and I think it's instructive to
+> see how it was handled compared to false positives from Sashiko.  We
+> had a discussion, and the result was two pull requests to LLVM to
+> avoid the false positive.  There was no complaints about how the false
+> positive somehow was demeaning to our humanity, or that we should be
+> accomodate those people who want to ban the use of static analyzers.
+> There is something about AI that seems to trigger a different sort of
+> energy, for better or for worse.
+> 
+> [1] https://lore.kernel.org/r/20260712165610.366474-2-timday@thelustrecollective.com
+> 
+
+
+
+Thanks,
+Mauro
