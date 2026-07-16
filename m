@@ -1,154 +1,194 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9E93F4109;
-	Thu, 16 Jul 2026 08:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F983596E1
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 09:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784192275; cv=none; b=t+8deqRr25lW0Nzud9j8g4h0tAswrntjHsJxDKk+esNqHGmVRphC12nlL4ZbHK94bzOJpUyAEwV7a8JNKtFhht00pzOJV0IZ+tU2gj2zTWdwUZJirqZ+ywJQ/1Fxr7ysP8xJWNvcF73qPbvwCckr7DsVBmeMMR7POvmsZs+yY50=
+	t=1784192746; cv=none; b=OFtHXhYC0PAYiFHd8fBAOMx/Q5kuFgmGCdi+OzNgFltlVJoprfel3H9IBl54y3RZFsd58bo6uvKeBaRR2tqrzwLyLVW9pfOn+QJqVUkrblcpk8tTzs/BgPSCU+H9LTy8KFhrHCKiAIQthyUu86ovnjPBQ8a1T6XYXKbGRIus26w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784192275; c=relaxed/simple;
-	bh=sxDReqpNLpihDImWqQxCu7SoBNma2krL86Ep2B0Vh7c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=W8MFv7N/Pqw6uxHk1uvRKPxR6zIPUKPPZpUWPI4tkQbbyEszJNF1UUcEbaQRXMpzaWgH670CH3AquUsmpiLPKBPQfoGuQtqFRqAnf+ir4DEAyvUSlGalbUdXWSs/STRWqSf932M9M0LADDQ6fOI1E1WRBKs2O0aCb+OoIujRt44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 65a7114280f411f1aa26b74ffac11d73-20260716
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:ee0a969b-f913-4098-9069-0b55d5f0dd00,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:886244ca0ff6ca646818881a33cb8c89,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|865|898,TC:nil,Content:0|15|50,E
-	DM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA
-	:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 65a7114280f411f1aa26b74ffac11d73-20260716
-X-User: yijiangshan@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <yijiangshan@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 434987799; Thu, 16 Jul 2026 16:57:39 +0800
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	paul.chaignon@gmail.com,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	13667453960@163.com,
-	Jiangshan Yi <yijiangshan@kylinos.cn>
-Subject: [PATCH] tools/resolve_btfids: fix OUTPUT leakage from kselftest causing corrupted build paths
-Date: Thu, 16 Jul 2026 16:57:33 +0800
-Message-Id: <20260716085733.1761196-1-yijiangshan@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1784192746; c=relaxed/simple;
+	bh=HpaTSISORJUYc9PniMkvcxrsDPb3BHQ2lZ1HJKc9N9c=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=I5Ntiv0H3jo/rhF+CWPsSqBlrW5YKgfT55DIiPOKtiuYxDUURvrdoqkbjhB5Q2Q2XUPpXQU/i/A1dOLMWLZ/Mh1y7x1LcYxlXmwYqyCVpTd5zum2FSrG5IRzM8D8cHk/mnUgv9JUbdK2oMm2H7hOMjNagv9lcsKIpEaLgAN+S/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V40IrP+u; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V40IrP+u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B601F000E9;
+	Thu, 16 Jul 2026 09:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784192745;
+	bh=3ZpnSjktarW7EeR1GU3nA9jHzRW0AIpspZMmrJMC9C0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=V40IrP+u8Mxlz8HK3HVewggyTQePhYgdLWJL/59GvjTGLOsfpYzqu2p7rjqIECdN2
+	 ZoG8eAf8G2FRCdmmsI52PpZAPTeYnJTvMCtyTFyF0bJD35H4/g2vF4XGLagArkbxGT
+	 eBjhxO1ZIzr+i0NZRpMMuO5/8WKyU7rFc7PXf1flHny3+EAZky1u9fdZYntcTBbL2z
+	 NcpTN7KT0gtCyLGcWEtPhozSVzAQzy1W/rwpb166nve8mGhvudjfe+0RrVWZsD3Qw5
+	 kolutgDCs7zBgt0rY9Cjd11lOlCboC7I9sW4/XXZWjJMOrB6L/kvYL0iXGskkvkZ/i
+	 dGtfpciNXV4kw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/2] bpf: Fix stale old_image UAF on trampoline
+ update failure
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hui Zhu" <hui.zhu@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <76dfd8edea81af878f52739431a218cd1d214ab2.1784191209.git.zhuhui@kylinos.cn>
+References: <cover.1784191209.git.zhuhui@kylinos.cn>
+ <76dfd8edea81af878f52739431a218cd1d214ab2.1784191209.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 16 Jul 2026 09:05:44 +0000
+Message-Id: <20260716090545.34B601F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-When building kselftest-all, the kselftest Makefile passes OUTPUT as a
-command-line variable to each test directory:
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
 
-  tools/testing/selftests/Makefile:
-    $(MAKE) OUTPUT=$$BUILD/$$TARGET -C $$TARGET
+New issues:
+- [Low] BPF subsystem coding style violation in multi-line comment.
 
-GNU Make automatically exports command-line variables to all sub-makes.
-This OUTPUT propagates through the entire build chain:
+Pre-existing issues:
+- [Critical] Use-After-Free of trampoline image on detach failure path when=
+ ftrace deletion fails.
+- [Critical] Use-After-Free of BPF program memory on detach failure path wh=
+en trampoline unlink fails.
+- [Critical] Use-After-Free of trampoline image on attach rollback failure.
+--
 
-  kselftest/mm (OUTPUT=.../selftests/mm)
-    -> gen_mods_dir -> page_frag (kernel module build)
-      -> tools/bpf/resolve_btfids (host tool dependency)
+--- Patch [1]: [PATCH bpf-next 1/2] bpf: Fix stale old_image UAF on trampol=
+ine update failure ---
+commit add7893089763b05b38780203210dc401d0f2955
+Author: Hui Zhu <zhuhui@kylinos.cn>
 
-The resolve_btfids Makefile uses a conditional assignment:
+bpf: Fix stale old_image UAF on trampoline update failure
 
-  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+This patch addresses a use-after-free where old_image could be freed
+even when bpf_trampoline_update() fails. It fixes the problem by verifying
+that old_image and cur_image are different before allowing the memory to
+be freed.
 
-However, ?= cannot override a variable inherited from a parent build's
-command line or environment.  The inherited OUTPUT points to the wrong
-directory (the mm selftest directory) and lacks a trailing slash.
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index 6eadf64f7ec90..a78fbf726fad5 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -1585,7 +1585,17 @@ static void bpf_trampoline_multi_attach_init(struc=
+t bpf_trampoline *tr)
+> =20
+>  static void bpf_trampoline_multi_attach_free(struct bpf_trampoline *tr)
+>  {
+> -	if (tr->multi_attach.old_image)
+> +	/* Only free old_image if it is no longer the active image.
 
-The tools/build Makefile.build system concatenates $(OUTPUT) with
-filenames without a separating slash in its pattern rules:
+[Severity: Low]
+Does this violate the BPF subsystem coding style? Multi-line comments
+should have the opening /* on its own line.
 
-  $(OUTPUT)%.o: %.c FORCE
+> +	 * When bpf_trampoline_update() fails before modify_fentry_multi()/
+> +	 * unregister_fentry_multi() is called, cur_image is unchanged
+> +	 * (cur_image =3D=3D old_image) and ftrace still points to it. Freeing
+> +	 * it would cause a UAF when ftrace calls into the freed memory.
+> +	 * On success, cur_image is either a new image or NULL, so
+> +	 * old_image !=3D cur_image correctly identifies a stale image that
+> +	 * is safe to free.
+> +	 */
+> +	if (tr->multi_attach.old_image &&
+> +	    tr->multi_attach.old_image !=3D tr->cur_image)
+>  		bpf_tramp_image_put(tr->multi_attach.old_image);
 
-When OUTPUT lacks a trailing '/', this produces corrupted paths such
-as ".../selftests/mmmain.o" instead of ".../selftests/mm/main.o".
-Meanwhile, the resolve_btfids Makefile itself uses $(OUTPUT)/filename
-(with an explicit slash), so the HOSTLD step produces the file at a
-different path than where the LINK step looks for it:
+[Severity: Critical]
+This is a pre-existing issue, but does this logic safely handle the case
+where ftrace deletion fails in bpf_trampoline_multi_detach()?
 
-  HOSTLD produces: .../selftests/mmresolve_btfids-in.o  (no slash)
-  LINK looks for:  .../selftests/mm/resolve_btfids-in.o  (with slash)
+If __bpf_trampoline_unlink_prog() succeeds, unregister_fentry_multi()
+sets tr->cur_image =3D NULL.
 
-This results in a linker error:
+Then update_ftrace_direct_del() is called, but it can fail (e.g., if
+hash_sub allocation fails). If it fails, the error is ignored and ftrace
+continues pointing to old_image:
 
-  ld: cannot find .../resolve_btfids-in.o: No such file or directory
+bpf_trampoline_multi_detach() {
+    ...
+    if (ftrace_hash_count(data->unreg))
+        WARN_ON_ONCE(update_ftrace_direct_del(&direct_ops, data->unreg));
+    ...
+}
 
-Fix this by checking the origin of OUTPUT.  When it is "command line"
-or "environment" (indicating leakage from a parent build such as
-kselftest), use 'override' to reset it to the correct directory.  When
-built normally via the kernel build system, OUTPUT is set by
-scripts/Makefile.include with origin "file" from the O= parameter,
-which is correct and remains unaffected.
+When bpf_trampoline_multi_attach_free() executes, old_image !=3D cur_image
+evaluates to true (non-NULL !=3D NULL), causing old_image to be freed.
+Could ftrace then trigger and execute the freed memory?
 
-The fix can be reproduced and verified with:
 
-  make -C tools/bpf/resolve_btfids clean
-  # Before fix: fails with corrupted paths
-  make OUTPUT=/path/to/selftests/mm -C tools/bpf/resolve_btfids
-  # After fix: succeeds, artifacts in resolve_btfids directory
+[Severity: Critical]
+This is a pre-existing issue, but is there a use-after-free of the BPF
+program memory if the trampoline unlink fails during detach?
 
-  # Also test environment variable leakage:
-  OUTPUT=/path/to/selftests/mm make -C tools/bpf/resolve_btfids
+If __bpf_trampoline_unlink_prog() fails (e.g., returns -ENOMEM) in
+bpf_trampoline_multi_detach(), the failure is ignored:
 
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- tools/bpf/resolve_btfids/Makefile | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+bpf_trampoline_multi_detach() {
+    ...
+    WARN_ON_ONCE(__bpf_trampoline_unlink_prog(&mnode->node, mnode->trampoli=
+ne,
+                                              NULL, &trampoline_multi_ops, =
+data));
+    ...
+}
 
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 7672208f65e4..eee88c73fd7a 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -26,6 +26,22 @@ HOSTAR  ?= ar
- HOSTPKG_CONFIG ?= pkg-config
- CROSS_COMPILE =
- 
-+# If OUTPUT was inherited from a parent build's command line (e.g. from
-+# kselftest), it points to the wrong directory and may lack a trailing
-+# slash.  The tools/build Makefile.build concatenates $(OUTPUT) with
-+# filenames without a separating slash ($(OUTPUT)%.o), so a missing
-+# trailing '/' produces corrupted paths such as "mmmain.o" instead of
-+# "mm/main.o", and the linker cannot find resolve_btfids-in.o.
-+#
-+# When built via the kernel build system, OUTPUT is set by
-+# scripts/Makefile.include (origin "file") from the O= parameter, which
-+# is correct.  Only a command-line origin indicates leakage from a
-+# parent build and needs to be reset.  Both "command line" and
-+# "environment" origins indicate leakage; "file" (set by Makefile.include
-+# from O=) and "undefined" are legitimate and must not be overridden.
-+ifneq ($(filter command line environment,$(origin OUTPUT)),)
-+override OUTPUT := $(srctree)/tools/bpf/resolve_btfids/
-+endif
- OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
- 
- LIBBPF_SRC := $(srctree)/tools/lib/bpf/
--- 
-2.25.1
+The detach function returns, and bpf_tracing_multi_link_release()
+unconditionally frees the BPF program memory:
 
+bpf_tracing_multi_link_release() {
+    ...
+    WARN_ON_ONCE(bpf_trampoline_multi_detach(link->prog, tr_link));
+    bpf_tracing_multi_link_free(tr_link);
+    ...
+}
+
+However, because unlink failed, ftrace still points to old_image, which
+contains hardcoded assembly jumping into the now-freed BPF program memory.
+Could this result in a use-after-free of the BPF program memory if ftrace
+is triggered?
+
+
+[Severity: Critical]
+This is a pre-existing issue, but can the trampoline image be freed while
+ftrace is still using it during a failed attach rollback?
+
+In bpf_trampoline_multi_attach(), if update_ftrace_direct_mod() fails,
+the rollback sequence attempts update_ftrace_direct_del():
+
+bpf_trampoline_multi_attach() {
+    ...
+    if (err) {
+        if (ftrace_hash_count(data->reg))
+            WARN_ON_ONCE(update_ftrace_direct_del(&direct_ops, data->reg));
+        goto rollback_unlink;
+    }
+    ...
+}
+
+If update_ftrace_direct_del() fails, ftrace remains configured to call
+the newly allocated cur_image.
+
+Then bpf_trampoline_multi_attach_rollback() unconditionally frees
+tr->cur_image:
+
+bpf_trampoline_multi_attach_rollback() {
+    if (tr->cur_image)
+        bpf_tramp_image_put(tr->cur_image);
+    ...
+}
+
+Could ftrace execute the freed cur_image in this scenario?
+
+> =20
+>  	tr->multi_attach.old_image =3D NULL;
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1784191209.gi=
+t.zhuhui@kylinos.cn?part=3D1
