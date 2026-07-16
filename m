@@ -1,199 +1,156 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22FF288B8
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 21:09:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427D82EEE82
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 21:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784236184; cv=none; b=NL74ENJAdY3w7hXyStU5TfdTt+Xqi+vythtXgr9F7NGejQF1wmnEz157+NQajD12w2jGNVTuBmOdlEbMPMhssTHai7SClnwTlMJ6zUmrlGDpzdBySLyNOQu8d6iWLJYWn/uzFo09ZlEbWCcWhiMPF4qOxybmZ/3mxG9FAWBErQw=
+	t=1784236200; cv=none; b=nFycKACrOjVj0+zP7JvQyA/XZM6y7miJoUb3RsBx6j8hARdTqOth1Yyp2LPZzCUofJxfgW4wkJg6aE2VIGgFaoPJ5ZtNKEvydbxgHBbVaNjOvb0uYl+/rLlyO3pBoQH29786A+VmrHkSJF/2SJ6Z5usbMN/1bCHcBq2jbADXidk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784236184; c=relaxed/simple;
-	bh=aOjQstTkfrqW9EREwl6wTjEnaJdoRbk9gUXBta3Zqw0=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tc1PsHfq/P+3MasGVmL7oR8ZVCU5FUJmr7hcCGVRuf8Wmcva5ljI24VUQaBxvIUoNxDsgX1z45moV6eHQtDlc6PG5QHrE+kBDeTUFx089XCDXGbdEJ04fpSie4LzVniHK+hWquv/9MQABiJoKS/xmNsKNRHwrGHDsPh6gH7Gt6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KX4WSmog; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784236200; c=relaxed/simple;
+	bh=Wrg2Rv4NaBpzTpPQCcNqA0QYIaD0fvsmo8kjBAUbyQA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=efv5S/0aZx+89nZa9jN5YbZUN/M/VfErUfUwLx/mKO1Ah9NrkZ7aWau6fZCmMA9t0m7WgJrfOmj87G+Vl3pymyR61YgiMDpscouGafCxuDrpTJZmHDVqs8gqjKsTkwQ2oq9H46DvrEDsV0rgjYjygd/ku8NSpm8EKjL1sXUEIh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=neeiSpMf; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KX4WSmog"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-47df6a5202bso4736892f8f.0
-        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 14:09:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784236179; x=1784840979; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9adGFST24XbUB9HX5zfJ4jTnzDpD6OlzQnD7d2fItro=;
-        b=KX4WSmogKQPjmmpCoR2LvReQ04UgI60ckiKvUO0g1wMV5bkjqsz5zHXiqBuIEfabt+
-         kN4Lc9GLg9mK5950y3KWjrpHQZpKM5Gp+SRmjiiyVhFiGit9d7kFxo3L5eGSKKSY38gT
-         +QeRaICG5s+8COJyeo0nIrGV6EQDKYE87IFaLws91fRIJi6Zx5hRr/iyME12BGYnaRpA
-         0Vp5EKH0uf4nlwX1ehG3ft/dD0b8nYa3CJzygQbMseN7ZtCMMKVW7xyMQHm/jN94+yWo
-         kKaOHy4/Lc2kOW7Y2QzmVRQsEvLGBzGybEZmBm2pfZ+3jayfyHp6tLkpLUxhTwMCZBGo
-         WNpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784236179; x=1784840979;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9adGFST24XbUB9HX5zfJ4jTnzDpD6OlzQnD7d2fItro=;
-        b=g/I31Rqa5Q+fdG8khYl5frfDUHmeE//Ik0uyDEfNoZ6KQn8kGIJTP6iZgigecyhmNj
-         7CtfjFxHBSb7d93G6pfwD7gKHD0ygSUbbpDKrDACPaMis3lD8xtYBwJuU6IqycMzKWle
-         R9bAWWFFUQgirVl7NzmeXWikh1GGRkterh18EjPKU+DjoOuo06b5YMEiJCM8XjpN86ya
-         /Uip1FcZ/J3OPLqG5JWzdl+vFEqLdl3wpsU8QYWseeZMv/IOJ7fZDgXR6kfsGMiplC+t
-         drPq0FCjRRlQuj2DIDFRQB6Zl53cgxpVzPl7F6UWrOXWLZDD0Ng1xfmZnPcfy3RePACR
-         RP/A==
-X-Forwarded-Encrypted: i=1; AHgh+RrEGZQjXsWMWCCFoGJfOZlJI10UIYChn/IFc2cvdxS+MiHIqABFcM+AKmp48ajZQO5L69g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yycd6bTtt+1yh7iwtE33fuNuQBrs+UEz982d4mRmaVDHK1YCgu8
-	6PhIxkpq0nFTZ9RT95gxRTYOYuhGARQekaNyG4+SZJlG952OGlxvzTjO
-X-Gm-Gg: AfdE7cmQNVrMmWy7Dk/GaPYEsA6MS8DetmweVbUOTFuW1zM8/xkaOLZfGm5Nf+fGFJO
-	Gel8eBPrEq271nD4xhfytkiIkycqlBARdjJKne+WEl56tFTtk2Hkxxq8ifCgkzF/w0UPFMwd/3H
-	oZmALWXFj/P29tsiULKFcPuiLGkBZMGBhSaN6POPTn2RzKxg671nZd5O15jegfqgH/O9k1DZN2l
-	SqTrx7/UxBEkqNnVBmZVkWwighDa5RLT2Z9plxrf023UcSWT5V155oYE0mN3HNUAiBGSAolAfqY
-	EMvsJ3Zr7WMgx8w6oVVrB3J3gGj3cKFOQrVp3KzRLdPimzFMyJzSo5zoD/Zhtsn5l9DGLwPyyVH
-	sIQmHs6yGYCUIhjgwfFgUrHCmdztGbAAlpa9IE+ynOshYcS7bCsC0RDPtA71W5T6G3A==
-X-Received: by 2002:a05:600c:5904:b0:490:9d1b:f086 with SMTP id 5b1f17b1804b1-4953c156283mr80700865e9.14.1784236178517;
-        Thu, 16 Jul 2026 14:09:38 -0700 (PDT)
-Received: from krava ([193.86.205.162])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f4635082csm26531281f8f.7.2026.07.16.14.09.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2026 14:09:38 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 16 Jul 2026 23:09:36 +0200
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next 2/2] bpf: Fix UAF in bpf_trampoline_multi_detach
- when ftrace update fails
-Message-ID: <allIkF_1_P5z_zuN@krava>
-References: <cover.1784191209.git.zhuhui@kylinos.cn>
- <d1fcbede8f311db5cfa7cbe34371de7b63186ce5.1784191209.git.zhuhui@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="neeiSpMf"
+Message-ID: <f3a5c7dc-6731-4a3e-b8bd-909c0fff4520@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784236196;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=khS4w+amc72eU4eeH8Vqsd3aLRhCVcDe8GHHM5vei/M=;
+	b=neeiSpMf/Qj6kZpXMwlAZDozbUlu5THPFbpbfknHm56QqRL3yuhbLvLCJdhHbgZF7DAXx4
+	uAowl+I5VbJa/lMzDSP+oCAZ7oFqhDB3VR5MI68dUmweknEoJ0PVOZ0maJxAf7QjijbBIi
+	2pyPpFVO37Rp2UWXvrbN6BbCRsx1TQg=
+Date: Thu, 16 Jul 2026 14:09:48 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d1fcbede8f311db5cfa7cbe34371de7b63186ce5.1784191209.git.zhuhui@kylinos.cn>
+Subject: Re: [PATCH 1/4] selftests/bpf: Install bpftool where test_progs
+ expects to find it
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Christian Brauner <brauner@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260710-selftests-bpf_fixes-v1-0-aa24dfd6f4f9@suse.com>
+ <20260710-selftests-bpf_fixes-v1-1-aa24dfd6f4f9@suse.com>
+ <DJXJWE3X286K.16LM4LUS201ZP@bootlin.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <DJXJWE3X286K.16LM4LUS201ZP@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jul 16, 2026 at 04:43:39PM +0800, Hui Zhu wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
+On 7/13/26 8:32 AM, Alexis Lothoré wrote:
+> Hi,
 > 
-> After the per-mnode unlink loop, the return values of the batch
-> update_ftrace_direct_del()/update_ftrace_direct_mod() calls are only
-> WARN_ON_ONCE()'d, not checked. bpf_trampoline_multi_attach_free() is
-> then called unconditionally for every mnode, freeing old_image
-> whenever the single-point unlink succeeded (old_image != cur_image).
+> On Sat Jul 11, 2026 at 12:09 AM CEST, Ricardo B. Marlière wrote:
+>> bpftool_helpers.c looks for bpftool at "tools/sbin/bpftool" or
+>> "../tools/sbin/bpftool" relative to the running test_progs binary, matching
+>> the build directory layout where bpftool sits at
+>> $(OUTPUT)/tools/sbin/bpftool.
+>>
+>> INSTALL_RULE installs bpftool through the generic TEST_GEN_PROGS_EXTENDED
+>> mechanism, which flattens it straight into $(INSTALL_PATH) and loses the
+>> tools/sbin/ prefix. After "make install", every flavor of test_progs,
+>> including the default one, fails to locate bpftool, and bpftool_maps_access
+>> and bpftool_metadata error out with "Failed to detect bpftool path", even
+>> though bpftool itself built and installed fine.
+>>
+>> Explicitly install bpftool under tools/sbin/ in the installed tree
+>> so its relative location matches what detect_bpftool_path() already
+>> expects, restoring the pre-install layout instead of introducing a
+>> new one.
+>>
+>> Fixes: f21fae577446 ("selftests/bpf: Add a few helpers for bpftool testing")
+>> Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 > 
-> If the batch update fails, ftrace still points to old_image for the
-> affected IPs, so freeing it is a UAF.
+> I did not face the issue because I am running the selftests in-tree, and
+> the CI seems to do the same, but for users using selftests after running
+> `make install`, I guess the change makes sense.
 > 
-> Capture the two return values and, for mnodes whose single-point
-> unlink succeeded but whose batch update failed, call
-> bpf_trampoline_multi_attach_rollback() instead of
-> bpf_trampoline_multi_attach_free(). cur_image == NULL identifies the
-> unreg path (set by unregister_fentry_multi when total == 0),
-> cur_image != NULL identifies the modify path (set by
-> modify_fentry_multi when total > 0), so err_unreg/err_mod can be
-> matched to the right mnodes. Rollback restores cur_image = old_image,
-> the image ftrace is still actually calling.
+> That's not the first fix aiming to improve bpftool
+> detection/installation (eg the BPFTOOL env variable, see [1]), so it
+> makes me wonder if we shouldn't just make bpftool part of
+> TRUNNER_EXTRA_FILES for all flavours of test_progs, similarly to other
+> binaries needed during tests (eg: urandom_read), instead of just adding
+> some bpftool-specific details in this generic install rule, and just
+> make the test runners assume that the needed binary is in the same
+> directory.
+
+Alexis, using TRUNNER_EXTRA_FILES is a bit worse because that would
+copy bpftool into every flavor subdir. I think just doing a single
+rsync on install is fine.
+
 > 
-> This mirrors the existing error handling in
-> bpf_trampoline_multi_attach()'s rollback_unlink path.
+> Alexis
 > 
-> Fixes: aef4dfa790b2 ("bpf: Add bpf_trampoline_multi_attach/detach functions")
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-> ---
->  kernel/bpf/trampoline.c | 42 ++++++++++++++++++++++++++++++++++-------
->  1 file changed, 35 insertions(+), 7 deletions(-)
+> [1] https://lore.kernel.org/all/20260223191118.655185-2-ihor.solodrai@linux.dev/
 > 
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index a78fbf726fad..44ef25beb4cc 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -1723,7 +1723,7 @@ int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracing_multi_
->  {
->  	struct bpf_tracing_multi_data *data = &link->data;
->  	struct bpf_tracing_multi_node *mnode;
-> -	int i;
-> +	int i, err_unreg = 0, err_mod = 0;
->  
->  	trampoline_lock_all();
->  
-> @@ -1734,13 +1734,41 @@ int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracing_multi_
->  					NULL, &trampoline_multi_ops, data));
->  	}
->  
-> -	if (ftrace_hash_count(data->unreg))
-> -		WARN_ON_ONCE(update_ftrace_direct_del(&direct_ops, data->unreg));
-> -	if (ftrace_hash_count(data->modify))
-> -		WARN_ON_ONCE(update_ftrace_direct_mod(&direct_ops, data->modify, true));
-> +	if (ftrace_hash_count(data->unreg)) {
-> +		err_unreg = update_ftrace_direct_del(&direct_ops, data->unreg);
-> +		WARN_ON_ONCE(err_unreg);
-> +	}
-> +	if (ftrace_hash_count(data->modify)) {
-> +		err_mod = update_ftrace_direct_mod(&direct_ops, data->modify, true);
-> +		WARN_ON_ONCE(err_mod);
-> +	}
->  
-> -	for_each_mnode(mnode, link)
-> -		bpf_trampoline_multi_attach_free(mnode->trampoline);
-> +	for_each_mnode(mnode, link) {
-> +		struct bpf_trampoline *tr = mnode->trampoline;
-> +
-> +		/* If the batch ftrace update failed for this mnode's path,
-> +		 * ftrace still points to old_image. Use rollback to restore
-> +		 * cur_image to old_image (putting the new cur_image if any)
-> +		 * so the trampoline keeps the image ftrace is calling.
-> +		 *
-> +		 * This relies on update_ftrace_direct_del/mod being atomic:
-> +		 * on failure, NO IPs in the hash are modified in ftrace (all
-> +		 * validation/allocation happens before any ftrace record is
-> +		 * touched). If this assumption is broken in the future (i.e.,
-> +		 * partial success becomes possible), this rollback logic would
-> +		 * need to be revisited.
-> +		 *
-> +		 * cur_image == NULL indicates the unreg path (total == 0);
-> +		 * cur_image != NULL indicates the modify path (total > 0).
-> +		 */
-> +		if (tr->multi_attach.old_image &&
+>> ---
+>>  tools/testing/selftests/bpf/Makefile | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>> index b642ee489ea6..47911c9b4977 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -1055,6 +1055,8 @@ endif
+>>  DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
+>>  override define INSTALL_RULE
+>>  	$(DEFAULT_INSTALL_RULE)
+>> +	@mkdir -p $(INSTALL_PATH)/tools/sbin
+>> +	@rsync -a $(if $(PERMISSIVE),--ignore-missing-args) $(TRUNNER_BPFTOOL) $(INSTALL_PATH)/tools/sbin/
 
-I think tr->multi_attach.old_image is always != NULL in here?
 
-> +		    tr->multi_attach.old_image != tr->cur_image &&
-> +		    ((err_unreg && !tr->cur_image) ||
-> +		     (err_mod && tr->cur_image)))
-> +			bpf_trampoline_multi_attach_rollback(tr);
+It looks like we still have a redundant copy of bpftool because of:
 
-it's good that we won't free the image that's used, but after the link
-is detached, its program will be freed, so I expect the trampoline execution
-is likely to crash anyway.. did you try to simulate the errors?
+selftests/bpf/Makefile:327
 
-I remember suggesting to increase the prog's refcount to prevent that
-but I never sent that change.. I think also standard trampolines have
-the same issue
+        TEST_GEN_PROGS_EXTENDED += $(TRUNNER_BPFTOOL)
 
-> +		else
-> +			bpf_trampoline_multi_attach_free(tr);
-> +	}
->  
->  	trampoline_unlock_all();
+selftets/lib.mk:153
 
-also we could have bpf_trampoline_multi_detach returning void,
-without the WARN_ON_ONCE in bpf_tracing_multi_link_release,
-we already have the warnings in here
+        $(eval INSTALL_LIST = $(TEST_GEN_PROGS_EXTENDED)) $(INSTALL_SINGLE_RULE)
 
-thanks,
-jirka
+Ricardo, does it makes sense to remove it with your fix?
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 7260d672acf7..c776913bc32f 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -324,8 +324,6 @@ TRUNNER_BPFTOOL := $(DEFAULT_BPFTOOL)
+ USE_BOOTSTRAP := "bootstrap/"
+ endif
+ 
+-TEST_GEN_PROGS_EXTENDED += $(TRUNNER_BPFTOOL)
+-
+ $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOBJ)
+ 
+ TESTING_HELPERS        := $(OUTPUT)/testing_helpers.o
+
+>>  	@for DIR in $(TEST_INST_SUBDIRS); do				  \
+>>  		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
+>>  		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
+> 
+> 
+> 
+> 
+
