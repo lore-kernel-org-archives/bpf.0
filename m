@@ -1,30 +1,32 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8286942D759
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 14:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EFB42F71F
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 14:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784212109; cv=none; b=Z3rmRb6fiRpsLEgelKNKvj5NMXJjFXbvh9R0+80qC64MCfHmTyCOlzooREtxRHZ28APjU1c/XriNw7Ur0R36M9BmiQj9QLUF7qUUh+RNvpGoGAnUILkxPcAUhqWJ8+SnlJb+yp3gNFmsFKCfQhvZehpQihTFtGCNTgfbI/dYYzQ=
+	t=1784212148; cv=none; b=FwgdEFUCOHrZ9eDt9yiHoaBqoXzgvzNhZSEAIZFb+ZnH3zh9XTZnkTJbcNqXUqL4k1woBxCG+MPaNCk2b/TeGAWsv9BP2dVBb/9enDkMZK/9qsnqbItEpqDkoj+W3H7KcoV+Kwpcajh9cIXw3hH6yTqKD7fWyf3KTXFdBKh9UjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784212109; c=relaxed/simple;
-	bh=lTkri3eLcyfnznfqpApEqA81+0LQWnP5CrSlpTRIU3g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rxyLPYotrYbXCqZUunJSEqIhCkro7yrl6HHn4LaNlz6xkziasIUCT2EJ2jB946yXMiAEvNHY2qNga12P6cjNWXc4Hpcolv6hbCdAfsv7QoQpaBYBv7+c6uP1RUjg5zviLpZw+WZejslvepu3UaVTWZE2F+md+7x61paZUBeRg2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ey7kylJD; arc=none smtp.client-ip=95.215.58.171
+	s=arc-20240116; t=1784212148; c=relaxed/simple;
+	bh=m2dzVoqI8XAWj2ycfPSQkIQLOjCvq6cIUNWx365btec=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FBQwoO/UwiOkL2FzR88zsWzsbbVXRNt0YSmGkcamXYB42dmDv+LbxDu1OEJCT1muPpak3WHY1UBIF/n6pZeul97lsQ2VsgATjUSnuxyJrddeHWONeNn2b/MVhV5dGXaqyIRz0t06jIyrXUFdBBJhI0dhxr47njw30Rsuk2Jj2Bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gT6wB3S0; arc=none smtp.client-ip=95.215.58.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ey7kylJD"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gT6wB3S0"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784212095;
+	t=1784212143;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Cn8IWL7vldf7zy6/xPcDXPEoWEq0JvN6ZK8h9U3/xgo=;
-	b=Ey7kylJDsBds2FC0n5ih0PJ1Y3WKxFHy3DIOuqIIiz5gG7rB4Ya59zm09SJqWEvpb53z0y
-	wrXPu2r0JoMkCtDPnCa8FkoLWr+t2ob2U1Buav7T8inq9trWtt73AhF6JBUAyoOjgeiYxo
-	6JwBw52Wq+0vLANNXPRaRclFSyHYMuE=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uoY/N/ojtKzgaX5M5kqWpsRSKeYM7+C0F5rloiA8XWo=;
+	b=gT6wB3S0aIz17LheDmG0eppQnm+V6GWaAP744H/GDsf3i+wzSDCKGTpnnRKZB4APYqO88j
+	y5LmP6jys50UmB93zBhZQEQ9FDDZc1XgL76YitCQFK3sw30qcOgj2B7uClapcctHjNh83c
+	h0E0HCoFhz9BCdq9me627fi12a/LdWU=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org,
 	memxor@gmail.com
@@ -45,9 +47,11 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 1/3] bpf: Add memory usage for arena
-Date: Thu, 16 Jul 2026 22:24:58 +0800
-Message-ID: <20260716142746.8794-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next 2/3] selftests/bpf: Run arena tests serially
+Date: Thu, 16 Jul 2026 22:24:59 +0800
+Message-ID: <20260716142746.8794-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260716142746.8794-1-jiayuan.chen@linux.dev>
+References: <20260716142746.8794-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,136 +61,129 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-arena is the only map type whose map_mem_usage() still returns 0, so
-"bpftool map show" and fdinfo always showed 0 memlock for an arena no
-matter how many pages it had.
+Every arena reserves a 4GB kernel vmalloc region at creation. On a KASAN
+build that eagerly populates ~512MB of shadow memory per arena. Running the
+arena tests in parallel keeps several arenas alive at once, which exhausts
+the memory of a small CI VM and trips the OOM killer during map creation.
 
-Count the pages that are actually mapped into the arena: bump a counter in
-apply_range_set_cb() when a page goes in and drop it in
-apply_range_clear_cb() when a page goes out, both under the arena spinlock.
-map_mem_usage() then just returns nr_pages << PAGE_SHIFT.
-
-Only real data pages are counted, not the scratch page.
+Make the arena tests serial so at most one arena is alive at a time.
 
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- kernel/bpf/arena.c | 27 ++++++++++++++++-----------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/arena_atomics.c      | 2 +-
+ tools/testing/selftests/bpf/prog_tests/arena_direct_value.c | 2 +-
+ tools/testing/selftests/bpf/prog_tests/arena_htab.c         | 2 +-
+ tools/testing/selftests/bpf/prog_tests/arena_list.c         | 2 +-
+ tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c    | 2 +-
+ tools/testing/selftests/bpf/prog_tests/arena_strsearch.c    | 2 +-
+ tools/testing/selftests/bpf/prog_tests/libarena.c           | 2 +-
+ tools/testing/selftests/bpf/prog_tests/libarena_asan.c      | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 80b7b8a69446..bc3460211604 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -55,8 +55,10 @@ struct bpf_arena {
- 	struct vm_struct *kern_vm;
- 	struct page *scratch_page;
- 	struct range_tree rt;
--	/* protects rt */
-+	/* protects rt and nr_pages */
- 	rqspinlock_t spinlock;
-+	/* number of pages currently populated in the arena */
-+	u64 nr_pages;
- 	struct list_head vma_list;
- 	/* protects vma_list */
- 	struct mutex lock;
-@@ -143,14 +145,14 @@ static long compute_pgoff(struct bpf_arena *arena, long uaddr)
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_atomics.c b/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
+index d98577a6babc..1ad5d03d07ad 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
+@@ -222,7 +222,7 @@ static void test_store_release(struct arena_atomics *skel)
+ 		  "store_release64_result");
  }
  
- struct apply_range_data {
-+	struct bpf_arena *arena;
- 	struct page **pages;
--	struct page *scratch_page;
- 	int i;
- };
- 
- struct clear_range_data {
-+	struct bpf_arena *arena;
- 	struct llist_head *free_pages;
--	struct page *scratch_page;
- };
- 
- static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
-@@ -180,7 +182,7 @@ static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
- 
- 		if (pte_none(old))
- 			continue;
--		if (WARN_ON_ONCE(pte_page(old) != d->scratch_page))
-+		if (WARN_ON_ONCE(pte_page(old) != d->arena->scratch_page))
- 			return -EBUSY;
- 		ptep_get_and_clear(&init_mm, addr, pte);
- 		flush_tlb_before_set(addr);
-@@ -196,6 +198,7 @@ static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
- 	set_pte_at(&init_mm, addr, pte, pteval);
- #endif
- 	d->i++;
-+	d->arena->nr_pages++;
- 	return 0;
- }
- 
-@@ -227,10 +230,11 @@ static int apply_range_clear_cb(pte_t *pte, unsigned long addr, void *data)
- 	 * scratches its PTE. A later bpf_arena_free_pages() over that range walks
- 	 * here. Without the skip, scratch_page would be freed.
- 	 */
--	if (page == d->scratch_page)
-+	if (page == d->arena->scratch_page)
- 		return 0;
- 
- 	__llist_add(&page->pcp_llist, d->free_pages);
-+	d->arena->nr_pages--;
- 	return 0;
- }
- 
-@@ -413,7 +417,9 @@ static int arena_map_check_btf(struct bpf_map *map, const struct btf *btf,
- 
- static u64 arena_map_mem_usage(const struct bpf_map *map)
+-void test_arena_atomics(void)
++void serial_test_arena_atomics(void)
  {
--	return 0;
-+	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
-+
-+	return (u64)READ_ONCE(arena->nr_pages) << PAGE_SHIFT;
+ 	struct arena_atomics *skel;
+ 	int err;
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+index 4b4adb3f4b71..01fcf4965ea4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_direct_value.c
+@@ -66,7 +66,7 @@ static void test_arena_direct_value_one_past_end(void)
+ 	close(map_fd);
  }
  
- struct vma_list {
-@@ -506,8 +512,7 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 	if (ret)
- 		goto out_sigsegv_memcg;
+-void test_arena_direct_value(void)
++void serial_test_arena_direct_value(void)
+ {
+ 	if (test__start_subtest("one_past_end"))
+ 		test_arena_direct_value_one_past_end();
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_htab.c b/tools/testing/selftests/bpf/prog_tests/arena_htab.c
+index d69fd2465f53..91ccf0402980 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_htab.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_htab.c
+@@ -81,7 +81,7 @@ static void test_arena_htab_asm(void)
+ 	arena_htab_asm__destroy(skel);
+ }
  
--	struct apply_range_data data = { .pages = &page, .i = 0,
--					 .scratch_page = arena->scratch_page };
-+	struct apply_range_data data = { .arena = arena, .pages = &page, .i = 0 };
- 	/* Account into memcg of the process that created bpf_arena */
- 	ret = bpf_map_alloc_pages(map, NUMA_NO_NODE, 1, &page);
- 	if (ret) {
-@@ -696,8 +701,8 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
- 		bpf_map_memcg_exit(old_memcg, new_memcg);
- 		return 0;
- 	}
-+	data.arena = arena;
- 	data.pages = pages;
--	data.scratch_page = arena->scratch_page;
+-void test_arena_htab(void)
++void serial_test_arena_htab(void)
+ {
+ 	if (test__start_subtest("arena_htab_llvm"))
+ 		test_arena_htab_llvm();
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_list.c b/tools/testing/selftests/bpf/prog_tests/arena_list.c
+index 4f2866a615ce..2648e06f53d0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_list.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_list.c
+@@ -68,7 +68,7 @@ static void test_arena_list_add_del(int cnt, bool nonsleepable)
+ 	arena_list__destroy(skel);
+ }
  
- 	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
- 		goto out_free_pages;
-@@ -873,8 +878,8 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 	range_tree_set(&arena->rt, pgoff, page_cnt);
+-void test_arena_list(void)
++void serial_test_arena_list(void)
+ {
+ 	if (test__start_subtest("arena_list_1"))
+ 		test_arena_list_add_del(1, false);
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
+index acb9d53b5973..545b05d7a0aa 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
+@@ -101,7 +101,7 @@ static void test_arena_spin_lock_size(int size)
+ 	return;
+ }
  
- 	init_llist_head(&free_pages);
-+	cdata.arena = arena;
- 	cdata.free_pages = &free_pages;
--	cdata.scratch_page = arena->scratch_page;
- 	/* clear ptes and collect struct pages */
- 	apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
- 				     apply_range_clear_cb, &cdata);
-@@ -981,8 +986,8 @@ static void arena_free_worker(struct work_struct *work)
- 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
+-void test_arena_spin_lock(void)
++void serial_test_arena_spin_lock(void)
+ {
+ 	repeat = 1000;
+ 	if (test__start_subtest("arena_spin_lock_1"))
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_strsearch.c b/tools/testing/selftests/bpf/prog_tests/arena_strsearch.c
+index f81a0c066505..0c1c6cbfa0f1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_strsearch.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_strsearch.c
+@@ -23,7 +23,7 @@ static void test_arena_str(void)
+ 	arena_strsearch__destroy(skel);
+ }
  
- 	init_llist_head(&free_pages);
-+	cdata.arena = arena;
- 	cdata.free_pages = &free_pages;
--	cdata.scratch_page = arena->scratch_page;
- 	arena_vm_start = bpf_arena_get_kern_vm_start(arena);
- 	user_vm_start = bpf_arena_get_user_vm_start(arena);
+-void test_arena_strsearch(void)
++void serial_test_arena_strsearch(void)
+ {
+ 	if (test__start_subtest("arena_strsearch"))
+ 		test_arena_str();
+diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/testing/selftests/bpf/prog_tests/libarena.c
+index ba5a5a50f7c0..df7e4b8dc394 100644
+--- a/tools/testing/selftests/bpf/prog_tests/libarena.c
++++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
+@@ -202,7 +202,7 @@ static void run_libarena_parallel_test(struct libarena *skel, struct bpf_program
+ 	run_libarena_parallel_fini(skel, name, prefixlen);
+ }
  
+-void test_libarena(void)
++void serial_test_libarena(void)
+ {
+ 	struct arena_alloc_reserve_args args;
+ 	struct libarena *skel;
+diff --git a/tools/testing/selftests/bpf/prog_tests/libarena_asan.c b/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
+index f897405f701d..9c31b17dbf39 100644
+--- a/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
++++ b/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
+@@ -85,7 +85,7 @@ static void run_test(void)
+  * Run the test depending on whether LLVM can compile arena ASAN
+  * programs.
+  */
+-void test_libarena_asan(void)
++void serial_test_libarena_asan(void)
+ {
+ #ifdef HAS_BPF_ARENA_ASAN
+ 	run_test();
 -- 
 2.43.0
 
