@@ -1,125 +1,161 @@
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B7B3F44D7
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 12:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665DD41B8E4
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 12:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784205169; cv=none; b=oJPYND+P5FwqX3Iz+70L/AFFEde607VpcNmFvDGK+kXOATRFzpRXUfijpyWj+vfO+iNVRJ0W59FTNsHWJrk+OJhmL6iPUw9ATsiU21rDyJumJuypaNNmKqH1jq8BL5EtwVaiCk4nghmL2Xx1R9nRhUEnZKRk6SkV0aJazoLuk4s=
+	t=1784205342; cv=none; b=DUfMhGe2SHzKVDFFLr5dcr90av6hzlPsG+CoCkTxpITVb8ojTMiz08HdeaEG6JPSmdqXVBmVjIjeAupdNg/MBEH+YBkdT1O07PhEbP9g0/2R/vjw4nsY0cG2Xp+7CguMy3Xp2edXyLsHIbWs3CMij2VC23w8l7LQo6Zx81WKf+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784205169; c=relaxed/simple;
-	bh=4CBJ8YnD1s2aE8qPCXY6nOU6cIkgfJQt0Zr2Ep+kCNU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UTAqmOhuq0o5pzwvYK2O5UScVsiAtUZfXHOILAOaAdQctQ5N0sLwIoNjPeO5uZ5jPR67+rv/xOe0UcWnZfRXI/wQIZoj1oxV42PwvhrKdjYaA+OgpXeqTU02+URLGh2zwYKM87WKChA9LXc3pZxDGDIQ/SdTYn1pYagIRqLQqRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=qUCMvoKD; arc=none smtp.client-ip=18.9.28.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
+	s=arc-20240116; t=1784205342; c=relaxed/simple;
+	bh=zIK9msFJRP0bVSvAudH3HVfa7ABzZg1JzpTWlPIy4sk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=bPkJoRLbs/9F2Cr8ce63tfO62GOd79L050KRc6S4/s38VeWsiKzHTuYwcF0bBreUK17LP0+SWqMTiBuDb6nWwQbT+CTaYfKorNo+l0MT60Vhz+jpQVWN05UqPZaY4quO2BMfytQHcqqsP6tjfzsf59bLC84a/XsnURCnJ3FxpQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=AtJ0J5Gm; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="qUCMvoKD"
-Received: from macsyma.thunk.org ([151.240.45.27])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 66GCWEnd019170
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jul 2026 08:32:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1784205139; bh=NqxL3+SH2AbvlvVybH4sIY4E98+1L2ywgJjmzyt8SIE=;
-	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
-	b=qUCMvoKD0/7fqDuh/lBDbbI+hF1MijLx/EWHUVcydVFyR0ZsTny51YubjkXZ2yWds
-	 d9xGsv79d2SisYSsefz4TMLbJQbeu99vSGpoXWGSkZohwTZqz+2d2rvsnctyr+Qt/z
-	 ojXHBdjFFTxNxhugP23c3my58ufsrl/zkwlT5G8Ob7k3Wk9BQMHW+vcWlVcTakh4Yy
-	 9x6XWEfX9nGNpBnOtoWJVtfRs2zjr2bE+t0TxEWtVOu6YQ5XMs9CVRh7OsPrtIWr42
-	 h9ggvCryV9z+UPilYki8yZF4qTpwASqPNqMuY0mvOS+YYcG+WAb4Ek18Ar8uDxx5fN
-	 vU2WGrKD95WHg==
-Received: by macsyma.thunk.org (Postfix, from userid 15806)
-	id 79CA5A4EB5C; Thu, 16 Jul 2026 08:32:14 -0400 (EDT)
-Date: Thu, 16 Jul 2026 08:32:14 -0400
-From: "Theodore Tso" <tytso@mit.edu>
-To: Jai Luthra <jai.luthra@ideasonboard.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ihor Solodrai <ihor.solodrai@linux.dev>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Derek Barbosa <debarbos@redhat.com>,
-        Matthieu Baerts <matttbe@kernel.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Steven Rostedt <rostedt@goodmis.org>,
-        users@kernel.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Stephen Finucane <stephenfin@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Chris Mason <clm@meta.com>, Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: Linking Patchwork with Sashiko?
-Message-ID: <aljMl2wAv3mlQHhz@mit.edu>
-References: <20260713094120.GD1127719@killaraus.ideasonboard.com>
- <20260713220427.582b28bf@foz.lan>
- <7ia4mrvtrxjl.fsf@castle.c.googlers.com>
- <20260715005909.GF1656185@killaraus.ideasonboard.com>
- <00a244f8-5be6-4ee7-b5b1-e4cbdcd4fc77@linux.dev>
- <20260715163921.GH1778116@killaraus.ideasonboard.com>
- <153db0fa-65ac-49de-9bf5-456c9639954c@linux.dev>
- <20260715190654.GK1778116@killaraus.ideasonboard.com>
- <alfwOgVRgUJYOGtU@mit.edu>
- <178418302445.1426769.8816954031983102120@freya>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="AtJ0J5Gm"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-49546e16075so366415e9.3
+        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 05:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1784205338; x=1784810138; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=Mn32CUX/cJgGWYz3TdLuqf1PZ7vkIhqqxMT9vIruGHs=;
+        b=AtJ0J5GmJfuNy1cEZikbAcJyxxd7TpLfwp3FDaHvWRMnbWpG911azD2FJJ/+a0rPSh
+         OXIJm9gbJaQg29w0UIvlqkjpo8ESLrko3morkLRGlhrYdJj+EhgguK+FWWhK1vty97OS
+         Y3f+tIjrR4shiUHqWVH0R6d6JPbVftSYclR+R3rRpBPhPJuWXjZ9ZpGtPh7EhipeaR9+
+         2NzQs1FyIQKouBBDGUo4L1/hKIOVOPF1LWxMeS8LAKDwNVCSBiMGjmagoDtUclTWMxF0
+         KikncRnj6UTSJI6EcmLmmAyLTlpCJCwLP8YhvudGAQolN9ebaazrX0mh52o+NcW9RBLA
+         kBPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784205338; x=1784810138;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Mn32CUX/cJgGWYz3TdLuqf1PZ7vkIhqqxMT9vIruGHs=;
+        b=fPD14FeiSXrojp0KoX/YyrjzYZx9Wc35Z5hQtXaXjymR7oq5Q2qgRYjuyH7uTD1bGF
+         T6WI85XuytyP+46/LEc8cjBirDBbwscuI3VYWhf5Zy+zm1m1aGyi80La8CaAEIin9VXz
+         MtjsspV7TvXs2eDGCz0xr1JN1oBkvhI/sOCjbz4dZT5tZfzuWWZKGpkJQrKkengOAH1q
+         r7eN8lE/lkZHTYv7OGenyCGOOPL8ObkEirwJr27ciWjfLaV/h1+WY7wxmkwj9xiMrWeV
+         9HHg2+kRksjRWhZSDlbuaU4CFYGVs8ClHR0vnv0nEbqQ50xlYj20PrQkonTZUttjXY3g
+         zi1A==
+X-Forwarded-Encrypted: i=1; AHgh+RpsQioErrOK2Bw5epQUmFRsu/lipuc5lk9UfFPPV8J7+A4sV8CmQAJjG544lxnTWHg+r0o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxduu/0Qhc2fRUz4a0mPHrDhvHMekrTJSKlowJn7f71ZddkML7A
+	OHR9+ZXMNVk8AEkHCHP4GenXHn3Mz+TYBpSrP6QYTQRpx4G94w2b13Q5SLPBFfu6BjQ=
+X-Gm-Gg: AfdE7cmO6H6zNpaGFTP7qJMzoelwmL3dhi9KyhVAN7naB9T3B5OYYZEUfVYzgcQMvya
+	h5QsRfzw1g4Num4PlVzhZB2If95Bo3B9ixKUsHVnaV7gPZMfJABA+wJQms6U3DJEc21iPINJXNr
+	WxD1f7Xc7SoKmv1jeh4DTNNNlT9cptJkMAeoACe8a/fkzjRtkmBledfxVvtEyLR9e4yahf8zFw1
+	v8e83xZbIH4qTAesHhtTaCgHKe8wG3kLm2iHoTIKy/tjOODuTShF2BPq5h9pVyInmy1T8fC9oF9
+	JE9OEguGocSdMQ0i82btQVPWzMCwhd4OPm4ClVxOTK9BEo5kg2ph5E18Lqn+7kubcoEZWzHc2se
+	ixYc0fVQ4oA27t/hvgQD9rXwPe67vWKIl8kW9axsCENgGRqQ6ONSrrXnO3NW2uejHBmgWrxK/2V
+	BlIuPmVA==
+X-Received: by 2002:a05:600c:4fc4:b0:493:9cb3:53fc with SMTP id 5b1f17b1804b1-495389d2bb0mr120251385e9.11.1784205337476;
+        Thu, 16 Jul 2026 05:35:37 -0700 (PDT)
+Received: from cloudflare.com ([104.28.189.108])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f4635a935sm24118297f8f.11.2026.07.16.05.35.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2026 05:35:37 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: netdev@vger.kernel.org,  bpf@vger.kernel.org,  kernel-team@cloudflare.com
+Subject: Re: [PATCH RFC net-next 1/6] bpf: Introduce per-packet metadata
+ storage for BPF programs
+In-Reply-To: <aljJ1u-_1CBBF8Ha@devvm7509.cco0.facebook.com> (Stanislav
+	Fomichev's message of "Thu, 16 Jul 2026 05:10:12 -0700")
+References: <20260714-bpf-meta-inside-skb-ext-v1-0-5871c07a8dd6@cloudflare.com>
+	<20260714-bpf-meta-inside-skb-ext-v1-1-5871c07a8dd6@cloudflare.com>
+	<aljJ1u-_1CBBF8Ha@devvm7509.cco0.facebook.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Thu, 16 Jul 2026 14:35:36 +0200
+Message-ID: <87fr1jjenb.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <178418302445.1426769.8816954031983102120@freya>
+Content-Type: text/plain
 
-On Thu, Jul 16, 2026 at 11:53:44AM -0500, Jai Luthra wrote:
-> IMO false positives are possible everywhere, but LLMs are unpredictable in 
-> a very different way compared to static-analysis tools *especially* because 
-> they can be quite good at finding some issues and are non-deterministic.
+On Thu, Jul 16, 2026 at 05:10 AM -07, Stanislav Fomichev wrote:
+> On 07/14, Jakub Sitnicki wrote:
+>> BPF programs attached at different points in the network stack have no way
+>> to pass data between each other on a per-packet basis, other than by
+>> stashing it into a shared BPF map. xdp/skb->data_meta works for XDP-to-TC
+>> handoff, but is not available to programs running at later hooks like
+>> cgroup/skb, sock_ops, socket filters, tracing or LSM.
+>> 
+>> Add a new skb extension (struct bpf_skb_ext) that provides up to 256 bytes
+>> of per-packet storage. Size is configurable at build time though the
+>> CONFIG_BPF_SKB_EXT_SIZE option. The storage is embedded inside the
+>> extension chunk itself.
+>> 
+>> Expose the storage to BPF programs via bpf_dynptr_from_skb_ext() kfunc.
+>> The caller passes BPF_SKB_EXT_F_CREATE to allocate or COW (unshare) the
+>> extension and get a read-write dynptr. Without the flag, it gets a
+>> read-only dynptr to the existing extension, or -ENOENT if none exists.
+>> 
+>> Guard the feature behind a new CONFIG_BPF_SKB_EXT option.
+>> 
+>> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+>> ---
+>>  include/linux/bpf.h      |  10 ++++
+>>  include/linux/filter.h   |  26 ++++++++++
+>>  include/linux/skbuff.h   |   3 ++
+>>  include/uapi/linux/bpf.h |   5 ++
+>>  kernel/bpf/helpers.c     |   7 +++
+>>  kernel/bpf/log.c         |   2 +
+>>  kernel/bpf/verifier.c    |  10 +++-
+>>  net/Kconfig              |  20 ++++++++
+>>  net/core/filter.c        | 129 +++++++++++++++++++++++++++++++++++++++++++++++
+>>  net/core/skbuff.c        |   3 ++
+>>  10 files changed, 214 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index 7719f6528445..6b918a5b61bf 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -1484,6 +1484,8 @@ enum bpf_dynptr_type {
+>>  	BPF_DYNPTR_TYPE_SKB_META,
+>>  	/* Underlying data is a file */
+>>  	BPF_DYNPTR_TYPE_FILE,
+>> +	/* Underlying data is a bpf_skb_ext chunk */
+>> +	BPF_DYNPTR_TYPE_SKB_EXT,
+>>  };
+>>  
+>>  int bpf_dynptr_check_size(u64 size);
+>> @@ -4209,4 +4211,12 @@ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 all
+>>  	return 0;
+>>  }
+>>  
+>> +#ifdef CONFIG_BPF_SKB_EXT
+>> +
+>> +struct bpf_skb_ext {
+>> +	u8 buf[CONFIG_BPF_SKB_EXT_SIZE] __aligned(8);
+>> +};
+>
+> Can we do a dynamic size from the start? Say, some sysfs knob, 0 by
+> default. Once written, it's locks in the size and can't be changed.
+> Then your new 'flags' field can be used to indicate whether the area
+> actually has been allocated or not?
 
-Syzbot reports (whether it is of a lockdep or WARN spat) are also
-non-determinstic.  Even when it claims to have a reproducer, the
-reproducer is not neecessarily reliable.  I think the difference is
-that we know what to expect with syzbot, and LLM reviews are new.
+Thanks for feedback. Dynamic size would be ideal.
 
-And as others have recently pointed out, there is a combination of
-very deep subtle, real bugs that humans would not or have not
-discovered --- and at the same time, hallucinations that aren't real.
-So it's been hard to calibrate whether or not a particular report from
-Sashiko is valid or not.  But this is nothing new, and I would claim
-that it's not necessarily unique to LLM's.
+We're limited by skb extensions implementation here, which needs to know
+the (maximum) size of each skb extension chunk at init time [1].
 
-> I can understand the appeal of using them to find security bugs or as extra 
-> "eye balls to make all bugs shallow". And I am not advocating AI as bad or 
-> to ban it. But I do think usage of LLMs through Sashiko may give us free 
-> reviews, but require brand new work of reviewing the reviews. And this new 
-> work will be a burden on experienced folks, not newcomers, who will simply 
-> believe the LLM output because it is (or sounds) smarter than them.
+That said, there's been hallway discussion at Netdev, that we should
+look into making skb_ext allocate memory just for activated extensions
+and realloc as needed, as extensions are gaining more users.
 
-Syzbot and oss-fuzz has been an extra burden on us as well.  I suspect
-how much each tool impacts each subsystem varies, but I've had *way*
-more syzbot false positives (e.g., reports that don't conform to our
-threat models, such as reproducers using root privileges to modify the
-loop device out from under a file system being reported as a "security
-bug") than with Sashiko.  But it seems pretty clear that each
-subsystem's experience has had different experiences with differnt
-tools.
+Current implementation (allocate space for every available extension) is
+wasteful, as you have extension combos which are not possible (won't be
+active at the same time), like IPsec and MPTCP and CAN.
 
-> My point isn't that static-analysis tools can't make the same mistake, but 
-> that they're open source and fixable in a way that current architecture of 
-> LLM models isn't in general, other than giving it an ever-increasing prompt 
-> and hoping the random-number generator gods bless me when I need them to.
+IOW, build-time config is what is doable today. Having a sysctl knob
+doesn't buy us much. But we have a path to lift that constraint later
+(if we don't mess up the BPF API).
 
-Sashiko is open source as well, and there are a number of ways of
-fixing this, including adding annotations to the source code, etc.
-
-Sure, figuring out prompts is tricky, but I'd argue so is making
-changes to Clang for its context analysis.  Fortunately, there are
-people who are smarter than me in terms of their Clang-fu who have
-been improving Clang.  Similarly, Roman and his team are working on
-improving Sashiko.  I don't think anyone has said that kernel
-developers are responsible for changing the prompts (or changing
-syzbot, Coverity, etc.)
-
-Cheers,
-
-						- Ted
+[1] https://elixir.bootlin.com/linux/v7.2-rc3/source/net/core/skbuff.c#L5171
