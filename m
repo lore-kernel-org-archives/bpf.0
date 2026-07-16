@@ -1,266 +1,100 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC4A42BE97
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 15:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590523CA4AB
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 15:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784214689; cv=none; b=rpoc3IoT/tYwV6mkWi6gO5eQ6p22cB3olQI30v5P3sGaFw2tbd2WtGLBjHkEQEGlpGemvMUQGUqVRsoiZpJWsh/vFyAksOUmYrCR7codC0gUL75wuTs6fS44XYR0nJrC9mMpqkXNKgvr33SYfZI8qsfTGcTlGng1SWthZmy/qaI=
+	t=1784215657; cv=none; b=QQqQbtLmmZy/8Ov9WVsTeneOtyzApwacQjH03bXm2LGq2X15kOhifLvUdlVxk2ROL2SKxSfOAvB2xmC3pmvb0XnrKBl9sHoN0cfcn1DaAg8Tj5VIHCMX/dSBF4N5PSP/TlKxCvJwpyinozV9YJpGkUGK2/ARn2QoalBU0JQ1fPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784214689; c=relaxed/simple;
-	bh=psHxBjl481gjYQhTwo0qzwWBgo7H74fRjJSrZGRHig8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Xx06v1FiR3CZ7SlFTudKv7du0YeJEZFK30Ev1zxXMyELVvDPCKMuU6TgfkrrzYwP1Gl91K6wilh5d4NRSr2PXb/PqPr08egqxqVKxIZmLS3Dag7hO0EbfZQFndMhnN3U7zTO3eXUtQAzVJhA4omeJorFhNhXGLAo+58DD9Ui3XQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TZ+EExFV; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784215657; c=relaxed/simple;
+	bh=dgS/tQFfRzvNfjUwJwZ9lkxaDxCsUJGqb2ecu530vsU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=IKpnIoO1lTxKcfh4GbY9qWZ7bxskd0W4WhNxlS5sIXP97oq5hEpbrF/dSuUdJdHH00P8ajO8E7A8/sEOcbE5y/1OsvlANf28RKRC/RVQ/FaGtnvT1pOnU4vw8N03+opSJ7AyGc/bWEtQnOMu58m+0vKs7C8siZ5DjIk6sCSe86E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fkRP8Mvg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TZ+EExFV"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-9034b6b7674so51485776d6.0
-        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 08:11:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784214687; x=1784819487; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BSYGiZH98e8TFqFguafqMMr46lLxQiNCXi6OZDZdQ5Y=;
-        b=TZ+EExFVObcdbV8vK6hdbejC/IMMyJnAFWdyPG3Nm8o4Oi9Q0Coe+kUaDhNMJ2h4uR
-         z91wqujxK515LZ4Cvdh4YbKEgiTvYRaJL/uHix3Tt238G8Lxqm7HhlGSaVb24HH2mAqf
-         +WyompAtUMizoq3HQdN0SoE/Wq6Wnn919vVxMERUI4TeUxW6VUxSrgxe9DHVGo/mQEKl
-         zfEfiCqJmpAxAvDZmYEpl8MbPop+9rQjfj4OjPic6L4rP9eMfKDE0CklbtH+GUApK8An
-         bOud0O4OyNpX4tlFUj62wwIHoGBw7LsZo9MtWLgmmPw9TsdKxKVDhZXz1CtFa3U7tHjX
-         DUzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784214687; x=1784819487;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BSYGiZH98e8TFqFguafqMMr46lLxQiNCXi6OZDZdQ5Y=;
-        b=rmHvWhONlZTIkr7sns9h4t/JctjBWQpexlpA9Jwh0ftKLbWCV9URD0Q8GPzfCKpTEh
-         SWF25bQqleeEzpjLXjJNWJ0HI5Jl/MKzBhLURKr5MQvcE4boD1irPmfOY+TLOUt7cRMS
-         8u0lch7Rly4MeI1c2N9Ed8CUFhGPx8lMwxSvFT6R2Lzgd91JAVZ0fAeMU/78Wd3In1N/
-         IjKYLhZPh+zUOruDnrkWU4X5L47lzxsgeW+GzTJcVfaDjBtEjsSrAcuD9juHZdlaP3mC
-         RJieBK+0hTAgD9tPO/s3Q6gbz98OK5vftVDGfepThtr/PlrD3iDjg7nUxDOalVLsWTLD
-         ifpw==
-X-Gm-Message-State: AOJu0YxU2QKdjoMfYze4I0l2CNywjf6F1r+8nwHvx52tjjeVSr+yyZ4b
-	lIXRO33E2YhEvoqsZfiIWpGK4iGhEy8S3sHDBPNK5CbG8+umJsl1BGTu
-X-Gm-Gg: AfdE7cnOUY6NU4cxWfDhT9EEUIHjrYt9BUoczgH0JMlVfNh0/gmEPyUPkqCqRuoHBSp
-	1XHSuo/n0OtUHSEFitKj/d4KxevHK/yc2dC80Qid1yGea7H9XSM5Mysn1QZMS31XJVyiqfct8uN
-	Gddsc02otH9UAbIPU8JVkDIwErNJtyfCDZPtj2P/uRfDfh23A11e3q5pS0FVKJuC0YnSdciHJkw
-	Vksl3dVFdWcFjqmE2t3SO9qVOgP4mYtWmJzn/mnpXejiivmZ8LLRJ/3GTdFrS+tErgpiCTRxwum
-	s9BoohlDSIRdGvh0qZiJynm8cLhJtR2lCFx44PuhGAr102XWfLm4cDH0Mqvj8tTE7kzFDwgFVgV
-	mpkU6sT+OkdAjOyqu4Pjhorn0gjZfIypodFOhyzeJLMEoLKFTDqX45AA/EgGWwN8OJt3fH2PkYu
-	UyGeToub2j
-X-Received: by 2002:a05:6214:3385:b0:8fd:6e12:9710 with SMTP id 6a1803df08f44-90747d1cbf4mr139771886d6.62.1784214686754;
-        Thu, 16 Jul 2026 08:11:26 -0700 (PDT)
-Received: from TurinLinux.. ([184.144.109.221])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd56c4b78sm220031906d6.18.2026.07.16.08.11.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2026 08:11:25 -0700 (PDT)
-From: Nicholas Dudar <main.kalliope@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	davem@davemloft.net,
-	andreas@gaisler.com
-Cc: bpf@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	visitorckw@gmail.com
-Subject: [PATCH bpf-next] bpf, sparc: Add support for BPF_SDIV and BPF_SMOD in the sparc64 JIT
-Date: Thu, 16 Jul 2026 11:11:10 -0400
-Message-Id: <20260716151110.1716607-1-main.kalliope@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fkRP8Mvg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC631F000E9;
+	Thu, 16 Jul 2026 15:27:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784215656;
+	bh=8ogGyO/ZDH/4HZ9Pk5RROyNvtknNo6kO+744RQq+i6o=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fkRP8Mvg7Sb1nsOWH46JUP6oZ+mlTudOzxuXlI0afbd5cfaEp5oovE+XXzv0mP5yr
+	 PnHNb3UY2A1WzBUu6buj9ziFCf7fbhveGjQ19br51vQx8PfKFTvJjFOBlwakEXWx91
+	 xEQ/D4HvXbtRk4o+PRgR1ua6OW/8bRCU4cdf9S+wiX1MQigkNib81hFMWMR4YepmVk
+	 eHI+zNFPe4rXAOPn7IbTARoPC2Z3ABGQGznQm8YZJrmeQmP00uy4sp2wvEm0gUriFD
+	 zaEehW/g8+Q6rbjnISNld9D8ztjpXLcmsPgJBZMPxB+djrpYzoNLS3MouqnvhK2a/U
+	 DJqBeueLhgvEQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: Run arena tests serially
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260716142746.8794-2-jiayuan.chen@linux.dev>
+References: <20260716142746.8794-1-jiayuan.chen@linux.dev>
+ <20260716142746.8794-2-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 16 Jul 2026 15:27:35 +0000
+Message-Id: <20260716152735.DBC631F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-build_insn()'s div/mod emit sites pick DIV/UDIVX by ALU width only,
-never by insn->off, so the sparc64 JIT does not implement signed
-BPF_SDIV and BPF_SMOD (off == 1). Signed ALU32 and ALU64 div/mod get
-an unsigned quotient and remainder rather than the verifier's and the
-interpreter's signed result for negative operands.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Emit SDIV/SDIVX on the signed path across the ALU32 and ALU64, X-form
-and K-form div/mod sites. The 32-bit signed divide takes a 64-bit
-dividend from %y:dst, so sign-fill %y from dst before SDIV where the
-unsigned path zeroes it; the 64-bit SDIVX skips the %y write. Route the
-signed ALU32 result through do_alu32_trunc, since SDIV does not leave
-bits 63:32 clear the way unsigned DIV does.
+Pre-existing issues:
+- [High] Incomplete serialization of BPF arena tests leaves the CI environm=
+ent vulnerable to OOM.
+--
 
-The verifier and bpf_do_misc_fixups() remove the zero divisor and
-INT_MIN / -1 cases before the JIT runs.
+--- Patch [2]: [PATCH bpf-next 2/3] selftests/bpf: Run arena tests serially=
+ ---
+commit 4661bf4c3b39723c6187b74928c316a1e721ac60
+Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
-Assisted-by: Claude:claude-opus-4-8
----
- arch/sparc/net/bpf_jit_comp_64.c | 92 +++++++++++++++++++++++++++-----
- 1 file changed, 80 insertions(+), 12 deletions(-)
+selftests/bpf: Run arena tests serially
 
-diff --git a/arch/sparc/net/bpf_jit_comp_64.c b/arch/sparc/net/bpf_jit_comp_64.c
-index 2fa0e9375127..6de9fb29944c 100644
---- a/arch/sparc/net/bpf_jit_comp_64.c
-+++ b/arch/sparc/net/bpf_jit_comp_64.c
-@@ -149,6 +149,8 @@ static u32 WDISP10(u32 off)
- #define MULX		F3(2, 0x09)
- #define UDIVX		F3(2, 0x0d)
- #define DIV		F3(2, 0x0e)
-+#define SDIV		F3(2, 0x0f)
-+#define SDIVX		F3(2, 0x2d)
- #define SLL		F3(2, 0x25)
- #define SLLX		(F3(2, 0x25)|(1<<12))
- #define SRA		F3(2, 0x27)
-@@ -941,32 +943,69 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	case BPF_ALU64 | BPF_MUL | BPF_X:
- 		emit_alu(MULX, src, dst, ctx);
- 		break;
--	case BPF_ALU | BPF_DIV | BPF_X:
-+	case BPF_ALU | BPF_DIV | BPF_X: {
-+		const bool is_signed = (off == 1);
-+
-+		if (is_signed) {
-+			const u8 tmp = bpf2sparc[TMP_REG_1];
-+
-+			ctx->tmp_1_used = true;
-+
-+			/* Sign-extend dst into %y for 32-bit sdiv. */
-+			emit_alu3_K(SRA, dst, 31, tmp, ctx);
-+			emit_write_y(tmp, ctx);
-+			emit_alu(SDIV, src, dst, ctx);
-+			/*
-+			 * SDIV does not guarantee the zero-extension that
-+			 * the unsigned DIV path relies on, so clear bits
-+			 * 63:32 through the shared truncation instead of
-+			 * consuming the verifier's zext marker, as the
-+			 * other ALU32 ops do.
-+			 */
-+			goto do_alu32_trunc;
-+		}
- 		emit_write_y(G0, ctx);
- 		emit_alu(DIV, src, dst, ctx);
- 		if (insn_is_zext(&insn[1]))
- 			return 1;
- 		break;
-+	}
- 	case BPF_ALU64 | BPF_DIV | BPF_X:
--		emit_alu(UDIVX, src, dst, ctx);
-+		if (off == 1)
-+			emit_alu(SDIVX, src, dst, ctx);
-+		else
-+			emit_alu(UDIVX, src, dst, ctx);
- 		break;
- 	case BPF_ALU | BPF_MOD | BPF_X: {
- 		const u8 tmp = bpf2sparc[TMP_REG_1];
-+		const bool is_signed = (off == 1);
- 
- 		ctx->tmp_1_used = true;
- 
--		emit_write_y(G0, ctx);
--		emit_alu3(DIV, dst, src, tmp, ctx);
-+		if (is_signed) {
-+			const u8 tmp2 = bpf2sparc[TMP_REG_2];
-+
-+			ctx->tmp_2_used = true;
-+
-+			/* Sign-extend dst into %y for 32-bit sdiv. */
-+			emit_alu3_K(SRA, dst, 31, tmp2, ctx);
-+			emit_write_y(tmp2, ctx);
-+			emit_alu3(SDIV, dst, src, tmp, ctx);
-+		} else {
-+			emit_write_y(G0, ctx);
-+			emit_alu3(DIV, dst, src, tmp, ctx);
-+		}
- 		emit_alu3(MULX, tmp, src, tmp, ctx);
- 		emit_alu3(SUB, dst, tmp, dst, ctx);
- 		goto do_alu32_trunc;
- 	}
- 	case BPF_ALU64 | BPF_MOD | BPF_X: {
- 		const u8 tmp = bpf2sparc[TMP_REG_1];
-+		const unsigned int mod = (off == 1) ? SDIVX : UDIVX;
- 
- 		ctx->tmp_1_used = true;
- 
--		emit_alu3(UDIVX, dst, src, tmp, ctx);
-+		emit_alu3(mod, dst, src, tmp, ctx);
- 		emit_alu3(MULX, tmp, src, tmp, ctx);
- 		emit_alu3(SUB, dst, tmp, dst, ctx);
- 		break;
-@@ -1096,33 +1135,62 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	case BPF_ALU64 | BPF_MUL | BPF_K:
- 		emit_alu_K(MULX, dst, imm, ctx);
- 		break;
--	case BPF_ALU | BPF_DIV | BPF_K:
-+	case BPF_ALU | BPF_DIV | BPF_K: {
-+		const bool is_signed = (off == 1);
-+
- 		if (imm == 0)
- 			return -EINVAL;
- 
--		emit_write_y(G0, ctx);
--		emit_alu_K(DIV, dst, imm, ctx);
-+		if (is_signed) {
-+			const u8 tmp = bpf2sparc[TMP_REG_2];
-+
-+			ctx->tmp_2_used = true;
-+
-+			/* Sign-extend dst into %y for 32-bit sdiv. */
-+			emit_alu3_K(SRA, dst, 31, tmp, ctx);
-+			emit_write_y(tmp, ctx);
-+			emit_alu_K(SDIV, dst, imm, ctx);
-+		} else {
-+			emit_write_y(G0, ctx);
-+			emit_alu_K(DIV, dst, imm, ctx);
-+		}
- 		goto do_alu32_trunc;
-+	}
- 	case BPF_ALU64 | BPF_DIV | BPF_K:
- 		if (imm == 0)
- 			return -EINVAL;
- 
--		emit_alu_K(UDIVX, dst, imm, ctx);
-+		emit_alu_K((off == 1) ? SDIVX : UDIVX, dst, imm, ctx);
- 		break;
- 	case BPF_ALU64 | BPF_MOD | BPF_K:
- 	case BPF_ALU | BPF_MOD | BPF_K: {
- 		const u8 tmp = bpf2sparc[TMP_REG_2];
-+		const bool is_signed = (off == 1);
- 		unsigned int div;
- 
- 		if (imm == 0)
- 			return -EINVAL;
- 
--		div = (BPF_CLASS(code) == BPF_ALU64) ? UDIVX : DIV;
-+		if (BPF_CLASS(code) == BPF_ALU64)
-+			div = is_signed ? SDIVX : UDIVX;
-+		else
-+			div = is_signed ? SDIV : DIV;
- 
- 		ctx->tmp_2_used = true;
- 
--		if (BPF_CLASS(code) != BPF_ALU64)
--			emit_write_y(G0, ctx);
-+		if (BPF_CLASS(code) != BPF_ALU64) {
-+			if (is_signed) {
-+				const u8 tmp3 = bpf2sparc[TMP_REG_3];
-+
-+				ctx->tmp_3_used = true;
-+
-+				/* Sign-extend dst into %y for 32-bit sdiv. */
-+				emit_alu3_K(SRA, dst, 31, tmp3, ctx);
-+				emit_write_y(tmp3, ctx);
-+			} else {
-+				emit_write_y(G0, ctx);
-+			}
-+		}
- 		if (is_simm13(imm)) {
- 			emit(div | IMMED | RS1(dst) | S13(imm) | RD(tmp), ctx);
- 			emit(MULX | IMMED | RS1(tmp) | S13(imm) | RD(tmp), ctx);
+This commit changes several BPF arena tests to run serially to prevent memo=
+ry
+exhaustion during KASAN builds. By renaming the test functions to start with
+serial_test_, the selftests framework ensures at most one arena is alive at=
+ a
+time.
 
-base-commit: d1f4b56417a3dc1a0600f960b14f46bd25eda89d
--- 
-2.34.1
+> Make the arena tests serial so at most one arena is alive at a time.
 
+[Severity: High]
+This is a pre-existing issue, but there are other tests that allocate
+BPF_MAP_TYPE_ARENA maps which are still running in parallel.
+
+For example, in tools/testing/selftests/bpf/prog_tests/verifier.c:
+
+void test_verifier_arena(void)                { RUN(verifier_arena); }
+void test_verifier_arena_large(void)          { RUN(verifier_arena_large); }
+
+In tools/testing/selftests/bpf/prog_tests/stream.c:
+
+void test_stream_success(void)
+{
+	RUN_TESTS(stream);
+	return;
+}
+
+In tools/testing/selftests/bpf/prog_tests/compute_live_registers.c:
+
+void test_compute_live_registers(void)
+{
+	RUN_TESTS(compute_live_registers);
+}
+
+Since these remain prefixed with test_ rather than serial_test_, won't they
+still run concurrently and potentially exhaust memory on KASAN builds?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260716142746.8794=
+-1-jiayuan.chen@linux.dev?part=3D2
