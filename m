@@ -1,32 +1,32 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16093F1AA6
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 08:44:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2243CF661
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 08:44:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784191443; cv=none; b=cKJTFzvU8dMIjwa2c65WGatXiWkLDGlXEIEDfLQFesv8sgnV88wQhSYd+UHLxlx/fVuK27WOeg6qEyOhW57zQhcSQCgfl8NC1YAoLXJ6icehzU4XnsaNY8TTBv42tahvDXUGwHtZIv5WUPcrSzAN+bVgYK8v0fClH2GNAPeSorw=
+	t=1784191449; cv=none; b=jnBC5D9DAco+OtsQaIYJ7AzgayvSuK3fItzUt3iRWcBXi/WhheXb8i8QI2FkZ6XHdJTDN1GXgJACslBktB4L93CSgF4MQJ8FpH2kvHG5fVoG/05F+ti1bjpwhAlP2NjTw2YPKRgoW9U0GXiBodKYCRXMPFYZ6N2qiHRQx1ox0I4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784191443; c=relaxed/simple;
-	bh=BUB0EyKhcKQeUShMQ9ND2AJfi4caV3oUxc9/yPRbvKY=;
+	s=arc-20240116; t=1784191449; c=relaxed/simple;
+	bh=FNp0LF73oMrRqxmEDPZiDkxtu9dBbjdVTdY2tC98oGk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Re7JUFBWlDB+tWu66lrRC0fBpO1nEnsnsnijY32zS8rZ2HDjpwUpeVs7haLiJxi0ffRW2Lsvo/E9ESVP8zOffqAIrKn1PFAXhncDYJC5RNKE8SAnFBxDUUu4e9QqvgHNJlQGObRe6mbM5Za6emPt0t69+ZsJgoezPk/dmBydimA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=spZ/MkTm; arc=none smtp.client-ip=95.215.58.171
+	 MIME-Version; b=mVZ1eJbayzpA4dlrdqxDKWe5W2wllXTtR3kEp6j2UeeZM0FD10kTJtu0IjRVNRSSEgTmnG4Nq7zmGePR6K8Zn7d4Q/L4ya2IKBxXzM4mT/eOEXwZwu7uOhPBkhkd0RoZeo3szC3zrJSs5wdHz/YTFbXQ2Owh5E6bLnlJLwYh/7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FnJMyG5F; arc=none smtp.client-ip=95.215.58.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="spZ/MkTm"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FnJMyG5F"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784191439;
+	t=1784191443;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aHvaCVoxGTpef8l56Ulzg3qJv8QB8JZGTeStI/cS64c=;
-	b=spZ/MkTml7u1vBJ4ojNJy2Qp/4PVW1IgmBPTQXaTF6O2p8QCuy5DPxvQ7xbD6/0tn5cqY0
-	Cuos+PYp6flkuC2AGMKgdMbeI/vLKcAuwvfvE4in1bop1mNE7FubfSxyvEDk8l1MrFS7Rl
-	eThpgzQzLNtYh0Ib4NSJIxpk+PRR4Pk=
+	bh=PSuxZuUD5WiJ17/GaOn+xt1UMmsQRqTvDVf84o+44Zk=;
+	b=FnJMyG5FFs5hanxSpJ+odiCtKLwsTJsh4z5WnQOFAXEEsZdtv5cIoFG7FuBh31A/TTJYfn
+	6B06XEiLueJ/M0jMPBmO8q8GtVLUjScSv4ogdnJfvkztRAEC6jQASlEIl9aGNK/mntT6r4
+	LDwN+lUeNVtWK757J/1o3qyi/OjNvnI=
 From: Hui Zhu <hui.zhu@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -42,9 +42,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next 1/2] bpf: Fix stale old_image UAF on trampoline update failure
-Date: Thu, 16 Jul 2026 16:43:38 +0800
-Message-ID: <76dfd8edea81af878f52739431a218cd1d214ab2.1784191209.git.zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next 2/2] bpf: Fix UAF in bpf_trampoline_multi_detach when ftrace update fails
+Date: Thu, 16 Jul 2026 16:43:39 +0800
+Message-ID: <d1fcbede8f311db5cfa7cbe34371de7b63186ce5.1784191209.git.zhuhui@kylinos.cn>
 In-Reply-To: <cover.1784191209.git.zhuhui@kylinos.cn>
 References: <cover.1784191209.git.zhuhui@kylinos.cn>
 Precedence: bulk
@@ -58,58 +58,95 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Hui Zhu <zhuhui@kylinos.cn>
 
-In bpf_trampoline_multi_detach(), if __bpf_trampoline_unlink_prog()
-fails (e.g. -ENOMEM in bpf_tramp_image_alloc), bpf_trampoline_update()
-returns before touching ftrace, so cur_image still equals old_image
-and ftrace still points to it. The failure is only WARN_ON_ONCE'd and
-the loop continues; afterwards bpf_trampoline_multi_attach_free()
-unconditionally frees old_image via bpf_tramp_image_put(). Once the
-RCU grace period elapses, the still-active image is freed while
-ftrace keeps calling into it - a UAF that can crash the kernel or be
-exploited via slab reuse.
+After the per-mnode unlink loop, the return values of the batch
+update_ftrace_direct_del()/update_ftrace_direct_mod() calls are only
+WARN_ON_ONCE()'d, not checked. bpf_trampoline_multi_attach_free() is
+then called unconditionally for every mnode, freeing old_image
+whenever the single-point unlink succeeded (old_image != cur_image).
 
-The attach path avoids this with bpf_trampoline_multi_attach_rollback(),
-but that can't be reused here: on this failure path cur_image ==
-old_image, so calling it would free the active image the same way.
-Re-adding the prog to the trampoline's hlist isn't safe either, since
-bpf_tracing_multi_link_release() frees the link (and its embedded
-tramp_node) immediately after detach returns.
+If the batch update fails, ftrace still points to old_image for the
+affected IPs, so freeing it is a UAF.
 
-Fix it by only freeing old_image in bpf_trampoline_multi_attach_free()
-when it differs from cur_image. On success cur_image is updated to a
-new image (or NULL), so old_image != cur_image correctly identifies a
-stale image. On this failure path they're equal, so the image is left
-alone until a later successful update replaces it.
+Capture the two return values and, for mnodes whose single-point
+unlink succeeded but whose batch update failed, call
+bpf_trampoline_multi_attach_rollback() instead of
+bpf_trampoline_multi_attach_free(). cur_image == NULL identifies the
+unreg path (set by unregister_fentry_multi when total == 0),
+cur_image != NULL identifies the modify path (set by
+modify_fentry_multi when total > 0), so err_unreg/err_mod can be
+matched to the right mnodes. Rollback restores cur_image = old_image,
+the image ftrace is still actually calling.
+
+This mirrors the existing error handling in
+bpf_trampoline_multi_attach()'s rollback_unlink path.
 
 Fixes: aef4dfa790b2 ("bpf: Add bpf_trampoline_multi_attach/detach functions")
 Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 ---
- kernel/bpf/trampoline.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ kernel/bpf/trampoline.c | 42 ++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 35 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 6eadf64f7ec9..a78fbf726fad 100644
+index a78fbf726fad..44ef25beb4cc 100644
 --- a/kernel/bpf/trampoline.c
 +++ b/kernel/bpf/trampoline.c
-@@ -1585,7 +1585,17 @@ static void bpf_trampoline_multi_attach_init(struct bpf_trampoline *tr)
- 
- static void bpf_trampoline_multi_attach_free(struct bpf_trampoline *tr)
+@@ -1723,7 +1723,7 @@ int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracing_multi_
  {
--	if (tr->multi_attach.old_image)
-+	/* Only free old_image if it is no longer the active image.
-+	 * When bpf_trampoline_update() fails before modify_fentry_multi()/
-+	 * unregister_fentry_multi() is called, cur_image is unchanged
-+	 * (cur_image == old_image) and ftrace still points to it. Freeing
-+	 * it would cause a UAF when ftrace calls into the freed memory.
-+	 * On success, cur_image is either a new image or NULL, so
-+	 * old_image != cur_image correctly identifies a stale image that
-+	 * is safe to free.
-+	 */
-+	if (tr->multi_attach.old_image &&
-+	    tr->multi_attach.old_image != tr->cur_image)
- 		bpf_tramp_image_put(tr->multi_attach.old_image);
+ 	struct bpf_tracing_multi_data *data = &link->data;
+ 	struct bpf_tracing_multi_node *mnode;
+-	int i;
++	int i, err_unreg = 0, err_mod = 0;
  
- 	tr->multi_attach.old_image = NULL;
+ 	trampoline_lock_all();
+ 
+@@ -1734,13 +1734,41 @@ int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracing_multi_
+ 					NULL, &trampoline_multi_ops, data));
+ 	}
+ 
+-	if (ftrace_hash_count(data->unreg))
+-		WARN_ON_ONCE(update_ftrace_direct_del(&direct_ops, data->unreg));
+-	if (ftrace_hash_count(data->modify))
+-		WARN_ON_ONCE(update_ftrace_direct_mod(&direct_ops, data->modify, true));
++	if (ftrace_hash_count(data->unreg)) {
++		err_unreg = update_ftrace_direct_del(&direct_ops, data->unreg);
++		WARN_ON_ONCE(err_unreg);
++	}
++	if (ftrace_hash_count(data->modify)) {
++		err_mod = update_ftrace_direct_mod(&direct_ops, data->modify, true);
++		WARN_ON_ONCE(err_mod);
++	}
+ 
+-	for_each_mnode(mnode, link)
+-		bpf_trampoline_multi_attach_free(mnode->trampoline);
++	for_each_mnode(mnode, link) {
++		struct bpf_trampoline *tr = mnode->trampoline;
++
++		/* If the batch ftrace update failed for this mnode's path,
++		 * ftrace still points to old_image. Use rollback to restore
++		 * cur_image to old_image (putting the new cur_image if any)
++		 * so the trampoline keeps the image ftrace is calling.
++		 *
++		 * This relies on update_ftrace_direct_del/mod being atomic:
++		 * on failure, NO IPs in the hash are modified in ftrace (all
++		 * validation/allocation happens before any ftrace record is
++		 * touched). If this assumption is broken in the future (i.e.,
++		 * partial success becomes possible), this rollback logic would
++		 * need to be revisited.
++		 *
++		 * cur_image == NULL indicates the unreg path (total == 0);
++		 * cur_image != NULL indicates the modify path (total > 0).
++		 */
++		if (tr->multi_attach.old_image &&
++		    tr->multi_attach.old_image != tr->cur_image &&
++		    ((err_unreg && !tr->cur_image) ||
++		     (err_mod && tr->cur_image)))
++			bpf_trampoline_multi_attach_rollback(tr);
++		else
++			bpf_trampoline_multi_attach_free(tr);
++	}
+ 
+ 	trampoline_unlock_all();
+ 
 -- 
 2.43.0
 
