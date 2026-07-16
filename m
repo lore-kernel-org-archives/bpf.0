@@ -1,147 +1,160 @@
-Received: from MRZP264CU002.outbound.protection.outlook.com (mail-francesouthazon11020107.outbound.protection.outlook.com [52.101.165.107])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 231FC2ED84A
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 11:27:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.165.107
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784201273; cv=fail; b=ZFEAontTl6pqFvFin9J7wCDPwP0v/Iui98EoDpTEpiiyHSEwIM6X1ZvTFzfmomhzW+gjup/2SoiYRAgYSXyzd9N8gQyLnjr/gWzMK0KlMc9KoTJEhpMac6lYVDgvSSd9n8THTLZK9IdiyhVhOy0W6iDdCtSSGk1k2KmocnmXb3M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784201273; c=relaxed/simple;
-	bh=iAidOtlqUDTjOcvInlMyXu0bUcJGJzjfYL5v+p54Gks=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=TrjVC6KMZ7S1Qgmzop4WHdH92QrN0PBWMgFPxnulr6QfZhH3LAQUZLLZUlV7Il/WMHYQPVjoFl2RBlBDZQmpvbDLTQjVlNX3qgzajd1V7kgioF7cGGeHgLDbMBnBOG8xFZou1oX7NoT/bO2g31Tc9+cC3I5cY8BhzGLeD6rqUt8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=harfanglab.fr; spf=pass smtp.mailfrom=harfanglab.fr; dkim=pass (1024-bit key) header.d=harfanglab.fr header.i=@harfanglab.fr header.b=mTmRvCcw; arc=fail smtp.client-ip=52.101.165.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=harfanglab.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=harfanglab.fr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AA43502A9;
+	Thu, 16 Jul 2026 11:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784201505; cv=none; b=tj3rmcMBZi4oM9V5GEFDrTSR6/6YUNcvaMERvSf9Y1swa2EeGfxl5Ji6KC+lOO9oOSumOy7ucHwRkW7nsMH0IcPqT77/tRT2L4AaEQxPOKs2HFhiw3rACnXDbZ8nUgXMyDwNGFMMSz/rkcbzyXuxWb0SRf68O+9eT3Tng18ZmXE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784201505; c=relaxed/simple;
+	bh=snEacmZNAlbxjOEuzNdvq+Xo8Dyw2gWqhXlIQWZzwAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QoPJWFinQm1WzxGy3UaCv1daZzKhJ4Fx5avlQTgU+KiVxSui40emuyJZ+9GWgOa+BOnJ9Q7Tu4igYZ1XmnEtM4sgDmPGD+a2LyRIH/eheja2IogKRcKMPoZzcfeXirGnNNFSwoKiiAafRlsUszcDvuqmT2Yi4smZzSl2Ppp3wrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CU8PyQnp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=harfanglab.fr header.i=@harfanglab.fr header.b="mTmRvCcw"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nWL2JBdAzd7JJpkzpxyncKk9flA3Rmv3dw9TZDZVovaLkG1gJBvpMSsiZGoUJX5UTQJuhufxL82iuPGy8LDOAjESp00dfn9b2i1WaLbRLTW8fb97ee+mbKp/3voN1Ee85XTPC8cOgqWX28rnuqNt4hUMVuzbAueA71BkYRAcYh5CXwxoIyUEFl3J1fBxW+EqHDZbCoP4CIFzww7WIRdnL3TBEtx0wNFnl1ViTTqFguMU2TlEAAxOPOlZ1h/kpuGV9va8wri5hrZBLaL9fy06D1/Le4MCQ9+QWdUO0qfn7CNhNow5kZpdr7ctVxUgVePLIeDRJg52HaFU0/lyKx4wzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iAidOtlqUDTjOcvInlMyXu0bUcJGJzjfYL5v+p54Gks=;
- b=sIDFOjp3V8qn9rUBavpo/4yQ5M/+Puk8EW13Xi4dmaE7G+yhuLWc4q5wh8N/70XMqmdydhj41vYQrql9dmqYYEdhhUm8O0UmggrRK3/x01qDVcHYLsYka1gAH6SUk9jEjdDs9YtmJyCYVfiVqHnSKWBGB0nlmQ8ph6cA4ApgPXECY+VKJfsUQXiqzGJHQJGkNugg3FirJvCjMQGGhhDBJK0dSrXOEwm3pL7F1Udd2Nlnd5jS0uXjqIvnRRCyHAMeSxhTsS9nq5p2nsigouV8hny4ru/Xh0oE1dnCdgFcz1ktGSK5//pihhsdmrCjATknZ+o7aS/KWgJTHvTdUrAAKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=harfanglab.fr; dmarc=pass action=none
- header.from=harfanglab.fr; dkim=pass header.d=harfanglab.fr; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=harfanglab.fr;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iAidOtlqUDTjOcvInlMyXu0bUcJGJzjfYL5v+p54Gks=;
- b=mTmRvCcw349J815oiJYmV37/FO3492CqhYUTJKU9xnY1cI+h3pbVtrgO+xTc+HfMGa4V2VS/NUPhDRzCUrMH/n+8eOrYJTMuvCmLw3LCocjaIeT68ymG3n/seY9AIRxdrLFMPtxcS8k1ZSkmaQQmlxsoULCuwfz0Cr+7Zgqf7O8=
-Received: from MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:28::14)
- by PARP264MB6867.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:55b::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.18; Thu, 16 Jul
- 2026 11:27:47 +0000
-Received: from MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM
- ([fe80::7d89:c984:624d:9689]) by MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM
- ([fe80::7d89:c984:624d:9689%6]) with mapi id 15.21.0223.011; Thu, 16 Jul 2026
- 11:27:47 +0000
-From: Vincent Thiberville <vincent@harfanglab.fr>
-To: Leon Hwang <leon.hwang@linux.dev>, "ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>
-CC: "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: PROBLEM: BPF interpreter fallback after JIT compilation of
- BPF_ADDR_PERCPU leads to kernel panic
-Thread-Topic: PROBLEM: BPF interpreter fallback after JIT compilation of
- BPF_ADDR_PERCPU leads to kernel panic
-Thread-Index: AQHdB8yzqGrNWEhQ9U+ot25Rw6XY5rZWVYcAgACsKdaAAPcQgIAYISD5
-Date: Thu, 16 Jul 2026 11:27:46 +0000
-Message-ID:
- <MR1P264MB331493FEEA2ACE6C2AEA5EB9B7C72@MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM>
-References:
- <MR1P264MB331494502C9D13D8A9EAFB99B7E82@MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM>
- <d255172d-d9e9-4116-9243-975cf4bdf3d0@linux.dev>
- <MR1P264MB33143D31DA8982ADB2E0D808B7F72@MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM>
- <90c32de0-feac-4e63-9757-2a1d115be08c@linux.dev>
-In-Reply-To: <90c32de0-feac-4e63-9757-2a1d115be08c@linux.dev>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=harfanglab.fr;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MR1P264MB3314:EE_|PARP264MB6867:EE_
-x-ms-office365-filtering-correlation-id: 59666c6a-f58a-4f4c-827c-08dee32d42fc
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|23010399003|376014|366016|1800799024|6133799003|38070700021|10067099003|56012099006|55112099003|18002099003|22082099003|11063799006|4143699003;
-x-microsoft-antispam-message-info:
- jkvQLICG4ITZJDkVPWkATc7DyOdSn3CHrUJRbug67m7whphiuUbzhkyDaaMsomvsnUkOYAm7DKCQXRyBHIsag576RAA7KoA1pgiZasVYqofiiAbsp697uHjGllQEZNu9+iC64Zr+m9AoTLVIlx1eaj4fWagAB+tgVMqsvw+4SpvpTeNMSyHtyXukjBCgEo4uFjh2xniY02cywm6v83gei0P2rjhwTVKuvOrex+hvYr9eZ6CkNQueag4kokr+LtGuDmnuOh2yRWLrQdivFS1p2eGAy/svu9vWVTj9KKat9DKwrfb07FVtzYMHQ2rkprODJiMHNsbTUj2N0V1uZuspFsg2QlHKurfMlYVsLh+w/rt3nRWUakdvCrUF1lbBWi+rKl5EdagLL0TlqmELnPeQHFGdR3DD321eZghfpqzAlk62bgxPc6GRY+1dexhy5c40ir/7Qdy6qEQxTFI2eq0O+qNJvrJgfpe1jKoI0g/CE+0nge+Up/UpOBk/mmsIR6X4vps+eGzpoVICGpLOYpYFRb1aXHFRsIpQ2vh0LQ9aHKQbb2wlHCIY0X4gUwyhPCmS2FF1NNkDVhADeT8rT09DIl2LTI9lIji6MaNukhk1m3HXculrFshqIz4Q0W1cMkgvzPG+vr2D6MPMssYrDwqGWN+WX+oluzwdn2IAnDeNslGerDZeoT747/a8KA2pB2Zoa7Hfpdr6HQwzlz7BX6QboOCT1d2+Z57C2qb/AaC0YTw=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(366016)(1800799024)(6133799003)(38070700021)(10067099003)(56012099006)(55112099003)(18002099003)(22082099003)(11063799006)(4143699003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?40J+WU+2uo++Is8+URVOb4etV2KpaWK+onglsWrO0MG8eq61emljfsR0Ym?=
- =?iso-8859-1?Q?xVZr6HiJyAY8eZJ7WfLhFgpzF83aRZxm/wNwZswDGCv79G4wtmDWi/h41p?=
- =?iso-8859-1?Q?HShkQu08aVgqdZoaBIufjTw//wfUP89y0UsAphQFEjebrUlMQRD56ikwQ9?=
- =?iso-8859-1?Q?gAtmZwZH/JsazpigQyiiZzwQg/H3So2CwEe1gPtbvRShRR/WvZ32pqabB0?=
- =?iso-8859-1?Q?FDWvTRfZ+Zzvy4LZSJchIyMJptk34nZsxzaoCaZ1aGyf+4EyTSvePR07Sz?=
- =?iso-8859-1?Q?wKnSAwdMtN692/LVhAWRW5O9URZR687IBp7F1jMgeIRj0aM1FG3c1pKlAm?=
- =?iso-8859-1?Q?M07HrmbCoCn8Vib9VIMwxUlheNNTqc2IJtWqVHg5gcd54y0zNnpNxlXMxK?=
- =?iso-8859-1?Q?B+g8PESjRY9ZmB53W3ItNI3bMF/KGoUY2aFWm++s+Ev2+rHuJgsx5CEyhX?=
- =?iso-8859-1?Q?8ybULs5UXNloScQ4CCnIF8WGiQRkTwCnzEXblSOS2YBkf1g8sGJo7Pvma4?=
- =?iso-8859-1?Q?3nDa/Mg52QKlbg7N3gvdy0cZGwnS2EgKbyLAsmEhHp9Tn9aB4RQSz98J+a?=
- =?iso-8859-1?Q?GdKpKWuRhUOvQ6InLeHks5jiQ9lPEqiBI64gUAi0kusjBukLatdY8M9tUf?=
- =?iso-8859-1?Q?6+xxWrR7/bXFsZG2BOO4ma+oVGdoYEZMERyCnAkKNBj8l9KQh/aFSSoCsH?=
- =?iso-8859-1?Q?qJSLpi9g/Jrok6pQ9jERwkYin8LBuPzRzu8EPRU2X/vwuYdSEhMJl6gzMr?=
- =?iso-8859-1?Q?sdZd5XGut6032c7M0WgdRwbETBOW90lCNWMqrq72o5TKZcHwSrkRo6CauD?=
- =?iso-8859-1?Q?B4PUE1v68E75+VCHQawW+/Ha9zUWyt+x+5epXGsB3BKTtpmMl/GpgG2qGW?=
- =?iso-8859-1?Q?XlMJOC5eTGsz5t8m6/6HVHWWLzCeW7ZY8yVL3cXvG5fhUoMNl2oS5UgB4k?=
- =?iso-8859-1?Q?eXxH5/jaqMUWAU6+uWC0dBWkXt8tNfSRYWnTWSg1iCkpC9uyZfobZCGbbJ?=
- =?iso-8859-1?Q?eUNHyDW/z/g3a1m5K0w0Us/x4dNB3NgHTXgbGN7/jWa5SdW0bR9w7Bjxkn?=
- =?iso-8859-1?Q?Wqeq6mXfs/MWh0P7Hy7QlKjF+mkCxWSTbwt0PiRvMGMhEpaLPcozZIAYAt?=
- =?iso-8859-1?Q?kpy823ZlZd4qhH5JYRZcfXaFvoD5VskIPwGG+c14EPaJTM49pkRW3iyMEy?=
- =?iso-8859-1?Q?/KYnZLU4kXdDj94rVqlajhaJrQHPQcnaM/jzjCwiF87UiQjHOBPwjmur2k?=
- =?iso-8859-1?Q?kdej19M26M4EwMBL4PlzSy2FYitrbQ2eafU35TAsZVO7PIKesSJHw7GVj9?=
- =?iso-8859-1?Q?KaLmmYxTPwlSl2djqa1VzXU92k3Bh8QIx+iUjrHiw/Bgg+GErtPt6EG4yM?=
- =?iso-8859-1?Q?Wgc8toIIvkhRJVijReqIZ13GtEXrtmzUlMb2ho8RkzhoHhT61uN6CL6VAI?=
- =?iso-8859-1?Q?KH+zJe7M7OUCK4bzlGIZ0qnczne0fAn1Gt28WdcZ58Em7jJiG+4AwGqyGY?=
- =?iso-8859-1?Q?AIk2+bcuD4eBrdQ3+d6B2kpwPtvlgzCNIPtPoYPmuMbhOdoDXxze7zgmQ5?=
- =?iso-8859-1?Q?ZKbhU2lzUpNYTYDBvPUqMAERVcEgTFOTfI7eWTY7IAbhxbMMKmtsU9t3J8?=
- =?iso-8859-1?Q?ldk97/BqZriN/ezCuEcRzfF07HpukiEiUrUfvMs6zHxYKcHmy6YNH/GHo3?=
- =?iso-8859-1?Q?fUpbIyk+DZ+AEWklLFzNsjx9ldzJayYQnMabTAmGTLWMH59fzSvVi1iQsH?=
- =?iso-8859-1?Q?e75pQQx79/l+fy18Z10dTP7mbMGAvXXZyh3VW+OT101OcC?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CU8PyQnp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AECA71F00A3A;
+	Thu, 16 Jul 2026 11:31:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784201503;
+	bh=ZhTPrG3YQEfBVn0yyzrLN6C3o96SAGlfQ2/4r1lWCWQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=CU8PyQnpbvCRE3vUmMHtzieTpGX2UBTMwb0mi88LgLxkSs8B/ksftCcM5iz3NUd7A
+	 fb8sHvnwCl7Rr4+CQEHwLGQjWOD3HXM5jPd5Cc8rCwwABcs8eQ+BKe0BjntQ/EVekx
+	 dCYd2NVN2TxTIh+bleHc9Mrq3zRtYkVxaE0UqGfb4CkNFltxw8JAppM9iqDmYpCTt0
+	 gr4x6uAHVmNLV4MlaNFHizKmi/tvmxJdDgxQqcFCa06FzxAgCNdY51pKLaGwJPAlOY
+	 1KPwHyfp5KJywmQSfRSQ0QHUlhb6Srefcz+e9NxqkaeYr/Q75MW2N2bjgJnsxF9rfo
+	 ndpfdliuZ0loQ==
+Date: Thu, 16 Jul 2026 12:31:35 +0100
+From: Will Deacon <will@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	David Hildenbrand <david@kernel.org>,
+	Michal Hocko <mhocko@suse.com>, Uladzislau Rezki <urezki@gmail.com>,
+	Toshi Kani <toshi.kani@hpe.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dev Jain <dev.jain@arm.com>, Ryan Roberts <ryan.roberts@arm.com>,
+	David Carlier <devnexen@gmail.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
+	abarnas@google.com
+Subject: Re: [PATCH mm-hotfixes v3 2/4] x86/mm/pat: acquire mmap lock on page
+ table free to avoid ptdump UAF
+Message-ID: <aljBF-am7dqqG8Gd@willie-the-truck>
+References: <20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org>
+ <20260714-series-vmap-race-fix-v3-2-b812eccfa0f9@kernel.org>
+ <alemS7vxeRB7NcBO@willie-the-truck>
+ <alesCtwXdIqH6bOP@kernel.org>
+ <178419641178.59347.17339330762419756196.b4-reply@b4>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: harfanglab.fr
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59666c6a-f58a-4f4c-827c-08dee32d42fc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jul 2026 11:27:47.0013
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e072cd9e-210a-496b-aa68-c0965404b8f9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OoaznFplIKBqnANAeeJ49djLVl+E8QZNpUqhKnwVzbid1pRtFQMr3VSP2RVw8WoEflk0wKUcnaEwoxgjeBTZeA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PARP264MB6867
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <178419641178.59347.17339330762419756196.b4-reply@b4>
 
-On 1/7/26 04:49, Leon Hwang wrote:=0A=
-> By changing 'r0 =3D 0' to nop, I can reproduce the BUG with bpf-next code=
-:=0A=
-[...]=0A=
-> With this diff, the internal BPF_ADDR_PERCPU insn is supported in the int=
-erpreter.=0A=
-=0A=
-Thank you for the investigation and further details.=0A=
-=0A=
-Is a fix planned? This bug impacts stable versions of the kernel and is fai=
-rly=0A=
-easy to trigger notably on Debian 13. With some ebpf programs, simply=0A=
-enabling `bpf_jit_harden` on Debian 13 means a guaranteed kernel panic.=0A=
-=0A=
-Thank you=0A=
-Vincent Thiberville=0A=
+On Thu, Jul 16, 2026 at 11:06:51AM +0100, Lorenzo Stoakes (ARM) wrote:
+> On 2026-07-15 18:49 +0300, Mike Rapoport wrote:
+> > On Wed, Jul 15, 2026 at 04:24:59PM +0100, Will Deacon wrote:
+> > > > diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> > > > index d023a40a1e03..4c4b8244502f 100644
+> > > > --- a/arch/x86/mm/pat/set_memory.c
+> > > > +++ b/arch/x86/mm/pat/set_memory.c
+> > > > @@ -22,6 +22,7 @@
+> > > >  #include <linux/cc_platform.h>
+> > > >  #include <linux/set_memory.h>
+> > > >  #include <linux/memregion.h>
+> > > > +#include <linux/cleanup.h>
+> > > >
+> > > >  #include <asm/e820/api.h>
+> > > >  #include <asm/processor.h>
+> > > > @@ -436,9 +437,16 @@ static void cpa_collapse_large_pages(struct cpa_data *cpa)
+> > > >
+> > > >  	flush_tlb_all();
+> > > >
+> > > > -	list_for_each_entry_safe(ptdesc, tmp, &pgtables, pt_list) {
+> > > > -		list_del(&ptdesc->pt_list);
+> > > > -		pagetable_free(ptdesc);
+> > > > +	/*
+> > > > +	 * ptdump might read these page tables, so avoid a use-after-free by
+> > > > +	 * acquiring the mmap read lock on init_mm (ptdump acquires the mmap
+> > > > +	 * write lock).
+> > > > +	 */
+> > > > +	scoped_guard(mmap_read_lock, &init_mm) {
+> > > > +		list_for_each_entry_safe(ptdesc, tmp, &pgtables, pt_list) {
+> > > > +			list_del(&ptdesc->pt_list);
+> > > > +			pagetable_free(ptdesc);
+> > > > +		}
+> > >
+> > > As I understand it, the argument for taking the read lock is that we're
+> > > operating on a region that we "wholly own" and therefore we can happily
+> > > run concurrently with CPUs walking distinct parts of the page-table.
+> > > However, from what I can tell, the CPA collapse logic will operate on
+> > > regions outside of the address range being manipulated by its caller
+> > > because it rounds up to the PMD size.
+> > >
+> > > As a made-up example, imagine I have a 2MiB aligned region where the
+> > > first 1MiB is read-only and the second 1MiB is in the default r/w state.
+> > > If one CPU calls set_memory_rw() on the first 1MiB while another CPU is
+> > > walking the second 1MiB (via some other API that doesn't take cpa_lock),
+> > > it looks to me like the first CPU can collapse the page-table and free
+> > > the unused pages under the feet of the other CPU. What prevents that
+> > > from happening?
+> >
+> > Nothing, and there's a patch to fix that that synchronizes
+> > cpa_collapse_large_pages() using cpa_lock:
+> >
+> > https://lore.kernel.org/all/20260626163213.2284080-1-den@openvz.org
+
+Hmm, but that relies on all concurrent walkers taking cpa_lock, no? Surely
+that's not generally the case.
+
+> Thanks Mike!
+> 
+> >
+> > This still won't be enough to sync with ptdump though.
+> 
+> Yeah, so this patch is still necessary.
+> 
+> But that patch conflicts with this one as it holds a spin lock over the page
+> table freeing, which prevents taking an rwsem... :/
+> 
+> Anyway I think this one is still fine as it seems there's not a consensus over
+> there as there was discussion about just removing the locking anyway ([0])?
+> 
+> So can kick that can down the road and just get these ptdump bugs fixed :)
+> 
+> >
+> > > If all concurrent walkers have interrupts disabled, I guess the TLB
+> > > invalidation logic would do it, but it would be good to call this out in
+> > > the commit message because it's not clear to me why the read_lock is
+> > > sufficient for the collapsing case.
+> 
+> Yeah, so this patch is _only_ fixing the ptdump case. Any existing bug must be
+> addressed separately.
+
+Up to you folks, but if you took the write lock during collapse wouldn't
+that fix it for all concurrent walkers and we wouldn't need another patch?
+
+I would argue that using the read lock here directly contradicts the
+rationale for why this is safe, because this is an occurence of code
+that operates on a range that it doesn't wholly own. It seems bizarre
+to me to go to the effort of adding locking, but then not adding
+sufficient locking for all concurrent walkers.
+
+Will
