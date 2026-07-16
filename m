@@ -1,65 +1,64 @@
-Received: from mail-wm2-f1.google.com (mail-wm2-f1.google.com [74.125.225.129])
+Received: from mail-wm2-f0.google.com (mail-wm2-f0.google.com [74.125.225.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8BF3502A9
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 11:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9643F41A57C
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 11:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784201513; cv=none; b=TtkdnoRnYvnIvmEL5JXlOKM0rn941KslVZsTd/3k7uBs0MECbOYFcNIaNwJcaKl8uKtVOLd7fZ/SVjY1hJJZgpV2hdki5lKMFiYF8nOX8Dv9OiKJTA6wOVYrUPCm9/GCBCJJ/Bl2yjsx334Mon4HUYd/RKwza2lSh4jK+Ho0cXg=
+	t=1784201566; cv=none; b=tcJhnTMF2fR2lcPwtnI9uoJ0puKFPzWQ+jszQno7yp0Xn5HPWH2VZrA9mcb8NRJL5bvekvkOpb3WsFD+ia4l1/oav2vWI24FGhlR0RQ4oN06iLfksX7hdQMFfX/NHAghWDeGZwrMQK9+4bGc2CvDdq6ZM6m7qD2MVNV+3Rj0qQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784201513; c=relaxed/simple;
-	bh=sGex/JtTk0jOQ38eZT0kslFT80OGgFCCaKn9KlGVl/I=;
+	s=arc-20240116; t=1784201566; c=relaxed/simple;
+	bh=YZKBbW2GomCys1dMhNIiGDO21zwKxj5N/Rh2Z2W9Znk=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=X/f3rcN292cs833pOLJkXDYmTDlqbHrc9RFcVaYML8bLuGCHx0azf+1JKs1G8WzBFlmMyKEM1euGLvFSMrxJpCOde0GNQttQ4xoNqOUUOm43d/0rNXxTlbkBEOKWcSfHeS6tbccf4kjbFi5NZJbiSAmi12t6/qHv8oHLiPMVpdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k8gGi/bX; arc=none smtp.client-ip=74.125.225.129
+	 References:In-Reply-To; b=p2bZZQ2vl3HivmklmMQAxKtM51jZN5No/V6rij2JT7Bq8r+NYl3MkISWMKDTjQEckBe6UeCVxHTYNZqnN2vcvZzK2Rxib3yBY9Y9h4No3wieAl3YIQf07gC1KQAOQV11Ue26DYGbVZE35jdlHjGjMbZNYuhUOCYAtWuq42GyDA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fO9ho2AZ; arc=none smtp.client-ip=74.125.225.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k8gGi/bX"
-Received: by mail-wm2-f1.google.com with SMTP id 5b1f17b1804b1-492367f3094so26369095e9.0
-        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 04:31:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fO9ho2AZ"
+Received: by mail-wm2-f0.google.com with SMTP id 5b1f17b1804b1-493b4d3a635so15052345e9.0
+        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 04:32:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784201510; x=1784806310; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784201563; x=1784806363; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=gZCQhVXkUWTDzM8gJJA9BBZP8wsTQOpKKaJUyhI6+CA=;
-        b=k8gGi/bXHOxrYjd/dI940y+MLB7bQKIInpk0MS3vIGv8DdM89EvK61/U5lMjDPc98Y
-         nZmqXY8tAWhVWJk/k2kC/s7fkpyOggz3Mo+IayqPFMdI64tNLE3a6ekIVc/ZGBNUxhN2
-         lYKHYNAqr0SDFa89UTaP8OOFIMKSa6bRAu9KPPSMI6qSwOx/wt4e4olBj3oEzPzjiQry
-         VlVt1dbBrIWHJKUSxPlbwxmzZfupHDJnwsedqLjUTk0Vj7QLlv2Ymid65HaPzATaiZsS
-         1wgubMW+FHyLUnEynCk0ii9C4/+Ep6qOqhyi4Pyo4BjcTqO4/xShGiEbE73H9TGqNUjf
-         iGPQ==
+        bh=nQFV6uTevVnEZyY/RP6SSrTntWr7oAjSimUXIkwaAKQ=;
+        b=fO9ho2AZoxLV9iDAWhheewjocwoL+rjQCHNrKfuK1t77tmYHiIWtz6GRqmFlkisIzq
+         HfYtYDCU/HWlpeNsnhLeJh4z32b1QHwmv6U+zYXiU1UdiP173uzK2s2BFYzgCivkIRlN
+         gcbGvaK4nEctwW7bmlkpPQfLT2BIA+/F46htXTpO672UeVH8TpdbeGd0Dmc2OoWI5fTO
+         PSlyHK4eVDVvXedZVutY6TpOfpzGbCSP7FSUHNcFCFKWxbVarecrCDjJ9laY8aVLJLUa
+         HWUSQsjjkb8VaWd6XJdIZvmuyWH3qIehtuNbQ8aHrT8purrXHQmEUqBjc5p9FxbeE3aB
+         c5Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784201510; x=1784806310;
+        d=1e100.net; s=20251104; t=1784201563; x=1784806363;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gZCQhVXkUWTDzM8gJJA9BBZP8wsTQOpKKaJUyhI6+CA=;
-        b=ogwdAiAml6RWvJUSCe0IPqZ25ubvLY18ZJxZBqfhTtsxHYGvYatSwg+TTjkrO8RPEE
-         BjtPvIvS/0GZa051193ZXyF2ZuQU+cB8hibxUKF7HnIvIn5YPnxSVfweCF1bFSNP/Hll
-         WjhpIfkKmol8S4ucPPOYKxzLqKiDNyqdvYN2evZwZpxTaYYtkv4Yyqy2EISHPq6RfyTM
-         PxF5FTNRuB6S6YIjc74YHdtLvCzLjhj/uzhvmtJ+avunDQjaYqcnLEdy9ILWDIG5e9Uv
-         tRYfzh0Qcf9xXKvh/xL1lIcMcJH3X2oRCmIxmdyqdMk8YFKwielwnOW35FxKlwYLIDoK
-         Z44g==
-X-Forwarded-Encrypted: i=1; AHgh+RotItzGHW+2it1ClzbXP4DcU/wBcHvpsJflq2743HuzL2kBZIMCDaodixGezwrBM9l1W50=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywdd+TzIqh4MIZLWVZfeF9I1afuDC+EKrAyUqV4TSqEf51qSzQM
-	eg7NZLQCqTLEkDyINed4aPBSg4ACd6bfM/tqQhW90WIjZ8DHr5hTxXN7
-X-Gm-Gg: AfdE7clAUcsKWSGHmKRZE16WOw5sXSi5URTNNjdTzbN+Jv6YOeQ+0UWeU8tbcLC+E0f
-	FA40g+Puf7t8TkMidKYq3d/O41viK6r8ihlKMvvCucFRaWgavmn4C9Wl6U2fSqWtqNih6lVRryl
-	VtDwxj6fYb0ijtjN+71CB4UOZv6e1UxNx8xtH+izmpqDMa2fpRu9UmXjkIY2G6bHqelcJhiCTwU
-	iy2jOjG0boN1tGVyRpj6vGKY/vRBrd19heBDNkxjPrXewvZmv/dkGD5uYJKpkB+veEVbZ46Kp+o
-	nspe0r+hbxjAh9dA5VMsZr/uj6/Fg4vcySahz7amOgyX676zsi8hTjD8W/HmbOkiMnoBRgPkBnG
-	vuOnrO4LewBshUYYQVn+uxlg9X3J8ZdTmoxfs9qODNRWj+c6/3nlZCxcxtnbnN0lucVW4iQkRpF
-	JAJZNIr8pHISnb4etK1pnIefCesva2XIfDwZTfudr0NKtqmPmDqP8u9ED9qYGtImFT8WrtlMQAt
-	N3p54TIBX+nDc1QhbFbKk/nURBNUjHC0JCVV930Fh92
-X-Received: by 2002:a05:600c:1f91:b0:495:3f84:a792 with SMTP id 5b1f17b1804b1-4953f84a866mr50112875e9.12.1784201509478;
-        Thu, 16 Jul 2026 04:31:49 -0700 (PDT)
+        bh=nQFV6uTevVnEZyY/RP6SSrTntWr7oAjSimUXIkwaAKQ=;
+        b=VFY24sGFJ6qNDmxgmk9ZFbYgv9l7Gy3kovYbLax4nOo8lrxFrhbPzV1yG1vZ4tcokp
+         vynYf0ezegg94fhGN0OKMetTHcUqUUL39SpUWWx7pbn99x5dpfFySZYQE5k2q9lApQzX
+         Jy4MU416OxWexpfKvhp7m9jHuiNXIar2AoQim28zMfB4sjpK01j8iOjp7nmN0tPbItIS
+         rf3OayhEVvYcZvU+3kQtXyYwm4FaHnKwSin2LUjw7CtfS5qWSPvSUCguPAalkEm6obkM
+         jYbpgUIy3kOTPwKkGtDZ0Sdo4RZn2WRXHzTPMO7HDmBHgQSjhd6yUoiG7jfMJ5wZ8Xvc
+         xcHQ==
+X-Gm-Message-State: AOJu0Yw8dc/XqSu1gHm3CKK5sqQvHswb0zuIHDCSvsI8aEYrMlBPKV4L
+	OveZFFwBDXkLKtgOMdZMOAOeNnZTqKCA8w+VgDeBxUD899W3+CdT6Gr/
+X-Gm-Gg: AfdE7cn7gGZZZVbk7NEgR9fME6wNnuN3eLv4H8j7IYjM+w63B4Zodx5pPindnL5Ut1Q
+	tHtFuNbg8YJ3XuGizmak+Hrm4Xh4whDhNHlMxR2xvrJNNb3S+jYybBHjZNGUUVlMidlZHOLtH5J
+	KjLO7aqL5eThHR4r3HaDNLeQ0cfIEOky6PgzxU27lNf/B8s/Nafr+PoWlDpwAFn/F1mPdrkxvWI
+	FTdBw8KwBBxmJi/Nx5DSK8ZjkVHTQGTB6NmcV2Rv9dFaC6HtfHGXQfK2tRFwhJ0a8aMAl6NMUyx
+	pBBn4ujjrFct7sdj53ka9fpUXjvaiS8g+cQFX73FE7m4VGWhEQ/ZzKJjNi7ZTrtrFrI18OC9ylc
+	O8j+Az/u96oM1WgSmZ8lsrHmmddj1R5t57LdKVlaZ8K8sGKIU3swvo+cOXp9Fhfbr8jRJa5D8++
+	gSbFrpH2lCo8rebuuzYD0FvS/HbX93FK7QGkx5YUD+y6Tcsk5BljnZqJ3uZOSi/wppJs4X2EUEu
+	yLChp2/FpL8FO4oann5U1ytgTXge5mTmgfcGPqLlY9H
+X-Received: by 2002:a05:600c:1d9a:b0:493:c535:3934 with SMTP id 5b1f17b1804b1-495384a43aemr130193515e9.36.1784201562704;
+        Thu, 16 Jul 2026 04:32:42 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49541e9425asm85411405e9.11.2026.07.16.04.31.48
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f47688f29sm21622919f8f.21.2026.07.16.04.32.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2026 04:31:48 -0700 (PDT)
+        Thu, 16 Jul 2026 04:32:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,89 +67,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 16 Jul 2026 13:31:48 +0200
-Message-Id: <DJZYNDFLW8ZJ.2XCIK1AVCDHR@gmail.com>
-Cc: <tj@kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
- <kkd@meta.com>, <kernel-team@meta.com>, <martin.lau@kernel.org>,
- <yonghong.song@linux.dev>, <clm@meta.com>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v1 1/9] bpf: Support __arena and
- __arena_nullable kfunc argument suffixes
+Date: Thu, 16 Jul 2026 13:32:41 +0200
+Message-Id: <DJZYO1XU6ANR.27W4M62WISKOV@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 8/9] bpf, x86: Fix stack-passed arguments
+ for indirect trampolines
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <memxor@gmail.com>, <bpf@vger.kernel.org>
+To: <sashiko-reviews@lists.linux.dev>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>
 X-Mailer: aerc 0.21.0
-References: <20260715220052.1590783-2-memxor@gmail.com>
- <af44252e506d749246d5f7593468acd22dc8e9968f99566e43476f4136869259@mail.kernel.org>
-In-Reply-To: <af44252e506d749246d5f7593468acd22dc8e9968f99566e43476f4136869259@mail.kernel.org>
+References: <20260715220052.1590783-1-memxor@gmail.com>
+ <20260715220052.1590783-9-memxor@gmail.com>
+ <20260715221412.ACF3D1F000E9@smtp.kernel.org>
+In-Reply-To: <20260715221412.ACF3D1F000E9@smtp.kernel.org>
 
-On Thu Jul 16, 2026 at 1:05 AM CEST, bot+bpf-ci wrote:
->> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
->> index c801a330aece..a980266ec788 100644
->> --- a/Documentation/bpf/kfuncs.rst
->> +++ b/Documentation/bpf/kfuncs.rst
->> @@ -250,6 +250,33 @@ Or::
->>                  ...
->>          }
+On Thu Jul 16, 2026 at 12:14 AM CEST, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+>
+> Pre-existing issues:
+> - [Medium] The patch correctly fixes the struct_ops stack argument offset=
+ bug for x86, but leaves the exact same bug unfixed in the ARM64, RISC-V, a=
+nd LoongArch BPF JIT implementations.
+> --
+>
+> --- Patch [8]: [PATCH bpf-next v1 8/9] bpf, x86: Fix stack-passed argumen=
+ts for indirect trampolines ---
+> commit 804aec167442bbd8ddbbc13495bc188618bbaeaf
+> Author: Tejun Heo <tj@kernel.org>
+>
+> bpf, x86: Fix stack-passed arguments for indirect trampolines
+>
+> This commit fixes a bug in the x86 BPF JIT where stack-passed arguments
+> for indirect trampolines (such as struct_ops) were read from the wrong
+> offset. It correctly adjusts the offset to account for only the caller's
+> return address being on the stack, which fixes callbacks that have more
+> than six arguments.
+>
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> index 2f25353f135bd..672fe54dfeb8d 100644
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
+>> @@ -3074,6 +3074,7 @@ static void save_args(const struct btf_func_model =
+*m, u8 **prog,
+>>  {
+>>  	int arg_regs, first_off =3D 0, nr_regs =3D 0, nr_stack_slots =3D 0;
+>>  	bool use_jmp =3D bpf_trampoline_use_jmp(flags);
+>> +	int stack_args_off =3D (use_jmp || (flags & BPF_TRAMP_F_INDIRECT)) ? 1=
+6 : 24;
+>
+> [Severity: Medium]
+> This is a pre-existing issue, but does this same bug also need to be fixe=
+d
+> in the ARM64, RISC-V, and LoongArch BPF JIT implementations?
+>
+> On ARM64, save_args() unconditionally hardcodes a 32-byte offset:
+>
+> arch/arm64/net/bpf_jit_comp.c:save_args() {
+>     ...
+>     soff =3D 32; /* on stack arguments start from FP + 32 */
+>     ...
+> }
+>
+
+Yes, but it will be sent separately as a separate patch.
+
+> This seems to assume two 16-byte frames (FP+LR and FP+R9), but struct_ops
+> only pushes one, meaning stack arguments would start at FP + 16.
+>
+> Similarly, on RISC-V and LoongArch, store_args() unconditionally skips 16
+> bytes for the traced function's T0 and FP frame:
+>
+> arch/riscv/net/bpf_jit_comp64.c:store_args() {
+>     ...
+>     /* skip slots for T0 and FP of traced function */
+>     emit_ld(RV_REG_T1, 16 + (i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
+>     ...
+> }
+>
+> For BPF_TRAMP_F_INDIRECT (is_struct_ops), the prologue aligns FP directly
+> to the caller's SP, so arguments start exactly at FP. Will these hardcode=
+d
+> offsets cause the JIT to read 16 bytes past the actual arguments on these
+> architectures as well?
+>
+>>  	int i, j, slot =3D 0;
 >>
->> +2.3.7 __arena and __arena_nullable Annotations
->> +----------------------------------------------
->> +
->> +Both annotations indicate that the pointer argument points into the
->> +calling program's arena. The JIT rebases the value at the call site so
->> +the kfunc receives a directly dereferenceable kernel address, subject t=
-o
->> +the access rules described in :ref:`BPF_kfunc_arena_access` (at most
->> +``GUARD_SZ / 2``, 32 KiB, past the pointer in a single unchecked access=
-).
->> +
->> +With ``__arena`` the rebase is unconditional and the argument is never
->> +NULL: a value whose lower 32 bits are zero arrives as the arena base
->> +address (arena offset 0). The kfunc must not check the argument for NUL=
-L.
->> +With ``__arena_nullable`` such a value arrives as NULL instead and the
->> +kfunc must check before dereferencing.
->> +
->> +An example is given below::
->> +
->> +        __bpf_kfunc int bpf_process_item(struct item *item__arena)
->> +        {
->> +        ...
->> +        }
->> +
->> +Calling such a kfunc requires the program to use an arena map and a JIT
->> +with arena argument support (currently x86-64 and arm64); verification
->> +fails otherwise. The program can pass any value without compromising th=
-e
->> +kernel. A value that does not point into the arena is a program bug.
->
-> The documentation says arena argument support is available on "currently
-> x86-64 and arm64", but does arm64 actually support it here?
->
-> bpf_jit_supports_arena_args() is only defined to return true in the
-> x86-64 JIT. The arm64 JIT is not touched, so on arm64
-> bpf_jit_supports_arena_args() falls through to the __weak stub added in
-> this commit:
->
-> kernel/bpf/core.c:
-> bool __weak bpf_jit_supports_arena_args(void)
->
-> which returns false.
->
-> On arm64, check_kfunc_args() would then reject any __arena or
-> __arena_nullable argument with -ENOTSUPP. Should the documentation drop
-> arm64 from the list of supported architectures until the arm64 JIT gains
-> support?
->
-
-Thanks, fixed the documentation.
-
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/294547=
-48905
+>>  	/* Store function arguments to stack.
 
