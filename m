@@ -1,92 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC7934887B
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 07:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD41E28C869;
+	Thu, 16 Jul 2026 07:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784186620; cv=none; b=fwWgpNr5yvAdWXCuFZkPvI3XAs60Ch007ZGCGRK0FZ6u4jbBYc2COr/uRVOLu2KOLiusuEHBlqOGNkeLvylSjnV2PgzlkFBfj/1Ccpb1WUaePycoOCSI9vluuJfieXJNTZeyXQKJTvlcWr4zNWPcZEqJGHYTjGmD9D+vip/reRA=
+	t=1784186793; cv=none; b=q0UDmyOBjG9TLFKKhSu05t5hYt7fSHYSKZMIcmqp0+KZNzqnG1xRLrZry5J1HnBT5l9mya3DVaoAsURSpwtUOM9EOSb0SR7gqQ2nexNtM+mtgN2LIslMgGDiAVaAboxqT6MkfpddRUpR0xVR8qs2dqxiZPv0mLXqnmg09kikAvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784186620; c=relaxed/simple;
-	bh=HK1D2V1zvP4RHhn9FKgCQkc+wbtdV0oG5PMWOAbJ9N4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=aEFOVae7sMkEhZ83RO71U6JwSbLprJdDe2SfHll3IJJi0NeQ5F4hczfMoTDZrGBU73gxv2zFkCxxb2rku0VDu3YjsMX/lBv2Cx2PKiEqD/CBRa38/E0aDuVTPhOMFdd2w+ckzY/5eN3zG/q6E8TDfOitvURyNJQ8Y7XMx9clcNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fmwWWdvX; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fmwWWdvX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FD721F00A3A;
-	Thu, 16 Jul 2026 07:23:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784186606;
-	bh=rF6TDn+VwttH/dmmrx4vrLo9j7QlOq14T4ld+k3Rs5Q=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fmwWWdvXYFeo3dnolf5iqivfXvgmz88Ivxi2wuqMRIA2u8rgAW3Ph8ac4jC2eRHwX
-	 VzPvMKJEYlBW8s9cwl0lqGBOuL2pjHb1v2b8iNoF+fx11+dW59NednNVVeSj/X16rA
-	 MRXFHcyHyXzuO5R8zIDC2YzmvjlcnLeG48ANILUJTEa9X3tzASXFkMVtQQBDxde6NQ
-	 walonQ6DSJgU4bvjR10wxoI6aaamJA885NpbHeXSg7mR6JiWhB1HRI1saXo4tTt+ry
-	 OtAs8PnQrVMTkFSUCbZLAbQsFYXd6jQ174uwNB8FlKPhJ2FB20YLEclQbMJu5L2tx0
-	 Bpnng2TdR3ZKQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] libarena/selftests: use ARRAY_SIZE macro in
- st_asan_buddy.bpf.c
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "longlong yan" <yanlonglong@kylinos.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260716071110.560-1-yanlonglong@kylinos.cn>
-References: <20260716071110.560-1-yanlonglong@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Jul 2026 07:23:26 +0000
-Message-Id: <20260716072326.8FD721F00A3A@smtp.kernel.org>
+	s=arc-20240116; t=1784186793; c=relaxed/simple;
+	bh=3OhdXQwxYuUOwNmPTHHmrYXkdBRV8xmSUY/IwcXh88A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=naG7Xt+QewVx8dpc84rqd1Syf6Ijm6Q2p5nsyi51Vjqgt0XuOyMHnSqm7RMdiBwYtUn5IKxf73d7UI55r0Cg2MFQ4wJtnvL4HcUJkMNlIBZwEwApHXs9Cyz3NsGijaTFqcDu5oBoD1DAhrfirHLv6lXKK29hdkS4GPsWFxtG0AU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: a447501880e711f1aa26b74ffac11d73-20260716
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:7685f8c4-8899-48d2-b484-b9d5d74bd90e,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:0d4e1e5c6215962a8491b5039acde1e8,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|865|898,TC:nil,Content:0
+	|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,O
+	SI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: a447501880e711f1aa26b74ffac11d73-20260716
+X-User: jiangfeng@kylinos.cn
+Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <jiangfeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 620461011; Thu, 16 Jul 2026 15:26:20 +0800
+Message-ID: <714418f3-03a8-40e7-81b7-68ca20a26437@kylinos.cn>
+Date: Thu, 16 Jul 2026 15:26:17 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] bpf, riscv: fix missing extable entry for arena
+ load_acquire
+To: Pu Lehui <pulehui@huawei.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+ bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20260716-bpf-riscv-fix-extable-v1-1-af023cc17af4@kylinos.cn>
+ <ed7c71d1-f692-4a8f-954e-2d3ea9177c28@huawei.com>
+Content-Language: en-US
+From: Feng Jiang <jiangfeng@kylinos.cn>
+In-Reply-To: <ed7c71d1-f692-4a8f-954e-2d3ea9177c28@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The commit introduces the `ARRAY_SIZE` macro into a BPF program wit=
-hout defining or including it, causing a compilation failure.
---
+On 2026/7/16 15:01, Pu Lehui wrote:
+> 
+> On 2026/7/16 14:15, Feng Jiang wrote:
+>> emit_atomic_ld_st() returns 1 to have build_body() skip the zext after
+>> a sub-word load_acquire. The caller does "ret = ret ?:
+>> add_exception_handler(...)", which skips add_exception_handler() on any
+>> non-zero ret, so the extable entry is missing and a faulting
+>> PROBE_ATOMIC load_acquire oopses.
+>>
+>> Check ret >= 0 before calling add_exception_handler(), and return ret
+>> unchanged so build_body() still skips the zext.
+>>
+>> Fixes: fb7cefabae81 ("riscv, bpf: Add support arena atomics for RV64")
+>> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+>> ---
+>>   arch/riscv/net/bpf_jit_comp64.c | 12 ++++++++----
+>>   1 file changed, 8 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+>> index f9d5347ba966..4fd4392dd080 100644
+>> --- a/arch/riscv/net/bpf_jit_comp64.c
+>> +++ b/arch/riscv/net/bpf_jit_comp64.c
+>> @@ -1986,10 +1986,14 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>>           else
+>>               ret = emit_atomic_rmw(rd, rs, insn, ctx);
+>>   -        ret = ret ?: add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx);
+>> -        if (ret)
+>> -            return ret;
+>> -        break;
+>> +        /* ret can be 1 (skip-zext); extable entry still needs to be added */
+>> +        if (ret >= 0) {
+>> +            int err = add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx);
+> 
+> Thanks Feng Jiang. Maybe we could remove this additional variable.
+> 
+> ```
+> /* ret can be 1 (skip-zext); extable entry still needs to be added */
+> if (ret >= 0)
+>   ret = add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx) ?: ret;
+> 
+> if (ret)
+>   return ret;
+> 
+> break;
+> ```
+> 
 
---- Patch [1]: [PATCH] libarena/selftests: use ARRAY_SIZE macro in st_asan_=
-buddy.bpf.c ---
-commit 70521e8b40248839f7100def222aa4fb06724c32
-Author: longlong yan <yanlonglong@kylinos.cn>
-libarena/selftests: use ARRAY_SIZE macro in st_asan_buddy.bpf.c
+Thanks for the review! Your suggestion is indeed cleaner and more concise. I'll send v2 shortly.
 
-This commit replaces manual array size calculations with the ARRAY_SIZE mac=
-ro=20
-in the asan_test_buddy_oob and asan_test_buddy_uaf functions to make the co=
-de=20
-more compact.
+> 
+>> +
+>> +            if (err)
+>> +                return err;
+>> +        }
+>> +        return ret;
+>>         default:
+>>           pr_err("bpf-jit: unknown opcode %02x\n", code);
+>>
+>> ---
+>> base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
+>> change-id: 20260716-bpf-riscv-fix-extable-399947ca778d
+>>
+>> Best regards,
 
-> diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_asan_bud=
-dy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_asan_buddy.b=
-pf.c
-> index 3266a28f53d76..9c94a5167a503 100644
-> --- a/tools/testing/selftests/bpf/libarena/selftests/test_asan_buddy.bpf.c
-> +++ b/tools/testing/selftests/bpf/libarena/selftests/test_asan_buddy.bpf.c
-> @@ -163,7 +163,7 @@ __weak int asan_test_buddy_oob(void)
->  		return ret;
->  	}
-> =20
-> -	for (i =3D zero; i < sizeof(sizes) / sizeof(sizes[0]) && can_loop; i++)=
- {
-> +	for (i =3D zero; i < ARRAY_SIZE(sizes) && can_loop; i++) {
+-- 
+With Best Regards,
+Feng Jiang
 
-[Severity: Low]
-Does this cause a compilation failure when building the BPF selftests?
-
-It appears that ARRAY_SIZE is not defined in this BPF program or its curren=
-tly
-included headers. Would we need to define ARRAY_SIZE locally in this file, =
-or
-include a header that provides it specifically for BPF environments?
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260716071110.560-=
-1-yanlonglong@kylinos.cn?part=3D1
