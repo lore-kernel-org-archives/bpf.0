@@ -1,175 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69446239E60
-	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 02:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24EEE28727D
+	for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 02:54:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784168188; cv=none; b=VGCkIO9Soh12//dAxaLacZSVD1D6ands0DWUpTJJj+XVy2BGKBJy4t7zj8m/LMV3vIvkseecjsSnSeYEVP4CQWsKTFNi5WvVD9ySotM+KBn9wVdN8flOQmk36TqqYQb3gYH0B6GoVCJ1ipJFBRi4n6DlvjKkFNdm0K0Ks0xy5y4=
+	t=1784170451; cv=none; b=HeTSSGzRl+NVkaFUmFwAngJlwF5JksdFLiAuZ7QuIAWTyWaXnKLaz1EV4ZgxEfzYZTnxBiy+nxUnyXTIZDee9H1+6Zu+GvBf9Fp7PmIrrxhigIZODM5+cwWJgU9IiyhadxwuIOXN+LQkBNTpdJ1fkED/6OKOQXgzHjnQeebDWrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784168188; c=relaxed/simple;
-	bh=pcxYTaferYxiwg0HguVkRbXnF3bDSW6BQAxD93jkh+w=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SBNPyReUjHigIug1XffWOD8CTLeyA9Dph4ldl14sQqhfhoJ2sr/V+hEOeZj3ypKJHh/qTQ4uoRcTNczJ0sV45n3KQk5Z5HghfmOam4vcnn1bJ4GvUYe4UsZS5pJ4/frTVE8jdxlG8yjjKRhJcRgthYthaRtVxCWwWYaVIEZkN6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=giU7XgW7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784170451; c=relaxed/simple;
+	bh=jplXyjbwYz/QcAGg2H0J8hiAVcqFhJv9LJAFB6t6Fp4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VTmJ1+hzIzU2sjwvh1A4caOUuqOmqSSZFWlqczXhoEWTtYcMD3tYMcwQoDy+aAZFRxOvqm0ZoKytFHGpNwY0qR+bPkBxMQgewBf0MgJ+HylP0XTVFIihEmmncC2k5PXBydu50F1c8yqK0QygdxnTnl9lhR+kU3r9MY0zxg6PXfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=reDEZ0v7; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="giU7XgW7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22CD31F000E9;
-	Thu, 16 Jul 2026 02:16:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784168187;
-	bh=cm7xZqqfhAMczOnV5IlsHuL3Wu1MtQPANNMyefTYeRA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=giU7XgW71djF6/229iDygh86H8Kn8J6yicFy6OZxQDRzej4Y1RMSXmkVNYeFIONVr
-	 Pl+POLi80GG2yfRwz4fJ0lVOtmsyIuWx8402/R/7KPt6F0jtwRGL8djX0Fozo772RB
-	 Wc4okcNRL+SVtf5ddR3VpfL4WmjdMT/trUsnS1fnQx7FdTDykaZWwvwlK5h31Hzlzk
-	 9h2FCDfwDrLd/d+5lh5urM6IyzpPPlhAP/BMXKH0SNKTGKTruvnCV36DXv/+4de6QH
-	 CaLuDNsl2kRb7fvQen+iqcISOXwZ0jYTvoszokqfGw3ODnT6T2xucZJOCjG5gWqblG
-	 QuMVviOGgsoDg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH + QUESTION] bpf: use cond_resched_tasks_rcu_qs in
- bpf_fd_array_map_clear() loop
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Rik van Riel" <riel@surriel.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260715215314.44423f47@fangorn>
-References: <20260715215314.44423f47@fangorn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Jul 2026 02:16:26 +0000
-Message-Id: <20260716021627.22CD31F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="reDEZ0v7"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-381b831d535so3210506a91.0
+        for <bpf@vger.kernel.org>; Wed, 15 Jul 2026 19:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784170449; x=1784775249; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=dv6aphQ0lu/azohKm7IVKPlY3gzISaBS16LtQ3l9PNo=;
+        b=reDEZ0v7JbDcIPibS6la8g5nppzcLpdCimN2lnrnLyQf2H4VUBKtJQ2bVUuTYu7Bpt
+         JTe+GoLyWKgs/W+OqdrJv44B8yNolnJO+yRmYlwmp5QOj73IZgQYISUDqzKu0mAVHO3+
+         Vj+Aj2WDbeId4X2SyUYj9zS44cnl5jYnBLi5Js65EYMBadCzFNhCkIaHQiTlZmDYW6+B
+         7dHmw5MemGmKbD4zoVn6CmC5mtv21cVDTH0M17flUK3ccJleq6fEDHfw3zLxEpmPpQGA
+         lEWxxd6Xe9xywQDprOtNO9RST5n4ZLvQknyWrxuQGdT3xzTyjvNd2pBbFlgkAG9574AE
+         PVCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784170449; x=1784775249;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dv6aphQ0lu/azohKm7IVKPlY3gzISaBS16LtQ3l9PNo=;
+        b=WEk/RYQEWV2wkXw2OBgzjFxVj8VvLk5sLw7J2ciWYjm39F4P9h9EwDKLdF49Ikgwj5
+         xezh3nusd22PKLNaXskjqn4qM9SAnVhDQRQIpQF5sfGEO7hHBq0tcoVmWWINohGtZT2D
+         1uG/pUKvmdWIM/+buvefZODPxPitMpThvtHu/uvbZA3+/0LvjFzkOfEl9cDCsF3dyzw2
+         f27VERkREherOHhsL+IvVW5CiyAspC8YrcQ/AbE4brVbxF37oxk1CGMNdcUVPYKJzB+t
+         pzh5pLaFdE1mLPXCml7gSZCFLwqlEaCnLIP+5aBw7v8UjvBbeObjdo2iEkaZYoQfiJBQ
+         /K2w==
+X-Forwarded-Encrypted: i=1; AHgh+Rqk0oAnfa1ceI7Nmk1sns60bSo6+DQ0bX950ywO+KHLEJK8AYgAqfaKz27VI/eZFkts24g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRjIX5mSvwzFo+GSP/KwERrtbgiE842ddO70CoUZQ1lNP6znPf
+	ijjgCvYqVgZk8DdNpNx+EHW8sLpTBbHc51zxmRti+kKdYybtrWNOWRofWwix4JlrqoQ=
+X-Gm-Gg: AfdE7cn6KBRVXjgE8hluf5UoSsjBteg87HcvODzvtNCjR4YlcN7uWngExFTvzCbjzTx
+	0taAR8kaMGFB38vJ3rD3Jm4HywIZLoPE0KPwNpYnjuMY1/H8GPDKAwnCgh5PpyDVq0bcUiRlF9R
+	QXnTHtKRml6aCvTykgYMhWHrDCyDuUahTouBNj9gpT+QewssLye0tTlBPUr08dkbHtnN1QPbjRr
+	1M7BOQbFb4mPPZBdNd/V2cVPeejUIp62O76vUhFBSR1ajz8LrAyg/S14B/W6FgxYWSZjkuQcH6A
+	CAQCN6dXNScz6P3SbRMebw1tKtpwPAtS6n8oqHRHWswOOzuCces9YrLBwDVfpi2nJMFdQrf4qIU
+	fepJEFjDjPlZg7recavSQofMWytGA74XxmYG1o1AT+WsBBW2KJpZaktxmyt+j2XzCikZP9k0E1I
+	QoPI1PEoVsDFQQMXxJLwZ1ME0Xt/mUuFyuUwH1uDJipDvomNV6rS/8xgj+2xHlGbunZBRzaQ==
+X-Received: by 2002:a17:90b:5146:b0:38d:ef48:b04 with SMTP id 98e67ed59e1d1-38def480cbdmr16308118a91.10.1784170449479;
+        Wed, 15 Jul 2026 19:54:09 -0700 (PDT)
+Received: from localhost.localdomain ([240e:46d:2100:4eeb:a8ed:60ba:3d:9b14])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e2a20b2a2sm892232a91.1.2026.07.15.19.54.07
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 15 Jul 2026 19:54:08 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: nathan@kernel.org,
+	nsc@kernel.org
+Cc: linux-kbuild@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH v2] kbuild: rpm-pkg: Preserve .BTF section in kernel modules during debuginfo stripping
+Date: Thu, 16 Jul 2026 10:53:42 +0800
+Message-ID: <20260716025342.42628-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+After switching to the kernel's default package scripts for our local
+kernel RPM builds, we noticed that module BTF entries were missing:
 
-New issues:
-- [Medium] The commit message incorrectly claims that `bpf_fd_array_map_cle=
-ar()` executes 'under RCU read lock'.
+  $ ls /sys/kernel/btf/
+  vmlinux    <<<< only vmlinux, no module BTF
 
-Pre-existing issues:
-- [High] perf_event_fd_array_release() iterates over the entire map under a=
- single rcu_read_lock() region, causing Classic RCU stalls for large maps.
-- [High] The patch only fixes the RCU-tasks stall in bpf_fd_array_map_clear=
-(), leaving identical vulnerabilities in other BPF map teardown functions.
-- [High] A Time-Of-Check to Time-Of-Use race in perf_event_fd_array_release=
- can maliciously delete concurrently updated perf events.
---
+Root cause: find-debuginfo.sh (from the debugedit package) prefers
+eu-strip over strip when elfutils is installed, which is the common
+case on RHEL 9. eu-strip removes non-allocated ELF sections, including
+the .BTF section that contains BPF Type Format information for kernel
+modules. Without .BTF, BPF tools (bpftool, bcc, bpftrace) cannot resolve
+kernel types at runtime, and /sys/kernel/btf/<module> entries are not
+created when modules are loaded.
 
---- Patch [1]: [PATCH + QUESTION] bpf: use cond_resched_tasks_rcu_qs in bpf=
-_fd_array_map_clear() loop ---
-commit c19063bda5ebcdaccc0217e960d2910817786a73
-Author: Rik van Riel <riel@surriel.com>
+Fix by passing --keep-section .BTF via _find_debuginfo_opts, which adds
+-K .BTF to the eu-strip/strip command, preserving the .BTF section while
+allowing normal debuginfo extraction to proceed.
 
-bpf: use cond_resched_tasks_rcu_qs in bpf_fd_array_map_clear() loop
+After this change, all module BTF files are properly generated:
 
-syzkaller creates a PROG_ARRAY with huge max_entries and triggers perf
-tracepoint open close in parallel. The hung task detector reports
-"INFO: task hung in perf_tp_event_init" with event_mutex held waiting
-for synchronize_rcu_tasks().
+  $ ls /sys/kernel/btf/
+  aesni_intel         drm                 i2c_i801            mfd_core
+  ahci                drm_client_lib      i2c_mux             net_failover
+  backlight           drm_kms_helper      i2c_smbus           pcspkr
+  ccp                 drm_shmem_helper    input_leds          qemu_fw_cfg
+  dm_log              failover            intel_rapl_common   sch_fq_codel
+  dm_mirror           fat                 intel_rapl_msr      serio_raw
+  dm_mod              fuse                irqbypass           sunrpc
+  dm_region_hash      gf128mul            iTCO_wdt            vfat
+  virtio_balloon      virtio_console      virtio_dma_buf      virtio_gpu
+  virtio_net          virtio_rng          virtio_blk          vmlinux
+  xfs
 
-> bpf_fd_array_map_clear walks max_entries under RCU read lock on a
-> workqueue kworker. Commit 4406942e65ca added cond_resched for classic
-> RCU, but under PREEMPT it is a no-op and a preempted kworker never
-> reports RCU-tasks QS. The loop then blocks the grace period while
-> event_mutex is held in ftrace_shutdown, stalling perf_event_open().
+Assisted-by: Comagic:DeepSeek-V4-Flash
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ scripts/package/kernel.spec | 2 +-
+ scripts/package/mkspec      | 5 +++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-[Severity: Medium]
-This isn't a bug introduced by this patch, but the commit message incorrect=
-ly
-claims that bpf_fd_array_map_clear() executes 'under RCU read lock'.
+v1->v2: check if find-debuginfo.sh supports --keep-section (sashiko-bot)
 
-bpf_fd_array_map_clear() is executed via map destruction callbacks (e.g.,
-prog_array_map_clear_deferred) on a sleepable workqueue context without hol=
-ding
-rcu_read_lock(). If a classic RCU read lock were actually held, calling
-cond_resched_tasks_rcu_qs() (which invokes cond_resched()) would be an ille=
-gal
-sleeping operation and trigger might_sleep() lockdep splats.
+diff --git a/scripts/package/kernel.spec b/scripts/package/kernel.spec
+index c732415662ef..2e16de54ed74 100644
+--- a/scripts/package/kernel.spec
++++ b/scripts/package/kernel.spec
+@@ -67,7 +67,7 @@ This package provides debug information for the kernel image and modules from th
+ %undefine _unique_debug_srcs
+ %undefine _debugsource_packages
+ %undefine _debuginfo_subpackages
+-%global _find_debuginfo_opts -r
++%global _find_debuginfo_opts -r%{?with_keep_section: --keep-section .BTF}
+ %global _missing_build_ids_terminate_build 1
+ %global _no_recompute_build_ids 1
+ %{debug_package}
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index c604f8c174e2..00acef348ba8 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -65,6 +65,11 @@ fi
+ echo "%define with_debuginfo_manual $with_debuginfo_manual"
+ echo "%define with_debuginfo_rpm $with_debuginfo_rpm"
+ 
++# Detect if find-debuginfo.sh supports --keep-section (RHEL 9+)
++if find-debuginfo.sh --help 2>&1 | grep -q keep-section; then
++	echo "%global with_keep_section 1"
++fi
++
+ cat<<EOF
+ %define ARCH ${ARCH}
+ %define KERNELRELEASE ${KERNELRELEASE}
+-- 
+2.52.0
 
-Could the commit message be updated to reflect the actual context?
-
-[ ... ]
-
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> index 248b4818178cd..55fd97375130b 100644
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
-> @@ -1015,7 +1015,8 @@ static void bpf_fd_array_map_clear(struct bpf_map *=
-map, bool need_defer)
-> =20
->  	for (i =3D 0; i < array->map.max_entries; i++) {
->  		__fd_array_map_delete_elem(map, &i, need_defer);
-> -		cond_resched();
-> +		/* cond_resched() is a noop with preempt; unblock RCU */
-> +		cond_resched_tasks_rcu_qs();
->  	}
->  }
-
-[Severity: High]
-This isn't a bug introduced by this patch, but the fix only addresses the
-RCU-tasks stall in bpf_fd_array_map_clear(), leaving similar issues in other
-BPF map teardown functions.
-
-For instance, fd_htab_map_free() in kernel/bpf/hashtab.c loops over all
-buckets without any yield point:
-
-	for (i =3D 0; i < htab->n_buckets; i++) {
-		head =3D select_bucket(htab, i);
-		...
-	}
-
-Also, bpf_array_free_percpu() in kernel/bpf/arraymap.c loops over max_entri=
-es
-using only cond_resched():
-
-	for (i =3D 0; i < array->map.max_entries; i++) {
-		free_percpu(array->pptrs[i]);
-		cond_resched();
-	}
-
-Since cond_resched() is a noop under CONFIG_PREEMPT, wouldn't these loops
-similarly stall RCU Tasks when freeing huge hash or per-cpu array maps?
-
-[Severity: High]
-This is another pre-existing issue, but while we are looking at
-arraymap teardown, perf_event_fd_array_release() also has a potential issue.
-
-It iterates over the entire map under a single rcu_read_lock() region:
-
-	rcu_read_lock();
-	for (i =3D 0; i < array->map.max_entries; i++) {
-		ee =3D READ_ONCE(array->ptrs[i]);
-		if (ee && ee->map_file =3D=3D map_file)
-			__fd_array_map_delete_elem(map, &i, true);
-	}
-	rcu_read_unlock();
-
-Does this cause Classic RCU stalls for large maps, since it prevents grace
-periods from completing without any yield points?
-
-[Severity: High]
-Additionally, there seems to be a pre-existing Time-Of-Check to Time-Of-Use
-race in perf_event_fd_array_release() calling __fd_array_map_delete_elem().
-
-If Thread A closes a map file, it triggers perf_event_fd_array_release(), w=
-hich
-verifies ee->map_file =3D=3D map_file.
-
-If Thread B concurrently calls bpf_map_update_elem to replace the element,
-Thread A then calls __fd_array_map_delete_elem(), which unconditionally
-executes:
-
-	old_ptr =3D xchg(array->ptrs + index, NULL);
-
-Does this mean Thread A could unconditionally nullify Thread B's newly inse=
-rted
-element, incorrectly deleting it from the map?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715215314.4442=
-3f47@fangorn?part=3D1
