@@ -1,166 +1,168 @@
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E55329E46;
-	Fri, 17 Jul 2026 02:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C314B43F093
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 02:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784253929; cv=none; b=EbxRGmlmeJwwT7j2MYuCSzTfJW0fZGyIFsCiwl8BDuqfFrmQQ34Lhub0pZCAuuze8/OaaQ/fesXrZT4hBJWD8fGsU+2v1VLQUpBA94P/sNgtnl9iEyDorq9P6gAjIQhWRxJE/ULDfi7g09Dy+61blJFgUNymaOLundmWexbwFzw=
+	t=1784254105; cv=none; b=KOLuUbhitryrH0WoHR+cTYin2YDros5i2XyOxn3hBu2SX4U7mWJ9D0O/m/aeWLh1ksw/HRkVmgi2OKDlihqpdS0Hp4Yb0WodrdLUG+4R6Iq+82HUhoXS965wTqyQHjgGiw0Z+lb2b+OGK0d3Er25lgX2D9knPmCwEzWDygbCy6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784253929; c=relaxed/simple;
-	bh=4HHXnFs15qYBxD3mB2j1xfwe+/ju7oZyKN3oPIs3UPU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=o1jMlvypJtX1L3ysPxCIf5dXUiXjmk0zhX1RIXJcJNJlHca15/3Z7kN77qp8Yr33WB6hAfj83rBuWgzHCaENc9jOSL0OhOuz485UL5uLuU+Bu7FgjXXkePIFyWRT+T5kUbVkIwXKuLU8pObFAT7WqzdmwQzSjlKzULmRsXa7lOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=iYf9ECku; arc=none smtp.client-ip=96.67.55.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=surriel.com
+	s=arc-20240116; t=1784254105; c=relaxed/simple;
+	bh=By3FimZceyxGDktINDq9g2IrqhxlFRDBNtG+uonqiis=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W383J+Vu/p3hJGISwxtSG7wqWWk8ZCOPu4kxHt67Q37c+mCmaBD4+vPJgxTxXye5qJ4I8bZdXWehGF9D85ZG4SDp3SXzNDagw0Vla7psRhEr97b9ebSQak/RBbQqESLyTEfZuuDXNPRyXoRLie7WoX5mNOm2oXqRixUyk24AhYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UxetImme; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="iYf9ECku"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
-	; s=mail; h=MIME-Version:Content-Transfer-Encoding:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=0czS6fGKnRAlpLNmhKUfszqeeJjdTdy4oh9/e2ZpkBY=; b=iYf9ECkuHtG0MyUyEiQrxD+b0E
-	t443YXmnLYB6oIf39NNtGJvHs9HdbJVGgpaJLEQEg4aLLwnEA3yE7KkYly92QIWNB6IXg3VoZhqdp
-	TqW7xmXWj6EHw0siJG1uVTle4b/tzHb1XSBLhkeIw8vQpEBMRKqIFft/sT4tdqMwzirYymoeKwcEn
-	FD+KJjMWENUZYeZn46YkMgKSvoq8zDGhoEKKbcqEZbNl8wGPei3HDwflo3SwwyCVkP74ji3SUTIKg
-	JmN13uFMlfoOL/+Qp0IcFWKFVfJ29RFgx+k7vjmbL1f8ay/Y3CP2CQnJNRTSrNGD9llHCofii3q/v
-	pdtVTtMg==;
-Received: from fangorn.home.surriel.com ([10.0.13.7])
-	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.97.1)
-	(envelope-from <riel@surriel.com>)
-	id 1wkXwV-000000007kZ-2LhO;
-	Thu, 16 Jul 2026 22:04:47 -0400
-Message-ID: <be9c5707e2d83090de28e4b0ce3bc43c67f423af.camel@surriel.com>
-Subject: Re: [PATCH + QUESTION] bpf: use cond_resched_tasks_rcu_qs in 
- bpf_fd_array_map_clear() loop
-From: Rik van Riel <riel@surriel.com>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: kernel-team@meta.com, Andrii Nakryiko <andrii@kernel.org>, Eduard
- Zingerman	 <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org,  "Paul E. McKenney"	 <paulmck@kernel.org>, Frederic
- Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Ingo Molnar <mingo@redhat.com>, Peter
- Zijlstra	 <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>
-Date: Thu, 16 Jul 2026 22:04:47 -0400
-In-Reply-To: <20260715215314.44423f47@fangorn>
-References: <20260715215314.44423f47@fangorn>
-Autocrypt: addr=riel@surriel.com; prefer-encrypt=mutual;
- keydata=mQENBFIt3aUBCADCK0LicyCYyMa0E1lodCDUBf6G+6C5UXKG1jEYwQu49cc/gUBTTk33A
- eo2hjn4JinVaPF3zfZprnKMEGGv4dHvEOCPWiNhlz5RtqH3SKJllq2dpeMS9RqbMvDA36rlJIIo47
- Z/nl6IA8MDhSqyqdnTY8z7LnQHqq16jAqwo7Ll9qALXz4yG1ZdSCmo80VPetBZZPw7WMjo+1hByv/
- lvdFnLfiQ52tayuuC1r9x2qZ/SYWd2M4p/f5CLmvG9UcnkbYFsKWz8bwOBWKg1PQcaYHLx06sHGdY
- dIDaeVvkIfMFwAprSo5EFU+aes2VB2ZjugOTbkkW2aPSWTRsBhPHhV6dABEBAAG0HlJpayB2YW4gU
- mllbCA8cmllbEByZWRoYXQuY29tPokBHwQwAQIACQUCW5LcVgIdIAAKCRDOed6ShMTeg05SB/986o
- gEgdq4byrtaBQKFg5LWfd8e+h+QzLOg/T8mSS3dJzFXe5JBOfvYg7Bj47xXi9I5sM+I9Lu9+1XVb/
- r2rGJrU1DwA09TnmyFtK76bgMF0sBEh1ECILYNQTEIemzNFwOWLZZlEhZFRJsZyX+mtEp/WQIygHV
- WjwuP69VJw+fPQvLOGn4j8W9QXuvhha7u1QJ7mYx4dLGHrZlHdwDsqpvWsW+3rsIqs1BBe5/Itz9o
- 6y9gLNtQzwmSDioV8KhF85VmYInslhv5tUtMEppfdTLyX4SUKh8ftNIVmH9mXyRCZclSoa6IMd635
- Jq1Pj2/Lp64tOzSvN5Y9zaiCc5FucXtB9SaWsgdmFuIFJpZWwgPHJpZWxAc3VycmllbC5jb20+iQE
- +BBMBAgAoBQJSLd2lAhsjBQkSzAMABgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRDOed6ShMTe
- g4PpB/0ZivKYFt0LaB22ssWUrBoeNWCP1NY/lkq2QbPhR3agLB7ZXI97PF2z/5QD9Fuy/FD/jddPx
- KRTvFCtHcEzTOcFjBmf52uqgt3U40H9GM++0IM0yHusd9EzlaWsbp09vsAV2DwdqS69x9RPbvE/Ne
- fO5subhocH76okcF/aQiQ+oj2j6LJZGBJBVigOHg+4zyzdDgKM+jp0bvDI51KQ4XfxV593OhvkS3z
- 3FPx0CE7l62WhWrieHyBblqvkTYgJ6dq4bsYpqxxGJOkQ47WpEUx6onH+rImWmPJbSYGhwBzTo0Mm
- G1Nb1qGPG+mTrSmJjDRxrwf1zjmYqQreWVSFEt26tBpSaWsgdmFuIFJpZWwgPHJpZWxAZmIuY29tP
- okBPgQTAQIAKAUCW5LbiAIbIwUJEswDAAYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQznneko
- TE3oOUEQgAsrGxjTC1bGtZyuvyQPcXclap11Ogib6rQywGYu6/Mnkbd6hbyY3wpdyQii/cas2S44N
- cQj8HkGv91JLVE24/Wt0gITPCH3rLVJJDGQxprHTVDs1t1RAbsbp0XTksZPCNWDGYIBo2aHDwErhI
- omYQ0Xluo1WBtH/UmHgirHvclsou1Ks9jyTxiPyUKRfae7GNOFiX99+ZlB27P3t8CjtSO831Ij0Ip
- QrfooZ21YVlUKw0Wy6Ll8EyefyrEYSh8KTm8dQj4O7xxvdg865TLeLpho5PwDRF+/mR3qi8CdGbkE
- c4pYZQO8UDXUN4S+pe0aTeTqlYw8rRHWF9TnvtpcNzZw==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UxetImme"
+Message-ID: <50c2d308-cfed-41bb-9084-54e380463ad2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784254091;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ut/bn6tdhBjZ2U2t5bilQwjTZNYcf8S/FU1sHi3PRTA=;
+	b=UxetImmeMTy5r1AYTSDL9wpcQq8iz7sKP2lWQiRcVORWAiqdOdlpRQX/O9IBfrqtPfaW2/
+	6OIUBHp/83de+2HKv3EehAta6d62yMLQIjDERGjlv3CSBq9U6pfwYlKohDGK8odOf9U3qM
+	+n3uTtrrzJ/QW0cFomXHU3DW6b0xdbY=
+Date: Fri, 17 Jul 2026 10:08:04 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-
-On Wed, 2026-07-15 at 21:53 -0400, Rik van Riel wrote:
-> syzkaller creates a PROG_ARRAY with huge max_entries and triggers
-> perf
-> tracepoint open close in parallel. The hung task detector reports
-> "INFO: task hung in perf_tp_event_init" with event_mutex held waiting
-> for synchronize_rcu_tasks().
->=20
-OK, this is more interesting than it looked at first,
-and this patch does not look like the right approach,
-but I'm also not sure what other approach would work :(
-
-The actual error being thrown is a hung task:
+Subject: Re: [PATCH bpf-next 1/3] bpf: Add memory usage for arena
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260716142746.8794-1-jiayuan.chen@linux.dev>
+ <20260716144840.3DE1F1F00A3A@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260716144840.3DE1F1F00A3A@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
+On 7/16/26 10:48 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+>
+> New issues:
+> - [Medium] The `nr_pages` counter is modified using plain writes while being read concurrently locklessly, constituting a data race.
+>
+> Pre-existing issues:
+> - [High] Functions that can sleep and acquire sleepable locks are called while holding a raw spinlock with interrupts disabled.
+> --
+>
+> --- Patch [1]: [PATCH bpf-next 1/3] bpf: Add memory usage for arena ---
+> commit 68cbc4739a7a9be56d49db779d319ec002523097
+> Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Subject: bpf: Add memory usage for arena
+>
+> This patch adds memory usage tracking for the arena map type by counting
+> the pages mapped into the arena. It bumps a counter in apply_range_set_cb()
+> when a page is added, drops it in apply_range_clear_cb() when removed, and
+> returns the calculated usage in map_mem_usage().
+>
+>> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+>> index 80b7b8a694464..bc34602116040 100644
+>> --- a/kernel/bpf/arena.c
+>> +++ b/kernel/bpf/arena.c
+> [ ... ]
+>
+>> @@ -196,6 +198,7 @@ static int apply_range_set_cb(pte_t *pte, unsigned long addr, void *data)
+>>   	set_pte_at(&init_mm, addr, pte, pteval);
+>>   #endif
+>>   	d->i++;
+>> +	d->arena->nr_pages++;
+>>   	return 0;
+>>   }
+> [Severity: Medium]
+> Is it safe to use a plain increment here since nr_pages is read concurrently?
+>
+> In arena_map_mem_usage(), arena->nr_pages is read locklessly via
+> READ_ONCE(arena->nr_pages). The Linux Kernel Memory Model requires that writes
+> pairing with a lockless READ_ONCE must be marked with WRITE_ONCE to prevent
+> the compiler from splitting the writes or assuming no concurrent access.
+>
+> Could this lead to incorrect statistics or torn writes?
+>
+> [ ... ]
+>
+>> @@ -227,10 +230,11 @@ static int apply_range_clear_cb(pte_t *pte, unsigned long addr, void *data)
+>>   	 * scratches its PTE. A later bpf_arena_free_pages() over that range walks
+>>   	 * here. Without the skip, scratch_page would be freed.
+>>   	 */
+>> -	if (page == d->scratch_page)
+>> +	if (page == d->arena->scratch_page)
+>>   		return 0;
+>>   
+>>   	__llist_add(&page->pcp_llist, d->free_pages);
+>> +	d->arena->nr_pages--;
+> [Severity: Medium]
+> Similar to the increment above, does this plain decrement need WRITE_ONCE() to
+> safely pair with the READ_ONCE() in arena_map_mem_usage()?
 
-The syzkaller kernel failure is a tragedy in 3 parts.
-
-First, we have perf_event_open() waiting on the event_mutex:
-
-   syz.7.35551 (pid 31354, state D): perf_event_open=C2=A0
-  -> perf_tp_event_init
-   -> perf_trace_init
-    -> __mutex_lock
-     -> blocked on event_mutex.
+It's true.
 
 
-Second, we have perf_trace_destroy() indirectly
-waiting in synchronize_rcu_tasks(), with the
-event_mutex held.
-
-    syz.5.35491 (state:I)  do_exit=C2=A0
-  -> task_work_run=C2=A0
-   -> __fput=C2=A0
-    -> perf_release
-     -> perf_event_release_kernel
-      -> __free_event
-       -> perf_trace_destroy
-        -> perf_trace_event_close
-         -> reg(TRACE_REG_PERF_CLOSE)
-          -> perf_ftrace_event_register
-           -> perf_ftrace_function_unregister
-            -> unregister_ftrace_function=C2=A0
-             -> ftrace_shutdown
-              -> synchronize_rcu_tasks()   <-- BLOCKS HERE, forever,
-holding event_mutex
-
-Tasks RCU waits for every task to have gone through
-a voluntary reschedule, before the grace period can
-be advanced. A preemption does not count.
-
-
-Third, we have a kworker looping for a very long time:
-=C2=A0
-  kworker/0:0 (pid 9, TASK_RUNNING, on CPU0): process_one_work
-  -> prog_array_map_clear_deferred
-   -> bpf_fd_array_map_clear
-    -> __fd_array_map_delete_elem. Looping over a huge PROG_ARRAY
-max_entries.
-
-With CONFIG_PREEMPT_LAZY=3Dy this gets preempted,
-but since involuntary preemptions do not count
-for tasks RCU, that does nothnig to help
-ftrace_shutdown() get unstuck.
+> [ ... ]
+>
+>> @@ -506,8 +512,7 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+>>   	if (ret)
+>>   		goto out_sigsegv_memcg;
+>>   
+>> -	struct apply_range_data data = { .pages = &page, .i = 0,
+>> -					 .scratch_page = arena->scratch_page };
+>> +	struct apply_range_data data = { .arena = arena, .pages = &page, .i = 0 };
+>>   	/* Account into memcg of the process that created bpf_arena */
+>>   	ret = bpf_map_alloc_pages(map, NUMA_NO_NODE, 1, &page);
+> [Severity: High]
+> This isn't a bug introduced by this patch, but does this function call
+> sleepable allocators while holding a raw spinlock?
+>
+> In arena_vm_fault(), the raw spinlock is acquired before this block:
+>
+> 	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+>
+> Then bpf_map_alloc_pages() performs sleepable memory allocations (GFP_USER
+> with __GFP_DIRECT_RECLAIM). Furthermore, apply_to_page_range() is called
+> shortly after, which may dynamically allocate kernel page tables using
+> GFP_PGTABLE_KERNEL while taking init_mm.page_table_lock (a sleepable
+> spinlock on PREEMPT_RT).
+>
+> Can this cause a kernel panic (BUG: sleeping function called from invalid
+> context) or potential deadlocks?
 
 
-How do we solve this?
+Not true. __bpf_alloc_page::can_alloc_pages already check whether we are 
+under lock.
 
-Do we actually need to have cond_resched() points
-quiesce the task RCU state when running with lazy
-preempt, since those are points where we could
-preempt voluntarily?
 
-Do we need to prohibit calling synchronize_rcu_tasks()
-while holding a mutex?
+> [ ... ]
+>
+>> @@ -696,8 +701,8 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
+>>   		bpf_map_memcg_exit(old_memcg, new_memcg);
+>>   		return 0;
+>>   	}
+>> +	data.arena = arena;
+>>   	data.pages = pages;
+>> -	data.scratch_page = arena->scratch_page;
+>>   
+>>   	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+> [Severity: High]
+> This isn't a bug introduced by this patch, but are sleepable functions also
+> called inside this atomic section in arena_alloc_pages()?
+>
+> After the lock is acquired, the code enters a loop that calls
+> bpf_map_alloc_pages() and apply_to_page_range(), both of which can sleep
+> or acquire sleepable locks.
 
-Do we need to do something else?
 
-What is the best way forward here?
+apply_to_page_range() does not allocate page tables here. 
+arena_map_alloc() already did it.
 
---=20
-All Rights Reversed.
+
