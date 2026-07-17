@@ -1,60 +1,63 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D63175A83
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 15:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75AE34EF15
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 15:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784303635; cv=none; b=l7gXR4BqsSf/xao5eX4+Ce4jwuIV6CEJzeh38lvkYuNH9CB+PR+uRv87x/M6CIGJwIZM4s2zCvMsZFFvklZdv47fLRDQLt14haXuayXXntJ5ZdVECAyaG/KMI+veJlCA1GREE3cQ078OX4w3Bj3VhT/dmIAtURF5jakKLwjQ1aA=
+	t=1784303636; cv=none; b=g/kPvELr/AUA05hTyooUjMy0Lbx3I9/Egi2ai1fD6P+L1lq7gmbQR5s3g1OgmKyFfZ90kJR5lxgjK1IYgLbDorsjUoY6aQFO0FyB9aNCI7XTopzsVdIWPSEWEtdFv/w1F8vNjDXNyOx19SdciIb5LIKyabWTb/+8SUDnEUI6HGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784303635; c=relaxed/simple;
-	bh=YF9Knm40lON0FlUgiurO8Nd3SbRk4kttQ+DtP+b13jY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EI6PnRgq6aC7KLb6bKEPCTQBTB7mQtQyqZM+aoN7v6zrneTmrSCmaS3Y2VT4PX9A6BQI0fF1rgeyoBrcUW6GSI/Er7PLdJkOtenjFq8xrUMlcDlNwcFWJxtVyG1RmNLTTWGzpZ9PiYmdeV1NMXB09cXElzX1eOmyA0uIJSxLgfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ixVOyCd+; arc=none smtp.client-ip=209.85.221.43
+	s=arc-20240116; t=1784303636; c=relaxed/simple;
+	bh=s3q9wJaNCd4aqGAfSgzhEmwkY7JI4EZuWLp6kixzQpo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pp9p/TI+IgveZLGwpE/B5jMjRF+JIY3PNaYn3PtTjI7dn4eASMw4kbq14NJKha+x9AYECkj+6zbJ/NLY4wT/EpMhor1DRnakRGx84ucrApGB+S3O4amTkWzkSK6SCINEtK4a0lDMaq++lEae7w1yeKaquijW8BRLUZdJs+TxNwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N3FmyOuP; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ixVOyCd+"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-47c6e9a694bso4411600f8f.1
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 08:53:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N3FmyOuP"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-474560436c3so3422858f8f.0
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 08:53:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784303632; x=1784908432; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KgKTphT/EPBidWmUJpQky4fuu3ayeXNP41GXKcwaXpY=;
-        b=ixVOyCd+G5zisdrc5ETx7nVumKoUjZCxACN6n/wSNEB1YtfxqWczAEduIV05Wjd/DK
-         CM+FYVBml/Rep19+YnwjcZTtghC7xlCrFeI4tQe8h/NnYIPkV9CLyRP5JtslX7g0rv96
-         rxTY94Z88ZujwGaGJVcJvX99ce1kxwbQDDjOZGB470J+Ev7ayjM4eqXukkbepavFEszc
-         pHDhcMQgIDIHrDT9c7QyyL81iDXuMqp/ZokvlNRXxZ7qYCYodqt54cc8doh23bXcfccx
-         XlGJKa5Za3WV4i9VZJIPlDYJi+IgbSZdnEEwGK0g4CEA8jvADJVnliwisUfBGvu6SBuz
-         Wp/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784303632; x=1784908432;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1784303633; x=1784908433; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=KgKTphT/EPBidWmUJpQky4fuu3ayeXNP41GXKcwaXpY=;
-        b=NYkqYRLnUBf2FjBjeQPomzby0b6vP48cG9SaT6jsgRw57CjLxCjosS4qSOp+FW2tz7
-         07HGx2tz9EqtsOKBc2jdxxxxVA3/F2r+k1aQeoKQgnAp78f4YA5bT68lvU+KIE5zQzav
-         v4xg/+e+i9jUHBhs8g09Ycpo90N+IH7fThOIhrbmbF2kyIBbnbdoyt7d4Su+vXh0Ssfw
-         WnyBsUpnMiWIj9Hvt7CfVuXXNPs6KqP5yUAC8TaWxOPj+ro4Cw9lgkJANDZOEdoCqEh1
-         VIrapwFKLYt//KCGOCCTBruhWXTmCPZTXP7WxeENovUhzttJvG5mABsjG4rtLdkG5x+V
-         UtFQ==
-X-Gm-Message-State: AOJu0Yw3FOWmU/D0/6wh/hpu6K9BEjOzxHOhkXRItThLq+n5ZzbpAL68
-	kSPjjNNBW9/IEqNWVl8n8ac5jfUigDoCJ2TRIEZcf//2aXvPEIa3v0Fn
-X-Gm-Gg: AfdE7cn3yD5l9xMat7hDZjRaDzuVeBPo0kYXgEid6Vf6eCe6feil2bSLyl7a+DNOliJ
-	eH/WO6zhgT8jLLtEaBKaN3ZjChUzbUITj2DjarJ7eNFjWuvBVvt3pJk+LlPkUWIkNGAKLvcBnW+
-	3zCLbakpGDZaBPCvGA9Izy2xSn0i9asiUzUgmK2alttju7Nz+Sz97f9UKws354Qnckkn08OIHGi
-	WxLMVB4jJZdD1CHBwhS2B+UMx92SDAQ/Kla3UD7kqDLetpj96zawXhEFmy2AyJXmW+B95j8CJaj
-	Y+ERxzikWYqQoKr5W5geng0i9rJ4xFdT2HQ9+PORJS9DWjACdT64ljD6UoER9ikbYhhxAVou61+
-	r9HV6MZdI7jIGz5oNJjL9vPDbJ6EgIM1Pe5aqIwEUBLuFTps7UeCpygEqnf+75yr+3ZDcdx78ik
-	CkcXsvv95buc+MmJONMr9qILeE0HNJg/+XmctqumzTbMTFGUHIwM4xo/l1dhFFaR0TmA==
-X-Received: by 2002:a05:6000:2213:b0:47f:59b4:3933 with SMTP id ffacd0b85a97d-47f62330c15mr4105029f8f.42.1784303631863;
-        Fri, 17 Jul 2026 08:53:51 -0700 (PDT)
+        bh=OyPjQCXherIdXkhKswzDtmo6q9pYSImGwr9J9riqS9s=;
+        b=N3FmyOuPDYgK/grqBKI042mNXyrc/hEqM3Vmc4F13S2pLYIdCKLT2tr+bA/V1ve6WY
+         hbk/iJexhTgzzc35d9bJ+a0B0dsWYNfajKvhxpatMVGMMaX0JCzsQ5RBA7oGB9T/N5r0
+         taCqj2S0CDTcmgtG9YA45J7ql3qa8w9V8WDZkWaDeCaGUIU4PouYKZbv5QnAJHnl2Xt5
+         gRyXHjzOINgvBmz0ud+o5l872WI1LADH8xEhWpMR+rYyEtV9UPEtAdJVlbxabb3846uG
+         +VuK1oyJn2CWVxWEvE6UmCfX7d+tG9wuz1CK3EXW9LQ7DP62JcfdSnSAv0zhEtVlaTE5
+         I1/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784303633; x=1784908433;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=OyPjQCXherIdXkhKswzDtmo6q9pYSImGwr9J9riqS9s=;
+        b=Jv8FsPRawEFvdpfSJcCMfnljYuNC/+v+OIcW7H0vn+cjrbuT5qnQLItNBjVRJPvbFo
+         HhJQl8eh19OFMVBNFQQUYZ674JroPp/YON2IvnFOtjK/mc0OOFvfOHmlGFuD8umr2ILY
+         dXR0VQuSu62k7PjiZ+sB2XJAUAPKvlW8e7oerl3P1ayrKwDRwyoU9vBPcoYlJ7KZY5j+
+         XWlk7oyp48rndMKKQyRHDmM22IQ5+XhF5AnHEKBe+EUWJ17eedeOuJ2TmG2Y4pCSzY3E
+         Wm+nrLg762NhKXD8plwQ5CR9tmRhDsL8l5u2+cX7dgCbeah4awCphIKbHhf37awXq0j1
+         lDQg==
+X-Gm-Message-State: AOJu0Yy8G5Lli3f5Pi3QvFn239fDv68e0ylOD29KqQt7q5eDTsgoZqxS
+	U3MBWHjWZjLTBeo3Xr0KgWi227p33GYnZSGai37Xi5iSOexkmaBPmtVJ
+X-Gm-Gg: AfdE7clDQ85l5VkTiWlot4QXo3dB6CmB5E6Skk00tl7Pxw/3hJkUD02O4a/141eKdSD
+	HUjkf5K4cGvA16x2abXlMveO3VvueFbafagKpHAK4xYxhjFK3H44XlYXV12GJdcEHU0UPkDPlMd
+	ZyTthHWpzYb0jM0Z3dC0/3nTFdVj0xCTBbOT7cCB8lPDz9mhLH2H+8ruA/aVqy622Jgwv/sWhEd
+	xyGJnxh0e+tEn0Vt4HnTLWGoo7GE0swp8YFGQfaLegARWcMR5SyaPK97+vqcGnkyoz3yT2gdlhV
+	Lb2tyUIKy6qzA7VYVOl2pwLDL7ozCeWUYlZnG/jsWdmtjr2Zzgp3FPBgeDIRNsa+GZpfUTtXNmO
+	MAl4q2TM5rGwZ0TaunKODZ229DQxmjPTgP9ltBZ6KND3MXrS0WvvVdEfc1g1YWpVYVxvdYBZ2yD
+	hOb+vfnOEA4maP6BjpHxW2Hb0Op2RShYrkSG2EbPyO1R6dDACcWwT+u+s3jid2RWM5UbLMrLNu5
+	Cby
+X-Received: by 2002:a05:6000:2302:b0:47f:487c:ce7b with SMTP id ffacd0b85a97d-47f622f2c3fmr4212975f8f.7.1784303632688;
+        Fri, 17 Jul 2026 08:53:52 -0700 (PDT)
 Received: from localhost.localdomain (host86-153-201-25.range86-153.btcentralplus.com. [86.153.201.25])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63edcf8dsm5321369f8f.27.2026.07.17.08.53.50
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63edcf8dsm5321369f8f.27.2026.07.17.08.53.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2026 08:53:51 -0700 (PDT)
+        Fri, 17 Jul 2026 08:53:52 -0700 (PDT)
 From: Nnamdi Onyeyiri <nnamdio@gmail.com>
 To: nnamdio@gmail.com
 Cc: bpf@vger.kernel.org,
@@ -71,10 +74,12 @@ Cc: bpf@vger.kernel.org,
 	pabeni@redhat.com,
 	sashiko-reviews@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 0/2] bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
-Date: Fri, 17 Jul 2026 16:53:46 +0100
-Message-ID: <20260717155348.54975-1-nnamdio@gmail.com>
+Subject: [PATCH v5 1/2] bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
+Date: Fri, 17 Jul 2026 16:53:47 +0100
+Message-ID: <20260717155348.54975-2-nnamdio@gmail.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260717155348.54975-1-nnamdio@gmail.com>
+References: <20260717155348.54975-1-nnamdio@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,54 +88,195 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Spurious wakeups in tcp_msg_wait_data() isn't being handled by
-tcp_bpf_recvmsg() and tcp_bpf_recvmsg_parser(), leading to unexpected
-EAGAIN errors returned by recvfrom()/recv().  Adding handling for the
-wakeup and a selftest.
+recvfrom()/recv() are documented as only returning EAGAIN for blocking sockets
+when they have a receive timeout configured.  However, adding a blocking
+ipv4 tcp socket without a receive timeout to a sockmap will cause EAGAIN errors
+sporadically.  A socket with a receive timeout may return EAGAIN before the
+timeout expires.
 
-This issue was first discovered in an application that adds sockets to
-a sockmap as a way to view the received data.  No redirects or any
-other operations are performed.
+There are 2 code paths affected by this:
 
-Sashiko has noted a few other pre-existing issues in the same area
-(https://patch.msgid.link/20260714205118.17DB11F000E9@smtp.kernel.org)
-that can lead to EAGAIN in tcp_bpf_recvmsg() and
-tcp_bpf_recvmsg_parser().  A local run of Sashiko also identified a
-potential issue in tcp_bpf_recvmsg() handling zero-data FIN packets when
-the MSG_PEEK flag is set.  To prevent this patchset from growing too
-large, I intend to submit follow up patches to address these once this
-one has been accepted.
+  1. tcp_bpf_recvmsg() - Used when the socket has been added to a sockmap
+     that has no verdict program attached.
 
-Changes in v5:
-- Move selftest from net into bpf/prog_tests/sockmap_basic.c
-- Link to v4: https://patch.msgid.link/20260715213538.37229-1-nnamdio@gmail.com
+  2. tcp_bpf_recvmsg_parser() - Used when the socket has been added to a
+     sockmap that has a verdict program.  To reproduce this issue, it is
+     enough for the verdict program to do nothing but return SK_PASS.
 
-Changes in v4:
-- Fix potential data loss in tcp_bpf_recvmsg() when a FIN or RST has
-  been received.
-- Check the return code of pthread_create() in the selftest.
-- Fix race caused by using EXPECT macros in a thread in selftest.
-- Link to v3: https://patch.msgid.link/20260714203927.32289-1-nnamdio@gmail.com
+In both cases this happens when tcp_msg_wait_data() wakes spuriously
+(returning 0).  To fix it, we now loop back to msg_bytes_ready instead
+of returning -EAGAIN on spurious wakeup.
 
-Changes in v3:
-- Added the sockmap_recvfrom selftest.
-- Link to v2: https://patch.msgid.link/alFRK66z45eDNZA7@localhost.localdomain
+To ensure the looping does not cause sockets with a SO_RCVTIMEO set to
+wait excessively long, tcp_msg_wait_data() now takes a pointer to timeo,
+allowing sk_wait_event() to update it as appropriate.
 
-Changes in v2:
-- In tcp_bpf_recvmsg, handle signals and the socket closing in the loop.
-- Fix spurious wakeups when SO_RCVTIMEO has been set on the socket.
-- Link to v1: https://patch.msgid.link/ak_rR-Skd8Mvn4mH@localhost.localdomain
+The logic in tcp_bpf_recvmsg_parser() that allow it to handle signals,
+socket errors and closuers in its loop was also added to tcp_bpf_recvmsg().
 
 Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
 ---
-Nnamdi Onyeyiri (2):
-  bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
-  selftest/bpf: added selftest sockmap_basic/sockmap recvfrom eagain
+ net/ipv4/tcp_bpf.c | 69 ++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 60 insertions(+), 9 deletions(-)
 
- net/ipv4/tcp_bpf.c                            |  69 +++++++++--
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 115 ++++++++++++++++++
- 2 files changed, 175 insertions(+), 9 deletions(-)
-
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index cc0bd73f36b6..aa5c5d741599 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -179,7 +179,7 @@ EXPORT_SYMBOL_GPL(tcp_bpf_sendmsg_redir);
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+ static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+-			     long timeo)
++			     long *timeo)
+ {
+ 	DEFINE_WAIT_FUNC(wait, woken_wake_function);
+ 	int ret = 0;
+@@ -187,12 +187,12 @@ static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+ 	if (sk->sk_shutdown & RCV_SHUTDOWN)
+ 		return 1;
+ 
+-	if (!timeo)
++	if (!*timeo)
+ 		return ret;
+ 
+ 	add_wait_queue(sk_sleep(sk), &wait);
+ 	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+-	ret = sk_wait_event(sk, &timeo,
++	ret = sk_wait_event(sk, timeo,
+ 			    !list_empty(&psock->ingress_msg) ||
+ 			    !skb_queue_empty_lockless(&sk->sk_receive_queue), &wait);
+ 	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+@@ -229,6 +229,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 	int copied_from_self = 0;
+ 	int copied = 0;
+ 	u32 seq;
++	long timeo;
+ 
+ 	if (unlikely(flags & MSG_ERRQUEUE))
+ 		return inet_recv_error(sk, msg, len);
+@@ -262,6 +263,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 		}
+ 	}
+ 
++	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
++
+ msg_bytes_ready:
+ 	copied = __sk_msg_recvmsg(sk, psock, msg, len, flags, &copied_from_self);
+ 	/* The typical case for EFAULT is the socket was gracefully
+@@ -280,7 +283,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 	}
+ 	seq += copied_from_self;
+ 	if (!copied) {
+-		long timeo;
+ 		int data;
+ 
+ 		if (sock_flag(sk, SOCK_DONE))
+@@ -299,7 +301,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 			goto out;
+ 		}
+ 
+-		timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+ 		if (!timeo) {
+ 			copied = -EAGAIN;
+ 			goto out;
+@@ -310,13 +311,15 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+ 			goto out;
+ 		}
+ 
+-		data = tcp_msg_wait_data(sk, psock, timeo);
++		data = tcp_msg_wait_data(sk, psock, &timeo);
+ 		if (data < 0) {
+ 			copied = data;
+ 			goto unlock;
+ 		}
+ 		if (data && !sk_psock_queue_empty(psock))
+ 			goto msg_bytes_ready;
++		if (!data && timeo > 0)
++			goto msg_bytes_ready;
+ 		copied = -EAGAIN;
+ 	}
+ out:
+@@ -355,6 +358,7 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ {
+ 	struct sk_psock *psock;
+ 	int copied, ret;
++	long timeo;
+ 
+ 	if (unlikely(flags & MSG_ERRQUEUE))
+ 		return inet_recv_error(sk, msg, len);
+@@ -371,14 +375,59 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 		return tcp_recvmsg(sk, msg, len, flags);
+ 	}
+ 	lock_sock(sk);
++
++	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
++
+ msg_bytes_ready:
+ 	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
+ 	if (!copied) {
+-		long timeo;
+ 		int data;
+ 
+-		timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+-		data = tcp_msg_wait_data(sk, psock, timeo);
++		if (sock_flag(sk, SOCK_DONE)) {
++			ret = 0;
++			goto unlock;
++		}
++
++		if (sk->sk_err) {
++			if (!sk_psock_queue_empty(psock))
++				goto msg_bytes_ready;
++			if (!skb_queue_empty(&sk->sk_receive_queue)) {
++				release_sock(sk);
++				sk_psock_put(sk, psock);
++				return tcp_recvmsg(sk, msg, len, flags);
++			}
++			ret = sock_error(sk);
++			goto unlock;
++		}
++
++		if (sk->sk_shutdown & RCV_SHUTDOWN) {
++			if (!sk_psock_queue_empty(psock))
++				goto msg_bytes_ready;
++			if (!skb_queue_empty(&sk->sk_receive_queue)) {
++				release_sock(sk);
++				sk_psock_put(sk, psock);
++				return tcp_recvmsg(sk, msg, len, flags);
++			}
++			ret = 0;
++			goto unlock;
++		}
++
++		if (sk->sk_state == TCP_CLOSE) {
++			ret = -ENOTCONN;
++			goto unlock;
++		}
++
++		if (!timeo) {
++			ret = -EAGAIN;
++			goto unlock;
++		}
++
++		if (signal_pending(current)) {
++			ret = sock_intr_errno(timeo);
++			goto unlock;
++		}
++
++		data = tcp_msg_wait_data(sk, psock, &timeo);
+ 		if (data < 0) {
+ 			ret = data;
+ 			goto unlock;
+@@ -390,6 +439,8 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 			sk_psock_put(sk, psock);
+ 			return tcp_recvmsg(sk, msg, len, flags);
+ 		}
++		if (!data && timeo > 0)
++			goto msg_bytes_ready;
+ 		copied = -EAGAIN;
+ 	}
+ 	ret = copied;
 -- 
 2.52.0
 
