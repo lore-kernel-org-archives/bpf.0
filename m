@@ -1,127 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860CF3E5EF5
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 11:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E718A3CB56A
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 12:02:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784289221; cv=none; b=SW0FzOn7nKJ/DBKcQqnzXY+mS6opbTkqke/gnfZWCYANewe2SNd7+Y9eWFYaQdFyYbt+1ZmrwJq1lp8JumkS2T/UcSseYov6Lqpe9glOacPRozD1hLGh0xFKgjLNnR/QGlP153olg3G1lKtLO1z6XAmZzJI04qdxsf2T3PREXEo=
+	t=1784289750; cv=none; b=lbpgzWMyS7Pu9sCo6W/VograiDsT16vOaBqlcKvHE6QCS6wKzHXlOut0SL6npbinrd74SOba/1V4M5m/x7UuFVRPsK2J8PPPS+xdplcUbTnB4k6wCWI1AnasuK8PJpAUMytvwh9kgA1zqzdYhYmU4YpD793f0W0Pax9X42m3fNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784289221; c=relaxed/simple;
-	bh=csW3tvjYaqkvjHjb0FuwdBIV4ltAIT/KF9hokiJqUVo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=g3AqtuEG8BC2r5u34EPrR/NwGgfTB1ogcwR73DQyDKle4LQLpPfOsRJXQrzdfQOTKZBz3+abCTlMZvZHSYV+bMu/Iz9KbUalJmUNoNWeL6wwBcE8iKW9cQ7oZ64KvdhSypNydBG9NaGZ5N2yeY6xnXX1GNGHeFsjkuSzb/CygMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCnPGAbl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784289750; c=relaxed/simple;
+	bh=ePQIorKlCKR2lEtnJ1TWZLUUVqIsXrtU6rxUgRE9PdA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IMi5haVSxtq2FmsUzmYvV83LN1fSvW66bBbHUoUKSShnI2k6WUt+ygNE6QgBF/GVrTVvW/N0VIggnDO2cpgAwcs3jsHtVjJPiybWHNc5O2l5cYO4OtGaXkOdEIeQ8OrTMt6M5wCttGkFyyiOk+ZOqynLHbUF6/guEX8bMBxtdgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJQxAh+7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCnPGAbl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A78DC1F000E9;
-	Fri, 17 Jul 2026 11:53:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJQxAh+7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6B41F000E9;
+	Fri, 17 Jul 2026 12:02:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784289216;
-	bh=sz65C5TfgPEaW01qAu9bzLfE1ZJQMQgSLajFfx+X02o=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XCnPGAbl4q4Q/BMJ+MtX9ijKiv4fxpsFaV6YQmnFZzXras+f6By1CU73fRbEFQRlW
-	 akcw5i/Vcc4jLYML/KCpkuBD+gBmiZxWux1NFE+iBDPdC/qTJtla5T2oYqppFpf24M
-	 n1jVCfcRdTCbQntB1By2uwRxoaCdpAr0MmlH7JfDHWyGRoasuAXIcQIzGtEb1DUrUF
-	 965+xlR1QfjrMHPcuZ31EupAuQJkUDrznO+4+wN6yarx0kkM44X8puYJt9b/628blh
-	 tDq74j1Rw4MJKaZNF1aubbkqnU/hZb1WuJ6Agj177yxdwQ99xHvnSYB2s823ClNGea
-	 DO/bg+9o/tXlQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 4/4] selftests/bpf: Add tests for memory
- usage for arena
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260717114117.350851-5-jiayuan.chen@linux.dev>
-References: <20260717114117.350851-1-jiayuan.chen@linux.dev>
- <20260717114117.350851-5-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 17 Jul 2026 11:53:36 +0000
-Message-Id: <20260717115336.A78DC1F000E9@smtp.kernel.org>
+	s=k20260515; t=1784289748;
+	bh=gnq3g882HK65JyI1okzHM5wZCSmRNCR9zm5wYHc7t0E=;
+	h=From:To:Cc:Subject:Date;
+	b=iJQxAh+71br1SMArtiSyJSzrhYXP5Lq61WKlw4H/FCtSOBpJzFyEGpXT3uDrf6Tj3
+	 tnSfyRsCDcAK/L14NsuHuYfKqjjg6fsMw6QfJxun5JsRjNH8X5rZfafpla6ma/l+NT
+	 ZrIL/imzKr3KlUysDat0s4LMGhhA4y/lRhH+rlrISo6WCxiRGdnKBdLMOscI85ojD8
+	 4Xb9VLarK5xycu/smByCBelXMSJV3HgvvZlew4nCJZtyvb/BM5Bbawc0thrF869UUq
+	 o2bKCEeI1ouMgVWjAJAw+O+uWe3IyovNe1/SOXJngQl+6X2EZtSBsSS3nU4ABXa3cA
+	 SPcQGhyobffxQ==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Martin KaFai Lau" <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+	"Song Liu" <song@kernel.org>,
+	"Yonghong Song" <yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 0/4] bpf: Inline the numeric open-coded iterator kfuncs
+Date: Fri, 17 Jul 2026 05:02:08 -0700
+Message-ID: <20260717120215.2171057-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Incorrect use of ASSERT_OK_PTR to check for a NULL pointer read =
-from BPF userspace memory, breaking intended error handling.
---
+The bpf_for(i, start, end) macro is BPF's open-coded numeric iterator. It
+expands into calls to three kfuncs: bpf_iter_num_new() to set the iterator
+up, bpf_iter_num_next() once per iteration, and bpf_iter_num_destroy() to
+tear it down. The verifier emits these as ordinary kfunc calls, so a
+bpf_for() loop pays function-call overhead on setup, teardown, and — most
+importantly — on every single iteration via bpf_iter_num_next().
 
---- Patch [4]: [PATCH bpf-next v2 4/4] selftests/bpf: Add tests for memory =
-usage for arena ---
-commit b8bd79585d9f7cbf2a83d5381d0df2c316e65ed7
-Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+All three kfuncs are tiny and only touch the 8-byte on-stack iterator state
+(struct bpf_iter_num_kern { int cur; int end; }). That makes them good
+candidates for inlining, the same way several other special kfuncs are
+already open-coded in bpf_fixup_kfunc_call(). This series replaces each of
+the three calls with an equivalent inline BPF instruction sequence:
 
-selftests/bpf: Add tests for memory usage for arena
+  - bpf_iter_num_new(): keeps the (s64)end - (s64)start overflow check
+    (emitted with sign-extending moves) and returns the same
+    -EINVAL / -E2BIG / 0 results as the kfunc.
 
-This patch adds a selftest to verify memory usage tracking for BPF arenas.
-It allocates and frees arena pages both from BPF and user-space and checks=
-=20
-the map's memlock value via fdinfo to ensure it tracks populated pages.
+  - bpf_iter_num_next(): the hot path. Since cur and end are int, the
+    kfunc's (s64)(s->cur + 1) >= s->end test reduces to a signed 32-bit
+    comparison of (s->cur + 1) against s->end, so the inlined code uses a
+    32-bit compare with no sign extension.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c b/t=
-ools/testing/selftests/bpf/prog_tests/arena_mem_usage.c
-> new file mode 100644
-> index 0000000000000..14c2d1a1d673c
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c
+  - bpf_iter_num_destroy(): a single 8-byte store zeroing the state.
 
-[ ... ]
+The emitted instructions are plain BPF and remain valid for the
+interpreter, so interpreter fallback stays correct and no jit_required
+marking is needed.
 
-> +void serial_test_arena_mem_usage(void)
-> +{
-> +	struct arena_mem_usage *skel;
-> +	const long ps =3D PAGE_SIZE;
-> +	char *base;
-> +	size_t sz;
-> +	int fd, i;
-> +
-> +	skel =3D arena_mem_usage__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_load"))
-> +		return;
-> +	fd =3D bpf_map__fd(skel->maps.arena);
-> +
-> +	/* Fresh arena: no data pages, and the scratch page is not counted. */
-> +	ASSERT_EQ(map_memlock(fd), 0, "initial");
-> +
-> +	/* BPF-side allocation of 17 pages. */
-> +	skel->bss->alloc_cnt =3D 17;
-> +	if (run(skel->progs.alloc, "alloc"))
-> +		goto out;
-> +	/*
-> +	 * A NULL ptr means bpf_arena_alloc_pages() itself failed (e.g. the host
-> +	 * is under memory pressure), not a miscount -- flag it distinctly so a
-> +	 * red CI run is not mistaken for a counting bug.
-> +	 */
-> +	if (!ASSERT_OK_PTR(skel->bss->ptr, "arena_alloc_pages"))
+Patch 4 adds a bench_bpf_for benchmark, modeled on the existing bpf_loop
+benchmark, that runs a bpf_for() loop with an empty body so the
+per-iteration iterator cost can be measured directly.
 
-[Severity: Medium]
-Will this check actually catch a NULL pointer when bpf_arena_alloc_pages()
-fails?
+Results (./bench -p 1 --nr_loops 1000 bpf-for):
 
-When skel->bss->ptr is NULL, ASSERT_OK_PTR() evaluates libbpf_get_error(NUL=
-L),
-which returns -errno. Since the userspace errno is likely 0 following a=20
-successful bpf_prog_test_run_opts() ioctl call, ASSERT_OK_PTR silently
-evaluates to true (success).
+  +--------+----------------------+----------------------+--------------+
+  |  arch  |       inlined        |     kfunc calls      |   result     |
+  +--------+----------------------+----------------------+--------------+
+  | x86-64 | 12884 M/s (0.078 ns) | 5812 M/s (0.172 ns)  | ~2.2x faster |
+  +--------+----------------------+----------------------+--------------+
+  | arm64  | 546.1 M/s (1.831 ns) | 545.8 M/s (1.832 ns) | neutral      |
+  +--------+----------------------+----------------------+--------------+
 
-This would cause the goto out to be skipped, and the test to proceed to
-evaluate ASSERT_EQ(map_memlock(fd), 17 * ps). This subsequent check would
-then fail, emitting the exact counting bug error the comment mentions trying
-to avoid.
+On x86-64, removing the per-iteration call to bpf_iter_num_next() roughly
+doubles throughput. On arm64 the numbers are unchanged: the loop is bound
+by the load/store dependency chain on the on-stack iterator state rather
+than by call overhead, so inlining neither helps nor hurts there. It still
+removes the calls.
 
-Should this use a different macro, like ASSERT_NEQ(skel->bss->ptr, NULL), to
-correctly verify the userspace pointer?
+Changelog:
+v1: https://lore.kernel.org/all/20260715130430.318421-1-puranjay@kernel.org/
+Changes in v2:
+- Don't use sign-extending moves as some JITs don't support them (AI)
 
-> +		goto out;
-> +	ASSERT_EQ(map_memlock(fd), 17 * ps, "after_alloc");
+Puranjay Mohan (4):
+  bpf: Inline bpf_iter_num_new() kfunc
+  bpf: Inline bpf_iter_num_next() kfunc
+  bpf: Inline bpf_iter_num_destroy() kfunc
+  selftests/bpf: Add bpf_for() benchmark
 
-[ ... ]
+ kernel/bpf/verifier.c                         |  81 ++++++++++++++
+ tools/testing/selftests/bpf/Makefile          |   2 +
+ tools/testing/selftests/bpf/bench.c           |   4 +
+ .../selftests/bpf/benchs/bench_bpf_for.c      | 105 ++++++++++++++++++
+ .../selftests/bpf/benchs/run_bench_bpf_for.sh |  15 +++
+ .../selftests/bpf/progs/bpf_for_bench.c       |  32 ++++++
+ 6 files changed, 239 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_for.c
+ create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_for.sh
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_for_bench.c
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260717114117.3508=
-51-1-jiayuan.chen@linux.dev?part=3D4
+
+base-commit: 1d91ea01185656ac3ee63c5f9f6f8bde3c746b3d
+-- 
+2.53.0-Meta
+
