@@ -1,158 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679D531D381
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 02:52:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4213750CB;
+	Fri, 17 Jul 2026 03:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784256774; cv=none; b=u1vKFHk00O6S0RgbsEYbHwI8LDd5zp6pdt3PWJnYyN7Rk/+cjla8rvYPHEFj+zryACZ1UJ8HAHnzo2noQXXPl4EeGCYxaFb8BJB2SM3Xx6LGXOB0IijBcWdvypVzQrK6b3RspRMxlVYI5oJDpTaoMTKKiaah8Q4z+8XqiG/aqzo=
+	t=1784258933; cv=none; b=kMdHcg5yqC7CYNis06ebJla8irKYM1pYD/fM5XmbxqxCbtJptMxLsF8Fq4qZNmtgJFmoYoCoE7QsCJzOyAmsPrYY05rMpFjNPZSmGJKn3/UaVKdSPWQVz2om8J47a8BTsTQnvgK7WUlJ2664Wfeebm2Jg7ky/LCMvlBXzIBQf9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784256774; c=relaxed/simple;
-	bh=uatSludlOAXuY3aDExaDqB8gPuymhXC1CXQdudAfQVs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fXnq1K6MX/wgUT6aaFvuVLwbpvetRjP3FlRDCpttDyDvUiyYPND8EbtDouj8id+/XcMiHq6a/QMrQWsX/LAYFH+4B1/6Ny7/1eM9xtzyGgI5o/0FGHE25fQDMGS31H8hZqNBtP+h2TPJpQ3pHOsd2dGzmeLxoRamLvtcvdNpopU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UEmV+hqL; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UEmV+hqL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23EEB1F000E9;
-	Fri, 17 Jul 2026 02:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784256773;
-	bh=lC5zRwFW/+m2cqZWiw20OPNoPHi6Hjk2jPdle7gf1mY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UEmV+hqLLGoqPIO4G1TNf3KjCgLpxKIUlS8mDcvL5qObKJON70oCVGQUz9dECNI4s
-	 3yJdDJUIONzZ6nz6fOuHQb5vtQpWclce49ClrbycC8oAmw0NSPGyyMIwkxdlikiutv
-	 /kGqnUjnwnZaL7VOZiY24YfaWsBKT+dlckbXHJT9CWfU8AgEvVoGT15QRzDSGDh1P+
-	 X5ThCp9GAVlXwig+iuvJVsCJRZE1+RDpD4BSBosTl2VroScDjc21JXl0UHDwaWSEEH
-	 KTHHQxvc7778EKK2RXcRReoy5Yv3QAA4K3bKf6NZs4WmwI8xRfbGXGwqtGKvoRWFPm
-	 Wat7YARvTZszw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2] bpf: tcp: Fix use-after-free in
- bpf_iter_tcp_established_batch()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?Sm9zZSBGZXJuYW5kZXogKEFudGhyb3BpYyk=?= <jose.fernandez@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260717-bpf-iter-tcp-refcnt-v2-1-8e81f0ac6f3e@linux.dev>
-References: <20260717-bpf-iter-tcp-refcnt-v2-1-8e81f0ac6f3e@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 17 Jul 2026 02:52:52 +0000
-Message-Id: <20260717025253.23EEB1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1784258933; c=relaxed/simple;
+	bh=CFvoVcZIx1dFwO0Ci0FJuR6lHhaU5JTofeRASD9Xl5E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QEiU6xRlfd3MbxRLHGAN3zGnVhjDQGtKwx+uPdwwV1MFy/Mw+P2HTOl7pb9SwiD7ReSfhaGtO9gjZ5unMR0qDPb9s1F/88B2Qv/SXkalgbIrzBMk00htyxJGL153sjl6ETciYpJZIE9dO3+pwfwp94PCMGZ8E4YWhIgzh+KN4Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 9e7d2a60818f11f1aa26b74ffac11d73-20260717
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:d811b572-e5b2-42bd-a1ba-c30d82780afe,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:bc5ead1f839908384fe6a72a23752c91,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|865|898,TC:nil,Content:0
+	|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,O
+	SI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 9e7d2a60818f11f1aa26b74ffac11d73-20260717
+X-User: jiangfeng@kylinos.cn
+Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <jiangfeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 1940698584; Fri, 17 Jul 2026 11:28:46 +0800
+Message-ID: <b4281b16-5c87-423b-bcc3-d6f623c8cd6b@kylinos.cn>
+Date: Fri, 17 Jul 2026 11:28:43 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] selftests/bpf: enable timed may_goto tests for
+ riscv64
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>,
+ Xi Wang <xi.wang@gmail.com>, Pu Lehui <pulehui@huawei.com>,
+ Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260715-riscv-bpf-timed-may-goto-v3-0-cf2a9c3d843f@kylinos.cn>
+ <20260715-riscv-bpf-timed-may-goto-v3-2-cf2a9c3d843f@kylinos.cn>
+ <877bmvwekq.fsf@all.your.base.are.belong.to.us>
+Content-Language: en-US
+From: Feng Jiang <jiangfeng@kylinos.cn>
+In-Reply-To: <877bmvwekq.fsf@all.your.base.are.belong.to.us>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On 2026/7/16 15:58, Björn Töpel wrote:
+> Feng Jiang <jiangfeng@kylinos.cn> writes:
+> 
+>> Enable verifier_may_goto_1 (raw instruction tests), stream_cond_break
+>> (250ms timeout path), and the may_goto_interaction_arm64 fastcall test
+>> on riscv64 now that the JIT supports timed may_goto.
+> 
+> Really a nit, but now that may_goto_interaction_arm64() handles more
+> than just aarch64, maybe rename that function?
+ 
+Makes sense, will rename it to may_goto_interaction in v4.
 
-New issues:
-- [Low] The patch introduces a multi-line comment that violates the BPF sub=
-system comment style guidelines.
+-- 
+With Best Regards,
+Feng Jiang
 
-Pre-existing issues:
-- [High] Double-put and wild pointer dereference of batch sockets on the fi=
-rst bpf_iter_tcp_realloc_batch failure path.
---
-
---- Patch [1]: [PATCH bpf v2] bpf: tcp: Fix use-after-free in bpf_iter_tcp_=
-established_batch() ---
-commit c52d637a13758169d9dce0d7c05be97965d399d3
-Author: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
-
-bpf: tcp: Fix use-after-free in bpf_iter_tcp_established_batch()
-
-This commit fixes a use-after-free issue in the TCP iterator caused by
-request sockets being published to the ehash chain with a refcount of 0
-before being updated. The fix uses refcount_inc_not_zero() to safely handle
-these sockets during batch iteration. It also refactors the batch completion
-logic to rely on whether any sockets were left behind during the walk.
-
-Link: https://lore.kernel.org/bpf/20260620-bpf-iter-tcp-refcnt-v1-1-883bf9e=
-69495@linux.dev
-
-> --- a/net/ipv4/tcp_ipv4.c
-> +++ b/net/ipv4/tcp_ipv4.c
-> @@ -3073,24 +3073,24 @@ static unsigned int bpf_iter_tcp_established_batc=
-h(struct seq_file *seq,
-
-[ ... ]
-
->  	sk_nulls_for_each_from(sk, node) {
-> -		if (seq_sk_match(seq, sk)) {
-> -			if (iter->end_sk < iter->max_sk) {
-> -				sock_hold(sk);
-> -				iter->batch[iter->end_sk++].sk =3D sk;
-> -			} else if (!*start_sk) {
-> -				/* Remember where we left off. */
-> -				*start_sk =3D sk;
-> -			}
-> -			expected++;
-> +		if (!seq_sk_match(seq, sk))
-> +			continue;
-> +		expected++;
-> +		if (iter->end_sk < iter->max_sk) {
-> +			/* reqsk_queue_hash_req() inserts with sk_refcnt =3D=3D 0
-> +			 * and refcount_set()s it after the bucket lock drops.
-> +			 */
-
-[Severity: Low]
-Does this multi-line comment follow the BPF subsystem comment style?
-The BPF subsystem guide expects the opening block to be on its own line:
-
-/*
- * reqsk_queue_hash_req() inserts with sk_refcnt =3D=3D 0
- ...
-
-> +			if (unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
-> +				continue;
-
-[ ... ]
-
-> @@ -3128,12 +3128,14 @@ static struct sock *bpf_iter_tcp_batch(struct seq=
-_file *seq)
->  	struct sock *sk;
->  	int err;
-> =20
-> +again:
->  	sk =3D bpf_iter_tcp_resume(seq);
->  	if (!sk)
->  		return NULL; /* Done */
-> =20
->  	expected =3D bpf_iter_fill_batch(seq, &sk);
-> -	if (likely(iter->end_sk =3D=3D expected))
-> +	/* sk carries the first socket that did not fit in the batch. */
-> +	if (likely(!sk))
->  		goto done;
-
-[Severity: High]
-This is a pre-existing issue, but I wanted to ask about the reallocation
-failure path that occurs just after this block in bpf_iter_tcp_batch().
-
-If bpf_iter_tcp_realloc_batch() fails, the function calls
-bpf_iter_tcp_put_batch() and returns an error without clearing iter->end_sk.
-
-When this happens, bpf_iter_tcp_put_batch() overwrites item->sk with a
-cookie:
-
-net/ipv4/tcp_ipv4.c:bpf_iter_tcp_put_batch() {
-    ...
-    while (cur_sk < iter->end_sk) {
-        ...
-        sock_gen_put(item->sk);
-        item->cookie =3D cookie;
-    }
-}
-
-Because the seq framework subsequently calls bpf_iter_tcp_seq_stop(), it se=
-es
-iter->cur_sk < iter->end_sk and calls bpf_iter_tcp_put_batch() a second tim=
-e.
-
-Could this lead to a wild pointer dereference when sock_gen_put() tries
-to use the cookie as a socket pointer during the second pass?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260717-bpf-iter-t=
-cp-refcnt-v2-1-8e81f0ac6f3e@linux.dev?part=3D1
