@@ -1,110 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED5C2F7EE4;
-	Fri, 17 Jul 2026 17:07:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6642F7EE4
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 17:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784308023; cv=none; b=LeoLLnYYPGMUX5q0o9aMmE9uos0XZJeiT/ZEnjFr55EVkhPzkxca9chFrp7PJbrUmrLVHbp7a/2zvBgkoLm6cfFTVCfRLrgu539DVvWLzoacmQta4KDlitP2RXmiS0SgB+doiczf1ccgYtePi4aqlHmLlY29miret9BjMHBe0Uo=
+	t=1784308832; cv=none; b=FDfIWtcQyU2kxspkSPgflvoyhFn4XI7aPhk1JokhRKeInUcKr4l38ErpkGSl4k39MgTR+mGRl4JkhL9p4GmO0DHrlw18muOJjhHm1L2TM1pMPvTVMVSltGH01UxhTJAxj6DpARxh6yxipfljPociizVTZrvnnu3EEhaC3A4TzdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784308023; c=relaxed/simple;
-	bh=0Vi4XcTkAZJbkjqmtACMfa0Zc5DhaJox1a7m2QlS3jo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QFWa1Remj94XCyX+6vBCwd+bp/QN94h+itMef2CkPj+9vfrNLQzbEqoPtbJ/wA3BAVq8ODBXwj9YhuE7fKlEAjqAfiWdzYqk4iXJjhDIRZnyN/81EJjVLG7qrJrw2dCXksLPvY5+dMw5d35Zy5kH6pccOf75bpwpvPcXqXio5FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TZ8EQfEY; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1784308832; c=relaxed/simple;
+	bh=qBGsqWs3fysZG/1kRPukzlDtKxGPwfwavUKvF1vyPw0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Wy1KTkcKHThP/boBtnbdRx+grUpP1uIgztskS9YXALqs+D1HZaVK0ASN5bqXCn8dTOr5Mt/rGKCa6kdzzcfJQnZizGCgGZZVeeQzrTQ0fC5tcDXQeD1P6Bq5bxeqhHLvTC0SmAinYFHRb/n5u1wJKISbNSu7QPUzKV/ErkPO/IQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RIKjHOae; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TZ8EQfEY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784308022; x=1815844022;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0Vi4XcTkAZJbkjqmtACMfa0Zc5DhaJox1a7m2QlS3jo=;
-  b=TZ8EQfEYMAr1z6EjN9Y38NAW+FRjirfffGl7yVGAQcA7wZknS8Rj8avN
-   YnuEgRROc8xkaI3gp3xNogQXYgg0YINQlCFDgKYmS4tvpwru8j/cxi8eZ
-   C3ECmWT5tK7a4DR/rufo3D3TXHtRILA594bpcjXifiw+EMfCaikeUoJkL
-   BBrq+F0FUEeG+TLHe6CHuXjwkgYqGb3TB3Z7iyCzbCEyTm3PMIr4T87Hl
-   UWHq9YuyUhiJHoQyHr/Mjr55QcnVP47hp+9ms1+44VutSLZeh/pc7q52u
-   zF2Nxrm9yFBHBXicd6i9z6X3PJcHnvFKHHm304VV4IbnW68/5W/SC9sBv
-   w==;
-X-CSE-ConnectionGUID: jIVsAwvwTueY9ni64bGfXA==
-X-CSE-MsgGUID: N7S896jWRSmwL8MfnWUE7g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11849"; a="110533861"
-X-IronPort-AV: E=Sophos;i="6.25,169,1779174000"; 
-   d="scan'208";a="110533861"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2026 10:07:02 -0700
-X-CSE-ConnectionGUID: QsBHxzL7TnG5yB9vKgLUgg==
-X-CSE-MsgGUID: xE1DH7+0Qj6GVrNzYrHArQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,169,1779174000"; 
-   d="scan'208";a="286903978"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2026 10:07:02 -0700
-Date: Fri, 17 Jul 2026 10:07:01 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: stable@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
-Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	x86@kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 6.6.y 6/6] bpf: Prefer dirty packs for eBPF allocations
-Message-ID: <20260717-cbpf-jit-spray-hardening-6-6-y-v1-6-e04f1b2893de@linux.intel.com>
-X-Mailer: b4 0.16-dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RIKjHOae"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061111F000E9;
+	Fri, 17 Jul 2026 17:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784308831;
+	bh=WGnXUM8BqOfArwiVjryDWYJHWHrEPCG4mN5uQ6IfpAM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=RIKjHOaeDJuOCkWOVNsY9Yf1ggf2iCAhqtLed3G5KrjFvvM1RKCLE/49KJ8sBZawL
+	 SOgInSSAnfeV/0VKiP54/jlf+fMw5COcRwdIMMWIJVYkQTL/BvqRSjzQNEu8ngI8DA
+	 RFoHv1BteBfGxz/TjaOJxVQRIuQWWKlaxiQqyT9LyQA69p3O0Q8Ok1wB/WfBTtOITd
+	 Iu+VIHcIVd5+W9brNbQvqWa2vWFYTXJtlN1TFxN5L0N0sAp0Xpx6g5sFnEGuBCuVeZ
+	 jSkUw3XofxM2T5JyHqrnOvJrbt9vRyhYMHAn8XpKr7EM2gFksTu5iyDjzqzaXM2cYA
+	 WWOB2KQwzCaZg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 6.6.y 3/6] bpf: Restrict JIT predictor flush to cBPF
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260717-cbpf-jit-spray-hardening-6-6-y-v1-3-e04f1b2893de@linux.intel.com>
 References: <20260717-cbpf-jit-spray-hardening-6-6-y-v1-0-e04f1b2893de@linux.intel.com>
+ <20260717-cbpf-jit-spray-hardening-6-6-y-v1-3-e04f1b2893de@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 17 Jul 2026 17:20:30 +0000
+Message-Id: <20260717172031.061111F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260717-cbpf-jit-spray-hardening-6-6-y-v1-0-e04f1b2893de@linux.intel.com>
 
-commit b72e29e0f7ee329d89f86db8700c8ea99b4a370a upstream.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Spectre v2 mitigation bypass in BPF JIT allocator due to restricte=
+d predictor flush.
+--
 
-The pack allocator only flushes predictors when reusing a dirty pack for
-cBPF, eBPF allocations never trigger a flush. Currently, eBPF picks the
-first free pack, which could be a clean pack. As an optimization, leaving
-a clean pack for cBPF can avoid flushes.
-
-Prefer dirty packs for eBPF and keep clean packs free for cBPF. This
-mirrors the existing cBPF preference for clean packs: each program kind
-prefers the pack that avoids an extra flush, and falls back to the other
-kind only when no preferred pack has room. eBPF reuse of a dirty pack is
-harmless since eBPF being privileged does not flush.
-
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+--- Patch [3]: [PATCH 6.6.y 3/6] bpf: Restrict JIT predictor flush to cBPF =
 ---
- kernel/bpf/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+commit 8a65f5d94c81da9af1257fa2e8b48ff8c73c9963
+Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 7dc59570cd25..4669a57265ad 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -950,10 +950,10 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns, bool
- 			goto found_free_area;
- 		/*
- 		 * cBPF reuse of a dirty pack triggers a flush, so prefer a
--		 * clean pack for cBPF. eBPF never flushes, so pick the first
--		 * free pack, dirty or clean.
-+		 * clean pack for cBPF. eBPF never flushes, so steer it to a
-+		 * dirty pack and keep clean packs free for cBPF.
- 		 */
--		if (!was_classic || !pack->arch_flush_needed)
-+		if (was_classic ^ pack->arch_flush_needed)
- 			goto found_free_area;
- 		if (!fallback_pack) {
- 			fallback_pack = pack;
+bpf: Restrict JIT predictor flush to cBPF
 
--- 
-2.43.0
+This commit restricts the predictor flush on memory reuse for BPF JIT
+allocations to only cBPF programs. It adds a was_classic parameter to
+bpf_prog_pack_alloc to determine if the flush is necessary, assuming eBPF
+allocations do not require the overhead of flushing predictors on reuse.
 
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 0d8008711629c..509f1b9c2b2e2 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+[ ... ]
+> @@ -951,7 +951,9 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole=
+_t bpf_fill_ill_insns)
+>  	pos =3D 0;
+> =20
+>  found_free_area:
+> -	static_call_cond(bpf_arch_pred_flush)();
+> +	/* Flush only for cBPF as it may contain a crafted gadget */
+> +	if (static_branch_unlikely(&bpf_pred_flush_enabled) && was_classic)
+> +		static_call_cond(bpf_arch_pred_flush)();
 
+[Severity: High]
+Does skipping the flush for eBPF allocations leave the branch predictor
+vulnerable if the memory was previously used by a cBPF program?
+
+If an attacker loads a cBPF program, trains the CPU branch predictor to
+target a specific offset, and then frees it, could a subsequent eBPF program
+allocated in the same memory chunk skip the flush because was_classic is
+false? This might allow an attacker to trigger a kernel indirect branch that
+mispredicts into the newly loaded eBPF program at the trained offset.
+
+Also, if kernel.unprivileged_bpf_disabled=3D0, couldn't an attacker directly
+use unprivileged eBPF programs to bypass the flush completely, since their
+type is not BPF_PROG_TYPE_UNSPEC?
+
+>  	bitmap_set(pack->bitmap, pos, nbits);
+>  	ptr =3D (void *)(pack->ptr) + (pos << BPF_PROG_CHUNK_SHIFT);
+[ ... ]
+> diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
+> index fa3e9225aedc0..b3f164e31c6bb 100644
+> --- a/kernel/bpf/dispatcher.c
+> +++ b/kernel/bpf/dispatcher.c
+> @@ -145,7 +145,7 @@ void bpf_dispatcher_change_prog(struct bpf_dispatcher=
+ *d, struct bpf_prog *from,
+> =20
+>  	mutex_lock(&d->mutex);
+>  	if (!d->image) {
+> -		d->image =3D bpf_prog_pack_alloc(PAGE_SIZE, bpf_jit_fill_hole_with_zer=
+o);
+> +		d->image =3D bpf_prog_pack_alloc(PAGE_SIZE, bpf_jit_fill_hole_with_zer=
+o, false);
+
+[Severity: High]
+Similarly, does explicitly passing false here for the dispatcher skip the
+flush, leaving it vulnerable to unintentional gadget exploitation via
+leftover branch predictions?
+
+>  		if (!d->image)
+>  			goto out;
+>  		d->rw_image =3D bpf_jit_alloc_exec(PAGE_SIZE);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260717-cbpf-jit-s=
+pray-hardening-6-6-y-v1-0-e04f1b2893de@linux.intel.com?part=3D3
