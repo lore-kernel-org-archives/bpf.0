@@ -1,52 +1,61 @@
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3E6B3EBF19;
-	Fri, 17 Jul 2026 10:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F163E5A34;
+	Fri, 17 Jul 2026 10:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784282798; cv=none; b=RNRIhWLirvOOrwzz3TJF1mdz9TAVkX8RGNEVr7tf86zI1HflVvAdkA1stM+u/35bOxmpgxrT9bM8qBAx/aYGsjgUMLLvySEnGbejuFYo0bajukMSCb5CVpBjk6MEJlQFASXOvO0tXlb2lwIqTApjTReMxlxb0ZRbQ1Z4zocKLQw=
+	t=1784283281; cv=none; b=MWQYDc+wpz0ryMR8zdUoOQfElyEG6+Zn4NPGcJqnX2OnoYxB2t6Jj3maKQVFkXBxJzcC9KEK5Xyej+urg3z8xIjFz3SMcRuNd0q/eRYyrydQzYqECg4UsD46FYtwv18EdLa1lZoIsUQPzotIUC63h1/cMZ/EQwgotg1IQOvNex8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784282798; c=relaxed/simple;
-	bh=cEUglNTU42hYq85eqcknhLHrufR9jtVIORvDZmHuG9k=;
+	s=arc-20240116; t=1784283281; c=relaxed/simple;
+	bh=MbnU5nsfcR/D37bn1oyo20h6OIACSDYRlpSPuSj9ibk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ilt/tOatSiQ/g+lacfxPodhNfTTq8COQ98L+q5nHYQg71k9ffdude9klayCblWZwGogtw+cp8ELFVZfpaV0Kjxernfnh6jWrUnd+EUh30qhAap+Ezwo22VGjaRkN5BFsWolsvJQL97fg2zmEALklQuQZagGe5adTaBsj5vLs6eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=hq4XE0QB; arc=none smtp.client-ip=162.243.164.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="hq4XE0QB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=bp8Gc4LkX5+LNoXfj0iJ9sg+oAKDRVxcEM
-	KUbjXxp5Y=; b=hq4XE0QBZTAaD4X/W2B4HAwhO+U5WhK9V8xA9QKg/uYgrBoihj
-	C8RlWaY8rgDOOgLDVRLPfQmFZjAFkv3v/W+9JMUhjgrOoB8eYl6efFidB9U7osII
-	wiZJXJ70nfTc8QO5zAsZbBVZVyRl93q4ds4+LOh6mVJ9j9ZglPvPFGF8Q=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web3 (Coremail) with SMTP id ygQGZQDXpRR7_llqNYAPAA--.22378S4;
-	Fri, 17 Jul 2026 18:06:14 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
+	 MIME-Version; b=CNhogzHO2KWZkj1npUulhaEUjCRXR9lgqXFcSQi5khT8LUpPaDXr7WFBg4S3pkZaRToaCmk76nQ4vUo3KnMyQDaYxYLYX11zKz8gvmQI6YpSYP5Uxv3vDI8gq0DuAik0vATLSrcYDU/lsfrZ79FsCxsn6oJuuxOmAOt+W65gJJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 4bf85b6e81c811f1aa26b74ffac11d73-20260717
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:c156f080-ca78-445a-8285-65dbbe15d2ff,IP:0,U
+	RL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:25
+X-CID-META: VersionHash:e7bac3a,CLOUDID:31745d72666f8a3a3a10b6e628440402,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|83|102|850|865|898,TC:nil,Content:
+	0|15|50,EDM:-3,IP:nil,URL:11|99|85|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:n
+	il,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 4bf85b6e81c811f1aa26b74ffac11d73-20260717
+X-User: yijiangshan@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <yijiangshan@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 569924405; Fri, 17 Jul 2026 18:14:29 +0800
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
+To: ihor.solodrai@linux.dev
+Cc: 13667453960@163.com,
+	andrii@kernel.org,
+	ast@kernel.org,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Cover helper reads of invalid spill siblings
-Date: Fri, 17 Jul 2026 10:05:45 +0000
-Message-Id: <4cacb17794793237658cf039d7df5e14f2aab335.1784280493.git.chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1784280493.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1784280493.git.chenyy23@mails.tsinghua.edu.cn>
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	emil@etsalapatis.com,
+	jolsa@kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	paul.chaignon@gmail.com,
+	song@kernel.org,
+	yijiangshan@kylinos.cn,
+	yonghong.song@linux.dev
+Subject: Re: Re: [PATCH] tools/resolve_btfids: fix OUTPUT leakage from kselftest causing corrupted build paths
+Date: Fri, 17 Jul 2026 18:14:26 +0800
+Message-Id: <20260717101426.2106635-1-yijiangshan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <0ffd26d2-a5f1-4c4c-9f4a-13809f9eb94e@linux.dev>
+References: <0ffd26d2-a5f1-4c4c-9f4a-13809f9eb94e@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,89 +63,64 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ygQGZQDXpRR7_llqNYAPAA--.22378S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw17ZF43ur4Uur15WrWUtwb_yoW8uF1xp3
-	4kW3W3W34rWr1I93W3CFW8JFWrCr4kZry5XFn3Kw1kurW0qr12qr4Ika17Aw1Y93W5XrWF
-	va4aqFW7Ca1UAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-	8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vY
-	z4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
-	02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
-	4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4
-	IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwVW8twCF
-	04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-	18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vI
-	r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr
-	1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-	x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUPl1PUUUUU=
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Add a verifier_spill_fill case that passes an untouched byte next to a
-one-byte scalar spill to bpf_map_update_elem(). The full-capability load
-retains the existing uninitialized-stack behavior, while the CAP_BPF-only
-load must reject the STACK_INVALID helper read.
+Hi Ihor Solodrai,
 
-Fixes: 354e8f1970f8 ("bpf: Support <8-byte scalar spill and refill")
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
----
- .../selftests/bpf/progs/verifier_spill_fill.c | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Thanks for the review -- you are right on both counts, and v1 is dropped.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 8b166c42c4e0e..2e62a7ddcbce2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -11,6 +11,13 @@ struct {
- 	__uint(max_entries, 4096);
- } map_ringbuf SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u8);
-+} map_partial_spill SEC(".maps");
-+
- SEC("socket")
- __description("check valid spill/fill")
- __success __failure_unpriv __msg_unpriv("R0 leaks addr")
-@@ -1307,6 +1314,33 @@ __naked void stack_noperfmon_spill_32bit_onto_64bit_slot(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("helper read must reject an invalid sibling of a narrow spill")
-+__success
-+__caps_unpriv(CAP_BPF)
-+__failure_unpriv __msg_unpriv("invalid read from stack R3 off -7+0 size 1")
-+__naked void helper_read_invalid_partial_spill_sibling(void)
-+{
-+	asm volatile ("					\
-+	r5 = 1;						\
-+	*(u8 *)(r10 - 8) = r5;				\
-+	r2 = 0;						\
-+	*(u32 *)(r10 - 16) = r2;			\
-+	r1 = %[map_partial_spill] ll;			\
-+	r2 = r10;					\
-+	r2 += -16;					\
-+	r3 = r10;					\
-+	r3 += -7;					\
-+	r4 = 0;						\
-+	call %[bpf_map_update_elem];			\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_update_elem),
-+	  __imm_addr(map_partial_spill)
-+	: __clobber_all);
-+}
-+
- /*
-  * stacksafe(): check if 32-bit scalar spill in old state is considered
-  * equivalent to STACK_MISC in cur state.
--- 
-2.34.1
+On the nested sub-make: the `override OUTPUT :=` only changes the
+variable inside the outer resolve_btfids make; it does not touch
+MAKEOVERRIDES, so the nested `$(MAKE) $(build)=resolve_btfids`
+(resolve_btfids/Makefile:90) still inherits the original command-line
+OUTPUT through MAKEFLAGS. The pattern rules that produce the corrupted
+`$(OUTPUT)%.o` paths run in that nested sub-make, so they still see the
+un-slashed value. Your parent.mk/child.mk repro captures this exactly.
 
+On bpf/hid: selftests/bpf/Makefile:440 and selftests/hid/Makefile:159
+build resolve_btfids directly with
+`OUTPUT=$(HOST_BUILD_DIR)/resolve_btfids/` on the command line. An
+origin check cannot tell those deliberate command-line assignments apart
+from a leaked one, so v1 clobbered them -- exactly the breakage you
+showed. The origin is simply the wrong place to make this decision.
+
+v2 takes the approach you suggested: drop the generic kselftest OUTPUT
+at the gen_mods_dir descent in selftests/lib.mk, so it never reaches the
+kernel module build (and thus resolve_btfids) as a command-line
+variable:
+
+      gen_mods_dir: MAKEOVERRIDES := $(filter-out OUTPUT=%,$(MAKEOVERRIDES))
+      gen_mods_dir:
+      	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR)
+
+      clean_mods_dir: MAKEOVERRIDES := $(filter-out OUTPUT=%,$(MAKEOVERRIDES))
+      clean_mods_dir:
+      	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR) clean
+
+gen_mods_dir is the only path through which kselftest's per-test OUTPUT
+leaks into a kernel build (the TEST_GEN_MODS_DIR module build, which can
+the other selftest sub-makes -- and the test programs that rely on
+OUTPUT -- are unaffected.
+
+With the leaked command-line OUTPUT gone, resolve_btfids is reached with
+only the O= that the kernel build passes on its tools/% descent, so the
+`OUTPUT := $(ABSOLUTE_O)/...` assignment in scripts/Makefile.include (a
+simple assignment) wins at every make level, including the nested
+`$(build)=resolve_btfids` sub-make where the pattern rules run. bpf and
+hid invoke resolve_btfids directly with their own OUTPUT= and do not go
+through gen_mods_dir, so they are untouched.
+
+Tested from a clean tree:
+    * kselftest build of a TEST_GEN_MODS_DIR test (mm/page_frag) with
+      CONFIG_DEBUG_INFO_BTF: resolve_btfids now builds into its
+      O=-derived directory; no more "mmmain.o" / missing
+      resolve_btfids-in.o.
+    * make -C tools/bpf/resolve_btfids
+      make -C tools/bpf/resolve_btfids OUTPUT=/tmp/o/resolve_btfids/
+      both still build (bpf/hid-style explicit OUTPUT= preserved).
+    * make OUTPUT=/tmp/build/kcmp -C tools/testing/selftests/kcmp still
+      honours OUTPUT for its own programs.
+
+v2 posted as a separate thread.
+
+Thanks,
+Jiangshan
