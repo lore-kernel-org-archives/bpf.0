@@ -1,133 +1,137 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6A03DC4A9
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 07:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CA23B42D2
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 07:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784272750; cv=none; b=ubRd3479KAc0fb7Kg8rDUuQmmtltqu0mIVFVqdMq7rTlF9vLu1Gt2WGzGbKItL1JhfCslsR5QYy31jRUA9jSNUrrdx0ROZl18VG7KRkxSo4roBVe0boqyqoo1+nVlN2kaUfL1v0PSXO1N1UKdeDTSPGbS+dYTBbZLjKtt6DhYYA=
+	t=1784273237; cv=none; b=YUt+lf2cLxWD3HzCiAUNytfx2D4EwSGKdxFKP4SzAlGlGzXwtAw2fOHKNWGvyqzdj1R8St5LXRBSlR1m06LdJSsOKAgpChCetHHnnH4t1baWN3A13HB6HusMI6kj5LD3cfpjDIKAORmUEVjwvwpKLrThZ8ZObvAmqMrBQpXX36Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784272750; c=relaxed/simple;
-	bh=4XV5j8l+ZaaMiZ3dJH+bmX/koa4RnjUehAxPZxq37ko=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e6LSNkcbWmlIW0RzsWLta8UKa7fqgVXec1qPuioQL8Zjbq52GqTotwd+tcniYDTu0DfNQrDr8nMqXbdB9h5KRMNplCCAGgIyAYP+sClHJWK6KJnTumuuA7LdiVp9Q3Q0t5NXHPhcpILchLw2Sh+4WfYSmeVkruZbGWWFcgepTiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h1h8z35kPzYQtLm
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 15:18:43 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 807114098A
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 15:19:03 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgAH7Shm11lq0ygiBg--.18846S2;
-	Fri, 17 Jul 2026 15:19:03 +0800 (CST)
-Message-ID: <5890190e-125c-4555-bf35-f9e7003ee08d@huaweicloud.com>
-Date: Fri, 17 Jul 2026 15:19:02 +0800
+	s=arc-20240116; t=1784273237; c=relaxed/simple;
+	bh=+c1BnKCDEQ3gnHueuw5QTr2XAvtr/08flu7onybr7A0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lPBT0uMH7X5ixkXxyXLzhhNgEiE3aY+RwdjYwUtY28UltPpqOJXtADgaDCsgIxVDFsX22G1kH6iWJXzdaHUwK4mk/QFxGEsQRRftJzdFImHTmjteoZ2+VpH1R1D5rNPKYJUtNHl/PDYoxyH2UvmR+w7tfnp9by//Jkouo1jCRPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G8GzKaOc; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G8GzKaOc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B50801F00A3A
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 07:27:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784273235;
+	bh=+c1BnKCDEQ3gnHueuw5QTr2XAvtr/08flu7onybr7A0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=G8GzKaOc0Jvk8TEXbyPSVKF/f3Ibbrn0n8xeWeY2Ju3TjODR7SN+ptVYI22g30V7O
+	 bVm9kC4x5lvg/CgvzYsxXCgmEpRkkS5WUxPwKMPhP1cinJIp3bbecydp3CW86IWof9
+	 3jghXpiX7LeYzsdn3f/6nlaJXrQ6mWrA5yQ1PSzXRtulJZGZXfKS3gTZ9/RFjqWWF0
+	 w9XS36Hr5eYM9VKw3HAtnyT9lfrTixiEKjYOhrP0e0kwNPCGcurQvotygaL2qJgQgO
+	 UjUFPlnH7kIrO+uWu0VBhl2VybdZfdbEUDjlh3rAqHxlVI0eqaISL5pdyONsLZlWGJ
+	 aSF+ep4k8Itpg==
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8f1e274ccb9so31252036d6.2
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 00:27:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RpUJ15zUESU0iLDoFojiUAsPH+RIYf13DcwGgU3G56GirAhCDtd4/JYPuLAi839/3KRZP4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLR7aoB96kjxU7AHlidBIABq59tlOaudkqrFanigzQTCv4bffX
+	du5SQIpHxb9UKX+HG2JmqbMZrZCE9YSaC1hYe5TNbHT6JEpBRqvCHASGGS5KPpnSrPZQK1Subs7
+	azMjZsXkbvjKnbe7N9At99udfbFXPAQg=
+X-Received: by 2002:a05:620a:2985:b0:915:a811:1707 with SMTP id
+ af79cd13be357-930b3ed9e4dmr151991685a.5.1784273234978; Fri, 17 Jul 2026
+ 00:27:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf, cgroup: Fix storage null-ptr-deref after
- replacing prog
-Content-Language: en-US
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260714014659.401063-1-pulehui@huaweicloud.com>
- <20260714015658.123021F000E9@smtp.kernel.org>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <20260714015658.123021F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgAH7Shm11lq0ygiBg--.18846S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxurykGF1rtFWUtrWrWF47XFb_yoW5XF4kpF
-	WDAr95u34DJwnYvrnrt3yIvF18ZF1ktF15KrZ8Xw4xCr4SqFyFgrySg3y5uFZ3Zrnruw10
-	qr1Yvw4vkr12vFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
-	Ja73UjIFyTuYvjxUzsqWUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+References: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
+ <CAPhsuW5pRMtpa5Q0Y=zO5=2HSj4xOX+i5Vp+g2a6RDvmkeHKFw@mail.gmail.com> <alnOkjf8rq3dUGmg@kernel.org>
+In-Reply-To: <alnOkjf8rq3dUGmg@kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Fri, 17 Jul 2026 00:27:03 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7xvJM6PPGwkeZJhi+a-emuuX09uxKom29mns5-iwOYXw@mail.gmail.com>
+X-Gm-Features: AUfX_mzZuQMVeoaPUGN7-WJp_yB6Y6DgWtQRr48Eo6PuskP4XZj2uvYTZSydvGg
+Message-ID: <CAPhsuW7xvJM6PPGwkeZJhi+a-emuuX09uxKom29mns5-iwOYXw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for
+ BPF allocations
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
+	Borislav Petkov <bp@alien8.de>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ingo Molnar <mingo@redhat.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jul 16, 2026 at 11:41=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wr=
+ote:
+>
+> On Thu, Jul 16, 2026 at 05:00:11PM -0700, Song Liu wrote:
+> > On Thu, Jul 16, 2026 at 12:51=E2=80=AFAM Mike Rapoport (Microsoft)
+> > <rppt@kernel.org> wrote:
+> > >
+> > > Hi,
+> > >
+> > > BPF allocations of executable memory on x86 are essentially read-only=
+. Most
+> > > paths that call bpf_jit_alloc_exec() immediately make it ROX with
+> > > set_memory_rox().
+> > >
+> > > The code generation, at least on x86, uses separately allocated writa=
+ble
+> > > buffers and then updates the actual text memory with text_poke().
+> > >
+> > > These patches do several small adjustments to how BPF allocates execu=
+table
+> > > memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
+> >
+> > After this set, we are still using bpf_prog_pack_alloc() from x86 code.=
+ I think
+> > the goal is to eventually remove bpf_prog_pack_alloc(). What's our plan=
+ for
+> > the next steps (toward removing bpf_prog_pack_alloc)?
+>
+> "It works, don't touch"? ;-)
+>
+> We can add another layer for sub-page allocations to execmem.
 
+Sub-page allocation is not a hard requirement here. Using 4kB for
+each small BPF program isn't too bad. We added bpf_prog_pack to
+avoid fragmentation of direct map page table entry (caused by W^X
+requirement). If execmem allocator reserves large enough ROX
+memory (with PMD page table entries) and reuses them properly,
+we shouldn't see page table fragmentation getting worse over time.
+Then, we can use 4kB granularity allocation for BPF programs. (I am
+not sure about 64kB pages..).
 
-On 2026/7/14 9:56, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] In-place updates of `item->cgroup_storage` in the active RCU-protected `bpf_prog_array` cause data races with concurrent RCU readers, leading to NULL pointer dereferences or Out-Of-Bounds memory accesses.
-> --
-> 
-> --- Patch [1]: [PATCH bpf] bpf, cgroup: Fix storage null-ptr-deref after replacing prog ---
-> commit 3d155d588030a7a30403e9ee7737c108f47b5cb3
-> Author: Pu Lehui <pulehui@huawei.com>
-> 
-> bpf, cgroup: Fix storage null-ptr-deref after replacing prog
-> 
-> This commit fixes a storage null pointer dereference when replacing a
-> program by allocating, assigning, and linking the required cgroup storage
-> for the replacement program during link_update.
-> 
->> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
->> index 4355ccb78a9c6..52b5b685a93c5 100644
->> --- a/kernel/bpf/cgroup.c
->> +++ b/kernel/bpf/cgroup.c
->> @@ -1014,6 +1014,7 @@ static void replace_effective_prog(struct cgroup *cgrp,
->>   				desc->bpf.effective[atype],
->>   				lockdep_is_held(&cgroup_mutex));
->>   		item = &progs->items[pos];
->> +		bpf_cgroup_storages_assign(item->cgroup_storage, pl->storage);
-> 
-> [Severity: High]
-> Does this in-place update of item->cgroup_storage create a data race with
-> concurrent RCU readers?
-> 
-> If CPU1 is executing bpf_prog_run_array_cg() under the RCU read lock and
-> starts running the old program:
-> 
-> CPU1:
-> bpf_prog_run_array_cg()
->      while ((prog = READ_ONCE(item->prog))) {
->          run_ctx.prog_item = item;
->          func_ret = run_prog(prog, ctx);
-> 
-> And CPU2 concurrently replaces the program with one that doesn't use storage,
-> it updates the storage in-place:
-> 
-> CPU2:
-> replace_effective_prog()
->      bpf_cgroup_storages_assign(item->cgroup_storage, pl->storage);
->      WRITE_ONCE(item->prog, pl->link->link.prog);
-> 
-> If CPU1's executing program then calls bpf_get_local_storage(), it could
-> read the updated NULL storage pointer while still executing the old program:
-> 
-> CPU1:
-> bpf_get_local_storage()
->      storage = ctx->prog_item->cgroup_storage[stype];
->      if (stype == BPF_CGROUP_STORAGE_SHARED)
->          ptr = &READ_ONCE(storage->buf)->data[0];
-> 
-> Could this lead to a NULL pointer dereference or out-of-bounds access?
+>
+> Since BPF is the only user the easiest would be just to move prog_pack
+> logic from BPF to execmem and call it a day.
 
-Sashiko is right. When the storage changes, rcu readers calling 
-bpf_get_local_storage could trigger an invalid access. Therefore, for 
-scenarios where the storage changes, we need to fallback to RCU-safe 
-operations, update_effective_progs. I will fix this in the next version.
+If we move to bigger page sizes, say 64kB, there will be other
+users that would benefit from sub page allocation, right?
 
-> 
->>   		WRITE_ONCE(item->prog, pl->link->link.prog);
->>   	}
->>   }
-> 
+> Another option is to add a slab-like layer for sub-page allocations to
+> execmem. This is more complex but it would allow to get rid of the rigid
+> BPF_PROG_CHUNK_SIZE.
+>
+> Maybe it would be also possible to teach SLUB to use execmem_alloc()
+> instead of alloc_pages() but that's surely the most far fetched one :)
 
+I was thinking some rb-tree algorithm might be useful here,
+something similar to vmap.
+
+> And since we are talking about bpf_prog_pack_alloc(), why
+> BPF_PROG_PACK_SIZE accounts for num_possible_nodes():
+>
+> #define BPF_PROG_PACK_SIZE (SZ_2M * num_possible_nodes())
+>
+> Is it an elaborate choice or it was picked to work around older
+> vmalloc_huge() limitations?
+
+It is a bit complicated. The goal is to get PMDs for prog_pack.
+We can adjust this if vmalloc_huge() changes after that.
+
+Thanks,
+Song
