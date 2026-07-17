@@ -1,104 +1,85 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987B32EBDDE
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 06:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199493D47A1
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 06:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784271071; cv=none; b=GzgyjpiPGWaeGLi6Woj9XoyZv99J+fH0iOGqMqttCwhJIxJX9xe2pEtorhEhj/OwSpRfh2wMNP+l7Rqm29xe4SBl6LKLhOxs6PseCRUKhqysbO6t3tErlQn19wCaw48IIPAE+X6Fbzb39fg2IeyT1/gOeLohmfHb7OIJxwjcO34=
+	t=1784271467; cv=none; b=htYLNi+d/VlsXHuRNJvd1cb/8ZPQtO9P3duqO+rJ9T00QDQ41JGuE6Ak7rXxucFqXQOqfj56Y9lDSi+OuF+SzTfQPj1C9hOGYZrv5er+17hsRGlXg3BmZqtfz1BtVaLqE3m5FKekMAbj/44g+C5YnIbShLOY+1Oyu85n1j8XaJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784271071; c=relaxed/simple;
-	bh=xlBre8X0QT8NlLeZRTfJWdE9tVmL4ARL3Jf3KCwmik4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hAYa7CDfJryv6OlU1ctqvaFvmSeKGMvoawLyVf3Rgadux2EP7bhu5ZcB569oik7yK2p5gBXjMaoDMgUiy2B6/6cJuL862QHqKP2l6rJKgmPHSlQHar8Kdpd1T2/+jBntSu+DeVK1/SqN4xx/hKUC19xekKfNt7FeeHQy7jjQV4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cLmH6dtx; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784271467; c=relaxed/simple;
+	bh=Fv3dvwHeQkFuq2lYvaUCDtvR+zkXdxXHQ8k4r9aKw2s=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=RYuM3Y49BuPZ7F3TkSrgsgKh1jPVmIEkpw0UE2zKV3AC9uFiZ+HFSF+i/GQzKu3l1+tWiM3gmCgt1R9yz67X3OexQE2NpzvdR2usl++OfBYsdPaJir+W+AmzG+hHTmpiOCmx+j/adUZY05aSI8hJHsD5z9EQF4+oMQO4l2ibE0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=imJP292c; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cLmH6dtx"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c85b73ffb52so4370831a12.3
-        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 23:51:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784271070; x=1784875870; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=91QAhxA/bXlLyI7Ii/MPNy3UTDO8kzcswlfxF17K6QY=;
-        b=cLmH6dtxxkvGUeDxcjI7bfQlY4jmRO+hpN/SGBXfAk/8V2TRGvgfZYYUDvKYtl5hHO
-         Vv5uFTKxFy/QAZDf/kkKpotf/34iiWAShZolBC0OfpZYZhyzZDCdxa7hWqS/yX2pohWi
-         adY2hVqqCFEEEzUeey4tTeREu1R/bT0/J7jOgpvSfEJI/BMfxqhK/ZE7x1s6OKSjRalA
-         4iOsCqt/6XIytTXswCnlzcIATF3P4lObCCvubTOLyMSkXVeFjqIzIC1PanYIJ/8rXFMg
-         7F39DrYeXVT5OW59pxtXAaTUmrHU/sEVUXUQheOGVlUZx+Wselib4EFbLc3yXJ4XI20a
-         H7MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784271070; x=1784875870;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=91QAhxA/bXlLyI7Ii/MPNy3UTDO8kzcswlfxF17K6QY=;
-        b=If5q6eLd/aVh1zK85QysCU/+BwAgPH3Ui2PwEmbJBjfZIPiLBWQVYg+gqJFScC8FWk
-         A3ZNsi+ZbXAEqSRJJtTgFTx6iBd8yG10Yg/yh8b5OfOOd9bltLohjMhRKs2eK6ovCcAk
-         wJ2LfARjYcNwIeUdTmGgFmwQaCi1gHvHkRtQp4KP4RvWXN0sJnbvf8SsLLYJ2mroDm9G
-         0hXFfd6cTR8QyvJwWgTJCGejVkNw9oHkMTs57RaBDwxH4xzQhznsNRVekbuNXlQbu1Zg
-         TiD392FrYnUEfpwssUSOLq6+Aa6j2oPih09fEkDvodv7zVEZ+u9ioi+Nlqg6Ue6gVMR2
-         Rj9Q==
-X-Forwarded-Encrypted: i=1; AHgh+Rrxhh/wDsWXt++b+EsHjKxnPM9YcDgnD4YFGjNl/Za9l2TqQYxxQf7+X6eYG3eR9A9JsJA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPuhdtVu5ZLohlCWxgQMm9KsCudnKodN7QBf91QTiN83aL+Di5
-	3VzAhMtbcGdZ+ySHvWueH245aF+JxulXMhlbKtE0yuE4JOwaG4XG0Vz+
-X-Gm-Gg: AfdE7cnSmCnuiG7j+Kn/5f4exnzhtdyKvAGgpj6+WM0m6Tz7kP2N+oQlbm0cNsYr6y3
-	Kjj0mReI0/wA7UMVNq8O16cCI+88CbSRohnsnBVN3nL3HaweCe4rMuMJaRPKPe1zr1CGWN+wV9+
-	JzZ0Pj134wyF4+qOL7MH65devDiAB5JJgYGAat/GUN2rVkcSHLcTvQMcJAGysEBefQY1bCl6HlS
-	HBrku6EQVjFM2BCY8PI1u374Qpq1Z1QhzdPZN5nB5d7pme+y+Wp+/j2ec5CG2eXsCmD39Nc7lii
-	CHA3wzOzJhaX4xxZm+uiMpNNrf+3VHNwZB92BOUG9Dy6CZTWRrpymzQE9Y21pKqBt4KXhG7ym+b
-	2EFBpct+aKUce9ki8uuF4/QSVdpi4NAIRtJ75wKJFkrDCdp83nyUdjGCIvc2NEGwXZ3pTeRNvhW
-	H7ilRkwALNV2EdAJZlyL5Y16EppPqINNc=
-X-Received: by 2002:a05:6a00:2405:b0:835:6388:655d with SMTP id d2e1a72fcca58-84c29305b4dmr1241103b3a.14.1784271069756;
-        Thu, 16 Jul 2026 23:51:09 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2adcd3dcsm433593b3a.24.2026.07.16.23.51.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2026 23:51:09 -0700 (PDT)
-Message-ID: <d348c5e190c00f71bbf0f38107ebedc9f54e98e3.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 02/17] bpf: Add source and instruction
- diagnostic context
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Thu, 16 Jul 2026 23:51:06 -0700
-In-Reply-To: <2978385544ba62298a8f0323ba22e70b9096e4f9.camel@gmail.com>
-References: <20260713153910.2556007-1-memxor@gmail.com>
-			 <20260713153910.2556007-3-memxor@gmail.com>
-	 <2978385544ba62298a8f0323ba22e70b9096e4f9.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="imJP292c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957721F000E9;
+	Fri, 17 Jul 2026 06:57:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784271463;
+	bh=+U1gJJSA6wbr1gKf0i0z8rsFnsXQXTCInzuJg7LQXhM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=imJP292ccn5b5eC4L4e+2YG21wgjxmpPV8wieRudKUeftlrI/KLG/NVfBMStzk/x9
+	 pDMkgjAp9E0d5NAxgGjspFN547xILfeismHqGRkWdH8wR/eajcxfuP9wwkS8vbFyDW
+	 vMzqdT/GHlXDiB3zOv7/Ff+5FISWstm6sEBOMU2h5ThetB9M+BR+DH0tnHmEYyG0V1
+	 sAasq5lLUXOd1juP3A0otFSXipNhYZ1AzF/mVqYsSGByiATiZ4idjgm9mG8jfmrEu3
+	 n1vqlZfGkO32G6+U5gjlr9p/MHEyPG9tJXN/ItFjWsZNtNc811jXIJPMjiVH0U5+Nw
+	 qv3x5iFS0H5gw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] libarena: use ARRAY_SIZE macro in test_rbtree.bpf.c
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "longlong yan" <yanlonglong@kylinos.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260717064719.1032-1-yanlonglong@kylinos.cn>
+References: <20260717064719.1032-1-yanlonglong@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+Date: Fri, 17 Jul 2026 06:57:43 +0000
+Message-Id: <20260717065743.957721F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Wed, 2026-07-15 at 10:49 -0700, Eduard Zingerman wrote:
-> On Mon, 2026-07-13 at 17:38 +0200, Kumar Kartikeya Dwivedi wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The `ARRAY_SIZE` macro is used but never defined, resulting in a bu=
+ild failure.
+--
 
-...
+--- Patch [1]: [PATCH] libarena: use ARRAY_SIZE macro in test_rbtree.bpf.c =
+---
+commit 49bb37468e341cf82c49ff84b927aa30773d6092
+Author: longlong yan <yanlonglong@kylinos.cn>
 
-> > +struct bpf_diag_insn_buf {
-> > +	char *buf;
-> > +	size_t size;
-> > +	size_t len;
-> > +};
+libarena: use ARRAY_SIZE macro in test_rbtree.bpf.c
 
-One more nit, Claude reminded me that there is `struct seq_buf`,
-which is exactly this + a set of primitives including printf.
-On top of that, seq_buf can be used to manage bump allocation
-in diag_fmt_alloc(), as in [1].
+This commit replaces manual array size calculations with the ARRAY_SIZE
+macro throughout the test_rbtree.bpf.c selftest.
 
-[1] https://github.com/kernel-patches/bpf/commit/5e719a70cc454ef093aa689d13=
-a0e502cb004962
+> diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.b=
+pf.c b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+> index 856c484a009a8..f6e15f77cdf5a 100644
+> --- a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+> @@ -275,7 +275,7 @@ clean_up_noalloc_tree(struct rbtree __arena *rbtree)
+> =20
+>  int insert_many(enum rbtree_alloc alloc, enum rbtree_insert_mode insert)
+>  {
+> -	const size_t numkeys =3D sizeof(keys) / sizeof(keys[0]);
+> +	const size_t numkeys =3D ARRAY_SIZE(keys);
 
-...
+[Severity: Low]
+Does this code fail to build because ARRAY_SIZE is not defined?
+
+It appears ARRAY_SIZE is not provided by the headers included in this=20
+translation unit, which could cause the compiler to reject it as an
+undeclared identifier during the selftest compilation.
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260717064719.1032=
+-1-yanlonglong@kylinos.cn?part=3D1
