@@ -1,48 +1,49 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4343D8128
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 12:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E6B3E1CEF;
+	Fri, 17 Jul 2026 12:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784289772; cv=none; b=VKMWGu29CORdoxR5UhaRd8A0QKn8gEObFG+qil/ax+ehivRPLpkH08yb45xFMBPutQMByhW+HxlKQdtPwtRrvFrVlH5sgrfbpBC5DtIIm9LMR4HPE4S3d77XODgY9oehuqfzLmzWHiCpPDkq8HvZvk79AmCG0j/PzTr1Jwwctbg=
+	t=1784292857; cv=none; b=ADb9bFnXL7wi/dQ66igHtLDnoYh6B8Q3VneT+sv+FZOpgM7YWMip50i5J7GYyzCPCRBZ2h2hCvzLz22CRfiPp4k4T0FyPN7YdF27h3W49Ok6yGobyIHzrCX9bIJWuYsuJaBQMCiFqE1Txxl4j10dUaF1ETgoEU+37dXERflO9E8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784289772; c=relaxed/simple;
-	bh=ejcKgWrXGtNt0NjxXIvzH/KBv/r8VCy/3l8goGVQV/Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JD/8PWlI5KqqkRWVCe4uPmoBtOXTks7pXB5u5gBeiSEczo2gAeRq8OeBbt7ycBr3lPdoc6tI9whMNX0ZHEST823DNChF30ECcbB2L6DRvHp7mxYVV8fzovtAQgxtHaIQpLy3dKB+R3FbskAJlhqtjg77W/YiGZiKJX9s3FS69bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gTxDHg/e; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784292857; c=relaxed/simple;
+	bh=GsNjtOzEtpfYQr754hqRJlqmpZDW1+0T3geCNbKwdZY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=W3qfqP1rvbMynRy3KEipOR7FWy4vnhaEFX3gEqB1Arx1PA0DHdDsdYOeo90HR4FQbMhxXiOM44Iw3Zaz/zMDHs6NXmbjqW9xY84qdIXaza3+YaitWYAgWgH0NVUR3gIMtAiZvyPm9Ym+4343/IwlHMX6NN4FMXIjbnF9l+fIlJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ZbE592zy; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gTxDHg/e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E243C1F00A3A;
-	Fri, 17 Jul 2026 12:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784289771;
-	bh=x2B4i+37ZUZMS3mV6DUOlviFFCTrygWG44jj/kzOuUQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=gTxDHg/e+3ada1v5b27jNMysIyenVIwGtrQwTOf6TlnyJLdGiNOyywxRkmL3XUuq6
-	 4t48lKjJB3fOFeryHqqSHWB73FmHspHAU6lqpYiqIgSpxCtqT8P5huWfk8c0qOKsTI
-	 qfin3L5GWPQ9PJFTsBzbMPEZ3JjSVoM5df08R6urnb4UbWMGGDB6iku1ZpsziCn0u+
-	 LXTVzriK2HPL7Go8o24tk4Bg3EmYUw+x7fYeQoAfROUAWC32LwGdXn460cJFxI2dQ0
-	 LiMWQWlKZGmNHS7CjGcBys/ILO5MJFqGu5zgVFdgSuahsMLsXu04SUWpRrRnMW6pwT
-	 VYbSf9Lr1G1wg==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>,
-	"Yonghong Song" <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v2 4/4] selftests/bpf: Add bpf_for() benchmark
-Date: Fri, 17 Jul 2026 05:02:12 -0700
-Message-ID: <20260717120215.2171057-5-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260717120215.2171057-1-puranjay@kernel.org>
-References: <20260717120215.2171057-1-puranjay@kernel.org>
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ZbE592zy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=KvBE6
+	w7iPBhyaQ2qmkua2gCM+8n6qaD69gXol9+z+zk=; b=ZbE592zyM0SoYrL9EKqWD
+	qrLmE7Mo9gG5vtTha/DeegruBuvr1MB0505JzJiJdMeEVHtpvbKEmVJkxZbq4BRb
+	gFIEY+ZxIM/Los7aIRZbu+zXiYUCaj4fTF3eP59wr7Yh0FRxBDZnj2UslHDwLhB5
+	AekqXMx93QrCf5iQOIg5mw=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web3 (Coremail) with SMTP id ygQGZQDntRTdJVpqswkQAA--.23244S2;
+	Fri, 17 Jul 2026 20:53:59 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/2] bpf: Reject arena frees below the arena base
+Date: Fri, 17 Jul 2026 12:53:46 +0000
+Message-Id: <20260717-c10-031-public-bpf-next-v2-b4-v2-0-54b555443a7c@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,261 +51,52 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ygQGZQDntRTdJVpqswkQAA--.23244S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw43XFyrZr47XF1xZFWUArb_yoWkGrb_Wr
+	48Ka4DGr4DWFnI9a4Ykr1fZrW8CrWUKry3Ar40gFW7Xry5ZF17GFs3ArnIvryxGa1Ygr95
+	JF1akFn7ArZ3ZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb6AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+	1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+	w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMc
+	vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v
+	4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67AK6r
+	yUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
+	Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x
+	0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
+	JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
+	AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbqXdUUUUUU=
+	=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-The bpf_for() macro builds on the numeric open-coded iterator kfuncs
-bpf_iter_num_{new,next,destroy}(). Add a benchmark, modelled on the
-existing bpf_loop benchmark, that repeatedly runs a bpf_for() loop so the
-per-iteration cost of the iterator can be measured, e.g. to quantify the
-effect of inlining the iterator kfuncs in the verifier.
+bpf_arena_free_pages() can be called with a scalar arena address. The
+runtime reconstructs a full user address from the arena base and the low
+32 bits before returning the range to the arena free tree. A scalar one
+page below the arena base can otherwise produce an out-of-domain free-tree
+offset and make a later allocation return an address below the arena
+mapping.
 
-The BPF program runs an inner bpf_for(i, 0, nr_loops) loop with an empty
-body 1000 times per trigger and accounts nr_loops hits per outer
-iteration, mirroring bench_bpf_loop so the two are directly comparable.
+Patch 1 rejects frees whose reconstructed full user address is below
+user_vm_start. Patch 2 adds verifier_arena coverage for the
+scalar-below-base case.
 
-nr_loops defaults to 1000 so that the per-iteration bpf_iter_num_next()
-cost, rather than the one-time bpf_iter_num_new()/destroy() setup and
-teardown, dominates the reported numbers:
+Changes in v2:
+- Add Reviewed-by tags from Emil Tsalapatis.
+- Remove the empty inline asm from the selftest.
 
-  $ ./bench -p 1 --nr_loops 1000 bpf-for
+v1: https://lore.kernel.org/bpf/cover.1782813442.git.chenyy23@mails.tsinghua.edu.cn/
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- tools/testing/selftests/bpf/Makefile          |   2 +
- tools/testing/selftests/bpf/bench.c           |   4 +
- .../selftests/bpf/benchs/bench_bpf_for.c      | 105 ++++++++++++++++++
- .../selftests/bpf/benchs/run_bench_bpf_for.sh |  15 +++
- .../selftests/bpf/progs/bpf_for_bench.c       |  32 ++++++
- 5 files changed, 158 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_for.c
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_for.sh
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_for_bench.c
+Yiyang Chen (2):
+  bpf: Reject arena frees below the arena base
+  selftests/bpf: Cover scalar arena frees below the base
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b642ee489ea64..00b6ff636e3c1 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -967,6 +967,7 @@ $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.skel.h \
- 			    $(OUTPUT)/perfbuf_bench.skel.h
- $(OUTPUT)/bench_bloom_filter_map.o: $(OUTPUT)/bloom_filter_bench.skel.h
- $(OUTPUT)/bench_bpf_loop.o: $(OUTPUT)/bpf_loop_bench.skel.h
-+$(OUTPUT)/bench_bpf_for.o: $(OUTPUT)/bpf_for_bench.skel.h
- $(OUTPUT)/bench_strncmp.o: $(OUTPUT)/strncmp_bench.skel.h
- $(OUTPUT)/bench_bpf_hashmap_full_update.o: $(OUTPUT)/bpf_hashmap_full_update_bench.skel.h
- $(OUTPUT)/bench_local_storage.o: $(OUTPUT)/local_storage_bench.skel.h
-@@ -992,6 +993,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_ringbufs.o \
- 		 $(OUTPUT)/bench_bloom_filter_map.o \
- 		 $(OUTPUT)/bench_bpf_loop.o \
-+		 $(OUTPUT)/bench_bpf_for.o \
- 		 $(OUTPUT)/bench_strncmp.o \
- 		 $(OUTPUT)/bench_bpf_hashmap_full_update.o \
- 		 $(OUTPUT)/bench_local_storage.o \
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 3d9d2cd7764bd..b86b73456d3ca 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -276,6 +276,7 @@ static const struct argp_option opts[] = {
- extern struct argp bench_ringbufs_argp;
- extern struct argp bench_bloom_map_argp;
- extern struct argp bench_bpf_loop_argp;
-+extern struct argp bench_bpf_for_argp;
- extern struct argp bench_local_storage_argp;
- extern struct argp bench_local_storage_rcu_tasks_trace_argp;
- extern struct argp bench_strncmp_argp;
-@@ -292,6 +293,7 @@ static const struct argp_child bench_parsers[] = {
- 	{ &bench_ringbufs_argp, 0, "Ring buffers benchmark", 0 },
- 	{ &bench_bloom_map_argp, 0, "Bloom filter map benchmark", 0 },
- 	{ &bench_bpf_loop_argp, 0, "bpf_loop helper benchmark", 0 },
-+	{ &bench_bpf_for_argp, 0, "bpf_for loop benchmark", 0 },
- 	{ &bench_local_storage_argp, 0, "local_storage benchmark", 0 },
- 	{ &bench_strncmp_argp, 0, "bpf_strncmp helper benchmark", 0 },
- 	{ &bench_local_storage_rcu_tasks_trace_argp, 0,
-@@ -557,6 +559,7 @@ extern const struct bench bench_bloom_false_positive;
- extern const struct bench bench_hashmap_without_bloom;
- extern const struct bench bench_hashmap_with_bloom;
- extern const struct bench bench_bpf_loop;
-+extern const struct bench bench_bpf_for;
- extern const struct bench bench_strncmp_no_helper;
- extern const struct bench bench_strncmp_helper;
- extern const struct bench bench_bpf_hashmap_full_update;
-@@ -640,6 +643,7 @@ static const struct bench *benchs[] = {
- 	&bench_hashmap_without_bloom,
- 	&bench_hashmap_with_bloom,
- 	&bench_bpf_loop,
-+	&bench_bpf_for,
- 	&bench_strncmp_no_helper,
- 	&bench_strncmp_helper,
- 	&bench_bpf_hashmap_full_update,
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_for.c b/tools/testing/selftests/bpf/benchs/bench_bpf_for.c
-new file mode 100644
-index 0000000000000..789f8bfe25b9a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_bpf_for.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <argp.h>
-+#include "bench.h"
-+#include "bpf_for_bench.skel.h"
-+
-+/* BPF triggering benchmarks */
-+static struct ctx {
-+	struct bpf_for_bench *skel;
-+} ctx;
-+
-+static struct {
-+	__u32 nr_loops;
-+} args = {
-+	/*
-+	 * Default to a large loop count so the per-iteration
-+	 * bpf_iter_num_next() cost dominates the one-time
-+	 * bpf_iter_num_new()/destroy() setup and teardown.
-+	 */
-+	.nr_loops = 1000,
-+};
-+
-+enum {
-+	ARG_NR_LOOPS = 4000,
-+};
-+
-+static const struct argp_option opts[] = {
-+	{ "nr_loops", ARG_NR_LOOPS, "nr_loops", 0,
-+		"Set number of iterations for the bpf_for() loop"},
-+	{},
-+};
-+
-+static error_t parse_arg(int key, char *arg, struct argp_state *state)
-+{
-+	switch (key) {
-+	case ARG_NR_LOOPS:
-+		args.nr_loops = strtol(arg, NULL, 10);
-+		break;
-+	default:
-+		return ARGP_ERR_UNKNOWN;
-+	}
-+
-+	return 0;
-+}
-+
-+/* exported into benchmark runner */
-+const struct argp bench_bpf_for_argp = {
-+	.options = opts,
-+	.parser = parse_arg,
-+};
-+
-+static void validate(void)
-+{
-+	if (env.consumer_cnt != 0) {
-+		fprintf(stderr, "benchmark doesn't support consumer!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void *producer(void *input)
-+{
-+	while (true)
-+		/* trigger the bpf program */
-+		syscall(__NR_getpgid);
-+
-+	return NULL;
-+}
-+
-+static void measure(struct bench_res *res)
-+{
-+	res->hits = atomic_swap(&ctx.skel->bss->hits, 0);
-+}
-+
-+static void setup(void)
-+{
-+	struct bpf_link *link;
-+
-+	setup_libbpf();
-+
-+	ctx.skel = bpf_for_bench__open_and_load();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	link = bpf_program__attach(ctx.skel->progs.benchmark);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+
-+	ctx.skel->bss->nr_loops = args.nr_loops;
-+}
-+
-+const struct bench bench_bpf_for = {
-+	.name = "bpf-for",
-+	.argp = &bench_bpf_for_argp,
-+	.validate = validate,
-+	.setup = setup,
-+	.producer_thread = producer,
-+	.measure = measure,
-+	.report_progress = ops_report_progress,
-+	.report_final = ops_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_for.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_for.sh
-new file mode 100755
-index 0000000000000..7da6453920dab
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_for.sh
-@@ -0,0 +1,15 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ./benchs/run_common.sh
-+
-+set -eufo pipefail
-+
-+for t in 1 4 8 12 16; do
-+for i in 10 100 500 1000 5000 10000 50000 100000 500000 1000000; do
-+subtitle "nr_loops: $i, nr_threads: $t"
-+	summarize_ops "bpf_for: " \
-+	    "$($RUN_BENCH -p $t --nr_loops $i bpf-for)"
-+	printf "\n"
-+done
-+done
-diff --git a/tools/testing/selftests/bpf/progs/bpf_for_bench.c b/tools/testing/selftests/bpf/progs/bpf_for_bench.c
-new file mode 100644
-index 0000000000000..920f8f188e864
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_for_bench.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+u32 nr_loops;
-+long hits;
-+
-+static int outer_loop(__u32 index, void *data)
-+{
-+	int i;
-+
-+	/*
-+	 * Empty body: the work being measured is the open-coded numeric
-+	 * iterator itself (bpf_iter_num_new/next/destroy behind bpf_for()).
-+	 */
-+	bpf_for(i, 0, nr_loops)
-+		;
-+	__sync_add_and_fetch(&hits, nr_loops);
-+	return 0;
-+}
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int benchmark(void *ctx)
-+{
-+	bpf_loop(1000, outer_loop, NULL, 0);
-+	return 0;
-+}
+ kernel/bpf/arena.c                                 |  2 ++
+ tools/testing/selftests/bpf/progs/verifier_arena.c | 40 +++++++++++++++++++---
+ 2 files changed, 37 insertions(+), 5 deletions(-)
+
+base-commit: 1d91ea01185656ac3ee63c5f9f6f8bde3c746b3d
 -- 
-2.53.0-Meta
+2.34.1
 
