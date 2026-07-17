@@ -1,186 +1,127 @@
-Received: from akranes.kaiser.cx (akranes.kaiser.cx [152.53.16.207])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811E1385D9B;
-	Fri, 17 Jul 2026 12:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=152.53.16.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7063FBED9
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 13:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784293004; cv=none; b=bVAzPzV+GGmQ8F5wZc0m3TyZbRxss1oc2Du1wZKiFem1tsoyzgE9BkpHd7SXoeanxJ//2PQ8SDidKn0r6M6HxBnIXQixQld6SzUaysYztMsc+ISni0SKFxVpHzlsMsn/lWMZkUORYL/4DYMqrqj9f3PoiV8fs3C7YFnr0T5xU5w=
+	t=1784294358; cv=none; b=cbKHRuhalrR+nzizFQQS4N5U0Woj7mkOhKwaZlqtTRyK26/BDETW8Mhcd8u+AnncH4CrQv2nE/2j6rwTWORhSxmImU7vThwTaQBHy3j2+AtCZijYhaDAkvgNczFgJ0AnEmNEGdcJaVglgPTuj04yxx+Soa7+Z5+wblujUB7M/Uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784293004; c=relaxed/simple;
-	bh=brIhlY1cbIss4kQg0f32ia/AQYs16hsUdElR2BvxkpE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jI5qxm/6uCVpzMQqJGx8krx+e0cIstOOSPmNDCctT2+ys4y1Hz6xox3vPqARBkbekOVBdFXjtN7eyIrrMTD0ObFSjxlHUrspwKigJn9AAVIkZxLnGpml5TCBLUkfg7rpP0lM4ukQLs1QDvkd5QonCURMezNIEkX9hZQ5WN/aC30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kaiser.cx; spf=pass smtp.mailfrom=kaiser.cx; arc=none smtp.client-ip=152.53.16.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kaiser.cx
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaiser.cx
-Received: from ipservice-092-209-184-216.092.209.pools.vodafone-ip.de ([92.209.184.216] helo=nb282.user.codasip.com)
-	by akranes.kaiser.cx with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <martin@kaiser.cx>)
-	id 1wkhs1-00000000q3K-25zz;
-	Fri, 17 Jul 2026 14:40:49 +0200
-Date: Fri, 17 Jul 2026 14:40:47 +0200
-From: Martin Kaiser <martin@kaiser.cx>
-To: Florian Schmaus via B4 Relay <devnull+flo.geekplace.eu@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Florian Schmaus <flo@geekplace.eu>
-Subject: Re: [PATCH] selftests: do not preserve ownership when installing
- files with rsync
-Message-ID: <aloiz8LyEDprnVeL@nb282.user.codasip.com>
-References: <20260715-kselftest-rsync-right-v1-1-8df6c7734389@geekplace.eu>
+	s=arc-20240116; t=1784294358; c=relaxed/simple;
+	bh=+Bt6+Goat+FUbSO1uQ+yOgPj04WcdtNgvnfxalQE8HA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SLfU8aZDrlEy4j+q9PypNsTp9S6yTiZiHLQOLIgaPOs0AgkHIt9wjr776FDf0I5X3F3Pi2LuzH8x+i4fKiZwwoXk88ATwneleXeO3VYAwwfbDviF0XyKSSq7b0ZicZmC5BxO5CX+zT3FAzmtwWWKCaq8Hu3MIyf+bp+Va6zJoaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BrR5XkKt; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BrR5XkKt"
+Message-ID: <d365c74d-a8a0-4331-921b-4cb3d546590f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784294345;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CE2YjpJZ8eOHIiNT+EOnxdh14S4kY6fOB/FwDIqk4TU=;
+	b=BrR5XkKtzzku74edaNJNiLI2odtR61mLvqAMqsQThMdX0pOC815KMoSnO/P12kNQ9wWU6x
+	U1xQqoY+XMIbiZSUbbi/X9bxGY8AB8JYYwnzx184RMVLNQnksTOVnREEx2qBxvoz9CVeT/
+	KBZV+uZjynxEq+jnBDWILPPI7vzeKXs=
+Date: Fri, 17 Jul 2026 21:18:47 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260715-kselftest-rsync-right-v1-1-8df6c7734389@geekplace.eu>
-
-Thus wrote Florian Schmaus via B4 Relay (devnull+flo.geekplace.eu@kernel.org):
-
-> From: Florian Schmaus <flo@geekplace.eu>
-
-> When kselftests are built and installed using "make install" or
-> integrated into other build systems (such as Yocto's "devtool
-> modify"), the source tree might be owned by a non-root developer user.
-
-> Because the installation scripts use "rsync -a", which implies -o and
-> -g, the installed test binaries and scripts are explicitly assigned
-> the UID/GID of the source tree owner instead of the user running the
-> install command. This results in UID leaks into the root filesystem.
-
-> Fix this by explicitly adding --no-owner --no-group to all rsync
-> invocations across the selftests Makefiles so that the installed files
-> are owned by the installing user (typically root).
-
-> Signed-off-by: Florian Schmaus <flo@geekplace.eu>
-> ---
->  tools/testing/selftests/bpf/Makefile     | 6 +++---
->  tools/testing/selftests/futex/Makefile   | 2 +-
->  tools/testing/selftests/lib.mk           | 8 ++++----
->  tools/testing/selftests/sparc64/Makefile | 2 +-
->  4 files changed, 9 insertions(+), 9 deletions(-)
-
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index b642ee489ea6..1ff923eab76b 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -781,7 +781,7 @@ $(TRUNNER_LIB_OBJS): $(TRUNNER_OUTPUT)/%.o:$(TOOLSDIR)/lib/%.c
->  $(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_FILES) | $(TRUNNER_OUTPUT)
->  ifneq ($2:$(OUTPUT),:$(shell pwd))
->  	$$(call msg,EXT-COPY,$(TRUNNER_BINARY),$(TRUNNER_EXTRA_FILES))
-> -	$(Q)rsync -aq $(if $(PERMISSIVE),--ignore-missing-args) $$^ $(TRUNNER_OUTPUT)/
-> +	$(Q)rsync -aq --no-owner --no-group $(if $(PERMISSIVE),--ignore-missing-args) $$^ $(TRUNNER_OUTPUT)/
->  endif
-
->  # some X.test.o files have runtime dependencies on Y.bpf.o files
-> @@ -1048,7 +1048,7 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
->  ifneq ($(PERMISSIVE),)
->  override define INSTALL_SINGLE_RULE
->  	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-> -	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-> +	$(if $(INSTALL_LIST),rsync -a --no-owner --no-group --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
->  endef
->  endif
-
-> @@ -1057,7 +1057,7 @@ override define INSTALL_RULE
->  	$(DEFAULT_INSTALL_RULE)
->  	@for DIR in $(TEST_INST_SUBDIRS); do				  \
->  		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
-> -		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
-> +		rsync -a --no-owner --no-group $(if $(PERMISSIVE),--ignore-missing-args)	  \
->  			$(OUTPUT)/$$DIR/*.bpf.o				  \
->  			$(INSTALL_PATH)/$$DIR;				  \
->  	done
-> diff --git a/tools/testing/selftests/futex/Makefile b/tools/testing/selftests/futex/Makefile
-> index 78ab2cd111f6..c59f40b837e8 100644
-> --- a/tools/testing/selftests/futex/Makefile
-> +++ b/tools/testing/selftests/futex/Makefile
-> @@ -11,7 +11,7 @@ all:
->  		mkdir $$BUILD_TARGET  -p;	\
->  		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;\
->  		if [ -e $$DIR/$(TEST_PROGS) ]; then \
-> -			rsync -a $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
-> +			rsync -a --no-owner --no-group $$DIR/$(TEST_PROGS) $$BUILD_TARGET/; \
->  		fi \
->  	done
-
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index f02cc8a2e4ae..aedcee1c04c6 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -122,14 +122,14 @@ define INSTALL_INCLUDES
->  			fi; \
->  			relative_files="$$relative_files $$relative_dir/$$entry_name"; \
->  		done; \
-> -		cd $(SRC_PATH) && rsync -aR $$relative_files $(OBJ_PATH)/ \
-> +		cd $(SRC_PATH) && rsync -aR --no-owner --no-group $$relative_files $(OBJ_PATH)/ \
->  	)
->  endef
-
->  run_tests: all
->  ifdef building_out_of_srctree
->  	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)$(TEST_GEN_MODS_DIR)" != "X" ]; then \
-> -		rsync -aq --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(TEST_GEN_MODS_DIR) $(OUTPUT); \
-> +		rsync -aq --no-owner --no-group --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(TEST_GEN_MODS_DIR) $(OUTPUT); \
->  	fi
->  	@$(INSTALL_INCLUDES)
->  	@if [ "X$(TEST_PROGS)" != "X" ]; then \
-> @@ -150,12 +150,12 @@ clean_mods_dir:
-
->  define INSTALL_SINGLE_RULE
->  	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-> -	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
-> +	$(if $(INSTALL_LIST),rsync -a --no-owner --no-group --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
->  endef
-
->  define INSTALL_MODS_RULE
->  	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH)/$(INSTALL_LIST))
-> -	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
-> +	$(if $(INSTALL_LIST),rsync -a --no-owner --no-group --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
->  endef
-
->  define INSTALL_RULE
-> diff --git a/tools/testing/selftests/sparc64/Makefile b/tools/testing/selftests/sparc64/Makefile
-> index 88f7be76f962..001b68e6354b 100644
-> --- a/tools/testing/selftests/sparc64/Makefile
-> +++ b/tools/testing/selftests/sparc64/Makefile
-> @@ -25,7 +25,7 @@ all:
->  		#SUBDIR test prog name should be in the form: SUBDIR_test.sh \
->  		TEST=$$DIR"_test.sh"; \
->  		if [ -e $$DIR/$$TEST ]; then \
-> -			rsync -a $$DIR/$$TEST $$BUILD_TARGET/; \
-> +			rsync -a --no-owner --no-group $$DIR/$$TEST $$BUILD_TARGET/; \
->  		fi \
->  	done
+Subject: Re: [PATCH bpf-next v2 4/4] selftests/bpf: Add tests for memory usage
+ for arena
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260717114117.350851-1-jiayuan.chen@linux.dev>
+ <20260717114117.350851-5-jiayuan.chen@linux.dev>
+ <20260717115336.A78DC1F000E9@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260717115336.A78DC1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
-> ---
-> base-commit: 3b029c035b34bbc693405ddf759f0e9b920c27f1
-> change-id: 20260715-kselftest-rsync-right-a57bf0e85190
+On 7/17/26 7:53 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Incorrect use of ASSERT_OK_PTR to check for a NULL pointer read from BPF userspace memory, breaking intended error handling.
+> --
+>
+> --- Patch [4]: [PATCH bpf-next v2 4/4] selftests/bpf: Add tests for memory usage for arena ---
+> commit b8bd79585d9f7cbf2a83d5381d0df2c316e65ed7
+> Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+>
+> selftests/bpf: Add tests for memory usage for arena
+>
+> This patch adds a selftest to verify memory usage tracking for BPF arenas.
+> It allocates and frees arena pages both from BPF and user-space and checks
+> the map's memlock value via fdinfo to ensure it tracks populated pages.
+>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c b/tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c
+>> new file mode 100644
+>> index 0000000000000..14c2d1a1d673c
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c
+> [ ... ]
+>
+>> +void serial_test_arena_mem_usage(void)
+>> +{
+>> +	struct arena_mem_usage *skel;
+>> +	const long ps = PAGE_SIZE;
+>> +	char *base;
+>> +	size_t sz;
+>> +	int fd, i;
+>> +
+>> +	skel = arena_mem_usage__open_and_load();
+>> +	if (!ASSERT_OK_PTR(skel, "open_load"))
+>> +		return;
+>> +	fd = bpf_map__fd(skel->maps.arena);
+>> +
+>> +	/* Fresh arena: no data pages, and the scratch page is not counted. */
+>> +	ASSERT_EQ(map_memlock(fd), 0, "initial");
+>> +
+>> +	/* BPF-side allocation of 17 pages. */
+>> +	skel->bss->alloc_cnt = 17;
+>> +	if (run(skel->progs.alloc, "alloc"))
+>> +		goto out;
+>> +	/*
+>> +	 * A NULL ptr means bpf_arena_alloc_pages() itself failed (e.g. the host
+>> +	 * is under memory pressure), not a miscount -- flag it distinctly so a
+>> +	 * red CI run is not mistaken for a counting bug.
+>> +	 */
+>> +	if (!ASSERT_OK_PTR(skel->bss->ptr, "arena_alloc_pages"))
+> [Severity: Medium]
+> Will this check actually catch a NULL pointer when bpf_arena_alloc_pages()
+> fails?
+>
+> When skel->bss->ptr is NULL, ASSERT_OK_PTR() evaluates libbpf_get_error(NULL),
+> which returns -errno. Since the userspace errno is likely 0 following a
+> successful bpf_prog_test_run_opts() ioctl call, ASSERT_OK_PTR silently
+> evaluates to true (success).
+>
+> This would cause the goto out to be skipped, and the test to proceed to
+> evaluate ASSERT_EQ(map_memlock(fd), 17 * ps). This subsequent check would
+> then fail, emitting the exact counting bug error the comment mentions trying
+> to avoid.
+>
+> Should this use a different macro, like ASSERT_NEQ(skel->bss->ptr, NULL), to
+> correctly verify the userspace pointer?
 
-> Best regards,
-> --  
-> Florian Schmaus <flo@geekplace.eu>
 
-Looks good to me.
+On success ptr is a valid arena address and ASSERT_OK_PTR() passes 
+correctly.
 
-Reviewed-by: Martin Kaiser <martin@kaiser.cx>
+On alloc failure ptr is NULL and ASSERT_OK_PTR() may treat it as OK 
+(libbpf_get_error(NULL)
+returns -errno, which can be 0), but the next ASSERT_EQ(map_memlock(fd), 
+17 * ps) still fails.
+
+I can switch it to ASSERT_NEQ(skel->bss->ptr, NULL, ...) in the next 
+revision.
