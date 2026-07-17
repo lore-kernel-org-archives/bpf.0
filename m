@@ -1,137 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CA23B42D2
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 07:27:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CFE390C84;
+	Fri, 17 Jul 2026 07:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784273237; cv=none; b=YUt+lf2cLxWD3HzCiAUNytfx2D4EwSGKdxFKP4SzAlGlGzXwtAw2fOHKNWGvyqzdj1R8St5LXRBSlR1m06LdJSsOKAgpChCetHHnnH4t1baWN3A13HB6HusMI6kj5LD3cfpjDIKAORmUEVjwvwpKLrThZ8ZObvAmqMrBQpXX36Q=
+	t=1784273374; cv=none; b=XP+Q2L/Ep5KH0W3CykF5SeKqcCFZmPKQoNDUhvXdnrjfgD4HmzGc31KKkl9y68rws8T+CkDrWQTYK/5ELkBxBOIH/wfZnR/SHK1ZdBJ0GveFB++ykxcDIz26mm9WudDyssyxLR4p81R79wuAHyaXeAx5AyhKchHaCaYzYhyk6Is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784273237; c=relaxed/simple;
-	bh=+c1BnKCDEQ3gnHueuw5QTr2XAvtr/08flu7onybr7A0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lPBT0uMH7X5ixkXxyXLzhhNgEiE3aY+RwdjYwUtY28UltPpqOJXtADgaDCsgIxVDFsX22G1kH6iWJXzdaHUwK4mk/QFxGEsQRRftJzdFImHTmjteoZ2+VpH1R1D5rNPKYJUtNHl/PDYoxyH2UvmR+w7tfnp9by//Jkouo1jCRPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G8GzKaOc; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G8GzKaOc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B50801F00A3A
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 07:27:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784273235;
-	bh=+c1BnKCDEQ3gnHueuw5QTr2XAvtr/08flu7onybr7A0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=G8GzKaOc0Jvk8TEXbyPSVKF/f3Ibbrn0n8xeWeY2Ju3TjODR7SN+ptVYI22g30V7O
-	 bVm9kC4x5lvg/CgvzYsxXCgmEpRkkS5WUxPwKMPhP1cinJIp3bbecydp3CW86IWof9
-	 3jghXpiX7LeYzsdn3f/6nlaJXrQ6mWrA5yQ1PSzXRtulJZGZXfKS3gTZ9/RFjqWWF0
-	 w9XS36Hr5eYM9VKw3HAtnyT9lfrTixiEKjYOhrP0e0kwNPCGcurQvotygaL2qJgQgO
-	 UjUFPlnH7kIrO+uWu0VBhl2VybdZfdbEUDjlh3rAqHxlVI0eqaISL5pdyONsLZlWGJ
-	 aSF+ep4k8Itpg==
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8f1e274ccb9so31252036d6.2
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 00:27:15 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RpUJ15zUESU0iLDoFojiUAsPH+RIYf13DcwGgU3G56GirAhCDtd4/JYPuLAi839/3KRZP4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLR7aoB96kjxU7AHlidBIABq59tlOaudkqrFanigzQTCv4bffX
-	du5SQIpHxb9UKX+HG2JmqbMZrZCE9YSaC1hYe5TNbHT6JEpBRqvCHASGGS5KPpnSrPZQK1Subs7
-	azMjZsXkbvjKnbe7N9At99udfbFXPAQg=
-X-Received: by 2002:a05:620a:2985:b0:915:a811:1707 with SMTP id
- af79cd13be357-930b3ed9e4dmr151991685a.5.1784273234978; Fri, 17 Jul 2026
- 00:27:14 -0700 (PDT)
+	s=arc-20240116; t=1784273374; c=relaxed/simple;
+	bh=jKKFSiOgumrI/CYJElT/KK5tE9WcL353AroqtODhQlo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=F9tFyY39FSsQsbKOkb9CPMxjVrXgprbGdCp3IB2+VsFsVq99+UHYNKUhw68+ozRnF5NsDeCILr/JufT8o43s1y7jHsocT7NY4zMw+bV60924taLPldvVX/ElGxwT+t8eoWBCJYjBEcRyXfqAiueWUyQfUdK41uismaKPdM3aweA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h1hNV3Cw8zKHLwm;
+	Fri, 17 Jul 2026 15:28:42 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id A595A4056F;
+	Fri, 17 Jul 2026 15:29:17 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgDH1XHM2VlqGyogBg--.61085S2;
+	Fri, 17 Jul 2026 15:29:17 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf v2] bpf, cgroup: Fix storage null-ptr-deref after replacing prog
+Date: Fri, 17 Jul 2026 07:33:43 +0000
+Message-Id: <20260717073343.958862-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
- <CAPhsuW5pRMtpa5Q0Y=zO5=2HSj4xOX+i5Vp+g2a6RDvmkeHKFw@mail.gmail.com> <alnOkjf8rq3dUGmg@kernel.org>
-In-Reply-To: <alnOkjf8rq3dUGmg@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Fri, 17 Jul 2026 00:27:03 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7xvJM6PPGwkeZJhi+a-emuuX09uxKom29mns5-iwOYXw@mail.gmail.com>
-X-Gm-Features: AUfX_mzZuQMVeoaPUGN7-WJp_yB6Y6DgWtQRr48Eo6PuskP4XZj2uvYTZSydvGg
-Message-ID: <CAPhsuW7xvJM6PPGwkeZJhi+a-emuuX09uxKom29mns5-iwOYXw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for
- BPF allocations
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
-	Borislav Petkov <bp@alien8.de>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ingo Molnar <mingo@redhat.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgDH1XHM2VlqGyogBg--.61085S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF13ArW3Zw17Ar4DXFWrXwb_yoW5uw43pF
+	1DAwn8tw15J39avFn7J3y2vFy3Xa10qr1UKrZ8Jw1Fka17tayFgry7CryYva43ZF1DWr1S
+	qw1YqF4jk3WUZFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
+	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+	zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+	CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+	nIWIevJa73UjIFyTuYvjfUonmRUUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Thu, Jul 16, 2026 at 11:41=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wr=
-ote:
->
-> On Thu, Jul 16, 2026 at 05:00:11PM -0700, Song Liu wrote:
-> > On Thu, Jul 16, 2026 at 12:51=E2=80=AFAM Mike Rapoport (Microsoft)
-> > <rppt@kernel.org> wrote:
-> > >
-> > > Hi,
-> > >
-> > > BPF allocations of executable memory on x86 are essentially read-only=
-. Most
-> > > paths that call bpf_jit_alloc_exec() immediately make it ROX with
-> > > set_memory_rox().
-> > >
-> > > The code generation, at least on x86, uses separately allocated writa=
-ble
-> > > buffers and then updates the actual text memory with text_poke().
-> > >
-> > > These patches do several small adjustments to how BPF allocates execu=
-table
-> > > memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
-> >
-> > After this set, we are still using bpf_prog_pack_alloc() from x86 code.=
- I think
-> > the goal is to eventually remove bpf_prog_pack_alloc(). What's our plan=
- for
-> > the next steps (toward removing bpf_prog_pack_alloc)?
->
-> "It works, don't touch"? ;-)
->
-> We can add another layer for sub-page allocations to execmem.
+From: Pu Lehui <pulehui@huawei.com>
 
-Sub-page allocation is not a hard requirement here. Using 4kB for
-each small BPF program isn't too bad. We added bpf_prog_pack to
-avoid fragmentation of direct map page table entry (caused by W^X
-requirement). If execmem allocator reserves large enough ROX
-memory (with PMD page table entries) and reuses them properly,
-we shouldn't see page table fragmentation getting worse over time.
-Then, we can use 4kB granularity allocation for BPF programs. (I am
-not sure about 64kB pages..).
+Syzkaller reported a storage null-ptr-deref issue after replacing prog.
+This occurs in the following scenario:
+1. prog A, an empty prog, is attached to a cgrp.
+2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
+   bpf_get_local_storage helper.
+3. link_update is called to replace prog A with prog B.
 
->
-> Since BPF is the only user the easiest would be just to move prog_pack
-> logic from BPF to execmem and call it a day.
+The reason is that __cgroup_bpf_replace fails to alloc and assign the
+required cgrp storage for the incoming replacement prog. Consequently,
+the new prog inherits an uninit storage, leading to null-ptr-deref panic
+when kick the new prog.
 
-If we move to bigger page sizes, say 64kB, there will be other
-users that would benefit from sub page allocation, right?
+Fix this by properly allocating the storage and comparing the old and
+new storage pointers. If the storage changed, fallback to
+update_effective_progs which performs a RCU-safe update of the entire
+array. If the storage remains unchanged, we can safely retain the
+fast-path in-place update.
 
-> Another option is to add a slab-like layer for sub-page allocations to
-> execmem. This is more complex but it would allow to get rid of the rigid
-> BPF_PROG_CHUNK_SIZE.
->
-> Maybe it would be also possible to teach SLUB to use execmem_alloc()
-> instead of alloc_pages() but that's surely the most far fetched one :)
+Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+v2:
+- Fix invalid access for in-place update when storage changed. (Sashiko)
 
-I was thinking some rb-tree algorithm might be useful here,
-something similar to vmap.
+v1: https://lore.kernel.org/bpf/20260714014659.401063-1-pulehui@huaweicloud.com
 
-> And since we are talking about bpf_prog_pack_alloc(), why
-> BPF_PROG_PACK_SIZE accounts for num_possible_nodes():
->
-> #define BPF_PROG_PACK_SIZE (SZ_2M * num_possible_nodes())
->
-> Is it an elaborate choice or it was picked to work around older
-> vmalloc_huge() limitations?
+ kernel/bpf/cgroup.c | 37 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
 
-It is a bit complicated. The goal is to get PMDs for prog_pack.
-We can adjust this if vmalloc_huge() changes after that.
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 4355ccb78a9c..e2fa0ebeed83 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1032,11 +1032,17 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+ 				struct bpf_cgroup_link *link,
+ 				struct bpf_prog *new_prog)
+ {
++	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
++	struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
++	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
++	enum bpf_cgroup_storage_type stype;
+ 	enum cgroup_bpf_attach_type atype;
++	bool storage_changed = false;
+ 	struct bpf_prog *old_prog;
+ 	struct bpf_prog_list *pl;
+ 	struct hlist_head *progs;
+ 	bool found = false;
++	int err;
+ 
+ 	atype = bpf_cgroup_atype_find(link->link.attach_type, new_prog->aux->attach_btf_id);
+ 	if (atype < 0)
+@@ -1056,10 +1062,39 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+ 	if (!found)
+ 		return -ENOENT;
+ 
++	if (bpf_cgroup_storages_alloc(storage, new_storage, link->link.attach_type,
++				      new_prog, cgrp))
++		return -ENOMEM;
++
++	for_each_cgroup_storage_type(stype) {
++		if (storage[stype] != pl->storage[stype]) {
++			storage_changed = true;
++			break;
++		}
++	}
++
+ 	cgrp->bpf.revisions[atype] += 1;
+ 	old_prog = xchg(&link->link.prog, new_prog);
+-	replace_effective_prog(cgrp, atype, pl);
++
++	if (!storage_changed) {
++		replace_effective_prog(cgrp, atype, pl);
++		bpf_prog_put(old_prog);
++		return 0;
++	}
++
++	bpf_cgroup_storages_assign(old_storage, pl->storage);
++	bpf_cgroup_storages_assign(pl->storage, storage);
++	err = update_effective_progs(cgrp, atype);
++	if (err) {
++		xchg(&link->link.prog, old_prog);
++		bpf_cgroup_storages_assign(pl->storage, old_storage);
++		bpf_cgroup_storages_free(new_storage);
++		cgrp->bpf.revisions[atype] -= 1;
++		return err;
++	}
++
+ 	bpf_prog_put(old_prog);
++	bpf_cgroup_storages_link(new_storage, cgrp, link->link.attach_type);
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
-Thanks,
-Song
