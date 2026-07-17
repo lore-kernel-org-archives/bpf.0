@@ -1,96 +1,80 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D542C21F1
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 19:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE88E3914FD;
+	Fri, 17 Jul 2026 19:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784317542; cv=none; b=b0sFcLQS+X7wul/1YztGkIordCg41a50mIRuKYcPajbazBt/m3SEnWlm2t61nGAOWXdz8D8q+e590v8QZDl/vxb5VD2XrdfZlHpJZk/rIU5nEmQo0xH7zttOrt2k+IL6TMWS8NefD54HI1qiY/pwNQG3QayCFVeMX3VKtUqdY4s=
+	t=1784317946; cv=none; b=kWdS2z1BWIHUz/+YzkcRNezRbOa6EEDIpkKagSD2le9i/Xbp7/UAOzosdh0BXXgRq227VqIQoDq4a7nCxExPqwG7M3GlAr0iKWwogt2+rJx9AsuuLxgunAli88Zyj13Vhs0Bj3kaswCYRiesrTb1IXD+A5znPRaj+YWORu6m0iI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784317542; c=relaxed/simple;
-	bh=w39gpdOdAZCCy/sBAjAKU7RRDVxYVaLXmEz0ABBfi/0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Qtk78NW37te3kJGj57J1LXFHLEckvwmeltI/4y53dZ2vbPWeEuzRHW3FCFjGfAvwdWVdSgcIxu+c0xWVwcftv+Kqj8nUuEFVkgVSt5hNfe9rQsKYI3/tSJa1bNRYc/BFopwfMviJmsRZxyNiMQ5gO4VJ9IcULTIr4MI2V1+pkYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jEx9V5eC; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784317946; c=relaxed/simple;
+	bh=rrspSGehfKYKSnQ3rbmXPCsQVH+cgD7MP5a6ioOOlXw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=sYHq7SOvV9HLawWH9CvPfTGYmvl18638TpTUSyFp0tGQI/MnjxZ5wNvbsJJxyf6x+MUhEOe62lDwViB5fLf3JYm1M8YkscAU8cx4PdymN+GnZpSAdnbIhbXdL1j2YVuyKxYcWCtb/KwCzsCzVAG787Wp0HLF92uhAP12/eDKQKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bMkXlI4N; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jEx9V5eC"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3856d6fbcb3so4392518a91.2
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 12:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784317541; x=1784922341; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=w39gpdOdAZCCy/sBAjAKU7RRDVxYVaLXmEz0ABBfi/0=;
-        b=jEx9V5eCm4mxLywSeG5ebgav/9Wn3k995efFmZgSMT5rYF2Ur0Emrc7H0vEv4j4ONg
-         A5cjeIhGwFFjyIvFNIcLtzxgK/sK5KcMnmBBVe1QpQPi3b70CO1ha7vCQUCh7ISfGT3A
-         iOqgYbCGPrTDBXpkLpaRnL7bBAaAPt+SfX4ST05SHrfVmmPOGaYN730X/46sYfhTe91N
-         QYXbqQ7UglIIeRAb4xhTAcPcG4P1F5uCw24bJtZ5DpoToafIXXN6QvuO49uye9lH6tcB
-         BFn5fLzXOkiZvQeQcqzVxOC5VUbsjLY5n5y0CIQpGy4Wpech8I0eIJ4LB+uUpsCrzvBh
-         JZ4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784317541; x=1784922341;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=w39gpdOdAZCCy/sBAjAKU7RRDVxYVaLXmEz0ABBfi/0=;
-        b=UnJ/BbtDTFM0urKvNmdbhlrpM88GEB9eMQhVY3cH46Pec5kYo3kOkj/GBL55rqUCEa
-         hgmSbtSiNaPqSyi0mgqB1/loZkwxatAVxkYYmb4t2erJ7Pd+tG4+nKQyyOhGo0bCTFJ/
-         Q7sbI3Aiaqb3Ym+cVcUq0ph0Oiuuef1axkxI3F5tFoN/pjXsghuxY30phJ/Q8qPkM7r0
-         4YXKCwrR9ow1m2ltYRG7y4q/xdiHRZb3F5V8gg2myXC8xaZ1k02a5ZK8a0oLBeOnqucX
-         kGqXJH9xD7BhzqYEq3RNVIl7kzzrkZvoTKjdSmAaSdzxM60ZZV1vjJSMfZz+xMmUNN+n
-         E7nQ==
-X-Forwarded-Encrypted: i=1; AHgh+Robtne0+FQKgoIbKOD5jFkb+R9IiBl5p4lDT43e073EmSChI4yyMOTITUl6yH6P8JNEBRo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMfFU7CnO0uT8RE4qgp09NA8AerzdznW7JJcuESCPpV+VtSXwn
-	3a7qZTHvTe8PwAIJqYaKKWnfayFF7h4OWNg/Q/aPcRNx4DUHTAnoVjTL
-X-Gm-Gg: AfdE7cnzHQlrC9VVvEYq85GC1Al09DQDOBIqdkH9nBmdh/Y/OXVvA4LHBQ5fhBT+B8j
-	bT+65zQk2v3Bks/ovIadi/B7Vho4eRiqPQPXb1kYSFfloRSvrnhgv3E1FIBcFmVvhkLwG/D0wtm
-	WK7pK4HrZZWd0Rwql8bR8A/ZCcgWH2U+2Jg+dQiwYWgYJcwOZAjiz0PzHTWQvGQ/G0SH9Daoz5P
-	6VXrnL8rql7ydgN9YsPblfcxNpQqf1ngu7oZ98UO6EWI/+JYAcuMxJyX1uAIWI8zl+2n4/5Tc5N
-	xT8QVfXUSVCcpLtQ3Kh71LupwlyRzwfj43CdeGEl2cMdhD8t89uT7/yka6xgr+D4Sh+/jo08+HB
-	AemgLiKSgCSHNb6zgbax4+AcSQ/9V3DSIRnZAHMvv7wvmnvo/y28EsdHbx/Y3SX6VUrFEMB0egF
-	5i3eXvyhAIkJlIMNXb/Pmia1eQnVfAwH1e3FjZZcHQasjj0qCllobZlwFptQ==
-X-Received: by 2002:a17:90b:35c1:b0:38e:485c:ebd3 with SMTP id 98e67ed59e1d1-38e4b43145bmr4412372a91.15.1784317541049;
-        Fri, 17 Jul 2026 12:45:41 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:87e3:2c3:b68c:94ea? ([2620:10d:c090:500::1:14f3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3142a210571sm9872397eec.31.2026.07.17.12.45.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2026 12:45:40 -0700 (PDT)
-Message-ID: <f2116abb909f0f6ce85b6b8bab0a687580a1fc00.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/4] bpf: Inline bpf_iter_num_destroy() kfunc
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song	 <yonghong.song@linux.dev>
-Date: Fri, 17 Jul 2026 12:45:39 -0700
-In-Reply-To: <20260717120215.2171057-4-puranjay@kernel.org>
-References: <20260717120215.2171057-1-puranjay@kernel.org>
-	 <20260717120215.2171057-4-puranjay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bMkXlI4N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FA541F000E9;
+	Fri, 17 Jul 2026 19:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784317945;
+	bh=c2c+nCQRFnQzMGUEwe4sVdtFvea3M+zacbG58Luv/FA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=bMkXlI4NHqtCOwMGFqOAzBphoOETmxMwLgPLrB0oMUt9QrbI/GCU64H/UQZJAobg3
+	 ECILpixnlncYUDdSe1k9Z3c9NkOQgknOPDXdqeaUdyRN9xyh66n+YbwxzOI6RbbScz
+	 tRW5kMZxobaTO+cH7eQLUI1rzroNy+Ov08rog0d1kr5T+IMwgTPnbaZj+61u0GmrDs
+	 C4/Bca6VSpjAm4jFuQ9mb/a1l0RuSq/5nFDnASdgnNHeFrUac84D+bfPJMlTETw55c
+	 jTm0crkllI8iHAvJpul5aFYa1UXG+7g66Bc0ADVMKQUPPuO6NYzb5VueDbBDeJbZN0
+	 8FjN0KHI7eyAA==
+Content-Type: multipart/mixed; boundary="===============7499260634970125321=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <730b11181226fe2aa47c5add541431bb8bd4b4fa6af6e3b41bd8a09161d2f51c@mail.kernel.org>
+In-Reply-To: <20260717190544.257306-2-main.kalliope@gmail.com>
+References: <20260717190544.257306-2-main.kalliope@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, parisc: Add support for BPF_SDIV and BPF_SMOD in the parisc64 JIT
+From: bot+bpf-ci@kernel.org
+To: main.kalliope@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,deller@gmx.de,James.Bottomley@HansenPartnership.com
+Cc: bpf@vger.kernel.org,linux-parisc@vger.kernel.org,linux-kernel@vger.kernel.org,visitorckw@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 17 Jul 2026 19:52:25 +0000 (UTC)
 
-On Fri, 2026-07-17 at 05:02 -0700, Puranjay Mohan wrote:
-> bpf_iter_num_destroy() only zeroes the on-stack iterator state, which is
-> a single 8-byte store. Open-code it in the verifier to drop the call
-> emitted at the end of every bpf_for() loop.
->=20
-> Inline it in bpf_fixup_kfunc_call() by replacing the call with a store of
-> zero to the iterator, matching the kfunc which clears both s->cur and
-> s->end. R1 holds the pointer to the on-stack bpf_iter_num.
->=20
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
+--===============7499260634970125321==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> emit_call_libgcc_ll() zero-extends the ALU32 operands and calls the
+> unsigned hppa_div64()/hppa_div64_rem() helpers regardless of the BPF
+> instruction's signedness, so the parisc64 JIT does not implement
+> signed BPF_SDIV and BPF_SMOD (off == 1). Signed ALU32 and ALU64
+> div/mod get an unsigned quotient and remainder rather than the
+> verifier's and the interpreter's signed result for negative operands.
+>
+> Add hppa_sdiv64()/hppa_sdiv64_rem() wrapping div64_s64(), thread
+> is_signed = (insn->off == 1) through the div/mod emit sites, and on the
+> signed path sign-extend the ALU32 operands (and the immediate divisor)
+> instead of zero-extending them before calling the signed helpers.
+> bpf_do_misc_fixups() rewrites the zero-divisor and INT_MIN/-1 cases out
+> of the instruction stream before the JIT runs.
+>
+> Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
+
+This looks like a fix for a correctness bug that has been present since
+the parisc64 eBPF JIT was first added, where signed div/mod produced an
+unsigned result for negative operands.
+
+Should this carry a Fixes: tag?
+
+  Fixes: c95e269773b3 ("parisc: Add 64-bit eBPF JIT compiler")
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29607384764
+--===============7499260634970125321==--
