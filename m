@@ -1,128 +1,104 @@
-Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0323038D3ED;
-	Fri, 17 Jul 2026 09:56:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.95.4
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 455713E9C3D;
+	Fri, 17 Jul 2026 10:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784282208; cv=none; b=FbubjMbdgrT8ze21f/+yxxdZcmzSkQsux/X4ZWFANMU2I5J02dAYGJOa359OozZMU/mNrGLMM8uCJGp50x3NisFziU8XbY1CYN9E8Ne7fTLaCf8EAXthETkXq6JDY6d0OSp9uF4dt0v8meb+2JGKy1NZE1y6iV081bjEeg2WIvI=
+	t=1784282782; cv=none; b=ZB7aMHjawaBegTO3/C/zdoqv52VcGk3Dn+pR+Rg590mx4wA/8wK82R5fKxLs8xidc6Hg/euEE6pCmCDcKMKrbIEiC0FXoWDwbhQ5NUzlTsuV7KGp+Z+p5CtnscReTtDo7B13p8oHMR6YvKJMiwPj7ErofxOKvB5mQsdVpldyH+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784282208; c=relaxed/simple;
-	bh=Sr89TNn2NgaYiSBqvK4cOSOzgv8vcIhUYYBrZsyUQUI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=GOpdXzZUYbcqttnHZTtZUBA/nLGN2OZo+BwpmiXb0VjpCepwjp6Jb/Q99BW2FgodDFHpEVStnTCpWoGTMLVry5G/ePgBn5jbCHcdArVyAH8hmQBTjnova5TVQgFM4iYkjj3DEsboSJqrLjy9ByrnSPjDNey5jO0sbW5cpoPDutM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toke.dk; spf=pass smtp.mailfrom=toke.dk; arc=none smtp.client-ip=45.145.95.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toke.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toke.dk
-Authentication-Results: mail.toke.dk; dkim=none
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-To: Matt Fleming <matt@readmodwrite.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Lorenzo Bianconi <lorenzo@kernel.org>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, stable@vger.kernel.org,
- kernel-team@cloudflare.com, Matt Fleming <mfleming@cloudflare.com>
-Subject: Re: [PATCH bpf] veth: convert frag_list skbs before running XDP
-In-Reply-To: <20260716100605.939654-1-matt@readmodwrite.com>
-References: <20260716100605.939654-1-matt@readmodwrite.com>
-Date: Fri, 17 Jul 2026 11:56:41 +0200
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87jyquj5wm.fsf@toke.dk>
+	s=arc-20240116; t=1784282782; c=relaxed/simple;
+	bh=7ODRxQ1Qnznw6oFlmp4IQyDsK5WC4u5aJZid17ad3GI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RN6OaIoWdYuoSfrU0WjA/+NasJJJU5r1QWO7lmZylfWzPYd23UiIdtgzo5MZbAJAwLdso+Evca5qWXKFe519Zg9pwHLPTRr5pfpuCA2SK+1fjIdIVzfYb5KmZy66hDRk/3g2NqdBLZVVq/gsdLKQlB6MqSyK2MNCYYOvLqu4L94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=PnKb9Xue; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="PnKb9Xue"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=8nz40
+	Tc6hoLFo5EGGysyuFnmKq4JJ7JcRBJoFTmlWrU=; b=PnKb9XueBQl3UgEJ4nyFd
+	ZKVKN8mLRvArXLFIuhBHwIEDd8C+q9T3XBg8KBkDPwWmrMmRdnuXO6Ni2e4KM2b+
+	rKlHl8jQ7WCplm5o5s2ydg95KNjPPkV4XhfgG0R1tPePc+fZU25fuYF73EKJjZTp
+	BVnRclJZrjpiWhS9qubPIg=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web3 (Coremail) with SMTP id ygQGZQDXpRR7_llqNYAPAA--.22378S2;
+	Fri, 17 Jul 2026 18:06:06 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/2] bpf: Validate byte type for helper stack reads
+Date: Fri, 17 Jul 2026 10:05:43 +0000
+Message-Id: <cover.1784280493.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:ygQGZQDXpRR7_llqNYAPAA--.22378S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrZFW5WF45Gr4ruw4UZF4rAFb_yoW8JF45pF
+	Z5WanIkF1kGayxC3Way3WIva4fJF4kXr13urn3C348AF98G3ZrZrWFgr45CFy5taykWw4F
+	vFn3X3Z0ka1UuaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+	0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+	1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+	rcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14
+	v_Gw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
+	xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrx
+	kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
+	6r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8Jw
+	CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOv38UUUU
+	U
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Matt Fleming <matt@readmodwrite.com> writes:
+The verifier checks helper memory arguments byte by byte, but its scalar
+spill fast path only checks the slot-wide spill marker. For a CAP_BPF load,
+a narrow scalar spill can therefore make an untouched sibling byte appear
+initialized when the sibling is passed to a helper.
 
-> From: Matt Fleming <mfleming@cloudflare.com>
->
-> A frag_list skb can reach veth with data_len set but nr_frags zero.
-> veth_convert_skb_to_xdp_buff() only converts skbs that are shared,
-> locked, have frags[], or do not have enough headroom. It later uses
-> skb_is_nonlinear() to decide whether to set XDP_FLAGS_HAS_FRAGS and
-> xdp_frags_size.
->
-> That exposes frag_list data to XDP as if it were stored in frags[], but
-> frags[] is empty. AF_XDP copy mode can then trust the bogus XDP fragment
-> metadata, walk an empty fragment entry, and crash in memcpy() from
-> __xsk_rcv().
->
-> Route frag_list skbs through skb_pp_cow_data() before exposing them to
-> XDP, and only advertise XDP frags when the resulting skb has frags[].
-> skb_copy_bits() already handles frag_list input, and skb_pp_cow_data()
-> builds frags[] output with skb_add_rx_frag(), which is the representation
-> XDP multi-buffer expects.
->
-> Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accept non-linear skb")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Matt Fleming <mfleming@cloudflare.com>
+Patch 1 makes the fast path require STACK_SPILL for the byte being checked.
+Patch 2 adds verifier_spill_fill coverage for a CAP_BPF map update helper
+reading an invalid sibling byte.
 
-Seems reasonable, but a few nits below:
+Changes in v2:
+- Rewrite the patch 1 commit message to explain the uninitialized-stack-read
+  invariant and distinguish it from the pointer-leak check, with references
+  to the related producer-side fix and direct-read selftest.
+- Add the regression Fixes tag to patch 2 and use the neighboring inline-asm
+  line-continuation style.
 
-> ---
->  drivers/net/veth.c | 4 ++--
->  net/core/skbuff.c  | 9 ++++-----
->  2 files changed, 6 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 1c5142149175..efb24aae1f26 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -756,7 +756,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
->  	u32 frame_sz;
->  
->  	if (skb_shared(skb) || skb_head_is_locked(skb) ||
-> -	    skb_shinfo(skb)->nr_frags ||
-> +	    skb_shinfo(skb)->nr_frags || skb_has_frag_list(skb) ||
+v1: https://lore.kernel.org/bpf/cover.1783920884.git.chenyy23@mails.tsinghua.edu.cn/
 
-Isn't 'skb_shinfo(skb)->nr_frags || skb_has_frag_list(skb)' basically
-the same as 'skb_is_nonlinear(skb)'? Which, incidentally, is what
-generic XDP uses in the check that guards calling into the
-skb_pp_cow_data() path.
+Yiyang Chen (2):
+  bpf: Check byte type when validating helper stack reads
+  selftests/bpf: Cover helper reads of invalid spill siblings
 
-Looking at those two places, generic XDP checks for 'skb_cloned(skb)',
-while veth checks 'skb_shared(skb) || skb_head_is_locked(skb)'. AFAICT,
-the latter is stricter; should we update the generic XDP check?
+ kernel/bpf/verifier.c                         |  3 +-
+ .../selftests/bpf/progs/verifier_spill_fill.c | 34 +++++++++++++++++++
+ 2 files changed, 36 insertions(+), 1 deletion(-)
 
->  	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
->  		if (skb_pp_cow_data(rq->page_pool, pskb, XDP_PACKET_HEADROOM))
->  			goto drop;
-> @@ -771,7 +771,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
->  	xdp_prepare_buff(xdp, skb->head, skb_headroom(skb),
->  			 skb_headlen(skb), true);
->  
-> -	if (skb_is_nonlinear(skb)) {
-> +	if (skb_shinfo(skb)->nr_frags) {
->  		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
->  		xdp_buff_set_frags_flag(xdp);
->  	} else {
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 18dabb4e9cfa..1e837d01a908 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -936,12 +936,11 @@ int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
->  	int err, i, head_off;
->  	void *data;
->  
-> -	/* XDP does not support fraglist so we need to linearize
-> -	 * the skb.
-> +	/*
-> +	 * skb_copy_bits() handles both frags[] and frag_list input. If the
-> +	 * copied skb remains non-linear, it uses frags[], which is the
-> +	 * representation used by XDP multi-buffer.
->  	 */
 
-This comment sorta reads like a function documentation comment, but it
-ends up sitting weirdly in the middle of the function body. The comment
-you're replacing was tied to the statement below, but this one isn't,
-really. Should we turn it into an actual function doc comment instead?
+base-commit: 1d91ea01185656ac3ee63c5f9f6f8bde3c746b3d
+-- 
+2.34.1
 
--Toke
