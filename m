@@ -1,112 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414263BBA01;
-	Fri, 17 Jul 2026 06:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7144E3AEB2B;
+	Fri, 17 Jul 2026 06:47:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784270510; cv=none; b=QUHd1cx1GbXIyLkdUGv76ULak1CQ4nvXHRGr6x3eIgzfmZ4F++6HrnWAgCjBDT9VFwpRUPopIW059ye7+956D2NdLJoh1WvUvzRXXrOHeFthBPJTcPSc5CfynPlsjyJ0XXvoIQPmuCLAL7TszqzhdW/zdZp92qmj9GsVcc9KEJE=
+	t=1784270867; cv=none; b=hDIncYXjjKJiQlcUoOyw5TKik2jYytl67a5S0KsdtGqIvaKljtsX/vlwXerlXJXiinaxXVMIFPsrw3Q/8opjNes0fqfaKXRgLIjj5Nw0hzjBXEbPg35RM8CC9qJwv30GbhFFF2gFT0M214it9jhCLgqEWBl58GbHc+TESMRJEh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784270510; c=relaxed/simple;
-	bh=9xNXfCWLAqBC3ulkM3qh8DF1At54FXqC7nm+D7oeF1k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s16gEM4qQudJzJD/2/1hHAWP0AzpjedhefgNRO0S7cnz+6uzmPyf6ZLmsKCSSMgL3pPBmFqGYUYDGN0Ad6lKJWvCRLmzjW2ditMQMRx9rYc4QASmbjOONDWv9Zt8svMDJsrBUV2Kd9TUGZ1GCrsfjr5fj/Syo0kvD6WhwB59Svk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gHo1a2H+; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gHo1a2H+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1977F1F000E9;
-	Fri, 17 Jul 2026 06:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784270492;
-	bh=AR2WUaN40b69ENQDLvIRE6Dl8TK13zKRTQBCCA7YVzw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gHo1a2H+KPUsPmhnfncydM3Jwsco/Jy9B9SXBilHDUf9sNcHkRymfwq1ogY+RfaFO
-	 /a7YHnFvLwpjBZ6d+fAWhs03JyFmtn0uOiFyKhxh/rMGCKJqct4uhKK/B4jbrStFhJ
-	 djpP+mvWHwPvoigPgmPmAr55dWfTSt92Rw/9ry6OhBUJCHl7GxZDoBqwGTnUm+g2Pz
-	 eJrH//2jmyAJ4OHcWAbZlc/y9rQl+3yTrzYRSx5OoQcMwN0wEbm9YOZp088DQDxult
-	 OWVX7u2PWNvCVg+aDWzM4AJvSj/EH3+54+p/lzOmrKJOEuVkaItzA67xpeZWJo3Mez
-	 XNr83eADZH4Ow==
-Date: Fri, 17 Jul 2026 09:41:22 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Song Liu <song@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH bpf-next v3 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for
- BPF allocations
-Message-ID: <alnOkjf8rq3dUGmg@kernel.org>
-References: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
- <CAPhsuW5pRMtpa5Q0Y=zO5=2HSj4xOX+i5Vp+g2a6RDvmkeHKFw@mail.gmail.com>
+	s=arc-20240116; t=1784270867; c=relaxed/simple;
+	bh=fOFQhIeYpSGz1gdjOadiq9kqiR9t1kkS9wVHQJoeIn8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aanCoFzIis1R95jmg5/kY/4IWVWDho1lTgIAiJA5jNV4SJ8KL+NUfKLF1u3jcRnreH28dbFFhQ51nllI5btSAJ1ipAK56b/ssm9a/7af+08BDPIYaROgUw/xl6CShc0HP1eigeAcxIYbm7SLATPsbhm+YyIg+2bd7tv8lN/vvLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 6462ab3681ab11f1aa26b74ffac11d73-20260717
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:71484f9b-9529-477f-82e7-f8def91eaa32,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:-25
+X-CID-META: VersionHash:e7bac3a,CLOUDID:58a5985be35c12dda518903384f02405,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|865|898,TC:nil,Content:0|15|50,E
+	DM:1,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:
+	0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 6462ab3681ab11f1aa26b74ffac11d73-20260717
+X-User: yanlonglong@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <yanlonglong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1220787653; Fri, 17 Jul 2026 14:47:34 +0800
+From: longlong yan <yanlonglong@kylinos.cn>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: longlong yan <yanlonglong@kylinos.cn>
+Subject: [PATCH] libarena: use ARRAY_SIZE macro in test_rbtree.bpf.c
+Date: Fri, 17 Jul 2026 14:47:19 +0800
+Message-ID: <20260717064719.1032-1-yanlonglong@kylinos.cn>
+X-Mailer: git-send-email 2.47.1.windows.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW5pRMtpa5Q0Y=zO5=2HSj4xOX+i5Vp+g2a6RDvmkeHKFw@mail.gmail.com>
 
-On Thu, Jul 16, 2026 at 05:00:11PM -0700, Song Liu wrote:
-> On Thu, Jul 16, 2026 at 12:51 AM Mike Rapoport (Microsoft)
-> <rppt@kernel.org> wrote:
-> >
-> > Hi,
-> >
-> > BPF allocations of executable memory on x86 are essentially read-only. Most
-> > paths that call bpf_jit_alloc_exec() immediately make it ROX with
-> > set_memory_rox().
-> >
-> > The code generation, at least on x86, uses separately allocated writable
-> > buffers and then updates the actual text memory with text_poke().
-> >
-> > These patches do several small adjustments to how BPF allocates executable
-> > memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
-> 
-> After this set, we are still using bpf_prog_pack_alloc() from x86 code. I think
-> the goal is to eventually remove bpf_prog_pack_alloc(). What's our plan for
-> the next steps (toward removing bpf_prog_pack_alloc)?
+The ARRAY_SIZE macro is more compact and more formal in linux source.
 
-"It works, don't touch"? ;-)
+Fixes: 6c3e8a4d4765 ("selftests/bpf: libarena: Add rbtree data structure")
+Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
+---
+ .../selftests/bpf/libarena/selftests/test_rbtree.bpf.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-We can add another layer for sub-page allocations to execmem.
-
-Since BPF is the only user the easiest would be just to move prog_pack
-logic from BPF to execmem and call it a day.
-
-Another option is to add a slab-like layer for sub-page allocations to
-execmem. This is more complex but it would allow to get rid of the rigid
-BPF_PROG_CHUNK_SIZE.
-
-Maybe it would be also possible to teach SLUB to use execmem_alloc()
-instead of alloc_pages() but that's surely the most far fetched one :)
-
-And since we are talking about bpf_prog_pack_alloc(), why
-BPF_PROG_PACK_SIZE accounts for num_possible_nodes():
-
-#define BPF_PROG_PACK_SIZE (SZ_2M * num_possible_nodes())
-
-Is it an elaborate choice or it was picked to work around older
-vmalloc_huge() limitations?
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+index 856c484a009a..f6e15f77cdf5 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+@@ -275,7 +275,7 @@ clean_up_noalloc_tree(struct rbtree __arena *rbtree)
  
-> Thanks,
-> Song
-
+ int insert_many(enum rbtree_alloc alloc, enum rbtree_insert_mode insert)
+ {
+-	const size_t numkeys = sizeof(keys) / sizeof(keys[0]);
++	const size_t numkeys = ARRAY_SIZE(keys);
+ 	node_ctx nodec;
+ 	u64 key, value;
+ 	int ret;
+@@ -373,7 +373,7 @@ __weak int test_rbtree_remove_one(void)
+ 
+ static __always_inline int remove_many_verify_all_present(struct rbtree __arena *rbtree)
+ {
+-	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
++	const size_t numkeys = ARRAY_SIZE(morekeys);
+ 	u64 value;
+ 	int ret;
+ 	int i;
+@@ -394,7 +394,7 @@ static __always_inline int remove_many_verify_all_present(struct rbtree __arena
+ 
+ static __always_inline int remove_many_verify_remaining(struct rbtree __arena *rbtree)
+ {
+-	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
++	const size_t numkeys = ARRAY_SIZE(morekeys);
+ 	u64 value;
+ 	int ret;
+ 	int i;
+@@ -434,7 +434,7 @@ static __always_inline int remove_many_verify_remaining(struct rbtree __arena *r
+ 
+ static __noinline int remove_many_alloc(struct rbtree __arena *rbtree)
+ {
+-	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
++	const size_t numkeys = ARRAY_SIZE(morekeys);
+ 	u64 value;
+ 	int ret;
+ 	int i;
+@@ -482,7 +482,7 @@ static __noinline int remove_many_alloc(struct rbtree __arena *rbtree)
+ 
+ static __noinline int remove_many_noalloc(struct rbtree __arena *rbtree)
+ {
+-	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
++	const size_t numkeys = ARRAY_SIZE(morekeys);
+ 	node_ctx first = NULL, last = NULL;
+ 	u64 value;
+ 	int ret;
 -- 
-Sincerely yours,
-Mike.
+2.43.0
+
