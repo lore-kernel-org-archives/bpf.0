@@ -1,29 +1,29 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7338D384242;
-	Fri, 17 Jul 2026 10:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3E6B3EBF19;
+	Fri, 17 Jul 2026 10:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784282792; cv=none; b=b4x0fs6NymXKFnDVHCI3Hia3HvQ1OUuznUNmVxiUl3Z5v4h9bTolDKzIgXE5i5bpowG7cGQeFop4Nyxa8ArLzhqqI7sBy1pR7cyut8vq1Ni/0HuXQgRkIdoaBHVzuymUrWzpeq7me1/SSkHuKUM6zgjQF1tsZcjx/ugjYAZwxHs=
+	t=1784282798; cv=none; b=RNRIhWLirvOOrwzz3TJF1mdz9TAVkX8RGNEVr7tf86zI1HflVvAdkA1stM+u/35bOxmpgxrT9bM8qBAx/aYGsjgUMLLvySEnGbejuFYo0bajukMSCb5CVpBjk6MEJlQFASXOvO0tXlb2lwIqTApjTReMxlxb0ZRbQ1Z4zocKLQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784282792; c=relaxed/simple;
-	bh=rhyV2/zH8NG1ApY2JLFDEGUd/6iY+BYDnQ+iTorm8Wo=;
+	s=arc-20240116; t=1784282798; c=relaxed/simple;
+	bh=cEUglNTU42hYq85eqcknhLHrufR9jtVIORvDZmHuG9k=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qeH+qtj0nZvBh+NqeKFyp2u0KMc4Vq47pUhSGjpwgoIdL+2JkU7HiGLiH8kenVLwkB8x4sbtbacOVe2+1/w0FIH0ycveN9eu6xRP0zNaZwikddJi+d3Rzu07Z5qmx+J8p2lTuEhzHP8pnY6MQ5mJ0xykd2pYUTasjhiWk9fZ4rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=XbTB3kiH; arc=none smtp.client-ip=13.75.44.102
+	 MIME-Version; b=Ilt/tOatSiQ/g+lacfxPodhNfTTq8COQ98L+q5nHYQg71k9ffdude9klayCblWZwGogtw+cp8ELFVZfpaV0Kjxernfnh6jWrUnd+EUh30qhAap+Ezwo22VGjaRkN5BFsWolsvJQL97fg2zmEALklQuQZagGe5adTaBsj5vLs6eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=hq4XE0QB; arc=none smtp.client-ip=162.243.164.118
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="XbTB3kiH"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="hq4XE0QB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
 	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=8TisMnL01GqO+HUkhMyk7JWt2gJFiDUOf4
-	ea6D7y8P8=; b=XbTB3kiHYiJ+R4Nigqy4EGFNCar7tY2KaQ/4nDfooQDvn9raFk
-	091eDIqkNxVWRDNKYPAXCQzG+vT5+WcwKs/GESbis/73YjkDDe33cVJUkwMYOMDn
-	HhthKwLuE0p7YHYIALK5pImetgFn29PjA/R7BCiq01i2mlM3tYw7tSZOE=
+	Content-Transfer-Encoding; bh=bp8Gc4LkX5+LNoXfj0iJ9sg+oAKDRVxcEM
+	KUbjXxp5Y=; b=hq4XE0QBZTAaD4X/W2B4HAwhO+U5WhK9V8xA9QKg/uYgrBoihj
+	C8RlWaY8rgDOOgLDVRLPfQmFZjAFkv3v/W+9JMUhjgrOoB8eYl6efFidB9U7osII
+	wiZJXJ70nfTc8QO5zAsZbBVZVyRl93q4ds4+LOh6mVJ9j9ZglPvPFGF8Q=
 Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web3 (Coremail) with SMTP id ygQGZQDXpRR7_llqNYAPAA--.22378S3;
-	Fri, 17 Jul 2026 18:06:12 +0800 (CST)
+	by web3 (Coremail) with SMTP id ygQGZQDXpRR7_llqNYAPAA--.22378S4;
+	Fri, 17 Jul 2026 18:06:14 +0800 (CST)
 From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -41,9 +41,9 @@ Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/2] bpf: Check byte type when validating helper stack reads
-Date: Fri, 17 Jul 2026 10:05:44 +0000
-Message-Id: <aa470c883419417b06a7fcd63afc9f05eef29f5a.1784280493.git.chenyy23@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Cover helper reads of invalid spill siblings
+Date: Fri, 17 Jul 2026 10:05:45 +0000
+Message-Id: <4cacb17794793237658cf039d7df5e14f2aab335.1784280493.git.chenyy23@mails.tsinghua.edu.cn>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1784280493.git.chenyy23@mails.tsinghua.edu.cn>
 References: <cover.1784280493.git.chenyy23@mails.tsinghua.edu.cn>
@@ -54,13 +54,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ygQGZQDXpRR7_llqNYAPAA--.22378S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw45WrW5CF13Jw13KFWDCFg_yoW8Kry7p3
-	W8Wasrtr48XFWxu3ZFvFn7ZFyUGFWDJr43uF18Wry5X345Wry2qFWYqFW5CF1avr4vq34r
-	trWIv390q34DZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:ygQGZQDXpRR7_llqNYAPAA--.22378S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw17ZF43ur4Uur15WrWUtwb_yoW8uF1xp3
+	4kW3W3W34rWr1I93W3CFW8JFWrCr4kZry5XFn3Kw1kurW0qr12qr4Ika17Aw1Y93W5XrWF
+	va4aqFW7Ca1UAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUQE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
 	Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
 	8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vY
 	z4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
@@ -71,56 +71,72 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7Zw45WrW5CF13Jw13KFWDCFg_yoW8Kry7p3
 	18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vI
 	r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr
 	1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-	x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU20PDUUUUU=
+	x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUPl1PUUUUU=
 X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-check_stack_range_initialized() accepts a STACK_INVALID byte only when
-allow_uninit_stack is set. It then has a separate path for spilled
-registers: scalar spills are accepted directly, while pointer spills
-require allow_ptr_leaks.
-
-bpf_is_spilled_reg() tests slot_type[BPF_REG_SIZE - 1], the canonical top
-byte of the slot. After a sub-register scalar spill, such as a one-byte
-store to fp-8, save_register_state() marks only the covered byte
-STACK_SPILL. mark_stack_slot_misc() leaves the untouched sibling bytes
-STACK_INVALID. When the helper range reaches fp-7, the STACK_INVALID case
-correctly declines it if allow_uninit_stack is false, but the following
-scalar-spill path accepts it based on fp-8's slot-wide spill marker.
-
-For a CAP_BPF load without CAP_PERFMON, allow_uninit_stack is false, so an
-untouched sibling byte such as fp-7 should reach -EACCES. Instead, passing
-fp-7 as the value to bpf_map_update_elem() after a one-byte spill to fp-8
-is accepted, and the helper copies a byte the program never wrote. A direct
-read of fp-7 rejects; only the helper-argument path is affected.
-
-Require the current byte to be STACK_SPILL before taking the
-spilled-register path. Full-width spills still mark every byte STACK_SPILL.
-A permitted STACK_INVALID read is still handled by the preceding
-allow_uninit_stack case. This mirrors the producer-side fix in
-mark_stack_slot_misc(), which preserves STACK_INVALID siblings, and applies
-the same invariant to helper arguments. The existing direct-read selftest
-does not cover this path.
+Add a verifier_spill_fill case that passes an untouched byte next to a
+one-byte scalar spill to bpf_map_update_elem(). The full-capability load
+retains the existing uninitialized-stack behavior, while the CAP_BPF-only
+load must reject the STACK_INVALID helper read.
 
 Fixes: 354e8f1970f8 ("bpf: Support <8-byte scalar spill and refill")
 Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 ---
- kernel/bpf/verifier.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../selftests/bpf/progs/verifier_spill_fill.c | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a78cdabf85607..7c61ade27d2a6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6735,7 +6735,8 @@ static int check_stack_range_initialized(
- 			goto mark;
- 		}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 8b166c42c4e0e..2e62a7ddcbce2 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -11,6 +11,13 @@ struct {
+ 	__uint(max_entries, 4096);
+ } map_ringbuf SEC(".maps");
  
--		if (bpf_is_spilled_reg(&state->stack[spi]) &&
-+		if (*stype == STACK_SPILL &&
-+		    bpf_is_spilled_reg(&state->stack[spi]) &&
- 		    (state->stack[spi].spilled_ptr.type == SCALAR_VALUE ||
- 		     env->allow_ptr_leaks)) {
- 			if (clobber) {
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u8);
++} map_partial_spill SEC(".maps");
++
+ SEC("socket")
+ __description("check valid spill/fill")
+ __success __failure_unpriv __msg_unpriv("R0 leaks addr")
+@@ -1307,6 +1314,33 @@ __naked void stack_noperfmon_spill_32bit_onto_64bit_slot(void)
+ 	: __clobber_all);
+ }
+ 
++SEC("socket")
++__description("helper read must reject an invalid sibling of a narrow spill")
++__success
++__caps_unpriv(CAP_BPF)
++__failure_unpriv __msg_unpriv("invalid read from stack R3 off -7+0 size 1")
++__naked void helper_read_invalid_partial_spill_sibling(void)
++{
++	asm volatile ("					\
++	r5 = 1;						\
++	*(u8 *)(r10 - 8) = r5;				\
++	r2 = 0;						\
++	*(u32 *)(r10 - 16) = r2;			\
++	r1 = %[map_partial_spill] ll;			\
++	r2 = r10;					\
++	r2 += -16;					\
++	r3 = r10;					\
++	r3 += -7;					\
++	r4 = 0;						\
++	call %[bpf_map_update_elem];			\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_update_elem),
++	  __imm_addr(map_partial_spill)
++	: __clobber_all);
++}
++
+ /*
+  * stacksafe(): check if 32-bit scalar spill in old state is considered
+  * equivalent to STACK_MISC in cur state.
 -- 
 2.34.1
 
