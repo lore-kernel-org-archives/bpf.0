@@ -1,152 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04C6B2F691D;
-	Fri, 17 Jul 2026 04:21:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F190137B014
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 04:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784262092; cv=none; b=hmtubrBtspxkrEUAG9Gqlo2H5Sp6QE/g9I4DMM5ZC7oyLEG9gK3XKFFTTKI5LS+v3GqnA6IVwJizEKh699z/CaGwLQFJE33y/zurrPQLMbvu4SxZKJOWfRDAftu2mbT9Z4o6iQiNqM+Uj+di0szV0UYKgZT7Ah4aY/tsjHTH8sQ=
+	t=1784263224; cv=none; b=lAHsLG7Htx/ZhNHQuq7qlcMTFdQktIhGdHJMWIwAHXcN1Sb3RgOwJmHthWLySph5w7SlLW/TmRpdXSuoLo4ce6GcnSWP2tc/wgvJ9vFixAPsDuKS1YcVlsnDdAZj+IWUR3rSfXl/zhqc7PhnE27/eIch2UxKDHYyp8UTz/hgQZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784262092; c=relaxed/simple;
-	bh=IjFnXi8Zx09XPkRYr/r03WZAkkKUxqRPRo4BMmjbWNo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fvgpz8bKbRRFjUv6Fs01iyLWJ+2K8iDjbwJC6IiNpikEX3lNM/BZLRiQFR+mRg8obtVoAY/tIfiJrgZIPS+cqq/8syIYd2z3v0epd9TWOB6jgt/+XByYMCKkODlJlobKt2/fBH6N7bGbLlkKlGNX7mCGG1eCKirz7/F2ikFcApg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWWjTeX7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784263224; c=relaxed/simple;
+	bh=dFwwbddi436lZ04xBgAScK+cVA2/cK0wHX5M8zZf6Xo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FJeuYikn5eBn66lWCSeH5lUDk4BGUlaRem8T43N5HkoqIhDlMyL7321sdn1Muz94jLp/zNxslvXTXRmEJRKao1qXyioclTZkNjnVvdTh5+4VHLv4gGPql4e1Z9JEOYrIrBklAG9mtapitPEpG54hM9klLXdsQ5K0SMMMD5M1B4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=akVGgWEc; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWWjTeX7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FD421F000E9;
-	Fri, 17 Jul 2026 04:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784262090;
-	bh=PkJ5UCoOYLPnm22/3vGMIIC9C0VK1SyoRr1+c7A/zVs=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=LWWjTeX79eMqVJjsd9N5pkGiwWknM20Xh3IelxYo+li6MvujaKauKAHw2WVgzp3BM
-	 VVKy/GZ4Wi+3mn16v/wt8UcCKeOXS/pFeKFnK1hwK4rXByYAFFv8dsbaLhznyOPK1M
-	 zuUlr9RNNO52b4ztBWaZlS6tU84xZ1gBfXP6H3EmmyXyUgBldDWurqHgcwrP1JTGEg
-	 PnDH+TB3s/YVbB27mi5SDK76O/V7Xv2qKyLYr2vDt2SfSbLhFZdNnNs18dUyyYguqu
-	 8n44jrTWLTWMlQIN7xpbpil2ecBMo7r35TYo5MlG31x9Rg8rxElwTUMKWeyw1m92Rl
-	 sVaZUFRft4PLw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 40252CE0E5D; Thu, 16 Jul 2026 21:21:30 -0700 (PDT)
-Date: Thu, 16 Jul 2026 21:21:30 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Rik van Riel <riel@surriel.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, kernel-team@meta.com,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH + QUESTION] bpf: use cond_resched_tasks_rcu_qs in
- bpf_fd_array_map_clear() loop
-Message-ID: <9d444098-7c03-4163-af12-bd0a79a51443@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20260715215314.44423f47@fangorn>
- <be9c5707e2d83090de28e4b0ce3bc43c67f423af.camel@surriel.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="akVGgWEc"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c15f020a223so975199266b.1
+        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 21:40:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1784263219; x=1784868019; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=V99zj7iq8MUudw2Yr6Iyox0msy4Zs+nzuYqOJgmh9Ho=;
+        b=akVGgWEcG5/SPfuoMpVGhbwXJIelrjH9E91vapfYN8AM6/Dv12MG6yH38zmbXgNgiR
+         qjB9l0AQmUln5BfGzs5HkobLrhf5h9Nm7fHTjoXjQx5C9othEhd7qcx30L51zcJz3XA4
+         NbptXRJRq/GruLeeuu2uvcuXgSGz7pLtTvLwjyE4wdsXkV1OtVosfn8tTAqBvaQLQM65
+         Y2FLvMggkwb5S/izlVBU+9WfVMDUYklTxe0fH8JiDWFOnwl/VQ3g4NqrABYoUyld5GaU
+         abg//dmopvKNQcSYkOQ7DWw5WhXkrvBoNwy4ScVICY/Hzi2hyFkx5FnAXalnNaAU1oul
+         zGyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784263219; x=1784868019;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=V99zj7iq8MUudw2Yr6Iyox0msy4Zs+nzuYqOJgmh9Ho=;
+        b=GH65RtGyzN+XvSRdokplThVGcVAe2k+xte0VbdE5fuWC8mdsAn8IC5/6l1oUCGH34w
+         xQqbCM5GwjS1TbX05T7bUvP/qyQTeCW1+JRmMYfct2/FhdnwcFtAuwoLcvocLEtBhQUS
+         FJoDe6fVrCeMtQY8MlVwM44Zt44S+wLc6cnv/4C9RQ0KL9OyYE/lfeyI+DK2vDos+i3v
+         kqp3cFiK1sxFVBTrMxMT5XOGIUOP9kcZy4yTajgH8BZ8p/4130Ei8z7nlqZOdDogLLco
+         64zXBGx5rucUQ8+tGOoeRttF0GaI5R5XqBzNSqWX2IszB8xCNAfLwEqZHeTD+nOIaSzR
+         LQUw==
+X-Gm-Message-State: AOJu0Yyowz7VswntD8H6nRAb+ZahgfNa1in81UcgbZTMW4HTeu1n1WFR
+	LapmXO8i+/iT9PCEldIRaV/EictwtcSxjbj/aDUNm/RpNB9/LBxYXGDV26zArzf5XzFN7ZzNSrx
+	EVRxu
+X-Gm-Gg: AfdE7ckjStozrh3aJZS7eEBKLDkegj52PbRRh9y3Bq8VJGjD4JQlT7SgzL1LIoKLmxP
+	iaE6FO591Jv7dh5G+Jdohz1Rme1T0H+P0eQKfS3AQcxzbT/aUp9v6P6AC5kbY3yJhT2B5dYT2Cl
+	Dk5KuWnAkuXjPoLIMPxymTyH7lBc5j4TLnKUZDy2E7vueXPZpiOCBKLJLLPjSh1MZh4z7qxM3f1
+	S0B5WtZ4k8Hm0NSSJx6/aMYc1FHDFPAbxoY8JdGo52byFdWFuzi8Q4NqmbPP+Xhq7QxDFCHbQg0
+	AnAVo4VQVEbopL1E4GP8+s5ZedSgkL5EHdPMwY6nLQYdLFsX39DbBp1Ed++9P8y35PBo1z3Q+oF
+	KVavqhE+SNmc8xwSYXKtGHtm4Eo+GqMURTLeK+h9fUz/jPUG1hil2PzrNLZk36vf1Qf5Rg+PjCP
+	Wn0ju7rTfziTZt7Bqqge9CfDjpBJrrsR0=
+X-Received: by 2002:a17:907:3c85:b0:c15:fc59:cdf3 with SMTP id a640c23a62f3a-c16b46abda6mr27628166b.12.1784263218854;
+        Thu, 16 Jul 2026 21:40:18 -0700 (PDT)
+Received: from localhost (106-64-25-226.adsl.fetnet.net. [106.64.25.226])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2ad8b879sm227781b3a.7.2026.07.16.21.40.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2026 21:40:17 -0700 (PDT)
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: bpf@vger.kernel.org
+Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Subject: [PATCH stable 6.18 0/6] bpf: verifier: linked register tests and fixes
+Date: Fri, 17 Jul 2026 12:39:59 +0800
+Message-ID: <20260717044009.120224-1-shung-hsi.yu@suse.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <be9c5707e2d83090de28e4b0ce3bc43c67f423af.camel@surriel.com>
 
-On Thu, Jul 16, 2026 at 10:04:47PM -0400, Rik van Riel wrote:
-> On Wed, 2026-07-15 at 21:53 -0400, Rik van Riel wrote:
-> > syzkaller creates a PROG_ARRAY with huge max_entries and triggers
-> > perf
-> > tracepoint open close in parallel. The hung task detector reports
-> > "INFO: task hung in perf_tp_event_init" with event_mutex held waiting
-> > for synchronize_rcu_tasks().
-> > 
-> OK, this is more interesting than it looked at first,
-> and this patch does not look like the right approach,
-> but I'm also not sure what other approach would work :(
-> 
-> The actual error being thrown is a hung task:
-> 
-> 
-> 
-> The syzkaller kernel failure is a tragedy in 3 parts.
-> 
-> First, we have perf_event_open() waiting on the event_mutex:
-> 
->    syz.7.35551 (pid 31354, state D): perf_event_open 
->   -> perf_tp_event_init
->    -> perf_trace_init
->     -> __mutex_lock
->      -> blocked on event_mutex.
-> 
-> 
-> Second, we have perf_trace_destroy() indirectly
-> waiting in synchronize_rcu_tasks(), with the
-> event_mutex held.
-> 
->     syz.5.35491 (state:I)  do_exit 
->   -> task_work_run 
->    -> __fput 
->     -> perf_release
->      -> perf_event_release_kernel
->       -> __free_event
->        -> perf_trace_destroy
->         -> perf_trace_event_close
->          -> reg(TRACE_REG_PERF_CLOSE)
->           -> perf_ftrace_event_register
->            -> perf_ftrace_function_unregister
->             -> unregister_ftrace_function 
->              -> ftrace_shutdown
->               -> synchronize_rcu_tasks()   <-- BLOCKS HERE, forever,
-> holding event_mutex
-> 
-> Tasks RCU waits for every task to have gone through
-> a voluntary reschedule, before the grace period can
-> be advanced. A preemption does not count.
-> 
-> 
-> Third, we have a kworker looping for a very long time:
->  
->   kworker/0:0 (pid 9, TASK_RUNNING, on CPU0): process_one_work
->   -> prog_array_map_clear_deferred
->    -> bpf_fd_array_map_clear
->     -> __fd_array_map_delete_elem. Looping over a huge PROG_ARRAY
-> max_entries.
-> 
-> With CONFIG_PREEMPT_LAZY=y this gets preempted,
-> but since involuntary preemptions do not count
-> for tasks RCU, that does nothnig to help
-> ftrace_shutdown() get unstuck.
-> 
-> 
-> How do we solve this?
-> 
-> Do we actually need to have cond_resched() points
-> quiesce the task RCU state when running with lazy
-> preempt, since those are points where we could
-> preempt voluntarily?
-> 
-> Do we need to prohibit calling synchronize_rcu_tasks()
-> while holding a mutex?
-> 
-> Do we need to do something else?
+This patchset mainly aims to backport upstream commit 1b327732c846
+("bpf: Clear delta when clearing reg id for non-{add,sub} ops") (patch
+4), and its selftests patch in commit cac16ce1e378 ("selftests/bpf: Add
+tests for stale delta leaking through id reassignment") (patch 6). While
+doing so, I find that a BPF selftests patches are missing as context, so
+backported them along to import coverage.
 
-The traditional approach is cond_resched_tasks_rcu_qs(), which is to
-synchronize_rcu_tasks() as cond_resched() is to synchronize_rcu().
+The full list of patches that were backported are:
+1. "selftests/bpf: Add tests for stale delta leaking through id reassignment"
+2. "selftests/bpf: Add tests for delta tracking when src_reg == dst_reg"
+3. "bpf: Clear delta when clearing reg id for non-{add,sub} ops"
+4. "selftests/bpf: Add a test cases for sync_linked_regs regarding zext propagation"
+5. "selftests/bpf: Add tests for improved linked register tracking"
+6. "selftests: bpf: Add test for multiple syncs from linked register"
 
-But if we can avoid holding mutexes across synchronize_rcu_tasks(), that
-would be a very good thing.  The synchronize_rcu_tasks() latency can be
-many minutes, which isn't usually what you want when blocking on a mutex.
+I have confirmed that after this patchset is applied, BPF selftests
+(test_progs*, test_verifier, and test_maps) still passes on x86_64[1] and
+aarch64[2].
 
-Or maybe we want a way of sleeping on a mutex at TASK_IDLE.
+1: https://github.com/kernel-patches/linux-stable/actions/runs/29553646000/job/87801246946
+2: https://github.com/kernel-patches/linux-stable/actions/runs/29553646000/job/87801246917
 
-> What is the best way forward here?
+Daniel Borkmann (4):
+  selftests/bpf: Add a test cases for sync_linked_regs regarding zext
+    propagation
+  bpf: Clear delta when clearing reg id for non-{add,sub} ops
+  selftests/bpf: Add tests for delta tracking when src_reg == dst_reg
+  selftests/bpf: Add tests for stale delta leaking through id
+    reassignment
 
-Excellent question!!!
+Puranjay Mohan (2):
+  selftests: bpf: Add test for multiple syncs from linked register
+  selftests/bpf: Add tests for improved linked register tracking
 
-							Thanx, Paul
+ kernel/bpf/verifier.c                         |  50 +-
+ .../bpf/progs/verifier_linked_scalars.c       | 556 +++++++++++++++++-
+ 2 files changed, 580 insertions(+), 26 deletions(-)
+
+-- 
+2.54.0
+
