@@ -1,73 +1,80 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA4E42B736;
-	Fri, 17 Jul 2026 15:02:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D63175A83
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 15:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784300540; cv=none; b=sKEOFncHVIV1W//QFLJ97ZUUJrG2cqJtLxgRVdnWXEmo8G1F3YGRuTEg5eqrpfBlqOxqbetysH7WI5RaoRqNNTr033DdtGoewOuWd+ZAn2NzlAz0xW8HovH5v0KoBXj/XMHwnRnSgD7vEo0Nw7iYFq8Seo4VS+aCxhwGDHTecBc=
+	t=1784303635; cv=none; b=l7gXR4BqsSf/xao5eX4+Ce4jwuIV6CEJzeh38lvkYuNH9CB+PR+uRv87x/M6CIGJwIZM4s2zCvMsZFFvklZdv47fLRDQLt14haXuayXXntJ5ZdVECAyaG/KMI+veJlCA1GREE3cQ078OX4w3Bj3VhT/dmIAtURF5jakKLwjQ1aA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784300540; c=relaxed/simple;
-	bh=6nFAVA3D3J6ZoztLJM7SWjFVX081sR7eZPJ17zehnBw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MciwvgISkDahaI9UwDHTK2GviagfyM0WoF63VOzR+rXmgFST7z5xQ+t2YhUyN88tZonZUooq4553ygQc0o12otH+7SNP07Lj4L5heXgzKKPxPcNzNU/9CuLddyzzM/KF8t4atB/ZaKMrc6g/HDs3ZO+9nUrQmaDxYbTtGgAhq2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 7975a95281f011f1aa26b74ffac11d73-20260717
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR
-	DN_TRUSTED, SRC_TRUSTED, SA_UNTRUSTED, SA_UNFAMILIAR, SN_UNTRUSTED
-	SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD_SPF
-	CIE_UNKNOWN, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
-	ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:0f086ed1-37ff-4f49-a60c-2185133f39bf,IP:10,
-	URL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:35
-X-CID-INFO: VERSION:1.3.12,REQID:0f086ed1-37ff-4f49-a60c-2185133f39bf,IP:10,UR
-	L:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:35
-X-CID-META: VersionHash:e7bac3a,CLOUDID:8dbf1e7266bc33d03e96b539114e43b9,BulkI
-	D:2607172302087Y1J1LDM,BulkQuantity:0,Recheck:0,SF:10|66|78|102|127|865|89
-	8,TC:nil,Content:0|15|50,EDM:5,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil
-	,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 7975a95281f011f1aa26b74ffac11d73-20260717
-X-User: yijiangshan@kylinos.cn
-Received: from lazy-pc.www.tendawifi.com [(118.251.51.53)] by mailgw.kylinos.cn
-	(envelope-from <yijiangshan@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1298199652; Fri, 17 Jul 2026 23:02:05 +0800
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
-To: shuah@kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	paul.chaignon@gmail.com,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	13667453960@163.com,
-	Jiangshan Yi <yijiangshan@kylinos.cn>
-Subject: [PATCH v2] selftests: stop leaking OUTPUT into gen_mods_dir kernel builds
-Date: Fri, 17 Jul 2026 23:01:50 +0800
-Message-Id: <20260717150150.180824-1-yijiangshan@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1784303635; c=relaxed/simple;
+	bh=YF9Knm40lON0FlUgiurO8Nd3SbRk4kttQ+DtP+b13jY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EI6PnRgq6aC7KLb6bKEPCTQBTB7mQtQyqZM+aoN7v6zrneTmrSCmaS3Y2VT4PX9A6BQI0fF1rgeyoBrcUW6GSI/Er7PLdJkOtenjFq8xrUMlcDlNwcFWJxtVyG1RmNLTTWGzpZ9PiYmdeV1NMXB09cXElzX1eOmyA0uIJSxLgfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ixVOyCd+; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ixVOyCd+"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-47c6e9a694bso4411600f8f.1
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 08:53:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784303632; x=1784908432; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KgKTphT/EPBidWmUJpQky4fuu3ayeXNP41GXKcwaXpY=;
+        b=ixVOyCd+G5zisdrc5ETx7nVumKoUjZCxACN6n/wSNEB1YtfxqWczAEduIV05Wjd/DK
+         CM+FYVBml/Rep19+YnwjcZTtghC7xlCrFeI4tQe8h/NnYIPkV9CLyRP5JtslX7g0rv96
+         rxTY94Z88ZujwGaGJVcJvX99ce1kxwbQDDjOZGB470J+Ev7ayjM4eqXukkbepavFEszc
+         pHDhcMQgIDIHrDT9c7QyyL81iDXuMqp/ZokvlNRXxZ7qYCYodqt54cc8doh23bXcfccx
+         XlGJKa5Za3WV4i9VZJIPlDYJi+IgbSZdnEEwGK0g4CEA8jvADJVnliwisUfBGvu6SBuz
+         Wp/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784303632; x=1784908432;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=KgKTphT/EPBidWmUJpQky4fuu3ayeXNP41GXKcwaXpY=;
+        b=NYkqYRLnUBf2FjBjeQPomzby0b6vP48cG9SaT6jsgRw57CjLxCjosS4qSOp+FW2tz7
+         07HGx2tz9EqtsOKBc2jdxxxxVA3/F2r+k1aQeoKQgnAp78f4YA5bT68lvU+KIE5zQzav
+         v4xg/+e+i9jUHBhs8g09Ycpo90N+IH7fThOIhrbmbF2kyIBbnbdoyt7d4Su+vXh0Ssfw
+         WnyBsUpnMiWIj9Hvt7CfVuXXNPs6KqP5yUAC8TaWxOPj+ro4Cw9lgkJANDZOEdoCqEh1
+         VIrapwFKLYt//KCGOCCTBruhWXTmCPZTXP7WxeENovUhzttJvG5mABsjG4rtLdkG5x+V
+         UtFQ==
+X-Gm-Message-State: AOJu0Yw3FOWmU/D0/6wh/hpu6K9BEjOzxHOhkXRItThLq+n5ZzbpAL68
+	kSPjjNNBW9/IEqNWVl8n8ac5jfUigDoCJ2TRIEZcf//2aXvPEIa3v0Fn
+X-Gm-Gg: AfdE7cn3yD5l9xMat7hDZjRaDzuVeBPo0kYXgEid6Vf6eCe6feil2bSLyl7a+DNOliJ
+	eH/WO6zhgT8jLLtEaBKaN3ZjChUzbUITj2DjarJ7eNFjWuvBVvt3pJk+LlPkUWIkNGAKLvcBnW+
+	3zCLbakpGDZaBPCvGA9Izy2xSn0i9asiUzUgmK2alttju7Nz+Sz97f9UKws354Qnckkn08OIHGi
+	WxLMVB4jJZdD1CHBwhS2B+UMx92SDAQ/Kla3UD7kqDLetpj96zawXhEFmy2AyJXmW+B95j8CJaj
+	Y+ERxzikWYqQoKr5W5geng0i9rJ4xFdT2HQ9+PORJS9DWjACdT64ljD6UoER9ikbYhhxAVou61+
+	r9HV6MZdI7jIGz5oNJjL9vPDbJ6EgIM1Pe5aqIwEUBLuFTps7UeCpygEqnf+75yr+3ZDcdx78ik
+	CkcXsvv95buc+MmJONMr9qILeE0HNJg/+XmctqumzTbMTFGUHIwM4xo/l1dhFFaR0TmA==
+X-Received: by 2002:a05:6000:2213:b0:47f:59b4:3933 with SMTP id ffacd0b85a97d-47f62330c15mr4105029f8f.42.1784303631863;
+        Fri, 17 Jul 2026 08:53:51 -0700 (PDT)
+Received: from localhost.localdomain (host86-153-201-25.range86-153.btcentralplus.com. [86.153.201.25])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63edcf8dsm5321369f8f.27.2026.07.17.08.53.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2026 08:53:51 -0700 (PDT)
+From: Nnamdi Onyeyiri <nnamdio@gmail.com>
+To: nnamdio@gmail.com
+Cc: bpf@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	horms@kernel.org,
+	jakub@cloudflare.com,
+	jiayuan.chen@linux.dev,
+	john.fastabend@gmail.com,
+	kuba@kernel.org,
+	kuniyu@google.com,
+	ncardwell@google.com,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	sashiko-reviews@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/2] bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
+Date: Fri, 17 Jul 2026 16:53:46 +0100
+Message-ID: <20260717155348.54975-1-nnamdio@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -76,115 +83,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-selftests/Makefile builds each test with OUTPUT on the make command line:
+Spurious wakeups in tcp_msg_wait_data() isn't being handled by
+tcp_bpf_recvmsg() and tcp_bpf_recvmsg_parser(), leading to unexpected
+EAGAIN errors returned by recvfrom()/recv().  Adding handling for the
+wakeup and a selftest.
 
-  $(MAKE) OUTPUT=$$BUILD/$$TARGET -C $$TARGET
+This issue was first discovered in an application that adds sockets to
+a sockmap as a way to view the received data.  No redirects or any
+other operations are performed.
 
-That OUTPUT is authoritative (command-line origin) and travels through
-MAKEFLAGS into every sub-make.  For tests that set TEST_GEN_MODS_DIR
-(currently mm/page_frag and livepatch/test_modules) the gen_mods_dir rule
-recurses into a kernel module build:
+Sashiko has noted a few other pre-existing issues in the same area
+(https://patch.msgid.link/20260714205118.17DB11F000E9@smtp.kernel.org)
+that can lead to EAGAIN in tcp_bpf_recvmsg() and
+tcp_bpf_recvmsg_parser().  A local run of Sashiko also identified a
+potential issue in tcp_bpf_recvmsg() handling zero-data FIN packets when
+the MSG_PEEK flag is set.  To prevent this patchset from growing too
+large, I intend to submit follow up patches to address these once this
+one has been accepted.
 
-  $(MAKE) -C $(TEST_GEN_MODS_DIR)
-  # -> make -C $(KDIR) M=... modules
+Changes in v5:
+- Move selftest from net into bpf/prog_tests/sockmap_basic.c
+- Link to v4: https://patch.msgid.link/20260715213538.37229-1-nnamdio@gmail.com
 
-which may in turn (re)build tools/bpf/resolve_btfids as a kernel "prepare"
-dependency (CONFIG_DEBUG_INFO_BTF).  resolve_btfids derives its OUTPUT from
-O= via tools/scripts/Makefile.include:
+Changes in v4:
+- Fix potential data loss in tcp_bpf_recvmsg() when a FIN or RST has
+  been received.
+- Check the return code of pthread_create() in the selftest.
+- Fix race caused by using EXPECT macros in a thread in selftest.
+- Link to v3: https://patch.msgid.link/20260714203927.32289-1-nnamdio@gmail.com
 
-  OUTPUT := $(ABSOLUTE_O)/$(if $(subdir),$(subdir)/)
+Changes in v3:
+- Added the sockmap_recvfrom selftest.
+- Link to v2: https://patch.msgid.link/alFRK66z45eDNZA7@localhost.localdomain
 
-but a command-line OUTPUT inherited from kselftest overrides that
-assignment, so resolve_btfids builds into the kselftest test directory.
-Because that directory lacks a trailing '/', the tools/build pattern rules
-$(OUTPUT)%.o are corrupted as well: ".../mmmain.o" instead of
-".../mm/main.o", ending in:
+Changes in v2:
+- In tcp_bpf_recvmsg, handle signals and the socket closing in the loop.
+- Fix spurious wakeups when SO_RCVTIMEO has been set on the socket.
+- Link to v1: https://patch.msgid.link/ak_rR-Skd8Mvn4mH@localhost.localdomain
 
-  ld: cannot find .../resolve_btfids-in.o: No such file or directory
-
-Fix this at the source of the leak: strip OUTPUT from the command-line
-overrides handed to the gen_mods_dir/clean_mods_dir sub-make only.  OUTPUT,
-if still present, then reaches the kernel build merely as an overridable
-environment default, which the tools build overrides with its O=-derived
-value (which always carries a trailing '/').  The assignment is
-target-specific, so other selftest sub-makes -- and the test programs that
-rely on OUTPUT -- are unaffected; selftests that build resolve_btfids
-themselves with an explicit OUTPUT= (bpf, hid) do not use gen_mods_dir and
-are untouched.
-
-This supersedes the earlier attempt to normalise OUTPUT with an override in
-tools/bpf/resolve_btfids/Makefile.  That override lives in the outer
-resolve_btfids make and is invisible to the nested
-"$(MAKE) $(build)=resolve_btfids" sub-make in which the pattern rules
-actually run, so it did not fix the corruption; it also risked the
-explicit-OUTPUT builds used by bpf/hid.
-
-Reproduce the leak (before this fix), e.g. with a kernel configured for
-CONFIG_DEBUG_INFO_BTF and a TEST_GEN_MODS_DIR test such as mm/page_frag:
-
-  $ make kselftest-all
-  ...
-  HOSTLD  .../mmresolve_btfids-in.o
-  gcc: error: .../mm/resolve_btfids-in.o: No such file or directory
-
-Tested:
-  * With a real lib.mk gen_mods_dir descent, OUTPUT no longer reaches a
-    resolve_btfids-style sub-make as command-line (origin becomes
-    environment); the O=-derived "OUTPUT := " assignment then wins.
-  * make -C tools/bpf/resolve_btfids
-    make -C tools/bpf/resolve_btfids OUTPUT=/tmp/o/resolve_btfids/
-    both still build.
-  * make OUTPUT=/tmp/build/kcmp -C tools/testing/selftests/kcmp still
-    honours OUTPUT for its own programs.
-
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
-
+Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
 ---
-v2:
- - Reworked the fix: instead of overriding OUTPUT in
-   tools/bpf/resolve_btfids/Makefile (v1), which is invisible to the
-   nested "$(MAKE) $(build)=resolve_btfids" sub-make where the pattern
-   rules actually run and also clobbers the explicit OUTPUT= used by
-   bpf/hid, strip OUTPUT from the command-line overrides of the
-   gen_mods_dir/clean_mods_dir sub-make in tools/testing/selftests/lib.mk
-   so the leak is fixed at its source.
-v1:
- - initial submission
+Nnamdi Onyeyiri (2):
+  bpf, sockmap: handle spurious tcp_msg_wait_data() wakeup
+  selftest/bpf: added selftest sockmap_basic/sockmap recvfrom eagain
 
- tools/testing/selftests/lib.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ net/ipv4/tcp_bpf.c                            |  69 +++++++++--
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 115 ++++++++++++++++++
+ 2 files changed, 175 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index f02cc8a2e4ae..5345be76223a 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -142,9 +142,26 @@ else
- 	@$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS))
- endif
- 
-+# The build of TEST_GEN_MODS_DIR recurses into the kernel build (it builds
-+# out-of-tree modules via "make -C \$(KDIR) M=..."), which may in turn build
-+# tools/bpf/resolve_btfids as a kernel "prepare" dependency.  That tools build
-+# derives its own OUTPUT from O=, but a command-line OUTPUT inherited from here
-+# (e.g. the per-test output directory that selftests/Makefile passes on its
-+# command line) is authoritative and overrides that derivation, corrupting the
-+# paths produced by the tools/build pattern rules (e.g. ".../mmmain.o" instead
-+# of ".../mm/main.o", and a missing resolve_btfids-in.o).
-+#
-+# Strip OUTPUT from the command-line overrides handed to this sub-make only, so
-+# it can no longer override the O=-derived value downstream.  The variable, if
-+# still present, then reaches the kernel build merely as an overridable
-+# environment default, which the tools build ignores in favour of its O=-derived
-+# OUTPUT.  This is target-specific so that other sub-makes, which may legitimately
-+# rely on the inherited OUTPUT, are unaffected.
-+gen_mods_dir: MAKEOVERRIDES := $(filter-out OUTPUT=%,$(MAKEOVERRIDES))
- gen_mods_dir:
- 	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR)
- 
-+clean_mods_dir: MAKEOVERRIDES := $(filter-out OUTPUT=%,$(MAKEOVERRIDES))
- clean_mods_dir:
- 	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR) clean
- 
 -- 
-2.25.1
+2.52.0
 
