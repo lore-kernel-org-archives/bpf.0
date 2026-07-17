@@ -1,112 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6810137E5E7
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 17:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44812E091B;
+	Fri, 17 Jul 2026 17:31:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784309474; cv=none; b=lCiNCe+hN+MANJwkeS0FX2GfnDF+1B25Vn/of6YidGZRRqTZiXzUuAJF773T7G0Q0dDJ+I9CrcoTPPEzMRHKRzaZJA8WrPKdD8Yj+1tsEpog+eQpQGjlyNRCCOoW7D0JJBX7ERo7WRs6BhFbkEQRcX3H57VB0HmsfKi8mtLnMuQ=
+	t=1784309477; cv=none; b=iPbekwi7x730GvGdTHjjkpDXdvhR94uVIQEP8IptcEUbm69er8u+hI0Ca+Gfdb/bcYsiq6aHzxh1XYa5nQlMNOwrryHhi428uazoecM1Kar6eK4dEw9QqIBNslHLgqVTjD9P9t2jK2bfNSrm16SHNXJt2tl7TCaUSR0mhFVayAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784309474; c=relaxed/simple;
-	bh=nycHs2+wkPZROAaukizAYgDR/ASWovYp7jorHb7bQ5M=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Zp2mkd5ohxXkpLM0oM29UoZWhdHl2A1UBbMIr22V3F5Rd2GDXQt70+8bYcq8lf7piX9it9rXYqTxeJp29xBlKlw2YsfqGyNRPzWrnc0RCuLXEv/cNcsMnNm1YndyBrEXRmZSklyzbpQUJBRtQWpcWKjRUA7+AWpa0z5WyPAkNi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IEaRF5Pa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784309477; c=relaxed/simple;
+	bh=VITXU838ytmI5wjkeVjJjzJ76fi6Ga2j8Ljay/OkRtw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=WkFD7HoUEj2DGT9Xy2YEdGJcU4CVj8Pyg6NUl154IJZnmpIElON0pBdxtfCWH2ho6X9UGritfhyMWo/mJtiXF8UIYHkDEDEVr5WrfwKWX//ZDhbos/E0RoW53kzK1vs17n7fxJEps/yHMJ9EZAIdEe61+O8wQE0ahpsfd3eQgf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j7PegHdq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IEaRF5Pa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6BFF1F00ACA;
-	Fri, 17 Jul 2026 17:31:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j7PegHdq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E8F1F000E9;
+	Fri, 17 Jul 2026 17:31:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784309473;
-	bh=zb3OorBq26OCtGW3zsBVv0CWMfzmUgrUItVKeO8nUiI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IEaRF5Pac1ZovBf5B7Y1u1H9bKuWzLcdkD45SijVNxy3HsBldTayJEHKBbGoU00hk
-	 WdcOkkaejb5jVZxfr5nE0sW91kxrrqe5VIp2OaZauMIoQdCSK14KNBcQegeijifVvZ
-	 kOPFlfCDVjIOak4UHCcdaEPTOBW8VZNfd+oHT3vtxqDvRLkezT3klJyWIftnc14KUh
-	 qE16DD4tkhkNa982iw072ZEvUwCW+9WtzSfPyp+hdCJNz0+ihrAdaRaR/1qfPJ57x6
-	 NuW6axRzRouApWz4J7P4DiKUNaMq0EiH3whbqcmQOmf/R5Lgxe55QEEraAHMX16Osv
-	 DenOZxWquMjsg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 6.6.y 6/6] bpf: Prefer dirty packs for eBPF allocations
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260717-cbpf-jit-spray-hardening-6-6-y-v1-6-e04f1b2893de@linux.intel.com>
-References: <20260717-cbpf-jit-spray-hardening-6-6-y-v1-0-e04f1b2893de@linux.intel.com>
- <20260717-cbpf-jit-spray-hardening-6-6-y-v1-6-e04f1b2893de@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 17 Jul 2026 17:31:12 +0000
-Message-Id: <20260717173112.D6BFF1F00ACA@smtp.kernel.org>
+	s=k20260515; t=1784309476;
+	bh=4TmiXyJvQ92TKxUnkF2EBAbSx4BVAEx8E3qvkE5M06w=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=j7PegHdq1OFesFoUaayKABXnDJpVNSvSPDwYaiVx8/2g+pwbNCJ3ZfJja6eAtQZ8p
+	 cIyc+DGp8cE1mY5T3MVxHeoEgCBsIQO/nHC6nOlsBe2FoOyLceFjBJ0vPPfhsUb9SM
+	 5m/5O+dZndx9pKSDw52Ga8CFym1IitqeHcVgrB3OBwnEfcA6QcwjBgRM++V4FQwvYi
+	 aOZwa7704A9u7bk3CoW7eomhkOF0zM5mBg5cz6qywFa0Ar92EAzklWTyarUQg4dv7m
+	 BSQW/EW4hzjEqX2YoDLXo5uYFzkwDvt0LRfUvjOsP2TYV3cvXr7QKgDnltalcad/JW
+	 +Q9P+xVsQPKwA==
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Date: Fri, 17 Jul 2026 18:30:10 +0100
+Subject: [PATCH mm-hotfixes v5 4/5] mm/ptdump: always stabilise against
+ page table freeing using init_mm
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260717-series-vmap-race-fix-v5-4-606a0ac6d3e5@kernel.org>
+References: <20260717-series-vmap-race-fix-v5-0-606a0ac6d3e5@kernel.org>
+In-Reply-To: <20260717-series-vmap-race-fix-v5-0-606a0ac6d3e5@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Suren Baghdasaryan <surenb@google.com>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Shakeel Butt <shakeel.butt@linux.dev>, David Hildenbrand <david@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+ Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, 
+ Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Dev Jain <dev.jain@arm.com>, Ryan Roberts <ryan.roberts@arm.com>
+Cc: David Carlier <devnexen@gmail.com>, ljs@kernel.org, linux-mm@kvack.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, "Denis V. Lunev" <den@virtuozzo.com>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3325; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=VITXU838ytmI5wjkeVjJjzJ76fi6Ga2j8Ljay/OkRtw=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLKi0rZ/XWP6/n/eThWz4m8aOyLm1Qpq9ujrr9sb/v3mt
+ bR522oudJSyMIhxMciKKbI8/yK+P0gkbF7nBX83mDmsTCBDGLg4BWAih+MYfjHL3hNP3Nvg+Jtp
+ 1eU2vcCDZsmnLsjIzVir+DA4257NqJnhf4l0GpOQ+mypRYdmc1x2ZFwq37jKX7A5avOxL9Nz3lU
+ KMQAA
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] The patch actively steers eBPF programs into dirty packs without f=
-lushing the branch predictor, leaving privileged eBPF vulnerable to Cross-D=
-omain BTB Poisoning and allowing unprivileged eBPF to preserve BTB pre-trai=
-ning.
---
+Previous commits have established the invariant that kernel page table
+freeing is performed while an mmap read lock on init_mm is held, which
+fixes races between ptdump and kernel page table freeing over init_mm.
 
---- Patch [6]: [PATCH 6.6.y 6/6] bpf: Prefer dirty packs for eBPF allocatio=
-ns ---
-commit b2416181326f994ad8a8ff6f867915a656a73187
-Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+However, x86 and arm64 can perform a ptdump over an mm other than init_mm
+via ptdump_walk_pgd() and since kernel memory ranges are shared across
+non-kernel mm's, this means that the race still exists for these cases.
 
-bpf: Prefer dirty packs for eBPF allocations
+Fix this by acquiring a nested mmap write lock for init_mm in
+ptdump_walk_pgd().
 
-This commit modifies bpf_prog_pack_alloc() to prefer dirty packs for eBPF
-allocations. It steers eBPF programs into dirty packs and keeps clean packs
-free for cBPF to reduce branch predictor flushes.
+This is safe as we take this after mmap write locking the mm, and nothing
+acquires the init_mm lock first before locking an arbitrary mm, so no
+deadlock is possible.
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 7dc59570cd25a..4669a57265ad7 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -950,10 +950,10 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_ho=
-le_t bpf_fill_ill_insns, bool
->  			goto found_free_area;
->  		/*
->  		 * cBPF reuse of a dirty pack triggers a flush, so prefer a
-> -		 * clean pack for cBPF. eBPF never flushes, so pick the first
-> -		 * free pack, dirty or clean.
-> +		 * clean pack for cBPF. eBPF never flushes, so steer it to a
-> +		 * dirty pack and keep clean packs free for cBPF.
->  		 */
-> -		if (!was_classic || !pack->arch_flush_needed)
-> +		if (was_classic ^ pack->arch_flush_needed)
->  			goto found_free_area;
+Also update walk_page_range_debug() to assert that init_mm is write locked,
+add a comment explaining why and remove some redundant code, and eliminate
+the unnecessary and confusing invocation of walk_kernel_page_table_range().
 
-[Severity: High]
-Does steering eBPF programs into dirty packs without flushing the branch
-predictor expose them to Cross-Domain BTB Poisoning?
+We can safely remove the non-NULL check for walk.mm, as the mmap lock
+asserts would NULL pointer deref if it was (and of course no callers do
+this).
 
-If an attacker loads a cBPF program to train the branch predictor and then
-frees it, the pack becomes dirty. When an eBPF program is subsequently load=
-ed,
-this logic steers it directly into the dirty pack.
+The first point at which ptdump can race kernel page table freeing is
+commit b6bdb7517c3d ("mm/vmalloc: add interfaces to free unmapped page
+table"), so we target this in the Fixes tag.
 
-Because the flush condition later in bpf_prog_pack_alloc() only triggers wh=
-en
-was_classic is true:
+Fixes: b6bdb7517c3d ("mm/vmalloc: add interfaces to free unmapped page table")
+Cc: stable@vger.kernel.org
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Reviewed-by: Kiryl Shutsemau <kas@kernel.org>
+Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+---
+ mm/pagewalk.c | 14 +++++++++-----
+ mm/ptdump.c   |  7 +++++++
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
-	/* Flush only for cBPF as it may contain a crafted gadget */
-	if (static_branch_unlikely(&bpf_pred_flush_enabled) &&
-	    pack->arch_flush_needed &&
-	    was_classic) {
-		...
-	}
+diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+index bbcfd68d0907..5d87c632a255 100644
+--- a/mm/pagewalk.c
++++ b/mm/pagewalk.c
+@@ -702,12 +702,16 @@ int walk_page_range_debug(struct mm_struct *mm, unsigned long start,
+ 	 * to account for page table freeing on vmap huge page mapping.
+ 	 */
+ 	mmap_assert_write_locked(mm);
++	/*
++	 * x86, arm64 ptdump allow walks of efi mm's and x86 ptdump allows walks
++	 * of arbitrary mm's.
++	 *
++	 * However, they both must also hold the init_mm lock to account for
++	 * concurrent kernel page table freeing.
++	 */
++	mmap_assert_write_locked(&init_mm);
+ 
+-	/* For convenience, we allow traversal of kernel mappings. */
+-	if (mm == &init_mm)
+-		return walk_kernel_page_table_range(start, end, ops,
+-						    pgd, private);
+-	if (start >= end || !walk.mm)
++	if (start >= end)
+ 		return -EINVAL;
+ 	if (!check_ops_safe(ops))
+ 		return -EINVAL;
+diff --git a/mm/ptdump.c b/mm/ptdump.c
+index 973020000096..5851096e6f65 100644
+--- a/mm/ptdump.c
++++ b/mm/ptdump.c
+@@ -178,11 +178,18 @@ void ptdump_walk_pgd(struct ptdump_state *st, struct mm_struct *mm, pgd_t *pgd)
+ 
+ 	get_online_mems();
+ 	mmap_write_lock(mm);
++	/* To stabilise kernel page tables we must hold the init_mm lock too. */
++	if (mm != &init_mm)
++		mmap_write_lock_nested(&init_mm, SINGLE_DEPTH_NESTING);
++
+ 	while (range->start != range->end) {
+ 		walk_page_range_debug(mm, range->start, range->end,
+ 				      &ptdump_ops, pgd, st);
+ 		range++;
+ 	}
++
++	if (mm != &init_mm)
++		mmap_write_unlock(&init_mm);
+ 	mmap_write_unlock(mm);
+ 	put_online_mems();
+ 
 
-Could this bypass the IBPB flush for eBPF allocations, leaving pre-trained
-malicious BTB predictions intact for an attacker to exploit?
+-- 
+2.55.0
 
->  		if (!fallback_pack) {
->  			fallback_pack =3D pack;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260717-cbpf-jit-s=
-pray-hardening-6-6-y-v1-0-e04f1b2893de@linux.intel.com?part=3D6
