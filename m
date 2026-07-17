@@ -1,89 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB3C126BF1
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 00:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6CF194C96;
+	Fri, 17 Jul 2026 00:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784246425; cv=none; b=DjrNo3aBIFv4k8K9fojOLN7guwzKMdzy+xTaGLBMaKPNs17CWwVpD+OAM5QaxdVNPi5dBwjMZopBHcITM1cTkCdkHB02c3a8+t7NlEXm0jUBRAG9OVlBcL9sCC0WpCgLdAKr8I9FNl+ao3HdPG9hDAdz37lD/WRJ5wbfF3dUCk8=
+	t=1784249440; cv=none; b=iibsCsaFo6tgrBxDRPTt5hC6y4xx+F1on707OlmU5OQTXihM2ZHU3Sn0ehUsj5lASBbwIuevGMeykPUJGh1L6EvVMw0SG5ofOkTFlTlWI3WMR4VeTLi+eTaXdgHl4wEHvXfiLitaKmo3LsC49DznCm9I9L8+W6FpKXvS/jaqmTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784246425; c=relaxed/simple;
-	bh=FV85GGmpsMCgQRdgB+CrI5AgR1SLQ/WZQpZKMtsu4bo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i7G6/oEtx7NL0jgHB3GDXFj7zhJyz7LVwIvuLU+rjhsoUqxpbZFvw5buNYvya2JsXl/Zf+Pb2ycxD8EznqURiMEJKhGZQHanrN/rkMzC54vRrGKxsGNNNcY9Pc2SgZdruWCvmdxtaqQpDHdcrJH/q/d33m9uC+2QBPTmotCU+Co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Exefbbpq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784249440; c=relaxed/simple;
+	bh=mv/ZqKV+A4iIZ1OBQFdjcegc+1pNV28NTIk0nlHZS0Y=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=mdxpk8FZav+RE1OSHYDO9BvAaJ5yQ+h4uAuucg5AhYts1rnSXeLouSqiK2U4aUO94K7e2/CvCxRqv+PJcJj9bB6zSzscDNUQed7CyzoLw5McQ+00tj7dldjCOoWr/pybRiHpIqyZ2+n+LYz4FKwynTUh3Gbgqu1D0QfR1Eyncoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dHX3FdZo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Exefbbpq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB671F00A3A
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 00:00:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dHX3FdZo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA2331F000E9;
+	Fri, 17 Jul 2026 00:50:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784246424;
-	bh=FV85GGmpsMCgQRdgB+CrI5AgR1SLQ/WZQpZKMtsu4bo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Exefbbpqy3YyEfdH1P+9gYzaypWqBPZqykrD8AKDkJKoi73NuAzazSbQlpiBQleEA
-	 JmRZ6NBieN02ck5ZBzS5vmaF5k2R8wuoor1QB6tPk1JHVEEDGFhs/kfA7GxSZhkRoy
-	 BHO+yyP8XZJWzQhPV1Y2rjab6gmrxcFn7LSeDyH3lq2BkzTUase7+En8LDQ1GqtPGd
-	 X6mWShYA2KkCAJ6tvxqE7oBGpFBzhmDNWIt45t70P+mpXQ+oGgNGhgjRSYEDVQNF+q
-	 wwTmkqb/FVvRk41QOEhJJKYo9cy0IBzBSUw+ZclacCp2iSiAz+c9JJKO9wZOlnT7YI
-	 RONFy94swonRg==
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8f1e274ccb9so29154116d6.2
-        for <bpf@vger.kernel.org>; Thu, 16 Jul 2026 17:00:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Rp4UBpIDY2rrNhe1wj84rLIoKbxoH3f/k+bL80WhWtTV3JLlsUR63hGlv7DuGW2OwdJR/U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyipOz7m+tMYpXZMllx7t7a8qJjWrpEBYmXqEhX+sbPDL30iSHH
-	92tRpOA8PsOMtV/eOpDhUfVBgM07NNPS6gZ0gxcrovopQJo3afl3CT2xlvZWpFqeAb7dzT4HcQm
-	8pu7OUZb6Dl461UjnktPTBAINUyhot5c=
-X-Received: by 2002:ad4:5d67:0:b0:8f2:4100:8613 with SMTP id
- 6a1803df08f44-907782676a1mr4803936d6.0.1784246423346; Thu, 16 Jul 2026
- 17:00:23 -0700 (PDT)
+	s=k20260515; t=1784249438;
+	bh=n1gMdrI3Q9rjWX+zRZlsTMXPTaWDy0K0K2F4e6/E/qQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=dHX3FdZopIUiFCYYN8ei8DXASLnAJe7ZmbSj26yjQRRu8rvbSGtGre77VZ2QyaZ0K
+	 /6COS1bmkTg+SVIZTwZwEc6DGqyzii8Z5pOH0XkuB1NuDBCNgOIBSo/iidGkp0GzFH
+	 2OI89lcDt0kA4j4a2tmSIkEmZOmvh45N+tCJ2jJPcKMTBAUSw5W0dvf1qk3g9hlV8C
+	 mCoL9ns3LQIfdJ0vYeoDkm85DtPL/4vJiSJuZjJcVqsBkubBHdWmOUQPKSL/mDOpOY
+	 O/7+nENQGRDYN9RW0m1urKbl5yYIMzc1M4E8CW3csuu27aUitrmzLHJxve1FwY1uMZ
+	 dP6BnnNuVQl8w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A89380A97A;
+	Fri, 17 Jul 2026 00:50:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
-In-Reply-To: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Thu, 16 Jul 2026 17:00:11 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5pRMtpa5Q0Y=zO5=2HSj4xOX+i5Vp+g2a6RDvmkeHKFw@mail.gmail.com>
-X-Gm-Features: AUfX_mwAx0Gvsvjh_SQkCp6O_MY-GsUz9YxEaRc2ch7UfOgTpRKa2aDJgIpD2nU
-Message-ID: <CAPhsuW5pRMtpa5Q0Y=zO5=2HSj4xOX+i5Vp+g2a6RDvmkeHKFw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for
- BPF allocations
-To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
-	Borislav Petkov <bp@alien8.de>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ingo Molnar <mingo@redhat.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/3] Fixes for tailcall with subprog and
+ callback
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178424941139.1475787.18080893330670192934.git-patchwork-notify@kernel.org>
+Date: Fri, 17 Jul 2026 00:50:11 +0000
+References: <20260716120157.835937-1-pulehui@huaweicloud.com>
+In-Reply-To: <20260716120157.835937-1-pulehui@huaweicloud.com>
+To: Pu Lehui <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, eddyz87@gmail.com,
+ bjorn@kernel.org, daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
+ memxor@gmail.com, yonghong.song@linux.dev, martin.lau@linux.dev,
+ song@kernel.org, jolsa@kernel.org, emil@etsalapatis.com, pulehui@huawei.com
 
-On Thu, Jul 16, 2026 at 12:51=E2=80=AFAM Mike Rapoport (Microsoft)
-<rppt@kernel.org> wrote:
->
-> Hi,
->
-> BPF allocations of executable memory on x86 are essentially read-only. Mo=
-st
-> paths that call bpf_jit_alloc_exec() immediately make it ROX with
-> set_memory_rox().
->
-> The code generation, at least on x86, uses separately allocated writable
-> buffers and then updates the actual text memory with text_poke().
->
-> These patches do several small adjustments to how BPF allocates executabl=
-e
-> memory and enable EXECMEM_ROX_CACHE for BPF allocations on x86.
+Hello:
 
-After this set, we are still using bpf_prog_pack_alloc() from x86 code. I t=
-hink
-the goal is to eventually remove bpf_prog_pack_alloc(). What's our plan for
-the next steps (toward removing bpf_prog_pack_alloc)?
+This series was applied to bpf/bpf-next.git (master)
+by Eduard Zingerman <eddyz87@gmail.com>:
 
-Thanks,
-Song
+On Thu, 16 Jul 2026 12:01:54 +0000 you wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+> 
+> This series fix two issues related to tailcall:
+> 
+> patch 1: Fix tail_call_reachable state leak across call branches.
+> patch 2: Reject callback subprogs invoke tailcall.
+> patch 3: testcases for patch 1 and 2.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v3,1/3] bpf: Sync tail_call_reachable with callee state on entry
+    https://git.kernel.org/bpf/bpf-next/c/3513ea9dab6c
+  - [bpf-next,v3,2/3] bpf: Reject callback subprogs invoke tailcall
+    https://git.kernel.org/bpf/bpf-next/c/a41d0c30d764
+  - [bpf-next,v3,3/3] selftests/bpf: Add testcases for callback with tailcall
+    https://git.kernel.org/bpf/bpf-next/c/42bfd21a8b70
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
