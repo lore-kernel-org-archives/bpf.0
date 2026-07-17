@@ -1,62 +1,62 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52ACB1D435F
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 17:02:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0064530171C
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 17:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784307736; cv=none; b=PgckosVAahTmlTX6/GxsKkmG/7e4OSehBjB/QZ+V1x27rjcEpS5nYLhRgj7XJ0cXDTl/Abdb5KNWsmCH5G998LZs4x6T+hj4yZ+TPeAoKdWY+Resye/VJ5DbYT5L1Ad/G0BiJxyip5PM/2N3I2wHq/acEG2TJjdnsK6Rivrt7Ko=
+	t=1784307778; cv=none; b=iMqEdOSMfij3hSehOMtpm3GWi/J0fmaAJ/4aZp3aGkY0YHhbFGQ+Ws77rDq4zoSDHXYZbRHtCArLBMgHk8zhH7Zry5iMWCFVVR7or3wR5lVoa/YFcYx+s97InL0wmCnK7SylnAKJ2BesJkJNikFtxjqb2DvSicUdie2wD1bIVcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784307736; c=relaxed/simple;
-	bh=YDJGf1I1MKhn6O63oKXrgMUp3tx2upjwJXx94rVqyLY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=A/5NDiOtn6wkBmpYEJBfMr3mU89k2oipDebBxLKW6RBvR5G4ONYU18/Au/kOMVIAtvPWTUfEBSxiDBl5JjmUWBc4keJlb5vRqbPV4LSwldkrQ5VNZvSIRZMQzDxXwH1axqYnuk0iu0zrxKc5DfvAuFpINal713ckpAfnjhHFsOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fnn67Mz5; arc=none smtp.client-ip=209.85.221.46
+	s=arc-20240116; t=1784307778; c=relaxed/simple;
+	bh=4BZzTWmadIpPgdQresUeVaUcp5DGpz5V6zno6Q4Z1O8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=HlMZ3lpg9je4RJTiXIvoVk9+Nw/16xGUSVMpy3o9cYMv8BwzXm42axCWNmWyUQdWEOZ8M4qjgtejk49hT5ugOFFh58Sigi2AdYnC3mbh+T0T1BimL8ONiHUrRdxFDbVXM3ZkeLIm0o9FC3FtIdY+ZluY43ZTivI8VJ24wnW5K4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=X3hsFQIu; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fnn67Mz5"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-472326ca506so6421804f8f.2
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 10:02:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="X3hsFQIu"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-47db714766aso954597f8f.0
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 10:02:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784307732; x=1784912532; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
+        d=suse.com; s=google; t=1784307775; x=1784912575; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:from:to:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=RFvn5E/HLi7anOzIPg5BZrN/v/kHFq5z0LqYxHl8WlA=;
-        b=fnn67Mz5oF9QPq34GlM++WijnRdx6VQVPwJZrf5zMkFru5zuZ65gU8bsKioGvHnJFH
-         xDvkw6YygZrc1dUdA65U+Y6yL9/qaAqD5VZj0zwJabnRCkGAwxhB5fRdHBeijdKvQLI4
-         ybMpIMKG/kJIYKNSozyldI8iIkIl8n4vLTUCQh6WDuzWLLxUPIApLAG/qQKK3regPKnP
-         qR9rA6kX8LBFaQy3gfmRiE0IbItqj0tZfTPcSUNBjuLd+PdNxIrBgBAWdkeenJqs1f+e
-         HEaFO5lh/uEah1nni+xftbaeEvUsztl4aQFjmX3qYPHRcLhScPzWFmbxN8xsaEoSgNEb
-         sEhA==
+        bh=Lkj6Un2bLVNZ+vPuAfaPexv3e+Wv8C5O29PKU28JKqQ=;
+        b=X3hsFQIuDdkqW3Oi3cPT+CoYCPPqroxq3JQpI6WjBnzK1pj7GskJtl1Q1RELU73XMT
+         /3Qq04+DPhk5wZa6id5MZE3/7Qs89VYHZ7dEsPr/PvCJ6jBsYRC9FgvIeSbscgfZfflK
+         6v+r3W0KSwQrxZRDtbZVoMpP2PgyF52/lMHp9Ug7rQT7Igw8hgH3xBfXReb2/Q5AF0oz
+         95I5hWzN1CRBw02jKCw9W2Pn0lj6ZiL8JC+AnZ/UnfYJ5/67I2AJ7F8A+R/k6EhH8Ep6
+         cYDGJVmwj5KgFvKGInqBU9tl+ub5UGEn9cdHtDBskzF/cBKODUDGHETK2ezayxIGG0mG
+         8hqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784307732; x=1784912532;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
+        d=1e100.net; s=20251104; t=1784307775; x=1784912575;
+        h=in-reply-to:references:subject:from:to:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=RFvn5E/HLi7anOzIPg5BZrN/v/kHFq5z0LqYxHl8WlA=;
-        b=DjEEfUIG3+KgNX7wbAqVTR4An2ViidISyAGW2THzbPDceBTiZrPPN4ENjFxabom3Pm
-         p37tA3VrHqIznfESLwVrgmVoToySSXDDjGplLhJQxJVdsk3/cU5v6Vzczo0592DkfIOP
-         asoupb7+N0ehzO4pRvf76aiWtvbHwdjZzDWVGIMZsgYNi2dCrdc3EMTrsWscjHTNLwca
-         M02Nq1ggUsi4pOgQCGBTDIiXlE5WME6t63ZEE4lKGc9ecM1iZXxw+QidcRW/3u3TDxyb
-         9GPuEEyHMALxh2EJfg7eEJ6efCto2elcIqIqqWmSik5il2XiPKt0rn25wZ1OtrCNL9E5
-         9XTQ==
-X-Gm-Message-State: AOJu0YyPmiJtwTM5VHm/9yzm5HH/HrGCBCLTXkShzIVK5NmDfUGj2lpW
-	ueYyZobJviLzKdOP1nBQuqOMj9/C7HvoW6tZ+LqORqPofVNSGFgb9JYFzwYBBCx9SAc=
-X-Gm-Gg: AfdE7clq5brsIOKW6XTaT6dVfPf42/wFKaUJWkDx/ALQBnQrzmZBVha0FYOkmH0Abd9
-	c0ximMm295XNJyINd2gVBBbTUKz+wSJBmlSs6IY9KHg9SyJfU6bZB+HrsiXP85TnD50Qls9vfWw
-	luV3vGcWx1sAlxFZfGfOwqHEeWx9QbAe+hYgzTGPZF0OSxwIwiJRQ+Ylqcm4VQBY0ZkMRQd1Sqz
-	1NPzhGLaA6TxlkX0+tRAErvJ4tCF45dG23nli0VE6VozqRch44WqspWUFmEwoUqLXk/tQDygUau
-	ZzvAjZzeHa2IB2lwCKhYB/38Sp1TlCI15GX4FOcKl7CNjO5Ro54jhOuHNUrfhCozjC/B7gs+Ojl
-	kWaik4s0FlWYFjhJxUiqkURLdoF9Fc+Puc2Ws2wvRyWtAZK3AqTByglJAeg1+IFbE
-X-Received: by 2002:a05:600c:1509:b0:495:3f5e:e7a with SMTP id 5b1f17b1804b1-4954a51dee6mr28993565e9.34.1784307732370;
-        Fri, 17 Jul 2026 10:02:12 -0700 (PDT)
+        bh=Lkj6Un2bLVNZ+vPuAfaPexv3e+Wv8C5O29PKU28JKqQ=;
+        b=alJPWUOtRh3mHCaRwZeRoRy99CGXWUPktVofn+gC+geOmfEHeu77+Tq5C3MlZDT91n
+         ymVfJy9UMRwnOyEecI277GDhFCPYv8C1YO4xTZkD7pIij8mdJ0eKhPWXdfNPDkargnFf
+         OzjJuYL0NZcPUS5CZMKTQZQF9bcEtBt8ZkyB8Q2eFL8zHLGwe6Z6C0uoBs9yFQxlNYsd
+         IbybWBuZs+87YvJKZxXbN/DNCY5369EQTJpZ1PGrA9dm2Y+K5y5YmLtBhvzYhnSDsnPw
+         g42ArBgArfki57PD1LHYtmkgi+8MxgX/FHJb1Qslk1ondyEZ0M7bDloV0tIFD61TmKMp
+         w/Sw==
+X-Gm-Message-State: AOJu0YxWUyr+qn+m4J0EERRlC8FkHzVkIdSYuvBkPao/S16IOfzunZi2
+	3E3TJw4K0x0FmwcVe1Q1aZfTzJskCgeQ/Q7CTaUJNnEPrZedFjCjdvOAtXwus/ww6ec=
+X-Gm-Gg: AfdE7cl+E5IdZruYoiHnrMHIPujngOLGe5KBmLeqzHj+CWU7kxphNY5YKdi8LokdFM+
+	ZMQs1DH+y4vG7l008MSNmFvclgDH12JKQjhvZ//nlKQrNeFnGbe52jznA/ySq/pOaQio0Asgoto
+	kSsXIAfb8mNcobnnEfo+1+gvWS8YfmOGwpe9Wxjef36CTNRf/vV2She9I+nN+lOaxvCyDXEiNbG
+	X+7ota8okEZXsxajdXBSM0TJewHXmlywi5D7S1A7z4Fl0f9sSOq/pRWXJ/Lak7XuWXcleFZUU4C
+	VaagiT20qXesHGSLX/Hmed85zhEhjxPmU1l+rv/6uYDxICixAzu5qFSZVvDGT/ilG8fR7aMU4sY
+	gyF5TUuxa5FKt8EG+rvweVQZcuoJhjdMuUMLCJyQFED50/FT8MBmXM8gHr4x37AWN
+X-Received: by 2002:a05:600c:c050:b0:495:499e:ec37 with SMTP id 5b1f17b1804b1-495499eed36mr34495265e9.18.1784307775060;
+        Fri, 17 Jul 2026 10:02:55 -0700 (PDT)
 Received: from localhost ([2804:7f0:b765:c3e:eeab:5970:313d:2132])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81ef4050ce3sm14792547b3.15.2026.07.17.10.02.11
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81ef4275060sm14733597b3.23.2026.07.17.10.02.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2026 10:02:11 -0700 (PDT)
+        Fri, 17 Jul 2026 10:02:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,9 +65,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 17 Jul 2026 14:02:08 -0300
-Message-Id: <DK10AULI0UTM.QXCUVGI3J3N@suse.com>
-Subject: Re: [PATCH 3/4] selftests/bpf: Fix lsm_bdev dev_t encoding mismatch
+Date: Fri, 17 Jul 2026 14:02:52 -0300
+Message-Id: <DK10BEEYBU0Z.1T9AS7CA7LJID@suse.com>
 Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
  <linux-kernel@vger.kernel.org>
 To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
@@ -81,79 +80,79 @@ To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
  =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
  <alexis.lothore@bootlin.com>, "Christian Brauner" <brauner@kernel.org>
 From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+Subject: Re: [PATCH 2/4] selftests/bpf: Install resolve_btfids.test.o.BTF
+ where the test expects it
 X-Mailer: aerc 0.21.0-146-g87073a0460e3-dirty
 References: <20260710-selftests-bpf_fixes-v1-0-aa24dfd6f4f9@suse.com>
- <20260710-selftests-bpf_fixes-v1-3-aa24dfd6f4f9@suse.com>
- <2088b8ed-c26c-4120-a3d6-8e6dfbf89f58@linux.dev>
-In-Reply-To: <2088b8ed-c26c-4120-a3d6-8e6dfbf89f58@linux.dev>
+ <20260710-selftests-bpf_fixes-v1-2-aa24dfd6f4f9@suse.com>
+ <cebe82a7-203c-4b7e-a57f-0616850c58e3@linux.dev>
+In-Reply-To: <cebe82a7-203c-4b7e-a57f-0616850c58e3@linux.dev>
 
-On Thu Jul 16, 2026 at 6:11 PM -03, Ihor Solodrai wrote:
+On Thu Jul 16, 2026 at 6:10 PM -03, Ihor Solodrai wrote:
 > On 7/10/26 3:09 PM, Ricardo B. Marli=C3=A8re wrote:
->> progs/lsm_bdev.c keys its verity_devices hashmap with the raw kernel dev=
-_t
->> read straight off bdev->bd_dev, i.e. MKDEV(major, minor) =3D (major << 2=
-0) |
->> minor. prog_tests/lsm_bdev.c instead builds its lookup key with dev_key =
-=3D
->> (__u32)st.st_rdev from stat(2), but the stat(2) syscall fills st_rdev vi=
-a
->> the kernel's new_encode_dev(), a different bit layout: (minor & 0xff) |
->> (major << 8) | ((minor & ~0xff) << 12).
+>> prog_tests/resolve_btfids.c looks for "resolve_btfids.test.o.BTF" relati=
+ve
+>> to the running test_progs binary. resolve_btfids always writes
+>> <obj.path>.BTF next to the object it processes, so building
+>> resolve_btfids.test.o also produces resolve_btfids.test.o.BTF in the bui=
+ld
+>> output directory as a side effect.
 >>=20
->> For any device with a non-trivial major these two values differ, so the
->> lookup can never find what the BPF program stored, and test_lsm_bdev()
->> always fails with:
+>> INSTALL_RULE never carries it over: it is not part of TEST_FILES,
+>> TEST_GEN_FILES or TRUNNER_EXTRA_FILES, and it is not copied by the *.bpf=
+.o
+>> rsync used for TEST_INST_SUBDIRS. After "make install", every flavor of
+>> test_progs, including the default one, fails with "Failed to load BTF fr=
+om
+>> resolve_btfids.test.o.BTF", even though the file built fine and BTF ID
+>> resolution itself works correctly.
 >>=20
->>   test_lsm_bdev:FAIL:map lookup unexpected error: -2 (errno 2)
+>> Install it next to the rest of the per-flavor build output, using an
+>> explicit rsync in INSTALL_RULE like the one already used for bpftool.
 >>=20
->> Reconstruct the raw kernel dev_t from the decoded major/minor instead of
->> casting st_rdev directly, restoring the layout the BPF program actually
->> reads.
->>=20
->> Fixes: 96f4c251a087 ("selftests/bpf: add block device management selftes=
-ts")
+>> Fixes: 522397d05e7d ("resolve_btfids: Change in-place update with raw bi=
+nary output")
 >> Signed-off-by: Ricardo B. Marli=C3=A8re <rbm@suse.com>
 >> ---
->>  tools/testing/selftests/bpf/prog_tests/lsm_bdev.c | 3 ++-
+>>  tools/testing/selftests/bpf/Makefile | 3 ++-
 >>  1 file changed, 2 insertions(+), 1 deletion(-)
 >>=20
->> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_bdev.c b/tools/t=
-esting/selftests/bpf/prog_tests/lsm_bdev.c
->> index a970798e1173..28bc4b117f41 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/lsm_bdev.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_bdev.c
->> @@ -17,6 +17,7 @@
->>  #include <stdlib.h>
->>  #include <string.h>
->>  #include <sys/stat.h>
->> +#include <sys/sysmacros.h>
->>  #include <sys/types.h>
->>  #include <unistd.h>
->>  #include "lsm_bdev.skel.h"
->> @@ -172,7 +173,7 @@ void test_lsm_bdev(void)
->>  	if (!ASSERT_OK(stat(DM_DEV_PATH, &st), "stat dm dev"))
->>  		goto remove_dm;
->> =20
->> -	dev_key =3D (__u32)st.st_rdev;
->> +	dev_key =3D (major(st.st_rdev) << 20) | minor(st.st_rdev);
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selfte=
+sts/bpf/Makefile
+>> index 47911c9b4977..7260d672acf7 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -1057,10 +1057,11 @@ override define INSTALL_RULE
+>>  	$(DEFAULT_INSTALL_RULE)
+>>  	@mkdir -p $(INSTALL_PATH)/tools/sbin
+>>  	@rsync -a $(if $(PERMISSIVE),--ignore-missing-args) $(TRUNNER_BPFTOOL)=
+ $(INSTALL_PATH)/tools/sbin/
+>> +	@rsync -a $(if $(PERMISSIVE),--ignore-missing-args) $(OUTPUT)/resolve_=
+btfids.test.o.BTF $(INSTALL_PATH)/
 >
-> Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> I think you can squash patches #1 and #2 into a single "Fix make
+> install target" patch.
 >
-> nit: I wonder if there are other tests with this bug. Have you checked?
+> pw-bot: cr
+>
+> nit: This hardcodes the filename, and even though we only have one
+> test that needs .BTF currently, you could add *.BTF to the loop:
+>
+> 	$(OUTPUT)/$$DIR/*.bpf.o $(OUTPUT)/$$DIR/*.BTF
+>
+> Then any future test that consumes a raw .BTF gets installed for free.
 
-I don't think there are.
-
-grepping for "map lookup unexpected error" in
-https://openqa.opensuse.org/tests/6106285/logfile?filename=3Dtest_progs.tap=
-.txt
-shows only lsm_bdev.
-
-Tumbleweed is 7.1.3
+Good call! I'll prepare v2. Thanks for the review :)
 
 >
->> =20
->>  	/* Look up the device in the BPF map and verify. */
->>  	err =3D bpf_map__lookup_elem(skel->maps.verity_devices,
+>>  	@for DIR in $(TEST_INST_SUBDIRS); do				  \
+>>  		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
+>>  		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
+>> -			$(OUTPUT)/$$DIR/*.bpf.o				  \
+>> +			$(OUTPUT)/$$DIR/*.bpf.o $(OUTPUT)/$$DIR/resolve_btfids.test.o.BTF \
+>>  			$(INSTALL_PATH)/$$DIR;				  \
+>>  	done
+>>  endef
 >>=20
 
 
