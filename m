@@ -1,144 +1,108 @@
-Received: from nbd.name (nbd.name [46.4.11.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE1F345741;
-	Fri, 17 Jul 2026 18:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.4.11.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F80B2EEE93
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 19:03:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784314568; cv=none; b=mCYm7qqqTAmG41whzuZQLzcqfi0EPBLlw2i1Vgjf6zTs6YTENm0yS/sLo7iLmg4Or8+eBatQMAU02Bhr3n6y0Ge5i8tKSE10mjtiRcwk/bKxeSAWOTz7PwqChm1z26+F2qUDP/K4A9bS3iC3Q63RAy96GVOYdJgpm9MooKVrSSY=
+	t=1784314983; cv=none; b=P6cp27PoZ4/HO7ZSPsCj14S8qOOcl37x7dwIWHUvz4UaS53vAMdeU5+alx8CZOiwQuzANfS+QpJodZEzAQtCYD3+ZCSNWRda0GpOjVopHON9BxiGFKbnuYJJWn0hraCIHV/AsIOTmMQuhIdQizNAzKowV2EvUkUiBnM1KEQXFmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784314568; c=relaxed/simple;
-	bh=uPvXCQ8QkM0UXt5QJvDelT5fZ4wQhH2aRcTMXl9s6cQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qxgiZ5UO2BQHPQAI2qQX5Vis6ij/2l0/P9NTzcAhX06w47TTUv5ByI7rT7OWfF7tQx1c5o1CFlBuPgWj91WzFHa8iAZfN6sJiUpKoe4SWM1Y9izWw7ifr97icVi8dpPXFAuWFfd9CNHyYMAHAorNV9pT8ug1oRCsjMQbxlhBiUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nbd.name; spf=pass smtp.mailfrom=nbd.name; dkim=pass (1024-bit key) header.d=nbd.name header.i=@nbd.name header.b=CVZ66Nbi; arc=none smtp.client-ip=46.4.11.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nbd.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nbd.name
+	s=arc-20240116; t=1784314983; c=relaxed/simple;
+	bh=vURde89sMtWURw6FG+tepB88QIn9K8t6TisozbmFr3A=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PKvqi/MollBFtG2oQrGopOV29O325hDxck/sDbpFIUMKJGIeIQWmLguOKTNq8JH/e4af9HWJR5ZK6mT1a5ni+6bvtwbDyWa6+Fu9KHBfUiVw4Pie051fEkT9g+29pND2WGerSnqOMhnrgjIVPzQZc1rVhSZ93PFZcq2zCDk2E3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MaoBhxcF; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nbd.name header.i=@nbd.name header.b="CVZ66Nbi"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-	s=20160729; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
-	Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=6fslNnrJYY4f0Iggtff566fAv2juiOH4sYdmgrxCIN8=; b=CVZ66NbiL24MRcEAxXEcPMBy3D
-	F3QhglAPWmxdyuk+ryXZukF7Y9yttGSPQ4wCxqbWIDa7C1PjocwSlfWEVr3XtqhEZVR5UcaittWBV
-	tO4MCoP96F0c8YQqPn9x4Loh6lQnZuDwuJojP7GwwPIfEW+wDzzXsXnnkuO6iCetcuWs=;
-Received: from p5b015c4b.dip0.t-ipconnect.de ([91.1.92.75] helo=Maecks.lan)
-	by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
-	(Exim 4.96)
-	(envelope-from <nbd@nbd.name>)
-	id 1wknQL-001a5c-3C;
-	Fri, 17 Jul 2026 20:36:38 +0200
-From: Felix Fietkau <nbd@nbd.name>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>
-Cc: =?UTF-8?q?Thibaut=20VAR=C3=88NE?= <hacks@slashdirt.org>,
-	Stijn Tintel <stijn@linux-ipv6.be>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] bpf: Fix alignment of memory allocator objects on 32-bit archs
-Date: Fri, 17 Jul 2026 20:36:31 +0200
-Message-ID: <20260717183632.99195-1-nbd@nbd.name>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MaoBhxcF"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84862b0d5f8so4161598b3a.3
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 12:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784314981; x=1784919781; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=0HQ96Vdn4h35OeWau0U6VFgnANMcH6MfT+eFQl3cSlw=;
+        b=MaoBhxcFnQhFRaNA2Z+ubiZwfqGUIflOErH8nfTaUsRC4v3U/VBU0OIQOrujGZfFL8
+         FX6nL4jB0hduh8Dt1OdeV/mOGdzhc0K85lr5PlFq0IqsmC1XvclKc9LAVs2iXZ2jHthg
+         pnRBLKy9Bp6G2AHpUsnb45nVpLxfn5/SiTTpOeb40BsutOo710CJAWuwKjmBAO5Fd8Z+
+         INCxVUKFVhEWwNAx5Ddo/hi16GgouACmiInhncxeMb3KrOxGS8ZRlXPCMReWVWpjWB3X
+         Dc4k8knde6JNLGPmV4d+5/ddkDFp1SbjtCQXQi5RQdEFwt9gRR/YYXqIYuBW5IOtXeuL
+         6zxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784314981; x=1784919781;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0HQ96Vdn4h35OeWau0U6VFgnANMcH6MfT+eFQl3cSlw=;
+        b=axUgwbx1q8NmsFv2ncZm35giA8p62w8QtV6cFWYN/csKLU0Dzic+nhRNjc/KD8fBx+
+         vqX/XdPf7+ffZbk5a3c0EWaz7jSOur2Br35L6dkYvBYUg1fClSlWlPPXv6zXBh0zUWGK
+         En1UxfaFSxVbe+6K2nVsOxi18LGz3wo3/8HhwDiXCOyIA1RLvzw53MRuFO6S+ekXBZF5
+         nWMvtHHFWN+uKsmTaT6athZ0QR+RYuSAfG0iFV0XBm61cxWSGYuWYV4q5RnBppmE0pb4
+         kCAIeG2vUlO9pi24jKX/4qKFnEqZ0YjW5y9TY7FEYvV/Z9y/9cKgnaCQaHxC2PrfZ31X
+         qnLQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqH3thX5lWZzujSm9iK2i1y0Yp/Ih2QulEXHE5JiYlhFkzDVpzs7iqMlXJSaopUwzQHm2U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy38QMF2nOYTDLq6AjV+lenDZY+8fOs5HnC3LZYGgRbo2nyTZ7h
+	B4hIZ+IEvNBCwf87MuqL1Lfad+DFgttaczcN/IY5ek+wq/ffWsXAkzam
+X-Gm-Gg: AfdE7cl0aVcPJ6AWn1ZJzyOOqNStj3t16iVPZHcVwztXIQBVyUAzDYrYPiuvJ5G50do
+	dN8l72M5igZLTN596Q+RQTuM7yyyYHcCjvyHVWTm3Eyntbl5G4CYYAgWHKfkauUffzNas3GTZd0
+	eez1t+saY7eNSeUPHQMIMvEbgNBDPuefmR7C1c8LrENZuzWsRZ2gPIfUal96a2NOaigSJXqBs/C
+	5uVhApstpUtFiwgxP3vCtw5UxlvO3cDqDsQVH9Tdzkua940nY3lg0Y3sY87OyHRNzSKIX/qSnJy
+	ZB74EJ1H4ZmzIu72KUQ5fcEYbgK3J5BHi6cCyZzoMDzzVNWandRTsf2oA/PohWCq2Zj2XFwff7c
+	/G4phNlu/RFgVfzWxjgHHG8oEeoCkcV3lWnUkp10ZPXWBbGUCef62YgsMx4OOK5/utIBX5vT6fT
+	qOk3Q6HGpPVIFzN/FGkgziwVaWrp0qBsSlVKoE6rpu4I/Tdr5umyex1OsdLw==
+X-Received: by 2002:a05:6a20:1446:b0:3c3:954d:279a with SMTP id adf61e73a8af0-3c3ad87eba1mr4515283637.33.1784314981521;
+        Fri, 17 Jul 2026 12:03:01 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:87e3:2c3:b68c:94ea? ([2620:10d:c090:500::1:14f3])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce2cd6e6esm7942276c88.13.2026.07.17.12.03.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2026 12:03:01 -0700 (PDT)
+Message-ID: <a6bff14e1eaaae768562fb2825693fa3c5568dee.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/4] selftests/bpf: Add bpf_for() benchmark
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song	 <yonghong.song@linux.dev>
+Date: Fri, 17 Jul 2026 12:02:59 -0700
+In-Reply-To: <20260717120215.2171057-5-puranjay@kernel.org>
+References: <20260717120215.2171057-1-puranjay@kernel.org>
+	 <20260717120215.2171057-5-puranjay@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-The BPF memory allocator prefixes each object with a header that holds
-struct llist_node while the object sits on a free list, and a pointer
-to the owning bpf_mem_cache while it is allocated. The header size was
-sizeof(struct llist_node), so on 32-bit architectures the memory handed
-out was offset by 4 bytes from the 8-byte aligned kmalloc allocation.
+On Fri, 2026-07-17 at 05:02 -0700, Puranjay Mohan wrote:
+> The bpf_for() macro builds on the numeric open-coded iterator kfuncs
+> bpf_iter_num_{new,next,destroy}(). Add a benchmark, modelled on the
+> existing bpf_loop benchmark, that repeatedly runs a bpf_for() loop so the
+> per-iteration cost of the iterator can be measured, e.g. to quantify the
+> effect of inlining the iterator kfuncs in the verifier.
+>=20
+> The BPF program runs an inner bpf_for(i, 0, nr_loops) loop with an empty
+> body 1000 times per trigger and accounts nr_loops hits per outer
+> iteration, mirroring bench_bpf_loop so the two are directly comparable.
+>=20
+> nr_loops defaults to 1000 so that the per-iteration bpf_iter_num_next()
+> cost, rather than the one-time bpf_iter_num_new()/destroy() setup and
+> teardown, dominates the reported numbers:
+>=20
+>   $ ./bench -p 1 --nr_loops 1000 bpf-for
+>=20
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
 
-The verifier assumes that allocated objects are 8-byte aligned and
-allows BPF_DW atomic instructions on their u64 fields, e.g. on values
-of non-preallocated hash maps, objects from bpf_obj_new() and local
-storage. On arm32 the JIT does not implement atomics, and the
-interpreter executes them via atomic64_*(), which are implemented with
-LDREXD/STREXD on ARMv6K and later. Those instructions require 8-byte
-aligned addresses; a misaligned address raises an alignment fault and
-crashes the kernel.
+Could you please add a few tests with __xlated tag, e.g. as in:
 
-Pad the header to 8 bytes to preserve the alignment provided by
-kmalloc. Store the percpu pointer of percpu objects at the new header
-offset instead of assuming the header is pointer-sized, and update the
-copy of the header size used by the hash map memory usage accounting.
+  tools/testing/selftests/bpf/progs/epilogue_exit.c
 
-Fixes: 7c8199e24fa0 ("bpf: Introduce any context BPF specific memory allocator.")
-Reported-by: Thibaut VARÈNE <hacks@slashdirt.org>
-Reported-by: Stijn Tintel <stijn@linux-ipv6.be>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
----
- kernel/bpf/hashtab.c  | 2 +-
- kernel/bpf/memalloc.c | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 3dd9b4924ae4..900c1851d264 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -2337,7 +2337,7 @@ static u64 htab_map_mem_usage(const struct bpf_map *map)
- 		else if (!lru)
- 			usage += sizeof(struct htab_elem *) * num_possible_cpus();
- 	} else {
--#define LLIST_NODE_SZ sizeof(struct llist_node)
-+#define LLIST_NODE_SZ ALIGN(sizeof(struct llist_node), 8)
- 
- 		num_entries = htab->use_percpu_counter ?
- 					  percpu_counter_sum(&htab->pcount) :
-diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
-index e9662db7198f..ca7555b1da34 100644
---- a/kernel/bpf/memalloc.c
-+++ b/kernel/bpf/memalloc.c
-@@ -33,7 +33,7 @@
-  * Every allocated objected is padded with extra 8 bytes that contains
-  * struct llist_node.
-  */
--#define LLIST_NODE_SZ sizeof(struct llist_node)
-+#define LLIST_NODE_SZ ALIGN(sizeof(struct llist_node), 8)
- 
- #define BPF_MEM_ALLOC_SIZE_MAX 4096
- 
-@@ -142,7 +142,7 @@ static struct llist_node notrace *__llist_del_first(struct llist_head *head)
- static void *__alloc(struct bpf_mem_cache *c, int node, gfp_t flags)
- {
- 	if (c->percpu_size) {
--		void __percpu **obj = kmalloc_node(c->percpu_size, flags, node);
-+		void *obj = kmalloc_node(c->percpu_size, flags, node);
- 		void __percpu *pptr = __alloc_percpu_gfp(c->unit_size, 8, flags);
- 
- 		if (!obj || !pptr) {
-@@ -150,7 +150,7 @@ static void *__alloc(struct bpf_mem_cache *c, int node, gfp_t flags)
- 			kfree(obj);
- 			return NULL;
- 		}
--		obj[1] = pptr;
-+		*(void __percpu **)(obj + LLIST_NODE_SZ) = pptr;
- 		return obj;
- 	}
- 
-@@ -257,7 +257,7 @@ static void alloc_bulk(struct bpf_mem_cache *c, int cnt, int node, bool atomic)
- static void free_one(void *obj, bool percpu)
- {
- 	if (percpu)
--		free_percpu(((void __percpu **)obj)[1]);
-+		free_percpu(*(void __percpu **)(obj + LLIST_NODE_SZ));
- 
- 	kfree(obj);
- }
--- 
-2.51.0
-
+To verify the shape of the inlined code?
