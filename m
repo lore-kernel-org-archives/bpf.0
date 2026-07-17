@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E718A3CB56A
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 12:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD0E33B6C4
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 12:02:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784289750; cv=none; b=lbpgzWMyS7Pu9sCo6W/VograiDsT16vOaBqlcKvHE6QCS6wKzHXlOut0SL6npbinrd74SOba/1V4M5m/x7UuFVRPsK2J8PPPS+xdplcUbTnB4k6wCWI1AnasuK8PJpAUMytvwh9kgA1zqzdYhYmU4YpD793f0W0Pax9X42m3fNs=
+	t=1784289757; cv=none; b=GP0ULG0Z2Lxl7NOWJUhqMLe4mZBLMNn7OU86RiwT7reNrNQEw5B5UVQR1wmgSw1WDo9iwzgUHxPt9D7YmQMnHAa2zGm+Qo8ZFnt4xgg9pkFJ5+0PGiZ4qZtfB/l5qT0qmWFCxreDmXJYmbTtS1tiWku3KShjyulcSnQ/bpeW/yM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784289750; c=relaxed/simple;
-	bh=ePQIorKlCKR2lEtnJ1TWZLUUVqIsXrtU6rxUgRE9PdA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IMi5haVSxtq2FmsUzmYvV83LN1fSvW66bBbHUoUKSShnI2k6WUt+ygNE6QgBF/GVrTVvW/N0VIggnDO2cpgAwcs3jsHtVjJPiybWHNc5O2l5cYO4OtGaXkOdEIeQ8OrTMt6M5wCttGkFyyiOk+ZOqynLHbUF6/guEX8bMBxtdgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJQxAh+7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784289757; c=relaxed/simple;
+	bh=Ozi9IsrHJgPIXjGxCaeJ8R06lnMEwmR+htIV9n2sVXU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PjNmHTWpN6psmyjWb2qdTUecmjVITSSArs4rvhzoJQ4D43NfLyoiPyxkrRmuDHD8Bsz+SehKLwGK8+TO5IRocK/LrHKtRG35BzbXEmiLuVBleQaRu2wAf+SlhaQwnQCh3AqhbPxbrwl3FYavxgkP9Q2efreMT4Me+hNnGfU4n0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H2IxgYYg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJQxAh+7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6B41F000E9;
-	Fri, 17 Jul 2026 12:02:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H2IxgYYg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BA111F000E9;
+	Fri, 17 Jul 2026 12:02:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784289748;
-	bh=gnq3g882HK65JyI1okzHM5wZCSmRNCR9zm5wYHc7t0E=;
-	h=From:To:Cc:Subject:Date;
-	b=iJQxAh+71br1SMArtiSyJSzrhYXP5Lq61WKlw4H/FCtSOBpJzFyEGpXT3uDrf6Tj3
-	 tnSfyRsCDcAK/L14NsuHuYfKqjjg6fsMw6QfJxun5JsRjNH8X5rZfafpla6ma/l+NT
-	 ZrIL/imzKr3KlUysDat0s4LMGhhA4y/lRhH+rlrISo6WCxiRGdnKBdLMOscI85ojD8
-	 4Xb9VLarK5xycu/smByCBelXMSJV3HgvvZlew4nCJZtyvb/BM5Bbawc0thrF869UUq
-	 o2bKCEeI1ouMgVWjAJAw+O+uWe3IyovNe1/SOXJngQl+6X2EZtSBsSS3nU4ABXa3cA
-	 SPcQGhyobffxQ==
+	s=k20260515; t=1784289755;
+	bh=8iRXkHNUEzwsTwCZOOY91Y8KleG4VNud4RBWa8mGJ9Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=H2IxgYYgCjBpouq+a+Kq1cq0mvR5uH1dc4rQfzHJpBg5Z65Sx16dpln/ODeLeLtBh
+	 cLHERUSHpHI/GdUeTggjDFwlIddBP/oeUu4BtvaXSpZWvrZpZ0dzDmLzcmwbE8irzL
+	 ZtqHfP5kQthWqvQUZfZlM4KY07AreF0WdmX2DnNO93X3ubZ8jMvJ12veiaGpfz+GIA
+	 5iQnxjzmmHNKBi6xCL6Hcv3sWlDXZ2yqyDNED3s40vWQvB9Lxo/nqgEFH1RoFZO9di
+	 Ej1W2xW92uINU6H0e6GnkmUDwYmdjROpp+kjWWMAoormk3UXalNIfCHsc36VD25Fhg
+	 xKKv70e1UdFVg==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -36,91 +37,107 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
 	"Song Liu" <song@kernel.org>,
 	"Yonghong Song" <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v2 0/4] bpf: Inline the numeric open-coded iterator kfuncs
-Date: Fri, 17 Jul 2026 05:02:08 -0700
-Message-ID: <20260717120215.2171057-1-puranjay@kernel.org>
+Subject: [PATCH bpf-next v2 1/4] bpf: Inline bpf_iter_num_new() kfunc
+Date: Fri, 17 Jul 2026 05:02:09 -0700
+Message-ID: <20260717120215.2171057-2-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260717120215.2171057-1-puranjay@kernel.org>
+References: <20260717120215.2171057-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The bpf_for(i, start, end) macro is BPF's open-coded numeric iterator. It
-expands into calls to three kfuncs: bpf_iter_num_new() to set the iterator
-up, bpf_iter_num_next() once per iteration, and bpf_iter_num_destroy() to
-tear it down. The verifier emits these as ordinary kfunc calls, so a
-bpf_for() loop pays function-call overhead on setup, teardown, and — most
-importantly — on every single iteration via bpf_iter_num_next().
+The numeric iterator kfuncs bpf_iter_num_{new,next,destroy}() back the
+open-coded iterator macro bpf_for() and are emitted as regular kfunc
+calls by the verifier. bpf_iter_num_new() is small and only touches the
+on-stack iterator state, so the verifier can open-code it and avoid the
+call overhead of setting up an iterator.
 
-All three kfuncs are tiny and only touch the 8-byte on-stack iterator state
-(struct bpf_iter_num_kern { int cur; int end; }). That makes them good
-candidates for inlining, the same way several other special kfuncs are
-already open-coded in bpf_fixup_kfunc_call(). This series replaces each of
-the three calls with an equivalent inline BPF instruction sequence:
+Inline it in bpf_fixup_kfunc_call() by replacing the call with an
+equivalent instruction sequence. R1 holds the pointer to the on-stack
+bpf_iter_num, while R2 and R3 hold the start and end arguments. The
+arithmetic and the error paths mirror the kfunc exactly, so a program
+that inspects the return value keeps observing the same -EINVAL /
+-E2BIG / 0 results.
 
-  - bpf_iter_num_new(): keeps the (s64)end - (s64)start overflow check
-    (emitted with sign-extending moves) and returns the same
-    -EINVAL / -E2BIG / 0 results as the kfunc.
+The kfunc guards against overflow with a (s64)end - (s64)start range
+check. The start > end case is rejected first, so start <= end at that
+point and the range end - start fits in a u32. The inlined code computes
+it with a 32-bit subtraction that zero-extends into a 64-bit register
+and compares the result against BPF_MAX_LOOPS. Sign-extending the
+operands with movsx instead would emit a cpuv4 instruction after
+verification; JITs that do not implement movsx (e.g. x86-32, mips32,
+sparc64) decode it as a plain move and would miscompile the check.
 
-  - bpf_iter_num_next(): the hot path. Since cur and end are int, the
-    kfunc's (s64)(s->cur + 1) >= s->end test reduces to a signed 32-bit
-    comparison of (s->cur + 1) against s->end, so the inlined code uses a
-    32-bit compare with no sign extension.
-
-  - bpf_iter_num_destroy(): a single 8-byte store zeroing the state.
-
-The emitted instructions are plain BPF and remain valid for the
+The emitted instructions are plain BPF and are handled by the
 interpreter, so interpreter fallback stays correct and no jit_required
 marking is needed.
 
-Patch 4 adds a bench_bpf_for benchmark, modeled on the existing bpf_loop
-benchmark, that runs a bpf_for() loop with an empty body so the
-per-iteration iterator cost can be measured directly.
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
+ kernel/bpf/verifier.c | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-Results (./bench -p 1 --nr_loops 1000 bpf-for):
-
-  +--------+----------------------+----------------------+--------------+
-  |  arch  |       inlined        |     kfunc calls      |   result     |
-  +--------+----------------------+----------------------+--------------+
-  | x86-64 | 12884 M/s (0.078 ns) | 5812 M/s (0.172 ns)  | ~2.2x faster |
-  +--------+----------------------+----------------------+--------------+
-  | arm64  | 546.1 M/s (1.831 ns) | 545.8 M/s (1.832 ns) | neutral      |
-  +--------+----------------------+----------------------+--------------+
-
-On x86-64, removing the per-iteration call to bpf_iter_num_next() roughly
-doubles throughput. On arm64 the numbers are unchanged: the loop is bound
-by the load/store dependency chain on the on-stack iterator state rather
-than by call overhead, so inlining neither helps nor hurts there. It still
-removes the calls.
-
-Changelog:
-v1: https://lore.kernel.org/all/20260715130430.318421-1-puranjay@kernel.org/
-Changes in v2:
-- Don't use sign-extending moves as some JITs don't support them (AI)
-
-Puranjay Mohan (4):
-  bpf: Inline bpf_iter_num_new() kfunc
-  bpf: Inline bpf_iter_num_next() kfunc
-  bpf: Inline bpf_iter_num_destroy() kfunc
-  selftests/bpf: Add bpf_for() benchmark
-
- kernel/bpf/verifier.c                         |  81 ++++++++++++++
- tools/testing/selftests/bpf/Makefile          |   2 +
- tools/testing/selftests/bpf/bench.c           |   4 +
- .../selftests/bpf/benchs/bench_bpf_for.c      | 105 ++++++++++++++++++
- .../selftests/bpf/benchs/run_bench_bpf_for.sh |  15 +++
- .../selftests/bpf/progs/bpf_for_bench.c       |  32 ++++++
- 6 files changed, 239 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_for.c
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_for.sh
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_for_bench.c
-
-
-base-commit: 1d91ea01185656ac3ee63c5f9f6f8bde3c746b3d
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a78cdabf85607..9b9748b2a7cf5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19721,6 +19721,42 @@ static void __fixup_collection_insert_kfunc(struct bpf_insn_aux_data *insn_aux,
+ 	*cnt = 4;
+ }
+ 
++/*
++ * Inline bpf_iter_num_new(). R1 holds the pointer to the iterator, R2 and R3
++ * hold the (int) start and end arguments. Keep in sync with the kfunc in
++ * kernel/bpf/bpf_iter.c.
++ */
++static int inline_bpf_iter_num_new(struct bpf_insn *insn_buf)
++{
++	/* if (start > end) goto einval; */
++	insn_buf[0] = BPF_JMP32_REG(BPF_JSGT, BPF_REG_2, BPF_REG_3, 8);
++	/*
++	 * start <= end here, so the range end - start fits in a u32; compute it
++	 * as a 32-bit subtraction that zero-extends into r0.
++	 */
++	insn_buf[1] = BPF_MOV32_REG(BPF_REG_0, BPF_REG_3);
++	insn_buf[2] = BPF_ALU32_REG(BPF_SUB, BPF_REG_0, BPF_REG_2);
++	/* if (r0 > BPF_MAX_LOOPS) goto e2big; */
++	insn_buf[3] = BPF_JMP_IMM(BPF_JSGT, BPF_REG_0, BPF_MAX_LOOPS, 8);
++	/* s->cur = start - 1; */
++	insn_buf[4] = BPF_ALU32_IMM(BPF_ADD, BPF_REG_2, -1);
++	insn_buf[5] = BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_2, 0);
++	/* s->end = end; */
++	insn_buf[6] = BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_3, 4);
++	/* return 0; */
++	insn_buf[7] = BPF_MOV64_IMM(BPF_REG_0, 0);
++	insn_buf[8] = BPF_JMP_A(5);
++	/* einval: s->cur = s->end = 0; return -EINVAL; */
++	insn_buf[9] = BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0);
++	insn_buf[10] = BPF_MOV64_IMM(BPF_REG_0, -EINVAL);
++	insn_buf[11] = BPF_JMP_A(2);
++	/* e2big: s->cur = s->end = 0; return -E2BIG; */
++	insn_buf[12] = BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0);
++	insn_buf[13] = BPF_MOV64_IMM(BPF_REG_0, -E2BIG);
++
++	return 14;
++}
++
+ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		     struct bpf_insn *insn_buf, int insn_idx, int *cnt)
+ {
+@@ -19850,6 +19886,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		insn_buf[4] = BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_1);
+ 		insn_buf[5] = BPF_ALU64_IMM(BPF_NEG, BPF_REG_0, 0);
+ 		*cnt = 6;
++	} else if (desc->func_id == special_kfunc_list[KF_bpf_iter_num_new]) {
++		*cnt = inline_bpf_iter_num_new(insn_buf);
+ 	}
+ 
+ 	if (env->insn_aux_data[insn_idx].arg_prog) {
 -- 
 2.53.0-Meta
 
