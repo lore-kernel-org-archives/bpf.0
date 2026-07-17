@@ -1,236 +1,165 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09610370D75
-	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 15:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784303639; cv=none; b=bxKID0hNC7lqMcidmNpheyY/kYf7VFTy38AIB1rVhy4f7UnEtmsiA3NHbgQsczpWt1LqCOaOdI2gfbzs8EX8V9D8oDbrxa9TdoZYNlOOTPk48LKqj1t9hyxtpcp4HDB57KhaHJlYSk/pZ+jPuUjjK7WQ17jA8es0IDyzJ7RSAlY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784303639; c=relaxed/simple;
-	bh=VKuA9f4L9c2fHlbPxYh5eVx4PTiH7moY6MV+G6sSpbw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DZZ5SZWdEgoN3vFtJgT7alyWQNN1OwSZYQjb+6oEBZCMtHAv+LO88wKv055+LQoANqCNSGifE01WTnA06/RGI9QQTiBWUtdnCd1pOyUJ6Yak9PsUbWs+eWrvULC7czcUqT0xPQpGueybzfICUcsZwHpwfjwVQslmo49HeW+5h2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jw4knwCx; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3F842A15C
+	for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 16:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784305795; cv=pass; b=mzOxRKiUvR/hl+cgJz8jIEx4aBB04uSOvGkOBCwsO2eo9ftfdpsjHlaCL5NiqoWZuJQiIaxHaS+5jMu+6VBNwvq0oBD6QVV45JOhkMqTizkaN4m5yykW36aPpl+9n5mtheqTx7yXuBHeSXpaJEd+++83Xjlfrmp0O3zQaH0fPeY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784305795; c=relaxed/simple;
+	bh=KEIvrRuiVrT7+dBXuaA0uQ4mV0n5hVwt+9ry5LaCeWc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YWhuWdBlss0WAnzugK0fjqQHexTLl1w83CZqi6blD/9CAwHDUpbkqOW5lpVq/Y7J0eUM/RQ3lydMt7R7lr5iIAAh3OGL81fll1u7fbgIOQbQKZAeGfZ6pBLd4/OLfasn9RDG1m7kBBRWk0UPVVV+6wWiTWCRpgx+K3fUsCNLeeE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=azzd97Uh; arc=pass smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jw4knwCx"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4953de5be0aso17637155e9.0
-        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 08:53:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="azzd97Uh"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-493be0fbcc5so76125e9.0
+        for <bpf@vger.kernel.org>; Fri, 17 Jul 2026 09:29:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784305793; cv=none;
+        d=google.com; s=arc-20260327;
+        b=nq+R03kEgBtCC293muEFUYfWEoFr4AVQB01biNlOWv6ExXfAzsIYYL5mqIjFJMKzUs
+         +sVOMmfBWhO/XOO3c2Hw2UC5/bc4eeOuwNZu9+7V7f8E8od9099gzE0aDuX/5eqTNoCN
+         DQNV1fOchJ0I1y6qFLNZqueHnrLiRiS+eSoqopGu1hw5B0dFkF4Sr4/2FYGlLaiDnHFs
+         wEeWmPg7pjkpqaZjgOsGgUH1jw3Jc5Vl7K9YLN3ON7bFAba39ZMh1Mmx0fNNN+rDNz+A
+         uLbJejdnovHmtcPWC4j3oZX+uC9phwDebwsAFC+7TJQmm8D9rTgF3tCeT98SU5QITwFw
+         Nr2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=J1fiEC3LJWgMWiE+exeLjiuwsjKxQMa3Wx9AO5yvpjU=;
+        fh=bZHGP0q1Qy4CL6/Xb7Wxvp0NpTkNlhrZ9peI4Twk3TE=;
+        b=dIAfP1+HfvdHH7ZJWS5FD4rV/2TmoYoRqrBb7oC3bKbYwwy7+YF1M0Wj0TMmZGJETw
+         Z1/qyNIrob7OLMY45f9BwkBlsSvjtBmNLyPjNNS4Rb3GWf36pdEHAe7kId4jXlLYZAJO
+         sxm2bL7fqT/qcz6XAKygTGJwcFfS8eHYULLI1tfG8xX8TwIme4ii7Gps2cJJ8Sr6Wffn
+         honB7ES6Cxk1hhx450ajhLtlnofy8ZNCmS7OgQQQEyWw2S2eX2JrKUm5Fcoa+YCM6PEg
+         cocuJUWQtMlE2PdyC03xdL909NeNcVWs2MSNUMCRqUIfbviOi6kKxMd47xn1nS5qWE3m
+         rcfw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784303634; x=1784908434; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QJZFhVlVRJBtOvN4CxOHlR9fsZLHag9Vm77ey5DeUVg=;
-        b=jw4knwCx20jIkw9/m85F9eMM8jGA+jOCrq7YduUU0ueF2pg9RcnNUJp7DxlVqVVrpI
-         DbjjWuC9tuVMmZXjl6OY3K6NDukGxOPEBo8T6l4lM2SyjQ1sIGx4KPNsh8M4wUyskjiR
-         IFAHo1rzLJ9Akhgn1q4Y7XlMD/Rf54Mkw4/NXcQuLOk8jSgbfaZr75WU0Sd0TUAD4dey
-         4rQ0wFGWceojbHcpqee/LEQukU+ZAJpWc0aI5u24We9f0X1XrPKvCJjSFB6yGR1joQIj
-         N4Wi8WL+xauoo3cFQVA6oloN5QEmZZNpsBzvLHvUyySE8A17X6YCupJfhipt8xxRqO09
-         ZU4g==
+        d=google.com; s=20251104; t=1784305793; x=1784910593; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=J1fiEC3LJWgMWiE+exeLjiuwsjKxQMa3Wx9AO5yvpjU=;
+        b=azzd97UhRk4GDudHUsml6PbuUSQ/8qXtL/v+QsrQ8C+U+JGlD4zoZZ9/EfcXrgPJ3I
+         Fs/TE80q6YhRcj3REYloQtH/mRXRX1ifItzF2Ge8OwuZyTti4F3CCDYVv92jhXvXrPhd
+         48gLpFL9cxUn5jUtOk+0ocn3a66wjr5R3YcYdMPRaEyzAs2O3Yx5Kx90CuGaH00smq2f
+         FaXDxS85tOUL8WuG3FFGeN3OvOl7g7mcBhzMDPSCMnAaEso9hb7vi/oqxx1GvtANZmJp
+         rdAzN55SUo7rpwLMW1+L94jYxA+FR6URGmEwloPvZlJunWpdo4AMFpy5Omn8dv1CZQYz
+         bZcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784303634; x=1784908434;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QJZFhVlVRJBtOvN4CxOHlR9fsZLHag9Vm77ey5DeUVg=;
-        b=XlwC6q3MimbdddlGPwALRLElYC3kA7VPU8uMrxHd+SkBpKfpiat3gHIGPhmok50cej
-         VCtQVm6yy/WEfj6xo84ymrmhY1fB+IXSQ99AQbXqYfn1P1q6UTi3LwQyrmZZsT+hnpte
-         /5FGrB32UCfoxAoiI+f7Oz1z7gOhhclzE1RzaFwzk75sHcUiHHYD9gutBgWg6YpjaykC
-         dPrDuojktEDmcNHkDCz0KBLLI6+ICN2w6gGX0Aqg5PVoeDxL4Q6rj6JeEdmucQKUwUIP
-         eaPexi/Fi+DrKDavZSQSfN8EOgbnFEjsdZBPSpVPERiGZ6uIcUMzdmEh62GMbXKlQIS5
-         VCDA==
-X-Gm-Message-State: AOJu0YzPsJxa6AN1jE7kPPvYaCxoiXORBBfli3lF6yyXfNZNKYL3Hyih
-	beStSVP0G6rTWwIQZufFPGrDk7R/TeLOHghMtMRnTQCcfWmKrOHhdHGS
-X-Gm-Gg: AfdE7cmxe4aT1hJphj5uTSwky6E4gAyYlhZ7ovPZz8T/qNdK8/VRCZCIiKR3KtjY6j7
-	+I7LJZ/rMnexH7Tfa1vUYy4AzgposXKfRcR5dZD4nIBMdNtyG/LPl92KGk763zadFJ9HnJ3BRdo
-	Mw3rBwlEyYqgEK1zsEniem6pUOfJBNEXNRGCEqmXnAXnWCJdx1YamAM7Ks50hSS4SUKNNSiNIA8
-	Te5xMcuf7InGehzFzMMjr/0V/FWChHJOB9bgdBRXs3KDqjsRRfFFsuYlP7h2oYGUKMRMOpFkHZm
-	IkUiAIT736ShhLm2CHzh2ZsO/2UGPjljhylTtifoQvJ/+jGWjZcKWBmxng0e2rzL2WHdwtksaa7
-	tkIMnH+U+E9fiOAjJG+q8Hzngn6OW0DUBqhERds85/T0/aQSQopM1EL+hJjrB8lWOpmjJHtlX4l
-	W16S/2ZQXRym7lqDKVH1xcYo/AV3F4EHnL0U2WpeMv2X67RVrmq4aOU7gV5+DHCYxnQA==
-X-Received: by 2002:a05:600c:4504:b0:495:495b:9248 with SMTP id 5b1f17b1804b1-4954a3d0cf9mr35460595e9.4.1784303633793;
-        Fri, 17 Jul 2026 08:53:53 -0700 (PDT)
-Received: from localhost.localdomain (host86-153-201-25.range86-153.btcentralplus.com. [86.153.201.25])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63edcf8dsm5321369f8f.27.2026.07.17.08.53.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2026 08:53:53 -0700 (PDT)
-From: Nnamdi Onyeyiri <nnamdio@gmail.com>
-To: nnamdio@gmail.com
-Cc: bpf@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	horms@kernel.org,
-	jakub@cloudflare.com,
-	jiayuan.chen@linux.dev,
-	john.fastabend@gmail.com,
-	kuba@kernel.org,
-	kuniyu@google.com,
-	ncardwell@google.com,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	sashiko-reviews@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/2] selftest/bpf: added selftest sockmap_basic/sockmap recvfrom eagain
-Date: Fri, 17 Jul 2026 16:53:48 +0100
-Message-ID: <20260717155348.54975-3-nnamdio@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260717155348.54975-1-nnamdio@gmail.com>
-References: <20260717155348.54975-1-nnamdio@gmail.com>
+        d=1e100.net; s=20251104; t=1784305793; x=1784910593;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=J1fiEC3LJWgMWiE+exeLjiuwsjKxQMa3Wx9AO5yvpjU=;
+        b=X9ssGLeb5ch4WH9Fq3lhrrY4+GAnrQyzu4E29TFLgB8Uhh0o1ZiFrK2Yc1kpwJp3fv
+         kBjSrk4nJvo2Deuwi57oBoem2StwQ5QY1RE7LlX8UoXgnn/IAhQ4akliJG2YlyBsiTML
+         74p1gW2x68oq0cwdScKYQftdI82Ui/gZ8Q3YNYYDkx46KXLNnIKWRrj1YsLiwu4oEvv+
+         dc+Wn3e2Xhow6bJG1ntamsqshWEE5wvUGklPCDcSOV75qrsZgD0IBtBD+5EGky2C2rNK
+         3eCQnVitWogIKGkQ07NKa7TISDu7cE6xJbLkB0aYb5qPkDhyXG2D04GGOi+IA3yhU0QF
+         6TTA==
+X-Forwarded-Encrypted: i=1; AHgh+RqBqBNTBstUNZAtp/x54mY4qb6LXl8PAkTgXZzY39+wFqy2eGKq8Dd7JJ5C34rzBeR2GaU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0TO8wVBuacRBXMakvBS3PYbdV6mIawwRLF7kAn/Lq1+cY3XT1
+	V7dJdkbAOK15SOEcZKvnsa6h8pEgFmp++b5qFWApdVF9EMDcIcJ8dNN/y4UdkpVG716W5eWsLW8
+	5i8cVkri58jnyiv3qTllixD44HLdtw7Evm6TnNwTg
+X-Gm-Gg: AfdE7cmH/E+8DlyfQ3XlH08/o7wQ1QZAUBPnE/uf5/3KWBDS87Ruz/t8YymeeNbtv0l
+	itSfftG/Imkvvm8er4DYeVFDR7G6oSy9QDRCjzlakj8HDVLTz7OAH6pIel1/c1nD3mXK3xhqb1R
+	iPxl+ma20OiyTNNHTpfttMDcW/fdoZVUNN8BLgQNX5b7Tjaa4/4Na+4nFcmntt7k8D1hRtzZvUI
+	nZSEblT8a6wGwsJECLi7xvBktjlRFQTNQI7AASpOM0BiGQy+I51/QWA4kz9ZPPnPlD3eD38ekod
+	4Ju7R09EE/pxwgtct690gvYN/Lg=
+X-Received: by 2002:a05:600c:41c5:b0:493:aed4:8d03 with SMTP id
+ 5b1f17b1804b1-4954f623a21mr164335e9.9.1784305792127; Fri, 17 Jul 2026
+ 09:29:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260701192210.2997769-1-tjmercier@google.com> <akbPrI67h5btdI44@devvm29614.prn0.facebook.com>
+In-Reply-To: <akbPrI67h5btdI44@devvm29614.prn0.facebook.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Fri, 17 Jul 2026 09:29:40 -0700
+X-Gm-Features: AUfX_mwkE9srLqf9jV3ClopD-np-tcerODpRpCcyM1eqJKlhjubKKS2HeTkHP3I
+Message-ID: <CABdmKX0-tubji_pBiaZbePrxVLA9qkw5ez61wyzjDz8-pko9SQ@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: Open /dev/udmabuf O_RDONLY
+To: Shuah Khan <shuah@kernel.org>
+Cc: kraxel@redhat.com, vivek.kasireddy@intel.com, kuba@kernel.org, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	Bobby Eshleman <bobbyeshleman@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-These selftests exercise the tcp_bpf_recvmsg() and tcp_bpf_recvmsg_parser()
-functions, to ensure that they are properly handling spurious wakeups in
-tcp_msg_wait_data().
+On Thu, Jul 2, 2026 at 1:53=E2=80=AFPM Bobby Eshleman <bobbyeshleman@gmail.=
+com> wrote:
+>
+> On Wed, Jul 01, 2026 at 12:22:08PM -0700, T.J. Mercier wrote:
+> > Write permissions on the /dev/udmabuf device file are not required to
+> > issue ioctls and allocate udmabufs. Applications should be opening this
+> > file as O_RDONLY. The BPF dmabuf_iter selftest already does this. [1]
+> >
+> > Users are pointing to these selftests as examples of how use udmabuf,
+> > and encountering permission errors on systems where write permissions
+> > are not available on /dev/udmabuf. Apply the principle of least
+> > privilege to selftests which use udmabuf by removing the write access
+> > mode from drivers/dma-buf/udmabuf.c and drivers/net/hw/ncdevmem.c.
+> >
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c?h=3Dv7.1#n49
+> >
+> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > ---
+> >  tools/testing/selftests/drivers/dma-buf/udmabuf.c | 2 +-
+> >  tools/testing/selftests/drivers/net/hw/ncdevmem.c | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/=
+testing/selftests/drivers/dma-buf/udmabuf.c
+> > index d78aec662586..ced0b95c876c 100644
+> > --- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> > +++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> > @@ -140,7 +140,7 @@ int main(int argc, char *argv[])
+> >       ksft_print_header();
+> >       ksft_set_plan(7);
+> >
+> > -     devfd =3D open("/dev/udmabuf", O_RDWR);
+> > +     devfd =3D open("/dev/udmabuf", O_RDONLY);
+> >       if (devfd < 0) {
+> >               ksft_print_msg(
+> >                       "%s: [skip,no-udmabuf: Unable to access DMA buffe=
+r device file]\n",
+> > diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/=
+testing/selftests/drivers/net/hw/ncdevmem.c
+> > index e098d6534c3c..8114a29692fd 100644
+> > --- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> > +++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> > @@ -149,7 +149,7 @@ static struct memory_buffer *udmabuf_alloc(size_t s=
+ize)
+> >
+> >       ctx->size =3D size;
+> >
+> > -     ctx->devfd =3D open("/dev/udmabuf", O_RDWR);
+> > +     ctx->devfd =3D open("/dev/udmabuf", O_RDONLY);
+> >       if (ctx->devfd < 0) {
+> >               pr_err("[skip,no-udmabuf: Unable to access DMA buffer dev=
+ice file]");
+> >               goto err_free_ctx;
+> >
+> > base-commit: fbb7ad31ab376c5101b2ac7205fad0344fd2de60
+> > --
+> > 2.55.0.rc0.799.gd6f94ed593-goog
+> >
+>
+> Reviewed-by: Bobby Eshleman <bobbyeshleman@meta.com>
 
-The expected behaviour is that recvfrom() does not return an EAGAIN
-error.  If the spurious wakeups are incorrectly handled, this assertion
-will fail.
+Thanks Bobby.
 
-Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 115 ++++++++++++++++++
- 1 file changed, 115 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index cb3229711f93..852a12b17e6b 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -1373,6 +1373,117 @@ static void test_sockmap_multi_channels(int sotype)
- 	test_sockmap_pass_prog__destroy(skel);
- }
- 
-+static void *test_sockmap_recvfrom_eagain_thread(void *arg)
-+{
-+	int fd = *(int *)arg;
-+	char buf[1024];
-+	void *result = NULL;
-+
-+	while (true) {
-+		ssize_t len = recvfrom(fd, buf, sizeof(buf), 0, NULL, NULL);
-+
-+		if (len == -1) {
-+			if (errno == EINTR)
-+				continue;
-+			result = (void *)1;
-+			break;
-+		}
-+
-+		if (!len || buf[len - 1] == 'e')
-+			break;
-+	}
-+
-+	send(fd, "test", 4, MSG_NOSIGNAL);
-+
-+	return result;
-+}
-+
-+static void test_sockmap_recvfrom_eagain(bool with_verdict)
-+{
-+	struct test_sockmap_pass_prog *skel = NULL;
-+	struct bpf_program *prog = NULL;
-+	size_t buflen = 1024 * 1024 * 25;
-+	char *buf = NULL;
-+	int map, err;
-+
-+	skel = test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	map = bpf_map__fd(skel->maps.sock_map_msg);
-+
-+	if (with_verdict) {
-+		prog = skel->progs.prog_skb_verdict;
-+		err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+		if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
-+			goto cleanup;
-+	}
-+
-+	buf = malloc(buflen);
-+	if (!ASSERT_OK_PTR(buf, "malloc buf"))
-+		goto cleanup;
-+	memset(buf, 0, buflen);
-+	buf[buflen - 1] = 'e';
-+
-+	for (int i = 0; i < 200; ++i) {
-+		ssize_t sent;
-+		char ignored[128];
-+		pthread_t thread;
-+		bool thread_created = false;
-+		size_t rem = buflen;
-+		int c = -1, p = -1, zero = 0;
-+		bool success = false;
-+
-+		err = create_pair(AF_INET, SOCK_STREAM, &c, &p);
-+		if (!ASSERT_OK(err, "create_pair"))
-+			goto end_attempt;
-+
-+		err = pthread_create(&thread, NULL, &test_sockmap_recvfrom_eagain_thread, &p);
-+		if (!ASSERT_OK(err, "pthread_create"))
-+			goto end_attempt;
-+		thread_created = true;
-+
-+		err = bpf_map_update_elem(map, &zero, &c, BPF_ANY);
-+		if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+			goto end_attempt;
-+
-+		while (rem) {
-+			sent = xsend(c, buf + (buflen - rem), rem, 0);
-+			if (sent == -1)
-+				goto end_attempt;
-+			rem -= sent;
-+		}
-+
-+		err = recvfrom(c, ignored, sizeof(ignored), 0, NULL, NULL);
-+		if (err < 0 && !ASSERT_NEQ(errno, EAGAIN, "recvfrom eagain"))
-+			goto end_attempt;
-+
-+		success = true;
-+
-+end_attempt:
-+		if (c >= 0)
-+			close(c);
-+
-+		if (thread_created) {
-+			void *retval = NULL;
-+
-+			pthread_join(thread, &retval);
-+			ASSERT_NULL(retval, "retval");
-+		}
-+
-+		if (p >= 0)
-+			close(p);
-+		if (!success)
-+			break;
-+	}
-+
-+cleanup:
-+	if (buf)
-+		free(buf);
-+
-+	test_sockmap_pass_prog__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -1451,4 +1562,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_multi_channels(SOCK_STREAM);
- 	if (test__start_subtest("sockmap udp multi channels"))
- 		test_sockmap_multi_channels(SOCK_DGRAM);
-+	if (test__start_subtest("sockmap recvfrom eagain"))
-+		test_sockmap_recvfrom_eagain(false);
-+	if (test__start_subtest("sockmap recvfrom eagain with verdict"))
-+		test_sockmap_recvfrom_eagain(true);
- }
--- 
-2.52.0
-
+Shuah, would you mind picking this up?
