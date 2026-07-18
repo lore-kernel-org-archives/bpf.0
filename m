@@ -1,202 +1,151 @@
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE0A1F938
-	for <bpf@vger.kernel.org>; Sat, 18 Jul 2026 07:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75DF2DB794;
+	Sat, 18 Jul 2026 10:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784358990; cv=none; b=dBB//BQr9hgQzY5rUHkHFY5MphzTsyRkS66+jltDurxG6pIf7iHiSra4VKyXPt7F8mD9i8jq3xEPv2q/LFhTW2STIdsSLme5XgE6tlalSFCWfpraGjOrzu+CHzBQIW0pZY0yjptxXDZtjFQyrKOhSnAsEMGBSv4al3fpAfmHMQI=
+	t=1784372103; cv=none; b=Z49NWUgIcG01ZpnayebeTNvloq2IkGpMgKbxCkqvKDw1pchQLMdPgD4MmznnExBD3WbpTRmAReQzHsVDLAgxz9QUPePYwJmqwzKBCw5FfDteBHj4d3T95Dq6EXWszKkbxxgL/EN+Mjl6uDzmUURHmtFeK65acZzchyQ6jflAN8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784358990; c=relaxed/simple;
-	bh=j0sKNsEiZ5IWClk6MuxNEOruBhLWU3Lx+JlxGKTz9cA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=gMnIn5qYNUCSeiwO3jAjFwQfRarJaqzueXKclP20zTnsX7mGlmOeDcMqK9PhnvufwXcuc7CkHlp3W2iL12qoOhh8WKXXNGUnppC75QN4liVQwyWGsu4j2rO+yWMhQ2ygIirPbyA4Q5hwsoUvJjFm6PiJ+zVcRlORF/XCUYyvijM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gp2J+JyH; arc=none smtp.client-ip=209.85.221.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784372103; c=relaxed/simple;
+	bh=VPez2kCk8EUMWhoDf8qATR/LDnFE4PepJlxC3mOAojQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cSkS1PLVHW6511OZex2mVJsIuwm3od81JrCleokIcnkGeM+eOkkFsCuvG7o7H2tqURKFi0bSTvk4T2lUN3bLjAfb/haUDlz688J8R1urFXeWhOGhGL7eGbPtQT1CUyxZUhkV9How29rayzDdfncLeuOi1huO6BrgBH9Z4DUarCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aiI8R0kP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gp2J+JyH"
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-4758bd3731bso1916515f8f.0
-        for <bpf@vger.kernel.org>; Sat, 18 Jul 2026 00:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784358986; x=1784963786; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=fl4aKug68tRSQQajO04Rgp3fva/Tsm5uZ0ANZn5nlwE=;
-        b=gp2J+JyHzjzbNw+F372gJvuoZG4IOxbslX8/swyVLrKSkclUIIfqmWMyQ5A2GTWntp
-         XJsFEOVCxpOhIv6IpDtoqW9PwqLEDlZ7nSOASF3UHheg4XmAedNSiiynO/OoWXPbKSi0
-         0NTfQASX1WBhk1XIQDetYdV+ggAFwymrZ6DkiFilNtCsn1micLTGBeUQog6of2U476Iv
-         xfGwVXnWDi+6hMvH2UYx0M77o0oeE4HaFvlaN37xMAm7J3FFwh/EINTnaVZgEPGECELC
-         xHYCUlL4wMgVyyfooioRRoB76b/gxMjjF9FNH6E90kbWBVGs/PV5JKrCJdRRXO+7ORgt
-         QLxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784358986; x=1784963786;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fl4aKug68tRSQQajO04Rgp3fva/Tsm5uZ0ANZn5nlwE=;
-        b=p96lKRZvfDM2NpKSl/YcQ1KsPKgeKjDj3OHMJBzcwbEdhYbzSqCJ4MF5Wzks4gI6Z0
-         KOPHwz1ZHFX8/CH0+OioOEL/4K/fUHsmFog8ohr24CJ/6vaLXdGcRfB/Tireq5rqgkV9
-         DLfkYTB72rqlaAGPfJaxBdbf9s/Uz4F3Va8zuHst89ufXRGU2uw8Ws1soVj+lq95v8Hs
-         RXncxmJU5diXlyX7vJYCIyzKXtNErWiiepxdqniPUArKJ318B1UQen4Gq07VUaNEspZW
-         dU8FEwbprFKw6x497A8VGfX4275LS6h64N9/mmNUeckGf+TJnUx4Vjt+IEPkG8WguNNV
-         i6hQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqVjkyJtRjn+BdkVm2z/V9x7Nw/I0YT6FQ1opMp0BWxO3l2+8s5af6Z00YhSLRI/48TFZQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlvSUtP1WtwR4wXlwQl4H86svLAENYnJeMA16/qEQVMYNiIufV
-	0vphcOkMnenPK+hv99436mY27fBi8FIOpR9OyFeQ2HNbsTvcTlvThyy3
-X-Gm-Gg: AfdE7clWQ6A8X7F9rhd1BrOVUeMP1K5t0RQDmv1QYN5tznKCk7ZNpX+Vo1jD69nEeZk
-	c56wy9RO9RbZif8SvLH9kFKSAG3tDIjhcDqbjcSqvYlnNLDyn9tv2enRoj9sCuMo5aJh5vhkOsx
-	VUplREDmsQtE2/obOduQJIT9vqMbGWufuq/mcwDj32FWjw/yrH53dDEX8Wb6BssamYUGpAP7hQH
-	LbrWFoHHfDyObGpJDprwA0iLQI8EUqXk4VDN6oRFfjWWcEdCGRoA9SE7hdpOpvz5B+wphR7/Gw3
-	YUyJxsidrHZPI2o1CZccI94+ELpoZaqptXX9rTloo7FOpUTSwj8ZNMHN/f0TwgL8BhsmxfrXAkq
-	szkdiH9oliEysCy83VZRJ0R4wsdZOsHWCbjT1n03mhGMwWt6bZmRs1wtlXjYz+92D16RPiZIRb9
-	E8lr3B1gZhDmOP7sA4SXIB4LINA3iymNOtDPyYUpqnniC3rhIgWBUHJlVSqk1LINOV5N27PvTID
-	VU0GYjvyjjalFsztavtfB3XlXITthJtIWPWuUXWDAnx
-X-Received: by 2002:a5d:5f92:0:b0:473:66e2:37d4 with SMTP id ffacd0b85a97d-47f5a66523dmr13070017f8f.27.1784358986246;
-        Sat, 18 Jul 2026 00:16:26 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e52aa4sm10798405f8f.10.2026.07.18.00.16.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Jul 2026 00:16:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aiI8R0kP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B31D1F000E9;
+	Sat, 18 Jul 2026 10:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784372102;
+	bh=6Wk95nsyLty8ZIxsRyt5wCr5/RC7WWcTwZjDgbSZNSs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=aiI8R0kPNLSytO43AkjaOcOjJhYehi+jiu0VA1Efoyqtg1kBLTrE0UTrpEjDlMu/K
+	 dnFZ5QtHXVwRiuDjw8yONGi0FSYk9RBir2PD/U99wZJ1Vb4q+9Q4RbVpWwNVcr91Yq
+	 r26wxPsubsi+R9hxTg+TqhAGi1e756ZR7odtaCpKb0PSYO/H5GFAFLy4cbmG5YQ0re
+	 pgLWdpkAR+xyXqa9zjTTRyaD6kK/ktq2b15gni9Bc+q78KU5jfhbAVk+s5GWZpn6Tg
+	 mzKAgRuA9T7wlRb+kZ1gwGzSToi43PYttqNOzzE6ePr5aWjBeK4df/8CUqk7vVM6BB
+	 us/qCDz52pdng==
+Date: Sat, 18 Jul 2026 13:54:50 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	David Hildenbrand <david@kernel.org>,
+	Michal Hocko <mhocko@suse.com>, Uladzislau Rezki <urezki@gmail.com>,
+	Toshi Kani <toshi.kani@hpe.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Dev Jain <dev.jain@arm.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	David Carlier <devnexen@gmail.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"Denis V. Lunev" <den@virtuozzo.com>, stable@vger.kernel.org
+Subject: Re: [PATCH mm-hotfixes v5 3/5] x86/mm/pat: acquire init_mm read lock
+ on attribute change to avoid UAF
+Message-ID: <altbeuTZ0HCz_7HS@kernel.org>
+References: <20260717-series-vmap-race-fix-v5-0-606a0ac6d3e5@kernel.org>
+ <20260717-series-vmap-race-fix-v5-3-606a0ac6d3e5@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 18 Jul 2026 09:16:25 +0200
-Message-Id: <DK1IGXGCR7R7.2ZVCIOYH3JAPL@gmail.com>
-Cc: "Tejun Heo" <tj@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v1 3/9] bpf, x86: JIT __arena kfunc argument
- rebasing
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260715220052.1590783-1-memxor@gmail.com>
- <20260715220052.1590783-4-memxor@gmail.com>
- <bbf82d80eb0dc307d09a6c7cc33c23063a55a90f.camel@gmail.com>
-In-Reply-To: <bbf82d80eb0dc307d09a6c7cc33c23063a55a90f.camel@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260717-series-vmap-race-fix-v5-3-606a0ac6d3e5@kernel.org>
 
-On Sat Jul 18, 2026 at 3:33 AM CEST, Eduard Zingerman wrote:
-> On Thu, 2026-07-16 at 00:00 +0200, Kumar Kartikeya Dwivedi wrote:
->> From: Tejun Heo <tj@kernel.org>
->>
->> Implement arena argument rebasing for kfunc calls on x86. R12 already
->> holds kern_vm_start whenever the prog has an arena, so each tagged
->> argument costs two instructions emitted right before the call:
->>
->>   movl %eN, %eN         /* truncate, clear the upper 32 bits */
->>   addq %r12, %rN
->>
->> A nullable argument tests the truncated value and jumps over the add:
->>
->>   movl  %eN, %eN
->>   testl %eN, %eN
->>   jz    1f
->>   addq  %r12, %rN
->> 1:
->>
->> addq carries a REX prefix for every argument register and is always
->> three bytes, so the jz displacement is constant. The sequence is native
->> code generated after constant blinding has run on the BPF instruction
->> stream, so blinding never sees the rebase and needs no special handling.
->>
->> bpf_jit_supports_arena_args() is not flipped yet; that happens when the
->> struct_ops trampoline side is in place as well.
->>
->> Signed-off-by: Tejun Heo <tj@kernel.org>
->> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->> ---
->>  arch/x86/net/bpf_jit_comp.c | 49 +++++++++++++++++++++++++++++++++++++
->>  1 file changed, 49 insertions(+)
->
-> Hi Kumar, Tejun,
->
-> Sorry for the delayed response.
->
-> I'd like to push back on the JIT based approach.
-> As far as I understand, it saves a 64-immediate move per callsite,
-> for jits that have dedicated arena registers (all but s390),
-> but it puts implementation burden on each jit.
->
-> There is an easy workaround regarding 64-immediate move:
-> use R0 as in the original patch-set by default,
-> add a jit_has_dedicated_arena_register() predicate +
-> and encoding to address this register from __internal__
-> bpf instruction, say BPF_REG_12.
->
-> I'd prefer to keep the bulk of the implementation in one place instead
-> of verifier.c + 6 jits.
->
+On Fri, Jul 17, 2026 at 06:30:09PM +0100, Lorenzo Stoakes (ARM) wrote:
+> A previous commit protected us against races between ptdump and CPA
+> collapse, however one still exists between attribute changes and collapse
+> as reported by Denis V. Lunev (linked).
+> 
+> When an attribute change arises, a lockless page table walker obtains a PTE
+> entry, which is later written to via set_pte_atomic():
+> 
+> ...
+> -> change_page_attr_set_clr()
+> -> __change_page_attr_set_clr()
+> -> __change_page_attr()
+> 	-> _lookup_address_cpa()
+> 	-> lookup_address_in_pgd_attr()
+> 	-> [ lockless page table walker ]
+> -> set_pte_atomic()
+> 
+> There is nothing preventing a concurrent CPA collapse which can free the
+> PTE that was retrieved here, resulting in a use-after-free.
+> 
+> With the mmap write lock taken on init_mm over CPA collapse, we can now
+> resolve this race by acquiring an mmap read lock on init_mm over
+> __change_page_attr_set_clr().
+> 
+> This locks across the whole operation over which the walk and the PTE entry
+> write occurs, solving the race.
+> 
+> It is safe to do this here, as no spinlocks are held upon entry to
+> __change_page_attr_set_clr().
+> 
+> The CPA_COLLAPSE flag is only set by set_memory_rox(), which exclusively
+> operates upon vmalloc ranges, and on x86 only within the module mapping
+> space.
+> 
+> This is important, because some callers directly invoke
+> __change_page_attr_set_clr(), bypassing this lock. However, none of these
+> operate within the module mapping space.
+> 
+> * cpa_process_alias() - a recursive helper called by
+>   __change_page_attr_set_clr().
+> * __set_memory_enc_pgtable() - operates on the direct mapping and (via
+>   __vmbus_establish_gpadl()) the vmalloc mapping space.
+> * __set_pages_[n]p() - called by set_direct_map_[invalid, default,
+>   valid]_noflush(), __kernel_map_pages() - operates on the direct map.
+> * kernel_[un]map_pages_in_pgd() - operates on EFI ranges.
+> 
+> This work is based upon Denis V. Lunev's excellent analysis of the bug with
+> gratitude.
+> 
+> Link: https://lore.kernel.org/all/20260626163213.2284080-1-den@openvz.org/
+> Fixes: 41d88484c71c ("x86/mm/pat: restore large ROX pages after fragmentation")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> ---
+>  arch/x86/mm/pat/set_memory.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> index d1e63f7d267f..301fb9e77d91 100644
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@ -2122,7 +2122,9 @@ static int change_page_attr_set_clr(unsigned long *addr, int numpages,
+>  	cpa.curpage = 0;
+>  	cpa.force_split = force_split;
+>  
+> -	ret = __change_page_attr_set_clr(&cpa, 1);
+> +	/* Avoid race with concurrent CPA collapse. */
+> +	scoped_guard(mmap_read_lock, &init_mm)
+> +		ret = __change_page_attr_set_clr(&cpa, 1);
 
-I considered some of these options.
+There's a small issue with this. debug_pagealloc_unmap_pages() ends up here
+and since it's called from __free_pages() it can be in an atomic context.
 
-I think this is reasonable for kfuncs. We can retain move to R0 for JITs wi=
-thout
-that predicate. But what do we do for struct_ops? Earlier prototype had to =
-reload,
-translate the arg, and store it back into ctx. IMO that's way uglier than j=
-ust
-translating while storing into the ctx during save_args().
+>  
+>  	/*
+>  	 * Check whether we really changed something:
+> 
+> -- 
+> 2.55.0
+> 
 
-At that point, the argument for avoiding JIT-specific code in favor of gene=
-ric
-sequences becomes a lot weaker.
-
-Now we can argue for having some way to inject generic bytecode sequence in=
- the
-trampoline before BPF program is called, but that requires more conversatio=
-n.
-This case would be the only user. If we have more, it is probably worth a
-consideration.
-
-> =3D=3D=3D
->
-> Tangential to this, I think that __arena vs __arena_nullable is a footgun=
-.
-> Is it really so performance critical to avoid this null check?
->
-
-Just imagine multiple arena arguments. Let's think beyond the immediate use=
- case
-for a moment (in scx). With the test+branch, that's way too many instructio=
-ns
-before each function call to translate each argument. In scx I think one of=
- the
-kfunc / struct_ops callback already did not need __nullable. In general it =
-also
-stays more consistent with us opting into __nullable for arguments, than ha=
-ving
-it by default.
-
-Yes, __arena means different things in different places, the meaning is now
-context-dependent. In the program, it just indicates global function takes =
-arena
-pointer. NULL-ness or not distinction is erased, just like for PTR_TO_ARENA=
-. For
-kfuncs, the translation happens from program to kernel, for struct_ops, fro=
-m
-kernel to program. Better naming can probably avoid some of the overloading=
-, but
-anything else seems uglier to spell out.
-
-> =3D=3D=3D
->
-> On more tangential, these flags would represent a third way to encode
-> arena arguments we already have:
-> - KF_ARENA_ARG{1,2} for kfuncs
-> - ARG_TAG_ARENA for global functions.
->
-> Any ideas on how to unify these?
-
-We can gate this new one behind type tag support in GCC, and begin using th=
-ose
-instead. That still won't allow unification with KF_ARENA_* ones.
+-- 
+Sincerely yours,
+Mike.
