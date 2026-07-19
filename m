@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA9E1E520A;
-	Sun, 19 Jul 2026 13:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B528379C56;
+	Sun, 19 Jul 2026 13:56:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784469389; cv=none; b=O1etV6pVp+dMsOeUT4YZOuVJ7GGR16y2xNGzfPtqPuiBPnpOfsl8Cb7rhjzZ4AdGcydvmSZfXcMOYeA3q1RR3WVYyVBDzBqpuQwXLyQt4Q4wLLdzh8zT7FDENW0swki0bdCTE08WqZkLSaUBtqtm8Y80NhQtKi7iFE7L3NOlZ2s=
+	t=1784469392; cv=none; b=NkcCC/RJGIrvcXhBeRj81eqCy2OBZoG5gDvGgHB0Qf0UUULJ96tBqYrc6qxvrVhI2LYnzCn61c3ppGZNGTgxjeun5OOtRj+D9ZFn17TOQ4vBSc2CgirNj48Br3XfbopZ6UmVOVm/Cximlkhpg8fOWjJRlFPVpb4lzEZfQJg8x+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784469389; c=relaxed/simple;
-	bh=uLcLgSw3/jdC0zr4UwoSgWly6XpwWPjEuo6lGBf64TA=;
+	s=arc-20240116; t=1784469392; c=relaxed/simple;
+	bh=etL/nuSSqDIoXNFrE7jx7xgtltKO6zzLuG8A3gsb5B0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LYPferuAEZgyRQYICzJoO1sMUEfgvZxCNApzmrI69xodzADj2XJXP/PjmqQcfNAJzaT2Q/MxL8qRJA0hKLu2S5XiiOfhRR7W1IBJF11tyPjdAB95RwRqLr11E3hhbdso5e/SwQhYiErcw9HTv2MK/NH6Pm86Sn5O5NQ7/f1a0yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AEPu8zJm; arc=none smtp.client-ip=192.198.163.12
+	 MIME-Version; b=iQ5LtatOZ45zrpL/OKgBNwFKxGNlsXAOLfl82k0U4s2KImyowLrHeuw3m0udDbQkD3DcSTj/V5yoEV7Jh4B2nfte8y305b62Wd/q1YD/jGp81s53sxlEJ6GgxUXailb6pxxq1TC+/4Uyx1pYE2djqghk1wqwwVWO2jUmMJH5RwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FFixsAqn; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AEPu8zJm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FFixsAqn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784469388; x=1816005388;
+  t=1784469391; x=1816005391;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=uLcLgSw3/jdC0zr4UwoSgWly6XpwWPjEuo6lGBf64TA=;
-  b=AEPu8zJmttaWA5+kXaQZiFWCJXTDlNHst4JHvmgXbiu6WFCgn5tKQH32
-   40n9jnMqXsvVQJW4a98sep+kweiKDzZ+wSre1dOuZlQlgtBnJ/ySwPRhr
-   +F+VG4Z9R67xT4EgUpuMp5NtK9u4nYQ5tR1qhHOxlRQFOrSSUjLAkhGRK
-   HJ5bkdezeLRsxFqf3Et8c40MtSWT6Nyzo/tyKMBYZ+G5nQIABxAUvtsca
-   eoSwiBStl3tuAV61WBI2cc9SpZTYpUIU6zb/BbdJnjoQdRIUvrfl/gtff
-   bMDFbC5wVp+EtdmUPFnqNXVlc0sezlELry6da1SuwfZpHb56yvcQeRkL3
-   Q==;
-X-CSE-ConnectionGUID: 74n2KyZPRtiQxxPHn3pwbw==
-X-CSE-MsgGUID: J8yKmGhGSJ+8L1N8AAKbQg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11851"; a="88894160"
+  bh=etL/nuSSqDIoXNFrE7jx7xgtltKO6zzLuG8A3gsb5B0=;
+  b=FFixsAqnT64RxDzKoYDwZ853FjGz4SuQu0SXZ+6Tl7aH4xXLiWtuH7uO
+   HY0lMZgNUyG6eBIyYXb3eB3AyqVBgkx6I9pGpLV0xeF7cvQXY/xPoUZGf
+   stxDegd/RE0mjuQriauDAcH5aqsIefcf+5ugTGDSiuidhbTg+x6WkNQO7
+   2sy9N0dQihHlHvRNkAKqfb9zBSyrU0N/ogn0DqszoEXeGSH+pYOptDlJJ
+   QxIgPGCdkG9QsznC5C7gpQv/vODt0OfS/MDzmMJNDHGq2rd7RP4Mk4EgG
+   d3huXo1B15AjPuHRCCkVwfhgWhiRd88jSyWoVOiJvg9XIWxDLeZ04sAtn
+   A==;
+X-CSE-ConnectionGUID: 5oSwV2bMRKSQ7OfZ3JXNCw==
+X-CSE-MsgGUID: FLMbZ1RsQH2Dn3ovKMVmkw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11851"; a="88894167"
 X-IronPort-AV: E=Sophos;i="6.25,172,1779174000"; 
-   d="scan'208";a="88894160"
+   d="scan'208";a="88894167"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2026 06:56:27 -0700
-X-CSE-ConnectionGUID: VSjheyalR5CKLFjxN1AEtA==
-X-CSE-MsgGUID: tZKNEhX+QcCazF3t/SmrYw==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2026 06:56:30 -0700
+X-CSE-ConnectionGUID: Tj+9XFLDSOq5UaYlmTmk7w==
+X-CSE-MsgGUID: 5YUhTLjPQt2eodpEDRE7UQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,172,1779174000"; 
-   d="scan'208";a="260791922"
+   d="scan'208";a="260791933"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orviesa003.jf.intel.com with ESMTP; 19 Jul 2026 06:56:24 -0700
+  by orviesa003.jf.intel.com with ESMTP; 19 Jul 2026 06:56:27 -0700
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -53,11 +53,11 @@ Cc: bpf@vger.kernel.org,
 	horms@kernel.org,
 	bjorn@kernel.org,
 	kerneljasonxing@gmail.com,
-	Jason Xing <kernelxing@tencent.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v4 net 2/6] xsk: drain continuation descs after overflow in xsk_build_skb()
-Date: Sun, 19 Jul 2026 15:56:05 +0200
-Message-Id: <20260719135609.147823-3-maciej.fijalkowski@intel.com>
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH v4 net 3/6] xsk: provide sufficient space in pool->tx_descs
+Date: Sun, 19 Jul 2026 15:56:06 +0200
+Message-Id: <20260719135609.147823-4-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20260719135609.147823-1-maciej.fijalkowski@intel.com>
 References: <20260719135609.147823-1-maciej.fijalkowski@intel.com>
@@ -69,136 +69,130 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Jason Xing <kernelxing@tencent.com>
+The temporary Tx descriptor array in an XSK buffer pool is currently
+sized from the Tx ring of the socket that creates the pool.
 
-Fix generic xmit path multi-buffer logic when packets are either too big
-(count of descriptors exceed MAX_SKB_FRAGS) or an invalid descriptor is
-included in fragmented packet. Introduce xdp_sock::drain_cont and act
-upon this flag - when it is set, keep on consuming descriptors from
-AF_XDP Tx ring and put them directly onto Cq. Previously these
-descriptors were silently lost and could never be reached again.
+This is insufficient for shared-UMEM Tx. A later socket may have a
+larger Tx ring and submit a valid multi-buffer packet containing more
+descriptors than the first socket's ring, while still remaining within
+the device's xdp_zc_max_segs limit.
 
-Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on Tx path")
-Closes: https://lore.kernel.org/all/20260425041726.85FB3C2BCB2@smtp.kernel.org/
+A packet-framed batch parser bounded by the temporary array cannot reach
+the end-of-packet descriptor in that case. It leaves the packet on the
+Tx ring and encounters the same packet on every subsequent attempt,
+stalling Tx processing for that socket.
+
+Size the temporary descriptor array to the larger of the first Tx ring
+and the device's xdp_zc_max_segs capability. This keeps the array large
+enough to inspect one maximum-sized valid packet. Larger shared Tx rings
+do not require further resizing, as they can be processed over multiple
+batches.
+
+Following commit will actually address the data path side.
+
+Fixes: d5581966040f ("xsk: support ZC Tx multi-buffer in batch API")
 Reviewed-by: Jason Xing <kernelxing@tencent.com>
-Co-developed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com> # wrapped cq addr submission onto routine
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
 ---
- include/net/xdp_sock.h |  1 +
- net/xdp/xsk.c          | 45 +++++++++++++++++++++++++++++++++++++++---
- 2 files changed, 43 insertions(+), 3 deletions(-)
+ include/net/xsk_buff_pool.h |  6 ++++--
+ net/xdp/xsk.c               | 10 +++++++---
+ net/xdp/xsk_buff_pool.c     | 12 ++++++++----
+ 3 files changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index ebac60a3d8a1..8b51876efbed 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -80,6 +80,7 @@ struct xdp_sock {
- 	 * call of __xsk_generic_xmit().
- 	 */
- 	struct sk_buff *skb;
-+	bool drain_cont;
+diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+index ccb3b350001f..f5e737a83055 100644
+--- a/include/net/xsk_buff_pool.h
++++ b/include/net/xsk_buff_pool.h
+@@ -102,12 +102,14 @@ struct xsk_buff_pool {
  
- 	struct list_head map_list;
- 	/* Protects map_list */
+ /* AF_XDP core. */
+ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
+-						struct xdp_umem *umem);
++						struct xdp_umem *umem,
++						u32 max_segs);
+ int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *dev,
+ 		  u16 queue_id, u16 flags);
+ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
+ 			 struct net_device *dev, u16 queue_id);
+-int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *xs);
++int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *xs,
++		      u32 max_segs);
+ void xp_destroy(struct xsk_buff_pool *pool);
+ void xp_get_pool(struct xsk_buff_pool *pool);
+ bool xp_put_pool(struct xsk_buff_pool *pool);
 diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index a7a83dc4546a..12a845d012f6 100644
+index 12a845d012f6..091792d1d82d 100644
 --- a/net/xdp/xsk.c
 +++ b/net/xdp/xsk.c
-@@ -737,6 +737,19 @@ static void xsk_cq_submit_addr_locked(struct xsk_buff_pool *pool,
- 	spin_unlock_irqrestore(&pool->cq_prod_lock, flags);
+@@ -1525,7 +1525,8 @@ static int xsk_bind(struct socket *sock, struct sockaddr_unsized *addr, int addr
+ 			 * and/or device.
+ 			 */
+ 			xs->pool = xp_create_and_assign_umem(xs,
+-							     umem_xs->umem);
++							     umem_xs->umem,
++							     dev->xdp_zc_max_segs);
+ 			if (!xs->pool) {
+ 				err = -ENOMEM;
+ 				sockfd_put(sock);
+@@ -1557,7 +1558,8 @@ static int xsk_bind(struct socket *sock, struct sockaddr_unsized *addr, int addr
+ 			 * utilizes
+ 			 */
+ 			if (xs->tx && !xs->pool->tx_descs) {
+-				err = xp_alloc_tx_descs(xs->pool, xs);
++				err = xp_alloc_tx_descs(xs->pool, xs,
++							dev->xdp_zc_max_segs);
+ 				if (err) {
+ 					xp_put_pool(xs->pool);
+ 					xs->pool = NULL;
+@@ -1575,7 +1577,9 @@ static int xsk_bind(struct socket *sock, struct sockaddr_unsized *addr, int addr
+ 		goto out_unlock;
+ 	} else {
+ 		/* This xsk has its own umem. */
+-		xs->pool = xp_create_and_assign_umem(xs, xs->umem);
++		xs->pool = xp_create_and_assign_umem(xs, xs->umem,
++						     dev->xdp_zc_max_segs);
++
+ 		if (!xs->pool) {
+ 			err = -ENOMEM;
+ 			goto out_unlock;
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 1f28a9641571..12c9fb29af05 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -42,9 +42,12 @@ void xp_destroy(struct xsk_buff_pool *pool)
+ 	kvfree(pool);
  }
  
-+static void xsk_cq_submit_addr_single_locked(struct xsk_buff_pool *pool,
-+					     struct xdp_desc *desc)
-+{
-+	unsigned long flags;
-+	u32 idx;
-+
-+	spin_lock_irqsave(&pool->cq_prod_lock, flags);
-+	idx = xskq_get_prod(pool->cq);
-+	xskq_prod_write_addr(pool->cq, idx, desc->addr);
-+	xskq_prod_submit_n(pool->cq, 1);
-+	spin_unlock_irqrestore(&pool->cq_prod_lock, flags);
-+}
-+
- static void xsk_cq_cancel_locked(struct xsk_buff_pool *pool, u32 n)
+-int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *xs)
++int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *xs,
++		      u32 max_segs)
  {
- 	spin_lock(&pool->cq->cq_cached_prod_lock);
-@@ -1028,13 +1041,14 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- static int __xsk_generic_xmit(struct sock *sk)
+-	pool->tx_descs = kvzalloc_objs(*pool->tx_descs, xs->tx->nentries);
++	u32 nentries = max(xs->tx->nentries, max_segs);
++
++	pool->tx_descs = kvzalloc_objs(*pool->tx_descs, nentries);
+ 	if (!pool->tx_descs)
+ 		return -ENOMEM;
+ 
+@@ -52,7 +55,8 @@ int xp_alloc_tx_descs(struct xsk_buff_pool *pool, struct xdp_sock *xs)
+ }
+ 
+ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
+-						struct xdp_umem *umem)
++						struct xdp_umem *umem,
++						u32 max_segs)
  {
- 	struct xdp_sock *xs = xdp_sk(sk);
--	bool sent_frame = false;
- 	struct xdp_desc desc;
- 	struct sk_buff *skb;
-+	u32 cached_cons;
- 	u32 max_batch;
- 	int err = 0;
+ 	bool unaligned = umem->flags & XDP_UMEM_UNALIGNED_CHUNK_FLAG;
+ 	struct xsk_buff_pool *pool;
+@@ -69,7 +73,7 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
+ 		goto out;
  
- 	mutex_lock(&xs->mutex);
-+	cached_cons = xs->tx->cached_cons;
- 
- 	/* Since we dropped the RCU read lock, the socket state might have changed. */
- 	if (unlikely(!xsk_is_bound(xs))) {
-@@ -1063,11 +1077,21 @@ static int __xsk_generic_xmit(struct sock *sk)
+ 	if (xs->tx)
+-		if (xp_alloc_tx_descs(pool, xs))
++		if (xp_alloc_tx_descs(pool, xs, max_segs))
  			goto out;
- 		}
  
-+		if (unlikely(xs->drain_cont)) {
-+			xsk_cq_submit_addr_single_locked(xs->pool, &desc);
-+			xs->tx->invalid_descs++;
-+			xskq_cons_release(xs->tx);
-+			xs->drain_cont = xp_mb_desc(&desc);
-+			continue;
-+		}
-+
- 		skb = xsk_build_skb(xs, &desc);
- 		if (IS_ERR(skb)) {
- 			err = PTR_ERR(skb);
- 			if (err != -EOVERFLOW)
- 				goto out;
-+			if (xp_mb_desc(&desc))
-+				xs->drain_cont = true;
- 			err = 0;
- 			continue;
- 		}
-@@ -1096,18 +1120,33 @@ static int __xsk_generic_xmit(struct sock *sk)
- 			goto out;
- 		}
- 
--		sent_frame = true;
- 		xs->skb = NULL;
- 	}
- 
- 	if (xskq_has_descs(xs->tx)) {
-+		bool drain = xs->skb || xs->drain_cont || xp_mb_desc(&desc);
-+
-+		err = xsk_cq_reserve_locked(xs->pool);
-+		if (err) {
-+			xs->tx->invalid_descs--;
-+			if (xs->skb)
-+				xsk_drop_skb(xs->skb);
-+			xs->drain_cont = drain;
-+			err = -EAGAIN;
-+			goto out;
-+		}
-+
- 		if (xs->skb)
- 			xsk_drop_skb(xs->skb);
-+
-+		xsk_cq_submit_addr_single_locked(xs->pool, &desc);
-+
- 		xskq_cons_release(xs->tx);
-+		xs->drain_cont = xp_mb_desc(&desc);
- 	}
- 
- out:
--	if (sent_frame)
-+	if (xs->tx->cached_cons != cached_cons)
- 		__xsk_tx_release(xs);
- 
- 	mutex_unlock(&xs->mutex);
+ 	pool->chunk_mask = ~((u64)umem->chunk_size - 1);
 -- 
 2.43.0
 
