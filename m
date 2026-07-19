@@ -1,114 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f1.google.com (mail-wm2-f1.google.com [74.125.225.129])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F6D38E8BA
-	for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 12:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2331DA23
+	for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 12:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784464178; cv=none; b=BPdI/wGS6AOjDMbeoQKH2ntXYVRFhNIheoIFGh6ZE7fltPY+l9HFK4MKiWHebZy3Lc4RrFk0dt8Yaqy76D8aCtTgMJ/tLOT+ngl+pbFmFo2b9GiTOMZjLVjrSuU3w7ZF6QgcheufrGJaJxQuYyFik4FFMi/czl2yT8Q9pZ7n9hc=
+	t=1784465663; cv=none; b=AbsbTlia15aMS2Xx3BQ6dzT8A/F7JFZkXl/5OfCmamMjDSQqofE2tBipPzE67mI/p7KUub+Jb5BlZagzhGXcjDSM8Y5yRxZx0Blr17fOEZV5axXcVRmv61fv/TK/wo5PXw07eQMckd17bv4GyvA3oY5e+DXjrn6Q3TCap16Bvio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784464178; c=relaxed/simple;
-	bh=hN8SuF8OLSzbcLiJlJGWjoQsZ2HQuXOMARiUFW5Ljdg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=drL09gIh2eWlAxrNwjGUDRrDalS0Aj0SEZJTDx01UGjtmj1z1dY57awnVaa4cV+3C2kXfTgFWAfStuxJiRPxwreaOcOCZvNYhFWBZ/QhIE8xBMtAt59pCIfAuS1yTkUZ1/cVvcdW8dNz83iL2G9L7k8VOv4a95aGKkNt8Nn5wAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FosEudP5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784465663; c=relaxed/simple;
+	bh=rwB9ZHytivFOMtQ6iDyU04oX6d58HWu8MvXWc8CDXEk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JFsVNhWDRmavmp0XHn18L8b7rqEJF+S+62QC7JbT/ebM1RjlNS/QgbLp7rMq79gm6aoPlWm3UkGqr09xjwy16xwOYSODUuFmgFpMW9e7PLe8QaIFtjTmDQxdeeG+wi2t4+ER2ENCjuL2sl6+X51xSkj3dGLZ8r3wyk6dd2QQqQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I2FXbAjm; arc=none smtp.client-ip=74.125.225.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FosEudP5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03FDD1F000E9;
-	Sun, 19 Jul 2026 12:29:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784464177;
-	bh=uUFzx+MnG0gAguZEwyJc7B7OLom88tSRN4gJvNpxr/Y=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FosEudP5mELZvRFMLkjvupab99K6U4CXvpyssR1QSWBX9GZ4a8JeaqxnIRlPhmmmT
-	 kvYbOk00k6NHcmvskByeIKYNbx7uQZ7hadqNfQhKXwCt60d/aO3BXsuSCxJxukXLoh
-	 E0wOD31quC2jKuLw+YR5x5eexg8hwYndpS7DIbL/ABihJqvA/EtyVP29CnX/4JRQWE
-	 uAhSDTUUN9IfabI2IvbfTMoDPo4L2qWAEQSRt0ilillzMm/YuwDzj3kMM8pyz97E1M
-	 LT3xY4Fv5Q6sRvZBpnmoNHBvprlXFV+mPfDvzAk2qqQg1Kc1GKedzyWZQ12nnFFJTQ
-	 EU/iDb84AADxA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] bpf: Fix offset warn check for
- bpf_res_spin_lock
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260719121740.1547434-1-memxor@gmail.com>
-References: <20260719121740.1547434-1-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 19 Jul 2026 12:29:36 +0000
-Message-Id: <20260719122937.03FDD1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I2FXbAjm"
+Received: by mail-wm2-f1.google.com with SMTP id 5b1f17b1804b1-492367f3094so37547695e9.0
+        for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 05:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784465660; x=1785070460; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IiWqi16jx6xKOIv5FGyqEh1shDL9gMbURRG2mYLNzuo=;
+        b=I2FXbAjmT7GDOWr19Y1MieyvqAcOndbwiAXpgtuU7RJmXaQzX98pl5TRkQJMck+K4I
+         NkeuDX7btzyW54IcDIKkYtOjysJUpUei/1xqYMK7Vz9wat635NBlPkpnC5q+WBSHVq7P
+         sBTbcmzRHjkqdT7ESEMUH+C/a0BTgah8Wc4/qYQzsbRXp+V/vw0OF3/R7n38P1PDocMr
+         Pnr34so5juBf0e+xECsOqWPPBQArgHyUM5g4NzVYPFpc61ucsHK2dSXkgegh01bmw99g
+         uXiKkU8XU96RPxSAKxjqzjcsDtN+ccbDNkrKm/b/RBz192DvudLNZZxBaLcyHV48pCbJ
+         Qhww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784465660; x=1785070460;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IiWqi16jx6xKOIv5FGyqEh1shDL9gMbURRG2mYLNzuo=;
+        b=JlBUn4TeOMMXRqpYBAN7z2qmpnylkfRDN2o1kPszy/z0J7S6Rfw3LtN+wHsBhjhU/q
+         Za8Ob64jXMR/znY3MNxkEHVnKRPE7o6Ingm4adjRiuMPIGf30tOY3DErU3iy4xH4glVu
+         D8T2iuTmw0RCFV8yqTUF3ebbpAq7W+bQL+0n2eMJp2ACo+J/b1eJ4+oo3Wlp9YlLFC7O
+         O5e5vUUAzLRfKgVahfH2yC2O+XOZazR2OTlS3vRrQUPoxd6mMCEdaSi+rijBB8WueT9v
+         j7CHcRK5iHPAmFaCIRIIzWaRZ7oMU1nYlL0Ws+j2bt2k7g+ejRS1pmUvxVBdpjZDC+s7
+         Ouug==
+X-Gm-Message-State: AOJu0YxluhR/SELvcIfghYipk2lRtNKC3TSoXo+JPvpYx/EvACuuP+wc
+	+ty+EWgRh2JEE3+0SnxNTPGpt0jDJ4+yWFD23vTinqPT59nAII/scb3haQT39TmI
+X-Gm-Gg: AfdE7cl27PHVoiFIreZRzz/qcDkPv0Xj1C27rEdM5SCdBGoKySeEyLSAL+IUNFG48bH
+	a2LpQug3bya95UIFhrzNjS3frSFguXJNvkJ/mXiX2vnfZmYqIlfz5qfp8xwlPVHhyBxF218giKr
+	DPDIlllB4PEgsdhpTvpsolklEeWsFMMaurYMMuWQSW5pQG+hPp8QZYZnO+sfWcMowCBN5KSWv5t
+	IBBbkt7CPR8WmL1EdVmbwMl4c0zCTfIqaTuX2cjLm3iIwr0OGkg7NMO0t0sO01mX+6tsyf7YsD+
+	qLJzy1aP6z6qx59L6HvcgEkUPHWS/DyMY3KhNsJZgXXVNjQiCnwGOv7xccMPyH0n0Wsdt8oIYpz
+	E1VZdMlDOOcBDwc4+AIECi7hYtpXdOK4rnPal6d0IcbrACIOF8zqpNQ5zZ8jIpyEnh8foyCMCDI
+	THq2cSdX7y2AO4dymCE3paWfACJ7jLCm3a468SdeXmunpY4br0ephH2HXtufsckDi+cM8jrAg0g
+	D3xjzaFF6dlenDGudu9gbojLIis+9enoihLS0LlkFa1
+X-Received: by 2002:a05:600c:1549:b0:495:4a27:483f with SMTP id 5b1f17b1804b1-4954a50baa5mr98664435e9.29.1784465660071;
+        Sun, 19 Jul 2026 05:54:20 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4954a2edda2sm189009165e9.13.2026.07.19.05.54.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jul 2026 05:54:19 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next] bpf: Zero queue and stack outputs on lock failure
+Date: Sun, 19 Jul 2026 14:54:18 +0200
+Message-ID: <20260719125419.1782196-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Queue and stack pop/peek helpers accept an uninitialized output buffer
+because the verifier expects the helper to initialize it. The empty-map
+error path clears the buffer, but a failed lock acquisition returns
+-EBUSY without writing it.
 
-Pre-existing issues:
-- [High] Unprivileged users can trigger a `WARN_ON_ONCE` in the kernel (cau=
-sing a panic on systems with `panic_on_warn` enabled) by supplying a crafte=
-d BTF with duplicate unique fields hidden inside nested structs.
+Clear the output before returning -EBUSY so BPF programs cannot observe
+uninitialized stack contents after a failed helper call.
+
+Fixes: a34a9f1a19af ("bpf: Avoid deadlock when using queue and stack maps from NMI")
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ kernel/bpf/queue_stack_maps.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
+index 9a5f94371e50..c1c9dee4dcdd 100644
+--- a/kernel/bpf/queue_stack_maps.c
++++ b/kernel/bpf/queue_stack_maps.c
+@@ -99,8 +99,10 @@ static long __queue_map_get(struct bpf_map *map, void *value, bool delete)
+ 	int err = 0;
+ 	void *ptr;
+
+-	if (raw_res_spin_lock_irqsave(&qs->lock, flags))
++	if (raw_res_spin_lock_irqsave(&qs->lock, flags)) {
++		memset(value, 0, qs->map.value_size);
+ 		return -EBUSY;
++	}
+
+ 	if (queue_stack_map_is_empty(qs)) {
+ 		memset(value, 0, qs->map.value_size);
+@@ -130,8 +132,10 @@ static long __stack_map_get(struct bpf_map *map, void *value, bool delete)
+ 	void *ptr;
+ 	u32 index;
+
+-	if (raw_res_spin_lock_irqsave(&qs->lock, flags))
++	if (raw_res_spin_lock_irqsave(&qs->lock, flags)) {
++		memset(value, 0, qs->map.value_size);
+ 		return -EBUSY;
++	}
+
+ 	if (queue_stack_map_is_empty(qs)) {
+ 		memset(value, 0, qs->map.value_size);
 --
+2.53.0
 
---- Patch [1]: [PATCH bpf-next] bpf: Fix offset warn check for bpf_res_spin=
-_lock ---
-commit 5f18853b127e7eb3f89c39c50e8644777d002289
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-bpf: Fix offset warn check for bpf_res_spin_lock
-
-Sashiko pointed out correctly that the case statement for
-BPF_RES_SPIN_LOCK incorrectly checks offset for BPF_SPIN_LOCK.
-Fix it by checking res_spin_lock_off instead.
-
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index cbb1e49b9bcbf..e7d4e9ba24e26 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -4168,7 +4168,7 @@ struct btf_record *btf_parse_fields(const struct bt=
-f *btf, const struct btf_type
->  			rec->spin_lock_off =3D rec->fields[i].offset;
->  			break;
->  		case BPF_RES_SPIN_LOCK:
-> -			WARN_ON_ONCE(rec->spin_lock_off >=3D 0);
-> +			WARN_ON_ONCE(rec->res_spin_lock_off >=3D 0);
-
-[Severity: High]
-This is a pre-existing issue, but can unprivileged users trigger this
-WARN_ON_ONCE() by supplying a crafted BTF with duplicate unique fields
-hidden inside nested structs?
-
-Looking at btf_find_struct_field(), it enforces the uniqueness of special
-BTF fields using a local seen_mask variable:
-
-kernel/bpf/btf.c:btf_find_struct_field() {
-    ...
-    u32 i, off, seen_mask =3D 0;
-    ...
-    ret =3D btf_find_field_one(..., &seen_mask, ...);
-    ...
-}
-
-However, when it encounters a nested struct, it recursively calls itself
-via btf_find_nested_struct(). This nested call initializes a fresh
-seen_mask =3D 0, ignoring the parent's state.
-
-If a user crafts a BTF with multiple nested structs containing duplicate
-unique fields (like BPF_SPIN_LOCK or BPF_RES_SPIN_LOCK), wouldn't these
-duplicates bypass the seen_mask checks and be returned to
-btf_parse_fields()?
-
-Since btf_parse_fields() processes these duplicates and hits this
-WARN_ON_ONCE() macro, could this act as a local Denial of Service (DoS)
-vector on systems configured with panic_on_warn=3D1?
-
->  			/* Cache offset for faster lookup at runtime */
->  			rec->res_spin_lock_off =3D rec->fields[i].offset;
->  			break;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260719121740.1547=
-434-1-memxor@gmail.com?part=3D1
