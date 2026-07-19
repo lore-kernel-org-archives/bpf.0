@@ -1,165 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1BE346E55;
-	Sun, 19 Jul 2026 09:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127A33612CF
+	for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 11:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784453020; cv=none; b=RdhbaNTQgKZWHvGls8+oSWGndR0TZhlRlkkyscgeeokBUFz8TPk+7jS8X3InmZVslmLgQIMlYqzeuAK2+akbhM0XwDMylhiNGEnP1n9Px2aHWtqC+Eda2OX1WwGbyEK9ZR8wRTYF2I85cRC6ZdtsR8SHktqQP+NV4ZDvr7+C414=
+	t=1784460956; cv=none; b=aG5Z+RvwwpoiZBSqqLq8zCOg4Y64P+IfRh+wymc8OYc7NNWROg36CMwUM3L9qcD6PbeNpysLu0rYTXKI1i/OUNVojF4HBuRbDTNI3PcgdEDQ5QFmr+ZAbgXDuuVLnJrPsdOpCJjZEMX37p9PAO5D4AB/xj7OU6Fr7aB2AKoBEB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784453020; c=relaxed/simple;
-	bh=aSg1HatHCDKb0cdWU3vBFFvlMfXxykSLrX47B0LC2PM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iMyVbixcqXRu64X8tGNmJ3dt34G2VUok6UbOsDmoBILZlJl7L5FjHTF+QP74iuIUUOo8O0iuCy+mlpPKFz6xHVt5C8kN1TGn45cJzB0L68DuNf7q+ruvbOqBl1fymBUWWnQotCSsWP4S57Jdx5WkA3FrTvbj0Rqugdpvesv0igM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fUHdzov3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784460956; c=relaxed/simple;
+	bh=PB/eFiUDswq6btu7wgrrxP0Eu5jaApzpSDXw4EzGfTQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G1z2aVbFaGPeRQhZ+BH2mOj71rBX+QjxlLHevF7jIWLb2SwweRotBF/0c+RZYvcXQemcHZZY/zqrqmj9QL2YIqQz6FJZqNR+l9qi19tMZVDmGRnR68rpP5KzQRmXAEmO4giYhzdnw0sOtXHhfnJjG4ZvrLlExbpcmh0shRriETQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RzfU1cbn; arc=none smtp.client-ip=74.125.225.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fUHdzov3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC63A1F000E9;
-	Sun, 19 Jul 2026 09:23:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784453018;
-	bh=PuP9EzqwTlsKhoLgtEy3/0hMjKlLxYeVmpZLAfFwQdU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fUHdzov3MC3v1wWePhABbLqZzLElCD+p//6saLHs/ketnxhw8Jp3jrM+pwx3hbefK
-	 rVBqPOCZ1TSqveOu0xsGbxRRo2aiHhFouFx009684zMJMXblcN2cJFY+fjJP8zHn6I
-	 OlVHBMbgM6TY8xDj2iUEzQYaD6q+t7V88aShm5mh0SGuXzAjIr202pn+lROF4/615o
-	 pQWHrDBG85sAqPvaGPuunp5SJIiFxPVS2qYPUHrqzhOU3U6JULRU0jYUCQNfzR1FZi
-	 sUghYoU548WwuXJsY6Kkrme13FTZw6psST8ZZPZUGZwSVYBA3cgHjVhZcx7ghVW/2A
-	 P6TYHC1u/m1rg==
-Date: Sun, 19 Jul 2026 12:23:27 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Song Liu <song@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RzfU1cbn"
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-4700bd8aed1so723820f8f.1
+        for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 04:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784460953; x=1785065753; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IG/JejKWQ2cH7Zlw0leeKV8ROhlzIkblKJBXg0gnDyU=;
+        b=RzfU1cbnUW8XjPWQKUAo8b79bWDxf9T46JRHd7RYKdCV0yEAn4vjU0DxHyIjnAnd0C
+         nWxNoMs86E7kKFfuW5VhaqvYMf6jKC1jwBjVjXbaXPJVCVejIaulxLfSJtcPztV8EBvX
+         Xfv1Oum8YlktS5anGiIFNQzRcL7Q9BYiHhtn8Ai0qFMZQKQk9/+DG/bOW5Kf6XAHBYtO
+         kph9o52OQ10SY8QXSIs4wUwAuvLekVTSYZd1LKbkDFJufLgGV1FD+OxShVrglNKpPSlc
+         SZ2Xa2vtNnVtNI2kgOsfx74wMiswPeKziRUyoaCb4bUdmJhLzAVqV8+C2UtI+NkPCczT
+         HnOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784460953; x=1785065753;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IG/JejKWQ2cH7Zlw0leeKV8ROhlzIkblKJBXg0gnDyU=;
+        b=lvi3a/+lMkaDDnl2bIo1yLpSZO1szZlEM5JL+cIPyt68kVN1ttAZzFWEM2EcxutQs+
+         M/dj548/BpB7neJA3mhC6vXUAYG21gaZ4h64345WOHhbe62vo4VfZsgALFxNJefYTaHR
+         SjQYxgmd5F1TNZ0vEZ1hxm18GDAd7AvKy7PbGu1cRsUgGJFxpddX/BULFbTKqGRDoNXK
+         C+aDjuhiCTZhyJwEDiGxIypsyUdHJg9l14oPMaK43UKXaGZin/p+w9oKTYT42XzmL6F0
+         padFtQmRPe7wguO+NZx0tBCbxsgti/n1Xx2ZE7inMXQN21VxpBMPV/Zd0sB3sXVrOySx
+         kDdg==
+X-Gm-Message-State: AOJu0YwHQCt1XxTBlt7FM3Tlm4Vuh9zPNsC4hK6Cm32mo3nKVnL0ecrO
+	P/5a4y8Nv+IPWBZaylOfVkwuC0yya5m5fFzpPnN7OAwJjdEDLo2q7xLgDa+7wJXh
+X-Gm-Gg: AfdE7cnP3E4fI4tCuo2KUvYppUXsM3YYV4BtdDxiWz5ajWB2VgX1wJgrU2sq4vbcmU0
+	+0ji17kAruyvqC0A7/gfJ1XX+iHKlpCeUiLOQPkMnB4iH98NhsrrC6nhicsil29MZy/JG5YGG80
+	Jslmb8hrA/w7TmXoPBMM8cQWz7KOxJg6/cRS7RlLLN2Y5y4iYm9bxDv7dmDMMsm0GU2TEprvNDl
+	nWXy6uz72dwJ2P3Ca65sxtDVdKKRGBsPF69S+Ajb/NoOaJCFp1LWOapsyw5KIJKf2Ay7I9+CBxV
+	pqKs8kRNMEdhGxB/iXG3w/pBqFHERa4qPHG7+Rr7dZrdZjA09TFGmTlvwUVb9fY6Ssr0aH6a2oj
+	+lYUMyJWAzHlzmOlSaK/hjdkQS69J7fezOK+mCD1v/jFokQmbC6ONvGa0e6xJ0n0TOuRz3PojMK
+	6QjeaJYFg1Eq8qSSnc++uHWXKOO32ED5pwhjFbP7kOZ9a0btC5w2AwgbuqWMx/UxOIFPyzHT2Ce
+	y3LUtZ4OV6NlO5QE6ENjS/7PuXyBhJAX/bweqdv9+p1
+X-Received: by 2002:a05:6000:46d9:b0:47f:6e8b:699c with SMTP id ffacd0b85a97d-47f6e8b6bcdmr3925476f8f.14.1784460952994;
+        Sun, 19 Jul 2026 04:35:52 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e519f4sm19657181f8f.14.2026.07.19.04.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jul 2026 04:35:52 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH bpf-next v3 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for
- BPF allocations
-Message-ID: <alyXjynKnIp7X-3b@kernel.org>
-References: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
- <CAPhsuW5pRMtpa5Q0Y=zO5=2HSj4xOX+i5Vp+g2a6RDvmkeHKFw@mail.gmail.com>
- <alnOkjf8rq3dUGmg@kernel.org>
- <CAPhsuW7xvJM6PPGwkeZJhi+a-emuuX09uxKom29mns5-iwOYXw@mail.gmail.com>
- <aln1_kGygUqdtlAt@kernel.org>
- <CAPhsuW4dt6YdNnce4wfJkVuuP339sh=0wCGwBG2_Nc2BYu4CSQ@mail.gmail.com>
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1 0/2] Open up res_spin_lock for tracing programs, fix is_tracing_prog_type()
+Date: Sun, 19 Jul 2026 13:35:48 +0200
+Message-ID: <20260719113551.1294284-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1223; i=memxor@gmail.com; h=from:subject; bh=PB/eFiUDswq6btu7wgrrxP0Eu5jaApzpSDXw4EzGfTQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIStmcxfPn4OrVn7un2W/68aT9Xu+9xqKyrLN8z7xgKvi+ L/XkpEHOkpZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRPZcY/kr/XT05/YrA0zWR XlfnTkqNYjP/ubx/SqBb3pXDG80SLbcx/BVM/Pj/+1J9e15pId+3PJO0M6r+cNpPTlc6+2d1tII kOy8A
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW4dt6YdNnce4wfJkVuuP339sh=0wCGwBG2_Nc2BYu4CSQ@mail.gmail.com>
 
-On Fri, Jul 17, 2026 at 10:50:09AM -0700, Song Liu wrote:
-> On Fri, Jul 17, 2026 at 2:29 AM Mike Rapoport <rppt@kernel.org> wrote:
-> [...]
-> > > >
-> > > > "It works, don't touch"? ;-)
-> > > >
-> > > > We can add another layer for sub-page allocations to execmem.
-> > >
-> > > Sub-page allocation is not a hard requirement here. Using 4kB for
-> > > each small BPF program isn't too bad. We added bpf_prog_pack to
-> > > avoid fragmentation of direct map page table entry (caused by W^X
-> > > requirement). If execmem allocator reserves large enough ROX
-> > > memory (with PMD page table entries) and reuses them properly,
-> > > we shouldn't see page table fragmentation getting worse over time.
-> > > Then, we can use 4kB granularity allocation for BPF programs. (I am
-> > > not sure about 64kB pages..).
-> >
-> > execmem uses PMD_SIZE pages for ROX cache. Since right now it's only
-> > supported on x86, the issue with oversized large page with 64k base pages
-> > didn't come up yet.
-> 
-> With 64kB page size, PMD_SIZE is probably too big for execmem.
+Patches in the set first open up res_spin_lock in all program types. The
+second patch goes back to addressing the technical debt highlighted in [0].
+While for programs affected by the second patch don't need res_spin_lock
+to be opened up (since it was already allowed in those program types due
+to the oversight in is_tracing_prog_type()), it is timely to do so now.
 
-Yeah, I think so. But maybe on arm64 with 64kB pages we could use CONT_PTE.
- 
-> > > > Since BPF is the only user the easiest would be just to move prog_pack
-> > > > logic from BPF to execmem and call it a day.
-> > >
-> > > If we move to bigger page sizes, say 64kB, there will be other
-> > > users that would benefit from sub page allocation, right?
-> >
-> > Maybe modules could, don't know TBH.
-> > There is another caveat with sub-page allocations: they must preserve ROX
-> > and no subsystem except BPF can deal with ROX-only allocations and writable
-> > copies.
-> 
-> I think ftrace and kprobe could be good users?
+  [0]: https://lore.kernel.org/bpf/DJ3W8IZ08WBT.VTRTP72FSWVO@gmail.com
 
-Don't know about ftrace, but kprobes essentially has page-sized caches and
-uses them internally.
- 
-> > > > Another option is to add a slab-like layer for sub-page allocations to
-> > > > execmem. This is more complex but it would allow to get rid of the rigid
-> > > > BPF_PROG_CHUNK_SIZE.
-> > > >
-> > > > Maybe it would be also possible to teach SLUB to use execmem_alloc()
-> > > > instead of alloc_pages() but that's surely the most far fetched one :)
-> > >
-> > > I was thinking some rb-tree algorithm might be useful here,
-> > > something similar to vmap.
-> >
-> > Could be that or maple_tree especially considering there's an active
-> > discussion about converting vmalloc to maple_tree as well:
-> >
-> > https://lore.kernel.org/linux-mm/20260613-vmalloc_maple-v1-0-0aa740bb944b@oss.qualcomm.com/
-> >
-> > But the choice of allocation algorithm is anyway secondary to the decision
-> > whether execmem should have the sub-page allocator.
-> >
-> > If you say that a page per BPF program is fine, than maybe we can just rip
-> > off bpf_prog_pack_alloc().
-> > If BPF still needs to maintain the ability to allocate in smaller chunks,
-> > then maybe the best way is to keep bpf_prog_pack_alloc() as is because I
-> > don't foresee other users for small page allocations any time soon.
-> >
-> > > > And since we are talking about bpf_prog_pack_alloc(), why
-> > > > BPF_PROG_PACK_SIZE accounts for num_possible_nodes():
-> > > >
-> > > > #define BPF_PROG_PACK_SIZE (SZ_2M * num_possible_nodes())
-> > > >
-> > > > Is it an elaborate choice or it was picked to work around older
-> > > > vmalloc_huge() limitations?
-> > >
-> > > It is a bit complicated. The goal is to get PMDs for prog_pack.
-> > > We can adjust this if vmalloc_huge() changes after that.
-> >
-> > Since commit c82be0be9576 ("mm: vmalloc: don't account for number of nodes
-> > for HUGE_VMAP allocations") vmalloc_huge() is fine with PMD_SIZE regardless
-> > of number of nodes.
-> 
-> Before execmem can handle sub page allocations, how about we
-> send allocations that are bigger than page size directly to execmem,
-> and let bpf_prog_pack handle sub page allocations. Then,
-> BPF_PROG_PACK_SIZE will be PAGE_SIZE. This should be a net
-> win for x86_64. Other archs will be the same. WDYT?
+See commits for details.
 
-Makes perfect sense to me for x86.
+Kumar Kartikeya Dwivedi (2):
+  bpf: Allow bpf_res_spin_lock() in all contexts
+  bpf: Fix is_tracing_prog_type() to cover fentry/fexit/fmod_ret
 
-On architectures that support large mappings in the direct map and do not
-support EXECMEM_CACHE_ROX this will increase direct map fragmentation.
- 
-> Thanks,
-> Song
+ kernel/bpf/verifier.c                         | 48 +++++++++++--------
+ .../selftests/bpf/prog_tests/linked_list.c    |  6 +--
+ .../selftests/bpf/prog_tests/map_btf.c        | 19 ++++----
+ .../selftests/bpf/progs/map_in_map_btf.c      |  2 +-
+ .../selftests/bpf/progs/normal_map_btf.c      |  2 +-
+ .../selftests/bpf/progs/refcounted_kptr.c     | 10 ++--
+ .../bpf/progs/refcounted_kptr_fail.c          |  5 +-
+ .../bpf/progs/verifier_helper_restricted.c    |  4 ++
+ 8 files changed, 51 insertions(+), 45 deletions(-)
 
+
+base-commit: ecf11bc5f56abb3a2219a8c75e8a5b54467d1781
 -- 
-Sincerely yours,
-Mike.
+2.53.0
+
