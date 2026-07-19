@@ -1,142 +1,152 @@
-Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B8B3A0B05
-	for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 15:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DC91C84BB
+	for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 16:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784476261; cv=none; b=dIVA3J/i/IXzek2p15BnFFOXD8b+I3uWhSqgyrgxT8amAheRDrcT/7uJsVLKuvfroycRNJUy9fQwgkArKpHiWL+UvF68uZ8A5rO7a9TGRnJPH3U4V8KoIpX/GLmal22IxPi3OpJ1TTihiW+E0QQwnApQondS0+OG096jfct/og0=
+	t=1784477820; cv=none; b=d/qJmpDxLIRWsl35ElPKNRkg72cFDXN8y3O8i+1wUnLj2eK0jsWKtExqYnZW2Spi/7dI/+YJ5x4GQb2OXagz6T3CSU7DiZr5X41xBcRGTlbEoAYDzoCLiruQpPhR6ZSCSpdnA14PHpEP0OidTSHdJAyCa901ev4igRCtN6gg5h0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784476261; c=relaxed/simple;
-	bh=M42+QN7g06FnCWI24XlVFuqTmluNJh0Hjbo/TmkFubk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=YSMPSdcqxiLBzEGYQU2qhIQPg5ZfqrB2LBuGmOsjDar27xQwqOogpJms+XWjJ0jSLvJL2S4ZQbCcRqPPjgRUuZYvRJtFQCagtr1KxmSe2r1P5RyvcrigQYGVTmHi46HvllFtkqL8KnYfUDzO1P8RxJ8IU3ooR/qCVhMnqbm4SGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PHZ5a301; arc=none smtp.client-ip=74.125.225.66
+	s=arc-20240116; t=1784477820; c=relaxed/simple;
+	bh=iSGrBa9MrZpnBNiL/pSvSPtiuYn2CkLBSU+mghu130o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dzmW47gSzqfuAyxnth/8stogwNwDpfHzDvvV/PBh8s6U0tSqdTaxUgKZYg3PDBdN5evzXGJ3JNnzmkWET2Pt7Cn84LxhuT6CuKErU4WfODJx6YVRFf1Hsxf8ZlGNUPTmUK5GE59jjlzT3dZXB0J35zxt7Wz9WJ99M9D3wVw50rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DxqWL1aY; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PHZ5a301"
-Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-473ba029526so991867f8f.0
-        for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 08:50:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DxqWL1aY"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84862aaa8bfso184567b3a.2
+        for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 09:16:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784476258; x=1785081058; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=PXkXoZcPYatQN5jk0nmNsirA5Eu/FVrdYn879C+3tX8=;
-        b=PHZ5a301hruHVWrtRJqZyr+0GcJ57qFaBwyhlXClivaRQPon1XIXyeWADs9z28w7z4
-         M0CszHe6vSj7rRamJRezoTqtyiJ+z1aMZSZlbVwy4Yp9IsqYkN7Bv4P1I1Zr/TaSRPqK
-         E2PIMh3X0Cl4LbeDUMz2JJb15hVTkAvvWJW8u3J3d9RmvJA0tuSQfw3tXJ1N+DCD4DUM
-         NkZYNO79PGcXgin8rdOdGdNoDe4pe26PTRHOk0MOeIO8mxbX4lrl6eZwrtOgEAp3T+Iq
-         9jhU3GlM6moTcSrVCGYdEQs0MYv7gUp4jl0bjUTdzTzFFYrY9fLc0Rk2qk0q0K5yOazS
-         XDrw==
+        d=gmail.com; s=20251104; t=1784477818; x=1785082618; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=WsGdm1kAKTSurBA0TqYfEfEn/QcPy7r5m6E0+HTCYIw=;
+        b=DxqWL1aYc8w6Y2MR25y5MkHQy/eZV0OavN1GzY23KlH+Xj5TE4UqkzJH6CGQuUIURI
+         WP1q8yQkkrX1hcAZQv8aOU7V7zFyJIaTOR0i8VwX2aDD0NwGzWcTYdHmidxVOHI18l4l
+         bXiU9nxThyC1xzPA9pxEQtVIYOpaUjgd7el6o4aNnV+rqLOxhlQwQl78+AQALCTbLu3z
+         lolhIaHuFJx0HfVft0iUzvOKaT52fWEWOMsfh0gcYbXF61x6KrvUhFbzPbhCfjmJyzzJ
+         D+v+H6QyaxGUh5AXqdMzdAwkQq9ZozMEdAyJMB5AjAGOUBocCCFN6s44eOt+mFma/ACD
+         eJjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784476258; x=1785081058;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PXkXoZcPYatQN5jk0nmNsirA5Eu/FVrdYn879C+3tX8=;
-        b=HfVJ0pc6jDUfBB5WuBVI6xsW2lgqfA3iOlKP40vqq2IEJ7rnbHAexROkpPTampXyJB
-         h20F7h04N6dffyvS/bi1vFCkJF5iF0siBHvFBcTi0r6N0HXpFP3x2zUYsMnCgqDXHwyK
-         +HfFVetCdtXufm8EF4QWcAweNvfPYExEIHOqKYbzAX5YLKG7dFnBYuXQLuCy4SdpoEAy
-         HEQvI2v2I6cPdIJCzDqrja9rizpEmKHyKLIi8j5L4k6mUslvzqk8p4oHrb74HOO+/rKS
-         zFKXMBSxFkYL0UvrkigWexYYVoDkj3Nt2oTJKrqzP7yJv/A/MZlFTBXiHRUtRrtA8LvN
-         xv9A==
-X-Gm-Message-State: AOJu0Ywb3AdHsDVf9rPxl0qQa9pQjDWpgyVTKLgz0uozdoQekLmcmqqc
-	TmU1MLtupfOXE1PeNTSt8vbqb7m3+DaeeM0hXUyGINMqRw8hgHtaIkAsLXlEsDhB
-X-Gm-Gg: AfdE7cl5a0sU7AapMrk2KGsXyYEIUpt0SDslwMvGb63sdJycNmSSEt24WgfUY8tX32Z
-	rzx3ZMUglIM/fuL+0gTK/Ov0pwqkUITmEsb0ReY0NnWny96FBtuyH/GE46Fn9Y+dpfJbJyRAuPE
-	V8WCdIueG4xGBalH908JW+QKDbsrnF3SN/dfBJ7/78+NFyp082iRPHkZC2r4oEXOHECO7mx2a+T
-	4WmQiS3RzpvmjbuvV7+aJyoQ2kbrrlJuLSxVR3VUTyPiGoxGdRJ9+qfMJJZs/09Jrz/Afm+rigF
-	mE2HDOqPxfBM0I7J39NS/BFe8d3+qvZuMNvoO2bkao9zw3DppkfPWpoFZC5h2SGFiMmxjrt8P8z
-	hdIRmEaWtEYXlJYVR0m4RcXwMz23yy6lnNHvyaQiTVy5vhcbfvN6t4Zs5C3sXYjp2g2MBLLEmsB
-	Ith4YgrxVYxb5OcK2oKYi6yTPBiOmIMngdIHbp1o64FC6iHHhpa9fcnMv6KLNUSxUJ28Gs7l3eN
-	OTEZELG2zTHGIvkoPiletu/DV3kUy+wmVy/14yOzonx
-X-Received: by 2002:a5d:6f05:0:b0:47f:7045:dab8 with SMTP id ffacd0b85a97d-47f7045db28mr4801609f8f.7.1784476257907;
-        Sun, 19 Jul 2026 08:50:57 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f6b85970esm15744545f8f.15.2026.07.19.08.50.57
+        d=1e100.net; s=20251104; t=1784477818; x=1785082618;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=WsGdm1kAKTSurBA0TqYfEfEn/QcPy7r5m6E0+HTCYIw=;
+        b=o9NHlifMt4ueQJSMBEJjVYih5dXaZzCbGIPawoJYmQcKpuUsqg5xDx3vX8gvVU3JTq
+         9YY6exYcwKaaJFaMrGkCO3yQGkeOkGNxwr7Y/EO3zvu78IlvsWO8Zr9Pa2u+yrxkpy1m
+         mY76MTP5sPpZszohpx/CFMIWfMQ0NRjhxyHz3kBdD06dM0j2dEGUr0bR5OqnuQO/oi9a
+         nMI/QCsZ4YYAzXwhxYAoDEh2LIn36jZwMlKMKp/Jf609CwG2NqhxBXsJEWlh2G1fQ1fx
+         UiLHH4FSQSpAvFwT3qZEYLkJuDNm/jKRrwKRxt9SjABUih2wboQlEMJ4OMQMtwp0lSnf
+         Yd0Q==
+X-Forwarded-Encrypted: i=1; AHgh+RotHENX4lemwFzrLXCYy1mmz8kTY0NKHsnl9P010YZOY3dp3vQNd9WIxS+TikaZ9drKd0c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDUp9gfWEwGtnVue7OhGaBJZ2yiPVkd+Q5GAFyiPsQJ+bKAsWR
+	PPJi934FPk7CDeMxqv46O3Jsd7evmiWiT82oAuHHtz+Vkce15brCsbrp
+X-Gm-Gg: AfdE7clRWQZT+QEicTnctik0ZDk7rFPFVtk1g/OKPTjarDxgVWEystjZvuxgt/WGUlT
+	XxAPyndE0XIjAJGQE066+j9uJwOuf7Apsx/FniO7IpdL+0p7T4vtUawukECNKyUrpoe1sOySyee
+	4eDF435rxoLGzOiH22gQfboCP1YnjTNxk02rJ7rkcsNNNXTw1vI9wD9wwVI/M7LoVE89LeNSOEf
+	8HCkUQQcG4e5rxQS/TMONcOF3HHmxUluVOkqSZ/GBuYS1cXjeN4qQcSo2/5urTX1SZcNLdU9mW3
+	uJZUbhl9WD2hSdhR3gTatsePW9vuUfgigDr77WmX44HEuXM41KFH9W7VzGZmDGbKFCKMpMCdQa6
+	yl/M3K1hG4ysUxjhmABnqZRSQuvfTHXk2e45Ik8C57WPiIF0Eqc+iAovngWbFpOGEbWIY/GZyR1
+	2/kyqFnX9q1XVLj/VPUK208dkximy/J3ve/2LSrzv61aAHz7DMeQRYQrPS4e0=
+X-Received: by 2002:a05:6a00:ad2:b0:846:8b0a:1536 with SMTP id d2e1a72fcca58-84c294da01amr8277970b3a.4.1784477817551;
+        Sun, 19 Jul 2026 09:16:57 -0700 (PDT)
+Received: from localhost.localdomain ([14.218.106.255])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c3793ec61sm3018204b3a.42.2026.07.19.09.16.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jul 2026 08:50:57 -0700 (PDT)
+        Sun, 19 Jul 2026 09:16:55 -0700 (PDT)
+From: Chengfeng Ye <nicoyip.dev@gmail.com>
+To: Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	bpf@vger.kernel.org (open list:BPF [L7 FRAMEWORK] (sockmap))
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chengfeng Ye <nicoyip.dev@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] bpf, sockmap: Fix cork use-after-free in tcp_bpf_sendmsg()
+Date: Mon, 20 Jul 2026 00:16:30 +0800
+Message-ID: <20260719161630.2901208-1-nicoyip.dev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 19 Jul 2026 17:50:56 +0200
-Message-Id: <DK2O1FA85Q5Y.20IOU7GKJ6O6G@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 1/5] bpf: Fix offset warn check for
- bpf_res_spin_lock
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260719153634.2908692-1-memxor@gmail.com>
- <20260719153634.2908692-2-memxor@gmail.com>
- <20260719154827.54DA51F000E9@smtp.kernel.org>
-In-Reply-To: <20260719154827.54DA51F000E9@smtp.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun Jul 19, 2026 at 5:48 PM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
->
-> Pre-existing issues:
-> - [High] Userspace-triggerable kernel warning (WARN_ON_ONCE) due to neste=
-d struct bypassing `seen_mask` uniqueness check, potentially leading to ker=
-nel panic.
-> --
->
-> --- Patch [1]: [PATCH bpf-next v2 1/5] bpf: Fix offset warn check for bpf=
-_res_spin_lock ---
-> commit f617fbd9a79f403f8e8be07c38922dcd0eedd840
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->
-> bpf: Fix offset warn check for bpf_res_spin_lock
->
-> This commit fixes an incorrect offset check for BPF_RES_SPIN_LOCK in
-> btf_parse_fields(). It now correctly checks res_spin_lock_off instead of
-> spin_lock_off.
->
->> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->> index cbb1e49b9bcbf..e7d4e9ba24e26 100644
->> --- a/kernel/bpf/btf.c
->> +++ b/kernel/bpf/btf.c
->> @@ -4168,7 +4168,7 @@ struct btf_record *btf_parse_fields(const struct b=
-tf *btf, const struct btf_type
->>  			rec->spin_lock_off =3D rec->fields[i].offset;
->>  			break;
->>  		case BPF_RES_SPIN_LOCK:
->> -			WARN_ON_ONCE(rec->spin_lock_off >=3D 0);
->> +			WARN_ON_ONCE(rec->res_spin_lock_off >=3D 0);
->
-> [Severity: High]
-> This is a pre-existing issue, but could this WARN_ON_ONCE() be triggered
-> from userspace and cause a kernel panic on systems with panic_on_warn
-> enabled?
->
-> If a crafted BTF with multiple identical unique fields (like
-> BPF_RES_SPIN_LOCK) is provided in different nested structures, it appears
-> btf_find_struct_field() resets seen_mask to 0 for each nested level:
->
-> kernel/bpf/btf.c:btf_find_struct_field() {
-> 	u32 i, off, seen_mask =3D 0;
-> 	...
-> }
->
-> This could allow duplicate unique fields to bypass the seen_mask check an=
-d
-> be returned to btf_parse_fields(). When iterating over these duplicates
-> here, would it hit this WARN_ON_ONCE() and panic the system? Should we
-> return an error instead of warning, or pass seen_mask down during the
-> recursive struct traversal to prevent this?
->
->>  			/* Cache offset for faster lookup at runtime */
->>  			rec->res_spin_lock_off =3D rec->fields[i].offset;
->>  			break;
+tcp_bpf_sendmsg() keeps msg_tx across sk_stream_wait_memory(), which
+drops and reacquires the socket lock.  Its error path tries to decide
+whether msg_tx names the local temporary message by comparing it with
+the current value of psock->cork.
 
-Fixed by next commit.
+This comparison is unsafe when two threads send on the same socket:
+
+  Thread A                         Thread B
+  msg_tx = psock->cork
+  sk_msg_alloc() fails
+  sk_stream_wait_memory()
+    releases the socket lock      acquires the socket lock
+                                  completes the cork
+                                  psock->cork = NULL
+                                  frees the cork
+    reacquires the socket lock
+  msg_tx != psock->cork
+  sk_msg_free(msg_tx)
+
+The stale cork is therefore mistaken for the local temporary message
+and freed again.  KASAN reported:
+
+  BUG: KASAN: slab-use-after-free in sk_msg_free+0x49/0x50
+  Read of size 4 at addr ffff88810c908800 by task poc/90
+  Call Trace:
+   sk_msg_free+0x49/0x50
+   tcp_bpf_sendmsg+0x14f5/0x1cc0
+   __sys_sendto+0x32c/0x3a0
+   __x64_sys_sendto+0xdb/0x1b0
+  Allocated by task 89:
+   __kasan_kmalloc+0x8f/0xa0
+   tcp_bpf_sendmsg+0x16b3/0x1cc0
+  Freed by task 91:
+   __kasan_slab_free+0x43/0x70
+   kfree+0x131/0x3c0
+   tcp_bpf_sendmsg+0xec3/0x1cc0
+
+msg_tx can only name the stack-local tmp or the shared cork.  Test for
+tmp directly so a changed psock->cork cannot turn a shared message into
+an apparent local one.
+
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Cc: stable@vger.kernel.org
+Signed-off-by: Chengfeng Ye <nicoyip.dev@gmail.com>
+---
+ net/ipv4/tcp_bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 8e905b50dead..a30475afb6f8 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -604,7 +604,7 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ wait_for_memory:
+ 		err = sk_stream_wait_memory(sk, &timeo);
+ 		if (err) {
+-			if (msg_tx && msg_tx != psock->cork)
++			if (msg_tx == &tmp)
+ 				sk_msg_free(sk, msg_tx);
+ 			goto out_err;
+ 		}
+-- 
+2.43.0
+
