@@ -1,63 +1,63 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
+Received: from mail-wm2-f3.google.com (mail-wm2-f3.google.com [74.125.225.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E4E3A1681
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D253A5421
 	for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 15:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784475402; cv=none; b=kTeNFHnNgaNZGdw+omDRXPJmCFEZJuHDbHl3rxIVE3m+WpISVI11Qv43euH2sSASzpe3MZmgZ4cZ3Ja7E7itHGvBJViZvc5xBMOC7+zIyC6S1x7sPEswnS93G2bc4qWGziurM3rwrcd2Vm/5CZcrPY6xT8accVBf90NkAkPku/o=
+	t=1784475403; cv=none; b=g3Bb9mgjte0RpRw5HFBt3cRxPATUTHtE+evuHi88UAW4018Fn71gLSJe/oYkjbG0NYY/21WbfV07+EUJSvkDZbE01IE7p6JnW0Fs/4swnVQ7ZnCuxnbojIUx5XWXDqtll1Eajvo0X/LeVLnV76+vgrmLoVr2kiPMcDfMYohesY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784475402; c=relaxed/simple;
-	bh=10Ho7dr5l4fuAhOOthXSibAznFNAgGdRFTc8FN9HcCk=;
+	s=arc-20240116; t=1784475403; c=relaxed/simple;
+	bh=2oa5USaUdYnShJ/OC6sAxGb9UX1weNTEblTOqF+//Po=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JcTxxbM7IGE8DDzxOm6kt4MYN2D3RXNhzrzlqGa4uWWER4N+VA1nDYRKGSQJ93nxV3ZNENXCcWoO5S+ROD6kXiMGv8841eHzztbQovUHOmMtGkoTmuxK9tI4m6sgQ8uRiyzDMYMkpxvnJq5/RC4CtnoAkA0biEmStqQbEl2ur9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=APem2PZB; arc=none smtp.client-ip=74.125.225.64
+	 MIME-Version; b=FBYozaoVvVWckcY571H+Vq02e3YGu9hOFLMRfInmrVMcJOGmEFfgXVNITlhwr9z3kv4WAD0QxXpHaVFiF8va41ln7XqTagt86hBTieRDbBiIduYdaseInNvRHquvDf56SO4KCJPQ+H8pNFLHc/np/1vEn0664sXhwPiZKdpR5sM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J1m6pVyX; arc=none smtp.client-ip=74.125.225.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="APem2PZB"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4744516a312so1276327f8f.1
-        for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 08:36:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J1m6pVyX"
+Received: by mail-wm2-f3.google.com with SMTP id 5b1f17b1804b1-493ec89dbb0so5916165e9.0
+        for <bpf@vger.kernel.org>; Sun, 19 Jul 2026 08:36:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784475399; x=1785080199; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784475400; x=1785080200; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Vmi9hbcO0tiSDtwGKEKzAl+A2ux3D+9Qg88NOjva8w0=;
-        b=APem2PZBu6b28bEEkQvkhNabsveLcNgTSEsfj2ag4Nibye4oqywFuS8RU+HlheTmc6
-         URcVNKjj+czzx5lleOPstpATePlxXfGn/y4bUn6qcj/ia5h82l+WFQAWu6NnyjzXFNC/
-         tLzUwZ9NsxBjI3ql42IzfWKmcEo6iYy8I4d+t8eZLT4Sb2DF8XvGHIMgT2Qw0vRVH/PY
-         Gb+vAQ0H4aFhtk5EybU4prnBVfU6k5s6FuW5x8mVyS+NzBBzgEg8RdPOlJKIakf6wMC9
-         mPGOTNjZB5bGggLwZDrIbAd32Q/nyYYr83Tru5+h9jELIBAVtsGo/vQbjNFJXgeUBJFT
-         BnVQ==
+        bh=f0Wgj2xTEJwb2gCLeRgxerl9SDNG4n6ZvruOvMWJ0ZE=;
+        b=J1m6pVyX0M5m2g3QgL0QTu5eUixcm7ZbCqP7uYDHro5dxHxCV6iDeuY+iv6Ja8dQ4g
+         /mP014nNmh0xVbMnMRcehwMHKQuovECMhOWH9/bbWGwdiUENhYYnAcj1r+F0bRVOZgo/
+         T3bfRC1XvqQB8Xt28evq5gRs5Ot3HirL2bmqAEFWg8p1IDYYa5nPQYVgwrXv17fpVDxP
+         jEzdF+ClRb7DMbw5sGFLTDV/e6JNSdoWlLmndQaUGFWyCHCRq8X7F5/UHm9rsJ9RfjJp
+         YObxED8A6lvL5ZOxfHdt2cN3/5oN4q5p7UIauGy0G04WzycGf4wk+RBiqWMQjvkYYq3J
+         NdbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784475399; x=1785080199;
+        d=1e100.net; s=20251104; t=1784475400; x=1785080200;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Vmi9hbcO0tiSDtwGKEKzAl+A2ux3D+9Qg88NOjva8w0=;
-        b=Y3PTUEEkI3tfJvY0KqokiQmRc5JvWsy+A9BQyJfZc4WE3mPLCdRk0auf4mM/Ux+xpe
-         Ea041+0QyimNrDgI2XOz+mojQJ5TF6CKZbu4nJNA6nGPe+FdxEK0uEAT43nCUahG2vTO
-         RAXcyEjOAVY7Rnlz2BFY7RU86BFjk9F9xIt8zaKw9V5qHcjtTEDtFLDOgKeGLQJAyUpL
-         ub0/bmtR/cXVn/14fMADNC0EZNhiy+Kz307Z48kdFWADRn7wr4h5tSJKh0K6RH7HxJ01
-         GAmVlR9UL68MjAZNN//J4Wt3nCoMZYwF5tz9j5O7iKjrbcQ8CuJ62FTRYHHmRVMiOQf+
-         gq4w==
-X-Gm-Message-State: AOJu0Yx+vGC8m9wvpnOwN0iVtCOpMLBj8OQl4M63uhGNWPjfsH6LWZdc
-	vArng3VVb8W6exL0Da5sf/aRUXm+NE3s8QsjdDtom7kttLVVihyBfZYggcJ+rLdT
-X-Gm-Gg: AfdE7ckmJETRlDM0aqsGljrWX1oEw6Pnv5uraneoJFySVWpvCkhnAem5t+lRUKCIMHO
-	uECcC6luaHfypCXE/Bl7CSTdzSuoKuWZzsD3ZsTJyIz+lTh8oPL01yCsLU4bR8ZHoBskMq2W+bK
-	wx3V03JZcQ5qd83Kn7h16RxZYSEkLyleFdvtgKfs3Y3d+BJRWbAj/ReaX+4zPx8nCZCL/MtECEO
-	w0Jopzj8labRIl6K296xDjH/YGQ8ux+5j4ra86DkkwVX3eMdsnjvikV8GlfScaBEayMpzRDigyV
-	gE9ZY6Jg2KvBYzS/cPf7m3SHW7r8ArWQBXA+xwvPq8ZT36bJ/nDANpab620DQ196dY3LpHoq9mz
-	qPlWfY/Em3dg1AWyZHh/x+ob8xNIo5G+T1kDaXXVuO4XStRDIiGTufQS6xjnYd7Wy5hUAs7u4Q6
-	4UCPR+QAA0aSa1xWETH2B/twxth+GGR0mVeV3vwUM7meLnvPbQ5+lmwtX73NzxICNGKsS2BVYYL
-	Q+RJuwWHUxUVrpgHTzYEIg51cnth5f24/HUaUlzOn0A4e1xkVTCq8M=
-X-Received: by 2002:a05:600c:3113:b0:493:f478:4c71 with SMTP id 5b1f17b1804b1-4954a323b14mr107429325e9.7.1784475399059;
-        Sun, 19 Jul 2026 08:36:39 -0700 (PDT)
+        bh=f0Wgj2xTEJwb2gCLeRgxerl9SDNG4n6ZvruOvMWJ0ZE=;
+        b=HQNUTlGWwySacoS9rYeRteTid1rNt/NGrZ3R7xlVU997NBva7HYKV8Uc8M0rt4m3XE
+         nEKC2AkyEvHVUkwKUa3ptvGpj3DwQcwOJi8BqlnZlwYp75eGPaSJyELHyWkGCARNAwfs
+         HELUqPnnrXb2ukdJxNVgroX1VtKdl4wpcMbHX1zDSOIkReSrhRCI6yk731mpEfjZ8wMD
+         4xs91NAL0mWhjCYUJPXki+ify3k+NTnC47zPk0WS/Plwl+oM1zHSZ44CUDRH05zvGtYk
+         3s0rmonAaaOjdUxybF3mGFjEQphKLhkZ0rpFe1yLAxhw/T0Mes8LVAFEJgU8cfNadwo0
+         WpoA==
+X-Gm-Message-State: AOJu0Yzo0ady9wcOYF11FyOnXGdFpWsaxHCGXMdnmA5MjwvkOW43P7w0
+	hKK3FwR61bFHO5TlWQozKKMTMorTpkSLkp6fnKn5FmCF9BqjFCR65rpOqqutKyZk
+X-Gm-Gg: AfdE7cmlB31AkaIs9sHzN2XU6mocGenUwM/omlDZVNzQlfYQ50UNio0+DFiE8gHB2I0
+	uRLmrIWQaxhgyNqdVpeicDo4qqiQ3UnOhGwaFh4esHdcIODum3MKMBK/IwhDtgAvU7tKVwY6lWg
+	OEw9DN+XmqobhGL7WLGe4WCevyTD1HxDlJ4p+PzsLx+b+rILO3nkudkzPpcJeqWUTdOiVSHELHo
+	eeC601DN9v1C1WD2Q601iaE61Ur9qf0viACil35W4z/ulGCHwNY5LtRvGi90j40cBsu0klqDUpG
+	QqRFGSunYN1OGKdw2XV9tpxBMcC5go3LB93IKIQ+P6myyKoeHG/Ad8LjsYJdZ2dng3Dl1E9XaAe
+	v1Km06rfqhRIg4Ri8sWuBelvdtJGdyaQH+RtuhETDaC8olgWaGfFycdXXjAwBwUCyb0XU/NvM6j
+	4uevH7uNqxdc/i6zpnlzbSP86RGwbTOGKB0r6K5YqVKQ91UIyfTc35rmVITzVKyIyUYpgKW2JLB
+	3VzVnn2RiwRLg6b/kK+bjZA6ymTIjuUUn2j9GfOTXVF
+X-Received: by 2002:a05:600c:4f0e:b0:495:4f84:7280 with SMTP id 5b1f17b1804b1-4954f847354mr85184855e9.4.1784475400152;
+        Sun, 19 Jul 2026 08:36:40 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4954a2edbe4sm221929135e9.12.2026.07.19.08.36.38
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4954a2edda2sm197510335e9.13.2026.07.19.08.36.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jul 2026 08:36:38 -0700 (PDT)
+        Sun, 19 Jul 2026 08:36:39 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 4/5] selftests/bpf: Test duplicate unique fields in nested structs
-Date: Sun, 19 Jul 2026 17:36:31 +0200
-Message-ID: <20260719153634.2908692-5-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Test duplicate bpf_refcount fields
+Date: Sun, 19 Jul 2026 17:36:32 +0200
+Message-ID: <20260719153634.2908692-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260719153634.2908692-1-memxor@gmail.com>
 References: <20260719153634.2908692-1-memxor@gmail.com>
@@ -79,50 +79,45 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1511; i=memxor@gmail.com; h=from:subject; bh=10Ho7dr5l4fuAhOOthXSibAznFNAgGdRFTc8FN9HcCk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JISvmlcSU1R9Mrh9YOCF35iKZi58XyUd5lPRfMH39XfLuE i+135WvO0pZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRl/4M//23PVi8vVPSTOXv 9dvHeLY/4Z3UtMV4ZeG5BLUnBQofMgoY/mn9MrlTe4X9W5XLq1adS+XysrIarpvqQ7Y+u/db46/ 5Wg4A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1366; i=memxor@gmail.com; h=from:subject; bh=2oa5USaUdYnShJ/OC6sAxGb9UX1weNTEblTOqF+//Po=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JISvmlUTyDy3zKH+zP6f2hpw48zny0Wy7i/EaDGr/EjJsb 5892BjdUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIn8u8bwvy704/ObDPaBnzsK 7zZ1x/4w6RbkFDk+nU3VRC6HraDpHsP/aI/m97+6XkQc+vXN0Us2fqnXzKs+Uz3ZAi743xI7qJv ABQA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add a raw BTF test with a spin lock directly in a struct and another in a
-nested struct. The duplicate must now be rejected during BTF loading.
+Add a raw BTF test with two bpf_refcount fields. The duplicate must be
+rejected during BTF loading instead of reaching the duplicate-field
+invariant in btf_parse_fields().
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/btf.c | 27 ++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/btf.c | 21 ++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index 66855cbd6b73..2100400d896b 100644
+index 2100400d896b..67b9015cbd98 100644
 --- a/tools/testing/selftests/bpf/prog_tests/btf.c
 +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -4250,6 +4250,33 @@ static struct btf_raw_test raw_tests[] = {
- 	.max_entries = 1,
+@@ -4277,6 +4277,27 @@ static struct btf_raw_test raw_tests[] = {
+ 	.btf_load_err = true,
  },
  
 +/*
-+ * struct inner {
-+ *     struct bpf_spin_lock lock;
-+ * };
-+ *
 + * struct value {
-+ *     struct bpf_spin_lock lock;
-+ *     struct inner nested;
++ *     struct bpf_refcount a;
++ *     struct bpf_refcount b;
 + * };
 + */
 +{
-+	.descr = "struct test duplicate nested unique fields",
++	.descr = "struct test duplicate bpf_refcount fields",
 +	.raw_types = {
 +		BTF_TYPE_INT_ENC(NAME_TBD, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
 +		BTF_STRUCT_ENC(NAME_TBD, 1, 4),				/* [2] */
 +		BTF_MEMBER_ENC(NAME_TBD, 1, 0),
-+		BTF_STRUCT_ENC(NAME_TBD, 1, 4),				/* [3] */
++		BTF_STRUCT_ENC(NAME_TBD, 2, 8),				/* [3] */
 +		BTF_MEMBER_ENC(NAME_TBD, 2, 0),
-+		BTF_STRUCT_ENC(NAME_TBD, 2, 8),				/* [4] */
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 32),
++		BTF_MEMBER_ENC(NAME_TBD, 2, 32),
 +		BTF_END_RAW,
 +	},
-+	BTF_STR_SEC("\0int\0bpf_spin_lock\0val\0inner\0lock\0value\0lock\0nested"),
++	BTF_STR_SEC("\0int\0bpf_refcount\0refs\0value\0a\0b"),
 +	.btf_load_err = true,
 +},
 +
