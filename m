@@ -1,185 +1,163 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C8B13C9C4;
-	Mon, 20 Jul 2026 13:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDB640DFDE;
+	Mon, 20 Jul 2026 13:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784553843; cv=none; b=LQ4Sdtbaqiq3Lhj37trVcEPCHrGOlU9IBK4mCrNodY/EAEVWAPrOkfyIcY1FC4eyKKai0yBfqDUdcgkBHviAjY1nfXo4VJljvtMuIjIlFaMqdosHICco1OewaOgcv9+hUNRDn1uMznRFvZy+34cg73/kML1z+zRfOtnPGPkdrHs=
+	t=1784553986; cv=none; b=eS4cXn6PriVTS4qO+AN5SmXHuZhgVRCEJVOxj+ylViQNMITlBNI/eIyyGBg1jwgr8HsfJ+IlDc3IKzdmmoTa/7nd/ELqpPJP+F2CH6ooH56kVoVre/C+lKCIoHvuOvjxOREuNxBVhIDZU8n7IekgCczAd6RlGKqmwh9or6PvhpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784553843; c=relaxed/simple;
-	bh=NX7o9MEnwBb1ZdXMh5zfcmhcQEOlSll9tKEHjzqLS7A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Z8w4403wUeBgIEwv18kuoIavm4sR/PEDUG347oD5+Q8zR7Wki7wO5qujEJ4vDPM3wTOLpGBkZsTz+qkfHKUIcy5i1xDIVVSm/vvOBZKqYsvXVM5bbTFluuPOYlqQZYcsNVM27WFa7n6fxOV4ffrSdyMknL93hfS2pIdTMpV0u54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=WDJ4beNA; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="WDJ4beNA"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
-	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
-	bh=BkKV/CXdplTRXv3/Z7GA3DMv5lr0BziwgRfgXCsS3o0=; b=WDJ4beNAvQwsduVlfMQF4N9GDi
-	iKsoAJ3xMPMWfpHtmsQ8qx3G7zxvvj0NaLK5gb7wdiGXoq6y4XMf8mMtMhZmzqgdc7Baqh2mzN4BP
-	j4W655BXOjsSosmYNE4tmdhcjNPOQDjpliQLwQSEOxTlkmApNZvltu2gnm63lHeWZNJRNUP1C9HtV
-	kIXr52sbeDSHR+YYmfBN9qif2TgR/64Lg8G0ptl3gTx4sc8n1gRWAqch3sek2GAOWOir+DBEqyI3J
-	e7cHxgz+G42ZnviTZD2/sTNWh6VWJ7FkCXjAPfA2jgUqgt4OS/H0ljpmjqesK5BkFMyNfOGeEVaYr
-	Un63osog==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wlnyL-001Svl-18;
-	Mon, 20 Jul 2026 13:23:53 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Mon, 20 Jul 2026 06:23:45 -0700
-Subject: [PATCH] mm/kmemleak: report RCU-tasks quiescent states during the
- scan
+	s=arc-20240116; t=1784553986; c=relaxed/simple;
+	bh=ZGawmCXaYx/QVK3hYcXSBEwi4LPgFTI3S+rYbVPvmvo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qdaGLrrfHTXziG/IONVCFIDD0vUynwLcHOHlOY43nmFXAVmH32j6zU5+hTrEtyXl1LpkySLjNkyLGCSH8DBdwRp8nZhs7wRs8fzaFeJE9h1DumjbE1tNHuC1rv0DhyPJasH6y2epz4pU1ec9b4oNHtTOJ4hkjgWuK5OMNxQOsFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h3h9G4QQfzYQtp4;
+	Mon, 20 Jul 2026 21:25:54 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 450534058C;
+	Mon, 20 Jul 2026 21:26:20 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAHGHT6IV5qBcGqBw--.35011S2;
+	Mon, 20 Jul 2026 21:26:20 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jeff Garzik <jeff@garzik.org>,
+	Auke Kok <auke-jan.h.kok@intel.com>,
+	Breno Leitao <leitao@debian.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH net v2] e1000e: Fix out-of-bounds MMIO access by validating BAR0 size
+Date: Mon, 20 Jul 2026 13:30:49 +0000
+Message-Id: <20260720133049.1289167-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
-X-B4-Tracking: v=1; b=H4sIAGAhXmoC/x3MUQqDMBAFwKss7zuBJBbFXKWIRLPVJWolaUUQ7
- 17oHGAuFM7CBZ4uZD6kyHuDJ6sI4xy2ibVEeIIzrjaNMzqtvC4cUp/Hb/8JJek6VhystUP7aKA
- Ie+aXnP/z2d33DwD+DUZjAAAA
-X-Change-ID: 20260720-kmemleak_rcu_task-6d3ea111b947
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: paulmck@kernel.org, puranjay@kernel.org, linux-mm@kvack.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com, 
- Breno Leitao <leitao@debian.org>
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3492; i=leitao@debian.org;
- h=from:subject:message-id; bh=NX7o9MEnwBb1ZdXMh5zfcmhcQEOlSll9tKEHjzqLS7A=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqXiFlo5lGAhVSbkXtGZupsBhc+o/hOqPdZnkIJ
- +B/Z5gA54KJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCal4hZQAKCRA1o5Of/Hh3
- bUQSD/9c06m08PmDxKH4FhQFDUkA5k2PwriF3G4BpAD116tKr6TOrp/Qx7fSEKsCc0+71yP195B
- yMtmuOi5wSWW0JXrMGxljEckTDoo4Y6rL6lefCgbdl6d4nH5ssLbShttd4PjwUFL2vFOyRl90wH
- 1whJab+QbHm+bkvaoPbUIwoxD8twoTnXWOf8nJP6V6D8Q3A1qqjDRXA6eiI0+zg3fbICZjcN/xV
- xtlsHoqBNXhqxSsZqyBJME8eadY5OqhS0g9KoqBqWozC8vwQHD8AY0Z9sxc046141YaenpfyZCT
- 9gjJxuxARdo/NG6IftpcZ0ZyJcCTA7GDmoPMtUAnskHtCh5Y2kgNlfDrtG7sAYzdxeO6I54c8dE
- XB0ZwdVVEUUnPY3V+IetXbCuEvqxqbTtqpcJMyT59Quqd9u67ol5ATyLYZqgTL4yp92zFL6aUHe
- 3pn92M7KraNZ8Lbvnn+JMjC5caRw3mQed0/tBBTYqfmLpvPWlbrhxiDiH7DKRFqaMpzIhEIOg2b
- qyOVCqqVE00W0RKNAUhmRiWjDrMU9bHu3M+TXqVdnSI8RXf4SGC8ymk6Wwrpn623GPPKAsxIkcw
- Sd7lOgNErLvTBcukyL0rYO1FT06lH/AqqMcy/MBtvrIeP4LxlYd3jZoY0mHB7HHVfAEVmFtJZnP
- qrAhTeTp89a0wXA==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgAHGHT6IV5qBcGqBw--.35011S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWFyUtr1rZFWrGF4rKrWUXFb_yoWrZr4kpa
+	y3Ga47ur4rJr17X3W8Jr4UWFZ8Cayjyay5Cry2gwsY9FyUKry8Jry7tFW3Gr4xZFWktF9x
+	tryUZ34Ikr4qyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
+	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+	zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+	CwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcS
+	sGvfC2KfnxnUUI43ZEXa7VUbGQ6JUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-kmemleak_scan() can run for ages on large debug kernels. It was
-causing some soft-lockups which I got fixed with commit
-3175fcfec8b16baeb ("mm/kmemleak: avoid soft lockup when scanning task
-stacks") with our beloved cond_resched().
+From: Pu Lehui <pulehui@huawei.com>
 
-I've got the fix above deployed in the Meta fleet, and now I am seeing:
+Syzkaller reported a kernel panic caused by an out-of-bounds MMIO
+access in the e1000e driver.
 
-  INFO: rcu_tasks detected stalls on tasks:
-    task:kmemleak state:R ... nvcsw: 274/274 holdout: 1 idle_cpu: -1/3
-     scan_block
-     scan_gray_list
-     kmemleak_scan
+[   82.868719][  T404] e1000e 0000:00:02.0: The NVM Checksum Is Not Valid
+[   82.872328][  T404] Unable to handle kernel paging request at virtual address ffff80008894e090
+[   83.085218][  T404] CPU: 2 UID: 0 PID: 404 Comm: bash Not tainted 7.2.0-rc2-g3f1f75536668 #1 PREEMPTLAZY
+[   83.129013][  T404] pc : e1000_get_cfg_done_82571+0x70/0x158
+[   83.140092][  T404] lr : e1000_get_cfg_done_82571+0x68/0x158
+[   83.151196][  T404] sp : ffff80008ac37410
+[   83.158922][  T404] x29: ffff80008ac37410 x28: ffff0000cd6a11b8 x27: ffff0000c58190d0
+[   83.173919][  T404] x26: ffff0000cd6a11b8 x25: ffff0000cd6a0bc0 x24: ffff0000cd6a0000
+[   83.189417][  T404] x23: 0000000000001010 x22: ffff0000cd6a11c0 x21: ffff0000cd6a11b8
+[   83.205195][  T404] x20: 0000000000000064 x19: ffff80008894e090 x18: 0000000000000000
+[   83.220545][  T404] x17: ffff800081c1a3f4 x16: ffff800081c19c10 x15: ffff800081e86510
+[   83.235764][  T404] x14: 0000000000000001 x13: 0000000000000001 x12: ffff60001bc8a8b3
+[   83.251301][  T404] x11: 1fffe0001bc8a8b2 x10: ffff60001bc8a8b2 x9 : ffff800081eae25c
+[   83.266705][  T404] x8 : 00009fffe437574e x7 : ffff0000de454593 x6 : 0000000000000001
+[   83.281919][  T404] x5 : ffff0000cf2b9640 x4 : 0000000000000000 x3 : dfff800000000000
+[   83.297317][  T404] x2 : 0000000000000007 x1 : ffff0000cd6a11c0 x0 : 0000000000000000
+[   83.312601][  T404] Call trace:
+[   83.318662][  T404]  e1000_get_cfg_done_82571+0x70/0x158 (P)
+[   83.329748][  T404]  e1000e_phy_hw_reset_generic+0x17c/0x1a8
+[   83.341541][  T404]  e1000_probe+0xbd8/0x1988
+[   83.350334][  T404]  local_pci_probe+0x84/0x130
 
-and, worse, blocks the callers waiting on that grace period. Here a BPF
-struct_ops map free, which waits via synchronize_rcu_mult(call_rcu,
-call_rcu_tasks), is stuck long enough to also trip the hung task check:
+Repetition steps:
+1. Find PCI device which BAR0 size <= 4K. If it's:
+   Device Addr: 0000:00:02.0   BAR0 SIZE: 4K
+   Vendor/Device ID: 0x1af4 0x1004
+2. Unbind the above PCI device
+   echo '0000:00:02.0' > /sys/bus/pci/devices/0000:00:02.0/driver/unbind
+3. Set the above device to e1000e new_id
+   echo '1af4 1004' > /sys/bus/pci/drivers/e1000e/new_id
 
-  INFO: task kworker/...:bpf_map_free_deferred blocked for 122 seconds
-     __wait_rcu_gp
-     bpf_struct_ops_map_free
+During e1000_probe(), the driver maps the device's BAR0 memory region.
+If the device has a 4K BAR0, ioremap() maps only 4K of space. Later in
+the probe process, when the NVM checksum validation fails, the driver
+attempts to perform a hardware reset and falls back to the err_eeprom
+cleanup path.
 
-Then I've learned that cond_resched() is not an RCU-tasks quiescent
-state, so, we need to use stronger primitives.
+This cleanup path will trigger an OOB access kernel panic:
+e1000_phy_hw_reset
+  e1000e_phy_hw_reset_generic
+    e1000_get_cfg_done_82571
+      er32(EEMNGCTL)
+        readl(hw->hw_addr + EEMNGCTL); <-- EEMNGCTL(0x1010) > 4K, OOB access
 
-Use cond_resched_tasks_rcu_qs() at the scan reschedule points so the scan
-reports an RCU-tasks quiescent state as it proceeds.
+Fix this by ensuring the MMIO length (pci_resource_len(pdev, 0)) is at
+least 64K (0x10000) before proceeding with ioremap(). The 64K minimum
+safely covers the maximum register offset accessed by the e1000e driver.
 
-Inspired by commit b96285e10aad ("tracing: Have osnoise_main() add a
-quiescent state for task rcu").
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Fixes: bc7f75fa9788 ("[E1000E]: New pci-express e1000 driver (currently for ICH9 devices only)")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- mm/kmemleak.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+v2:
+- Update comment about E1000_MMIO_LEN_MIN. (Breno)
 
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 85f18b17e79c4..f63dfacee7ca1 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -1586,7 +1586,7 @@ static int scan_large_block(void *start, void *end)
- 		if (scan_block(start, next, NULL))
- 			return 1;
- 		start = next;
--		cond_resched();
-+		cond_resched_tasks_rcu_qs();
- 	}
- 
- 	return 0;
-@@ -1623,7 +1623,7 @@ static void scan_object(struct kmemleak_object *object)
- 			scan_block(start, end, object);
- 
- 			raw_spin_unlock_irqrestore(&object->lock, flags);
--			cond_resched();
-+			cond_resched_tasks_rcu_qs();
- 			raw_spin_lock_irqsave(&object->lock, flags);
- 			if (!(object->flags & OBJECT_ALLOCATED))
- 				break;
-@@ -1645,7 +1645,7 @@ static void scan_object(struct kmemleak_object *object)
- 				break;
- 
- 			raw_spin_unlock_irqrestore(&object->lock, flags);
--			cond_resched();
-+			cond_resched_tasks_rcu_qs();
- 			raw_spin_lock_irqsave(&object->lock, flags);
- 		} while (object->flags & OBJECT_ALLOCATED);
- 	} else {
-@@ -1673,7 +1673,7 @@ static void scan_gray_list(void)
- 	 */
- 	object = list_entry(gray_list.next, typeof(*object), gray_list);
- 	while (&object->gray_list != &gray_list) {
--		cond_resched();
-+		cond_resched_tasks_rcu_qs();
- 
- 		/* may add new objects to the list */
- 		if (!scan_should_stop())
-@@ -1708,7 +1708,7 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
- 	raw_spin_unlock_irq(&kmemleak_lock);
- 
- 	rcu_read_unlock();
--	cond_resched();
-+	cond_resched_tasks_rcu_qs();
- 	rcu_read_lock();
- 
- 	raw_spin_lock_irq(&kmemleak_lock);
-@@ -1753,7 +1753,7 @@ static void kmemleak_scan_task_stacks(void)
- 			}
- 			put_task_struct(p);
- 		}
--		cond_resched();
-+		cond_resched_tasks_rcu_qs();
- 	} while (pid && !stop);
- }
- 
-@@ -1935,7 +1935,7 @@ static int __kmemleak_scan(bool full)
- 			struct page *page = pfn_to_online_page(pfn);
- 
- 			if (!(pfn & 63))
--				cond_resched();
-+				cond_resched_tasks_rcu_qs();
- 
- 			if (!page)
- 				continue;
+ drivers/net/ethernet/intel/e1000e/netdev.c | 5 +++++
+ drivers/net/ethernet/intel/e1000e/regs.h   | 3 +++
+ 2 files changed, 8 insertions(+)
 
----
-base-commit: 0718283ab28bc3907e10b61a6b4be6fefa1cbb2f
-change-id: 20260720-kmemleak_rcu_task-6d3ea111b947
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+index 844f31ab37ad..46e58e926f7b 100644
+--- a/drivers/net/ethernet/intel/e1000e/netdev.c
++++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+@@ -7450,6 +7450,11 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	mmio_len = pci_resource_len(pdev, 0);
+ 
+ 	err = -EIO;
++	if (mmio_len < E1000_MMIO_LEN_MIN) {
++		dev_err(&pdev->dev, "MMIO len is too small\n");
++		goto err_ioremap;
++	}
++
+ 	adapter->hw.hw_addr = ioremap(mmio_start, mmio_len);
+ 	if (!adapter->hw.hw_addr)
+ 		goto err_ioremap;
+diff --git a/drivers/net/ethernet/intel/e1000e/regs.h b/drivers/net/ethernet/intel/e1000e/regs.h
+index 6c0cd8cab3ef..dbabd35f5a12 100644
+--- a/drivers/net/ethernet/intel/e1000e/regs.h
++++ b/drivers/net/ethernet/intel/e1000e/regs.h
+@@ -242,4 +242,7 @@
+ /* PHY registers */
+ #define I82579_DFT_CTRL	PHY_REG(769, 20)
+ 
++/* Smallest BAR0 that covers every register the driver accesses */
++#define E1000_MMIO_LEN_MIN	0x10000
++
+ #endif
+-- 
+2.34.1
 
