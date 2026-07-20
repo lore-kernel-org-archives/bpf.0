@@ -1,159 +1,123 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570F23ACA57
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 20:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784580109; cv=pass; b=RZTnz7yM/jYJCRGMkmprHkJ4M7Feth0adcMhdzyPDkXEy0rT8QhsCQnSU2Fwbtyo91xJlMnKNZqV9i6Eifcx6vIX7+IWL4+Kx88rmd81PMbUBwfNpU8MHkQq8FRtDYSDtZ+19lbYRDht+NGEmZW9Su8men+lQtxPWLX9zmT+Jjo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784580109; c=relaxed/simple;
-	bh=+FnGzrkieywgVg11x7JlrzQVOV+0MSbS/7UrH/f2buE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NddAmrL9ce64SR/QnFEnZdzueArtVyYXrDfDftULwyeMEIqbjdVKhNdokURH3YN/lZuaEQKwQaCPdKDj9oldP9suzSWyUADZtvUQUKQRVj1D/BJ/KQN/PYhTuxwfRhBALnMmXP+dFxlbeEIIWA7ZekS3M5f6R02NK81w4XzD1xQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=acU5kcyz; arc=pass smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D843C3BF7;
+	Mon, 20 Jul 2026 20:53:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784580814; cv=none; b=dZUTLgUeDP+NzCccW9AQXvl/lMfmVixvKulEBmzy9dByDC299CJ3RyXk9wOHzZ4mH7Io6PrlscZwXm6MzV3YRzfLXAISLmvEU+OgxkgzuAImQ3KBQRE5YMhm3TK7ehZO+JwrWcjpokN/9t9CbngsfElxVmdhyfNs506n3sWA0wU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784580814; c=relaxed/simple;
+	bh=xNGHfZFJOSvi5ZB/bgCt2e5/PoA8SaVrwdd2Hji1bo4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GMV/Ue9J+6gQtftCUkL/FNh4tck1py1J4d2JQL/x/KhpNXmtt83+QP+UDnrjUPtBElJAODFa3DzKgwxJhcB09/nWFihsnz2BlagmNLpLZzjTnRgYygdaxXKobUO0NYP2dTyD4xy5Ldsbagod66CYdsurEoqJLC8K37jb3vO8V1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=kWRD/WwS; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="acU5kcyz"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c9fe3c9bd5fso2703994a12.0
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 13:41:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784580107; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jyU3/WCRPhXiCsc7MAjVS0qfYzXvVa6ripDc3CkaN1gyGLqRm33o0rBJF9n/F/B/DU
-         NlDttwNlc7NsRPtmTXsf9oG/V1FpgWqYAG3YDN/D+56pN4SO0MS37CWmtN9UksufHtzS
-         JdZKIAUr625I3opD+XMPMPoc6a2sqA4FGwYZck1VPky6AfMrEKlyDgp/MB4xbUHvDVt7
-         JmSsXF8dlqZh+X+nlurhEGYWmv3MUH3isJcu8wOuprCDT8jBeyngwWI0jkHWhNe7Dsdd
-         Uqi/OS1gmWiXuGcOGctnh5QTw0wszKApGUSabEF1BMaziobXlhlmNtzhN+S5gCXUCV12
-         Qdqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=A9BFAH7wtR+2i0gcTzfUj/Ayf/0UVSPIiKXXXL362qU=;
-        fh=C08reglIPPXqNB3PRHSGvBe0osl0YYxppkspdRz+Qno=;
-        b=K2BII6CFmVwZMRyybVUZZQ86TPgilpmrHRYDNZWjVEiiBoDjuD3fVK7C0g79pL9dfD
-         zCCYN1YjkaYFz1DPbrvGLnnXkJV9adBsf0/fgkZYp2Ky8WGBN3vwX0ASoyJR8KKM0oKO
-         +2U9oZAZlaHaeKVCWmqf4MR0f5KToHgfkvmK+haf1y7L2QUZuJmQSLoDgTzUOMhZ1f1Z
-         +COej5Irwv2xpjIn5IcLWQWMYXfsnWQMCzfvHbXNqb0/EOh4VpRX+4QyKBb77ZjvZo2j
-         +ivt9OF3M/xncEaMKsC9nIhmRx30/ivgQKyxtNERO9K5ndtb7cTuLS8Y/sK7e/zacKxC
-         RYsQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1784580107; x=1785184907; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=A9BFAH7wtR+2i0gcTzfUj/Ayf/0UVSPIiKXXXL362qU=;
-        b=acU5kcyz461RfGj31K+aMa61941kdHnQBbJ6e+23LJp4LwniIds9WYheH6RX4YeoNR
-         7M52t4Ca736IkAbT2nYVebEA/eSSOwjaJECJ35omKzxXNoN0ZOQnqhKGz6LCYloqdDGH
-         fGAodT8jcRTm6eVGA3+33QYCO47NNbbUaOtT/NrH2dRm0GLTh12p0sDRP28QvWm/B7ui
-         U7ItQAxCvfMVlZ2CKXqWBQ1guXfAn9gKhFhgkrLpkTCLOcAsuRsCsaYkrB2uRhOtiSU+
-         NXyQdOQhNBCOCVmzMfHof6ypHtgwwI6D64fu46mfBjdqG8hg7AixokpvzVQvF3qzwXNY
-         ebYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784580107; x=1785184907;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=A9BFAH7wtR+2i0gcTzfUj/Ayf/0UVSPIiKXXXL362qU=;
-        b=aWEYAq/LImeXO79ZqFLedhmxdxLiUN4sk/JhGCMKFaqFHQr+2eA9p4SuQayY3syJO0
-         8GytoXO1/bfTbg9qXT5EWpnl0FFGm6ie3lc+64ymxBiT2CVBWZz++M5gEphZKI04nTHy
-         vE7/HpNL0xidXkB1cawVMvpxhaYecIKeltMPTdY3QERb1yP3YwdyQsew2eVScqLHvle6
-         9e1sduqQVA+8a7Tx3+moQ2aDB7dbmTQ+idAHpNU/IGnu/ISd0/VGbBhxAce+c44MZF4I
-         QiX5IyFFKbpmCruXgWXdIdg2Zdm/pMgxlp2LbCOjs3+a9PQincYJFVmdWpchaxymdjXN
-         1dZg==
-X-Forwarded-Encrypted: i=1; AHgh+RqJ3gRet76kM0VlFhMJ9v4XutXlfIIsg/PeKA6nmTT+iobtHO5Bf0ML++9MegPMeHmYZLU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWbm6VR98D3uxb7VuwNy3aoMm9jwDWuGHPPO2CrMSJSUf+Sjbo
-	3u3LI+ajGq74QfdimNtmhB4k+xSr2kmzGVV50XLmYae7PG/St6OkrYoOaPcVRkzj7ee0980Tceq
-	KVZuVQFIJBiVwlnRAqoW7CRkL2edHNjMHs4JtewC/
-X-Gm-Gg: AfdE7cmfBCIV8iOepFQf/TZUxuOhRE0vk/y9mVNc+VN8T97Yp68qERHFG8HLnu2g8kJ
-	LB1QzwAE9YmO/39nI3q6X2NDbopXP5hs3w/zjuyyfDaeajOqWijexpbhlWlL7t+RRg9s6N7BtHW
-	NzaBAlgnmmtEWD2/XKWLr+iqfPIDYrj06zLwnPvfqiVXaa58mhBov8+8KC/K4JzcSEl9ON3Jhu2
-	IHzdQKC+bd2WmE11pw4Ug1X+WRQJZcVT+cATFUg6ZVjChmOLnfoxPwTGyJzJA==
-X-Received: by 2002:a05:6a20:9183:b0:3c0:9acb:3fc with SMTP id
- adf61e73a8af0-3c3ad121d58mr15942725637.33.1784580106787; Mon, 20 Jul 2026
- 13:41:46 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="kWRD/WwS"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=rLkNesRCYNFOq+ZuVFxEEhkM0txhhysUwpvEFeMD4Fw=; b=kWRD/WwSdH3oQGCu/bb2MqxLFt
+	GxxMAXajZYFA8mU3N1Pm9DTmh8P/j0xPt/6IE5Pei2n1jaMYNVOfrjUkv5qnofA/1mh5DxHW6vw6w
+	G6xJB9AiVVAZK+u8aHNV/3Pt2rqgYDi1iqaQ5Jt98DQbpEtpuFBvr45lX/W5wsB0Shy0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wluz9-00DK2K-VG; Mon, 20 Jul 2026 22:53:11 +0200
+Date: Mon, 20 Jul 2026 22:53:11 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Natalie Vock <nat@pixelcluster.dev>
+Cc: Taehee Yoo <ap420073@gmail.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Alexei Starovoitov <ast@kernel.org>, amd-gfx@lists.freedesktop.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Bill Wendling <morbo@google.com>, bpf@vger.kernel.org,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	David Airlie <airlied@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Felix Kuehling <Felix.Kuehling@amd.com>,
+	Hoyeon Lee <hoyeon.rhee@gmail.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Leon Romanovsky <leon@kernel.org>, linaro-mm-sig@lists.linaro.org,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+	Mark Bloch <mbloch@nvidia.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+	Simona Vetter <simona@ffwll.ch>, Simon Horman <horms@kernel.org>,
+	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [RFC PATCH net-next 08/13] drm/amdkfd: add GPU instruction
+ emitter and disassembler
+Message-ID: <8dfbef48-db20-4642-8f50-e37f46af6627@lunn.ch>
+References: <20260719175857.4071636-1-ap420073@gmail.com>
+ <20260719175857.4071636-9-ap420073@gmail.com>
+ <41e73be8-242a-4e7b-b085-439375303590@pixelcluster.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708000956.46138-2-dwindsor@gmail.com> <cb9f84292a7f1d41ff8388d8c0c8c3d0@paul-moore.com>
- <CAEXv5_i_iHmF8n6Qf1NiVOhm2cCnVLgmwXK-b8M+hvmdO3aQdA@mail.gmail.com>
-In-Reply-To: <CAEXv5_i_iHmF8n6Qf1NiVOhm2cCnVLgmwXK-b8M+hvmdO3aQdA@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 20 Jul 2026 16:41:35 -0400
-X-Gm-Features: AUfX_mxGGJZotoA_L59yykgtbAa9gAB3rgxUm27TjBp9LjxVqLCLOtt3LkUBu9U
-Message-ID: <CAHC9VhQFGQmJ829kAZ7U48kQOyPT-+zixb61VuK3Zn-myV6+vA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] security: rework inode_init_security xattr handling
-To: David Windsor <dwindsor@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <41e73be8-242a-4e7b-b085-439375303590@pixelcluster.dev>
 
-On Mon, Jul 20, 2026 at 2:06=E2=80=AFPM David Windsor <dwindsor@gmail.com> =
-wrote:
-> On Thu, Jul 16, 2026 at 5:55=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> >
+On Mon, Jul 20, 2026 at 10:05:33PM +0200, Natalie Vock wrote:
+> On 7/19/26 19:58, Taehee Yoo wrote:
+> > Add the AMD GCN (gfx9/gfx10) instruction encoder used to build the GPU
+> > shaders that knod dispatches, plus a matching disassembler used for
+> > debugging the generated code.
+> 
+> Is it really necessary to have a full-on compiler and disassembler in the
+> kernel driver? This patch is massive and I'm wondering how much benefit it
+> really provides. Is there really no way to move GPU compilation out of the
+> kernel, one way or another? Could you get acceptable perf with a static
+> shader that interprets BPF programs at runtime? Such a shader can be
+> compiled beforehand and just embedded into the kernel - there's prior art
+> there with the CWSR trap handler in amdkfd.
+> 
+> In case you really, really need to compile the BPF to native ISA, could you
+> still have userspace take care of that in one way or another?
 
-...
+There was a long and painful discussion about P4, and offloading it to
+hardware. The proponents of that wanted to do the compilation stage in
+user space to produce a binary blob, but it was hard to prove that the
+P4 passed to the kernel for software processing, and the binary blob
+passed to the hardware actually where the same. It opened up the path
+for closed source P4 where the kernel never got to see the actual P4
+code. So it was not really offload, but kernel bypass.
 
-> > > +int security_lsmxattr_add(struct lsm_xattrs *xattrs, u64 lsm_id,
-> > > +                       const char *name, const void *value,
-> > > +                       size_t value_len)
-> > > +{
-> > > +     struct xattr *xattr;
-> > > +     void *xattr_value;
-> > > +     size_t name_len;
-> > > +
-> > > +     if (!xattrs || !xattrs->xattrs || !name || !value)
-> > > +             return -EINVAL;
-> >
-> > Sashiko raised a good point about xattrs->xattrs being NULL not
-> > necessarily being a good reason for -EINVAL.  If xattrs is NULL, yes,
-> > something has gone wrong and -EINVAL seems reasonable, but the
-> > xattr->xattrs NULL case does seem like it should simply return early
-> > with a value of 0 (see SELinux's handling of this case as an example).
->
-> The problem is, SELinux has already set the sid by before calling
-> lsm_get_xattr_slot, so we do indeed get an in-core label for the inode
-> before returning early here. Returning early here from BPF would not
-> mean the same thing: there is no label anywhere, in memory or on disk.
+So having a compiler in the kernel is probably the correct way to go,
+if you want to be friendly to open source.
 
-It's important to remember that you are not always guaranteed to have
-an lsm_xattrs buffer, for some filesystems that is going to be normal
-and expected.  In these instances the 'xattrs->xattrs' value is going
-to be NULL and each LSM that provides a security_inode_init_security()
-LSM callback needs to handle that condition gracefully.
+The other option is to get the GPU to do the compilation itself, so
+you pass BPF byte codes to the GPU and it generates its own native
+code. I've no idea if that is possible, but clang can target OpenMP,
+so maybe it is possible to move this compiler into the GPU?
 
-As you already know, the SELinux approach to this is to set the
-in-memory inode label, but refrain from setting a presistent label
-(these filesystems are typically either transient or don't have a
-mechanism to allow for persistent label storage).  Each BPF program
-will need to decide how they want to handle this in their
-security_inode_init_security() callback, but in the
-security_lsmxattr_add() code where the only purpose is to populate the
-lsm_xattrs strcut with the persistent BPF label/xattr, there is
-nothing that can be done, it should simply return early without error.
-
---=20
-paul-moore.com
+      Andrew
