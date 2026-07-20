@@ -1,211 +1,150 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1BB417BE2
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 18:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2BB31D372
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 18:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784573076; cv=none; b=rWc9aFFVa8UQX5B8NIKATyQd0ky6o0qRz6Vfl4gAWpr1JQlHWrnyr80evsLA2YdaaW9EiQoxLB7K3vSCXrndrwzrc4vT5enKDAYbZto7BofWJknw1JPZT+bghQL74gH8tSa4bbCZOX08ZzgCZ7GbQaUkegZpMn8YQZINELussQI=
+	t=1784573235; cv=none; b=gw1//MK+M9W8abYz/eLZQqSlKzku9WwCYjLj4RSK0BNTLN64ImUdtaxBOsxvEOqxVacqSMgiL/DMUymq3pIDjgWBZzTUdY20XRWAbb4oLsB8zKBR39tuWj5wJWeRy7tO6ydOkrnHu/1ZtNHoiaNwEQ8JZvYI1VvWRjhgLLVISOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784573076; c=relaxed/simple;
-	bh=2L2fv/rRlQ7gXsqSpb4UNsGxj75C744R/uNr4AqWByk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oK4c2Zdj6pEJp79R7aRMSJGJ+/SK318mIiYbyZfj8ni43ouMS/97wJ3Pqy5WLZBqBKgy16PAEJtkzpAU9XKOp0osvkiBevfXBPX1WANlpl08Q7j4l7aey1GlNlLSDVBJsS4wFn9ffMsoOrmPATMlAcZYqsOgrFCzVsNgrlchlRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qSpVrccG; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1784573235; c=relaxed/simple;
+	bh=2JEVIKRjuogw3CiJj97/97MbKmbSMBHFdJ8CWOymg3Y=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rl+vclgoY0mvRyDl3eV7BSUtsZVKyro71/pJZjjqdKNE/qFsp0jG4dl2PRnnvS5pn7GSQJ8MHIE/2VJjVQd8PO2V7m3679HFhOcjgSrqE/PAFXaznFAQxBBBIiRy8AzBIlHSEK9sUY7o6D5ijTpYy5FPXBxX1v1lxqm1Vho6uoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c7WTa0jS; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qSpVrccG"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ceb096e675so103651135ad.0
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 11:44:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c7WTa0jS"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-381b831d535so8312217a91.0
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 11:47:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784573075; x=1785177875; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aASqcmVgH1IHSjKyVpZV3aEHq+SHY3BNiJAYIynxciA=;
-        b=qSpVrccGvQS7zE5r981XwhOxmrYGCFN2KZ8gmiY1X228J/M3oy7gKMoV5W5GOQ1icv
-         HVMI3A5Y19DAF4gV/a9lbg8zL8TWeW/4P8s+eXv42Ei/tsfDwLHONEISADJGn9gYC/Mf
-         AQ6dzGFmYZFi0KpRRISaT6aZBDWXRZNFNHlVO+FwDvvZKFBnA+QGdxroQlnFqN5gAeH0
-         0XORlfKxapA2m63365kCeBA5mmrTUf1F58eYILqGs38fCSTnDkNQBN8DYovF6QTvDhtv
-         /hmASv0hloJT0V7WPqcx+CvGAx/5GKDGeXdv4AQ2ixr8RC4Cpm06Sd4sBrS8isWJV87Z
-         P5FQ==
+        d=gmail.com; s=20251104; t=1784573234; x=1785178034; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=wYNGagPb4YA1YB5zrq43PT6RJzgokAlH9V1waITYWGM=;
+        b=c7WTa0jSJR7YlJdgNC5nm4+tQSXpI3lu1p674oiopBy5vkAthEwpX/hH5CP0vE8HPW
+         SPnGb4KXxZuTugL4haC8tpOQ5aPxyf3pqdtkX9V/Q9rAdCMYfW3feUCPpWdxbc5WYh0x
+         ncrWQllHFUkyA2ppWLkVZvsm6FctdSyBI8ArViSnNbtcW0ycF5a144UesLedIOLgSPSy
+         seZTeLZAzZRvUtonNZaOw12r4NO3zBiLzQ25M612efnFuWMahcIziRBUsmi4Z+ITn1BD
+         38Sp88OZHrGIa+fFB27UI0QSkxK9tP1YEcEP+xpTbAW1I0aXtkC0QkmyCFBh1VH3tMGp
+         s6zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784573075; x=1785177875;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=aASqcmVgH1IHSjKyVpZV3aEHq+SHY3BNiJAYIynxciA=;
-        b=E2Rq+b02P0vMkqX6weq3O1RNCqAULd/5LnLtAz09tcqaimNkLL/1pMsjmZ71poO2hA
-         lDXTD448ypMpy0tRfz18vE9+8k7z5/8CRk7bkyd59YKVMufOEXNKrx3V/fzl/oJeJ5aK
-         x/kils5XdGWlUn8sYXS7seftoVRI+mQGq+PNwXl4qWxTH1MSVQOkwyi678AnQlGmDGhV
-         CvaNdD/XvnQrP4l/9vRoSq0F/cumtq36AYvD2F4wB8VJmPrnXNokkS7beDrPuR8jv3n4
-         sDwtBSdTADU2JmYn9VMOYT5rTdHE+E4dYno6v4uw5OrZG/JTnE1ChSwNu57tgEOkm+RS
-         YsSA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqx5J65vq4wbRTf41lFw+gVxMoe9LbehZD8l22MO89T9bE8mkmOwr4aBMtBzAvpeDf7eqA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjOxRxj5iUx5pPiEyJwHzmiAzok7EGeUNAwlUfsDSr57SiWEv9
-	8EhPp5OMEl4SbNGW7k8DNnTrgkwSB9eT26UVNaESmzHe7vZFzO6BkTmU
-X-Gm-Gg: AR+sD12SSfXD6d0xNgU27Td6tEgoaL1QPH52CdUH3fGQZUm8qMGqdWqWOxdj+H03myU
-	27tfaeinbsQQQ9bBQyBFmWsdpbEbJZTxbEhJlvzRox4mWABuapbiuS029JUyKOlYJ+433mxWJNU
-	Jv7lGXxE9/VSdNps5Iv3NKbqEUxXS52K4Ek8NIV+dCj6DjEdIzmjuGj8rmEVc2xhVzWTLJ2HCtt
-	JURq+Xnthf5bXjzoN6X6buBKzcrKRIAUs+NPhen1ls0Mar5C4jdAW2oM+4XGbYt1LkkWVKJqOCv
-	QrU8oIcAOlBO3vTzkrgYATah/cL87T7PrPvlz7AA9rbC8D//EisSTNFAef9q6WY053qcNBlp0l2
-	HBOR3JMX7jxFX0OlyFyIKGvAVmmKFI1bDJf39y9TbL5owjt08WPfEar10ynPccskDsVL9qxSQcc
-	0Xo+0pvDybB4DwYVicDJQ=
-X-Received: by 2002:a17:903:184d:b0:2cc:d6de:d597 with SMTP id d9443c01a7336-2cf348332bamr158556905ad.7.1784573074798;
-        Mon, 20 Jul 2026 11:44:34 -0700 (PDT)
-Received: from [192.168.1.77] ([50.47.108.115])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf344bd3aesm61347835ad.26.2026.07.20.11.44.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jul 2026 11:44:34 -0700 (PDT)
-Message-ID: <4b343a35-45a2-40c2-a27d-36998688f5d7@gmail.com>
-Date: Mon, 20 Jul 2026 11:44:33 -0700
+        d=1e100.net; s=20251104; t=1784573234; x=1785178034;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wYNGagPb4YA1YB5zrq43PT6RJzgokAlH9V1waITYWGM=;
+        b=aU3s5VsoZ4WHrF/QOdwXZFnoJ9rGLdu8GhfDET3HRJiaEH5ZpUxoO/sRROnJbyli0Z
+         H8oEkj1q2zBooU/n5hnmcD3HhqIDSG+NTKdUSMr2rOPfbun6Eq4+sf8c3s6b4hbKP9eX
+         LvzKcJgCtJKprfXxun2SZT/defDupYtD/T33Ib/e1X5zncwY8Dz2cr6+Z0vXCWrneNWX
+         WafTHBQt+oNSzZFPErbEmIpE1jEpjSjkFSb2c6im/ROOkDJ2uvrbdhIEwUaZzSN5m6t4
+         nALi0SKJ+ijtyDL2f8M3CQb3uzlQoAovXlqX9FCdvA2X++uqSGTRsGuukdX8QSP8rbrF
+         vVWA==
+X-Forwarded-Encrypted: i=1; AHgh+RqJwQfd7hhFP2/j+9kDIs6J6/zmnIHjxfp3/EJynKMhwBHp7SqoscI13qANk8Czqpm+9S0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuYOt739woc35k/NN40f+4ytzHlI/70nVVU7yyIbM6ekHFynjy
+	ALTcVt+Ni31oB/+DFYCY0KoFYB4/Qj9DEqqBkajI3KJKK0AeggI8v9JM
+X-Gm-Gg: AR+sD127q93bHSPZ5nKTq2I7LSRnzFL+pWByynIISRGbWJIUeQ+jrkrWu4Lxywk/d+e
+	ics7gWhFcWMrD/OEgkT/TiGE5aHDb4khHr7EjCFBxKac2uyRef43bLBhqAcl3Q8/SdP0FA5kyNo
+	HLESi0321wEKD/lEQhTZsRpXoIPhsulPfzCr+jCUPHT3NaDKr1TbSz+dFjjhuF3zv0n66NnzZaI
+	/QDK8qROVqNDW6WOQFHuDWEtkyse+Esf/rv9N/0ijJzRK8vbWca4e+Kqa9pK/fPlrQLKY1niC1Q
+	ZY+1MMkawa2B5CU9zzE4sHIJO/7bG45+M3EEpC3TOSd9hXH8ycILFcGo142F08yYwgjp0v0lx+e
+	byHdXlMxHaFVv/IWvgfnBEQ2QdGzaDy0wu9BcHrrB3n5iq3jG4UqLymMEuQ6Vqt7Eqqe8IQUM6x
+	aGoemVSOT2/kiPzaL+VRtvPHO2z6afTQ==
+X-Received: by 2002:a17:90b:2691:b0:387:e0db:3fb2 with SMTP id 98e67ed59e1d1-38e4b602948mr16389172a91.43.1784573233855;
+        Mon, 20 Jul 2026 11:47:13 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e92396445sm158611a91.17.2026.07.20.11.47.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2026 11:47:13 -0700 (PDT)
+Message-ID: <a469d5344126d38b5151b9bd044ce83320875517.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Preserve stack frame number for
+ commuted arithmetic
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
+	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan	
+ <shuah@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ bpf@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Mon, 20 Jul 2026 11:47:09 -0700
+In-Reply-To: <fee8d44c3c792e29b8898951a68c8313d9d2da53.1784563939.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1784563939.git.chenyy23@mails.tsinghua.edu.cn>
+	 <fee8d44c3c792e29b8898951a68c8313d9d2da53.1784563939.git.chenyy23@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v4 2/4] bpf: Fix UAF due to missing link type check in
- mprog
-To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
- Pu Lehui <pulehui@huawei.com>
-References: <20260720134547.1289964-1-pulehui@huaweicloud.com>
- <20260720134547.1289964-3-pulehui@huaweicloud.com>
-Content-Language: en-US
-From: Amery Hung <ameryhung@gmail.com>
-In-Reply-To: <20260720134547.1289964-3-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+On Mon, 2026-07-20 at 16:37 +0000, Yiyang Chen wrote:
+> When scalar +=3D pointer is handled in adjust_ptr_min_max_vals(), the
+> destination register inherits the pointer type and id from the source
+> pointer. For PTR_TO_STACK, the inherited pointer state also has to carry
+> the stack frame number.
+>=20
+> Without the frame number copy, a stack pointer derived inside a callee
+> through scalar +=3D fp can be recorded as pointing to frame 0. Stack read=
+s
+> and writes through that register can then update or consult the caller
+> frame while the actual instruction uses the callee frame.
+>=20
+> Copy the frame number when PTR_TO_STACK state is inherited by the
+> commuted arithmetic form.
 
+Could you please infer a "Fixes" tag?
 
-On 7/20/26 6:45 AM, Pu Lehui wrote:
-> From: Pu Lehui <pulehui@huawei.com>
-> 
-> In bpf_mprog_link, the code does not check the link->type first before
-> dereferencing link->prog->type. This missing validation allows a user to
-> pass an abnormal non-netkit or non-tcx link via relative_fd. If do
-> BPF_LINK_UPDATE on the abnormal link, it can trigger a UAF issue.
-> 
-> CPU0                                      CPU1
-> netkit_link_prog_attach
-> bpf_mprog_attach
-> bpf_mprog_tuple_relative
-> bpf_mprog_link
->    link = bpf_link_get_from_fd(id_or_fd);
->                                            BPF_LINK_UPDATE
->                                            ...
->                                            old_prog = xchg(&link->link.prog, new_prog);
->                                            bpf_prog_put(old_prog);
->    if (type && link->prog->type != type) <-- trigger UAF
-> 
-> Fix this by strictly validate link->type in bpf_mprog_link against the
-> expected link type. bpf_mprog_tuple_relative is also adjusted to accept
-> and pass down the expected link type.
-> 
-> Fixes: 053c8e1f235d ("bpf: Add generic attach/detach/query API for multi-progs")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
-
-The message can be improved. The reason for the UAF is that each 
-subsystem provides its own protection for link->prog. Since there is no 
-cross subsystem protection (if not considering the RCU of prog tear 
-down), dereferencing the prog of an anchor link that does not belong to 
-the current subsystem is not safe: it may have been freed. Therefore, we
-need to validate link->type to reject foreign anchors.
-
-There are also some grammar errors:
-If do -> If doing
-strictly validate -> strictly validating.
-
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 > ---
->   kernel/bpf/mprog.c | 15 ++++++++++-----
->   1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
-> index 1394168062e8..367f8f10da0a 100644
-> --- a/kernel/bpf/mprog.c
-> +++ b/kernel/bpf/mprog.c
-> @@ -6,7 +6,7 @@
->   
->   static int bpf_mprog_link(struct bpf_tuple *tuple,
->   			  u32 id_or_fd, u32 flags,
-> -			  enum bpf_prog_type type)
-> +			  enum bpf_link_type type)
->   {
->   	struct bpf_link *link = ERR_PTR(-EINVAL);
->   	bool id = flags & BPF_F_ID;
-> @@ -17,7 +17,7 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
->   		link = bpf_link_get_from_fd(id_or_fd);
->   	if (IS_ERR(link))
->   		return PTR_ERR(link);
-> -	if (type && link->prog->type != type) {
-> +	if (type && link->type != type) {
->   		bpf_link_put(link);
->   		return -EINVAL;
->   	}
-> @@ -52,21 +52,22 @@ static int bpf_mprog_prog(struct bpf_tuple *tuple,
->   
->   static int bpf_mprog_tuple_relative(struct bpf_tuple *tuple,
->   				    u32 id_or_fd, u32 flags,
-> -				    enum bpf_prog_type type)
-> +				    enum bpf_link_type ltype,
-> +				    enum bpf_prog_type ptype)
->   {
->   	bool link = flags & BPF_F_LINK;
->   	bool id = flags & BPF_F_ID;
->   
->   	memset(tuple, 0, sizeof(*tuple));
->   	if (link)
-> -		return bpf_mprog_link(tuple, id_or_fd, flags, type);
-> +		return bpf_mprog_link(tuple, id_or_fd, flags, ltype);
->   	/* If no relevant flag is set and no id_or_fd was passed, then
->   	 * tuple link/prog is just NULLed. This is the case when before/
->   	 * after selects first/last position without passing fd.
->   	 */
->   	if (!id && !id_or_fd)
->   		return 0;
-> -	return bpf_mprog_prog(tuple, id_or_fd, flags, type);
-> +	return bpf_mprog_prog(tuple, id_or_fd, flags, ptype);
->   }
->   
->   static void bpf_mprog_tuple_put(struct bpf_tuple *tuple)
-> @@ -243,6 +244,8 @@ int bpf_mprog_attach(struct bpf_mprog_entry *entry,
->   		return -EEXIST;
->   	ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd,
->   				       flags & ~BPF_F_REPLACE,
-> +				       link ? link->type :
-> +				       BPF_LINK_TYPE_UNSPEC,
+> =C2=A0kernel/bpf/verifier.c | 7 +++++--
+> =C2=A01 file changed, 5 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 52be0a118cce0..58017141d52b7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -13796,11 +13796,14 @@ static int adjust_ptr_min_max_vals(struct bpf_v=
+erifier_env *env,
+> =C2=A0		return -EACCES;
+> =C2=A0	}
+> =C2=A0
+> -	/* In case of 'scalar +=3D pointer', dst_reg inherits pointer type and =
+id.
+> -	 * The id may be overwritten later if we create a new variable offset.
+> +	/* In case of 'scalar +=3D pointer', dst_reg inherits pointer type, id,
+> +	 * and for stack pointers also the frame number. The id may be overwrit=
+ten
+> +	 * later if we create a new variable offset.
+> =C2=A0	 */
+> =C2=A0	dst_reg->type =3D ptr_reg->type;
+> =C2=A0	dst_reg->id =3D ptr_reg->id;
+> +	if (base_type(ptr_reg->type) =3D=3D PTR_TO_STACK)
+> +		dst_reg->frameno =3D ptr_reg->frameno;
 
-nit: keep it in a line. It is well under 100 cols.
+This patch fixes a real issue and this a surprisingly buggy piece of
+code. Looking at other fields defined in bpf_reg_state, it appears
+that several additional modifications are necessary:
+- dst_reg->delta =3D 0
+- dst_reg->parent_id =3D ptr_reg->parent_id
 
->   				       prog_new->type);
->   	if (ret)
->   		return ret;
-> @@ -343,6 +346,8 @@ int bpf_mprog_detach(struct bpf_mprog_entry *entry,
->   	if (!bpf_mprog_total(entry))
->   		return -ENOENT;
->   	ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd, flags,
-> +				       link ? link->type :
-> +				       BPF_LINK_TYPE_UNSPEC,
+Given such an error prone nature, I think it would be better to:
+- stash the value of the off_reg in a temporary variable and adjust
+  off_reg pointer accordingly (see bpf_verifier_env for a collection
+  of similar temporaries).
+- do *dst_reg =3D *ptr_reg instead of the fixup.
 
-Same here.
+Wdyt?
 
->   				       prog ? prog->type :
->   				       BPF_PROG_TYPE_UNSPEC);
->   	if (ret)
-
+> =C2=A0
+> =C2=A0	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type) ||
+> =C2=A0	=C2=A0=C2=A0=C2=A0 !check_reg_sane_offset_ptr(env, ptr_reg, ptr_re=
+g->type))
