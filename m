@@ -1,141 +1,159 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DC13C9ED0
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 20:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784579524; cv=none; b=qlMEj6UdNgXwfITM7OoaAhXHcjQi6Wp5CMQOfdnlzdLfKd2iJfeXAtoep2W+A4buHR+nnmEGTMGTa1QKtTbIIGAFXLRRQg9oB5gfE9Vc/NjSet9T96aA7GEeo5zAO0zUEhMbUMk6duIOSZyUg0LTmeHCGjVQC4P7LWwBKBbHe70=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784579524; c=relaxed/simple;
-	bh=+K99nVC+DTtOEY18kwlCzZK2l1ko95eezwSaGr6g4YM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=be44zXW0/smxqLrBKUa9wkSCsbRhCMQMATC3U6On/GMmp7qxzher+8oBV2Uta9oSDANjdrHUMQevir2E3WXYDltbNYEW89RIxyp/D565NsQoZVOqTXiskQkmo/6OiKu/pxQ7uhNNOWn6sbf7EdEt3dHiXkwPyyrdeWk4DZgFEVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NBAje2pJ; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570F23ACA57
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 20:41:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784580109; cv=pass; b=RZTnz7yM/jYJCRGMkmprHkJ4M7Feth0adcMhdzyPDkXEy0rT8QhsCQnSU2Fwbtyo91xJlMnKNZqV9i6Eifcx6vIX7+IWL4+Kx88rmd81PMbUBwfNpU8MHkQq8FRtDYSDtZ+19lbYRDht+NGEmZW9Su8men+lQtxPWLX9zmT+Jjo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784580109; c=relaxed/simple;
+	bh=+FnGzrkieywgVg11x7JlrzQVOV+0MSbS/7UrH/f2buE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NddAmrL9ce64SR/QnFEnZdzueArtVyYXrDfDftULwyeMEIqbjdVKhNdokURH3YN/lZuaEQKwQaCPdKDj9oldP9suzSWyUADZtvUQUKQRVj1D/BJ/KQN/PYhTuxwfRhBALnMmXP+dFxlbeEIIWA7ZekS3M5f6R02NK81w4XzD1xQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=acU5kcyz; arc=pass smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NBAje2pJ"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-47f633e6058so3141155f8f.0
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 13:32:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="acU5kcyz"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c9fe3c9bd5fso2703994a12.0
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 13:41:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784580107; cv=none;
+        d=google.com; s=arc-20260327;
+        b=jyU3/WCRPhXiCsc7MAjVS0qfYzXvVa6ripDc3CkaN1gyGLqRm33o0rBJF9n/F/B/DU
+         NlDttwNlc7NsRPtmTXsf9oG/V1FpgWqYAG3YDN/D+56pN4SO0MS37CWmtN9UksufHtzS
+         JdZKIAUr625I3opD+XMPMPoc6a2sqA4FGwYZck1VPky6AfMrEKlyDgp/MB4xbUHvDVt7
+         JmSsXF8dlqZh+X+nlurhEGYWmv3MUH3isJcu8wOuprCDT8jBeyngwWI0jkHWhNe7Dsdd
+         Uqi/OS1gmWiXuGcOGctnh5QTw0wszKApGUSabEF1BMaziobXlhlmNtzhN+S5gCXUCV12
+         Qdqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=A9BFAH7wtR+2i0gcTzfUj/Ayf/0UVSPIiKXXXL362qU=;
+        fh=C08reglIPPXqNB3PRHSGvBe0osl0YYxppkspdRz+Qno=;
+        b=K2BII6CFmVwZMRyybVUZZQ86TPgilpmrHRYDNZWjVEiiBoDjuD3fVK7C0g79pL9dfD
+         zCCYN1YjkaYFz1DPbrvGLnnXkJV9adBsf0/fgkZYp2Ky8WGBN3vwX0ASoyJR8KKM0oKO
+         +2U9oZAZlaHaeKVCWmqf4MR0f5KToHgfkvmK+haf1y7L2QUZuJmQSLoDgTzUOMhZ1f1Z
+         +COej5Irwv2xpjIn5IcLWQWMYXfsnWQMCzfvHbXNqb0/EOh4VpRX+4QyKBb77ZjvZo2j
+         +ivt9OF3M/xncEaMKsC9nIhmRx30/ivgQKyxtNERO9K5ndtb7cTuLS8Y/sK7e/zacKxC
+         RYsQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784579521; x=1785184321; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+        d=paul-moore.com; s=google; t=1784580107; x=1785184907; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=XsZYL70lc2QNJ9h65aBXRYUJv3y6rfN3clJ0NI3vBeY=;
-        b=NBAje2pJ0lUCLC18eJ9mAvxb59nijCftdqMnkShoolpFG2LIwfq9jGGp5eD4UirARY
-         Gbgy5RMEZI/HJUjIkf8QeQ9yIR47c88Tl8zuZYYOmsN/kqNLXcxbHon/vSeJHaS/snjA
-         yC5IGhRz4NE+i5/18vcydL9QJ3POyGObrPskMlGIdkhyL7mwz9/al5HHw0JGPijHBXzT
-         EbHtlLZWCbC/pdkKnaW1oW4wf2gmuqJngRd2powS+/QEBN6IDbIJ8/S2tp2Hx1niwNWI
-         NOeHKXURFb3vU+442OpUQorNKG+H0s+oV+lAD699t5ruzNkm61+6zGozgvYNuW25BCI8
-         T/Ww==
+        bh=A9BFAH7wtR+2i0gcTzfUj/Ayf/0UVSPIiKXXXL362qU=;
+        b=acU5kcyz461RfGj31K+aMa61941kdHnQBbJ6e+23LJp4LwniIds9WYheH6RX4YeoNR
+         7M52t4Ca736IkAbT2nYVebEA/eSSOwjaJECJ35omKzxXNoN0ZOQnqhKGz6LCYloqdDGH
+         fGAodT8jcRTm6eVGA3+33QYCO47NNbbUaOtT/NrH2dRm0GLTh12p0sDRP28QvWm/B7ui
+         U7ItQAxCvfMVlZ2CKXqWBQ1guXfAn9gKhFhgkrLpkTCLOcAsuRsCsaYkrB2uRhOtiSU+
+         NXyQdOQhNBCOCVmzMfHof6ypHtgwwI6D64fu46mfBjdqG8hg7AixokpvzVQvF3qzwXNY
+         ebYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784579521; x=1785184321;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
+        d=1e100.net; s=20251104; t=1784580107; x=1785184907;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=XsZYL70lc2QNJ9h65aBXRYUJv3y6rfN3clJ0NI3vBeY=;
-        b=gu0FlXDkLnRzzf72HnIC/dKzOGNPjwhhDDRM6RmRdcv9XsG8Hcb/ugmvdsCdhcvD5F
-         xh3GfjGOf4BfvJggefJQL7x+9/a3CMgfaFKPaMYDCvfG+Er7tWXKP+ZceHfwoJJOq78d
-         OWEryINktf7XkRJrDl9uqkGuY0UgKBKGvTxVk6zYFUnV6x2BQ/OFvJspgE4uLJpAaeoU
-         d68y8H+XqmhlXmIftTKinVsg1qcCIJm1BMkRc2Es6h20TGR39go4oGJPxePk6yeP7CP9
-         RsRZJG0+Ml5a7hBKEU5A1f/Nvry+KiOr4zHzqbuqdmcITitQ/LLejb1Piv5bem8loF4z
-         7ugw==
-X-Gm-Message-State: AOJu0YyxhIgIPn2+/CBrNtFjGKrEiJbUztrUuFc5pvsARpDpqDdGyVkH
-	pooClxYYf2vFPeDSgiMHHozePsBb0+vPLS1d6mD73K5HMT+Sv53GPtox
-X-Gm-Gg: AR+sD12EdJLv4iA1ES5bTKGGkglk3pyJhx5coTitxTJoZJZwuoJhOKvZe8BK4uaHGI3
-	DDowQZy2XOfaLMyhF0+oK3jKerMQ6m54Wdg3ADS1iHWdBVq2PoAnRZI6wvwYAEYqkXyINRtDSil
-	0klxreRzpuo4nvlt/W4jNNFYADUN5tzUjoAMeugAaGoEYSFYRzU8zpL4mZPSYJjtSzTW5RnrztW
-	xJAj9fLwj5ljQU+5t4nZOzcPH0fH0HAXPqJJJkPI5/wZnawDKTJVrzw8T62YefjUFcuOq2n5o6l
-	r/cGPvypULXrn2PPhdMjewMr4t2mZIH8MMhRBCn6J1nirSQSjowsBFYXdmLk8lIy/sI9+MUz8FM
-	+BPnOEg9jZaIr8BtXdUyvc2xdWuDz2Yw5d3gX/T0guv+tmoSkDXdHfnBWxzSMuGVVZg==
-X-Received: by 2002:a05:6000:26cd:b0:47f:5d51:6201 with SMTP id ffacd0b85a97d-47f62325709mr18360133f8f.33.1784579520939;
-        Mon, 20 Jul 2026 13:32:00 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63eddd27sm32802701f8f.28.2026.07.20.13.32.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 13:32:00 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 20 Jul 2026 22:31:58 +0200
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 8/9] bpf: Remove trace_in argument from
- __bpf_get_stack
-Message-ID: <al6Fvrxd19Qip2o9@krava>
-References: <20260720085351.655075-1-jolsa@kernel.org>
- <20260720085351.655075-9-jolsa@kernel.org>
- <20260720090945.C778F1F000E9@smtp.kernel.org>
+        bh=A9BFAH7wtR+2i0gcTzfUj/Ayf/0UVSPIiKXXXL362qU=;
+        b=aWEYAq/LImeXO79ZqFLedhmxdxLiUN4sk/JhGCMKFaqFHQr+2eA9p4SuQayY3syJO0
+         8GytoXO1/bfTbg9qXT5EWpnl0FFGm6ie3lc+64ymxBiT2CVBWZz++M5gEphZKI04nTHy
+         vE7/HpNL0xidXkB1cawVMvpxhaYecIKeltMPTdY3QERb1yP3YwdyQsew2eVScqLHvle6
+         9e1sduqQVA+8a7Tx3+moQ2aDB7dbmTQ+idAHpNU/IGnu/ISd0/VGbBhxAce+c44MZF4I
+         QiX5IyFFKbpmCruXgWXdIdg2Zdm/pMgxlp2LbCOjs3+a9PQincYJFVmdWpchaxymdjXN
+         1dZg==
+X-Forwarded-Encrypted: i=1; AHgh+RqJ3gRet76kM0VlFhMJ9v4XutXlfIIsg/PeKA6nmTT+iobtHO5Bf0ML++9MegPMeHmYZLU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWbm6VR98D3uxb7VuwNy3aoMm9jwDWuGHPPO2CrMSJSUf+Sjbo
+	3u3LI+ajGq74QfdimNtmhB4k+xSr2kmzGVV50XLmYae7PG/St6OkrYoOaPcVRkzj7ee0980Tceq
+	KVZuVQFIJBiVwlnRAqoW7CRkL2edHNjMHs4JtewC/
+X-Gm-Gg: AfdE7cmfBCIV8iOepFQf/TZUxuOhRE0vk/y9mVNc+VN8T97Yp68qERHFG8HLnu2g8kJ
+	LB1QzwAE9YmO/39nI3q6X2NDbopXP5hs3w/zjuyyfDaeajOqWijexpbhlWlL7t+RRg9s6N7BtHW
+	NzaBAlgnmmtEWD2/XKWLr+iqfPIDYrj06zLwnPvfqiVXaa58mhBov8+8KC/K4JzcSEl9ON3Jhu2
+	IHzdQKC+bd2WmE11pw4Ug1X+WRQJZcVT+cATFUg6ZVjChmOLnfoxPwTGyJzJA==
+X-Received: by 2002:a05:6a20:9183:b0:3c0:9acb:3fc with SMTP id
+ adf61e73a8af0-3c3ad121d58mr15942725637.33.1784580106787; Mon, 20 Jul 2026
+ 13:41:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260720090945.C778F1F000E9@smtp.kernel.org>
+References: <20260708000956.46138-2-dwindsor@gmail.com> <cb9f84292a7f1d41ff8388d8c0c8c3d0@paul-moore.com>
+ <CAEXv5_i_iHmF8n6Qf1NiVOhm2cCnVLgmwXK-b8M+hvmdO3aQdA@mail.gmail.com>
+In-Reply-To: <CAEXv5_i_iHmF8n6Qf1NiVOhm2cCnVLgmwXK-b8M+hvmdO3aQdA@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 20 Jul 2026 16:41:35 -0400
+X-Gm-Features: AUfX_mxGGJZotoA_L59yykgtbAa9gAB3rgxUm27TjBp9LjxVqLCLOtt3LkUBu9U
+Message-ID: <CAHC9VhQFGQmJ829kAZ7U48kQOyPT-+zixb61VuK3Zn-myV6+vA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] security: rework inode_init_security xattr handling
+To: David Windsor <dwindsor@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 20, 2026 at 09:09:45AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [High] bpf_get_stack_pe permanently truncates the shared perf event callchain for user stacks.
-> --
-> 
-> --- Patch [8]: [PATCH bpf-next 8/9] bpf: Remove trace_in argument from __bpf_get_stack ---
-> commit 42ed70b803080e71468d115e2948bdba98a800f5
-> Author: Jiri Olsa <jolsa@kernel.org>
-> 
-> bpf: Remove trace_in argument from __bpf_get_stack
-> 
-> This commit removes the trace_in argument from __bpf_get_stack and
-> handles the trace_in case directly in a new __bpf_get_stack_pe function.
-> This simplifies __bpf_get_stack for upcoming preemption fixes.
-> 
-> > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> > index eea7b781300ca..57cd4c33403bd 100644
-> > --- a/kernel/bpf/stackmap.c
-> > +++ b/kernel/bpf/stackmap.c
-> [ ... ]
-> > @@ -978,14 +1001,13 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
-> >  		skip += nr_kernel;
-> >  		if (skip > BPF_F_SKIP_FIELD_MASK)
-> >  			goto clear;
-> > -
-> >  		flags = (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
-> > -		err = __bpf_get_stack(regs, NULL, trace, buf, size, flags, false /* !may_fault */);
-> > +		err = __bpf_get_stack_pe(trace, buf, size, flags);
-> 
-> [Severity: High]
-> This is a pre-existing issue, but does this permanently truncate the shared
-> perf event callchain for user stacks?
-> 
-> In bpf_get_stack_pe(), the kernel stack branch explicitly saves and restores
-> trace->nr around the call to __bpf_get_stack_pe().
-> 
-> However, the user stack branch directly calls __bpf_get_stack_pe() without
-> saving the original trace->nr value. Inside __bpf_get_stack_pe(), the trace
-> size is modified in place:
-> 
-> static int __bpf_get_stack_pe(...)
-> {
->         ...
->         max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
->         trace->nr = min_t(u32, trace->nr, max_depth);
->         ...
-> }
-> 
-> If a BPF program attached to a perf event requests a user stack trace and
-> provides a buffer smaller than the actual callchain length, trace->nr is
-> truncated.
-> 
-> When the perf subsystem later processes this event and outputs it to the
-> perf ring buffer, could this result in incomplete or corrupted profiling
-> data due to the truncated user space callchain length?
+On Mon, Jul 20, 2026 at 2:06=E2=80=AFPM David Windsor <dwindsor@gmail.com> =
+wrote:
+> On Thu, Jul 16, 2026 at 5:55=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
+wrote:
+> >
 
-right, will fix that in next version
+...
 
-jirka
+> > > +int security_lsmxattr_add(struct lsm_xattrs *xattrs, u64 lsm_id,
+> > > +                       const char *name, const void *value,
+> > > +                       size_t value_len)
+> > > +{
+> > > +     struct xattr *xattr;
+> > > +     void *xattr_value;
+> > > +     size_t name_len;
+> > > +
+> > > +     if (!xattrs || !xattrs->xattrs || !name || !value)
+> > > +             return -EINVAL;
+> >
+> > Sashiko raised a good point about xattrs->xattrs being NULL not
+> > necessarily being a good reason for -EINVAL.  If xattrs is NULL, yes,
+> > something has gone wrong and -EINVAL seems reasonable, but the
+> > xattr->xattrs NULL case does seem like it should simply return early
+> > with a value of 0 (see SELinux's handling of this case as an example).
+>
+> The problem is, SELinux has already set the sid by before calling
+> lsm_get_xattr_slot, so we do indeed get an in-core label for the inode
+> before returning early here. Returning early here from BPF would not
+> mean the same thing: there is no label anywhere, in memory or on disk.
+
+It's important to remember that you are not always guaranteed to have
+an lsm_xattrs buffer, for some filesystems that is going to be normal
+and expected.  In these instances the 'xattrs->xattrs' value is going
+to be NULL and each LSM that provides a security_inode_init_security()
+LSM callback needs to handle that condition gracefully.
+
+As you already know, the SELinux approach to this is to set the
+in-memory inode label, but refrain from setting a presistent label
+(these filesystems are typically either transient or don't have a
+mechanism to allow for persistent label storage).  Each BPF program
+will need to decide how they want to handle this in their
+security_inode_init_security() callback, but in the
+security_lsmxattr_add() code where the only purpose is to populate the
+lsm_xattrs strcut with the persistent BPF label/xattr, there is
+nothing that can be done, it should simply return early without error.
+
+--=20
+paul-moore.com
