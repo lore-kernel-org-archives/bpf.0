@@ -1,85 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337AD18871F;
-	Mon, 20 Jul 2026 04:04:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0338A2D97BB
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 04:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784520249; cv=none; b=YX56WErWz7Sc8mF6oNYtE4yHNSn5F9seC5gOjP9zhrtcU1BuEVGYpm1Zdk6Evh1BwtxQwLH/NP9BA0wDzYsIsjLCuA8B/nP6on7d2ymEHYP/PeGwqe/AA1M4WYS2aeQj1u4NDyoakLcDLw6ZW0bkh4CJ/NZ+jz9zlGAVxmboOZ0=
+	t=1784523567; cv=none; b=Jb18xHF5haYptR4hkqITfAV9L2qN5Rwg1WJ+QiimGvQlWCrK/JC6uyBoA8KeGapkdi3uc+P/6v9qnrzFtbWbwAvVB70s3yX489mLpynCmF7vVIHMVwtu+fjwL8eM89jj5pgX9xQobZU4JpuexS3w0I/wmgltxCQMeAVQGjQJyYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784520249; c=relaxed/simple;
-	bh=oP3WewlBdDSfW+EQDfLF6ChmotNQb5KbxJEpptVq/ew=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Qi7g7wOQErzJbaKgJDRyZpTJ0ZOo81KAqqrn664wiYk3+27jRGaFWWrsXR/kAQzRg4RMG5LIjOTPf4WHjjATt7ZC0SvT7AwCtDUbhkhq941nCyY0oGJG4jPxPX7u6VOF5P8WEh6ag4Q8pftORmXnVqrd80vyKMZa4jyp1Jp4xPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VlX9cIMQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784523567; c=relaxed/simple;
+	bh=BJS2+mkFhprys5kERsW68INIvtIVaX1Ay3f+CUlrrOk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V3IYyc4rQM4fPMoOL4RqMehJ7ZrPXrWN6VqXktaHPEA83SDwaQhgelSLUOZ/9kmShssseFeWghX37zgMYK9z5OWZbXRitzeCc/U5HixTwQ9cnB4UDDncnSAWt4zHRgfFeDNs2Jhtvpse/Fw644nk952jZm1dD0yK1A7JGm6qy+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rV99D+Ml; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VlX9cIMQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C06611F000E9;
-	Mon, 20 Jul 2026 04:04:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784520248;
-	bh=nccPk4YJNFT8X3BEc8Ul9c7tvodmKm9bzqmxPfk6ydE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=VlX9cIMQKD8BVF2J6v5PWiYRCEg1fwTdvB2mWG5xOrQp5s1iB9IlND+vpB345sc1j
-	 5rwXe5+RpuRUaI0w1rpn7B9at6Mff6l6lm3FJETXEWq5X8SdT5y0bM0zv15ko729WL
-	 xnrVhDBWRpIBPZyogiB/FLerlJbWWbx48QXl8Fcwi6gM9MMG5/EuHlw889tRlnWOIB
-	 ZFuDGwBDLB3RNvq/uS7Bbnc61EI+2bDyDwhm1zWtdKYDmBjH/lPMYYYFz7ciclnGQF
-	 QzzzWCxN8kNI7UWz8zRlnEnIQZw75B75soH3sjcntgJfSluhiLvJB97dpPXhilzl+u
-	 HsSZp1wk4u8AQ==
-Content-Type: multipart/mixed; boundary="===============5378695787097462599=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rV99D+Ml"
+Message-ID: <9615cf9b-4a77-4d7a-aec4-8990ea6ff638@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784523552;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MrDWATovCwgpMVQwj7SV06bEzlRmjyDz0ZNXxVdu1V8=;
+	b=rV99D+Ml9dKH1LlS85UylG9LFBx765lVm4TPNBdY+VJFv1wAeaCTEcarO3t6QvsTA3W+sx
+	D4VYvrrGbTvcM1yd4YEvS7Alrq85HiIO12xLp1PT8Nqdgrpd8OsiSC398cBq94fngY6lNb
+	XrW4jBkgxo5zGNKxZFTfn4TkURDbgtw=
+Date: Mon, 20 Jul 2026 12:59:02 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <27e047ceba0b38f4f51e932d9d256d280a4370fb66beca03ed7a3148b6600b19@mail.kernel.org>
-In-Reply-To: <20260720033055.1215477-2-pulehui@huaweicloud.com>
-References: <20260720033055.1215477-2-pulehui@huaweicloud.com>
-Subject: Re: [PATCH bpf v3 1/3] bpf: Fix potential UAF when reading bpf link info
-From: bot+bpf-ci@kernel.org
-To: pulehui@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,song@kernel.org,jolsa@kernel.org,emil@etsalapatis.com,pulehui@huawei.com,pulehui@huaweicloud.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 20 Jul 2026 04:04:07 +0000 (UTC)
-
---===============5378695787097462599==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v10 2/9] bpf: Introduce global percpu data
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260715153254.92010-1-leon.hwang@linux.dev>
+ <20260715153254.92010-3-leon.hwang@linux.dev>
+ <DK0MRMWIAE1T.20UJQKK2YN3VY@etsalapatis.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <DK0MRMWIAE1T.20UJQKK2YN3VY@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> In bpf_link_show_fdinfo and bpf_link_get_info_by_fd, link->prog is
-> accessed without holding any locks. If the prog is concurrently replaced
-> via bpf_link_update, the old prog can be freed, leading to a potential
-> UAF issue.
->
-> Fix this by holding both normal RCU and tasks trace RCU read locks
-> before dereferencing the prog, as BPF_LINK_TYPE_ITER support both
-> non-sleepable and sleepable progs.
->
-> Fixes: f9d041271cf4 ("bpf: Refactor bpf_link update handling")
+On 17/7/26 14:25, Emil Tsalapatis wrote:
+> On Wed Jul 15, 2026 at 11:32 AM EDT, Leon Hwang wrote:
 
-Is the Fixes: tag pointing at the right commit?
+[...]
 
-f9d041271cf4 ("bpf: Refactor bpf_link update handling") only refactored
-the existing update path into the bpf_link_ops->update_prog method.  It
-does not look like it introduced the ability to concurrently replace and
-free link->prog.
+>>  
+>> +static int percpu_array_map_direct_value_addr(const struct bpf_map *map, u64 *imm, u32 off)
+>> +{
+>> +	struct bpf_array *array = container_of(map, struct bpf_array, map);
+>> +
+>> +	if (map->max_entries != 1)
+>> +		return -EOPNOTSUPP;
+>> +	if (off >= map->value_size)
+>> +		return -EINVAL;
+>> +	if (!bpf_jit_supports_percpu_insn())
+>> +		return -EOPNOTSUPP;
+> 
+> Nit: This should be first, if the JIT doesn't support the instruction
+> all else is moot. Same below.
 
-The unlocked reader in bpf_link_show_fdinfo() already existed by then,
-and the racing replacement path (the BPF_LINK_UPDATE command with
-xchg(&link->prog, new_prog) followed by bpf_prog_put(old_prog)) seems to
-have first appeared in:
+Ack.
 
-  0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+> 
+>> +
+>> +	*imm = (u64)(__force unsigned long) array->pptrs[0];
+>> +	return 0;
+>> +}
+>> +
+>> +static int percpu_array_map_direct_value_meta(const struct bpf_map *map, u64 imm, u32 *off)
+>> +{
+>> +	struct bpf_array *array = container_of(map, struct bpf_array, map);
+>> +	u64 base = (u64)(__force unsigned long) array->pptrs[0];
+>> +
+>> +	if (map->max_entries != 1)
+>> +		return -EOPNOTSUPP;
+>> +	if (imm < base || imm >= base + array->elem_size)
+>> +		return -ENOENT;
+>> +	if (!bpf_jit_supports_percpu_insn())
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	*off = imm - base;
+>> +	return 0;
+>> +}
+>> +
 
-Should the tag instead be:
+[...]
 
-  Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index e1244a721194..ae442ea217c4 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -5615,6 +5615,8 @@ int bpf_map_direct_read(struct bpf_map *map, int off, int size, u64 *val,
+>>  	u64 addr;
+>>  	int err;
+>>  
+>> +	if (map->map_type == BPF_MAP_TYPE_INSN_ARRAY || map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY)
+>> +		return -EINVAL;
+>>  	err = map->ops->map_direct_value_addr(map, &addr, off);
+>>  	if (err)
+>>  		return err;
+>> @@ -6174,6 +6176,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+>>  			if (tnum_is_const(reg->var_off) &&
+>>  			    bpf_map_is_rdonly(map) &&
+>>  			    map->ops->map_direct_value_addr &&
+>> +			    map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY &&
+>>  			    map->map_type != BPF_MAP_TYPE_INSN_ARRAY) {
+> 
+> An issue I have with the patch is that it takes the special-casing we
+> already have for INSN_ARRAY and makes it worse. The instruction arrays
+> implement direct_value_addr, but it's not actually valid to call
+> direct_value_addr from a bunch of places where it's called, so we have
+> to special case check the map type to prevent it. Case in point the
+> special casing in check_arg_const_str in the thunk below.
+> 
+> Imo we should consider making a different map method different from
+> direct_value_addr that INSN_ARRAY and PERCPU_ARRAY implement. That way
+> we remove most of the map type checks in those paths. I'm not exactly
+> sure how that would look like, but I could take a look at it tomorrow.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Seems reasonable to me. I don't have good candidates for the new map
+method name.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29715011327
---===============5378695787097462599==--
+Instead of making a new map method, how about factoring out a helper for
+the 'if (t == BPF_READ && value_regno >= 0) {}' block? It will simplify
+these map_type checks in the helper.
+
+> 
+>>  				int map_off = off + reg->var_off.value;
+>>  				u64 val = 0;
+>> @@ -8176,6 +8179,12 @@ static int check_arg_const_str(struct bpf_verifier_env *env,
+>>  		return -EACCES;
+>>  	}
+>>  
+>> +	if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
+>> +		verbose(env, "%s points to percpu_array map which cannot be used as const string\n",
+>> +			reg_arg_name(env, argno));
+>> +		return -EACCES;
+>> +	}
+>> +
+>>  	if (!bpf_map_is_rdonly(map)) {
+>>  		verbose(env, "%s does not point to a readonly map'\n", reg_arg_name(env, argno));
+>>  		return -EACCES;
+>> @@ -18279,6 +18288,12 @@ static int check_and_resolve_insns(struct bpf_verifier_env *env)
+>>  					return -EINVAL;
+>>  				}
+>>  
+>> +				if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY &&
+>> +				    !env->prog->jit_requested) {
+>> +					verbose(env, "JIT is required to use global percpu data\n");
+>> +					return -EOPNOTSUPP;
+>> +				}
+>> +
+> 
+> Another place where we add map-specific checks where there are none.
+
+
+I think this check is unnecessary, because 'prog->jit_required = true'
+has been set for global percpu data.
+
+Will drop this if.
+
+Thanks,
+Leon
+
+> 
+>>  				err = map->ops->map_direct_value_addr(map, &addr, off);
+>>  				if (err) {
+>>  					verbose(env, "invalid access to map value pointer, value_size=%u off=%u\n",
+> 
+
