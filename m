@@ -1,193 +1,310 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D553D0BE9
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 22:47:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784587679; cv=pass; b=ZrtCbfxvuEq2Fetj94g93AKyvye9urhcRgfGJTPXPNQ2EjZ77/qXJdX4Le7M+RdHx8xY1pP34IWdclrUIO9Ti/kYdcV2Kki6G3xxS/ygvcrGBHDcT7UyPBWivORWptScDo1K1kZVvxOb5qXojlt1HgbiiewX/UoCx7mtE50YNuI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784587679; c=relaxed/simple;
-	bh=j218zC175OIjPULuI/NKHO7aTKDJQ2ZX3WjZYu5fHhQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IlJt2QMINI/aBxH6/i+PKQY73F6TOZUVw4kYYxiRr4db3M1XxbRYdOvdP5dRNT88oi2N7Gm2xl1qhNItwR7Yb8JRVVtYwCkhG7ruhHd2rqtRStvcyNWtv6a/PyzeTDmsrWYpoYbCF8NChgcZHSsT3ONet2UO6QmaZsa2pOysZ60=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YnExVDM/; arc=pass smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6789C38BF81
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 22:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784588011; cv=none; b=aw1litwT5IXzgfixMXeZqd65oat1ATgMdpbZrj1TsB6VIO4OZsbvnkWvNN5DX5Wq5bCisnJmb+R4LwRDZWdFzfLgDQrGnoTIjb4Vkm5DpLEfOA0lMYrJdmaOHcaGA+grI22JkcgnNjhOU8xQttZBcxFo9upt/zka6iutNJ/IV9o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784588011; c=relaxed/simple;
+	bh=bu9MxjR9PrOS7jFoOtI1kzXfsfiOmCRm8agej7/N0eo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=My6Gl87ROYPgCc+SArthNPBwWhc3gJJ8gm15jvq+tJv6/xUWhiILAjKYqhKXkBnlYjtUflIkCBhM+Cb4SzSR0GIiNOleTHRbCMk8LveAl5y+pjMPOPXB095EVMrfxlbAA/KwBn/TS0x9PZf0YMrb4EG5QitURlVziziR2uY0FBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qYSw80KT; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YnExVDM/"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ceab75934dso111741175ad.2
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 15:47:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784587677; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VNsUXmfUIVoDqW50nxMTHdqjRAqdwp2RQqdNQpLFfZnC8oRjzwp0tFqxEYjG9YFBG8
-         EF3+QIO6gkomsSeGWmW3erT+i7Bg5HD1aYXpAxOdw49J63LYNX6S+Y6S+WmJo7kVzZr9
-         6k822A0ChfoI6Lftqw3JCoakIXz2hAUnnzKO4Z+5n89DaU+YNiY2+KU6Sbbprg3lBoGz
-         9Q1OSzIbPQBMkgBJU4IjqdpIgButtap1Qa0oyWl8ExJS0d8UJGMj2XBwT3WWPtHDBp4u
-         8JQITUJ+OnnRjGrDdusNU0KRCQYR2ULXQEUQqHgN0HzM1f86y2d1+LolCNVvTjs2NUKx
-         OgsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jBcBCCBCmHLnCiyc438pf1e9jEwlaZNqcasfh2fW7yI=;
-        fh=UrXQyctbAap46Z0jCyvCbOxeJx6GDJsdjFb1xoHCYJ8=;
-        b=pxISVCniU1Cl12+YeJRZMaL20dRFXtPwi4iZJ+auBSjZMhrkjM0iUEqcEp9Nm8kVuQ
-         3YAiUJeAghNpuGfKnIGSMfaa08NgL5zriiNx0gxYcYBMDmxxuf3p/N2KNNolYqa3pPIR
-         jy01bQqBerk8f2FcOQSwTQNGIVUzQeJlWPGa38PfdL6EBe52TqL4EXuuaynsCINjKGrd
-         uF6AmYhOUX/1RuuotfSaIshGdpnFBSX5S7Va/JutNjKunWh7JBglS1rQbm0QCUsG/hA3
-         Zi42HDt59G9ImTEKW/mIf8EhzyZU4XXpNPEdiKjdIZBPMc35Nwfe82dylBfAUECmBKr6
-         Hx6Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qYSw80KT"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4954a32cf1eso14866685e9.3
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 15:53:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1784587677; x=1785192477; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1784588007; x=1785192807; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=jBcBCCBCmHLnCiyc438pf1e9jEwlaZNqcasfh2fW7yI=;
-        b=YnExVDM/uQ21So2D/O2JFPZsYtJk6EyXiuoaMh3FGKl7eZTm4eRapKhI00hRmUqjUd
-         xsdhU+t8BznC/UG8ct79OBVA5eXMZPPXQwu2Mi1st4891ApwoXn8zvpO1FCXwgOYfhMa
-         q4yB6fjg0KM6w3NcmXkaj6AX5/qZr+v1QHvcPHWAKbeG5DcM2WWVx7L79/duSWExk44j
-         kt3uoGtnmC1mZiixh1X4K1211xFoLPM8stfZjmFjpOF+FYf1HZyjYQWM/7z6dMRMZryv
-         B5eHv2D3InPcnQSxZRctubJx6HgAGl0hA2paZfI1EiZV3eLpatcUleQwGe2Oe2/qsDIg
-         io6w==
+        bh=xaOVkEmI94bSxjGZP8o0unCsarNml6GU1QHwiTIhRTw=;
+        b=qYSw80KTcXhIsJmoJ5JfON/ZxwRG+mIFCHhz0GXnMIKkdeasNRh7vNze6MBfOEposa
+         ++dLmsCTry0xU1SjRxFQe/iefs90QH8vaVGsdmKmiW3R4joATlDAIFNEbw88Xf/wrEVK
+         BeGSGKoV3E5Ss9F+q875gSOhct7T82AS1x33wgxoVTnPag58GrSmvjOWWGMFb2a4c2cZ
+         OAGg4nZEDCbZcwLpwHcsqxtJmoqJEdjkeNCDpadXX/Jk3ctlqFBq1aGZTGtKRVJjJTw+
+         IR9cahOCrpScwJ+O+vuWNNQ13+OQJCWftAnL7Ys9zFKwo43UERC1T9RVOHG4+v8UHgD7
+         pYZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784587677; x=1785192477;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1784588007; x=1785192807;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jBcBCCBCmHLnCiyc438pf1e9jEwlaZNqcasfh2fW7yI=;
-        b=j3cuSWAwM64MAKGNW9zpWjFowRCvb4BFoWK8rS8hWCpt1VP/I0vV3YkOC1KyLw4GHE
-         HLq/TuMC7Ahf1b0Xcn/SJIth+PGCPlQ3X32UxmpKYVXbeHcv34g3qZ3PRXiZ0HOR0Y4U
-         YPpRnVXrhu/sKGALSfYU1mClTJQkI8pgCVowLjtP3jp1WLIPvLJRvYYhn4O+HR+76bXb
-         71QDYzFApGOeuk+rEKCyUNrTLNjBf+ndJGx8H/IR/FhE9vQgq5yqngg66X7mE+l9pp9d
-         Vi9n6PVTO/fGs+ZGF17XFjrByqJ4MEH3LL9wCvMIxjUW0Z5rd1ZlRWLBY+2uBIDWlVJy
-         HfWQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rqd2wuqk7EYgYvHdYxUsAj+Hbb8/RpTOo96p10A76u7HHMRlo0QwoSso0DaY8Y/1SZY+jI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWm4Nha8grESBuuhYI2AATTuCH6gUOaUyvMPtTEHU5e98c4F+c
-	IOhS3xONZcR3LHNI6LI8Am31NOuEM0a6TKcTjGHjYg5pc2uNgpVnfoN4IOK15VRnGYhJkVN+i3P
-	qzrcA2TmVgj8RZS7d7TU9T+d4w6/n0nJPevtB8K3S
-X-Gm-Gg: AfdE7clLl9MdR6UTS1OVpQEeDFNO9KuEPEvZHTYDW76sUfwsy0V6LwqULXeDfWdmaUv
-	NjK7OkPaEwBxC9YIRt5MI6aK4J0ml9HfhIUDJ+1DdUjkz1L2PBq0+j1pDkTI6+aMZxzfX1RUSXA
-	jdQNcD6HIO5C50YT6RfkutQp1um7nva0/CtVm//RTsi5Gu/Ta+qIQ4tgBQBKmwi19FX5Cxz+zIb
-	r3znpmWYwyEOxTkc2JJw2mGPCnPi1zIjDo95q1N3ZAD2ywLrYyTDsBX5u+s5w==
-X-Received: by 2002:a05:6a20:c70b:b0:3bf:7c02:c46f with SMTP id
- adf61e73a8af0-3c3ad5ffb90mr16486972637.14.1784587677211; Mon, 20 Jul 2026
- 15:47:57 -0700 (PDT)
+        bh=xaOVkEmI94bSxjGZP8o0unCsarNml6GU1QHwiTIhRTw=;
+        b=gpmS9nSiGETV7fd83FKxz3rLU7uNoIHzXqHNiiKbEhE0VFC+UfbCGDC9aqrh564n6A
+         Pjhl3SbztvznIPohH/diZHxFg09P46cLXtH6/IsVgilbFrvzKrB/+M8dwIaTKao2X4A6
+         7HSYNDwRYUd5ApPcibmdsTAMaKF+jD303tFcIHkML1u8ZM64zQIYQ7EELnP3mQbE7U3P
+         EeJUN0ygr+Dxxn4vSpGihK2yQSlrCQxKecJ8uEP+KtO+ZKRSSkCsKR46zzGYPZJUINMO
+         r0F0qmPj0+Ubbbf+tFXa1VoNF99PqwPlSIM34IiArLCLXqJd1c9pRMiG9yqa0A519X3j
+         KLXg==
+X-Gm-Message-State: AOJu0Yxdbx/mxohApI0wW8J5zL7qSN4uloCDGOOYE0YFw8ny1KAd1cCd
+	7Yemycy0+mBF4fFl8gTY/VRrEwlO5jAlM/c+DAI/36gBkYB6Vf76QAhU
+X-Gm-Gg: AfdE7cnnjiEsTx9OPwtsAoe7eMirXV9fsLRKESlaHPpqoy/CqU4fP+LLedpNdaqd8W1
+	x+38Th8OQnN4THEhhUFpxhljXLRU959LlSgRjJ2aglgOpSMrxMLMr1CzZAJyiUJO9kw42RoTGRo
+	8f2/VYk+4FFm28lkpmJ5Xvce4l1jkO10PqjFWXkm1LJxm8WKKMmvRywqenGyzVq9uLDnl+PkHpt
+	9iLnKKQLUjiHUnVoCLzFoVJCmkXqL4e3EW0ugBPsdimrl0Jjey6Gc//BGN0v+Z6ArD+OcyvB3gW
+	siE3owgr1c45JOvsljQW1wWo+Tzz9ZKzdc1GDbbuEVXIzZ1XNzAkow9gSrFz+9vje0GO7IgWjg+
+	wFEx4p4IpOht+ScLcdNRmHXGEqoEncuRVxZNGFH5zsAOqbeBLMnhvZx2aLkriSYCST8BzfRIEi2
+	rfWeBJycBOZrooxUmsOuxOn9S5JgU1EMCNHCNzLMEKcUeDpxs5hLyFclgekYiu7bukSWhexLRh7
+	Aus
+X-Received: by 2002:a05:600c:1f82:b0:495:607e:5ee7 with SMTP id 5b1f17b1804b1-495607e635amr51345645e9.17.1784588006289;
+        Mon, 20 Jul 2026 15:53:26 -0700 (PDT)
+Received: from localhost.localdomain (host86-153-201-25.range86-153.btcentralplus.com. [86.153.201.25])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e499c2sm31525849f8f.4.2026.07.20.15.53.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2026 15:53:25 -0700 (PDT)
+Date: Mon, 20 Jul 2026 23:53:23 +0100
+From: Nnamdi Onyeyiri <nnamdio@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	horms@kernel.org, jakub@cloudflare.com, jiayuan.chen@linux.dev, 
+	john.fastabend@gmail.com, kuba@kernel.org, kuniyu@google.com, ncardwell@google.com, 
+	netdev@vger.kernel.org, pabeni@redhat.com, sashiko-reviews@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] bpf, sockmap: handle spurious tcp_msg_wait_data()
+ wakeup
+Message-ID: <al6iBv_Yn4YSCmWc@localhost.localdomain>
+References: <20260720171535.67867-1-nnamdio@gmail.com>
+ <20260720171535.67867-2-nnamdio@gmail.com>
+ <DK3PKY6RN5FI.4DKPSHWNEBHM@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708000956.46138-3-dwindsor@gmail.com> <a3a376bce713ac38ce6746508239c1af@paul-moore.com>
- <CAEXv5_gt7BPWvdR4D1_3XJ0_XpBXWN52jeAOf1K2QJ7LL6CtPQ@mail.gmail.com>
- <DK3LZOFOVG5L.3F34IKOCO1I04@gmail.com> <CAHC9VhR8n_TBPGLGq-Pray+mHrUCdcmqGXi9wTXyeGa2Dc4m4g@mail.gmail.com>
- <DK3PRLXZFGKN.GES64J05HY6B@gmail.com>
-In-Reply-To: <DK3PRLXZFGKN.GES64J05HY6B@gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 20 Jul 2026 18:47:44 -0400
-X-Gm-Features: AUfX_myc5k3-eepFI8wiBLb8aQXZE1oN-cQyoKyDkS4G7UoPqGpzL4qDyO8o5wU
-Message-ID: <CAHC9VhSLMf4vzWduSfA67DDqB+s2wrAZ5AMr=0A08uybQpuRxg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] bpf: add bpf_init_inode_xattr kfunc for atomic
- inode labeling
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DK3PKY6RN5FI.4DKPSHWNEBHM@etsalapatis.com>
 
-On Mon, Jul 20, 2026 at 5:24=E2=80=AFPM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
-> On Mon Jul 20, 2026 at 10:15 PM CEST, Paul Moore wrote:
-> > On Mon, Jul 20, 2026 at 2:27=E2=80=AFPM Kumar Kartikeya Dwivedi
-> > <memxor@gmail.com> wrote:
-> >> On Mon Jul 20, 2026 at 8:12 PM CEST, David Windsor wrote:
-> >> > On Thu, Jul 16, 2026 at 5:55=E2=80=AFPM Paul Moore <paul@paul-moore.=
-com> wrote:
-> >> >>
-> >> >>
-> >> >> I'm sorry David, now that I'm seeing this function again, especiall=
-y
-> >> >> with the LSM specific bits extracted into a LSM function, this abso=
-lutely
-> >> >> belongs somewhere under security/.  It's only callable from within =
-a
-> >> >> BPF LSM callback and all it does outside of some BPF pointer boiler=
-plate
-> >> >> is call right back into a LSM helper function.
-> >> >>
-> >> >> If the BPF maintainers aren't willing to accept that, then we will =
-all
-> >> >> need to find another way.
-> >> >
-> >> > Where this code lands doesn't matter to me, so I'll stay out of the
-> >> > decision of where it lives.
+On Mon, Jul 20, 2026 at 05:16:08PM -0400, Emil Tsalapatis wrote:
+> On Mon Jul 20, 2026 at 1:15 PM EDT, Nnamdi Onyeyiri wrote:
+> > recvfrom()/recv() are documented as only returning EAGAIN for blocking sockets
+> > when they have a receive timeout configured.  However, adding a blocking
+> > ipv4 tcp socket without a receive timeout to a sockmap will cause EAGAIN errors
+> > sporadically.  A socket with a receive timeout may return EAGAIN before the
+> > timeout expires.
 > >
-> > Yes, you're caught up in some territorial wrangling that goes a fair
-> > bit beyond what you're looking to accomplish.  My apologies for my
-> > half of that, it is an unfortunate part of upstream kernel
-> > development.
+> > There are 2 code paths affected by this:
 > >
-> >> > If this kfunc goes to security/, would we also want to move eg
-> >> > bpf_set_dentry_xattr similarly?
-> >> >
-> >> > I'll roll v6 of this series meanwhile and we'll see what the BPF
-> >> > maintainers say.
+> >   1. tcp_bpf_recvmsg() - Used when the socket has been added to a sockmap
+> >      that has no verdict program attached.
 > >
-> > Thanks.  Fortunately, it should be easy enough to move the kfunc
-> > around, that's likely one of the smaller changes needed in v6.
+> >   2. tcp_bpf_recvmsg_parser() - Used when the socket has been added to a
+> >      sockmap that has a verdict program.  To reproduce this issue, it is
+> >      enough for the verdict program to do nothing but return SK_PASS.
 > >
-> >> I don't think there was any preference expressed from the BPF side.
+> > In both cases this happens when tcp_msg_wait_data() wakes spuriously
+> > (returning 0).  To fix it, we now loop back to msg_bytes_ready instead
+> > of returning -EAGAIN on spurious wakeup.
 > >
-> > Look at the second patch in the v4 patchset, you'll see a preference.
+> > To ensure the looping does not cause sockets with a SO_RCVTIMEO set to
+> > wait excessively long, tcp_msg_wait_data() now takes a pointer to timeo,
+> > allowing sk_wait_event() to update it as appropriate.
 > >
-> >> Logically,
-> >> one cannot be faulted for adding a kfunc to set the xattr for inode in=
- the same
-> >> file where similar kfuncs to set xattr on other FS objects / entities =
-exist.
+> > The logic in tcp_bpf_recvmsg_parser() that allow it to handle signals,
+> > socket errors and closuers in its loop was also added to tcp_bpf_recvmsg().
 > >
-> > First off, I can't say that the existing BPF kfuncs intended for use
-> > within a BPF LSM program are in a good location.  Unlike every other
-> > LSM which locates its code under security, the BPF LSM devs have
-> > chosen to locate their associated code all over the place.  Some of
-> > that happened before I was responsible for the LSM framework, and some
-> > of that which has happened afterwards has likely intentionally avoided
-> > traditional LSM review.  Unfortunately, this has muddied things with
-> > respect to what is possible generally in BPF versus what is possible
-> > only when the BPF LSM is enabled; we just recently saw where this was
-> > arguably the root cause of an exploitable vulnerability.
+> > Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
+> > ---
+> >  net/ipv4/tcp_bpf.c | 69 ++++++++++++++++++++++++++++++++++++++++------
+> >  1 file changed, 60 insertions(+), 9 deletions(-)
 > >
-> >> The question about bpf_set_dentry_xattr is thus valid.
-> >
-> > It's a very valid question.  It is my opinion that kfuncs which are
-> > only intended to be called from within BPF LSMs should be located
-> > under security/, just like every other LSM.  If there is a kfunc that
-> > is generally useful from other contexts, that is a different story,
-> > but in the bpf_set_dentry_xattr() case, it is explicitly only useful
-> > for setting 'security.bpf.*' xattrs.
+> > diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> > index cc0bd73f36b6..aa5c5d741599 100644
+> > --- a/net/ipv4/tcp_bpf.c
+> > +++ b/net/ipv4/tcp_bpf.c
+> > @@ -179,7 +179,7 @@ EXPORT_SYMBOL_GPL(tcp_bpf_sendmsg_redir);
+> >  
+> >  #ifdef CONFIG_BPF_SYSCALL
+> >  static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+> > -			     long timeo)
+> > +			     long *timeo)
+> >  {
+> >  	DEFINE_WAIT_FUNC(wait, woken_wake_function);
+> >  	int ret = 0;
+> > @@ -187,12 +187,12 @@ static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+> >  	if (sk->sk_shutdown & RCV_SHUTDOWN)
+> >  		return 1;
+> >  
+> > -	if (!timeo)
+> > +	if (!*timeo)
+> >  		return ret;
+> >  
+> >  	add_wait_queue(sk_sleep(sk), &wait);
+> >  	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+> > -	ret = sk_wait_event(sk, &timeo,
+> > +	ret = sk_wait_event(sk, timeo,
+> >  			    !list_empty(&psock->ingress_msg) ||
+> >  			    !skb_queue_empty_lockless(&sk->sk_receive_queue), &wait);
+> >  	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+> > @@ -229,6 +229,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+> >  	int copied_from_self = 0;
+> >  	int copied = 0;
+> >  	u32 seq;
+> > +	long timeo;
+> >  
+> >  	if (unlikely(flags & MSG_ERRQUEUE))
+> >  		return inet_recv_error(sk, msg, len);
+> > @@ -262,6 +263,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+> >  		}
+> >  	}
+> >  
+> > +	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+> > +
+> >  msg_bytes_ready:
+> >  	copied = __sk_msg_recvmsg(sk, psock, msg, len, flags, &copied_from_self);
+> >  	/* The typical case for EFAULT is the socket was gracefully
+> > @@ -280,7 +283,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+> >  	}
+> >  	seq += copied_from_self;
+> >  	if (!copied) {
+> > -		long timeo;
+> >  		int data;
+> >  
+> >  		if (sock_flag(sk, SOCK_DONE))
+> > @@ -299,7 +301,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+> >  			goto out;
+> >  		}
+> >  
+> > -		timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+> >  		if (!timeo) {
+> >  			copied = -EAGAIN;
+> >  			goto out;
+> > @@ -310,13 +311,15 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+> >  			goto out;
+> >  		}
+> >  
+> > -		data = tcp_msg_wait_data(sk, psock, timeo);
+> > +		data = tcp_msg_wait_data(sk, psock, &timeo);
+> >  		if (data < 0) {
+> >  			copied = data;
+> >  			goto unlock;
+> >  		}
+> >  		if (data && !sk_psock_queue_empty(psock))
+> >  			goto msg_bytes_ready;
+> > +		if (!data && timeo > 0)
+> > +			goto msg_bytes_ready;
+> >  		copied = -EAGAIN;
+> >  	}
+> >  out:
+> > @@ -355,6 +358,7 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+> >  {
+> >  	struct sk_psock *psock;
+> >  	int copied, ret;
+> > +	long timeo;
+> >  
+> >  	if (unlikely(flags & MSG_ERRQUEUE))
+> >  		return inet_recv_error(sk, msg, len);
+> > @@ -371,14 +375,59 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+> >  		return tcp_recvmsg(sk, msg, len, flags);
+> >  	}
+> >  	lock_sock(sk);
+> > +
+> > +	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+> > +
+> >  msg_bytes_ready:
+> >  	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
+> >  	if (!copied) {
+> > -		long timeo;
+> >  		int data;
+> >  
+> > -		timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
+> > -		data = tcp_msg_wait_data(sk, psock, timeo);
+> > +		if (sock_flag(sk, SOCK_DONE)) {
+> > +			ret = 0;
+> > +			goto unlock;
+> > +		}
+> > +
+> > +		if (sk->sk_err) {
+> > +			if (!sk_psock_queue_empty(psock))
+> > +				goto msg_bytes_ready;
+> > +			if (!skb_queue_empty(&sk->sk_receive_queue)) {
+> > +				release_sock(sk);
+> > +				sk_psock_put(sk, psock);
+> > +				return tcp_recvmsg(sk, msg, len, flags);
+> > +			}
+> > +			ret = sock_error(sk);
+> > +			goto unlock;
+> > +		}
+> > +
+> > +		if (sk->sk_shutdown & RCV_SHUTDOWN) {
+> > +			if (!sk_psock_queue_empty(psock))
+> > +				goto msg_bytes_ready;
+> > +			if (!skb_queue_empty(&sk->sk_receive_queue)) {
+> > +				release_sock(sk);
+> > +				sk_psock_put(sk, psock);
+> > +				return tcp_recvmsg(sk, msg, len, flags);
+> > +			}
+> > +			ret = 0;
+> > +			goto unlock;
+> 
+> These two error handling routines above look identical. Can you refactor
+> them?
 >
-> I don't think we should do that in v6 though.
 
-Yes, that would be a separate effort and it's one of the reasons I
-didn't bring it up in my review comments, I was simply responding to
-those who raised it as a question.
+Will do.  My understanding is the same logic is needed to address the
+issue Sashiko raised with the SOCK_DONE check as well.
 
---=20
-paul-moore.com
+> > +		}
+> > +
+> > +		if (sk->sk_state == TCP_CLOSE) {
+> > +			ret = -ENOTCONN;
+> > +			goto unlock;
+> > +		}
+> > +
+> > +		if (!timeo) {
+> > +			ret = -EAGAIN;
+> > +			goto unlock;
+> > +		}
+> > +
+> 
+> Since this handling (which Sashiko flags by the way, correctly AFAICT) 
+> are taken from tcp_bpf_recvmsg, there is obvious overlap between the two
+> functions. Please factor those out so that they share the logic between
+> them.
+> 
+> pw-bot: cr
+> 
+
+Sashiko highlighted the "if (!timeo)" and signal_pending early returns
+when MSG_DONTWAIT is set, but I think I'm missing part of the picture.
+By the time we reach these branches, haven't we already checked for data
+in sk_receive_queue (line 372, after the patch is applied to 7.2-rc2)
+[copied below for ease of viewing]:
+
+    if (!skb_queue_empty(&sk->sk_receive_queue) &&
+        sk_psock_queue_empty(psock)) {
+        sk_psock_put(sk, psock);
+        return tcp_recvmsg(sk, msg, len, flags);
+    }
+
+and in the psock (line 382) [again copied below for viewing]:
+
+    copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
+
+> > +		if (signal_pending(current)) {
+> > +			ret = sock_intr_errno(timeo);
+> > +			goto unlock;
+> > +		}
+> > +
+> > +		data = tcp_msg_wait_data(sk, psock, &timeo);
+> >  		if (data < 0) {
+> >  			ret = data;
+> >  			goto unlock;
+> > @@ -390,6 +439,8 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+> >  			sk_psock_put(sk, psock);
+> >  			return tcp_recvmsg(sk, msg, len, flags);
+> >  		}
+> > +		if (!data && timeo > 0)
+> > +			goto msg_bytes_ready;
+> >  		copied = -EAGAIN;
+> >  	}
+> >  	ret = copied;
+> 
