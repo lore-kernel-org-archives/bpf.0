@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA633D47D4;
-	Mon, 20 Jul 2026 09:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45053D669F;
+	Mon, 20 Jul 2026 09:34:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784540088; cv=none; b=U55yMXurPe2y/y8fzRDBzOmkTRAvIUL/SsDsHj1VGthIGnph6eO8vX8guGHtj00Ndoh3k0sq5UYH42YpksX6uoH2fnUOclkSz7VAAd3RdmU/zaSL2tz18z17MPCg5F20TQhBFohXoNmZFSK5SjR3UbO97CT8YR/UUtQJOgsDXOY=
+	t=1784540091; cv=none; b=U2YPt2rmwAJVf9KBG2awWtYpaX/HfBW96BD+IVxx7BdHh71I70vNvvQbC+0jORZy5/qPHJFZwefZqhlnlYcIYvxbBkFLW6SBjBO/RQK1iOF37GY+DchHGzFuGWhpFNGBIR7i5Yi2aO+qGcPPNykqAJOCMTwNx9msYjhvPAmNXlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784540088; c=relaxed/simple;
-	bh=2cz/Uon2cc1y44sOqIk8MHfFBV5eE11DUXnjL3cZ21o=;
+	s=arc-20240116; t=1784540091; c=relaxed/simple;
+	bh=x2DkL4sFAm5IyQlbm2cRRy4gizA87I+afph09+me8n0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MNzfeVlOkjSRUnqpW82uVgfxMncPEHOSO+Ene3O/1Cj7N2dKL4s7hRYpHSwe6cdZINjvGFqRhZoVTN3t0f6KOZj3gXt5OucsSk8vr1QP5SSZFIPR5bBS0FkTH0tHQwjsUBacduH2F8ThJaPgLI39pWtst1GcKTXy4dGKQo7fM1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HnHZ///A; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=UYWhEwfle57f3NK2Ccg+D8SUo2KfNAjitgweK2IzFB5iWULTOJmr3GvSEzOxfyG+pfYHstiI3n4r2cinxqZ6RlhliJXrmqMiyVth5HKthwsjaLL/TwGnqKuGNH8vJ+vHwedY4VwcT1K2O3Ov58t5yGNeuKUBtAbTZii3SGiCd0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K3dcM21p; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HnHZ///A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC7DC1F00A3A;
-	Mon, 20 Jul 2026 09:34:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K3dcM21p"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8421F00A3D;
+	Mon, 20 Jul 2026 09:34:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784540087;
-	bh=FAAiNP5sbEBPejy0XpW4wgSJa4O4wifezU7doCgFL3A=;
+	s=k20260515; t=1784540090;
+	bh=LTLWrh6caoD4CwLDzNTxAt3JlVH4gwwkfJU5sX9FL1U=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=HnHZ///AFPSNwS4w0n015817chaT6GIyVDdfBMt+eiGmKS7fzL0fwjE9p0zkgIWW7
-	 KxQwji0T8qbw/Hka0wWqZnAVB4kQZldXtl7RxyJgHY06hTxejp2AToH9b5Na2RtlB+
-	 1yFMMdrEDjBd81bJKLZl6xL6jrDTA3AWPsMnbqiYhebbtTVjqfHOJWTVoX4YDG6BTt
-	 zA8Wr/Pt2WfS2F3dMVaxoxoi13zGVS+7GK7cNLUA+WfFSjimV1eUH+wyKjIIWwPy5c
-	 WbCgK7GvkACgLASBdDYLrloFJTbL2TD+EizCuJOt+wkMQxQtGd8mgqC1w4f2n8cuK7
-	 5q1ua8Dcx4o/A==
+	b=K3dcM21p+m2SrtYLQIkzXAXOKFJR71qgjlFct9K1ryfM/c1CdWvAnAdravTwuTc/9
+	 ZgarO3e4TXpe1IrGauTgUmgSNlELIYaQaHm7FOWcvNe9a2zswu9NKjfxAA01hPoWGN
+	 yBnYMrZR2bZAxv9ahZs/5j5mDltPmdi69VyBFoLjcHGpAOtCKbhfrZXImlv7sisIwe
+	 EtCyV8B2dw1NNYBpFSw48oxExk0rLHbT4fSaCaMM/lBteTUNUKsakEG0x2snlnqH8k
+	 BYCJnGWYUPJEW0doVOVhP9eYMHMrpLjgLyYTgtt+WZtHnbrrk/rEKSRsQDK7I/lqUQ
+	 qwne+RUKZdaQA==
 From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 20 Jul 2026 11:33:38 +0200
-Subject: [PATCH 15/21] binfmt_misc: document the transparent identity
- contract
+Date: Mon, 20 Jul 2026 11:33:39 +0200
+Subject: [PATCH 16/21] exec: carry a PT_INTERP substitute in struct
+ linux_binprm
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260720-work-bpf-binfmt_misc-ptinterp-v1-15-ddb76c9a508e@kernel.org>
+Message-Id: <20260720-work-bpf-binfmt_misc-ptinterp-v1-16-ddb76c9a508e@kernel.org>
 References: <20260720-work-bpf-binfmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org>
 In-Reply-To: <20260720-work-bpf-binfmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org>
 To: Farid Zakaria <farid.m.zakaria@gmail.com>, 
@@ -50,61 +50,98 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
  jannh@google.com, mail@johnericson.me, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.16-dev-4217c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2352; i=brauner@kernel.org;
- h=from:subject:message-id; bh=2cz/Uon2cc1y44sOqIk8MHfFBV5eE11DUXnjL3cZ21o=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTFvm7qtK9MuPohZQm/d6czw3yHUAeXT6+ac/aJWtz/d
- kQz8LBtRykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwETCvjD8U74v7+K6S+FQhuKd
- XScZZt7UeZms2T7byENUfGNG1xHGjYwMvwxmma9iut0fJ6/FdzFjB3P3lVe3G9c5vagX9zgrUST
- JCAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3383; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=x2DkL4sFAm5IyQlbm2cRRy4gizA87I+afph09+me8n0=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTFvm6yXpq/pXDH3p+bXp8Wyf8690tnmr3pyq8cp1Yfl
+ s6dePS+Z0cpC4MYF4OsmCKLQ7tJuNxynorNRpkaMHNYmUCGMHBxCsBE9h5l+KcTeOGKlszauJ8u
+ p3XXvNSSWyGdWfj/f6NL34YNSe3sqhMZGeacqN/+MKWoZuX7lTcPR+541ZGrq3w34tsXkUJrrcb
+ ou3wA
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Describe what a transparent dispatch constructs and the loader contract
-behind AT_FLAGS_TRANSPARENT_INTERP. Also note what deliberately stays
-different (the address space layout) and what stays unchanged
-(credential derivation without 'C').
+binfmt_misc currently supports an execution model where the registered
+interpreter becomes the executed program and the matched binary is
+handed to it as payload. The upcoming binfmt_misc loader mode inverts
+this. The matched binary remains the executed program and the registered
+interpreter is substituted into the role the binary's PT_INTERP would
+have played.
+
+Add the channel for that hand-over. bprm->loader carries an
+open_exec-style struct file reference from the binfmt_misc match to the
+binary format that consumes it. Unlike bprm->interpreter it does not
+request a restart of the format search. The stashing handler declines
+the exec with -ENOEXEC and the search continues to the real format in
+the same round.
+
+Establish the complete lifecycle up front so a stashed loader can
+neither leak nor be silently ignored.
+
+- Chain restart: if another format wins the round by staging
+  bprm->interpreter (binfmt_script) the stashed loader belonged to
+  the file being replaced. Drop it at the top of the swap block in
+  exec_binprm().
+
+- Unclaimed or error: free_bprm() releases a still-stashed loader
+  next to the other bprm file references.
+
+- Silent non-substitution: a final format that reaches
+  begin_new_exec() with a pending loader would run the binary while
+  ignoring the override. Refuse with -ENOEXEC before the point of no
+  return. Formats that do not know about the override (binfmt_flat,
+  binfmt_elf_fdpic, out-of-tree) need no changes.
 
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- Documentation/admin-guide/binfmt-misc.rst | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ fs/exec.c               | 9 +++++++++
+ include/linux/binfmts.h | 1 +
+ 2 files changed, 10 insertions(+)
 
-diff --git a/Documentation/admin-guide/binfmt-misc.rst b/Documentation/admin-guide/binfmt-misc.rst
-index b27ad31847ab..0946ca1923f2 100644
---- a/Documentation/admin-guide/binfmt-misc.rst
-+++ b/Documentation/admin-guide/binfmt-misc.rst
-@@ -218,6 +218,31 @@ binfmt_misc instances themselves are looked up. The entry keeps the handler
- alive; deleting the struct_ops map only prevents new activations.
+diff --git a/fs/exec.c b/fs/exec.c
+index 45d416994682..797d9a0cf6c6 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1123,6 +1123,10 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 	struct task_struct *me = current;
+ 	int retval;
  
++	/* A pending PT_INTERP substitution this format cannot consume. */
++	if (bprm->loader)
++		return -ENOEXEC;
++
+ 	/* A declined execfd request has no executable for a later format. */
+ 	if (!bprm->executable) {
+ 		bprm->have_execfd = 0;
+@@ -1435,6 +1439,8 @@ static void free_bprm(struct linux_binprm *bprm)
+ 	if (bprm->old_mm)
+ 		exec_mm_put_old(bprm->old_mm);
+ 	do_close_execat(bprm->file);
++	/* An unconsumed PT_INTERP substitute from a binfmt_misc loader entry. */
++	do_close_execat(bprm->loader);
+ 	if (bprm->executable) {
+ 		/* A transparent dispatch still holds the write denial. */
+ 		if (bprm->executable_denied)
+@@ -1757,6 +1763,9 @@ static int exec_binprm(struct linux_binprm *bprm)
+ 		if (!bprm->interpreter)
+ 			break;
  
-+Transparent interpreters
-+------------------------
++		/* A stashed PT_INTERP substitute belonged to the replaced file. */
++		do_close_execat(no_free_ptr(bprm->loader));
 +
-+With the ``T`` flag or ``BPF_BINPRM_TRANSPARENT`` the dispatch is invisible
-+to the resulting process. The argument vector is left exactly as the caller
-+built it. The binary is passed through ``AT_EXECFD``. The kernel also labels
-+``/proc/pid/exe`` correctly. The binary's file is write-denied while the
-+process runs while the interpreter is not, exactly as if it had been executed
-+directly. A transparent entry does not change how credentials are derived. As
-+with any other entry, set*id bits of the binary are only honored with ``C`` (or
-+``BPF_BINPRM_CREDENTIALS``).
-+
-+The interpreter has to be built for this contract. The kernel announces it
-+with ``AT_FLAGS_TRANSPARENT_INTERP`` in the ``AT_FLAGS`` aux vector entry
-+next to ``AT_EXECFD``. The argument vector belongs entirely to the program,
-+nothing was spliced in, so the interpreter doesn't consume arguments and
-+simply loads the program from the descriptor. The bit is also the loader's
-+license to finish the identity. After mapping the program it may retarget the
-+``AT_PHDR``/``AT_ENTRY``/``AT_BASE`` entries of ``/proc/pid/auxv`` and the
-+code/data statistics markers via one ``PR_SET_MM_MAP`` which completes
-+what attaching debuggers observe. What remains visibly different from a direct
-+execution is the address space layout. The interpreter occupies the main-image
-+position and the program lives in the mmap region.
-+
-+
- Hints
- -----
- 
+ 		exec = bprm->file;
+ 		bprm->file = bprm->interpreter;
+ 		bprm->interpreter = NULL;
+diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
+index ba5037b69866..aa6dac777173 100644
+--- a/include/linux/binfmts.h
++++ b/include/linux/binfmts.h
+@@ -64,6 +64,7 @@ struct linux_binprm {
+ 		executable_denied:1;
+ 	struct file *executable; /* Executable to pass to the interpreter */
+ 	struct file *interpreter;
++	struct file *loader;
+ 	struct file *file;
+ 	struct cred *cred;	/* new credentials */
+ 	int unsafe;		/* how unsafe this exec is (mask of LSM_UNSAFE_*) */
 
 -- 
 2.53.0
