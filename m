@@ -1,179 +1,194 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pj2-f10.google.com (mail-pj2-f10.google.com [74.125.227.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722CE3BBFA9
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 20:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784578589; cv=pass; b=X2ZiCjO76ak0Fg2TNqACdtFyTuLSW/HGLz/QXmGc2xCFuYlvkR+RB2bcujMucTcEE2HhkZklu12As975HMvTwe0ATnsHaAvUYA1HD8BTi5U0WvUl9SAwA3fF344bLAre1pscNBbi3twRBIH93wjvyF14uCXWm3E/9ufPgNuCNXk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784578589; c=relaxed/simple;
-	bh=qOEkNLJrOibH57gOt/DIm3R8ct2tEakFik9JpGI7f18=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nE/pTkYRroJ5Q6+vvWnXqlub78wPcKHUWZB8iZxucDqZd0NLBaPWQ+Kb4yt7ynwzZDWksiWbA8818xhD2wkdE0S9DbRe5fortYkISVhHEnaaI7+rcWNZXaORSBJtot1ehpp3j8mzvnRKfijgNfw4iBuksNu6FYP820aDYz6nqjA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=d2866SVJ; arc=pass smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B6B3BF667
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 20:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.138
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784579080; cv=none; b=b3ihcOwC0m4ZkrNfbkercpzhN7/VRDG64ErJoFLBWBhbOFK4Dk277FpcK/bALwDnJUP7aWeaPtc/8wlNeSwU21GV4EI5ker1A8js+9HSpWm0d2Y9NdVgHo6+SnNRvlRav7YVGHIqmxGm2TN6K7s1qTYwEyZQ+Jufd0EPc/rdE1w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784579080; c=relaxed/simple;
+	bh=QM8Hkd0gMPdHJ/60YK8Qdb4OsDSzn4nGwT7SSTznQ4o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l10DOn1+/9BrdfIvqAJF5TKxR34JR565lsMT4EBfyyTg/0PWzyeVMoOYuMTjiV8c+hQPNhVo5aMEoSPTXyXh1Vovon97v8Cx1haLtuKYxDecGfUsoLrPIs1JuFyQqR0/MngzMBXMnc5FuuHiUMRaX194UGI8MKrO8WcNE4xK+os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SjHNde3w; arc=none smtp.client-ip=74.125.227.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="d2866SVJ"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8485b358552so11375538b3a.2
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 13:16:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784578569; cv=none;
-        d=google.com; s=arc-20260327;
-        b=MR3kGO5Sxx8DEzA8dKBiXdNhpc/35MNZguYuBPVMpRnzrS2yzRrnMESFcx6sCiNcGE
-         gOXAcLdqylf3dAQoSNm0p/HYuJwN0+3tbH7UNI3YXzR4AV8zIoKudrLPWQqeDmOy+9LT
-         8ztcrsmqCVusYHdmNjE5IWk+iOfsmOJUwFy2n8J9haeGy0eI2CPYDgMS1Tm4pIS7hBup
-         mzYhBxolltQiJWRTMJ/gg0ra2h4EvL8JqYodxPU7HCKLI1LQztqAYIZa1kr4xTlWxOlW
-         1Il96ZFW/L148iECnUrOyrshh0ZRwflUXMTcc75FXfNrb37SbfE7/oSV95NNJ+Vq8ByV
-         Xkng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NEIzKGx6nstnSDXiYsrtWuuGIdEs+ij5HpQm4P2etZk=;
-        fh=H76jlso9rt/WI4d8vbXKnGEItepQQTa5NW4H7nTJJcA=;
-        b=A4u7C6nvWj09zAbYVBMFU4nFSoXvncTmdOgVZiKCviiJXyooQhqnQRnsvbM65pVmk0
-         dZ83fxJC3xEm99w6FeH/P4Dh2Dk2rq4Pc7QL7SWVJz8J5DqofhuBX0eegDJFen9DCRTC
-         hws39nxxVPsIY01ghhxWR7VhkxrNEznn0MSCTwOVHwnBzX0Qlp13CSmZkkk3HewrNwcy
-         7Z5gdxOcOssv3JCT22e3CcegO369rHCO2t3f1Qc2zVh7Iwpr5Q4fqFaTh7NyMedXkvN9
-         +dWgJIgYmOE+JPJMYhb6l+uUrdv7BnrcdAzZ9pZ7DX8pTRRTz0nOfxJZ33sz6IbVyZc6
-         5TjA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SjHNde3w"
+Received: by mail-pj2-f10.google.com with SMTP id 98e67ed59e1d1-38e8adc1d70so470065a91.1
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 13:24:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1784578569; x=1785183369; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1784579078; x=1785183878; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NEIzKGx6nstnSDXiYsrtWuuGIdEs+ij5HpQm4P2etZk=;
-        b=d2866SVJs2a0e1lfW2MqZvVhHeHIcHycmtnI65CnmV5ZeaakXFzLdM8aykzl8XCp4r
-         FjIgoqKhSid0Ww300wNhKHUVQRbmt5vyhdjyGdMviHWnGpWlKD632Cn+BMeib6C6LWxu
-         5VF1OoAfbCwtkrxfDTYj1XkpnLVMkWpe3YoGEjDstsJEFzdcsMULJhwhQKwNyQ66OkgV
-         wxxZ3fXTFoneravECaIHMy3fg9WbwXzJbK0co4pRXXXR+ue0ep3EFGwbAXctpImE5eOB
-         lQn0zqJHw2zJRBZHBTCL4C56JbOgGfThb8fVfsLLcdX4fLZAht1e0QHTyJG44uJFYEjm
-         ip9A==
+        bh=DuxloEjMIUr3usgKrRgUoqh61BlU8RAK2e67hxqdRj8=;
+        b=SjHNde3wy9EDiajuErQyzpvkeaKM5SEtItxWkH6QNyaRFmQ4bLYdgufCGB/hsYDVnt
+         3bDlOLVNA6nTO3qD0CWnrFDdKTXAUnmc/1CSwilvSWWS5lP+AoPkvjjFOhsXz0GxZ4fq
+         9TQ4C2Pxudfi9WY7+dSMHPEbfcFX1UnhXJEXJ5azfSYe3t8ApMIrUgFs33gJHIyhmf8P
+         aGQBlx2ricP4dsh8EjNaXDukXGe7yFoYIDoOA/DrBO7/8mWKZB5U7a4QqJANnthpwdqP
+         5G5+hAiwKPDA4D7CnJf4hsW3RKIGyX++m8nFRgBwZRhCC01Za3JlR2pE52hH+Ai1Qoqc
+         E1lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784578569; x=1785183369;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1784579078; x=1785183878;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NEIzKGx6nstnSDXiYsrtWuuGIdEs+ij5HpQm4P2etZk=;
-        b=qTha7501LCP0yNylHNPp3g+Kj4/5Qjn8dfv+RezhX4vJMUOSzkVd7SkPuLef+DqXRY
-         7zxQWivj7lqUtsF41DUEs7HXaONzYd+8vkxBw7KtYNnI0U39HurDWFleE15018Zt411q
-         2c6lE8YUHICKG/JaY5nsPVfWPzGqMRYgWAJ1MJrUVT3kqb0o2BA7mDUvFxul1YLAhHL9
-         nhjLZsX4UBbWLcG0Syqts1GPqXcsFaJbwkdir5crf1iGmqYZuRFUC1+D/rmuL1P174GK
-         pMsVak7+/qGbVAmuov5b7RD1UFtGMid6iRq4GItaeBH9edQX0fn1GSmT2/bkbO/jM614
-         Yo3g==
-X-Forwarded-Encrypted: i=1; AHgh+Rrl0HECdKg46avpbQ4IJUx7YUdBQvTs6rIx7yqcQslK0RASCuXW1KGzPNI5X09R4b1f8B0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0s47thZD3186ULFOc2H0hRojssff922ynzSfDrcVDt2hKxY7t
-	BWwc1WoEDBebQ9NU3YDBhWWx8OM3rNAHdfsdhiE7vqBEgl/SweAF7/DmLaDag5lpJQzdzvVgoHb
-	xsKf2gGVfJvca2q7gcKvZ21BkD6jT8G0YtX2Zbfdf
-X-Gm-Gg: AfdE7cnKkfe4ieMqW97YENQwtFWHc5N9SHGpoX0LA71T66VM34Mh7tz6r4VP+9/IwSQ
-	0AikW3K3v4YuWMjKgtY5GPaToLGp+VDc2NZBXuQrKVPHi87G9qrUea3ZC++JrSB8jnzzlLK54Hg
-	LFyef9Bi1qddXKhI74HpI4RZd95rPQsRYwNSxPQsESv1CUtLCaDsrCY2eR/0uP6BSCi4W/vp2Hw
-	AgU9wIks63o44Z0/4gKLmR9smgsljzJHDfMLMweTEzYYyNGrGkR71NNSqs6VQ==
-X-Received: by 2002:a05:6a00:438d:b0:848:68d7:c673 with SMTP id
- d2e1a72fcca58-84c2948848fmr15306792b3a.47.1784578569285; Mon, 20 Jul 2026
- 13:16:09 -0700 (PDT)
+        bh=DuxloEjMIUr3usgKrRgUoqh61BlU8RAK2e67hxqdRj8=;
+        b=SHc1dRptxiZi2Z0530cGFt7LQXEu2Y+seYtZxyP2bWflPtRtUbd2tRHkXSaMJDxC11
+         8TiI6V9kyUTonXfxA8PTr1yErtuA3FGQ58PVVdxMgfMiWVCCDEGKXJKF95Q+HBurSsb4
+         KKzQGldPRoH45uOqM6nefuBp+biQaGffAHQgn7eyop9h1zq36aDUx+4GdV805T3YYTpe
+         MU4dh+FlpvoE/1OFkRn09oW9UCyAwuT141+bv5jvpkeAQavl2GaJoDrXNhX8ggSapIDQ
+         mGW3ohgcT+1n/pzd1i4yInpBB6U5ivx8YHWvptja7FYOM/+afuVHpBAwqeIqRN15I8dY
+         DE2g==
+X-Forwarded-Encrypted: i=1; AHgh+RojQa9dLCdd0WPmFvA0JlVUtzuHoW3Ae8VyzmCXRWHRzqOcH684Zt66KdF1WuWt2mURtNA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVDLAtiKcRFdjz9DFxMAKPywBx5zlp6sjEyh0j8Yp/d74K8clU
+	H5vrc3FoEdETliX9JH/8+WghalVK+7i3yeHJNCudQ1pkLBuhCUocVGmc
+X-Gm-Gg: AR+sD10+KwNG7Qq56FyCmxjwDBQ8Bl3VNOMDHuYxlapHntzUKT/87ykQUwPY3VZXVXj
+	3vMGr/gw1WxD71GGuC0KsztIelRwrl9qciWHciny0TDsuLNmNyTQ8WFs2G1wGfNFZCiIKFYjP2B
+	6VPikNKtXGUlx0ZFHo4aUSLruOZSdjtSGrXVCJj8P37X2yvK7yN9w6FNQrDihamVqQCeFWAlaSC
+	CelmstN3/xiJs4CZ+PCcvinuw95R3xFmHHARKz5wXlG4ygopRErArC2Z4ZjowcTy6SUJW4lvBSE
+	GZ0C8/ordNYotfwHlKjIxTpq7xGHCoggFtB3u9Q6B/XwVp90lOIiMS4W7LbsvgrVkEqrdiW2GiZ
+	bFYLTHWCWlbOQoT/KlspoerlJIIbKlxZSThtghlvsr4NsZOlp+vUdv/kDYjKKBxfk1vPdv/V7KC
+	OtocSGig==
+X-Received: by 2002:a17:90b:1350:b0:38e:6a96:447b with SMTP id 98e67ed59e1d1-38e6a96490bmr10631437a91.25.1784579078316;
+        Mon, 20 Jul 2026 13:24:38 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:71::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e47fe75c1sm1737214a91.1.2026.07.20.13.24.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2026 13:24:37 -0700 (PDT)
+Date: Mon, 20 Jul 2026 13:24:32 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
+Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	sdf@fomichev.me, horms@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, AutonomousCodeSecurity@microsoft.com, 
+	tgopinath@linux.microsoft.com, kys@microsoft.com
+Subject: Re: [PATCH net] xsk: reject tx_metadata_len smaller than struct
+ xsk_tx_metadata
+Message-ID: <al6Czy7Gvhc41RsY@devvm7509.cco0.facebook.com>
+References: <20260720155210.34229-1-blbllhy@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708000956.46138-3-dwindsor@gmail.com> <a3a376bce713ac38ce6746508239c1af@paul-moore.com>
- <CAEXv5_gt7BPWvdR4D1_3XJ0_XpBXWN52jeAOf1K2QJ7LL6CtPQ@mail.gmail.com> <DK3LZOFOVG5L.3F34IKOCO1I04@gmail.com>
-In-Reply-To: <DK3LZOFOVG5L.3F34IKOCO1I04@gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 20 Jul 2026 16:15:56 -0400
-X-Gm-Features: AUfX_mw17rEY5xGffzntET0ex7-B1yqGVCACoJsXOFIbYfGKrVihTs1yl3fAaHM
-Message-ID: <CAHC9VhR8n_TBPGLGq-Pray+mHrUCdcmqGXi9wTXyeGa2Dc4m4g@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] bpf: add bpf_init_inode_xattr kfunc for atomic
- inode labeling
-To: David Windsor <dwindsor@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260720155210.34229-1-blbllhy@gmail.com>
 
-On Mon, Jul 20, 2026 at 2:27=E2=80=AFPM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
-> On Mon Jul 20, 2026 at 8:12 PM CEST, David Windsor wrote:
-> > On Thu, Jul 16, 2026 at 5:55=E2=80=AFPM Paul Moore <paul@paul-moore.com=
-> wrote:
-> >>
-> >>
-> >> I'm sorry David, now that I'm seeing this function again, especially
-> >> with the LSM specific bits extracted into a LSM function, this absolut=
-ely
-> >> belongs somewhere under security/.  It's only callable from within a
-> >> BPF LSM callback and all it does outside of some BPF pointer boilerpla=
-te
-> >> is call right back into a LSM helper function.
-> >>
-> >> If the BPF maintainers aren't willing to accept that, then we will all
-> >> need to find another way.
-> >
-> > Where this code lands doesn't matter to me, so I'll stay out of the
-> > decision of where it lives.
+On 07/20, Cen Zhang (Microsoft) wrote:
+> xdp_umem_reg() validates tx_metadata_len for upper bound (<256) and
+> alignment (%8) but not a lower bound.  xsk_skb_metadata() computes
+> meta = buffer - pool->tx_metadata_len then unconditionally accesses
+> the full 24-byte struct xsk_tx_metadata, so any value less than
+> sizeof(struct xsk_tx_metadata) allows an out-of-bounds read.
+> 
+> KASAN reports this as:
+> 
+>   BUG: KASAN: vmalloc-out-of-bounds in xsk_skb_metadata+0x4b2/0x500
+>   Read of size 8 at addr ffffc90000f11000 by task exploit/148
+> 
+>   xsk_skb_metadata (net/xdp/xsk.c:837)
+>   xsk_build_skb (net/xdp/xsk.c)
+>   __xsk_generic_xmit (net/xdp/xsk.c)
+>   xsk_sendmsg (net/xdp/xsk.c)
+> 
+> Add a lower-bound check in xdp_umem_reg() to reject tx_metadata_len
+> values that cannot cover the full metadata struct.
+> 
+> Fixes: 341ac980eab9 ("xsk: Support tx_metadata_len")
+> Reported-by: AutonomousCodeSecurity@microsoft.com
+> Signed-off-by: Cen Zhang (Microsoft) <blbllhy@gmail.com>
+> ---
+>  net/xdp/xdp_umem.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+> index 58da2f4f4397..d16ad9d8f919 100644
+> --- a/net/xdp/xdp_umem.c
+> +++ b/net/xdp/xdp_umem.c
+> @@ -208,7 +208,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+>  		return -EINVAL;
+>  
+>  	if (mr->flags & XDP_UMEM_TX_METADATA_LEN) {
+> -		if (mr->tx_metadata_len >= 256 || mr->tx_metadata_len % 8)
+> +		if (mr->tx_metadata_len < sizeof(struct xsk_tx_metadata) ||
+> +		    mr->tx_metadata_len >= 256 || mr->tx_metadata_len % 8)
+>  			return -EINVAL;
+>  		umem->tx_metadata_len = mr->tx_metadata_len;
+>  	}
+> -- 
+> 2.53.0
+> 
 
-Yes, you're caught up in some territorial wrangling that goes a fair
-bit beyond what you're looking to accomplish.  My apologies for my
-half of that, it is an unfortunate part of upstream kernel
-development.
+This will make adding new tx metadata types harder (and will require all
+userspace to be updated whenever we do so), will the following be
+a bit nicer? (but, obviously, paying more per-packet at runtime)
 
-> > If this kfunc goes to security/, would we also want to move eg
-> > bpf_set_dentry_xattr similarly?
-> >
-> > I'll roll v6 of this series meanwhile and we'll see what the BPF
-> > maintainers say.
+(untested)
 
-Thanks.  Fortunately, it should be easy enough to move the kfunc
-around, that's likely one of the smaller changes needed in v6.
-
-> I don't think there was any preference expressed from the BPF side.
-
-Look at the second patch in the v4 patchset, you'll see a preference.
-
-> Logically,
-> one cannot be faulted for adding a kfunc to set the xattr for inode in th=
-e same
-> file where similar kfuncs to set xattr on other FS objects / entities exi=
-st.
-
-First off, I can't say that the existing BPF kfuncs intended for use
-within a BPF LSM program are in a good location.  Unlike every other
-LSM which locates its code under security, the BPF LSM devs have
-chosen to locate their associated code all over the place.  Some of
-that happened before I was responsible for the LSM framework, and some
-of that which has happened afterwards has likely intentionally avoided
-traditional LSM review.  Unfortunately, this has muddied things with
-respect to what is possible generally in BPF versus what is possible
-only when the BPF LSM is enabled; we just recently saw where this was
-arguably the root cause of an exploitable vulnerability.
-
-> The question about bpf_set_dentry_xattr is thus valid.
-
-It's a very valid question.  It is my opinion that kfuncs which are
-only intended to be called from within BPF LSMs should be located
-under security/, just like every other LSM.  If there is a kfunc that
-is generally useful from other contexts, that is a different story,
-but in the bpf_set_dentry_xattr() case, it is explicitly only useful
-for setting 'security.bpf.*' xattrs.
-
---=20
-paul-moore.com
+diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
+index 46797645a0c2..b55b878949d5 100644
+--- a/include/net/xdp_sock_drv.h
++++ b/include/net/xdp_sock_drv.h
+@@ -260,9 +260,21 @@ xsk_buff_raw_get_ctx(const struct xsk_buff_pool *pool, u64 addr)
+ 	0)
+ 
+ static inline bool
+-xsk_buff_valid_tx_metadata(const struct xsk_tx_metadata *meta)
++xsk_buff_valid_tx_metadata(const struct xsk_buff_pool *pool,
++			   const struct xsk_tx_metadata *meta)
+ {
+-	return !(meta->flags & ~XDP_TXMD_FLAGS_VALID);
++	/* covers flags, XDP_TXMD_FLAGS_CHECKSUM & XDP_TXMD_FLAGS_TIMESTAMP */
++	if (unlikely(pool->tx_metadata_len < 16))
++		return false;
++
++	if (unlikely(meta->flags & ~XDP_TXMD_FLAGS_VALID))
++		return false;
++
++	if (meta->flags & XDP_TXMD_FLAGS_LAUNCH_TIME)
++		if (unlikely(pool->tx_metadata_len < offsetofend(struct xsk_tx_metadata, launch_time)))
++			return false;
++
++	return true;
+ }
+ 
+ static inline struct xsk_tx_metadata *
+@@ -274,7 +286,7 @@ __xsk_buff_get_metadata(const struct xsk_buff_pool *pool, void *data)
+ 		return NULL;
+ 
+ 	meta = data - pool->tx_metadata_len;
+-	if (unlikely(!xsk_buff_valid_tx_metadata(meta)))
++	if (unlikely(!xsk_buff_valid_tx_metadata(pool, meta)))
+ 		return NULL; /* no way to signal the error to the user */
+ 
+ 	return meta;
+@@ -469,7 +481,8 @@ xsk_buff_raw_get_ctx(const struct xsk_buff_pool *pool, u64 addr)
+ 	return (struct xdp_desc_ctx){ };
+ }
+ 
+-static inline bool xsk_buff_valid_tx_metadata(struct xsk_tx_metadata *meta)
++static inline bool xsk_buff_valid_tx_metadata(const struct xsk_buff_pool *pool,
++					      struct xsk_tx_metadata *meta)
+ {
+ 	return false;
+ }
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index b970f30ea9b9..75b2c97e41e4 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -809,7 +809,7 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
+ 		return -EINVAL;
+ 
+ 	meta = buffer - pool->tx_metadata_len;
+-	if (unlikely(!xsk_buff_valid_tx_metadata(meta)))
++	if (unlikely(!xsk_buff_valid_tx_metadata(pool, meta)))
+ 		return -EINVAL;
+ 
+ 	if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
