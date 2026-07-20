@@ -1,65 +1,64 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3DD141CB5E
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 21:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7FA3D6664
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 21:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784582695; cv=none; b=qtNoRgoZKFU5WciVFVABcbdUcYlYeuKa1D3PsAm9KqlJHAZ8C8J2HftqJXrsVVpcsvRjI72C7+96gcxIHR7Lz8G/zcxqxLKY7i0JZbicmJT0tbxfacVty3nn17qI1duDOvOmYs6IJQufZvLBYnO8+ggMevITtwLuOvrJsQVRSdM=
+	t=1784584034; cv=none; b=RO7OP4k+mFGo10POM/wX4OO5La0rNl0LxYEBMBrJg83i5TTz0e7rqY5Ah08ezBCoycpB4wSv7cfzBekgXft90mw6EF43Td78Buip7BmkJGFHrbDY7lnlQgxhelpeoPyGHpKvGCYTkwE7GB+62vdIQ28MPJn6m1srFF/nyYxTkzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784582695; c=relaxed/simple;
-	bh=RcxGzEEwefX7zAbWTLQPNtYc6E9SwfZuoICNfQ9Im5U=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=nNEGmgtIuhMBXH+QxD/E8h+3Zdpn3TFWl9b1KOk3nQoPSiyJJCH1e1sg1vd51TDLqOXZ84PoOdzWWrqq/yXK/K2G4Ss+EbeTvH50WfDErcbSjDDBl/YwWw9lD8hOKV0BpOCIh27f50Ff4TVy2sVZzaJwOE7ZD0dVJJM63zN6fSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aLAdZdR5; arc=none smtp.client-ip=74.125.225.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784584034; c=relaxed/simple;
+	bh=7gQY7AlbHewQtnIWDwf6xeKE5zm3O+CvGwbpF1ZE6m0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=NEEAsb7SNAg1k/DP9WsrZ0nuDNwfORJFlsPqMi2ygokSSxjIH09fHSiwmd1/cJZJ9TnuD/x3YRJmjEd8/Vww5c5hCBENQId0c761XMqgQTs07IvvTsPKM6E6knS103sUM4tDse2LoHSdpnNKKngdBQBuA3TA5Q8yu+YE7HJGOOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=VUYuMoJV; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aLAdZdR5"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-4954b049503so6748735e9.0
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 14:24:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="VUYuMoJV"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8484f229529so4490815b3a.2
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 14:47:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784582691; x=1785187491; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784584031; x=1785188831; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=GodhWzpy/c4vsdA8Jyp/tHYkO7IhbQZ6imvsrnVIekE=;
-        b=aLAdZdR5xPOkHVS3ZZO7tRXs2KoCcxRTyzJw7bqbbmG2FCksMr4SWNeHNOCraKJgJ2
-         JQItI9AznZ2nyXmDvj771w2dmcTtCkVKpNC7g3rr/twj8xAz6lYCyxD+AbLEVcyPngMh
-         NUbQ3jVl4SrRUTkN2cxLs0tldzjYZy1dkaaGY8gEBE17ikCIK7J22uz56vw6HsfpyPMp
-         GsWq1UnfN9MEtxJn1JhkskV3hUUNSsY3KYztwelvpUgAXvRF9lbI6Kku/n8zVWvatNbH
-         Q+WUZDZFmuqr+b1YEHcCG2M0QbqaLP9/UB8fTd2avdFTO6a0Xc9gdFnE21JfbvJrZQYb
-         H23w==
+        bh=SxhXZCE8F/8NLGo9T+1i7MwIlRVltbKl0w04IWFpO+Q=;
+        b=VUYuMoJVcax288cUrIzGzE6cqIMGJyYkCaNuyVCVpUVJ74x5TgyfI+y1AXDIDvKuo1
+         fT1hrbmp17tE/yAcT9Kd6mRTVqp5j8HwnJh5Y9eahW6bycElWxFmYXjnLgpg4i1BpCq3
+         kG6e8pEyS0uSNveUSq0Ip3dTIAzb/5UHf7uaN/S8vEQXl2B9ztq/kcDA5BEJ16BakQwc
+         J9UrfU/XCl26i0NLHnJBtpONs7G7uIe0yzFhR5E7FUhlCDY+hOWdGan6yIrCBLABd/6P
+         sejUSKWjEhLqT0vhiW4JhOgIO74rw3ZVa16w0vBRlhtA0PC/Xw7SAAlCgpKTnGRj84m/
+         ZXAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784582691; x=1785187491;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20251104; t=1784584031; x=1785188831;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GodhWzpy/c4vsdA8Jyp/tHYkO7IhbQZ6imvsrnVIekE=;
-        b=TyI8QW5pBARt1vIBuS6cE+im9+WTnkGlNCdHJLM+VzrMawrBs9B17Eig72VS4GspGH
-         60L8gsIXeeUxPbhmm5KbQRQ3FF+jT3uS/JrH3JGCgmUje09EqvSquDdHDUlrpVZ6kQ2F
-         YBD+he65+C2WfHv2SkFVt3VKHWchq/qrho2m9xmqIzBpjXk7onhKNql6PJsaaijvM2Ow
-         v/Ee0gydALfluKbnKbOayi5jW0WrCuInmK7tzatKTtS3a7diS3xm4eUkLUu3NkJaaFuY
-         2gqlJVmkUAaDIiwn3zin+3M4lrbol8FFa7bPBdhf00zL6AkQJbEoA7p9VO8+rNHEYB9a
-         71rA==
-X-Forwarded-Encrypted: i=1; AHgh+Rpp6OA2e0ijFqI5RdIZpMhGONg4kbHLonTEbzMhwiENf0DNyiLqWqBTCGnNZ7fmprqucl0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnZarK2vE51JlSq2zNtCHQwMQSaH9895RGfPmhrR6/VgR1KZA5
-	z6HQKlzR0nkdkul3M3YzvKGNutmAPzRl1e1T82dekb++yKe/r0WqEbsZ
-X-Gm-Gg: AfdE7cncw0wucPM9p39ZVGzuy8VbbKorGfX51+VMJJ2CnHTZiYTAKi+AYW8VS1J22Sg
-	k2T/1gN7EY8N/QBCL+naJFDk2hx/lB1iphdQQFNzGl1uwWYiEBEe9rUdDZCtCk/RPHpHhuwqKFi
-	WIu9SAdutC8Dhj76niXWMEf8LYdsYHMSlfdvzMcXKmGNOtRTzSRBfw1bTtbXQE2VhhTdUsxBzI6
-	HMuu0uAghMGwZ9IsVUizb95kyZ0+hb6AWnaWHlgXzkFlZgWEQez4htjz3xDkk+Qa01ELrPCyHCS
-	QoOboTrwl94hcec4aMDkgy3YSgKvtlb6Pbu527QGFl+UEq0u+DCVok4qC0VCXBT1x3UQYJOqy+x
-	n6bHgfJTEEblmez4LIUth3wgxcajFvjYtaGfHLoIiSkNrjCiPzd00zhOYGCV5k1qfDZUuO9OKec
-	SiBypr2g7u6nhaE2LQn7beGkCf0oWGLvLskkEVBg0GSEtoFGy6rrmYCngjE0tlRGEZn8/3yFh/7
-	COJHWRPMdtQ4kkvPPCdneTBv1B+tndS6aP5Nxfwspmi
-X-Received: by 2002:a05:600c:4fce:b0:493:fa66:4861 with SMTP id 5b1f17b1804b1-4954a404bc2mr195886525e9.25.1784582690803;
-        Mon, 20 Jul 2026 14:24:50 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-495653bffefsm17137255e9.9.2026.07.20.14.24.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 14:24:50 -0700 (PDT)
+        bh=SxhXZCE8F/8NLGo9T+1i7MwIlRVltbKl0w04IWFpO+Q=;
+        b=iPfnPJvhWjyG3PlTPp9aXgo9qkEV3fq2/euot1VT7RBkyEnbM9CGeQLCG1hXhZN299
+         6iWJJuE4HR6DimOSMDEggl2FC+PCxtW0D88QHG3j1SaJjg63E+r+okzyd3mOi9kxmyh+
+         cF7K1CBIl4vdIlFrjrM6ju+A5p/Yvy/f6ZwvXDit1pX15+wi2SePWvFSYCxOdDLrI1SG
+         qRw7/oejhiruQHd9BBMt+ry+5+gYcd08mY5NUNNx+TZK3ZvJAPqP7bwtG9LvmNYpeAc8
+         XTumWw+a7M6LYs2Ochi1Fek+SVsTnr1g3x7yBGmjNFe6dYygQ114teGYqbbuhIfYDFbA
+         qMsw==
+X-Gm-Message-State: AOJu0Yys2ir/7Zr6vklKgLsZ6TJ15/mRS5+6uwdn3NEHv8ccocMxlW4i
+	oM87k19LkckihrxfCky0NgVAzRBiqn1lR5GKour4Tk0G8IJ83OeSHhgoYwRr+hekujKPXosGnDX
+	4u0Wo7Jw=
+X-Gm-Gg: AfdE7clu3CJqJQOYztuDflW0OFPSqk/vmC+8fywr6uzcbBKaK9XFoGtdYfIQMqgi7mg
+	zx99BrKNFxVYEUXt/iU5/d9R2hctJEti/SjVB3ghvUsdfStDSjY7NHaQ79DgymKffTpgqYbwr36
+	EQPyPyyQBCqARAh4WXmc6knT7dQ/sIznT7jxM+n6wyLBjpfsACLBO8g2C97YMhkmyCBQENJvKZS
+	sqnrQJkyyeqQWVLFPqfczkm3pIdZoTE7MWtjiGVY8T4L4lG2XCUbDiXgtYYhhmUlRExmy2tLTSh
+	q72HG50olqDLAK8kl6qdcNpsn4iTKG+oxd8VIqXMNMlvwTBplbx6HI6hIZYdU9isVYr4iYb9hoX
+	To6apX2zPn23lnRbp/HLkInWovVxtddJMXfbI6ptsR7tC4Wnge0FN5NJkGSemgIidgVQITdZcZG
+	mqBXeONtfAd3yq/9IUt+XJz/zVFyvO/yk=
+X-Received: by 2002:a05:6a00:4ace:b0:848:48e7:437b with SMTP id d2e1a72fcca58-84c294c5fe9mr14998819b3a.69.1784584030880;
+        Mon, 20 Jul 2026 14:47:10 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2adcaa0bsm6322022b3a.20.2026.07.20.14.47.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jul 2026 14:47:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,117 +67,197 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Jul 2026 23:24:49 +0200
-Message-Id: <DK3PRLXZFGKN.GES64J05HY6B@gmail.com>
-To: "Paul Moore" <paul@paul-moore.com>, "David Windsor"
- <dwindsor@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "John Fastabend" <john.fastabend@gmail.com>, "KP Singh"
- <kpsingh@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "Matt Bobrowski" <mattbobrowski@google.com>, "James
- Morris" <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, "Casey
- Schaufler" <casey@schaufler-ca.com>, "Stephen Smalley"
- <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
- "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
- <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
- "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
- <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
- Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
- <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 2/3] bpf: add bpf_init_inode_xattr kfunc for atomic
- inode labeling
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260708000956.46138-3-dwindsor@gmail.com>
- <a3a376bce713ac38ce6746508239c1af@paul-moore.com>
- <CAEXv5_gt7BPWvdR4D1_3XJ0_XpBXWN52jeAOf1K2QJ7LL6CtPQ@mail.gmail.com>
- <DK3LZOFOVG5L.3F34IKOCO1I04@gmail.com>
- <CAHC9VhR8n_TBPGLGq-Pray+mHrUCdcmqGXi9wTXyeGa2Dc4m4g@mail.gmail.com>
-In-Reply-To: <CAHC9VhR8n_TBPGLGq-Pray+mHrUCdcmqGXi9wTXyeGa2Dc4m4g@mail.gmail.com>
+Date: Mon, 20 Jul 2026 17:47:09 -0400
+Message-Id: <DK3Q8PFVGNAV.GZNZC89346A9@etsalapatis.com>
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Nnamdi Onyeyiri" <nnamdio@gmail.com>
+Cc: <bpf@vger.kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+ <horms@kernel.org>, <jakub@cloudflare.com>, <jiayuan.chen@linux.dev>,
+ <john.fastabend@gmail.com>, <kuba@kernel.org>, <kuniyu@google.com>,
+ <ncardwell@google.com>, <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+ <sashiko-reviews@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 2/2] selftests/bpf: add sockmap recvfrom EAGAIN
+ selftest
+X-Mailer: aerc 0.20.1
+References: <20260720171535.67867-1-nnamdio@gmail.com>
+ <20260720171535.67867-3-nnamdio@gmail.com>
+In-Reply-To: <20260720171535.67867-3-nnamdio@gmail.com>
 
-On Mon Jul 20, 2026 at 10:15 PM CEST, Paul Moore wrote:
-> On Mon, Jul 20, 2026 at 2:27=E2=80=AFPM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
->> On Mon Jul 20, 2026 at 8:12 PM CEST, David Windsor wrote:
->> > On Thu, Jul 16, 2026 at 5:55=E2=80=AFPM Paul Moore <paul@paul-moore.co=
-m> wrote:
->> >>
->> >>
->> >> I'm sorry David, now that I'm seeing this function again, especially
->> >> with the LSM specific bits extracted into a LSM function, this absolu=
-tely
->> >> belongs somewhere under security/.  It's only callable from within a
->> >> BPF LSM callback and all it does outside of some BPF pointer boilerpl=
-ate
->> >> is call right back into a LSM helper function.
->> >>
->> >> If the BPF maintainers aren't willing to accept that, then we will al=
-l
->> >> need to find another way.
->> >
->> > Where this code lands doesn't matter to me, so I'll stay out of the
->> > decision of where it lives.
+On Mon Jul 20, 2026 at 1:15 PM EDT, Nnamdi Onyeyiri wrote:
+> These selftests exercise the tcp_bpf_recvmsg() and tcp_bpf_recvmsg_parser=
+()
+> functions, to ensure that they are properly handling spurious wakeups in
+> tcp_msg_wait_data().
 >
-> Yes, you're caught up in some territorial wrangling that goes a fair
-> bit beyond what you're looking to accomplish.  My apologies for my
-> half of that, it is an unfortunate part of upstream kernel
-> development.
+> The expected behaviour is that recvfrom() does not return an EAGAIN
+> error.  If the spurious wakeups are incorrectly handled, this assertion
+> will fail.
 >
->> > If this kfunc goes to security/, would we also want to move eg
->> > bpf_set_dentry_xattr similarly?
->> >
->> > I'll roll v6 of this series meanwhile and we'll see what the BPF
->> > maintainers say.
->
-> Thanks.  Fortunately, it should be easy enough to move the kfunc
-> around, that's likely one of the smaller changes needed in v6.
->
->> I don't think there was any preference expressed from the BPF side.
->
-> Look at the second patch in the v4 patchset, you'll see a preference.
->
->> Logically,
->> one cannot be faulted for adding a kfunc to set the xattr for inode in t=
-he same
->> file where similar kfuncs to set xattr on other FS objects / entities ex=
-ist.
->
-> First off, I can't say that the existing BPF kfuncs intended for use
-> within a BPF LSM program are in a good location.  Unlike every other
-> LSM which locates its code under security, the BPF LSM devs have
-> chosen to locate their associated code all over the place.  Some of
-> that happened before I was responsible for the LSM framework, and some
-> of that which has happened afterwards has likely intentionally avoided
-> traditional LSM review.  Unfortunately, this has muddied things with
-> respect to what is possible generally in BPF versus what is possible
-> only when the BPF LSM is enabled; we just recently saw where this was
-> arguably the root cause of an exploitable vulnerability.
->
->> The question about bpf_set_dentry_xattr is thus valid.
->
-> It's a very valid question.  It is my opinion that kfuncs which are
-> only intended to be called from within BPF LSMs should be located
-> under security/, just like every other LSM.  If there is a kfunc that
-> is generally useful from other contexts, that is a different story,
-> but in the bpf_set_dentry_xattr() case, it is explicitly only useful
-> for setting 'security.bpf.*' xattrs.
+> Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
 
-I don't think we should do that in v6 though. What you're describing affect=
-s all
-other xattr kfuncs. That's a broader discussion we should have separately w=
-hen
-folks are back from vacation, and more importantly involve FS folks where t=
-he
-code currently lives. As you say yourself, the lines are blurry, xattrs are=
- as
-much a filesystem concept.
+The test looks fine, even if slightly flaky. Running with only patch 2/2
+still passes sometimes on my box. Can we handle this somehow, e.g., do
+more attempts?
 
-So I wouldn't burden David with it right now. David, just respin addressing=
- all
-other comments and the CI issue.
+There's also a couple magic numbers in the tests that may need some
+explanation (noted below).
+
+> ---
+>  .../selftests/bpf/prog_tests/sockmap_basic.c  | 124 ++++++++++++++++++
+>  1 file changed, 124 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/too=
+ls/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> index cb3229711f93..d18faf46fac0 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> @@ -1373,6 +1373,126 @@ static void test_sockmap_multi_channels(int sotyp=
+e)
+>  	test_sockmap_pass_prog__destroy(skel);
+>  }
+> =20
+> +static void *test_sockmap_recvfrom_eagain_thread(void *arg)
+> +{
+> +	int fd =3D *(int *)arg;
+> +	char buf[1024];
+> +	void *result =3D NULL;
+> +
+> +	while (true) {
+> +		ssize_t len =3D recvfrom(fd, buf, sizeof(buf), 0, NULL, NULL);
+> +
+> +		if (len =3D=3D -1) {
+> +			if (errno =3D=3D EINTR)
+> +				continue;
+> +			result =3D (void *)1;
+> +			break;
+> +		}
+> +
+> +		if (!len || buf[len - 1] =3D=3D 'e')
+> +			break;
+> +	}
+> +
+> +	send(fd, "test", 4, MSG_NOSIGNAL);
+> +
+> +	close(fd);
+> +
+> +	return result;
+> +}
+> +
+> +static void test_sockmap_recvfrom_eagain(bool with_verdict)
+> +{
+> +	struct test_sockmap_pass_prog *skel =3D NULL;
+> +	struct bpf_program *prog =3D NULL;
+> +	size_t buflen =3D 1024 * 1024 * 25;
+
+Here
+
+> +	char *buf =3D NULL;
+> +	int map, err;
+> +
+> +	skel =3D test_sockmap_pass_prog__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +
+> +	map =3D bpf_map__fd(skel->maps.sock_map_msg);
+> +
+> +	if (with_verdict) {
+> +		prog =3D skel->progs.prog_skb_verdict;
+> +		err =3D bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_=
+VERDICT, 0);
+> +		if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
+> +			goto cleanup;
+> +	}
+> +
+> +	buf =3D malloc(buflen);
+> +	if (!ASSERT_OK_PTR(buf, "malloc buf"))
+> +		goto cleanup;
+> +	memset(buf, 0, buflen);
+> +	buf[buflen - 1] =3D 'e';
+> +
+> +	for (int i =3D 0; i < 200; ++i) {
+
+Also here. Why 200 iterations specifically? Can we at least name the
+defaults to make it clearer that we've chosen those numbers because
+that's how we trigger the bug?
+
+> +		ssize_t sent;
+> +		char ignored[128];
+> +		pthread_t thread;
+> +		bool thread_created =3D false;
+> +		size_t rem =3D buflen;
+> +		int c =3D -1, p =3D -1, zero =3D 0;
+> +		bool success =3D false;
+> +
+> +		err =3D create_pair(AF_INET, SOCK_STREAM, &c, &p);
+> +		if (!ASSERT_OK(err, "create_pair"))
+> +			goto end_attempt;
+> +
+> +		err =3D pthread_create(&thread, NULL, &test_sockmap_recvfrom_eagain_th=
+read, &p);
+> +		if (!ASSERT_OK(err, "pthread_create"))
+> +			goto end_attempt;
+> +		thread_created =3D true;
+> +
+> +		err =3D bpf_map_update_elem(map, &zero, &c, BPF_ANY);
+> +		if (!ASSERT_OK(err, "bpf_map_update_elem"))
+> +			goto end_attempt;
+> +
+> +		while (rem) {
+> +			sent =3D xsend(c, buf + (buflen - rem), rem, 0);
+> +			if (sent =3D=3D -1)
+> +				goto end_attempt;
+> +			rem -=3D sent;
+> +		}
+> +
+> +		/* we cannot use recv_timeout(), otherwise EAGAIN would be an expected=
+ errno. */
+> +		err =3D recvfrom(c, ignored, sizeof(ignored), 0, NULL, NULL);
+> +
+> +		/*
+> +		 * we are checking for the invalid return of EAGAIN, any other return =
+is considered
+> +		 * successful for the purposes of this test.
+> +		 */
+> +		if (err < 0 && !ASSERT_NEQ(errno, EAGAIN, "recvfrom eagain"))
+> +			goto end_attempt;
+> +
+> +		success =3D true;
+> +
+> +end_attempt:
+> +		if (c >=3D 0)
+> +			close(c);
+> +
+> +		if (thread_created) {
+> +			void *retval =3D NULL;
+> +
+> +			pthread_join(thread, &retval);
+> +			if (!ASSERT_NULL(retval, "retval"))
+> +				success =3D false;
+> +		}
+> +
+> +		if (!thread_created && p >=3D 0)
+> +			close(p);
+> +		if (!success)
+> +			break;
+> +	}
+> +
+> +cleanup:
+> +	if (buf)
+> +		free(buf);
+> +
+> +	test_sockmap_pass_prog__destroy(skel);
+> +}
+> +
+>  void test_sockmap_basic(void)
+>  {
+>  	if (test__start_subtest("sockmap create_update_free"))
+> @@ -1451,4 +1571,8 @@ void test_sockmap_basic(void)
+>  		test_sockmap_multi_channels(SOCK_STREAM);
+>  	if (test__start_subtest("sockmap udp multi channels"))
+>  		test_sockmap_multi_channels(SOCK_DGRAM);
+> +	if (test__start_subtest("sockmap recvfrom eagain"))
+> +		test_sockmap_recvfrom_eagain(false);
+> +	if (test__start_subtest("sockmap recvfrom eagain with verdict"))
+> +		test_sockmap_recvfrom_eagain(true);
+>  }
+
