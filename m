@@ -1,161 +1,170 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010070.outbound.protection.outlook.com [52.101.85.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536D2393DE8;
-	Mon, 20 Jul 2026 03:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784518007; cv=none; b=ROeVjJvEloiFjAVMx+qMJiDWJOL1cjN1D5xoEM7gErVkeu0ovdUR/G2lgPGx5/0TvP+UXJX9Lzi6q8R5rnmnoRiqU5MsGUnnLlJF9Mf2NSsvm4ODIyr0ZvjWxqCQHy+tTCeFUQu5dYFPAAgRa4LtHFbqeTu3CmILdoe74sLcZJc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784518007; c=relaxed/simple;
-	bh=2JunEdrPcLhl3BZ8kfAyGiRjIBTY9wGsAlAMNwKo4fg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=U7buImdYb6BPoHyKlhcuedt1I4ummDblxg1WDX5B5iHVhjFyak9x+lPF/6GKw5bBUjJMlFJh/WtWW9DzGE5WIxluV9IyalnXsdbM8iF7IWabCc0s+iASOrunUK/8zJ0DyeJtjEagWEvG/oDL3p0Qnm7itennUovZkDatCphR/Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h3QsK2XGwzYQtxm;
-	Mon, 20 Jul 2026 11:26:13 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 3078E40570;
-	Mon, 20 Jul 2026 11:26:27 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgDXMm9hlV1q56Z3Bw--.11895S3;
-	Mon, 20 Jul 2026 11:26:27 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf v3 1/3] bpf: Fix potential UAF when reading bpf link info
-Date: Mon, 20 Jul 2026 03:30:53 +0000
-Message-Id: <20260720033055.1215477-2-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260720033055.1215477-1-pulehui@huaweicloud.com>
-References: <20260720033055.1215477-1-pulehui@huaweicloud.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26123955DC;
+	Mon, 20 Jul 2026 03:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784518309; cv=fail; b=jSDjuL8v4X5zr9IAqypOtsCcRZi7qyq2wBolAQPU4m2E7u+8QJVKI5MGs0C62CnK2mBedK17h1/BDBS/5agve0ZDcGaWFWgxss41kkeEOtWwYrA1JJgMujfAqih8Pn026twRYxXbSMR57RfOZjVP7oy5bLz05Xl9NR8FnmoM+No=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784518309; c=relaxed/simple;
+	bh=DH8ZpYp/Z2DVigMu6wax7QRPajmqv3PT2kNlejAOVDM=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=WBOLQMWFzt7wLCgkDr+DFk3D+oDDWcddmJW04OGk56x8rDbQzH+0gvqGfltW8U/TVGExwdlHqrS1HImqCA57AVL/+JzD/H7AooyaPHXpqavUBnta/I7jFUz2fQAGdYN2g7lUFK0E4V4GYp+kZsSTkD7wPRQdlUH2HeKXRyJiyXw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=KtWlKNcN; arc=fail smtp.client-ip=52.101.85.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="KtWlKNcN"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kY4N2k8ZEgR9YxXugOIsvkM+BSry4hNVEFQNZkPPNJA/QCnwO9BOP1j/KPMskaEzNvUJ9Z/QnYjVZ5bd6sKTs6W8jIaffOb2uIy66WnpdKjsmTxXj8UQuDLb/MJGhSI2YPqXfjmLqxeo3VktJexDjBztbmlYikz1uh+929R8MXvItTexUT5lityLDopxDL52WzMccYH6aILLp51KRe7lbYCfisveZMkj54kxQOXVl9vEr7s92GqKiXgJAw2Z+EnXPIuSn5FBKwG2zrTP2/J6VOkCjwQNz4F0LQWvi5sT8MJhTjwcf6KyANBvl9Pje9gBdgqj5sfacZVBIuqwqbSsrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wP/hLuAJPLX4p9+cOcPCWAojBI5kSd4iz0bJD8QIbkM=;
+ b=Ren5/Fjh2NS7FAY0LFzPaiZGBPZSPIWIH4xM3sBgyuWEq0x0B4+9Uorle5x34lBSyMXvsbWd68lL1Rd2ulDfQIWnSbjM3yAye9IvtFxpWr2vzTnU4WPKzJ2ffx0NzDPhuaMNTbwUsOpj1fU+COXe1KqTsowFWJNkW++yoXsiPv5xMrDQkAcSYHCjRMG2eGorDY0QJkpXTE9Qbct4+cynY5PQtvVpOICvoU6H3J4Kx7X3CJkIMSNjgjZXDSQT4o2OoXoxTI6pKPHC/O1VRR1eW6Hx6JGYAEMzeBgAtvK+Vs+n23eeWj+eD0Quzqc7XwlTkRDphj6Ouid+qkKp7J0BIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wP/hLuAJPLX4p9+cOcPCWAojBI5kSd4iz0bJD8QIbkM=;
+ b=KtWlKNcNFaOuviKL2u3z2mvw99jtm/B3UJbhgsDSqnDylHe3egpu0/EF4bT+0GEt7CZ1/NGqxZsEqQwNLjvsZG/F5z3pa4NlnRKgkCKO13TB0xqFp+fbqVlxFBNKnL2yPAeM4pCWRk8k9lFYCClTVLdrCOK5eiMK3tVT46Aqv2vX51plqsnMmbE2u1TnNr8HFnGaE/XRQQ/TZH0cw14NX8n8XOYigVU+6FMoY8JIQXr3QmGDmntsGydyS2KlZE5uCeLs7xtXevXbHKhvbKBcm/6bMaTpGfsKrcYkMwkfw4PHuLq1b2f87buagji722aMT6PRx66gmXGcdplRtZ8z4A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
+ by PH8PR12MB6940.namprd12.prod.outlook.com (2603:10b6:510:1bf::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.16; Mon, 20 Jul
+ 2026 03:31:44 +0000
+Received: from BL0PR12MB2370.namprd12.prod.outlook.com
+ ([fe80::86cf:c3ec:2cf5:74c8]) by BL0PR12MB2370.namprd12.prod.outlook.com
+ ([fe80::86cf:c3ec:2cf5:74c8%5]) with mapi id 15.21.0223.015; Mon, 20 Jul 2026
+ 03:31:44 +0000
+From: Richard Cheng <icheng@nvidia.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	newtonl@nvidia.com,
+	kristinc@nvidia.com,
+	kaihengf@nvidia.com,
+	kobak@nvidia.com,
+	Richard Cheng <icheng@nvidia.com>
+Subject: [PATCH] bpf: Run deferred program freeing on system_dfl_long_wq
+Date: Mon, 20 Jul 2026 11:31:35 +0800
+Message-ID: <20260720033135.62223-1-icheng@nvidia.com>
+X-Mailer: git-send-email 2.50.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: KUZPR02CA0017.apcprd02.prod.outlook.com
+ (2603:1096:d10:31::8) To BL0PR12MB2370.namprd12.prod.outlook.com
+ (2603:10b6:207:47::27)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgDXMm9hlV1q56Z3Bw--.11895S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJFyfGryUurWUGF4UJw1fZwb_yoW5Xw1rpF
-	W3GFn0ka15ur429F17Zr45urySgF48GFyUtF9rW34FyF1YqFZYg34UCrWfZr9IkF97GrWx
-	X3y2va43Gr17XFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-	ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWl
-	e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-	8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-	jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-	kIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
-	Ja73UjIFyTuYvjfU8XdbUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL0PR12MB2370:EE_|PH8PR12MB6940:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3cbbf1bd-5043-4694-cdaf-08dee60f6b87
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|7416014|376014|1800799024|366016|921020|6133799003|11063799006|56012099006|10067099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	84Q+I2YHtYimjRXSNaEjQJdIAY1MWxSfddtSErRLLItsfNFfaP3ypwuwsnv+MV4PhMYlunqYfbQBGKP4yEjQzqUZMCvXeqzsRxYGvISUauC9w8epjvFro4Nd9i3INN6LwRHwdJrTQ8IzAcxL2+Vx/NA7F0Np75ecrxD0nXftZ9AraOEq1Lti+AZlb+v8FsBSXHPBS5P4N5JIwwEDkpvSxE8FJAetqMTyj+GQRJxRLpDxm+gOXr/v7MBQzDw7EkBMU+U9l2HfYfO9oUTmsxfCWZhnIK9i+Gv+RRUEIwbapUPJY4Oei7FDO0s3/MfZq/PUb3fGJKBuIdsE+38tmypzUCtX6CnBk89LOX4gMWV8gmw2sWmRa6OmB18WKFbV+un/4jMpEq+fshvzxyaDWyo7xDTUGo/DxLso4BAR+RDOP4R4obuB31YBa30GDGz/YSzMWVDZJJztgXx+5LcMUasp88RVTulThLjtb0sRKwBHMHFbT6Sa0sxzGrj+q75aG4qrBgMjDVQSXvMz1ygKIX2FzkhZtlsIISVgfbCn9DuKvxJXq/P3ZS/RkNkPTNYVonUK+ZFs10IsCePamjEKHvwH22BxJwxRTh59hQiiKyEvhSOeN2fhsKQTjpbmbBtSi8NvSuKnAH2f/yuSfSGO/esFcf1w1isZ7gEXOGsxA/pMxRe0Mol1hrsZY1RqTg0f6ugbWBHn1XnTY3+XNMPKk/mbbQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(1800799024)(366016)(921020)(6133799003)(11063799006)(56012099006)(10067099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?To9H1dAsurHNe6YWXIouahSAfhPeb6xNQYA5rHqk+Qqs4U6aumjBJefzQiTh?=
+ =?us-ascii?Q?mhMIpIfVRpjNKVnbXrWFhtu1dZYjoQY93SsR766mk17E6wujxp9fRHzWLm4b?=
+ =?us-ascii?Q?kgbQq64JYyKozf+KW4+8B0h9gHbpRNhD77GNh4ANO++fm2CyMx59JkjLTv+X?=
+ =?us-ascii?Q?EdyKXcMQrxsnwXxzeRDHAV2B+R3Ju1gzxxY1gUvigCQ7YrgQK29VNNgHh7E5?=
+ =?us-ascii?Q?19/fxjSF+RqNeVIMe9g9Kz8iHaMdSryMKzXPo2zFTO9pMjDLWbY/wHo5zRjY?=
+ =?us-ascii?Q?ejx724HU2wQ8wXIuhesdShhg+SyUHKN+UthVKByf/Q7wTGvXq0ro2IRU9aAj?=
+ =?us-ascii?Q?EusOS9L1jqabsRdEF9tO9kS3ibWn9LGPHvyDzXV9RkrFkgX288JJ6Acxylgq?=
+ =?us-ascii?Q?qJ4HUoqkDeTBPMxxPKluDEOlY1vPNwRIgDSnw35V1BYlU6Uk3lsoFXqHYlaO?=
+ =?us-ascii?Q?NPKKAK8JnGpzk8Ka7p0ZbRc4IFUbazxWMUVdgV3r8gO2EJx59tkYWkQIB7j9?=
+ =?us-ascii?Q?aPU552eOv07L3e+aAWan+GUs6N5YZIvw/72uBJTA86+zDUE/dn0ZWwtfRpuc?=
+ =?us-ascii?Q?OL2YU3NxRRZHSFU8EM+T1inawFEUEOPbMA9RBSz49Bd1FiAqCtvLSwi/y2QJ?=
+ =?us-ascii?Q?QNbYNpNkKOs4V7xtLGyn8v3gKxcT042jXa+Z3kSIMdEK3/eOdmuF0gzb6F8u?=
+ =?us-ascii?Q?gayf14Dp2y5ra1VyeWmfn50S0qhqjUZp51Ha7HGP+rKdSnJ4YCkwcdR1QTVM?=
+ =?us-ascii?Q?9qrI6cO2a6BLE8dazUDQAJz8MNvPb5EcKe2djVFvHVj6YCY8wYrbjXt6PNDs?=
+ =?us-ascii?Q?yHgC9l7uwzjzGG4dna17+bM18LoqJqkHixCwiaGwdgfnwyJCcg7LKCpQaMwY?=
+ =?us-ascii?Q?QpsawE2RjfmnzNpqZnnuzqUOffsorS7xGev8dG2rePuT7KTJWNEAMfMBRB94?=
+ =?us-ascii?Q?IBSNnJVUh/jEAZjy6c1V8aS+y8ZCN5xmdvxbmmvGjykblN4qC7OHidR8FigV?=
+ =?us-ascii?Q?VAue2cn2381+qjw9i2rqZk8Ka5gTPfOD+h9ULiABst0ad039Kuyg1j8ZM1aY?=
+ =?us-ascii?Q?GVmp7z4oCkzBFsONMyYPVOHq2Duvv9jbOJFxmVFuknSvjdEacrrX8lqgW9+6?=
+ =?us-ascii?Q?oAbVvJSQ5DZzEyhxeg0RXQIsUUkVtHlVkzA5Q6XEBdnYTM/AlGop5gxnDbUH?=
+ =?us-ascii?Q?WzAV2FRFMj9UMPJZ+NBDWqcGsy9couloX8KISP3cSDj+LA7gtWUfbdhNeOIK?=
+ =?us-ascii?Q?JtqDbjjaMIRPB0v8ovuJsbyQyV20pPcTWwDA22IdKPAKGvu6XG8C6cwOwbGR?=
+ =?us-ascii?Q?rpNV+JIel5uwoQfnW5yO9nOg4mmnw9ZvMUlfpmtPA96+PWB2UWe6u+eNsEvm?=
+ =?us-ascii?Q?esTsR6xwdit5/WGVga0AdGX9PlCiYrdtaYK/R69PLaCjsZJuAPfLfmM2MeRY?=
+ =?us-ascii?Q?GHq7HylzECydnNjWtN+C60wfTOk87kcW2rgtZAOEG6Iuz4V1ZyXszQ44hnO3?=
+ =?us-ascii?Q?NXJRVPCO++nTO5lHK+Q0rvi6WGB9oO5Smb6SD96+MoiJ7dHMB36RJLCDpyha?=
+ =?us-ascii?Q?Jbvl9vCQ3De9D1S4fxn/QeE+EnvL+OtM1pGyXiP/46kr9vQpHJGmlvua0QES?=
+ =?us-ascii?Q?7ojvpBah2EAJSgh6PoeC38QRPafGhxYqev5GZct6BO4NUQ0KrrvxLz5l5oER?=
+ =?us-ascii?Q?B2tm/bXUswA7OA5xWo0kva7j1dGUfLDG/TxkLkoXIR7IycKq25FtXO0IQwUg?=
+ =?us-ascii?Q?9ETWYxxQ5g=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3cbbf1bd-5043-4694-cdaf-08dee60f6b87
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB2370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2026 03:31:43.9460
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dWy5TGbIEagAnOdHlN1AXqmxuWF7GkAlyuVXAM1QKVvJcG4TdmNcZwxn58labqHEY/Dv3rZYZ+DZu5ZITZlSNQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6940
 
-From: Pu Lehui <pulehui@huawei.com>
+Destroying APT's seccomp BPF programs can spend over 20ms in arm64 JIT
+text invalidation. bpf_jit_free() calls kick_all_cpus_sync(), which is
+especially expensive on system with many CPUs.
 
-In bpf_link_show_fdinfo and bpf_link_get_info_by_fd, link->prog is
-accessed without holding any locks. If the prog is concurrently replaced
-via bpf_link_update, the old prog can be freed, leading to a potential
-UAF issue.
+schedule_work() uses a per-CPU workqueue, causing:
 
-Fix this by holding both normal RCU and tasks trace RCU read locks
-before dereferencing the prog, as BPF_LINK_TYPE_ITER support both
-non-sleepable and sleepable progs.
+"""
+[204351.169849] workqueue: bpf_prog_free_deferred hogged CPU for
+>20000us 5 times, consider switching to WQ_UNBOUND
+"""
 
-Fixes: f9d041271cf4 ("bpf: Refactor bpf_link update handling")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
+This is triggered during a normal "sudo apt update -y"
+
+Queue the cleanup on system_dfl_long_wq, the unbound queue intended for
+long-running work, to avoid delaying concurrency-managed per-CPU
+workers.
+
+Signed-off-by: Richard Cheng <icheng@nvidia.com>
 ---
- kernel/bpf/syscall.c | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+ kernel/bpf/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6db306d23b47..2458c68146b9 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3471,9 +3471,10 @@ static const char *bpf_link_type_strs[] = {
- static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
- {
- 	const struct bpf_link *link = filp->private_data;
--	const struct bpf_prog *prog = link->prog;
-+	const struct bpf_prog *prog;
- 	enum bpf_link_type type = link->type;
- 	char prog_tag[sizeof(prog->tag) * 2 + 1] = { };
-+	u32 prog_id;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 6e19a030da6f..a2ca6bdfb6f5 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3115,7 +3115,7 @@ void bpf_prog_free(struct bpf_prog *fp)
+ 		bpf_prog_put(aux->dst_prog);
+ 	bpf_token_put(aux->token);
+ 	INIT_WORK(&aux->work, bpf_prog_free_deferred);
+-	schedule_work(&aux->work);
++	queue_work(system_dfl_long_wq, &aux->work);
+ }
+ EXPORT_SYMBOL_GPL(bpf_prog_free);
  
- 	if (type < ARRAY_SIZE(bpf_link_type_strs) && bpf_link_type_strs[type]) {
- 		if (link->type == BPF_LINK_TYPE_KPROBE_MULTI)
-@@ -3490,13 +3491,23 @@ static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
- 	}
- 	seq_printf(m, "link_id:\t%u\n", link->id);
- 
-+	/* prog can be sleepable */
-+	rcu_read_lock_trace();
-+	rcu_read_lock();
-+	prog = READ_ONCE(link->prog);
- 	if (prog) {
- 		bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
-+		prog_id = prog->aux->id;
-+	}
-+	rcu_read_unlock();
-+	rcu_read_unlock_trace();
-+
-+	if (prog) {
- 		seq_printf(m,
- 			   "prog_tag:\t%s\n"
- 			   "prog_id:\t%u\n",
- 			   prog_tag,
--			   prog->aux->id);
-+			   prog_id);
- 	}
- 	if (link->ops->show_fdinfo)
- 		link->ops->show_fdinfo(link, m);
-@@ -5535,6 +5546,7 @@ static int bpf_link_get_info_by_fd(struct file *file,
- {
- 	struct bpf_link_info __user *uinfo = u64_to_user_ptr(attr->info.info);
- 	struct bpf_link_info info;
-+	const struct bpf_prog *prog;
- 	u32 info_len = attr->info.info_len;
- 	int err;
- 
-@@ -5549,8 +5561,15 @@ static int bpf_link_get_info_by_fd(struct file *file,
- 
- 	info.type = link->type;
- 	info.id = link->id;
--	if (link->prog)
--		info.prog_id = link->prog->aux->id;
-+
-+	/* prog can be sleepable */
-+	rcu_read_lock_trace();
-+	rcu_read_lock();
-+	prog = READ_ONCE(link->prog);
-+	if (prog)
-+		info.prog_id = prog->aux->id;
-+	rcu_read_unlock();
-+	rcu_read_unlock_trace();
- 
- 	if (link->ops->fill_link_info) {
- 		err = link->ops->fill_link_info(link, &info);
 -- 
-2.34.1
+2.43.0
 
