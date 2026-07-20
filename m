@@ -1,135 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CF13CFF6B;
-	Mon, 20 Jul 2026 08:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C804D3D1CA7
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 09:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784537727; cv=none; b=kXipmpAF5D0fwhO7F6AXoGpOIUVL7yUdnYi+T6pMfGu+xMVD1kEUG/E5N0aXpvhBp68uRkrjI+cCpSE3XSYVqdq5gMqV6AdXuXxq1H4TVEBzSsfZd7EzwKhOldS7Pz1MQlYK/YfL4cZaf1Z+/RR0B1lLIddRZHfBlyJ9n/vxKrY=
+	t=1784538102; cv=none; b=cVvdOis2sjDxTKO9XlpM8HBq4WabbFqaxLHT3HKBadv76X6Y6VkmVom5zxUPtMutTM0Ngc7c/JTHJyMwcMzwVJsL6X74WiD0qoK+M5yaMZu3RiAZXvkVaKdO7xulvLsEBZSEsbmENVllq5ahdwXiV5FUvPOs569QtR9BXpVgnvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784537727; c=relaxed/simple;
-	bh=6kDWmnBaOGN9mIgLZxZAGshikUf2cPz7qahnJgxmS2s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QIEc8OM7JmLrlgokaMmKc/Oz2CibbIFAWxICksg/mFx2JLzudORfvBRvHD9fFDwVDhELo8kneZLgxQ45brS8xFR6DBlh0IAXYw3cG6BN39CdTSs9sdXpTy7BjcVWAp6mlf4dZ0KMePgHBhpGBGvcU3JhqYfaOk13XjP0bgNQHSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FvrhHfwC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784538102; c=relaxed/simple;
+	bh=GmqZdwFkLdyb/nXXBEuQdcvZo/D+zeMbOHpH8ifaGQU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=thNjRjIuJBqs3pFt+v1RqWFFJ7paYPltRcu19WKb0xp7NOpCnnpBCv+WP07U+BtdKQYJbiOeEHnQjiXxwVRUnFQJqyyR5ZIA6czplDNijf05sfEij5Ayq42IDZSkKbTugd+gghorGp+CvQLL0qcRMyZ7y30i4gI4oyQNuZQteI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eh4Vl82c; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FvrhHfwC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D1A61F000E9;
-	Mon, 20 Jul 2026 08:55:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eh4Vl82c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54DC81F000E9;
+	Mon, 20 Jul 2026 09:01:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784537726;
-	bh=IVvg3iyIecPWVJOKr+bqU7r+J25fao6Gg09Zf2QWVVU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=FvrhHfwCd5dmJKoeRqAPDyW+zB7L2TkNgY5my9D9drVT2AJ1Xtmr0PAnXk0SszFij
-	 iSrNwxMgiiiILx+syzVN38gDiTLc2AbGvUYsfglk7fX231fjLv7tAeftdqNB1swkqE
-	 9SaBmbIt6btVHOrQ1LBx3187EUSyp9A1y7UEQ4FPanCeLOhWUuT+TjpeWOdfNRzWEp
-	 e6VpjVi1BeL2hRc1N/DaVt9GOa2LFr0DSYmvBJ8BvNkIcmKXojt0xZztTj4xRZowsU
-	 HA6OdyW3dwosaNWe5ZDmG3Rr2QKoFLhifaeEl86wwq4SnEEifA3JlB6sG363rwmAax
-	 fpAoDirY/nBFg==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: stable@vger.kernel.org,
-	Tao Chen <chen.dylane@linux.dev>,
-	STAR Labs SG <info@starlabs.sg>,
-	bpf@vger.kernel.org,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	Quentin Monnet <qmo@kernel.org>
-Subject: [PATCH bpf-next 9/9] bpf: Disable preemption in __bpf_get_stack
-Date: Mon, 20 Jul 2026 10:53:51 +0200
-Message-ID: <20260720085351.655075-10-jolsa@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260720085351.655075-1-jolsa@kernel.org>
+	s=k20260515; t=1784538101;
+	bh=z5t1dU6iRjhpqA5h+GXJyQ7xgDWQSQq53YRFF5X4aPs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=eh4Vl82c1et+C+ZXBMhnjsbw1p6hyQ9bmpjEs5upmwp6qcJFrNAUy5+oS/ujZABzf
+	 eKoiQbAIS87/G4VIzKZpmnjDAbI6EcmI6/Ym8FvDuVwLkHPdQjGqPUpPKw1u8A917E
+	 zwPCbsUkNkl0uj0dfwCWf7+uW4HeQDYE0xy+2+bVy6FsLPcJZJPdWExiDyVFIpDnsa
+	 U7NqysEm/V9978R/fTzYAuK0yD4BoRSxDlBrnp8EyIkVCXVvPOy69fbbqk0RlBk0HM
+	 8Rxopy1sEyIu7+Jh0fpeLLriKFJzFC67iVLf+9nP0X/tBQIvfRc0oX0/5MDkbp+nvv
+	 wDdWNceqn1nnA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 3/9] bpf: Factor stackid_new_bucket from
+ __bpf_get_stackid
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260720085351.655075-4-jolsa@kernel.org>
 References: <20260720085351.655075-1-jolsa@kernel.org>
+ <20260720085351.655075-4-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 20 Jul 2026 09:01:40 +0000
+Message-Id: <20260720090141.54DC81F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Daniel Borkmann <borkmann@iogearbox.net>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The newly introduced `stackid_new_bucket` function accepts `trace` =
+and `flags` parameters which are completely unused within its body.
+--
 
-get_perf_callchain() returns a per-CPU perf_callchain_entry buffer and
-releases its recursion slot via put_callchain_entry() before returning,
-so nothing keeps the entry reserved while __bpf_get_stack() consumes
-it below.
+--- Patch [3]: [PATCH bpf-next 3/9] bpf: Factor stackid_new_bucket from __b=
+pf_get_stackid ---
+commit cee0ea77a9c1144b54fb0472b1788623044b5650
+Author: Jiri Olsa <jolsa@kernel.org>
 
-A preemptible BPF program (e.g. a non-sleepable raw tracepoint program
-on a PREEMPT kernel, which runs under migrate_disable() but not
-preempt_disable()) can be scheduled out between obtaining the entry
-and the copy. Another task scheduled on the same CPU then reuses the
-same per-CPU buffer and overwrites trace->nr with a larger value.
-copy_len is then computed from the inflated trace->nr and can exceed
-the caller's buffer, causing an out-of-bounds write in the memcpy()
-and in the build_id path.
+bpf: Factor stackid_new_bucket from __bpf_get_stackid
 
-The rcu_read_lock() previously taken here does not prevent this. It is
-only taken on the may_fault path, and under CONFIG_PREEMPT_RCU it does
-not disable preemption; it merely keeps perf's callchain buffer array
-alive (freed via call_rcu()) and does nothing to stop another task
-from reusing the entry.
+This commit factors out the bucket allocation and initialization logic
+from __bpf_get_stackid into a new stackid_new_bucket helper function.
 
-Disable preemption around obtaining the callchain entry and copying
-it into the caller's buffer, so the entry cannot be reused underneath
-us and trace->nr stays bounded by max_depth. Build ID resolution may
-fault and is therefore deferred until after preemption is re-enabled;
-by then the instruction pointers have already been copied into buf,
-so it operates only on that private copy. Note, preempt_disable() also
-subsumes the buffer-lifetime guarantee the rcu_read_lock() provided,
-since a preempt-disabled section is an RCU read-side critical section
-for the callchain buffers' call_rcu() reclaim.
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index 7bc2a966e3e81..48a2e28f0c68a 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -559,31 +559,53 @@ static int stackid_fastpath(struct stackid *stackid=
+, struct bpf_map *map,
+>  	return -ENOENT;
+>  }
+> =20
+> +static struct stack_map_bucket *
+> +stackid_new_bucket(struct stackid *stackid, struct bpf_map *map,
+> +		   struct perf_callchain_entry *trace, u64 flags)
 
-Cc: stable@vger.kernel.org
-Fixes: c195651e565a ("bpf: add bpf_get_stack helper")
-Reported-by: Tao Chen <chen.dylane@linux.dev>
-Closes: https://lore.kernel.org/bpf/20260206090653.1336687-1-chen.dylane@linux.dev/
-Reported-by: STAR Labs SG <info@starlabs.sg>
-Signed-off-by: Daniel Borkmann <borkmann@iogearbox.net>
-[ changed Fixes: commit ]
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- kernel/bpf/stackmap.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+[Severity: Low]
+Are the trace and flags parameters needed here?
 
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 57cd4c33403b..37f8e46319b3 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -819,8 +819,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 
- 	max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
- 
--	if (may_fault)
--		rcu_read_lock(); /* need RCU for perf's callchain below */
-+	preempt_disable();
- 
- 	if (kernel && task) {
- 		trace = get_callchain_entry_for_task(task, max_depth);
-@@ -830,16 +829,14 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 	}
- 
- 	if (unlikely(!trace) || trace->nr < skip) {
--		if (may_fault)
--			rcu_read_unlock();
-+		preempt_enable();
- 		goto err_fault;
- 	}
- 
- 	trace_nr = callchain_store(trace, buf, size, elem_size, flags);
- 
- 	/* trace should not be dereferenced after this point */
--	if (may_fault)
--		rcu_read_unlock();
-+	preempt_enable();
- 
- 	return callchain_finalize(buf, size, trace_nr, elem_size, user_build_id, user, may_fault);
- 
--- 
-2.54.0
+Looking at the implementation of stackid_new_bucket() below, neither trace
+nor flags are used anywhere in the function body. Could they be removed
+from the function signature to clean up the API?
 
+> +{
+> +	struct bpf_stack_map *smap =3D container_of(map, struct bpf_stack_map, =
+map);
+> +	struct bpf_stack_build_id *id_offs;
+> +	struct stack_map_bucket *bucket;
+> +	u32 i;
+> +
+> +	bucket =3D (struct stack_map_bucket *) pcpu_freelist_pop(&smap->freelis=
+t);
+> +	if (unlikely(!bucket))
+> +		return NULL;
+> +
+> +	if (stack_map_use_build_id(map)) {
+> +		id_offs =3D (struct bpf_stack_build_id *)bucket->data;
+> +		for (i =3D 0; i < stackid->nr; i++)
+> +			id_offs[i].ip =3D stackid->ips[i];
+> +	} else {
+> +		memcpy(bucket->data, stackid->ips, stackid->len);
+> +	}
+> +
+> +	bucket->hash =3D stackid->hash;
+> +	bucket->nr =3D stackid->nr;
+> +	return bucket;
+> +}
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720085351.6550=
+75-1-jolsa@kernel.org?part=3D3
