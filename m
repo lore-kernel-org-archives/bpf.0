@@ -1,28 +1,29 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.187.6.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07134302F6;
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD233C454E;
 	Mon, 20 Jul 2026 16:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.187.6.220
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784565791; cv=none; b=IZEKcfo9Bw7NAXrbIXJ/SRcCuKVv89E/iMc4wkjEvkEKpZ9ZEWF6/B6HBjVIolflcC4jXgxpeiZx99FEfBA8EVKcTNXLE6utEY9pUKoN64YA6/vGYXuEUT7k8Lc9Sj7PtSpLFAOq6EFOc20Rvs916Zhsnb7sF3/pd3d2Dt7W9VY=
+	t=1784565792; cv=none; b=qP+0OVgOnDeJCpM7APyQYCx10Ls29xOy2BqNcPC14yTItQkKA+x8oxmKRefCF6Gx2q7LdqM/Rf5MGQ1lo5CEPyLMDd/lfFwaX9/oPRP9NPRBhAqqQ8uS9fFeEwZWQG7giTNHb2qGSZ/I2Oy6GW2t1Fjx2G8HKmhmShawmaHmTig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784565791; c=relaxed/simple;
-	bh=nrsV3aQGDUDpGrlMw0JqI3UoiNvNrEbtvZ+8ZYaYDDE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qz/8/qr6/QQIGjp/lLZZlq5k7znOBpy9LJnh3hLlf6sTFgp08EGGQs4naqeYNNnoojypw4uerYIjDaxDHpVAXsCOoImTXgNyrFZYSJFzprKSQdk7/aD6ZrTLxEQRFBBaQwVfM8/Px1ByX59EP4LxqBBPgMhFwruPzNDkCxGFxsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=rDdeMk0i; arc=none smtp.client-ip=52.187.6.220
+	s=arc-20240116; t=1784565792; c=relaxed/simple;
+	bh=Pf9FKFiD+3sCvJQkhMXUXOFjABalyHpc5Z6NhqtEixQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Rgv+54KSG+H0fj8t0AE6+doGU0OP3I+D3SuO0gdKyaZqUYvu/6nOUirF1F0TW51oWFuec913E4dzyG/HtSr28yAfcHo2kwf9WwyW8N/4pvSYqUlbAxpMz59hZ3sMaVofqag6ks5cnlwI3ptpP0ev5tbCtMwrVBgdIRJPa9bFrcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=KOTgRVBh; arc=none smtp.client-ip=4.193.249.245
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="rDdeMk0i"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="KOTgRVBh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=ScHLL
-	W7PsgGNyPwTlAbUCgZuDTdFZhxn8kRVhx7oDCk=; b=rDdeMk0iEF3/WVZNfvtl+
-	JzmxbcaWIrPDAli0MjNEVlF2TxBpzwK4PqX5Ki6orXJBXrWT4jrklnazWlwORcvw
-	QRoJZoMJzJLqUeZn4IFtvL6RNjgsTkGqCzWu1ahmrm+iwNmfM6/WIbpT3uZ3qTzC
-	BXCNJKtIKgIw3uGLKm1j9I=
+	Date:Message-Id:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=BV3iMZqr+wyDnIuGY0yLA7i+Yxkbu7DsXn
+	7fEjaWcPw=; b=KOTgRVBhduD+2w3iRv6vOs8bekz3kND/4cKzQCmn78LM/zsUWF
+	f83xSnrZIm2J+3TlcSpeJak5a2Jeoi0jk+FvtbJO6kQjj05qYLqxN6Sa55p7J5dm
+	EZRLkY5iSKf+2n7CELaual0L8cMhygNu/Ct9AbMK5dYPy4Asdyofo7Rs0=
 Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web2 (Coremail) with SMTP id yQQGZQDX1bcGUF5q2kYhAA--.51004S2;
-	Tue, 21 Jul 2026 00:42:49 +0800 (CST)
+	by web2 (Coremail) with SMTP id yQQGZQDX1bcGUF5q2kYhAA--.51004S3;
+	Tue, 21 Jul 2026 00:42:52 +0800 (CST)
 From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -40,10 +41,12 @@ Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 0/2] bpf: Preserve stack frame number for commuted stack arithmetic
-Date: Mon, 20 Jul 2026 16:37:43 +0000
-Message-Id: <cover.1784563939.git.chenyy23@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf-next 1/2] bpf: Preserve stack frame number for commuted arithmetic
+Date: Mon, 20 Jul 2026 16:37:44 +0000
+Message-Id: <fee8d44c3c792e29b8898951a68c8313d9d2da53.1784563939.git.chenyy23@mails.tsinghua.edu.cn>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1784563939.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1784563939.git.chenyy23@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,48 +54,65 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yQQGZQDX1bcGUF5q2kYhAA--.51004S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFW3Kr1kWFWrZFyxZw4fXwb_yoWDKwc_ua
-	9ava90ywsrAFs2gFy7CF1fZrW3Ca1fXryxAa1DtF13trn8Xrn8WF1kur15G3yIqF4jqrZx
-	ZF9Yq34F9r1agjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb6AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-	1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
-	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
-	YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwV
-	WUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
-	Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x
-	0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
-	JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
-	AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUsXo7UUUUU=
-	=
+X-CM-TRANSID:yQQGZQDX1bcGUF5q2kYhAA--.51004S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr1xWw1xtw43Jr18CF4kJFb_yoW8Ar13pr
+	Z3K3s3tw4kKa429wnFvFn7AFZ0kan7J34fCr1UA34Iy3WDJ34YqrWrKFy5JFWSkF4kJa40
+	vr1j93yav3Z8Z3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQK14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+	x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
+	ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2vY
+	z4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
+	02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
+	4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4
+	IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwVWUMxAI
+	w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+	4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxG
+	rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJw
+	CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+	z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sREyv33UUUUU==
 X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-The verifier uses reg->frameno to distinguish stack pointers that have the
-same offset but refer to different call frames. The scalar += pointer path
-copies pointer type and id to the destination register, but it also needs to
-preserve frameno when the source pointer is PTR_TO_STACK.
+When scalar += pointer is handled in adjust_ptr_min_max_vals(), the
+destination register inherits the pointer type and id from the source
+pointer. For PTR_TO_STACK, the inherited pointer state also has to carry
+the stack frame number.
 
-Preserve the frame number for commuted stack pointer arithmetic and add a
-verifier regression test where a callee derives its frame pointer through
-scalar += fp before overwriting and reloading the same stack slot.
+Without the frame number copy, a stack pointer derived inside a callee
+through scalar += fp can be recorded as pointing to frame 0. Stack reads
+and writes through that register can then update or consult the caller
+frame while the actual instruction uses the callee frame.
 
-Yiyang Chen (2):
-  bpf: Preserve stack frame number for commuted arithmetic
-  selftests/bpf: Cover stack frame number after scalar plus fp
+Copy the frame number when PTR_TO_STACK state is inherited by the
+commuted arithmetic form.
 
- kernel/bpf/verifier.c                         |  7 +++-
- .../selftests/bpf/prog_tests/verifier.c       |  2 -
- .../bpf/prog_tests/verifier_basic_stack.c     | 28 +++++++++++++
- .../bpf/progs/verifier_basic_stack.c          | 41 +++++++++++++++++++
- 4 files changed, 74 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/verifier_basic_stack.c
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+---
+ kernel/bpf/verifier.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-
-base-commit: cfce77b63375dac81d53f2f85593c548415206b7
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 52be0a118cce0..58017141d52b7 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -13796,11 +13796,14 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
+-	/* In case of 'scalar += pointer', dst_reg inherits pointer type and id.
+-	 * The id may be overwritten later if we create a new variable offset.
++	/* In case of 'scalar += pointer', dst_reg inherits pointer type, id,
++	 * and for stack pointers also the frame number. The id may be overwritten
++	 * later if we create a new variable offset.
+ 	 */
+ 	dst_reg->type = ptr_reg->type;
+ 	dst_reg->id = ptr_reg->id;
++	if (base_type(ptr_reg->type) == PTR_TO_STACK)
++		dst_reg->frameno = ptr_reg->frameno;
+ 
+ 	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type) ||
+ 	    !check_reg_sane_offset_ptr(env, ptr_reg, ptr_reg->type))
 -- 
 2.34.1
 
