@@ -1,71 +1,70 @@
-Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBC039AD25;
-	Mon, 20 Jul 2026 05:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2452C21F1
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 05:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784524444; cv=none; b=IfBEHpdDbkrFznTN2DzRWMGzdAr/PjtJSIwUdNOPoItc8dSBfrA8QucoyePI43oXs4azsCsbiyr/rffhxDhR9e1XMX0nbBt/3G9An4fwVtJIdOPUpH0dc5xN0z8A8keMyARQXTh+plI8jXn3/oD+Z9CfGfEejnlv18PO1G8wudM=
+	t=1784525197; cv=none; b=lxDEJTTdLRstFZqmHq+aHznUK/7GH03NaXwcGEOSB5WcJZ/p/VPue0xzXGcuKawCNpL1ztcTEGGfGcrLH0VsxibX7bawV3FgDJTGILCX1G81XJfl4HWkNIi8nGMmZCl2xiaNOue4DMyP3kgJh45gThz9xrcWfnGUqL12QhyfmWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784524444; c=relaxed/simple;
-	bh=M2vTagZshWYVJzLGMY94jqL1ZAzAVp6NZkmRbz09P1I=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=bGqgG1T7ncpeZ0MaIUsUQHEEUvNwxHZosuyh73RkxDvdBeaUu+z27Buo3puA1ZwFA/YH3Zb6/RAuAQ3ZLSNHUADtnuys5v3pAlM+mjBWelbn5AktmPEhzR86C8K8m6evdwO4H/ZJdy+e/umsOE5Ch5qyIh7qVaZWkAB/CP1qlvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=iwxqpmur; arc=none smtp.client-ip=203.205.221.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1784525197; c=relaxed/simple;
+	bh=BHfrF6KHIxF4uC9GWLtnRHG8uodkt9GoOHUixAuzgVs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=kUUe+R9Moq6zU70FEIddXbHcbK4ORA66x2TIOj9RWXI0d0TwffWqFhTT27LaGPqS8C/8oU2uAUznPaEZMqo+NvYZ+QwwjARyzVgDXi06S2uYuxBjelP7t+Zz+nh9A5tsKafaB61/B0NgVkiUdNCTVhEJxR+xujoE/ZtRMVkiaAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dd0KPihC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="iwxqpmur"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1784524432;
-	bh=K/Oq076yhWFpYUBv4tcHa4FJr6rjkTqmaL4FJqOLNe0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=iwxqpmur86ZwyrKDslxBVlGmkanDkw8E3A+0Dm3ae5Aaf0Fs4kby/vPey0yG2gDaI
-	 tD5yiDoUp4jganvu08RiXD7iBHVIBWrh1LNIfbk9euAE1re864PS8QOcOwAX1VSjYd
-	 U70yjQqVbl0fMsuDiO5MuB5Xw474ebVjVDPgqlfo=
-Received: from localhost.localdomain ([180.153.160.8])
-	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
-	id 3728BC83; Mon, 20 Jul 2026 13:13:50 +0800
-X-QQ-mid: xmsmtpt1784524430tlj2udc1m
-Message-ID: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
-X-QQ-XMAILINFO: OTAuIxCfey6wvbD1/5/qotpTo0oGJyjVEshEJyH833jbAPVhJToBdrDt2sz1lz
-	 /uKDnkJAeqRKJvLM0RfcEuZdn9S2xfWV1gF8G84H6puZqiBfjtjh7lXuUFdDG5wl9ySWdrgz/5km
-	 p9TqAmpJlo9k1ROP3a5TVa4oP9DhjYpjKx5t7+QOSWuWmm6smD1lD+e5awhH3pdD5awUjKWPk077
-	 m8Wag6aSoTqq6+XXYMLQAGcs5+5YTMT5U8mHOWkQ3v9TZetalMgOjkp1bBjjkrwKVoV9rmuJgpUq
-	 DgApnD1BeP5AHzlB/5OQsxUUkR4K4HYwuDhXO/w6uK+KQaLeUo+k/rIJkDKZAyQZXO8PtfGWh1nI
-	 tNIRbK22IQ93z22ggwTG2WttI8N3sZJX6jzZ7YicCjv5X3tGPou6MwcGmcRdb26Id92PfUfS8pjy
-	 ZTL1GIK1M/DpvvzO8PL+nD51foRsfl2ONh8JPoHceITLzrOHlqS5MvaSRebJf+ilsPtxpTCsb5U1
-	 xqgrnxocD1Q+rjkKhf5VyRvEjrfrDxLD+5V6jDoZBYQAmOt9kIM29fO8xyn0UZ6DiE+KTsueAfKF
-	 IBKgo6cdBLyHvHvsz+Q2r1Y43eUKbsmhkssn+OOHmLfrcmcjqSaxF1qXtE7+Yu95j6mOIRoY8Zqm
-	 Q6Xp8ufrfJpFCUiwLaL7e7/0USf1xZJhR6MxNnd7fnmJ6F6EeuuO7TZY0sX9d5L0sQUlIJJbeDA/
-	 uQIGm6Pt20l6zIYDqIjDHrNjsQ9Ra9fvDT6myZbOfy5BGUTY7KaSSjAWhKI6guk5cKKCwQ//Nwlo
-	 AlX51FsbZnj+qYaAGUAn6PyAt3pZUsSon+B/Nsc9SZ4L/l59LhfQURTXSnIkpOwGSLtsTuuozsCz
-	 iZ2sMR7upYa5Vovn55GV2OGYnPmIVyhsI5y/NXokcQRhNF9zT2RIdszqCVov/nGKY6EzthhSOA8G
-	 y2d9Jw7Bjo6yycF+WBXes6dj+d1hrZmHlAU/Ot+XS8cwWaSBpc33Tsg9oUMFzooTgwqe0p3bgCBB
-	 bK2N51c/P5G93xeyKBoydO51PT66/NCcfIn+i1IBOqvEia2URzpoVbVJwOjqL+PUDGEplEk5Occx
-	 7m1FFCjoTIOahcCOw=
-X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
-From: Jianlin Shi <shijianlin11@foxmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	pulehui@huawei.com,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] bpf: roll back stream capacity when allocation fails
-Date: Mon, 20 Jul 2026 13:13:50 +0800
-X-OQ-MSGID: <20260720051350.556496-1-shijianlin11@foxmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dd0KPihC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE55B1F000E9;
+	Mon, 20 Jul 2026 05:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784525195;
+	bh=6ggyYqDj4VWwomak7JFWA0TBtr/Y27R8m0Ytc+mDH5o=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=dd0KPihCk1KkaS7aV2pKEEztkJ0+54fC08RcH4GbAi6haJWcgunjMmy3cM7X3O8fB
+	 03EizCP6ZF5AdaY2JUuT0nmU1YPEdTlROdGa4xu8W8pMKayraHCwG9sb15OvK+uCSk
+	 vLIomT27eLRk1H8tOih3FToXdBGpJOamOb/4c8CK3vUFNesBOCcdtfYlYQY4My8OYd
+	 I3RzTzsSylAbLyVpuF0/7dy0JpXiZyfCvaF9kauGvN20DR9hH3fhsFX/HRKYSbCZx0
+	 Uv70VRqAWqBWZetL1QL86J9TDGZ0YMNhriKcW7YbuQeM1tlE0boUeVDsdyOz3Ng+zy
+	 eqCwDSoUJ0vfg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2] bpf: roll back stream capacity when
+ allocation fails
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jianlin Shi" <shijianlin11@foxmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
 References: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
+ <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 20 Jul 2026 05:26:35 +0000
+Message-Id: <20260720052635.BE55B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+
+Pre-existing issues:
+- [High] The patch fixes a capacity leak in `bpf_stream_push_str()` when st=
+ream element allocation fails, but misses an identical leak in `bpf_stream_=
+stage_printk()`.
+- [High] `bpf_stream_read` drops successfully read data if a subsequent `co=
+py_to_user` fails, violating API contracts.
+- [Medium] Log messages are entirely dropped and return an error instead of=
+ pushing the truncated message when the formatted output exceeds the intern=
+al string buffer size.
+--
+
+--- Patch [1]: [PATCH bpf-next v2] bpf: roll back stream capacity when allo=
+cation fails ---
+commit 3fa8598d2b8afa51091cf463bee21d3c9f140975
+Author: Jianlin Shi <shijianlin11@foxmail.com>
+
+bpf: roll back stream capacity when allocation fails
 
 bpf_stream_push_str() accounts the string length before allocating a
 stream element. If the allocation fails, the length remains charged even
@@ -75,35 +74,116 @@ BPF program is freed.
 
 Roll back the capacity charge when creating the stream element fails.
 
-Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
-Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
----
-v2:
-- Retarget to bpf-next as suggested by Pu Lehui.
+> diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+> index be9ce98e94692..4b8a74b9162e1 100644
+> --- a/kernel/bpf/stream.c
+> +++ b/kernel/bpf/stream.c
+> @@ -79,7 +79,14 @@ static int bpf_stream_push_str(struct bpf_stream *stre=
+am, const char *str, int l
+>  {
+>  	int ret =3D bpf_stream_consume_capacity(stream, len);
+> =20
+> -	return ret ?: __bpf_stream_push_str(&stream->log, str, len);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret =3D __bpf_stream_push_str(&stream->log, str, len);
+> +	if (ret)
+> +		atomic_sub(len, &stream->capacity);
+> +
+> +	return ret;
+>  }
 
- kernel/bpf/stream.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+[Severity: High]
+This is a pre-existing issue, but does bpf_stream_stage_printk() suffer from
+the identical capacity leak that this patch fixes here?
 
-diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-index be9ce98e9..4b8a74b91 100644
---- a/kernel/bpf/stream.c
-+++ b/kernel/bpf/stream.c
-@@ -79,7 +79,14 @@ static int bpf_stream_push_str(struct bpf_stream *stream, const char *str, int l
- {
- 	int ret = bpf_stream_consume_capacity(stream, len);
- 
--	return ret ?: __bpf_stream_push_str(&stream->log, str, len);
-+	if (ret)
-+		return ret;
-+
-+	ret = __bpf_stream_push_str(&stream->log, str, len);
-+	if (ret)
-+		atomic_sub(len, &stream->capacity);
-+
-+	return ret;
- }
- 
- static struct bpf_stream *bpf_stream_get(enum bpf_stream_id stream_id, struct bpf_prog_aux *aux)
--- 
-2.43.0
+Looking at bpf_stream_stage_printk():
 
+kernel/bpf/stream.c:bpf_stream_stage_printk() {
+    ...
+	ss->len +=3D ret;
+	/* Exclude NULL byte during push. */
+	ret =3D __bpf_stream_push_str(&ss->log, buf->buf, ret);
+    ...
+}
+
+If __bpf_stream_push_str() fails to allocate memory, ss->len remains increm=
+ented.
+Later, bpf_stream_stage_commit() unconditionally consumes this erroneously
+inflated ss->len from the stream capacity:
+
+kernel/bpf/stream.c:bpf_stream_stage_commit() {
+    ...
+	ret =3D bpf_stream_consume_capacity(stream, ss->len);
+	if (ret)
+		return ret;
+    ...
+}
+
+Since the failed element isn't in the log, its length will never be release=
+d,
+which could permanently leak stream capacity over time.
+
+[Severity: Medium]
+This is a pre-existing issue, but what happens if the formatted output exce=
+eds
+the internal string buffer size?
+
+Both bstr_printf() and vsnprintf() return the number of characters that wou=
+ld
+have been written, not the actual number written.
+
+For example, in bpf_stream_vprintk():
+
+kernel/bpf/stream.c:bpf_stream_vprintk() {
+    ...
+	ret =3D bstr_printf(data.buf, MAX_BPRINTF_BUF, fmt__str, data.bin_args);
+	/* Exclude NULL byte during push. */
+	ret =3D bpf_stream_push_str(stream, data.buf, ret);
+    ...
+}
+
+If the string is truncated, the un-capped return value is passed as len to
+bpf_stream_push_str(). Since bpf_stream_elem_alloc() has a strict bounds ch=
+eck,
+it will reject the allocation and return -ENOMEM.
+
+Does this mean the entire log message is dropped instead of safely pushing =
+the
+truncated message prefix?
+
+[Severity: High]
+This is a pre-existing issue, but does bpf_stream_read() permanently drop d=
+ata
+if a subsequent copy_to_user() fails?
+
+In bpf_stream_read():
+
+kernel/bpf/stream.c:bpf_stream_read() {
+    ...
+		/* Restore in case of error. */
+		if (ret) {
+			ret =3D -EFAULT;
+			elem->consumed_len =3D cons_len;
+			break;
+		}
+    ...
+	return ret ? ret : len - rem_len;
+}
+
+If copy_to_user() fails on a subsequent element in the loop, it breaks and
+unconditionally returns -EFAULT.
+
+Since elements that were successfully read in previous iterations have alre=
+ady
+been popped and freed, returning an error instead of the number of successf=
+ully
+read bytes hides the fact that partial data was consumed.=20
+
+Will retrying the read operation cause the previously read data to be
+permanently lost?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/tencent_C919BB32458=
+A4DAD645A68F441345B971E05@qq.com?part=3D1
