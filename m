@@ -1,185 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D1440FDA0
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 12:22:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782A84192FD;
+	Mon, 20 Jul 2026 12:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784550150; cv=none; b=K6LQJfVyCed0o7p2laHO1EvpCg3gAv8CNcyaREtK+/qZNv9xdYJeyV4I4TgcrEvpGRKOgvT9pheXBYFrscpS3UAwtPJi6Kc0Ut/ydoLLx7y5qnyeq7pjMqBBJM4CFXxAYqB5dUSk3fJEBEANW5H2RvtsUjI+nmEvDZssFM+e+ew=
+	t=1784551047; cv=none; b=AZep5cp4s4G6CeQegQC5prapmSLMIHFgMHIUfYFSg+ncZLm1Y3wOUx3wI3MsPdyi3L0zWvpsV7vrNieIGx7XakvWMkAsI8foavvmyEkZsgdwqLzbVEJfT/R/ZjApSz5HTgl1eN2TQGDZnfjgT56Grym66RhgkLX1nb9isLmXtkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784550150; c=relaxed/simple;
-	bh=x8S3GcVNnxtB7K00XX6l1xPEe2l3GGT7pO2F0Xz7+JE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hSLzSzACBzrwOmpWI9hZzwDx65AOkvJdnpnfNehjPSLPCGkykyZ1J9A4kAGB7fYDeFlR3GOfudrCOobgoZPa2hVS2+N/IFehYI63zwWu1bnyYhpozR6/6tBdUQCPAIju1x+qbI9iuUKfN0J14ILKHsa/s/aSRH78uEvWxWtDLBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=USPQApPM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784551047; c=relaxed/simple;
+	bh=kj0AZ5A6Jop+KqbA2yhJS4V30yHrTSQgJ33ZorM7qxg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rVxIqE3BIDhkABOFCAwg8OUhRiPm0I7t8SWxTDHA51Izc+nmEsfXkHMrNBG4wsApjkInYsoYmleOx1TomclfCzoup+0lW4dI3XLffqI+k+RBQReDokEt+9R9SOvU5pgqE7xaufn6ToeJLv8QtzvHsu3/eKJdzpwL4qT1q6lRPRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GY7bQ3bN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USPQApPM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77DE11F00A3A;
-	Mon, 20 Jul 2026 12:22:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GY7bQ3bN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487B21F00A3A;
+	Mon, 20 Jul 2026 12:37:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784550148;
-	bh=3//aF8I0zNDL3Ac4X6nVsZn0RLwK9SoGtITpgBlt4UM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=USPQApPM3Ymd03YRw2tzufAsu9TLnoT19VR0EXPbA9in5QlD5lyzS9lUzgE9XiXBM
-	 w07FIxR11TTKfk2YXLpQfn3vvN3uQdrM2/DM01WlCJTMQv4fxjKKrKx0GU9eojnksp
-	 FDyO64C+RBwfP6mdWCgbGTep+vDWvo4TlexF9D8pkkE8/gvfOw0W4zqslaETCsrRLh
-	 IdejyC3JwGj6udHHiuqYHWjs+ya4R9IRhTVQkH1b3VJI/qi/a2o80uYYCS8i3XgQ3v
-	 W9SUD1Nk2Tw4Zkjr7yHDOS6FxEQ0FHFf5JlYg9pXgGE/QFk8BgG6wejc/Bn1EjdPWk
-	 PBeRdwTHc/ZYg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 20/21] selftests/exec: test binfmt_misc loader
- substitution
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christian Brauner" <brauner@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260720-work-bpf-binfmt_misc-ptinterp-v1-20-ddb76c9a508e@kernel.org>
-References: <20260720-work-bpf-binfmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org>
- <20260720-work-bpf-binfmt_misc-ptinterp-v1-20-ddb76c9a508e@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 12:22:28 +0000
-Message-Id: <20260720122228.77DE11F00A3A@smtp.kernel.org>
+	s=k20260515; t=1784551046;
+	bh=K5qltyN+MfU8aQCuenvbMxWg7poDhOA/J+jqlFW5yPc=;
+	h=From:To:Cc:Subject:Date;
+	b=GY7bQ3bNSoNb1of3AfVAdlHJ9ktb8mfCWC9IazeVyU+pGlqJ0c5td2EXlAWQJgcWx
+	 Glqj0qYMMPMZVPOvHvIFSRVyOaETXSBGgBmMRrD7HXZuQFcu0HCb+3IU504UHEX04V
+	 3Q1lQ5JxV3lsPBE6iIJnU62ilAY2BgBSWYDrto+JKpJNFAKqK/TfnyVjTpA6TnkGHP
+	 UCxjLC/vxD4mcSQ3WONPqjncQ3keEU9JLbLexlsu05rKuSczIQe/7fCTmgOmRDqAcU
+	 wHd2Dc4Q1VS3J6uOdVaCyPE4A8UU+GFZ4kbtYelxOdfascgaZyU83cGuRO42y0YVWB
+	 EbmX2zLAg5TMA==
+From: Christian Brauner <brauner@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Christian Brauner <brauner@kernel.org>,
+	Farid Zakaria <farid.m.zakaria@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-mm@kvack.org,
+	bpf@vger.kernel.org,
+	jannh@google.com,
+	mail@johnericson.me,
+	stable@vger.kernel.org
+Subject: [PATCH] binfmt_misc: set have_execfd only once the interpreter is opened
+Date: Mon, 20 Jul 2026 14:36:49 +0200
+Message-ID: <20260720-beglichen-kognitiv-organismus-5e1e55326c56@brauner>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2761; i=brauner@kernel.org; h=from:subject:message-id; bh=kj0AZ5A6Jop+KqbA2yhJS4V30yHrTSQgJ33ZorM7qxg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTFiVWs5Dt2bv61zvhvq3ayPlU//fbNo8386xXu6AiYT c1hSJjg2lHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjAR35uMDC9NZtew1vfVX9+x VaVEuqRRsUI4Tz9hkdxeY+3ffCF+kxgZdh9wCJn9qsjQISlJfMPProP2Imra74+ziJildO1cnx7 ECwA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Missing NULL check for the map pointer returned by `bpf_object__=
-find_map_by_name` before passing it to `bpf_map__attach_struct_ops`.
-- [Medium] An unhandled `read()` error on `/proc/<pid>/auxv` leads to a mas=
-sive out-of-bounds array read due to implicit type conversion on 32-bit arc=
-hitectures.
---
+load_misc_binary() raises bprm->have_execfd as soon as it sees the 'O'
+(or 'C') flag. This happens well before it opens the interpreter. If
+that open fails the flag stays set on the bprm. binfmt_misc is at the
+head of the format list so an interpreter open failure that returns
+-ENOEXEC lets the search fall through to a later format. This means it
+runs the matched binary directly having never staged an interpreter. So
+bprm->executable is NULL while have_execfd falsely claims a descriptor
+is present.
 
---- Patch [20]: [PATCH 20/21] selftests/exec: test binfmt_misc loader subst=
-itution ---
-commit 7fb50e082768e7f213f616cf84985ff4feb60ccd
-Author: Christian Brauner <brauner@kernel.org>
-Subject: selftests/exec: test binfmt_misc loader substitution
+Consequently, begin_new_exec() dereferences the missing executable:
 
-This commit exercises the 'L' flag end to end by running a payload as the m=
-ain
-image with a copy of the system loader substituted for its PT_INTERP. It al=
-so
-introduces a bpf-side BPF_BINPRM_LOADER test path.
+  would_dump(bprm, bprm->executable);
 
-> diff --git a/tools/testing/selftests/exec/binfmt_misc_bpf.c b/tools/testi=
-ng/selftests/exec/binfmt_misc_bpf.c
-> index 483c46e134107..926db50d39d54 100644
-> --- a/tools/testing/selftests/exec/binfmt_misc_bpf.c
-> +++ b/tools/testing/selftests/exec/binfmt_misc_bpf.c
+and NULL derefs. Had it not, the hand-off later in the same function
+would have failed anyway. FD_ADD(0, bprm->executable) rejects a NULL
+file with -ENOMEM. Both sites are past the point of no return so the
+exec cannot be unwound either way.
 
-[ ... ]
+This can be reached by unprivileged users as binfmt_misc can be mounted
+in user namespaces. So a user can register an 'O' entry whose
+interpreter lives on a FUSE mount, have the FUSE server fail the open
+with -ENOEXEC and execute a native ELF file that matches the entry.
 
-> +static int bpf_case_start(struct bpf_case *c, const char *objfile,
-> +			  const char *handler, const char *entry)
->  {
-> -	struct bpf_object *obj;
-> -	struct bpf_map *map;
-> -	struct bpf_link *link;
-> -	int ret =3D -1;
-> +	c->obj =3D NULL;
-> +	c->link =3D NULL;
-> +	c->entry =3D entry;
-> =20
-> -	obj =3D bpf_object__open_file(objfile, NULL);
-> -	if (!obj || libbpf_get_error(obj)) {
-> +	c->obj =3D bpf_object__open_file(objfile, NULL);
-> +	if (!c->obj || libbpf_get_error(c->obj)) {
->  		fprintf(stderr, "open %s failed\n", objfile);
-> +		c->obj =3D NULL;
->  		return -1;
->  	}
-> -	if (bpf_object__load(obj)) {
-> +	if (bpf_object__load(c->obj)) {
->  		fprintf(stderr, "load %s failed (check dmesg for the verifier log)\n",
->  			objfile);
-> -		goto close;
-> -	}
-> -	map =3D bpf_object__find_map_by_name(obj, handler);
-> -	if (!map) {
-> -		fprintf(stderr, "no struct_ops map '%s' in %s\n", handler, objfile);
-> -		goto close;
-> +		goto fail;
->  	}
-> -	link =3D bpf_map__attach_struct_ops(map);
-> -	if (!link || libbpf_get_error(link)) {
-> +	c->link =3D bpf_map__attach_struct_ops(
-> +			bpf_object__find_map_by_name(c->obj, handler));
-> +	if (!c->link || libbpf_get_error(c->link)) {
+have_execfd only means anything alongside the executable it describes
+which is not set until the interpreter has been opened and staged.
+So lets raise it there, next to execfd_creds, which is already set at
+that point. An open failure now leaves it clear, so the fallback format
+derives credentials from the binary and emits no AT_EXECFD, as it would
+for any native exec. The argv rewrite load_misc_binary() performs before
+the open is still not undone. This means the binary sees the interpreter
+path in argv[0] and its own path in argv[1] but that predates this
+change and only became observable once the exec stopped faulting.
 
-[Severity: Medium]
-Is it possible for bpf_object__find_map_by_name() to return NULL here if th=
-e=20
-map isn't found?
+Fixes: bc2bf338d54b ("exec: Remove recursion from search_binary_handler")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+ fs/binfmt_misc.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-If it does return NULL, passing it directly to bpf_map__attach_struct_ops()
-will cause a segmentation fault because the attach API unconditionally=20
-dereferences the map pointer to check its type. The original code included a
-check for a NULL map before attempting to attach.
+diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
+index 84349fcb93f1..5de615ca7a75 100644
+--- a/fs/binfmt_misc.c
++++ b/fs/binfmt_misc.c
+@@ -228,9 +228,6 @@ static int load_misc_binary(struct linux_binprm *bprm)
+ 			goto ret;
+ 	}
+ 
+-	if (fmt->flags & MISC_FMT_OPEN_BINARY)
+-		bprm->have_execfd = 1;
+-
+ 	/* make argv[1] be the path to the binary */
+ 	retval = copy_string_kernel(bprm->interp, bprm);
+ 	if (retval < 0)
+@@ -260,6 +257,8 @@ static int load_misc_binary(struct linux_binprm *bprm)
+ 		goto ret;
+ 
+ 	bprm->interpreter = interp_file;
++	if (fmt->flags & MISC_FMT_OPEN_BINARY)
++		bprm->have_execfd = 1;
+ 	if (fmt->flags & MISC_FMT_CREDENTIALS)
+ 		bprm->execfd_creds = 1;
+ 
+-- 
+2.53.0
 
->  		fprintf(stderr, "attach struct_ops '%s' failed\n", handler);
-> -		goto close;
-> +		c->link =3D NULL;
-> +		goto fail;
->  	}
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/exec/binfmt_misc_loader.c b/tools/te=
-sting/selftests/exec/binfmt_misc_loader.c
-> new file mode 100644
-> index 0000000000000..97fa0247ab53e
-> --- /dev/null
-> +++ b/tools/testing/selftests/exec/binfmt_misc_loader.c
-
-[ ... ]
-
-> +static int ptrace_probe(const char *target)
-> +{
-> +	unsigned long auxv[2 * 64], base =3D 0, entry =3D 0, at_flags =3D 0;
-> +	unsigned long start_code =3D 0, end_code =3D 0;
-> +	int status, fd, execfd_seen =3D 0, failed =3D 0;
-> +	char path[64], buf[PATH_MAX];
-> +	ssize_t n;
-> +	pid_t pid;
-> +	int i;
-
-[ ... ]
-
-> +	snprintf(path, sizeof(path), "/proc/%d/auxv", pid);
-> +	fd =3D open(path, O_RDONLY);
-> +	if (fd < 0) {
-> +		failed =3D 1;
-> +		n =3D 0;
-> +	} else {
-> +		n =3D read(fd, auxv, sizeof(auxv));
-> +		close(fd);
-> +	}
-> +	for (i =3D 0; i + 1 < (int)(n / sizeof(unsigned long)); i +=3D 2) {
-
-[Severity: Medium]
-What happens if the read() call fails and returns -1?
-
-If n is set to -1, the loop condition implicitly converts it to an unsigned
-size_t during the division: n / sizeof(unsigned long). On 32-bit platforms,
-this division results in a massive positive integer (0x3FFFFFFF).=20
-
-Because this is cast to an int, the loop will iterate far past the end of t=
-he
-auxv array, leading to an out-of-bounds memory read. Should this check if n
-is greater than 0 before proceeding to the loop?
-
-> +		switch (auxv[i]) {
-> +		case AT_BASE:
-> +			base =3D auxv[i + 1];
-> +			break;
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720-work-bpf-b=
-infmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org?part=3D20
