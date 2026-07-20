@@ -1,110 +1,185 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2AE409278;
-	Mon, 20 Jul 2026 12:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D1440FDA0
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 12:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784549846; cv=none; b=rZdPEeNu67VvHssMj98mxskCO3RwzKXRycl1Q5UYiRzxXrwl797XUzQ5SlvA126PTqqWLpvQj5TfBS+bnEqnmLBjHzgWrmkMHJG71qzgJo9Z/JfrReD4Cl8zHHAtHSGmK/ocvl0gB2Yg3iMtdSjNuJrUF3z0qeP2CASJPkMm/P4=
+	t=1784550150; cv=none; b=K6LQJfVyCed0o7p2laHO1EvpCg3gAv8CNcyaREtK+/qZNv9xdYJeyV4I4TgcrEvpGRKOgvT9pheXBYFrscpS3UAwtPJi6Kc0Ut/ydoLLx7y5qnyeq7pjMqBBJM4CFXxAYqB5dUSk3fJEBEANW5H2RvtsUjI+nmEvDZssFM+e+ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784549846; c=relaxed/simple;
-	bh=HQxSx5CU82tCOihowjVZJN57y2ZpK0Cp2PfnhmPATuA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X6N8bTwtUeZzWgIUFblyZNXk9UKN/E1iLVSRjkX2TKBBJMkvgMRYQdf4Vx2eWfQ0yHHyEXcTmZrt6IFt12eg0uHhn2PObP8+rPm3T8PWEYcf3tmfmj8Ilr35inOXNZyQ5uv8nEOoWX2BdLAQhIuWGfGw/NHL+wPPooUeeCPNMRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h3fdZ2DwszYQv0q;
-	Mon, 20 Jul 2026 20:16:50 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id DB6564056E;
-	Mon, 20 Jul 2026 20:17:15 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgB3h3PKEV5qteOkBw--.22716S2;
-	Mon, 20 Jul 2026 20:17:15 +0800 (CST)
-Message-ID: <f610a87b-5d8d-4241-a1fe-9c6338371afd@huaweicloud.com>
-Date: Mon, 20 Jul 2026 20:17:14 +0800
+	s=arc-20240116; t=1784550150; c=relaxed/simple;
+	bh=x8S3GcVNnxtB7K00XX6l1xPEe2l3GGT7pO2F0Xz7+JE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=hSLzSzACBzrwOmpWI9hZzwDx65AOkvJdnpnfNehjPSLPCGkykyZ1J9A4kAGB7fYDeFlR3GOfudrCOobgoZPa2hVS2+N/IFehYI63zwWu1bnyYhpozR6/6tBdUQCPAIju1x+qbI9iuUKfN0J14ILKHsa/s/aSRH78uEvWxWtDLBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=USPQApPM; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USPQApPM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77DE11F00A3A;
+	Mon, 20 Jul 2026 12:22:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784550148;
+	bh=3//aF8I0zNDL3Ac4X6nVsZn0RLwK9SoGtITpgBlt4UM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=USPQApPM3Ymd03YRw2tzufAsu9TLnoT19VR0EXPbA9in5QlD5lyzS9lUzgE9XiXBM
+	 w07FIxR11TTKfk2YXLpQfn3vvN3uQdrM2/DM01WlCJTMQv4fxjKKrKx0GU9eojnksp
+	 FDyO64C+RBwfP6mdWCgbGTep+vDWvo4TlexF9D8pkkE8/gvfOw0W4zqslaETCsrRLh
+	 IdejyC3JwGj6udHHiuqYHWjs+ya4R9IRhTVQkH1b3VJI/qi/a2o80uYYCS8i3XgQ3v
+	 W9SUD1Nk2Tw4Zkjr7yHDOS6FxEQ0FHFf5JlYg9pXgGE/QFk8BgG6wejc/Bn1EjdPWk
+	 PBeRdwTHc/ZYg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 20/21] selftests/exec: test binfmt_misc loader
+ substitution
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Christian Brauner" <brauner@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260720-work-bpf-binfmt_misc-ptinterp-v1-20-ddb76c9a508e@kernel.org>
+References: <20260720-work-bpf-binfmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org>
+ <20260720-work-bpf-binfmt_misc-ptinterp-v1-20-ddb76c9a508e@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 20 Jul 2026 12:22:28 +0000
+Message-Id: <20260720122228.77DE11F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 1/3] bpf: Fix potential UAF when reading bpf link
- info
-Content-Language: en-US
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- yonghong.song@linux.dev, song@kernel.org, jolsa@kernel.org,
- emil@etsalapatis.com, pulehui@huawei.com, martin.lau@kernel.org,
- clm@meta.com, ihor.solodrai@linux.dev
-References: <20260720033055.1215477-2-pulehui@huaweicloud.com>
- <27e047ceba0b38f4f51e932d9d256d280a4370fb66beca03ed7a3148b6600b19@mail.kernel.org>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <27e047ceba0b38f4f51e932d9d256d280a4370fb66beca03ed7a3148b6600b19@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgB3h3PKEV5qteOkBw--.22716S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr48Aw4ruw4rWrW7GryrCrg_yoW8Wryfpa
-	48GFnxCw1qg3yUX3WIqr45WFWSgF4v9ry5JFn8Wry09FnYvanagry8Cr43ZFyY9Fn0gr4I
-	qw4aqw1xA347Zr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8
-	JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIb
-	yZUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] Missing NULL check for the map pointer returned by `bpf_object__=
+find_map_by_name` before passing it to `bpf_map__attach_struct_ops`.
+- [Medium] An unhandled `read()` error on `/proc/<pid>/auxv` leads to a mas=
+sive out-of-bounds array read due to implicit type conversion on 32-bit arc=
+hitectures.
+--
 
+--- Patch [20]: [PATCH 20/21] selftests/exec: test binfmt_misc loader subst=
+itution ---
+commit 7fb50e082768e7f213f616cf84985ff4feb60ccd
+Author: Christian Brauner <brauner@kernel.org>
+Subject: selftests/exec: test binfmt_misc loader substitution
 
-On 2026/7/20 12:04, bot+bpf-ci@kernel.org wrote:
->> In bpf_link_show_fdinfo and bpf_link_get_info_by_fd, link->prog is
->> accessed without holding any locks. If the prog is concurrently replaced
->> via bpf_link_update, the old prog can be freed, leading to a potential
->> UAF issue.
->>
->> Fix this by holding both normal RCU and tasks trace RCU read locks
->> before dereferencing the prog, as BPF_LINK_TYPE_ITER support both
->> non-sleepable and sleepable progs.
->>
->> Fixes: f9d041271cf4 ("bpf: Refactor bpf_link update handling")
-> 
-> Is the Fixes: tag pointing at the right commit?
-> 
-> f9d041271cf4 ("bpf: Refactor bpf_link update handling") only refactored
-> the existing update path into the bpf_link_ops->update_prog method.  It
-> does not look like it introduced the ability to concurrently replace and
-> free link->prog.
-> 
-> The unlocked reader in bpf_link_show_fdinfo() already existed by then,
-> and the racing replacement path (the BPF_LINK_UPDATE command with
-> xchg(&link->prog, new_prog) followed by bpf_prog_put(old_prog)) seems to
-> have first appeared in:
-> 
->    0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
-> 
-> Should the tag instead be:
-> 
->    Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+This commit exercises the 'L' flag end to end by running a payload as the m=
+ain
+image with a copy of the system loader substituted for its PT_INTERP. It al=
+so
+introduces a bpf-side BPF_BINPRM_LOADER test path.
 
-make sense.
+> diff --git a/tools/testing/selftests/exec/binfmt_misc_bpf.c b/tools/testi=
+ng/selftests/exec/binfmt_misc_bpf.c
+> index 483c46e134107..926db50d39d54 100644
+> --- a/tools/testing/selftests/exec/binfmt_misc_bpf.c
+> +++ b/tools/testing/selftests/exec/binfmt_misc_bpf.c
 
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29715011327
+[ ... ]
 
+> +static int bpf_case_start(struct bpf_case *c, const char *objfile,
+> +			  const char *handler, const char *entry)
+>  {
+> -	struct bpf_object *obj;
+> -	struct bpf_map *map;
+> -	struct bpf_link *link;
+> -	int ret =3D -1;
+> +	c->obj =3D NULL;
+> +	c->link =3D NULL;
+> +	c->entry =3D entry;
+> =20
+> -	obj =3D bpf_object__open_file(objfile, NULL);
+> -	if (!obj || libbpf_get_error(obj)) {
+> +	c->obj =3D bpf_object__open_file(objfile, NULL);
+> +	if (!c->obj || libbpf_get_error(c->obj)) {
+>  		fprintf(stderr, "open %s failed\n", objfile);
+> +		c->obj =3D NULL;
+>  		return -1;
+>  	}
+> -	if (bpf_object__load(obj)) {
+> +	if (bpf_object__load(c->obj)) {
+>  		fprintf(stderr, "load %s failed (check dmesg for the verifier log)\n",
+>  			objfile);
+> -		goto close;
+> -	}
+> -	map =3D bpf_object__find_map_by_name(obj, handler);
+> -	if (!map) {
+> -		fprintf(stderr, "no struct_ops map '%s' in %s\n", handler, objfile);
+> -		goto close;
+> +		goto fail;
+>  	}
+> -	link =3D bpf_map__attach_struct_ops(map);
+> -	if (!link || libbpf_get_error(link)) {
+> +	c->link =3D bpf_map__attach_struct_ops(
+> +			bpf_object__find_map_by_name(c->obj, handler));
+> +	if (!c->link || libbpf_get_error(c->link)) {
+
+[Severity: Medium]
+Is it possible for bpf_object__find_map_by_name() to return NULL here if th=
+e=20
+map isn't found?
+
+If it does return NULL, passing it directly to bpf_map__attach_struct_ops()
+will cause a segmentation fault because the attach API unconditionally=20
+dereferences the map pointer to check its type. The original code included a
+check for a NULL map before attempting to attach.
+
+>  		fprintf(stderr, "attach struct_ops '%s' failed\n", handler);
+> -		goto close;
+> +		c->link =3D NULL;
+> +		goto fail;
+>  	}
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/exec/binfmt_misc_loader.c b/tools/te=
+sting/selftests/exec/binfmt_misc_loader.c
+> new file mode 100644
+> index 0000000000000..97fa0247ab53e
+> --- /dev/null
+> +++ b/tools/testing/selftests/exec/binfmt_misc_loader.c
+
+[ ... ]
+
+> +static int ptrace_probe(const char *target)
+> +{
+> +	unsigned long auxv[2 * 64], base =3D 0, entry =3D 0, at_flags =3D 0;
+> +	unsigned long start_code =3D 0, end_code =3D 0;
+> +	int status, fd, execfd_seen =3D 0, failed =3D 0;
+> +	char path[64], buf[PATH_MAX];
+> +	ssize_t n;
+> +	pid_t pid;
+> +	int i;
+
+[ ... ]
+
+> +	snprintf(path, sizeof(path), "/proc/%d/auxv", pid);
+> +	fd =3D open(path, O_RDONLY);
+> +	if (fd < 0) {
+> +		failed =3D 1;
+> +		n =3D 0;
+> +	} else {
+> +		n =3D read(fd, auxv, sizeof(auxv));
+> +		close(fd);
+> +	}
+> +	for (i =3D 0; i + 1 < (int)(n / sizeof(unsigned long)); i +=3D 2) {
+
+[Severity: Medium]
+What happens if the read() call fails and returns -1?
+
+If n is set to -1, the loop condition implicitly converts it to an unsigned
+size_t during the division: n / sizeof(unsigned long). On 32-bit platforms,
+this division results in a massive positive integer (0x3FFFFFFF).=20
+
+Because this is cast to an int, the loop will iterate far past the end of t=
+he
+auxv array, leading to an out-of-bounds memory read. Should this check if n
+is greater than 0 before proceeding to the loop?
+
+> +		switch (auxv[i]) {
+> +		case AT_BASE:
+> +			base =3D auxv[i + 1];
+> +			break;
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720-work-bpf-b=
+infmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org?part=3D20
