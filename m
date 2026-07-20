@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4733D1CAA
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 09:04:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F4E3A9624
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 09:07:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784538253; cv=none; b=mf8thA9/KMJrQFZjQHqUGtU3NON7NSW6tHosRlChyINHsfKK6jL9M2P0PrKtvWC5pOYC0GIp+lBssX0zEr4FICKecfaX1Re/nz05GvSx22+1k/GPa7OCwG14hb4wXwm8e+urOB6XNm06rN4QNllvWcue8pdE00qlF66TLaVMol0=
+	t=1784538442; cv=none; b=d68H7DxPTqBlDUuJn8iiSmMl2Aa0hO/UQqmZNphMlPsQ2lfMRd6XPmZRg2UTHBvfRhgwBxvcgJRHwDO4iTOnyjTg6cqeUYC8FfO/EEjbrQdl3pDqmmIkQcr3q5ftSA5Kiyw7urL8C2rZZtt8Z3DMwh4CqB1Z36VLOOkP7faJa74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784538253; c=relaxed/simple;
-	bh=DSW7z/rLoS518NX/TmF82geXEzyghH3fOLonN8YL5Yw=;
+	s=arc-20240116; t=1784538442; c=relaxed/simple;
+	bh=uHDHf2cmebgBp9gOmiZaJQ1C3/62qtQXnYNxfsA0dOU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=K2sDIa3Cr3MPon6U2eFXJ9l+hJdUhwJYBFC5NL2aFluZLz3MLfVhCUjpPLNsTKfLRGBccdG4PJrUt4FgtXjwG/Vl43bqO43T1A12cjKBxFRHntZU03+io7RoGJcJmlAJXUmqwCn4m5Fg1qUBVfnKZkyzxCIg3b/n9srHXn89XfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lgXvyeGF; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=jRSqnQtEJb/Gdc0pL7qqtu3JY7XOtK43dmvT0THKJyN8xUE7IeW2UfiSKLQeg/x7lxKwfcHKmBags8JMQVWHSknkLyIjiNt9FUFm0Whe1NMk9y7AAOCo9/yjftylbFol8nADQgYrqaXvKk5zl3m3y6LiPR7sQ+Ce+Vfe8jVs6zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c/xQZ/Aa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lgXvyeGF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E931F00A3A;
-	Mon, 20 Jul 2026 09:04:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c/xQZ/Aa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D26B1F000E9;
+	Mon, 20 Jul 2026 09:07:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784538251;
-	bh=ui2z/08eoPMFeRnoHSeltVGquoY7f7jIlwS6PiCsuCk=;
+	s=k20260515; t=1784538441;
+	bh=sMzzEcShb57NAkG7w6uh28MYuzYXSU2uMay1P5ZbQwQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lgXvyeGFCC4CLpZfhVmHJFY7ypNcAiOGd4uFB4ey7CmQhNMKCjf04E2Gbnf6PR+Tk
-	 gyqj5HI+4x5uV1EOG2hRPJ2PU1Iwlb9f9LEdwNdhEop8o/KOncK1U57ZDKWTFAHoTX
-	 tJJWeEmAyAfiU0jTVlC5LKKwc6X01jfEV8B8ZMlhzGRlvAxTFu5xAl1pMWtwdYC4vG
-	 R9Hyn29cmuI9dxCNZDRf8JTCeGycWPM8d2PeWvRv4WI72jjgpkm0P7Bz3m6dhyPQQ8
-	 YXZVSofed9u1bt5R9Fnep9mL0zP0WxaSXlMoCzpxLfdgyaOS9OeNJ+2f8qyCieJg+0
-	 au/UJbyfV7HaQ==
+	b=c/xQZ/Aa15jSY9XwIVC9zQCQiNbxWGDGgfE8NrFrXsOVRKtQdr50i3P2SiDAzX6XE
+	 R8pwkMlVlGtDfe60WsyhgQ7jzpQHpWze65jOIvV2QerrRljGLUj5pw9C1R1hqHO6ci
+	 8Hek8Ay99bkcsJkdR2pctb5PwP3jPvANNNy8UEtKUwGbZOQeq5Q/18/rRUsmEAHwUR
+	 DPhFIRV71VGFIjhObKPqAkehphTL1dlsQ4L24J53G9ElW0zYAYd6oykBgZ9o0lhfqJ
+	 ER7Xz9oXbTbYa5VRw+nmjhXeumfcrXAsVzO8P5iF1lBRCeQFu/71WvSUfHfsieSAM2
+	 kkjTb+oAE82aw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 5/9] bpf: Disable preemption in bpf_get_stackid
+Subject: Re: [PATCH bpf-next 6/9] bpf: Factor callchain_store function from
+ __bpf_get_stack
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiri Olsa" <jolsa@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260720085351.655075-6-jolsa@kernel.org>
+In-Reply-To: <20260720085351.655075-7-jolsa@kernel.org>
 References: <20260720085351.655075-1-jolsa@kernel.org>
- <20260720085351.655075-6-jolsa@kernel.org>
+ <20260720085351.655075-7-jolsa@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 09:04:10 +0000
-Message-Id: <20260720090411.61E931F00A3A@smtp.kernel.org>
+Date: Mon, 20 Jul 2026 09:07:20 +0000
+Message-Id: <20260720090721.2D26B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,69 +47,64 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Incomplete fix for preemption vulnerability in stack helpers (__bp=
-f_get_stack)
+- [Low] The 'size' parameter in callchain_store() is unused.
 --
 
---- Patch [5]: [PATCH bpf-next 5/9] bpf: Disable preemption in bpf_get_stac=
-kid ---
-commit eb097d7647defa7379264dcdf95711bc573a419a
+--- Patch [6]: [PATCH bpf-next 6/9] bpf: Factor callchain_store function fr=
+om __bpf_get_stack ---
+commit aee65ba10526fcf4c6320ea660fc50a555551cc1
 Author: Jiri Olsa <jolsa@kernel.org>
 
-bpf: Disable preemption in bpf_get_stackid
+bpf: Factor callchain_store function from __bpf_get_stack
 
-This commit adds preempt_disable() and preempt_enable() around the
-get_perf_callchain() call and trace buffer usage in bpf_get_stackid()
-to prevent the per-CPU trace entries buffer from being corrupted if the
-task is preempted.
-
-Closes: https://lore.kernel.org/bpf/20260206090653.1336687-2-chen.dylane@li=
-nux.dev/
+This commit extracts the logic for storing trace entries into a user-suppli=
+ed
+buffer from __bpf_get_stack() and places it into a new helper function named
+callchain_store().
 
 > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 83efd5892d907..a64b14ffd1e8e 100644
+> index a64b14ffd1e8e..b990643f25cd8 100644
 > --- a/kernel/bpf/stackmap.c
 > +++ b/kernel/bpf/stackmap.c
-> @@ -625,30 +625,37 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs,=
- struct bpf_map *, map,
->  	struct perf_callchain_entry *trace;
->  	struct stackid stackid;
->  	bool kernel =3D !user;
-> +	int err =3D -EFAULT;
->  	u32 max_depth;
-> -	int err;
+[ ... ]
+> @@ -747,6 +747,29 @@ const struct bpf_func_proto bpf_get_stackid_proto_pe=
+ =3D {
+>  	.arg3_type	=3D ARG_ANYTHING,
+>  };
 > =20
->  	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
->  			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
->  		return -EINVAL;
-> =20
->  	max_depth =3D stack_map_calculate_max_depth(map->value_size, elem_size,=
- flags);
+> +static u32 callchain_store(struct perf_callchain_entry *trace, void *buf=
+, u32 size,
+> +			   u32 elem_size, u64 flags)
+
+[Severity: Low]
+This isn't a bug, but the 'size' parameter doesn't appear to be used anywhe=
+re
+within callchain_store() in kernel/bpf/stackmap.c. Could it be safely remov=
+ed
+from the function signature since the bounds checking is handled in the cal=
+ler?
+
+> +{
+> +	bool user_build_id =3D flags & BPF_F_USER_BUILD_ID;
+> +	u32 skip =3D flags & BPF_F_SKIP_FIELD_MASK;
+> +	u32 trace_nr, copy_len;
+> +	u64 *ips;
 > +
-> +	preempt_disable();
->  	trace =3D get_perf_callchain(regs, kernel, user, max_depth,
->  				   false, false, 0);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does __bpf_get_stack() also
-need this preempt_disable() protection?
-
-__bpf_get_stack() has a similar pattern where it calls get_perf_callchain()
-or get_callchain_entry_for_task() and dereferences trace->ip via memcpy().
-
-While it uses rcu_read_lock() when may_fault is true, on CONFIG_PREEMPT_RCU
-kernels this does not prevent preemption.
-
-Could a preempting task trigger another stack trace on the same CPU before
-the memcpy() finishes, overwriting the per-CPU buffer in __bpf_get_stack()?
-
->  	if (unlikely(!trace))
->  		/* couldn't fetch the stack trace */
-> -		return -EFAULT;
-> +		goto out;
+> +	trace_nr =3D trace->nr - skip;
+> +	copy_len =3D trace_nr * elem_size;
+> +
+> +	ips =3D trace->ip + skip;
+> +	if (user_build_id) {
+> +		struct bpf_stack_build_id *id_offs =3D buf;
+> +
+> +		for (u32 i =3D 0; i < trace_nr; i++)
+> +			id_offs[i].ip =3D ips[i];
+> +	} else {
+> +		memcpy(buf, ips, copy_len);
+> +	}
+> +	return trace_nr;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720085351.6550=
-75-1-jolsa@kernel.org?part=3D5
+75-1-jolsa@kernel.org?part=3D6
