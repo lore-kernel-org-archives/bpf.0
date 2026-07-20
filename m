@@ -1,310 +1,243 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6789C38BF81
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 22:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA2F3B95F8
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 22:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784588011; cv=none; b=aw1litwT5IXzgfixMXeZqd65oat1ATgMdpbZrj1TsB6VIO4OZsbvnkWvNN5DX5Wq5bCisnJmb+R4LwRDZWdFzfLgDQrGnoTIjb4Vkm5DpLEfOA0lMYrJdmaOHcaGA+grI22JkcgnNjhOU8xQttZBcxFo9upt/zka6iutNJ/IV9o=
+	t=1784588112; cv=none; b=ogDRqUs4Jmye5BSXttAf+Hde7YEtdegNHbSxfgurj/i8IVvsSEJV0ls0pPTS/lDqPgxHSO4LCe4hWjUFzWlvSmM3GQJBG7ErPrxujhZFvlqF4iYcfBvF1HX2lAk79wNajvICbx8/VwWMi0WD48ngkhxS7nEdOqMn5YJ7PfWhVY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784588011; c=relaxed/simple;
-	bh=bu9MxjR9PrOS7jFoOtI1kzXfsfiOmCRm8agej7/N0eo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=My6Gl87ROYPgCc+SArthNPBwWhc3gJJ8gm15jvq+tJv6/xUWhiILAjKYqhKXkBnlYjtUflIkCBhM+Cb4SzSR0GIiNOleTHRbCMk8LveAl5y+pjMPOPXB095EVMrfxlbAA/KwBn/TS0x9PZf0YMrb4EG5QitURlVziziR2uY0FBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qYSw80KT; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784588112; c=relaxed/simple;
+	bh=DuwoLoocC5KEX4fom5jop9xjwLbH6dmrbqe3Lwe8Igc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=HXzVc106j582OBn6isxlvzb0z7D7bYBMxH4jcrj7e3WSxE+vXkM2kP8ZaypKMHDwMVXKadsxMZNLR9jLIrPDMLWBvgUBIgFfChIKTemMQl/oKI1b+smBW6WAgIlBbr4nkF5Qs5p64eezOV7QxAqAP280yuQBkG4AR3tLy3AnQoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=MeYCBhn3; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qYSw80KT"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4954a32cf1eso14866685e9.3
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 15:53:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="MeYCBhn3"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cca0c5799eso83487345ad.0
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 15:55:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784588007; x=1785192807; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xaOVkEmI94bSxjGZP8o0unCsarNml6GU1QHwiTIhRTw=;
-        b=qYSw80KTcXhIsJmoJ5JfON/ZxwRG+mIFCHhz0GXnMIKkdeasNRh7vNze6MBfOEposa
-         ++dLmsCTry0xU1SjRxFQe/iefs90QH8vaVGsdmKmiW3R4joATlDAIFNEbw88Xf/wrEVK
-         BeGSGKoV3E5Ss9F+q875gSOhct7T82AS1x33wgxoVTnPag58GrSmvjOWWGMFb2a4c2cZ
-         OAGg4nZEDCbZcwLpwHcsqxtJmoqJEdjkeNCDpadXX/Jk3ctlqFBq1aGZTGtKRVJjJTw+
-         IR9cahOCrpScwJ+O+vuWNNQ13+OQJCWftAnL7Ys9zFKwo43UERC1T9RVOHG4+v8UHgD7
-         pYZw==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784588110; x=1785192910; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=uiDaTietAlrtPBtFFJF3jlwUkPb84yeQywUkW/obk08=;
+        b=MeYCBhn3z8r2zZnNNpMtFN8jwxMJgZoK2q03bdM2zm+xtw+GRmXM+dtN6+FHnsEw1h
+         2Phon3J65IeWL4/o3KIdMkepuhKj7IbmtVaJiv5LGpBMiBP0isdkNQ6AkzWBwYzIetzp
+         YWgxjfdfqQ3+1zj0vanaO8GcChOVg6QMoNlURy9ukNa8n3L77onKMvQsES82sy+nUrEI
+         ++TJDRdScuEs9rhFHLIUaW6JWYAAgzPd6Lo9KTJ59UqdTqoF3z+7TU6s1hjiqCHazYVp
+         8WT8tbnGKify/CB6Dc6q/rjh3l3ToJibkhTCfWzGDqnSKGoA8x5P7WVuC+WxNrcihuh9
+         D3iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784588007; x=1785192807;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1784588110; x=1785192910;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xaOVkEmI94bSxjGZP8o0unCsarNml6GU1QHwiTIhRTw=;
-        b=gpmS9nSiGETV7fd83FKxz3rLU7uNoIHzXqHNiiKbEhE0VFC+UfbCGDC9aqrh564n6A
-         Pjhl3SbztvznIPohH/diZHxFg09P46cLXtH6/IsVgilbFrvzKrB/+M8dwIaTKao2X4A6
-         7HSYNDwRYUd5ApPcibmdsTAMaKF+jD303tFcIHkML1u8ZM64zQIYQ7EELnP3mQbE7U3P
-         EeJUN0ygr+Dxxn4vSpGihK2yQSlrCQxKecJ8uEP+KtO+ZKRSSkCsKR46zzGYPZJUINMO
-         r0F0qmPj0+Ubbbf+tFXa1VoNF99PqwPlSIM34IiArLCLXqJd1c9pRMiG9yqa0A519X3j
-         KLXg==
-X-Gm-Message-State: AOJu0Yxdbx/mxohApI0wW8J5zL7qSN4uloCDGOOYE0YFw8ny1KAd1cCd
-	7Yemycy0+mBF4fFl8gTY/VRrEwlO5jAlM/c+DAI/36gBkYB6Vf76QAhU
-X-Gm-Gg: AfdE7cnnjiEsTx9OPwtsAoe7eMirXV9fsLRKESlaHPpqoy/CqU4fP+LLedpNdaqd8W1
-	x+38Th8OQnN4THEhhUFpxhljXLRU959LlSgRjJ2aglgOpSMrxMLMr1CzZAJyiUJO9kw42RoTGRo
-	8f2/VYk+4FFm28lkpmJ5Xvce4l1jkO10PqjFWXkm1LJxm8WKKMmvRywqenGyzVq9uLDnl+PkHpt
-	9iLnKKQLUjiHUnVoCLzFoVJCmkXqL4e3EW0ugBPsdimrl0Jjey6Gc//BGN0v+Z6ArD+OcyvB3gW
-	siE3owgr1c45JOvsljQW1wWo+Tzz9ZKzdc1GDbbuEVXIzZ1XNzAkow9gSrFz+9vje0GO7IgWjg+
-	wFEx4p4IpOht+ScLcdNRmHXGEqoEncuRVxZNGFH5zsAOqbeBLMnhvZx2aLkriSYCST8BzfRIEi2
-	rfWeBJycBOZrooxUmsOuxOn9S5JgU1EMCNHCNzLMEKcUeDpxs5hLyFclgekYiu7bukSWhexLRh7
-	Aus
-X-Received: by 2002:a05:600c:1f82:b0:495:607e:5ee7 with SMTP id 5b1f17b1804b1-495607e635amr51345645e9.17.1784588006289;
-        Mon, 20 Jul 2026 15:53:26 -0700 (PDT)
-Received: from localhost.localdomain (host86-153-201-25.range86-153.btcentralplus.com. [86.153.201.25])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e499c2sm31525849f8f.4.2026.07.20.15.53.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 15:53:25 -0700 (PDT)
-Date: Mon, 20 Jul 2026 23:53:23 +0100
-From: Nnamdi Onyeyiri <nnamdio@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
-	horms@kernel.org, jakub@cloudflare.com, jiayuan.chen@linux.dev, 
-	john.fastabend@gmail.com, kuba@kernel.org, kuniyu@google.com, ncardwell@google.com, 
-	netdev@vger.kernel.org, pabeni@redhat.com, sashiko-reviews@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] bpf, sockmap: handle spurious tcp_msg_wait_data()
- wakeup
-Message-ID: <al6iBv_Yn4YSCmWc@localhost.localdomain>
-References: <20260720171535.67867-1-nnamdio@gmail.com>
- <20260720171535.67867-2-nnamdio@gmail.com>
- <DK3PKY6RN5FI.4DKPSHWNEBHM@etsalapatis.com>
+        bh=uiDaTietAlrtPBtFFJF3jlwUkPb84yeQywUkW/obk08=;
+        b=C+4rG+xz+PAti9w+7kCVcO8bW7Zayi8UhGuR81oMPQrFhP2rOPxZRwWX4sQfIhruct
+         IyPvvMjjba7f4RJMnR5d2Hi6JiLaqP+iYTODAdDVCHTBkbRJpzYIsYyYLAZUuNtWJugO
+         STtZ244mXfoqsvwhkwItmN62xsN9sRGSw997pLRXo+8+aNWpGFmyCalFoxvN+0t5C1b3
+         zqP+8paFhiiyWdOfDaSiOwfCnTNlvjB6RZNEpqY+I/vhkgDscO7khwOWyWHpMd9AgwPn
+         +adgbOnQziVFMriH3bGAKpBLuSX/9YRlrvIaQQPg9FR+RZxeI+KCJB0OlZllBH/d3IBH
+         jyKQ==
+X-Forwarded-Encrypted: i=1; AHgh+Roxa+R6d06Vy1l8bLZ7+QLur9BHI0BVv6DR2tNtYCsL2eipcmD2qYOcVsHZkHYvsSS50xk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuM69D86NJ/IeRMzsp2m6nqQfCPMgkSns/x7vf4mE2tvawWl/R
+	tq4E3q4pxdkjHx4z0hGDGk7QwN4md8OuPCl4PMQAMhi/n5dkKSVtpFmd2Qvox2a3pNw=
+X-Gm-Gg: AR+sD10P/LviaE8B9mUTVyXoIY7+cFZ3i/yNM6AWcFMcZoJmdxlYactBsBvdYqBsktb
+	cZx/wn+7G6Xr/TFCLxxzAUlxjffnWNhdQrMG693T4pFia9tBEneDICosPVJthBSKRFTtet4FMJL
+	R4SxNThuMNmxWLz2foFrHXbRmzuTT4lT3IUxB4PStKqNdfKXqmRJq/ut7WlAz5G2Z8GPx9Acy+t
+	TaAHPY7i7S3OhIDl98QnroH58LS5m5zw6dnr4aQ2Mg4iLDJRIncPgyB3x2E6f3JcbnQcwnBxPGU
+	A4WAWJJaOwVV22QJde+R5xGQ+vVmqEBU/+Ut081OPFir33zz6azET2bzcf2J5a3kz52Xf7gvDcP
+	mmfKJB8Nsr44rwQK1M0AnQusWU9jHZq/L5dEHy2vtH4d7lYVIdJpZFUUg+Kh9OPhP8N4QeYKts3
+	aTTJRfL8m5xLskG8K9lviqmm1jyqChPUmRTMbZUzKLfg==
+X-Received: by 2002:a17:903:3c46:b0:2ca:b48f:3395 with SMTP id d9443c01a7336-2cf349b8496mr167528205ad.34.1784588110210;
+        Mon, 20 Jul 2026 15:55:10 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf3479463bsm62613395ad.80.2026.07.20.15.55.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jul 2026 15:55:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DK3PKY6RN5FI.4DKPSHWNEBHM@etsalapatis.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 20 Jul 2026 18:55:08 -0400
+Message-Id: <DK3ROR4KKIIT.1RCEKYHY63CPT@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Quentin Monnet"
+ <qmo@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <kernel-patches-bot@fb.com>
+Subject: Re: [PATCH bpf-next v10 2/9] bpf: Introduce global percpu data
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260715153254.92010-1-leon.hwang@linux.dev>
+ <20260715153254.92010-3-leon.hwang@linux.dev>
+ <DK0MRMWIAE1T.20UJQKK2YN3VY@etsalapatis.com>
+ <9615cf9b-4a77-4d7a-aec4-8990ea6ff638@linux.dev>
+In-Reply-To: <9615cf9b-4a77-4d7a-aec4-8990ea6ff638@linux.dev>
 
-On Mon, Jul 20, 2026 at 05:16:08PM -0400, Emil Tsalapatis wrote:
-> On Mon Jul 20, 2026 at 1:15 PM EDT, Nnamdi Onyeyiri wrote:
-> > recvfrom()/recv() are documented as only returning EAGAIN for blocking sockets
-> > when they have a receive timeout configured.  However, adding a blocking
-> > ipv4 tcp socket without a receive timeout to a sockmap will cause EAGAIN errors
-> > sporadically.  A socket with a receive timeout may return EAGAIN before the
-> > timeout expires.
-> >
-> > There are 2 code paths affected by this:
-> >
-> >   1. tcp_bpf_recvmsg() - Used when the socket has been added to a sockmap
-> >      that has no verdict program attached.
-> >
-> >   2. tcp_bpf_recvmsg_parser() - Used when the socket has been added to a
-> >      sockmap that has a verdict program.  To reproduce this issue, it is
-> >      enough for the verdict program to do nothing but return SK_PASS.
-> >
-> > In both cases this happens when tcp_msg_wait_data() wakes spuriously
-> > (returning 0).  To fix it, we now loop back to msg_bytes_ready instead
-> > of returning -EAGAIN on spurious wakeup.
-> >
-> > To ensure the looping does not cause sockets with a SO_RCVTIMEO set to
-> > wait excessively long, tcp_msg_wait_data() now takes a pointer to timeo,
-> > allowing sk_wait_event() to update it as appropriate.
-> >
-> > The logic in tcp_bpf_recvmsg_parser() that allow it to handle signals,
-> > socket errors and closuers in its loop was also added to tcp_bpf_recvmsg().
-> >
-> > Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
-> > ---
-> >  net/ipv4/tcp_bpf.c | 69 ++++++++++++++++++++++++++++++++++++++++------
-> >  1 file changed, 60 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> > index cc0bd73f36b6..aa5c5d741599 100644
-> > --- a/net/ipv4/tcp_bpf.c
-> > +++ b/net/ipv4/tcp_bpf.c
-> > @@ -179,7 +179,7 @@ EXPORT_SYMBOL_GPL(tcp_bpf_sendmsg_redir);
-> >  
-> >  #ifdef CONFIG_BPF_SYSCALL
-> >  static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
-> > -			     long timeo)
-> > +			     long *timeo)
-> >  {
-> >  	DEFINE_WAIT_FUNC(wait, woken_wake_function);
-> >  	int ret = 0;
-> > @@ -187,12 +187,12 @@ static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
-> >  	if (sk->sk_shutdown & RCV_SHUTDOWN)
-> >  		return 1;
-> >  
-> > -	if (!timeo)
-> > +	if (!*timeo)
-> >  		return ret;
-> >  
-> >  	add_wait_queue(sk_sleep(sk), &wait);
-> >  	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-> > -	ret = sk_wait_event(sk, &timeo,
-> > +	ret = sk_wait_event(sk, timeo,
-> >  			    !list_empty(&psock->ingress_msg) ||
-> >  			    !skb_queue_empty_lockless(&sk->sk_receive_queue), &wait);
-> >  	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-> > @@ -229,6 +229,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
-> >  	int copied_from_self = 0;
-> >  	int copied = 0;
-> >  	u32 seq;
-> > +	long timeo;
-> >  
-> >  	if (unlikely(flags & MSG_ERRQUEUE))
-> >  		return inet_recv_error(sk, msg, len);
-> > @@ -262,6 +263,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
-> >  		}
-> >  	}
-> >  
-> > +	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-> > +
-> >  msg_bytes_ready:
-> >  	copied = __sk_msg_recvmsg(sk, psock, msg, len, flags, &copied_from_self);
-> >  	/* The typical case for EFAULT is the socket was gracefully
-> > @@ -280,7 +283,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
-> >  	}
-> >  	seq += copied_from_self;
-> >  	if (!copied) {
-> > -		long timeo;
-> >  		int data;
-> >  
-> >  		if (sock_flag(sk, SOCK_DONE))
-> > @@ -299,7 +301,6 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
-> >  			goto out;
-> >  		}
-> >  
-> > -		timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-> >  		if (!timeo) {
-> >  			copied = -EAGAIN;
-> >  			goto out;
-> > @@ -310,13 +311,15 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
-> >  			goto out;
-> >  		}
-> >  
-> > -		data = tcp_msg_wait_data(sk, psock, timeo);
-> > +		data = tcp_msg_wait_data(sk, psock, &timeo);
-> >  		if (data < 0) {
-> >  			copied = data;
-> >  			goto unlock;
-> >  		}
-> >  		if (data && !sk_psock_queue_empty(psock))
-> >  			goto msg_bytes_ready;
-> > +		if (!data && timeo > 0)
-> > +			goto msg_bytes_ready;
-> >  		copied = -EAGAIN;
-> >  	}
-> >  out:
-> > @@ -355,6 +358,7 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
-> >  {
-> >  	struct sk_psock *psock;
-> >  	int copied, ret;
-> > +	long timeo;
-> >  
-> >  	if (unlikely(flags & MSG_ERRQUEUE))
-> >  		return inet_recv_error(sk, msg, len);
-> > @@ -371,14 +375,59 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
-> >  		return tcp_recvmsg(sk, msg, len, flags);
-> >  	}
-> >  	lock_sock(sk);
-> > +
-> > +	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-> > +
-> >  msg_bytes_ready:
-> >  	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
-> >  	if (!copied) {
-> > -		long timeo;
-> >  		int data;
-> >  
-> > -		timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
-> > -		data = tcp_msg_wait_data(sk, psock, timeo);
-> > +		if (sock_flag(sk, SOCK_DONE)) {
-> > +			ret = 0;
-> > +			goto unlock;
-> > +		}
-> > +
-> > +		if (sk->sk_err) {
-> > +			if (!sk_psock_queue_empty(psock))
-> > +				goto msg_bytes_ready;
-> > +			if (!skb_queue_empty(&sk->sk_receive_queue)) {
-> > +				release_sock(sk);
-> > +				sk_psock_put(sk, psock);
-> > +				return tcp_recvmsg(sk, msg, len, flags);
-> > +			}
-> > +			ret = sock_error(sk);
-> > +			goto unlock;
-> > +		}
-> > +
-> > +		if (sk->sk_shutdown & RCV_SHUTDOWN) {
-> > +			if (!sk_psock_queue_empty(psock))
-> > +				goto msg_bytes_ready;
-> > +			if (!skb_queue_empty(&sk->sk_receive_queue)) {
-> > +				release_sock(sk);
-> > +				sk_psock_put(sk, psock);
-> > +				return tcp_recvmsg(sk, msg, len, flags);
-> > +			}
-> > +			ret = 0;
-> > +			goto unlock;
-> 
-> These two error handling routines above look identical. Can you refactor
-> them?
+On Mon Jul 20, 2026 at 12:59 AM EDT, Leon Hwang wrote:
+> On 17/7/26 14:25, Emil Tsalapatis wrote:
+>> On Wed Jul 15, 2026 at 11:32 AM EDT, Leon Hwang wrote:
+>
+> [...]
+>
+>>> =20
+>>> +static int percpu_array_map_direct_value_addr(const struct bpf_map *ma=
+p, u64 *imm, u32 off)
+>>> +{
+>>> +	struct bpf_array *array =3D container_of(map, struct bpf_array, map);
+>>> +
+>>> +	if (map->max_entries !=3D 1)
+>>> +		return -EOPNOTSUPP;
+>>> +	if (off >=3D map->value_size)
+>>> +		return -EINVAL;
+>>> +	if (!bpf_jit_supports_percpu_insn())
+>>> +		return -EOPNOTSUPP;
+>>=20
+>> Nit: This should be first, if the JIT doesn't support the instruction
+>> all else is moot. Same below.
+>
+> Ack.
+>
+>>=20
+>>> +
+>>> +	*imm =3D (u64)(__force unsigned long) array->pptrs[0];
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int percpu_array_map_direct_value_meta(const struct bpf_map *ma=
+p, u64 imm, u32 *off)
+>>> +{
+>>> +	struct bpf_array *array =3D container_of(map, struct bpf_array, map);
+>>> +	u64 base =3D (u64)(__force unsigned long) array->pptrs[0];
+>>> +
+>>> +	if (map->max_entries !=3D 1)
+>>> +		return -EOPNOTSUPP;
+>>> +	if (imm < base || imm >=3D base + array->elem_size)
+>>> +		return -ENOENT;
+>>> +	if (!bpf_jit_supports_percpu_insn())
+>>> +		return -EOPNOTSUPP;
+>>> +
+>>> +	*off =3D imm - base;
+>>> +	return 0;
+>>> +}
+>>> +
+>
+> [...]
+>
+>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>> index e1244a721194..ae442ea217c4 100644
+>>> --- a/kernel/bpf/verifier.c
+>>> +++ b/kernel/bpf/verifier.c
+>>> @@ -5615,6 +5615,8 @@ int bpf_map_direct_read(struct bpf_map *map, int =
+off, int size, u64 *val,
+>>>  	u64 addr;
+>>>  	int err;
+>>> =20
+>>> +	if (map->map_type =3D=3D BPF_MAP_TYPE_INSN_ARRAY || map->map_type =3D=
+=3D BPF_MAP_TYPE_PERCPU_ARRAY)
+>>> +		return -EINVAL;
+>>>  	err =3D map->ops->map_direct_value_addr(map, &addr, off);
+>>>  	if (err)
+>>>  		return err;
+>>> @@ -6174,6 +6176,7 @@ static int check_mem_access(struct bpf_verifier_e=
+nv *env, int insn_idx, struct b
+>>>  			if (tnum_is_const(reg->var_off) &&
+>>>  			    bpf_map_is_rdonly(map) &&
+>>>  			    map->ops->map_direct_value_addr &&
+>>> +			    map->map_type !=3D BPF_MAP_TYPE_PERCPU_ARRAY &&
+>>>  			    map->map_type !=3D BPF_MAP_TYPE_INSN_ARRAY) {
+>>=20
+>> An issue I have with the patch is that it takes the special-casing we
+>> already have for INSN_ARRAY and makes it worse. The instruction arrays
+>> implement direct_value_addr, but it's not actually valid to call
+>> direct_value_addr from a bunch of places where it's called, so we have
+>> to special case check the map type to prevent it. Case in point the
+>> special casing in check_arg_const_str in the thunk below.
+>>=20
+>> Imo we should consider making a different map method different from
+>> direct_value_addr that INSN_ARRAY and PERCPU_ARRAY implement. That way
+>> we remove most of the map type checks in those paths. I'm not exactly
+>> sure how that would look like, but I could take a look at it tomorrow.
+>
+>
+> Seems reasonable to me. I don't have good candidates for the new map
+> method name.
+>
+> Instead of making a new map method, how about factoring out a helper for
+> the 'if (t =3D=3D BPF_READ && value_regno >=3D 0) {}' block? It will simp=
+lify
+> these map_type checks in the helper.
 >
 
-Will do.  My understanding is the same logic is needed to address the
-issue Sashiko raised with the SOCK_DONE check as well.
+[...]
 
-> > +		}
-> > +
-> > +		if (sk->sk_state == TCP_CLOSE) {
-> > +			ret = -ENOTCONN;
-> > +			goto unlock;
-> > +		}
-> > +
-> > +		if (!timeo) {
-> > +			ret = -EAGAIN;
-> > +			goto unlock;
-> > +		}
-> > +
-> 
-> Since this handling (which Sashiko flags by the way, correctly AFAICT) 
-> are taken from tcp_bpf_recvmsg, there is obvious overlap between the two
-> functions. Please factor those out so that they share the logic between
-> them.
-> 
-> pw-bot: cr
-> 
+>>=20
+>>>  				int map_off =3D off + reg->var_off.value;
+>>>  				u64 val =3D 0;
+>>> @@ -8176,6 +8179,12 @@ static int check_arg_const_str(struct bpf_verifi=
+er_env *env,
+>>>  		return -EACCES;
+>>>  	}
+>>> =20
+>>> +	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY) {
+>>> +		verbose(env, "%s points to percpu_array map which cannot be used as =
+const string\n",
+>>> +			reg_arg_name(env, argno));
+>>> +		return -EACCES;
+>>> +	}
+>>> +
+>>>  	if (!bpf_map_is_rdonly(map)) {
+>>>  		verbose(env, "%s does not point to a readonly map'\n", reg_arg_name(=
+env, argno));
+>>>  		return -EACCES;
+>>> @@ -18279,6 +18288,12 @@ static int check_and_resolve_insns(struct bpf_=
+verifier_env *env)
+>>>  					return -EINVAL;
+>>>  				}
+>>> =20
+>>> +				if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY &&
+>>> +				    !env->prog->jit_requested) {
+>>> +					verbose(env, "JIT is required to use global percpu data\n");
+>>> +					return -EOPNOTSUPP;
+>>> +				}
+>>> +
+>>=20
+>> Another place where we add map-specific checks where there are none.
+>
+>
+> I think this check is unnecessary, because 'prog->jit_required =3D true'
+> has been set for global percpu data.
+>
+> Will drop this if.
 
-Sashiko highlighted the "if (!timeo)" and signal_pending early returns
-when MSG_DONTWAIT is set, but I think I'm missing part of the picture.
-By the time we reach these branches, haven't we already checked for data
-in sk_receive_queue (line 372, after the patch is applied to 7.2-rc2)
-[copied below for ease of viewing]:
+I think you're right, in which case we can drop it. In turn this means
+wrapping the check above in a helper adds enough structure to the logic.
+Adding the new method would still work valid but it'd be more borderline
+in terms of simplifying the code because we''ll have abstracted most of
+the type checks away.
 
-    if (!skb_queue_empty(&sk->sk_receive_queue) &&
-        sk_psock_queue_empty(psock)) {
-        sk_psock_put(sk, psock);
-        return tcp_recvmsg(sk, msg, len, flags);
-    }
+>
+> Thanks,
+> Leon
+>
+>>=20
+>>>  				err =3D map->ops->map_direct_value_addr(map, &addr, off);
+>>>  				if (err) {
+>>>  					verbose(env, "invalid access to map value pointer, value_size=3D%=
+u off=3D%u\n",
+>>=20
 
-and in the psock (line 382) [again copied below for viewing]:
-
-    copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
-
-> > +		if (signal_pending(current)) {
-> > +			ret = sock_intr_errno(timeo);
-> > +			goto unlock;
-> > +		}
-> > +
-> > +		data = tcp_msg_wait_data(sk, psock, &timeo);
-> >  		if (data < 0) {
-> >  			ret = data;
-> >  			goto unlock;
-> > @@ -390,6 +439,8 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
-> >  			sk_psock_put(sk, psock);
-> >  			return tcp_recvmsg(sk, msg, len, flags);
-> >  		}
-> > +		if (!data && timeo > 0)
-> > +			goto msg_bytes_ready;
-> >  		copied = -EAGAIN;
-> >  	}
-> >  	ret = copied;
-> 
