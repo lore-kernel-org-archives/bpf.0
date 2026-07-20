@@ -1,78 +1,109 @@
-Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
+Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808332BE7BE;
-	Mon, 20 Jul 2026 05:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBC039AD25;
+	Mon, 20 Jul 2026 05:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784524402; cv=none; b=G89bRApjp7gyf6abINKTVelw5gTf70sopZKwP18kUkMjHpqW2GPIAVYW3Z4csVVHd7Izzr63Qjti2iaY6R8MmibRnpG3ZDayVugR6A++sIILvvUKdlC2d3wJCfQcc8yIolOX2i2q4mZhFi/C99NYOt7oFki01gmkuPTGsDhdaw4=
+	t=1784524444; cv=none; b=IfBEHpdDbkrFznTN2DzRWMGzdAr/PjtJSIwUdNOPoItc8dSBfrA8QucoyePI43oXs4azsCsbiyr/rffhxDhR9e1XMX0nbBt/3G9An4fwVtJIdOPUpH0dc5xN0z8A8keMyARQXTh+plI8jXn3/oD+Z9CfGfEejnlv18PO1G8wudM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784524402; c=relaxed/simple;
-	bh=FooyImD8cg8TX7dVexySo1iTXXs2Jxc7D/885lCjPzo=;
+	s=arc-20240116; t=1784524444; c=relaxed/simple;
+	bh=M2vTagZshWYVJzLGMY94jqL1ZAzAVp6NZkmRbz09P1I=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E5Nbzcc6nbtSfOk4tjg8mBpFaqe59dSQTZHPIvsxIRF3kDad5/Ug04PjAt9VONrmBfnnlWRbHOcCNAM4KT1SUQKIKgzZZfUiL9B9EKKjvSPRivHQsigrpyvRvlB+1XZiCWI9eT/SHEVrdD3oLWm1hLm0ELfXziYQDY3J87hZsKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=l6KL81GY; arc=none smtp.client-ip=203.205.221.240
+	 MIME-Version; b=bGqgG1T7ncpeZ0MaIUsUQHEEUvNwxHZosuyh73RkxDvdBeaUu+z27Buo3puA1ZwFA/YH3Zb6/RAuAQ3ZLSNHUADtnuys5v3pAlM+mjBWelbn5AktmPEhzR86C8K8m6evdwO4H/ZJdy+e/umsOE5Ch5qyIh7qVaZWkAB/CP1qlvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=iwxqpmur; arc=none smtp.client-ip=203.205.221.231
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="l6KL81GY"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="iwxqpmur"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1784524390;
-	bh=FooyImD8cg8TX7dVexySo1iTXXs2Jxc7D/885lCjPzo=;
+	s=s201512; t=1784524432;
+	bh=K/Oq076yhWFpYUBv4tcHa4FJr6rjkTqmaL4FJqOLNe0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=l6KL81GYD6LWX9VNGNggpr5BBsLr7uXz4fBQqqB1JPDs3kmiOArR2B+XCzVvddmLv
-	 KwGp1kyO9RXiM9crcIuPqlGhyKTNB+Zy/g7Lkzfx0NxcxN8tLU74QA/FlnGptD6Ck6
-	 l9mZLnpi/B5kysJovpqdiBPJjYMnTIXh3LBbD9lk=
+	b=iwxqpmur86ZwyrKDslxBVlGmkanDkw8E3A+0Dm3ae5Aaf0Fs4kby/vPey0yG2gDaI
+	 tD5yiDoUp4jganvu08RiXD7iBHVIBWrh1LNIfbk9euAE1re864PS8QOcOwAX1VSjYd
+	 U70yjQqVbl0fMsuDiO5MuB5Xw474ebVjVDPgqlfo=
 Received: from localhost.localdomain ([180.153.160.8])
-	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
-	id 34724807; Mon, 20 Jul 2026 13:13:07 +0800
-X-QQ-mid: xmsmtpt1784524387t2wd21vjk
-Message-ID: <tencent_B8C82F954152FB6A22D315A324A2A8BA9208@qq.com>
-X-QQ-XMAILINFO: OOO9dHjlsLs7oC7HEagNkQ39WJLvoetd5A4U1A7Xf6oFQBnih9TWjmbIYAW99+
-	 RWKt91PvpaOo+ctqB07mevIx9Oxhuj6lRGdbx6D5xudu2ppHX/GEIfUikjWhAP5spIuPMgnGaIqG
-	 3LxOXEdORUyRX4ovuhlm8X2IbfSFlRWGGvSQ/1eQzIIMDd9eRDE23RpFL5NXSNoramGAJPyvWoEi
-	 ihglbD59S0DReagCqslpD1+zHkRkhCSlvzvKvhmXfCiRX0YYTS0+ivEXaGn9XcjGxPV13T73fFm7
-	 PgF99iY/kb6zVow456nij8g9s2CXlZle7VKSawtdnqABJVbOTCb6yjLJn1vxswVz2B8tJJNS82Ht
-	 7eOavqDodcsukB6AHb+ahzDnk+o4Bd3Uk7MHmXMgJR2PDCvN2Zi8lgucFDzifZ03tf37B8KsYv+m
-	 1kCfiE6aSlDypHZoiqcx0subLsc2QqQlKUt/ClRYLRzzdno9F2U82pfLW2K5ZgmAXR8UQccGpbUc
-	 4st35vSLSqD+piVT7QcLdMBkSDdVoAQftPUkqWa9sqk9eTy8ewEdosbCETsSWMRhJbmGuvayEEnW
-	 Dzm0KcZlxk2NIrEvJGAizUZtHLz5rMtCy/As8aQZ1h430t5KPk9hte0rmqaQut1gT2nX6l0Ypkg2
-	 Nqdffh4EaMq8sV3MiKWfKbgDt/WbVT/c4lgTLN/uxwKppmd9Cqylq4v8Wi3hdLTyx76Jw6LI6FUR
-	 YGnWxNMqLgPRAOhaqAxKuowL083a+BQV3OQ83Me/0F3ngJcI3IuKWmIjkihj16u1vF8Vmx49sef5
-	 /AAWSHdG03GwkbEJVCXn23vKyubW+dO8m7gp+RxZZyKps8gk0iZKa5cc1lTrVOAkLL3SxO6TgJKN
-	 y8FE+VhnVbS8ywcnFGWRpppk/heIC2BWuQP9R89SckNb4aTc+Ci+ioUvEFhzkovOhfjd/hGje3CH
-	 HzueuhtgMMVdm6cRJjuob8pA1r3jvonHen3uc2L22rSxOGK9hKFtSMLJY4BPffondqBUcWuTzqRB
-	 cwHazOQAI0gyBfOZKzX8CRzYVH5Vh4EEazwr5xGg==
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
+	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
+	id 3728BC83; Mon, 20 Jul 2026 13:13:50 +0800
+X-QQ-mid: xmsmtpt1784524430tlj2udc1m
+Message-ID: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
+X-QQ-XMAILINFO: OTAuIxCfey6wvbD1/5/qotpTo0oGJyjVEshEJyH833jbAPVhJToBdrDt2sz1lz
+	 /uKDnkJAeqRKJvLM0RfcEuZdn9S2xfWV1gF8G84H6puZqiBfjtjh7lXuUFdDG5wl9ySWdrgz/5km
+	 p9TqAmpJlo9k1ROP3a5TVa4oP9DhjYpjKx5t7+QOSWuWmm6smD1lD+e5awhH3pdD5awUjKWPk077
+	 m8Wag6aSoTqq6+XXYMLQAGcs5+5YTMT5U8mHOWkQ3v9TZetalMgOjkp1bBjjkrwKVoV9rmuJgpUq
+	 DgApnD1BeP5AHzlB/5OQsxUUkR4K4HYwuDhXO/w6uK+KQaLeUo+k/rIJkDKZAyQZXO8PtfGWh1nI
+	 tNIRbK22IQ93z22ggwTG2WttI8N3sZJX6jzZ7YicCjv5X3tGPou6MwcGmcRdb26Id92PfUfS8pjy
+	 ZTL1GIK1M/DpvvzO8PL+nD51foRsfl2ONh8JPoHceITLzrOHlqS5MvaSRebJf+ilsPtxpTCsb5U1
+	 xqgrnxocD1Q+rjkKhf5VyRvEjrfrDxLD+5V6jDoZBYQAmOt9kIM29fO8xyn0UZ6DiE+KTsueAfKF
+	 IBKgo6cdBLyHvHvsz+Q2r1Y43eUKbsmhkssn+OOHmLfrcmcjqSaxF1qXtE7+Yu95j6mOIRoY8Zqm
+	 Q6Xp8ufrfJpFCUiwLaL7e7/0USf1xZJhR6MxNnd7fnmJ6F6EeuuO7TZY0sX9d5L0sQUlIJJbeDA/
+	 uQIGm6Pt20l6zIYDqIjDHrNjsQ9Ra9fvDT6myZbOfy5BGUTY7KaSSjAWhKI6guk5cKKCwQ//Nwlo
+	 AlX51FsbZnj+qYaAGUAn6PyAt3pZUsSon+B/Nsc9SZ4L/l59LhfQURTXSnIkpOwGSLtsTuuozsCz
+	 iZ2sMR7upYa5Vovn55GV2OGYnPmIVyhsI5y/NXokcQRhNF9zT2RIdszqCVov/nGKY6EzthhSOA8G
+	 y2d9Jw7Bjo6yycF+WBXes6dj+d1hrZmHlAU/Ot+XS8cwWaSBpc33Tsg9oUMFzooTgwqe0p3bgCBB
+	 bK2N51c/P5G93xeyKBoydO51PT66/NCcfIn+i1IBOqvEia2URzpoVbVJwOjqL+PUDGEplEk5Occx
+	 7m1FFCjoTIOahcCOw=
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
 From: Jianlin Shi <shijianlin11@foxmail.com>
-To: pulehui@huawei.com
-Cc: bpf@vger.kernel.org,
-	ast@kernel.org,
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
 	daniel@iogearbox.net,
 	andrii@kernel.org,
 	memxor@gmail.com,
+	pulehui@huawei.com,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf] bpf: roll back stream capacity when allocation fails
-Date: Mon, 20 Jul 2026 13:13:06 +0800
-X-OQ-MSGID: <reply-pulehui-bpf-stream-capacity@local>
+Subject: [PATCH bpf-next v2] bpf: roll back stream capacity when allocation fails
+Date: Mon, 20 Jul 2026 13:13:50 +0800
+X-OQ-MSGID: <20260720051350.556496-1-shijianlin11@foxmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <734259ce-a3e6-495e-9c88-24ab23e781bd@huawei.com>
-References: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com> <734259ce-a3e6-495e-9c88-24ab23e781bd@huawei.com>
+In-Reply-To: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
+References: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 2026/7/20 11:40, Pu Lehui wrote:
-> looks good to me, but it might be better to target bpf-next, as this
-> isn't a critical issue.
+bpf_stream_push_str() accounts the string length before allocating a
+stream element. If the allocation fails, the length remains charged even
+though no element is queued and therefore cannot be released by a reader.
+Repeated failures can exhaust the stream capacity permanently until the
+BPF program is freed.
 
-Thanks for the review. Will resend as v2 targeting bpf-next.
+Roll back the capacity charge when creating the stream element fails.
 
-Thanks,
-Jianlin
+Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
+Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
+---
+v2:
+- Retarget to bpf-next as suggested by Pu Lehui.
+
+ kernel/bpf/stream.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+index be9ce98e9..4b8a74b91 100644
+--- a/kernel/bpf/stream.c
++++ b/kernel/bpf/stream.c
+@@ -79,7 +79,14 @@ static int bpf_stream_push_str(struct bpf_stream *stream, const char *str, int l
+ {
+ 	int ret = bpf_stream_consume_capacity(stream, len);
+ 
+-	return ret ?: __bpf_stream_push_str(&stream->log, str, len);
++	if (ret)
++		return ret;
++
++	ret = __bpf_stream_push_str(&stream->log, str, len);
++	if (ret)
++		atomic_sub(len, &stream->capacity);
++
++	return ret;
+ }
+ 
+ static struct bpf_stream *bpf_stream_get(enum bpf_stream_id stream_id, struct bpf_prog_aux *aux)
+-- 
+2.43.0
 
