@@ -1,64 +1,64 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7FA3D6664
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 21:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3502D739B
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 22:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784584034; cv=none; b=RO7OP4k+mFGo10POM/wX4OO5La0rNl0LxYEBMBrJg83i5TTz0e7rqY5Ah08ezBCoycpB4wSv7cfzBekgXft90mw6EF43Td78Buip7BmkJGFHrbDY7lnlQgxhelpeoPyGHpKvGCYTkwE7GB+62vdIQ28MPJn6m1srFF/nyYxTkzo=
+	t=1784584821; cv=none; b=LjWukH47BWPW9gs/wCCNRMjknajwU5aOOd7w/i2fH3GxS/AB0Uz1aAkZ3JDJqY8q3OC6abzieXPoAaaHZOq6ZK4J4nJKNF9nZ6JGHccAAhuc9qS2molDzCzkLH9Og0Dd+xri7dELVWUhjXBu9QroIZQ7Ymaq6w7FOCqmHdtHcQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784584034; c=relaxed/simple;
-	bh=7gQY7AlbHewQtnIWDwf6xeKE5zm3O+CvGwbpF1ZE6m0=;
+	s=arc-20240116; t=1784584821; c=relaxed/simple;
+	bh=M3AOKBC27snVGDOXJ3vT/8dlkvcBqonj+Ig/uPKhH9w=;
 	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=NEEAsb7SNAg1k/DP9WsrZ0nuDNwfORJFlsPqMi2ygokSSxjIH09fHSiwmd1/cJZJ9TnuD/x3YRJmjEd8/Vww5c5hCBENQId0c761XMqgQTs07IvvTsPKM6E6knS103sUM4tDse2LoHSdpnNKKngdBQBuA3TA5Q8yu+YE7HJGOOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=VUYuMoJV; arc=none smtp.client-ip=209.85.210.175
+	 References:In-Reply-To; b=RigObGRfMdTiUdotYORi0BbPKRM00TtZZMOEnErGbaZgbzYeuVUhQhss+4eTjaOQtmIJkPj87PSarVcNM97bFxT7fD5uZ21MxEwT1sU4UwQdQOdRhpQDf6pes2EDATGFZeFB/FqsOxA3xTLEiH0pUBdEeEm8f4T8FQlQ87k69rM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=FmFqJDNX; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="VUYuMoJV"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8484f229529so4490815b3a.2
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 14:47:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="FmFqJDNX"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-845b6d9bf39so4169728b3a.1
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 15:00:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784584031; x=1785188831; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784584820; x=1785189620; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=SxhXZCE8F/8NLGo9T+1i7MwIlRVltbKl0w04IWFpO+Q=;
-        b=VUYuMoJVcax288cUrIzGzE6cqIMGJyYkCaNuyVCVpUVJ74x5TgyfI+y1AXDIDvKuo1
-         fT1hrbmp17tE/yAcT9Kd6mRTVqp5j8HwnJh5Y9eahW6bycElWxFmYXjnLgpg4i1BpCq3
-         kG6e8pEyS0uSNveUSq0Ip3dTIAzb/5UHf7uaN/S8vEQXl2B9ztq/kcDA5BEJ16BakQwc
-         J9UrfU/XCl26i0NLHnJBtpONs7G7uIe0yzFhR5E7FUhlCDY+hOWdGan6yIrCBLABd/6P
-         sejUSKWjEhLqT0vhiW4JhOgIO74rw3ZVa16w0vBRlhtA0PC/Xw7SAAlCgpKTnGRj84m/
-         ZXAg==
+        bh=3lAbJ4IhV88GF9seQafPlXiSyADaZ4lU5bSkNSNxT1g=;
+        b=FmFqJDNXS7pW9YZrYaiV9rc7IVO4dmKyFCJatKUmNKeZzLvVdbFCuxCTdhxXhdpbak
+         FpCNLVzfqB8N6SRvfKu6XwUjbu16h+jn2PdjMP967jlaTk2MHMcExEvi0EF49Mnlsz8C
+         U/7NxrlQ72sZcn40ma0gvJQ/HwZw0PkYOGhjp2eanoOHC8y6ngQT2CfIZUAcbtFnpGDL
+         PVUI3CnqmLZccSBRjbK37JQGU2BUyRpaAvw8XNo51r1Tg281lkrSdVhtBeo9RE9lXqIP
+         A0gIs4blIlVgtD5qFVmBYXmibtis6dXw26RTs5MFTOOrTNxcx3YWnDPyFqLwLJJgdbl0
+         Ds7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784584031; x=1785188831;
+        d=1e100.net; s=20251104; t=1784584820; x=1785189620;
         h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=SxhXZCE8F/8NLGo9T+1i7MwIlRVltbKl0w04IWFpO+Q=;
-        b=iPfnPJvhWjyG3PlTPp9aXgo9qkEV3fq2/euot1VT7RBkyEnbM9CGeQLCG1hXhZN299
-         6iWJJuE4HR6DimOSMDEggl2FC+PCxtW0D88QHG3j1SaJjg63E+r+okzyd3mOi9kxmyh+
-         cF7K1CBIl4vdIlFrjrM6ju+A5p/Yvy/f6ZwvXDit1pX15+wi2SePWvFSYCxOdDLrI1SG
-         qRw7/oejhiruQHd9BBMt+ry+5+gYcd08mY5NUNNx+TZK3ZvJAPqP7bwtG9LvmNYpeAc8
-         XTumWw+a7M6LYs2Ochi1Fek+SVsTnr1g3x7yBGmjNFe6dYygQ114teGYqbbuhIfYDFbA
-         qMsw==
-X-Gm-Message-State: AOJu0Yys2ir/7Zr6vklKgLsZ6TJ15/mRS5+6uwdn3NEHv8ccocMxlW4i
-	oM87k19LkckihrxfCky0NgVAzRBiqn1lR5GKour4Tk0G8IJ83OeSHhgoYwRr+hekujKPXosGnDX
-	4u0Wo7Jw=
-X-Gm-Gg: AfdE7clu3CJqJQOYztuDflW0OFPSqk/vmC+8fywr6uzcbBKaK9XFoGtdYfIQMqgi7mg
-	zx99BrKNFxVYEUXt/iU5/d9R2hctJEti/SjVB3ghvUsdfStDSjY7NHaQ79DgymKffTpgqYbwr36
-	EQPyPyyQBCqARAh4WXmc6knT7dQ/sIznT7jxM+n6wyLBjpfsACLBO8g2C97YMhkmyCBQENJvKZS
-	sqnrQJkyyeqQWVLFPqfczkm3pIdZoTE7MWtjiGVY8T4L4lG2XCUbDiXgtYYhhmUlRExmy2tLTSh
-	q72HG50olqDLAK8kl6qdcNpsn4iTKG+oxd8VIqXMNMlvwTBplbx6HI6hIZYdU9isVYr4iYb9hoX
-	To6apX2zPn23lnRbp/HLkInWovVxtddJMXfbI6ptsR7tC4Wnge0FN5NJkGSemgIidgVQITdZcZG
-	mqBXeONtfAd3yq/9IUt+XJz/zVFyvO/yk=
-X-Received: by 2002:a05:6a00:4ace:b0:848:48e7:437b with SMTP id d2e1a72fcca58-84c294c5fe9mr14998819b3a.69.1784584030880;
-        Mon, 20 Jul 2026 14:47:10 -0700 (PDT)
+        bh=3lAbJ4IhV88GF9seQafPlXiSyADaZ4lU5bSkNSNxT1g=;
+        b=eIa6agwv7gegmhEyrYgcpgR0UNg6aSWU8Bjpa2HA04N+NQ8pSTUbpy5Sk1IqcGgJ5D
+         Ov/rD6QoANKXYp0cPR4MbZR/sNcQceb88LbOG1yflufgodUy/ipEN9mO5E6QicH/DQrs
+         ztb3l989e8RopwUVBPyug2tkVhHyadS3LTWPi/3d2gKMFxvZMTtwKZHtdgvcxFclAuEp
+         Xa4dfZu4jOaeeJwF9Ofro+dyuBaIf3xgK6+t8AdT7fhtTGJFFNxQ3iOaK5OwYYql9ZVb
+         XXhmBOnxhr0Ya+6PjaOzrLSYCncISKO91rP8NhcbNzax/2Xe4OVKBj4UIh8jjG5tinQ+
+         bqrA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr/7QH60+bVmcRyumr8x4K3Sj6T3CcAfen1rdUub0KFwnnkmDpnDn///Rx2rslfvW3C7LQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzg7o2gucUbMwKyLocWhpmFSJfymAiIGuUkXSUcsK6psrv8uPBs
+	/iOTZsPumMZ/RNQV7ZyhuewiGEjBSWfKfFpvJ5pTDV2NLX7USxWv20iLb5tTD6zI/Qs=
+X-Gm-Gg: AfdE7cl+JXd0UFbyga229UgMvqjNOzOasHp3icWlMxWUVDWWElVaJjoqT45Qa2n1vPE
+	Al5EbkCyR6uaUP3i7+BTF9rMaaAkVJbmd4xQDcJIXk4lDvjrlG5P9LXgY0kpVRgzOiV1V2ujy4X
+	DqHN+yzAs74IZHFRGpZY53WI3hzcrYIOn9sK1oFlh9x7CNStAY7+c/448NyoPvVzpk1GgAjxXqO
+	XSR3K5UcAL4P7jU17s91w8Ru5L2q59Yt0dAF7qhOynuU/eBCh+c0LcnIAupYI5GsjnjtcIzNGt/
+	5OPoqMT1H/hlZmueaDJ0CJJ4+8TfpNLGtp0JcY+xK25lCebnjPiIR7Ux86pi2ZePMu2hwh2OIIW
+	4dsqh8QGe8s7yXWJueCAXPmfNinAfTCBq3QFLQ0Ej8pX1nmLAa5NfBsUXkxZ0O93hjmju1zn+M0
+	itfpuGmrnFybgnE3Ufltxfc14C5l42WyI=
+X-Received: by 2002:a05:6a00:391d:b0:848:2ef5:50df with SMTP id d2e1a72fcca58-84c28c97cf2mr14325314b3a.39.1784584819358;
+        Mon, 20 Jul 2026 15:00:19 -0700 (PDT)
 Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2adcaa0bsm6322022b3a.20.2026.07.20.14.47.10
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2af30d0dsm6315458b3a.32.2026.07.20.15.00.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jul 2026 14:47:10 -0700 (PDT)
+        Mon, 20 Jul 2026 15:00:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,197 +67,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Jul 2026 17:47:09 -0400
-Message-Id: <DK3Q8PFVGNAV.GZNZC89346A9@etsalapatis.com>
+Date: Mon, 20 Jul 2026 18:00:17 -0400
+Message-Id: <DK3QIRHTWRC9.3DGK77TTOSW2H@etsalapatis.com>
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Nnamdi Onyeyiri" <nnamdio@gmail.com>
-Cc: <bpf@vger.kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
- <horms@kernel.org>, <jakub@cloudflare.com>, <jiayuan.chen@linux.dev>,
- <john.fastabend@gmail.com>, <kuba@kernel.org>, <kuniyu@google.com>,
- <ncardwell@google.com>, <netdev@vger.kernel.org>, <pabeni@redhat.com>,
- <sashiko-reviews@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 2/2] selftests/bpf: add sockmap recvfrom EAGAIN
- selftest
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, <kkd@meta.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Allow bpf_res_spin_lock() in all
+ contexts
 X-Mailer: aerc 0.20.1
-References: <20260720171535.67867-1-nnamdio@gmail.com>
- <20260720171535.67867-3-nnamdio@gmail.com>
-In-Reply-To: <20260720171535.67867-3-nnamdio@gmail.com>
+References: <20260719113551.1294284-1-memxor@gmail.com>
+ <20260719113551.1294284-2-memxor@gmail.com>
+In-Reply-To: <20260719113551.1294284-2-memxor@gmail.com>
 
-On Mon Jul 20, 2026 at 1:15 PM EDT, Nnamdi Onyeyiri wrote:
-> These selftests exercise the tcp_bpf_recvmsg() and tcp_bpf_recvmsg_parser=
-()
-> functions, to ensure that they are properly handling spurious wakeups in
-> tcp_msg_wait_data().
+On Sun Jul 19, 2026 at 7:35 AM EDT, Kumar Kartikeya Dwivedi wrote:
+> There is no particular reason to keep bpf_res_spin_lock() disabled in
+> tracing programs, since it is safe against reentrancy and deadlocks.
+> Remove the restriction for tracing programs covered by the predicate
+> is_tracing_prog_type().
 >
-> The expected behaviour is that recvfrom() does not return an EAGAIN
-> error.  If the spurious wakeups are incorrectly handled, this assertion
-> will fail.
+> This is a prerequisite before the definition of is_tracing_prog_type()
+> is updated to include raw_tp, fentry, fexit, and fmod_ret. Existing
+> tracing programs will be updated to use bpf_res_spin_lock() instead when
+> it is available.
 >
-> Signed-off-by: Nnamdi Onyeyiri <nnamdio@gmail.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-The test looks fine, even if slightly flaky. Running with only patch 2/2
-still passes sometimes on my box. Can we handle this somehow, e.g., do
-more attempts?
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-There's also a couple magic numbers in the tests that may need some
-explanation (noted below).
+I assume we do not want to enable this for socket filter to avoid
+additional testing, since there is currently no clear use case for
+it?
 
 > ---
->  .../selftests/bpf/prog_tests/sockmap_basic.c  | 124 ++++++++++++++++++
->  1 file changed, 124 insertions(+)
+>  kernel/bpf/verifier.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/too=
-ls/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> index cb3229711f93..d18faf46fac0 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> @@ -1373,6 +1373,126 @@ static void test_sockmap_multi_channels(int sotyp=
-e)
->  	test_sockmap_pass_prog__destroy(skel);
->  }
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 4446f0bde88b..bb6e16668d0d 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -17815,7 +17815,9 @@ static int check_map_prog_compatibility(struct bp=
+f_verifier_env *env,
+>  			verbose(env, "socket filter progs cannot use bpf_spin_lock yet\n");
+>  			return -EINVAL;
+>  		}
+> +	}
 > =20
-> +static void *test_sockmap_recvfrom_eagain_thread(void *arg)
-> +{
-> +	int fd =3D *(int *)arg;
-> +	char buf[1024];
-> +	void *result =3D NULL;
-> +
-> +	while (true) {
-> +		ssize_t len =3D recvfrom(fd, buf, sizeof(buf), 0, NULL, NULL);
-> +
-> +		if (len =3D=3D -1) {
-> +			if (errno =3D=3D EINTR)
-> +				continue;
-> +			result =3D (void *)1;
-> +			break;
-> +		}
-> +
-> +		if (!len || buf[len - 1] =3D=3D 'e')
-> +			break;
-> +	}
-> +
-> +	send(fd, "test", 4, MSG_NOSIGNAL);
-> +
-> +	close(fd);
-> +
-> +	return result;
-> +}
-> +
-> +static void test_sockmap_recvfrom_eagain(bool with_verdict)
-> +{
-> +	struct test_sockmap_pass_prog *skel =3D NULL;
-> +	struct bpf_program *prog =3D NULL;
-> +	size_t buflen =3D 1024 * 1024 * 25;
-
-Here
-
-> +	char *buf =3D NULL;
-> +	int map, err;
-> +
-> +	skel =3D test_sockmap_pass_prog__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +		return;
-> +
-> +	map =3D bpf_map__fd(skel->maps.sock_map_msg);
-> +
-> +	if (with_verdict) {
-> +		prog =3D skel->progs.prog_skb_verdict;
-> +		err =3D bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_=
-VERDICT, 0);
-> +		if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
-> +			goto cleanup;
-> +	}
-> +
-> +	buf =3D malloc(buflen);
-> +	if (!ASSERT_OK_PTR(buf, "malloc buf"))
-> +		goto cleanup;
-> +	memset(buf, 0, buflen);
-> +	buf[buflen - 1] =3D 'e';
-> +
-> +	for (int i =3D 0; i < 200; ++i) {
-
-Also here. Why 200 iterations specifically? Can we at least name the
-defaults to make it clearer that we've chosen those numbers because
-that's how we trigger the bug?
-
-> +		ssize_t sent;
-> +		char ignored[128];
-> +		pthread_t thread;
-> +		bool thread_created =3D false;
-> +		size_t rem =3D buflen;
-> +		int c =3D -1, p =3D -1, zero =3D 0;
-> +		bool success =3D false;
-> +
-> +		err =3D create_pair(AF_INET, SOCK_STREAM, &c, &p);
-> +		if (!ASSERT_OK(err, "create_pair"))
-> +			goto end_attempt;
-> +
-> +		err =3D pthread_create(&thread, NULL, &test_sockmap_recvfrom_eagain_th=
-read, &p);
-> +		if (!ASSERT_OK(err, "pthread_create"))
-> +			goto end_attempt;
-> +		thread_created =3D true;
-> +
-> +		err =3D bpf_map_update_elem(map, &zero, &c, BPF_ANY);
-> +		if (!ASSERT_OK(err, "bpf_map_update_elem"))
-> +			goto end_attempt;
-> +
-> +		while (rem) {
-> +			sent =3D xsend(c, buf + (buflen - rem), rem, 0);
-> +			if (sent =3D=3D -1)
-> +				goto end_attempt;
-> +			rem -=3D sent;
-> +		}
-> +
-> +		/* we cannot use recv_timeout(), otherwise EAGAIN would be an expected=
- errno. */
-> +		err =3D recvfrom(c, ignored, sizeof(ignored), 0, NULL, NULL);
-> +
-> +		/*
-> +		 * we are checking for the invalid return of EAGAIN, any other return =
-is considered
-> +		 * successful for the purposes of this test.
-> +		 */
-> +		if (err < 0 && !ASSERT_NEQ(errno, EAGAIN, "recvfrom eagain"))
-> +			goto end_attempt;
-> +
-> +		success =3D true;
-> +
-> +end_attempt:
-> +		if (c >=3D 0)
-> +			close(c);
-> +
-> +		if (thread_created) {
-> +			void *retval =3D NULL;
-> +
-> +			pthread_join(thread, &retval);
-> +			if (!ASSERT_NULL(retval, "retval"))
-> +				success =3D false;
-> +		}
-> +
-> +		if (!thread_created && p >=3D 0)
-> +			close(p);
-> +		if (!success)
-> +			break;
-> +	}
-> +
-> +cleanup:
-> +	if (buf)
-> +		free(buf);
-> +
-> +	test_sockmap_pass_prog__destroy(skel);
-> +}
-> +
->  void test_sockmap_basic(void)
->  {
->  	if (test__start_subtest("sockmap create_update_free"))
-> @@ -1451,4 +1571,8 @@ void test_sockmap_basic(void)
->  		test_sockmap_multi_channels(SOCK_STREAM);
->  	if (test__start_subtest("sockmap udp multi channels"))
->  		test_sockmap_multi_channels(SOCK_DGRAM);
-> +	if (test__start_subtest("sockmap recvfrom eagain"))
-> +		test_sockmap_recvfrom_eagain(false);
-> +	if (test__start_subtest("sockmap recvfrom eagain with verdict"))
-> +		test_sockmap_recvfrom_eagain(true);
->  }
+> +	if (btf_record_has_field(map->record, BPF_SPIN_LOCK)) {
+>  		if (is_tracing_prog_type(prog_type)) {
+>  			verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
+>  			return -EINVAL;
 
