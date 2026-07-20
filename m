@@ -1,74 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E9C394E91;
-	Mon, 20 Jul 2026 19:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FB02DCF55
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 19:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784574037; cv=none; b=Sq6dUMcr+PAkDE9eUh7nJf8jFSBDkW2j4EFdM/Dzz3c2gBx9ytKuNox2ZRUOjsnHabW/zBSod6QsneC3/Ije8uBWbknE2dHakUWNU9BIMu76YO9IKjAurFOPrZrXI1G4/5uecI2tx/kB3rtHou4EA+mpt7U6HqAz5vTw28kFFpY=
+	t=1784574642; cv=none; b=CDE4jINbiIuJd5qZDc6J3dUxTyRII7xhh/DrDlmAEP1uemm0/IjgbfYjPzZsumZNrmil1R0j1WSMIUjuxx71LXCYvIYrZN8JbiQJI1yi9+lBSEgXHwiOM8eNbqH1ZcP34qeEelKm+30f8cPWEMGdtcJi+DGSLnNcrYNOvxiJIMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784574037; c=relaxed/simple;
-	bh=XYp2/FqtUlPVihTnmgip3HcpVOrwlAg33e2I9/h150Y=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=IF26QewYPBg/LNcVYsktgfrfC455cukyrk3KerPq//Kbm8TtrudBzy4tT2Yg0x8ljfMYKyrQ0WpZvEIKcBK+P9bztmp/28EftsEBEZ/SqeXyPx9JY4MloZhM1dQDx841kbCj/16b1oLuuKns4oPp4bKHjDV9Wkl988uM4ud9jj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DT8xx8jg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784574642; c=relaxed/simple;
+	bh=4CJV/mKVrM6+VKdJl8TXhstkhJwnkk7OUAfzUtx9qm8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=BtvNlcsMz3B/0CtdNw6X12ugqCXlVmeTYWaP/p7/be5DbLRSC6Q2ffd1GelVWsNBDU8UL+IgX8qMC/WVwy4ghwTk5zKD9k4wlZlpP24haJepfUfNdFnYYpuot+74a/hNhHArEgoWvlMgqcy30De91Ug9mspNYq+Rmvd4VQcZCes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VlXLTyp6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DT8xx8jg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 779691F000E9;
-	Mon, 20 Jul 2026 19:00:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VlXLTyp6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676C21F000E9;
+	Mon, 20 Jul 2026 19:10:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784574028;
-	bh=XYp2/FqtUlPVihTnmgip3HcpVOrwlAg33e2I9/h150Y=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=DT8xx8jgYa/1Q0uA4JwszPgIfozWwRcA4ThOyarDIp98KIVU8MxM1BSY02B53sBcE
-	 Yt6d1Tfp9hitE3lKVE2LrephiZZURdsIv1DfJ5QVBMzheX1hjwtIbjVdULhf1ydpMH
-	 u+crgG9Y+d5EPSL/e/V9Wf0JOBJr0FLVCj8ph1OHY2tIyjWz1yndHVCTdOuzXrVIM9
-	 Q/70iUz+Qyy0gB0sbw0tsWqCph7I/QlsqGtI/4aINKRpbMfWSSKtnIIjCXFIYEsYtD
-	 4yx19nthss0ROqJms6xLcPFDh4yKmiEq0tVfS5i7wPGudslObG30r7uW4Hlj72vXQI
-	 /ZTMOv23mxQEA==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Florian Schmaus via B4 Relay <devnull+flo.geekplace.eu@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard
- Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>,
- =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@igalia.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Florian Schmaus <flo@geekplace.eu>
-Subject: Re: [PATCH] selftests: do not preserve ownership when installing
- files with rsync
-In-Reply-To: <20260715-kselftest-rsync-right-v1-1-8df6c7734389@geekplace.eu>
-References: <20260715-kselftest-rsync-right-v1-1-8df6c7734389@geekplace.eu>
-Date: Mon, 20 Jul 2026 21:00:25 +0200
-Message-ID: <87zezllc52.ffs@fw13>
+	s=k20260515; t=1784574641;
+	bh=U4/ZEUpqMgPvzSkQ5oimHUSdQNLaQpZgFBNHt+oTGS0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=VlXLTyp61hT+GCFX9svXFxU0EPsC/GsDRLawMzGHQKusR+gELAY0vIdeA7i/3OEI2
+	 jJd9ipYGTSLt4rMzhIO6Qz7RIhJVDa9KaEa9hrzUQm0Zl17cAcpwfDplc8y34nuanu
+	 OaWotAhga+bXal9LPXmx9odnLi2weTWb1lle4TqUThzQ9zii7QEPHymN1zD3w1wnKt
+	 Sa9ByS7tyVhI5lesxuCNVzndQz0lPMBDW+dHBazISEpvbM7eukMfIymcitH8uQwQ/g
+	 CV77qqDWS4UVVr9tRyM8G/pA72dorL7I19fgpQMtUThr8nv+pYU8ra5QQM7o25J9WN
+	 I45hxinfWV0Gw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D09F039244CA;
+	Mon, 20 Jul 2026 19:10:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 0/4] selftests/bpf: Fix compilation with
+ RELEASE=1
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178457461164.4123047.1929607676311792554.git-patchwork-notify@kernel.org>
+Date: Mon, 20 Jul 2026 19:10:11 +0000
+References: <cover.1784112948.git.vmalik@redhat.com>
+In-Reply-To: <cover.1784112948.git.vmalik@redhat.com>
+To: Viktor Malik <vmalik@redhat.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, shuah@kernel.org, ebiggers@kernel.org, sdf@fomichev.me
 
-On Wed, Jul 15 2026 at 12:51, Florian Schmaus via wrote:
-> From: Florian Schmaus <flo@geekplace.eu>
->
-> When kselftests are built and installed using "make install" or
-> integrated into other build systems (such as Yocto's "devtool
-> modify"), the source tree might be owned by a non-root developer user.
->
-> Because the installation scripts use "rsync -a", which implies -o and
-> -g, the installed test binaries and scripts are explicitly assigned
-> the UID/GID of the source tree owner instead of the user running the
-> install command. This results in UID leaks into the root filesystem.
->
-> Fix this by explicitly adding --no-owner --no-group to all rsync
-> invocations across the selftests Makefiles so that the installed files
-> are owned by the installing user (typically root).
->
-> Signed-off-by: Florian Schmaus <flo@geekplace.eu>
+Hello:
 
-Acked-by: Thomas Gleixner <tglx@kernel.org>
+This series was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+
+On Wed, 15 Jul 2026 13:21:59 +0200 you wrote:
+> When compiling BPF selftests with RELEASE=1 (which most notably adds
+> -O2), GCC reports several warnings. These are by default treated as
+> errors and abort the compilation.
+> 
+> This series fixes all of the issues such that selftests can be compiled
+> with RELEASE=1.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,1/4] selftests/bpf: Check malloc result with ASSERT_NEQ in test_loader
+    https://git.kernel.org/bpf/bpf-next/c/40f986aed81f
+  - [bpf-next,2/4] selftests/bpf: Check malloc result with ASSERT_NEQ in test_sha256
+    https://git.kernel.org/bpf/bpf-next/c/eb5cd154f174
+  - [bpf-next,3/4] selftests/bpf: Silence array bounds warning in global_map_resize
+    https://git.kernel.org/bpf/bpf-next/c/dcd164ec67f8
+  - [bpf-next,4/4] selftests/bpf: Silence maybe-uninitialized compiler warning in libarena
+    https://git.kernel.org/bpf/bpf-next/c/5763790965eb
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
