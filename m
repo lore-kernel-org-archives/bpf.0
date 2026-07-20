@@ -1,96 +1,132 @@
-Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECDC39BFEF;
-	Mon, 20 Jul 2026 03:40:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C06399887
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 03:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784518860; cv=none; b=CsMMitTx9YvBh3lyWyPz8JPkSLJTWgfy8n5OHCPg3Dv7j/DdTXKXDXbqv12U8fArSBUD7p3S7u/7aRdiGFfbQnKF9sxSoLZGNx9D2k6Zoym80DgqW3uZVNJSoqVQPpx1pYGlo6jVesAq0WcMpbV3c6YV6zg6qZAM5KXaHsVOUEY=
+	t=1784518874; cv=none; b=XF0KKSTBwGIGAIfBFjUkrw22NyDZxirwAfvBA+vN+dFRrKxMl/HsdKzEvbs31o/mYlTwgGhmbWty+1Eu8yH6C71yMVb0QzUTYswNSvyeDN0LU2BBxUns8W1XwHYGOAcKN3ywVrVrZvMT1WYVFq9zlDfntZpRDXivOaEyDxCr+vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784518860; c=relaxed/simple;
-	bh=M8w3kvYuRSdv0EKawq5Ux1KBlw8ASIqf1trDVKNNunE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=qolZJoFSGuvCqgY9s8rx8cpoCCO23z+wQZb6bgyAx7pSof404mSbaQ/qN6DRucXysORUDzDrisGvRz4Z6zZMBv/kLSsKsQEuY+tfiw/wvVEqtN3/ciJvRjlYzoWMXeaNWwCsNlI0ZFcDUNBpnOJsM5sjpVvGQgridElWrIAy+gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=BDBGjX79; arc=none smtp.client-ip=113.46.200.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1784518874; c=relaxed/simple;
+	bh=7KMyobaVE7Xd6ODqQHEJsz6Z3VCbczCzjAb/bu8jMdk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=AQ0t0d7xyFX67JdgkHf3I6w3qupzws/QWuRkTBu/g031J4p/YFu8s0SLug5PNYCroHtaXW75N9MnnIC/SQOn2EXH1BeLFV9WBpqrlR8xc3wruVW4v44/gbrQjlwaIztt+x3qrOZPjeFn1RPSEg6t9G6FvE7rJYNig/zlhmTWpaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kx6jnhnE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="BDBGjX79"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=vmHyB7sEL48iocPNlmpy5NRjKTvUJqdc90idg85Zf4A=;
-	b=BDBGjX79SDi4Z0/REPZXT5tf3AkQjoZajXy7gCWbFBimJXekM7O90UGVv9sXOGE68nUstN3a9
-	gXyWnjEN54UpB7ZwhzAXAsPlOaARwVK25A+o/kp2XVk90gxJTjs9bQHMIl1TmiFoHdGB7d2eCm2
-	iJptl7Q/9J0c1G7gThJuu8Q=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h3Qz45ZFMznTwN;
-	Mon, 20 Jul 2026 11:31:12 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4E34240572;
-	Mon, 20 Jul 2026 11:40:45 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Mon, 20 Jul
- 2026 11:40:44 +0800
-Message-ID: <734259ce-a3e6-495e-9c88-24ab23e781bd@huawei.com>
-Date: Mon, 20 Jul 2026 11:40:44 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kx6jnhnE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19AB51F000E9;
+	Mon, 20 Jul 2026 03:41:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784518870;
+	bh=o8IVzubdU4ST9dUU/SDRG9kTYGE/ZHg9LNFq6V+wqYA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Kx6jnhnEAe0rDkArgt7feGVGRZe/whriTAPH6epY1TJHrUgm2uc1hrJv42S49zj6d
+	 d3Oj3NISGPew84L0/LZjxsLfLP0nJ8hsUeaAjIpqiLJpnkMmexQur7yejZVlvokbph
+	 Qsk1ZlgEuriZC1TcVQBBIrbNO+8Lj/sUn84QTCcVVsRZwlM2Ly8GulYij8q4U4/nY+
+	 Ly22qkYsnR7qXhZCDfYuzZfqjojcbk+Bt0NOu4N397z5Dx8IL5wXZcMIsMj4c9Pmox
+	 XCoIvvOxqoEqYqjX+CqbUgnnF1S/pxIY2lA4zV4XtITN6mogQyd8MLtuQhNsjwcPnx
+	 WaY4mKbL8GLEw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v3 2/3] bpf, cgroup: Fix storage not restored when
+ update_effective_progs failed
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pu Lehui" <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260720033055.1215477-3-pulehui@huaweicloud.com>
+References: <20260720033055.1215477-1-pulehui@huaweicloud.com>
+ <20260720033055.1215477-3-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 20 Jul 2026 03:41:09 +0000
+Message-Id: <20260720034110.19AB51F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: roll back stream capacity when allocation fails
-Content-Language: en-US
-To: Jianlin Shi <shijianlin11@foxmail.com>, <bpf@vger.kernel.org>
-CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<memxor@gmail.com>, <linux-kernel@vger.kernel.org>
-References: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemf100007.china.huawei.com (7.202.181.221)
 
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-On 2026/7/20 9:23, Jianlin Shi wrote:
-> bpf_stream_push_str() accounts the string length before allocating a
-> stream element. If the allocation fails, the length remains charged even
-> though no element is queued and therefore cannot be released by a reader.
-> Repeated failures can exhaust the stream capacity permanently until the
-> BPF program is freed.
-> 
-> Roll back the capacity charge when creating the stream element fails.
-> 
-> Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
-> Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
-> ---
->   kernel/bpf/stream.c | 9 ++++++++-
->   1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-> index be9ce98e9..4b8a74b91 100644
-> --- a/kernel/bpf/stream.c
-> +++ b/kernel/bpf/stream.c
-> @@ -79,7 +79,14 @@ static int bpf_stream_push_str(struct bpf_stream *stream, const char *str, int l
->   {
->   	int ret = bpf_stream_consume_capacity(stream, len);
->   
-> -	return ret ?: __bpf_stream_push_str(&stream->log, str, len);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = __bpf_stream_push_str(&stream->log, str, len);
-> +	if (ret)
-> +		atomic_sub(len, &stream->capacity);
-> +
-> +	return ret;
->   }
->   
->   static struct bpf_stream *bpf_stream_get(enum bpf_stream_id stream_id, struct bpf_prog_aux *aux)
+New issues:
+- [Medium] Uninitialized memory is read when saving `pl->storage` into `old=
+_storage` for newly allocated `bpf_prog_list` entries.
 
-looks good to me, but it might be better to target bpf-next, as this 
-isn't a critical issue.
+Pre-existing issues:
+- [High] If the first program attach to a cgroup fails, `cgrp->bpf.flags[at=
+ype]` is not rolled back, leading to a complete bypass of ancestor mandator=
+y security policies.
+--
+
+--- Patch [2]: [PATCH bpf v3 2/3] bpf, cgroup: Fix storage not restored whe=
+n update_effective_progs failed ---
+commit 30470afb00630f3ed1a914958997d62e12b1f60a
+Author: Pu Lehui <pulehui@huawei.com>
+
+bpf, cgroup: Fix storage not restored when update_effective_progs failed
+
+In __cgroup_bpf_attach(), if update_effective_progs() fails, pl->storage
+is not restored to old_storage. This patch saves the old_storage before
+assigning the new one, and restores it in the error path.
+
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+[ ... ]
+> @@ -883,6 +884,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>  	pl->prog =3D prog;
+>  	pl->link =3D link;
+>  	pl->flags =3D flags;
+> +	bpf_cgroup_storages_assign(old_storage, pl->storage);
+
+[Severity: Medium]
+When __cgroup_bpf_attach() allocates a new bpf_prog_list entry, it does so
+without zeroing the memory:
+
+        pl =3D kmalloc_obj(*pl);
+
+Because pl is not zero-initialized, does calling bpf_cgroup_storages_assign=
+()
+here result in reading uninitialized garbage pointers from pl->storage and
+copying them into old_storage? This could trigger KMSAN uninit-value warnin=
+gs
+when attaching a new program.
+
+>  	bpf_cgroup_storages_assign(pl->storage, storage);
+>  	cgrp->bpf.flags[atype] =3D saved_flags;
+> =20
+[ ... ]
+> @@ -916,6 +918,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>  		pl->prog =3D old_prog;
+>  		pl->link =3D NULL;
+>  	}
+> +	bpf_cgroup_storages_assign(pl->storage, old_storage);
+>  	bpf_cgroup_storages_free(new_storage);
+>  	if (!old_prog) {
+>  		hlist_del(&pl->node);
+>  		kfree(pl);
+>  	}
+>  	return err;
+>  }
+
+[Severity: High]
+This isn't a bug introduced by this patch, but looking at the error path, if
+the very first program attach to a cgroup fails (for example, if
+update_effective_progs() fails), the newly added list entry is deleted and
+freed here, making the list empty again.
+
+However, the flags set earlier in the function are not rolled back:
+
+        cgrp->bpf.flags[atype] =3D saved_flags;
+
+Could an attacker attempt an attach with BPF_F_ALLOW_MULTI, intentionally
+force an error (like hitting memory limits in update_effective_progs()), and
+leave the compromised cgroup with permanently altered BPF flags?=20
+
+If the flags stay stuck, does this allow bypassing mandatory, non-overridab=
+le
+programs from ancestor cgroups during compute_effective_progs()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720033055.1215=
+477-1-pulehui@huaweicloud.com?part=3D2
