@@ -1,147 +1,208 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14DF425CEE
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 13:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30B73DB647;
+	Mon, 20 Jul 2026 13:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784554647; cv=none; b=VJvAMUMbmD3m9kccPJVbOUeSJeC/oYrOio3PVZUqj7Re7JLz3Aq3yvyodfLAwJPSDfYu3TqfsSGftdB/Pr0tY1WGQhMQdVd7etpl7/MnT+3RUnLsnMqt+YhJ8ml6+n+ZFslIgnx1FAb0PNBy07QTQoou0I/mYRnY+D8q2v9DV5Q=
+	t=1784554884; cv=none; b=VldFLm0ObiCdAqBnEdVBuuwogn4r0CyBzW8MAy/abs8rSdaLTZe15XikdBJwxhczn/oZkO2nXS9Ky9SnCtTeDuYozSMLLNCv2/wX+YBW3l5ggfgIu1+QHGs1NDX+qf0f3cL4p9tfeEyj7pmt7z4xuC65rpcKPBWoBUmngo77qYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784554647; c=relaxed/simple;
-	bh=nNU348KDnizm40Hn8c1pbPoLWDHjeLSKeTa4mOhVOMk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SLA++oWv8L6inYz4KCuhbWNr78AwXWZMRT/GbyH/Jk57UjpZ7haPW6D3cwbip/B851/rKZfu9qVNtutnnsW+TU4K9x+BI/NbZul/4S3ZrkWeNAWMzbBUbUHnV3aFLcdfDUbcf2jVR5qTsiZHwrm9EhTKi9igd6IpSfN3LZKusnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9gHhTvK; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9gHhTvK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C1CB1F000E9;
-	Mon, 20 Jul 2026 13:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784554645;
-	bh=lvSE5NCvnMQxN8GVJI0sx6evNYGAgYs/OyjF4rDqqAU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=T9gHhTvKBexOHgU2sUqLFFY2mQCLlJ4/MLGWlqgTB/yS/JRAws2gEEZlddZJvguhZ
-	 panASJxNzzYH3AALYNIm3QtzqE7Leorhgx1zU0fVmh4X6j8PgFA9c/dyq5jbnoPnYp
-	 uIL96bSggAoO4RPbM1JMDvBBj4i/xQfiZlYKbZdr5ncjk9NCG+P+S0pavcswbJ6PAG
-	 uqrEf02ifuMVCpancoG4catLhUYvHDnHWnOjlLokrXNrdTYgqAyAvDIR40PzS8GGZg
-	 EVWs9yw/4DbXIfthNDVaGZUVWQll7/iLQRoDKpsCtV10JmD0+lUei8XnnnrPJpq32o
-	 lZF3JBtFTRs8Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] mm/kmemleak: report RCU-tasks quiescent states during
- the scan
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Breno Leitao" <leitao@debian.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
-References: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 13:37:25 +0000
-Message-Id: <20260720133725.9C1CB1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1784554884; c=relaxed/simple;
+	bh=OHr6dNveuGp2ZYUpW86f177ahnXeL5Q4y5EL8JRLwdk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=hD4eVlflHz7EhBsTKtQZLNI9bNxrXCuYGDVWMgTZku+kJEUzgcMwBYD8M8IAWDDhrnwX8ReMdQ0PhbfKlnnUU6k8dfj6WDwGJDUXWeRltC+cbn4/C6WJgqAjiedilo13XF21iUiDgx9+TGB5jg4UeK9Tcmk6VeO/7BQWHdzifuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h3hVF5f9YzKHMZy;
+	Mon, 20 Jul 2026 21:40:37 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 4AD214056D;
+	Mon, 20 Jul 2026 21:41:18 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgDn9XF8JV5qIAesBw--.40451S6;
+	Mon, 20 Jul 2026 21:41:18 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf v4 4/4] bpf, cgroup: Fix storage null-ptr-deref after replacing prog
+Date: Mon, 20 Jul 2026 13:45:47 +0000
+Message-Id: <20260720134547.1289964-5-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260720134547.1289964-1-pulehui@huaweicloud.com>
+References: <20260720134547.1289964-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgDn9XF8JV5qIAesBw--.40451S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF13ArW3Zw17Ar4DXFWrXwb_yoWrKF1kpF
+	1kAwn8tw1UX39avF1kJ39FvF1rAa10qr1UKrZ8tw1Fkay7tayFg347CryYva43uF1DWr1f
+	tw1YvF4jk3WjvFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUma14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
+	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
+	z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr
+	1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
+	3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
+	IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
+	M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
+	kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
+	bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
+	AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
+	42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
+	CI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsG
+	vfC2KfnxnUUI43ZEXa7VUbPC7UUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+From: Pu Lehui <pulehui@huawei.com>
 
-Pre-existing issues:
-- [High] Incomplete fix: Tasks RCU stalls persist in __kmemleak_do_cleanup(=
-) and __kmemleak_scan().
-- [High] Unbounded RCU critical section in kmemleak_clear() stalls Normal R=
-CU.
---
+Syzkaller reported a storage null-ptr-deref issue after replacing prog.
+This occurs in the following scenario:
+1. prog A, an empty prog, is attached to a cgrp.
+2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
+   bpf_get_local_storage helper.
+3. link_update is called to replace prog A with prog B.
 
---- Patch [1]: [PATCH] mm/kmemleak: report RCU-tasks quiescent states durin=
-g the scan ---
-commit 558fef0ac4a016de42546b6d38536df76b835edb
-Author: Breno Leitao <leitao@debian.org>
+The reason is that __cgroup_bpf_replace fails to alloc and assign the
+required cgrp storage for the incoming replacement prog. Consequently,
+the new prog inherits an uninit storage, leading to null-ptr-deref panic
+when kick the new prog.
 
-mm/kmemleak: report RCU-tasks quiescent states during the scan
+Fix this by properly allocating the storage and comparing the old and
+new storage pointers. If the storage changed, fallback to
+update_effective_progs which performs a RCU-safe update of the entire
+array. If the storage remains unchanged, we can safely retain the
+fast-path in-place update.
 
-This patch replaces cond_resched() with cond_resched_tasks_rcu_qs() at vari=
-ous
-reschedule points during the kmemleak scan. This aims to report Tasks RCU
-quiescent states and prevent Tasks RCU stalls and hung tasks, since
-cond_resched() by itself is not a Tasks RCU quiescent state.
+Additionally, handle the error path in __cgroup_bpf_attach strictly.
+Although it is rare for update_effective_progs to fail in this context,
+proper rollbacks for storage and flags are added for code rigor.
 
-> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> index 85f18b17e79c4..f63dfacee7ca1 100644
-> --- a/mm/kmemleak.c
-> +++ b/mm/kmemleak.c
-[ ... ]
-> @@ -1708,7 +1708,7 @@ static void kmemleak_cond_resched(struct kmemleak_o=
-bject *object)
->  	raw_spin_unlock_irq(&kmemleak_lock);
-> =20
->  	rcu_read_unlock();
-> -	cond_resched();
-> +	cond_resched_tasks_rcu_qs();
->  	rcu_read_lock();
-> =20
->  	raw_spin_lock_irq(&kmemleak_lock);
+Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ kernel/bpf/cgroup.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
 
-[Severity: High]
-This is a pre-existing issue, but modifying kmemleak_cond_resched() here
-might not fully resolve the Tasks RCU stall.
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 4355ccb78a9c..56d538f05520 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -813,10 +813,12 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 	struct bpf_prog *old_prog = NULL;
+ 	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+ 	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
++	struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+ 	struct bpf_prog *new_prog = prog ? : link->link.prog;
+ 	enum cgroup_bpf_attach_type atype;
+ 	struct bpf_prog_list *pl;
+ 	struct hlist_head *progs;
++	u8 old_flags;
+ 	int err;
+ 
+ 	if (((flags & BPF_F_ALLOW_OVERRIDE) && (flags & BPF_F_ALLOW_MULTI)) ||
+@@ -883,7 +885,10 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 	pl->prog = prog;
+ 	pl->link = link;
+ 	pl->flags = flags;
++	if (old_prog)
++		bpf_cgroup_storages_assign(old_storage, pl->storage);
+ 	bpf_cgroup_storages_assign(pl->storage, storage);
++	old_flags = cgrp->bpf.flags[atype];
+ 	cgrp->bpf.flags[atype] = saved_flags;
+ 
+ 	if (type == BPF_LSM_CGROUP) {
+@@ -915,12 +920,14 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 	if (old_prog) {
+ 		pl->prog = old_prog;
+ 		pl->link = NULL;
++		bpf_cgroup_storages_assign(pl->storage, old_storage);
+ 	}
+ 	bpf_cgroup_storages_free(new_storage);
+ 	if (!old_prog) {
+ 		hlist_del(&pl->node);
+ 		kfree(pl);
+ 	}
++	cgrp->bpf.flags[atype] = old_flags;
+ 	return err;
+ }
+ 
+@@ -1032,11 +1039,17 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+ 				struct bpf_cgroup_link *link,
+ 				struct bpf_prog *new_prog)
+ {
++	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
++	struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
++	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
++	enum bpf_cgroup_storage_type stype;
+ 	enum cgroup_bpf_attach_type atype;
++	bool storage_changed = false;
+ 	struct bpf_prog *old_prog;
+ 	struct bpf_prog_list *pl;
+ 	struct hlist_head *progs;
+ 	bool found = false;
++	int err;
+ 
+ 	atype = bpf_cgroup_atype_find(link->link.attach_type, new_prog->aux->attach_btf_id);
+ 	if (atype < 0)
+@@ -1056,10 +1069,39 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+ 	if (!found)
+ 		return -ENOENT;
+ 
++	if (bpf_cgroup_storages_alloc(storage, new_storage, link->link.attach_type,
++				      new_prog, cgrp))
++		return -ENOMEM;
++
++	for_each_cgroup_storage_type(stype) {
++		if (storage[stype] != pl->storage[stype]) {
++			storage_changed = true;
++			break;
++		}
++	}
++
+ 	cgrp->bpf.revisions[atype] += 1;
+ 	old_prog = xchg(&link->link.prog, new_prog);
+-	replace_effective_prog(cgrp, atype, pl);
++
++	if (!storage_changed) {
++		replace_effective_prog(cgrp, atype, pl);
++		bpf_prog_put(old_prog);
++		return 0;
++	}
++
++	bpf_cgroup_storages_assign(old_storage, pl->storage);
++	bpf_cgroup_storages_assign(pl->storage, storage);
++	err = update_effective_progs(cgrp, atype);
++	if (err) {
++		xchg(&link->link.prog, old_prog);
++		bpf_cgroup_storages_assign(pl->storage, old_storage);
++		bpf_cgroup_storages_free(new_storage);
++		cgrp->bpf.revisions[atype] -= 1;
++		return err;
++	}
++
+ 	bpf_prog_put(old_prog);
++	bpf_cgroup_storages_link(new_storage, cgrp, link->link.attach_type);
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
-kmemleak_cond_resched() is only called in __kmemleak_scan() when
-need_resched() is true:
-
-	if (need_resched())
-		kmemleak_cond_resched(object);
-
-Since Tasks RCU does not actively set the need_resched flag on running tasks
-(unlike normal RCU, which uses inter-processor interrupts during a stall),
-need_resched() could remain false on an otherwise idle system.
-
-Does this mean the Tasks RCU quiescent state update is never reached,
-bypassing this new logic and leaving the stall bug intact?
-
-[ ... ]
-
-[Severity: High]
-Additionally, this is a pre-existing issue, but does __kmemleak_do_cleanup()
-need a similar fix?
-
-It still uses the bare cond_resched() in its loop:
-
-mm/kmemleak.c:__kmemleak_do_cleanup() {
-	list_for_each_entry_safe(object, tmp, &object_list, object_list) {
-		...
-		/* Call cond_resched() once per 64 iterations to avoid soft lockup */
-		if (!(++cnt & 0x3f))
-			cond_resched();
-	}
-}
-
-Will this cause Tasks RCU grace periods to stall during cleanup work, just
-like they were stalling during the scan?
-
-[Severity: High]
-This is another pre-existing issue, but can the unyielding loop in
-kmemleak_clear() stall normal RCU?
-
-When a privileged user writes 'clear' to /sys/kernel/debug/kmemleak, it
-invokes kmemleak_clear(), which iterates over the entire object_list:
-
-mm/kmemleak.c:kmemleak_clear() {
-	rcu_read_lock();
-	list_for_each_entry_rcu(object, &object_list, object_list) {
-		raw_spin_lock_irq(&object->lock);
-		...
-		raw_spin_unlock_irq(&object->lock);
-	}
-	rcu_read_unlock();
-}
-
-Since this loop runs fully inside an RCU read-side critical section with no
-yielding mechanisms whatsoever, could iterating millions of objects
-uninterrupted exceed the 21-second RCU stall timeout and trigger normal
-RCU stall warnings?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720-kmemleak_r=
-cu_task-v1-1-5b460ade777d@debian.org?part=3D1
