@@ -1,167 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E770F2DCF52;
-	Mon, 20 Jul 2026 15:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F1A438003
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 15:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784561119; cv=none; b=KxOnPn5vuj2QOHspgMsz7p2qaC3vIGmUZto++o6MwS0yMGRi82tF3oZ5Ij0E1zMr9BRZ3uIQH8ncXtGrbRZnZXABpTQBTSAuLarMQLb0Lve4usBB66lhrmI9KCythQ3l3/7j5lzrBiBPES3I01mM7fMBnQsvLMeCuQnDCS4jFbQ=
+	t=1784562737; cv=none; b=BFj44LH9F1p/f00SUPvccMsQG9Dh7bf+9jXQh5U1U1P/LWGa2JFeKzSuO35gitaNcpS08GmvrjiWRg1bFoe62cz+Ji5ghu3t1B8q3WSsvprGN/sp4PHgq9q/9E8BI8poSOElTUDzXKqpDRFZidRCdIunOY8PVk57mjxApwVb+YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784561119; c=relaxed/simple;
-	bh=hLnPVQNRGGR2PWWenBGyFj/Z3wNhcKxmrWbRi36XQiM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rNpp5WejHBGjeOAW8DoG/o4dDMgDfjqN9PIGlLqwnkRtQjcVfGW8wceEVcg+nUvskaVK8E7so3Y31Dbw504pFvb6ev6aKB/3kOZ1pz5d68+4ZT09wO3UmcAaZdWjbcELifQp7VXiJ4FH3edNt2g5/vRkGkYu1jGbwNpMDgFjmW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJaX/lI9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784562737; c=relaxed/simple;
+	bh=awiAFydxdIelEQ4wg8/iHoVK1CLVZXMRpWwfx96zJZc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EpTkjCH21f6+bk2itshQZlxtlnEfG5zsg8jUvlx/7OEMd05gJa+66gMqdpZ63+8VJ5HEuVhWexmpaUuu5sH/VWjiPvgnP943tOqrJy+asOlIEb4RnudJKlSSFKuCG+PXaTKaaZ96sRnKmwQZVeCFfazbUk5gu1hTqJKF5YQTJCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D0BvIK/f; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJaX/lI9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941361F000E9;
-	Mon, 20 Jul 2026 15:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784561117;
-	bh=H6yVyiE63yXcD/fvLI3hqIkx+vFonOcuLVo15lmuJ6Y=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=XJaX/lI9ygdRmKcimsELCE6cxoMXHvXYspGuz9eSToSm0RMONx0IL4cHzeJh9nReI
-	 ou/0IyMyJj2UEVeaoAQXQJrI8W0iasCg9pU0JCJjcKbadwrXz2VReMwu4L/l1T6rJR
-	 ROxC93As7r0qhfIhwhKhvI2K5u2L6ZTk/2A7INZnibdbDVfAsC7mjuPwSx17jXTQFJ
-	 eHPVUVB5PxE0YAvAoNRMZii8Z2+RDZyIBdcfW0UNcziqe1MGr2ZM1PtLMg+1XvMNX5
-	 XtBf1t8rIdk6qvKbyPClHESk5vKn9jDy5FlDT/wPKMfTpMUHDnhFk0p6kXTYQ8cqdz
-	 MQTsCZxp5xJNg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 66ED3CE0C57; Mon, 20 Jul 2026 08:25:17 -0700 (PDT)
-Date: Mon, 20 Jul 2026 08:25:17 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>, puranjay@kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH] mm/kmemleak: report RCU-tasks quiescent states during
- the scan
-Message-ID: <8114f54f-b05b-489d-a3f1-7aa02d93cda0@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D0BvIK/f"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38e347638adso5402475a91.0
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 08:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784562735; x=1785167535; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Pe0BelC1xYhkiVWFcp8S5qlznLCha6GNRa/amzyqD5o=;
+        b=D0BvIK/fOTuyvxtdJw63BoeoH4t0UF6wKKRpa+rjIXJL/xdfMUw1ijnZJzLbHdJpiP
+         SyRlTpeKLrtAyzBnaWh4StnOa3oqZVtNeeY0msSAES5bUqmpWRBGE4ymCa4GOYcISrz9
+         k436nBwc6IDB0pjwKmtJVCjxPKpMyDBgtJa6tbTYW6MMl0fMlszeEtt19anAX6eaPUlc
+         NzjzVd2BeSDcA+517Np3RV5fJxe9H9UZeIbaoeLuKnqW9IVPkvaL3hrrKDCtPT04VJOi
+         K19YEsEoskR6lqW6LXv3tZ4cVSAMi2f3/gMGLLU9s5im5P1QeHso8fN7PJafqnxzKhWI
+         tRmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784562735; x=1785167535;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Pe0BelC1xYhkiVWFcp8S5qlznLCha6GNRa/amzyqD5o=;
+        b=DjP1yyAWLtj16mfzQiVibvJVSivtGstYoepImeqXRL+BLmo2RMuj3/euzc4P2joT8n
+         FGjpHPPxKewvki3XRGSSqfzIBdYRYDHUuZT9AlIgkS5TCJdDXhcQB+L0gvdSyDd7o613
+         hXEelgNiNYaLj0b2HI4M1sKV+jB7Cn5sYPAf5sGMIzxKiFkloEba0KckS5/JiKczL6ta
+         z9N3fd7YxzsqlLV7lYZIM29+vIHAxisOffGtw9h7crCdMM8FoyzdmYg8zo8I7mJddSFR
+         oICpqbFCVzuR8YB2EVQ9tC0v+L6pgq2NpJuVDOjaylVxzMUZ5KwRT2bOVnA/D9jpuASU
+         j6vg==
+X-Forwarded-Encrypted: i=1; AHgh+RqLFt893VW0whTcMD1L2JOK5Ame8Ubm9e8j0yjIRgxrcDsuqkb5kwaqTQplJvPi8ONXj0s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw866qC+xQfksi3vW1pujF3HKiwd4hvQaww4ovz2ffuEFIk7zkI
+	PwLgqBOi02IU+gYxgWAnUNlkwZWuLGdEyDlQLNS8tMGN5KOoTs1+rzNH
+X-Gm-Gg: AR+sD12b7FhpQnMJqUWax3L5vzJU8FBUe4LTu/+wmHNUiE8506YVos9E1uuxGsqnuP5
+	cZqMF9YTStDf4Rayzz8w5ljqaVpBHnu+qiqE+0c+7MT+QR1/CTlFkr4Jyx7KjdtGf4RDYFYaEw4
+	mOKQ0LAvJT9oJBzAvoHS9FmY3Xvq927PJs2ywEG0PT8MCBhX0tQtep1A69xSpJl+DCDdS2TQ+QT
+	v1G/j0+eWHuZLDsyxLXFgAPmCAtFASE9mtSKOLkP2SaZ32xQwdY41hyHUjCe9DxFh3uXgKXxTLr
+	leJn4u2l8Ntl+bePzdP3Jn/SHp3Mcm96d7JP9Qs8L1Q/mkcVhlYhd4Ta/oMTSXa1r7/WLt1UWxJ
+	5cEfdFGMfHSeS2GFmWsNVa0u6v7jak/nMaXF9RHQ/ogTARM+ZYwERh9oagIaCc0x3s3aV8rB/91
+	CkSFyGIUE4/Cm/djTqT747uARC1gT5k6UNLLA4wKYtGqQp3eusbUE+Zvw2titCFS+hpUd/go8zl
+	8F1mvYQlYw5t+6//A==
+X-Received: by 2002:a17:90b:3887:b0:387:df8f:1406 with SMTP id 98e67ed59e1d1-38e4b59b8fdmr14439187a91.39.1784562734431;
+        Mon, 20 Jul 2026 08:52:14 -0700 (PDT)
+Received: from LAPTOP-83ECOPAB.f7a5e5c3-cab1-4810-bdbb-207cdd06de9e.globalsecureaccess.local ([2001:4898:a800:1012:e4ac:299c:3d12:cc91])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e4aff1cd3sm6113063a91.6.2026.07.20.08.52.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2026 08:52:13 -0700 (PDT)
+From: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
+To: magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: sdf@fomichev.me,
+	horms@kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	AutonomousCodeSecurity@microsoft.com,
+	tgopinath@linux.microsoft.com,
+	kys@microsoft.com,
+	blbllhy@gmail.com
+Subject: [PATCH net] xsk: reject tx_metadata_len smaller than struct xsk_tx_metadata
+Date: Mon, 20 Jul 2026 11:52:10 -0400
+Message-ID: <20260720155210.34229-1-blbllhy@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 20, 2026 at 06:23:45AM -0700, Breno Leitao wrote:
-> kmemleak_scan() can run for ages on large debug kernels. It was
-> causing some soft-lockups which I got fixed with commit
-> 3175fcfec8b16baeb ("mm/kmemleak: avoid soft lockup when scanning task
-> stacks") with our beloved cond_resched().
-> 
-> I've got the fix above deployed in the Meta fleet, and now I am seeing:
-> 
->   INFO: rcu_tasks detected stalls on tasks:
->     task:kmemleak state:R ... nvcsw: 274/274 holdout: 1 idle_cpu: -1/3
->      scan_block
->      scan_gray_list
->      kmemleak_scan
-> 
-> and, worse, blocks the callers waiting on that grace period. Here a BPF
-> struct_ops map free, which waits via synchronize_rcu_mult(call_rcu,
-> call_rcu_tasks), is stuck long enough to also trip the hung task check:
-> 
->   INFO: task kworker/...:bpf_map_free_deferred blocked for 122 seconds
->      __wait_rcu_gp
->      bpf_struct_ops_map_free
-> 
-> Then I've learned that cond_resched() is not an RCU-tasks quiescent
-> state, so, we need to use stronger primitives.
-> 
-> Use cond_resched_tasks_rcu_qs() at the scan reschedule points so the scan
-> reports an RCU-tasks quiescent state as it proceeds.
-> 
-> Inspired by commit b96285e10aad ("tracing: Have osnoise_main() add a
-> quiescent state for task rcu").
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+xdp_umem_reg() validates tx_metadata_len for upper bound (<256) and
+alignment (%8) but not a lower bound.  xsk_skb_metadata() computes
+meta = buffer - pool->tx_metadata_len then unconditionally accesses
+the full 24-byte struct xsk_tx_metadata, so any value less than
+sizeof(struct xsk_tx_metadata) allows an out-of-bounds read.
 
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+KASAN reports this as:
 
-> ---
->  mm/kmemleak.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> index 85f18b17e79c4..f63dfacee7ca1 100644
-> --- a/mm/kmemleak.c
-> +++ b/mm/kmemleak.c
-> @@ -1586,7 +1586,7 @@ static int scan_large_block(void *start, void *end)
->  		if (scan_block(start, next, NULL))
->  			return 1;
->  		start = next;
-> -		cond_resched();
-> +		cond_resched_tasks_rcu_qs();
->  	}
->  
->  	return 0;
-> @@ -1623,7 +1623,7 @@ static void scan_object(struct kmemleak_object *object)
->  			scan_block(start, end, object);
->  
->  			raw_spin_unlock_irqrestore(&object->lock, flags);
-> -			cond_resched();
-> +			cond_resched_tasks_rcu_qs();
->  			raw_spin_lock_irqsave(&object->lock, flags);
->  			if (!(object->flags & OBJECT_ALLOCATED))
->  				break;
-> @@ -1645,7 +1645,7 @@ static void scan_object(struct kmemleak_object *object)
->  				break;
->  
->  			raw_spin_unlock_irqrestore(&object->lock, flags);
-> -			cond_resched();
-> +			cond_resched_tasks_rcu_qs();
->  			raw_spin_lock_irqsave(&object->lock, flags);
->  		} while (object->flags & OBJECT_ALLOCATED);
->  	} else {
-> @@ -1673,7 +1673,7 @@ static void scan_gray_list(void)
->  	 */
->  	object = list_entry(gray_list.next, typeof(*object), gray_list);
->  	while (&object->gray_list != &gray_list) {
-> -		cond_resched();
-> +		cond_resched_tasks_rcu_qs();
->  
->  		/* may add new objects to the list */
->  		if (!scan_should_stop())
-> @@ -1708,7 +1708,7 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
->  	raw_spin_unlock_irq(&kmemleak_lock);
->  
->  	rcu_read_unlock();
-> -	cond_resched();
-> +	cond_resched_tasks_rcu_qs();
->  	rcu_read_lock();
->  
->  	raw_spin_lock_irq(&kmemleak_lock);
-> @@ -1753,7 +1753,7 @@ static void kmemleak_scan_task_stacks(void)
->  			}
->  			put_task_struct(p);
->  		}
-> -		cond_resched();
-> +		cond_resched_tasks_rcu_qs();
->  	} while (pid && !stop);
->  }
->  
-> @@ -1935,7 +1935,7 @@ static int __kmemleak_scan(bool full)
->  			struct page *page = pfn_to_online_page(pfn);
->  
->  			if (!(pfn & 63))
-> -				cond_resched();
-> +				cond_resched_tasks_rcu_qs();
->  
->  			if (!page)
->  				continue;
-> 
-> ---
-> base-commit: 0718283ab28bc3907e10b61a6b4be6fefa1cbb2f
-> change-id: 20260720-kmemleak_rcu_task-6d3ea111b947
-> 
-> Best regards,
-> --  
-> Breno Leitao <leitao@debian.org>
-> 
+  BUG: KASAN: vmalloc-out-of-bounds in xsk_skb_metadata+0x4b2/0x500
+  Read of size 8 at addr ffffc90000f11000 by task exploit/148
+
+  xsk_skb_metadata (net/xdp/xsk.c:837)
+  xsk_build_skb (net/xdp/xsk.c)
+  __xsk_generic_xmit (net/xdp/xsk.c)
+  xsk_sendmsg (net/xdp/xsk.c)
+
+Add a lower-bound check in xdp_umem_reg() to reject tx_metadata_len
+values that cannot cover the full metadata struct.
+
+Fixes: 341ac980eab9 ("xsk: Support tx_metadata_len")
+Reported-by: AutonomousCodeSecurity@microsoft.com
+Signed-off-by: Cen Zhang (Microsoft) <blbllhy@gmail.com>
+---
+ net/xdp/xdp_umem.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+index 58da2f4f4397..d16ad9d8f919 100644
+--- a/net/xdp/xdp_umem.c
++++ b/net/xdp/xdp_umem.c
+@@ -208,7 +208,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+ 		return -EINVAL;
+ 
+ 	if (mr->flags & XDP_UMEM_TX_METADATA_LEN) {
+-		if (mr->tx_metadata_len >= 256 || mr->tx_metadata_len % 8)
++		if (mr->tx_metadata_len < sizeof(struct xsk_tx_metadata) ||
++		    mr->tx_metadata_len >= 256 || mr->tx_metadata_len % 8)
+ 			return -EINVAL;
+ 		umem->tx_metadata_len = mr->tx_metadata_len;
+ 	}
+-- 
+2.53.0
+
