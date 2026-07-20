@@ -1,179 +1,183 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D953FE34D
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 14:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43DE3FE34D
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 14:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784556354; cv=none; b=cpI+j2RJKbn5iaMttYdG5lwtqNgFf1+P7OS9Y1bysU2GH96L6Zqu9qUtnUBAU0RFKkkPgxwRRRIWGk0RdtmHEi3+0F6ndY3N/sYEXEWf1Az8lTemzhHMKcDRz4Z8QJP+8zpdeD4otyhCmcA/S78tFAr65sBfB+E410bRvvLOnX8=
+	t=1784556990; cv=none; b=QM50h+CgEToPK1GM5IvaKM+wwwPVpnMp6iQJp8NQf4eOkMj5hf1FI9SfQlDko8+e+Bxgr3SbH3M2z49f3NdYyrNpqLKlj4R1Ny78IIIt9JzrJQp1CLeSYjjHjBb0J6+oAZiRXHiyQMkE+cC29bV1ujc+RnfC08jRMas/bHvGReA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784556354; c=relaxed/simple;
-	bh=ePAKTHXDKdNb0FH/H3wB+Xwk4sX0kyILjAOUtmZQnIw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iNZZrCoKcqB/lwbu1hMc27i2I+8Wktbh/s/jP0bQMen36gDglL0EGZzjD+OMK+1XeXpSFIQSzlkA8yQe8/ftOWxzFUP0LFi28FiBa6TU+E5d2IW/wGij9gvsvzek2b/v8BjlxjZ2/xAX/EvFi8Z3Psex/+KL3UP9zrGAAnEiEho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=readmodwrite.com; spf=none smtp.mailfrom=readmodwrite.com; dkim=pass (2048-bit key) header.d=readmodwrite-com.20251104.gappssmtp.com header.i=@readmodwrite-com.20251104.gappssmtp.com header.b=FGtpU4+z; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=readmodwrite.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=readmodwrite.com
+	s=arc-20240116; t=1784556990; c=relaxed/simple;
+	bh=KlFEs9hTMJp5oOQb4F6v6uFKRQFs4PJPbJsE6rFMvME=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ixasrjZL7szDS3scyTwmr16Kklfmqk9QCaTm9XKssGR3aBWkKbXlrWCY20Kqmc74mW7rTvcgjRKvJgN1O7qGIv2eAtak5+vf5QBUQpuJOWesF2QKnAlnhsm63UaXPzwVE5zUyFt30DL5wEFivp+eIj551FLJm5R7ZWJkNTXJaaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RdTgqbJz; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=readmodwrite-com.20251104.gappssmtp.com header.i=@readmodwrite-com.20251104.gappssmtp.com header.b="FGtpU4+z"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-47ddf7b09e5so6354737f8f.1
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 07:05:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RdTgqbJz"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4921eed3fa2so78020545e9.0
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 07:16:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=readmodwrite-com.20251104.gappssmtp.com; s=20251104; t=1784556350; x=1785161150; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DRi4OgK0lR0T6QvblIYz4VmndjhrAJYR+QcTs5ku3lo=;
-        b=FGtpU4+zq3uD/a4wQijQAAsqSKc2mq31h0WlT6dzLh7tbF/bI4JYTljJVy6rfvRM+4
-         CXBPa7RbSCfCVraD3AdExqyKnvN5cPbUCrM53+98rEdoo1PzP5t+yB3+3F+DhDIJqdWF
-         09AWjN91TwmSNEg1FjNyDQDm8pCv2AAvDtafedBUBSvUTy9B1zOC/oB2L5vx6bUeWlaW
-         vAM14aaW6/gjUTbWQJEz5uZFJo0fbyDo6EwUMQ3NOWqsPDckfRaFL53s4G/qXVTI1Dl3
-         MzW6G9YwxZELV+Cfec3GiFlv8NqMOqnR8mShujj4pqztllJXzXf4EMcWu5NBnkzNx+ns
-         7g7A==
+        d=gmail.com; s=20251104; t=1784556983; x=1785161783; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lD+PhWTsoZ7u38tqy3BQ4p87PXVlUFxqanb+GZ7ay68=;
+        b=RdTgqbJzlYBc5Okncnat3xtJPrjNRQESDWmBwKWlUX+k4QwLAcuM6S6IWovXYH9fwT
+         YCiso9RkNzGHTgmMtQ3k3nNnWFtGpzfG6SiM6FRzX+XeHo2QoTCPa1kcBlQU48DbIPHV
+         9/eGHLPDzddBJI+4IyXOxPJxN5x8BHHxKp++Qyww6uGtVIHxFtwxXlUjp+rLIg4PKvix
+         d47/5sJYRh1j/lb/y5Ba3LcKTmkT679wGm2//aNL/o3gAJGfYdttUY863TMeemMBwN37
+         7XHPm8o/+MoLsRxMZsKM5iZMqgQCtEOjBSmRCREVEI/Y1qjPIcj3kw44ziD9mdVxRegj
+         P7mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784556350; x=1785161150;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1784556983; x=1785161783;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DRi4OgK0lR0T6QvblIYz4VmndjhrAJYR+QcTs5ku3lo=;
-        b=R/sIA1sGLHFzZToFpbKcPfPd4D1/zwMaciRTPzWQPBXyZh8MxiPIQelEc5qOSjBy/r
-         QGU0G8YxMrFjW0TbQTep/C48EltzT5c9e5cznImC0j8GaP9iRNYIbLKkdqgFsZ9sF6WZ
-         fa7Fj/f89clqOxefVBSzLlmtSS6Ka0uylCsNZ0J2eRk3A6gESGkktMYJpyi64RHK2fhL
-         CelPev+nBPzbDzhmO3z/uhqRbg9nYpD8F/qZq6+QPXbbYEfaarotExXe3rBwMt+oEG5T
-         kVPy6yZsyCNBb3D85ILms2G+PGti1ZLJaitqTYtHVfRRLQ7JruOmajcyQz1LGu33wbDq
-         MgUQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpfcDd3s5Cg7bPF1yhGcBR4GTwQhyD/Wg4p/mRjFnsyoEKDdyRQTlLVM7TInMlW9Rn42jA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzc/I8Mdx/5ajRr1+tLr3xqhBIKU1nS9heVPedmy7X0MkALO1r7
-	cWvxhr3V8mUe8pHrKYZSTcODCcFqi95ETpl1C2+XZgndZXjWzX1r75bIkoowEXtkwCo=
-X-Gm-Gg: AR+sD10aB/PnL9Y3OaJfyCHCsUj/nuZeq1g2/H2SMPLAW+4UHCIO6bVzjqDTu2IKy0+
-	kRYyReqE7agmzr/5P+EQQ0mO2Hwel1de40bzIoPc253RM25fq/aZL2qZ4dVw4eBZv8BAUfS1v3a
-	YS5hWej6QlWLuoQVUA45hHmQ6p/Tm91tO8vCz6moBZBaLDuROypMu+1p61DCtweCBKzpGIrO0rP
-	FofQ8RnZI6C8RgUZHxZH6fu1Wgq9hyH6imLQyamR+rIU7/NqVQ4Gp86MBk5jHUEfmxW2NNbYOrr
-	oX+hXp+h77JJTTcLr2CS237L5Kl1RRG7uow5xn9/mZgvl4boULsaMszBn3Lp0HGzDx6o1rVF3aQ
-	+QFe3jjb7NVa5Q7IveRL67whsMV0w0Q07rwTvyMBaUEskXXVDqwXILbiP0GvTZpkl3E3WwR2vTT
-	l2SAUy
-X-Received: by 2002:a05:6000:4b15:b0:47e:4b05:2c8c with SMTP id ffacd0b85a97d-47f622f81c1mr17766182f8f.15.1784556349482;
-        Mon, 20 Jul 2026 07:05:49 -0700 (PDT)
-Received: from matt-Precision-5490.. ([2a09:bac6:37a8:1cdc::2e0:ea])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e496ffsm29757674f8f.3.2026.07.20.07.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 07:05:48 -0700 (PDT)
-From: Matt Fleming <matt@readmodwrite.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	stable@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	Matt Fleming <mfleming@cloudflare.com>
-Subject: [PATCH bpf v2] veth: convert frag_list skbs before running XDP
-Date: Mon, 20 Jul 2026 15:05:45 +0100
-Message-ID: <20260720140545.461747-1-matt@readmodwrite.com>
-X-Mailer: git-send-email 2.43.0
+        bh=lD+PhWTsoZ7u38tqy3BQ4p87PXVlUFxqanb+GZ7ay68=;
+        b=bjZ24u8DAL0LlC3MyUktGd1OcBJcW4aCkjG5yJds25QHmmXe8RJsv9dQW63XgYbt9f
+         i4Cz/MXgzI4cPrwwS+8djZOxc4F2yawM0/sucBy3vjpruKVRVKMcX4oZat5XsD/tzURo
+         e3LPdWUNWcYvqeFo/4UEqac/D4eKOpcQYoedrxWMK14G/gZp9dWD5CIwF1yukxJMPcQf
+         DdZvDgIvh22nCJXly3yXi9+/JnEuWd/tQnYoCmmUw9CYlf98H0xStQyDCRRLNufj45zM
+         ORBOvVX8aZxrpsX7AF9AXpf4F4YAWgPr0eu9F1L289Y3lRlCij1WpplxlU+2IQ1nf/f3
+         /FDg==
+X-Forwarded-Encrypted: i=1; AHgh+Rq5D4LDOvaLwTurr5ankh2n+XQ3pFRUoGuR1fC5jXM/UVddEvJRq0lkJ65DcEWMzCXodjk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt1CpuaLjND+6n4qP57V4BTzCEzmDIH5jA7Y9HJT2QdC/6KkbW
+	btDQzVack/20LJXLHkVCuhDlVXjxR5P2krw2GESmsgw5SF1lowlf/iF1
+X-Gm-Gg: AfdE7cnQ4uSveRH1JZ9SCmh+Yexy0200i/z2QkmeoQ5yg98B7DQWl9K2PtxSEf1LaE6
+	tkrwK/NJf4G7q0vuyDu7zPkeairRYU6sLW8wbI9R9vf35KtOEj0bBBgROM912lLsLNIc8+LCJPC
+	6k8r7iwno/RsLYeAzoE6ckEL/NMo1/FhpLk9Tp2y44gxwIjep+9NzlwEUq4t43g4hoi2w27b5qQ
+	HJzgaCmPIrf9hcAdlnior6PS8n9s8n4ztYS+aFnb4g9MESHeFT5D7i4I97EeAdzeglW3huTmJdI
+	YWvIiNvd6iR+SaY+QIr7EQutSzcJZHu7AzcESwZnjDFbcOxirj7mUJwwBOyT3YeaICHEa9WI0Ag
+	wGihmoYPvc9qxIvm2EeERBHa60ca/exUhAvMdNN/e8zCsdJHcsv4tPIdFx9TKEt3oiwK/z38LXB
+	9Ur0+TzJMJBaq94rLdKuU15It59gyFfhu7VlNHCUc=
+X-Received: by 2002:a05:600c:4504:b0:493:c194:4e7a with SMTP id 5b1f17b1804b1-4954a3d09c8mr155757535e9.3.1784556982227;
+        Mon, 20 Jul 2026 07:16:22 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:356a:bbd5:2aeb:97cd? ([2620:10d:c092:500::6:7242])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-495516c68fasm207736295e9.1.2026.07.20.07.16.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jul 2026 07:16:21 -0700 (PDT)
+Message-ID: <1289e62e-e956-40c9-a93b-22feefb9110f@gmail.com>
+Date: Mon, 20 Jul 2026 15:16:18 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v4 3/4] bpf: Fix potential UAF when reading bpf link
+ info
+To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Pu Lehui <pulehui@huawei.com>
+References: <20260720134547.1289964-1-pulehui@huaweicloud.com>
+ <20260720134547.1289964-4-pulehui@huaweicloud.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260720134547.1289964-4-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Matt Fleming <mfleming@cloudflare.com>
 
-A frag_list skb can reach veth with data_len set but nr_frags zero.
-veth_convert_skb_to_xdp_buff() only converts skbs that are shared,
-locked, have frags[], or do not have enough headroom. It later uses
-skb_is_nonlinear() to decide whether to set XDP_FLAGS_HAS_FRAGS and
-xdp_frags_size.
+On 7/20/26 2:45 PM, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+> 
+> In bpf_link_show_fdinfo and bpf_link_get_info_by_fd, link->prog is
+> accessed without holding any locks. If the prog is concurrently replaced
+> via bpf_link_update, the old prog can be freed, leading to a potential
+> UAF issue.
+> 
+> Fix this by holding both normal RCU and tasks trace RCU read locks
+> before dereferencing the prog, as BPF_LINK_TYPE_ITER support both
+> non-sleepable and sleepable progs.
+> 
+> Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> ---
+>  kernel/bpf/syscall.c | 27 +++++++++++++++++++++++----
+>  1 file changed, 23 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 6db306d23b47..2458c68146b9 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3471,9 +3471,10 @@ static const char *bpf_link_type_strs[] = {
+>  static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
+>  {
+>  	const struct bpf_link *link = filp->private_data;
+> -	const struct bpf_prog *prog = link->prog;
+> +	const struct bpf_prog *prog;
+>  	enum bpf_link_type type = link->type;
+>  	char prog_tag[sizeof(prog->tag) * 2 + 1] = { };
+> +	u32 prog_id;
+>  
+>  	if (type < ARRAY_SIZE(bpf_link_type_strs) && bpf_link_type_strs[type]) {
+>  		if (link->type == BPF_LINK_TYPE_KPROBE_MULTI)
+> @@ -3490,13 +3491,23 @@ static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
+>  	}
+>  	seq_printf(m, "link_id:\t%u\n", link->id);
+>  
+> +	/* prog can be sleepable */
+> +	rcu_read_lock_trace();
+> +	rcu_read_lock();
 
-That exposes frag_list data to XDP as if it were stored in frags[], but
-frags[] is empty. AF_XDP copy mode can then trust the bogus XDP fragment
-metadata, walk an empty fragment entry, and crash in memcpy() from
-__xsk_rcv().
+Only rcu_read_lock() should be enough, see 57b23c0f612d ("bpf: Retire rcu_trace_implies_rcu_gp()")
+Did you manage to reproduce the UAF?
 
-Route non-linear skbs through skb_pp_cow_data() before exposing them to
-XDP, and only advertise XDP frags when the resulting skb has frags[].
-skb_copy_bits() already handles frag_list input, and skb_pp_cow_data()
-builds frags[] output with skb_add_rx_frag(), which is the
-representation XDP multi-buffer expects.
-
-Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accept non-linear skb")
-Cc: stable@vger.kernel.org
-Signed-off-by: Matt Fleming <mfleming@cloudflare.com>
----
-Changes in v2:
-- Use skb_is_nonlinear() in veth_convert_skb_to_xdp_buff().
-- Move the skb_pp_cow_data() comment into kerneldoc.
-
- drivers/net/veth.c |  4 ++--
- net/core/skbuff.c  | 16 ++++++++++------
- 2 files changed, 12 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 1c5142149175..00e34afd858e 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -756,7 +756,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
- 	u32 frame_sz;
- 
- 	if (skb_shared(skb) || skb_head_is_locked(skb) ||
--	    skb_shinfo(skb)->nr_frags ||
-+	    skb_is_nonlinear(skb) ||
- 	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
- 		if (skb_pp_cow_data(rq->page_pool, pskb, XDP_PACKET_HEADROOM))
- 			goto drop;
-@@ -771,7 +771,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
- 	xdp_prepare_buff(xdp, skb->head, skb_headroom(skb),
- 			 skb_headlen(skb), true);
- 
--	if (skb_is_nonlinear(skb)) {
-+	if (skb_shinfo(skb)->nr_frags) {
- 		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
- 		xdp_buff_set_frags_flag(xdp);
- 	} else {
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 18dabb4e9cfa..66f57131633a 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -927,6 +927,16 @@ static void skb_clone_fraglist(struct sk_buff *skb)
- 		skb_get(list);
- }
- 
-+/**
-+ * skb_pp_cow_data() - copy skb data into page-pool backed storage
-+ * @pool: page pool to allocate from
-+ * @pskb: pointer to skb pointer, replaced with the copied skb on success
-+ * @headroom: headroom to reserve in the copied skb
-+ *
-+ * skb_copy_bits() handles both frags[] and frag_list input. If the copied
-+ * skb remains non-linear, it uses frags[], which is the representation used
-+ * by XDP multi-buffer.
-+ */
- int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
- 		    unsigned int headroom)
- {
-@@ -936,12 +946,6 @@ int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
- 	int err, i, head_off;
- 	void *data;
- 
--	/* XDP does not support fraglist so we need to linearize
--	 * the skb.
--	 */
--	if (skb_has_frag_list(skb))
--		return -EOPNOTSUPP;
--
- 	max_head_size = SKB_WITH_OVERHEAD(PAGE_SIZE - headroom);
- 	if (skb->len > max_head_size + MAX_SKB_FRAGS * PAGE_SIZE)
- 		return -ENOMEM;
--- 
-2.43.0
+> +	prog = READ_ONCE(link->prog);
+>  	if (prog) {
+>  		bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
+> +		prog_id = prog->aux->id;
+> +	}
+> +	rcu_read_unlock();
+> +	rcu_read_unlock_trace();
+> +
+> +	if (prog) {
+>  		seq_printf(m,
+>  			   "prog_tag:\t%s\n"
+>  			   "prog_id:\t%u\n",
+>  			   prog_tag,
+> -			   prog->aux->id);
+> +			   prog_id);
+>  	}
+>  	if (link->ops->show_fdinfo)
+>  		link->ops->show_fdinfo(link, m);
+> @@ -5535,6 +5546,7 @@ static int bpf_link_get_info_by_fd(struct file *file,
+>  {
+>  	struct bpf_link_info __user *uinfo = u64_to_user_ptr(attr->info.info);
+>  	struct bpf_link_info info;
+> +	const struct bpf_prog *prog;
+>  	u32 info_len = attr->info.info_len;
+>  	int err;
+>  
+> @@ -5549,8 +5561,15 @@ static int bpf_link_get_info_by_fd(struct file *file,
+>  
+>  	info.type = link->type;
+>  	info.id = link->id;
+> -	if (link->prog)
+> -		info.prog_id = link->prog->aux->id;
+> +
+> +	/* prog can be sleepable */
+> +	rcu_read_lock_trace();
+> +	rcu_read_lock();
+> +	prog = READ_ONCE(link->prog);
+> +	if (prog)
+> +		info.prog_id = prog->aux->id;
+> +	rcu_read_unlock();
+> +	rcu_read_unlock_trace();
+>  
+>  	if (link->ops->fill_link_info) {
+>  		err = link->ops->fill_link_info(link, &info);
 
