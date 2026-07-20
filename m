@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC4C403EAF
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 13:52:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B68353EDF
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 13:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784555539; cv=none; b=YfzPEr03QIE2suLcpsBmYDbcdSyD0gGN4m/SneQo7ktm2DxzcJNf11eUXqX1PwE+3wA54q/Omq3ssgDg/Gs+cxeIl58WUIp8AZdThcAhmnRKJYctyDExke42rfRNGst8vrEb8astdbggFqbrZ2PYeo3ulJ0RpipKawaJJ0HGNMI=
+	t=1784555725; cv=none; b=RbSKsY6YF3vuNzMTOB0sgNGqRmk7NMPpbn8D8Sz5Y6IEoZE7hhkBWuWua31b4MbrzI58dSOlcmYmKSZGEIlO3yoWAmIq8/2tiWApn40UpBBl11mehJSrHvphlEh9BCs1x6yUym0DCmXF4RUwTwmj8iRP7sm0fNLt1Ui7UUSky2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784555539; c=relaxed/simple;
-	bh=pVPk6hHan87/9lR/Uy7QlMDPlmxouiwdQ+5gaaUTEBA=;
+	s=arc-20240116; t=1784555725; c=relaxed/simple;
+	bh=0WUV12pQQp82+/Jivpu6a/p6bQQ5GTYa4FBLUJKhjcI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Er0Z3ChNTV0jaS3WraKmYtzxDypVnNvbX7PSET2yBq6QM+HKi+oqrVazoG2vPv+LUPR5ohKrzlmd8k4mJthGBycfm+s6CkSF4AGQRbzVtEnG3I+xZ0QybHXLImNrIXDKbRdT9XUPi9ogITPNjwaNrzyD8bYe/+M71pHP0Xiv2KA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ujtf1SyH; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ovBEtkIk9UbkvxFQ7pangug022n04n6CJVnIyN1vmoFukY/AJdr4MfQI/DNe2mL6a8EhV0Lf7lbNHWr3odIsl83vjKdvvMfLj0xFiw5JlJQAGrKkQd3zIWfXYsETcyDjwcuig4MBnvYAOOr/RN0l8yVi2VgXmv/fKB0xsdMlMlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Md0rGbC8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ujtf1SyH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92EE61F00A3D;
-	Mon, 20 Jul 2026 13:52:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Md0rGbC8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3461F000E9;
+	Mon, 20 Jul 2026 13:55:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784555538;
-	bh=QKtRt90WVtehLuR8QUC86CeJ5wX+Ib6lyt3da1KIdnc=;
+	s=k20260515; t=1784555723;
+	bh=166MG0fuA9oHN/tLfAvCvwYrL3MlnOD8WHw3K5raWms=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Ujtf1SyHCJwFAZ+KGy6egoCMAjWpq7XaJOZM1DZn95qNUvxK8sQNUx2jZYGUc7ae1
-	 Tkkzmqa9APDs3uRPzrAMqp5pgtkeUoE4w+cHjpUvuVDNtENf6BysHS2pP5LQShIRK+
-	 y+NIec7ZchiXplvUi9ApO3COMeFrZaYqe7RDrQS2+yg1rkRe8jnUXzdpXF75vxU0Q5
-	 yNWbqUQOSLa9PzC7ATbUOnXWyZgzEqJ0Z+ncvJ+b3TrMHZKqo/tAgayUJNcvsC+6AK
-	 3BR/CWJc/UpvdFviKIw8TiT/zzbOQthiPK5bEHwE7GHVQYn0tD+hs2w1bSQV3sGD0x
-	 goMxRhPCdOdAQ==
+	b=Md0rGbC8osPsbVuxE1ilJ35GKvBkLFFrRfSiYl+SvKayvMew9Wx9uXWNVTZkHN6ZV
+	 PZOhVxfkOH6fLmM4MbM6FHAgHZo7rFPvpg/fuq0oATWO7XEdCbKg1aSky2NxVDDnkI
+	 BjbvwhhhjOFiPimKdMsPT9otdvFVnsF1yGqGJqix+UQiGHbDOA3BgtdK2EDAZpJT96
+	 50FASMEAxmoWF+Y3mr2rwgQtbsodPPMtHQ78k+mb01wKRa2YL45SeKOVLAW0l/uYgU
+	 qgkRWAsxHXW0cmF1WHkq2Pp8R9IukK0GtZfIurg6lEsoZv9pTPgEPsB+LxY41YeBT4
+	 sMMsGLdNKJr8Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v2] e1000e: Fix out-of-bounds MMIO access by
- validating BAR0 size
+Subject: Re: [PATCH bpf v4 1/4] bpf: Fix potential UAF in
+ bpf_netns_link_update_prog
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Pu Lehui" <pulehui@huaweicloud.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260720133049.1289167-1-pulehui@huaweicloud.com>
-References: <20260720133049.1289167-1-pulehui@huaweicloud.com>
+In-Reply-To: <20260720134547.1289964-2-pulehui@huaweicloud.com>
+References: <20260720134547.1289964-1-pulehui@huaweicloud.com>
+ <20260720134547.1289964-2-pulehui@huaweicloud.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 13:52:18 +0000
-Message-Id: <20260720135218.92EE61F00A3D@smtp.kernel.org>
+Date: Mon, 20 Jul 2026 13:55:23 +0000
+Message-Id: <20260720135523.AB3461F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,62 +49,89 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] The driver unconditionally maps BAR0 with `ioremap()`, without ver=
-ifying that BAR0 is an `IORESOURCE_MEM` region. A spoofed PCI device could =
-expose BAR0 as an I/O region, which could bypass the new length check on so=
-me architectures and lead to `ioremap()` being called on an I/O port addres=
-s.
+- [High] Lockless access to `link->prog` in generic BPF link info retrieval=
+ functions and mprog logic can lead to a Use-After-Free when an updateable =
+link replaces its program concurrently.
 --
 
---- Patch [1]: [PATCH net v2] e1000e: Fix out-of-bounds MMIO access by vali=
-dating BAR0 size ---
-commit 939eee77005bb32587689d8e06aa2cec8c38f7e9
+--- Patch [1]: [PATCH bpf v4 1/4] bpf: Fix potential UAF in bpf_netns_link_=
+update_prog ---
+commit 1e9631860a41f1ee87e0b9afa5e2e3ca3f35147e
 Author: Pu Lehui <pulehui@huawei.com>
 
-e1000e: Fix out-of-bounds MMIO access by validating BAR0 size
+bpf: Fix potential UAF in bpf_netns_link_update_prog
+   =20
+This commit fixes a potential use-after-free race condition in
+bpf_netns_link_update_prog. By moving the old_prog and prog->type checks
+inside the netns_bpf_mutex critical section, it prevents concurrent
+BPF_LINK_UPDATE operations from freeing the program while it is being acces=
+sed.
 
-This commit fixes an out-of-bounds MMIO access in the e1000e driver
-by ensuring the length of BAR0 is at least 64K before performing ioremap.
-
-> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/eth=
-ernet/intel/e1000e/netdev.c
-> index 844f31ab37ad4..46e58e926f7b4 100644
-> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
-> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-
-[ ... ]
-
-> @@ -7450,6 +7450,11 @@ static int e1000_probe(struct pci_dev *pdev, const=
- struct pci_device_id *ent)
->  	mmio_len =3D pci_resource_len(pdev, 0);
+> diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
+> index 25f30f9edaefd..9fc62db1441c6 100644
+> --- a/kernel/bpf/net_namespace.c
+> +++ b/kernel/bpf/net_namespace.c
+> @@ -171,13 +171,17 @@ static int bpf_netns_link_update_prog(struct bpf_li=
+nk *link,
+>  	struct net *net;
+>  	int idx, ret;
 > =20
->  	err =3D -EIO;
-> +	if (mmio_len < E1000_MMIO_LEN_MIN) {
-> +		dev_err(&pdev->dev, "MMIO len is too small\n");
-> +		goto err_ioremap;
+> -	if (old_prog && old_prog !=3D link->prog)
+> -		return -EPERM;
+> -	if (new_prog->type !=3D link->prog->type)
+> -		return -EINVAL;
+> -
+>  	mutex_lock(&netns_bpf_mutex);
+> =20
+> +	if (old_prog && old_prog !=3D link->prog) {
+> +		ret =3D -EPERM;
+> +		goto out_unlock;
+> +	}
+> +	if (new_prog->type !=3D link->prog->type) {
+> +		ret =3D -EINVAL;
+> +		goto out_unlock;
 > +	}
 > +
->  	adapter->hw.hw_addr =3D ioremap(mmio_start, mmio_len);
 
 [Severity: High]
-This isn't a bug introduced by this patch, but is it possible for ioremap()=
-=20
-to be called on an I/O port region here?
+This isn't a bug introduced by this patch, but while looking at the lockless
+accesses of link->prog being fixed here, I noticed other places that might
+have similar race conditions.
 
-Earlier in e1000_probe(), pci_select_bars() filters out non-memory BARs. If=
-=20
-a device is bound via sysfs and exposes BAR0 as an IORESOURCE_IO region=20
-instead of IORESOURCE_MEM, the driver fails to request the region but still=
-=20
-unconditionally passes mmio_start to ioremap() at this location.
+For example, in kernel/bpf/syscall.c, bpf_link_show_fdinfo() reads link->pr=
+og
+locklessly:
 
-Could this cause a kernel panic on architectures where I/O space is distinc=
-t=20
-from memory space when the returned address is subsequently dereferenced?
+kernel/bpf/syscall.c:bpf_link_show_fdinfo() {
+    ...
+    const struct bpf_prog *prog =3D link->prog;
+    ...
+    if (prog) {
+        bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
+    ...
+}
 
->  	if (!adapter->hw.hw_addr)
->  		goto err_ioremap;
+Similarly, bpf_link_get_info_by_fd() in the same file accesses
+link->prog->aux->id locklessly, and bpf_mprog_link() in kernel/bpf/mprog.c
+checks link->prog->type without locks.
+
+If a user-space thread calls one of these info retrieval functions and is
+preempted, could a concurrent BPF_LINK_UPDATE (like tcx_link_update or
+the one being fixed in this patch) swap out link->prog via xchg() and free
+it?
+
+Since the reading threads do not appear to hold rcu_read_lock() or take a
+reference on the program, it seems the RCU grace period could complete,
+resulting in a use-after-free when they resume and dereference prog->tag or
+prog->aux->id.
+
+Should we add RCU read locks or reference counting around these generic info
+retrieval paths to prevent the program from being freed out from under them?
+
+>  	net =3D net_link->net;
+>  	if (!net || !check_net(net)) {
+>  		/* Link auto-detached or netns dying */
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720133049.1289=
-167-1-pulehui@huaweicloud.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720134547.1289=
+964-1-pulehui@huaweicloud.com?part=3D1
