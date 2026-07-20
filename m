@@ -1,189 +1,98 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9BE43E06D
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 16:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.187.6.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07134302F6;
+	Mon, 20 Jul 2026 16:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.187.6.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784564522; cv=none; b=MZRcJGnwjcsmvuqMYkytx+zrnfpQx3FEm6my/1zUv0rOqvji7K+SicLXGLED5lKvMhl5PxPZ5B4SZhmcL287Uggv8pswaEbLylvu1fBS2HZrdj1OH+8ihCb0dNAAeBTKqFavsqUG8CUUGgZhDIviccIBqGVlWtqyHiUCY5IVRIQ=
+	t=1784565791; cv=none; b=IZEKcfo9Bw7NAXrbIXJ/SRcCuKVv89E/iMc4wkjEvkEKpZ9ZEWF6/B6HBjVIolflcC4jXgxpeiZx99FEfBA8EVKcTNXLE6utEY9pUKoN64YA6/vGYXuEUT7k8Lc9Sj7PtSpLFAOq6EFOc20Rvs916Zhsnb7sF3/pd3d2Dt7W9VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784564522; c=relaxed/simple;
-	bh=0YdNydfw4xMctPFOfeLTpz+PtcBJNRG0IrIv2owRlhA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=sl1RlbDAfmcG5Ly/FIj3HE4KYNx9fTA3TZp32bO5yfIQCwDODbmJarE7NlOizKdinKmlXZnKWBCMA32TCjniBB13irCoZXXMmg/3qoxqoO4S7K/8kr/wSkZvsyXTQwysd3jz5n973ww5Jvp9crNBW4f1gbin3qDHk8Q7ALNSk6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MpUgyPoA; arc=none smtp.client-ip=74.125.225.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784565791; c=relaxed/simple;
+	bh=nrsV3aQGDUDpGrlMw0JqI3UoiNvNrEbtvZ+8ZYaYDDE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qz/8/qr6/QQIGjp/lLZZlq5k7znOBpy9LJnh3hLlf6sTFgp08EGGQs4naqeYNNnoojypw4uerYIjDaxDHpVAXsCOoImTXgNyrFZYSJFzprKSQdk7/aD6ZrTLxEQRFBBaQwVfM8/Px1ByX59EP4LxqBBPgMhFwruPzNDkCxGFxsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=rDdeMk0i; arc=none smtp.client-ip=52.187.6.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MpUgyPoA"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495482c36b8so15754975e9.0
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 09:21:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="rDdeMk0i"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784564512; x=1785169312; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=stbwh1TlSlsm7qqGCEf/6eqyf2AXTrm0T0HbGR7Vf9Y=;
-        b=MpUgyPoALHyEy14VLClKcfagYKjhVPNIrAuMIPKAWSorEMn1C1a6YACaKks64rURHQ
-         W3L6r7rFMMFUT8I4AJTkkXmH5J1hFZbv7tzMcRhmwBGoCrOtT8smT7TRMCamRH4PqIFM
-         YQJPAkDJ0g7rgti8vlMasf3SLU+l8Ry9mA5Wh6XzNRRekbBaoenx23x41COlVXxhAQwp
-         csdXmHKDc6kystGsJKgxjZSqk/1dVzEk/0A7D5GBdZWGvSpm9f+XFV2eQ0eg+Fdyu/Uc
-         itLdKHeAhguhlH0eMtFEYhU4ddiMKqGpkYfM2urRKxUoMYO3zqgDVR7iNmQZ7l7SCmTS
-         RxWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784564512; x=1785169312;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=stbwh1TlSlsm7qqGCEf/6eqyf2AXTrm0T0HbGR7Vf9Y=;
-        b=FPvncl0qNLxGyDmBGyuZZQnK7+igyhzqxIVFbrT2OWiGJspxLzgRqKGGV+Rp4QSz5R
-         M9QpaFEqxyM+xGAsgaKAgmF7XWbpypsYD5sj/bEV5UsszB88yZSHA1oUUv9tG0007MpD
-         Yo7GlQRuDM0s7bb/ApZdpq9L/uwTno9E2TYuA5XatZsxgb9ayl/P4Ing2FQH0mJbSCcq
-         xe9YwPr8psmy5v4Uxsno3/ToE6D6EkFh1aIsSwkxRh2Mf1oHli4Ti5NfLC6c7zq3WPE7
-         Hg5So1K0m5ocwOl25IyxeeothllcVTlZuVfBuX+cNimeDzOUtxKTho5wF1owmwDzD6ut
-         yGaA==
-X-Gm-Message-State: AOJu0YxzJZT3MkF21XX68br3ZQsoqz8E3C1gDcXUZCCxv/eJ8ajjlTR/
-	i+prkfMpa57DwVgdeyHi9UiXqCUsvv/Bc7a2brutTGzehuDIsV+3ptE+mI87+n+K
-X-Gm-Gg: AfdE7cl9PRvEYluFNu8hs6dlwzpLCHRdZ8jqN7jKiSRzYhCaEAEa62vFRtmdmSCj9Mb
-	UECb6T6TrNx35cGuCrciFv6SeM0uO7MqulvPeWBOUCJ6c6szWkjXrDyi/4tOHz7xLbozwx3Bo4a
-	uNOZRkFw8qUL6A+xvjw/aM/ebj27yY1bS/sgLtwseJQmE9G4ZxSrAVsWGv4EpEk8uf+eiCRu5KQ
-	I9RWeerCZquyg5HUjijZkSqH9sXmnO++HR6RALOndX0E1nd/4O4KFr668TrhyXDbOC0Nk2gHS4W
-	9oSYmGdlSf4N2mBLB9JWMkhbXU9tahwWE76WMNaARIJts/IbiqXAHmNjO7wPOwDca3Z0mfnG7+W
-	UtM4GfrQOHuyjj6B3usSgMM11VMjic46zuzCrnyrg30Iy17aVzu0Ns0BPBpxJI+PJeMPLMkZvte
-	QAlQ+GsYRhRSbc4qIWnGqkCu/HXnjEtWhM0RS8NZrywWlHeycX+rnOs0uT4QNq48O7iAqjc0wE/
-	OEGyBktC/+3rRkyb20QFMmfGblZRC/nwS92Sf7aMTOF
-X-Received: by 2002:a05:600c:524a:b0:495:641a:bd3f with SMTP id 5b1f17b1804b1-495641abe94mr21767565e9.13.1784564512031;
-        Mon, 20 Jul 2026 09:21:52 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956537c7desm1794725e9.7.2026.07.20.09.21.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 09:21:51 -0700 (PDT)
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=ScHLL
+	W7PsgGNyPwTlAbUCgZuDTdFZhxn8kRVhx7oDCk=; b=rDdeMk0iEF3/WVZNfvtl+
+	JzmxbcaWIrPDAli0MjNEVlF2TxBpzwK4PqX5Ki6orXJBXrWT4jrklnazWlwORcvw
+	QRoJZoMJzJLqUeZn4IFtvL6RNjgsTkGqCzWu1ahmrm+iwNmfM6/WIbpT3uZ3qTzC
+	BXCNJKtIKgIw3uGLKm1j9I=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web2 (Coremail) with SMTP id yQQGZQDX1bcGUF5q2kYhAA--.51004S2;
+	Tue, 21 Jul 2026 00:42:49 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] bpf: Preserve stack frame number for commuted stack arithmetic
+Date: Mon, 20 Jul 2026 16:37:43 +0000
+Message-Id: <cover.1784563939.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Jul 2026 18:21:51 +0200
-Message-Id: <DK3JBMNLNYLD.2YDG311I01VWT@gmail.com>
-Subject: Re: [PATCH bpf-next 0/4] selftests/bpf: Fix compilation with
- RELEASE=1
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Viktor Malik" <vmalik@redhat.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
- "Eric Biggers" <ebiggers@kernel.org>, "Stanislav Fomichev"
- <sdf@fomichev.me>
-X-Mailer: aerc 0.21.0
-References: <cover.1784112948.git.vmalik@redhat.com>
- <CAP01T74To6X_XPeM5L9wN52QuL8oSuoDA3jk3jhR_Y1bLXH2Lw@mail.gmail.com>
- <c49fbf3d-c1de-4eb3-a6b4-22c7bc84d655@redhat.com>
-In-Reply-To: <c49fbf3d-c1de-4eb3-a6b4-22c7bc84d655@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:yQQGZQDX1bcGUF5q2kYhAA--.51004S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GFW3Kr1kWFWrZFyxZw4fXwb_yoWDKwc_ua
+	9ava90ywsrAFs2gFy7CF1fZrW3Ca1fXryxAa1DtF13trn8Xrn8WF1kur15G3yIqF4jqrZx
+	ZF9Yq34F9r1agjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb6AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+	1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+	YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwV
+	WUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
+	Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x
+	0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
+	JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
+	AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUsXo7UUUUU=
+	=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On Wed Jul 15, 2026 at 3:30 PM CEST, Viktor Malik wrote:
-> On 7/15/26 14:10, Kumar Kartikeya Dwivedi wrote:
->> On Wed, 15 Jul 2026 at 13:22, Viktor Malik <vmalik@redhat.com> wrote:
->>>
->>> When compiling BPF selftests with RELEASE=3D1 (which most notably adds
->>> -O2), GCC reports several warnings. These are by default treated as
->>> errors and abort the compilation.
->>>
->>> This series fixes all of the issues such that selftests can be compiled
->>> with RELEASE=3D1.
->>>
->>
->> Are these changes sufficient to fix all issues? I see more when I
->> compile with GCC 15 and RELEASE=3D1.
->
-> Strange, I tried compiling with both GCC 15 and 16 and these four
-> patches got rid of all the issues. Can you send the specific issues that
-> you see?
->
+The verifier uses reg->frameno to distinguish stack pointers that have the
+same offset but refer to different call frames. The scalar += pointer path
+copies pointer type and id to the destination register, but it also needs to
+preserve frameno when the source pointer is PTR_TO_STACK.
 
-  In file included from /usr/include/features.h:539,
-                   from /usr/include/arpa/inet.h:21,
-                   from tools/testing/selftests/bpf/map_tests/lpm_trie_map_=
-batch_ops.c:3:
-  In function =E2=80=98inet_ntop=E2=80=99,
-      inlined from =E2=80=98map_batch_verify.constprop=E2=80=99 at tools/te=
-sting/selftests/bpf/map_tests/lpm_trie_map_batch_ops.c:53:3:
-  /usr/include/x86_64-linux-gnu/bits/inet-fortified.h:36:10: error: call to=
- =E2=80=98__inet_ntop_chk_warn=E2=80=99 declared with attribute warning: in=
-et_ntop called with
-  bigger length than size of destination buffer [-Werror=3Dattribute-warnin=
-g]
-     36 |   return __glibc_fortify (inet_ntop, __dst_size, sizeof (char),
-        |          ^~~~~~~~~~~~~~~
+Preserve the frame number for commuted stack pointer arithmetic and add a
+verifier regression test where a callee derives its frame pointer through
+scalar += fp before overwriting and reloading the same stack slot.
 
-  In file included from /usr/include/fcntl.h:342,
-                   from tools/testing/selftests/bpf/prog_tests/cgroup_xattr=
-.c:5:
-  In function =E2=80=98open=E2=80=99,
-      inlined from =E2=80=98test_read_cgroup_xattr=E2=80=99 at tools/testin=
-g/selftests/bpf/prog_tests/cgroup_xattr.c:52:11,
-      inlined from =E2=80=98test_cgroup_xattr=E2=80=99 at tools/testing/sel=
-ftests/bpf/prog_tests/cgroup_xattr.c:71:3:
-  /usr/include/x86_64-linux-gnu/bits/fcntl2.h:52:11: error: call to =E2=80=
-=98__open_missing_mode=E2=80=99 declared with attribute error: open with O_=
-CREAT or O_TMPFILE in
-  second argument needs 3 arguments
-     52 |           __open_missing_mode ();
-        |           ^~~~~~~~~~~~~~~~~~~~~~
+Yiyang Chen (2):
+  bpf: Preserve stack frame number for commuted arithmetic
+  selftests/bpf: Cover stack frame number after scalar plus fp
 
-That said, it also fixes the ones you pointed out, so we can probably land =
-this.
+ kernel/bpf/verifier.c                         |  7 +++-
+ .../selftests/bpf/prog_tests/verifier.c       |  2 -
+ .../bpf/prog_tests/verifier_basic_stack.c     | 28 +++++++++++++
+ .../bpf/progs/verifier_basic_stack.c          | 41 +++++++++++++++++++
+ 4 files changed, 74 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verifier_basic_stack.c
 
->> Also, is there no way to make ASSERT_OK_PTR work when we're testing
->> for non-NULL-ness? Having to change it to explicit !=3D NULL is kinda
->> sad.
->
-> ASSERT_OK_PTR uses libbpf_get_error(), which returns -errno when the
-> passed pointer is NULL. This is correct for checking pointers returned
-> from libbpf because libbpf always sets errno when it returns NULL as an
-> erroneous value of a pointer. However, that is not the case for other
-> library functions, such as malloc(), so calling libbpf_get_error() on
-> their result may actually return 0, if the function returned NULL and
-> never set errno.
->
-> So, I'd say that in the current state, results of non-libbpf
-> ptr-returning functions should be checked with ASSERT_NEQ.
-> Alternatively, we can update ASSERT_OK_PTR to explicitly fail with a
-> default error code when NULL is passed, for example:
->
-> diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
-ftests/bpf/test_progs.h
-> index 2cf950afcd85..bf94b0947790 100644
-> --- a/tools/testing/selftests/bpf/test_progs.h
-> +++ b/tools/testing/selftests/bpf/test_progs.h
-> @@ -390,7 +390,7 @@ void hexdump(const char *prefix, const void *buf, siz=
-e_t len);
->  #define ASSERT_OK_PTR(ptr, name) ({                                    \
->         static int duration =3D 0;                                       =
- \
->         const void *___res =3D (ptr);                                    =
- \
-> -       int ___err =3D libbpf_get_error(___res);                         =
- \
-> +       int ___err =3D ___res ? libbpf_get_error(___res) : -EINVAL;      =
- \
->         bool ___ok =3D ___err =3D=3D 0;                                  =
-     \
->         CHECK(!___ok, (name), "unexpected error: %d\n", ___err);        \
->         ___ok;                                                          \
->
-> However, that would make us lose the error codes passed via errno from
-> libbpf.
 
-Hmm, I see. I guess we can let it be then. Eduard, any suggestions or
-preferences here?  Otherwise I am inclined to apply this for now.
-
->
-> Viktor
+base-commit: cfce77b63375dac81d53f2f85593c548415206b7
+-- 
+2.34.1
 
