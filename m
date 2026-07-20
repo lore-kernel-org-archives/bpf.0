@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07D73D25CC;
-	Mon, 20 Jul 2026 09:34:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FE83D79F9;
+	Mon, 20 Jul 2026 09:34:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784540066; cv=none; b=iQ2weaumOskYOpL0h6o+N3AAyVpfCXSvdfqJAOFFa7g//7hG2DCNA9lMvtU3sG13zRZ24mBLnS6WVEa4d29iN96mgTNw/vcwrcHkyLk3pNwvzHxP5zh833Mar0qLyRmcrDtB2Y3lbTwItNBMrPjNzn7csm5KYPzhPVW6F4re+ac=
+	t=1784540070; cv=none; b=hr5YeTUEWfjnmy3jLHdetOUIW8GNfia6dZW6I5G3o/IZfEKdVhCfn6Wv2r0Jcr7+UmPCwsAB6erQPGV5YlB6bGof98BAJmeb7pNDLLuglALVYbE0RGBN7fxkjDy7yVZO9vxUZyFn4v5zVkLOyUkl8xM38N2UTcY22R+1X2EI46k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784540066; c=relaxed/simple;
-	bh=HTd4FlQ/ImzVQFbVjYVnYvCT5MQJdjtKW6kGkWqTDs0=;
+	s=arc-20240116; t=1784540070; c=relaxed/simple;
+	bh=i7lH8bNEiRx9Hi67BUFlmbcbsKQKKwiaM+41Ap7Y50w=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=g3Y/1kFfd5cZ9jV8Hqe4E8eJtV0fJ8p//2De+iQATy7kuxEfjDZjprCdfeBn+WZGFNPkIOOjt9NSCkVASqOK5twvyDBpUe40OLS4B11fj1YQdpRW5b7jqZ0YpWk1LI7Q+MIPJHKJZb6hX42hPIzELeyaNrbuus3kO2i+BoFiFTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KL9HwLcI; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=rsZHPHT/vrt6h5g5k97S0qlQoj1JYxhOZz90Ou3VsPM9A8KGgXSVAIDIIQUJ2XOVK4FQ2CSaoqYqponyFvKLWRE/MolFkOTUtPBcPvno2rdhTWMcLCfVkCf+1uwHMDiH7qTSNz2dfO4JM4kdp5RREtqprBqe//vJdZA4FrUjM2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PtcLvcUW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KL9HwLcI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CBC1F000E9;
-	Mon, 20 Jul 2026 09:34:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PtcLvcUW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4665D1F00A3A;
+	Mon, 20 Jul 2026 09:34:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784540064;
-	bh=qiqkk6rXeNnoqsmRilhTR74TetGVo2qWnVY/kCrNM9Y=;
+	s=k20260515; t=1784540068;
+	bh=wAKUaYj5DHW9nm1lOWEWXJhJ77C/0u0qe7FA/HC26JE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=KL9HwLcIv8tVa5sPFjWGyTsjHza2tuUE3dpiQXmXF5Y6K55NFaTwY2sSDcqnTzbHQ
-	 bKOWNkU6CGhFzONqd6QNHEDM/4UV3x4tGWZIdmRW/IiAisXLy+YmUFGneBqrGlBIQP
-	 DexRGWtMLkDa6ubxnhaqqCMTZhF6hDTUNhrAMw/pRCdjG/yWhcxEzlL8VvtKQQitsy
-	 vTV5a1/cMQfqh0OuDM6p97pxEH0uTReOmoDIAuO7ALGRCY0XXiJ6ndUJgfNuqWUZ35
-	 1pItIQDNMSBsfh94YEPOxnBIlg83a8DIUQrUazIaOEFrh2OAO+wxn9wn+Sh0ZN1ngA
-	 KA0nHZRk3vAHg==
+	b=PtcLvcUWgji8C06pO0Nbhwhuinq8erGH6bGMb88UpzguOUqi8cwYu177TSeZfq3nK
+	 JuOIjRKM++e1kFvETq/72YFxc1wl+YD+c4w2LS+2ftIdOm/K3OaozZBG8PrkqH+lMB
+	 Z6X4uxML9bRxF9qiy/G8m4nYTuOUCeWApMNvaLKGConVh4HB0sGHgBV8KVnUBz0WQ/
+	 +6bz2t91NfmIm2BVuBg9Mc0bfjCI9CAiTo+Wm7+oxFMQjhnS6RqmWc9ZwwqSgwwkC8
+	 alnweCozFNKlHCNztQ029Go+EDXQN9BTkXnG5fCSjgjZmEKckkj0bMgzeOE+ofzutL
+	 ib61ufI5orCOg==
 From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 20 Jul 2026 11:33:31 +0200
-Subject: [PATCH 08/21] exec: add AT_FLAGS_TRANSPARENT_INTERP
+Date: Mon, 20 Jul 2026 11:33:32 +0200
+Subject: [PATCH 09/21] exec: label mm->exe_file with the binary for a
+ transparent dispatch
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,7 +38,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260720-work-bpf-binfmt_misc-ptinterp-v1-8-ddb76c9a508e@kernel.org>
+Message-Id: <20260720-work-bpf-binfmt_misc-ptinterp-v1-9-ddb76c9a508e@kernel.org>
 References: <20260720-work-bpf-binfmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org>
 In-Reply-To: <20260720-work-bpf-binfmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org>
 To: Farid Zakaria <farid.m.zakaria@gmail.com>, 
@@ -49,110 +50,153 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
  jannh@google.com, mail@johnericson.me, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.16-dev-4217c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4399; i=brauner@kernel.org;
- h=from:subject:message-id; bh=HTd4FlQ/ImzVQFbVjYVnYvCT5MQJdjtKW6kGkWqTDs0=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTFvm4KV5BpNiyZcrzlW2+61XqH7AVL+Zyn8s6XebLt/
- 50pcnF+HaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABPZGMjI8Ou737uDJs6/tl9s
- 0TZMrdH/fPZbgfW8hPl3zdj0V703MWH4H/Tn5s19J6UnMRRbySnOeTyPdYZSgE+Y0hr9DI+j3kV
- L2QA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5670; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=i7lH8bNEiRx9Hi67BUFlmbcbsKQKKwiaM+41Ap7Y50w=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTFvm5yv1tXtSltJovFJx2r1+qzFujUPQ37qJTg8zWDq
+ 9C7N4Kno5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCLPgxj+x6oHSVama7zOueS3
+ 73DIwaceCj0m7v+/XNXeFBcuci6DgeF/hceE9XcbtliXcfyTFpjLVPx1y/vnx85u+Xb8y4zDBcq
+ pTAA=
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-A transparent binfmt_misc dispatch hands the binary to the interpreter
-through AT_EXECFD and leaves the argument vector exactly as the caller
-built it. The loader on the receiving end has to know which contract it
-got.
+When binfmt_misc dispatches a binary to an interpreter, the interpreter
+becomes bprm->file and begin_new_exec() labels mm->exe_file with it. For
+wine or qemu-user that is the point. For the transparent mode it
+defeats the point. The interpreter is an implementation detail and the
+process's identity is the binary. Relocatable programs that locate
+themselves via /proc/self/exe find the dynamic linker instead [1].
 
-On the classic 'O'/'C' entries the binary's path is spliced into the
-argument vector and the loader consumes arguments. In transparent mode
-nothing was spliced and argv belongs entirely to the program. This
-cannot be inferred from AT_EXECFD alone. Raise a new AT_FLAGS bit
-following the AT_FLAGS_PRESERVE_ARGV0 precedent added for qemu-user in
-commit 2347961b11d4 ("binfmt_misc: pass binfmt_misc flags to the
-interpreter").
+Userspace cannot repair this after the fact. The exe link is the one
+capability-gated field of PR_SET_MM_MAP, deliberately, because an
+uncapped exe swap lets any ptrace-capable process masquerade as an
+arbitrary executable.
 
-The bit also announces that mm->exe_file names the binary rather than
-the interpreter (added in the next commit). A loader that sees the bit
-may finish the identity polish by fixing up AT_PHDR/AT_ENTRY/AT_BASE in
-saved_auxv and fix the code/data markers via one uncapped PR_SET_MM_MAP
-once it has mapped the binary. I've got glibc patches for this as well
-but it's useful for any loader.
+bprm->executable is the file execve() access-checked and kept open for
+AT_EXECFD. It is already the file would_dump() bases the dumpability
+decision on and the file bprm->execfd_creds derives credentials from.
+Label mm->exe_file with it when the dispatch is transparent and the
+identity is correct from the start. The label names precisely the file
+the caller passed to execve().
 
-BINPRM_FLAGS_TRANSPARENT_INTERP carries the mode from binfmt_misc to
-the ELF loaders. Both create_elf_tables() variants translate it into
-the aux vector bit. Nothing sets the bprm flag yet.
+Write-denial moves along with the label. The result is exact parity with
+a direct execution. A concurrently written binary fails execve() with
+-ETXTBSY at open and a running one cannot be opened for writing. The
+interpreter consequently is not exe-pinned and matches the role it has
+in a native PT_INTERP exec.
 
+Nothing sets BINPRM_FLAGS_TRANSPARENT_INTERP yet; the transparent
+dispatch machinery in binfmt_misc follows and raises it from birth, so
+the label and the aux vector bit that announces it appear together.
+
+Link: https://inbox.sourceware.org/libc-alpha/87ik6fymha.fsf@oldenburg.str.redhat.com [1]
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- fs/binfmt_elf.c              | 5 ++++-
- fs/binfmt_elf_fdpic.c        | 5 ++++-
- include/linux/binfmts.h      | 4 ++++
- include/uapi/linux/binfmts.h | 7 +++++++
- 4 files changed, 19 insertions(+), 2 deletions(-)
+ fs/exec.c               | 33 ++++++++++++++++++++++++++++-----
+ include/linux/binfmts.h |  4 +++-
+ 2 files changed, 31 insertions(+), 6 deletions(-)
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 16a56b6b3f6c..e44230242f3a 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -254,7 +254,10 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
- 	NEW_AUX_ENT(AT_PHENT, sizeof(struct elf_phdr));
- 	NEW_AUX_ENT(AT_PHNUM, exec->e_phnum);
- 	NEW_AUX_ENT(AT_BASE, interp_load_addr);
--	if (bprm->interp_flags & BINPRM_FLAGS_PRESERVE_ARGV0)
-+	/* Transparency preserves the whole argv, argv[0] included. */
-+	if (bprm->interp_flags & BINPRM_FLAGS_TRANSPARENT_INTERP)
-+		flags |= AT_FLAGS_TRANSPARENT_INTERP;
-+	else if (bprm->interp_flags & BINPRM_FLAGS_PRESERVE_ARGV0)
- 		flags |= AT_FLAGS_PRESERVE_ARGV0;
- 	NEW_AUX_ENT(AT_FLAGS, flags);
- 	NEW_AUX_ENT(AT_ENTRY, e_entry);
-diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
-index 7e3108489c83..3306d21ab738 100644
---- a/fs/binfmt_elf_fdpic.c
-+++ b/fs/binfmt_elf_fdpic.c
-@@ -645,7 +645,10 @@ static int create_elf_fdpic_tables(struct linux_binprm *bprm,
- 	NEW_AUX_ENT(AT_PHENT,	sizeof(struct elf_phdr));
- 	NEW_AUX_ENT(AT_PHNUM,	exec_params->hdr.e_phnum);
- 	NEW_AUX_ENT(AT_BASE,	interp_params->elfhdr_addr);
--	if (bprm->interp_flags & BINPRM_FLAGS_PRESERVE_ARGV0)
-+	/* Transparency preserves the whole argv, argv[0] included. */
-+	if (bprm->interp_flags & BINPRM_FLAGS_TRANSPARENT_INTERP)
-+		flags |= AT_FLAGS_TRANSPARENT_INTERP;
-+	else if (bprm->interp_flags & BINPRM_FLAGS_PRESERVE_ARGV0)
- 		flags |= AT_FLAGS_PRESERVE_ARGV0;
- 	NEW_AUX_ENT(AT_FLAGS,	flags);
- 	NEW_AUX_ENT(AT_ENTRY,	exec_params->entry_addr);
-diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
-index 03e1794b5cbb..d4f64d143d1a 100644
---- a/include/linux/binfmts.h
-+++ b/include/linux/binfmts.h
-@@ -93,6 +93,10 @@ struct linux_binprm {
- #define BINPRM_FLAGS_PRESERVE_ARGV0_BIT 3
- #define BINPRM_FLAGS_PRESERVE_ARGV0 (1 << BINPRM_FLAGS_PRESERVE_ARGV0_BIT)
- 
-+/* binfmt_misc dispatched to the interpreter transparently */
-+#define BINPRM_FLAGS_TRANSPARENT_INTERP_BIT 4
-+#define BINPRM_FLAGS_TRANSPARENT_INTERP (1 << BINPRM_FLAGS_TRANSPARENT_INTERP_BIT)
-+
- /*
-  * This structure defines the functions that are used to load the binary formats that
-  * linux accepts.
-diff --git a/include/uapi/linux/binfmts.h b/include/uapi/linux/binfmts.h
-index c6f9450efc12..aafc07d78b80 100644
---- a/include/uapi/linux/binfmts.h
-+++ b/include/uapi/linux/binfmts.h
-@@ -22,4 +22,11 @@ struct pt_regs;
- #define AT_FLAGS_PRESERVE_ARGV0_BIT 0
- #define AT_FLAGS_PRESERVE_ARGV0 (1 << AT_FLAGS_PRESERVE_ARGV0_BIT)
+diff --git a/fs/exec.c b/fs/exec.c
+index 6e540f4b43d8..45d416994682 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1101,6 +1101,17 @@ void __set_task_comm(struct task_struct *tsk, const char *buf, bool exec)
+ 	perf_event_comm(tsk, exec);
+ }
  
 +/*
-+ * The interpreter runs transparently: the argument vector and the exe
-+ * link belong to the binary passed in AT_EXECFD.
++ * The file the process presents as: its exe link and comm. A transparent
++ * dispatch presents as the binary, which is bprm->executable.
 + */
-+#define AT_FLAGS_TRANSPARENT_INTERP_BIT 1
-+#define AT_FLAGS_TRANSPARENT_INTERP (1 << AT_FLAGS_TRANSPARENT_INTERP_BIT)
++static struct file *bprm_identity_file(const struct linux_binprm *bprm)
++{
++	if (bprm->interp_flags & BINPRM_FLAGS_TRANSPARENT_INTERP)
++		return bprm->executable;
++	return bprm->file;
++}
 +
- #endif /* _UAPI_LINUX_BINFMTS_H */
+ /*
+  * Calling this is the point of no return. None of the failures will be
+  * seen by userspace since either the process is already taking a fatal
+@@ -1157,7 +1168,7 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 	 * not visible until then. Doing it here also ensures
+ 	 * we don't race against replace_mm_exe_file().
+ 	 */
+-	retval = set_mm_exe_file(bprm->mm, bprm->file);
++	retval = set_mm_exe_file(bprm->mm, bprm_identity_file(bprm));
+ 	if (retval)
+ 		goto out;
+ 
+@@ -1247,6 +1258,8 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 	 * Let's fix it up to be something reasonable.
+ 	 */
+ 	if (bprm->comm_from_dentry) {
++		struct file *comm_file = bprm_identity_file(bprm);
++
+ 		/*
+ 		 * Hold RCU lock to keep the name from being freed behind our back.
+ 		 * Use acquire semantics to make sure the terminating NUL from
+@@ -1256,7 +1269,7 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 		 * detecting a concurrent rename and just want a terminated name.
+ 		 */
+ 		rcu_read_lock();
+-		__set_task_comm(me, smp_load_acquire(&bprm->file->f_path.dentry->d_name.name),
++		__set_task_comm(me, smp_load_acquire(&comm_file->f_path.dentry->d_name.name),
+ 				true);
+ 		rcu_read_unlock();
+ 	} else {
+@@ -1300,6 +1313,9 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 		retval = FD_ADD(0, bprm->executable);
+ 		if (retval < 0)
+ 			goto out_unlock;
++		/* mm->exe_file carries its own write denial now. */
++		if (bprm->executable_denied)
++			exe_file_allow_write_access(bprm->executable);
+ 		bprm->executable = NULL;
+ 		bprm->execfd = retval;
+ 	}
+@@ -1419,8 +1435,12 @@ static void free_bprm(struct linux_binprm *bprm)
+ 	if (bprm->old_mm)
+ 		exec_mm_put_old(bprm->old_mm);
+ 	do_close_execat(bprm->file);
+-	if (bprm->executable)
++	if (bprm->executable) {
++		/* A transparent dispatch still holds the write denial. */
++		if (bprm->executable_denied)
++			exe_file_allow_write_access(bprm->executable);
+ 		fput(bprm->executable);
++	}
+ 	/* If a binfmt changed the interp, free it. */
+ 	if (bprm->interp != bprm->filename)
+ 		kfree(bprm->interp);
+@@ -1746,8 +1766,11 @@ static int exec_binprm(struct linux_binprm *bprm)
+ 				do_close_execat(exec);
+ 				return -ENOEXEC;
+ 			}
+-			/* Only the reference is kept, for AT_EXECFD. */
+-			exe_file_allow_write_access(exec);
++			/* A transparent dispatch keeps the denial for mm->exe_file. */
++			if (bprm->interp_flags & BINPRM_FLAGS_TRANSPARENT_INTERP)
++				bprm->executable_denied = 1;
++			else
++				exe_file_allow_write_access(exec);
+ 			bprm->executable = exec;
+ 		} else {
+ 			do_close_execat(exec);
+diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
+index d4f64d143d1a..ba5037b69866 100644
+--- a/include/linux/binfmts.h
++++ b/include/linux/binfmts.h
+@@ -59,7 +59,9 @@ struct linux_binprm {
+ 		 * Set by user space to check executability according to the
+ 		 * caller's environment.
+ 		 */
+-		is_check:1;
++		is_check:1,
++		/* bprm->executable holds a write denial still to be released. */
++		executable_denied:1;
+ 	struct file *executable; /* Executable to pass to the interpreter */
+ 	struct file *interpreter;
+ 	struct file *file;
 
 -- 
 2.53.0
