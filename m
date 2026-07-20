@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D32F3D8902;
-	Mon, 20 Jul 2026 09:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A943D9029;
+	Mon, 20 Jul 2026 09:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784540056; cv=none; b=XlItWZIOIflfJXa1rVHR4t/cMfBEzLxeXOPGKsVwnNIUAVunnQCeNqXaSnE8UsXy34ISK3HUlZndGy+8eRQ3tOs3KggdGo/cKBor+Qtf6PDlou+7MpcXX/xtum6CfDWTm11LDtGDM/Xg/1GdwBZ9J8WQqFzYczIZeXpqrLpf5So=
+	t=1784540059; cv=none; b=MMWsqXAyP1GMI3xMfeB7eLiRMtXhuQ3ZN9XfTY/1x1hxKCwHfD/9+DIpMuy362b2RNNBMKS0XA+br6B1+jaS8zDFWbrmHu9I/yodhsw57bNfHXbjYCAPotl2Ha22EAIizTPOUunvDG9c0dsbZGnbYsoFXgjWrYMA+3xGDAToSwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784540056; c=relaxed/simple;
-	bh=rTLpfXr1BN78GmzRT93H9qEQR280+PMjndmHO+m2QyM=;
+	s=arc-20240116; t=1784540059; c=relaxed/simple;
+	bh=S1I+8XOcJimoOZpkS+sQ4beHcupitoNVrqmvMwX3N3g=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FVWHjcQwVJ53QEiDwS1zgMZ5OqmVcc6hXlnUWD5t4vO0HYBqHhyMRbpIf37adaXtoHY01gJyh+CbVtfu2WXjdq27fYjDirHTd7nIbkJnadFUd7hi79AmxfTuL8LP94vp1tCrR67lDRMHumr3mw//kp1wd55Rnph5467I1TYW1ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QA7RLa9Q; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=tc+Tw2saoGuxodsCMX3wv0XUSrV8l1zBCdJIlUxr6p74XMEtayzh8mgHDmDAMWoAMdjVCIu+YXMeGLNnCbSyVHCwVvwebrR+IeameV1sa0p0EYwxMhae9Ymd55OoAjBftHo+IqaLO31DhfHSujaUXc1gI6l9aXg7qJ7P+bPPobU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XrEyjAsV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QA7RLa9Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43EEB1F00A3A;
-	Mon, 20 Jul 2026 09:34:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XrEyjAsV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 964FD1F000E9;
+	Mon, 20 Jul 2026 09:34:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784540055;
-	bh=1GDtZ/H9PPREqEQroKi/tSbzImHJ30r90YyvmcEwAQo=;
+	s=k20260515; t=1784540058;
+	bh=2Vi2Y6eFLaZZncWxhzA85l4SRnVsg67aEdWUPdvtHPg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=QA7RLa9QP1SNmuoZc7iunsr2CmLaNtwj8OM+BAV/YHGw6uzfHI5uoU1JjHuEq5TBZ
-	 iK1su5CVPaC2a/DtjPRMF4GGRA8uZ4lB4Ib1cRq1bL5OzWJKgwEYKlb/KdOPUsAgRr
-	 72xlwvjhTyvTIp29vcN1KmhzA1Ay9a1/76GrPPl9m/mE9tJjKIi/8sphCnHx3X018E
-	 jouqZqg+qTV/UIAVIxmls32K6Sw5Pk0WIv2llawmEpAlV1R42326b6+QOrjGv7fcYm
-	 R3EqZdfplXTgN5Nf+qZCYeieJHdc2xYpygQcY2d+j5bShKkYGM4ZvEQR8qA1UfiRJH
-	 f1+5Pv0aScTIg==
+	b=XrEyjAsVS7VocJDQ+FLPK0E0rZI39Dwdh6rT79D3/z1ln1ia/tdKr77fL4myrxBLK
+	 QCQWUROnM69/sB3uDoCeGiQBeNiwcdluPoZxRIXSWGiR+0GOAZDFFmyUgf/FYyV3gf
+	 HvD5TqOH1bEg3Qa8MwMJAKZhS/4iodK/atJcoHnSbIkA/FHqudeoJ3//DpMSC0XnHr
+	 TBogyuFZsbFyB6yg211N9J1s6M1ZF30GQN69+dAoMEkSNKBkA5rRIMJaYX+0P0+fJY
+	 Dol6pOpfcns7rO1KOv7uiHGBe5kUL/8ve9TMFRXRVSaFodFHkbn6V6QbsppKnvs5ZU
+	 K6NXSdswly/Dg==
 From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 20 Jul 2026 11:33:28 +0200
-Subject: [PATCH 05/21] binfmt_misc: split out entry_open_interpreter()
+Date: Mon, 20 Jul 2026 11:33:29 +0200
+Subject: [PATCH 06/21] binfmt_misc: split out build_interp_argv()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,7 +37,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260720-work-bpf-binfmt_misc-ptinterp-v1-5-ddb76c9a508e@kernel.org>
+Message-Id: <20260720-work-bpf-binfmt_misc-ptinterp-v1-6-ddb76c9a508e@kernel.org>
 References: <20260720-work-bpf-binfmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org>
 In-Reply-To: <20260720-work-bpf-binfmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org>
 To: Farid Zakaria <farid.m.zakaria@gmail.com>, 
@@ -49,91 +49,134 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
  jannh@google.com, mail@johnericson.me, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.16-dev-4217c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2360; i=brauner@kernel.org;
- h=from:subject:message-id; bh=rTLpfXr1BN78GmzRT93H9qEQR280+PMjndmHO+m2QyM=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTFvm7yVZj6SXb71wclfLy13s1ffzav2VM3zfPyxL36g
- UXPJMusO0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACaiNJmRYXp4jZHv7AvszMwL
- 2o0r7thc+5N5QOmKVsxXrj33sjT3SDD8z0g75T+79Ekgx86ehZlvflcW5+qVME+2FmuKnWRc0P2
- NHwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3720; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=S1I+8XOcJimoOZpkS+sQ4beHcupitoNVrqmvMwX3N3g=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTFvm7SDFilVPxMX2L7s6q2imjtE3NOdu7jMjk6dyIXq
+ 36+qqxVRykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwEQaahn+uweJ89yx/B2WenzB
+ +6tnN3+33VscXOLQM3npGlbhHO+pDQz/E7p5tp5b1nuP8fumJ4t9Sh9/1bkc6+mx/1vc0qXxK85
+ nsAAA
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Opening the interpreter is a property of the matched entry: an 'F'
-entry hands out a clone of the file it pre-opened at registration
-time, any other entry opens the selected path. Give that its own
-helper instead of an if/else in the middle of load_misc_binary(), and
-let it fail early rather than carrying an ERR_PTR through the
-successful branch.
+Building the interpreter's argument vector is the bulk of
+load_misc_binary() and the one part of it that is specific to the
+classic dispatch. Move it into its own helper so what remains reads as
+what it is: pick a handler, pick an interpreter, build the invocation,
+open it.
 
 No functional change.
 
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- fs/binfmt_misc.c | 44 +++++++++++++++++++++++++++++++-------------
- 1 file changed, 31 insertions(+), 13 deletions(-)
+ fs/binfmt_misc.c | 84 ++++++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 54 insertions(+), 30 deletions(-)
 
 diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
-index 7a6bbeb8a58c..63c10066e3a6 100644
+index 63c10066e3a6..f0ccc5d000f6 100644
 --- a/fs/binfmt_misc.c
 +++ b/fs/binfmt_misc.c
-@@ -352,6 +352,36 @@ static unsigned long entry_invocation_flags(const struct binfmt_misc_entry *e,
- 	return flags;
+@@ -382,40 +382,23 @@ static struct file *entry_open_interpreter(const struct binfmt_misc_entry *e,
+ 	return no_free_ptr(interp_file);
  }
  
+-/*
+- * the loader itself
 +/**
-+ * entry_open_interpreter - open the entry's interpreter for execution
-+ * @e: matched binary type handler
++ * build_interp_argv - splice the interpreter invocation into the argv
++ * @bprm: binary that is being executed
 + * @interpreter: the interpreter selected for this exec
++ * @flags: invocation flags in effect for this exec
 + *
-+ * An 'F' entry hands out a clone of the file it pre-opened at registration,
-+ * any other entry opens the selected path.
++ * The interpreter becomes argv[0] and the binary its last argument, with an
++ * optional staged argument in between. The caller's argv[0] is dropped
++ * unless 'P' keeps it.
 + *
-+ * Return: the opened interpreter on success, an ERR_PTR on failure
-+ */
-+static struct file *entry_open_interpreter(const struct binfmt_misc_entry *e,
-+					   const char *interpreter)
-+{
-+	struct file *interp_file __free(fput) = NULL;
-+	int retval;
-+
-+	if (!(e->flags & MISC_FMT_OPEN_FILE))
-+		return open_exec(interpreter);
-+
-+	interp_file = file_clone_open(e->interp_file);
-+	if (IS_ERR(interp_file))
-+		return interp_file;
-+
-+	retval = exe_file_deny_write_access(interp_file);
-+	if (retval)
-+		return ERR_PTR(retval);
-+
-+	return no_free_ptr(interp_file);
++ * Return: 0 on success, a negative error code on failure
+  */
+-static int load_misc_binary(struct linux_binprm *bprm)
++static int build_interp_argv(struct linux_binprm *bprm, const char *interpreter,
++			     unsigned long flags)
+ {
+-	struct binfmt_misc_entry *fmt __free(put_binfmt_handler) = NULL;
+-	const char *interpreter;
+-	struct file *interp_file;
+-	struct binfmt_misc *misc;
+-	unsigned long flags;
+ 	int retval;
+ 
+-	misc = current_binfmt_misc();
+-	if (!READ_ONCE(misc->enabled))
+-		return -ENOEXEC;
+-
+-	fmt = get_binfmt_handler(misc, bprm);
+-	if (!fmt)
+-		return -ENOEXEC;
+-
+-	/* Need to be able to load the file after exec */
+-	if (bprm->interp_flags & BINPRM_FLAGS_PATH_INACCESSIBLE)
+-		return -ENOENT;
+-
+-	interpreter = entry_select_interpreter(fmt, bprm);
+-	if (IS_ERR(interpreter))
+-		return PTR_ERR(interpreter);
+-
+-	flags = entry_invocation_flags(fmt, bprm);
+-	if (flags & MISC_FMT_CREDENTIALS)
+-		bprm->execfd_creds = 1;
+-	if (flags & MISC_FMT_OPEN_BINARY)
+-		bprm->have_execfd = 1;
+-
+ 	/* The entry's own choice - not one accumulated from an earlier level. */
+ 	if (flags & MISC_FMT_PRESERVE_ARGV0) {
+ 		bprm->interp_flags |= BINPRM_FLAGS_PRESERVE_ARGV0;
+@@ -451,6 +434,47 @@ static int load_misc_binary(struct linux_binprm *bprm)
+ 		return retval;
+ 	bprm->argc++;
+ 
++	return 0;
 +}
 +
- /*
-  * the loader itself
-  */
-@@ -426,19 +456,7 @@ static int load_misc_binary(struct linux_binprm *bprm)
++/*
++ * the loader itself
++ */
++static int load_misc_binary(struct linux_binprm *bprm)
++{
++	struct binfmt_misc_entry *fmt __free(put_binfmt_handler) = NULL;
++	const char *interpreter;
++	struct file *interp_file;
++	struct binfmt_misc *misc;
++	unsigned long flags;
++	int retval;
++
++	misc = current_binfmt_misc();
++	if (!READ_ONCE(misc->enabled))
++		return -ENOEXEC;
++
++	fmt = get_binfmt_handler(misc, bprm);
++	if (!fmt)
++		return -ENOEXEC;
++
++	/* Need to be able to load the file after exec */
++	if (bprm->interp_flags & BINPRM_FLAGS_PATH_INACCESSIBLE)
++		return -ENOENT;
++
++	interpreter = entry_select_interpreter(fmt, bprm);
++	if (IS_ERR(interpreter))
++		return PTR_ERR(interpreter);
++
++	flags = entry_invocation_flags(fmt, bprm);
++	if (flags & MISC_FMT_CREDENTIALS)
++		bprm->execfd_creds = 1;
++	if (flags & MISC_FMT_OPEN_BINARY)
++		bprm->have_execfd = 1;
++
++	retval = build_interp_argv(bprm, interpreter, flags);
++	if (retval)
++		return retval;
++
+ 	/* Update interp in case binfmt_script needs it. */
+ 	retval = bprm_change_interp(interpreter, bprm);
  	if (retval < 0)
- 		return retval;
- 
--	if (fmt->flags & MISC_FMT_OPEN_FILE) {
--		interp_file = file_clone_open(fmt->interp_file);
--		if (!IS_ERR(interp_file)) {
--			int err = exe_file_deny_write_access(interp_file);
--
--			if (err) {
--				fput(interp_file);
--				interp_file = ERR_PTR(err);
--			}
--		}
--	} else {
--		interp_file = open_exec(interpreter);
--	}
-+	interp_file = entry_open_interpreter(fmt, interpreter);
- 	if (IS_ERR(interp_file))
- 		return PTR_ERR(interp_file);
- 
 
 -- 
 2.53.0
