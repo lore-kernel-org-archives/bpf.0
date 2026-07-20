@@ -1,136 +1,175 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9173141CB5D;
-	Mon, 20 Jul 2026 13:03:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684C9423A72;
+	Mon, 20 Jul 2026 13:07:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784552614; cv=none; b=O+giU6ZmiOVqbWc9s2X8KDNe462coNrnAkDQASomfCga4xhsmKdeqftR3G5IJX4do1gVOCdegdkntVmciMrwBWQvsSyXVQ8IKBKk0l0kGsW3OPyMoy/P577KBfAzVDswjVB7/XPYzeK+nSVrh6N7gRYUFVF4WCTsZtU9H9DFwnE=
+	t=1784552845; cv=none; b=be6VWlyINzzVeNMrD3Q6ibTkbwauUVCt7QG2dHiCW0toc7M2iYKmOugpvXqWkqbp8kXBzeIisUGNjv33jhLkKot68bAAiZX75fh/qftKEpTh14zpSB+X0+SCDoxhGEJMXAXE9stgp+/gvf/ya2QAbIkMhVqs2QEgSQTpMdqMKuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784552614; c=relaxed/simple;
-	bh=gCgsSOO/kYR6Mk0fZ0sUZB0n3+Z8OP4GKz3AvXGTDpE=;
+	s=arc-20240116; t=1784552845; c=relaxed/simple;
+	bh=94jLs4pN65bI9GjrCpe4Yvvfqu5YHmUVOi6rtgwMxh0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IoyYPYh95MVkJeeqZPJigclU3Km9ManjOFnmmGn8JWRXj8HAFrTU8GvnnYYxR0GKY2OJ+m3IuuAhGUiLmpwSNvhz/oeynegTppIT3NOcnprmhYy/Um3stwuhXI9FM5so6q/kAK3lZA7VQZD348Q0PfrQIFuVwtqhWteqWl3h1NA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PdfcxN1B; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=UCuFWiHBz/qYUpn0kXgreN4t3tFUB1PufxPaxth3k9z2aLMWxw4rurYuN1xno1yGRhAD+9V7n1dFAtkpnZr8YhhnJvervyKPyjIBbjPlaHxifT2fHEvBjx3e3IljZfkDG8j3A4Dik8YGgE65ALUTl8UeWc2UzmerbpPQ4+oEOZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6ApG76b; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PdfcxN1B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED34A1F00A3F;
-	Mon, 20 Jul 2026 13:03:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6ApG76b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 333EB1F00A3A;
+	Mon, 20 Jul 2026 13:07:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784552613;
-	bh=MLaBEkNcDAfJaYgjm0xh/71XLnSe7xFsmGFPFBxNA7w=;
+	s=k20260515; t=1784552839;
+	bh=a2Jbx+MGZnPUeIlSJxhYdZO1D/nzfxLEcF7IxuL1wRw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PdfcxN1B3Yd65mEe/WFPYDBj15Plnqy5YNHJozkKvKuG4xmVC26f5ltMOPmtbm1s+
-	 t+ZzfyHPtMSnePXvtbYiuiV2cpTHGtN96M6wxIs2d1Z/kze5pDLCX5CDEVOG3WfLq+
-	 8bbKJg1ZxR7j7TLzbDZqMLoDpx7sUvRA025Y/tAp/klVFlZ/xNoVQ7iK2JQCHhFjw+
-	 clqMVoIHDsruzb8RLo4jzaFPqS4Nxscfl9kxH4L8IlL6EOSi9dwmpYGoaB0FfaTE4u
-	 EjBpLV9AUIL2O0p3h8hH86Y6mTbDLGe8K2LsmXjmh2j4toH0/ljU69psor5WC6RwHj
-	 8jbxQMw8e3eOA==
+	b=T6ApG76bt4DcZ9c7AsIpQC3j4M4EGRaUmFrZHe2uCrXA2tB76XehHv7ZOcE3BBmMN
+	 7MEuZuQ4QWKpKDMmKAbUACDSYIki9v0DRZUooSyH7M8c9Yt0cWZFOkBk27Q9jknZDo
+	 bzEpyxQvF5w79XpywBl9wIAi/JyEsnkaVdZ3K65/AJszGv+qf1jgjIVyYdr3R/slT6
+	 AkhWqtelZv2wozANFni7727wpRyH2iIaHbL0UMeg7Bd4ikA4WvQazsaRmHrYrsN6GQ
+	 R+40GyDSfIDhvfZ6qWfpvyvMU6VUzw7VzTw601bh4RBW2JBp31V9KC/ikJFLVltOQl
+	 aOJDEAN09Oe6w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH slab/for-next v4 4/8] mm/slab: extend deferred free
- mechanism to handle rcu sheaves
+Subject: Re: [PATCH slab/for-next v4 7/8] mm/slab: introduce
+ kfree_rcu_nolock()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?SGFycnkgWW9vIChPcmFjbGUp?= <harry@kernel.org>
-Cc: linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20260720-kfree_rcu_nolock-v4-4-964e03c41a4e@kernel.org>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev
+In-Reply-To: <20260720-kfree_rcu_nolock-v4-7-964e03c41a4e@kernel.org>
 References: <20260720-kfree_rcu_nolock-v4-0-964e03c41a4e@kernel.org>
- <20260720-kfree_rcu_nolock-v4-4-964e03c41a4e@kernel.org>
+ <20260720-kfree_rcu_nolock-v4-7-964e03c41a4e@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 13:03:32 +0000
-Message-Id: <20260720130332.ED34A1F00A3F@smtp.kernel.org>
+Date: Mon, 20 Jul 2026 13:07:18 +0000
+Message-Id: <20260720130719.333EB1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] `__kfree_rcu_sheaf()` acquires a lock using `local_trylock()`, whi=
-ch triggers a lockdep 'Invalid wait context' warning when called via `kvfre=
-e_call_rcu()`.
+- [High] kfree_call_rcu_nolock() crashes with a NULL pointer dereference wh=
+en given a ZERO_SIZE_PTR or an unsupported vmalloc/large kmalloc pointer.
+- [High] Memory leak and cache destruction panic because deferred_work_barr=
+ier() is called after flush_rcu_sheaves_on_cache().
+- [High] Calling kfree_rcu_nolock() on PREEMPT_RT triggers an 'Invalid wait=
+ context' lockdep warning from local_trylock().
 --
 
---- Patch [4]: [PATCH slab/for-next v4 4/8] mm/slab: extend deferred free m=
-echanism to handle rcu sheaves ---
-commit 136141e9d7cd5370bbb83aa5e26b9b28ea8267ad
+--- Patch [7]: [PATCH slab/for-next v4 7/8] mm/slab: introduce kfree_rcu_no=
+lock() ---
+commit 278abd26e1c5865b59d3e42ddc961dd9dca8dc17
 Author: Harry Yoo (Oracle) <harry@kernel.org>
 
-mm/slab: extend deferred free mechanism to handle rcu sheaves
+mm/slab: introduce kfree_rcu_nolock()
 
-This commit extends the deferred free mechanism to handle RCU sheaves when
-spinning is not allowed and IRQs are disabled. It queues the RCU sheaf on
-an IRQ work to safely invoke call_rcu() later, and updates barrier syncs.
+This patch introduces the kfree_rcu_nolock() variant to handle
+k[v]free_rcu() calls in unknown context. It uses kfree_rcu_sheaf() when
+possible and falls back to kvfree_rcu() batching. It also adjusts barrier
+placement in kvfree_rcu_barrier_on_cache().
 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 680fe64aff72e..8afa6b47b1f2b 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index c1c32909fa528..09c457645e039 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
 [ ... ]
-
-> @@ -6154,8 +6161,22 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void =
-*obj, unsigned int free_flags)
->  	 * we flush before local_unlock to make sure a racing
->  	 * flush_all_rcu_sheaves() doesn't miss this sheaf
->  	 */
-> -	if (rcu_sheaf)
-> -		call_rcu(&rcu_sheaf->rcu_head, rcu_free_sheaf);
-> +	if (rcu_sheaf) {
-> +		/*
-> +		 * With !allow_spin, we might have interrupted call_rcu()'s
-> +		 * IRQ-disabled critical section. If IRQs are not disabled,
-> +		 * we know that's not the case.
-> +		 */
-> +		if (unlikely(!allow_spin && irqs_disabled())) {
-> +			struct deferred_percpu_work *dpw;
+> @@ -1263,6 +1263,29 @@ EXPORT_TRACEPOINT_SYMBOL(kmem_cache_alloc);
+>  EXPORT_TRACEPOINT_SYMBOL(kfree);
+>  EXPORT_TRACEPOINT_SYMBOL(kmem_cache_free);
+> =20
+> +void kfree_call_rcu_nolock(struct kvfree_rcu_head *head, void *ptr)
+> +{
+> +	struct slab *slab;
+> +	struct kmem_cache *s;
 > +
-> +			dpw =3D this_cpu_ptr(&deferred_percpu_work);
-> +			if (llist_add(&rcu_sheaf->llnode, &dpw->rcu_sheaves))
-> +				irq_work_queue(&dpw->work);
-> +		} else {
-> +			call_rcu(&rcu_sheaf->rcu_head, rcu_free_sheaf);
-> +		}
-> +	}
+> +	VM_WARN_ON_ONCE(is_vmalloc_addr(ptr) || !virt_to_slab(ptr));
+> +
+> +	slab =3D virt_to_slab(ptr);
+> +	s =3D slab->slab_cache;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but since this modifies
-__kfree_rcu_sheaf(), I wanted to ask about a preexisting locking issue in
-this execution path.
+Does this code properly handle unsupported pointers? For example, if a call=
+er
+passes a 0-byte allocation (ZERO_SIZE_PTR) or a large kmalloc object,
+virt_to_slab() returns NULL.=20
 
-Earlier in __kfree_rcu_sheaf(), the code unconditionally acquires a lock via
-local_trylock(&s->cpu_sheaves->lock). However, this function is reachable f=
-rom
-kvfree_call_rcu(), which can be called under a raw_spinlock_t (like pi_lock)
-and from hardirq context:
+Since the kfree_rcu_nolock() macro only checks if the pointer evaluates to
+true (and ZERO_SIZE_PTR is truthy), this would lead to a NULL pointer
+dereference when accessing slab->slab_cache. Should this return early if
+virt_to_slab() returns NULL instead of just warning?
 
-mm/slab_common.c:kvfree_call_rcu() {
-	...
-	if (kfree_rcu_sheaf(ptr))
-		return;
-	...
-}
+> +
+> +	if (unlikely(IS_ENABLED(CONFIG_NUMA) && slab_nid(slab) !=3D numa_mem_id=
+()))
+> +		goto fallback;
+> +
+> +	if (unlikely(!__kfree_rcu_sheaf(s, ptr, SLAB_FREE_NOLOCK)))
 
-which routes to:
+[Severity: High]
+Could this trigger an 'Invalid wait context' lockdep warning on PREEMPT_RT?
+
+The kfree_rcu_nolock() variant is intended to be safe for any context,
+including under raw spinlocks or in hardirq context. However,
+__kfree_rcu_sheaf() acquires s->cpu_sheaves->lock via local_trylock():
 
 mm/slub.c:__kfree_rcu_sheaf() {
-	...
-	if (!local_trylock(&s->cpu_sheaves->lock))
-		goto fail;
-	...
+    ...
+    if (!local_trylock(&s->cpu_sheaves->lock))
+        goto fail;
+    ...
 }
 
-Will acquiring a local_trylock within this wait context trigger a lockdep
-"Invalid wait context" warning, since it statically violates the raw
-spinlock locking rules?
+On PREEMPT_RT, local_trylock() maps to a sleepable spin_trylock(). Taking
+this lock from a raw spinlock or hardirq context would violate wait-type
+nesting rules.
 
+> +		goto fallback;
+> +
+> +	return;
+> +
+> +fallback:
+> +	defer_kfree_rcu(head);
+> +}
+> +EXPORT_SYMBOL_GPL(kfree_call_rcu_nolock);
+> +
+[ ... ]
+> @@ -2120,10 +2143,11 @@ void kvfree_rcu_barrier_on_cache(struct kmem_cach=
+e *s)
+>  		cpus_read_lock();
+>  		flush_rcu_sheaves_on_cache(s);
+>  		cpus_read_unlock();
+> -		deferred_work_barrier();
+> -		rcu_barrier();
+>  	}
 > =20
->  	local_unlock(&s->cpu_sheaves->lock);
->
+> +	/* kfree_rcu_nolock() might have deferred frees even without sheaves */
+> +	deferred_work_barrier();
+> +	rcu_barrier();
+
+[Severity: High]
+Can this sequence strand objects in the sheaves and cause a cache
+destruction panic?
+
+Since deferred_work_barrier() is now called after
+flush_rcu_sheaves_on_cache() completes, the deferred work for objects in
+objs_by_rcu will call kvfree_call_rcu().=20
+
+If the cache has sheaves, kvfree_call_rcu() will succeed at placing those
+objects back into the newly emptied sheaves:
+
+mm/slub.c:deferred_percpu_work_fn() {
+    ...
+    llnode =3D llist_del_all(objs_by_rcu);
+    llist_for_each_safe(pos, t, llnode) {
+        ...
+        kvfree_call_rcu(head, objp);
+    }
+    ...
+}
+
+Since there is no further sheaf flush after this repopulation, could these
+objects remain stranded and cause kmem_cache_destroy() to fail with a
+'Slab cache still has objects' panic?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720-kfree_rcu_=
-nolock-v4-0-964e03c41a4e@kernel.org?part=3D4
+nolock-v4-0-964e03c41a4e@kernel.org?part=3D7
