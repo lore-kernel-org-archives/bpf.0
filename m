@@ -1,179 +1,125 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8472877F6
-	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 18:56:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4D9356759
+	for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 18:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784573778; cv=none; b=I4woKd2EKLwRl3Qio4H2iNY+QCVdlsiujOr7IUzEfFrk/TFlYNzVu6cqGgAm959NsT0Y9dqyFsAkdjHjkc8MPIi0IwAgv9hBDYlTkHM+dTBA6Vj6k80ySiKWBLHeaN2EuW9JIyVXent1KANewGfgN9Tm9YFEjrHeGKmVOq2GSNs=
+	t=1784573896; cv=none; b=uvXn7K45Reb1kCKURNkMn0AFg//wjVKdrAmuu9+sg/Lt0tN/QZmMjSUPbrhCAwBZEdkzQD4WP60pnaSk8qnZMweFhjCPtLEdbKgfoZNG2h+CPTYLElV1J5WIOIGPb+Y5iP9tLeC2xwJEl+OqRyZBezRraXR+dzsJaS2PJJhqp/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784573778; c=relaxed/simple;
-	bh=2N6C3ol2NdR6tSVyv7hdO+Z6Cgq6aGLskzxVJN43nQI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fRwPg+L1MHuZsZCBSLb+yyVvmwcrAySPm4ZA/a1mWhk3wZAQ+V1RYbzxgnqmSRApdathVgDC20v56RVvzoqxZEYuWBf5o/nkJy9V+/xh+ZKoWDPTo4KiLfZe9IYV08nBE3ZYJZc1Wnh+fOY0Nd85HlQnrmJYGk/vomPnRGxSgYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PWpOnbVm; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1784573896; c=relaxed/simple;
+	bh=eMgTGw8wrTt0RInOc+uENx4fWyxGJ4zX701Lv6w7LfI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pHLc2v0PZMLvqKH7F2O+bH57/VOqIWdXFkQybttGkmZLtCCOucsVuzHPEVDG02q4DGG4H62RJL3YB2EI6i6e8z4p2+Il/rSnBZxOOKLqlhtIZWPgM7XSkSY9H75X9aA+Ju3xCSx8Eu1w0s06Ltn7QAIfyIAGf+33jB2ILQu/aag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JseSykWn; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PWpOnbVm"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cab973140bso128609815ad.3
-        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 11:56:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JseSykWn"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2caea3f742bso125898935ad.0
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 11:58:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784573776; x=1785178576; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=2N6C3ol2NdR6tSVyv7hdO+Z6Cgq6aGLskzxVJN43nQI=;
-        b=PWpOnbVmw3HWtIPZaqgfUY8Mt2YtTCU46YP36qBvmGoB7NR4pYiE/OHwGqmuoiOPqB
-         NuGgXzztSIreCAN8CtSRd25CFcuUema4DebrIV+IWH6/sUmYCxMXrqMwdmKVWcRYZxCh
-         8p6udk3TumdV/WzxdhYRR2ANkxuqAgSyUbMFZnEDjiKbL0aBKPyhGmCpMD3n8PVdzhk2
-         8uRLutAxd7GjSGn4OoqGYbPmULDw92GX/IHAXi3o970qnVWyX+MVvC9Nx54c4opacIKz
-         yt/1S7Egb1UZ1NDeyPkr9bIHryMVRzipgI/A0iV8mHIjAPzlg30jLw24RUcWxiolz17T
-         dgig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784573776; x=1785178576;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1784573894; x=1785178694; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2N6C3ol2NdR6tSVyv7hdO+Z6Cgq6aGLskzxVJN43nQI=;
-        b=hGPnoZmzXeeHXCJvaDvw0PNjsPWJOTvK+rJUYJUUZp5iCPXzYVeQtYIRMqqoflG2uM
-         hk2QXeXw6yGsIk45L+pwmznXNbg73IiQfg42s/27vR9mO/yd03OzqnDHb8GxXmh5UeME
-         pcdjGHd2rc2vGPjMehy2oz06c2iMMIcc9yz6hZWNkqgz5yUjgdt9TwMQ802tfBMcf6SF
-         gHPU0KAd20ystvpveq8yH/+tjXCU5wyNpfccKzAuuO9SJjxap8yC2bD4aDdXq/5CCv07
-         kHLy1XAkHQNLxq095WXGThhU2cN0pRVBDPkgQzBdYML05tyKpxiXXvAOmPkqrxwdv8Kb
-         PREg==
-X-Gm-Message-State: AOJu0YyDxo4RPi9cJ/+mBPR5GfRArvWw+mJNBkDyWqUwyO1QHccGjJa0
-	AU7wjj2LNGaWMYVMkYavMcLdWNWp9MvcuvxKhGc8o0rPvwNOKcBH12RG2U38+Q==
-X-Gm-Gg: AR+sD12sIlTou2KwNtWnsLvFPcj8A3Bvr+CG5Tv9JC0K5QEGQ2ZoyREffg9EQguPBdl
-	Cj9YirNVrvcUXGarRPGl13hDYDS1fKODfd92Nv0zUTls5/Gs4M6eAXxX4rfwWtNmsfZiv9KbScJ
-	Ehe8KCKBBQEfC1KZLBmagsn4uoJHTT53eNqlP6tiO3mO5sDV7SZjN4lTBB7WxEWht54RFW9yrId
-	Ir2mQbPpGz60uXdmL0tjobmrHE4SwgCBTAbrIiZjxhQdh/b6dFCELR5z7ByQlEs7hexMzBmI/jL
-	gCLzd0H392Rrl/hkT09qX9NLeUvSAOBcCipLFQIVu86a9uPzwoXgOIg1Nyp2FvSVDN5fZ39RjVI
-	N5FN6wDc884XJdkysdEcBOJeW9IjWfP/HEuywb5vx+6KTE4MQZptlaO9NALSbasxr3Cw+Lbcpa/
-	g1gtdwpAfkIiD3kJv9MrEhHYLXhyJzX5eyoub2jOQe
-X-Received: by 2002:a17:903:3510:b0:2cc:6817:d9bc with SMTP id d9443c01a7336-2cf349ea184mr167457145ad.38.1784573776144;
-        Mon, 20 Jul 2026 11:56:16 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf34730e35sm61231115ad.64.2026.07.20.11.56.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 11:56:15 -0700 (PDT)
-Message-ID: <62e8903180a5caeafbd09cd8d2375bd06a755c54.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 0/4] selftests/bpf: Fix compilation with
- RELEASE=1
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Viktor Malik
- <vmalik@redhat.com>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau	 <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song	 <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis	 <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Eric Biggers	 <ebiggers@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>
-Date: Mon, 20 Jul 2026 11:56:13 -0700
-In-Reply-To: <DK3JBMNLNYLD.2YDG311I01VWT@gmail.com>
-References: <cover.1784112948.git.vmalik@redhat.com>
-	 <CAP01T74To6X_XPeM5L9wN52QuL8oSuoDA3jk3jhR_Y1bLXH2Lw@mail.gmail.com>
-	 <c49fbf3d-c1de-4eb3-a6b4-22c7bc84d655@redhat.com>
-	 <DK3JBMNLNYLD.2YDG311I01VWT@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.56.2-10 
+        bh=EUhJ3DQnkMITZG1aHb7WqoIrpGY+mCsbkAev63KsSzg=;
+        b=JseSykWnQEbL9VNHG/JeFVk4GQrH5oPSkhuNksL7MzZYtCyomCmp+za+G4cUxVKEoy
+         qwYyMBGgjK3XsnJajq5cr177cH6/ma41+ArA2yckiGPRljm10n8KN1OEEiEUYO9QxW9s
+         XTM997IyM42GB6GFvNjgvyCD7yLPqkgWClBuNXSRB122MkbRBPH3m7Mho24r1PN/n97r
+         hkonbXZcXNwpGcqtF95yLG+FUxFZddlBvfMdNohltecxGkJ+1saLbFIxYRJqFztvMH+0
+         1Enm8/tT7TO0W1uVHUFHKlcC3V7SZtNWcoW6bYd0+p4aNPzqPqfjVRtaBeAnJIw1Qirn
+         sLAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784573894; x=1785178694;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=EUhJ3DQnkMITZG1aHb7WqoIrpGY+mCsbkAev63KsSzg=;
+        b=WhfT+d/I6OoVgoqR0AR1FOQBgZMVF8QcR6sxpxDHpDvEwo8uAGvTE6TRm+XmIIaS+W
+         fuvIPk4Z98QF9r854D1xuY7tErXw9j2/yj1+/zdj/yXA3b1/8ac8goOwywN9XKzX/bVU
+         vfxdR9Z/5Wu8sPundeictzveKFppiPz15G9Lpc4qqMBqSWCcyrgjVIS4UcDQrcyJbOCp
+         vUT82nGC8VWv0vG43REzUYa1C/YYP/TbzgrVUOA/rjozc358OvZ2TqFLW4Cx9Ti+Ouwr
+         BA7aVIPMIne4DvjBXIhSzqLEKIlPn90qx27dnlCD9RVYf9Jy0DXido8qnpNeB/Yo1nFT
+         CwsQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqPvuyjLV1rfNQ1XBdiWjTsVMbe6bEKt0uQN0XuNPbWYAiyGCajZjWrwbGtPkeOuxZRKsE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEOWnLow7K3CyodKALOiCGUuxtZ398Uz0OLNIq+qiumfEMeAy7
+	BhjlOLTaZXKpdefcnaH9LCdxXA9CYy+/oA4mRoq5kv/W9TDo2oBE1Ywa
+X-Gm-Gg: AR+sD13BjcMcT2pxXh0eC/1hqedveuMgLQDyKIdz331GWsmmdcJE5+fYJevXxlczDyV
+	koSOb6yVb1rgU0m4mDmgw1GyOJPQt5EWoOqqc7ds38SH9r5Wxtd1raX//YoAe7fEo7GUbflv4ME
+	06n8NtMI5riuqrM05q5/l3skOu71ChhkzxBW9YJDxwSI/VtcMt5vodv2V/t30ohpXlrgRkiojGv
+	wbyEPZMaoTBMbNuKr5tBYTykOu4sxlBxitbK5e1d8X/Y/7xr9fH9NnEJIWrp+tTOlmb/xeq7nO7
+	zuo0HgdlwAkx5xLXdnyyu/pr4RB5ZcS2WurhmPswhnVqyAkj7XZUNd8jw86wwdYb+0PpUWtRtuT
+	Dl+AGyVBT2EkHROfmjAqu8+PCB/DQYVtxwP0QI7vyIJT8baxGP3x++3LpOw7Zoz31oDysS/SNby
+	/uFPKzAVRiGx/SlOUqUms=
+X-Received: by 2002:a17:903:13c6:b0:2ce:b096:e517 with SMTP id d9443c01a7336-2cf3489548bmr165934705ad.5.1784573894122;
+        Mon, 20 Jul 2026 11:58:14 -0700 (PDT)
+Received: from [192.168.1.77] ([50.47.108.115])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf347166e6sm61259355ad.59.2026.07.20.11.58.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jul 2026 11:58:13 -0700 (PDT)
+Message-ID: <505a58d4-e585-4cb7-a21f-80a721f5c452@gmail.com>
+Date: Mon, 20 Jul 2026 11:58:13 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v4 4/4] bpf, cgroup: Fix storage null-ptr-deref after
+ replacing prog
+To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Pu Lehui <pulehui@huawei.com>
+References: <20260720134547.1289964-1-pulehui@huaweicloud.com>
+ <20260720134547.1289964-5-pulehui@huaweicloud.com>
+Content-Language: en-US
+From: Amery Hung <ameryhung@gmail.com>
+In-Reply-To: <20260720134547.1289964-5-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-T24gTW9uLCAyMDI2LTA3LTIwIGF0IDE4OjIxICswMjAwLCBLdW1hciBLYXJ0aWtleWEgRHdpdmVk
-aSB3cm90ZToKPiBPbiBXZWQgSnVsIDE1LCAyMDI2IGF0IDM6MzAgUE0gQ0VTVCwgVmlrdG9yIE1h
-bGlrIHdyb3RlOgo+ID4gT24gNy8xNS8yNiAxNDoxMCwgS3VtYXIgS2FydGlrZXlhIER3aXZlZGkg
-d3JvdGU6Cj4gPiA+IE9uIFdlZCwgMTUgSnVsIDIwMjYgYXQgMTM6MjIsIFZpa3RvciBNYWxpayA8
-dm1hbGlrQHJlZGhhdC5jb20+IHdyb3RlOgo+ID4gPiA+IAo+ID4gPiA+IFdoZW4gY29tcGlsaW5n
-IEJQRiBzZWxmdGVzdHMgd2l0aCBSRUxFQVNFPTEgKHdoaWNoIG1vc3Qgbm90YWJseSBhZGRzCj4g
-PiA+ID4gLU8yKSwgR0NDIHJlcG9ydHMgc2V2ZXJhbCB3YXJuaW5ncy4gVGhlc2UgYXJlIGJ5IGRl
-ZmF1bHQgdHJlYXRlZCBhcwo+ID4gPiA+IGVycm9ycyBhbmQgYWJvcnQgdGhlIGNvbXBpbGF0aW9u
-Lgo+ID4gPiA+IAo+ID4gPiA+IFRoaXMgc2VyaWVzIGZpeGVzIGFsbCBvZiB0aGUgaXNzdWVzIHN1
-Y2ggdGhhdCBzZWxmdGVzdHMgY2FuIGJlIGNvbXBpbGVkCj4gPiA+ID4gd2l0aCBSRUxFQVNFPTEu
-Cj4gPiA+ID4gCj4gPiA+IAo+ID4gPiBBcmUgdGhlc2UgY2hhbmdlcyBzdWZmaWNpZW50IHRvIGZp
-eCBhbGwgaXNzdWVzPyBJIHNlZSBtb3JlIHdoZW4gSQo+ID4gPiBjb21waWxlIHdpdGggR0NDIDE1
-IGFuZCBSRUxFQVNFPTEuCj4gPiAKPiA+IFN0cmFuZ2UsIEkgdHJpZWQgY29tcGlsaW5nIHdpdGgg
-Ym90aCBHQ0MgMTUgYW5kIDE2IGFuZCB0aGVzZSBmb3VyCj4gPiBwYXRjaGVzIGdvdCByaWQgb2Yg
-YWxsIHRoZSBpc3N1ZXMuIENhbiB5b3Ugc2VuZCB0aGUgc3BlY2lmaWMgaXNzdWVzIHRoYXQKPiA+
-IHlvdSBzZWU/Cj4gPiAKPiAKPiDCoCBJbiBmaWxlIGluY2x1ZGVkIGZyb20gL3Vzci9pbmNsdWRl
-L2ZlYXR1cmVzLmg6NTM5LAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBm
-cm9tIC91c3IvaW5jbHVkZS9hcnBhL2luZXQuaDoyMSwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgZnJvbSB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvbWFwX3Rlc3Rz
-L2xwbV90cmllX21hcF9iYXRjaF9vcHMuYzozOgo+IMKgIEluIGZ1bmN0aW9uIOKAmGluZXRfbnRv
-cOKAmSwKPiDCoMKgwqDCoMKgIGlubGluZWQgZnJvbSDigJhtYXBfYmF0Y2hfdmVyaWZ5LmNvbnN0
-cHJvcOKAmSBhdCB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvbWFwX3Rlc3RzL2xwbV90cmll
-X21hcF9iYXRjaF9vcHMuYzo1MzozOgo+IMKgIC91c3IvaW5jbHVkZS94ODZfNjQtbGludXgtZ251
-L2JpdHMvaW5ldC1mb3J0aWZpZWQuaDozNjoxMDogZXJyb3I6IGNhbGwgdG8g4oCYX19pbmV0X250
-b3BfY2hrX3dhcm7igJkgZGVjbGFyZWQgd2l0aCBhdHRyaWJ1dGUgd2FybmluZzogaW5ldF9udG9w
-IGNhbGxlZCB3aXRoCj4gwqAgYmlnZ2VyIGxlbmd0aCB0aGFuIHNpemUgb2YgZGVzdGluYXRpb24g
-YnVmZmVyIFstV2Vycm9yPWF0dHJpYnV0ZS13YXJuaW5nXQo+IMKgwqDCoMKgIDM2IHzCoMKgIHJl
-dHVybiBfX2dsaWJjX2ZvcnRpZnkgKGluZXRfbnRvcCwgX19kc3Rfc2l6ZSwgc2l6ZW9mIChjaGFy
-KSwKPiDCoMKgwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgIF5+fn5+fn5+fn5+fn5+fgo+
-IAo+IMKgIEluIGZpbGUgaW5jbHVkZWQgZnJvbSAvdXNyL2luY2x1ZGUvZmNudGwuaDozNDIsCj4g
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZyb20gdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvY2dyb3VwX3hhdHRyLmM6NToKPiDCoCBJbiBmdW5jdGlv
-biDigJhvcGVu4oCZLAo+IMKgwqDCoMKgwqAgaW5saW5lZCBmcm9tIOKAmHRlc3RfcmVhZF9jZ3Jv
-dXBfeGF0dHLigJkgYXQgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvY2dy
-b3VwX3hhdHRyLmM6NTI6MTEsCj4gwqDCoMKgwqDCoCBpbmxpbmVkIGZyb20g4oCYdGVzdF9jZ3Jv
-dXBfeGF0dHLigJkgYXQgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvY2dy
-b3VwX3hhdHRyLmM6NzE6MzoKPiDCoCAvdXNyL2luY2x1ZGUveDg2XzY0LWxpbnV4LWdudS9iaXRz
-L2ZjbnRsMi5oOjUyOjExOiBlcnJvcjogY2FsbCB0byDigJhfX29wZW5fbWlzc2luZ19tb2Rl4oCZ
-IGRlY2xhcmVkIHdpdGggYXR0cmlidXRlIGVycm9yOiBvcGVuIHdpdGggT19DUkVBVCBvciBPX1RN
-UEZJTEUgaW4KPiDCoCBzZWNvbmQgYXJndW1lbnQgbmVlZHMgMyBhcmd1bWVudHMKPiDCoMKgwqDC
-oCA1MiB8wqDCoMKgwqDCoMKgwqDCoMKgwqAgX19vcGVuX21pc3NpbmdfbW9kZSAoKTsKPiDCoMKg
-wqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgwqAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fgo+
-IAo+IFRoYXQgc2FpZCwgaXQgYWxzbyBmaXhlcyB0aGUgb25lcyB5b3UgcG9pbnRlZCBvdXQsIHNv
-IHdlIGNhbiBwcm9iYWJseSBsYW5kIHRoaXMuCj4gCj4gPiA+IEFsc28sIGlzIHRoZXJlIG5vIHdh
-eSB0byBtYWtlIEFTU0VSVF9PS19QVFIgd29yayB3aGVuIHdlJ3JlIHRlc3RpbmcKPiA+ID4gZm9y
-IG5vbi1OVUxMLW5lc3M/IEhhdmluZyB0byBjaGFuZ2UgaXQgdG8gZXhwbGljaXQgIT0gTlVMTCBp
-cyBraW5kYQo+ID4gPiBzYWQuCj4gPiAKPiA+IEFTU0VSVF9PS19QVFIgdXNlcyBsaWJicGZfZ2V0
-X2Vycm9yKCksIHdoaWNoIHJldHVybnMgLWVycm5vIHdoZW4gdGhlCj4gPiBwYXNzZWQgcG9pbnRl
-ciBpcyBOVUxMLiBUaGlzIGlzIGNvcnJlY3QgZm9yIGNoZWNraW5nIHBvaW50ZXJzIHJldHVybmVk
-Cj4gPiBmcm9tIGxpYmJwZiBiZWNhdXNlIGxpYmJwZiBhbHdheXMgc2V0cyBlcnJubyB3aGVuIGl0
-IHJldHVybnMgTlVMTCBhcyBhbgo+ID4gZXJyb25lb3VzIHZhbHVlIG9mIGEgcG9pbnRlci4gSG93
-ZXZlciwgdGhhdCBpcyBub3QgdGhlIGNhc2UgZm9yIG90aGVyCj4gPiBsaWJyYXJ5IGZ1bmN0aW9u
-cywgc3VjaCBhcyBtYWxsb2MoKSwgc28gY2FsbGluZyBsaWJicGZfZ2V0X2Vycm9yKCkgb24KPiA+
-IHRoZWlyIHJlc3VsdCBtYXkgYWN0dWFsbHkgcmV0dXJuIDAsIGlmIHRoZSBmdW5jdGlvbiByZXR1
-cm5lZCBOVUxMIGFuZAo+ID4gbmV2ZXIgc2V0IGVycm5vLgo+ID4gCj4gPiBTbywgSSdkIHNheSB0
-aGF0IGluIHRoZSBjdXJyZW50IHN0YXRlLCByZXN1bHRzIG9mIG5vbi1saWJicGYKPiA+IHB0ci1y
-ZXR1cm5pbmcgZnVuY3Rpb25zIHNob3VsZCBiZSBjaGVja2VkIHdpdGggQVNTRVJUX05FUS4KPiA+
-IEFsdGVybmF0aXZlbHksIHdlIGNhbiB1cGRhdGUgQVNTRVJUX09LX1BUUiB0byBleHBsaWNpdGx5
-IGZhaWwgd2l0aCBhCj4gPiBkZWZhdWx0IGVycm9yIGNvZGUgd2hlbiBOVUxMIGlzIHBhc3NlZCwg
-Zm9yIGV4YW1wbGU6Cj4gPiAKPiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
-cy9icGYvdGVzdF9wcm9ncy5oIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Rlc3RfcHJv
-Z3MuaAo+ID4gaW5kZXggMmNmOTUwYWZjZDg1Li5iZjk0YjA5NDc3OTAgMTAwNjQ0Cj4gPiAtLS0g
-YS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvdGVzdF9wcm9ncy5oCj4gPiArKysgYi90b29s
-cy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvdGVzdF9wcm9ncy5oCj4gPiBAQCAtMzkwLDcgKzM5MCw3
-IEBAIHZvaWQgaGV4ZHVtcChjb25zdCBjaGFyICpwcmVmaXgsIGNvbnN0IHZvaWQgKmJ1Ziwgc2l6
-ZV90IGxlbik7Cj4gPiDCoCNkZWZpbmUgQVNTRVJUX09LX1BUUihwdHIsIG5hbWUpICh7wqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBcCj4gPiDCoMKgwqDCoMKgwqDCoCBzdGF0aWMgaW50IGR1cmF0aW9uID0gMDvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgXAo+ID4gwqDCoMKgwqDCoMKgwqAgY29uc3Qgdm9pZCAqX19fcmVz
-ID0gKHB0cik7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFwKPiA+IC3CoMKgwqDCoMKgwqAgaW50IF9fX2VyciA9
-IGxpYmJwZl9nZXRfZXJyb3IoX19fcmVzKTvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCBcCj4gPiArwqDCoMKgwqDCoMKgIGludCBfX19lcnIgPSBfX19y
-ZXMgPyBsaWJicGZfZ2V0X2Vycm9yKF9fX3JlcykgOiAtRUlOVkFMO8KgwqDCoMKgwqDCoCBcCj4g
-PiDCoMKgwqDCoMKgwqDCoCBib29sIF9fX29rID0gX19fZXJyID09IDA7wqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBcCj4gPiDCoMKgwqDCoMKgwqDCoCBDSEVDSyghX19fb2ssIChuYW1lKSwgInVuZXhwZWN0
-ZWQgZXJyb3I6ICVkXG4iLCBfX19lcnIpO8KgwqDCoMKgwqDCoMKgIFwKPiA+IMKgwqDCoMKgwqDC
-oMKgIF9fX29rO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBcCj4gPiAKPiA+IEhvd2V2ZXIsIHRoYXQgd291bGQgbWFrZSB1cyBsb3NlIHRo
-ZSBlcnJvciBjb2RlcyBwYXNzZWQgdmlhIGVycm5vIGZyb20KPiA+IGxpYmJwZi4KPiAKPiBIbW0s
-IEkgc2VlLiBJIGd1ZXNzIHdlIGNhbiBsZXQgaXQgYmUgdGhlbi4gRWR1YXJkLCBhbnkgc3VnZ2Vz
-dGlvbnMgb3IKPiBwcmVmZXJlbmNlcyBoZXJlPwoKVGhlIGNoYW5nZSB0byBBU1NFUlRfT0tfUFRS
-IGxvZ2ljIHNlZW0gcmVhc29uYWJsZSwgYSBzaW5nbGUgdGVzdCBydW4Kc2hvdWxkIHNob3cgd2hl
-dGhlciB0aGVyZSBhcmUgcGxhY2VzIHRoYXQgbGVnaXRpbWF0ZWx5IGV4cGVjdCBOVUxMIHRvCnBh
-c3MgdGhlIGNoZWNrLCBzdWNoIHBsYWNlcyBjYW4gYmUgdXBkYXRlZC4KCj4gT3RoZXJ3aXNlIEkg
-YW0gaW5jbGluZWQgdG8gYXBwbHkgdGhpcyBmb3Igbm93LgoKSSB0aGluayBpdCdzIGZpbmUgdG8g
-YXBwbHkgdGhpcyBwYXRjaCBhcy1pcy4K
+
+
+On 7/20/26 6:45 AM, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+> 
+> Syzkaller reported a storage null-ptr-deref issue after replacing prog.
+> This occurs in the following scenario:
+> 1. prog A, an empty prog, is attached to a cgrp.
+> 2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
+>     bpf_get_local_storage helper.
+> 3. link_update is called to replace prog A with prog B.
+> 
+> The reason is that __cgroup_bpf_replace fails to alloc and assign the
+> required cgrp storage for the incoming replacement prog. Consequently,
+> the new prog inherits an uninit storage, leading to null-ptr-deref panic
+> when kick the new prog.
+> 
+> Fix this by properly allocating the storage and comparing the old and
+> new storage pointers. If the storage changed, fallback to
+> update_effective_progs which performs a RCU-safe update of the entire
+> array. If the storage remains unchanged, we can safely retain the
+> fast-path in-place update.
+> 
+> Additionally, handle the error path in __cgroup_bpf_attach strictly.
+> Although it is rare for update_effective_progs to fail in this context,
+> proper rollbacks for storage and flags are added for code rigor.
+> 
+> Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
+
+[...]
 
