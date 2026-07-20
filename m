@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCF13D47A1;
-	Mon, 20 Jul 2026 09:34:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A362E3D45C3;
+	Mon, 20 Jul 2026 09:34:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784540083; cv=none; b=i6WwcCl9Ms18eXopL2VHnth9/PqVl5pvLHj+AI3sHTb3LXHa3NwWoXrwJIg3yYyjv7hBceY4DgaHZp+Y6KoEekExgqtT/egT8grGIt/RIy8DnFyVkxHoYaJByMG0B3Q6A1vFBaRrVXZRIFLhD5y0coRMEpojJpPQpNkTFMpuqJY=
+	t=1784540086; cv=none; b=qUyxdao+IN9XUCWG5MMNKTPGC4yMEGx50jSuTeC7cyk490UDVEiGrZyguCKpe0AEner1vIKhP8Yz0HYwNGA1tWGRHOeokEjffSJiImYmSWFqMZyP8JR5sXt9LxtxQI79YUPkGYk0dcA5BSNAKcsrGrIAXfhx7yFslP6cjiMqzxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784540083; c=relaxed/simple;
-	bh=edp5jvmw68Q1SL8tR5mr0/QDhvFhmeGEDscCO/DjphY=;
+	s=arc-20240116; t=1784540086; c=relaxed/simple;
+	bh=AM15bcA1VzjVrQWbKZKfiVmo8DosxAfjEl+xEJJ+L80=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ugnTsHSWb8tZ8nnBVQPmu09LjgYPUaXhbLzGpYAL59tjAUSgoEt8o8jZ4TPMFGwVd/pIN4T/lBz/CM1Qji+ltR/xwH7uThYKpKrjxTItjY9J4sZDHOeQuteQuBIOH1Xec6HSnio9xxa9VpfawLIUEhY2xjR49kvDy3VDlRm1f7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gRJlcp99; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=uCeKDdXeG4P19LoLoE3fsBx8HnhwQg1mRizKhj1ai1/ZWq/Lgnj7K4aCtyD8DNJpUostwRbWFBhzh+yt55h+4SCglR5mVah/M/nhmMobLThTG4sI9VWPo10KHQrPKI4TUDhLtmvMom2aoqWgLjH7Szlhv4NQDQ+OpbEZ0iFYzws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gw/SPV54; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gRJlcp99"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CB221F00A3A;
-	Mon, 20 Jul 2026 09:34:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gw/SPV54"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81EAB1F000E9;
+	Mon, 20 Jul 2026 09:34:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784540081;
-	bh=ntyJopp4vvup2ZPbBKB88wZ1aJSzifC2mNeQAL0lXqQ=;
+	s=k20260515; t=1784540084;
+	bh=ov4tquAahGBcZiHmeEOUu3SlaUbolIjXy+o6OPsoFIQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=gRJlcp99VRyXh/VDcLPt3NZZ/soLLm7Sxjxz21hzkgkhnP9XV7hbR1cSBtIy2enKs
-	 Q6YwHBGc+15qdJDIr9i2qsXux/WHztMYvacjoIUJAeZfGjVpzajBG5lO4JqYOfrro+
-	 aZzkeHHmiAAVBf7eXRX27hIa5ZaHu9eI5b1gHfgUeBGN7pODgkodaVnDX5kRSVd85M
-	 iezvuWHBAe/joFc7hUx7lVBIocqhNIjgvbktdHezkTqV9SmFoMvIEmF8z5VdXHNg/h
-	 LNDVwY3igCUm7SzTpadiH5aI4egNQycTVY38LUjBMVL2P9KlrGGpksibxZ0CKU/Lxk
-	 UuioDaeIvgLFw==
+	b=Gw/SPV54Jh88N/SB9KjV5oR15mFAZH3ZYpfEeTRx62Q10MTu/mG2b4gNb1xKAu8MC
+	 ARMZVm93/IjlGE7AE6NEXXrXL1or3H6CBvk80yYflz713jyASIhmUYkFRaE1cFEq5+
+	 aewn5WwNgvc3fQV6+RtmP3keLCjPc0zhfCNS7y6bD6h4xI3MIrdOxn6yKIRAB2uJ7c
+	 5WCyxwEMGs9Afxy2inVl6xaAAmiaOHEYVNvQ1QngJ3BLne++MRKNNSW8LSMxFq0Bvl
+	 jZ3G+iT16/WOqlLq1nB3wuUq98tbBvcZ4HCo2mOPLEi+eydRyCXEGNejvFttq0xwXA
+	 A/0zQd0UTH2oQ==
 From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 20 Jul 2026 11:33:36 +0200
-Subject: [PATCH 13/21] selftests/exec: convert the binfmt_misc bpf test to
- the kselftest harness
+Date: Mon, 20 Jul 2026 11:33:37 +0200
+Subject: [PATCH 14/21] selftests/exec: test the transparent binfmt_misc
+ mode
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260720-work-bpf-binfmt_misc-ptinterp-v1-13-ddb76c9a508e@kernel.org>
+Message-Id: <20260720-work-bpf-binfmt_misc-ptinterp-v1-14-ddb76c9a508e@kernel.org>
 References: <20260720-work-bpf-binfmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org>
 In-Reply-To: <20260720-work-bpf-binfmt_misc-ptinterp-v1-0-ddb76c9a508e@kernel.org>
 To: Farid Zakaria <farid.m.zakaria@gmail.com>, 
@@ -50,441 +50,501 @@ Cc: Daniel Borkmann <daniel@iogearbox.net>,
  jannh@google.com, mail@johnericson.me, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.16-dev-4217c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13251; i=brauner@kernel.org;
- h=from:subject:message-id; bh=edp5jvmw68Q1SL8tR5mr0/QDhvFhmeGEDscCO/DjphY=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTFvm5Kebc1oCOO92nkupf6ldnMisdetM8zOb6NKWd21
- rvUW2v0OkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACayiIWRYf2X0qdzPth3LuxY
- Z6o6wWbOx869sSzXNXre/215VahQuJ6RYXb4NfXzz89yR9YGZ/Us3ZQeMbnjpFLQ9hkZ98TUN3W
- HMQIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=16946; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=AM15bcA1VzjVrQWbKZKfiVmo8DosxAfjEl+xEJJ+L80=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTFvm46ZH9x5eT/4iFnlf8rS7Zs6MsQX3jr2IGf9f8yl
+ scvub90V0cpC4MYF4OsmCKLQ7tJuNxynorNRpkaMHNYmUCGMHBxCsBE6psY/mdozjVwy9Cf38uo
+ 1cX/M8JUzzWpuZVTQ/THi7d/vk7u7mX4X3pe4tPvH/+1Hlze0fDPY3mhlu2fHbf4dj1Z1ShqnWE
+ RwwUA
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-The test reports its own pass and fail lines, returns a bare 4 for
-KSFT_SKIP and runs both cases in one process, so a failure in the first
-takes the second with it. It also open-codes the register, unregister,
-file-copy and mount helpers that the tests for the upcoming transparent
-and loader dispatch modes need again.
+Verify the identity a transparent dispatch constructs, from both
+activation paths.
 
-Convert it to the kselftest harness: a fixture for the common setup and
-teardown, one TEST_F per case so each is reported and isolated
-separately, and SKIP() for the root, BTF and binfmt_misc preconditions.
-Move the helpers to a shared header on the way, with the register
-helper preserving the write's errno so a caller can tell a rejected
-flag combination (EINVAL) from a kernel that does not know the flag at
-all. The synthetic ELF header gains an e_machine argument and uses the
-elf.h constants instead of open-coded numbers.
+- binfmt_misc_transparent: registers a magic entry with the static 'T'
+  flag and execs a matched binary with arguments.
 
-No change in what is tested.
+- binfmt_misc_bpf: a handler whose load program sets
+  BPF_BINPRM_TRANSPARENT.
+
+Both dispatch to a shared asserting interpreter that runs in place of
+the binary and checks the contract from the inside:
+
+- AT_FLAGS carries AT_FLAGS_TRANSPARENT_INTERP
+- AT_EXECFD refers to the very inode of the binary
+- /proc/self/exe resolves to the binary
+- argv and /proc/self/cmdline are exactly what the caller passed with
+  nothing spliced in
+- comm is the binary's basename
+- the binary is write-denied while it runs
+
+The static test also validates the registration. 'T' combined with 'P'
+must be rejected. A kernel that does not know 'T' turns the test into a
+skip. The asserting interpreter and the static test build without the
+bpf toolchain so the core transparent semantics stay covered on systems
+where the bpf cases are skipped.
 
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- tools/testing/selftests/exec/Makefile             |   6 +-
- tools/testing/selftests/exec/binfmt_misc_bpf.c    | 195 ++++++++--------------
- tools/testing/selftests/exec/binfmt_misc_common.h |  98 +++++++++++
- 3 files changed, 168 insertions(+), 131 deletions(-)
+ tools/testing/selftests/exec/.gitignore            |   2 +
+ tools/testing/selftests/exec/Makefile              |  10 +-
+ tools/testing/selftests/exec/binfmt_misc_bpf.c     |  47 +++++++-
+ .../selftests/exec/binfmt_misc_transparent.c       | 108 +++++++++++++++++
+ .../selftests/exec/binfmt_transparent_interp.c     | 130 +++++++++++++++++++++
+ tools/testing/selftests/exec/transparent.bpf.c     |  57 +++++++++
+ 6 files changed, 349 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
+index 8b93b405c424..94b9ab4eb46c 100644
+--- a/tools/testing/selftests/exec/.gitignore
++++ b/tools/testing/selftests/exec/.gitignore
+@@ -22,5 +22,7 @@ S_I*.test
+ binfmt_misc_bpf
+ binfmt_bpf_interp
+ binfmt_bpf_app
++binfmt_misc_transparent
++binfmt_transparent_interp
+ *.bpf.o
+ vmlinux.h
 diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index ec66c1fecfc0..fb5ca59af51d 100644
+index fb5ca59af51d..6c2fdb674695 100644
 --- a/tools/testing/selftests/exec/Makefile
 +++ b/tools/testing/selftests/exec/Makefile
-@@ -44,6 +44,8 @@ endif
- EXTRA_CLEAN := $(OUTPUT)/subdir.moved $(OUTPUT)/execveat.moved $(OUTPUT)/xxxxx*	\
- 	       $(OUTPUT)/S_I*.test
+@@ -21,6 +21,11 @@ TEST_GEN_PROGS += recursion-depth
+ TEST_GEN_PROGS += null-argv
+ TEST_GEN_PROGS += check-exec
  
-+LOCAL_HDRS += binfmt_misc_common.h
++# Static ('T' flag) transparent binfmt_misc test; the asserting interpreter
++# is shared with the bpf harness's transparent case. No bpf toolchain needed.
++TEST_GEN_PROGS += binfmt_misc_transparent
++TEST_GEN_FILES += binfmt_transparent_interp
 +
- include ../lib.mk
- 
- CHECK_EXEC_SAMPLES := $(top_srcdir)/samples/check-exec
-@@ -91,7 +93,7 @@ $(OUTPUT)/vmlinux.h:
- $(OUTPUT)/%.bpf.o: %.bpf.c $(OUTPUT)/vmlinux.h
- 	$(CLANG) -g -O2 -target bpf -mcpu=v3 $(BPF_CFLAGS) $(LIBBPF_CFLAGS) -c $< -o $@
- 
--$(OUTPUT)/binfmt_misc_bpf: binfmt_misc_bpf.c
-+$(OUTPUT)/binfmt_misc_bpf: binfmt_misc_bpf.c binfmt_misc_common.h
- 	$(CC) $(CFLAGS) $(LIBBPF_CFLAGS) $(LDFLAGS) $< $(LIBBPF_LDLIBS) -o $@
- 
+ # binfmt_misc bpf-backed ('B') handler test: a libbpf harness plus its
+ # struct_ops objects and the test interpreter/app it routes between. Only
+ # built when clang, bpftool, the vmlinux BTF and libbpf are all present
+@@ -35,7 +40,7 @@ HAVE_BPF_TOOLCHAIN ?= $(shell command -v $(CLANG) >/dev/null 2>&1 && \
+ 			pkg-config --exists libbpf 2>/dev/null && echo y)
+ ifeq ($(HAVE_BPF_TOOLCHAIN),y)
+ TEST_GEN_PROGS += binfmt_misc_bpf
+-TEST_GEN_FILES += bpf_interp.bpf.o nix_origin.bpf.o
++TEST_GEN_FILES += bpf_interp.bpf.o nix_origin.bpf.o transparent.bpf.o
+ TEST_GEN_FILES += binfmt_bpf_interp binfmt_bpf_app
+ else
+ $(info exec selftests: skipping binfmt_misc_bpf, needs clang, bpftool, vmlinux BTF and libbpf)
+@@ -99,6 +104,9 @@ $(OUTPUT)/binfmt_misc_bpf: binfmt_misc_bpf.c binfmt_misc_common.h
  $(OUTPUT)/binfmt_bpf_interp: binfmt_bpf_interp.c
-@@ -102,4 +104,4 @@ $(OUTPUT)/binfmt_bpf_interp: binfmt_bpf_interp.c
- $(OUTPUT)/binfmt_bpf_app: binfmt_bpf_app.c
- 	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,--dynamic-linker,'$$ORIGIN/binfmt_bpf_interp' $< -o $@
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@
  
--EXTRA_CLEAN += $(OUTPUT)/vmlinux.h $(OUTPUT)/bpf_interp.bpf.o $(OUTPUT)/nix_origin.bpf.o
-+EXTRA_CLEAN += $(OUTPUT)/vmlinux.h $(OUTPUT)/*.bpf.o
++$(OUTPUT)/binfmt_transparent_interp: binfmt_transparent_interp.c
++	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@
++
+ # PT_INTERP is set to the literal "$ORIGIN/binfmt_bpf_interp"; the nix_origin
+ # handler resolves it relative to the binary at run time.
+ $(OUTPUT)/binfmt_bpf_app: binfmt_bpf_app.c
 diff --git a/tools/testing/selftests/exec/binfmt_misc_bpf.c b/tools/testing/selftests/exec/binfmt_misc_bpf.c
-index cb89d2766fe2..7954c6274623 100644
+index 7954c6274623..483c46e13410 100644
 --- a/tools/testing/selftests/exec/binfmt_misc_bpf.c
 +++ b/tools/testing/selftests/exec/binfmt_misc_bpf.c
-@@ -23,66 +23,40 @@
-  * program's chosen interpreter actually ran.
+@@ -9,7 +9,7 @@
+  *
+  *     echo ':name:B::::<handler>:' > /proc/sys/fs/binfmt_misc/register
+  *
+- * Two self-contained cases are exercised:
++ * Three self-contained cases are exercised:
+  *
+  *   1. bpf_interp: the match program matches a synthetic aarch64 ELF header
+  *      from the prefetched bprm->buf and the load program routes it to a
+@@ -18,9 +18,13 @@
+  *      commit only to a "$ORIGIN/..."-relative PT_INTERP and the load program
+  *      resolves it to an interpreter co-located with the binary (the
+  *      relocatable-loader case the kernel ELF loader cannot express).
++ *   3. transparent: the load program sets BPF_BINPRM_TRANSPARENT; the
++ *      asserting interpreter (binfmt_transparent_interp) verifies the
++ *      identity the kernel constructed (exe link, argv, cmdline, comm,
++ *      AT_EXECFD, write denial) from inside the process.
+  *
+- * Both route to a test interpreter that prints BPF_INTERP_RAN, proving the
+- * program's chosen interpreter actually ran.
++ * The first two route to a test interpreter that prints BPF_INTERP_RAN,
++ * proving the program's chosen interpreter actually ran.
   */
  #define _GNU_SOURCE
-+#include <elf.h>
-+#include <limits.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
- #include <fcntl.h>
--#include <libgen.h>
--#include <sys/mount.h>
- #include <sys/stat.h>
- 
- #include <bpf/btf.h>
+ #include <elf.h>
+@@ -36,12 +40,15 @@
  #include <bpf/libbpf.h>
  
-+#include "binfmt_misc_common.h"
-+#include "../kselftest_harness.h"
-+
+ #include "binfmt_misc_common.h"
+-#include "../kselftest_harness.h"
++#include "kselftest_harness.h"
+ 
  #define INTERP_PATH	"/tmp/binfmt_bpf_interp"
  #define AARCH64_PATH	"/tmp/binfmt_bpf_aarch64"
  #define RELOC_DIR	"/tmp/binfmt_reloc"
--#define BINFMT_REG	"/proc/sys/fs/binfmt_misc/register"
++#define TRANS_INTERP	"/tmp/binfmt_transparent_interp"
++#define TRANS_PATH	"/tmp/binfmt_bpf_riscv"
  #define EXPECT		"BPF_INTERP_RAN"
++#define TRANS_EXPECT	"TRANSPARENT_OK"
  
--static char testdir[512]; /* directory holding this test's built artifacts */
--
--static int copy_file(const char *src, const char *dst)
--{
--	char buf[4096];
--	int in, out;
--	ssize_t n;
--
--	in = open(src, O_RDONLY);
--	if (in < 0)
--		return -1;
--	out = open(dst, O_WRONLY | O_CREAT | O_TRUNC, 0755);
--	if (out < 0) {
--		close(in);
--		return -1;
--	}
--	while ((n = read(in, buf, sizeof(buf))) > 0) {
--		if (write(out, buf, n) != n) {
--			close(in);
--			close(out);
--			return -1;
--		}
--	}
--	close(in);
--	close(out);
--	return n < 0 ? -1 : 0;
--}
--
--/* A minimal 64-bit little-endian aarch64 ELF header, padded to the read size. */
--static int create_fake_aarch64(const char *path)
-+/* A minimal 64-bit little-endian ELF header, padded to the read size. */
-+static int create_fake_elf(const char *path, unsigned short machine)
- {
- 	unsigned char hdr[256] = {0};
- 	int fd;
- 
- 	hdr[0] = 0x7f; hdr[1] = 'E'; hdr[2] = 'L'; hdr[3] = 'F';
--	hdr[4] = 2;			/* ELFCLASS64 */
--	hdr[5] = 1;			/* ELFDATA2LSB */
--	hdr[6] = 1;			/* EV_CURRENT */
--	hdr[16] = 2;			/* e_type = ET_EXEC */
--	hdr[18] = 183 & 0xff;		/* e_machine = EM_AARCH64 */
--	hdr[19] = (183 >> 8) & 0xff;
--	hdr[20] = 1;			/* e_version */
-+	hdr[4] = ELFCLASS64;
-+	hdr[5] = ELFDATA2LSB;
-+	hdr[6] = EV_CURRENT;
-+	hdr[16] = ET_EXEC;
-+	hdr[18] = machine & 0xff;	/* e_machine, little-endian */
-+	hdr[19] = machine >> 8;
-+	hdr[20] = EV_CURRENT;
- 
- 	fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0755);
- 	if (fd < 0)
-@@ -97,31 +71,10 @@ static int create_fake_aarch64(const char *path)
- 
- static int register_entry(const char *name, const char *handler)
- {
--	char rule[128];
--	int fd;
--	ssize_t n;
-+	char rule[PATH_MAX];
- 
- 	snprintf(rule, sizeof(rule), ":%s:B::::%s:", name, handler);
--	fd = open(BINFMT_REG, O_WRONLY);
--	if (fd < 0)
--		return -1;
--	n = write(fd, rule, strlen(rule));
--	close(fd);
--	return n < 0 ? -1 : 0;
--}
--
--static void unregister_entry(const char *name)
--{
--	char path[128];
--	int fd;
--
--	snprintf(path, sizeof(path), "/proc/sys/fs/binfmt_misc/%s", name);
--	fd = open(path, O_WRONLY);
--	if (fd >= 0) {
--		if (write(fd, "-1", 2) < 0)
--			; /* best effort */
--		close(fd);
--	}
-+	return write_reg(rule);
+ /* A minimal 64-bit little-endian ELF header, padded to the read size. */
+ static int create_fake_elf(const char *path, unsigned short machine)
+@@ -77,6 +84,15 @@ static int register_entry(const char *name, const char *handler)
+ 	return write_reg(rule);
  }
  
++/* Probe for transparent-mode support via its static counterpart. */
++static bool have_transparent(void)
++{
++	if (write_reg(":test_t_probe:E::bmtprobe::/bin/true:T"))
++		return false;
++	unregister("test_t_probe");
++	return true;
++}
++
  static int check_output(const char *cmd, const char *expected)
-@@ -178,7 +131,7 @@ static int run_case(const char *objfile, const char *handler,
- 		goto detach;
- 	}
- 	ret = check_output(target, expect);
--	unregister_entry(entry);
-+	unregister(entry);
- detach:
- 	bpf_link__destroy(link);
- close:
-@@ -186,92 +139,76 @@ static int run_case(const char *objfile, const char *handler,
- 	return ret;
- }
- 
--int main(void)
-+FIXTURE(bpf_handler) {
-+	char obj[PATH_MAX];	/* struct_ops object of the case under test */
-+};
-+
-+FIXTURE_SETUP(bpf_handler)
  {
--	char src[600], obj[600], appdst[600], interpdst[600];
--	char exe[512];
--	ssize_t n;
--	int fail = 0;
-+	char src[PATH_MAX];
- 	struct stat st;
- 	struct btf *btf;
- 
--	if (getuid() != 0) {
--		fprintf(stderr, "Skipping: test must be run as root\n");
--		return 4; /* KSFT_SKIP */
--	}
-+	if (getuid() != 0)
-+		SKIP(return, "test must be run as root");
- 
- 	/* The kernel must know struct binfmt_misc_ops (CONFIG_BINFMT_MISC_BPF). */
- 	btf = btf__load_vmlinux_btf();
- 	if (!btf || btf__find_by_name_kind(btf, "binfmt_misc_ops",
- 					   BTF_KIND_STRUCT) < 0) {
--		fprintf(stderr,
--			"Skipping: no struct binfmt_misc_ops in the kernel BTF (CONFIG_BINFMT_MISC_BPF)\n");
- 		btf__free(btf);
--		return 4; /* KSFT_SKIP */
-+		SKIP(return,
-+		     "no struct binfmt_misc_ops in the kernel BTF (CONFIG_BINFMT_MISC_BPF)");
- 	}
- 	btf__free(btf);
- 
--	n = readlink("/proc/self/exe", exe, sizeof(exe) - 1);
--	if (n < 0) {
--		perror("readlink");
--		return 1;
--	}
--	exe[n] = '\0';
--	snprintf(testdir, sizeof(testdir), "%s", dirname(exe));
--
- 	if (stat("/sys/fs/bpf", &st) < 0)
- 		mkdir("/sys/fs/bpf", 0755);
- 	mount("bpf", "/sys/fs/bpf", "bpf", 0, NULL);
--	if (access(BINFMT_REG, F_OK) < 0)
--		mount("binfmt_misc", "/proc/sys/fs/binfmt_misc", "binfmt_misc", 0, NULL);
-+	if (!binfmt_misc_available())
-+		SKIP(return, "no binfmt_misc");
- 
- 	/* Shared test interpreter. */
--	snprintf(src, sizeof(src), "%s/binfmt_bpf_interp", testdir);
--	if (copy_file(src, INTERP_PATH)) {
--		fprintf(stderr, "cannot install %s\n", INTERP_PATH);
--		return 1;
--	}
-+	ASSERT_EQ(artifact_path(src, sizeof(src), "binfmt_bpf_interp"), 0);
-+	ASSERT_EQ(copy_file(src, INTERP_PATH), 0);
-+}
- 
--	/* Case 1: match a synthetic aarch64 header -> fixed interpreter. */
--	printf("[*] case 1: match aarch64 header -> program-chosen interpreter\n");
--	if (create_fake_aarch64(AARCH64_PATH)) {
--		fprintf(stderr, "cannot create %s\n", AARCH64_PATH);
--		return 1;
--	}
--	snprintf(obj, sizeof(obj), "%s/bpf_interp.bpf.o", testdir);
--	if (run_case(obj, "bpf_interp", "test_bpf_interp", AARCH64_PATH, EXPECT) == 0)
--		printf("[+] case 1 passed\n");
--	else {
--		printf("[-] case 1 FAILED\n");
--		fail = 1;
--	}
-+FIXTURE_TEARDOWN(bpf_handler)
-+{
-+	unlink(INTERP_PATH);
-+}
-+
-+/* The match program matches a synthetic header, the load program routes it. */
-+TEST_F(bpf_handler, fixed_interpreter)
-+{
-+	ASSERT_EQ(create_fake_elf(AARCH64_PATH, EM_AARCH64), 0);
-+	ASSERT_EQ(artifact_path(self->obj, sizeof(self->obj),
-+				"bpf_interp.bpf.o"), 0);
-+	EXPECT_EQ(run_case(self->obj, "bpf_interp", "test_bpf_interp",
-+			   AARCH64_PATH, EXPECT), 0);
- 	unlink(AARCH64_PATH);
-+}
-+
-+/* A "$ORIGIN/..." PT_INTERP resolved to an interpreter next to the binary. */
-+TEST_F(bpf_handler, origin_relative_interpreter)
-+{
-+	char src[PATH_MAX], app[PATH_MAX], interp[PATH_MAX];
- 
--	/* Case 2: $ORIGIN-relative PT_INTERP -> co-located interpreter. */
--	printf("[*] case 2: $ORIGIN interpreter resolved relative to the binary\n");
- 	mkdir(RELOC_DIR, 0755);
--	snprintf(appdst, sizeof(appdst), "%s/app", RELOC_DIR);
--	snprintf(interpdst, sizeof(interpdst), "%s/binfmt_bpf_interp", RELOC_DIR);
--	snprintf(src, sizeof(src), "%s/binfmt_bpf_app", testdir);
--	if (copy_file(src, appdst) ||
--	    copy_file(INTERP_PATH, interpdst)) {
--		fprintf(stderr, "cannot set up %s\n", RELOC_DIR);
--		fail = 1;
--	} else {
--		snprintf(obj, sizeof(obj), "%s/nix_origin.bpf.o", testdir);
--		if (run_case(obj, "nix_origin", "test_bpf_origin", appdst, EXPECT) == 0)
--			printf("[+] case 2 passed\n");
--		else {
--			printf("[-] case 2 FAILED\n");
--			fail = 1;
--		}
--	}
--	unlink(appdst);
--	unlink(interpdst);
--	rmdir(RELOC_DIR);
--	unlink(INTERP_PATH);
-+	snprintf(app, sizeof(app), "%s/app", RELOC_DIR);
-+	snprintf(interp, sizeof(interp), "%s/binfmt_bpf_interp", RELOC_DIR);
-+	ASSERT_EQ(artifact_path(src, sizeof(src), "binfmt_bpf_app"), 0);
-+	ASSERT_EQ(copy_file(src, app), 0);
-+	ASSERT_EQ(copy_file(INTERP_PATH, interp), 0);
-+
-+	ASSERT_EQ(artifact_path(self->obj, sizeof(self->obj),
-+				"nix_origin.bpf.o"), 0);
-+	EXPECT_EQ(run_case(self->obj, "nix_origin", "test_bpf_origin",
-+			   app, EXPECT), 0);
- 
--	if (!fail)
--		printf("[*] all binfmt_misc bpf cases passed\n");
--	return fail;
-+	unlink(app);
-+	unlink(interp);
-+	rmdir(RELOC_DIR);
+ 	char buf[128];
+@@ -211,4 +227,27 @@ TEST_F(bpf_handler, origin_relative_interpreter)
+ 	rmdir(RELOC_DIR);
  }
+ 
++/* A transparent dispatch: the process presents as the binary, not the interp. */
++TEST_F(bpf_handler, transparent_dispatch)
++{
++	char src[PATH_MAX], cmd[PATH_MAX + 16];
 +
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/exec/binfmt_misc_common.h b/tools/testing/selftests/exec/binfmt_misc_common.h
++	if (!have_transparent())
++		SKIP(return, "kernel without transparent mode");
++
++	ASSERT_EQ(artifact_path(src, sizeof(src), "binfmt_transparent_interp"), 0);
++	ASSERT_EQ(copy_file(src, TRANS_INTERP), 0);
++	ASSERT_EQ(create_fake_elf(TRANS_PATH, EM_RISCV), 0);
++
++	setenv("BINFMT_TEST_BINARY", TRANS_PATH, 1);
++	snprintf(cmd, sizeof(cmd), "%s argone argtwo", TRANS_PATH);
++	ASSERT_EQ(artifact_path(self->obj, sizeof(self->obj),
++				"transparent.bpf.o"), 0);
++	EXPECT_EQ(run_case(self->obj, "transparent", "test_bpf_transparent",
++			   cmd, TRANS_EXPECT), 0);
++
++	unlink(TRANS_PATH);
++	unlink(TRANS_INTERP);
++}
++
+ TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/exec/binfmt_misc_transparent.c b/tools/testing/selftests/exec/binfmt_misc_transparent.c
 new file mode 100644
-index 000000000000..854c7a6d34e1
+index 000000000000..de59dc8c5695
 --- /dev/null
-+++ b/tools/testing/selftests/exec/binfmt_misc_common.h
-@@ -0,0 +1,98 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Helpers shared by the binfmt_misc selftests. */
-+#ifndef __SELFTESTS_EXEC_BINFMT_MISC_COMMON_H
-+#define __SELFTESTS_EXEC_BINFMT_MISC_COMMON_H
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <libgen.h>
-+#include <limits.h>
-+#include <stdbool.h>
++++ b/tools/testing/selftests/exec/binfmt_misc_transparent.c
+@@ -0,0 +1,108 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test the static transparent flag 'T' of binfmt_misc. A magic-matched
++ * binary is dispatched to an interpreter with the argument vector left
++ * untouched, the binary passed through AT_EXECFD and mm->exe_file labeled
++ * with the binary. The asserting interpreter (binfmt_transparent_interp)
++ * verifies the constructed identity from inside the process and exits 0.
++ *
++ * Needs root for the registration; no bpf toolchain involved.
++ */
++#define _GNU_SOURCE
 +#include <stdio.h>
-+#include <string.h>
-+#include <sys/mount.h>
-+#include <unistd.h>
++#include <stdlib.h>
++#include <sys/wait.h>
 +
-+#define BINFMT_DIR	"/proc/sys/fs/binfmt_misc"
-+#define BINFMT_REG	BINFMT_DIR "/register"
++#include "binfmt_misc_common.h"
++#include "kselftest_harness.h"
 +
-+static inline int copy_file(const char *src, const char *dst)
++#define MAGIC		"#TRANSPARENT-SELFTEST#"
++#define TARGET_PATH	"/tmp/binfmt_transparent_target"
++#define INTERP_PATH	"/tmp/binfmt_transparent_interp"
++#define ENTRY		"test_transparent"
++#define TRANSPARENT_ARGV0 "transparent-argv0"
++#define RULE(flags)	":" ENTRY ":M:0:" MAGIC "::" INTERP_PATH ":" flags
++
++/* The target only has to carry the magic; it is never actually loaded. */
++static int create_target(void)
 +{
-+	char buf[4096];
-+	int in, out;
-+	ssize_t n;
-+
-+	in = open(src, O_RDONLY);
-+	if (in < 0)
-+		return -1;
-+	out = open(dst, O_WRONLY | O_CREAT | O_TRUNC, 0755);
-+	if (out < 0) {
-+		close(in);
-+		return -1;
-+	}
-+	while ((n = read(in, buf, sizeof(buf))) > 0) {
-+		if (write(out, buf, n) != n) {
-+			close(in);
-+			close(out);
-+			return -1;
-+		}
-+	}
-+	close(in);
-+	close(out);
-+	return n < 0 ? -1 : 0;
-+}
-+
-+/* Write @rule to the register file, preserving the write's errno. */
-+static inline int write_reg(const char *rule)
-+{
-+	int fd, saved;
-+	ssize_t n;
-+
-+	fd = open(BINFMT_REG, O_WRONLY);
-+	if (fd < 0)
-+		return -1;
-+	n = write(fd, rule, strlen(rule));
-+	saved = errno;
-+	close(fd);
-+	errno = saved;
-+	return n < 0 ? -1 : 0;
-+}
-+
-+static inline void unregister(const char *name)
-+{
-+	char path[PATH_MAX];
++	char buf[128] = MAGIC "\n";
 +	int fd;
 +
-+	snprintf(path, sizeof(path), BINFMT_DIR "/%s", name);
-+	fd = open(path, O_WRONLY);
-+	if (fd >= 0) {
-+		if (write(fd, "-1", 2) < 0)
-+			; /* best effort */
++	fd = open(TARGET_PATH, O_WRONLY | O_CREAT | O_TRUNC, 0755);
++	if (fd < 0)
++		return -1;
++	if (write(fd, buf, sizeof(buf)) != (ssize_t)sizeof(buf)) {
 +		close(fd);
++		return -1;
 +	}
-+}
-+
-+/* Mount binfmt_misc unless it already is, and report whether it is usable. */
-+static inline bool binfmt_misc_available(void)
-+{
-+	if (access(BINFMT_REG, F_OK) < 0)
-+		mount("binfmt_misc", BINFMT_DIR, "binfmt_misc", 0, NULL);
-+	return access(BINFMT_REG, F_OK) == 0;
-+}
-+
-+/* Absolute path of @name in the directory this test was built into. */
-+static inline int artifact_path(char *out, size_t sz, const char *name)
-+{
-+	char exe[PATH_MAX];
-+	ssize_t n;
-+
-+	n = readlink("/proc/self/exe", exe, sizeof(exe) - 1);
-+	if (n < 0)
-+		return -1;
-+	exe[n] = '\0';
-+	if ((size_t)snprintf(out, sz, "%s/%s", dirname(exe), name) >= sz)
-+		return -1;
++	close(fd);
 +	return 0;
 +}
 +
-+#endif /* __SELFTESTS_EXEC_BINFMT_MISC_COMMON_H */
++FIXTURE(transparent) {
++};
++
++FIXTURE_SETUP(transparent)
++{
++	char src[PATH_MAX];
++
++	if (getuid() != 0)
++		SKIP(return, "test must be run as root");
++	if (!binfmt_misc_available())
++		SKIP(return, "no binfmt_misc");
++
++	ASSERT_EQ(artifact_path(src, sizeof(src), "binfmt_transparent_interp"), 0);
++	ASSERT_EQ(copy_file(src, INTERP_PATH), 0);
++	ASSERT_EQ(create_target(), 0);
++
++	/* Skip the whole suite on a kernel that does not know 'T'. */
++	if (write_reg(RULE("T"))) {
++		ASSERT_EQ(errno, EINVAL);
++		SKIP(return, "kernel without the 'T' flag");
++	}
++	unregister(ENTRY);
++}
++
++FIXTURE_TEARDOWN(transparent)
++{
++	unregister(ENTRY);
++	unlink(TARGET_PATH);
++	unlink(INTERP_PATH);
++}
++
++/* Grammar sanity check: the same entry without 'T' has to register. */
++TEST_F(transparent, plain_entry_registers)
++{
++	ASSERT_EQ(write_reg(RULE("")), 0);
++}
++
++/* 'T' preserves the whole argv, so combining it with 'P' is rejected. */
++TEST_F(transparent, rejects_preserve_argv0)
++{
++	ASSERT_NE(write_reg(RULE("TP")), 0);
++	EXPECT_EQ(errno, EINVAL);
++}
++
++/* The interpreter asserts the identity the kernel built for it. */
++TEST_F(transparent, dispatch)
++{
++	int status;
++	pid_t pid;
++
++	ASSERT_EQ(write_reg(RULE("T")), 0);
++
++	setenv("BINFMT_TEST_BINARY", TARGET_PATH, 1);
++	setenv("BINFMT_TEST_ARGV0", TRANSPARENT_ARGV0, 1);
++	pid = fork();
++	ASSERT_GE(pid, 0);
++	if (pid == 0) {
++		execl(TARGET_PATH, TRANSPARENT_ARGV0, "argone", "argtwo", (char *)NULL);
++		_exit(126);
++	}
++	ASSERT_EQ(waitpid(pid, &status, 0), pid);
++	ASSERT_TRUE(WIFEXITED(status));
++	EXPECT_EQ(WEXITSTATUS(status), 0);
++}
++
++TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/exec/binfmt_transparent_interp.c b/tools/testing/selftests/exec/binfmt_transparent_interp.c
+new file mode 100644
+index 000000000000..2a71c4706758
+--- /dev/null
++++ b/tools/testing/selftests/exec/binfmt_transparent_interp.c
+@@ -0,0 +1,130 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Asserting interpreter for the transparent binfmt_misc mode. It runs in
++ * place of the dispatched binary and verifies the identity the kernel
++ * constructed: the aux vector contract, the exe link, argv, cmdline, comm
++ * and the write denial on the binary. BINFMT_TEST_BINARY names the binary;
++ * the harness execs it with the arguments "argone argtwo". Prints
++ * TRANSPARENT_OK and exits 0 when every check holds.
++ */
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <limits.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/auxv.h>
++#include <sys/stat.h>
++#include <unistd.h>
++
++#include "kselftest.h"
++
++#ifndef AT_FLAGS_TRANSPARENT_INTERP
++#define AT_FLAGS_TRANSPARENT_INTERP (1 << 1)
++#endif
++
++#define TASK_COMM_LEN 16
++
++static int fail;
++
++static void ok(int cond, const char *what)
++{
++	if (!cond) {
++		fprintf(stderr, "TRANSPARENT_FAIL: %s (errno %d)\n", what, errno);
++		fail = 1;
++	}
++}
++
++int main(int argc, char **argv)
++{
++	const char *binary = getenv("BINFMT_TEST_BINARY");
++	const char *argv0 = getenv("BINFMT_TEST_ARGV0");
++	char exe[PATH_MAX], real[PATH_MAX], buf[PATH_MAX];
++	char expect[PATH_MAX + 32];
++	unsigned long execfd;
++	struct stat stb, stfd;
++	const char *want[3];
++	const char *base;
++	size_t expect_len, i;
++	ssize_t n;
++	int fd;
++
++	if (!binary) {
++		fprintf(stderr, "TRANSPARENT_FAIL: BINFMT_TEST_BINARY unset\n");
++		return 1;
++	}
++	/* Distinct from the binary path, so a classic argv splice is caught. */
++	want[0] = argv0 ? argv0 : binary;
++	want[1] = "argone";
++	want[2] = "argtwo";
++
++	/* The aux vector announces the transparent contract. */
++	ok(getauxval(AT_FLAGS) & AT_FLAGS_TRANSPARENT_INTERP,
++	   "AT_FLAGS lacks AT_FLAGS_TRANSPARENT_INTERP");
++
++	/* AT_EXECFD refers to the very file that was executed. */
++	execfd = getauxval(AT_EXECFD);
++	ok(execfd > 2, "no AT_EXECFD");
++	ok(!stat(binary, &stb), "cannot stat the binary");
++	ok(!fstat((int)execfd, &stfd), "cannot fstat AT_EXECFD");
++	ok(stb.st_dev == stfd.st_dev && stb.st_ino == stfd.st_ino,
++	   "AT_EXECFD is not the binary");
++
++	/* The exe link names the binary, not this interpreter. */
++	n = readlink("/proc/self/exe", exe, sizeof(exe) - 1);
++	ok(n > 0, "cannot read /proc/self/exe");
++	if (n > 0)
++		exe[n] = '\0';
++	ok(n > 0 && realpath(binary, real) && !strcmp(exe, real),
++	   "/proc/self/exe is not the binary");
++
++	/* argv arrived unspliced. */
++	ok(argc == (int)ARRAY_SIZE(want), "argv was rewritten");
++	for (i = 0; i < ARRAY_SIZE(want) && i < (size_t)argc; i++)
++		ok(!strcmp(argv[i], want[i]), "argv was rewritten");
++
++	/* And so did the kernel's copy of it: the same strings, NUL separated. */
++	for (i = 0, expect_len = 0; i < ARRAY_SIZE(want); i++) {
++		size_t len = strlen(want[i]) + 1;
++
++		memcpy(expect + expect_len, want[i], len);
++		expect_len += len;
++	}
++	fd = open("/proc/self/cmdline", O_RDONLY);
++	n = fd >= 0 ? read(fd, buf, sizeof(buf)) : -1;
++	if (fd >= 0)
++		close(fd);
++	ok(n == (ssize_t)expect_len && !memcmp(buf, expect, expect_len),
++	   "/proc/self/cmdline was rewritten");
++
++	/* comm is the binary's basename. */
++	base = strrchr(binary, '/');
++	base = base ? base + 1 : binary;
++	snprintf(expect, TASK_COMM_LEN, "%s", base);
++	fd = open("/proc/self/comm", O_RDONLY);
++	n = fd >= 0 ? read(fd, buf, sizeof(buf) - 1) : -1;
++	if (fd >= 0)
++		close(fd);
++	if (n > 0 && buf[n - 1] == '\n')
++		n--;
++	if (n >= 0)
++		buf[n] = '\0';
++	ok(n > 0 && !strcmp(buf, expect), "comm is not the binary's basename");
++
++	/* The binary is write-denied while it runs, like a direct exec. */
++	errno = 0;
++	fd = open(binary, O_WRONLY);
++	ok(fd < 0 && errno == ETXTBSY, "binary is writable while running");
++	if (fd >= 0)
++		close(fd);
++	errno = 0;
++	fd = open("/proc/self/exe", O_WRONLY);
++	ok(fd < 0 && errno == ETXTBSY, "exe link is writable while running");
++	if (fd >= 0)
++		close(fd);
++
++	if (!fail)
++		printf("TRANSPARENT_OK\n");
++	return fail;
++}
+diff --git a/tools/testing/selftests/exec/transparent.bpf.c b/tools/testing/selftests/exec/transparent.bpf.c
+new file mode 100644
+index 000000000000..7632019ebe69
+--- /dev/null
++++ b/tools/testing/selftests/exec/transparent.bpf.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * binfmt_misc_ops handler for the transparent-mode case: match a synthetic
++ * riscv ELF header and run the asserting interpreter transparently - the
++ * argument vector untouched, the binary in AT_EXECFD and mm->exe_file
++ * labeled with the binary.
++ */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++#define EI_CLASS	4
++#define ELFCLASS64	2
++#define EM_RISCV	243
++
++extern int bpf_binprm_set_interp(struct linux_binprm *bprm, const char *path,
++				 size_t path__sz) __ksym;
++extern int bpf_binprm_set_flags(struct linux_binprm *bprm,
++				enum bpf_binprm_flags flags) __ksym;
++
++SEC("struct_ops.s/match")
++bool BPF_PROG(transparent_match, struct linux_binprm *bprm)
++{
++	__u16 machine;
++
++	if (bprm->buf[0] != 0x7f || bprm->buf[1] != 'E' ||
++	    bprm->buf[2] != 'L' || bprm->buf[3] != 'F' ||
++	    bprm->buf[EI_CLASS] != ELFCLASS64)
++		return false;
++
++	/* e_machine is a 16-bit little-endian field at offset 18. */
++	machine = (__u8)bprm->buf[18] | ((__u16)(__u8)bprm->buf[19] << 8);
++	return machine == EM_RISCV;
++}
++
++SEC("struct_ops.s/load")
++int BPF_PROG(transparent_load, struct linux_binprm *bprm)
++{
++	char interp[] = "/tmp/binfmt_transparent_interp";
++	int err;
++
++	err = bpf_binprm_set_flags(bprm, BPF_BINPRM_TRANSPARENT);
++	if (err)
++		return err;
++
++	/* @path__sz includes the terminating NUL; 0 commits the selection. */
++	return bpf_binprm_set_interp(bprm, interp, sizeof(interp));
++}
++
++SEC(".struct_ops.link")
++struct binfmt_misc_ops transparent = {
++	.match = (void *)transparent_match,
++	.load = (void *)transparent_load,
++	.name = "transparent",
++};
 
 -- 
 2.53.0
