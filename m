@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5002141B8FB;
-	Mon, 20 Jul 2026 12:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6322B41BA79;
+	Mon, 20 Jul 2026 12:56:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784552171; cv=none; b=G67+/b3Y6nKUCZW4K31A5bF+VWA6l8UkB0N0p4R4CndhOBFgwKOQ3ZCZ+R4zgQMiSvNXHdOLY9dpduWlvPxvY3T+G9ggzsms0HimiE28MlAy0kTdQB9zJdN+Yb5Nq22Z+b59HZLCKhYjcrQ0/KcRbt7FUAt58RxF4kamhn96mUI=
+	t=1784552198; cv=none; b=epIpHIjJk1Bm+cIClY5+uhz8ka6txNG+IOdCCTxKJ+ghCo9N3w+zP1CxpVLCt/lcLeh4N981yW/PnXXSsmOXAUWnoDAxLIb0zboasNpGyrOjzTWk+4yC8g3WqnDLLK2nAF8sO8V4/v9RopZjFMt7LOhbEVAMzA50AC+B/twTBTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784552171; c=relaxed/simple;
-	bh=NLCD4MyHNwLEeRIEmoTn0hyPF48QDNzMnfwGiPP783o=;
+	s=arc-20240116; t=1784552198; c=relaxed/simple;
+	bh=51yuat7FvU0PthhpGiKFzfQWwWHzp0lh20PBTUlNzUk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XE6W6ZbwKE+HvB0155JN2wjvPd74OChJG3xkvvE66LOokTKDs0UghHEkqzRMEtA+sUjNO8YJhUvLJMTZja4Bx/MRGtlb5W6uyTdX96YSpUSXMRTObkbBsJBKm1DwKHGos2Pp1tszsCMouMvuZtYgSOhxbfxCVL1f8QBP6zfd/Ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ocl+VZAV; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=KZiFgLvbizyYTr1zgxaN9hVfLfm/zG2yXXWeULh55tG7lgl1QRnQu2+o8VsO5+iTmzKUHlQuqX1fl2hdg4Wd/a8q47MueMNe1Vq5APJobtJsiI/9qKoFA6oiIKQ9atAU64OkwwwS9DvuIJIlZyI1DcuDosgIQ4cmT93fQGrlQ4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=abfS4EOE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ocl+VZAV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030E31F000E9;
-	Mon, 20 Jul 2026 12:56:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="abfS4EOE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 129D01F00A3A;
+	Mon, 20 Jul 2026 12:56:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784552170;
-	bh=nPuEan/ndgKEJU8EyTzHJC706e1R6jLrfdYM1L8UXeY=;
+	s=k20260515; t=1784552197;
+	bh=un4HkghspyZsqT1HV3ewuK+Ez+dYAlrY3NSEAHDyFnQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ocl+VZAVZn6JGJsNoubD59ioGpmLioPI/E2WONMNEda7xDhbaQDWxaR67Kg5o3E9t
-	 g5U7iq8mX82sfJ9DacF+IelPsgO6fONAGv/3952NZ0y9YQRkk4VMRyiCY1zVGahe+y
-	 c8R8IjZONY+FcOHYj7Wsh5B7oeplR/2ZGiOT/ivOt9r6BCi8tnY8YrZehwFJ9NF7Nn
-	 bH5zaOo/S6wLRi9ySIXuBFmlwpOt3BqTKIoAvy5TTKywUiCgcuIG83+B17X0QQKUMR
-	 Ui84lMTCzN8RXQ0+12XqNdm+1YRK2RPs4ZOmYTh5lZ+DU/tI30ZwM7N42ses5RTIdd
-	 2vUkusHw239EA==
+	b=abfS4EOEPhAp6c0ycU/Mbb7K78dsFerBVOYtIZv2iEk/4WIVHuO8I05lyk8ltjXRw
+	 BIt+WCcu0ZC+bdaxCDe/M/wUixF6f8+804PoFHoQ62Eer9v1mrguQomvlfRvXohuK+
+	 6eJxwq8MKQtp+OGYtw6PQgQSzad0fsgvT+C/3ZkWWLKUkLNpbPVNJBCsOAGNTWvbUh
+	 kO1EZMUAfOxKwWeMVXXMMg4dVjvDq6+99Pt39OFcyUeUb9+Uay12/4i0FZlYEIXU8g
+	 y00qjTqFWmFiq3wOfsq2nyO2PTPV81seuoEPTBQx9EvxJhUocfLUxtRl4GxU3nKr6s
+	 Rt9ROxqZUusUA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH slab/for-next v4 1/8] mm/slab, slub_kunit: register
- kprobe to trigger _nolock APIs
+Subject: Re: [PATCH slab/for-next v4 5/8] mm/slab: allow kfree_rcu_sheaf()
+ on PREEMPT_RT
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?SGFycnkgWW9vIChPcmFjbGUp?= <harry@kernel.org>
-Cc: linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260720-kfree_rcu_nolock-v4-1-964e03c41a4e@kernel.org>
+Cc: bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org
+In-Reply-To: <20260720-kfree_rcu_nolock-v4-5-964e03c41a4e@kernel.org>
 References: <20260720-kfree_rcu_nolock-v4-0-964e03c41a4e@kernel.org>
- <20260720-kfree_rcu_nolock-v4-1-964e03c41a4e@kernel.org>
+ <20260720-kfree_rcu_nolock-v4-5-964e03c41a4e@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Jul 2026 12:56:08 +0000
-Message-Id: <20260720125609.030E31F000E9@smtp.kernel.org>
+Date: Mon, 20 Jul 2026 12:56:36 +0000
+Message-Id: <20260720125637.129D01F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,130 +47,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] The globally registered kprobe pre-handler executes system-wide on=
- all CPUs, causing non-test tasks to inadvertently execute KUnit test logic=
- and concurrently mutate the test thread's stack-allocated context.
-- [Medium] The refactoring to `kmalloc_obj(*objects[j], gfp)` incorrectly e=
-valuates the allocation size to 1 byte instead of the intended 64 bytes.
+
+New issues:
+- [High] Calling `local_trylock()` inside `kvfree_call_rcu()` on PREEMPT_RT=
+ violates lockdep wait-type nesting rules and is unsafe in hardirq/NMI cont=
+ext.
+
+Pre-existing issues:
+- [High] Preexisting bug: Using GFP_NOWAIT in __kfree_rcu_sheaf() can cause=
+ lock recursion deadlocks when called under scheduler locks.
 --
 
---- Patch [1]: [PATCH slab/for-next v4 1/8] mm/slab, slub_kunit: register k=
-probe to trigger _nolock APIs ---
-commit 632627083aa5c71fb7be8b45f24099b08c94d6a7
+--- Patch [5]: [PATCH slab/for-next v4 5/8] mm/slab: allow kfree_rcu_sheaf(=
+) on PREEMPT_RT ---
+commit 9ccf08cd866ca28e999f59be7998db3bfc32fb7a
 Author: Harry Yoo (Oracle) <harry@kernel.org>
+Subject: mm/slab: allow kfree_rcu_sheaf() on PREEMPT_RT
 
-mm/slab, slub_kunit: register kprobe to trigger _nolock APIs
+This patch allows kfree_rcu_sheaf() to be used on PREEMPT_RT by setting
+SLAB_FREE_NOLOCK when PREEMPT_RT is enabled. It relaxes the limitation
+in kvfree_call_rcu() and skips the lockdep wait-type override map on
+PREEMPT_RT to avoid suppressing valid warnings.
 
-This commit registers a kprobe pre-handler in slub_kunit to invoke and
-test kmalloc_nolock() and kfree_nolock() from within the slab allocator.
-It adds a wrapper for lockdep_assert_held() to attach the kprobe, and
-refactors the test allocation loop into a shared helper function.
+Link: https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4d9f98162=
+@kernel.org [1]
+Link: https://lore.kernel.org/linux-mm/40591888-3a87-433e-b3d2-cda1cab543be=
+@kernel.org [2]
 
-Link: https://lore.kernel.org/linux-mm/20260427-nolock-api-fix-v2-0-a6b83a9=
-2d9a4@kernel.org [1]
-Link: https://lore.kernel.org/linux-mm/6edebc2b-5f5a-4b9c-9a4c-564310acee1b=
-@kernel.org  [2]
-
-> diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
-> index fa6d31dbca166..a391467c1aa6e 100644
-> --- a/lib/tests/slub_kunit.c
-> +++ b/lib/tests/slub_kunit.c
-
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 9c9ae1384f476..8c631bf97cd5b 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
 [ ... ]
-
-> @@ -302,26 +303,40 @@ struct test_nolock_context {
->  	int callback_count;
->  	int alloc_ok;
->  	int alloc_fail;
-> +#ifdef CONFIG_PERF_EVENTS
->  	struct perf_event *event;
-> +#endif
-> +#if defined(CONFIG_KPROBES) && defined(CONFIG_SMP)
-> +	struct kprobe kprobe;
-> +#endif
->  };
+> @@ -1954,7 +1962,7 @@ void kvfree_call_rcu(struct rcu_head *head, void *p=
+tr)
+>  	if (!head)
+>  		might_sleep();
 > =20
-> -static struct perf_event_attr hw_attr =3D {
-> -	.type =3D PERF_TYPE_HARDWARE,
-> -	.config =3D PERF_COUNT_HW_CPU_CYCLES,
-> -	.size =3D sizeof(struct perf_event_attr),
-> -	.pinned =3D 1,
-> -	.disabled =3D 1,
-> -	.freq =3D 1,
-> -	.sample_freq =3D 100000,
-> -};
-> +static void test_kmalloc_kfree(void)
-> +{
-> +	int i, j;
-> +
-> +	for (i =3D 0; i < NR_ITERATIONS; i++) {
-> +		for (j =3D 0; j < NR_OBJECTS; j++) {
-> +			gfp_t gfp =3D (i % 2) ? GFP_KERNEL : GFP_KERNEL_ACCOUNT;
+> -	if (!IS_ENABLED(CONFIG_PREEMPT_RT) && kfree_rcu_sheaf(ptr))
+> +	if (kfree_rcu_sheaf(ptr))
+>  		return;
 > =20
-> -static void overflow_handler_test_kmalloc_kfree_nolock(struct perf_event=
- *event,
-> -						       struct perf_sample_data *data,
-> -						       struct pt_regs *regs)
-> +			objects[j] =3D kmalloc_obj(*objects[j], gfp);
-
-[Severity: Medium]
-Does this refactoring unintentionally reduce the allocation size to 1 byte?
-
-Since objects is declared as an array of void *, the dereferenced type
-of *objects[j] is void. The kmalloc_obj() macro evaluates
-sizeof(typeof(VAR_OR_TYPE)), which resolves to sizeof(void). Under GCC,
-sizeof(void) evaluates to 1.
-
-Does this silently reduce the test coverage by targeting kmalloc-8 instead
-of the original 64-byte allocations targeted in the previous code?
-
-> +			if (!objects[j]) {
-> +				j--;
-> +				while (j >=3D 0)
-> +					kfree(objects[j--]);
-> +				return;
-> +			}
-> +		}
-> +
-
+>  	// Queue the object but don't yet schedule the batch.
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 8afa6b47b1f2b..deac315d0f23e 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
 [ ... ]
-
-> +#if defined(CONFIG_KPROBES) && defined(CONFIG_SMP)
-> +static int slab_kprobe_pre_handler(struct kprobe *p, struct pt_regs *reg=
-s)
-> +{
-> +	struct test_nolock_context *ctx;
-> +
-> +	ctx =3D container_of(p, struct test_nolock_context, kprobe);
-> +	test_nolock(ctx);
-> +	return 0;
-> +}
+> @@ -6080,10 +6081,10 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void=
+ *obj, unsigned int free_flags)
+>  	struct slab_sheaf *rcu_sheaf;
+>  	bool allow_spin =3D free_flags_allow_spinning(free_flags);
+> =20
+> -	if (WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT)))
+> -		return false;
+> +	VM_WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT) && allow_spin);
+> =20
+> -	lock_map_acquire_try(&kfree_rcu_sheaf_map);
+> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> +		lock_map_acquire_try(&kfree_rcu_sheaf_map);
+> =20
+>  	if (!local_trylock(&s->cpu_sheaves->lock))
+             ^^^^^^^^^^^^^
 
 [Severity: High]
-Does this kprobe pre-handler execute for all CPUs system-wide?
+Will this cause lockdep wait-type violations and potential crashes on
+PREEMPT_RT?
 
-Since this function is invoked via the kprobe attached to
-slab_attach_kprobe_locked(), and there is no check ensuring
-current =3D=3D test_task, it appears any non-test task executing SLUB
-slowpaths (like add_partial or remove_full) will also trigger this
-handler.
+Since this patch removes the !IS_ENABLED(CONFIG_PREEMPT_RT) guard in
+kvfree_call_rcu() inside mm/slab_common.c, kvfree_call_rcu() can now reach
+this path on PREEMPT_RT.
 
-Could this allow unrelated tasks to inadvertently execute test_nolock()
-from arbitrary contexts and concurrently mutate the test thread's
-stack-allocated ctx, causing a data race on ctx->alloc_ok and
-ctx->callback_count?
+Because kvfree_call_rcu() can be called while holding a raw spinlock (like
+the scheduler's pi_lock) or in hardirq context, it seems this local_trylock=
+()
+will attempt to acquire a sleeping lock (rt_mutex on PREEMPT_RT) in an
+invalid context.
 
-> +
-> +static bool register_slab_kprobes(struct test_nolock_context *ctx)
-> +{
-> +	ctx->kprobe.symbol_name =3D "slab_attach_kprobe_locked";
-> +	ctx->kprobe.pre_handler =3D slab_kprobe_pre_handler;
-> +
-> +	if (register_kprobe(&ctx->kprobe))
-> +		return false;
-> +	return true;
-> +}
+Since the lockdep override map is intentionally skipped for PREEMPT_RT just
+above, will this correctly trigger lockdep "invalid wait context" splats
+and potentially cause panics if the trylock is attempted from hardirq/NMI
+context?
+
+[Severity: High]
+This is a pre-existing issue, but since we are enabling this path for
+PREEMPT_RT, does the use of GFP_NOWAIT later in this function cause
+lock recursion deadlocks?
+
+When the fast path fails, __kfree_rcu_sheaf() calls:
+
+    empty =3D alloc_empty_sheaf(s, GFP_NOWAIT, alloc_flags);
+
+GFP_NOWAIT includes __GFP_KSWAPD_RECLAIM, which invokes wakeup_kswapd().
+The wake-up path enters the scheduler via try_to_wake_up() and attempts to
+acquire scheduler locks like pi_lock and the runqueue lock.
+
+If kvfree_call_rcu() was called while the CPU already holds these scheduler
+locks, will this wake-up attempt cause a lock recursion self-deadlock?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260720-kfree_rcu_=
-nolock-v4-0-964e03c41a4e@kernel.org?part=3D1
+nolock-v4-0-964e03c41a4e@kernel.org?part=3D5
