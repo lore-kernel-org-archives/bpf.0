@@ -1,115 +1,121 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48321449B32;
-	Tue, 21 Jul 2026 02:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054C826738B
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 03:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784599583; cv=none; b=kruPRJ2cYIAatRQfIqGABQfBEMXg+4ZvAXSQLwhDL8gwAgbLWZ9UE9Y0q+oBzRMDsMsM+7R1FhyXZAliQIqZzxY9entHtF4NVLdULng0ili/ErpW6eqe7O0nOPuLIAhUi+B+4U1YbwyMVGl5Y7nHpOPz4TJQLHsizI6pDefUqU8=
+	t=1784604003; cv=none; b=MWor1YhIr1jC7NKfokjUosv5xAM5wfNYHAV9Njd2Zz+7S94kxVBqC5rHPUX+ajZrIqTU3RdZTsPighif4JhKk3VCLpjQH6iIGClWPPDiT6ZAbHMt2onXgfczECLFggNk1FNOevo6J4KkrUQOHqrlgSHPhgA4fm2LEmC6UHWV/rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784599583; c=relaxed/simple;
-	bh=0DXo3Hihyz4FIzmty2pQ86l4BcGXDvyr8RypYC9PwUE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=trhjud3ZqvWj14yRMGlyjRnnnJlEq2TGql9YH3EeEPLNtB1x0qs4Y2uC4BtS9a3WEYdfBUyNsGGNXpqwKo1aQMepUzXrryJmC7wdGO3FOBu11uzwFgpEst3Wo9Z+xluzs+qMli1sZtFt/HKnkPN5QzhczLHfRax9Caeqos0t1Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h411k5YJ7zKHMTv;
-	Tue, 21 Jul 2026 10:05:30 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 164BC4058D;
-	Tue, 21 Jul 2026 10:06:12 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgDH9lcS1F5qCcDzBw--.34514S2;
-	Tue, 21 Jul 2026 10:06:11 +0800 (CST)
-Message-ID: <933d745d-712a-4d49-982f-414ccfd69e47@huaweicloud.com>
-Date: Tue, 21 Jul 2026 10:06:10 +0800
+	s=arc-20240116; t=1784604003; c=relaxed/simple;
+	bh=jN48kOJU4WhtS9MttnvWOpagwtAUL58CfCi146hI6oY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=IDiv6LNsjKEtL0CoZWLZdiUdHAHh103mkzxf9CU9os7RxT8KFRXBocekjzoLZiHsU903VOKaKhuW3PBwAQs9a551Lq+wvqGZC14n/i7qN82QC6zEiy0JfkTx3qkUKtmOy4HG54kEEKDw8j8CAp7q2epLFWLYPQhII1TMhQiVoTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F/3w1V3a; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F/3w1V3a"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cf52d15d88so23773265ad.2
+        for <bpf@vger.kernel.org>; Mon, 20 Jul 2026 20:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784604001; x=1785208801; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=jN48kOJU4WhtS9MttnvWOpagwtAUL58CfCi146hI6oY=;
+        b=F/3w1V3aUddUPI6uPEHJ9+Cyn8B5U3EJ76jHNz2D34aITrFNWHX6/2BPAxjo9rW/JO
+         rxv1So5A5k+jdLH/hkZ03fdUvFz0m+VNhncspfBF1+iITFiLN6MiryC1f0RCc6zISpMR
+         JzKjPjsfXdMipUsEUz79amwFWRvKctqCjGSZyFFwpCrdDV23PIlyjI3Bbc4qV55tTROy
+         2VA0tbX57mrPiCVOuZQQiKd3YQ2gw043pwMd5P162rc1IfvOL9p26oAyfACuFWqyCrKF
+         tJ/7L2LfeaYNKwu+LurqUzex6FctTV7cFDNd/GiLJB+qUVuttvDoEsK2fyACvt7ZvwXa
+         co7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784604001; x=1785208801;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jN48kOJU4WhtS9MttnvWOpagwtAUL58CfCi146hI6oY=;
+        b=NzFRN0IxJxdZ9UUTtfGSE8xDk4O0pY1vT0dCPt/2hTuQtAwL2uGCByHjLjbyEVBQHs
+         uWKCQAR2G4EOtk/Y4s1yoyig8170fW8uo4CemI8FBwme3siETjuDxVfWsnrXIFfgLRaD
+         MfXJ7i7Rci8Ke8icgVVbLSBGUU2rXz5OSRaJzhZxWjdzVsuv4pxJDOrkjsUDzG6xyF4A
+         xUvU6HW10ILG/mogZPIMm4W6NMO24DQi62reFHAFj5WfrNHBVAszuqtKi8s6d5NE4fY0
+         fLOxpYGO8dy6PZuF2c5cOUmLEh2/JtjpF6xTbuAZXy3Ps4T7IX2j7Sk9wMkTRfx+OMr1
+         Vh0Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rovh3+NlwM9IB4R6W9xF32N2GIKT4PQKBs1Nogiu8aZeEh+GE3khqSatfy8Z+oYG1EkrIA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyc/ST1JsZpaEc0QgR13WwjaDG5URj41CupgA2AHVQdTcBdlBm/
+	XGSNJI/Ob427q2uD5WgIrBI3w3xuv4oynmytP4zwkBfyV6Wyi2dwvMyU
+X-Gm-Gg: AfdE7ck9s9M+jI6FwEQyLACE2GOAkdVlcyhZjRFrXOqMIdoAG3iW/RhOgUpsoSyZR7Y
+	Ep2yVIGwuAJVdg59gJSQDcvtM1aO+XWj82v2hc96vMjGZ9nND3Xt90wrAIrSh9+ZlxNVAA7nj3N
+	OiBjyxpqbrS/I72zdcZTjK3AidS+PtpvubQv+qSCzAxKARawoS28QbGf2yxjDrlYRSqRZXCdCuO
+	9w+nl4O4mHiDDFCen/gbhiKidwcbUCJhxoQXYANENVprNrRNZKb1Bf0oDf1K0Xa4dPRJk9cbFYv
+	IZcYjmUgCIAPKJkCdl/G6XywWN7DOB6fBpeH0C9KDcefGLLlx/3kUCedmcosuFbRJTzsk1XyjmD
+	ZNehPmnWuMlDAHekrdQAMDFzxDDSocXwgzN/haxCjAELEJlSFiYXIG7YNHau4JDDuLL0nHCa1mJ
+	kXDkiQPspGA9+A5w==
+X-Received: by 2002:a05:6a21:114c:b0:3bf:a489:1483 with SMTP id adf61e73a8af0-3c3ad80c23dmr17180509637.33.1784604001242;
+        Mon, 20 Jul 2026 20:20:01 -0700 (PDT)
+Received: from localhost ([98.35.8.117])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3142a1de21asm42087052eec.23.2026.07.20.20.19.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jul 2026 20:20:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2] e1000e: Fix out-of-bounds MMIO access by
- validating BAR0 size
-Content-Language: en-US
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jeff Garzik <jeff@garzik.org>, Auke Kok <auke-jan.h.kok@intel.com>,
- Breno Leitao <leitao@debian.org>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, Pu Lehui <pulehui@huawei.com>
-References: <20260720133049.1289167-1-pulehui@huaweicloud.com>
- <d86c6b6a-fa9a-4429-b004-8c54b2232797@lunn.ch>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <d86c6b6a-fa9a-4429-b004-8c54b2232797@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgDH9lcS1F5qCcDzBw--.34514S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cry7Ar1rKrWxKF4rWrWDtwb_yoW8GF13pa
-	yvga4Y9w10vFsFga1fZr1DXF93Ga43t3yDKr13trs8uFn8Zw4fJr47GFW5XrnrX397try8
-	tr4qgw4fCrs8J37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
-	e7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-	GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-	UAwIDUUUUU=
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 20 Jul 2026 20:19:58 -0700
+Message-Id: <DK3XBITGHXVO.245WLO7AFGP4M@gmail.com>
+Subject: Re: [PATCH v2 0/9] binfmt_misc: bpf-backed binary type handlers
+From: "Farid Zakaria" <farid.m.zakaria@gmail.com>
+To: "Christian Brauner" <brauner@kernel.org>, "Farid Zakaria"
+ <farid.m.zakaria@gmail.com>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Kees Cook" <kees@kernel.org>, "Alexander Viro"
+ <viro@zeniv.linux.org.uk>, "Jan Kara" <jack@suse.cz>, "Jonathan Corbet"
+ <corbet@lwn.net>, <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
+ <bpf@vger.kernel.org>, <jannh@google.com>, <mail@johnericson.me>
+X-Mailer: aerc 0.21.0
+References: <20260714-work-bpf-binfmt_misc-v2-0-57b7529c002c@kernel.org>
+ <178407531866.2243172.12944140194021045628.b4-review@b4>
+ <20260715-reorganisation-umtausch-radiergummi-8b38ca81ebb0@brauner>
+ <DJZK5TY3IXQC.2XKA1X9IEGJDO@gmail.com>
+ <DJZK7IJ53B5J.141W232JLWL44@gmail.com>
+ <20260716-surfen-erzfeind-aerodynamik-5dc96c3f136d@brauner>
+In-Reply-To: <20260716-surfen-erzfeind-aerodynamik-5dc96c3f136d@brauner>
+
+On Thu Jul 16, 2026 at 2:42 AM PDT, Christian Brauner wrote:
+>> Should I continue to add Reviewed-By trailers to the other patches?
+>
+> Review them, please where you can.
+>
+>> (I have limited knowledge on some of the mutex stuff but the agent
+>> review in b4 was helpful in understanding it enough to give a review.)
+>>=20
+>> Sorry if it's obvious. I've never contributed to a patch this far
+>> along or substantial to the point of having to understand the
+>> merging/acceptance process in Linux.
+>
+> I plan on getting this into -next in the near future.
+
+Sorry I have not reviewed them yet.
+I got a little distracted preparing myself for some talks at DEFCON34
+for the Nix village [1]
+
+I plan to take a look at the remaining patches and add my Reviewed-By
+trailers to them in the next few days.
+
+I also just saw the transparent execution patch and will review it as
+well (as much as I can).
+
+One of the talks I plan on giving at DEFCON34 is about the idea to
+support relocatable binaries in Nix. I did a short self-summary of it if
+you are interested in reading it [2].
 
 
-On 2026/7/20 22:52, Andrew Lunn wrote:
->> --- a/drivers/net/ethernet/intel/e1000e/regs.h
->> +++ b/drivers/net/ethernet/intel/e1000e/regs.h
->> @@ -242,4 +242,7 @@
->>   /* PHY registers */
->>   #define I82579_DFT_CTRL	PHY_REG(769, 20)
->>   
->> +/* Smallest BAR0 that covers every register the driver accesses */
->> +#define E1000_MMIO_LEN_MIN	0x10000
-> 
-> I commented on the previous version. Is I82579_DFT_CTRL the highest
-> register? Can E1000_MMIO_LEN_MIN defines based on that?
-> 
-> 	  Andrew
-
-Hi Andrew,
-
-Thanks for reviewing this! And yeah, I caught your comment on the 
-previous version.
-
-I did the math on I82579_DFT_CTRL, and it comes out to 0x6034, so it's 
-actually not the highest one. And the registers in regs.h aren't really 
-sorted by address anyway.
-
-The highest static address is E1000_SYSSTMPH(0x0B64C)
-The highest dynamic address is E1000_TXDCTL(_n), as it define bellow:
-
-#define E1000_TXDCTL(_n) ((_n) < 4 ? (0x03828 + ((_n) * 0x100)) : \
-                          (0x0E028 + ((_n) * 0x40)))
-
-But since the maximum _n we use in the e1000e driver is just 1, that 
-address maxes out at only 0x3928.
-
-So, since E1000_SYSSTMPH is the highest register offset the driver 
-actually accesses, how about we just define E1000_MMIO_LEN_MIN based on 
-that? Something like:
-
-/* Smallest BAR0 that covers every register the driver accesses */
-#define E1000_MMIO_LEN_MIN	E1000_SYSSTMPH
-
-Thanks,
-Lehui
-
+[1] https://nix.vegas
+[2] https://fzakaria.com/2026/07/20/linux-kernel-will-support-origin-sort-o=
+f
