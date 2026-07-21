@@ -1,67 +1,50 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DCD471257;
-	Tue, 21 Jul 2026 18:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69DA4404BC7;
+	Tue, 21 Jul 2026 18:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784657629; cv=none; b=Mk+cwlDLnZi1+Ux8BsYlcMGaMc9aWA+xSFel3S5yrUlaTEu+ar1aVWPAgAraeRHRbMFHKRrSD4Q3wVYGWu4HQUEsFSTl56awepYomkvEQ5uQLVUBatgcM6C9f8+4ThrX1kzogSChDLH1okjvnpFwldA603ngeS0XADMJaMHsoVY=
+	t=1784657875; cv=none; b=JGje7/28tuND8brzT1/aYVvORjg+lHqDMm9c9OGIUH881ew+FOS7kTbRfWjGfnWNIPS7UQalNr1RTNegZk12IFAvhPbZsuu1TnbHBc7CZIt3CAgdyvY3XpZAxGbKktLo924ESosVVqoq/Q4ugS0hgztikclVPxpCqOAuHD/DWSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784657629; c=relaxed/simple;
-	bh=EFAQxgd+oUJ+jH2aGiUQecL7qwwmxU50Ap/j9C3g7fU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sWMvPC8s62zbZWDswBCvbhgyGhnRv20FBGAziTafsRKHHn/qYrc6MBZDXIQ77wVii5LWg8NlhP5DL1e76SDXOlUdbPXsBEIlr+juYSU7fpnnlNW5Blim0aFwrYfoBdMKiV8z5HuBxHFGhLymMkiKFt4WCh/35vPhqzR94fVLwAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=AFG+8oMq; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1784657875; c=relaxed/simple;
+	bh=DAgpQs99S8QypFrkxBDN2isaBOsPn8rkpC+lorqlJt8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=I5yeDHf3lF2OdbZ8H3Lpr8WgAhVjJndDmLPi/4A3Vhb3qz0kDJvlyihWpGJX12qBaxz0QPdEPYYZo4lbF97PhqOYWJTnHE0HV3qf0h9dUPGb7SH0nml21OxJ4wv3lVnl59bnnFjUPX2MUFEXUlCb9VVvxy7zlvXMRr488ts8mB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oNdbEr3n; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="AFG+8oMq"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 04AB040E00C3;
-	Tue, 21 Jul 2026 18:13:45 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id WAgM4pQygBNu; Tue, 21 Jul 2026 18:13:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1784657615; bh=LSfkR1e/dR8kqPxQlWrl73BK+AJy0HI9oL3YLggpuKk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AFG+8oMqJ6CM22RRudRv/nXdW5UuYrbU46fmTTZlALzETNNr9CwP4cZbj+QgQOxkh
-	 9hw+oXsWm5DhTcDpNXuGs/YaK9pFU0L9TIXnkESUOmFRlNIcTGyk6+nDFaRzeg1Qmp
-	 dzgEU5UiguZUOojfrsjzaGNbEZOZa2HT5ih8y5OM13Pnl0VYhYin8b2Nkpny3l/u2C
-	 rktizLJ48mqBMrjD8CFdkklVH8Q3inF4tCYFexQKghkl3miTHh7yAlOZoTNfIJ55id
-	 UlpSM6QZM3uOCg63I8/rTdWRN0gwZNPl8Nrnic0062Bx+A8JsZIEQocUyMj3Y4nikl
-	 9owLsJzseUxstriow0FasdINPHKxavLfkxW9UsQ6EaXH3XvNMZGsHBzvUfMR0SrgQN
-	 SJDtzRl9sZzag3zbCFNbDZJH/qEn8zG2oa/llXQCN6PMmBoF9ru6EQ28SR7baXL/jE
-	 MfLjcKh+7rqtWDuo86Rz25IvPKUyjsexNDvlecm56E2jpambnMRwBgPM0iWYUPqZvt
-	 cnMGp0GyLIhZNJShDQ4F+iLCCuqIYfJpSBPMxgw0qFnOusN2uaJyCjPdf6jwdpiSbQ
-	 ya1WUb+rjROSj2Rc/tDGNBbURH+R5lNWBMyqNlt8aGTp9ehn28FLWJ+ee1oEcq/8gw
-	 MH8GvTKPSj6o5/oBONJ9AO3Y=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::2b])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 690BE40E00E6;
-	Tue, 21 Jul 2026 18:13:19 +0000 (UTC)
-Date: Tue, 21 Jul 2026 11:13:16 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>,
-	Ingo Molnar <mingo@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>, bpf@vger.kernel.org,
-	kernel-team@meta.com, kasan-dev@googlegroups.com,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/5] x86/cpu: Refactor identify_cpu()
-Message-ID: <20260721181316.GFal-2vGmvOGqbq8mW@fat_crate.local>
-References: <20260704002046.3859585-1-ihor.solodrai@linux.dev>
- <7c79eb26-0986-41c8-a5f9-5911a2e71175@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oNdbEr3n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 568141F00A3F;
+	Tue, 21 Jul 2026 18:17:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784657870;
+	bh=DAgpQs99S8QypFrkxBDN2isaBOsPn8rkpC+lorqlJt8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=oNdbEr3nyDVIx1R/+Zb4Y2JnC/fLb3S2/FwdF0uGAz3dlSPLNcmI3gY+o13M54FCQ
+	 7IGXIf+MrEKPeiQ4iccsPeu639yNBbxM9aBnn5ikmovOVd1I5sjApHG3BdZehzIqDu
+	 K3SbTDKKP9tIt6ARfCdWy2IIIwGGe6qs8Oh0GYxcxZjuOmi4Mr/ylZKb4pIZbYcqx9
+	 u4UIB6+jUaQ3TqUH1WKnvEYWF/+ak8qHq8xTKBiIw9JLNS4oeLc3eYFRmpVBmnvosL
+	 7jr8o5D1jEVQ89NBV+k+3rcnUunF/WOLdWL31SN/dOlJDibpddIRB7eJxPhL1D+5Ou
+	 ylrQTcIWEr+cQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Feng Jiang <jiangfeng@kylinos.cn>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Pu Lehui
+ <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley
+ <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
+Cc: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+ bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, Feng Jiang
+ <jiangfeng@kylinos.cn>
+Subject: Re: [PATCH v3] bpf, riscv: fix extable handling for arena load_acquire
+In-Reply-To: <20260720-bpf-riscv-fix-extable-v3-1-e9a603882309@kylinos.cn>
+References: <20260720-bpf-riscv-fix-extable-v3-1-e9a603882309@kylinos.cn>
+Date: Tue, 21 Jul 2026 20:17:48 +0200
+Message-ID: <87h5lsurzn.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,23 +52,27 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7c79eb26-0986-41c8-a5f9-5911a2e71175@linux.dev>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 21, 2026 at 10:23:25AM -0700, Ihor Solodrai wrote:
-> Bumping the thread as it's been a couple of weeks.
+Feng Jiang <jiangfeng@kylinos.cn> writes:
 
-You don't have to - it is on the TODO list.
+> emit_atomic_ld_st() returns 1 to have build_body() skip the zext after
+> a sub-word load_acquire. The caller does "ret =3D ret ?:
+> add_exception_handler(...)", which skips add_exception_handler() on any
+> non-zero ret, so the extable entry is missing and a faulting
+> PROBE_ATOMIC load_acquire oopses.
+>
+> REG_DONT_CLEAR_MARKER leaves rd stale on fault, and the verifier still
+> thinks the load overwrote it, so a program can leak it through a map.
+>
+> Check ret >=3D 0 before calling add_exception_handler(), and pass rd for
+> LOAD_ACQ so the fault zeroes rd like a PROBE_MEM load. Return ret
+> unchanged for the zext skip.
+>
+> Fixes: fb7cefabae81 ("riscv, bpf: Add support arena atomics for RV64")
+> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
 
-> Please take a look when you get a chance. Thanks!
+Thank you for spinning a new version!
 
-There's this thing called fires which need to be handled yesterday and we're
-all drowning in them. So yeah, I know, but pls be patient.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
