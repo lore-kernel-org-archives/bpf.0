@@ -1,180 +1,116 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5E12EF653;
-	Tue, 21 Jul 2026 04:06:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE54D22157B;
+	Tue, 21 Jul 2026 04:21:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784606799; cv=none; b=izEeFaa5JSR5t5c2GjcrT+yzhS7dPSVIIN3oFn40pGhlWYdkOd26ouzMFNs1pHELK22ZzzAYVTYx2QJI/qnYX4BCVJGUR/RQImx3IqUBgEpHnq1xxe0eoQyWjK6+SUDcqAJ28S3+rUusa/NK65ZeTcH+WPoI/bthR0Zb674m3kg=
+	t=1784607678; cv=none; b=DJrpRC3AJ4QmKre41mBPofaDKQCNVA/hH56pSvXCRKn7xy1DVIfhWot3erct3r5SFBFq3e344L7MEJlh9EQ7g5i1xBc6xZvpDNr5Glu3WPmIzIWxn68rcMirBBZEqxxlLJxTHQSiP9xE8ghWwnSA6WDdL7LV0w34kS0JC6gjyXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784606799; c=relaxed/simple;
-	bh=H/V0jVFnZ1pQMZit3JMtoGaXSaYiPGPcKaFv6kDu8RI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mpSPhdEdry5ZF/YiwfI1lHD/1vPv30cYa/DdKsiXY0yZoR/WpiK+RggFotYdBSu09Cj6+G+colZ6r25PNYyjP5FRA666/kRCSYfkxy6Gj6gXbYuGH3WVNbcnQxeGdwJsq87AfYmXZVW60Bski896uygUoP5XXUUJeaM1dIRrXms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h43hc1rgBzKHMPd;
-	Tue, 21 Jul 2026 12:05:52 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id E535F405B5;
-	Tue, 21 Jul 2026 12:06:18 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAHF3M58F5qwav1Bw--.64145S4;
-	Tue, 21 Jul 2026 12:06:18 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf v5 2/4] bpf: Fix UAF due to missing link type check in mprog
-Date: Tue, 21 Jul 2026 04:10:46 +0000
-Message-Id: <20260721041048.1394085-3-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260721041048.1394085-1-pulehui@huaweicloud.com>
-References: <20260721041048.1394085-1-pulehui@huaweicloud.com>
+	s=arc-20240116; t=1784607678; c=relaxed/simple;
+	bh=BhDAf/hzvjT5Hxc/kltpkXT4SjaPx+kytqxgoGIDY6E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GP+qj65Anp8vuNSkPE22wGYDzgBgKpTd2WU3DTzuIfkuMNBzQ2Y2HzCQ/P0/ag6qaPite26WmAgXddYIYeiqjZnatC1FRh3ZTDRXOnMff++AyiMwfrVUFCm4ih6lE4pfnBSJc6UTQ2rMcChNujHMHQnMmej2uu8N0asqIdEDAAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iarXXAPp; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iarXXAPp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A301F000E9;
+	Tue, 21 Jul 2026 04:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784607677;
+	bh=dMHccTkWfwnMZnE8iTx+9aXqPgPG/0UfrAZGeol7M0k=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=iarXXAPpk5grgNiNHJ9+0ORfs+eqwINWGlhJV23J0hy9Oh6vOPKEQEcGJJEfpsbQJ
+	 99slihQd1VusX1ACoiVNMkcamd34VXv4ji1rTbAw0kOFQpagTXV1+T4AiSFycyVNeG
+	 fwRr5qcfoUkuYyl+7NvukQqJ0df6dFAYy0ff8+3BFxBLQJzhVMUbIWWrFiF+xtaEXR
+	 zoYQ6qidCneViV5uuh/Ikv9xz74AZNUKqCgxSurdDPCCWK+QYfx+Rh1vo7SARh/j4G
+	 CwGUo4apsDVdu77gJx8WEYfUJnWJwjWBeWjnFlRsCNFb+z73d0y3a/5SWpWBJQqwVE
+	 FaewjKVP9QIIA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 505A6CE0F85; Mon, 20 Jul 2026 21:21:17 -0700 (PDT)
+Date: Mon, 20 Jul 2026 21:21:17 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Breno Leitao <leitao@debian.org>,
+	Catalin Marinas <catalin.marinas@arm.com>, puranjay@kernel.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH] mm/kmemleak: report RCU-tasks quiescent states during
+ the scan
+Message-ID: <5b83b0a0-708a-458a-bdbd-41c6d4610349@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
+ <20260720153917.2e428e489cd0873ac6d4e6da@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgAHF3M58F5qwav1Bw--.64145S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxZr47Gr4kKry8tryxXr43Jrb_yoW5Kw4kpF
-	s3JryvyF1Yv3y7XF4jvF1fAryY9F48Wr1jkas5Ww4vvrn0ga1vqF1fWr4Sqw15KFZ8Grsa
-	vw1qqryDA34DXrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-	8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
-	e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-	8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-	jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-	kIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
-	Ja73UjIFyTuYvjfUOdgAUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260720153917.2e428e489cd0873ac6d4e6da@linux-foundation.org>
 
-From: Pu Lehui <pulehui@huawei.com>
+On Mon, Jul 20, 2026 at 03:39:17PM -0700, Andrew Morton wrote:
+> On Mon, 20 Jul 2026 06:23:45 -0700 Breno Leitao <leitao@debian.org> wrote:
+> 
+> > kmemleak_scan() can run for ages on large debug kernels. It was
+> > causing some soft-lockups which I got fixed with commit
+> > 3175fcfec8b16baeb ("mm/kmemleak: avoid soft lockup when scanning task
+> > stacks") with our beloved cond_resched().
+> > 
+> > I've got the fix above deployed in the Meta fleet, and now I am seeing:
+> > 
+> >   INFO: rcu_tasks detected stalls on tasks:
+> >     task:kmemleak state:R ... nvcsw: 274/274 holdout: 1 idle_cpu: -1/3
+> >      scan_block
+> >      scan_gray_list
+> >      kmemleak_scan
+> > 
+> > and, worse, blocks the callers waiting on that grace period. Here a BPF
+> > struct_ops map free, which waits via synchronize_rcu_mult(call_rcu,
+> > call_rcu_tasks), is stuck long enough to also trip the hung task check:
+> > 
+> >   INFO: task kworker/...:bpf_map_free_deferred blocked for 122 seconds
+> >      __wait_rcu_gp
+> >      bpf_struct_ops_map_free
+> > 
+> > Then I've learned that cond_resched() is not an RCU-tasks quiescent
+> > state, so, we need to use stronger primitives.
+> > 
+> > Use cond_resched_tasks_rcu_qs() at the scan reschedule points so the scan
+> > reports an RCU-tasks quiescent state as it proceeds.
+> > 
+> > Inspired by commit b96285e10aad ("tracing: Have osnoise_main() add a
+> > quiescent state for task rcu").
+> 
+> I'll add
+> 
+> Fixes: c4b28963fd79 ("mm/kmemleak: rely on rcu for task stack scanning")
+> Cc: <stable@vger.kernel.org>
 
-In bpf_mprog_link, the code does not check the link->type first before
-dereferencing link->prog->type. This missing validation allows a user to
-pass an abnormal non-netkit or non-tcx link via relative_fd. If doing
-BPF_LINK_UPDATE on the abnormal link, it can trigger a UAF issue.
+Thanks to all three of you!
 
-CPU0                                      CPU1
-netkit_link_prog_attach
-bpf_mprog_attach
-bpf_mprog_tuple_relative
-bpf_mprog_link
-  link = bpf_link_get_from_fd(id_or_fd);
-                                          BPF_LINK_UPDATE
-                                          ...
-                                          old_prog = xchg(&link->link.prog, new_prog);
-                                          bpf_prog_put(old_prog);
-  if (type && link->prog->type != type) <-- trigger UAF
+This adds fewer than ten calls to cond_resched_tasks_rcu_qs(), but still
+more than doubles the number of such calls outside of the RCU subsystem.
 
-The reason for the UAF is that each subsystem provides its own
-protection for link->prog. Since there is no cross subsystem protection
-(if not considering the RCU of prog tear down), dereferencing the prog
-of an anchor link that does not belong to the current subsystem is not
-safe: it may have been freed. Therefore, we need to validate link->type
-to reject foreign anchors.
+Which is most likely just fine, and in any case absolutely should not
+get in the way of Breno's patch, which after all solves a real problem
+in the here and now.
 
-Fix this by strictly validating link->type in bpf_mprog_link against the
-expected link type. bpf_mprog_tuple_relative is also adjusted to accept
-and pass down the expected link type.
+Nevertheless, on the off-chance that over the next few months or years
+we start playing cond_resched_tasks_rcu_qs() whack-a-mole, I figured it
+would be good to get a head start on writing up alternatives.  An initial
+draft may be found here:
 
-Fixes: 053c8e1f235d ("bpf: Add generic attach/detach/query API for multi-progs")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- kernel/bpf/mprog.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+https://docs.google.com/document/d/1s3fn29SCTYVw9jak4iraNIVQR59Wk5C6_I-_eu-MfQA/edit?usp=sharing
 
-diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
-index 1394168062e8..37ce91e0bcd2 100644
---- a/kernel/bpf/mprog.c
-+++ b/kernel/bpf/mprog.c
-@@ -6,7 +6,7 @@
- 
- static int bpf_mprog_link(struct bpf_tuple *tuple,
- 			  u32 id_or_fd, u32 flags,
--			  enum bpf_prog_type type)
-+			  enum bpf_link_type type)
- {
- 	struct bpf_link *link = ERR_PTR(-EINVAL);
- 	bool id = flags & BPF_F_ID;
-@@ -17,7 +17,7 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
- 		link = bpf_link_get_from_fd(id_or_fd);
- 	if (IS_ERR(link))
- 		return PTR_ERR(link);
--	if (type && link->prog->type != type) {
-+	if (type && link->type != type) {
- 		bpf_link_put(link);
- 		return -EINVAL;
- 	}
-@@ -52,21 +52,22 @@ static int bpf_mprog_prog(struct bpf_tuple *tuple,
- 
- static int bpf_mprog_tuple_relative(struct bpf_tuple *tuple,
- 				    u32 id_or_fd, u32 flags,
--				    enum bpf_prog_type type)
-+				    enum bpf_link_type ltype,
-+				    enum bpf_prog_type ptype)
- {
- 	bool link = flags & BPF_F_LINK;
- 	bool id = flags & BPF_F_ID;
- 
- 	memset(tuple, 0, sizeof(*tuple));
- 	if (link)
--		return bpf_mprog_link(tuple, id_or_fd, flags, type);
-+		return bpf_mprog_link(tuple, id_or_fd, flags, ltype);
- 	/* If no relevant flag is set and no id_or_fd was passed, then
- 	 * tuple link/prog is just NULLed. This is the case when before/
- 	 * after selects first/last position without passing fd.
- 	 */
- 	if (!id && !id_or_fd)
- 		return 0;
--	return bpf_mprog_prog(tuple, id_or_fd, flags, type);
-+	return bpf_mprog_prog(tuple, id_or_fd, flags, ptype);
- }
- 
- static void bpf_mprog_tuple_put(struct bpf_tuple *tuple)
-@@ -243,6 +244,7 @@ int bpf_mprog_attach(struct bpf_mprog_entry *entry,
- 		return -EEXIST;
- 	ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd,
- 				       flags & ~BPF_F_REPLACE,
-+				       link ? link->type : BPF_LINK_TYPE_UNSPEC,
- 				       prog_new->type);
- 	if (ret)
- 		return ret;
-@@ -343,6 +345,7 @@ int bpf_mprog_detach(struct bpf_mprog_entry *entry,
- 	if (!bpf_mprog_total(entry))
- 		return -ENOENT;
- 	ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd, flags,
-+				       link ? link->type : BPF_LINK_TYPE_UNSPEC,
- 				       prog ? prog->type :
- 				       BPF_PROG_TYPE_UNSPEC);
- 	if (ret)
--- 
-2.34.1
+TL;DR:  Should we get into a rousing game of whack-a-mole, alternatives
+include continuing as we are, making the existing calls to cond_resched()
+in turn call cond_resched_tasks_rcu_qs(), decoupling mutex-induced
+hung-task warnings from synchronize_rcu_tasks(), and various
+not-so-practical alternatives to RCU Tasks for trampoline synchronization.
 
+Thoughts?  Especially thoughts on other schemes?
+
+							Thanx, Paul
