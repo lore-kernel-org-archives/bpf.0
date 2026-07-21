@@ -1,306 +1,95 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76D83B9930
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 21:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BA7418A58;
+	Tue, 21 Jul 2026 22:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784670923; cv=none; b=qIap1/yThk9d0oGOiCnNnUzdSX09zWEYcuVfZ5UZY/NlVN6t0lnsCs5bLUm7rS8tuuUxi1jUff9+obwrQVpG6r0DDe1pJalq86HDgWP57Mo2LJG3JP5pTH2kFWFamx7qOaS9wO2mQMFC0s7vqp0RLZV3dWSF7dZmgvMCO2wGfmk=
+	t=1784671855; cv=none; b=KafHI7mExJfD3typQ12hTr/IllxrT5X+iUIIO8cs52btXCniLCzPs/zj6MAgtPjNBi3HdE56MI4ZbSKCKVXq2bJk2SXGJWe01roY7TLJJp5rrp7fNgr5L0CNeVYKzGIQZ0fg66npVgbvNiURXelcQABT5FR+BvSH33MODPRPGHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784670923; c=relaxed/simple;
-	bh=f1hu6tLo0+BCNNJKKgvm7cAlnDLnuYkIvVYXS0I8Rj4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YVGUTvlITWyvPOhALp9keaVSd1w95wAfLhZ598VRF+31TCdekTby7J/iASr+K6zFvM2TVKNSP7yKcMq1AdrwaCVn1LD3KEEPiTwOMyTeaUEHWSUBW1wUy6DoEEV2F4CY069VDDkBm721VILsUVUXut3b/9RXp4z0Vanzl608CRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y7wj1cRo; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784671855; c=relaxed/simple;
+	bh=VzSFI/A/mU1RFixF+N00ArXIvSfEOMKn/Kgg/596AU4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=TyQqd4eDgteuLT4VRJs1ORWhQFg19p+mnSLbPwZQVLlO2MHqq12fO56upkuK2aIY34HFZv2KYl/JoEnXhNq5uOFAI3lf0A0GTmU1fzYws4iZJ4xg9MGH+QcwyZGWshbwR3homeEmbajZfhxcVQ1MBBEc2EE0WIxFfyZVPT3JLvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j2BkNgBC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y7wj1cRo"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-81eff3ddba4so45845187b3.3
-        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 14:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784670921; x=1785275721; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Aor1gy3cPPxEdvRqiUc0A+Tvnlrd7s+z5uJMPv36HgA=;
-        b=Y7wj1cRon7BcbtH1nKawZlLwFcFJFtAEg08zaiC+s3prPrlHepxJBA/K/cAxUzImKw
-         O63DqIeFDgZqHFpjHWECiItgcwTtFxJPAAqgjvlId0Iv79tGA9oz7sIxcs5c0+U70Axj
-         GNrLi2eltNayXwiyPgan0WBOlhm7NsOvAd2Ek9dl/IxtgWdm4r0tMDy7OLJC+S3bTTSB
-         ocEZyrAv3LySkuOJ6ckt0zTPjcH2SVoRObnSen6BYaHhKRsCohSzvrGi5QouGO/V41Vn
-         lnSzNH+VnLwiZ7j0mzynR2UeChXVQmhl7dBPKoL0Lc7kB4kZ9k2XS1Ahbl65m8NHum9l
-         q/Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784670921; x=1785275721;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Aor1gy3cPPxEdvRqiUc0A+Tvnlrd7s+z5uJMPv36HgA=;
-        b=K74qV8agpfPYDv0ncg/xV23wT1v5upSWQaWFkOZUVeAH5+bX8amPChryJsDil3uKYl
-         HBFe9IUkDCxsIMMmciqsuyt/D0vidjOOJGPGZqP35SwQKgvOa6vMOw2u5Qb7ivVQOfNf
-         GXUN5c29B4UgN6da7jZum2K9F/CARfGR8M9zv8XZOIDJ3gBkTqAYeZUzDAcfBJRkWOC4
-         YMmcOHiVlwVXGZ3JX3Y06jht1iPMrnMaGYKM14rijYrBSg9/3i9mfCDTkRIehKlAmsJ1
-         epmGom8JZVqCk5mP2egN1j/pAyQmsFtn3pGXn3hwN46N+ZoDuR7DHyE4lYb8EyrsK794
-         jpHQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrWhv1iSsm33Xr901k73nq5INTovaq/EgBPsTnxO+gl6ZPpJjspq733kZJIet1XPBuNc7Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzreFXgjtVLD0LkCdIuOsUJbfZNla+a7+x5brGl+LSVb5Gwk4dI
-	bIvcjhKAd0fnta+Czz6j+gxYp2vEBS9+2FncByZ7/RdTHDUltuyRPOt+
-X-Gm-Gg: AR+sD11mykBhIKDjy9aRlFKhPS52NBay1wrcPeQYBgx1i35E8mexzq0loC4QVukhFWJ
-	Vmc+pNdZrRh7sNcmC4oEs5Ow2Hnq3kDPrG5meqdlbbG6K0z/wXC58uIgSdfekOyyhsdfWuyBQv4
-	J7m3fjH5j1B0zZFaYNGedIvAmAgN+W2CpKK0t3siSNW6Vi24q+7HClYxHd4Ao9gnq5EFnMAVa7S
-	37qpD1fc0wSR7RVQbjoe8J6NfCjeeH23hWA07k04SD+9hQk7tixQYESQgvCGkbN5DveQUwKgvLJ
-	GEzDQ1lOSHSiQnWQbgOZqnoEGutOO4d1HTmL1z0Tg9Q1dJ1YKzVwYGXtTn+RmHBnAgVAEHfNiPq
-	gRpUHyHWFzhcs5y8OboMm3QRl4gevBuwDUpvBOA/Hjj575qr7SzACSZrT9UeGq+erK/j+1RqSPZ
-	WYARYIb0gDlZsueCaWwdRDxxi1Gbz+4Qf589co
-X-Received: by 2002:a05:690c:7245:b0:81e:d032:f3dd with SMTP id 00721157ae682-81ef26a5bbamr60101417b3.45.1784670920807;
-        Tue, 21 Jul 2026 14:55:20 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:858f:ad8f:8b97:19da])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81f33f35417sm4111957b3.47.2026.07.21.14.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 14:55:19 -0700 (PDT)
-Date: Tue, 21 Jul 2026 17:55:18 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org, viro@zeniv.linux.org.uk, 
-	brauner@kernel.org, kees@kernel.org, gnoack@google.com, jack@suse.cz, 
-	jmorris@namei.org, serge@hallyn.com, song@kernel.org, yonghong.song@linux.dev, 
-	martin.lau@linux.dev, m@maowtm.org, eddyz87@gmail.com, john.fastabend@gmail.com, 
-	sdf@fomichev.me, skhan@linuxfoundation.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	Frederick Lawler <fred@cloudflare.com>
-Subject: Re: [RFC PATCH 06/20] bpf: lsm: Add Landlock kfuncs
-Message-ID: <al_TBtXYUNGLZHC2@zenbox>
-References: <20260407200157.3874806-1-utilityemal77@gmail.com>
- <20260407200157.3874806-7-utilityemal77@gmail.com>
- <20260701.ze4eph1eKo7a@digikod.net>
- <CAHC9VhRfqSoM89WC6TdQHapUVQe8a18rW2c-F7+tu6EjM9EdCA@mail.gmail.com>
- <akUH13qbsEnJLgQu@zenbox>
- <CAHC9VhSjRcMr9+5dMkep_TPKduYdob-bZ73FLfXd_o2xiWwOSg@mail.gmail.com>
- <akVbLGYyafZq_93v@zenbox>
- <CAHC9VhRp6pvQXskNU0FXBkDw=MAF8Ht1Mk7BbUeU8JnEkSk52g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2BkNgBC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19651F00A3A;
+	Tue, 21 Jul 2026 22:10:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784671854;
+	bh=6ghj0bAXJ7QM0jI0Z0cbalfZJOu7EbXC3apo2wHHgRc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=j2BkNgBCqE2rjYT68nNQ1r2DFARqy3UTnRM85Z6Vb6IMwcGo6+7JoJ+ctYwgtNFXm
+	 FBk2ZY2+MAbKSN/WEqMIiAbTVDvdZBJAnh7ld3EcvMK78SUz9bcSNgsP8wcw4IRIDG
+	 lLV2QIeJyiCylGkME6OBx1/qS897VWdSiqbFeWWis2+5oLQjMv1cgWSvZ6SGNC37NW
+	 Pg9KlGg7Hs7IGUyg3e/Bd4TNrmqomrS8DZX0gijZQBGAZr5f72kyBkck1I41+KXDrY
+	 sJkKiI2cfwT/HkeiyOxqjUQLByFuH763miOFJ5eZ5iXLOPCmlsmxxsgFHLKRu9z67a
+	 JvC+QDdmPI6CA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93B86380820D;
+	Tue, 21 Jul 2026 22:10:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhRp6pvQXskNU0FXBkDw=MAF8Ht1Mk7BbUeU8JnEkSk52g@mail.gmail.com>
+Subject: Re: [PATCH net 0/7] selftests: net: add missing kconfig and settings
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178467182339.1107545.10049647609744373439.git-patchwork-notify@kernel.org>
+Date: Tue, 21 Jul 2026 22:10:23 +0000
+References: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
+In-Reply-To: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kuniyu@google.com, aconole@redhat.com,
+ echaudro@redhat.com, i.maximets@ovn.org, dev@openvswitch.org,
+ antonio@openvpn.net, sd@queasysnail.net, andrew+netdev@lunn.ch,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, mohsin.bashr@gmail.com,
+ dw@davidwei.uk, weibunny@fb.com, bpf@vger.kernel.org, leitao@debian.org,
+ asantostc@gmail.com
 
-On Wed, Jul 01, 2026 at 02:33:26PM -0400, Paul Moore wrote:
-> On Wed, Jul 1, 2026 at 2:29 PM Justin Suess <utilityemal77@gmail.com> wrote:
-> > On Wed, Jul 01, 2026 at 09:28:22AM -0400, Paul Moore wrote:
-> > > On Wed, Jul 1, 2026 at 8:52 AM Justin Suess <utilityemal77@gmail.com> wrote:
-> > > > On Wed, Jul 01, 2026 at 08:12:34AM -0400, Paul Moore wrote:
-> > > > > On Wed, Jul 1, 2026 at 6:59 AM Mickaël Salaün <mic@digikod.net> wrote:
-> > > > > > On Tue, Apr 07, 2026 at 04:01:28PM -0400, Justin Suess wrote:
-> [..]
->
-> Please keep in mind that the LSM framework API needs to be reasonably
-> generic.  We've got some general guidance on adding new LSM hooks at
-> the link below:
+Hello:
+
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri, 10 Jul 2026 20:04:40 +0200 you wrote:
+> When trying to execute the same selftests targets as the ones executed
+> on NIPA, but using containers with minimal tools, I got some issues
+> with a few tests.
 > 
-> https://github.com/LinuxSecurityModule/kernel/blob/main/README.md#new-lsm-hooks
->
+> Most of these issues are due to missing kernel config, but also too
+> short timeout:
+> 
+> [...]
 
-Howdy,
+Here is the summary with links:
+  - [net,1/7] selftests: af_unix: add USER_NS config
+    https://git.kernel.org/netdev/net/c/f8b1abed7361
+  - [net,2/7] selftests: openvswitch: add config file
+    https://git.kernel.org/netdev/net/c/441a820ccef9
+  - [net,3/7] selftests: ovpn: add IPV6 and VETH configs
+    https://git.kernel.org/netdev/net/c/90c792681a37
+  - [net,4/7] selftests: ovpn: increase timeout
+    https://git.kernel.org/netdev/net/c/61ac7049aaa8
+  - [net,5/7] selftests: drv-net: increase timeout
+    https://git.kernel.org/netdev/net/c/3529d75d6741
+  - [net,6/7] selftests: drv-net: add missing kconfig for psp.py
+    https://git.kernel.org/netdev/net/c/c25dd7439f84
+  - [net,7/7] selftests: netconsole: ignore busywait errors
+    https://git.kernel.org/netdev/net/c/e6ad44a5b1d5
 
-I'd like to reopen this conversation with a fresh proposal.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Apologies it's been a while.. hope this isn't too long.
 
-I've re-read the LSM design documents linked above, plus some of the
-older discussions where similar things were proposed, and this is a
-redesign I'd like feedback on before wasting time prototyping.
-
-Background
-==========
-
-Refresher (since it's been a minute):
-
-The original RFC exposed kfuncs (non-ABI functions callable
-from sleepable BPF LSM programs) straight out of security/landlock, to
-apply a userspace-created Landlock ruleset to a binprm during exec.
-That skipped the LSM framework entirely and was basically a direct
-line into one LSM.
-
-Paul and Casey, as I understand it your objection breaks down into
-two parts:
-
-1. LSM configuration/policy interfaces shouldn't exist outside the
-   LSM framework. If every LSM grows its own kernel-internal API
-   surface it gets messy and hard to refactor.
-
-2. Anything at the framework level has to be reasonably generic. From
-   the design docs:
-
-   "Hooks should be designed to be LSM agnostic. While it is possible
-   that only one LSM might implement the hook at the time of
-   submission, the hook's behavior should be generic enough that
-   other LSMs could provide a meaningful implementation."
-
-The proposal here should meet this better.
-
-Proposal
-========
-
-Broadly, I am seeking to propose an LSM framework API for kfuncs.
-
-This would be ALL through the existing LSM hook interface.
-
-Instead of individual LSMs exporting kfuncs, the LSM framework exports
-all LSM kfuncs and dispatches them to LSMs through generic LSM hooks.
-
-Here's an ASCII diagram (hopefully it doesn't get mangled)
-of the framework:
-
-     bpf_landlock_restrict_binprm(bprm, ruleset, flags)
-                        |
-                        |  strongly BTF-typed
-                        |  (struct bpf_landlock_ruleset *)
-                        v
-   +-------------------------------------------------------------+
-   |                       LSM framework                         |
-   |                                                             |
-   |  security/lsm_kfuncs.c            (owns all kfuncs)         |
-   |     - kfunc filter: prog type / sleepable / LSM enabled?    |
-   |     - type erasure: ruleset -> void *policy                 |
-   |                        |                                    |
-   |                        v                                    |
-   |  security_kfunc_enforce_bprm_policy(LSM_ID_LANDLOCK,        |
-   |                                     bprm, policy, flags)    |
-   |                        |                                    |
-   |     lsm_for_each_hook: | dispatch by lsm_id                 |
-   |        +---------------+---------------+                    |
-   |        |               |               |                    |
-   +--------|---------------|---------------|--------------------+
-            v               v               v
-      id != lsm_id     id != lsm_id    id == LSM_ID_LANDLOCK
-      (skipped)        (skipped)            |
-                                            v
-   +-------------------------------------------------------------+
-   |  security/landlock                                          |
-   |                                                             |
-   |  LSM_HOOK_INIT(kfunc_enforce_bprm_policy,                   |
-   |                hook_enforce_bprm_policy)                    |
-   |     - applies ruleset, staged to bprm_committing_creds      |
-   +-------------------------------------------------------------+
-
-      no LSM matches / hook not implemented  ->  -EOPNOTSUPP
-
-1. The LSM framework owns the kfuncs.
-
-   Individual LSMs never register or export a kfunc. All kfuncs live
-   under security/ (say security/lsm_kfuncs.c) and go through the LSM
-   tree. LSMs only ever implement ordinary LSM hooks, via
-   LSM_HOOK_INIT() like anything else. No LSM touches BPF.
-
-   The kfuncs break down into two categories:
-
-   a. kfuncs that talk to the LSM framework itself and no specific
-      LSM. There's already userspace precedent for this category in
-      the LSM syscalls (lsm_list_modules() etc). To be honest
-      category (a) may not need any kfuncs at all to start with; I'm
-      including it for completeness of the model :)
-
-   b. kfuncs that carry a policy operation to one specific LSM.
-      Applying a Landlock ruleset to a binprm (this series), or
-      hypothetically loading an AppArmor profile. The kfunc from
-      this series is one of these:
-
-      bpf_landlock_restrict_binprm(struct linux_binprm *bprm,
-                                   const struct bpf_landlock_ruleset *ruleset,
-                                   u32 flags);
-
-2. Either way, every kfunc call passes through a generic LSM hook. No
-   kfunc calls directly into an individual LSM. The shim in
-   security/security.c (or other lsm framework owned file) is the
-   only caller of the hook.
-
-3. Category (a) kfuncs map 1:1 onto an LSM hook. The framework
-   dispatches to every LSM implementing the hook and returns the
-   collective verdict, same as any hook today.
-
-4. Category (b) kfuncs follow the existing
-   security_getprocattr()/security_setprocattr() precedent: a generic
-   hook dispatched by LSM id. For the Landlock case the shim would
-   look something like:
-
-      int security_kfunc_enforce_bprm_policy(int lsm_id,
-                                             struct linux_binprm *bprm,
-                                             void *policy,
-                                             u32 flags);
-
-   dispatched by lsm_id:
-
-      lsm_for_each_hook(scall, kfunc_enforce_bprm_policy) {
-              if (scall->hl->lsmid->id != lsm_id)
-                      continue;
-              return scall->hl->hook.kfunc_enforce_bprm_policy(bprm,
-                                                        policy, flags);
-      }
-      return -EOPNOTSUPP;
-
-   The hook is generic in that any LSM with a notion of a per-task or
-   per-exec policy object can implement it. Landlock implements it
-   like any other hook:
-
-      LSM_HOOK_INIT(kfunc_enforce_bprm_policy,
-                    hook_enforce_bprm_policy),
-
-   Critically, Landlock only receives hook calls with a matching
-   LSM_ID, so another LSM implementing the same hook never sees calls
-   meant for a different kfunc.
-
-5. Type safety at the kfunc boundary is preserved.
-
-   Note the asymmetry between the kfunc signature and the hook
-   signature above: the kfunc the BPF verifier sees stays strongly
-   BTF-typed (struct bpf_landlock_ruleset *), so BPF programs get
-   full verifier type checking and can't pass an arbitrary pointer.
-
-   This also avoids a user facing multiplexer.
-
-   The erasure to void * happens inside the shim, after the verifier
-   has already guaranteed the pointer's type, and the receiving LSM
-   (picked by lsm_id) is the only LSM that will ever see it. Think
-   the relationship setprocattr has with its string payloads, just
-   with stronger (BPF verifier-enforced) typing on the kfunc side.
-
-6. The shim checks that the target LSM is actually enabled at
-   runtime, and that the calling context is OK (i.e. implementing a
-   kfunc filter). This is centralized to make it easier for review
-   from both LSM and BPF subsystems.
-
-BPF Side
-=========
-
-Alexei / Song / Kumar / BPF maintainers,
-
-Even if this proposal doesn't touch kernel/bpf/, I still would
-need to hear your feedback / review on this every bit as much
-as I need to hear the LSM side.
-
-I think the kfunc / kptr model with strong typing fits this well.
-We can have reference counted and strongly typed policy objects
-for the LSMs, and kfuncs give more flexibility for API deprecation
-as they are not considered to be ABI like helpers...
-
-Obviously any new kfunc / kptr would need to be reviewed by BPF tree
-especially with regards to kptr lifetimes and the calling context.
-
-But hopefully this centralizes the interface that would otherwise be an
-ad-hoc mess of individual LSMs trying to define kfuncs willy-nilly and
-causing regressions.
-
-One particular point that I would need to know is what should happen if
-an LSM is not loaded / compiled in, but the kfunc is called. Is a
-verifier rejection acceptible? Or is a runtime error more appropriate
-for this?
-
-Thanks,
-Justin
