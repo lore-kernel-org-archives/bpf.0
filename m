@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99592433BC3
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 07:17:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FD6433BA5
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 07:18:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784618281; cv=none; b=WCH7cSBIWzMktLyG0VqFAyHiEYNjJygdgXOuD+4vYLF4zoWE0BMvy3Dp2oyIVRpC2/BBSfJJr6/6OAke0kWMGh2FhDOh8ruyLploKEKcyOBEc6O+qJ+P9b8qVANBftywetZBkiEwbSbMaFzOmHkF8fCcdWYTg5Wh8ksXODEzf4k=
+	t=1784618281; cv=none; b=QG9sjNKFSVO1Fht2L9tsi5ukV44u2vr1nfRkFG+vJVwqhUprgnfrKel+/wcKP1se72mZBaw+fMpwUJbsFKz+DNyu240WFSfW2i9voMMAHZ7t7jMOfebMsCuO0SUI2yzpLxhC6k3BiQVii9OVX45aBu8v3pcHnKq0gCreK7aayMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784618281; c=relaxed/simple;
-	bh=7MCd6OudWBhjJORh/39I8LeZg8cTYiWnJndMJ7VlSpY=;
+	bh=tUljI4IBpKc97R20ohsbM7TcSPRCv8X1OPFT190lI1w=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=I43reANDVF0ew/cIIms1Z4szBdIH02SxuLe6p0QM+DZNOglyE7r4SMd47MU+qybtjptCwBuHhBBu9sCl4MybUXjPGwr1KQwPJOfxzKEAF6AtsITrcuolwCqmw6O4XjoG0q63xXi9Szo09kMPDuDVNdVRdvAP8f6rXMpl/3SNoK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gzj9EqTb; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=nwaDm0vYUMoR2q4BHBw1vkde9Y5gfZynBUXrB17Tl/FV8rZSspc12PubXQa0gAgPChHWvfOFRwih2fCvQX0Zhc69snV9OOubb+e484TdbRRa7DBlPnYNadyqLALifxJXKNMLJVQ7KsnPTsjF6DxfdfQVcY+vXdb6PIn4bIjNSVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rb5lPKHc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gzj9EqTb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F411F00A3A;
-	Tue, 21 Jul 2026 07:17:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rb5lPKHc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF0191F000E9;
+	Tue, 21 Jul 2026 07:17:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784618279;
-	bh=TuICvdkhYFkfwJvswpn7FhCUDElehUmd6cepDTkR13g=;
+	s=k20260515; t=1784618280;
+	bh=SiXUCpLnvsmh5s4KIZnYWdkH8YALck8dRgQkppYTETA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Gzj9EqTbSQ+CoiwzgnDu+DKS5kPeY7lQbvSt6ftllA8MK8e8TMDlY/4OUig+JNltJ
-	 Qtc8I85MgN9CYwfa5zWMMXbbWczKsG3sYKcMXGreCW3xGUviR4ZpHD+sCpjle2mozd
-	 rgLnuGvrfTDkcqBJhap3/tFmVbz03M83BeJaoVykOliFljLrdxgGNBn8gTRiVui8uR
-	 ogVOcM5cuw9qFwOMn63v6McoVKQ2u1piqfuECiYAwh3yvYOFNWxQsEwomdTf6tQcoT
-	 oZpHgYw0JeRKt8jypvNRzrd68FOye92BDiI0fZdopxFwXg2Ti/MlLcTQhNfOfsYNzH
-	 Qbzx9xvAsLuqA==
+	b=Rb5lPKHcEHD6WCas/3vZrDzk0g6h5rzsOoKFPJvZMFmKQDy3GCqcD4tdhELc15TNF
+	 PQelnvg1pCkR93As9mxCytVPi2hbJ1eM/jO3pcplMy2elg2ThN125Qw5RfI/d9jDma
+	 SN01Fi7+p1QjLkhaGNE2ak8S8MyZrZCbE0DxT/fNq/LXUys2jYl9HYsCIbEfDtUpC9
+	 bo+11gSq2Rv58cxumC2MtsRcJTpMFqjhVAWrJXCHn/Xn/jr9vumdfzI6jHGlr3+LnB
+	 r4FiDtTB1pu0a2PbKaT2Yksb+RsD7obHUJag8dwygmlGhXvbdyd2exj5gxCJP/db7O
+	 fPLvmFlenQ2Uw==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH net-next 04/13] net: knod: add offload device core
- and control plane
+Subject: Re: [RFC PATCH net-next 10/13] net/mlx5e: add knod XDP offload
+ support
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Taehee Yoo" <ap420073@gmail.com>
-Cc: dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, media-ci@linuxtv.org
-In-Reply-To: <20260719175857.4071636-5-ap420073@gmail.com>
+Cc: bpf@vger.kernel.org, media-ci@linuxtv.org, dri-devel@lists.freedesktop.org
+In-Reply-To: <20260719175857.4071636-11-ap420073@gmail.com>
 References: <20260719175857.4071636-1-ap420073@gmail.com>
- <20260719175857.4071636-5-ap420073@gmail.com>
+ <20260719175857.4071636-11-ap420073@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Jul 2026 07:17:58 +0000
-Message-Id: <20260721071759.09F411F00A3A@smtp.kernel.org>
+Date: Tue, 21 Jul 2026 07:17:59 +0000
+Message-Id: <20260721071759.BF0191F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,253 +47,241 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 10 potential issue=
 (s) to consider:
-- [High] Lockless traversal of knod_dev_list in IPsec datapath races with l=
-ist mutations in knod_dev_detach, leading to kernel panic or Use-After-Free.
-- [High] Lack of hot-unplug detachment and missing net_device refcounts lea=
-d to Use-After-Free if hardware is removed.
-- [High] knod_pass_detach uses a timeout that forces premature freeing of p=
-age pool structures, causing Use-After-Free when delayed SKBs are eventuall=
-y released.
-- [High] Uninitialized variable 'i' is used in the free_spsc error cleanup =
-path if memory allocation fails.
-- [High] Hardware SDMA target pages are prematurely recycled if the hardwar=
-e fence times out, leading to silent data corruption.
-- [High] PP_FLAG_DMA_MAP is improperly set for a custom memory provider tha=
-t supplies pre-mapped device memory.
-- [High] Hardcoded sdma_idx =3D 0 causes hardware fence polling on the wron=
-g queue.
-- [Medium] Netlink operations do not reply with a full message for object c=
-reation, and notifications ignore NLM_F_ECHO requirements.
-- [Medium] Direct modification of netdev->features bypasses networking core=
- feature synchronization and notifications.
-- [Medium] Double-attachment in knod_ipsec_attach corrupts the saved xfrmde=
-v_ops pointer.
+- [High] mlx5e_open() starts the offload worker unconditionally even if mlx=
+5e_open_locked() fails.
+- [High] mlx5e_knod_uninit() illegally frees priv->knodev which is owned an=
+d freed by the KNOD framework.
+- [High] Unbounded iteration over channels causes out-of-bounds accesses on=
+ `knodev->wpriv` and `mlx5e_knod_release_batch`.
+- [High] mlx5e_xmit_xdp_offload_buff() incorrectly casts standard netmem_re=
+f pages to net_iov, reading garbage DMA addresses.
+- [High] RX buffers mapped as DMA_FROM_DEVICE are transmitted on the TX que=
+ue without remapping, causing IOMMU faults.
+- [High] Global static batch array is used concurrently by different netdev=
+ NAPI instances.
+- [High] Missing channel restart during offload attach/detach leads to sile=
+nt failure and Use-After-Free of `rq->knodev`.
+- [High] `mlx5e_rx_offload_stop` races with active NAPI RX processing, lead=
+ing to SPSC ring corruption and use-after-free of page pool pages.
+- [High] A permanent failure during offload transmission (e.g., oversized M=
+TU) causes the release loop to wedge forever, breaking the RX queue.
+- [Low] The `nic_ops` structure is exported to the global linker namespace =
+without the `static` keyword.
 --
 
---- Patch [4]: [RFC PATCH net-next 04/13] net: knod: add offload device cor=
-e and control plane ---
-commit e070e2966937b9789951030b969d12e24910bb8f
+--- Patch [10]: [RFC PATCH net-next 10/13] net/mlx5e: add knod XDP offload =
+support ---
+commit de6f2fbf7fa4e2b457c356167b75d55f4c90a073
 Author: Taehee Yoo <ap420073@gmail.com>
-Subject: net: knod: add offload device core and control plane
 
-Add the KNOD core framework and its genetlink control plane. The core
-maintains three object types and drives the RX data path over per-queue
-SPSC rings. The genetlink family exposes attach/detach, inventory, and
-feature selection.
+net/mlx5e: add knod XDP offload support
 
-> diff --git a/net/knod/knod_core.c b/net/knod/knod_core.c
-> index af50a69bca651..[snip]
-> --- /dev/null
-> +++ b/net/knod/knod_core.c
+Let mlx5e act as a knod NIC: register with the knod core, feed received
+packets to the accelerator over the per-queue SPSC ring, and transmit
+accelerator verdicts (XDP_TX) back through the XDP SQ.  Restricted to
+inline-none TX and single-page MTU.
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/n=
+et/ethernet/mellanox/mlx5/core/en/xdp.c
+> index d8c7cb8837d74..82adfc9b7c1b6 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
 
 [ ... ]
 
-> 		desc =3D ptr;
-> 		desc->netmem =3D dst;
-> 		desc->src =3D src;
-> 		desc->off =3D off;
-> 		desc->len =3D len;
-> 		desc->fence_val =3D fv;
-> 		desc->sdma_idx =3D 0;
+> +static inline bool mlx5e_xmit_xdp_offload_buff(struct mlx5e_xdpsq *sq,
+> +					       struct mlx5e_rq *rq,
+> +					       struct spsc_bd *bd)
+> +{
+> +	struct mlx5e_xmit_data_frags xdptxdf =3D {};
+> +	struct mlx5e_xmit_data *xdptxd;
+> +
+> +	/* attach is restricted to inline-none NICs, so the WQE inlines no
+> +	 * header and xdptxd->data is never read (left NULL here).
+> +	 */
+> +	xdptxd =3D &xdptxdf.xd;
+> +	xdptxd->len =3D bd->len;
+> +	xdptxd->has_frags =3D 0;
+> +	xdptxd->dma_addr =3D netmem_to_net_iov(bd->netmem)->desc.dma_addr +
+> +			   bd->off;
 
 [Severity: High]
-Does this hardcoded index cause hardware fence polling on the wrong queue?
+Is this cast safe if the memory isn't a devmem/net_iov?
 
-By setting sdma_idx to 0 instead of the dynamically assigned napi_index,
-subsequent calls to d2h_fence() in knod_d2h_drain() and knod_pass_flush()
-will always poll queue 0. This could lead to premature delivery of incomple=
-te
-DMA buffers or hang indefinitely on multi-queue configurations.
+If the interface uses standard host memory, `netmem_to_net_iov()` will read
+garbage data for the DMA address instead of properly mapping it.
 
-[ ... ]
-
-> static struct knod_dev *knod_ipsec_find_xdev(struct net_device *dev)
-> {
-> 	struct knod_dev *knodev;
->=20
-> 	list_for_each_entry(knodev, &knod_dev_list, list) {
-> 		if (knodev->netdev =3D=3D dev)
-> 			return knodev;
-> 	}
+> +
+> +	if (!mlx5e_xmit_xdp_frame(sq, xdptxd, 0, NULL))
+> +		return false;
 
 [Severity: High]
-Can this lockless iteration of knod_dev_list cause a use-after-free or
-kernel panic?
+Will this trigger an IOMMU access violation?
 
-This function is called from the IPsec transmit path via
-knod_ipsec_xdo_offload_ok(). Concurrently, knod_dev_detach() for other
-devices modifies knod_dev_list using list_del() and kfree() without RCU
-protection or locking, meaning this traversal could read poisoned list
-pointers or freed memory.
+If rq->buff.map_dir defaults to DMA_FROM_DEVICE (when there's no software
+XDP program), this transmits the buffer without remapping it for device
+read access.
 
 [ ... ]
 
-> 	knodev->ipsec_orig_xfrmdev_ops =3D knodev->netdev->xfrmdev_ops;
-> 	knodev->ipsec_added_hw_esp =3D
-> 		!(knodev->netdev->features & NETIF_F_HW_ESP);
-> 	knodev->netdev->xfrmdev_ops =3D &knod_ipsec_xfrmdev_ops;
-
-[Severity: Medium]
-Is there protection against double-attachment overwriting the original
-operations pointer?
-
-If knod_ipsec_attach() is called twice, the previously installed proxy
-operations will be saved as the original xfrmdev_ops. During detach, this
-proxy will be restored instead of the true hardware operations, breaking the
-offload and potentially creating recursion loops.
-
-> 	knodev->netdev->features |=3D NETIF_F_HW_ESP;
-> 	knodev->netdev->hw_enc_features |=3D NETIF_F_HW_ESP;
-
-[Severity: Medium]
-Does directly modifying netdev->features bypass core network synchronizatio=
-n?
-
-Dynamically modifying features should typically be done by updating
-hw_features or wanted_features and invoking netdev_update_features().
-Modifying them directly misses the NETDEV_FEAT_CHANGE notification, leaving
-userspace tools like ethtool out of sync with the hardware state.
-
-[ ... ]
-
-> static bool hostmem_pp_release_netmem(struct page_pool *pool, netmem_ref =
-netmem)
-> {
-> 	struct page_pool_hostmem *hm =3D pool->mp_priv;
-> 	unsigned long addr =3D page_pool_get_dma_addr_netmem(netmem);
->=20
-> 	page_pool_clear_pp_info(netmem);
-> 	gen_pool_free(hm->genpool, addr, PAGE_SIZE);
+> +struct mlx5e_knod_release_batch {
+> +	struct spsc_bd *bds[NAPI_POLL_WEIGHT];
+> +	struct spsc_pass_bd pass[NAPI_POLL_WEIGHT];
+> +};
+> +
+> +static struct mlx5e_knod_release_batch
+> +mlx5e_knod_release_batch[KNOD_SPSC_MAX];
 
 [Severity: High]
-Can this lead to a use-after-free when delayed SKBs are released?
+Is this static array prone to cross-device data races?
 
-In knod_pass_detach(), there is a timeout that forcefully frees the wpriv
-structure (which contains pass_hm) if the page pool hasn't drained within
-5 seconds. When the network stack eventually frees those delayed SKBs,
-this callback will dereference the freed pool->mp_priv (hm) when calling
-gen_pool_free().
+If multiple mlx5e network interfaces are active concurrently, their NAPI
+threads might run in parallel on different CPUs. Because this array is
+global and indexed only by rq->ix in mlx5e_rx_offload_release_pending(),
+they could overwrite each other's batches.
+
+Additionally, since mlx5e supports creating one RX channel per CPU core,
+can rq->ix exceed KNOD_SPSC_MAX and cause an out-of-bounds access?
 
 [ ... ]
 
-> 	struct page_pool_params pp =3D {
-> 		.order		=3D 0,
-> 		.pool_size	=3D KNOD_PASS_SLOTS,
-> 		.nid		=3D NUMA_NO_NODE,
-> 		.dev		=3D knodev->netdev->dev.parent,
-> 		.dma_dir	=3D DMA_FROM_DEVICE,
-> 		.max_len	=3D PAGE_SIZE,
-> 		.flags		=3D PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV |
-> 				  PP_FLAG_CUSTOM_MEMORY_PROVIDER,
+> +			case KNOD_TX:
+> +				if (!mlx5e_xmit_xdp_offload_buff(rq->xdpsq, rq,
+> +								 bds[i]))
+> +					goto stop_release;
 
 [Severity: High]
-Is PP_FLAG_DMA_MAP appropriate for a custom memory provider returning
-pre-mapped device memory?
+Does this cause an infinite retry loop for permanent failures?
 
-Setting PP_FLAG_DMA_MAP instructs the page pool core to automatically unmap
-the page via dma_unmap_page_attrs() on release. Since hostmem_pp_init uses
-GTT device addresses instead of standard system RAM DMA mappings, this will
-result in invalid DMA API unmap operations.
+If mlx5e_xmit_xdp_offload_buff() fails because a packet exceeds the TX MTU
+limit, taking this goto stop_release leaves the buffer in the ring.=20
+
+The next NAPI poll would then retry the exact same oversized packet
+indefinitely, stalling the queue.
 
 [ ... ]
 
-> 			if (desc->src) {
-> 				struct page_pool *src_pp =3D
-> 					netmem_get_pp(desc->src);
->=20
-> 				page_pool_recycle_direct_netmem(src_pp,
-> 								desc->src);
-> 			}
-> 			page_pool_put_full_netmem(pool, desc->netmem, false);
+> +static int mlx5e_rx_offload_xdp_attach(struct knod_dev *knodev)
+> +{
+[ ... ]
+> +	pr_debug("Attaching XDP offload to netdev %s\n", knodev->netdev->name);
+> +	WRITE_ONCE(priv->knodev, knodev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int mlx5e_rx_offload_xdp_detach(struct knod_dev *knodev)
+> +{
+> +	struct mlx5e_priv *priv =3D netdev_priv(knodev->netdev);
+> +
+> +	pr_debug("Detaching XDP offload from netdev %s\n",
+> +		 knodev->netdev->name);
+> +	WRITE_ONCE(priv->knodev, NULL);
+> +
+> +	return 0;
+> +}
 
 [Severity: High]
-Could recycling these DMA target pages after a timeout cause silent data
-corruption?
+Could this lead to use-after-free and silent data path failures if the
+interface is administratively UP?
 
-If the polling loop in knod_pass_flush() times out, the pages are recycled
-back to the active pools immediately. Since the hardware operation was not
-definitively aborted, the accelerator might complete its delayed DMA write
-later, silently overwriting whatever new packet data has been placed in
-that page.
+By updating priv->knodev without restarting the active network channels
+(e.g., via mlx5e_safe_switch_params()), a hot-detach leaves the active RX
+queues holding stale pointers to a knodev structure that the framework
+is about to free.
 
+> +
+> +struct knod_nic_ops nic_ops =3D {
+> +	.attach =3D mlx5e_rx_offload_xdp_attach,
+> +	.detach =3D mlx5e_rx_offload_xdp_detach,
+> +};
+
+[Severity: Low]
+Should this struct be marked static?
+
+Exporting nic_ops to the global namespace could create a collision hazard
+if any other driver defines a variable with the same name.
+
+> +
+> +int mlx5e_knod_init(struct mlx5e_priv *priv)
 [ ... ]
-
-> 	knodev->netdev =3D knetdev->dev;
+> +void mlx5e_knod_uninit(struct mlx5e_priv *priv)
+> +{
+> +	knod_netdev_unregister(priv->knetdev);
+> +	kfree(priv->knetdev);
+> +	priv->knetdev =3D NULL;
+> +	kfree(priv->knodev);
+> +	WRITE_ONCE(priv->knodev, NULL);
+> +}
 
 [Severity: High]
-Should dev_hold() be called here to take a reference on the net_device?
+Does this code free memory it doesn't own?
 
-If the device is hot-removed, the hardware driver invokes
-unregister_netdev() and frees the net_device. knod_netdev_unregister() only
-removes the object from the list without detaching it. This leaves a
-dangling pointer in knodev->netdev, which can cause a use-after-free when
-accessed by Netlink queries like knod_nl_dev_get_dumpit().
+The knodev pointer is a framework-owned object passed via the attach()
+callback. Calling kfree(priv->knodev) here could lead to a double-free
+when the framework subsequently cleans up the device.
 
 [ ... ]
 
-> 		if (knodev->accel_ops->alloc_mem) {
-> 			size_t total =3D pool_size * nqueues;
-> 			u64 base_gaddr;
-> 			void *base_pool;
-> 			void *pool_priv;
->=20
-> 			base_pool =3D knodev->accel_ops->alloc_mem(knodev, total,
-> 					&base_gaddr, NULL, &pool_priv);
-> 			if (!base_pool) {
-> 				err =3D -ENOMEM;
-> 				pr_err("%s: alloc_mem failed\n", __func__);
-> 				goto free_spsc;
-> 			}
-
+> +void mlx5e_rx_offload_stop(struct mlx5e_priv *priv)
+> +{
 [ ... ]
-
-> free_spsc:
-> 	for (i--; i >=3D 0; i--)
-> 		spsc_destroy(&knodev->wpriv[i].spsc_bds);
+> +	synchronize_net();
+> +	for (i =3D 0; i < KNOD_SPSC_MAX; i++) {
+[ ... ]
+> +		spsc_rewind(&knodev->wpriv[i].spsc_bds);
+> +		while (!spsc_pop(&knodev->wpriv[i].spsc_bds, (void **)&bd))
+> +			page_pool_put_full_netmem(netmem_get_pp(bd->netmem),
+> +						  bd->netmem, true);
+> +	}
+> +}
 
 [Severity: High]
-Will this loop use an uninitialized variable if alloc_mem() fails?
+Could this race with NAPI and corrupt the SPSC ring or page pool?
 
-If alloc_mem() fails, the code jumps to free_spsc before 'i' is initialized.
-The loop then operates on an uninitialized stack value for 'i', leading to
-an out-of-bounds array access on knodev->wpriv[i] and passing an invalid
-pointer to spsc_destroy().
+In mlx5e_close(), mlx5e_rx_offload_stop() is called before
+mlx5e_close_locked(), meaning NAPI is still actively processing.
 
-> diff --git a/net/knod/knod_nl.c b/net/knod/knod_nl.c
-> index 77799202abcf4..[snip]
-> --- /dev/null
-> +++ b/net/knod/knod_nl.c
+Calling page_pool_put_full_netmem() with allow_direct =3D true concurrently
+with NAPI violates the page pool API locking constraints.
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/=
+net/ethernet/mellanox/mlx5/core/en_main.c
+> index aa8610cedaa85..cfc6ba6dc492b 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> @@ -918,6 +918,7 @@ static int mlx5e_alloc_rq(struct mlx5e_params *params,
+>  	pool_size =3D 1 << params->log_rq_mtu_frames;
+> =20
+>  	rq->mkey_be =3D cpu_to_be32(mdev->mlx5e_res.hw_objs.mkey);
+> +	rq->knodev =3D rq->priv->knodev;
+
+[Severity: High]
+Does rq->buff.map_dir need to be DMA_BIDIRECTIONAL when hardware offload
+is active?
+
+In mlx5e_alloc_rq() just above this addition, rq->buff.map_dir is set to
+DMA_FROM_DEVICE if params->xdp_prog is false. This causes IOMMU faults
+later when the buffer is transmitted directly on the TX queue without being
+remapped.
 
 [ ... ]
 
-> 	genlmsg_multicast_netns(&knod_nl_family, net, ntf, 0,
-> 				KNOD_NLGRP_MGMT, GFP_KERNEL);
+> @@ -3592,6 +3597,7 @@ int mlx5e_open(struct net_device *netdev)
+>  		mlx5e_modify_admin_state(priv->mdev, MLX5_PORT_UP);
+>  	mutex_unlock(&priv->state_lock);
+> =20
+> +	mlx5e_rx_offload_start(priv);
+>  	return err;
+>  }
 
-[Severity: Medium]
-Does this ignore the NLM_F_ECHO flag?
+[Severity: High]
+Should mlx5e_rx_offload_start() be skipped if mlx5e_open_locked() fails?
 
-Notifications emitted in response to requests should pass the request
-information to genl_notify() to honor the NLM_F_ECHO flag. Using
-genlmsg_multicast_netns() drops the request context.
-
-[ ... ]
-
-> 	err =3D knod_dev_attach(knetdev, accel);
-> 	if (!err)
-> 		knod_nl_notify_dev(knetdev->knodev, KNOD_CMD_DEV_ADD_NTF);
->=20
-> unlock:
-> 	mutex_unlock(&knod_lock);
-> 	rtnl_unlock();
-> 	return err;
-
-[Severity: Medium]
-Should this operation reply with a full message?
-
-According to Netlink uAPI design rules, NEW/ADD operations must reply with
-a full message carrying identifying information about the newly created
-object, rather than just returning zero and ACKing the request.
+If err indicates failure, the netdev remains closed, so mlx5e_close()
+won't be called to clean up. This leaves the worker running indefinitely
+and can cause a use-after-free when it accesses the failed queues.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260719175857.4071=
-636-1-ap420073@gmail.com?part=3D4
+636-1-ap420073@gmail.com?part=3D10
