@@ -1,63 +1,63 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE06E46D2CC
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 18:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B6F1145B27
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 18:40:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784659108; cv=none; b=QXVXT6FIMn9MkNCO8EvENrXWCEh+Yja6WNJ1e3Pn7lEWc8N2pKmC9FRNplRThcKnXYjBMo1k+uiP5j+JTdrbVsfvS2NcwO2+Ilt9/f+rQIZspB/xQDQbgR1ju7egyU1AqsAqPGJJYedVLyesDidHLpHucQda/CejTP5Ygl8fdjo=
+	t=1784659217; cv=none; b=S8bRuqU8oEJTZBU3RkLjzQqROhA+y7YoBDf4Q0XcAFLo8PrHq3j+s1JCwXzqKa1v6m1j0gOeQwEHSresgqyeZkFw67iCwVgbuhrMixZAOus8b163vRSxs/ZcmD2BGUhx4A/8Nz1dAe1/Q5y3H1rPeJElviqo7IDoejbBuflDH38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784659108; c=relaxed/simple;
-	bh=nFMZkC6MFhZO41bV/qEQar9Fqbs9a4q5U52SS8xj06Y=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=J2LZRzcKiaS5xKYpv67RwuxZHtIB03fkjtrR1Xr/Ehghy17xOv7Rmc0o25uCpTUYkS8/orsA/AANIAFYGdHeBAKb75IiqundZ8NwOua89tXNjYwlR+5YUPMdDHB/W01D93VXj37v68JmNog3okAx74LfkzAbYtV0ozm6pLml3Vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=yGjYxqbu; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1784659217; c=relaxed/simple;
+	bh=CEHCZS1G5Y42WECDRP5LrS/sZ+WH6FFxldqOA5Qzf7I=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=MqoXqdg/5vpVHFGAB0O/RPz5BQSUoU9fclGo+fVJQqjgOeM2vgq/fw+ZQBw/mDHo0tXNzBmN98PRKse2hHEoTWfcIb5vajaWTxFYlOiNsnBd55U/gLbVMRPpsz0pd/cK2qxji1zLdgT6P0kklwjHp3b53b9EBUVQhgoXCdWxK9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Fr64NkhM; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="yGjYxqbu"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38e347638adso6776835a91.0
-        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 11:38:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Fr64NkhM"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c9cf07d2df6so7363514a12.2
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 11:40:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784659103; x=1785263903; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784659215; x=1785264015; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=laCbyrDADvn5u1fSkRd/6IfFVMa2YUzQg3u8hQpf/yg=;
-        b=yGjYxqbuNOOt/BS4Fy39217QhzkuNzI74i4xUBW22LvZA+heSTqnpOKzQcjxwJYVQY
-         9X8geHceK/K4cXulkPYc1UfAZX+4HxTnDiFkfPM8x4pSGpgW5m+Y9lSKa/lmqwtdItns
-         myl1UjdgUZgheQdU5qJi4tLo1tXYXyfIsXMrRAuSjuwAddtcnbO7fnWfQaQ/UneLHsNH
-         D/IYi1qvPHpJSgCXhEeUYVuHaDtaCxzeCVqZOljqNdoPCmqf/eIZdW5rmQzup8k/auwb
-         PgdHIEF2H1a98LodSe0Y+7iQES7gkK5fo/yHdhIYL4Y65kmpjkD3GDqiPgN2lEMX7roc
-         q/sw==
+        bh=cXucJmocQuo7Hb1xWA0bWNA+TKY00q86yxvGHTwRRPk=;
+        b=Fr64NkhMoJMMVvlMYStpTVWCclhBPjmZGPycE5u+wPtY07dNfse1DPw0kwUq9qdSIF
+         2intzA52oAh2E71QRXUunVed3p5JLGYsRL4x+nFeyqirW3kiXFNH0hyycViTA6DQ40tL
+         QmOr5d2zwY2rBF0DC+MYLN4fGqyoYO9HueAvJOAJ4cTW/gx4aB5Rb6hSqyX/blayTWMU
+         FlY3FzZTYKy5C4n71zd9hQEiZzpj1TbKD6sa8steFvSMCoNTKj7Q4dPpHgx/NEabli3+
+         TKxa3gyBr68sAHHB46bNh/vowck9HYNTMvQsWVQd6i5b3OP4kDGx4a5fwst/H4DuEeIs
+         xWSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784659103; x=1785263903;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20251104; t=1784659215; x=1785264015;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=laCbyrDADvn5u1fSkRd/6IfFVMa2YUzQg3u8hQpf/yg=;
-        b=m4Z3x5sBdKqKxEa6D5gilPqEr935+7sL9w1TxO+r38ECRyQKbCqpKgIwkB4c85qJTi
-         KwgJObtc6WWpEBWBYWvmlBSteGSy0tH6fhS1G28f49NKYPcPhphQrFO1myOkdcnQ5DXa
-         TYhj4heo1MOqRFfpqrDVN4RJyGMSW/frC0HpTui4jw3STEJ8DAjpLRsObuMQ+k53E85S
-         LfxHQyF3Zfs87WAIaAQtC3dMSJyFON7qPvsP2JNa17LNQZdpF6Zr8gwmNaVh9Oit5cEv
-         uebyZci9QBsXksVp2r4gYZHCwq0j74A2rYOgi71p2gcjXnOvhoh1pvj0mWh+bg+mq62v
-         A3Kw==
-X-Forwarded-Encrypted: i=1; AHgh+RrM99oeeLa5mb0lVQw0PtfoAJAeY6mfJqnYdaRJtf3PR0P6LtpGdUeVr0hPRcz3njx5MNc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzsq0vwAMhgsSw89ehpp5JtSXSYvG8mXg1cpVyCjJ3Gp8UWEknX
-	TPJJ4rtRcP+0Uq+76n74ezslhTEekZjxy9CKJ7mPL8q2rEOOx7gfJZBzi5iKMgqNkGs=
-X-Gm-Gg: AR+sD10LL1HVelCahWLyq6w27PRS2kBWAM/G79l42vKiqCKP36hi34xBCA7cNgDfr2H
-	jXiHeFpzlBkhNW8HCRIjaFbgOz4heELxZd/xZmiyYq8eU3P88EbvoeqRXQT+79a9F0TGRYFIuo7
-	OShNGFGg/vIDV+sepLSRW+j2f82ivHDtQLfaqL/QonvXo7aq6n6IjhsaVo8j/C9eiHj2yfBSwD+
-	vTJO8pifvrtjM1et93cy31JFVeogizKp/SjY6icvRQfHeU5lyoh2QV0QhBFiBoCVAsRtVlUTl8j
-	N8Cm14KLfslmZwxyFCyEYoTXY66jmNKn5iQwWPft75Mg0l7A0fvi3G65jN8iWbaGAOX9EW6J8EY
-	tg/CCFIIG3/T4PItf1k9U9sRQMKOargcTjLOZJnmZkoc44WU9aN1OMmCxDJs=
-X-Received: by 2002:a05:6a21:a8d:b0:3c3:a490:9674 with SMTP id adf61e73a8af0-3c3ada8c6e1mr21386953637.64.1784659103080;
-        Tue, 21 Jul 2026 11:38:23 -0700 (PDT)
+        bh=cXucJmocQuo7Hb1xWA0bWNA+TKY00q86yxvGHTwRRPk=;
+        b=AqV0dVJTMcsCHPIxIb5PTMm9sWEVa/rFGGmAlpAXgc98ine5zkrR/SqHGl4ITEA5Nj
+         BYR6AFXJE8LAeHGslzWlg1q8jIzJM/Hj8p/8d7WyNLK7K4YiF4OGdk8kJkOXsr9CPYWu
+         4RzPyfAzk26d8lI3EJs1pLvptOSbMoYi6dNeBgtLMPll2r/ehD7lAJn8hDgWT6mAmpb6
+         SmN8fVRuPjfMMdAZn2aZRetr9KjOXbn6Dfzh9JUDf1I2BW1zETVImU4mc69SWja3fuOA
+         Z9uKnHMutt7Ue0qP2K8zchJXF/wYebkgpsFBfjhsG3gzxSD1nhJmXsBbvPpSYwMzC8Ih
+         2+xg==
+X-Forwarded-Encrypted: i=1; AHgh+RqDUceNDJ3srzjbDGI6vJSFn4s/Fwc4W3GA/nuC1T+L3DtHfmwGEv/QPFoX7lHa30ZYaQY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWZFcwPADielfh0/uE68xAqQS01aQgRkiLZhRjdnD57JJu9BSb
+	TpzoH+2eXTtOvY70nr5vXG7DfpBPDcg3o0fy6nyxLxCmAFoIPYpNk2SZ9bGa5Wh/5GI=
+X-Gm-Gg: AR+sD10bm3xhLPb7zLt5pkwcRyNHvfpCeSDHBDPLZ9SBRVEO6JbcKUWCOE+Yp6uMLx8
+	GviR8I26Qce+89EA6Tt+cNI578RIoSU5i6yEegoQ/pxFz0fU0BH3n+0AVwnTUwk3ux70Qjl6jOF
+	kyyPh86mmid9qBEaVddnIiNd2Gm7rQtMglFHOrNm5GaLO8YJnDVNG5DWgUEzgf2/Y4VZ87oVYuX
+	Cot2nheRIO9AARgsYqXTzE45QR/xjRYHSEzFcX3VFNfXlsN/5cjLYjO4s5Wgks8bGKagX2OiF7p
+	S/Ng/5hASst7pbuoLyb1CXKibnEv6qN+mcjuGIWjWSmcUObT1jOO44WyGiPC+gQoRnyWur5F4iW
+	dowDKXPrYmw9P8EBt9Ivs9dkZTfd1weDAbJBp0blsumMfQZYtU2mG1LG5E3I=
+X-Received: by 2002:a05:6a20:2583:b0:3c3:9595:57ef with SMTP id adf61e73a8af0-3c3ad7781b3mr18749954637.31.1784659215324;
+        Tue, 21 Jul 2026 11:40:15 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:600::4a7b])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce2a18a47sm45874614c88.8.2026.07.21.11.38.21
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce2a129f3sm39641494c88.7.2026.07.21.11.40.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2026 11:38:22 -0700 (PDT)
+        Tue, 21 Jul 2026 11:40:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,116 +66,133 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 21 Jul 2026 14:38:20 -0400
-Message-Id: <DK4GUOJ1F4UY.20HLHNS3S63BS@etsalapatis.com>
-Subject: Re: [PATCH bpf v5 3/4] bpf: Fix potential UAF when reading bpf link
- info
+Date: Tue, 21 Jul 2026 14:40:13 -0400
+Message-Id: <DK4GW4BH8RPS.32N0A91SQGMOH@etsalapatis.com>
+Cc: <sashiko-reviews@lists.linux.dev>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf v5 2/4] bpf: Fix UAF due to missing link type check
+ in mprog
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Pu Lehui" <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Mykyta Yatsenko"
- <mykyta.yatsenko5@gmail.com>, "Amery Hung" <ameryhung@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Song Liu" <song@kernel.org>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Pu Lehui"
- <pulehui@huawei.com>
+To: "Amery Hung" <ameryhung@gmail.com>, "Pu Lehui" <pulehui@huaweicloud.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260721041048.1394085-1-pulehui@huaweicloud.com>
- <20260721041048.1394085-4-pulehui@huaweicloud.com>
-In-Reply-To: <20260721041048.1394085-4-pulehui@huaweicloud.com>
+ <20260721041048.1394085-3-pulehui@huaweicloud.com>
+ <20260721042151.E6F941F000E9@smtp.kernel.org>
+ <723495f2-f4a0-4723-90a8-d4774e6dce05@huaweicloud.com>
+ <CAMB2axMocV3+cC8O5LEu-0bPcGvchwjASbjM_afx=Stc_8AvKw@mail.gmail.com>
+In-Reply-To: <CAMB2axMocV3+cC8O5LEu-0bPcGvchwjASbjM_afx=Stc_8AvKw@mail.gmail.com>
 
-On Tue Jul 21, 2026 at 12:10 AM EDT, Pu Lehui wrote:
-> From: Pu Lehui <pulehui@huawei.com>
+On Tue Jul 21, 2026 at 1:40 PM EDT, Amery Hung wrote:
+> On Tue, Jul 21, 2026 at 2:18=E2=80=AFAM Pu Lehui <pulehui@huaweicloud.com=
+> wrote:
+>>
+>>
+>> On 2026/7/21 12:21, sashiko-bot@kernel.org wrote:
+>> > Thank you for your contribution! Sashiko AI review found 1 potential i=
+ssue(s) to consider:
+>> > - [Medium] Anchor link type validation is bypassed when attaching or d=
+etaching bare BPF programs, leading to wildcard insertions/deletions and da=
+ta races.
+>> > --
+>> >
+>> > --- Patch [2]: [PATCH bpf v5 2/4] bpf: Fix UAF due to missing link typ=
+e check in mprog ---
+>> > commit 830a4e62ebb8e98cc45b0ce829c6686aacafabc4
+>> > Author: Pu Lehui <pulehui@huawei.com>
+>> > Subject: bpf: Fix UAF due to missing link type check in mprog
+>> >
+>> > This commit adds a link type validation in bpf_mprog_link() to prevent=
+ a
+>> > use-after-free when dereferencing link->prog for foreign anchors. It a=
+lso
+>> > adjusts bpf_mprog_attach() and bpf_mprog_detach() to pass down the exp=
+ected
+>> > link type.
+>> >
+>> >> diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
+>> >> index 1394168062e85..37ce91e0bcd21 100644
+>> >> --- a/kernel/bpf/mprog.c
+>> >> +++ b/kernel/bpf/mprog.c
+>> >> @@ -17,7 +17,7 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
+>> >>              link =3D bpf_link_get_from_fd(id_or_fd);
+>> >>      if (IS_ERR(link))
+>> >>              return PTR_ERR(link);
+>> >> -    if (type && link->prog->type !=3D type) {
+>> >> +    if (type && link->type !=3D type) {
+>> >>              bpf_link_put(link);
+>> >>              return -EINVAL;
+>> >>      }
+>> >
+>> > [ ... ]
+>> >
+>> >> @@ -243,6 +244,7 @@ int bpf_mprog_attach(struct bpf_mprog_entry *entr=
+y,
+>> >>              return -EEXIST;
+>> >>      ret =3D bpf_mprog_tuple_relative(&rtuple, id_or_fd,
+>> >>                                     flags & ~BPF_F_REPLACE,
+>> >> +                                   link ? link->type : BPF_LINK_TYPE=
+_UNSPEC,
+>> >>                                     prog_new->type);
+>> >>      if (ret)
+>> >
+>> > [Severity: Medium]
+>> > When attaching a bare BPF program, link is NULL. This passes
+>> > BPF_LINK_TYPE_UNSPEC (0) to bpf_mprog_tuple_relative() as the expected
+>> > anchor link type.
+>>
+>> Ah, so when attaching a bare prog with a relative link, having the
+>> BPF_F_LINK flag set means the relative id_or_fd is a link, not the
+>> object being attached. Sorry, that definitely confused me.
+>>
+>> >
+>> > In bpf_mprog_link() above, the validation check is:
+>> >
+>> >      if (type && link->type !=3D type) {
+>> >
+>> > Because type is 0, the validation is bypassed entirely.
+>> >
+>> > If a user passes a foreign link with a NULL prog (like struct_ops) as =
+an
+>> > anchor via id_or_fd, the positioning logic treats tuple->prog =3D=3D N=
+ULL as
+>> > 'no anchor provided' instead of rejecting the invalid anchor with -EIN=
+VAL.
+>> >
+>> > Does this allow wildcard insertions or deletions, and leave a benign d=
+ata
+>> > race when reading link->prog locklessly? Should the expected link type=
+ be
+>> > explicitly provided when attaching bare programs?
 >
-> In bpf_link_show_fdinfo and bpf_link_get_info_by_fd, link->prog is
-> accessed without holding any locks. If the prog is concurrently replaced
-> via bpf_link_update, the old prog can be freed, leading to a potential
-> UAF issue.
->
-> Before dereferencing the prog, both normal RCU and RCU Tasks Trace read
-> locks would normally be required, as BPF_LINK_TYPE_ITER supports both
-> non-sleepable and sleepable progs. However, as commit 57b23c0f612d
-> ("bpf: Retire rcu_trace_implies_rcu_gp()") clarifies, an RCU Tasks Trace
-> grace period implies an RCU grace period, so holding only
-> rcu_read_lock() is already sufficient.
->
-> Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active b=
-pf_cgroup_link")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> I also overlooked this. Make sense to pass the expected link type from
+> callers of bpf_mprog_attach().
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
++1 on this, and can we add a comment that ptype =3D=3D UNSPEC is because
+detach() uses this as a wildcard? UNSPEC is only valid in very few
+places in the subsystem.
 
-> ---
->  kernel/bpf/syscall.c | 21 +++++++++++++++++----
->  1 file changed, 17 insertions(+), 4 deletions(-)
 >
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 6db306d23b47..cad986807d53 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -3471,9 +3471,10 @@ static const char *bpf_link_type_strs[] =3D {
->  static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
->  {
->  	const struct bpf_link *link =3D filp->private_data;
-> -	const struct bpf_prog *prog =3D link->prog;
-> +	const struct bpf_prog *prog;
->  	enum bpf_link_type type =3D link->type;
->  	char prog_tag[sizeof(prog->tag) * 2 + 1] =3D { };
-> +	u32 prog_id;
-> =20
->  	if (type < ARRAY_SIZE(bpf_link_type_strs) && bpf_link_type_strs[type]) =
-{
->  		if (link->type =3D=3D BPF_LINK_TYPE_KPROBE_MULTI)
-> @@ -3490,13 +3491,20 @@ static void bpf_link_show_fdinfo(struct seq_file =
-*m, struct file *filp)
->  	}
->  	seq_printf(m, "link_id:\t%u\n", link->id);
-> =20
-> +	rcu_read_lock();
-> +	prog =3D READ_ONCE(link->prog);
->  	if (prog) {
->  		bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
-> +		prog_id =3D prog->aux->id;
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	if (prog) {
->  		seq_printf(m,
->  			   "prog_tag:\t%s\n"
->  			   "prog_id:\t%u\n",
->  			   prog_tag,
-> -			   prog->aux->id);
-> +			   prog_id);
->  	}
->  	if (link->ops->show_fdinfo)
->  		link->ops->show_fdinfo(link, m);
-> @@ -5535,6 +5543,7 @@ static int bpf_link_get_info_by_fd(struct file *fil=
-e,
->  {
->  	struct bpf_link_info __user *uinfo =3D u64_to_user_ptr(attr->info.info)=
-;
->  	struct bpf_link_info info;
-> +	const struct bpf_prog *prog;
->  	u32 info_len =3D attr->info.info_len;
->  	int err;
-> =20
-> @@ -5549,8 +5558,12 @@ static int bpf_link_get_info_by_fd(struct file *fi=
-le,
-> =20
->  	info.type =3D link->type;
->  	info.id =3D link->id;
-> -	if (link->prog)
-> -		info.prog_id =3D link->prog->aux->id;
-> +
-> +	rcu_read_lock();
-> +	prog =3D READ_ONCE(link->prog);
-> +	if (prog)
-> +		info.prog_id =3D prog->aux->id;
-> +	rcu_read_unlock();
-> =20
->  	if (link->ops->fill_link_info) {
->  		err =3D link->ops->fill_link_info(link, &info);
+>> >
+>> > [ ... ]
+>> >
+>> >> @@ -343,6 +345,7 @@ int bpf_mprog_detach(struct bpf_mprog_entry *entr=
+y,
+>> >>      if (!bpf_mprog_total(entry))
+>> >>              return -ENOENT;
+>> >>      ret =3D bpf_mprog_tuple_relative(&rtuple, id_or_fd, flags,
+>> >> +                                   link ? link->type : BPF_LINK_TYPE=
+_UNSPEC,
+>> >>                                     prog ? prog->type :
+>> >>                                     BPF_PROG_TYPE_UNSPEC);
+>> >>      if (ret)
+>> >
+>> > [Severity: Medium]
+>> > Similarly, when detaching a bare BPF program, link is NULL. This also
+>> > passes BPF_LINK_TYPE_UNSPEC as the expected link type.
+>> >
+>> > Does this bypass the new validation and allow wildcard deletions when =
+using
+>> > foreign anchors?
+>> >
+>>
+>>
 
