@@ -1,178 +1,175 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B7444E045
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 09:55:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B873BB680;
+	Tue, 21 Jul 2026 10:05:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784627745; cv=none; b=m9KZH+ImqIAL/xwjljnLAzpe5mMmZPhFmRKOTxBqgjN1ZwmJxq98a52s66XQQ3rqOFkghdo87AS/3JTc8jFEkrZFh2b+lSZFouparvP9QlB+siwlw4P2ZSZIGi1Qr1LqTNL41ZT160XQWMeG3HhbFu8sGcA8OOjMheEKhToZbFw=
+	t=1784628349; cv=none; b=MVmf8ZlWmYkiPWEzi0V1seOPRBIorgiiyW8N959KWZ+0G728r+Mg7//AnEQgQtwhqk1JEOClvRwnd4E/6GntgueKJpL0utXeWXoUaZs6KROsjXPcNH62RQw1+XLrUj99VqXjsEARkgTV8HnRykVKw9mL2/PELc5jZeFVgutYitQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784627745; c=relaxed/simple;
-	bh=Gi9KqnjpAyBuYlm0a4nPgu0S9Rw0bYXr90RdSf/zhm8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UPkT3rim9oeUXjDM/AqzeP/0Xlcbvav27Ht1RSuNOYhefpJYiLr6v/cC44DzodJprHSDUcalAggwx2aZKthpp7tjaTSib6SXMakZbMIlftYFXaqgOAZtqesurDf4/k3RsQ8nsTB+0qO5xeDlNU1SWtUe9LfRUTBVoeGgPan1eFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b8BZhxHd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784628349; c=relaxed/simple;
+	bh=NFhyskmRZPHldhrwwIzXa5ek/HEJ3Bg4EVvNXIK9xzU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GehXvojQuw1SGHOK6ByzmMPwwCQi852vnOKFrhVb+f0b3GzytL+WM0cRyZvSA4Oc0nSg6RaFwz0oEli+9BnuRtM+v/UtIrrsk7KNjbWtEQCeWAtOv6WTsboBAgojPVss68jzgFsg+yXLc/OfgqblW35J3UsxeapLcOK0u4U+T54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Id+EDO2F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b8BZhxHd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63A41F00A3A;
-	Tue, 21 Jul 2026 09:55:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Id+EDO2F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0BAA1F000E9;
+	Tue, 21 Jul 2026 10:05:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784627743;
-	bh=w8XIX1H1fk19bS580F1wtmzuDlHuW3gUe0CIUuFqRJ4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=b8BZhxHdCVQqVF/fzZP2pLxv7U1PChm0k2ZaRBd5p5Oz2Vl9PB4vr3aY86uN/Qv0p
-	 F0BLV6VQYBODqAUhyB9azhOlDWUd4Vc3fxNXb6ltpTZd2Wpny/J+AFGnk99SQ1Yunq
-	 medWa/XsD0fRmv+ri12MxT439khkVVETYVLYatdE7GVvsxPJJfx9TbIzZhlChGGU/A
-	 cD3Uf00D8Xcj7rpAJugqr3CuyjZpkKqwGm5+e3j6kyDf/tf7SDZzHCcyzXZ5TNRKCT
-	 15cbNP6Y0HOLiNeAc5pK0UA6jeEMMdNen0W0TrLOmmBv95ujbQi9vF6cZm1tYIk+vi
-	 VTQX8WX7TTjDw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix double free of name
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Feng Yang" <yangfeng59949@163.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260721094404.593127-1-yangfeng59949@163.com>
-References: <20260721094404.593127-1-yangfeng59949@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Jul 2026 09:55:42 +0000
-Message-Id: <20260721095543.C63A41F00A3A@smtp.kernel.org>
+	s=k20260515; t=1784628348;
+	bh=eBBmPaMF2me330caw3najNlvU5OLEQJLv5nTlPJ9018=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Id+EDO2FTbKNxAswXaewsqA6pVfNpMaxyh1obnhv946ZrN66ZCIdW2hq24TrlZsT7
+	 vALVtQARYTsxs3gjsr6xCBXEYRFMN3MCZ4abvNwearAkA2VjfDwB2sIsXD0Gxlyzs6
+	 JjCkwWiBp8mHNJKHO3/bV9oAjKCUr554unjA89EHGa1pQfQ05JSFvNdMUEERbw9dOB
+	 ur4JetVhM9o1yubKDLZ4zHysRzzJoHBD+6L8cHvbZkozbN9EsPTxd/MApLwL7rOdJJ
+	 +8Bm99CHOfOeDwMBQRkZs/U0pe/05k23eSpX+ym8kGb74Ux6Fn2eK/+VLzNAoiXgQB
+	 RhDAtqWo/gPKA==
+Date: Tue, 21 Jul 2026 12:05:45 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Matt Fleming <matt@readmodwrite.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
+	bpf@vger.kernel.org, netdev@vger.kernel.org, stable@vger.kernel.org,
+	kernel-team@cloudflare.com, Matt Fleming <mfleming@cloudflare.com>
+Subject: Re: [PATCH bpf v2] veth: convert frag_list skbs before running XDP
+Message-ID: <al9EeXMW9Mi-YDZZ@lore-desk>
+References: <20260720140545.461747-1-matt@readmodwrite.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="VfY0+0HuWFiEeolm"
+Content-Disposition: inline
+In-Reply-To: <20260720140545.461747-1-matt@readmodwrite.com>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+--VfY0+0HuWFiEeolm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Pre-existing issues:
-- [Medium] Missing NULL check for `malloc()` return value when allocating `=
-subtest_states` array in `dispatch_thread_send_subtests()`.
-- [Medium] Early return in `dispatch_thread_send_subtests()` leaves array e=
-lements uninitialized, leading to memory corruption when freed.
-- [Medium] `realloc()` failure in `test__start_subtest_with_desc` causes a =
-memory leak and subsequent NULL pointer dereference.
-- [Medium] Missing checks for NULL subtest name in `test__start_subtest_wit=
-h_desc()` lead to a segfault via `strscpy()`.
---
+> From: Matt Fleming <mfleming@cloudflare.com>
+>=20
+> A frag_list skb can reach veth with data_len set but nr_frags zero.
+> veth_convert_skb_to_xdp_buff() only converts skbs that are shared,
+> locked, have frags[], or do not have enough headroom. It later uses
+> skb_is_nonlinear() to decide whether to set XDP_FLAGS_HAS_FRAGS and
+> xdp_frags_size.
+>=20
+> That exposes frag_list data to XDP as if it were stored in frags[], but
+> frags[] is empty. AF_XDP copy mode can then trust the bogus XDP fragment
+> metadata, walk an empty fragment entry, and crash in memcpy() from
+> __xsk_rcv().
+>=20
+> Route non-linear skbs through skb_pp_cow_data() before exposing them to
+> XDP, and only advertise XDP frags when the resulting skb has frags[].
+> skb_copy_bits() already handles frag_list input, and skb_pp_cow_data()
+> builds frags[] output with skb_add_rx_frag(), which is the
+> representation XDP multi-buffer expects.
+>=20
+> Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accept no=
+n-linear skb")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Matt Fleming <mfleming@cloudflare.com>
 
---- Patch [1]: [PATCH bpf-next] selftests/bpf: Fix double free of name ---
-commit 297db6a341af110e628f3b4e73b2087ba183e417
-Author: Feng Yang <yangfeng@kylinos.cn>
-selftests/bpf: Fix double free of name
+Acked-by: Lorenzo Bianconi <lorenzo@kernel.org>
 
-This commit removes an unnecessary free of subtest_state->name in
-worker_main_send_subtests to fix a double-free issue, since it is
-already handled by free_subtest_state.
-
-> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
-ftests/bpf/test_progs.c
-> index 7ba82974ee784..1d3caf9969717 100644
-> --- a/tools/testing/selftests/bpf/test_progs.c
-> +++ b/tools/testing/selftests/bpf/test_progs.c
-> @@ -1886,7 +1886,6 @@ static int worker_main_send_subtests(int sock, stru=
-ct test_state *state)
->  			worker_main_send_log(sock, subtest_state->log_buf, subtest_state->log=
-_cnt);
+> ---
+> Changes in v2:
+> - Use skb_is_nonlinear() in veth_convert_skb_to_xdp_buff().
+> - Move the skb_pp_cow_data() comment into kerneldoc.
+>=20
+>  drivers/net/veth.c |  4 ++--
+>  net/core/skbuff.c  | 16 ++++++++++------
+>  2 files changed, 12 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 1c5142149175..00e34afd858e 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -756,7 +756,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_r=
+q *rq,
+>  	u32 frame_sz;
 > =20
->  		free_subtest_state(subtest_state);
-> -		free(subtest_state->name);
->  	}
+>  	if (skb_shared(skb) || skb_head_is_locked(skb) ||
+> -	    skb_shinfo(skb)->nr_frags ||
+> +	    skb_is_nonlinear(skb) ||
+>  	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
+>  		if (skb_pp_cow_data(rq->page_pool, pskb, XDP_PACKET_HEADROOM))
+>  			goto drop;
+> @@ -771,7 +771,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_r=
+q *rq,
+>  	xdp_prepare_buff(xdp, skb->head, skb_headroom(skb),
+>  			 skb_headlen(skb), true);
 > =20
->  out:
+> -	if (skb_is_nonlinear(skb)) {
+> +	if (skb_shinfo(skb)->nr_frags) {
+>  		skb_shinfo(skb)->xdp_frags_size =3D skb->data_len;
+>  		xdp_buff_set_frags_flag(xdp);
+>  	} else {
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 18dabb4e9cfa..66f57131633a 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -927,6 +927,16 @@ static void skb_clone_fraglist(struct sk_buff *skb)
+>  		skb_get(list);
+>  }
+> =20
+> +/**
+> + * skb_pp_cow_data() - copy skb data into page-pool backed storage
+> + * @pool: page pool to allocate from
+> + * @pskb: pointer to skb pointer, replaced with the copied skb on success
+> + * @headroom: headroom to reserve in the copied skb
+> + *
+> + * skb_copy_bits() handles both frags[] and frag_list input. If the copi=
+ed
+> + * skb remains non-linear, it uses frags[], which is the representation =
+used
+> + * by XDP multi-buffer.
+> + */
+>  int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
+>  		    unsigned int headroom)
+>  {
+> @@ -936,12 +946,6 @@ int skb_pp_cow_data(struct page_pool *pool, struct s=
+k_buff **pskb,
+>  	int err, i, head_off;
+>  	void *data;
+> =20
+> -	/* XDP does not support fraglist so we need to linearize
+> -	 * the skb.
+> -	 */
+> -	if (skb_has_frag_list(skb))
+> -		return -EOPNOTSUPP;
+> -
+>  	max_head_size =3D SKB_WITH_OVERHEAD(PAGE_SIZE - headroom);
+>  	if (skb->len > max_head_size + MAX_SKB_FRAGS * PAGE_SIZE)
+>  		return -ENOMEM;
+> --=20
+> 2.43.0
+>=20
 
-This is a pre-existing issue, but looking at dispatch_thread_send_subtests,
-there doesn't seem to be a NULL check after allocating subtest_states:
+--VfY0+0HuWFiEeolm
+Content-Type: application/pgp-signature; name=signature.asc
 
-tools/testing/selftests/bpf/test_progs.c:dispatch_thread_send_subtests() {
-    ...
-    state->subtest_states =3D malloc(subtest_num * sizeof(*subtest_state));
+-----BEGIN PGP SIGNATURE-----
 
-    for (int i =3D 0; i < subtest_num; i++) {
-        subtest_state =3D &state->subtest_states[i];
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCal9EeQAKCRA6cBh0uS2t
+rD64APwOVWC3bpQjfLEbGW15cSNK2rrmlYql0WRyioHpf0VPAwD+PQ8cyFnSbszt
+pjeKVOPsqPoDKwuVoBVLeR+MUy+GiAk=
+=Nvpn
+-----END PGP SIGNATURE-----
 
-        memset(subtest_state, 0, sizeof(*subtest_state));
-    ...
-}
-
-[Severity: Medium]
-If malloc fails, could this cause a segmentation fault when the loop attemp=
-ts
-to memset the address relative to NULL?
-
-Additionally, if read_prog_test_msg returns early:
-
-tools/testing/selftests/bpf/test_progs.c:dispatch_thread_send_subtests() {
-    ...
-        memset(subtest_state, 0, sizeof(*subtest_state));
-
-        if (read_prog_test_msg(sock_fd, &msg, MSG_SUBTEST_DONE))
-            return 1;
-    ...
-}
-
-[Severity: Medium]
-This is a pre-existing issue, but since the array was allocated with malloc
-rather than calloc, does this early return leave the remaining array elemen=
-ts
-uninitialized? If so, when free_test_states iterates up to subtest_num and
-calls free on state->name or state->log_buf, could it cause memory corrupti=
-on
-by freeing garbage pointers?
-
-This isn't a bug introduced by this patch, but looking at
-test__start_subtest_with_desc, the realloc pattern appears to overwrite
-the pointer on failure:
-
-tools/testing/selftests/bpf/test_progs.c:test__start_subtest_with_desc() {
-    ...
-    state->subtest_states =3D
-        realloc(state->subtest_states,
-            state->subtest_num * sub_state_size);
-    if (!state->subtest_states) {
-        fprintf(stderr, "Not enough memory to allocate subtest result\n");
-        return false;
-    }
-    ...
-}
-
-[Severity: Medium]
-If realloc fails, does this overwrite the only pointer to the allocated
-memory, causing a leak? Furthermore, since state->subtest_num was already
-incremented without being rolled back, could the loop in
-worker_main_send_subtests later dereference the NULL array?
-
-This is a pre-existing issue, but if strdup fails or an empty name is
-provided in test__start_subtest_with_desc, it returns early:
-
-tools/testing/selftests/bpf/test_progs.c:test__start_subtest_with_desc() {
-    ...
-    subtest_state->name =3D strdup(subtest_display_name);
-    if (!subtest_state->name) {
-        fprintf(env.stderr_saved,
-            "Subtest #%d: failed to copy subtest name!\n",
-            state->subtest_num);
-        return false;
-    }
-    ...
-}
-
-[Severity: Medium]
-Because state->subtest_num is already incremented before this early return,
-the subtest state is left partially initialized with name as NULL. When
-worker_main_send_subtests later unconditionally copies the name:
-
-tools/testing/selftests/bpf/test_progs.c:worker_main_send_subtests() {
-    ...
-        strscpy(msg.subtest_done.name, subtest_state->name, MAX_SUBTEST_NAM=
-E);
-    ...
-}
-
-Could this result in a NULL pointer dereference, as strscpy does not
-validate the source pointer?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260721094404.5931=
-27-1-yangfeng59949@163.com?part=3D1
+--VfY0+0HuWFiEeolm--
