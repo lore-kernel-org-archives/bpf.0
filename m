@@ -1,350 +1,132 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05A0434408
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 07:18:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC75F433BDC
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 07:18:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784618282; cv=none; b=jxylaWBkKz+W3C1vxWARKCsT+Q4dJSqLVFY74O2SMKspqsbyqkb68QZwiA7ehL7GUF9ghASKJ/r3Ckxm/9sqjgeK4ugqdRv983ZHvScLcBBdcVXN0dhE/LVzvkMZ2iu7DncNaX4pium71ml/OdXd7x686GYOxMlwPL2sbQuUiyE=
+	t=1784618282; cv=none; b=da/t4DS/KmEVkp2kTcCuIBmir81olCGHyu4sBY9AaGOluWBPjSiomdI/XzAzCAPUvXpgoEwYhvIPOClYtUNmuMZIr3cKRkEx5zeDYSffuZmOXDsNioKngfqX/HUG5BRhXXDh3M2NVSTNF8tYTGMiaRlB9lXJQpvzo4k/10HC7F8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784618282; c=relaxed/simple;
-	bh=Cb3HUPw0UNMpGQhebFQel2kvhr8V7JgrP6gFe7UhrEw=;
+	bh=v4Sn1kt0qR/WulWgH4poDZWf7DK5PK+xd8XcZjsR/2A=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Nlj5IuyFNAe+WQ+u4lCpJMw1b2XOwIaeWT42DG15y2fuiYF+vHmthKe1BqXgGY2FFSJzFrQLLEULUqKOIryzXmd7TqwX4ROvXeppIcSXtzkud5RJ+yRrLr/ww8s+m02zCnxhdITV+KzL+DZn8p7Y4/53dTK7bvLhXTkNCkgTs60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WYeAnUkM; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=LpapkJpq6id+MaFDnwb9HvqkIErP6ROuNAIevN2THWdaw6OEja8E47/fA8yhLXnMoV1dDJfjFY22uPLXZAYH7g5bh8QbQj/prBE0qACEdt3nhjiv6yLx9RP6uBqljok9515RY0Sv1qznYqo7lxQJw5qtLIPzZkZetoJjr6m1fD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMK+ZBe3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WYeAnUkM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CFE91F00A3D;
-	Tue, 21 Jul 2026 07:18:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMK+ZBe3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 527C91F00A3F;
+	Tue, 21 Jul 2026 07:18:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784618280;
-	bh=qKeT3kgS8bqc/M0HXp/jRNFK4uxiHEl2Szl+Hx3XJtY=;
+	s=k20260515; t=1784618281;
+	bh=68H8YU4zQ0YE+FK1pWzcRZvWOy38cxrSdwGp4TkHarI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WYeAnUkMIBa1wUgJHPQpHwdlrdj/5wVTtyxb4FaQn0mgXYDvCDGUuJEIPieD+ktwa
-	 9RKDnWUAu1uy2udh80L21QNDWa6jfISCypgCTF+omY9pElK4MkR/fUG2670rGqykI3
-	 UDI44xEXGziJYncnwhHQ+Z4TmtELbUgs/z3zGeJFy1yoAQy9beqeM4CoDmFnV4XhDr
-	 JOlPM9MPDNWhcl3ig+IxXM7JKrdIplGfhWR4DtoPBX72WwdQM4+H3dqGnDF3fqbc8V
-	 bV6Yz95evQjB5nZ/O5ShoD01Iw6ZuHn1s0nBqcnxoyNEu1/N959FKoEA6H/w/U/6Lc
-	 UHeymO2xENzEw==
+	b=nMK+ZBe3quTJ5O5ZEmomiGFJYRhE2X0+NEXFsS6PuvIGE7CIaj3COrObjG/bflSUn
+	 h4YBMXxIhx2m2qg4sXlopcj4S+qddWictjXOqWfExDZ8GkRe0oT6TkFICp89xKUc/m
+	 OGPQUyhKeF2hbxH5ykmjZCps4xm4TNxd2bwoWsCtXiZS3mFLSq3YOBcDriIhU5Oyio
+	 Vsq9Vx1gz1Xfnk7/WU+NzLc2Hy6guuxTnKnb4joAxfPDYyskRXqlP/kUQm7hDLq6lh
+	 Bghcs9Sw/ooKMNBWPGfRNZJrb9rZ1SLDa4LTNE8/1ip6Sz7merueXbz345REGorJVE
+	 rx/SHGeN9LIqA==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH net-next 11/13] bnxt_en: add knod XDP offload
- support
+Subject: Re: [RFC PATCH net-next 12/13] selftests: drivers/net: add knod
+ tests
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Taehee Yoo" <ap420073@gmail.com>
-Cc: dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, media-ci@linuxtv.org
-In-Reply-To: <20260719175857.4071636-12-ap420073@gmail.com>
+Cc: bpf@vger.kernel.org, dri-devel@lists.freedesktop.org, media-ci@linuxtv.org
+In-Reply-To: <20260719175857.4071636-13-ap420073@gmail.com>
 References: <20260719175857.4071636-1-ap420073@gmail.com>
- <20260719175857.4071636-12-ap420073@gmail.com>
+ <20260719175857.4071636-13-ap420073@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Tue, 21 Jul 2026 07:18:00 +0000
-Message-Id: <20260721071800.8CFE91F00A3D@smtp.kernel.org>
+Message-Id: <20260721071801.527C91F00A3F@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 10 potential issue=
-(s) to consider:
-- [High] Memory leaks in `bnxt_rx_pkt` when `BNXT_RX_OFFLOAD_MODE` is activ=
-e.
-- [High] Incomplete error rollback during offload attach leads to NULL poin=
-ter dereferences.
-- [High] Invalid free of knod core-owned memory in `bnxt_knod_uninit()`.
-- [High] Detaching the offload accelerator silently corrupts standard XDP s=
-tate.
-- [High] Type confusion via unconditional cast of `netmem_ref` to `net_iov`.
-- [High] Prematurely setting `bp->knodev` to NULL during detach triggers mu=
-ltiple NULL pointer dereferences.
-- [High] Ignoring the return value of `bnxt_knod_init()` causes a NULL poin=
-ter dereference on unload.
-- [High] Head-of-line blocking and packet stalls in `bnxt_rx_offload_act_ha=
-ndler` due to restrictive limit based on TX availability.
-- [High] Unbalanced lifecycle operations for `knod_dev_start` leading to op=
-erational failure or resource leaks.
-- [High] Incorrect queue bounds check in `bnxt_rx_offload_act_handler()` le=
-ads to out-of-bounds access and stalls.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] The tests hardcode relative paths to in-tree pyynl scripts and Y=
+AML specs, which breaks when tests are run from an installed directory.
+- [Medium] The map lookup script uses the GNU awk extension strtonum(), cau=
+sing the test to unconditionally fail on systems using non-GNU awk (like ma=
+wk).
 --
 
---- Patch [11]: [RFC PATCH net-next 11/13] bnxt_en: add knod XDP offload su=
-pport ---
-commit bc105761ac52d8c362d8a3b4da5f278514f84ca4
+--- Patch [12]: [RFC PATCH net-next 12/13] selftests: drivers/net: add knod=
+ tests ---
+commit 8c1df38ed71ba173e2fb3bc36bc8224d06cad0df
 Author: Taehee Yoo <ap420073@gmail.com>
 
-bnxt_en: add knod XDP offload support
+selftests: drivers/net: add knod tests
 
-This commit introduces knod XDP offload support for the bnxt_en driver,
-allowing it to register as a knod NIC. It sets up the transmission of
-accelerator verdicts through the XDP TX ring and feeds received packets
-to the accelerator over the per-queue SPSC ring.
+Add attach/detach and XDP offload selftests for knod, exercising the
+genetlink control plane and the BPF data path over a knod-capable NIC.
 
-> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethe=
-rnet/broadcom/bnxt/bnxt.c
-> index 7513618793daf..6ddf4bafc3d47 100644
-> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> diff --git a/tools/testing/selftests/drivers/net/knod/lib.sh b/tools/test=
+ing/selftests/drivers/net/knod/lib.sh
+> new file mode 100755
+> index 0000000000000..d0d9b03f109dc
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/knod/lib.sh
+> @@ -0,0 +1,181 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# lib.sh - KNOD XDP offload test utilities
+> +#
+> +# The KNOD control plane is the "knod" generic-netlink family; it is dri=
+ven
+> +# here through the in-tree ynl CLI (tools/net/ynl/pyynl/cli.py) so the t=
+ests
+> +# need no dedicated user-space tool.
+> +
+> +KSRC=3D$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../../../.." && pwd)
+> +readonly KNOD_YNL=3D"$KSRC/tools/net/ynl/pyynl/cli.py"
+> +readonly KNOD_SPEC=3D"$KSRC/Documentation/netlink/specs/knod.yaml"
+
+[Severity: Medium]
+Will this hardcoded relative path cause the tests to fail when run from an
+installed directory?
+
+When tests are installed (e.g., via make install) and run out-of-tree, these
+paths to cli.py and the YAML specs will likely be invalid since they are not
+copied to the install directory by default.
+
 [ ... ]
-> @@ -2249,6 +2303,36 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnx=
-t_cp_ring_info *cpr,
->  	len =3D flags >> RX_CMP_LEN_SHIFT;
->  	dma_addr =3D rx_buf->mapping;
-> =20
-> +	if (BNXT_RX_OFFLOAD_MODE(bp)) {
-> +		if (bnxt_alloc_rx_off_netmem(bp, rxr, rxr->rx_prod,
-> +					     GFP_ATOMIC)) {
-> +			bnxt_reuse_rx_data(rxr, cons, data);
-> +			bnapi->cp_ring.sw_stats->rx.rx_buf_errors++;
-> +		} else {
-> +			struct knod_work_priv *wpriv;
-> +			struct spsc_bd *bd;
+
+> +knod_map_lookup_u64() {
+> +	local map_id=3D$1
+> +	local key=3D$2
+> +	local hex
 > +
-> +			if (bnapi->index >=3D KNOD_SPSC_MAX) {
-> +				rc =3D 1;
-> +				goto next_rx;
-
-[Severity: High]
-Does this path leak the current data buffer? It appears to jump to
-next_rx without freeing or reusing data.
-
-> +			}
+> +	hex=3D$(bpftool map lookup id "$map_id" \
+> +	      key $key 0 0 0 2>/dev/null | \
+> +	      grep -o 'value:.*' | sed 's/value: //')
+> +	if [ -z "$hex" ]; then
+> +		echo 0
+> +		return
+> +	fi
 > +
-> +			wpriv =3D &bp->knodev->wpriv[bnapi->index];
-> +			if (spsc_produce(&wpriv->spsc_bds, (void **)&bd)) {
-> +				bnxt_reuse_rx_data(rxr, cons, data);
+> +	printf '%d' "$(echo "$hex" | awk '{
+> +		v =3D 0;
+> +		for (i =3D 8; i >=3D 1; i--)
+> +			v =3D v * 256 + strtonum("0x" $i);
+> +		printf "0x%x", v;
+> +	}')"
 
-[Severity: High]
-If the accelerator SPSC ring is full and spsc_produce() fails, doesn't
-calling bnxt_reuse_rx_data() here permanently leak the newly allocated
-replacement buffer by overwriting it with the old data?
+[Severity: Medium]
+Does the use of the strtonum() function break this script on systems using
+non-GNU awk?=20
 
-> +			} else {
-> +				bd->netmem =3D (netmem_ref)data;
-> +				bd->len =3D len;
-> +				bd->off =3D bp->rx_offset;
-> +				bd->page_idx =3D net_iov_binding_idx(
-> +					netmem_to_net_iov((netmem_ref)data));
+The strtonum() function is a gawk-specific extension. On systems where the
+default awk is mawk or BusyBox awk, this may fail with an undefined function
+error, causing the extracted map value to evaluate to 0 and the test to
+falsely fail.
 
-[Severity: High]
-Is it safe to unconditionally cast data to a net_iov here? The RX page pool
-allows standard pages, so if a standard page is used, could this cause type
-confusion and out-of-bounds reads?
-
-> +				spsc_produce_commit(&wpriv->spsc_bds);
-> +			}
-> +		}
-> +		rc =3D 1;
-> +		goto next_rx;
-> +	}
-> +
->  	if (bnxt_xdp_attached(bp, rxr)) {
-[ ... ]
-> @@ -13356,6 +13489,7 @@ static int bnxt_open(struct net_device *dev)
->  						   BNXT_RESTART_ULP_SP_EVENT);
->  		}
->  	}
-> +	bnxt_rx_offload_start(bp);
-
-[Severity: High]
-Is it intended to unconditionally call bnxt_rx_offload_start() here? If the
-preceding __bnxt_open_nic() fails, this will start the accelerator while
-the NIC remains down, which could leak active workers.
-
-> =20
->  	return rc;
->  }
-[ ... ]
-> @@ -17198,6 +17336,7 @@ static int bnxt_init_one(struct pci_dev *pdev, co=
-nst struct pci_device_id *ent)
->  	bnxt_print_device_info(bp);
-> =20
->  	pci_save_state(pdev);
-> +	bnxt_knod_init(bp);
-
-[Severity: High]
-Could this leave the driver in a corrupted state if memory allocation fails?
-bnxt_knod_init() can return -ENOMEM, but the error is ignored here. If it
-fails, bp->knetdev remains NULL, which might lead to a NULL pointer
-dereference during module unload in bnxt_knod_uninit().
-
-> =20
->  	return 0;
->  init_err_cleanup:
-> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/=
-ethernet/broadcom/bnxt/bnxt_xdp.c
-> index 9e5009be8e989..a264a2cf8302a 100644
-> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-[ ... ]
-> @@ -441,19 +446,123 @@ static int bnxt_xdp_set(struct bnxt *bp, struct bp=
-f_prog *prog)
->  	return 0;
->  }
-> =20
-> +
-> +static int bnxt_xdp_offload_set(struct bnxt *bp, int enable)
-> +{
-[ ... ]
-> +	if (enable) {
-> +		bnxt_set_rx_skb_mode(bp, BNXT_FLAG_RX_OFFLOAD_MODE);
-> +		xdp_features_set_redirect_target_locked(dev, true);
-> +	} else {
-> +		xdp_features_clear_redirect_target_locked(dev);
-> +		bnxt_set_rx_skb_mode(bp, false);
-
-[Severity: High]
-Does detaching the offload accelerator silently corrupt standard XDP state?
-If a standard XDP program is still active (bp->xdp_prog), explicitly cleari=
-ng
-the BNXT_FLAG_RX_PAGE_MODE flag here without restoring the correct settings
-for the active standard XDP program could cause packet processing failures.
-
-> +	}
-> +	bp->tx_nr_rings_xdp =3D tx_xdp;
-> +	bp->tx_nr_rings =3D bp->tx_nr_rings_per_tc * tc + tx_xdp;
-> +	tx_cp =3D bnxt_num_tx_to_cp(bp, bp->tx_nr_rings);
-> +	bp->cp_nr_rings =3D max_t(int, tx_cp, bp->rx_nr_rings);
-> +	bnxt_set_tpa_flags(bp);
-> +	bnxt_set_ring_params(bp);
-> +
-> +	if (netif_running(dev))
-> +		return bnxt_open_nic(bp, true, false);
-
-[Severity: High]
-When attaching offload to an already-running interface, is the accelerator
-ever started? This restarts the NIC via bnxt_open_nic(), but it seems to
-omit a call to bnxt_rx_offload_start(), which might leave the accelerator
-unable to process packets.
-
-> +
-> +	return 0;
-> +}
-[ ... ]
-> +static int bnxt_rx_offload_xdp_attach(struct knod_dev *knodev)
-> +{
-> +	struct bnxt *bp =3D netdev_priv(knodev->netdev);
-> +	int rc;
-> +
-> +	WRITE_ONCE(bp->knodev, knodev);
-> +	rc =3D bnxt_xdp_offload_set(bp, true);
-> +	if (rc)
-> +		WRITE_ONCE(bp->knodev, NULL);
-
-[Severity: High]
-Could this error handling path lead to a NULL pointer dereference? If
-bnxt_xdp_offload_set() sets BNXT_FLAG_RX_OFFLOAD_MODE but subsequently
-fails, bp->knodev is set back to NULL without clearing the offload flag. A
-later stats read or interface up might see the flag and dereference the
-NULL knodev.
-
-> +
-> +	return rc;
-> +}
-> +
-> +static int bnxt_rx_offload_xdp_detach(struct knod_dev *knodev)
-> +{
-> +	struct bnxt *bp =3D netdev_priv(knodev->netdev);
-> +
-> +	WRITE_ONCE(bp->knodev, NULL);
-> +	bnxt_xdp_offload_set(bp, false);
-
-[Severity: High]
-Is it safe to set bp->knodev to NULL before shutting down the interface?
-Since BNXT_RX_OFFLOAD_MODE is still active until bnxt_xdp_offload_set()
-finishes, concurrent NAPI polling in bnxt_rx_pkt() or teardown paths like
-bnxt_rx_offload_clear_napi() could observe the flag and dereference the NULL
-pointer.
-
-> +
-> +	return 0;
-> +}
-[ ... ]
-> +int bnxt_rx_offload_act_handler(struct bnxt_napi *bnapi, int budget)
-> +{
-> +	struct bnxt_tx_ring_info *txr =3D bnapi->tx_ring[0];
-> +	struct bnxt_rx_ring_info *rxr =3D bnapi->rx_ring;
-> +	struct spsc_bd *bds[NAPI_POLL_WEIGHT];
-> +	u32 tx_avail, cnt, i, nxmit =3D 0;
-> +	struct knod_dev *knodev;
-> +	struct knod_work_priv *wpriv;
-> +	struct napi_struct *napi;
-> +	struct bnxt *bp =3D bnapi->bp;
-> +	dma_addr_t mapping;
-> +
-> +	knodev =3D bp->knodev;
-> +	if (!knodev)
-> +		return 0;
-> +
-> +	if (bnapi->index >=3D bp->dev->real_num_tx_queues) {
-
-[Severity: High]
-Should this bounds check compare against KNOD_SPSC_MAX instead of the number
-of TX queues? If there are more RX queues than TX queues, valid RX NAPI
-instances might return early and abandon packets. Conversely, if there are
-many TX queues, this could fail to properly bound accesses to the wpriv arr=
-ay.
-
-> +		this_cpu_inc(knodev->stats->tx_dropped);
-> +		return 0;
-> +	}
-> +
-> +	wpriv =3D &knodev->wpriv[bnapi->index];
-> +	napi =3D READ_ONCE(wpriv->napi);
-> +	if (!napi)
-> +		return 0;
-> +
-> +	tx_avail =3D bnxt_tx_avail(bp, txr);
-> +	cnt =3D min_t(u32, NAPI_POLL_WEIGHT, tx_avail);
-> +	cnt =3D min_t(u32, cnt, budget);
-> +	if (!cnt)
-> +		return 0;
-
-[Severity: High]
-Could this early return cause head-of-line blocking and permanent packet
-stalls? If the TX ring is full (tx_avail =3D=3D 0), cnt becomes 0. Returning
-immediately skips knod_dev_xdp_drain_pass(), which could trap packets meant
-for the host stack indefinitely.
-
-> +
-> +	spsc_release(&wpriv->spsc_bds, (void **)bds, cnt, &cnt);
-> +	if (!cnt)
-> +		return 0;
-> +
-> +	for (i =3D 0; i < cnt; i++) {
-> +		switch (bds[i]->act) {
-> +		case KNOD_ACT_INFLIGHT:
-> +		case KNOD_IPSEC_INFLIGHT:
-> +			goto stop_release;
-> +		case XDP_TX:
-> +			mapping =3D netmem_to_net_iov(bds[i]->netmem)->desc.dma_addr +
-> +				  bds[i]->off;
-
-[Severity: High]
-Can this path be reached when netmem is a standard page rather than a DMABU=
-F?
-If so, using netmem_to_net_iov() without verifying netmem_is_net_iov() could
-misinterpret standard page structure fields as DMA addresses, potentially
-causing memory corruption.
-
-> +			__bnxt_xmit_netmem(bp, txr, mapping, bds[i]->len,
-> +					   bds[i]->netmem);
-[ ... ]
-> +void bnxt_knod_uninit(struct bnxt *bp)
-> +{
-> +	knod_netdev_unregister(bp->knetdev);
-> +	kfree(bp->knetdev);
-> +	bp->knetdev =3D NULL;
-> +	kfree(bp->knodev);
-
-[Severity: High]
-Is it correct to call kfree(bp->knodev) here? bp->knodev points to a
-struct knod_dev allocated and managed by the knod core framework, so freeing
-it from the driver could result in heap corruption or a use-after-free
-during device unbind.
-
-> +	WRITE_ONCE(bp->knodev, NULL);
 > +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260719175857.4071=
-636-1-ap420073@gmail.com?part=3D11
+636-1-ap420073@gmail.com?part=3D12
