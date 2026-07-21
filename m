@@ -1,156 +1,109 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB4F3C6A41
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 09:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ED40446071;
+	Tue, 21 Jul 2026 09:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784625260; cv=none; b=F+2QSkJN9w6zBAkiRK1HRJ1UgQ0NUHpBF1lScVEbwdaYum7u+pYs9JQKdGm0QEYVmyFXsIdZ41z2h8JwrYJsEw4D5cD3ff2gvDCIT24nolmjnxNfmjkUnWnNNUwMITOEyqNPhF4SKxjwuCjO+1XmoGrXH/xzfZMmqfXrjU95VFU=
+	t=1784626816; cv=none; b=JIF5yzI5iVTE6erXhf9as6f7ynxcfApQWj1AaXIYISmPrqyI/gqWHxov92Jvbb5EFHtpOD3JNdal46Gw/zmyiVAa9dicOWGtwO05Yjf7rn8ZfEC5uhuqQ7RqUlBdwDB4d1F60QpoxO8yUy0/bIWXHCFmjlB5zAUCHf1wL4KGrOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784625260; c=relaxed/simple;
-	bh=90LezclH39XFxSapEqzsa/UAxXIZmYzFAObAkt2Edf4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eB8fTDp2x7IxltUjPNuhueQVby3nmFBVeioSiXTFoyPyo34c66KsqUy5cBzgdhoHf5yv+YimmEkbUj6JYyHB4gVFCf0737QF7kCqkXrhm4/xxx82bsKhvsyf+nVs+1Vgttfpu+GISuqAygxG307wU5M/lwoatfG29YB+oJ+B3Yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h4BWY6s5rzKHMKl
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 17:13:29 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id C4D4D4056D
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 17:14:11 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgC3nSljOF9qNWwTCA--.25971S2;
-	Tue, 21 Jul 2026 17:14:11 +0800 (CST)
-Message-ID: <9ca18f8e-73c1-4ced-a0bc-f515329b57eb@huaweicloud.com>
-Date: Tue, 21 Jul 2026 17:14:11 +0800
+	s=arc-20240116; t=1784626816; c=relaxed/simple;
+	bh=DNg9cx5D/bFI7aXIgJiqqnb5Rckme3lTmPc4cu3HGnU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PDyCMpxVGGZiBWXlWJm7u6zw4wsNMevlxbS2oVUYC8pcG1VCChNwu6UAQy6PWbKAqJADwNzVkTUYC9O5OC9FdxZVGGcszPNCXpusFcM7M2L7oVwcTe+8B3pd17OIxL4oq9o1/ZapxeKfb5Rt+SCx4bYBKSOZI2WXxdXVaCEOffQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=o5flln19; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="o5flln19"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=Zf3+a
+	t1KQeQ0JWCC0ZIpNZdTxi+bBMzHz5pcVRwf5fg=; b=o5flln19ExOH3aHYIJDoE
+	40+34hgdHdfpg23BsUA8Al3iJBRPHd4yRcTSQ8kHXtkdNevVtq0J/MtQfxPW3klD
+	W0IaS8bYxDFxlk0uOGTnKBbLDqnAgqhGHT3IlpPnnTb3AH0zd2p0t+EPKMzkzvpL
+	OhS6UOSqJvJmtSSTNohiAY=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web2 (Coremail) with SMTP id yQQGZQB3dbdfPl9q4NAnAA--.61424S2;
+	Tue, 21 Jul 2026 17:39:50 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [bpf-next v2 0/2] bpf: Preserve stack frame number for commuted arithmetic
+Date: Tue, 21 Jul 2026 09:39:41 +0000
+Message-Id: <cover.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v5 1/4] bpf: Fix potential UAF in
- bpf_netns_link_update_prog
-Content-Language: en-US
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260721041048.1394085-1-pulehui@huaweicloud.com>
- <20260721041048.1394085-2-pulehui@huaweicloud.com>
- <20260721042823.9901A1F000E9@smtp.kernel.org>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <20260721042823.9901A1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgC3nSljOF9qNWwTCA--.25971S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuryDZw4rtFykKr1kKw4xCrg_yoW5ZF13pa
-	y3JF1xAw4j9rsrur18ZF1kuFy8XF18WF1jkr1DZF1kAFyavFWFgFyUWrWfur9Y9F4kGa1I
-	vF1qqr1rt345ZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2
-	KfnxnUUI43ZEXa7IU1wL05UUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:yQQGZQB3dbdfPl9q4NAnAA--.61424S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr17trWfZF4fury3GF47XFb_yoW8XryfpF
+	Z29asaqa1kAr1xK3y3AF47ZFyrZFs29345Cr18tw17Zw1jyryjqrW7KFWUXrZ5CFyxJw1F
+	vF15X3s5uayUA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+	0_GcWlnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67
+	AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjWxR3UU
+	UUU==
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+
+The verifier uses reg->frameno to distinguish stack pointers that have
+the same offset but refer to different call frames. The scalar += pointer
+path copies pointer type and id to the destination register, but it also
+needs to preserve pointer provenance fields such as the stack frame
+number.
+
+Preserve the full pointer register state for commuted stack pointer
+arithmetic and add a verifier regression test where a callee derives its
+frame pointer through scalar += fp before overwriting and reloading the
+same stack slot.
+
+Changes in v2:
+- Preserve the full pointer register state instead of copying only
+  selected fields, as suggested by Eduard.
+- Use a temporary scalar offset register for the commuted scalar += fp
+  case, as suggested by Eduard.
+- Add a Fixes tag to the verifier change.
+- Drop CAP_SYS_ADMIN handling from the new verifier_basic_stack harness,
+  as requested by Eduard.
+
+Yiyang Chen (2):
+  bpf: Preserve stack frame number for commuted arithmetic
+  selftests/bpf: Cover stack frame number after scalar plus fp
+
+ kernel/bpf/verifier.c                         | 14 +++++++-----
+ .../selftests/bpf/prog_tests/verifier.c       |  2 -
+ .../bpf/prog_tests/verifier_basic_stack.c     | 14 ++++++++
+ .../bpf/progs/verifier_basic_stack.c          | 41 +++++++++++++++++++
+ 4 files changed, 64 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verifier_basic_stack.c
 
 
-On 2026/7/21 12:28, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [High] Lockless access to `link->prog` in generic link VFS operations (`bpf_link_show_fdinfo`, `bpf_link_get_info_by_fd`, and `bpf_mprog_link`) can lead to Use-After-Free if `BPF_LINK_UPDATE` executes concurrently.
-> --
-> 
-> --- Patch [1]: [PATCH bpf v5 1/4] bpf: Fix potential UAF in bpf_netns_link_update_prog ---
-> commit 5e4c7fbc6ffdce928d3526471c4a856d31dd1aba
-> Author: Pu Lehui <pulehui@huawei.com>
-> 
-> bpf: Fix potential UAF in bpf_netns_link_update_prog
-> 
-> This commit fixes a potential Use-After-Free (UAF) in
-> bpf_netns_link_update_prog by moving the checks for old_prog and
-> new_prog->type inside the netns_bpf_mutex lock. This prevents a race
-> condition when multiple threads concurrently execute BPF_LINK_UPDATE on
-> the same network namespace link.
-> 
->> diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
->> index 25f30f9edaefd..9fc62db1441c6 100644
->> --- a/kernel/bpf/net_namespace.c
->> +++ b/kernel/bpf/net_namespace.c
->> @@ -171,13 +171,17 @@ static int bpf_netns_link_update_prog(struct bpf_link *link,
->>   	struct net *net;
->>   	int idx, ret;
->>   
->> -	if (old_prog && old_prog != link->prog)
->> -		return -EPERM;
->> -	if (new_prog->type != link->prog->type)
->> -		return -EINVAL;
->> -
->>   	mutex_lock(&netns_bpf_mutex);
->>   
->> +	if (old_prog && old_prog != link->prog) {
->> +		ret = -EPERM;
->> +		goto out_unlock;
->> +	}
->> +	if (new_prog->type != link->prog->type) {
->> +		ret = -EINVAL;
->> +		goto out_unlock;
->> +	}
->> +
->>   	net = net_link->net;
->>   	if (!net || !check_net(net)) {
->>   		/* Link auto-detached or netns dying */
-> 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but it looks like other generic
-> link VFS operations might suffer from a similar concurrent update issue.
-> 
-> Functions like bpf_link_show_fdinfo() and bpf_link_get_info_by_fd() in
-> kernel/bpf/syscall.c, and bpf_mprog_link() in kernel/bpf/mprog.c read
-> link->prog locklessly without holding rcu_read_lock().
-> 
-> If a userspace thread calls bpf_link_get_info_by_fd():
-> 
-> kernel/bpf/syscall.c:bpf_link_get_info_by_fd() {
->      ...
->      info.prog_id = link->prog->aux->id;
->      ...
-> }
-> 
-> And a context switch occurs just before accessing link->prog->aux->id, could a
-> concurrent thread executing a BPF_LINK_UPDATE command on the same link replace
-> link->prog and call bpf_prog_put() on the old program?
-> 
-> If the RCU grace period expires before the preempted thread resumes, would this
-> result in a Use-After-Free when accessing prog->aux->id?
-> 
-> Similarly, in bpf_link_show_fdinfo(), could reading prog->tag and prog->aux->id
-> locklessly trigger the same race?
-> 
-> kernel/bpf/syscall.c:bpf_link_show_fdinfo() {
->      ...
->                 prog->aux->id);
->      ...
-> }
-> 
-> And in bpf_mprog_link(), could dereferencing link->prog->type locklessly
-> result in reading freed memory?
-> 
-> kernel/bpf/mprog.c:bpf_mprog_link() {
->      ...
->      if (type && link->prog->type != type) {
->      ...
-> }
-> 
-
-This series already covers these scenarios.
+base-commit: 0bcca2a42cc50b7d64a95c08dffc6b93661a7ea2
+--
+2.34.1
 
