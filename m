@@ -1,108 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C6D415F1A
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 19:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3032471404
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 19:41:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784662573; cv=none; b=Fuvjv6bO8mNPFYlXOk62k1E2rccK1eJqan8gFr5QvTSUdLaJH9/T2El2XhFkOXipfplx+qroPRYLYZQyhZumcM13Qv/uccdsmjJZpJz+DTL+J54PoCBOZz7xvSvBpN1HCfCQSt9TyV1okGqAxF5K1fy0P8rrhO4hBMl8MhDkLnI=
+	t=1784662899; cv=none; b=oYULpuzTIXFSFhOC6KY2epCj2pdI94KFVqineZeHDlkHAldqNCqdg+E6FLfHaR9d/5BBxw6mjjV1jF3zZEdkjqfGzkCpbHfVd7vUxWenhSlbvpPC5n1X+08NC0YCZ9BgcLwoNKYMEqD6xUtkrWBnn/0jFuB7t0R79tQjdLa+Fx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784662573; c=relaxed/simple;
-	bh=BWC8c22UHleyRyD/yXsrwfjKbp+TGQNcyjVRljujR1o=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=QXXq76w+aSQ3TUWQRyKuUBZ3UWwiJkOECBEVamUy7bw1PpyG0SbeT8utSU/iAyRNvhf3gGhYV3T8VKbNyB8DKQWsxYC272hXKLq+KDUbd50LMR4F47LP1C7tNXuMJiaMQcdoYWKMlzMQXz+zA8AHQwboQpzjxHYpZkRJOg/f6aA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EyTj0SlC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784662899; c=relaxed/simple;
+	bh=0GFJGUpJPupKlp6BWR2qYbhPJhmAcNGQX2I8MbPaVRI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nph7K9hS/HyT43TEcTiiQnDhEIYPtyNyNCfMHE59ePTonlS74/RUHhijaIh87weqPORBHIkv4MXzmHu/9yd88118Ea1Ibj/iUzfqEDn6iKk7LW+Ey9Z/V5tONlgpnZ5tmEvrNUpm0Q+c5tHsl8R+PN4cAoYCZ5/bRegHff4/U7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c5U0m+Y3; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EyTj0SlC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB051F00A3A;
-	Tue, 21 Jul 2026 19:36:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784662571;
-	bh=ZecRTLqdTNG8UoQang0q8KvRu1IyS3JUvtytovhcjOA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=EyTj0SlCWInOk/P8ZB3CpbFg0VfXufHHDKt2WQ/H3p2zTkC+SpCgvFbagBy8cn5db
-	 oBKIpOgdukWPRyoSmUzTJfHjqMHNErgPbykJa9gg5cXVzAc1/I0DH7FfQRklE7VSZr
-	 ONxFbAdPJ/zpv07gAo/XVgqwf5Vr9hjN7aYHOTjB6D4EvL2RCT8Ex9yFNP+7Xb+VY4
-	 gaGEdMu/pRypsSb5BEEgjwNG6ph5kNqvSwadYCfRbw/x2cm3FWKOZ4zG7GBQ7rC6+O
-	 cvoyrcBZQyfMg9MZIzitai+0j2SdfIM7Dpk8Q0UYJBpmEIMNsDZCkuYxKSBbvqQ7pv
-	 frHJECfzo7SqQ==
-Content-Type: multipart/mixed; boundary="===============3737622020390923340=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c5U0m+Y3"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84864086bfeso12499146b3a.1
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 12:41:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784662897; x=1785267697; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=cOgxoZIEPooamKcdQ3jZyytzK2hQCdcCEVeQPJDuiwc=;
+        b=c5U0m+Y3rZIw/k4kZ7Rjel7zeFDcv8K1Be2H9PNvr9L1keZW6/M0BAjLRs5G6nl35+
+         PaFs9LF/Ky9mTeiWb7HCqXuCZEk7Dp5Aiar3AuErncSrMw2m/S7gb02aQPjGsqE7i9hP
+         O7XSRTFVHEOH64v47bm+/x5IDmnqufsZsovIJIcdhs+MGEGYaHBaudB49fEsRQP+yLca
+         Gmm5eN7XxcRcjtoBvnCvetMnBZnvSLCxkepJUOxlgm599uXbdjtRBeB6O37cv5QNkDZv
+         5Ju83OphpU3uhE1AnpPhClDBbD7gerfxTZhBgwOY7C+eyqRH0tW4sfptn+tm4/dDoMGu
+         n4lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784662897; x=1785267697;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=cOgxoZIEPooamKcdQ3jZyytzK2hQCdcCEVeQPJDuiwc=;
+        b=PFn5cLESiztk4O9tNTGm75WgHu8XeNxpcrKCbcwVcvjGw4j6pvAtZvH+l1rhxC/awZ
+         ehTP2fUjeAyrP2WY0ddHiYXTlOaOZPtNYwR9qiYa5RFNr/9AhdrDzKgDWEZuAIL4ztJw
+         ANheDFt9reB0/DIsVNsrwxetRQM+AH3oDeSTre0/5WaxO1ZzsWFpumunic3YOGuCNe3c
+         pxc675lLfbJRc6v0mdAMj9jNB8h9Vq89Ag6JtRjvV4W4XynzZYRjkCu5kxMNgn2Qhfru
+         yIE2FenopvOi3jP4vRCkjrTPW6EFemGKgdDNjTlaVE6Ye4jK4nAir+0y6efcDjlA7BdM
+         26iA==
+X-Gm-Message-State: AOJu0YyZasbTYhUnVOUXzsYm6lmeZu1JC9YULEjgXfYMUZRY9C31nSWy
+	2CmDu2+K1bzlrJ/otNXUuUwncg8qmmwSByIKBhF8YcCQLCwRvLQ0qhRC0M70ZovJ
+X-Gm-Gg: AR+sD133KARU/lW3EZeABut8aTqE5Qff4dGHeBk3uUoXx96AvLrUsotSebWm3uHLRl/
+	g+9bE1VyGx+df4URuGmDKP9JZdo7lFMfP3wfjCw84rIwb/PpVwwtKVQ9tgbSOxJ+8r1HNDwMRos
+	3zTXVxwhN0PWD0ZHcRUtrp25z706X6GTFwd9A+KGbg3hWfpHqL7GDqcyPfKZlBVSoCx43TdU0tE
+	piYqCeFFmvbzs61tOcfvI07s61xSbOS0eBxjF6ppkWK1z7khAwcoNTrfkeqhat3OmuM573V8dp6
+	hgbGaKStiPqPM97mVrIAEtvjEK9+Bb1ARm6d300fLnnRF2et9anehfgLXaLYLLZnhXeTOOFJN9V
+	IHUiWMeUT89m5qsuYtMhl93FZQp7JMBJk6OEMSWFQ8PxqIBRoXYLdMLrrd1QguQZrUqfzou81Qy
+	Y1yyvlq1H5tGroXN147Q/x1C7v
+X-Received: by 2002:a05:6a00:1f18:b0:84e:43f:7188 with SMTP id d2e1a72fcca58-84e043f7261mr4882786b3a.12.1784662896930;
+        Tue, 21 Jul 2026 12:41:36 -0700 (PDT)
+Received: from powertower.localdomain ([64.180.35.234])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17237761sm214934b3a.4.2026.07.21.12.41.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2026 12:41:36 -0700 (PDT)
+From: Mykola Lysenko <nickolay.lysenko@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	Mykola Lysenko <nickolay.lysenko@gmail.com>
+Subject: [RFC PATCH bpf-next v2 0/3] selftests/bpf: restructure the Makefile as a layered build
+Date: Tue, 21 Jul 2026 12:41:08 -0700
+Message-ID: <20260721194111.334795-1-nickolay.lysenko@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <abe2224f7327a21cc821cbe34c233800ba7015afa2683adb2d4bbbf927567c0a@mail.kernel.org>
-In-Reply-To: <20260721185705.1365329-1-memxor@gmail.com>
-References: <20260721185705.1365329-1-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next] libarena: Use compiler load-acquire/store-release in bpf_atomic.h
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 21 Jul 2026 19:36:11 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============3737622020390923340==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+The BPF selftests Makefile has grown to ~1,100 lines, with much of the
+complexity concentrated in the DEFINE_TEST_RUNNER double-expansion
+machinery: the per-runner rules are written in $$-escaped make and
+eval'd once per flavor, so the rules that actually run never appear in
+the source, are invisible to make's own debugging facilities, and are
+easy to break for one flavor while testing another.
 
-> diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_atomic.h b/tools/testing/selftests/bpf/libarena/include/bpf_atomic.h
-> index b7b230431929..ec8d606e7ce3 100644
-> --- a/tools/testing/selftests/bpf/libarena/include/bpf_atomic.h
-> +++ b/tools/testing/selftests/bpf/libarena/include/bpf_atomic.h
-> @@ -86,6 +86,21 @@ extern bool CONFIG_X86_64 __kconfig __weak;
->  /* Control dependency provides LOAD->STORE, provide LOAD->LOAD */
->  #define smp_acquire__after_ctrl_dep() ({ smp_rmb(); })
->
-> +#if defined(__BPF_FEATURE_LOAD_ACQ_STORE_REL)
-> +#define __BPF_HAVE_LOAD_ACQUIRE_STORE_RELEASE 1
-> +#endif
-> +
-> +#ifdef __BPF_HAVE_LOAD_ACQUIRE_STORE_RELEASE
-> +/*
-> + * Clang advertises this feature when it can lower acquire/release atomic
-> + * builtins to BPF_LOAD_ACQ/BPF_STORE_REL. Older compilers keep using the
-> + * barrier-based fallback below. The generated instructions require kernel
-> + * verifier/JIT support added in Linux 6.15; compile for an older BPF CPU to
-> + * keep using the fallback when targeting older kernels.
-> + */
-> +#define smp_load_acquire(p) __atomic_load_n((p), __ATOMIC_ACQUIRE)
-> +#define smp_store_release(p, val) __atomic_store_n((p), (val), __ATOMIC_RELEASE)
+This series restructures the build in three steps, each independently
+buildable and each producing byte-identical artifacts:
 
-Can the __atomic_load_n / __atomic_store_n form here handle a pointer to
-a struct?
+  1) the four near-identical skeleton generation recipes move into a
+     parameterized helper script (gen_bpf_skel.sh);
+  2) shared (non-rule) definitions move into Makefile.buildvars;
+  3) each test runner instance (test_progs, test_progs-<flavor>,
+     test_maps) becomes its own plain-make sub-make (Makefile.runner),
+     replacing the eval/escaping layer.
 
-__atomic_load_n(&some_struct, ...) is a compile error when p points to an
-aggregate type, since these builtins only accept scalar-typed pointers.
+After the series the top Makefile owns everything that exists once
+(toolchain setup, the libbpf/bpftool/resolve_btfids sub-builds,
+vmlinux.h, shared helper objects, standalone binaries, and the lib.mk
+run/install contract), while every runner instance is an ordinary
+single-flavor makefile with no escaping. Total line count is roughly a
+wash; the point is the structure, not the size.
 
-Would the more generic builtin form work for both scalar and struct
-pointers, for example:
+Sent as RFC to gather feedback on the overall direction.
 
-  #define smp_load_acquire(p) ({                     \
-          __unqual_scalar_typeof(*p) __val;          \
-          __atomic_load(p, &__val, __ATOMIC_ACQUIRE); \
-          __val;                                     \
-  })
-  #define smp_store_release(p, v) ({                 \
-          __unqual_scalar_typeof(*p) __val = (v);    \
-          __atomic_store(p, &__val, __ATOMIC_RELEASE); \
-  })
+Validation (each patch, x86_64, identical toolchains, clean builds):
+2,948/2,948 BPF objects, 5,352/5,352 skeleton headers and 1,413/1,413
+userspace objects byte-identical to the current Makefile's output. For
+the end state additionally: 20/22 binaries byte-identical, and the two
+exceptions (bench, test_maps) differ only in object link order, proven
+by relinking the current Makefile's objects in the new order and
+comparing bytes; emit_tests output and the installed tree identical;
+BPF CI green on a manual pre-submission run across x86_64 gcc/llvm,
+aarch64 and s390x (including GCC-BPF, ASAN and veristat jobs); and all
+76 benchmarks produce identical outcomes on old- and new-built bench
+binaries.
 
-> +#else
->  #define smp_load_acquire(p)                                  \
->  	({                                                   \
->  		__unqual_typeof(*(p)) __v = READ_ONCE(*(p)); \
-> @@ -102,6 +117,7 @@ extern bool CONFIG_X86_64 __kconfig __weak;
->  		barrier();             \
->  		WRITE_ONCE(*(p), val); \
->  	})
-> +#endif
+v1 -> v2:
+- rebased onto current bpf-next: ported the semantics of commit
+  0b236ac75d04 ("selftests/bpf: Fix make install target") - bpftool
+  installed under tools/sbin/, *.BTF files installed - into the new
+  install rule (resolves the CI apply conflict against v1)
+- gen_bpf_skel.sh is a prerequisite of every skeleton rule, so editing
+  the script regenerates the headers (reported by Sashiko AI review)
+- the shared helper objects the top Makefile pre-builds now depend on
+  a superset of the prerequisites the runner-side object rule uses
+  (libarena skeletons, both generated tests.h headers), closing a
+  window where the unflavored test_progs and test_maps sub-makes could
+  both consider a shared helper object stale and recompile it
+  concurrently in the shared output directory (reported by Sashiko AI
+  review)
+- v1: https://lore.kernel.org/bpf/20260721174909.8044-1-nickolay.lysenko@gmail.com/
+
+Mykola Lysenko (3):
+  selftests/bpf: extract BPF skeleton generation into a helper script
+  selftests/bpf: move shared build definitions into Makefile.buildvars
+  selftests/bpf: build each test runner instance in its own sub-make
+
+ tools/testing/selftests/bpf/Makefile          | 950 +++++-------------
+ .../testing/selftests/bpf/Makefile.buildvars  | 204 ++++
+ tools/testing/selftests/bpf/Makefile.runner   | 316 ++++++
+ tools/testing/selftests/bpf/gen_bpf_skel.sh   |  97 ++
+ 4 files changed, 886 insertions(+), 681 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/Makefile.buildvars
+ create mode 100644 tools/testing/selftests/bpf/Makefile.runner
+ create mode 100755 tools/testing/selftests/bpf/gen_bpf_skel.sh
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: 5eb8921371c6fd117d4a328b6053dfda38707df8
+-- 
+2.43.0
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29860654839
---===============3737622020390923340==--
