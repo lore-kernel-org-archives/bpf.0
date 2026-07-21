@@ -1,60 +1,62 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3032471404
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 19:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F69470126
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 19:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784662899; cv=none; b=oYULpuzTIXFSFhOC6KY2epCj2pdI94KFVqineZeHDlkHAldqNCqdg+E6FLfHaR9d/5BBxw6mjjV1jF3zZEdkjqfGzkCpbHfVd7vUxWenhSlbvpPC5n1X+08NC0YCZ9BgcLwoNKYMEqD6xUtkrWBnn/0jFuB7t0R79tQjdLa+Fx8=
+	t=1784662904; cv=none; b=g0EyiYrByaWySywmL2LZ+mF92nK8lLWVi6wi9b7XxZ1g7S4MvxSnR2Yfxnc9SD2C5qC9wmV3kGiDSOU/4hAXXC6XJxeGFtnOomZA3iM40dRmhTHmojy3MlTIbGcD6mov+6O5l99k3/ASZW+0vHWZpxqciE6XrvR4CVxVNt4CLTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784662899; c=relaxed/simple;
-	bh=0GFJGUpJPupKlp6BWR2qYbhPJhmAcNGQX2I8MbPaVRI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nph7K9hS/HyT43TEcTiiQnDhEIYPtyNyNCfMHE59ePTonlS74/RUHhijaIh87weqPORBHIkv4MXzmHu/9yd88118Ea1Ibj/iUzfqEDn6iKk7LW+Ey9Z/V5tONlgpnZ5tmEvrNUpm0Q+c5tHsl8R+PN4cAoYCZ5/bRegHff4/U7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c5U0m+Y3; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1784662904; c=relaxed/simple;
+	bh=W6zdG6I32xQ76mnzc1gY/v61WpLg7bKpAaUL8uEyva4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RTHbErAt93l1U19U8W2lr8jw9+yqSWGfAgoXWFE3XsmWFT8WL3a4EciVjLXlQUP4pAilQZZFGIC6Sb5Vl8rTGI0OPxOi+534WybQLEU/k1DotpkwjX+qRY9QgSUP5fk73QhJLny7FMIWhB1Cw7fJ9U5qaIGKmdW/GkkKFU9BYtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=joQZ3BNb; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c5U0m+Y3"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84864086bfeso12499146b3a.1
-        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 12:41:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="joQZ3BNb"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8487b7b3fc8so11918284b3a.3
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 12:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784662897; x=1785267697; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cOgxoZIEPooamKcdQ3jZyytzK2hQCdcCEVeQPJDuiwc=;
-        b=c5U0m+Y3rZIw/k4kZ7Rjel7zeFDcv8K1Be2H9PNvr9L1keZW6/M0BAjLRs5G6nl35+
-         PaFs9LF/Ky9mTeiWb7HCqXuCZEk7Dp5Aiar3AuErncSrMw2m/S7gb02aQPjGsqE7i9hP
-         O7XSRTFVHEOH64v47bm+/x5IDmnqufsZsovIJIcdhs+MGEGYaHBaudB49fEsRQP+yLca
-         Gmm5eN7XxcRcjtoBvnCvetMnBZnvSLCxkepJUOxlgm599uXbdjtRBeB6O37cv5QNkDZv
-         5Ju83OphpU3uhE1AnpPhClDBbD7gerfxTZhBgwOY7C+eyqRH0tW4sfptn+tm4/dDoMGu
-         n4lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784662897; x=1785267697;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1784662902; x=1785267702; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=cOgxoZIEPooamKcdQ3jZyytzK2hQCdcCEVeQPJDuiwc=;
-        b=PFn5cLESiztk4O9tNTGm75WgHu8XeNxpcrKCbcwVcvjGw4j6pvAtZvH+l1rhxC/awZ
-         ehTP2fUjeAyrP2WY0ddHiYXTlOaOZPtNYwR9qiYa5RFNr/9AhdrDzKgDWEZuAIL4ztJw
-         ANheDFt9reB0/DIsVNsrwxetRQM+AH3oDeSTre0/5WaxO1ZzsWFpumunic3YOGuCNe3c
-         pxc675lLfbJRc6v0mdAMj9jNB8h9Vq89Ag6JtRjvV4W4XynzZYRjkCu5kxMNgn2Qhfru
-         yIE2FenopvOi3jP4vRCkjrTPW6EFemGKgdDNjTlaVE6Ye4jK4nAir+0y6efcDjlA7BdM
-         26iA==
-X-Gm-Message-State: AOJu0YyZasbTYhUnVOUXzsYm6lmeZu1JC9YULEjgXfYMUZRY9C31nSWy
-	2CmDu2+K1bzlrJ/otNXUuUwncg8qmmwSByIKBhF8YcCQLCwRvLQ0qhRC0M70ZovJ
-X-Gm-Gg: AR+sD133KARU/lW3EZeABut8aTqE5Qff4dGHeBk3uUoXx96AvLrUsotSebWm3uHLRl/
-	g+9bE1VyGx+df4URuGmDKP9JZdo7lFMfP3wfjCw84rIwb/PpVwwtKVQ9tgbSOxJ+8r1HNDwMRos
-	3zTXVxwhN0PWD0ZHcRUtrp25z706X6GTFwd9A+KGbg3hWfpHqL7GDqcyPfKZlBVSoCx43TdU0tE
-	piYqCeFFmvbzs61tOcfvI07s61xSbOS0eBxjF6ppkWK1z7khAwcoNTrfkeqhat3OmuM573V8dp6
-	hgbGaKStiPqPM97mVrIAEtvjEK9+Bb1ARm6d300fLnnRF2et9anehfgLXaLYLLZnhXeTOOFJN9V
-	IHUiWMeUT89m5qsuYtMhl93FZQp7JMBJk6OEMSWFQ8PxqIBRoXYLdMLrrd1QguQZrUqfzou81Qy
-	Y1yyvlq1H5tGroXN147Q/x1C7v
-X-Received: by 2002:a05:6a00:1f18:b0:84e:43f:7188 with SMTP id d2e1a72fcca58-84e043f7261mr4882786b3a.12.1784662896930;
-        Tue, 21 Jul 2026 12:41:36 -0700 (PDT)
+        bh=yT7DY8XJ/aN8v+T2ZP9Ewe2DGZXAgJzTUlkFum8Zjag=;
+        b=joQZ3BNbajJDHl/D21nZDS6vOz1RykoarR2DvELHffbLl5tEaWK0CHj1D3xQAaG2zZ
+         a/GIudPHL95d0Fn4tumUww+H66A5NxFqEEtdfKkHG51Unx0CJ2DPuwOL1+GZ7DGBJa2s
+         Bkmvp5Iz3WjqUUNcSRE7zOBNlaQkGItSc7ZnC7ok+r77pQyMTCsu2A0XkkJuZgxzDRq0
+         Xh2AvgkmP+lmqNFqk6x7CHtyufVKFcI+6dx4O3fjBYMJmOt6QlwS009fJqklnLVLq7Vy
+         I22Hk1Pumay9V6wlVBLbF/XOMKKOpxou+oKX4S0Y2Ysp3LaTlVkUEipoyPfjjnj1YPkf
+         Nr3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784662902; x=1785267702;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=yT7DY8XJ/aN8v+T2ZP9Ewe2DGZXAgJzTUlkFum8Zjag=;
+        b=TAcFPKHo5FaKew7g+MDK2GR4Whc4PISgy5HKPrIWPWDN70Mne7J4pUj5f9O8FgFyfp
+         3MCh3COzi3oCAuMXnD0oTG9Rjwk1SxOT16gD48JUlqOSwXN0GSXUzOld32gS8TW3HsFj
+         m6viHO6ODmu9GIwooc6js+fizCrY6cmaTXIODQoYMoBxeEJIRk3WotimuTIgT1Ppe+Mn
+         RdNHLG3DnlUuc60dtt83zTsA/rt1A04PtRioD6Au1Fcls/kLyyf80UCDkSHZ0Md88eIx
+         grBNSElqb3BNS6lQZnae1PGzb7DhMKdDmos2sLizoS3yuP+gI7SjxfFfusWAgt0wepsS
+         UDJw==
+X-Gm-Message-State: AOJu0YyPio//QvFAk8YM4bNf+boU04K4jfcXeRWtTXOjzk0PCKTMJYGK
+	O9qrIcFpwJhcX2a0NdUn0RUfyM2v4/MDKaJyGZiFOCeJueVvMk9DvBL4iU9JaBl5
+X-Gm-Gg: AR+sD10ucuSM3WH5kyULPug3s4GffEOat1T0bAsOL/pH3JfIDvBNFn97uNxxHUI6A0y
+	Ffq51zv/W+3PPuk5vKfdMUL8Gz2SBATOUl/kIAXYsyFua/xRCgXKebO/y7EkXEZluBpmlZzM8Zq
+	GhUaY18qFmCjZIgm81pR0nZw1oeNdtG090/hvoi2wex6X2FjE6jSt+09b8YuOBFVFP2yQeDB8la
+	iZ5ycOTXnMmt2paEd4+ifQKradz5SphH+ottLqHKXPnaqRxZQ/dIz+Y1g3mNWX+BJMwgJn9A8ZK
+	stOjx4jGfuUYJRjKPBVe9EHOlZVajxjLInz030kuGfRdvphoc7hiLtQ7wtWG3uZGKVX0+3Duz5t
+	9nOWqRyGJ/0ZPmMh+djh7kT42IGXuCap2rUv//S92/zP448UFwTT8C4K1ABLadn1Nh4GnAmjlX/
+	bIuQ4v7kLfQqPGNt8bJjJrBXuY
+X-Received: by 2002:a05:6a00:408a:b0:84a:2dcb:5aca with SMTP id d2e1a72fcca58-84c2954df26mr20379587b3a.77.1784662902035;
+        Tue, 21 Jul 2026 12:41:42 -0700 (PDT)
 Received: from powertower.localdomain ([64.180.35.234])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17237761sm214934b3a.4.2026.07.21.12.41.36
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17237761sm214934b3a.4.2026.07.21.12.41.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 12:41:36 -0700 (PDT)
+        Tue, 21 Jul 2026 12:41:41 -0700 (PDT)
 From: Mykola Lysenko <nickolay.lysenko@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -67,10 +69,12 @@ Cc: ast@kernel.org,
 	jolsa@kernel.org,
 	memxor@gmail.com,
 	Mykola Lysenko <nickolay.lysenko@gmail.com>
-Subject: [RFC PATCH bpf-next v2 0/3] selftests/bpf: restructure the Makefile as a layered build
-Date: Tue, 21 Jul 2026 12:41:08 -0700
-Message-ID: <20260721194111.334795-1-nickolay.lysenko@gmail.com>
+Subject: [RFC PATCH bpf-next v2 1/3] selftests/bpf: extract BPF skeleton generation into a helper script
+Date: Tue, 21 Jul 2026 12:41:09 -0700
+Message-ID: <20260721194111.334795-2-nickolay.lysenko@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260721194111.334795-1-nickolay.lysenko@gmail.com>
+References: <20260721194111.334795-1-nickolay.lysenko@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,76 +83,255 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The BPF selftests Makefile has grown to ~1,100 lines, with much of the
-complexity concentrated in the DEFINE_TEST_RUNNER double-expansion
-machinery: the per-runner rules are written in $$-escaped make and
-eval'd once per flavor, so the rules that actually run never appear in
-the source, are invisible to make's own debugging facilities, and are
-easy to break for one flavor while testing another.
+The four skeleton generation recipes (regular, light, signed light and
+linked) are near-identical five-step pipelines - link via "bpftool gen
+object" three times, compare the second and third results as a
+regression test for bpftool's determinism, generate the skeleton (and
+possibly subskeleton), remove intermediates - duplicated with small
+variations inside DEFINE_TEST_RUNNER_RULES, where every line pays the
+double-expansion escaping tax.
 
-This series restructures the build in three steps, each independently
-buildable and each producing byte-identical artifacts:
+Move the pipeline into gen_bpf_skel.sh; the differences between the four
+variants become flags (--lskel, --sign, --subskel, --infix). The
+distinct linked/llinked intermediate infixes are kept: tests listed in
+LSKELS_EXTRA generate both a .skel.h and a .lskel.h from the same
+.bpf.o, and distinct intermediate names are what keeps parallel builds
+from racing. The determinism check gets an escape hatch
+(--no-determinism-check) but remains on by default; behavior is
+unchanged.
 
-  1) the four near-identical skeleton generation recipes move into a
-     parameterized helper script (gen_bpf_skel.sh);
-  2) shared (non-rule) definitions move into Makefile.buildvars;
-  3) each test runner instance (test_progs, test_progs-<flavor>,
-     test_maps) becomes its own plain-make sub-make (Makefile.runner),
-     replacing the eval/escaping layer.
+Generated skeletons are byte-identical to the previous recipes' output.
 
-After the series the top Makefile owns everything that exists once
-(toolchain setup, the libbpf/bpftool/resolve_btfids sub-builds,
-vmlinux.h, shared helper objects, standalone binaries, and the lib.mk
-run/install contract), while every runner instance is an ordinary
-single-flavor makefile with no escaping. Total line count is roughly a
-wash; the point is the structure, not the size.
+The script is a prerequisite of every skeleton rule, so editing it
+regenerates the headers.
 
-Sent as RFC to gather feedback on the overall direction.
-
-Validation (each patch, x86_64, identical toolchains, clean builds):
-2,948/2,948 BPF objects, 5,352/5,352 skeleton headers and 1,413/1,413
-userspace objects byte-identical to the current Makefile's output. For
-the end state additionally: 20/22 binaries byte-identical, and the two
-exceptions (bench, test_maps) differ only in object link order, proven
-by relinking the current Makefile's objects in the new order and
-comparing bytes; emit_tests output and the installed tree identical;
-BPF CI green on a manual pre-submission run across x86_64 gcc/llvm,
-aarch64 and s390x (including GCC-BPF, ASAN and veristat jobs); and all
-76 benchmarks produce identical outcomes on old- and new-built bench
-binaries.
-
-v1 -> v2:
-- rebased onto current bpf-next: ported the semantics of commit
-  0b236ac75d04 ("selftests/bpf: Fix make install target") - bpftool
-  installed under tools/sbin/, *.BTF files installed - into the new
-  install rule (resolves the CI apply conflict against v1)
-- gen_bpf_skel.sh is a prerequisite of every skeleton rule, so editing
-  the script regenerates the headers (reported by Sashiko AI review)
-- the shared helper objects the top Makefile pre-builds now depend on
-  a superset of the prerequisites the runner-side object rule uses
-  (libarena skeletons, both generated tests.h headers), closing a
-  window where the unflavored test_progs and test_maps sub-makes could
-  both consider a shared helper object stale and recompile it
-  concurrently in the shared output directory (reported by Sashiko AI
-  review)
-- v1: https://lore.kernel.org/bpf/20260721174909.8044-1-nickolay.lysenko@gmail.com/
-
-Mykola Lysenko (3):
-  selftests/bpf: extract BPF skeleton generation into a helper script
-  selftests/bpf: move shared build definitions into Makefile.buildvars
-  selftests/bpf: build each test runner instance in its own sub-make
-
- tools/testing/selftests/bpf/Makefile          | 950 +++++-------------
- .../testing/selftests/bpf/Makefile.buildvars  | 204 ++++
- tools/testing/selftests/bpf/Makefile.runner   | 316 ++++++
- tools/testing/selftests/bpf/gen_bpf_skel.sh   |  97 ++
- 4 files changed, 886 insertions(+), 681 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/Makefile.buildvars
- create mode 100644 tools/testing/selftests/bpf/Makefile.runner
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+Assisted-by: Claude:claude-fable-5 shellcheck
+Signed-off-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
+---
+ tools/testing/selftests/bpf/Makefile        | 99 ++++++---------------
+ tools/testing/selftests/bpf/gen_bpf_skel.sh | 97 ++++++++++++++++++++
+ 2 files changed, 125 insertions(+), 71 deletions(-)
  create mode 100755 tools/testing/selftests/bpf/gen_bpf_skel.sh
 
-
-base-commit: 5eb8921371c6fd117d4a328b6053dfda38707df8
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 55d394438..09e5be201 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -628,82 +628,39 @@ $(TRUNNER_BPF_OBJS): $(TRUNNER_OUTPUT)/%.bpf.o:				\
+ 					  $$($$<-CFLAGS)		\
+ 					  $$($$<-$2-CFLAGS),$(TRUNNER_BINARY))
+ 
+-$(TRUNNER_BPF_SKELS): %.skel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$(Q)$(if $(PERMISSIVE),if [ ! -f $$< ]; then			\
+-		$$(RM) $$@ $$(@:.skel.h=.subskel.h);			\
+-		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-		exit 0;							\
+-	fi;)								\
+-	printf '  %-12s %s\n' 'GEN-SKEL' '[$(TRUNNER_BINARY)] $$(notdir $$@)' 1>&2; \
+-	$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$< &&		\
+-	$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o) && \
+-	$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o) && \
+-	diff $$(<:.o=.linked2.o) $$(<:.o=.linked3.o) &&		\
+-	$$(BPFTOOL) gen skeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.bpf.o=)) > $$@ && \
+-	$$(BPFTOOL) gen subskeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.bpf.o=)) > $$(@:.skel.h=.subskel.h) $(if $(PERMISSIVE),|| { \
+-		$$(RM) $$@ $$(@:.skel.h=.subskel.h); \
+-		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-	}) && \
+-	rm -f $$(<:.o=.linked1.o) $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
+-
+-$(TRUNNER_BPF_LSKELS): %.lskel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$(Q)$(if $(PERMISSIVE),if [ ! -f $$< ]; then			\
+-		$$(RM) $$@;						\
+-		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-		exit 0;							\
+-	fi;)								\
+-	printf '  %-12s %s\n' 'GEN-SKEL' '[$(TRUNNER_BINARY)] $$(notdir $$@)' 1>&2; \
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked1.o) $$< &&		\
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked2.o) $$(<:.o=.llinked1.o) && \
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked3.o) $$(<:.o=.llinked2.o) && \
+-	diff $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o) &&		\
+-	$$(BPFTOOL) gen skeleton -L $$(<:.o=.llinked3.o) name $$(notdir $$(<:.bpf.o=_lskel)) > $$@ $(if $(PERMISSIVE),|| { \
+-		$$(RM) $$@; \
+-		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-	}) && \
+-	rm -f $$(<:.o=.llinked1.o) $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o)
+-
+-$(TRUNNER_BPF_LSKELS_SIGNED): %.lskel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$(Q)$(if $(PERMISSIVE),if [ ! -f $$< ]; then			\
+-		$$(RM) $$@;						\
+-		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-		exit 0;							\
+-	fi;)								\
+-	printf '  %-12s %s\n' 'GEN-SKEL' '[$(TRUNNER_BINARY) (signed)] $$(notdir $$@)' 1>&2; \
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked1.o) $$< &&		\
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked2.o) $$(<:.o=.llinked1.o) && \
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked3.o) $$(<:.o=.llinked2.o) && \
+-	diff $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o) &&		\
+-	$$(BPFTOOL) gen skeleton $(LSKEL_SIGN) $$(<:.o=.llinked3.o) name $$(notdir $$(<:.bpf.o=_lskel)) > $$@ $(if $(PERMISSIVE),|| { \
+-		$$(RM) $$@; \
+-		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-	}) && \
+-	rm -f $$(<:.o=.llinked1.o) $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o)
++$(TRUNNER_BPF_SKELS): %.skel.h: %.bpf.o $(BPFTOOL) gen_bpf_skel.sh | $(TRUNNER_OUTPUT)
++	$(Q)BPFTOOL=$$(BPFTOOL) ./gen_bpf_skel.sh --tag '$(TRUNNER_BINARY)'	\
++		--name $$(notdir $$(<:.bpf.o=)) --infix linked			\
++		--skel $$@ --subskel $$(@:.skel.h=.subskel.h) $$< $(if $(PERMISSIVE),|| { \
++		$$(RM) $$@ $$(@:.skel.h=.subskel.h);				\
++		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; })
++
++$(TRUNNER_BPF_LSKELS): %.lskel.h: %.bpf.o $(BPFTOOL) gen_bpf_skel.sh | $(TRUNNER_OUTPUT)
++	$(Q)BPFTOOL=$$(BPFTOOL) ./gen_bpf_skel.sh --tag '$(TRUNNER_BINARY)'	\
++		--name $$(notdir $$(<:.bpf.o=_lskel)) --infix llinked --lskel	\
++		--skel $$@ $$< $(if $(PERMISSIVE),|| {				\
++		$$(RM) $$@;							\
++		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; })
++
++$(TRUNNER_BPF_LSKELS_SIGNED): %.lskel.h: %.bpf.o $(BPFTOOL) gen_bpf_skel.sh | $(TRUNNER_OUTPUT)
++	$(Q)BPFTOOL=$$(BPFTOOL) ./gen_bpf_skel.sh --tag '$(TRUNNER_BINARY) (signed)' \
++		--name $$(notdir $$(<:.bpf.o=_lskel)) --infix llinked		\
++		--sign '$(LSKEL_SIGN)'						\
++		--skel $$@ $$< $(if $(PERMISSIVE),|| {				\
++		$$(RM) $$@;							\
++		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; })
+ 
+ $(LINKED_BPF_OBJS): %: $(TRUNNER_OUTPUT)/%
+ 
+ # .SECONDEXPANSION here allows to correctly expand %-deps variables as prerequisites
+ .SECONDEXPANSION:
+-$(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_OUTPUT)/%: $$$$(%-deps) $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$(Q)$(if $(PERMISSIVE),for f in $$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps)); do \
+-		if [ ! -f $$$$f ]; then						\
+-			$$(RM) $$@ $$(@:.skel.h=.subskel.h);		\
+-			printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-			exit 0;							\
+-		fi;								\
+-	done;)									\
+-	printf '  %-12s %s\n' 'LINK-BPF' '[$(TRUNNER_BINARY)] $$(notdir $$(@:.skel.h=.bpf.o))' 1>&2; \
+-	$$(BPFTOOL) gen object $$(@:.skel.h=.linked1.o) $$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps)) && \
+-	$$(BPFTOOL) gen object $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked1.o) && \
+-	$$(BPFTOOL) gen object $$(@:.skel.h=.linked3.o) $$(@:.skel.h=.linked2.o) && \
+-	diff $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked3.o) &&	\
+-	printf '  %-12s %s\n' 'GEN-SKEL' '[$(TRUNNER_BINARY)] $$(notdir $$@)' 1>&2 && \
+-	$$(BPFTOOL) gen skeleton $$(@:.skel.h=.linked3.o) name $$(notdir $$(@:.skel.h=)) > $$@ && \
+-	$$(BPFTOOL) gen subskeleton $$(@:.skel.h=.linked3.o) name $$(notdir $$(@:.skel.h=)) > $$(@:.skel.h=.subskel.h) $(if $(PERMISSIVE),|| { \
+-		$$(RM) $$@ $$(@:.skel.h=.subskel.h);			\
+-		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-	}) &&									\
+-	rm -f $$(@:.skel.h=.linked1.o) $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked3.o)
++$(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_OUTPUT)/%: $$$$(%-deps) $(BPFTOOL) gen_bpf_skel.sh | $(TRUNNER_OUTPUT)
++	$(Q)BPFTOOL=$$(BPFTOOL) ./gen_bpf_skel.sh --tag '$(TRUNNER_BINARY)'	\
++		--name $$(notdir $$(@:.skel.h=)) --infix linked			\
++		--skel $$@ --subskel $$(@:.skel.h=.subskel.h)			\
++		$$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps)) $(if $(PERMISSIVE),|| { \
++		$$(RM) $$@ $$(@:.skel.h=.subskel.h);				\
++		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; })
+ 
+ # When the compiler generates a %.d file, only skel basenames (not
+ # full paths) are specified as prerequisites for corresponding %.o
+diff --git a/tools/testing/selftests/bpf/gen_bpf_skel.sh b/tools/testing/selftests/bpf/gen_bpf_skel.sh
+new file mode 100755
+index 000000000..0b237f639
+--- /dev/null
++++ b/tools/testing/selftests/bpf/gen_bpf_skel.sh
+@@ -0,0 +1,97 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Link BPF object file(s) with "bpftool gen object" and generate a
++# skeleton (or light skeleton) header from the result.
++#
++# Usage:
++#   BPFTOOL=<bpftool> gen_bpf_skel.sh --name NAME --skel OUT [options] OBJ...
++#
++#   --name NAME       skeleton object name ("name NAME" for bpftool)
++#   --skel OUT        output header ("foo.skel.h" or "foo.lskel.h")
++#   --subskel OUT     also generate a subskeleton header into OUT
++#   --lskel           generate a light skeleton (bpftool gen skeleton -L)
++#   --sign 'ARGS'     extra "gen skeleton" args for signing (-S -k .. -i ..)
++#   --tag TAG         build-log tag, e.g. "test_progs-no_alu32"
++#   --infix STR       intermediate file infix (default: linked). Callers
++#                     generating both a .skel.h and a .lskel.h from the
++#                     same .bpf.o MUST use distinct infixes, or parallel
++#                     builds race on the intermediate files.
++#   --no-determinism-check
++#                     link the inputs once instead of three times.
++#                     By default the object is re-linked twice more and
++#                     the 2nd and 3rd results compared, as a regression
++#                     test for the determinism of "bpftool gen object".
++#
++# The bpftool binary is taken from $BPFTOOL (default: bpftool from PATH).
++# On failure all outputs and intermediates are removed and the script
++# exits non-zero; permissive-mode skipping is the caller's business
++# (see skip_on_fail in Makefile.buildvars).
++
++set -u
++
++bpftool=${BPFTOOL:-bpftool}
++name='' skel='' subskel='' tag='' sign_args='' infix=linked
++lskel=0 det_check=1
++
++while [ $# -gt 0 ]; do
++	case "$1" in
++	--name)		name=$2; shift 2 ;;
++	--skel)		skel=$2; shift 2 ;;
++	--subskel)	subskel=$2; shift 2 ;;
++	--tag)		tag=$2; shift 2 ;;
++	--infix)	infix=$2; shift 2 ;;
++	--sign)		sign_args=$2; shift 2 ;;
++	--lskel)	lskel=1; shift ;;
++	--no-determinism-check) det_check=0; shift ;;
++	--)		shift; break ;;
++	-*)		echo "$0: unknown option: $1" >&2; exit 1 ;;
++	*)		break ;;
++	esac
++done
++
++if [ -z "$name" ] || [ -z "$skel" ] || [ $# -eq 0 ]; then
++	echo "usage: $0 --name NAME --skel OUT [options] OBJ..." >&2
++	exit 1
++fi
++
++base=${skel%.skel.h}
++base=${base%.lskel.h}
++t1=$base.${infix}1.o
++t2=$base.${infix}2.o
++t3=$base.${infix}3.o
++
++fail() {
++	rm -f "$skel" ${subskel:+"$subskel"} "$t1" "$t2" "$t3"
++	exit 1
++}
++
++if [ $# -gt 1 ]; then
++	printf '  %-12s %s\n' 'LINK-BPF' "${tag:+[$tag] }$(basename "$base").bpf.o" >&2
++fi
++printf '  %-12s %s\n' 'GEN-SKEL' "${tag:+[$tag] }$(basename "$skel")" >&2
++
++"$bpftool" gen object "$t1" "$@" || fail
++final=$t1
++if [ "$det_check" -eq 1 ]; then
++	"$bpftool" gen object "$t2" "$t1" || fail
++	"$bpftool" gen object "$t3" "$t2" || fail
++	if ! cmp -s "$t2" "$t3"; then
++		echo "$0: bpftool gen object is not deterministic for $skel" >&2
++		fail
++	fi
++	final=$t3
++fi
++
++flags=
++[ "$lskel" -eq 1 ] && flags=-L
++# $sign_args intentionally unquoted: it is a list of bpftool arguments
++# shellcheck disable=SC2086
++"$bpftool" gen skeleton $sign_args $flags "$final" name "$name" > "$skel" || fail
++
++if [ -n "$subskel" ]; then
++	"$bpftool" gen subskeleton "$final" name "$name" > "$subskel" || fail
++fi
++
++rm -f "$t1" "$t2" "$t3"
++exit 0
 -- 
 2.43.0
 
