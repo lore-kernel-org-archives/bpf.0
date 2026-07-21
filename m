@@ -1,136 +1,185 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E780321445
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 10:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139AC32861E;
+	Tue, 21 Jul 2026 11:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784631577; cv=none; b=gH1hBR+smxstFrSd57NLu4R+F/Zs8hdkp5vqRzQKer5ppBrXNnv7a4dVZubyATJ9FQ1xT4+jcDy+yB2lEdYQoDQy0qBzTkGnEGSas1Iv2Su+RoaVIBEm3h8/vt7tmT4c+SxcdhCCO6MhYrXNEkzP9qEvPNzz2ZQKThV3kxm8kzQ=
+	t=1784631973; cv=none; b=bKZRMrHxUbwfEuEe1nTspviZYJvn7Y2nqNp6ZgIjgKc/2hKC6timiSrlFlywighfuoHjDmPStN0OrPVCgI+jFmGHDesE+oJ3wZMJSLIuFU0DZuL3PTZvDA0qnDnQinGsDfWXNCHBBHBIW2iQspj2sLSfxj4lX/2cR4bdRtuvnYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784631577; c=relaxed/simple;
-	bh=r+WvVdqs9BjRaBdTi9xcGkRRvY7b/OnljJXckgkaal4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XzkXsGcUOJPLEVOMIpZpcyhkPD1xfLAX6iMwzGguzZTGv7sYxVdfXfaRfSglrERGNvLUL3ReUVQxYfjJwDK1JA2JTkmh12OUZbUcCh/7TcDLTrrNNiUjUqYG1CTAVxdudYa0d6rG/Tkj0kW3qXOXRx4Yeq7xLwPhWR2fs075TQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HaKLpVbX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784631973; c=relaxed/simple;
+	bh=T1mTMz9P94jNWmYvNRr3q4DbGHNst55KgRnteZzb2JQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lQJvsMzSSyJWZpqzCsW2na39Vld4x80qkj52ytlUEugJmxoQWNoCBKvljI998egyU2I5htoyxiH3UEz7dU2McCZL9UEpwTBsLdr0eHyQ+wOWbRRf7zM+gChNG0Fxbp+wm6UmpzVA88CoESEJjsBKhzHYOFDzjnTDF6urzjfEKo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TM9BOLXU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HaKLpVbX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A5611F000E9;
-	Tue, 21 Jul 2026 10:59:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TM9BOLXU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0057C1F000E9;
+	Tue, 21 Jul 2026 11:06:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784631576;
-	bh=UOWA+LT7kl+cEhgFXoaLWktB9D2IdJlDPxiBO0QiXC0=;
-	h=From:To:Cc:Subject:Date;
-	b=HaKLpVbX1v7G4cWrftMYl/jzPsZ/yv5uJCUIw4TA/WC2GlRMQKG/YKX0mqU5fINHx
-	 BDEzwOVRKMi8tMKJaFDztv6iPoICleLA0e15MkUrSuQms/KGbAaoYB7Bd1VMqJ0xZl
-	 SijGpc276pVKqyQjAcEFRH0jvfylxGsd3IDa/PJMkUBdo61G3CSmd1C80A8hwgdUI9
-	 BMBWHwrUItotMumolmPZV3czFLgUuFI0IegCiQHhX9roUNaVDlPXbNnCGT/c6f0LpK
-	 pGhGN6S4l4Wq2vQfm/g+FX5+Y8lp0csg1igvTkE0CxN43QcA0uQuz41ccRkAVg7pSr
-	 89sPRjN6FEGNQ==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>,
-	"Yonghong Song" <yonghong.song@linux.dev>,
-	"Xu Kuohai" <xukuohai@huaweicloud.com>,
-	Xu Kuohai <xukuohai@huawei.com>
-Subject: [PATCH bpf-next v2] bpf, arm64: Optimize cast_user code generation
-Date: Tue, 21 Jul 2026 03:59:20 -0700
-Message-ID: <20260721105921.1070501-1-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=k20260515; t=1784631971;
+	bh=LaVZvxNKUlS8V5YFdO52ViXqG34PCKTpK+eQer0gTnI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=TM9BOLXUbZv8axude7fnH0r8XrDLOI8/x4LVPjAPG823eqYIStGZxvrdJkC9sdotq
+	 SBHMq+1to+F+pV2rXsEE+y/SL3hR+P5QfvhMGN55BSQHAgoUgGOVASH4J0A4s6PdB6
+	 +sTBRPbfwA8vHdjNpB/t5TNmnlbbLcCJ9iamgnXqqt9OTiNFkPedPs3MFjCSNLFplk
+	 SYRByFhF/e1L0rg+ADBPrH3PVf1MIN/HvJX4BZKbzLG9u3b9/cD81fCxJgeXrQQv5H
+	 TxCewVYgMAegtT6YCaXeCw7KM3G1Ge64txCm6X7Q2apiTlaMdPv4IYHcFzvjCE73kF
+	 jZoH0SKUa8C5g==
+Message-ID: <cd11b015-7c59-4ce4-8eb0-8040fbb2cdfc@kernel.org>
+Date: Tue, 21 Jul 2026 13:06:04 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH slab/for-next v4 6/8] mm/slab: introduce struct
+ kvfree_rcu_head for kvfree_rcu batching
+Content-Language: en-US
+To: "Harry Yoo (Oracle)" <harry@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>,
+ Shengming Hu <hu.shengming@zte.com.cn>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260720-kfree_rcu_nolock-v4-0-964e03c41a4e@kernel.org>
+ <20260720-kfree_rcu_nolock-v4-6-964e03c41a4e@kernel.org>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <20260720-kfree_rcu_nolock-v4-6-964e03c41a4e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-cast_user converts an arena offset into a user address by combining the
-low 32 bits of the pointer with the upper 32 bits of user_vm_start, while
-keeping a NULL pointer NULL. The current sequence always emits six
-instructions: it materializes user_vm_start >> 32 into a register, shifts
-it into place, and ORs in the offset.
+On 7/20/26 14:44, Harry Yoo (Oracle) wrote:
+> rcu_head is overkill for kvfree_rcu() because the callback
+> function is always either kfree(), vfree(), or free_large_kmalloc(),
+> and thus there is no need for a function pointer.
+> 
+> kvfree_rcu batching reuses the field to store the start address
+> of an object, however, this is not strictly needed because we can
+> calculate the start address in the slowpath. For the purpose of
+> kvfree_rcu batching, it is sufficient to implement a linked list using
+> a single pointer.
+> 
+> Introduce a new struct called kvfree_rcu_head (the name was suggested
+> by Vlastimil Babka), which is similar to rcu_head but is only a single
+> pointer to build a linked list, without a function pointer, when
+> CONFIG_KVFREE_RCU_BATCHED=y.
+> 
+> When kvfree_rcu is not batched, kvfree_rcu_head is the same size
+> as rcu_head. Note that shrinking struct kvfree_rcu_head on
+> CONFIG_KVFREE_RCU_BATCHED=n kernels would inevitably require additional
+> complexity and also some sort of batching (which defeats the purpose of
+> the config option) because it cannot fall back to call_rcu().
+> 
+> For now there are no user-visible changes to the API. k[v]free_rcu()
+> simply casts rcu_head to kvfree_rcu_head. While this does not affect
+> the API, it allows kfree_rcu_nolock() to reuse kvfree_rcu batching
+> as a fallback when trylock or sheaf allocation fails.
+> 
+> Stop storing the object pointer in rcu_head.func and instead calculate
+> the object's start address in kvfree_rcu_list(). Factor out the existing
+> logic to calculate the start address from kvfree_rcu_cb() to
+> kvmalloc_obj_start_addr().
+> 
+> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
 
-The upper half of user_vm_start is a constant, so it can be written
-directly onto the offset with MOVK. Move the 32-bit offset into dst
-(which also zeroes the upper 32 bits), then MOVK the non-zero halfwords
-of the upper address, branching over the MOVKs when the offset is zero so
-NULL is preserved.
+Nice.
 
-This emits at most four instructions, and only one when the upper half of
-user_vm_start is zero. The generated code is equivalent.
+Reviewed-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
 
-Before:
-  ; bpf_addr_space_cast(page1, 1, 0);
-  7c:   mov     w10, w8
-  80:   mov     w8, #1
-  84:   lsl     x8, x8, #32
-  88:   cbz     x10, 0xffff800087b80c20
-  8c:   orr     x10, x8, x10
-  90:   mov     x8, x10
+Nit:
 
-After:
-  ; bpf_addr_space_cast(page1, 1, 0);
-  7c:   mov     w8, w8
-  80:   cbz     w8, 0xffff800087b80c28
-  84:   movk    x8, #1, lsl #32
+> --- a/mm/slab.h
+> +++ b/mm/slab.h
+> @@ -351,6 +351,33 @@ static inline int objs_per_slab(const struct kmem_cache *cache,
+>  	return slab->objects;
+>  }
+>  
+> +/* kvfree_rcu_head offset can be only less than page size */
+> +static inline void *kvmalloc_obj_start_addr(void *head)
+> +{
+> +	void *obj = head;
+> +
+> +	if (unlikely(is_vmalloc_addr(obj))) {
+> +		obj = (void *) PAGE_ALIGN_DOWN((unsigned long)obj);
+> +	} else {
+> +		struct page *page = virt_to_page(obj);
+> +		struct slab *slab = page_slab(page);
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-Acked-by: Xu Kuohai <xukuohai@huawei.com>
----
+Can use virt_to_slab().
 
-Changelog:
-V1: https://lore.kernel.org/all/20260717134817.2868291-1-puranjay@kernel.org/
-Changes in v2:
-- Rename upper_32 and upper_48 to upper_low and upper_high (Xu Kuohai)
-
----
- arch/arm64/net/bpf_jit_comp.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
-
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index b0075ece4a6e7..0f61662b900bd 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1284,12 +1284,25 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 	case BPF_ALU | BPF_MOV | BPF_X:
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
- 		if (insn_is_cast_user(insn)) {
--			emit(A64_MOV(0, tmp, src), ctx); // 32-bit mov clears the upper 32 bits
--			emit_a64_mov_i(0, dst, ctx->user_vm_start >> 32, ctx);
--			emit(A64_LSL(1, dst, dst, 32), ctx);
--			emit(A64_CBZ(1, tmp, 2), ctx);
--			emit(A64_ORR(1, tmp, dst, tmp), ctx);
--			emit(A64_MOV(1, dst, tmp), ctx);
-+			u32 upper = ctx->user_vm_start >> 32;
-+			u16 upper_low = upper & 0xffff;
-+			u16 upper_high = upper >> 16;
-+			int nr_movk = !!upper_low + !!upper_high;
-+
-+			/*
-+			 * Build the user address: the low 32 bits are the arena
-+			 * offset, the upper 32 bits come from user_vm_start. A
-+			 * zero offset must stay NULL, so branch over the MOVKs
-+			 * when it is zero.
-+			 */
-+			emit(A64_MOV(0, dst, src), ctx); /* 32-bit mov clears the upper 32 bits */
-+			if (nr_movk) {
-+				emit(A64_CBZ(0, dst, nr_movk + 1), ctx);
-+				if (upper_low)
-+					emit(A64_MOVK(1, dst, upper_low, 32), ctx);
-+				if (upper_high)
-+					emit(A64_MOVK(1, dst, upper_high, 48), ctx);
-+			}
- 			break;
- 		} else if (insn_is_mov_percpu_addr(insn)) {
- 			if (dst != src)
-
-base-commit: 0bcca2a42cc50b7d64a95c08dffc6b93661a7ea2
--- 
-2.53.0-Meta
-
+> +
+> +		if (!slab) {
+> +			obj = (void *) PAGE_ALIGN_DOWN((unsigned long)obj);
+> +		} else if (is_kfence_address(obj)) {
+> +			obj = kfence_object_start(obj);
+> +		} else {
+> +			struct kmem_cache *s = slab->slab_cache;
+> +			unsigned int idx = __obj_to_index(s, slab_address(slab), obj);
+> +
+> +			obj = slab_address(slab) + s->size * idx;
+> +			obj = fixup_red_left(s, obj);
+> +		}
+> +	}
+> +
+> +	return obj;
+> +}
+> +
+>  /*
+>   * State of the slab allocator.
+>   *
