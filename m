@@ -1,269 +1,299 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D924A3845D8
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 14:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784645430; cv=none; b=MDdBeU5cxUqpgQBX6TSiIEhulXVyg+TT4WrxYeulEaNwrDTMMWM8RWYuAx4mxygobPAtpf+bBxuoTBn+DF7pXLGxLqRvQ5tz8+5IZ5WPfGTxT6W9qY99POkPIlEa1rM+9qInc1kNnH+s25JW6ZhfajoZgU3vQPAHPT1WEmhsE4w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784645430; c=relaxed/simple;
-	bh=VdzjbCqpOCc/wxAkcZBMdXE2lZLa455cPk+XT0ctYp4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ePrHOVcrw4vE0k0sulKiiYraZauE/wx5HRlu6cpbwBO0cnye3zI29inKlJxvuCK7tPSdAx3q1u6hPjDCc13tg8DwiadP7mwM+rS+2654ojrRzrOw41AVOJp81fuUczubd2mebRFPlVoV9a96SH0hlR3lljndrB33iFG2PDcZmME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=F/6S49bv; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=JDX2t/Jv; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3424DA553
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 15:17:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784647071; cv=pass; b=kBhxpq6KZkM0AxwEmQTysZZtwmZQuMLfhu9aD4CQmNdfvVGLVhYEAqB7T5Ng0/CMtdVPfSLX6hQ8GjRGCMLooIgvbInc724b62s059+Rg2dYfrMrFW4I7pBCizdQvOtnESTH4/y4u82M00lsehysaKdqtqWOns66BaKrOXMuedE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784647071; c=relaxed/simple;
+	bh=7Bl6iGExNSfEFuA2llVeNlo332mnIke0DZlReiI3nQE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bh8+dAQEI/P5DVKUEW6lB/0p+866HFEhn2p1vOjFAL4Di6QyeRTnpVzEfNM0Ulw4hO0WPNz9+YtJk1yEqLTKE+tN/h2xZMieLf++ylfxCCxemVuC6MYBHuQ1NbjE9RoS/x9K9SPa9v4gLAeakCAOyW7fuOJtCG75QI0Lg/NkeeM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ld/UM5IQ; arc=pass smtp.client-ip=209.85.167.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="F/6S49bv";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="JDX2t/Jv"
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66LDgAeg1592126
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 14:50:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	yAKVXKkluIoVT2T7N4XQAHdKs/hPq5A0t8zyTSkrPJ4=; b=F/6S49bvvnH4yYT9
-	N+GBwPl0pMXFrT3pq65+0jKTDv/V3cYvChvxXWLepEqK0bGH/TUH45/KeB+8sggf
-	kpNV0o5mz/Z3F3Z2p1KEj4s5Tz+rDUyRrFSmBtFhrNMMHaYUn4sdQoetmXT/bwDA
-	kvudWlVyWpcNNcaDeSs2SkiYuuadyZAvXfxzMRr/7aKVEenaZIeOd4/fUSH+JF4H
-	DVzsJizbgilarL2UsrfJYvD1va5bIELaI1v+2SGgpzZbYQb7vTb0idRl4m44iyWE
-	c8jEIimIOqcSHZ+wvnQcpfR9OjyeMW+OQSayMgpq4GWEQ9RWoK2EewGc407nQHMw
-	JlVwCA==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4fj0as3buu-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 14:50:27 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-51c075c1e25so163031961cf.3
-        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 07:50:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ld/UM5IQ"
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-4a071495be0so4621995b6e.0
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 08:17:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784647068; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ixVcFnSim6QiuNeK+jbeNpTqRPtUe5M7O9jHDDsputl1JQi81Mwp1FSoDX51EvrAHi
+         RckcmCYqYTbQu4WiCxt6o/iWNnBgfSvhk2C+p24BlIcvWiOWPbT5mkOCUg6D11cijcIU
+         PdOSbsUB1bNHgnZKHJt3xoktFdhBh7BzcR4QtTs9ViZav/dzahNacrycFGgMCZp9O9aB
+         6gDzVnqF2wA2Tr4Dxz5199kmHqD/vl37wLBIwqtRIswS6VAYeplZYr70PHLWUqOqLvzn
+         eT3sae/15f+TA3yPCRvBPvKIH78M0nqJcLvvFDAJCmFWsbUUxQMFUNscoomTIwBQbtlH
+         jv5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=PMoHz0UZ2YFtSigDv9V4lPoZ67yQ64GXiacPhsl7yN8=;
+        fh=dC32wNMutUjZ+npY0kJcNGy9Syru3WOiWSRtrnSwBVQ=;
+        b=kM1XE4QX7xQ67gySCgwE9qZsmSLlbPAUK461Hnyn1vPOFIyEO2gIf1boYieDZDHral
+         09/rGpI39wP/oj6zHAuopITKaOUs2Bo0XOCLLnVDHPz8PRuC+fGxbp5us0ZoIrzrnXwk
+         CRH/26ZvZmqz92dNzH0G6CMv0VFaSwGgKpXxz8Wk/c5vsPi4o51i5Rga/QPDmeyJ+7OS
+         XIJMDqS9Vm1fVE3v9AHGm1HeJidLiwCMaUbfK8SFx18WYxTu3qUh5ZTT/YEvnXUDURAm
+         1fq5H0eNMZgVPJlKJxt4j/2lhrlQVUCd8E6FSuLBzVZnuKUctg/httDN3lLPhaNzJeER
+         YLsg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1784645427; x=1785250227; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yAKVXKkluIoVT2T7N4XQAHdKs/hPq5A0t8zyTSkrPJ4=;
-        b=JDX2t/Jvht8ZnRUlrY0Mc82Dk3Hv2qneW6DSoHUV6akxjBL8ijSNhoQhHlaPE68Djt
-         L8UyDT/Deg4EgW1OIhptR/8Cd3m3OpvDhudR216Bm6hDDiduqI88HP0/d6ORxOS32VUB
-         /NuZum2KbxsJVc7MTaCRB4aK/HBEze+jPkvjR3mYIb0pQiZ34A5hFY29oMxpXQvViAxG
-         qn/cli+a3ZT0FvmD+eG1u8Q15qyE6oWOO13poiW2jyMPQYXEJeeY21F9UrjvQfSXCG6e
-         z52yjq1xFiL+1rreKjKTOicVbLL8+xLCStSD6A+UsIFZ6pnnSwzj1CgwV1JM1xFr71NI
-         NXrg==
+        d=gmail.com; s=20251104; t=1784647068; x=1785251868; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=PMoHz0UZ2YFtSigDv9V4lPoZ67yQ64GXiacPhsl7yN8=;
+        b=Ld/UM5IQvTgZjpUtzDkmTWl44ExbXjjpL6w1syejoBgDTANTcjmg5nh7sv6RAM9sFT
+         nySa1BkQKZSeUg5gmCFyXwhEjc0koVEWFjCAuGm08hHSmz21rXpkLQ332W0CN1b0rFHt
+         XXbR8LWErDLFzIiuLwzy5kpbGV+krueaUyS52MeyzD0XEe8QQq9kqPoFHz6vX7wOL+YV
+         1ggpWH5XJPe+AzlgzJ9a13RjX/GjtGhY097e8vt34fPu8f43SU6h6V0AiexEAS6CrBJZ
+         eqOuiSRPTIR6ao15Th3pLl/ANrf2wPKPPCik/cBfz22sMzoDDUp7gJagU6Hk3TLuB6de
+         uWLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784645427; x=1785250227;
-        h=content-transfer-encoding:content-type:in-reply-to:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=yAKVXKkluIoVT2T7N4XQAHdKs/hPq5A0t8zyTSkrPJ4=;
-        b=Cq1ZTU21cFV0Hj7ONGJDj4BlTfAbltlVgsHHa0OkXSFw2Cf3I89u4E+XsFmbiJD1ct
-         psxeTEPdcPIn4LNtIGbWGCcuqXAymufTnE9t3HwsIUM8WjkWOP8Gb//X6OKinpzwaIiS
-         ggF/nycnCpQORbMR0PAeVG1PFQlh03+SeLFpK0hsAEkWvaXleag8vM9oCKEtL9bRYSIG
-         y1gbRbiI2uOiBkMTSzJjgmnQOWN5m1Em9qWCObqMHs/HIFZa8qZkxsLIp2LAr3U113DW
-         GNjkhk/2Ynwl7MZ1DuOX2Fp4p7JmlJGER0NaFjecpYhF3aHMIX9+E33x9eL84VBMHG7v
-         wiaQ==
-X-Gm-Message-State: AOJu0YyT4tMjFk+G4oLai6NwIBll1Cg2fznplLeQfxZGVXw9ESgNjxdi
-	EQwIr4AXdzF+BzNYECXirGRQUX71SKWgXD6WlRPDwJym/w9e1DW39DTwNnKzVSXM4GV/aaZMk75
-	267ZMnrurqdymUzw4YoCUs8zv5qO4fR8wJkbIvxCbZvC9YNP1Hdk8ydA=
-X-Gm-Gg: AfdE7cmTUMBYlqLNwqlmKHZIwu5A4bYyldDt0NhsQSjKjmCSIvjX90/kP0dzPD9iapn
-	G9WRQeMAeivQb2KhZdKzGcjSUV5sde1KWGq27G5vwo5EN9+BL0+G7W0QyDWBolRD3dkp9KkM1dL
-	9tAWdJACY3sKt5fawMbe9nfcHqfOH+NYy7B7r8Xf4f1BOtFYku+kvLAX5fM7c9YLoXsRM1JG17E
-	gEuKnLVyPElHDkcCvdNhSSDLgOELjBsYHRiwhE1isJvxna2tYuCOlix3JdjkdivA7rb0ZSFaDXG
-	A4UFtjtcGhVKcE+LdBAJHm4WL7YqeIvhnut0kLP6kE99maLFaZEH8TK1OvCNdRokU2OTpoS2yS8
-	w7sQtEDUX1T1a9F6VRDkOS29N9oT9qjchpgPKreDDgOqln3yy43Q=
-X-Received: by 2002:a05:622a:834d:b0:527:7112:a5bd with SMTP id d75a77b69052e-5277112a701mr7780661cf.78.1784645426879;
-        Tue, 21 Jul 2026 07:50:26 -0700 (PDT)
-X-Received: by 2002:a05:622a:834d:b0:527:7112:a5bd with SMTP id d75a77b69052e-5277112a701mr7780241cf.78.1784645426283;
-        Tue, 21 Jul 2026 07:50:26 -0700 (PDT)
-Received: from [10.131.142.220] (220.171.88.92.rev.sfr.net. [92.88.171.220])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956546de4fsm77753335e9.1.2026.07.21.07.50.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2026 07:50:25 -0700 (PDT)
-Message-ID: <4c78319b-9816-4d01-acc9-fda1a68de3ec@oss.qualcomm.com>
-Date: Tue, 21 Jul 2026 16:50:21 +0200
+        d=1e100.net; s=20251104; t=1784647068; x=1785251868;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=PMoHz0UZ2YFtSigDv9V4lPoZ67yQ64GXiacPhsl7yN8=;
+        b=pqu9eQblrFM62GcoGWMnVLi0bAZYUx0zGFHQhJhbfHhddOG+wKFJzu2ql2ymKB4CRN
+         vtHaFyU5bK//bNlx4nv2SZAQhzaspZDcddeyHskwlEU7QLwvGAFx21Z3lTER8lLtUmlO
+         wDjJu5OKqoQthbpBV9T6KjffBkhQLW9mw8lvlRFj7VD81/wfJJCqNUc49zmawCYV0u2b
+         t59SWf73W4K7JBu6WEj84qlNwWY4Vb/FzbubgxaaY9BJLR+kA1AGVmYOJX6o9hkSkGhU
+         Idqf/3HjRsJlcPEYpFZSPO7eLz51+CXezf1fyHwy/KgY1bd8F1RUv2Am+EcnnQ/mgyER
+         vUkA==
+X-Forwarded-Encrypted: i=1; AHgh+RoP0dQiknzW7iS2jhaU5zi3GRg7ehYP/Pdz1KvxbQXxSJhKsKyH6AMAIPArqAlW4AOrbNU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVykwl3hmpQ7/KC+lACpPw42a4A/CP1VXEC0GTF3YA3RtdAsDb
+	/4l+wJaVq6D8xtlzeUt/wsUBfoCDUgp6+MwUsBk8hMPgKiUfa5yFjFlBelAXpH/fP71EnBRfj1M
+	QbLeX1WvETVQpCcvQ/9OhQkqefp0UhWM=
+X-Gm-Gg: AfdE7cnwmHWMAOfdmr0OIgH2fpaRHBLdaudbiLCMd5gmYY7R1oCNV+kUfPhFRq/ECRM
+	UWnQBV7hVhVG+fWaCJfn7SWJ480VlSzyLwe+Mb2KcwAWiGXLwilMAeVhqzalo0eSjhppuZfTW22
+	4S7DtgdTQiZE/fhJI2zUaayKzmtI8QnQZJbusLqCFyi4JoSIJ5djjLxsdVv0POr9xsGBGrzpDFF
+	mOMWxvJkJXd4WyORipd6dvL2mmikHgdKwIZsOgSxUhQbjV7w7ZFM3DolvikCkA=
+X-Received: by 2002:a05:6808:f8f:b0:495:f519:70f1 with SMTP id
+ 5614622812f47-4a4d05655bamr11557394b6e.31.1784647067874; Tue, 21 Jul 2026
+ 08:17:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpf, mips: Add support for BPF_SDIV and BPF_SMOD
- in the mips JIT
-Content-Language: en-US
-To: Nicholas Dudar <main.kalliope@gmail.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-        memxor@gmail.com, tsbogend@alpha.franken.de,
-        johan.almbladh@anyfinetworks.com, paulburton@kernel.org
-Cc: bpf@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, visitorckw@gmail.com
-References: <20260716211055.2569433-1-main.kalliope@gmail.com>
-From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@oss.qualcomm.com>
-In-Reply-To: <20260716211055.2569433-1-main.kalliope@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIxMDE1NiBTYWx0ZWRfX1AYzdT8kmGSN
- RcFTs8svpWFXwKx92s5g4AoU8Jh7qWVm0ESUD7CY7rSuQzO9L742JPaxVMgHc/F7hIl+HXw4emp
- pHQrBB6mW7KR702rplv6E7oUqSeMP6Y+wIKiuxiZjez5r9ByWNMQDxsrQU95QeDRsOTK9r6JxXj
- wmFI8i5jtjrA+ozkSwv9zxETyumtg3oTQeCiKUqY+GMnyIFa717Sh1tw9+zxDmcNl1SnvL+N+zN
- LV2KBze41WUFIb8cOzcV5fCx0OsxtI2FIZSIFl+5UIxYqHAduRuFeQIK3T4MGOchCCaX6jduUQG
- rf4jDwvd+LgrYil1r+KOGIhhO++ualnMN5dbbKd068t5nqW3x3e6dkD8v2GNaOA59gFKoczetkh
- cJ+e+9laZEUDkzU0/XdkAFIJm/A5PyDBmX2T2QUyRcuDidIDcRkTnyYo9QSMosNAjXMGCA8sCIw
- ZcGWuyv2QINB+xG8uLA==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIxMDE1NiBTYWx0ZWRfX3ZB40W9VSHz3
- iN2WfpON3QyGOpb2z8CdDVFdP5DK7oylo/1O6bboPrxwVSxVogIYO946LUKZY7CzoIO67iZXG0w
- A5HeSgYr4G4cEdR70bnQyxnPntkM4aI=
-X-Authority-Analysis: v=2.4 cv=DoFmPm/+ c=1 sm=1 tr=0 ts=6a5f8733 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=HvFMDRKYglX6yPpWI6gtsw==:17
- a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=M51BFTxLslgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=YMgV9FUhrdKAYTUUvYB2:22
- a=pGLkceISAAAA:8 a=c_zzUmBBnj_Mq94Nlw0A:9 a=QEXdDO2ut3YA:10
- a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-GUID: AdAo1N0jIb1OpVfZtLYqKfKPtVwWq5-F
-X-Proofpoint-ORIG-GUID: AdAo1N0jIb1OpVfZtLYqKfKPtVwWq5-F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-21_03,2026-07-20_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1011 phishscore=0
- suspectscore=0 impostorscore=0 bulkscore=0 priorityscore=1501 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607210156
+References: <20260719175857.4071636-1-ap420073@gmail.com> <CAHS8izMocev_0TtAsUr9BqCm6sH2DBh-bPK4DfZYNEAb_d2G6w@mail.gmail.com>
+In-Reply-To: <CAHS8izMocev_0TtAsUr9BqCm6sH2DBh-bPK4DfZYNEAb_d2G6w@mail.gmail.com>
+From: Taehee Yoo <ap420073@gmail.com>
+Date: Wed, 22 Jul 2026 00:17:36 +0900
+X-Gm-Features: AUfX_mz2BhMqLPLPvuogKcIXppoGgoP6WsP21eb7KRTuGc6qaIlknUYcLS2hihA
+Message-ID: <CAMArcTXoUyPm1j1HW7xHRbRCLryvmJQVhJGBpGJ2c65mbxs5QQ@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next 00/13] net: knod: in-kernel network offload device
+To: Mina Almasry <almasrymina@google.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>, Alexei Starovoitov <ast@kernel.org>, 
+	amd-gfx@lists.freedesktop.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Andrii Nakryiko <andrii@kernel.org>, Bill Wendling <morbo@google.com>, bpf@vger.kernel.org, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, David Airlie <airlied@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
+	dri-devel@lists.freedesktop.org, Eduard Zingerman <eddyz87@gmail.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Eric Dumazet <edumazet@google.com>, 
+	Felix Kuehling <Felix.Kuehling@amd.com>, Hoyeon Lee <hoyeon.rhee@gmail.com>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <kees@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Leon Romanovsky <leon@kernel.org>, 
+	linaro-mm-sig@lists.linaro.org, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev, 
+	Mark Bloch <mbloch@nvidia.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Michael Chan <michael.chan@broadcom.com>, Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Pavan Chebbi <pavan.chebbi@broadcom.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Shuah Khan <shuah@kernel.org>, Simona Vetter <simona@ffwll.ch>, Simon Horman <horms@kernel.org>, 
+	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Tariq Toukan <tariqt@nvidia.com>, 
+	Yonghong Song <yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nicholas,
+On Tue, Jul 21, 2026 at 4:18=E2=80=AFAM Mina Almasry <almasrymina@google.co=
+m> wrote:
+>
 
-On 16/7/26 23:10, Nicholas Dudar wrote:
-> build_insn() picks the div/mod opcode by ALU width alone and never
-> reads insn->off, so the mips32 and mips64 JITs do not implement signed
-> BPF_SDIV and BPF_SMOD (off == 1). Signed div/mod get an unsigned
-> quotient and remainder rather than the signed result the verifier and
-> interpreter produce for negative operands. Neither JIT has a signed
-> divide opcode or C helper.
-> 
-> Add the signed path alongside the unsigned one:
-> 
-> - uasm gains div/ddiv/mod/dmod emitters (and their R6 forms) next to
->    the existing divu/ddivu/modu/dmodu. This is shared MIPS assembler
->    infrastructure, so it lives with the unsigned emitters it mirrors,
->    not in the JIT.
-> - The 32-bit and 64-bit JITs thread an is_signed flag (from
->    insn->off == 1) through emit_alu_r()/emit_alu_r64() and pick the
->    signed opcode. On 32-bit MIPS, ALU64 runs through a C helper, so
->    add div64_s64() and a signed remainder helper beside the existing
->    div64_u64()/jit_mod64().
-> - valid_alu_i() drops the divide-by-power-of-two strength reduction
->    (/ (1<<n) -> >> n, % (1<<n) -> & mask) for the signed case. An
->    arithmetic shift rounds toward negative infinity and a mask drops
->    the sign, so the signed K-form falls through to the register path.
-> 
-> The K-form rejects imm == 0 at verify time, and MIPS div/ddiv, like
-> divu/ddivu, does not trap on S32_MIN/-1 or S64_MIN/-1. The ALU32
-> result is zero-extended after each div/mod, for the signed and
-> unsigned cases.
-> 
-> Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
-> Assisted-by: Claude:claude-opus-4-8
-> ---
->   arch/mips/include/asm/uasm.h   |  6 ++++
->   arch/mips/mm/uasm-mips.c       | 10 ++++++
->   arch/mips/mm/uasm.c            | 15 ++++++---
->   arch/mips/net/bpf_jit_comp.c   | 47 ++++++++++++++++++++++------
->   arch/mips/net/bpf_jit_comp.h   |  4 +--
->   arch/mips/net/bpf_jit_comp32.c | 28 +++++++++++------
->   arch/mips/net/bpf_jit_comp64.c | 57 ++++++++++++++++++++++------------
->   7 files changed, 122 insertions(+), 45 deletions(-)
+Hi Mina,
+Thanks a lot for your review!
 
+> On Sun, Jul 19, 2026 at 11:01=E2=80=AFAM Taehee Yoo <ap420073@gmail.com> =
+wrote:
+> >
+> > knod (in-kernel network offload device) drives a GPU directly from the
+> > Linux kernel - with no userspace GPU runtime such as CUDA or ROCm, and
+> > no userspace component in the data path - to accelerate packet
+> > processing.
+> >
+> > The kernel itself allocates the GPU's queues, JIT-compiles the
+> > per-packet program to GPU machine code, and dispatches it; the NIC DMAs
+> > received packets straight into GPU memory and the GPU returns a verdict=
+.
+> > The GPU is programmed like any other in-kernel offload, not through a
+> > userspace framework, so existing XDP programs and IPsec SAs can be
+> > offloaded to it transparently.
+> >
+> > The design and motivation were presented at Linux Plumbers Conference
+> > 2025:
+> >
+> >   https://lpc.events/event/19/contributions/2267/
+> >
+> > Motivation
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > Line-rate packet processing that does non-trivial per-packet work - an
+> > XDP program doing L4 load balancing, or IPsec crypto - is bound by the
+> > host CPU: each core handles one packet at a time, so scaling means
+> > spending more cores. A GPU is the opposite shape - thousands of lanes
+> > running the same small program over many packets at once (SIMT) - which
+> > happens to match the per-packet-program model of XDP.
+> >
+> > knod moves that per-packet compute off the host CPU and onto a GPU. The
+> > NIC DMAs received packets directly into GPU memory, the GPU runs the
+> > program across a batch of packets in parallel, and only the result
+> > comes back: a verdict for every packet, plus the packet itself for the
+> > ones destined to the host. The CPU no longer pays the per-packet
+> > program cost, and throughput scales with GPU occupancy rather than core
+> > count.
+> >
+> > Crucially this happens entirely inside the kernel. GPU packet processin=
+g
+> > today generally launches work from a userspace GPU runtime (CUDA and
+> > friends) and keeps that runtime in the data path; knod instead builds
+> > the GPU queues, compiles the program, and dispatches it from the kernel=
+,
+> > so it plugs into existing offload paths (XDP, xfrm) with nothing to
+> > install or keep running in userspace.
+> >
+>
+> TBH I found this motivation weak, especially since IIUC you're asking
+> for almost ~50K lines of code to be merged to the kernel. My thinking
+> is that (a) it's true that Native XDP takes up CPU cores, but
+> HW-offload XDP already exists and takes up no CPU. (b) with AI, GPUs
+> are very expensive and the work they're doing is critical, so you're
+> unlikely to buy a GPU and use it for knod-offloaded XDP; you'd
+> probably buy a cheaper smart-NIC? And in the cases where you do have a
+> GPU, it's likely your system's money-maker, and you probably want to
+> offload work from the GPU, not to your GPU.
+>
 
-> diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
-> index 6ee4abe6a1f7..504daea4aac2 100644
-> --- a/arch/mips/net/bpf_jit_comp.c
-> +++ b/arch/mips/net/bpf_jit_comp.c
-> @@ -208,7 +208,7 @@ void emit_mov_r(struct jit_context *ctx, u8 dst, u8 src)
->   }
->   
->   /* Validate ALU immediate range */
-> -bool valid_alu_i(u8 op, s32 imm)
-> +bool valid_alu_i(u8 op, s32 imm, bool is_signed)
->   {
->   	switch (BPF_OP(op)) {
->   	case BPF_NEG:
-> @@ -237,6 +237,15 @@ bool valid_alu_i(u8 op, s32 imm)
->   		return imm == 0 || (imm > 0 && is_power_of_2(imm));
->   	case BPF_DIV:
->   	case BPF_MOD:
-> +		/*
-> +		 * The rewrite to a shift/mask below is an unsigned-only
-> +		 * optimization: arithmetic right shift rounds toward
-> +		 * negative infinity rather than zero, and masking does not
-> +		 * reproduce a negative dividend's sign. Force the signed
-> +		 * case through the general register path instead.
-> +		 */
-> +		if (is_signed)
-> +			return false;
->   		/* imm must be an 17-bit power of two */
->   		return (u32)imm <= 0x10000 && is_power_of_2((u32)imm);
->   	}
-> @@ -339,7 +348,7 @@ void emit_alu_i(struct jit_context *ctx, u8 dst, s32 imm, u8 op)
->   }
->   
->   /* ALU register operation (32-bit) */
-> -void emit_alu_r(struct jit_context *ctx, u8 dst, u8 src, u8 op)
-> +void emit_alu_r(struct jit_context *ctx, u8 dst, u8 src, u8 op, bool is_signed)
->   {
->   	switch (BPF_OP(op)) {
->   	/* dst = dst & src */
-> @@ -385,20 +394,38 @@ void emit_alu_r(struct jit_context *ctx, u8 dst, u8 src, u8 op)
->   		break;
->   	/* dst = dst / src */
->   	case BPF_DIV:
-> -		if (cpu_has_mips32r6) {
-> -			emit(ctx, divu_r6, dst, dst, src);
-> +		if (is_signed) {
-> +			if (cpu_has_mips32r6) {
-> +				emit(ctx, div_r6, dst, dst, src);
-> +			} else {
-> +				emit(ctx, div, dst, src);
-> +				emit(ctx, mflo, dst);
-> +			}
->   		} else {
-> -			emit(ctx, divu, dst, src);
-> -			emit(ctx, mflo, dst);
-> +			if (cpu_has_mips32r6) {
-> +				emit(ctx, divu_r6, dst, dst, src);
-> +			} else {
-> +				emit(ctx, divu, dst, src);
-> +				emit(ctx, mflo, dst);
-> +			}
->   		}
->   		break;
->   	/* dst = dst % src */
->   	case BPF_MOD:
-> -		if (cpu_has_mips32r6) {
-> -			emit(ctx, modu, dst, dst, src);
-> +		if (is_signed) {
-> +			if (cpu_has_mips32r6) {
-> +				emit(ctx, mod, dst, dst, src);
-> +			} else {
-> +				emit(ctx, div, dst, src);
-> +				emit(ctx, mfhi, dst);
-> +			}
->   		} else {
-> -			emit(ctx, divu, dst, src);
-> -			emit(ctx, mfhi, dst);
-> +			if (cpu_has_mips32r6) {
-> +				emit(ctx, modu, dst, dst, src);
-> +			} else {
-> +				emit(ctx, divu, dst, src);
-> +				emit(ctx, mfhi, dst);
-> +			}
->   		}
->   		break;
->   	}
-Your patch would be clearer if you extract a pair of emit_div()
-and emit_mod() helpers in a preliminary patch, then include the
-32r6 support (this patch).
+Thanks, these are fair concerns.
 
-My 2 cents anyway.
+For a system where the GPU is already fully utilized, a SmartNIC may
+indeed be the better target for XDP offload. We are not arguing that
+GPU offload is always cheaper or more efficient.
 
-Regards,
+The goal of KNOD is to provide an upstream path for using programmable
+accelerators already available in the system for kernel networking.
+Hardware XDP offload exists, but the available functionality is tied to
+the NIC, its firmware, and the features maintained by the vendor.
+KNOD instead aims to provide an execution layer that can be extended
+in the kernel community. XDP is the first workload used to validate
+this layer, rather than the intended limit of KNOD.
 
-Phil.
+> But as far as I can tell there should be much more interesting
+> applications for what you're doing rather than offloading XDP. Like
+> wouldn't you with this feature be able to implement ML collectively
+> like all-to-all/all-reduce/all-gather as purely XDP programs offloaded
+> to the GPU? If you have that implemented and can positively compare
+> performance to RoCE or RDMA that would be a much more interesting use
+> case IMO.
+>
+
+I agree that this is a promising direction, and collective communication
+could be a good fit for this model. At least for all-reduce, however,
+BPF/XDP does not currently support the required floating-point
+operations. If that support is discussed and added by the BPF community,
+this would be an interesting use case to explore with KNOD and evaluate
+against RoCE or RDMA.
+
+> > Model
+> > =3D=3D=3D=3D=3D
+> >
+> > knod binds two endpoints through a third object:
+> >
+> >   - a NIC-side netdev, registered by the NIC driver;
+> >   - an accelerator (the GPU), registered by a provider built into the
+> >     GPU driver;
+> >   - an offload device, created on attach, that connects them and owns
+> >     the per-queue data-path state.
+> >
+> > The accelerator ops are feature-agnostic, so different per-packet
+> > programs plug in behind one interface. This series ships two features
+> > to show the framework is not tied to a single use case (the accel-type
+> > uAPI also reserves "dpu" for future non-GPU backends):
+> >
+> >   - BPF:   an XDP program attached in offload mode is JIT-compiled from
+> >            eBPF to an AMD GCN shader and executed on the GPU.
+> >   - IPsec: RX ESP full-packet decrypt on the GPU (proof of concept,
+> >            see below).
+> >
+> > Data path
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > For a NIC RX queue bound to an accelerator, a received packet flows as
+> > follows:
+> >
+> >   1. Attach reconfigures the NIC's page_pool so its pages come from GPU
+> >      memory, exported as a dma-buf and plugged in through the devmem
+> >      memory provider. The NIC therefore DMAs the packet straight into
+> >      GPU memory - there is no host-side copy on RX.
+> >
+> >   2. Instead of building an skb and entering the stack, the NIC's NAPI
+> >      pushes a small descriptor (memory ref + offset + length) onto a
+> >      per-queue lock-free SPSC ring shared with the GPU.
+> >
+> >   3. A persistent GPU worker drains descriptors and runs the active
+> >      feature's shader over a batch of packets in parallel - one
+> >      workgroup per packet - then writes a per-packet verdict back onto
+> >      the ring: PASS, DROP or TX.
+> >
+> >   4. Back on the NIC NAPI, each verdict is applied:
+> >        - DROP: the GPU page is recycled to the pool;
+> >        - TX:   the packet is sent back out the NIC directly from GPU
+> >                memory (XDP_TX), with no host round-trip;
+> >        - PASS: the packet is copied out of GPU memory into a host
+> >                delivery page by the GPU's DMA engine (async SDMA),
+> >                wrapped as an skb, and handed to the normal stack.
+> >
+> > So only PASS packets ever touch host memory, and even then the copy is
+> > done by the GPU, not the CPU.
+> >
+> > The control plane is a generic netlink family ("knod") for
+> > attach/detach, accelerator/NIC inventory, and per-accelerator feature
+> > selection, with notifications on bind/unbind.
+> >
+> > Code layout
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > knod separates into a subsystem-neutral core and a GPU-specific
+> > provider; nothing in the core knows about GPUs. Roughly:
+> >
+> >   - core + control plane + NIC drivers   net/, kernel/bpf/       (~4.4k=
+)
+> >   - GPU provider (queues, JIT, shaders)  drivers/gpu/drm/amd/    (~39k)
+> >
+>
+> Since the changes are so large, I would break this work into many
+> series, the first which only supports a very minimal set of work
+> (which I would guess would be XDP_DROP and XDP_TX), and then follow up
+> with another series which adds XDP_PASS support, and then IPSec, etc.
+>
+
+That makes sense. We will split the work and start with the minimum
+functionality needed to demonstrate the architecture, likely XDP_DROP
+and XDP_TX. XDP_PASS, IPsec, and the remaining functionality can follow
+in separate series.
+
+Thanks a lot!
+Taehee Yoo
+
+> --
+> Thanks,
+> Mina
