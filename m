@@ -1,129 +1,159 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pj2-f7.google.com (mail-pj2-f7.google.com [74.125.227.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538A33C1F2B
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 17:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0184D90B8
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 17:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784655756; cv=none; b=ZUCGcgRyVf4w4YIwi5xAAXlsDuL7K0i4F3b5lY++FW5flKT3HVOePFjwgcN2NfPNNAIP4pn0ZDZWmbLcb8PjmNbMoTFGmFzZ9jUk08CybixPoUy07i9/sdYSIxqk/ZkwjQCAfLifRcxb9ZKDtHBzpCcZGJWtZr+SvNtgfhk+O1I=
+	t=1784656119; cv=none; b=sKhRXFCRmrazNrhhOSj2c7tsdPdf5SnDBA7DVwnGr0rdQ8EzWAkWGjzwehYp/RxETAEwALoGtv/ueg/4FSgGkmm3RS55YYoFyN5gmaG7+0h2GdyvDXEwFc6rje1EC1COLfcfLQ/naWnrE8YDF2y31HkOuztD3AEAMyekTxdQ3r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784655756; c=relaxed/simple;
-	bh=6xFKwekECWUA0X47pSCwxKCiYB6mh0Ro1gs7w5BfjQY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Miu3fvnpdLBZK7CpnP1pNOg5m7mX4StzcjMJZQeCWoDXMwWLEf320mHPxqKjSTMSqvIdOF6Lu5saxlPinRYq0lq1SGwRStwenrf6bFqob/kXvEPKtZSsNh8vfMo7ub68MVaGYW/bHQsgM0ta3Rb6QGDRLBZVjjCv52BMxUiO4Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=hQLPTr2b; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1784656119; c=relaxed/simple;
+	bh=uxpBSxsdvw9bPVWAq3FN82g9IP6N274Ej/qPp1bMJpo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nusOs530RvdBdWdlD1gP2NJvzLVUm0/+PW/TRJbIABvi2MkiThp7rJTbrZtVLK8GsNLu6lEQj/3l1itnXTAQC9i+I7ttvNuzk018IrUEK8LWVzbTG1Qb2Xln4QefDhd3lh9T+0EEHjQyBpQVoUsoSsWs47pGP97aQd0abqDPuaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=adc95vtt; arc=none smtp.client-ip=74.125.227.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="hQLPTr2b"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-ca12086c06eso9678849a12.0
-        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 10:42:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="adc95vtt"
+Received: by mail-pj2-f7.google.com with SMTP id 98e67ed59e1d1-38dcd98e5easo5876085a91.0
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 10:48:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784655754; x=1785260554; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=7NxyykXPpGi3o6qz0JzAnoShwcagUkmE6BiBsUAJTJg=;
-        b=hQLPTr2bD1ADi0LhOnXmHudYpaQ7xnUoRMQlQTqCb+jXzZcGyuzyrT8/Gr17Z6Z74o
-         EpYlafozzq1MqG6T+QCEVwBUX+ahe0XSl8bLoxStqqteIw7ydngMvyPPc5Llg+XYlfZY
-         dj+o3xSWm57NwWI0q2YZFe21uSse91GYXb8dQkpaALS0tDPvsWgIKMFaZRlu1QsMxJbg
-         4JTiRwZkzCbQ3etz1WHwcSVO78EOPGVO7KSSJsNjrpRq/LLxdAkhQkfqnCttjFCa19Bm
-         kzYPmjmN2tw0MUaHcZAFIoXnZ0w468dTrlVzTwqgvABAhv7noFgb7zRXOWNIz78FaBzv
-         IxIA==
+        d=gmail.com; s=20251104; t=1784656117; x=1785260917; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ocH8UcOo4UY0LfArAy9N9P4eBtmhXMCHbqhRio/RB1c=;
+        b=adc95vttj0/YNjk4MoS4Zb8a3M5zg/8jr0y73daEoFbRMFM0P2ix2+VzbCCIAGtH8E
+         uGhl9n8BXZuJd/vHLZytXIPXkIIENYn0DdoYfE+VoVgkhA4ecMNlH8iBGhBXiLSRE1x2
+         PS5RvT8xm5X4i12zKUkZtoN5ef2lSTYWbEhDSD1yBn0rZ9LSUV6Zw1hx9GVuM3+rk3IW
+         2UrhzoicubpKG1QwVcAVRSYaJbs4R9DnCzDGHqcfC3zXptVZv9MRcxXXSl+4WzzNDhQU
+         tfNTkAfGJGrOlRhoFtuafM/IFvxdH6ZWfv468xGNALByVs61O5wg5DGeJGYFmkJpxHPQ
+         dKEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784655754; x=1785260554;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7NxyykXPpGi3o6qz0JzAnoShwcagUkmE6BiBsUAJTJg=;
-        b=fkghwYZMdbXqJxN1ziBm+taL1dlWWn/xSESBnTEVO1zsVeI2vt+pEQ5M8/4WLON1eo
-         29M3NFb1RK497T988cXJZIaZGeeP70TDnopUP2q3v7k91TfpRY0s5lqtGjxzdutY1NdP
-         h0HkxUUG2xTgg4LfukWUiobcB1q2AU9p6o4X62Sb2T/ECEX8BQaAigfabqRNkmy1et0b
-         1MsRmV4qGZnBOmvfSMX54bwgtKoxCQutBfQ3cvEPU92XWBmITrJbTtQFLrSSYS975fD6
-         HCxH8aICfqiVKJboIl5eZX2kecZwE4SOaq2eRRbdJCsp2a1GhQ1E9gIJ08ryLoNkHlia
-         UaRw==
-X-Gm-Message-State: AOJu0Yy/xlPIq/ekfVu3baQ96bc3mO9bJe56l4q3Rb9KVYgN8a/XLE0D
-	k7K44nHskMBjotzuudbxXcMBBaIBPPFLpiOzTwVpVaAkes/LyRkqCKHjSnWk014tWf4=
-X-Gm-Gg: AR+sD101vueiBeMbpVT3Tv8l83Q8cNTgS47B2bfkwICHzsGnvvG/sDP8zYYnBXcSGNe
-	OCrFIwGnMke4Fy3fj1xMVLQAKk2cYNL0l5GgePj4XV+13murYrUvY0wP3tEAsIsGA5xT8598xxa
-	19wHKSI5dyilHYXH2nSo00o35cR3is+NTzMuMj0Op5gZs22384r80TwyIh4WPrmqaBoT3rauc18
-	/hqEuGj0KH9n0oDH8iUuxPNMWbBnUVw1gBil6engoIB2aDvb0yvnonyakGMo7hPRZ2BniRXCXuT
-	bHnHjGcpouxmUli8GexZt2VRaXk6WS2kPA/UfSNaaOiVG87HhPHgxWjRK4nC67j0CqhLq9rr0jV
-	20KcXLSR7DP4rvugBzBXdW0Gp+cvPH+T+qEEbnNP2ytfE67yiRl1ai9bDJUiedLKJF+GwaEcSm+
-	vNWA==
-X-Received: by 2002:a05:6a20:b786:b0:3bf:6237:4d3f with SMTP id adf61e73a8af0-3c3ad7cfc5cmr19531762637.18.1784655754383;
-        Tue, 21 Jul 2026 10:42:34 -0700 (PDT)
-Received: from localhost ([163.114.132.129])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3147dc9d932sm872448eec.12.2026.07.21.10.42.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2026 10:42:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784656117; x=1785260917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ocH8UcOo4UY0LfArAy9N9P4eBtmhXMCHbqhRio/RB1c=;
+        b=GLG+oX7J63WBlyFJAr4Wc5DGXZJOASf9/L0at4FMXR2kePdTAXnAECd9zBfnOu2D8D
+         diEObBg+ma9kJ5Qh/u15IGccVU9X9PEKSHldMAszxQVFc5Ohp2zaCY0ZB+5HpEMEgwec
+         +BJbIWcPO26eXHipXlURq8lzSM2YJ9c7agqvKiyU9NBqWIfhBpYHRgWmlhJJA2wmNlvk
+         v1kd8NJ8GbwLhMbUXCycRzTg80Ki/2vRwv5ss3A9RwgRzioUZzWw6TcjayG3t43X4lvm
+         CUJ57bpoQPrflyzu4u+4KMOM/giN/eXVAHq+lxWzlEaE/fCqJf9sOpbbCj+AXHL8MPVU
+         fqHQ==
+X-Forwarded-Encrypted: i=1; AHgh+RojtfTgGU8cEINvpFontA+7aLbrvASI5p+bAAmNa8wFgtfLurXVDYv8jQtYuxgh0P2/D0c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7NKh1TAyWQa62GkpcR5Bz1qsJpI9KzjdB9i9y5bhx4MTKDgx2
+	C6mT2812doD6N6pSpXzsHxOiI9JfpeYot0/wvBr1/tBGJeoWMMobXwjx
+X-Gm-Gg: AR+sD10gQkaU6/2WIuclO8kQi3bDDqPGgZwP1M6Q8ukvO0aowpixDmrPxeTC17Mm78T
+	Bs5mBHiByAcvnHVLWgl/ghiQwziyO4M53ehZjXIkFKqP8CNoxIOPY6TDxNKvVsSVLCSC+52oL5o
+	LMfW9L4XtR2J5Kh9EJjijZ5yoYb+V2Jbrk27wDN8QEUvrhLdrOLSn4Psiw29LasESQh+3v9VE6N
+	a5sf8dDPFMvMXeGRqPBzY71pIMg56PufirbIFGXDPoYak1jCKwOrmSSn48rWXIUqdEODZeUm7Zu
+	Uu+TAGn5vcjLdlywmI3x+hs6dG8YBcCIG/a9cmGBr5Wnv93PR0ot2cw0+qzCLsUUWSaor8zYxwz
+	PSmbfb6+BbEa0t5RLpBlUdWmSvYQXbXVQS1vOrrygztbmkVjL4oVgjaDzx85BtjTi9HmIuCp6
+X-Received: by 2002:a17:90b:3ccd:b0:38e:11ba:992e with SMTP id 98e67ed59e1d1-38e4b57dd07mr19138219a91.35.1784656116703;
+        Tue, 21 Jul 2026 10:48:36 -0700 (PDT)
+Received: from localhost ([2a03:2880:9ff:68::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce29c2c93sm47964768c88.3.2026.07.21.10.48.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2026 10:48:36 -0700 (PDT)
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Mykola Lysenko <mykolal@meta.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-mm@kvack.org,
+	kernel-team@meta.com,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Ziyang Men <ziyang.meme@gmail.com>
+Subject: [PATCH v2 0/4] selftests: shared lib.bpf.mk for building BPF progs and skeletons
+Date: Tue, 21 Jul 2026 10:48:29 -0700
+Message-ID: <20260721174833.1232771-1-ziyang.meme@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 21 Jul 2026 13:42:32 -0400
-Message-Id: <DK4FNY8VB0QR.ZO90B07ZCTJS@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] MAINTAINERS: BPF: Add self as reviewer
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei Starovoitov"
- <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260721172104.3689982-1-ihor.solodrai@linux.dev>
-In-Reply-To: <20260721172104.3689982-1-ihor.solodrai@linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue Jul 21, 2026 at 1:21 PM EDT, Ihor Solodrai wrote:
-> Add myself as a reviewer for the BPF areas where I've been active.
->
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+This series re-factors the bpf-related toolchain for selftests, which
+currently duplicated across selftests/{bpf,sched_ext,hid}/. Unify them
+into a single includable fragment, tools/testing/selftests/lib.bpf.mk,
+and wires up three consumers. We believe this will simplify the work for
+configuraing selftests with the bpf, for both the existing and future ones.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Patch 1 adds lib.bpf.mk: it builds the in-tree libbpf.a and a host
+bpftool, generates vmlinux.h from the kernel's BTF, compiles *.bpf.c into
+BPF objects and skeletons, and exports the include paths, a bpf_link
+helper, and BPF_LDLIBS.  Use can control the behavior by several knobs
+(source layout/suffix, extra headers/cflags, skeleton suffix,
+subskeletons, output dirs) that can be used commonly in general cases.
 
-> ---
->  MAINTAINERS | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a674e36529f7..e45807bf019e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4916,6 +4916,7 @@ R:	Song Liu <song@kernel.org>
->  R:	Yonghong Song <yonghong.song@linux.dev>
->  R:	Jiri Olsa <jolsa@kernel.org>
->  R:	Emil Tsalapatis <emil@etsalapatis.com>
-> +R:	Ihor Solodrai <ihor.solodrai@linux.dev>
->  L:	bpf@vger.kernel.org
->  S:	Supported
->  W:	https://bpf.io/
-> @@ -4976,6 +4977,7 @@ F:	net/unix/unix_bpf.c
->  BPF [LIBRARY] (libbpf)
->  M:	Andrii Nakryiko <andrii@kernel.org>
->  M:	Eduard Zingerman <eddyz87@gmail.com>
-> +R:	Ihor Solodrai <ihor.solodrai@linux.dev>
->  L:	bpf@vger.kernel.org
->  S:	Maintained
->  F:	tools/lib/bpf/
-> @@ -5041,6 +5043,7 @@ F:	security/bpf/
->  BPF [SELFTESTS] (Test Runners & Infrastructure)
->  M:	Andrii Nakryiko <andrii@kernel.org>
->  M:	Eduard Zingerman <eddyz87@gmail.com>
-> +R:	Ihor Solodrai <ihor.solodrai@linux.dev>
->  L:	bpf@vger.kernel.org
->  S:	Maintained
->  F:	tools/testing/selftests/bpf/
-> @@ -5055,6 +5058,7 @@ F:	tools/bpf/bpftool/
->  BPF [TRACING]
->  M:	Song Liu <song@kernel.org>
->  R:	Jiri Olsa <jolsa@kernel.org>
-> +R:	Ihor Solodrai <ihor.solodrai@linux.dev>
->  L:	bpf@vger.kernel.org
->  S:	Maintained
->  F:	kernel/bpf/stackmap.c
+Patch 2 adds a new selftest, test_memcg_stat_cross_cpu, under
+selftests/cgroup. This test is a memory-cgroup statistics correctness
+test that compares the memcg BPF kfuncs against memory.stat over a whole
+cgroup subtree charged across many CPUs, and checks the cross-CPU rstat
+flush. It is the first in-tree consumer of lib.bpf.mk outside
+selftests/bpf.
+
+Patches 3 and 4 convert the duplicated parts in Makefile for two
+existing duplicating bpf consumers, the selftests/hid and
+selftests/sched_ext, to lib.bpf.mk.  The generated skeletons keep
+a byte-identical public API and land in the same locations as before.
+The folders build cleanly under both plain make and LLVM=1.
+
+Changes since v1:
+  - Generalized lib.bpf.mk (source layout/suffix, extra hdrs/cflags,
+    skeleton suffix, subskeletons, configurable output dirs) so it can
+    serve hid and sched_ext, not just cgroup.
+  - Added patch 3 (hid) and patch 4 (sched_ext), converting those folders
+    to the shared fragment.
+
+Ziyang Men (4):
+  selftests: add shared lib.bpf.mk to build BPF progs and skeletons
+  selftests/cgroup: add memcg_stat_cross_cpu correctness test for flush
+  selftests/hid: build the BPF program via the shared lib.bpf.mk
+  selftests/sched_ext: build BPF schedulers via the shared lib.bpf.mk
+
+ tools/testing/selftests/cgroup/.gitignore     |   6 +
+ tools/testing/selftests/cgroup/Makefile       |  21 +
+ tools/testing/selftests/cgroup/config         |   4 +
+ .../selftests/cgroup/lib/cgroup_util.c        |  48 ++
+ .../cgroup/lib/include/cgroup_util.h          |   1 +
+ .../cgroup/memcg_stat_cross_cpu.bpf.c         |  86 ++
+ .../selftests/cgroup/memcg_stat_cross_cpu.h   |  27 +
+ .../cgroup/test_memcg_stat_cross_cpu.c        | 780 ++++++++++++++++++
+ tools/testing/selftests/hid/Makefile          | 182 +---
+ tools/testing/selftests/lib.bpf.mk            | 247 ++++++
+ tools/testing/selftests/sched_ext/Makefile    | 153 +---
+ 11 files changed, 1275 insertions(+), 280 deletions(-)
+ create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
+ create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.h
+ create mode 100644 tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
+ create mode 100644 tools/testing/selftests/lib.bpf.mk
+
+
+base-commit: 6eb8711ece2ce27e52e327a5b7a628ed39b97f45
+-- 
+2.53.0-Meta
 
