@@ -1,64 +1,64 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-wm2-f2.google.com (mail-wm2-f2.google.com [74.125.225.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327B646D098
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 19:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F79F386C39
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 19:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784661849; cv=none; b=q8HLoxRDpEzIN/k7jsgyxHFIFLVQs+Cjm1oXSMMJwPYpijLrpZzFnHh2HMx189YBuNLK/pzHUyr0lx6UEkzdYv011pH38tqh+JTlOlcJ7eMCI87LN3CbmuuUnV4dBk3+2qDq18Jrw2vrsclOwJ0dwLPILQWuWAG83WiBxqMdXFA=
+	t=1784662228; cv=none; b=PHcX6h+FJ9aGaA2eovWcimApTU7IdaFVuuASoi8d1WDQjKgDAvLWuuHipP8b1R+TyippkprEAL4sAw3a2p1t7LkEa00igg4El1e3t7fqsel8no2ddJuDpNBGD8LluRlbHoMhLnSQ6Ja2VLkcX5OVaBRuJJoVZc7JqJPOylK9/Fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784661849; c=relaxed/simple;
-	bh=cORZVbqM3eFwRSKUS7EP2gVPo2dqxwN0ZywsfK6umOM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=oLKGoL9wIuX/e30sVjbpbd9sfR8Cr6M8gM2uQpqQzdknC8uWP83hoQ3SYpJUR2BdLYv2D3AYHp2lAoOCiYA6hrnyz5PLhqcJVy19kdCv6TIOM8kVl/kflwsVllFB4lx5dd6awpuwOuKTa+kBf/rR9qPgqRaRUmN6i+GXErZ+iR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qhsDLMvh; arc=none smtp.client-ip=74.125.225.137
+	s=arc-20240116; t=1784662228; c=relaxed/simple;
+	bh=qtNC47ku99vDgcpvjMR2ku6SVXf+HJN7XOCZuGkep7U=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=o67Et1YKt6FzVfbBM4QOdxXtqq7KPSkuQKWyL5cvYnT5hbSG4+eTSk5S19BgajftL1XGGsncv2/xoT9cCpmb//tVo09mvhzxCWEGAU/y77+wBf0wRCy3/SH6jxA7MGvip5MBtIqtecmQgLTmcm/jsbttslXjQ0FrovGN+7Tp07s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XU86Iye8; arc=none smtp.client-ip=74.125.225.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qhsDLMvh"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-493e55619a2so24256075e9.1
-        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 12:24:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XU86Iye8"
+Received: by mail-wm2-f2.google.com with SMTP id 5b1f17b1804b1-49242309566so23345495e9.0
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 12:30:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784661846; x=1785266646; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=gmail.com; s=20251104; t=1784662225; x=1785267025; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=hZgHks4ec8eMjqtz7edpvaA3KS3nyRCBHqNjcy/fc/U=;
-        b=qhsDLMvhQFi8L9oudMZSjsoRZkV+cA9aSSK2Avzu8Kmes3S/Izf5cqglFPXLVfYGGI
-         ngz+W8Jy+u7CQcHpXmxV5O4rPXxkh8AyOZo4KNHhTO+jz/cfvTFGj/V76DeiXvXzY0MG
-         3nkWap50KPNGJzupby+jxHqSx13pGNR8aKdf/weEu5kurhmnXex8Ox5rn6IEUXMjI8gQ
-         Doin3coAYtjYrrw3vceGZlFK8v28B6ioUZZ474Hs77qCKdIocXkYFD3CumArym4Lugu6
-         SSuKqfKMkZ6r2M3jrV6//Lyny13JPEKyrFOc1JENuS6nyaGSmcwHuioUrWDWyxx8GKvG
-         uyQg==
+        bh=FQPv+FfN22otxjRHQ2lP9vtjJl2RzMRuNs/wEDCdzNM=;
+        b=XU86Iye8ThlqLYZc4CCRIX5OeA26KOy/KGbfjAsK5n01y4DLewPrlBX6mwnpk3MXjQ
+         YtyEzmpEoaCi3/TYNzn54A+o0QYMMqapZyuFXfz46Wto9Q9pcCkt66aOkUpYJq6K7UAu
+         Y7Sw0G+mAKTVRgLfxCSd4kic3We7D+Cd+dxgoRPhDwaHflcjSMbcMSYAbdHjl3YviL/Z
+         MP1bqQBtBS+XS74LpSES2KhSH8uLHcSR7D/yDR0DMUA/y3os8YmJ7yBT1NzBn5FE9Cyu
+         eXnlhy4SWntOr54phDEj4cW6PB7pFjuYWtKxNatG/eNc4kBd0ESpysx+eIPhAXPSoAWk
+         tyEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784661846; x=1785266646;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20251104; t=1784662225; x=1785267025;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=hZgHks4ec8eMjqtz7edpvaA3KS3nyRCBHqNjcy/fc/U=;
-        b=mma9ALg4EluXVDqr6RDMZDN91/vlnQrmuoa00Zo5BbsYa7q2/LWhb46QupvQGSDZIE
-         drABb/W1jgi+iKGkiMKRWTxzHvALtq6Z7+gdTV+26ycNIETaMvsnHePeSttVlf93+yc0
-         VY7qymFmDm1yct/aZDZEFAuHPgdZ2mQXtbsDE0uRSO9UCD5vZVqJEAvFbDgd4NvKjn2A
-         Dg9mISw7Pwt4SLfDZSPqpEo04zxywpkFKdBXD7i79g+mhZmQ498UvVOKf4b4oADUQh7Y
-         I/hSxtWIDeHhC34XjN6UDdlfMUlEJLKBwn88kdIiEICiO84r0YNGLylgcnlSd3Xb80Nm
-         9eZQ==
-X-Gm-Message-State: AOJu0YzziLBex6XmUigVRpAP5Re7Ni377STsSDo5wkBokBzBwykBSZv5
-	L0l48IOMyqHVNVs8vgsk91Bl9WRtkEdFi/3GvIWYVAKyTwrdgXN3wjNM
-X-Gm-Gg: AfdE7cl+4FoqSqEr9rHfKHFe7TA4NQrxOHUmZxoAeWC6JLBTUhUf+lWpWfck9z/MtoB
-	k+HaLFHevoa9CcBOJRJCRKEecljFyLL8efmNwuOEL53Hs5O4rFH+2N7OpH16E1e+Wr6VawuyK6K
-	wn9ZuuyZK6pIovunxEcBLEnIpxxhfXubiv5LoaMebP9ICGq6QXXE3g3qbn8TiFpNdgUzsBYMtjX
-	NDADF4U262Es/JVYUIjAZnTioitfhLavkx6GnXSEACOKZDZR/7s8K3maXxB+wz0eXokqFeTkUku
-	56vdrncmxECqDlK1nMjz2rA0BAMpKRTn5Cr1qzt7iqolqkWgUu9BtSVVWOawXKiD1LVnWG0CtqS
-	GqhrXkp6glIu/qZ865GibDbcQAGhl/FyP/hBwl9PLw6beX0qYajHTYNdw0nm6CszPPC6PJFYWut
-	YiwBYD/H4R4XVOGlRYF9rqn0w5Dx0Y7CHY6XCvnnXVHJOXMZPrxe/qoT/psQxSbLsK9EM58Rdsd
-	Tva0R2HaiXmCNCS4y4JIYVqSOkVio6huXkrZvkYhBh1oandnPEzWjg=
-X-Received: by 2002:a05:600c:45d3:b0:495:4d00:2fda with SMTP id 5b1f17b1804b1-4955233b700mr171381265e9.2.1784661846199;
-        Tue, 21 Jul 2026 12:24:06 -0700 (PDT)
+        bh=FQPv+FfN22otxjRHQ2lP9vtjJl2RzMRuNs/wEDCdzNM=;
+        b=btUnVQED2WL2Wj8RvjFZGLUf2Px7qmHDWN9UAfLLOw6+vzJ9Ov5Z9oDyHO218xZ9PX
+         akYJM9Rg9uZhmWkuV/hpmyXMuhFbvu2gIVQe4V/Rhj0QTAbELJ5HKVJPzPM3MlKQhl3Z
+         qF6uX5y/S9Ld5eJKSKxX4Mz6iw6yr+KuOUxw3GnmrrZBOU6PwCSIZefwiG4xeMzWp5EB
+         v6B4UNA3QRezM011rk3Mqd436adhIDZWgCMIt2fzznszhhWejTHgas4j060VyxqQV1+y
+         ZIECt+wEqqFZwSJrDtSNkGnDsjZSlp7ZrcFiIJsFj4qwUFrE0fF4skv9mXp7ZQGyZ5DG
+         JsMA==
+X-Gm-Message-State: AOJu0YxBWv1uT+DZGDC8ysa8MULDYEPSlBkmHeiw9GeeIzzwMTjOvsld
+	gHJGR3DqudPhRZieLhkeU0p09echpbC/gIibGMS0spCAvauWqF/cosh5
+X-Gm-Gg: AfdE7ckFO19XCFODE2jprZygL66zwDkRhN0/buiCt13BuQHDushBn0AHoZyzaB00N06
+	1I9H+DHRkG5p4WiZLxphkLT2TZA/PpkZnp+/9aGVW9ZOWv2hqCy5IxTlW/g31Ys/zRcdxTM6dzS
+	TEWWHzZZhUeANN+OhCGzun7hGnG0mpWx+tErSAqOuhvdI3UM1CQLq4A2Kh/0yGDYvAsWMiTPziM
+	ZAc6R1uYwMVfhmzXFd6PA3aUZiCdK5MHG20C3oLJod/QUsBBPaHy8B/0iskk0BxDsG4LPzfmCkf
+	ao/XPoFGFhNS069k7O1CEnyx1B+yigrf2nKhAmHui9abKHavRnOcIoghUF639nS3E2c4AdluuJC
+	6lxH4trr01IqWGl8Ow96VAbcMAuoPAbxAXcF0ZdGkw+BOxL6bCYO/YlGHIClk/fnVeLgESHGNln
+	plAqcm0T/zcrjZVfJZlcvhUDHqy/sHrwj7rh3nTosGGhDzJ7yhmHsRGPHrkTIWZ6UKJ5EJH4Me0
+	cf+ecaNnzrDraknh6HiIluGUGsKL+4+38tM201C9vCZ
+X-Received: by 2002:a05:600c:350f:b0:493:e365:ace9 with SMTP id 5b1f17b1804b1-4954a3db7e8mr223805455e9.11.1784662224989;
+        Tue, 21 Jul 2026 12:30:24 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e51986sm46719237f8f.11.2026.07.21.12.24.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-495653bfabesm99387645e9.10.2026.07.21.12.30.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 12:24:05 -0700 (PDT)
+        Tue, 21 Jul 2026 12:30:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,134 +67,128 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 21 Jul 2026 21:24:05 +0200
-Message-Id: <DK4HTPHX3NL8.2N1FK8D2N9521@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, "Jose Fernandez (Anthropic)"
- <jose.fernandez@linux.dev>, "Kuniyuki Iwashima" <kuniyu@google.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf v2] bpf: tcp: Fix use-after-free in
- bpf_iter_tcp_established_batch()
+Date: Tue, 21 Jul 2026 21:30:24 +0200
+Message-Id: <DK4HYJHDLBZP.92SX05PI2C5T@gmail.com>
+Cc: <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next] bpf, arm64: Fix stack-passed arguments for
+ indirect trampolines
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Puranjay Mohan" <puranjay12@gmail.com>, "Xu Kuohai"
+ <xukuohai@huaweicloud.com>
 X-Mailer: aerc 0.21.0
-References: <20260717-bpf-iter-tcp-refcnt-v2-1-8e81f0ac6f3e@linux.dev>
- <20260717025253.23EEB1F000E9@smtp.kernel.org>
-In-Reply-To: <20260717025253.23EEB1F000E9@smtp.kernel.org>
+References: <20260717141737.4090962-1-puranjay@kernel.org>
+ <e2d160c9-903b-46f6-82e0-b3fc74aaebcb@huaweicloud.com>
+ <CANk7y0isy3eUEv7Krxn08yGSiWu_kxaSxGj1XYO=1uuAC=hFOA@mail.gmail.com>
+In-Reply-To: <CANk7y0isy3eUEv7Krxn08yGSiWu_kxaSxGj1XYO=1uuAC=hFOA@mail.gmail.com>
 
-On Fri Jul 17, 2026 at 4:52 AM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
->
-> New issues:
-> - [Low] The patch introduces a multi-line comment that violates the BPF s=
-ubsystem comment style guidelines.
->
-> Pre-existing issues:
-> - [High] Double-put and wild pointer dereference of batch sockets on the =
-first bpf_iter_tcp_realloc_batch failure path.
-> --
->
-> --- Patch [1]: [PATCH bpf v2] bpf: tcp: Fix use-after-free in bpf_iter_tc=
-p_established_batch() ---
-> commit c52d637a13758169d9dce0d7c05be97965d399d3
-> Author: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
->
-> bpf: tcp: Fix use-after-free in bpf_iter_tcp_established_batch()
->
-> This commit fixes a use-after-free issue in the TCP iterator caused by
-> request sockets being published to the ehash chain with a refcount of 0
-> before being updated. The fix uses refcount_inc_not_zero() to safely hand=
-le
-> these sockets during batch iteration. It also refactors the batch complet=
-ion
-> logic to rely on whether any sockets were left behind during the walk.
->
-> Link: https://lore.kernel.org/bpf/20260620-bpf-iter-tcp-refcnt-v1-1-883bf=
-9e69495@linux.dev
->
->> --- a/net/ipv4/tcp_ipv4.c
->> +++ b/net/ipv4/tcp_ipv4.c
->> @@ -3073,24 +3073,24 @@ static unsigned int bpf_iter_tcp_established_bat=
-ch(struct seq_file *seq,
->
-> [ ... ]
->
->>  	sk_nulls_for_each_from(sk, node) {
->> -		if (seq_sk_match(seq, sk)) {
->> -			if (iter->end_sk < iter->max_sk) {
->> -				sock_hold(sk);
->> -				iter->batch[iter->end_sk++].sk =3D sk;
->> -			} else if (!*start_sk) {
->> -				/* Remember where we left off. */
->> -				*start_sk =3D sk;
->> -			}
->> -			expected++;
->> +		if (!seq_sk_match(seq, sk))
->> +			continue;
->> +		expected++;
->> +		if (iter->end_sk < iter->max_sk) {
->> +			/* reqsk_queue_hash_req() inserts with sk_refcnt =3D=3D 0
->> +			 * and refcount_set()s it after the bucket lock drops.
->> +			 */
->
-> [Severity: Low]
-> Does this multi-line comment follow the BPF subsystem comment style?
-> The BPF subsystem guide expects the opening block to be on its own line:
->
-> /*
->  * reqsk_queue_hash_req() inserts with sk_refcnt =3D=3D 0
->  ...
->
->> +			if (unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
->> +				continue;
->
-> [ ... ]
->
->> @@ -3128,12 +3128,14 @@ static struct sock *bpf_iter_tcp_batch(struct se=
-q_file *seq)
->>  	struct sock *sk;
->>  	int err;
+On Tue Jul 21, 2026 at 12:50 PM CEST, Puranjay Mohan wrote:
+> On Sat, Jul 18, 2026 at 3:50=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.c=
+om> wrote:
 >>
->> +again:
->>  	sk =3D bpf_iter_tcp_resume(seq);
->>  	if (!sk)
->>  		return NULL; /* Done */
+>> On 7/17/2026 10:17 PM, Puranjay Mohan wrote:
+>> > save_args() reads stack-passed arguments relative to FP assuming the
+>> > trampoline is entered through the fentry call from a traced function, =
+in
+>> > which case both the parent frame (FP/x9) and the traced function frame
+>> > (FP/LR) are saved before FP is set, so the arguments start at FP + 32.
+>> >
+>> > An indirect trampoline for a struct_ops callback is entered through a
+>> > function pointer (blr), so only the FP/LR frame is pushed and the
+>> > arguments start at FP + 16, not FP + 32. Every stack-passed argument o=
+f
+>> > a struct_ops callback with more than eight argument slots is read two
+>> > slots off.
+>> >
+>> > This has gone unnoticed because no in-tree struct_ops member passes
+>> > arguments on the stack. Pass is_struct_ops into save_args() and pick t=
+he
+>> > offset accordingly, mirroring the x86 fix.
+>> >
 >>
->>  	expected =3D bpf_iter_fill_batch(seq, &sk);
->> -	if (likely(iter->end_sk =3D=3D expected))
->> +	/* sk carries the first socket that did not fit in the batch. */
->> +	if (likely(!sk))
->>  		goto done;
+>> Which x86 fix? Add a reference to it?
+>>
+>> > Fixes: 9014cf56f13d ("bpf, arm64: Support up to 12 function arguments"=
+)
+>> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+>> > ---
+>> >   arch/arm64/net/bpf_jit_comp.c | 16 ++++++++++++----
+>> >   1 file changed, 12 insertions(+), 4 deletions(-)
+>> >
+>> > diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_co=
+mp.c
+>> > index c6756b964c843..4fe235f7ce894 100644
+>> > --- a/arch/arm64/net/bpf_jit_comp.c
+>> > +++ b/arch/arm64/net/bpf_jit_comp.c
+>> > @@ -2506,7 +2506,7 @@ static void clear_garbage(struct jit_ctx *ctx, i=
+nt reg, int effective_bytes)
+>> >   static void save_args(struct jit_ctx *ctx, int bargs_off, int oargs_=
+off,
+>> >                     const struct btf_func_model *m,
+>> >                     const struct arg_aux *a,
+>> > -                   bool for_call_origin)
+>> > +                   bool for_call_origin, bool is_struct_ops)
+>> >   {
+>> >       int i;
+>> >       int reg;
+>> > @@ -2526,7 +2526,15 @@ static void save_args(struct jit_ctx *ctx, int =
+bargs_off, int oargs_off,
+>> >               bargs_off +=3D 8;
+>> >       }
+>> >
+>> > -     soff =3D 32; /* on stack arguments start from FP + 32 */
+>> > +     /*
+>> > +      * On-stack arguments start above the frame(s) pushed by the
+>> > +      * trampoline prologue. A traced function is entered through the
+>> > +      * fentry call, so both the parent (FP/x9) and the traced functi=
+on
+>> > +      * (FP/LR) frames are saved and the arguments start at FP + 32. =
+A
+>> > +      * struct_ops callback is called indirectly, so only the FP/LR f=
+rame
+>> > +      * is saved and the arguments start at FP + 16.
+>> > +      */
+>> > +     soff =3D is_struct_ops ? 16 : 32;
+>> >       doff =3D (for_call_origin ? oargs_off : bargs_off);
+>> >
+>> >       /* save on stack arguments */
+>> > @@ -2722,7 +2730,7 @@ static int prepare_trampoline(struct jit_ctx *ct=
+x, struct bpf_tramp_image *im,
+>> >       store_func_meta(ctx, func_meta, func_meta_off);
+>> >
+>> >       /* save args for bpf */
+>> > -     save_args(ctx, bargs_off, oargs_off, m, a, false);
+>> > +     save_args(ctx, bargs_off, oargs_off, m, a, false, is_struct_ops)=
+;
+>> >
+>> >       /* save callee saved registers */
+>> >       emit(A64_STR64I(A64_R(19), A64_SP, regs_off), ctx);
+>> > @@ -2771,7 +2779,7 @@ static int prepare_trampoline(struct jit_ctx *ct=
+x, struct bpf_tramp_image *im,
+>> >
+>> >       if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>> >               /* save args for original func */
+>> > -             save_args(ctx, bargs_off, oargs_off, m, a, true);
+>> > +             save_args(ctx, bargs_off, oargs_off, m, a, true, is_stru=
+ct_ops);
+>> >               /* call original func */
+>> >               emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
+>> >               emit(A64_ADR(A64_LR, AARCH64_INSN_SIZE * 2), ctx);
+>> >
+>>
+>> LGTM. Since this issue is not covered by the existing selftests, I think
+>> we need to add a new one.
 >
-> [Severity: High]
-> This is a pre-existing issue, but I wanted to ask about the reallocation
-> failure path that occurs just after this block in bpf_iter_tcp_batch().
->
-> If bpf_iter_tcp_realloc_batch() fails, the function calls
-> bpf_iter_tcp_put_batch() and returns an error without clearing iter->end_=
-sk.
->
-> When this happens, bpf_iter_tcp_put_batch() overwrites item->sk with a
-> cookie:
->
-> net/ipv4/tcp_ipv4.c:bpf_iter_tcp_put_batch() {
->     ...
->     while (cur_sk < iter->end_sk) {
->         ...
->         sock_gen_put(item->sk);
->         item->cookie =3D cookie;
->     }
-> }
->
-> Because the seq framework subsequently calls bpf_iter_tcp_seq_stop(), it =
-sees
-> iter->cur_sk < iter->end_sk and calls bpf_iter_tcp_put_batch() a second t=
-ime.
->
-> Could this lead to a wild pointer dereference when sock_gen_put() tries
-> to use the cookie as a socket pointer during the second pass?
+> Kumar is working on a similar fix for x86 and will add a selftest with
+> it. I will wait and repost this patch again when Kumar's patchset
+> lands.
+> Thanks for your review.
 
-Hi Kuniyuki,
-Thoughts on the fix and Sashiko's concern? (The latter should be probably b=
-e
-fixed separately, if needed).
+Yes, please resend when that lands, along with changes to enable tests on a=
+rm64
+and the remaining JIT-side changes needed to translate arena args.
 
+pw-bot: cr
