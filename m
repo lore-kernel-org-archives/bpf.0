@@ -1,122 +1,73 @@
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.184])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA83C3B7763
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 20:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85B73B7741
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 20:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784666209; cv=none; b=LtQj+mQ/B8WDgUR2K/ez+XjjrZ6rso5A+jzMH7iIk9CK6AVBVfjKMyTbjCgzSlI1X71ysTG75K34Z10S97oZZsorT886yKi/6AccMdclb3JBgayS8OP9Kb9EKJimsJmt+DShmPwHLovjT/xpD+BqVlXOYJX/JWwNYcVFBCawvQk=
+	t=1784667037; cv=none; b=V0upaZZhhID2lLxyKje3V6TkK8uN9c79tWSRzpFrRbk84qApg2iPp8cGLPGTHsayMIO1F8PIHAPsuGuDIBHPjo7bSEbWRr/bI4nxnSsD/oCRoimGGDXZrw++jh333RnB2jflc8rOlodTneicSPPTz8jkP0p9lhP2iamoyJESV1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784666209; c=relaxed/simple;
-	bh=eGV+Nr26bbBa30zN2rLCQJpfF2PwF3cVqhJ/YUbZOac=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mu5xzg6ogEYh56GKUySAQzEN5tCMmtHumZsSzS2iejtq3vZAyeFaF9lrb33/FQ2mkkn6FNtWwaFfEiaI0TIgXKJw/1v/F0dxVeI+Ebl3F/4o0fY4nUfVNi/4shkPSSaN4J3O0pwjpHpg3iE1VAlkREFsU3cfZbbNEPORYKtlKqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=fw4JTd/q; arc=none smtp.client-ip=195.121.94.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+	s=arc-20240116; t=1784667037; c=relaxed/simple;
+	bh=jBBk8QafKCr4aKNqR985pKQdQ7bO/3tD9aO+EJTcQC0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=jEcvGoqwWeOICKyJzGS5ilDCwFC1xJNfHWGaGEX4A+aM2pRAPIIFxQkzWdyM7giwQzrT8fXpyc1DC3RQ4keP4re5e9UKJAp3q4+ZJ2fiv00GX1VKGGSZk2rPMwNh09mGFq72Limq8QFX1w4A21yMx+DWrrnT411OXbnW+9Py8Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FScVJPCH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="fw4JTd/q"
-X-KPN-MessageId: de161530-8543-11f1-a5a0-005056994fde
-Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id de161530-8543-11f1-a5a0-005056994fde;
-	Tue, 21 Jul 2026 22:36:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=content-type:mime-version:message-id:subject:to:from:date;
-	bh=X6JbNQIATPP5lzRYGP9EC0Lk7v2gUEGWN6HyA1XyIBs=;
-	b=fw4JTd/qR7ifxH2fj/4bRz3KVC/QD9f8iYNWW5Q3w8YjOYoFoFe4ZdcHOC3XahpY8VjOIfWJHHbix
-	 XD5XiYFNABemP+gEJ5gDD10p2GlkGKoFArYnrqnkeFamt6ikv+qf0UJrjZ1x6jlR1RP3irnfPrbkNU
-	 7VCacAMAstMXBntGGZaXwYEw20UpvXGZNHFjmZ3snx8i3ixbr6UttKvLC5uFZBXMxEJZQNJX9fiRSD
-	 ZI2phKRqAvsixtMKeqePNMSe4LhwKK026NBQ1fJPx4lkArGyL7VKuVz2LzW8VewpT04zM4x/csvEkZ
-	 lPkkZKC/9qy4Wn3Bffmic4C4SEkfVSQ==
-X-KPN-MID: 33|/FRaVBBNTpX7oZEbL/WUJwV+obe8QveTmU6qomkjd7Zwy0bDuddoRQ6LhmU9/QC
- +7Nh0UkLCbRlhhU1hxRxRyHX5B0cO19/6jnvbrmmuR1g=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|Bt02zkTEX4BovQyofVTpaC6SvmEMyLJr1cMXxpOT5X5aV92dxLfZk6RhnWA+hTi
- 9O7uuVJiPiXaYg6l10QxO/g==
-Received: from localhost (unknown [178.231.6.225])
-	by smtp.xs4all.nl (Halon) with ESMTPSA
-	id dde1a5a1-8543-11f1-8dd0-00505699d6e5;
-	Tue, 21 Jul 2026 22:36:35 +0200 (CEST)
-Date: Tue, 21 Jul 2026 22:37:58 +0200
-From: Jori Koolstra <jkoolstra@xs4all.nl>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, 
-	Farid Zakaria <farid.m.zakaria@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Jonathan Corbet <corbet@lwn.net>, 
-	linux-mm@kvack.org, bpf@vger.kernel.org, jannh@google.com, mail@johnericson.me, 
-	stable@vger.kernel.org
-Subject: Re: [PATCH] binfmt_elf_fdpic: only honour the first PT_INTERP
-Message-ID: <al_MqBrjDW1QjRau@daedalus>
-References: <20260721-gezittert-medium-kreide-b41fc1f0277e@brauner>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FScVJPCH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A629D1F000E9;
+	Tue, 21 Jul 2026 20:50:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784667036;
+	bh=enXylscmsjyiXuzcYE3M2N0/N1Epqu708U93pQmnyWA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=FScVJPCHGNkqyRhaHaY6rHS4/5ooqk7WH8jwFIZ+a8/2dw761G6/ki7BHwtxF8cTJ
+	 aXHP7mN7O4ucH+s6PeOrjxcCYIJCNqovqU0+0XZNSqDV3eyWolt3bCAFVy7NEh4C1a
+	 X+0fxKYzVfiPwlfCOGnkH8HGGERq19r+uspNXUylViY4BsnAYBg6HtIfS9pMeRnBek
+	 w/W+lPimLjq8eJyU4sxYdfkLoCvp3nXB4MGNu5J2PX674gjD3ugg1NfJZcsQpU30cY
+	 6CxR5FsUcnC2/UkdSyT4bRotZLV6xYnExe3O/bDRY4+8ILKBYoGPPLY/o8KXXRqyzh
+	 3eg6IrrQxmA1w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 569EF3926245;
+	Tue, 21 Jul 2026 20:50:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260721-gezittert-medium-kreide-b41fc1f0277e@brauner>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] MAINTAINERS: BPF: Add self as reviewer
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178466700591.1054554.8406172524883236704.git-patchwork-notify@kernel.org>
+Date: Tue, 21 Jul 2026 20:50:05 +0000
+References: <20260721172104.3689982-1-ihor.solodrai@linux.dev>
+In-Reply-To: <20260721172104.3689982-1-ihor.solodrai@linux.dev>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, bpf@vger.kernel.org
 
-On Tue, Jul 21, 2026 at 01:20:45PM +0200, Christian Brauner wrote:
-> The program header scan handles PT_INTERP from a switch nested in the
-> scan loop, so its break leaves the switch and not the loop. A binary
-> carrying more than one PT_INTERP runs the case again and overwrites both
-> interpreter_name and interpreter. The previous name allocation leaks and
-> so does the previous interpreter reference, along with the write denial
-> open_exec() took on it. The denial is never released, so the file stays
-> unwritable for as long as the system runs.
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+
+On Tue, 21 Jul 2026 10:21:04 -0700 you wrote:
+> Add myself as a reviewer for the BPF areas where I've been active.
 > 
-> An unprivileged caller reaches this with a crafted binary and repeats it
-> at will. binfmt_elf stops at the first PT_INTERP. Do the same here.
-> 
-> The flaw dates back to the driver's introduction in the pre-git history
-> tree introduced in v2.6.11 by 91808d6ebe39 ("[PATCH] FRV: Add FDPIC ELF
-> binary format driver").
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 > ---
->  fs/binfmt_elf_fdpic.c | 4 ++++
+>  MAINTAINERS | 4 ++++
 >  1 file changed, 4 insertions(+)
-> 
-> diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
-> index 7e3108489c83..fe0b5c5ed2bc 100644
-> --- a/fs/binfmt_elf_fdpic.c
-> +++ b/fs/binfmt_elf_fdpic.c
-> @@ -231,6 +231,10 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
->  	for (i = 0; i < exec_params.hdr.e_phnum; i++, phdr++) {
->  		switch (phdr->p_type) {
->  		case PT_INTERP:
-> +			/* elf ABI allows only one interpreter */
-> +			if (interpreter_name)
-> +				continue;
-> +
->  			retval = -ENOMEM;
->  			if (phdr->p_filesz > PATH_MAX)
->  				goto error;
-> -- 
-> 2.53.0
-> 
 
-Good catch.
+Here is the summary with links:
+  - [bpf-next] MAINTAINERS: BPF: Add self as reviewer
+    https://git.kernel.org/bpf/bpf-next/c/fcac2b4a3bdf
 
-Reviewed-by: Jori Koolstra <jkoolstra@xs4all.nl>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Btw, it seems that elf_fdpic_map_file_constdisp_on_uclinux() has no
-check to verify that phdr->p_memsz >= phdr->p_filesz, despite elf(5)
-saying that
 
-	The file size may not be larger than the memory size.
-
-Afaict, currently read_code() may blow past what vm_mmap() allocated
-there, which may result in memory corruption for a non MMU system. This
-is an LLM assisted find, and it may be that I missed something when
-verifying. If you agree this is wrong, I'll fix it.
-
-Thanks,
-Jori.
