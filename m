@@ -1,126 +1,154 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35374473C7E
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 23:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784677987; cv=none; b=SvXvFajW7t5oSzm+0gwmdjrGszEubz21WUoP1iz1guZ7cRZ67ORFmNxYD2Q8nC5k/2PJTUBwBFV8taAIyT9W1/xg6CmHej3VlAGZooAp8glyFejwjC54i2KWcCDK1+of6hfh6dXK5msuvxZ3P47a+5xmim/Qc4eEjAm+uk6wtu0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784677987; c=relaxed/simple;
-	bh=o3/LOYhvDhaSRK4supHpFZWqrvVZAHUL1OwjfXkLq8I=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EajIygO+dsSq0EIBAL2y3AfEi0NQytCGG0sFlZ34sEAV8dv11qo3ywljqZdNXxhgOewKTPWf1rOiD/U4+LkPq5DCtPIvGPRAuqyg5ULRHDDBTg9aboYQWELkXxcEiyjyGMdJ+lUBaOCX9M+5PD5VksdNG5+vqIHO3a3yUmHExxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GxxjQJgE; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A0C472F9C
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 23:56:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784678213; cv=pass; b=kVfZMyp6jI5FsAewkuwJF9g/Ea47AmyBM7u8NI3VJpI2TbNt2vtFgoaXczk0Uhf1QxE7gx9X8TKwQIuolOokZdjugUMDE/cdLojfTv3enXulXl502dJk0h5Efybrvb4kbG6K+SByJi6eIcPDn4wRGPmOP9p9mGg7r/e5qvVT9l4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784678213; c=relaxed/simple;
+	bh=/3DnzFUGSaO/deY28VejyOwo6kGg+FKTgVWwKcW1rhI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=Qs0zY3oHyGM+ugtg9D6PMf/LUjdNgGDgtfUQSKVAcw74T0+1trcjDcCIEneuB+QBZoLZiB42wgxmZmnWgwgPTrlTBYJUK48lTeJr+Hl1CK6/gIFisMmlKp+ujhAc56FVi+XX5f3JwgOdbA4l23DBCTuvBZv6j1KJ9MReS/BCvyw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p8DHIxoj; arc=pass smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GxxjQJgE"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-382ef647e20so11419305a91.1
-        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 16:53:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p8DHIxoj"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-51c10e86e52so1360771cf.1
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 16:56:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784678211; cv=none;
+        d=google.com; s=arc-20260327;
+        b=oqe1wbXqEEMK9XKUvZQXVq/tasDHIIjJd6P88BLLIDl2avT+G5LMQCeI1x2K7pQPqN
+         N2EryKpNcvjvqX2YuYS0h8Euhc5KRTfjy7EvHuyYIjzTiKI8wcrYd/OTV3UD3IaFkFgQ
+         azVv/NWtPWYhRcGnYN4zz696j8VZbKucLhE11029NFGs3EBZ3iUFwy/vSdk7MwguwBiJ
+         wsZ4UrthAkZT6iWHQu2S45T9IQbPapEupHq6J+ydbf6iHcSAqc2ABi7x2DvRlp5zgTbJ
+         MOMjFbnTxsndQEilK2IpE/6Nm8eDkksGPitoUdEYk6mmNfrDv3cwyBzOTqTFI+SS/BoS
+         aP5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:dkim-signature;
+        bh=2HDZnLZEgTng2BU/7p81Zndbee1PtPvUlTtKfIbfOGo=;
+        fh=FppHYmJCV9t7qZc3Dd+/gP0jnzwLRMYeugQT35dVFxE=;
+        b=XqBQOFlBkPgnHfLjX/C5YuL1TL4ff+Kj27CgfNtvDZ/zqdRTHbEAb8w2cV6glp18T2
+         TVJAdWiF9ZUScKng/Ui7f/gr1kyPiuk2p13PDnAy/VakItiQrkSuiYMCLv4aHWpegNsV
+         EnPxug/2cP0d1CkAZWedhbRiElB1FWFNUJm6FEPi3Sj9bQ5fwUTaEWlAc6hktO9rLSKN
+         LQH3JSEu42NfRawvqpU9l80j309TI97xMc8q8SgdBBjNNtM5NDcQp0olpAy7KahqFZV2
+         4xI6nTBSUIWUFpsenhieh6h7xSo/dkBD1Xcr5JVsxgpgKzvTvsMMx5Is3TR2w93k9xdu
+         c89A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784677985; x=1785282785; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=xz+rLekKfe/AAP0Xgd+Iz5oYMriTqERJLl0HYz+gnMU=;
-        b=GxxjQJgECCSY08QnYzjmSGxP6PhdBeUFlNHFBjBKp9Hn+KI0mKXGx2vz8zBVZlv80b
-         5rDEvdjBv2dHfizn9LpP3rMryuTBV9KmeGfQzLMOtI2+D7awLZFgh45RUjTy7ERRqskI
-         79z/vJIPlVyhO21GqpYh/UmBIgAUwPzEkoKqQV8Fw/F3rCxwUczGqCVswayElOQ7IO8z
-         iRA6rDsSwOXdSOsHXY3y+rLVkEuDrwIFOMuXVa7+Q16L69nWiLXcMdA46u9gdltTOADZ
-         qIzcqJmSobfSi8BWb95KBFOkFV8f1XBQS/OSmacZW4V6TXXUo59fyUYGasOYjxvbFnqb
-         KnSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784677985; x=1785282785;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1784678211; x=1785283011; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:to:subject:message-id:date
+         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xz+rLekKfe/AAP0Xgd+Iz5oYMriTqERJLl0HYz+gnMU=;
-        b=U4OIdgKGSyv7oYZOIdqwM6k+2jKNBgggZkPicD5nrNhTgyeH0MlxuDPR3yBykqbJo8
-         1Ay3rHp1rriLheVJEzOgTuHxZl/Vn3jHaSYGJqMqXMAce57JlYLRknINzxdSuOIcWxe+
-         lutnFtNWR27qAvSQZzE3ypAB7wj2snk1dWTqJWINDyoLZWZQrrFWvrgIay9Q7U/iVG0A
-         JEInQ5NGV+B2uA/u9IDTsqG2/9ZF5TlAP/34IOecZ9mTI3FEahdHeVcUatgh2YRN5De6
-         xod+UB7QDzRVHta5ZB2j8PhVE0HhcIdo5LzMtT1ghSYZR2Vg82mdiBq5GvEMQM+IX6nG
-         a7Ug==
-X-Forwarded-Encrypted: i=1; AHgh+RpnCzbpGehLaw4gLmpsFib7f7q+cYJrx09B1fjVhZAkXZA8yaV+IohM/iyxoF2zKmomiVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxV+28An4vjIC6dTnA4tZKP8SQr2hM6rj3heSxFe/FSdXZywY7F
-	dVjNoftLym0//FvVjmhKEOwICieAH4M2kcdENfs2iLwN+yxxnefTmhFT
-X-Gm-Gg: AR+sD10DdfTp9lx0DMiDzhkBCCX0zwgEiTV4HoiChyMY2k89IKguNBS7FZgCHsoihwZ
-	ZBZ+JFXmi0lCc5krZIfdtN8uBUYL0sx1+Qmy+b/+e4hxma/LIIqBDNGIGXsK35qp2GE9nVVG7VF
-	Ivu18orVyJeUEimMUjZgRxPRDADxh4r4m2GkFYfsYKTTpA79a2nHdN5aDqjWGXVtkMts84rp4PG
-	p+4plmYznX7f3dGrj3r6u+WFix6MgRceK7G9P3hJ3+BO5cqKsG6AYFipYOSY1OC+3X4RMN6wry9
-	vlUGBYwJsOIhRaV2zPKs1fm+m0JuERPa8m1ZT52ckgI6blAohZ4KUQdPPfJOgqFpem9G8hFpWGN
-	rbHixBnO6YNQmYzEQaITLLSyUas/YOc/83iGoDf/f2gssZd6kvTinbo03VltQnDd2XutEWKP1bo
-	brGwVA9CQRAPI8dmHh9hqJoXx8ZAsienpKkZyuI+4mGHHI6o0Fxivc+8r/
-X-Received: by 2002:a17:90b:3886:b0:369:7f25:cec0 with SMTP id 98e67ed59e1d1-38e4b2a5964mr21107022a91.0.1784677985494;
-        Tue, 21 Jul 2026 16:53:05 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:cda2:e912:7f2e:f787? ([2620:10d:c090:500::7827])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13d1300401fsm672641c88.3.2026.07.21.16.53.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 16:53:05 -0700 (PDT)
-Message-ID: <ea92ce5296ff4cacb1ecddd90493e04424dfc488.camel@gmail.com>
-Subject: Re: [PATCH 2/2] selftests/bpf: Cover stack frame number after
- scalar plus fp
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bot+bpf-ci@kernel.org, chenyy23@mails.tsinghua.edu.cn, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Cc: john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
- emil@etsalapatis.com, 	bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org,
- martin.lau@kernel.org, clm@meta.com, 	ihor.solodrai@linux.dev
-Date: Tue, 21 Jul 2026 16:53:02 -0700
-In-Reply-To: <b076593c985497a5f903439b864d1e8f1cd107f1561d04a22b77c6fafb3b4c13@mail.kernel.org>
-References: 
-	<81c5f138e510622fcf908b99bfc7000b872e0966.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
-	 <b076593c985497a5f903439b864d1e8f1cd107f1561d04a22b77c6fafb3b4c13@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        bh=2HDZnLZEgTng2BU/7p81Zndbee1PtPvUlTtKfIbfOGo=;
+        b=p8DHIxojSGqUeDZdxUHjZzEiAmX4EahYPUmGOgtAyxc0KUgFK6/tYK4GCnpnCC/dkn
+         CjsB3sPcWeU/l3CI91xJK3cF/YI87dCGImfRus3IaG6oRV+OMn75fwUODhHT4kNXDRYT
+         1JH5LUFUmangSssTmRuVfgfNYF073W8A3UgLeFrVlIV3/haw9U8rUdMAWsh8bvEV5xQA
+         +z8plFzOD+ewWPQEbRFzMQwpPnfOX4Y1kGCFfNdDTWQcRtZIM5awtJefI6WFTNkSunbg
+         zjsdMA3d0iP4JyHq7nyf6o5RC619jiMWDBwo8M1PxRnCoiOdl3+J7tpIcMHnShsdVIb1
+         cqCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784678211; x=1785283011;
+        h=content-transfer-encoding:content-type:to:subject:message-id:date
+         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2HDZnLZEgTng2BU/7p81Zndbee1PtPvUlTtKfIbfOGo=;
+        b=BMLuHDWbqQMyf2+kDGec5tSvoiSQIzZDJqihpJjGlqHgT80rt3O7xXr+zT80QYPAGr
+         rmkO8N/6GKHAP6+KOu4LjwqstjABVI6/950nc+iODkjRkFMAbO3ZAwT6w+u6V12LoGS5
+         fuNXuGND9NKoyHSNcYVg46nS3YYEmz2ByLZcukCkRxiF0XLcWDnh1OXaN42jO0sA5IaG
+         qewCH4hI+cbTjow6VOkjF6wTgqRv1Qk4GGe/NCuZqWGf3irUL6lO8FRwVOsN5rzSGdwT
+         S19BVbDXUXoGVdPRekoccqBWMDRK0J1ndpXsrVDwTpmvyVKBv13ifclR5YV4JgkKzZFS
+         BkaA==
+X-Gm-Message-State: AOJu0YzLhInsy4FgHcaeegknKs+PDdofLHX2PGT/baz4LBhln4GOFbsY
+	gKzNzhr4JuczXEvAnaehuUoJfYF7D5J2JhVYpqVA2hjxVnOKS3F8zvGfDTYKq0RhAYgvVWHmoI0
+	wnFsQ6xMnEh4TNMuru0drzC17RxaomgKFD8l8bBQxTilQJguLQ6ms/6LAhJk=
+X-Gm-Gg: AR+sD13GBQLSjWF5KG2j7+lo4GBADRzGsr9Gl0sdM7myquBLCOWMcWQ0ClYnbR59n6T
+	oKlF+GR86MuSl/yWhgL9t+ONU6DmFiiIjv0pbT6CvEPI8vJiB9yTA2HxgGsT+UNMGCiZb5o/ACM
+	yh95XPzBIIWBXY5plEYzFOobQIDlRSbD/ozCcV/CdJPLAJZbotuY30tZ+v8cQrPGXuay1olshyH
+	sJQTmgtYJ6ZSfoz4ioxp+DsT+UXpFi1gJ4prgyrl3qfZiRUQuSzRx7yWnC1vr+vy1OUn8GZXQ58
+	X1enzQOTaWjaCgV4
+X-Received: by 2002:ac8:610f:0:b0:51c:7a90:a798 with SMTP id
+ d75a77b69052e-527c400ad2fmr4737971cf.24.1784678210043; Tue, 21 Jul 2026
+ 16:56:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+From: YiFei Zhu <zhuyifei@google.com>
+Date: Tue, 21 Jul 2026 16:56:39 -0700
+X-Gm-Features: AUfX_mw-H9ROdS8DGZ7O8x6C4vMouBwP7F7113xXDldmrpgofe4tM3HShhGD_HA
+Message-ID: <CAA-VZPmzCKF5uhP0OG4mPwEs8WaL-xyjAYW=bE8z7Z_J4-h6cw@mail.gmail.com>
+Subject: LLVM regression in memcpy struct bpf_sock_ops->remote_ip6 to struct in6_addr
+To: bpf <bpf@vger.kernel.org>, =?UTF-8?Q?=C3=96mer_Sinan_A=C4=9Facan?= <omeragacan@gmail.com>, 
+	yonghong-song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-07-21 at 10:29 +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/=
-testing/selftests/bpf/prog_tests/verifier.c
-> > index be97f6887f0e..0483ae340726 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> > @@ -11,7 +11,6 @@
-> > =C2=A0#include "verifier_arena_globals2.skel.h"
-> > =C2=A0#include "verifier_array_access.skel.h"
-> > =C2=A0#include "verifier_async_cb_context.skel.h"
-> > -#include "verifier_basic_stack.skel.h"
-> > =C2=A0#include "verifier_bitfield_write.skel.h"
-> > =C2=A0#include "verifier_bounds.skel.h"
-> > =C2=A0#include "verifier_bounds_deduction.skel.h"
-> > @@ -165,7 +164,6 @@ void test_verifier_arena(void)                { RUN=
-(verifier_arena); }
-> > =C2=A0void test_verifier_arena_large(void)          { RUN(verifier_aren=
-a_large); }
-> > =C2=A0void test_verifier_arena_globals1(void)       { RUN(verifier_aren=
-a_globals1); }
-> > =C2=A0void test_verifier_arena_globals2(void)       { RUN(verifier_aren=
-a_globals2); }
-> > -void test_verifier_basic_stack(void)          { RUN(verifier_basic_sta=
-ck); }
-> > =C2=A0void test_verifier_bitfield_write(void)       { RUN(verifier_bitf=
-ield_write); }
-> > =C2=A0void test_verifier_bounds(void)               { RUN(verifier_boun=
-ds); }
-> > =C2=A0void test_verifier_bounds_deduction(void)     { RUN(verifier_boun=
-ds_deduction); }
->=20
-> The verifier_basic_stack skeleton was already dispatched here through
-> RUN(verifier_basic_stack).  Adding the new subtest to
-> progs/verifier_basic_stack.c on its own would have exercised it under the
-> existing harness with no change to prog_tests.
+In one of our BPF progs, there is a pattern of copying IPv6 addresses
+(which are four u32s) off of struct bpf_sock_ops into a stack variable
+(a larger struct that contains struct in6_addr), then updating a map
+with that stack variable. After a recent LLVM upgrade, that program no
+longer loads.
 
-Bot is spot on here.
+I wrote a reproducer:
 
-pw-bot: cr.
+  #include <string.h>
+  #include <linux/in6.h>
+  #include <linux/bpf.h>
+  #include <bpf/bpf_helpers.h>
+
+  struct in6_addr addr6;
+
+  SEC("sockops")
+  int test(struct bpf_sock_ops *skops)
+  {
+          struct in6_addr stack_addr6;
+
+          memcpy(&stack_addr6, skops->remote_ip6, sizeof(skops->remote_ip6)=
+);
+          addr6 =3D stack_addr6;
+          return 0;
+  }
+
+This will fail loading at latest LLVM main with error:
+
+  -- BEGIN PROG LOAD LOG --
+  0: R1=3Dctx() R10=3Dfp0
+  0: (7b) *(u64 *)(r10 -8) =3D r1         ; R1=3Dctx() R10=3Dfp0 fp-8=3Dctx=
+()
+  1: (79) r1 =3D *(u64 *)(r10 -8)         ; R1=3Dctx() R10=3Dfp0 fp-8=3Dctx=
+()
+  2: (79) r2 =3D *(u64 *)(r1 +40)
+  invalid bpf_context access off=3D40 size=3D8
+  processed 3 insns (limit 1000000) max_states_per_insn 0 total_states
+0 peak_states 0 mark_read 0
+  -- END PROG LOAD LOG --
+
+It seems that the program is reading the address from the bpf_sock_ops
+as two u64s instead of four u32s, and the verifier understandably does
+not allow that due to the complexity of rewriting context accesses. I
+bisected the regression to
+
+  commit 790f0623411d5d9d5c989f14e87f2fe86f52eaf3
+  Author: =C3=96mer Sinan A=C4=9Facan <omeragacan@gmail.com>
+  Date:   Tue Jun 9 16:03:26 2026
+
+      [SelectionDAG] Pass dest and src alignments separately to memcpy
+and memmove lowering functions (#201119)
+
+Looking at its PR [1], it seems that commit caused another regression
+for BPF selftests and that has been fixed, but this regression is
+still reproducible on main with that fix applied.
+
+I'm not really familiar enough with LLVM internals to understand
+exactly why it generates the code this way or how to fix the
+regression.
+
+YiFei Zhu
+
+[1] https://github.com/llvm/llvm-project/pull/201119
