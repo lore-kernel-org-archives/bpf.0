@@ -1,84 +1,83 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B89D3F825C
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 17:24:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4534A446839;
+	Tue, 21 Jul 2026 17:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784654654; cv=none; b=Va4ay/bVf6v8ssrj86hWGbLPfzXIYN3J5/CgFXM9YykL7kSMEULNkO6q3+TBiw3OMfZZRVFkyvwMk8tWCCJ4wBv03mvnijEvSnRWV0kCcdFFPg3rNRHRORmT037lVQsbOpS6nZQNvknOor+3OwTfaEw+tD1+TUbedvyDogFrSJ8=
+	t=1784655042; cv=none; b=o88gbsuZB5uvdNU/4rMclxBVpl8gW6xjgG7Pju+jTpyuXUGCTbaixE85GgLywg2RexukIVvZmGRwae++rkfY2szY7aN0M/iJqC1ofH5we9JT1OqJGr3yXnh8M6MUaFHt9JGOxHlUlO0MUeicg5dwXYqayhh5T5CEVhVa7M+HFvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784654654; c=relaxed/simple;
-	bh=3aib/mJy7dWcb7PQMt/jFgSo4y+WB1x21Rs1eesUuQE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Xqr0zS2gS8k644i/ChzZb+IwEPCDrb/OwGIkJOm3Ak1iBMmZhGqLYMmdmg+f9ma6XsMR0uRv8QRx646azvD9yK+TBnqlZQUAFP0ZHJ+07FpxuC86b7lVQvAdSCQkVpqsVyoIpmjV7Bryv0DkIQOl/VvRwv8iODCxaH+9yhfQDpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=J0h3YynE; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784655042; c=relaxed/simple;
+	bh=2KOGuuA9FDIkJ5Wreg6YTybx0xMLE00SXevl6PVql1A=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=NRcgPxxqyFLmTOIh0DO3gmDaHmOZsjRSGZ1qJv2QfTZwclh/7TRv/e85Ag5Qzte3fb9L4KXf8hVmHuYixITvo3a2uUe1zAYe2MxagKkhniYR3xQW6+Ta+vxv82NduakAu0KU7uaWAcfSrusByUg9JqRDTNlWVHjGueifMjBCEXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZjUSe+Yy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="J0h3YynE"
-Message-ID: <7c79eb26-0986-41c8-a5f9-5911a2e71175@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784654649;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4F+iZhFV6VPB9ZUQh4/hKSJwpjYLP4RW3rsSYNMA+yo=;
-	b=J0h3YynECLow0Nnsp03fdyDTS34Y59J51xWwDr2kgqKZ+bKjF8x6FCbBrrZ+jMk0bOw0sl
-	4Mnp7MxCx4Pw1IVloH58zet5ib5GPDifhdDNflFMbMXGBmu4g9/DbXHuKBXZrjb6eb8HFg
-	x10FPUADk/mxFAuq3c77N0sGAoYLr34=
-Date: Tue, 21 Jul 2026 10:23:25 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZjUSe+Yy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C894F1F00A3A;
+	Tue, 21 Jul 2026 17:30:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784655040;
+	bh=PXub7QjxlKunPYoCAwyVyltbPLo7SXnDLSzJEGokQmg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=ZjUSe+Yy0AlHYfI8ymzJBfvT76pM1sQukjtbZ3BD8WiZfQSA0TnHXoyzrjH/4R/Ar
+	 NEmocDERNTLNgvfLbcsgPg2n4uOmTeYqcz2RrMcq0fFMblyBm+GMmM6ThsdBaLv1ZJ
+	 XWx3yXuirVpADtJgTtlwOvt3o5EFyf/s7ABcEwS9Sbv8JtsDguujhYUvErtwVSoWhT
+	 iKel7lIGeyHXl+SZdIH6+Dz0dZWFgk63S24aQw/NpTBt2Af5Co9NjFaWsBsdowG2wW
+	 z1W2UTTeQljJonXc5s+VWIt3ctZrxF3/3xA3E1MPKwzOFbX5035chmX9AA1c7N9boZ
+	 GhFdZ2morfdlA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93B3539253CB;
+	Tue, 21 Jul 2026 17:30:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 0/5] x86/cpu: Refactor identify_cpu()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, Ingo Molnar <mingo@redhat.com>,
- Thomas Gleixner <tglx@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, "H . Peter Anvin"
- <hpa@zytor.com>, Andrey Konovalov <andreyknvl@gmail.com>,
- bpf@vger.kernel.org, kernel-team@meta.com, kasan-dev@googlegroups.com,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20260704002046.3859585-1-ihor.solodrai@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20260704002046.3859585-1-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/3] selftests/bpf: A few edge case fixes
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178465501039.874899.18364184442966669455.git-patchwork-notify@kernel.org>
+Date: Tue, 21 Jul 2026 17:30:10 +0000
+References: <20260720-selftests-bpf_fixes-v2-0-b450eda93dfe@suse.com>
+In-Reply-To: <20260720-selftests-bpf_fixes-v2-0-b450eda93dfe@suse.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgPHJibUBzdXNlLmNvbT4=?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ shuah@kernel.org, alexis.lothore@bootlin.com, ihor.solodrai@linux.dev,
+ brauner@kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On 7/3/26 5:20 PM, Ihor Solodrai wrote:
-> This series refactors identify_cpu() machinery on x86 and then
-> implements a fix for a bug when cpu capabilities are temporarily
-> cleared within an interruptable window. For more details and
-> discussion see the relevant bug report [1].
-> 
-> Suggested-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> 
-> [1] https://lore.kernel.org/bpf/20260610175651.647515-1-ihor.solodrai@linux.dev/
-> 
-> Ihor Solodrai (5):
->   x86/cpu: Factor init_cpu_info() out of identify_cpu()
->   x86/cpu: Inline generic_identify() into identify_cpu()
->   x86/cpu: Introduce identify_cpu_32() helper
->   x86/cpu: Set X86_BUG_ESPFIX in identify_cpu_32()
->   x86/cpu: Don't reset boot CPU cpuinfo in identify_cpu()
+Hello:
 
-Hi Boris, everyone.
+This series was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
-Bumping the thread as it's been a couple of weeks.
-
-Please take a look when you get a chance. Thanks!
-
+On Mon, 20 Jul 2026 08:13:06 -0300 you wrote:
+> Hi,
 > 
->  arch/x86/kernel/cpu/common.c | 114 +++++++++++++++++++----------------
->  1 file changed, 61 insertions(+), 53 deletions(-)
+> Please consider merging the following fixes, found by means of targeting
+> BPF selftests through openQA [1].
 > 
+> [1]: e.g. https://openqa.opensuse.org/tests/6087703
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,1/3] selftests/bpf: Fix make install target
+    https://git.kernel.org/bpf/bpf-next/c/0b236ac75d04
+  - [v2,2/3] selftests/bpf: Fix lsm_bdev dev_t encoding mismatch
+    https://git.kernel.org/bpf/bpf-next/c/71cf3f3275e5
+  - [v2,3/3] libbpf: Search /lib64 and /lib in resolve_full_path()
+    https://git.kernel.org/bpf/bpf-next/c/7b5ae0481efd
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
