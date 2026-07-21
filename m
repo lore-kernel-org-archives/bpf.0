@@ -1,118 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57D946F48B
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 19:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784663537; cv=none; b=aAu5sj5Yagedo1oPTRIGc37vilbIUclKUOnTNzJsoaZc4YigoQXao7tgw8M8W421+nRLSbZkD9EJPKmLpJBJ5XQQLjtO6Yz/ECMZrn0XxyGeuc86DOu/WzlWIITBQVgDaJAypQdwNsxZPsaCIy0c6Nhxj3S5fb6lPgZw5BE1I2w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784663537; c=relaxed/simple;
-	bh=uJlifbMY2TDmHwjFa5rsBBnnQtSyLuzQRMpQ5dPbsFI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Q/SmTVxD/WRvlVS0vMR8M+RyW2Sni3+n/nsrSrM8o0MnHmWCfNpRf/xIgn5p3zRwNo3y5CoghN88L5pT5B4Wp8nVdoqBFm9VaHXIj/54mHRpHAUqw6NKo+dcAZnAb0d/U7/J7T0eaRneFfLU9DHLBChyd3X1+rVFUC3suvhTElo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fz432JhW; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3D646D56D
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 20:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784664504; cv=pass; b=bORxZC4bMbo6IPTBO07j7Ql27ai/O4e1s3Q3ZWddRHXP/mar9m3Yu7yKcyDXBN/UxI8eeui1RlJCrMneNflyUXq4C6g8x8KTw2NGwZHdnfZzuC6LgJ9h/UvAo1QiBPlEwQI+bsqBYS6m4Zaktts+OpkfzLCzb9Q+4Py8TmnNIxA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784664504; c=relaxed/simple;
+	bh=Hci1bC3P+X3owHHYjbdKslMn9zLpOpY/3YyemZZfHDg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V90stzdCbr1/Y7mGT6oMZ4jFjlFac6gMNRZDMPcJWn216w7PulkUeaXHijtJIr9xvSH45HMEA3IgRqcv+ezrbwn6SS7rwy2YGquyxk6vV2kWt9DREl46OMvWYB0AQprbj5nErYAFArhApGr4qRy23qO7jg7pobFIlB2CELhXsIE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=My0fr/6Z; arc=pass smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fz432JhW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 712FC1F00A3A;
-	Tue, 21 Jul 2026 19:52:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784663536;
-	bh=F7O+1ednDdWhIr44uyOnhNkgO7DsXSDG5HEJaE8X1Zk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Fz432JhWQ7jb1b2XrOFQMcq1FS7yl3/LownzlifxDk3Iq+bu8+qtqrRXsGK6LEYcP
-	 klRFMvK6/XgUmaH8N5vtxoPN1+bDud28watIyguNsv/tenmMy3MnUrRTOn2Ctn7H0g
-	 QYld5cpCUN4LY07pt1tGxfBpJpbSLRRTxmUiGs53FheGW0iRspi3Dg7qe7geiYF5vC
-	 UM8AZPgkfWv+ISLFiSzYWVgaDdMXK6R2mWUsBhxZWkc2yMHT/l3xBfpkqFRLnTuFPD
-	 02mIqJ3QLo8WA28/5i+SpGDlb5tQxbrLlld/88+z4CFnwQHM79m294BIvyGPo3S/sS
-	 M8SDaiNM7R9TA==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v2 2/3] selftests/bpf: move shared build
- definitions into Makefile.buildvars
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mykola Lysenko" <nickolay.lysenko@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260721194111.334795-3-nickolay.lysenko@gmail.com>
-References: <20260721194111.334795-1-nickolay.lysenko@gmail.com>
- <20260721194111.334795-3-nickolay.lysenko@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Jul 2026 19:52:16 +0000
-Message-Id: <20260721195216.712FC1F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="My0fr/6Z"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-81ed000b507so63437087b3.0
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 13:08:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784664497; cv=none;
+        d=google.com; s=arc-20260327;
+        b=lTGeoQK7pJiXp/M9nxEG9KB8ZertGae4AbF5bQBj6rBxSZLi3z/gs8Nv75DNl8P1bD
+         bhS1nlXfEew09J9Bk/MVXGtFln9nYueSonoUwE95IjujPMG+X/h5ZOkq0IOrJq64zo2/
+         70bPrNN9kxTR07zOtRjCeWswNp7QsJTmVS0p6Zf7rkeHKqRFSRkKjB2xWb3eB50BTuVY
+         Y8nkKWCnuZBpr0AkUzD425E4ZnEkieaZ2+XkHzaiPICPTe5PivxgiJ2GwQyLEdKLhtpy
+         48XNUQMsWlG6/V4j2P4kvflN6VUHe4Kd0RfX8dxmE+F6WdhK32Zd5XhrXWnY/pO1dD4u
+         ijyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=JU9MbkLemkYABqglPrFanA0gj95u2y8wUop81+DJJFE=;
+        fh=Kzg5sAIWYL2B6uXjj/8QZ/BVfLsBTjDqp0uHqA1I23k=;
+        b=tDtXzHPiub+8G6PU0PzaCBBl9K12My/7N+Rn/6FNvbPn4vsXUEfndydt1YwiqLfHuC
+         JirRkgUltD67JvGbyriKhLhlUBj/YMSCwQTAKHy5Jf+rIchqzFSn52UEUw21VhBlQ0D4
+         jqFYq+e6AwgbizFA442t/F7pwova1LKPeXIUYw1Ax1/nHI1VNqXkJgKt+086sQNZTKgE
+         LOjvNH0luxsW59af+0lSnWScMohMRSva9xd5TCAsvEx4Muo050lSqi1tKMgEsdoqVWz9
+         WAkQoIcBP4nlXbzh0KohIMe1c/Z3cqpKXFgBK2VWibjU57EZH5SJMTaqXZ9ihM+wCjGD
+         u8fg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784664497; x=1785269297; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JU9MbkLemkYABqglPrFanA0gj95u2y8wUop81+DJJFE=;
+        b=My0fr/6Z7/BO+qyxzQx0fS3LcMICFpF9+K6LRb8tSdWGLvftXE88AwO1/4JO/L5DJZ
+         2Kl6533RC4sjV7L1b4MMxi3qzoqzKZSwpzRIfHNV8W0kth5PoeAPBjAGehRLluYXBe/J
+         q5L4/MJdP8TJb6APm+DrS+2JogbiVIe7YQZ0aviPJnu6vsEHh48sJ6+vZQi12x4fXcxy
+         w8OMQO89iMUTVA8R1OsHJh1UWRq3j8DrkanTDWPgGhPx72YuP8FmPHkdKvALdqvAPXsF
+         EdoV14IsdzG5tvVV8cCB1qkWlscYvKoND3U+TtjULVFo2r5kwPrtTGsQIhChQMsV3Lue
+         Pyhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784664497; x=1785269297;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JU9MbkLemkYABqglPrFanA0gj95u2y8wUop81+DJJFE=;
+        b=QTDWKvF5IqGWFAuCAISMtLnuTd740WIrYn8nD7PqC6/dxfkzLIA8+ssvvwEP5Ptef2
+         xAo90dMFCSeTS9kA+C3782YwoPYS2Ch1sPSn0C+yZtt8uZvX13k3YpGwaCuLAwaKpTfR
+         BN8lm4PaYdCNx/u8Idcdwo1NdUbbCyAcSdlhthrOEYnvta3B3//ygdyxMb3Ntbwd8TDG
+         Ctr7w6T46U5tU8C5abbI9Lt+SnFgJDFJKYJb3Pcac8cAMnumV7q5DJp6Qwei8OMFRRyT
+         +cugtbLwvHtJKlwa95t4aqkB2SNmm0wiBw9dAVbtaO0yvyaK4MXODMcIaiSRJ9aAIJv/
+         Hqow==
+X-Gm-Message-State: AOJu0YyewkY/PkAHdqrnAiJnjgLsWPY+GjZFMA9Xgsu0U7uQz5uO7/Pv
+	eR5pQfE+M0+JwVmjOEGFr2dpSlv29wt23SYMU5aO11m+WDcLzU6Dn6U1NalZyZZEWmQMlsSXd/8
+	qASikeFALfJwnny1AO6pJ5zAUjjSsLCU=
+X-Gm-Gg: AR+sD12yKy5rJzOYfSX9qGLja/XqDa0iFRqTF08T1YqKevuSHyZP8VjLwepGFllf9f/
+	+fXlviGiBhAZnv1e+qyhlGMwfCDnJAEDBhiIKzj0mDy9FzhFUtGtGRDzfuUXx4z+b6q8Ke2Kq+r
+	OqH97QV5VzQVCInFFnvm/SO5MV/GaGNi5rEqukL+BwaOWCTSqPVnFn2vqFtjPftmZxvJNQI0uHZ
+	GegGUeiv6hEaBEYdRFfTobFxCxG8ADPhQv9g7kQzVZyj30LDFwZ6c/Sn1iLHA==
+X-Received: by 2002:a05:690c:450f:b0:7fd:e030:2407 with SMTP id
+ 00721157ae682-81ef2410929mr62852067b3.29.1784664497098; Tue, 21 Jul 2026
+ 13:08:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260721041048.1394085-1-pulehui@huaweicloud.com> <20260721041048.1394085-4-pulehui@huaweicloud.com>
+In-Reply-To: <20260721041048.1394085-4-pulehui@huaweicloud.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 21 Jul 2026 13:08:06 -0700
+X-Gm-Features: AUfX_mwO25ftYQyg1LqqH3IxQr-FEeMc2njKxC8RQDPGpa4lwYfv9-Rp_bgKQYE
+Message-ID: <CAMB2axMZxvKLbMFvt2gLeAQk75=y1-m6eRSqsL28sc0kJ=w_Cw@mail.gmail.com>
+Subject: Re: [PATCH bpf v5 3/4] bpf: Fix potential UAF when reading bpf link info
+To: Pu Lehui <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
+	Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Pu Lehui <pulehui@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The variables TEST_KMODS and BPF_GCC are duplicated in both Make=
-file and Makefile.buildvars, creating a brittle maintenance hazard.
---
+On Mon, Jul 20, 2026 at 9:06=E2=80=AFPM Pu Lehui <pulehui@huaweicloud.com> =
+wrote:
+>
+> From: Pu Lehui <pulehui@huawei.com>
+>
+> In bpf_link_show_fdinfo and bpf_link_get_info_by_fd, link->prog is
+> accessed without holding any locks. If the prog is concurrently replaced
+> via bpf_link_update, the old prog can be freed, leading to a potential
+> UAF issue.
+>
+> Before dereferencing the prog, both normal RCU and RCU Tasks Trace read
+> locks would normally be required, as BPF_LINK_TYPE_ITER supports both
+> non-sleepable and sleepable progs. However, as commit 57b23c0f612d
+> ("bpf: Retire rcu_trace_implies_rcu_gp()") clarifies, an RCU Tasks Trace
+> grace period implies an RCU grace period, so holding only
+> rcu_read_lock() is already sufficient.
+>
+> Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active b=
+pf_cgroup_link")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
 
---- Patch [2]: [RFC PATCH bpf-next v2 2/3] selftests/bpf: move shared build=
- definitions into Makefile.buildvars ---
-commit 609eb873658507425701a592c055f112cedbb6b8
-Author: Mykola Lysenko <nickolay.lysenko@gmail.com>
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
 
-selftests/bpf: move shared build definitions into Makefile.buildvars
-
-This commit moves toolchain, path, flag, and probe definitions from the main
-Makefile into a new Makefile.buildvars file. This allows these definitions
-to be included by multiple makefiles for running test instances in sub-make=
-s.
-
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index 09e5be201afb5..2ddcb812dc85c 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-[ ... ]
-> +# These probes gate the flavor list, which must be final before lib.mk is
-> +# included; keep values consistent with Makefile.buildvars.
-> +ifeq ($(origin BPF_GCC),undefined)
-> +BPF_GCC :=3D $(shell command -v bpf-gcc;)
->  endif
-[ ... ]
-> -TEST_KMODS :=3D bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko=
- \
-> +TEST_KMODS ?=3D bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko=
- \
->  	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/Makefile.buildvars b/tools/testi=
-ng/selftests/bpf/Makefile.buildvars
-> new file mode 100644
-> index 0000000000000..2a7efe6d1c795
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/Makefile.buildvars
-[ ... ]
-> +# Immediate (with an override-preserving guard): a plain ?=3D stays
-> +# recursively expanded and would re-run 'command -v' on every expansion.
-> +ifeq ($(origin BPF_GCC),undefined)
-> +BPF_GCC		:=3D $(shell command -v bpf-gcc;)
-> +endif
-[ ... ]
-> +# Kernel test modules; TEST_KMODS=3D on the command line disables them.
-> +TEST_KMODS ?=3D bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko=
- \
-> +	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
-
-[Severity: Medium]
-Does keeping duplicate definitions of TEST_KMODS and BPF_GCC in both Makefi=
-le
-and Makefile.buildvars create a maintenance hazard?
-
-Since Makefile defines TEST_KMODS with "?=3D" before including
-Makefile.buildvars, if a developer adds a new test module to
-Makefile.buildvars but forgets to update Makefile, the new module won't
-be built because the Makefile definition takes precedence and ignores the
-update.
-
-Could these definitions be consolidated into a single location to prevent
-silent build failures from desynchronized lists?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260721194111.3347=
-95-1-nickolay.lysenko@gmail.com?part=3D2
+> ---
+>  kernel/bpf/syscall.c | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 6db306d23b47..cad986807d53 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3471,9 +3471,10 @@ static const char *bpf_link_type_strs[] =3D {
+>  static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
+>  {
+>         const struct bpf_link *link =3D filp->private_data;
+> -       const struct bpf_prog *prog =3D link->prog;
+> +       const struct bpf_prog *prog;
+>         enum bpf_link_type type =3D link->type;
+>         char prog_tag[sizeof(prog->tag) * 2 + 1] =3D { };
+> +       u32 prog_id;
+>
+>         if (type < ARRAY_SIZE(bpf_link_type_strs) && bpf_link_type_strs[t=
+ype]) {
+>                 if (link->type =3D=3D BPF_LINK_TYPE_KPROBE_MULTI)
+> @@ -3490,13 +3491,20 @@ static void bpf_link_show_fdinfo(struct seq_file =
+*m, struct file *filp)
+>         }
+>         seq_printf(m, "link_id:\t%u\n", link->id);
+>
+> +       rcu_read_lock();
+> +       prog =3D READ_ONCE(link->prog);
+>         if (prog) {
+>                 bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
+> +               prog_id =3D prog->aux->id;
+> +       }
+> +       rcu_read_unlock();
+> +
+> +       if (prog) {
+>                 seq_printf(m,
+>                            "prog_tag:\t%s\n"
+>                            "prog_id:\t%u\n",
+>                            prog_tag,
+> -                          prog->aux->id);
+> +                          prog_id);
+>         }
+>         if (link->ops->show_fdinfo)
+>                 link->ops->show_fdinfo(link, m);
+> @@ -5535,6 +5543,7 @@ static int bpf_link_get_info_by_fd(struct file *fil=
+e,
+>  {
+>         struct bpf_link_info __user *uinfo =3D u64_to_user_ptr(attr->info=
+.info);
+>         struct bpf_link_info info;
+> +       const struct bpf_prog *prog;
+>         u32 info_len =3D attr->info.info_len;
+>         int err;
+>
+> @@ -5549,8 +5558,12 @@ static int bpf_link_get_info_by_fd(struct file *fi=
+le,
+>
+>         info.type =3D link->type;
+>         info.id =3D link->id;
+> -       if (link->prog)
+> -               info.prog_id =3D link->prog->aux->id;
+> +
+> +       rcu_read_lock();
+> +       prog =3D READ_ONCE(link->prog);
+> +       if (prog)
+> +               info.prog_id =3D prog->aux->id;
+> +       rcu_read_unlock();
+>
+>         if (link->ops->fill_link_info) {
+>                 err =3D link->ops->fill_link_info(link, &info);
+> --
+> 2.34.1
+>
