@@ -1,185 +1,226 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139AC32861E;
-	Tue, 21 Jul 2026 11:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784631973; cv=none; b=bKZRMrHxUbwfEuEe1nTspviZYJvn7Y2nqNp6ZgIjgKc/2hKC6timiSrlFlywighfuoHjDmPStN0OrPVCgI+jFmGHDesE+oJ3wZMJSLIuFU0DZuL3PTZvDA0qnDnQinGsDfWXNCHBBHBIW2iQspj2sLSfxj4lX/2cR4bdRtuvnYs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784631973; c=relaxed/simple;
-	bh=T1mTMz9P94jNWmYvNRr3q4DbGHNst55KgRnteZzb2JQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lQJvsMzSSyJWZpqzCsW2na39Vld4x80qkj52ytlUEugJmxoQWNoCBKvljI998egyU2I5htoyxiH3UEz7dU2McCZL9UEpwTBsLdr0eHyQ+wOWbRRf7zM+gChNG0Fxbp+wm6UmpzVA88CoESEJjsBKhzHYOFDzjnTDF6urzjfEKo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TM9BOLXU; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486343876B7
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 11:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784632331; cv=fail; b=uKBSLEHs61r9tgKKKP4jd35496qNV8kxU3RySd1RKdQbrhJBmRdu7G8KPo4Xz3zOqKy60Rg81ps9j4EYbKTkyLo5eI22a9LYo6VpGoMswX23Gvih8CO0S++WTEnMU6IZ0xDkf9ABd8VxMXQKmds1xWaBxR2Gh0MrqdqTriMZMcU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784632331; c=relaxed/simple;
+	bh=gG0paWB0wn+W7Z17yUKwnf+zfQrS2jSxT/CmWJ5jqCU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=u+3TqzSA7+hYqkZHuP81scEIMSZysqmrvwUXB25kTQaCzFtSXoOZOUiXYtEHSms3oMqsiSm1JbjzrZxHAo/kUN4MEwHJaG7eWzVGVm8fG1yXAgimq45APBqmoO/wuoNQNIaA20JQCI2mPpTg+SLbLfmSD4MuurrMdZIJoXxqyqo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W4quEpG1; arc=fail smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TM9BOLXU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0057C1F000E9;
-	Tue, 21 Jul 2026 11:06:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784631971;
-	bh=LaVZvxNKUlS8V5YFdO52ViXqG34PCKTpK+eQer0gTnI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=TM9BOLXUbZv8axude7fnH0r8XrDLOI8/x4LVPjAPG823eqYIStGZxvrdJkC9sdotq
-	 SBHMq+1to+F+pV2rXsEE+y/SL3hR+P5QfvhMGN55BSQHAgoUgGOVASH4J0A4s6PdB6
-	 +sTBRPbfwA8vHdjNpB/t5TNmnlbbLcCJ9iamgnXqqt9OTiNFkPedPs3MFjCSNLFplk
-	 SYRByFhF/e1L0rg+ADBPrH3PVf1MIN/HvJX4BZKbzLG9u3b9/cD81fCxJgeXrQQv5H
-	 TxCewVYgMAegtT6YCaXeCw7KM3G1Ge64txCm6X7Q2apiTlaMdPv4IYHcFzvjCE73kF
-	 jZoH0SKUa8C5g==
-Message-ID: <cd11b015-7c59-4ce4-8eb0-8040fbb2cdfc@kernel.org>
-Date: Tue, 21 Jul 2026 13:06:04 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W4quEpG1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784632328; x=1816168328;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=gG0paWB0wn+W7Z17yUKwnf+zfQrS2jSxT/CmWJ5jqCU=;
+  b=W4quEpG1Ew0NAaACMfFrVdkjXlIwxSYL/qu4/zNp/pjIR2tRYyZTeMCZ
+   NOTkAkCh4DbzDv5GjgeTjIGrCowQNKlyMxS7Y0ttSvQ6qnMEGE6p2hixd
+   p2Kodl71SWw+vfevLfGoXysaIVNlfL26P1zhFFIXsWja9bs1/6C0U6Re6
+   lt7mZ/9HwffZVrc7I2LoGGKcaOU3YEHBQDmlL27vVmmAOwOawkFxqtwn9
+   IDjEr4OKRwvYBIqJjRJbFkLFMXkLeGa7+VjDb4i5cMRR29YTqkO8vBNOx
+   o0avzTDzh25IgaKlA+GynwH684EcqW29UXTx5cAV/YRf7qP9X7sSF3ASk
+   w==;
+X-CSE-ConnectionGUID: +TVBNWDATGSXsbJXj7TDdg==
+X-CSE-MsgGUID: 0H0Hc1ShQSyacEnJ6hHTvA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11852"; a="102778293"
+X-IronPort-AV: E=Sophos;i="6.25,176,1779174000"; 
+   d="scan'208";a="102778293"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2026 04:12:06 -0700
+X-CSE-ConnectionGUID: ziuFmeylQt6Y8gQbFnFWRQ==
+X-CSE-MsgGUID: cDyBrj9PQOaAr4IR7Kf5Wg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,176,1779174000"; 
+   d="scan'208";a="281009713"
+Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2026 04:12:06 -0700
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Tue, 21 Jul 2026 04:12:06 -0700
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43 via Frontend Transport; Tue, 21 Jul 2026 04:12:06 -0700
+Received: from DM1PR04CU001.outbound.protection.outlook.com (52.101.61.36) by
+ edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Tue, 21 Jul 2026 04:12:00 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=O+DQCzIFw4B8BeVNoxgBjZfNzJ1m3PQrNWNjuqf90gDCg8XtR3xlBtLqucxrGiVBSeNvaTnatE+v6P0NpPUD1YiN2LWUS9zfWXsGeyJGUnNL0RA3mk2+PXfInspmHctsMORqsyR3j3pd8J+Kdo3GTsHgQylFY5ApYJa4sVAxUOF11M85EewP5iCFwM+oftCpkhKCG7gbZWsYwvpwC9kQmSHxdnTS6xS2WvxfMAg9WibZxQ/XprT96S5O/k9kUkORr7VAYZKLXCgEQbZW29l4Mkp852voB6guqhak+Xg1jUXdcUTST0NagtGJlucAN+Qgy1o5TjkOQKHANmMvdCsmog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/h2fseAgvzwwe+WHSn1d78RO08kwhmGOL1bvNisOmrY=;
+ b=uBQ8Izs4xibMaVOYwtMJWyjuYz1cGBPSZ9EufX4+1nRul02pcdqC4UY2Fq5I9zIglGTcAzzawgnf971iXn7W7hx6WGDIfVj5clsLOofh1nHXion/aknzzci15LEm51hieWOJBcNu/6RDTVwIR2ycNYDPt3dGWyZqKy9qz2qdpeZ+l8cs000p4o1Y76x6SX4DvJcZBwMpcMcBf3epnD0RVIPjHDZ89UEtLC7PRPj8UYu2g157/dPnG+ngFsbK4UDTFJXFd7PdWERDO32i9I42VDlfiuLAp0hoxc7ftlILZaISH4nVIZWTrG2Ozq5eAG+S7w8oc3VVk6afXEE48nhKhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ DM4PR11MB5994.namprd11.prod.outlook.com (2603:10b6:8:5d::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.245.10; Tue, 21 Jul 2026 11:11:58 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0245.009; Tue, 21 Jul 2026
+ 11:11:58 +0000
+Date: Tue, 21 Jul 2026 13:11:48 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: <sashiko-reviews@lists.linux.dev>
+CC: Matt Fleming <matt@readmodwrite.com>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf v2] veth: convert frag_list skbs before running XDP
+Message-ID: <al9T9Eto/hRIzP5W@boxer>
+References: <20260720140545.461747-1-matt@readmodwrite.com>
+ <20260720141859.19FF41F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260720141859.19FF41F000E9@smtp.kernel.org>
+X-ClientProxiedBy: VI1PR04CA0069.eurprd04.prod.outlook.com
+ (2603:10a6:802:2::40) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH slab/for-next v4 6/8] mm/slab: introduce struct
- kvfree_rcu_head for kvfree_rcu batching
-Content-Language: en-US
-To: "Harry Yoo (Oracle)" <harry@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>,
- Shengming Hu <hu.shengming@zte.com.cn>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260720-kfree_rcu_nolock-v4-0-964e03c41a4e@kernel.org>
- <20260720-kfree_rcu_nolock-v4-6-964e03c41a4e@kernel.org>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Autocrypt: addr=vbabka@kernel.org; keydata=
- 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
-In-Reply-To: <20260720-kfree_rcu_nolock-v4-6-964e03c41a4e@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|DM4PR11MB5994:EE_
+X-MS-Office365-Filtering-Correlation-Id: 64c1b0ef-57eb-41cc-3db7-08dee718e191
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|4143699003|56012099006|10067099003|11063799006|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info: TbQoEFTli2+/PaUUcNeFDYSxvXmdeW1VoUJKIbRT70yR1JuiWgicdOEfhbhuIUSD5DgFhd5oBNwkWofMLUCsR3mjfMhn2/BCf6Wfy9MRC0jsfNC1LPWqMOXi5RbBkAgy1vv+BTzgdmtNAo2uUPElQdwltO5FnGN9PFKtcET3g2GJirZzFozHV+9juKOcvXxUks7LuqoipjnnXx2W4V9BHepmkaZglGW6H+u++h3FEyRriIUTSZvrH+jde65PDGJDZ61Jr4wA5KqEFaPxvBfLLGF2Trblkb+LAKJPog+FMh4Cf3P/RORpd9P7sk1B5Q+RxtCPrjnbwAXfWZ7dC7uYU8IZHbblABsmDHbNbltPP1tluR8nuZz9dMJQKp13CBqpBMAFKAYbQB+gBJFgDU46LOvHbICOnmwsJEEGNkwtC7vQbXI32qAWs6TqveZYOFJ39mTad6aoXjOIr4SYqnevBtssSoIB3L8eS0vIMCLUo6QKd68X/Rx4rgwDq4+cMUbr1aBHbsSmFV1dJU1y9ksuU16wZS78iZgetyi+5gGg8Mi9pIcc2hpTBhDiL5GtXGdqKW8XEHLR9aOlLz+NosHIQ3Irbwq/Uu0A21gSlPvtjE8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(4143699003)(56012099006)(10067099003)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?Qkbcy2JPdt5zb7+Ou7IBjTVm/V9vIsx1j0hYHQKpkhX61e3HdnI80Dn6Jo?=
+ =?iso-8859-1?Q?NDijUzjCk78r+xycrSEuxxwuPOi1icrfndDqfv4WDQG2CcWOgQDodk4wXf?=
+ =?iso-8859-1?Q?Sk+jAfNqAjDaMcvssPxSBDt+o7gpgXtr63mLDMyvYjfyJF0vLulcMGmh0b?=
+ =?iso-8859-1?Q?nIcMPn46jU0ZzhFOyDXagxN9H4cuUnoTnvL1TbmR1K5Ae5DqEPLdmBnAH6?=
+ =?iso-8859-1?Q?xGgdF62pY2jhy8gkJa0ZB1EbQMlFw4EUadT+xp+Q2YNf8ZQnve3QWY6w0d?=
+ =?iso-8859-1?Q?J8PivFyHGIEklCJ5/5fC2A/G+WXrpXFhPpuS0uhq2Q5iIoh9bHFSiIrjx1?=
+ =?iso-8859-1?Q?5RI/z8ci3xCHmYDywL/wAAcyTBLnFCcHLrycOVQoT1LIKqqXluexFN+kX4?=
+ =?iso-8859-1?Q?MUawdPAFJVJqdLhVDs6Y3TsotDuzpAFIWnjZfhhDxBluhYss9eAC+myKjr?=
+ =?iso-8859-1?Q?dI5C678r22IFJZ9XMBDX3JlpPgrlOUdCNFX5Mx+M1JSHujvPV8KsT8y/qX?=
+ =?iso-8859-1?Q?4GJEhyuq65dxzucFbeuPwbrYTicL9kLq9HqCvzieL8U/LSrsceyRutVEJ1?=
+ =?iso-8859-1?Q?Uw3Eajx3lBtc46KfEhKbvf6eXY3i/gbKWioC8nmOFeEtdZGiJkCuIvN2aF?=
+ =?iso-8859-1?Q?CUCy1A6C+Z3LHsqc/oRvI8iK/t/bseBAY1g9q5VRmV7a0u+rLHqCVmSqag?=
+ =?iso-8859-1?Q?ogYwNWQ7Y4CRXsvs4PK3tW+JKDw/Zsdy81yLHs3JOuC3s9uzQlJV4xvDFA?=
+ =?iso-8859-1?Q?N9+PtohbN9ukz57nUySVkTc6PcmC4esPJ2+a4Y8GEtk6C5hmOrvz/JXmQW?=
+ =?iso-8859-1?Q?R/e8NhtW0Q5AgRpctRptsgmjUimBVubc/d9GjlbXn2Ymog8fv/Elkdck9Z?=
+ =?iso-8859-1?Q?CwAoJtQu81ULRiYZFl71BJbWFuD1jCQwmQObuJKmkRn76mjYrZpA2r6DeM?=
+ =?iso-8859-1?Q?680x4oGyNjQHf3Qz1KzJpLepm+yMqDqZl1V7on71dL/DBfgw3LrQFp815K?=
+ =?iso-8859-1?Q?F3nZcLs44NCcvQs36aowLIOP13dp2DDkwVNp3wB1R0PbAQagF2ESLDKcGN?=
+ =?iso-8859-1?Q?r/CR/Ob/EDJyA4oSaN14twPbga9YaJw0dd9FPLZeAG5jmbcpOhbC3sQMP8?=
+ =?iso-8859-1?Q?WA8U1E8veOehECxPu7x+AOxIGLDE2qg4KFqEU0bhPq8C19p4fN0enSco01?=
+ =?iso-8859-1?Q?7aDKJ4jeBOYbCj9z5eZqdUbK7GBr9vB6sVx5J/MAdjawe/z7wKywxlWLir?=
+ =?iso-8859-1?Q?U61lK/WKBxcqPPJpZg4RXwMi983rEQLZjnEIdw/qdrZavQQzZjLGeI4qm9?=
+ =?iso-8859-1?Q?DIBcbK5R0I/IzK/4LHPyTL3RJ8n+/YgmiDk67rmEPgWqoUwnZ41PSkRuvj?=
+ =?iso-8859-1?Q?ovQTfAvYgay57OczCA048pkAPRS3TDzGb/JPodrlLeThkQgiKC50qEiugd?=
+ =?iso-8859-1?Q?jR/FqWdLcksxVV6DoD/t/RIOruWK5a3uzdSjn166JxixDKT11hqKZgt/cb?=
+ =?iso-8859-1?Q?/e7q8EFPEgKzYTl6AnIPsINDmTBW4zQP+L068r8fD447LGUezkVa1Kbe8P?=
+ =?iso-8859-1?Q?Bq0W0efYx8yuZLphWF8xOy8yHp+MC5tRwqNxK8PkcbH8Y3wJPkYHLCwfJU?=
+ =?iso-8859-1?Q?xf2LTbJjLfK5cb1ZBhlbNs2NrYxw70vpKnXrCoh0yEPrDFq+boFdOiZh0j?=
+ =?iso-8859-1?Q?Y4didw5LFY8K5WBOz7MIW7XSoadkQ4AkDGxguU2k3q93xHd+onfT25sUsp?=
+ =?iso-8859-1?Q?LIp8hg3WsvQatoi2vdr/JmpuxdTwAh8nKubhDWbHSVTPZUwbyJ0/JGiewd?=
+ =?iso-8859-1?Q?V06VFZwrr0nh0QFVhBy1RxZUYpFero0=3D?=
+X-Exchange-RoutingPolicyChecked: opeQJbidvtg9GVpZpeP4tuJ5Yj6vhmZXaRHPVYsb8a5Uch3mVOGraDCnm44quqqnx6oavW9k4ZQdOMj8CtAsMticrDOWf6OjDBJMxU0Yupxi4hsEiyXbOj+sJXGN+JsjTfvRMY2NpeARS9m6pRSt9GCoc8jEeYn9FDv0ZoGO7T1b4R9JCoWB/79KX9Dpkv+mbEYibgQsvnCuN7NVklAT+FUAYeJ50imSPZHrRIzWQUmnG7Pc7L4nmeNgd46oGGw9NlyVV/CvKWr8C5R7xi2fb5WSuV5rR3SA8VFZHzFusKhvZmMXipMeWw9sXxv7/dMhJiY3gIX0sw/iGAMx5kdLSQ==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64c1b0ef-57eb-41cc-3db7-08dee718e191
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2026 11:11:58.3638
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: b0Eo57srAUhey0Vt0tRxN6qXxNUxC55qs33pM/F1zokS88lK3QZwOwb3AWAS5KCdpxT2hnTL4FZYMbBn6To1u7ooCEHXxbmqzTg4xLraGgw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5994
+X-OriginatorOrg: intel.com
 
-On 7/20/26 14:44, Harry Yoo (Oracle) wrote:
-> rcu_head is overkill for kvfree_rcu() because the callback
-> function is always either kfree(), vfree(), or free_large_kmalloc(),
-> and thus there is no need for a function pointer.
+On Mon, Jul 20, 2026 at 02:18:58PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
 > 
-> kvfree_rcu batching reuses the field to store the start address
-> of an object, however, this is not strictly needed because we can
-> calculate the start address in the slowpath. For the purpose of
-> kvfree_rcu batching, it is sufficient to implement a linked list using
-> a single pointer.
+> Pre-existing issues:
+> - [Critical] veth_xdp_rcv_skb() fails to adjust skb->len when an XDP program modifies fragment lengths, causing state desynchronization.
+> --
 > 
-> Introduce a new struct called kvfree_rcu_head (the name was suggested
-> by Vlastimil Babka), which is similar to rcu_head but is only a single
-> pointer to build a linked list, without a function pointer, when
-> CONFIG_KVFREE_RCU_BATCHED=y.
+> --- Patch [1]: [PATCH bpf v2] veth: convert frag_list skbs before running XDP ---
+> commit c3ece024a1663f1b10d53a17f59581af7993ec1f
+> Author: Matt Fleming <mfleming@cloudflare.com>
 > 
-> When kvfree_rcu is not batched, kvfree_rcu_head is the same size
-> as rcu_head. Note that shrinking struct kvfree_rcu_head on
-> CONFIG_KVFREE_RCU_BATCHED=n kernels would inevitably require additional
-> complexity and also some sort of batching (which defeats the purpose of
-> the config option) because it cannot fall back to call_rcu().
+> veth: convert frag_list skbs before running XDP
+>     
+> A frag_list skb can reach veth with data_len set but nr_frags zero.
+> This patch routes non-linear skbs through skb_pp_cow_data() before exposing
+> them to XDP, preventing a crash in AF_XDP copy mode.
 > 
-> For now there are no user-visible changes to the API. k[v]free_rcu()
-> simply casts rcu_head to kvfree_rcu_head. While this does not affect
-> the API, it allows kfree_rcu_nolock() to reuse kvfree_rcu batching
-> as a fallback when trylock or sheaf allocation fails.
+> > diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> > index 1c51421491753..00e34afd858e7 100644
+> > --- a/drivers/net/veth.c
+> > +++ b/drivers/net/veth.c
 > 
-> Stop storing the object pointer in rcu_head.func and instead calculate
-> the object's start address in kvfree_rcu_list(). Factor out the existing
-> logic to calculate the start address from kvfree_rcu_cb() to
-> kvmalloc_obj_start_addr().
+> [ ... ]
 > 
-> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+> > @@ -771,7 +771,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+> >  	xdp_prepare_buff(xdp, skb->head, skb_headroom(skb),
+> >  			 skb_headlen(skb), true);
+> >  
+> > -	if (skb_is_nonlinear(skb)) {
+> > +	if (skb_shinfo(skb)->nr_frags) {
+> >  		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
+> >  		xdp_buff_set_frags_flag(xdp);
+> >  	} else {
+> 
+> [Severity: Critical]
+> This is a pre-existing issue, but while reviewing the XDP fragment changes, I
+> noticed a potential state desynchronization in veth_xdp_rcv_skb() when handling
+> XDP tail adjustments.
+> 
+> When a fragmented packet is received and an attached XDP program calls
+> bpf_xdp_adjust_tail() to shrink or grow the packet, veth_xdp_rcv_skb() updates
+> skb->data_len:
+> 
+> drivers/net/veth.c:veth_xdp_rcv_skb() {
+>     ...
+> 	/* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
+> 	 * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
+> 	 */
+> 	if (xdp_buff_has_frags(xdp))
+> 		skb->data_len = skb_shinfo(skb)->xdp_frags_size;
+> 	else
+> 		skb->data_len = 0;
+>     ...
+> }
+> 
+> Does skb->len also need to be updated with the corresponding delta when
+> skb->data_len is modified?
+> 
+> If skb->len isn't updated alongside skb->data_len, could skb_headlen()
+> evaluate to a size larger than the actual linear buffer? If the tail is
+> shrunk, this desynchronization might lead to out-of-bounds reads or writes
+> past the allocated linear memory during subsequent network stack processing.
 
-Nice.
+I think this is a valid find which also affects generic XDP side. Probably
+another reason to have generic XDP code being reused here so fix would
+happen in a single spot.
 
-Reviewed-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+We only handle the linear part via __skb_put() when we detect
+bpf_xdp_adjust_tail() usage. I assume skb->len = xdp_get_buff_len(xdp); is
+missing.
 
-Nit:
-
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -351,6 +351,33 @@ static inline int objs_per_slab(const struct kmem_cache *cache,
->  	return slab->objects;
->  }
->  
-> +/* kvfree_rcu_head offset can be only less than page size */
-> +static inline void *kvmalloc_obj_start_addr(void *head)
-> +{
-> +	void *obj = head;
-> +
-> +	if (unlikely(is_vmalloc_addr(obj))) {
-> +		obj = (void *) PAGE_ALIGN_DOWN((unsigned long)obj);
-> +	} else {
-> +		struct page *page = virt_to_page(obj);
-> +		struct slab *slab = page_slab(page);
-
-Can use virt_to_slab().
-
-> +
-> +		if (!slab) {
-> +			obj = (void *) PAGE_ALIGN_DOWN((unsigned long)obj);
-> +		} else if (is_kfence_address(obj)) {
-> +			obj = kfence_object_start(obj);
-> +		} else {
-> +			struct kmem_cache *s = slab->slab_cache;
-> +			unsigned int idx = __obj_to_index(s, slab_address(slab), obj);
-> +
-> +			obj = slab_address(slab) + s->size * idx;
-> +			obj = fixup_red_left(s, obj);
-> +		}
-> +	}
-> +
-> +	return obj;
-> +}
-> +
->  /*
->   * State of the slab allocator.
->   *
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260720140545.461747-1-matt@readmodwrite.com?part=1
+> 
