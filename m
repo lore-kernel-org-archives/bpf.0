@@ -1,146 +1,179 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49255403E9E
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 04:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487FF433BC3
+	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 07:17:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784608105; cv=none; b=F6bClgsGZtjRC2jGuDSwwfKAUzsCboiqACcq8SlB9WLAfQ4drzWVPiGRzLP/MBq79WFFECQAPQmfnjvdk3tn11nMa9s9E68yMHNWVPCHno5PfVyQ6Q8esZdw8eTPBIqTOsTMRF4sq0aEWksvlyMcm+p7dbIEbIyya3LDBvgZQE0=
+	t=1784618275; cv=none; b=EYy874dHpagu52u7LLnytI2FoCyQOmT5VhZ3vatTAQ3XLboSCSvUfhxXhQbOUteqhKiyZrNwjMU0oN+sN0JplZfW1Ma1Km3FsPd6YsLRXkaVKwP2RUNTIOW9/oYGOptqm3GQVmt/rCtOOP7ufwGEYvX92V1a63B1EqB7AodVd/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784608105; c=relaxed/simple;
-	bh=PrXIV+O6EjK9VB1pfJpUjXKRL/d5xXyqilodVSjVc4M=;
+	s=arc-20240116; t=1784618275; c=relaxed/simple;
+	bh=LvWxxEInUmDlqgPj+Ovd8vMDF9N4ZnDIXOeJ2BhWwi8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ih+ciJOAZAAhNHY7pnjhn+JZODUda8V7F0r0cWYGO/eawGIyWNKWrbyv2Q3pRd4rza4Ssc8hzkrfTGvAxhASbwVmZ1cCrWPM7006CrbRNkL/ZDzxAWVy2xDCJOWSeNMnyD38Eo9AfoekQ72DJcux48V39wNy+6HKzrTLDbcyWh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KvqqmjHV; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=eYsNs6jT16P1m5zooe3X+kXH3Dlmnt9exCzMHaTlWk3yKM6C0syfk2Hox2a2ERVmOVwgzZ586HBlFa5HolxEWg8oCeJ6f6WcmySllvOGhaEFQnTzg9ULk9y8e5EH6c6faRrwPMo6rw5pjXU+gmmndao9OAs6te8zQuBzA20pSR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EGAUK/BQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KvqqmjHV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9901A1F000E9;
-	Tue, 21 Jul 2026 04:28:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EGAUK/BQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABBE41F000E9;
+	Tue, 21 Jul 2026 07:17:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784608103;
-	bh=ECx0lZULKz1wcSrwQtwMHDH8RPnQUdLUO4Mlp6DTbM0=;
+	s=k20260515; t=1784618274;
+	bh=WXvbCde+8EP/jwspcQ1jgB8S+be0mtvvnkjMY82g7q4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KvqqmjHVS0fhPt3jRUnb9h9pc7CTbYdTMpUTrgnoVn+dMhPOpj1jkMr/T7kEQ4Vcv
-	 1XIRWP1Nw0RfdsJI4cEIKa0+Allic4fLByi/3csgqqikzegitJMKenfCK6xOIj80PR
-	 ZmnG/YRaT0/bJNQL0OJvh2tTm2O5nh0ryVLVHDgfDW16oRAjYAm2LwS7waoALseSG2
-	 tc1nQl443u9ae2QNVOJK/TA635wN9nFhwaD9mvW0wZrn6CFQ+xbygKLDWRDU2Fl4TT
-	 0TYF9whFUt0HtlXuAUggSs9Hz2pjLvynGGtxPaBcGyZWfzkr1eprlNuIH4/lg9qyUy
-	 r8ntco9kqFIKQ==
+	b=EGAUK/BQq+O0D2uHqofYOXa8h3o0oK7049q5r9R0uhNTxnUZdYxWsH9c0vUhXRinW
+	 tvtu6wc7MUV3fLEGoOwIGlyg+Q0L/UG340x4vTaqpQcWRNaSgZZY3f67rCGR1KnJPD
+	 aYikX+niasYTKuc3n1pHHKO+rGJZbjWt1KP7h6OXL1IO+2lz/lcOV95q1MsDVfz7tV
+	 OcFd14AuDydZm9oXaA9gKsCrGGimsE4QUYfkxPVJmDD5sOg6JTn0hArvYUia2ebCGO
+	 ZwxnsJpI46i1SgZAB7mbCdsEr2o8aNnJB/jMae/HJBIsAjB5jmrbefeDl+JeeMQVsE
+	 tBJ5bD9TK2Qgw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v5 1/4] bpf: Fix potential UAF in
- bpf_netns_link_update_prog
+Subject: Re: [RFC PATCH net-next 02/13] net: devmem: extend memory provider
+ for knod
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pu Lehui" <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260721041048.1394085-2-pulehui@huaweicloud.com>
-References: <20260721041048.1394085-1-pulehui@huaweicloud.com>
- <20260721041048.1394085-2-pulehui@huaweicloud.com>
+To: "Taehee Yoo" <ap420073@gmail.com>
+Cc: dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, media-ci@linuxtv.org
+In-Reply-To: <20260719175857.4071636-3-ap420073@gmail.com>
+References: <20260719175857.4071636-1-ap420073@gmail.com>
+ <20260719175857.4071636-3-ap420073@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Jul 2026 04:28:23 +0000
-Message-Id: <20260721042823.9901A1F000E9@smtp.kernel.org>
+Date: Tue, 21 Jul 2026 07:17:53 +0000
+Message-Id: <20260721071753.ABBE41F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Lockless access to `link->prog` in generic link VFS operations (`b=
-pf_link_show_fdinfo`, `bpf_link_get_info_by_fd`, and `bpf_mprog_link`) can =
-lead to Use-After-Free if `BPF_LINK_UPDATE` executes concurrently.
+- [High] The patch silently increases PP_ALLOC_CACHE_REFILL from 64 to up t=
+o 4096 (for 4K pages), severely bloating struct page_pool and causing order=
+-5 page allocation failures.
+- [High] Ignored error return value of page_pool_set_dma_addr_netmem can le=
+ad to silent DMA address truncation and memory corruption on 32-bit archite=
+ctures with 64-bit DMA.
+- [Medium] The is_kernel_rodata check in page_pool_init prevents loadable d=
+river modules from utilizing the new PP_FLAG_CUSTOM_MEMORY_PROVIDER feature.
 --
 
---- Patch [1]: [PATCH bpf v5 1/4] bpf: Fix potential UAF in bpf_netns_link_=
-update_prog ---
-commit 5e4c7fbc6ffdce928d3526471c4a856d31dd1aba
-Author: Pu Lehui <pulehui@huawei.com>
+--- Patch [2]: [RFC PATCH net-next 02/13] net: devmem: extend memory provid=
+er for knod ---
+commit 685f164a3b04db75b3dba6257fd2806218155a24
+Author: Taehee Yoo <ap420073@gmail.com>
 
-bpf: Fix potential UAF in bpf_netns_link_update_prog
+net: devmem: extend memory provider for knod
 
-This commit fixes a potential Use-After-Free (UAF) in
-bpf_netns_link_update_prog by moving the checks for old_prog and
-new_prog->type inside the netns_bpf_mutex lock. This prevents a race
-condition when multiple threads concurrently execute BPF_LINK_UPDATE on
-the same network namespace link.
+This commit extends the devmem memory-provider path so a knod accelerator
+can back a NIC page_pool with accelerator-exported memory. This lets the
+NIC DMA received packets directly into accelerator memory.
 
-> diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
-> index 25f30f9edaefd..9fc62db1441c6 100644
-> --- a/kernel/bpf/net_namespace.c
-> +++ b/kernel/bpf/net_namespace.c
-> @@ -171,13 +171,17 @@ static int bpf_netns_link_update_prog(struct bpf_li=
-nk *link,
->  	struct net *net;
->  	int idx, ret;
-> =20
-> -	if (old_prog && old_prog !=3D link->prog)
-> -		return -EPERM;
-> -	if (new_prog->type !=3D link->prog->type)
-> -		return -EINVAL;
-> -
->  	mutex_lock(&netns_bpf_mutex);
-> =20
-> +	if (old_prog && old_prog !=3D link->prog) {
-> +		ret =3D -EPERM;
-> +		goto out_unlock;
-> +	}
-> +	if (new_prog->type !=3D link->prog->type) {
-> +		ret =3D -EINVAL;
-> +		goto out_unlock;
-> +	}
-> +
->  	net =3D net_link->net;
->  	if (!net || !check_net(net)) {
->  		/* Link auto-detached or netns dying */
+> diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
+> index 03da138722f58..3e866f249768e 100644
+> --- a/include/net/page_pool/types.h
+> +++ b/include/net/page_pool/types.h
+[ ... ]
+> @@ -54,11 +62,11 @@
+>   * would have to take a slower code path.
+>   */
+>  #if PAGE_SIZE >=3D SZ_64K
+> -#define PP_ALLOC_CACHE_REFILL	4
+> +#define PP_ALLOC_CACHE_REFILL	256
+>  #elif PAGE_SIZE >=3D SZ_16K
+> -#define PP_ALLOC_CACHE_REFILL	16
+> +#define PP_ALLOC_CACHE_REFILL	1024
+>  #else
+> -#define PP_ALLOC_CACHE_REFILL	64
+> +#define PP_ALLOC_CACHE_REFILL	4096
+>  #endif
 
 [Severity: High]
-This isn't a bug introduced by this patch, but it looks like other generic
-link VFS operations might suffer from a similar concurrent update issue.
+Will this increase to PP_ALLOC_CACHE_REFILL cause page_pool_create() to
+fail unpredictably under memory fragmentation?
 
-Functions like bpf_link_show_fdinfo() and bpf_link_get_info_by_fd() in
-kernel/bpf/syscall.c, and bpf_mprog_link() in kernel/bpf/mprog.c read
-link->prog locklessly without holding rcu_read_lock().
+Since PP_ALLOC_CACHE_SIZE is defined as PP_ALLOC_CACHE_REFILL * 2, the
+inline cache array inside struct page_pool grows to 8,192 entries for 4K
+pages. At 8 bytes per pointer, this array alone consumes ~65.5KB.
 
-If a userspace thread calls bpf_link_get_info_by_fd():
+This forces an order-5 kzalloc_node allocation for the page_pool struct,
+which is highly prone to failure under fragmentation and drastically bloats
+the memory footprint per RX queue.
 
-kernel/bpf/syscall.c:bpf_link_get_info_by_fd() {
-    ...
-    info.prog_id =3D link->prog->aux->id;
-    ...
-}
+[ ... ]
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index 21dc4a9c8714d..fd7444943b9f5 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -272,7 +272,17 @@ static int page_pool_init(struct page_pool *pool,
+> =20
+>  	xa_init_flags(&pool->dma_mapped, XA_FLAGS_ALLOC1);
+> =20
+> -	if (pool->slow.flags & PP_FLAG_ALLOW_UNREADABLE_NETMEM) {
+> +	if (pool->slow.flags & PP_FLAG_CUSTOM_MEMORY_PROVIDER) {
+> +		/* Driver-managed pool with a directly-supplied memory
+> +		 * provider, not bound to a netdev rx queue.
+> +		 */
+> +		if (WARN_ON(!pool->slow.mp_ops || !pool->slow.mp_priv)) {
+> +			err =3D -EINVAL;
+> +			goto free_ptr_ring;
+> +		}
+> +		pool->mp_priv =3D pool->slow.mp_priv;
+> +		pool->mp_ops =3D pool->slow.mp_ops;
 
-And a context switch occurs just before accessing link->prog->aux->id, coul=
-d a
-concurrent thread executing a BPF_LINK_UPDATE command on the same link repl=
-ace
-link->prog and call bpf_prog_put() on the old program?
+[Severity: Medium]
+Will this new flag work for loadable driver modules?
 
-If the RCU grace period expires before the preempted thread resumes, would =
-this
-result in a Use-After-Free when accessing prog->aux->id?
+When PP_FLAG_CUSTOM_MEMORY_PROVIDER is used, pool->mp_ops is populated here.
+Later in page_pool_init(), there is a preexisting check:
 
-Similarly, in bpf_link_show_fdinfo(), could reading prog->tag and prog->aux=
-->id
-locklessly trigger the same race?
+    if (WARN_ON(!is_kernel_rodata((unsigned long)pool->mp_ops))) {
+        err =3D -EFAULT;
+        goto free_ptr_ring;
+    }
 
-kernel/bpf/syscall.c:bpf_link_show_fdinfo() {
-    ...
-               prog->aux->id);
-    ...
-}
+Because is_kernel_rodata() only checks against the core kernel's
+__start_rodata and __end_rodata boundaries, any memory provider ops struct
+allocated in a loadable module's .rodata section will fail this check.
+This renders the new feature unusable for modular drivers.
 
-And in bpf_mprog_link(), could dereferencing link->prog->type locklessly
-result in reading freed memory?
+> +	} else if (pool->slow.flags & PP_FLAG_ALLOW_UNREADABLE_NETMEM) {
+>  		netdev_assert_locked(pool->slow.netdev);
+>  		rxq =3D __netif_get_rx_queue(pool->slow.netdev,
+>  					   pool->slow.queue_idx);
+[ ... ]
+> @@ -725,6 +735,16 @@ void page_pool_clear_pp_info(netmem_ref netmem)
+>  	netmem_set_pp(netmem, NULL);
+>  }
+> =20
+> +void page_pool_provider_set_netmem(struct page_pool *pool, netmem_ref ne=
+tmem,
+> +				   dma_addr_t addr)
+> +{
+> +	netmem_to_nmdesc(netmem)->pp_magic =3D 0;
+> +	netmem_to_nmdesc(netmem)->pp =3D NULL;
+> +	atomic_long_set(&netmem_to_nmdesc(netmem)->pp_ref_count, 0);
+> +	page_pool_set_pp_info(pool, netmem);
+> +	page_pool_set_dma_addr_netmem(netmem, addr);
 
-kernel/bpf/mprog.c:bpf_mprog_link() {
-    ...
-    if (type && link->prog->type !=3D type) {
-    ...
-}
+[Severity: High]
+Does this silently ignore DMA address truncation?
+
+page_pool_set_dma_addr_netmem() returns a boolean indicating whether the
+DMA address exceeded the capacity of the storage representation (such as
+on 32-bit architectures with 64-bit DMA support).
+
+Because page_pool_provider_set_netmem() returns void and discards this
+boolean, memory providers will be unaware if their DMA address was
+truncated. This could lead to silent data corruption or IOMMU faults
+when the hardware uses the truncated address.
+
+> +}
+> +
+>  static __always_inline void __page_pool_release_netmem_dma(struct page_p=
+ool *pool,
+>  							   netmem_ref netmem)
+>  {
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260721041048.1394=
-085-1-pulehui@huaweicloud.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260719175857.4071=
+636-1-ap420073@gmail.com?part=3D2
