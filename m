@@ -1,27 +1,27 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFC02F745C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5E12EF653;
 	Tue, 21 Jul 2026 04:06:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784606799; cv=none; b=GSfs0B6owfTZ2BOGbkfYfwu7Mb9Y315qGLSmh+x+cMJWX6YM0K4G6/+7gtDuJkcyZ6Ts1uAu+CW142z0y3zKpKl56YUUN7ECGqAS95gmzbLqDsyR70H4p7kjDo2h5AZMaDgialUFLDeADCJH1KIkapsfWvL9bz6Tb1ahnJCk1yE=
+	t=1784606799; cv=none; b=izEeFaa5JSR5t5c2GjcrT+yzhS7dPSVIIN3oFn40pGhlWYdkOd26ouzMFNs1pHELK22ZzzAYVTYx2QJI/qnYX4BCVJGUR/RQImx3IqUBgEpHnq1xxe0eoQyWjK6+SUDcqAJ28S3+rUusa/NK65ZeTcH+WPoI/bthR0Zb674m3kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784606799; c=relaxed/simple;
-	bh=6kLDb/EkwL+x0uT2625WN0nWMVGKTy4T4ZBkAimrppQ=;
+	bh=H/V0jVFnZ1pQMZit3JMtoGaXSaYiPGPcKaFv6kDu8RI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KDMcNTWTRZcfw5EHCRgtydoDBLo2r27Xp9F4gYmfmBJVrXjlT6PnJFyK+KqaizLMMPjjoH+TbDrZP6Oz4VXPrawnk14xc6/jNGNfJL3ADtg3oZ+6ITtDM92cbb6WsA5bL3eWvhx/c59yEUlhVpEK/KRQlloxF1fdz1A2W1BkCRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=mpSPhdEdry5ZF/YiwfI1lHD/1vPv30cYa/DdKsiXY0yZoR/WpiK+RggFotYdBSu09Cj6+G+colZ6r25PNYyjP5FRA666/kRCSYfkxy6Gj6gXbYuGH3WVNbcnQxeGdwJsq87AfYmXZVW60Bski896uygUoP5XXUUJeaM1dIRrXms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h43hv0rn7zYQtJ3;
-	Tue, 21 Jul 2026 12:06:07 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h43hc1rgBzKHMPd;
+	Tue, 21 Jul 2026 12:05:52 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id E8E7A405B6;
+	by mail.maildlp.com (Postfix) with ESMTP id E535F405B5;
 	Tue, 21 Jul 2026 12:06:18 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAHF3M58F5qwav1Bw--.64145S6;
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAHF3M58F5qwav1Bw--.64145S4;
 	Tue, 21 Jul 2026 12:06:18 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -40,9 +40,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Pu Lehui <pulehui@huawei.com>,
 	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf v5 4/4] bpf, cgroup: Fix storage null-ptr-deref after replacing prog
-Date: Tue, 21 Jul 2026 04:10:48 +0000
-Message-Id: <20260721041048.1394085-5-pulehui@huaweicloud.com>
+Subject: [PATCH bpf v5 2/4] bpf: Fix UAF due to missing link type check in mprog
+Date: Tue, 21 Jul 2026 04:10:46 +0000
+Message-Id: <20260721041048.1394085-3-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260721041048.1394085-1-pulehui@huaweicloud.com>
 References: <20260721041048.1394085-1-pulehui@huaweicloud.com>
@@ -53,159 +53,128 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgAHF3M58F5qwav1Bw--.64145S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF13ArW3Zw17Ar4DXFWrXwb_yoWrKw48pF
-	1kAwn8tw1UX39avF1kJ39FvF1rAa10qr1UKrZ8tw1Fkay7tayFg347CryYva43uF1DWr1f
-	tw1YvF4jk3WjvFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmS14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-	z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr
-	1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE
-	3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2I
-	x0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8
-	JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2
-	ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
-	z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
-	AF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
-	IxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
-	4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBI
-	daVFxhVjvjDU0xZFpf9x0JUQFxUUUUUU=
+X-CM-TRANSID:cCh0CgAHF3M58F5qwav1Bw--.64145S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr47Gr4kKry8tryxXr43Jrb_yoW5Kw4kpF
+	s3JryvyF1Yv3y7XF4jvF1fAryY9F48Wr1jkas5Ww4vvrn0ga1vqF1fWr4Sqw15KFZ8Grsa
+	vw1qqryDA34DXrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUmY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
+	8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
+	e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
+	8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
+	jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
+	kIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
+	Ja73UjIFyTuYvjfUOdgAUUUUU
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 From: Pu Lehui <pulehui@huawei.com>
 
-Syzkaller reported a storage null-ptr-deref issue after replacing prog.
-This occurs in the following scenario:
-1. prog A, an empty prog, is attached to a cgrp.
-2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
-   bpf_get_local_storage helper.
-3. link_update is called to replace prog A with prog B.
+In bpf_mprog_link, the code does not check the link->type first before
+dereferencing link->prog->type. This missing validation allows a user to
+pass an abnormal non-netkit or non-tcx link via relative_fd. If doing
+BPF_LINK_UPDATE on the abnormal link, it can trigger a UAF issue.
 
-The reason is that __cgroup_bpf_replace fails to alloc and assign the
-required cgrp storage for the incoming replacement prog. Consequently,
-the new prog inherits an uninit storage, leading to null-ptr-deref panic
-when kick the new prog.
+CPU0                                      CPU1
+netkit_link_prog_attach
+bpf_mprog_attach
+bpf_mprog_tuple_relative
+bpf_mprog_link
+  link = bpf_link_get_from_fd(id_or_fd);
+                                          BPF_LINK_UPDATE
+                                          ...
+                                          old_prog = xchg(&link->link.prog, new_prog);
+                                          bpf_prog_put(old_prog);
+  if (type && link->prog->type != type) <-- trigger UAF
 
-Fix this by properly allocating the storage and comparing the old and
-new storage pointers. If the storage changed, fallback to
-update_effective_progs which performs a RCU-safe update of the entire
-array. If the storage remains unchanged, we can safely retain the
-fast-path in-place update.
+The reason for the UAF is that each subsystem provides its own
+protection for link->prog. Since there is no cross subsystem protection
+(if not considering the RCU of prog tear down), dereferencing the prog
+of an anchor link that does not belong to the current subsystem is not
+safe: it may have been freed. Therefore, we need to validate link->type
+to reject foreign anchors.
 
-Additionally, handle the error path in __cgroup_bpf_attach strictly.
-Although it is rare for update_effective_progs to fail in this context,
-proper rollbacks for storage and flags are added for code rigor.
+Fix this by strictly validating link->type in bpf_mprog_link against the
+expected link type. bpf_mprog_tuple_relative is also adjusted to accept
+and pass down the expected link type.
 
-Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+Fixes: 053c8e1f235d ("bpf: Add generic attach/detach/query API for multi-progs")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
 Reviewed-by: Amery Hung <ameryhung@gmail.com>
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- kernel/bpf/cgroup.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 43 insertions(+), 1 deletion(-)
+ kernel/bpf/mprog.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 4355ccb78a9c..56d538f05520 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -813,10 +813,12 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
- 	struct bpf_prog *old_prog = NULL;
- 	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
- 	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
-+	struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
- 	struct bpf_prog *new_prog = prog ? : link->link.prog;
- 	enum cgroup_bpf_attach_type atype;
- 	struct bpf_prog_list *pl;
- 	struct hlist_head *progs;
-+	u8 old_flags;
- 	int err;
+diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
+index 1394168062e8..37ce91e0bcd2 100644
+--- a/kernel/bpf/mprog.c
++++ b/kernel/bpf/mprog.c
+@@ -6,7 +6,7 @@
  
- 	if (((flags & BPF_F_ALLOW_OVERRIDE) && (flags & BPF_F_ALLOW_MULTI)) ||
-@@ -883,7 +885,10 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
- 	pl->prog = prog;
- 	pl->link = link;
- 	pl->flags = flags;
-+	if (old_prog)
-+		bpf_cgroup_storages_assign(old_storage, pl->storage);
- 	bpf_cgroup_storages_assign(pl->storage, storage);
-+	old_flags = cgrp->bpf.flags[atype];
- 	cgrp->bpf.flags[atype] = saved_flags;
- 
- 	if (type == BPF_LSM_CGROUP) {
-@@ -915,12 +920,14 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
- 	if (old_prog) {
- 		pl->prog = old_prog;
- 		pl->link = NULL;
-+		bpf_cgroup_storages_assign(pl->storage, old_storage);
- 	}
- 	bpf_cgroup_storages_free(new_storage);
- 	if (!old_prog) {
- 		hlist_del(&pl->node);
- 		kfree(pl);
- 	}
-+	cgrp->bpf.flags[atype] = old_flags;
- 	return err;
- }
- 
-@@ -1032,11 +1039,17 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
- 				struct bpf_cgroup_link *link,
- 				struct bpf_prog *new_prog)
+ static int bpf_mprog_link(struct bpf_tuple *tuple,
+ 			  u32 id_or_fd, u32 flags,
+-			  enum bpf_prog_type type)
++			  enum bpf_link_type type)
  {
-+	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
-+	struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
-+	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
-+	enum bpf_cgroup_storage_type stype;
- 	enum cgroup_bpf_attach_type atype;
-+	bool storage_changed = false;
- 	struct bpf_prog *old_prog;
- 	struct bpf_prog_list *pl;
- 	struct hlist_head *progs;
- 	bool found = false;
-+	int err;
+ 	struct bpf_link *link = ERR_PTR(-EINVAL);
+ 	bool id = flags & BPF_F_ID;
+@@ -17,7 +17,7 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
+ 		link = bpf_link_get_from_fd(id_or_fd);
+ 	if (IS_ERR(link))
+ 		return PTR_ERR(link);
+-	if (type && link->prog->type != type) {
++	if (type && link->type != type) {
+ 		bpf_link_put(link);
+ 		return -EINVAL;
+ 	}
+@@ -52,21 +52,22 @@ static int bpf_mprog_prog(struct bpf_tuple *tuple,
  
- 	atype = bpf_cgroup_atype_find(link->link.attach_type, new_prog->aux->attach_btf_id);
- 	if (atype < 0)
-@@ -1056,10 +1069,39 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
- 	if (!found)
- 		return -ENOENT;
+ static int bpf_mprog_tuple_relative(struct bpf_tuple *tuple,
+ 				    u32 id_or_fd, u32 flags,
+-				    enum bpf_prog_type type)
++				    enum bpf_link_type ltype,
++				    enum bpf_prog_type ptype)
+ {
+ 	bool link = flags & BPF_F_LINK;
+ 	bool id = flags & BPF_F_ID;
  
-+	if (bpf_cgroup_storages_alloc(storage, new_storage, link->link.attach_type,
-+				      new_prog, cgrp))
-+		return -ENOMEM;
-+
-+	for_each_cgroup_storage_type(stype) {
-+		if (storage[stype] != pl->storage[stype]) {
-+			storage_changed = true;
-+			break;
-+		}
-+	}
-+
- 	cgrp->bpf.revisions[atype] += 1;
- 	old_prog = xchg(&link->link.prog, new_prog);
--	replace_effective_prog(cgrp, atype, pl);
-+
-+	if (!storage_changed) {
-+		replace_effective_prog(cgrp, atype, pl);
-+		bpf_prog_put(old_prog);
-+		return 0;
-+	}
-+
-+	bpf_cgroup_storages_assign(old_storage, pl->storage);
-+	bpf_cgroup_storages_assign(pl->storage, storage);
-+	err = update_effective_progs(cgrp, atype);
-+	if (err) {
-+		xchg(&link->link.prog, old_prog);
-+		bpf_cgroup_storages_assign(pl->storage, old_storage);
-+		bpf_cgroup_storages_free(new_storage);
-+		cgrp->bpf.revisions[atype] -= 1;
-+		return err;
-+	}
-+
- 	bpf_prog_put(old_prog);
-+	bpf_cgroup_storages_link(new_storage, cgrp, link->link.attach_type);
- 	return 0;
+ 	memset(tuple, 0, sizeof(*tuple));
+ 	if (link)
+-		return bpf_mprog_link(tuple, id_or_fd, flags, type);
++		return bpf_mprog_link(tuple, id_or_fd, flags, ltype);
+ 	/* If no relevant flag is set and no id_or_fd was passed, then
+ 	 * tuple link/prog is just NULLed. This is the case when before/
+ 	 * after selects first/last position without passing fd.
+ 	 */
+ 	if (!id && !id_or_fd)
+ 		return 0;
+-	return bpf_mprog_prog(tuple, id_or_fd, flags, type);
++	return bpf_mprog_prog(tuple, id_or_fd, flags, ptype);
  }
  
+ static void bpf_mprog_tuple_put(struct bpf_tuple *tuple)
+@@ -243,6 +244,7 @@ int bpf_mprog_attach(struct bpf_mprog_entry *entry,
+ 		return -EEXIST;
+ 	ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd,
+ 				       flags & ~BPF_F_REPLACE,
++				       link ? link->type : BPF_LINK_TYPE_UNSPEC,
+ 				       prog_new->type);
+ 	if (ret)
+ 		return ret;
+@@ -343,6 +345,7 @@ int bpf_mprog_detach(struct bpf_mprog_entry *entry,
+ 	if (!bpf_mprog_total(entry))
+ 		return -ENOENT;
+ 	ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd, flags,
++				       link ? link->type : BPF_LINK_TYPE_UNSPEC,
+ 				       prog ? prog->type :
+ 				       BPF_PROG_TYPE_UNSPEC);
+ 	if (ret)
 -- 
 2.34.1
 
