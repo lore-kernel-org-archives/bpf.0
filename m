@@ -1,221 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06BC473C6A;
-	Wed, 22 Jul 2026 07:43:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D2A478859
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784706184; cv=none; b=L40gWYfMpDyOS/9vt+5hFKTunZVaQ17ZNtQOHrfBxlMe9Aqkbc8tW5a3G17jhBUFJ9Jr8igLFVoDOcZZd6QItou0rJWM8kmKo+ddh1P5hwJNrKw4jTOq55LokXAhx5V2RxRC1zKcbuAAAdd56JnDMnAce/vvDOsvaRtNQLHJ2Ts=
+	t=1784706271; cv=none; b=WIxlHShn2+EcLrFadMDb+m62zUvWNWpM8PIGX/adhzWlpzGWqcLJbft3EmGPig2rIoUYt4B2wP5W2H941HVTFTStf9QOf9zGoJaONDoOZ7Xofd4SYc1wTCtWXiLJhCEEkDFpOnu9c64jvUA9w2/SlC+XAEfwjZKtI88F2XKbZv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784706184; c=relaxed/simple;
-	bh=vw6aECGNcSucd+DP8F++GffzANZ94TJ6H+0NGWn+Cwg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N6e6WNXZuhsZrYN6U+5HcRBIpjaJkeMWhyzbLMdE4zqNoqEv0aFMQWWJDGq1x4Vd4c6MFI+PKTp3N2MmEx5YKsySte4W3bAPKefraTjX58mXUCdTIJa/7UmZv7bYmbfDLPBJ+oWWE9EFwcF8vtUb511AOsZtr1LELgivfXLufjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ebWyYhT/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784706271; c=relaxed/simple;
+	bh=hvvZZ9WnDamFt2nH8Wj/UMAMyTXKq6pATnBAsjabcRs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HKCrgb++K+aMQ2GD63c7L0rspNBx96DEUKhLElxYzNRfdCJ9ag0NBDKsZDLSNXDA72jUDsit4UXM3uHykXmLGq6ytLhHzOc1fC3+RAK8eYqvP7ZwWSABr1YX1LLQW+G9FNlbJGeuOu3bfD7Qhuwsf03UwU8+85NBGPV0PiWzziw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VHwnIyGG; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ebWyYhT/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA451F00A3A;
-	Wed, 22 Jul 2026 07:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784706179;
-	bh=8U9RMhwokOKMZq1o2LzyxZKmoBd6qWII0YPk4ynCuMU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ebWyYhT/wa2nWhacIPmvVJQzvzTXDlVJ96VITfDN5Jjar/Caw0wg39bD1SP1dKETX
-	 gGcHws7ZzFTjOFv+WW1+UFwXcy/bKZuB6kT8vrqVnB1/hYEvv+DhfxQgk/SP1G2wDH
-	 wPuaQcAKsmxLYHm10IedGfP258I1sqRRe9Lj2ruUgnqQfxJzubsXEKIixVMVA6myJU
-	 5+EJyrg4BqYBwBtkMyoW/nP05SP/0jNrbNhAcNyCBfScuAxAHdBq++BKNbolsm52J8
-	 vmmE+RXFBXJ3DLnflfRNGs4en5imzeBWwGyJG+GSj+lizYX7FOQBI6pM/9dkHJ3S6v
-	 ICu/hNLhR+81Q==
-Message-ID: <29fb9c96-5685-4974-afe5-c76f48eeba45@kernel.org>
-Date: Wed, 22 Jul 2026 16:42:46 +0900
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VHwnIyGG"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c15f360851aso1350849366b.2
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 00:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1784706266; x=1785311066; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jF6485LeRKPydpaF+R9Ey9azSDTe9cIW9VnQV5w/95g=;
+        b=VHwnIyGG2cMfX/7dU/WUpxk8REmgAxOiDuoSao9663xJeJWum0bLZNHmiHSmv6stAv
+         +TTEXTt4vnA1goRg7QXr7DEoSGKkJUGmYWwjQLm+B0POFG4jzvRzrNyvdYq25yxDxDEj
+         PjnhnWVzKdRIbbYhs4hsZF//rJDobDfswnGDosGJd2Mcxd7OiUUueZkaYqCoGbAHWBzw
+         etSRmmgp2SQtFVvAukJhA/W20GFV+MLv8wDm2MRM1EZDUk2oxPYQ3XtmrkN58DmwgqB0
+         fwj4mSWrm1Rg8YUPi6aEdgx7kBkTbn6z//4bwofRFHnol9C2syeI/rzv0C0vWD+MnudF
+         hxpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784706266; x=1785311066;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jF6485LeRKPydpaF+R9Ey9azSDTe9cIW9VnQV5w/95g=;
+        b=BUU7qlzwfFnTXmjYzl2SMLNNqcm15RaKz0EyllNTQ/XlaXlsMLB3PxYej3KQDjjCNd
+         9Ijy4pb3uw8zFuTRD/c2J+NR462eEtOdi2+zIhkonxBxGrAl5YNUrs9VFtp6FZxIgEGL
+         CSTI0n0xF8x1+sNbtsG1QpxoW5r74j2s9WGqP0719stzGb/oJaDS3p8NB8hihSgitvRV
+         AtUEvINIqvzytKNhtfna503++JJJdfYrrLMGgvIjinoBJbY6IE1P8r/V6J6DrIsiIBip
+         UTsAKjKN4zDs/WPSyutZ+Ij9peYAfCjFoBnqgq39NX0/AN7gQDgYudRFyiOnTp1KNMyT
+         GQKw==
+X-Gm-Message-State: AOJu0YzdtomA9eQGD765BpN7NrEEzOpgwxeRSOFERU6aRK8zSaUsMoa4
+	c7m+eAy1SvAKugeQAFYJrYF3x+5Qs6oHhGcViWgsSrijAlFWJ0OSGjZCgz20gzmtP01CA/CO+RF
+	vc6e+sEdH4A==
+X-Gm-Gg: AR+sD10LdVCY9KraKJ1g5oIZ1Lqm1mLvKHM/+fhP9V1n2hK5pJrtATdtyFpghvhV+3X
+	6UYLPRY9U4xXXdFuuo0HGEt+WvG0z6TykWPluGUNze7Kf3SWoyAveiPoaobSayiM/vpnlChTvum
+	b40ee0iaNzzro/RhK0AAX18zJc8e7R4w7+aA+Ugw42zlwVuLMrYnTfFzhN6+SeQ1QYPvE48e1Y5
+	7JFqKr25RhLW1JfCfPDIz8A9YqfmWbJd6AgphFHYmSkZ+L3xBAgBpwHYvEwqZqYL/ugyBkbbrTk
+	kOMDKGkoG0dZ8Bd5YlfSGp43PXR6cY3ptVdwgXMF7qyKkNqNanOx6Yu8IlsojeFjPyV3qd9lvqP
+	SC47xqI5hFsPjpYsVrt0fEs5tWg6Xy2KbCJeaHuCg1BpJ6DGi35BsmtmP8OAj273MaQbcWApYvF
+	9kN12y3tdnWGEabHjEUZcKPl00
+X-Received: by 2002:a17:907:3f99:b0:c16:592b:ec4c with SMTP id a640c23a62f3a-c16b46990d8mr908620966b.1.1784706265503;
+        Wed, 22 Jul 2026 00:44:25 -0700 (PDT)
+Received: from u94a (27-53-137-220.adsl.fetnet.net. [27.53.137.220])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8efa9918sm9950635ad.16.2026.07.22.00.44.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 00:44:24 -0700 (PDT)
+Date: Wed, 22 Jul 2026 15:44:19 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, 
+	sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH 1/2] bpf: Preserve stack frame number for commuted
+ arithmetic
+Message-ID: <amByrnAG0NWd0dLK@u94a>
+References: <cover.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
+ <a092a059781aad37b8d8ce3bb927052de5f73431.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
+ <20260721094829.3D0C71F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH slab/for-next v4 6/8] mm/slab: introduce struct
- kvfree_rcu_head for kvfree_rcu batching
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>,
- Shengming Hu <hu.shengming@zte.com.cn>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260720-kfree_rcu_nolock-v4-0-964e03c41a4e@kernel.org>
- <20260720-kfree_rcu_nolock-v4-6-964e03c41a4e@kernel.org>
- <cd11b015-7c59-4ce4-8eb0-8040fbb2cdfc@kernel.org>
-Content-Language: en-US
-From: Harry Yoo <harry@kernel.org>
-In-Reply-To: <cd11b015-7c59-4ce4-8eb0-8040fbb2cdfc@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------rHmQ19i50j0kL2o2vIw30Byv"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260721094829.3D0C71F00A3A@smtp.kernel.org>
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------rHmQ19i50j0kL2o2vIw30Byv
-Content-Type: multipart/mixed; boundary="------------77Phiovz4D8FAfavJFkTxfks";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>,
- Shengming Hu <hu.shengming@zte.com.cn>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-Message-ID: <29fb9c96-5685-4974-afe5-c76f48eeba45@kernel.org>
-Subject: Re: [PATCH slab/for-next v4 6/8] mm/slab: introduce struct
- kvfree_rcu_head for kvfree_rcu batching
-References: <20260720-kfree_rcu_nolock-v4-0-964e03c41a4e@kernel.org>
- <20260720-kfree_rcu_nolock-v4-6-964e03c41a4e@kernel.org>
- <cd11b015-7c59-4ce4-8eb0-8040fbb2cdfc@kernel.org>
-In-Reply-To: <cd11b015-7c59-4ce4-8eb0-8040fbb2cdfc@kernel.org>
+On Tue, Jul 21, 2026 at 09:48:28AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Critical] The patch completely breaks the security check that prohibits subtracting a pointer from a scalar (`scalar -= pointer`), allowing unprivileged eBPF programs to bypass memory isolation and achieve arbitrary kernel memory read/write.
+> --
+> 
+> --- Patch [1]: [PATCH 1/2] bpf: Preserve stack frame number for commuted arithmetic ---
+> commit 3b8c2832d6eb05fc6ef4d1f2af9ee96ccdf5566e
+> Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> 
+> bpf: Preserve stack frame number for commuted arithmetic
+> 
+> This patch modifies how commuted pointer arithmetic is handled in
+> adjust_reg_min_max_vals(). It uses a temporary off_reg to copy the
+> destination register before calling adjust_ptr_min_max_vals().
+> 
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 52be0a118cce0..3c0af83db4672 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> 
+> [ ... ]
+> 
+> > @@ -14854,15 +14855,18 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+> >  					bpf_alu_string[opcode >> 4]);
+> >  				return -EACCES;
+> >  			} else {
+> > +				struct bpf_reg_state off_reg;
+> > +
+> >  				/* scalar += pointer
+> >  				 * This is legal, but we have to reverse our
+> >  				 * src/dest handling in computing the range
+> >  				 */
+> > +				off_reg = *dst_reg;
+> >  				err = mark_chain_precision(env, insn->dst_reg);
+> >  				if (err)
+> >  					return err;
+> >  				return adjust_ptr_min_max_vals(env, insn,
+> > -							       src_reg, dst_reg);
+> > +							       src_reg, &off_reg);
+> 
+> [Severity: Critical]
+> Does passing a pointer to the local stack variable off_reg here break the
+> pointer equality check in adjust_ptr_min_max_vals()?
+> 
+> In adjust_ptr_min_max_vals(), we have this check to prevent subtracting a
+> pointer from a scalar:
+> 
+> 	case BPF_SUB:
+> 		if (dst_reg == off_reg) {
+> 			/* scalar -= pointer.  Creates an unknown scalar */
+> 			verbose(env, "R%d tried to subtract pointer from scalar\n",
+> 				dst);
+> 			return -EACCES;
+> 		}
+> 
+> Since off_reg is now a stack pointer from adjust_reg_min_max_vals(), it will
+> never equal the verifier state array pointer dst_reg. Could this regression
+> allow eBPF programs to bypass the restriction and execute scalar -= pointer,
+> potentially breaking memory isolation?
 
---------------77Phiovz4D8FAfavJFkTxfks
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+This seems right. adjust_ptr_min_max_vals() has the assumptions that
+either one of these cases has to be true
+1. off_reg == dst_reg && ptr_reg == src_reg
+2. ptr_reg == dst_reg && off_reg == src_reg
 
-
-
-On 7/21/26 8:06 PM, Vlastimil Babka (SUSE) wrote:
-> On 7/20/26 14:44, Harry Yoo (Oracle) wrote:
->> rcu_head is overkill for kvfree_rcu() because the callback
->> function is always either kfree(), vfree(), or free_large_kmalloc(),
->> and thus there is no need for a function pointer.
->>
->> kvfree_rcu batching reuses the field to store the start address
->> of an object, however, this is not strictly needed because we can
->> calculate the start address in the slowpath. For the purpose of
->> kvfree_rcu batching, it is sufficient to implement a linked list using=
-
->> a single pointer.
->>
->> Introduce a new struct called kvfree_rcu_head (the name was suggested
->> by Vlastimil Babka), which is similar to rcu_head but is only a single=
-
->> pointer to build a linked list, without a function pointer, when
->> CONFIG_KVFREE_RCU_BATCHED=3Dy.
->>
->> When kvfree_rcu is not batched, kvfree_rcu_head is the same size
->> as rcu_head. Note that shrinking struct kvfree_rcu_head on
->> CONFIG_KVFREE_RCU_BATCHED=3Dn kernels would inevitably require additio=
-nal
->> complexity and also some sort of batching (which defeats the purpose o=
-f
->> the config option) because it cannot fall back to call_rcu().
->>
->> For now there are no user-visible changes to the API. k[v]free_rcu()
->> simply casts rcu_head to kvfree_rcu_head. While this does not affect
->> the API, it allows kfree_rcu_nolock() to reuse kvfree_rcu batching
->> as a fallback when trylock or sheaf allocation fails.
->>
->> Stop storing the object pointer in rcu_head.func and instead calculate=
-
->> the object's start address in kvfree_rcu_list(). Factor out the existi=
-ng
->> logic to calculate the start address from kvfree_rcu_cb() to
->> kvmalloc_obj_start_addr().
->>
->> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
->=20
-> Nice.
->=20
-> Reviewed-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
-
-Thanks!
-
-> Nit:
->=20
->> --- a/mm/slab.h
->> +++ b/mm/slab.h
->> @@ -351,6 +351,33 @@ static inline int objs_per_slab(const struct kmem=
-_cache *cache,
->>  	return slab->objects;
->>  }
->> =20
->> +/* kvfree_rcu_head offset can be only less than page size */
->> +static inline void *kvmalloc_obj_start_addr(void *head)
->> +{
->> +	void *obj =3D head;
->> +
->> +	if (unlikely(is_vmalloc_addr(obj))) {
->> +		obj =3D (void *) PAGE_ALIGN_DOWN((unsigned long)obj);
->> +	} else {
->> +		struct page *page =3D virt_to_page(obj);
->> +		struct slab *slab =3D page_slab(page);
->=20
-> Can use virt_to_slab().
-
-Ah, right. We don't call free_large_kmalloc() here.
-
->> +
->> +		if (!slab) {
->> +			obj =3D (void *) PAGE_ALIGN_DOWN((unsigned long)obj);
->> +		} else if (is_kfence_address(obj)) {
->> +			obj =3D kfence_object_start(obj);
->> +		} else {
->> +			struct kmem_cache *s =3D slab->slab_cache;
->> +			unsigned int idx =3D __obj_to_index(s, slab_address(slab), obj);
->> +
->> +			obj =3D slab_address(slab) + s->size * idx;
->> +			obj =3D fixup_red_left(s, obj);
->> +		}
->> +	}
->> +
->> +	return obj;
->> +}
->> +
->>  /*
->>   * State of the slab allocator.
->>   *
-
---=20
-Cheers,
-Harry / Hyeonggon
-
-
---------------77Phiovz4D8FAfavJFkTxfks--
-
---------------rHmQ19i50j0kL2o2vIw30Byv
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCamB0dwAKCRCGXBN6rc5S
-1obAAQCqHfelJX+qi5duTvHrT8jGkOgRfpF+LiWvdac7y5+2pAEAryoulTJ2FIDf
-tKqBX1pWil296y3KUUzK/9SUjWszIAk=
-=N3ce
------END PGP SIGNATURE-----
-
---------------rHmQ19i50j0kL2o2vIw30Byv--
+By passing neither dst_reg and src_reg as off_reg we're breaking the
+assumption. Perhaps we should have add a ptr_is_dst_reg argument for
+adjust_ptr_min_max_vals(), which could also then passed down to
+sanitize_ptr_alu() as well (which currently computes ptr_is_dst_reg
+itself).
