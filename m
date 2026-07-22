@@ -1,149 +1,197 @@
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5C1389459;
-	Wed, 22 Jul 2026 04:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.155
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784695347; cv=none; b=eXwzerebYn+P7lioziMqNIbXprTIT594kNoAwAhSwzxfVFvzWw3Ailqn12n9YA3KeSStJ5oH+J+gI9wNLNAxpCr6T23ghOYewlZb3fGLEvsCSzgaNCcH0gyOPG7OvbpCDn5BBkoNiM20Ku30SwufI5XLKpsrML8eyxlubaBzwLs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784695347; c=relaxed/simple;
-	bh=wPnO+rdhWhHU4W916hYj3apl30glcr+ygckHKdjpxrI=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=XJVYYMO72bpGgicM1csf9ou8a3UGm6jjNKkaZVgDsS7yfrSSmEHOMeL4rZutv16dwFQTbVE3YLtDyEFR2uljp4bmD9hYlGZmWEXuRMmcPolt+YNj1smDzCW798LapRQosgAsN/oJ3Kcx6MdewS2tanLLcw82/Ut4Aydtfi0sTTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=g8pR5sot; arc=none smtp.client-ip=203.205.221.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBD233A9D6
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 04:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784695810; cv=pass; b=J6gCPLKqoiPxQnh/yzWT1IS6ypUzOwJaJteUyQroz3qvTVF8fEyYS2y0qhEWn7tS2xtQVJs6XkvaRFUeLZde3viDng8NebtsIUOmLbE6/o3F1jWGKV3rf2Q9GGwCCzkJifY5CQq+jxtATbRTmrioEherQWzG6P0eF4pa6T4g1Ss=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784695810; c=relaxed/simple;
+	bh=DZtoM11vWBXpN7yeX143KogHmDSn59wuNdvkW8Rs0g4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wyp+B1iKW1UzZw9swvChIH0NPoH8rEymVzsnXL7FxxPBYVSks6YgJMlsVtlUfH99RrqIhXZMH6ss8wfdbj08yZSbUM+N6jEksWe/yovtVGHtNLyi4paI+azLh0IJRejfSUgeYRstj2mclqgEXds/wp+PYHEKPWdPCqN30O8Mo0k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fjc0HrLO; arc=pass smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="g8pR5sot"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1784695342;
-	bh=WlEcT0tWpxZI6RXRhm5LeYSQ7/dWQKcbRqEN/6k1Exc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=g8pR5sotx+CMA9m3GVCL5+OpE3baBSbAQNRGijBGTshBYdyyUiQ1VMUw/fq3lK0lM
-	 Jd63YXFFLYDqLjEwKlrxjZfc+uQgNZWkMJQy1mIZo+jT7DtOTPnZpG7JRgqwdVqkTO
-	 Q4krgfarMgMbaKFUWGCpEg2c+b1cDENICFHfS2KM=
-Received: from NUC10 ([39.156.73.14])
-	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
-	id A70214ED; Wed, 22 Jul 2026 12:41:48 +0800
-X-QQ-mid: xmsmtpt1784695332t2sbrldap
-Message-ID: <tencent_586BE1E837629801BE504D16D665994AF506@qq.com>
-X-QQ-XMAILINFO: N0Cpyjih+sbnOPeF0KhF35PRFgYVEiyPfCX+jFTK+77vUZLWvrh+MifZQW22OB
-	 N3EkBEFtF4oMSAdGS/qs1/zpPEe1LPhsDD20j9lpuIM3LOqdYaCx8VK94d2xkGXhNp/++n27KYUP
-	 39toiRXKoHV9rpHiI8WYg7wnfszY3Gk6Bv5kfzR4+ea0wUlI2Tz1RYnvCnFpAKCJP/JQUgTlqe0H
-	 8/fphEICGj6QdjkTZDT0/WWIaOXTm+xLHFInWx8OiqEXiw5iIzXChG3TEgBciA+EAS7UuHw/XR5A
-	 gNlJJ915fbVcPfDsULuadF/moAPiMdGUwN/4Qmu3r2pDQY6tzrZqAZC3W850Fhw/ChXKLQuIkh6m
-	 cfWLAieTX63nrIZY7padjXsFaTxrcGpUCh8ktmhvffponVNf8PGVGPhAR1XZSeBLlerjdp+UP+1g
-	 uNW/tLPhvsXTq5iAu7zqYjnTXugKtQRlUcZ8hogXfXSCaaiHB+Pn3miZ7Jg47wEkFA4KTN2vH7jV
-	 Zd5PR1GeM3+fB9SGSee835Y1MZC196JcgfrDiOJpn1KseXtM+Khuk2sjIPqBHRmKNBTfqYp/cMIE
-	 1kNiMBwWj+vFi//Ezt80zRMvJy0P+/+KQYLng6SIt+v82PPkFepxobVj+9ImlCyjhwvbXKRODQ11
-	 bEAK/fjc8ihff+VakWJSyPNnV4/8re/ZHVkgZ9X+xJU7TpKWvvZDUoICTlSP9AUKNuGLalRI3h87
-	 S3CLIhBsDs0U33/Wwuyrl1O5GzkixjXLVACRCvhdPyXJfTZ89BBQG+qthUBbRsnGPys1OOgsyoJa
-	 p7uBeelfyIHDuAgQjf4t9fnJiEkgMOAAHpEPyojZkh+JfZWJxeaDJKElqCgGo4YbNW7En7b9cv2z
-	 UoS3LJNRDiC+P7A/TqqAIVd5VPAMn5SQmh+8v6WLcprw8rpMeDaQqZ8aVTGV1xbHqAXDbSPjcPyQ
-	 O5zufOR0CcbXD92ZrTtft3GGIwTgXLRECNNYPJ+AqmCuxHNgeqQb1j2vgBdss0xqke9fitiSjg8k
-	 4TLa+5WCXaClUtT+KsbcQHlg9JL3eE/derAAzuV/YpgpXZuCt5C1e5tsZksPfttrax2eUBuIgYIl
-	 2voPhzIwreD0uHbnVcwXn0BL6AEqzH2XmVKCV4D+p8YcCWXPw=
-X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
-From: Rong Tao <rtoax@foxmail.com>
-To: vmalik@redhat.com,
-	andrii@kernel.org,
-	ast@kernel.org
-Cc: rtoax@foxmail.com,
-	rongtao@cestc.cn,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Test bpf_strcat,bpf_strncat kfuncs
-Date: Wed, 22 Jul 2026 12:41:28 +0800
-X-OQ-MSGID: <a04f1b029dbdc4d3c7af658ee9643ed8ba840462.1784695085.git.rtoax@foxmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1784695085.git.rtoax@foxmail.com>
-References: <cover.1784695085.git.rtoax@foxmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fjc0HrLO"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c15ca7a7ca9so912390266b.0
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 21:50:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784695807; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qN1zILBZj9Au6CNCnRmNTDX1VNhkG7iWV8kkWkksIfMIfF4j2tb6Jygo5wBafDet13
+         q/apc/ruVerV7XWkyfNrwcsc+BrQf/x1mebTotpqkxHLaNGk8C6PfkymI4baARpGfiJO
+         X/sSYtjqRo7pxMiJeopM+OAmw4StZaFRfRZYHGgkp+a7MSV1TKSVo2Xgds1AXYI5LEni
+         KSrDZT/8rL5plsqN3yCW3okXSzVOzTffFnIojsg4+Hg8nQhmc1P45lF7CQqMilSQMFFd
+         h3Q72BDHfOIurWMYxG2n/qRl91kvHXYB17+FIJ+ta/81O633DwtyfamwntmlpDrQohh+
+         2Hmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LeaH/TFJ1GwO1Q8eKs9LjZXB370WPJ5FOv2mW/b/SmU=;
+        fh=7Arrm4x/e3jLuY/3jfr0FhtOrbmLzIqss9WWJZ8vNjE=;
+        b=H3lZjxv8//q1TFcLvWyHEoRzl/rbuV08xftQ8r9ADjzYRH31qjAscCeLAzBs9uKbQU
+         D114OJBR0K9A/G2W0TrL9ImxMs8mjbWHMqNoSUMCHiQEsQIGUE3cn04IPjsq1kr6h3uf
+         FyKBKbEAju6AIjvHSHvGq0c4HT49R/WcCaRsWOii/E+ElyhJwuhm71Ok47aSyHZDgZhm
+         CkXYQ5ZA0/f7bG7zmCEvUVQK7xZWUM7WCznnfb/qe/qA8tG4f6FWBS6G1BhMHOYsjeDJ
+         5JNGbdTVCLF1CM+vOk+TDQnp+ghJBKwGXh+nP4XhjuI+DWwFH/w7alCVZXRQRGMt4H4a
+         IFew==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784695807; x=1785300607; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LeaH/TFJ1GwO1Q8eKs9LjZXB370WPJ5FOv2mW/b/SmU=;
+        b=fjc0HrLOJvTvYfsd0UldKAMhJu+qXV3ZwM5W2nbntHR2vVMQ97FgfUaSf/PPmuJ6ok
+         TFDSN/DjV8chU02l2KjDjur3hBOoD1own6QAi9K07lsHpVGzKsvaBp2ScJaFhMI4PPO3
+         M6JNNP6BEkd8eVdfY+kjoLzkxTapcIr4xjTZZSqBrQ+PZGoNfHPhFqkAMBDJFxguADUx
+         hlEhPw2mkm9Yg6LoPAnD7I5Aow9SZWbMP1VUa+RrPy2erEkVnzfB6KHUvPt+7nLZHXgH
+         qUE2IPXz85YISLUN1FqtH/BgQMH+xmWGlm7t9pRX6jcR1l96tSDGxGQwGfWCDhQsYtb0
+         fJLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784695807; x=1785300607;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LeaH/TFJ1GwO1Q8eKs9LjZXB370WPJ5FOv2mW/b/SmU=;
+        b=rJCTB3qsTYj16eMEhS2D3Q6mkRGcK5cNbxmL63S/YeOQ5WNqob3m1/52THV1V0Kb7B
+         YvQZzs67i9ZHYKqDWm0m1kLLuqkBjbuUg1hVZumebyS2Tk67YdUIPSoif6RPSlVucFfG
+         pu0k0N1Pcw0LMoG5zUyjoGfeAcrgemaOtjZsnOgUCF2f2ZOeqvugYFlIR2dsp8XRTIRc
+         p+FpswpidCqzJdDtFcyexLeK3izkYzOz4y3ajewdI24nkEa8m+An7jOsEXMs9xojMpvs
+         QYp6JHJdHbWWRpiiHrKu/MD2SwGxT/halYOGbQJ65dRGnXij54iJ9jlF/JbOCqJJva9c
+         RxbQ==
+X-Gm-Message-State: AOJu0YxSqvC2BRZBTWx5eGUhmcWOizc2Q5HwCor8JDmpZempO1Z51TFL
+	+HCYWqGO0vDjEi1yB+9yWL1PF3h4islQRN7m8888SlSxqoya3dC0PTrYb0TIs3NNFDOwnmXPCQc
+	QtsFudws75NX/Yh7yvrw27AUOeAd0p+FPYyQHjSc=
+X-Gm-Gg: AR+sD11Xmg94cV/LihSh3nF/BlrCbdBS8HPTKNZyB9J3z8r+ZHTulEvgzkL7NW00a0G
+	U+Nq/REQ28V+AKXxNKyzx+5B3JGRwQj74tcOdKlw6dsQBYB4j+ArKh4Z5VxBqDiG+LlStXy7K2P
+	WqoCsUGcRgSJdTqZwbNtfyYZO1f6RfyT0CBYq/YM0Mr+aS9JrTrHi6HAMend536ZCL5gSc0Lqxv
+	V32Z2VKAfYN/Gv2cZHMYTZsFpHHbSPfsv5O0ScIMIc0I5LhSBJrDuJSY9Ur9IhJbkhuD9V0QPya
+	upmSyvZRTXR47b0+/cIMqK3mGU0X
+X-Received: by 2002:a17:906:9c82:b0:c16:7c0:8f1f with SMTP id
+ a640c23a62f3a-c16b47c8068mr993443566b.44.1784695806630; Tue, 21 Jul 2026
+ 21:50:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260722040830.387979-1-nickolay.lysenko@gmail.com>
+In-Reply-To: <20260722040830.387979-1-nickolay.lysenko@gmail.com>
+From: Mykola Lysenko <nickolay.lysenko@gmail.com>
+Date: Tue, 21 Jul 2026 21:49:54 -0700
+X-Gm-Features: AUfX_mxAYcxPlTIIoz_MtkCkM2FMic-hjRSUVJmoQDMQ0nKNnwWDE0HHvo7HPA0
+Message-ID: <CAMtxOX1R5Jnb5ZNBtGDcAqwHpWwKT9UBCfbecYj9oESCGaGidw@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v3 0/3] selftests/bpf: restructure the
+ Makefile as a layered build
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, memxor@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Rong Tao <rongtao@cestc.cn>
+Please do not review v3.
 
-Add tests for new kfuncs bpf_strcat() and bpf_strncat().
+I noticed a problem in my manual BPF CI run
+which I missed locally before sending.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- .../testing/selftests/bpf/prog_tests/string_kfuncs.c |  2 ++
- .../selftests/bpf/progs/string_kfuncs_failure2.c     |  3 +++
- .../selftests/bpf/progs/string_kfuncs_success.c      | 12 ++++++++++++
- 3 files changed, 17 insertions(+)
+Will address in v4.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-index 300032a19445..460567ef622a 100644
---- a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-@@ -24,6 +24,8 @@ static const char * const test_cases[] = {
- 	"strcasestr",
- 	"strnstr",
- 	"strncasestr",
-+	"strcat",
-+	"strncat",
- };
- 
- void run_too_long_tests(void)
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-index 412c53b87b18..2dbd1349689e 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-@@ -5,6 +5,7 @@
- #include <linux/limits.h>
- 
- char long_str[XATTR_SIZE_MAX + 1];
-+char str[] = "hello";
- 
- SEC("syscall") int test_strcmp_too_long(void *ctx) { return bpf_strcmp(long_str, long_str); }
- SEC("syscall") int test_strcasecmp_too_long(void *ctx) { return bpf_strcasecmp(long_str, long_str); }
-@@ -23,5 +24,7 @@ SEC("syscall") int test_strstr_too_long(void *ctx) { return bpf_strstr(long_str,
- SEC("syscall") int test_strcasestr_too_long(void *ctx) { return bpf_strcasestr(long_str, "hello"); }
- SEC("syscall") int test_strnstr_too_long(void *ctx) { return bpf_strnstr(long_str, "hello", sizeof(long_str)); }
- SEC("syscall") int test_strncasestr_too_long(void *ctx) { return bpf_strncasestr(long_str, "hello", sizeof(long_str)); }
-+SEC("syscall") int test_strcat_too_long(void *ctx) { return bpf_strcat(long_str, sizeof(long_str), str); }
-+SEC("syscall") int test_strncat_too_long(void *ctx) { return bpf_strncat(long_str, sizeof(long_str), str, 3); }
- 
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-index f65b1226a81a..40583361c655 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-@@ -59,5 +59,17 @@ __test(-ENOENT) int test_strncasestr_notfound1(void *ctx) { return bpf_strncases
- __test(-ENOENT) int test_strncasestr_notfound2(void *ctx) { return bpf_strncasestr(str, "hello", 4); }
- __test(-ENOENT) int test_strncasestr_notfound3(void *ctx) { return bpf_strncasestr("", "a", 0); }
- __test(0) int test_strncasestr_empty(void *ctx) { return bpf_strncasestr(str, "", 1); }
-+__test(0) int test_strcat_success(void *ctx)
-+{
-+	char buf[32] = "hello";
-+	bpf_strcat(buf, sizeof(buf), str);
-+	return bpf_strcmp(buf, "hellohello world");
-+}
-+__test(0) int test_strncat_success(void *ctx)
-+{
-+	char buf[32] = "hello";
-+	bpf_strncat(buf, sizeof(buf), str, 3);
-+	return bpf_strcmp(buf, "hellohe");
-+}
- 
- char _license[] SEC("license") = "GPL";
--- 
-2.55.0
+Sorry for the noise.
 
+On Tue, Jul 21, 2026 at 9:08=E2=80=AFPM Mykola Lysenko
+<nickolay.lysenko@gmail.com> wrote:
+>
+> The BPF selftests Makefile has grown to ~1,100 lines, with much of the
+> complexity concentrated in the DEFINE_TEST_RUNNER double-expansion
+> machinery: the per-runner rules are written in $$-escaped make and
+> eval'd once per flavor, so the rules that actually run never appear in
+> the source, are invisible to make's own debugging facilities, and are
+> easy to break for one flavor while testing another.
+>
+> This series restructures the build in three steps, each independently
+> buildable and each producing byte-identical artifacts:
+>
+>   1) the four near-identical skeleton generation recipes move into a
+>      parameterized helper script (gen_bpf_skel.sh);
+>   2) shared (non-rule) definitions move into Makefile.buildvars;
+>   3) each test runner instance (test_progs, test_progs-<flavor>,
+>      test_maps) becomes its own plain-make sub-make (Makefile.runner),
+>      replacing the eval/escaping layer.
+>
+> After the series the top Makefile owns everything that exists once
+> (toolchain setup, the libbpf/bpftool/resolve_btfids sub-builds,
+> vmlinux.h, shared helper objects, standalone binaries, and the lib.mk
+> run/install contract), while every runner instance is an ordinary
+> single-flavor makefile with no escaping. Total line count is roughly a
+> wash; the point is the structure, not the size.
+>
+> Sent as RFC to gather feedback on the overall direction.
+>
+> Validation (each patch, x86_64, identical toolchains, clean builds):
+> 2,948/2,948 BPF objects, 5,352/5,352 skeleton headers and 1,413/1,413
+> userspace objects byte-identical to the current Makefile's output. For
+> the end state additionally: 20/22 binaries byte-identical, and the two
+> exceptions (bench, test_maps) differ only in object link order, proven
+> by relinking the current Makefile's objects in the new order and
+> comparing bytes; emit_tests output and the installed tree identical;
+> BPF CI green on a manual pre-submission run across x86_64 gcc/llvm,
+> aarch64 and s390x (including GCC-BPF, ASAN and veristat jobs); and all
+> 76 benchmarks produce identical outcomes on old- and new-built bench
+> binaries.
+>
+> v2 -> v3:
+> - BPF_GCC and TEST_KMODS are defined once (main Makefile, which needs
+>   them before lib.mk) and exported to the runner sub-makes instead of
+>   being duplicated in Makefile.buildvars, where the copies could
+>   silently drift (reported by Sashiko AI review)
+> - the permissive-mode runner link rule keeps the current Makefile's
+>   incremental semantics: test objects existing at parse time are
+>   normal prerequisites again, so editing a test source relinks the
+>   runner (reported by Sashiko AI review; v2 had regressed this to
+>   order-only)
+> - v2: https://lore.kernel.org/bpf/20260721194111.334795-1-nickolay.lysenk=
+o@gmail.com/
+>
+> v1 -> v2:
+> - rebased onto current bpf-next: ported the semantics of commit
+>   0b236ac75d04 ("selftests/bpf: Fix make install target") - bpftool
+>   installed under tools/sbin/, *.BTF files installed - into the new
+>   install rule (resolves the CI apply conflict against v1)
+> - gen_bpf_skel.sh is a prerequisite of every skeleton rule, so editing
+>   the script regenerates the headers (reported by Sashiko AI review)
+> - the shared helper objects the top Makefile pre-builds now depend on
+>   a superset of the prerequisites the runner-side object rule uses
+>   (libarena skeletons, both generated tests.h headers), closing a
+>   window where the unflavored test_progs and test_maps sub-makes could
+>   both consider a shared helper object stale and recompile it
+>   concurrently in the shared output directory (reported by Sashiko AI
+>   review)
+> - v1: https://lore.kernel.org/bpf/20260721174909.8044-1-nickolay.lysenko@=
+gmail.com/
+>
+> Mykola Lysenko (3):
+>   selftests/bpf: extract BPF skeleton generation into a helper script
+>   selftests/bpf: move shared build definitions into Makefile.buildvars
+>   selftests/bpf: build each test runner instance in its own sub-make
+>
+>  tools/testing/selftests/bpf/Makefile          | 950 +++++-------------
+>  .../testing/selftests/bpf/Makefile.buildvars  | 204 ++++
+>  tools/testing/selftests/bpf/Makefile.runner   | 316 ++++++
+>  tools/testing/selftests/bpf/gen_bpf_skel.sh   |  97 ++
+>  4 files changed, 886 insertions(+), 681 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/Makefile.buildvars
+>  create mode 100644 tools/testing/selftests/bpf/Makefile.runner
+>  create mode 100755 tools/testing/selftests/bpf/gen_bpf_skel.sh
+>
+>
+> base-commit: 5eb8921371c6fd117d4a328b6053dfda38707df8
+> --
+> 2.43.0
+>
