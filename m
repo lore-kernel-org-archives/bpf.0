@@ -1,30 +1,32 @@
 Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6686370D4D
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 15:19:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6FB37883D
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 15:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784733587; cv=none; b=a1R+TuUSVURbAznYkPkPUv1SdCdNzS+cWhc2jY/ODasPNIL6aH7cLxah94xuuRpR8Kl+WODuAXsMprIC/WppELgXbmKAmCwcRnoiI7gj3Cshk5AXDvWCaWMkr6rq8WTgcQYUhGQW9ZN65PdD7CiZ15cEP9q0kx08fSot74xqIkk=
+	t=1784733598; cv=none; b=TAsJhtvAAOT1S/lUg0hwk+Sx9p8C7QmPy2jDe8xYQTsMQaL0NyDQhqdC9ncxGRUuWIaBxwcQD4+aPeFVYAeSiAlVD6kHrPsD3FOSCG+BJewK6v4qTUWMuBVskG564Y12dawbxsaUO3pCY6oz/xoEjwZ/S47DCavZ5N7kAs+W+ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784733587; c=relaxed/simple;
-	bh=xk3+nrHllWQ1G0pZL39iYHK7vypyilrYeYrFPuYlxg4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TGh5tW8y1gpmHcIt3hxPBOPrs/KrkJTa/5sMb/2ZsushYB2+SRu5XpuYpyMwCnjxDuZSvVlky5lPsP4Zu6KEgQ2Jeb97h7PltfRCQpF1wfnMxBztGHFO+rmv2zSfbm9bj6knOd/WyCTVbpIh2Ciz8KTK65jXB1dv71J/lB+1vBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uC5LpJ5I; arc=none smtp.client-ip=91.218.175.182
+	s=arc-20240116; t=1784733598; c=relaxed/simple;
+	bh=i5Y8LBLIVi9NZXbiFyUAigdwHHkCtn2fo3m5k7f1Kac=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sNg5hdPj5De8loM4WG4nLeL+uJ5L85yfL44hnGIAIFQ1eP/aoI3lhBMBjvPkrT9lwaRsZHjRf6U0oKlpXvqN/jbOVGxEF5Aq+N6RE/yDVeR60XpRxRi88ib1yU8xVGz3MDN0equ8SUom7l97yGGwOfFf6Kvx+g/dMZY8KzYa6dM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rP6SWJRw; arc=none smtp.client-ip=91.218.175.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uC5LpJ5I"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rP6SWJRw"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784733581;
+	t=1784733591;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TO1DigB1z+i/Y3sHuC5IZU2pZU4A7heTWtiFEAbnRkY=;
-	b=uC5LpJ5I3bOYD09OC4mw2G1ka5CiiHHietkOlZ2az9kY6mlq3CE/0pEuW2AxhnxquCyAtz
-	YCSOPfKdE4xU3Amb90EB5vVdElpJeWzE+4TQ9JUaNLqbCS3cA8MlebMDUgA6v7jB1Nju6W
-	y5STTwZbcs0SO9xN2E8RBioQd51rjUQ=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hYTgWVcRbrysugLURttWCpGcYz3LG4GprKcAXdzH1sw=;
+	b=rP6SWJRw4mfP9qp8M+vv00V5zK6gxv7Bl7QQOcJBP0RTHEqhD6DOiubdBnUG5+mqWjxNHT
+	lXm34jmVUjHJMDbBLYmpcT8HbIYW5faznwfTv6eDvShX9RSJ5I4EIPuqJvniBaCI77vXQO
+	aGuxT/AYa1cLQcYU5qvKMH2e44UHWos=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -47,9 +49,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 0/2] bpf: Fix WARNING in bpf_tracing_link_release
-Date: Wed, 22 Jul 2026 23:19:07 +0800
-Message-ID: <20260722151909.69142-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 1/2] bpf: Fix WARNING in bpf_tracing_link_release
+Date: Wed, 22 Jul 2026 23:19:08 +0800
+Message-ID: <20260722151909.69142-2-leon.hwang@linux.dev>
+In-Reply-To: <20260722151909.69142-1-leon.hwang@linux.dev>
+References: <20260722151909.69142-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,21 +83,66 @@ The trampoline could be corrupted by the blindly
 
 Fix the warning by updating 'tr->flags' with '|=' and lock.
 
-Changes:
-v1 -> v2:
-* Update the patch #1 message with 'tr->flags' change. (per Jiri)
-* Drop the 'link' and the last 'if' in patch #2. (per Jiri)
-* v1: https://lore.kernel.org/bpf/20260721133036.49265-1-leon.hwang@linux.dev/
+Fixes: 2b5dcb31a19a ("bpf, x64: Fix tailcall infinite loop")
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ include/linux/bpf.h     | 2 ++
+ kernel/bpf/trampoline.c | 7 +++++++
+ kernel/bpf/verifier.c   | 2 +-
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
-Leon Hwang (2):
-  bpf: Fix WARNING in bpf_tracing_link_release
-  selftests/bpf: Verify no warning when close fexit link
-
- include/linux/bpf.h                           |  2 +
- kernel/bpf/trampoline.c                       |  7 +++
- kernel/bpf/verifier.c                         |  2 +-
- .../selftests/bpf/prog_tests/tailcalls.c      | 48 +++++++++++++++++++
- 4 files changed, 58 insertions(+), 1 deletion(-)
-
---
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index e066f44a9c05..7bfc28673124 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1523,6 +1523,7 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+ 				struct bpf_tracing_multi_link *link);
+ int bpf_trampoline_multi_detach(struct bpf_prog *prog,
+ 				struct bpf_tracing_multi_link *link);
++void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags);
+ 
+ /*
+  * When the architecture supports STATIC_CALL replace the bpf_dispatcher_fn
+@@ -1646,6 +1647,7 @@ static inline int bpf_trampoline_multi_detach(struct bpf_prog *prog,
+ {
+ 	return -ENOTSUPP;
+ }
++static inline void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags) {}
+ #endif
+ 
+ struct bpf_func_info_aux {
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 6eadf64f7ec9..129d07db117e 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -670,6 +670,13 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, int size)
+ 	return ERR_PTR(err);
+ }
+ 
++void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags)
++{
++	trampoline_lock(tr);
++	tr->flags |= flags;
++	trampoline_unlock(tr);
++}
++
+ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex,
+ 				 const struct bpf_trampoline_ops *ops, void *data)
+ {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 52be0a118cce..66d8d9eaec05 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19523,7 +19523,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 		return -ENOMEM;
+ 
+ 	if (tgt_prog && tgt_prog->aux->tail_call_reachable)
+-		tr->flags = BPF_TRAMP_F_TAIL_CALL_CTX;
++		bpf_trampoline_set_flags(tr, BPF_TRAMP_F_TAIL_CALL_CTX);
+ 
+ 	prog->aux->dst_trampoline = tr;
+ 	return 0;
+-- 
 2.55.0
+
