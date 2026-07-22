@@ -1,191 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6732DEA6B;
-	Wed, 22 Jul 2026 07:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1315E2DEA86
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784704573; cv=none; b=rXT/6eWkRH1uEi9SdaRAtOn8buBTT3wxlZTN1h1Z4CQcZyJ4j3DgSaYBh5cHmXfDZdsEZveePENEoNdOj9zpMA3IXk+r1z/+C7gwsIcFsLddmVCXe+xgTNtEXe/nkKlpgNa/IjrpxnejPya8sxU3LQx6hI9nios+xF7s0WpcOqU=
+	t=1784704612; cv=none; b=JMbAHkCtgu7jytOAbI1xUebIR6b6iW/c43QBZtXETpoApPomwJE9b9bebt1cQqrVHTuu2iiNZT8HF83DGDyVEnUvM/LWDKweJaf2B9wRBcSXz8XqrnumOPRsNqtkoWItHPYFklZFVci1T/HvST1xUmUxTcCjo+/25gHsxx/KOk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784704573; c=relaxed/simple;
-	bh=693vjRiYIWjTznoCO9BwIbJbyn7Sft9EHzTdPud4tSk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RDH+OCM5R/DQCkGf3wzp1kreONAZ2uBLCLvcP1J2ZirLo/sRn3vtmAGJXmVpJTTwJW5tifnNz9uuOX57qDHJcowIZooQvsTTkcRYRL5MjzBptrO/gKnNHMwTKNrfD7YKDwUa6dMK3UO49nqK7UP7o6WMSfdqeM4ueUNX+LE59zY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bc2KXFhL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784704612; c=relaxed/simple;
+	bh=HxjyNfUxKkmZTSUFGNjTIpFRJG983QJ1KTtiUKbDf6s=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=KDZGtfMdUxsxs5hEggQaxTP1lGwrhRK/XG73v19wC56H+WBrS2+QjgXJcneu2X1tSIRgeL0nZaj53UToGshxJfNVNhirmgA+ftUSi0oIxxwF+6hh8L+ossqBvzbldT8UpQu4wI6XvpfEdIYP+jGSnqwqi06J87k/zRbhe+ollsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FgWUoxp5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bc2KXFhL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52CF81F000E9;
-	Wed, 22 Jul 2026 07:16:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FgWUoxp5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D761F000E9;
+	Wed, 22 Jul 2026 07:16:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784704571;
-	bh=QczM2k3gjfBkQg6SLRGr4KO6x2nabmYHG3X/oqp3yTs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Bc2KXFhLyD1DFGv9udYttAPL0u9PjXCUNwYk04HPyfgCvnAu9cGaUQrkVKvywTKP0
-	 q6a4lSNIvV/Uj+o6GsQJz7gfTQhwKYCN2YV0cMHbW9FvAzXDNF/r4gRv347/cb4NkC
-	 BVwlbm1iBJ/BBJaazXm5X/zPLqkS0JgXjeJxDBkvuFqjPh+YhL2ruH6sNcNAGmJzKc
-	 qcOh6urXoStSQVqxwmwYJK0SDceGzyBkt3rXoQVi8NT1r16WBweAkE1aN19QvgPL/F
-	 w1II5sds5nmCRYLsCDvcjrsmqp3Oygz24L/gQM/umdbjIO9AQIsbSR9uTfnPF3ijIC
-	 NfIcK7iov/lCg==
-Message-ID: <004d1215-a1da-448e-bf10-df637c7029f5@kernel.org>
-Date: Wed, 22 Jul 2026 16:16:00 +0900
+	s=k20260515; t=1784704610;
+	bh=Xnm79dzrULnWHYEKHnx8l5QEv8x2Sm7NTAeiJHwM4Bs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=FgWUoxp5AuDpsyYo8AE6fC9kJScBXNmUVlB5e4irR9f4xtCCupW0sRiGDMaWsC4z6
+	 qcofEFDwH8oPownX7GCEyzLzN4GWOEkEHVGNphVZZ/A+DHhI4QENEX0arIueL84bbj
+	 kTHwLOtnhSHLJd+BOvXZbncmHFIX6epuVlkTAinoVNBxL8Z0qgGO1UiPJiFRm7cRVy
+	 BUjq64Gs6nO1qmBlmUKgd0pt2sWcn2uKEjklanBEPiA8++ZrS54s4kHQlUx67Wjlq9
+	 jvLnCjtgNKFXuatdA7ViHRq2qUsfsFbtlqzXPY0TNLOUHoMaLIxL17dAIGz14t7wny
+	 umdnE5uWUyvBw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/2] bpf: Populate mmap-able array map memory
+ lazily
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Song Liu" <song@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260722065308.4116186-2-song@kernel.org>
+References: <20260722065308.4116186-1-song@kernel.org>
+ <20260722065308.4116186-2-song@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 22 Jul 2026 07:16:50 +0000
+Message-Id: <20260722071650.83D761F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH slab/for-next v4 1/8] mm/slab, slub_kunit: register kprobe
- to trigger _nolock APIs
-To: hu.shengming@zte.com.cn
-Cc: vbabka@kernel.org, akpm@linux-foundation.org, hao.li@linux.dev,
- cl@gentwo.org, rientjes@google.com, roman.gushchin@linux.dev,
- ast@kernel.org, andrii@kernel.org, puranjay@kernel.org, ameryhung@gmail.com,
- bigeasy@linutronix.de, clrkwllms@kernel.org, rostedt@goodmis.org,
- paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
- joelagnelf@nvidia.com, josh@joshtriplett.org, boqun@kernel.org,
- urezki@gmail.com, mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
- qiang.zhang@linux.dev, pfalcato@suse.de, surenb@google.com,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-References: <20260722112748588_IEr10bQdigv8c8bjw7Ck@zte.com.cn>
-Content-Language: en-US
-From: Harry Yoo <harry@kernel.org>
-In-Reply-To: <20260722112748588_IEr10bQdigv8c8bjw7Ck@zte.com.cn>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------l2diSXyS8PSFwRyJhRRP3Q53"
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------l2diSXyS8PSFwRyJhRRP3Q53
-Content-Type: multipart/mixed; boundary="------------80TQbEbkEElO0TKxmuJVujmY";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: hu.shengming@zte.com.cn
-Cc: vbabka@kernel.org, akpm@linux-foundation.org, hao.li@linux.dev,
- cl@gentwo.org, rientjes@google.com, roman.gushchin@linux.dev,
- ast@kernel.org, andrii@kernel.org, puranjay@kernel.org, ameryhung@gmail.com,
- bigeasy@linutronix.de, clrkwllms@kernel.org, rostedt@goodmis.org,
- paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
- joelagnelf@nvidia.com, josh@joshtriplett.org, boqun@kernel.org,
- urezki@gmail.com, mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
- qiang.zhang@linux.dev, pfalcato@suse.de, surenb@google.com,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
-Message-ID: <004d1215-a1da-448e-bf10-df637c7029f5@kernel.org>
-Subject: Re: [PATCH slab/for-next v4 1/8] mm/slab, slub_kunit: register kprobe
- to trigger _nolock APIs
-References: <20260722112748588_IEr10bQdigv8c8bjw7Ck@zte.com.cn>
-In-Reply-To: <20260722112748588_IEr10bQdigv8c8bjw7Ck@zte.com.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] An integer overflow in `array_map_mmap` on 32-bit architecture=
+s allows bypassing the VMA bounds check. Combined with pointer arithmetic t=
+runcation in the new `array_map_mmap_fault` handler, an attacker can map th=
+e `struct bpf_array` header into user space, leading to Local Privilege Esc=
+alation (LPE) by overwriting the BPF map's operations pointer.
+--
 
---------------80TQbEbkEElO0TKxmuJVujmY
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+--- Patch [1]: [PATCH bpf-next 1/2] bpf: Populate mmap-able array map memor=
+y lazily ---
+commit 07e8d5ac0a564f432fdda75a2eb43f2790e3860c
+Author: Song Liu <song@kernel.org>
 
+bpf: Populate mmap-able array map memory lazily
 
+This commit modifies mmap-able BPF array maps to populate memory lazily
+rather than upfront at map creation time. It adds a new map_mmap_fault
+callback to handle inserting pages on demand, reducing the mmap and
+munmap complexity to O(1) for large maps.
 
-On 7/22/26 12:27 PM, hu.shengming@zte.com.cn wrote:
-> Harry wrote:
->> Since kmalloc_nolock() always fails in NMI and hardirq contexts on
->> PREEMPT_RT, slub_kunit cannot properly test _nolock() APIs.
->>
->> Register a kprobe pre-handler to invoke kmalloc_nolock() and
->> kfree_nolock() in the middle of the slab allocator. However, do not
->> register the handler on UP kernels because that use case is not
->> well supported [1] in the kernel.
->>
->> To attach the pre-handler while s->cpu_sheaves->lock or n->list_lock
->> is held, add a wrapper function for lockdep_assert_held() that calls
->> a no-op function slab_attach_kprobe_locked() on debug builds. The
->> function is optimized away when neither CONFIG_PROVE_LOCKING nor
->> CONFIG_DEBUG_VM is selected and register_kprobe() fails.
->>
->> The function calls barrier() to prevent the compiler from optimizing
->> away its callsites. Otherwise, the compiler may consider the function
->> does not have any side effect and remove callsites.
->>
->> Compared to using plain kprobe, this has two advantages: 1) it avoids
->> hardcoding function names in the test, and 2) it can trigger those API=
-s
->> in the middle of a function, where the lock is expected to be held as
->> annotated with lockdep.
->>
->> While it was proposed [2] to use kunit function redirection to test
->> this, it is currently infeasible as some lock helpers don't have
->> symbols.
->>
->> Factor out the nested loop that calls kmalloc and friends to
->> test_kmalloc_kfree(), and call them in
->> test_kmalloc_kfree_nolock_{perf,kprobe}(), each being an independent
->> test case. During the refactoring, drop alloc_fail handling as it
->> doesn't provide much benefits.
->=20
-> Nice test addition!
->=20
-> Reviewed-by: Shengming Hu <hu.shengming@zte.com.cn>
+> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+> --- a/kernel/bpf/arraymap.c
+> +++ b/kernel/bpf/arraymap.c
+> @@ -576,7 +576,6 @@ static int array_map_check_btf(struct bpf_map *map,
+>  static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vm=
+a)
+>  {
+>  	struct bpf_array *array =3D container_of(map, struct bpf_array, map);
+> -	pgoff_t pgoff =3D PAGE_ALIGN(sizeof(*array)) >> PAGE_SHIFT;
+> =20
+>  	if (!(map->map_flags & BPF_F_MMAPABLE))
+>  		return -EINVAL;
+> @@ -585,8 +584,42 @@ static int array_map_mmap(struct bpf_map *map, struc=
+t vm_area_struct *vma)
+>  	    PAGE_ALIGN((u64)array->map.max_entries * array->elem_size))
+>  		return -EINVAL;
 
-Thanks a lot for reviewing, Shengming!
+[Severity: Critical]
+Does this bounds check in array_map_mmap overflow on 32-bit architectures?
 
-Just FYI, I'm going to adjust a nit pointed out by sashiko
-that kmalloc_obj(*objects[j], gfp) is wrong because objects is an array
-of void pointers. (which is fixed later in the series)
+Since the left-hand side calculation uses 32-bit unsigned long arithmetic,
+could an excessive page offset overflow the result to zero, thereby
+bypassing the check entirely?
 
-> Nit below:
->> +static void test_kmalloc_kfree_nolock_perf(struct kunit *test)
->> +{
->> +    struct test_nolock_context ctx =3D { .test =3D test };
->> =20
->> -    kunit_info(test, "callback_count: %d, alloc_ok: %d, alloc_fail: %=
-d\n",
->> -           ctx.callback_count, ctx.alloc_ok, ctx.alloc_fail);
->> +    if (!enable_perf_events(&ctx))
->> +        kunit_skip(test, "Failed to enable perf event, skipping");
->> =20
->> -    if (alloc_fail)
->> -        kunit_skip(test, "Allocation failed");
->> +    test_kmalloc_kfree();
->> +
->> +    disable_perf_events(&ctx);
->> +    KUNIT_EXPECT_EQ(test, 0, slab_errors);
->> +}
->> +#endif
->> +
->=20
-> Maybe it would be worth checking that the perf event actually fired:
->=20
->     KUNIT_EXPECT_GT(test, ctx.callback_count, 0);
->=20
-> Otherwise, the test could pass without the callback.
+> -	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array),
+> -				   vma->vm_pgoff + pgoff);
+> +	/*
+> +	 * The backing memory is vmalloc'ed up front, so instead of wiring up
+> +	 * every PTE here we let array_map_mmap_fault() insert pages on demand.
+> +	 * remap_vmalloc_range_partial() used to set these flags for us; keep
+> +	 * them to preserve behavior (no VMA expansion, excluded from coredump).
+> +	 */
+> +	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
+> +
+> +	return 0;
+> +}
+> +
+> +static vm_fault_t array_map_mmap_fault(struct bpf_map *map,
+> +				       struct vm_fault *vmf)
+> +{
+> +	struct bpf_array *array =3D container_of(map, struct bpf_array, map);
+> +	pgoff_t pgoff =3D PAGE_ALIGN(sizeof(*array)) >> PAGE_SHIFT;
+> +	struct page *page;
+> +	void *kaddr;
+> +
+> +	/*
+> +	 * vmf->pgoff is the page offset within the mapping (vma->vm_pgoff plus
+> +	 * the offset of the faulting address). The data pages start after the
+> +	 * bpf_array header, hence the extra pgoff. This mirrors the offset that
+> +	 * remap_vmalloc_range(vma, ..., vma->vm_pgoff + pgoff) used to apply.
+> +	 */
+> +	kaddr =3D array_map_vmalloc_addr(array) +
+> +		((u64)(vmf->pgoff + pgoff) << PAGE_SHIFT);
 
-I'm not sure if that would be useful though.
+[Severity: Critical]
+Can this pointer arithmetic lead to truncation when calculating kaddr?
 
-Ideally we want to make sure every code path that handles
-allow_spin =3D false is tested, but it's tricky to measure that and
-also it's tricky to make sure those paths are properly tested
-(especially with perf events).
-
-callback_count is not a good indicator to measure test coverage.
-
-(I use GCOV to make sure we have reasonable coverage,
- but it's hard to turn that into a test case...)
+On 32-bit systems, array_map_vmalloc_addr returns a 32-bit pointer.
+If the 64-bit offset calculation is added to this pointer, does it truncate
+the upper bits? If an overflowed pgoff was passed from the mmap bounds chec=
+k,
+could this truncation cause the mapping to wrap around and incorrectly
+expose the internal bpf_array header memory to user space?
 
 --=20
-Cheers,
-Harry / Hyeonggon
-
---------------80TQbEbkEElO0TKxmuJVujmY--
-
---------------l2diSXyS8PSFwRyJhRRP3Q53
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCamBuMAAKCRCGXBN6rc5S
-1sPeAQDxKa0DMrDQTezN00ksgEUR3eb05xC3gVwrShymZlkh5wEA7tBOlrr/Ntis
-S3x7DXHLG0TmEitCZ5rUhYKcT3diOQI=
-=g7jN
------END PGP SIGNATURE-----
-
---------------l2diSXyS8PSFwRyJhRRP3Q53--
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260722065308.4116=
+186-1-song@kernel.org?part=3D1
