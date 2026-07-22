@@ -1,185 +1,102 @@
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018C147043D;
-	Wed, 22 Jul 2026 10:18:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DAF3B19AF;
+	Wed, 22 Jul 2026 10:23:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784715494; cv=none; b=NhZkPlvkLwLQISnYkL7/4igw07uz+oO5VABaKGexFKtnkIoKsXSk2jH6+vEGbRPVf6xtaHyXRnhz/qIcfiX9BBsy2hrB5tC08XDenpOzr6iWeLCxbng16XQt2nnl/PEMsNXuHFUdnXoH1bt/pQEzsa2w6Ef9pxmCXWaqOn5xGiw=
+	t=1784715819; cv=none; b=rBDFkhzl0QmzhM/EB49rhvs+1x6EdoJYstrrU8uiIEjhU0MKQauCemsmia9/xhO5V1yDAH8tpesbhPnfxDWv3Uwf9EthmlkgvAxMfqWxTQWUN+KPqBDYoQr4B10s2WP7ZEBmhwWQAW8faPnxx1dajz0R2sjrx2Vf4NlK+dsvCEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784715494; c=relaxed/simple;
-	bh=CUVABRT8u6sIkCSaBwXYAsL2LoY6BthfYLDAz7oEI3U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=CWT/4AqG0RdZJ2A1KcTS0ckRhsjhpDU32YQ6QGdQVnxKZLYJ2d+bSf7t9Bwrdg0KRRsg1gCHNKJtrCnJk+feyztz7lIF1ebbcBJhV4DZFs8DE3iOwRSGb9SkxB/aj3i/zOALbrPFo/siPjSSeX1pxznxA+XMJ1hIk+ibGOzpUR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=4DwY6um3; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1784715819; c=relaxed/simple;
+	bh=ScN/GYWMG9bFf7QCQ4WW9FhbJFboxppSiGKKS+CNLnk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AzmflI4nsip5DXp4W/RAqOrAJsm71tBf5XUcX2L04uWJvbeUlTROKERKaUVoYBe13tnZOaJIc/VD0Q78Zco4uXrLq7Ai7CNcsFd1caFyWxExKq07Wi7NkEMUQ/cgAiY5OFiJPwSYenGp6lPctk5O4j9NAAV5vIX1rl+gbh/G5uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=Qmly8Lcn; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=mX1Ympy6; arc=none smtp.client-ip=92.243.27.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="4DwY6um3"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=h9L8mZwcaSEYqtHbvb4ujqFx0pT12RwD6oNzavrJYvE=;
-	b=4DwY6um3U7bafCA1X9Y9RRHNOHavkkRwtEebewVEtIekBpcjcvBP+YczJPxY1YduGPc/yfIto
-	1tPzHs/zmV8qzc6T2hVU86xoSItkwbYtT0S3cV8NFlp2AA6Hm5bwp7hi1i5/6nMVmX+ch7oTsVa
-	oxSlmoQfoYb+VUE52Ewswjo=
-Received: from mail.maildlp.com (unknown [172.19.162.140])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4h4qhh6njYzcZyH;
-	Wed, 22 Jul 2026 18:08:36 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id C36A6202E6;
-	Wed, 22 Jul 2026 18:18:05 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Wed, 22 Jul
- 2026 18:18:04 +0800
-Message-ID: <53b49505-f593-44d1-a4ea-b3ad81f6cc0b@huawei.com>
-Date: Wed, 22 Jul 2026 18:18:04 +0800
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="Qmly8Lcn";
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="mX1Ympy6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1784715816; bh=ScN/GYWMG9bFf7QCQ4WW9FhbJFboxppSiGKKS+CNLnk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Qmly8LcnNsVPKG/mz29thcJbZhSk+WHMQSCWBDuCN8HtRhltnNPMzX1BTGG+pykUJ
+	 1/aSif7pDg1U5WBKDne1uGKDaSNwEFix4kr8QeeW7/R9PINa9NZTVez0KlFptP4gab
+	 QCyQaY1972hCbyWz33ITT4h4zOLDSP6DXdamgNYoCXh5FuIXXiEzYbP0kmXnPz1XYu
+	 DBOXA8LYJHMTvwJ4LaaJScjRS+T+5oXKNpLJFIArU/d9FemUTFmxMDQVZrmZvjvJrw
+	 wcA1H5NLDY5u0H44qAsWk9jRzMkPcAnG2hW3WvGhQbdFFh7lcNgXtetpl5bX8leBbk
+	 7EF5zM+ZXibAA==
+Received: by extorris.mess.org (Postfix, from userid 1004)
+	id 463BA4017A; Wed, 22 Jul 2026 11:23:36 +0100 (BST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1784715815; bh=ScN/GYWMG9bFf7QCQ4WW9FhbJFboxppSiGKKS+CNLnk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mX1Ympy6E9LLp/Gj2oY9QzItI/7gErZocMvMY8xgjRF1WJREKYkliwiphN7N8R0Au
+	 Hsl6YrLXz5+3/gztoFc6VknWfZAKxmb6fBigMs1Ax5M13c6g5xTY+iFJp3Z4RPqZ37
+	 ifgg82MAYXfsgD7paaGBPeJOpkqXbJ9GK+S7pbpmXYPVomGJVc2jpVt3LENE1y+WgE
+	 RA4LhhPY2ndI8dlAvbWqtnFG7N2MnbQNn6XFRly7gFssGqNvFmd6HqBr2XiP6l9vkl
+	 hCFlhN5thJhArNVedIoQXEe6bKri96xFOSUH+j5u9nUgIjDX3tmYU3MKoGBadEfUMi
+	 chu8259tIjZ8w==
+Received: from maru.local (unknown [62.232.99.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by extorris.mess.org (Postfix) with ESMTPSA id 61A1A4017A;
+	Wed, 22 Jul 2026 11:23:35 +0100 (BST)
+From: Sean Young <sean@mess.org>
+To: linux-media@vger.kernel.org
+Cc: Sean Young <sean@mess.org>,
+	bpf@vger.kernel.org
+Subject: [PATCH v3 00/13] Fix leaks in rc core 
+Date: Wed, 22 Jul 2026 11:23:12 +0100
+Message-ID: <cover.1784715737.git.sean@mess.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 1/3] bpf, riscv: add support for timed
- may_goto
-Content-Language: en-US
-To: Feng Jiang <jiangfeng@kylinos.cn>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
-	<memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
-	<jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson
-	<luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Puranjay Mohan
-	<puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti
-	<alex@ghiti.fr>, Shuah Khan <shuah@kernel.org>, Ihor Solodrai
-	<ihor.solodrai@linux.dev>
-CC: <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20260722-riscv-bpf-timed-may-goto-v4-0-e117e6337bc7@kylinos.cn>
- <20260722-riscv-bpf-timed-may-goto-v4-1-e117e6337bc7@kylinos.cn>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260722-riscv-bpf-timed-may-goto-v4-1-e117e6337bc7@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+
+Changes since v2:
+ - sashiko had many more good review comments
+
+Changes since v1:
+ - sashiko had many good review comments
+ - Added fix rc: Use after free in ir_raw_event_handle()
+ - Added fix meson-ir-tx: Ensure probe error is propagated
+ - Added fix redrat3: Ensure all urbs are suspended
+ - Added fix media: redrat3: Error path leaves device in transmitting state
+ - streamzap fix was incorrect
+ - Other minor fixes
 
 
-On 2026/7/22 12:21, Feng Jiang wrote:
-> Implement arch_bpf_timed_may_goto() for the RV64 JIT. The argument and
-> return value are carried in BPF_REG_AX, and BPF R0-R5 are preserved
-> across the call to the generic bpf_check_timed_may_goto().
-> 
-> Enable bpf_jit_supports_timed_may_goto() so the verifier uses the timed
-> expansion path.
-> 
-> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
-> ---
->   arch/riscv/net/Makefile             |  2 +-
->   arch/riscv/net/bpf_jit_comp64.c     | 12 +++++++++-
->   arch/riscv/net/bpf_timed_may_goto.S | 47 +++++++++++++++++++++++++++++++++++++
->   3 files changed, 59 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/net/Makefile b/arch/riscv/net/Makefile
-> index 9a1e5f0a94e5..6458d4d51990 100644
-> --- a/arch/riscv/net/Makefile
-> +++ b/arch/riscv/net/Makefile
-> @@ -3,7 +3,7 @@
->   obj-$(CONFIG_BPF_JIT) += bpf_jit_core.o
->   
->   ifeq ($(CONFIG_ARCH_RV64I),y)
-> -	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
-> +	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o bpf_timed_may_goto.o
->   else
->   	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
->   endif
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index ad089a9a4ea9..8fe8969fb8a0 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -1841,7 +1841,12 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   		if (aux->tail_call_reachable && insn->src_reg == BPF_PSEUDO_CALL)
->   			emit_sd(RV_REG_SP, ctx->tcc_offset, RV_REG_TCC, ctx);
->   
-> -		if (insn->src_reg != BPF_PSEUDO_CALL)
-> +		/*
-> +		 * arch_bpf_timed_may_goto() is emitted by the verifier and
-> +		 * returns its result in BPF_REG_AX instead of BPF_REG_0, so
-> +		 * skip the normal "move return register into R0".
-> +		 */
-> +		if (insn->src_reg != BPF_PSEUDO_CALL && addr != (u64)arch_bpf_timed_may_goto)
->   			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_A0, ctx);
->   		break;
->   	}
-> @@ -2161,3 +2166,8 @@ bool bpf_jit_supports_subprog_tailcalls(void)
->   {
->   	return true;
->   }
-> +
-> +bool bpf_jit_supports_timed_may_goto(void)
-> +{
-> +	return true;
-> +}
-> diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_timed_may_goto.S
-> new file mode 100644
-> index 000000000000..f4bf2cd10586
-> --- /dev/null
-> +++ b/arch/riscv/net/bpf_timed_may_goto.S
-> @@ -0,0 +1,47 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (c) 2026 Feng Jiang <jiangfeng@kylinos.cn> */
-> +
-> +#include <linux/linkage.h>
-> +#include <asm/asm.h>
-> +
-> +/*
-> + * Trampoline for the BPF timed may_goto loop bound. Custom calling convention:
-> + *	- input:  stack offset in BPF_REG_AX (t0)
-> + *	- output: updated count in BPF_REG_AX (t0)
-> + *
-> + * Calls bpf_check_timed_may_goto(ptr) with the standard RISC-V ABI, where
-> + * ptr = BPF_REG_FP (s5) + BPF_REG_AX (t0). BPF R0-R5 (a5, a0-a4) are saved
-> + * across the call; BPF_REG_FP (s5) is callee-saved and needs no saving.
-> + */
-> +
-> +SYM_FUNC_START(arch_bpf_timed_may_goto)
-> +	addi	sp, sp, -64
-> +	sd	ra, 56(sp)
-> +	sd	s0, 48(sp)
-> +	addi	s0, sp, 64
-> +
-> +	/* Save BPF registers R0-R5 (a5, a0-a4) */
-> +	sd	a5, 40(sp)
-> +	sd	a0, 32(sp)
-> +	sd	a1, 24(sp)
-> +	sd	a2, 16(sp)
-> +	sd	a3, 8(sp)
-> +	sd	a4, 0(sp)
-> +
-> +	add	a0, t0, s5
-> +	call	bpf_check_timed_may_goto
-> +	mv	t0, a0
-> +
-> +	/* Restore BPF registers R0-R5 */
-> +	ld	a4, 0(sp)
-> +	ld	a3, 8(sp)
-> +	ld	a2, 16(sp)
-> +	ld	a1, 24(sp)
-> +	ld	a0, 32(sp)
-> +	ld	a5, 40(sp)
-> +
-> +	ld	s0, 48(sp)
-> +	ld	ra, 56(sp)
-> +	addi	sp, sp, 64
-> +	ret
-> +SYM_FUNC_END(arch_bpf_timed_may_goto)
+Sean Young (13):
+  media: streamzap: Add missing rc_unregister_device()
+  media: redrat3: Ensure rc device is freed if enable_detector() fails
+  media: redrat3: Ensure we don't read beyond the end of the packet
+  media: redrat3: Ensure all urbs are suspended
+  media: redrat3: Error path leaves device in transmitting state
+  media: sunxi-cir: Ensure no more interrupts can occur before free
+  media: meson-ir-tx: Ensure clock is disabled on unbind
+  media: meson-ir-tx: Ensure rc_free_device() is called on unbind
+  media: meson-ir-tx: Ensure probe error is propagated
+  media: ir-hix5hd2: Ensure rdev is setup before interrupts are enabled
+  media: rc: Use after free in ir_raw_event_handle()
+  media: rc: Fix use after free in bpf progs
+  media: rc: Fix race condition during rc_register_device()
 
-I think we should use REG_S/REG_L/SZREG like in arch/riscv ([0]) – it 
-keeps us in sync with upstream and will make it easier if we may later 
-port timed_may_goto to RV32.
+ drivers/media/rc/bpf-lirc.c    | 18 ++++++++++-----
+ drivers/media/rc/ir-hix5hd2.c  |  5 +++--
+ drivers/media/rc/meson-ir-tx.c | 14 +++++-------
+ drivers/media/rc/rc-ir-raw.c   | 40 ++++++++++------------------------
+ drivers/media/rc/rc-main.c     | 18 +++++++++------
+ drivers/media/rc/redrat3.c     | 35 ++++++++++++++++++++++++-----
+ drivers/media/rc/streamzap.c   |  1 +
+ drivers/media/rc/sunxi-cir.c   |  2 +-
+ 8 files changed, 75 insertions(+), 58 deletions(-)
 
-[0] arch/riscv/kernel/mcount.S
+-- 
+2.55.0
+
