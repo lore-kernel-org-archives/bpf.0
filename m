@@ -1,242 +1,137 @@
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+Received: from mail-pj2-f2.google.com (mail-pj2-f2.google.com [74.125.227.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D5B430781
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 20:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB31437864
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 20:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784752726; cv=none; b=Nrcc+iJGCkSlqUKtXr9Tvi1/z54dJnxnlKIeCG5bYGgvbGVsUfuzvjGnp04VJ0Pf+pub5XQoT/qLIxIzwjf/IEoTEyxxYmGLPexnpJ8notpF/6fI/XaMJt5YVPQYhVzEYweIAIcPSHlLKTCrU7SG9XmhnQJpXmyiR0JHsls0wVs=
+	t=1784752887; cv=none; b=k1AcqF6DaMzM3lcGMjnnBL8BRCDBUvemKzVh4eYIfLXzKhUaPpx/japOSktdFDunv7UuEudPY50XI3S4dZhQZJ/+aLZP8jBsZpJzwEpSoqQ0fcCyUVyllp3WAnPPo6RS/hzMRS8ARm87yvT377UmT4T8CTVt6Eu7r+xCIeeNzgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784752726; c=relaxed/simple;
-	bh=rUK40bARNxczgJ996whFU3NmgjvPa/s39yfxpjJVUqo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=q8J89A55cADLFk7sOVGpyRv+AFObxrOzg3A84Sz1wh5X7RbgPrOT9fj04xfdW8XVh5vCU57RAJTPqNTcgoO2llrS9OMEL4iP6y6cs0i27TXh7sKdBNQDlkdFVBoByGO7S6d83Y4Z+2U/BeA7q5N5U5UQjrC2hb80QA+tZis4SYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U3rBxrWH; arc=none smtp.client-ip=209.85.214.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
+	s=arc-20240116; t=1784752887; c=relaxed/simple;
+	bh=Yf15RLlhXlooxQ5ojngrKI3NfRjWBJYoBlpiscAPU24=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C9ZYP5zzyE4nLpu3tiCRvN/Jf3AYBIEROSP+IzhbtZHvBnArdMFoNP7xOUMDRfmRk3dkpg0xNTXvqSxSx+tI/TmBTBE+tpyw7YyGkccEOlvIHYzFjQJE8oHv++Z49DZ8rL8HBixe3N6YhR0lZiYqyg+ZsE4ZzRmcYRvgBGlvugQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OvkoZmOM; arc=none smtp.client-ip=74.125.227.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U3rBxrWH"
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2cceabd70f5so259341055ad.1
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 13:38:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OvkoZmOM"
+Received: by mail-pj2-f2.google.com with SMTP id 98e67ed59e1d1-37fb1883fbfso3460097a91.0
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 13:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784752724; x=1785357524; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=q56EpsIonIpKbN+joDw4ls0yr16ZYqeSmCoC1Wd1d9g=;
-        b=U3rBxrWH/F3z6/gnZwTztGBQfMWmNloO1h0Pap98DooUhdNjh1vNp2AoxE8ZHA4PEQ
-         r6KcVs8Y5HMNSnr2sJJJZJAqXF1p2NuTjLxn5xJoDI71UkXlaWBpOA6miwxBAUjdN1iz
-         Tp+8wEx/RgpBDte18MX7bF2QfCeMRvQYLt1iSZgRP+rJcO1TnGW4q3fARUHsgnaUPvpe
-         RSk5GcR97w2AcAcq/9f6F0+lxtpKMTPbf3f2SvK32q6M4kWTWaRkRtJcd9/9dmMXxufk
-         Yq+dB76MEXCGe5lff2zYCCwEStTzSmF1Gz+X5YpWL1BDAhHtU7HAKnaQjukoZICo943g
-         IDbg==
+        d=gmail.com; s=20251104; t=1784752886; x=1785357686; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lwCODOyVSYFhI5c3HdXAxVNdit7/+b6pODVCWxPDLeg=;
+        b=OvkoZmOMoZHgmw+uthSEVZwNaDuIVjFK8r4wZ5vcwzk1Qmle2wf/d9bnQi7DIwBuGy
+         h7y13hdrNMox/fnxHCtGBAHc7KTIjEXL94fET8o/Mrx55Aog950ugI93RdQcrchmOP9I
+         TVDYhfYydNaVHIspnhmuEy55MXIzI3gaJ+FCdzbibdeazu4m5uGj3FRb9vxqq3CnikDX
+         lLXogicjPaQDGxkDxwzRh4hs6v86kKKXZf5NwvReJJ3C4hrI/8HVHgeDIISm3BiwA5OX
+         nrmhFK+GobX+1TWgBrj+Zgx23kb8PGPUX3GLX5JdoD48npqknWp3WhPfLS3IuC2DkuUk
+         fNfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784752724; x=1785357524;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=q56EpsIonIpKbN+joDw4ls0yr16ZYqeSmCoC1Wd1d9g=;
-        b=Ic1V50WMhMpEUxT6MUnq+tMFITs+eYZZrSo0v3WLjA4ZCMqtC5XpXf6uu8GjYZsOTn
-         jLUveYwaUVDasnlTWA0fnOgiH9SQWm1Az7/vdwDZpmpC1P0eTtlToRPn7aW98skSmyXf
-         w2nTTxr9tbJHC+3HV6xHARr6/nzK+1HEuqMumtC/x4kN5FzF8eNcXpQRy71r1aClah8V
-         w7MOdzisyZUGe1S+I+OmIFhb1EQ11YczsNqsOb07yWh2xITtHXFYUVMb+eoTOnqgHBDb
-         Cxh8cSxTyet992or4B0nKgjkDpFeF3PlanwGxb+KyfKSbLnOwWgo/wz42STF/WS0KKYf
-         OqIg==
-X-Gm-Message-State: AOJu0Yw37rCM62OLsuGR6GE9s1Oo/gZK2jKUA54WoffSKzmkXqN6Dqre
-	tNzzZV39z1T3uhjsaSzB/tUuKdgdsvV5Fg7vNpRvevBQ17Qkh7OWORpPgHRZO6eHZs/o8eiNp0E
-	9YsOsw41WduWub1RuMA==
-X-Received: from plbkk7.prod.google.com ([2002:a17:903:707:b0:2cc:8a78:d849])
- (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:2449:b0:2cc:4c29:8221 with SMTP id d9443c01a7336-2cfa74d88b2mr3893655ad.45.1784752724215;
- Wed, 22 Jul 2026 13:38:44 -0700 (PDT)
-Date: Wed, 22 Jul 2026 13:38:01 -0700
-In-Reply-To: <20260722203801.1854941-1-tjmercier@google.com>
+        d=1e100.net; s=20251104; t=1784752886; x=1785357686;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lwCODOyVSYFhI5c3HdXAxVNdit7/+b6pODVCWxPDLeg=;
+        b=cT0Y29Zxbjb3cWpQ4Aj3YOV88dJykmvmvC9azlcGXGtZH0iS0xx7Nl4o76QfpdcozC
+         fttWsehqBavaNeyaF4VKm0jYZ/oFGydLkUaWFBaWfRRgoyw01fsd24UAtAbgU5EMgvuv
+         IKmpqaVAlUsJnKu+zz97lnSnG6tPKd9rMb/DLPWg1FSn7GiY0kYJfU9Tqb/k3zz7M53U
+         EBIAl0Uns+RPxcc7/MzSCgyEDOCWgq3fEUnHQhXzd7S9hlSaf9ezloBYaJPMV68SN+E5
+         OdEjcl9TDRgHbCMqEv1CEvwTgid+cvieF6oMC7UnvDljNkDpva5N4AtjSEwot1F3+/f6
+         hisw==
+X-Forwarded-Encrypted: i=1; AHgh+RoiqTJPzPeIxOYt47lOFMG1IZQAL9c5PmmTC71B5jeyRIMdB7ifGINN40NY5m7hfeQSeCQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCnGCW0DPfqwhGaK3DqmW7ylmbKxoxKJzgPNxb+Bd1ExtXgtDR
+	59dvHBczfGcrWcM/CCVvJU05GMoNGwT78sfk9ZnrBseKWWzRqXOsY8h6
+X-Gm-Gg: AR+sD10fkUy2mwtkE2Q/ZrgulV3zy+e/Y3+sTNjxGVhpdUZzXEE6ZO66IVfu6FtsFnk
+	SVxf768MRpYur7g0MmfAJWskinGFn4hdxO7Y7ScB+XfuBLoB6YESRUqwEiED8xExEBY5BE6mcKR
+	Izv260i3OMJLU9M5zhePvVMBcHAFq6uh8BoapRLrsDz1bNNsIzFoHWHEvsBp7Z2mAJYRaby0gXX
+	1Pizy+MET5sYNJp9aDjQd0YxpufAoDgCI8TETE4dFdPHJ2ipzTxjjR/YWQ7ywYObon3KeJL8Fgq
+	9M3uatXJe7e14Zl+Mm5rvY2p8PkbWUGaQ0AahmhWkWXOCiKDs9h/7391tgju/LVS3ZvKgwj7o9i
+	N09Zexp38yso1jlhJM6de14WkesIuhACq7snCie4QBHoLbpLSXzi4UuAGlM6AQtQ/ZrWmNm85fj
+	YXJWTOag==
+X-Received: by 2002:a17:90a:e703:b0:38d:ddc2:7ccb with SMTP id 98e67ed59e1d1-38ec6406625mr281164a91.1.1784752885668;
+        Wed, 22 Jul 2026 13:41:25 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38ea466e62fsm1240712a91.1.2026.07.22.13.41.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 13:41:24 -0700 (PDT)
+Date: Wed, 22 Jul 2026 13:40:58 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Vladimir Vdovin <deliran@verdict.gg>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 8/8] selftests: net: add test for XDP_PASS
+ skb checksum invalidation
+Message-ID: <amEojEGsIGkUjIWn@devvm7509.cco0.facebook.com>
+References: <20260715-bpf-xdp-meta-rxcksum-v5-0-623d5c0d0ab7@kernel.org>
+ <20260715-bpf-xdp-meta-rxcksum-v5-8-623d5c0d0ab7@kernel.org>
+ <aljNR2sf8qJVKFgb@devvm7509.cco0.facebook.com>
+ <alkBnI3XcH0XGjEo@lore-desk>
+ <al53WS9FMTnu7tBI@devvm7509.cco0.facebook.com>
+ <20260721082728.74142e6c@kernel.org>
+ <al_4VWS_EyyZLe8z@devvm7509.cco0.facebook.com>
+ <20260721183256.6f49d6e1@kernel.org>
+ <amEEEohxmC8hkBvY@devvm7509.cco0.facebook.com>
+ <20260722113525.34092660@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260722203801.1854941-1-tjmercier@google.com>
-X-Mailer: git-send-email 2.55.0.229.g6434b31f56-goog
-Message-ID: <20260722203801.1854941-3-tjmercier@google.com>
-Subject: [PATCH 2/2] bpf: htab: Reduce elem_size by 8 bytes for small key sizes
-From: "T.J. Mercier" <tjmercier@google.com>
-To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	"T.J. Mercier" <tjmercier@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260722113525.34092660@kernel.org>
 
-For standard and PCPU (non-LRU) hash maps with small key sizes (<= 8
-bytes), comparing keys requires only an 8 byte compare. Storing a cached
-32-bit hash value to shortcut full key comparisons provides no
-performance advantage for small keys, and consumes memory for every
-element.
+On 07/22, Jakub Kicinski wrote:
+> On Wed, 22 Jul 2026 11:00:07 -0700 Stanislav Fomichev wrote:
+> > > > This is about current drivers that only report UNNECESSARY with xdp: the xdp
+> > > > prog has to maintain in-packet checksum if it changes the payload. I think
+> > > > it's a fair assumption?  
+> > > 
+> > > What about decap? If we decap the header that device validated 
+> > > as UNNECESSARY there's no possibility of maintaining the checksum
+> > > (by which IIUC you mean correcting it in along the payload changes).
+> > > 
+> > > I think we'd need some API to "decrement the csum level" ?
+> > > Or some heuristic in the drivers to decrement if the head moved
+> > > by at least len(IP+UDP) into the packet ?  
+> > 
+> > True :-/ I guess one more case to document?
+> 
+> What would we be documenting? That it's a known bug and we have no idea
+> how to address it? Or am I missing something?
 
-This memory can be saved by eliminating hash along with its associated
-4 byte padding before the key, reducing the elem_size (and key_offset)
-by 8 bytes for standard and PCPU maps.
+Yeah, that UNECESSARY + decap in xdp has this corner case of inner
+csum being not validated (and currently no way to flip it to NONE from
+bpf).
 
-Introduce htab_has_hash() to check whether a map requires a cached hash
-field. Update htab_elem_set_hash(), lookup_elem_raw(), and
-lookup_nulls_elem_raw() to conditionally bypass hash checking and
-storage when htab_has_hash() is false.
+(idk whether we really have nics that do csum_level>=2, so I'd just add
+bpf_invalidate_csum or something, but it's a separate conversation)
 
-Together with the previous patch, this reduces the minimum standard and
-preallocated hash map element size from 64 bytes down to 32 bytes, and
-non-preallocated per-CPU element size from 64 bytes down to 40 bytes.
+> Again: 
+>  .. the ask was to sketch out the plan of explicitly
+>  updating/invalidating the checksum even if we don't 
+>  implement it today
 
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
----
- kernel/bpf/hashtab.c                          | 35 +++++++++++++------
- .../selftests/bpf/progs/map_ptr_kern.c        |  2 +-
- 2 files changed, 25 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 57729c3dff3d..b8c30d402958 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -118,7 +118,7 @@ struct htab_elem {
- 			};
- 		};
- 	};
--	u32 hash;
-+	u32 hash; /* Only when htab_has_hash() */
- } __aligned(8);
- 
- struct htab_elem_lru {
-@@ -151,12 +151,13 @@ struct htab_elem_pcpu {
- 		};
- 	};
- 	void *ptr_to_pptr;
--	u32 hash;
-+	u32 hash; /* Only when htab_has_hash() */
- } __aligned(8);
- 
- struct htab_btf_record {
- 	struct btf_record *record;
- 	u32 key_size;
-+	u32 key_offset;
- };
- 
- static inline bool htab_is_prealloc(const struct bpf_htab *htab)
-@@ -257,6 +258,11 @@ static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)
- 	return (struct htab_elem *) (htab->elems + i * (u64)htab->elem_size);
- }
- 
-+static inline bool htab_has_hash(const struct bpf_htab *htab)
-+{
-+	return htab_is_lru(htab) || htab->map.key_size > 8;
-+}
-+
- static inline u32 htab_elem_hash(struct bpf_htab *htab, struct htab_elem *l)
- {
- 	if (htab_is_lru(htab))
-@@ -269,6 +275,8 @@ static inline u32 htab_elem_hash(struct bpf_htab *htab, struct htab_elem *l)
- 
- static inline void htab_elem_set_hash(struct bpf_htab *htab, struct htab_elem *l, u32 hash)
- {
-+	if (!htab_has_hash(htab))
-+		return;
- 	if (htab_is_lru(htab))
- 		((struct htab_elem_lru *)l)->hash = hash;
- 	else if (htab_is_percpu(htab) && !htab_is_prealloc(htab))
-@@ -561,7 +569,7 @@ static void htab_mem_dtor(void *obj, void *ctx)
- 	if (IS_ERR_OR_NULL(hrec->record))
- 		return;
- 
--	map_value = (void *)elem + sizeof(struct htab_elem) + round_up(hrec->key_size, 8);
-+	map_value = (void *)elem + hrec->key_offset + round_up(hrec->key_size, 8);
- 	bpf_obj_free_fields(hrec->record, map_value);
- }
- 
-@@ -587,7 +595,7 @@ static void htab_dtor_ctx_free(void *ctx)
- }
- 
- static int bpf_ma_set_dtor(struct bpf_map *map, struct bpf_mem_alloc *ma,
--			   void (*dtor)(void *, void *))
-+			   void (*dtor)(void *, void *), u32 key_offset)
- {
- 	struct htab_btf_record *hrec;
- 	int err;
-@@ -600,6 +608,7 @@ static int bpf_ma_set_dtor(struct bpf_map *map, struct bpf_mem_alloc *ma,
- 	if (!hrec)
- 		return -ENOMEM;
- 	hrec->key_size = map->key_size;
-+	hrec->key_offset = key_offset;
- 	hrec->record = btf_record_dup(map->record);
- 	if (IS_ERR(hrec->record)) {
- 		err = PTR_ERR(hrec->record);
-@@ -622,9 +631,9 @@ static int htab_map_check_btf(struct bpf_map *map, const struct btf *btf,
- 	 * populated in htab_map_alloc(), so it will always appear as NULL.
- 	 */
- 	if (htab_is_percpu(htab))
--		return bpf_ma_set_dtor(map, &htab->pcpu_ma, htab_pcpu_mem_dtor);
-+		return bpf_ma_set_dtor(map, &htab->pcpu_ma, htab_pcpu_mem_dtor, htab->key_offset);
- 	else
--		return bpf_ma_set_dtor(map, &htab->ma, htab_mem_dtor);
-+		return bpf_ma_set_dtor(map, &htab->ma, htab_mem_dtor, htab->key_offset);
- }
- 
- static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
-@@ -671,9 +680,13 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
- 	if (htab_is_lru(htab))
- 		htab->key_offset = sizeof(struct htab_elem_lru);
- 	else if (percpu && !prealloc)
--		htab->key_offset = sizeof(struct htab_elem_pcpu);
-+		htab->key_offset = round_up(htab_has_hash(htab) ?
-+					    sizeof(struct htab_elem_pcpu) :
-+					    offsetof(struct htab_elem_pcpu, hash), 8);
- 	else
--		htab->key_offset = sizeof(struct htab_elem);
-+		htab->key_offset = round_up(htab_has_hash(htab) ?
-+					    sizeof(struct htab_elem) :
-+					    offsetof(struct htab_elem, hash), 8);
- 
- 	htab->elem_size = htab->key_offset + round_up(htab->map.key_size, 8);
- 	if (percpu)
-@@ -791,7 +804,7 @@ static struct htab_elem *lookup_elem_raw(struct bpf_htab *htab,
- 	struct htab_elem *l;
- 
- 	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
--		if (htab_elem_hash(htab, l) == hash &&
-+		if ((!htab_has_hash(htab) || htab_elem_hash(htab, l) == hash) &&
- 		    !memcmp(htab_elem_key(htab, l), key, key_size))
- 			return l;
- 
-@@ -812,7 +825,7 @@ static struct htab_elem *lookup_nulls_elem_raw(struct bpf_htab *htab,
- 
- again:
- 	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
--		if (htab_elem_hash(htab, l) == hash &&
-+		if ((!htab_has_hash(htab) || htab_elem_hash(htab, l) == hash) &&
- 		    !memcmp(htab_elem_key(htab, l), key, key_size))
- 			return l;
- 
-@@ -3219,7 +3232,7 @@ static int rhtab_map_check_btf(struct bpf_map *map, const struct btf *btf,
- {
- 	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
- 
--	return bpf_ma_set_dtor(map, &rhtab->ma, rhtab_mem_dtor);
-+	return bpf_ma_set_dtor(map, &rhtab->ma, rhtab_mem_dtor, offsetof(struct rhtab_elem, data));
- }
- 
- static void rhtab_map_free_internal_structs(struct bpf_map *map)
-diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-index 373c8d17ea55..6bd4cb68c20c 100644
---- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-+++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-@@ -114,7 +114,7 @@ static inline int check_hash(void)
- 	VERIFY(check_default_noinline(&hash->map, map));
- 
- 	VERIFY(hash->n_buckets == MAX_ENTRIES);
--	VERIFY(hash->elem_size == 64);
-+	VERIFY(hash->elem_size == 32);
- 
- 	VERIFY(hash->count.counter == 0);
- 	VERIFY(bpf_map_sum_elem_count(map) == 0);
--- 
-2.55.0.229.g6434b31f56-goog
-
+SGTM, I'll leave it up to Lorenzo. I had this TODAY vs TOMORROW summary,
+we can expand on that with UNNECESSARY+csum_level plus maybe more
+details on the shape of kfuncs for TOMORROW section..
