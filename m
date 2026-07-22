@@ -1,199 +1,262 @@
-Received: from mail-pz2-f0.google.com (mail-pz2-f0.google.com [74.125.228.0])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD602345EA1
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 18:27:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.0
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784744860; cv=none; b=Eb6IKSUMwh90+imxb/ecPN6sY/I7A2aNLcaVAoM4qFpMqDxFaE1tosvXA6eLojsEJLNIdTFW8MjOvIwuu04udn6AzPiB9tJCHyy39RreDBQ2MfdvfNqCJ5I/SSbrcADmK9iH6ZNMK54mF2Dw3iOo/VcDHiM5jP/DlGhmCYpmdUI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784744860; c=relaxed/simple;
-	bh=qu8L4Z0Qjy010uI9XNszwHCG69kbR0jceUP/NQxbomk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qNytYRRzU6SVazXLepK8s/caRgf1egP+CkmzSvzMdymEu4PQrWpe60tMxpEoeS48w5fvGZdQtA942GYrVDFoIbY/oINcVw44tCWwgGbBHEwnMjdEgYLkMHc5dch07taUV3VS7E+rIsGJE1+PsMn0QoFpjsSX66zWNsn297E04v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k/q+Ht0L; arc=none smtp.client-ip=74.125.228.0
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4AA442B1B
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 18:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784744998; cv=pass; b=bUP/TfcGmQOe4NwFVBxupICtD2dTP3X3zIGDTTF7BDmKmUTc+mXMhB/lzwigt9cL9te7DdM9638BgNWUPpii0E7vczN4XHykx5mhLn3FkJllV7mYmkovI53fcq1HfDRphQxkm8qVc4GNwso9B4ue7l4SbizLNzAe+6Yeuu5IQtU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784744998; c=relaxed/simple;
+	bh=/l71NXez5IBHg2o5uvalxHKgKhdxiODPMlFk8RG5G6M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UM/3ekRqRt0qgV+LhhxOOSo5FyxNZcU0AG15Z9p3UxCAjDogEpPBL30M0rCNhvo9iZSP7CtZCZDqcenNym6qWjjoMmBjfC0NpUYZ8j+03678FFbXDwbTP+dZWFssYFdS6jfC/Pwg0TnDovTA26SrIZt2zfqE2cb5jW8IWI1Xh20=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qLv9dXbu; arc=pass smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/q+Ht0L"
-Received: by mail-pz2-f0.google.com with SMTP id 41be03b00d2f7-c888c001628so7896366a12.0
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 11:27:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qLv9dXbu"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cede6375caso7825ad.0
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 11:29:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784744996; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ULYzbSKcy8zSO4JwT4RIidcEtGQBfImeVAZ86gqJJV8ob+T+47j2pS4gAe6H5GBQwb
+         t1zzs3BMetSFBiVRJGk7AXt/UB3oL+aXtrS7B/ecEQu9OCqvCPGIgtXWLbUOBAVy62Ui
+         wQKsLOV0UlBTfVRKVsahfmlkQYAJu/s4EEmOyrWRKgi41zjMpPaFE1G8WStHZ9TZjoFK
+         /oM33VcRSnK4Mu3E2SGxlCNClPIiDhnWoG9hhvAilc3Wwl/EZXpV+6OW70eVojrfZGg9
+         iU3wHBIKJCy6gXud89abMShlhmQDp3dCO4TBYzg0EB64CfMgZoCySb5o6S4uJpXEWQiv
+         6XNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=EFjIw+YHhZOGu9EHRZwkadgAAA6y6Xc2ZzPm9AMLH64=;
+        fh=+E0+s+6mVGv414kJG3yHjNOcn3j9c2b+vbn7Wz8c8Gg=;
+        b=SU7CoOqouFOzJHEdrg44j8S3MiGzAXVgMkAvcw7rmrbls6R5vBil51XeyQsxk3TLxV
+         9y0aqi8KTN23PsLKNeTJ79Mt09raV71Q4uF2MLgp70DnfjBZ0JxK9j7ESmRn7mUr/WPX
+         8TU1xO3aTVS8kilZx3Y25DsuXWFtxzksHny5+8opGZ70AYgTebSAY2gJejvmqM/Crqel
+         jqBWyqw4e+B13A939labWpXQdykz2DzAXMqZpneUl82gYY8JXkXwf5s4WTkuddmCKJGr
+         PWJGQFS2Frmh+GHJJ7fnPbbtQQwa+zdhQ/j87qEIErXuj7DCORor822QhMANo+72+xoz
+         k7MA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784744858; x=1785349658; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=google.com; s=20251104; t=1784744996; x=1785349796; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=CbBKwHfKRVYGj68CsQiUTwpd2GkW2R3DspriFVDsZpw=;
-        b=k/q+Ht0LGaViH9T632hTCFfGav8kn/Y48n8Pv5hcepYTsi/4RiC3atrlQFqr7SC9i7
-         ZlgbhQfr1JSMKp7fRNcBSdAyNjaSKaOlhrkC8c3SIgKYlSOmfOaA+9ekv/JYiPMZAmzy
-         sT0a7CIv/S2LLyP0TUdnlmooeVR6uhwjU/246TgNyMr+8f49DXK/PX2LO92YKfx6iF9O
-         VwduyT+vYX8IOI7ZEhnDtLogHF6yIeVEGjypM7v3a8i/vZqz7CwUBycb3uUU9Ho9inUT
-         Ly/ZnoL1Ym6R4ErEdJNbbKb9iVSljaTUEqJ+6nIwxCautnU7J9lvo44TcyMJA28EwpT0
-         IJtg==
+        bh=EFjIw+YHhZOGu9EHRZwkadgAAA6y6Xc2ZzPm9AMLH64=;
+        b=qLv9dXbuiZs4OgRQjTHMs60lWeLrqtl8W0Kj3quzkzcueC5owi6iTnLsPCTpDf8jlT
+         HOcrs1ggqQmLOIALs+r9cgKfuzzb6c95qD44Akl0V+d6/9vvsDn3sGZgFpbhCQMm4zGo
+         luw2bl3TGlHYoGDtHCX0zI2vzHQa8OJwytkMUW6hfb08+ULpZh/WOGkmNs4VphUMtWTQ
+         BgujSYZgalBUWPkOnSh6Tz1GkFkLY16XzQAQkBhELvzG762l2YukaAheyWPCZZaS/n5+
+         6B8LFpllAD4MLAq5dgUkJDydxwudYLyM5Ho8Ie0rAet2K9uS0OM4lnPDJDQTypQ9Q8Qz
+         lsmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784744858; x=1785349658;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1784744996; x=1785349796;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CbBKwHfKRVYGj68CsQiUTwpd2GkW2R3DspriFVDsZpw=;
-        b=fLYimVlEEB3qojyeMx2+dYEwaaDmYeNh0eNOzlWwXVOYG8mJsWAfXi4JVjLc9JxkP+
-         L7UJJHVcic+wDaTZ5ZFTOUw2CFFVkSol3HHXSaO82rmjvzN1i7FyqBbubDOMjGwwG8dq
-         ZRJkeT5ocR0iNnawVuYrNVUgg6ECYKJFkgRYpEW/iTWgNtgtjUV6FnEz8iQbuZ7pkKSX
-         kaIZCOQFSdgBfFlrYf869YY6bqF2nYC7sTHq0EUseE+2pu6xocU5rP8vX5Fzweqqx8QQ
-         J6k29E40+JLzY90L6O0UKbstantsWLW/by//PHCSjPx7jv/DClNFZK18ekdQ/2Ql1Di7
-         6bwA==
-X-Gm-Message-State: AOJu0Yxhwb65oCxkvbyz9gm5tIvVgLrdRsShjhCp6Bn1ymsVdiBQFEAU
-	U0gJW4sCryGLlc+YmfIlnp2vt6qFol+OdBNARjS7h5VqNNmWBf9tE+75
-X-Gm-Gg: AR+sD134c9sHy6YslmFvzjYVnXAVNhTCmJa5MLi5DUPZDT/s2jie1jqoQ9RQ1AlG3bl
-	vwAniaz/ycUt8AQHLq4dCiG1sALB7tqVED9ZD6MJVAafo3FZA/HglJlZ1S0gmA+8WYt6Yamk/Jp
-	aAW0h4MC6FFkt27jFXBl0FXsYcuJ6dFgB0hky5mvGNPGCgoTmMoyBNrMocWkVVIzviMEZ11yjly
-	wHv/djOGQdodJTBb1aoY6fu4I0TQ4DsVrUH5gADFmfTFKDS8KOV2WpLdSx9tnTMGH6QE69FFVrO
-	oJ/dAWefPDnqbj+bMl2CLHrtp8qQlRnzTNZqI1Mc+J8r/niweBs8WS8m+WMxkqFfnsAnizn2xhJ
-	SNsu1hyp8Kx/j0ZHPb5fh4BPvajP2J8Qoob/GJ73IstXoKLb9+8VivTFnwK5qOn9Jqx0S/Jk=
-X-Received: by 2002:a05:6a00:80b:b0:847:8504:9946 with SMTP id d2e1a72fcca58-84e2b8aa7femr41883b3a.25.1784744858012;
-        Wed, 22 Jul 2026 11:27:38 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4c::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17604d76sm1678369b3a.61.2026.07.22.11.27.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 11:27:36 -0700 (PDT)
-Date: Wed, 22 Jul 2026 11:27:32 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Mahe Tardy <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
-	edumazet@google.com, john.fastabend@gmail.com, kuba@kernel.org, liamwisehart@meta.com, 
-	martin.lau@linux.dev, pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org, 
-	ameryhung@gmail.com, kuniyu@google.com
-Subject: Re: [PATCH bpf-next v2 2/5] bpf: Add ksock kfuncs
-Message-ID: <amELAv1bgc9DP6WT@devvm7509.cco0.facebook.com>
-References: <20260722104454.165911-1-mahe.tardy@gmail.com>
- <20260722104454.165911-3-mahe.tardy@gmail.com>
+        bh=EFjIw+YHhZOGu9EHRZwkadgAAA6y6Xc2ZzPm9AMLH64=;
+        b=AJ7h6a6r4IMYRFYzk8p1NpffBS0PcLHBEs63l8slBcFMeKygAhRzBfzGoF1GBEnErb
+         BRnx4KdpTK9SEm1uEFfjhwiniKCIZ2hMtKT1z9CLjnAvko5+COHY1I0wIsSX6CtoRWvH
+         jvQjzWV68CUEGQNSxwPsB2oXELy1zRRDWfCNFdtbUXvIfnmx2SZ+vex3fRgIQUyKHwr/
+         fHz6oyCrDSac3rGpcR8P8G8s3pAoqAX5560qGPGEr/rq7NpILjk0EWx7ZqU5tjZSacxf
+         cIeu3rlil98joJn+ofshn+1FHm7Q8WviYOMFnTxZluckiHYWiD2PohcVPgJ3XZJik+B+
+         CwSQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrGc83QKb/d1zf1vfjrt4wtVrELL1xyudm8xbLx07hEh4zK6roZCh7GBJV+ZGs226aN5Lg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/BgyV6PGrDihO5lWiAFAQBiStYHd2aixstm7eI098BDGRYTY2
+	zXQw1/51QP92yhk5K7sHwIBcsunaJffIPvfwR4F3ZKdAzfWqXBZlsPA4e6rGP9osYK6lgoUj32/
+	o+Lxze9t+hxU29JVPkY/FXkdGtWdETY1ZhGNLkCI07QuI4drJSjmxg58N
+X-Gm-Gg: AR+sD13rFTt+eykAwND5FI3fnI1sIcsVTm6+MlfVgr3FvzA2Xq3pP2KATSry0F3FaUX
+	MH1FoQp9VrLTM0k+hvbz/BYUFw52gqQDrikApla8B1ZZIeBIr4z/5NgdTLGoT6TPoDcuIiAsdVv
+	ErZTnorJ/SNsufOT/euTi7UNL8t/K8Q3pGq2EcnHsqGxp0HYndiA9baAwAmyqbpTPBO9LrF3wY+
+	NHcN/RkP+g4l10ofLVhbhRXPKiI0SF4zMw4hLVHUp9M7OmByhC2d3V6ISQbCELegZvj27pB7pb/
+	LHVjWBPsFHhNF8kx
+X-Received: by 2002:a17:902:f60e:b0:2c1:ee6e:4e49 with SMTP id
+ d9443c01a7336-2cfa53828bcmr546965ad.26.1784744995317; Wed, 22 Jul 2026
+ 11:29:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260722104454.165911-3-mahe.tardy@gmail.com>
+References: <tencent_7DB01BE7F8FA056BB5F11D3570CF636C4309@qq.com> <tencent_8FE30FDFA32089B69BA3112E4A4C5E886D06@qq.com>
+In-Reply-To: <tencent_8FE30FDFA32089B69BA3112E4A4C5E886D06@qq.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 22 Jul 2026 11:29:42 -0700
+X-Gm-Features: AUfX_mzS7_PqfH6KstmDgOCBUlGwA2ixyTSez2IFSShyi5JJI7ari5NvR-MmgQI
+Message-ID: <CAHS8izPBvv4ENCcnSpsbcL9+TEMj9nBE6CAj4fg9_aDBdhrBaQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/2] net: atlantic: free stranded TX buffers on
+ ring deinit
+To: Yangyu Chen <cyy@cyyself.name>
+Cc: Sukhdeep Singh <sukhdeeps@marvell.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Richard Cochran <richardcochran@gmail.com>, 
+	Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 07/22, Mahe Tardy wrote:
-> Add BPF kfuncs that allow BPF LSM programs to create and use sockets for
-> sending data. This provides a mechanism for BPF programs to emit
-> telemetry. For this first patch set, it's restricted to SOCK_DGRAM
-> socket types with IPPROTO_UDP protocol but could be easily extended to
-> SOCK_STREAM and IPPROTO_TCP in the future.
-> 
-> The API consists of five kfuncs:
-> 
->   bpf_ksock_create()   - Create a socket (sleepable)
->   bpf_ksock_connect()  - Connect socket to remote address (sleepable)
->   bpf_ksock_send()     - Send data through the socket (sleepable)
->   bpf_ksock_acquire()  - Acquire a reference to a socket context
->   bpf_ksock_release()  - Release a reference (cleanup via
->                          queue_rcu_work since sock_release sleeps)
-> 
-> The setup kfuncs bpf_ksock_create, bpf_ksock_connect, can be called from
-> SYSCALL programs only. While bpf_ksock_acquire, bpf_ksock_release and
-> bpf_ksock_send can be called from SYSCALL and LSM programs.
-> 
-> The implementation follows the established kfunc lifecycle pattern
-> (create/acquire/release with refcounting, kptr map storage, dtor
-> registration). The kernel socket is wrapped in a refcounted bpf_ksock
-> struct. Cleanup is deferred via queue_rcu_work() because sock_release()
-> may sleep.
-> 
-> The kfuncs are only compiled when CONFIG_INET is enabled, as they
-> specifically support AF_INET and AF_INET6 sockets.
-> 
-> The socket operations go through the expected LSM hooks instead of
-> by-passing them like many kernel sockets since those are created by BPF
-> programs and thus system users. Thus bpf_ksock_send() kfunc, which is
-> exposed to LSM progs, has a re-entering protection to avoid recursion.
-> Also, because of the LSM checks, we prevent the use of the kfuncs from
-> asynchronous workqueue as the current value would then be invalid.
-> 
-> In bpf_ksock_create(), we copy the arg values to avoid TOCTOU races
-> since the kfunc can sleep and the arg values could be stored in a map
-> that could be re-written by BPF progs or even userspace programs if the
-> map is mmaped.
-> 
-> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+On Thu, Jul 9, 2026 at 10:41=E2=80=AFAM Yangyu Chen <cyy@cyyself.name> wrot=
+e:
+>
+> aq_vec_deinit() drains the TX rings with a single aq_ring_tx_clean()
+> call, which frees at most AQ_CFG_TX_CLEAN_BUDGET (256) descriptors and
+> stops at hw_head, which no longer moves once aq_vec_stop() has stopped
+> the hardware and NAPI. Completed descriptors beyond the budget and
+> everything still posted in [hw_head, sw_tail) keep their skb or
+> xdp_frame when the interface goes down: aq_vec_ring_free() then frees
+> the buffer ring and the references are lost for good.
+>
+> Today this is a silent memory leak on every interface down under
+> TX/XDP_TX load. With the following conversion of the RX path to
+> page_pool it becomes much more visible: XDP_TX frames carry fragment
+> references on the RX ring's page_pool, so a single stranded frame
+> keeps the pool's inflight count above zero forever. page_pool_destroy()
+> then never completes, the pool is leaked together with its pages, and
+> "page_pool_release_retry() stalled pool shutdown" is warned every 60
+> seconds from that point on, on every ifdown, XDP detach or ring resize
+> under XDP_TX load.
+>
+> Bring back aq_ring_tx_deinit() as it was before the removal and use it
+> for teardown again, with one extension: TX rings can hold xdp_frames
+> nowadays, so release those too. They are returned with
+> xdp_return_frame() since this runs in process context.
+>
+> Fixes: eb36bedf28be ("net: aquantia: remove function aq_ring_tx_deinit")
+> Assisted-by: Claude:claude-fable-5
+> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+
+Looks fine as far as I can tell, but don't you want this sent to net as a f=
+ix?
+
 > ---
->  include/linux/bpf_ksock.h |  46 +++++
->  include/linux/sched.h     |   4 +
->  kernel/bpf/verifier.c     |   3 +
->  net/core/Makefile         |   3 +
->  net/core/bpf_ksock.c      | 361 ++++++++++++++++++++++++++++++++++++++
->  5 files changed, 417 insertions(+)
->  create mode 100644 include/linux/bpf_ksock.h
->  create mode 100644 net/core/bpf_ksock.c
-> 
-> diff --git a/include/linux/bpf_ksock.h b/include/linux/bpf_ksock.h
-> new file mode 100644
-> index 000000000000..a2e06e3d604d
-> --- /dev/null
-> +++ b/include/linux/bpf_ksock.h
-> @@ -0,0 +1,46 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/* Copyright (c) 2026 Isovalent */
+>
+> Notes:
+>     Without this fix, converting the RX path to page_pool (next patch)
+>     turns the stranded XDP_TX frames into leaked page_pool fragments, so
+>     page_pool_destroy() can never drain and the shutdown stalls forever.
+>
+>     Reproduced on an AQC100 with this patch dropped from the series (i.e.
+>     page_pool applied without the tx-deinit fix):
+>
+>       # reflect received frames back out through XDP_TX
+>       xdp-bench tx enp99s0                    # or any trivial XDP_TX pro=
+g
+>       # from a peer on the same link, flood RX so frames are in flight, t=
+hen
+>       ip link set enp99s0 down
+>
+>     The pool is destroyed with frames still stranded on the TX ring, and
+>     page_pool_release_retry() warns every 60s with the same id and inflig=
+ht
+>     count and a growing age, indefinitely:
+>
+>       [161110.753385] page_pool_release_retry() stalled pool shutdown: id=
+ 361, 12 inflight 60 sec
+>       [161171.170756] page_pool_release_retry() stalled pool shutdown: id=
+ 361, 12 inflight 120 sec
+>       [161231.588685] page_pool_release_retry() stalled pool shutdown: id=
+ 361, 12 inflight 181 sec
+>       [161292.005886] page_pool_release_retry() stalled pool shutdown: id=
+ 361, 12 inflight 241 sec
+>
+>     With this patch the stranded buffers are freed at deinit, inflight
+>     drops to zero and the pool drains cleanly.
+>
+>  .../net/ethernet/aquantia/atlantic/aq_ring.c  | 30 +++++++++++++++++++
+>  .../net/ethernet/aquantia/atlantic/aq_ring.h  |  1 +
+>  .../net/ethernet/aquantia/atlantic/aq_vec.c   |  2 +-
+>  3 files changed, 32 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/n=
+et/ethernet/aquantia/atlantic/aq_ring.c
+> index 8ff07de2bd52..c59b6c0b37f1 100644
+> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+> @@ -360,6 +360,36 @@ bool aq_ring_tx_clean(struct aq_ring_s *self)
+>         return !!budget;
+>  }
+>
+> +void aq_ring_tx_deinit(struct aq_ring_s *self)
+> +{
+> +       if (!self)
+> +               goto err_exit;
+
+return; here and delete label?
+
 > +
-> +#ifndef _BPF_KSOCK_H
-> +#define _BPF_KSOCK_H
+> +       for (; self->sw_head !=3D self->sw_tail;
+> +               self->sw_head =3D aq_ring_next_dx(self, self->sw_head)) {
+> +               struct aq_ring_buff_s *buff =3D &self->buff_ring[self->sw=
+_head];
+> +               struct device *ndev =3D aq_nic_get_dev(self->aq_nic);
 > +
-> +#include <linux/types.h>
+> +               if (likely(buff->is_mapped)) {
+> +                       if (unlikely(buff->is_sop)) {
+> +                               dma_unmap_single(ndev, buff->pa, buff->le=
+n,
+> +                                                DMA_TO_DEVICE);
+> +                       } else {
+> +                               dma_unmap_page(ndev, buff->pa, buff->len,
+> +                                              DMA_TO_DEVICE);
+> +                       }
+
+I would remove the unlikelys that seem unnecassry to me. This is a
+reconfig path and the unlikely is probably not improving perf.
+
+> +               }
 > +
-
-[..]
-
-> +/**
-> + * struct bpf_ksock_create_opts - BPF kernel socket creation parameters
-> + * @family:	Address family: AF_INET or AF_INET6.
-> + * @type:	Socket type: only SOCK_DGRAM supported for now.
-> + * @protocol:	Protocol number (e.g. IPPROTO_UDP), or 0 for the default protocol
-> + *		of the given type.
-> + * @reserved:	Must be zero. Reserved for future use.
-> + */
-> +struct bpf_ksock_create_opts {
-> +	__u8 family;
-> +	__u8 type;
-> +	__u8 protocol;
-> +	__u8 reserved;
-> +};
+> +               if (unlikely(buff->is_eop)) {
+> +                       if (buff->skb)
+> +                               dev_kfree_skb_any(buff->skb);
+> +                       else if (buff->xdpf)
+> +                               xdp_return_frame(buff->xdpf);
+> +               }
+> +       }
+> +err_exit:;
+> +}
 > +
-> +/**
-> + * struct bpf_ksock_addr_opts - BPF kernel socket address parameters
-> + * @family:	Address family: AF_INET or AF_INET6.
-> + * @reserved:	Must be zero. Reserved for future use.
-> + * @port:	Port in host byte order.
-> + * @scope_id:	IPv6 scope ID for scoped AF_INET6 addresses, or zero.
-> + *		Must be zero when family=AF_INET.
-> + * @ipv4_addr:	IPv4 address in network byte order. Used when family=AF_INET.
-> + * @ipv6_addr:	IPv6 address (16 bytes, network byte order). Used when family=AF_INET6.
-> + */
-> +struct bpf_ksock_addr_opts {
-> +	__u8 family;
-> +	__u8 reserved;
-> +	__u16 port;
-> +	__u32 scope_id;
-> +
-> +	union {
-> +		__be32 ipv4_addr;
-> +		__u32 ipv6_addr[4]; /* in6_addr; network order */
-> +	};
-> +};
+>  static void aq_rx_checksum(struct aq_ring_s *self,
+>                            struct aq_ring_buff_s *buff,
+>                            struct sk_buff *skb)
+> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h b/drivers/n=
+et/ethernet/aquantia/atlantic/aq_ring.h
+> index a70b880ada67..6431cc62962f 100644
+> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
+> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
+> @@ -202,6 +202,7 @@ void aq_ring_update_queue_state(struct aq_ring_s *rin=
+g);
+>  void aq_ring_queue_wake(struct aq_ring_s *ring);
+>  void aq_ring_queue_stop(struct aq_ring_s *ring);
+>  bool aq_ring_tx_clean(struct aq_ring_s *self);
+> +void aq_ring_tx_deinit(struct aq_ring_s *self);
+>  int aq_xdp_xmit(struct net_device *dev, int num_frames,
+>                 struct xdp_frame **frames, u32 flags);
+>  int aq_ring_rx_clean(struct aq_ring_s *self,
+> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_vec.c b/drivers/ne=
+t/ethernet/aquantia/atlantic/aq_vec.c
+> index 2f9033ceed8c..05814fea0f5f 100644
+> --- a/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
+> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
+> @@ -275,7 +275,7 @@ void aq_vec_deinit(struct aq_vec_s *self)
+>
+>         for (i =3D 0U; self->tx_rings > i; ++i) {
+>                 ring =3D self->ring[i];
+> -               aq_ring_tx_clean(&ring[AQ_VEC_TX_ID]);
+> +               aq_ring_tx_deinit(&ring[AQ_VEC_TX_ID]);
+>                 aq_ring_rx_deinit(&ring[AQ_VEC_RX_ID]);
+>         }
+>
+> --
+> 2.47.3
+>
+>
 
-Do you add these because of BTF type checking? Can we have something a bit
-more orthodox like:
 
-union bpf_sockaddr {
-	struct sockaddr_in sin;
-	struct sockaddr_in6 sin6;
-};
-
-?
-
-I hope we can just pass these to sock_create and make it do all the input
-checking..
+--=20
+Thanks,
+Mina
