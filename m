@@ -1,150 +1,193 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C1336DA03
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 15:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB67445DF44;
+	Wed, 22 Jul 2026 15:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784733608; cv=none; b=qQD9lx0aUnesX0PLTjmgNTRVUmcWAVPsF0J+p0EZ2WgI885ueYgiBr0dChwpxs57uy+2ie3BJu1ChRc4kMyQeXbQFo/bUEmd2c2X8bb2bjJi/aLnCquqI+oKFDY2/sU5qcwuZSHoLqCfsF9jQUHMWWe4St7OpqBJaT0PX3QuXwY=
+	t=1784734131; cv=none; b=V3LLdkkfLQk3Kn8WDV0hHH2p3peYJhU+pfxs5u7fmFoMX4zzC6oC7o3NZ5FhPhvw3z1j17UG5Xdr0xmkUkD0mWe3mrxHlmwtWfu0VPjW+rgpgyr+bev/bKcAyy2TtSQNiJC736ZfuP3yOYcu5MJ+PzUZ9CyNfY3q8ObTtJTaZrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784733608; c=relaxed/simple;
-	bh=AUK1CkpWB3YJ6nNShoGFre6CvyeNBldHZzibhJ/Kzeg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LFI2jf4ZChphuH11SBXzSgP5Tgfh1jHnXsXs59962WA2TqRnmB2+y6SW9WnrX//xohbLKyZVeoGbtdpdL3B0dQWAOmFX6dGYz4PDinySfK2Q39t5VIq9v4MLnJG1ODQAtAgD79w8B/eWpuuEXrwNDzf/CfsJk8y/cmhrYdGI9ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I4iVSPb+; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784734131; c=relaxed/simple;
+	bh=T7qNbWNMCW+XnZ3bHIKMzFZeRbjfJifnJdxVxkDn+7M=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=S7YdygNGjCyKN0IJDacxpbyOIvX7BNAo8BsDSisqdHfiQenuRlBOmS4T8kQcuAKoYVn+Pr9kksb2PcCdwkSJdTg+lRqXGK7bsSLEgLaRiaZleJ6bAdLVQJW1NyPi5B9DfOc3iNmm8ehTqnsXEzky6zMpjlIBXP2i0S+u7oyNNVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AuW6CU/P; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I4iVSPb+"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784733600;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bFhLnlSq59bbqBUiEsR5Lhpwh+Img+fmsgmvB5qeBwE=;
-	b=I4iVSPb+soza6UkOzJZmzaLTqG5jkBczDdixfC/oNqLiS7N2yZfnRpTEOMxtjRfkgMePAU
-	3k0G5dyoDgbZw9mb1bGlVuoodtecHvBFXovPq3qTmI6AHSAzt03Jhex6jnzLKMmknBAM7p
-	Y3EHFDpQAKEuTy+rCjv9EMYYQjpRZNI=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jingguo Tan <tanjingguo@huawei.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Lin Ma <malin89@huawei.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Verify no warning when close fexit link
-Date: Wed, 22 Jul 2026 23:19:09 +0800
-Message-ID: <20260722151909.69142-3-leon.hwang@linux.dev>
-In-Reply-To: <20260722151909.69142-1-leon.hwang@linux.dev>
-References: <20260722151909.69142-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AuW6CU/P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7234E1F000E9;
+	Wed, 22 Jul 2026 15:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784734119;
+	bh=LAPSEeqODkSr8MHh7/rXtwJjk2BELc7XRJ901+kQ/zI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=AuW6CU/Pl8pOWp+6+XFCEhtEbQ56YsHdLLuakoq0hh9/EUVfwsFgDfepe7lSYzfd6
+	 P0QQd4qLpOfvVLE4fjnVTgRsAMvmnql9p6b8kS3wJYqDsvCBW2T47GZQbXIUBGwgRy
+	 nQ77eVZeoyvGOgaLgPsDjHleEgqLc91AzD+40HI31AjoKTGrcZhGsNd3U+wMvYXZB6
+	 ibgYVZ121LCIMDQt7drSHK3lJlxUQi++TS+zKTn9nxZ6GuItakU1oN8VLUZbsEe11b
+	 aPCbSaJI5IeGqdPwqN/ysQjy6uTpnPSYwtwJ06Zcm2+24zy+FDgm1yRs96jeTpA19g
+	 Gl4xy2XhA/ehg==
+Content-Type: multipart/mixed; boundary="===============5638868986840667114=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <1ad4363fcdd7bb7d9d11d831b450ef21753560486b90e90c7a9b93936677843c@mail.kernel.org>
+In-Reply-To: <20260722140015.1982158-6-varunrmallya@gmail.com>
+References: <20260722140015.1982158-6-varunrmallya@gmail.com>
+Subject: Re: [PATCH bpf-next v3 5/6] riscv, bpf: Add support for BPF exceptions
+From: bot+bpf-ci@kernel.org
+To: varunrmallya@gmail.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,bjorn@kernel.org,pulehui@huawei.com
+Cc: alex@ghiti.fr,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,puranjay@kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,varunrmallya@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 22 Jul 2026 15:28:37 +0000 (UTC)
 
-Add a test to verify that there's no WARNING when detaching fexit link by
-following the repro steps of previous commit.
+--===============5638868986840667114==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Without the fix, the WARNING could be triggered by this test.
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index b804382075c40..e0c2f73bc646a 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -56,6 +56,29 @@ static const int pt_regmap[] = {
+>  	[RV_REG_T0] = offsetof(struct pt_regs, t0),
+>  };
+>
+> +/* Full set of RISC-V callee-saved GP registers (ra, s0-s11) saved by a program
+> + * acting as an exception boundary, in the order they are stored on the stack.
+     ^^
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+This isn't a bug, but Bjorn Topel requested netdev-style multi-line
+comments in v2. Should the opening /* be on the same line as the first
+text instead of on its own line?
+
+> + * RA and FP come first so the saved ra/fp pair forms a valid stackframe record
+> + * at [FP-8]/[FP-16] for the unwinder. The exception callback reuses the
+> + * boundary program's frame and restores this same set in its epilogue, so both
+> + * paths must agree on the contents and ordering of this list.
+> + */
+> +static const int rv_exception_csave_regs[] = {
+> +	RV_REG_RA,
+> +	RV_REG_FP,
+> +	RV_REG_S1,
+> +	RV_REG_S2,
+> +	RV_REG_S3,
+> +	RV_REG_S4,
+> +	RV_REG_S5,
+> +	RV_REG_S6,
+> +	RV_REG_S7,
+> +	RV_REG_S8,
+> +	RV_REG_S9,
+> +	RV_REG_S10,
+> +	RV_REG_S11,
+> +};
+
+[ ... ]
+
+> @@ -312,11 +335,67 @@ static void emit_normal_restore(struct rv_jit_context *ctx, int stack_adjust)
+>  	emit_ld(RV_REG_TCC, ctx->tcc_offset, RV_REG_SP, ctx);
+>  }
+>
+> +static bool is_exception_prog(const struct bpf_prog *prog)
+> +{
+> +	return prog->aux->exception_boundary || prog->aux->exception_cb;
+> +}
+> +
+> +static void emit_exception_boundary_prologue(struct rv_jit_context *ctx,
+> +					     int stack_adjust)
+> +{
+> +	int store_offset = stack_adjust - 8;
+> +	int i;
+> +
+> +	emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
+> +	for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
+> +		emit_sd(RV_REG_SP, store_offset, rv_exception_csave_regs[i], ctx);
+> +		store_offset -= 8;
+> +	}
+> +
+> +	/* store TCC from RV_REG_TCC to stack */
+> +	emit_sd(RV_REG_SP, store_offset, RV_REG_TCC, ctx);
+> +	ctx->tcc_offset = store_offset;
+> +
+> +	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+> +}
+> +
+> +/* reuses the boundary program's frame, whose frame pointer
+> + * is passed in a2 (since it's the third argument from bpf_throw()).
+     ^^
+
+Same comment style here - should this also follow netdev style?
+
+> + * Setting SP = FP - stack_adjust lines the epilogue's loads up with
+> + * the registers the boundary saved.
+> + */
+> +static void emit_exception_cb_prologue(struct rv_jit_context *ctx,
+> +				       int stack_adjust)
+> +{
+> +	emit_mv(RV_REG_FP, RV_REG_A2, ctx);
+> +	emit_addi(RV_REG_SP, RV_REG_FP, -stack_adjust, ctx);
+> +	ctx->tcc_offset = stack_adjust - 8 - ARRAY_SIZE(rv_exception_csave_regs) * 8;
+> +}
+> +
+> +/* Used by both the boundary program and the exception callback alike, since the
+> + * callback runs on the boundary's frame.
+     ^^
+
+And here as well.
+
+> + */
+> +static void emit_exception_restore(struct rv_jit_context *ctx, int stack_adjust)
+> +{
+> +	int store_offset = stack_adjust - 8;
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
+> +		emit_ld(rv_exception_csave_regs[i], store_offset, RV_REG_SP, ctx);
+> +		store_offset -= 8;
+> +	}
+> +	/* restore TCC from stack to RV_REG_TCC */
+> +	emit_ld(RV_REG_TCC, ctx->tcc_offset, RV_REG_SP, ctx);
+> +}
+> +
+>  static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+>  {
+>  	int stack_adjust = ctx->stack_size;
+>
+> -	emit_normal_restore(ctx, stack_adjust);
+> +	if (is_exception_prog(ctx->prog))
+> +		emit_exception_restore(ctx, stack_adjust);
+> +	else
+> +		emit_normal_restore(ctx, stack_adjust);
+>
+>  	emit_addi(RV_REG_SP, RV_REG_SP, stack_adjust, ctx);
+>  	/* Set return value. */
+
+[ ... ]
+
+> @@ -2183,3 +2280,12 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+>  {
+>  	return true;
+>  }
+> +
+> +bool bpf_jit_supports_exceptions(void)
+> +{
+> +	/* bpf_throw() unwinds by walking the frame-pointer chain from inside
+> +	 * the kernel back into the BPF frames (see arch_bpf_stack_walk()), so
+         ^^
+
+And one more multi-line comment here with the same style.
+
+> +	 * exceptions require the frame-pointer unwinder to be enabled.
+> +	 */
+> +	return IS_ENABLED(CONFIG_FRAME_POINTER);
+> +}
+
+
 ---
- .../selftests/bpf/prog_tests/tailcalls.c      | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-index c66037162da5..c5c9d6c359bb 100644
---- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -13,6 +13,8 @@
- #include "tailcall_cgrp_storage.skel.h"
- #include "tailcall_sleepable.skel.h"
- #include "tailcall_callback.skel.h"
-+#include "tailcall_bpf2bpf2.skel.h"
-+#include "tailcall_bpf2bpf_fexit.skel.h"
- 
- /* test_tailcall_1 checks basic functionality by patching multiple locations
-  * in a single program for a single tail call slot with nop->jmp, jmp->nop
-@@ -1907,6 +1909,50 @@ static void test_tailcall_callback(void)
- 	RUN_TESTS(tailcall_callback);
- }
- 
-+static void test_tailcall_bpf2bpf_fexit_links(void)
-+{
-+	struct tailcall_bpf2bpf_fexit *skel1 = NULL, *skel2 = NULL;
-+	struct tailcall_bpf2bpf2 *skel_tc;
-+	int err, prog_fd;
-+
-+	skel_tc = tailcall_bpf2bpf2__open_and_load();
-+	if (!ASSERT_OK_PTR(skel_tc, "tailcall_bpf2bpf2__open_and_load"))
-+		return;
-+
-+	skel1 = tailcall_bpf2bpf_fexit__open();
-+	if (!ASSERT_OK_PTR(skel1, "tailcall_bpf2bpf_fexit__open"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(skel_tc->progs.classifier_0);
-+	err = bpf_program__set_attach_target(skel1->progs.fexit, prog_fd, "subprog_tail");
-+	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
-+		goto out;
-+
-+	err = tailcall_bpf2bpf_fexit__load(skel1);
-+	if (!ASSERT_OK(err, "tailcall_bpf2bpf_fexit__load"))
-+		goto out;
-+
-+	skel1->links.fexit = bpf_program__attach_trace(skel1->progs.fexit);
-+	if (!ASSERT_OK_PTR(skel1->links.fexit, "bpf_program__attach_trace"))
-+		goto out;
-+
-+	skel2 = tailcall_bpf2bpf_fexit__open();
-+	if (!ASSERT_OK_PTR(skel2, "tailcall_bpf2bpf_fexit__open"))
-+		goto out;
-+
-+	err = bpf_program__set_attach_target(skel2->progs.fexit, prog_fd, "subprog_tail");
-+	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
-+		goto out;
-+
-+	err = tailcall_bpf2bpf_fexit__load(skel2);
-+	ASSERT_OK(err, "tailcall_bpf2bpf_fexit__load");
-+
-+out:
-+	tailcall_bpf2bpf_fexit__destroy(skel1);
-+	tailcall_bpf2bpf_fexit__destroy(skel2);
-+	tailcall_bpf2bpf2__destroy(skel_tc);
-+}
-+
- void test_tailcalls(void)
- {
- 	if (test__start_subtest("tailcall_1"))
-@@ -1974,4 +2020,6 @@ void test_tailcalls(void)
- 	if (test__start_subtest("tailcall_cgrp_storage_no_storage_bridge"))
- 		test_tailcall_cgrp_storage_no_storage_bridge();
- 	test_tailcall_callback();
-+	if (test__start_subtest("tailcall_bpf2bpf_fexit_links"))
-+		test_tailcall_bpf2bpf_fexit_links();
- }
--- 
-2.55.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29929750005
+--===============5638868986840667114==--
