@@ -1,168 +1,468 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0028C386C2A;
-	Wed, 22 Jul 2026 03:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9743793CC;
+	Wed, 22 Jul 2026 03:28:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=183.62.165.209
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784689900; cv=none; b=m9kC3HeRDkou/768XGI0+EO5iCA/p/4Vx+HPqcX6I2AWFFFTtXIyX1PEZoQ7eeSxULdclPriL8/KZZmbJhAnyOVcrwY8RE2Gu57Ad3QGhzvJpbp4534gXMUx628PTcWp+udiiRMGxwIJN9iaxJKSHS0Cw+o4m7GVah8JUs7WFh8=
+	t=1784690896; cv=none; b=oIEsspMN2echRSEHGGLz069eia2o/I9JbmRsQsrLs4ROxgAsxnc71xqPhAKKbOMuk1cHbLtYLXVYKD+KCj/COhWcGj0rNxH5pszZw1n86jwTBbEw7KzTfo70HgzNZgj4L5eDh6ITvXY1HUXKieWsQC29TH/JluHKhFJwwab4LC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784689900; c=relaxed/simple;
-	bh=Xf6hNoFp/RHCtjn9u+60i0YtJ+gsbkKW2Akw4bCm8G8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z1261GRKjUWpjTkwfPojNHPZ01t1g7taVL3KLAbtcaqWNIXz2YctzpyP9IykEND20hDYDCpdRevyLwG4D8cWpmkyzBX5wb59rOS4wMhn627WYCUY5k4QtBzRR1+dZ6P5wgGlj4ML3wijJkIdmBJJ1Z8OHBz5iycZHyEvhxt9E5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h4fQx3PB4zYQtmg;
-	Wed, 22 Jul 2026 11:11:05 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id CD35640561;
-	Wed, 22 Jul 2026 11:11:33 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgD3BnPkNGBqkTtqCA--.42292S2;
-	Wed, 22 Jul 2026 11:11:33 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jeff Garzik <jeff@garzik.org>,
-	Auke Kok <auke-jan.h.kok@intel.com>,
-	Breno Leitao <leitao@debian.org>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH net v3] e1000e: Fix out-of-bounds MMIO access by validating BAR0 size
-Date: Wed, 22 Jul 2026 03:16:03 +0000
-Message-Id: <20260722031603.1471127-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1784690896; c=relaxed/simple;
+	bh=jUnsJ8NJa4e/0bfAwLbalmOpr9lb/SgOdU4cK35BuFo=;
+	h=Message-ID:In-Reply-To:References:Date:Mime-Version:From:To:Cc:
+	 Subject:Content-Type; b=Kpi8OAWWw06H/mdgfNQX7+pLl0sTVffk4liOT0XQQkVtaWAVByfKsBsSZtbljZh1zEJioH1GTbxWRgpRohrvrEJ69g81HCHckkyz9MGIk5P/y2x1xMRuW0fWQVbnPh+Vuhsgcrp5PGHnaUXLSFnkGzjkl6yc+2RU7D9WOV4+blk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=183.62.165.209
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mxct.zte.com.cn (FangMail) with ESMTPS id 4h4fpW4Jhgz4xPSw;
+	Wed, 22 Jul 2026 11:28:03 +0800 (CST)
+Received: from xaxapp04.zte.com.cn ([10.99.98.157])
+	by mse-fl2.zte.com.cn with SMTP id 66M3RlRs026462;
+	Wed, 22 Jul 2026 11:27:47 +0800 (+08)
+	(envelope-from hu.shengming@zte.com.cn)
+Received: from mapi (xaxapp05[null])
+	by mapi (Zmail) with MAPI id mid32;
+	Wed, 22 Jul 2026 11:27:48 +0800 (CST)
+X-Zmail-TransId: 2afc6a6038b44fe-0aa85
+X-Mailer: Zmail v1.0
+Message-ID: <20260722112748588_IEr10bQdigv8c8bjw7Ck@zte.com.cn>
+In-Reply-To: <20260720-kfree_rcu_nolock-v4-1-964e03c41a4e@kernel.org>
+References: 20260720-kfree_rcu_nolock-v4-0-964e03c41a4e@kernel.org,20260720-kfree_rcu_nolock-v4-1-964e03c41a4e@kernel.org
+Date: Wed, 22 Jul 2026 11:27:48 +0800 (CST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgD3BnPkNGBqkTtqCA--.42292S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFyUtr1rZFWrGF4rKrWUXFb_yoWruFW3pa
-	y3Ga47ur4rJr17Xw48Ar4UWF98Cayjyay5Cry2gwsY9FyUGry8Jr17tFW3Gr47ZrWkJF9x
-	tryUZ34I9F4qyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-	6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-	xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-	8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFV
-	Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
-	x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
-	1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
-	JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-	sGvfC2KfnxnUUI43ZEXa7VUbGQ6JUUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Mime-Version: 1.0
+From: <hu.shengming@zte.com.cn>
+To: <harry@kernel.org>
+Cc: <vbabka@kernel.org>, <akpm@linux-foundation.org>, <hao.li@linux.dev>,
+        <cl@gentwo.org>, <rientjes@google.com>, <roman.gushchin@linux.dev>,
+        <ast@kernel.org>, <andrii@kernel.org>, <puranjay@kernel.org>,
+        <ameryhung@gmail.com>, <bigeasy@linutronix.de>, <clrkwllms@kernel.org>,
+        <rostedt@goodmis.org>, <paulmck@kernel.org>, <frederic@kernel.org>,
+        <neeraj.upadhyay@kernel.org>, <joelagnelf@nvidia.com>,
+        <josh@joshtriplett.org>, <boqun@kernel.org>, <urezki@gmail.com>,
+        <mathieu.desnoyers@efficios.com>, <jiangshanlai@gmail.com>,
+        <qiang.zhang@linux.dev>, <pfalcato@suse.de>, <surenb@google.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linux-rt-devel@lists.linux.dev>, <rcu@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <harry@kernel.org>
+Subject: =?UTF-8?B?UmU6IFtQQVRDSCBzbGFiL2Zvci1uZXh0IHY0IDEvOF0gbW0vc2xhYiwgc2x1Yl9rdW5pdDogcmVnaXN0ZXIga3Byb2JlIHRvIHRyaWdnZXIgX25vbG9jayBBUElz?=
+Content-Type: text/plain;
+	charset="UTF-8"
+X-MAIL:mse-fl2.zte.com.cn 66M3RlRs026462
+X-TLS: YES
+X-ENVELOPE-SENDER: hu.shengming@zte.com.cn
+X-SOURCE-IP: 10.5.228.133 unknown Wed, 22 Jul 2026 11:28:03 +0800
+X-CLEAN: YES
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6A6038C3.000/4h4fpW4Jhgz4xPSw
 
-From: Pu Lehui <pulehui@huawei.com>
+Harry wrote:
+> Since kmalloc_nolock() always fails in NMI and hardirq contexts on
+> PREEMPT_RT, slub_kunit cannot properly test _nolock() APIs.
+> 
+> Register a kprobe pre-handler to invoke kmalloc_nolock() and
+> kfree_nolock() in the middle of the slab allocator. However, do not
+> register the handler on UP kernels because that use case is not
+> well supported [1] in the kernel.
+> 
+> To attach the pre-handler while s->cpu_sheaves->lock or n->list_lock
+> is held, add a wrapper function for lockdep_assert_held() that calls
+> a no-op function slab_attach_kprobe_locked() on debug builds. The
+> function is optimized away when neither CONFIG_PROVE_LOCKING nor
+> CONFIG_DEBUG_VM is selected and register_kprobe() fails.
+> 
+> The function calls barrier() to prevent the compiler from optimizing
+> away its callsites. Otherwise, the compiler may consider the function
+> does not have any side effect and remove callsites.
+> 
+> Compared to using plain kprobe, this has two advantages: 1) it avoids
+> hardcoding function names in the test, and 2) it can trigger those APIs
+> in the middle of a function, where the lock is expected to be held as
+> annotated with lockdep.
+> 
+> While it was proposed [2] to use kunit function redirection to test
+> this, it is currently infeasible as some lock helpers don't have
+> symbols.
+> 
+> Factor out the nested loop that calls kmalloc and friends to
+> test_kmalloc_kfree(), and call them in
+> test_kmalloc_kfree_nolock_{perf,kprobe}(), each being an independent
+> test case. During the refactoring, drop alloc_fail handling as it
+> doesn't provide much benefits.
 
-Syzkaller reported a kernel panic caused by an out-of-bounds MMIO
-access in the e1000e driver.
+Nice test addition!
 
-[   82.868719][  T404] e1000e 0000:00:02.0: The NVM Checksum Is Not Valid
-[   82.872328][  T404] Unable to handle kernel paging request at virtual address ffff80008894e090
-[   83.085218][  T404] CPU: 2 UID: 0 PID: 404 Comm: bash Not tainted 7.2.0-rc2-g3f1f75536668 #1 PREEMPTLAZY
-[   83.129013][  T404] pc : e1000_get_cfg_done_82571+0x70/0x158
-[   83.140092][  T404] lr : e1000_get_cfg_done_82571+0x68/0x158
-[   83.151196][  T404] sp : ffff80008ac37410
-[   83.158922][  T404] x29: ffff80008ac37410 x28: ffff0000cd6a11b8 x27: ffff0000c58190d0
-[   83.173919][  T404] x26: ffff0000cd6a11b8 x25: ffff0000cd6a0bc0 x24: ffff0000cd6a0000
-[   83.189417][  T404] x23: 0000000000001010 x22: ffff0000cd6a11c0 x21: ffff0000cd6a11b8
-[   83.205195][  T404] x20: 0000000000000064 x19: ffff80008894e090 x18: 0000000000000000
-[   83.220545][  T404] x17: ffff800081c1a3f4 x16: ffff800081c19c10 x15: ffff800081e86510
-[   83.235764][  T404] x14: 0000000000000001 x13: 0000000000000001 x12: ffff60001bc8a8b3
-[   83.251301][  T404] x11: 1fffe0001bc8a8b2 x10: ffff60001bc8a8b2 x9 : ffff800081eae25c
-[   83.266705][  T404] x8 : 00009fffe437574e x7 : ffff0000de454593 x6 : 0000000000000001
-[   83.281919][  T404] x5 : ffff0000cf2b9640 x4 : 0000000000000000 x3 : dfff800000000000
-[   83.297317][  T404] x2 : 0000000000000007 x1 : ffff0000cd6a11c0 x0 : 0000000000000000
-[   83.312601][  T404] Call trace:
-[   83.318662][  T404]  e1000_get_cfg_done_82571+0x70/0x158 (P)
-[   83.329748][  T404]  e1000e_phy_hw_reset_generic+0x17c/0x1a8
-[   83.341541][  T404]  e1000_probe+0xbd8/0x1988
-[   83.350334][  T404]  local_pci_probe+0x84/0x130
+Reviewed-by: Shengming Hu <hu.shengming@zte.com.cn>
 
-Repetition steps:
-1. Find PCI device which BAR0 size <= 4K. If it's:
-   Device Addr: 0000:00:02.0   BAR0 SIZE: 4K
-   Vendor/Device ID: 0x1af4 0x1004
-2. Unbind the above PCI device
-   echo '0000:00:02.0' > /sys/bus/pci/devices/0000:00:02.0/driver/unbind
-3. Set the above device to e1000e new_id
-   echo '1af4 1004' > /sys/bus/pci/drivers/e1000e/new_id
+Nit below:
 
-During e1000_probe(), the driver maps the device's BAR0 memory region.
-If the device has a 4K BAR0, ioremap() maps only 4K of space. Later in
-the probe process, when the NVM checksum validation fails, the driver
-attempts to perform a hardware reset and falls back to the err_eeprom
-cleanup path.
+> Link: https://lore.kernel.org/linux-mm/20260427-nolock-api-fix-v2-0-a6b83a92d9a4@kernel.org [1]
+> Link: https://lore.kernel.org/linux-mm/6edebc2b-5f5a-4b9c-9a4c-564310acee1b@kernel.org  [2]
+> Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+> ---
+>  lib/tests/slub_kunit.c | 167 +++++++++++++++++++++++++++++++++++--------------
+>  mm/slub.c              |  36 ++++++++---
+>  2 files changed, 148 insertions(+), 55 deletions(-)
+> 
+> diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
+> index fa6d31dbca16..a391467c1aa6 100644
+> --- a/lib/tests/slub_kunit.c
+> +++ b/lib/tests/slub_kunit.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/rcupdate.h>
+>  #include <linux/delay.h>
+>  #include <linux/perf_event.h>
+> +#include <linux/kprobes.h>
+>  #include "../mm/slab.h"
+>  
+>  static struct kunit_resource resource;
+> @@ -292,7 +293,7 @@ static void test_krealloc_redzone_zeroing(struct kunit *test)
+>      kmem_cache_destroy(s);
+>  }
+>  
+> -#ifdef CONFIG_PERF_EVENTS
+> +#if defined(CONFIG_PERF_EVENTS) || (defined(CONFIG_KPROBES) && defined(CONFIG_SMP))
+>  #define NR_ITERATIONS 1000
+>  #define NR_OBJECTS 1000
+>  static void *objects[NR_OBJECTS];
+> @@ -302,26 +303,40 @@ struct test_nolock_context {
+>      int callback_count;
+>      int alloc_ok;
+>      int alloc_fail;
+> +#ifdef CONFIG_PERF_EVENTS
+>      struct perf_event *event;
+> +#endif
+> +#if defined(CONFIG_KPROBES) && defined(CONFIG_SMP)
+> +    struct kprobe kprobe;
+> +#endif
+>  };
+>  
+> -static struct perf_event_attr hw_attr = {
+> -    .type = PERF_TYPE_HARDWARE,
+> -    .config = PERF_COUNT_HW_CPU_CYCLES,
+> -    .size = sizeof(struct perf_event_attr),
+> -    .pinned = 1,
+> -    .disabled = 1,
+> -    .freq = 1,
+> -    .sample_freq = 100000,
+> -};
+> +static void test_kmalloc_kfree(void)
+> +{
+> +    int i, j;
+> +
+> +    for (i = 0; i < NR_ITERATIONS; i++) {
+> +        for (j = 0; j < NR_OBJECTS; j++) {
+> +            gfp_t gfp = (i % 2) ? GFP_KERNEL : GFP_KERNEL_ACCOUNT;
+>  
+> -static void overflow_handler_test_kmalloc_kfree_nolock(struct perf_event *event,
+> -                               struct perf_sample_data *data,
+> -                               struct pt_regs *regs)
+> +            objects[j] = kmalloc_obj(*objects[j], gfp);
+> +            if (!objects[j]) {
+> +                j--;
+> +                while (j >= 0)
+> +                    kfree(objects[j--]);
+> +                return;
+> +            }
+> +        }
+> +
+> +        for (j = 0; j < NR_OBJECTS; j++)
+> +            kfree(objects[j]);
+> +    }
+> +}
+> +
+> +static void test_nolock(struct test_nolock_context *ctx)
+>  {
+>      void *objp;
+>      gfp_t gfp;
+> -    struct test_nolock_context *ctx = event->overflow_handler_context;
+>  
+>      /* __GFP_ACCOUNT to test kmalloc_nolock() in alloc_slab_obj_exts() */
+>      gfp = (ctx->callback_count % 2) ? 0 : __GFP_ACCOUNT;
+> @@ -335,47 +350,104 @@ static void overflow_handler_test_kmalloc_kfree_nolock(struct perf_event *event,
+>      kfree_nolock(objp);
+>      ctx->callback_count++;
+>  }
+> +#endif
+>  
+> -static void test_kmalloc_kfree_nolock(struct kunit *test)
+> +#ifdef CONFIG_PERF_EVENTS
+> +static struct perf_event_attr hw_attr = {
+> +    .type = PERF_TYPE_HARDWARE,
+> +    .config = PERF_COUNT_HW_CPU_CYCLES,
+> +    .size = sizeof(struct perf_event_attr),
+> +    .pinned = 1,
+> +    .disabled = 1,
+> +    .freq = 1,
+> +    .sample_freq = 100000,
+> +};
+> +
+> +static void overflow_handler_test_nolock(struct perf_event *event,
+> +                     struct perf_sample_data *data,
+> +                     struct pt_regs *regs)
+> +{
+> +    struct test_nolock_context *ctx = event->overflow_handler_context;
+> +
+> +    test_nolock(ctx);
+> +}
+> +
+> +static bool enable_perf_events(struct test_nolock_context *ctx)
+>  {
+> -    int i, j;
+> -    struct test_nolock_context ctx = { .test = test };
+>      struct perf_event *event;
+> -    bool alloc_fail = false;
+>  
+>      event = perf_event_create_kernel_counter(&hw_attr, -1, current,
+> -                         overflow_handler_test_kmalloc_kfree_nolock,
+> -                         &ctx);
+> +                         overflow_handler_test_nolock,
+> +                         ctx);
+> +
+>      if (IS_ERR(event))
+> -        kunit_skip(test, "Failed to create perf event");
+> -    ctx.event = event;
+> -    perf_event_enable(ctx.event);
+> -    for (i = 0; i < NR_ITERATIONS; i++) {
+> -        for (j = 0; j < NR_OBJECTS; j++) {
+> -            gfp_t gfp = (i % 2) ? GFP_KERNEL : GFP_KERNEL_ACCOUNT;
+> +        return false;
+>  
+> -            objects[j] = kmalloc(64, gfp);
+> -            if (!objects[j]) {
+> -                j--;
+> -                while (j >= 0)
+> -                    kfree(objects[j--]);
+> -                alloc_fail = true;
+> -                goto cleanup;
+> -            }
+> -        }
+> -        for (j = 0; j < NR_OBJECTS; j++)
+> -            kfree(objects[j]);
+> -    }
+> +    ctx->event = event;
+> +    perf_event_enable(ctx->event);
+> +    return true;
+> +}
+>  
+> -cleanup:
+> -    perf_event_disable(ctx.event);
+> -    perf_event_release_kernel(ctx.event);
+> +static void disable_perf_events(struct test_nolock_context *ctx)
+> +{
+> +    kunit_info(ctx->test, "HW perf events: callback_count: %d, alloc_ok: %d, alloc_fail: %d\n",
+> +           ctx->callback_count, ctx->alloc_ok, ctx->alloc_fail);
+> +
+> +    perf_event_disable(ctx->event);
+> +    perf_event_release_kernel(ctx->event);
+> +}
+> +
+> +static void test_kmalloc_kfree_nolock_perf(struct kunit *test)
+> +{
+> +    struct test_nolock_context ctx = { .test = test };
+>  
+> -    kunit_info(test, "callback_count: %d, alloc_ok: %d, alloc_fail: %d\n",
+> -           ctx.callback_count, ctx.alloc_ok, ctx.alloc_fail);
+> +    if (!enable_perf_events(&ctx))
+> +        kunit_skip(test, "Failed to enable perf event, skipping");
+>  
+> -    if (alloc_fail)
+> -        kunit_skip(test, "Allocation failed");
+> +    test_kmalloc_kfree();
+> +
+> +    disable_perf_events(&ctx);
+> +    KUNIT_EXPECT_EQ(test, 0, slab_errors);
+> +}
+> +#endif
+> +
 
-This cleanup path will trigger an OOB access kernel panic:
-e1000_phy_hw_reset
-  e1000e_phy_hw_reset_generic
-    e1000_get_cfg_done_82571
-      er32(EEMNGCTL)
-        readl(hw->hw_addr + EEMNGCTL); <-- EEMNGCTL(0x1010) > 4K, OOB access
+Maybe it would be worth checking that the perf event actually fired:
 
-Fix this by verifying that the MMIO length (pci_resource_len(pdev, 0))
-is large enough to encompass the highest register offset
-(E1000_SYSSTMPH) accessed by the driver before calling ioremap(). This
-ensures that subsequent register reads/writes remain strictly within the
-mapped boundary.
+    KUNIT_EXPECT_GT(test, ctx.callback_count, 0);
 
-Fixes: bc7f75fa9788 ("[E1000E]: New pci-express e1000 driver (currently for ICH9 devices only)")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
-v3:
-- Align the minimum BAR0 size to the largest register access offset. (Andrew)
+Otherwise, the test could pass without the callback.
 
-v2:
-- Update comment about E1000_MMIO_LEN_MIN. (Breno)
+> +#if defined(CONFIG_KPROBES) && defined(CONFIG_SMP)
+> +static int slab_kprobe_pre_handler(struct kprobe *p, struct pt_regs *regs)
+> +{
+> +    struct test_nolock_context *ctx;
+> +
+> +    ctx = container_of(p, struct test_nolock_context, kprobe);
+> +    test_nolock(ctx);
+> +    return 0;
+> +}
+> +
+> +static bool register_slab_kprobes(struct test_nolock_context *ctx)
+> +{
+> +    ctx->kprobe.symbol_name = "slab_attach_kprobe_locked";
+> +    ctx->kprobe.pre_handler = slab_kprobe_pre_handler;
+> +
+> +    if (register_kprobe(&ctx->kprobe))
+> +        return false;
+> +    return true;
+> +}
+> +
+> +static void unregister_slab_kprobes(struct test_nolock_context *ctx)
+> +{
+> +    kunit_info(ctx->test, "kprobes: callback_count: %d, alloc_ok: %d, alloc_fail: %d\n",
+> +           ctx->callback_count, ctx->alloc_ok, ctx->alloc_fail);
+> +    unregister_kprobe(&ctx->kprobe);
+> +}
+> +
+> +static void test_kmalloc_kfree_nolock_kprobe(struct kunit *test)
+> +{
+> +    struct test_nolock_context ctx = { .test = test };
+> +
+> +    if (!register_slab_kprobes(&ctx))
+> +        kunit_skip(test, "Failed to register kprobe, skipping");
+> +
+> +    test_kmalloc_kfree();
+> +
+> +    unregister_slab_kprobes(&ctx);
+>      KUNIT_EXPECT_EQ(test, 0, slab_errors);
+>  }
 
- drivers/net/ethernet/intel/e1000e/netdev.c | 5 +++++
- drivers/net/ethernet/intel/e1000e/regs.h   | 3 +++
- 2 files changed, 8 insertions(+)
+Same here. Maybe it would be useful to check that the kprobe handler was
+invoked at least once:
 
-diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
-index 844f31ab37ad..46e58e926f7b 100644
---- a/drivers/net/ethernet/intel/e1000e/netdev.c
-+++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-@@ -7450,6 +7450,11 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	mmio_len = pci_resource_len(pdev, 0);
- 
- 	err = -EIO;
-+	if (mmio_len < E1000_MMIO_LEN_MIN) {
-+		dev_err(&pdev->dev, "MMIO len is too small\n");
-+		goto err_ioremap;
-+	}
-+
- 	adapter->hw.hw_addr = ioremap(mmio_start, mmio_len);
- 	if (!adapter->hw.hw_addr)
- 		goto err_ioremap;
-diff --git a/drivers/net/ethernet/intel/e1000e/regs.h b/drivers/net/ethernet/intel/e1000e/regs.h
-index 6c0cd8cab3ef..1e875227eef2 100644
---- a/drivers/net/ethernet/intel/e1000e/regs.h
-+++ b/drivers/net/ethernet/intel/e1000e/regs.h
-@@ -242,4 +242,7 @@
- /* PHY registers */
- #define I82579_DFT_CTRL	PHY_REG(769, 20)
- 
-+/* Smallest BAR0 that covers every register the driver accesses */
-+#define E1000_MMIO_LEN_MIN	(E1000_SYSSTMPH + sizeof(u32))
-+
- #endif
--- 
-2.34.1
+    KUNIT_EXPECT_GT(test, ctx.callback_count, 0);
 
+--
+With Best Regards,
+Shengming
+
+>  #endif
+> @@ -405,7 +477,10 @@ static struct kunit_case test_cases[] = {
+>      KUNIT_CASE(test_leak_destroy),
+>      KUNIT_CASE(test_krealloc_redzone_zeroing),
+>  #ifdef CONFIG_PERF_EVENTS
+> -    KUNIT_CASE_SLOW(test_kmalloc_kfree_nolock),
+> +    KUNIT_CASE_SLOW(test_kmalloc_kfree_nolock_perf),
+> +#endif
+> +#if defined(CONFIG_KPROBES) && defined(CONFIG_SMP)
+> +    KUNIT_CASE_SLOW(test_kmalloc_kfree_nolock_kprobe),
+>  #endif
+>      {}
+>  };
+> diff --git a/mm/slub.c b/mm/slub.c
+> index da9efb040040..e32a68677537 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -908,6 +908,24 @@ static inline unsigned int obj_exts_offset_in_object(struct kmem_cache *s)
+>  }
+>  #endif
+>  
+> +/*
+> + * A no-op function used to attach kprobe handlers in slub_kunit tests.
+> + * The barrier is needed to prevent the compiler from optimizing out callsites.
+> + */
+> +#if defined(CONFIG_DEBUG_VM) || defined(CONFIG_PROVE_LOCKING)
+> +static noinline void slab_attach_kprobe_locked(void)
+> +{
+> +    barrier();
+> +}
+> +#else
+> +static inline void slab_attach_kprobe_locked(void) { }
+> +#endif
+> +
+> +#define slab_lockdep_assert_held(lock) do {    \
+> +    lockdep_assert_held(lock);        \
+> +    slab_attach_kprobe_locked();    \
+> +} while (0)
+> +
+>  #ifdef CONFIG_SLUB_DEBUG
+>  
+>  /*
+> @@ -1665,7 +1683,7 @@ static void add_full(struct kmem_cache *s,
+>      if (!(s->flags & SLAB_STORE_USER))
+>          return;
+>  
+> -    lockdep_assert_held(&n->list_lock);
+> +    slab_lockdep_assert_held(&n->list_lock);
+>      list_add(&slab->slab_list, &n->full);
+>  }
+>  
+> @@ -1674,7 +1692,7 @@ static void remove_full(struct kmem_cache *s, struct kmem_cache_node *n, struct
+>      if (!(s->flags & SLAB_STORE_USER))
+>          return;
+>  
+> -    lockdep_assert_held(&n->list_lock);
+> +    slab_lockdep_assert_held(&n->list_lock);
+>      list_del(&slab->slab_list);
+>  }
+>  
+> @@ -2868,7 +2886,7 @@ static unsigned int __sheaf_flush_main_batch(struct kmem_cache *s)
+>      void *objects[PCS_BATCH_MAX];
+>      struct slab_sheaf *sheaf;
+>  
+> -    lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+> +    slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+>  
+>      pcs = this_cpu_ptr(s->cpu_sheaves);
+>      sheaf = pcs->main;
+> @@ -3547,7 +3565,7 @@ __add_partial(struct kmem_cache_node *n, struct slab *slab, enum add_mode mode)
+>  static inline void add_partial(struct kmem_cache_node *n,
+>                  struct slab *slab, enum add_mode mode)
+>  {
+> -    lockdep_assert_held(&n->list_lock);
+> +    slab_lockdep_assert_held(&n->list_lock);
+>      __add_partial(n, slab, mode);
+>  }
+>  
+> @@ -3561,7 +3579,7 @@ static inline void clear_node_partial_state(struct kmem_cache_node *n,
+>  static inline void remove_partial(struct kmem_cache_node *n,
+>                      struct slab *slab)
+>  {
+> -    lockdep_assert_held(&n->list_lock);
+> +    slab_lockdep_assert_held(&n->list_lock);
+>      list_del(&slab->slab_list);
+>      clear_node_partial_state(n, slab);
+>  }
+> @@ -3577,7 +3595,7 @@ static void *alloc_single_from_partial(struct kmem_cache *s,
+>  {
+>      void *object;
+>  
+> -    lockdep_assert_held(&n->list_lock);
+> +    slab_lockdep_assert_held(&n->list_lock);
+>  
+>  #ifdef CONFIG_SLUB_DEBUG
+>      if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+> @@ -4642,7 +4660,7 @@ __pcs_replace_empty_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
+>      struct node_barn *barn;
+>      bool allow_spin;
+>  
+> -    lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+> +    slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+>  
+>      /* Bootstrap or debug cache, back off */
+>      if (unlikely(!cache_has_sheaves(s))) {
+> @@ -5765,7 +5783,7 @@ static void __pcs_install_empty_sheaf(struct kmem_cache *s,
+>          struct slub_percpu_sheaves *pcs, struct slab_sheaf *empty,
+>          struct node_barn *barn)
+>  {
+> -    lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+> +    slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+>  
+>      /* This is what we expect to find if nobody interrupted us. */
+>      if (likely(!pcs->spare)) {
+> @@ -5816,7 +5834,7 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
+>      bool put_fail;
+>  
+>  restart:
+> -    lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+> +    slab_lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock));
+>  
+>      /* Bootstrap or debug cache, back off */
+>      if (unlikely(!cache_has_sheaves(s))) {
+> 
+> -- 
+> 2.53.0
