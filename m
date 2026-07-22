@@ -1,120 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95ED23C503
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4903EC2E6
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784703949; cv=none; b=KtTBGh+EmUlI1/TKQKQf4Y83aN31yqVDBB2ZRiB32kl6t2gMH8GXfV/A0EcMV0Lscv9u9Zm4UzdOLrDQZpqy7rby7GGTg50vqsIx4kjlkKo6J//6dSUQnMM4Q3LG+o07rWi6rB9bQ8+EedySIT6EUM852A3KFIfiNuFayorlMgM=
+	t=1784704519; cv=none; b=Ox6tGQUjBTpSFVNbJPtcdqh9lnfdG2BA7nQ6zbYA8Boap+ePTXc4ffAYJl+nK12D+nLlUFwQf2ishGLNgNzioHyJTyFltAUkL+8yCfSQhGjlRYc4x1lZchUX+97TP5nib0Z9Y/Ck6h3jC4l0+Otk2lUU2IyPdIuzAxvk0OjOta8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784703949; c=relaxed/simple;
-	bh=u2J4QkjjH0P9I52dCCDItU+o2mj/JGnsgpKZk6+mLxw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qdVcwOY04SPukbTWDa8cO9AtQAlF7vXpOt8AMGI1Y0zs0W3bhNZsmUFThAfModRk1ZGvlL65q3WndG8q0Q296iiO6BtjWrSr2Oyt6ofaxJyf4eQbvu3F5mkJA1KvfIWwhjPXbxRYbjT6lxIHHQFCVHphk1iCRzOCynhRT63rSg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MKOIii7f; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MKOIii7f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5F5C1F000E9;
-	Wed, 22 Jul 2026 07:05:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784703948;
-	bh=zpq/25rKYYhpsmjJbRYxQEMbFogPHNq9epkY2eUJ/Sg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MKOIii7fbCiRnza8/dVKb7x3fdqhRp+dteYB7EYFXhqXRa0QhlWCsMS4I6mIZfWS7
-	 FlB/3pBX6YGvvLpG/DxIyN6+d8igD8m8eTt4SE9AgQ6jikJEgixZKtw/TJ+viKRQFI
-	 iD6EIucEjgT1RZrtw3LdiU4t+J7TVKJBTc66uE3L+n81H90mX+NR9Nk5rccgWlfQ1A
-	 9WlasAkk6K7jeCMgi54IoPKVTEDagQHgUmPJEaPzQgybHN2xy2KTLz2paE/lANWe3+
-	 +lg6znZHuooWns86dnQslwDUvNAlJERt99OrMwipJ7+bex7sHAyblxAUchL6wzqvCO
-	 ErSolBc5hy9xA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add mmap/munmap benchmark
- for array maps
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Song Liu" <song@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260722065308.4116186-3-song@kernel.org>
-References: <20260722065308.4116186-1-song@kernel.org>
- <20260722065308.4116186-3-song@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Jul 2026 07:05:47 +0000
-Message-Id: <20260722070547.D5F5C1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1784704519; c=relaxed/simple;
+	bh=hZ9qu5PaDa1DgkrG9mGkifxxDGPOsqE3xCRNrHfqidc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ojshe79gcUCffIvBhPmid9HLwlFT1RAw0GgSyJZRzaqKMumWftW9hXT4muYYJkQGEY7KWZqJCB00CKJeyGuGq57CX2gX8UGxcHF87qEaVL4PzYGo/HJOblDGYmY6+GPxIAGno4gs29PUmSNfTtuhvFonce3eSRVq4ZIoFW/F94k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h4lr422GFzYQtkR
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 15:14:44 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id E51214056B
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 15:15:12 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAXJ3P_bWBqJ8B+CA--.19569S2;
+	Wed, 22 Jul 2026 15:15:12 +0800 (CST)
+Message-ID: <bdccaa6e-cf8c-438d-ba05-98652e9ce988@huaweicloud.com>
+Date: Wed, 22 Jul 2026 15:15:11 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v5 2/4] bpf: Fix UAF due to missing link type check in
+ mprog
+Content-Language: en-US
+To: Amery Hung <ameryhung@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+References: <20260721041048.1394085-1-pulehui@huaweicloud.com>
+ <20260721041048.1394085-3-pulehui@huaweicloud.com>
+ <20260721042151.E6F941F000E9@smtp.kernel.org>
+ <723495f2-f4a0-4723-90a8-d4774e6dce05@huaweicloud.com>
+ <CAMB2axMocV3+cC8O5LEu-0bPcGvchwjASbjM_afx=Stc_8AvKw@mail.gmail.com>
+ <DK4GW4BH8RPS.32N0A91SQGMOH@etsalapatis.com>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <DK4GW4BH8RPS.32N0A91SQGMOH@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgAXJ3P_bWBqJ8B+CA--.19569S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAFWxZr43JF48Cr13ArWkZwb_yoWrXr1xpF
+	Z7JF1vyFWUXry2qr1jq3Z5AryjgF4kJr1UXrn5Xw1jyFn09F1IqF1UKr4ruw1Syr4DJw4v
+	vw1jqF9xZ34DAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUglb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
+	CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
+	bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
+	AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
+	42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
+	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
+	xhVjvjDU0xZFpf9x07UE-erUUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Mutating `env.producer_cnt` inside `validate()` causes a heap bu=
-ffer overflow in the core benchmark runner framework.
---
 
---- Patch [2]: [PATCH bpf-next 2/2] selftests/bpf: Add mmap/munmap benchmar=
-k for array maps ---
-commit 39f3ece9fcc36c46f5da11156d115c4340de663c
-Author: Song Liu <song@kernel.org>
+On 2026/7/22 2:40, Emil Tsalapatis wrote:
+> On Tue Jul 21, 2026 at 1:40 PM EDT, Amery Hung wrote:
+>> On Tue, Jul 21, 2026 at 2:18 AM Pu Lehui <pulehui@huaweicloud.com> wrote:
+>>>
+>>>
+>>> On 2026/7/21 12:21, sashiko-bot@kernel.org wrote:
+>>>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+>>>> - [Medium] Anchor link type validation is bypassed when attaching or detaching bare BPF programs, leading to wildcard insertions/deletions and data races.
+>>>> --
+>>>>
+>>>> --- Patch [2]: [PATCH bpf v5 2/4] bpf: Fix UAF due to missing link type check in mprog ---
+>>>> commit 830a4e62ebb8e98cc45b0ce829c6686aacafabc4
+>>>> Author: Pu Lehui <pulehui@huawei.com>
+>>>> Subject: bpf: Fix UAF due to missing link type check in mprog
+>>>>
+>>>> This commit adds a link type validation in bpf_mprog_link() to prevent a
+>>>> use-after-free when dereferencing link->prog for foreign anchors. It also
+>>>> adjusts bpf_mprog_attach() and bpf_mprog_detach() to pass down the expected
+>>>> link type.
+>>>>
+>>>>> diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
+>>>>> index 1394168062e85..37ce91e0bcd21 100644
+>>>>> --- a/kernel/bpf/mprog.c
+>>>>> +++ b/kernel/bpf/mprog.c
+>>>>> @@ -17,7 +17,7 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
+>>>>>               link = bpf_link_get_from_fd(id_or_fd);
+>>>>>       if (IS_ERR(link))
+>>>>>               return PTR_ERR(link);
+>>>>> -    if (type && link->prog->type != type) {
+>>>>> +    if (type && link->type != type) {
+>>>>>               bpf_link_put(link);
+>>>>>               return -EINVAL;
+>>>>>       }
+>>>>
+>>>> [ ... ]
+>>>>
+>>>>> @@ -243,6 +244,7 @@ int bpf_mprog_attach(struct bpf_mprog_entry *entry,
+>>>>>               return -EEXIST;
+>>>>>       ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd,
+>>>>>                                      flags & ~BPF_F_REPLACE,
+>>>>> +                                   link ? link->type : BPF_LINK_TYPE_UNSPEC,
+>>>>>                                      prog_new->type);
+>>>>>       if (ret)
+>>>>
+>>>> [Severity: Medium]
+>>>> When attaching a bare BPF program, link is NULL. This passes
+>>>> BPF_LINK_TYPE_UNSPEC (0) to bpf_mprog_tuple_relative() as the expected
+>>>> anchor link type.
+>>>
+>>> Ah, so when attaching a bare prog with a relative link, having the
+>>> BPF_F_LINK flag set means the relative id_or_fd is a link, not the
+>>> object being attached. Sorry, that definitely confused me.
+>>>
+>>>>
+>>>> In bpf_mprog_link() above, the validation check is:
+>>>>
+>>>>       if (type && link->type != type) {
+>>>>
+>>>> Because type is 0, the validation is bypassed entirely.
+>>>>
+>>>> If a user passes a foreign link with a NULL prog (like struct_ops) as an
+>>>> anchor via id_or_fd, the positioning logic treats tuple->prog == NULL as
+>>>> 'no anchor provided' instead of rejecting the invalid anchor with -EINVAL.
+>>>>
+>>>> Does this allow wildcard insertions or deletions, and leave a benign data
+>>>> race when reading link->prog locklessly? Should the expected link type be
+>>>> explicitly provided when attaching bare programs?
+>>
+>> I also overlooked this. Make sense to pass the expected link type from
+>> callers of bpf_mprog_attach().
+> 
+> +1 on this, and can we add a comment that ptype == UNSPEC is because
+> detach() uses this as a wildcard? UNSPEC is only valid in very few
+> places in the subsystem.
 
-selftests/bpf: Add mmap/munmap benchmark for array maps
+both ack, thanks
 
-Add a benchmark that repeatedly mmap()s and munmap()s an mmap-able BPF
-array map (BPF_F_MMAPABLE) from a configurable number of threads. Both
-the number of worker threads and the size of the map are tunable via
---nr-threads and --map-size, defaulting to 16 threads and 8MiB.
+> 
+>>
+>>>>
+>>>> [ ... ]
+>>>>
+>>>>> @@ -343,6 +345,7 @@ int bpf_mprog_detach(struct bpf_mprog_entry *entry,
+>>>>>       if (!bpf_mprog_total(entry))
+>>>>>               return -ENOENT;
+>>>>>       ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd, flags,
+>>>>> +                                   link ? link->type : BPF_LINK_TYPE_UNSPEC,
+>>>>>                                      prog ? prog->type :
+>>>>>                                      BPF_PROG_TYPE_UNSPEC);
+>>>>>       if (ret)
+>>>>
+>>>> [Severity: Medium]
+>>>> Similarly, when detaching a bare BPF program, link is NULL. This also
+>>>> passes BPF_LINK_TYPE_UNSPEC as the expected link type.
+>>>>
+>>>> Does this bypass the new validation and allow wildcard deletions when using
+>>>> foreign anchors?
+>>>>
+>>>
+>>>
 
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_arraymap_mmap.c b/t=
-ools/testing/selftests/bpf/benchs/bench_arraymap_mmap.c
-> new file mode 100644
-> index 0000000000000..356d80a85cf01
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/benchs/bench_arraymap_mmap.c
-> @@ -0,0 +1,146 @@
-[ ... ]
-> +static void validate(void)
-> +{
-> +	if (env.consumer_cnt !=3D 0) {
-> +		fprintf(stderr, "benchmark doesn't support consumer!\n");
-> +		exit(1);
-> +	}
-> +
-> +	/*
-> +	 * The number of worker threads is controlled by --nr-threads and
-> +	 * drives the framework's producer machinery, so per-producer stats
-> +	 * are reported correctly.
-> +	 */
-> +	env.producer_cnt =3D args.nr_threads;
-> +}
-
-[Severity: Medium]
-Does mutating env.producer_cnt inside validate() cause a heap buffer overfl=
-ow?
-
-The state.producers array is allocated in setup_benchmark() based on the
-initial env.producer_cnt:
-
-tools/testing/selftests/bpf/bench.c:setup_benchmark() {
-    ...
-    state.producers =3D calloc(env.producer_cnt, sizeof(*state.producers));
-    ...
-}
-
-When this validate callback overwrites env.producer_cnt with args.nr_threads
-(which defaults to 16), the core framework later iterates over the new count
-when spawning threads:
-
-tools/testing/selftests/bpf/bench.c:setup_benchmark() {
-    ...
-    for (i =3D 0; i < env.producer_cnt; i++) {
-        ...
-        err =3D pthread_create(&state.producers[i], NULL,
-                             bench->producer_thread, (void *)(long)i);
-    ...
-}
-
-This will write out of bounds since the array was originally sized for the
-unmodified env.producer_cnt.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260722065308.4116=
-186-1-song@kernel.org?part=3D2
