@@ -1,179 +1,166 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F17D466AFF
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 16:41:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8D94D2EC4;
+	Wed, 22 Jul 2026 17:01:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784738498; cv=none; b=Z2/1Q7nUXb5fSdtvgeCWsu11udh94qpAZZ6qaRbBUFljVLsqf2MkyXE2cr7boAJNrkLJ2aygbLYmldWibSI6Cx6Z0isT42l7Q3ikI20XfOtujYuPP2rHpTWj6PNBXOIjoOfed6tQBV+xuZFqfDUNdI/5yZERxQ7q1MIzY0HhmLY=
+	t=1784739682; cv=none; b=TP31kQRvGv2copJi3FVPxh0BvA7t305ylNQeL9vyBOfSCOwjXIk5HvlUmkM9qBVNUHq9FYLfbXtvI1F+oXz42rfTk/XJF/4EL5Qgb0SEJym0cW3gsUrKVf6knIporfXxhKn8RdetJKL8BA0lUN0VJAweA0uILtDWMejD1Bb6QBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784738498; c=relaxed/simple;
-	bh=RXqcfcZSbNb3rB21Ph12lQCkkQdPMp95EfoTarPxUao=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=r5/Xn4m4Upb0igim+j6Jpkq1oQTaqi6PiEny+V0PNRD0ZXs+3twmJCHI3AWYAntHRAye7+HNKQVGNJlE7odlD2Mjhr+RX30vyckGdbpq90qnR2cPPgE2KGdpd+/78C3SOAK1tkLBkjVH2fc35B9C24UocjFdm4KhKBTRf8NhWY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=WzLFxW5f; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1784739682; c=relaxed/simple;
+	bh=SfpZ/3L0DEK4tUXJgLD6kEAOHVZDwyPm91q/afIdFPA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FpygopyFG49KkOS2EdWbnwKZSLqD9vIKS5ZCQU9FRt1p/U7+IsqjTNt81EP5TUHT35yg1xib+ZPqyJCKSIrpH4CeqPuF9dwYa2us64kxIcorlyvI9sO9pU4EyN7zrD0429n8iBsBaOeYqrA8+FUYwmzkZKB3GYmLS2pleQKfkJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=DdQu2Tvz; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="WzLFxW5f"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38de840f2f0so8693632a91.0
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 09:41:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784738485; x=1785343285; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Rk7HaColAzxmgyqV5k+/tQbJI9Q9Gz2mbZ9N8yXhieA=;
-        b=WzLFxW5fNRJwW96xE+FfglPtzF6bBN4ZJsUodDhGy8X72MW4CnLlUdSipf/kxMVs0N
-         dITUpOLCbUMKYBnXq6tsl7WPysUcmMbhpvaFl56Ij/+K+SeiJy38emz0GIgje+JPHMl2
-         DfgmWb+k210ye+riXiichKWQCkWO/qTkdxaHxu4PTECAN1EIKiRgD8auGMn+0foiokQj
-         THOGuifVYE//CIXjhuizT6J9B19r1hhCCpD1K1DYU6bJHM2sjrFq5QiiZHm//eLJoLQz
-         io9xuWXdFEYAVKhazENQemdHXIUYFCkO3NzKiicQvpiIVN7TN5MwF+9otsClbsHJVUr0
-         bI3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784738485; x=1785343285;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Rk7HaColAzxmgyqV5k+/tQbJI9Q9Gz2mbZ9N8yXhieA=;
-        b=XinaOLCXJ5oWdB+o7fOxr7ukimxRSG986BhRUFzSGcvwkDsZab6N9dqUkLJKg0yONV
-         59/jwcvZQ9wUW+1XO/lP6oz2IXujGreMMNIF4Lv88yrYKD0m8864T3b6iLLYdL9aBHYW
-         7tTGz5Ctppq3l+jk7YHea3EYsjDdEGBI6sTDrceonkWBkr+KSmOJomE6rDJsdgNKrMA7
-         tebd2fyTzZqbL8caj0o7Hk9Bc5welQsY0RMlh6p+dXMH6m8txu6cu0FtUHfnqmRcvQJn
-         MEBOyelMN77JMSpDIAuqNfevd9pch5pKeFpTcEQQ04HW/kjKrWI8m1Kk6evQhV5nNNG/
-         odbQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqDfmSkrgorlMOSJTLRvue88UGSaoCkA23P15RuIPAYGrDeKDb3Ymgbko4Fpq9pc/yv/6o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzOK8SDqqjC77k9CpjqX4Cj96/Y1MGHCwsfDQSm/9A/g/xKj4e
-	kfIzzC8+stiYAHZYcu9uUhkarXxYC0wES13hcXHqdLU0L/qQEiBxttnDbVM5EfZCXZ0=
-X-Gm-Gg: AR+sD12PUVDpbQ8lkqFKHoodtqKlTcaJ+CxkFylxDfasTHhr6oUlLoY/dVimjfnxuO4
-	XZS7RFu4VxElGmetMnGVUQcmEx7/adeK+BRhKUdfA1nCeE+fHFcyW4PK6eNKqIlpGn5y7RvykAz
-	qCxZzNwVbw3ryKUyjlaajFhdilQ9dos0YCVdL/o1w9zTXelZCxv3sMQ20nN0SQa1nEybz/366uF
-	ZqTVBLe51egoyV9e1vCHnEYx4JDF1y47cEAZ7mQVjnURJY75fPd6QrwRXjG7ueifom3LQ/5Bvnv
-	0Z925N+YLA6v8lpEPz+wcbGduTvQrYE1fN9SqvD4Vj5h/q93GcDISU7eUnhFERNju57QXf5LLyc
-	YZ+hgrCV/uNPvOJcJ6F7L7SQOHA4r13nKwm0Z5u0Z4XoRSaeZA5xpklU80ZZk3eWODpst3lF+fB
-	rx0X8npnWt6daRQll3btcYt+iQMPiMNmI=
-X-Received: by 2002:a17:90b:2f4b:b0:37f:9cdf:f03e with SMTP id 98e67ed59e1d1-38e4b540acbmr23711630a91.33.1784738485186;
-        Wed, 22 Jul 2026 09:41:25 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e92091875sm3559948a91.7.2026.07.22.09.41.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jul 2026 09:41:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="DdQu2Tvz"
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+	by m0089730.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 66MFZMZg4098128;
+	Wed, 22 Jul 2026 10:01:01 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=s2048-2025-q2; bh=QUv5GrDyHCUA0ZFDfv
+	P6w4o3Qz1jitC/KXT8IcH1/ok=; b=DdQu2Tvz0imx8OMF9+gp1gBmcUnq10jdEh
+	rpbvHLfQoHT5N6ABdCzYK0j0XUywOW91RbSiSl4AZQXj6g1klcaIMLcuXDV2tg3F
+	Eis1b1YoFR+SGce4L9OBai90XTynmkYb2A7xBumY5hKY83+RRFwyCuqxj4b4wKtf
+	pVNUQlwrNZh1uIgxuCdp8JTS33TVxFCzHTC9GXY+/17Eilm+Wqtsz07QzB1a6rVJ
+	bliHag3FJXMghiYzt/8ZdD6HUglLwx0JMqAK5kv1e7nFX77LbZ6nbXR9ZmiXXe7S
+	ycAHdZxQAaJc1U1o3jUQvI1DWnliPbuJjgO7mIt4d7jKkfmUTO9Q==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by m0089730.ppops.net (PPS) with ESMTPS id 4fjfj0e5rg-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 22 Jul 2026 10:01:01 -0700 (PDT)
+Received: from localhost (2620:10d:c085:108::4) by mail.thefacebook.com
+ (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.41; Wed, 22 Jul
+ 2026 17:00:59 +0000
+From: Tejas Birajdar <tejasbirajdar@meta.com>
+To: Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>,
+        <netdev@vger.kernel.org>
+CC: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        "David
+ S . Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tejas Birajdar
+	<tejasbirajdar@meta.com>
+Subject: [PATCH net-next] tcp: honor BPF_SOCK_OPS_RWND_INIT on the active connect path
+Date: Wed, 22 Jul 2026 10:00:33 -0700
+Message-ID: <20260722170033.2763794-1-tejasbirajdar@meta.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 22 Jul 2026 12:41:23 -0400
-Message-Id: <DK58ZON5P6RO.2LTH6C3PKW2VJ@etsalapatis.com>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan"
- <shuah@kernel.org>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Report the real error from
- libarena parallel workers
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260722064713.357277-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260722064713.357277-1-jiayuan.chen@linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: ZwSiifyl2BMbGird2mzsH85iUIdr13fz
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIyMDE2NyBTYWx0ZWRfX5cDl33mPO8Ep
+ ZK4HgM8culeljhHQCMgB+SXhNm3F4xx2fh/3SJ+GLAFVQwBYqR/5iAOnZ1bOrgVjyo9ezNJAw2B
+ YmBUuEMM0DA5NxtlkzBueZDELvSRzKKPAWOGZqJPi7VSWNmu51KjszQiIQCqYaR4kj0/I9hAGk1
+ DccdoU3iql+ZUxbpgKgNu8ZFXJWORPuOwEl7j5erH0D6kQGvaxJpyEz5IMnxTyslvjstOjZ0T1c
+ j0W0ufRGJqj6cwsUC7Kemxe5KkwAwhD9zfXYR66kSTh7nPex9OiaL+QeXq66x+qFJhUSYteAcr7
+ LgapLRm5i0/rAaD2JZzSuBqqGIxKSmhs64JdEw2YgFbDsxP6tZk9k6sJn40tatHVHLj/atXRtzt
+ sOAgoWLE9PWiOSGUl+KaN6RawOL7gJ+z5hIFX5b228idUxbTMYB1jv1t0tC8mGVErF1ctdbzuwv
+ LqWbV0JnqPnVAgVrpJA==
+X-Authority-Analysis: v=2.4 cv=TtnWQjXh c=1 sm=1 tr=0 ts=6a60f74d cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
+ a=855S8uPTkML1Oy45N9_h:22 a=VabnemYjAAAA:8 a=bl5ZhtMPR9QNAx643iAA:9
+ a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIyMDE2NyBTYWx0ZWRfX8S1I1U+ycpPr
+ 9VZ9NumWw7g+dEgeQI9/GU9/peGM6/lyIdUag49p7JLVoWCwaS98pIHWH5wJxwAGeQsvs/yYDDy
+ 5zcvrIxjvfg1+tO2CbrdUEE0OVvCBgg=
+X-Proofpoint-ORIG-GUID: ZwSiifyl2BMbGird2mzsH85iUIdr13fz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-22_04,2026-07-22_02,2025-10-01_01
 
-On Wed Jul 22, 2026 at 2:47 AM EDT, Jiayuan Chen wrote:
-> Several CI runs failed in the libarena parallel tests with -4 (-EINTR) [1=
-],
-> which says nothing about what actually went wrong.
->
-> Two workers can fail like this:
->
->   worker 1: gives up, e.g. the rendezvous times out, sets test_abort and
->             returns its own error (-ETIMEDOUT)
->   worker 2: sees test_abort and returns -EINTR
->
-> -EINTR only means "someone else already gave up", so it carries no
-> information. Which of the two gets reported depends on the order
-> pthread_join() collects them, because
->
-> 	err =3D err ?: (long)thread_ret;
->
-> keeps the first non-zero value and drops the rest. When the -EINTR worker
-> comes first, the error describing the actual failure is lost.
->
-> Let any other error win over -EINTR, and log each worker that returned an
-> error.
->
-> It is still unclear whether the timeouts come from CI load or from a
-> problem in the test itself. Report the error accurately first, so the nex=
-t
-> failure can be diagnosed.
->
-> [1]:
-> https://github.com/kernel-patches/bpf/actions/runs/29867905253/job/887644=
-63566
-> https://github.com/kernel-patches/bpf/actions/runs/29878191901/job/887948=
-45824
+BPF_SOCK_OPS_RWND_INIT lets a sockops BPF program pick the initial TCP
+receive window, e.g. to advertise a larger window up front in environments
+where that is known to be safe. Today it is only effective for the passive
+(listener) side; on the active (connect) side the value is computed and
+then silently discarded.
 
-Overall change makes sense, a couple things.
+On the passive path tcp_openreq_init_rwin() inflates full_space when the
+program returns a non-zero window, so tcp_select_initial_window() can offer
+it:
 
-I'll also look into the error itself.
+	else if (full_space < rcv_wnd * mss)
+		full_space = rcv_wnd * mss;
 
->
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  .../testing/selftests/bpf/prog_tests/libarena.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/te=
-sting/selftests/bpf/prog_tests/libarena.c
-> index df7e4b8dc394..65743920ff69 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/libarena.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
-> @@ -112,13 +112,28 @@ static int run_libarena_parallel_test_workers(struc=
-t libarena *skel,
-> =20
-> =20
->  	for (i =3D 0; i < nthreads; i++) {
-> +		int worker_err;
-> +
+tcp_select_initial_window() only clamps the requested window *down* to the
+available space, so without inflating the space first the BPF reply can
+never raise the offered window above tcp_full_space(sk).
 
-Let's hoist this definition up to the top of the function.
+tcp_connect_init() calls tcp_rwnd_init_bpf() but never inflates full_space,
+so on connect() the requested window is clamped back to tcp_full_space(sk)
+(~64KB at the default rcvbuf) and the program's value is ignored.
 
->  		ret =3D pthread_join(threads[i], &thread_ret);
->  		if (!ASSERT_OK(ret, "pthread_join")) {
->  			err =3D err ?: ret;
->  			continue;
->  		}
-> =20
-> -		err =3D err ?: (long)thread_ret;
-> +		worker_err =3D (long)thread_ret;
-> +		if (!worker_err)
-> +			continue;
-> +
-If we are ignoring -EINTR errors from workers then let's skip the
-printing for them altogether, otherwise below we keep printing the
-"main" error for every interrupted thread.
+Mirror the listener-side inflation in tcp_connect_init() so both directions
+behave the same. tp->advmss is the mss the listener path uses as well (both
+are tcp_mss_clamp(tp, dst_metric_advmss(dst))).
 
-> +		/*
-> +		 * A worker that bails out because another one already gave up
-> +		 * reports -EINTR. That is collateral damage, so let any other
-> +		 * error win: it tells us what actually went wrong.
+Fixes: 13d3b1ebe287 ("bpf: Support for setting initial receive window")
+Signed-off-by: Tejas Birajdar <tejasbirajdar@meta.com>
+---
+Functional test: attached a cgroup sockops BPF program that sets
+skops->reply for BPF_SOCK_OPS_RWND_INIT on the connecting socket, and
+drove it with packetdrill on the active-open (connect) path (wscale 11,
+advmss 1440). On the patched kernel the advertised receive window on the
+first post-handshake ACK now reflects the requested value; unpatched it
+stays clamped at ~64 KB:
 
-Capitalize "it"
+  req_segs   unpatched   patched
+  256        ~64 KB      360 KB   (256  * 1440)
+  1024       ~64 KB      1.41 MB  (1024 * 1440)
+  4096       ~64 KB      5.63 MB  (4096 * 1440)
 
-> +		 */
-> +		if (!err || err =3D=3D -EINTR)
-> +			err =3D worker_err;
-> +
-> +		fprintf(stdout, "%.*s__%d returned %d\n", (int)prefixlen, name,
-> +			i, worker_err);
+(The SYN window itself is unscaled/capped; the offered window appears on
+the first scaled post-handshake ACK.)
 
->  	}
-> =20
->  	free(threads);
+Regression: tools/testing/selftests/net/packetdrill run under virtme-ng
+on this commit vs its parent produces an identical pass/fail set (no
+newly failing tests).
+
+ net/ipv4/tcp_output.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index d7c1444b5e30..478e4951140f 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -4101,6 +4101,7 @@ static void tcp_ca_dst_init(struct sock *sk, const struct dst_entry *dst)
+ static void tcp_connect_init(struct sock *sk)
+ {
+ 	const struct dst_entry *dst = __sk_dst_get(sk);
++	int full_space = tcp_full_space(sk);
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	__u8 rcv_wscale;
+ 	u16 user_mss;
+@@ -4133,14 +4134,16 @@ static void tcp_connect_init(struct sock *sk)
+ 
+ 	/* limit the window selection if the user enforce a smaller rx buffer */
+ 	if (sk->sk_userlocks & SOCK_RCVBUF_LOCK &&
+-	    (tp->window_clamp > tcp_full_space(sk) || tp->window_clamp == 0))
+-		WRITE_ONCE(tp->window_clamp, tcp_full_space(sk));
++	    (tp->window_clamp > full_space || tp->window_clamp == 0))
++		WRITE_ONCE(tp->window_clamp, full_space);
+ 
+ 	rcv_wnd = tcp_rwnd_init_bpf(sk);
+ 	if (rcv_wnd == 0)
+ 		rcv_wnd = dst_metric(dst, RTAX_INITRWND);
++	else if (full_space < rcv_wnd * tp->advmss)
++		full_space = rcv_wnd * tp->advmss;
+ 
+-	tcp_select_initial_window(sk, tcp_full_space(sk),
++	tcp_select_initial_window(sk, full_space,
+ 				  tp->advmss - (tp->rx_opt.ts_recent_stamp ? tp->tcp_header_len - sizeof(struct tcphdr) : 0),
+ 				  &tp->rcv_wnd,
+ 				  &tp->window_clamp,
+-- 
+2.53.0-Meta
 
