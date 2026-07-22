@@ -1,181 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F3F442B32;
-	Wed, 22 Jul 2026 22:12:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C4E3BADB2
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 22:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784758348; cv=none; b=nPiBLh/qLVJnvSouS56/IR/MF+jORgn1sf+hoTff2j1wQgriTY0PoiY5RXJiz5d2G2Q6U9TldXF4Y3xvp8wkK5rm6vpjxE0Z7/rsGamHl188SmNQepGScoODKjOqOFnl3nOA01Y640cbuhSskY7mw7lNVMtyIk/Yb6RTzjgeJ0g=
+	t=1784758600; cv=none; b=OgWUZXW6ysCbNepzxv0BuJRM2QN5xnNCd47JedUH5cS6nCHM10jMjKC7eZJEEWlZ8r2TnTfDXdk0ojJob4kPnpJXTF7Qcg7pV/CVVMi2PvuuXrtgF19iUi00Z2qWhwqj+oGR+lFPsvwSQogss0lkIQgNXRtY+muFcTdxiw8C3Ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784758348; c=relaxed/simple;
-	bh=zgCb7X3BnwkTA5tD0TQQ7Qh4n2JOVgcDwrWHr2SJ0vw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kZzIwebONSYCxNSBVNM1Q0tLX21YK/06CE4COAvukqYUxH51G+GtRmwjDQrs4DyeYMRicJyJF/jhOD5f/4x3LHca9s6w23D2vzupyNKGQk7CzysjRYTF7pRBnChMsyxQGBK9bcOVnUSBvIZcMmnLE3GPcoEC3PjzQ2SxA/etTpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ibqVPL3k; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784758600; c=relaxed/simple;
+	bh=1Us5xGkBAJXwBwExy8cfS9g65Z2dRyMfwJTU8OTSbAA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=dgcvK96OTGnHpUGaxJCWfPrdxfV+3EW6ncU9Sm41nUvO1rLbgO/eBF4ODG+hK5yz6i/56ntrFbrhtcuw2UodrkXlxejCVaaAOY/G4B8VH2B6imF42K72LnFEEHxzyqlMzyzviDJf3LgaVX4cvmEI2UM6iisAwGuepwOmhytEFfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=korRYhqx; arc=none smtp.client-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ibqVPL3k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81181F000E9;
-	Wed, 22 Jul 2026 22:12:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784758347;
-	bh=vcYElyVY0/NdQyiOikeqmJC0d5RBhx3sVyZg6lwyKhU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ibqVPL3kDHdn1bOg7X3EBtg8CScIG6Py6EYzusUriZx9r8k/gMQjAZXbjFEgvYdOj
-	 TEs8pqZcatDpOWHtdjVPmMF04an+HkIDihn/2jPILmKIq9AZbbYCANMLsyo5xsNXas
-	 aDFH9zOteJCb0uBhUTeGDjxc5Ggw8s4XzEvLDblInSCfQLKfbk+DfguEu2ftIfy6NM
-	 wwyTk3cbusXn1FsNzZu8+DbNsldzI8VB1fistnn4/WmOxQFd6EJF5lKczATwGR0LlX
-	 GwyM9u25GNoG9gqhmVAwHjv1wAOUepZUgFZLgxlYvfgRrps4tVyTgStUWAfF8zdELQ
-	 9FNzC27BPpkPw==
-Date: Thu, 23 Jul 2026 00:12:24 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Matt Fleming <matt@readmodwrite.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
-	bpf@vger.kernel.org, netdev@vger.kernel.org, stable@vger.kernel.org,
-	kernel-team@cloudflare.com, Matt Fleming <mfleming@cloudflare.com>
-Subject: Re: [PATCH net v3] veth: convert frag_list skbs before running XDP
-Message-ID: <amFASFNeiup3_beA@lore-desk>
-References: <20260722191925.2192070-1-matt@readmodwrite.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="korRYhqx"
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-84a3514f912so18423859b3a.3
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 15:16:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1784758599; x=1785363399; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=NxbTcxXwuujoRQit/eAYaWnsgYP73zQK/sdfkRV8/Tw=;
+        b=korRYhqxMmosDuRgMl2dQ+tYcEXhRdWeh8KOxAp0vW8+NHjdSt1312LxcEWIwae+vM
+         uN8bx/5fztGqQKNaKevYJ26qeFcoLsNGNAJC6kKaQnBk0deGFyHP+aPWMBg+t7gJ+wCA
+         2YVq9CF4uc4UvpnrE1M8Uf2tqjGjmSGVt+HAgudl9qO/wiT7V2P/C/+B+HmS41bYakLH
+         g7tJ/Tajb4aWD1BgRHk4bzrIMPNeSqVznetArH2eRKEH84+eOD838xmbE1GMGATr9ACJ
+         7+mpVyX83Fsa5ZQ1HfveSZ64eAiw/YTnijgsM0H7rZnSWxoPqTvy8P3eV3e0jA07zJ2h
+         lPUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784758599; x=1785363399;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NxbTcxXwuujoRQit/eAYaWnsgYP73zQK/sdfkRV8/Tw=;
+        b=iUBXMZSamCVF0vZkx2wS5TSgCVGogQ7CPLw3K2OSQhwdU8L+Vyk8p5LPlNIqjiTrfV
+         pVbzNN8BUgJrNEwMFZ9UzFTo3qgK4DGFj0qG1jP0LjUX4Lu2FT2p4pXL9IQx3jS6ZdeG
+         ojWhUirKajAiTKGCXl0yc0dqE26vqiB9uXEpSmO62QhZV/XouZTsb06dGNKzFqDFjonr
+         1veC4N814ZLxXNyIpSm0zwsHdHmCP9+E4bA43YUy2DU5zbddziAJL73qbvlgPjgwWEY7
+         Q9XzydUWt2zqESD/rP4qoUSJWezTIhmc2VxKmhjUBpCa/jtPdznQkN0F4cOntPCcb4SZ
+         dQpw==
+X-Forwarded-Encrypted: i=1; AHgh+RpJapbG0RPDtVxV9QKRU25cgN75UdGN5xJ4JuwxCBs+2m5ryVSh/eROD4CXi/Oawg7e+3M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqP4kQYOe3U2WhnMp88WmI+il4vsonLwKdTmi7bHVcIpRKqk1V
+	9oneczDhVkvZ1mZIIyimQ49QT3Zw+k1O+sOfbw2uIyt9yXOMHGlJZotqUOoqlEih+1vSUTtPnfu
+	V5eMdrlrK8sguTw==
+X-Received: from pfem19.prod.google.com ([2002:a05:6a00:c093:b0:84e:101:e491])
+ (user=joshwash job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:3cd6:b0:848:8619:c149 with SMTP id d2e1a72fcca58-84e2bbe8355mr790924b3a.2.1784758598470;
+ Wed, 22 Jul 2026 15:16:38 -0700 (PDT)
+Date: Wed, 22 Jul 2026 15:16:32 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="12lppVdet+iItazL"
-Content-Disposition: inline
-In-Reply-To: <20260722191925.2192070-1-matt@readmodwrite.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.229.g6434b31f56-goog
+Message-ID: <20260722221634.186886-1-joshwash@google.com>
+Subject: [PATCH net-next v3 0/2] XDP metadata support for DQ RDA
+From: Joshua Washington <joshwash@google.com>
+To: netdev@vger.kernel.org
+Cc: Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Jordan Rhee <jordanrhee@google.com>, 
+	Tim Hostetler <thostet@google.com>, Ankit Garg <nktgrg@google.com>, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---12lppVdet+iItazL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This small series enables XDP metadata support in DQ RDA mode. While
+space is reserved in the headroom for metadata and the DQ queue format
+supports the xmo_rx_timestamp metadata operation, support for adjusting
+the metadata and passing metadata along to SKBs was not actually
+implemented.
 
-> From: Matt Fleming <mfleming@cloudflare.com>
->=20
-> A frag_list skb can reach veth with data_len set but nr_frags zero.
-> veth_convert_skb_to_xdp_buff() only converts skbs that are shared,
-> locked, have frags[], or do not have enough headroom. It later uses
-> skb_is_nonlinear() to decide whether to set XDP_FLAGS_HAS_FRAGS and
-> xdp_frags_size.
->=20
-> That exposes frag_list data to XDP as if it were stored in frags[], but
-> frags[] is empty. AF_XDP copy mode can then trust the bogus XDP fragment
-> metadata, walk an empty fragment entry, and crash in memcpy() from
-> __xsk_rcv().
->=20
-> Route non-linear skbs through skb_pp_cow_data() before exposing them to
-> XDP, and only advertise XDP frags when the resulting skb has frags[].
-> skb_copy_bits() already handles frag_list input, and skb_pp_cow_data()
-> builds frags[] output with skb_add_rx_frag(), which is the
-> representation XDP multi-buffer expects.
->=20
-> Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accept no=
-n-linear skb")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Matt Fleming <mfleming@cloudflare.com>
+v3:
+  - Make use of xdp_build_skb methods to implicitly pass on metadata
+    when constructing SKBs from XDP buffs.
+  - v2: https://lore.kernel.org/netdev/20260318192450.3400774-1-joshwash@google.com/
+v2:
+  - Fix referenced commit hash
+  - v1: https://lore.kernel.org/netdev/20260316230434.1398828-1-joshwash@google.com/
 
-Acked-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Joshua Washington (2):
+  gve: use xdp_build_skb methods for XDP_PASS case
+  gve: add XDP metadata support for DQ RDA
 
-> ---
-> Changes in v3:
-> - Target net instead of bpf.
-> - Add Return: to the skb_pp_cow_data() kerneldoc.
->=20
-> Changes in v2:
-> - Use skb_is_nonlinear() in veth_convert_skb_to_xdp_buff().
-> - Move the skb_pp_cow_data() comment into kerneldoc.
->=20
->  drivers/net/veth.c |  4 ++--
->  net/core/skbuff.c  | 18 ++++++++++++------
->  2 files changed, 14 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 1c5142149175..00e34afd858e 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -756,7 +756,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_r=
-q *rq,
->  	u32 frame_sz;
-> =20
->  	if (skb_shared(skb) || skb_head_is_locked(skb) ||
-> -	    skb_shinfo(skb)->nr_frags ||
-> +	    skb_is_nonlinear(skb) ||
->  	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
->  		if (skb_pp_cow_data(rq->page_pool, pskb, XDP_PACKET_HEADROOM))
->  			goto drop;
-> @@ -771,7 +771,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_r=
-q *rq,
->  	xdp_prepare_buff(xdp, skb->head, skb_headroom(skb),
->  			 skb_headlen(skb), true);
-> =20
-> -	if (skb_is_nonlinear(skb)) {
-> +	if (skb_shinfo(skb)->nr_frags) {
->  		skb_shinfo(skb)->xdp_frags_size =3D skb->data_len;
->  		xdp_buff_set_frags_flag(xdp);
->  	} else {
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 18dabb4e9cfa..ba3dbac80fb4 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -927,6 +927,18 @@ static void skb_clone_fraglist(struct sk_buff *skb)
->  		skb_get(list);
->  }
-> =20
-> +/**
-> + * skb_pp_cow_data() - copy skb data into page-pool backed storage
-> + * @pool: page pool to allocate from
-> + * @pskb: pointer to skb pointer, replaced with the copied skb on success
-> + * @headroom: headroom to reserve in the copied skb
-> + *
-> + * skb_copy_bits() handles both frags[] and frag_list input. If the copi=
-ed
-> + * skb remains non-linear, it uses frags[], which is the representation =
-used
-> + * by XDP multi-buffer.
-> + *
-> + * Return: 0 on success or a negative errno on failure.
-> + */
->  int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
->  		    unsigned int headroom)
->  {
-> @@ -936,12 +948,6 @@ int skb_pp_cow_data(struct page_pool *pool, struct s=
-k_buff **pskb,
->  	int err, i, head_off;
->  	void *data;
-> =20
-> -	/* XDP does not support fraglist so we need to linearize
-> -	 * the skb.
-> -	 */
-> -	if (skb_has_frag_list(skb))
-> -		return -EOPNOTSUPP;
-> -
->  	max_head_size =3D SKB_WITH_OVERHEAD(PAGE_SIZE - headroom);
->  	if (skb->len > max_head_size + MAX_SKB_FRAGS * PAGE_SIZE)
->  		return -ENOMEM;
-> --=20
-> 2.43.0
->=20
+ drivers/net/ethernet/google/gve/gve_rx_dqo.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
---12lppVdet+iItazL
-Content-Type: application/pgp-signature; name=signature.asc
+-- 
+2.55.0.229.g6434b31f56-goog
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCamFASAAKCRA6cBh0uS2t
-rOzcAQDSJ4yvr131bHLhtIoQwICJQOv62OhEtogxQR3U2ZSBVAD+MadPuRZ9a1oR
-0ynjlJowe8IiPldD6HMrxRsy+RZ2sQ4=
-=U7/a
------END PGP SIGNATURE-----
-
---12lppVdet+iItazL--
