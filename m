@@ -1,30 +1,40 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFD7472F64
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:49:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F6D435EF0
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784706542; cv=none; b=Q3SnDgVuwxV5cggKSi8IzZUzlhIMcwizbveYDIA1mgY7aG8Ryvuv5auAKbJSK3/p91ulQS+OSJslT+omMFOfVqJ1e+VaUDk8EP7B+3rrX7dlJSOnzCFL+gDTBfNI/Hx3gP7PwCUQAsJ9Aw9k8dJgTecHpbvzl6rOgRWNB1UDsUc=
+	t=1784706690; cv=none; b=XoL3PKoYaI9tv03XW8rJnwZTI77nx9a9JvJiqTh6UWJH84uIXw/xXl/L7do59ZqsMExG06kXRMtp86ugLTqlEZQBmCzZpn0OBFRApjgJnZ/F4t3q3OsdEYKr/O5R/7/zChlMHy/ycTO7mrDzXzArsZ2KP/Z2pcCDSCefrIYDVnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784706542; c=relaxed/simple;
-	bh=HJLE2eo85PmgYQQn5EeKe0b3NHkn/5qReU42v3xFLPU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AxTDSCVyidPkpfK3hjZozqdrRDdMoZVRxAkCpu7pUYMiJNzS4Z3YL9FuiOc8JvGrDpohHTO/BO3Jeb90UyuyhWDTZKX+rhN0PnA7fs/cAiHG1ORn0Xdps7N9lxVwJMkPdiArhTJo3VOMXAycPHGsNJikGfAhbqJ027zrSVaey9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h4mb12pCNzYQtmJ
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 15:48:29 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 1315F40539
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 15:48:58 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDnFyTpdWBqimOFCA--.51088S2;
-	Wed, 22 Jul 2026 15:48:58 +0800 (CST)
-Message-ID: <d1c272dd-9db3-4d93-806e-ba8b4dcc0e91@huaweicloud.com>
-Date: Wed, 22 Jul 2026 15:48:57 +0800
+	s=arc-20240116; t=1784706690; c=relaxed/simple;
+	bh=3s6WTKFhhSExzluhud8wBq3Zan2Vs3Rk6iSqpY6kVkU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=U2l80t9azkSjpfTToRkL/0jABY4hYnVlAM0n+azok4YS68NbA4yXptBtbG29NwIrgjsSn0dN7mfAGnKJ4R8Ls6CB9O1onnWSu6PlSuaKdH2DIn9MLx8ZbVxyqq1/vzNUkKjDguoEQ/9rqpSIMb8MY4jKmnEa9XiLnsYIKqCny5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=wsNP8KW6; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="wsNP8KW6"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=i6448xFg9WY+v8Bm0s0sYviAL+voHoV55VQG6KMWMws=;
+	b=wsNP8KW6Dr5mr3C9M4GlhXszBbfVJMbhktLF83f0f6SPfH+K0XGc/E53oFS4sX0aWM9ekBVXi
+	8ODHJ14qyoLw1dN4XEiZmpZcgkHJNbOHnCXPB5p5nqZHa4+IiZDyUQEUjv/rgNVfmwdtS+fVW/8
+	TIrHMXdS/XVUDSTUAOnp5is=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4h4mRJ4DDbz12LDl;
+	Wed, 22 Jul 2026 15:41:48 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7382840538;
+	Wed, 22 Jul 2026 15:51:22 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Wed, 22 Jul
+ 2026 15:51:22 +0800
+Message-ID: <b47d9d56-6d37-4d67-b636-0c6fdf283598@huawei.com>
+Date: Wed, 22 Jul 2026 15:51:21 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -32,116 +42,69 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v6 4/4] bpf, cgroup: Fix storage null-ptr-deref after
- replacing prog
+Subject: Re: [PATCH net v2] e1000e: Fix out-of-bounds MMIO access by
+ validating BAR0 size
 Content-Language: en-US
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260722072326.1545677-1-pulehui@huaweicloud.com>
- <20260722072326.1545677-5-pulehui@huaweicloud.com>
- <20260722073501.64ACE1F00A3A@smtp.kernel.org>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <20260722073501.64ACE1F00A3A@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: <sashiko-reviews@lists.linux.dev>, Pu Lehui <pulehui@huaweicloud.com>
+CC: <bpf@vger.kernel.org>
+References: <20260720133049.1289167-1-pulehui@huaweicloud.com>
+ <20260720135218.92EE61F00A3D@smtp.kernel.org>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260720135218.92EE61F00A3D@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgDnFyTpdWBqimOFCA--.51088S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuryDZw45Xr1kWr15WryxuFg_yoW5Ar4xpF
-	4kZasrX3Z8Jr9Yvr1kt3929F48Aa10qr1Ykrs8Jw1rurW2gFWFgr97uFWY9Fy3JF1Du3Za
-	qF90vF1qkF10vFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUglb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-	AIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVF
-	xhVjvjDU0xZFpf9x07UNvtZUUUUU=
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
+sorry for the noise, did not update the send patch script, it should not 
+be showed in bpf list.
 
-On 2026/7/22 15:35, sashiko-bot@kernel.org wrote:
+On 2026/7/20 21:52, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
 > 
 > Pre-existing issues:
-> - [High] Missing rollback of `pl->flags` on the error path in `__cgroup_bpf_attach` permanently corrupts the execution order of the replaced program.
+> - [High] The driver unconditionally maps BAR0 with `ioremap()`, without verifying that BAR0 is an `IORESOURCE_MEM` region. A spoofed PCI device could expose BAR0 as an I/O region, which could bypass the new length check on some architectures and lead to `ioremap()` being called on an I/O port address.
 > --
 > 
-> --- Patch [4]: [PATCH bpf v6 4/4] bpf, cgroup: Fix storage null-ptr-deref after replacing prog ---
-> commit f8726e124d0a4e72b87976830f0741e286d474df
+> --- Patch [1]: [PATCH net v2] e1000e: Fix out-of-bounds MMIO access by validating BAR0 size ---
+> commit 939eee77005bb32587689d8e06aa2cec8c38f7e9
 > Author: Pu Lehui <pulehui@huawei.com>
 > 
-> bpf, cgroup: Fix storage null-ptr-deref after replacing prog
+> e1000e: Fix out-of-bounds MMIO access by validating BAR0 size
 > 
-> Syzkaller reported a storage null-ptr-deref issue after replacing a prog.
-> The issue is fixed by properly allocating the storage and comparing the old
-> and new storage pointers, falling back to an RCU-safe update if they change.
-> Additionally, proper rollbacks for storage and flags are added to the error
-> path in __cgroup_bpf_attach for code rigor.
+> This commit fixes an out-of-bounds MMIO access in the e1000e driver
+> by ensuring the length of BAR0 is at least 64K before performing ioremap.
 > 
->> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
->> --- a/kernel/bpf/cgroup.c
->> +++ b/kernel/bpf/cgroup.c
->> @@ -883,7 +885,10 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->>   	pl->prog = prog;
->>   	pl->link = link;
->>   	pl->flags = flags;
->> +	if (old_prog)
->> +		bpf_cgroup_storages_assign(old_storage, pl->storage);
->>   	bpf_cgroup_storages_assign(pl->storage, storage);
->> +	old_flags = cgrp->bpf.flags[atype];
->>   	cgrp->bpf.flags[atype] = saved_flags;
->>   
->>   	if (type == BPF_LSM_CGROUP) {
+>> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+>> index 844f31ab37ad4..46e58e926f7b4 100644
+>> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
+>> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
 > 
 > [ ... ]
 > 
->> @@ -915,12 +920,14 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->>   	if (old_prog) {
->>   		pl->prog = old_prog;
->>   		pl->link = NULL;
->> +		bpf_cgroup_storages_assign(pl->storage, old_storage);
->>   	}
+>> @@ -7450,6 +7450,11 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>>   	mmio_len = pci_resource_len(pdev, 0);
+>>   
+>>   	err = -EIO;
+>> +	if (mmio_len < E1000_MMIO_LEN_MIN) {
+>> +		dev_err(&pdev->dev, "MMIO len is too small\n");
+>> +		goto err_ioremap;
+>> +	}
+>> +
+>>   	adapter->hw.hw_addr = ioremap(mmio_start, mmio_len);
 > 
 > [Severity: High]
-> This is a pre-existing issue, but since this patch tightens the error handling
-> and rollbacks in __cgroup_bpf_attach(), should we also restore the original
-> pl->flags here?
-
-
+> This isn't a bug introduced by this patch, but is it possible for ioremap()
+> to be called on an I/O port region here?
 > 
-> Earlier in the function, pl->flags is overwritten with the incoming flags:
+> Earlier in e1000_probe(), pci_select_bars() filters out non-memory BARs. If
+> a device is bound via sysfs and exposes BAR0 as an IORESOURCE_IO region
+> instead of IORESOURCE_MEM, the driver fails to request the region but still
+> unconditionally passes mmio_start to ioremap() at this location.
 > 
-> 	pl->prog = prog;
-> 	pl->link = link;
-> 	pl->flags = flags;
+> Could this cause a kernel panic on architectures where I/O space is distinct
+> from memory space when the returned address is subsequently dereferenced?
 > 
-> If update_effective_progs() later fails (e.g., due to memory allocation
-
-It's hard to make update_effective_progs fail in __cgroup_bpf_attach, as 
-it will failed only when allocating failed:
-
-progs = bpf_prog_array_alloc(cnt, GFP_KERNEL);
-
-failed for the above alloc is not a high issue, as cnt max is no more 
-than BPF_CGROUP_MAX_PROGS.
-
-> failure), the error path restores pl->prog, pl->link, and pl->storage, but
-> misses pl->flags. If a user attempts to replace a program using BPF_F_REPLACE
-> with different BPF_F_PREORDER settings and the replacement fails, could this
-> leave the original program active but with its execution order silently
-> corrupted?
+>>   	if (!adapter->hw.hw_addr)
+>>   		goto err_ioremap;
 > 
->>   	bpf_cgroup_storages_free(new_storage);
->>   	if (!old_prog) {
->>   		hlist_del(&pl->node);
->>   		kfree(pl);
->>   	}
->> +	cgrp->bpf.flags[atype] = old_flags;
->>   	return err;
->>   }
-> 
-
