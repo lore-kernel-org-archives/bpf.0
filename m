@@ -1,50 +1,50 @@
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
+Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A18140BCA0;
-	Wed, 22 Jul 2026 04:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5C1389459;
+	Wed, 22 Jul 2026 04:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784695341; cv=none; b=DV78De0rETUACXwy2IUzIMn4JOV+OAJjHAHYCpM3WHNJzNAoGlkSbM5cnssiRkLu4AjN+v5h5yJH3YTe6WHa5y/oPfyP/txUZ3Y+BoPXjbNpBOVqLsc9/yUmCTzc36eF74Oqn8D1suo+MAxsMTBkRhsRrWOnYGy4hSkGlRm3fGE=
+	t=1784695347; cv=none; b=eXwzerebYn+P7lioziMqNIbXprTIT594kNoAwAhSwzxfVFvzWw3Ailqn12n9YA3KeSStJ5oH+J+gI9wNLNAxpCr6T23ghOYewlZb3fGLEvsCSzgaNCcH0gyOPG7OvbpCDn5BBkoNiM20Ku30SwufI5XLKpsrML8eyxlubaBzwLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784695341; c=relaxed/simple;
-	bh=UFaliVxrIGy1zF6d7IKDsknOE0oAqstS2nvZ79V8R4w=;
+	s=arc-20240116; t=1784695347; c=relaxed/simple;
+	bh=wPnO+rdhWhHU4W916hYj3apl30glcr+ygckHKdjpxrI=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=NqVpW147L7XuoB6nnrCYoqTXwZZRqustUksnMhFe2vjxgIzEcWriburSnKYsK95MfDj2VbXiUmSQTdH3BxUWSrLwW9VvvE55mWMSKC8jT74S3+8IcxcOgR4HXBE24mmms36CfQBd4zJ9oFDcdASAGO1lVbejm39/7lVz/EHMD2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=UHi7E03R; arc=none smtp.client-ip=162.62.57.64
+	 MIME-Version; b=XJVYYMO72bpGgicM1csf9ou8a3UGm6jjNKkaZVgDsS7yfrSSmEHOMeL4rZutv16dwFQTbVE3YLtDyEFR2uljp4bmD9hYlGZmWEXuRMmcPolt+YNj1smDzCW798LapRQosgAsN/oJ3Kcx6MdewS2tanLLcw82/Ut4Aydtfi0sTTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=g8pR5sot; arc=none smtp.client-ip=203.205.221.155
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="UHi7E03R"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="g8pR5sot"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1784695333;
-	bh=yNfspZFtc0PZYXtKxUDV1KbZtgzEmHkYDEQ6wWzb0QA=;
+	s=s201512; t=1784695342;
+	bh=WlEcT0tWpxZI6RXRhm5LeYSQ7/dWQKcbRqEN/6k1Exc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=UHi7E03RpcIZO3Nf/2dwp1SxyO/UsL42yHU9pfRbuLZ+GJW+s42T8wTQbqkVJtLFR
-	 DKIc25PWUsP+C2qkcP+gk0AYQDV7vRA6SwDGpvAmtVgEakpFkdq4aTh+ZLeLLlKyLr
-	 2rMuCa7WeqDv62YmdmvIVlzOUVQWq2N5QFluqb0k=
+	b=g8pR5sotx+CMA9m3GVCL5+OpE3baBSbAQNRGijBGTshBYdyyUiQ1VMUw/fq3lK0lM
+	 Jd63YXFFLYDqLjEwKlrxjZfc+uQgNZWkMJQy1mIZo+jT7DtOTPnZpG7JRgqwdVqkTO
+	 Q4krgfarMgMbaKFUWGCpEg2c+b1cDENICFHfS2KM=
 Received: from NUC10 ([39.156.73.14])
 	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
 	id A70214ED; Wed, 22 Jul 2026 12:41:48 +0800
-X-QQ-mid: xmsmtpt1784695311tb7p5i4zh
-Message-ID: <tencent_60882E4BE4F247C5F6D564F41BF1C3004805@qq.com>
-X-QQ-XMAILINFO: NC4p7XQIBeahFvyhj1eRzT/H1QcGcAxqHW4HbcuDmdCis+5KnWVm63Kv7qQHkm
-	 Pwp8hsJ6zWjaz9i7Ij9CCGem6CbdnBCBwhaaDzvz9JB9WHqDJoB40rRqPX1JHprlWmb0M7/RfnP4
-	 j0SdLylX/0HNw66AW6Gb0FGsI7/dJs9l1z99yM/1TdGTOIkp/dcwI3FiAHVZWMKpN1klO53d0FG5
-	 OdZsWaXmedfGmuxgWl0msRSdHoKhF1CDOtMMP2g+B23lTsKwOh5RLB1tLpwx/lkUTug6BnRuTkTt
-	 gsl1TTx7VWgvqjDAFdHsOIJPjJD3nlbQRlQDDQI9NBlVJIKKzzF5hflluZz0trSBVAnhjM/aTgMa
-	 flJnffZlmbzdJONn4jtIHCARRI7qd1s4Rg6bQ0t9o2GgQKgAz1BKmNxdgUdKZTZ22XCxEXrCxwMC
-	 Gnu4ypfWxk2BSlRJQsLrlOWnE84aBdYFzrZbaDKNSLdaX+r/AXJ0/9xyuurLS0Afqex81VlN/L1T
-	 OL/5DFLQKF6YUua+f8KahQHJuMsAbyuI46vP4gyOmnF3rxL/y3XIepMjq/LGr/T9jHRELS1HaGki
-	 P4dXnQrwoD+pHw8ZDlc/aqAC12C8N8J7+aVV9I/Sdf/WWRZSinfkNPleRj0sj12fqmyc6j+ZDyzo
-	 S7qaGzUj+KXUbrJH4o5K/dPGa1zrLnV44+iR7vRsh01ndktG54lB+WHzBs+5OFBmfi37sOIHMJpv
-	 UAdrK7q+M+ET30kNxGLUK9QiEbWPUz9cY96E5Z6mrJEg1dO263XAkrM1EsngCDBZsntdNRJll429
-	 KQ9vd66HY48ZHwS8NrqxrQu7OUyQ0VAWzut6RcrKBYuygB3IKJDtWUld09LoPcnTTb7h3UxQOkIF
-	 Dr7rAyDGhq0urdC+AEYhWIXYe2ZanguDReHr0/v7Xa3+Qdmr9m3g87FrcZSBtiEPSCn2Nz+lXgqO
-	 AFXRlL3Gn0oh4uZb5jqRueSKPkShfOX7ZlIuSibz8CzyAHt5GHthhfv+gVyeYiW/L1j5dyKkvzHu
-	 YkHJqoYKQ8MTe+RAH/LaVNewnJOrF7rwKbMGpB7zfLxlegjDutaeuQCy80ce90JMMF2hXa2jIAth
-	 JkWudMwVepTAEg5MYsX/zN5IhA9w==
-X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
+X-QQ-mid: xmsmtpt1784695332t2sbrldap
+Message-ID: <tencent_586BE1E837629801BE504D16D665994AF506@qq.com>
+X-QQ-XMAILINFO: N0Cpyjih+sbnOPeF0KhF35PRFgYVEiyPfCX+jFTK+77vUZLWvrh+MifZQW22OB
+	 N3EkBEFtF4oMSAdGS/qs1/zpPEe1LPhsDD20j9lpuIM3LOqdYaCx8VK94d2xkGXhNp/++n27KYUP
+	 39toiRXKoHV9rpHiI8WYg7wnfszY3Gk6Bv5kfzR4+ea0wUlI2Tz1RYnvCnFpAKCJP/JQUgTlqe0H
+	 8/fphEICGj6QdjkTZDT0/WWIaOXTm+xLHFInWx8OiqEXiw5iIzXChG3TEgBciA+EAS7UuHw/XR5A
+	 gNlJJ915fbVcPfDsULuadF/moAPiMdGUwN/4Qmu3r2pDQY6tzrZqAZC3W850Fhw/ChXKLQuIkh6m
+	 cfWLAieTX63nrIZY7padjXsFaTxrcGpUCh8ktmhvffponVNf8PGVGPhAR1XZSeBLlerjdp+UP+1g
+	 uNW/tLPhvsXTq5iAu7zqYjnTXugKtQRlUcZ8hogXfXSCaaiHB+Pn3miZ7Jg47wEkFA4KTN2vH7jV
+	 Zd5PR1GeM3+fB9SGSee835Y1MZC196JcgfrDiOJpn1KseXtM+Khuk2sjIPqBHRmKNBTfqYp/cMIE
+	 1kNiMBwWj+vFi//Ezt80zRMvJy0P+/+KQYLng6SIt+v82PPkFepxobVj+9ImlCyjhwvbXKRODQ11
+	 bEAK/fjc8ihff+VakWJSyPNnV4/8re/ZHVkgZ9X+xJU7TpKWvvZDUoICTlSP9AUKNuGLalRI3h87
+	 S3CLIhBsDs0U33/Wwuyrl1O5GzkixjXLVACRCvhdPyXJfTZ89BBQG+qthUBbRsnGPys1OOgsyoJa
+	 p7uBeelfyIHDuAgQjf4t9fnJiEkgMOAAHpEPyojZkh+JfZWJxeaDJKElqCgGo4YbNW7En7b9cv2z
+	 UoS3LJNRDiC+P7A/TqqAIVd5VPAMn5SQmh+8v6WLcprw8rpMeDaQqZ8aVTGV1xbHqAXDbSPjcPyQ
+	 O5zufOR0CcbXD92ZrTtft3GGIwTgXLRECNNYPJ+AqmCuxHNgeqQb1j2vgBdss0xqke9fitiSjg8k
+	 4TLa+5WCXaClUtT+KsbcQHlg9JL3eE/derAAzuV/YpgpXZuCt5C1e5tsZksPfttrax2eUBuIgYIl
+	 2voPhzIwreD0uHbnVcwXn0BL6AEqzH2XmVKCV4D+p8YcCWXPw=
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
 From: Rong Tao <rtoax@foxmail.com>
 To: vmalik@redhat.com,
 	andrii@kernel.org,
@@ -64,9 +64,9 @@ Cc: rtoax@foxmail.com,
 	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
 	linux-kernel@vger.kernel.org (open list),
 	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v5 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
-Date: Wed, 22 Jul 2026 12:41:27 +0800
-X-OQ-MSGID: <b80dcfdf496c885abc06f89b0c5a91977f16d91b.1784695085.git.rtoax@foxmail.com>
+Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Test bpf_strcat,bpf_strncat kfuncs
+Date: Wed, 22 Jul 2026 12:41:28 +0800
+X-OQ-MSGID: <a04f1b029dbdc4d3c7af658ee9643ed8ba840462.1784695085.git.rtoax@foxmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <cover.1784695085.git.rtoax@foxmail.com>
 References: <cover.1784695085.git.rtoax@foxmail.com>
@@ -80,116 +80,70 @@ Content-Transfer-Encoding: 8bit
 
 From: Rong Tao <rongtao@cestc.cn>
 
-Add string concatenation kfuncs, prototype:
-
-  int bpf_strcat(char *dst, u32 dst__sz, const char *src);
-  int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len);
-
-This differs from the glibc library functions strcat and strncat, which,
-for safety reasons, require the size of the target string's memory space
-as a parameter.
-
-The src parameter cannot directly pass a string constant, such as "XYZ",
-otherwise it will throw an error "write into map forbidden".
+Add tests for new kfuncs bpf_strcat() and bpf_strncat().
 
 Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- kernel/bpf/helpers.c | 75 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ .../testing/selftests/bpf/prog_tests/string_kfuncs.c |  2 ++
+ .../selftests/bpf/progs/string_kfuncs_failure2.c     |  3 +++
+ .../selftests/bpf/progs/string_kfuncs_success.c      | 12 ++++++++++++
+ 3 files changed, 17 insertions(+)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index c18f1e16edee..85afff60365c 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4195,6 +4195,79 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ign, const char *s2__ign,
- 	return __bpf_strnstr(s1__ign, s2__ign, len, true);
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
+index 300032a19445..460567ef622a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
++++ b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
+@@ -24,6 +24,8 @@ static const char * const test_cases[] = {
+ 	"strcasestr",
+ 	"strnstr",
+ 	"strncasestr",
++	"strcat",
++	"strncat",
+ };
  
-+static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
+ void run_too_long_tests(void)
+diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
+index 412c53b87b18..2dbd1349689e 100644
+--- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
++++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
+@@ -5,6 +5,7 @@
+ #include <linux/limits.h>
+ 
+ char long_str[XATTR_SIZE_MAX + 1];
++char str[] = "hello";
+ 
+ SEC("syscall") int test_strcmp_too_long(void *ctx) { return bpf_strcmp(long_str, long_str); }
+ SEC("syscall") int test_strcasecmp_too_long(void *ctx) { return bpf_strcasecmp(long_str, long_str); }
+@@ -23,5 +24,7 @@ SEC("syscall") int test_strstr_too_long(void *ctx) { return bpf_strstr(long_str,
+ SEC("syscall") int test_strcasestr_too_long(void *ctx) { return bpf_strcasestr(long_str, "hello"); }
+ SEC("syscall") int test_strnstr_too_long(void *ctx) { return bpf_strnstr(long_str, "hello", sizeof(long_str)); }
+ SEC("syscall") int test_strncasestr_too_long(void *ctx) { return bpf_strncasestr(long_str, "hello", sizeof(long_str)); }
++SEC("syscall") int test_strcat_too_long(void *ctx) { return bpf_strcat(long_str, sizeof(long_str), str); }
++SEC("syscall") int test_strncat_too_long(void *ctx) { return bpf_strncat(long_str, sizeof(long_str), str, 3); }
+ 
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+index f65b1226a81a..40583361c655 100644
+--- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
++++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
+@@ -59,5 +59,17 @@ __test(-ENOENT) int test_strncasestr_notfound1(void *ctx) { return bpf_strncases
+ __test(-ENOENT) int test_strncasestr_notfound2(void *ctx) { return bpf_strncasestr(str, "hello", 4); }
+ __test(-ENOENT) int test_strncasestr_notfound3(void *ctx) { return bpf_strncasestr("", "a", 0); }
+ __test(0) int test_strncasestr_empty(void *ctx) { return bpf_strncasestr(str, "", 1); }
++__test(0) int test_strcat_success(void *ctx)
 +{
-+	int dlen = 0, slen, space, copied;
-+
-+	if (sz == 0 || dsz == 0)
-+		return -EINVAL;
-+
-+	while (dlen < dsz && dst[dlen] != '\0')
-+		dlen++;
-+
-+	if (dlen >= dsz)
-+		return -E2BIG;
-+
-+	space = dsz - dlen;
-+
-+	slen = bpf_strnlen(src, sz);
-+	if (space <= slen)
-+		return -E2BIG;
-+
-+	copied = strncpy_from_kernel_nofault(dst + dlen, src, sz);
-+	if (copied < 0)
-+		return copied;
-+	else if (copied == 0 || copied == 1)
-+		return dlen;
-+
-+	/* The copied character count includes '\0'. */
-+	return dlen + copied - 1;
++	char buf[32] = "hello";
++	bpf_strcat(buf, sizeof(buf), str);
++	return bpf_strcmp(buf, "hellohello world");
 +}
-+
-+/**
-+ * bpf_strcat - Append non-null bytes from a source string, and null-terminate
-+ *              the result
-+ * @dst: Destination string.
-+ * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
-+ * @src: Source string.
-+ *
-+ * Return:
-+ * * >=0      - Length of the concatenated string.
-+ *
-+ * * %-EINVAL - String @dst__ign is invalid.
-+ * * %-EFAULT - Cannot read or write one of the strings.
-+ * * %-E2BIG  - String @src__ign is too large or the remaining space in
-+ *              @dst__ign is too small.
-+ * * %-ERANGE - One of the strings is outside of kernel address space
-+ */
-+__bpf_kfunc int bpf_strcat(char *dst, u32 dst__sz, const char *src)
++__test(0) int test_strncat_success(void *ctx)
 +{
-+	return __bpf_strncat(dst, dst__sz, src, dst__sz);
++	char buf[32] = "hello";
++	bpf_strncat(buf, sizeof(buf), str, 3);
++	return bpf_strcmp(buf, "hellohe");
 +}
-+
-+/**
-+ * bpf_strncat - Append non-null bytes from a source string, and null-terminate
-+ *               the result
-+ * @dst: Destination string.
-+ * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
-+ * @src: Source string.
-+ * @len: the maximum number of characters to concatenate, the null terminator
-+ *       \0 of the target string @dst will also be included.
-+ *
-+ * Return:
-+ * * >=0      - Length of the concatenated string.
-+ *
-+ * * %-EINVAL - String @dst__ign is invalid.
-+ * * %-EFAULT - Cannot read or write one of the strings.
-+ * * %-E2BIG  - String @src__ign is too large or the remaining space in
-+ *              @dst__ign is too small.
-+ * * %-ERANGE - One of the strings is outside of kernel address space
-+ */
-+__bpf_kfunc int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len)
-+{
-+	return __bpf_strncat(dst, dst__sz, src, len);
-+}
-+
- #ifdef CONFIG_KEYS
- /**
-  * bpf_lookup_user_key - lookup a key by its serial
-@@ -4958,6 +5031,8 @@ BTF_ID_FLAGS(func, bpf_strstr);
- BTF_ID_FLAGS(func, bpf_strcasestr);
- BTF_ID_FLAGS(func, bpf_strnstr);
- BTF_ID_FLAGS(func, bpf_strncasestr);
-+BTF_ID_FLAGS(func, bpf_strcat);
-+BTF_ID_FLAGS(func, bpf_strncat);
- #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
- BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
- #endif
+ 
+ char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
