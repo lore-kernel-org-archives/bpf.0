@@ -1,401 +1,224 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054294457C5
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 18:43:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A58B30C148
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 18:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784745840; cv=pass; b=QJPXEtqWbGg7PMOyehgSb+NJfa+drPDOkgVm3qvO9v1mYGAe3VMS5qPiffbDENVf4bHcBz6KzJHWW8Rvz/Bo9CoUuCkVHdbYTMJTJVKZ0RjDshTWC2k8MxiQzvS25HrAXgxMdwCzLoLeIfvSnKcCYaT/7acc48lM17uoUQDTbI4=
+	t=1784746214; cv=pass; b=ffscvmhPWca32UXyihhJcSiKBIlJ59E6euWTDWccn6BWrliVQRsJY6L3u6nuPHpIt2UgmYmu2xOA/3ZsZEPCe3Wj1aHR5Xa4F+VyNx9wlYxB6Z3FJoAbPvPtA3AXkluYhbN4QdVQ2y6+mEE1LnjHitQh8iMk2HboMGQIxa9ObZ8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784745840; c=relaxed/simple;
-	bh=sWuC7RcEfO2bBvVxTAgFyctvDw7VaGC57NMExonBeIY=;
+	s=arc-20240116; t=1784746214; c=relaxed/simple;
+	bh=LpzHZjjw9WWzYVr2KkbWNQpkV9bpn8GytcGc6ODCG0c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hn2Clv1b+Pwm8RMA0BI0cEk+JnOAJjBQDv6YGYM1hHmMFULVGUrI3cmYs2rvHSL+NIzvzGafquxFBHTVVEjRBBXzIttQ02pD97KdDH5daO8dziPf26q6ewarb0dSOp4Ovf804HThulzR8dBmr3aSj/5guYR0xXRcsoJ/nMXklQY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UmRbC7+9; arc=pass smtp.client-ip=209.85.214.174
+	 To:Cc:Content-Type; b=Fm403mzkE9gSNCpVQWbT8mQcxwzyysF4ZHY5hDVpCbsMxVzzkT3a88R7IqEkLFuflGzrN+uV9j1ytTm0Pxp7JXZkpRcxB7OHFwnMaSaAqFGu1kKfgpyHEuVcHUkAd7Qlx1py0ujDQsaiSCbqLt7+RFamKJMokiFFb//NoNKcRZE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TwRLDPSl; arc=pass smtp.client-ip=209.85.222.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UmRbC7+9"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ccdf36f63dso11665ad.0
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 11:43:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784745837; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TwRLDPSl"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-930c0f9c1b1so498712885a.1
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 11:50:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784746211; cv=none;
         d=google.com; s=arc-20260327;
-        b=lJUCiZ8HIW88S11K5lV4ucmP8TBkmNR8amOLIJquh+pgTMBD5pFGriqKreNcKOUX70
-         QHuVSDZBfTE5Otb9wmG35fyo1hKy0J9ZBt3QJd3Lnt7xc/V0mFQdlUWpLOZwDMyn80eg
-         TRcfwvq7UI5H8sLwJSt538mViuGSCkE+rgZXoFQdwSLvR/WK+M9byR1ERIAsdm3DPPTd
-         o9DzFYe+UK8a+6/9xw98aZRm0DAbXxlyKBb4K5UiHK1IFmpsXWhcRfHD9GxGDIAHjlPB
-         bV08LprPUCRQLGby5opqNsFqVltGX02t7FDD4YpMUsGAV/tYvHfVuvQT2gXW4961Ri/x
-         zLWg==
+        b=jChHm3J5vUF7o4ufw+yNREB2CfAl7Aj3XOI6XvmtsNQpQc//9SmQzEKYu96PyiyGXY
+         Pvsvd6SBr5EqVOXi773RXoK2JveMcWYOFyMhAg+K5aZ8lff2uBbunChUV6QMT3MukSQp
+         UR/GzK6Lw2MuRLXov/3hRJWZScqc/M+HnIwMD9rnW0Y5EbrmLUVOYTE53OT3c/uJIspa
+         pFBnXVB8SoBDklLebOpUNbk9r6uFjESCAP0C4fXP5CL2uhpmStj8fQ+rir8qGe2SsMAm
+         2c/Wzehe+x8Xs/b4lVCKg1ZGE9t5+tZiLsVYWOajwk8bXtv/d6Gumg5ClEq9fH5V85vL
+         bKYg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=SwB+xCH1z9pWiUIqElqZkFZUWVe28VGLc6W9xbc0aqw=;
-        fh=xBR2NEI9DholcM/8opscoKRZURKtwaQEaqtxAANvH7k=;
-        b=nncZ8QBKxH5C9hyCJAKyQJYTNX9nZ2UnD4Vx2l2IrpEMR4/5mdEL4O14XgM0F8kpI3
-         LdfpZqW8KRHxcWL6TG3hKJbLqSGzFuYDCzUPYm4J1aVVcdfCiZew3fKRcoxV7u1acnYa
-         hfwJPCUoTUnkkZq1DlI3CbnJoxL3Q2vBZvG84mahKj0kPDGDEvFFxn+O3hZWQNifrP+C
-         A5egk37IMmmyyydVY/YLd7/dgeweVNLRTixh5M5kAZNo86z46kuqXEVU+L8JiHVQkicE
-         hYDm3HqCxPNFD2S81BKAN5BIROrj6Cl0orl5uI9qrz7Jm5Os5+CDwIlT6dF4niGnXJS2
-         0ihg==;
+        bh=81PqcakE3vFqwcrUKH8WKjOfwB48ApktmKwcHNXwN8w=;
+        fh=9ZVTFihw7ntTMMkfY75VQ8ejL4DLKI2HWzeLAQ1q7Zo=;
+        b=JlfZD4qFKcV8WlZTg6wRMyQG6qCZCVLYKy0LtxeE83RCuFJf+hc0ta3Uu7xXKrS1eE
+         aIza0wlBZ1EH08iLXGcei0n9Yg1QSM/OiJBa8+xEEMB3DYoY8JTA8krxAm391efKqlxk
+         PveN4D4YQsWZ2HqJiyrDmtg7LmELJYSg5NW006rf08jwdydcS43BFCXSrdO6Dcmbbt5v
+         J0xzOWvcol6OR53IWiXpDjbgxQMNuxysfbcqRHKzi9XvniGUMiwXZGpVV08758buWWMD
+         5tOkoEGDgYc1ZjcOxpNBNhteIP8UkXTYjhaN+iVBNuFoCZDvL5/X/R3XY/fD+3CwmBu7
+         LgrA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784745837; x=1785350637; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1784746211; x=1785351011; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=SwB+xCH1z9pWiUIqElqZkFZUWVe28VGLc6W9xbc0aqw=;
-        b=UmRbC7+9NFnly+w1RCN0orn0AGZKMB/gHH/D/+kP1vcInPN404mNadMYnSAZTVJ65z
-         IWITk4ch6zjCQ+SOdwQxMCZfHZvtKS/sjxNRHSA5YdI7hgKposLgoeLLSiHPfaSnzFoJ
-         QAIdXT6THdRcAeuk9AZxsfRtE2K7mJi0LOAfRDKzEUVGtJsnJuA6v2l0wR1ALzyC99SL
-         3YPZNXPFX+AhweqQwLvobOx7tPLUtb4nLgAkIZDGC2KPrSczV5a2dTWYxRo9i2UAc5Ah
-         k7T7UjhO/51o2RFpqgEvE+6CzwYil8RfDYHWWMEmm7aSYVgJBoTk9QCGYCfUXO4hJtVt
-         MWgQ==
+        bh=81PqcakE3vFqwcrUKH8WKjOfwB48ApktmKwcHNXwN8w=;
+        b=TwRLDPSlaqKU0KTwYCWF45jMW5DZy9g9q0wP1M4K2l95JKX7p6gpHEKrMu7LYoe0/O
+         XWTxPsO99B52ZaJD0d6YH1MbVhYO+8PNUDnrKP/53zlhjsc8kEbFZXdc7Op0K+TPjrJy
+         sd1k37lE1LibVdk9GR1EH2B+mDIQecfIo9+KbonwbO8v7aKqWfT5QfOJt85vxhW7aSU0
+         KQGQtxG+WgQnRCbSnYTgmo+YrRE+Q1v1TiK2xWzaNKPL24TirIGAVOSVfL+qmuo/PURY
+         9adM9Cwl97B4NotDScBIBFZcxl/eppm78HqPzzdAMZmcB7q8oHT6KOhyY3p5pxHzqxVD
+         A8Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784745837; x=1785350637;
+        d=1e100.net; s=20251104; t=1784746211; x=1785351011;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=SwB+xCH1z9pWiUIqElqZkFZUWVe28VGLc6W9xbc0aqw=;
-        b=gzbzB0n18Di9LEaIq91Lu3I2cQwe+Nw8XqwGooglNez8Cf8vxt5xu0NUpriQ4DfphW
-         Z4qet63R9XRA9rOpXA7ChVhWVTbI44uwZf7SBdBjA662RQ6PFdu7vgu3SQbS7ntiShcK
-         yONz/kgmlGV3m0MOkKnOCxvS0coVEOaig9yzPyt8+MRghrS04Vcxkc5Mj81X1DgdFwn8
-         gvLyefh0ABAtzNqdA+yrx7pY89KSvbWbky5i5sbbCZGRIXY8SGes0aClUAjcDBHe49tj
-         tt6OuJUlw8GDLyu3GJNfV9TRoNmpMIhnr7xHLciWXLyMeoWxn2ihbD2PHwwk7VyCpGb2
-         QkbA==
-X-Forwarded-Encrypted: i=1; AHgh+RrHpwrxlQQb7rlYEQpExWT5KQrPyH0A015zdwOSbVy/JQ3phGBBkf7sCMDm36MslGB1p94=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQGxGocCpHAPb84AFcCyo9VM/3poIUZ8dGVbUtoKEwe91SnNxn
-	giUtxON4iwRmu2KgwvqqShNiXhFgQko0v8qSQ45v9d+hSWFHQ4ClN0Om9SWpQjn8X9Kv/NN+Q+y
-	Bnpx959UUIRzIeB5tAB95sL87Mzdx4MdZeQ4SPZO7
-X-Gm-Gg: AR+sD13DrcGigjzQLpMdNzCcc0hPxt3PZXi5UEuWuxZQBdzWnULMgi+TfdSFTcgOmq3
-	4t3IY0YIlikroR1xBY8zMQOO/MvIF4ZJ3kWGafFDGhF6mSe6CjxRZn+pTE1N5MeKKiP2ACrd/uC
-	ScFjQ4nd5CsBmskRE1Kews7hIfeWBgI9omO1MbsZqgASfX+uC98go0Hu7horjuONz3/Ik9Ww01h
-	Qkfa0eb89a5LpGrJ5/gj5RCqhBmtwjE0E530dW2TrQf2L5Fk7Sa6RUxVk1jW0xb3EtFx5jldbO1
-	uJH65/pgF+50foUU
-X-Received: by 2002:a17:902:e544:b0:2ca:4bb4:4bd with SMTP id
- d9443c01a7336-2cfa54a8b89mr658905ad.5.1784745836571; Wed, 22 Jul 2026
- 11:43:56 -0700 (PDT)
+        bh=81PqcakE3vFqwcrUKH8WKjOfwB48ApktmKwcHNXwN8w=;
+        b=fRDWG6e/Bke1cARDHpa7tKpdhyiL20jkB6bQc8F0PtJsMmKrE3RJM7qyAy4nwi45Zh
+         SjDQHNNKTZ0YcUxCcgMTQc28B5FucKT74GMGrvbF5H3P2tStzk44etShhVKYe/ORJXGQ
+         1TwuoAQN4Xa9vzChhdg1IZ+g1JDKe2FWKUWCK1i1e8cBgfyXhVQsztiFo8I113gqlNMy
+         IxJ0272sLd9NIvailaSKcCPK551CGfcjA2aOjPbBgVq89QaVBhtP8JJxzMu82UxyRqw5
+         F8rv6He28yrhmxrP9f2mZfhDPK1uVOEDfWW8F7LpL/LNsanYMLCpUzFW6OH7iRrZ5W6d
+         hCLw==
+X-Forwarded-Encrypted: i=1; AHgh+Rqi8UPuplln36yiQHx6tdvML2veZEptoJJS8IK8D1LXHma201gnBA+HIAjmUU4i6c5rxBU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDqVzSleGE6P79JvKbxyrWPaf/lDuCYrAdrKsWkIQnwteh9fRg
+	V6jYpjbVRE+8YSMPI0c9lu8aoKB5rGz2gmzrKnALR0gmO84EWZ2gmRB/86Vrtn+eVhsuph7w7Zu
+	TsEeemDAyS6W3urv+O/sWsoP3VRkXo2Dl/7lpShli
+X-Gm-Gg: AR+sD12Bie5NbAD+WRIPaVI0u2xHR467FuYvTu9rtu9712eMI1WvEOz512LZyoXPzKk
+	AmEUwJWIU19CrkPZLLr5BNe8mPyDsynNomitiSYSk3dV95qwipSbu5oUDd8C1i8h12W95Wm0hZk
+	7wc3e2YlpL9kZo3IfFy/t08PCuL9NaU3XSXsXIs+5g7Vlcfbc6YFBfoocYcQ99vlDALyBBtMRFv
+	+0iy3CO4NZ9r0ATeBCInpTDNpNGD3fwrE6NtJlg6PyW67BbECsByaYESNtifdJ/KdRtDnowOOKa
+	itbWdOsdVZ1eO7iBV3YAa5fDj9gwUGbOfuqWqrxlWQBPTTt2oCueeiMRJxquCHc4fDuT3oZc/dr
+	AzcYHjQQ=
+X-Received: by 2002:a05:620a:2781:b0:930:a3f9:93be with SMTP id
+ af79cd13be357-930b41e3f78mr2166588085a.45.1784746210540; Wed, 22 Jul 2026
+ 11:50:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <tencent_7DB01BE7F8FA056BB5F11D3570CF636C4309@qq.com> <tencent_164779DC8B18AB10B9C636BE23C178ED5907@qq.com>
-In-Reply-To: <tencent_164779DC8B18AB10B9C636BE23C178ED5907@qq.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 22 Jul 2026 11:43:44 -0700
-X-Gm-Features: AUfX_mw5UAwzkJ7NPvu44HLKSHoX9nB5Y5w52d1GXfqklxyWXm6Ky8JWEjQRdEE
-Message-ID: <CAHS8izPPAC7CvRw+eRvMND96NduMjEFMhGFOBrbs8JzbtWXg_g@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/2] net: atlantic: convert RX path to page_pool
-To: Yangyu Chen <cyy@cyyself.name>
-Cc: Sukhdeep Singh <sukhdeeps@marvell.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Richard Cochran <richardcochran@gmail.com>, 
-	Lino Sanfilippo <LinoSanfilippo@gmx.de>
+References: <20260722170033.2763794-1-tejasbirajdar@meta.com>
+In-Reply-To: <20260722170033.2763794-1-tejasbirajdar@meta.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 22 Jul 2026 20:49:58 +0200
+X-Gm-Features: AUfX_my4Md1AiO3X81lIV1evIfaK05NsCXHOiqWRa_MlvfcNKZaAVltr3zCh0w4
+Message-ID: <CANn89i+WLbtLYNjYipH+8=6nrq-XmdYY9TgHHNpeLLeuuvbEUQ@mail.gmail.com>
+Subject: Re: [PATCH net-next] tcp: honor BPF_SOCK_OPS_RWND_INIT on the active
+ connect path
+To: Tejas Birajdar <tejasbirajdar@meta.com>
+Cc: Neal Cardwell <ncardwell@google.com>, netdev@vger.kernel.org, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"David S . Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 9, 2026 at 10:42=E2=80=AFAM Yangyu Chen <cyy@cyyself.name> wrot=
-e:
+On Wed, Jul 22, 2026 at 7:01=E2=80=AFPM Tejas Birajdar <tejasbirajdar@meta.=
+com> wrote:
 >
-> The driver currently allocates RX buffers with dev_alloc_pages(), maps
-> them with dma_map_page(), and uses a hand-rolled page-flip scheme to
-> subdivide high-order pages. Behind an IOMMU, the map/unmap churn is a
-> major RX cost: on a Thunderbolt-attached QNAP QNA-T310G1S, iperf3 -R
-> over IPv6 tops out at about 2.2 Gbit/s over MTU 1500.
+> BPF_SOCK_OPS_RWND_INIT lets a sockops BPF program pick the initial TCP
+> receive window, e.g. to advertise a larger window up front in environment=
+s
+> where that is known to be safe. Today it is only effective for the passiv=
+e
+> (listener) side; on the active (connect) side the value is computed and
+> then silently discarded.
 >
-> Convert RX buffers to page_pool fragments. Pages are DMA-mapped once
-> when entering the pool and recycled through the stack or XDP via the
-> MEM_TYPE_PAGE_POOL memory model. This removes the custom page-flip
-> accounting, lets page_pool handle fragment reuse, and ensures every RX
-> path either keeps the ring's fragment reference for reposting or hands
-> it to the skb/xdp_buff for later recycling.
+> On the passive path tcp_openreq_init_rwin() inflates full_space when the
+> program returns a non-zero window, so tcp_select_initial_window() can off=
+er
+> it:
 >
-> Register the PTP RX ring's xdp_rxq as well, since it shares the RX
-> clean paths. Walk the full RX ring during deinit so consumed but not yet
-> refilled slots cannot leak page-pool references. Drop the ethtool
-> PageFlips/PageReuses/PageFrees counters which only described the old
-> scheme.
+>         else if (full_space < rcv_wnd * mss)
+>                 full_space =3D rcv_wnd * mss;
 >
-> On the QNA-T310G1S, MTU 1500, TCP over IPv6, iperf3 -R improves from
-> 2.24 Gbit/s to 9.14 Gbit/s. The module was also smoke-tested with native
-> XDP PASS, DROP, and ABORTED actions; carrier recovered after each
-> attach/detach cycle and dmesg showed no page_pool/DMA warnings.
+> tcp_select_initial_window() only clamps the requested window *down* to th=
+e
+> available space, so without inflating the space first the BPF reply can
+> never raise the offered window above tcp_full_space(sk).
 >
-> Assisted-by: Claude:claude-fable-5
-> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+> tcp_connect_init() calls tcp_rwnd_init_bpf() but never inflates full_spac=
+e,
+> so on connect() the requested window is clamped back to tcp_full_space(sk=
+)
+> (~64KB at the default rcvbuf) and the program's value is ignored.
+>
+> Mirror the listener-side inflation in tcp_connect_init() so both directio=
+ns
+> behave the same. tp->advmss is the mss the listener path uses as well (bo=
+th
+> are tcp_mss_clamp(tp, dst_metric_advmss(dst))).
+>
+> Fixes: 13d3b1ebe287 ("bpf: Support for setting initial receive window")
+> Signed-off-by: Tejas Birajdar <tejasbirajdar@meta.com>
 > ---
->  drivers/net/ethernet/aquantia/Kconfig         |   1 +
->  .../ethernet/aquantia/atlantic/aq_ethtool.c   |   3 -
->  .../net/ethernet/aquantia/atlantic/aq_ptp.c   |  20 +-
->  .../net/ethernet/aquantia/atlantic/aq_ring.c  | 238 ++++++++----------
->  .../net/ethernet/aquantia/atlantic/aq_ring.h  |   6 +-
->  .../net/ethernet/aquantia/atlantic/aq_vec.c   |  15 +-
->  6 files changed, 140 insertions(+), 143 deletions(-)
+> Functional test: attached a cgroup sockops BPF program that sets
+> skops->reply for BPF_SOCK_OPS_RWND_INIT on the connecting socket, and
+> drove it with packetdrill on the active-open (connect) path (wscale 11,
+> advmss 1440). On the patched kernel the advertised receive window on the
+> first post-handshake ACK now reflects the requested value; unpatched it
+> stays clamped at ~64 KB:
 >
-> diff --git a/drivers/net/ethernet/aquantia/Kconfig b/drivers/net/ethernet=
-/aquantia/Kconfig
-> index cec2018c84a9..c8fb7b33e5b7 100644
-> --- a/drivers/net/ethernet/aquantia/Kconfig
-> +++ b/drivers/net/ethernet/aquantia/Kconfig
-> @@ -20,6 +20,7 @@ config AQTION
->         tristate "aQuantia AQtion(tm) Support"
->         depends on PCI
->         depends on MACSEC || MACSEC=3Dn
-> +       select PAGE_POOL
->         help
->           This enables the support for the aQuantia AQtion(tm) Ethernet c=
-ard.
+>   req_segs   unpatched   patched
+>   256        ~64 KB      360 KB   (256  * 1440)
+>   1024       ~64 KB      1.41 MB  (1024 * 1440)
+>   4096       ~64 KB      5.63 MB  (4096 * 1440)
 >
-> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ethtool.c b/driver=
-s/net/ethernet/aquantia/atlantic/aq_ethtool.c
-> index 420af958d486..0f5125bd2315 100644
-> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ethtool.c
-> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ethtool.c
-> @@ -100,9 +100,6 @@ static const char * const aq_ethtool_queue_rx_stat_na=
-mes[] =3D {
->         "%sQueue[%d] AllocFails",
->         "%sQueue[%d] SkbAllocFails",
->         "%sQueue[%d] Polls",
-> -       "%sQueue[%d] PageFlips",
-> -       "%sQueue[%d] PageReuses",
-> -       "%sQueue[%d] PageFrees",
->         "%sQueue[%d] XdpAbort",
->         "%sQueue[%d] XdpDrop",
->         "%sQueue[%d] XdpPass",
-> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ptp.c b/drivers/ne=
-t/ethernet/aquantia/atlantic/aq_ptp.c
-> index 558ac9237f75..5b8a4d0d1cff 100644
-> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ptp.c
-> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ptp.c
-> @@ -13,6 +13,7 @@
->  #include <linux/ptp_classify.h>
->  #include <linux/interrupt.h>
->  #include <linux/clocksource.h>
-> +#include <net/xdp.h>
+> (The SYN window itself is unscaled/capped; the offered window appears on
+> the first scaled post-handshake ACK.)
 >
->  #include "aq_nic.h"
->  #include "aq_ptp.h"
-> @@ -1192,12 +1193,25 @@ int aq_ptp_ring_alloc(struct aq_nic_s *aq_nic)
->         if (err)
->                 goto err_exit_ptp_tx;
+> Regression: tools/testing/selftests/net/packetdrill run under virtme-ng
+> on this commit vs its parent produces an identical pass/fail set (no
+> newly failing tests).
 >
-> +       err =3D xdp_rxq_info_reg(&aq_ptp->ptp_rx.xdp_rxq, aq_nic->ndev,
-> +                              rx_ring_idx, aq_ptp->napi.napi_id);
-> +       if (err < 0)
-> +               goto err_exit_ptp_rx;
-> +
-> +       err =3D xdp_rxq_info_reg_mem_model(&aq_ptp->ptp_rx.xdp_rxq,
-> +                                        MEM_TYPE_PAGE_POOL,
-> +                                        aq_ptp->ptp_rx.pg_pool);
-> +       if (err < 0) {
-> +               xdp_rxq_info_unreg(&aq_ptp->ptp_rx.xdp_rxq);
-> +               goto err_exit_ptp_rx;
-
-Why do it like this? Why not goto err_exit_xdp_rxq; which will do the
-same thing?
-
-> +       }
-> +
->         if (aq_ptp->a1_ptp) {
->                 err =3D aq_ring_hwts_rx_alloc(&aq_ptp->hwts_rx, aq_nic, P=
-TP_HWST_RING_IDX,
->                                             aq_nic->aq_nic_cfg.rxds,
->                                             aq_nic->aq_nic_cfg.aq_hw_caps=
-->rxd_size);
->                 if (err)
-> -                       goto err_exit_ptp_rx;
-> +                       goto err_exit_xdp_rxq;
->         }
+>  net/ipv4/tcp_output.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 >
->         err =3D aq_ptp_skb_ring_init(&aq_ptp->skb_ring, aq_nic->aq_nic_cf=
-g.rxds);
-> @@ -1217,6 +1231,8 @@ int aq_ptp_ring_alloc(struct aq_nic_s *aq_nic)
->  err_exit_hwts_rx:
->         if (aq_ptp->a1_ptp)
->                 aq_ring_hwts_rx_free(&aq_ptp->hwts_rx);
-> +err_exit_xdp_rxq:
-> +       xdp_rxq_info_unreg(&aq_ptp->ptp_rx.xdp_rxq);
->  err_exit_ptp_rx:
->         aq_ring_free(&aq_ptp->ptp_rx);
->  err_exit_ptp_tx:
-> @@ -1233,6 +1249,8 @@ void aq_ptp_ring_free(struct aq_nic_s *aq_nic)
->                 return;
->
->         aq_ring_free(&aq_ptp->ptp_tx);
-> +       if (xdp_rxq_info_is_reg(&aq_ptp->ptp_rx.xdp_rxq))
-> +               xdp_rxq_info_unreg(&aq_ptp->ptp_rx.xdp_rxq);
->         aq_ring_free(&aq_ptp->ptp_rx);
->         if (aq_ptp->a1_ptp)
->                 aq_ring_hwts_rx_free(&aq_ptp->hwts_rx);
-> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/n=
-et/ethernet/aquantia/atlantic/aq_ring.c
-> index c59b6c0b37f1..e06c502b59f9 100644
-> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-> @@ -14,120 +14,37 @@
->  #include "aq_vec.h"
->  #include "aq_main.h"
->
-> +#include <net/page_pool/helpers.h>
->  #include <net/xdp.h>
->  #include <linux/filter.h>
->  #include <linux/bpf_trace.h>
->  #include <linux/netdevice.h>
->  #include <linux/etherdevice.h>
->
-> -static void aq_get_rxpages_xdp(struct aq_ring_buff_s *buff,
-> -                              struct xdp_buff *xdp)
-> -{
-> -       struct skb_shared_info *sinfo;
-> -       int i;
-> -
-> -       if (xdp_buff_has_frags(xdp)) {
-> -               sinfo =3D xdp_get_shared_info_from_buff(xdp);
-> -
-> -               for (i =3D 0; i < sinfo->nr_frags; i++) {
-> -                       skb_frag_t *frag =3D &sinfo->frags[i];
-> -
-> -                       page_ref_inc(skb_frag_page(frag));
-> -               }
-> -       }
-> -       page_ref_inc(buff->rxdata.page);
-> -}
-> -
-> -static inline void aq_free_rxpage(struct aq_rxpage *rxpage, struct devic=
-e *dev)
-> -{
-> -       unsigned int len =3D PAGE_SIZE << rxpage->order;
-> -
-> -       dma_unmap_page(dev, rxpage->daddr, len, DMA_FROM_DEVICE);
-> -
-> -       /* Drop the ref for being in the ring. */
-> -       __free_pages(rxpage->page, rxpage->order);
-> -       rxpage->page =3D NULL;
-> -}
-> -
-> -static int aq_alloc_rxpages(struct aq_rxpage *rxpage, struct aq_ring_s *=
-rx_ring)
-> +static int aq_get_rxpages(struct aq_ring_s *self, struct aq_ring_buff_s =
-*rxbuf)
+> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> index d7c1444b5e30..478e4951140f 100644
+> --- a/net/ipv4/tcp_output.c
+> +++ b/net/ipv4/tcp_output.c
+> @@ -4101,6 +4101,7 @@ static void tcp_ca_dst_init(struct sock *sk, const =
+struct dst_entry *dst)
+>  static void tcp_connect_init(struct sock *sk)
 >  {
-> -       struct device *dev =3D aq_nic_get_dev(rx_ring->aq_nic);
-> -       unsigned int order =3D rx_ring->page_order;
-> +       unsigned int size =3D self->page_offset + self->frame_max +
-> +                           self->tail_size;
-> +       unsigned int pg_off;
->         struct page *page;
-> -       int ret =3D -ENOMEM;
-> -       dma_addr_t daddr;
-> -
-> -       page =3D dev_alloc_pages(order);
-> -       if (unlikely(!page))
-> -               goto err_exit;
+>         const struct dst_entry *dst =3D __sk_dst_get(sk);
+> +       int full_space =3D tcp_full_space(sk);
+>         struct tcp_sock *tp =3D tcp_sk(sk);
+>         __u8 rcv_wscale;
+>         u16 user_mss;
+> @@ -4133,14 +4134,16 @@ static void tcp_connect_init(struct sock *sk)
 >
-> -       daddr =3D dma_map_page(dev, page, 0, PAGE_SIZE << order,
-> -                            DMA_FROM_DEVICE);
-> +       /* Buffers whose page was not passed up the stack are reposted
-> +        * with the data they already carry discarded.
-> +        */
-> +       if (rxbuf->rxdata.page)
-> +               return 0;
+>         /* limit the window selection if the user enforce a smaller rx bu=
+ffer */
+>         if (sk->sk_userlocks & SOCK_RCVBUF_LOCK &&
+> -           (tp->window_clamp > tcp_full_space(sk) || tp->window_clamp =
+=3D=3D 0))
+> -               WRITE_ONCE(tp->window_clamp, tcp_full_space(sk));
+> +           (tp->window_clamp > full_space || tp->window_clamp =3D=3D 0))
+> +               WRITE_ONCE(tp->window_clamp, full_space);
 >
-> -       if (unlikely(dma_mapping_error(dev, daddr)))
-> -               goto free_page;
-> -
-> -       rxpage->page =3D page;
-> -       rxpage->daddr =3D daddr;
-> -       rxpage->order =3D order;
-> -       rxpage->pg_off =3D rx_ring->page_offset;
-> -
-> -       return 0;
-> -
-> -free_page:
-> -       __free_pages(page, order);
-> -
-> -err_exit:
-> -       return ret;
-> -}
-> -
-> -static int aq_get_rxpages(struct aq_ring_s *self, struct aq_ring_buff_s =
-*rxbuf)
-> -{
-> -       unsigned int order =3D self->page_order;
-> -       u16 page_offset =3D self->page_offset;
-> -       u16 frame_max =3D self->frame_max;
-> -       u16 tail_size =3D self->tail_size;
-> -       int ret;
-> -
-> -       if (rxbuf->rxdata.page) {
-> -               /* One means ring is the only user and can reuse */
-> -               if (page_ref_count(rxbuf->rxdata.page) > 1) {
-> -                       /* Try reuse buffer */
-> -                       rxbuf->rxdata.pg_off +=3D frame_max + page_offset=
- +
-> -                                               tail_size;
-> -                       if (rxbuf->rxdata.pg_off + frame_max + tail_size =
-<=3D
-> -                           (PAGE_SIZE << order)) {
-> -                               u64_stats_update_begin(&self->stats.rx.sy=
-ncp);
-> -                               self->stats.rx.pg_flips++;
-> -                               u64_stats_update_end(&self->stats.rx.sync=
-p);
-> -
-> -                       } else {
-> -                               /* Buffer exhausted. We have other users =
-and
-> -                                * should release this page and realloc
-> -                                */
-> -                               aq_free_rxpage(&rxbuf->rxdata,
-> -                                              aq_nic_get_dev(self->aq_ni=
-c));
-> -                               u64_stats_update_begin(&self->stats.rx.sy=
-ncp);
-> -                               self->stats.rx.pg_losts++;
-> -                               u64_stats_update_end(&self->stats.rx.sync=
-p);
-> -                       }
-> -               } else {
-> -                       rxbuf->rxdata.pg_off =3D page_offset;
-> -                       u64_stats_update_begin(&self->stats.rx.syncp);
-> -                       self->stats.rx.pg_reuses++;
-> -                       u64_stats_update_end(&self->stats.rx.syncp);
-> -               }
-> +       page =3D page_pool_dev_alloc_frag(self->pg_pool, &pg_off, size);
-> +       if (unlikely(!page)) {
-> +               u64_stats_update_begin(&self->stats.rx.syncp);
-> +               self->stats.rx.alloc_fails++;
-> +               u64_stats_update_end(&self->stats.rx.syncp);
-> +               return -ENOMEM;
->         }
+>         rcv_wnd =3D tcp_rwnd_init_bpf(sk);
+>         if (rcv_wnd =3D=3D 0)
+>                 rcv_wnd =3D dst_metric(dst, RTAX_INITRWND);
+> +       else if (full_space < rcv_wnd * tp->advmss)
+> +               full_space =3D rcv_wnd * tp->advmss;
 >
-> -       if (!rxbuf->rxdata.page) {
-> -               ret =3D aq_alloc_rxpages(&rxbuf->rxdata, self);
-> -               if (ret) {
-> -                       u64_stats_update_begin(&self->stats.rx.syncp);
-> -                       self->stats.rx.alloc_fails++;
-> -                       u64_stats_update_end(&self->stats.rx.syncp);
-> -               }
-> -               return ret;
-> -       }
-> +       rxbuf->rxdata.page =3D page;
-> +       rxbuf->rxdata.daddr =3D page_pool_get_dma_addr(page);
-> +       rxbuf->rxdata.pg_off =3D pg_off + self->page_offset;
->
->         return 0;
->  }
+> -       tcp_select_initial_window(sk, tcp_full_space(sk),
+> +       tcp_select_initial_window(sk, full_space,
+>                                   tp->advmss - (tp->rx_opt.ts_recent_stam=
+p ? tp->tcp_header_len - sizeof(struct tcphdr) : 0),
+>                                   &tp->rcv_wnd,
+>                                   &tp->window_clamp,
+> --
 
-The LLM thinks this code is perfect :-), but any chance you can pretty
-up the diff above a bit so it's more easily human reviewable? Maybe
-keep the function names the same or  factor the renames into another
-patch or something? Right now it looks like completely deleted code
-and new added.
 
---=20
-Thanks,
-Mina
+LGTM, but it seems "rcv_wnd * tp->advmss" could overflow
+
+I would suggest squashing to your patch the following fix to current code,
+and apply the same logic to your added code.
+
+diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+index ddc4b17a826b52afa967e17d482403f373f2f72a..f8c1123aba433713f60b30fd4e1=
+df7fe4f1860bc
+100644
+--- a/net/ipv4/tcp_minisocks.c
++++ b/net/ipv4/tcp_minisocks.c
+@@ -453,8 +453,8 @@ void tcp_openreq_init_rwin(struct request_sock *req,
+        rcv_wnd =3D tcp_rwnd_init_bpf((struct sock *)req);
+        if (rcv_wnd =3D=3D 0)
+                rcv_wnd =3D dst_metric(dst, RTAX_INITRWND);
+-       else if (full_space < rcv_wnd * mss)
+-               full_space =3D rcv_wnd * mss;
++       else if (full_space < (u64)rcv_wnd * mss)
++               full_space =3D min_t(u64, (u64)rcv_wnd * mss, INT_MAX);
+
+        /* tcp_full_space because it is guaranteed to be the first packet *=
+/
+        tcp_select_initial_window(sk_listener, full_space,
