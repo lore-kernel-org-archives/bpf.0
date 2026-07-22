@@ -1,124 +1,155 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487C04D2ECF
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 11:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03323E008A
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 11:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784720311; cv=none; b=LcNUQjE1pSMm79sCauirEasXxyiDcfZ0hfwcOap5liXfntvTUGAsnmBP7p6RhsGpLBbThMJahHAE1wOEUkJXB5oUNGD3Cd0anp7/GJ3X1wmKPTipFEsDNN8Qkl6a++A3PrS1R1Qyl7Xq5izxduPsZdEofBg7A2hEt2IhAFZSifw=
+	t=1784720502; cv=none; b=X81fKARaiM2O32sZ63hKpDPCH0JGtLNOoKnkbMkh2AXXUpaPgWR2Xpvaw4w/EjYg62EDZI3ozfLzMEmQZ3t8LlA1JRdPVQyBrakrfmg+ExOc8Meonu4aHAUa2rcBHPjaTyJNn2mYsNxLCqhIMHp4EWj39upiaiFXg57VeG+LR6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784720311; c=relaxed/simple;
-	bh=4SUTil00fqpgPAucthU6HTl2XlqWFfYKnVVCbAIsH5c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VEiCCSymL+r5owU5gb/nSNZ3mJAEBAo5G5MrrGOzXBzgS93sfPw97i+d2L26bX/oVcMgMDvQa1rS1I2vpnw1ed+vkkKeL3balzfwIGN777qlLkdpIbyhMaoBt13F3au+Ug+0EBxYTPDhhkdFH6NN+a3D1jA63gzSMnNP1YxjE8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tJeV4egu; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784720502; c=relaxed/simple;
+	bh=oiqsiXH2auvvTcy+XpKqq3f+Cggs5IcjKSAEqS0H5jI=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=mSrT7wlFig5Aa2Vfe5JZTKoiNQP2EYs3F6VIBshNYZ2DwIgDeD3UGp5i/OiL42ynVAVL7Gm18ZkamuLNiygx6vriXdUHc2VcW0PjBBnbmaqGcxFZrALdOAq9mHRVCEEk31UPv+8ipUJuOotjd/DuQwlDI+IiNRY9/+yb6+tWVNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Pru3Trle; arc=none smtp.client-ip=209.85.221.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tJeV4egu"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ceae1ed204so104255095ad.0
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 04:38:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Pru3Trle"
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-47f753a0aa0so2223709f8f.3
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 04:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784720307; x=1785325107; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Lz8wSJ72VvS/5HxQLoKKzBsvogEF0aAdv/0SLjzmBu8=;
-        b=tJeV4eguW8FAaVkaKySpnAOrvCIjeRyybgvPdJmZscFO/Yk097+TE1rGHmf1gRu8v3
-         V6CetvUQmLlRegbznt3g3WqraoaKpx9yVbf9r98EBx++RA0X0mWsxhjhDToVnho+PcaN
-         rPw91ci6f7Kwm1V5VZQO13FPSAxEH6etsR5vVQ1KiWYhflb9AHWqOgztS5I2+ZQtBsBo
-         mQ0v/6b/UsldAr4h7dAVW6HNIz1dhpxno8KJqXJz9DahTdReSA0WQWtZtl76d0o8p72h
-         Y+NA8NeElGpRIF9aX+YbpvL8VaC/wZ5Rv7Fhc/zdK5YfyfEN717ObgOipH6bxY9YgI9v
-         u6mw==
+        d=google.com; s=20251104; t=1784720499; x=1785325299; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5EEdu2NtDKvJ6m5L7yD3u1hILhc3acdgjyOagawBBaU=;
+        b=Pru3Trle65O6AmM9lDZgylvzE04eqtnMGLnAWwot+Zx5jMMHmWj9XT7gCLBJksQYpr
+         21kgRKzLu29m45NWXs2uYjOlCQvw61b983HZGilgjpiRmfbuxy7LXVx4tSepcWVHbyN4
+         Iobqf5a8vDQrFo1XJFHjGr3I+qieBM0McZw8pPNMfNFsmBaJRUK+O0XWXVeFg6APEAkl
+         dbsVfNVfJjhI2u1pfMASnwsq1n9UOvRxsAC9QEIxomT8ZB9cd5GvrFjBTgOceCq5a6dp
+         F+tvGVbHJJ7EKpDXuVkNX3rVt+w2qXUZGOPnq8b8WHUag7MqZHSPcsnKSsQkE/EI1Yvh
+         ZtCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784720307; x=1785325107;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1784720499; x=1785325299;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Lz8wSJ72VvS/5HxQLoKKzBsvogEF0aAdv/0SLjzmBu8=;
-        b=a9yT1x0v0YBzoIBnyBCnUJHUrKcb8KjG6in5ZldJ2VkewiMvDuBnxW412accs9xkWd
-         iiN9qB0lvqZgRk85Qhrv8El0s/CBTvdIKlhiwYqRKvX3wDr+T4IcuWAsXpf9k9sKW6gI
-         7NjQX7H2IODxor+GAzRDtr4ifKBi7PrZOyAvHorImFgIXGGjkoT1LNwuQXDqD+s2L5+Q
-         mHYobBk23z2dBRhFPYatUx2YAhd/Qyy1USaRUhxTcnLIXl0GL8bddaqxrSkP+Nvpj3ho
-         zVLC3sVV3c+9S9ynqK0BO8/KhX27zF/72uar2gDywk/ibE1DsM8PjjDhua0gnouDRMX+
-         rGaQ==
-X-Forwarded-Encrypted: i=1; AHgh+Roe4iYWk9esGPC26neQgh/ntxqdEEEPrqrQbGVIf5XfqHnz6Tz0S+itEnlMwdVd3w3PCyg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQXJ27/ew70V6t6Gwu6m3Xdke2ogDrLgKSuy+8kRI2B8qvD3hm
-	SXJuxwh/BJlkncHg3Rn+xg1U4UT9usk8cRUtiVzfsJM9HFnjqKlrdH+P
-X-Gm-Gg: AR+sD11J8X6E2f0eqqzLlfTx+DARGVeEfosH+gAMzeK+hD1c7KRKGgifm+V3aJ8SSw7
-	BaCOJDiC5ewXXWKX67A9Ydl/rMiatjFTLqztAIA+eDcEmSMNngscFrzkGrLBtJPTV5mM2ejN6Iy
-	6EBK6t+8G44G1AoGVS9sx5tuHzgIE6nFR0D+NArGoxRxfLR5SQAJugDn+JV1nGfH1clCBHSOCc3
-	f81S0P5I707Q0QhKVbXHnYWVzhKkvcKVuQUrH5PpRqDcbWLxW5pWcxZ6Dasxy2HPrpGH1nuc3SY
-	DLRosvhNMXdBRTjWGGPfFNSgQwat1cL3lnaxBZWBEbRPqfgavwAjItlxbPenFDLRAIB+CTzSsrr
-	Be0tq7Ft5rHxVb+Pf2sIWUAQB5FLaeufk2EqMtKsfYQkYkvHe2YgLO8OBFvUwCKTJ1h7zhj7jcc
-	vQJJ4a+m64Xwmz/LwLLQsVkEGcl6hfGMJkh4vgV7NGG4amkwxOHrZWhFG95zUdWX/n62ER/ZGj8
-	G4D0d03o6I=
-X-Received: by 2002:a17:903:1b2e:b0:2ca:281:27f9 with SMTP id d9443c01a7336-2cf349978f5mr237336055ad.27.1784720307137;
-        Wed, 22 Jul 2026 04:38:27 -0700 (PDT)
-Received: from kali ([115.131.60.160])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8f31383bsm13110205ad.59.2026.07.22.04.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 04:38:26 -0700 (PDT)
-Date: Wed, 22 Jul 2026 21:08:09 +0930
-From: Daniel Wade <danjwade95@gmail.com>
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>,
- bpf@vger.kernel.org,
- Daniel Borkmann <daniel@iogearbox.net>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Jiri Olsa <jolsa@kernel.org>,
- linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Shuah Khan <shuah@kernel.org>,
- Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v3 0/3] bpf: Preserve pointer state for commuted arithmetic
-Message-ID: <20260722210809.382642@kali>
-In-Reply-To: <cover.1784696371.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1784696371.git.chenyy23@mails.tsinghua.edu.cn>
+        bh=5EEdu2NtDKvJ6m5L7yD3u1hILhc3acdgjyOagawBBaU=;
+        b=cPSDxFi2S7Mx1POAUO/0qdyvZqY+ssf3PhBkmtEqMyGRzHTbkI9w9Owu0E6DLfOX6G
+         yKm0yVBa5CizrJL/Hk9e4zAzChoNmOMeb3BEdjXbpBSSz2pocRDy5OXSUnoPWsY/3Rsi
+         Rtu992TeCA0WJDA8vbb3SSvEQs4yfy+4XOaSftuQWFErtvO+L1Xqr9zsIzsi26PT2FQ+
+         mhvl67Gxd0hYC2eZx+IDv75l68HIjDNNK2UG37hbgujTm3T2tR2Vmd3dmehnA0vqEsnC
+         OkbZnjfR6C5hTHe4jpMfc0z0NjCPcXqR2DWx9PvK5mOCSCieKtn0RvXf09S7he2IbSkF
+         7bUw==
+X-Gm-Message-State: AOJu0YyoLAHnYDDJHc/bQq2X1bKhHzJnLvpZFQdFbo3wPMKHIntI0njm
+	fuPwxlinIkJ0+fFwf3e61xzczk2GhBErS/QKplKOK+aQOPIj/xyO+O28JruuAa/UBi29SoBBwEy
+	UmOcrCkP2XVKhD8llFg==
+X-Received: from wrzf10.prod.google.com ([2002:a05:6000:1b0a:b0:46e:4b8:3001])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:c84:b0:493:dcad:84da with SMTP id 5b1f17b1804b1-4954a3eec74mr269227495e9.1.1784720498761;
+ Wed, 22 Jul 2026 04:41:38 -0700 (PDT)
+Date: Wed, 22 Jul 2026 11:41:31 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAGqsYGoC/32NQQ6CMBBFr0Jm7Zh2lCKuvIdhUcpQGpGS1jQa0
+ rtbOYDL93/e/xtEDo4jXKsNAicXnV8K0KECM+nFMrqhMJAgJRQR9uuIc3zwjKN7c0TCpr6Ik9L ctlJC8dbAe1W0e1d4cvHlw2e/SPKX/ltLEiUKcR4aMr2uDd2s93bmo/FP6HLOX1YCZqqzAAAA
+X-Change-Id: 20260622-bpf-lskel-fixes-2-758036ae9911
+X-Mailer: b4 0.14.3
+Message-ID: <20260722-bpf-lskel-fixes-2-v2-1-1ec545c6861c@google.com>
+Subject: [PATCH v2] libbpf: poison unresolved weak kfuncs in light skeletons
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Giuliano Procida <gprocida@google.com>, Matthias Maennich <maennich@google.com>, 
+	Tiffany Yang <ynaffit@google.com>, Neill Kapron <nkapron@google.com>, 
+	Siddharth Nayyar <sidnayyar@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi Eduard, Yiyang,
+When the light skeleton generator (gen_loader) fails to find a BTF ID
+for a weak kfunc, it correctly clears the immediate value (imm = 0) to
+convert the pseudo kfunc call into an invalid instruction.
 
-Thanks for the pointer. I independently tested Yiyang's v3 series on the
-source-matched f105f3631d51 base with the same kernel config used for my
-original report.
+However, the generator fails to clear src_reg (which is set to
+BPF_PSEUDO_KFUNC_CALL). This leaves the instruction looking like a valid
+pseudo kfunc call with a zero BTF ID. When the target verifier's
+add_subprog_and_kfunc encounters this, it unconditionally scans all
+BPF_PSEUDO_KFUNC_CALL instructions, sees imm == 0, and panics or
+fails the load (e.g. bpf_unspec#0 or -EINVAL). This entirely breaks
+the verifier's dead-code elimination logic which expects to cleanly prune
+branches protected by bpf_ksym_exists().
 
-Before the series, my impact witness reached chosen-address kernel
-read/write and changed UID/GID 65534 with CAP_BPF and CAP_PERFMON to
-UID/GID 0 in 3/3 runs. With all three v3 patches applied, the intended
-untrusted-pointer positive control still passed, while the impact program
-was rejected at "R0 pointer += pointer prohibited" before any address leak
-or privilege transition in 3/3 runs.
+Furthermore, when the generator processes subsequent references to the
+same unresolved weak kfunc, it copies the imm and off fields from
+the first occurrence but skips the src_reg field, meaning subsequent
+calls also retain the poisonous BPF_PSEUDO_KFUNC_CALL flag.
 
-I also ran the three focused cases added by the v3 series. All passed:
+This patch fixes the issue by explicitly clearing src_reg for both the
+initial occurrence and all subsequent occurrences of unresolved weak
+kfuncs, converting them into standard invalid helper calls that the
+verifier's dead-code eliminator can safely recognize and discard.
 
-  mem_rdonly_untrusted/ldx_is_ok_commuted_addr
-  dynptr/dynptr_slice_commuted_invalidate
-  verifier_basic_stack/stack pointer arithmetic preserves frame number
+Fixes: 18f4fccbf314 ("libbpf: Update gen_loader to emit BTF_KIND_FUNC relocations")
+Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+---
+Changes in v2:
+- Rebased and added Fixes and Acked-by tags
+- Link to v1: https://lore.kernel.org/r/20260622-bpf-lskel-fixes-2-v1-1-004d72cba5c2@google.com
+---
+ tools/lib/bpf/gen_loader.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-Given that the affected code has shipped and the issue reaches kernel
-read/write from a CAP_BPF and CAP_PERFMON context, should this be routed
-through bpf and marked for stable rather than bpf-next?
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index d79695f01c87..a08071114347 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -783,10 +783,17 @@ static void emit_relo_kfunc_btf(struct bpf_gen *gen, struct ksym_relo_desc *relo
+ 		return;
+ 	/* try to copy from existing bpf_insn */
+ 	if (kdesc->ref > 1) {
+-		move_blob2blob(gen, insn + offsetof(struct bpf_insn, imm), 4,
+-			       kdesc->insn + offsetof(struct bpf_insn, imm));
+ 		move_blob2blob(gen, insn + offsetof(struct bpf_insn, off), 2,
+ 			       kdesc->insn + offsetof(struct bpf_insn, off));
++		move_blob2blob(gen, insn + offsetof(struct bpf_insn, imm), 4,
++			       kdesc->insn + offsetof(struct bpf_insn, imm));
++		/*
++		 * jump over src_reg adjustment if imm (btf_id) is not 0, reuse BPF_REG_0 from
++		 * move_blob2blob. If btf_id is zero, clear BPF_PSEUDO_KFUNC_CALL flag in src_reg
++		 * of call insn.
++		 */
++		emit(gen, BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1));
++		emit(gen, BPF_ST_MEM(BPF_B, BPF_REG_8, 1, 0));
+ 		goto log;
+ 	}
+ 	/* remember insn offset, so we can copy BTF ID and FD later */
+@@ -804,10 +811,12 @@ static void emit_relo_kfunc_btf(struct bpf_gen *gen, struct ksym_relo_desc *relo
+ 	}
+ 	kdesc->off = btf_fd_idx;
+ 	/* jump to success case */
+-	emit(gen, BPF_JMP_IMM(BPF_JSGE, BPF_REG_7, 0, 3));
++	emit(gen, BPF_JMP_IMM(BPF_JSGE, BPF_REG_7, 0, 4));
+ 	/* set value for imm, off as 0 */
+ 	emit(gen, BPF_ST_MEM(BPF_W, BPF_REG_8, offsetof(struct bpf_insn, imm), 0));
+ 	emit(gen, BPF_ST_MEM(BPF_H, BPF_REG_8, offsetof(struct bpf_insn, off), 0));
++	/* clear src_reg (and dst_reg) to convert pseudo kfunc call into invalid helper call */
++	emit(gen, BPF_ST_MEM(BPF_B, BPF_REG_8, 1, 0));
+ 	/* skip success case for ret < 0 */
+ 	emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, 10));
+ 	/* store btf_id into insn[insn_idx].imm */
 
-For the v3 series:
+---
+base-commit: 248951ddc14de84de3910f9b13f51491a8cd91df
+change-id: 20260622-bpf-lskel-fixes-2-758036ae9911
 
-Tested-by: Daniel Wade <danjwade95@gmail.com>
-
-Regards,
-Daniel
+Best regards,
+-- 
+Siddharth Nayyar <sidnayyar@google.com>
 
