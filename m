@@ -1,119 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EDFD30D40D
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 14:21:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00FAD1F30A9
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 14:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784730071; cv=none; b=dH06Ry52VvsK85f6s0DPtNYWDUP0aD/KcfIAPuaLgYPxdqHRmXEHyEQ07F2MmDweA384b866/YZA0rPAANhIEVQOOwuFoXOvZRiTeINTmzYGaBwcOxyhedYb0ywMJGUSAL5emXaHlWQYzsoX/96//ySQSDfALCu/cvH0jS6jgfU=
+	t=1784731541; cv=none; b=Oe2QyESimaB/AeSSbK74mghcalzdWMPFvZ2kQ6zveDsygQFmWE7HQfTkJ4hMr/SALURTu87H9HPtwcMs6fiaq3Cvnv7DEGoV2lbbmTPaG2a9pRv+fsAgnUgU11MYUkuAlq68QkRG24lPXfniw9ggRxpccbTpoZ4j/KK/7U4EoIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784730071; c=relaxed/simple;
-	bh=Wsu7SLs1zyfsG8Of7WizFmS2m8fKyvP+8Pv4faVY47g=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WWh3bDV38pdN20hyXm2VrI8cqBUUKAHlLhdXr5nb3cHQT9c8mOPX0jTccqyFLVwxvzw5jlbSwe5XjvJ294XgFft5g+1tJbqXVPYmAWuxLMPBXteIPkLJXmEH5asq4gOtAeFrv0DMKwBhTbYiLOuafzCHNRxyMymxrEWStrURDI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LHPDF/RX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784731541; c=relaxed/simple;
+	bh=MuCHnkT/76HR5kI6MTpVC4n5sjzqmsaLA1djUnKU818=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UaJN3LsYie0LRbgAs+Jyyy+ApYKpOmMeIEgobCGDlTO/PsMTTh5WhdvUqLvMSUbgwotZatnU5gFEhOFzilo9kUieZss1E837TWDhP2wr/Zdndrc7rlpvvK0ujNikKLD41e5Qa6t5C2oSwbPEa8DFSBvv5IoOzjiQY/piCXpn0Cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cV6P4HNk; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LHPDF/RX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA991F000E9;
-	Wed, 22 Jul 2026 14:21:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784730070;
-	bh=GYOQ6XnwhhH3RZBrByxBCPGg/TW0mBUH7YqsxKm4lGQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=LHPDF/RXsHp3cxxwwwY7iKE6QaZjBVL05XEKJEgr2jkLHAljbH7s/+7bt+5T5Ib2/
-	 +I+uSEoP4nXJD1UvxlAswnGcj3+qcL1tidknhcYM6mkPMJ6So+xo5ZHQ+yxdoly2vu
-	 WUdWLqNGCtrdCIdqFhYAEndSEbwLokfP7EY8hJ61ZJ2OJDJIAPd1CBo0q2rtehNqKc
-	 BtpQLIjdjEdxjPXZWhI+hTlV67hY2+F4i8bumfk71MOghDn1rcdjE0pqIB+4INqCmW
-	 ZRORt25yQdnCeLc2RfNUqMvFvcd/xOs3vB1FNdGdqPPRFdLeEfIfCkMqJMzr6gw0Vw
-	 NHKTr265hyvHA==
-Content-Type: multipart/mixed; boundary="===============4182586529210164508=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cV6P4HNk"
+Message-ID: <84d3de0a-5d81-47eb-9e41-7107c0c15d70@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784731527;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jZQHj//W3wrPBt+vPqcY/ihQCddTbbdsI2etWjc+kNg=;
+	b=cV6P4HNkvZR98ac85VaYtspeCrcWfQs2OYMvq7a9IHNMkTQRttTuGevMvEcY2dI9trWjcE
+	clav6NcRDCL6dIVYALzzmt8JMMMHbG6aAOyyIZLLJK/d4WMxbmyFMQOfgrmSI14j914ugP
+	/67WK75JCAt3SfZzLjg2v/HazEgtTiw=
+Date: Wed, 22 Jul 2026 22:44:42 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <19a993d6b34ccda8ca5861f41799ab85c9daee8250c9ef393ec3fc5ae4802669@mail.kernel.org>
-In-Reply-To: <20260722132424.450230-3-puranjay@kernel.org>
-References: <20260722132424.450230-3-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next v3 2/6] bpf: Inline bpf_iter_num_next() kfunc
-From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 22 Jul 2026 14:21:08 +0000 (UTC)
-
---===============4182586529210164508==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next 1/2] bpf: Fix WARNING in bpf_tracing_link_release
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Jingguo Tan <tanjingguo@huawei.com>, Pu Lehui <pulehui@huawei.com>,
+ Lin Ma <malin89@huawei.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260721133036.49265-1-leon.hwang@linux.dev>
+ <20260721133036.49265-2-leon.hwang@linux.dev> <amCnUg9xTo4kStW8@krava>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <amCnUg9xTo4kStW8@krava>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index ff76a1ed04556..6fb8fdd5d5b21 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19807,6 +19807,34 @@ static int inline_bpf_iter_num_new(struct bpf_insn *insn_buf)
->  	return i;
->  }
->
-> +/*
-> + * Inline bpf_iter_num_next(). R1 holds the pointer to the iterator. Keep in sync with the
-> + * kfunc in kernel/bpf/bpf_iter.c.
-> + */
-> +static int inline_bpf_iter_num_next(struct bpf_insn *insn_buf)
-> +{
-> +	int i = 0;
-> +
-> +	/*
-> +	 * s->cur and s->end are int, so the (s64)(s->cur + 1) >= s->end check is equivalent to a
-> +	 * signed 32-bit comparison of (s->cur + 1) against s->end and needs no sign extension.
-> +	 */
-> +	insn_buf[i++] = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 0);
-> +	insn_buf[i++] = BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1);
-> +	insn_buf[i++] = BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 4);
-> +	/* if ((s32)(s->cur + 1) >= (s32)s->end) goto done; */
-> +	insn_buf[i++] = BPF_JMP32_REG(BPF_JSGE, BPF_REG_0, BPF_REG_2, 3);
-> +	/* s->cur++; return &s->cur; */
-> +	insn_buf[i++] = BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0, 0);
-> +	insn_buf[i++] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
-> +	insn_buf[i++] = BPF_JMP_A(2);
-> +	/* done: s->cur = s->end = 0; return NULL; */
-> +	insn_buf[i++] = BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0);
-> +	insn_buf[i++] = BPF_MOV64_IMM(BPF_REG_0, 0);
-> +
-> +	return i;
-> +}
-> +
->  int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  		     struct bpf_insn *insn_buf, int insn_idx, int *cnt)
->  {
-> @@ -19938,6 +19966,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  		*cnt = 6;
->  	} else if (desc->func_id == special_kfunc_list[KF_bpf_iter_num_new]) {
->  		*cnt = inline_bpf_iter_num_new(insn_buf);
-> +	} else if (desc->func_id == special_kfunc_list[KF_bpf_iter_num_next]) {
-> +		*cnt = inline_bpf_iter_num_next(insn_buf);
->  	}
->
->  	if (env->insn_aux_data[insn_idx].arg_prog) {
-
-The commit message explains the performance motivation for this change, but
-could you provide more detailed analysis about how this was determined?
-
-What perf counters or measurements were used to validate the improvement on
-ARM64? The explanation focuses on the theoretical benefit of removing a
-function call, but it would be helpful to understand the actual measured
-impact.
-
-Additionally, how does this compare against can_loop in terms of overhead?
-Understanding the relative performance would help evaluate whether this
-optimization is addressing the right bottleneck.
-
-Reference: https://lore.kernel.org/bpf/DK55I184SHNJ.37QBB1WKDWOEZ@gmail.com/
+On 2026/7/22 19:19, Jiri Olsa wrote:
+> On Tue, Jul 21, 2026 at 09:30:34PM +0800, Leon Hwang wrote:
+>> The trampoline could be corrupted by the blindly
+>> 'tr->flags = BPF_TRAMP_F_TAIL_CALL_CTX' in verifier.
+>>
+>> 1. A fexit attached to a tail_call_reachable prog.
+>> 2. Another fexit loaded with the same tail_call_reachable prog target.
+>> 3. Close the first fexit link.
+> 
+> had to ask ai for more details on how the warning was trigered ;-)
+> would be nice to have that info in the changelog
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Ack.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29924758865
---===============4182586529210164508==--
+Will add the change of tr->flags. So, the detach failure would be
+obvious due to the incorrect tr->flags.
+
+> 
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+
+Thanks for your review.
+
+Leon
+
+> [...]
