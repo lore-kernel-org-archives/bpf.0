@@ -1,143 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BB833EAF9
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:59:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55D6471439;
+	Wed, 22 Jul 2026 08:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784707193; cv=none; b=i7Ydpu3dgw1Cid1FLgB5ILwNCXnqqOvKaPzY8Q+l++7vfpKAC+2mFB2in2poBXUs1/eRbGExb9nIAB3zAhV9rX+7er89FdjvCJ+TkBqYmXLya+nEeggxKwTfxk9mJkR068topiBZOIdn2pVLXWzycWJoMh3XAssM8gKvSpGS88s=
+	t=1784707562; cv=none; b=alc2QoSDBaRZuCN+tFOqa8EDYGNfKg88QpqLDcdOskjbj5s5LiIDskgWAZ7Z7RdzbakRBsCLRQeza+V++d6kKSAy/R5h9qJ8oqS0SX2G9Ax9J3BPHXXTScAzevkP296onOy2PypiG4B0sFIyNg/nEna/kSghV6cOkE57B2S/jgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784707193; c=relaxed/simple;
-	bh=x9jhofdDugmF8hSgWTuPHvlR8KzVI2c00+fLuUy3i6w=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=VYeol7iFB91M/uGf+Z+/lvE5owSXAJBMGIpziOeYv0jczRNA4OU91kEfeYced502g7YPPjHSfX7vGp58xaMMivLArDflh/vEMPdEdauSSEruk75QWNM6G/V7S8eh+J9W0DlxXkOljpSCFnwfTRlFVaPRCJlefYL/jfpAyKxtRa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eu2zhGzS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784707562; c=relaxed/simple;
+	bh=u96X09wuufO4dzaJuuvO4LBL+2+DVtt6RM3GbzuEmbg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dZUVke8L8qBmJJUoemFKBTuvf+3BsPNcqR/vByvHmtDzm53zS1yW6OHHpvgw4Nkwxkr7fbUhsh/VmA8WOUa9noxwKrn/rVQfBZxGktVJwYx074V2hCGnxiiKoPn/jVpnir9xZHeadFKozNTShitmsbXpo1J3vH2OCSjn9lzAebA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NygyAUup; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eu2zhGzS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B33211F000E9;
-	Wed, 22 Jul 2026 07:59:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NygyAUup"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE9EB1F000E9;
+	Wed, 22 Jul 2026 08:05:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784707191;
-	bh=iwIoZgvGQpeDKPKrrjnMQ3I3R6riCbZIJgz2qzovpjs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eu2zhGzSlcrCd5TkYD86SX2kEyViXP/5+yH/ryFaliNv2nkxoiCM5NMGafzQlOJoy
-	 FfM+zGaBVn+Fmy2T15Hx7eqmKHM+Mcxb1fHq31SUoSDHOOHHCZRTWX9Q+a1RlCBcim
-	 o1vbaGYILTvMK5t1qrLg2E2gSZMrh6Ozi6BPdMTWZIYMcAKYizH0CAO7RIOj72lEUg
-	 vBu4o1MePyv6f+fTvgyPhcp3Xw0Pp/0g20Xmu5pQuAKnFTuEcKwMPXVUaW66+CytoK
-	 xHOC6w3Mz9gwg8u0onrFMBQ7J+dsOhyJuvfdPB22s9gnNCxIztJWjUBfx2OLC9nC8W
-	 uPBDwkP6oKfRQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 2/5] selftests/bpf: Fix missing allocation
- null checks in test_progs.c
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Feng Yang" <yangfeng59949@163.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260722074748.674080-3-yangfeng59949@163.com>
-References: <20260722074748.674080-1-yangfeng59949@163.com>
- <20260722074748.674080-3-yangfeng59949@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Jul 2026 07:59:51 +0000
-Message-Id: <20260722075951.B33211F000E9@smtp.kernel.org>
+	s=k20260515; t=1784707561;
+	bh=6Ck9xPPL0TmASgoKbDMyp7CMVHfOp+cb63tWZ/yAXbY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=NygyAUupeyD40hxfX2KNeaE/qRaUjaDCRqBbxUsqiZCGZOL2wii8u8p1aEFnPzkWS
+	 FGYgws55wNwnCX8yuFeDBWI3gVaEwu3b5IpRAfkXBwU8kgJyzpux28jkeZwJppVVrm
+	 Z2Rub7DOPzyp+ICs70MXaa2ai1lrh1psgMWeGfic2khqz2in3nCl4X8VUrUXd21txY
+	 BbE7RTPpqwjsQ/5C/gg8q3ykVGP/b1WxD+/FdpgOsGpgwqBHJ0470MFRpar1j3vBW0
+	 MlmUGRWtnQDtUa6VJRuhEuYRWkeMQKfGdCVlOakm/S1HRejOION9M+hyLgQkPDQSi7
+	 aOsl/JVz9DjTA==
+Date: Wed, 22 Jul 2026 11:05:47 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Song Liu <song@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH bpf-next v3 0/5] bpf, x86: enable EXECMEM_ROX_CACHE for
+ BPF allocations
+Message-ID: <amB52yECfXNgbeY4@kernel.org>
+References: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
+ <CAPhsuW5pRMtpa5Q0Y=zO5=2HSj4xOX+i5Vp+g2a6RDvmkeHKFw@mail.gmail.com>
+ <alnOkjf8rq3dUGmg@kernel.org>
+ <CAPhsuW7xvJM6PPGwkeZJhi+a-emuuX09uxKom29mns5-iwOYXw@mail.gmail.com>
+ <aln1_kGygUqdtlAt@kernel.org>
+ <CAPhsuW4dt6YdNnce4wfJkVuuP339sh=0wCGwBG2_Nc2BYu4CSQ@mail.gmail.com>
+ <alyXjynKnIp7X-3b@kernel.org>
+ <CAPhsuW6+6zcSRGUAtp=3e4a8at3yuRP8Xijb-4LBHtQ8Li6wrQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW6+6zcSRGUAtp=3e4a8at3yuRP8Xijb-4LBHtQ8Li6wrQ@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] The newly added NULL check prevents an immediate crash but intro=
-duces a segmentation fault during program teardown due to inconsistent stat=
-e.
-- [Medium] Direct return on allocation failure in `main()` and `server_main=
-()` bypasses the cleanup path, leaving the test kernel module loaded.
---
+On Tue, Jul 21, 2026 at 10:59:06AM -0700, Song Liu wrote:
+> On Sun, Jul 19, 2026 at 2:23 AM Mike Rapoport <rppt@kernel.org> wrote:
+> > > >
+> > > > Since commit c82be0be9576 ("mm: vmalloc: don't account for number of nodes
+> > > > for HUGE_VMAP allocations") vmalloc_huge() is fine with PMD_SIZE regardless
+> > > > of number of nodes.
+> > >
+> > > Before execmem can handle sub page allocations, how about we
+> > > send allocations that are bigger than page size directly to execmem,
+> > > and let bpf_prog_pack handle sub page allocations. Then,
+> > > BPF_PROG_PACK_SIZE will be PAGE_SIZE. This should be a net
+> > > win for x86_64. Other archs will be the same. WDYT?
+> >
+> > Makes perfect sense to me for x86.
+> 
+> Can we include this change to this patch set? This will make this
+> change a meaningful step towards migrating to EXECMEM.
 
---- Patch [2]: [PATCH v2 bpf-next 2/5] selftests/bpf: Fix missing allocatio=
-n null checks in test_progs.c ---
-commit 5b8390b4a3f20a060d50a407c4941f4877ed4709
-Author: Feng Yang <yangfeng@kylinos.cn>
+I'd prefer to leave this as a separate followup. 
 
-selftests/bpf: Fix missing allocation null checks in test_progs.c
-   =20
-Add null checks after memory allocations to prevent potential segmentation =
-faults.
+The decision whether to use EXECMEM_ROX_CACHE is made at runtime, which
+means that BPF_PROG_PACK_SIZE should become a variable, that variable needs
+initialization at some point during boot and that in turn requires a new
+helper in execmem that will say if EXECMEM_CACHE_ROX is enabled.
+ 
+> > On architectures that support large mappings in the direct map and do not
+> > support EXECMEM_CACHE_ROX this will increase direct map fragmentation.
+> 
+> Architectures that support bpf_prog_pack can benefit from
+> EXECMEM_CACHE_ROX. What does it take to also enable
+> EXECMEM_CACHE_ROX for them?
 
-> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
-ftests/bpf/test_progs.c
-> index 1d3caf9969717..88c65ce5b0189 100644
-> --- a/tools/testing/selftests/bpf/test_progs.c
-> +++ b/tools/testing/selftests/bpf/test_progs.c
-[ ... ]
-> @@ -1514,6 +1517,8 @@ static int dispatch_thread_send_subtests(int sock_f=
-d, struct test_state *state)
->  	int subtest_num =3D state->subtest_num;
-> =20
->  	state->subtest_states =3D malloc(subtest_num * sizeof(*subtest_state));
-> +	if (!state->subtest_states)
-> +		return -ENOMEM;
+For EXECMEM_ROX_CACHE to help in reducing the fragmentation and TLB
+pressure an architecture should support collapsing of the split mappings at
+least in vmalloc/modules space.
 
-[Severity: Medium]
-Will this lead to a segmentation fault during program teardown?
+There is an RFC for arm64 to add support for EXECMEM_ROX_CACHE there:
 
-If this allocation fails, we return without clearing state->subtest_num.
-Later during teardown, free_test_states() loops over test_state->subtest_num
-and accesses test_state->subtest_states[j], which calculates an offset from
-a NULL array:
+https://lore.kernel.org/all/20260611130144.1385343-1-abarnas@google.com
 
-tools/testing/selftests/bpf/test_progs.c:free_test_states() {
-    ...
-		for (j =3D 0; j < test_state->subtest_num; j++)
-			free_subtest_state(&test_state->subtest_states[j]);
-    ...
-}
+and it looks like it'll take a couple of iterations :)
 
-Should state->subtest_num be set to 0 before returning here?
+I don't how much work it would be for other architectures.
+ 
+> Thanks,
+> Song
 
-[ ... ]
-> @@ -1732,9 +1737,24 @@ static void server_main(void)
->  	sigaction(SIGINT, &sigact_int, NULL);
-> =20
->  	dispatcher_threads =3D calloc(sizeof(pthread_t), env.workers);
-> +	if (!dispatcher_threads) {
-> +		perror("Failed to calloc dispatcher_threads");
-> +		exit(EXIT_ERR_SETUP_INFRA);
-> +	}
-
-[Severity: Medium]
-Does exiting directly here leak the loaded bpf_testmod kernel module?
-
-Normally, main() handles cleanup by going to the out label and calling
-unload_bpf_testmod(), but calling exit() bypasses this cleanup path.
-
-[ ... ]
-> @@ -2094,7 +2114,16 @@ int main(int argc, char **argv)
->  	env.worker_id =3D -1; /* main process */
->  	if (env.workers) {
->  		env.worker_pids =3D calloc(sizeof(pid_t), env.workers);
-> +		if (!env.worker_pids) {
-> +			perror("Failed to calloc worker_pids");
-> +			return -ENOMEM;
-> +		}
->  		env.worker_socks =3D calloc(sizeof(int), env.workers);
-> +		if (!env.worker_socks) {
-> +			perror("Failed to calloc worker_socks");
-> +			free(env.worker_pids);
-> +			return -ENOMEM;
-> +		}
-
-[Severity: Medium]
-Could this direct return also bypass the cleanup path?
-
-Returning directly skips the out label at the end of main(), which is
-responsible for unloading the bpf_testmod module if it was loaded. Should t=
-his
-use a goto to reach the cleanup code?
-
->  		if (env.debug)
->  			fprintf(stdout, "Launching %d workers.\n", env.workers);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260722074748.6740=
-80-1-yangfeng59949@163.com?part=3D2
+-- 
+Sincerely yours,
+Mike.
