@@ -1,118 +1,121 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CDD35B650
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 14:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43DD9352013;
+	Wed, 22 Jul 2026 14:02:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784728914; cv=none; b=RPoj9HqUl27BRErQnzxu1cPGIJl/qiHSRA9H9vUXzeY6s9jKPHjxK80EXk6sy4oBT0OEH3MA81fsyDkiSQz5j3Gym6UaOHYWeHb6Idqd8PuvqHsnrwMnsKUYZzQXuG1fLOiUPY4bR9hpqJdVCyz/Uu4cVSegrO5zlyCb9Xa51VA=
+	t=1784728960; cv=none; b=M9eGyfVz+zrL/+2Wu2XpfmS/orlp6gCRSt/yb8Te0uUS9sqst/B93dm3E053AnU2an1B9s0UGVmoj2P+Sa66W1rhPhPNr8ShVQRNVoqIV2zZ7fcj0qb8JEQ4CtzGM0knWxMf0td0pERRxRjAUdLvAMddmJGyiLm9wDhHKZFfvMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784728914; c=relaxed/simple;
-	bh=IRZyJ0fopRXhrBse54glb0AttLyv2hlC/a2Ga8rTfYU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fmpET1esoCLgwz4h6eBmhSMTlytmKt5pJCFYNxOzVP2axVRFkDznsj2R1QDVnfi+XUjYCkhb86aUEoKWHhPwOie0S+bhZk1eB0MDl3DeNDvxSaeidxGyHIIsurltAe99jfbdjVCUC1jhK1i2fUbOVckibMuwrmTjWpDqqQaG/gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NQRowHfa; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784728960; c=relaxed/simple;
+	bh=xW6HEANIwzaL9qihei/h38a0uLj9ZZuqjYQn7dfmeOk=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=KtRARk+Yrakq7FI3KqUhhOPTczcvbODXmiOxGtP+1d90k4DLzKJBNHlFXF1ZFy5+v2tsxzvfhRp3KRJ2Uk/R6nG7LMMYxZqQVfwf6rpfEncVOrj861R1VpIGXxzesQzPujMpKPh4TyI765IlY1Cs5V/bv3C6nj/cnJ2BvGlaxDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bfyt0B3R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NQRowHfa"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-ca913a601fbso8370712a12.3
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784728912; x=1785333712; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lhfzR90Z74WPj2CRcWlLERVPxsI4JJvonp11/p/J06I=;
-        b=NQRowHfaXL6iDzqeEeq+ZuOMQODllOoRvvZEJD1OUUnLkgeDH0R0VrxAbyx0oq27nK
-         1/bEQgr4qipV7NvC82iH52xn1o2Ry15mg4WQzpQP61EOhZ+i1TQ2ujhGWM618qRrK84f
-         k5qxmCxpDxz+V3UN3T0zHsDxtlrv/jvfFwApO+MJG9kZJEv3ldfDyDcqwWEHCK0BhSNw
-         8Hpa/z6NIxfCHC2VkZZNAPNUFuT5abdGtrp55S2gVxiKkTf4tWoAcrEBc3FRfVlk5jvf
-         G9dWmMDDi+dlhZZ41Ss4fBOtIoRAn7r4sSf9X3IExo8U6wx2HAiXBy3ekFByxU1/GZvq
-         dcOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784728912; x=1785333712;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lhfzR90Z74WPj2CRcWlLERVPxsI4JJvonp11/p/J06I=;
-        b=K+ZkcZGQwWBXfCRxraiBMgx3bTJXe2eXaFHxHxeFn9sqj5ZCnu7xN2KtadUgkkgDzw
-         GHhJFrfaNHuqfrtkmdoyysCjTiVbCtQKhO0Xnhxzm/toJYrysEJRYf8G52xWGbjmvTxB
-         36ZCba/Ew1SWol3li6itp8Cb5kG/MYGHj/AhuuuMYXrr43Y3rh3DhDxzF3xyKRWhnVf0
-         WFgw5Ub2Pf11BfpK+swkaiteDdlMaia7UJFVIdvRVqmJvwZWTFm/xomKcqjQ7EylHKHg
-         jtBg5s1vR7QA2MyTsJX4bIF42IcSglzSP23w2gVHzmb6lgCryZ3WteObgZ+IrCocwIqP
-         vwrw==
-X-Forwarded-Encrypted: i=1; AHgh+Rq0MP6VKXqF3ghFOs/PUgaCyjHHH2sS0etsOyjwwVPHywEPa14ccKzg5GUORTKlvf2oxsc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbxcERlqXMCG9qkDk3h+gLyDQRyWTmQdVS3ZX0kqt1igVh8hRe
-	xIpgKuFZWk7bbjAbVEdogbaqTKEScx/JYhF9zAOOq52PWjRFoZ6MhfIr
-X-Gm-Gg: AR+sD118xmmPYDRePDhagXR6usiBxTr4Kw0sS2gSWM547pxjaiNN8DsStOkUvjwldlA
-	9FYcVKoBMeZQvlMoZjfdwajfJqjf5nK7HA1vB1W8aImfEHuo+w+1cXgz8A/1eX4gQyDSQS3P9TK
-	z3YG6+bk3sQvx2Cy5bSh16ctWHo6XG19uUg3zkGvmXWM88Ng9ccvFeAncue2u1sOUQFBpKj9HPJ
-	UA2D1yv6wHYClaJQvMdycq/KyWn2No4RlbTfdb1b8xyg35YgaRXTuF8/VKA4l0IXrCiSYG3FA3m
-	SP2YoaPBHKeS8ezl58HxlL7YI6wV0UMn/Y/kJFjmfyhW66lM0xVirvSjKrWeoHzO2HYTYPTC0tR
-	F4vET9BnImRRC0GnwCo0ddOsHQPPiLttr/LgAk1sj5+Xz3eyj2CeBPfxHBQIbIzbzi2bV9f3EJr
-	5y/akSq/wdXfYvS+e5/OSJkP/hvQgrK59iXDvqqi0wBevj9Fc=
-X-Received: by 2002:a05:6a21:62c4:b0:3c0:b3f7:e5e5 with SMTP id adf61e73a8af0-3c3ad65cc12mr24097620637.25.1784728910120;
-        Wed, 22 Jul 2026 07:01:50 -0700 (PDT)
-Received: from computer.goose-salary.ts.net ([2a09:bac5:40b2:277d::3ef:c9])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb8f1a8a1fsm1242281a12.26.2026.07.22.07.01.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 07:01:49 -0700 (PDT)
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	pulehui@huawei.com
-Cc: alex@ghiti.fr,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	puranjay@kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	varunrmallya@gmail.com
-Subject: [PATCH bpf-next v3 6/6] riscv, bpf: Remove BPF exceptions from denylist
-Date: Wed, 22 Jul 2026 19:30:13 +0530
-Message-ID: <20260722140015.1982158-7-varunrmallya@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260722140015.1982158-1-varunrmallya@gmail.com>
-References: <20260722140015.1982158-1-varunrmallya@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bfyt0B3R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5EE91F000E9;
+	Wed, 22 Jul 2026 14:02:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784728958;
+	bh=EgzAv324wbWpcz6dBQ14sGLLSXabiEa87HpRWnnfqqU=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=Bfyt0B3RXEPX+KCdYlIAAjVVmIoEZZz9zHzxtgrLHfjS3pG+M7QY3KxLGxsg2e8ZZ
+	 zSB+0YjDPXhySzgSAlLU/hTmWfrtzz5wQ3N/+Rb21gXYpIVwPN+l30xgnNxEPJ1XtP
+	 mem6wGdkgKAfgwySqRYq72mlycMBJEOYoaJ9h7oz/3KViWJsu48iBgaRlsKRnBizgv
+	 AgAJBN41hzTjp10GBaaFfNLI7AzzwfSHCMvIeDjQn6H+1esaYAZ7OGm0Wab8+4hmSS
+	 uOO0ZW9wTUAXPO7MusbJhxzDm9udgi9ey/MlTlUCde2fojRmx1s9xLcc5eGlLLPnhq
+	 KgWzrhuDsa+7g==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] binfmt_elf_fdpic: only honour the first PT_INTERP
+From: Christian Brauner <brauner@kernel.org>
+To: Jori Koolstra <jkoolstra@xs4all.nl>
+Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
+ Farid Zakaria <farid.m.zakaria@gmail.com>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+ Kees Cook <kees@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Jan Kara <jack@suse.cz>, Jonathan Corbet <corbet@lwn.net>, 
+ linux-mm@kvack.org, bpf@vger.kernel.org, jannh@google.com, 
+ mail@johnericson.me, stable@vger.kernel.org
+In-Reply-To: <al_MqBrjDW1QjRau@daedalus>
+References: <20260721-gezittert-medium-kreide-b41fc1f0277e@brauner>
+ <al_MqBrjDW1QjRau@daedalus>
+Date: Wed, 22 Jul 2026 16:02:33 +0200
+Message-Id: <20260722-abgehackt-gedonnert-bekunden-39413664ab17@brauner>
+X-Mailer: b4 0.16-dev-2f6f2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2431; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=xW6HEANIwzaL9qihei/h38a0uLj9ZZuqjYQn7dfmeOk=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQlnK0u5JO9/EGm2TVjkoP0wUCeht1eE7KfLfq4r8biw
+ KplDk5fO0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACbycDIjw3uWshOfT5bVmq9a
+ FNi6vFP/qZu1yLfcl+yXRF4/XaK2NpiR4SyP0NHv74XE7VnV1pz3kXcL7cvhuTLxRcOuqWY7WHO
+ 28gIA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-This patch removes BPF exceptions from riscv64 denylist on
-BPF selftests since support for exceptions has been added now.
-Also, since the file is empty, delete the file.
+On 2026-07-21 22:37 +0200, Jori Koolstra wrote:
+> On Tue, Jul 21, 2026 at 01:20:45PM +0200, Christian Brauner wrote:
+> > The program header scan handles PT_INTERP from a switch nested in the
+> > scan loop, so its break leaves the switch and not the loop. A binary
+> > carrying more than one PT_INTERP runs the case again and overwrites both
+> > interpreter_name and interpreter. The previous name allocation leaks and
+> > so does the previous interpreter reference, along with the write denial
+> > open_exec() took on it. The denial is never released, so the file stays
+> > unwritable for as long as the system runs.
+> > 
+> > An unprivileged caller reaches this with a crafted binary and repeats it
+> > at will. binfmt_elf stops at the first PT_INTERP. Do the same here.
+> > 
+> > The flaw dates back to the driver's introduction in the pre-git history
+> > tree introduced in v2.6.11 by 91808d6ebe39 ("[PATCH] FRV: Add FDPIC ELF
+> > binary format driver").
+> > 
+> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> > ---
+> >  fs/binfmt_elf_fdpic.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
+> > index 7e3108489c83..fe0b5c5ed2bc 100644
+> > --- a/fs/binfmt_elf_fdpic.c
+> > +++ b/fs/binfmt_elf_fdpic.c
+> > @@ -231,6 +231,10 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
+> >  	for (i = 0; i < exec_params.hdr.e_phnum; i++, phdr++) {
+> >  		switch (phdr->p_type) {
+> >  		case PT_INTERP:
+> > +			/* elf ABI allows only one interpreter */
+> > +			if (interpreter_name)
+> > +				continue;
+> > +
+> >  			retval = -ENOMEM;
+> >  			if (phdr->p_filesz > PATH_MAX)
+> >  				goto error;
+> > -- 
+> > 2.53.0
+> > 
+> 
+> Good catch.
+> 
+> Reviewed-by: Jori Koolstra <jkoolstra@xs4all.nl>
+> 
+> Btw, it seems that elf_fdpic_map_file_constdisp_on_uclinux() has no
+> check to verify that phdr->p_memsz >= phdr->p_filesz, despite elf(5)
+> saying that
+> 
+> 	The file size may not be larger than the memory size.
+> 
+> Afaict, currently read_code() may blow past what vm_mmap() allocated
+> there, which may result in memory corruption for a non MMU system. This
+> is an LLM assisted find, and it may be that I missed something when
+> verifying. If you agree this is wrong, I'll fix it.
 
-Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
----
- tools/testing/selftests/bpf/DENYLIST.riscv64 | 2 --
- 1 file changed, 2 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/DENYLIST.riscv64
-
-diff --git a/tools/testing/selftests/bpf/DENYLIST.riscv64 b/tools/testing/selftests/bpf/DENYLIST.riscv64
-deleted file mode 100644
-index ca1beae7fe8f..000000000000
---- a/tools/testing/selftests/bpf/DENYLIST.riscv64
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# riscv64 deny list for BPF CI and local vmtest
--exceptions					# JIT does not support exceptions
--- 
-2.55.0
+Seems like a decent fix to do.
 
