@@ -1,63 +1,88 @@
-Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A55E4D991D;
-	Wed, 22 Jul 2026 10:23:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1629A473C7A
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 10:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784715827; cv=none; b=XKCFAeIU5YkqT4qsk2+91OSQTedzHS3bTZQqM3LdnyrNS18mnc6XEJ3RN9RPwUx9shXkulafyBAyagwQSgIPpehc6yqdBdfz/69O72BT/fkXrkWbVzahQ9ZdjJ7u0Os9ldjbEqqh8kRwO2nP3M8GlgQ9A6RTzHILnT6s7a0plOU=
+	t=1784717105; cv=none; b=iABCBkB/+iA8rjK7S9/mXLu+R2qpuA8Y3wLpuK+ljwvwYy2ZALL+s1NPOvaNzc1xk/XU99ev3D5Zy4exlcDD9Im6flYqX8LzaEHm16wNqH48+IXn/Wr8O3iQJesr4cuOoB1cLxHt8iXJj0qYfgGm6E0w7PZQ70oUkjMp1jiYRZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784715827; c=relaxed/simple;
-	bh=KmBEI0QqBfLJsbIjc2Gk7pu9WEqMvEOx9sfqp1Aled0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q2N6NIPTkBrAk2M99y2z2UFn9x+VHJPpRr1VEVgrfHbMxw2Kg3zbufyvb2OBUTZbBjjXHXtJ+H6z7hIf0nwGcpIfK9G2o+7GuxeIyL+Be8Aa4yFLjxdutn5SFHX8/wcqzpqlAIv8NO4QMmyhKwES4yhisy31lp98XJ7oVMiks/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=GnXEPpI7; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=jKsXW2Rh; arc=none smtp.client-ip=92.243.27.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+	s=arc-20240116; t=1784717105; c=relaxed/simple;
+	bh=XV0B/JhCsG40H9ag/PHxTNYCI0x+JONwkI59bxqGKMM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=i7ZEfAZLdvYTB+s/lhChVKcHxuvfqeD7SUtDalp43kOa9MPnv9hHA59Qvf44AGoqbJTfijyFXrTq3sVjp2VtSb9/H54Ma1WvRZY2jVtUaMAvowjuqozZugpRPnqvFvEjabl3O3nbQEnkW2ykyQq6ZhsG2C6XpQZpXHR9j/u6nBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=alR4KjSs; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="GnXEPpI7";
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="jKsXW2Rh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1784715823; bh=KmBEI0QqBfLJsbIjc2Gk7pu9WEqMvEOx9sfqp1Aled0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GnXEPpI7WojQs5xx0JMVTnSJoueJH5f7svQ5DaongSIAKXt6WfWhEi5Wp+58DJF02
-	 SpLy1VObE+MZWpytPloqrej/JbVVdmz9C5VPoJfcZAqiQ4EuuVnMpejBMl/ZBhX9Je
-	 N9tBo4Kj7mm8kyPsAvA7+WoWrncR75ge6L1bJAx40EOZXSk3eOFUP1ud3vXL78r15f
-	 iwBPHys/H3hxiXVxYASTUMGe49utpliFrwe8uBqmoGo51O+/w4rkud8CH0FhzJ2/vm
-	 XkS5IinKVYchw7pLovRWOxQLdculzA5wqxMdDKjfMsKrepYz1kA+IJP4cmPl4RCYR3
-	 hKGtX2Yyeac2A==
-Received: by extorris.mess.org (Postfix, from userid 1004)
-	id A56F54017A; Wed, 22 Jul 2026 11:23:43 +0100 (BST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1784715822; bh=KmBEI0QqBfLJsbIjc2Gk7pu9WEqMvEOx9sfqp1Aled0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jKsXW2Rh+L5FPEDcWhvyyWoe1MaTpBdyeIRX8/LisFuybM6EH4afPPC8JyT5P/aHE
-	 ynqYd7HS94M1SVEbMRfEXo0UYcaGOb8Q/vv5UJtCIdOFqQY+W1wYnf/AfuFeEL8qPi
-	 I3Z73fEgQq4iMOpnhYrG3vpjYqKE79Mbd5pLgM052OMnnrdYWOesCjX0J6C3MasY1G
-	 VftVAc9Z5Bq3jwByC6eY1bKwzRsaF+Eqqv5AmHv87Qfs/7ry8tX6Yhh9clLHXeWT2s
-	 /5XkiIBiexSLMziwjeVTTo3NpErfQYps5SiZq/xqcQoxc2F8zxrGRfHIhsUKTX+vm/
-	 uNYTzXxo0nY+g==
-Received: from maru.local (unknown [62.232.99.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by extorris.mess.org (Postfix) with ESMTPSA id 40B8F42540;
-	Wed, 22 Jul 2026 11:23:42 +0100 (BST)
-From: Sean Young <sean@mess.org>
-To: linux-media@vger.kernel.org,
-	Sean Young <sean@mess.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v3 12/13] media: rc: Fix use after free in bpf progs
-Date: Wed, 22 Jul 2026 11:23:24 +0100
-Message-ID: <ef00c264d0ead1324c4d61bbb3b1a4b2dc5bd4f6.1784715737.git.sean@mess.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1784715737.git.sean@mess.org>
-References: <cover.1784715737.git.sean@mess.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="alR4KjSs"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-49554ebb87dso39828215e9.3
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 03:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784717102; x=1785321902; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1rwrdJxGLamDKuaEmMI5UrE7st//n0E96F1Xn4wpyT0=;
+        b=alR4KjSsUvsyJX4a8y8F563m5nzXLxi72VRfFHaPwqWzYs7fHOoe01Y1W3XW8UVToR
+         lUUtg9vZgOLnVNZ3lJREr/6e7cT2vq2GZpJ+iJx1obmVdw8AQH+RmJNqKHs75H634Ozu
+         m3iyIT2A/w0GKQeqHBhy+gHJ3dYk0PPdIK89Z6jJ+e8Zl/yjKHARnDCUCRpkkQOmb2sd
+         mzmi1OYYNM9D/w7y33MjR2y5DTuL8NMZC4ZwPCzSrFicRSutAECqHv8H5IdqERwNXUcp
+         Ag9z/CD8xtQYavsHTy+NoQ5ZF6D6G4yIahztG4I80MEcemViybW589nY0NkyHVdfg97V
+         B/Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784717102; x=1785321902;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1rwrdJxGLamDKuaEmMI5UrE7st//n0E96F1Xn4wpyT0=;
+        b=ICk908x7/VxVVVbyn/+QlvrbMX1rZZas3WjZBi8JyJONs1a3xhGo7jCIZbXKDSxxWO
+         jV8K++H6IGrwjJkEpn3FvsqpGxucIuNiEG0u24lQexMZT1RRzpC7GmZoocO+VdUYTj6j
+         3hhPSuKrs1ZfLSrf5tx1LwIqgrYxnooIgxGYgXkbG3MR0RVkcWZY5/937b/f0LcYGXAd
+         HlbSdULAJkPdQzwnbbQId5zRKHi1jcG0h5eP5pbedBZW7O0T94E2wVsCcdJgflpD43Ts
+         EvoU7zxEfdqAiCV7iXaw8ZkFlb7rOI1wxsG5tKqg9cICHc6Pa64xrFKZghx0+m9lcEdb
+         858A==
+X-Gm-Message-State: AOJu0YzC8QKE9oSbe/Ohybc37nKJwSbmAS0wloTw9WQa4QgWy9ccKKzn
+	2eYwNekxihT7O9h1ZATcN3dmKaVxt/P4mliQtxQqzXG/9R2Xc7Hsbup8hHO/UK4bj/0=
+X-Gm-Gg: AR+sD132IdtZrLrGWY8BAQy6194BQOFQqXrjdeuIgla1XHvVAs/uXhtP+EGn7LdZerb
+	v3HD+k0XzFnxzVT9zOTl0sO7Y9lCZj1l3ROUx95xmSGPNn0SvyUs3wkkwrwQq9tGhMhOhjs1p1U
+	VrHj1Jp9dxPoBdyh+ai5NSHVQuSM+PeGb0j/YySQfAWu4Ub0WkWz9Mjd/MxMiaRRPnb/4iKAL/a
+	pk5UmbJttV4MHc4MIzp7vjHTB9MCEryEnoSn+oaTHTvBy3KLiQIuArvsByydI6rhOQ3R+VtQduF
+	rSPQVcOT9SHFE1J4b3qihQYuUSFi1a3bIdwbgH0Dji1m6R+bpB5S76l8F+wsyotR2J6zdnbcqlT
+	FyH+UAtXPYuSAt8TlxlslymrS1V8+4fyHJg2A8ySZ4Jw1V5yehNGaVIEDp0O3/+9OmSFS/t5I9X
+	FIyx69ab1HsbvOGIZsQtvYRQQwCrUyay2lCBlUeRLvNG7MV+Ze6F7cYVXYuw==
+X-Received: by 2002:a05:600c:3b88:b0:495:4d2d:82f2 with SMTP id 5b1f17b1804b1-4954d2d8335mr258235425e9.26.1784717102050;
+        Wed, 22 Jul 2026 03:45:02 -0700 (PDT)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4956a509901sm111090575e9.8.2026.07.22.03.45.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 03:45:01 -0700 (PDT)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,
+	andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	eddyz87@gmail.com,
+	edumazet@google.com,
+	john.fastabend@gmail.com,
+	kuba@kernel.org,
+	liamwisehart@meta.com,
+	martin.lau@linux.dev,
+	pabeni@redhat.com,
+	song@kernel.org,
+	netdev@vger.kernel.org,
+	sdf.kernel@gmail.com,
+	ameryhung@gmail.com,
+	kuniyu@google.com,
+	Mahe Tardy <mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next v2 1/5] net: Add __sys_connect_socket() helper
+Date: Wed, 22 Jul 2026 10:44:50 +0000
+Message-Id: <20260722104454.165911-2-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260722104454.165911-1-mahe.tardy@gmail.com>
+References: <20260722104454.165911-1-mahe.tardy@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,113 +91,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since commit dccc0c3ddf8f ("media: rc: fix race between unregister and
-urb/irq callbacks"), rcdev->raw is no longer set to NULL after device
-unregister. raw->progs could point to stale data.
+Add a helper that connects an existing socket while invoking the LSM
+hook. Reuse it in __sys_connect_file() to avoid duplicating the connect
+logic. Other socket operations have equivalent helpers that trigger the
+appropriate LSM hooks that can be reused, this one was the only one
+missing.
 
-Fixes: dccc0c3ddf8f ("media: rc: fix race between unregister and urb/irq callbacks")
-Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
- drivers/media/rc/bpf-lirc.c  | 18 +++++++++++++-----
- drivers/media/rc/rc-ir-raw.c | 11 +++--------
- 2 files changed, 16 insertions(+), 13 deletions(-)
+ include/linux/socket.h |  2 ++
+ net/socket.c           | 32 ++++++++++++++++++--------------
+ 2 files changed, 20 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/media/rc/bpf-lirc.c b/drivers/media/rc/bpf-lirc.c
-index 2f7564f26445..14ab611e7445 100644
---- a/drivers/media/rc/bpf-lirc.c
-+++ b/drivers/media/rc/bpf-lirc.c
-@@ -148,12 +148,13 @@ static int lirc_bpf_attach(struct rc_dev *rcdev, struct bpf_prog *prog)
- 	if (ret)
- 		return ret;
- 
--	raw = rcdev->raw;
--	if (!raw) {
-+	if (!rcdev->registered) {
- 		ret = -ENODEV;
- 		goto unlock;
- 	}
- 
-+	raw = rcdev->raw;
+diff --git a/include/linux/socket.h b/include/linux/socket.h
+index 2a8d7b14f1d1..48f1eb8193de 100644
+--- a/include/linux/socket.h
++++ b/include/linux/socket.h
+@@ -461,6 +461,8 @@ extern struct file *__sys_socket_file(int family, int type, int protocol);
+ extern int __sys_bind(int fd, struct sockaddr __user *umyaddr, int addrlen);
+ extern int __sys_bind_socket(struct socket *sock, struct sockaddr_storage *address,
+ 			     int addrlen);
++extern int __sys_connect_socket(struct socket *sock, struct sockaddr_storage *addr,
++				int addrlen, int flags);
+ extern int __sys_connect_file(struct file *file, struct sockaddr_storage *addr,
+ 			      int addrlen, int file_flags);
+ extern int __sys_connect(int fd, struct sockaddr __user *uservaddr,
+diff --git a/net/socket.c b/net/socket.c
+index 63c69a0fa74e..c7427dd4dd52 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -2115,27 +2115,31 @@ SYSCALL_DEFINE3(accept, int, fd, struct sockaddr __user *, upeer_sockaddr,
+  *	include the -EINPROGRESS status for such sockets.
+  */
+
++int __sys_connect_socket(struct socket *sock, struct sockaddr_storage *address,
++			 int addrlen, int flags)
++{
++	int err;
 +
- 	old_array = lirc_rcu_dereference(raw->progs);
- 	if (old_array && bpf_prog_array_length(old_array) >= BPF_MAX_PROGS) {
- 		ret = -E2BIG;
-@@ -186,12 +187,13 @@ static int lirc_bpf_detach(struct rc_dev *rcdev, struct bpf_prog *prog)
- 	if (ret)
- 		return ret;
- 
--	raw = rcdev->raw;
--	if (!raw) {
-+	if (!rcdev->registered) {
- 		ret = -ENODEV;
- 		goto unlock;
- 	}
- 
-+	raw = rcdev->raw;
++	err = security_socket_connect(sock, (struct sockaddr *)address, addrlen);
++	if (err)
++		return err;
 +
- 	old_array = lirc_rcu_dereference(raw->progs);
- 	ret = bpf_prog_array_copy(old_array, prog, NULL, 0, &new_array);
- 	/*
-@@ -235,7 +237,8 @@ void lirc_bpf_free(struct rc_dev *rcdev)
- 	struct bpf_prog_array_item *item;
- 	struct bpf_prog_array *array;
- 
--	array = lirc_rcu_dereference(rcdev->raw->progs);
-+	array = rcu_replace_pointer(rcdev->raw->progs, NULL,
-+				    lockdep_is_held(&ir_raw_handler_lock));
- 	if (!array)
- 		return;
- 
-@@ -316,6 +319,11 @@ int lirc_prog_query(const union bpf_attr *attr, union bpf_attr __user *uattr)
- 	if (ret)
- 		goto put;
- 
-+	if (!rcdev->registered) {
-+		ret = -ENODEV;
-+		goto unlock;
-+	}
++	return READ_ONCE(sock->ops)->connect(sock,
++				    (struct sockaddr_unsized *)address,
++				    addrlen, flags);
++}
 +
- 	progs = lirc_rcu_dereference(rcdev->raw->progs);
- 	cnt = progs ? bpf_prog_array_length(progs) : 0;
- 
-diff --git a/drivers/media/rc/rc-ir-raw.c b/drivers/media/rc/rc-ir-raw.c
-index f066176c9f37..26962b500b0c 100644
---- a/drivers/media/rc/rc-ir-raw.c
-+++ b/drivers/media/rc/rc-ir-raw.c
-@@ -650,8 +650,11 @@ int ir_raw_event_register(struct rc_dev *dev)
- void ir_raw_event_free(struct rc_dev *dev)
+ int __sys_connect_file(struct file *file, struct sockaddr_storage *address,
+ 		       int addrlen, int file_flags)
  {
- 	if (dev->raw) {
-+		mutex_lock(&ir_raw_handler_lock);
- 		if (dev->raw->thread)
- 			put_task_struct(dev->raw->thread);
-+		lirc_bpf_free(dev);
-+		mutex_unlock(&ir_raw_handler_lock);
- 		kfree(dev->raw);
- 		dev->raw = NULL;
- 	}
-@@ -661,9 +664,6 @@ void ir_raw_event_unregister(struct rc_dev *dev)
- {
- 	struct ir_raw_handler *handler;
- 
--	if (!dev || !dev->raw)
--		return;
+ 	struct socket *sock;
+-	int err;
+
+ 	sock = sock_from_file(file);
+-	if (!sock) {
+-		err = -ENOTSOCK;
+-		goto out;
+-	}
 -
- 	kthread_stop(dev->raw->thread);
- 	timer_delete_sync(&dev->raw->edge_handle);
- 
-@@ -676,11 +676,6 @@ void ir_raw_event_unregister(struct rc_dev *dev)
- 
- 	lirc_bpf_free(dev);
- 
--	/*
--	 * A user can be calling bpf(BPF_PROG_{QUERY|ATTACH|DETACH}), so
--	 * ensure that the raw member is null on unlock; this is how
--	 * "device gone" is checked.
--	 */
- 	mutex_unlock(&ir_raw_handler_lock);
+-	err =
+-	    security_socket_connect(sock, (struct sockaddr *)address, addrlen);
+-	if (err)
+-		goto out;
++	if (!sock)
++		return -ENOTSOCK;
+
+-	err = READ_ONCE(sock->ops)->connect(sock, (struct sockaddr_unsized *)address,
+-					    addrlen, sock->file->f_flags | file_flags);
+-out:
+-	return err;
++	return __sys_connect_socket(sock, address, addrlen,
++				    sock->file->f_flags | file_flags);
  }
- 
--- 
-2.55.0
+
+ int __sys_connect(int fd, struct sockaddr __user *uservaddr, int addrlen)
+--
+2.34.1
 
