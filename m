@@ -1,126 +1,150 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D2B3370EA;
-	Wed, 22 Jul 2026 02:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7916638CFF8;
+	Wed, 22 Jul 2026 02:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784686806; cv=none; b=iqL+TunpOcyjIWuz6gaZPtEkbZ6UPzcWsGqOLRESK1NLzUVlZDT0PrOoXk4aV0zPboMszob0J+YyzZkT+ba/1v911+kN2PDVAkhuoZcLacMUezR3ny7U04p6XI53U/yZH4dSQPOZJnDLJuZXaVfdufnllcfLwdB5PPJm0Vllimw=
+	t=1784687360; cv=none; b=SBsdf1uwm3apo1R2TQpZjqe71uZf2DC1ge0g6EpBJPnaPyYmLVuby6hyegurdQEk8A4Tqn6SP0QJdXUiud9if2dq0KPsmlgyBva28/0e8yHR09VsZrzDciXWAD8xwe/lg8S/EWNld3DIwXB7CNZFpu1Y7RpMMEeFUV3GESadvR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784686806; c=relaxed/simple;
-	bh=sBTd1U8YJcYv1dR8ckR50Y0iSA5h1U8R1j+UpdwJplg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FBcMmBjwoRc5jeqN+OEIIyS/hHyQzWNE/HHokNbhl6Qp5jCflunqsiMYIiwR3Ch+q5Kw7pS64Ps5bFKk8FlpB89LuqD1YifI+ZVLWDUb5IMneY32DOK887Lx/xwSRUtxgrT2hrML0g2okiDEpDicZ/h0eKpHnMlCzf5IqE1eFyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h4dH365dKzKHMPS;
-	Wed, 22 Jul 2026 10:19:11 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id CB6B6405A0;
-	Wed, 22 Jul 2026 10:19:54 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgC3FHHJKGBq8ORlCA--.65S2;
-	Wed, 22 Jul 2026 10:19:54 +0800 (CST)
-Message-ID: <7ef9d72c-2c5a-4c99-acdc-b7a70df7b876@huaweicloud.com>
-Date: Wed, 22 Jul 2026 10:19:53 +0800
+	s=arc-20240116; t=1784687360; c=relaxed/simple;
+	bh=2a2xFxA0Pk7iVCaTkFnjhuUyLzsaMAYo8+BBU6pKASw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UTDqplIxg0ignMU6FPS/xRxgSeWswwq1mL0PAKEZrlRtDkr5UHg8cnOkSV4WaYfgjwNF7c34TNbHECsdHmzvNwpvOdw9RsMlio5D4xBIY1BXudDCAy3qkQOM9G0RXMQsMUul1Qj44yD9wyY77lCw9NeVBpeZw55+6UZTkHxXefg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxVer1KmBqxtsFAA--.21644S3;
+	Wed, 22 Jul 2026 10:29:09 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJBxb8fyKmBq9qgUAA--.44439S2;
+	Wed, 22 Jul 2026 10:29:07 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v1] selftests/bpf: Add get_preempt_count() support for RISC-V
+Date: Wed, 22 Jul 2026 10:29:06 +0800
+Message-ID: <20260722022906.8778-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2] e1000e: Fix out-of-bounds MMIO access by
- validating BAR0 size
-Content-Language: en-US
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jeff Garzik <jeff@garzik.org>, Auke Kok <auke-jan.h.kok@intel.com>,
- Breno Leitao <leitao@debian.org>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, Pu Lehui <pulehui@huawei.com>
-References: <20260720133049.1289167-1-pulehui@huaweicloud.com>
- <d86c6b6a-fa9a-4429-b004-8c54b2232797@lunn.ch>
- <933d745d-712a-4d49-982f-414ccfd69e47@huaweicloud.com>
- <9238e3a3-4168-4716-b2f3-8e8879e65963@lunn.ch>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <9238e3a3-4168-4716-b2f3-8e8879e65963@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgC3FHHJKGBq8ORlCA--.65S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr1kJry5Zr48Gry7GFWxWFg_yoW8Cr1xpa
-	yqga4Y9r4jvr47tw4Svwn8XF9Ykasxtay0g345Jrs8uFn8uw4fJr47GFW5WrnrZws2kry8
-	tr4qqw4fZrs8J3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
-	e7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-	GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-	UAwIDUUUUU=
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJBxb8fyKmBq9qgUAA--.44439S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxJw4DAF18Kr1rWFWDGw1fXwc_yoW5XF17pr
+	WxJr1jywn5tFW7JFZrJw4DXF1Yqrn5Wa4rCr43K393AF1UtrWqqFySgry3tFnYgry8KryF
+	v343Ka4ruasrAabCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jUsqXUUUUU=
 
+Currently, there is no RISC-V support for get_preempt_count() and
+its fallback path always returns 0.
 
+Add it so that bpf_in_interrupt(), bpf_in_nmi(), bpf_in_hardirq(),
+bpf_in_serving_softirq(), and bpf_in_task() work for RISC-V as well.
 
-On 2026/7/21 21:02, Andrew Lunn wrote:
-> On Tue, Jul 21, 2026 at 10:06:10AM +0800, Pu Lehui wrote:
->>
->> On 2026/7/20 22:52, Andrew Lunn wrote:
->>>> --- a/drivers/net/ethernet/intel/e1000e/regs.h
->>>> +++ b/drivers/net/ethernet/intel/e1000e/regs.h
->>>> @@ -242,4 +242,7 @@
->>>>    /* PHY registers */
->>>>    #define I82579_DFT_CTRL	PHY_REG(769, 20)
->>>> +/* Smallest BAR0 that covers every register the driver accesses */
->>>> +#define E1000_MMIO_LEN_MIN	0x10000
->>>
->>> I commented on the previous version. Is I82579_DFT_CTRL the highest
->>> register? Can E1000_MMIO_LEN_MIN defines based on that?
->>>
->>> 	  Andrew
->>
->> Hi Andrew,
->>
->> Thanks for reviewing this! And yeah, I caught your comment on the previous
->> version.
->>
->> I did the math on I82579_DFT_CTRL, and it comes out to 0x6034, so it's
->> actually not the highest one. And the registers in regs.h aren't really
->> sorted by address anyway.
->>
->> The highest static address is E1000_SYSSTMPH(0x0B64C)
->> The highest dynamic address is E1000_TXDCTL(_n), as it define bellow:
->>
->> #define E1000_TXDCTL(_n) ((_n) < 4 ? (0x03828 + ((_n) * 0x100)) : \
->>                           (0x0E028 + ((_n) * 0x40)))
->>
->> But since the maximum _n we use in the e1000e driver is just 1, that address
->> maxes out at only 0x3928.
->>
->> So, since E1000_SYSSTMPH is the highest register offset the driver actually
->> accesses, how about we just define E1000_MMIO_LEN_MIN based on that?
->> Something like:
->>
->> /* Smallest BAR0 that covers every register the driver accesses */
->> #define E1000_MMIO_LEN_MIN	E1000_SYSSTMPH
-> 
-> What is the size of this register? U32? Maybe you actually need:
-> 
-> #define E1000_MMIO_LEN_MIN	E1000_SYSSTMPH + sizeof(u32)
-> 
-> 	Andrew
+Given that RISC-V has supported CONFIG_THREAD_INFO_IN_TASK since its
+initial commit fbe934d69eb7 ("RISC-V: Build Infrastructure") in 2017,
+directly retrieve preempt_count from the thread_info embedded within
+task_struct via bpf_get_current_task_btf().
 
-yeah, in the e1000, these registers are all accessed via rd32 and wr32. 
-I will respin new version soon. Thanks Andrew.
+This aligns the implementation with arm64, powerpc, and loongarch.
+
+Tested on a RISC-V virtual machine.
+
+Before:
+  $ sudo ./test_progs -t exe_ctx
+  ...
+  #114     exe_ctx:FAIL
+  Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+
+After:
+  $ sudo ./test_progs -t exe_ctx
+  #114     exe_ctx:OK
+  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Tested-by: Pu Lehui <pulehui@huawei.com>
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
+---
+RFC -> v1:
+  -- No code changes
+  -- Update the commit message
+  -- Add Tested-by and Reviewed-by
+https://lore.kernel.org/bpf/0191fe3f-b956-480d-aef2-a4d75f9e02de@huawei.com/
+
+ tools/testing/selftests/bpf/bpf_experimental.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+index 67ff7882299e..ff37ae5a113d 100644
+--- a/tools/testing/selftests/bpf/bpf_experimental.h
++++ b/tools/testing/selftests/bpf/bpf_experimental.h
+@@ -425,6 +425,8 @@ static inline int get_preempt_count(void)
+ 	return bpf_get_lowcore()->preempt_count;
+ #elif defined(bpf_target_loongarch)
+ 	return bpf_get_current_task_btf()->thread_info.preempt_count;
++#elif defined(bpf_target_riscv)
++	return bpf_get_current_task_btf()->thread_info.preempt_count;
+ #endif
+ 	return 0;
+ }
+@@ -436,6 +438,7 @@ static inline int get_preempt_count(void)
+  *	* powerpc64
+  *	* s390x
+  *	* loongarch
++ *	* riscv
+  */
+ static inline int bpf_in_interrupt(void)
+ {
+@@ -458,6 +461,7 @@ static inline int bpf_in_interrupt(void)
+  *	* powerpc64
+  *	* s390x
+  *	* loongarch
++ *	* riscv
+  */
+ static inline int bpf_in_nmi(void)
+ {
+@@ -471,6 +475,7 @@ static inline int bpf_in_nmi(void)
+  *	* powerpc64
+  *	* s390x
+  *	* loongarch
++ *	* riscv
+  */
+ static inline int bpf_in_hardirq(void)
+ {
+@@ -484,6 +489,7 @@ static inline int bpf_in_hardirq(void)
+  *	* powerpc64
+  *	* s390x
+  *	* loongarch
++ *	* riscv
+  */
+ static inline int bpf_in_serving_softirq(void)
+ {
+@@ -505,6 +511,7 @@ static inline int bpf_in_serving_softirq(void)
+  *	* powerpc64
+  *	* s390x
+  *	* loongarch
++ *	* riscv
+  */
+ static inline int bpf_in_task(void)
+ {
+-- 
+2.42.0
 
