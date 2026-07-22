@@ -1,32 +1,32 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1267437464
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 23:36:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EFC9459AE7
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 23:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784763363; cv=none; b=i4rd4hDVRZHDBbXgo47cME4d8/sRBNSmee37g2fTHvsYDmaf7+WNVg0dZ3mbeqbSsCqcjz5JHTIsBH3qIsSj7eBmy/snAU1kPbOogE/KJWczPSw088/+1gjUpZp4y5/UQ9Inzux1QMDRJ4bRou+vtLG9MncZIBuWllyHEuc6MOU=
+	t=1784763365; cv=none; b=knuU9ZMT/0sVk+UQINbOJ0FQqgYz8eGAWU5XVGbDWthFaXrIKR2FZKYP9/9XQhIWTGk0ziyluUtYaI8pGpPgmgV2sWxld0J5iJ/yAMvegTuetFzXHOrU4mthIK9Kx2Fy7n0+UBdw1Oty8OTjyXMTTKK40X5qaS/5uk2ijEnlv7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784763363; c=relaxed/simple;
-	bh=6dyZfEquXX1eoqPSu/KktcyXKEdPvQfExb4e/wVEqYI=;
+	s=arc-20240116; t=1784763365; c=relaxed/simple;
+	bh=GamW1VwKvhKJeT/6CK2u8DdO2/TMjN3bJls3oHrWt/M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cvAL974fV/qkaPf3qf1ios1T5cpcSBVDtZBgxmkHKOg7luKwKOlTsPFMQuedLVRWUfzENP987OP319ceq91sppoHPTE0bcs92ATDB3voIcYq4UISBNjYULJ7F8lhMgTmxG99oNl2MbTvOz4AT3XAdB2P4rTeP//3y+bB2wtJhNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KcaBJN82; arc=none smtp.client-ip=95.215.58.189
+	 MIME-Version; b=bCNH5V9v2dW/c1ljaJGGhbQIjxQYf0C4y8yoEirrZqFnxuMoY972+mMul2G+vmbNAw+NWe7p6qWLfqfEzPwEDf3eciVSqtezuN7aQNlrZ6C9IO13w8L29y16aqHAGR9Syp61PkCKIPWj3JdMYpCait81ISEzlroQXZsFVJquD5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TeXRZVl6; arc=none smtp.client-ip=95.215.58.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KcaBJN82"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TeXRZVl6"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784763358;
+	t=1784763361;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=APFqKWBeT7g6YAOdNNRcwHzhLIjsoIsdQObLP86YxIc=;
-	b=KcaBJN827QhS+pbEirrPfioVgBJ6rwEhZh3cMQwkt9E+XZwH76wOaC7Xfl+BwoUx7WWOh8
-	vXDRF6hPRWGcg1gm09cdIcGpVEgsXaAnlTa2EFUwYeocnWZ/xvAM8+IBNBfUycGt1FqqNM
-	DNOaJ6ScY8YMqd2P08XcD00ReC/4s28=
+	bh=WTfkRdtMdkcOuL/IvPO/EoGmDNTqaSXpsalOp4NmLbs=;
+	b=TeXRZVl6WmqHLCDF/CYf6nJzSLRQXgIfIBSB5IGXNXfqvGwloPMynXjwCDzXhZkSI3Ntc4
+	U0Wo1cuJSs0APCB2QTiSVHJFybnh5bIl9N6ElKBEjBNcwEqSnxoWtBjZNKQShsMzMuca7u
+	BxBXXM3ZtiWjk2OcdAqVO3z/G/IAABQ=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -40,9 +40,9 @@ Cc: Benjamin Tissoires <bentiss@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-input@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 4/8] libbpf: Export btf__find_by_name_kind_own()
-Date: Wed, 22 Jul 2026 16:35:14 -0700
-Message-ID: <20260722233518.778854-5-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 5/8] resolve_btfids: Fix the _impl lookup for module BTF
+Date: Wed, 22 Jul 2026 16:35:15 -0700
+Message-ID: <20260722233518.778854-6-ihor.solodrai@linux.dev>
 In-Reply-To: <20260722233518.778854-1-ihor.solodrai@linux.dev>
 References: <20260722233518.778854-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -54,58 +54,34 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-btf__find_by_name_kind() searches the base BTF before the split BTF,
-so in case of a name collision between base and split it always
-returns a base type. Tools that process split BTF may need to restrict
-a lookup to the split's own types.
+process_kfunc_with_implicit_args() skips generating <name>_impl
+function when one already exists for backwards compatibility.
 
-The internal helper btf__find_by_name_kind_own() already does exactly
-that. Make it a public API.
+It uses btf__find_by_name_kind(), which searches the base BTF before
+the split BTF. When resolve_btfids processes a module, a same-named
+_impl in vmlinux would be found and the module's own counterpart would
+not be created.
+
+Fix by using btf__find_by_name_kind_own() for the lookup.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/lib/bpf/btf.h             | 2 ++
- tools/lib/bpf/libbpf.map        | 1 +
- tools/lib/bpf/libbpf_internal.h | 2 --
- 3 files changed, 3 insertions(+), 2 deletions(-)
+ tools/bpf/resolve_btfids/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 1a31f2da947f..587172c0de08 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -172,6 +172,8 @@ LIBBPF_API __s32 btf__find_by_name(const struct btf *btf,
- 				   const char *type_name);
- LIBBPF_API __s32 btf__find_by_name_kind(const struct btf *btf,
- 					const char *type_name, __u32 kind);
-+LIBBPF_API __s32 btf__find_by_name_kind_own(const struct btf *btf,
-+					    const char *type_name, __u32 kind);
- LIBBPF_API __u32 btf__type_cnt(const struct btf *btf);
- LIBBPF_API const struct btf *btf__base_btf(const struct btf *btf);
- LIBBPF_API const struct btf_type *btf__type_by_id(const struct btf *btf,
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index b731df19ae69..08ab2ea881fb 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -460,5 +460,6 @@ LIBBPF_1.8.0 {
- 	global:
- 		bpf_program__attach_tracing_multi;
- 		bpf_program__clone;
-+		btf__find_by_name_kind_own;
- 		btf__new_empty_opts;
- } LIBBPF_1.7.0;
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index d5b7db703b3f..7a74abb904f8 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -596,8 +596,6 @@ typedef int (*type_id_visit_fn)(__u32 *type_id, void *ctx);
- typedef int (*str_off_visit_fn)(__u32 *str_off, void *ctx);
- int btf_ext_visit_type_ids(struct btf_ext *btf_ext, type_id_visit_fn visit, void *ctx);
- int btf_ext_visit_str_offs(struct btf_ext *btf_ext, str_off_visit_fn visit, void *ctx);
--__s32 btf__find_by_name_kind_own(const struct btf *btf, const char *type_name,
--				 __u32 kind);
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index de4986e1bc3d..ab3ab3045592 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -1232,7 +1232,7 @@ static int process_kfunc_with_implicit_args(struct btf2btf_context *ctx, struct
+ 		return -E2BIG;
+ 	}
  
- /* handle direct returned errors */
- static inline int libbpf_err(int ret)
+-	if (btf__find_by_name_kind(btf, tmp_name, BTF_KIND_FUNC) > 0) {
++	if (btf__find_by_name_kind_own(btf, tmp_name, BTF_KIND_FUNC) > 0) {
+ 		pr_debug("resolve_btfids: function %s already exists in BTF\n", tmp_name);
+ 		goto add_new_proto;
+ 	}
 -- 
 2.55.0
 
