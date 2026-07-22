@@ -1,225 +1,275 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987A034BA42
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 13:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506A732B103
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 14:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784728642; cv=none; b=ZfNOgDgHvm1oUCHgAQqo/UPdY92yGb9edZySVOymcc0pWI5aF9Ql0g8O6m/jg2VHNqI/YpALOYYXkS9lWVRFQQcGm7X1ZVZ+xI/kOCTQhyspy58rolyLe9NfE+obo6vqMJTu72hzT2grZP8EEkXEsCgcWELWf8/Rn03JbSqgOOQ=
+	t=1784728834; cv=none; b=DQglEGOzxnUDknSHi1BIlXFjPln3QBhHgv2F4WRSXOs0RxT0D9pR/tVbsnC9rYWpmAfRmKB2rC04RoxTfzViJgHKYFhljNXr9jouUYwYFmcDH5EiDbulwcnLQKOzkD3hVQyLncPpoHIGSlGpYh/pSdclmvtN3H6m6ongGn+frU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784728642; c=relaxed/simple;
-	bh=ZdB3m2iSuqfb77BpI4QLn9scPAGC3lo/vOo7T39FJUE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=It5/vQe1aeFE+ISxVmvt5CnQ4v8JLfx69UQoTefaygWYT2AbEMp9TRFpzt49bV9nWkpXbDTLf7jxBIWV0k2iriWGHLP8hIiUo9WySzGouhPwk/HjXaKS6o4IkkAEquK2kgPK/s3X0RLQHrGmKAd1NSICCizvVfFhWPm99/ktz1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AW3RB99Y; arc=none smtp.client-ip=74.125.225.137
+	s=arc-20240116; t=1784728834; c=relaxed/simple;
+	bh=v29liR08HV268l93mu5RRNDkogQe6C7RQIhjB5TiQuY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Q1QVcYyyJ934tViQNVu1M2TrkUsHh8tzvm3/DC9QKCeoGx/Dd/m52h7s4vhneMnpaWaHC8CFh12XouGWA1bmUVAj50mYrbHqv61G7LZrHON76vAWHMBLOfCKBOFue8URG2ihYMirVnURD0nLMkxXKd/pMd71WxvL5Gufng2Bte0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cxmi4Zkh; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AW3RB99Y"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49553da76dcso15343485e9.1
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 06:57:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cxmi4Zkh"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c999f162c9aso8160451a12.3
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:00:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784728639; x=1785333439; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=go5jgVDGTFBmuogaeDe5LrDifuMcupZu3FGvDho6cOc=;
-        b=AW3RB99Y2m6Juj28tnhWBvJvmA2nbhMSYh76JmW00JCom1pBmoDmthrKkRTzcqTnYl
-         5M2USjsbVhN8WUXq7ljnSPBLSBsLiwus9j0EmXkxScwNhsUr/LkAt5HExtIGRKBjwdTI
-         grZMxtDEpbejMSP69eH30Qahi8whccOJWAY4bGgTDnJHRaAMkkqTJgV9Std2yr0SKiFY
-         UzrjwKIGZmIvwPw2hsykGfMhl0jFwa0edc2uze8yZjLpKiGuTGSW+Beprn5Gqu/csXG0
-         vhKMkWucoPIC3r5YlywZunAK3f0pNZKTx8cvD2TcMNPuoP4Tprg1lCI0ZeK1DHtW605c
-         RGwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784728639; x=1785333439;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1784728833; x=1785333633; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=go5jgVDGTFBmuogaeDe5LrDifuMcupZu3FGvDho6cOc=;
-        b=IRww38oLYgNexDvbu/zZTc6yKz26U1qpUe7XHqFcHzl5fIsxPs3EbopPGcle+/RvKS
-         XK+pMf7lSsq/Tv8enB6l24vqgErCnDdf8mzPeErqBx9WuaDtCVbxQA8oq4wOL7By8fln
-         34iuTZCV6l6UfQnUGpgrln/kYu4gRJp1XgP5NB2qDhwMP916YFHeoUdHEhO2hne6Kh2+
-         87FtD6cN2bKbMEbVzzhkHfe9H4+++llwHcbj+OC6z0L7fdGQpMKAhpi9MFWy6s+vGPW6
-         6831Jqi3KUTScUQyLzIlGww+5hODAwZqRFEr3CELEtgT0DUnLrVhIngez4wyrebyglnv
-         mdcQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqSdinYadYLhpSZkdOD1IRMWiPLiTE1e8f1MKCtZObHN+XrcvnDLHNDKBCDW2aS8Louzto=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyp+mKjS2U5TKLIKk/m/OHJATllTh1CYVzEtp2psa8F4zCGhGJo
-	UgziCwQopN7QCo15nau1Y4wVZws74HObtHDmzQPhiV8fzAf4kwkpS0V0rUz/XrM7
-X-Gm-Gg: AR+sD10/x/DjnUm3cGW9KcuaiNVhYrhjbhwSLWQJ/nP5uzSXtobY2wzl8mzskLFSC9J
-	Yv2VBESc1p8xt5aYIwDQ5RU542BlvMyt6DIA1F6AAcDPFIwM4ITSLCo9DkkGy6pjugEW1ndI7Eb
-	BDGee2Rrw+QAPEpVggtp7qtx+R04OiFnR3aqYI+ZJPF0kuNEotglYxqRsGb/SrS7z771ZrA6R0O
-	NKMLlFKIRajbyaFX3w9sZbBi0e3YeOykXfs1HuJyQuZ5rDelTMjYDHPIoth/4mDL778pVPzDnuW
-	O06/hQ7VGdbaLIO10nHKP7UcSU2DiMDHXWB5uYvoBXLKUbWFWMgHjO8qvffvvP4CCEm/OehWqP+
-	6t0eLeThGlquJb4BaErluA10nz7vBc2FS1OmF5DwIy9CEDKjr2JWizcVQfNdyANrmYTML84NXix
-	T+J8Z8GXIoUx5H3u68/uot+tsnYPgjZIJZre0TN64W0yb9JZMBLt/UzM66A0Tew5jFQWiUbW6qc
-	KRBzLShvWxcReCSOqNYIU1yox4ddyY7aT3wU3ewgEiH
-X-Received: by 2002:a05:600c:e558:20b0:495:5cda:52ec with SMTP id 5b1f17b1804b1-4955cda5441mr119195205e9.16.1784728638473;
-        Wed, 22 Jul 2026 06:57:18 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956b4e8885sm44307355e9.0.2026.07.22.06.57.17
+        bh=1mcjtBnYim3GM1gk3lVV9pkUsUsu2bQG4ImpXHHwTGg=;
+        b=Cxmi4ZkhvuQIAOWTUqugz2BQZSjYwUpVHZy7Tyny+9oxvXWWc3SFgLfbpD9FgPHldh
+         DPS3Qm5izFmg+b6gQMepdlDb/lbzbACqA9e65vNhGDar4n8SbairQjSq7xjyTfnwutyp
+         xncgfdVuXgP1a09ivNXP5SP02Hzy+bDmGAMaCJRFqwZotKYvsO7ERIv8027nFWXwlB6F
+         JWtog6fF/PPyWCcyCsjAwtUPR1K6biqeutdSb8WXmMAZ/htrL2s8Wc6lns24BZTf9yRk
+         WT8O9Xy8DaQas65w5tyrwEMzDSaxChQA2/s+cXblQBYuZ0y8PK/XEfLhF8YmL/+pOnSq
+         OZUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784728833; x=1785333633;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=1mcjtBnYim3GM1gk3lVV9pkUsUsu2bQG4ImpXHHwTGg=;
+        b=NVxRfWgjvkn8uDQvazaoNDb1iPTh3BYdKyDtYZT5Zc4lv1pyisSEW1LhVJRlDrZpm+
+         nJcKKqAkLTwfkFmwEtfkN0Prolafk9HIcww0T+Pzsugu4LvLLZV1Eh/Y2sJP25NuFhba
+         yT1HZXBNkiISa9WpK+NCtGY12bLSrp1DmDnZHOgl9ntiKDq2Mi71TRdAXoyodUc/0kdY
+         MuDVZfuZ99R5V2A+bxfoYKLUioGzXih/474qE64CzG/OCgoEeF+T1WA5hSJyeOFkDYDN
+         jeAsHOnO00aJ3x/aXS7EsI0LABxZZme4hhg3mB9/fivkmo//hmfWYGtFSSa1DVaTDSD6
+         lD6Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqU/0GoyCG4DY37ICNA2iHTAFmIHia0tP7pPmFhjJ4KcGx1MYUuTIxos5oVOG2YgeKypYM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxtMrm71FVq1f2YzI+jETlMqSvp8I1hW3JY/ISkMOnXpKn/IeW
+	UxAog2TZr3A8dILqO3IJMdIXRfXzrrLR1XMnFcDYUTpT2SGEW0BTcsAp
+X-Gm-Gg: AR+sD12QaRNsh5SdUTXeE0iLE7HnWtO1RPIDy+VKyISyhH/U/NPoGXhkV7lMTQvOnwn
+	6hngrg+/q0OYnfV/9mH1+FVzoLO1tK5j2UZurHt11n4jXF0mNFnJ2tnnpqX57r6ebm8GJMeSaFX
+	b8dGFnV6NgAQUOn5HCYwRWxdwfJjkeyy/T0ZC317Tx5z4rfQ12t5jrwrAXjeFAoLMIFRLUbqnXU
+	xqy3I5sNCnjNsaKMVL/VZmZW0xmTfKxNM6KT9TTdXzvwCx8fPeH5oIs4PWgijVmyUYL2CuKoNJc
+	akKwINq/CzfzfCcMYPNg8hI8gA5E/WxYLNhdBT+d3Tfn+rAT3IVaEEjDeYkiEJAO/vU/tW6jU94
+	ZfvHKYAten/pNxt2WmFO6+XQSBNptHSZQng9dQOyWratraED1YZEn8OO9FHuHGXutd10C14iBrm
+	0+Wuw3Pa3H3Zpp1vXLdztIrY+AmAC7tIZVS9lkwqxJVk/d3Rw=
+X-Received: by 2002:a05:6a20:eed0:10b0:3c4:14a3:fed4 with SMTP id adf61e73a8af0-3c414a442bcmr4588280637.55.1784728829637;
+        Wed, 22 Jul 2026 07:00:29 -0700 (PDT)
+Received: from computer.goose-salary.ts.net ([2a09:bac5:40b2:277d::3ef:c9])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb8f1a8a1fsm1242281a12.26.2026.07.22.07.00.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 06:57:18 -0700 (PDT)
+        Wed, 22 Jul 2026 07:00:28 -0700 (PDT)
+From: Varun R Mallya <varunrmallya@gmail.com>
+To: pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	bjorn@kernel.org,
+	pulehui@huawei.com
+Cc: alex@ghiti.fr,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	puranjay@kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	varunrmallya@gmail.com
+Subject: [PATCH bpf-next v3 0/6] Add BPF Exceptions support for RISC-V
+Date: Wed, 22 Jul 2026 19:30:07 +0530
+Message-ID: <20260722140015.1982158-1-varunrmallya@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 22 Jul 2026 15:57:17 +0200
-Message-Id: <DK55I184SHNJ.37QBB1WKDWOEZ@gmail.com>
-To: "Puranjay Mohan" <puranjay@kernel.org>, <bpf@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v3 0/6] bpf: Inline the numeric open-coded
- iterator kfuncs
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260722132424.450230-1-puranjay@kernel.org>
-In-Reply-To: <20260722132424.450230-1-puranjay@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed Jul 22, 2026 at 3:24 PM CEST, Puranjay Mohan wrote:
-> The bpf_for(i, start, end) macro is BPF's open-coded numeric iterator. It
-> expands into calls to three kfuncs: bpf_iter_num_new() to set the iterato=
-r
-> up, bpf_iter_num_next() once per iteration, and bpf_iter_num_destroy() to
-> tear it down. The verifier emits these as ordinary kfunc calls, so a
-> bpf_for() loop pays function-call overhead on setup, teardown, and =E2=80=
-=94 most
-> importantly =E2=80=94 on every single iteration via bpf_iter_num_next().
->
-> All three kfuncs are tiny and only touch the 8-byte on-stack iterator sta=
-te
-> (struct bpf_iter_num_kern { int cur; int end; }). That makes them good
-> candidates for inlining, the same way several other special kfuncs are
-> already open-coded in bpf_fixup_kfunc_call(). This series replaces each o=
-f
-> the three calls with an equivalent inline BPF instruction sequence:
->
->   - bpf_iter_num_new(): the (s64)end - (s64)start overflow check is done
->     with 32-bit arithmetic (start <=3D end is checked first, so the range
->     fits in a u32), avoiding cpuv4 sign-extension insns that some JITs do
->     not implement. Returns the same -EINVAL / -E2BIG / 0 as the kfunc.
->
->   - bpf_iter_num_next(): the hot path. Since cur and end are int, the
->     kfunc's (s64)(s->cur + 1) >=3D s->end test reduces to a signed 32-bit
->     comparison of (s->cur + 1) against s->end, so the inlined code uses a
->     32-bit compare with no sign extension.
->
->   - bpf_iter_num_destroy(): a single 8-byte store zeroing the state.
->
-> bpf_for() is frequently used with constant bounds; in that case the range
-> checks in bpf_iter_num_new() are decidable at verification time, so a
-> follow-up patch elides them and emits only the iterator init (or the erro=
-r
-> result). The inlined shapes are pinned by new __xlated selftests, and a
-> bench_bpf_for benchmark (modeled on the existing bpf_loop benchmark) runs=
- a
-> bpf_for() loop with an empty body to measure the per-iteration cost.
->
-> The emitted instructions are plain BPF and remain valid for the
-> interpreter, so interpreter fallback stays correct and no jit_required
-> marking is needed.
->
-> Benchmark (./bench -p 1 --nr_loops 1000000 {bpf-loop,bpf-for}):
->
->     +--------+---------------------+---------------------+---------------=
-------+
->     |  arch  |       bpf_loop      | bpf_for non-inlined |   bpf_for inli=
-ned   |
->     +--------+---------------------+---------------------+---------------=
-------+
->     | x86-64 | 2946 M/s (0.339 ns) | 4281 M/s (0.234 ns) | 8981 M/s (0.11=
-1 ns) |
->     +--------+---------------------+---------------------+---------------=
-------+
->     | arm64  |  618 M/s (1.619 ns) |  543 M/s (1.843 ns) |  538 M/s (1.85=
-8 ns) |
->     +--------+---------------------+---------------------+---------------=
-------+
->
-> On x86-64, removing the per-iteration call to bpf_iter_num_next() roughly
-> doubles bpf_for() throughput. On arm64 it is neutral: the loop is bound b=
-y
-> the load/store dependency chain on the on-stack iterator state rather tha=
-n
-> by call overhead, so inlining neither helps nor hurts there. It still
-> removes the calls.
+This patchset aims to add BPF exceptions supports for riscv64 by
+implementing the arch_bpf_stack_walk function and then updating the
+prologue and epilogue for BPF JIT on riscv. Also,
+bpf_jit_supports_exceptions() returns true now so that the verifier does
+not reject programs containing BPF exceptions on riscv64.
 
-I find some of this explanation unsatisfying. How was this determined? Is t=
-his
-just your hypothesis, or did you actually observe different counters in per=
-f
-state to corroborate this on arm64? I am no arm64 expert, so perhaps it doe=
-s not
-do a bunch of things (store-load forwarding and memory disambiguation) that
-would help here, but it would still be good to understand why.
+On riscv the unwinder used by arch_bpf_stack_walk() is the frame-pointer
+unwinder, so exception support is gated on CONFIG_FRAME_POINTER.
 
-It would also be interesting to compare against can_loop. Adding it as a
-comparison and finding the result should be easy. Can you check what the
-overhead is in that case?
+In the prologue and epilogue of the RISC-V JIT, I saved the
+return address and then the frame-pointer according to [1]. Also,
+according to [2], s0 to s11 are callee saved registers, which is why a
+new array (rv_exception_csave_regs) has been created to save these
+registers which contains all the required registers along with the frame
+pointer as well as return address.
 
-All that said, I am still fine with all this, bpf_for() being costly has be=
-en a
-known fact forever.
+The following demonstrates that all the selftests for BPF exceptions pass:
+root@virtme-ng:~/bpf# ./test_progs -t exceptions
+#114/1   exceptions/exception_throw_always_1:OK
+#114/2   exceptions/exception_throw_always_2:OK
+#114/3   exceptions/exception_throw_unwind_1:OK
+#114/4   exceptions/exception_throw_unwind_2:OK
+#114/5   exceptions/exception_throw_default:OK
+#114/6   exceptions/exception_throw_default_value:OK
+#114/7   exceptions/exception_tail_call:OK
+#114/8   exceptions/exception_ext:OK
+#114/9   exceptions/exception_ext_mod_cb_runtime:OK
+#114/10  exceptions/exception_throw_subprog:OK
+#114/11  exceptions/exception_assert_nz_gfunc:OK
+#114/12  exceptions/exception_assert_zero_gfunc:OK
+#114/13  exceptions/exception_assert_neg_gfunc:OK
+#114/14  exceptions/exception_assert_pos_gfunc:OK
+#114/15  exceptions/exception_assert_negeq_gfunc:OK
+#114/16  exceptions/exception_assert_poseq_gfunc:OK
+#114/17  exceptions/exception_assert_nz_gfunc_with:OK
+#114/18  exceptions/exception_assert_zero_gfunc_with:OK
+#114/19  exceptions/exception_assert_neg_gfunc_with:OK
+#114/20  exceptions/exception_assert_pos_gfunc_with:OK
+#114/21  exceptions/exception_assert_negeq_gfunc_with:OK
+#114/22  exceptions/exception_assert_poseq_gfunc_with:OK
+#114/23  exceptions/exception_bad_assert_nz_gfunc:OK
+#114/24  exceptions/exception_bad_assert_zero_gfunc:OK
+#114/25  exceptions/exception_bad_assert_neg_gfunc:OK
+#114/26  exceptions/exception_bad_assert_pos_gfunc:OK
+#114/27  exceptions/exception_bad_assert_negeq_gfunc:OK
+#114/28  exceptions/exception_bad_assert_poseq_gfunc:OK
+#114/29  exceptions/exception_bad_assert_nz_gfunc_with:OK
+#114/30  exceptions/exception_bad_assert_zero_gfunc_with:OK
+#114/31  exceptions/exception_bad_assert_neg_gfunc_with:OK
+#114/32  exceptions/exception_bad_assert_pos_gfunc_with:OK
+#114/33  exceptions/exception_bad_assert_negeq_gfunc_with:OK
+#114/34  exceptions/exception_bad_assert_poseq_gfunc_with:OK
+#114/35  exceptions/exception_assert_range:OK
+#114/36  exceptions/exception_assert_range_with:OK
+#114/37  exceptions/exception_bad_assert_range:OK
+#114/38  exceptions/exception_bad_assert_range_with:OK
+#114/39  exceptions/exception_throw_from_void_global:OK
+#114/40  exceptions/non-throwing fentry -> exception_cb:OK
+#114/41  exceptions/throwing fentry -> exception_cb:OK
+#114/42  exceptions/non-throwing fexit -> exception_cb:OK
+#114/43  exceptions/throwing fexit -> exception_cb:OK
+#114/44  exceptions/throwing extension (with custom cb) -> exception_cb:OK
+#114/45  exceptions/throwing extension -> global func in exception_cb:OK
+#114/46  exceptions/exception_ext_mod_cb_runtime:OK
+#114/47  exceptions/throwing extension (with custom cb) -> global func in exception_cb:OK
+#114/48  exceptions/exception_ext:OK
+#114/49  exceptions/non-throwing fentry -> non-throwing subprog:OK
+#114/50  exceptions/throwing fentry -> non-throwing subprog:OK
+#114/51  exceptions/non-throwing fentry -> throwing subprog:OK
+#114/52  exceptions/throwing fentry -> throwing subprog:OK
+#114/53  exceptions/non-throwing fexit -> non-throwing subprog:OK
+#114/54  exceptions/throwing fexit -> non-throwing subprog:OK
+#114/55  exceptions/non-throwing fexit -> throwing subprog:OK
+#114/56  exceptions/throwing fexit -> throwing subprog:OK
+#114/57  exceptions/non-throwing fmod_ret -> non-throwing subprog:OK
+#114/58  exceptions/non-throwing fmod_ret -> non-throwing global subprog:OK
+#114/59  exceptions/non-throwing extension -> non-throwing subprog:OK
+#114/60  exceptions/non-throwing extension -> throwing subprog:OK
+#114/61  exceptions/non-throwing extension -> non-throwing subprog:OK
+#114/62  exceptions/non-throwing extension -> throwing global subprog:OK
+#114/63  exceptions/throwing extension -> throwing global subprog:OK
+#114/64  exceptions/throwing extension -> non-throwing global subprog:OK
+#114/65  exceptions/non-throwing extension -> main subprog:OK
+#114/66  exceptions/throwing extension -> main subprog:OK
+#114/67  exceptions/reject_exception_cb_type_1:OK
+#114/68  exceptions/reject_exception_cb_type_2:OK
+#114/69  exceptions/reject_exception_cb_type_3:OK
+#114/70  exceptions/reject_exception_cb_type_4:OK
+#114/71  exceptions/reject_exception_cb_type_5:OK
+#114/72  exceptions/reject_async_callback_throw:OK
+#114/73  exceptions/reject_with_lock:OK
+#114/74  exceptions/reject_subprog_with_lock:OK
+#114/75  exceptions/reject_with_rcu_read_lock:OK
+#114/76  exceptions/reject_subprog_with_rcu_read_lock:OK
+#114/77  exceptions/reject_with_rbtree_add_throw:OK
+#114/78  exceptions/reject_with_reference:OK
+#114/79  exceptions/reject_global_subprog_throw_with_reference:OK
+#114/80  exceptions/reject_with_cb_reference:OK
+#114/81  exceptions/reject_with_cb:OK
+#114/82  exceptions/reject_with_subprog_reference:OK
+#114/83  exceptions/reject_throwing_exception_cb:OK
+#114/84  exceptions/reject_exception_cb_call_global_func:OK
+#114/85  exceptions/reject_exception_cb_call_static_func:OK
+#114/86  exceptions/reject_multiple_exception_cb:OK
+#114/87  exceptions/reject_exception_throw_cb:OK
+#114/88  exceptions/reject_exception_throw_cb_diff:OK
+#114/89  exceptions/reject_subprog_rcu_lock_throw:OK
+#114/90  exceptions/reject_subprog_throw_preempt_lock:OK
+#114/91  exceptions/reject_subprog_throw_irq_lock:OK
+#114/92  exceptions/reject_set_exception_cb_bad_ret1:OK
+#114/93  exceptions/reject_set_exception_cb_bad_ret2:OK
+#114/94  exceptions/reject_out_of_range_global_throw:OK
+#114/95  exceptions/check_assert_eq_int_min:OK
+#114/96  exceptions/check_assert_eq_int_max:OK
+#114/97  exceptions/check_assert_eq_zero:OK
+#114/98  exceptions/check_assert_eq_llong_min:OK
+#114/99  exceptions/check_assert_eq_llong_max:OK
+#114/100 exceptions/check_assert_lt_pos:OK
+#114/101 exceptions/check_assert_lt_zero:OK
+#114/102 exceptions/check_assert_lt_neg:OK
+#114/103 exceptions/check_assert_le_pos:OK
+#114/104 exceptions/check_assert_le_zero:OK
+#114/105 exceptions/check_assert_le_neg:OK
+#114/106 exceptions/check_assert_gt_pos:OK
+#114/107 exceptions/check_assert_gt_zero:OK
+#114/108 exceptions/check_assert_gt_neg:OK
+#114/109 exceptions/check_assert_ge_pos:OK
+#114/110 exceptions/check_assert_ge_zero:OK
+#114/111 exceptions/check_assert_ge_neg:OK
+#114/112 exceptions/check_assert_range_s64:OK
+#114/113 exceptions/check_assert_range_u64:OK
+#114/114 exceptions/check_assert_single_range_s64:OK
+#114/115 exceptions/check_assert_single_range_u64:OK
+#114/116 exceptions/check_assert_generic:OK
+#114/117 exceptions/check_assert_with_return:OK
+#114     exceptions:OK
+Summary: 1/117 PASSED, 0 SKIPPED, 0 FAILED
 
->
-> bpf_loop() is shown for reference only; it is a different construct (a
-> callback invoked per iteration), so the comparison is structural rather
-> than a measure of the inlining: on x86-64 bpf_for() is faster than
-> bpf_loop() even before inlining, while on arm64 bpf_loop() is faster
-> because bpf_for()'s per-iteration cost is dominated by the stack round-tr=
-ip
-> through the iterator state.
->
-> Changelog:
-> v2: https://lore.kernel.org/bpf/20260717120215.2171057-1-puranjay@kernel.=
-org/
-> Changes in v3:
-> - Elide the range checks in bpf_iter_num_new() when start and end are
->   constant, marking the registers precise so paths reaching the call with
->   different constants are not pruned (Eduard Zingerman)
-> - Add __xlated selftests pinning the inlined new()/next()/destroy() shape=
-s
->   (Eduard Zingerman)
-> - Use the insn_buf[i++] idiom in the inline helpers (Eduard Zingerman)
-> - Pick up Acked-by on patch 3
->
-> v1: https://lore.kernel.org/all/20260715130430.318421-1-puranjay@kernel.o=
-rg/
-> Changes in v2:
-> - Don't emit sign-extending (movsx) moves; some JITs (e.g. x86-32, mips32=
-,
->   sparc64) decode them as a plain move and would miscompile the range che=
-ck
->
-> Puranjay Mohan (6):
->   bpf: Inline bpf_iter_num_new() kfunc
->   bpf: Inline bpf_iter_num_next() kfunc
->   bpf: Inline bpf_iter_num_destroy() kfunc
->   bpf: Elide range checks when inlining bpf_iter_num_new() for constant
->     bounds
->   selftests/bpf: Verify inlined numeric iterator shape with __xlated
->   selftests/bpf: Add bpf_for() benchmark
->
->  include/linux/bpf_verifier.h                  |  13 ++
->  kernel/bpf/verifier.c                         | 157 ++++++++++++++++++
->  tools/testing/selftests/bpf/Makefile          |   2 +
->  tools/testing/selftests/bpf/bench.c           |   4 +
->  .../selftests/bpf/benchs/bench_bpf_for.c      | 104 ++++++++++++
->  .../selftests/bpf/benchs/run_bench_bpf_for.sh |  15 ++
->  .../selftests/bpf/progs/bpf_for_bench.c       |  32 ++++
->  tools/testing/selftests/bpf/progs/iters.c     | 145 ++++++++++++++++
->  8 files changed, 472 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_for.c
->  create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_for.=
-sh
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_for_bench.c
->
->
-> base-commit: a23a71823352e2d792dcaae25f1ebb744acbfc0b
+Since all exception tests pass now, the denylist file has been removed
+as it is empty now.
+
+Changes in v1->v2:
+v1: https://lore.kernel.org/bpf/20260621144259.288135-1-varunrmallya@gmail.com/
+- resolve the ftrace trampoline address with ftrace_graph_ret_addr()
+  inside arch_bpf_stack_walk()
+- Remove duplicated code in bpf_jit_build_prologue()
+
+Changes in v2->v3:
+v2: https://lore.kernel.org/bpf/20260628081710.113333-1-varunrmallya@gmail.com/
+- extend walk_stackframe to use sp/fp similar to how arm64 does it. (Björn Töpel)
+- refactor prologue/epilogue into helpers. (Björn Töpel)
+- fix comments to make them netdev style.
+- save/restore the tail-call counter in the exception prologue/epilogue
+- exception_tail_call now passes since bpf2bpf+tailcall mixing landed [3], so
+  drop the (now-empty) DENYLIST.riscv64
+- (!aux->exception_cb) has been simplified to only one condition (Pu Lehui)
+
+[1]: https://riscv-non-isa.github.io/riscv-elf-psabi-doc/#_frame_pointer_convention
+[2]: https://riscv-non-isa.github.io/riscv-elf-psabi-doc/#_integer_register_convention
+[3]: https://lore.kernel.org/bpf/bf647816-d292-419c-b79f-fc048122aebc@huaweicloud.com
+
+Varun R Mallya (6):
+  riscv: Use arch_stack_walk() for the kernel callchain
+  riscv, stacktrace: Pass sp and fp to the walk_stackframe() callback
+  riscv, stacktrace: Implement arch_bpf_stack_walk() for BPF
+  riscv, bpf: Split prologue and epilogue into helper functions
+  riscv, bpf: Add support for BPF exceptions
+  riscv, bpf: Remove BPF exceptions from denylist
+
+ arch/riscv/include/asm/stacktrace.h          |   5 +-
+ arch/riscv/kernel/perf_callchain.c           |   3 +-
+ arch/riscv/kernel/stacktrace.c               |  64 ++++-
+ arch/riscv/net/bpf_jit_comp64.c              | 254 ++++++++++++++-----
+ tools/testing/selftests/bpf/DENYLIST.riscv64 |   2 -
+ 5 files changed, 253 insertions(+), 75 deletions(-)
+ delete mode 100644 tools/testing/selftests/bpf/DENYLIST.riscv64
+
+-- 
+2.55.0
 
