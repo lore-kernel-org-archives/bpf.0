@@ -1,94 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23AA5318BA8
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 05:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470CC341AD6;
+	Wed, 22 Jul 2026 06:19:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784698482; cv=none; b=nqjGQOBZWByZqE6rqLoqO81XO4o0oFZ064B+XwAoLwUsSnrOpLSs6G/v2YNp+2cW/tiTydF5NPIi0I9NBL8qbupqZBIX3mBmbwiH+94hyuKH4DY2qDaWXs0zsE+j9g4wST9q9qBcufh5sj+QfkUJDWDcYa6EGIgbfxqo/WFdpvY=
+	t=1784701181; cv=none; b=E2xwCJjerUlnbOShXD6DVJl8bOBnUzbS99uOj8s/I3tElLqSDULhVAggVmkMTiDm74tjGOcVeE944cT1XOcQu13tn3/nj0fSjhG3nqzJ+xKMo04k7Yia7JCT56ndj4IxeTRXpsEp51lZMQDx1auc58rT3ADZIzg/FusgqAlCKwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784698482; c=relaxed/simple;
-	bh=eLclA0SZOSkB5OEe0dyJaBaEuOKY8HB5P+t15WLH3PM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ajWeThtZgNm3RqJJFd+XTxn+0sIKJwFI8cCZ1ZBN+muWbZA9YvAnuglTQGixIJ7gHmLAZjQdP/JH+UWvUx7Fhv8vvZpVRW2F3Qwip7wwiV+fDbGh+NCNOhzH0z8O+9oBQUA9UfHvUHUHPfofmAvGnL3LnHN6oBVy4LLMypmuNTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L2jqfNF9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784701181; c=relaxed/simple;
+	bh=sTovb3jlHmMmpacyIEycqdjDJrdtEJ4opsDA6DZw6oI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=uu4xmddgv5/X/3fCCtdWgl8NrNTbgdIW17ejC7BoEj7gmFNr3I+cpp0mhmOnSTbWwOGNtjCLEq03y9XxfNLqBWuHDDhzKMkWs4qTl7Zc6wnc5u48Rx7zzSViTEeL6rhVaKlorzbIYAe5Ia/6hXuJu3IzaYY2yxfxinH1IdCRGCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K4XAbMye; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L2jqfNF9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93FAB1F00A3A;
-	Wed, 22 Jul 2026 05:34:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K4XAbMye"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7A31F000E9;
+	Wed, 22 Jul 2026 06:19:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784698480;
-	bh=mFf9aCHpLWTWPcEgso6hUY7vO55NgTBwaQxoLjmT7Sc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L2jqfNF9cXIZFp638+4FlT0X8PGoqPM2Krh2IO9yV9CcG4/OFDcGmBnhZB5D96TsR
-	 4YDSu7WYoEsI4xWb+CQh5ZqoF/3mZrRyXItZNA7/6GV9n8detlV6ZgclE+L3L082Np
-	 Y+4Ynl8CfejVm3gorWZDAVzszabWlOzy0otg3jvUcUspnk4/dakB8ADs6UqNQ1lH8B
-	 3esvbJhZ0fZHADSPWJ0KPjP5XPUx2hXrFMWyEzAJ0lyq4etkZoHQSv5IR4T+GvLr6K
-	 kIp11/oEgnPn34kONnfa6yL9+Iu7FX6H9yf3YPfKx76YdHT/CXav1iFYFeES64FUtg
-	 95g23//g4GyZQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Cover commuted pointer
- state propagation
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <c1023bb6c9e24d98cbe69f63e1df487f4d490108.1784696372.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1784696371.git.chenyy23@mails.tsinghua.edu.cn>
- <c1023bb6c9e24d98cbe69f63e1df487f4d490108.1784696372.git.chenyy23@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Jul 2026 05:34:40 +0000
-Message-Id: <20260722053440.93FAB1F00A3A@smtp.kernel.org>
+	s=k20260515; t=1784701177;
+	bh=AEh4CLLahb9Ms3Mqn7fXlHzTRN7mIHaMYarLA5wmEL4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=K4XAbMye85KnDNriuWSmnUtbR/InR4ASMSlBmx0eGGM0HqHnvCR27UMsE1rLZeoQE
+	 aJ+jBXVAeEFQ+LEmYAjjNkhs1+4IcK9zAymwoVZGHMk2W8NklQYquUx2gnwt1Pf7wW
+	 CAuJfhRYCntrawYilZgfoPiGPxrvr7wQqPaa303FhQoQ4WEsUl8WVYadtrL7WUaX8V
+	 kFxbft/LStA0RaivqDYDWH7yvjyjCteo9kGgC8Gq4LeOdVCaDSX2mcBW6PeKsMutNm
+	 p39YLSWYBc6RqvoXdg6YiDxX/gBvedZ+dn1277ZS05C86fCCAGxrLf2S0vDZizIrSG
+	 s8gu1xf1cnjFA==
+Content-Type: multipart/mixed; boundary="===============7886987547029329891=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <455026ad71596cb0ff71074ef232644d1cd4d623cccbd0f695fa275aaf5ed972@mail.kernel.org>
+In-Reply-To: <tencent_60882E4BE4F247C5F6D564F41BF1C3004805@qq.com>
+References: <tencent_60882E4BE4F247C5F6D564F41BF1C3004805@qq.com>
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
+From: bot+bpf-ci@kernel.org
+To: rtoax@foxmail.com,vmalik@redhat.com,andrii@kernel.org,ast@kernel.org
+Cc: rtoax@foxmail.com,rongtao@cestc.cn,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,ishiyama@hpc.is.uec.ac.jp,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 22 Jul 2026 06:19:36 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Multi-line comment uses the deprecated style where the text starts =
-on the same line as the opening `/*`.
---
+--===============7886987547029329891==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---- Patch [3]: [PATCH bpf-next v3 3/3] selftests/bpf: Cover commuted pointe=
-r state propagation ---
-commit 39ba76cb345769c48c9359e58e1fcdae124fef19
-Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-
-selftests/bpf: Cover commuted pointer state propagation
-
-This commit adds verifier coverage for three cases affected by preserving
-the full pointer state across scalar +=3D pointer operations. These cases
-include stack frame number inheritance, readonly-untrusted memory access,
-and dynptr data-slice invalidation.
-
-> diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/test=
-ing/selftests/bpf/progs/dynptr_fail.c
-> index 94489ac64da8e..7da4266bae09b 100644
-> --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> @@ -1635,6 +1635,37 @@ static int callback(__u32 index, void *data)
->          return 0;
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index c18f1e16edee..85afff60365c 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -4195,6 +4195,79 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ign, const char *s2__ign,
+>  	return __bpf_strnstr(s1__ign, s2__ign, len, true);
 >  }
-> =20
-> +/* A commuted add should preserve the parent id of a dynptr data slice.
-> + */
-
-[Severity: Low]
-This isn't a bug, but does this multi-line comment follow the preferred
-BPF subsystem style? It looks like the text starts on the same line as the
-opening /*, whereas the modern kernel style guidelines typically prefer the
-opening /* to be on its own line for multi-line comments.
-
-> +SEC("?raw_tp")
-> +__failure __msg("invalid mem access 'scalar'")
-> +int dynptr_slice_commuted_invalidate(void *ctx)
+>
+> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
 > +{
-> +	struct bpf_dynptr ptr;
+> +	int dlen = 0, slen, space, copied;
+> +
+> +	if (sz == 0 || dsz == 0)
+> +		return -EINVAL;
+> +
+> +	while (dlen < dsz && dst[dlen] != '\0')
+> +		dlen++;
+> +
+> +	if (dlen >= dsz)
+> +		return -E2BIG;
+> +
+> +	space = dsz - dlen;
+> +
+> +	slen = bpf_strnlen(src, sz);
+
+This came up in the earlier review of the series: the length of src does not
+need to be computed here, since strncpy_from_kernel_nofault() already bounds
+the copy by sz.
+
+  https://lore.kernel.org/bpf/3e73aeb2-afce-4ae9-9163-51e4dc1ded01@redhat.com/
+
+That bpf_strnlen(src, sz) call was dropped in an earlier revision and has
+returned in this one.  Is the separate src length scan still needed here, or
+can strncpy_from_kernel_nofault() handle the bound on its own?
+
+> +	if (space <= slen)
+> +		return -E2BIG;
+> +
+> +	copied = strncpy_from_kernel_nofault(dst + dlen, src, sz);
+> +	if (copied < 0)
+> +		return copied;
+> +	else if (copied == 0 || copied == 1)
+> +		return dlen;
+> +
+> +	/* The copied character count includes '\0'. */
+> +	return dlen + copied - 1;
+> +}
 
 [ ... ]
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1784696371.gi=
-t.chenyy23@mails.tsinghua.edu.cn?part=3D3
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29894636510
+--===============7886987547029329891==--
