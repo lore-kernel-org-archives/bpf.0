@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF23233374F
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 06:53:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC0F346E59
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 06:53:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784703199; cv=none; b=TT63C55cX29nZBJE0KsfqIDgWd4a4k7uSFSjjPPxiL4gPnPjQetQDgRxWGmooYu//f4/DZjj0i8jbkEjM/QvjsW2DSLJeyTS29QAYUp9AMhDEyNgQqOfs2DDbD/EUSAtUaz9UKLmJGUTKYqbWFo5Cnvya+wNHv2T2GwlRRHYUDY=
+	t=1784703205; cv=none; b=VNIpRzEQX1uYweQgfwjZsA0lgbawjrzSM7fe/gC9D3s6NluAlC1piXHbEnBV2/ONBr59Ut9p8gYrsu/NZ0fb9OX5OlBjYrrTsXS2GJ2yPSYxlMALy3l5oJOycWLdGdB5i/SbuePmh+yxy8gadBh9SdkzZiko/RwFatVe3hdV6ck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784703199; c=relaxed/simple;
-	bh=LzbmJLqhqhdv2BUxN0HrsfCtLhnFWyoevXj1F4dRChk=;
+	s=arc-20240116; t=1784703205; c=relaxed/simple;
+	bh=EjgwsKetTIuGMZSADTnPR1fOehx7aMW6C1gB08KEoqo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JdWMv5vliY6s7Gcsy8cRyuZtBRdHf5QECvcElcpRWBqDUFXn65jsm57+qM5Vx+hn3khk5kjfkxR4XS1g4rGZ0HyMoAQS3rmlXp0xA0CUx+iP/uRlcRY2W+1cvI7gIT1XO/9wGOXTUBuEZaThbmkGMkSo+4oLpGxZzN1gWZcpIJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A0HRz9Iu; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=It2r4ZGBFdhpULFn1wBDT2H7BRcvnzhJCPkxVJIZt0UWAl7ubOZWHyhfD7fiInD8Vho4Brwr4rQ88dqrDrdBWdC2SwxwdXdd0+zfLf50Ig27MjOsbxKJktvhEGcgffLj4bEsVP2anfCHwGKcdGsfGQpiw+kV0oO8zI3Hmdqra8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DYkY2jTP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A0HRz9Iu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3704C1F000E9;
-	Wed, 22 Jul 2026 06:53:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DYkY2jTP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68C6B1F000E9;
+	Wed, 22 Jul 2026 06:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784703198;
-	bh=j1vcCQwCWfc0hJV3eNhexRi1p0yWfyXpvdfgVEZl/iY=;
+	s=k20260515; t=1784703203;
+	bh=CNgM21zkT13LhBwG5+nILIk3R+wA7gePyg7WfF68o2M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=A0HRz9IuYxoQmfAyBxFpvBBqz5GFYdfDLkgyTDPAdMI2MJZ3WWvhy8FAsXJVTwdwt
-	 KKr16KA9SB6BFw4tX95qZh7sC53Ip6a2J6wU3S8bMG7SPqP4PuS2pNHTPV8Lujwgu+
-	 IOi8ASsO1LV7Dlh3SuTkSVTpeFIzMlf5EJa1/syqSdas05anfevk1KPeDUU2RcQILs
-	 zRV2XfBO5JuanDFT/mo6/wMlJFzNfNmD5KKWtyBKIy6wu3yGT76v/ErRoQoZT1y3nt
-	 MW68RNANo48z1VfWWLbQmUltp1YQ/OzJbi5L37vB5fYYtVrHfO/YpZUT1cXCgookHB
-	 fJEbJRsptFVnQ==
+	b=DYkY2jTPyeE90jrQ6nL5t96fxyZlPcZyI+YQ9zzDSpg5jSSkWVlZzsJmC1XgdkS7K
+	 qux08TSYl6SJ2BpHL8vs3Frxw9Y+DTrow/76zshwLOEw3+3utS9rKxdrEcQ4VZRc7Y
+	 dTaHfd0sa4mH94RXmH7osUam8EWjrmqEc6KPgsTNWAdRb4iBPG9kD6DAsrN8hO+VZO
+	 8y7GofdHiVZPoFvaAOca+Tk7bPPqw2ZNfHGJ6PCS2kK0Pr5/D/D+nRfiabFJVb0kRM
+	 dZ004+Lg3sPN2vFktih6lEve0pYQE1XQpkT+ouWLVXXPv+sTU+02TL7Swfw8NILmEa
+	 nXcE3GYS79snw==
 From: Song Liu <song@kernel.org>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -35,9 +35,9 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH bpf-next 1/2] bpf: Populate mmap-able array map memory lazily
-Date: Tue, 21 Jul 2026 23:53:07 -0700
-Message-ID: <20260722065308.4116186-2-song@kernel.org>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add mmap/munmap benchmark for array maps
+Date: Tue, 21 Jul 2026 23:53:08 -0700
+Message-ID: <20260722065308.4116186-3-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260722065308.4116186-1-song@kernel.org>
 References: <20260722065308.4116186-1-song@kernel.org>
@@ -49,148 +49,246 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-An mmap-able BPF array map (BPF_F_MMAPABLE) has its backing memory
-vmalloc'ed up front at map creation time. array_map_mmap() then wired up
-the whole mapping eagerly via remap_vmalloc_range(), which calls
-vm_insert_page() for every page of the map. For large maps this makes
-every mmap() O(number of pages): an 8MiB map inserts 2048 PTEs per
-mmap() and tears them all down again on munmap(), even when user space
-only touches a few pages (or none at all).
+Add a benchmark that repeatedly mmap()s and munmap()s an mmap-able BPF
+array map (BPF_F_MMAPABLE) from a configurable number of threads. Both
+the number of worker threads and the size of the map are tunable via
+--nr-threads and --map-size, defaulting to 16 threads and 8MiB.
 
-Populate the mapping lazily instead, the same way the arena map already
-does. array_map_mmap() now only performs the bounds check and returns,
-leaving the PTEs unpopulated; the pages are inserted on demand by a new
-array_map_mmap_fault() handler. Because the memory is already resident,
-the fault handler simply resolves the vmalloc page and hands it to the
-fault path.
-
-To keep the existing VMA open/close accounting (VM_MAYWRITE write-active
-tracking, freeze handling) centralized, the fault handler is reached
-through a new optional ->map_mmap_fault callback dispatched from the
-shared bpf_map_default_vmops, rather than each map installing its own
-vm_operations_struct.
-
-This turns mmap()/munmap() of an mmap-able array from O(map size) into
-O(1). Callers that want the pages populated up front can still request
-that explicitly with MAP_POPULATE, matching regular file semantics.
-Kernel-side access to the map (via the vmalloc address) is unaffected.
+The benchmark is useful to observe how the cost of mmap()/munmap()
+scales with the mapping size, e.g. eager vs lazy page-table population.
 
 Signed-off-by: Song Liu <song@kernel.org>
 Assisted-by: Claude:claude-opus-4-8
 ---
- include/linux/bpf.h   |  1 +
- kernel/bpf/arraymap.c | 40 +++++++++++++++++++++++++++++++++++++---
- kernel/bpf/syscall.c  | 17 +++++++++++++++++
- 3 files changed, 55 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/Makefile          |   1 +
+ tools/testing/selftests/bpf/bench.c           |   4 +
+ .../bpf/benchs/bench_arraymap_mmap.c          | 146 ++++++++++++++++++
+ .../bpf/benchs/run_bench_arraymap_mmap.sh     |  15 ++
+ 4 files changed, 166 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_arraymap_mmap.c
+ create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_arraymap_mmap.sh
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index e066f44a9c05..b536f3c9e103 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -145,6 +145,7 @@ struct bpf_map_ops {
- 	int (*map_direct_value_meta)(const struct bpf_map *map,
- 				     u64 imm, u32 *off);
- 	int (*map_mmap)(struct bpf_map *map, struct vm_area_struct *vma);
-+	vm_fault_t (*map_mmap_fault)(struct bpf_map *map, struct vm_fault *vmf);
- 	__poll_t (*map_poll)(struct bpf_map *map, struct file *filp,
- 			     struct poll_table_struct *pts);
- 	unsigned long (*map_get_unmapped_area)(struct file *filep, unsigned long addr,
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 248b4818178c..1711be582907 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -576,7 +576,6 @@ static int array_map_check_btf(struct bpf_map *map,
- static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
- {
- 	struct bpf_array *array = container_of(map, struct bpf_array, map);
--	pgoff_t pgoff = PAGE_ALIGN(sizeof(*array)) >> PAGE_SHIFT;
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 55d394438705..b6593fb1135b 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -1003,6 +1003,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+ 		 $(OUTPUT)/bench_bpf_timing.o \
+ 		 $(OUTPUT)/bench_bpf_nop.o \
+ 		 $(OUTPUT)/bench_xdp_lb.o \
++		 $(OUTPUT)/bench_arraymap_mmap.o \
+ 		 $(OUTPUT)/usdt_1.o \
+ 		 $(OUTPUT)/usdt_2.o \
+ 		 #
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
+index 3d9d2cd7764b..192d5fcb7a74 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -287,6 +287,7 @@ extern struct argp bench_crypto_argp;
+ extern struct argp bench_sockmap_argp;
+ extern struct argp bench_lpm_trie_map_argp;
+ extern struct argp bench_xdp_lb_argp;
++extern struct argp bench_arraymap_mmap_argp;
  
- 	if (!(map->map_flags & BPF_F_MMAPABLE))
- 		return -EINVAL;
-@@ -585,8 +584,42 @@ static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
- 	    PAGE_ALIGN((u64)array->map.max_entries * array->elem_size))
- 		return -EINVAL;
- 
--	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array),
--				   vma->vm_pgoff + pgoff);
-+	/*
-+	 * The backing memory is vmalloc'ed up front, so instead of wiring up
-+	 * every PTE here we let array_map_mmap_fault() insert pages on demand.
-+	 * remap_vmalloc_range_partial() used to set these flags for us; keep
-+	 * them to preserve behavior (no VMA expansion, excluded from coredump).
-+	 */
-+	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
-+
-+	return 0;
-+}
-+
-+static vm_fault_t array_map_mmap_fault(struct bpf_map *map,
-+				       struct vm_fault *vmf)
-+{
-+	struct bpf_array *array = container_of(map, struct bpf_array, map);
-+	pgoff_t pgoff = PAGE_ALIGN(sizeof(*array)) >> PAGE_SHIFT;
-+	struct page *page;
-+	void *kaddr;
-+
-+	/*
-+	 * vmf->pgoff is the page offset within the mapping (vma->vm_pgoff plus
-+	 * the offset of the faulting address). The data pages start after the
-+	 * bpf_array header, hence the extra pgoff. This mirrors the offset that
-+	 * remap_vmalloc_range(vma, ..., vma->vm_pgoff + pgoff) used to apply.
-+	 */
-+	kaddr = array_map_vmalloc_addr(array) +
-+		((u64)(vmf->pgoff + pgoff) << PAGE_SHIFT);
-+
-+	page = vmalloc_to_page(kaddr);
-+	if (!page)
-+		return VM_FAULT_SIGBUS;
-+
-+	get_page(page);
-+	vmf->page = page;
-+
-+	return 0;
- }
- 
- static bool array_map_meta_equal(const struct bpf_map *meta0,
-@@ -812,6 +845,7 @@ const struct bpf_map_ops array_map_ops = {
- 	.map_direct_value_addr = array_map_direct_value_addr,
- 	.map_direct_value_meta = array_map_direct_value_meta,
- 	.map_mmap = array_map_mmap,
-+	.map_mmap_fault = array_map_mmap_fault,
- 	.map_seq_show_elem = array_map_seq_show_elem,
- 	.map_check_btf = array_map_check_btf,
- 	.map_lookup_batch = generic_map_lookup_batch,
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 0ff9e3aa293d..fb0e1f55c487 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1077,9 +1077,26 @@ static void bpf_map_mmap_close(struct vm_area_struct *vma)
- 		bpf_map_write_active_dec(map);
- }
- 
-+/*
-+ * Called for maps that populate their memory-mapped region lazily, i.e. that
-+ * return without wiring up any PTEs from their ->map_mmap callback. Maps that
-+ * populate the whole VMA eagerly (e.g. via remap_vmalloc_range()) never reach
-+ * here.
-+ */
-+static vm_fault_t bpf_map_mmap_fault(struct vm_fault *vmf)
-+{
-+	struct bpf_map *map = vmf->vma->vm_private_data;
-+
-+	if (!map->ops->map_mmap_fault)
-+		return VM_FAULT_SIGBUS;
-+
-+	return map->ops->map_mmap_fault(map, vmf);
-+}
-+
- static const struct vm_operations_struct bpf_map_default_vmops = {
- 	.open		= bpf_map_mmap_open,
- 	.close		= bpf_map_mmap_close,
-+	.fault		= bpf_map_mmap_fault,
+ static const struct argp_child bench_parsers[] = {
+ 	{ &bench_ringbufs_argp, 0, "Ring buffers benchmark", 0 },
+@@ -304,6 +305,7 @@ static const struct argp_child bench_parsers[] = {
+ 	{ &bench_sockmap_argp, 0, "bpf sockmap benchmark", 0 },
+ 	{ &bench_lpm_trie_map_argp, 0, "LPM trie map benchmark", 0 },
+ 	{ &bench_xdp_lb_argp, 0, "XDP load-balancer benchmark", 0 },
++	{ &bench_arraymap_mmap_argp, 0, "arraymap-mmap benchmark", 0 },
+ 	{},
  };
  
- static int bpf_map_mmap(struct file *filp, struct vm_area_struct *vma)
+@@ -582,6 +584,7 @@ extern const struct bench bench_lpm_trie_delete;
+ extern const struct bench bench_lpm_trie_free;
+ extern const struct bench bench_bpf_nop;
+ extern const struct bench bench_xdp_lb;
++extern const struct bench bench_arraymap_mmap;
+ 
+ static const struct bench *benchs[] = {
+ 	&bench_count_global,
+@@ -665,6 +668,7 @@ static const struct bench *benchs[] = {
+ 	&bench_lpm_trie_free,
+ 	&bench_bpf_nop,
+ 	&bench_xdp_lb,
++	&bench_arraymap_mmap,
+ };
+ 
+ static void find_benchmark(void)
+diff --git a/tools/testing/selftests/bpf/benchs/bench_arraymap_mmap.c b/tools/testing/selftests/bpf/benchs/bench_arraymap_mmap.c
+new file mode 100644
+index 000000000000..356d80a85cf0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/benchs/bench_arraymap_mmap.c
+@@ -0,0 +1,146 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. */
++#include <argp.h>
++#include <sys/mman.h>
++#include "bench.h"
++
++/* Benchmark mmap()/munmap() of an mmap-able BPF array map from N threads. */
++
++static struct ctx {
++	int map_fd;
++	size_t mmap_sz;
++} ctx;
++
++static struct {
++	__u32 nr_threads;
++	__u64 map_size;
++} args = {
++	.nr_threads = 16,
++	.map_size = 8 * 1024 * 1024, /* 8 MiB */
++};
++
++enum {
++	ARG_NR_THREADS = 5000,
++	ARG_MAP_SIZE = 5001,
++};
++
++static const struct argp_option opts[] = {
++	{ "nr-threads", ARG_NR_THREADS, "NR_THREADS", 0,
++		"Number of threads that mmap/munmap the map (default 16)" },
++	{ "map-size", ARG_MAP_SIZE, "BYTES", 0,
++		"Size of the BPF array map in bytes (default 8388608)" },
++	{},
++};
++
++static error_t parse_arg(int key, char *arg, struct argp_state *state)
++{
++	switch (key) {
++	case ARG_NR_THREADS:
++		args.nr_threads = strtoul(arg, NULL, 0);
++		if (args.nr_threads == 0) {
++			fprintf(stderr, "Invalid nr-threads: %s\n", arg);
++			argp_usage(state);
++		}
++		break;
++	case ARG_MAP_SIZE:
++		args.map_size = strtoull(arg, NULL, 0);
++		if (args.map_size == 0) {
++			fprintf(stderr, "Invalid map-size: %s\n", arg);
++			argp_usage(state);
++		}
++		break;
++	default:
++		return ARGP_ERR_UNKNOWN;
++	}
++
++	return 0;
++}
++
++/* exported into benchmark runner */
++const struct argp bench_arraymap_mmap_argp = {
++	.options = opts,
++	.parser = parse_arg,
++};
++
++static void validate(void)
++{
++	if (env.consumer_cnt != 0) {
++		fprintf(stderr, "benchmark doesn't support consumer!\n");
++		exit(1);
++	}
++
++	/*
++	 * The number of worker threads is controlled by --nr-threads and
++	 * drives the framework's producer machinery, so per-producer stats
++	 * are reported correctly.
++	 */
++	env.producer_cnt = args.nr_threads;
++}
++
++static long hits;
++
++static void *producer(void *input)
++{
++	while (true) {
++		void *addr;
++
++		addr = mmap(NULL, ctx.mmap_sz, PROT_READ | PROT_WRITE,
++			    MAP_SHARED, ctx.map_fd, 0);
++		if (addr == MAP_FAILED) {
++			fprintf(stderr, "mmap failed: %d\n", -errno);
++			exit(1);
++		}
++		if (munmap(addr, ctx.mmap_sz)) {
++			fprintf(stderr, "munmap failed: %d\n", -errno);
++			exit(1);
++		}
++		atomic_inc(&hits);
++	}
++
++	return NULL;
++}
++
++static void measure(struct bench_res *res)
++{
++	res->hits = atomic_swap(&hits, 0);
++}
++
++static void setup(void)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
++	long page_sz = sysconf(_SC_PAGESIZE);
++	__u32 value_size = sizeof(__u64);
++	__u32 max_entries;
++
++	setup_libbpf();
++
++	/*
++	 * mmap-able array maps round the value size up to 8 bytes and expose
++	 * PAGE_ALIGN(max_entries * elem_size) bytes to user space.
++	 */
++	max_entries = (args.map_size + value_size - 1) / value_size;
++	ctx.mmap_sz = ((__u64)max_entries * value_size + page_sz - 1) &
++		      ~(page_sz - 1);
++
++	ctx.map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "mmap_array",
++				    sizeof(__u32), value_size, max_entries,
++				    &opts);
++	if (ctx.map_fd < 0) {
++		fprintf(stderr, "failed to create map: %d\n", -errno);
++		exit(1);
++	}
++
++	printf("array map: %u entries, mmap size %zu bytes, %u threads\n",
++	       max_entries, ctx.mmap_sz, args.nr_threads);
++}
++
++const struct bench bench_arraymap_mmap = {
++	.name = "arraymap-mmap",
++	.argp = &bench_arraymap_mmap_argp,
++	.validate = validate,
++	.setup = setup,
++	.producer_thread = producer,
++	.measure = measure,
++	.report_progress = ops_report_progress,
++	.report_final = ops_report_final,
++};
+diff --git a/tools/testing/selftests/bpf/benchs/run_bench_arraymap_mmap.sh b/tools/testing/selftests/bpf/benchs/run_bench_arraymap_mmap.sh
+new file mode 100755
+index 000000000000..3efd441cd653
+--- /dev/null
++++ b/tools/testing/selftests/bpf/benchs/run_bench_arraymap_mmap.sh
+@@ -0,0 +1,15 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++source ./benchs/run_common.sh
++
++set -eufo pipefail
++
++for t in 1 4 8 16; do
++for s in 1048576 8388608 67108864; do
++subtitle "nr_threads: $t, map_size: $s"
++	summarize_ops "arraymap-mmap: " \
++	    "$($RUN_BENCH --nr-threads $t --map-size $s arraymap-mmap)"
++	printf "\n"
++done
++done
 -- 
 2.53.0-Meta
 
