@@ -1,145 +1,147 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3522447604E;
-	Wed, 22 Jul 2026 07:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFD7472F64
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784706528; cv=none; b=NUSa8Cb1Kx7Chq62jzgCMAgskHIvhzPXtGs6MUJ2dC+eie4gZfh08i7Hv1d4F5t9l36BMZzUKNstabjyJdIuz9AnAl7AGs75p1RPkvghPnqny9T//HdFptRB9JezzOy9YXvmlgEorw0hFpl1TDhT0amA0pIery+bOGqf6wADTHA=
+	t=1784706542; cv=none; b=Q3SnDgVuwxV5cggKSi8IzZUzlhIMcwizbveYDIA1mgY7aG8Ryvuv5auAKbJSK3/p91ulQS+OSJslT+omMFOfVqJ1e+VaUDk8EP7B+3rrX7dlJSOnzCFL+gDTBfNI/Hx3gP7PwCUQAsJ9Aw9k8dJgTecHpbvzl6rOgRWNB1UDsUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784706528; c=relaxed/simple;
-	bh=FNi/w8QUVzqiKMiKlF225WNheWrCsvZLomDXdy+bxb0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RmpSWWzO5Ko3O7kAU1oOB26dgAuGr+ilsuA7orL+CIvRCLLUbotpaU8dYtZOjMoCF/T4qNUUO9bcSPmLWzzw4byX9tXXePHtGtaREuJ7BYRZgtJ49J9QFmTrE9t2vh6OBAwExNfmuPpi2RqcmcTTELE0fPtfZ7KXerDZwFozUSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=OTKLeElO; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="OTKLeElO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=pR
-	tt+gWQWOELN6BDEnQJjjf8T2CiaZ37KNZud1J4Acs=; b=OTKLeElOvALEI5PHSH
-	TTdT7vXGJ5X3aMeIOK71jPZgEyTShenSCBDZBuDidEv2Q9yPnFGAxedJDv+9xEPf
-	yi7o/5q7nMOAe+j8aFnABtvVmy6T3gENndLIaSMpAuF+w6SACb9xOLiXOs0h6WPP
-	VTlmEvUuIeJPxzVP4a6WJqD70=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgDnrw+kdWBq8DkpJA--.55057S4;
-	Wed, 22 Jul 2026 15:47:51 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 bpf-next 2/5] selftests/bpf: Fix missing allocation null checks in test_progs.c
-Date: Wed, 22 Jul 2026 15:47:45 +0800
-Message-Id: <20260722074748.674080-3-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260722074748.674080-1-yangfeng59949@163.com>
-References: <20260722074748.674080-1-yangfeng59949@163.com>
+	s=arc-20240116; t=1784706542; c=relaxed/simple;
+	bh=HJLE2eo85PmgYQQn5EeKe0b3NHkn/5qReU42v3xFLPU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AxTDSCVyidPkpfK3hjZozqdrRDdMoZVRxAkCpu7pUYMiJNzS4Z3YL9FuiOc8JvGrDpohHTO/BO3Jeb90UyuyhWDTZKX+rhN0PnA7fs/cAiHG1ORn0Xdps7N9lxVwJMkPdiArhTJo3VOMXAycPHGsNJikGfAhbqJ027zrSVaey9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h4mb12pCNzYQtmJ
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 15:48:29 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 1315F40539
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 15:48:58 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDnFyTpdWBqimOFCA--.51088S2;
+	Wed, 22 Jul 2026 15:48:58 +0800 (CST)
+Message-ID: <d1c272dd-9db3-4d93-806e-ba8b4dcc0e91@huaweicloud.com>
+Date: Wed, 22 Jul 2026 15:48:57 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgDnrw+kdWBq8DkpJA--.55057S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAFWfuw4fKry3Cr47Ar47Jwb_yoW5WrykpF
-	48GFn8KF4fZFnFv3W3C3yUWry5KwsYqayDKa4xAw17Ar47JryfK34ktFyIqFnrGr45uFW3
-	Z3Z09F1IgrsrJF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j7R6rUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbCzwc5sWpgdadMXwAA3L
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v6 4/4] bpf, cgroup: Fix storage null-ptr-deref after
+ replacing prog
+Content-Language: en-US
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260722072326.1545677-1-pulehui@huaweicloud.com>
+ <20260722072326.1545677-5-pulehui@huaweicloud.com>
+ <20260722073501.64ACE1F00A3A@smtp.kernel.org>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20260722073501.64ACE1F00A3A@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:Syh0CgDnFyTpdWBqimOFCA--.51088S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryDZw45Xr1kWr15WryxuFg_yoW5Ar4xpF
+	4kZasrX3Z8Jr9Yvr1kt3929F48Aa10qr1Ykrs8Jw1rurW2gFWFgr97uFWY9Fy3JF1Du3Za
+	qF90vF1qkF10vFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUglb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+	CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+	AIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVF
+	xhVjvjDU0xZFpf9x07UNvtZUUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Feng Yang <yangfeng@kylinos.cn>
 
-Add null checks after memory allocations to prevent potential segmentation faults.
+On 2026/7/22 15:35, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> 
+> Pre-existing issues:
+> - [High] Missing rollback of `pl->flags` on the error path in `__cgroup_bpf_attach` permanently corrupts the execution order of the replaced program.
+> --
+> 
+> --- Patch [4]: [PATCH bpf v6 4/4] bpf, cgroup: Fix storage null-ptr-deref after replacing prog ---
+> commit f8726e124d0a4e72b87976830f0741e286d474df
+> Author: Pu Lehui <pulehui@huawei.com>
+> 
+> bpf, cgroup: Fix storage null-ptr-deref after replacing prog
+> 
+> Syzkaller reported a storage null-ptr-deref issue after replacing a prog.
+> The issue is fixed by properly allocating the storage and comparing the old
+> and new storage pointers, falling back to an RCU-safe update if they change.
+> Additionally, proper rollbacks for storage and flags are added to the error
+> path in __cgroup_bpf_attach for code rigor.
+> 
+>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+>> --- a/kernel/bpf/cgroup.c
+>> +++ b/kernel/bpf/cgroup.c
+>> @@ -883,7 +885,10 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>>   	pl->prog = prog;
+>>   	pl->link = link;
+>>   	pl->flags = flags;
+>> +	if (old_prog)
+>> +		bpf_cgroup_storages_assign(old_storage, pl->storage);
+>>   	bpf_cgroup_storages_assign(pl->storage, storage);
+>> +	old_flags = cgrp->bpf.flags[atype];
+>>   	cgrp->bpf.flags[atype] = saved_flags;
+>>   
+>>   	if (type == BPF_LSM_CGROUP) {
+> 
+> [ ... ]
+> 
+>> @@ -915,12 +920,14 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>>   	if (old_prog) {
+>>   		pl->prog = old_prog;
+>>   		pl->link = NULL;
+>> +		bpf_cgroup_storages_assign(pl->storage, old_storage);
+>>   	}
+> 
+> [Severity: High]
+> This is a pre-existing issue, but since this patch tightens the error handling
+> and rollbacks in __cgroup_bpf_attach(), should we also restore the original
+> pl->flags here?
 
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- tools/testing/selftests/bpf/test_progs.c | 33 ++++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 1d3caf996971..88c65ce5b018 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -730,11 +730,14 @@ int compare_map_keys(int map1_fd, int map2_fd)
- int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len)
- {
- 	__u32 key, next_key, *cur_key_p, *next_key_p;
--	char *val_buf1, *val_buf2;
--	int i, err = 0;
-+	char *val_buf1 = NULL, *val_buf2 = NULL;
-+	int i, err = -ENOMEM;
- 
- 	val_buf1 = malloc(stack_trace_len);
- 	val_buf2 = malloc(stack_trace_len);
-+	if (!val_buf1 || !val_buf2)
-+		goto out;
-+	err = 0;
- 	cur_key_p = NULL;
- 	next_key_p = &key;
- 	while (bpf_map_get_next_key(smap_fd, cur_key_p, next_key_p) == 0) {
-@@ -1514,6 +1517,8 @@ static int dispatch_thread_send_subtests(int sock_fd, struct test_state *state)
- 	int subtest_num = state->subtest_num;
- 
- 	state->subtest_states = malloc(subtest_num * sizeof(*subtest_state));
-+	if (!state->subtest_states)
-+		return -ENOMEM;
- 
- 	for (int i = 0; i < subtest_num; i++) {
- 		subtest_state = &state->subtest_states[i];
-@@ -1732,9 +1737,24 @@ static void server_main(void)
- 	sigaction(SIGINT, &sigact_int, NULL);
- 
- 	dispatcher_threads = calloc(sizeof(pthread_t), env.workers);
-+	if (!dispatcher_threads) {
-+		perror("Failed to calloc dispatcher_threads");
-+		exit(EXIT_ERR_SETUP_INFRA);
-+	}
- 	data = calloc(sizeof(struct dispatch_data), env.workers);
-+	if (!data) {
-+		perror("Failed to calloc data");
-+		free(dispatcher_threads);
-+		exit(EXIT_ERR_SETUP_INFRA);
-+	}
- 
- 	env.worker_current_test = calloc(sizeof(int), env.workers);
-+	if (!env.worker_current_test) {
-+		perror("Failed to calloc env.worker_current_test");
-+		free(data);
-+		free(dispatcher_threads);
-+		exit(EXIT_ERR_SETUP_INFRA);
-+	}
- 	for (i = 0; i < env.workers; i++) {
- 		int rc;
- 
-@@ -2094,7 +2114,16 @@ int main(int argc, char **argv)
- 	env.worker_id = -1; /* main process */
- 	if (env.workers) {
- 		env.worker_pids = calloc(sizeof(pid_t), env.workers);
-+		if (!env.worker_pids) {
-+			perror("Failed to calloc worker_pids");
-+			return -ENOMEM;
-+		}
- 		env.worker_socks = calloc(sizeof(int), env.workers);
-+		if (!env.worker_socks) {
-+			perror("Failed to calloc worker_socks");
-+			free(env.worker_pids);
-+			return -ENOMEM;
-+		}
- 		if (env.debug)
- 			fprintf(stdout, "Launching %d workers.\n", env.workers);
- 		for (i = 0; i < env.workers; i++) {
--- 
-2.43.0
+> 
+> Earlier in the function, pl->flags is overwritten with the incoming flags:
+> 
+> 	pl->prog = prog;
+> 	pl->link = link;
+> 	pl->flags = flags;
+> 
+> If update_effective_progs() later fails (e.g., due to memory allocation
+
+It's hard to make update_effective_progs fail in __cgroup_bpf_attach, as 
+it will failed only when allocating failed:
+
+progs = bpf_prog_array_alloc(cnt, GFP_KERNEL);
+
+failed for the above alloc is not a high issue, as cnt max is no more 
+than BPF_CGROUP_MAX_PROGS.
+
+> failure), the error path restores pl->prog, pl->link, and pl->storage, but
+> misses pl->flags. If a user attempts to replace a program using BPF_F_REPLACE
+> with different BPF_F_PREORDER settings and the replacement fails, could this
+> leave the original program active but with its execution order silently
+> corrupted?
+> 
+>>   	bpf_cgroup_storages_free(new_storage);
+>>   	if (!old_prog) {
+>>   		hlist_del(&pl->node);
+>>   		kfree(pl);
+>>   	}
+>> +	cgrp->bpf.flags[atype] = old_flags;
+>>   	return err;
+>>   }
+> 
 
