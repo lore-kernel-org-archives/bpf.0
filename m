@@ -1,154 +1,159 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A0C472F9C
-	for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 23:56:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784678213; cv=pass; b=kVfZMyp6jI5FsAewkuwJF9g/Ea47AmyBM7u8NI3VJpI2TbNt2vtFgoaXczk0Uhf1QxE7gx9X8TKwQIuolOokZdjugUMDE/cdLojfTv3enXulXl502dJk0h5Efybrvb4kbG6K+SByJi6eIcPDn4wRGPmOP9p9mGg7r/e5qvVT9l4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784678213; c=relaxed/simple;
-	bh=/3DnzFUGSaO/deY28VejyOwo6kGg+FKTgVWwKcW1rhI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=Qs0zY3oHyGM+ugtg9D6PMf/LUjdNgGDgtfUQSKVAcw74T0+1trcjDcCIEneuB+QBZoLZiB42wgxmZmnWgwgPTrlTBYJUK48lTeJr+Hl1CK6/gIFisMmlKp+ujhAc56FVi+XX5f3JwgOdbA4l23DBCTuvBZv6j1KJ9MReS/BCvyw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p8DHIxoj; arc=pass smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4734725B0B3
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 00:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784679139; cv=none; b=gD6FRT5igv2tX9oCMMcc/pDR4JVyx6n7b2Oo4EXRhAWCEa3ZOX4wuPsQUsWuqFgjLm3ExMUG0V90YoIt5Bl+U+ZbVLNaDrc6Sg4i6JFD9kfG0V3r907qM+ZIfB/9cPrilGP/qUVJ9ckFd6/HHf1BSUE1xnNABtCZ363WthfNXOs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784679139; c=relaxed/simple;
+	bh=INJwYTrSQ3WAovcuijCA3YELaIRjXjzM8P0z1g5h5Ag=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=g5IuWkuOUNcEmDAsY81y02iR6kQwvnBXWGbCY58GNsJe4exOTYQp1RKqMbdv+0CNijwZ4dFw4q5QXYdbTW0wari1yu2JQ6cIQE2vzGuhB7QV5jqK099fuwoEDKhn/qmSeH+m6xwUXB8b0ChyESXJVUrUPC1Yfzafo9KU5Xzq4Q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ToV//2k3; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p8DHIxoj"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-51c10e86e52so1360771cf.1
-        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 16:56:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784678211; cv=none;
-        d=google.com; s=arc-20260327;
-        b=oqe1wbXqEEMK9XKUvZQXVq/tasDHIIjJd6P88BLLIDl2avT+G5LMQCeI1x2K7pQPqN
-         N2EryKpNcvjvqX2YuYS0h8Euhc5KRTfjy7EvHuyYIjzTiKI8wcrYd/OTV3UD3IaFkFgQ
-         azVv/NWtPWYhRcGnYN4zz696j8VZbKucLhE11029NFGs3EBZ3iUFwy/vSdk7MwguwBiJ
-         wsZ4UrthAkZT6iWHQu2S45T9IQbPapEupHq6J+ydbf6iHcSAqc2ABi7x2DvRlp5zgTbJ
-         MOMjFbnTxsndQEilK2IpE/6Nm8eDkksGPitoUdEYk6mmNfrDv3cwyBzOTqTFI+SS/BoS
-         aP5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:dkim-signature;
-        bh=2HDZnLZEgTng2BU/7p81Zndbee1PtPvUlTtKfIbfOGo=;
-        fh=FppHYmJCV9t7qZc3Dd+/gP0jnzwLRMYeugQT35dVFxE=;
-        b=XqBQOFlBkPgnHfLjX/C5YuL1TL4ff+Kj27CgfNtvDZ/zqdRTHbEAb8w2cV6glp18T2
-         TVJAdWiF9ZUScKng/Ui7f/gr1kyPiuk2p13PDnAy/VakItiQrkSuiYMCLv4aHWpegNsV
-         EnPxug/2cP0d1CkAZWedhbRiElB1FWFNUJm6FEPi3Sj9bQ5fwUTaEWlAc6hktO9rLSKN
-         LQH3JSEu42NfRawvqpU9l80j309TI97xMc8q8SgdBBjNNtM5NDcQp0olpAy7KahqFZV2
-         4xI6nTBSUIWUFpsenhieh6h7xSo/dkBD1Xcr5JVsxgpgKzvTvsMMx5Is3TR2w93k9xdu
-         c89A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ToV//2k3"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-ca7c1176317so8768831a12.1
+        for <bpf@vger.kernel.org>; Tue, 21 Jul 2026 17:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784678211; x=1785283011; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:to:subject:message-id:date
-         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2HDZnLZEgTng2BU/7p81Zndbee1PtPvUlTtKfIbfOGo=;
-        b=p8DHIxojSGqUeDZdxUHjZzEiAmX4EahYPUmGOgtAyxc0KUgFK6/tYK4GCnpnCC/dkn
-         CjsB3sPcWeU/l3CI91xJK3cF/YI87dCGImfRus3IaG6oRV+OMn75fwUODhHT4kNXDRYT
-         1JH5LUFUmangSssTmRuVfgfNYF073W8A3UgLeFrVlIV3/haw9U8rUdMAWsh8bvEV5xQA
-         +z8plFzOD+ewWPQEbRFzMQwpPnfOX4Y1kGCFfNdDTWQcRtZIM5awtJefI6WFTNkSunbg
-         zjsdMA3d0iP4JyHq7nyf6o5RC619jiMWDBwo8M1PxRnCoiOdl3+J7tpIcMHnShsdVIb1
-         cqCg==
+        d=gmail.com; s=20251104; t=1784679137; x=1785283937; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=cWKpfdDZ5rwahGdKmtliUWjX0cNTR5TraqAEREqnMtI=;
+        b=ToV//2k3xpy9GDnRpv5mpAzagZ8Y9EAsbyNTwifQW1bDq2xHUmURlHh/ebdqo1AVQE
+         N/KDBsEYSiuCFOqVfwhuQO529qBgnZgPsB4hKovZg0ZPkrfe8iJYXddQSnCTsPYFtqA2
+         WJGrKHH8CDrUYV3vnVEqyaFtFA+FEoPX7y3jWC5NddglaiNwNrxNPX6DqTZnb//HeI9Y
+         CJahrxx/o6A97hKnUC6q3rEMkc221q2BuswM5HzVaYu9nXMlhe1B2eTztJFy7wiI4x5y
+         FFBkflxifoty2gZLQot5UGdIC9K9tvUpkWvcqbji3yCr23NKGCF6q7+jj+4G3ZPIkIlG
+         ByTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784678211; x=1785283011;
-        h=content-transfer-encoding:content-type:to:subject:message-id:date
-         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2HDZnLZEgTng2BU/7p81Zndbee1PtPvUlTtKfIbfOGo=;
-        b=BMLuHDWbqQMyf2+kDGec5tSvoiSQIzZDJqihpJjGlqHgT80rt3O7xXr+zT80QYPAGr
-         rmkO8N/6GKHAP6+KOu4LjwqstjABVI6/950nc+iODkjRkFMAbO3ZAwT6w+u6V12LoGS5
-         fuNXuGND9NKoyHSNcYVg46nS3YYEmz2ByLZcukCkRxiF0XLcWDnh1OXaN42jO0sA5IaG
-         qewCH4hI+cbTjow6VOkjF6wTgqRv1Qk4GGe/NCuZqWGf3irUL6lO8FRwVOsN5rzSGdwT
-         S19BVbDXUXoGVdPRekoccqBWMDRK0J1ndpXsrVDwTpmvyVKBv13ifclR5YV4JgkKzZFS
-         BkaA==
-X-Gm-Message-State: AOJu0YzLhInsy4FgHcaeegknKs+PDdofLHX2PGT/baz4LBhln4GOFbsY
-	gKzNzhr4JuczXEvAnaehuUoJfYF7D5J2JhVYpqVA2hjxVnOKS3F8zvGfDTYKq0RhAYgvVWHmoI0
-	wnFsQ6xMnEh4TNMuru0drzC17RxaomgKFD8l8bBQxTilQJguLQ6ms/6LAhJk=
-X-Gm-Gg: AR+sD13GBQLSjWF5KG2j7+lo4GBADRzGsr9Gl0sdM7myquBLCOWMcWQ0ClYnbR59n6T
-	oKlF+GR86MuSl/yWhgL9t+ONU6DmFiiIjv0pbT6CvEPI8vJiB9yTA2HxgGsT+UNMGCiZb5o/ACM
-	yh95XPzBIIWBXY5plEYzFOobQIDlRSbD/ozCcV/CdJPLAJZbotuY30tZ+v8cQrPGXuay1olshyH
-	sJQTmgtYJ6ZSfoz4ioxp+DsT+UXpFi1gJ4prgyrl3qfZiRUQuSzRx7yWnC1vr+vy1OUn8GZXQ58
-	X1enzQOTaWjaCgV4
-X-Received: by 2002:ac8:610f:0:b0:51c:7a90:a798 with SMTP id
- d75a77b69052e-527c400ad2fmr4737971cf.24.1784678210043; Tue, 21 Jul 2026
- 16:56:50 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784679137; x=1785283937;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cWKpfdDZ5rwahGdKmtliUWjX0cNTR5TraqAEREqnMtI=;
+        b=d6y7HQ23oBlpNJWD/nHBbd9pfij/yK5qgHoOQVbOyy0+ZxzH0r8ChjAdJqRGPv3rc6
+         6A3qy53qjhXNK+7kQJRYFOPMVKXIW83Uz9M6F+jGmTJmbLaBOnYOc3RIo6NNtL4XkYOg
+         HBsSVxSjRkz+Y5lX5T6E5JdRt3A5qzbhtyhgi79IHJI/BOGmUD1nKkHb+DJ34z7i2/v3
+         51tfcAIX1ZE08TPMWYY8ggQ2dR7hZpjjTm9u5TeVEnZE55Eq6LW8ZyTFA5Ki7Pc58w0F
+         p7YFjOTgJRWyUZhqtqU86v2+XhLNvsaOpxA+a7lRFxROfSgqbhyFs0WcYUihqaY9Rhqg
+         co6w==
+X-Forwarded-Encrypted: i=1; AHgh+Rr3+snALwmFpHcluqeV28/PyiJP/Yu/dxoTJfVArmxLc2NEocDSsqFK+WtSgee2SDyfPMc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfGDE7ZKvcypm2SK4STCimBvmcuHfW5/1tLuUplkCKjWrqAEMB
+	WRKkW8gOI6JF620FNf1nIKiEF77muFoqeyKv8FcIMq39T+qmUw/GxhBu
+X-Gm-Gg: AR+sD101hQdE7pxAJiCMcbLETa/fc3czVHJWSNYjLV2NgUQkcb1wmv2HmaKpyNUmsSg
+	OgcXzWsDSLleln0A2SMO2F+mU2Ybf8BfJa1DOK33XFe5wNSdSGjiGARB4XXb/ny4sw+kCV0aStX
+	/sg0nn/HrNuIfeE5Hlh9QKDyrwV/cGbzCgi2NlVUd/osrhdcMxn0rbfLOIa8da7/cWvrfNzRgjv
+	rk/hTZXdpVwfRbd7a39h6rJdpH09HvkBHzK6aCa9GLvCRqRz62m1lXwNw7GdUtydtPB0B9b9UC2
+	CUrIvurnWYVYU9r2i1cONgwC/hFP/SUZf13/lmxh5BrFY3NTvYx6BZ6pe/RwvvAEJYgirYzELi8
+	KHTUBEvCANltbw+95vIMryHliJFSs5H77vFlUUIIoMsHW3864O4ocsHz6sSgRh1G/6dPh1o7rsX
+	jp8blVOdN+Her353DRp0L5JdSWkqOdGECnaUnduviDnb2wQeM0l1aGsqSF
+X-Received: by 2002:a05:6a20:734d:b0:3c3:69d0:c573 with SMTP id adf61e73a8af0-3c3adaae79amr21522093637.68.1784679137427;
+        Tue, 21 Jul 2026 17:12:17 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:cda2:e912:7f2e:f787? ([2620:10d:c090:500::7827])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3147df06864sm2786421eec.15.2026.07.21.17.12.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2026 17:12:16 -0700 (PDT)
+Message-ID: <976ae2fbf6f2ead76622e39813bfda6a6981d382.camel@gmail.com>
+Subject: Re: [PATCH 1/2] bpf: Preserve stack frame number for commuted
+ arithmetic
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
+	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan	
+ <shuah@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ bpf@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Tue, 21 Jul 2026 17:12:14 -0700
+In-Reply-To: <a092a059781aad37b8d8ce3bb927052de5f73431.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
+	 <a092a059781aad37b8d8ce3bb927052de5f73431.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: YiFei Zhu <zhuyifei@google.com>
-Date: Tue, 21 Jul 2026 16:56:39 -0700
-X-Gm-Features: AUfX_mw-H9ROdS8DGZ7O8x6C4vMouBwP7F7113xXDldmrpgofe4tM3HShhGD_HA
-Message-ID: <CAA-VZPmzCKF5uhP0OG4mPwEs8WaL-xyjAYW=bE8z7Z_J4-h6cw@mail.gmail.com>
-Subject: LLVM regression in memcpy struct bpf_sock_ops->remote_ip6 to struct in6_addr
-To: bpf <bpf@vger.kernel.org>, =?UTF-8?Q?=C3=96mer_Sinan_A=C4=9Facan?= <omeragacan@gmail.com>, 
-	yonghong-song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-In one of our BPF progs, there is a pattern of copying IPv6 addresses
-(which are four u32s) off of struct bpf_sock_ops into a stack variable
-(a larger struct that contains struct in6_addr), then updating a map
-with that stack variable. After a recent LLVM upgrade, that program no
-longer loads.
+On Tue, 2026-07-21 at 09:39 +0000, Yiyang Chen wrote:
+> When scalar +=3D pointer is handled in adjust_ptr_min_max_vals(), the
+> destination register has to inherit the pointer register state from the
+> source pointer. Copying only selected fields is fragile because pointer
+> provenance is tracked by several bpf_reg_state fields.
+>=20
+> For the commuted form, pass a temporary scalar offset register to the
+> common pointer arithmetic helper and copy the full pointer state before
+> applying pointer arithmetic. This preserves the frame number for
+> PTR_TO_STACK registers and keeps parent identity fields consistent.
+>=20
+> Fixes: f1174f77b50c ("bpf/verifier: rework value tracking")
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> ---
+>  kernel/bpf/verifier.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 52be0a118cce0..3c0af83db4672 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -13796,11 +13796,12 @@ static int adjust_ptr_min_max_vals(struct bpf_v=
+erifier_env *env,
+>  		return -EACCES;
+>  	}
+> =20
+> -	/* In case of 'scalar +=3D pointer', dst_reg inherits pointer type and =
+id.
+> -	 * The id may be overwritten later if we create a new variable offset.
+> +	/* For 'scalar +=3D pointer', dst_reg inherits the complete pointer
+> +	 * register state. Individual fields may be adjusted later by pointer
+> +	 * arithmetic.
+>  	 */
+> -	dst_reg->type =3D ptr_reg->type;
+> -	dst_reg->id =3D ptr_reg->id;
+> +	if (ptr_reg !=3D dst_reg)
+> +		*dst_reg =3D *ptr_reg;
 
-I wrote a reproducer:
 
-  #include <string.h>
-  #include <linux/in6.h>
-  #include <linux/bpf.h>
-  #include <bpf/bpf_helpers.h>
+Lot's of tests are failing on the CI, please investigate.
 
-  struct in6_addr addr6;
+> =20
+>  	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type) ||
+>  	    !check_reg_sane_offset_ptr(env, ptr_reg, ptr_reg->type))
+> @@ -14854,15 +14855,18 @@ static int adjust_reg_min_max_vals(struct bpf_v=
+erifier_env *env,
+>  					bpf_alu_string[opcode >> 4]);
+>  				return -EACCES;
+>  			} else {
+> +				struct bpf_reg_state off_reg;
+> +
 
-  SEC("sockops")
-  int test(struct bpf_sock_ops *skops)
-  {
-          struct in6_addr stack_addr6;
+We store such temporaries in the bpf_verifier_env to avoid excessive
+stack consumption.
 
-          memcpy(&stack_addr6, skops->remote_ip6, sizeof(skops->remote_ip6)=
-);
-          addr6 =3D stack_addr6;
-          return 0;
-  }
-
-This will fail loading at latest LLVM main with error:
-
-  -- BEGIN PROG LOAD LOG --
-  0: R1=3Dctx() R10=3Dfp0
-  0: (7b) *(u64 *)(r10 -8) =3D r1         ; R1=3Dctx() R10=3Dfp0 fp-8=3Dctx=
-()
-  1: (79) r1 =3D *(u64 *)(r10 -8)         ; R1=3Dctx() R10=3Dfp0 fp-8=3Dctx=
-()
-  2: (79) r2 =3D *(u64 *)(r1 +40)
-  invalid bpf_context access off=3D40 size=3D8
-  processed 3 insns (limit 1000000) max_states_per_insn 0 total_states
-0 peak_states 0 mark_read 0
-  -- END PROG LOAD LOG --
-
-It seems that the program is reading the address from the bpf_sock_ops
-as two u64s instead of four u32s, and the verifier understandably does
-not allow that due to the complexity of rewriting context accesses. I
-bisected the regression to
-
-  commit 790f0623411d5d9d5c989f14e87f2fe86f52eaf3
-  Author: =C3=96mer Sinan A=C4=9Facan <omeragacan@gmail.com>
-  Date:   Tue Jun 9 16:03:26 2026
-
-      [SelectionDAG] Pass dest and src alignments separately to memcpy
-and memmove lowering functions (#201119)
-
-Looking at its PR [1], it seems that commit caused another regression
-for BPF selftests and that has been fixed, but this regression is
-still reproducible on main with that fix applied.
-
-I'm not really familiar enough with LLVM internals to understand
-exactly why it generates the code this way or how to fix the
-regression.
-
-YiFei Zhu
-
-[1] https://github.com/llvm/llvm-project/pull/201119
+>  				/* scalar +=3D pointer
+>  				 * This is legal, but we have to reverse our
+>  				 * src/dest handling in computing the range
+>  				 */
+> +				off_reg =3D *dst_reg;
+>  				err =3D mark_chain_precision(env, insn->dst_reg);
+>  				if (err)
+>  					return err;
+>  				return adjust_ptr_min_max_vals(env, insn,
+> -							       src_reg, dst_reg);
+> +							       src_reg, &off_reg);
+>  			}
+>  		} else if (ptr_reg) {
+>  			/* pointer +=3D scalar */
+>=20
+> base-commit: 0bcca2a42cc50b7d64a95c08dffc6b93661a7ea2
