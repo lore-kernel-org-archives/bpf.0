@@ -1,63 +1,63 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C516A3438B2
-	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 14:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83412356762
+	for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 14:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784728877; cv=none; b=AuXhBNUiVMVI8R04c4jU3p3hQeQcmosh5Ubus9HA0mhxo9m478mY43Lz9Mzuy1FxocbFMTila5uG3EyigYqwOJlH2foKizunwRaMlzr8Dzw79kI4DaOlFUegHwr/FvdUcaGXLfSLdq40mkh6IrgZvlLx95vU/FM4kJN4rd06FYg=
+	t=1784728890; cv=none; b=n3bP6GYAALh5k7XvbhUh2qCH7I5MgWkgc9dpjjxGK3qnHffnaurTJUrZEmdkdwHaFQT+lzskGLfqkVuOlx9BJzO9EnrvakePdwelIkD0yMZgBhmy94N1fXcTVjIZo2eGuHjHUfX5JAxoYYn9HerrPVujOVoIx210d/z2miAgM5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784728877; c=relaxed/simple;
-	bh=XvVl5mjflIv3UtJ8KZ2CpGKOS7tfRL7wakHrEfbOmYA=;
+	s=arc-20240116; t=1784728890; c=relaxed/simple;
+	bh=fOHTCBcrgzq+oHWGg2uUXZmqlixrBOKYf9/zyymmA0g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i424tvqym3pkNQqS99BHvGthQ+7D+PCXTU1SSZrdpbpqo68+pTlPAb2osu8vvQnpyagTrelQyZYr0NojuTBfqcJidZS58ovLgWDi5zWMWjxgV8AWWCHwRzbe3NydWzwU3Zl5wVZxBrNd0nTAAicpMV0sVPLgZnn0/in4jgA4rYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NEarH/fk; arc=none smtp.client-ip=209.85.210.181
+	 MIME-Version; b=PI2pSHzoruJltM9cEczCP0oZ1z7mBvz+FQsfc2f1AIPm5MmHelp5NX/6yOMLLesOE+bS2dTmSfygo/GRQ9MCEMDkY2ssNIK1qUPGxNQtGniYhjapE4C9BJnuSBQj7McIgMC0qA1/C7Oe/KPRTj1jw2Rwdlq7Uvm1qMg19hXuAKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BfNDmBJO; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NEarH/fk"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84862b0d5f8so7482705b3a.3
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:01:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BfNDmBJO"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cbb662575d3so1234578a12.0
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 07:01:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784728874; x=1785333674; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784728888; x=1785333688; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ZEjjn0vc5h6Klfz50Xi3OPenrjoSwnSYbs/Qn95SwQM=;
-        b=NEarH/fk0a/bhzHN/l+ixz/cCRwCV6iqTMYLltQPeoDh8C0E20EN0EUdeTzxmGP+uy
-         /WvZ+9HZsAjVV61hkwMVqntKqEKVzqMkSMMWfqoP7lCUMmskEVwBvDzrDIqkF8+Yrb8Z
-         AdrqAEKmqZO5z1L3ln3CmO+WdgFfYeusGYe55pqnuushnn2zcZIY8/O/auD/9ZF2VQoL
-         1euhfHYmPW+xcw2Kx+hvs2/Izy7/LKMOO3gfTCSkuMPveQyXsWmbRT/LpbMsHpBV+iIz
-         zyCxEt//W66H4KedZqEZPTnmtjfz1PyR6WUILY+Lih1pIeXlSYvr6yFQcUvFB0J2EYON
-         RvGQ==
+        bh=FH52Aw5C7E2f+s1RWscjl9uFLtr6OIWxpcyJYXQFaUM=;
+        b=BfNDmBJOcX99rQTu/IE7X2eQTgw5EG//8IrQFhBxNEIItf3BX6/c3eKtal9anYIzQl
+         7m/65+4koQ8147ZNdHWeXPkxMRasueDVPqVZ1UfjmnUCgPfRIk0yIAHH7pnO9t4EL1GV
+         qxOGHSleMlwZuSxW+KM2+eAZGQI0f0AWWuq5HVmp0M8GUaodlOkgX48n+MGAsvgvAO2z
+         XzYXGVX2XZJMKQ0pvZ2yjhdX1L2GVbFn1LBz8ALPMkcCiKZEX8nX4qpRhRM+rQAhghyO
+         yPuv635LuCODDxp8Z1UuasvIEvHj52aN2yI0TeZAghhdiUzQ8iDNWxAEsN/9UAidotEJ
+         uG6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784728874; x=1785333674;
+        d=1e100.net; s=20251104; t=1784728888; x=1785333688;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ZEjjn0vc5h6Klfz50Xi3OPenrjoSwnSYbs/Qn95SwQM=;
-        b=FbHXmiqLXUIOZjIsdBG7eOfHS8plBLKdIcxTJGGuo43oW2tb31x/ZFRCxO0Kva3yZF
-         YXVLeASwgqnW8w/HyQp0WBOXdEAoI4CSW1Wig3qIQ2rEiE+4zRBinSxucz07Jamngv58
-         UCTCSgH92Pe1oNAqyg9zBkN9lRHuYHl7ON8gewMMO7ncPZMjRWQp5RgtHWVCbU4gJ35k
-         vLY7j0oIFD1dNazc0paMHmLQpCefXZcghTxlnQaw0a2KnjbAMdnQaMylEwcypK7qlNfg
-         RW7pv+SGMHjOfzuyymS8eAQ9UYb6/VsDktiM3fW/E69gYeIBTh0CUvbFPgIW43mvZ4yC
-         ik+A==
-X-Forwarded-Encrypted: i=1; AHgh+Rq8qYd20H4Gi8LnB2FyVyRvlUVVDpqiqnd+7OOk1zR/8cZTXJwClk+EEWk1W5QUtL/0H68=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycLYSUyRQnqVnRpcza6c29loYNVNZGR4HXYIWGrcX1F3e42q/1
-	DR/QbBSJNFU1pznY/kTs1S8y3xoTpnXZpTkbcuvyR3ZLRrY3xzYaYsM0
-X-Gm-Gg: AR+sD11X2GbPNjCUFTSYZ6K9AAyNX+3Q4mletNHkOwl9MO4cLrqGd4t2/430aLAtUjd
-	Ky11YmATLngQn5ZIjrZ6Vc81+PvVeofYGZES1rvKk7vkq9M65SOO73yyt2numRxhjb4inSKknFc
-	AjHb7XXWy0uxSXouWoHZi2gop5B6m3+KmovHJwpX+3VvzzMtsk1lN3qTMtnudEO0eDUjJkoJrM1
-	MhdvDiUlGLJgwM8UG5QaLeNYs3qs+oalIrEBq3+9+65a0LZ12ysqJEpfjO2R9EH2FG+ITHUbxE8
-	qDb7jFgGse9lSmTOIwNzRlh76I0DY+7T66fZVPdWLjYy3Ri9+/E1Mob9KpUz6aHWYOFvgAnb7Ln
-	sbdRJz7wrCAvNU0Gr28JW8rsTSJ9ZuZa7KKEc1wvfvXoq4ehfa0/9vlOib1BFMpYFIKO18SQY0D
-	1nLs9R0UE8iDzvTJRhonmxKUwiZNsM3l9kQImSfFIL/5jQlVI=
-X-Received: by 2002:a05:6a20:3ca3:b0:3c3:7ecd:72df with SMTP id adf61e73a8af0-3c3ad86ab89mr26184446637.30.1784728873939;
-        Wed, 22 Jul 2026 07:01:13 -0700 (PDT)
+        bh=FH52Aw5C7E2f+s1RWscjl9uFLtr6OIWxpcyJYXQFaUM=;
+        b=aTdJSXLUzfkUyRHXn2+fnzrXHuz6YdzH810DBOGUx6MpBox5FaEb6lNoUjOfE4RV56
+         S98AQCBGJpypZ6uBQJYD4kQnhIqUiI9lLEXTEJgn36u29zmuiEsqGB3V278+FEmrG+jE
+         UzCkgWbd8mP5tjzqvr5uuNnTuc7x8SfK4fDn+7OoCqDVxf70IzrmFmuSCkH6PUyCWqN4
+         TgbWy00zXn/BCiWCh1Wi5yZDy1H8esODtl2VEJXobqR5Rq7lifENquWOcZKJIHaNTJCn
+         NyEFq0DUXvoZP23SMhjG0sMHLegEc0USANRE/eCPgi23bql3Z+xcxy/Bm/idEFwcpP4K
+         Wfjg==
+X-Forwarded-Encrypted: i=1; AHgh+RoYE7worYFCy88x48krNsB0X3unKWbJb3FotUo0RSUl9tTprn2MZSXhbJU7sNL1ZQdLRSQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPHqqr0fvvaW5w89h5LOslsrP+uDCVOQ9SPdxUYoM+Fy336QFq
+	tqa/w5hQsF8nrl/xBXpbhFoe4ydIffvqa7ZR0H7fmZK4U5Yf1Tjz/sGP
+X-Gm-Gg: AR+sD10bukOBFXluMem0q8FgFkJzynxEjwCCqJ4Gk1/pFr78qTChwFTp/zUGgennOCM
+	yo9T53+5PQuHD2dDvw4sI7zyMbt3NCrySHslI5ey5kX3MM7zR7obFWU4gugfKE36Cv1fntFyGBO
+	KRgUv+kES2Gr0Y9+EyV0lZB6vZGw0WJ2zvpeZwWBX5KAFcFtbocQyT9hMrwZ+1ldfXuFgov6gcd
+	x2Uru5A856YmtzhkEQJVvst1b23fNhqgDVFc+Aco7GQAHY4dp20I+klpqdh7ZXorM023hJYH0Km
+	LNmHnDL4JvS5yCs4PH9WQRFPt2SyL62620arZZGkpH+DVY1i+DVXRCMYjz27u7xLDQhRaDlYjog
+	Zta+5sLXeJaMNdqO5fy2sPsc/LBoMQmXT4dbJoubUrWvM8ZFu9w5nE7poqlv0Iv3sk3haK2sbpW
+	UiJYfKSP44lq3wXeWWABPW1tH2qYtiRqI51uU73lAGuM80otQ=
+X-Received: by 2002:a05:6a20:9397:b0:3bd:4698:e7c4 with SMTP id adf61e73a8af0-3c3ada17f25mr23594749637.42.1784728884846;
+        Wed, 22 Jul 2026 07:01:24 -0700 (PDT)
 Received: from computer.goose-salary.ts.net ([2a09:bac5:40b2:277d::3ef:c9])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb8f1a8a1fsm1242281a12.26.2026.07.22.07.01.04
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb8f1a8a1fsm1242281a12.26.2026.07.22.07.01.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 07:01:13 -0700 (PDT)
+        Wed, 22 Jul 2026 07:01:23 -0700 (PDT)
 From: Varun R Mallya <varunrmallya@gmail.com>
 To: pjw@kernel.org,
 	palmer@dabbelt.com,
@@ -81,9 +81,9 @@ Cc: alex@ghiti.fr,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	varunrmallya@gmail.com
-Subject: [PATCH bpf-next v3 3/6] riscv, stacktrace: Implement arch_bpf_stack_walk() for BPF
-Date: Wed, 22 Jul 2026 19:30:10 +0530
-Message-ID: <20260722140015.1982158-4-varunrmallya@gmail.com>
+Subject: [PATCH bpf-next v3 4/6] riscv, bpf: Split prologue and epilogue into helper functions
+Date: Wed, 22 Jul 2026 19:30:11 +0530
+Message-ID: <20260722140015.1982158-5-varunrmallya@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260722140015.1982158-1-varunrmallya@gmail.com>
 References: <20260722140015.1982158-1-varunrmallya@gmail.com>
@@ -95,60 +95,213 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This will be used by bpf_throw() to unwind till the program marked as
-exception boundary and run the exception callback with the stack of the
-main program.
-This is a wrapper around walk_stackframe(), which now passes (pc, sp and
-fp) to it's consume callback.
+Split bpf_jit_build_prologue() and __build_epilogue() into helpers.
+normal_stack_adjust() computes the frame size for the callee-saved
+registers a program actually clobbers, emit_normal_prologue() allocates
+the frame and spills those registers, and emit_normal_restore() reloads
+them.
+
+The kcfi preamble, fentry nops and tail-call-counter setup are hoisted
+before the frame-size computation and they do not depend on it and the
+emitted instruction sequence is unchanged.
+
+No functional change.
 
 Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
 ---
- arch/riscv/kernel/stacktrace.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ arch/riscv/net/bpf_jit_comp64.c | 152 ++++++++++++++++++--------------
+ 1 file changed, 87 insertions(+), 65 deletions(-)
 
-diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
-index 30b369dd2815..c0f2393e5163 100644
---- a/arch/riscv/kernel/stacktrace.c
-+++ b/arch/riscv/kernel/stacktrace.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/export.h>
-+#include <linux/filter.h>
- #include <linux/kallsyms.h>
- #include <linux/sched.h>
- #include <linux/sched/debug.h>
-@@ -104,6 +105,30 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
- 	}
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index ad089a9a4ea9..b804382075c4 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -198,9 +198,84 @@ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
+ 		emit_addi(rd, rd, lower, ctx);
  }
  
-+struct bpf_unwind_consume_entry_data {
-+	bool (*consume_entry)(void *cookie, u64 ip, u64 sp, u64 fp);
-+	void *cookie;
-+};
+-static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
++/* Stack space for the callee-saved registers a normal program spills,
++ * excluding the BPF stack itself.
++ */
++static int normal_stack_adjust(struct rv_jit_context *ctx)
+ {
+-	int stack_adjust = ctx->stack_size, store_offset = stack_adjust - 8;
++	int stack_adjust = 0;
 +
-+static bool bpf_unwind_consume_entry(void *arg, unsigned long pc,
-+				     unsigned long sp, unsigned long fp)
-+{
-+	struct bpf_unwind_consume_entry_data *data = arg;
++	if (seen_reg(RV_REG_RA, ctx))
++		stack_adjust += 8;
++	stack_adjust += 8; /* RV_REG_FP */
++	if (seen_reg(RV_REG_S1, ctx))
++		stack_adjust += 8;
++	if (seen_reg(RV_REG_S2, ctx))
++		stack_adjust += 8;
++	if (seen_reg(RV_REG_S3, ctx))
++		stack_adjust += 8;
++	if (seen_reg(RV_REG_S4, ctx))
++		stack_adjust += 8;
++	if (seen_reg(RV_REG_S5, ctx))
++		stack_adjust += 8;
++	if (ctx->arena_vm_start)
++		stack_adjust += 8;
++	stack_adjust += 8; /* RV_REG_TCC */
 +
-+	return data->consume_entry(data->cookie, pc, sp, fp);
++	return round_up(stack_adjust, STACK_ALIGN);
 +}
 +
-+void notrace arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp),
-+				 void *cookie)
++/* Allocate the frame and save the callee-saved registers the program
++ * actually clobbers, then point FP at the frame top.
++ */
++static void emit_normal_prologue(struct rv_jit_context *ctx, int stack_adjust)
 +{
-+	struct bpf_unwind_consume_entry_data data = {
-+		.consume_entry = consume_fn,
-+		.cookie = cookie,
-+	};
++	int store_offset = stack_adjust - 8;
++	/* tailcall starts here, emit insn before it must be fixed */
 +
-+	walk_stackframe(current, NULL, bpf_unwind_consume_entry, &data);
++	emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
++
++	if (seen_reg(RV_REG_RA, ctx)) {
++		emit_sd(RV_REG_SP, store_offset, RV_REG_RA, ctx);
++		store_offset -= 8;
++	}
++	emit_sd(RV_REG_SP, store_offset, RV_REG_FP, ctx);
++	store_offset -= 8;
++	if (seen_reg(RV_REG_S1, ctx)) {
++		emit_sd(RV_REG_SP, store_offset, RV_REG_S1, ctx);
++		store_offset -= 8;
++	}
++	if (seen_reg(RV_REG_S2, ctx)) {
++		emit_sd(RV_REG_SP, store_offset, RV_REG_S2, ctx);
++		store_offset -= 8;
++	}
++	if (seen_reg(RV_REG_S3, ctx)) {
++		emit_sd(RV_REG_SP, store_offset, RV_REG_S3, ctx);
++		store_offset -= 8;
++	}
++	if (seen_reg(RV_REG_S4, ctx)) {
++		emit_sd(RV_REG_SP, store_offset, RV_REG_S4, ctx);
++		store_offset -= 8;
++	}
++	if (seen_reg(RV_REG_S5, ctx)) {
++		emit_sd(RV_REG_SP, store_offset, RV_REG_S5, ctx);
++		store_offset -= 8;
++	}
++	if (ctx->arena_vm_start) {
++		emit_sd(RV_REG_SP, store_offset, RV_REG_ARENA, ctx);
++		store_offset -= 8;
++	}
++
++	/* store TCC from RV_REG_TCC to stack */
++	emit_sd(RV_REG_SP, store_offset, RV_REG_TCC, ctx);
++	ctx->tcc_offset = store_offset;
++
++	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
 +}
 +
- #else /* !CONFIG_FRAME_POINTER */
++static void emit_normal_restore(struct rv_jit_context *ctx, int stack_adjust)
++{
++	int store_offset = stack_adjust - 8;
  
- void notrace walk_stackframe(struct task_struct *task,
+ 	if (seen_reg(RV_REG_RA, ctx)) {
+ 		emit_ld(RV_REG_RA, store_offset, RV_REG_SP, ctx);
+@@ -235,6 +310,13 @@ static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+ 
+ 	/* restore TCC from stack to RV_REG_TCC */
+ 	emit_ld(RV_REG_TCC, ctx->tcc_offset, RV_REG_SP, ctx);
++}
++
++static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
++{
++	int stack_adjust = ctx->stack_size;
++
++	emit_normal_restore(ctx, stack_adjust);
+ 
+ 	emit_addi(RV_REG_SP, RV_REG_SP, stack_adjust, ctx);
+ 	/* Set return value. */
+@@ -2006,34 +2088,12 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 
+ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+ {
+-	int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
++	int i, stack_adjust, bpf_stack_adjust;
+ 
+ 	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
+ 	if (bpf_stack_adjust)
+ 		mark_fp(ctx);
+ 
+-	if (seen_reg(RV_REG_RA, ctx))
+-		stack_adjust += 8;
+-	stack_adjust += 8; /* RV_REG_FP */
+-	if (seen_reg(RV_REG_S1, ctx))
+-		stack_adjust += 8;
+-	if (seen_reg(RV_REG_S2, ctx))
+-		stack_adjust += 8;
+-	if (seen_reg(RV_REG_S3, ctx))
+-		stack_adjust += 8;
+-	if (seen_reg(RV_REG_S4, ctx))
+-		stack_adjust += 8;
+-	if (seen_reg(RV_REG_S5, ctx))
+-		stack_adjust += 8;
+-	if (ctx->arena_vm_start)
+-		stack_adjust += 8;
+-	stack_adjust += 8; /* RV_REG_TCC */
+-
+-	stack_adjust = round_up(stack_adjust, STACK_ALIGN);
+-	stack_adjust += bpf_stack_adjust;
+-
+-	store_offset = stack_adjust - 8;
+-
+ 	/* emit kcfi type preamble immediately before the  first insn */
+ 	emit_kcfi(is_subprog ? cfi_bpf_subprog_hash : cfi_bpf_hash, ctx);
+ 
+@@ -2046,46 +2106,8 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+ 	if (!is_subprog)
+ 		emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
+ 
+-	/* tailcall starts here, emit insn before it must be fixed */
+-
+-	emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
+-
+-	if (seen_reg(RV_REG_RA, ctx)) {
+-		emit_sd(RV_REG_SP, store_offset, RV_REG_RA, ctx);
+-		store_offset -= 8;
+-	}
+-	emit_sd(RV_REG_SP, store_offset, RV_REG_FP, ctx);
+-	store_offset -= 8;
+-	if (seen_reg(RV_REG_S1, ctx)) {
+-		emit_sd(RV_REG_SP, store_offset, RV_REG_S1, ctx);
+-		store_offset -= 8;
+-	}
+-	if (seen_reg(RV_REG_S2, ctx)) {
+-		emit_sd(RV_REG_SP, store_offset, RV_REG_S2, ctx);
+-		store_offset -= 8;
+-	}
+-	if (seen_reg(RV_REG_S3, ctx)) {
+-		emit_sd(RV_REG_SP, store_offset, RV_REG_S3, ctx);
+-		store_offset -= 8;
+-	}
+-	if (seen_reg(RV_REG_S4, ctx)) {
+-		emit_sd(RV_REG_SP, store_offset, RV_REG_S4, ctx);
+-		store_offset -= 8;
+-	}
+-	if (seen_reg(RV_REG_S5, ctx)) {
+-		emit_sd(RV_REG_SP, store_offset, RV_REG_S5, ctx);
+-		store_offset -= 8;
+-	}
+-	if (ctx->arena_vm_start) {
+-		emit_sd(RV_REG_SP, store_offset, RV_REG_ARENA, ctx);
+-		store_offset -= 8;
+-	}
+-
+-	/* store TCC from RV_REG_TCC to stack */
+-	emit_sd(RV_REG_SP, store_offset, RV_REG_TCC, ctx);
+-	ctx->tcc_offset = store_offset;
+-
+-	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
++	stack_adjust = normal_stack_adjust(ctx) + bpf_stack_adjust;
++	emit_normal_prologue(ctx, stack_adjust);
+ 
+ 	if (bpf_stack_adjust)
+ 		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
 -- 
 2.55.0
 
