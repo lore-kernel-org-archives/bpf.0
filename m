@@ -1,40 +1,40 @@
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96E43D955F;
-	Wed, 22 Jul 2026 08:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB65648A2CD;
+	Wed, 22 Jul 2026 08:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784710174; cv=none; b=ikmYGK0FMRXPI4moW0eq7oKno917jTprhQkJWsr+lBrTgBxxasZqpwn32zZurdIIgt42LZDifENIJbys4xH1c1MyJ4AR1z/kgrVCFf56b2k12lIyjGGiOgwNIQebVAC+7VwFC+mX/8ZxrK3iriKM4ohPhH9wSLh93wp4FZH/HbA=
+	t=1784710262; cv=none; b=ql/gkg4qXV8HQ1ei8jxG8qH64QY/udNxkQpVCW30YZsf4JST4seifHr9NA4oPKtttboCjZNuBP7hPjmankIx63bgGTk2rjk5iTRim6odGIFSYzNPvUKxPRjbXY7Jh4IJcn+vU5XX2XILufNkdg+sYqQMp+d6IcJHUbRf19bvuOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784710174; c=relaxed/simple;
-	bh=0eJ51hMEsT4i3G2wfs25Efu3Dg4DjZJuEOzTbGfJxgQ=;
+	s=arc-20240116; t=1784710262; c=relaxed/simple;
+	bh=QbI6v2ttlIdiUfDzOHseEmFNkcpC+uWWFPVwzeay0uI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=eiTTcYpc0NZSH6mcsAN2M+hbhjrzzO9nq8NSFpHrSKH6Z6gfY80QSyYoqtn3Ayv4aYrPkIKar0zKfhRo0N2CxQ+iNLHmKmB4y33fzVhQ8y1n1bWah26Oe3Ss5dlIfkEKzNQBFutUfSuUr5VagHdGoyZwbKc242PL/AGRT0z5Bh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=1asIkeXV; arc=none smtp.client-ip=113.46.200.217
+	 In-Reply-To:Content-Type; b=Y5WovADe07CECD1dndfZU+i1fzlcVSynAaioLXcOxwfi+ERxeHPWpE6rwpR0svRU5DMTpt6v8ln5najCPoubFEcR0NRvB05ISWDLy6yDrjRtyu+xw3odC912ViEi91zcqwNFChcJb7dZVNe2337xjIfqlQH9sVhlhgUzSOhSGjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=DT6kQEN3; arc=none smtp.client-ip=113.46.200.227
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="1asIkeXV"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="DT6kQEN3"
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=wP2YIMoJu7BNs5/6oLWSmAw++AAZluHFpCpirm2hGzQ=;
-	b=1asIkeXVDKKfx8MmR/G4t9RG3MC6sJXRoxCLXoqrhDE47S3vQQv/TSAuNs41yLZm2qJAri384
-	O1UkJa7Sq+NKsUdYeTRweydQ48biIaTTIoFHUbCQRJ1eC+4nuow7+vN+iK3NRjK8l2Hd7zqkmKh
-	gtC8cGYjFY8Omn25ydT5DDk=
-Received: from mail.maildlp.com (unknown [172.19.162.140])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4h4nkD3StqzcZyH;
-	Wed, 22 Jul 2026 16:39:48 +0800 (CST)
+	bh=X8gXVDezIp61XwBaCqIx2DoFEqrx8gFK3iA3Tx+5yHs=;
+	b=DT6kQEN3IBX7VPzkdHCBoONCAT6Nj64N2K5AYF/6CDt6EGSm4NPzDPdPYdNUrBk67dIdizj1v
+	0B2z+zuBvAlkBSUrLVa6eAdBV5I/eN0gp/D/sVXUip8lBz/ydNNrVBXEdNV0OHJfZjVAFWAhBjm
+	XNzbTG/L4/+/JjTj1zSXwYo=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h4nm04SHMznTVd;
+	Wed, 22 Jul 2026 16:41:20 +0800 (CST)
 Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 35444202E6;
-	Wed, 22 Jul 2026 16:49:17 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id DC4CF4048B;
+	Wed, 22 Jul 2026 16:50:51 +0800 (CST)
 Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
  (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Wed, 22 Jul
- 2026 16:49:16 +0800
-Message-ID: <cb2d9feb-bf4b-4625-a9c5-2f71381214b1@huawei.com>
-Date: Wed, 22 Jul 2026 16:49:15 +0800
+ 2026 16:50:50 +0800
+Message-ID: <eb7f8617-7a47-4b9c-957e-86c9cd742f7a@huawei.com>
+Date: Wed, 22 Jul 2026 16:50:50 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,8 +42,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6.6.y/6.12.y/6.18.y 1/2] bpf: Fix ld_{abs,ind} failure
- path analysis in subprogs
+Subject: Re: [PATCH 6.6.y/6.12.y/6.18.y 2/2] selftests/bpf: Add tests for
+ ld_{abs,ind} failure path in subprogs
 Content-Language: en-US
 To: Philo Lu <lulie@linux.alibaba.com>, <stable@vger.kernel.org>
 CC: <daniel@iogearbox.net>, <info@starlabs.sg>, <ast@kernel.org>,
@@ -54,85 +54,208 @@ CC: <daniel@iogearbox.net>, <info@starlabs.sg>, <ast@kernel.org>,
 	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
 	<dust.li@linux.alibaba.com>
 References: <20260722073908.72382-1-lulie@linux.alibaba.com>
- <20260722073908.72382-2-lulie@linux.alibaba.com>
+ <20260722073908.72382-3-lulie@linux.alibaba.com>
 From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260722073908.72382-2-lulie@linux.alibaba.com>
+In-Reply-To: <20260722073908.72382-3-lulie@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
  kwepemf100007.china.huawei.com (7.202.181.221)
 
 
+
 On 2026/7/22 15:39, Philo Lu wrote:
 > From: Daniel Borkmann <daniel@iogearbox.net>
 > 
-> commit ee861486e377edc55361c08dcbceab3f6b6577bd upstream.
+> commit e0fcb42bc6f41bab2895757d6610616b3820eff7 upstream.
 > 
-> Usage of ld_{abs,ind} instructions got extended into subprogs some time
-> ago via commit 09b28d76eac4 ("bpf: Add abnormal return checks."). These
-> are only allowed in subprograms when the latter are BTF annotated and
-> have scalar return types.
+> Extend the verifier_ld_ind BPF selftests with subprogs containing
+> ld_{abs,ind} and craft the test in a way where the invalid register
+> read is rejected in the fixed case. Also add a success case each,
+> and add additional coverage related to the BTF return type enforcement.
 > 
-> The code generator in bpf_gen_ld_abs() has an abnormal exit path (r0=0 +
-> exit) from legacy cBPF times. While the enforcement is on scalar return
-> types, the verifier must also simulate the path of abnormal exit if the
-> packet data load via ld_{abs,ind} failed.
+>    # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t verifier_ld_ind
+>    [...]
+>    #611/1   verifier_ld_ind/ld_ind: check calling conv, r1:OK
+>    #611/2   verifier_ld_ind/ld_ind: check calling conv, r1 @unpriv:OK
+>    #611/3   verifier_ld_ind/ld_ind: check calling conv, r2:OK
+>    #611/4   verifier_ld_ind/ld_ind: check calling conv, r2 @unpriv:OK
+>    #611/5   verifier_ld_ind/ld_ind: check calling conv, r3:OK
+>    #611/6   verifier_ld_ind/ld_ind: check calling conv, r3 @unpriv:OK
+>    #611/7   verifier_ld_ind/ld_ind: check calling conv, r4:OK
+>    #611/8   verifier_ld_ind/ld_ind: check calling conv, r4 @unpriv:OK
+>    #611/9   verifier_ld_ind/ld_ind: check calling conv, r5:OK
+>    #611/10  verifier_ld_ind/ld_ind: check calling conv, r5 @unpriv:OK
+>    #611/11  verifier_ld_ind/ld_ind: check calling conv, r7:OK
+>    #611/12  verifier_ld_ind/ld_ind: check calling conv, r7 @unpriv:OK
+>    #611/13  verifier_ld_ind/ld_abs: subprog early exit on ld_abs failure:OK
+>    #611/14  verifier_ld_ind/ld_ind: subprog early exit on ld_ind failure:OK
+>    #611/15  verifier_ld_ind/ld_abs: subprog with both paths safe:OK
+>    #611/16  verifier_ld_ind/ld_ind: subprog with both paths safe:OK
+>    #611/17  verifier_ld_ind/ld_abs: reject void return subprog:OK
+>    #611/18  verifier_ld_ind/ld_ind: reject void return subprog:OK
+>    #611     verifier_ld_ind:OK
+>    Summary: 1/18 PASSED, 0 SKIPPED, 0 FAILED
 > 
-> This is currently not the case. Fix it by having the verifier simulate
-> both success and failure paths, and extend it in similar ways as we do
-> for tail calls. The success path (r0=unknown, continue to next insn) is
-> pushed onto stack for later validation and the r0=0 and return to the
-> caller is done on the fall-through side.
-> 
-> Fixes: 09b28d76eac4 ("bpf: Add abnormal return checks.")
-> Reported-by: STAR Labs SG <info@starlabs.sg>
 > Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Link: https://lore.kernel.org/r/20260408191242.526279-2-daniel@iogearbox.net
+> Link: https://lore.kernel.org/r/20260408191242.526279-4-daniel@iogearbox.net
 > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> [ Dropped visit_abnormal_return_insn changes: depends on 7.0 symbols from
->   e40f5a6bf88a ("bpf: correct stack liveness for tail calls");
->   Hunk1: adapted IS_ERR/PTR_ERR to !branch/-EFAULT to match push_stack()
->   NULL-on-failure convention. ]
-
-These versions does not introduce consumers corresponding to the output
-of jump tables; therefore, the assignment of jump tables is not involved.
+> Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
 
 Reviewed-by: Pu Lehui <pulehui@huawei.com>
 
-> Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
 > ---
->   kernel/bpf/verifier.c | 17 +++++++++++++++++
->   1 file changed, 17 insertions(+)
+>   .../selftests/bpf/progs/verifier_ld_ind.c     | 142 ++++++++++++++++++
+>   1 file changed, 142 insertions(+)
 > 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index f638b2d3a42fb..3f74767e47484 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -15119,6 +15119,23 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
->   	mark_reg_unknown(env, regs, BPF_REG_0);
->   	/* ld_abs load up to 32-bit skb data. */
->   	regs[BPF_REG_0].subreg_def = env->insn_idx + 1;
-> +	/*
-> +	 * See bpf_gen_ld_abs() which emits a hidden BPF_EXIT with r0=0
-> +	 * which must be explored by the verifier when in a subprog.
-> +	 */
-> +	if (env->cur_state->curframe) {
-> +		struct bpf_verifier_state *branch;
-> +
-> +		mark_reg_scratched(env, BPF_REG_0);
-> +		branch = push_stack(env, env->insn_idx + 1, env->insn_idx, false);
-> +		if (!branch)
-> +			return -EFAULT;
-> +		mark_reg_known_zero(env, regs, BPF_REG_0);
-> +		err = prepare_func_exit(env, &env->insn_idx);
-> +		if (err)
-> +			return err;
-> +		env->insn_idx--;
-> +	}
->   	return 0;
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
+> index c925ba9a2e74c..09e81b99eecb4 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
+> @@ -107,4 +107,146 @@ __naked void ind_check_calling_conv_r7(void)
+>   	: __clobber_all);
 >   }
-> 
-> --
-> 2.47.3
-> 
-> 
+>   
+> +/*
+> + * ld_{abs,ind} subprog that always sets r0=1 on the success path.
+> + * bpf_gen_ld_abs() emits a hidden exit with r0=0 when the load helper
+> + * fails. The verifier must model this failure return so that callers
+> + * account for r0=0 as a possible return value.
+> + */
+> +__naked __noinline __used
+> +static int ldabs_subprog(void)
+> +{
+> +	asm volatile (
+> +	"r6 = r1;"
+> +	".8byte %[ld_abs];"
+> +	"r0 = 1;"
+> +	"exit;"
+> +	:
+> +	: __imm_insn(ld_abs, BPF_LD_ABS(BPF_W, 0))
+> +	: __clobber_all);
+> +}
+> +
+> +__naked __noinline __used
+> +static int ldind_subprog(void)
+> +{
+> +	asm volatile (
+> +	"r6 = r1;"
+> +	"r7 = 0;"
+> +	".8byte %[ld_ind];"
+> +	"r0 = 1;"
+> +	"exit;"
+> +	:
+> +	: __imm_insn(ld_ind, BPF_LD_IND(BPF_W, BPF_REG_7, 0))
+> +	: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("ld_abs: subprog early exit on ld_abs failure")
+> +__failure __msg("R9 !read_ok")
+> +__naked void ld_abs_subprog_early_exit(void)
+> +{
+> +	asm volatile (
+> +	"call ldabs_subprog;"
+> +	"if r0 != 0 goto l_exit_%=;"
+> +	"r0 = r9;"
+> +	"l_exit_%=:"
+> +	"r0 = 0;"
+> +	"exit;"
+> +	::: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("ld_ind: subprog early exit on ld_ind failure")
+> +__failure __msg("R9 !read_ok")
+> +__naked void ld_ind_subprog_early_exit(void)
+> +{
+> +	asm volatile (
+> +	"call ldind_subprog;"
+> +	"if r0 != 0 goto l_exit_%=;"
+> +	"r0 = r9;"
+> +	"l_exit_%=:"
+> +	"r0 = 0;"
+> +	"exit;"
+> +	::: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("ld_abs: subprog with both paths safe")
+> +__success
+> +__naked void ld_abs_subprog_both_paths_safe(void)
+> +{
+> +	asm volatile (
+> +	"call ldabs_subprog;"
+> +	"r0 = 0;"
+> +	"exit;"
+> +	::: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("ld_ind: subprog with both paths safe")
+> +__success
+> +__naked void ld_ind_subprog_both_paths_safe(void)
+> +{
+> +	asm volatile (
+> +	"call ldind_subprog;"
+> +	"r0 = 0;"
+> +	"exit;"
+> +	::: __clobber_all);
+> +}
+> +
+> +/*
+> + * ld_{abs,ind} in subprogs require scalar (int) return type in BTF.
+> + * A test with void return must be rejected.
+> + */
+> +__naked __noinline __used
+> +static void ldabs_void_subprog(void)
+> +{
+> +	asm volatile (
+> +	"r6 = r1;"
+> +	".8byte %[ld_abs];"
+> +	"r0 = 1;"
+> +	"exit;"
+> +	:
+> +	: __imm_insn(ld_abs, BPF_LD_ABS(BPF_W, 0))
+> +	: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("ld_abs: reject void return subprog")
+> +__failure __msg("LD_ABS is only allowed in functions that return 'int'")
+> +__naked void ld_abs_void_subprog_reject(void)
+> +{
+> +	asm volatile (
+> +	"call ldabs_void_subprog;"
+> +	"r0 = 0;"
+> +	"exit;"
+> +	::: __clobber_all);
+> +}
+> +
+> +__naked __noinline __used
+> +static void ldind_void_subprog(void)
+> +{
+> +	asm volatile (
+> +	"r6 = r1;"
+> +	"r7 = 0;"
+> +	".8byte %[ld_ind];"
+> +	"r0 = 1;"
+> +	"exit;"
+> +	:
+> +	: __imm_insn(ld_ind, BPF_LD_IND(BPF_W, BPF_REG_7, 0))
+> +	: __clobber_all);
+> +}
+> +
+> +SEC("socket")
+> +__description("ld_ind: reject void return subprog")
+> +__failure __msg("LD_ABS is only allowed in functions that return 'int'")
+> +__naked void ld_ind_void_subprog_reject(void)
+> +{
+> +	asm volatile (
+> +	"call ldind_void_subprog;"
+> +	"r0 = 0;"
+> +	"exit;"
+> +	::: __clobber_all);
+> +}
+> +
+>   char _license[] SEC("license") = "GPL";
