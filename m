@@ -1,151 +1,214 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CD5037F304;
-	Thu, 23 Jul 2026 15:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784822220; cv=none; b=FchW67jFvXV4wrgHDTg28zkdAcWRJLN46s7fyAJ26Yp+QYKeXNoUr2+aCLwtiU51h5RR1PP6vCSU9Nm6xBuGFaLxB4zQxmxt5/5ZrwGk59IpV7A0a55MM9dDKXhNDmcQsmmaGx58YjpUGtJCnilo1Lh1+MIs3BDm2m3uHQxaNZs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784822220; c=relaxed/simple;
-	bh=VREs5+QRwYxVeFKSNZVzgDF2RvPY5lHS/WsHFZWNSjw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L7Hj+x+PlOBneRkVt0KCtAdtVYIkmf3wuyyyNAUjUsMiykVnh02MaQmGIbVVucTEvqLmYp9i3icahtstBWpKGSGohdFbk/sWSTK+YJo6uTFhOYbmYjJtA4eyJchZjV5LEnEbqHiTz7lwqPE8Wzg0zhRqU2ozD+kRzggYBffqq48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/RqNP4F; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED6447DF84
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 16:19:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784823582; cv=pass; b=TNNiN3jcsOX80UkhyXa369vKHxred17AHKmtuyn6x6DR/UdwzYs1CjRgUzQpcMFupEOl+dZZ2hoGitWtVQSfQZ0NjMNYE9W9m2U9okPDedIicNQr3Y6+U49DRJKEq9cCBL43/rwsmexQzSWYazaqxA81T8frv/aSWC4MX4ENh9w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784823582; c=relaxed/simple;
+	bh=CGTehmPoZtpkgLUVZInj667j2ApkFO752c0wLjhRzDA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CDhnqTncrmz4GC17w10rtHZ/cYIKSTBH2lW2/IGgLWM7GAqQ/zd8WqMu/E+/e1xWeeglwW6qYaH/SSh45g35WIUaL3ZPjQfuy/wkzKi6bi4w6NNzQsVGBjHMjSyeY9cvQ5dzmStdaquEAlPUnl42oIcY7NZbadKFY+a5pybsSJw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QxYuVdgT; arc=pass smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j/RqNP4F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E771C1F000E9;
-	Thu, 23 Jul 2026 15:56:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784822218;
-	bh=hnLlhWiRynP6/ofod3foQ+AAh+0y6A4DSv+/njyBLhk=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=j/RqNP4FNb4Os1gXyhKtdKfwqPKeDbNELuRzvh9cpAYIRLQx8uOQLbNhmD9pZKMcy
-	 vJHxgcX9VvyQ0Ix2KMvnDd7a0rJWynXgNAjgvdgzDtV9QzpXumbmDBCghjOj4JnEp5
-	 AceACFVIAsARZeXulWzpbGJ0DQz/aSNHU/JaehDbcRnsGUZbUQ4JWrf1vsqIkn+uKj
-	 NQ+EFQmFq7SPD/5Mrkc9RgV9meMuzI+QPAAwTH1zy8W9NJtQ5HWVWDE80LS96AcWau
-	 aZW2TIyCB0+rWBoLJ4Y3CzHIT9z4VY78ZajWpZU4ChbKz4jTg/ZenZLlQq6tSUx1My
-	 GWWGHnqdz8ghQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 9B657CE0AD8; Thu, 23 Jul 2026 08:56:58 -0700 (PDT)
-Date: Thu, 23 Jul 2026 08:56:58 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>, puranjay@kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH] mm/kmemleak: report RCU-tasks quiescent states during
- the scan
-Message-ID: <ffa5d8d2-1157-4a30-995c-ddae3566e3a4@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
- <20260720153917.2e428e489cd0873ac6d4e6da@linux-foundation.org>
- <5b83b0a0-708a-458a-bdbd-41c6d4610349@paulmck-laptop>
- <amCT9QEgJRsLIb_y@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QxYuVdgT"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-81ed073fed0so8360737b3.0
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 09:19:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784823566; cv=none;
+        d=google.com; s=arc-20260327;
+        b=QxbqaHHMsOkjd9IcJixf6dCJmFq468ORF2WnD7gRvXllvd0bDLFPNPP8r/CbPULJg3
+         PgGsAHGVNDIwY4jH14Q5wZjLc2IEIb7IpeMmvXow22qrKVxEyYgJqkhp5fJwYaKJl4Dx
+         udr2+Xa58ngvqAYigy/oj6azo7e2SvHpFifYD4FEW4jvelScByrLh2OgU31NII5oIc0N
+         kluHvNb+l4JeVIRiFmq2zlz/Rf6wFdQd8QBD9VwrEEr86wYPG9bBZ0KG5nASfIlG9dAD
+         48+ef/p4a5Yn3CCy2/poXtdjnEaRiunwX/ZkzUEGgU2t0cmCVay7/LIH0yVK7zL7yVt6
+         NPaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=U7KT+w2KO22zzr4U0Av/AbpkMD4h2JR4x2ATdiLmsbY=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=ptQ3o2rngg8ohDjp7BNHXQubEsxvFp2WToIPTiZa8ldnT6/xQMjuEANtVOUETEKpLD
+         sg7Y4QYw0iSsx5GaJMprZn/HLCgz1MgutCGFbIgkz+wmxVPq676wqAbyOX4XgCSQWFGN
+         JQtxnl74RDHsLy2A4KKY5j6D939+Oe/nXJ596mnA1fcP/qY6cYw5ZYAQKQrO06lJ/SKf
+         GqbGWEPBRLed7JL+LhexFr8xL/K8PekB3DBjm/8LDA7l+jyr4rrkd/yU2+zjwA1FZLrg
+         qyCIGP8zQri7ql/IVEFqUw9fEKh5rxyGxEZbO2eEQ6LaNQGXShN7UcgEl+MH0kloea5I
+         Hmyg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784823566; x=1785428366; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=U7KT+w2KO22zzr4U0Av/AbpkMD4h2JR4x2ATdiLmsbY=;
+        b=QxYuVdgTI7zt9b8p6AMmLWXc4pROgQ92ZR8jDtxGCk5GsjRJDXo6ler85X2GV3FzO+
+         l3X1kFu4+ZYh1a0BYGtVUdN3wTRyQdgk/QVIitEruuufg03fCX3pasWuoDSubw1hNY/X
+         /ACijPDhYjWIMZzpfCkP1knoL0WFkpdvR/i4+9L7/cCBEkq3JIU1KiWcLeXArZ0BAbvr
+         Ii0zENah1dJ7OkuDY2VpLDOT0/GjZ52GnkfIdiWN11q6kOuY7Ow2EGVx1YfSz62BHzxn
+         rV35AkCZXOYtK0lrkqSkXwNbhP0/6lYIgcR766VEjPvjd1LH1PLF4RtmbgkJcnq1uZw0
+         amug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784823566; x=1785428366;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=U7KT+w2KO22zzr4U0Av/AbpkMD4h2JR4x2ATdiLmsbY=;
+        b=DMdI1FPClVDJgdOGZaQbEwzGHc/8EJB7ZDWAPrdfVFJmnxeJIUpZlL39H51Exmkfej
+         P3g/wFiL9zdZafNRQz/+1wYAFIPGLo81el8516mnTIsw7wnAJiLSwJ40tp/w0wQmTIjC
+         LhTK+JHSTf6ZNvk/NX0vxFlbcSWsCO4WoqOxl0/9FRrPcgV0h3VztiTpunzkCrIzVgsQ
+         UG9PpmAokh2Bx9fvkNRBgYEoaneP4I8k4vXVFFtAyNTIi3Dq1B3EhiX0sVSAsCpPvHGG
+         nTBJZf0kKaD6VJgFV9olPvl2itsrPNqHhqktI9a5aLPmaY4S2bkETgp8kSUit4CQK/Ly
+         s0YA==
+X-Gm-Message-State: AOJu0Yy6u07n4QHRjIpehr8kO8uDVLWSdHog3+xPlH4VKDILD5gEKdTp
+	SrjgxbbbFoIyA0QaHfiKpGpuezhD0tSYSvtmLEjwdfU7wo52PJ4dW95D8GgOascCaDaH8Uf/m0a
+	QLlp3C0IXQ1jJmVu1IfSOUHoVPfTzL8OvTq64
+X-Gm-Gg: AR+sD1209SG91NNzp0552RbERFSL6+LfSXPHzqMrb9FEcRRIPUX6+QZRZzf6PiPJWhx
+	ZtVe14lzYtShFt7mMXxKGdQdPck+QzbA6D2b5JbzuVk1//3f68+rIwMBZhYcUDIBXp1dLvx3f/g
+	xuYUXOAjG0drSFTFWPnNIhpl9hacL/hHIFZTI8T9omXuA7nEkeWtfVBsI8dsp5sAuqSGiPmIyw4
+	5/tX3Fm+DHtOtu0XZoU/cyycO6u23z3pO5BVEVBky84URAWd7A2azumDfM3/g==
+X-Received: by 2002:a05:690c:3389:b0:81e:fd36:ff73 with SMTP id
+ 00721157ae682-81f4c15ffc8mr11121537b3.5.1784823566010; Thu, 23 Jul 2026
+ 09:19:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <amCT9QEgJRsLIb_y@gmail.com>
+References: <20260723050806.1158442-1-ameryhung@gmail.com> <20260723050806.1158442-3-ameryhung@gmail.com>
+ <20260723052519.261291F000E9@smtp.kernel.org>
+In-Reply-To: <20260723052519.261291F000E9@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 23 Jul 2026 09:19:14 -0700
+X-Gm-Features: AUfX_mzdbE453_9nXvQOeKy14QwV2Y8p0rPt5LClYeWV1TsjmoAvbVTiTLVMQdg
+Message-ID: <CAMB2axObD03d9mVhXgZqsk3HiruW3tpdjJ-M_WofWZziDX=Rrw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 02/18] bpf: Unify const map ptr argument
+ checking for helpers and kfuncs
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 23, 2026 at 06:26:11AM -0700, Breno Leitao wrote:
-> Hello Paul,
-> 
-> On Mon, Jul 20, 2026 at 09:21:17PM -0700, Paul E. McKenney wrote:
-> > On Mon, Jul 20, 2026 at 03:39:17PM -0700, Andrew Morton wrote:
-> > > On Mon, 20 Jul 2026 06:23:45 -0700 Breno Leitao <leitao@debian.org> wrote:
-> > > 
-> > > > kmemleak_scan() can run for ages on large debug kernels. It was
-> > > > causing some soft-lockups which I got fixed with commit
-> > > > 3175fcfec8b16baeb ("mm/kmemleak: avoid soft lockup when scanning task
-> > > > stacks") with our beloved cond_resched().
-> > > > 
-> > > > I've got the fix above deployed in the Meta fleet, and now I am seeing:
-> > > > 
-> > > >   INFO: rcu_tasks detected stalls on tasks:
-> > > >     task:kmemleak state:R ... nvcsw: 274/274 holdout: 1 idle_cpu: -1/3
-> > > >      scan_block
-> > > >      scan_gray_list
-> > > >      kmemleak_scan
-> > > > 
-> > > > and, worse, blocks the callers waiting on that grace period. Here a BPF
-> > > > struct_ops map free, which waits via synchronize_rcu_mult(call_rcu,
-> > > > call_rcu_tasks), is stuck long enough to also trip the hung task check:
-> > > > 
-> > > >   INFO: task kworker/...:bpf_map_free_deferred blocked for 122 seconds
-> > > >      __wait_rcu_gp
-> > > >      bpf_struct_ops_map_free
-> > > > 
-> > > > Then I've learned that cond_resched() is not an RCU-tasks quiescent
-> > > > state, so, we need to use stronger primitives.
-> > > > 
-> > > > Use cond_resched_tasks_rcu_qs() at the scan reschedule points so the scan
-> > > > reports an RCU-tasks quiescent state as it proceeds.
-> > > > 
-> > > > Inspired by commit b96285e10aad ("tracing: Have osnoise_main() add a
-> > > > quiescent state for task rcu").
-> > > 
-> > > I'll add
-> > > 
-> > > Fixes: c4b28963fd79 ("mm/kmemleak: rely on rcu for task stack scanning")
-> > > Cc: <stable@vger.kernel.org>
-> > 
-> > Thanks to all three of you!
-> > 
-> > This adds fewer than ten calls to cond_resched_tasks_rcu_qs(), but still
-> > more than doubles the number of such calls outside of the RCU subsystem.
-> > 
-> > Which is most likely just fine, and in any case absolutely should not
-> > get in the way of Breno's patch, which after all solves a real problem
-> > in the here and now.
-> > 
-> > Nevertheless, on the off-chance that over the next few months or years
-> > we start playing cond_resched_tasks_rcu_qs() whack-a-mole, I figured it
-> > would be good to get a head start on writing up alternatives.  An initial
-> > draft may be found here:
-> > 
-> > https://docs.google.com/document/d/1s3fn29SCTYVw9jak4iraNIVQR59Wk5C6_I-_eu-MfQA/edit?usp=sharing
-> > 
-> > TL;DR:  Should we get into a rousing game of whack-a-mole, alternatives
-> > include continuing as we are, making the existing calls to cond_resched()
-> > in turn call cond_resched_tasks_rcu_qs(), decoupling mutex-induced
-> > hung-task warnings from synchronize_rcu_tasks(), and various
-> > not-so-practical alternatives to RCU Tasks for trampoline synchronization.
-> > 
-> > Thoughts?  Especially thoughts on other schemes?
-> 
-> While debugging this issue, I was surprised to discover that cond_resched()
-> doesn't provide RCU-tasks quiescent states. That led me to
-> cond_resched_tasks_rcu_qs(), which is the stronger primitive needed for
-> long-running kernel threads like kmemleak_scan(). Is this the common
-> case for cond_resched()? I got the impression that kmemleak is the
-> extreme side, but, I have no data on this.
+On Wed, Jul 22, 2026 at 10:25=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+> - [Medium] NULL pointer dereference in `process_map_ptr_arg` when a BPF f=
+unction accepts multiple map arguments.
+> - [Low] Incorrect and misleading register numbers in `process_map_ptr_arg=
+` verifier error message.
+> --
+>
+> --- Patch [2]: [PATCH bpf-next v1 02/18] bpf: Unify const map ptr argumen=
+t checking for helpers and kfuncs ---
+> commit e4d2232623c3b71f4ec65054cb7cebf7737a4120
+> Author: Amery Hung <ameryhung@gmail.com>
+>
+> bpf: Unify const map ptr argument checking for helpers and kfuncs
+>
+> This commit factors out the map pointer argument checking logic for both
+> helpers and kfuncs into a single process_map_ptr_arg() function. It uses
+> the bound map's btf_record to derive the object name (timer, workqueue,
+> or bpf_task_work) for diagnostic messages.
+>
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index e8c76abbf76a2..bff51aff25579 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> [ ... ]
+> > @@ -8274,6 +8274,50 @@ static int get_constant_map_key(struct bpf_verif=
+ier_env *env,
+> >
+> >  static bool can_elide_value_nullness(const struct bpf_map *map);
+> >
+> > +/* Record the bpf_map argument of a helper or kfunc call in meta->map.
+> > + *
+> > + * When meta->map is already set from an earlier argument (a timer, wo=
+rkqueue or
+> > + * task_work object that is bound to a map), reject a map pointer that=
+ does not
+> > + * match it. That object sits in the register right before the map arg=
+ument, and
+> > + * its type is taken from the bound map's record for the diagnostic.
+> > + */
+> > +static int process_map_ptr_arg(struct bpf_verifier_env *env, struct bp=
+f_reg_state *reg,
+> > +                            argno_t argno, struct bpf_call_arg_meta *m=
+eta)
+> > +{
+> > +     int map_regno =3D reg_from_argno(argno);
+> [ ... ]
+> > +     if (meta->map.ptr &&
+> > +         (meta->map.ptr !=3D reg->map_ptr || meta->map.uid !=3D reg->m=
+ap_uid)) {
+> > +             struct btf_record *rec =3D meta->map.ptr->record;
+> > +             const char *obj_name =3D "workqueue";
+> > +
+> > +             if (rec->timer_off >=3D 0)
+>
+> [Severity: Medium]
+> Will this cause a NULL pointer dereference in the verifier if a kfunc
+> accepts multiple map pointers?
+>
+> If a custom kfunc or future helper takes two map pointers, such as
+> void *a__map and void *b__map, process_map_ptr_arg() will process the
+> second map and see meta->map.ptr already set by the first.
+>
+> If the first map was a standard map without special fields, its record
+> pointer is NULL, causing rec->timer_off to crash.
+>
+> Should we check if rec is NULL before accessing its fields?
 
-And that discovery did in fact lead you correctly, and hence my
-giving you a Reviewed-by.
+Probably not.
 
-> Worth noting that commit 7dadeaa6e851e7 ("sched: Further restrict the
-> preemption modes") continues to narrow PREEMPT_NONE, so the future of
-> cond_resched() itself may be uncertain, no?
+This isn't triggerable because no helper or kfunc takes two map arguments.
 
-Especially given that one of the explicitly stated goals of lazy
-preemption was in fact to eliminate cond_resched().  ;-)
+If the two-map use case ever appears, the logic would need reworking
+first regardless since it currently rejects a second different map.
 
-Getting back to your point about kmemleak possibly being extreme, as far
-as I know, none of us have data on how many conversions of cond_resched()
-to cond_resched_tasks_rcu_qs() will be required, or, for that matter,
-how many additions of cond_resched_tasks_rcu_qs() above and beyond
-current cond_resched() instances will be required.
+>
+> > +                     obj_name =3D "timer";
+> > +             else if (rec->task_work_off >=3D 0)
+> > +                     obj_name =3D "bpf_task_work";
+> > +
+> > +             verbose(env, "%s pointer in R%d map_uid=3D%d doesn't matc=
+h map pointer in R%d map_uid=3D%d\n",
+> > +                     obj_name, map_regno - 1, meta->map.uid, map_regno=
+, reg->map_uid);
+>
+> [Severity: Low]
+> Can the hardcoded map_regno - 1 produce confusing or negative register
+> numbers in the verifier error message?
+>
+> If the map argument is passed on the stack (e.g. more than 5 arguments),
+> reg_from_argno() returns -1, making the printed registers -2 and -1.
+>
 
-There were concerns raised off-list, so I figured that it was time
-to lay out what we do know, hence the above gdoc.  I very much hope
-that we don't need many more calls to cond_resched_tasks_rcu_qs(), and
-thus that the time I spent writing that turns out to be wasted time.
-But better safe than sorry!
+I will use reg_arg_name() when printing the debug msg.
 
-							Thanx, Paul
+> Additionally, if a future kfunc separates the object and map arguments,
+> map_regno - 1 will point to the wrong register.
+>
+> Could we retrieve the exact register or stack slot number for the
+> bound object dynamically instead of assuming strict adjacency?
+
+No need to change now. This block needs rewriting when that use case appear=
+s.
+
+>
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     meta->map.ptr =3D reg->map_ptr;
+> > +     meta->map.uid =3D reg->map_uid;
+> > +     return 0;
+> > +}
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723050806.11=
+58442-1-ameryhung@gmail.com?part=3D2
