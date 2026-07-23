@@ -1,40 +1,86 @@
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8B436EA88;
-	Thu, 23 Jul 2026 10:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08352F1FEC
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 10:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784801819; cv=none; b=ghxfFZMsFC/YDTzj2zj+zayDweZ/3yB/S4aYnj7zma5oFHIiPVigcRGtkHm1cuqdhqHpFKuLLRHwoPANhCz52nl5ctJJrJ837qG5b/IWiEP5PrxjajnWlCJ4fSMQMydiFjOrVgVTycbj09WDNTckI7e3yeW41poCKH8L8g9jDUg=
+	t=1784802006; cv=none; b=K93PBuTOVif10FsQ2oGQh/LYlQ2XYF7RFM87+JWZNhJoxjerrrVrIqVEz880oLW1xEzEj9LqCUNxTUEKXfkhRNx9VNawF2dqFyDrQN6J45BnuYtsa++UHLOsrMYHGzJ5uRbWyqcB++DEN0NOmBtkPlnjeg0zaGKOB3BTN6jMCAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784801819; c=relaxed/simple;
-	bh=PK6P+wFHXI6nz4eun4nujdXTpCe4tNVG5S92nDWOQoY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=JzfshgXMQhO6/k0tGG+GYjySwemuBFve1f9vUnqbItzUyTkOpuRsTOQJbhgTkgeZXa6lnxpxdCFUboUTNLFMHo6MqZE1/ZfaRW/JjKXjkuDYFsJ5o8yGOxetR4J/1dBEfbQyosfiSwrdpHcwF2igkGjN2sXk34I67JWBm+TAclM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=EZBGNbQ3; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1784802006; c=relaxed/simple;
+	bh=zkE1CxynhhuX45SZ6JJT+YmMZiFe1viNbE9YBLAS9Uk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=NFjqZzJjy+RQ0QyimHbfQOf311LgScPqxmdWCDvVNeszsNVQTusuUa/T0n6z7sjCl8/YI4Lg528bwkNOiZSegv0bjxWs8NGYJ5bztMhWfxoOGPM0fzuBbc03YQMMdzsoS/g1pZOJrHYsbnOxiA3qBWi1mGMVA2d262S42o13XYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O3WJQhNC; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Nyv8cTFq; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="EZBGNbQ3"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=dUFTOvgZ/NRiie8IA2L45PJfQB6b+Osy4helS/3oESs=;
-	b=EZBGNbQ3nFpV8CvS+pgqGoiyuepQ3JsA2FK9chOK3W+yWhYCqozMwNRB+EZqNuqIaXyA7l8s1
-	FYs2phNai77DJr3QVA/lZ7Z7NnRXULvZ5+zIR4zoRrnkzFl9xo293UhrNqB9Yu6wPlVsBvxEyxm
-	4BqkDnPz5etgaTjLXZn+NY8=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4h5Rcz1W3cz1T4Lb;
-	Thu, 23 Jul 2026 18:07:31 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3C76940561;
-	Thu, 23 Jul 2026 18:16:53 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Thu, 23 Jul
- 2026 18:16:52 +0800
-Message-ID: <aa2c4ede-234d-4cb7-8ff1-163f1495bafc@huawei.com>
-Date: Thu, 23 Jul 2026 18:16:52 +0800
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O3WJQhNC";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Nyv8cTFq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784802001;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c9dgMMoQ1YTrpRt1/B5y0R7DlFAMJKah05nee02sPkU=;
+	b=O3WJQhNCGvRqAQP+rDL2UTHi+hD7rvAJkQ3RKHY31FXTGhl97QSBLmyuLVVoWOgGC+Dioz
+	6Iozp3xDo/EJPFpbeS67rcGyvpv1lRYKpn2WDpPYUI8a63IvnEvScx/EcwBI1kUd2BnDS7
+	Z6gbh4GVYEyWPgrzWcro+vM3UgN7R38=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-588-Z_o5xSh2M5m2Sm6A3Tkzyg-1; Thu, 23 Jul 2026 06:18:28 -0400
+X-MC-Unique: Z_o5xSh2M5m2Sm6A3Tkzyg-1
+X-Mimecast-MFC-AGG-ID: Z_o5xSh2M5m2Sm6A3Tkzyg_1784801907
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-490a767c7dcso4516025e9.2
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 03:18:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1784801907; x=1785406707; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=c9dgMMoQ1YTrpRt1/B5y0R7DlFAMJKah05nee02sPkU=;
+        b=Nyv8cTFq6wSkw9CFQGc+//PSIWnzoPn5H/e48wHEr3Pee2m2t8sfuEdKXoNR1f2HOG
+         OYUzltGeNuGWsGLWewvuSYuRcH5RAkOvCn7Q4Ea/g/H8/Ge0SB1O+I31RfgT4KaYb3qb
+         7A6cFWMJTiPiFF1vQDKuJ6kI7rVfIAB/kvfrou+vhW5OjQy3O8U9rr4BDr2bKvJjSwKr
+         E238Co3rmqPohu54YH4nnW2gzQR5lDY3ysz5wmPFTVQPjhYIYgRZbN8gPJaJe27WzTKC
+         I3N/TiNtHxa4yVzvhpHCoobLTVxNFkv1v56C671Ki/IxWFQWnHspCBM0hh9zY/mX78gH
+         ficA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784801907; x=1785406707;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=c9dgMMoQ1YTrpRt1/B5y0R7DlFAMJKah05nee02sPkU=;
+        b=EEfcbv0XId2IWLJpE25XP2MKLlkZjImE3AyxffXiJlFjhoLBjtRUYmtrcwkbsdZRlG
+         kOTyYHhKhSUszeiUwGVDT6dxt1sRwTdKvICE++3qr6Ae4eEd6x56ETYPGgjhOALF/kA6
+         2os7pOKlAMhoYUCqJoboC7a09GkSxc/2TvITxjMhVAv/5jiYbp1lyf/zH/dvoH6IZLky
+         pG+axh6i+VjUZMvXXt9rId6fVpGaVTS3asmUAWoApZOpb4E+7/4qFfgqcPfZLlaH0W9R
+         IGfTtXrrazc6tNvNrtElf3dt68OqUF+Fyr+o/+ijN2HNrziroFySnvVsdrFjkfaoLCP+
+         UCVg==
+X-Forwarded-Encrypted: i=1; AHgh+RrOTnv5asmPwNVPMlTbh0UQlTX/HmbZC0lzFCM62G/nKzkH2QxEWg+LBi8zjNmSgBqwK2I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUjvb4Y4ngzAmTq5rOcUd2MBUCzYx1kjWwDQ5aYW1lHLajeeA2
+	Mq7sjHWErkKaYsy8a0RNftAETbfWnSW7rwGknHCGkY0+YJhhDUqMTdTx30agOqrf7LzE1hiHqxU
+	CsELSVQR48Dsc/BJE2kLzVmW39KGuTy6+JKDn2EL8nih1lrvXg2a51A==
+X-Gm-Gg: AR+sD13l3cCupen8r1vzpYCItgWE1rQ3FJTJRBjyFLtIg9ttnbLcWuqnS/hMI0SeUoN
+	SUUYihK8SxAP/gXmJ7azHIqK2JqybxCUPDRgKpq6tN9iu27EdqP3SEwWVhcJiyTdEBOwj5cGGtT
+	JPByjN9ouWFXIkF7QjzPwD6LIEalKdMSxSye2IVJ6jNtVqYuidmPRC5xVGarBgLJorH+4nCz/xv
+	nYzr0Jffvueqz2nRrzlAM3DvER/d85gzUS2J9FLqae85xIbXJZe3sJYTYIkTTFQMKmmSP6guhxM
+	MdQyloSrPo9Qaf3wdtwGMzQKhr5xJ3bTvTZ323XHHzOHk3T82leCcCJd8Sn2fMHhPl4JpFV3Bid
+	52/Lun1wo5skkiXIDqyzKltXSU8TwWcMvn2BhOzG3/EJQyczhl0+6/RK9WlrzALf750CnUBKhhe
+	cmzA==
+X-Received: by 2002:a05:600c:4ecd:b0:493:c77c:108a with SMTP id 5b1f17b1804b1-49573d218camr25163895e9.36.1784801907444;
+        Thu, 23 Jul 2026 03:18:27 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ecd:b0:493:c77c:108a with SMTP id 5b1f17b1804b1-49573d218camr25163275e9.36.1784801906974;
+        Thu, 23 Jul 2026 03:18:26 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:5521:6b10:58fd:68f:7756:389d? ([2a0d:3344:5521:6b10:58fd:68f:7756:389d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956a6354a3sm218761215e9.10.2026.07.23.03.18.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jul 2026 03:18:26 -0700 (PDT)
+Message-ID: <d2014044-d410-466a-ae66-2a173dbdba82@redhat.com>
+Date: Thu, 23 Jul 2026 12:18:22 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,93 +88,67 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 0/3] bpf, riscv: add timed may_goto support
+Subject: Re: [PATCH net-next v12 4/4] net: mana: recover port on attach
+ failure in ethtool operations
+To: Dipayaan Roy <dipayanroy@linux.microsoft.com>, kys@microsoft.com,
+ haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, leon@kernel.org, longli@microsoft.com,
+ kotaranov@microsoft.com, horms@kernel.org, shradhagupta@linux.microsoft.com,
+ ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
+ shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rdma@vger.kernel.org, stephen@networkplumber.org,
+ jacob.e.keller@intel.com, dipayanroy@microsoft.com, leitao@debian.org,
+ kees@kernel.org, john.fastabend@gmail.com, hawk@kernel.org,
+ bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
+ yury.norov@gmail.com, pavan.chebbi@broadcom.com,
+ schakrabarti@linux.microsoft.com, gargaditya@linux.microsoft.com
+References: <20260711041415.3008868-1-dipayanroy@linux.microsoft.com>
+ <20260711041415.3008868-5-dipayanroy@linux.microsoft.com>
+From: Paolo Abeni <pabeni@redhat.com>
 Content-Language: en-US
-To: Feng Jiang <jiangfeng@kylinos.cn>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
-	<memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
-	<jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson
-	<luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Puranjay Mohan
-	<puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti
-	<alex@ghiti.fr>, Shuah Khan <shuah@kernel.org>, Ihor Solodrai
-	<ihor.solodrai@linux.dev>
-CC: <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <20260711041415.3008868-5-dipayanroy@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemf100007.china.huawei.com (7.202.181.221)
 
+On 7/11/26 6:10 AM, Dipayaan Roy wrote:
+> When mana_attach() fails during ethtool ring size or channel count
+> changes, the port is left in a broken state with no recovery
+> mechanism, requiring manual intervention to bring the port back up.
+> 
+> On VM SKUs without a netvsc fallback interface, this results in
+> complete loss of network connectivity to the VM.
+> 
+> Fix by scheduling queue_reset_work when mana_attach() fails. The
+> preceding patch ensures mana_detach() always completes its full
+> teardown (netif_device_detach + cleanup), so the reset handler's
+> mana_detach() takes the "already detached" early return, preserving
+> port_st_save for a successful mana_attach() recovery.
+> 
+> When mana_attach() fails, choose retry values that maximize recovery
+> chances: if the operation was an increase, fall back to the previous
+> working values; if it was a decrease but still above default, fall
+> back to defaults; otherwise use the minimum supported values.
+> 
+> Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+> Tested-by: Aditya Garg <gargaditya@linux.microsoft.com>
+> Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+sashiko gemini sees quite a bit of problem with the above approach:
 
-On 2026/7/23 13:41, Feng Jiang wrote:
-> This series adds RISC-V JIT support for the timed may_goto loop bound.
-> 
-> Patch 1 implements arch_bpf_timed_may_goto() and enables
-> bpf_jit_supports_timed_may_goto() so the verifier uses the timed
-> expansion path.
-> 
-> Patch 2 adds a test that checks R0-R5 are preserved across
-> arch_bpf_timed_may_goto() calls.
-> 
-> Patch 3 enables the verifier_may_goto_1, stream_cond_break, and
-> may_goto_interaction fastcall tests on riscv64.
-> 
-> Tested on riscv64 QEMU (rva23s64): may_goto programs load and JIT
-> correctly, and the 250ms timeout path works as expected.
-> 
-> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+https://sashiko.dev/#/patchset/20260711041415.3008868-1-dipayanroy%40linux.microsoft.com
 
-For this series:
+Also, changing user-setting in case of fallback is quite a bad thing to
+be avoided.
 
-Tested-by: Pu Lehui <pulehui@huawei.com>
+Skimming over the code, it looks like than pre-allocate all the
+resources and to a replace instead of detach/attach() looks feasible. I
+suggest investigating such path. I also think that this last patch (and
+possibly 2/4) could/should be in separate series.
 
-> ---
-> Changes in v5:
-> - Use REG_S/REG_L/SZREG in arch_bpf_timed_may_goto assembly. (Pu Lehui)
-> - Add __arch_s390x to the timed_may_goto_preserves_regs test. (Pu Lehui)
-> - Switch the preserves-regs test to SEC("syscall") to fix
->    bpf_prog_test_run() EINVAL.
-> - Link to v4: https://lore.kernel.org/r/20260722-riscv-bpf-timed-may-goto-v4-0-e117e6337bc7@kylinos.cn
-> 
-> Changes in v4:
-> - Add 'bpf-next' prefix to match the BPF kernel tree workflow.
-> - Add a test checking that R0-R5 are preserved across
->    arch_bpf_timed_may_goto() calls. Use bpf_get_prandom_u32() to
->    prevent the verifier from removing the checks via DCE.
-> - Rename may_goto_interaction_arm64() to may_goto_interaction().
-> - Wrap the arch_bpf_timed_may_goto address check to a single line.
-> - Link to v3: https://lore.kernel.org/r/20260715-riscv-bpf-timed-may-goto-v3-0-cf2a9c3d843f@kylinos.cn
-> 
-> Changes in v3:
-> - Set up the frame pointer in arch_bpf_timed_may_goto() so the function
->    does not break stack unwinding under CONFIG_FRAME_POINTER.
-> 
-> Changes in v2:
-> - Fix BPF_REG_0 being clobbered after arch_bpf_timed_may_goto() calls.
-> - Enable the may_goto_interaction fastcall test on riscv64.
-> 
-> ---
-> Feng Jiang (3):
->        bpf, riscv: add support for timed may_goto
->        selftests/bpf: test timed may_goto preserves R0-R5
->        selftests/bpf: enable timed may_goto tests for riscv64
-> 
->   arch/riscv/net/Makefile                            |  2 +-
->   arch/riscv/net/bpf_jit_comp64.c                    | 12 ++++-
->   arch/riscv/net/bpf_timed_may_goto.S                | 47 ++++++++++++++++
->   tools/testing/selftests/bpf/progs/stream.c         |  1 +
->   .../selftests/bpf/progs/verifier_bpf_fastcall.c    |  3 +-
->   .../selftests/bpf/progs/verifier_may_goto_1.c      | 62 ++++++++++++++++++++++
->   6 files changed, 124 insertions(+), 3 deletions(-)
-> ---
-> base-commit: a23a71823352e2d792dcaae25f1ebb744acbfc0b
-> change-id: 20260710-riscv-bpf-timed-may-goto-0dce564985af
-> 
-> Best regards,
+Finally and most relevant thing; AI review comments should be explicitly
+acknowledged by either debating them or addressing them. In both cases a
+reply on the ML is expected.
+
+/P
+
