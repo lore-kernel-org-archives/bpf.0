@@ -1,70 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E6C18D636;
-	Thu, 23 Jul 2026 09:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BC03F8EC9
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 09:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784800117; cv=none; b=rHqhT1BOXlq3BscQHPZU/gT2Fh9ySw7XQ6KQhQaH5fPNFVPxZUDqOFMHSBDI1CvyTjjAcREvYh/WKsG5GalgNGDLgoDKqWNPzhrmS3+2skm3aMXMLq2U/i2uzYiCLL4uBJ2ddKMi7+ueEMEQwfJ0zssecz0btvHzpZodI4gZT3g=
+	t=1784800330; cv=none; b=V5sahfB8hCQS7T0WyRXmGy75BUqY5TsJsGmJEgSzAPZJ8xCbJkJHDluZqMY9cIinzoeWfcE5i5KK+7SkBhlQD6+fVyPb1yZo/Uvj+HHzq+NE7XamsCZyGCyC6a6vluDZfB4vi2QmLM/1rzUiLR7XVnoLyV6fVbu6mRi2FVvwTIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784800117; c=relaxed/simple;
-	bh=H/+4S+fv6QO2xnc1ySQL8eb3xrPv51YPvcIph5XLI48=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=myz7E5BwfrkIc8V92cLcVpOfWYvB4qLK5jqrqvau9FOIohuLktvdWPo6I5fCxIi83GlL3VQfkilh5oRfozbuF/7Fbvwlzf6l+hm/nik4gyhOp/4OaVgysQe7EkKQUVBcZrJ6kNgZt72PtfJXX/lnpnsqdxX9TzW2FJO9w5rNIKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HHSmSnn+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784800330; c=relaxed/simple;
+	bh=PJrlFgAiuyfnK1/+yuPQLy7EwaiQj66gGELJG7MkhUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dUlRQ6T6TVJ5klDU9FScO7DhEnEzJoMjsSFTX6dIegvCyee5htb6ZRKk2wJ7sg9YP2HRDrC7wwGfNYtZGe6P/osDwhDiQVZVNdO0kAgWu1Wn17OGsIdgT2tINv/KqOmwHJD2TZjSwa7qQWRjWRAZrzGTZlpmVK617lUDVYUjVH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUVjTT8n; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HHSmSnn+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5484A1F000E9;
-	Thu, 23 Jul 2026 09:48:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784800115;
-	bh=+dWL2WyLdza5agh1ICZ7Nx+Hq+qtUv/yXiwZFwWI/ys=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HHSmSnn+/HNACtFMA+wD03tEujNgmNnlQpM3Yduz/XbJy2ltfHbcnGqeYRY0xE7ik
-	 9thWpb0RzHaYhYtRa5hVizMGFDj9kIH24LstX3OQgwKr8dOKImV7+k6JB4VtIZFl7/
-	 1U1xvjGZ8Y9O6PddLMH/JyAa3z+EteUzHvIVGqrP3m1bxZ0wvivYJuVSFR52+h7cvg
-	 YBC2Yx/3zSzpYpf29nGj80PA0ivBbnxBY6oiikOR3zHMzDCDfTsjTNRBjViZFThaxY
-	 VMsIy1bZfz9BYNBEKzBb4Z7hlsRkMpRc6Z6Kxshsr0DgW6K9jI/NJPqfbEb8MR6PDG
-	 TBj1FBNw8cvpA==
-Content-Type: multipart/mixed; boundary="===============4855712811431053212=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUVjTT8n"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4954df200ddso2818065e9.0
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 02:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784800327; x=1785405127; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=tWzwSmtqiucIJdON+AGZxd6bPRUb1cQqs4PNYmJoULQ=;
+        b=MUVjTT8n0sjO1HgO23tg8OBmx/l1ExTU2km2Cq5202klAStKj12AP5jeHSv4d6MDQP
+         H/YPs1cmeCqdUu6nlnBxyMmlSRPYtOwZ69ZdfyxBqbTUCvJ+8SJginCCh4UygVGPjIBI
+         YkxsrOtXmZq5dmjl8zWMyhzonXXBKdkItOTsfyG1q+cl/qpXnDYez47UdCKuo4qvEx4+
+         MWNz434T32uGRYgTpn3njtWLgT5bD+tBnWTnfVOaoVNyrEXmaZ7PmnObN2kWIkqmWB0e
+         CdphJ0VwH6v5MDV8vvctvQ5SJcXPyL9aIjRZ7eLI2WZLM96Ekke1C03mAfS0TLExSxm6
+         TzLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784800327; x=1785405127;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=tWzwSmtqiucIJdON+AGZxd6bPRUb1cQqs4PNYmJoULQ=;
+        b=L6OodvveUIgt9eu3W9WDk5STVfyXRCqfNNuDEvATRF+RCkNkUGvloWqDgenLiwLGX2
+         BEt9vDqvAhZm/If6qwVCZE95AhM83dx9bOGLwxBoSD2WSRysikk1TLGxECKwjbC9yp0g
+         4vgyONoqy0gpfBi7Dt7sfrzVyuS+uzpuK2hoWfhtugcAs2SClS47+JRPL8Vz1qHzWObQ
+         x9JNsghTvz2OOz0kyTOppR+iQTELQqQfSUbH3fHz6qx/QVy50Jn6IOLACNaiM467DXN/
+         k6xuKCtPtufi48keAFRZy8dw8jVHOxZFKmerf3+iirS+AdNEEfYT4wWsdfzTIS5asc5n
+         ivzA==
+X-Gm-Message-State: AOJu0YyWKAADbwyzzKm6jvjhtzP7fYI7iixUWRYDawngPujaaC/2+WdK
+	7l5QJtbBBx+GxiE2snWbuTGREZ2SPoMSKX9h+cT2EcElDrd4JIbvfPXl
+X-Gm-Gg: AR+sD129xrfjOwrezf3oexoAisVPJtYgPRFXLCeBptCKa+Vo7equr/kDfJ/YIPm7xZ2
+	7vuRp/1bcn7K0OoporZzae4TmdEv3RiSHDvevMHjjlXl85sgU6zD6vAxgBlnA6E8GNnG9sy3GU9
+	HDUsIX+qnZYUAAqbIooS+Rq/gImFkyLYq1ebyCgjAIcD51yv562Zomnav9R53PxEDW1PkFeeufw
+	YVkuhLnzFWmVD9QFSxTqqF01ryzNW0e9k8OiVRUbpMYfv7gcFjkbHm8tlWDjCtkIoMpe5pRC0y8
+	nRZNkkkKcutHz7CqOaEgk1d0/OcKMcfDlEEa5oah7RUXx6dioIeEBJ64rh5Ft6IhN0pGj5RHo1A
+	oX7gFjw63VVsW8z4GDlgDSYham9nG3nAvglRkzodH04JM5aCaJuwhF7c6/pp50gJXuLBV8PNDYN
+	WUO42XarJpZsAaOxozPEergP7Vo1xEyuRNAw==
+X-Received: by 2002:a05:600c:4f56:b0:490:e5c1:b8bf with SMTP id 5b1f17b1804b1-49573cd0b3emr23809065e9.13.1784800326532;
+        Thu, 23 Jul 2026 02:52:06 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956a4f25b6sm127202545e9.2.2026.07.23.02.52.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2026 02:52:06 -0700 (PDT)
+Date: Thu, 23 Jul 2026 11:52:04 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
+	kuba@kernel.org, liamwisehart@meta.com, martin.lau@linux.dev,
+	pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org,
+	ameryhung@gmail.com, kuniyu@google.com
+Subject: Re: [PATCH bpf-next v2 2/5] bpf: Add ksock kfuncs
+Message-ID: <amHkRPNLKl8dQomb@gmail.com>
+References: <20260722104454.165911-1-mahe.tardy@gmail.com>
+ <20260722104454.165911-3-mahe.tardy@gmail.com>
+ <amELAv1bgc9DP6WT@devvm7509.cco0.facebook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f95518d44faf4ae8e76c203ce75b47318a411790f7a06601d6c1ff9b0e88b562@mail.kernel.org>
-In-Reply-To: <20260723085100.482147-5-yangfeng59949@163.com>
-References: <20260723085100.482147-5-yangfeng59949@163.com>
-Subject: Re: [PATCH v3 bpf-next 4/5] selftests/bpf: Use calloc to allocate subtest_states
-From: bot+bpf-ci@kernel.org
-To: yangfeng59949@163.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 23 Jul 2026 09:48:34 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <amELAv1bgc9DP6WT@devvm7509.cco0.facebook.com>
 
---===============4855712811431053212==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Jul 22, 2026 at 11:27:32AM -0700, Stanislav Fomichev wrote:
+> On 07/22, Mahe Tardy wrote:
+> > Add BPF kfuncs that allow BPF LSM programs to create and use sockets for
+> > sending data. This provides a mechanism for BPF programs to emit
+> > telemetry. For this first patch set, it's restricted to SOCK_DGRAM
+> > socket types with IPPROTO_UDP protocol but could be easily extended to
+> > SOCK_STREAM and IPPROTO_TCP in the future.
+> > 
 
->     selftests/bpf: Use calloc to allocate subtest_states
->
->     An early return triggered by read_prog_test_msg leaves uninitialized elements,
->     which leads to memory corruption during free_test_states cleanup.
->
->     Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+[...]
 
-This looks like a fix for a memory corruption bug in
-dispatch_thread_send_subtests().  The uninitialized elements that
-free_test_states() later frees were introduced when the malloc() plus
-per-element memset() allocation was added.  Should this include:
+> > +
+> > +/**
+> > + * struct bpf_ksock_addr_opts - BPF kernel socket address parameters
+> > + * @family:	Address family: AF_INET or AF_INET6.
+> > + * @reserved:	Must be zero. Reserved for future use.
+> > + * @port:	Port in host byte order.
+> > + * @scope_id:	IPv6 scope ID for scoped AF_INET6 addresses, or zero.
+> > + *		Must be zero when family=AF_INET.
+> > + * @ipv4_addr:	IPv4 address in network byte order. Used when family=AF_INET.
+> > + * @ipv6_addr:	IPv6 address (16 bytes, network byte order). Used when family=AF_INET6.
+> > + */
+> > +struct bpf_ksock_addr_opts {
+> > +	__u8 family;
+> > +	__u8 reserved;
+> > +	__u16 port;
+> > +	__u32 scope_id;
+> > +
+> > +	union {
+> > +		__be32 ipv4_addr;
+> > +		__u32 ipv6_addr[4]; /* in6_addr; network order */
+> > +	};
+> > +};
+> 
+> Do you add these because of BTF type checking? Can we have something a bit
+> more orthodox like:
+> 
+> union bpf_sockaddr {
+> 	struct sockaddr_in sin;
+> 	struct sockaddr_in6 sin6;
+> };
+> 
+> ?
+> 
+> I hope we can just pass these to sock_create and make it do all the input
+> checking..
 
-  Fixes: 0925225956bb ("bpf/selftests: Add granular subtest output for prog_test")
+Yeah probably, I didn't think about this too much. I inherited it from
+the netpoll tentative where Daniel suggested to take inspiration from
+the fib lookup helpers[^1], which made sense for the netpoll call. If we
+can simplify this we can get rid of bpf_ksock_parse_addr(). Let me try.
 
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29993688332
---===============4855712811431053212==--
+[^1]: https://lore.kernel.org/bpf/4b64ecd8-eade-4676-822e-da73abe2421d@iogearbox.net/
