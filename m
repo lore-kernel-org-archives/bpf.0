@@ -1,50 +1,49 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB954A13AE;
-	Thu, 23 Jul 2026 13:03:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983534C954D;
+	Thu, 23 Jul 2026 13:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784811844; cv=none; b=ZvxVa3SX1JsQWetsxUmXUQpYQHIe+rKRhOGoYJ1VzlcuH3P7K07lfSxVy4caq8lHhh6qlnkJlZ6suxVFmO05GSXAxYApu0EjEbsuTLwTS6qArABcxmy1IhdhdrXDH7bPCEqoo49j8eSLx4FKpCNiByVlc3fSWzLWovheY5o0St8=
+	t=1784813191; cv=none; b=Q+BX6HL9qwRExd2oxIiRCR6PsbPMewCta4ktymZWbVxyJuQ2oaDwNV4gqGueI5q9fE/VEHn0+samxsGClitw7UjVyLmJJRmyPwCEpClOejTp27/ppOWvB5DDpYiJZaJ5xcsUHe7O7XmtKfzfRE/HTvZfRO6CfymBeTLkiYpGxmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784811844; c=relaxed/simple;
-	bh=oTAnUBaUEzt4zyDa+niOSvLgNwqzWK3+m/VkQ2R/cvw=;
+	s=arc-20240116; t=1784813191; c=relaxed/simple;
+	bh=BfiyJnllws9cYHkpNvsOL5Dl/9pGjYcfrPidHcqRQT8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nat7Khpq3c0u7Mi0pl243ywBqAiwNdHGvHyxavy1t3F6P0VwG6UnU+oUpPwUoeys189uCPvvKeo0ola7Klk53GZVpcz230/fuW2KyP02eHaWWMCSR5T8V4kPBCZAHJw8zqhry5kOI9if78xbslWHEumbhLrAKXeBDyme3QIFCho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lnPF723r; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=iUpAWCeBvYownq92+GbFlC8av6xYprTgcv4H5I0Ik2T537cbCbgqzirAHEgStWwRhQTJmfgNWC5FPsZjpUnjdEfa+cWPTShXJjYg0SBuG3+YWdwKyotCJQQCnwLWonPcZLxkWQl2S5t3giNp8H/bKakwfIfzHi5TvNSIfjU2CNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ZBI7Po3M; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lnPF723r"
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id ED7751F000E9;
-	Thu, 23 Jul 2026 13:03:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784811836;
-	bh=/UNnUz4YwAKrVQ/InK94XJgfLNOw/9jcKEV9DpAiR8k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lnPF723r/cXVAeQnCQ9a3K2JYgnHUs3gByTpQqIxNL4cHWsAupOtdq41VAgAEyuFE
-	 fp7t1GgVJRDV2PBwOTOArYsbZYTMm8I9Jl7SFt9ZyUfBROFwvlVt2QYYaTK6y9YPD3
-	 x6RF/yG++XRuGEdjEVQL7Q7kfrHz+X9VZUOPEUTcxG+m5ceRh86xi6zDVXngVukR3S
-	 J0FemnMozLdgQg6SIGG2EupPgkm5pTwsHmvy1Msto5t96j+CokeX6H7LiL68G9qcCK
-	 JGTElj4jqL/y3xL/d7NqNwOFdcKTsFQfDz9buixKywyO+DWIupp6H4iRakPcDjhNBP
-	 eaTPoT7+SJoQg==
-Date: Thu, 23 Jul 2026 16:03:52 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: "Miao, Jun" <jun.miao@intel.com>
-Cc: "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-	"Huang, Kai" <kai.huang@intel.com>,
-	"linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"Du, Fan" <fan.du@intel.com>, "x86@kernel.org" <x86@kernel.org>,
-	"challvy.tee@gmail.com" <challvy.tee@gmail.com>
-Subject: Re: [PATCH v5] x86/sgx: Report RCU-Tasks quiescent state in EPC
- sanitization loop
-Message-ID: <amIROIRvs_bmaoh9@kernel.org>
-References: <20260703084810.145567-1-jun.miao@intel.com>
- <ak-hG4mo57WiP616@kernel.org>
- <PH7PR11MB84559DCC54D746868A3424D39AC02@PH7PR11MB8455.namprd11.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ZBI7Po3M"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=XVvr4lvzSBINbdNbGS1serlGFMjFjvkzIEReevjxqGM=; b=ZBI7Po3M8vlmyjdMI+5EAnUcm1
+	BtdcBZWbjta0MQoOcU7hd9BXwRVc3X20IgHoq+909L8OJ2fZuKuFDDKY3u5UGhhoilHnSqrVJA8jO
+	HDl6k0dk/hvR7+VNeA01o1lqTuE3fobEgpnGWQQzkt4yY9R8W+pYS8rdsN8fx/oGB6TzyotVwijtr
+	yJohn68p9UvLuMhj6QLblQpMnv+Rcwj/ZQD9sIBXOf+NrPGWyG8dq7/Tz9uI1/TD5iHyYOfU88x5Y
+	USxcIRvVdP+3GfcT4KfLV6d2oFCGJGKAzbNrgg4qJvlkRsLWJG7oufQ2qazeRnjx1viDAR/h3lgmJ
+	M/O8ReKw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wmtRI-003oFU-1p;
+	Thu, 23 Jul 2026 13:26:16 +0000
+Date: Thu, 23 Jul 2026 06:26:11 -0700
+From: Breno Leitao <leitao@debian.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, puranjay@kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH] mm/kmemleak: report RCU-tasks quiescent states during
+ the scan
+Message-ID: <amCT9QEgJRsLIb_y@gmail.com>
+References: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
+ <20260720153917.2e428e489cd0873ac6d4e6da@linux-foundation.org>
+ <5b83b0a0-708a-458a-bdbd-41c6d4610349@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,41 +52,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH7PR11MB84559DCC54D746868A3424D39AC02@PH7PR11MB8455.namprd11.prod.outlook.com>
+In-Reply-To: <5b83b0a0-708a-458a-bdbd-41c6d4610349@paulmck-laptop>
+X-Debian-User: leitao
 
-On Thu, Jul 23, 2026 at 09:57:33AM +0000, Miao, Jun wrote:
-> >You should probably also say why cond_resched() does not trigger
-> >rescheduling. E.g., put that and delete the first sentence as it tells nothing
-> >and is confusing.
-> 
-> Hi BR, Jarkko,
-> 
-> How about I place the explanation as a comment above the code at the v6 version ?
-> See the description below.
-> 
-> Warm regards
-> Jun Miao
+Hello Paul,
 
-Yeah, that is exactly kind of reminder that would make sense there.
-
+On Mon, Jul 20, 2026 at 09:21:17PM -0700, Paul E. McKenney wrote:
+> On Mon, Jul 20, 2026 at 03:39:17PM -0700, Andrew Morton wrote:
+> > On Mon, 20 Jul 2026 06:23:45 -0700 Breno Leitao <leitao@debian.org> wrote:
+> > 
+> > > kmemleak_scan() can run for ages on large debug kernels. It was
+> > > causing some soft-lockups which I got fixed with commit
+> > > 3175fcfec8b16baeb ("mm/kmemleak: avoid soft lockup when scanning task
+> > > stacks") with our beloved cond_resched().
+> > > 
+> > > I've got the fix above deployed in the Meta fleet, and now I am seeing:
+> > > 
+> > >   INFO: rcu_tasks detected stalls on tasks:
+> > >     task:kmemleak state:R ... nvcsw: 274/274 holdout: 1 idle_cpu: -1/3
+> > >      scan_block
+> > >      scan_gray_list
+> > >      kmemleak_scan
+> > > 
+> > > and, worse, blocks the callers waiting on that grace period. Here a BPF
+> > > struct_ops map free, which waits via synchronize_rcu_mult(call_rcu,
+> > > call_rcu_tasks), is stuck long enough to also trip the hung task check:
+> > > 
+> > >   INFO: task kworker/...:bpf_map_free_deferred blocked for 122 seconds
+> > >      __wait_rcu_gp
+> > >      bpf_struct_ops_map_free
+> > > 
+> > > Then I've learned that cond_resched() is not an RCU-tasks quiescent
+> > > state, so, we need to use stronger primitives.
+> > > 
+> > > Use cond_resched_tasks_rcu_qs() at the scan reschedule points so the scan
+> > > reports an RCU-tasks quiescent state as it proceeds.
+> > > 
+> > > Inspired by commit b96285e10aad ("tracing: Have osnoise_main() add a
+> > > quiescent state for task rcu").
+> > 
+> > I'll add
+> > 
+> > Fixes: c4b28963fd79 ("mm/kmemleak: rely on rcu for task stack scanning")
+> > Cc: <stable@vger.kernel.org>
 > 
-> >> --- a/arch/x86/kernel/cpu/sgx/main.c
-> >> +++ b/arch/x86/kernel/cpu/sgx/main.c
-> >> -		cond_resched();
-> +               /*
-> +                * cond_resched() only schedules when TIF_NEED_RESCHED is set.
-> +                * During this boot-time loop that condition may not happen for a
-> +                * long time, so report an RCU-Tasks quiescent state explicitly.
-> +                */
+> Thanks to all three of you!
 > 
-> >> +		cond_resched_tasks_rcu_qs();
-> >>  	}
-> >>
-> >>  	list_splice(&dirty, dirty_page_list);
-> >> --
-> >> 2.32.0
-> >>
-> >
-> >
+> This adds fewer than ten calls to cond_resched_tasks_rcu_qs(), but still
+> more than doubles the number of such calls outside of the RCU subsystem.
+> 
+> Which is most likely just fine, and in any case absolutely should not
+> get in the way of Breno's patch, which after all solves a real problem
+> in the here and now.
+> 
+> Nevertheless, on the off-chance that over the next few months or years
+> we start playing cond_resched_tasks_rcu_qs() whack-a-mole, I figured it
+> would be good to get a head start on writing up alternatives.  An initial
+> draft may be found here:
+> 
+> https://docs.google.com/document/d/1s3fn29SCTYVw9jak4iraNIVQR59Wk5C6_I-_eu-MfQA/edit?usp=sharing
+> 
+> TL;DR:  Should we get into a rousing game of whack-a-mole, alternatives
+> include continuing as we are, making the existing calls to cond_resched()
+> in turn call cond_resched_tasks_rcu_qs(), decoupling mutex-induced
+> hung-task warnings from synchronize_rcu_tasks(), and various
+> not-so-practical alternatives to RCU Tasks for trampoline synchronization.
+> 
+> Thoughts?  Especially thoughts on other schemes?
 
-BR, Jarkko
+While debugging this issue, I was surprised to discover that cond_resched()
+doesn't provide RCU-tasks quiescent states. That led me to
+cond_resched_tasks_rcu_qs(), which is the stronger primitive needed for
+long-running kernel threads like kmemleak_scan(). Is this the common
+case for cond_resched()? I got the impression that kmemleak is the
+extreme side, but, I have no data on this.
+
+Worth noting that commit 7dadeaa6e851e7 ("sched: Further restrict the
+preemption modes") continues to narrow PREEMPT_NONE, so the future of
+cond_resched() itself may be uncertain, no?
