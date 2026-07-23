@@ -1,168 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E5573A5E97;
-	Thu, 23 Jul 2026 05:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63303AA9F4;
+	Thu, 23 Jul 2026 05:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784785157; cv=none; b=lLaadIT4UX7kB4cG7fOCRLb09Q4Uk7bIKbb4pNgCrkRA67tL3V+iCP6EI1DhiScfWqUUtLzEzTcqLYw6uckTOJaX0uB5kmHX8N0kVATGmL4YUZsotUbXJ+yEQt1uSeVjmXz9HSV/6bFpMYKlwQ7yHhLPg5dHzbwmjY2TsIGi9dM=
+	t=1784785310; cv=none; b=WDz4vMgrDRVKZuMIJhv84NSOPgwf4w88dCVWxta/GD61fBLQVB0OACwkdNmTOm6BS4PXqOecY0HySVq2u7XPNmje+okv6uQwnBKFObhmhQRBUWp+omAifDK+3rbOBCz/H05ISlRZX7Mb10oAsn6BmG+d0i7Yj1gqe9zUUHIepgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784785157; c=relaxed/simple;
-	bh=Q0FqA9yN0GrgE2FgUfLGEy7t+0X7rELu2TIL1Fv0E0o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sq3NthcwMVqLEcy7wdsvlKLzhYcuCww7qoUiDBQLLmWBelRdZ17b97iDTcjI/D70mBeSgJ8+61NhJ7jxPXnE+7RxxPqlYLkkmBv0d6blU2C5eF/DqLYbkpsr9tzo2GT6AyH7cIbsUCsp92jJEaRTifVtWn+2tNHFhIkgNHTKR6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xq/oVMjN; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xq/oVMjN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C241F000E9;
-	Thu, 23 Jul 2026 05:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784785156;
-	bh=UG4IuQG8s5OGsI4Bd5jYurMqNTknGwhMSic/RGI0A9E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Xq/oVMjNFFjMxst0Q5XnhynLHVDn6XCce+5kwq7vuUrjnKYRP6aSJD4onLWvNMiJC
-	 13qRFqMpenSz5Dp1EGLT/0Tm+d/BQQKB2pF6zqmxsdxOG7RMotpP9glTABzGPCluMv
-	 dgKwD4zLnQ9rprhWzDxAyq3yeCkbpexLsQEJng89RTEU1cCuqp+FHlkSBJzF/M0J+m
-	 I9EWarFkuZDDPHOsviqgZGhJBCJ5DNe+EAbl5G+am251OnM1kBPdJfbV2XprX9lSwx
-	 JWfaXl1R5vGOVBk6fOCmEIPjODyyko8HIsg81+Gmi+h2esffgiHg2fjmOhBsjtyx1S
-	 WBoRHWyK6p9Gg==
-Message-ID: <1c7ce106-c5b0-4689-8c24-b32a0966eb02@kernel.org>
-Date: Thu, 23 Jul 2026 14:39:08 +0900
+	s=arc-20240116; t=1784785310; c=relaxed/simple;
+	bh=JDFRUOpgCgrr75HFKaJ0dlLre8qe9ANEfqNnZ9PYI/Q=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=u694myCqVxvbfW3O957QyKfn8Fc4i4H8/fAqtiPLmYkTB/0kBdAXotpQjxaqJzSgB3dTkSOtC8pWYMlbMETXGKGnSvDxlQi7kB7CgJALWvXOBQ9stzixoFdGU7tdZGb5Hq/MNL7p1pLOQ5hLs6vbKKeMZKzVR2EY+nd24Pc9QMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 2d649d58865911f1aa26b74ffac11d73-20260723
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:35998454-3bec-478b-b67b-efd9f61364b0,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:98b40a018686caac7d3782104e19b5b8,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|136|850|865|898,TC:nil,Content:0|15|
+	50,EDM:-3,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+	I:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 2d649d58865911f1aa26b74ffac11d73-20260723
+X-User: jiangfeng@kylinos.cn
+Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <jiangfeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1242378994; Thu, 23 Jul 2026 13:41:39 +0800
+From: Feng Jiang <jiangfeng@kylinos.cn>
+Subject: [PATCH bpf-next v5 0/3] bpf, riscv: add timed may_goto support
+Date: Thu, 23 Jul 2026 05:41:31 +0000
+Message-Id: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH slab/for-next v4 5/8] mm/slab: allow kfree_rcu_sheaf() on
- PREEMPT_RT
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- linux-kernel@vger.kernel.org, vbabka@kernel.org, hao.li@linux.dev
-References: <20260720-kfree_rcu_nolock-v4-0-964e03c41a4e@kernel.org>
- <20260720-kfree_rcu_nolock-v4-5-964e03c41a4e@kernel.org>
- <20260720125637.129D01F00A3A@smtp.kernel.org>
-Content-Language: en-US
-From: Harry Yoo <harry@kernel.org>
-In-Reply-To: <20260720125637.129D01F00A3A@smtp.kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------wy0ijbG9AhwUrGLCuN11PMQS"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIupYWoC/33NTQ6CMBAF4KuQrh1TWn5deQ/jAsoUJmpLWtJAC
+ He3Ehe60OXLm/fNyjw6Qs9OycocBvJkTQz5IWFqaEyPQF3MTHBR8DLl4MirAO2oYaIHdvBoFuj
+ tZIF3CvMiq6u80SzOR4ea5p2+sNe9wXli19gM5Cfrlv1nkHv/5vPffJDAQWnR1Ep2VSb1+bbcy
+ Vh/VGZXQ/YhCfFHyqKEaVpiIWXZqvJL2rbtCWK5ym4VAQAA
+X-Change-ID: 20260710-riscv-bpf-timed-may-goto-0dce564985af
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>, 
+ Xi Wang <xi.wang@gmail.com>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Shuah Khan <shuah@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Feng Jiang <jiangfeng@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------wy0ijbG9AhwUrGLCuN11PMQS
-Content-Type: multipart/mixed; boundary="------------Dtl2WEb9uez8Q01hcYj3noLx";
- protected-headers="v1"
-From: Harry Yoo <harry@kernel.org>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- linux-kernel@vger.kernel.org, vbabka@kernel.org, hao.li@linux.dev
-Message-ID: <1c7ce106-c5b0-4689-8c24-b32a0966eb02@kernel.org>
-Subject: Re: [PATCH slab/for-next v4 5/8] mm/slab: allow kfree_rcu_sheaf() on
- PREEMPT_RT
-References: <20260720-kfree_rcu_nolock-v4-0-964e03c41a4e@kernel.org>
- <20260720-kfree_rcu_nolock-v4-5-964e03c41a4e@kernel.org>
- <20260720125637.129D01F00A3A@smtp.kernel.org>
-In-Reply-To: <20260720125637.129D01F00A3A@smtp.kernel.org>
+This series adds RISC-V JIT support for the timed may_goto loop bound.
 
---------------Dtl2WEb9uez8Q01hcYj3noLx
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Patch 1 implements arch_bpf_timed_may_goto() and enables
+bpf_jit_supports_timed_may_goto() so the verifier uses the timed
+expansion path.
 
+Patch 2 adds a test that checks R0-R5 are preserved across
+arch_bpf_timed_may_goto() calls.
 
+Patch 3 enables the verifier_may_goto_1, stream_cond_break, and
+may_goto_interaction fastcall tests on riscv64.
 
-On 7/20/26 9:56 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential is=
-sue(s) to consider:
->=20
-> New issues:
-> - [High] Calling `local_trylock()` inside `kvfree_call_rcu()` on PREEMP=
-T_RT violates lockdep wait-type nesting rules and is unsafe in hardirq/NM=
-I context.
->=20
-> Pre-existing issues:
-> - [High] Preexisting bug: Using GFP_NOWAIT in __kfree_rcu_sheaf() can c=
-ause lock recursion deadlocks when called under scheduler locks.
-> --
->=20
-> --- Patch [5]: [PATCH slab/for-next v4 5/8] mm/slab: allow kfree_rcu_sh=
-eaf() on PREEMPT_RT ---
-> commit 9ccf08cd866ca28e999f59be7998db3bfc32fb7a
-> Author: Harry Yoo (Oracle) <harry@kernel.org>
-> Subject: mm/slab: allow kfree_rcu_sheaf() on PREEMPT_RT
->=20
-> This patch allows kfree_rcu_sheaf() to be used on PREEMPT_RT by setting=
+Tested on riscv64 QEMU (rva23s64): may_goto programs load and JIT
+correctly, and the 250ms timeout path works as expected.
 
-> SLAB_FREE_NOLOCK when PREEMPT_RT is enabled. It relaxes the limitation
-> in kvfree_call_rcu() and skips the lockdep wait-type override map on
-> PREEMPT_RT to avoid suppressing valid warnings.
->=20
-> Link: https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4d9f9=
-8162@kernel.org [1]
-> Link: https://lore.kernel.org/linux-mm/40591888-3a87-433e-b3d2-cda1cab5=
-43be@kernel.org [2]
->=20
->> diff --git a/mm/slub.c b/mm/slub.c
->> index 8afa6b47b1f2b..deac315d0f23e 100644
->> --- a/mm/slub.c
->> +++ b/mm/slub.c
-> [ ... ]
->> @@ -6080,10 +6081,10 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, v=
-oid *obj, unsigned int free_flags)
->>  	struct slab_sheaf *rcu_sheaf;
->>  	bool allow_spin =3D free_flags_allow_spinning(free_flags);
->> =20
->> -	if (WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT)))
->> -		return false;
->> +	VM_WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT) && allow_spin);
->> =20
->> -	lock_map_acquire_try(&kfree_rcu_sheaf_map);
->> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
->> +		lock_map_acquire_try(&kfree_rcu_sheaf_map);
->> =20
->>  	if (!local_trylock(&s->cpu_sheaves->lock))
->              ^^^^^^^^^^^^^
-> [Severity: High]
-> This is a pre-existing issue, but since we are enabling this path for
-> PREEMPT_RT, does the use of GFP_NOWAIT later in this function cause
-> lock recursion deadlocks?
->=20
-> When the fast path fails, __kfree_rcu_sheaf() calls:
->=20
->     empty =3D alloc_empty_sheaf(s, GFP_NOWAIT, alloc_flags);
->=20
-> GFP_NOWAIT includes __GFP_KSWAPD_RECLAIM, which invokes wakeup_kswapd()=
-=2E
-> The wake-up path enters the scheduler via try_to_wake_up() and attempts=
- to
-> acquire scheduler locks like pi_lock and the runqueue lock.
+Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+---
+Changes in v5:
+- Use REG_S/REG_L/SZREG in arch_bpf_timed_may_goto assembly. (Pu Lehui)
+- Add __arch_s390x to the timed_may_goto_preserves_regs test. (Pu Lehui)
+- Switch the preserves-regs test to SEC("syscall") to fix
+  bpf_prog_test_run() EINVAL.
+- Link to v4: https://lore.kernel.org/r/20260722-riscv-bpf-timed-may-goto-v4-0-e117e6337bc7@kylinos.cn
 
-This indeed looks like a real issue as kfree_rcu() can be called under
-scheduler locks, but not sure how it's been undiscovered for this long?
+Changes in v4:
+- Add 'bpf-next' prefix to match the BPF kernel tree workflow.
+- Add a test checking that R0-R5 are preserved across
+  arch_bpf_timed_may_goto() calls. Use bpf_get_prandom_u32() to
+  prevent the verifier from removing the checks via DCE.
+- Rename may_goto_interaction_arm64() to may_goto_interaction().
+- Wrap the arch_bpf_timed_may_goto address check to a single line.
+- Link to v3: https://lore.kernel.org/r/20260715-riscv-bpf-timed-may-goto-v3-0-cf2a9c3d843f@kylinos.cn
 
-> If kvfree_call_rcu() was called while the CPU already holds these sched=
-uler
-> locks, will this wake-up attempt cause a lock recursion self-deadlock?
->=20
+Changes in v3:
+- Set up the frame pointer in arch_bpf_timed_may_goto() so the function
+  does not break stack unwinding under CONFIG_FRAME_POINTER.
 
---=20
-Cheers,
-Harry / Hyeonggon
+Changes in v2:
+- Fix BPF_REG_0 being clobbered after arch_bpf_timed_may_goto() calls.
+- Enable the may_goto_interaction fastcall test on riscv64.
 
---------------Dtl2WEb9uez8Q01hcYj3noLx--
+---
+Feng Jiang (3):
+      bpf, riscv: add support for timed may_goto
+      selftests/bpf: test timed may_goto preserves R0-R5
+      selftests/bpf: enable timed may_goto tests for riscv64
 
---------------wy0ijbG9AhwUrGLCuN11PMQS
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+ arch/riscv/net/Makefile                            |  2 +-
+ arch/riscv/net/bpf_jit_comp64.c                    | 12 ++++-
+ arch/riscv/net/bpf_timed_may_goto.S                | 47 ++++++++++++++++
+ tools/testing/selftests/bpf/progs/stream.c         |  1 +
+ .../selftests/bpf/progs/verifier_bpf_fastcall.c    |  3 +-
+ .../selftests/bpf/progs/verifier_may_goto_1.c      | 62 ++++++++++++++++++++++
+ 6 files changed, 124 insertions(+), 3 deletions(-)
+---
+base-commit: a23a71823352e2d792dcaae25f1ebb744acbfc0b
+change-id: 20260710-riscv-bpf-timed-may-goto-0dce564985af
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-- 
+Feng Jiang <jiangfeng@kylinos.cn>
 
-iHUEARYKAB0WIQQQ1ub6gR5ogjaKRmOGXBN6rc5S1gUCamGo/AAKCRCGXBN6rc5S
-1o0lAQCK2eCjHlRuDu0zE5pEWK7ZgEWFNUs05X72Eo/GpakHyAEA/l/TGwpb8ylP
-eEjf77xAvj55R+dksqmH80fDAEaIEAg=
-=kdl3
------END PGP SIGNATURE-----
-
---------------wy0ijbG9AhwUrGLCuN11PMQS--
