@@ -1,100 +1,146 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E789745D1B5;
-	Thu, 23 Jul 2026 15:25:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ABE0387359
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 15:33:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784820335; cv=none; b=O025aLgcgNUNFE2qNb+BzJiqkJYLwqpCH2HzmN7FCw5Nyk3h5nGnrAELpoL4YE8StM28TmUygRk1qQosyuc0KTpZe/890NtPydv8r0y7h4pcaIEnicJwnuU4CnFN5CgEWcol1+6LvyWZ5nSBY4Ag55DNw5h8FoJHekbf6pMpG7c=
+	t=1784820841; cv=none; b=oGR/99o76VAdPzCjpYTHwChl4CU59HqtNxC02Rrq31MVvRX4pm9aUHx8ccyI+TLFxTGdwxkCnUbW3xjqtmF4bxO48gcN/lTb0BleBtJRojiAOEUgiAd0vC5/UkuSMCTsbVnbGfwn/3G/G+Vp+DE/w9dKgzkT3Vjti8kCJ3PpB1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784820335; c=relaxed/simple;
-	bh=IZqZx1cm+KLT1HA3GZYkzGFwwH8dcV9HhusSswW3hCE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=EIWp6aiC9Y0UipKswBl64LO7KGRBQrRZFlygm7BICa2uCbn1l+gzoe/C8cOM9+ykFQ6KUZlsOn8OemQla52VjXc3d4IMYN8j/mriLyYlrQtUUtRyW5+3W9bPbdZp7pMBX1Lfb7nULfClOs3YVkqHRrMsZzp1C5lWK7R5JeRmNVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fWwtVpDM; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fWwtVpDM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 827DB1F00A3A;
-	Thu, 23 Jul 2026 15:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784820333;
-	bh=sO5eI7KvFIdN3ilwtmjIJQv0l0USR2hOkOJFvcL9u4U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fWwtVpDMqj6ZFdyZg6V0rcahAYz1Huk7C6+xHReKFwcasWOSw97KY0rVDn4sYXocD
-	 kYW8UuUJK3MtiZvYSVxPTuGIcJ5USbtuadKInF0IQ78RDD+7H2nCylgaEvknMIxuVn
-	 mWmc33d+K+TVEX/h+rc+tl3ycsxJbRipXhrBBqPDKukdHwVLOqy2iuYz1eTKuwcHEc
-	 iaMu1zTajZbYAnL6rxNAE9a8pwpgQwMWDExiDewUp+jU8CBL7ebmyoamkDf6KWgiG2
-	 Puu1r/z/QUfqNtfAoX8H2IssHAYAzpilIMJ16IxOCgp5JAD6JwpaEh5mHb4LnzhgvY
-	 E3n6GZuMKxRuQ==
-Content-Type: multipart/mixed; boundary="===============2073702956910006606=="
+	s=arc-20240116; t=1784820841; c=relaxed/simple;
+	bh=elhTsgp4LGpXJ1EqDFQ6x9SifwLGHaC9l6G+bJbyyCw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=vEvkfIaudq58OfMxkyp3jiV693pkKE2mRnyz59c9M6WQt7Ur5rwk/6jvLHm6NftP+7pkCrimyD5JBmGaOr92ED6OzNko+1uD1fsF+3cXkXwRpiX1ZIWybSFeWjcMYbOC4NYTKr4uGdNbPl24waGy7kn9aWQv4uMIZOGrEOxIZK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B17181F00A3D;
+	Thu, 23 Jul 2026 15:33:58 +0000 (UTC)
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH mm-hotfixes v6 1/5] mm/vmalloc: acquire init_mm lock on
+ huge vmap to avoid ptdump UAF
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260723-series-vmap-race-fix-v6-1-8cc77dcc0018@kernel.org>
+References: <20260723-series-vmap-race-fix-v6-0-8cc77dcc0018@kernel.org>
+ <20260723-series-vmap-race-fix-v6-1-8cc77dcc0018@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 23 Jul 2026 15:33:58 +0000
+Message-Id: <20260723153358.B17181F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <65b8f11245f3ec3b3444f701a84f749d8172b5cfcc0afb3c1f1f3ad6340f7a97@mail.kernel.org>
-In-Reply-To: <20260723-sockmap-lookup-tcp-leak-v1-3-1bbdc58ce514@rbox.co>
-References: <20260723-sockmap-lookup-tcp-leak-v1-3-1bbdc58ce514@rbox.co>
-Subject: Re: [PATCH bpf 3/3] bpf: Unconditionally take socket references in lookup helpers
-From: bot+bpf-ci@kernel.org
-To: mhal@rbox.co,edumazet@google.com,kuniyu@google.com,pabeni@redhat.com,willemb@google.com,john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,davem@davemloft.net,kuba@kernel.org,horms@kernel.org,daniel@iogearbox.net,sdf@fomichev.me,martin.lau@linux.dev,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,joe@wand.net.nz
-Cc: netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,mhal@rbox.co,sashiko-bot@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 23 Jul 2026 15:25:31 +0000 (UTC)
 
---===============2073702956910006606==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 403aba3ce891..4bc0b59668fa 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -7027,6 +7027,13 @@ static struct sock *sk_lookup(struct net *net, struct bpf_sock_tuple *tuple,
->  		WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
->  		sk = NULL;
->  	}
-> +
-> +	/* Always take a reference, even if the lookup skipped one;
-> +	 * bpf_sk_release() always puts one.
+Pre-existing issues:
+- [High] The patch attempts to fix a use-after-free race between vmap huge =
+page promotion and ptdump by taking `mmap_read_trylock(&init_mm)` before fr=
+eeing page tables in `vmap_try_huge_*()`. However, the fix is incomplete. T=
+he ptdump utility provides debugfs interfaces (e.g., `/sys/kernel/debug/pag=
+e_tables/current_kernel` and `efi` on x86, or `efi_page_tables` on RISC-V) =
+that walk the kernel address space using other `mm_struct`s like `current->=
+mm` or `efi_mm`. During these walks, `ptdump_walk_pgd()` acquires the write=
+ lock on the provided `mm`, bypassing the `init_mm` lock completely. Becaus=
+e kernel page tables (PUDs/PMDs) are shared globally across all processes, =
+ptdump traverses the exact same kernel page table pages that vmap operates =
+on in `init_mm`. Since vmap attempts to read-lock `init_mm`, and ptdump wri=
+te-locked `current->mm` (or `efi_mm`), there is no mutual exclusion. vmap w=
+ill successfully acquire its lock and free the PTE/PMD pages while ptdump i=
+s concurrently dereferencing them.
+--
+
+--- Patch [1]: [PATCH mm-hotfixes v6 1/5] mm/vmalloc: acquire init_mm lock =
+on huge vmap to avoid ptdump UAF ---
+commit efa73ddb526da8e42ad98e0cfb9807d1f1de063d
+Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
+mm/vmalloc: acquire init_mm lock on huge vmap to avoid ptdump UAF
+
+This commit attempts to fix a race condition between ptdump walking kernel=
+=20
+page tables and vmap promoting them to huge pages. It introduces an mmap=20
+read lock on init_mm during page table freeing to prevent ptdump from=20
+accessing freed pages while walking.
+
+Closes: https://lore.kernel.org/all/6a287988.39669fcc.33b062.00a0.GAE@googl=
+e.com/T/
+Link: https://lore.kernel.org/linux-mm/20260706203128.162335-1-devnexen@gma=
+il.com/
+
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 1afca3568b9b6..d5c4d2bb770bf 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+
+[ ... ]
+
+> @@ -158,10 +159,24 @@ static int vmap_try_huge_pmd(pmd_t *pmd, unsigned l=
+ong addr, unsigned long end,
+>  	if (!IS_ALIGNED(phys_addr, PMD_SIZE))
+>  		return 0;
+> =20
+> -	if (pmd_present(*pmd) && !pmd_free_pte_page(pmd, addr))
+> -		return 0;
+> +	if (!pmd_present(*pmd))
+> +		return pmd_set_huge(pmd, phys_addr, prot);
+> =20
+> -	return pmd_set_huge(pmd, phys_addr, prot);
+> +	/*
+> +	 * Acquire the mmap read lock to exclude ptdump, which walks
+> +	 * kernel page tables it does not own under the mmap write lock.
+> +	 *
+> +	 * Concurrent read lock holders are safe: each exclusively owns
+> +	 * the range it operates on and cannot reach this page table.
 > +	 */
-> +	if (sk && !refcounted && !refcount_inc_not_zero(&sk->sk_refcnt))
-> +		sk = NULL;
-> +
->  	return sk;
+> +#ifndef CONFIG_ARM64
+> +	scoped_cond_guard(mmap_read_lock_try, return 0, &init_mm)
+> +#endif
+> +	{
+
+[Severity: High]
+This is a pre-existing issue, but does locking init_mm here fully exclude
+ptdump from walking and accessing these page tables?
+
+The ptdump utility can walk the kernel address space using other mm_struct
+contexts besides init_mm. For example, reading the current_kernel debugfs
+file on x86 triggers a walk using current->mm:
+
+arch/x86/mm/debug_pagetables.c:ptdump_curknl_show() {
+    ...
+    ptdump_walk_pgd_level_debugfs(m, current->mm, false);
+}
+
+This walk acquires the mmap write lock on the provided mm, not init_mm:
+
+mm/ptdump.c:ptdump_walk_pgd() {
+    mmap_write_lock(mm);
+    while (range->start !=3D range->end) {
+        walk_page_range_debug(mm, range->start, range->end, ...);
+        ...
+    }
+    mmap_write_unlock(mm);
+}
+
+Because kernel page tables are shared globally, this walk traverses the
+exact same page table pages that vmap is operating on in init_mm.
+
+If vmap only takes the mmap read lock on init_mm, and ptdump takes the mmap
+write lock on current->mm or efi_mm, there is no mutual exclusion between
+the two operations.
+
+Could this allow ptdump to concurrently dereference the PTE pages that vmap
+is freeing, resulting in a use-after-free?
+
+> +		if (!pmd_free_pte_page(pmd, addr))
+> +			return 0;
+> +		return pmd_set_huge(pmd, phys_addr, prot);
+> +	}
 >  }
 
-The BPF subsystem guide specifies that multi-line comments under
-net/core/filter.c should have the opening '/*' on its own line. Could these
-comments follow that format?
-
-[ ... ]
-
-> @@ -7084,11 +7091,15 @@ bpf_sk_lookup_full_sk(struct sock *sk)
->  	 */
->  	if (sk2 != sk) {
->  		sock_gen_put(sk);
-> -		/* Ensure there is no need to bump sk2 refcnt. */
->  		if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
->  			WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
->  			return NULL;
->  		}
-> +		/* sk2 is RCU-free, but take a reference anyway;
-> +		 * bpf_sk_release() puts.
-> +		 */
-> +		if (sk2 && !refcount_inc_not_zero(&sk2->sk_refcnt))
-> +			sk2 = NULL;
->  		sk = sk2;
->  	}
-
-The same multi-line comment style appears here as well.
-
-[ ... ]
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30016591832
---===============2073702956910006606==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723-series-vma=
+p-race-fix-v6-0-8cc77dcc0018@kernel.org?part=3D1
