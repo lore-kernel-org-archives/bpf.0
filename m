@@ -1,269 +1,273 @@
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AC4335091;
-	Thu, 23 Jul 2026 14:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503D2126BF7;
+	Thu, 23 Jul 2026 14:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784816135; cv=none; b=hhtrvvpTqZ0kNVuAZjZdIvHAL8IaDIw/G1lxBQWPvC+QJXSnsz4ehGsaqibVH5fxIIG5h8qyhgw4FA6tWgDHXRXZXgFSFyUnSKIzMiMl1T0sTcZIK4GL+fW8tPMpG4m+GtwBXWsuJ3ZwzTww0PFMtQdNZ6DvpxNOngaR91MzMEM=
+	t=1784816343; cv=none; b=f02phEu8gdmfwWpZGEuoVozou6WkZIJvJSj8bWK1YziswFAIOsU/391RYrqFSg1p7e3ie8Aj2K2wwZDBvZh/D8y1jkyC1soT7Q/Kc/9csTVE35lsrctIitYVZSgqKzaKkoBZQ6wVJt+6FdNNiIkkmMigLWLMIOPyAQMwh/bg9CA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784816135; c=relaxed/simple;
-	bh=YBdMOKlaxYPP3hAbNP+AKxIXv6UQLudffOjgdGMDzEM=;
-	h=Message-ID:Content-Type:Mime-Version:Subject:From:In-Reply-To:
-	 Date:Cc:References:To; b=XVOYuSR3Ck/Pn2uns/CCBzDQowuhSUTdLTDm4HRd8Vyw7XS2OfrT54Ha/HOH6HNTG+/6ST+xzCHBZKPFCHVoq0BnFRc9hmTO8z6I+Gli/pI19BQ8vSWgxvGzfLT36F9NhMpqPtTGcUW+tWrkhv+JCh7lu2GgjXr1dxn5QlVGD0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=pass smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=TBJDJT0g; arc=none smtp.client-ip=162.62.57.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyyself.name
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="TBJDJT0g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1784816116; bh=m1fW/c2PDUMowmUABq2xRwXNu/N/GpGaTHQUB67TifI=;
-	h=Subject:From:In-Reply-To:Date:Cc:References:To;
-	b=TBJDJT0gKl3VohwW8rBYsSG0cP+YmYSu75Z8EZiPo8HtQ3FX/1BzMiRY0mJHgVL7v
-	 Ns3/AEZNFAcWxD8bVYTwDMlI1vGc97YWymGFKjewZvzmIc5SSj94NVsdLT384ttv9Z
-	 WwPd6qNanQ7A4g1UgwQCZiU6zwua6oLpqtAzyc/E=
-Received: from smtpclient.apple ([2408:8207:4821:550:885e:19b:2870:12b6])
-	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
-	id 3CD3A8D6; Thu, 23 Jul 2026 22:15:13 +0800
-X-QQ-mid: xmsmtpt1784816113tqfnul1oe
-Message-ID: <tencent_0695E317AE6D8C40C848E31E1FB420937606@qq.com>
-X-QQ-XMAILINFO: OATpkVjS499umLBCGK89N7O1z6b2nDgRBsBxG2Zlai/ohwdiVzjDtoFAtCyHys
-	 i6Pml8Thy/69RWMwELyGEY/6pBCYjebdcXc3M9451Qiq4+MjZbcGrJ2iREHUxLZgtPfsmE+3CbaJ
-	 +sWhwBKeOyTlNCdm3vOvv2pJC6U6FuPEaeHE8NWuXjNkScx37cJCGcZH+yxSSW9FY/NE73o7/8JB
-	 pAghryQj8vm+ZNioDhuk3d3L32uAqQHuNnlEoDsI6+/sHLdk22zCk8WWyBbNooMDUA1F3KwSbFNQ
-	 tTV793Dnq/9aHvELBSBLhvy1e8JGlBeCntChcVYG5lVN+IS5/5XhT/T2T6aykdXtRPrmpVzlk6oj
-	 oBSRHVY79nvzs6EGOCyRbH614gf2Hjbync9snrkSDtsw1COSWErI5pYEmPEKTqNS7JkiXGKwDvWP
-	 N0EBjiYoztuNmli318e1lVfV8Ei8Bnqd+C2lkDlv3ZOixSFKZg8ahlRxpUoBT2DZUYS0O6hskv0D
-	 QQkq7R4Dzz47PqHWHFZ4f1NjbUi0YneDOhbMxfelajIoMeY2q9XJMAm6npnE+JD9Stcnkdke0hMY
-	 9lxQEALMxVpJcEuO0Cf3nZHRFgmJHMJ2yy5wi3mK5PCTpkBIqaxMhfrS18SwPPO4vtyQKWfmRAyo
-	 G3SZh8a7/A+ZIayQE023n9DbuFgxuUQN1IUvEpxYSP7KPNFyj8K8t+NnmGr1lkyrlHNMkSLqaS+T
-	 mP/QyTH/gtGNb/IxnbarSvu9Hw4U3xTy3pNaRvuk2Y/7DnouzMZxxXSq7PU/fZ+aUu2Ip+nr70iD
-	 NF5LQGUacKxIxZoSKdhayqAwSsOXYU8NytHzfDgT3NEBQZF4bRRq9Aoe0bymaen99B0J9dWkveAQ
-	 C2odT1o9xnlG8BCKtCRGU7z14YVR+2syNLV89GGzthVGvvcVDCgOFDCBT1IX5JYzUldQJ1L1AAy2
-	 DDVMfUhfKsXQ+ttk8X2Y+ToXd8o9ssHjTyqmQrFaJ4E8RLiXbj3P8CBRBrcJGQNJ3EdFElayNVLH
-	 rG2NK755vkCi53VximoeuC7z1RYJlfg5TWfJ28gTNCFnK5oZQFA7t3SlBxadQVZOF9RyrhDoXbC8
-	 f5D0ZF7OXqt+WOGRs=
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1784816343; c=relaxed/simple;
+	bh=Nq0rRdIHI8nz8DqM5J/K5Sg9H8MnPNyyteUgeyTVJ9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C0mkKkYR7QrUFxF0NLHXe4qs1FC66fs+VUYOawJwefAdE782RJ3DT6oSDBSokC5ITfiq7fwCO+HxaoL3fxmrfQOuVTp15XpzDusoFIfafmEF6uE8pyQ/qJhbjn/xY4EplF66DfbW15/7wqb8sFYNpuhg9/vvhGasa5hhAaVahho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5040D1F000E9;
+	Thu, 23 Jul 2026 14:18:54 +0000 (UTC)
+Date: Thu, 23 Jul 2026 15:18:24 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Suren Baghdasaryan <surenb@google.com>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Dev Jain <dev.jain@arm.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, David Carlier <devnexen@gmail.com>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	"Denis V. Lunev" <den@virtuozzo.com>, stable@vger.kernel.org, 
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
+	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>
+Subject: Re: [REGRESSION]: [PATCH mm-hotfixes v5 3/5] x86/mm/pat: acquire
+ init_mm read lock on attribute change to avoid UAF
+Message-ID: <amIEC1qDW3kfeuHd@lucifer>
+References: <20260717-series-vmap-race-fix-v5-0-606a0ac6d3e5@kernel.org>
+ <20260717-series-vmap-race-fix-v5-3-606a0ac6d3e5@kernel.org>
+ <80993b70-352f-4069-84c7-39a04c061e98@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.600.51.1.1\))
-Subject: Re: [PATCH net-next 1/2] net: atlantic: free stranded TX buffers on
- ring deinit
-From: Yangyu Chen <cyy@cyyself.name>
-In-Reply-To: <CAHS8izPBvv4ENCcnSpsbcL9+TEMj9nBE6CAj4fg9_aDBdhrBaQ@mail.gmail.com>
-Date: Thu, 23 Jul 2026 22:15:02 +0800
-Cc: Sukhdeep Singh <sukhdeeps@marvell.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>,
- netdev@vger.kernel.org,
- bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Richard Cochran <richardcochran@gmail.com>,
- Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Content-Transfer-Encoding: quoted-printable
-X-OQ-MSGID: <D1E4B33D-35C7-4F10-A04E-D56A68FA11BC@cyyself.name>
-References: <tencent_7DB01BE7F8FA056BB5F11D3570CF636C4309@qq.com>
- <tencent_8FE30FDFA32089B69BA3112E4A4C5E886D06@qq.com>
- <CAHS8izPBvv4ENCcnSpsbcL9+TEMj9nBE6CAj4fg9_aDBdhrBaQ@mail.gmail.com>
-To: Mina Almasry <almasrymina@google.com>
-X-Mailer: Apple Mail (2.3864.600.51.1.1)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <80993b70-352f-4069-84c7-39a04c061e98@intel.com>
 
+On Thu, Jul 23, 2026 at 12:00:42PM +0530, Borah, Chaitanya Kumar wrote:
+> Hello Lorenzo,
+>
+> On 7/17/2026 11:00 PM, Lorenzo Stoakes (ARM) wrote:
+> > A previous commit protected us against races between ptdump and CPA
+> > collapse, however one still exists between attribute changes and collapse
+> > as reported by Denis V. Lunev (linked).
+> >
+> > When an attribute change arises, a lockless page table walker obtains a PTE
+> > entry, which is later written to via set_pte_atomic():
+> >
+> > ...
+> > -> change_page_attr_set_clr()
+> > -> __change_page_attr_set_clr()
+> > -> __change_page_attr()
+> > 	-> _lookup_address_cpa()
+> > 	-> lookup_address_in_pgd_attr()
+> > 	-> [ lockless page table walker ]
+> > -> set_pte_atomic()
+> >
+> > There is nothing preventing a concurrent CPA collapse which can free the
+> > PTE that was retrieved here, resulting in a use-after-free.
+> >
+> > With the mmap write lock taken on init_mm over CPA collapse, we can now
+> > resolve this race by acquiring an mmap read lock on init_mm over
+> > __change_page_attr_set_clr().
+> >
+> > This locks across the whole operation over which the walk and the PTE entry
+> > write occurs, solving the race.
+> >
+> > It is safe to do this here, as no spinlocks are held upon entry to
+> > __change_page_attr_set_clr().
+> >
+> > The CPA_COLLAPSE flag is only set by set_memory_rox(), which exclusively
+> > operates upon vmalloc ranges, and on x86 only within the module mapping
+> > space.
+> >
+> > This is important, because some callers directly invoke
+> > __change_page_attr_set_clr(), bypassing this lock. However, none of these
+> > operate within the module mapping space.
+> >
+> > * cpa_process_alias() - a recursive helper called by
+> >    __change_page_attr_set_clr().
+> > * __set_memory_enc_pgtable() - operates on the direct mapping and (via
+> >    __vmbus_establish_gpadl()) the vmalloc mapping space.
+> > * __set_pages_[n]p() - called by set_direct_map_[invalid, default,
+> >    valid]_noflush(), __kernel_map_pages() - operates on the direct map.
+> > * kernel_[un]map_pages_in_pgd() - operates on EFI ranges.
+> >
+> > This work is based upon Denis V. Lunev's excellent analysis of the bug with
+> > gratitude.
+> >
+>
+> This seems to be causing regression in our linux-next CI [1] on some of the
+> older machines (fi-elk-e7500, fi-ilk-650, fi-pnv-d510)
 
+Thanks for the report!
 
-> On 23 Jul 2026, at 02:29, Mina Almasry <almasrymina@google.com> wrote:
->=20
-> On Thu, Jul 9, 2026 at 10:41=E2=80=AFAM Yangyu Chen <cyy@cyyself.name> =
-wrote:
->>=20
->> aq_vec_deinit() drains the TX rings with a single aq_ring_tx_clean()
->> call, which frees at most AQ_CFG_TX_CLEAN_BUDGET (256) descriptors =
-and
->> stops at hw_head, which no longer moves once aq_vec_stop() has =
-stopped
->> the hardware and NAPI. Completed descriptors beyond the budget and
->> everything still posted in [hw_head, sw_tail) keep their skb or
->> xdp_frame when the interface goes down: aq_vec_ring_free() then frees
->> the buffer ring and the references are lost for good.
->>=20
->> Today this is a silent memory leak on every interface down under
->> TX/XDP_TX load. With the following conversion of the RX path to
->> page_pool it becomes much more visible: XDP_TX frames carry fragment
->> references on the RX ring's page_pool, so a single stranded frame
->> keeps the pool's inflight count above zero forever. =
-page_pool_destroy()
->> then never completes, the pool is leaked together with its pages, and
->> "page_pool_release_retry() stalled pool shutdown" is warned every 60
->> seconds from that point on, on every ifdown, XDP detach or ring =
-resize
->> under XDP_TX load.
->>=20
->> Bring back aq_ring_tx_deinit() as it was before the removal and use =
-it
->> for teardown again, with one extension: TX rings can hold xdp_frames
->> nowadays, so release those too. They are returned with
->> xdp_return_frame() since this runs in process context.
->>=20
->> Fixes: eb36bedf28be ("net: aquantia: remove function =
-aq_ring_tx_deinit")
->> Assisted-by: Claude:claude-fable-5
->> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
->=20
-> Looks fine as far as I can tell, but don't you want this sent to net =
-as a fix?
->=20
->> ---
->>=20
->> Notes:
->>    Without this fix, converting the RX path to page_pool (next patch)
->>    turns the stranded XDP_TX frames into leaked page_pool fragments, =
-so
->>    page_pool_destroy() can never drain and the shutdown stalls =
-forever.
->>=20
->>    Reproduced on an AQC100 with this patch dropped from the series =
-(i.e.
->>    page_pool applied without the tx-deinit fix):
->>=20
->>      # reflect received frames back out through XDP_TX
->>      xdp-bench tx enp99s0                    # or any trivial XDP_TX =
-prog
->>      # from a peer on the same link, flood RX so frames are in =
-flight, then
->>      ip link set enp99s0 down
->>=20
->>    The pool is destroyed with frames still stranded on the TX ring, =
-and
->>    page_pool_release_retry() warns every 60s with the same id and =
-inflight
->>    count and a growing age, indefinitely:
->>=20
->>      [161110.753385] page_pool_release_retry() stalled pool shutdown: =
-id 361, 12 inflight 60 sec
->>      [161171.170756] page_pool_release_retry() stalled pool shutdown: =
-id 361, 12 inflight 120 sec
->>      [161231.588685] page_pool_release_retry() stalled pool shutdown: =
-id 361, 12 inflight 181 sec
->>      [161292.005886] page_pool_release_retry() stalled pool shutdown: =
-id 361, 12 inflight 241 sec
->>=20
->>    With this patch the stranded buffers are freed at deinit, inflight
->>    drops to zero and the pool drains cleanly.
->>=20
->> .../net/ethernet/aquantia/atlantic/aq_ring.c  | 30 =
-+++++++++++++++++++
->> .../net/ethernet/aquantia/atlantic/aq_ring.h  |  1 +
->> .../net/ethernet/aquantia/atlantic/aq_vec.c   |  2 +-
->> 3 files changed, 32 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c =
-b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
->> index 8ff07de2bd52..c59b6c0b37f1 100644
->> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
->> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
->> @@ -360,6 +360,36 @@ bool aq_ring_tx_clean(struct aq_ring_s *self)
->>        return !!budget;
->> }
->>=20
->> +void aq_ring_tx_deinit(struct aq_ring_s *self)
->> +{
->> +       if (!self)
->> +               goto err_exit;
->=20
-> return; here and delete label?
+A small note - it'd be useful for you to clearly point
+out the revision of next to make our life a bit easier :)
 
-Maybe I can change it in the next revision.I would this fixes to be more =
-like a revert of commit eb36bedf28be
-("net: aquantia: remove function aq_ring_tx_deinit"), so I would
-like to keep that.
+I can see from below in the stack and the URI it's next-20260720. There was a
+broken merge in linux-next for a while but it's fixed by 20260720 so that's not
+it.
 
-Maybe I can change it in the next revision.
+>
+> <4> [196.236867] ======================================================
+> <4> [196.236878] WARNING: possible circular locking dependency detected
+> <4> [196.236890] 7.2.0-rc4-next-20260720-next-20260720-g3fe08b9796f3+ #1
+> Tainted: G S   U       L
+> <4> [196.236906] ------------------------------------------------------
+> <4> [196.236916] core_hotunplug/5687 is trying to acquire lock:
+> <4> [196.236927] ffffffff839048b8 ((init_mm).mmap_lock){++++}-{4:4}, at:
+> change_page_attr_set_clr+0x10a/0x220
 
-Thanks,
-Yangyu Chen
+This is the result of my change indeed.
 
->=20
->> +
->> +       for (; self->sw_head !=3D self->sw_tail;
->> +               self->sw_head =3D aq_ring_next_dx(self, =
-self->sw_head)) {
->> +               struct aq_ring_buff_s *buff =3D =
-&self->buff_ring[self->sw_head];
->> +               struct device *ndev =3D aq_nic_get_dev(self->aq_nic);
->> +
->> +               if (likely(buff->is_mapped)) {
->> +                       if (unlikely(buff->is_sop)) {
->> +                               dma_unmap_single(ndev, buff->pa, =
-buff->len,
->> +                                                DMA_TO_DEVICE);
->> +                       } else {
->> +                               dma_unmap_page(ndev, buff->pa, =
-buff->len,
->> +                                              DMA_TO_DEVICE);
->> +                       }
->=20
-> I would remove the unlikelys that seem unnecassry to me. This is a
-> reconfig path and the unlikely is probably not improving perf.
->=20
->> +               }
->> +
->> +               if (unlikely(buff->is_eop)) {
->> +                       if (buff->skb)
->> +                               dev_kfree_skb_any(buff->skb);
->> +                       else if (buff->xdpf)
->> +                               xdp_return_frame(buff->xdpf);
->> +               }
->> +       }
->> +err_exit:;
->> +}
->> +
->> static void aq_rx_checksum(struct aq_ring_s *self,
->>                           struct aq_ring_buff_s *buff,
->>                           struct sk_buff *skb)
->> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h =
-b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
->> index a70b880ada67..6431cc62962f 100644
->> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
->> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
->> @@ -202,6 +202,7 @@ void aq_ring_update_queue_state(struct aq_ring_s =
-*ring);
->> void aq_ring_queue_wake(struct aq_ring_s *ring);
->> void aq_ring_queue_stop(struct aq_ring_s *ring);
->> bool aq_ring_tx_clean(struct aq_ring_s *self);
->> +void aq_ring_tx_deinit(struct aq_ring_s *self);
->> int aq_xdp_xmit(struct net_device *dev, int num_frames,
->>                struct xdp_frame **frames, u32 flags);
->> int aq_ring_rx_clean(struct aq_ring_s *self,
->> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_vec.c =
-b/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
->> index 2f9033ceed8c..05814fea0f5f 100644
->> --- a/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
->> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
->> @@ -275,7 +275,7 @@ void aq_vec_deinit(struct aq_vec_s *self)
->>=20
->>        for (i =3D 0U; self->tx_rings > i; ++i) {
->>                ring =3D self->ring[i];
->> -               aq_ring_tx_clean(&ring[AQ_VEC_TX_ID]);
->> +               aq_ring_tx_deinit(&ring[AQ_VEC_TX_ID]);
->>                aq_ring_rx_deinit(&ring[AQ_VEC_RX_ID]);
->>        }
->>=20
->> --
->> 2.47.3
->>=20
->>=20
->=20
->=20
-> --=20
-> Thanks,
-> Mina
+> <4> [196.236958]
+> but task is already holding lock:
+> <4> [196.236969] ffff88810c852238 (&vm->mutex){+.+.}-{4:4}, at:
 
+So this is a lock dependency issue as this is obviously an entirely
+different lock.
 
+> i915_ggtt_driver_release+0xab/0x260 [i915]
+> <4> [196.237572]
+> which lock already depends on the new lock.
+> <4> [196.237585]
+> the existing dependency chain (in reverse order) is:
+> <4> [196.237597]
+> -> #2 (&vm->mutex){+.+.}-{4:4}:
+> <4> [196.237617]        i915_gem_shrinker_taints_mutex+0x35/0x70 [i915]
+> <4> [196.238267]        i915_address_space_init+0x226/0x2a0 [i915]
+> <4> [196.238961]        i915_ggtt_init_hw+0x2c/0x140 [i915]
+> <4> [196.239638]        i915_driver_hw_probe+0x208/0x380 [i915]
+> <4> [196.240260]        i915_driver_probe+0x113/0x5b0 [i915]
+> <4> [196.240883]        i915_pci_probe+0xe0/0x1d0 [i915]
+
+(another small note - running scripts/decode_stacktrace.sh would be hugely
+useful as these offsets aren't so useful unless I have the exact kernel
+binary you have with debug symbols :)
+
+>
+> Detailed log can be seen found in [2]
+>
+> We confirmed that reverting the patch solves the issue.
+>
+> Could you please check why the patch causes this regression and provide
+> a fix if necessary?
+>
+> Regards
+> Chaitanya
+>
+> [1] https://intel-gfx-ci.01.org/tree/linux-next/combined-alt.html?
+> [2] https://intel-gfx-ci.01.org/tree/linux-next/next-20260720/fi-ilk-650/igt@core_hotunplug@unbind-rebind.html
+
+<snip>
+
+So looking into it we have deadlock potential here:
+
+1. fs_reclaim -> &vm->mutex
+
+< device init >
+-> i915_address_space_init()
+-> ...
+-> i915_gem_shrinker_taints_mutex()
+(mark the dependency in lockdep)
+
+This is presumably because the shrinker needs to lock this mutex.
+
+2. init_mm -> fs_reclaim
+
+This was introduced by my patch and there we have:
+
+< caller needs to set memory, e.g. BPF >
+-> set_memory_rox()
+-> change_page_attr_set_clr()
+-> [acquire init_mm lock] <-- my change
+-> __change_page_attr_set_clr()
+-> __change_page_attr()
+-> split_large_page()
+-> pte_alloc_one_kernel()
+[ allocation ]
+< trigger direct reclaim >
+
+Thus init_mm -> fs_reclaim becasue in split_large_page() there's:
+
+	if (!debug_pagealloc_enabled())
+		spin_unlock(&cpa_lock);
+	pte = pte_alloc_one_kernel(&init_mm); <-- allocate
+	if (!debug_pagealloc_enabled())
+		spin_lock(&cpa_lock);
+	if (!pte)
+		return -ENOMEM;
+
+Note the CPA lock dance, will come back to that as that's how to solve this
+issue...
+
+3. &vm->mutex -> init_mm
+
+< device remove >
+-> i915_ggtt_driver_release()
+-> ggtt_cleanup_hw()
+-> [acquire &vm->mutex lock]
+-> ggtt->vm.cleanup == gmch_ggtt_remove()
+-> intel_gmch_remove()
+-> intel_gtt_teardown_scratch_page()
+-> set_pages_wb()
+-> set_memory_wb()
+-> _set_memory_wb()
+-> change_page_attr_clear()
+-> change_page_attr_set_clr()
+-> [acquire init_mm lock] <-- my change
+
+This &vm->mutex -> init_mm
+
+And so there is a circular dependency:
+
+ 	&vm->mutex ---> init_mm
+	      ^            |
+               \           v
+                \--- fs_reclaim
+
+(lockdep should totally do diagrams like this :)
+
+In reality to hit this you'd need something to be doing direct reclaim on
+allocating a split page table during a CPA operation with a simultaneous
+contended init_mm lock.
+
+But this issue is broader than that really - we can't be holding init_mm
+over an allocation.
+
+split_large_page() calls __split_large_page() after dropping the CPA lock,
+which opens with a revalidation:
+
+	spin_lock(&pgd_lock);
+	/*
+	 * Check for races, another CPU might have split this page
+	 * up for us already:
+	 */
+	tmp = _lookup_address_cpa(cpa, address, &level, &nx, &rw);
+	if (tmp != kpte) {
+		spin_unlock(&pgd_lock);
+		return 1;
+	}
+
+There's also revalidation in __change_page_attr() on every split:
+
+	err = split_large_page(cpa, kpte, address);
+	if (!err)
+		goto repeat;
+
+(Where goto repeat entails a complete rewalk)
+
+So dropping the init_mm lock here should not result in any problems with
+being raced by a collapse and was something already accounted for.
+
+So the broad strokes of the fix is to eliminate the init_mm -> fs_reclaim
+dependency and thus break the dependency loop.
+
+I'll send a respin with this addressed.
+
+Cheers, Lorenzo
