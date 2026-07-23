@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC3E33F374
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 07:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 637602475D0
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 07:27:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784791243; cv=none; b=Xpxw8jbWQgOjoyeXitMUvQFBEwRVscpUxuBv70ChaEx+juqaX60yL9OGsrw4ZkAu8pOBBKdVznpwUkQS+ynp631yOywqxN6BRKEKgusoH4en4PQR2rlsMe9POGkRLTWXOXDbgLCGa4CP8YWlr5k/+o7aR330Se59VsvgPPPUK4E=
+	t=1784791638; cv=none; b=UMCa5w3AI5I9Ty2BFpCtdzRIonPR91nh8rRnr7EyCdYB1oaEy++fIX2SQTzQT0DYNsN7SmwBeeOBIdvMcbPzbx6MV0EqPShg5V0XziZDEgj/6kHjfUCA+bIX0KBEi2XQo7vb6NiPbBZB0coL2dmWJ5vcFpqZLTOFbziYD//VkYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784791243; c=relaxed/simple;
-	bh=Xc7iHQ9vCifxxmtI+QCjs2SntCkSRDI+lGnwA5kjAxM=;
+	s=arc-20240116; t=1784791638; c=relaxed/simple;
+	bh=R5jekC4HAUm2HaVetQ1Lsy5Kko9VX23n2zmCqzifI9s=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GbMxVnjmjsAAftdTETE4pBbhVsV8yfoJm6CuvsrWZrp9Yj5wi0UAMmux6wUjhN4oufaughnLwp4Yx+1oMoKRp/L1NQpHhWnsn3f9vVbP0/84lEGwW1yU7rzeS6TxCMzp9dhAqxPx8liFC8w1JQ1lef9PPtlTQWkQgCM6X7QmPoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nheWqPU4; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=kiGJR2GDMY42HnhIozGKxql86xFiZlCpd4bqkMMFKBYCauSsGFq1C3k3unIaD0rz5d3neytjkcpHzqknVeEn4QAmUuUzWTPxWak5YzRcd8FaSj7fqtNAK1+EauzSB57ix1fGW/nn8V+Tb+i1FN8iAHn6pb6hf9YEQk7vHALUW+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZVJm5TBj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nheWqPU4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 141BB1F000E9;
-	Thu, 23 Jul 2026 07:20:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZVJm5TBj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D231F000E9;
+	Thu, 23 Jul 2026 07:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784791241;
-	bh=DL4D+XFCFeSLQ5CIbZcq7uY9YrNB8nCEppDYn/iFwfA=;
+	s=k20260515; t=1784791636;
+	bh=tHeTz3qudVhKkfTExBtEB59EASOtI/nUij4ZVH8fySY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nheWqPU4hDrIonjSBq4G7ZZRxTA7x/uUfO30ihzK2VEvIiVo5rPUUDmrw1jgpD3wv
-	 997GZ0Zk0+zU+W2wuJOvIWEMTPGLeaDmCM3PLX89oFvZOwd7rjClsZi3WtD3rL6rPk
-	 t/0noVuunzKCmWaBlWMcVvXl2uZElwjdclOjVv+4rfD8xPUNlZrzfVMvTzRUaEX72n
-	 aH7vVe7XuUEt16XXtu0A4jaHU9PPBMHADOUaVO+09CJev4Bq/dJW8r1lWtX+Gaiuzm
-	 imHetGS4q60JGRfB11luShDFcH0DgcTeyksjGIlmFB0HyIX3oyrcAc/oweGCJMnwil
-	 7BfIkUCnLkePQ==
+	b=ZVJm5TBjAyhrjDUbZ6eiHYDAraAG9+vLGbGa9or9B5aX7mzY6KyrDGhQ6IdQMBgYH
+	 aAaXKM9N0zlprw8Dt2CpYO6FVWox6F5MKXTJsSJDKmW1Wql9vSCO/w6sGI2fCQsHep
+	 6JkK0vwuINpYqykGw5LZTQgzMALSPlA8JmJZU/5UY2UFSHaGrywMW+qFbIeHn6oq00
+	 JFsNh1KhAokq0dNkn+k0tkWD+pcjphi6A7iS2CEINn//0PRnrpNYXokSlvdsvctP6o
+	 0m1Csf+ZCn05Y3Z5Ssxz3A2mfgIuOkbHlHhWOOUV0/N9LYJJl0Tiw/bj3EJSsoKpjt
+	 4ChhFUHcb7zpw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf, sockmap: fix page_counter underflow in
- strparser SK_PASS
+Subject: Re: [PATCH bpf-next v1 15/18] bpf: Classify kfunc pointer arguments
+ from BTF, resolve type against the register
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Junseo Lim" <zirajs7@gmail.com>
+To: "Amery Hung" <ameryhung@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260723065244.186916-1-zirajs7@gmail.com>
-References: <20260723065244.186916-1-zirajs7@gmail.com>
+In-Reply-To: <20260723050806.1158442-16-ameryhung@gmail.com>
+References: <20260723050806.1158442-1-ameryhung@gmail.com>
+ <20260723050806.1158442-16-ameryhung@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Jul 2026 07:20:40 +0000
-Message-Id: <20260723072041.141BB1F000E9@smtp.kernel.org>
+Date: Thu, 23 Jul 2026 07:27:16 +0000
+Message-Id: <20260723072716.A1D231F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,95 +47,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] Bypassing memory accounting in strparser SK_PASS path allows r=
-emote memory exhaustion (DoS)
+- [Critical] The removal of the `bpf_type_has_unsafe_modifiers()` check all=
+ows referenced pointers with unsafe modifiers (specifically `MEM_PERCPU`) t=
+o be passed as normal pointers to regular kfuncs.
 --
 
---- Patch [1]: [PATCH bpf] bpf, sockmap: fix page_counter underflow in strp=
-arser SK_PASS ---
-commit 5073ca36b1b9677d098ec43e3f231a7423b5d727
-Author: Junseo Lim <zirajs7@gmail.com>
+--- Patch [15]: [PATCH bpf-next v1 15/18] bpf: Classify kfunc pointer argum=
+ents from BTF, resolve type against the register ---
+commit 23915f0b14432c05d0cd9201ab12d531e9b8df8a
+Author: Amery Hung <ameryhung@gmail.com>
+Subject: bpf: Classify kfunc pointer arguments from BTF, resolve type again=
+st the register
 
-bpf, sockmap: fix page_counter underflow in strparser SK_PASS
-   =20
-This patch adds a charge_skb flag to skip memory accounting in the direct
-strparser SK_PASS path. It attempts to fix a page_counter underflow by
-preventing duplicate charges on the cloned SKB.
+This commit refactors kfunc pointer argument classification to rely on BTF=
+=20
+rather than the caller's register state. It also moves the referenced-or-tr=
+usted=20
+checks for BTF ID arguments into the BTF ID resolution path.
 
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 2521b643fa05d..17260681479a3 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-
-[ ... ]
-
-> @@ -618,12 +616,14 @@ static int sk_psock_skb_ingress(struct sk_psock *ps=
-ock, struct sk_buff *skb,
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
->  static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_b=
-uff *skb,
-> -				     u32 off, u32 len, bool take_ref)
-> +				     u32 off, u32 len, bool take_ref,
-> +				     bool charge_skb)
->  {
->  	struct sk_msg *msg =3D alloc_sk_msg(GFP_ATOMIC);
->  	struct sock *sk =3D psock->sk;
-> @@ -631,7 +631,8 @@ static int sk_psock_skb_ingress_self(struct sk_psock =
-*psock, struct sk_buff *skb
-> =20
->  	if (unlikely(!msg))
->  		return -EAGAIN;
-> -	skb_set_owner_r(skb, sk);
-> +	if (charge_skb)
-> +		skb_set_owner_r(skb, sk);
+> @@ -12383,20 +12376,46 @@ static int check_kfunc_args(struct bpf_verifier=
+_env *env, struct bpf_call_arg_me
+>  			break;
+>  		case KF_ARG_PTR_TO_BTF_ID:
+>  			/* Only base_type is checked, further checks are done here */
+> -			if ((base_type(reg->type) !=3D PTR_TO_BTF_ID ||
+> -			     (bpf_type_has_unsafe_modifiers(reg->type) && !is_rcu_reg(reg))) =
+&&
+> -			    !reg2btf_ids[base_type(reg->type)]) {
+> -				verbose(env, "%s is %s ", reg_arg_name(env, argno),
+> -					reg_type_str(env, reg->type));
+> -				verbose(env, "expected %s or socket\n",
+> -					reg_type_str(env, base_type(reg->type) |
+> -							  (type_flag(reg->type) & BPF_REG_TRUSTED_MODIFIERS)));
+> +			if (base_type(reg->type) =3D=3D PTR_TO_BTF_ID ||
+> +			    reg2btf_ids[base_type(reg->type)]) {
+> +
+> +				if (!is_trusted_reg(env, reg)) {
+> +					if (!is_kfunc_rcu(meta)) {
+> +						verbose(env, "%s must be referenced or trusted\n",
+> +							reg_arg_name(env, argno));
+> +						return -EINVAL;
+> +					}
+> +					if (!is_rcu_reg(reg)) {
+> +						verbose(env, "%s must be a rcu pointer\n",
+> +							reg_arg_name(env, argno));
+> +						return -EINVAL;
+> +					}
+> +				}
+> +
+> +				ret =3D process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref=
+_id, meta, i, argno);
 
 [Severity: Critical]
-Does skipping skb_set_owner_r() here leave the cloned SKB without an
-accounted truesize and without a destructor?
+Does this new structure allow referenced pointers with unsafe modifiers (li=
+ke
+MEM_PERCPU) to bypass validation and be passed to regular kfuncs?
 
-When charge_skb is false, the cloned SKB is queued without being charged.
-At the same time, __tcp_read_sock() unlinks and frees the original SKB via
-tcp_eat_recv_skb().
+The original code explicitly checked for unsafe modifiers:
+bpf_type_has_unsafe_modifiers(reg->type) && !is_rcu_reg(reg)
 
-This invokes sock_rfree() and immediately subtracts skb->truesize from
-sk->sk_rmem_alloc.
+However, is_trusted_reg() unconditionally returns true for all referenced
+pointers. If a BPF program allocates a per-CPU object using
+bpf_percpu_obj_new(), it receives a referenced pointer with the
+PTR_TO_BTF_ID | MEM_ALLOC | MEM_PERCPU type.
 
-Because this queued clone lacks a destructor and was never charged, could
-sk_rmem_alloc artificially drop to 0?
+Since is_trusted_reg() will trust this referenced pointer, the unsafe
+modifier check appears to be bypassed. If this pointer is then passed to a
+generic kfunc expecting a standard kernel pointer, could dereferencing the
+raw per-CPU pointer (which acts as an offset rather than a virtual address)
+trigger a page fault and crash the kernel?
 
-If so, tcp_select_window() might compute free_space as if the buffer is
-entirely empty, continuously advertising a fully open TCP window and
-potentially allowing a remote attacker to stream infinite data and exhaust
-kernel memory.
+> +				if (ret < 0)
+> +					return ret;
+> +				break;
+> +			}
 
 [ ... ]
 
-> @@ -1017,6 +1018,8 @@ static int sk_psock_verdict_apply(struct sk_psock *=
-psock, struct sk_buff *skb,
->  		 * retrying later from workqueue.
->  		 */
->  		if (skb_queue_empty(&psock->ingress_skb)) {
-> +			bool charge_skb =3D true;
-> +
->  			len =3D skb->len;
->  			off =3D 0;
->  			if (skb_bpf_strparser(skb)) {
-> @@ -1024,8 +1027,10 @@ static int sk_psock_verdict_apply(struct sk_psock =
-*psock, struct sk_buff *skb,
-> =20
->  				off =3D stm->offset;
->  				len =3D stm->full_len;
-> +				charge_skb =3D false;
->  			}
-> -			err =3D sk_psock_skb_ingress_self(psock, skb, off, len, false);
-> +			err =3D sk_psock_skb_ingress_self(psock, skb, off, len,
-> +							false, charge_skb);
->  		}
->  		if (err < 0) {
->  			spin_lock_bh(&psock->ingress_lock);
-
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723065244.1869=
-16-1-zirajs7@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723050806.1158=
+442-1-ameryhung@gmail.com?part=3D15
