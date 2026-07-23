@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A88E4963A5;
-	Thu, 23 Jul 2026 13:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA64748C8A2;
+	Thu, 23 Jul 2026 13:32:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784813384; cv=none; b=QRVPSLltxygIutB+ViVI14uhjITzrBYOPmmhH+T7XztjppOCt4bXjhFaT7Pvt3/9+98uV/nX2s5Fx3CWfiwqXa23QGFwN+qnsnPwSUuZOEaXwCy0+Sxrjficq7FdTBFF6ZkeVYWZ4cjBzJKUElWQxsVQRfwdd0C4PbLW3LH1ZIA=
+	t=1784813555; cv=none; b=RQAR/89i8z56eAQNoP0RjDFSXzsXKQvpe4JtH89l/sWvvoBFdeQhF9yww90UAVwoHVqWxPWU8zCy7zy2kdt+4hIsv8JXEA21yOHz7C9vJ0DXONukXPAz6diN0zAMTIsf+anCSl4bU/seg+x2EdQApVGwA7MqaBrtFIn2zxKkZ+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784813384; c=relaxed/simple;
-	bh=jlS1CQ2CImc0/y+01v6Hb1rpC0YyyEIywGqsUrLzmb4=;
+	s=arc-20240116; t=1784813555; c=relaxed/simple;
+	bh=pmGT3faBfzPliMxibFwp5n4R6WM3SvhEchhx/+niCQk=;
 	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=D5vzvcyu0UN2346gm3DQpGizDBNkOnE/w7xKmWLkuHwT39QuWluSIHoLpfiwC0SGwJpiCkuyjobcIWmThqW1WL1M65pxE68Cohh61g6UPsIyJKuekkiCB1PxJHYorwqI3cJa9bDGVA2BpXxU7utzhxuJR7smdsdCQYd2t+0o1pI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O344mY24; arc=none smtp.client-ip=100.103.45.18
+	 References:Date:Message-Id; b=ng/amBg1uFnoKsAuM+rdO35y1mUFCqXgPX/JzjWJE/1g0uvI7/FsRSFzUfYpA6ui2pcgeC539E0ENJnmSuHx+A9b7uj0uBtOLKotZel9cgV/GRthSQHxIBKhZF3gtd5n1yPVYw9WTg3YHO1L03dntqNmmQ/dbJE56QLmuUr+0/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RxKeUhdm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O344mY24"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F2981F000E9;
-	Thu, 23 Jul 2026 13:29:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RxKeUhdm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A90D81F00A3A;
+	Thu, 23 Jul 2026 13:32:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784813382;
-	bh=/eJaksA8cVR2h2DWYNLQWK0/asNQiai/rebHD8qgg1s=;
+	s=k20260515; t=1784813552;
+	bh=NAWPQDEwgUQenFjlFjzBd00tOhMhEOyT4kNXUGq7gfw=;
 	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=O344mY24di77hY1DpoQTGBaL/uH0bJpdD7FKCI+mrUNk5Z/tPe856FQFGZv5jHEo2
-	 YZrPy38475ITtvSH9z7qFZHirUWRYzIvK+R1DvxD+ttwMVs7K3jL86l2TMuM+C+/MX
-	 abg/gN9vXhAV03N8eiV3vl9QtPAw57YMniITd1xsqAfSYgqKsNzyUh0BD3eXHF7Cv0
-	 FJz/82jygREDLtA75V1NGDD5GGF6MvxxyZ2jqQmRdyVZFOJUKVrAM6frEHeVf7WQ6f
-	 MsXHyBReFNy8ZaoJ9NwRXYhf0h6C98p1jzLU4gzMA6/2Rh88OiiKS21Gi+i0MxLN3z
-	 v9odJn6VK0Rig==
+	b=RxKeUhdmBj4gJ1n4H1BRQDxOeHFg7Em7lrvFM95dPVAlyrqEEKogQVYaETnHVeev2
+	 geYcv0RmFhuu30Q+RaFN0kQfKqIorfqhzFt4g7mFnEVulsghRfHaTqiNVaGt7etaac
+	 yAOmy68hWehWYt4nkKVWJ2kxMoEhr02NkP+XMMIuVI0R6YdcnySFDuLWa5DkjWhY6K
+	 HaG0+YdObuc19bGQxK/pVLT2mIkZ4k5w9ZEs5Fy2atEdxVgbj5m0PGVjXzM43oSEmL
+	 6++8JM05scF/b7faXlUJId7oQljZ+E6hJDH6MWykOW5GRvZ88g4cNhK7sakvQFRiXl
+	 FyRSSS3WdVMrw==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,47 +34,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] binfmt_elf_fdpic: only honour the first PT_INTERP
+Subject: Re: [PATCH v2 00/21] binfmt_misc: transparent interpreters and
+ PT_INTERP loader substitution
 From: Christian Brauner <brauner@kernel.org>
-To: Kees Cook <kees@kernel.org>
+To: Farid Zakaria <farid.m.zakaria@gmail.com>
 Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
- Farid Zakaria <farid.m.zakaria@gmail.com>, 
  Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Jonathan Corbet <corbet@lwn.net>, linux-mm@kvack.org, bpf@vger.kernel.org, 
- jannh@google.com, mail@johnericson.me, stable@vger.kernel.org
-In-Reply-To: <202607222110.D5AB43796@keescook>
-References: <20260721-gezittert-medium-kreide-b41fc1f0277e@brauner>
- <202607222110.D5AB43796@keescook>
-Date: Thu, 23 Jul 2026 15:29:36 +0200
-Message-Id: <20260723-ertrinken-ahnung-pizza-5aac875268d0@brauner>
+ Kees Cook <kees@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Jan Kara <jack@suse.cz>, Jonathan Corbet <corbet@lwn.net>, 
+ linux-mm@kvack.org, bpf@vger.kernel.org, jannh@google.com, 
+ mail@johnericson.me
+In-Reply-To: <178477872729.254289.15918342296936455606.b4-review@b4>
+References: <20260721-work-bpf-binfmt_misc-ptinterp-v2-0-e57866e4ae0f@kernel.org>
+ <178477872729.254289.15918342296936455606.b4-review@b4>
+Date: Thu, 23 Jul 2026 15:32:09 +0200
+Message-Id: <20260723-entmilitarisieren-respekt-lehne-5db75924c69a@brauner>
 X-Mailer: b4 0.16-dev-0e65f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1076; i=brauner@kernel.org;
- h=from:subject:message-id; bh=jlS1CQ2CImc0/y+01v6Hb1rpC0YyyEIywGqsUrLzmb4=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQliTtd+ryyUa5mVdSS0JZpdlPsDbN+6byVj5N8uGN2S
- OGpU7e1O0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACayJpaR4d780AUGn2QcPxed
- 72IoDGF79Zy7YNGzXpkTtwVzvl23uc/IcCqSU/X6pZ0KN8WTK2Z/Xrf/chb3hknzYi+Y8e7PUkh
- dyAIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=692; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=pmGT3faBfzPliMxibFwp5n4R6WM3SvhEchhx/+niCQk=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQlib81X/yro9uX6wzT4+aHLBEPXf2fbNT/97/Xvf3F5
+ risLLmgjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIl85WBk2MB8ZUJZ64Y7+1pc
+ DH5eufWsnX+Fh+Wq13alRYI1v3cz6zAyLJ06c8vDJ0cCLGqrLF/U8/f6mok2TlI0mm4VeeCTyNK
+ XTAA=
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On 2026-07-22 21:13 -0700, Kees Cook wrote:
-> On Tue, Jul 21, 2026 at 01:20:45PM +0200, Christian Brauner wrote:
-> > The program header scan handles PT_INTERP from a switch nested in the
-> > scan loop, so its break leaves the switch and not the loop. A binary
-> > carrying more than one PT_INTERP runs the case again and overwrites both
-> > interpreter_name and interpreter. The previous name allocation leaks and
-> > so does the previous interpreter reference, along with the write denial
-> > open_exec() took on it. The denial is never released, so the file stays
-> > unwritable for as long as the system runs.
-> > 
-> > An unprivileged caller reaches this with a crafted binary and repeats it
-> > at will. binfmt_elf stops at the first PT_INTERP. Do the same here.
+On 2026-07-22 20:52 -0700, Farid Zakaria wrote:
+> On Tue, 21 Jul 2026 16:13:42 +0200, Christian Brauner <brauner@kernel.org> wrote:
+> > [...]
+> >  tools/testing/selftests/exec/loader.bpf.c          |  56 ++++
+> >  tools/testing/selftests/exec/transparent.bpf.c     |  57 ++++
+> >  19 files changed, 1823 insertions(+), 303 deletions(-)
+> > ---
+> > base-commit: 6cea93ff6fe97df34b63fe94487473e16c73b74b
+> > change-id: 20260719-work-bpf-binfmt_misc-ptinterp-e6ee99ff6ba8
 > 
-> binfmt_elf ignores all the other PT_INTERPs, which is what you've done
-> here too, but I wonder if it might be reasonable to refuse to load such
-> a binary?
+> Started to review (slowly); looks like the first ~10 are mostly NFC / refactor
+> / documentation.
+> 
+> This b4 thing is so slick; I want something like this for GitHub now.
 
-As a follow-up change I think it might make sense to try to do that for
-both going forward. As an actual fix this seems safer.
+You're not the only one. :)
 
