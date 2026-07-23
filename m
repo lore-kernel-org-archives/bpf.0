@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C86F472F74
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 15:34:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF6B3FA5FC
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 15:34:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784820847; cv=none; b=N2zmGNoD9Kn3tWE3KiMGe3+rOThXyCj3SAd7xCL84AsTeEa5vabsmoilo0poMRh4IU+FhTz5nEN1+UEuQcD/8Aeuj0HTR6rapXikpCQDwarOQEtkjvYKYMtMcsxxu5DY4uprTLfNvtbGszbLN8NBfuMnmGNu4pE/MFt3LOfIKZU=
+	t=1784820873; cv=none; b=ncGQYALaCWNoFQ+gYrZdStMcbkTalF74CJ2qLtYU0CtsE7FXTvGsG71BWQAHDgk2sD0tMB40R0MG+w9YpDxzsbTP0kVg7xJTO6BGI2RAcLJCuLsU68pCHHZ7VmkzYCN+3XVH5OL/FyMT/KYlV2pISZNZM/0sNkiECBxSCvoOmCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784820847; c=relaxed/simple;
-	bh=IS6ogMKG9NL29Dq1ZCzVERKxTMcD2W/V/2ixS/JL7AA=;
+	s=arc-20240116; t=1784820873; c=relaxed/simple;
+	bh=5+Oidvt6Y6nd/IYEEQav0OWntlRQWlpvILC++f8ZjL4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=f0kmL1eOMtLu28zVZ37HxgsxxdOQK8tXSJUSEzfNFMJQyJoZZMPn1FDrkUOvNw5gXTDEbL22YypmqJuezSHwTTc0H0rbdVGuNAF2X8zLBz2DkRbqB1xwgakk+GgaUWImVVeAYCMwXQ5is4uR0vhtwJ2cuZ1099IIUMx42uzP7VQ=
+	 Message-Id; b=ETj1PFtmbGJyzH7AmSPzqLt9Uc1KM4p1FKh0mbP6hiA1u9mVhr2Ap0lCfCU6+wumWrsTNHwgvCJUH58CbnlAluLnzCCpcPUNbHWHToc0UcYr7LuV3Q+fifaa3cVoq3yR6a9RFb94GGERZNTQTwsUplDtW5m8phAhSCeaQUvWe0k=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B303A1F000E9;
-	Thu, 23 Jul 2026 15:34:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EFE51F00A3A;
+	Thu, 23 Jul 2026 15:34:25 +0000 (UTC)
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH mm-hotfixes v6 2/5] x86/mm/pat: acquire init_mm write
- lock on collapse to avoid UAF
+Subject: Re: [PATCH mm-hotfixes v6 3/5] x86/mm/pat: acquire init_mm read
+ lock on attribute change to avoid UAF
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260723-series-vmap-race-fix-v6-2-8cc77dcc0018@kernel.org>
+In-Reply-To: <20260723-series-vmap-race-fix-v6-3-8cc77dcc0018@kernel.org>
 References: <20260723-series-vmap-race-fix-v6-0-8cc77dcc0018@kernel.org>
- <20260723-series-vmap-race-fix-v6-2-8cc77dcc0018@kernel.org>
+ <20260723-series-vmap-race-fix-v6-3-8cc77dcc0018@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Jul 2026 15:33:58 +0000
-Message-Id: <20260723153403.B303A1F000E9@smtp.kernel.org>
+Date: Thu, 23 Jul 2026 15:34:23 +0000
+Message-Id: <20260723153426.0EFE51F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,77 +37,66 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Incomplete Fix / Use-After-Free: Lockless kernel page table walker=
-s (like `vmalloc_to_page()`) are still vulnerable to UAF when kernel page t=
-ables are freed.
+- [High] Lockless callers of __change_page_attr_set_clr() remain vulnerable=
+ to Use-After-Free because set_memory_rox() and CPA_COLLAPSE operate on the=
+ direct map.
 --
 
---- Patch [2]: [PATCH mm-hotfixes v6 2/5] x86/mm/pat: acquire init_mm write=
- lock on collapse to avoid UAF ---
-commit 5ded4e5b38c3bfea3e52e559a3009697ac580593
+--- Patch [3]: [PATCH mm-hotfixes v6 3/5] x86/mm/pat: acquire init_mm read =
+lock on attribute change to avoid UAF ---
+commit 99a1d277a38cbe15d561ae13b70590f794c51988
 Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+x86/mm/pat: acquire init_mm read lock on attribute change to avoid UAF
 
-x86/mm/pat: acquire init_mm write lock on collapse to avoid UAF
-   =20
-This commit attempts to fix a use-after-free issue when collapsing
-page tables by taking the mmap write lock on init_mm during the
-CPA collapse operation. It aims to serialize against ptdump and
-other concurrent CPA walkers.
+This commit resolves a use-after-free race between a lockless page table
+walker and concurrent CPA collapse by acquiring the init_mm mmap read lock.
+It also temporarily drops the lock during page table allocations to avoid
+deadlocks with memory reclaim.
 
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index d023a40a1e034..d1e63f7d267ff 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
+Link: https://lore.kernel.org/all/20260626163213.2284080-1-den@openvz.org/
 
-[ ... ]
-
-> @@ -442,6 +443,18 @@ static void cpa_collapse_large_pages(struct cpa_data=
- *cpa)
->  	}
->  }
-> =20
-> +static void cpa_collapse_large_pages(struct cpa_data *cpa)
-> +{
-> +	/*
-> +	 * Take the mmap write lock on init_mm to:
-> +	 * - Avoid a use-after-free if raced by ptdump (which takes its own
-> +	 *   write lock on init_mm).
-> +	 * - Serialise concurrent CPA walkers.
-> +	 */
-> +	scoped_guard(mmap_write_lock, &init_mm)
-> +		__cpa_collapse_large_pages(cpa);
-> +}
+> The CPA_COLLAPSE flag is only set by set_memory_rox(), which exclusively
+> operates upon vmalloc ranges, and on x86 only within the module mapping
+> space.
+>=20
+> This is important, because some callers directly invoke
+> __change_page_attr_set_clr(), bypassing this lock. However, none of these
+> operate within the module mapping space.
+>=20
+> * cpa_process_alias() - a recursive helper called by
+>   __change_page_attr_set_clr().
+> * __set_memory_enc_pgtable() - operates on the direct mapping and (via
+>   __vmbus_establish_gpadl()) the vmalloc mapping space.
+> * __set_pages_[n]p() - called by set_direct_map_[invalid, default,
+>   valid]_noflush(), __kernel_map_pages() - operates on the direct map.
 
 [Severity: High]
-This is a pre-existing issue, but does this fix leave lockless kernel page
-table walkers unprotected?
+This is a pre-existing issue, but is the assumption that set_memory_rox()
+exclusively operates upon vmalloc ranges accurate?
 
-While taking the init_mm mmap write lock serializes against ptdump,
-functions like vmalloc_to_page() in mm/vmalloc.c perform lockless walks
-over the kernel page tables without acquiring the init_mm mmap read lock:
+Looking at machine_kexec_prepare(), it appears to call set_memory_rox() on
+control_page, which is a direct map address. If set_memory_rox() operates
+on the direct map, could a concurrent vfree() trigger a use-after-free?
 
-mm/vmalloc.c:vmalloc_to_page() {
-    ...
-    pmd =3D pmd_offset(pud, addr);
-    if (pmd_none(*pmd))
-        return NULL;
-    if (pmd_leaf(*pmd))
-        return pmd_page(*pmd) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
-    if (WARN_ON_ONCE(pmd_bad(*pmd)))
-        return NULL;
+For example, if CPU 1 is doing kexec:
 
-    ptep =3D pte_offset_kernel(pmd, addr);
-    ...
-}
+machine_kexec_prepare()
+  set_memory_rox() -> sets CPA_COLLAPSE
+    cpa_collapse_large_pages() -> replaces a page table with a huge page
+                                  and frees the PTE page table via
+                                  pagetable_free()
 
-If a thread executing vmalloc_to_page() checks pmd_leaf() and is preempted,
-and concurrently set_memory_rox() calls cpa_collapse_large_pages(), the
-PMD could be collapsed and the old PTE page freed.=20
+And CPU 2 is concurrently doing vfree():
 
-When the first thread resumes, could it dereference the freed PTE page=20
-causing a use-after-free, or read the new leaf PMD and incorrectly treat=20
-it as a PTE page?
+vfree()
+  vm_reset_perms()
+    set_area_direct_map()
+      set_direct_map_invalid_noflush()
+        __set_pages_np() -> calls __change_page_attr_set_clr() locklessly
+
+If CPU 2 performs a lockless walk on direct map pages that share the same
+2MB region being collapsed by CPU 1, could it access the freed PTE page?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723-series-vma=
-p-race-fix-v6-0-8cc77dcc0018@kernel.org?part=3D2
+p-race-fix-v6-0-8cc77dcc0018@kernel.org?part=3D3
