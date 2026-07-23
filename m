@@ -1,136 +1,153 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED0030ACFB
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 03:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC83C368D4D;
+	Thu, 23 Jul 2026 04:08:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784778763; cv=none; b=K7gdyXlF3ber63PBLamledJw3kfkPqIeZHVHO0UZKxMXsQOaMMwTawmACtybuExC5/GvAcb3IY/vqgx2NmFd0vNoSwIePIxC32OYUzO0qOZmP8WjMJJvgIduOxcSq3FzdbDaCyLeSkzV40ZJlS52ErD8xcA379DHRVUruYVa6/U=
+	t=1784779701; cv=none; b=huG+cVePy2L7OU4TDAxWglyhVc1Se/bKaJMs5ie8ljPZ+C4JQcwYdlh0d6fiLe5rWoo59PFg6OHMYOWrnRhw1vGC4K5MREu9z+ovvTDsIRt/YXh0W8sKsmbRTnR6JWMtw0mY+h3EWAaMr3Kj36LVlpuE0GanjN2AHnFzIh4re+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784778763; c=relaxed/simple;
-	bh=IluLGjsT7RZdSCRqAA2UzZd+nB4XSyCNHTZSjlQFFJ8=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=Fx9jQSfq0jH3KgaTDOLDt/ecV6jpHKGLUd7shVtK+jvcQEQLc7qu/jAWChHyGatRs+ijjN3UjPzpqhbCy3wvnDR2qH0qRgU+aDZYkz0F5V6ASesxjrt7ZYXm/HIy7pP4Mgolpl+ONyEMV00Fx2DGd3bpisZii/FW8JJsfMT2A1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GjDH5tUh; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784779701; c=relaxed/simple;
+	bh=EvmoLr2zZKIEp+gy16ySCySwS922FaTI8KUCTeEtFng=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=hsEIHFppkXJdLQ7iO5Rnz7XPPc8e8ARJvjyQZKT4Gl1IxnJgKl65fO+im3B99oAslk1/k8X+fbW2BiB9IqxsIRXs+aFXjh2AYhNuxBx79PaOPL1WWtY2T7JnbSJorcDj5I5Gcr9POM0MYuzel1N28eVC3y9c7jzbeCB+GaQo6Fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=1jB1fvbV; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GjDH5tUh"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38e347638adso184497a91.0
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 20:52:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784778761; x=1785383561; darn=vger.kernel.org;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=S1PEBsBmBuzQnOjcMzNDPNdLnwh3q1jmxZTOFvMDrVc=;
-        b=GjDH5tUhFu7dCswD25/ITnXyBMV9QAVq21g0eFbBYFFemLSeb+nsO5lkyQaPTh/X3y
-         aJlRP13B3dPvsVO/1GnyuEZ20EY+KTGgabC6iUbijBV8BmGL+Xehow19QofkJXmj6/Tm
-         dX17yJBieGWNp0fvgfbA39fksavXrCxCLdCwilK5ZPmXct4VBAT3FN7TqYH6wlK9I4CB
-         dBStWZq/QJYVeXNdQmhYxckgWc4jsNk82B2+S1G96C6vQmbnV5gSHDKvjlzUHVWWgRVi
-         xx9KnEAyLvpkY31vGYkExFvpJjUogSxsZcdCsBV8nC8DEfXkmpJcZcgpYU4v6V4j+Kni
-         36/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784778761; x=1785383561;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=S1PEBsBmBuzQnOjcMzNDPNdLnwh3q1jmxZTOFvMDrVc=;
-        b=KOQ/N+bO9/fIGgbkWPHGrYLzZGvx5yVqhvuurvzZ7Twd6W3JoAlRWAsLHjsYHMZS18
-         IA/tNDWJbONtHpyee+/bq6AyYTrrPxRXJ5pjG42W5NIPcIYNdTXu14+Dxp+1nQPgTKI2
-         8tJEX5CEbNO2qNgCRfpXrCfVbHbgr0IOJuyiVpKjDlCArV84ZcBqjaWSPK81eyCR9v2p
-         AMbDRRo4X/yFSDArRADfBbN8QYI6IUCbUm/zg+Zn+n+H9TODEq5+X2/g5I4DoYtONNUp
-         d34T7RisQhHGCp7HoiGlyYKCyrhX3XDRo/bQUiYGp6FYqa9zt0gKrHiQ4UlhcfCpYbBI
-         QaiA==
-X-Forwarded-Encrypted: i=1; AHgh+Ro5RwqOxP6yst/LEVQP/xbn57SxAIl4siFbLRYaozAfCZY6ROe1h8QPzLzksQ/jE/qvgcM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7FBzPmBBi0IIU2Tm/6UshACigyCzP92nNqdno3DeGI+rOZwRY
-	f6ZyrGO4g/FTvcohQGV2Qomk916PZ2GpuIMWNjIz7HqWjrLJe1AOSPZW
-X-Gm-Gg: AR+sD13HuAdrZABIpn6jg8s0DB+j794sJnfMJHt/ZPYEo66VPRhavadnAwnWelH6wbs
-	O1p9+UXBoPYNBnjoAQjDE1lj7Wz4SXNBCBLczL2xpnLVie67kYjxCNYqaICAi5UILDlyrh7lptP
-	CqREbBN+vEGMuuDtxfL+gaL/UcDSCwyT7IjL7ThqouNHsDtwDJpyh5nuP2djkiXPcyMHLT0EheK
-	JqGuQkdiiC7024MAjtYRfV1nruBXYHH2WJzkQayFoZ62+pY6oXU8/7HTFxbbq8HpR0ewbkfd+t9
-	BSXWoIyR5oUvwwbhGr1o+YSdf+xHo1edbazgJAu0MI23ZpYORZji1eYwpZW1hNQPFo2XoB5owhX
-	q6cKBMW406770fSYQWFuHPCeNnf9BAO+mWbWwcPjfyqnH4Mu4zY2YjQWm9o+P1B0CnmHju10BX8
-	I1Dazk6g==
-X-Received: by 2002:a17:90b:3cc4:b0:38d:b36e:9813 with SMTP id 98e67ed59e1d1-38ec642941emr1497129a91.11.1784778761575;
-        Wed, 22 Jul 2026 20:52:41 -0700 (PDT)
-Received: from [127.0.0.2] ([98.35.8.117])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13d12f267fdsm11497359c88.0.2026.07.22.20.52.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 20:52:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="1jB1fvbV"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=PkwAcbk3wA3nlynzUfzUlT3EsBLKum122AVkyFY+wTU=;
+	b=1jB1fvbVKfiPZCGPse198VNqsruTQoEDHRVe1RS4Jmu1lfEWFY93eyTMzdBZJMWF9AD6PowXb
+	V1Gaa/XaRy7QmQ+oQjxTkOQWY68xa6yFzoU+Z8qLxyuotPckQMdircvSk4EWEL/otx23HxB40Ra
+	KdVdqqklmDA3XgiQi/D8NwU=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4h5HRj2qZtzpStj;
+	Thu, 23 Jul 2026 11:58:57 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id B24FF2025F;
+	Thu, 23 Jul 2026 12:08:03 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Thu, 23 Jul
+ 2026 12:08:02 +0800
+Message-ID: <0fb1f779-bbd2-4b7f-a9dd-1e56fa487b50@huawei.com>
+Date: Thu, 23 Jul 2026 12:08:02 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Verify no warning when
+ close fexit link
+Content-Language: en-US
+To: Leon Hwang <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+	<emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, Jingguo Tan
+	<tanjingguo@huawei.com>, Lin Ma <malin89@huawei.com>, Maciej Fijalkowski
+	<maciej.fijalkowski@intel.com>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <kernel-patches-bot@fb.com>
+References: <20260722151909.69142-1-leon.hwang@linux.dev>
+ <20260722151909.69142-3-leon.hwang@linux.dev>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260722151909.69142-3-leon.hwang@linux.dev>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 06/21] exec: release the replaced file with
- do_close_execat()
-From: Farid Zakaria <farid.m.zakaria@gmail.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Farid Zakaria <farid.m.zakaria@gmail.com>, 
- linux-fsdevel@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
- Alexei Starovoitov <ast@kernel.org>, Kees Cook <kees@kernel.org>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Jonathan Corbet <corbet@lwn.net>, linux-mm@kvack.org, bpf@vger.kernel.org, 
- jannh@google.com, mail@johnericson.me
-In-Reply-To: <20260721-work-bpf-binfmt_misc-ptinterp-v2-6-e57866e4ae0f@kernel.org>
-References: <20260721-work-bpf-binfmt_misc-ptinterp-v2-0-e57866e4ae0f@kernel.org>
- <20260721-work-bpf-binfmt_misc-ptinterp-v2-6-e57866e4ae0f@kernel.org>
-Date: Wed, 22 Jul 2026 20:52:07 -0700
-Message-Id: <178477872732.254289.8598325015704574885.b4-review@b4>
-X-Mailer: b4 0.15.2
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-# Add your code comments below. There is no need to trim or delete
-# any existing content -- just insert your comments under the relevant
-# lines of code. Lines starting with "> " are quoted diff context and
-# lines starting with "| " are comments from other reviewers.
-# The final email will be reformatted automatically to include only
-# the sections that have your comments.
-#
-> When the format search stages an interpreter exec_binprm() swaps it
-> in and releases the file it replaces. Dropping the write denial the
-> open took is done manually ahead of both release paths. The one path
-> that keeps the file silently relies on it not being called.
-> 
-> Let's just use do_close_execat() on the two paths that release the file
-> and drop the denial explicitly on the one that does not.
-> 
-> No functional change.
-> 
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
->
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 41e1684d9..061e0f9fb 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -1735,15 +1735,17 @@ static int exec_binprm(struct linux_binprm *bprm)
->  		bprm->file = bprm->interpreter;
->  		bprm->interpreter = NULL;
->  
-> -		exe_file_allow_write_access(exec);
->  		if (unlikely(bprm->have_execfd)) {
->  			if (bprm->executable) {
-> -				fput(exec);
-> +				do_close_execat(exec);
->  				return -ENOEXEC;
->  			}
-> +			/* Only the reference is kept, for AT_EXECFD. */
-> +			exe_file_allow_write_access(exec);
->  			bprm->executable = exec;
-> -		} else
-> -			fput(exec);
-> +		} else {
-> +			do_close_execat(exec);
-> +		}
->  	}
->  
->  	audit_bprm(bprm);
 
-Reviewed-by: Farid Zakaria <farid.m.zakaria@gmail.com>
+On 2026/7/22 23:19, Leon Hwang wrote:
+> Add a test to verify that there's no WARNING when detaching fexit link by
+> following the repro steps of previous commit.
+> 
+> Without the fix, the WARNING could be triggered by this test.
+> 
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>   .../selftests/bpf/prog_tests/tailcalls.c      | 48 +++++++++++++++++++
+>   1 file changed, 48 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+> index c66037162da5..c5c9d6c359bb 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+> @@ -13,6 +13,8 @@
+>   #include "tailcall_cgrp_storage.skel.h"
+>   #include "tailcall_sleepable.skel.h"
+>   #include "tailcall_callback.skel.h"
+> +#include "tailcall_bpf2bpf2.skel.h"
+> +#include "tailcall_bpf2bpf_fexit.skel.h"
+>   
+>   /* test_tailcall_1 checks basic functionality by patching multiple locations
+>    * in a single program for a single tail call slot with nop->jmp, jmp->nop
+> @@ -1907,6 +1909,50 @@ static void test_tailcall_callback(void)
+>   	RUN_TESTS(tailcall_callback);
+>   }
+>   
+> +static void test_tailcall_bpf2bpf_fexit_links(void)
+> +{
+> +	struct tailcall_bpf2bpf_fexit *skel1 = NULL, *skel2 = NULL;
+> +	struct tailcall_bpf2bpf2 *skel_tc;
+> +	int err, prog_fd;
+> +
+> +	skel_tc = tailcall_bpf2bpf2__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel_tc, "tailcall_bpf2bpf2__open_and_load"))
+> +		return;
+> +
+> +	skel1 = tailcall_bpf2bpf_fexit__open();
+> +	if (!ASSERT_OK_PTR(skel1, "tailcall_bpf2bpf_fexit__open"))
+> +		goto out;
+> +
+> +	prog_fd = bpf_program__fd(skel_tc->progs.classifier_0);
+> +	err = bpf_program__set_attach_target(skel1->progs.fexit, prog_fd, "subprog_tail");
+> +	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
+> +		goto out;
+> +
+> +	err = tailcall_bpf2bpf_fexit__load(skel1);
+> +	if (!ASSERT_OK(err, "tailcall_bpf2bpf_fexit__load"))
+> +		goto out;
+> +
+> +	skel1->links.fexit = bpf_program__attach_trace(skel1->progs.fexit);
+> +	if (!ASSERT_OK_PTR(skel1->links.fexit, "bpf_program__attach_trace"))
+> +		goto out;
+> +
+> +	skel2 = tailcall_bpf2bpf_fexit__open();
+> +	if (!ASSERT_OK_PTR(skel2, "tailcall_bpf2bpf_fexit__open"))
+> +		goto out;
+> +
+> +	err = bpf_program__set_attach_target(skel2->progs.fexit, prog_fd, "subprog_tail");
+> +	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
+> +		goto out;
+> +
+> +	err = tailcall_bpf2bpf_fexit__load(skel2);
+> +	ASSERT_OK(err, "tailcall_bpf2bpf_fexit__load");
+> +
+> +out:
+> +	tailcall_bpf2bpf_fexit__destroy(skel1);
+> +	tailcall_bpf2bpf_fexit__destroy(skel2);
+> +	tailcall_bpf2bpf2__destroy(skel_tc);
+> +}
+> +
+>   void test_tailcalls(void)
+>   {
+>   	if (test__start_subtest("tailcall_1"))
+> @@ -1974,4 +2020,6 @@ void test_tailcalls(void)
+>   	if (test__start_subtest("tailcall_cgrp_storage_no_storage_bridge"))
+>   		test_tailcall_cgrp_storage_no_storage_bridge();
+>   	test_tailcall_callback();
+> +	if (test__start_subtest("tailcall_bpf2bpf_fexit_links"))
+> +		test_tailcall_bpf2bpf_fexit_links();
+>   }
 
--- 
-Farid Zakaria <farid.m.zakaria@gmail.com>
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
