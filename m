@@ -1,141 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EA1369D56
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 22:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5473A36B928
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 22:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784845009; cv=none; b=iOxr6lTeQ8KBAwHNb5UDwu1GUL0hweC6YfVaE3AWtW9z0nzpel+M46Y2iWLBZgkLfmdkVVq5NWuv+E8Bj6utFHOZVA0itRlceCbO1RL6qE4bbXkn8CYDaHqDiS/Azsax5Mh5d4QCigNLvIxkCbIUKcqjZg378aemTmt46bEQ78c=
+	t=1784845098; cv=none; b=a/DP9yLKq6Z/ulOShLp+gNSqkbRzIMoQ5RxW0TuEfohePRUhPWQS8XupIQPJ1PtgZgKYpiNwi5v8SxYJb4ovziI7wrRhHDJsdWSEheOIcYNzElBwwfSSPOG8VQgeb4La4+SIKXgen70iNyCro2jTpL7PFSPZv6O347hv2WheHt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784845009; c=relaxed/simple;
-	bh=fiOCnGSeEHtF+JqI70hUwqbzJJ8kgPc+0wJINcTuQuQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=H0tnXR/mo1/Be/wPzbUgCWDZERiGylaCnXSi8uNMMY+jROWniwgB0nlW2X9fH1Ffv3JrgsOGDKFoEYCp6BuBJJDprqnaybbBZGHwiHfW0JckO2qV9hON72i8WMs40+ycqIn5hM9yIlobYN2h3dkUNksBWZNf+QgYsANmwQqazjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ncLJ8yKn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784845098; c=relaxed/simple;
+	bh=KamYaFf7DMx8/L5rX00o4lze7Fh4WbXthxIdBeMDnlw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QbDnBa4FXcZNPb/vHxyNfwBruX+gbsBQMS3K5YGfFwQ38GHGMkpsBhMxLad04/GRHR/FBPoa6BE6eAucluQmiLjH6mzvsUI0BPmyEqwCGBGbikiv1S6fLjJDlMu8KJ4IPtbr/e/vRv4vR9rxQslIQsHBt+oWN1EE4qoNVC21n64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FBxnDQ5w; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ncLJ8yKn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56571F00A3A;
-	Thu, 23 Jul 2026 22:16:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784845008;
-	bh=xRazIBTwWLCXw6QVslxy58USIQx1ziWdSJZ5zCGFBl0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ncLJ8yKnK0uAkDWtlFECzMETjjePfG1JXuvQ+9qqv+iTj3k0SFGppq2Zgpn2e30yv
-	 SGLxB3hV1UQqkDqepGH8kFm+ygKwlTO2yggBa7sKJlylgY4LEXQ45mdkly4Bo5F5bV
-	 PySm2Ou4WmCeeIAwqUgiwLRQiKYPjsPgcAID5/HPiMiCJ46xSA9NBBWWfGbRW+lVDS
-	 NqTdyKmxsXKqIgdrnbBd4ItM1GmuLwPrrShNe7SpIzloe1cajxbiaxirB563SbbTTj
-	 g3xEK7Gflyickvc+ATjGQjmdWvyesxNjE6PqDv3tOL3TQ22cg0CKk3Cu4YfeeebdSa
-	 Ugd2/RNYIqUTA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 2/2] gve: add XDP metadata support for DQ
- RDA
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Joshua Washington" <joshwash@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260722221634.186886-3-joshwash@google.com>
-References: <20260722221634.186886-1-joshwash@google.com>
- <20260722221634.186886-3-joshwash@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Jul 2026 22:16:47 +0000
-Message-Id: <20260723221647.C56571F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FBxnDQ5w"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ceaf8a1265so14809875ad.2
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 15:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784845097; x=1785449897; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=556MUYL6Dp/wFsnRk64Tx7w7PHFJkxTZ7Ou1cxFsxdo=;
+        b=FBxnDQ5w8SK2EsoPi/fXMOtgGeXHklq88mmtIv3kaL4seZ55Un+LysOdDwVZ32QxGm
+         egcSl5ZcZaJctFfCBLtwOC5Pf5rv0zJBXv6lIPJGysUcLq8YFInJ5qSmvbNkN2D6Nxme
+         zP14axec0x7mOQDTvgKAiVpyhbTx3oevs63VHy5yzp3Yvj0UCjSSZ72odoF3o+GDH+1o
+         DCsQH+mBZU8xnf2g9yYB4ZZop4tHCycBo+BzeagdfV0xJNcMTHfGHgxrfv8ycKyG2WcR
+         ayGEbuot3rRJwaqtalgWNafeFSv8YJ3AQWFFI1Zw2Z/dlHe3/AVDyfMGp6JdLjQ69t43
+         u9ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784845097; x=1785449897;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=556MUYL6Dp/wFsnRk64Tx7w7PHFJkxTZ7Ou1cxFsxdo=;
+        b=SnJwAKStM1UyHOWbAI4LGZUUBuqp1bvGtOWgEfRKWmCB2Xn/r6Tbm2NoC59S9YlQcy
+         iZoZwTSJhMMNgRbb0csL/d1FNDvSbyzNx+Nm5xuRboXOqJYrg2w+1rFaiK7pUuZUG8Ql
+         TAnIb2sgoopJpqCDdr4KmXjtrfPHP0l8coLFeiKZK7hXSodDWd1IEbAXBk9NKiL83KPO
+         1xZmcTB3i4gjrw1aHGUDcRDUTyT8XZuSA44uGIqqnJKvR+GURtoCUvT+3PDNOWO3lFs+
+         nYhIosZR0vzt2lajPHt9JbwQByJQFmmJ4owrQyLUH0frdqH8I4tKDt7PDXBMAzB9Jv9F
+         Bbjw==
+X-Gm-Message-State: AOJu0YxyBeUD9AdpGn8HAdYFY9L7I0Pr1f5rRTgp+6P/BpntJh4ENhJU
+	4ZUph/Y+uSSnYI2aZ3hkuKds7VYYLeXGxjpS1gGCTg9ivGljU2O6cIU/lQQBCA==
+X-Gm-Gg: AR+sD13be20JBNLK+oc9HLGZUZ0U0W85p9v5kE9oOPNuftKxB0hQsdw/8SMIvGFLkLp
+	TzA5J5waw34UnKqZ0LuR3l27VTeDcJuXMaG38p93jxeVVPlmYzXfSb44aAj0OuGG27mkTabnu8L
+	2abtNd0bNF3RP56H2Gg89edLUtIOq7iaBIicgmIQIMdO8GoOxVEJ8dk0oShHlYy2fbptxplnlsZ
+	Xk01gnG3v7MotmXp31TugnCPR9e3VBLDFGa64D4ksIFjH7yfG/v6zLjVpIfnBT/Zo0JtDiyWUY6
+	l9h3O/ko4RyLawnmVt6aexA/9HyPKXy3K0wNVnbMk9efDix7jIapDsVbby/RYSWGKuoOX5pKbxW
+	RTz9zizXLpRWrHD/61PF7hDXaadmda+XzOvS869+gQ3g5OJzoUkpKGcJLN8IQJPGK3V+W
+X-Received: by 2002:a17:902:f60c:b0:2ce:6d4a:5b8a with SMTP id d9443c01a7336-2cfa71ab5b8mr57996915ad.38.1784845096648;
+        Thu, 23 Jul 2026 15:18:16 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:73::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8f35027dsm40576865ad.69.2026.07.23.15.18.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2026 15:18:16 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf v2 1/2] bpf: Reject passing scalar NULL to nonnull arg of a global subprog
+Date: Thu, 23 Jul 2026 15:18:14 -0700
+Message-ID: <20260723221815.367797-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+A global subprogram argument tagged __arg_nonnull is set up as a
+non-nullable PTR_TO_MEM. However the verifier does not check against a
+scalar NULL, leading to real NULL pointer dereference. Reject it as
+well.
 
-Pre-existing issues:
-- [High] In GVE DQO QPL mode with XDP enabled, `buf_state->page_info.pad` a=
-ccumulates XDP head adjustments and drifts unbounded, leading to out-of-bou=
-nds hardware DMA.
-- [High] Missing fragment drop tracking for multi-descriptor packets in the=
- DQO RX path causes subsequent fragments of a dropped packet to be treated =
-as new packets, bypassing XDP and network security filters.
---
+Fixes: 94e1c70a3452 ("bpf: support 'arg:xxx' btf_decl_tag-based hints for global subprog args")
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+---
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- Patch [2]: [PATCH net-next v3 2/2] gve: add XDP metadata support for DQ=
- RDA ---
-commit 7fa79d59c32cc58b133c8b5735d2691860bcdca2
-Author: Joshua Washington <joshwash@google.com>
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 99444eae917e..7aa47342dc65 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9189,7 +9189,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+ 				return ret;
+ 			if (check_mem_reg(env, reg, argno, arg->mem_size))
+ 				return -EINVAL;
+-			if (!(arg->arg_type & PTR_MAYBE_NULL) && (reg->type & PTR_MAYBE_NULL)) {
++			if (!(arg->arg_type & PTR_MAYBE_NULL) &&
++			    (type_may_be_null(reg->type) || bpf_register_is_null(reg))) {
+ 				bpf_log(log, "%s is expected to be non-NULL\n",
+ 					reg_arg_name(env, argno));
+ 				return -EINVAL;
+-- 
+2.52.0
 
-gve: add XDP metadata support for DQ RDA
-
-This commit updates xdp_prepare_buff to set meta_valid to true in
-gve_rx_dqo. This enables XDP programs to use metadata in the DQ RDA mode.
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/e=
-thernet/google/gve/gve_rx_dqo.c
-> --- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-> +++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-[ ... ]
->  	/* Append to current skb if one exists. */
->  	if (rx->ctx.skb_head) {
->  		if (unlikely(gve_rx_append_frags(napi, buf_state, buf_len, rx,
->  						 priv)) !=3D 0) {
->  			goto error;
->  		}
->  		return 0;
->  	}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but I have a question about
-fragment drop tracking for multi-descriptor packets in this DQO RX path.
-
-If the first fragment of a multi-descriptor packet is dropped (e.g., by XDP=
-),
-rx->ctx.skb_head remains NULL. Unlike the GQI path which tracks
-rx->ctx.drop_pkt, the DQO path does not seem to track dropped state.
-
-Will subsequent fragments of that dropped packet see rx->ctx.skb_head =3D=
-=3D NULL,
-bypass this append logic, and fall through to the XDP block below, treating
-the fragment as a new packet?
-
-> =20
->  	if (xprog) {
->  		struct gve_xdp_buff gve_xdp;
->  		void *old_data;
->  		int xdp_act;
-> =20
->  		xdp_init_buff(&gve_xdp.xdp, buf_state->page_info.buf_size,
->  			      &rx->xdp_rxq);
->  		xdp_prepare_buff(&gve_xdp.xdp,
->  				 buf_state->page_info.page_address +
->  				 buf_state->page_info.page_offset,
->  				 buf_state->page_info.pad,
-> -				 buf_len, false);
-> +				 buf_len, true);
->  		gve_xdp.gve =3D priv;
->  		gve_xdp.compl_desc =3D compl_desc;
-> =20
->  		old_data =3D gve_xdp.xdp.data;
->  		xdp_act =3D bpf_prog_run_xdp(xprog, &gve_xdp.xdp);
->  		buf_state->page_info.pad +=3D gve_xdp.xdp.data - old_data;
-
-[Severity: High]
-This is a pre-existing issue, but does accumulating the XDP head adjustment
-into buf_state->page_info.pad lead to out-of-bounds hardware DMA?
-
-When XDP programs adjust the packet head, the difference is accumulated into
-the pad. When the buffer is recycled, it appears the pad is never reset to
-the default headroom.=20
-
-Could this cause subsequent reuses of the buffer to continue accumulating
-the offset and eventually calculate an out-of-bounds DMA address in
-gve_alloc_buffer():
-
-drivers/net/ethernet/google/gve/gve_buffer_mgmt_dqo.c:gve_alloc_buffer() {
-    ...
-    desc->buf_addr =3D cpu_to_le64(buf_state->addr +
-                                 buf_state->page_info.page_offset +
-                                 buf_state->page_info.pad);
-    ...
-}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260722221634.1868=
-86-1-joshwash@google.com?part=3D2
