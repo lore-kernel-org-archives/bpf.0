@@ -1,134 +1,159 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C0E3D9557
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 07:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B4E270EC3
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 07:03:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784790087; cv=none; b=ZDl8q4AK1APJ4HG6IlcZOCqPM8UcqCYMb9Ews4gBtCkcASJKfm55xdc8Ul7A5qnHrPeh/QWy936IYOFpCNzoMNmBqDmxo6hf2L9l+2eGLh/XDbPgB+Frf0BNvFEit5IH0oUgjhJx5zHZ4w3GLGwKuWJPEJKQ+fONEqJSAif1qhs=
+	t=1784790206; cv=none; b=sWniBApJxD3Ocj4S5Aj0Gd+ZvitI7MBckpeZL0MlBfhq5fnDBGrczcFci+90+QWjUEUV7UK86ND0qZ0anlcG1iorjifiJJcEASKQNHNt4mpYOG3TROCEsOnkcSZTktiLufMepy7h9izHSeUvUVruhMJUgGPpvixW6Gg/UEfHZRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784790087; c=relaxed/simple;
-	bh=eeK+6eyMnjHMHPPkdBSZ/ZYrSJdAjKDx7pg8jCDM5oo=;
+	s=arc-20240116; t=1784790206; c=relaxed/simple;
+	bh=9cI9fuqc2Pki0/GfzxwDYS0Eos1a01vN9iDVjhxr3ZY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kC5nEmZ/U3z0oaJMiIXFQgBhgfXIjrLd6KI3D1eXP79cuGoKk0vvTzaxiSuo3FR1Cw8rrw6RR8iiO6xc+DeOwyj5saRmqlLNIxBW9YdvvRl1HbMNTJYYbYlAwuO7VKZ81n+NNvcnytBIFViNKcGwifucszQY/RlVOXWZ5C4u4uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eFek/+JV; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=i6BB5w2CoDDvsdnae3FHMMPrhmC0v2Cldp54/8glvqImWtAR5XEEB6ehUGATZzWirMxl80LEbz9k/VwDvFukFt/eG+/HA6gW3v9/7AFQ2lIlJCly+Ynj29kYe+xxnHI2cUuLi9c3NVM9y4Tpwxw2b3YVmK+JdhymjHCIDZ/4SdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YnI22mSM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eFek/+JV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F921F00A3A;
-	Thu, 23 Jul 2026 07:01:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YnI22mSM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 389781F000E9;
+	Thu, 23 Jul 2026 07:03:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784790082;
-	bh=cFL7/eF5weRRJUSWQKl3p7VBjRk1P1kuSEZ3t+CCfx8=;
+	s=k20260515; t=1784790204;
+	bh=bi4CvtAzmUwk4wgjHAj2B14yDpGjbG7jsfKjXdjtcKk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eFek/+JVH6bwACn8DuaEMy8kuk3sT+ymctB1MCnlsTVAlZk2Q6YMddqNlQTeGvqvg
-	 5Utz2rSfwNlXqTOgFCacdJa5MAhRnz1lnHdNBlRhXtBzopCM/cCrNcIjZ0unIpQ6gU
-	 Pr1ZvIZ8k9sz4TSOBl/CUHVmgoAmZ6ZrUYfrbZOSseoTQ5MXZqOep0WhmCnNNXIzzi
-	 RlR6a1SF7klMkl1hgly+SC6Z+YjuoV6IVhyEA5IzTNq2IfkOQtJmUD7xSO6pBgRNzg
-	 7nNthBIpstxjFcTWIUYiKuS181PgCIAknU2WYWE1/l/90/eXE4OfGWaHKxRYeuF9vQ
-	 lMsTULUXU2e3A==
+	b=YnI22mSMjlaQ5sI0J/apocVmE9SOGTMs4G1Oj+pvdZyZC14blmA/x7NzPn7A4VtR1
+	 H2O0K7A+S0UdR4tmlKVZPHZG3D9y23AbPxmJXKnWYCT1RiZnrQqBtwV2pnArmqjlos
+	 +nAUmdwMY9G0ReRHjS9CIR6s9XCrJ3JxU0a6jxyx5e9aFCxyOT0M/p3+H2fXc7wTg6
+	 zt5mZfeFzA/l2JkwPzDyOvP/F6McDzuTkGyOdtadz3G+laMm62HwFp+gycQAszheWr
+	 1R7j9nUy7aIysmRfiQO4T+9d78qDQzmfdV5ssPN4j9GuJWfpZobUElGu656gr/UOoy
+	 eFPPQc57JLfjw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3] libbpf: initialize btf_ext out-parameter early in
- btf_parse_elf()
+Subject: Re: [PATCH] libbpf: bounds-check struct_ops member offset before
+ writing shadow pointer
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Naveed Khan" <naveed@digiscrypt.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <178478908698.2.4018643732078767322@digiscrypt.com>
-References: <alTie0_4pu-T5Bik@krava>
- <178478908698.2.4018643732078767322@digiscrypt.com>
+In-Reply-To: <178478913040.2.14225985431891987705@digiscrypt.com>
+References: <178478913040.2.14225985431891987705@digiscrypt.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Jul 2026 07:01:22 +0000
-Message-Id: <20260723070122.99F921F00A3A@smtp.kernel.org>
+Date: Thu, 23 Jul 2026 07:03:23 +0000
+Message-Id: <20260723070324.389781F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
 
+New issues:
+- [Low] The new multi-line comment introduced in the patch violates the BPF=
+ subsystem comment style guidelines.
+
 Pre-existing issues:
-- [High] btf_parse_elf() incorrectly uses IS_ERR() to check for btf_ext__ne=
-w() failure, causing .BTF.ext parsing errors to be silently ignored.
-- [High] A latent double-free of dist_base_btf exists on the error path of =
-btf_parse_elf().
+- [High] Integer overflows in bounds checks during BTF and ELF parsing allo=
+w heap out-of-bounds reads.
+- [High] Incomplete Fix: Missing bounds check in `bpf_map__init_kern_struct=
+_ops` allows heap out-of-bounds read leaking memory to the kernel.
 --
 
---- Patch [1]: [PATCH v3] libbpf: initialize btf_ext out-parameter early in=
- btf_parse_elf() ---
-commit 5cc9e33bf25334c39330a03f9b8133245f9ed0c1
+--- Patch [1]: [PATCH] libbpf: bounds-check struct_ops member offset before=
+ writing shadow pointer ---
+commit edbb05326b1be4436b6fa2f85e4c2b2097d884b7
 Author: Naveed Khan <naveed@digiscrypt.com>
 
-libbpf: initialize btf_ext out-parameter early in btf_parse_elf()
+libbpf: bounds-check struct_ops member offset before writing shadow pointer
 
-This commit initializes the btf_ext out-parameter to NULL early in
-btf_parse_elf(). This prevents callers that pass an uninitialized pointer
-from encountering stack garbage during cleanup if the function fails before
-reaching the .BTF.ext parsing step.
+This commit adds a bounds check in bpf_object__collect_st_ops_relos() to
+ensure that writing the shadow pointer for a struct_ops member doesn't
+overflow the map's value size. It prevents a controlled heap out-of-bounds
+write that can occur when parsing malformed BTF data.
 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 823bce895178d..cabe8286f06c9 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -1453,6 +1453,9 @@ static struct btf *btf_parse_elf(const char *path, =
-struct btf *base_btf,
->  	int err =3D 0, fd =3D -1;
->  	Elf *elf =3D NULL;
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 1368752aa13c3..1aa2a1d098927 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -10529,6 +10529,17 @@ static int bpf_object__collect_st_ops_relos(stru=
+ct bpf_object *obj,
+>  			return -EINVAL;
+>  		}
 > =20
-> +	if (btf_ext)
-> +		*btf_ext =3D NULL;
+> +		/* the shadow pointer stored below is sizeof(struct bpf_program *)
+> +		 * bytes wide, so the whole write must fit within st_ops->data,
+> +		 * which is only map->def.value_size bytes long. A malformed BTF
+> +		 * can place a member near the end of the value and overflow it.
+> +		 */
+
+[Severity: Low]
+Is this multi-line comment using the correct BPF subsystem style?
+
+The guidelines indicate that multi-line comments must have the opening /* on
+its own line, with the comment text starting on the next line.
+
+> +		if (moff + sizeof(struct bpf_program *) > map->def.value_size) {
+> +			pr_warn("struct_ops reloc %s: member %s at moff %u overflows map valu=
+e size %u\n",
+> +				map->name, name, moff, map->def.value_size);
+> +			return -EINVAL;
+> +		}
 > +
->  	if (elf_version(EV_CURRENT) =3D=3D EV_NONE) {
->  		pr_warn("failed to init libelf for %s\n", path);
->  		return ERR_PTR(-LIBBPF_ERRNO__LIBELF);
+>  		prog =3D find_prog_by_sec_insn(obj, shdr_idx, insn_idx);
 
 [Severity: High]
-This is a pre-existing issue, but does btf_parse_elf() incorrectly use
-IS_ERR() to check for btf_ext__new() failure further down in this function?
+This is a pre-existing issue, but since this patch fixes a missing bounds
+check for struct_ops offsets, could a similar missing bounds check exist in
+bpf_map__init_kern_struct_ops()?
 
-tools/lib/bpf/btf.c:btf_parse_elf() {
-        ...
-        if (btf_ext && secs.btf_ext_data) {
-                *btf_ext =3D btf_ext__new(secs.btf_ext_data->d_buf,=20
-                                        secs.btf_ext_data->d_size);
-                if (IS_ERR(*btf_ext)) {
-                        err =3D PTR_ERR(*btf_ext);
-                        goto done;
-                }
-        ...
+tools/lib/bpf/libbpf.c:bpf_map__init_kern_struct_ops() {
+    ...
+		moff =3D member->offset / 8;
+		mdata =3D data + moff;
+		msize =3D btf__resolve_size(btf, member->type);
+    ...
+		memcpy(kern_mdata, mdata, msize);
+    ...
 }
 
-If btf_ext__new() returns NULL on error rather than ERR_PTR, IS_ERR() will
-evaluate to false. This would cause the function to silently ignore
-malformed .BTF.ext data or allocation failures, leaving *btf_ext as NULL
-and misleading the caller into assuming there is no extended BTF data.
+If a malformed BTF provides a struct_ops member with a large offset, could
+this result in an out-of-bounds heap read from mdata that is then copied
+into the kernel-bound buffer kern_mdata?
+
 
 [Severity: High]
-This is also a pre-existing issue, but is there a latent double-free of
-dist_base_btf on the error path of btf_parse_elf()?
+This is also a pre-existing issue, but can the 32-bit arithmetic used in
+the bounds checks for BTF and ELF parsing overflow?
 
-Earlier in the function, ownership of dist_base_btf is transferred to btf:
-
-tools/lib/bpf/btf.c:btf_parse_elf() {
-        ...
-        if (dist_base_btf)
-                btf->owns_base =3D true;
-        ...
+tools/lib/bpf/libbpf.c:init_struct_ops_maps() {
+    ...
+		if (vsi->offset + type->size > data->d_size) {
+			pr_warn("struct_ops init: var %s is beyond the end of DATASEC %s\n",
+				var_name, sec_name);
+			return -EINVAL;
+		}
+    ...
 }
 
-Then on the error path, both are explicitly freed:
+Since vsi->offset and type->size are 32-bit integers, could a maliciously
+crafted large vsi->offset (e.g., 0xFFFFFFF0) cause the addition to wrap
+around and bypass the check against the 64-bit data->d_size, leading to an
+out-of-bounds read during the subsequent operations?
 
-done:
-        ...
-        btf__free(dist_base_btf);
-        btf__free(btf);
+A similar 32-bit overflow appears to exist in create_jt_map() when parsing
+the .jumptables section:
 
-If btf->owns_base is true, btf__free(btf) recursively frees its base BTF,
-which points to the same dist_base_btf object. If an error occurs after
-the ownership transfer (such as if the btf_ext__new() error check is fixed),
-would this lead to a double-free?
+tools/lib/bpf/libbpf.c:create_jt_map() {
+    ...
+	if (sym_off + jt_size > obj->jumptables_data_sz) {
+		pr_warn("map '.jumptables': jumptables_data size is %zd, trying to access=
+ %d\n",
+			obj->jumptables_data_sz, sym_off + jt_size);
+		err =3D -EINVAL;
+		goto err_close;
+	}
+    ...
+}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/178478908698.2.4018=
-643732078767322@digiscrypt.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/178478913040.2.1422=
+5985431891987705@digiscrypt.com?part=3D1
