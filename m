@@ -1,59 +1,61 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB941E7C18
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 05:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFCF14F70
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 05:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784783290; cv=none; b=C1iTejw19URSZDLXMR5E5PrCw4mLN/58wOupPviIUUNm5X4+dzNSPPB2vmFUReHkmKOeP40L4fynXwildXrGNqeY03U17N+nRpKae/E0jK7GPvndDPVA9eQeMrEOo6zxFjYFJcQNm7LvTzS6sJhZEdgW3qr8iISQeeChQgOgSjw=
+	t=1784783291; cv=none; b=MyrEnPhHjePml2168H6fSw0NTk7+Gx3yAWxuhKRgXTutHmAbZ2iDVSleGJ+deP0qvc3qe3xESWXnVcLssk7uwjtk9FKtqjfwaqBM0dbBvE88AgsMPPEzPOHKaJwx5gXmA9e06YwnZO2WmSaiAX8i5ye573zWbGm9oJNEG3emE2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784783290; c=relaxed/simple;
-	bh=RVCNNI7wjdUeDGcuek+A83Z7cOqK/vWCbnH3x2ECDJk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uPMkvS4XVoPwWIl09QHwwwvbGWl7GBKUUCUKuxSl1xFMlqKdpZSwqVpznGPmR9s6iJlyPI0rb1S0B0txsASENCUfHkvyAI8zf2kw26USXTvnbu8UpXb0qk2TmR+xA528yB5foapr41FmjmDM4w/cPBSQJxyC3DiKNtmxViGMErM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EiiSt3hv; arc=none smtp.client-ip=209.85.214.176
+	s=arc-20240116; t=1784783291; c=relaxed/simple;
+	bh=Vza8QrPNtPQHRcBjh30dJlgG80VV02BZUO4pvHUqlUQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hNrQgx5H1S1la/RRsV9JT7zcGB/mUJ+980wLL9uFCswJICXgwPdNodZrxvgY7r/R88gqoHK6xnFa65lUF0mZBqK/4V3SLOvs3i+ekxLN/S+CMP9HV0CfvAAwI2Dm+fgcuYmr4axT8XemnozrwTnNdI3rBFk+C8c90jkKAbnNIZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H2WC+Gwp; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EiiSt3hv"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ceab75934dso2878295ad.2
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 22:08:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H2WC+Gwp"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8487088510aso195646b3a.0
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 22:08:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784783288; x=1785388088; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NjgBs7JFZ85Ut4vQwe7QGxIdoRiZKPgr3+MFaiLeQ5I=;
-        b=EiiSt3hv5DH7hXyNOtjCFtDNDIGOnGPSWttrC6YuIZp6h7zj0IzMhfdDMmuc5Ut0XQ
-         BBVRr0/9D+c/e8e0O7KTR3JtbdeS7ZhtFMlVCPSVN/aF0bEzJ51fJkFLB1D3U414ZtGj
-         JJplZrA6k2SMwKd7JPRbrUM3nBLbBNTQKKvXnC+YrvWUJKA3rAlE1LOqkRjDjr3oC6+t
-         mZKs6GzYwJO+c3soiE9hVJY+T6roAZ9p+keJRm53Uaz9OUITTBXyh6hHVEwOlqXv4pBw
-         U9tAnKFIGMpchHKy+VjBZ/IByNfdiLGV7gPb6QRpAV+1y4qLFu0uCWbHHXVRf6JRey5e
-         Ianw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784783288; x=1785388088;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1784783289; x=1785388089; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NjgBs7JFZ85Ut4vQwe7QGxIdoRiZKPgr3+MFaiLeQ5I=;
-        b=kA1MZUCpEM7jgyUdReACFVVl8Ps3S9GSBvbOaAmzng+f/C/B05vI32c60Ipr7lQ05c
-         TzXQ0LxaUx0UkbE+iwAJiovSww/CnDPRv3Tb2umP4KuxqcvAVBda8OvBTJ/vImhhqTZ+
-         DmvoiZsfIKJ6Vu9OBulB3fZtvQ+J4pzoiXr8TAdNfVVtpN6IAW1PZ6YJEoHs9Zee2PNt
-         fl9SEwdVvZV7S7naTIqfgU364AVozfUzM5l4WYDMFX6U3N8lczCXoCPnGuMPYIOojuJt
-         yszOytfdJY4Pr/ujI833u+MBThcT282MtpW2szfHcWFwqwVCRbn3yweM/BFi6IeSgX5O
-         LoAw==
-X-Gm-Message-State: AOJu0YxTHJ6yfumpx4YMucJxnNjv0xnUY/Va2s1YXEkU5A3E5iQ4aReJ
-	czfIWup1IUVkwa3Z1D9+3I4E5ti/6ujsq30Ib9O0bz6P4TF1KM8ilMB5BgF2bw==
-X-Gm-Gg: AR+sD11ox6+FCSgKBnlsmctRJDsxIl5dMiOpAPBtY4W8uBxZ/1rpH5pKZ4hHMn2tOvR
-	qHxSJL5SI1yTpEiG0joY4cIMOBjw/HSyZqbsk1LRnePC8ZX5sfod6MuK3lIeC/ppXlGzB0pS95M
-	4R7HR5J2JzuEF11c9tgkDAFAFgufEPtPDv1lsh5mTQD1nSEAaD+yDZtP/ud69W6caYT5cndSVgD
-	lLgixFCBX/Gnw/5LpTvZgrRbk0YHKBd4D6I+6pr3n8tslJ0fMx0BO0ojfbIUrnUgjevwSTNFORy
-	afgZxEzheThB8hCTr71Ope0UhbTU+Sbr6KJ/EMjNHJYzT9hHbUKMWqPDCAAy7wHM0UXn76HSnXf
-	10ZrdtjBe5c8UORNjk47ggNZWQG8oIpFEzlnsH6r/ntKxXRXP8ke2Y/r5HIXLlfaXoPBE
-X-Received: by 2002:a17:903:24c:b0:2c9:aae1:a61a with SMTP id d9443c01a7336-2cfa71dc76emr20675205ad.14.1784783288220;
-        Wed, 22 Jul 2026 22:08:08 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:4c::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8efddfe1sm26157645ad.32.2026.07.22.22.08.07
+        bh=Vv028n+m3gPhclylokuSI7IFB34Ic8AnTu0RjmcnGvk=;
+        b=H2WC+Gwp7PBqCTV6erjoT8/VXEGvDnegbkHuhNDooOjvtCPW8NWMJr8XWLCN0UpIwi
+         1AUMwVpyawOnP95gqdXmlWUxh8K+uWF/T+AJ1gGUveo5tIDsU11svqEcQpMvLuQxQrnq
+         5CCNcppAqmEwRCrXgCz+80GsPVzvEmJuGY5SoKrrghUpQjpJs9cZntpUFrhnijyZUUCu
+         MNO+AnSC2zC5cDMMX81NY7RUxzEVayStHyPn3isCdG2xk/kEUmTAbFz89vfx3D+nUSHE
+         laDNGziOnFnpwKYP+4JoX6dcEwm2PlmUnI8dW7aGoGsvPbtj+NfLa4/JGZA7XAPUItD7
+         Wj9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784783289; x=1785388089;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Vv028n+m3gPhclylokuSI7IFB34Ic8AnTu0RjmcnGvk=;
+        b=DdBNBt55QYzeGoFbBECCLQODrwlmTvW1BfyZ5mha0ISU9PghUVBH8amhezZVbu1WpA
+         AWkvhCYa8Eq3kpRbRhg5956286MjSyAe7pWbYhxnkH5Wfuod9it1R9dEgau51udRfPuY
+         9jSxmLJ8PEv0gQToFpWQ5IqP6eX94FDSlqlB6xWZs5/WZrTimR1ufk4dbDXfwOWsYQW7
+         6nwpxXj/h8FVtW6bP0gZHOr4BM6t3d82NcUi22J5gENZYqgsGT+ViKMSXud7fw2foQtl
+         wFBbioAhfzBaNQ9HUpSOkDuPcW3Uv+G9PiJNnKkBumUxX8XNDmBV2Xkt4WavlLCQpAPq
+         XPwg==
+X-Gm-Message-State: AOJu0YxOvwggOkvJINdJq+TWPn1aMa+ziaFl6xBIagXffOwqM6JSHOpu
+	wkIA2IfyfVilU/ZknI2Rhe3i5BZRFV0tQKFbrCzV+4BjddpnJy26rbmD0/L66A==
+X-Gm-Gg: AR+sD13rRT8Z13GG63w8/08hPDQonNiaA0hxqBoBoHpTpXBPZvMZDbL2kVe5kV8g10z
+	ufjQxkjV10/lV0OFkfc2d4DTqgeIrVeXMIifH7dsdspdvI2B26z/kxMbJL8loPtkOU3kYlIvHec
+	RjqrWaUYJjUcUJW+gzVqlSt3uhCDNVrZRMMGA6dQpha1Yyf5oW9MycfIKhIOzKqoLA7/d0YpjHv
+	IfluyozM1A5qvNYLxPpg6bUwmK3IwcmMVxE7l9nyRjvZd1glvucSe7p7NyikB8t5ygPlILtJ9im
+	4NlFwohkHDjj0MPvalInDP7lByOkFf7zI/JUTjjLLnC8K48B8wQlPtEhZmxQqRwM8SEj3c0ryPN
+	tOQGlLJDuWpJbKAnG6f5tuEtwFseGfkq0g6cz2upDcN87MGWAS5WMww1aTnviY/lbIzQ=
+X-Received: by 2002:a05:6a20:b78a:b0:3c3:652c:664e with SMTP id adf61e73a8af0-3c44b28edf4mr1597505637.69.1784783289368;
+        Wed, 22 Jul 2026 22:08:09 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:a::])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb8f1af5a0sm2195925a12.28.2026.07.22.22.08.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 22:08:07 -0700 (PDT)
+        Wed, 22 Jul 2026 22:08:08 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -63,10 +65,12 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 00/18] Generate bpf_func_proto for kfunc
-Date: Wed, 22 Jul 2026 22:07:48 -0700
-Message-ID: <20260723050806.1158442-1-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v1 01/18] bpf: Drop process_timer_func wrappers
+Date: Wed, 22 Jul 2026 22:07:49 -0700
+Message-ID: <20260723050806.1158442-2-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260723050806.1158442-1-ameryhung@gmail.com>
+References: <20260723050806.1158442-1-ameryhung@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,79 +79,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Drop process_timer_{helper,kfunc}() since bpf_call_arg_meta is now
+shared by helper and kfunc. Call process_timer_func() directly.
 
-This is the second of three patch sets to unify kfunc and helper
-argument verification. It:
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+---
+ kernel/bpf/verifier.c | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
-  1) further aligns the kfunc and helper argument checks,
-  2) makes kfunc argument type classification depend solely on BTF, and
-  3) generates a bpf_func_proto for each kfunc.
-
-With classification now a pure function of the kfunc's BTF, it is computed
-once at add-call time and cached in the generated bpf_func_proto, rather
-than re-derived on every verification of the call. Along the way it also
-fixes a few issues.
-
-The next patch set will align the argument register compatibility checks
-and route helper and kfunc argument verification through a single shared
-function.
-
-
-[1/3] https://lore.kernel.org/bpf/20260715064047.1793790-1-ameryhung@gmail.com/
-
-
-Amery Hung (18):
-  bpf: Drop process_timer_func wrappers
-  bpf: Unify const map ptr argument checking for helpers and kfuncs
-  bpf: Split kfunc map argument into __const_map and __map
-  bpf: Pass kfunc meta to mem and mem_size check
-  bpf: Check helper and kfunc mem+size arguments identically
-  selftests/bpf: Add tests for helper and kfunc mem+size arguments
-  bpf: Check fixed-size mem args of helpers and kfuncs the same way
-  bpf: Express ARG_CONST_SIZE_OR_ZERO as ARG_CONST_SIZE |
-    SCALAR_MAYBE_ZERO
-  bpf: Rename ARG_CONST_SIZE{,_OR_ZERO} to ARG_MEM_SIZE{,_OR_ZERO}
-  bpf: Fold __szk const size handling into the scalar arg path
-  bpf: Classify kfunc mem_size args from BTF without register state
-  bpf: Handle NULL kfunc pointer args without a KF_ARG_PTR_TO_NULL type
-  bpf: Distinguish fixed- and variable-size kfunc mem args with
-    MEM_FIXED_SIZE
-  bpf: Check helper mem+size in ARG_PTR_TO_MEM case
-  bpf: Classify kfunc pointer arguments from BTF, resolve type against
-    the register
-  bpf: Tag nullable kfunc pointer args with PTR_MAYBE_NULL
-  bpf: Classify scalar kfunc arguments from BTF
-  bpf: Generate kfunc argument prototype at add-call time
-
- Documentation/bpf/kfuncs.rst                  |  30 +-
- include/linux/bpf.h                           |  42 +-
- include/linux/bpf_verifier.h                  |  31 +-
- kernel/bpf/backtrack.c                        |   2 +-
- kernel/bpf/bpf_lsm.c                          |   4 +-
- kernel/bpf/btf.c                              |   2 +-
- kernel/bpf/cgroup.c                           |   8 +-
- kernel/bpf/core.c                             |   4 +-
- kernel/bpf/helpers.c                          |  42 +-
- kernel/bpf/ringbuf.c                          |   2 +-
- kernel/bpf/stackmap.c                         |  10 +-
- kernel/bpf/syscall.c                          |   6 +-
- kernel/bpf/verifier.c                         | 799 ++++++++++--------
- kernel/trace/bpf_trace.c                      |  62 +-
- net/core/filter.c                             | 116 +--
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/cgrp_kfunc_failure.c  |   2 +-
- .../bpf/progs/mem_rdonly_untrusted.c          |   2 +-
- .../selftests/bpf/progs/task_kfunc_failure.c  |   2 +-
- .../selftests/bpf/progs/verifier_bounds.c     |   2 +-
- .../progs/verifier_helper_access_var_len.c    |   6 +-
- .../bpf/progs/verifier_helper_value_access.c  |   2 +-
- .../bpf/progs/verifier_mem_size_reg.c         |  60 ++
- .../selftests/bpf/progs/verifier_vfs_reject.c |   6 +-
- tools/testing/selftests/bpf/verifier/calls.c  |   6 +-
- 25 files changed, 726 insertions(+), 524 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 52be0a118cce..e8c76abbf76a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7224,18 +7224,6 @@ static int process_timer_func(struct bpf_verifier_env *env, struct bpf_reg_state
+ 	return check_map_field_pointer(env, reg, argno, BPF_TIMER, map);
+ }
+ 
+-static int process_timer_helper(struct bpf_verifier_env *env, struct bpf_reg_state *reg, argno_t argno,
+-				struct bpf_call_arg_meta *meta)
+-{
+-	return process_timer_func(env, reg, argno, &meta->map);
+-}
+-
+-static int process_timer_kfunc(struct bpf_verifier_env *env, struct bpf_reg_state *reg, argno_t argno,
+-			       struct bpf_call_arg_meta *meta)
+-{
+-	return process_timer_func(env, reg, argno, &meta->map);
+-}
+-
+ static int process_kptr_func(struct bpf_verifier_env *env, int regno,
+ 			     struct bpf_call_arg_meta *meta)
+ {
+@@ -8466,7 +8454,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		}
+ 		break;
+ 	case ARG_PTR_TO_TIMER:
+-		err = process_timer_helper(env, reg, argno, meta);
++		err = process_timer_func(env, reg, argno, &meta->map);
+ 		if (err)
+ 			return err;
+ 		break;
+@@ -12514,7 +12502,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 					reg_arg_name(env, argno));
+ 				return -EINVAL;
+ 			}
+-			ret = process_timer_kfunc(env, reg, argno, meta);
++			ret = process_timer_func(env, reg, argno, &meta->map);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
 -- 
 2.52.0
 
