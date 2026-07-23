@@ -1,159 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B4E270EC3
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 07:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC3E33F374
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 07:20:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784790206; cv=none; b=sWniBApJxD3Ocj4S5Aj0Gd+ZvitI7MBckpeZL0MlBfhq5fnDBGrczcFci+90+QWjUEUV7UK86ND0qZ0anlcG1iorjifiJJcEASKQNHNt4mpYOG3TROCEsOnkcSZTktiLufMepy7h9izHSeUvUVruhMJUgGPpvixW6Gg/UEfHZRg=
+	t=1784791243; cv=none; b=Xpxw8jbWQgOjoyeXitMUvQFBEwRVscpUxuBv70ChaEx+juqaX60yL9OGsrw4ZkAu8pOBBKdVznpwUkQS+ynp631yOywqxN6BRKEKgusoH4en4PQR2rlsMe9POGkRLTWXOXDbgLCGa4CP8YWlr5k/+o7aR330Se59VsvgPPPUK4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784790206; c=relaxed/simple;
-	bh=9cI9fuqc2Pki0/GfzxwDYS0Eos1a01vN9iDVjhxr3ZY=;
+	s=arc-20240116; t=1784791243; c=relaxed/simple;
+	bh=Xc7iHQ9vCifxxmtI+QCjs2SntCkSRDI+lGnwA5kjAxM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=i6BB5w2CoDDvsdnae3FHMMPrhmC0v2Cldp54/8glvqImWtAR5XEEB6ehUGATZzWirMxl80LEbz9k/VwDvFukFt/eG+/HA6gW3v9/7AFQ2lIlJCly+Ynj29kYe+xxnHI2cUuLi9c3NVM9y4Tpwxw2b3YVmK+JdhymjHCIDZ/4SdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YnI22mSM; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=GbMxVnjmjsAAftdTETE4pBbhVsV8yfoJm6CuvsrWZrp9Yj5wi0UAMmux6wUjhN4oufaughnLwp4Yx+1oMoKRp/L1NQpHhWnsn3f9vVbP0/84lEGwW1yU7rzeS6TxCMzp9dhAqxPx8liFC8w1JQ1lef9PPtlTQWkQgCM6X7QmPoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nheWqPU4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YnI22mSM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 389781F000E9;
-	Thu, 23 Jul 2026 07:03:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nheWqPU4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 141BB1F000E9;
+	Thu, 23 Jul 2026 07:20:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784790204;
-	bh=bi4CvtAzmUwk4wgjHAj2B14yDpGjbG7jsfKjXdjtcKk=;
+	s=k20260515; t=1784791241;
+	bh=DL4D+XFCFeSLQ5CIbZcq7uY9YrNB8nCEppDYn/iFwfA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YnI22mSMjlaQ5sI0J/apocVmE9SOGTMs4G1Oj+pvdZyZC14blmA/x7NzPn7A4VtR1
-	 H2O0K7A+S0UdR4tmlKVZPHZG3D9y23AbPxmJXKnWYCT1RiZnrQqBtwV2pnArmqjlos
-	 +nAUmdwMY9G0ReRHjS9CIR6s9XCrJ3JxU0a6jxyx5e9aFCxyOT0M/p3+H2fXc7wTg6
-	 zt5mZfeFzA/l2JkwPzDyOvP/F6McDzuTkGyOdtadz3G+laMm62HwFp+gycQAszheWr
-	 1R7j9nUy7aIysmRfiQO4T+9d78qDQzmfdV5ssPN4j9GuJWfpZobUElGu656gr/UOoy
-	 eFPPQc57JLfjw==
+	b=nheWqPU4hDrIonjSBq4G7ZZRxTA7x/uUfO30ihzK2VEvIiVo5rPUUDmrw1jgpD3wv
+	 997GZ0Zk0+zU+W2wuJOvIWEMTPGLeaDmCM3PLX89oFvZOwd7rjClsZi3WtD3rL6rPk
+	 t/0noVuunzKCmWaBlWMcVvXl2uZElwjdclOjVv+4rfD8xPUNlZrzfVMvTzRUaEX72n
+	 aH7vVe7XuUEt16XXtu0A4jaHU9PPBMHADOUaVO+09CJev4Bq/dJW8r1lWtX+Gaiuzm
+	 imHetGS4q60JGRfB11luShDFcH0DgcTeyksjGIlmFB0HyIX3oyrcAc/oweGCJMnwil
+	 7BfIkUCnLkePQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] libbpf: bounds-check struct_ops member offset before
- writing shadow pointer
+Subject: Re: [PATCH bpf] bpf, sockmap: fix page_counter underflow in
+ strparser SK_PASS
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Naveed Khan" <naveed@digiscrypt.com>
+To: "Junseo Lim" <zirajs7@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <178478913040.2.14225985431891987705@digiscrypt.com>
-References: <178478913040.2.14225985431891987705@digiscrypt.com>
+In-Reply-To: <20260723065244.186916-1-zirajs7@gmail.com>
+References: <20260723065244.186916-1-zirajs7@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Jul 2026 07:03:23 +0000
-Message-Id: <20260723070324.389781F000E9@smtp.kernel.org>
+Date: Thu, 23 Jul 2026 07:20:40 +0000
+Message-Id: <20260723072041.141BB1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-New issues:
-- [Low] The new multi-line comment introduced in the patch violates the BPF=
- subsystem comment style guidelines.
-
-Pre-existing issues:
-- [High] Integer overflows in bounds checks during BTF and ELF parsing allo=
-w heap out-of-bounds reads.
-- [High] Incomplete Fix: Missing bounds check in `bpf_map__init_kern_struct=
-_ops` allows heap out-of-bounds read leaking memory to the kernel.
+- [Critical] Bypassing memory accounting in strparser SK_PASS path allows r=
+emote memory exhaustion (DoS)
 --
 
---- Patch [1]: [PATCH] libbpf: bounds-check struct_ops member offset before=
- writing shadow pointer ---
-commit edbb05326b1be4436b6fa2f85e4c2b2097d884b7
-Author: Naveed Khan <naveed@digiscrypt.com>
+--- Patch [1]: [PATCH bpf] bpf, sockmap: fix page_counter underflow in strp=
+arser SK_PASS ---
+commit 5073ca36b1b9677d098ec43e3f231a7423b5d727
+Author: Junseo Lim <zirajs7@gmail.com>
 
-libbpf: bounds-check struct_ops member offset before writing shadow pointer
+bpf, sockmap: fix page_counter underflow in strparser SK_PASS
+   =20
+This patch adds a charge_skb flag to skip memory accounting in the direct
+strparser SK_PASS path. It attempts to fix a page_counter underflow by
+preventing duplicate charges on the cloned SKB.
 
-This commit adds a bounds check in bpf_object__collect_st_ops_relos() to
-ensure that writing the shadow pointer for a struct_ops member doesn't
-overflow the map's value size. It prevents a controlled heap out-of-bounds
-write that can occur when parsing malformed BTF data.
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index 2521b643fa05d..17260681479a3 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 1368752aa13c3..1aa2a1d098927 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -10529,6 +10529,17 @@ static int bpf_object__collect_st_ops_relos(stru=
-ct bpf_object *obj,
->  			return -EINVAL;
->  		}
+[ ... ]
+
+> @@ -618,12 +616,14 @@ static int sk_psock_skb_ingress(struct sk_psock *ps=
+ock, struct sk_buff *skb,
+
+[ ... ]
+
+>  static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_b=
+uff *skb,
+> -				     u32 off, u32 len, bool take_ref)
+> +				     u32 off, u32 len, bool take_ref,
+> +				     bool charge_skb)
+>  {
+>  	struct sk_msg *msg =3D alloc_sk_msg(GFP_ATOMIC);
+>  	struct sock *sk =3D psock->sk;
+> @@ -631,7 +631,8 @@ static int sk_psock_skb_ingress_self(struct sk_psock =
+*psock, struct sk_buff *skb
 > =20
-> +		/* the shadow pointer stored below is sizeof(struct bpf_program *)
-> +		 * bytes wide, so the whole write must fit within st_ops->data,
-> +		 * which is only map->def.value_size bytes long. A malformed BTF
-> +		 * can place a member near the end of the value and overflow it.
-> +		 */
+>  	if (unlikely(!msg))
+>  		return -EAGAIN;
+> -	skb_set_owner_r(skb, sk);
+> +	if (charge_skb)
+> +		skb_set_owner_r(skb, sk);
 
-[Severity: Low]
-Is this multi-line comment using the correct BPF subsystem style?
+[Severity: Critical]
+Does skipping skb_set_owner_r() here leave the cloned SKB without an
+accounted truesize and without a destructor?
 
-The guidelines indicate that multi-line comments must have the opening /* on
-its own line, with the comment text starting on the next line.
+When charge_skb is false, the cloned SKB is queued without being charged.
+At the same time, __tcp_read_sock() unlinks and frees the original SKB via
+tcp_eat_recv_skb().
 
-> +		if (moff + sizeof(struct bpf_program *) > map->def.value_size) {
-> +			pr_warn("struct_ops reloc %s: member %s at moff %u overflows map valu=
-e size %u\n",
-> +				map->name, name, moff, map->def.value_size);
-> +			return -EINVAL;
-> +		}
+This invokes sock_rfree() and immediately subtracts skb->truesize from
+sk->sk_rmem_alloc.
+
+Because this queued clone lacks a destructor and was never charged, could
+sk_rmem_alloc artificially drop to 0?
+
+If so, tcp_select_window() might compute free_space as if the buffer is
+entirely empty, continuously advertising a fully open TCP window and
+potentially allowing a remote attacker to stream infinite data and exhaust
+kernel memory.
+
+[ ... ]
+
+> @@ -1017,6 +1018,8 @@ static int sk_psock_verdict_apply(struct sk_psock *=
+psock, struct sk_buff *skb,
+>  		 * retrying later from workqueue.
+>  		 */
+>  		if (skb_queue_empty(&psock->ingress_skb)) {
+> +			bool charge_skb =3D true;
 > +
->  		prog =3D find_prog_by_sec_insn(obj, shdr_idx, insn_idx);
-
-[Severity: High]
-This is a pre-existing issue, but since this patch fixes a missing bounds
-check for struct_ops offsets, could a similar missing bounds check exist in
-bpf_map__init_kern_struct_ops()?
-
-tools/lib/bpf/libbpf.c:bpf_map__init_kern_struct_ops() {
-    ...
-		moff =3D member->offset / 8;
-		mdata =3D data + moff;
-		msize =3D btf__resolve_size(btf, member->type);
-    ...
-		memcpy(kern_mdata, mdata, msize);
-    ...
-}
-
-If a malformed BTF provides a struct_ops member with a large offset, could
-this result in an out-of-bounds heap read from mdata that is then copied
-into the kernel-bound buffer kern_mdata?
-
-
-[Severity: High]
-This is also a pre-existing issue, but can the 32-bit arithmetic used in
-the bounds checks for BTF and ELF parsing overflow?
-
-tools/lib/bpf/libbpf.c:init_struct_ops_maps() {
-    ...
-		if (vsi->offset + type->size > data->d_size) {
-			pr_warn("struct_ops init: var %s is beyond the end of DATASEC %s\n",
-				var_name, sec_name);
-			return -EINVAL;
-		}
-    ...
-}
-
-Since vsi->offset and type->size are 32-bit integers, could a maliciously
-crafted large vsi->offset (e.g., 0xFFFFFFF0) cause the addition to wrap
-around and bypass the check against the 64-bit data->d_size, leading to an
-out-of-bounds read during the subsequent operations?
-
-A similar 32-bit overflow appears to exist in create_jt_map() when parsing
-the .jumptables section:
-
-tools/lib/bpf/libbpf.c:create_jt_map() {
-    ...
-	if (sym_off + jt_size > obj->jumptables_data_sz) {
-		pr_warn("map '.jumptables': jumptables_data size is %zd, trying to access=
- %d\n",
-			obj->jumptables_data_sz, sym_off + jt_size);
-		err =3D -EINVAL;
-		goto err_close;
-	}
-    ...
-}
+>  			len =3D skb->len;
+>  			off =3D 0;
+>  			if (skb_bpf_strparser(skb)) {
+> @@ -1024,8 +1027,10 @@ static int sk_psock_verdict_apply(struct sk_psock =
+*psock, struct sk_buff *skb,
+> =20
+>  				off =3D stm->offset;
+>  				len =3D stm->full_len;
+> +				charge_skb =3D false;
+>  			}
+> -			err =3D sk_psock_skb_ingress_self(psock, skb, off, len, false);
+> +			err =3D sk_psock_skb_ingress_self(psock, skb, off, len,
+> +							false, charge_skb);
+>  		}
+>  		if (err < 0) {
+>  			spin_lock_bh(&psock->ingress_lock);
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/178478913040.2.1422=
-5985431891987705@digiscrypt.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723065244.1869=
+16-1-zirajs7@gmail.com?part=3D1
