@@ -1,166 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8053630AF;
-	Thu, 23 Jul 2026 13:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E19471CF9
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 14:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784814435; cv=none; b=j8fwBink/SMblObeBVmGyImrhBzs9nHZNzng3EB2E8bOXV+f3qISI5Nkqo1Ix6B+v2+1n5vH539wc5Es/wnd3I/nR3hRfXQpTE6cj4AFSJiDVz5e7x35hyBf/D3cpuVsz5D47/2mWXKTirFACsE0rhF8inPh1C7o3XcA3CHte5I=
+	t=1784815641; cv=none; b=GY88tZWD8OoOoT+ogvBzl8A+Mg5NQsUZyUQE9daSRV7JEezU9IJkNXsgZ+Q92bsemPtRqskBRfBrnb7u1+/dZlaVD7jXSW3jF9yHTVbbM9IcE1N0TULUBIKTyoOtGt0D7qVhOcCQdPm37QPDvNlZLXHgpS/6TNSOnmiNbS/jHcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784814435; c=relaxed/simple;
-	bh=TTOiuNpKd3ZCkUsJNnXQtcBfFIarUNgpz9bYK41z5To=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=joh7u196R+FLRvMD3K1Q9hPCGzyINAyfDmU6S/WWcL2t8h4A6G8t1XHGKm5iuPDRTgg4jklSojskmsZp4Gl6uvEJjp/RPnt6bHvZEIVMR1gBHoO1FIPumi1WsAKNs/p6G5+D37+8A6QjFSEuTx8R2wpZiaYyA/4BS2Pmrorym8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QJfmqszm; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1784815641; c=relaxed/simple;
+	bh=R4H9Cu1uzuSEiDGG64i/DK2gCARH5OPSVPtbMLywKMs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M697NVq27NUcAVHFVB2NpMJclDDproS/TCzYPi7HxgpL364Y/Rsa8E+kBgciDhFlqddhmaeBS2/iuqtQza5iCAXCVf2pXBipF/VY6w4Ejf62FdjFDPAvcCWVYS1kJdNhJIMPLTlObajuj2aI6v7BfrjfmwOjukkd/B0pGomWWmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ek1iYXFu; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QJfmqszm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784814433; x=1816350433;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=TTOiuNpKd3ZCkUsJNnXQtcBfFIarUNgpz9bYK41z5To=;
-  b=QJfmqszmoazUO4TQ/refWGwArlf6IJPRlRFK0xkl/SMmu/MyHpA1fZLZ
-   J6KPIMvKuZJnjTMRZLVYWn3jOKQ5pK+TMOYIwxcIdc6S9dx5KzUcF3jnB
-   wqi5GC2CTUQ3beFpsJRBvV4bWjww1EEzeJrKT1DJSfc3S8xjd8kGqPvpp
-   IRn7RJdwsNvCh/8IFDIHm0ALH9bw8Bm5K/BxscfpLH4n2C4PnUL5qtSEn
-   XNjaixnWuz22MwRdkgxhYbbn8u11KGwm7URWqPJgsnPiDPk+a6ae+ycYP
-   Z9X3jmZPOIlyVMItHNX/wwNl0sic+1pqbp1V9DvU1AbBYPRG2gvXH+KpY
-   A==;
-X-CSE-ConnectionGUID: hiYwjM9US0GVdBYAznH/3A==
-X-CSE-MsgGUID: +qWTSrdSR2Oep9xtgrq7uw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11854"; a="88008518"
-X-IronPort-AV: E=Sophos;i="6.25,180,1779174000"; 
-   d="scan'208";a="88008518"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2026 06:47:07 -0700
-X-CSE-ConnectionGUID: 5I8g06L0RzW2DP7JqA5g0A==
-X-CSE-MsgGUID: b1+2gPZ+TkuUBaWrc2aoow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,180,1779174000"; 
-   d="scan'208";a="261962172"
-Received: from tassilo.jf.intel.com (HELO tassilo) ([10.54.38.190])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2026 06:47:07 -0700
-Date: Thu, 23 Jul 2026 06:47:00 -0700
-From: Andi Kleen <ak@linux.intel.com>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: acpica-devel@lists.linux.dev, bpf@vger.kernel.org,
-	coresight@lists.linaro.org, kvm@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, mptcp@lists.linux.dev,
-	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Alex Mastro <amastro@fb.com>, Alex Williamson <alex@shazbot.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Ankur Arora <ankur.a.arora@oracle.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Bobby Eshleman <bobbyeshleman@meta.com>,
-	Christian =?iso-8859-1?Q?Borntr=E4ger?= <borntraeger@linux.ibm.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Chun-Tse Shao <ctshao@google.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Costa Shulyupin <costa.shul@redhat.com>,
-	Crystal Wood <crwood@redhat.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	David Matlack <dmatlack@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Gabriele Monaco <gmonaco@redhat.com>,
-	Geliang Tang <geliang@kernel.org>, Ian Rogers <irogers@google.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Ivan Pravdin <ipravdin.official@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Jiri Olsa <jolsa@kernel.org>, Joe Damato <joe@dama.to>,
-	John Garry <john.g.garry@oracle.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Kaushlendra Kumar <kaushlendra.kumar@intel.com>,
-	Kent Gibson <warthog618@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Len Brown <lenb@kernel.org>, Leo Yan <leo.yan@linux.dev>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Mike Leach <mike.leach@arm.com>,
-	Mina Almasry <almasrymina@google.com>,
-	Mykyta Yatsenko <yatsenko@meta.com>, Nam Cao <namcao@linutronix.de>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Pawel Chmielewski <pawel.chmielewski@intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Quentin Monnet <qmo@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Saket Dumbre <saket.dumbre@intel.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Swapnil Sapkal <swapnil.sapkal@amd.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Tomas Glozar <tglozar@redhat.com>,
-	Vipin Sharma <vipinsh@google.com>,
-	Wander Lairson Costa <wander@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Willy Tarreau <w@1wt.eu>, Yonghong Song <yonghong.song@linux.dev>,
-	Zhang Chujun <zhangchujun@cmss.chinamobile.com>,
-	Zhang Rui <rui.zhang@intel.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] tools: Use fputc() calls in some functions
-Message-ID: <amIbVOIsOeZgcBZF@tassilo>
-References: <48f2d61f-d468-49b7-881e-f00777db073f@web.de>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ek1iYXFu"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66NDBtgX3095035;
+	Thu, 23 Jul 2026 14:07:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=zy0zcxjZFCN/knOdROBAniAMW22q9R75WDk4pJgrW
+	7c=; b=ek1iYXFuv0qD72SeHWVCsf2EDkeEjLZ3a9BtT1mi+p7oJ793g5tpPeyea
+	J/KGd3Gf+pT5pkgs2Ku63kuRpYWZHUbL90wehxHhLssksCh6qYzdFNkq4Mnjy/25
+	/H8ac4bghYnkrlZpcFBQs+2vd8asV8k9Kb6c9DA94PYulefPTVQapg852/EkmudU
+	6RUTTbI3mDGwNVlL3GlcWKNc1gMf1YTZH8/lGBBcsc/tcGG6tgBjxdp+EFg/HqpY
+	pF8zdamQ3mPFPc46frZMdiNzWlj5lBPokIotNuruOQ0oXljFYFQ+yIbMg1kpJAqn
+	bPoiCA3HGiRjcUffTQut/EsjtTASw==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fg7ahfab5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 23 Jul 2026 14:07:02 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66NE4atJ025098;
+	Thu, 23 Jul 2026 14:07:02 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fgnahcep7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 23 Jul 2026 14:07:02 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66NE70fC23659102
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 23 Jul 2026 14:07:01 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8D18B58064;
+	Thu, 23 Jul 2026 14:07:00 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8F72E5804E;
+	Thu, 23 Jul 2026 14:06:58 +0000 (GMT)
+Received: from thinkpad-p1.ehn-de.ibm.com (unknown [9.224.75.254])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 23 Jul 2026 14:06:58 +0000 (GMT)
+From: Maxim Khmelevskii <max@linux.ibm.com>
+To: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Subject: [PATCH bpf-next 0/3] s390/bpf: Support load-acquire and store-release instructions
+Date: Thu, 23 Jul 2026 16:03:48 +0200
+Message-ID: <20260723140648.583055-5-max@linux.ibm.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <48f2d61f-d468-49b7-881e-f00777db073f@web.de>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Ku-O69yqY8VmW-FIh7ELS4_Dm_Tz3AYg
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIzMDEzNSBTYWx0ZWRfX4SQ/8ucu0Swf
+ 0YZorOXH/zgR62BsEG6sVXzFBTW00Bg8twGO8TSZ1oPPOOvb/LJCVDjK18lfy3ZeVOo83P2etOJ
+ w00PaVenPEKlPWtZaFQkUdQ3DaCEPehEOclM7i0MtN6mc7RwcZuA/8P2Hpv6+Phxjuy9KAKdbtX
+ 7LpaEwA2l0F8fDLS/oEFnRTkGQJkQ5w1wDG9Mz9/BX0Nn1spYHpq3OTJ4JMlPEKeMJoJf1tRNYX
+ sDLs/10V864c6Zbns+s/A2R3NOcXdZPQjFfdjZpxskNrb1dHGsdiUGVZCIsPmX1iIX9ATtJ1bam
+ CoPV51fnP4p26qtI2nRB8wVa53V0Y80AMRSAYspLrPGKEnPRF7syTr4tsUmQwleMy61hVyph84P
+ yEY8WQfSiVb4HnGRzrYvXLQaGrmbRdpPbooZz1UByKHUmA50ieDOnxiU1pUZE46mJmUg3T+eoXK
+ VIkArVcUcmGScVyLhjw==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIzMDEzNSBTYWx0ZWRfXwuJbwQw7Htuc
+ Kvka+t1T7SWUVxhVusgg1Q6qhLPVI80OFt6/uY1idWDKbqGdQE2F73wplf9/UQlzJDGVu7AwoC1
+ iI9/klZD8ZFkRD5VHB/+pVcPRc2Kpcw=
+X-Proofpoint-GUID: Ku-O69yqY8VmW-FIh7ELS4_Dm_Tz3AYg
+X-Authority-Analysis: v=2.4 cv=SM5ykuvH c=1 sm=1 tr=0 ts=6a622006 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=RzCfie-kr_QcCd8fBx8p:22 a=7XoH4dCvY4e9pCTkT3EA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-23_04,2026-07-22_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 lowpriorityscore=0 bulkscore=0 suspectscore=0 adultscore=0
+ spamscore=0 malwarescore=0 priorityscore=1501 phishscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607230135
 
-On Thu, Jul 23, 2026 at 12:25:25PM +0200, Markus Elfring wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Thu, 23 Jul 2026 11:13:30 +0200
-> Subject: [PATCH] tools: Use fputc() calls in some functions
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=UTF-8
-> Content-Transfer-Encoding: 8bit
-> 
-> Single characters should occasionally be transferred into the output.
-> Thus use the corresponding function “fputc” (or even “putchar”).
-> 
-> The source code was transformed by using the Coccinelle software.
+Support load-acquire (BPF_LOAD_ACQ) and store-release (BPF_STORE_REL)
+instructions. Since s390 has strong memory model, implement
+them as regular BPF_LDX/BPF_STX instructions.
 
-gcc already does this transformation automatically.
+Maxim Khmelevskii (3):
+  s390/bpf: Add emit_ldx and emit_stx functions
+  s390/bpf: Support load-acquire and store-release instructions
+  s390/bpf: Enable atomics tests for s390
+
+ arch/s390/net/bpf_jit_comp.c                  | 198 ++++++++++--------
+ .../selftests/bpf/progs/arena_atomics.c       |  18 +-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   9 +-
+ 3 files changed, 123 insertions(+), 102 deletions(-)
+
+-- 
+2.55.0
+
