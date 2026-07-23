@@ -1,19 +1,19 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5317F45D1A3;
-	Thu, 23 Jul 2026 16:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B548047CA6B;
+	Thu, 23 Jul 2026 16:29:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784824197; cv=none; b=pMGQxajX2P9BbOCxnR8FMa8+QnqGQhUU2kS6J6CUJa/CvAvnkashTs3+v/1SBA4zasICJl7/KatlvkjzvKViMHEf+/fmaaPiqMb0TGToyq6QU3HKWPZgYFYxRtYcF27p8LSM4uGROmhnbWrIa9Jk/CPbdXq6GdnOqIHi8IuUYaU=
+	t=1784824202; cv=none; b=L2BMQ0nIe8SdDoE3xGJFjgqT4cMTQRdG6MCBLxDMBEjG4xO/VwxgxfsHF+Xay1zA5Bcd3dog1DhY8BBD98TCrGF0pcY3KrYW62vQjsQF3A4o+q73sMk3aFnZRo2mqcWqNumPljCFbmA3KsYCSbPOVlzBXoV5GeHYDl6nh3Wnod0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784824197; c=relaxed/simple;
-	bh=/cSrtwwDG/OeEv9j4ZM7vkFNdubrEiKmwU7mLoyt7Zk=;
+	s=arc-20240116; t=1784824202; c=relaxed/simple;
+	bh=NSv22Eowfqwk2yVty+Vsr9j5buPgHvtCCWJEc5Qnck4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iOep5Vmy3FNHl+4dV0zGuGuyYAYRZ143W0l3iakxUDHBBLMsdLqmcid6aNMQNwB1eMLMBtrwHIHBLgyAzN1k7QJPXIx4mC4lxRPpnUG/ZDkdjicZ7bpDAj44frFOAtMMPN7hL/Enpp1PGh5vBS4dUzLIpoX7PhZh2UQtFPKDZ7c=
+	 MIME-Version; b=IjTwj8vQLls3FBB8Az/zMWqaMQdNzsKSgvoQH3Rn4D2UL9wK4Qn9V/8uxzhYGrkn5Yov8Mk7wsR2VhfupTH0ETr8ecoRPd9qj7L0FssHJxlsklpKZ5BNEJBrzEcIUMOcTjV36hEXiwrRJwBMhtQTPL2LTrzy4g0GSuaTA2YeDfY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730571F000E9;
-	Thu, 23 Jul 2026 16:29:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DED91F00A3D;
+	Thu, 23 Jul 2026 16:29:56 +0000 (UTC)
 From: Jakub Kicinski <kuba@kernel.org>
 To: maciej.fijalkowski@intel.com
 Cc: Jakub Kicinski <kuba@kernel.org>,
@@ -26,12 +26,12 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	bjorn@kernel.org,
 	kerneljasonxing@gmail.com,
 	kernelxing@tencent.com
-Subject: Re: [PATCH v4 net 2/6] xsk: drain continuation descs after overflow in xsk_build_skb()
-Date: Thu, 23 Jul 2026 09:29:43 -0700
-Message-ID: <20260723162943.747184-1-kuba@kernel.org>
+Subject: Re: [PATCH v4 net 6/6] selftests/xsk: account reclaimed invalid Tx descriptors
+Date: Thu, 23 Jul 2026 09:29:50 -0700
+Message-ID: <20260723162950.747417-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260719135609.147823-3-maciej.fijalkowski@intel.com>
-References: <20260719135609.147823-3-maciej.fijalkowski@intel.com>
+In-Reply-To: <20260719135609.147823-7-maciej.fijalkowski@intel.com>
+References: <20260719135609.147823-7-maciej.fijalkowski@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,137 +43,94 @@ Content-Transfer-Encoding: 8bit
 This is an AI-generated review of your patch. The human sending this
 email has considered the AI review valid, or at least plausible.
 ---
-xsk: drain continuation descs after overflow in xsk_build_skb()
+selftests/xsk: account reclaimed invalid Tx descriptors
 
-This patch fixes the AF_XDP generic xmit path so that when a
-multi-buffer packet exceeds MAX_SKB_FRAGS or contains an invalid
-descriptor, the remaining continuation descriptors are drained onto
-the completion ring instead of being silently lost. A new
-xdp_sock::drain_cont flag tracks whether draining is in progress
-across sendmsg invocations.
+This patch updates the AF_XDP selftests to count every Tx descriptor
+submitted (including invalid ones) in valid_frags so the completion ring
+accounting matches the kernel's new behavior of returning invalid Tx
+descriptors through the completion ring. It also adjusts verbatim
+fragment counting and adds explicit end fragments after invalid middle
+descriptors.
 
-Link: https://lore.kernel.org/all/20260425041726.85FB3C2BCB2@smtp.kernel.org/
-
-> diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-> index ebac60a3d8a1..8b51876efbed 100644
-> --- a/include/net/xdp_sock.h
-> +++ b/include/net/xdp_sock.h
-> @@ -80,6 +80,7 @@ struct xdp_sock {
->  	 * call of __xsk_generic_xmit().
->  	 */
->  	struct sk_buff *skb;
-> +	bool drain_cont;
-
-[Low]
-Would it be worth documenting drain_cont here in the same style as the
-preceding skb field? The semantics are non-trivial: the flag persists
-across sendmsg invocations, only clears when a non-CONTD descriptor is
-consumed, and can be transiently overwritten in the post-loop error
-path with the composed expression:
-
-    bool drain = xs->skb || xs->drain_cont || xp_mb_desc(&desc);
-
-Today those semantics can only be reconstructed by reading the four
-separate assignment sites in net/xdp/xsk.c. The options field is
-also user-influenceable (an invalid descriptor can still carry
-XDP_PKT_CONTD), which is worth calling out for future readers.
-
->  
->  	struct list_head map_list;
->  	/* Protects map_list */
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index a7a83dc4546a..12a845d012f6 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+> index de17dd48f176..38ce6060b8fa 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
 
 [ ... ]
 
-> @@ -1063,11 +1077,21 @@ static int __xsk_generic_xmit(struct sock *sk)
->  			goto out;
->  		}
->  
-> +		if (unlikely(xs->drain_cont)) {
-> +			xsk_cq_submit_addr_single_locked(xs->pool, &desc);
-> +			xs->tx->invalid_descs++;
-> +			xskq_cons_release(xs->tx);
-> +			xs->drain_cont = xp_mb_desc(&desc);
-> +			continue;
-> +		}
-> +
->  		skb = xsk_build_skb(xs, &desc);
->  		if (IS_ERR(skb)) {
->  			err = PTR_ERR(skb);
->  			if (err != -EOVERFLOW)
->  				goto out;
-> +			if (xp_mb_desc(&desc))
-> +				xs->drain_cont = true;
+> @@ -665,11 +665,11 @@ static struct pkt_stream *__pkt_stream_generate_custom(struct ifobject *ifobj, s
+>  			if (!frame->valid || !pkt_continues(frame->options))
+>  				payload++;
+>  		} else {
+> -			if (frame->valid)
+> +			if (frame->valid) {
+>  				len += frame->len;
+> -			if (frame->valid && pkt_continues(frame->options))
+> -				continue;
+> -
+> +				if (pkt_continues(frame->options))
+> +					continue;
+> +			}
+>  			pkt->pkt_nb = pkt_nb;
+>  			pkt->len = len;
+>  			pkt->valid = frame->valid;
 
 [Low]
-Is the xp_mb_desc(&desc) check here ever false in practice? Looking at
-xsk_build_skb() in net/xdp/xsk.c, the only place -EOVERFLOW is returned
-is:
+The commit message says "Update custom stream generation so an invalid
+middle fragment terminates the generated Rx packet while Tx completion
+accounting still covers the complete invalid packet."
 
-    if (unlikely(nr_frags == (MAX_SKB_FRAGS - 1) && xp_mb_desc(desc)))
-            return ERR_PTR(-EOVERFLOW);
+Does this hunk actually change any behavior?
 
-so reaching this point already implies xp_mb_desc(&desc) is true, and
-the conditional appears to be a tautology.
+Walking through the four (valid, pkt_continues) combinations for the
+non-verbatim branch shows the same control flow before and after:
 
-Would it read more clearly as an unconditional assignment with a
-comment noting the invariant, or alternatively a comment explaining
-that a future non-CONTD -EOVERFLOW return would also want draining?
-As written, adding a new -EOVERFLOW return site could silently
-bypass the drain machinery.
+  valid=1, continues=1  -> len += frame->len; continue
+  valid=1, continues=0  -> len += frame->len; fall through to finalize
+  valid=0, continues=1  -> fall through to finalize
+  valid=0, continues=0  -> fall through to finalize
 
->  			err = 0;
->  			continue;
->  		}
-> @@ -1096,18 +1120,33 @@ static int __xsk_generic_xmit(struct sock *sk)
->  			goto out;
->  		}
->  
-> -		sent_frame = true;
->  		xs->skb = NULL;
->  	}
->  
->  	if (xskq_has_descs(xs->tx)) {
-> +		bool drain = xs->skb || xs->drain_cont || xp_mb_desc(&desc);
-> +
-> +		err = xsk_cq_reserve_locked(xs->pool);
-> +		if (err) {
-> +			xs->tx->invalid_descs--;
+The Rx-packet termination described in the commit message appears to be
+driven by the pkts[] additions and by removing the !pkt->valid early
+exit in pkt_nb_frags(), not by this hunk. Would it be clearer to describe
+this change as a pure refactor of __pkt_stream_generate_custom(), or
+drop it from this commit?
+
+[ ... ]
+
+> @@ -2099,13 +2098,16 @@ int testapp_invalid_desc_mb(struct test_spec *test)
+>  		{0, 0, 0, false, 0},
+>  		/* Invalid address in the second frame */
+>  		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+> -		{umem_sz, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+> +		{umem_sz * 2, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+> +		{0, MIN_PKT_SIZE, 0, false, 0},
 
 [Low]
-Can this decrement of xs->tx->invalid_descs be made less fragile?
+Would it be worth calling out the umem_sz -> umem_sz * 2 change in the
+commit message?
 
-The value being cancelled here appears to be the increment performed
-inside xskq_cons_is_valid_desc() as called from
-xskq_cons_peek_desc(), which incremented invalid_descs before
-returning false and dropping out of the while loop. Nothing at the
-decrement site documents this cross-function dependency.
+In shared_umem mode the UMEM size is doubled before registration:
 
-invalid_descs is a u64 exposed to userspace through XDP_STATISTICS,
-so if the increment location is ever refactored, or if a future path
-lets xskq_has_descs() be true here without having gone through a
-validity-check failure, this decrement will underflow the counter to
-~2^64-1.
+  umem_sz *= 2;
 
-Would a short comment naming the paired increment site, or an explicit
-save/restore around the peek, make the invariant more robust to future
-changes?
+so a descriptor address of umem_sz can fall inside the valid UMEM range
+for the second socket. Bumping this to umem_sz * 2 ensures the address
+is out of range regardless of shared_umem, which is a nice correctness
+tweak, but bundling it with the accounting change makes the intent less
+obvious and complicates bisection.
 
-> +			if (xs->skb)
-> +				xsk_drop_skb(xs->skb);
-> +			xs->drain_cont = drain;
-> +			err = -EAGAIN;
-> +			goto out;
-> +		}
-> +
->  		if (xs->skb)
->  			xsk_drop_skb(xs->skb);
-> +
-> +		xsk_cq_submit_addr_single_locked(xs->pool, &desc);
-> +
->  		xskq_cons_release(xs->tx);
-> +		xs->drain_cont = xp_mb_desc(&desc);
->  	}
+>  		/* Invalid len in the middle */
+>  		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+>  		{0, XSK_UMEM__INVALID_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+> +		{0, MIN_PKT_SIZE, 0, false, 0},
+>  		/* Invalid options in the middle */
+>  		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+>  		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XSK_DESC__INVALID_OPTION},
+> +		{0, MIN_PKT_SIZE, 0, false, 0},
+>  		/* Transmit 2 frags, receive 3 */
+>  		{0, XSK_UMEM__MAX_FRAME_SIZE, 0, true, XDP_PKT_CONTD},
+>  		{0, XSK_UMEM__MAX_FRAME_SIZE, 0, true, 0},
+
+[ ... ]
