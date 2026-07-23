@@ -1,178 +1,111 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE903A5445;
-	Thu, 23 Jul 2026 05:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AB73A9622
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 05:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784785323; cv=none; b=pw06EVx+pyQnI2Lb3wRiIp3OAUo+BaiQ1kowmxzGE8YJGwZ9Z7X5RhcK/PhGNRHe6E5hNufIxhBav/+q9IyOcQ4krO10+x18pY0HY1RCxbn2Jg7OsrtQltNqEnciHRlvM1rBAHGqXOIlROi0cQYfEm2BrsnAfDfyEo1moVoRzr0=
+	t=1784785337; cv=none; b=B6EF5v12aClz9rulb/lhhFcJbTIQOHng46Y9BMTQwF15oxlAJ2Fe/aggpsvTjS/NIAkcO/0tfY5/EZFoj++YqwkhTW4XSemGjyjteBStysAttGFwJ5+pb6JFg4FGRzlNTmV0Xj0ej+6RskOIAOCVYBLI7LawWsv2G11s3aUUSsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784785323; c=relaxed/simple;
-	bh=sNbBrbNgL1DCvUesbsN84M4eYHPRqBcR/E53/mGivWk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dT2QnILSck5dIQVcc40vOSscDCffRI45YKalsilWOB6Uf/RsU6NDXy/nZd7kaMjqd0+Em7cIYNwKNbaqUGSjZDyAnc4/ynMKu9OwKNM036PEwoQZV+K5ysdN1Aydh1CMf4u4o4cKf4MvSIRMDWN1mwfp+B3WhzI1nkiXvaZG76s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 2e012e52865911f1aa26b74ffac11d73-20260723
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:acf894eb-d1fa-4853-9153-903f1dea7d32,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:5a4cc073e97d43289fcbe7c6e710344a,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|136|850|865|898,TC:nil,Content
-	:0|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 2e012e52865911f1aa26b74ffac11d73-20260723
-X-User: jiangfeng@kylinos.cn
-Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1905472986; Thu, 23 Jul 2026 13:41:40 +0800
-From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Thu, 23 Jul 2026 05:41:32 +0000
-Subject: [PATCH bpf-next v5 1/3] bpf, riscv: add support for timed may_goto
+	s=arc-20240116; t=1784785337; c=relaxed/simple;
+	bh=MJRuYUbW7LS+q3iP3mEJK0QnGnfMLruj7LK686SKD3g=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=IQmdz8NPHY0Yg86LhbWttHrEyT+VXenm2uqQDrS1pkSbL7umGC/ZYnbYgdDUGGq9aaLFaJFg2Wuf9IuL9ffBTImRrm37vmnoO209sUXKSM2M3Khx94xGGFR/hGB6qhnN0/I3BWdfYbSn/Ov9Kr0x+LBBIhaOhex32/kjGucW3IE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 001381F000E9;
+	Thu, 23 Jul 2026 05:42:15 +0000 (UTC)
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 06/18] selftests/bpf: Add tests for helper
+ and kfunc mem+size arguments
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260723050806.1158442-7-ameryhung@gmail.com>
+References: <20260723050806.1158442-1-ameryhung@gmail.com>
+ <20260723050806.1158442-7-ameryhung@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 23 Jul 2026 05:42:13 +0000
+Message-Id: <20260723054216.001381F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260723-riscv-bpf-timed-may-goto-v5-1-86acb54e5642@kylinos.cn>
-References: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
-In-Reply-To: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>, 
- Xi Wang <xi.wang@gmail.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Shuah Khan <shuah@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Feng Jiang <jiangfeng@kylinos.cn>
-X-Mailer: b4 0.14.3
 
-Implement arch_bpf_timed_may_goto() for the RV64 JIT. The argument and
-return value are carried in BPF_REG_AX, and BPF R0-R5 are preserved
-across the call to the generic bpf_check_timed_may_goto().
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The selftest `mapofmaps_value_as_kfunc_mem_buf` uses an out-of-b=
+ounds buffer size (8 instead of 4), and both tests lack explicit `__msg(...=
+)` assertions. This causes the test to pass (fail verification) for the wro=
+ng reason, rendering it ineffective as a regression guard.
+--
 
-Enable bpf_jit_supports_timed_may_goto() so the verifier uses the timed
-expansion path.
+--- Patch [6]: [PATCH bpf-next v1 06/18] selftests/bpf: Add tests for helpe=
+r and kfunc mem+size arguments ---
+commit 967fe45d86aee49807b5742ffece3f858b20a4fd
+Author: Amery Hung <ameryhung@gmail.com>
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
----
- arch/riscv/net/Makefile             |  2 +-
- arch/riscv/net/bpf_jit_comp64.c     | 12 +++++++++-
- arch/riscv/net/bpf_timed_may_goto.S | 47 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 59 insertions(+), 2 deletions(-)
+selftests/bpf: Add tests for helper and kfunc mem+size arguments
 
-diff --git a/arch/riscv/net/Makefile b/arch/riscv/net/Makefile
-index 9a1e5f0a94e5..6458d4d51990 100644
---- a/arch/riscv/net/Makefile
-+++ b/arch/riscv/net/Makefile
-@@ -3,7 +3,7 @@
- obj-$(CONFIG_BPF_JIT) += bpf_jit_core.o
- 
- ifeq ($(CONFIG_ARCH_RV64I),y)
--	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
-+	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o bpf_timed_may_goto.o
- else
- 	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
- endif
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index ad089a9a4ea9..8fe8969fb8a0 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1841,7 +1841,12 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		if (aux->tail_call_reachable && insn->src_reg == BPF_PSEUDO_CALL)
- 			emit_sd(RV_REG_SP, ctx->tcc_offset, RV_REG_TCC, ctx);
- 
--		if (insn->src_reg != BPF_PSEUDO_CALL)
-+		/*
-+		 * arch_bpf_timed_may_goto() is emitted by the verifier and
-+		 * returns its result in BPF_REG_AX instead of BPF_REG_0, so
-+		 * skip the normal "move return register into R0".
-+		 */
-+		if (insn->src_reg != BPF_PSEUDO_CALL && addr != (u64)arch_bpf_timed_may_goto)
- 			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_A0, ctx);
- 		break;
- 	}
-@@ -2161,3 +2166,8 @@ bool bpf_jit_supports_subprog_tailcalls(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_timed_may_goto(void)
-+{
-+	return true;
-+}
-diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_timed_may_goto.S
-new file mode 100644
-index 000000000000..02c637d87420
---- /dev/null
-+++ b/arch/riscv/net/bpf_timed_may_goto.S
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2026 Feng Jiang <jiangfeng@kylinos.cn> */
-+
-+#include <linux/linkage.h>
-+#include <asm/asm.h>
-+
-+/*
-+ * Trampoline for the BPF timed may_goto loop bound. Custom calling convention:
-+ *	- input:  stack offset in BPF_REG_AX (t0)
-+ *	- output: updated count in BPF_REG_AX (t0)
-+ *
-+ * Calls bpf_check_timed_may_goto(ptr) with the standard RISC-V ABI, where
-+ * ptr = BPF_REG_FP (s5) + BPF_REG_AX (t0). BPF R0-R5 (a5, a0-a4) are saved
-+ * across the call; BPF_REG_FP (s5) is callee-saved and needs no saving.
-+ */
-+
-+SYM_FUNC_START(arch_bpf_timed_may_goto)
-+	addi	sp, sp, -(8*SZREG)
-+	REG_S	ra, 7*SZREG(sp)
-+	REG_S	s0, 6*SZREG(sp)
-+	addi	s0, sp, 8*SZREG
-+
-+	/* Save BPF registers R0-R5 (a5, a0-a4) */
-+	REG_S	a5, 5*SZREG(sp)
-+	REG_S	a0, 4*SZREG(sp)
-+	REG_S	a1, 3*SZREG(sp)
-+	REG_S	a2, 2*SZREG(sp)
-+	REG_S	a3, 1*SZREG(sp)
-+	REG_S	a4, 0*SZREG(sp)
-+
-+	add	a0, t0, s5
-+	call	bpf_check_timed_may_goto
-+	mv	t0, a0
-+
-+	/* Restore BPF registers R0-R5 */
-+	REG_L	a4, 0*SZREG(sp)
-+	REG_L	a3, 1*SZREG(sp)
-+	REG_L	a2, 2*SZREG(sp)
-+	REG_L	a1, 3*SZREG(sp)
-+	REG_L	a0, 4*SZREG(sp)
-+	REG_L	a5, 5*SZREG(sp)
-+
-+	REG_L	s0, 6*SZREG(sp)
-+	REG_L	ra, 7*SZREG(sp)
-+	addi	sp, sp, 8*SZREG
-+	ret
-+SYM_FUNC_END(arch_bpf_timed_may_goto)
+Make sure the return of map-of-maps lookup cannot be passed to nullable
+memory buffer argument for helper and kfunc.
 
--- 
-2.53.0
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c b/=
+tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c
+> new file mode 100644
+> index 0000000000000..78a9ad22b10df
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c
+[ ... ]
+> +/* An un-narrowed map-of-maps value must be rejected as a __nullable kfu=
+nc mem buffer */
+> +SEC("?tc")
+> +__failure
+> +int mapofmaps_value_as_kfunc_mem_buf(struct __sk_buff *skb)
+> +{
+> +	struct bpf_dynptr dptr;
+> +	__u32 key =3D 0;
+> +	void *inner;
+> +	char *p;
+> +
+> +	inner =3D bpf_map_lookup_elem(&outer_map, &key);
+> +	/* intentionally NOT NULL-checked: reg stays PTR_TO_MAP_VALUE_OR_NULL */
+> +
+> +	bpf_dynptr_from_skb(skb, 0, &dptr);
+> +	/* pass the un-narrowed map-of-maps value as the scratch buffer */
+> +	p =3D bpf_dynptr_slice(&dptr, 0, inner, 8);
 
+[Severity: Medium]
+Does using a size of 8 here exceed the outer map's value size of 4?
+
+If the intended type check is missing, the verifier will still reject the
+program due to a bounds check failure (size 8 > 4). Since the test uses
+__failure without __msg(...), this unrelated bounds-check failure satisfies
+the test expectation and causes it to pass for the wrong reason.
+
+> +	if (p)
+> +		return p[0];
+> +	return 0;
+> +}
+> +
+> +/* An un-narrowed map-of-maps value must be rejected as a PTR_MAYBE_NULL=
+ helper mem buffer */
+> +SEC("?tc")
+> +__failure
+
+[Severity: Medium]
+Similar to the above, would it be better to include a __msg(...) assertion
+here?
+
+Without an explicit message check, this test could pass due to unrelated
+verifier errors.
+
+> +int mapofmaps_value_as_helper_mem_buf(struct __sk_buff *skb)
+> +{
+> +	__u32 key =3D 0;
+> +	void *inner;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723050806.1158=
+442-1-ameryhung@gmail.com?part=3D6
