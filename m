@@ -1,177 +1,151 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E914746D4
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 14:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B134477E1
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 14:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784815651; cv=none; b=a8NlxOLRQb69Zfj7hkv5hAKJMY1Kc2fTBsmZgEmAk+YYbwNsWYA+Rlwky4yCl1R7iuW6mf2fyb5HKIPdSVhJ8Hwekz3FvUYvZ8glcZz4MHZhUK64cXNLd1suUKi58kpu8lXsqpCkN/ejt+k+OnfdovOoVWs6WbphfGjtNTa7n+s=
+	t=1784815932; cv=none; b=ulAWj05VxTSVMzniJjiplix38e9eVbTBgAv3qifJnGvc69tTIkP0xlyl2ecX4cJpeCSRZGM5uGwxvvj/FJGpW90IX4JusKZYcogN581oxRXMp7gd3ir+8JUyP3p1zi6ITwPbthIlQfGcQYQqWyva0GIysJv4TyjVs9gyzWqupsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784815651; c=relaxed/simple;
-	bh=sQiCF/bv5r8bm9OyGOm2NTYMVHexF4u6R5i27+GJOnA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dq+scvMoJKursvhXEabP++jBo89wLEGgql+zYdVy4wLBnX9bwJ54c4mtDNqMcA3qT8wE8NcOMa81TXjYNmiDZDmf/Kqqs868UgwKZwWO/7ZvimshFacO2nWrT6ovXIICHE70yHAFYa1FfhsZBmR8zzwwt9gmsPmDB5Jq3vnaiA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JejNtqLZ; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1784815932; c=relaxed/simple;
+	bh=umdyUQaqTezmHVMKRY5R1wyVhkoY8KLytGKxWC1/bUw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FANKt21AcAwi6O+6GOHMsPYM1+jJJWWC0sq7LIK2aA/1sMC533/nP1zFEMaQyVKT1xOiShEjbWUQumQibudLybqH6YbdwIX99odvPERRIKUEBCB4JEBNq3IwBX0IcVBihw5k9BEunS+JS8Gan/rFfFhtF6E7qfRTYh1bWoChK78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D/VQGsT3; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JejNtqLZ"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66NDC3C72987036;
-	Thu, 23 Jul 2026 14:07:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=ULoFRS2IvNt03k00F
-	Q6yoREvo+b7YLgDOISpnMy4iTE=; b=JejNtqLZ+ESo7IP1caFVgtSFBO+1Fa5fK
-	WaTBkJavmQ4MHT/LGmk6S4FiyHLKhiBiQccvBguYDP/U1/zwyLf/vvz/oWPICrKx
-	D735xIiGZiwmVG5FBVwj7RIL8cd8b+1ICG0doiV+k36+1exYY7m9tAtmtxjsU5rP
-	cGcc01TWhciymW88KyKnVBYMDjluT/vWjfiEBbIKYcCaopjJL10IyYr6C7ZKU0o/
-	Pl2DFPKKxqafrHE/dFsMp4IMdzx36OOzY5fCMKv1cEnc5VcjtsjYo/Ph+ym3Hmnl
-	8e11wWYBb3JLh65WSA/El4z2uaOxoYL8GEatHdHqkuI4aeTGb5i8w==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fg78gf9ga-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Jul 2026 14:07:09 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66NE4cwr029918;
-	Thu, 23 Jul 2026 14:07:09 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fgmtk4gg3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Jul 2026 14:07:09 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66NE77IA14156534
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 23 Jul 2026 14:07:07 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C36965803F;
-	Thu, 23 Jul 2026 14:07:07 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9F7715804E;
-	Thu, 23 Jul 2026 14:07:05 +0000 (GMT)
-Received: from thinkpad-p1.ehn-de.ibm.com (unknown [9.224.75.254])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 23 Jul 2026 14:07:05 +0000 (GMT)
-From: Maxim Khmelevskii <max@linux.ibm.com>
-To: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: [PATCH bpf-next 3/3] s390/bpf: Enable atomics tests for s390
-Date: Thu, 23 Jul 2026 16:03:51 +0200
-Message-ID: <20260723140648.583055-8-max@linux.ibm.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260723140648.583055-5-max@linux.ibm.com>
-References: <20260723140648.583055-5-max@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D/VQGsT3"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-49548e01d02so4184835e9.0
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 07:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784815916; x=1785420716; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=R48/gtuAzWAM6tFIR2pFfaUViiWLUSNVgve7iPhvVC0=;
+        b=D/VQGsT3CbWipYC/WO94KMjcXcSraYMrBLOwh81/7tZIJpnFa+W0HJF/a7W4ObQU1U
+         sKjrzlZmC2m6xCT2FGilZ6ck3sG5Wdjnp41a5wosynhjkEl13lxm5lSE2ul5BJewNrfj
+         7SPXuUmQNivbWeZjdg7XEV6Q1RkKoT2Z+2oHWAdjrf22s/Od1xly02yjRso8SW3i5NZI
+         T2T2hLwYXRtOI+rXzgN9WZ80rslfDFM/FoW5T21++cE9wOXmwALzCdOScU4ESl5FA2h+
+         ZFebyBtPE8pqQ4JAy/BaDAmoTNHiecjY9kexnKy1OhrJ3NJ2zs0tfX0pLCBciSru3AV8
+         Gzag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784815916; x=1785420716;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=R48/gtuAzWAM6tFIR2pFfaUViiWLUSNVgve7iPhvVC0=;
+        b=G5Qnu4C+7svOMQ9UrErKeYKF4MzkwwgphWzVu+dvGr+XTuff54otfDVT4NwU2Lpo1y
+         ZZBUPJu6gxgbcopPMJ674JQxidJcOore2QydLvUadYd+W+lOHihFzJGUiNuG1aC35O1W
+         +R6Kb1TZoF26e5myV6fpDFAJ4pP+Z6Ts3HCb9GR3Q0eLiGMLphwzlcJSYdWAYncMhWVX
+         lvz5QsiRaSKU5UPCRRJQyc8vlCo9u6ab31IfDhF0HYEbxw4m7yYkR3Yy0l9NvaAyz4bW
+         QUfcoUZ0ww+WV10RZ0YdCISX0bdEW9GN6Vj+0sKaeEc4axMHjOrFLC2hfrdk904Qz0c+
+         0Qfw==
+X-Gm-Message-State: AOJu0Yz1tFL38VM5AUuTvYHG5DJ8Wv3QgYb9PLbIE6eC8/4ouRdlDU6X
+	/0Puj4ymMyKzTtguj3VpPjDMWzJfdz5+fVuM8HeNalSi+CH0asRLKqgW
+X-Gm-Gg: AR+sD122u2XBSo8NsadsYhfhXqi1/kpkduE7Usl5XL7/ih36abjQGtjzWwlz9x9cij/
+	9iwOT8Cxta6C4F98rxzsuGOvrRwGXXzE9xHlZdd6RjlWvHEJm+ArpIPaQ1tKYrGdUugZqdeD42B
+	aW5Z12cYjMplfDQZmkXGRqEZHHB0Al26W6I6wjbnxQn/2sIDcJJ7cp3y/64ZdE9U1mOAbEzqsU8
+	yAJzwR72U9hI8lUcpzWyRY/v5dON4LwcszTBmgcJPCc90OZgW3UcxYxOwtldIqRQfuvgoCItQKv
+	7hx/GaLl1J0A3r9OaG0DY+N6TPpKH5cUoylxQP8I79dwnpmiWvdFcJjCL0RR+Ezw+q/OOC+mdBr
+	qCecl9xyC8urNB1Ju12hr+JkGmlrt+uOuUEZgXixB6W2wAuZp/IpERUFEcszI2RtNXV60SRJ72f
+	8a0fp1wEhydiV4LRu2pErd+fAow1EgtlX3dghABaOz5Av0886oAw==
+X-Received: by 2002:a05:600c:4e89:b0:495:63e4:7f78 with SMTP id 5b1f17b1804b1-49573ccd115mr41000795e9.10.1784815916032;
+        Thu, 23 Jul 2026 07:11:56 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:b876:739d:6f1f:1b78? ([2620:10d:c092:500::4:c44e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956b7483f0sm129549595e9.3.2026.07.23.07.11.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jul 2026 07:11:54 -0700 (PDT)
+Message-ID: <b8541508-5046-448c-b32d-40c7ad79b1e9@gmail.com>
+Date: Thu, 23 Jul 2026 15:11:54 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIzMDEzNSBTYWx0ZWRfX23xn0B9S2Wzs
- lZeh35ixObfFlpjWhjupicsx1NOsEuZdDJHqPUeT/3CeFQe2wBYlHaF84HNPQxjPt8CuccOQfMV
- VtxAuWSwpuLaO3B4gBjZS/Qp94fKLULqd3lGMR2moBg3LgkNR7FAwu76wJYE5tC42YS82NuplHD
- s6zJXBYV/4SC4zHxoh6LFPzOS8FY+2nW9mUHYt9asUzoXkHXSC/kUuXu3xI9t0jgv/PHDqfIiqz
- /VX0/nia3M6UAe+EZUEgGr6S/Vco6VRJPDDeuxytA1fWG+cnNAdAjZKsJon7l6JLrLJA2DBkNGq
- S6l6fsAhf6euNzeZwSZQ8Zpo3FEwDiLhYkyrxsuBrEBLfByuUc5i/Ig7/Gn7+8BmSePAOeOJ5me
- /Ioi6T/mQqiKPdkcXwpRTbQreEeLkSKdnTJ4waAK/yJGv5xYDU74J/DAYJITGoUkWF9MjlH1oQH
- ej6h9SRf3D3VoETTf8A==
-X-Proofpoint-GUID: pga3sMQ7acDb-kMo1sYkaXwPWfCcqOUj
-X-Authority-Analysis: v=2.4 cv=MelcfZ/f c=1 sm=1 tr=0 ts=6a62200d cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8 a=-kW5C2ItWs_aNgl303YA:9
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIzMDEzNSBTYWx0ZWRfXzDFWnkCzE0An
- HV3LUj8BlQKfWzwvt3KdF+pJLRfbKe0CpkyDOwBAogRd7jQu3RhD3s7GwDI0A4gSKybcXtE4bHR
- meLUlMzmIZcGVT17OtcOS/G8QPkX1hI=
-X-Proofpoint-ORIG-GUID: pga3sMQ7acDb-kMo1sYkaXwPWfCcqOUj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-23_04,2026-07-22_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0 spamscore=0
- clxscore=1015 malwarescore=0 phishscore=0 adultscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607230135
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] bpf: htab: Reduce memory use of hash maps
+To: "T.J. Mercier" <tjmercier@google.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260722203801.1854941-1-tjmercier@google.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260722203801.1854941-1-tjmercier@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add s390 to the if statement, that defines CAN_USE_LOAD_ACQ_STORE_REL.
-Reuse CAN_USE_LOAD_ACQ_STORE_REL in arena_atomics selftest,
-to remove code duplication.
+On 7/22/26 9:37 PM, T.J. Mercier wrote:
+> Memory is expensive and scarce these days. This series reduces the
+> memory use of BPF hash maps by eliminating the per-element overheads
+> below. This saves up to 50% of per-element memory use for standard and
+> PCPU hash maps. The memory use of LRU hash maps is unaffected.
+> 
 
-Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com>
-Signed-off-by: Maxim Khmelevskii <max@linux.ibm.com>
----
- .../selftests/bpf/progs/arena_atomics.c        | 18 ++++++++++++------
- tools/testing/selftests/bpf/progs/bpf_misc.h   |  9 ++++++---
- 2 files changed, 18 insertions(+), 9 deletions(-)
+I understand that these savings calculations do not account for the element 
+value overhead of per-CPU maps, which make up most of the map memory
+consumption. Realistically we won't see any memory savings for per-CPU maps.
 
-diff --git a/tools/testing/selftests/bpf/progs/arena_atomics.c b/tools/testing/selftests/bpf/progs/arena_atomics.c
-index 2e7751a85399..73bc2b835f3f 100644
---- a/tools/testing/selftests/bpf/progs/arena_atomics.c
-+++ b/tools/testing/selftests/bpf/progs/arena_atomics.c
-@@ -28,8 +28,10 @@ bool skip_all_tests = true;
- 
- #if defined(ENABLE_ATOMICS_TESTS) &&		  \
- 	defined(__BPF_FEATURE_ADDR_SPACE_CAST) && \
--	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64))
-+	(defined(__TARGET_ARCH_arm64) || \
-+	 defined(__TARGET_ARCH_x86) || \
-+	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
-+	 defined(__TARGET_ARCH_s390))
- bool skip_lacq_srel_tests __attribute((__section__(".data"))) = false;
- #else
- bool skip_lacq_srel_tests = true;
-@@ -315,8 +317,10 @@ int load_acquire(const void *ctx)
- {
- #if defined(ENABLE_ATOMICS_TESTS) &&		  \
- 	defined(__BPF_FEATURE_ADDR_SPACE_CAST) && \
--	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64))
-+	(defined(__TARGET_ARCH_arm64) || \
-+	 defined(__TARGET_ARCH_x86) || \
-+	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
-+	 defined(__TARGET_ARCH_s390))
- 
- #define LOAD_ACQUIRE_ARENA(SIZEOP, SIZE, SRC, DST)	\
- 	{ asm volatile (				\
-@@ -367,8 +371,10 @@ int store_release(const void *ctx)
- {
- #if defined(ENABLE_ATOMICS_TESTS) &&		  \
- 	defined(__BPF_FEATURE_ADDR_SPACE_CAST) && \
--	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64))
-+	(defined(__TARGET_ARCH_arm64) || \
-+	 defined(__TARGET_ARCH_x86) || \
-+	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
-+	 defined(__TARGET_ARCH_s390))
- 
- #define STORE_RELEASE_ARENA(SIZEOP, DST, VAL)	\
- 	{ asm volatile (			\
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index b0c441384f20..5eacf1b43252 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -264,9 +264,12 @@
- #endif
- 
- #if __clang_major__ >= 18 && defined(ENABLE_ATOMICS_TESTS) &&		\
--	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
--	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
--	defined(__TARGET_ARCH_powerpc) || defined(__TARGET_ARCH_loongarch))
-+	(defined(__TARGET_ARCH_arm64) ||				\
-+	 defined(__TARGET_ARCH_x86) ||					\
-+	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) ||	\
-+	 defined(__TARGET_ARCH_s390) ||					\
-+	 defined(__TARGET_ARCH_powerpc) ||				\
-+	 defined(__TARGET_ARCH_loongarch))
- #define CAN_USE_LOAD_ACQ_STORE_REL
- #endif
- 
--- 
-2.55.0
+> Map Type & Configuration            | Old size | New size | Savings
+> ------------------------------------|----------|----------|--------
+> Standard (key <= 8 B, val <= 8 B)   |   64 B   |   32 B   | 50.0%
+> Per-CPU (prealloc) (key <= 8 B)     |   64 B   |   32 B   | 50.0%
+> Per-CPU (non-prealloc) (key <= 8 B) |   64 B   |   40 B   | 37.5%
+> LRU (Any key/value size)            |    -     |    -     | 00.0%
+> 
+> 1) Unused LRU / PCPU fields in standard and PCPU hash maps (patch 1)
+> struct htab_elem is used for all hash map types, and includes fields
+> that are not always used (bpf_lru_node, ptr_to_pptr). For standard
+> (non-LRU, non-PCPU) hash maps the 24 bytes for the bpf_lru_node (union)
+> are entirely overhead and can be eliminated. Non-preallocated PCPU maps
+> only need the 8 byte ptr_to_pptr which is currently unioned with the
+> unneeded 24 byte bpf_lru_node, so 16 bytes of overhead can be
+> eliminated. Preallocated PCPU maps don't need ptr_to_pptr, so 24 bytes
+> of overhead can be saved.
+> 
+> 2) Hash caching for small keys (patch 2)
+> For hash maps with small key sizes (<= 8 bytes), comparing keys only
+> requires a single instruction (64 bit), or a few (32 bit). Currently the
+> 4 byte hash value (8 byte aligned) is used for this, but offers no
+> performance advantage in this case and can be eliminated.
+> 
+> The implementation splits htab_elem into dedicated structures for the
+> different map types (htab_elem_lru, htab_elem_pcpu, htab_elem) which
+> share a common initial sequence, but contain additional map-type
+> specific fields where necessary. This means the placement of the key for
+> each element varies with the map type, and key_offset is added to
+> bpf_htab for this purpose.
+> 
+> While using key_offset and conditional hash checks adds new pointer
+> dereferences and branching during element traversal,
+> run_bench_htab_mem.sh shows no significant performance regression across
+> 10 runs on my 3995WX.
+> 
+> Benchmark (all in kops/sec)  | Avg. Before | StDev | Avg. After | StDev
+> -----------------------------|-------------|-------|------------|------
+> prealloc overwrite           | 115.11      | 4.10  | 115.45     | 5.24
+> prealloc batch_add_batch_del | 127.14      | 4.32  | 127.06     | 2.32
+> prealloc add_del_on_diff_cpu | 23.22       | 0.93  | 22.91      | 1.60
+> normal overwrite             | 78.52       | 3.05  | 80.40      | 3.25
+> normal batch_add_batch_del   | 45.37       | 0.69  | 47.71      | 0.66
+> normal add_del_on_diff_cpu   | 12.02       | 0.73  | 12.48      | 0.70
+> 
+> T.J. Mercier (2):
+>   bpf: htab: Split htab_elem_lru and htab_elem_pcpu off of htab_elem
+>   bpf: htab: Reduce elem_size by 8 bytes for small key sizes
+> 
+>  kernel/bpf/hashtab.c                          | 339 ++++++++++++------
+>  kernel/bpf/map_in_map.c                       |  13 +
+>  kernel/bpf/map_in_map.h                       |   2 +
+>  .../selftests/bpf/progs/map_ptr_kern.c        |   2 +-
+>  4 files changed, 252 insertions(+), 104 deletions(-)
+> 
+> 
+> base-commit: cfce77b63375dac81d53f2f85593c548415206b7
 
