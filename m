@@ -1,115 +1,185 @@
-Received: from mail-pz2-f0.google.com (mail-pz2-f0.google.com [74.125.228.0])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307C67080D
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 17:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.0
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784826928; cv=none; b=VAHyDI84zCYBA5IXHZwnqYJvNpyGQBVdI+5qsUU/KoKRn0d2qmmpVFjKL4a7nJ+Owg7CYAOjY9hj0xbpV5asU6hfAKlE9Ny/Fck8TnsL6hPJbT2dq+7q+olVzLoPlornN4aUiSLZO/zn6BqbDjLWHoKTt8oXkqNaFXhwOXxcAWc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784826928; c=relaxed/simple;
-	bh=gRvEv99Tveaj910OP+Pr72Hlm+AWoGqPbF8kIi4uYIk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QUlpNvMpVHSIeBVdRcgwVyonp+NAO3q5B/BON1sOelUnivPEHpzEQD8251F2pWlOgyKZ5cUq0DOI1Zi3kbyHLC794OP5u16Vwc2M/ycImOO8OMy8NlfG82bwifVJyjQW1wu7zOTlv51CsXj7DipO+xhOqbPfYvRrbeLgGQ+QQbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kXDM0YeA; arc=none smtp.client-ip=74.125.228.0
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BFB304BA3
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 17:22:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784827368; cv=pass; b=hJSxOsqi2Rhp96nodaOX7ZzjHH46us8B2LlgW8z+4WQ6S0NSQFGiXSdK4IJzVB1NAFIeO+E8cAXDzKfDokbSeGM5KoPitLyF8HoGwmGdVWFkjPLnpqlXpZKTLQqp76d34p/KL39iRHA7jy5ypqgyGiJ+ctnfF9cpLKJDmORaXu4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784827368; c=relaxed/simple;
+	bh=XcnQUKlZ/kCg5463h87ts/aPm6x1I/s1vYmfqIZOBRc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FF0RuagpAHOvcDHBGA9dXLVuaeS8RB1bkcQ5/fMAjeMXg2xG9bgH64DZZ05gvv0y84g5dDmVZ+ALLGwbJ/uqT/8VRbd3UQ+fbKM6bNElmAA9Ku5GDuBQ4LjsRbC/7lt4EOwWuJOppGKf5rU8jw8tOFqkzPzGYsoaNY1DujYmCgE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E4mP5x8H; arc=pass smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kXDM0YeA"
-Received: by mail-pz2-f0.google.com with SMTP id 41be03b00d2f7-cbb92a1213fso282298a12.0
-        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 10:15:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E4mP5x8H"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4954d5d814fso2985e9.0
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 10:22:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784827365; cv=none;
+        d=google.com; s=arc-20260327;
+        b=bfg2KoV0Z7HJlFvE4u0vS7VvFZrtPSNs/gQFnFB74TENF7ke4FXSm4McKaVK+ndmvI
+         G2AHSxm19hs5o/HLqShGrgs5vcXP3OXEvfgB20epCj69ZwgwqZ7zYY1+vI5dHsEgbimq
+         gnqMh8xhXo+tf1Whmfs+egeMPVWSTZ4qHgKV3UpkztedV6jIHTU/TUR/d1tfdTeKBNrL
+         o4R5GGzjhI0dSabTqi+Tj9X2yOnRLt2oAPNlRi8LeLFDLq7LG3OTvduYZtxoD6A1FRvy
+         D9XKgs2SAqPeGvXKlL9t3CBbC2+zccPDANmWJX0iHhH3dQiQt+7LRy7yonF5tLINCCSV
+         1DhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=iVPu7LqA+ftOUUwDiXRHcxv3i6x+tkX8W/lNHMvjhTQ=;
+        fh=uH2F9q5LutW4Gd5QWt3cbhYR7cwFzOA0sreQr8h4jB4=;
+        b=JZ+z9U63yBZ9NhYRDbSOciOKX+aEcAjS0lhgkn9B1BrCcH1juAoYM3LIt03HwKBgOs
+         31lcmF8izKjoNsPdky+ztEu/DrUsH1ay1b8UwfbjfGPlsfdtufUggbkV9vEPWCbiTYVc
+         Y/W1o5DfCe4zCg94oVaqvoPLPMXKxHQCnZ+reafCMtz1UBQGah5AmCjocsgKIR8/UXNt
+         khYO2k1qVf8V70vaJFVrehVplH+suEFypQQyF5PLNh3I8J3T+HCD3r+xA+B36nMWKBwq
+         pG/uDLrOEW2idHEr5tTDuRvnkcX2AjM+XdvU+JJN3KwRuI23zVKTuAs+XMEEQyKPs0/E
+         1Xcg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784826926; x=1785431726; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=google.com; s=20251104; t=1784827365; x=1785432165; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=qDOoFldaLflTi52Y4t0/f1yKLzKujtAjPwxewIEUekM=;
-        b=kXDM0YeArlpWee1rz8t6MpObK07WYzNkhiMiwv9uvs0ZApUJG4xmdwpi4gYWouMJ8h
-         OVlZE4DrrxOBuCx31rpfBoJXuB/mvE8Ksxlk9isQXetCwid2iqnuFPz3NO0M3e7LBNqp
-         +jGs2ZstTOUAFyQUhvoxrL/k8qPxe/cJaw/9fV1gdA5wMieMAOoMFHWzqiX66I9Pcaod
-         BsF/CZ8OhzZdy1kwvxDHRdxkqIXEzr94Ki8Q1SOzxcuQYhQS1hxFCwc9E5fghbjAzABY
-         Hj5B67FHGi722J8r5Ci3CphbfLf8Zq3PQimtzKwQ4Vxt35tNjGrm/26LGKF57gt4DmWJ
-         4rZA==
+        bh=iVPu7LqA+ftOUUwDiXRHcxv3i6x+tkX8W/lNHMvjhTQ=;
+        b=E4mP5x8HTPgTL3bQA8YmEpHl1rED3FQ9HqIpISh+2de3hh4YPuui3t6kAuMy0M4TGn
+         AcrlGqqaGT2ZXZ2dEKYW/9KqXbnM9Tugx0B2RlHlHT1Lu7ZTOrmOaz40lhTYukonoUux
+         GEQRUVIuKi3eWAii5E6lXprtFhf9c2ys7n+yPtIZMwye7tuafNmx2tdhSIJygXZJNdOX
+         NCuDW4u54+5RL9wXlhlSmxIEdU6pxu/WqbQ6UFyUhfpC5BoFVrkDhSZclZzKVzwNQE+6
+         E4FScvvSZxP//NVvdHXI5Dq8eXUZOCvn52dkKwgsfSEQkcs4ofKtZBhuAJJU5t8mgG6k
+         u64Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784826926; x=1785431726;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1784827365; x=1785432165;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qDOoFldaLflTi52Y4t0/f1yKLzKujtAjPwxewIEUekM=;
-        b=S5v11FpMCyWkfWfDTKmOtedsBEyGuijD/2LlEFWRLTh59ezvu7KrYCMoYcY7nMHh+Z
-         Mh6TxEuPpmQQw4GPdA/pN2srBOkDO8+WAvkUcZA8Lem6tQLJ9BV5FGQG/G9mU+MtIJMP
-         r8FLJaOZxaR9Alp9qvAA0FVnoeRKTuplp36VRe2IXskkkgUEQd1ej1REz5WVsgJzWQoX
-         AvATESCtflPUaYqc2BkmFn/6DEVABPTaBkjvyXDakBnnlUUhB0UrmY1jixFqTKROb6yx
-         o1r+OJoZ9x3/GLY+vTHpGBRX6nbH7OjsnJdZ1Vffe3fvyxFdNr4YDpOXYY86Yqd+N/au
-         UVZQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrKQJ1X+BednTuHaJIM3J0WHkbwKZ/aN766kdNQN9wQV8gSNN7LtBjDIq6f6t5NXUsAteU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyyq2G2Wx2+L/GyM5aSCFxHLIb+/fly4s5sAd27bh+k0IMzacQj
-	NU8s00styeJb9qJs5SAK4D09i8ImAkF7BQhik/5qo0O3Ohzqz8/Rit/W
-X-Gm-Gg: AR+sD11fXchkIVIOZ9rmNjwbQLxKZ3WiyGHFSxrXxTW41sm0JiT1bK31C51TZ4c/PyN
-	5qvXcL2uYNW1VU12bkNUNos2d7xm5vcHVn1V3OtctEJuZMm6R5A8SOTqvc+LGalD5c176mCbBGZ
-	a+fuzVJYJJrEcQycqZS32wkPO1VkTdc1wLxiilbBPvM19LGR9VwwHYA1WkkGHfbwbX4h5SRD6U8
-	cVuoSoRHQF/3J1HGSn78oW3OQ4CUS7KuwKP45c2F6BzMBL0CSYtCAW/ly+e2L3hzKsJuRLDUUIC
-	LQxBGQHdMzxRt1eA5ZjtWm8gTuMB86g2wpTVJ9FF8xbRAq6i+NLfNR8z/uNKPlOY1cLelqvi8mU
-	Zn6P9Ne4TV6bH7A4IOTNYmfdLab3ur/MKoV4ZveVCzhRLSyoKayZkcn5nABpZ7HuDY7mb9d0=
-X-Received: by 2002:a05:6a00:1f0b:b0:84e:23a:14ba with SMTP id d2e1a72fcca58-84e2bba3b90mr4535479b3a.55.1784826926412;
-        Thu, 23 Jul 2026 10:15:26 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:59::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e1757833asm3453039b3a.29.2026.07.23.10.15.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2026 10:15:25 -0700 (PDT)
-Date: Thu, 23 Jul 2026 10:15:15 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, sdf@fomichev.me, horms@kernel.org, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	AutonomousCodeSecurity@microsoft.com, tgopinath@linux.microsoft.com, kys@microsoft.com
-Subject: Re: [PATCH net v2] xsk: reject undersized tx_metadata at runtime
- validation
-Message-ID: <amJL48yvoEcOLcHw@devvm7509.cco0.facebook.com>
-References: <20260722041326.75199-1-blbllhy@gmail.com>
- <amEBJTKhUJHaAsBG@devvm7509.cco0.facebook.com>
- <c3de7856-d9d1-4bb8-ba4a-a7f967c767ae@intel.com>
+        bh=iVPu7LqA+ftOUUwDiXRHcxv3i6x+tkX8W/lNHMvjhTQ=;
+        b=GF0FFnV1k7Ln0otyOpT1WuU/vAcsShM5dpk+/wfE/f0Cu37Ne0ROp6OUxyNqTBK06K
+         jWUMyydHv6m5eqAhHwwQdqSdLgNPNf89tPT+QlwDhW5nXJgTK+7BP42qUFCYGGq6P5bw
+         /z5SkUemrryG3KEbaLTjVAWSErVzuaLWQNNy0BH3Hbod8S/XXWmQ/2g/XnIKcWV1w2/l
+         Wi0xocrV9G07hT7bStzHUHem59HxZyGF7FOkGXyl+Cn9+WfPperB5KpZ6vgUAEoFZ4PS
+         gpiOE+qgVtxAx5CBsqDvalOzvF6Oc5wd+dH59EY1G0bQX1etMee05cYDHMlVSyHWdq5v
+         8MGw==
+X-Forwarded-Encrypted: i=1; AHgh+RqiaMTkqWwDvK0I0Bw5v8V5/9+R/hxatmUax417HmlmXkEfQoH2KSt2loJf0kg2puqccJY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwE0ZXKKw49gcftbAiXBcAFEVOqtIqLFsSQ5Ix5wowf2zju6sLZ
+	GJw/xXd5W8UYwcOCRj3GdAWt9aEiWCf4kXdvO7qYdpIk4I5BnJbj//h5n3E4NcwyF/dLAFYoRsM
+	WUK+TglLid0IPiTTytwO1lktqRvHo17CoHSw2hrEDkRzT4HpHGo8qMH/F
+X-Gm-Gg: AR+sD12BlxXtvwA4lrmTMjAmywrA9krVibfHAr74ackgGnCXNGt91wV7MeoQsuuZwX8
+	7i3LucX/iSKa9gdwmPUzPL4xYm9gr/xQjhVIyM5WfV5v5vzFQcD+38XlCIWca1GfsEZcxCiH7cI
+	P1FTebPOsIfjA02+Trd8DKFj2Fipd9WPbDtQk2F6GzSiuJOm7lqjn9zlx8O1/DJYUSnlj2gm7Ze
+	eg3XBp7Dkzl41cKzQktRW55fRpQmrFu0N0KOkjtMLAHu3ULOViAEgwiYasyFZq1TBR3OGyotafH
+	8/sdiQsctRHQh+5cCHx6GyUMv/UKKXibgr72JbSwmvrTyDrt
+X-Received: by 2002:a05:600c:2256:b0:493:b47f:a24 with SMTP id
+ 5b1f17b1804b1-4957bce2865mr39615e9.6.1784827364616; Thu, 23 Jul 2026 10:22:44
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c3de7856-d9d1-4bb8-ba4a-a7f967c767ae@intel.com>
+References: <20260722203801.1854941-1-tjmercier@google.com> <b8541508-5046-448c-b32d-40c7ad79b1e9@gmail.com>
+In-Reply-To: <b8541508-5046-448c-b32d-40c7ad79b1e9@gmail.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Thu, 23 Jul 2026 10:22:31 -0700
+X-Gm-Features: AUfX_mxWL3X7MyV994x-_ctz7wx7pSCf1Rt_MUQjDIAlZn7hhrvxBNSG_yZAi08
+Message-ID: <CABdmKX3Jhrb3G3_25CN+TAG8oSgOqJwr0xi8XUC8c7RsCS=h-A@mail.gmail.com>
+Subject: Re: [PATCH 0/2] bpf: htab: Reduce memory use of hash maps
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 07/23, Alexander Lobakin wrote:
-> From: Stanislav Fomichev <sdf.kernel@gmail.com>
-> Date: Wed, 22 Jul 2026 10:55:17 -0700
-> 
-> > On 07/22, Cen Zhang (Microsoft) wrote:
-> >> There is no metadata length check before accessing struct xsk_tx_metadata
-> >> fields in both xdp_umem_reg() (registration) and
-> >> xsk_buff_valid_tx_metadata() (runtime).  Thus, an invalid small
-> >> tx_metadata_len (e.g. 8 bytes) passes registration and later causes an
-> >> out-of-bounds read when xsk_skb_metadata() accesses fields beyond the
-> >> declared metadata region.
-> 
-> [...]
-> 
-> > @@ -773,7 +773,7 @@ struct xdp_desc_ctx xp_raw_get_ctx(const struct xsk_buff_pool *pool, u64 addr)
-> >  	addr = __xp_raw_get_addr(pool, addr);
-> >  
-> >  	ret.dma = __xp_raw_get_dma(pool, addr);
-> > -	ret.meta = __xsk_buff_get_metadata(pool, __xp_raw_get_data(pool, addr));
-> > +	xsk_buff_read_metadata(pool, addr, &ret.meta);
-> 
-> That effectively disables some micro-optimizations that were the reason
-> I created this helper -- __xp_raw_get_data() is inline, while
-> xsk_buff_read_metadata() uses the external version, probably some other
-> stuff (note the underscored __xsk_buff_get_metadata()) =\ This function
-> expanded to have no external calls on clang -O2, with this patch I'm not
-> sure it would.
+On Thu, Jul 23, 2026 at 7:11=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+> On 7/22/26 9:37 PM, T.J. Mercier wrote:
+> > Memory is expensive and scarce these days. This series reduces the
+> > memory use of BPF hash maps by eliminating the per-element overheads
+> > below. This saves up to 50% of per-element memory use for standard and
+> > PCPU hash maps. The memory use of LRU hash maps is unaffected.
+> >
+>
+> I understand that these savings calculations do not account for the eleme=
+nt
+> value overhead of per-CPU maps, which make up most of the map memory
+> consumption. Realistically we won't see any memory savings for per-CPU ma=
+ps.
 
-Any better ideas on how to solve it? I can convert all non libeth stuff
-to these new xsk_buff_read_metadata helpers and keep xp_raw_get_ctx
-to you? Will that work?
+Yes, I did not look at BPF_MAP_TYPE_PERCPU_ARRAY at all. 95% of the
+memory used by all of our BPF maps comes from hashmaps affected by
+these changes. We only have 7 BPF_MAP_TYPE_PERCPU_ARRAY maps and they
+consume only about 12 KiB. (I know a few of those PCPU arrays are just
+to avoid 128 / 256 byte BPF stack allocations.)
+
+
+
+
+
+> > Map Type & Configuration            | Old size | New size | Savings
+> > ------------------------------------|----------|----------|--------
+> > Standard (key <=3D 8 B, val <=3D 8 B)   |   64 B   |   32 B   | 50.0%
+> > Per-CPU (prealloc) (key <=3D 8 B)     |   64 B   |   32 B   | 50.0%
+> > Per-CPU (non-prealloc) (key <=3D 8 B) |   64 B   |   40 B   | 37.5%
+> > LRU (Any key/value size)            |    -     |    -     | 00.0%
+> >
+> > 1) Unused LRU / PCPU fields in standard and PCPU hash maps (patch 1)
+> > struct htab_elem is used for all hash map types, and includes fields
+> > that are not always used (bpf_lru_node, ptr_to_pptr). For standard
+> > (non-LRU, non-PCPU) hash maps the 24 bytes for the bpf_lru_node (union)
+> > are entirely overhead and can be eliminated. Non-preallocated PCPU maps
+> > only need the 8 byte ptr_to_pptr which is currently unioned with the
+> > unneeded 24 byte bpf_lru_node, so 16 bytes of overhead can be
+> > eliminated. Preallocated PCPU maps don't need ptr_to_pptr, so 24 bytes
+> > of overhead can be saved.
+> >
+> > 2) Hash caching for small keys (patch 2)
+> > For hash maps with small key sizes (<=3D 8 bytes), comparing keys only
+> > requires a single instruction (64 bit), or a few (32 bit). Currently th=
+e
+> > 4 byte hash value (8 byte aligned) is used for this, but offers no
+> > performance advantage in this case and can be eliminated.
+> >
+> > The implementation splits htab_elem into dedicated structures for the
+> > different map types (htab_elem_lru, htab_elem_pcpu, htab_elem) which
+> > share a common initial sequence, but contain additional map-type
+> > specific fields where necessary. This means the placement of the key fo=
+r
+> > each element varies with the map type, and key_offset is added to
+> > bpf_htab for this purpose.
+> >
+> > While using key_offset and conditional hash checks adds new pointer
+> > dereferences and branching during element traversal,
+> > run_bench_htab_mem.sh shows no significant performance regression acros=
+s
+> > 10 runs on my 3995WX.
+> >
+> > Benchmark (all in kops/sec)  | Avg. Before | StDev | Avg. After | StDev
+> > -----------------------------|-------------|-------|------------|------
+> > prealloc overwrite           | 115.11      | 4.10  | 115.45     | 5.24
+> > prealloc batch_add_batch_del | 127.14      | 4.32  | 127.06     | 2.32
+> > prealloc add_del_on_diff_cpu | 23.22       | 0.93  | 22.91      | 1.60
+> > normal overwrite             | 78.52       | 3.05  | 80.40      | 3.25
+> > normal batch_add_batch_del   | 45.37       | 0.69  | 47.71      | 0.66
+> > normal add_del_on_diff_cpu   | 12.02       | 0.73  | 12.48      | 0.70
+> >
+> > T.J. Mercier (2):
+> >   bpf: htab: Split htab_elem_lru and htab_elem_pcpu off of htab_elem
+> >   bpf: htab: Reduce elem_size by 8 bytes for small key sizes
+> >
+> >  kernel/bpf/hashtab.c                          | 339 ++++++++++++------
+> >  kernel/bpf/map_in_map.c                       |  13 +
+> >  kernel/bpf/map_in_map.h                       |   2 +
+> >  .../selftests/bpf/progs/map_ptr_kern.c        |   2 +-
+> >  4 files changed, 252 insertions(+), 104 deletions(-)
+> >
+> >
+> > base-commit: cfce77b63375dac81d53f2f85593c548415206b7
+>
