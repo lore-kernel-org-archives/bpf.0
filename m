@@ -1,143 +1,307 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D0733DEC2;
-	Thu, 23 Jul 2026 15:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DFB14756AE;
+	Thu, 23 Jul 2026 15:17:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784819831; cv=none; b=NdGdT8qBw2hxo/WhTNuidrVBjbNda0gMPtrALkwMNif2wvW4x+7NA9/SBL+iZceawSt9hVumx+LGg5vQtjqpRjtzxTOxvFzgnwQy7/qvFSJxbdD3+GRNqP47sSJ9dseeXL1bY/DbEp8xPpQMXH82OeZ+Q/v481FOPFXA6ikis94=
+	t=1784819835; cv=none; b=jwsRapNOcDhryIChg7bb9ClSkT2liF6NG7qBOEMF/iMePtxMyAbonClYYSlBzF02in6DpYezM096gTmK/s7i6ibyZwaGFG7V1+pYKi3/ZI43gBlEUM7sMDrC5HhOvkBy8RtLGhSKpNMbOTANErGZzbHnyn3yGgOgk2AiTyv4IoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784819831; c=relaxed/simple;
-	bh=WfY8nqKuTsiHSSWHKLtcZI05puT7uLfuQEDUgUGR9l4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=epFSFATB69uHK2yIHbAvKBRH8DCorhK+U4YJObd0UUZZejDCKQDI0Iwwrk8KA2su3dQ8BQkzdRNnMekR46Y0AUJGq3ax/E9lY3iq0ejCFr2suz4liReYIuKbfjv5Ho8HuUYRgnnhEabQ6jh/yDOChFu2V7Mz+3tRqY6A9k1muVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
-Received: from gate.crashing.org (localhost [127.0.0.1])
-	by gate.crashing.org (8.18.1/8.18.1/Debian-2) with ESMTP id 66NFEMq5259803;
-	Thu, 23 Jul 2026 10:14:22 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.18.1/8.18.1/Submit) id 66NFECrd259732;
-	Thu, 23 Jul 2026 10:14:12 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Thu, 23 Jul 2026 10:14:12 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Andi Kleen <ak@linux.intel.com>
-Cc: Markus Elfring <Markus.Elfring@web.de>, acpica-devel@lists.linux.dev,
-        bpf@vger.kernel.org, coresight@lists.linaro.org, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, mptcp@lists.linux.dev,
-        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        virtualization@lists.linux.dev,
-        Adrian Hunter <adrian.hunter@intel.com>, Alex Mastro <amastro@fb.com>,
-        Alex Williamson <alex@shazbot.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ankur Arora <ankur.a.arora@oracle.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Bartosz Golaszewski <brgl@kernel.org>,
-        Bobby Eshleman <bobbyeshleman@meta.com>,
-        Christian =?iso-8859-1?Q?Borntr=E4ger?= <borntraeger@linux.ibm.com>,
-        Christophe Leroy <chleroy@kernel.org>,
-        Chun-Tse Shao <ctshao@google.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Costa Shulyupin <costa.shul@redhat.com>,
-        Crystal Wood <crwood@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        David Hildenbrand <david@kernel.org>,
-        David Matlack <dmatlack@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Donald Hunter <donald.hunter@gmail.com>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Emil Tsalapatis <emil@etsalapatis.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Gabriele Monaco <gmonaco@redhat.com>,
-        Geliang Tang <geliang@kernel.org>, Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Ivan Pravdin <ipravdin.official@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, James Clark <james.clark@linaro.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Jason Xing <kerneljasonxing@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
-        Joe Damato <joe@dama.to>, John Garry <john.g.garry@oracle.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kaushlendra Kumar <kaushlendra.kumar@intel.com>,
-        Kent Gibson <warthog618@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Len Brown <lenb@kernel.org>, Leo Yan <leo.yan@linux.dev>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mat Martineau <martineau@kernel.org>,
-        Matthieu Baerts <matttbe@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, Mike Leach <mike.leach@arm.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Mykyta Yatsenko <yatsenko@meta.com>, Nam Cao <namcao@linutronix.de>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, Quentin Monnet <qmo@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Raghavendra Rao Ananta <rananta@google.com>,
-        Saket Dumbre <saket.dumbre@intel.com>, Shuah Khan <shuah@kernel.org>,
-        Simon Horman <horms@kernel.org>, Song Liu <song@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Stanislav Fomichev <sdf@fomichev.me>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Swapnil Sapkal <swapnil.sapkal@amd.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Tomas Glozar <tglozar@redhat.com>, Vipin Sharma <vipinsh@google.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Willy Tarreau <w@1wt.eu>, Yonghong Song <yonghong.song@linux.dev>,
-        Zhang Chujun <zhangchujun@cmss.chinamobile.com>,
-        Zhang Rui <rui.zhang@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] tools: Use fputc() calls in some functions
-Message-ID: <amIvxECTIM5paT94@gate>
-References: <48f2d61f-d468-49b7-881e-f00777db073f@web.de>
- <amIbVOIsOeZgcBZF@tassilo>
+	s=arc-20240116; t=1784819835; c=relaxed/simple;
+	bh=y0jFTQOJ+Dq2wgdO+3QOYkjdotoBMq7hRls4SEbmZAo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=nxz7RmvOTClSy31+OwF81VoN0hhjH48RJROYs+sFWjJIuuGKUufbkS7VzoIGkOh58UjIVvWWbHi1NCrHM150m+LASefhEUBcVbGyDt0YsFpoqiB1YRDWKuTO/LIC51DJ1DHjwDjyvY67XChsfKT3pHYAX5mWbXKwv0VKIRkr8jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SQWOUjeW; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SQWOUjeW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 413C71F00A3A;
+	Thu, 23 Jul 2026 15:17:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784819831;
+	bh=VUDPRdQphPMrECclGKpOqw0nMGRICTbCUk3WOCCAA1A=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=SQWOUjeW2dB3kjlC4odUADa9Jp2xJqiFX/7ZcgihbP0S64TwuIV2ks6zIvSWFIvvF
+	 xxWvfA7I3/PG5inDeTcHwTDlr544Hm1wv2BR1pIiiYuPWWIVEsqSozelC4GqGacO9e
+	 yKiakA8eLI22ykmTv99SLVJho+mtp4JueZhUd16wxuYhrkYyU5SVQPHcoQznNe9v6U
+	 hrreponpC2Elqr0MF5CfVPAHgv8m5DnGG72PqHDND+yjA1nZpPAz/3OEwAptnZZNVW
+	 VqrVj3BAopHlyQ242U24ibg6z6JBRmMpiVCELJPJ2mXRESt8wgun67jUQ5sDtxxmE9
+	 hPvZvyFUhbZDQ==
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Date: Thu, 23 Jul 2026 16:16:31 +0100
+Subject: [PATCH mm-hotfixes v6 1/5] mm/vmalloc: acquire init_mm lock on
+ huge vmap to avoid ptdump UAF
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <amIbVOIsOeZgcBZF@tassilo>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260723-series-vmap-race-fix-v6-1-8cc77dcc0018@kernel.org>
+References: <20260723-series-vmap-race-fix-v6-0-8cc77dcc0018@kernel.org>
+In-Reply-To: <20260723-series-vmap-race-fix-v6-0-8cc77dcc0018@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Suren Baghdasaryan <surenb@google.com>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Shakeel Butt <shakeel.butt@linux.dev>, David Hildenbrand <david@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+ Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, 
+ Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Dev Jain <dev.jain@arm.com>, Ryan Roberts <ryan.roberts@arm.com>
+Cc: David Carlier <devnexen@gmail.com>, ljs@kernel.org, linux-mm@kvack.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, "Denis V. Lunev" <den@virtuozzo.com>, 
+ "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>, 
+ stable@vger.kernel.org, 
+ syzbot+fd95a72470f5a44e464c@syzkaller.appspotmail.com
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8900; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=y0jFTQOJ+Dq2wgdO+3QOYkjdotoBMq7hRls4SEbmZAo=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLKSDGItizZ7PHgwo3lue/LTT5IeaudLdv1gqsg49sz98
+ fonJkXfOkpZGMS4GGTFFFmefxHfHyQSNq/zgr8bzBxWJpAhDFycAjCRu46MDFdNRW6+X9lYLxpT
+ /yeWiUNNKezc08qJL9z74tg1/+5nWMnw3//inBM9L7/uyhQ9Ztr2pJF7w5/s+1v2ee+c7ZmQJbN
+ nOS8A
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-On Thu, Jul 23, 2026 at 06:47:00AM -0700, Andi Kleen wrote:
-> On Thu, Jul 23, 2026 at 12:25:25PM +0200, Markus Elfring wrote:
-> > From: Markus Elfring <elfring@users.sourceforge.net>
-> > Date: Thu, 23 Jul 2026 11:13:30 +0200
-> > Subject: [PATCH] tools: Use fputc() calls in some functions
-> > MIME-Version: 1.0
-> > Content-Type: text/plain; charset=UTF-8
-> > Content-Transfer-Encoding: 8bit
-> > 
-> > Single characters should occasionally be transferred into the output.
-> > Thus use the corresponding function “fputc” (or even “putchar”).
-> > 
-> > The source code was transformed by using the Coccinelle software.
-> 
-> gcc already does this transformation automatically.
+Currently there is a nasty race between ptdump and vmap when attempting to
+map a huge P4D, PUD or PMD entry:
 
-Yup.  And the printf() form is much more regular, expected, readable.
-The primary consumers of source code are human beings, all programs
-should be written with that in mind!
+* ptdump walks kernel page table ranges it doesn't own.
 
+* When vmap maps ranges it tries to promotes existing ones to huge page
+  tables in vmap_try_huge_[p4d,pud,pmd]() at P4D, PUD and PMD level,
+  freeing the lower page table in [p4d,pud,pmd]_free_[pud,pmd,pte]_page()
+  when it succeeds.
 
-Segher
+Both of these things can happen at the same time and as a result ptdump can
+access a freed page table, resulting in a use-after-free and memory
+corruption.
+
+This is possible because while ptdump_walk_pgd() holds both the mem hotplug
+lock and the mmap write lock before invoking walk_page_range_debug(), vmap
+takes no relevant locks at all.
+
+Fix this by holding the mmap read lock in vmap_try_huge_*() when freeing
+page tables.
+
+The read lock is sufficient: ptdump is the only walker that must be
+excluded and it holds the mmap write lock.  Other holders of the read lock
+may run concurrently, but each exclusively owns the range it operates on
+and cannot reach the page tables freed here.
+
+We also hold the lock while assigning the huge page table entry, which
+means page table walkers observe only the huge or non-huge page table
+entry.
+
+We use a trylock to prevent ptdump from blocking vmap making forward
+progress. This is fine because it's an optimisation in any case, and thus
+the vmap can safely proceed regardless.
+
+All other kernel page table walkers that touch vmalloc ranges either
+exclusively own the memory walked or acquire the mmap lock, so this
+correctly excludes those walkers.
+
+One wrinkle here is commit fa93b45fd397 ("arm64: Enable vmalloc-huge with
+ptdump"), which addresses the issue for arm64 only by explicitly acquiring
+the mmap read lock on kernel page table freeing should a concurrent ptdump
+be in progress.
+
+This is problematic as vmap may acquire the mmap read lock prior to ptdump
+attempting to acquire an mmap write lock, leading to a deadlock when the
+mmap read lock is slept upon on page table freeing due to rwsem
+anti-starvation.
+
+We work around this by predicating the mmap lock being taken on
+!CONFIG_ARM64 for the time being.
+
+With this patch applied, a follow up will partially revert commit
+fa93b45fd397 ("arm64: Enable vmalloc-huge with ptdump") and at that stage
+remove the arm64 ifdeffery.
+
+We also update walk_page_range_debug() to assert the mmap write lock
+unconditionally and update the comment here to reflect this change.
+
+The issue has existed as long as ptdump was available and vmap freed page
+tables when promoting to a huge leaf entry, that is, since commit
+b6bdb7517c3d ("mm/vmalloc: add interfaces to free unmapped page table") for
+huge ioremap, and commit 121e6f3258fe ("mm/vmalloc: hugepage vmalloc
+mappings") for huge vmalloc.
+
+Since the former is the earlier of the two we choose that for our Fixes
+tag.
+
+We also define a guard class for mmap_read_trylock() so we can use
+cleanup.h to make the scope handling cleaner in the implementation.
+
+This patch is based on work by David Carlier (linked), with gratitude!
+
+Fixes: b6bdb7517c3d ("mm/vmalloc: add interfaces to free unmapped page table")
+Cc: stable@vger.kernel.org
+Reported-by: syzbot+fd95a72470f5a44e464c@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/6a287988.39669fcc.33b062.00a0.GAE@google.com/T/
+Link: https://lore.kernel.org/linux-mm/20260706203128.162335-1-devnexen@gmail.com/
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Reviewed-by: Dev Jain <dev.jain@arm.com>
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Reviewed-by: Kiryl Shutsemau <kas@kernel.org>
+Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+---
+ include/linux/mmap_lock.h |  1 +
+ mm/pagewalk.c             | 22 +++++++++++----------
+ mm/vmalloc.c              | 49 ++++++++++++++++++++++++++++++++++++++---------
+ 3 files changed, 53 insertions(+), 19 deletions(-)
+
+diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
+index 04b8f61ece5d..6b5c2390cc30 100644
+--- a/include/linux/mmap_lock.h
++++ b/include/linux/mmap_lock.h
+@@ -621,6 +621,7 @@ static inline void mmap_read_unlock(struct mm_struct *mm)
+ 
+ DEFINE_GUARD(mmap_read_lock, struct mm_struct *,
+ 	     mmap_read_lock(_T), mmap_read_unlock(_T))
++DEFINE_GUARD_COND(mmap_read_lock, _try, mmap_read_trylock(_T))
+ 
+ static inline void mmap_read_unlock_non_owner(struct mm_struct *mm)
+ {
+diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+index 3ae2586ff45b..bbcfd68d0907 100644
+--- a/mm/pagewalk.c
++++ b/mm/pagewalk.c
+@@ -678,6 +678,8 @@ int walk_kernel_page_table_range_lockless(unsigned long start, unsigned long end
+  * will also not lock the PTEs for the pte_entry() callback.
+  *
+  * This is for debugging purposes ONLY.
++ *
++ * The mmap write lock must be held.
+  */
+ int walk_page_range_debug(struct mm_struct *mm, unsigned long start,
+ 			  unsigned long end, const struct mm_walk_ops *ops,
+@@ -691,6 +693,16 @@ int walk_page_range_debug(struct mm_struct *mm, unsigned long start,
+ 		.no_vma		= true
+ 	};
+ 
++	/*
++	 * When walking userland page tables, an mmap write lock must be held to
++	 * account for munmap() downgrading to an mmap read lock when tearing
++	 * down page tables.
++	 *
++	 * When walking kernel page tables, an mmap write lock must also be held
++	 * to account for page table freeing on vmap huge page mapping.
++	 */
++	mmap_assert_write_locked(mm);
++
+ 	/* For convenience, we allow traversal of kernel mappings. */
+ 	if (mm == &init_mm)
+ 		return walk_kernel_page_table_range(start, end, ops,
+@@ -700,16 +712,6 @@ int walk_page_range_debug(struct mm_struct *mm, unsigned long start,
+ 	if (!check_ops_safe(ops))
+ 		return -EINVAL;
+ 
+-	/*
+-	 * The mmap lock protects the page walker from changes to the page
+-	 * tables during the walk.  However a read lock is insufficient to
+-	 * protect those areas which don't have a VMA as munmap() detaches
+-	 * the VMAs before downgrading to a read lock and actually tearing
+-	 * down PTEs/page tables. In which case, the mmap write lock should
+-	 * be held.
+-	 */
+-	mmap_assert_write_locked(mm);
+-
+ 	return walk_pgd_range(start, end, &walk);
+ }
+ 
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 1afca3568b9b..d5c4d2bb770b 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -43,6 +43,7 @@
+ #include <asm/tlbflush.h>
+ #include <asm/shmparam.h>
+ #include <linux/page_owner.h>
++#include <linux/cleanup.h>
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/vmalloc.h>
+@@ -158,10 +159,24 @@ static int vmap_try_huge_pmd(pmd_t *pmd, unsigned long addr, unsigned long end,
+ 	if (!IS_ALIGNED(phys_addr, PMD_SIZE))
+ 		return 0;
+ 
+-	if (pmd_present(*pmd) && !pmd_free_pte_page(pmd, addr))
+-		return 0;
++	if (!pmd_present(*pmd))
++		return pmd_set_huge(pmd, phys_addr, prot);
+ 
+-	return pmd_set_huge(pmd, phys_addr, prot);
++	/*
++	 * Acquire the mmap read lock to exclude ptdump, which walks
++	 * kernel page tables it does not own under the mmap write lock.
++	 *
++	 * Concurrent read lock holders are safe: each exclusively owns
++	 * the range it operates on and cannot reach this page table.
++	 */
++#ifndef CONFIG_ARM64
++	scoped_cond_guard(mmap_read_lock_try, return 0, &init_mm)
++#endif
++	{
++		if (!pmd_free_pte_page(pmd, addr))
++			return 0;
++		return pmd_set_huge(pmd, phys_addr, prot);
++	}
+ }
+ 
+ static int vmap_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+@@ -210,10 +225,18 @@ static int vmap_try_huge_pud(pud_t *pud, unsigned long addr, unsigned long end,
+ 	if (!IS_ALIGNED(phys_addr, PUD_SIZE))
+ 		return 0;
+ 
+-	if (pud_present(*pud) && !pud_free_pmd_page(pud, addr))
+-		return 0;
++	if (!pud_present(*pud))
++		return pud_set_huge(pud, phys_addr, prot);
+ 
+-	return pud_set_huge(pud, phys_addr, prot);
++	/* See comment in vmap_try_huge_pmd(). */
++#ifndef CONFIG_ARM64
++	scoped_cond_guard(mmap_read_lock_try, return 0, &init_mm)
++#endif
++	{
++		if (!pud_free_pmd_page(pud, addr))
++			return 0;
++		return pud_set_huge(pud, phys_addr, prot);
++	}
+ }
+ 
+ static int vmap_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
+@@ -262,10 +285,18 @@ static int vmap_try_huge_p4d(p4d_t *p4d, unsigned long addr, unsigned long end,
+ 	if (!IS_ALIGNED(phys_addr, P4D_SIZE))
+ 		return 0;
+ 
+-	if (p4d_present(*p4d) && !p4d_free_pud_page(p4d, addr))
+-		return 0;
++	if (!p4d_present(*p4d))
++		return p4d_set_huge(p4d, phys_addr, prot);
+ 
+-	return p4d_set_huge(p4d, phys_addr, prot);
++	/* See comment in vmap_try_huge_pmd(). */
++#ifndef CONFIG_ARM64
++	scoped_cond_guard(mmap_read_lock_try, return 0, &init_mm)
++#endif
++	{
++		if (!p4d_free_pud_page(p4d, addr))
++			return 0;
++		return p4d_set_huge(p4d, phys_addr, prot);
++	}
+ }
+ 
+ static int vmap_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
+
+-- 
+2.55.0
+
