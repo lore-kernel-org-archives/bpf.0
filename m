@@ -1,109 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB2D3D75B1
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 19:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D903EF64F
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 20:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784834382; cv=none; b=gZJoCK+5CH0AtZmCvcYC2PIWrQ45rzL7PAyChhpXzhvXvGhTEb1rPwaaYRjbCbHFjqumWGW5YvHfcR4NkKyT++FYSchtS3kr9bMuhF5LNZ0lB1zINZHLhPyFSRaKV2nsSARCPoPXUhmQP9ewOn93y/HHXtKWlsKlxAiG3gFv3+U=
+	t=1784838299; cv=none; b=by4Q5p4kWu+BgQMBjGBjv24PYeWZnkRHXHl7+LH7JglsUODwYK+EssGlhWf2Y3YcnsqsKGrs7vgdwI1rxcFX6MHqxYCbvRhSzTM/p6Pn7KcPFeYx/NUmfipa492rhtnpVCzJrNwOfRi5TPWbkBWwwqSWLCwYk/+05IWLwz+pLr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784834382; c=relaxed/simple;
-	bh=e8147N0L1fp07qTiTUApBB9Ru4iw7eRxHzWmAdIJbIs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=F2ahljnthScjQarCnGwAquF5nYZBbYcWlZzJib2bfWZ0EQKu8iBY37c9wOLycHz9lJrVuiscn6wAupHaZpcLajS04GVLQPn28Us/LROX7eD6zeQIwOIDPOW1sZM//kzLvj/PUvkcg/gX5AgSzLeBgOAnHM8isnl80dWPRbiJvVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dv01M06a; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784838299; c=relaxed/simple;
+	bh=OzetTbfjQePTy7OVY1wFP4vmFUZsVCuAyG7c7gEUj0M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IpP76+WqDHdv/eNBZM0vO14FgWoWoZpgS5ceUvKRTBKfhAf5U96YlQ6Rh2HFZim2EJJP9RqH4s0cXV8XwCHjr/oEL6WKZYXjEBhbIdZ37XrnSTdWVkuQhC4cViuac1GQe+uevpSkpixNdEgy/oLmxq9BHZwclnWlZ+30rgfZqqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D8tRQXY9; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dv01M06a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31CC91F00A3A;
-	Thu, 23 Jul 2026 19:19:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784834379;
-	bh=oSsi1FNjK5e0vdAJ7L+SxxfRahtPIpsEtW8KugBOH/k=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Dv01M06a5lt7L60ErYovkQONLg4k0QR0gN3sV2rEFk31ONSlvP9BRyKW8fy+IOIse
-	 lk2lkNf/2UdNK2QYpvNN+Y20OStzsG6O0pdePjVqSFlfexxE0IQuBsjYev1MAoYNjn
-	 svnwFJkp6TpKcAkOw8UVDBcuNGwHFlIL9C+0slfSJfcpWn1yYWA2K1BTJVd8tijIrB
-	 18zEqfGm34mkDist/1NO4Wc05rZ+Uy97rEbzgx2IBkEgYm4vjDlZJUc1RLMn02VLsL
-	 FPMKoWL+hmsrFM/UeaUeE8g2FGcVya6khwUTiPYhjoVAjv6hTUZNWrHde27Cexh2R/
-	 /btbOEvjRFPvQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v3] veth: convert frag_list skbs before running XDP
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Matt Fleming" <matt@readmodwrite.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260722191925.2192070-1-matt@readmodwrite.com>
-References: <20260722191925.2192070-1-matt@readmodwrite.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Jul 2026 19:19:38 +0000
-Message-Id: <20260723191939.31CC91F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D8tRQXY9"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cca0c5799eso11406985ad.0
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 13:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784838297; x=1785443097; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=u/wCNn7r7pOj0j9wdJMmH/uZiuuBESr30e4WVlCi2n4=;
+        b=D8tRQXY9AkmuYQrdSbgmQx1BzxkkWa50b6UvuXkhwr24/Crmm5BwWL7cm4l3EPvNnr
+         qBDPU4uBQWSPSu700uZLKd6YU+LXNSBYZj7BGV6aJknvEdjbBbHNy0zP9gBbVd2/9GD9
+         cDvvo5VoOrf9QcdsiiNd2W9pzHxeNznmc/LdCj7+65rzw+IUZNKgA7/bq1ItxaF/mgCI
+         IrzY+oG0WKi7hKZH+TXvMiUY3lmfS4tpdBPDz1h3atSpBJbSVMTXtzbrmO0pvzEUXyU2
+         OHf5lssKa1mdeP+EUdiqD+7rxZx188PdHR//AIrJcf6Ig/lqfx4xk28gY3qzCuaXWVuM
+         58Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784838297; x=1785443097;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=u/wCNn7r7pOj0j9wdJMmH/uZiuuBESr30e4WVlCi2n4=;
+        b=cMoIC2KMx6nFQj0lztdR2pSGluO4OMH9zgAchX4zdNbMxpDKxry7j3QWQpLKITdtYK
+         3nfi1P8N6BODLVEuAx7dc2mYchL+/nqmB8JSjeKwxuDtSZcVin3cdF3hBdXRgpiZc4Br
+         eiTVSTTkj2u+zEZL3a3qITNOke/jtt2wyp82dCj/LpAxher9OQAPTUiFkkO82qFl4C3U
+         8NB9kzrmC9pbTo7rsdRXSlC8bUqDDbLZzC0GRI9WEDDRlDa4ofRRmORPzWJgEpyGwmoN
+         7+2SCc436TLQ3fqmYS/a4Dw/pNL+hlKm2GClKPnONJ0OZtUAWX09znHN0R7O243qmbxZ
+         TDiA==
+X-Gm-Message-State: AOJu0YyuuEm9aVHThfLPXL+R7x6FoWu7j/fNA2/MVzpNE3A9Yja1iXt5
+	Zoh95sTIbYGx+cKC3AIS6Hr1Pb35ZUFCufO3n0uTiQ3ZYcLjv9u8xXKlRuxZpA==
+X-Gm-Gg: AR+sD10w3s9dqzsK3tybIgFdHZlRNJ9DiF5U99RiVUltWbnxErH5Sh5yxh+ytGzsSXc
+	wsrOOQEaB2xdvNXCdWSumpDh5PZOfiWiYRvvysyqSVlovhR7KLC5+hBaoSg/eBbTkgssJHSJK/+
+	iHnnouqDChgg4LJIsVUJZ2FPc0X+ftSKGU0L1DqUj8ox1MpTm5oProABWTYD9KUp/M5weCBZKdC
+	wc+Pa3pprJljn14IkDQyeX2jxLLdbIludMO64kCAZTPL3Ct1icNMpFeodJ/EGRNunAFTQI9B7KF
+	prBTdIYsnDe7LXAZXpZ/PhSFwPTFVImS8xWRMkFuhI6PFt55TVkd9m+OZiYb2ZIS37iHCdbKAZH
+	sT7ZSNKAFI0JZdtC0uhDs/+3JENn7mC8o9cjoPTdZgpb9QpWrXc5z99r9nRfFWv3GWZvlOeIlsg
+	77aQ==
+X-Received: by 2002:a17:902:d486:b0:2c9:e846:a57e with SMTP id d9443c01a7336-2cfa67039d2mr53287135ad.0.1784838297450;
+        Thu, 23 Jul 2026 13:24:57 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:1::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8f34bb48sm39637125ad.65.2026.07.23.13.24.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2026 13:24:57 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf v1 1/2] bpf: Reject passing scalar NULL to nonnull arg of a global subprog
+Date: Thu, 23 Jul 2026 13:24:55 -0700
+Message-ID: <20260723202456.3754267-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+A global subprogram argument tagged __arg_nonnull is set up as a
+non-nullable PTR_TO_MEM. However the verifier does not check against a
+scalar NULL, leading to real NULL pointer dereference. Reject it as
+well.
 
-Pre-existing issues:
-- [Critical] `skb_pp_cow_data` fails to account for `skb_shared_info` overh=
-ead in `truesize`, leading to memory corruption and `skb_over_panic`.
---
+Fixes: 94e1c70a3452 ("bpf: support 'arg:xxx' btf_decl_tag-based hints for global subprog args")
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+---
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- Patch [1]: [PATCH net v3] veth: convert frag_list skbs before running X=
-DP ---
-commit 2a77993dec578b7da44e393d4e9fecc7e0e8c05c
-Author: Matt Fleming <mfleming@cloudflare.com>
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d952bf07368d..498f01045be7 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9331,7 +9331,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+ 				return ret;
+ 			if (check_mem_reg(env, reg, argno, arg->mem_size, BPF_READ | BPF_WRITE, NULL))
+ 				return -EINVAL;
+-			if (!(arg->arg_type & PTR_MAYBE_NULL) && (reg->type & PTR_MAYBE_NULL)) {
++			if (!(arg->arg_type & PTR_MAYBE_NULL) &&
++			    (type_may_be_null(reg->type) || bpf_register_is_null(reg))) {
+ 				bpf_log(log, "%s is expected to be non-NULL\n",
+ 					reg_arg_name(env, argno));
+ 				return -EINVAL;
+-- 
+2.52.0
 
-veth: convert frag_list skbs before running XDP
-
-This commit fixes an AF_XDP copy mode crash by routing nonlinear skbs throu=
-gh
-skb_pp_cow_data() before exposing them to XDP, preventing empty frags[] from
-being exposed.
-
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 1c51421491753..00e34afd858e7 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -756,7 +756,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_r=
-q *rq,
->  	u32 frame_sz;
-> =20
->  	if (skb_shared(skb) || skb_head_is_locked(skb) ||
-> -	    skb_shinfo(skb)->nr_frags ||
-> +	    skb_is_nonlinear(skb) ||
->  	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
->  		if (skb_pp_cow_data(rq->page_pool, pskb, XDP_PACKET_HEADROOM))
->  			goto drop;
-
-[Severity: Critical]
-This isn't a bug introduced by this patch, but does changing this condition
-route more traffic into a memory corruption issue inside skb_pp_cow_data()?
-
-Looking at skb_pp_cow_data() in net/core/skbuff.c, it computes the allocati=
-on
-size without accounting for the skb_shared_info structural overhead:
-
-        truesize =3D SKB_HEAD_ALIGN(size) + headroom;
-        data =3D page_pool_dev_alloc_va(pool, &truesize);
-
-When page_pool_dev_alloc_va() allocates from a page fragment (which happens
-when the requested size is <=3D PAGE_SIZE / 2), it returns a buffer of exac=
-tly
-the requested size.=20
-
-The subsequent call to napi_build_skb() unconditionally subtracts the
-skb_shared_info overhead from this size, setting skb->end below the required
-bounds. This causes the payload copy in skb_copy_bits() to overwrite the
-shared info, and later skb_put() calls will crash with an skb_over_panic.
-
-Since standard 1500-byte MTU packets satisfy this fragment threshold
-(1792 <=3D 2048), will routing all nonlinear SKBs into this path allow remo=
-te
-input to reliably trigger a kernel panic?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260722191925.2192=
-070-1-matt@readmodwrite.com?part=3D1
