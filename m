@@ -1,275 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3653734027B;
-	Thu, 23 Jul 2026 15:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D0733DEC2;
+	Thu, 23 Jul 2026 15:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784819828; cv=none; b=tqKTMmDWpYoYmnRyeMGw7PU7UWp2RANwOqsfK6Lb4M/JTml47AeoZKdL+ORTnlKKBr4miQKz5Zch5prx+cPHewrQIfDZNhuazSrz5oD/vCR+hE2U8PWh17qMkM0BX7y5wDXWEpqcDPa6yApb7ub5GSiayb6pbSJHiYhyTro1Hi8=
+	t=1784819831; cv=none; b=NdGdT8qBw2hxo/WhTNuidrVBjbNda0gMPtrALkwMNif2wvW4x+7NA9/SBL+iZceawSt9hVumx+LGg5vQtjqpRjtzxTOxvFzgnwQy7/qvFSJxbdD3+GRNqP47sSJ9dseeXL1bY/DbEp8xPpQMXH82OeZ+Q/v481FOPFXA6ikis94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784819828; c=relaxed/simple;
-	bh=oLL0FuAaN0G99BVoKnEwyOx+jeYfUCBiH1tkDh09jxk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=D6Gq2gu+wNTLG2mhGgXLnBvu441J7+J+OXZeWRrb628X/Ia9Adn94CS5ZERXj4qkgta8c4j5SDu+Qcc4b6pdGzPp+rDPS3x99j4I5RSU0sQZ2r17JVckjsFzttFq3y/3AKhSVjkT9Jb+kh/sLbBVCOkPqHgksw6UfBF6KHqnJu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gALUPxMv; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gALUPxMv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 340191F000E9;
-	Thu, 23 Jul 2026 15:16:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784819824;
-	bh=tOkcYp7bq/lm/cKgO5LpqDOGzN7wj+Gq22Vqvq122OQ=;
-	h=From:Subject:Date:To:Cc;
-	b=gALUPxMvCsolFDharNcYLWcSwWh+mI5iyNAY3oz7Hwj41b7AxeeUx920gygiAMyGs
-	 PMxR7XVJDjGmIk713tapgV0SgBEJB4tTRK22BDeYiWo/v/B9q3wFFmq6B1oqQPrY/K
-	 nj+kToCaQUN/Rqk2gf/bDx0A54lNkgzskZSBxzadAO92MoxUWo2pGWrGOtHQ9DpIOy
-	 oLLb4SQdIkZzKC3ycZ2UsY2CEfsjOMHCvuUWEBBUSiD3SKfwVOiHF7TpaC5yRks+lb
-	 z8+AyZOBvv05qWtujJ/Ov238BAwAzm6GKeRo0U1piAopukeqcZZ8WiQLwAgtySuZ9o
-	 340xMen1L52Jg==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Subject: [PATCH mm-hotfixes v6 0/5] mm: fix UAF caused by race between
- ptdump and vmap pgtable freeing
-Date: Thu, 23 Jul 2026 16:16:30 +0100
-Message-Id: <20260723-series-vmap-race-fix-v6-0-8cc77dcc0018@kernel.org>
+	s=arc-20240116; t=1784819831; c=relaxed/simple;
+	bh=WfY8nqKuTsiHSSWHKLtcZI05puT7uLfuQEDUgUGR9l4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=epFSFATB69uHK2yIHbAvKBRH8DCorhK+U4YJObd0UUZZejDCKQDI0Iwwrk8KA2su3dQ8BQkzdRNnMekR46Y0AUJGq3ax/E9lY3iq0ejCFr2suz4liReYIuKbfjv5Ho8HuUYRgnnhEabQ6jh/yDOChFu2V7Mz+3tRqY6A9k1muVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
+Received: from gate.crashing.org (localhost [127.0.0.1])
+	by gate.crashing.org (8.18.1/8.18.1/Debian-2) with ESMTP id 66NFEMq5259803;
+	Thu, 23 Jul 2026 10:14:22 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.18.1/8.18.1/Submit) id 66NFECrd259732;
+	Thu, 23 Jul 2026 10:14:12 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Thu, 23 Jul 2026 10:14:12 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Andi Kleen <ak@linux.intel.com>
+Cc: Markus Elfring <Markus.Elfring@web.de>, acpica-devel@lists.linux.dev,
+        bpf@vger.kernel.org, coresight@lists.linaro.org, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, mptcp@lists.linux.dev,
+        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        virtualization@lists.linux.dev,
+        Adrian Hunter <adrian.hunter@intel.com>, Alex Mastro <amastro@fb.com>,
+        Alex Williamson <alex@shazbot.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ankur Arora <ankur.a.arora@oracle.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Bartosz Golaszewski <brgl@kernel.org>,
+        Bobby Eshleman <bobbyeshleman@meta.com>,
+        Christian =?iso-8859-1?Q?Borntr=E4ger?= <borntraeger@linux.ibm.com>,
+        Christophe Leroy <chleroy@kernel.org>,
+        Chun-Tse Shao <ctshao@google.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Costa Shulyupin <costa.shul@redhat.com>,
+        Crystal Wood <crwood@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        David Hildenbrand <david@kernel.org>,
+        David Matlack <dmatlack@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Donald Hunter <donald.hunter@gmail.com>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Emil Tsalapatis <emil@etsalapatis.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Gabriele Monaco <gmonaco@redhat.com>,
+        Geliang Tang <geliang@kernel.org>, Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Ivan Pravdin <ipravdin.official@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, James Clark <james.clark@linaro.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Jason Xing <kerneljasonxing@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Damato <joe@dama.to>, John Garry <john.g.garry@oracle.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kaushlendra Kumar <kaushlendra.kumar@intel.com>,
+        Kent Gibson <warthog618@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Len Brown <lenb@kernel.org>, Leo Yan <leo.yan@linux.dev>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mat Martineau <martineau@kernel.org>,
+        Matthieu Baerts <matttbe@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, Mike Leach <mike.leach@arm.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Mykyta Yatsenko <yatsenko@meta.com>, Nam Cao <namcao@linutronix.de>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>, Paolo Abeni <pabeni@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Pawel Chmielewski <pawel.chmielewski@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, Quentin Monnet <qmo@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        Saket Dumbre <saket.dumbre@intel.com>, Shuah Khan <shuah@kernel.org>,
+        Simon Horman <horms@kernel.org>, Song Liu <song@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Swapnil Sapkal <swapnil.sapkal@amd.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Tomas Glozar <tglozar@redhat.com>, Vipin Sharma <vipinsh@google.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Willy Tarreau <w@1wt.eu>, Yonghong Song <yonghong.song@linux.dev>,
+        Zhang Chujun <zhangchujun@cmss.chinamobile.com>,
+        Zhang Rui <rui.zhang@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] tools: Use fputc() calls in some functions
+Message-ID: <amIvxECTIM5paT94@gate>
+References: <48f2d61f-d468-49b7-881e-f00777db073f@web.de>
+ <amIbVOIsOeZgcBZF@tassilo>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAE4wYmoC/33OS26DMBAG4KtEXteVXxiTVe9RZTEM4+C2QGQT1
- Cri7nVgQ4Xo8p/HN/NgiWKgxM6nB4s0hRSGPgf7cmLYQn8lHpqcmRLKilIKvs7zqYMbj4DEffj
- mCgwCVs5V2rG8eouUywv7zrqOt8O45svaTPf6g3B8ws/xNqRxiD/LE5Nclv6/N0kueFHrsjIop
- fb09kmxp6/XIV6XG5PaKupAUVmBRmqDqEEq2Cl6q5gDRWeldlIRogfhq51itoo9UExWHErh0Gh
- ZNn6nFFulPFCKrFhhQQDaRlPxR5nn+Rcso2pe8AEAAA==
-X-Change-ID: 20260710-series-vmap-race-fix-2a4cac988938
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Suren Baghdasaryan <surenb@google.com>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Shakeel Butt <shakeel.butt@linux.dev>, David Hildenbrand <david@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
- Uladzislau Rezki <urezki@gmail.com>, Toshi Kani <toshi.kani@hpe.com>, 
- Dave Hansen <dave.hansen@linux.intel.com>, 
- Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Kiryl Shutsemau <kas@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Dev Jain <dev.jain@arm.com>, Ryan Roberts <ryan.roberts@arm.com>
-Cc: David Carlier <devnexen@gmail.com>, ljs@kernel.org, linux-mm@kvack.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, "Denis V. Lunev" <den@virtuozzo.com>, 
- "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>, 
- stable@vger.kernel.org, 
- syzbot+fd95a72470f5a44e464c@syzkaller.appspotmail.com
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9066; i=ljs@kernel.org;
- h=from:subject:message-id; bh=oLL0FuAaN0G99BVoKnEwyOx+jeYfUCBiH1tkDh09jxk=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLKSDKI480wyeR95Hl5y1GHx2/xQq2xPkYlu2zbXJ6le3
- +iUv2BHRykLgxgXg6yYIsvzL+L7g0TC5nVe8HeDmcPKBDKEgYtTACay+xUjw+ez5ru3sRnIrZ8t
- us/2YpqdWts1w7gfpxyF9//Y/OXvFzeG/+VT/DaILapd4nh6ptvGt3N3dXuEfpJ09q8yaJud4zy
- JlRUA
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <amIbVOIsOeZgcBZF@tassilo>
 
-Kernel page table walkers fall into two broad categories - those ranges
-where no exclusion is required via walk_kernel_page_table_range_lockless()
-and those where exclusion is required via walk_kernel_page_table_range()
-or walk_page_range_debug().
+On Thu, Jul 23, 2026 at 06:47:00AM -0700, Andi Kleen wrote:
+> On Thu, Jul 23, 2026 at 12:25:25PM +0200, Markus Elfring wrote:
+> > From: Markus Elfring <elfring@users.sourceforge.net>
+> > Date: Thu, 23 Jul 2026 11:13:30 +0200
+> > Subject: [PATCH] tools: Use fputc() calls in some functions
+> > MIME-Version: 1.0
+> > Content-Type: text/plain; charset=UTF-8
+> > Content-Transfer-Encoding: 8bit
+> > 
+> > Single characters should occasionally be transferred into the output.
+> > Thus use the corresponding function “fputc” (or even “putchar”).
+> > 
+> > The source code was transformed by using the Coccinelle software.
+> 
+> gcc already does this transformation automatically.
 
-The former category is used only by arm64 arch code operating on ranges it
-both wholly owns and does not concurrently write.
+Yup.  And the printf() form is much more regular, expected, readable.
+The primary consumers of source code are human beings, all programs
+should be written with that in mind!
 
-The latter category consists of kernel page table walkers operating on
-ranges that are wholly owned (but which need exclusion against concurrent
-writers).
 
-The lock used for exclusion is the mmap lock, and for kernel ranges this
-is the mmap lock on init_mm.
-
-ptdump is a special case being both the only user of
-walk_page_range_debug(), and the only case in which it walks ranges it does
-not own.
-
-This presents a problem, as page tables may be freed under ptdump. And
-indeed there is a use-after-free bug in the kernel as a result, which this
-series addresses.
-
-vmap promotes page tables to huge leaf entries where possible, freeing the
-lower page table when it does. It does this with no meaningful locks held
-against concurrent ptdump walks.
-
-As a result, use-after-free can currently occur. This series addresses the
-issue by having the vmap huge promotion logic acquire the mmap read lock
-while both setting the huge page table entry and freeing the prior leaf
-page table.
-
-The ptdump code already acquires the mmap write lock, so by doing so we
-ensure that the ptdump walker only ever observes either the huge page table
-entry or the existing page table entry, and nothing is freed underneath it.
-
-A mitigation for this issue was already applied for arm64 in commit
-fa93b45fd397 ("arm64: Enable vmalloc-huge with ptdump"), which this series
-has to deal with carefully.
-
-This mitigation resolves the issue by acquiring the mmap read lock on
-init_mm on vmap page table free if a ptdump is in progress.
-
-However the fix in this series would cause a deadlock if we were to simply
-apply it for arm64 without also reverting the change.
-
-This is because vmap may acquire the read lock before ptdump attempts to
-acquire the write lock, which then gets queued, and rwsem starvation rules
-mean that the (unacknowledged) nested mmap read lock in the arm64 code
-would also block, meaning the original read lock is never released and thus
-deadlock.
-
-This series works around this by #ifndef CONFIG_ARM64'ing the mmap read
-lock in vmap logic, then partially reverting commit fa93b45fd397 ("arm64:
-Enable vmalloc-huge with ptdump"), keeping the enablement of huge vmap
-support, and removing the ifdeffery with the partial revert patch.
-
-There are related issues that are also addressed in this series:
-
-* x86 page attribute logic, specifically Change Page Attributes (CPA),
-  implements a feature whereby huge ranges can be collapsed into huge leaf
-  entries. This can similarly cause a UAF when done in parallel with a
-  ptdump walk, so similarly acquire the init_mm mmap lock to avoid this.
-
-* The CPA logic allows concurrent page table manipulation and CPA
-  collapse, meaning the former risks accessing a page table the latter
-  frees. Fix this by acquiring mmap write lock on init_mm across the
-  whole CPA collapse operation and read lock on the page table
-  manipulation.
-
-* x86 and arm64 permit walks of non-kernel mm's (both allowing efi mm
-  walks, and in x86's case arbitrary mm's), so we ensure kernel mappings
-  remain stable by locking the init_mm as well as the mm being walked.
-
-The ordering of patches is established for both strict dependencies (the
-arm64 partial revert in particular has to be done after the vmap changes)
-and logical ones (the non-kernel mm fix only makes sense once the vmap/CPA
-fixes are in place).
-
----
-v6:
-* Rebased on latest master of Linus's tree.
-* Updated: 3/5 to drop the init_mm lock over page table allocation in order
-  to avoid deadlocks due to init_mm -> ... -> fs_reclaim -> init_mm
-  dependency cycles, as reported by Chaitanya with thanks!
-* Small cover letter typo fixes.
-
-v5:
-* Rebased on latest master of Linus's tree.
-* Accumulated tags, thanks everybody!
-* Added additional commit to fix race between CPA collapse/attribute set.
-* Slight commit message tweaks.
-https://patch.msgid.link/20260717-series-vmap-race-fix-v5-0-606a0ac6d3e5@kernel.org
-
-v4:
-* Rebased on latest master of Linus's tree.
-* Accumulated tags, thanks everybody!
-* Updated commit messages further as per Kiryl.
-* Took the mmap write lock across the whole CPA operation as per Will.
-https://patch.msgid.link/20260716-series-vmap-race-fix-v4-0-8c108c4317df@kernel.org
-
-v3:
-* Rebased on latest master of Linus's tree.
-* Accumulated tags, thanks everybody!
-* Reworded commit messages as per Kiryl and Boris.
-https://patch.msgid.link/20260714-series-vmap-race-fix-v3-0-b812eccfa0f9@kernel.org
-
-v2:
-* Rebased on latest master of Linus's tree.
-* Accumulated tags, thanks everybody!
-* Fixed cover letter reference to arm64 partial revert as per David C.
-* Combined all patches into a 4 patch series for ease of tracking/review
-  and updated cover letter to reflect.
-* Reordered patches in series logically - fix vmap, fix CPA issue, handle
-  mm vs. init_mm then revert arm64 mitigation.
-* Reworded first patch to be consistent with x86 wording to clearly
-  indicate the intent of the fix is to fix ptdump UAF.
-* Reworded arm64 revert patch subject as per Mike, Dev to make clear this
-  is only reverting the ptdump mitigation not the vmap huge support.
-* Added Fixes: tag to arm64 revert patch so we backport this also for
-  neatness. Not strictly necessary, but is a better fix overall applied.
-* Added note about stable dependency to arm64 revert patch.
-* Updated walk_page_range_debug() to remove pointless !walk.mm check - if
-  NULL mm then the mmap lock asserts would NULL pointer deref, and of
-  course no caller does this anyway.
-* Updated walk_page_range_debug() to always assert init_mm mmap write lock
-  is held.
-* Updated walk_page_range_debug() to always check for start >= end and that
-  it has safe walk ops, and remove the unnecessary
-  walk_kernel_page_table_range() invocation which ultimately does the same
-  thing.
-* Typo fixups as per Mike.
-* Some small commit message/comment wording fixups.
-https://patch.msgid.link/20260712-series-vmap-race-fix-v2-0-ad134cc3a12a@kernel.org
-
-v1:
-* vmap/arm64 partial revert series:
-  https://patch.msgid.link/20260710-series-vmap-race-fix-v1-0-5b3794c113fe@kernel.org
-* CPA patch:
-  https://patch.msgid.link/20260710-fix-cpa-ptdump-race-v1-1-d898699a7417@kernel.org
-* non-init_mm patch:
-  https://patch.msgid.link/20260710-b4-fix-non-init_mm-ptdump-v1-1-2d40982c98ec@kernel.org
-
-To: Andrew Morton <akpm@linux-foundation.org>
-To: Suren Baghdasaryan <surenb@google.com>
-To: "Liam R. Howlett" <liam@infradead.org>
-To: Vlastimil Babka <vbabka@kernel.org>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-To: David Hildenbrand <david@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-To: Michal Hocko <mhocko@suse.com>
-To: Uladzislau Rezki <urezki@gmail.com>
-To: Toshi Kani <toshi.kani@hpe.com>
-To: Dave Hansen <dave.hansen@linux.intel.com>
-To: Andy Lutomirski <luto@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-To: Thomas Gleixner <tglx@kernel.org>
-To: Ingo Molnar <mingo@redhat.com>
-To: Borislav Petkov <bp@alien8.de>
-To: x86@kernel.org
-To: "H. Peter Anvin" <hpa@zytor.com>
-To: Kiryl Shutsemau <kas@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-To: Will Deacon <will@kernel.org>
-To: Dev Jain <dev.jain@arm.com>
-To: Ryan Roberts <ryan.roberts@arm.com>
-Cc: David Carlier <devnexen@gmail.com>
-Cc: ljs@kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc:  "Denis V. Lunev" <den@virtuozzo.com>
-Cc: "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>
-
----
-Lorenzo Stoakes (ARM) (5):
-      mm/vmalloc: acquire init_mm lock on huge vmap to avoid ptdump UAF
-      x86/mm/pat: acquire init_mm write lock on collapse to avoid UAF
-      x86/mm/pat: acquire init_mm read lock on attribute change to avoid UAF
-      mm/ptdump: always stabilise against page table freeing using init_mm
-      arm64: remove redundant concurrent ptdump UAF mitigation
-
- arch/arm64/include/asm/ptdump.h |  2 --
- arch/arm64/mm/mmu.c             | 43 ++++-------------------------------------
- arch/arm64/mm/ptdump.c          | 11 ++---------
- arch/x86/mm/pat/set_memory.c    | 28 ++++++++++++++++++++++++---
- include/linux/mmap_lock.h       |  3 +++
- mm/pagewalk.c                   | 36 ++++++++++++++++++++--------------
- mm/ptdump.c                     |  7 +++++++
- mm/vmalloc.c                    | 40 +++++++++++++++++++++++++++++---------
- 8 files changed, 93 insertions(+), 77 deletions(-)
----
-base-commit: 4539944e515183668109bdf4d0c3d7d228383d88
-change-id: 20260710-series-vmap-race-fix-2a4cac988938
-
-Cheers,
--- 
-Lorenzo Stoakes (ARM) <ljs@kernel.org>
-
+Segher
