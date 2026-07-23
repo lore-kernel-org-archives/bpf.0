@@ -1,25 +1,25 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8D53A875E;
-	Thu, 23 Jul 2026 05:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4226D3909A4;
+	Thu, 23 Jul 2026 05:41:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784785311; cv=none; b=XZ1TBead+dV3yUa8YXARFqES/xn83ZQt/kTORJ03v7KdVSO5efN4LvJxGOfxWlEvpLS1gaQBLb8Waf8MjmetsSl1QVvRVnyvLosVHQwqWXU4bF+Usy/h7lj3TzpzrK8HA6vYTYCWIeNdJfOnHZaOPFuzVQowgwpQilx6mMWWbtg=
+	t=1784785319; cv=none; b=b73JiycIFFR1bso+UZaNqQO8B2TrmPJUziOK95Me69yW5s5sZO15rjGKL/iHXz7JSwd6bTgOjqSP37T/aAjPv+1AxkgP9ELIEYDVSSjxOcWcurulJBG0SVeIMiMplExrNJ0RxarrJjvIXrs8kK5x3uM7EjNO9zzw1T0FfiJMGJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784785311; c=relaxed/simple;
-	bh=QXGUUwr8r7UuDcNGIxEhO0ZUdlwKcgzeI+2RxnKctVg=;
+	s=arc-20240116; t=1784785319; c=relaxed/simple;
+	bh=uDd5tNYduRkYXRqylKmtFKkryYiwk3mUXyQHhCo29zc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Kv6eDFFYmz9dy+GJ1J16OyZNnFIFjTu3pp+BbVkFn3+jXwBwJyK4gEFnYYQj31gX8tph6PNoEzNOgkQpgT8GYLaGvhIcQForu+j+9WuJ1MoH6tauJKZwlhAKlvyEZElIO49V4bvhx9MM0ZRFfbOtYdc/5b0TTdQyOcVxShVt3mo=
+	 In-Reply-To:To:Cc; b=Hdc0lMJBuKFAVKZXIWHYD9kwIgNzR14f/NEwBO1UroPWGNrA7PtB0aroj/jyxds/Hy3rfKXwxuwivAKcOLtRFyU/715qRm+VI/N9QxJL2YTJzUoNhsgOajJiJjK5pKXer8WFHvw3E3eMuGCHe+mWJz8PnjTRzVPhmtIqfl5ejRo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 2e9d4558865911f1aa26b74ffac11d73-20260723
+X-UUID: 2f3b94d8865911f1aa26b74ffac11d73-20260723
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:d549539a-596e-4b32-8d4f-e5554912d50c,IP:0,U
+X-CID-O-INFO: VERSION:1.3.12,REQID:8b73f118-e106-4292-9956-820ddf859940,IP:0,U
 	RL:0,TC:0,Content:0,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
 	N:release,TS:-25
-X-CID-META: VersionHash:e7bac3a,CLOUDID:28fd9810108bc453a4ed04c95b0e54a7,BulkI
+X-CID-META: VersionHash:e7bac3a,CLOUDID:98fb09498250e5c02ee766237887bfaf,BulkI
 	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|850|865|898,TC:nil,Content:0|1
 	5|50,EDM:2,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:
 	0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
@@ -27,16 +27,16 @@ X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 2e9d4558865911f1aa26b74ffac11d73-20260723
+X-UUID: 2f3b94d8865911f1aa26b74ffac11d73-20260723
 X-User: jiangfeng@kylinos.cn
 Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
 	(envelope-from <jiangfeng@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 653154881; Thu, 23 Jul 2026 13:41:41 +0800
+	with ESMTP id 774362690; Thu, 23 Jul 2026 13:41:42 +0800
 From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Thu, 23 Jul 2026 05:41:33 +0000
-Subject: [PATCH bpf-next v5 2/3] selftests/bpf: test timed may_goto
- preserves R0-R5
+Date: Thu, 23 Jul 2026 05:41:34 +0000
+Subject: [PATCH bpf-next v5 3/3] selftests/bpf: enable timed may_goto tests
+ for riscv64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,8 +44,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260723-riscv-bpf-timed-may-goto-v5-2-86acb54e5642@kylinos.cn>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260723-riscv-bpf-timed-may-goto-v5-3-86acb54e5642@kylinos.cn>
 References: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
 In-Reply-To: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -66,85 +66,87 @@ Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
  Feng Jiang <jiangfeng@kylinos.cn>
 X-Mailer: b4 0.14.3
 
-Add a test that checks R0-R5 are preserved across
-arch_bpf_timed_may_goto() calls.
+Enable verifier_may_goto_1 (raw instruction tests), stream_cond_break
+(250ms timeout path), and the may_goto_interaction fastcall test on
+riscv64 now that the JIT supports timed may_goto.
 
-Use bpf_get_prandom_u32() to avoid the verifier removing the checks
-via DCE.
-
-Suggested-by: Björn Töpel <bjorn@kernel.org>
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
 Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
 ---
- .../selftests/bpf/progs/verifier_may_goto_1.c      | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ tools/testing/selftests/bpf/progs/stream.c                | 1 +
+ tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c | 3 ++-
+ tools/testing/selftests/bpf/progs/verifier_may_goto_1.c   | 4 ++++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
+index 92ba1d72e0ec..8d8e53d37266 100644
+--- a/tools/testing/selftests/bpf/progs/stream.c
++++ b/tools/testing/selftests/bpf/progs/stream.c
+@@ -64,6 +64,7 @@ SEC("syscall")
+ __arch_x86_64
+ __arch_arm64
+ __arch_s390x
++__arch_riscv64
+ __success __retval(0)
+ __stderr("ERROR: Timeout detected for may_goto instruction")
+ __stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
+index 8d7ff38e4c06..83707faea049 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
+@@ -660,6 +660,7 @@ __naked void may_goto_interaction_x86_64(void)
+ 
+ SEC("raw_tp")
+ __arch_arm64
++__arch_riscv64
+ __log_level(4) __msg("stack depth 24")
+ /* may_goto counter at -24 */
+ __xlated("0: *(u64 *)(r10 -24) =")
+@@ -679,7 +680,7 @@ __xlated("10: *(u64 *)(r10 -24) = r12")
+ __xlated("11: *(u64 *)(r10 -8) = r1")
+ __xlated("12: exit")
+ __success
+-__naked void may_goto_interaction_arm64(void)
++__naked void may_goto_interaction(void)
+ {
+ 	asm volatile (
+ 	"r1 = 1;"
 diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-index 4bdf4256a41e..cb1ce4d13cfc 100644
+index cb1ce4d13cfc..0e211f030d0d 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-@@ -106,4 +106,62 @@ __naked void may_goto_batch_2(void)
- 	: __clobber_all);
- }
- 
-+/*
-+ * Use bpf_get_prandom_u32() to prevent DCE from removing the checks.
-+ * retval: 0=all ok, 1-6=R0-R5 clobbered.
-+ */
-+SEC("syscall")
-+__description("timed may_goto preserves R0-R5")
-+__arch_x86_64
-+__arch_s390x
-+__arch_arm64
+@@ -11,6 +11,7 @@ __description("may_goto 0")
+ __arch_x86_64
+ __arch_s390x
+ __arch_arm64
 +__arch_riscv64
-+__success
-+__retval(0)
-+__naked void timed_may_goto_preserves_regs(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r6 = r0;"
-+	"r0 = 0x1111;"
-+	"r0 += r6;"
-+	"r1 = 0x2222;"
-+	"r1 += r6;"
-+	"r2 = 0x3333;"
-+	"r2 += r6;"
-+	"r3 = 0x4444;"
-+	"r3 += r6;"
-+	"r4 = 0x5555;"
-+	"r4 += r6;"
-+	"r5 = 0x6666;"
-+	"r5 += r6;"
-+	".8byte %[may_goto];"
-+	".8byte %[loop];"
-+	"r0 -= r6;"
-+	"r1 -= r6;"
-+	"r2 -= r6;"
-+	"r3 -= r6;"
-+	"r4 -= r6;"
-+	"r5 -= r6;"
-+	"if r0 != 0x1111 goto 1f;"
-+	"if r1 != 0x2222 goto 2f;"
-+	"if r2 != 0x3333 goto 3f;"
-+	"if r3 != 0x4444 goto 4f;"
-+	"if r4 != 0x5555 goto 5f;"
-+	"if r5 != 0x6666 goto 6f;"
-+	"r0 = 0;"
-+	"exit;"
-+	"1: r0 = 1; exit;"
-+	"2: r0 = 2; exit;"
-+	"3: r0 = 3; exit;"
-+	"4: r0 = 4; exit;"
-+	"5: r0 = 5; exit;"
-+	"6: r0 = 6; exit;"
-+	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 1, 0)),
-+	  __imm_insn(loop, BPF_RAW_INSN(BPF_JMP | BPF_JA, 0, 0, -2, 0))
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+ __xlated("0: r0 = 1")
+ __xlated("1: exit")
+ __success
+@@ -31,6 +32,7 @@ __description("batch 2 of may_goto 0")
+ __arch_x86_64
+ __arch_s390x
+ __arch_arm64
++__arch_riscv64
+ __xlated("0: r0 = 1")
+ __xlated("1: exit")
+ __success
+@@ -53,6 +55,7 @@ __description("may_goto batch with offsets 2/1/0")
+ __arch_x86_64
+ __arch_s390x
+ __arch_arm64
++__arch_riscv64
+ __xlated("0: r0 = 1")
+ __xlated("1: exit")
+ __success
+@@ -79,6 +82,7 @@ __description("may_goto batch with offsets 2/0")
+ __arch_x86_64
+ __arch_s390x
+ __arch_arm64
++__arch_riscv64
+ __xlated("0: *(u64 *)(r10 -16) = 65535")
+ __xlated("1: *(u64 *)(r10 -8) = 0")
+ __xlated("2: r12 = *(u64 *)(r10 -16)")
 
 -- 
 2.53.0
