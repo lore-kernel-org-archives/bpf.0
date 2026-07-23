@@ -1,64 +1,64 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084D92E266C
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 03:52:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED0030ACFB
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 03:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784778762; cv=none; b=V79KJtjgn6oUvcdPPw6YV3uXVfv1CRTReYC3Qf6jB4L+g4eAVqHIfMzuywaQC6S2rl84cQZcoy8Z7SdtumzJINOn3N1O3AwIBJXndJk2IHjl6E/aiWGkQiCeGB12ZQQ5d2bsBhZNAwbqrcriPkAx2FS9cBbf2cPbsjYiZx3xXqk=
+	t=1784778763; cv=none; b=K7gdyXlF3ber63PBLamledJw3kfkPqIeZHVHO0UZKxMXsQOaMMwTawmACtybuExC5/GvAcb3IY/vqgx2NmFd0vNoSwIePIxC32OYUzO0qOZmP8WjMJJvgIduOxcSq3FzdbDaCyLeSkzV40ZJlS52ErD8xcA379DHRVUruYVa6/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784778762; c=relaxed/simple;
-	bh=cxZNXOVSqNxENXyKw+Fb/8BWQU/zhWDz5ayqgPPbNXY=;
+	s=arc-20240116; t=1784778763; c=relaxed/simple;
+	bh=IluLGjsT7RZdSCRqAA2UzZd+nB4XSyCNHTZSjlQFFJ8=;
 	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=eNAFB2XSESBxJNvQIRf1TF3B8lzOLQ/tyWVIl39DFqVJW5SgFayb7MQt6KI9+PFMuwKbx45E9EmkCpFZPz77tFIu+RpvTt3afTmO2tP8ZmxbQpo+6MZSUNfKKpV8hZZMSW7Pt1h4X9vtsmBj9E6Nd8H89nVnE+2tiyNHuLEZ+pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EAGfmfCU; arc=none smtp.client-ip=209.85.216.43
+	 References:Date:Message-Id; b=Fx9jQSfq0jH3KgaTDOLDt/ecV6jpHKGLUd7shVtK+jvcQEQLc7qu/jAWChHyGatRs+ijjN3UjPzpqhbCy3wvnDR2qH0qRgU+aDZYkz0F5V6ASesxjrt7ZYXm/HIy7pP4Mgolpl+ONyEMV00Fx2DGd3bpisZii/FW8JJsfMT2A1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GjDH5tUh; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EAGfmfCU"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38e347638adso184479a91.0
-        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 20:52:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GjDH5tUh"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38e347638adso184497a91.0
+        for <bpf@vger.kernel.org>; Wed, 22 Jul 2026 20:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784778760; x=1785383560; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784778761; x=1785383561; darn=vger.kernel.org;
         h=message-id:date:references:in-reply-to:cc:to:from:subject
          :content-transfer-encoding:content-type:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=tyN4lv/m1nCHBkc/YC4b5dQo4s+xkz63mLX0J0yNeRk=;
-        b=EAGfmfCULCKWRLlwDVWJexkhoKtpYLBsVLcggNso67hq1gD7xT3dSTTJiNCrtZ5URx
-         wN8o8KpR7hEGsiaNuduKpWu86iWR4vL/faOt0lmqBzkelV6ATrBw9UXXV1XTvS8W4b4v
-         AUr2CHxSmaTUf0mnA5glcILEsxIAGxF8ojJOXmh6A8Z3UIrPUr/WekhfsQtuzNIf3GL/
-         v2iYCTCC8kfTyQwf4wX7FcEd8puQEr6Mdwb4t5XjEqXX+LZ84M///YgC1//xNJ4QIcUZ
-         C+Prbxl4U+7752CbKqCmbOetn2kr532Xr5V24qe/CXN3wB55GBO28zV391EvDJmtoMz2
-         AOlg==
+        bh=S1PEBsBmBuzQnOjcMzNDPNdLnwh3q1jmxZTOFvMDrVc=;
+        b=GjDH5tUhFu7dCswD25/ITnXyBMV9QAVq21g0eFbBYFFemLSeb+nsO5lkyQaPTh/X3y
+         aJlRP13B3dPvsVO/1GnyuEZ20EY+KTGgabC6iUbijBV8BmGL+Xehow19QofkJXmj6/Tm
+         dX17yJBieGWNp0fvgfbA39fksavXrCxCLdCwilK5ZPmXct4VBAT3FN7TqYH6wlK9I4CB
+         dBStWZq/QJYVeXNdQmhYxckgWc4jsNk82B2+S1G96C6vQmbnV5gSHDKvjlzUHVWWgRVi
+         xx9KnEAyLvpkY31vGYkExFvpJjUogSxsZcdCsBV8nC8DEfXkmpJcZcgpYU4v6V4j+Kni
+         36/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784778760; x=1785383560;
+        d=1e100.net; s=20251104; t=1784778761; x=1785383561;
         h=message-id:date:references:in-reply-to:cc:to:from:subject
          :content-transfer-encoding:content-type:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=tyN4lv/m1nCHBkc/YC4b5dQo4s+xkz63mLX0J0yNeRk=;
-        b=T4PUrmZgkggtTBLLE85ldGWbpZDZE5tunj5gWRBoBMu7qEFc3IVPB63/Jges0Xfgg9
-         mife/L+1l11EKAKDB4nPPeWjJ3g0qq1mQsAcANGQ67Hrf8zIRQFXJGxMrceKGbSCOAKO
-         T4ZT5S5TYoJipI4dDR98ji4RyGy4J1wE3q77bd5cy1K7o2U8U4n3C/qEIw0UFpnIxrlA
-         fCHv4rxb7REQZpUNBZnsHRKpR+UFM5WD0I5JZIzvMs73SW/Cfritokz/9dJ+bb5OjN5+
-         Azbtio7Wra96Ozs495L4PcslrpVrAr2kv75Zp6lym1Dq/AVAwHtEjnpI5/QGs2T1AEkq
-         Q4MQ==
-X-Forwarded-Encrypted: i=1; AHgh+RobvuwledyENAtdjfY43/NXZbsFhOINjNa5WeWkBOG5yTMiiqQdmbHUWCk+KJn2k9BPiY0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCSbxBrTih3TtqLfwImFmT776jObekHonqy5g7TU5D+eu0vMoD
-	Uby3Hs57M3xxBmuh27sZ/C0HSyFWKRZNhlYufAseC9tr63v4CYBF5wgf
-X-Gm-Gg: AR+sD11hYexDagGT4+lNlCB2YJlo/vO+EGbAu0sBmqgFpMOPPYEEd0SNXjB+DpDtI1c
-	GNw+2CcFBQmChjzz1H4m5jS0dVVCFCNHuQY9gFyGu2N4VxnMzoOKoJkXEFKTeTMpoQMpWAyDnti
-	ALIYYd2zUmsM8tzWcI+QlsEevmOVvnxla1u3BNvEmJj/MTr7EncX0frnC23H2VuyZax38iba7X9
-	+19yUJkYLylXjW74V2TRwE5gRS/oGGuRKpgGITSjOF9rNVsY9kGNodQxK/6rsxElhhncojwSI2u
-	SYK0WWzP8vPoteXoKi/gU9Tl/6gYTZ0DhHMKCqaaDxyCq1Xl4y9cfYQ61SoY4eisw0Ma/e9598n
-	6KEINIYaWhnsaEqgkjOxVvGZ/a32yDU3nyXJk62h+kw+OWstd0HdSO56MBybG7sDQM82ON+5RvG
-	NtvXWBDA==
-X-Received: by 2002:a17:90b:1d44:b0:38d:dfd1:7a8 with SMTP id 98e67ed59e1d1-38ec63e1ed7mr1430578a91.2.1784778760399;
-        Wed, 22 Jul 2026 20:52:40 -0700 (PDT)
+        bh=S1PEBsBmBuzQnOjcMzNDPNdLnwh3q1jmxZTOFvMDrVc=;
+        b=KOQ/N+bO9/fIGgbkWPHGrYLzZGvx5yVqhvuurvzZ7Twd6W3JoAlRWAsLHjsYHMZS18
+         IA/tNDWJbONtHpyee+/bq6AyYTrrPxRXJ5pjG42W5NIPcIYNdTXu14+Dxp+1nQPgTKI2
+         8tJEX5CEbNO2qNgCRfpXrCfVbHbgr0IOJuyiVpKjDlCArV84ZcBqjaWSPK81eyCR9v2p
+         AMbDRRo4X/yFSDArRADfBbN8QYI6IUCbUm/zg+Zn+n+H9TODEq5+X2/g5I4DoYtONNUp
+         d34T7RisQhHGCp7HoiGlyYKCyrhX3XDRo/bQUiYGp6FYqa9zt0gKrHiQ4UlhcfCpYbBI
+         QaiA==
+X-Forwarded-Encrypted: i=1; AHgh+Ro5RwqOxP6yst/LEVQP/xbn57SxAIl4siFbLRYaozAfCZY6ROe1h8QPzLzksQ/jE/qvgcM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7FBzPmBBi0IIU2Tm/6UshACigyCzP92nNqdno3DeGI+rOZwRY
+	f6ZyrGO4g/FTvcohQGV2Qomk916PZ2GpuIMWNjIz7HqWjrLJe1AOSPZW
+X-Gm-Gg: AR+sD13HuAdrZABIpn6jg8s0DB+j794sJnfMJHt/ZPYEo66VPRhavadnAwnWelH6wbs
+	O1p9+UXBoPYNBnjoAQjDE1lj7Wz4SXNBCBLczL2xpnLVie67kYjxCNYqaICAi5UILDlyrh7lptP
+	CqREbBN+vEGMuuDtxfL+gaL/UcDSCwyT7IjL7ThqouNHsDtwDJpyh5nuP2djkiXPcyMHLT0EheK
+	JqGuQkdiiC7024MAjtYRfV1nruBXYHH2WJzkQayFoZ62+pY6oXU8/7HTFxbbq8HpR0ewbkfd+t9
+	BSXWoIyR5oUvwwbhGr1o+YSdf+xHo1edbazgJAu0MI23ZpYORZji1eYwpZW1hNQPFo2XoB5owhX
+	q6cKBMW406770fSYQWFuHPCeNnf9BAO+mWbWwcPjfyqnH4Mu4zY2YjQWm9o+P1B0CnmHju10BX8
+	I1Dazk6g==
+X-Received: by 2002:a17:90b:3cc4:b0:38d:b36e:9813 with SMTP id 98e67ed59e1d1-38ec642941emr1497129a91.11.1784778761575;
+        Wed, 22 Jul 2026 20:52:41 -0700 (PDT)
 Received: from [127.0.0.2] ([98.35.8.117])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13d12f267fdsm11497359c88.0.2026.07.22.20.52.39
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13d12f267fdsm11497359c88.0.2026.07.22.20.52.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 20:52:39 -0700 (PDT)
+        Wed, 22 Jul 2026 20:52:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 05/21] binfmt_misc: split out
- entry_open_interpreter() and build_interp_argv()
+Subject: Re: [PATCH v2 06/21] exec: release the replaced file with
+ do_close_execat()
 From: Farid Zakaria <farid.m.zakaria@gmail.com>
 To: Christian Brauner <brauner@kernel.org>
 Cc: Farid Zakaria <farid.m.zakaria@gmail.com>, 
@@ -77,27 +77,58 @@ Cc: Farid Zakaria <farid.m.zakaria@gmail.com>,
  Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
  Jonathan Corbet <corbet@lwn.net>, linux-mm@kvack.org, bpf@vger.kernel.org, 
  jannh@google.com, mail@johnericson.me
-In-Reply-To: <20260721-work-bpf-binfmt_misc-ptinterp-v2-5-e57866e4ae0f@kernel.org>
+In-Reply-To: <20260721-work-bpf-binfmt_misc-ptinterp-v2-6-e57866e4ae0f@kernel.org>
 References: <20260721-work-bpf-binfmt_misc-ptinterp-v2-0-e57866e4ae0f@kernel.org>
- <20260721-work-bpf-binfmt_misc-ptinterp-v2-5-e57866e4ae0f@kernel.org>
+ <20260721-work-bpf-binfmt_misc-ptinterp-v2-6-e57866e4ae0f@kernel.org>
 Date: Wed, 22 Jul 2026 20:52:07 -0700
-Message-Id: <178477872731.254289.5616585238630856872.b4-review@b4>
+Message-Id: <178477872732.254289.8598325015704574885.b4-review@b4>
 X-Mailer: b4 0.15.2
 
-On Tue, 21 Jul 2026 16:13:47 +0200, Christian Brauner <brauner@kernel.org> wrote:
-> Opening the interpreter is a property of the matched entry: an 'F' entry
-> hands out a clone of the file it pre-opened at registration time, any
-> other entry opens the selected path. Give that its own helper instead of
-> an if/else in the middle of load_misc_binary(), and let it fail early
-> rather than carrying an ERR_PTR through the successful branch.
+# Add your code comments below. There is no need to trim or delete
+# any existing content -- just insert your comments under the relevant
+# lines of code. Lines starting with "> " are quoted diff context and
+# lines starting with "| " are comments from other reviewers.
+# The final email will be reformatted automatically to include only
+# the sections that have your comments.
+#
+> When the format search stages an interpreter exec_binprm() swaps it
+> in and releases the file it replaces. Dropping the write denial the
+> open took is done manually ahead of both release paths. The one path
+> that keeps the file silently relies on it not being called.
 > 
-> Building the interpreter's argument vector is the bulk of what remains
-> and the one part of load_misc_binary() that is specific to the classic
-> dispatch. Move it into its own helper too, so the dispatch reads as what
-> it is: pick a handler, pick an interpreter, build the invocation, open
-> it.
+> Let's just use do_close_execat() on the two paths that release the file
+> and drop the denial explicitly on the one that does not.
 > 
-> [...]
+> No functional change.
+> 
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+>
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 41e1684d9..061e0f9fb 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1735,15 +1735,17 @@ static int exec_binprm(struct linux_binprm *bprm)
+>  		bprm->file = bprm->interpreter;
+>  		bprm->interpreter = NULL;
+>  
+> -		exe_file_allow_write_access(exec);
+>  		if (unlikely(bprm->have_execfd)) {
+>  			if (bprm->executable) {
+> -				fput(exec);
+> +				do_close_execat(exec);
+>  				return -ENOEXEC;
+>  			}
+> +			/* Only the reference is kept, for AT_EXECFD. */
+> +			exe_file_allow_write_access(exec);
+>  			bprm->executable = exec;
+> -		} else
+> -			fput(exec);
+> +		} else {
+> +			do_close_execat(exec);
+> +		}
+>  	}
+>  
+>  	audit_bprm(bprm);
 
 Reviewed-by: Farid Zakaria <farid.m.zakaria@gmail.com>
 
