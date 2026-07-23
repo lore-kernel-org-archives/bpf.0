@@ -1,40 +1,30 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77248470E99;
-	Thu, 23 Jul 2026 02:37:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 586AE1684B0;
+	Thu, 23 Jul 2026 03:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784774225; cv=none; b=m/1BBOBiLFeStbfnWGjtk7J7HCeq0PaRJ6ID5/LB/iVqVXmealeDhlTbpfpXtYjoxfvyBlYdTgLtUY/+vshHhQuRydii4vflz/V/NWuEIF6oSMyoxRfu0/sKTk8yhfmqcuBuHmBurahck+tBzGf84y41sqTZTZPBqPck0UR/NCs=
+	t=1784776484; cv=none; b=lCZYk22V92tOvt+oRKeArhJIS3SMbAl8cE1K5h6MH1XfoiMFOv9XyC30nd3KzZx3Cz2opUbYqlC/L3EiKD0ReMrLbP8CgE4Va/IhLvzW4CTFOXn9JDZr37aisc1M1kPlggueW3colRIUo8Vc39sjyhxliYA24/Dn92VxPAWZfNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784774225; c=relaxed/simple;
-	bh=8wk/bP64hP2KTssLfv6UY/2vePcRTwVYSH6ldbyD1uo=;
+	s=arc-20240116; t=1784776484; c=relaxed/simple;
+	bh=gwpSTCh7jxd+/c5t7wbQP4S+IlE+op6+coQB77XukJ4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=esia1IULVg1oycB+/8g9RwARZ6Ospw9bMQur7TEJreVzDUeahyBqQ+1UIGx4tmVyeSzfpj5cpaXTwTGmp6Pc4wFKFPWtTHFRURWbyay8KonQ+yX1CyJKVX/P7Flnd1mVkB0u+8YPsoE7COKAUdNkyyfA+I7vONgg8ur9CMffdMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 5c3682fa863f11f1aa26b74ffac11d73-20260723
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:e839a83c-428e-4535-b3d4-f85157ba64fe,IP:0,U
-	RL:0,TC:0,Content:2,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:2
-X-CID-META: VersionHash:e7bac3a,CLOUDID:d2742e206fa6391dd61c9f0c70fa0008,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|865|898,TC:nil,Content:4
-	|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,O
-	SI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 5c3682fa863f11f1aa26b74ffac11d73-20260723
-X-User: jiangfeng@kylinos.cn
-Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 200611879; Thu, 23 Jul 2026 10:36:51 +0800
-Message-ID: <de2da58a-ae94-4e38-b9cc-517e48d894c3@kylinos.cn>
-Date: Thu, 23 Jul 2026 10:36:48 +0800
+	 In-Reply-To:Content-Type; b=VgFh4HyDWAu+6J4szUUUHDLfLIuBibuud6HQ3sl0g5pS81IWguAyaIuomB+GV+QEuasCrl1HmDUVjBQ/gz+qRUOahe0qo9ZMkhYo0EOOTwbk3mmaslafo0n17i9povHssE1sXYds247jrXmcKSlbRh4y367MocYDQSRovDpZnuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h5GRj6gvGzKHMXM;
+	Thu, 23 Jul 2026 11:13:53 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 92D3140574;
+	Thu, 23 Jul 2026 11:14:38 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgDH91gdh2FqDHbsCA--.47375S2;
+	Thu, 23 Jul 2026 11:14:38 +0800 (CST)
+Message-ID: <3c41af85-0dc2-4c84-8745-b7d37b7b37f5@huaweicloud.com>
+Date: Thu, 23 Jul 2026 11:14:36 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,149 +32,371 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 2/3] selftests/bpf: test timed may_goto
- preserves R0-R5
-To: Pu Lehui <pulehui@huawei.com>, Alexei Starovoitov <ast@kernel.org>,
+Subject: Re: [PATCH bpf v6 2/4] bpf: Fix UAF due to missing link type check in
+ mprog
+Content-Language: en-US
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Amery Hung <ameryhung@gmail.com>,
+ Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
  Eduard Zingerman <eddyz87@gmail.com>,
  Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>,
- Xi Wang <xi.wang@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Shuah Khan <shuah@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260722-riscv-bpf-timed-may-goto-v4-0-e117e6337bc7@kylinos.cn>
- <20260722-riscv-bpf-timed-may-goto-v4-2-e117e6337bc7@kylinos.cn>
- <2cd8255d-2b0a-45d8-bbc2-ac19e196c41a@huawei.com>
-Content-Language: en-US
-From: Feng Jiang <jiangfeng@kylinos.cn>
-In-Reply-To: <2cd8255d-2b0a-45d8-bbc2-ac19e196c41a@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Pu Lehui <pulehui@huawei.com>
+References: <20260722072326.1545677-1-pulehui@huaweicloud.com>
+ <20260722072326.1545677-3-pulehui@huaweicloud.com>
+ <DK58NPCIRLIH.SMOILLVYTZ1Q@etsalapatis.com>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <DK58NPCIRLIH.SMOILLVYTZ1Q@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgDH91gdh2FqDHbsCA--.47375S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfGr17JrWkZFyDGF4DZFy8Grg_yoW8JFWfZo
+	WS9r13K3WrG348A3s7G343WFn3XFWxG3yUAa13X3yDWa42yay2k343JrW8XF98X3WFqr4I
+	kFy7Jw1Yqr98try3n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUYc7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF
+	7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6x
+	kF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+	F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+	kC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xUF1v3UUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On 2026/7/22 19:10, Pu Lehui wrote:
-> 
-> 
-> On 2026/7/22 12:21, Feng Jiang wrote:
->> Add a test that checks R0-R5 are preserved across
->> arch_bpf_timed_may_goto() calls.
+
+On 2026/7/23 0:25, Emil Tsalapatis wrote:
+> On Wed Jul 22, 2026 at 3:23 AM EDT, Pu Lehui wrote:
+>> From: Pu Lehui <pulehui@huawei.com>
 >>
->> Use bpf_get_prandom_u32() to avoid the verifier removing the checks
->> via DCE.
+>> In bpf_mprog_link, the code does not check the link->type first before
+>> dereferencing link->prog->type. This missing validation allows a user to
+>> pass an abnormal non-netkit or non-tcx link via relative_fd. If doing
+>> BPF_LINK_UPDATE on the abnormal link, it can trigger a UAF issue.
 >>
->> Suggested-by: Björn Töpel <bjorn@kernel.org>
->> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+>> CPU0                                      CPU1
+>> netkit_link_prog_attach
+>> bpf_mprog_attach
+>> bpf_mprog_tuple_relative
+>> bpf_mprog_link
+>>    /* non-netkit or non-tcx link */
+>>    link = bpf_link_get_from_fd(id_or_fd);
+>>                                            BPF_LINK_UPDATE on relative link
+>>                                            ...
+>>                                            old_prog = xchg(&link->link.prog, new_prog);
+>>                                            bpf_prog_put(old_prog);
+>>    if (type && link->prog->type != type) <-- trigger UAF
+>>
+>> The reason for the UAF is that each subsystem provides its own
+>> protection for link->prog. Since there is no cross subsystem protection
+>> (if not considering the RCU of prog tear down), dereferencing the prog
+>> of an anchor link that does not belong to the current subsystem is not
+>> safe: it may have been freed. Therefore, we need to validate link->type
+>> to reject foreign anchors.
+>>
+>> Fix this by strictly validating link->type in bpf_mprog_link against the
+>> expected link type. mprog APIs is also adjusted to accept and pass down
+>> the expected link type. Meanwhile, add a comment explaining that when
+>> ptype == UNSPEC in bpf_mprog_detach, it acts as a wildcard.
+>>
+>> Fixes: 053c8e1f235d ("bpf: Add generic attach/detach/query API for multi-progs")
+>> Reported-by: Sashiko <sashiko-bot@kernel.org>
+>> Reviewed-by: Amery Hung <ameryhung@gmail.com>
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> 
+> Unless I'm missing something, at the very least there's no need for the
+> extra argument in detach() since we pass UNSPEC to bpf_mprog_link() and
+> never use it otherwise.
+> 
+> Even for the attach case, aren't we required to provide a new link
+> for attachment, and so already have the ltype available to test
+> against?
+> 
+Hi Emil,
+
+The BPF_F_LINK flag only indicates that relative_fd refers to an anchor 
+link or prog; it is independent of whether the object being attached or 
+detached is a bare prog or a link. This means that when attaching or 
+detaching a bare prog relative to an anchor link, we cannot obtain the 
+expected_link_type because the link parameter passed in is NULL.
+
+Furthermore, as you mentioned, we should support unconditional 
+detachment. But in the current version, because we strictly check 
+expected_link_type, the detach operation will fail if the relative link 
+type does not match.
+
+Therefore, we can simplify the approach to fix this UAF—similar to patch 
+3—by relying on RCU protection when accessing the prog type of a 
+relative link. When attaching or detaching a bare prog or a link 
+relative to an anchor link, we simply verify that 
+relative_link->prog->type matches the bare prog->type or 
+link->prog->type. This logic also naturally applies to unconditional 
+detachment with relative link, such as when the bare prog or link->prog 
+being detached is NULL.
+
+And the patch will be follow, wdyt?
+
+diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
+index 1394168062e8..512821c21aa6 100644
+--- a/kernel/bpf/mprog.c
++++ b/kernel/bpf/mprog.c
+@@ -10,6 +10,8 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
+  {
+  	struct bpf_link *link = ERR_PTR(-EINVAL);
+  	bool id = flags & BPF_F_ID;
++	bool type_mismatch = false;
++	struct bpf_prog *prog;
+
+  	if (id)
+  		link = bpf_link_by_id(id_or_fd);
+@@ -17,13 +19,20 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
+  		link = bpf_link_get_from_fd(id_or_fd);
+  	if (IS_ERR(link))
+  		return PTR_ERR(link);
+-	if (type && link->prog->type != type) {
++
++	rcu_read_lock();
++	prog = READ_ONCE(link->prog); <-- relative_link->prog
++	if (!prog || (type && prog->type != type))
++		type_mismatch = true;
++	rcu_read_unlock();
++
++	if (type_mismatch) {
+  		bpf_link_put(link);
+  		return -EINVAL;
+  	}
+
+  	tuple->link = link;
+-	tuple->prog = link->prog;
++	tuple->prog = prog;
+  	return 0;
+  }
+
 >> ---
->>   .../selftests/bpf/progs/verifier_may_goto_1.c      | 57 ++++++++++++++++++++++
->>   1 file changed, 57 insertions(+)
+>>   drivers/net/netkit.c      | 13 ++++++-------
+>>   include/linux/bpf_mprog.h |  6 ++++--
+>>   kernel/bpf/mprog.c        | 23 ++++++++++++++---------
+>>   kernel/bpf/tcx.c          | 13 ++++++-------
+>>   4 files changed, 30 insertions(+), 25 deletions(-)
 >>
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
->> index 4bdf4256a41e..98d59108d097 100644
->> --- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
->> @@ -106,4 +106,61 @@ __naked void may_goto_batch_2(void)
->>       : __clobber_all);
->>   }
->>   +/*
->> + * Use bpf_get_prandom_u32() to prevent DCE from removing the checks.
->> + * retval: 0=all ok, 1-6=R0-R5 clobbered.
->> + */
->> +SEC("raw_tp")
->> +__description("timed may_goto preserves R0-R5")
->> +__arch_x86_64
->> +__arch_arm64
->> +__arch_riscv64
->> +__success
->> +__retval(0)
-> 
-> __arch_s390x is also supported timed_may_goto
-
-Will add it in v5.
-
-> 
->> +__naked void timed_may_goto_preserves_regs(void)
->> +{
->> +    asm volatile (
->> +    "call %[bpf_get_prandom_u32];"
->> +    "r6 = r0;"
->> +    "r0 = 0x1111;"
->> +    "r0 += r6;"
->> +    "r1 = 0x2222;"
->> +    "r1 += r6;"
->> +    "r2 = 0x3333;"
->> +    "r2 += r6;"
->> +    "r3 = 0x4444;"
->> +    "r3 += r6;"
->> +    "r4 = 0x5555;"
->> +    "r4 += r6;"
->> +    "r5 = 0x6666;"
->> +    "r5 += r6;"
->> +    ".8byte %[may_goto];"
->> +    ".8byte %[loop];"
->> +    "r0 -= r6;"
->> +    "r1 -= r6;"
->> +    "r2 -= r6;"
->> +    "r3 -= r6;"
->> +    "r4 -= r6;"
->> +    "r5 -= r6;"
->> +    "if r0 != 0x1111 goto 1f;"
->> +    "if r1 != 0x2222 goto 2f;"
->> +    "if r2 != 0x3333 goto 3f;"
->> +    "if r3 != 0x4444 goto 4f;"
->> +    "if r4 != 0x5555 goto 5f;"
->> +    "if r5 != 0x6666 goto 6f;"
->> +    "r0 = 0;"
->> +    "exit;"
->> +    "1: r0 = 1; exit;"
->> +    "2: r0 = 2; exit;"
->> +    "3: r0 = 3; exit;"
->> +    "4: r0 = 4; exit;"
->> +    "5: r0 = 5; exit;"
->> +    "6: r0 = 6; exit;"
->> +    :
->> +    : __imm(bpf_get_prandom_u32),
->> +      __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 1, 0)),
->> +      __imm_insn(loop, BPF_RAW_INSN(BPF_JMP | BPF_JA, 0, 0, -2, 0))
->> +    : __clobber_all);
->> +}
->> +
->>   char _license[] SEC("license") = "GPL";
->>
-> 
-> not work, pls take a look
-
-The __retval(0) annotation enables the test_run path in test_laoder.
-do_prog_test_run() sets data_in/data_out/repeat by default,
-which bpf_prog_test_run_raw_tp() rejects with EINVAL. Switching to
-SEC("syscall") makes test_loader use empty opts. Will fix it in v5.
-
-> 
-> root@(none):/mnt/bpf# ./test_progs -v -a verifier_may_goto_1
-> bpf_testmod.ko is already unloaded.
-> Loading bpf_testmod.ko...
-> [   26.123549] bpf_testmod: loading out-of-tree module taints kernel.
-> [   26.127885] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
-> Successfully loaded bpf_testmod.ko.
-> tester_init:PASS:tester_log_buf 0 nsec
-> process_subtest:PASS:obj_open_mem 0 nsec
-> process_subtest:PASS:specs_alloc 0 nsec
-> run_subtest:PASS:obj_open_mem 0 nsec
-> run_subtest:PASS:unexpected_load_failure 0 nsec
-> VERIFIER LOG:
-> =============
-> processed 43 insns (limit 1000000) max_states_per_insn 0 total_states 4 peak_states 5 mark_read 0
-> =============
-> do_prog_test_run:FAIL:1114 FAIL: Unexpected bpf_prog_test_run error: 22 (Invalid argument) #660/1   verifier_may_goto_1/timed may_goto preserves R0-R5:FAIL
-> #660     verifier_may_goto_1:FAIL
-> Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
-> Successfully unloaded bpf_testmod.ko.
-
--- 
-With Best Regards,
-Feng Jiang
+>> diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+>> index a3931cd82132..99ddf2befb23 100644
+>> --- a/drivers/net/netkit.c
+>> +++ b/drivers/net/netkit.c
+>> @@ -768,7 +768,7 @@ int netkit_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+>>   	}
+>>   	ret = bpf_mprog_attach(entry, &entry_new, prog, NULL, replace_prog,
+>>   			       attr->attach_flags, attr->relative_fd,
+>> -			       attr->expected_revision);
+>> +			       attr->expected_revision, BPF_LINK_TYPE_NETKIT);
+>>   	if (!ret) {
+>>   		if (entry != entry_new) {
+>>   			netkit_entry_update(dev, entry_new);
+>> @@ -802,7 +802,7 @@ int netkit_prog_detach(const union bpf_attr *attr, struct bpf_prog *prog)
+>>   		goto out;
+>>   	}
+>>   	ret = bpf_mprog_detach(entry, &entry_new, prog, NULL, attr->attach_flags,
+>> -			       attr->relative_fd, attr->expected_revision);
+>> +			       attr->relative_fd, attr->expected_revision, BPF_LINK_TYPE_NETKIT);
+>>   	if (!ret) {
+>>   		if (!bpf_mprog_total(entry_new))
+>>   			entry_new = NULL;
+>> @@ -850,7 +850,7 @@ static int netkit_link_prog_attach(struct bpf_link *link, u32 flags,
+>>   	ASSERT_RTNL();
+>>   	entry = netkit_entry_fetch(dev, true);
+>>   	ret = bpf_mprog_attach(entry, &entry_new, link->prog, link, NULL, flags,
+>> -			       id_or_fd, revision);
+>> +			       id_or_fd, revision, BPF_LINK_TYPE_NETKIT);
+>>   	if (!ret) {
+>>   		if (entry != entry_new) {
+>>   			netkit_entry_update(dev, entry_new);
+>> @@ -877,7 +877,7 @@ static void netkit_link_release(struct bpf_link *link)
+>>   		ret = -ENOENT;
+>>   		goto out;
+>>   	}
+>> -	ret = bpf_mprog_detach(entry, &entry_new, link->prog, link, 0, 0, 0);
+>> +	ret = bpf_mprog_detach(entry, &entry_new, link->prog, link, 0, 0, 0, BPF_LINK_TYPE_NETKIT);
+>>   	if (!ret) {
+>>   		if (!bpf_mprog_total(entry_new))
+>>   			entry_new = NULL;
+>> @@ -919,9 +919,8 @@ static int netkit_link_update(struct bpf_link *link, struct bpf_prog *nprog,
+>>   		ret = -ENOENT;
+>>   		goto out;
+>>   	}
+>> -	ret = bpf_mprog_attach(entry, &entry_new, nprog, link, oprog,
+>> -			       BPF_F_REPLACE | BPF_F_ID,
+>> -			       link->prog->aux->id, 0);
+>> +	ret = bpf_mprog_attach(entry, &entry_new, nprog, link, oprog, BPF_F_REPLACE | BPF_F_ID,
+>> +			       link->prog->aux->id, 0, BPF_LINK_TYPE_NETKIT);
+>>   	if (!ret) {
+>>   		WARN_ON_ONCE(entry != entry_new);
+>>   		oprog = xchg(&link->prog, nprog);
+>> diff --git a/include/linux/bpf_mprog.h b/include/linux/bpf_mprog.h
+>> index 0b9f4caeeb0a..1fbe1a923968 100644
+>> --- a/include/linux/bpf_mprog.h
+>> +++ b/include/linux/bpf_mprog.h
+>> @@ -321,12 +321,14 @@ int bpf_mprog_attach(struct bpf_mprog_entry *entry,
+>>   		     struct bpf_mprog_entry **entry_new,
+>>   		     struct bpf_prog *prog_new, struct bpf_link *link,
+>>   		     struct bpf_prog *prog_old,
+>> -		     u32 flags, u32 id_or_fd, u64 revision);
+>> +		     u32 flags, u32 id_or_fd, u64 revision,
+>> +		     enum bpf_link_type expected_link_type);
+>>   
+>>   int bpf_mprog_detach(struct bpf_mprog_entry *entry,
+>>   		     struct bpf_mprog_entry **entry_new,
+>>   		     struct bpf_prog *prog, struct bpf_link *link,
+>> -		     u32 flags, u32 id_or_fd, u64 revision);
+>> +		     u32 flags, u32 id_or_fd, u64 revision,
+>> +		     enum bpf_link_type expected_link_type);
+>>   
+>>   int bpf_mprog_query(const union bpf_attr *attr, union bpf_attr __user *uattr,
+>>   		    struct bpf_mprog_entry *entry);
+>> diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
+>> index 1394168062e8..b4a1b35ff569 100644
+>> --- a/kernel/bpf/mprog.c
+>> +++ b/kernel/bpf/mprog.c
+>> @@ -6,7 +6,7 @@
+>>   
+>>   static int bpf_mprog_link(struct bpf_tuple *tuple,
+>>   			  u32 id_or_fd, u32 flags,
+>> -			  enum bpf_prog_type type)
+>> +			  enum bpf_link_type type)
+>>   {
+>>   	struct bpf_link *link = ERR_PTR(-EINVAL);
+>>   	bool id = flags & BPF_F_ID;
+>> @@ -17,7 +17,7 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
+>>   		link = bpf_link_get_from_fd(id_or_fd);
+>>   	if (IS_ERR(link))
+>>   		return PTR_ERR(link);
+>> -	if (type && link->prog->type != type) {
+>> +	if (type && link->type != type) {
+>>   		bpf_link_put(link);
+>>   		return -EINVAL;
+>>   	}
+>> @@ -52,21 +52,22 @@ static int bpf_mprog_prog(struct bpf_tuple *tuple,
+>>   
+>>   static int bpf_mprog_tuple_relative(struct bpf_tuple *tuple,
+>>   				    u32 id_or_fd, u32 flags,
+>> -				    enum bpf_prog_type type)
+>> +				    enum bpf_link_type ltype,
+>> +				    enum bpf_prog_type ptype)
+>>   {
+>>   	bool link = flags & BPF_F_LINK;
+>>   	bool id = flags & BPF_F_ID;
+>>   
+>>   	memset(tuple, 0, sizeof(*tuple));
+>>   	if (link)
+>> -		return bpf_mprog_link(tuple, id_or_fd, flags, type);
+>> +		return bpf_mprog_link(tuple, id_or_fd, flags, ltype);
+>>   	/* If no relevant flag is set and no id_or_fd was passed, then
+>>   	 * tuple link/prog is just NULLed. This is the case when before/
+>>   	 * after selects first/last position without passing fd.
+>>   	 */
+>>   	if (!id && !id_or_fd)
+>>   		return 0;
+>> -	return bpf_mprog_prog(tuple, id_or_fd, flags, type);
+>> +	return bpf_mprog_prog(tuple, id_or_fd, flags, ptype);
+>>   }
+>>   
+>>   static void bpf_mprog_tuple_put(struct bpf_tuple *tuple)
+>> @@ -226,7 +227,8 @@ int bpf_mprog_attach(struct bpf_mprog_entry *entry,
+>>   		     struct bpf_mprog_entry **entry_new,
+>>   		     struct bpf_prog *prog_new, struct bpf_link *link,
+>>   		     struct bpf_prog *prog_old,
+>> -		     u32 flags, u32 id_or_fd, u64 revision)
+>> +		     u32 flags, u32 id_or_fd, u64 revision,
+>> +		     enum bpf_link_type expected_link_type)
+>>   {
+>>   	struct bpf_tuple rtuple, ntuple = {
+>>   		.prog = prog_new,
+>> @@ -243,6 +245,7 @@ int bpf_mprog_attach(struct bpf_mprog_entry *entry,
+>>   		return -EEXIST;
+>>   	ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd,
+>>   				       flags & ~BPF_F_REPLACE,
+>> +				       expected_link_type,
+>>   				       prog_new->type);
+>>   	if (ret)
+>>   		return ret;
+>> @@ -328,7 +331,8 @@ static int bpf_mprog_fetch(struct bpf_mprog_entry *entry,
+>>   int bpf_mprog_detach(struct bpf_mprog_entry *entry,
+>>   		     struct bpf_mprog_entry **entry_new,
+>>   		     struct bpf_prog *prog, struct bpf_link *link,
+>> -		     u32 flags, u32 id_or_fd, u64 revision)
+>> +		     u32 flags, u32 id_or_fd, u64 revision,
+>> +		     enum bpf_link_type expected_link_type)
+>>   {
+>>   	struct bpf_tuple rtuple, dtuple = {
+>>   		.prog = prog,
+>> @@ -343,8 +347,9 @@ int bpf_mprog_detach(struct bpf_mprog_entry *entry,
+>>   	if (!bpf_mprog_total(entry))
+>>   		return -ENOENT;
+>>   	ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd, flags,
+>> -				       prog ? prog->type :
+>> -				       BPF_PROG_TYPE_UNSPEC);
+>> +				       expected_link_type,
+>> +				       /* Use UNSPEC as wildcard when prog is NULL */
+>> +				       prog ? prog->type : BPF_PROG_TYPE_UNSPEC);
+>>   	if (ret)
+>>   		return ret;
+>>   	if (dtuple.prog) {
+>> diff --git a/kernel/bpf/tcx.c b/kernel/bpf/tcx.c
+>> index 02db0113b8e7..f208cef13a98 100644
+>> --- a/kernel/bpf/tcx.c
+>> +++ b/kernel/bpf/tcx.c
+>> @@ -38,7 +38,7 @@ int tcx_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+>>   	}
+>>   	ret = bpf_mprog_attach(entry, &entry_new, prog, NULL, replace_prog,
+>>   			       attr->attach_flags, attr->relative_fd,
+>> -			       attr->expected_revision);
+>> +			       attr->expected_revision, BPF_LINK_TYPE_TCX);
+>>   	if (!ret) {
+>>   		if (entry != entry_new) {
+>>   			tcx_entry_update(dev, entry_new, ingress);
+>> @@ -76,7 +76,7 @@ int tcx_prog_detach(const union bpf_attr *attr, struct bpf_prog *prog)
+>>   		goto out;
+>>   	}
+>>   	ret = bpf_mprog_detach(entry, &entry_new, prog, NULL, attr->attach_flags,
+>> -			       attr->relative_fd, attr->expected_revision);
+>> +			       attr->relative_fd, attr->expected_revision, BPF_LINK_TYPE_TCX);
+>>   	if (!ret) {
+>>   		if (!tcx_entry_is_active(entry_new))
+>>   			entry_new = NULL;
+>> @@ -152,7 +152,7 @@ static int tcx_link_prog_attach(struct bpf_link *link, u32 flags, u32 id_or_fd,
+>>   	if (!entry)
+>>   		return -ENOMEM;
+>>   	ret = bpf_mprog_attach(entry, &entry_new, link->prog, link, NULL, flags,
+>> -			       id_or_fd, revision);
+>> +			       id_or_fd, revision, BPF_LINK_TYPE_TCX);
+>>   	if (!ret) {
+>>   		if (entry != entry_new) {
+>>   			tcx_entry_update(dev, entry_new, ingress);
+>> @@ -183,7 +183,7 @@ static void tcx_link_release(struct bpf_link *link)
+>>   		ret = -ENOENT;
+>>   		goto out;
+>>   	}
+>> -	ret = bpf_mprog_detach(entry, &entry_new, link->prog, link, 0, 0, 0);
+>> +	ret = bpf_mprog_detach(entry, &entry_new, link->prog, link, 0, 0, 0, BPF_LINK_TYPE_TCX);
+>>   	if (!ret) {
+>>   		if (!tcx_entry_is_active(entry_new))
+>>   			entry_new = NULL;
+>> @@ -229,9 +229,8 @@ static int tcx_link_update(struct bpf_link *link, struct bpf_prog *nprog,
+>>   		ret = -ENOENT;
+>>   		goto out;
+>>   	}
+>> -	ret = bpf_mprog_attach(entry, &entry_new, nprog, link, oprog,
+>> -			       BPF_F_REPLACE | BPF_F_ID,
+>> -			       link->prog->aux->id, 0);
+>> +	ret = bpf_mprog_attach(entry, &entry_new, nprog, link, oprog, BPF_F_REPLACE | BPF_F_ID,
+>> +			       link->prog->aux->id, 0, BPF_LINK_TYPE_TCX);
+>>   	if (!ret) {
+>>   		WARN_ON_ONCE(entry != entry_new);
+>>   		oprog = xchg(&link->prog, nprog);
 
