@@ -1,102 +1,227 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF6B3FA5FC
-	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 15:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996654137B6
+	for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 15:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784820873; cv=none; b=ncGQYALaCWNoFQ+gYrZdStMcbkTalF74CJ2qLtYU0CtsE7FXTvGsG71BWQAHDgk2sD0tMB40R0MG+w9YpDxzsbTP0kVg7xJTO6BGI2RAcLJCuLsU68pCHHZ7VmkzYCN+3XVH5OL/FyMT/KYlV2pISZNZM/0sNkiECBxSCvoOmCw=
+	t=1784820913; cv=none; b=rPxRsIZJzMTypWn+2A9vstNLhOEkNdd9G2ivozsvcbsT+u8eXi55K2jr+wxTphvgT8dbKYrkdX61Nqbip3UyLnascMUalyHgq3Ght9AKZdfBv9tJmsTY2YdWDFSUw/zNWXb5h3lq2bMSFhqbfDAt+++vr9VZPMzzc7DVsAirkaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784820873; c=relaxed/simple;
-	bh=5+Oidvt6Y6nd/IYEEQav0OWntlRQWlpvILC++f8ZjL4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ETj1PFtmbGJyzH7AmSPzqLt9Uc1KM4p1FKh0mbP6hiA1u9mVhr2Ap0lCfCU6+wumWrsTNHwgvCJUH58CbnlAluLnzCCpcPUNbHWHToc0UcYr7LuV3Q+fifaa3cVoq3yR6a9RFb94GGERZNTQTwsUplDtW5m8phAhSCeaQUvWe0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EFE51F00A3A;
-	Thu, 23 Jul 2026 15:34:25 +0000 (UTC)
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH mm-hotfixes v6 3/5] x86/mm/pat: acquire init_mm read
- lock on attribute change to avoid UAF
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260723-series-vmap-race-fix-v6-3-8cc77dcc0018@kernel.org>
-References: <20260723-series-vmap-race-fix-v6-0-8cc77dcc0018@kernel.org>
- <20260723-series-vmap-race-fix-v6-3-8cc77dcc0018@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Jul 2026 15:34:23 +0000
-Message-Id: <20260723153426.0EFE51F00A3A@smtp.kernel.org>
+	s=arc-20240116; t=1784820913; c=relaxed/simple;
+	bh=f/W56l8v8I4Z/bI4TUYNCd7jTn6u4MyWo43wLwwz+O4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=drYVclDSRbhf8zUnKcQwFDA6UhMncZ6g2i0XkOl6VATY4MOT/nGpNyeh0sOnLz3SQL+fS9ehdZtIZFfjKUVcIXRaCohdkvBkp7CxKBtnXU37tfI7NOvf8s+sviN7eLnNdEoK+RKYwbsbW73EVvcv5xqquIYaV3qrDEmK06OGFd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lKNjJ7yz; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lKNjJ7yz"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-ca53979f8e8so95116a12.2
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 08:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784820902; x=1785425702; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=YUwFPXE0ARZ2U6TesCDMJktXSbqLTCmlCnjsBK9QtbM=;
+        b=lKNjJ7yzMjwjyP4JKop1k931LjF3By13vj8GM5YnBq5vk4uV0JzuCmSfYUadN3c8c1
+         1D1GguBOWOZeGZIAJg/um7xhS8RRYzIHTlYJgVGfD29MV/ztNJn/i+GgqmCGmayIGOEL
+         YnAxhUj8AvuVLpnBJ3PisxXTB6xwKZY+q8GDK0TPy0tYChfFFn5nv8fQmcK7Y8IdMlBT
+         Mov9ChiuVFVcsnjpTHjrcrg8v9iSCV1wVSQ5LtYYDYh3LU0shvWE5Aajp/vMUwhnQuoj
+         zewHYtInzS6RAmSRC+KRTh9xih7BnE2idfPh3OX+BsvGDDkItWJOVDK+2jZXUPvKgB4M
+         e5jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784820902; x=1785425702;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YUwFPXE0ARZ2U6TesCDMJktXSbqLTCmlCnjsBK9QtbM=;
+        b=Pm9XIQeK1DOLzbZP33eyWsM/pl7yUeADHqbR1nRQEl+4W3BdBeVQj9S1pZVv1DiikT
+         hVxWYi69Meg698VMB2aEUFe8gd1c2ofRJ3lZ4NJHm13XwVNL5WT9JTVQI1gqEL8b66tN
+         +BF/BM1kfLDSCdrKX9hMRcbGGBsmEUl5mpngRFXcANGDZ1sTh9VhJhsj74GPrNTPocRA
+         +/W+3tZSMEpO1gQxYipKsLHaBQGD6PQdC9zuQgrIWTniKPJ+aG2YOravc7tTKbApVBQs
+         dbNe4fF5IPTtWWqg6YSVY8x0/OKrGnR4LASb8fuENFb2bTdU1Rw5Q1N/TBb8fLZp0x5c
+         kujA==
+X-Forwarded-Encrypted: i=1; AHgh+RpqUHaL9AE0vzw9IyOKiCJHprFJ3gtUJcjw+p9kUJ+pkYKvu23odAyDG+OuOtiXny4iXdM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzGw53RiNdBSMUOY2dsCMekO1Ny8TdJNTbxZyxvzGaYffliKQ1
+	OxOMWTZf9h8DfteZvZZzRkSdeNcW8HdMyDR7sb+Gk1uzgKTvnrwcu02u
+X-Gm-Gg: AR+sD10JVAlK6Vme0Dkb8BS1+HZ0rJ2mpPIJmTWwFe8WP5/cPLulpTGGDKdscyxF50u
+	V5cpTMiLqdIVnJJ8zLKZvCs28EVa+VhvBr3XyQNm8/6JcI6Hbzd+2egdHaSb3kBba1SroJdNYX8
+	xZ8kGiABFKcKwVZkxoXlIC1HcZJ6eR277ph4G25kE+rGLe2bt0v4F+16WPXNlnceR2X+jQKHp6X
+	thD77lZNSwRgX5Fq/OJoCsm8AVCfJgSk66Nlvo5mP4isnyCIewC6rukklAbX+q4y6hFVFhGsdFW
+	TY/J2Uf6AvgY/YZlXLQQfqQ9UCTxvku+b5ArSrPwBJISM1fkZL7a2ZZHyy2OMzC9+pOWMJAjtoP
+	sS90q6Xb+B1mLhqDTEKS1c6u9aEScGlfrd3ptGg08IRmq4YoQDY8k0NWa64D0qFJj0pDVFPKiNf
+	tP1uU7tzG5bNrQGFFIyGwTA+0RrRY/i/mN+Qpt/NcOmp1qdE6azaHxpnohxHmpyXdTvHlmWGW+o
+	FHagmA=
+X-Received: by 2002:a17:90b:254a:b0:36b:9323:c726 with SMTP id 98e67ed59e1d1-38f02f3b968mr153278a91.4.1784820901333;
+        Thu, 23 Jul 2026 08:35:01 -0700 (PDT)
+Received: from localhost.localdomain (45.78.65.84.16clouds.com. [45.78.65.84])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3149a62cf50sm7576718eec.5.2026.07.23.08.34.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2026 08:35:00 -0700 (PDT)
+From: Chengfeng Ye <nicoyip.dev@gmail.com>
+To: Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Cc: netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chengfeng Ye <nicoyip.dev@gmail.com>,
+	stable@vger.kernel.org,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH v2] bpf, sockmap: Fix cork ownership in tcp_bpf_sendmsg()
+Date: Thu, 23 Jul 2026 23:34:50 +0800
+Message-ID: <20260723153450.3224353-1-nicoyip.dev@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260719161630.2901208-1-nicoyip.dev@gmail.com>
+References: <20260719161630.2901208-1-nicoyip.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+tcp_bpf_sendmsg() keeps msg_tx across sk_stream_wait_memory(), which drops
+and reacquires the socket lock.  Its error path used the current value of
+psock->cork to decide whether msg_tx named the stack-local temporary
+message.
 
-Pre-existing issues:
-- [High] Lockless callers of __change_page_attr_set_clr() remain vulnerable=
- to Use-After-Free because set_memory_rox() and CPA_COLLAPSE operate on the=
- direct map.
---
+Two senders can therefore interleave as follows:
 
---- Patch [3]: [PATCH mm-hotfixes v6 3/5] x86/mm/pat: acquire init_mm read =
-lock on attribute change to avoid UAF ---
-commit 99a1d277a38cbe15d561ae13b70590f794c51988
-Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-x86/mm/pat: acquire init_mm read lock on attribute change to avoid UAF
+  Thread A                         Thread B
+  msg_tx = psock->cork
+  sk_msg_alloc() fails
+  sk_stream_wait_memory()
+    releases the socket lock      acquires the socket lock
+                                  completes the cork
+                                  psock->cork = NULL
+                                  frees the cork
+    reacquires the socket lock
+  msg_tx != psock->cork
+  sk_msg_free(msg_tx)
 
-This commit resolves a use-after-free race between a lockless page table
-walker and concurrent CPA collapse by acquiring the init_mm mmap read lock.
-It also temporarily drops the lock during page table allocations to avoid
-deadlocks with memory reclaim.
+The stale cork is mistaken for the local temporary message and freed again.
+KASAN reported:
 
-Link: https://lore.kernel.org/all/20260626163213.2284080-1-den@openvz.org/
+  BUG: KASAN: slab-use-after-free in sk_msg_free+0x49/0x50
+  Read of size 4 at addr ffff88810c908800 by task poc/90
+  Call Trace:
+   sk_msg_free+0x49/0x50
+   tcp_bpf_sendmsg+0x14f5/0x1cc0
+   __sys_sendto+0x32c/0x3a0
+   __x64_sys_sendto+0xdb/0x1b0
+  Allocated by task 89:
+   __kasan_kmalloc+0x8f/0xa0
+   tcp_bpf_sendmsg+0x16b3/0x1cc0
+  Freed by task 91:
+   __kasan_slab_free+0x43/0x70
+   kfree+0x131/0x3c0
+   tcp_bpf_sendmsg+0xec3/0x1cc0
 
-> The CPA_COLLAPSE flag is only set by set_memory_rox(), which exclusively
-> operates upon vmalloc ranges, and on x86 only within the module mapping
-> space.
->=20
-> This is important, because some callers directly invoke
-> __change_page_attr_set_clr(), bypassing this lock. However, none of these
-> operate within the module mapping space.
->=20
-> * cpa_process_alias() - a recursive helper called by
->   __change_page_attr_set_clr().
-> * __set_memory_enc_pgtable() - operates on the direct mapping and (via
->   __vmbus_establish_gpadl()) the vmalloc mapping space.
-> * __set_pages_[n]p() - called by set_direct_map_[invalid, default,
->   valid]_noflush(), __kernel_map_pages() - operates on the direct map.
+The same unclear ownership also leaves several error paths inconsistent.
+A failed cork allocation leaves cork_bytes armed, a subsequent temporary
+message can escape without releasing its pages, iterator errors are
+returned as success, and a failed redirect of a corked message discards
+data while reporting it as sent.  Re-evaluating an existing cork can also
+copy the object onto itself.
 
-[Severity: High]
-This is a pre-existing issue, but is the assumption that set_memory_rox()
-exclusively operates upon vmalloc ranges accurate?
+Make temporary ownership explicit by freeing only &tmp at the common exit.
+Reset cork_bytes when allocating the persistent cork fails, propagate
+iterator errors, preserve redirect failures and clear the copied count
+when corked data is discarded.  Skip the copy when the message is already
+the persistent cork.
 
-Looking at machine_kexec_prepare(), it appears to call set_memory_rox() on
-control_page, which is a direct map address. If set_memory_rox() operates
-on the direct map, could a concurrent vfree() trigger a use-after-free?
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Cc: stable@vger.kernel.org
+Suggested-by: Emil Tsalapatis <emil@etsalapatis.com>
+Signed-off-by: Chengfeng Ye <nicoyip.dev@gmail.com>
+---
 
-For example, if CPU 1 is doing kexec:
+Changes in v2:
+- Address Sashiko review findings for stale cork state, iterator-error
+  propagation, cork self-copy, and masked redirect failures.
+- Keep the original stale-cork use-after-free fix.
 
-machine_kexec_prepare()
-  set_memory_rox() -> sets CPA_COLLAPSE
-    cpa_collapse_large_pages() -> replaces a page table with a huge page
-                                  and frees the PTE page table via
-                                  pagetable_free()
+Sashiko: https://sashiko.dev/#/patchset/20260719161630.2901208-1-nicoyip.dev%40gmail.com
+Link: https://lore.kernel.org/netdev/20260719161630.2901208-1-nicoyip.dev@gmail.com/ [v1]
 
-And CPU 2 is concurrently doing vfree():
+ net/ipv4/tcp_bpf.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-vfree()
-  vm_reset_perms()
-    set_area_direct_map()
-      set_direct_map_invalid_noflush()
-        __set_pages_np() -> calls __change_page_attr_set_clr() locklessly
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 8e905b50dead..0594ee4013b0 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -443,12 +443,14 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+ 			psock->cork = kzalloc_obj(*psock->cork,
+ 						  GFP_ATOMIC | __GFP_NOWARN);
+ 			if (!psock->cork) {
++				psock->cork_bytes = 0;
+ 				sk_msg_free(sk, msg);
+ 				*copied = 0;
+ 				return -ENOMEM;
+ 			}
+ 		}
+-		memcpy(psock->cork, msg, sizeof(*msg));
++		if (psock->cork != msg)
++			memcpy(psock->cork, msg, sizeof(*msg));
+ 		return 0;
+ 	}
+ 
+@@ -495,14 +497,15 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+ 		if (unlikely(ret < 0)) {
+ 			int free = sk_msg_free(sk, msg);
+ 
+-			if (!cork)
++			if (cork)
++				*copied = 0;
++			else
+ 				*copied -= free;
+ 		}
+ 		if (cork) {
+ 			sk_msg_free(sk, msg);
+ 			kfree(msg);
+ 			msg = NULL;
+-			ret = 0;
+ 		}
+ 		break;
+ 	case __SK_DROP:
+@@ -579,6 +582,7 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 					       copy);
+ 		if (ret < 0) {
+ 			sk_msg_trim(sk, msg_tx, osize);
++			err = ret;
+ 			goto out_err;
+ 		}
+ 
+@@ -603,13 +607,12 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 		set_bit(SOCK_NOSPACE, &sk->sk_socket->flags);
+ wait_for_memory:
+ 		err = sk_stream_wait_memory(sk, &timeo);
+-		if (err) {
+-			if (msg_tx && msg_tx != psock->cork)
+-				sk_msg_free(sk, msg_tx);
++		if (err)
+ 			goto out_err;
+-		}
+ 	}
+ out_err:
++	if (msg_tx == &tmp)
++		sk_msg_free(sk, msg_tx);
+ 	if (err < 0)
+ 		err = sk_stream_error(sk, msg->msg_flags, err);
+ 	release_sock(sk);
+-- 
+2.43.0
 
-If CPU 2 performs a lockless walk on direct map pages that share the same
-2MB region being collapsed by CPU 1, could it access the freed PTE page?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723-series-vma=
-p-race-fix-v6-0-8cc77dcc0018@kernel.org?part=3D3
