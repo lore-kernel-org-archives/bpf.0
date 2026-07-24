@@ -1,159 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648F2388397
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 19:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D6643B4BF;
+	Fri, 24 Jul 2026 19:38:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784921543; cv=none; b=t48lMd6iLehqmb/PlRBLUOCzHksNU9covjkawDF8ZAxNfFpBh+nRdA/jOjHwxZkde3kj78cQLNAW7WBZDbFbLxIs9NCXmhFK2V0pWF80Pz5XnQYiCJnT56JnBy0eOS0LTD3Ambz4m6HDjHGwGYYAa1ml2+MmWbFIdLKISxcsybQ=
+	t=1784921889; cv=none; b=C/d8I3FdOiZck/CNguuHDJLyIq26EhtXhBv4ke6HSbQeneNch/U0L3HUU2yf0wjoC8kVdMZAJjGBQ9pxCIDAhTdRshi6ZmngCuk9S6wK5BGNqQDVtKrw8FYHrStIcyzBR5iCG/pNRY+RHo4xgQ3/IAKo+Ex3WHavNhoZ0F31Hes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784921543; c=relaxed/simple;
-	bh=GYSs0WxWe0wLEsNsCZ2UVX3U9+8fEaEgUswpha9s9J8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JZcmJghtpGTqnQOfKOVZ6md5EcnZ199YXqW9MRv+jrJhor9Tq06wOpA/f+t1mdUxraWNWhBJUBfHcf+zaJECRePQgVzje5kgFR5YfcpaPV/HIVglq1hE7gu+i1fR4TVH4Y+D16B3u5faxEgayj4lQsoP51uUhhPZKhl2g7fa1KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jSSGASuO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784921889; c=relaxed/simple;
+	bh=pNSG58VVaprl3EhqCQ8RunQyPJsG26bPHdoCHjw7oec=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=SipHPo8q0PIJh5xpCqky9izteyZHGchnb3SrlLqbd5laAHUnWr3JEvSowWLnQg2sIz07j9ApXIVsSQWFcZJYetCW6bT9ZF9q86AsUFvwj9bNWWjbJVTDVdKryzqF9MEjyQYeZgBwyEPFjNkUgtjG7xMmfZaNpIxT2hl8o49RNTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R0GtXkLz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jSSGASuO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 226651F000E9;
-	Fri, 24 Jul 2026 19:32:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R0GtXkLz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9027C1F000E9;
+	Fri, 24 Jul 2026 19:38:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784921539;
-	bh=gvR119GGhKvWBipUIeEQfRJeYD5MlZmAq8rBSFp/Ok8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jSSGASuOOU/DDJi9jGKqUkILC5wxlmu9yIG6adMYX3dwCtWvAUq8ra3RSnOaIsnkz
-	 Zi1WvrlGD6G4qCujr9+P0dsG7VBwHTh+JySjo/8iSWKQglAJTvMQEFG0U+xnDL3Yes
-	 GLoYj4cWPwbIhWXdIkJGExkMNTs8ync+jrEAxg5408YVROJNaCl+z8BCKH5oDNFs5A
-	 r8qBcJHxASTND2+DYT07rckEQrD/XhSjZyi1OBonBCWYoqWzXoxC5t7cDDxGefgcy2
-	 kYLlCu8GNc5FGmIe+X2pBwHsQqLkIVZDJUPcM4C349qcRZQUb+YCFpT+d/XEXSQeZ0
-	 j48k6NhLNFeeQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 07/18] bpf: Check fixed-size mem args of
- helpers and kfuncs the same way
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Amery Hung" <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260724190813.1458271-8-ameryhung@gmail.com>
-References: <20260724190813.1458271-1-ameryhung@gmail.com>
- <20260724190813.1458271-8-ameryhung@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Jul 2026 19:32:18 +0000
-Message-Id: <20260724193219.226651F000E9@smtp.kernel.org>
+	s=k20260515; t=1784921887;
+	bh=zDSNgvrN46Mh8+EbjqbSRln6do6ct55g+Nt1nrPXrw8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=R0GtXkLzAIr2zrZrhJDigbTNwzY1XZnncdp0RpWcgoiCTUK3C3gyj3q9FlXbr5pbD
+	 Sj0FJNviqxvD4Whiqfn0305REgTH1/KIkl9eEdoPaq8N1icEZbReDAi5ztUiClKFBG
+	 72Ec+V0rlx28zSpmo7F7n5h9Q/j+G65p8lse5qL+qsYc77YPlKwJTDK4PWm78f2X4v
+	 DLZ4OF23tyX1RSQ0goffVPk2CndnfBuQ7GBRqPn8AUMdzyDw5sY9QuvjMEcaBoa7uF
+	 7wmsbUEgJyCbbX2clml/dI23R4Okf1d5WD8IE2y6g7IsLn9z9rkiYtd3BeCvbIs75s
+	 xkkY9ABoeaVbQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Varun R Mallya <varunrmallya@gmail.com>, pjw@kernel.org,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, pulehui@huawei.com
+Cc: alex@ghiti.fr, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ puranjay@kernel.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, varunrmallya@gmail.com
+Subject: Re: [PATCH bpf-next v3 0/6] Add BPF Exceptions support for RISC-V
+In-Reply-To: <20260722140015.1982158-1-varunrmallya@gmail.com>
+References: <20260722140015.1982158-1-varunrmallya@gmail.com>
+Date: Fri, 24 Jul 2026 21:38:03 +0200
+Message-ID: <87cxwcqiuc.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+Varun R Mallya <varunrmallya@gmail.com> writes:
 
-Pre-existing issues:
-- [Critical] An integer overflow in `check_mem_reg` when calculating the st=
-ack access size allows global subprograms to bypass memory bounds checks, l=
-eading to out-of-bounds kernel memory accesses.
-- [Critical] Global subprograms unconditionally accept literal NULL scalars=
- for non-nullable pointer arguments, potentially leading to a kernel crash =
-due to NULL pointer dereferences.
---
+> This patchset aims to add BPF exceptions supports for riscv64 by
+> implementing the arch_bpf_stack_walk function and then updating the
+> prologue and epilogue for BPF JIT on riscv. Also,
+> bpf_jit_supports_exceptions() returns true now so that the verifier does
+> not reject programs containing BPF exceptions on riscv64.
+>
+> On riscv the unwinder used by arch_bpf_stack_walk() is the frame-pointer
+> unwinder, so exception support is gated on CONFIG_FRAME_POINTER.
+>
+> In the prologue and epilogue of the RISC-V JIT, I saved the
+> return address and then the frame-pointer according to [1]. Also,
+> according to [2], s0 to s11 are callee saved registers, which is why a
+> new array (rv_exception_csave_regs) has been created to save these
+> registers which contains all the required registers along with the frame
+> pointer as well as return address.
 
---- Patch [7]: [PATCH bpf-next v2 07/18] bpf: Check fixed-size mem args of =
-helpers and kfuncs the same way ---
-commit 7f7a12884bb4c90a70c0a9e694af984eca478eee
-Author: Amery Hung <ameryhung@gmail.com>
+...
 
-bpf: Check fixed-size mem args of helpers and kfuncs the same way
+> Since all exception tests pass now, the denylist file has been removed
+> as it is empty now.
+>
+> Changes in v1->v2:
+> v1: https://lore.kernel.org/bpf/20260621144259.288135-1-varunrmallya@gmai=
+l.com/
+> - resolve the ftrace trampoline address with ftrace_graph_ret_addr()
+>   inside arch_bpf_stack_walk()
+> - Remove duplicated code in bpf_jit_build_prologue()
+>
+> Changes in v2->v3:
+> v2: https://lore.kernel.org/bpf/20260628081710.113333-1-varunrmallya@gmai=
+l.com/
+> - extend walk_stackframe to use sp/fp similar to how arm64 does it. (Bj=
+=C3=B6rn T=C3=B6pel)
+> - refactor prologue/epilogue into helpers. (Bj=C3=B6rn T=C3=B6pel)
+> - fix comments to make them netdev style.
+> - save/restore the tail-call counter in the exception prologue/epilogue
+> - exception_tail_call now passes since bpf2bpf+tailcall mixing landed [3]=
+, so
+>   drop the (now-empty) DENYLIST.riscv64
+> - (!aux->exception_cb) has been simplified to only one condition (Pu Lehu=
+i)
 
-Fixed-size memory arguments went through two paths: helpers called
-check_helper_mem_access() directly, while kfuncs and global subprogs
-used check_mem_reg(). Route the helper MEM_FIXED_SIZE case through
-check_mem_reg() too so all three share the same check.
+Varun!
 
-This also fixes a bug in the helper path. When passing a NULL to
-PTR_MAYBE_NULL | ARG_PTR_TO_FIXED_SIZE_MEM argument, the program would
-be falsely rejected by check_helper_mem_access().
+Thanks for the rework. The overall structure is much better now, and the
+main v2 comments around reusing the stack walker and splitting the
+prologue/epilogue have been addressed!
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2e56f726c12a8..4606294e444a8 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -6965,10 +6968,12 @@ static int check_mem_reg(struct bpf_verifier_env =
-*env, struct bpf_reg_state *reg
->  		mark_ptr_not_null_reg(reg);
->  	}
-> =20
-> -	int size =3D base_type(reg->type) =3D=3D PTR_TO_STACK ? -(int)mem_size =
-: mem_size;
-> +	size =3D (!helper && base_type(reg->type) =3D=3D PTR_TO_STACK) ? -(int)=
-mem_size : mem_size;
+I tried to make sense of Sashiko's reports as well...
 
-[Severity: Critical]
-This is a pre-existing issue, but does the -(int)mem_size cast introduce an
-integer overflow risk for global subprograms?
+Sashiko seems correct about sp being stale after crossing an exception
+frame. We restore pc and fp from pt_regs, so sp should be restored from
+there as well. Would you agree?
 
-If a user defines a BTF struct with a size close to U32_MAX (e.g. 0xFFFFFFF=
-C),
--(int)mem_size evaluates to a small positive integer like 4.=20
+The full pt_regs should also be validated before dereferencing it...?
 
-The verifier would only validate this small 4-byte region on the caller's
-stack, while the global subprogram is verified separately with a PTR_TO_MEM
-of the original massive size.
+I *think* the instrumentation concern also looks valid. The new
+stack-walk adapter callbacks should not be instrumentable.
 
-Could this allow the subprogram to read and write out-of-bounds kernel memo=
-ry
-beyond the provided stack object?
+I don't think the !CONFIG_FRAME_POINTER report is an exception-support
+bug. Exceptions require a valid boundary frame pointer, so the current
+gating looks correct.
 
-> =20
-> -	err =3D check_helper_mem_access(env, reg, argno, size, BPF_READ, true, =
-meta);
-> -	err =3D err ?: check_helper_mem_access(env, reg, argno, size, BPF_WRITE=
-, true, meta);
-> +	if (access_type & BPF_READ)
-> +		err =3D check_helper_mem_access(env, reg, argno, size, BPF_READ, true,=
- meta);
-> +	if (!err && (access_type & BPF_WRITE))
-> +		err =3D check_helper_mem_access(env, reg, argno, size, BPF_WRITE, true=
-, meta);
+Sashiko is also correct that deleting DENYLIST.riscv64 breaks the
+documented selftest command. Please update the README or retain an empty
+file.
 
-[ ... ]
+Minor wording issue: ra is not callee-saved. Please say =E2=80=9CRA and the
+callee-saved registers s0-s11.=E2=80=9D
 
-> @@ -9251,7 +9255,7 @@ static int btf_check_func_arg_match(struct bpf_veri=
-fier_env *env, int subprog,
->  			ret =3D check_func_arg_reg_off(env, reg, argno, ARG_DONTCARE);
->  			if (ret < 0)
->  				return ret;
-> -			if (check_mem_reg(env, reg, argno, arg->mem_size, NULL))
-> +			if (check_mem_reg(env, reg, argno, arg->mem_size, BPF_READ | BPF_WRIT=
-E, NULL))
->  				return -EINVAL;
->  			if (!(arg->arg_type & PTR_MAYBE_NULL) && (reg->type & PTR_MAYBE_NULL)=
-) {
 
-[Severity: Critical]
-This isn't a bug introduced by this patch, but is it possible for global
-subprograms to bypass nullability requirements here?
-
-When check_mem_reg() is called just above this line, it returns 0 early for
-literal NULL scalars:
-
-kernel/bpf/verifier.c:check_mem_reg() {
-    if (bpf_register_is_null(reg))
-        return 0;
-    ...
-}
-
-Because of this early return, the nullability check immediately following
-check_mem_reg() in btf_check_func_arg_match() fails to catch the NULL.
-The check relies on the PTR_MAYBE_NULL flag, which a literal NULL scalar
-(SCALAR_VALUE) does not have.
-
-Does this allow global subprograms to accept unvalidated NULL pointers
-even for arguments not marked as nullable, leading to potential NULL
-pointer dereferences?
-
->  				bpf_log(log, "%s is expected to be non-NULL\n",
->  					reg_arg_name(env, argno));
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260724190813.1458=
-271-1-ameryhung@gmail.com?part=3D7
+Thanks,
+Bj=C3=B6rn
