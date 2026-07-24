@@ -1,316 +1,117 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFCC4908C7
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 01:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784856439; cv=pass; b=tFeU9TUauH7DzW+jG2R/F7cDxpwEbUEAGPMF4XGd82int8ATw1D/FVrflfUItsW6wSi1d3B0Kv3GlCuHnHP43jTpuzmbMjUxucpl8stSd2S32OU6UHipR3hEmGKjzY/SWe12x7Y4QDj2tIllQzpWzb8cjBpWds4fmkMZHT4lLOo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784856439; c=relaxed/simple;
-	bh=i6FbKyiX8wil2mCAKiEVuMZRT1biF82RHk6t3HD5eKc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fEuQKyQl1JSihRC1mpRN9HheyAJd7hUbP24CLFsWKvVEAu0K4uexSRIj2dctxadaa7LKFcteYDzXO44ItZj9b8EpxiFsoQ68DfUMiYN1HxTiFYGpA8WzrWKTFSdo9cXZxlXbP3U+sk18S9/Op4EFCJ9N264BIjRIJirXg0sNxR0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XT8OIQHC; arc=pass smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XT8OIQHC"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c1670dad7a8so204853766b.3
-        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 18:27:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784856435; cv=none;
-        d=google.com; s=arc-20260327;
-        b=E9iaASXfRaxf4dl5kAKMkPYr267oBAb/gU+OXBAOHl/jq7HjOIEobDK/RxgxXr7g/K
-         UWuQRvOlKbRCtGuQhIVr10y1tFsL/MzcrYbCI+QuewUjXd+NeDdNM9JR1WkF2e1LKPZ2
-         bq4b+9tMYoXp1W4FGHHquajbrSAfSGNLUPiY81Xng7Se9ja9ppnqCB3PjhsrM+mSLVhj
-         OUd6rn9AIckFOVFAUFt3mZBU09SuJTXkAeRM1kmOlgnSas5tsypgpt71zW27XK6bKyJz
-         axzTID3D4RNRHtprjnPR5HvvHPDdAnvzwf55QqGlomjzz42ZWevTt4PlzY5Pj2cuk5MP
-         ae/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=pfH6OzkyUnJg8mgaz8oWVr3UEOINj5n1NOSEE96CHHA=;
-        fh=FthGvuR3K9/4OOpgmQJp7FB64mSmSiZB6V3xeZ/77Q8=;
-        b=jZxUVaXYSB4epVhzj4PrUT3DG20Hj9BWFV/cgMY+rnvdCZxqT8v0UL26zkO9mAJm5F
-         c0ri7w4ILk4w9a2FYwQSzf3Zb74+hx51ZoksR/qOQJBLJw+GrEOLs70JQjRafm0oqz8K
-         lglhyYmj2dHWoqhEk6/TMXWhgTvrDBZguVHOOpUO8gFQYD7jGrVGUm4L1TdC4n1+gJs/
-         0wY6nkIayhJp8zlgHNJ5HutavOZS3frUnreN2Xczhy+a/UtYmZb6CKSvdHNNVjNbFmAn
-         1Zf6sksTUqgMNM8LeqXRhpAMIP26mfOQtcGRQ7fy6vbYSxtb5OLLoOGtnKnbHsdm8CD/
-         lxqw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784856435; x=1785461235; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=pfH6OzkyUnJg8mgaz8oWVr3UEOINj5n1NOSEE96CHHA=;
-        b=XT8OIQHCU71b5uEGmjMyn51IIeJCOcIRnqxTNUUdJO1bLfGSvisTCsH5deWP0064GA
-         zRy73LxUW7bvP6+GB7Wi83rqijVjiMfaNLxoTn89sHQxXBzZs51VLv6eyEJ1Koz/54J9
-         tDzeSrL752yBckU4q3geDHjUj7OskATiVlLsZM9aDMsbH4n+PsIk6uYiQ4KEJakXcHHx
-         pgjS7OhvG7pcRhH1LDYYRzeeX5ow8SHdW3q1WWSdEtby5tCcDRVdGFwjRQPBMh1e4I3g
-         D2WZ7QjoxRV+Bv1v7FXbITXA/unybGuYMiShZ8yokvk74XwG2W8jj0yz7m4KyUH6hgD8
-         vUwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784856435; x=1785461235;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pfH6OzkyUnJg8mgaz8oWVr3UEOINj5n1NOSEE96CHHA=;
-        b=ZW0SInsQIJPxk2GVm+XW5HheB+G4mjnJZZikqQChrYyfZSRAqQMeqLX352J9lIGlAQ
-         lgGY1+m7kmhgnY0bSuIqDRZsVyNXeUT52csxiaL84bm16Aw3ARs6Xbqig3DhVIJI5WrF
-         Uiyt20H4sEQt5I5leSsoGGlBvB3Zbu3S1wphSRIF7nDk98vDu+aO0pYFyUQjSHMhbh1q
-         maqwQNahRLsgVHYShpismTUmla8SXw/rz5ahZGcFt4MnO9nburr2Sst0QLdOKk3nX85X
-         B+1CyEIKgCZuRj999wLPyi60+Jx0s3O3Ne2YTpnNlM7NB3+oYJ0WCySWKUbwcVP4fVpw
-         8Mrg==
-X-Gm-Message-State: AOJu0YyNGCK+SZt1qXGXPJ3KASgWUBlzjgSZZ5hwNJQ9urwZmDPkc33g
-	MutRWATAXMa3dCggI+WXUUz18Dm2eMYmv716hTWW3YXAyqhgBOuS6EDMQ5TpUnH7wzcwybFQsQ6
-	6RDgCfjWF/aQ2pSx0zMrAvXDOr3zcyLM=
-X-Gm-Gg: AR+sD13s+Guya8l9c5YmQjs/QByaxT4Mn6ZPjMIF3f4TnCQ6wMn3o2kvGe89U7QvrOR
-	FwPMNbukxcilG0gC/QnM/yH2GaMWexYFfgGXkzeRQu5NS32+cpAPMSv+ZQXvclQF94Ud4YkyATW
-	FTO+qrR/uH23DUpC7QBFoKnvcg6SiT0Zyjufac+qli7nEvKq056rK5EUpBSeCqQtb5lNN4QTq4h
-	YAKYtKDLqW+0TxPNVKgZlRnVZLiGZJUyALPwt9YcLfGYsqxYp2Agyi73gLIV1kgGg/R5h+0I7OO
-	6aIncyShXd13WbiQUtQ=
-X-Received: by 2002:a17:906:a348:20b0:c15:fc9d:cf3c with SMTP id
- a640c23a62f3a-c1c50bfe071mr159764566b.42.1784856434951; Thu, 23 Jul 2026
- 18:27:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF371A681C
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 01:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784857184; cv=none; b=qGoGDDw3kWO0XuUZG5uBWufWeKxtiwHVDZ0S/f3dOS+5uTUOEEiYSRcj9k5X3rTeyajclbewMpjM9Dt1PoyfSetJOQGUv1r4PkBNhdWd7y9GD15tS5hwGq1Ph90vHBAC+mcxOKHeJtBbr5WZlFqaVJ76iF6Nk5yhaOaG/JwndD0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784857184; c=relaxed/simple;
+	bh=ZSu2HxhXu4BPUdzZi/39bsFPK9tNhoMqwzb8gq1shqw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X7C5LZ9R/GIcZvbI/xhnCPOjfbaW06QEavfTAaX2FejpkQCxIFRjXNvvt422F8S65iGIKsU05y7T5i0aSPq5HUHFVbTTnZXq4TcaI3vKE+MhMGPOFwir22WC880LAqZzwVm8esKOQ/4ga9QwJ/8T/1UtfeVV7mB2TFmwEZFmX4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h5rHr2dvlzYQttK
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 09:39:04 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 0A95540577
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 09:39:36 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgCXyFlWwmJqwP1dCQ--.5163S2;
+	Fri, 24 Jul 2026 09:39:35 +0800 (CST)
+Message-ID: <97c355e9-69ee-4e06-bfe7-95d7186a634b@huaweicloud.com>
+Date: Fri, 24 Jul 2026 09:39:34 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260722040830.387979-1-nickolay.lysenko@gmail.com>
- <20260722040830.387979-2-nickolay.lysenko@gmail.com> <1ce45b3ac7411e585d3554ee12489dc5a56bfd41.camel@gmail.com>
-In-Reply-To: <1ce45b3ac7411e585d3554ee12489dc5a56bfd41.camel@gmail.com>
-From: Mykola Lysenko <nickolay.lysenko@gmail.com>
-Date: Thu, 23 Jul 2026 18:27:03 -0700
-X-Gm-Features: AUfX_myWVuLhyPKYqP57ZHQ172Q40ov2J1gEANR__YTDIW3nHk0851MTaFDv_Cc
-Message-ID: <CAMtxOX0ems30XebDVfVnhkRmwmV3bevgT_Pw2kUsKVPUL8j_pA@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v3 1/3] selftests/bpf: extract BPF skeleton
- generation into a helper script
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, memxor@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/4] bpf, arm64: Fix memory leak in bpf_jit_free
+Content-Language: en-US
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260722112754.1615201-1-pulehui@huaweicloud.com>
+ <20260722112754.1615201-2-pulehui@huaweicloud.com>
+ <20260722113808.94D6D1F000E9@smtp.kernel.org>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20260722113808.94D6D1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgCXyFlWwmJqwP1dCQ--.5163S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFW5Gw4fZr4fKr15Gr4xtFb_yoW8CF4DpF
+	yDu3W3C3yq9r1ktF1kX3W8uF4UWw4rGF1UKa4Uur4IgFn0gr93WF4Sk3yfCayYyr4UJ3yF
+	qryYgryfCas5JrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
+	bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
+	AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
+	42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
+	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+	KfnxnUUI43ZEXa7IU1wL05UUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Wed, Jul 22, 2026 at 1:04=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Tue, 2026-07-21 at 21:08 -0700, Mykola Lysenko wrote:
->
-> ...
->
-> Overall lgtm, please see some notes below.
 
-Thanks! All five notes are addressed in v4.
 
->
-> >  tools/testing/selftests/bpf/Makefile        | 99 ++++++---------------
-> >  tools/testing/selftests/bpf/gen_bpf_skel.sh | 97 ++++++++++++++++++++
-> >  2 files changed, 125 insertions(+), 71 deletions(-)
-> >  create mode 100755 tools/testing/selftests/bpf/gen_bpf_skel.sh
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
-ests/bpf/Makefile
-> > index 55d394438..09e5be201 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
->
-> ...
->
-> > +$(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_OUTPUT)/%: $$$$(%-deps) $(BPFTO=
-OL) gen_bpf_skel.sh | $(TRUNNER_OUTPUT)
-> > +     $(Q)BPFTOOL=3D$$(BPFTOOL) ./gen_bpf_skel.sh --tag '$(TRUNNER_BINA=
-RY)'     \
-> > +             --name $$(notdir $$(@:.skel.h=3D)) --infix linked        =
-         \
-> > +             --skel $$@ --subskel $$(@:.skel.h=3D.subskel.h)          =
-         \
-> > +             $$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps)) $(if $(P=
-ERMISSIVE),|| { \
->
-> Rant: I should have voiced a concern with the PERMISSIVE patch-set earlie=
-r.
->       The level of it's invasiveness is appalling, it should have never b=
-een
->       merged. How are we supposed to write the makefile now, allow each t=
-arget
->       to fail?
->
->       Here is a follow-up: make it so the selftests are never dependent o=
-n host's
->       headers to compile bpf and drop this PERMISSIVE bs.
->
+On 2026/7/22 19:38, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> 
+> Pre-existing issues:
+> - [High] Memory leak of `jit_data->ctx.offset` in `bpf_jit_free()` for the LoongArch architecture.
+> --
+> 
+> --- Patch [1]: [PATCH bpf-next 1/4] bpf, arm64: Fix memory leak in bpf_jit_free ---
+> commit 34ee740bc2723be0c26671951b05fa73e1bfc918
+> Author: Pu Lehui <pulehui@huawei.com>
+> 
+> bpf, arm64: Fix memory leak in bpf_jit_free
+> 
+> This commit fixes a memory leak in the ARM64 BPF JIT compiler. When
+> bpf_jit_free() cleans up a subprogram after a later subprogram fails JIT
+> compilation, it now correctly frees the jit_data->ctx.offset array.
+> 
+>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>> index 4cdc7dfb05ba9..f4e4d4578e38a 100644
+>> --- a/arch/arm64/net/bpf_jit_comp.c
+>> +++ b/arch/arm64/net/bpf_jit_comp.c
+>> @@ -3237,6 +3237,7 @@ void bpf_jit_free(struct bpf_prog *prog)
+>>   		 */
+>>   		if (jit_data) {
+>>   			bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
+>> +			kvfree(jit_data->ctx.offset);
+> 
+> [Severity: High]
+> This isn't a bug introduced by this patch, but does the same memory leak
+> exist in the LoongArch BPF JIT compiler?
 
-I'd be glad to send the removal as a follow-up
-on top of this series.
+patch 2 have been covered this.
 
-> > +             $$(RM) $$@ $$(@:.skel.h=3D.subskel.h);                   =
-         \
-> > +             printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; =
-})
-> >
-> >  # When the compiler generates a %.d file, only skel basenames (not
-> >  # full paths) are specified as prerequisites for corresponding %.o
-> > diff --git a/tools/testing/selftests/bpf/gen_bpf_skel.sh b/tools/testin=
-g/selftests/bpf/gen_bpf_skel.sh
-> > new file mode 100755
-> > index 000000000..0b237f639
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/gen_bpf_skel.sh
-> > @@ -0,0 +1,97 @@
-> > +#!/bin/bash
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#
-> > +# Link BPF object file(s) with "bpftool gen object" and generate a
-> > +# skeleton (or light skeleton) header from the result.
-> > +#
-> > +# Usage:
-> > +#   BPFTOOL=3D<bpftool> gen_bpf_skel.sh --name NAME --skel OUT [option=
-s] OBJ...
-> > +#
-> > +#   --name NAME       skeleton object name ("name NAME" for bpftool)
-> > +#   --skel OUT        output header ("foo.skel.h" or "foo.lskel.h")
-> > +#   --subskel OUT     also generate a subskeleton header into OUT
-> > +#   --lskel           generate a light skeleton (bpftool gen skeleton =
--L)
-> > +#   --sign 'ARGS'     extra "gen skeleton" args for signing (-S -k .. =
--i ..)
-> > +#   --tag TAG         build-log tag, e.g. "test_progs-no_alu32"
-> > +#   --infix STR       intermediate file infix (default: linked). Calle=
-rs
-> > +#                     generating both a .skel.h and a .lskel.h from th=
-e
-> > +#                     same .bpf.o MUST use distinct infixes, or parall=
-el
-> > +#                     builds race on the intermediate files.
->
-> Let's drop the --infix parameter and construct one locally based on
-> --skel --lskel --sign --name etc.
+> 
+> Looking at arch/loongarch/net/bpf_jit.c in bpf_jit_free():
+> 
+> 		if (jit_data) {
+> 			bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
+> 			kfree(jit_data);
+> 		}
+> 
+> It appears jit_data->ctx.offset is not freed there before kfree(jit_data)
+> is called.
+> 
+> Could this lead to a similar resource leak if userspace loads a BPF program
+> with multiple subprograms that passes verification but fails JIT compilation?
+> 
+>>   			kfree(jit_data);
+>>   		}
+>>   		prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
+> 
 
-Done. The script derives it: "llinked" when --lskel or --sign,
-"linked" otherwise, which reproduces the old call sites exactly.
-
->
-> > +#   --no-determinism-check
-> > +#                     link the inputs once instead of three times.
-> > +#                     By default the object is re-linked twice more an=
-d
-> > +#                     the 2nd and 3rd results compared, as a regressio=
-n
-> > +#                     test for the determinism of "bpftool gen object"=
-.
-> > +#
-> > +# The bpftool binary is taken from $BPFTOOL (default: bpftool from PAT=
-H).
-> > +# On failure all outputs and intermediates are removed and the script
-> > +# exits non-zero; permissive-mode skipping is the caller's business
-> > +# (see skip_on_fail in Makefile.buildvars).
-> > +
-> > +set -u
-> > +
-> > +bpftool=3D${BPFTOOL:-bpftool}
-> > +name=3D'' skel=3D'' subskel=3D'' tag=3D'' sign_args=3D'' infix=3Dlinke=
-d
-> > +lskel=3D0 det_check=3D1
-> > +
-> > +while [ $# -gt 0 ]; do
-> > +     case "$1" in
-> > +     --name)         name=3D$2; shift 2 ;;
-> > +     --skel)         skel=3D$2; shift 2 ;;
-> > +     --subskel)      subskel=3D$2; shift 2 ;;
-> > +     --tag)          tag=3D$2; shift 2 ;;
-> > +     --infix)        infix=3D$2; shift 2 ;;
-> > +     --sign)         sign_args=3D$2; shift 2 ;;
->
-> So this passes sign arguments from the makefile, let's keep this a
-> boolean flag instead and set the sign_args internally in the script.
-
-Done. --sign is a boolean; the key and certificate come from
-$PRIVATE_KEY and $VERIFICATION_CERT in the environment, same pattern
-as $BPFTOOL.
-
->
-> > +     --lskel)        lskel=3D1; shift ;;
-> > +     --no-determinism-check) det_check=3D0; shift ;;
->
-> This flag is never set, let's drop it.
-
-Done, the determinism check is unconditional now.
-
->
-> > +     --)             shift; break ;;
-> > +     -*)             echo "$0: unknown option: $1" >&2; exit 1 ;;
-> > +     *)              break ;;
-> > +     esac
-> > +done
-> > +
-> > +if [ -z "$name" ] || [ -z "$skel" ] || [ $# -eq 0 ]; then
-> > +     echo "usage: $0 --name NAME --skel OUT [options] OBJ..." >&2
-> > +     exit 1
-> > +fi
-> > +
-> > +base=3D${skel%.skel.h}
-> > +base=3D${base%.lskel.h}
-> > +t1=3D$base.${infix}1.o
-> > +t2=3D$base.${infix}2.o
-> > +t3=3D$base.${infix}3.o
-> > +
-> > +fail() {
-> > +     rm -f "$skel" ${subskel:+"$subskel"} "$t1" "$t2" "$t3"
-> > +     exit 1
-> > +}
-> > +
-> > +if [ $# -gt 1 ]; then
-> > +     printf '  %-12s %s\n' 'LINK-BPF' "${tag:+[$tag] }$(basename "$bas=
-e").bpf.o" >&2
-> > +fi
-> > +printf '  %-12s %s\n' 'GEN-SKEL' "${tag:+[$tag] }$(basename "$skel")" =
->&2
->
-> Let's also drop --tag and move these printfs to the Makefile / Makefile.r=
-unner.
-
-Done. The recipes use the usual $(call msg,...) helpers.
-
->
-> > +
-> > +"$bpftool" gen object "$t1" "$@" || fail
-> > +final=3D$t1
-> > +if [ "$det_check" -eq 1 ]; then
-> > +     "$bpftool" gen object "$t2" "$t1" || fail
-> > +     "$bpftool" gen object "$t3" "$t2" || fail
-> > +     if ! cmp -s "$t2" "$t3"; then
-> > +             echo "$0: bpftool gen object is not deterministic for $sk=
-el" >&2
-> > +             fail
-> > +     fi
-> > +     final=3D$t3
-> > +fi
-> > +
-> > +flags=3D
-> > +[ "$lskel" -eq 1 ] && flags=3D-L
-> > +# $sign_args intentionally unquoted: it is a list of bpftool arguments
-> > +# shellcheck disable=3DSC2086
->
-> The shellcheck directive is noise, same for "intentionally unquoted" comm=
-ent.
-
-Both gone. With --sign boolean the signing arguments are built as a
-bash array inside the script, so nothing is expanded unquoted anymore.
-
->
-> > +"$bpftool" gen skeleton $sign_args $flags "$final" name "$name" > "$sk=
-el" || fail
-> > +
-> > +if [ -n "$subskel" ]; then
-> > +     "$bpftool" gen subskeleton "$final" name "$name" > "$subskel" || =
-fail
-> > +fi
-> > +
-> > +rm -f "$t1" "$t2" "$t3"
-> > +exit 0
