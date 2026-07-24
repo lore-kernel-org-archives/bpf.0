@@ -1,82 +1,59 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C18439008;
-	Fri, 24 Jul 2026 14:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6934399F3;
+	Fri, 24 Jul 2026 14:14:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784902424; cv=none; b=Y/089lmEpKo5JGmwqX15C6Om+o/P9sxHl+H30peqXO1Legz7ySaexcDE+6KjX+uAr3mhmmoNMDTsR0kzHAumvVotwer1AEqJ18zrhUT6qNWk1BIqqUi0DvtqCGb6oUROjdHJF9Q8d59TjHW5NVPq6XwiG4WiQE3G1edz6PO8UDY=
+	t=1784902489; cv=none; b=Mwgu9lq673leWfLVxiyNj16EraUiGUfoDilV7VNJXCf5pA5vRShyKPkweyaA4Jg8jY44ChtHrlwpHQuP3UMavX+wG66ya4Ll1iNwbzEp+1YfpWZYv3Mf+z/TWVLKIjI+Ojg7XZXeqBOGJGxbAjE+EaJgDYhDOJSO7u75tHQC7j8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784902424; c=relaxed/simple;
-	bh=qzdJEes+JcGSIMNS1SLAblNgi10KpFF/c7yicoMeH7M=;
+	s=arc-20240116; t=1784902489; c=relaxed/simple;
+	bh=JCpz07QMIoYkgWlFbFkBXaMEQIeBpd6j7HAefVsL008=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I/JJWW5f2bxYwl2Pt0w96YAaw6O7wOjC+K+/1x6V/W8oUu6Nl/lj/wu7yMnSWft5LRLOaMKkJNFrf+glTiK1wL9kCqHIyc6sETxgg0Tc23Rj+NxSVvzLSxhjmhsDS7HC/BJVagkUQ6xdfQBtNB+kVK/ZS7bdF9LhgQEp5MBloiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=f4ATmUMR; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 MIME-Version; b=ho6n9Qp1YuAoPQ2eMNTokk72U10T3XNjQwmPS5fO+xW3UnopcngphZLTUWvdNKiQ2E8GzyIJvCkiNQMXzL0p8VZPnzcX0NjBmalBUgynOdV2RYsPyhosN4eqTDsIadPH4WoIc0QaaTxyxzGccykxkytctoPQZcKapIBDxAzkHP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SHacB/p3; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="f4ATmUMR"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66ODfjd2100527;
-	Fri, 24 Jul 2026 14:13:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=3Gup2122irWeVTFwr
-	bTkTPgiSdur334BEncEwPBZo24=; b=f4ATmUMRShIEZtlwU0newHMUk2nm/a+OS
-	G8zZ1x7r8Iiw/DEVpOGEpivOsOkOCBp4MSyKYqAGXzU/HIIIrOJJo1TcaCeUQ/S6
-	QSReaJQ2o0Nqg60ZgcEZ7M6iQ8KZjeoWXbXdREsTtu31glEvpuh6YZsqc/a22t0K
-	m7zY3q2O7rGvROtqonaQRnrNdldOdTeGfrzPak6ZSmuoPq8SR+kuaWH1bMIHX5l0
-	6gW5dLJKI3/7okeEvSbJ36OKJz7pRmAphBxMUDGjRCl0qcoFylgE18r/CXuiHXSZ
-	jNTweATaJ3ogSR5ALiEBWc4BPa+PwZVncUGpI/Ua1cRFihMJm0kzw==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fm8gs8arv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 Jul 2026 14:13:28 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66ODo3rv024916;
-	Fri, 24 Jul 2026 14:13:27 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fgnahh68x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 Jul 2026 14:13:27 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66OEDNPs47382922
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 24 Jul 2026 14:13:23 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 54A4520116;
-	Fri, 24 Jul 2026 14:13:23 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0D68D2012A;
-	Fri, 24 Jul 2026 14:13:23 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 24 Jul 2026 14:13:23 +0000 (GMT)
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
-        Juergen Christ <jchrist@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Dominik Steenken <dost@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Maxim Khmelevskii <max@linux.ibm.com>,
-        Jens Remus <jremus@linux.ibm.com>,
-        Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: llvm@lists.linux.dev, bpf@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] s390/bpf: Add kCFI support
-Date: Fri, 24 Jul 2026 16:13:18 +0200
-Message-ID: <20260724141318.1037434-7-hca@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260724141318.1037434-1-hca@linux.ibm.com>
-References: <20260724141318.1037434-1-hca@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SHacB/p3"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784902485;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CtBv+6DKpRgeUFFG4TgzRtR+eRItYzi9T1OzkhCupJw=;
+	b=SHacB/p335Ksp6x94cwKEounO35MYO6UNiaadteJdmJOK6XBUmunYbgvq4+bGzeEpwrNVB
+	7PCRRvldTxswTNOa3q/yVHZzGJtUvVMZHmb1mTKQlQBxz5DTsQd1KBmICwG8s4YKiqgJDO
+	MOBCyETxKzHxS2a4pTie5MnPmZceY94=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Varun R Mallya <varunrmallya@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Viktor Malik <vmalik@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next 1/2] bpf: Fix sleepable check for tracing prog
+Date: Fri, 24 Jul 2026 22:14:21 +0800
+Message-ID: <20260724141422.10463-2-leon.hwang@linux.dev>
+In-Reply-To: <20260724141422.10463-1-leon.hwang@linux.dev>
+References: <20260724141422.10463-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,132 +61,71 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzI0MDEyOCBTYWx0ZWRfX7s4hQFR6dyO/
- yU//FEHDsfBWnBBqkCBq2lorxL69FsSOuiYOtpa9iaxSzNw39yKMTJM/TcSBs65QBHyPslMPqu/
- 1EVgBtJvVh17/ZoI7q6oUoCcL8mLfGM=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzI0MDEyOCBTYWx0ZWRfX51a4/FY8yNIo
- FVL7HF8JlpwBT7LKzlejFFd4zMyKPkeP45Bi9FL7xVV3dhik26/tcMN3JCxyKR6yvSr3xHxjGjd
- Bmd+7PhYWfY3V2+Zggr6Nj1N9CkOcIvdHFkUc8RBG7rdTUrlx5SWGLijavEw/mgrfpnDaNYNiO7
- 0hghr83sYnH+SB9MuPCBTio7LONhrM5zNwdvBtbSqelrJiKUHogbSRXE/y5hWnbyFYR6MKqk1+x
- 2fAy4M/sFoWNFRnccBbOVs1BRl3HvQUddmG6R++Z3EPcZm04onDdknVe7oeaadrqcyMkh6Z827+
- 1/uMPM3DaTG/ozo8YLR4Cg+g2kWEjRl/k7/QZVugoTBNVNASMjVfggra8opm7KRGLqBEH/Q33VW
- ehY7osXKO4YQ7VNouoxq0vvEzMrvEENlcZ4iC6mNPnMRlz2RJUrUwNEOe4mCFuls6h7LaexdS5m
- VMFU9xtgT8EHVZhqUyw==
-X-Authority-Analysis: v=2.4 cv=Q9LiJY2a c=1 sm=1 tr=0 ts=6a637309 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8 a=bPLy7VutBQud47ZB1NcA:9
-X-Proofpoint-ORIG-GUID: oMa11n_Y9UKCYcPNaaYAs0qJMEEvpXng
-X-Proofpoint-GUID: 6xkqPT-oPyxkUZsJsKQ8nqlhyGuI0UDV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-24_03,2026-07-24_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 adultscore=0 phishscore=0 bulkscore=0
- spamscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2607240128
+X-Migadu-Flow: FLOW_OUT
 
-This is the s390 variant of commit 710618c760c0 ("arm64/cfi,bpf: Support
-kCFI + BPF on arm64").
+When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing prog
+is allowed to attach to '__x64_'-alike prefix symbols.
 
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+It is because the verifier does not verify whether the symbol is a kernel
+function or a bpf prog. That said, a sleepable tracing prog is allowed to
+attach to a bpf prog target whose name has '__x64_'-alike prefix.
+
+For example, a sleepable fentry prog attaches to a '__x64_sys_nop' XDP
+prog, and copies buffer from a user pointer with bpf_copy_from_user()
+helper. After attaching the XDP prog to lo interface, the kernel BUG
+could be triggered by 'ping -c 1 -W 1 127.0.0.1':
+
+[    3.460756] BUG: sleeping function called from invalid context at kernel/bpf/trampoline.c:1324
+
+Fix it by disallowing sleepable tracing prog always when its target is
+bpf prog.
+
+Fixes: 16d9c5660692 ("bpf: Always allow sleepable programs on syscalls")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- arch/s390/include/asm/cfi.h  |  7 +++++++
- arch/s390/net/bpf_jit_comp.c | 26 ++++++++++++++++++++++----
- 2 files changed, 29 insertions(+), 4 deletions(-)
- create mode 100644 arch/s390/include/asm/cfi.h
+ kernel/bpf/verifier.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/arch/s390/include/asm/cfi.h b/arch/s390/include/asm/cfi.h
-new file mode 100644
-index 000000000000..9af2c7cb70ca
---- /dev/null
-+++ b/arch/s390/include/asm/cfi.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_S390_CFI_H
-+#define _ASM_S390_CFI_H
-+
-+#define __bpfcall
-+
-+#endif /* _ASM_S390_CFI_H */
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index 31749c0362ca..74642e0b4ee1 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -21,6 +21,7 @@
- #include <linux/filter.h>
- #include <linux/init.h>
- #include <linux/bpf.h>
-+#include <linux/cfi.h>
- #include <linux/mm.h>
- #include <linux/kernel.h>
- #include <asm/cacheflush.h>
-@@ -356,6 +357,19 @@ static void emit6_pcrel_rilc(struct bpf_jit *jit, u32 op, u8 mask, s64 pcrel)
- 	}							\
- })
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 52be0a118cce..40d567b90d24 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -18935,13 +18935,16 @@ static bool is_tracing_multi_id(const struct bpf_prog *prog, u32 btf_id)
+ }
  
-+static inline void emit_u32_data(const u32 data, struct bpf_jit *jit)
-+{
-+	if (jit->prg_buf)
-+		*(u32 *)(jit->prg_buf + jit->prg) = data;
-+	jit->prg += 4;
-+}
-+
-+static inline void emit_kcfi(u32 hash, struct bpf_jit *jit)
-+{
-+	if (IS_ENABLED(CONFIG_CFI))
-+		emit_u32_data(hash, jit);
-+}
-+
- /*
-  * Return whether this is the first pass. The first pass is special, since we
-  * don't know any sizes yet, and thus must be conservative.
-@@ -597,6 +611,8 @@ static void bpf_jit_prologue(struct bpf_jit *jit, struct bpf_prog *fp)
+ static int btf_id_allow_sleepable(u32 btf_id, unsigned long addr, const struct bpf_prog *prog,
+-				  const struct btf *btf)
++				  const struct btf *btf, const struct bpf_prog *tgt_prog)
  {
- 	BUILD_BUG_ON(sizeof(struct prog_frame) != STACK_FRAME_OVERHEAD);
+ 	const struct btf_type *t;
+ 	const char *tname;
  
-+	emit_kcfi(bpf_is_subprog(fp) ? cfi_bpf_subprog_hash : cfi_bpf_hash, jit);
+ 	switch (prog->type) {
+ 	case BPF_PROG_TYPE_TRACING:
++		if (tgt_prog)
++			return prog->sleepable ? -EINVAL : 0;
 +
- 	/* No-op for hotpatching */
- 	/* brcl 0,prologue_plt */
- 	EMIT6_PCREL_RILC(0xc0040000, 0, jit->prologue_plt);
-@@ -616,7 +632,7 @@ static void bpf_jit_prologue(struct bpf_jit *jit, struct bpf_prog *fp)
- 		bpf_skip(jit, 6);
+ 		t = btf_type_by_id(btf, btf_id);
+ 		if (!t)
+ 			return -EINVAL;
+@@ -19324,7 +19327,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 		}
+ 
+ 		if (prog->sleepable) {
+-			ret = btf_id_allow_sleepable(btf_id, addr, prog, btf);
++			ret = btf_id_allow_sleepable(btf_id, addr, prog, btf, tgt_prog);
+ 			if (ret) {
+ 				module_put(mod);
+ 				bpf_log(log, "%s is not sleepable\n", tname);
+@@ -19575,7 +19578,7 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
+ 
+ 	/* Check sleepable program attachment. */
+ 	if (prog->sleepable) {
+-		err = btf_id_allow_sleepable(btf_id, addr, prog, btf);
++		err = btf_id_allow_sleepable(btf_id, addr, prog, btf, NULL);
+ 		if (err)
+ 			return err;
  	}
- 	/* Tail calls have to skip above initialization */
--	jit->tail_call_start = jit->prg;
-+	jit->tail_call_start = jit->prg - cfi_get_offset();
- 	if (fp->aux->exception_cb) {
- 		/*
- 		 * Switch stack, the new address is in the 2nd parameter.
-@@ -2401,9 +2417,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 		jit_data->ctx = jit;
- 		jit_data->pass = pass;
- 	}
--	fp->bpf_func = (void *) jit.prg_buf;
-+	fp->bpf_func = (void *)jit.prg_buf + cfi_get_offset();
- 	fp->jited = 1;
--	fp->jited_len = jit.size;
-+	fp->jited_len = jit.size - cfi_get_offset();
- 
- 	if (!fp->is_func || extra_pass) {
- 		bpf_prog_fill_jited_linfo(fp, jit.addrs + 1);
-@@ -2671,8 +2687,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 		return -ENOTSUPP;
- 
- 	/* Return to %r14 in the struct_ops case. */
--	if (flags & BPF_TRAMP_F_INDIRECT)
-+	if (flags & BPF_TRAMP_F_INDIRECT) {
- 		flags |= BPF_TRAMP_F_SKIP_FRAME;
-+		emit_kcfi(cfi_get_func_hash(func_addr), jit);
-+	}
- 
- 	/*
- 	 * Compute how many arguments we need to pass to BPF programs.
 -- 
-2.53.0
+2.55.0
 
