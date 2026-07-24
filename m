@@ -1,94 +1,93 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B882EEE63
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 03:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3ED918FDBE
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 03:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784864404; cv=pass; b=TTbh8E89FSFNXYnWWs9MYPYQn2EQTbRkFoMo8z3pUDrb21/l82r1Pbr7coMfoBQhnEOeqfbSKdEdcHv+tcJU7lO+Tu14xtzuJYoAMBcIAuJynynczveK7JG0E6+FBDB3292XACnhPpIu8Uz5ssfgM5SaIGSsftSvel5KhucJWTg=
+	t=1784865183; cv=pass; b=HVpZ+/ghNPgV4EFAmNY1EHGyAKtOiDbKCxbfu45r8FUy4bGL/DQ7qHiSO3sqU3+iVBcLbW3VSGtcSFNuKbmUz0YSyXQgnEzZEWq9ZBfI2W3uLLqVLlsZE+Uhs0VK7wBp0B1tZEz9/RfqeqaqXflOPUpY7Ivfv6sLZrA2pEDyQ8o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784864404; c=relaxed/simple;
-	bh=pB8/V3XlrG5omt7Gz5mMSVLoHIr+uYCl606AtWvg3WI=;
+	s=arc-20240116; t=1784865183; c=relaxed/simple;
+	bh=AAt+tQ6x87EqieH4JRZs7DkkGKdTAFNhzwbrdBVNw70=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AwH680kFV/YNhbkEKXvUwQYbpsx5LKyCIE83KfNuVshVZPJGy8Y0EabMgmKC8yWxx/2cO0LrimToHNVRZ7gKljwvWSxNuyR3T8hfFMDxcTyiNvSFU5EViKRZoCqYvRJ0OvSFSSpOjwf4atrgkjz+z2fDxvg+WvRzkPCkj6/mAVQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bjjrxLZ+; arc=pass smtp.client-ip=209.85.167.41
+	 To:Cc:Content-Type; b=NhEOIEISyGH88Sy90LitXIFEy4bP0xskXAjaQe0316aBJaJqoHVSmZhejNEjH4x1ForfObg/FvAYDHVzWUWOE2Yj6Cr3J/oOCjzBGdjxf6wlIjRdcdPcx1UP+fEUSM0+M5pKmrXBYdclWusbVVgy9QrSEE8qAbJemuikv0sSyVI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JsS/YoQg; arc=pass smtp.client-ip=209.85.167.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bjjrxLZ+"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5aec201b582so1363725e87.1
-        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 20:40:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784864400; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JsS/YoQg"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5b2b92065ffso272118e87.1
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 20:53:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784865180; cv=none;
         d=google.com; s=arc-20260327;
-        b=ofA9l/IgFlfetW7/q5WsRrlWiR4VbTBVEdR6Bw0IDCeoRQUDQsedkzxMJddvxAwwed
-         bGiN9KrcU7/UGHU+G5g8fzl4lerQ1TxUkWPIRTGIZjgs6lx4U4/NZORslUu7Ue9r+ypI
-         sX4dUK3E9IUxmXMwgxGJfiTaTeRlAK9su6C2RUEvgflLcEoHvOljTG6PIlypm30afnbW
-         cl7aWq3yggYqtIoLo6qf+XFj+sryA6PAQd0AbXPtj9MoruYCXsLPhJvXNBz3m1aA6p/4
-         /bav8D+NU1C6MfE1bFn3o0Y1Z4Th8S4/jCZvIAKcwMWEy5JHThB7j5jj/LYKD3/BCrGV
-         i9zQ==
+        b=Qd2GsE7a2JSazVg7YSp0Rt2AeiNv5myqxqRei3OqXLk101zZemS+uMG9fE6UOB5GwQ
+         F2sU+kgwqwA1IEir0gtVyyJPxk9drqj6HE9kCcaoX2WkOVPo7qb0oPXd9zbrL9TVQBg6
+         W6KYotVImCroJUYpwRXO4hpfKh0nD2SfKf2q8Fle/neGLExBKNEjFi9KiBTRsRSBSOiI
+         EvAfWf9FblMfPF7oJFK/SV/X6wuSmp851J6GxDVQYuD1O922o8GDhZGWtl+XPWRwg3Xc
+         WFAV505iZRmPIaPTriLN1wcB4YXlPv/dhsfpYCxfp9cCOfmJDqJSE+cx3OtOpSP7vPHS
+         MHQA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=/jUaUCz0UWiUWGL5mMfIye/RyD1iev9TqicEqDX5xhA=;
-        fh=EI9h3kv2pjMWc2Z6LOkJ5ObhZKkfLXnPxO7VzyEiun8=;
-        b=PNyaBWHDA6mi6v2vpQOGuoI/AjQUTQxW97jRsO14AQp+jcVzHX9ZpBVYwbeREqzJ5w
-         FKKSmJV4rWJX8eqvHX4yrCW+Im4dRKDBYorWY8eVFYPuXSnljgVjHDbYs3d6On6fWu8s
-         dqy7dwiG2I0UfPC4iqHyGY5eNKw8kOxAfAQA8Pbvpd8z4V+ufeS4uyDy57LGF0FYb7zJ
-         vhluTD0BTKlmrh+8XaDep+Df5OLV77waRiHfAc2f6NIHDO8ztCSYhSd/ui++j0F37Ajq
-         EX4VL6FlGnGaOhrhysiUmgCUgRgeU9czeQJZvcpWNVnB/sXM+HQamV1KMlIrgGjChT92
-         eA5Q==;
+        bh=Ftf05G7vMLewqh+NOKCr0DXGowg0XyqdXBUvxLAZFjs=;
+        fh=RscmXjB8Kou97Hxme7PF1I6eyS6hPdGu3cCInxRfecY=;
+        b=UoyOAF9jqGwXKG2xPLDJOLoAiT5iEOB2PndP4Ccn99l1Mih28t9MARNruIaszeapG9
+         sYI11h2uvUNQUhQkmU8rxktBZHZq+eZBDUYZxxPuBCbfIGlRBW9Zg2LgVb30C4Tis7Nr
+         dTQLd/Apyg3P6nDAuY6MyhV9Y8W8i4/R4KtsOEIWVopB5UHHs1OGJwkIA7ZT6Z5RrfuY
+         9s++yoWofggIZMfZHOUO7Ck99NLErjpiAA55uTlj0VrjEkOX8gRKxmlOOBh2vO5aHEPp
+         tHZZqomW2GS5j0tSWnbtPXtonoi2DJsjnkDfopUZtDUwetiLo1UXQ/XMqJrKJJZgqZJe
+         I3yw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784864400; x=1785469200; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1784865180; x=1785469980; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=/jUaUCz0UWiUWGL5mMfIye/RyD1iev9TqicEqDX5xhA=;
-        b=bjjrxLZ+i/gWyy5RQCwU8Vfgpz+ENMx1x/29cHdjXXaRjprqEu20bNsYRUGrzO1jdv
-         57xGK6z8HCfD/0p2h3Rh4fsoTIqPXr4iW03mu1af1pWWxCtd2yY8ueP4+vGcgll1O1gc
-         +bDfY3CTFSwDR+8idN2dOZsN0p7tWExLG6Fj2T6oQKhSKdyQ68aQ2dRWcjYVCwrZoLct
-         EKeBCcZ5ImXdhDvWFddpZPelArV8vkSlk/TbX65jo2HW5m09I4saBB27nwhZ2CdLSim7
-         IKcz2nNiXs9lHXGfqZrKPbGFy0OcvkU3IT9UX4zsr4TyKFFAVVy3drKGvCmHal87mTxF
-         inLQ==
+        bh=Ftf05G7vMLewqh+NOKCr0DXGowg0XyqdXBUvxLAZFjs=;
+        b=JsS/YoQg1vILJIMppyaqyKaPGcto84rRQ9eGuFvb1Rxc6q4tT2V+kw74vQU+m6Fg3I
+         3b2tPvZq45UeQJAA9zhOCDBI9A8QtNNtKrOZWGRWcAZQyCbqX/8M3XsZqLhm7YWapefn
+         uW6icMgkzxi2JhQZffDisAiWLieT3WTkrxbVL5mnpopnnvz1R43qScjRdnmVLzv273c9
+         bhBJqmQce2ioaeXheSfyNEm7bJunuGXj4WVOtupAOdX6NRb0xTimlJCYFt3O/lF5k3ps
+         Y920RdDR58JRs3UIxsz9Q8DkQug0+X/WeNbarbGvGvc1WTQsQ6o4+3/GOS7DxBcU/+qE
+         fUSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784864400; x=1785469200;
+        d=1e100.net; s=20251104; t=1784865180; x=1785469980;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/jUaUCz0UWiUWGL5mMfIye/RyD1iev9TqicEqDX5xhA=;
-        b=GMzII26nJcyUoVjSA0taIN74hikH61gl3qy/xaACWBrbv/GaJzgcKMPXkKSRT2my5N
-         ZNW1vDRToUpVnwPdRNhMlSZtpTMeqKS64f2i8WiX7rYD2rpusaHCyJFtYTNW3YfFnfML
-         clLGvxYR0xj4Qm9xas0XuP1wVKRQoCBhFYsum2K08QPKPxNvv3it3A9Sb+Vp7dGyFmtE
-         CYDJSXR5M/K8A+Er+LX8/vEtppDuTov0Ko7IP7v6E8Aah6ps/OYeK6dIbIYnzFwlWY8N
-         OnTCLmsZhL0eCmk/tLhfHpCg8lHQlylnwqm4cbSzq5fVOR5TUS0I9f94bef0VSdR1DyB
-         RYIg==
-X-Forwarded-Encrypted: i=1; AHgh+Rrv+Rv9h3qYMhac2skk+ziiOyUmSI4K+96X+87fJMJ/FUkxyTpLCW84xwtainp4K4M0RMg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyK3zsToB2jm58XIsik6oTVJvKIdby47e+rpMz1FosXS5pRAGev
-	l3sNalfbPsI5+p251qml5NwOKIcgyr/2sFeDVMS1a7Eax+rTfxluCuPkVDamb16Ga4xfQ3y98LY
-	9yIcAH3aO9MCAZZmUVdGexOYT2G1IUCIHJqSJSsA97ZtG62/dgDiLxCCXOz4=
-X-Gm-Gg: AR+sD13+ZK4kvky85JDAiHWAGoM8in9qE/JYBqQkg462TJyTd/g18oLBaSqSvrmT8N1
-	Ct5V+8qkehQqV48cEotvtNB5iU0cvr8QhjSZtORKEMR46HW38lsU48z5SXcHF5zET/Iz3T/dZYy
-	atrFTsdgHizwb6PHXkUrRsImw4CDFv05kRMWyOoROI2JYjyI3SPa0ubnJzC5sJvR5BBqeSwmozw
-	zW497zP8zUXX6euzgG/hLB2qnZQTVXG0YlhOmgVOYIGIb7TOp6WPXKz1Cnx1WO3mCZUSPSvqw==
-X-Received: by 2002:a05:6512:8019:20b0:5b2:a353:e4af with SMTP id
- 2adb3069b0e04-5b2b2f7a8ecmr887529e87.56.1784864399706; Thu, 23 Jul 2026
- 20:39:59 -0700 (PDT)
+        bh=Ftf05G7vMLewqh+NOKCr0DXGowg0XyqdXBUvxLAZFjs=;
+        b=laMmR8+SHDUauV3B/oPPz0LgzAyoUuqp3tjv491k9hASOY7tsl42NuH43KkYJZWXaM
+         LT+5MW/3mV1eyWzMGtULM9AFSfC4G0pjPPPdtDC+1G45JQJp4IIBxQWJV84O+X/s8Vih
+         u21ldKMdzJtE6c+i1n+sWvrLReHYbABSD6IRP/BjOkd+Et7WV0WHm/43rnOetGEGALjW
+         o/4zBFXcYoWLtx//ViRhsy4m0mXsk4u2pKoRHMM32m10lffEN7MFa3wTwdV/ZcfLrrSR
+         mRBBIr9HysRHXaphOOjo8bwgVgpDKlHBSjRZz5zy1ssNwhEhF5ucaOAPYv1bWfkCh4ki
+         QV2Q==
+X-Forwarded-Encrypted: i=1; AHgh+RofPOVPPjyHBNlDOs15RnTVZW34cXmxVv7k5UBeB3dhncpg+Dp2dvRj9YQE2PKMWXVYcZo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCkTd4HsJhHZEoHlQnYS2nF+nhm5zJNXit6gqX7ORLeOPHKT/z
+	nm2ABFznRb2SlxzjK5ePc2EZ3qOpxikw/EHK/U8OiSVYLgIhEQOL/3lHFAzeg9kVnx/vxfUmrqX
+	yShKLQpOaiWH1HuYet5UUp/dfNvMCAlhlWWpHgS+3
+X-Gm-Gg: AR+sD12w/ijWzBm9nzCUPAznujzvRG5pZr8fPwEZNPszY/wiH2GMTn3cmjLFnmXHO3w
+	25WZ5O3ZNPWVlwfNHV+Ny4TEeWNRt8KfkOgxS7WmPhJIKIly8Bx+gbcVj4KZfpChVZpZNxDmSmS
+	gviUjxg9bWOdYgttTvMs1VxpGNCPj8y3qvoUYvwp9jGx3jd6HXBBoln8ywLO4oUbqJxGPfKF+eG
+	0EMe82oE8QZ+f7WCS5LQltVRUyPpsTacdArA9D60+eIna88jDEH5vJuVnvZxAw=
+X-Received: by 2002:a05:6512:3d9f:b0:5ae:c5f2:d213 with SMTP id
+ 2adb3069b0e04-5b2b2f67b63mr1221389e87.36.1784865179576; Thu, 23 Jul 2026
+ 20:52:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260722221634.186886-1-joshwash@google.com> <20260722221634.186886-2-joshwash@google.com>
-In-Reply-To: <20260722221634.186886-2-joshwash@google.com>
+References: <20260722221634.186886-1-joshwash@google.com> <20260722221634.186886-3-joshwash@google.com>
+In-Reply-To: <20260722221634.186886-3-joshwash@google.com>
 From: Joshua Washington <joshwash@google.com>
-Date: Thu, 23 Jul 2026 20:39:47 -0700
-X-Gm-Features: AUfX_myiu_NuloPmeS8ZU_Op_ds7ofTLCGS4h_nAjcrnVJa1oicB1rvJdCghtG0
-Message-ID: <CALuQH+UFf2oWTnrSK6mW4+PAqPTyfwJ55Zr8hNF5MTPC9KX2wA@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 1/2] gve: use xdp_build_skb methods for
- XDP_PASS case
+Date: Thu, 23 Jul 2026 20:52:47 -0700
+X-Gm-Features: AUfX_mzF6EYoyu4xTYrV2QSuc8p-IbH2jKCtRe-AL5nSaRF13COF7cND69QiJRA
+Message-ID: <CALuQH+XRWpy6_jKh=14MfBGgBrxWW+F1wrbNh9zD4Gb=9=Agug@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 2/2] gve: add XDP metadata support for DQ RDA
 To: netdev@vger.kernel.org
 Cc: Harshitha Ramamurthy <hramamurthy@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
 	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -103,144 +102,90 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Jul 22, 2026 at 3:16=E2=80=AFPM Joshua Washington <joshwash@google.=
 com> wrote:
 >
-> Newer common methods have been introduced to construct SKBs in the
-> event of XDP_PASS because many drivers replicated very similar
-> functionality. Update GVE to use these common methods for copy mode and
-> zero-copy mode.
+> Commit 1b42e07af1ee ("gve: Add Rx HWTS metadata to AF_XDP ZC mode")
+> exposes support for the XDP RX timestamping metadata operation in the DQ
+> RDA mode. While the operation works on its own, the intent was to enable
+> XDP metadata support for the queue format as a whole along with it.
+> Currently bpf_xdp_adjust_meta fails because meta_valid is set to false.
+> This change updates xdp_buff preparation to set meta_valid to true, so
+> metadata can be fully used by XDP programs.
 >
 > Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
 > Reviewed-by: Jordan Rhee <jordanrhee@google.com>
 > Signed-off-by: Joshua Washington <joshwash@google.com>
 > ---
 > v3:
->   - Newly introduced. Ensures that XDP metadata is passed onto SKB in
->     XDP_PASS case.
+>   - bfp -> bpf
+> v2:
+>   - Fix referenced commit in description
 > ---
->  drivers/net/ethernet/google/gve/gve_rx_dqo.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
+>  drivers/net/ethernet/google/gve/gve_rx_dqo.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/e=
 thernet/google/gve/gve_rx_dqo.c
-> index 02cba280d81a..907a0c15bf30 100644
+> index 907a0c15bf30..329a2585489b 100644
 > --- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
 > +++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-> @@ -736,8 +736,7 @@ static int gve_rx_xsk_dqo(struct napi_struct *napi, s=
-truct gve_rx_ring *rx,
->         }
+> @@ -882,7 +882,7 @@ static int gve_rx_dqo(struct napi_struct *napi, struc=
+t gve_rx_ring *rx,
+>                                  buf_state->page_info.page_address +
+>                                  buf_state->page_info.page_offset,
+>                                  buf_state->page_info.pad,
+> -                                buf_len, false);
+> +                                buf_len, true);
+>                 gve_xdp.gve =3D priv;
+>                 gve_xdp.compl_desc =3D compl_desc;
 >
->         /* Copy the data to skb */
-> -       rx->ctx.skb_head =3D gve_rx_copy_data(priv->dev, napi,
-> -                                           xdp->data, buf_len);
-> +       rx->ctx.skb_head =3D xdp_build_skb_from_zc(xdp);
-
-Sashiko says:
----
-[Severity: High]
-This isn't a bug introduced by this patch, but does this unconditionally
-overwrite the SKB head on every fragment for multi-fragment packets?
-
-If an AF_XDP enabled interface receives a jumbo frame (e.g., 9000 bytes),
-the hardware splits the packet across multiple RX descriptors. For each
-descriptor, gve_rx_xsk_dqo() allocates a new SKB here and assigns it to
-rx->ctx.skb_head.
-
-Since this ignores whether rx->ctx.skb_head is already populated from previ=
-ous
-fragments, does it leak the SKBs of prior fragments and truncate the delive=
-red
-packet?
----
-
-Multi-buffer XDP is not supported in GVE DQ.
-
->         if (unlikely(!rx->ctx.skb_head)) {
->                 xsk_buff_free(xdp);
->                 gve_free_buf_state(rx, buf_state);
-> @@ -745,8 +744,6 @@ static int gve_rx_xsk_dqo(struct napi_struct *napi, s=
-truct gve_rx_ring *rx,
->         }
->         rx->ctx.skb_tail =3D rx->ctx.skb_head;
->
-> -       /* Free XSK buffer and Buffer state */
-> -       xsk_buff_free(xdp);
->         gve_free_buf_state(rx, buf_state);
->
->         /* Update Stats */
-> @@ -899,9 +896,17 @@ static int gve_rx_dqo(struct napi_struct *napi, stru=
-ct gve_rx_ring *rx,
->                         return 0;
->                 }
->
-> +               rx->ctx.skb_head =3D xdp_build_skb_from_buff(&gve_xdp.xdp=
-);
-> +               if (unlikely(!rx->ctx.skb_head))
-> +                       goto error;
-> +               rx->ctx.skb_tail =3D rx->ctx.skb_head;
-> +
-> +               gve_reuse_buffer(rx, buf_state);
-> +
->                 u64_stats_update_begin(&rx->statss);
->                 rx->xdp_actions[XDP_PASS]++;
->                 u64_stats_update_end(&rx->statss);
-> +               return 0;
-
-Sashiko says:
----
-[Severity: High]
-Does returning 0 here bypass the copy-on-demand safety check for XDP_PASS
-packets?
-
-The gve_rx_should_trigger_copy_ondemand() check at the end of gve_rx_dqo()
-appears to be skipped. By bypassing this check, could the networking stack
-hold onto the QPL pages indefinitely?
-
-This might drive used_buf_states_cnt to num_buf_states, exhausting the buff=
-er
-pool and preventing new RX buffers from being posted to hardware, ultimatel=
-y
-starving the RX ring.
----
-
-DQ QPL doesn't have XDP support, so QPL pages are not in use.
-
->         }
->
->         if (eop && buf_len <=3D priv->rx_copybreak &&
 > --
 > 2.55.0.229.g6434b31f56-goog
 >
 
-
 Sashiko says:
 ---
-> @@ -894,14 +891,22 @@ static int gve_rx_dqo(struct napi_struct *napi, str=
-uct gve_rx_ring *rx,
+>       if (xprog) {
+>               struct gve_xdp_buff gve_xdp;
+>               void *old_data;
+>               int xdp_act;
+>
+>               xdp_init_buff(&gve_xdp.xdp, buf_state->page_info.buf_size,
+>                             &rx->xdp_rxq);
+>               xdp_prepare_buff(&gve_xdp.xdp,
+>                                buf_state->page_info.page_address +
+>                                buf_state->page_info.page_offset,
+>                                buf_state->page_info.pad,
+> -                              buf_len, false);
+> +                              buf_len, true);
+>               gve_xdp.gve =3D priv;
+>               gve_xdp.compl_desc =3D compl_desc;
+>
+>               old_data =3D gve_xdp.xdp.data;
+>               xdp_act =3D bpf_prog_run_xdp(xprog, &gve_xdp.xdp);
 >               buf_state->page_info.pad +=3D gve_xdp.xdp.data - old_data;
->               buf_len =3D gve_xdp.xdp.data_end - gve_xdp.xdp.data;
->               if (xdp_act !=3D XDP_PASS) {
->                       gve_xdp_done_dqo(priv, rx, &gve_xdp.xdp, xprog, xdp=
-_act,
->                                        buf_state);
->                       return 0;
->               }
 
 [Severity: High]
-This is a pre-existing issue, but if the first fragment of a multi-descript=
-or
-packet is dropped (e.g. XDP_DROP), does the driver fail to track that the r=
-est
-of the packet must be dropped?
+This is a pre-existing issue, but does accumulating the XDP head adjustment
+into buf_state->page_info.pad lead to out-of-bounds hardware DMA?
 
-When the next descriptor containing the middle of the payload arrives,
-rx->ctx.skb_head will be NULL. Will the driver incorrectly treat this fragm=
-ent
-as a new Ethernet frame and run the XDP program on arbitrary payload data?
+When XDP programs adjust the packet head, the difference is accumulated int=
+o
+the pad. When the buffer is recycled, it appears the pad is never reset to
+the default headroom.
+
+Could this cause subsequent reuses of the buffer to continue accumulating
+the offset and eventually calculate an out-of-bounds DMA address in
+gve_alloc_buffer():
+
+drivers/net/ethernet/google/gve/gve_buffer_mgmt_dqo.c:gve_alloc_buffer() {
+    ...
+    desc->buf_addr =3D cpu_to_le64(buf_state->addr +
+                                 buf_state->page_info.page_offset +
+                                 buf_state->page_info.pad);
+    ...
+}
 ---
 
-Again, GVE DQ doesn't support multi-buffer XDP. This will be addressed
-when support is added.
-
---=20
-
-Joshua Washington | Software Engineer | joshwash@google.com | (414) 366-442=
-3
+This is not acutally a concern becasue gve_alloc_buffer() always
+resets the the pad based on the page pool's offset parameter. This is
+something that would need to be accounted for in the case of DQ QPL,
+which does not yet support XDP.
