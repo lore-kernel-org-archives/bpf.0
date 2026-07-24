@@ -1,108 +1,140 @@
-Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BD14908AE;
-	Fri, 24 Jul 2026 06:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784875028; cv=none; b=WrGW2cc8pljxY9fDFHV+IH4EMK7D18An/sQVOMeN/LNs1cAKRqSTwwCA74NSoP015j1GUvwTq6BpRbZVL5U8gUSY4rOjyqnaXK32GmALuaAD03ptXxHf/gltsLW/WNHuLcNegmmeQZDbGKDKRUEhmyfiJwvcPtbsUqb6H77DtSM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784875028; c=relaxed/simple;
-	bh=PL+cFJw+A1mVND9tcmXNWtL6i+LZP+ToNTcw6ge+K5o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ts+he5ViPSj9q9auFrY9qzJWJiLXNsCMA5kidRGWF4P9PsBuaYc/sLBL5Xo5deG7aRSL1RUhVt/czodXulVXZf7JLOa7Lx2QZoBrUFEfzwUz9G5YFHuXFLpTybKvkCwao/XlzN9HsAPyYTrcIcG29z9GpEPWCRv1XVMfcf0ALm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=Xb3VqjiR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=E4KRqURO; arc=none smtp.client-ip=103.168.172.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529A139A4AA
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 06:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784876038; cv=pass; b=dwjB0VGed+oBN1GH2fLYy4JscB44jGvdParNsbQUWsJxhvl5daOaumbAsGLmJoOjMSVI7KFmeFS2Rfii3mki6LMuxcyn/raOFxVKutD/n+KvvREPN8gGx8mvVig+MmNolzWP0uzOZFBRfwVrzuFOIdXFtiuzv2qYNl+lHaRgx64=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784876038; c=relaxed/simple;
+	bh=1qBivE5gHnpwRsnieTy4VVDr8iEogrx6wD8+ggW6J2M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U2FeWUEoSDIhpelu/cTg6lnW6ucQ/wCxnzzPhOxuNAJIUAAXTAo/INmgKSyHZ24X2kovS21VP/H/R+oPu5tQsqRuNgptMOhu6CIz/m3xAxwZb5m4je+NMc0zoTXMoHRxdTTslJNMILn9OD4K/q+9ul34niUL2spBDT/6BRyqd6A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LVTfaxV4; arc=pass smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="Xb3VqjiR";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E4KRqURO"
-Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
-	by mailflow.phl.internal (Postfix) with ESMTP id 0305713800E3;
-	Fri, 24 Jul 2026 02:37:06 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Fri, 24 Jul 2026 02:37:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1784875025; x=1784882225; bh=PL+cFJw+A1
-	mVND9tcmXNWtL6i+LZP+ToNTcw6ge+K5o=; b=Xb3VqjiR6ggHWM6NVPVt0/BKjK
-	bXhw8MVXE53YORvHsKkzqFzUo0IXSWczqFvOIWbSRPiwBhh46d2l0+z+48E9jAqH
-	bxe7UetM5rYAxFCSSENb+AqeMCfRX/vMsrPbK9esDop/Y8j4NJNvnVZ/z3g0dcT0
-	L2+pH16ElKFfxaRZa6JWMmCiUVARPMBID0lnFdr4BJNAu47ej/Zc4a2QaQdoB6Gl
-	J2xEZ/u/cipp0ccjwklA+tNT4ScF2nDFkMuszDtZkFZp3wRp8pJm6YNz3cHYLg8j
-	gFrxXGM41jq+Q7ns2NY7rQlvB/4cmUxhTjnwcgLeh/cm7wpJRl2QV8LjJ5OA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1784875025; x=1784882225; bh=PL+cFJw+A1mVND9tcmXNWtL6i+LZP+ToNTc
-	w6ge+K5o=; b=E4KRqUROThBmzor2t/zYxQJPB0ip9oJCkwPIx7cIxB9Ker+R+Cn
-	N5Qhu+Px3qugUOgFYhTi1FeLsql8Ia7evopSC0nShTfPNGF6WUOM0YsZjbcrR5tT
-	T81nmIkrQZb6Ke4YWb2yQksAPjjSD8bZOvlpm61vSSjusYSklXtqDFfZbcxDXqDa
-	SrJC/zFzC+SldTBgkkefxcFfcpipLKfvr0z/Rw+0jC4GoBmW38pOmBoC+XuCDvE3
-	iN9/DKnMKgVXZblyIWkWPBZvtgTgaMozBLRBdPDW1d1cTWcG3v+x2rWsEzN6qRno
-	qLPLV55uDV95wFR0kEu1tTQRZyYyfGvoQpA==
-X-ME-Sender: <xms:EQhjajIahRpDyx59YVAOkO9j9BUpR9uxdf4NYmtzk1PkrESKBsCdyA>
-    <xme:EQhjauHNIWSuwlIHsO6uzb7ivHVBZoemkAjWhePEi6brT-Uf-ZGGzNBKMW50p8xYF
-    qPz89Bhiw7xrvpSdBHTLPfVZ5ZZ-fJ_4fjIu9lmwqFLDiNK>
-X-ME-Received: <xmr:EQhjakoEPLUhORWZwQ_c-AwNC_8xjyXi11gYR8EY2Qqy7l8h3PyRGhtHyOLOrsc-CR_SEeeBu1q-xLerES5QGQd5KA>
-X-ME-Proxy-Cause: dmFkZTFX5iPjis1+08aMQAfG2anV+zBI8zmH41Y47VAyCiJWTyfwZ7ELMO3BhcMlLZKfMW
-    fDTWyOy+PZWlS7Kx0pAXG7czUqKvrgCi4q51xKfz5cJLLsvJYphO9ETeTeFDNZQdXHYgVe
-    im9wGVk+RJ1YLmeL6ZP/396+9lUxfFYoPLWLGBYHqgNXSvw/ruBoPyxVtLKOQH5nhRPvdR
-    fPHAtRIJhLDkZXwHO0SBQfKq71gLj6p7ksc4llFPpIUa4UxdRtbYrMBU2cLrxeU9FSZFR6
-    T/Dl/+RyngkiZN++qOZL1XZFDdA87kiubCGqiBzUY50/fHnnxgbpsi5T71PF1j+rW+aWe4
-    U+RWmDRzPaaUjDb67h3Hud9a8QHWQXPzNYpCRWV0gfiL0b36vn73tyFYXyLtZYxf83lYex
-    BAYrhOEH2yZOV45k1hcrx4tL58/D8YLiPf3UX+jOKhtBVEig5hCZkJNc3xbnIlmN0alFY3
-    wTvD8qtj/WfpTIXxH4MRj27kg+Fl4lyOH244mmo+idDPzQvNCNCOiCZWcZEOdpBnCLG0OI
-    7EnbERLSfCi5pK3SzHsEvYSN6XmziCBTZ749fxUlpBbovtejWaVQHI6IuL6sGiv+sVlwOq
-    rZs4nn01uxi611kMHRlCXh1MR+K5xAior7grBjFf5EjOl6Es80nyEMChUgEg
-X-ME-Proxy: <xmx:EQhjakNHbpMmHIZHJawQiTeRof7s-JdEiu5ucVVYtVXP7Oaw7YrObQ>
-    <xmx:EQhjakpsS4MslApj7D75HsFHPWK_7d12Z9JvFaPFyahEUKvzLRLgoQ>
-    <xmx:EQhjaqnYAKr85uSFUQ5G6PT_zyUwMPJ0HXTlHLpJiecCpxUogLlgAg>
-    <xmx:EQhjakw00X7KtRLLhmGIgmuXgLfVGeh3u-g_-BfU5q9hJUYEBHj7NQ>
-    <xmx:EQhjauW8KJG8te-aYgxBMw9UXPqEx0i5V_L5rEes977ufK1ky-lM76Yy>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 24 Jul 2026 02:37:05 -0400 (EDT)
-Date: Fri, 24 Jul 2026 08:35:42 +0200
-From: Greg KH <greg@kroah.com>
-To: Min-gyu Kim <gimm78064@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Ilya Leoshkevich <iii@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>, bpf@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-	regressions@lists.linux.dev, security@kernel.org
-Subject: Re: [REGRESSION][SECURITY] bpf, s390: verifier/JIT mismatch allows
- unprivileged kernel memory access
-Message-ID: <2026072436-carload-untaken-585d@gregkh>
-References: <CAGKGUvm6sC9ay98zsYJS1xwB9+qUwverqAsAAwpVOpmqFpEy5A@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LVTfaxV4"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c9c26a5fb98so71728a12.0
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 23:53:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784876033; cv=none;
+        d=google.com; s=arc-20260327;
+        b=PqDJDVE7j/j4eb2K2jGieV2asCyzx0OQ+NVFmqvSw9r3UWdwMn0pq6Q6yE/r/yrAYA
+         0Cr37XYPlB7X91CbxNcLOriubVTEA3+9KiseYkc5M1UOQ6B2Wsq+IpNP29rXxCECSdpd
+         p52VRdasgglcMrMSKEwP47eCx1eKWvxr8sJursyV5yyH5M6Uv9K0nSszam3k50BV14xx
+         WFwdKnaS8dlvY7aubiXLnIbPpa4ygIKauXKbukuBwsj6CxbG6gLDecHzOF01j1DcUuER
+         H1aS1f3wCxegkd1+8AUcQ7xOdzrJ6oAPyCQJBMlwray16IxWEqV2VeSuqi56MzWPesC7
+         4R4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1qBivE5gHnpwRsnieTy4VVDr8iEogrx6wD8+ggW6J2M=;
+        fh=FicWmH1SogLT4ffVWiE3nDl3sbJCCIgKwY0CdwrVyPA=;
+        b=UDQr5J79mVnn9/HndGi9NHb3zgn0pPMB99cmBMi+djdlC8BSG9nqnwgkNGlpMgPQWc
+         CtA6eigX4dMEBikb/YEPB3e4snbsLfyXvS0vnbhkkMfPhAyZ6UWCcpG7pVVuklMbcypM
+         2kfi37F+9S21cyVIQ+pX98hjSUfhqottumimPrDjcuV8fiAeK5Xthe4PkSzn5+TzGYk7
+         rfdQe5VMN+dgJOCWWBeww3WvOgdpEkNPAN5SfYPrGr2g8xPHAxtiKZyHxZ1qWNtGwtYK
+         Zhbl3H4RFWx8ist7zeGzEAfpMSn8pVhA3JVDdGPBYvNLW3iSvoLXOI0k+StEWTV4m2uA
+         yzSg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784876033; x=1785480833; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=1qBivE5gHnpwRsnieTy4VVDr8iEogrx6wD8+ggW6J2M=;
+        b=LVTfaxV4tmSvA0snLCPFwyFqd0t0895ohC/4lET/FZvS4s6h/fjvEwsUwd39RrE8FY
+         3TSeyvhyxVTCPtpIbqeEhVrqXQKaLrM80yADLxdFYIXxtNvElBdduPBrGQcLfAA8/hzG
+         +/TUE44+baF03gMXzga5UhPQOgmq9BsKvRtMyvsm2FtV8YBugz6pYUptsqp9HgAcUDGe
+         Sra4qzKIzhMT5NG0E22aF//JHCiK22mLEq7lMdpTZhn0rd2TqhmoYPDEsyhlSeZH5bi2
+         063EkzwG7xteum3Nj3m7GoLXffQ6ZUC4uKKp9ubrLwK5ipQuJ7/FyyEmPXeYbpSuO4ph
+         Bb9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784876033; x=1785480833;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1qBivE5gHnpwRsnieTy4VVDr8iEogrx6wD8+ggW6J2M=;
+        b=AufrYcE7msw9KZ097nB2GsF6EYEOZ2ecc62f/4va83J+qbx8pK7xY3t2GtZE/ZnkSR
+         Ssj8NvqQyINuUaxvKISzbOS5FQJNHz3eHT6AUXYdxIUXInXOqWeocfOOkzjqW4oi/vjp
+         WZCVpZgi2y0hR2uSv/HvoWGn7cL+9qAFliQWTHszOIpyWsNoC7HqI/SuNkFnhTJXk5XJ
+         fIcTOrdC4Uib1KDYQ+G+bK0dQfTmEjyrQq+ITRZLQDtB5PwAdnJ2AwHcJDJD87xrDITl
+         DmQ1JaBUc938RXd1ssDzynoe/KXki1Y5ozYSrOMNMHolI5zaI2Tf/MdzmQIMiND7hgTh
+         13BA==
+X-Forwarded-Encrypted: i=1; AHgh+RoMuF/C7c740iz29QUVQSIKFVMEpZ3gjfh+rEan3DddlroaOlLwRcZRbRlZuqO/KFcCfQc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVx/Jwjy6EEJdkZiQMsgpLTVFQl/VR36hfsfz1xRMPrsi87Th7
+	+kGFifX9ulOATqWWlVrNXl+LiBU+xJJNtRyq3laUsl60UX+3JOB0S0KPrggHw8WzcwfCK/QPkTJ
+	PUYe4AgWnfHog3rk7OchWkSWemk7ir5Q=
+X-Gm-Gg: AR+sD118P/DXHP1+108wJ8u+1cVN0NwH9ULew00xPyYeqnwLBNPV2dk9GFZo37YbMKY
+	9Sh6avjV2CWGsmQVlB1BuFEDBfARKeiaMto9P/Fko7ldqdu60Ge23w95hDVOSSeoFL5TJHt+vbu
+	58xWO5ocNpM/XbKgQ5i0q587K8d9ibCcNNqsCD8snj9NsMi8KRL/+B10x2q99yzNttwK+uOhJOl
+	FMA+sFHMblnVDOujgL+y1CMsmwOOcro0EdCqNKq8PGMUhSY+zgDSwEw2b1gwxov21EGvFbvSSM=
+X-Received: by 2002:a05:6a20:6a1d:b0:398:76d4:c7e9 with SMTP id
+ adf61e73a8af0-3c44ccfad68mr6602250637.35.1784876033443; Thu, 23 Jul 2026
+ 23:53:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGKGUvm6sC9ay98zsYJS1xwB9+qUwverqAsAAwpVOpmqFpEy5A@mail.gmail.com>
+References: <CAGKGUvm6sC9ay98zsYJS1xwB9+qUwverqAsAAwpVOpmqFpEy5A@mail.gmail.com>
+ <2026072436-carload-untaken-585d@gregkh>
+In-Reply-To: <2026072436-carload-untaken-585d@gregkh>
+From: Min-gyu Kim <gimm78064@gmail.com>
+Date: Fri, 24 Jul 2026 15:53:41 +0900
+X-Gm-Features: AUfX_my_818fZNEZbBLLr1Xn5hBLUxeeu8JcRW55Az57jmjGZCViGOAZ8x97MLQ
+Message-ID: <CAGKGUvk6sOo4kMV0z20Vaq-eAAJn2t79Hgfhuc_sYLoC+rvqTw@mail.gmail.com>
+Subject: Re: [REGRESSION][SECURITY] bpf, s390: verifier/JIT mismatch allows
+ unprivileged kernel memory access
+To: Greg KH <greg@kroah.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Ilya Leoshkevich <iii@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, bpf@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 23, 2026 at 04:55:12PM +0900, Min-gyu Kim wrote:
-> I have not yet tested a patch.
+Hi Greg, Eduard,
 
-As you have a reproducer, please create a proposed patch that solves the
-issue for you for us to work off of, as our security documentation asks
-for.
+Thank you.
 
-Also, as you cc:ed public mailing lists, there's no need to get
-security@kernel.org involved here.
+Eduard has reproduced the issue and is already working on a fix that extend=
+s
+compute_live_registers() to track upper 32-bit subregister liveness and rem=
+oves
+the dependency on reg->subreg_def.
 
-thanks,
+Once the patch is posted, I can test it against my reproducer in
+the s390x QEMU environment, run the relevant BPF selftests, and report the
+results. I can also help prepare or test the regression test if that would =
+be
+useful.
 
-greg k-h
+I can additionally test older kernels to help determine whether the issue i=
+s
+triggerable before v6.18, as Eduard suggested.
+
+Best regards,
+Min-gyu Kim
+
+2026=EB=85=84 7=EC=9B=94 24=EC=9D=BC (=EA=B8=88) =EC=98=A4=ED=9B=84 3:37, G=
+reg KH <greg@kroah.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On Thu, Jul 23, 2026 at 04:55:12PM +0900, Min-gyu Kim wrote:
+> > I have not yet tested a patch.
+>
+> As you have a reproducer, please create a proposed patch that solves the
+> issue for you for us to work off of, as our security documentation asks
+> for.
+>
+> Also, as you cc:ed public mailing lists, there's no need to get
+> security@kernel.org involved here.
+>
+> thanks,
+>
+> greg k-h
