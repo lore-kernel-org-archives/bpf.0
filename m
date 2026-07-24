@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04A5380FF5;
-	Fri, 24 Jul 2026 21:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F2A3C1097;
+	Fri, 24 Jul 2026 21:33:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784928828; cv=none; b=fcnAtJdd7U4dYn/g+nlYncYB7/Yg2R2pT3figwODHjAlNVTs0NQ36QPbZGBFRa52cUJNd+Od9ZIvLKSVxMzNYcw4C9IBqWG61kq4x0SO1qSWOGPpJsTThVimS9KhD/qX2InauU2OBfBKKUP44UMWroGMNlbHG+j4sxuprGLYfNY=
+	t=1784928829; cv=none; b=g219atdXE7QkSqSoOsVbp9r9Topb/Dz2Em3rtTCOThN4ir1W0RTn7Dk9TWjaMkTVIuxexhkiQz4s+G8SupPnpo3k+kpN7PAkfhGTL2f9Bsw9ifhy3q+EWbR/6gGEglvEpUXECtiMCnmCgqOnSRSjc3iUI6fhVUo2qanxTx92I1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784928828; c=relaxed/simple;
-	bh=CbRXQuRR+arCZi/csc09MOw9Ae+OTA2AcgoaNCY+o8U=;
+	s=arc-20240116; t=1784928829; c=relaxed/simple;
+	bh=Z5uNbuyLMJFjarfoUWbEuxpvwb+ICwQ/r8CHQ55qZug=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=i2nPVmuafkPJNcO4Pv59w12zQBoIN3eXWeApSAERn16TiCbZaAGOmzsPVCU3jdXu54tFuBIj4qBY1YqfIeen3RZuLrB3yfqwLiq/GHWtvG7cxqALNi3zk3hesYCLznNjIlzDWwMAGf8TcsZmc7pYU9hYvFF2ZFvEMBJyjV4Y1Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lIW69292; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=dAWegHgGdaiMvhSVdZDj6ljJRaUHoT9lsRE61WcXlugEbmDWXEHFeiMb4ZpZzdhv+MPxRMPNFy25sQtxjP4rrtOsXyZzqjsF+7iOvhEzxY7f74yQ4l6LKleuNHsufl0xGzU5j1b80uggzH8Ml78MdvDB1kY6hXDaLYjKKs2stU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VBz09CkA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lIW69292"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 732EE1F000E9;
-	Fri, 24 Jul 2026 21:33:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VBz09CkA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC3201F00A3A;
+	Fri, 24 Jul 2026 21:33:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784928826;
-	bh=2MAjy3sRqglktAMb9kLeD58RV0s6NOxHFAcD1dDrH3g=;
+	s=k20260515; t=1784928828;
+	bh=VdjY8AbKL9V8VHyjNSSrDBurZ0IIjaJqBGK1hxMPvQQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=lIW69292V6XWCO1EmdWjQsOE3XWpau3LHf+FpZmas09nVZlgsz6FX4/+OH8OACXg2
-	 7JHMU/V2+L14lpJojlt+QZWh2Sol7fzTJER9XnsVDB3QjSxn1wd91cCKov0wj9ZBJK
-	 J1rAe1rcfZDgo7nOjDjs+9vbp+mMXvYgJ39DcpBjGf7yD1N9WEh1utRvgjWD+axdeJ
-	 nHvW9xADCZZTl/+kKu2jLY5V5LiTJ/nk3QvaFmxNpjU43doq7zz05pn4cByJZ+jRw7
-	 /21zoLCP4tgQ6KZ7xezGjHCJT/mb1o3/l/h1oTBLQL3+lZ0HU7usmrCE2azxOyClPF
-	 fa7p/cNNkf0IA==
+	b=VBz09CkAxqfdOruWYuYhsUIX1ybFS5Ld+7DrFI4sg+mKuK/262TEjxIW2vzkQWw2x
+	 De8KZsWWzaJ42RYuoJwwCUzDCELMpWHmpakBq0byEyGBzEpHUa84D6Mw9kmCs89CLB
+	 8JK3hD1D0fV88TQP4PvvRb1N2suOsEcIkXSQFz4RdOdbMAqeKjgN9MZUXnotus0pek
+	 /90WcuU8Evu8/7aYfUPzSyjoqnIG98XOjB60ywvJq0Gzgn1eYQ8EN4nyWFVJySjdV2
+	 HVfoIofcTNIlTMfsPBWfjbacwd4UHktYGGq1ueWhEX9544K0TIpqpJDLab5p0VAKzb
+	 oUoNY1W80Qymw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0B9A38111D7;
-	Fri, 24 Jul 2026 21:33:14 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 567E738111D7;
+	Fri, 24 Jul 2026 21:33:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,13 +37,14 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf-next 0/5] Fix several issues in test_progs.c
+Subject: Re: [PATCH v3 bpf-next 0/5] selftests/bpf: Fix several issues in
+ test_progs.c
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178492879339.3315717.9218051815031997167.git-patchwork-notify@kernel.org>
-Date: Fri, 24 Jul 2026 21:33:13 +0000
-References: <20260722074748.674080-1-yangfeng59949@163.com>
-In-Reply-To: <20260722074748.674080-1-yangfeng59949@163.com>
+ <178492879488.3315717.16767263989748199323.git-patchwork-notify@kernel.org>
+Date: Fri, 24 Jul 2026 21:33:14 +0000
+References: <20260723085100.482147-1-yangfeng59949@163.com>
+In-Reply-To: <20260723085100.482147-1-yangfeng59949@163.com>
 To: Feng Yang <yangfeng59949@163.com>
 Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
  daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
@@ -56,28 +57,28 @@ Hello:
 This series was applied to bpf/bpf-next.git (master)
 by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
-On Wed, 22 Jul 2026 15:47:43 +0800 you wrote:
+On Thu, 23 Jul 2026 16:50:55 +0800 you wrote:
 > From: Feng Yang <yangfeng@kylinos.cn>
 > 
 > Fix several issues in test_progs.c
 > 
-> v2: Fix several issues raised by sashiko-bot
-> 
-> v1: https://lore.kernel.org/all/20260721094404.593127-1-yangfeng59949@163.com/
+> v3: Add fix incorrect error checking for pthread_create patch
+>     Memory allocation null checks for the worker logic are relatively complex;
+>     remove them for now and submit them separately in a follow-up patch.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,bpf-next,1/5] selftests/bpf: Fix double free of subtest_state->name
+  - [v3,bpf-next,1/5] selftests/bpf: Fix double free of subtest_state->name
     https://git.kernel.org/bpf/bpf-next/c/791841e038c4
-  - [v2,bpf-next,2/5] selftests/bpf: Fix missing allocation null checks in test_progs.c
-    (no matching commit)
-  - [v2,bpf-next,3/5] selftests/bpf: Use calloc to allocate subtest_states
-    (no matching commit)
-  - [v2,bpf-next,4/5] selftests/bpf: Fix memory leak on subtest_states reallocation
+  - [v3,bpf-next,2/5] selftests/bpf: Fix incorrect error checking for pthread_create
+    https://git.kernel.org/bpf/bpf-next/c/b04b8d4e198a
+  - [v3,bpf-next,3/5] selftests/bpf: Fix missing allocation null checks in test_progs.c
+    https://git.kernel.org/bpf/bpf-next/c/12b362b2f06b
+  - [v3,bpf-next,4/5] selftests/bpf: Use calloc to allocate subtest_states
+    https://git.kernel.org/bpf/bpf-next/c/a813ad2185cd
+  - [v3,bpf-next,5/5] selftests/bpf: Fix memory leak on subtest_states reallocation
     https://git.kernel.org/bpf/bpf-next/c/06efb01c6530
-  - [v2,bpf-next,5/5] selftests/bpf: Fix potential NULL pointer dereference in strscpy call
-    (no matching commit)
 
 You are awesome, thank you!
 -- 
