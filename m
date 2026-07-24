@@ -1,129 +1,204 @@
-Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EC544210D
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 16:02:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784908948; cv=none; b=j9oYXIMEgnZ/Fc8hC8I8nFvEJoOw02w7wr0OoXbmJZlCdsjpgRe7iBBbDGHYzfDe4GB1mUg1dtUkkTKy8fh/69Ikv4wquwfy98KHFm8s2bWisvsGlig1YLftNowsxxLm0kOpAdmvvAtKOoNaz7qRE5DpYyjA3YQF9v/tBQgwRv0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784908948; c=relaxed/simple;
-	bh=SiOlZD9NMIJEcVTScWhRNja0TOvwP7qLk8zDIbXcowE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nM9tIx1/Rw58ncRbLAkKy7xgqcCcMxci84lu2rJalZ7yG2YiVSXfwYyQVf1IGzFEl7hBW5G/N/yiuo3Vcj4KakR6GM730Mw+9/AXlO0y0OEf//rDP3bv3weFRSZ7AQh/sbYV/qfvnFmqMsao0ONiMt6OYRvnwE/7bvRuVgohV9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mVCxwjo1; arc=none smtp.client-ip=74.125.227.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8BB3B47E0
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 16:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784910564; cv=pass; b=U+PYo1HDi1sO6RjBPe/uzQQKwMmdM7VGoY1PGDich/S41MJae4FOP2FF3VsOsR8w/HoqphHUKCDbQZCBKceHuF6ryKjQSWPDc0dObvutRkMWi9MqbPnWf8HFe7F3NwYCY1tP+B/N/JbMw71/x8mdKxm+Ytsnp2wropJeZUGG5XY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784910564; c=relaxed/simple;
+	bh=eiLri7nlGvjARufQYKavsqrnbicdoE8hXtUZaLQQeSw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hrGSSEerQvOMUikZSDZ+KYQVvJxvYgjTeyuwnCnY37E7FmYaTXFV4WE20jpEdN8X+ImWEJrwguqu9R4yCyfm8Z4cTXm3OSY+yhDONSC1E9XFzwdLVRFpUwVG5qaCNKG7O47L3B5lre+/ivEFzlVKzSOaM4hubNQAkuC/3jeCIwY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ld4zF+a/; arc=pass smtp.client-ip=209.85.128.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mVCxwjo1"
-Received: by mail-pj2-f11.google.com with SMTP id 98e67ed59e1d1-38dbe53179bso201256a91.0
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 09:02:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ld4zF+a/"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-81f52945098so7512317b3.0
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 09:29:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784910562; cv=none;
+        d=google.com; s=arc-20260327;
+        b=MTTyma1U+V4urVH1ye9M0FMzEVrbohYFnAxfwIy86SPBsMg2OUZBWpJBdaNb6M1KwQ
+         Y6OeddASD/F8hidHRMWSJeW65HlHZsQ/abhBsep/iMeJ5hPny/d0I1rgbIA0RVSc2Awk
+         tZU77kmxAAvY7wqI61R7Oo8Vf2Gt8IW9WUuH9rbvQBFM4aSeFf1O+gagV7ZPPwN0461U
+         +eVf6i5boGmR7FWUwvZ6SKcQqiT918TdP+YVHL01NJsfYVEGbcSG2VtlSLVEuq703LhT
+         pk77dC6DkDFZcKc9Zv9Ud0IlaYo9UbjAUxsKv5gxYuo++W0iInNg3OGxhhZ0/cF0hogX
+         KETw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=o0E+HrKhU17MYywCk8O/iPWCgtKjnfsVN5oK8hiTFYg=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=NFt9+EfPmu3Gcvl3UFNE2odISFaG9eRMkiH5dcZuByJ0QO1SfjL/RdJAMlx7Mjy87k
+         n+zJrOouHUlfDkOQzmu5ADBIfA7LIObTTBZhLFz5EdgIDqyODIm6qQ8mmj6DOavPQZj3
+         Ba4crMsDlF5mm9rSvLMXuxovKMdWeu8IdbglMI00GDTeMz3uhDr4xuEHEhrmS95FpePP
+         3OhqUqMpYMMJwVx9L6fjMW+YFmkw57hMQsqTh8ligvJduJekfQu31FnI0ZYD3X08dWGM
+         I04z3OlH266WSkY5D3o7FoFpYJxEayxq6djpkjNxTk6rS84OT/vPYGDwyTIF0rKSHHPv
+         4emw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784908946; x=1785513746; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1784910562; x=1785515362; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=CqElJuXGgCpnkfoHNKy8qMyBOhibQlCl5yeDj+8xAO0=;
-        b=mVCxwjo1++wlgH8T8OWNnH4JqmNVJQQcRDUl2fWi1dCzgA531fuJsc+uv5z1wWWxTv
-         JIKx8lrBBqn6FBYgVTe27A1vvQyDwGiIpLKIReWZssgwjB2JtMoF6gPMrk5m53YHsJuc
-         X/0wx80ui4BtQ0/PMkvts6mLUc84EKk4ZCv7RCf3FMi2e6xWedW+R8llKPqAq2NBsayS
-         DgKjbbtfCNgi3VcUkFCdROx17K0Q9QSXEutZGGOEhWAMXmTbV5fbeDuHnudL0uiQrja/
-         1QV/XeM5BvP4gFeJAZHf/K58PvXgwiOS26UcvJF6h+i4xtKpWMAB/e7U2r/i3rFbGlCq
-         KKNg==
+        bh=o0E+HrKhU17MYywCk8O/iPWCgtKjnfsVN5oK8hiTFYg=;
+        b=ld4zF+a/9oaiNcLI5+aP7ccETYoyM0o59OrjmaqrcM3dFa8jDNOxHbgn3HDiL6difN
+         n8bbd8+DkgdXDTfUp7nhCMhvO9xk3LZ23H+cqn5/6xxFFirSEFqze4tg/uncQtmu9laT
+         cOenmNfNK5mRNOS4Z+aS7UswDv3iz+1joDIZCEKW4PihaJHtl4Rf2KOtU0ew+ACiNRtd
+         w0UtuXU9mn8hxCZYx2oOThRyij6JMLVViBE2570l2cmhMHlIvK6PMzxzbL99PCqZPuFv
+         /xLl/8WktH/50TEwts6AbjU+BnjZl4jnqbldnoE2klSgIBOT/f0iV9898CW5kVTnfWSn
+         sX2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784908946; x=1785513746;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1784910562; x=1785515362;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CqElJuXGgCpnkfoHNKy8qMyBOhibQlCl5yeDj+8xAO0=;
-        b=BXmD3ZYjnRaiJW6hMBm+214XBFj7j/0Itgri5lVZ0G7bdegGNF1RotpJ0koFtP0VKT
-         /Gu46fUTThOq/vMs0suUWpvPoez/qjnF9EY4pWLoEK/Gb8MW5czaamLJL/wacxI6VE5A
-         p133QhjKw+S3Z1E8blCPVBHT1Im1VqjN040Vk0B0ubVYDr+FbH38fkSAm8FALEHwjj0Y
-         bg/96+iJt5jyxiAhLh2rhMgJqigD2/ng3qej3pH66kWWHgs0ZcaChj+14OzsFnStLKvA
-         2zGdUkOrfNrJmW2/jfPF9PbCK5OH0z9CWiBFJbLjmFIMB9lXsj8IEA9m+T8ouxPAaA3a
-         U3YA==
-X-Forwarded-Encrypted: i=1; AHgh+RrNtD2F8ZOwogRAZt2xNyQI0DXWtwcMmBgqOulwwwU8HTpOwMaLSzI6WMnnRCSDB1T6wK8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0uhLalqntiWSPCBr0dejoJc2ypmEcy1EFCiPkCYkXPUQJH/LE
-	1uMv69p1lHFQ5fswNtELKXOmkDey5CiPzSeixaeUgCPq6YLtdfmUVu/R
-X-Gm-Gg: AR+sD10AMn+EUed2GMx8KnFAHECzvoSGRF5/mPLMSfSt8LF+6CpnRaHNoIilPTm55Kl
-	kebw/wbvu+3NaCjaMlWbjHFZwii1QoTsqTZ7lgQhBriGAkUDOlG/hVXSJiUUx751D68EhO6kmmG
-	a0x4QKYqbSKFX+CH3//wM9LyyuzPI6w0yTTelk+7NGzX3a/j2nCqq0jpXRmse0iicBkOaf1n7E+
-	FtojDHBiwleFyc3DMstPCRtvs7ZYya8BNHh/1p4vLkoKI3gJdh+kppWPDiNGmi2IK6vaC5nA4rq
-	hZmOt6FLBIdNQeoVnkpx2Eh/Bhagdm5BMIHn/LN8SgaWtZy0QFgreYhDY3MDOiQqsXJU40l1+Ut
-	HXwNOYCB7UgkrKBbuOl0jeM9+iydGXHdfFsO1RPUEDEG87wOkKGqs9GT3N31JRPLENI96489VBC
-	ialmoz
-X-Received: by 2002:a17:90b:2787:b0:38e:9ef9:eb97 with SMTP id 98e67ed59e1d1-38ec651cb31mr7625553a91.16.1784908946308;
-        Fri, 24 Jul 2026 09:02:26 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:5::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f04175831sm1712388a91.11.2026.07.24.09.02.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 09:02:25 -0700 (PDT)
-Date: Fri, 24 Jul 2026 09:02:21 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, sdf@fomichev.me, horms@kernel.org, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	AutonomousCodeSecurity@microsoft.com, tgopinath@linux.microsoft.com, kys@microsoft.com
-Subject: Re: [PATCH net v2] xsk: reject undersized tx_metadata at runtime
- validation
-Message-ID: <amOMXI2j-3tLiej5@devvm7509.cco0.facebook.com>
-References: <20260722041326.75199-1-blbllhy@gmail.com>
- <amEBJTKhUJHaAsBG@devvm7509.cco0.facebook.com>
- <c3de7856-d9d1-4bb8-ba4a-a7f967c767ae@intel.com>
- <amJL48yvoEcOLcHw@devvm7509.cco0.facebook.com>
- <27dd39a0-71bd-4cff-8e72-6aa45df57dff@intel.com>
+        bh=o0E+HrKhU17MYywCk8O/iPWCgtKjnfsVN5oK8hiTFYg=;
+        b=KMkwPF1CsZTpFFLA82Rv73O/nIVB1fbp0J+uJbh+dsAmH46ImnsXUXQ4zwWFj+7Oic
+         D1BERKIIFn6b1Ko5K1QsVw3RTngnS55kLqALCgbzFWWvxCUqA+YGqqiDG5gkyFDNQOez
+         ypee5IpsxZGy9/dVisTUOk6uSJVcMTYuW/dwwlcUdqzW/uhBJ/ApkLApfrYtIiYXkvS0
+         /IG3cAV1jyZAsTWZ0xPHF+fdJbx/lMiGQQEBbP4cKts5o+oWVK+FLFmtEYgRBDbK711H
+         dHBSnkEuNgh/q0LrlddpnvUj8SjgRHinwmUYn/TnQy9enM0NDgzX6sWmtrNKwXQJqLEH
+         iXaw==
+X-Gm-Message-State: AOJu0YxCA33+GHppbl14aHtfKkZn063jVk0V7ONKYkNdrNvJJsRAx1od
+	LWl3PR444qkYFda+q8xuNIH//ffRCUMHZcGJoThZU0QVgpP2GIN0v2346m+uB/JqP5ZjfZq32XJ
+	SoIeKUHwhbtjkVuSsKfW0IdQIjjPBPOwG4CzV
+X-Gm-Gg: AR+sD13FAnDRTkyEFEg7vksYGZ0ZjNHexfYi0NbwwOD7UrgGi21qArU+s0HUuuYuLqx
+	0qYi4oJDf4A1I//1BLekPrFSATcXJOWI4MMt8of6orcPtiI1xYCKp0GhXpYmVikrp5MPGjILKbC
+	FOASmvV38Fsoe4IM0mDbilTbPF2RgW8ukeNsm5rWug6jL76UC7m60dBf9tmwbCDwqELwfq2PqfG
+	/tSe6ag54Z8dbDGUYTNVGokVKegNFkT8zNNHCeJ9rohzDmZtt+1vbWGhEUiyA==
+X-Received: by 2002:a05:690c:f07:b0:81e:c38e:4bf3 with SMTP id
+ 00721157ae682-81f63bcff14mr3477987b3.26.1784910562292; Fri, 24 Jul 2026
+ 09:29:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <27dd39a0-71bd-4cff-8e72-6aa45df57dff@intel.com>
+References: <20260723050806.1158442-1-ameryhung@gmail.com> <20260723050806.1158442-18-ameryhung@gmail.com>
+ <20260723080103.AE5CF1F000E9@smtp.kernel.org>
+In-Reply-To: <20260723080103.AE5CF1F000E9@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Fri, 24 Jul 2026 09:29:11 -0700
+X-Gm-Features: AUfX_mxON2WAiG3iq5irnRXSgNH4j5x1p07ciXkqimDB5AI19VYzK5IjC1ulqzs
+Message-ID: <CAMB2axPrsX+2fbKf--2M7oGBW68oWK1K+Ftt=SQpiYrcT0zvSQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 17/18] bpf: Classify scalar kfunc arguments
+ from BTF
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 07/24, Alexander Lobakin wrote:
-> From: Stanislav Fomichev <sdf.kernel@gmail.com>
-> Date: Thu, 23 Jul 2026 10:15:15 -0700
-> 
-> > On 07/23, Alexander Lobakin wrote:
-> >> From: Stanislav Fomichev <sdf.kernel@gmail.com>
-> >> Date: Wed, 22 Jul 2026 10:55:17 -0700
-> >>
-> >>> On 07/22, Cen Zhang (Microsoft) wrote:
-> >>>> There is no metadata length check before accessing struct xsk_tx_metadata
-> >>>> fields in both xdp_umem_reg() (registration) and
-> >>>> xsk_buff_valid_tx_metadata() (runtime).  Thus, an invalid small
-> >>>> tx_metadata_len (e.g. 8 bytes) passes registration and later causes an
-> >>>> out-of-bounds read when xsk_skb_metadata() accesses fields beyond the
-> >>>> declared metadata region.
-> >>
-> >> [...]
-> >>
-> >>> @@ -773,7 +773,7 @@ struct xdp_desc_ctx xp_raw_get_ctx(const struct xsk_buff_pool *pool, u64 addr)
-> >>>  	addr = __xp_raw_get_addr(pool, addr);
-> >>>  
-> >>>  	ret.dma = __xp_raw_get_dma(pool, addr);
-> >>> -	ret.meta = __xsk_buff_get_metadata(pool, __xp_raw_get_data(pool, addr));
-> >>> +	xsk_buff_read_metadata(pool, addr, &ret.meta);
-> >>
-> >> That effectively disables some micro-optimizations that were the reason
-> >> I created this helper -- __xp_raw_get_data() is inline, while
-> >> xsk_buff_read_metadata() uses the external version, probably some other
-> >> stuff (note the underscored __xsk_buff_get_metadata()) =\ This function
-> >> expanded to have no external calls on clang -O2, with this patch I'm not
-> >> sure it would.
-> > 
-> > Any better ideas on how to solve it? I can convert all non libeth stuff
-> > to these new xsk_buff_read_metadata helpers and keep xp_raw_get_ctx
-> > to you? Will that work?
-> 
-> Sure, I can take a look.
-> 
-> Do you want me to pick this patch as a base or you'd like to send a new rev?
+On Thu, Jul 23, 2026 at 1:01=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+> - [Critical] The `KF_ARG_MEM_SIZE` argument type completely bypasses the =
+`SCALAR_VALUE` check, allowing eBPF programs to pass massive pointers as bu=
+ffer sizes.
+> - [Low] Uninitialized variables `ref_t` and `ref_tname` passed by value t=
+o `get_kfunc_arg_type()`.
+> --
+>
+> --- Patch [17]: [PATCH bpf-next v1 17/18] bpf: Classify scalar kfunc argu=
+ments from BTF ---
+> commit ea739f7fbc71c6a534cb3103ddbdf3b31c5f391a
+> Author: Amery Hung <ameryhung@gmail.com>
+> Subject: bpf: Classify scalar kfunc arguments from BTF
+>
+> This patch updates how scalar kfunc arguments are handled by moving their
+> classification out of the inline register state validation and into BTF-b=
+ased
+> classification. It adds specific KF_ARG_* kinds for scalars and separates
+> BTF classification from register validation in check_kfunc_args.
+>
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 24858a38c34cf..ba2608592bd5f 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+>
+> [ ... ]
+>
+> > @@ -12130,11 +12122,13 @@ static int check_kfunc_args(struct bpf_verifi=
+er_env *env, struct bpf_call_arg_me
+> >               if (reg_is_referenced(env, reg))
+> >                       update_ref_obj(&meta->ref_obj, reg);
+> >
+> > -             ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
+> > -             ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
+> > +             if (btf_type_is_ptr(t)) {
+> > +                     ref_t =3D btf_type_skip_modifiers(btf, t->type, &=
+ref_id);
+> > +                     ref_tname =3D btf_name_by_offset(btf, ref_t->name=
+_off);
+> > +             }
+> >
+> > -             kf_arg_type =3D get_kfunc_ptr_arg_type(env, meta, t, ref_=
+t, ref_tname,
+> > -                                                  args, i, nargs, argn=
+o);
+> > +             kf_arg_type =3D get_kfunc_arg_type(env, meta, t, ref_t, r=
+ef_tname,
+> > +                                              args, i, nargs, argno);
+>
+> [Severity: Low]
+> If a kfunc call has a scalar argument, btf_type_is_ptr(t) evaluates to fa=
+lse,
+> skipping the initialization of ref_t and ref_tname.
+>
+> Could this result in passing uninitialized variables from the stack by va=
+lue
+> into get_kfunc_arg_type() during check_kfunc_args()?
 
-I have an idea on how to keep the existing pointer (instead of introducing a
-copy). Let me play with it today, will send something hopefully Monday..
+No because these are only used when the arg type is non-scalar. The
+next patch also resolve ref_t and ref_tname in get_kfunc_arg_type
+instead of passing them. I will make it less confusing by doing it in
+this patch instead.
+
+>
+> [ ... ]
+>
+> > @@ -12435,6 +12462,19 @@ static int check_kfunc_args(struct bpf_verifie=
+r_env *env, struct bpf_call_arg_me
+> >                               }
+> >                       }
+> >                       break;
+> > +             case KF_ARG_CONST_MEM_SIZE:
+> > +                     if (reg->type !=3D SCALAR_VALUE) {
+> > +                             verbose(env, "%s is not a scalar\n", reg_=
+arg_name(env, argno));
+> > +                             return -EINVAL;
+> > +                     }
+> > +
+> > +                     ret =3D process_const_arg(env, reg, argno, meta);
+> > +                     if (ret < 0)
+> > +                             return ret;
+> > +
+> > +                     fallthrough;
+> > +             case KF_ARG_MEM_SIZE:
+> > +                     break;
+>
+> [Severity: Critical]
+> Does this allow an eBPF program to bypass the scalar check by passing a
+> non-scalar register as the size parameter?
+>
+> Because the KF_ARG_MEM_SIZE case label is placed after the SCALAR_VALUE
+> check inside KF_ARG_CONST_MEM_SIZE, an argument that is exactly
+> KF_ARG_MEM_SIZE will jump directly to its label and break out, leaving th=
+e
+> register's type unchecked.
+>
+> Could this allow programs to pass a pointer as a buffer size, potentially
+> leading to out-of-bounds memory accesses?
+>
+
+Right, SCALAR_VALUE check needs to happen in KF_ARG_MEM_SIZE. Will fix.
+
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723050806.11=
+58442-1-ameryhung@gmail.com?part=3D17
