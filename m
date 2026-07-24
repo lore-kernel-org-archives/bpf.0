@@ -1,237 +1,138 @@
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f1.google.com (mail-pz2-f1.google.com [74.125.228.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5D5470131;
-	Fri, 24 Jul 2026 22:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4A14749F5
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 22:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784932217; cv=none; b=kLyu1pYTks/Uz0QRd3iGkwsjDfQ6V2TcvsIdGpPzB1X8dK6D8kdvtqtVCYHn4pPJtsUW5mAhBrJeVxm3ogf6MCZLxSv9b5J98SHnPEB7B0mxExBg7LuGJQt8+7Ydr7oNxqnPsZtz0Rw2fC+UByv+t2Zc80CJl+YZQE6Jl+8jWHI=
+	t=1784933172; cv=none; b=TUXKjfS8Q5GraL4kK2CPbm1eSEVVRJxRe4eg685VOszGasx37Huqw+UnBuL/PQt9HK2oztltRejIDz6QwZVVS3bdcUe4+piuOHa9TCiVcZ6IhYxBYJWyORzVUvzR472h5Viy83zbmMYT+w9N+jYyfzh12JxBrwSkaK+AKMJM7EM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784932217; c=relaxed/simple;
-	bh=F+4QHVMTdUxWVRG4L1XBerMtnFJQb/EMdPg2rQqLd68=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PlipCO5xgGg0/x07cdJ1w5t1iaoPI7pDRX1p4HUDKBIhko7ZXykXNfpVneb9c2v0X0fSCYtXqHgzAD4TiAUMjoxU7zd/ajN1xdxOtp0tijZqI8iM2AcBRXWVqCUIa7FOGivoqZC6MecbyD6xZdrLBTrFpUYWrvvLahe2K60P1Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=MS9beTn9; arc=none smtp.client-ip=96.67.55.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=surriel.com
+	s=arc-20240116; t=1784933172; c=relaxed/simple;
+	bh=bXGiriF0ZpR12CZdKrsdUosiRKo/uGaGWUfUovbd5gQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YVhGAykbTfToNRLn0YYVHoeOKDOP3l7xCM4CjJ6Gww/gpE0oKq0jkHkN4OOMmC6hgixzIWDTCdjX06naqURYWnayahTQmYyUb2d4+p62fHueb+Dka82uwvDxoTZ8NrA7XHDwYhzVo7IeZMXErJj8P4P31fzzjHG5naQcdSjo6rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=shagZRSj; arc=none smtp.client-ip=74.125.228.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="MS9beTn9"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
-	; s=mail; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=laFb2+2OJHBjt42yZcZ3hsZQhNcm9lH5QpuUTZr6hlo=; b=MS9beTn9E8RTJJ4e2NxUs4APQF
-	lAXN0Zcyhkx0y+7Mtv/RePRaBeHwPGyHKX5pv22oE72E+K3e2CemBHeOJQ9PfLCo/p58tVLwnJIAf
-	rV4awksMHY2ke6Lar0t7F7nBQEmsaHCdS4g0vM7Jm8fSYiL9FSVy8o6AWz03JvGdI93FHR8NU6YK9
-	PgHLj0T4iLAF9pqDWeSR/4GWTTlGKBm7U70OsI6A75EWGs7LGXi0x4MRr/g4r6Fus+Cfsi3RujiBg
-	BE1K/icV7oT4ieExMWcBru/LRH81jK04qt/z40d1zgRltnZXmSiMAEp2LBrmvW4kg0HpsyfNRtfR/
-	BoUcWQYQ==;
-Received: from fangorn.home.surriel.com ([10.0.13.7])
-	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.97.1)
-	(envelope-from <riel@surriel.com>)
-	id 1wnOOs-0000000027h-1eMx;
-	Fri, 24 Jul 2026 18:29:50 -0400
-From: Rik van Riel <riel@surriel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	kernel-team@meta.com,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Peter Xu <peterx@redhat.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Usama Arif <usamaarif642@gmail.com>,
-	Rik van Riel <riel@surriel.com>,
-	bpf@vger.kernel.org
-Subject: [PATCH RFC v4 07/12] mm: read remote strings under the per-VMA lock
-Date: Fri, 24 Jul 2026 18:29:29 -0400
-Message-ID: <20260724222934.1463812-8-riel@surriel.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260724222934.1463812-1-riel@surriel.com>
-References: <20260724222934.1463812-1-riel@surriel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="shagZRSj"
+Received: by mail-pz2-f1.google.com with SMTP id 41be03b00d2f7-ca7d1dc4554so468694a12.1
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 15:46:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784933162; x=1785537962; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=fUp0spRqE3+iwDhjOYRCe4RoHoRmEIKutFUO3Q5qoDQ=;
+        b=shagZRSj0URzxg12cqpVhAY7LpmeB9d9gsgXBjVaJHHoe0Md/5TZyo5+9hPJSq6Op0
+         HCZUcYMdtrUPpnQ2al3fcFFeU1za+Ay9sQfNXJbHGarNsVA37zKXWTjO1IU6rNdzXwz+
+         ncIMJ4pbuHBVpjbgbW4FFaviafI5Xd/zQIB3nu9qFlLf3NiiTa67mgzGGv1hd7zxzoj8
+         X7B059y+fzTDIBhBk0GClFCIEYZ+es/ATS0DXYHP4lksggfHrx1ZI1JyEghJ7aHOAicF
+         u5mg+bcLkz/EW+QYz9vfSBBZz71al8jOuLBCPfVM4S2EF3QaSwkTku26fT5TF2Sm5c45
+         bsSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784933162; x=1785537962;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fUp0spRqE3+iwDhjOYRCe4RoHoRmEIKutFUO3Q5qoDQ=;
+        b=UYsRA+Q9McdSAWVn9AHmNwcVV19c32gAqmgfGxmQkRHJpOTkj+XpilQYV9qKHkT30o
+         DsF5+Nn9+G1hSSPwtC2dG7c2cXYPVb7DPGqcKUm0OXuN4NPnnuNa+z5GTs7+3bOuf98i
+         rZtPwjRhHqtJ42JGif535v+x5yQH67C/0zcopiB+AM1QpiUnKwzQglIpt9uGvJ2xvpWR
+         NT2u/PCPRVeoZlbGeaXVyAmRwlziuuNuWO20jH6wMHgN3f+L8DbZxkJyN+u7xJkjToe1
+         gStE/D86WE5MajQALKcijs2HWFyry/QmIsfhVyIeNvJOytpGgL8mZ45NOrYZvDzJq93y
+         UTyA==
+X-Forwarded-Encrypted: i=1; AHgh+RqRgReJjpVGKwQp70M8T6zAPOKITWgYsp4W9ISVg8tahd8jNsJO2nzo//KWtIXTEgUOdoM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfiGaVO844DojTh9h+N+P/qYYA1CMwPws2lVIAFnfbAj1XWwra
+	TWx9Q8SQtbOB0wwSaWvGMg7ZpaLIRQaPrkW+1GoLGIlkyJir7JqYnN85
+X-Gm-Gg: AR+sD13jKl6XppIT/Ll1UXXakMFnOkaR5Wmu8SOBY4GXHvZx9zEMGKkY8LK3zp/iQp8
+	7sXBMc9Nq/MtvWrJCPFkF3xkm35GTZhzbDAq2pDowvR8ppiU5fRcVn6oeckFfl2PSwevOB9d4ze
+	0Vod6KZDHSDSKVgGHNTtlTjZuzajR/f9u8NnXYl9NMvYyPtXZZWRGSTXsIURUCQ18204d705VjZ
+	8/NNAOH02amFCuT0T2CRw9YPAmQ4Zp/mJWBp32ThVx3FdGhrpwqFmTUyAgZNQMU2XLDkxomPOLG
+	Js1R34p4rXC0+mUqTJdfx6LHsvVvuD5nBiFLRbqo1YmiHRcoOHcfJVsUtB15ahudGqcLrNS+NYF
+	VxRI31KMYBAX4iBH5lSVv/kQIX4waDxxqKdz2/F9rYOWPiHwMgm2eUPi6XH06oaht8oK9kQU=
+X-Received: by 2002:a05:6a00:23c3:b0:848:7475:29bd with SMTP id d2e1a72fcca58-84e5942f306mr124439b3a.7.1784933161733;
+        Fri, 24 Jul 2026 15:46:01 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:43::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e533ce1f7sm474895b3a.34.2026.07.24.15.46.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jul 2026 15:46:01 -0700 (PDT)
+Date: Fri, 24 Jul 2026 15:45:43 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
+Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, 
+	sdf@fomichev.me, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, AutonomousCodeSecurity@microsoft.com, 
+	tgopinath@linux.microsoft.com, kys@microsoft.com
+Subject: Re: [PATCH net] xsk: fix NULL pointer dereference in __xsk_rcv()
+Message-ID: <amPqFHJBnDEQGmOK@devvm7509.cco0.facebook.com>
+References: <20260724164719.99563-1-blbllhy@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260724164719.99563-1-blbllhy@gmail.com>
 
-__copy_remote_vm_str() reads another process's memory under the mmap read
-lock for the whole copy, and looks the VMA up again for every page through
-get_user_page_lookup_vma().
+On 07/24, Cen Zhang (Microsoft) wrote:
+> In __xsk_rcv() multi-buffer path, xsk_buff_alloc() is called in a
+> do-while loop without checking its return value for NULL. The pre-check
+> xsk_buff_can_alloc() only counts fill queue entries without validating
+> descriptor addresses, so it can pass while xsk_buff_alloc() rejects
+> all entries as invalid and returns NULL.
 
-This is the mmap-lock-only form that __access_remote_vm() used before it
-moved to the per-VMA lock, and it shares the same contention: an mmap() or
-munmap() stalls a bpf_copy_from_user_task_str() reader even though the
-string is resident.
+Agreed, looks like a valid issue :-( (!ok branch in _xp_alloc) ..
+ 
+>   Oops: general protection fault, probably for non-canonical address
+>    0xdffffc0000000000
+>   KASAN: null-ptr-deref in range
+>    [0x0000000000000000-0x0000000000000007]
+>   RIP: 0010:__xsk_rcv+0x426/0xc20 (net/xdp/xsk.c:350)
+>   Call Trace:
+>    xsk_generic_rcv+0x26d/0x5f0
+>    xdp_do_generic_redirect+0x3c5/0xcf0
+>    do_xdp_generic+0x92f/0xe70
+>    __netif_receive_skb_core.constprop.0+0xf7e/0x2b30
+> 
+> Fixed by adding a NULL check after xsk_buff_alloc() and use
+> xskq_prod_cancel_n() to roll back any partially submitted RX ring
+> descriptors, ensuring no incomplete multi-buffer packet is delivered
+> to userspace.
+> 
+> Fixes: 804627751b42 ("xsk: add support for AF_XDP multi-buffer on Rx path")
+> Reported-by: AutonomousCodeSecurity@microsoft.com
+> Signed-off-by: Cen Zhang (Microsoft) <blbllhy@gmail.com>
+> ---
+>  net/xdp/xsk.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index b970f30ea9b9..76e0cdd43722 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -301,6 +301,7 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+>  	struct xdp_buff_xsk *xskb;
+>  	struct xdp_buff *xsk_xdp;
+> +	u32 nb_submitted = 0;
+>  	skb_frag_t *frag;
+>  
+>  	from_len = xdp->data_end - copy_from;
+>  	meta_len = xdp->data - copy_from;
+> @@ -348,6 +349,11 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+>  		u32 copied;
+>  
+>  		xsk_xdp = xsk_buff_alloc(xs->pool);
+> +		if (!xsk_xdp) {
 
-Read the string through remote_vm_walk(), the walk __access_remote_vm()
-already uses, with a copy_vm_str() action that strscpy()s each page and
-stops at the NUL. Bounding the copy by its maximum length keeps the per-VMA
-path inside a single VMA, so no VMA is looked up again while that lock is
-held.
+[..]
 
-A copy the per-VMA lock cannot finish falls back to the mmap lock: a fault
-that dropped the lock, or a string running past the VMA. Memory with no
-struct page (VM_IO/VM_PFNMAP) and stack expansion stay on the mmap lock
-path and still return -EFAULT, as before; ->access() support is left for
-later.
+> +			xskq_prod_cancel_n(xs->rx, nb_submitted);
 
-Assisted-by: Claude:claude-opus-4.8
-Signed-off-by: Rik van Riel <riel@surriel.com>
----
- mm/memory.c | 111 ++++++++++++++++++++++------------------------------
- 1 file changed, 47 insertions(+), 64 deletions(-)
-
-diff --git a/mm/memory.c b/mm/memory.c
-index 273dfe12bc6d..aaf620017f34 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -7296,84 +7296,67 @@ EXPORT_SYMBOL_GPL(access_process_vm);
- 
- #ifdef CONFIG_BPF_SYSCALL
- /*
-- * Copy a string from another process's address space as given in mm.
-- * If there is any error return -EFAULT.
-+ * Copy a NUL-terminated string from @addr into *@buf, up to @len bytes,
-+ * stopping at the NUL. strscpy() always NUL terminates, so recopy the last
-+ * byte of a page when more pages follow. A string is never read from
-+ * struct-page-less VM_IO / VM_PFNMAP memory.
-  */
--static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
--				void *buf, int len, unsigned int gup_flags)
-+static int copy_vm_str(struct vm_area_struct *vma, struct page *page,
-+		       unsigned long addr, void **buf, int len, int write)
- {
--	void *old_buf = buf;
--	int err = 0;
--
--	*(char *)buf = '\0';
-+	struct folio *folio;
-+	int bytes, offset, retval;
-+	void *maddr;
- 
--	if (mmap_read_lock_killable(mm))
-+	if (!page)
- 		return -EFAULT;
- 
--	addr = untagged_addr_remote(mm, addr);
-+	bytes = len;
-+	offset = addr & (PAGE_SIZE - 1);
-+	if (bytes > PAGE_SIZE - offset)
-+		bytes = PAGE_SIZE - offset;
- 
--	/* Avoid triggering the temporary warning in __get_user_pages */
--	if (!vma_lookup(mm, addr)) {
--		err = -EFAULT;
--		goto out;
-+	folio = page_folio(page);
-+	maddr = kmap_local_folio(folio, folio_page_idx(folio, page) * PAGE_SIZE);
-+	retval = strscpy(*buf, maddr + offset, bytes);
-+	if (retval >= 0) {
-+		/* Found the end of the string. */
-+		*buf += retval;
-+		folio_release_kmap(folio, maddr);
-+		return 0;
- 	}
- 
--	while (len) {
--		int bytes, offset, retval;
--		void *maddr;
--		struct folio *folio;
--		struct page *page;
--		struct vm_area_struct *vma = NULL;
-+	*buf += bytes - 1;
-+	if (bytes != len) {
-+		copy_from_user_page(vma, page, addr + bytes - 1, *buf,
-+				    maddr + (PAGE_SIZE - 1), 1);
-+		*buf += 1;
-+	}
-+	folio_release_kmap(folio, maddr);
- 
--		page = get_user_page_lookup_vma(mm, addr, gup_flags, &vma);
--		if (IS_ERR(page)) {
--			/*
--			 * Treat as a total failure for now until we decide how
--			 * to handle the CONFIG_HAVE_IOREMAP_PROT case and
--			 * stack expansion.
--			 */
--			*(char *)buf = '\0';
--			err = -EFAULT;
--			goto out;
--		}
-+	return bytes;
-+}
- 
--		folio = page_folio(page);
--		bytes = len;
--		offset = addr & (PAGE_SIZE - 1);
--		if (bytes > PAGE_SIZE - offset)
--			bytes = PAGE_SIZE - offset;
--
--		maddr = kmap_local_folio(folio, folio_page_idx(folio, page) * PAGE_SIZE);
--		retval = strscpy(buf, maddr + offset, bytes);
--		if (retval >= 0) {
--			/* Found the end of the string */
--			buf += retval;
--			folio_release_kmap(folio, maddr);
--			break;
--		}
-+/*
-+ * Copy a string from another process's address space as given in mm.
-+ * If there is any error return -EFAULT.
-+ */
-+static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
-+				void *buf, int len, unsigned int gup_flags)
-+{
-+	int bytes, err;
- 
--		buf += bytes - 1;
--		/*
--		 * Because strscpy always NUL terminates we need to
--		 * copy the last byte in the page if we are going to
--		 * load more pages
--		 */
--		if (bytes != len) {
--			addr += bytes - 1;
--			copy_from_user_page(vma, page, addr, buf, maddr + (PAGE_SIZE - 1), 1);
--			buf += 1;
--			addr += 1;
--		}
--		len -= bytes;
-+	*(char *)buf = '\0';
- 
--		folio_release_kmap(folio, maddr);
-+	bytes = remote_vm_walk(mm, addr, buf, len, gup_flags, false,
-+			       copy_vm_str, &err);
-+	if (err) {
-+		/* The contract guarantees a terminated buffer even on error. */
-+		((char *)buf)[bytes] = '\0';
-+		return err;
- 	}
- 
--out:
--	mmap_read_unlock(mm);
--	if (err)
--		return err;
--	return buf - old_buf;
-+	return bytes;
- }
- 
- /**
--- 
-2.53.0-Meta
-
+.. but I don't think doing xskq_prod_cancel_n is enough? The descriptors
+from the fill ring have been consumed, and the prog ring stuff is
+cancelled, which means they are "lost"?
