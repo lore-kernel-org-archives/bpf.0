@@ -1,144 +1,246 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD0A1A6810
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 03:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784862972; cv=none; b=Gv0vQ5pOfXF36ehSYNBZ6su/URHZFdnsv4bUV3SWxNYxVTD02tngAW53vcMlvCxvW/vEVI5/S/q00zD5886TTY7rWowgIlbC4/i/Ce7SoBdDuef1DLDCAVQG7fwjEi777RH/DTM+3TW849B+e0ly5hVpVKIqV+J5tufZZ+iwRj4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784862972; c=relaxed/simple;
-	bh=1RnLhP3iUsnE5myKEdKyfGGZ48B3gZvFFvxx33OEAR4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Fc+3n0Q+oG0O5w4kJx7iGTulAWFAwfh3Qdaug1uPl+iq1mkkpiR9WgEUjIqzN5oNVQ1qV1RB0P74mHyeAzp3sO7ReaGrk6YcbQH/GrLh4xMvxBxzCNsUzamKfAeiPKoxjv/SVc6G1dPyJuwNLvxjp0H6Q368UpnGdfo/klvA5xA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h5tRC5RhrzYQts6
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 11:15:35 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 87C4440561
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 11:16:07 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgAX_Sj32GJqPj9hCQ--.22423S2;
-	Fri, 24 Jul 2026 11:16:07 +0800 (CST)
-Message-ID: <100c4981-cc61-44d4-928b-e6f5c29f9570@huaweicloud.com>
-Date: Fri, 24 Jul 2026 11:16:07 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B882EEE63
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 03:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784864404; cv=pass; b=TTbh8E89FSFNXYnWWs9MYPYQn2EQTbRkFoMo8z3pUDrb21/l82r1Pbr7coMfoBQhnEOeqfbSKdEdcHv+tcJU7lO+Tu14xtzuJYoAMBcIAuJynynczveK7JG0E6+FBDB3292XACnhPpIu8Uz5ssfgM5SaIGSsftSvel5KhucJWTg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784864404; c=relaxed/simple;
+	bh=pB8/V3XlrG5omt7Gz5mMSVLoHIr+uYCl606AtWvg3WI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AwH680kFV/YNhbkEKXvUwQYbpsx5LKyCIE83KfNuVshVZPJGy8Y0EabMgmKC8yWxx/2cO0LrimToHNVRZ7gKljwvWSxNuyR3T8hfFMDxcTyiNvSFU5EViKRZoCqYvRJ0OvSFSSpOjwf4atrgkjz+z2fDxvg+WvRzkPCkj6/mAVQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bjjrxLZ+; arc=pass smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bjjrxLZ+"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5aec201b582so1363725e87.1
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 20:40:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784864400; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ofA9l/IgFlfetW7/q5WsRrlWiR4VbTBVEdR6Bw0IDCeoRQUDQsedkzxMJddvxAwwed
+         bGiN9KrcU7/UGHU+G5g8fzl4lerQ1TxUkWPIRTGIZjgs6lx4U4/NZORslUu7Ue9r+ypI
+         sX4dUK3E9IUxmXMwgxGJfiTaTeRlAK9su6C2RUEvgflLcEoHvOljTG6PIlypm30afnbW
+         cl7aWq3yggYqtIoLo6qf+XFj+sryA6PAQd0AbXPtj9MoruYCXsLPhJvXNBz3m1aA6p/4
+         /bav8D+NU1C6MfE1bFn3o0Y1Z4Th8S4/jCZvIAKcwMWEy5JHThB7j5jj/LYKD3/BCrGV
+         i9zQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/jUaUCz0UWiUWGL5mMfIye/RyD1iev9TqicEqDX5xhA=;
+        fh=EI9h3kv2pjMWc2Z6LOkJ5ObhZKkfLXnPxO7VzyEiun8=;
+        b=PNyaBWHDA6mi6v2vpQOGuoI/AjQUTQxW97jRsO14AQp+jcVzHX9ZpBVYwbeREqzJ5w
+         FKKSmJV4rWJX8eqvHX4yrCW+Im4dRKDBYorWY8eVFYPuXSnljgVjHDbYs3d6On6fWu8s
+         dqy7dwiG2I0UfPC4iqHyGY5eNKw8kOxAfAQA8Pbvpd8z4V+ufeS4uyDy57LGF0FYb7zJ
+         vhluTD0BTKlmrh+8XaDep+Df5OLV77waRiHfAc2f6NIHDO8ztCSYhSd/ui++j0F37Ajq
+         EX4VL6FlGnGaOhrhysiUmgCUgRgeU9czeQJZvcpWNVnB/sXM+HQamV1KMlIrgGjChT92
+         eA5Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1784864400; x=1785469200; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=/jUaUCz0UWiUWGL5mMfIye/RyD1iev9TqicEqDX5xhA=;
+        b=bjjrxLZ+i/gWyy5RQCwU8Vfgpz+ENMx1x/29cHdjXXaRjprqEu20bNsYRUGrzO1jdv
+         57xGK6z8HCfD/0p2h3Rh4fsoTIqPXr4iW03mu1af1pWWxCtd2yY8ueP4+vGcgll1O1gc
+         +bDfY3CTFSwDR+8idN2dOZsN0p7tWExLG6Fj2T6oQKhSKdyQ68aQ2dRWcjYVCwrZoLct
+         EKeBCcZ5ImXdhDvWFddpZPelArV8vkSlk/TbX65jo2HW5m09I4saBB27nwhZ2CdLSim7
+         IKcz2nNiXs9lHXGfqZrKPbGFy0OcvkU3IT9UX4zsr4TyKFFAVVy3drKGvCmHal87mTxF
+         inLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784864400; x=1785469200;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/jUaUCz0UWiUWGL5mMfIye/RyD1iev9TqicEqDX5xhA=;
+        b=GMzII26nJcyUoVjSA0taIN74hikH61gl3qy/xaACWBrbv/GaJzgcKMPXkKSRT2my5N
+         ZNW1vDRToUpVnwPdRNhMlSZtpTMeqKS64f2i8WiX7rYD2rpusaHCyJFtYTNW3YfFnfML
+         clLGvxYR0xj4Qm9xas0XuP1wVKRQoCBhFYsum2K08QPKPxNvv3it3A9Sb+Vp7dGyFmtE
+         CYDJSXR5M/K8A+Er+LX8/vEtppDuTov0Ko7IP7v6E8Aah6ps/OYeK6dIbIYnzFwlWY8N
+         OnTCLmsZhL0eCmk/tLhfHpCg8lHQlylnwqm4cbSzq5fVOR5TUS0I9f94bef0VSdR1DyB
+         RYIg==
+X-Forwarded-Encrypted: i=1; AHgh+Rrv+Rv9h3qYMhac2skk+ziiOyUmSI4K+96X+87fJMJ/FUkxyTpLCW84xwtainp4K4M0RMg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyK3zsToB2jm58XIsik6oTVJvKIdby47e+rpMz1FosXS5pRAGev
+	l3sNalfbPsI5+p251qml5NwOKIcgyr/2sFeDVMS1a7Eax+rTfxluCuPkVDamb16Ga4xfQ3y98LY
+	9yIcAH3aO9MCAZZmUVdGexOYT2G1IUCIHJqSJSsA97ZtG62/dgDiLxCCXOz4=
+X-Gm-Gg: AR+sD13+ZK4kvky85JDAiHWAGoM8in9qE/JYBqQkg462TJyTd/g18oLBaSqSvrmT8N1
+	Ct5V+8qkehQqV48cEotvtNB5iU0cvr8QhjSZtORKEMR46HW38lsU48z5SXcHF5zET/Iz3T/dZYy
+	atrFTsdgHizwb6PHXkUrRsImw4CDFv05kRMWyOoROI2JYjyI3SPa0ubnJzC5sJvR5BBqeSwmozw
+	zW497zP8zUXX6euzgG/hLB2qnZQTVXG0YlhOmgVOYIGIb7TOp6WPXKz1Cnx1WO3mCZUSPSvqw==
+X-Received: by 2002:a05:6512:8019:20b0:5b2:a353:e4af with SMTP id
+ 2adb3069b0e04-5b2b2f7a8ecmr887529e87.56.1784864399706; Thu, 23 Jul 2026
+ 20:39:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/4] LoongArch: BPF: Fix memory leak in
- bpf_jit_free
-Content-Language: en-US
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260722112754.1615201-1-pulehui@huaweicloud.com>
- <20260722112754.1615201-3-pulehui@huaweicloud.com>
- <20260722113556.63A971F000E9@smtp.kernel.org>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <20260722113556.63A971F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgAX_Sj32GJqPj9hCQ--.22423S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw43ur48CF1kCry5Aw1DWrg_yoW5WrykpF
-	98Zr13CrWqg392gFsrJw48WF4UJw43W3WjgF1Y9r4xuF15WrykWFyak3yrWa90yry8Jw40
-	qFWjgr9xJa4kAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
-	KfnxnUUI43ZEXa7IU1wL05UUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+References: <20260722221634.186886-1-joshwash@google.com> <20260722221634.186886-2-joshwash@google.com>
+In-Reply-To: <20260722221634.186886-2-joshwash@google.com>
+From: Joshua Washington <joshwash@google.com>
+Date: Thu, 23 Jul 2026 20:39:47 -0700
+X-Gm-Features: AUfX_myiu_NuloPmeS8ZU_Op_ds7ofTLCGS4h_nAjcrnVJa1oicB1rvJdCghtG0
+Message-ID: <CALuQH+UFf2oWTnrSK6mW4+PAqPTyfwJ55Zr8hNF5MTPC9KX2wA@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 1/2] gve: use xdp_build_skb methods for
+ XDP_PASS case
+To: netdev@vger.kernel.org
+Cc: Harshitha Ramamurthy <hramamurthy@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Jordan Rhee <jordanrhee@google.com>, Tim Hostetler <thostet@google.com>, 
+	Ankit Garg <nktgrg@google.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Jul 22, 2026 at 3:16=E2=80=AFPM Joshua Washington <joshwash@google.=
+com> wrote:
+>
+> Newer common methods have been introduced to construct SKBs in the
+> event of XDP_PASS because many drivers replicated very similar
+> functionality. Update GVE to use these common methods for copy mode and
+> zero-copy mode.
+>
+> Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
+> Reviewed-by: Jordan Rhee <jordanrhee@google.com>
+> Signed-off-by: Joshua Washington <joshwash@google.com>
+> ---
+> v3:
+>   - Newly introduced. Ensures that XDP metadata is passed onto SKB in
+>     XDP_PASS case.
+> ---
+>  drivers/net/ethernet/google/gve/gve_rx_dqo.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/e=
+thernet/google/gve/gve_rx_dqo.c
+> index 02cba280d81a..907a0c15bf30 100644
+> --- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> +++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> @@ -736,8 +736,7 @@ static int gve_rx_xsk_dqo(struct napi_struct *napi, s=
+truct gve_rx_ring *rx,
+>         }
+>
+>         /* Copy the data to skb */
+> -       rx->ctx.skb_head =3D gve_rx_copy_data(priv->dev, napi,
+> -                                           xdp->data, buf_len);
+> +       rx->ctx.skb_head =3D xdp_build_skb_from_zc(xdp);
 
-On 2026/7/22 19:35, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [High] The patch series correctly fixes a memory leak of `prog->aux->jit_data` on JIT subprogram failure in `arm64` and `loongarch`, but misses the identical architectural flaw in `s390`, `parisc`, and `sparc64`.
+Sashiko says:
+---
+[Severity: High]
+This isn't a bug introduced by this patch, but does this unconditionally
+overwrite the SKB head on every fragment for multi-fragment packets?
+
+If an AF_XDP enabled interface receives a jumbo frame (e.g., 9000 bytes),
+the hardware splits the packet across multiple RX descriptors. For each
+descriptor, gve_rx_xsk_dqo() allocates a new SKB here and assigns it to
+rx->ctx.skb_head.
+
+Since this ignores whether rx->ctx.skb_head is already populated from previ=
+ous
+fragments, does it leak the SKBs of prior fragments and truncate the delive=
+red
+packet?
+---
+
+Multi-buffer XDP is not supported in GVE DQ.
+
+>         if (unlikely(!rx->ctx.skb_head)) {
+>                 xsk_buff_free(xdp);
+>                 gve_free_buf_state(rx, buf_state);
+> @@ -745,8 +744,6 @@ static int gve_rx_xsk_dqo(struct napi_struct *napi, s=
+truct gve_rx_ring *rx,
+>         }
+>         rx->ctx.skb_tail =3D rx->ctx.skb_head;
+>
+> -       /* Free XSK buffer and Buffer state */
+> -       xsk_buff_free(xdp);
+>         gve_free_buf_state(rx, buf_state);
+>
+>         /* Update Stats */
+> @@ -899,9 +896,17 @@ static int gve_rx_dqo(struct napi_struct *napi, stru=
+ct gve_rx_ring *rx,
+>                         return 0;
+>                 }
+>
+> +               rx->ctx.skb_head =3D xdp_build_skb_from_buff(&gve_xdp.xdp=
+);
+> +               if (unlikely(!rx->ctx.skb_head))
+> +                       goto error;
+> +               rx->ctx.skb_tail =3D rx->ctx.skb_head;
+> +
+> +               gve_reuse_buffer(rx, buf_state);
+> +
+>                 u64_stats_update_begin(&rx->statss);
+>                 rx->xdp_actions[XDP_PASS]++;
+>                 u64_stats_update_end(&rx->statss);
+> +               return 0;
+
+Sashiko says:
+---
+[Severity: High]
+Does returning 0 here bypass the copy-on-demand safety check for XDP_PASS
+packets?
+
+The gve_rx_should_trigger_copy_ondemand() check at the end of gve_rx_dqo()
+appears to be skipped. By bypassing this check, could the networking stack
+hold onto the QPL pages indefinitely?
+
+This might drive used_buf_states_cnt to num_buf_states, exhausting the buff=
+er
+pool and preventing new RX buffers from being posted to hardware, ultimatel=
+y
+starving the RX ring.
+---
+
+DQ QPL doesn't have XDP support, so QPL pages are not in use.
+
+>         }
+>
+>         if (eop && buf_len <=3D priv->rx_copybreak &&
 > --
-> 
-> --- Patch [2]: [PATCH bpf-next 2/4] LoongArch: BPF: Fix memory leak in bpf_jit_free ---
-> commit cacb56acd5af4ef394049dd1560a358cf9a04bae
-> Author: Pu Lehui <pulehui@huawei.com>
-> 
-> LoongArch: BPF: Fix memory leak in bpf_jit_free
-> 
-> This commit fixes a memory leak in the LoongArch BPF JIT compiler. When
-> bpf_int_jit_compile() returns early for subprograms, it leaves ctx->offset
-> allocated, which bpf_jit_free() previously failed to clean up on abort.
-> 
->> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
->> index 2738b4db11653..3d3ed1677d018 100644
->> --- a/arch/loongarch/net/bpf_jit.c
->> +++ b/arch/loongarch/net/bpf_jit.c
->> @@ -2361,6 +2361,7 @@ void bpf_jit_free(struct bpf_prog *prog)
->>   		 */
->>   		if (jit_data) {
->>   			bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
->> +			kvfree(jit_data->ctx.offset);
->>   			kfree(jit_data);
->>   		}
-> 
-> [Severity: High]
-> This is a pre-existing issue, but while this patch correctly fixes the memory
-> leak of the JIT context arrays for LoongArch, do we have the exact same leak
-> occurring in s390, parisc, and sparc64?
-ok, will take a look for the ctx.offset.
+> 2.55.0.229.g6434b31f56-goog
+>
 
-> 
-> Looking at s390, parisc, and sparc64, they also return early for subprograms
-> and leave memory attached to prog->aux->jit_data. For example, in s390:
-> 
-> arch/s390/net/bpf_jit_comp.c:bpf_int_jit_compile() {
->      ...
->      } else {
->          jit_data->header = header;
->          jit_data->ctx = jit;
->          jit_data->pass = pass;
->      }
->      ...
->      if (!fp->is_func || extra_pass) {
->          ...
->          kvfree(jit.addrs);
->          kfree(jit_data);
->          fp->aux->jit_data = NULL;
->      }
-> }
-> 
-> However, these architectures do not have a custom bpf_jit_free() implementation
-> and rely on the weak generic bpf_jit_free() function instead:
-> 
-> kernel/bpf/core.c:bpf_jit_free() {
->      if (fp->jited) {
->          struct bpf_binary_header *hdr = bpf_jit_binary_hdr(fp);
-> 
->          bpf_jit_binary_free(hdr);
->          WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
->      }
-> 
->      bpf_prog_unlock_free(fp);
-> }
-> 
-> The generic bpf_jit_free() does not check or free prog->aux->jit_data. If JIT
-> compilation fails for a later subprogram, the BPF core aborts and calls
-> bpf_jit_free() on all previously JITed subprograms.
-> 
-> Does this mean s390, parisc, and sparc64 will still leak their jit_data and
-> offset arrays on this failure path?
-> 
->>   		hdr = bpf_jit_binary_pack_hdr(prog);
-> 
 
+Sashiko says:
+---
+> @@ -894,14 +891,22 @@ static int gve_rx_dqo(struct napi_struct *napi, str=
+uct gve_rx_ring *rx,
+>               buf_state->page_info.pad +=3D gve_xdp.xdp.data - old_data;
+>               buf_len =3D gve_xdp.xdp.data_end - gve_xdp.xdp.data;
+>               if (xdp_act !=3D XDP_PASS) {
+>                       gve_xdp_done_dqo(priv, rx, &gve_xdp.xdp, xprog, xdp=
+_act,
+>                                        buf_state);
+>                       return 0;
+>               }
+
+[Severity: High]
+This is a pre-existing issue, but if the first fragment of a multi-descript=
+or
+packet is dropped (e.g. XDP_DROP), does the driver fail to track that the r=
+est
+of the packet must be dropped?
+
+When the next descriptor containing the middle of the payload arrives,
+rx->ctx.skb_head will be NULL. Will the driver incorrectly treat this fragm=
+ent
+as a new Ethernet frame and run the XDP program on arbitrary payload data?
+---
+
+Again, GVE DQ doesn't support multi-buffer XDP. This will be addressed
+when support is added.
+
+--=20
+
+Joshua Washington | Software Engineer | joshwash@google.com | (414) 366-442=
+3
