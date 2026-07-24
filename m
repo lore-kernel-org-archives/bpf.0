@@ -1,44 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C65233926;
-	Fri, 24 Jul 2026 19:50:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A902A3515F5;
+	Fri, 24 Jul 2026 19:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784922639; cv=none; b=oBsfqryV6jy2JB6O3Fut0CPl4bUarcTTfXRDX490PEkIADBsz0kEQc2shf6XWkVNgK0S/oucUY0nZJVLSnGIVoMrdWBTrt5OjieWCnffyl696veV3814YRZ+OBsDoJxO28S33rJxoHbNRpWEPU4SBZKqExq3lovedjPKfDtelwI=
+	t=1784922691; cv=none; b=mJGf2f8gfl6qtlT5p7cRILkMBdvZDHs4ttGMjbL5eZDiREk37LT1yw7mK3VOvpeU1sOusa/B/4u4vntSwFPfQMpAqKRaWiIL9foh2KD9gYxqOsfO7Fy/1M4uQIZ4/mdMVgr4h3qY3BzqAYwB/beOeMYmwlJpS15N+zd0xEpuOtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784922639; c=relaxed/simple;
-	bh=NoE+xy0UkbhTAXqkSxv2IuMHsApWUps4QQDy0yXorHU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LbTTwQ7RdndXUTLXUOpyIszsmYEx5kc0FGN5NPBuQF1KS0RGr9u6ZCwHamTVA/zaHtE4uF/zSxYc4bKqqPFj4YhZLu0yhGmO9+y3RiVQPkWM/FNQvPT3vqKy2RTRp0NCmmLPG4bJT7mU8P9dOTvH7YDvF3IgSe6c8C44s8PazdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BtYv7zqd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784922691; c=relaxed/simple;
+	bh=HEVHWQn2aNR/OtnJyCo+SOT/LHLhNEl4AX1lx1Jo5m8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=M7LET/+ppv9s61uazfSD8NMsFJzD8J7W8wd8CXH8u3t/BlsJwbgt/d9j2xLYIK1zUVqYPT+LSW6zAczru+RWE7Wd0Fs8+xZ8MXLIMLtpyGIIOE8dz9KCx0dnKTwQpuQ0kj49tbSr7lksIBdmxF6BbV7EblSmGguhU7WYyFdFwYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XV1l3QmC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BtYv7zqd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D67C1F000E9;
-	Fri, 24 Jul 2026 19:50:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XV1l3QmC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D65181F000E9;
+	Fri, 24 Jul 2026 19:51:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784922637;
-	bh=uYZYJpTXfDcHeTDqTQZMaqHJlAmMBAVkn93HWhktHe0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BtYv7zqddpucBXaaJwMzAyxzhsc9MJMRfHJFF5SqL5QEGqEUXUGuu7IPOHWq/tZxV
-	 LwBmCOdkdB+JaC8madHMT6EVUv9zBdLXy6bxjjSG6c5XaRw1MZE+SQdQV5WqEej35A
-	 kLqYD14gFOIW4jszjfZ+3z/yFT2thi8JUgnDRR5bJREoaLfW5UF+hM8nyv1nF8Mc8j
-	 xRoE/PGRsR2v3AF7Ei9vOFpE+CBy5Gf0wxVjpoJxNgY20TilndiOCtfq8C7R04P9YD
-	 +2kmJhPSQ/JPxxVuBTRs4TiUCg0w45n+JfaG0N4KbJivpNwpbuIGOLO/EiP4Ns1cQL
-	 ONn50oT6sRcrQ==
-Date: Fri, 24 Jul 2026 12:50:34 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, Nicolas Schier <nsc@kernel.org>
-Subject: Re: [PATCH v2] kbuild: rpm-pkg: Preserve .BTF section in kernel
- modules during debuginfo stripping
-Message-ID: <20260724195034.GB1461047@ax162>
-References: <20260716025342.42628-1-laoar.shao@gmail.com>
- <20260716030116.C613E1F000E9@smtp.kernel.org>
- <CALOAHbBQhAsTMHMMZH5Sen0cDYg8GREZMmQcT4Njc9VW_WHe4Q@mail.gmail.com>
- <20260724000015.GA2803569@ax162>
- <CALOAHbCaKNF2=Q0qCHbQttP4+LOwOdnxHKbdLeiJi0+2JKkvNQ@mail.gmail.com>
+	s=k20260515; t=1784922690;
+	bh=xufiH9DXV0tiDlC53cxtndN+yZzoXD3SbTD8L2MaEcU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=XV1l3QmCJopHKETwzxiAgbXzhlAijMPuRFb/b3z+OHELp1gLI8eaAg5F2NaA8Uimv
+	 OX0bpN696svmDT7tORfIMj+B74bhwd/JlczFOz9vp+xc/ugrzX1yfFuXlap5m28tk+
+	 doaqbth7w1MA5+We8/NhMbh/1Wq0Lc7T1OfvdAGAfnSDBMVUK4fka5XWz73YJAjchs
+	 7owhszZSQDsFBVFQHy9/s36SjV2XJ4G4J61taNyplS5wrtMRSiPO3nRKrzmgsPbSDG
+	 TNOhJqjwuTVKFvN+35SkB9xpooPG8L4O8MpBa8d2Wkxd6jKJfgiUDJFcnBcRSXtZuR
+	 Qua9UQf/o9GmA==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Pu Lehui <pulehui@huawei.com>, Feng Jiang <jiangfeng@kylinos.cn>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>, Xi Wang
+ <xi.wang@gmail.com>, Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley
+ <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Shuah Khan
+ <shuah@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 3/3] selftests/bpf: enable timed may_goto
+ tests for riscv64
+In-Reply-To: <15ceb481-ae3e-4c51-aeb7-513a3d213959@huawei.com>
+References: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
+ <20260723-riscv-bpf-timed-may-goto-v5-3-86acb54e5642@kylinos.cn>
+ <15ceb481-ae3e-4c51-aeb7-513a3d213959@huawei.com>
+Date: Fri, 24 Jul 2026 21:51:27 +0200
+Message-ID: <878q70qi80.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,160 +55,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALOAHbCaKNF2=Q0qCHbQttP4+LOwOdnxHKbdLeiJi0+2JKkvNQ@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 24, 2026 at 10:49:24AM +0800, Yafang Shao wrote:
-> On Fri, Jul 24, 2026 at 8:00 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Thu, Jul 16, 2026 at 05:11:05PM +0800, Yafang Shao wrote:
-> > > On Thu, Jul 16, 2026 at 11:01 AM <sashiko-bot@kernel.org> wrote:
-> > > >
-> > > > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> > > > - [Medium] The check for `find-debuginfo.sh` capabilities in `mkspec` hardcodes host properties into `kernel.spec`, breaking SRPM portability across distributions and failing silently when the tool is not in `$PATH`.
-> > > > --
-> > > >
-> > > > --- Patch [1]: [PATCH v2] kbuild: rpm-pkg: Preserve .BTF section in kernel modules during debuginfo stripping ---
-> > > > commit 99202060a54c32638e01a2bfdc4d23b190f3f77c
-> > > > Author: Yafang Shao <laoar.shao@gmail.com>
-> > > >
-> > > > kbuild: rpm-pkg: Preserve .BTF section in kernel modules during debuginfo stripping
-> > > >
-> > > > This commit updates the RPM packaging scripts to pass --keep-section .BTF
-> > > > to find-debuginfo.sh. This ensures that BTF information is preserved when
-> > > > debuginfo is stripped from kernel modules.
-> > > >
-> > > > > diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-> > > > > index c604f8c174e2c..00acef348ba84 100755
-> > > > > --- a/scripts/package/mkspec
-> > > > > +++ b/scripts/package/mkspec
-> > > > [ ... ]
-> > > > > @@ -65,6 +65,11 @@ fi
-> > > > >  echo "%define with_debuginfo_manual $with_debuginfo_manual"
-> > > > >  echo "%define with_debuginfo_rpm $with_debuginfo_rpm"
-> > > > >
-> > > > > +# Detect if find-debuginfo.sh supports --keep-section (RHEL 9+)
-> > > > > +if find-debuginfo.sh --help 2>&1 | grep -q keep-section; then
-> > > > > +     echo "%global with_keep_section 1"
-> > > > > +fi
-> > > >
-> > > > [Severity: Medium]
-> > > > Is it safe to assume find-debuginfo.sh is in the standard user $PATH?
-> > > >
-> > > > On many systems, this script resides in /usr/lib/rpm/, which isn't typically
-> > > > in the $PATH. This could cause the check to silently fail and strip the .BTF
-> > > > section during a local make rpm-pkg build.
-> > > >
-> > > > Also, since mkspec runs during SRPM generation (make srcrpm-pkg), doesn't
-> > > > this statically bake the generation host's capabilities into the resulting
-> > > > kernel.spec file?
-> > > >
-> > > > If the SRPM is rebuilt on an older distribution, rpmbuild might fail because
-> > > > the older script rejects the --keep-section argument. If generated on an
-> > > > older host and built on a newer one, BTF info would be silently stripped.
-> > > > Could we dynamically query the target host's capabilities using something
-> > > > like %(__find_debuginfo) inside the spec file itself?
-> > > >
-> > > > --
-> > > > Sashiko AI review · https://sashiko.dev/#/patchset/20260716025342.42628-1-laoar.shao@gmail.com?part=1
-> > >
-> > > I believe we could use the builtin _rpmconfigdir to locate
-> > > find-debuginfo.sh reliably. This avoids relying on $PATH.
-> > > What do you think about the following change?
-> >
-> > Just an FYI, this was not sent to anyone with authority to comment on
-> > said change, as the Kbuild folks were not included in the AI review
-> > thread. I just happened to find this when browsing the archives.
-> 
-> My apologies, I failed to notice that the linux-kbuild mailing list
-> was excluded from Sashiko's reply.
+Pu Lehui <pulehui@huawei.com> writes:
 
-No problem at all, I just wanted to make it obvious why you may not have
-gotten a response to your suggestion and for this issue to get lost.
+> On 2026/7/23 13:41, Feng Jiang wrote:
+>> Enable verifier_may_goto_1 (raw instruction tests), stream_cond_break
+>> (250ms timeout path), and the may_goto_interaction fastcall test on
+>> riscv64 now that the JIT supports timed may_goto.
+>>=20
+>> Reviewed-by: Pu Lehui <pulehui@huawei.com>
+>> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+>> ---
+>>   tools/testing/selftests/bpf/progs/stream.c                | 1 +
+>>   tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c | 3 ++-
+>>   tools/testing/selftests/bpf/progs/verifier_may_goto_1.c   | 4 ++++
+>>   3 files changed, 7 insertions(+), 1 deletion(-)
+>>=20
+>> diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/=
+selftests/bpf/progs/stream.c
+>> index 92ba1d72e0ec..8d8e53d37266 100644
+>> --- a/tools/testing/selftests/bpf/progs/stream.c
+>> +++ b/tools/testing/selftests/bpf/progs/stream.c
+>> @@ -64,6 +64,7 @@ SEC("syscall")
+>>   __arch_x86_64
+>>   __arch_arm64
+>>   __arch_s390x
+>> +__arch_riscv64
+>>   __success __retval(0)
+>>   __stderr("ERROR: Timeout detected for may_goto instruction")
+>
+>
+> This test fails because it relies on arch_bpf_stack_walk to fetch the=20
+> prog. It's fine to leave it on though, since support is on the way.
+>
+> https://lore.kernel.org/bpf/20260722140015.1982158-1-varunrmallya@gmail.c=
+om/
 
-> > > diff --git a/scripts/package/kernel.spec b/scripts/package/kernel.spec
-> > > index c732415662ef..4335e99f2aca 100644
-> > > --- a/scripts/package/kernel.spec
-> > > +++ b/scripts/package/kernel.spec
-> > > @@ -67,7 +67,21 @@ This package provides debug information for the
-> > > kernel image and modules from th
-> > >  %undefine _unique_debug_srcs
-> > >  %undefine _debugsource_packages
-> > >  %undefine _debuginfo_subpackages
-> > > +
-> > > +# Preserve .BTF section in kernel modules during debuginfo stripping
-> > > +# find-debuginfo.sh (from debugedit) uses eu-strip which removes
-> > > +# non-allocated ELF sections like .BTF by default.
-> > > +# --keep-section .BTF preserves BPF Type Format information.
-> > > +#
-> > > +# Uses _rpmconfigdir for reliable script location instead of relying on $PATH.
-> > > +%{!?with_keep_section:%global __fd %{_rpmconfigdir}/find-debuginfo.sh}
-> > > +%{!?with_keep_section:%global with_keep_section %(%{__fd} --help 2>&1
-> > > | grep -c keep-section)}
-> > > +%if %{with_keep_section}
-> > > +%global _find_debuginfo_opts -r --keep-section .BTF
-> > > +%else
-> > >  %global _find_debuginfo_opts -r
-> > > +%endif
-> > > +
-> > >  %global _missing_build_ids_terminate_build 1
-> > >  %global _no_recompute_build_ids 1
-> > >  %{debug_package}
-> > >
-> > > Please let me know if this approach works or if there are any concerns.
-> >
-> > /usr/lib/rpm/find-debuginfo.sh might not exist on certain distributions
-> > that can build .rpm packages like Arch Linux:
-> >
-> >   $ ls -l /usr/lib/rpm/find-debuginfo.sh
-> >   "/usr/lib/rpm/find-debuginfo.sh": No such file or directory (os error 2)
-> >
-> > Even on modern Fedora, this is a symlink:
-> >
-> >   $ ls -l /usr/lib/rpm/find-debuginfo.sh
-> >   lrwxrwxrwx@ - root 19 Jul 17:00 /usr/lib/rpm/find-debuginfo.sh -> ../../bin/find-debuginfo
-> >
-> > I think we would be better off just using the __find_debuginfo rpm
-> > macro:
-> >
-> >   $ rg -m 1 find-debuginfo /usr/lib/rpm/macros
-> >   69:%__find_debuginfo    /usr/bin/find-debuginfo
-> >
-> > This appears to work for me, it would be good if you can confirm this
-> > works for you as well.
-> >
-> > diff --git a/scripts/package/kernel.spec b/scripts/package/kernel.spec
-> > index c732415662ef..590b5b2e1b40 100644
-> > --- a/scripts/package/kernel.spec
-> > +++ b/scripts/package/kernel.spec
-> > @@ -67,7 +67,18 @@ This package provides debug information for the kernel image and modules from th
-> >  %undefine _unique_debug_srcs
-> >  %undefine _debugsource_packages
-> >  %undefine _debuginfo_subpackages
-> > +
-> > +# Preserve .BTF section in kernel modules during debuginfo stripping
-> > +# find-debuginfo.sh (from debugedit) uses eu-strip which removes
-> > +# non-allocated ELF sections like .BTF by default.
-> > +%global with_keep_section %(%{__find_debuginfo} --help 2>&1 | grep -c keep-section)
-> > +%if %{with_keep_section}
-> > +%global _find_debuginfo_opts -r --keep-section .BTF
-> > +%else
-> >  %global _find_debuginfo_opts -r
-> > +%endif
-> > +
-> >  %global _missing_build_ids_terminate_build 1
-> >  %global _no_recompute_build_ids 1
-> >  %{debug_package}
-> 
-> This works for me, thanks for the improvement.
-> Do you plan to send the official patch, or would you like me to send a
-> new version?
+I'm inclined to do the same here -- but only since it's RISC-V, where
+the tests are not run by any automation yet. In general I *don't* like
+that a series introduces a failing selftest merely because another
+unmerged series is expected to fix it later.
 
-You can send a new version, as your message makes it clear what is going
-on here. If you feel so inclined, you can add a Suggested-by tag but I
-don't think this is substantially different from what you suggested.
 
--- 
-Cheers,
-Nathan
+Bj=C3=B6rn
