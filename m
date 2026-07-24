@@ -1,166 +1,135 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3004B3D9DAA;
-	Fri, 24 Jul 2026 09:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784887119; cv=none; b=C1mW8Z4kcvKznhKdBcoI1Odi18VaT9Rur4aq5D6ShLCFhZsThzNw8edCUBV5xYqFeD12npeHN5Bp8hj9Sfw/o+sDGyHFORSf1dr+9vCR47z3Ovod5rftHF5WuUSW6dws+mwZaggdZ9B1zYxBrFg/rzfSHunZexJYKF9CT4y6x/4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784887119; c=relaxed/simple;
-	bh=XrWHgpSHBMBhlwbI3YVxs2W+Uc6ztGG/X698Csn/2fk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UbBwix5dU3N49f7ujmczicop8sLos8O3YfDnE0HY9ZNfs15x74VOA+KMZ2zXvKR7nYB1ZSIzr7KR1cpUzzv1uq80jd1zN7pxFq1Nxfr79NM9xdKtbxtpp4+Ja8wvFsavfWWsqh+VUheMFbITRD9bdx6tppjbjohe8yqhWJsN5a4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=obJNvxuD; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 489D241CB5C
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 10:02:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784887371; cv=pass; b=sHDJ2/54goWzKGmb9GEV6t2S7Q34wD+NNvErbJBYh/N5Vkbru7g1dObQdMm7b9emBQxhE1T3/E10iQxmBGm4VwUDe6K6t/yz0TpvsnrK5suCdt1zyODF8sEopjulTiWDXLej29g/OSYO7rvBpvL1PAiH/Atp3J6pW2QREkuEklc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784887371; c=relaxed/simple;
+	bh=CUL3i+XJlKERnsF8FzYTlTsyXlOwS7+NYYyYGSxwR7U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DGiz595RUZhv0kUY1nrp0qGHRCUoPl/1CllrjsVAZeTnVpbotYfgF1Q3RCDTn14bwDK6kVIKKqfYafixqIYwMNtnzOLfqRMXVPe0uLwY22SZE5fvWRJm/bL8og6FeXf4Fs06T3uNy9S/UskrLRNqi+yYAoFox5JSxLUDMFcpzpc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ie9j1sjQ; arc=pass smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="obJNvxuD"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=L541VKiqXeegrdDBGEbQltr0E3niQlPmGsrvV1AIcQA=; b=obJNvxuDYRmXOhnzrCkICh5HBw
-	BXHtwOW/lFdNmrivFjCW3TMe27FdHA/ZFw40SMfexgW0SzeNpNXg9Vns/alM6TRrqkI9GEuwGqrog
-	GXQJYl0SW8+E3+u/ls9rsMqVhetAUsFrqJfH6sVY4EZkDcaCkxVjvqD5Ib7AHiB6x+eUVahrcHS/T
-	UumxVay4PbaY2CqkBaW4Qcnox1s5wV03aLZm4tHtLzn5Dtfi7AEH4466GdG0H85HUndhHUbPLjRm1
-	0uugn6XPyPxOhkpEFFXms+rmHdGNSuuqNC/p2DiUMU+3xWvPBYGPtCVbSnQEFzkOMJRuLdlpd7hHz
-	M0Z1hSBg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wnCfl-004TYP-07;
-	Fri, 24 Jul 2026 09:58:29 +0000
-Date: Fri, 24 Jul 2026 02:58:24 -0700
-From: Breno Leitao <leitao@debian.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, puranjay@kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH] mm/kmemleak: report RCU-tasks quiescent states during
- the scan
-Message-ID: <amM1xUOhcpGpqIpe@gmail.com>
-References: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
- <20260720153917.2e428e489cd0873ac6d4e6da@linux-foundation.org>
- <5b83b0a0-708a-458a-bdbd-41c6d4610349@paulmck-laptop>
- <amCT9QEgJRsLIb_y@gmail.com>
- <ffa5d8d2-1157-4a30-995c-ddae3566e3a4@paulmck-laptop>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ie9j1sjQ"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-69a33fb0031so34590a12.1
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 03:02:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784887367; cv=none;
+        d=google.com; s=arc-20260327;
+        b=rHkS8i/+XgQa8J+H8hMzI3RR5YVU643CR5NAML+a1R4T6wONWoe1Nnr6Ow3MwsFTlx
+         RfzLlQziV9vOmqkFZ0NblFhGQExOpqgoRPeFWct4GX2GA5hnbmtnD1235WYwS7cyXj87
+         GKvPVCX8MjNCW9uf60bI3FoP0ZdPD79zEg6oXj5OcZRJLwDTi1KEg/9CKIaYovkErfZQ
+         AA3ypxE8tQAzjjt+xSAe3RL8BO7BcaC3oYFjYJlyGm60CqKNzk410fMYm9CqyhEJx85i
+         Ag91BuVTRQBtvwAwoaXdlRqI18akZJRqu5N5GHT0kUPQSRD7CJX0w4oUrrBecuUGpbyu
+         UWxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=CUL3i+XJlKERnsF8FzYTlTsyXlOwS7+NYYyYGSxwR7U=;
+        fh=A4WoJbnApddz7BKCWUgsCXMFQXkTbtaCkFu0f/GAAw8=;
+        b=r7gfrojUJnb5EkCsCzg7vigAge1a1pAqMxpLjZIkdbWoEeGaU+WZ7/nmBl6DF1vu+5
+         LckRiWy7jPPFPBWtg+PYbF2wTrU29kqzircFmz5dXnmUDPDqUkD8MHHst/KBIP9Z1koO
+         n5J2+TaIR9GwaZbi7xt2kKPruQYFH2WEBJMxbzqqRCAHkDht1z+G6DsQzSwZVEVkDSgW
+         tZZ8ZmgBLF/LqGQG/5Czw98FKpJCY1IWSvavAU+gNxFZY+zPGW5d3dVl6IId1+o03vfH
+         kzAWC94Du7O7GFz/mUUkYEyuQV33oRSJDp7BfANglloKKU0hEsOiW6q2rXeT/ot/jRI2
+         H9BQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784887367; x=1785492167; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=CUL3i+XJlKERnsF8FzYTlTsyXlOwS7+NYYyYGSxwR7U=;
+        b=ie9j1sjQXi6oO16pWAfr3yBFSJQx7smD72iWnrR6HuFhZezierdTz9lEWSNQ7hWyrP
+         I5XOYGDz+PvTRquSJzh+J2J385R6Wy16WXQsYcB7nw+ra0UWCd5gOsQWVG9BsNau47kX
+         gQkc085nqcD/4p2mjjLf0GzWsW8H+PYpoBK6OUhP5ire1rHzVMabp4/H7GXTmYXTnvvC
+         3vD+M+lJON47R3LggGp7RVcjyE++7qTwX3DaMATuOSeFj8tfs/h4LUxA3habHSdHjKIz
+         CN0n9EX5mUUqSb7pGuvw7+/ZLzFfEzS6E3ku2ElbpDH1B1547K1ephUeXIxsXLsZzmMz
+         GV/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784887367; x=1785492167;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CUL3i+XJlKERnsF8FzYTlTsyXlOwS7+NYYyYGSxwR7U=;
+        b=Kpe+J7M5CkpE0e0IH02WduhijvhZVMaVcKRKlSyrBm8NF656cESNAWAyP6KKYjI99I
+         JMPULVrmKCDTiRBrbOteaA3cdTtSGEAsbYsb53eArgUO4R/YThKjZUh1yFblWvQHgQzL
+         u1ImMcgqNABNRbkVnWLMjTG/WxFxPe0E6uYCB1c57mdYPigos7N2ga66CAGz+UynXO5y
+         grCsEgG/cyzwjg7AIZqGJPFHImbj0+yep9juBNtYAPn3E5b0xCXzvSFeX+NY8wp+OyhK
+         AfFwOpfpX0ApBO5yvuFmTIwrUYbaJunOGwZMioI9KrxH93U5EMXj7QLGigVlfmf7RQlm
+         NKXA==
+X-Forwarded-Encrypted: i=1; AHgh+Rrnn7b0jVp0c+rrII1ksvrSgGi2rZ0czTGnYE3SZ2q+AQ1UscbY2ed0lQ8/CxH4ydz+RbI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy55tc2g7JUk5EiAKs0u6oQZ4XKx1C0AugioiTHjIK7UmJpj1fd
+	FU/2kQJu5958u9fNIXa/PCeH5Evhshruvf0+OlaL/Zcp+NGw+rPUQSlTUwzRN+Q1oEasV8UUIZa
+	rbWsuPcFnFFOm7F1ise9SKeK5fqfro2g=
+X-Gm-Gg: AR+sD119dyvExn2KUM9kyoSU1240NT3XIYqYZBlgkoHIbyKD/VT/289tvcJKeiAexVr
+	ZPWMVy70m4qXl1zlV3lWnI7EhQ0oDiplkGm1xMuXtyixFa/FwZh17Mh9qpo+PO+Lyd7ZUUY1YG9
+	7zT2ZD3CMjPI+ZOEdS64zGhFes8jKBs1SGeDralYoi5ALpdbGuIOjyxud72kitDBtEr0e9qRF/b
+	7Sx4BCdJJTU4mlt8n8T+F4Z33ZwVUzmTrVkeTF9nTv9ZTIZ7nOSs2cpTfwf1U360amQTHzZ7sH2
+	O5UFV0RvE2/N9No=
+X-Received: by 2002:a05:6402:3997:b0:69c:7a3f:9fb5 with SMTP id
+ 4fb4d7f45d1cf-69f8ddfa863mr771337a12.7.1784887366457; Fri, 24 Jul 2026
+ 03:02:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ffa5d8d2-1157-4a30-995c-ddae3566e3a4@paulmck-laptop>
-X-Debian-User: leitao
+References: <20260719161630.2901208-1-nicoyip.dev@gmail.com>
+ <20260723162602.3275661-1-nicoyip.dev@gmail.com> <20260723100030.3eee6d51@kernel.org>
+ <87ldb0lo8t.fsf@cloudflare.com>
+In-Reply-To: <87ldb0lo8t.fsf@cloudflare.com>
+From: Chengfeng Ye <nicoyip.dev@gmail.com>
+Date: Fri, 24 Jul 2026 18:02:33 +0800
+X-Gm-Features: AUfX_mxJN7h4yxh_VHEGxVwUbDqmPuLUq7be4uNYXJEjMRhF3AJnYtdiUAsj4Rs
+Message-ID: <CAAo+4rV_5B-KOQgPL3BC3WKGa_otkEUXD=wDjCig9M0Se-mYtA@mail.gmail.com>
+Subject: Re: [PATCH v3] bpf, sockmap: Fix cork ownership in tcp_bpf_sendmsg()
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, "David S. Miller" <davem@davemloft.net>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 23, 2026 at 08:56:58AM -0700, Paul E. McKenney wrote:
-> On Thu, Jul 23, 2026 at 06:26:11AM -0700, Breno Leitao wrote:
-> > Hello Paul,
-> > 
-> > On Mon, Jul 20, 2026 at 09:21:17PM -0700, Paul E. McKenney wrote:
-> > > On Mon, Jul 20, 2026 at 03:39:17PM -0700, Andrew Morton wrote:
-> > > > On Mon, 20 Jul 2026 06:23:45 -0700 Breno Leitao <leitao@debian.org> wrote:
-> > > > 
-> > > > > kmemleak_scan() can run for ages on large debug kernels. It was
-> > > > > causing some soft-lockups which I got fixed with commit
-> > > > > 3175fcfec8b16baeb ("mm/kmemleak: avoid soft lockup when scanning task
-> > > > > stacks") with our beloved cond_resched().
-> > > > > 
-> > > > > I've got the fix above deployed in the Meta fleet, and now I am seeing:
-> > > > > 
-> > > > >   INFO: rcu_tasks detected stalls on tasks:
-> > > > >     task:kmemleak state:R ... nvcsw: 274/274 holdout: 1 idle_cpu: -1/3
-> > > > >      scan_block
-> > > > >      scan_gray_list
-> > > > >      kmemleak_scan
-> > > > > 
-> > > > > and, worse, blocks the callers waiting on that grace period. Here a BPF
-> > > > > struct_ops map free, which waits via synchronize_rcu_mult(call_rcu,
-> > > > > call_rcu_tasks), is stuck long enough to also trip the hung task check:
-> > > > > 
-> > > > >   INFO: task kworker/...:bpf_map_free_deferred blocked for 122 seconds
-> > > > >      __wait_rcu_gp
-> > > > >      bpf_struct_ops_map_free
-> > > > > 
-> > > > > Then I've learned that cond_resched() is not an RCU-tasks quiescent
-> > > > > state, so, we need to use stronger primitives.
-> > > > > 
-> > > > > Use cond_resched_tasks_rcu_qs() at the scan reschedule points so the scan
-> > > > > reports an RCU-tasks quiescent state as it proceeds.
-> > > > > 
-> > > > > Inspired by commit b96285e10aad ("tracing: Have osnoise_main() add a
-> > > > > quiescent state for task rcu").
-> > > > 
-> > > > I'll add
-> > > > 
-> > > > Fixes: c4b28963fd79 ("mm/kmemleak: rely on rcu for task stack scanning")
-> > > > Cc: <stable@vger.kernel.org>
-> > > G
-> > > Thanks to all three of you!
-> > > 
-> > > This adds fewer than ten calls to cond_resched_tasks_rcu_qs(), but still
-> > > more than doubles the number of such calls outside of the RCU subsystem.
-> > > 
-> > > Which is most likely just fine, and in any case absolutely should not
-> > > get in the way of Breno's patch, which after all solves a real problem
-> > > in the here and now.
-> > > 
-> > > Nevertheless, on the off-chance that over the next few months or years
-> > > we start playing cond_resched_tasks_rcu_qs() whack-a-mole, I figured it
-> > > would be good to get a head start on writing up alternatives.  An initial
-> > > draft may be found here:
-> > > 
-> > > https://docs.google.com/document/d/1s3fn29SCTYVw9jak4iraNIVQR59Wk5C6_I-_eu-MfQA/edit?usp=sharing
-> > > 
-> > > TL;DR:  Should we get into a rousing game of whack-a-mole, alternatives
-> > > include continuing as we are, making the existing calls to cond_resched()
-> > > in turn call cond_resched_tasks_rcu_qs(), decoupling mutex-induced
-> > > hung-task warnings from synchronize_rcu_tasks(), and various
-> > > not-so-practical alternatives to RCU Tasks for trampoline synchronization.
-> > > 
-> > > Thoughts?  Especially thoughts on other schemes?
-> > 
-> > While debugging this issue, I was surprised to discover that cond_resched()
-> > doesn't provide RCU-tasks quiescent states. That led me to
-> > cond_resched_tasks_rcu_qs(), which is the stronger primitive needed for
-> > long-running kernel threads like kmemleak_scan(). Is this the common
-> > case for cond_resched()? I got the impression that kmemleak is the
-> > extreme side, but, I have no data on this.
-> 
-> And that discovery did in fact lead you correctly, and hence my
-> giving you a Reviewed-by.
-> 
-> > Worth noting that commit 7dadeaa6e851e7 ("sched: Further restrict the
-> > preemption modes") continues to narrow PREEMPT_NONE, so the future of
-> > cond_resched() itself may be uncertain, no?
-> 
-> Especially given that one of the explicitly stated goals of lazy
-> preemption was in fact to eliminate cond_resched().  ;-)
-> 
-> Getting back to your point about kmemleak possibly being extreme, as far
-> as I know, none of us have data on how many conversions of cond_resched()
-> to cond_resched_tasks_rcu_qs() will be required, or, for that matter,
-> how many additions of cond_resched_tasks_rcu_qs() above and beyond
-> current cond_resched() instances will be required.
+On Fri, Jul 24, 2026 at 5:40=E2=80=AFPM Jakub Sitnicki <jakub@cloudflare.co=
+m> wrote:
+>
+> On Thu, Jul 23, 2026 at 10:00 AM -07, Jakub Kicinski wrote:
+> > On Fri, 24 Jul 2026 00:26:02 +0800 Chengfeng Ye wrote:
+> >> Subject: [PATCH v3] bpf, sockmap: Fix cork ownership in tcp_bpf_sendms=
+g()
+> >
+> > Since you are spamming the list with the reposts of this could you
+> > please add [PATCH bpf] to the subject so that netdev CI is not confused
+> > into caring?
+>
+> +1 because we need bpf CI to run sockmap selftests on this patch.
+> Please point your agent at Documentation/bpf/bpf_devel_QA.rst.
+>
+> Contrary to Emil's ask, I'd recommend fixing one issue at a time.
+> Reviewing multiple fixes crammed into one patch is harder, IMO.
 
-I've searched for "rcu_tasks detected stalls on tasks" on Meta's
-fleet "dmesg depot" and I was suprised to see we have many of them, in
-which seems to be on hypervisor workloads (running VMs).
+Sorry for the disturbance. I was trying to fix the other issues
+reported by sashiko,
+but it seems it is harder to fix multiple bugs in one patch despite
+being the same
+function, as more issues are flagged by sashiko when a new patch is sent...
 
-> There were concerns raised off-list, so I figured that it was time
-> to lay out what we do know, hence the above gdoc.  I very much hope
-> that we don't need many more calls to cond_resched_tasks_rcu_qs(), and
-> thus that the time I spent writing that turns out to be wasted time.
-> But better safe than sorry!
+Then please just take the original v1 patch for reference and ignore v2 and=
+ v3,
+and I will stop sending new patches for this report until there is
+further patch review.
+If there is a new patch, [PATCH bpf] will be used properly.
 
-The document was not a waste of time. it helped people like me to
-understand what the issue is, and what are the decisions we have ahead
-of us.
-
-Back to what is the best decision/design, I honestly don't have an
-opinion, but I am happy to get more data about Meta production servers
-to help with the decision.
+Best, Chengfeng
