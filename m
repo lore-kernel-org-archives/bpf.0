@@ -1,138 +1,207 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE493EF0CD
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 10:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F4C432E9E
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 10:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784890109; cv=none; b=WmNPc0K+eSeqtSuBXA3RShdc5doJR6c7W4f4wPgaMv5re5v8zMZpCVFrInyZiMkbbbiAXX0rvFvBz9rta4sgipRYWO+qRrOt5BUl16AqCRAXOQQ0WF0VN9Ssc/dHJRkLkBvkR5wJbNxkbNn/OkgCNG5Zxb6zc1sx3jIE6pBL/jw=
+	t=1784890568; cv=none; b=CVM+TX3QgcCaSwpcrZA6M2gxY+AZZADsIOZRe9NHnz+RQl5/B/3VtjMyBxKr8WvUhH2b8UB2ziAg4DmGxRQnNgdoslnVw7ZNlLLPBqnGKPejagd8iJ5AvbX49cONwMPOj1uR0o9SJwVK0h2P9G3eAJtJ5fSrBbehUe3XGH8ljII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784890109; c=relaxed/simple;
-	bh=xYRxLMtZ3/BRx1I4wyTmpchAQbo3mmEcBK6PpJEipNk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Mw5N8k313Qu8HlvUirdmV+0150lRbkq/urC3QxkK/lyJ7353P6GJ2c3es+dNQs+W6/0l9TDDgUdn95XPYnE6pNvTysTxO5seoAusDpQRBDZ/26GPGRDJEGt9t6KbBC7/dZkFLGX/cHt9+r+WUVrpY7tuscFE0kp5nA1u5MoK7vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Ub2STd1Q; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1784890568; c=relaxed/simple;
+	bh=IdH6pcNPx2qWxWJo7CfIYMaaPqEUdw2yY+xf00fy9Ig=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=EtBttx8nJsGSTe+A+j0K/YIfwTVkz5e0DiwaiWh8/jSqmW70lT5hhIET1OGG8RxEtAyYukuUvYxe/YCHnaubZCmIKNcEM9aXZgBcwgXdMCehUeTxnA9g701utLnWxqCGT8JYsv9TZbfMvIFk9R9JDS6GW33tMlmfxrCtVPaFn2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RvnNCg2q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Ub2STd1Q"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-69ea0595598so312096a12.0
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 03:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1784890105; x=1785494905; darn=vger.kernel.org;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Am9/owu6l1hJG7i/wElg5Hgmsf9dZWWfn/6yJfdsk+4=;
-        b=Ub2STd1QY/Yh0G/HXKAOpIh78GfmhUVVonLK8OK1KNbpiSq0KteOC/Y1Ldnzi7LksB
-         5lUsWTyMIJ5Dw9PzXLMVM5dpltes0Yjven2jcR3ZDJgNatXb37VqNBzsvH4zy1gCxhH9
-         m/2nw8GoFnVFd2LRD8rjEDxWGbSsLf/xBBRybQ9z4vSBTHrMCINAFfn45FTz/uT1wHxp
-         P+C+6EW1J8ZKdn8YR+93xx0jWiBULkj66mEUCpDJAD2mToSLZG46y1hiB/oo7PL7ubPy
-         0ERB/uztfhJmYUilHyV0g5jXeBGbHDQiacznv3yazsZTT1vei3ZWVfZYSTILLM7bWNZK
-         6ULw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784890105; x=1785494905;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=Am9/owu6l1hJG7i/wElg5Hgmsf9dZWWfn/6yJfdsk+4=;
-        b=H5G0kKvOZWrbtDdvrUYq1R0ixMKBLsB0Fvhd0VCbJ8aKmMZQxZbrlNhwMv18lNeMyB
-         bhDTQb9OG931uaBWcJ3ZK0ZAPqbbZDqson7FQFf+PtbbsqoOZNPYxqdpUd00uPt9R9pg
-         T4SVIOr1WpyQ+6lYaLE6KBp3wPGmljg+ChX6khe3MnehHIyiQPBXGuvwdjQSJvf0hm5S
-         7xl0+UwwPrE2LQo8WHqkdNGnPsTNz90KpsqBthx8hhC3Infpe5IJ3IceRUxmtxg2PqVO
-         gkvgzLzxWkQ0XZ4iLsW9dZHP8csgmAWKFBaU+Ca0JVt1m6iDF4D5wfFH97icve/pXRhs
-         FT5w==
-X-Forwarded-Encrypted: i=1; AHgh+RqAYpRxrHaVvKg9SrPyGvwYFW7Va+HbHAV8OAztYGCBWnhKTNvdXTK6JwKnEto9JhNPE7w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznCKwNEt62BWb/tHhqOrAR0dsUljaL+tc6jpHz8J6bWFyX5bJM
-	99QKCJO4ot1p2tHRig2wTAiD7hGRhmSVdNTsKnNfAVWDlCIL7aYnTvDecV5b+VTiCsE=
-X-Gm-Gg: AR+sD10huLz+ijkTur0SWPnopc/CFjcqABuwxPygKzsMiVZPdRnmulIuZdf+gidj6I4
-	pZZVmdvHLye9G6quSbSdP5Oaf30WvsfHdZDJsTGaH1MB0sYAPux44lAdbUBeJ3Y6FQccUUFS9zM
-	o+w2RrfRjSvmK0x3J0KyEJ5fxQwuWQk2HrYRFXRjbj9Xj77nJiEX2wF7WSTGSWa2cs+ht8hplxF
-	hM3DtnLHZHOFVNMXTU26tQ03fbduj2oV7fvt7E6PWQs7+d4WBT2V8GJLeRqnFvtWqcEuiXrDM+K
-	3m4mJ6mhCTI5k/WonQk7It3TVbuu+iUpZvq/iJNtW0YG2aOwYYERgfrnEa/C/A+MFpubC3qwJcx
-	xIUoHSdHnjR09WLkKbeCoPEPgn53elqiw0Ywx4rJYs+Qa0+JlTTpXcHQL8Z3lGydBuGkEOA0egs
-	/O1Ilw
-X-Received: by 2002:a05:6402:3513:b0:698:3b7c:7e50 with SMTP id 4fb4d7f45d1cf-69f6ab4956bmr2655292a12.38.1784890105421;
-        Fri, 24 Jul 2026 03:48:25 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-69f350391d2sm2952122a12.28.2026.07.24.03.48.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 03:48:24 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Chengfeng Ye <nicoyip.dev@gmail.com>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>,  Eric Dumazet
- <edumazet@google.com>,  Neal Cardwell <ncardwell@google.com>,  Kuniyuki
- Iwashima <kuniyu@google.com>,  John Fastabend <john.fastabend@gmail.com>,
-  Jiayuan Chen <jiayuan.chen@linux.dev>,  "David S. Miller"
- <davem@davemloft.net>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
- <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
-  netdev@vger.kernel.org,  bpf@vger.kernel.org,
-  linux-kernel@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RvnNCg2q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE1851F00A3D;
+	Fri, 24 Jul 2026 10:56:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784890567;
+	bh=uYQfu2EhnTgWrAy5JuyQh5JBzz6qbmyHiJkF4IgD7HY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=RvnNCg2qzTMvDm4Jbz55Ff1D6/zxsMSKSiD1Bnlj84dj1jvP3L/SsWbC4fDAJoi/e
+	 dHcrug5LMKE2jvOVUeoLrTMHEvCYrp+zMxv5AAYk3mUcCYott9eIW4wn7qmRm6A+TG
+	 Pn65KQ2G/ROvQuhHTsrbzLPRIHhFE4fA0JXtMtZdfzWVrCqcYISwT/ZH2eo3Rf4t/c
+	 ezpNVhuyL4UTjuHN4/Scxig5v+PPLwmi7BCTYklVgRNBuzVcwahR3BjW+wwX2egV5L
+	 l6DQCMQRBfjQwdV2uk6A3hnZfCo8Wp6kpU9FEvh535t/LDwqrNlxgD3C2iY0qXZife
+	 s9Dy1V4VMks5Q==
+From: sashiko-bot@kernel.org
 Subject: Re: [PATCH bpf v4] bpf, sockmap: Fix cork use-after-free in
  tcp_bpf_sendmsg()
-In-Reply-To: <20260724103856.3399001-1-nicoyip.dev@gmail.com> (Chengfeng Ye's
-	message of "Fri, 24 Jul 2026 18:38:56 +0800")
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Chengfeng Ye" <nicoyip.dev@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260724103856.3399001-1-nicoyip.dev@gmail.com>
 References: <87fr18lmzo.fsf@cloudflare.com>
-	<20260724103856.3399001-1-nicoyip.dev@gmail.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Fri, 24 Jul 2026 12:48:22 +0200
-Message-ID: <87a4rgll3d.fsf@cloudflare.com>
+ <20260724103856.3399001-1-nicoyip.dev@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 24 Jul 2026 10:56:06 +0000
+Message-Id: <20260724105606.BE1851F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
 
-On Fri, Jul 24, 2026 at 06:38 PM +08, Chengfeng Ye wrote:
-> tcp_bpf_sendmsg() keeps msg_tx across sk_stream_wait_memory(), which
-> drops and reacquires the socket lock.  Its error path tries to decide
-> whether msg_tx names the local temporary message by comparing it with
-> the current value of psock->cork.
->
-> This comparison is unsafe when two threads send on the same socket:
->
->   Thread A                         Thread B
->   msg_tx = psock->cork
->   sk_msg_alloc() fails
->   sk_stream_wait_memory()
->     releases the socket lock      acquires the socket lock
->                                   completes the cork
->                                   psock->cork = NULL
->                                   frees the cork
->     reacquires the socket lock
->   msg_tx != psock->cork
->   sk_msg_free(msg_tx)
->
-> The stale cork is therefore mistaken for the local temporary message
-> and freed again.  KASAN reported:
->
->   BUG: KASAN: slab-use-after-free in sk_msg_free+0x49/0x50
->   Read of size 4 at addr ffff88810c908800 by task poc/90
->   Call Trace:
->    sk_msg_free+0x49/0x50
->    tcp_bpf_sendmsg+0x14f5/0x1cc0
->    __sys_sendto+0x32c/0x3a0
->    __x64_sys_sendto+0xdb/0x1b0
->   Allocated by task 89:
->    __kasan_kmalloc+0x8f/0xa0
->    tcp_bpf_sendmsg+0x16b3/0x1cc0
->   Freed by task 91:
->    __kasan_slab_free+0x43/0x70
->    kfree+0x131/0x3c0
->    tcp_bpf_sendmsg+0xec3/0x1cc0
->
-> msg_tx can only name the stack-local tmp or the shared cork. Check for
-> tmp directly so a changed psock->cork cannot turn a shared message into
-> an apparent local one.
->
-> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> Signed-off-by: Chengfeng Ye <nicoyip.dev@gmail.com>
-> ---
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Thanks!
+Pre-existing issues:
+- [High] Concurrent sends on the same socket with an active redirect verdic=
+t cause a Use-After-Free on the target redirect socket (`sk_redir`).
+- [High] `memcpy` is called with identical source and destination pointers =
+when appending to an existing cork.
+- [High] A failed allocation of `psock->cork` leaves `psock->cork_bytes` gr=
+eater than zero, leading to a memory leak of the stack-allocated `tmp` mess=
+age and silent data loss on subsequent `sendmsg()` calls.
+--
 
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+--- Patch [1]: [PATCH bpf v4] bpf, sockmap: Fix cork use-after-free in tcp_=
+bpf_sendmsg() ---
+commit df6d10c569d9a8f6bacb9c15795f057eb688c1ef
+Author: Chengfeng Ye <nicoyip.dev@gmail.com>
+Subject: bpf, sockmap: Fix cork use-after-free in tcp_bpf_sendmsg()
+
+tcp_bpf_sendmsg() keeps msg_tx across sk_stream_wait_memory(), which drops
+and reacquires the socket lock. This patch fixes a use-after-free caused
+by an unsafe comparison between msg_tx and psock->cork, resolving it by
+checking directly against the stack-local tmp message.
+
+Link: https://lore.kernel.org/bpf/87fr18lmzo.fsf%40cloudflare.com/
+Link: https://lore.kernel.org/netdev/20260719161630.2901208-1-nicoyip.dev%4=
+0gmail.com/
+
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index 8e905b50deadb..a30475afb6f89 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+
+[ ... ]
+
+[Severity: High]
+This isn't a bug introduced by this patch, but could this leak the tmp
+message and cause silent data loss if an earlier cork allocation fails?
+
+In tcp_bpf_send_verdict(), psock->cork_bytes is updated before allocating
+psock->cork:
+
+net/ipv4/tcp_bpf.c:tcp_bpf_send_verdict() {
+    ...
+	if (msg->cork_bytes &&
+	    msg->cork_bytes > msg->sg.size && !enospc) {
+		psock->cork_bytes =3D msg->cork_bytes - msg->sg.size;
+		if (!psock->cork) {
+			psock->cork =3D kzalloc_obj(*psock->cork, ...);
+			if (!psock->cork) {
+				sk_msg_free(sk, msg);
+				*copied =3D 0;
+				return -ENOMEM;
+			}
+    ...
+}
+
+If the allocation fails, psock->cork_bytes remains greater than zero.
+
+Then, on a subsequent sendmsg(), tcp_bpf_sendmsg() populates the stack-local
+tmp message, sees the non-zero psock->cork_bytes, and jumps directly to
+out_err:
+
+net/ipv4/tcp_bpf.c:tcp_bpf_sendmsg() {
+    ...
+		if (psock->cork_bytes) {
+			if (size > psock->cork_bytes)
+				psock->cork_bytes =3D 0;
+			else
+				psock->cork_bytes -=3D size;
+			if (psock->cork_bytes && !enospc)
+				goto out_err;
+    ...
+}
+
+Because it bypasses the error path cleanup below, doesn't this permanently
+leak the tmp message's page fragments and silently drop the data?
+
+
+[Severity: High]
+This is a pre-existing issue, but does appending to a cork execute undefined
+behavior by calling memcpy() with identical pointers?
+
+In tcp_bpf_sendmsg(), if psock->cork is already allocated, msg_tx is set to
+point to it and passed to tcp_bpf_send_verdict() as the msg argument. If the
+BPF program requests further corking, the code does this:
+
+net/ipv4/tcp_bpf.c:tcp_bpf_send_verdict() {
+    ...
+		if (!psock->cork) {
+			psock->cork =3D kzalloc_obj(*psock->cork, ...);
+            ...
+		}
+		memcpy(psock->cork, msg, sizeof(*msg));
+		return 0;
+    ...
+}
+
+Since msg is exactly psock->cork here, does this result in a memcpy() with
+identical source and destination pointers, potentially causing a kernel
+panic with FORTIFY_SOURCE or KASAN?
+
+
+[Severity: High]
+This is a pre-existing issue, but is there a use-after-free on sk_redir
+when multiple threads send on the same socket concurrently?
+
+When a BPF program returns __SK_REDIRECT with apply_bytes > 0,
+sk_psock_msg_verdict() takes a single reference on the target socket via
+sock_hold(psock->sk_redir).
+
+If multiple threads process the remaining apply_bytes for this socket, they
+all read psock->sk_redir and release the socket lock to call
+tcp_bpf_sendmsg_redir():
+
+net/ipv4/tcp_bpf.c:tcp_bpf_send_verdict() {
+    ...
+	case __SK_REDIRECT:
+		redir_ingress =3D psock->redir_ingress;
+		sk_redir =3D psock->sk_redir;
+		sk_msg_apply_bytes(psock, tosend);
+		if (!psock->apply_bytes) {
+			/* Clean up before releasing the sock lock. */
+			eval =3D psock->eval;
+			psock->eval =3D __SK_NONE;
+			psock->sk_redir =3D NULL;
+		}
+        ...
+		release_sock(sk);
+
+		origsize =3D msg->sg.size;
+		ret =3D tcp_bpf_sendmsg_redir(sk_redir, redir_ingress, ...);
+		sent =3D origsize - msg->sg.size;
+
+		if (eval =3D=3D __SK_REDIRECT)
+			sock_put(sk_redir);
+    ...
+}
+
+The thread that exhausts apply_bytes clears psock->sk_redir and calls
+sock_put(sk_redir) to drop the single reference. Since it doesn't wait for
+other concurrent threads to finish, could the target socket be freed while
+they are still executing tcp_bpf_sendmsg_redir(sk_redir)?
+
+[ ... ]
+
+> @@ -604,7 +604,7 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct ms=
+ghdr *msg, size_t size)
+>  wait_for_memory:
+>  		err =3D sk_stream_wait_memory(sk, &timeo);
+>  		if (err) {
+> -			if (msg_tx && msg_tx !=3D psock->cork)
+> +			if (msg_tx =3D=3D &tmp)
+>  				sk_msg_free(sk, msg_tx);
+>  			goto out_err;
+>  		}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260724103856.3399=
+001-1-nicoyip.dev@gmail.com?part=3D1
