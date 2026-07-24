@@ -1,61 +1,61 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7BEA38D688
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 19:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433A738D3EE
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 19:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784920098; cv=none; b=WnqFEI1fXKyBbQ+tltcHZdLJ8wDm6XCp/9k77kC0yhERHeHLZXe9X5srOURWneuYKmbWET6qZkU3ZmXo8JspDWGeDnJHY2rS7Sf/x7Sm63G5pZ8KIFqINQdqEPg8Ivo9p4QTzTuhl0RyHGIJmQNhymFTgjl/h3rylCJsyac02RA=
+	t=1784920099; cv=none; b=BNm+SUMcLBfT7LviMxq2h7d/2C7PF8/XEKcb6K58+OOjs21C3vZYwP0JmIPTIbYDrCHnH4259u91p+5mfy579+3K/0StTxaUZhlnfuGj+PWk2Pi1qgP3K7VFgDhkGEwGIKb1Vn1X7i7yb8NFUI+Y/1sdD901C8w/7KBlszKaO5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784920098; c=relaxed/simple;
-	bh=X9eHBl2EZdZgVLt5k5Hqxcab3iW/olWH/45RdcdzSKk=;
+	s=arc-20240116; t=1784920099; c=relaxed/simple;
+	bh=H30qCj8JoKyfkvONwZsTV4uNTn0cwK+23CCPR2HfPNE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nkGP5JqpH28MFMOSyAzMMGFWqarBtRyeCUc2vJvRbXgWz8V3vmbcv6NTl62xgi5pgzmOJ5Dv0nIpD1dq+KU2Zv+tLAl4PtJtt5TlWJIyHEBBKb4NK6msA/71x4NlCE0hGcQ4sZJKBOvJRkmLOoi/9yduipxTtucCVDCpJrROjfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hSkonxc7; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version; b=OvN7getevIVsM/1ezDrwVMIwgucE6Uf7nZ0wUpP/G39rvcg8ieh056yrHF0vTe3ITN+pm1li/db6E8cpzSoZw9rnpLUBeJIPq4wjA0pnteUyBC2aSQ/Qa8X8c8DXGRDibbEq/m3Tr8b4apPGWNy4l8w3J9w7xbn6krvvxhrkBNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VJIrTVhF; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hSkonxc7"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-848643382fcso909253b3a.1
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 12:08:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VJIrTVhF"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ce87c7e3bbso9428885ad.1
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 12:08:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784920096; x=1785524896; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784920097; x=1785524897; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=UvV94sHfNmRr0bNGnz672CJGfC3M2QNvsXPmdKyP1uM=;
-        b=hSkonxc7HiImhU2Y+yh2XLXqHtlKqoBpcK2Y2m6xsz4XoczTXGEtDgga6kCVkP0fBq
-         3oTyP+Z0n35qXgFQ6vrqNL4u3Uc8VTIoklKmQVMJaNVkXn8j/7myzM7UrJv4iUdPXZz0
-         ClJbkkReqBe/PN9vSC2F5qt8unSk8Am7bUvAGn5GpvhOHg2xN9o3+jX23RUykyGAvyv+
-         I/ctUd5Jb2fpyX+SVfwI+uiDMR44FKFEmwPuqa+jk2npyR+t0HO6MikrY/Z5wqWoW/0k
-         a2AhGwvnTZwDiqhcBw+3qAK3ta2/+wTEhTkjxTsW3SrZtvN0keWE+wS+MuybT0DtRgse
-         Nr8w==
+        bh=++8R1Ndv/V4h1OXgVnPw9XXb0xcjnJbXbGXNw0twZd4=;
+        b=VJIrTVhFrh+avIx8DdZ+AiXJgmqN6Bu9Gt50wWLoyErLq9cEeo+IMDu/dy44Yt/8Oq
+         1uVZJ5MRQUowulkQRgAqZOBJyUTxXdKDYy4xJQEMp6b7SKE2e/q7q+0xqsg9HnsSEUKU
+         stwWM/69dfiYULxy/v8gO1bFy5S/SzwhpZxvqNZM3nC+M5u2nX9kiFMpxuWUynEjLOM0
+         YLqHAsTDyu44pDD36IbmMShUsNHELCJNiLQt3ILZUldFnY+FTcfNg2mH0rMronTDE//Q
+         j4U3rn6KgM4VHIN+EvFwigyEiza4ICvovlyPoIvNoyjntIfk0wbt7iqgHMUaG4BTchIF
+         166Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784920096; x=1785524896;
+        d=1e100.net; s=20251104; t=1784920097; x=1785524897;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UvV94sHfNmRr0bNGnz672CJGfC3M2QNvsXPmdKyP1uM=;
-        b=ajtXK8ZsJzyIBoxCbZ2gNTdljYqaVm8mFxYWJWe0pZFgMkH0Vo0/hC0MOnOMaNvoOd
-         ZpEHI7H95gAaomhQf4PcTxpaKC8/gepaEJoljOQVRUWCgDiOK04JdT2sE+cvNdaBEZ11
-         5JUx2Gca+IOQNTccSQgQESjGlOHSE6D23ZxAFHlFO5jjgYvYB5s6+f0zDwayjhhGJZP1
-         ya7KTF05wFtA/yLaAOvvO7b8h53kgBqaIxKB5aM/XEI1ZjZRJFdlodT4ew6mXmJ5C6ug
-         cTOS7uOX4GsALQScA3WijC9QSGj5n78c6iCYW0X5XGISdDiITsDR5TXsfzlUA4iO/7TC
-         QVDQ==
-X-Gm-Message-State: AOJu0Ywi7HzJ+FcM4aLUokyPpIRhSoKfz3rVWmZh3+3VxAdfL/Op7n99
-	nr0vHLVYifZwXNHaG9k+WUhV5MxRz5eW0IaIYbiAO5Rjc3K/McdVVQ8iSC51ow==
-X-Gm-Gg: AR+sD132YFFxaoyvu9OJ+RLzpgeGVMYc3xJbUQEI1Wuzgs5YbpGIc5XHuiwPwpYzrGS
-	jRbM8M7O5+oLeN3703x0r0BK9qLtdEHwAETP3H6QeJdl9nL9tqlIiYvHzDKxeaIZhs+J60lZHU1
-	Ah59ikBLFYI17fahqpHO0PPAy4cF0bPuDm5C+y21q9t1I+ydUj8dySBJiPS3lL1hqSzGv+Q3n1n
-	Nl3m9e9OSekDzoIrrzQSXtAHicxEcXpR4R8/OqNvTUh4MoWZQFCGFdnl1j5Ax6bs8+V6ZFjW4PV
-	cRHJ2AbOPC8j22M1cqMJKZ+pMBv5iK/WMljUFN8U2/dOuz/Tju4kiuth/wO6tbXvlBYfpGm5Yup
-	hvMf6EGiYg8w2ogfD+gj3riekUX4z8PQsPXUzwInji6wHW3oO1syC+DRO+bDsd0oOrdSX
-X-Received: by 2002:a05:6a00:3913:b0:848:57f3:8f8f with SMTP id d2e1a72fcca58-84e2c204c5bmr9195660b3a.51.1784920096229;
-        Fri, 24 Jul 2026 12:08:16 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:71::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e5344e583sm315088b3a.57.2026.07.24.12.08.15
+        bh=++8R1Ndv/V4h1OXgVnPw9XXb0xcjnJbXbGXNw0twZd4=;
+        b=Z588ULsOkKQt2hoioHEnvpAJf4gB3qwxgty8sT7erRKjE7Hm3qnh4q06svZHcug6WO
+         vH+FEHvOduHskjkHVkBkUo2R1bSkkDFQPGPa7YlxT/fxFucrD98HYpTBl3UbNkCQsvgP
+         nS39g6vr+zyrpmc6DblTVlMTzh5o6l9S+P25kNJbdyCe+puxfQe+7dy9yhaNanRnzgKj
+         OsAMSla0OsDuZ/ARHysbr1Fvjrcwmu2NKEJwaBmD67eVROdBM63NEuxNhmWkGtfeLIVU
+         39ZWDOtZT2fuYP201RxfmtUVP8ypWfmaoSI7fhYSSquw+X3M6cP+KG7aRMfLpOwmAT4m
+         SStg==
+X-Gm-Message-State: AOJu0YxzqpJly1gYvtPaG6wLo+wf4NJFGdE8+4aQw56fkm7vB5uOpxMA
+	zrDkBGunuUkMfTcIq5TBUoDQlZqDCjs6rNPLbm7WlEt+5/mY9XFo9zZQJLzdnw==
+X-Gm-Gg: AR+sD12QbdtrU5gEzSHnPjpc1H7klh4KX1LHRN9hxu8i0rNiwqA9rjcFen00Ypa3bhH
+	L+PpEUpn1nsdNwAeaQyJ6L0WdF07yR0SSdh0al2hmooM1z6MnYEXa7yUvIx5+XyBXhdHFM0rtf2
+	hfgrATo13D65nrR74KN6wqWnhTKtPvCdSpbed1jL26LPDbSVhjvEAY5+stb3ye+YJKI0P0SkamO
+	ohvF4IpCvVpMpztacrRmxEI1Va+WfpAxcEXAea9TlAN9h+TkX9MyQ7TCFPfblB9USo+VoT8tntq
+	gLn4Oj4ESIi8cLqrIYjeMVm5C1pN2zsgC8ludiZmQP6boTOzARbbLNuvmZrmkvXrx32tR69HDcq
+	0gTeZa7V0zB0fFmQxVVcbYcr6fsaQzHiFSpvImgmuTbCtvThL64piIiprhMaPv+xpsZAg
+X-Received: by 2002:a17:903:22d0:b0:2cf:bfbb:61e2 with SMTP id d9443c01a7336-2cfbfbb66afmr49752055ad.39.1784920097353;
+        Fri, 24 Jul 2026 12:08:17 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:73::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8f31319asm57802865ad.60.2026.07.24.12.08.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 12:08:15 -0700 (PDT)
+        Fri, 24 Jul 2026 12:08:16 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -65,9 +65,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 02/18] bpf: Unify const map ptr argument checking for helpers and kfuncs
-Date: Fri, 24 Jul 2026 12:07:56 -0700
-Message-ID: <20260724190813.1458271-3-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v2 03/18] bpf: Split kfunc map argument into __const_map and __map
+Date: Fri, 24 Jul 2026 12:07:57 -0700
+Message-ID: <20260724190813.1458271-4-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260724190813.1458271-1-ameryhung@gmail.com>
 References: <20260724190813.1458271-1-ameryhung@gmail.com>
@@ -79,144 +79,239 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Both the helper ARG_CONST_MAP_PTR and the kfunc KF_ARG_PTR_TO_MAP
-recorded the map pointer in meta->map and, when a map was already
-bound by a preceding timer/workqueue/task_work argument, rejected a
-mismatching map.
+Kfuncs used a single '__map' suffix (KF_ARG_PTR_TO_MAP) for two different
+things: a verifier-known map matched by map_uid against a bound
+timer/wq/task_work object (bpf_wq_init, bpf_task_work_schedule*), and an
+opaque 'struct bpf_map *' used only at runtime (bpf_arena_*), which may be a
+map fd or a PTR_TO_BTF_ID struct bpf_map (e.g. a bpf_map iterator's ctx->map).
 
-Factor the logic into a single process_map_ptr_arg() used by both
-paths. The bound-object name (timer, workqueue, or bpf_task_work) is
-derived from the bound map's btf_record, and the register numbers in
-the message are computed from the map argument position instead of
-being hard-coded.
+That combined path only accepted the btf map form due to type confusion. The
+'if (!reg->map_ptr)' check reads reg->map_ptr, which aliases reg->btf in the
+bpf_reg_state union. A PTR_TO_BTF_ID register always has a non-NULL reg->btf,
+so the guard silently passed and validation fell through to
+process_kf_arg_ptr_to_btf_id(). It also recorded PTR_TO_BTF_ID info in
+meta->map, which would be meaningless.
+
+Split the annotation to avoid such type confusion and to align with
+helper:
+
+- '__const_map' -> KF_ARG_CONST_MAP_PTR: verifier-known map, handled by
+  process_map_ptr_arg() like helper ARG_CONST_MAP_PTR.
+
+- '__map' -> KF_ARG_PTR_TO_BTF_ID: opaque struct bpf_map, validated by
+  process_kf_arg_ptr_to_btf_id(). A map fd still matches via
+  reg2btf_ids[CONST_PTR_TO_MAP], so bpf_arena_alloc_pages(&map) keeps
+  working.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c | 97 ++++++++++++++++++++-----------------------
- 1 file changed, 44 insertions(+), 53 deletions(-)
+ Documentation/bpf/kfuncs.rst | 30 +++++++++++++++++++++++-
+ kernel/bpf/helpers.c         | 16 ++++++-------
+ kernel/bpf/verifier.c        | 45 +++++++++++++++++++++---------------
+ 3 files changed, 64 insertions(+), 27 deletions(-)
 
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index c801a330aece..cbde86d082cc 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -250,6 +250,34 @@ Or::
+                 ...
+         }
+ 
++2.3.7 __const_map and __map Annotations
++---------------------------------------
++
++These annotations are used for ``struct bpf_map *`` arguments and distinguish a
++verifier-known map from an opaque one.
++
++``__const_map`` indicates a map must be known at the verification time, i.e. a
++concrete map fd the BPF program references directly.
++
++An example is given below::
++
++        __bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *p__const_map,
++                                    unsigned int flags)
++        {
++                ...
++        }
++
++``__map`` indicates an opaque ``struct bpf_map *`` that may be resolved
++at run time. The argument may take either a map fd or a ``PTR_TO_BTF_ID``
++``struct bpf_map`` pointer.
++
++An example is given below::
++
++        __bpf_kfunc void *bpf_arena_alloc_pages(void *p__map, ...)
++        {
++                ...
++        }
++
+ .. _BPF_kfunc_nodef:
+ 
+ 2.4 Using an existing kernel function
+@@ -411,7 +439,7 @@ Example declaration:
+ .. code-block:: c
+ 
+ 	__bpf_kfunc int bpf_task_work_schedule_signal(struct task_struct *task, struct bpf_task_work *tw,
+-						      void *map__map, bpf_task_work_callback_t callback,
++						      void *map__const_map, bpf_task_work_callback_t callback,
+ 						      struct bpf_prog_aux *aux) { ... }
+ 
+ Example usage in BPF program:
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index c18f1e16edee..93d0d9aa3e15 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3404,10 +3404,10 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+ 	WARN(1, "A call to BPF exception callback should never return\n");
+ }
+ 
+-__bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags)
++__bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *p__const_map, unsigned int flags)
+ {
+ 	struct bpf_async_kern *async = (struct bpf_async_kern *)wq;
+-	struct bpf_map *map = p__map;
++	struct bpf_map *map = p__const_map;
+ 
+ 	BUILD_BUG_ON(sizeof(struct bpf_async_kern) > sizeof(struct bpf_wq));
+ 	BUILD_BUG_ON(__alignof__(struct bpf_async_kern) != __alignof__(struct bpf_wq));
+@@ -4642,17 +4642,17 @@ static int bpf_task_work_schedule(struct task_struct *task, struct bpf_task_work
+  * mode
+  * @task: Task struct for which callback should be scheduled
+  * @tw: Pointer to struct bpf_task_work in BPF map value for internal bookkeeping
+- * @map__map: bpf_map that embeds struct bpf_task_work in the values
++ * @map__const_map: bpf_map that embeds struct bpf_task_work in the values
+  * @callback: pointer to BPF subprogram to call
+  * @aux: pointer to bpf_prog_aux of the caller BPF program, implicitly set by the verifier
+  *
+  * Return: 0 if task work has been scheduled successfully, negative error code otherwise
+  */
+ __bpf_kfunc int bpf_task_work_schedule_signal(struct task_struct *task, struct bpf_task_work *tw,
+-					      void *map__map, bpf_task_work_callback_t callback,
++					      void *map__const_map, bpf_task_work_callback_t callback,
+ 					      struct bpf_prog_aux *aux)
+ {
+-	return bpf_task_work_schedule(task, tw, map__map, callback, aux, TWA_SIGNAL);
++	return bpf_task_work_schedule(task, tw, map__const_map, callback, aux, TWA_SIGNAL);
+ }
+ 
+ /**
+@@ -4660,17 +4660,17 @@ __bpf_kfunc int bpf_task_work_schedule_signal(struct task_struct *task, struct b
+  * mode
+  * @task: Task struct for which callback should be scheduled
+  * @tw: Pointer to struct bpf_task_work in BPF map value for internal bookkeeping
+- * @map__map: bpf_map that embeds struct bpf_task_work in the values
++ * @map__const_map: bpf_map that embeds struct bpf_task_work in the values
+  * @callback: pointer to BPF subprogram to call
+  * @aux: pointer to bpf_prog_aux of the caller BPF program, implicitly set by the verifier
+  *
+  * Return: 0 if task work has been scheduled successfully, negative error code otherwise
+  */
+ __bpf_kfunc int bpf_task_work_schedule_resume(struct task_struct *task, struct bpf_task_work *tw,
+-					      void *map__map, bpf_task_work_callback_t callback,
++					      void *map__const_map, bpf_task_work_callback_t callback,
+ 					      struct bpf_prog_aux *aux)
+ {
+-	return bpf_task_work_schedule(task, tw, map__map, callback, aux, TWA_RESUME);
++	return bpf_task_work_schedule(task, tw, map__const_map, callback, aux, TWA_RESUME);
+ }
+ 
+ static int make_file_dynptr(struct file *file, u32 flags, bool may_sleep,
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e8c76abbf76a..a3429610b426 100644
+index a3429610b426..bb0f3ea53c99 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -8274,6 +8274,44 @@ static int get_constant_map_key(struct bpf_verifier_env *env,
+@@ -10817,6 +10817,11 @@ static bool is_kfunc_arg_map(const struct btf *btf, const struct btf_param *arg)
+ 	return btf_param_match_suffix(btf, arg, "__map");
+ }
  
- static bool can_elide_value_nullness(const struct bpf_map *map);
- 
-+static int process_map_ptr_arg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
-+			       argno_t argno, struct bpf_call_arg_meta *meta)
++static bool is_kfunc_arg_const_map(const struct btf *btf, const struct btf_param *arg)
 +{
-+	/* Use map_uid (which is unique id of inner map) to reject:
-+	 * inner_map1 = bpf_map_lookup_elem(outer_map, key1)
-+	 * inner_map2 = bpf_map_lookup_elem(outer_map, key2)
-+	 * if (inner_map1 && inner_map2) {
-+	 *     timer = bpf_map_lookup_elem(inner_map1);
-+	 *     if (timer)
-+	 *         // mismatch would have been allowed
-+	 *         bpf_timer_init(timer, inner_map2);
-+	 * }
-+	 *
-+	 * Comparing map_ptr is enough to distinguish normal and outer maps.
-+	 */
-+	if (meta->map.ptr &&
-+	    (meta->map.ptr != reg->map_ptr || meta->map.uid != reg->map_uid)) {
-+		argno_t obj_argno = argno_from_reg(reg_from_argno(argno) - 1);
-+		struct btf_record *rec = meta->map.ptr->record;
-+		const char *obj_name = "workqueue";
-+
-+		if (rec->timer_off >= 0)
-+			obj_name = "timer";
-+		else if (rec->task_work_off >= 0)
-+			obj_name = "bpf_task_work";
-+
-+		verbose(env, "%s pointer in %s map_uid=%d ",
-+			obj_name, reg_arg_name(env, obj_argno), meta->map.uid);
-+		verbose(env, "doesn't match map pointer in %s map_uid=%d\n",
-+			reg_arg_name(env, argno), reg->map_uid);
-+		return -EINVAL;
-+	}
-+
-+	meta->map.ptr = reg->map_ptr;
-+	meta->map.uid = reg->map_uid;
-+	return 0;
++	return btf_param_match_suffix(btf, arg, "__const_map");
 +}
 +
- static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 			  struct bpf_call_arg_meta *meta,
- 			  const struct bpf_func_proto *fn,
-@@ -8349,29 +8387,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 	switch (base_type(arg_type)) {
- 	case ARG_CONST_MAP_PTR:
- 		/* bpf_map_xxx(map_ptr) call: remember that map_ptr */
--		if (meta->map.ptr) {
--			/* Use map_uid (which is unique id of inner map) to reject:
--			 * inner_map1 = bpf_map_lookup_elem(outer_map, key1)
--			 * inner_map2 = bpf_map_lookup_elem(outer_map, key2)
--			 * if (inner_map1 && inner_map2) {
--			 *     timer = bpf_map_lookup_elem(inner_map1);
--			 *     if (timer)
--			 *         // mismatch would have been allowed
--			 *         bpf_timer_init(timer, inner_map2);
--			 * }
--			 *
--			 * Comparing map_ptr is enough to distinguish normal and outer maps.
--			 */
--			if (meta->map.ptr != reg->map_ptr ||
--			    meta->map.uid != reg->map_uid) {
--				verbose(env,
--					"timer pointer in R1 map_uid=%d doesn't match map pointer in R2 map_uid=%d\n",
--					meta->map.uid, reg->map_uid);
+ static bool is_kfunc_arg_alloc_obj(const struct btf *btf, const struct btf_param *arg)
+ {
+ 	return btf_param_match_suffix(btf, arg, "__alloc");
+@@ -11063,7 +11068,7 @@ enum kfunc_ptr_arg_type {
+ 	KF_ARG_PTR_TO_RB_NODE,
+ 	KF_ARG_PTR_TO_NULL,
+ 	KF_ARG_PTR_TO_CONST_STR,
+-	KF_ARG_PTR_TO_MAP,
++	KF_ARG_CONST_MAP_PTR,
+ 	KF_ARG_PTR_TO_TIMER,
+ 	KF_ARG_PTR_TO_WORKQUEUE,
+ 	KF_ARG_PTR_TO_IRQ_FLAG,
+@@ -11382,8 +11387,11 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env, struct bpf_func_state *call
+ 	if (is_kfunc_arg_const_str(meta->btf, &args[arg]))
+ 		return KF_ARG_PTR_TO_CONST_STR;
+ 
++	if (is_kfunc_arg_const_map(meta->btf, &args[arg]))
++		return KF_ARG_CONST_MAP_PTR;
++
+ 	if (is_kfunc_arg_map(meta->btf, &args[arg]))
+-		return KF_ARG_PTR_TO_MAP;
++		return KF_ARG_PTR_TO_BTF_ID;
+ 
+ 	if (is_kfunc_arg_wq(meta->btf, &args[arg]))
+ 		return KF_ARG_PTR_TO_WORKQUEUE;
+@@ -12131,19 +12139,15 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 		if (kf_arg_type < 0)
+ 			return kf_arg_type;
+ 
++		if (is_kfunc_arg_map(btf, &args[i])) {
++			ref_id = *reg2btf_ids[CONST_PTR_TO_MAP];
++			ref_t = btf_type_by_id(btf_vmlinux, ref_id);
++			ref_tname = btf_name_by_offset(btf, ref_t->name_off);
++		}
++
+ 		switch (kf_arg_type) {
+ 		case KF_ARG_PTR_TO_NULL:
+ 			continue;
+-		case KF_ARG_PTR_TO_MAP:
+-			if (!reg->map_ptr) {
+-				verbose(env, "pointer in %s isn't map pointer\n",
+-					reg_arg_name(env, argno));
 -				return -EINVAL;
 -			}
--		}
--		meta->map.ptr = reg->map_ptr;
--		meta->map.uid = reg->map_uid;
-+		err = process_map_ptr_arg(env, reg, argno, meta);
-+		if (err)
-+			return err;
- 		break;
- 	case ARG_PTR_TO_MAP_KEY:
- 		/* bpf_map_xxx(..., map_ptr, ..., key) call:
-@@ -12122,36 +12140,9 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
- 					reg_arg_name(env, argno));
- 				return -EINVAL;
+-			ret = process_map_ptr_arg(env, reg, argno, meta);
+-			if (ret < 0)
+-				return ret;
+-			fallthrough;
+ 		case KF_ARG_PTR_TO_ALLOC_BTF_ID:
+ 		case KF_ARG_PTR_TO_BTF_ID:
+ 			if (!is_trusted_reg(env, reg)) {
+@@ -12159,6 +12163,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 				}
  			}
--			if (meta->map.ptr && (reg->map_ptr->record->wq_off >= 0 ||
--					      reg->map_ptr->record->task_work_off >= 0)) {
--				/* Use map_uid (which is unique id of inner map) to reject:
--				 * inner_map1 = bpf_map_lookup_elem(outer_map, key1)
--				 * inner_map2 = bpf_map_lookup_elem(outer_map, key2)
--				 * if (inner_map1 && inner_map2) {
--				 *     wq = bpf_map_lookup_elem(inner_map1);
--				 *     if (wq)
--				 *         // mismatch would have been allowed
--				 *         bpf_wq_init(wq, inner_map2);
--				 * }
--				 *
--				 * Comparing map_ptr is enough to distinguish normal and outer maps.
--				 */
--				if (meta->map.ptr != reg->map_ptr ||
--				    meta->map.uid != reg->map_uid) {
--					if (reg->map_ptr->record->task_work_off >= 0) {
--						verbose(env,
--							"bpf_task_work pointer in R2 map_uid=%d doesn't match map pointer in R3 map_uid=%d\n",
--							meta->map.uid, reg->map_uid);
--						return -EINVAL;
--					}
--					verbose(env,
--						"workqueue pointer in R1 map_uid=%d doesn't match map pointer in R2 map_uid=%d\n",
--						meta->map.uid, reg->map_uid);
--					return -EINVAL;
--				}
--			}
--			meta->map.ptr = reg->map_ptr;
--			meta->map.uid = reg->map_uid;
+ 			fallthrough;
++		case KF_ARG_CONST_MAP_PTR:
+ 		case KF_ARG_PTR_TO_ITER:
+ 		case KF_ARG_PTR_TO_LIST_HEAD:
+ 		case KF_ARG_PTR_TO_LIST_NODE:
+@@ -12365,12 +12370,16 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
+-		case KF_ARG_PTR_TO_MAP:
+-			/* If argument has '__map' suffix expect 'struct bpf_map *' */
+-			ref_id = *reg2btf_ids[CONST_PTR_TO_MAP];
+-			ref_t = btf_type_by_id(btf_vmlinux, ref_id);
+-			ref_tname = btf_name_by_offset(btf, ref_t->name_off);
+-			fallthrough;
++		case KF_ARG_CONST_MAP_PTR:
++			if (base_type(reg->type) != CONST_PTR_TO_MAP) {
++				verbose(env, "pointer in %s isn't map pointer\n",
++					reg_arg_name(env, argno));
++				return -EINVAL;
++			}
 +			ret = process_map_ptr_arg(env, reg, argno, meta);
 +			if (ret < 0)
 +				return ret;
- 			fallthrough;
- 		case KF_ARG_PTR_TO_ALLOC_BTF_ID:
++			break;
  		case KF_ARG_PTR_TO_BTF_ID:
+ 			/* Only base_type is checked, further checks are done here */
+ 			if ((base_type(reg->type) != PTR_TO_BTF_ID ||
 -- 
 2.52.0
 
