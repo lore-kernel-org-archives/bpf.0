@@ -1,112 +1,138 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F8842376B
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 10:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784889829; cv=pass; b=oMKxLehAMcIrqsM1cJQSoJuqkuXH9PxxePemO/cP/z4shoUp+1yFPUq4P9a2AL2Z5OyXp4MT3NN84rGa+pxE/FbsI+Na+r0cnswlLifdyUZD5m3DZPwHX6/I9YlEgOs2b60qOl4fM3xy5zx9neQX6UX+ixawRve9EMAZtw0zNt0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784889829; c=relaxed/simple;
-	bh=5zjfyufp55cUafsB5TW/gzWxPo9YnjRh+gz6mRSML90=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G7lwIYK2yhzP7Vmd4SMwif1siQpHxtJCDmBe/lqIzPPBjXynGhB1/KbGLD68PFVxF4v9o7FlbR28bshmDC+UIM9G9DaJ1eB0b2JawBScfymaNj+XqjfAMd4HfIWKQQvSOOoRne49SlPhks3rKEN2GnwFzhhjJ1avPZrtztVrEq0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VYo0u6g+; arc=pass smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE493EF0CD
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 10:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784890109; cv=none; b=WmNPc0K+eSeqtSuBXA3RShdc5doJR6c7W4f4wPgaMv5re5v8zMZpCVFrInyZiMkbbbiAXX0rvFvBz9rta4sgipRYWO+qRrOt5BUl16AqCRAXOQQ0WF0VN9Ssc/dHJRkLkBvkR5wJbNxkbNn/OkgCNG5Zxb6zc1sx3jIE6pBL/jw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784890109; c=relaxed/simple;
+	bh=xYRxLMtZ3/BRx1I4wyTmpchAQbo3mmEcBK6PpJEipNk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Mw5N8k313Qu8HlvUirdmV+0150lRbkq/urC3QxkK/lyJ7353P6GJ2c3es+dNQs+W6/0l9TDDgUdn95XPYnE6pNvTysTxO5seoAusDpQRBDZ/26GPGRDJEGt9t6KbBC7/dZkFLGX/cHt9+r+WUVrpY7tuscFE0kp5nA1u5MoK7vQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Ub2STd1Q; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VYo0u6g+"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-69edc72e513so46409a12.3
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 03:43:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784889826; cv=none;
-        d=google.com; s=arc-20260327;
-        b=eVtIYtwLsvcD3WuDgX+SiVOms3GdX6EVW2Jcd6p7JKatp745rUAIOxTzKlz8qaFAEW
-         meazY8Sjv4Up4bOMTGKDHNdmEX/9XVYnoxUaspuYuRvZY7T6uGWOWTeafpSOcE+cwCHp
-         eEI0dGdjsEiXNXJtr97t9LJD6P70cxlGSmPJHrjL9pLFgISSvTk9QDKYFtu9VFGUnrTL
-         yYZcpj06MXzED0MZhw69/SRupMPmHfziA+6Xyb0FMwi6LQKh9mQR5funkVft6rV2ojTx
-         swPApyya+DQxdkqkETjNoALcGntenysuFoNmUUgjrGNauSyrD0vLW3MsbPTezKF5wZr7
-         cfPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5zjfyufp55cUafsB5TW/gzWxPo9YnjRh+gz6mRSML90=;
-        fh=bkaEavAhAZRxJkIyvVj3DlP68KKraVSHvVrNBUuXC7A=;
-        b=mtKC67F3ew1z8shA45yC8W/1VwV69d0x1R8Cm8rVpvEH5lqDV3dRkOAss3oOgLNVo+
-         UE47fLY1wnvDSGGCQXHctxAYntFb+LiqIaWFQG/Vs68bCMa7xAcTcOZAJc9XW7g9QoWC
-         pYiBjDEJbQ9+QWutPEjrqFvbA3lzMDtgrYKr/EzfWl88GkHBMIX+yidHlEkDGiUJ+rXB
-         H/yPxZdLfS+9bFtuI4jcnfyvK9/4sU7z24ekr160+ZXvCZ1At0WLY6wFmY4qdqrV1Mhb
-         EYid40kLDGjmlm+I3jvrsqYy1iZBSNz4zmrpWhpI23GjD7eVaWlPOsByBSwZOmgtjA0A
-         6/9g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Ub2STd1Q"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-69ea0595598so312096a12.0
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 03:48:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784889826; x=1785494626; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5zjfyufp55cUafsB5TW/gzWxPo9YnjRh+gz6mRSML90=;
-        b=VYo0u6g+ZlXejTwgeQp1hmpxlhdOFiBh6LXBNM0GcuKMaUaryc+CKy1SYV7Y6aVf5u
-         OmtnTh4pEK2MQa2pDJNXPwQx2WQcuWP32aEh+4HI8nvdWWRjFRuKwvXs8JZd+oW01z37
-         pFboOTUKL2TTNboj4DJbg0hWde29+5nRB9CD8bLNqGDFZn2mMc/Y4CWLGP7fxaizMpim
-         OFGtDvF0BmAG+Rr/THtJNktOtKlPuRCs73C6pXRZWHbJrku67qLx0Cfk3PTtdYyiBNVQ
-         iu6KfeilKMz5Yyr+tQAnY1rQwKEnzErvvBooA2j8X8C9vFD7AzQexU+tsG87gdHrJW9+
-         54WA==
+        d=cloudflare.com; s=google09082023; t=1784890105; x=1785494905; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=Am9/owu6l1hJG7i/wElg5Hgmsf9dZWWfn/6yJfdsk+4=;
+        b=Ub2STd1QY/Yh0G/HXKAOpIh78GfmhUVVonLK8OK1KNbpiSq0KteOC/Y1Ldnzi7LksB
+         5lUsWTyMIJ5Dw9PzXLMVM5dpltes0Yjven2jcR3ZDJgNatXb37VqNBzsvH4zy1gCxhH9
+         m/2nw8GoFnVFd2LRD8rjEDxWGbSsLf/xBBRybQ9z4vSBTHrMCINAFfn45FTz/uT1wHxp
+         P+C+6EW1J8ZKdn8YR+93xx0jWiBULkj66mEUCpDJAD2mToSLZG46y1hiB/oo7PL7ubPy
+         0ERB/uztfhJmYUilHyV0g5jXeBGbHDQiacznv3yazsZTT1vei3ZWVfZYSTILLM7bWNZK
+         6ULw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784889826; x=1785494626;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5zjfyufp55cUafsB5TW/gzWxPo9YnjRh+gz6mRSML90=;
-        b=FFiHuMXpCMCjGA799d74WB0Yr30L2hm62N5GGT2y09YhkPcmyIgqKjnZze/2caEaCk
-         F3Z4GtsFjmr9zm3+Pp5UZ8aPaYe4p0ArlQ8tEl6swB7+US1qyJBgl6McM/P1dKEOyV5R
-         Kh3ifTD8TRWegvzo4vWJI0dYG/NevyrVOmCpPoTcyY+mJuahGxURyZAVWsY8cnVoIuUR
-         YFB45PdcXctp9Sai79NtxymvT7QqTv3oo9ZFL4OGzSZPtLLxX+3sgB1B+ZfAq3TVsvV0
-         qVdCG6LiUreLv0ZocCyM2dZ32cx2KwwohrFPf7PB8HcadT4yqu7KaS/ubACIDhnbWfnD
-         jfIw==
-X-Forwarded-Encrypted: i=1; AHgh+RorkPKzcsSQc2jQVCkg0AXGWWEnygLBTUbMjxo5Moenr2f6migq/Zyg1AIxThEgWA+9LqM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjE1qqGJ81mrgDylADad5B6B8/oYxX2wD2S785OqbCjoFL0n6e
-	/d7pH3i2qjH3/teAH5GJOxzIwiJpMGoHZIJ8LBiZ/6AxC9j5aN3z+HxbB7EzbfzXiKyjeaDB0rN
-	MXoh0GG/feNUQAYnfkWlKZi8+1oBEvOs=
-X-Gm-Gg: AR+sD10cX3h52ySDsQk30xHtEyCUm3bx0f29m+WmovhXieN1ZswwMOjHb7qOe2TOCYz
-	2ceyikpAu7le5h5LJdB+Mf9S7kJEl/6Ar3h34ah6vHV65Jtf+jMmr4K13utMZRYNSf/kjmF9iH4
-	XRxVbHBIxhdWHfQJP5QcM5QsFaJ2L7DcuR2voPA8xr4PSnKwtRf9u1l2kglWdArUnkOu6ZRVlIM
-	eHOFCyrHI51EYk/ghLrKCtQO17E+rXeM/YvCZ9DC6MkeKqCngZSKMHNbkPxAR4KU3i1/fIFqvwW
-	ihPPgF/1dR+RzY8=
-X-Received: by 2002:a05:6402:5388:b0:698:81d7:b812 with SMTP id
- 4fb4d7f45d1cf-69f8ddc0d34mr814454a12.3.1784889826059; Fri, 24 Jul 2026
- 03:43:46 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784890105; x=1785494905;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Am9/owu6l1hJG7i/wElg5Hgmsf9dZWWfn/6yJfdsk+4=;
+        b=H5G0kKvOZWrbtDdvrUYq1R0ixMKBLsB0Fvhd0VCbJ8aKmMZQxZbrlNhwMv18lNeMyB
+         bhDTQb9OG931uaBWcJ3ZK0ZAPqbbZDqson7FQFf+PtbbsqoOZNPYxqdpUd00uPt9R9pg
+         T4SVIOr1WpyQ+6lYaLE6KBp3wPGmljg+ChX6khe3MnehHIyiQPBXGuvwdjQSJvf0hm5S
+         7xl0+UwwPrE2LQo8WHqkdNGnPsTNz90KpsqBthx8hhC3Infpe5IJ3IceRUxmtxg2PqVO
+         gkvgzLzxWkQ0XZ4iLsW9dZHP8csgmAWKFBaU+Ca0JVt1m6iDF4D5wfFH97icve/pXRhs
+         FT5w==
+X-Forwarded-Encrypted: i=1; AHgh+RqAYpRxrHaVvKg9SrPyGvwYFW7Va+HbHAV8OAztYGCBWnhKTNvdXTK6JwKnEto9JhNPE7w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznCKwNEt62BWb/tHhqOrAR0dsUljaL+tc6jpHz8J6bWFyX5bJM
+	99QKCJO4ot1p2tHRig2wTAiD7hGRhmSVdNTsKnNfAVWDlCIL7aYnTvDecV5b+VTiCsE=
+X-Gm-Gg: AR+sD10huLz+ijkTur0SWPnopc/CFjcqABuwxPygKzsMiVZPdRnmulIuZdf+gidj6I4
+	pZZVmdvHLye9G6quSbSdP5Oaf30WvsfHdZDJsTGaH1MB0sYAPux44lAdbUBeJ3Y6FQccUUFS9zM
+	o+w2RrfRjSvmK0x3J0KyEJ5fxQwuWQk2HrYRFXRjbj9Xj77nJiEX2wF7WSTGSWa2cs+ht8hplxF
+	hM3DtnLHZHOFVNMXTU26tQ03fbduj2oV7fvt7E6PWQs7+d4WBT2V8GJLeRqnFvtWqcEuiXrDM+K
+	3m4mJ6mhCTI5k/WonQk7It3TVbuu+iUpZvq/iJNtW0YG2aOwYYERgfrnEa/C/A+MFpubC3qwJcx
+	xIUoHSdHnjR09WLkKbeCoPEPgn53elqiw0Ywx4rJYs+Qa0+JlTTpXcHQL8Z3lGydBuGkEOA0egs
+	/O1Ilw
+X-Received: by 2002:a05:6402:3513:b0:698:3b7c:7e50 with SMTP id 4fb4d7f45d1cf-69f6ab4956bmr2655292a12.38.1784890105421;
+        Fri, 24 Jul 2026 03:48:25 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-69f350391d2sm2952122a12.28.2026.07.24.03.48.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jul 2026 03:48:24 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Chengfeng Ye <nicoyip.dev@gmail.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>,  Eric Dumazet
+ <edumazet@google.com>,  Neal Cardwell <ncardwell@google.com>,  Kuniyuki
+ Iwashima <kuniyu@google.com>,  John Fastabend <john.fastabend@gmail.com>,
+  Jiayuan Chen <jiayuan.chen@linux.dev>,  "David S. Miller"
+ <davem@davemloft.net>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
+ <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+  netdev@vger.kernel.org,  bpf@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf v4] bpf, sockmap: Fix cork use-after-free in
+ tcp_bpf_sendmsg()
+In-Reply-To: <20260724103856.3399001-1-nicoyip.dev@gmail.com> (Chengfeng Ye's
+	message of "Fri, 24 Jul 2026 18:38:56 +0800")
+References: <87fr18lmzo.fsf@cloudflare.com>
+	<20260724103856.3399001-1-nicoyip.dev@gmail.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Fri, 24 Jul 2026 12:48:22 +0200
+Message-ID: <87a4rgll3d.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260719161630.2901208-1-nicoyip.dev@gmail.com>
- <20260723162602.3275661-1-nicoyip.dev@gmail.com> <20260723100030.3eee6d51@kernel.org>
- <87ldb0lo8t.fsf@cloudflare.com> <CAAo+4rV_5B-KOQgPL3BC3WKGa_otkEUXD=wDjCig9M0Se-mYtA@mail.gmail.com>
- <87fr18lmzo.fsf@cloudflare.com>
-In-Reply-To: <87fr18lmzo.fsf@cloudflare.com>
-From: Chengfeng Ye <nicoyip.dev@gmail.com>
-Date: Fri, 24 Jul 2026 18:43:34 +0800
-X-Gm-Features: AUfX_mxnlnSFi_yV1t_Ui--j4AHwdWK1tce35HMxRExxAoQFSSo6xtrsHUCb3QU
-Message-ID: <CAAo+4rVrB-Lv4MfaaH9sbosbOPFJQy0_UaDcbu9tLUFoGtWnvw@mail.gmail.com>
-Subject: Re: [PATCH v3] bpf, sockmap: Fix cork ownership in tcp_bpf_sendmsg()
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, "David S. Miller" <davem@davemloft.net>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Fri, Jul 24, 2026 at 6:07=E2=80=AFPM Jakub Sitnicki <jakub@cloudflare.co=
-m> wrote:
-> You need to resend v1 with "PATCH bpf" prefix for bpf CI to pick it up.
+On Fri, Jul 24, 2026 at 06:38 PM +08, Chengfeng Ye wrote:
+> tcp_bpf_sendmsg() keeps msg_tx across sk_stream_wait_memory(), which
+> drops and reacquires the socket lock.  Its error path tries to decide
+> whether msg_tx names the local temporary message by comparing it with
+> the current value of psock->cork.
+>
+> This comparison is unsafe when two threads send on the same socket:
+>
+>   Thread A                         Thread B
+>   msg_tx = psock->cork
+>   sk_msg_alloc() fails
+>   sk_stream_wait_memory()
+>     releases the socket lock      acquires the socket lock
+>                                   completes the cork
+>                                   psock->cork = NULL
+>                                   frees the cork
+>     reacquires the socket lock
+>   msg_tx != psock->cork
+>   sk_msg_free(msg_tx)
+>
+> The stale cork is therefore mistaken for the local temporary message
+> and freed again.  KASAN reported:
+>
+>   BUG: KASAN: slab-use-after-free in sk_msg_free+0x49/0x50
+>   Read of size 4 at addr ffff88810c908800 by task poc/90
+>   Call Trace:
+>    sk_msg_free+0x49/0x50
+>    tcp_bpf_sendmsg+0x14f5/0x1cc0
+>    __sys_sendto+0x32c/0x3a0
+>    __x64_sys_sendto+0xdb/0x1b0
+>   Allocated by task 89:
+>    __kasan_kmalloc+0x8f/0xa0
+>    tcp_bpf_sendmsg+0x16b3/0x1cc0
+>   Freed by task 91:
+>    __kasan_slab_free+0x43/0x70
+>    kfree+0x131/0x3c0
+>    tcp_bpf_sendmsg+0xec3/0x1cc0
+>
+> msg_tx can only name the stack-local tmp or the shared cork. Check for
+> tmp directly so a changed psock->cork cannot turn a shared message into
+> an apparent local one.
+>
+> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Signed-off-by: Chengfeng Ye <nicoyip.dev@gmail.com>
+> ---
 
-No problem, just resent as "[PATCH bpf v4]".
+Thanks!
 
-Best, Chengfeng
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
