@@ -1,116 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBFA409608;
-	Fri, 24 Jul 2026 14:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D953D3126DF
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 14:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784903692; cv=none; b=G20J3YbSfxyHitszpx7RGcE8EvAu1hKtnXuR8ATMclrigIswB4PnnJn0O8IRNaG2apBsqi41eK469yEUSgjTKJ0WYu6BJmgIZULTsdjhbloU5WwYcAmd31sloJbEzjWrn5+pRXyeDONpMMZkdr4SNDZJdTwQ53DQQAM6ZQh5Uk8=
+	t=1784903753; cv=none; b=kcrv/6srvs2e42D5ky3vvrluImInMf9bwxJ6u/7sAxCaZaabU3i5EoeqXQmwjuOw6Lb0nnAOqvdoc7dhj1EcmHxP2mZ4o1v4dXvTtY+SR25J0CXvaO5O9YoxSx2cVfmCxVRQl1Gkjs8XDCedVwtH+rQOBd5xLSNe2SF9dHOD20w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784903692; c=relaxed/simple;
-	bh=4lmCq4LbPbYv2k3pYEf/I1/+tzhXtJJrywGHxdp5yTI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QjWCNwHGkzrjqvqMnWEQ+mSFiVw3J7XHS7LP01XaIgyRr/FWfLmhCCvXgb/J+mzVMgDZqnaudMLgZNGF7fJ3c8iZ63nyqidtEqqPcfCg3vUc/dH7J0526Eo0H3bEcANWgkSxk+zTMJdquixG38iEgu6b/bgtaI7OYROIfCHdFRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VsFUUbU4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784903753; c=relaxed/simple;
+	bh=7oS8vM6iAnANmbP0WQb5EPFQcVXRX1c0I5kp2CKZf3w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iXtNkuLuD3SrQGqjCoFk8H+Rja3lO98CReQT2NBW2kC4nZ8STtkq1AQBi8gPNAoaeNTrYUrI5SthzYc5KR46aJSSRn+9HWHIOrKUEqW5H4PBdx2/smk7TnWJyIvyxEPFlpLX10d+T+VHqfchvb+PMLyg8I16gMevPyCDmozgT6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nt9K+5x4; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VsFUUbU4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C08831F000E9;
-	Fri, 24 Jul 2026 14:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784903689;
-	bh=GBDBmg2CPKEg5YjNZKmb5/bmQDSejvsj9LvkjzBS8wk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VsFUUbU4nQzm9RNoaqPMN6v1ucDGBQspbq7FVvPXMo2A0+A6yNxTEc4N5wr2cFeIk
-	 c31bU+N7w5HRAH/VzmomHE/x7gu0P0RaFMBldclvCSAvx+lGEVVIE9Ssz8LcwRhWjT
-	 X2BKcewpWMFDf8Kb6PAgat/qZ+d8LOJI/GwzzbivDDbNv9FNDmJIli9CrDG4hgoNcz
-	 8Tiu94JOIMOdFj+7eZRjwuVhsHO8pcLvvJh1y5k/sxd8b0dX/Gtn+FflF4XsRP+nnW
-	 KVi8ayW4D2QaJ6AmSUQWjg5vKNXezLw+OeCkMWu7kZIOACJtPbRXdueZ+S6nA3zBJz
-	 wvnH00k72u1RA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 6/6] s390/bpf: Add kCFI support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Heiko Carstens" <hca@linux.ibm.com>
-Cc: bpf@vger.kernel.org, "Heiko Carstens" <hca@linux.ibm.com>, linux-s390@vger.kernel.org, "Vasily
- Gorbik" <gor@linux.ibm.com>, "Alexander Gordeev" <agordeev@linux.ibm.com>
-In-Reply-To: <20260724141318.1037434-7-hca@linux.ibm.com>
-References: <20260724141318.1037434-1-hca@linux.ibm.com>
- <20260724141318.1037434-7-hca@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Jul 2026 14:34:48 +0000
-Message-Id: <20260724143448.C08831F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nt9K+5x4"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4955de8797cso4042075e9.3
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 07:35:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784903750; x=1785508550; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=T2AmyK6VS5hlMIK1jljsVPuXvNOj4MYXZ8JpEwO/0IE=;
+        b=Nt9K+5x4IqR/ltj2xzsH9XgXM5t3JtS3Iw5k3pqlrdsIMBHpuCFdmNgvET/WkfMMYS
+         eN7PjNezTV6X7G/boE/wWV4WB3/tWmkAP7dGEkLccvr3ygwp63/sHTI6XGJlZhyeSDuK
+         U+9L9lKGEnl0UgfqP9OSO1QlIARw17b6dX1QMIO7ZAfAlsE95V7PD4FFIDFNe4uQ3uSe
+         RDTdrCTW3yO5L8YSbsJwT4Bui2ZxSjRKYvaAacTwSFOEts+TXokrz27Qxnd4aza2Wmvz
+         ESXFNHACcn3VG53GijD2xPQ7/rS+674+RkfEIPrFvbANblIregcTR4GzV5yEHLQc82vP
+         D4Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784903750; x=1785508550;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=T2AmyK6VS5hlMIK1jljsVPuXvNOj4MYXZ8JpEwO/0IE=;
+        b=deini6//m9N6ZnAfqmO5RwnMjOsMFMypuVq81G/5i828FFNNwmCQS3fTfQp6jeGY49
+         iWyhbu0iPqlGbI9VAfstYvk5N2F0IaRlpJSJZfvzugrmVB2AQJDXqnwCbj21I086io5L
+         aC5avqieTQ/A0Q67OMrLDeYBhapZ/ekHOosSLMY3n67SxdCADdJII3QEz2yzRyjhjhcT
+         pflrhc16X+yurGVr7CtbDuExqbJTpzx1y/kfWr+fvh6yZX7q6MO2VXVjKRNS3qlRVI87
+         4FEB4u4fpScR5XdW3MCD5635Tqe1bARXmTIkY4/aVdRmTbM/EywOA3ppqm0apeVm/Nmy
+         eeXA==
+X-Forwarded-Encrypted: i=1; AHgh+RrBEg/U7o85DidPGMadBntqZKy0h2JkH+sT5/E6oyYcKMZ2IeNR3qwsiSuQgBhMwKDhESk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjWk9JzgbSMqu+DMmfkARHbRarCJGqvMTkdtBZjxDJWoKKnFiX
+	xtP74PBW3DXG+Xe6Ax1mt2u3kqYu5BJu97+jwuBkgw0gWQAq7QcZv8kJ
+X-Gm-Gg: AR+sD11UIPUFKtNIE+klKqkfcl5EWtUMSgC61AE9lDogkchpFa5tISqZFIRRHaYzMH7
+	Uy6hyvXC6RP86QuylIv0EDBGQieNf53B4+d39ECfg4RdjtX1XWFBp7bPaU03TmsGHna0G77b97v
+	fZPntRMbIT6LWIZOkYY9jZl1+Nsi2RNKcNjui1ornAF2MZwm7kzpuPW8y0Bpn9N8XmfeMcyGLms
+	72eOZefVBSFSMY+G2E6HitP5drvWvwZFDjEm6o3h5zAKiZgeQoxFY7qNVcPBLxAoXKh7CQihhQ5
+	EvUMWnhZiJGE/MmKcW6K0klftfYqu4SnNbP1Rd1AKE6XEqUWn3IxZ34YpsjuZBTSnGHhLo6Xhkf
+	zgclLa35XY+nnx2wP/Mk1MBpBBzp8JF5Qo55aYurUx4o77Zhu6fU1sjxBd+hT8Hn/1yKNvwH9Gp
+	rYXuvtyzGRzg8iMiXK7H9Af9Z1GEMLZb8Ts3P2AT+LqQvoQiDH+yr3ExnhJ9aZsg==
+X-Received: by 2002:a05:600c:46c8:b0:495:6713:9aa3 with SMTP id 5b1f17b1804b1-4957a6e9f55mr52267595e9.30.1784903749664;
+        Fri, 24 Jul 2026 07:35:49 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85bb5127sm23724640f8f.10.2026.07.24.07.35.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jul 2026 07:35:49 -0700 (PDT)
+Message-ID: <dc95818f-eb75-4389-be28-b1128126b92c@gmail.com>
+Date: Fri, 24 Jul 2026 15:35:48 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] bpf: htab: Reduce memory use of hash maps
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260722203801.1854941-1-tjmercier@google.com>
+ <b8541508-5046-448c-b32d-40c7ad79b1e9@gmail.com>
+ <CABdmKX3Jhrb3G3_25CN+TAG8oSgOqJwr0xi8XUC8c7RsCS=h-A@mail.gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <CABdmKX3Jhrb3G3_25CN+TAG8oSgOqJwr0xi8XUC8c7RsCS=h-A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] BPF line info offsets are shifted by 4 bytes due to double-count=
-ing the CFI hash size in `bpf_prog_fill_jited_linfo()`.
---
+On 7/23/26 6:22 PM, T.J. Mercier wrote:
+> On Thu, Jul 23, 2026 at 7:11 AM Mykyta Yatsenko
+> <mykyta.yatsenko5@gmail.com> wrote:
+>>
+>> On 7/22/26 9:37 PM, T.J. Mercier wrote:
+>>> Memory is expensive and scarce these days. This series reduces the
+>>> memory use of BPF hash maps by eliminating the per-element overheads
+>>> below. This saves up to 50% of per-element memory use for standard and
+>>> PCPU hash maps. The memory use of LRU hash maps is unaffected.
+>>>
+>>
+>> I understand that these savings calculations do not account for the element
+>> value overhead of per-CPU maps, which make up most of the map memory
+>> consumption. Realistically we won't see any memory savings for per-CPU maps.
+> 
+> Yes, I did not look at BPF_MAP_TYPE_PERCPU_ARRAY at all. 95% of the
+> memory used by all of our BPF maps comes from hashmaps affected by
+> these changes. We only have 7 BPF_MAP_TYPE_PERCPU_ARRAY maps and they
+> consume only about 12 KiB. (I know a few of those PCPU arrays are just
+> to avoid 128 / 256 byte BPF stack allocations.)
+> 
+> 
 
---- Patch [6]: [PATCH 6/6] s390/bpf: Add kCFI support ---
-commit 07d29b72daf2643a639d32a0ab6a9b913adcfbc6
-Author: Heiko Carstens <hca@linux.ibm.com>
+BTW, did you look into BPF_MAP_TYPE_RHASH? It does not
+yield much memory savings compared to normal hashmap, but performance
+is better in some scenarios.
 
-s390/bpf: Add kCFI support
+Link: https://lore.kernel.org/all/20260605-rhash-v7-0-5b8e05f8630d@meta.com/
 
-This patch adds kCFI (Kernel Control Flow Integrity) support for BPF progra=
-ms=20
-on the s390 architecture. It emits a CFI hash before the BPF program=20
-instructions and adjusts the function pointer and lengths to account for=20
-this prefix.
+> 
+> 
+> 
+>>> Map Type & Configuration            | Old size | New size | Savings
+>>> ------------------------------------|----------|----------|--------
+>>> Standard (key <= 8 B, val <= 8 B)   |   64 B   |   32 B   | 50.0%
+>>> Per-CPU (prealloc) (key <= 8 B)     |   64 B   |   32 B   | 50.0%
+>>> Per-CPU (non-prealloc) (key <= 8 B) |   64 B   |   40 B   | 37.5%
+>>> LRU (Any key/value size)            |    -     |    -     | 00.0%
+>>>
+>>> 1) Unused LRU / PCPU fields in standard and PCPU hash maps (patch 1)
+>>> struct htab_elem is used for all hash map types, and includes fields
+>>> that are not always used (bpf_lru_node, ptr_to_pptr). For standard
+>>> (non-LRU, non-PCPU) hash maps the 24 bytes for the bpf_lru_node (union)
+>>> are entirely overhead and can be eliminated. Non-preallocated PCPU maps
+>>> only need the 8 byte ptr_to_pptr which is currently unioned with the
+>>> unneeded 24 byte bpf_lru_node, so 16 bytes of overhead can be
+>>> eliminated. Preallocated PCPU maps don't need ptr_to_pptr, so 24 bytes
+>>> of overhead can be saved.
+>>>
+>>> 2) Hash caching for small keys (patch 2)
+>>> For hash maps with small key sizes (<= 8 bytes), comparing keys only
+>>> requires a single instruction (64 bit), or a few (32 bit). Currently the
+>>> 4 byte hash value (8 byte aligned) is used for this, but offers no
+>>> performance advantage in this case and can be eliminated.
+>>>
+>>> The implementation splits htab_elem into dedicated structures for the
+>>> different map types (htab_elem_lru, htab_elem_pcpu, htab_elem) which
+>>> share a common initial sequence, but contain additional map-type
+>>> specific fields where necessary. This means the placement of the key for
+>>> each element varies with the map type, and key_offset is added to
+>>> bpf_htab for this purpose.
+>>>
+>>> While using key_offset and conditional hash checks adds new pointer
+>>> dereferences and branching during element traversal,
+>>> run_bench_htab_mem.sh shows no significant performance regression across
+>>> 10 runs on my 3995WX.
+>>>
+>>> Benchmark (all in kops/sec)  | Avg. Before | StDev | Avg. After | StDev
+>>> -----------------------------|-------------|-------|------------|------
+>>> prealloc overwrite           | 115.11      | 4.10  | 115.45     | 5.24
+>>> prealloc batch_add_batch_del | 127.14      | 4.32  | 127.06     | 2.32
+>>> prealloc add_del_on_diff_cpu | 23.22       | 0.93  | 22.91      | 1.60
+>>> normal overwrite             | 78.52       | 3.05  | 80.40      | 3.25
+>>> normal batch_add_batch_del   | 45.37       | 0.69  | 47.71      | 0.66
+>>> normal add_del_on_diff_cpu   | 12.02       | 0.73  | 12.48      | 0.70
+>>>
+>>> T.J. Mercier (2):
+>>>   bpf: htab: Split htab_elem_lru and htab_elem_pcpu off of htab_elem
+>>>   bpf: htab: Reduce elem_size by 8 bytes for small key sizes
+>>>
+>>>  kernel/bpf/hashtab.c                          | 339 ++++++++++++------
+>>>  kernel/bpf/map_in_map.c                       |  13 +
+>>>  kernel/bpf/map_in_map.h                       |   2 +
+>>>  .../selftests/bpf/progs/map_ptr_kern.c        |   2 +-
+>>>  4 files changed, 252 insertions(+), 104 deletions(-)
+>>>
+>>>
+>>> base-commit: cfce77b63375dac81d53f2f85593c548415206b7
+>>
 
-> diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-> index 31749c0362ca2..74642e0b4ee19 100644
-> --- a/arch/s390/net/bpf_jit_comp.c
-> +++ b/arch/s390/net/bpf_jit_comp.c
-
-[ ... ]
-
-> @@ -2401,9 +2417,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ver=
-ifier_env *env, struct bpf_pr
->  		jit_data->ctx =3D jit;
->  		jit_data->pass =3D pass;
->  	}
-> -	fp->bpf_func =3D (void *) jit.prg_buf;
-> +	fp->bpf_func =3D (void *)jit.prg_buf + cfi_get_offset();
->  	fp->jited =3D 1;
-> -	fp->jited_len =3D jit.size;
-> +	fp->jited_len =3D jit.size - cfi_get_offset();
-> =20
->  	if (!fp->is_func || extra_pass) {
->  		bpf_prog_fill_jited_linfo(fp, jit.addrs + 1);
-
-[Severity: Medium]
-Does this double-count the CFI offset when calculating the JIT line info?
-
-Looking at bpf_int_jit_compile(), the emit_kcfi() call during the prologue=
-=20
-generation advances jit.prg by 4 bytes. This means the offsets stored in=20
-jit.addrs already include the CFI hash size.
-
-However, when we pass these offsets to bpf_prog_fill_jited_linfo(), it=20
-uses fp->bpf_func as the base address to resolve the final instruction=20
-pointers:
-
-kernel/bpf/core.c:bpf_prog_fill_jited_linfo() {
-    ...
-    for (i =3D 1; i < nr_linfo && linfo[i].insn_off < insn_end; i++)
-        jited_linfo[i] =3D prog->bpf_func +
-            insn_to_jit_off[linfo[i].insn_off - insn_start - 1];
-}
-
-Since fp->bpf_func has already been shifted forward by cfi_get_offset(),=20
-adding the unadjusted jit.addrs offsets might shift the resulting line info=
-=20
-by 4 bytes, which could break source line mapping in userspace tools.
-
-Should jit.addrs be adjusted to subtract cfi_get_offset() before filling=20
-the line info, or should the original base pointer be passed instead?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260724141318.1037=
-434-1-hca@linux.ibm.com?part=3D6
