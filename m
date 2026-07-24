@@ -1,122 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882FE4908B9
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 06:06:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BD14908AE;
+	Fri, 24 Jul 2026 06:37:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784873163; cv=none; b=XJY9s2yEyi7wlmCWDtJvURXnL2kwZX/fgg7Jh7sGeh4XMUyTAieC94VgCaikTEvYDQyXKBpGBDInvIMgBtynNlKtSnbMpKnITYLjtz4gmIJbgWUbEFd8VNvcXtjHmzdbwv1j9nv/+I91HDaDyEyBlxSutamOzPQo7aw2MBGblhY=
+	t=1784875028; cv=none; b=WrGW2cc8pljxY9fDFHV+IH4EMK7D18An/sQVOMeN/LNs1cAKRqSTwwCA74NSoP015j1GUvwTq6BpRbZVL5U8gUSY4rOjyqnaXK32GmALuaAD03ptXxHf/gltsLW/WNHuLcNegmmeQZDbGKDKRUEhmyfiJwvcPtbsUqb6H77DtSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784873163; c=relaxed/simple;
-	bh=s7pbSfZBkXLhOVdmAbafHRuBcOkd0zfGJdf156zepe4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=r9pxrZ0Hj5YCwET0WROMSidUM+Sebu9IwG1DFXglb3FkS1OXpRzNUiMfpkRAaFuc9NJCdLk+OhCfsZAtRzBHJqhG7LOBa88QxLpO5OOcFTig7pFZjC6AoKFv+dvzyTnSWQg9ILXoWNkmWGbHNUZdl/uw7wiHt/GSmr0lOaoAZdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LIwzQiaV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784875028; c=relaxed/simple;
+	bh=PL+cFJw+A1mVND9tcmXNWtL6i+LZP+ToNTcw6ge+K5o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ts+he5ViPSj9q9auFrY9qzJWJiLXNsCMA5kidRGWF4P9PsBuaYc/sLBL5Xo5deG7aRSL1RUhVt/czodXulVXZf7JLOa7Lx2QZoBrUFEfzwUz9G5YFHuXFLpTybKvkCwao/XlzN9HsAPyYTrcIcG29z9GpEPWCRv1XVMfcf0ALm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=Xb3VqjiR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=E4KRqURO; arc=none smtp.client-ip=103.168.172.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LIwzQiaV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E509C1F000E9;
-	Fri, 24 Jul 2026 06:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784873162;
-	bh=1w///eXdmssDPnSWmFbNC1+LzZB79A+9zAxZE+1pwH0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LIwzQiaVnHDmjCx9rYqDQOzPtifcWuHZqfOZKRZodhw5jDN15KfLAzy714UMKlebn
-	 9w4BcB0jLT/vIItfHSe1JQrBWcgwy9anMPaAEuKMCDxl2fZIjz0RB+Q+jA2WvyTivz
-	 PFFatpWIo4trGEl7cAHcqdv6zHyW8nzD+LFVBIqotRyAdgYRo+IizWjEH8Jnk0enGd
-	 +LO7LOwe1DVtFXfihOIpFQ5xFIAJ8ZcvFYHn2yh+g9XMzKUO6eZBHFBv36GEwoyUmH
-	 utKKnnsyuVnoW3/WH0c/6vOgRHUAIl5ygKFc1te3RF3TnBpBJUO/2RaA07JlWiGK23
-	 AJOExlLl+9nFA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v1] bpf: lwt: Fix dst reference leak on reroute
- failure
-Reply-To: sashiko-reviews@lists.linux.dev
-To: xuanqiang.luo@linux.dev
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260723060445.21926-1-xuanqiang.luo@linux.dev>
-References: <20260723060445.21926-1-xuanqiang.luo@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Jul 2026 06:06:01 +0000
-Message-Id: <20260724060601.E509C1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="Xb3VqjiR";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E4KRqURO"
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailflow.phl.internal (Postfix) with ESMTP id 0305713800E3;
+	Fri, 24 Jul 2026 02:37:06 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-12.internal (MEProxy); Fri, 24 Jul 2026 02:37:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1784875025; x=1784882225; bh=PL+cFJw+A1
+	mVND9tcmXNWtL6i+LZP+ToNTcw6ge+K5o=; b=Xb3VqjiR6ggHWM6NVPVt0/BKjK
+	bXhw8MVXE53YORvHsKkzqFzUo0IXSWczqFvOIWbSRPiwBhh46d2l0+z+48E9jAqH
+	bxe7UetM5rYAxFCSSENb+AqeMCfRX/vMsrPbK9esDop/Y8j4NJNvnVZ/z3g0dcT0
+	L2+pH16ElKFfxaRZa6JWMmCiUVARPMBID0lnFdr4BJNAu47ej/Zc4a2QaQdoB6Gl
+	J2xEZ/u/cipp0ccjwklA+tNT4ScF2nDFkMuszDtZkFZp3wRp8pJm6YNz3cHYLg8j
+	gFrxXGM41jq+Q7ns2NY7rQlvB/4cmUxhTjnwcgLeh/cm7wpJRl2QV8LjJ5OA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1784875025; x=1784882225; bh=PL+cFJw+A1mVND9tcmXNWtL6i+LZP+ToNTc
+	w6ge+K5o=; b=E4KRqUROThBmzor2t/zYxQJPB0ip9oJCkwPIx7cIxB9Ker+R+Cn
+	N5Qhu+Px3qugUOgFYhTi1FeLsql8Ia7evopSC0nShTfPNGF6WUOM0YsZjbcrR5tT
+	T81nmIkrQZb6Ke4YWb2yQksAPjjSD8bZOvlpm61vSSjusYSklXtqDFfZbcxDXqDa
+	SrJC/zFzC+SldTBgkkefxcFfcpipLKfvr0z/Rw+0jC4GoBmW38pOmBoC+XuCDvE3
+	iN9/DKnMKgVXZblyIWkWPBZvtgTgaMozBLRBdPDW1d1cTWcG3v+x2rWsEzN6qRno
+	qLPLV55uDV95wFR0kEu1tTQRZyYyfGvoQpA==
+X-ME-Sender: <xms:EQhjajIahRpDyx59YVAOkO9j9BUpR9uxdf4NYmtzk1PkrESKBsCdyA>
+    <xme:EQhjauHNIWSuwlIHsO6uzb7ivHVBZoemkAjWhePEi6brT-Uf-ZGGzNBKMW50p8xYF
+    qPz89Bhiw7xrvpSdBHTLPfVZ5ZZ-fJ_4fjIu9lmwqFLDiNK>
+X-ME-Received: <xmr:EQhjakoEPLUhORWZwQ_c-AwNC_8xjyXi11gYR8EY2Qqy7l8h3PyRGhtHyOLOrsc-CR_SEeeBu1q-xLerES5QGQd5KA>
+X-ME-Proxy-Cause: dmFkZTFX5iPjis1+08aMQAfG2anV+zBI8zmH41Y47VAyCiJWTyfwZ7ELMO3BhcMlLZKfMW
+    fDTWyOy+PZWlS7Kx0pAXG7czUqKvrgCi4q51xKfz5cJLLsvJYphO9ETeTeFDNZQdXHYgVe
+    im9wGVk+RJ1YLmeL6ZP/396+9lUxfFYoPLWLGBYHqgNXSvw/ruBoPyxVtLKOQH5nhRPvdR
+    fPHAtRIJhLDkZXwHO0SBQfKq71gLj6p7ksc4llFPpIUa4UxdRtbYrMBU2cLrxeU9FSZFR6
+    T/Dl/+RyngkiZN++qOZL1XZFDdA87kiubCGqiBzUY50/fHnnxgbpsi5T71PF1j+rW+aWe4
+    U+RWmDRzPaaUjDb67h3Hud9a8QHWQXPzNYpCRWV0gfiL0b36vn73tyFYXyLtZYxf83lYex
+    BAYrhOEH2yZOV45k1hcrx4tL58/D8YLiPf3UX+jOKhtBVEig5hCZkJNc3xbnIlmN0alFY3
+    wTvD8qtj/WfpTIXxH4MRj27kg+Fl4lyOH244mmo+idDPzQvNCNCOiCZWcZEOdpBnCLG0OI
+    7EnbERLSfCi5pK3SzHsEvYSN6XmziCBTZ749fxUlpBbovtejWaVQHI6IuL6sGiv+sVlwOq
+    rZs4nn01uxi611kMHRlCXh1MR+K5xAior7grBjFf5EjOl6Es80nyEMChUgEg
+X-ME-Proxy: <xmx:EQhjakNHbpMmHIZHJawQiTeRof7s-JdEiu5ucVVYtVXP7Oaw7YrObQ>
+    <xmx:EQhjakpsS4MslApj7D75HsFHPWK_7d12Z9JvFaPFyahEUKvzLRLgoQ>
+    <xmx:EQhjaqnYAKr85uSFUQ5G6PT_zyUwMPJ0HXTlHLpJiecCpxUogLlgAg>
+    <xmx:EQhjakw00X7KtRLLhmGIgmuXgLfVGeh3u-g_-BfU5q9hJUYEBHj7NQ>
+    <xmx:EQhjauW8KJG8te-aYgxBMw9UXPqEx0i5V_L5rEes977ufK1ky-lM76Yy>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 24 Jul 2026 02:37:05 -0400 (EDT)
+Date: Fri, 24 Jul 2026 08:35:42 +0200
+From: Greg KH <greg@kroah.com>
+To: Min-gyu Kim <gimm78064@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>, bpf@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+	regressions@lists.linux.dev, security@kernel.org
+Subject: Re: [REGRESSION][SECURITY] bpf, s390: verifier/JIT mismatch allows
+ unprivileged kernel memory access
+Message-ID: <2026072436-carload-untaken-585d@gregkh>
+References: <CAGKGUvm6sC9ay98zsYJS1xwB9+qUwverqAsAAwpVOpmqFpEy5A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGKGUvm6sC9ay98zsYJS1xwB9+qUwverqAsAAwpVOpmqFpEy5A@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Thu, Jul 23, 2026 at 04:55:12PM +0900, Min-gyu Kim wrote:
+> I have not yet tested a patch.
 
-Pre-existing issues:
-- [High] Missing pskb_may_pull() or length checks before accessing IP/IPv6 =
-headers.
---
+As you have a reproducer, please create a proposed patch that solves the
+issue for you for us to work off of, as our security documentation asks
+for.
 
---- Patch [1]: [PATCH net v1] bpf: lwt: Fix dst reference leak on reroute f=
-ailure ---
-commit e474c43b475b276dbbb67aeaae49296dafe9f3ef
-Author: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+Also, as you cc:ed public mailing lists, there's no need to get
+security@kernel.org involved here.
 
-bpf: lwt: Fix dst reference leak on reroute failure
+thanks,
 
-This patch fixes a reference leak on the newly looked up dst in
-bpf_lwt_xmit_reroute(). When skb_cow_head() fails, the error path
-now correctly releases the new dst reference before freeing the skb.
-
-Cc: stable@vger.kernel.org
-
-> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> index bf588f508b79e..652952d416f23 100644
-> --- a/net/core/lwt_bpf.c
-> +++ b/net/core/lwt_bpf.c
-[ ... ]
-> @@ -255,8 +255,10 @@ static int bpf_lwt_xmit_reroute(struct sk_buff *skb)
->  	 * if there is enough header space in skb.
->  	 */
->  	err =3D skb_cow_head(skb, LL_RESERVED_SPACE(dst->dev));
-> -	if (unlikely(err))
-> +	if (unlikely(err)) {
-> +		dst_release(dst);
->  		goto err;
-> +	}
-> =20
->  	skb_dst_drop(skb);
->  	skb_dst_set(skb, dst);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but there is a pre-existing issue
-in bpf_lwt_xmit_reroute() and bpf_lwt_input_reroute() regarding missing hea=
-der
-length checks.
-
-If a BPF program attached to lwtunnel (e.g., BPF_PROG_TYPE_LWT_XMIT or LWT_=
-IN)
-shrinks the packet via bpf_skb_change_tail() such that the linear data leng=
-th
-is less than the IPv4/IPv6 header size, and returns BPF_LWT_REROUTE, the
-kernel unconditionally accesses the packet headers.
-
-In bpf_lwt_xmit_reroute():
-
-    if (ipv4) {
-        struct iphdr *iph =3D ip_hdr(skb);
-        ...
-        fl4.daddr =3D iph->daddr;
-        fl4.saddr =3D iph->saddr;
-
-In bpf_lwt_input_reroute():
-
-    if (skb->protocol =3D=3D htons(ETH_P_IP)) {
-        struct iphdr *iph =3D ip_hdr(skb);
-        ...
-        reason =3D ip_route_input_noref(skb, iph->daddr, iph->saddr,
-                                      ip4h_dscp(iph), dev);
-
-Does this sequence cause an out-of-bounds memory read (info leak or Oops) w=
-hen
-dereferencing iph->daddr or iph->saddr, since there is no verification that
-skb->len >=3D sizeof(struct iphdr) or a call to pskb_may_pull()?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260723060445.2192=
-6-1-xuanqiang.luo@linux.dev?part=3D1
+greg k-h
