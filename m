@@ -1,53 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A902A3515F5;
-	Fri, 24 Jul 2026 19:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038E4390219;
+	Fri, 24 Jul 2026 19:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784922691; cv=none; b=mJGf2f8gfl6qtlT5p7cRILkMBdvZDHs4ttGMjbL5eZDiREk37LT1yw7mK3VOvpeU1sOusa/B/4u4vntSwFPfQMpAqKRaWiIL9foh2KD9gYxqOsfO7Fy/1M4uQIZ4/mdMVgr4h3qY3BzqAYwB/beOeMYmwlJpS15N+zd0xEpuOtE=
+	t=1784922755; cv=none; b=VISLzCT6M/cnUgUDVb7aYdz9OsBTFS7R7xpgMjhFsKOtHy5GtwulyRVLZJ6rB1R81YqRZczwtVK5UqFKzSQmjFuIETZO/qxEkobm9BUBspvMS2ETbK9e99rZXKFhBmTppBBdAB/BY1b4Dy/ELY2/JAA/wT8dFUQGkJNI8uqVVf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784922691; c=relaxed/simple;
-	bh=HEVHWQn2aNR/OtnJyCo+SOT/LHLhNEl4AX1lx1Jo5m8=;
+	s=arc-20240116; t=1784922755; c=relaxed/simple;
+	bh=BvkOFAgW7KVB9mqXAbR0plG+x6ThYtwEmmSS6Tc6Ayk=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=M7LET/+ppv9s61uazfSD8NMsFJzD8J7W8wd8CXH8u3t/BlsJwbgt/d9j2xLYIK1zUVqYPT+LSW6zAczru+RWE7Wd0Fs8+xZ8MXLIMLtpyGIIOE8dz9KCx0dnKTwQpuQ0kj49tbSr7lksIBdmxF6BbV7EblSmGguhU7WYyFdFwYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XV1l3QmC; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=Y1Sa+BGyIBTxybSrhLW4s5fpscn8DHKEgM5DF1m8S1j+Rm5tHOcV43FMkJ/z0AEl033hpLPIax9Su0Yn8YDBmoAJwQu/5Iyqu3lM7XjW36d7rVq5ePQPnl2Io45rFh13ksLHBYUZDrewZR7YNk8OqzxKDukw3uywNaN89sszj7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LPNT8J6P; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XV1l3QmC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D65181F000E9;
-	Fri, 24 Jul 2026 19:51:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LPNT8J6P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263391F000E9;
+	Fri, 24 Jul 2026 19:52:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784922690;
-	bh=xufiH9DXV0tiDlC53cxtndN+yZzoXD3SbTD8L2MaEcU=;
+	s=k20260515; t=1784922753;
+	bh=BvkOFAgW7KVB9mqXAbR0plG+x6ThYtwEmmSS6Tc6Ayk=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=XV1l3QmCJopHKETwzxiAgbXzhlAijMPuRFb/b3z+OHELp1gLI8eaAg5F2NaA8Uimv
-	 OX0bpN696svmDT7tORfIMj+B74bhwd/JlczFOz9vp+xc/ugrzX1yfFuXlap5m28tk+
-	 doaqbth7w1MA5+We8/NhMbh/1Wq0Lc7T1OfvdAGAfnSDBMVUK4fka5XWz73YJAjchs
-	 7owhszZSQDsFBVFQHy9/s36SjV2XJ4G4J61taNyplS5wrtMRSiPO3nRKrzmgsPbSDG
-	 TNOhJqjwuTVKFvN+35SkB9xpooPG8L4O8MpBa8d2Wkxd6jKJfgiUDJFcnBcRSXtZuR
-	 Qua9UQf/o9GmA==
+	b=LPNT8J6PKD17BwukgbJI2D1uGD7aOUu+vQ4fWZFDJs6QfjqpH9zrup9FGB4G8f7px
+	 7/urGY2EC1v8w/e0eM0YwQQsxJWfKqO6v/N/7mv3NcUuprJxwLWY4lomqC6C8tWD5D
+	 0lXmQf0C6bMobWbHWL5t0BAIGWz7OzTc/IrEBoss/YPv9dML7WeanAGJSg4AluOFC5
+	 n+PTr8y1XRv3JSSwMclepxapnmJ8p8vw/u62hWEGCrLnj7hosoKvFXQXZUhHB6W8I9
+	 YyCTmjfRE1kNxhmBuq8mvDPxUGGjAthsW3EINjNIUtCZpTagh+AFhx7+/fhUzmqOuR
+	 tGgTTsTU29ygA==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Pu Lehui <pulehui@huawei.com>, Feng Jiang <jiangfeng@kylinos.cn>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>, Xi Wang
- <xi.wang@gmail.com>, Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley
+To: Feng Jiang <jiangfeng@kylinos.cn>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson
+ <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, Pu Lehui
+ <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley
  <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
  <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Shuah Khan
  <shuah@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
 Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 3/3] selftests/bpf: enable timed may_goto
- tests for riscv64
-In-Reply-To: <15ceb481-ae3e-4c51-aeb7-513a3d213959@huawei.com>
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Feng Jiang
+ <jiangfeng@kylinos.cn>
+Subject: Re: [PATCH bpf-next v5 0/3] bpf, riscv: add timed may_goto support
+In-Reply-To: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
 References: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
- <20260723-riscv-bpf-timed-may-goto-v5-3-86acb54e5642@kylinos.cn>
- <15ceb481-ae3e-4c51-aeb7-513a3d213959@huawei.com>
-Date: Fri, 24 Jul 2026 21:51:27 +0200
-Message-ID: <878q70qi80.fsf@all.your.base.are.belong.to.us>
+Date: Fri, 24 Jul 2026 21:52:31 +0200
+Message-ID: <8733x8qi68.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,45 +55,26 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Pu Lehui <pulehui@huawei.com> writes:
+Feng Jiang <jiangfeng@kylinos.cn> writes:
 
-> On 2026/7/23 13:41, Feng Jiang wrote:
->> Enable verifier_may_goto_1 (raw instruction tests), stream_cond_break
->> (250ms timeout path), and the may_goto_interaction fastcall test on
->> riscv64 now that the JIT supports timed may_goto.
->>=20
->> Reviewed-by: Pu Lehui <pulehui@huawei.com>
->> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
->> ---
->>   tools/testing/selftests/bpf/progs/stream.c                | 1 +
->>   tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c | 3 ++-
->>   tools/testing/selftests/bpf/progs/verifier_may_goto_1.c   | 4 ++++
->>   3 files changed, 7 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/=
-selftests/bpf/progs/stream.c
->> index 92ba1d72e0ec..8d8e53d37266 100644
->> --- a/tools/testing/selftests/bpf/progs/stream.c
->> +++ b/tools/testing/selftests/bpf/progs/stream.c
->> @@ -64,6 +64,7 @@ SEC("syscall")
->>   __arch_x86_64
->>   __arch_arm64
->>   __arch_s390x
->> +__arch_riscv64
->>   __success __retval(0)
->>   __stderr("ERROR: Timeout detected for may_goto instruction")
+> This series adds RISC-V JIT support for the timed may_goto loop bound.
 >
+> Patch 1 implements arch_bpf_timed_may_goto() and enables
+> bpf_jit_supports_timed_may_goto() so the verifier uses the timed
+> expansion path.
 >
-> This test fails because it relies on arch_bpf_stack_walk to fetch the=20
-> prog. It's fine to leave it on though, since support is on the way.
+> Patch 2 adds a test that checks R0-R5 are preserved across
+> arch_bpf_timed_may_goto() calls.
 >
-> https://lore.kernel.org/bpf/20260722140015.1982158-1-varunrmallya@gmail.c=
-om/
+> Patch 3 enables the verifier_may_goto_1, stream_cond_break, and
+> may_goto_interaction fastcall tests on riscv64.
+>
+> Tested on riscv64 QEMU (rva23s64): may_goto programs load and JIT
+> correctly, and the 250ms timeout path works as expected.
+>
+> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
 
-I'm inclined to do the same here -- but only since it's RISC-V, where
-the tests are not run by any automation yet. In general I *don't* like
-that a series introduces a failing selftest merely because another
-unmerged series is expected to fix it later.
+Nice!
 
-
-Bj=C3=B6rn
+Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
