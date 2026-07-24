@@ -1,63 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8486E4399C2;
-	Fri, 24 Jul 2026 14:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6954443B6E7
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 14:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784902994; cv=none; b=Ee3t09bNgAnuPvM+6JoiQ2MqEttGWEaX9vS9sAukHA2LpKpS1osyUHZg7RO1o2H5xCIEGOPc1SGyjWgnWVkiAxaKS7YhOLpk2biS8B0FZlc480vWfjBQ2ZLqldV0kYJJOpVJATlRFRmek/CBhymq8eMrR4orwXLf1KuDR3/4fJ8=
+	t=1784903063; cv=none; b=tu44wvzYxQoGjbNHlQUjX3EuCreMRs4wdUSzoFRpLymKDRABdFkMMq8tkvkC+QFz9c3Msz+EvebDesfTYAyL3KS5pEcz4Ul6/SPbEFzOzp2fLI4vzkKtdPiWJc7HrQQtbHsFf9Pdyzs1DL76ueQ+qZ/66k80oD9QlUvfV1QDNQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784902994; c=relaxed/simple;
-	bh=kwXDIbY7tnlrxTE76Zhvu84QKmk5zDU2ZJt4Dss7E4Y=;
+	s=arc-20240116; t=1784903063; c=relaxed/simple;
+	bh=FPAs/yBm48d6pXnQ37wvF3Dyk0fQtyD68aqNVi8HVSE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ExQmraJ9m9A5U2u59aDZbECMVPIfeEvsx+F2Rtwz3jjt3+AvPn7jg+b3+fORuGdHjM8/gQwwXLny5iohDq4rgvyPUNOO+NJUq1JhAD4x0ELcs2sCLt/AyQAr/y98U/xEkUjxhzjcuLLf7We6jbcAEOgfmz8bWcGukCMsruZI0ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dk8QONOr; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=uVyiwOpO79WmKZSEwoTvhCxVrlKCqE/fx5Tw85pE8spcdjTL2AQqirVz3r3PIFSIm/SZFtxMJAAF4Cf+2KN/m5/tZvONxPCshqcBfE7hTS29Ht7moyrucBLWv+ihenoeeUZyb0wzLH4SFZJGy0uwIafNgP/yDOWQWcbfPQwEP/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JFExTP0v; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dk8QONOr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA2F1F000E9;
-	Fri, 24 Jul 2026 14:23:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JFExTP0v"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E191F00A3D;
+	Fri, 24 Jul 2026 14:24:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784902993;
-	bh=kwXDIbY7tnlrxTE76Zhvu84QKmk5zDU2ZJt4Dss7E4Y=;
+	s=k20260515; t=1784903059;
+	bh=zu67Pv+KerA1wCD9vFSBzWvyd2EYlvngTi7u+X+xv2A=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Dk8QONOrcAFwsWXJ8Qy6hdyiUvw+BeVvLdJwvQ7FrpyeiJM6vhihkFZIgv/XxyfGI
-	 cWgHrLBZJ43JCTLXgCqzcDYP2VSM8Q7S90r0qzPsj116rUEvZXxF5yCX5sWMVFDEzS
-	 KqhFcguuZ7oA2Hondki32FSAjAi/FHDZs9ybDbvCZs1LMQgNpIf3F6ZzVK9oUC0h13
-	 k1/pK/b8mMuCjMizeiLLrdSdoSYfat+qaNMdiQsMbbcUGuyNqyLmp/Ub1L48UBo2s1
-	 vdm65rNrhL55XFx0XsYHrWgS2Ygw4a4HMAzbVmlAa04g9G3UbA1fqhXmfRIW9+TLER
-	 yKvFTLnECip4g==
+	b=JFExTP0v82aHSGFGJFROuyy6g5WcegomtmH1e3v0CW+sHXmSO4gYrj7hjKCSLALER
+	 uBVykaNLKqm/D4ILxGoHsS/EJHFlz8+HPBkfXAR+zXk7MRaBCrQl4I+9gKbTxkG6gr
+	 Vcu9JCWg/DxDPVwmB5J8p42hJN0YMKGem89ZiExbXCQTt5agw+uo/YCXMldccw7Zni
+	 kRKNZy/zbYu8m6GBknbIcC/pIXKqxwHtC/kKweVu88xQnKMq2lVBuA0hGSdeLLDuNT
+	 RsilqDt+Wtf7tkTi1n7wheB+2tZYpt+Acy7yxrzKwcj1avamHE3+K+yxJS5Znpcyop
+	 qic2C6/msa88g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/6] s390/tools: Pass symbol name to do_relocs()
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Verify rejection of
+ sleepable tracing prog
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Heiko Carstens" <hca@linux.ibm.com>
-Cc: "Alexander Gordeev" <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org, "Heiko
- Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, bpf@vger.kernel.org
-In-Reply-To: <20260724141318.1037434-2-hca@linux.ibm.com>
-References: <20260724141318.1037434-1-hca@linux.ibm.com>
- <20260724141318.1037434-2-hca@linux.ibm.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260724141422.10463-3-leon.hwang@linux.dev>
+References: <20260724141422.10463-1-leon.hwang@linux.dev>
+ <20260724141422.10463-3-leon.hwang@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Jul 2026 14:23:12 +0000
-Message-Id: <20260724142312.AAA2F1F000E9@smtp.kernel.org>
+Date: Fri, 24 Jul 2026 14:24:18 +0000
+Message-Id: <20260724142418.B7E191F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-> Pass the symbol symbol name which corresponds to a relocation to
-> do_relocs(). This is preparation for kcfi support.
->=20
-> Given that the s390 specific relocs tool is a stripped down version of the
-> x86 version, add more code from the x86 version to the s390 version, while
-> keeping coding style, etc. in order to add the required functionality.
->=20
-> Reviewed-by: Jens Remus <jremus@linux.ibm.com>
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The test incorrectly handles the expected failure of `fentry_sle=
+epable__load()`, leading to dead code on patched kernels and an intentional=
+ kernel BUG on unpatched kernels.
+--
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+--- Patch [2]: [PATCH bpf-next 2/2] selftests/bpf: Verify rejection of slee=
+pable tracing prog ---
+commit 21867bb1ed07f00930e4aa9f252967deb7c142a2
+Author: Leon Hwang <leon.hwang@linux.dev>
+
+selftests/bpf: Verify rejection of sleepable tracing prog
+
+This commit adds a BPF selftest to verify that a sleepable tracing program
+cannot attach to a '__x64_sys' prefix program target.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/too=
+ls/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+> --- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+[ ... ]
+> @@ -576,6 +577,60 @@ static void test_func_replace_progmap(void)
+[ ... ]
+> +	err =3D fentry_sleepable__load(skel);
+> +	ASSERT_ERR(err, "fentry_sleepable__load");
+> +	if (err)
+> +		goto out;
+> +
+> +	skel->links.fentry_xdp =3D bpf_program__attach_trace(skel->progs.fentry=
+_xdp);
+> +	if (!ASSERT_OK_PTR(skel->links.fentry_xdp, "bpf_program__attach_trace"))
+> +		goto out;
+> +
+> +	skel_xdp->links.__x64_sys_nop =3D bpf_program__attach_xdp(skel_xdp->pro=
+gs.__x64_sys_nop,
+> +								ifindex);
+> +	if (!ASSERT_OK_PTR(skel_xdp->links.__x64_sys_nop, "bpf_program__attach_=
+xdp"))
+> +		goto out;
+> +
+> +	err =3D system("ping -q -c 1 -W 1 127.0.0.1 > /dev/null");
+> +	ASSERT_OK(err, "ping");
+> +	ASSERT_ERR(skel->bss->retval, "retval");
+
+[Severity: Medium]
+Is it intended that the attach and ping logic only executes on unpatched
+kernels?
+
+When run on a patched kernel, fentry_sleepable__load() fails as expected
+(err !=3D 0). The ASSERT_ERR(err) check passes, but the if (err) block then
+causes the test to jump to 'out', making the remaining attach and ping code
+unreachable.
+
+When run on an unpatched kernel, the load succeeds (err =3D=3D 0). The
+ASSERT_ERR(err) check fails, but because err is 0, the test proceeds past
+the if (err) check. It then attaches the program and triggers it via ping,
+which intentionally crashes the system with a kernel BUG (as noted in the
+commit message) instead of failing gracefully.
+
+Could this be resolved by either removing the unreachable attach and ping
+code entirely, or by changing the check to if (!err) to prevent the test
+from crashing unpatched kernels?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260724141318.1037=
-434-1-hca@linux.ibm.com?part=3D1
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260724141422.1046=
+3-1-leon.hwang@linux.dev?part=3D2
