@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044834457D7
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 19:38:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D606246AEEF
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 19:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784921936; cv=none; b=nDEUYIwmrtGn+zYdMUt3HhUQG7STm3aMNl7e0wJ2vlIu7aEnGi8LDXpzdCe4xLmWoZmWJCiKcdnAvDquB1Zn+TYsdyFqy9bv8nX9CsToh6s6m6oUDlk4RLD1UvxeNjooNuR+zFriqM5Dn0jF5HCUmMFC7vc5qjabyM+FneOpxnw=
+	t=1784922430; cv=none; b=WfXEZWMLEFMe11kRl63rNUTHdJYQu7zZKUVkOshqmYwtFUbbg5taLO5xypUPSsrFT/Kg4hX0GwHkxa3fB5s6Plr0utTypVYVPERR9/RuXpAIsXYVoSBYoHflJwN59t7XpogPIML83NS6I2K/Kn48oeGLHIX2xtych4zGEuWPKTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784921936; c=relaxed/simple;
-	bh=A9EzM3kQSe6GvMO4s5H+XgjcZYWWqKZglBR5N3sjOrg=;
+	s=arc-20240116; t=1784922430; c=relaxed/simple;
+	bh=eWHdlM0PPbWob7O4URBBpSz/LBeALF92QvwqYIttKRI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=KCLjDCWozHtexKgdkUGUd7R5Zdp3l2mtQbGC0sJamh5bKiSTJX+Qx43/Zr1MdmTPtKbvTPfY+H0j6A930vO0hwbJAp01xt1JWwvj77p4Vgi+HJkIHnKG2PlwC5BsazmlCN+uSV6q+EKMA+VfrDcxUS/zxIfYpVda2v9TFNMPNJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aYZnk94D; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=f6zsYTz+DR7ObwcaTRSJer0KWDF2afBuwsT3LSm3zOuvdhbrSIWYieze9sBnV3cxV0/PB5yfSK/NBHolcFOs6+QkoDhdJbbtsONToCMPDIlIxDGjWr6Fl4/FtLXLkjdexb3SmqoqkHsgtnSDcrZ3DHv7rCBQTxDRk+712scrOwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVj73T7x; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aYZnk94D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F981F000E9;
-	Fri, 24 Jul 2026 19:38:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVj73T7x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F79D1F000E9;
+	Fri, 24 Jul 2026 19:47:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784921934;
-	bh=fXkuMb+n0HhvY5nv1bsBMBQKp5sXGb1nWsy7MgHLdVQ=;
+	s=k20260515; t=1784922426;
+	bh=HHPS6Mbl3eUcRqoBjsJUB6UE32RyyQ9+2aUk369QOXo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=aYZnk94DObA1+zq6VVM1lwxxzTqd0LoRccuW0k5DsYk3SkPKQz3KSXNy+3kp692ve
-	 7xqtJNFvaTnUpmEXags2Tsox702h7swx0otrJPGRHftvIm5P8ubcGmXRWFhPqXumVv
-	 MLIJie6qdfflvvlLy8tAlsYUIX4EcL6eprDtuEhlbI/hnTAC8dTHCo3V+4ilk3IvIm
-	 qIbkp010CU4YtvE2zHV8mOwAhWRqWNqSdzT18e1wXuYw8zfh/WAn4af4qFhfidkAQg
-	 nrsyNAWq5Xw7AckKkpvN6fm4xau6bdyR/XvCTH4Ri07kgFFU7j0dQyIT5KtoARIPqg
-	 bIObZKhI5wjdA==
+	b=mVj73T7xRZMNeSH1QozwTdOMm3U6NadvkuZNDz3v56n0d9NaJgqjUyny53Tsk52nu
+	 bjUmmSUi8XNkYz1pCSl8F+ZeRnwPkm7hV9JePw+nE+dM01+ViF46h0EgtSu1cXrljG
+	 Sgr/yEv3QOIsCJ8CLkzUyyftC4AdCgD0hl4VeVm4EiF78GFBERHHaxf+RFszVKPeU1
+	 fw12yKmVPrVO/PVTULHTunT8dw9pHvEId8CZKiZwLNHavoaOU6W4235C5yiaLCyUA8
+	 cIr+jYnhmPLeNAzpbL0FHITIRQFrnNV95JDKcozqiCjLdxnGlbGoHNTSSUJMpbKw+W
+	 G/9fmsbPeuAXw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 11/18] bpf: Classify kfunc mem_size args
- from BTF without register state
+Subject: Re: [PATCH bpf-next v2 14/18] bpf: Check helper mem+size in
+ ARG_PTR_TO_MEM case
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Amery Hung" <ameryhung@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260724190813.1458271-12-ameryhung@gmail.com>
+In-Reply-To: <20260724190813.1458271-15-ameryhung@gmail.com>
 References: <20260724190813.1458271-1-ameryhung@gmail.com>
- <20260724190813.1458271-12-ameryhung@gmail.com>
+ <20260724190813.1458271-15-ameryhung@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Jul 2026 19:38:53 +0000
-Message-Id: <20260724193854.57F981F000E9@smtp.kernel.org>
+Date: Fri, 24 Jul 2026 19:47:05 +0000
+Message-Id: <20260724194706.0F79D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,79 +47,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Removing the `SCALAR_VALUE` check from `is_kfunc_arg_mem_size()` a=
-nd `is_kfunc_arg_const_mem_size()` allows unvalidated pointer registers to =
-be passed as memory size arguments during kfunc lookahead validation, trigg=
-ering a `verifier_bug` kernel warning splat and local DoS.
+- [High] Calling check_mem_size_reg() on the size register before validatin=
+g its type allows an unprivileged user to trigger a kernel warning (WARN_ON=
+CE) and potential panic, leading to a local Denial of Service.
 --
 
---- Patch [11]: [PATCH bpf-next v2 11/18] bpf: Classify kfunc mem_size args=
- from BTF without register state ---
-commit 55013229ec44003dda12328783652d410aa4f75e
+--- Patch [14]: [PATCH bpf-next v2 14/18] bpf: Check helper mem+size in ARG=
+_PTR_TO_MEM case ---
+commit 49ede5ce4d16f1df74560df7eef17176d13cb3e1
 Author: Amery Hung <ameryhung@gmail.com>
 
-bpf: Classify kfunc mem_size args from BTF without register state
+bpf: Check helper mem+size in ARG_PTR_TO_MEM case
 
-This commit drops the scalar register type check in is_kfunc_arg_mem_size()
-and is_kfunc_arg_const_mem_size() to decouple get_kfunc_ptr_arg_type()
-from register state.
+This commit modifies the BPF verifier to check variable-size memory argumen=
+ts
+and their associated size registers simultaneously during the ARG_PTR_TO_MEM
+case, rather than waiting for the ARG_MEM_SIZE argument. It looks ahead to
+regno + 1 to process the size register.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 0f8d403083177..f6b373630ca95 100644
+> index 144c2d8aa4922..2326b12a15313 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -10795,26 +10795,24 @@ static bool is_kfunc_rcu_protected(struct bpf_c=
-all_arg_meta *meta)
->  }
-> =20
->  static bool is_kfunc_arg_mem_size(const struct btf *btf,
-> -				  const struct btf_param *arg,
-> -				  const struct bpf_reg_state *reg)
-> +				  const struct btf_param *arg)
->  {
->  	const struct btf_type *t;
-> =20
->  	t =3D btf_type_skip_modifiers(btf, arg->type, NULL);
-> -	if (!btf_type_is_scalar(t) || reg->type !=3D SCALAR_VALUE)
-> +	if (!btf_type_is_scalar(t))
->  		return false;
-> =20
->  	return btf_param_match_suffix(btf, arg, "__sz");
->  }
+
+[ ... ]
+
+> @@ -8515,14 +8512,15 @@ static int check_func_arg(struct bpf_verifier_env=
+ *env, u32 arg,
+>  				return err;
+>  			if (arg_type & MEM_ALIGNED)
+>  				err =3D check_ptr_alignment(env, reg, 0, fn->arg_size[arg], true);
+> +		} else {
+> +			struct bpf_reg_state *size_reg =3D reg_state(env, regno + 1);
+> +
+> +			err =3D check_mem_size_reg(env, reg, size_reg, argno,
+> +						 argno_from_reg(regno + 1),
+> +						 arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ,
+> +						 fn->arg_type[arg + 1] & SCALAR_MAYBE_ZERO, meta);
 
 [Severity: High]
-Could this removal allow a pointer register to be incorrectly classified as=
- a
-memory size parameter during kfunc lookahead validation?
+Could this call to check_mem_size_reg() process a non-scalar register?
 
-If a BPF program passes a pointer register (such as PTR_TO_STACK with a fix=
-ed
-offset of 0) instead of a scalar to a size argument suffixed with __sz,
-get_kfunc_ptr_arg_type() will now look ahead and classify it solely based on
-the BTF signature.
+By looking ahead and processing size_reg at regno + 1 here, it seems this is
+happening before the size register's type is validated in the next loop
+iteration of check_func_arg().
 
-Because of this classification, check_kfunc_args() eagerly processes the
-unverified register as a size parameter before the generic scalar validation
-loop catches it:
+If a BPF program passes a pointer (like PTR_TO_MAP_VALUE with var_off=3D0)
+instead of a scalar for the size argument, it appears it would bypass the
+scalar bounds checks. When check_mem_size_reg() subsequently calls
+mark_chain_precision() on that non-scalar register, could this trigger a
+verifier_bug() and BPF_WARN_ONCE()?
 
-check_kfunc_args()
-    ...
-    check_mem_size_reg(env, buff_reg, size_reg, argno, next_argno, ...)
+On systems with panic_on_warn enabled, this might lead to a local denial
+of service.
 
-Inside check_mem_size_reg(), the pointer with a fixed offset of 0 yields a
-size of 0. Since zero-size is allowed, it passes the bounds check and calls
-mark_chain_precision() on the pointer register.
-
-Because mark_chain_precision() expects a SCALAR_VALUE, it triggers a
-verifier_bug splat for backtracking misuse when given a pointer. On systems
-configured with panic_on_warn, this creates a local denial of service
-regression.
-
-Should the register type check be retained here, or is there another way to
-prevent pointer registers from bypassing validation during the lookahead?
+>  		}
+>  		break;
 
 [ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260724190813.1458=
-271-1-ameryhung@gmail.com?part=3D11
+271-1-ameryhung@gmail.com?part=3D14
