@@ -1,173 +1,173 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ADC444C502
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 17:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C01424D6B;
+	Fri, 24 Jul 2026 17:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784913591; cv=none; b=jqpL9HDRM99zzo2MUTimXGC95rB4x6xEfMzmRINbZFvpCbXLdZDNE2L+ctqYb5QyW0jb1O7ubrtc2pBaDNFOlZ6LwHKB0t75Ub27Jcn4n2YGl3RtZa02VLCHSvKtTU54n/7EOGGTre3vZePG5zfZGXU/n10flsA9SEq2FRdEnfM=
+	t=1784914168; cv=none; b=QX7KOJmZ/k7/km2NNspqJkrMa75Y0n321wWZHhB0gDTiApGq8DnzhM81cs5v0+GCWFwYDFTCuLTEtGtcldOtm6CvQun9m5hZkPJrliZ3m32zQ4io9c+VvdYUPtbQrx6vlpVA18G9Xqy3dKfoSDfmMCRCp27cxzoKfN6ol5ZMlPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784913591; c=relaxed/simple;
-	bh=h43OVubBFOUqhHHcp0LrQGUoL7yyuyHZKEUxyYWHBUE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=DrzXl56Iw03SdmdsyDQNWe2mguK0JnN8prQKv0thI79XM8VXW3rNtgVAViE08ZMePYn81TN+9gRbZ/etmzqkUJ6nFjE29pqkM/yaO23n6a+7DpLVbmRL2r833dUF25955in85IBel5qkT+U8yaxd1Gw/0XycwOy2Kj3MuELpSJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JYt/tflG; arc=none smtp.client-ip=74.125.225.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784914168; c=relaxed/simple;
+	bh=9HJoe9p4DKMDNexysOJt9lnc5MUsHquq8+rus2Aa5DA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lpzgz0FfnBhb/gwiAb/Hr5LtZwuWIQDjrEiiy2uUJMa2TA57POQesrj2K9xE4ID49I81t2daAiveaJ/EL0imFnG8FJEYFb+aJE5pvw4R8sep3KG0r0rp8A7IArecpcG+lgvSdmiUklQql7V1xKSOfKKT/GBreDFa8y1UNxukwns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QzbxZzeE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JYt/tflG"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495459712d2so1878355e9.1
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 10:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784913587; x=1785518387; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=KowxSJVmc3vRiPdHyROrkjM4WewCaL2j1J/8LxUkYtk=;
-        b=JYt/tflGn11muPpBMVHJnVUocFze63t0VswaCJl0UGmUlc/kw9a7mejzVFHaorrKNW
-         tej5WEACR3SkJXb2JZiJp4WQxMRbg5gSJR3m6iEKu2TblmMzXwi3wI7kzZrXBu+ticrs
-         MQoRTq5mPuLW106CFbXAusqi9d+8okQc++xo+rcwI2oDfqbcPBhobx9qKYjJgo8rIPKY
-         jkaHa56KslGmDtEsiUwkw5JV3PbyLUU8assMCFC0l4WJvcnOu/vS2XFUMuNoYzMBrPNM
-         ulCmFOT8j7hK7XUX/HDoubNFMo2UOhO0ksVC9KFls2aCtgo6kL4mA4wjLIALmkUrxcoM
-         ekDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784913587; x=1785518387;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KowxSJVmc3vRiPdHyROrkjM4WewCaL2j1J/8LxUkYtk=;
-        b=aERwyiId5hGhq8L7nxLEOWX8qVjs2GJDQvJ+y2Jzm68E6FE7bEiGzI5CkNsA9/miss
-         0I6FOHlaHI5/HmjUHyb5Bhpo6iAd8YzqRxjbiMHgVbwImW1oXbgz7TrVFKkcKb+xo9MZ
-         m/wT4E4+YpnWpVxOus9BykPMBOgHIWS/hpy8HLxtq0pfqY6Db9dmcwCW3pvupZF9Vv8x
-         x6BAu86Q/75Me5bZD7/d0Cdk/+MAjsEYsFxgU54+blrqMKDAajVohK6g9bRWJU7qqZ7o
-         +mIJRN+qlCASJU5+awCDCGDRJY5t2FfcbdvpkLU0OL9n9VjkW6W7gIJ+rEGIUPnIbasj
-         yy5A==
-X-Forwarded-Encrypted: i=1; AHgh+RpZ/rfgZgfuESEMZ11gcZhKLwg0pFJQSDRbuH3dmkD+aDS0cuLoIoXcxLsJrpLwUuYUhJM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgPzP64jK81AH+iVEtrKOkLbQ0pdrfAKHsdntrr1KcBD66jdOY
-	Gq2oIhv40Ad0VGUgRfUQnWwWs01n4UVj43UahZJJ5bubk5bcpJfvFsT6
-X-Gm-Gg: AR+sD12+hkoFIMCG7eXGffLqgdMopyfsWRSXZbG9GJcZM6DjbzaT9yBBIP9Odw/BNJ8
-	3CDfOpfEBNdcj1R/NkdfJCn2G4KE8D10BU+P/fi+s+ecqSaopn18rKPhXnQc51e+iApdXK0MwHH
-	bgEksDiJpwvtHvzu/UhcXFVz+ThaI9j+3zOEVKttYA4XyqiFU5XeS/ZLDNZzOdAW03SAmb+ZYS8
-	qjKMIG7xM4W0eavCcy7Vx1gCB0RPyxIFPZhqc818Y56utOZJWIMhN/wuxdNssOFF9wJJY+71CO7
-	lEoVS78HVqome3TkSsV+01lZOY667jGxYFrszuGzFVMZv//+GctLMW1mipEpPG/amQFS4EcPoFw
-	kp8SsMzV9vaKQsPpGAx1pegSDzU0Bw+CqmB2WpQh0Cw+NaeHRgcJaJlKSYID47REKugp17hL8wn
-	PSvs4RzwHyMkDXstOPXidX3Z8O9EGUytoen7RvoIFYF0wjV8jcVnLITjtvOLfnZ218rci1HSC9g
-	PYg2b1MvABs2XPMo5O2HOr163Hrr0TA2nVDffBVoSjl
-X-Received: by 2002:a05:600c:5942:b0:495:6397:14b1 with SMTP id 5b1f17b1804b1-49573cf0ec2mr67839245e9.34.1784913586592;
-        Fri, 24 Jul 2026 10:19:46 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4957f5665f0sm49342725e9.0.2026.07.24.10.19.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 10:19:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QzbxZzeE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70B7A1F000E9;
+	Fri, 24 Jul 2026 17:29:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784914166;
+	bh=rzIG0ffdjdaknmN28KqXEB7nB5TnL1C89uh1+8cw5PY=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=QzbxZzeE8vpgOXP2ZHM161S+PygFvp3hBMEljNtXd3B1MacnT6d15F13lz8yW5qE2
+	 pig/YSBxoTHdOL5j+mpuJydhtwuLy/EY7o7nqCNnugYQENXyXzrzKUK7mq8zMQOiYN
+	 TOIbLeUnBnHrjjk2hOvvXF4ZbzGGjHpFYYbPseEuUHNJCxS5FwJRL23aIUKYrmRQ11
+	 PD0Ciggb4DJmxy4yRyDq46Vik4qSiyNQW97cfxCT9ugOyJzSeDM7xaaJisu2ynkP4r
+	 CPkBFhZJhSAc2IKM4F2qiwr0csrMGrDID/TjEY4MH7k5HYj9cM3oXrRvOlIL1+zbRl
+	 PMOhVqpO49X3A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 37477CE08DF; Fri, 24 Jul 2026 10:29:26 -0700 (PDT)
+Date: Fri, 24 Jul 2026 10:29:26 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>, puranjay@kernel.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH] mm/kmemleak: report RCU-tasks quiescent states during
+ the scan
+Message-ID: <39c90e82-f785-4b47-9571-dd4b1339d685@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
+ <20260720153917.2e428e489cd0873ac6d4e6da@linux-foundation.org>
+ <5b83b0a0-708a-458a-bdbd-41c6d4610349@paulmck-laptop>
+ <amCT9QEgJRsLIb_y@gmail.com>
+ <ffa5d8d2-1157-4a30-995c-ddae3566e3a4@paulmck-laptop>
+ <amM1xUOhcpGpqIpe@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 24 Jul 2026 19:19:45 +0200
-Message-Id: <DK6Z25AV02BM.3KXO0EMCMP2W9@gmail.com>
-Cc: "Arnaldo Carvalho de Melo" <acme@kernel.org>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Nathan Chancellor" <nathan@kernel.org>, "Nick
- Desaulniers" <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin KaFai
- Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Peter Zijlstra"
- <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>, "Mark Rutland"
- <mark.rutland@arm.com>, "Alexander Shishkin"
- <alexander.shishkin@linux.intel.com>, "Ian Rogers" <irogers@google.com>,
- "Adrian Hunter" <adrian.hunter@intel.com>, "Shuah Khan" <shuah@kernel.org>,
- <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
- <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 0/4] tools/build: Allow versioning of all LLVM tools
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Namhyung Kim" <namhyung@kernel.org>, "James Clark"
- <james.clark@linaro.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
- <algbxQAAmurxms8X@google.com>
-In-Reply-To: <algbxQAAmurxms8X@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <amM1xUOhcpGpqIpe@gmail.com>
 
-On Thu Jul 16, 2026 at 1:46 AM CEST, Namhyung Kim wrote:
-> Hello BPF folks,
->
-> On Wed, Jul 15, 2026 at 03:53:47PM +0100, James Clark wrote:
->> I ran into the build issue mentioned in the first commit, because using
->> an option like LLVM=3D-15 is a documented way to build [1], but only
->> some of the LLVM tools defined in tools/ support this.
->>
->> After fixing that, a lot of other tidyups fell out. I didn't go too far,
->> for example some selftests include tools/testing/selftests/lib.mk which
->> reimplements some of the LLVM_SUFFIX stuff, but other selftests include
->> tools/scripts/Makefile.include and I stopped before touching the former.
->> Some other non build scripts hard code toolchains and I didn't touch
->> those either, this change is only focused on things that already
->> include Makefile.include.
->>
->> [1]: Documentation/kbuild/llvm.rst
->>
->> Signed-off-by: James Clark <james.clark@linaro.org>
->> ---
->> Changes in v4:
->> - Drop "tools/build: selftests: Allow versioning LLVM lld", clang
->>   already picks the correct sibling lld version. (Sashiko)
->> - Link to v3: https://lore.kernel.org/r/20260715-james-perf-llvm-version=
--v3-0-8854bfe5af7e@linaro.org
->>
->> Changes in v3:
->> - Add warning for empty $USE_LD
->> - Use $HOSTREADELF in bpf Makefile
->> - Rebase on v7.2-rc3
->> - Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version=
--v2-0-f12cc4f031d8@linaro.org
->>
->> Changes in v2:
->> - Fix selftests/bpf build. LLD needs to take the full path to be used
->>   with -fuse-ld=3D
->> - Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version=
--v1-0-6cac1a9a4c8d@linaro.org
->>
->> ---
->> James Clark (4):
->>       tools/build: Allow versioning of all LLVM tools defined in Makefil=
-e.include
->>       tools/build: Indent if else blocks
->>       tools/build: Allow versioning LLVM readelf
->>       tools/build: selftests: Remove some duplicate toolchain definition=
-s
->>
->>  tools/bpf/resolve_btfids/Makefile    |  3 --
->>  tools/lib/api/Makefile               |  4 --
->>  tools/lib/bpf/Makefile               |  8 ++--
->>  tools/lib/subcmd/Makefile            |  4 --
->>  tools/lib/symbol/Makefile            |  4 --
->>  tools/perf/Makefile.perf             |  7 ----
->>  tools/scripts/Makefile.include       | 77 ++++++++++++++++++++---------=
--------
->>  tools/testing/selftests/bpf/Makefile |  1 -
->>  8 files changed, 46 insertions(+), 62 deletions(-)
->
-> Are you ok with this change and going through perf tree?
->
+On Fri, Jul 24, 2026 at 02:58:24AM -0700, Breno Leitao wrote:
+> On Thu, Jul 23, 2026 at 08:56:58AM -0700, Paul E. McKenney wrote:
+> > On Thu, Jul 23, 2026 at 06:26:11AM -0700, Breno Leitao wrote:
+> > > Hello Paul,
+> > > 
+> > > On Mon, Jul 20, 2026 at 09:21:17PM -0700, Paul E. McKenney wrote:
+> > > > On Mon, Jul 20, 2026 at 03:39:17PM -0700, Andrew Morton wrote:
+> > > > > On Mon, 20 Jul 2026 06:23:45 -0700 Breno Leitao <leitao@debian.org> wrote:
+> > > > > 
+> > > > > > kmemleak_scan() can run for ages on large debug kernels. It was
+> > > > > > causing some soft-lockups which I got fixed with commit
+> > > > > > 3175fcfec8b16baeb ("mm/kmemleak: avoid soft lockup when scanning task
+> > > > > > stacks") with our beloved cond_resched().
+> > > > > > 
+> > > > > > I've got the fix above deployed in the Meta fleet, and now I am seeing:
+> > > > > > 
+> > > > > >   INFO: rcu_tasks detected stalls on tasks:
+> > > > > >     task:kmemleak state:R ... nvcsw: 274/274 holdout: 1 idle_cpu: -1/3
+> > > > > >      scan_block
+> > > > > >      scan_gray_list
+> > > > > >      kmemleak_scan
+> > > > > > 
+> > > > > > and, worse, blocks the callers waiting on that grace period. Here a BPF
+> > > > > > struct_ops map free, which waits via synchronize_rcu_mult(call_rcu,
+> > > > > > call_rcu_tasks), is stuck long enough to also trip the hung task check:
+> > > > > > 
+> > > > > >   INFO: task kworker/...:bpf_map_free_deferred blocked for 122 seconds
+> > > > > >      __wait_rcu_gp
+> > > > > >      bpf_struct_ops_map_free
+> > > > > > 
+> > > > > > Then I've learned that cond_resched() is not an RCU-tasks quiescent
+> > > > > > state, so, we need to use stronger primitives.
+> > > > > > 
+> > > > > > Use cond_resched_tasks_rcu_qs() at the scan reschedule points so the scan
+> > > > > > reports an RCU-tasks quiescent state as it proceeds.
+> > > > > > 
+> > > > > > Inspired by commit b96285e10aad ("tracing: Have osnoise_main() add a
+> > > > > > quiescent state for task rcu").
+> > > > > 
+> > > > > I'll add
+> > > > > 
+> > > > > Fixes: c4b28963fd79 ("mm/kmemleak: rely on rcu for task stack scanning")
+> > > > > Cc: <stable@vger.kernel.org>
+> > > > G
+> > > > Thanks to all three of you!
+> > > > 
+> > > > This adds fewer than ten calls to cond_resched_tasks_rcu_qs(), but still
+> > > > more than doubles the number of such calls outside of the RCU subsystem.
+> > > > 
+> > > > Which is most likely just fine, and in any case absolutely should not
+> > > > get in the way of Breno's patch, which after all solves a real problem
+> > > > in the here and now.
+> > > > 
+> > > > Nevertheless, on the off-chance that over the next few months or years
+> > > > we start playing cond_resched_tasks_rcu_qs() whack-a-mole, I figured it
+> > > > would be good to get a head start on writing up alternatives.  An initial
+> > > > draft may be found here:
+> > > > 
+> > > > https://docs.google.com/document/d/1s3fn29SCTYVw9jak4iraNIVQR59Wk5C6_I-_eu-MfQA/edit?usp=sharing
+> > > > 
+> > > > TL;DR:  Should we get into a rousing game of whack-a-mole, alternatives
+> > > > include continuing as we are, making the existing calls to cond_resched()
+> > > > in turn call cond_resched_tasks_rcu_qs(), decoupling mutex-induced
+> > > > hung-task warnings from synchronize_rcu_tasks(), and various
+> > > > not-so-practical alternatives to RCU Tasks for trampoline synchronization.
+> > > > 
+> > > > Thoughts?  Especially thoughts on other schemes?
+> > > 
+> > > While debugging this issue, I was surprised to discover that cond_resched()
+> > > doesn't provide RCU-tasks quiescent states. That led me to
+> > > cond_resched_tasks_rcu_qs(), which is the stronger primitive needed for
+> > > long-running kernel threads like kmemleak_scan(). Is this the common
+> > > case for cond_resched()? I got the impression that kmemleak is the
+> > > extreme side, but, I have no data on this.
+> > 
+> > And that discovery did in fact lead you correctly, and hence my
+> > giving you a Reviewed-by.
+> > 
+> > > Worth noting that commit 7dadeaa6e851e7 ("sched: Further restrict the
+> > > preemption modes") continues to narrow PREEMPT_NONE, so the future of
+> > > cond_resched() itself may be uncertain, no?
+> > 
+> > Especially given that one of the explicitly stated goals of lazy
+> > preemption was in fact to eliminate cond_resched().  ;-)
+> > 
+> > Getting back to your point about kmemleak possibly being extreme, as far
+> > as I know, none of us have data on how many conversions of cond_resched()
+> > to cond_resched_tasks_rcu_qs() will be required, or, for that matter,
+> > how many additions of cond_resched_tasks_rcu_qs() above and beyond
+> > current cond_resched() instances will be required.
+> 
+> I've searched for "rcu_tasks detected stalls on tasks" on Meta's
+> fleet "dmesg depot" and I was suprised to see we have many of them, in
+> which seems to be on hypervisor workloads (running VMs).
 
-Sorry for the delay, yes, feel free to take it through your tree.
+Good to know!  There have been experiments in the past with hinting
+to the hypervisor that a given vCPU could really use some CPU time,
+but the result has usually instead been a more targeted fix.
 
-> Thanks,
-> Namhyung
->
->> ---
->> base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
->> change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
->>
->> Best regards,
->> --
->> James Clark <james.clark@linaro.org>
->>
+> > There were concerns raised off-list, so I figured that it was time
+> > to lay out what we do know, hence the above gdoc.  I very much hope
+> > that we don't need many more calls to cond_resched_tasks_rcu_qs(), and
+> > thus that the time I spent writing that turns out to be wasted time.
+> > But better safe than sorry!
+> 
+> The document was not a waste of time. it helped people like me to
+> understand what the issue is, and what are the decisions we have ahead
+> of us.
+> 
+> Back to what is the best decision/design, I honestly don't have an
+> opinion, but I am happy to get more data about Meta production servers
+> to help with the decision.
 
+Looking forward to seeing what you come up with!
+
+							Thanx, Paul
