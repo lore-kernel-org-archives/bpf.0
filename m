@@ -1,191 +1,206 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3ED918FDBE
-	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 03:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784865183; cv=pass; b=HVpZ+/ghNPgV4EFAmNY1EHGyAKtOiDbKCxbfu45r8FUy4bGL/DQ7qHiSO3sqU3+iVBcLbW3VSGtcSFNuKbmUz0YSyXQgnEzZEWq9ZBfI2W3uLLqVLlsZE+Uhs0VK7wBp0B1tZEz9/RfqeqaqXflOPUpY7Ivfv6sLZrA2pEDyQ8o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784865183; c=relaxed/simple;
-	bh=AAt+tQ6x87EqieH4JRZs7DkkGKdTAFNhzwbrdBVNw70=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NhEOIEISyGH88Sy90LitXIFEy4bP0xskXAjaQe0316aBJaJqoHVSmZhejNEjH4x1ForfObg/FvAYDHVzWUWOE2Yj6Cr3J/oOCjzBGdjxf6wlIjRdcdPcx1UP+fEUSM0+M5pKmrXBYdclWusbVVgy9QrSEE8qAbJemuikv0sSyVI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JsS/YoQg; arc=pass smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44667175A99
+	for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 04:26:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784867180; cv=none; b=pQipRNdbuqHdGSYSevX6J2fl7zwppUQsbIxD7+1Su0lED6/OIKmFvYrt+Erw32mW2Pxral2FSVi2pfgjVn3z9IDGzC7CSZX/WbcDh+FXIxT5r7Z2YTabAx3dTFwhgqHD8ISXwrHepPoq1qvmy4gcObsh510UBpscQEI2X0b5WNc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784867180; c=relaxed/simple;
+	bh=ijPWs2xVksAmAB5hovnsUjVdUQBp1OkedN4DUHOGrrE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Bob+Yi28MOPNza+sXPKJZhKn+Sd4ByhAuN12iuIHFG8B2bSX7vTyHrWbaIV5alIh7nUFHK0wb1fq+uO0cDb2qxt2cgE2bjh/Jtuqu5C+U1+6P+XgkZCatzBGti0amnzVgZsD1OxW+kt8dBGtot0OUjEvPmw1Va7ULpoxPcwArGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YIjITw+b; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JsS/YoQg"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5b2b92065ffso272118e87.1
-        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 20:53:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784865180; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Qd2GsE7a2JSazVg7YSp0Rt2AeiNv5myqxqRei3OqXLk101zZemS+uMG9fE6UOB5GwQ
-         F2sU+kgwqwA1IEir0gtVyyJPxk9drqj6HE9kCcaoX2WkOVPo7qb0oPXd9zbrL9TVQBg6
-         W6KYotVImCroJUYpwRXO4hpfKh0nD2SfKf2q8Fle/neGLExBKNEjFi9KiBTRsRSBSOiI
-         EvAfWf9FblMfPF7oJFK/SV/X6wuSmp851J6GxDVQYuD1O922o8GDhZGWtl+XPWRwg3Xc
-         WFAV505iZRmPIaPTriLN1wcB4YXlPv/dhsfpYCxfp9cCOfmJDqJSE+cx3OtOpSP7vPHS
-         MHQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Ftf05G7vMLewqh+NOKCr0DXGowg0XyqdXBUvxLAZFjs=;
-        fh=RscmXjB8Kou97Hxme7PF1I6eyS6hPdGu3cCInxRfecY=;
-        b=UoyOAF9jqGwXKG2xPLDJOLoAiT5iEOB2PndP4Ccn99l1Mih28t9MARNruIaszeapG9
-         sYI11h2uvUNQUhQkmU8rxktBZHZq+eZBDUYZxxPuBCbfIGlRBW9Zg2LgVb30C4Tis7Nr
-         dTQLd/Apyg3P6nDAuY6MyhV9Y8W8i4/R4KtsOEIWVopB5UHHs1OGJwkIA7ZT6Z5RrfuY
-         9s++yoWofggIZMfZHOUO7Ck99NLErjpiAA55uTlj0VrjEkOX8gRKxmlOOBh2vO5aHEPp
-         tHZZqomW2GS5j0tSWnbtPXtonoi2DJsjnkDfopUZtDUwetiLo1UXQ/XMqJrKJJZgqZJe
-         I3yw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YIjITw+b"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cca0c5799eso376115ad.0
+        for <bpf@vger.kernel.org>; Thu, 23 Jul 2026 21:26:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784865180; x=1785469980; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ftf05G7vMLewqh+NOKCr0DXGowg0XyqdXBUvxLAZFjs=;
-        b=JsS/YoQg1vILJIMppyaqyKaPGcto84rRQ9eGuFvb1Rxc6q4tT2V+kw74vQU+m6Fg3I
-         3b2tPvZq45UeQJAA9zhOCDBI9A8QtNNtKrOZWGRWcAZQyCbqX/8M3XsZqLhm7YWapefn
-         uW6icMgkzxi2JhQZffDisAiWLieT3WTkrxbVL5mnpopnnvz1R43qScjRdnmVLzv273c9
-         bhBJqmQce2ioaeXheSfyNEm7bJunuGXj4WVOtupAOdX6NRb0xTimlJCYFt3O/lF5k3ps
-         Y920RdDR58JRs3UIxsz9Q8DkQug0+X/WeNbarbGvGvc1WTQsQ6o4+3/GOS7DxBcU/+qE
-         fUSg==
+        d=gmail.com; s=20251104; t=1784867178; x=1785471978; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DKY6IXvIHIW6veKFhlZ9Co6g1obJc5pSTuCyVlsA160=;
+        b=YIjITw+b10gwmnYDzIk67GVI9g4njmv1Qr/CV8EJmbvQEVHBdO4c0Y7yyCcpuMInmK
+         iBZ8WJ1d3uTsjXklHA3v3u1DpniUxlvZ2VATtqilgmOeLX9vsZLi6xj9tWkgsbNuQTN5
+         5n4z81ZZdxPnddSwhVpd9z/AWZTV9yICCExl6caJMPz/bLXdHrkBdGtchpQWbkfDp5jM
+         aFtLJVDCVh/8Km0digJjiiKpmqAO6MnAc2LvRdqz+4Jb1caGt57W+ayBAtAoekip5ApT
+         w6TCpCqpGjSIYhkY6G+jXBQUeHiv+cMOwZK2qj2S19yWjboYxf5Q9U0sNF43J4FQfeSf
+         auHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784865180; x=1785469980;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ftf05G7vMLewqh+NOKCr0DXGowg0XyqdXBUvxLAZFjs=;
-        b=laMmR8+SHDUauV3B/oPPz0LgzAyoUuqp3tjv491k9hASOY7tsl42NuH43KkYJZWXaM
-         LT+5MW/3mV1eyWzMGtULM9AFSfC4G0pjPPPdtDC+1G45JQJp4IIBxQWJV84O+X/s8Vih
-         u21ldKMdzJtE6c+i1n+sWvrLReHYbABSD6IRP/BjOkd+Et7WV0WHm/43rnOetGEGALjW
-         o/4zBFXcYoWLtx//ViRhsy4m0mXsk4u2pKoRHMM32m10lffEN7MFa3wTwdV/ZcfLrrSR
-         mRBBIr9HysRHXaphOOjo8bwgVgpDKlHBSjRZz5zy1ssNwhEhF5ucaOAPYv1bWfkCh4ki
-         QV2Q==
-X-Forwarded-Encrypted: i=1; AHgh+RofPOVPPjyHBNlDOs15RnTVZW34cXmxVv7k5UBeB3dhncpg+Dp2dvRj9YQE2PKMWXVYcZo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCkTd4HsJhHZEoHlQnYS2nF+nhm5zJNXit6gqX7ORLeOPHKT/z
-	nm2ABFznRb2SlxzjK5ePc2EZ3qOpxikw/EHK/U8OiSVYLgIhEQOL/3lHFAzeg9kVnx/vxfUmrqX
-	yShKLQpOaiWH1HuYet5UUp/dfNvMCAlhlWWpHgS+3
-X-Gm-Gg: AR+sD12w/ijWzBm9nzCUPAznujzvRG5pZr8fPwEZNPszY/wiH2GMTn3cmjLFnmXHO3w
-	25WZ5O3ZNPWVlwfNHV+Ny4TEeWNRt8KfkOgxS7WmPhJIKIly8Bx+gbcVj4KZfpChVZpZNxDmSmS
-	gviUjxg9bWOdYgttTvMs1VxpGNCPj8y3qvoUYvwp9jGx3jd6HXBBoln8ywLO4oUbqJxGPfKF+eG
-	0EMe82oE8QZ+f7WCS5LQltVRUyPpsTacdArA9D60+eIna88jDEH5vJuVnvZxAw=
-X-Received: by 2002:a05:6512:3d9f:b0:5ae:c5f2:d213 with SMTP id
- 2adb3069b0e04-5b2b2f67b63mr1221389e87.36.1784865179576; Thu, 23 Jul 2026
- 20:52:59 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784867178; x=1785471978;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=DKY6IXvIHIW6veKFhlZ9Co6g1obJc5pSTuCyVlsA160=;
+        b=cLkeMKikUH70wL86xx7FbJTuGi3zqULgDXCsOYh7dfAUutdnxq6JSWFGrXDGokN4YN
+         V/Bbux5KPbTQXoXfR4ZQzpz6uNhZtV1+GxleqCvxhojTKG8Oo0NOYF4PEZdyoowyF9Wr
+         x8NqcPMziKTGKhABhwN4lrr9CJXy3c9VHgquhIfRyuEdH8/S1fiHiT9hLmbDTW7uMu4p
+         dzBQMe7rI9jHl9Wn8ASkcqvNYVw0kYXxbCqjWTjapiWCpNRNX3a1fF44C3xRWc4noJyF
+         HdulKHnkkjzDSQ/QL2IWzKrVevAw2lugFg2QVX12IZkVW9mwWnwKj06R9lLPn1eg0gY5
+         YJ9w==
+X-Gm-Message-State: AOJu0YzVOUfcMHLTj6tbFK5/LMk6Q8XUPBr1BAKU6UmbQm3+wY85xzPI
+	T+dDgyD89IIBPtO6+cAscSbWHC14cvlj6cUaqX2FYbr0n6kNV8viJmrGQuu8SmM3
+X-Gm-Gg: AR+sD12VdAKmCafdGzJ6N0Oy0Zt2u8zn0i1Z7mpRmcSdkcJDbP6N7KlUBtzYqyr2bam
+	WtJ5pDQu6jUwrilujMNpZg5xpRyi/jGMaAEsSxLydYAJUBehOmjadCgLzboHLkxyhqzY7IRGJ37
+	WmWwTW7c6Cs6xUwcx3jyDoa3u+9U9a/vgCEk8bnTNzdSMIco2rl7JEb+OaPJPz/8ujtFeW/6Qnw
+	orTZEnv+KM+U+huk89EpuCLBIj0moeSRv8MrgI09KKxXLZ3iEPDkOLz4YoZ7PodZOm4uQyIvSld
+	allsnNbtYnHjqrkDUglDy0iqEflAdNZjp24IErN9XTtB3b6A46BxB+ptNIthSqS0PjDuK0xu2gp
+	q6YXqcGpWYf0h8O6k/5rltkeZyk8OWgUP5JSb6Ld90ecjbQ1GWyNv+3SSCQ/XKIhKpAKxG0WrOS
+	cjM8u18lvmebze7HPcRKxpCYoXyWfT2Dgh
+X-Received: by 2002:a17:902:eccd:b0:2bf:27b2:4b80 with SMTP id d9443c01a7336-2cfa6b7a7c2mr67782935ad.14.1784867178521;
+        Thu, 23 Jul 2026 21:26:18 -0700 (PDT)
+Received: from powertower.tail474ae1.ts.net ([64.180.35.234])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8f0072a8sm44437015ad.34.2026.07.23.21.26.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2026 21:26:17 -0700 (PDT)
+From: Mykola Lysenko <nickolay.lysenko@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	Mykola Lysenko <nickolay.lysenko@gmail.com>
+Subject: [RFC PATCH bpf-next v4 0/3] selftests/bpf: restructure the Makefile as a layered build
+Date: Thu, 23 Jul 2026 21:25:57 -0700
+Message-ID: <20260724042600.175440-1-nickolay.lysenko@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260722221634.186886-1-joshwash@google.com> <20260722221634.186886-3-joshwash@google.com>
-In-Reply-To: <20260722221634.186886-3-joshwash@google.com>
-From: Joshua Washington <joshwash@google.com>
-Date: Thu, 23 Jul 2026 20:52:47 -0700
-X-Gm-Features: AUfX_mzF6EYoyu4xTYrV2QSuc8p-IbH2jKCtRe-AL5nSaRF13COF7cND69QiJRA
-Message-ID: <CALuQH+XRWpy6_jKh=14MfBGgBrxWW+F1wrbNh9zD4Gb=9=Agug@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 2/2] gve: add XDP metadata support for DQ RDA
-To: netdev@vger.kernel.org
-Cc: Harshitha Ramamurthy <hramamurthy@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Jordan Rhee <jordanrhee@google.com>, Tim Hostetler <thostet@google.com>, 
-	Ankit Garg <nktgrg@google.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 22, 2026 at 3:16=E2=80=AFPM Joshua Washington <joshwash@google.=
-com> wrote:
->
-> Commit 1b42e07af1ee ("gve: Add Rx HWTS metadata to AF_XDP ZC mode")
-> exposes support for the XDP RX timestamping metadata operation in the DQ
-> RDA mode. While the operation works on its own, the intent was to enable
-> XDP metadata support for the queue format as a whole along with it.
-> Currently bpf_xdp_adjust_meta fails because meta_valid is set to false.
-> This change updates xdp_buff preparation to set meta_valid to true, so
-> metadata can be fully used by XDP programs.
->
-> Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
-> Reviewed-by: Jordan Rhee <jordanrhee@google.com>
-> Signed-off-by: Joshua Washington <joshwash@google.com>
-> ---
-> v3:
->   - bfp -> bpf
-> v2:
->   - Fix referenced commit in description
-> ---
->  drivers/net/ethernet/google/gve/gve_rx_dqo.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/e=
-thernet/google/gve/gve_rx_dqo.c
-> index 907a0c15bf30..329a2585489b 100644
-> --- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-> +++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-> @@ -882,7 +882,7 @@ static int gve_rx_dqo(struct napi_struct *napi, struc=
-t gve_rx_ring *rx,
->                                  buf_state->page_info.page_address +
->                                  buf_state->page_info.page_offset,
->                                  buf_state->page_info.pad,
-> -                                buf_len, false);
-> +                                buf_len, true);
->                 gve_xdp.gve =3D priv;
->                 gve_xdp.compl_desc =3D compl_desc;
->
-> --
-> 2.55.0.229.g6434b31f56-goog
->
+The BPF selftests Makefile has grown to ~1,100 lines, with much of the
+complexity concentrated in the DEFINE_TEST_RUNNER double-expansion
+machinery: the per-runner rules are written in $$-escaped make and
+eval'd once per flavor, so the rules that actually run never appear in
+the source, are invisible to make's own debugging facilities, and are
+easy to break for one flavor while testing another.
 
-Sashiko says:
----
->       if (xprog) {
->               struct gve_xdp_buff gve_xdp;
->               void *old_data;
->               int xdp_act;
->
->               xdp_init_buff(&gve_xdp.xdp, buf_state->page_info.buf_size,
->                             &rx->xdp_rxq);
->               xdp_prepare_buff(&gve_xdp.xdp,
->                                buf_state->page_info.page_address +
->                                buf_state->page_info.page_offset,
->                                buf_state->page_info.pad,
-> -                              buf_len, false);
-> +                              buf_len, true);
->               gve_xdp.gve =3D priv;
->               gve_xdp.compl_desc =3D compl_desc;
->
->               old_data =3D gve_xdp.xdp.data;
->               xdp_act =3D bpf_prog_run_xdp(xprog, &gve_xdp.xdp);
->               buf_state->page_info.pad +=3D gve_xdp.xdp.data - old_data;
+This series restructures the build in three steps, each independently
+buildable and each producing byte-identical artifacts:
 
-[Severity: High]
-This is a pre-existing issue, but does accumulating the XDP head adjustment
-into buf_state->page_info.pad lead to out-of-bounds hardware DMA?
+  1) the four near-identical skeleton generation recipes move into a
+     parameterized helper script (gen_bpf_skel.sh);
+  2) shared (non-rule) definitions move into Makefile.buildvars;
+  3) each test runner instance (test_progs, test_progs-<flavor>,
+     test_maps) becomes its own plain-make sub-make (Makefile.runner),
+     replacing the eval/escaping layer.
 
-When XDP programs adjust the packet head, the difference is accumulated int=
-o
-the pad. When the buffer is recycled, it appears the pad is never reset to
-the default headroom.
+After the series the top Makefile owns everything that exists once
+(toolchain setup, the libbpf/bpftool/resolve_btfids sub-builds,
+vmlinux.h, shared helper objects, standalone binaries, and the lib.mk
+run/install contract), while every runner instance is an ordinary
+single-flavor makefile with no escaping. Total line count is roughly a
+wash; the point is the structure, not the size.
 
-Could this cause subsequent reuses of the buffer to continue accumulating
-the offset and eventually calculate an out-of-bounds DMA address in
-gve_alloc_buffer():
+Sent as RFC to gather feedback on the overall direction.
 
-drivers/net/ethernet/google/gve/gve_buffer_mgmt_dqo.c:gve_alloc_buffer() {
-    ...
-    desc->buf_addr =3D cpu_to_le64(buf_state->addr +
-                                 buf_state->page_info.page_offset +
-                                 buf_state->page_info.pad);
-    ...
-}
----
+Validation (each patch, x86_64, identical toolchains, clean builds):
+2,948/2,948 BPF objects, 5,352/5,352 skeleton headers and 1,413/1,413
+userspace objects byte-identical to the current Makefile's output. For
+the end state additionally: 20/22 binaries byte-identical, and the two
+exceptions (bench, test_maps) differ only in object link order, proven
+by relinking the current Makefile's objects in the new order and
+comparing bytes; emit_tests output and the installed tree identical;
+BPF CI green on a manual pre-submission run across x86_64 gcc/llvm,
+aarch64 and s390x (including GCC-BPF, ASAN and veristat jobs); and all
+76 benchmarks produce identical outcomes on old- and new-built bench
+binaries.
 
-This is not acutally a concern becasue gve_alloc_buffer() always
-resets the the pad based on the page pool's offset parameter. This is
-something that would need to be accounted for in the case of DQ QPL,
-which does not yet support XDP.
+v3 -> v4:
+- fix patch 2: "export BPF_GCC TEST_KMODS" preceded the TEST_KMODS
+  definition, and 'export NAME' on an undefined variable creates it
+  empty, turning the ?= default into a no-op - the kernel test modules
+  were silently neither built nor installed and every BPF CI
+  test-runner job failed with "Can't find bpf_testmod.ko" (caught by
+  BPF CI; not reproducible locally where TEST_KMODS is overridden).
+  The definitions now precede the export, with a comment on the trap.
+- addressed Eduard's (partial) review of patch 3: header comment
+  trimmed; CHECK_FEAT cosmetic reverted; the stock named helper
+  variables and per-binary dependency lines are kept (HELPER_OBJS is
+  defined from them); map_tests/tests.h added to the runner
+  prerequisites; the include-derived skeleton lists are dropped from
+  this series in favor of the current hand-maintained lists (the
+  derivation can be a follow-up); the per-flavor BPF compiler
+  differences became plain sub-make parameters, removing the runner's
+  only conditional compile block; content the series does not change
+  (helper variables and dependency lines, docs and resolve_btfids
+  rules, uprobe_multi, verifier/tests.h, the libarena targets) keeps
+  its original file position, so it appears as context rather than
+  churn in the diff
+- addressed Eduard's review of patch 2: Makefile.buildvars keeps the
+  definitions in the order they had in the original Makefile; knobs
+  the runner never reads (SKIP_*, submake_extras, VMLINUX_BTF,
+  TEST_KMOD_TARGETS) stay in the main Makefile (TEST_KMOD_TARGETS is
+  inlined at its single runner use); patch 2 no longer touches
+  TEST_KMODS, TEST_KMOD_TARGETS or the VMLINUX_BTF block at all - they
+  keep their current positions, and the export the runners need moves
+  to patch 3 next to the LLVM-probe export; file header comments
+  trimmed
+- addressed Eduard's review of patch 1: the gen_bpf_skel.sh interface
+  shrinks to --name/--skel/--subskel/--lskel/--sign - the
+  linked/llinked intermediate infix is derived inside the script,
+  --sign is a boolean taking the key and certificate from
+  $PRIVATE_KEY/$VERIFICATION_CERT in the environment, the build-log
+  lines moved into the make recipes ($(call msg,...)), and the unused
+  --no-determinism-check escape hatch is gone (the determinism check
+  is unconditional)
+- v3: https://lore.kernel.org/bpf/20260722040830.387979-1-nickolay.lysenko@gmail.com/
+
+v2 -> v3:
+- BPF_GCC and TEST_KMODS are defined once (main Makefile, which needs
+  them before lib.mk) and exported to the runner sub-makes instead of
+  being duplicated in Makefile.buildvars, where the copies could
+  silently drift (reported by Sashiko AI review)
+- the permissive-mode runner link rule keeps the current Makefile's
+  incremental semantics: test objects existing at parse time are
+  normal prerequisites again, so editing a test source relinks the
+  runner (reported by Sashiko AI review; v2 had regressed this to
+  order-only)
+- v2: https://lore.kernel.org/bpf/20260721194111.334795-1-nickolay.lysenko@gmail.com/
+
+v1 -> v2:
+- rebased onto current bpf-next: ported the semantics of commit
+  0b236ac75d04 ("selftests/bpf: Fix make install target") - bpftool
+  installed under tools/sbin/, *.BTF files installed - into the new
+  install rule (resolves the CI apply conflict against v1)
+- gen_bpf_skel.sh is a prerequisite of every skeleton rule, so editing
+  the script regenerates the headers (reported by Sashiko AI review)
+- the shared helper objects the top Makefile pre-builds now depend on
+  a superset of the prerequisites the runner-side object rule uses
+  (libarena skeletons, both generated tests.h headers), closing a
+  window where the unflavored test_progs and test_maps sub-makes could
+  both consider a shared helper object stale and recompile it
+  concurrently in the shared output directory (reported by Sashiko AI
+  review)
+- v1: https://lore.kernel.org/bpf/20260721174909.8044-1-nickolay.lysenko@gmail.com/
+
+Mykola Lysenko (3):
+  selftests/bpf: extract BPF skeleton generation into a helper script
+  selftests/bpf: move shared build definitions into Makefile.buildvars
+  selftests/bpf: build each test runner instance in its own sub-make
+
+ tools/testing/selftests/bpf/Makefile          | 942 +++++-------------
+ .../testing/selftests/bpf/Makefile.buildvars  | 160 ++++
+ tools/testing/selftests/bpf/Makefile.runner   | 325 ++++++
+ tools/testing/selftests/bpf/gen_bpf_skel.sh   |  93 ++
+ 4 files changed, 866 insertions(+), 654 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/Makefile.buildvars
+ create mode 100644 tools/testing/selftests/bpf/Makefile.runner
+ create mode 100755 tools/testing/selftests/bpf/gen_bpf_skel.sh
+
+
+base-commit: 87267b89459813cb50ab5377e076b639c07b4491
+-- 
+2.43.0
+
