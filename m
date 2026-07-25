@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EEF3C2B8F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DE339EB73
 	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 10:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784975278; cv=none; b=k9Up2q3rUb6jv0mjCbDtLZoaWohHMPceBSK0cBOYDrxj4tiRrEosnOLEhb4YLti499wZLks9EKtwdOIX50pWErXBwetaB9rGiqT6ac4BEx/nr/iKyIhtz2+GBFbQEKnaJ1acOyZGFs0Us3rXy5++70/7fISQs0vQepTBjQcehn0=
+	t=1784975279; cv=none; b=rJGxaefwBGTRuE/WOtlnV0aT97WG4Ryfy8qmo48pWCf60xx90gsO6eWR0QCjjuYhtL9IaIKWpIP0rKE16peIBoPY13898DdLkfEsYmORIXmV6bxQ8MKguzwPMEQu3MyKuEEvgbrTHrlTRbK8z2WITK5gdWpt72iD1796PUgfrWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784975278; c=relaxed/simple;
-	bh=V9tq2ODzBv2FGYwwotX3UCH9hZwRKS0OsOhdC0TOUac=;
+	s=arc-20240116; t=1784975279; c=relaxed/simple;
+	bh=XSx8LFwNUq6IJuSvJOS2AQkQDprRPfOUZ6SxzYoe2PY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BVi8BWzw+Gek2/uxyOZ6OGvQ9QFUojR+uYqfNUV7iYJ9Jf43FQXN3h9+YWhS+lIcD38DTLWFGVIlf4tkF7Z6DLs47IHhkZRhUQecIOWJOcmv4wHxp/i7+/wW/Y+PnqiHBBCy7g94OZkpEmxuZOVrVfpklwCR2NaLrNd0al/Av0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FWcIoHKz; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Hst/sVgG32BMxLdUk0dEzyv5S7cByrTLoMnV5DUad9dlHdnFpQd3RzRXWzaJssRDfoFR9aeZsqlp73f+Q857gREnosqEqZXgSGCfb9iLnEWrjaxZl92BCqDqSHc4bpAFxOyQXH5mA5D+IfsqICbhzLDSM6e+6gKszdI4nZBfwCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GPwxrs80; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FWcIoHKz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC3BD1F000E9;
-	Sat, 25 Jul 2026 10:27:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GPwxrs80"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F4D1F00A3A;
+	Sat, 25 Jul 2026 10:27:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1784975273;
-	bh=SGOuzc/IdOnk+IZMA2WkXOgHSBEaoy6u/ezd3BmsY9o=;
+	bh=sp4Wm87Vruxlp20e1dUYVIzkSUMXAtHrCwnwezBwEKU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FWcIoHKziyULW169xPW5tRGBT1Hly7TqMtVmQCLabNwwrwh2naZJ6XfXB7mr80Shd
-	 qWmnML7dYsIKcmZOhGGRveEMua7ebTui4Qtvjg0l7WcmPOdDV1l7DWH7l59xKJd5XG
-	 OJPY4wdaNRmw/gJqKi2GdIk3oSQ3NWXp+1uWXjLV1EF2XDLHyZj85V6XX8Alm2Yedh
-	 0YVnHhWiePcNz+JR3w/9F60qTZFHSxiu20N7PUEynHAFz8yeH3KgDpJUfA1vmfMcWV
-	 92i8rjIor42Lk+OLR9LEjUZhf7K5ITuk8YcWsZtwDuTWfQfiYqMFaz82CPB7fP/YJF
-	 SzjP/GZ/fxN3Q==
+	b=GPwxrs80CN/6yU3QlDUFd7V5tnhDQu5rQS/vdHmv1RnUsRJaSJ4l/wLZs8WnTlrsu
+	 OYIUPNbT/UqrErVUmrL5x5pl0Hh1+2/qoPko5XM6O0wDM/ejJF3xkAB8yDJ/oAw82C
+	 koyjHq4WFTvWGP93sDDj9UQ57pcZu3b6UlG+FCMDMbiUqS3hwzJ1cFSmnasPsHvLt/
+	 X9vMgaedsCGW2ROlgNdR3ysYpOT7rZRqjIv794E+257S96zue+7yBepSMR1XCtMzMy
+	 ghADZbmiI1xzv/iP/4CJBruoFnys1WGG1EQINtpWp1h9G2bpk56q3aV5OFVaufLGCH
+	 DW2jA9eTAMt9g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 6/7] riscv, bpf: Adjust bpf_func to account
- for CFI offset in bpf_jit_free
+Subject: Re: [PATCH bpf-next v2 2/7] s390/bpf: Fix memory leak in
+ bpf_jit_free
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Pu Lehui" <pulehui@huaweicloud.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260725102020.2287770-7-pulehui@huaweicloud.com>
+In-Reply-To: <20260725102020.2287770-3-pulehui@huaweicloud.com>
 References: <20260725102020.2287770-1-pulehui@huaweicloud.com>
- <20260725102020.2287770-7-pulehui@huaweicloud.com>
+ <20260725102020.2287770-3-pulehui@huaweicloud.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Jul 2026 10:27:52 +0000
-Message-Id: <20260725102752.DC3BD1F000E9@smtp.kernel.org>
+Date: Sat, 25 Jul 2026 10:27:53 +0000
+Message-Id: <20260725102753.87F4D1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,54 +47,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [Critical] bpf_jit_free() ignores the return value of bpf_jit_binary_pack=
-_finalize(), leading to a double free and use-after-free of the ro_header i=
-f finalization fails.
+- [Low] The patch introduces a direct compilation error on s390 by declarin=
+g and dereferencing an undefined struct `struct bpf_jit_data`.
 --
 
---- Patch [6]: [PATCH bpf-next v2 6/7] riscv, bpf: Adjust bpf_func to accou=
-nt for CFI offset in bpf_jit_free ---
-commit 3086c59fad7254d5809adea2a09ea130ccb95d10
+--- Patch [2]: [PATCH bpf-next v2 2/7] s390/bpf: Fix memory leak in bpf_jit=
+_free ---
+commit 69c0bb88eff440919ad293e92f90d3f1f44abf60
 Author: Pu Lehui <pulehui@huawei.com>
 
-riscv, bpf: Adjust bpf_func to account for CFI offset in bpf_jit_free
+s390/bpf: Fix memory leak in bpf_jit_free
 
-This commit subtracts cfi_get_offset() from prog->bpf_func to correctly
-restore the original JITed allocation address before freeing it. This preve=
-nts
-potential invalid memory frees when CFI is enabled.
+This commit implements a custom bpf_jit_free() for s390 to clean up leftover
+jit_data when a subprogram fails to JIT, fixing a memory leak.
 
-> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-> index cbfcd287ea166..059db1adeaf8d 100644
-> --- a/arch/riscv/net/bpf_jit_core.c
-> +++ b/arch/riscv/net/bpf_jit_core.c
-> @@ -237,6 +237,7 @@ void bpf_jit_free(struct bpf_prog *prog)
->  			kvfree(jit_data->ctx.offset);
->  			kfree(jit_data);
->  		}
-> +		prog->bpf_func =3D (void *)prog->bpf_func - cfi_get_offset();
->  		hdr =3D bpf_jit_binary_pack_hdr(prog);
->  		bpf_jit_binary_pack_free(hdr, NULL);
+> diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+> index b60877478b45d..d9fdb32b7a96c 100644
+> --- a/arch/s390/net/bpf_jit_comp.c
+> +++ b/arch/s390/net/bpf_jit_comp.c
+[ ... ]
+> @@ -3106,3 +3106,22 @@ bool bpf_jit_inlines_helper_call(s32 imm)
+>  		return false;
+>  	}
+>  }
+> +
+> +void bpf_jit_free(struct bpf_prog *fp)
+> +{
+> +	if (fp->jited) {
+> +		struct bpf_jit_data *jit_data =3D fp->aux->jit_data;
 
-[Severity: Critical]
-This is a pre-existing issue, but does ignoring the return value of
-bpf_jit_binary_pack_finalize() called just above this block lead to a double
-free?
+[Severity: Low]
+Does this code cause a build failure on s390?
 
-If bpf_jit_binary_pack_finalize() fails during text patching, it frees the
-ro_header internally and returns an error.
+It appears struct bpf_jit_data is undefined in this context, as the s390
+architecture uses struct s390_jit_data instead.
 
-Since that error is ignored in bpf_jit_free(), the execution unconditionally
-continues down to:
+This leads to a compiler error when trying to dereference it to access
+jit_data->ctx.addrs below.
 
-    hdr =3D bpf_jit_binary_pack_hdr(prog);
-    bpf_jit_binary_pack_free(hdr, NULL);
-
-Can this lead to a use-after-free when bpf_jit_binary_pack_free() tries to
-read the header size, followed by a double free of the memory chunk?
+> +		struct bpf_binary_header *hdr =3D bpf_jit_binary_hdr(fp);
+> +
+> +		/* Cleanup for earlier subprogs if jit_subprogs() aborts */
+> +		if (jit_data) {
+> +			kvfree(jit_data->ctx.addrs);
+> +			kfree(jit_data);
+> +		}
+> +
+> +		bpf_jit_binary_free(hdr);
+> +		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
+> +	}
+> +
+> +	bpf_prog_unlock_free(fp);
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260725102020.2287=
-770-1-pulehui@huaweicloud.com?part=3D6
+770-1-pulehui@huaweicloud.com?part=3D2
