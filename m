@@ -1,104 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EBF2D94B5
-	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 00:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B39E2E7374;
+	Sat, 25 Jul 2026 01:00:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784938444; cv=none; b=F6CewJLu3x85CeYGG5GSlAFS6Kg92TehJK5oWdJrUzoAhT27sfhl3SJ9Dk4T0qQpGLcibdnAsG26OZmvnURUdlfiA95ygEluC/R6TMCjdDlvrHM6fEukBSvJxbelg1vdsPz2EICr9C9aZ5Xb6KxFkTZazLZJx0/a74MrKdrZtfQ=
+	t=1784941212; cv=none; b=fyvdFbmrkufUD7zJ2cOXlcqLdJ3380DUm9cQwrfo4Q+HSNSPcC16J3Ftohl4eDWWD9zu4IaSEgl5k6iAuu/1LrsUto5V2eoPFKvHSz1wPPggO6VQV25v4Cqi/76zQW4Oq0kSSnikwfgJlD0FWC+vVG/I5mocu0VG85vnpcz2a/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784938444; c=relaxed/simple;
-	bh=rrbH6GKBQ4OOox6cMRM4X2sVPFFLkMCrRwIGoGFfkHc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P1DzsDGwNw+WGCv2OZ8Gk9m+V3qBtCStAP6+mPb3+XlZx8xbr/CNBAsNT9FpaNkSjL+X4d0FKO7Jad5Y0DaPtGhYKGJG83rMJSjgSDKq/sEqVCzsEiA3HwYJXMa8kNpl531ssMbmrU9YKQklmgM5s/hfVzdZNecT4OE3hoMexFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FLlxKJEj; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784941212; c=relaxed/simple;
+	bh=1RUFjWz6Rg1f1hrlS//lgaICRxO4c3YvsrZYedb7KL8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OP2yo7O6074+TU/EOVdu1CvavgsBkKUKpRCqvIrVYMqNuRITaDt4O0nilIloDdanMEJ/qgl/+VZbnBfnhlTN+URYdGIxKOPMJAy1jzQ74DzLWXupr3yetoobF/mjhz5CWkn4TOOJuFXEydwoFdz5R0MalzHOeBvAungFhI4gSRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WpNkeymz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FLlxKJEj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C261C1F000E9
-	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 00:14:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WpNkeymz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37F51F000E9;
+	Sat, 25 Jul 2026 01:00:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784938441;
-	bh=c/IzNZDV3n5JvnwV6UiSPs5H7EW8rm/6iVaurEmVtvY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=FLlxKJEjbsQYCfwkTQSmkkSPbXIFncW8d2Gkx8GkccGifWS2MZ+livtolcBOVFlPP
-	 q9Aw0klwFTokdBJnUPzk/3jD+U1D9Rpvgx56iIkeCUu8B/4wuzFQVXgEXydbjzwrwV
-	 CjzqAq87o+63/9ax5cBeo8mnrZfXgndvkie8qaOzKNbvy0xG8P8V70aMllzedpafxn
-	 6ELy26R3tF4ndTIISsrHOMf+xSudmCV3sXFknynb1Tb9n/GKC6MRNeLpSkzwzT2t5Q
-	 cJjFf2RtxVEEpaQpfxtn7eGPB+hYCM4MBfT9++dm9UgNOdOUTqR/jMNECedP50LXGh
-	 keDAjJ+HVE8dQ==
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92e5c92c389so76566185a.3
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 17:14:01 -0700 (PDT)
-X-Gm-Message-State: AOJu0YyXwL3ORdgxzRpU5Ie3f+6KdRktm2dycbP6z/+aoqBBEnpcWytC
-	rbxrvbH7gMvU9SNYdTPd8ES3SN4fYX3i7ZYnG3iLCOs1G9whYyyk293COUMbImo5CC5GDiyFJo8
-	HRDjswf31ckGSmiI1DDSvkZm4SPe7nEU=
-X-Received: by 2002:a05:620a:4622:b0:930:f306:8275 with SMTP id
- af79cd13be357-932df5ac872mr28955085a.9.1784938441043; Fri, 24 Jul 2026
- 17:14:01 -0700 (PDT)
+	s=k20260515; t=1784941211;
+	bh=As1VFAV4/mE6JvvbbxmZ+Bp8mI/fGVenXZeP4wEav0w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=WpNkeymzxme+ejkFrlPhhO39hPAULrf6Ox8rY8fd5z66lDcD7sQMYqZ0OJIWqte6G
+	 lkyDdWeFmbLddAXwFMuEdKeJrEkhhZUj3GH1SGjHUGXlgZ1QKvxbUm9U7J8jFU38OJ
+	 lX+pgVE2Umo+C+zC0LEu5na/P+wWjTnlUYs/MTXAvZA/5ntkRilET4bXMRzu/nc+x/
+	 MCg1V/7OAM+fxdaq7H3Kotho/ypxoMHFO6mcqiklqPugH/qnYOQzvSrhOZU6NNCQdd
+	 IuHFkwsLsIZxhbyfQnzcEl1liqC9puOGMLjdXRXenKjmr1vHlgNJNVgif65YY6jIMc
+	 N5UVIZqZhu7jg==
+Date: Fri, 24 Jul 2026 18:00:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
+	Juergen Christ <jchrist@linux.ibm.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Dominik Steenken <dost@de.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Maxim Khmelevskii <max@linux.ibm.com>,
+	Jens Remus <jremus@linux.ibm.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <kees@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, llvm@lists.linux.dev,
+	bpf@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] s390/Kconfig: Select ARCH_SUPPORTS_CFI
+Message-ID: <20260725010004.GA1686739@ax162>
+References: <20260724141318.1037434-1-hca@linux.ibm.com>
+ <20260724141318.1037434-6-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260722065308.4116186-1-song@kernel.org> <20260722065308.4116186-3-song@kernel.org>
- <amJhnbom_expRgN2@krava> <CAPhsuW4NKdRmFxsmLoAYKV60NuKoRO-3NKqHAucaXPyFKk4BMw@mail.gmail.com>
- <amMoJnZUF5flJazb@krava>
-In-Reply-To: <amMoJnZUF5flJazb@krava>
-From: Song Liu <song@kernel.org>
-Date: Fri, 24 Jul 2026 17:13:47 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5bhv+CktsvnhEy97KA4oQY1dZfnGkzgKdAZTk77Pe90g@mail.gmail.com>
-X-Gm-Features: AUfX_mwGZVIGG3Xku0U4OpQHpN5yFYmZwxxT-E2UGQGFtKZMz3mmBb-R4aV61bE
-Message-ID: <CAPhsuW5bhv+CktsvnhEy97KA4oQY1dZfnGkzgKdAZTk77Pe90g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add mmap/munmap benchmark for
- array maps
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260724141318.1037434-6-hca@linux.ibm.com>
 
-On Fri, Jul 24, 2026 at 1:54=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
-[...]
-> > If we add a read per page, which is the worst case:
-> >
-> > before:
-> >         nr_threads: 1, map_size: 1048576
-> > arraymap-mmap:       throughput: 0.032 =C2=B1 0.000 M ops/s, latency: 3=
-1248.846 ns/op
-> >
-> >         nr_threads: 1, map_size: 8388608
-> > arraymap-mmap:       throughput: 0.003 =C2=B1 0.000 M ops/s, latency:
-> > 372565.622 ns/op
-> >
-> >         nr_threads: 1, map_size: 67108864
-> > arraymap-mmap:       throughput: 0.000 =C2=B1 0.000 M ops/s, latency:
-> > 2061083.005 ns/op
-> >
-> > after:
-> >         nr_threads: 1, map_size: 1048576
-> > arraymap-mmap:       throughput: 0.006 =C2=B1 0.000 M ops/s, latency:
-> > 170794.193 ns/op
-> >
-> >         nr_threads: 1, map_size: 8388608
-> > arraymap-mmap:       throughput: 0.001 =C2=B1 0.000 M ops/s, latency:
-> > 1346389.229 ns/op
-> >
-> >         nr_threads: 1, map_size: 67108864
-> > arraymap-mmap:       throughput: 0.000 =C2=B1 0.000 M ops/s, latency:
-> > 10700389.105 ns/op
-> >
-> > So filling all the pages in the mmap is faster than faulting one page a=
-t a time
-> > in many page faults. IOW, there is a performance regression in this cas=
-e.
->
-> would it make sense to add new map flag for that?
+Hi Heiko,
 
-If possible, I would avoid adding a new flag for this. I think the
-regression is on a very special corner case. BPF arena has
-similar behavior (fill in page table on fault). So it should be OK
-to have array map do the same. WDYT?
+On Fri, Jul 24, 2026 at 04:13:17PM +0200, Heiko Carstens wrote:
+> With all prerequisites in place select ARCH_SUPPORTS_CFI.
+> 
+> Note that this support is supposed to work with the generic kcfi support
+> which is provided by clang. This comes with a couple of limitations:
 
-Thanks,
-Song
+Consider adding
+
+  select ARCH_USES_CFI_GENERIC_LLVM_PASS if CC_IS_CLANG
+
+to this change in case there are problems such as the one worked around
+by commit c57f5fee54df ("libeth: xdp: Disable generic kCFI pass for
+libeth_xdp_tx_xmit_bulk()"). Whenever clang grows an s390 backend
+expansion for kCFI, that can be version gated pretty easily.
+
+I will test this series fully next week.
+
+> ---
+>  arch/s390/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index 84404e6778d5..d57a6c02f51d 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -144,6 +144,7 @@ config S390
+>  	select ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE
+>  	select ARCH_STACKWALK
+>  	select ARCH_SUPPORTS_ATOMIC_RMW
+> +	select ARCH_SUPPORTS_CFI
+>  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
+>  	select ARCH_SUPPORTS_HUGETLBFS
+>  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128 && CC_IS_CLANG
+> -- 
+> 2.53.0
+> 
+
+-- 
+Cheers,
+Nathan
