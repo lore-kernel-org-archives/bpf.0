@@ -1,27 +1,28 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B1B33A9C1;
-	Sat, 25 Jul 2026 15:44:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796D533DEF7;
+	Sat, 25 Jul 2026 15:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784994293; cv=none; b=M0621Ue/NT6ysKDr6NkI6jve4heC0j/2p47Q2vkUGNbmaBAllEBhMDlJ+o7ZP+hyNc3CJG2goQAwAMgNpoaHBS8wZi+ZGmwNhs1f5Rbgt4SH+dLymrqClLdWc0rg+kkXvq8PQcIwp/tp4qjI+tY0tyHKJfaj38IACQpP1RGh5vM=
+	t=1784994294; cv=none; b=cBe8+wAZatr3q1pqUf8mWmfrrPIHiS6XtXA9aqrLMvXMc6hTG746TIw54G7NU0YlTqEEMprkX3cdXKrk5AmhU81lB01UIvFNLZw/VXuqr2aUROls+Fws4NZE/oqPsWOh9jRnrMKVkXymj9YgGDu2dzitFUK134dgpFEiykKiLB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784994293; c=relaxed/simple;
-	bh=kb5QUEIo2bft06iuoF17ty44R5IaizQ29kr/u+WwYgA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=N0+KyvNf/2d3ikiWav3nOAKMoegehsQXWge8oucdOz0YO6j0694ZRUGeGbfFTK+vb9Y9SpLdlE3eem7SWWGJDuHkPUafhYCFf2vJG4fiiHKfkuE0PtXTZ3/dmR/me4+3GymKBWq3eY+PDJ2zT8zG83diWZvLu+U0SPCzvkAlIlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	s=arc-20240116; t=1784994294; c=relaxed/simple;
+	bh=beztoTTGLu2Z9AXoQ6+/OsF/saY0f5VOINaSUOLfR0U=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=FMCL/UtrkZL26BS4uKud2OyQnSHPqkQ5+BZUWXAwqJIVbh9ZZv9CxODA8OIptmgIFqAcZ7yXMX8EwYG7t2aKVOfsivbDsoimhh7gkJ8xBqOhsd9ZPN4f5GGE1VMuEYPSoY86APsGuhNqylPZAOcbUkk3RW6pV5C8DKc/gzEB+so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h6q09380wzKHMZQ;
-	Sat, 25 Jul 2026 23:43:53 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h6q0S3gmBzYQtwW;
+	Sat, 25 Jul 2026 23:44:08 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 3757F4058F;
+	by mail.maildlp.com (Postfix) with ESMTP id D3DAA408C1;
 	Sat, 25 Jul 2026 23:44:42 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgCXpXHo2WRqLfYVCg--.46096S2;
-	Sat, 25 Jul 2026 23:44:41 +0800 (CST)
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgCXpXHo2WRqLfYVCg--.46096S9;
+	Sat, 25 Jul 2026 23:44:42 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -52,10 +53,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Naveen N Rao <naveen@kernel.org>,
 	Pu Lehui <pulehui@huawei.com>,
 	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next v3 0/9] Fixes for bpf_jit_free
-Date: Sat, 25 Jul 2026 15:49:06 +0000
-Message-Id: <20260725154915.2488611-1-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v3 7/9] bpf, arm64: Fix private stack leak when JIT failed
+Date: Sat, 25 Jul 2026 15:49:13 +0000
+Message-Id: <20260725154915.2488611-8-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260725154915.2488611-1-pulehui@huaweicloud.com>
+References: <20260725154915.2488611-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,66 +66,56 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgCXpXHo2WRqLfYVCg--.46096S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww1fXw1xCrW7urykKFWDtwb_yoW8Ww1xpr
-	s5Ar13Cr1vgr92qws3J3W0qF15tw4rWw17WrW7W3yrJ3Z0qFyUZr1fCw15C398try8tay5
-	XFy3Kry5C34kX3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-	n2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-	67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
-	MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCT
-	nIWIevJa73UjIFyTuYvjTRM6wCDUUUU
+X-CM-TRANSID:cCh0CgCXpXHo2WRqLfYVCg--.46096S9
+X-Coremail-Antispam: 1UD129KBjvJXoW7Gw1fCw1rGF1UJFWxCrWxWFg_yoW8JrW5pa
+	s5AasIyw4qgr1Utws8tF18JFWUJw40qa17GrW8C3yUKFn09r92gFWrK34UCFWrArWrtw4Y
+	vFyUKrnxAa4kX3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUmq14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
+	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
+	z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
+	4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE
+	3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2I
+	x0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8
+	JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2
+	ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+	z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+	AF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1l
+	IxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+	1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIY
+	CTnIWIevJa73UjIFyTuYvjTRNdb1DUUUU
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 From: Pu Lehui <pulehui@huawei.com>
 
-Fixes for bpf_jit_free identified by Sashiko, as previously noted in [0].
+When bpf_int_jit_compile fails after allocating the private stack and
+ro_header, it jumps to out_free_hdr where bpf_jit_binary_pack_free frees
+ro_header but leaves the pointer non-NULL. This causes the subsequent
+`if (!ro_header && priv_stack_ptr)` check at out_off to evaluate to
+false, skipping free_percpu(priv_stack_ptr) and leaking the private
+stack memory.
 
-Link: https://lore.kernel.org/bpf/28ba19a4-b487-49fd-bbba-04410acdb113@iogearbox.net/ [0]
+Fix this by setting ro_header to NULL after freeing it in out_free_hdr.
 
-v3:
-- Add fix for private stack leak on arm64. (Sashiko)
-- Some minor fixes.
+Fixes: 6c17a882d380 ("bpf, arm64: JIT support for private stack")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-v2: https://lore.kernel.org/bpf/20260725102020.2287770-1-pulehui@huaweicloud.com
-- Fix JITs not freeing leftover jit_data when jit_subprogs() aborts. (Sashiko)
-- Drop fix for loongarch as it's applied.
-
-v1: https://lore.kernel.org/bpf/20260722112754.1615201-1-pulehui@huaweicloud.com
-
-
-Pu Lehui (9):
-  bpf: Extract the bpf_jit_binary_hdr helper
-  s390/bpf: Fix memory leak in bpf_jit_free
-  parisc: Fix memory leak in bpf_jit_free
-  bpf, sparc64: Fix memory leak in bpf_jit_free
-  ARC, bpf: Fix memory leak in bpf_jit_free
-  bpf, arm64: Fix memory leak in bpf_jit_free
-  bpf, arm64: Fix private stack leak when JIT failed
-  riscv, bpf: Adjust bpf_func to account for CFI offset in bpf_jit_free
-  bpf: Fix double-free RO header in bpf_jit_free
-
- arch/arc/net/bpf_jit_core.c      | 19 +++++++++++++++++++
- arch/arm64/net/bpf_jit_comp.c    |  6 +++---
- arch/loongarch/net/bpf_jit.c     |  6 ++----
- arch/parisc/net/bpf_jit_core.c   | 19 +++++++++++++++++++
- arch/powerpc/net/bpf_jit_comp.c  |  5 +++--
- arch/riscv/net/bpf_jit_core.c    |  8 +++-----
- arch/s390/net/bpf_jit_comp.c     | 19 +++++++++++++++++++
- arch/sparc/net/bpf_jit_comp_64.c | 19 +++++++++++++++++++
- arch/x86/net/bpf_jit_comp.c      |  7 ++-----
- include/linux/filter.h           |  2 ++
- kernel/bpf/core.c                | 19 ++++++++++---------
- 11 files changed, 101 insertions(+), 28 deletions(-)
-
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index f4e4d4578e38..6e036acf80d8 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -2311,6 +2311,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 		bpf_arch_text_copy(&ro_header->size, &header->size,
+ 				   sizeof(header->size));
+ 		bpf_jit_binary_pack_free(ro_header, header);
++		ro_header = NULL;
+ 	}
+ 	goto out_off;
+ }
 -- 
 2.34.1
 
