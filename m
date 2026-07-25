@@ -1,105 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B39E2E7374;
-	Sat, 25 Jul 2026 01:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7551CBE63
+	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 01:39:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784941212; cv=none; b=fyvdFbmrkufUD7zJ2cOXlcqLdJ3380DUm9cQwrfo4Q+HSNSPcC16J3Ftohl4eDWWD9zu4IaSEgl5k6iAuu/1LrsUto5V2eoPFKvHSz1wPPggO6VQV25v4Cqi/76zQW4Oq0kSSnikwfgJlD0FWC+vVG/I5mocu0VG85vnpcz2a/Y=
+	t=1784943571; cv=none; b=eiK8dIocIHFGwJKTxiExfxUtOOACaW/Fct899LA0NOe5zckxk6+tK1DNm9jS0LFqoEfB+X6+rkl9VQDtokQWfQ72SRftEj5VUp5LvUY+52hdY1jQwIS/x03SxB9tLmKQCgsdxsv249DGD5UY1weL/LFRMZgzrRKdUGnOzzSHi9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784941212; c=relaxed/simple;
-	bh=1RUFjWz6Rg1f1hrlS//lgaICRxO4c3YvsrZYedb7KL8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OP2yo7O6074+TU/EOVdu1CvavgsBkKUKpRCqvIrVYMqNuRITaDt4O0nilIloDdanMEJ/qgl/+VZbnBfnhlTN+URYdGIxKOPMJAy1jzQ74DzLWXupr3yetoobF/mjhz5CWkn4TOOJuFXEydwoFdz5R0MalzHOeBvAungFhI4gSRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WpNkeymz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784943571; c=relaxed/simple;
+	bh=D/oiJNuCYIAmvsAsnbKG9YJEUS/g7SfYUnOVzoyv3Sg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HtvvG03q45pMBl4WFwoL2H0cJ5rwpiUwVcL/rVSiCoUWhd2q4I2bRAr8pY5nqoTVNkKvXnq//Amc3/MK27RX1nVHcuFeavSr5gpLDPg0X8w6szUpjn+Qi5SaU1zcVDHg6iG20YZOCi7jdG1aZRO+3mr2EvAmMuyuDJiiGO0BshA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DVQTz9q/; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WpNkeymz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37F51F000E9;
-	Sat, 25 Jul 2026 01:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784941211;
-	bh=As1VFAV4/mE6JvvbbxmZ+Bp8mI/fGVenXZeP4wEav0w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=WpNkeymzxme+ejkFrlPhhO39hPAULrf6Ox8rY8fd5z66lDcD7sQMYqZ0OJIWqte6G
-	 lkyDdWeFmbLddAXwFMuEdKeJrEkhhZUj3GH1SGjHUGXlgZ1QKvxbUm9U7J8jFU38OJ
-	 lX+pgVE2Umo+C+zC0LEu5na/P+wWjTnlUYs/MTXAvZA/5ntkRilET4bXMRzu/nc+x/
-	 MCg1V/7OAM+fxdaq7H3Kotho/ypxoMHFO6mcqiklqPugH/qnYOQzvSrhOZU6NNCQdd
-	 IuHFkwsLsIZxhbyfQnzcEl1liqC9puOGMLjdXRXenKjmr1vHlgNJNVgif65YY6jIMc
-	 N5UVIZqZhu7jg==
-Date: Fri, 24 Jul 2026 18:00:04 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
-	Juergen Christ <jchrist@linux.ibm.com>,
-	Ilya Leoshkevich <iii@linux.ibm.com>,
-	Dominik Steenken <dost@de.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Maxim Khmelevskii <max@linux.ibm.com>,
-	Jens Remus <jremus@linux.ibm.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <kees@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, llvm@lists.linux.dev,
-	bpf@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] s390/Kconfig: Select ARCH_SUPPORTS_CFI
-Message-ID: <20260725010004.GA1686739@ax162>
-References: <20260724141318.1037434-1-hca@linux.ibm.com>
- <20260724141318.1037434-6-hca@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DVQTz9q/"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cacf197759so14864005ad.2
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 18:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784943570; x=1785548370; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=D/oiJNuCYIAmvsAsnbKG9YJEUS/g7SfYUnOVzoyv3Sg=;
+        b=DVQTz9q/q3ke0P/jn8mLTjQViHm1t7UUdv5ZK4vgZO+xufzFkhLOaDnpjPQPQhUR5w
+         I7+wZLAeb9DCxRJZPfHbLj4+pPtnLSATH1my/2UXddnLJMBmHaStO4nGRI0AQ+pMEa97
+         pHfJeMGzR2K3PwDdfDoh7uoK0yZiDlbw5b+zq/ltWTgPRHRSEFm3D0iStqsjd9ZWPS5J
+         bSxCzZrtiOzmdwZJbAxy7ESnOXUbHVt2++8B2jL6chwm6757gI1xsJWIT235xhGkmBN1
+         lnuLhXA10X5kGvy9Pp6c5g1xG1+/O/+YJjOPlaj1TIUTOAI5DaWVVAB4UmqThKfWJ0cu
+         19Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784943570; x=1785548370;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=D/oiJNuCYIAmvsAsnbKG9YJEUS/g7SfYUnOVzoyv3Sg=;
+        b=FVAnV8T5JKj+51STX0+6Pi4oGj2GPPUTnmhIKe6GYe5ZFcwozyhwlivDRDbahVxFzX
+         98duue7+cCTfzwtDr6MtBDjp3r+RhGowUMaOuL4yLGu5geh0FPlDQ9ANhxTG4NjcAxXE
+         dz09wZ/6eQHva7ndNJHNjKazgk9W1EJiKTUbiw+Rj+YGlu0o+/sCIOn3ixGrV1Xqa7mN
+         IIowBXtjGWDsZ237qtBFY9xMCJoiu3sAzcWCB80YYsiLjFzYa2MkScJ8+UCghADfKIb+
+         10HFrOmZgZsrlkNihY0cpxhvuDC183xRlqrCKwToIo7tea/bVefhDILxQPZP8QzSEqBZ
+         icrg==
+X-Forwarded-Encrypted: i=1; AHgh+RrRuW7sRb0+cH/YWvAocI4vVNEJeXaZ8VnMSIDXyqv4CmAhyMqNX7ndgeV1ACdsemTwq20=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPN7VRtJSNQmq8OCVhKvQC8YrrowsVdHd2KhRzU83L1kfVflfL
+	cEe45NEnXv77rhZ4yCLFZKd7x9hpKzo2pU3u5lOmgQ+f2r+TK0p5JcZN
+X-Gm-Gg: AR+sD13kKm4qQd6qvg836H4FZVMTvDMtOXD3KeZIJesX6+xmFzwYPlc65UvTBDmCMTD
+	s6tNbFPxKmb6bpFW34oez3mnowEBAh3QeiB4O2UW99h4RADRP+fGaQH4Yyu5fQJWPoNJfCzaAQe
+	GAM2Nf/FQ0DkNP2wlhMTB4WNxTQatG7QwLpv30OofoSNL7YdBrUmi8D5ZDPF4yZfd7a+iHJL2JI
+	XMBUBVNmIuG/B3iRF0DyFkWV3WdgfRwa2Hdrba0HzezRGNeY5s1RGIjddsPwpeFdmLPZcUj/XiS
+	3d/Mxrly6kbtlbUed04skfE885SmV1Vy0p4taXfhXHJoAdO/nOPGBnT++V9t4dqDKk/DNYdR+VD
+	s6EjuhOxi12VrcHaYETf5qPNr11xuPpkDcr5gxAtIc+N2dFD0P0VUzGsst72nGtsGh+DTf2lj9z
+	Ulm00VMaWA6avBLE4AAlZLsPq8ur26pA==
+X-Received: by 2002:a17:902:dacb:b0:2cf:4544:104b with SMTP id d9443c01a7336-2cfde79689fmr7232495ad.5.1784943569585;
+        Fri, 24 Jul 2026 18:39:29 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde7bbdc2sm2685385ad.42.2026.07.24.18.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jul 2026 18:39:29 -0700 (PDT)
+Message-ID: <f387ffb440878c6a9b9393debdd154a647780348.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 01/18] bpf: Drop process_timer_func wrappers
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net, 
+	memxor@gmail.com, kernel-team@meta.com
+Date: Fri, 24 Jul 2026 18:39:25 -0700
+In-Reply-To: <20260724190813.1458271-2-ameryhung@gmail.com>
+References: <20260724190813.1458271-1-ameryhung@gmail.com>
+	 <20260724190813.1458271-2-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260724141318.1037434-6-hca@linux.ibm.com>
 
-Hi Heiko,
-
-On Fri, Jul 24, 2026 at 04:13:17PM +0200, Heiko Carstens wrote:
-> With all prerequisites in place select ARCH_SUPPORTS_CFI.
-> 
-> Note that this support is supposed to work with the generic kcfi support
-> which is provided by clang. This comes with a couple of limitations:
-
-Consider adding
-
-  select ARCH_USES_CFI_GENERIC_LLVM_PASS if CC_IS_CLANG
-
-to this change in case there are problems such as the one worked around
-by commit c57f5fee54df ("libeth: xdp: Disable generic kCFI pass for
-libeth_xdp_tx_xmit_bulk()"). Whenever clang grows an s390 backend
-expansion for kCFI, that can be version gated pretty easily.
-
-I will test this series fully next week.
-
+On Fri, 2026-07-24 at 12:07 -0700, Amery Hung wrote:
+> Drop process_timer_{helper,kfunc}() since bpf_call_arg_meta is now
+> shared by helper and kfunc. Call process_timer_func() directly.
+>=20
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
 > ---
->  arch/s390/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-> index 84404e6778d5..d57a6c02f51d 100644
-> --- a/arch/s390/Kconfig
-> +++ b/arch/s390/Kconfig
-> @@ -144,6 +144,7 @@ config S390
->  	select ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE
->  	select ARCH_STACKWALK
->  	select ARCH_SUPPORTS_ATOMIC_RMW
-> +	select ARCH_SUPPORTS_CFI
->  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
->  	select ARCH_SUPPORTS_HUGETLBFS
->  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128 && CC_IS_CLANG
-> -- 
-> 2.53.0
-> 
 
--- 
-Cheers,
-Nathan
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
+
+...
