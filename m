@@ -1,104 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B81353A60
-	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 16:47:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90192F5487;
+	Sat, 25 Jul 2026 18:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784998051; cv=none; b=GZGcGD0OGdyU5j7OwWyty4wInCDw34+mO6UJ0ESxHuk8Topl1/XhFmIXJd6G51w6oTZ5ysXL2SX9I3M7OMvKxcesTm3ff7YuZJLeq3+I2aTLjy0ZTZ/Db8xmcIXeCRDXERnaGGn9kko6QrZMsOD3S1n/nbUtcs8a7T2yyQxsqsY=
+	t=1785002914; cv=none; b=r6U4SQGzVnSqyQJqTxjolCWTzdTOZwJHgCUsEiVvoJ/yskKerOFuWTWg9PFK0OaO3N3DcnqJOR2dii6SDE6DFxVW1rUdqSIC5VFOK7vsR1Jd8+8wbU5l2afklt/wCH4snU31YC/V7zWqyrpMge8843DbjVQJJAcMYp8V1kIxQIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784998051; c=relaxed/simple;
-	bh=yawoDYxXYUHkREbZrp1DC2pUtxnWJGFbbNbxsw0iZ/M=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mXJbavJa/p+6PjzLs83MIC7xclO9HShswfIIPh3OJMkAfJvidLbzLZhwZPZ4PN+ikLXwt4/2Qmq1mz7tA0TyDajY/Vp7qeslKfNiN0ffbPWDsDz2EIhikqnNd88uugruN7ctNfRHteW7LaVQoA5AbUJX949mtAiEAhI/QpTaRpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Woeh6k6X; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785002914; c=relaxed/simple;
+	bh=tEpU/DEvJ/ntQWXqWHulhY16XAu7Ry70hjLxZVNAOe8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MgRpBmpNL2eA8IwLeHID8T6VTnyirAgXHLl8eAq6KFfMGJuMoK1EwMGz6sSrBZdUCZc8ZzLTklynhn/UZ3pvUDvRd5lmGHIdP0hHaWy6AnJGvGQCAI0c+M/UqQwe0LP1NsA841qYD9oR/q4I0zqruA1TekagQnlR0g4tLwEz2s8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=UDM4GUPt; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Woeh6k6X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB941F000E9;
-	Sat, 25 Jul 2026 16:47:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784998049;
-	bh=wVd4ZTP8olfExz9FphqkjKYBKdgnHwDEEEsqkKO8+wA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Woeh6k6XPHbE1+Wt1oGq9yWgsDV0E4O1U1iVgN1nH/gprcPqAkAQyrKPQMpbYTm2T
-	 /+vwWMt7mAVFXN9aNHUP/n3Y0M3Tud2LzQPwget54ekHEEbFdCuNktSLYbylCl4Zf8
-	 7XPJDbxy4sHdIGvrawxCJjPk1UCxWoomiNi2BPYxnhS3LxsTlStvc8kdx8+5UC1Eyl
-	 CPc14vn31nzWYXOKMSXfpIWrxpqg4tLu5skJ91mIx9BIkE99U2CRTri1+53diVeB1B
-	 t13gYZHagfYB8Qke2vSqtQ0iKHybvImY6PTjWN+Pl2Ijpe05/DH5j67FGbSqC0nDNL
-	 5AWc06sRKlosg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net] xsk: fix NULL pointer dereference in __xsk_rcv()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?Q2VuIFpoYW5nIChNaWNyb3NvZnQp?= <blbllhy@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260724164719.99563-1-blbllhy@gmail.com>
-References: <20260724164719.99563-1-blbllhy@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Jul 2026 16:47:28 +0000
-Message-Id: <20260725164729.6BB941F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="UDM4GUPt"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1wngnD-00CMSP-Mt; Sat, 25 Jul 2026 20:08:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=2KYNlDtl58Qgh8rb02AfLzOu/UAS72qPiNqld44YtQs=; b=UDM4GUPt7z0xyznrVXZMinYjte
+	uxcC8spvTs9WQiUXWmTAI196TkbgzaLR+UEMmUD2IqBXhcuZIKaY45eS3pNjjb+hFRhH94aBE7lUI
+	4MBRKnilsMlAVyXwVzru7GV9Cg5VgcMMBRMRnym76t2NeSNtd3WLZ5jkX0NnIx2ut+GGyQzER7Vq3
+	a6GobRv0f2WlTJ4Tuc3sDrE3U9aN+IJOuyzor6qpEAprFoocBRp2ha1CrYoHcfAPNqh436y9qSNve
+	s7lND1H0N3c86QFprZdeQF2/8xwLIbtD5LXfz6OGsjY4u2+eHKGT9zZ7L+USaWXT+wpMqMlancKX/
+	CMqAZVDg==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1wngnB-0004kH-Sv; Sat, 25 Jul 2026 20:08:10 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1wngn0-00AXvH-1Y;
+	Sat, 25 Jul 2026 20:07:58 +0200
+Message-ID: <1b224fd7-0d3e-4baa-8426-4df370b3bc64@rbox.co>
+Date: Sat, 25 Jul 2026 20:07:56 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 1/3] bpf, sockmap: Use sock_hold() instead of
+ refcount_inc_not_zero() in lookup
+To: John Fastabend <john.fastabend@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima
+ <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, Jakub Sitnicki
+ <jakub@cloudflare.com>, Jiayuan Chen <jiayuan.chen@linux.dev>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Stanislav Fomichev <sdf@fomichev.me>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Joe Stringer <joe@wand.net.nz>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260723-sockmap-lookup-tcp-leak-v1-0-1bbdc58ce514@rbox.co>
+ <20260723-sockmap-lookup-tcp-leak-v1-1-1bbdc58ce514@rbox.co>
+ <amP8aYwtxo5qJUEb@john-p8>
+From: Michal Luczaj <mhal@rbox.co>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <amP8aYwtxo5qJUEb@john-p8>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Rolling back the RX ring via xskq_prod_cancel_n() leaks previously=
- allocated UMEM buffers on multi-buffer packet allocation failure.
---
+On 7/25/26 02:00, John Fastabend wrote:
+> On Thu, Jul 23, 2026 at 01:33:27PM +0200, Michal Luczaj wrote:
+>> psock's hold on the looked up socket isn't dropped until sk_psock_drop() ->
+>> queue_rcu_work() -> sk_psock_destroy() runs, which happens only after the
+>> entry is unlinked and an RCU grace period elapses. Since the lookup runs
+>> under RCU, a non-NULL result guarantees sk_refcnt >= 1:
+>> refcount_inc_not_zero() can never fail here. Use sock_hold() instead.
+>>
+>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>> ---
+> 
+> Should bpf-next right? this is an optimization not a fix?
 
---- Patch [1]: [PATCH net] xsk: fix NULL pointer dereference in __xsk_rcv()=
- ---
-commit 53feb1519cd9a4933abf6d79d7b04cb89df34c4b
-Author: Cen Zhang (Microsoft) <blbllhy@gmail.com>
+Right. Would you rather have it squashed with patch 3 or should I save it
+for bpf-next?
 
-xsk: fix NULL pointer dereference in __xsk_rcv()
-
-This commit fixes a NULL pointer dereference in the multi-buffer receive pa=
-th
-of __xsk_rcv(). It introduces a check for when xsk_buff_alloc() fails and
-uses xskq_prod_cancel_n() to roll back partially submitted RX ring descript=
-ors
-to ensure no incomplete multi-buffer packet is delivered to userspace.
-
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index b970f30ea9b9d..3aad3996bd803 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-
-[ ... ]
-
-> @@ -348,6 +349,11 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp=
-_buff *xdp, u32 len)
->  		u32 copied;
-> =20
->  		xsk_xdp =3D xsk_buff_alloc(xs->pool);
-> +		if (!xsk_xdp) {
-> +			xskq_prod_cancel_n(xs->rx, nb_submitted);
-> +			xs->rx_dropped++;
-> +			return -ENOMEM;
-> +		}
-
-[Severity: High]
-Does this error path leak the UMEM chunks from previous loop iterations?
-
-If an earlier fragment was allocated and submitted to the RX ring via
-__xsk_rcv_zc_safe() (which internally calls xp_release()), and a subsequent
-allocation fails here, xskq_prod_cancel_n() rewinds the RX ring's local
-producer pointer.
-
-Because the previously reserved descriptors are cancelled without manually
-retrieving and returning their UMEM chunks to the kernel's free list, will
-those chunks be permanently lost, allowing a user to exhaust the shared
-UMEM pools by intentionally feeding invalid descriptors?
-
->  		copy_to =3D xsk_xdp->data - meta_len;
-> =20
->  		copied =3D xsk_copy_xdp(copy_to, &copy_from, to_len, &from_len, &frag,=
- rem);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260724164719.9956=
-3-1-blbllhy@gmail.com?part=3D1
+>> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+>> index 9efbd8ca7db8..ca49bc7f8687 100644
+>> --- a/net/core/sock_map.c
+>> +++ b/net/core/sock_map.c
+>> @@ -392,8 +392,8 @@ static void *sock_map_lookup(struct bpf_map *map, void *key)
+>> 	sk = __sock_map_lookup_elem(map, *(u32 *)key);
+>> 	if (!sk)
+>> 		return NULL;
+>> -	if (sk_is_refcounted(sk) && !refcount_inc_not_zero(&sk->sk_refcnt))
+>> -		return NULL;
+>> +	if (sk_is_refcounted(sk))
+>> +		sock_hold(sk);
+>> 	return sk;
+>> }
+>>
+>> @@ -1218,8 +1218,8 @@ static void *sock_hash_lookup(struct bpf_map *map, void *key)
+>> 	sk = __sock_hash_lookup_elem(map, key);
+>> 	if (!sk)
+>> 		return NULL;
+>> -	if (sk_is_refcounted(sk) && !refcount_inc_not_zero(&sk->sk_refcnt))
+>> -		return NULL;
+>> +	if (sk_is_refcounted(sk))
+>> +		sock_hold(sk);
+>> 	return sk;
+>> }
