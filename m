@@ -1,100 +1,105 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BB130C156
-	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 01:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D652D780E
+	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 03:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784944657; cv=none; b=Nv/E1GI7TB8sdxVLE1btZfgo4XViY/64UXLvfqgt9rg6JOSw8ZS+8fYHRHlGzSihzpOmAmEHD4pypLFXBAf7ZY071zXgdYumG8qbdruoqHY+HAoGWZgD7sIwtcMguCWLZwi/leL8r1KRPTkdNZuVgdT5Kkx1j8ffeyq0WZ9jRhM=
+	t=1784948432; cv=none; b=tPqzgsWiU5M3R32l5Wji65useeJFHTXd5AypWM/8LKiUNX1Mq9kr/goLUKoB40q3XE/vUdGiwGurLkzBZly7EGYl5VKlG0Y8KRgPyxyT/19vi50asal3+lpMZmSE/8TOpQZmlmSD5o7m58P1suSw71D624Ho+72wpeuOuP3XdbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784944657; c=relaxed/simple;
-	bh=ezyoiGRpuqCY5hHiKdgNqnkdCQ6lqqlJwadeN7XCdtI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gzaDiDd5B1z+a8SQav0ik0ifpVOln++Clj4ea+TFhXG7LuF+7jJez4m8jI9kWCCKoX+uxeZ5ABIaEUL8CATe4T1z2h52yOj7uxT704PYpJipRWtyR0F6V/KTMYHt4ffR8t02bbgTJWU+0rWi2QyZ05gOmwQksBnOaZKz4PokpE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Swx1+B+m; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1784948432; c=relaxed/simple;
+	bh=YqF8uXn973kV70BvwYjv8iv0rJOPusygYoAgrJ8qSW0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=q/5e8XTtYwu8xYlW6Z9sFVTNQhI2Mh3UJAqnH/MrY0vQJ6canjwCbT1mFp+AuxOISbe99noOSfIaw6BseoAJa9tYU4claT8gtBMja5sPbroKfTFr7mgpsQPEo4lPfCubOOD2X+lVglH+SoKTEFFp7iov4imCBe+cKUKcNusv7zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nPjqOh94; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Swx1+B+m"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38125cebfdaso1377308a91.1
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 18:57:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nPjqOh94"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-81ed2a00f12so10847597b3.2
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 20:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784944655; x=1785549455; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=ezyoiGRpuqCY5hHiKdgNqnkdCQ6lqqlJwadeN7XCdtI=;
-        b=Swx1+B+mCqBN3PLJeWtvdgsa5vbls2xVQRkpi0e1vpdvUVMBthVrh2eY4JmYcV4fwa
-         sMYW++ErclGSYbFHXK/Sw/uTLnhBZoxLrqFbSG6t32YFQXD2UHtcyRICdWVqiclqPbpl
-         sWPwh2bV6+GvIJq6IdwmqIfQtvYyG4U8O22jrf7OE/KePcy+OjWXEy/fTzGeUYzljlTR
-         J4NRiSykcjkznIdYzh6U2EsPRNGJlQ8SzqTjplOFJ3eMImT2I9Md4yq5QaZzmojZMqPr
-         /aGhFF6WbtlKA0uipoVFsFLhn4i/XlLQFrsj301Wm2yTSvZm1qBa3mVYBgHIMyf/aKAx
-         rdXg==
+        d=gmail.com; s=20251104; t=1784948427; x=1785553227; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=e/c6yCrQuwkxtDBKJryWHPTZlmuJWG49aqIdtTn1MT0=;
+        b=nPjqOh94kE5pFXoybmk1JhPScrx7zFrxFev+E9YeCW74B+9USuei3f8NgJtPG3EXmd
+         MLhVHiXwxx1kyNDfKqhw/cGJApFy0vWY863XiRyTatwsw2c7QBPco847CCd+4H1VpFKA
+         Ht+PDYR6vmKZnYQIHsV4ZseVnjLIU20Cldb8yXpIGavCbotZsFiE3YgiSAPIG4DkJT/t
+         OQ1ojFUkBpIxtcGtnhZFhXzqBq/weFBAmtXSxxwNpy9MV85qb9J67cj+XqG2MqEVzfMn
+         oFagF9n16Fdb5wSaZzLOD1jcWe8OTK9mn0ycEzR4QY2R1J6QXS3b/kTVEBBGyCvWqnrK
+         J9tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784944655; x=1785549455;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ezyoiGRpuqCY5hHiKdgNqnkdCQ6lqqlJwadeN7XCdtI=;
-        b=HPfIylFyu9CZZo5m7DX38UdzDlZE1jxSQEA6yOasujf4sR2jK0fSFKQmist+ecnrMs
-         SECMuqNxkLI5CnIPip4ypRwdvF31NMfSL8ApvJrVGwbCydTjLA6dDNakem6Qw3qtkW1v
-         WEJlYeRHV3YVu5ZMbYS0JaH8q49PCWePldlmrkua76pq32gEexK2I7mJspGIq3k7iHRw
-         5yuMfdH2AKMXKpN2pSVUBMXu7Yr7D1MLNsqFE0FPKPsJzNWKYfogSlpbBn9U+hADNNj1
-         s39/RMONQn3W8UmHk/WOvEBezCEcojzc5XNl+Kyl9lycQ73uQ9yBFiGEy/gCA7xqNP/4
-         sV2Q==
-X-Forwarded-Encrypted: i=1; AHgh+RokH8Av+Da8yNkNoyGiCu6O9u/zb/pztFNrd/W/fYHLKqqQxf0ZxmJkq6z7vot0bZA4PbQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1h66Jqs1I4kIy16oufWE2cQUnoMUA2WP/LPQmn4WkB9Kb6/YC
-	KUsZLnOtlXqu0xcMnm0DXuq6BRYZnQNSFchOQbSC0KlZ0akFk0ll1E0Y
-X-Gm-Gg: AR+sD12dpFXfPZOSyi3zq0knyUBpPLBTOW90mDEe2lh+Ji0tJNag6uYWM5vMX+EWN8c
-	agfie3h/KBue+yvcPL6vCBchHr/9dwOnEOXAcAXUM97QsUvM6OkoXvIbUAcHBr8Op4d7x9ejUQM
-	WevnU2krpjjxOPcgOn38mTnjBNj6ChEjnjrhMdZtbX38cvHc3Zoq5v3vmbsuT3087t5e6hrNAbr
-	3Jr6/GqMaP8eAtORidQKsA/pdYpugdXEkCyoGxI9GfuXQFZSIZAO1sT/1RmM0cMVmL9eijG7jxQ
-	4/gDDEeHuUxIxzYK9FbbOzHeEY4VWHir8lwSuFTXFq+BEyIletJB0S6YqC8LPY/nrsM4z1rFy3i
-	v6L6k00p0TI5hQTtcAMNR+S6xbPAkArKwfsYG3Lf2CGDkyguIcCV1X9GlZuwBXOBPRsFm6ocdNY
-	nArlTAsePjEtRRFTKZSTMcmyuO3tK7xg==
-X-Received: by 2002:a17:90b:1cc4:b0:38e:64b0:8bce with SMTP id 98e67ed59e1d1-38f296554c0mr699351a91.20.1784944655578;
-        Fri, 24 Jul 2026 18:57:35 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f03b0eabesm2362908a91.6.2026.07.24.18.57.33
+        d=1e100.net; s=20251104; t=1784948427; x=1785553227;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=e/c6yCrQuwkxtDBKJryWHPTZlmuJWG49aqIdtTn1MT0=;
+        b=BC4gNbQ1hvyF1Rm83cfr3S9JE2o6Y6vCyigjK9Lb1HCjszHMtEoFsNto6/DnhBN6Ns
+         mbP8sCD5Wo+vFlvkJwz+UVDwuhgewhF9pEAxdKbQRghTZ6ggbxhF3yyw6INEpmF6Miav
+         oK7dFmwLHoCMvfe7UVhivzY6+J0ffZm3mLzdPawwI+/rRGIAztaYdxj+UTEzy2k6g8Sh
+         tckg3ngcZG4WmubuIErA3ND0KwjOQBPnBCqXCym3vXUdneJPbCZwMwKYC1XtG+I1lJmJ
+         L0vKbACt070Zx0IgwuWvOwEhe7gpRnMx4y4NO7/6BBHXQleumJdqzCvO/f5d3ylCcGgw
+         CWcw==
+X-Forwarded-Encrypted: i=1; AHgh+RoaPK9U8uYLZsp7KR9pxD25btE4zVOFD0oxcURGmle2H6UyZXrPUpwY/sbzjOmhMNwuvUY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkeK72R55e/Q3W0AwKhD6nIW18r54e9SxYPNu75N32mIpKYNaD
+	yMjfpZBwlzzTsigzZLtDINu0N0HmOfVFNlbYU5SYF730PiaxUfU5CdRB
+X-Gm-Gg: AR+sD11pE+AimA9RpX1sF0oKFiZze/njehjTvnlNajQLr49l18xqECgxjEA9e8mwW7M
+	f8NRreyaXNLCBUIiRqZT1QrAwh5AcRImpZqL0DkZQUJTobEXDEwFcuOmp5oMV+OOKv2dle6Q4gn
+	49CEw6CI5ibVLGyIJrdvanMIgzIj2EjBrR668gWKceStAy96FBBFZJA22VUqEjLLwtHfZ4Hn9Wo
+	CuItnMepYJENbdCqZIhk6vDShO0J60pKGpH34kum4Tw7vdpAYDL+WhIhDZsaL43DqsQiiyxo9hH
+	mFRSDoqBPmQQht1qBc8oZYYDZyuhWoFZ/H51nDmNwRqDkCr3SHlrS4NRz8kkWMD+776/xK+ucJX
+	jMepPuXf7UA7HeK55IQvA1zQEiSSNrWeFIlFQNORZwyFZnKNuuz3p48Z6Z0mruJB4usHPDBnLjP
+	5+2N5urfg3I0AXGTIWwrlzdS/WWCQNKtzNYwUp3Fl5f0kx3C2QvYS+IYgUznMdWzFfrCiGwnQzQ
+	V3VT4Lr62o9Jw==
+X-Received: by 2002:a05:690c:64c2:b0:81e:9ba9:d36b with SMTP id 00721157ae682-81f69e9bd7amr3122207b3.63.1784948426585;
+        Fri, 24 Jul 2026 20:00:26 -0700 (PDT)
+Received: from LAPTOP-83ECOPAB.f7a5e5c3-cab1-4810-bdbb-207cdd06de9e.globalsecureaccess.local ([136.55.173.105])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81f658d32b6sm8270777b3.26.2026.07.24.20.00.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 18:57:34 -0700 (PDT)
-Message-ID: <3b40c3c30db47998a146fed0904704f7b34278d3.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 02/18] bpf: Unify const map ptr argument
- checking for helpers and kfuncs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net, 
-	memxor@gmail.com, kernel-team@meta.com
-Date: Fri, 24 Jul 2026 18:57:31 -0700
-In-Reply-To: <20260724190813.1458271-3-ameryhung@gmail.com>
-References: <20260724190813.1458271-1-ameryhung@gmail.com>
-	 <20260724190813.1458271-3-ameryhung@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+        Fri, 24 Jul 2026 20:00:26 -0700 (PDT)
+From: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
+To: sdf.kernel@gmail.com
+Cc: AutonomousCodeSecurity@microsoft.com,
+	blbllhy@gmail.com,
+	bpf@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	horms@kernel.org,
+	kuba@kernel.org,
+	kys@microsoft.com,
+	linux-kernel@vger.kernel.org,
+	maciej.fijalkowski@intel.com,
+	magnus.karlsson@intel.com,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	sdf@fomichev.me,
+	tgopinath@linux.microsoft.com
+Subject: Re: [PATCH net] xsk: fix NULL pointer dereference in __xsk_rcv()
+Date: Fri, 24 Jul 2026 23:00:26 -0400
+Message-ID: <20260725030026.191412-1-blbllhy@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <amPqFHJBnDEQGmOK@devvm7509.cco0.facebook.com>
+References: <amPqFHJBnDEQGmOK@devvm7509.cco0.facebook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2026-07-24 at 12:07 -0700, Amery Hung wrote:
-> Both the helper ARG_CONST_MAP_PTR and the kfunc KF_ARG_PTR_TO_MAP
-> recorded the map pointer in meta->map and, when a map was already
-> bound by a preceding timer/workqueue/task_work argument, rejected a
-> mismatching map.
->=20
-> Factor the logic into a single process_map_ptr_arg() used by both
-> paths. The bound-object name (timer, workqueue, or bpf_task_work) is
-> derived from the bound map's btf_record, and the register numbers in
-> the message are computed from the map argument position instead of
-> being hard-coded.
->=20
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> ---
+> ... which means they are "lost"?
 
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
+You are right. The UMEM frames already consumed from the Fill Ring must
+be recycled into free_list when the packet cannot be completed. 
 
-...
+Since the current loop calls __xsk_rcv_zc_safe(), and therefore
+xp_release(), after every allocation, they cannot simply be recycled
+after a later failure. I will rework v2 as a two-stage transaction:
+first allocate and stage all required buffers, recycling all staged
+buffers if any allocation fails; then run the error-free
+copy/submit/release loop only after the allocation stage succeeds.
+
+Thanks.
