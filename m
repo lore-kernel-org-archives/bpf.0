@@ -1,27 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C363ACEE0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F873ACEE1;
 	Sat, 25 Jul 2026 10:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784974562; cv=none; b=lpYttGXL80mhwFW9QoXxn0nI5Si09DNc8sLME8RSdxjiW18fAYWN8djLKuwqDhfLt9JLBFOmFpWr8RuUESkppn/ZX49qhbqZ00JaerZQpCmkNVVx8ci0A3Gtuqi1R3tfbmmWZRMkW2d8OCEcZLRMOOjKpWXGybgmQ+VhQwwSK0g=
+	t=1784974562; cv=none; b=El294Cssf5sMVw3vO35NYUjDvJYDoQc83cK8/xT/Jdjm7DaR0sW3UtR8rHMax+hJomKSh+Xmgf/nKwphWsLWBi3HqFE00d1OOrsL7l/9b5TCSYbDP3qehd3gSQszUtHrUH9ebt75tLV9AiJ7nH/Tap5orzIniAf0oTNkSPjaFmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784974562; c=relaxed/simple;
-	bh=EyYzB0uBrMcqxkx97kMvFoTq9FU3pmzAd6LASba6Yzs=;
+	bh=eIYDh6RPmeYnrqbwzwhMDoq6kr3RiyYp95L3To+Yf6s=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ani+OWgVcF9jGOmS9WI30bTDaswSEfyirruvgpQRIXmDt9kGNXklSIrUZXEwoKMNfR5Rm4FCIq/c/RCfsZMoaHmJaDi/1rcIKlImaPZ2EvglDUe66XOLsOOQAopTjrbLkhWSPer985zGCNEtaEQmPcr5PSyGXIqDjTrWVqFHZ4k=
+	 MIME-Version; b=SVbMaVoxmahP7vhgOJG0cyt1f5aFKjaeImACUbZY7BJXDwkKG8yDtZQXY/3MaAesu4S7SEKHL1O+XMamPIMLxoCinMTVAwk4cGV5WKYF5zPmJTgqLInIsAALqN8skJbT56p8ZK7btsr706pgN7xqQDhRX5R4RbOFQjjNK+44EXI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h6ghg1QYSzKHMYs;
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h6ghg2J6HzKHMZX;
 	Sat, 25 Jul 2026 18:14:59 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 8BA5D4058C;
+	by mail.maildlp.com (Postfix) with ESMTP id B02EE4056B;
 	Sat, 25 Jul 2026 18:15:47 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAnOHTRjGRqlDL6CQ--.33326S5;
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAnOHTRjGRqlDL6CQ--.33326S7;
 	Sat, 25 Jul 2026 18:15:47 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Naveen N Rao <naveen@kernel.org>,
 	Pu Lehui <pulehui@huawei.com>,
 	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf-next v2 3/7] parisc: Fix memory leak in bpf_jit_free
-Date: Sat, 25 Jul 2026 10:20:16 +0000
-Message-Id: <20260725102020.2287770-4-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v2 5/7] ARC, bpf: Fix memory leak in bpf_jit_free
+Date: Sat, 25 Jul 2026 10:20:18 +0000
+Message-Id: <20260725102020.2287770-6-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260725102020.2287770-1-pulehui@huaweicloud.com>
 References: <20260725102020.2287770-1-pulehui@huaweicloud.com>
@@ -66,24 +66,24 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgAnOHTRjGRqlDL6CQ--.33326S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF1kCryDArW7Gr1fGw45Wrg_yoW8Gw4kpF
-	yDCw13Cr4vgw4Igrs3Ja1xZFW5Jw4vgw15WFW7u3y0ga4Yg3WkWF1ak34rGFZ0kryUXw4r
-	Xr4rKry3GrykJrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmI14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
-	e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-	8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-	jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-	kIwI1lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
-	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnI
-	WIevJa73UjIFyTuYvjTRM6wCDUUUU
+X-CM-TRANSID:cCh0CgAnOHTRjGRqlDL6CQ--.33326S7
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZF1Dur4UKF17tF43ZFyrJFb_yoW8Jw43pa
+	yDuwnxCr4vgw4Igws3Ja18ZF45Ja18W3WjgFy7u3y0g3Z0ga4kWF1ak34Yga90yryUXw1r
+	Xr1YkrW3GrykJrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUmq14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
+	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
+	z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
+	4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE
+	3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2I
+	x0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8
+	JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2
+	ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+	z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+	AF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1l
+	IxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+	1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIY
+	CTnIWIevJa73UjIFyTuYvjTRNdb1DUUUU
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 From: Pu Lehui <pulehui@huawei.com>
@@ -94,43 +94,40 @@ free their leftover jit_data, causing a memory leak.
 
 Implement a custom bpf_jit_free() to free this data.
 
-Fixes: 22de5d626231 ("parisc: Add eBPF JIT compiler glue code and Makefile")
+Fixes: f122668ddcce ("ARC: Add eBPF JIT support")
 Reported-by: Sashiko <sashiko-bot@kernel.org>
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- arch/parisc/net/bpf_jit_core.c | 19 +++++++++++++++++++
+ arch/arc/net/bpf_jit_core.c | 19 +++++++++++++++++++
  1 file changed, 19 insertions(+)
 
-diff --git a/arch/parisc/net/bpf_jit_core.c b/arch/parisc/net/bpf_jit_core.c
-index 172770132440..11e13ad6bc50 100644
---- a/arch/parisc/net/bpf_jit_core.c
-+++ b/arch/parisc/net/bpf_jit_core.c
-@@ -178,6 +178,25 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	goto out_offset;
- }
+diff --git a/arch/arc/net/bpf_jit_core.c b/arch/arc/net/bpf_jit_core.c
+index 639a2736f029..45a700f42cd4 100644
+--- a/arch/arc/net/bpf_jit_core.c
++++ b/arch/arc/net/bpf_jit_core.c
+@@ -1412,3 +1412,22 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
  
+ 	return prog;
+ }
++
 +void bpf_jit_free(struct bpf_prog *fp)
 +{
-+	if (fp->jited) {
++        if (fp->jited) {
 +		struct bpf_jit_data *jit_data = fp->aux->jit_data;
-+		struct bpf_binary_header *hdr = bpf_jit_binary_hdr(fp);
++                struct bpf_binary_header *hdr = bpf_jit_binary_hdr(fp);
 +
 +		/* Cleanup for earlier subprogs if jit_subprogs() aborts */
 +		if (jit_data) {
-+			kfree(jit_data->ctx.offset);
++			kfree(jit_data->bpf2insn)
 +			kfree(jit_data);
 +		}
 +
-+		bpf_jit_binary_free(hdr);
-+		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
-+	}
++                bpf_jit_binary_free(hdr);
++                WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
++        }
 +
-+	bpf_prog_unlock_free(fp);
++        bpf_prog_unlock_free(fp);
 +}
-+
- u64 hppa_div64(u64 div, u64 divisor)
- {
- 	div = div64_u64(div, divisor);
 -- 
 2.34.1
 
