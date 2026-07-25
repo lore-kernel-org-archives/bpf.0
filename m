@@ -1,190 +1,160 @@
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B0E346A11
-	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 03:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD5D2D8DBB;
+	Sat, 25 Jul 2026 06:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784950971; cv=none; b=DAgj8ycu6q3bFfa22DEvi060WDioqMJ/QphGZQFzmFoZR6JaQ379KnjbZMP/qqQRFzlK0YljGiMHZjpRuoe9e1eBzD5Nq0Dy0lzgPZxQU3xIFFnx5DSspoS3Uykp9/ZjHlwPKRpIlNNhRmEGzEMqZqbeEzpdSDIJ3/yKSR+VXgA=
+	t=1784959754; cv=none; b=EhaVPWKkeMxMjp8w8H65RkCqAaFqxm09708/rSxe6cfd5gvsIlFEIbsqWqq1et+LeJ4vSA9XyBzh1+Ln5AhypB94+TzrOaY5MXGKXPg2GZ9Xh3q+vWzUpgTjCQ56N9WjPNetDRbRoNWyknADnpujje8HVhkiJLf1ksqOtliBq7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784950971; c=relaxed/simple;
-	bh=qdCRc3nJ771x3VQVRjLBimIKuM3JuBDSq8fvXhd8+lg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lLbiy1KEpaE8b8JspbwekP8fZ/NHlP33tXyyDgSjHayBmurpvKT96Ws7bDL2lJcD1yzrDu9yxS0pqPXvoWfhRB4bnYJBW3lQrYzJB2oAm5zy5gFPYEs4BXxoz1YyRf+yNeZqJ4WGZI/dmhpMfZQu5pc6pmgqWmXpZsjVaX2Drjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MggFcivc; arc=none smtp.client-ip=74.125.224.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784959754; c=relaxed/simple;
+	bh=C0cYxrITXcn/H448tLJH7tlW63Htb/xQhKKBpitRExU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=sceobz7kGOi+qh0bn2SPLB710l6DZW625wwSQ3wZcTKu8Bxz6kPUy1yKSnZTTO4ZFG6DYD875L/CutFVlGn0xEl0mJyncEtuk5FxplbmQfCh920O13BqDJE3hsiJLpqBbc1XkcEXgcLffwCMXzP/MnhdYxcen9J/XdSiO1IQnJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BhCWfux0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MggFcivc"
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-66825847b2cso827372d50.3
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 20:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784950969; x=1785555769; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1D+KDOADjt6pawjgxVvSFGUpDqaxbR+onKq6lqxxAIs=;
-        b=MggFcivcs7UIMn2oCbsyBCnkC/3LvLjriyxTo/aSy3epy75U+FKbEN7YxJ4TpxymSm
-         G0enEL6dOAB6VHX4Jytt+OnlKnACYWERlZArBNRlms3EpIxw/XryRl+/24xlxWPYLjmN
-         Mn4wQ3c83hvNu2deF0PhQ0MCcYBe+Mp3+8ypJ4YY2GEqj4n6XjbGQhHITgwf9Ybbdq9J
-         xotbWH1ctVpJdDYnpK1baCOC4jVf9fzyCdhp9BpJGJCuaS7wHDPjwt+z+6mztzTQBSBS
-         +fxHLZOe4MKHH3PaUB3ZZV6NRyyJGwG4RoqXXVI4j7Q+KuKrFtNUtfaBmq7hlVGHrBfA
-         CF4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784950969; x=1785555769;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=1D+KDOADjt6pawjgxVvSFGUpDqaxbR+onKq6lqxxAIs=;
-        b=bsRss+wSaVnsma1ndOvsj/FuBxVUcs2vARdYZYPzK+c25ob/u0oi2G/z8yKBdO3kT3
-         qiJLTW4DV1mKRRhDSc4HrGVkBMnbdvGtD08oKGQMkBCbZKV/48X50Py3o/pwkaTslUIv
-         hDDyMr9Dmf1uyGq3KyA/ZZMHap7MzdtL/gd6+Ev1BtJdRjzSq6LV0dPub9m146rAbdjT
-         Wk+2+hvPebY0FCkSfpl3FDbwaOgSe4H35h8bsFqkS2OfjQX37MzSaR/2nnMN72sVamRH
-         F8pX0+UivnykKXOvBNTQS5uS7cNniHI3bLjNCtZ3l4kTpyT8jtg/xyjm0sus1XNi/XTJ
-         mVrA==
-X-Forwarded-Encrypted: i=1; AHgh+Rq8PdmnPUb77osp8BbSIDummlnVXLCf7LnHhTfHGUdXOaPNzkZF2ZUAX4UCLsL/SSLzevs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybHDwPxF+E70AV4U7e/Z9gCJmKTM1mKcCxkASH3b/GrEhj9tpl
-	KAzalOjdVZ0E2zLtlF4QtaD4y4syFCbu/POAuBlWrtpMPLksdN0o4acindMEUOsICbQ=
-X-Gm-Gg: AR+sD11o4FAPuoLXOR87a/+r6DwYEroHqj0h43SXHJLWIY8XpMkOyJaLWmeVWySQfOf
-	eTTI82omjXw0jYFBYw41Z4EIpp9iAQ2q2tvU1iE4OSSRYbE+BL5YwHHlhDkA/naoJF3shnhx9DM
-	5qOTCyxIuhhFIw34pr8P5wnVXH+0UC1vPL6ZCcppuBJ5MU9ZrNtY7v1N4aogLxZ4QNFSc7VsyKT
-	zsYG2Pq9sqpVBeF7Bq+xAh9N+25rx2rHGOIF8F8V88GN/xJH5TRf1fEib5n2aq8suSFYjv0gvM0
-	K3Jwv8AYGxOPXI2Xczzs67ZCsurqpQfqSvdvbzjs6bKykgofQtZvGQnrwM8uF/1dq3KuFsclJp/
-	+h59jYoFBkcK0daHXrE+MfdJna203AZMhuQ5A4cqKM0kpeaLUeIOt81Ag19x58954p4oFF2CUSt
-	wwsEZQPOkcgvZVpdb3zipsQe9LKEuY71nfgaeMu5K9n5lnfh1F4YG5S7t/kAmZNzFuKfFFnQEYc
-	6mKd/zrfsEi9A==
-X-Received: by 2002:a53:ca8c:0:b0:667:9481:5b37 with SMTP id 956f58d0204a3-668c7a3c507mr214817d50.2.1784950968851;
-        Fri, 24 Jul 2026 20:42:48 -0700 (PDT)
-Received: from LAPTOP-83ECOPAB.f7a5e5c3-cab1-4810-bdbb-207cdd06de9e.globalsecureaccess.local ([136.55.173.105])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81f65770059sm8525917b3.7.2026.07.24.20.42.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 20:42:48 -0700 (PDT)
-From: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
-To: magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	sdf@fomichev.me,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org
-Cc: netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	AutonomousCodeSecurity@microsoft.com,
-	tgopinath@linux.microsoft.com,
-	kys@microsoft.com,
-	blbllhy@gmail.com
-Subject: [PATCH net v2] xsk: fix NULL pointer dereference in __xsk_rcv()
-Date: Fri, 24 Jul 2026 23:42:46 -0400
-Message-ID: <20260725034246.192091-1-blbllhy@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BhCWfux0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4DB31F000E9;
+	Sat, 25 Jul 2026 06:09:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784959752;
+	bh=vl9av0su70QDbnSyvpjOuNyucyKSdvo8XYRSG+4fbSg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=BhCWfux07qWs+GRyYGHTSjdj1psv4QW+pesi8eLe8vWEnGpt52sV3iPdMo+RYVMse
+	 PtTokGMcZJ3sz8nBSEgMBl+6icrsRU71F56jXujKjTtxvtyECWu8ZMgIEa5wyH+Qbx
+	 3BxcmvKwBCBlysRS17Z4R6NHXUYRizndAyTzjp0A24n1K27nQnQ33nbcbiyWFzau0I
+	 vTQ832TCUuBh13ifOmno+obmU8Mw9AF1KaVla39gvsQ4h4qychNVyzZZ2VZWXsmgDY
+	 It5yCQiIgo743KhKNnMWThuBoIn9cVXHH3n5hay/vjAmzRLGtwI1CQXLN8/0lVhGUB
+	 Kqe+i7OWbAtEg==
+Content-Type: multipart/mixed; boundary="===============0332709161616845450=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <6bf45c1a019d55ff4558d946fd4ab478536f670d804ff9e1b3613556dc441f0a@mail.kernel.org>
+In-Reply-To: <20260723162602.3275661-1-nicoyip.dev@gmail.com>
+References: <20260723162602.3275661-1-nicoyip.dev@gmail.com>
+Subject: Re: [PATCH v3] bpf, sockmap: Fix cork ownership in tcp_bpf_sendmsg()
+From: bot+bpf-ci@kernel.org
+To: nicoyip.dev@gmail.com,emil@etsalapatis.com,edumazet@google.com,ncardwell@google.com,kuniyu@google.com,john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,davem@davemloft.net,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,ast@kernel.org,daniel@iogearbox.net
+Cc: netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,nicoyip.dev@gmail.com,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 25 Jul 2026 06:09:10 +0000 (UTC)
 
-In the __xsk_rcv() multi-buffer path, xsk_buff_alloc() is called in a
-loop without checking its return value. xsk_buff_can_alloc() only
-counts fill queue entries without validating their addresses, so it
-can succeed while xsk_buff_alloc() rejects all remaining entries and
-returns NULL.
+--===============0332709161616845450==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-  Oops: general protection fault, probably for non-canonical address
-   0xdffffc0000000000
-  KASAN: null-ptr-deref in range
-   [0x0000000000000000-0x0000000000000007]
-  RIP: 0010:__xsk_rcv+0x426/0xc20 (net/xdp/xsk.c:350)
-  Call Trace:
-   xsk_generic_rcv+0x26d/0x5f0
-   xdp_do_generic_redirect+0x3c5/0xcf0
-   do_xdp_generic+0x92f/0xe70
-   __netif_receive_skb_core.constprop.0+0xf7e/0x2b30
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index cc0bd73f36b6..fcf535b7a754 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -401,7 +401,9 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+>  }
+>
+>  static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+> -				struct sk_msg *msg, int *copied, int flags)
+> +				struct sk_msg *msg, int *copied,
+> +				u32 msg_copied, bool *corked,
+> +				int flags)
+>  {
+>  	bool cork = false, enospc = sk_msg_full(msg), redir_ingress;
+>  	struct sock *sk_redir;
+> @@ -428,12 +430,18 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+>  			psock->cork = kzalloc_obj(*psock->cork,
+>  						  GFP_ATOMIC | __GFP_NOWARN);
+>  			if (!psock->cork) {
+> -				sk_msg_free(sk, msg);
+> -				*copied = 0;
+> +				int free;
+> +
+> +				psock->cork_bytes = 0;
+> +				free = sk_msg_free(sk, msg);
+> +				*copied -= min_t(u32, msg_copied, free);
+>  				return -ENOMEM;
+>  			}
+>  		}
+> -		memcpy(psock->cork, msg, sizeof(*msg));
+> +		if (psock->cork != msg) {
+> +			sk_msg_xfer_full(psock->cork, msg);
+> +			*corked = true;
+> +		}
+>  		return 0;
+>  	}
+>
+> @@ -480,14 +488,15 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+>  		if (unlikely(ret < 0)) {
+>  			int free = sk_msg_free(sk, msg);
+>
+> -			if (!cork)
+> +			if (cork)
+> +				*copied -= min_t(u32, msg_copied, free);
+> +			else
+>  				*copied -= free;
+>  		}
+>  		if (cork) {
+>  			sk_msg_free(sk, msg);
+>  			kfree(msg);
+>  			msg = NULL;
+> -			ret = 0;
+>  		}
+>  		break;
+>  	case __SK_DROP:
+> @@ -519,6 +528,7 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+>  	struct sk_msg tmp, *msg_tx = NULL;
+>  	int copied = 0, err = 0, ret = 0;
+>  	struct sk_psock *psock;
+> +	u32 msg_copied = 0;
+>  	long timeo;
+>  	int flags;
+>
+> @@ -545,9 +555,12 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+>  		if (!sk_stream_memory_free(sk))
+>  			goto wait_for_sndbuf;
+>  		if (psock->cork) {
+> +			if (msg_tx != psock->cork)
+> +				msg_copied = 0;
+>  			msg_tx = psock->cork;
+>  		} else {
+>  			msg_tx = &tmp;
+> +			msg_copied = 0;
+>  			sk_msg_init(msg_tx);
+>  		}
+>
+> @@ -580,21 +595,23 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+>  			psock->cork_bytes = 0;
+>  		}
+>
+> -		err = tcp_bpf_send_verdict(sk, psock, msg_tx, &copied, flags);
+> +		err = tcp_bpf_send_verdict(sk, psock, msg_tx, &copied,
+> +					   msg_copied, &corked, flags);
+>  		if (unlikely(err < 0))
+>  			goto out_err;
+> +		if (corked)
+> +			msg_tx = psock->cork;
+>  		continue;
 
-Fix this with a two-stage transaction. First allocate and stage all
-buffers required for the packet, recycling all staged buffers with
-xsk_buff_free() if any allocation fails. Only after this stage
-succeeds, copy the data, reserve the RX descriptors, and release the
-buffers in an error-free loop.
+This patch folds several distinct changes into one: the stale-cork
+use-after-free fix at the common exit, a cork_bytes reset on the cork
+allocation failure path, the new msg_copied accounting for the failure
+paths, the switch from memcpy() to sk_msg_xfer_full() for the cork
+transfer, and iterator error propagation via err = ret.
 
-Fixes: 804627751b42 ("xsk: add support for AF_XDP multi-buffer on Rx path")
-Reported-by: AutonomousCodeSecurity@microsoft.com
-Signed-off-by: Cen Zhang (Microsoft) <blbllhy@gmail.com>
+The upstream discussion suggested fixing one issue at a time rather than
+combining several fixes in a single patch:
+
+  https://lore.kernel.org/bpf/87ldb0lo8t.fsf@cloudflare.com/
+
+Would it be clearer to split these into separate patches?  A minimal
+single-fix version addressing just the use-after-free was posted afterwards
+and was the form that landed (commit 2d66a033864e).
+
+
 ---
-v2:
- - Allocate all packet buffers before reserving RX descriptors.
- - Recycle partially allocated buffers instead of only cancelling the
-  RX producer reservations.
-Link: https://lore.kernel.org/netdev/20260724164719.99563-1-blbllhy@gmail.com
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
- net/xdp/xsk.c | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
-
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index f906d51b6699..383fc2b1de48 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -298,9 +298,11 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- 	u32 frame_size = __xsk_pool_get_rx_frame_size(xs->pool);
- 	void *copy_from = xsk_copy_xdp_start(xdp), *copy_to;
- 	u32 from_len, meta_len, rem, num_desc;
--	struct xdp_buff_xsk *xskb;
-+	struct xdp_buff_xsk *xskb, *tmp;
- 	struct xdp_buff *xsk_xdp;
-+	LIST_HEAD(xsk_buffs);
- 	skb_frag_t *frag;
-+	u32 i;
- 
- 	from_len = xdp->data_end - copy_from;
- 	meta_len = xdp->data - copy_from;
-@@ -343,23 +345,44 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- 		frag =  &sinfo->frags[0];
- 	}
- 
-+	for (i = 0; i < num_desc; i++) {
-+		xsk_xdp = xsk_buff_alloc(xs->pool);
-+		if (!xsk_xdp)
-+			goto err_alloc;
-+
-+		xskb = container_of(xsk_xdp, struct xdp_buff_xsk, xdp);
-+		if (unlikely(!list_empty(&xskb->list_node)))
-+			goto err_alloc;
-+		list_add_tail(&xskb->list_node, &xsk_buffs);
-+	}
-+
- 	do {
- 		u32 to_len = frame_size + meta_len;
- 		u32 copied;
- 
--		xsk_xdp = xsk_buff_alloc(xs->pool);
-+		xskb = list_first_entry(&xsk_buffs, struct xdp_buff_xsk,
-+					list_node);
-+		list_del_init(&xskb->list_node);
-+		xsk_xdp = &xskb->xdp;
- 		copy_to = xsk_xdp->data - meta_len;
- 
- 		copied = xsk_copy_xdp(copy_to, &copy_from, to_len, &from_len, &frag, rem);
- 		rem -= copied;
- 
--		xskb = container_of(xsk_xdp, struct xdp_buff_xsk, xdp);
- 		__xsk_rcv_zc_safe(xs, xskb, copied - meta_len,
- 				  rem ? XDP_PKT_CONTD : 0);
- 		meta_len = 0;
- 	} while (rem);
- 
- 	return 0;
-+
-+err_alloc:
-+	list_for_each_entry_safe(xskb, tmp, &xsk_buffs, list_node) {
-+		list_del_init(&xskb->list_node);
-+		xsk_buff_free(&xskb->xdp);
-+	}
-+	xs->rx_dropped++;
-+	return -ENOMEM;
- }
- 
- static bool xsk_tx_writeable(struct xdp_sock *xs)
--- 
-2.53.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30145850605
+--===============0332709161616845450==--
