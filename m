@@ -1,114 +1,210 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1D1396D09
-	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 09:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7580396560
+	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 09:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784970530; cv=none; b=uZX2diWBLsg5TA6EVmGBj3QBusLWKdRfFRCdtvhLD/C92msSr/nFgrxzUeqOW4HLioRsgesywKclqY5g3ZAgmYb0/NnKfWioSSrFOlafstM25iC1p3no7bVVk/6YPt3QrhAerKS5EpslfvyWTu6VozxH8kTMC76RvbCbXAk5n60=
+	t=1784970531; cv=none; b=W16DQyIGlVNlhEVvl6gxv0NWwgUFnHioKq9PVYNJ5ululVZPcK6NJZGYyWucblAQq5z4zHT8/PMuqjun2sgT6KMQ1IvHwYD8NiYYrohG8JbT63XAiKWEb1ADigknfaP9me1QtazOprkz5VwxmDPyDZn9Ttp7mpb5larH2qXGPU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784970530; c=relaxed/simple;
-	bh=eaZZdBieHM9Ekzvqay49fi/fnnlrQBnYiL1lVFLqeSM=;
+	s=arc-20240116; t=1784970531; c=relaxed/simple;
+	bh=XzqttnwN/LCfwC31lJCWbAS9SwF7cmnWRyYnLNCqU6M=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ozqX68enacuVetT+CI+y7fTwehaZHr43tYXyLAFC3ScthhcKW9jfNk+QcXJdARpcFcbM56f4XKAP36pWofXtWqLi6qP+R/khhSDIyDZe9j542eWmCsIIyTVQHgPXu3YxGOivHUa6B8NIA24wPl1yiUp2aLb0erqN/sxbFcuw4+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mnJ+q547; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=bHZcWzJ1ymE74ck9cLDWDaT2kWjgtwCsbpiKEg2jIyAgXLLyoVRN0Tn6UjUY6QQksoB/S+XoOui/imAOUdvl1geDVArhh1i0OS1UjXvDnFd3kkqbSMLgoBK6fG6nrYJJQ3+YYu0bZ/WFkVpYKkpiCK23SD1nyn6bWZkA8HW9mG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmUA6/dp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mnJ+q547"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3590F1F000E9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmUA6/dp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B621F00A3A;
 	Sat, 25 Jul 2026 09:08:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1784970527;
-	bh=Q6kg1rxoPgtDoygSF5Zo5anii7Kim5PPMhJ/8ePRIso=;
+	bh=Gfsw4hTl5d8o/5FpA1DDn/VPVLHXk6RNxXh7L2IwTSU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mnJ+q547a+1RfJUW6nv7wbb9wiBEYxK0kopz+jTpjNNa2KxgmOyU8Aq4IaZPYexEs
-	 4or3exScSZ9XkrpDhHPCNiG5ZBNSkX6zYRNRqxjVI+be8msqM8vWX3SPFn7QGUy2c7
-	 Gn+BbZM59mJDwBAJ2BUZVh13eKCjVSxF/MQwHNbRAdwvLeIUM1WnA0ApqS6lo2O4gs
-	 iDaSidgwIn1GYyM7LgOwb2fERERsTDVGhPc2ddDX0Iams7Mj06PKOZbR1/6csy6Hhn
-	 vT4fHFhaUePwwiipxM2db6cqLsa34nyVcSUcLRHx57pOFMH/hyOCxp7PC4K+TpbnFZ
-	 l8wQAg4iallOQ==
+	b=jmUA6/dpWEDwNH5OSE+0r7xUTbmYOSBgO+ZNtrIbbmZb8CudWs1ibzug7L6lSX+In
+	 I8UYwkaFKOwjGBnWxSxN8ldo7nx2MdowlpPQ1JHVTaEAVQBmfNj7nhB6YMyRN04qz7
+	 NIblYit4ZqvL5VWibFcO4DQ8TkG8RNFwZAgrVPHUgoHo/wUl9foMM8PFk8PeLeYPHS
+	 /I0pb7771Z3KI1UUkNSxM+ixIyFBW/7lESMKJLxgAqvhCy/eQTPYk+MhmDe2XGKGhs
+	 KPOQZLEzUTPDKihX0RuwL18lLi5XaNDUcrVg/VXrQsBGeYj4Jyx554SuzRcKr1c9+A
+	 qa6unQ13t5hyg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 1/3] net: atlantic: free stranded TX buffers
- on ring deinit
+Subject: Re: [PATCH net-next v2 3/3] net: atlantic: convert RX path to
+ page_pool
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yangyu Chen" <cyy@cyyself.name>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <tencent_E5DA048E95B86B31EB21258D8E7CE1825308@qq.com>
+In-Reply-To: <tencent_771AEE718C41884FA30CDF85E092F693E306@qq.com>
 References: <tencent_1F173E0FC1606D2AC704DC9C98AF10984607@qq.com>
- <tencent_E5DA048E95B86B31EB21258D8E7CE1825308@qq.com>
+ <tencent_771AEE718C41884FA30CDF85E092F693E306@qq.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Jul 2026 09:08:46 +0000
-Message-Id: <20260725090847.3590F1F000E9@smtp.kernel.org>
+Date: Sat, 25 Jul 2026 09:08:47 +0000
+Message-Id: <20260725090847.C8B621F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Incomplete fix: PTP TX ring still uses `aq_ring_tx_clean()` on tea=
-rdown, leading to memory/DMA leaks and a locking violation.
+- [High] Encountering an RX packet with more than MAX_SKB_FRAGS fragments c=
+auses an infinite NAPI polling loop.
+- [High] In the XDP path, if a packet exceeds MAX_SKB_FRAGS, the remainder =
+of its fragments are erroneously parsed as independent new packets.
+- [High] NULL pointer dereference when an XDP program returns XDP_TX for a =
+packet received on the PTP ring.
+- [High] Incorrect reporting of dropped XDP frames in `ndo_xdp_xmit` causes=
+ dropped frames to be leaked and successfully transmitted frames to be doub=
+le-freed.
 --
 
---- Patch [1]: [PATCH net-next v2 1/3] net: atlantic: free stranded TX buff=
-ers on ring deinit ---
-commit d506a87f11eebfd3878d7ddde798e451d9fd8627
+--- Patch [3]: [PATCH net-next v2 3/3] net: atlantic: convert RX path to pa=
+ge_pool ---
+commit 18978fa8fbab5efde73aa39b92ef15e773290438
 Author: Yangyu Chen <cyy@cyyself.name>
 
-net: atlantic: free stranded TX buffers on ring deinit
+net: atlantic: convert RX path to page_pool
 
-This commit brings back aq_ring_tx_deinit() to properly clean up TX rings=20
-on teardown by iterating up to sw_tail. It replaces the call to=20
-aq_ring_tx_clean() in aq_vec_deinit() to fix a memory and DMA mapping leak=
-=20
-that occurs during interface shutdown.
+The driver currently allocates RX buffers with dev_alloc_pages(), maps
+them with dma_map_page(), and uses a hand-rolled page-flip scheme to
+subdivide high-order pages. Behind an IOMMU, the map/unmap churn is a
+major RX cost. This patch converts RX buffers to page_pool fragments.
 
-Cc: stable@vger.kernel.org # v4.11+
+> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/n=
+et/ethernet/aquantia/atlantic/aq_ring.c
+> index e1193c6719d9d..9dd8817105942 100644
+> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
 
-> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_vec.c b/drivers/ne=
-t/ethernet/aquantia/atlantic/aq_vec.c
-> index 2f9033ceed8ce..05814fea0f5f7 100644
-> --- a/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
-> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
-> @@ -275,7 +275,7 @@ void aq_vec_deinit(struct aq_vec_s *self)
-> =20
->  	for (i =3D 0U; self->tx_rings > i; ++i) {
->  		ring =3D self->ring[i];
-> -		aq_ring_tx_clean(&ring[AQ_VEC_TX_ID]);
-> +		aq_ring_tx_deinit(&ring[AQ_VEC_TX_ID]);
->  		aq_ring_rx_deinit(&ring[AQ_VEC_RX_ID]);
->  	}
+[ ... ]
+
+> @@ -437,22 +379,15 @@ int aq_xdp_xmit(struct net_device *dev, int num_fra=
+mes,
+>  }
 
 [Severity: High]
-This is a pre-existing issue, but should the PTP TX ring be updated to use=
-=20
-aq_ring_tx_deinit() as well?
+This isn't a bug introduced by this patch, but is it possible for
+aq_xdp_xmit() to mislead the caller into freeing the wrong frames?
 
-Looking at the PTP TX ring teardown path:
+When a transmission fails, the loop increments drop but does not break
+or reorganize the frames array:
 
-drivers/net/ethernet/aquantia/atlantic/aq_ptp.c:aq_ptp_ring_deinit() {
-    ...
-    aq_ring_tx_clean(&aq_ptp->ptp_tx);
-    ...
-}
+        for (i =3D 0; i < num_frames; i++) {
+                struct xdp_frame *xdpf =3D frames[i];
 
-Since aq_ring_tx_clean() only cleans up to hw_head, won't any PTP descripto=
-rs
-between hw_head and sw_tail be leaked when the interface is stopped while
-PTP TX packets are in flight?=20
+                if (aq_nic_xmit_xdpf(aq_nic, ring, xdpf) =3D=3D NETDEV_TX_B=
+USY)
+                        drop++;
+        }
 
-Also, since aq_ring_tx_clean() updates u64_stats without disabling preempti=
-on,
-does keeping it here leave the teardown path vulnerable to a lockdep splat =
-on
-32-bit systems?
+        return num_frames - drop;
 
-Does it make sense to update aq_ptp_ring_deinit() to use the newly restored
-aq_ring_tx_deinit() for the PTP TX ring to fully close this leak?
+If the failure occurs in the middle of the array, the kernel's XDP stack wi=
+ll
+assume the last drop frames failed and free them. Could this result in a
+use-after-free of successfully transmitted frames while they are still being
+accessed by hardware, and leak the actual dropped frames?
+
+>  static struct sk_buff *aq_xdp_build_skb(struct xdp_buff *xdp,
+
+[ ... ]
+
+> @@ -503,7 +446,6 @@ static struct sk_buff *aq_xdp_run_prog(struct aq_nic_=
+s *aq_nic,
+>  		u64_stats_update_begin(&rx_ring->stats.rx.syncp);
+>  		++rx_ring->stats.rx.xdp_tx;
+>  		u64_stats_update_end(&rx_ring->stats.rx.syncp);
+> -		aq_get_rxpages_xdp(buff, xdp);
+>  		break;
+
+[Severity: High]
+This is a pre-existing issue, but could this dereference a NULL pointer
+if an XDP program returns XDP_TX for a packet on the PTP ring?
+
+The PTP RX ring shares the RX clean path, meaning __aq_ring_xdp_clean() and
+aq_xdp_run_prog() are executed for it. If an XDP program returns XDP_TX:
+
+        tx_ring =3D aq_nic->aq_ring_tx[rx_ring->idx];
+        result =3D aq_nic_xmit_xdpf(aq_nic, tx_ring, xdpf);
+
+Since the PTP TX ring is never placed into the aq_ring_tx array during
+allocation, tx_ring would be NULL here.
+
+>  	case XDP_REDIRECT:
+
+[ ... ]
+
+> @@ -546,8 +489,11 @@ static bool aq_add_rx_fragment(struct device *dev,
+>  	do {
+>  		skb_frag_t *frag;
+> =20
+> -		if (unlikely(sinfo->nr_frags >=3D MAX_SKB_FRAGS))
+> +		if (unlikely(sinfo->nr_frags >=3D MAX_SKB_FRAGS)) {
+> +			/* Attached frags must reach xdp_return_buff() */
+> +			xdp_buff_set_frags_flag(xdp);
+>  			return true;
+> +		}
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does the early return in
+aq_add_rx_fragment() leave remaining descriptors uncleaned?
+
+If a packet exceeds MAX_SKB_FRAGS, it seems aq_add_rx_fragment() aborts
+and returns true without setting buff_->is_cleaned =3D 1 on the rest of the
+fragments.
+
+Then, in __aq_ring_xdp_clean(), the outer loop continues, increments sw_hea=
+d,
+and encounters those uncleaned fragments:
+
+                if (!buff->is_eop) {
+                        if (aq_add_rx_fragment(dev, rx_ring, buff, &xdp)) {
+                                ...
+                                xdp_return_buff(&xdp);
+                                continue;
+                        }
+                }
+
+Since their is_cleaned flag is false, could they be treated as the start of=
+ a
+brand new packet and erroneously passed to the XDP program?
+
+>  		frag =3D &sinfo->frags[sinfo->nr_frags++];
+
+[ ... ]
+
+> @@ -674,6 +625,7 @@ static int __aq_ring_rx_clean(struct aq_ring_s *self,=
+ struct napi_struct *napi,
+>  			err =3D -ENOMEM;
+>  			goto err_exit;
+>  		}
+> +		skb_mark_for_recycle(skb);
+
+[Severity: High]
+This is a pre-existing issue, but I have a question about the error handling
+in __aq_ring_rx_clean().
+
+If hardware aggregates a packet resulting in more than MAX_SKB_FRAGS fragme=
+nts
+(for example, via LRO), the code takes this error path before getting here:
+
+        if (unlikely(!is_rsc_completed) ||
+            frag_cnt > MAX_SKB_FRAGS) {
+                err =3D 0;
+                goto err_exit;
+        }
+
+Does this exit the function without advancing sw_head or consuming the
+malformed multi-fragment packet? On the next NAPI poll, it seems the exact
+same state would be encountered, permanently stalling the queue in an infin=
+ite
+loop.
+
+>  		if (is_ptp_ring)
+>  			buff->len -=3D
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/tencent_1F173E0FC16=
-06D2AC704DC9C98AF10984607@qq.com?part=3D1
+06D2AC704DC9C98AF10984607@qq.com?part=3D3
