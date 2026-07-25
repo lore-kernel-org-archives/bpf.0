@@ -1,204 +1,122 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3D72EEE7D
-	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 13:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DD32472A2
+	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 13:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784986043; cv=none; b=QQhw+IYRn2FgBjLHOoRkbbYtoc8B63U5sK+rZ45MPwcjXhpQJJ21DCsINo1pYFHSHFRnKXwIdErFyZzKMWAZPmdhKf0pQtRVetFkHUbGNag7Km1c1UlKXvkdryPUa/fUXk+asiEOaT/sU8ueQ9hT1tF0StwiGmkMSKke/9Xa/ao=
+	t=1784986391; cv=none; b=Kx4WqpVtILfXhUBrwgpbuP9lOtSAAblqGOmNtnZN7qMoI+TV0CcITfgISZ+Vgaz/7B3GrbbBawT5DeVLbrLD2kxIvdsTcqRxVzVY0MBz0//KSx2OIkWdUZjdXnSjHvSmsB6qmbYP5+wcTe4V4DjwTEtt/F8da3As5O+9+1P2kHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784986043; c=relaxed/simple;
-	bh=ka//KcHbyYQUh2bSJY7Nt4kXw73ZHvokyQ/vwGI/Sds=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lsYuYpaBptKCKLJWiTSoKFC0x1ObTSBAibRyWN3gkY00HDQThlcc2eVkFCbzvQp61NMuyIhcLC4XYJdexXO+sIf6D4xWf+v+ovRGPmxS7YAKxt9PUKD3Tj7N7udiEUEBRVXO+D14KaK5IukoKkSlM8CC2FVbyWgqFWcH6pUUGdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tYYqys1H; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784986391; c=relaxed/simple;
+	bh=Bc3cTnxaGLzeKs/A72dFXkvvTh8KhqS5P5MFpU2Lp1E=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=cAjtify9SUkqs5VNerG8nKEzEyIXOf0EbeZkTTafOS/hAFeetW3GTbk583RXVlvBCNkKkjzlz5jf7u3EUhJRQnylJMYTvIMi+Ca5XR81hf1rT+HTTv9HPZIBa6R56b2bfRMEE/QP8aHzLKncWoiJ9CIw7VnLH1TxPY4C9VKazDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aub3ZTp8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tYYqys1H"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784986039;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=20vkqGm/nP+8NBvcX1R/kUQUl8YlGe7JJv6AylUO3fo=;
-	b=tYYqys1HyBifdzgMfzBqTDSlqd/fVN/6LimaQ4PtG46Aiw2ouwwb8coWadxbpCOFSeXHPx
-	ibvLvN5nGPnEHJZBFWMeGxbidYGuNcDFB593tNpCyJgWaeuafjWA0gsAhhE/PzKwESUJge
-	TSaNgk/HiAh0y6uBLokxfwai3DXu+RM=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Varun R Mallya <varunrmallya@gmail.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Viktor Malik <vmalik@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Verify rejection of sleepable tracing prog
-Date: Sat, 25 Jul 2026 21:26:24 +0800
-Message-ID: <20260725132624.78373-3-leon.hwang@linux.dev>
-In-Reply-To: <20260725132624.78373-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aub3ZTp8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B66B31F00A3A;
+	Sat, 25 Jul 2026 13:33:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784986389;
+	bh=NS/79ZLEVqJz6M237iPrd8X0EANF2TL8jF++lWT06eA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Aub3ZTp8ptdqKHrcXaZTXf9eS3wucnMNtiUvk1h0aeo4xa7iLLes82+KmBCqdqbQl
+	 JA/+z1zfZA2rsPk67uf6Hu1GPg6MuuqBozmjg4nu44GpmajXsjsGszPDizI1vT0uZ/
+	 aspq+DMyCmfwgtlEeAhehaYlrmykpju97epL4cy+zwYw0ZvyE4q1N3/kn/U+DrF/ry
+	 p1b9lSwJR+EDIHbFlBAFjE7ofQluCNetztS6w8ZnarmyUgNPkOZ0pP4PracNZVxq4L
+	 z+464nify33qcsR8z3w60DILtGPVce1MBTW2KcZFskKEZY9GupIpHnyIQKz+8N+ML9
+	 4M3kTAtMP32oA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Verify rejection of
+ sleepable tracing prog
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260725132624.78373-3-leon.hwang@linux.dev>
 References: <20260725132624.78373-1-leon.hwang@linux.dev>
+ <20260725132624.78373-3-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 25 Jul 2026 13:33:09 +0000
+Message-Id: <20260725133309.B66B31F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-Add a test to verify that the sleepable tracing prog cannot attach to a
-'__x64_sys' prefix prog target.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The test contains dead code after the expected failure of `fentr=
+y_sleepable__load()`. If this code executes on an unfixed kernel, it intent=
+ionally triggers a kernel BUG and crashes the test environment.
+--
 
-When CONFIG_FUNCTION_ERROR_INJECTION is disabled, without the fix, the
-test would trigger the BUG:
+--- Patch [2]: [PATCH bpf-next v2 2/2] selftests/bpf: Verify rejection of s=
+leepable tracing prog ---
+commit 44292a230f0467503b72b0ecb8c6c25244de310b
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-[    3.460756] BUG: sleeping function called from invalid context at kernel/bpf/trampoline.c:1324
+selftests/bpf: Verify rejection of sleepable tracing prog
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 57 +++++++++++++++++++
- .../selftests/bpf/progs/fentry_sleepable.c    | 19 +++++++
- tools/testing/selftests/bpf/progs/xdp_dummy.c |  6 ++
- 3 files changed, 82 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_sleepable.c
+This commit adds a selftest to verify that a sleepable tracing program
+cannot attach to a '__x64_sys' prefix program target. The test attempts
+to load the program and expects the load to fail, avoiding a kernel BUG
+on unpatched kernels.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index 4a87d7163c8c..2523c07a16c6 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -5,6 +5,7 @@
- #include <bpf/btf.h>
- #include "bind4_prog.skel.h"
- #include "freplace_progmap.skel.h"
-+#include "fentry_sleepable.skel.h"
- #include "xdp_dummy.skel.h"
- 
- typedef int (*test_cb)(struct bpf_object *obj);
-@@ -576,6 +577,60 @@ static void test_func_replace_progmap(void)
- 	freplace_progmap__destroy(skel);
- }
- 
-+static void test_sleepable_fentry_to_xdp(void)
-+{
-+	struct fentry_sleepable *skel = NULL;
-+	struct xdp_dummy *skel_xdp = NULL;
-+	int ifindex, prog_fd, err;
-+	char buff[64] = {};
-+
-+#ifndef __x86_64__
-+	test__skip();
-+	return;
-+#endif
-+
-+	ifindex = if_nametoindex("lo");
-+	if (!ASSERT_GT(ifindex, 0, "if_nametoindex"))
-+		return;
-+
-+	skel_xdp = xdp_dummy__open_and_load();
-+	if (!ASSERT_OK_PTR(skel_xdp, "xdp_dummy__open_and_load"))
-+		return;
-+
-+	skel = fentry_sleepable__open();
-+	if (!ASSERT_OK_PTR(skel, "fentry_sleepable__open"))
-+		goto out;
-+
-+	skel->bss->user_ptr = buff;
-+
-+	prog_fd = bpf_program__fd(skel_xdp->progs.__x64_sys_nop);
-+	err = bpf_program__set_attach_target(skel->progs.fentry_xdp, prog_fd, "__x64_sys_nop");
-+	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
-+		goto out;
-+
-+	err = fentry_sleepable__load(skel);
-+	ASSERT_ERR(err, "fentry_sleepable__load");
-+	if (err)
-+		goto out;
-+
-+	skel->links.fentry_xdp = bpf_program__attach_trace(skel->progs.fentry_xdp);
-+	if (!ASSERT_OK_PTR(skel->links.fentry_xdp, "bpf_program__attach_trace"))
-+		goto out;
-+
-+	skel_xdp->links.__x64_sys_nop = bpf_program__attach_xdp(skel_xdp->progs.__x64_sys_nop,
-+								ifindex);
-+	if (!ASSERT_OK_PTR(skel_xdp->links.__x64_sys_nop, "bpf_program__attach_xdp"))
-+		goto out;
-+
-+	err = system("ping -q -c 1 -W 1 127.0.0.1 > /dev/null");
-+	ASSERT_OK(err, "ping");
-+	ASSERT_ERR(skel->bss->retval, "retval");
-+
-+out:
-+	fentry_sleepable__destroy(skel);
-+	xdp_dummy__destroy(skel_xdp);
-+}
-+
- /* NOTE: affect other tests, must run in serial mode */
- void serial_test_fexit_bpf2bpf(void)
- {
-@@ -607,4 +662,6 @@ void serial_test_fexit_bpf2bpf(void)
- 		test_func_replace_int_with_void();
- 	if (test__start_subtest("freplace_void"))
- 		test_func_replace_void();
-+	if (test__start_subtest("sleepable_fentry_to_xdp"))
-+		test_sleepable_fentry_to_xdp();
- }
-diff --git a/tools/testing/selftests/bpf/progs/fentry_sleepable.c b/tools/testing/selftests/bpf/progs/fentry_sleepable.c
-new file mode 100644
-index 000000000000..44b938f485e2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fentry_sleepable.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char LICENSE[] SEC("license") = "GPL";
-+
-+void *user_ptr;
-+int retval;
-+
-+SEC("fentry.s")
-+int BPF_PROG(fentry_xdp)
-+{
-+	char buff[64];
-+
-+	retval = bpf_copy_from_user(buff, sizeof(buff), user_ptr);
-+	return 0;
-+}
-+
-diff --git a/tools/testing/selftests/bpf/progs/xdp_dummy.c b/tools/testing/selftests/bpf/progs/xdp_dummy.c
-index d988b2e0cee8..5f1e0771021d 100644
---- a/tools/testing/selftests/bpf/progs/xdp_dummy.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_dummy.c
-@@ -10,4 +10,10 @@ int xdp_dummy_prog(struct xdp_md *ctx)
- 	return XDP_PASS;
- }
- 
-+SEC("xdp")
-+int __x64_sys_nop(struct xdp_md *ctx)
-+{
-+	return XDP_PASS;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.55.0
+> diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/too=
+ls/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+> --- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+[ ... ]
+> @@ -576,6 +577,60 @@ static void test_func_replace_progmap(void)
+[ ... ]
+> +static void test_sleepable_fentry_to_xdp(void)
+> +{
+[ ... ]
+> +	err =3D fentry_sleepable__load(skel);
+> +	ASSERT_ERR(err, "fentry_sleepable__load");
+> +	if (err)
+> +		goto out;
+> +
+> +	skel->links.fentry_xdp =3D bpf_program__attach_trace(skel->progs.fentry=
+_xdp);
+> +	if (!ASSERT_OK_PTR(skel->links.fentry_xdp, "bpf_program__attach_trace"))
+> +		goto out;
+> +
+> +	skel_xdp->links.__x64_sys_nop =3D bpf_program__attach_xdp(skel_xdp->pro=
+gs.__x64_sys_nop,
+> +								ifindex);
+> +	if (!ASSERT_OK_PTR(skel_xdp->links.__x64_sys_nop, "bpf_program__attach_=
+xdp"))
+> +		goto out;
+> +
+> +	err =3D system("ping -q -c 1 -W 1 127.0.0.1 > /dev/null");
+> +	ASSERT_OK(err, "ping");
+> +	ASSERT_ERR(skel->bss->retval, "retval");
+> +
+> +out:
+> +	fentry_sleepable__destroy(skel);
+> +	xdp_dummy__destroy(skel_xdp);
+> +}
 
+[Severity: Medium]
+Since the test expects fentry_sleepable__load() to fail (meaning err < 0),
+won't the "if (err) goto out;" statement cause the test to immediately bran=
+ch
+to out?
+
+If this code behaves as expected, it appears all the subsequent logic for
+bpf_program__attach_trace(), bpf_program__attach_xdp(), and the ping command
+becomes unreachable dead code.
+
+Conversely, if the test runs on an unpatched kernel where the load
+unexpectedly succeeds (err =3D=3D 0), the test would fall through to the at=
+tach
+and ping logic. Could executing this sequence on an unpatched kernel trigger
+the exact kernel BUG mentioned in the commit message, potentially crashing
+the test environment instead of gracefully failing the test?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260725132624.7837=
+3-1-leon.hwang@linux.dev?part=3D2
