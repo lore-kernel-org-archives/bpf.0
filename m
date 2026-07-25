@@ -1,80 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689162771E;
-	Sat, 25 Jul 2026 00:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EBF2D94B5
+	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 00:14:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784938240; cv=none; b=XkZKeYO5BBP6i/3PP4txxuvV9RiOFoh0RRKwE6aDlJzH//q1DbIImzqThG7aTsYua93T5/Ma3FXUOPun70KGJW0/k7tGu77yF5SqZKfRuYyaAJMZTXjwGxJaZ604enkllMsreV/EIZsQ1X0UrMkLHEuMGI2MG4THkzrumh1vm8I=
+	t=1784938444; cv=none; b=F6CewJLu3x85CeYGG5GSlAFS6Kg92TehJK5oWdJrUzoAhT27sfhl3SJ9Dk4T0qQpGLcibdnAsG26OZmvnURUdlfiA95ygEluC/R6TMCjdDlvrHM6fEukBSvJxbelg1vdsPz2EICr9C9aZ5Xb6KxFkTZazLZJx0/a74MrKdrZtfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784938240; c=relaxed/simple;
-	bh=Zko8iDNBnxDt13+skpFnanyO6gyoFDmgNvvuIcCcWg0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=t2duprsVhxtW3Z3TCKx6yw+G+jlSDZd//Eg7nptSvblUAKvhz3vIRerDjFwPHU8YPPOBG5bCboMVQVVSrwLFZZScvq+ORoTZz8Jp4AiEVY+Lt3JDVALR7yXnSODA4pMpfCRydRmgRV5owfobF+6ehvj7c0R0zdTD0dgg7FY29Z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JKOVTljO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784938444; c=relaxed/simple;
+	bh=rrbH6GKBQ4OOox6cMRM4X2sVPFFLkMCrRwIGoGFfkHc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P1DzsDGwNw+WGCv2OZ8Gk9m+V3qBtCStAP6+mPb3+XlZx8xbr/CNBAsNT9FpaNkSjL+X4d0FKO7Jad5Y0DaPtGhYKGJG83rMJSjgSDKq/sEqVCzsEiA3HwYJXMa8kNpl531ssMbmrU9YKQklmgM5s/hfVzdZNecT4OE3hoMexFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FLlxKJEj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JKOVTljO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB821F000E9;
-	Sat, 25 Jul 2026 00:10:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FLlxKJEj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C261C1F000E9
+	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 00:14:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784938239;
-	bh=ZLivT9kGA2BtbGDfTpkvWXnyqkH2d5UL361k1IF+lcg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=JKOVTljOINggi64Md2mcWKenmnoqYGN8tq9plVzJts7PzAscKKzbYpcs7Wl8piZKX
-	 DMoFoo1WFWV+pS23RNNsbcgHhPGCp2sdCzYrUSCFJNnfSzTExeZOJP1yrweI+Xq4Bh
-	 WnDOMvLwGqgudpTQxG98ILu8vHtNXXmolfYWTwMzrHdSRc6F+d/53kazNOl5PYl+qn
-	 64qZSuoW4EDmJ66PD09EsrGf90lFOaBplnABrsUccHlRMD8B/0nCzg9T+9LdIW+jjI
-	 lp0WcdmNRegvGIrZhpUOY8rOiL++gns6ebSShyhMRJ65zrxMLWUBt0fp5UO+g1OPLo
-	 unkzsRHeIm1Mw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56ABF38111D8;
-	Sat, 25 Jul 2026 00:10:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1784938441;
+	bh=c/IzNZDV3n5JvnwV6UiSPs5H7EW8rm/6iVaurEmVtvY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=FLlxKJEjbsQYCfwkTQSmkkSPbXIFncW8d2Gkx8GkccGifWS2MZ+livtolcBOVFlPP
+	 q9Aw0klwFTokdBJnUPzk/3jD+U1D9Rpvgx56iIkeCUu8B/4wuzFQVXgEXydbjzwrwV
+	 CjzqAq87o+63/9ax5cBeo8mnrZfXgndvkie8qaOzKNbvy0xG8P8V70aMllzedpafxn
+	 6ELy26R3tF4ndTIISsrHOMf+xSudmCV3sXFknynb1Tb9n/GKC6MRNeLpSkzwzT2t5Q
+	 cJjFf2RtxVEEpaQpfxtn7eGPB+hYCM4MBfT9++dm9UgNOdOUTqR/jMNECedP50LXGh
+	 keDAjJ+HVE8dQ==
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92e5c92c389so76566185a.3
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2026 17:14:01 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyXwL3ORdgxzRpU5Ie3f+6KdRktm2dycbP6z/+aoqBBEnpcWytC
+	rbxrvbH7gMvU9SNYdTPd8ES3SN4fYX3i7ZYnG3iLCOs1G9whYyyk293COUMbImo5CC5GDiyFJo8
+	HRDjswf31ckGSmiI1DDSvkZm4SPe7nEU=
+X-Received: by 2002:a05:620a:4622:b0:930:f306:8275 with SMTP id
+ af79cd13be357-932df5ac872mr28955085a.9.1784938441043; Fri, 24 Jul 2026
+ 17:14:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] veth: convert frag_list skbs before running XDP
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178493820590.3361200.16785920221578022952.git-patchwork-notify@kernel.org>
-Date: Sat, 25 Jul 2026 00:10:05 +0000
-References: <20260722191925.2192070-1-matt@readmodwrite.com>
-In-Reply-To: <20260722191925.2192070-1-matt@readmodwrite.com>
-To: Matt Fleming <matt@readmodwrite.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, lorenzo@kernel.org, toke@toke.dk, bpf@vger.kernel.org,
- netdev@vger.kernel.org, stable@vger.kernel.org, kernel-team@cloudflare.com,
- mfleming@cloudflare.com
+References: <20260722065308.4116186-1-song@kernel.org> <20260722065308.4116186-3-song@kernel.org>
+ <amJhnbom_expRgN2@krava> <CAPhsuW4NKdRmFxsmLoAYKV60NuKoRO-3NKqHAucaXPyFKk4BMw@mail.gmail.com>
+ <amMoJnZUF5flJazb@krava>
+In-Reply-To: <amMoJnZUF5flJazb@krava>
+From: Song Liu <song@kernel.org>
+Date: Fri, 24 Jul 2026 17:13:47 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5bhv+CktsvnhEy97KA4oQY1dZfnGkzgKdAZTk77Pe90g@mail.gmail.com>
+X-Gm-Features: AUfX_mwGZVIGG3Xku0U4OpQHpN5yFYmZwxxT-E2UGQGFtKZMz3mmBb-R4aV61bE
+Message-ID: <CAPhsuW5bhv+CktsvnhEy97KA4oQY1dZfnGkzgKdAZTk77Pe90g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add mmap/munmap benchmark for
+ array maps
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Fri, Jul 24, 2026 at 1:54=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+[...]
+> > If we add a read per page, which is the worst case:
+> >
+> > before:
+> >         nr_threads: 1, map_size: 1048576
+> > arraymap-mmap:       throughput: 0.032 =C2=B1 0.000 M ops/s, latency: 3=
+1248.846 ns/op
+> >
+> >         nr_threads: 1, map_size: 8388608
+> > arraymap-mmap:       throughput: 0.003 =C2=B1 0.000 M ops/s, latency:
+> > 372565.622 ns/op
+> >
+> >         nr_threads: 1, map_size: 67108864
+> > arraymap-mmap:       throughput: 0.000 =C2=B1 0.000 M ops/s, latency:
+> > 2061083.005 ns/op
+> >
+> > after:
+> >         nr_threads: 1, map_size: 1048576
+> > arraymap-mmap:       throughput: 0.006 =C2=B1 0.000 M ops/s, latency:
+> > 170794.193 ns/op
+> >
+> >         nr_threads: 1, map_size: 8388608
+> > arraymap-mmap:       throughput: 0.001 =C2=B1 0.000 M ops/s, latency:
+> > 1346389.229 ns/op
+> >
+> >         nr_threads: 1, map_size: 67108864
+> > arraymap-mmap:       throughput: 0.000 =C2=B1 0.000 M ops/s, latency:
+> > 10700389.105 ns/op
+> >
+> > So filling all the pages in the mmap is faster than faulting one page a=
+t a time
+> > in many page faults. IOW, there is a performance regression in this cas=
+e.
+>
+> would it make sense to add new map flag for that?
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+If possible, I would avoid adding a new flag for this. I think the
+regression is on a very special corner case. BPF arena has
+similar behavior (fill in page table on fault). So it should be OK
+to have array map do the same. WDYT?
 
-On Wed, 22 Jul 2026 20:19:25 +0100 you wrote:
-> From: Matt Fleming <mfleming@cloudflare.com>
-> 
-> A frag_list skb can reach veth with data_len set but nr_frags zero.
-> veth_convert_skb_to_xdp_buff() only converts skbs that are shared,
-> locked, have frags[], or do not have enough headroom. It later uses
-> skb_is_nonlinear() to decide whether to set XDP_FLAGS_HAS_FRAGS and
-> xdp_frags_size.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,v3] veth: convert frag_list skbs before running XDP
-    https://git.kernel.org/netdev/net/c/d0d641596304
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Song
