@@ -1,160 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8860E3CF963
-	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 10:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AA13064B2
+	for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 13:27:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784975513; cv=none; b=c/4vzVzmNV+sT+L1W4z1oOk+YtvbkA4+AailcweonILmnVR67jeQkhFIn8YuuntF0sxSfkDxrNwYorK3KdGmqdY0Hc31P5B5CqD5pLKQK32ja67Arv6Kiyjg9SZvWSF0KmLMnPbEHk/rPXj28v+Sw+VICsA++sadKXuX9PwpkmU=
+	t=1784986036; cv=none; b=cpx3fqOb1fQKvPuyBDDS3sbntE4eJzFNDQSjdEZhWT+ODiM6aMz+bP8zmDSajcfHrbnHGNsrVBlStyu9SHXmIZLyfdNHJu+WN95zMXpXF4aG6PPVIDJdyDFGZ23qPiTWpGwhfVwrH2lmhX4YxZdnpUwMi3tm0UWVtxAsZkzh4r0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784975513; c=relaxed/simple;
-	bh=fDcLNSGwmQ/iaXf8Gv995YLtuvCbtgY62a4ytpL+4/A=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=exFLsCQw9wcLrRjHjUDnHk2UVQhT1RgoppFjFJChz7Bjiss7/QeWaiTAda0m6MNmeutIzEHi/U4hNk0z1xTvIMOtu3e4wgcZhku2zlM/1BZ4to/bZMCxiW/efLZZw7YSxGtlZf2YTMhKNOTeBgCeo22YeLDJNyhgz8bhBfSGKxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ila0eAT/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784986036; c=relaxed/simple;
+	bh=dXnO2CVcVShG8lP+gpd8VYYjwBsfavrtuqXmi6o1zdM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=shkTttDxTwv1iNlTbYri2b+zrQPhvFMLDstwZtiBOcuRcIAz/nLd4H4IfssQmX/S9K/50leg6+Q/EhuHw6OseMc6JtdsuPX7xe7m0bHh2roxv0F//LsFtKgl8KitPeKeQrerF0p41YhtE1SLo66fbOGH2SU9U1t2Gr6yewOy9xU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LvT3B+tC; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ila0eAT/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155841F000E9;
-	Sat, 25 Jul 2026 10:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784975512;
-	bh=ahU8/jroF41nMCrK2ZKzd7LZjWKPVSMkiQ//X3K/Ppk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ila0eAT/0vks50G/vrGN+qgREauiXCLKirQRckE4b/oof+Q7c55O7eEojkU7jBLyy
-	 oW5DnbRE1MXG2eXBZH3eTyp76FunyPKfTDY98PnO5tQmwmIFw67maj5/Ty5OeRceZ8
-	 c3aLMvMR7eAAD5bgZDEQ+LDfaoDg/d9XshLpu3QUlHUVKTh02eZsFDImMZ+zoJfI76
-	 5St9aPM4bRylvJ4U60ThhrQDa7Bg1W+Muerka8/Vs2Emcu7H6mhRizib5X7gK8vzXy
-	 4xFg3AtyY1ozJPxQo9tkCCYRiVGBjSQdCCqnD/3mAyF8DoR1CvvU6tRLUDSmhknS7D
-	 Y7RaNQISyX6dw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/7] bpf, arm64: Fix memory leak in
- bpf_jit_free
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pu Lehui" <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260725102020.2287770-2-pulehui@huaweicloud.com>
-References: <20260725102020.2287770-1-pulehui@huaweicloud.com>
- <20260725102020.2287770-2-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Jul 2026 10:31:51 +0000
-Message-Id: <20260725103152.155841F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LvT3B+tC"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784986022;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GlVzZJS0JTsV98D/V1kP7SM0ZnBbLTv2sUFIA2Id9Mk=;
+	b=LvT3B+tCQVTCVDHWaj4oWobopdhM4Dsq2DWL05AOewKFErmevCAuZaV9+YVcutUex85isB
+	hieRII+6QQEbRGQjfbNPKBQQ5pV7hBDRNI9ldnA0E1tJB09n7DgoQiMy+lSndZm8pchore
+	eDV3x1YvvkFrh+rzf3qkwA8+jcKP8B0=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Varun R Mallya <varunrmallya@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Viktor Malik <vmalik@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/2] bpf: Fix sleepable check for tracing prog
+Date: Sat, 25 Jul 2026 21:26:22 +0800
+Message-ID: <20260725132624.78373-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing prog
+is allowed to attach to '__x64_'-alike prefix symbols.
 
-Pre-existing issues:
-- [High] If `bpf_jit_binary_pack_finalize()` fails during `bpf_jit_free()`,=
- it leads to a Use-After-Free and Double-Free of `ro_header`.
-- [Medium] Pre-existing memory leaks of intermediate JIT state (`jit_data`,=
- `ctx.offset`, etc.) in other architectures when JIT compilation of subprog=
-rams aborts.
-- [Medium] The per-CPU private stack (`priv_stack_ptr`) is permanently leak=
-ed when JIT compilation fails after allocating `ro_header` on ARM64.
+It is because the verifier does not verify whether the symbol is a kernel
+function or a bpf prog. That said, a sleepable tracing prog is allowed to
+attach to a bpf prog target whose name has '__x64_'-alike prefix.
+
+For example, a sleepable fentry prog attaches to a '__x64_sys_nop' XDP
+prog, and copies buffer from a user pointer with bpf_copy_from_user()
+helper. After attaching the XDP prog to lo interface, the kernel BUG
+could be triggered by 'ping -c 1 -W 1 127.0.0.1':
+
+[    3.460756] BUG: sleeping function called from invalid context at kernel/bpf/trampoline.c:1324
+
+Fix it by disallowing sleepable tracing prog always when its target is
+bpf prog.
+
+Changes:
+v1 -> v2:
+* Drop redundant 'prog->sleepable' check.
+* Collect Acked-by from Viktor, Thanks.
+* v1: https://lore.kernel.org/bpf/20260724141422.10463-1-leon.hwang@linux.dev/
+
+Leon Hwang (2):
+  bpf: Fix sleepable check for tracing prog
+  selftests/bpf: Verify rejection of sleepable tracing prog
+
+ kernel/bpf/verifier.c                         |  9 ++-
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 57 +++++++++++++++++++
+ .../selftests/bpf/progs/fentry_sleepable.c    | 19 +++++++
+ tools/testing/selftests/bpf/progs/xdp_dummy.c |  6 ++
+ 4 files changed, 88 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_sleepable.c
+
 --
-
---- Patch [1]: [PATCH bpf-next v2 1/7] bpf, arm64: Fix memory leak in bpf_j=
-it_free ---
-commit da1c3e7675f67e35f9b079e317bc882f8ea47e77
-Author: Pu Lehui <pulehui@huawei.com>
-
-bpf, arm64: Fix memory leak in bpf_jit_free
-
-When bpf_int_jit_compile() is called for subprograms, it returns early
-during the first pass (!prog->is_func || extra_pass is false), keeping
-ctx->offset alive for the subsequent extra pass.
-
-If JIT compilation fails for a later subprogram, the BPF core aborts and
-calls bpf_jit_free() to clean up the first subprogram. However,
-bpf_jit_free() fails to free jit_data->ctx.offset, which causes a memory
-leak of the JIT context offsets array.
-
-Fix this by adding the missing kvfree(jit_data->ctx.offset) in
-bpf_jit_free().
-
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 4cdc7dfb05ba9..f4e4d4578e38a 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -3237,6 +3237,7 @@ void bpf_jit_free(struct bpf_prog *prog)
->  		 */
->  		if (jit_data) {
->  			bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does ignoring the return
-value of bpf_jit_binary_pack_finalize() here cause a use-after-free?
-
-If bpf_jit_binary_pack_finalize() fails internally, it frees ro_header.
-However, because the return value is ignored, execution continues to:
-
-    hdr =3D bpf_jit_binary_pack_hdr(prog);
-    bpf_jit_binary_pack_free(hdr, NULL);
-
-This would retrieve the already-freed ro_header and call
-bpf_jit_binary_pack_free() on it again, leading to a double-free. Is
-it necessary to check the return value of bpf_jit_binary_pack_finalize()
-here?
-
-> +			kvfree(jit_data->ctx.offset);
-
-[Severity: Medium]
-This is a pre-existing issue, but does this same intermediate JIT state
-leak in other architectures when JIT compilation of subprograms aborts?
-
-For example, architectures like S390 and SPARC64 allocate jit_data in
-bpf_int_jit_compile() but appear to lack a bpf_jit_free() override to
-clean it up, falling back to the weak generic implementation which only
-frees the binary header.
-
-Additionally, LoongArch's bpf_jit_free() frees jit_data but seems to miss
-the same kvfree(jit_data->ctx.offset) that this patch adds for ARM64.
-
-Could these other architectures be updated to prevent permanent memory
-leaks of jit_data and ctx.offset on error paths?
-
-[Severity: Medium]
-This is also a pre-existing issue, but does the error handling in
-bpf_int_jit_compile() permanently leak the private stack?
-
-If bpf_int_jit_compile() fails after allocating ro_header, it jumps to
-out_free_hdr:
-
-arch/arm64/net/bpf_jit_comp.c:bpf_int_jit_compile() {
-    ...
-out_free_hdr:
-    if (header) {
-        bpf_arch_text_copy(&ro_header->size, &header->size,
-                           sizeof(header->size));
-        bpf_jit_binary_pack_free(ro_header, header);
-    }
-    goto out_off;
-
-out_off:
-    if (!ro_header && priv_stack_ptr) {
-        free_percpu(priv_stack_ptr);
-        prog->aux->priv_stack_ptr =3D NULL;
-    }
-    ...
-}
-
-Because ro_header is freed but never set to NULL before jumping to out_off,
-the (!ro_header && priv_stack_ptr) condition evaluates to false, skipping
-the free_percpu() call. Since prog->jited is set to 0, bpf_jit_free() also
-bypasses its cleanup block, permanently leaking priv_stack_ptr.
-
-Should ro_header be set to NULL in out_free_hdr to ensure the private stack
-is properly freed?
-
->  			kfree(jit_data);
->  		}
->  		prog->bpf_func =3D (void *)prog->bpf_func - cfi_get_offset();
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260725102020.2287=
-770-1-pulehui@huaweicloud.com?part=3D1
+2.55.0
