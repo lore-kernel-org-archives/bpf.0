@@ -1,104 +1,136 @@
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.34])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453BB1B4F0A
-	for <bpf@vger.kernel.org>; Sun, 26 Jul 2026 15:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.30.148.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0684A42A82
+	for <bpf@vger.kernel.org>; Sun, 26 Jul 2026 15:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785079623; cv=none; b=Yl7hf/sRGjSPFY73U/8Z5egSe0oUft9ZgB8ZmiddMnluXfWOW6Opr/lPZGbB2XavScl2Tbj8qo9CT2OlSwYA8it2xgL/AjBG72E8iKWZFsW0Dabq85mECa0oMUlY3DGAxIZqgULHwAIMXzELN0XiTkTT9su2q1jGYV43ENZEz9M=
+	t=1785081032; cv=none; b=iwiBAmnJKTvJP3uyk4HAr1Kyh6XIIhZ+YSEu3D1QDJSYgdy/AsKLUh/3FQVFQ4+qPkDDUyfcY7TcE0AWIKl4lPfzMS0yJGtb/S0eKCIMfq9twXGufL6VbdX+pI+hDkbZeydD/bd8k81mCNWzlzXCbIwvoCiFnu1abidYDztQSXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785079623; c=relaxed/simple;
-	bh=V+E0p2/P7/e3UbY8xBtFZF/rq/8lhOoBU8GkQT3Vfwg=;
-	h=Message-ID:In-Reply-To:References:Date:Mime-Version:From:To:Cc:
-	 Subject:Content-Type; b=BiUiYiXMdx/o83rYFNC0eH15t6C5aInJ/RuAJ727kZXZkCUoUMWpbNBsTOUkpq/a3mbDO1WdL928Ecv4kWIYmAq7qtRLWcD6hVseT0EdE+Rwmk9eavU2jyK5smyza4Ltcn0v2kal1weIvk6r9bD/X+qu//wP335M5h6hL75Ru2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=160.30.148.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4h7QZC1kWJz5BNRf;
-	Sun, 26 Jul 2026 23:26:59 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-	by mse-fl2.zte.com.cn with SMTP id 66QFQo0g042661;
-	Sun, 26 Jul 2026 23:26:50 +0800 (+08)
-	(envelope-from xu.xin16@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Sun, 26 Jul 2026 23:26:52 +0800 (CST)
-X-Zmail-TransId: 2afa6a66273c781-1011d
-X-Mailer: Zmail v1.0
-Message-ID: <20260726232652148weP__aGeUXMQpolrgR-vT@zte.com.cn>
-In-Reply-To: <20260726151922.C9F3B1F000E9@smtp.kernel.org>
-References: 20260726230724742Z4CDN9ntFInEofAf2YxME@zte.com.cn,20260726151922.C9F3B1F000E9@smtp.kernel.org
-Date: Sun, 26 Jul 2026 23:26:52 +0800 (CST)
+	s=arc-20240116; t=1785081032; c=relaxed/simple;
+	bh=WxryvA2HakVuZd8ykAXTzypU5qJnX45HQzh2z9MOmTU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=qCcPkr6aj6b0mX1LK+aYuytgxeE3k2D14w789lkxqGe4SxPBUfNYPZv3esy+oTAn3sfIVD+LzZKDLohTHa3zquQSo28/Abs0yEjGlNjGQaS2N+ulpOk+cFn44NNw26YOW/unCqEWI+iQco1C50hbehKJO8O3U88cf1zx1UTRoNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n+ObyI7h; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n+ObyI7h"
+Message-ID: <31dc8d80-83d6-43fa-8e49-b5b9b3a6c648@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785081018;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bNd4NfXNcK/uMLM3n6UPnEgZFUXB7zaNVNBXT+1pwdg=;
+	b=n+ObyI7h/+1C5A/BfLk0pUz01J/pgTJtCDhu8Y2IsdGHuHjt/62NGyJdGAevgRIXk2OXuc
+	c8BP2UGElyT57t67jCUv76b7dRMni0WbxmSv13Ylr909YGj4bs/qd8TlMIqPu5xrHDwmfG
+	eaOe6xcJw7s/8ZMSRauBlN9LsMKHBUw=
+Date: Sun, 26 Jul 2026 23:50:05 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <xu.xin16@zte.com.cn>
-To: <sashiko-bot@kernel.org>, <ast@kernel.org>
-Cc: <bpf@vger.kernel.org>, <yonghong.song@linux.dev>
-Subject: =?UTF-8?B?UmU6IFtQQVRDSCBicGYtbmV4dCB2Ml0gYnBmOiBMb2cgZXJyb3IgY29kZSBvbiB0cmFtcG9saW5lIHVubGluayBmYWlsdXJl?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl2.zte.com.cn 66QFQo0g042661
-X-TLS: YES
-X-ENVELOPE-SENDER: xu.xin16@zte.com.cn
-X-SOURCE-IP: 10.5.228.133 unknown Sun, 26 Jul 2026 23:26:59 +0800
-X-CLEAN: YES
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6A662743.000/4h7QZC1kWJz5BNRf
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2] bpf: Log error code on trampoline unlink
+ failure
+To: xu.xin16@zte.com.cn, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, leon.hwang@linux.dev
+References: <20260726230724742Z4CDN9ntFInEofAf2YxME@zte.com.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260726230724742Z4CDN9ntFInEofAf2YxME@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> Pre-existing issues:
-> - [High] Use-After-Free due to flawed teardown design when bpf_trampoline_unlink_prog fails
-> --
-> 
-> --- Patch [1]: [PATCH bpf-next v2] bpf: Log error code on trampoline unlink failure ---
-> commit 8f743682724c96c3eba346cdcf6a1a3646dc28bd
-> Author: xu xin <xu.xin16@zte.com.cn>
-> 
-> bpf: Log error code on trampoline unlink failure
+On 2026/7/26 23:07, xu.xin16@zte.com.cn wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
 > 
 > Replace silent WARN_ON_ONCE with WARN_ONCE that prints the actual error
 > code from bpf_trampoline_unlink_prog(). This aids debugging of race
-> conditions during link teardown.
+> conditions during link teardown, while keeping the warning rate limited
+> to avoid log flooding.
 > 
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 0ff9e3aa293d5..9cbe00bc8d051 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -3547,10 +3547,13 @@ static void bpf_tracing_link_release(struct bpf_link *link)
-> >  {
-> >      struct bpf_tracing_link *tr_link =
-> >          container_of(link, struct bpf_tracing_link, link.link);
-> > +    int err;
-> >  
-> > -    WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link.node,
-> > -                        tr_link->trampoline,
-> > -                        tr_link->tgt_prog));
-> > +    err = bpf_trampoline_unlink_prog(&tr_link->link.node,
-> > +                    tr_link->trampoline,
-> > +                    tr_link->tgt_prog);
-> > +    if (err)
-> > +        WARN_ONCE(err, "bpf_trampoline_unlink_prog returns error: %d\n", err);
+> This will be very helpful for speeding up trouble-shooting of some crash
+> UAF due to bpf_trampoline_unlink_prog failures.
 > 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but does this error path lead to a
-> Use-After-Free?
-> 
-> If bpf_trampoline_unlink_prog() fails (for example, due to a memory allocation
-> failure in bpf_tramp_image_alloc() during bpf_trampoline_update()), the caller
-> logs the error here but continues the teardown process.
-> 
-> Because the update failed, the old active trampoline image remains registered 
-> with ftrace or direct calls. However, the link teardown will unconditionally 
-> free the linked BPF program:
+> No functional change intended.
 
-the memory allocation failure case was discussed in previous thead, which seems
-to be not a big problem [1]. So just ignoring this question.
+Is it "No change to unlink behavior"?
 
-[1] https://lore.kernel.org/all/9e36407a-22fb-0fc1-b147-ebdc12ea0823@meta.com/
+> 
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> ---
+> v1->v2:
+> 1) clean the subject name by remove 'syscall' suggested by Leon Hwang
+> https://lore.kernel.org/all/20a444b2-aeed-4af8-ba76-e994e2c14087@linux.dev/
+> 2) Add up the missed case in kernel/bpf/trampoline.c:bpf_shim_tramp_link_release()
+> 
+> kernel/bpf/syscall.c    | 9 ++++++---
+>  kernel/bpf/trampoline.c | 5 ++++-
+>  2 files changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 6db306d23b47..2348dc33abf4 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3626,10 +3626,13 @@ static void bpf_tracing_link_release(struct bpf_link *link)
+>  {
+>  	struct bpf_tracing_link *tr_link =
+>  		container_of(link, struct bpf_tracing_link, link.link);
+> +	int err;
+> 
+> -	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link.node,
+> -						tr_link->trampoline,
+> -						tr_link->tgt_prog));
+> +	err = bpf_trampoline_unlink_prog(&tr_link->link.node,
+> +					tr_link->trampoline,
+> +					tr_link->tgt_prog);
+> +	if (err)
+> +		WARN_ONCE(err, "bpf_trampoline_unlink_prog returns error: %d\n", err);
+
+'if (err)' here is unnecessary.
+
+> 
+>  	bpf_trampoline_put(tr_link->trampoline);
+> 
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index 1a721fc4bef5..dae3c2104ed4 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -997,12 +997,15 @@ static void bpf_shim_tramp_link_release(struct bpf_link *link)
+>  {
+>  	struct bpf_shim_tramp_link *shim_link =
+>  		container_of(link, struct bpf_shim_tramp_link, link.link);
+> +	int err;
+> 
+>  	/* paired with 'shim_link->trampoline = tr' in bpf_trampoline_link_cgroup_shim */
+>  	if (!shim_link->trampoline)
+>  		return;
+> 
+> -	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&shim_link->link.node, shim_link->trampoline, NULL));
+> +	err = bpf_trampoline_unlink_prog(&shim_link->link.node, shim_link->trampoline, NULL);
+> +	if (err)
+> +		WARN_ONCE(err, "bpf_trampoline_unlink_prog returns error: %d\n", err);
+
+Ditto.
+
+>  	bpf_trampoline_put(shim_link->trampoline);
+>  }
+> 
+
+Would it be better to include this multi_detach() one?
+
+		WARN_ON_ONCE(__bpf_trampoline_unlink_prog(&mnode->node, mnode->trampoline,
+					NULL, &trampoline_multi_ops, data));
+
+Thanks,
+Leon
+
