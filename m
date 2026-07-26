@@ -1,64 +1,64 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4562D238F
-	for <bpf@vger.kernel.org>; Sun, 26 Jul 2026 02:02:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F80C136672
+	for <bpf@vger.kernel.org>; Sun, 26 Jul 2026 02:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785031323; cv=none; b=kx+yVxhuZFZ98QgNyTqJC/j0RtasbT+Mkv1wEOt8oTIPSIEDWHYZ84zAh2B3krCV5r1arRG31N6dh7k8LAdl816P2HamSAw4dlpQzHjB7x+eScHcU/hw36ijsORQCPWg3Lpv0wcOcrwJ+t45UDGJfOMR4LnuJeNqtX4cWfC6iRk=
+	t=1785031364; cv=none; b=Fsz47TCMnySku2F3OP2GGOlqLi9arKMECSVanC2LY3gv/eAu8uZKT9+eVNxSUe6gZbehq6GnPrMnUhj3jxBcEWZnMnutOqSAkRvStblnOCa+T1eU7mwaZT3bq8sRiKkNIvwFLJw1FFJHaKUSd47MrOdZGksXO1Frdzwv1uBo7gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785031323; c=relaxed/simple;
-	bh=LzTG6H3sflel7BZtGJ95D3gkKtDDlMTm1VHq+AiAU/k=;
+	s=arc-20240116; t=1785031364; c=relaxed/simple;
+	bh=8MHiJgXiLwaflmldyw5XZaurOOQUdmH7Ahr8KRIRGhU=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=MtwY0G/5embvTC1fZLe25ory2cyK/cnURRNDSqdbaezDe/P2WHm/VgbNDYRc7uKgToM/6f5y0Z4uFdmRpsj0O/niFcLhRqJDe8elyPuBq4Mpg5zHGVANnrC7Mnm4lsPBBNo+BXroNh3rL3NlkPCsJ4KFsYh7vdz7W+Zh62hjthI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=in9Pq8Om; arc=none smtp.client-ip=74.125.225.65
+	 References:In-Reply-To; b=ln+EIHUjdeqpiwLtZxzat3pJ7+KKvMN8U85BCCHHCEQp6dzmJcU/YVRS7pAvOM/nclKsvd5HAhBzMI4vnlnSVNW5v0fEwPXf0FEQ8UuiYb19QX1CRK4c1dFc/RgdqhYp9Hg4/MMHo/3zkNePfiVXyna44NswsUstv4VgkkhA8GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cc6gsF5G; arc=none smtp.client-ip=74.125.225.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="in9Pq8Om"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47033972bfaso521239f8f.1
-        for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 19:02:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cc6gsF5G"
+Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-47f7f93b3d4so420492f8f.1
+        for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 19:02:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785031320; x=1785636120; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785031362; x=1785636162; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Icq5OMx0iLqWZS2dmdktmdTaUjitNjJ7m6dxMi93PFw=;
-        b=in9Pq8OmI5klqgEJeqSKMt55/+InmYvnnN7119onFCHpARwKmUIWmLCcoO6NHySVcb
-         UHRIwmmWKXLut6ujykwmDcYI9klI/Zr3FALq6RYac3r+4oGA6SdBFm4IQGxSZhHFaeCN
-         ZWAy9vZt67d/oey1G5m39kpLRLeDxO8TwwE0FeFrQ6ADHGdHpopKiFcWDtRRkq4pZgjX
-         /MkHVtCtxbjYhCndX0tSK1NpHb2zkCEpiMjGZPPjv+v1s9xqFxLU5rPcOaMdcevUZBGs
-         +TCSVBePA2nDZJshWrwoluVlGkRiVIDdQE+16gmgYbgP3UjdNlfh9+5gQ/iR+D7YCWoP
-         y1QA==
+        bh=TDTuZ70qXufeETtiXikOewPxsFp3y1jcFjaKcCLz/9k=;
+        b=cc6gsF5GWi+1L+YS60KtaFIMqhnvCBJ4W3Xw2C0xwlseIrPPpuPzQWMChevlZdjQL4
+         SubLoXQd9/tdSaiLNMAZN1rcuWKn4aUCYgERQ0ZTR62uN97R5Pqvo0q9U2qvMhgPgXHP
+         hWfbSf9wKe+am1OdTjHgFHjN5ezqy+8Dw6/ljMLVTGlXH/Le7CVKXZrf0459UvCAhFdg
+         HYlZzfWjqK4SceazjOWAjdNtyO47uE4jw9zYkuS3IUKp0CCfSiWHzS3TpD9SlZvGRFcU
+         rZnXpH39flZ2BYDIPEDG28Qa3TKtLA/0cnQgYyDTEYOpraX7w9r5v5GciTB2BwZrwybo
+         Wa4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785031320; x=1785636120;
+        d=1e100.net; s=20251104; t=1785031362; x=1785636162;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Icq5OMx0iLqWZS2dmdktmdTaUjitNjJ7m6dxMi93PFw=;
-        b=eS1o+DaLbTk4+5HY1sUHCmyP02Q2oEkviiJB3JdYK5l/U4N3I0rAGDtM8UEBXvNo/x
-         w8Yh63WnqbG+FBFbclc/1NiG7saddXAkWhvIC+7wMQBrlzdzGN/FsPWf3Y6LjcgqCW41
-         8OxnpttyMKIGGlui+3VBjVdPLYPg1oJd2xHBlzxTA6Ky+TjV5yYyZmUgfcw3FFOai0/E
-         cM7v/XhFF1Hlq3wvfiHldUuR/OMbTwjQzVdVvACZSwrWsYZRgMs2Qw5P8eNxJYTOW+zf
-         BNkhDYZBGOrJvld0kIhgrrogr08uCgibmE2wC7WVkDqnJ28E0rTUCNxHffkR88rW2pj0
-         nq4Q==
-X-Gm-Message-State: AOJu0YyL/ZqZ2PgcSsb/AVGKx4284qO5cHZIvLO9AoEIFv9puzFPTuCP
-	xAsUKL5REiei1Re4ym++dbgATOyqcYVrPyKGueWEn5e2A5hQgcdP3iBoI7rdsjBE
-X-Gm-Gg: AR+sD12kll0M/MXiy5udqJila6Nf4fAWYvN00LCVGvCBlE+FilGGgFWKI5bjCmEukFJ
-	/5SG0DQC9VWJJgVlH9gH2ZxJKsv6WExh6yXZ9MxIcvFDGXqMopGfPEjuW2XtX5En1VJgA/f1E5+
-	28CVcCt/v6RnTsd5JDXoC+HzB5gUbJ4AUntJiIF215IpO5MxdRFCj06okMpIuDGTrIXWzebCI0u
-	/dE6rVaAFGhK6z5QDV6qLa/8m2rqpjjO4jVRMUMqcXu1nJa/w4bcIdPjtmcJ7RPAWk6I1wmkMPW
-	w9iEonGaZeM9A4SuKrAU/T2xWoL5Mapfg579Jl7tiuhU1KlXLaeh+tKblIuaeZl6cIbJWjo85Bo
-	hXxix9c/gX+MHaPjlAdoDf2iA12qLsGT5xmEj96u4L5UGNhtR3ws4IUgoF7qo18EqoKnogR7N4Z
-	M2e3Xqmwmr8+JwyHfFv+VuojWx2rdycXq/KZt4fQrXIx2uAzMdchjBPVFAHsNMxWgPNLg79Eodw
-	dE3dYkfyW1CFBuLF0mNv1TlU8lJCyr+eM2qrZUyXfov
-X-Received: by 2002:a05:600c:4f56:b0:495:4c62:9d43 with SMTP id 5b1f17b1804b1-496b747487bmr39215725e9.34.1785031320118;
-        Sat, 25 Jul 2026 19:02:00 -0700 (PDT)
+        bh=TDTuZ70qXufeETtiXikOewPxsFp3y1jcFjaKcCLz/9k=;
+        b=e2NCDznCUYsFzPahKx8L3s2c0E6XmIMTLsBz1on6weAcchDnQ4pgvMOX5y3Yydd8sK
+         vAAUmLykMfZAqHPmJo/eovjZPiJ6PmCh78uTVpJSrJxXAmuFhbMZXWLwNnXEvb/9m+Xw
+         Bln7Fk71Orq602JcdZnjZn24IjmKjHJVkvPh3UHj36iZu0d/Hmmli4ZJX4FulXzflnT4
+         6zY0NmwqmNH8/AK6Z3REOB9CETt+nOa9cCgiGm0IfIcQtZvKsu1cl56vfTw1OncZellQ
+         F9vkFbLsSaQxV6z/9cwE7MmkCLUtAaN1QLkiPAsUjTmkOrfkcVdtbvdEHHbwFTd8ealR
+         qLaA==
+X-Gm-Message-State: AOJu0Yxx69HzlUFj9BNhgykSsen5ao5DUP9r7xK0nduekKY/hy3fnhH6
+	u1ripmQJ9ewOZQSjb+No/XcGrQFBVdNMVL22wJUudfnUPSNUzeLQ2IAA
+X-Gm-Gg: AR+sD13gJR3bDEVcnr8xjE+fPWfDSasmcH+3DRitZw6wvfYT+SM+fX8KqcG2TX9kBEH
+	dpOHio3eFp/PC1iMxr58ljukzwFAhazUaENe/2WEkEouecB6BCLPSSYNUyXD/Hvel1KmuuQcT//
+	6X6GxNpGwmDG9Kgo4erc54/jragrY8ER84XgfviNmw6s2at5RTYauRS7SbpX74YkXNruj0QIxas
+	MWI2gNo68YfZ3e9Vk4Zcumx/ZxyjRX1IOXB3mPlBI7uXLOQ6yt4HJ2nz2FnIrSrd+uqs73RNHK0
+	nH+4digDVS0oCkbgscYoD3tYGGipG4rrOBgiH3JMl2jPjIFbPM8rY71mnxEvIVYO+U6+ef95R2y
+	ue3geMXQGRjbpC/e5KHgYIGZ2LpNBRg2TAOQ7k6s+q5Gdj+eeX2jCrNTW/vus0NcTJrYHpA99fJ
+	l/NDkOAhLgdEhCOxTW/l0gGyO8GJXyN6UdSxJHk+ncWl63h3ZOt/L6+g1dpecnVcCguLSfXJRQt
+	R754JNf/m4O7BEopoBAYh5BWH6Y2JkObDsrdRzJxD34
+X-Received: by 2002:a5d:6f12:0:b0:47f:9171:bca2 with SMTP id ffacd0b85a97d-47f9fe9251dmr4624238f8f.27.1785031361520;
+        Sat, 25 Jul 2026 19:02:41 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85c6dc25sm36021351f8f.33.2026.07.25.19.01.59
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85bb5127sm35291767f8f.10.2026.07.25.19.02.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jul 2026 19:01:59 -0700 (PDT)
+        Sat, 25 Jul 2026 19:02:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,127 +67,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 26 Jul 2026 04:01:59 +0200
-Message-Id: <DK84SJFF77GL.1VGZ5Q21VUPXC@gmail.com>
+Date: Sun, 26 Jul 2026 04:02:40 +0200
+Message-Id: <DK84T2IP24QC.2ZOOOKY4B7MWU@gmail.com>
 Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 1/9] bpf: Support __arena and
- __arena_nullable kfunc argument suffixes
+Subject: Re: [PATCH bpf-next v2 5/9] selftests/bpf: Add kfunc __arena and
+ __arena_nullable argument tests
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 To: <sashiko-reviews@lists.linux.dev>
 X-Mailer: aerc 0.21.0
 References: <20260726013105.3689867-1-memxor@gmail.com>
- <20260726013105.3689867-2-memxor@gmail.com>
- <20260726014755.2DA7D1F000E9@smtp.kernel.org>
-In-Reply-To: <20260726014755.2DA7D1F000E9@smtp.kernel.org>
+ <20260726013105.3689867-6-memxor@gmail.com>
+ <20260726014114.A795D1F000E9@smtp.kernel.org>
+In-Reply-To: <20260726014114.A795D1F000E9@smtp.kernel.org>
 
-On Sun Jul 26, 2026 at 3:47 AM CEST, sashiko-bot wrote:
+On Sun Jul 26, 2026 at 3:41 AM CEST, sashiko-bot wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issu=
 e(s) to consider:
-> - [High] The `__arena_nullable` kfunc argument design uses a 32-bit trunc=
-ated value of 0 as a sentinel for NULL, which collides with valid memory al=
-locations from `bpf_arena_alloc_pages()`.
+> - [Medium] The `arena_arg_stack` failure test is conditionally compiled o=
+ut on compilers missing `__BPF_FEATURE_ADDR_SPACE_CAST`, causing a false te=
+st suite failure.
 > --
 >
-> --- Patch [1]: [PATCH bpf-next v2 1/9] bpf: Support __arena and __arena_n=
-ullable kfunc argument suffixes ---
-> commit fb759ca6f84030ccde9ee83f1e83634342bdae0d
+> --- Patch [5]: [PATCH bpf-next v2 5/9] selftests/bpf: Add kfunc __arena a=
+nd __arena_nullable argument tests ---
+> commit b7abeb2e41481276f90bb3144448d08e3c6e2c96
 > Author: Tejun Heo <tj@kernel.org>
 >
-> bpf: Support __arena and __arena_nullable kfunc argument suffixes
+> selftests/bpf: Add kfunc __arena and __arena_nullable argument tests
 >
-> This patch adds support for passing BPF arena pointers to kfuncs by intro=
-ducing
-> __arena and __arena_nullable argument suffixes. The verifier processes th=
-ese
-> suffixes and allows JITs to handle the translation (rebasing) at the call=
- site.
-> __arena rebases unconditionally, while __arena_nullable preserves NULL by=
- skipping
-> the rebase when the arena offset is zero.
+> This commit adds kfunc arena argument tests to bpf_testmod to exercise
+> argument rebasing, various accepted argument forms, and verifier rejectio=
+ns.
 >
->> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
->> index c801a330aece0..9809680bee43e 100644
->> --- a/Documentation/bpf/kfuncs.rst
->> +++ b/Documentation/bpf/kfuncs.rst
+>> diff --git a/tools/testing/selftests/bpf/progs/arena_kfunc.c b/tools/tes=
+ting/selftests/bpf/progs/arena_kfunc.c
+>> new file mode 100644
+>> index 0000000000000..e7250c5197ab4
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/arena_kfunc.c
+>
 > [ ... ]
->> @@ -250,6 +250,33 @@ Or::
->>                  ...
->>          }
->>
->> +2.3.7 __arena and __arena_nullable Annotations
->> +----------------------------------------------
->> +
->> +Both annotations indicate that the pointer argument points into the
->> +calling program's arena. The JIT rebases the value at the call site so
->> +the kfunc receives a directly dereferenceable kernel address, subject t=
-o
->> +the access rules described in :ref:`BPF_kfunc_arena_access` (at most
->> +``GUARD_SZ / 2``, 32 KiB, past the pointer in a single unchecked access=
-).
->> +
->> +With ``__arena`` the rebase is unconditional and the argument is never
->> +NULL: a value whose lower 32 bits are zero arrives as the arena base
->> +address (arena offset 0). The kfunc must not check the argument for NUL=
-L.
->> +With ``__arena_nullable`` such a value arrives as NULL instead and the
->> +kfunc must check before dereferencing.
 >
-> [Severity: High]
-> Does this __arena_nullable design cause a collision with valid allocation=
-s?
+>> +SEC("syscall")
+>> +__arch_x86_64
+>> +__failure __msg("arena pointer cannot be a stack argument")
+>> +int arena_arg_stack(void *ctx)
+>> +{
+>> +#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+>> +	bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
+>> +	bpf_kfunc_arena_stack_arg_test(1, 2, 3, 4, 5, (u64 *)1);
+>> +#endif
+>> +	return 0;
+>> +}
 >
-> If an arena is mapped at a 4GB-aligned boundary, the user_vm_start addres=
-s will
-> have its lower 32 bits as 0. When bpf_arena_alloc_pages() returns the fir=
-st
-> free page at offset 0, the resulting user pointer also has its lower 32 b=
-its
-> equal to 0.
+> [Severity: Medium]
+> Does this conditional compilation cause the test suite to fail on older
+> compilers missing __BPF_FEATURE_ADDR_SPACE_CAST?
 >
-> If a BPF program passes this valid pointer to an __arena_nullable kfunc, =
-won't
-> the JIT see the 0 value in the lower 32 bits and incorrectly pass NULL to=
- the
-> kfunc instead of the valid arena base address?
+> Because this test is marked with __failure, the test runner expects the
+> verifier to reject it. If the macro is not defined, the program compiles
+> to just return 0. The verifier will successfully load the empty program,
+> causing the test runner to report a failure because the expected rejectio=
+n
+> did not occur.
 
-Yes, but it is intentional. Referencing the first page is equivalent to NUL=
-L, or
-start of the arena "address space".
-
->
->> +
->> +An example is given below::
-> [ ... ]
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 641c3c62c1ecf..f3e6190f639e4 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->> @@ -12056,6 +12066,35 @@ static int check_kfunc_args(struct bpf_verifier=
-_env *env, struct bpf_call_arg_me
->>
->>  		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
->>
->> +		if (is_kfunc_arg_arena(btf, &args[i]) || is_kfunc_arg_arena_nullable(=
-btf, &args[i])) {
->
-> [Severity: High]
-> Should check_kfunc_args() or the arena allocator ensure that offset 0 is
-> reserved?
->
-> If offset 0 is not reserved, the verifier will allow programs to pass a v=
-alid
-> offset 0 allocation to __arena_nullable arguments. The JIT will then sile=
-ntly
-> translate this to NULL, causing unexpected behavior in the kfunc since it=
- will
-> assume the optional argument was not provided.
-
-It will always be left unmapped in practice.
-
->
->> +			if (verifier_bug_if(!btf_type_is_ptr(t), env,
->> +					    "kfunc %s arg#%d has __arena tag on non-pointer",
->> +					    func_name, i))
->> +				return -EFAULT;
-
+I think the goal is to not fail compilation, this is fine as a tradeoff.
