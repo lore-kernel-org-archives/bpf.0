@@ -1,160 +1,143 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E682526AC5
-	for <bpf@vger.kernel.org>; Sun, 26 Jul 2026 02:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A65B2D5937
+	for <bpf@vger.kernel.org>; Sun, 26 Jul 2026 02:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785032735; cv=none; b=m5yAYUBr1rqJCnyLhN/SBoNWopkWr8m5NQTGtG3ioXTpBPcwOtiDxrhpsrt6UkLFSMI2Pi5QCiSxVejotyh9EjqbgiFm7qK/wk5CAsuCljR6qLQSm1VJT4UwS3pUj09FD4/DtplIwOBw7449w6ga/JnJNwZODJ8RgXbMuxL9K78=
+	t=1785034394; cv=none; b=BK8sI6peFZ7+4Fq99BFkMm868iSafvi9ZrH/ulm2pv37uqe42PJb6F3qyhCUrkop2gqy5bLAJQqYL2T7SVUsfounoX35zE968/sawU2lQBHD/PCAFqqQSoMwui7hn4weQSfl/4IhRAuc614l1ROxtHHAXH6Yj5F7iPvExxIRQvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785032735; c=relaxed/simple;
-	bh=KdQLKAPtaFg8fF+84GR7UXM7F8PtezJ51SdSXQQxhsU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=cByBI8DbFGd+Xf1hEzJCGJE2NONw9Z6os7PX8EEyf5BtT4kyF6NdARkBADdZFGN6VVSZA2nbQn7AguNj0N6a2PZUWyGV17rJ/aeMRyuteui4TGnh36+wYZb7rcJD3UWmi3QfRbnwRXVjEW3u2kbmo8u6drPKvlCUknQIiwFjfek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m9Fdk6u7; arc=none smtp.client-ip=74.125.225.64
+	s=arc-20240116; t=1785034394; c=relaxed/simple;
+	bh=ur7J3+xa2ZE/P0fviH4Md/Wp2oKnOCvVnY95NF6AUpg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aA+3ptmv/xYZCpjz+7uFxZpb6Ufcw9fqdTNKzw1MwIdqb5rMQ5CU2AP8ZnX05Igs9T0vK0zCkM4MFAakc6afXaO5WRnoVb4X9BqyTmlwSlnBf8wyWcUzXmbyviiWLp9agu4iWxLsfURz7+4QUjI35uKNac0vM301EGkbZfJmSVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sa/4ZN+V; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m9Fdk6u7"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-47528970fbdso658045f8f.1
-        for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 19:25:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sa/4ZN+V"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cc891373e0so16943595ad.2
+        for <bpf@vger.kernel.org>; Sat, 25 Jul 2026 19:53:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785032732; x=1785637532; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=1BraonShgnVaifxGA2wnAyOgOoltyCIEJeUws1RlsU8=;
-        b=m9Fdk6u7eE52TV3P9KF7GnKvH9inqyfToMEPphpkI6bSr9HCKUI8+IJ4Tz5rxFTp8R
-         trz7gEJkxzsa57U5l5NgJzTndhfeZ8z11tFiDyZhJsS9e/WxUqXWaq0lq4f2QyD0+OiX
-         JdkvUJNsUdIA9U+kvwj29DSRTGzPmHaN1ivTCHHOqiwrh2Lk6iEKVRhhh+ajcV11Sy9/
-         mTXBqZJycL9eIKGFw3U8b5SSqJ3jqCs+y5GlFE5eFGjBp+ZPj8nxXiVq3+i/lugEBEqh
-         sRN+fPdnn77PPQBAR1FL5gDF5wr9ozuCBLArswDiY4Hy/b1lz7/qepoeejgjJGFmKku8
-         c6ow==
+        d=gmail.com; s=20251104; t=1785034393; x=1785639193; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=A+fZlpoNwUNiIF9UMejK6Q5RLcRANFeTV+evvoYlWpc=;
+        b=sa/4ZN+VqkOZ9H7mpmfN1XffHKNmq2HaibTGqRcVepjMgrpID2zavKEgQ5Ie56vAWr
+         JPkkUyLD05HdvD6al4y7wYaI5BZ26NMeg+bsVfAdiw9t4mtHXDXDsHOv9Jx5EjQWEzT8
+         /usVp1HtC8ejNdNSeXKvStQzG0u3fboWuLft+6mvAuj1FIEiSvlF4AgBrrna8LdxeMYa
+         bIPDQ0ZGSP21M2cnVTnVswvYkYzzNtqTSM2e/xvrCgCqRjSlElOfIN3TKTl4nJPdcRLL
+         23qm4e38vufZUg18zcxeEhgYw8QNvp4s8u6iK5i9hkfss29wu6D0/F5Gj/1nSqKuCa5E
+         9fYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785032732; x=1785637532;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1BraonShgnVaifxGA2wnAyOgOoltyCIEJeUws1RlsU8=;
-        b=mjgNkViItUHf8mpF22im19IFXs8AUSef9RhqRrMkhdCzNYcVOaf27t1S1Zqj4KeWAj
-         9Cgs5+rffj8cyomcHBpvoM4mw3ymMTTPGL+erzuj4/o9xxXt4/FspjGoZsGYDMKyUmhB
-         qBdPR8O1HOFKgod9rZK/krzsXJnN+kSN+q7TN8DbGO9a9TxFBSDSX7gjamZ378QLowM5
-         aZUvgLMcOd9UmzlYAI/5l/MRHlC+Ac5AMPKgZFypi0GBq1hwV84pD+4cWjs8Aj/Ez6o7
-         uFEKDs3ZV4Zw1HnI4P3isiTS6x47JkrJ/jXY1nWMWAf5uAuU56HD6TcrwGVnZjodr1X5
-         hhUg==
-X-Forwarded-Encrypted: i=1; AHgh+RpIcaCaG/Ff6OrQ2FQ8jx9ZF+DtQq9Vt4BtZFZ6TPt67Bguv+luhVq/lQGkcHzD5MBKnso=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVQ1tkCR88mwgjF2t5U+VfdoOqmy4cXPZD+vvrlldfF1tdC4Hf
-	ngyAuHdChKyvHpvZtwuD7S6S0YO26fs92wu9W2EWThq2cVxcELb92IsE
-X-Gm-Gg: AR+sD10wPhg67VwUosgXfBwtE2UG7vdJncTTdIlRD3Qh3toGWm6GGF10mNt1W6RJKAn
-	uFWT9/6wcqnxKw+VGlKgH84/0hzc4nxa5r0AkJFawCflVsG+DS0oZmWaL4c7Ti9nGJE7laQvf5Z
-	sG5+I21cOSNt3UpsDr0JpnhziBOZdNcpxRJ4YhpGZba0Imc55IJ8gRHuB14ZVcerRO8chjwmDeI
-	T0NtioUFGyCywX9kHE3Daq3ZnibnZ51K0cYmmj/aeq0FWuj1bXJ0PGIOZ4AkIQbvBAIHLx1ZSS6
-	Wfs1dMijakq4QzziFIGw2InM/rE4Si+039qeaE2iMnO035k3BNW6FI3hL6ixFlmcHCDVB3apJd6
-	8pUxhWTR6qLeLZ5bOicWBTcDUuwspbJ5pgU3pCSoKUsAlabu/78GO+2DQ1ips0rhgovy+WiJWZN
-	4tyvpf+9YBWOFYOcVyJE6pvk9BZ6tT9ibCD5lJCxAO9Rk7zO6SL6dINVFAiVbY6qkA10FB/CDbu
-	KxjodhibemX/P7ujsmwuCLWisTPBQLMu0z4OE9qNhcj
-X-Received: by 2002:a05:6000:605:b0:47f:8810:cc64 with SMTP id ffacd0b85a97d-47f9fc976f0mr4249229f8f.19.1785032732002;
-        Sat, 25 Jul 2026 19:25:32 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85b9a659sm37421812f8f.6.2026.07.25.19.25.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jul 2026 19:25:31 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785034393; x=1785639193;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=A+fZlpoNwUNiIF9UMejK6Q5RLcRANFeTV+evvoYlWpc=;
+        b=FUjiG21qWe1+81dTWx6jLv1AG9g93zDjbOi7ySGwN7FDu28uMDuV1ZmTOL/WaBESEv
+         ZLUmVNxv7SeWzVoqGqehEZC9ReFYy1XAVpHIbd9HSvmEuVh9OAoZC9KsXeUOQ+LIF49M
+         bKDd5vXg5L4tjFK8RRcjNpI7Q9eUgt6HHJpa9Xo7GCt9VQ/LsiN7BlRu09hVB/W2FzCN
+         gDJSLAbpfPO0hTHb/OflwsLT10H4dg9tZGLEt5kqKzu7NPXcaaqXmPwQgAEYl4x3ZlWD
+         u4kkhH2MNZbZyDKf+xp0w82hSJlmLsio4icN6XiYri562rMX7Dh166BR1BQRE5/o+X83
+         6CDQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rqa+jkv2OYOgelCV8ITRUCefM+nEdPe3/K4CFjLaDbVWf2u8EX6rfoNUZ40VSW1st4SDEE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyspSPgdjcH5/3Uqv3f0E6eAltl8M3LHaR1cdqhm60ezjAFFd7z
+	Nibe+OmjbM+TiiLVWBZKC/BAQvCm8N6S6P77Rffob2zXdGqcmA97yKyT
+X-Gm-Gg: AR+sD107YSVZ+chWvsJnjhJzY2yzowaAm9lHSTfpnUg2pPlGxQIpu9quJmFLmTZx6p3
+	SGKmgxGgKknvMX1ilYp5XpUSazAWa3v6ZHKdubxZ8ht0m/bJx6KkjR8BzkczckDKaI9mh8X8qH9
+	XMptvYm6HOYBrhEjrX0Aqj1JSsxG0cbZqVjSZiPJjjuN/O4Mv/snHyqt/EUIg1aLu2wa5ajL8gx
+	kNd2UtyCcm9ThQirGhDHpYEcmoQ24gxfP1eROrpJt2HrvsH+doJwSs/OYmImlCHOxxObTHUBpgX
+	AJwVWcZdzRti1Rp6DlX4eDt4UX5YsLqch+lCtNBjGaKuPLsvcyvlb6RJT4+LHpF3aY7xACJ/VIz
+	Px7LRjWR0X4z9iQSdy5h9Rx8n/nItiOdUSHFyDm1GHLnuxqa/tAfGChiDAjUL+fhCxUVJl0xzVD
+	/tusyRqFVgUVszdXaN25P5IcZBW1UdgiT91adROvqoWDmZXuxt+OaEnckmQ+13VDaLEWOIkPo=
+X-Received: by 2002:a17:90b:2b50:b0:38e:75f3:ad4d with SMTP id 98e67ed59e1d1-38f2939e6c4mr3721113a91.7.1785034392599;
+        Sat, 25 Jul 2026 19:53:12 -0700 (PDT)
+Received: from localhost.localdomain ([240e:46c:2000:294d:9ad:36c8:10e3:4aa8])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f2951eb8dsm1324936a91.13.2026.07.25.19.53.08
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 25 Jul 2026 19:53:11 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: nathan@kernel.org,
+	nsc@kernel.org
+Cc: linux-kbuild@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH v3] kbuild: rpm-pkg: Preserve .BTF section in kernel modules during debuginfo stripping
+Date: Sun, 26 Jul 2026 10:52:42 +0800
+Message-ID: <20260726025242.42245-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 26 Jul 2026 04:25:31 +0200
-Message-Id: <DK85AK3KBMGT.26YEC0E62HKCO@gmail.com>
-Cc: <tj@kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
- <kkd@meta.com>, <kernel-team@meta.com>, <martin.lau@kernel.org>,
- <yonghong.song@linux.dev>, <clm@meta.com>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v2 3/9] bpf, x86: JIT __arena kfunc argument
- rebasing
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260726013105.3689867-4-memxor@gmail.com>
- <22f76e29c963794d5650486124e295ffc275c5e548dfc7fbae022f24c9d5d1ad@mail.kernel.org>
-In-Reply-To: <22f76e29c963794d5650486124e295ffc275c5e548dfc7fbae022f24c9d5d1ad@mail.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun Jul 26, 2026 at 4:22 AM CEST, bot+bpf-ci wrote:
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index b2feec81e231..08013c2fcfaa 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
->> @@ -1678,6 +1678,50 @@ static int emit_spectre_bhb_barrier(u8 **pprog, u=
-8 *ip,
->>  	return 0;
->>  }
->>
->> +/*
->> + * Rebase the __arena args of a kfunc call to arena kernel addresses,
->> + * rN =3D kern_vm_start + (u32)rN, with R12 holding kern_vm_start. A nu=
-llable
->> + * arg preserves NULL by skipping the add, tested on the truncated valu=
-e as
->> + * arena NULL is offset 0. Return the number of emitted bytes.
->> + */
->> +static int emit_kfunc_arena_args(struct bpf_prog *bpf_prog,
->> +				 const struct bpf_insn *insn, u8 **pprog)
->> +{
->> +	const struct btf_func_model *fm;
->> +	u8 *prog =3D *pprog;
->> +	u8 *start =3D prog;
->> +	int i;
->> +
->> +	fm =3D bpf_jit_find_kfunc_model(bpf_prog, insn);
->> +	if (!fm)
->> +		return -EINVAL;
->> +
->> +	for (i =3D 0; i < min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS); i++)=
- {
->> +		u8 flags =3D fm->arg_flags[i];
->> +		u32 reg =3D BPF_REG_1 + i;
->> +
->> +		if (!(flags & BTF_FMODEL_ARENA_ARG))
->> +			continue;
->> +		if (WARN_ON_ONCE(!bpf_prog->aux->arena))
->> +			return -EINVAL;
->> +
->> +		/* mov eN, eN: truncate and clear the upper 32 bits */
->> +		emit_mov_reg(&prog, false, reg, reg);
->> +		if (flags & BTF_FMODEL_NULLABLE_ARG) {
->> +			/* test eN, eN; jz over the 3-byte add */
->> +			maybe_emit_mod(&prog, reg, reg, false);
->> +			EMIT2(0x85, add_2reg(0xC0, reg, reg));
->> +			EMIT2(X86_JE, 3);
->> +		}
->> +		/* add rN, r12 */
->> +		maybe_emit_mod(&prog, reg, X86_REG_R12, true);
->> +		EMIT2(0x01, add_2reg(0xC0, reg, X86_REG_R12));
->> +	}
->> +
->> +	*pprog =3D prog;
->> +	return prog - start;
->> +}
->
-> In v1 review, Eduard Zingerman raised a concern about the JIT-based
-> implementation approach, suggesting that it spreads complexity across
-> multiple JITs (verifier.c + 6 jits) instead of keeping the bulk of the
-> implementation in one place. He proposed an alternative using R0 by defau=
-lt
-> with a jit_has_dedicated_arena_register() predicate to avoid the
-> 64-immediate move overhead while centralizing the logic in verifier.c.
->
-> Kumar responded that while this approach is reasonable for kfuncs, struct=
-_ops
-> would require uglier code with reloading/translating/storing. The v2 patc=
-h
-> retained the JIT-based approach.
->
+After switching to the kernel's default package scripts for our local
+kernel RPM builds, we noticed that module BTF entries were missing:
 
-Yes, it was discussed offlist, we'll move ahead with JIT-based approach.
+  $ ls /sys/kernel/btf/
+  vmlinux    <<<< only vmlinux, no module BTF
 
-> [...]
+Root cause: find-debuginfo.sh (from the debugedit package) prefers
+eu-strip over strip when elfutils is installed, which is the common
+case on RHEL 9. eu-strip removes non-allocated ELF sections, including
+the .BTF section that contains BPF Type Format information for kernel
+modules. Without .BTF, BPF tools (bpftool, bcc, bpftrace) cannot resolve
+kernel types at runtime, and /sys/kernel/btf/<module> entries are not
+created when modules are loaded.
+
+Fix by passing --keep-section .BTF via _find_debuginfo_opts, which adds
+-K .BTF to the eu-strip/strip command, preserving the .BTF section while
+allowing normal debuginfo extraction to proceed.
+
+After this change, all module BTF files are properly generated:
+
+  $ ls /sys/kernel/btf/
+  aesni_intel         drm                 i2c_i801            mfd_core
+  ahci                drm_client_lib      i2c_mux             net_failover
+  backlight           drm_kms_helper      i2c_smbus           pcspkr
+  ccp                 drm_shmem_helper    input_leds          qemu_fw_cfg
+  dm_log              failover            intel_rapl_common   sch_fq_codel
+  dm_mirror           fat                 intel_rapl_msr      serio_raw
+  dm_mod              fuse                irqbypass           sunrpc
+  dm_region_hash      gf128mul            iTCO_wdt            vfat
+  virtio_balloon      virtio_console      virtio_dma_buf      virtio_gpu
+  virtio_net          virtio_rng          virtio_blk          vmlinux
+  xfs
+
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ scripts/package/kernel.spec | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+v2->v3: use %{__find_debuginfo} (Nathan)
+v1->v2: check if find-debuginfo.sh supports --keep-section (sashiko-bot)
+
+diff --git a/scripts/package/kernel.spec b/scripts/package/kernel.spec
+index c732415662ef..1032f337a71c 100644
+--- a/scripts/package/kernel.spec
++++ b/scripts/package/kernel.spec
+@@ -67,7 +67,17 @@ This package provides debug information for the kernel image and modules from th
+ %undefine _unique_debug_srcs
+ %undefine _debugsource_packages
+ %undefine _debuginfo_subpackages
++
++# Preserve .BTF section in kernel modules during debuginfo stripping
++# find-debuginfo.sh (from debugedit) uses eu-strip which removes
++# non-allocated ELF sections like .BTF by default.
++%global with_keep_section %(%{__find_debuginfo} --help 2>&1 | grep -c keep-section)
++%if %{with_keep_section}
++%global _find_debuginfo_opts -r --keep-section .BTF
++%else
+ %global _find_debuginfo_opts -r
++%endif
++
+ %global _missing_build_ids_terminate_build 1
+ %global _no_recompute_build_ids 1
+ %{debug_package}
+-- 
+2.52.0
+
