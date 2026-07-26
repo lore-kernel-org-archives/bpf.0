@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A5D175A80
-	for <bpf@vger.kernel.org>; Sun, 26 Jul 2026 01:47:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E48EAC7
+	for <bpf@vger.kernel.org>; Sun, 26 Jul 2026 01:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785030476; cv=none; b=A6vEAd43r6PBw5nYQlVJO+qtDfYMBZP0jYw3IgJY/VCqfSxkeldQeHPFkphbAgW7YD5gvKxSYO2oFd7arqXhpDZrkxdEMznmE/IcNtHgB4pxdv3bmOmncDjf/l2gStJprFsslZyyX1G34cM1esyy4DzlNwkdMcsMAF966sBWP2o=
+	t=1785030674; cv=none; b=n2fbiYJaAH13ld4YEgT8s8PE25w27i1XRrGA+ojkSkZEzi28oTq5GmPiSGB55gCpcgInT97Jzz+lBkzRsHeM3KTeOjeIYSiWD0Ic7g5BwFsyDhV0dciy3rMpYT+R4xI6rTzzOUWwfXUXRp0G1Cgz8kWu+3VRjsWE155Jr+G6IWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785030476; c=relaxed/simple;
-	bh=vg8Fyj2skHFlttJJVuJy99Ckw4hdrGkMNXJbFm4SaCs=;
+	s=arc-20240116; t=1785030674; c=relaxed/simple;
+	bh=N8Ino2vuIJu3F4DG32z+qe7Z5vpEo2YVYC7WI+Wip7c=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=R0PT6LXJC2MsMdBqCBmtl47l8GV+a/i4FE8FzXRxClEaBMDWUizAE9DV6f6V7TB7RIgH4UwmK+dQ8jFR2BOHk5/ZGIZsLtZmK7FFVFR1IXnIpRI2lCQ+j+lUWVTCAdpuZ2PndEKihpUt/d+NwtxApZODQCD7eUJJuO8O7ITlAHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=djKkJljE; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=SH1wIJFdA21gafTSavLUVLtukWrR3HVOwOk5whuobqcs5qNHSDEyi118Rm9vdhATuyY8962Exc9wH2ee/piuVDg5ChIUeUU4ORU8vjB3dkinGUGkD0LC6Py5lVxRYpmdqC+ZLdc1q2/3Qtw0WvUdhIs8Vf+aOeip3/8tTUra4kU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dZSfLSyg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="djKkJljE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DA7D1F000E9;
-	Sun, 26 Jul 2026 01:47:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dZSfLSyg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CACC1F000E9;
+	Sun, 26 Jul 2026 01:51:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785030475;
-	bh=c13j6f58p8a8ADY9847qufRclnPvtruin6AN2yC5jSA=;
+	s=k20260515; t=1785030672;
+	bh=YHqeynC0GttooU9TziQRlx6yqY8p+qCiZRqMLeDHAGo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=djKkJljEVErUZKPmAb8WbrzzjV0zDmxggQOdhXAJGPB9+xX9DESVpKoFIutl462Cd
-	 96I36u8EWfJVidBnAp3HeNqymCjs7NjUR/WVbr24ih19MZcmiDcWAPtrbCXKMo1nPW
-	 X3wLjnO6k2GiG/8SkQNfvMACs+6b6+N3cmx65qY23Abh74j1NABH8OCxnMSppPaSLX
-	 3sZkWT/VTOFB4YWuZAm/GsvmxrEQba+iNtFbz8hWfpSA/h9VO5ItCs+hBH8htd5O6Q
-	 HiaRWc4D4nuDnWENQ6WWpQSdQVq/YeNttlxQoYJKdGntlpgRHG25uGHP1umb0yWPpz
-	 FaFXtBZ8s+5Kw==
+	b=dZSfLSygbyc/AV8nNtSnpRMy5e567pyyQxnsfbFi3iNCVB18AHe3MPOjCyAebfK5e
+	 tYa9fcM4kghVFZzRngcQs2e21sSmkYO8Pp9xpdbO1j4HOjc0sn5Jpgjl5U96XevybI
+	 dVS1cuo5WPUQAllSeZMaAdzaJkVBC2OqlvBm1KByZHdvGpshCHHIR0J5oJOS15G+Si
+	 Zs85ThRaNLdvIzFT6NGg77cL4utZk7a0K9mt5RNr1VNSFSiSLUGWDSqMgp06yNGtXp
+	 SL96QaAqXAga/26XGS2lNHom7wnyipjJktoKvYoXRGLnYhmJMy+Z7S6T8xAoHuQd9N
+	 3BOVAV7MZg04A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/9] bpf: Support __arena and
- __arena_nullable kfunc argument suffixes
+Subject: Re: [PATCH bpf-next v2 8/9] bpf, x86: Fix stack-passed arguments
+ for indirect trampolines
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260726013105.3689867-2-memxor@gmail.com>
+In-Reply-To: <20260726013105.3689867-9-memxor@gmail.com>
 References: <20260726013105.3689867-1-memxor@gmail.com>
- <20260726013105.3689867-2-memxor@gmail.com>
+ <20260726013105.3689867-9-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 26 Jul 2026 01:47:54 +0000
-Message-Id: <20260726014755.2DA7D1F000E9@smtp.kernel.org>
+Date: Sun, 26 Jul 2026 01:51:12 +0000
+Message-Id: <20260726015112.7CACC1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,99 +47,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] The `__arena_nullable` kfunc argument design uses a 32-bit truncat=
-ed value of 0 as a sentinel for NULL, which collides with valid memory allo=
-cations from `bpf_arena_alloc_pages()`.
+
+Pre-existing issues:
+- [High] The patch fixes the stack-passed argument offset for indirect stru=
+ct_ops trampolines on x86, but leaves the exact same logical bug unfixed in=
+ the ARM64, RISC-V, and LoongArch BPF JIT compilers.
 --
 
---- Patch [1]: [PATCH bpf-next v2 1/9] bpf: Support __arena and __arena_nul=
-lable kfunc argument suffixes ---
-commit fb759ca6f84030ccde9ee83f1e83634342bdae0d
+--- Patch [8]: [PATCH bpf-next v2 8/9] bpf, x86: Fix stack-passed arguments=
+ for indirect trampolines ---
+commit 1625042935fc87b38acf83c8304433545d672f35
 Author: Tejun Heo <tj@kernel.org>
 
-bpf: Support __arena and __arena_nullable kfunc argument suffixes
+bpf, x86: Fix stack-passed arguments for indirect trampolines
 
-This patch adds support for passing BPF arena pointers to kfuncs by introdu=
-cing
-__arena and __arena_nullable argument suffixes. The verifier processes these
-suffixes and allows JITs to handle the translation (rebasing) at the call s=
-ite.
-__arena rebases unconditionally, while __arena_nullable preserves NULL by s=
-kipping
-the rebase when the arena offset is zero.
+This patch fixes the calculation of stack-passed arguments for indirect
+trampolines in the x86 BPF JIT compiler. It introduces stack_args_off
+to properly handle the number of return addresses on the stack depending
+on how the trampoline was called.
 
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index c801a330aece0..9809680bee43e 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-[ ... ]
-> @@ -250,6 +250,33 @@ Or::
->                  ...
->          }
-> =20
-> +2.3.7 __arena and __arena_nullable Annotations
-> +----------------------------------------------
-> +
-> +Both annotations indicate that the pointer argument points into the
-> +calling program's arena. The JIT rebases the value at the call site so
-> +the kfunc receives a directly dereferenceable kernel address, subject to
-> +the access rules described in :ref:`BPF_kfunc_arena_access` (at most
-> +``GUARD_SZ / 2``, 32 KiB, past the pointer in a single unchecked access).
-> +
-> +With ``__arena`` the rebase is unconditional and the argument is never
-> +NULL: a value whose lower 32 bits are zero arrives as the arena base
-> +address (arena offset 0). The kfunc must not check the argument for NULL.
-> +With ``__arena_nullable`` such a value arrives as NULL instead and the
-> +kfunc must check before dereferencing.
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index dfb5335ad8374..4b349ae35ebf9 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -3075,6 +3075,7 @@ static void save_args(const struct btf_func_model *=
+m, u8 **prog,
+>  {
+>  	int arg_regs, first_off =3D 0, nr_regs =3D 0, nr_stack_slots =3D 0;
+>  	bool use_jmp =3D bpf_trampoline_use_jmp(flags);
+> +	int stack_args_off =3D (use_jmp || (flags & BPF_TRAMP_F_INDIRECT)) ? 16=
+ : 24;
 
 [Severity: High]
-Does this __arena_nullable design cause a collision with valid allocations?
+This is a pre-existing issue, but does this same logical bug need to be fix=
+ed
+for ARM64, RISC-V, and LoongArch?=20
 
-If an arena is mapped at a 4GB-aligned boundary, the user_vm_start address =
-will
-have its lower 32 bits as 0. When bpf_arena_alloc_pages() returns the first
-free page at offset 0, the resulting user pointer also has its lower 32 bits
-equal to 0.
+Looking at arch/arm64/net/bpf_jit_comp.c:save_args(), there is a hardcoded
+offset that unconditionally assumes two frames were pushed:
 
-If a BPF program passes this valid pointer to an __arena_nullable kfunc, wo=
-n't
-the JIT see the 0 value in the lower 32 bits and incorrectly pass NULL to t=
-he
-kfunc instead of the valid arena base address?
+    soff =3D 32; /* on stack arguments start from FP + 32 */
 
-> +
-> +An example is given below::
-[ ... ]
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 641c3c62c1ecf..f3e6190f639e4 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -12056,6 +12066,35 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_call_arg_me
+Similarly, in arch/riscv/net/bpf_jit_comp64.c:store_args(), there is a
+hardcoded offset of 16 which skips the first 16 bytes of caller arguments f=
+or
+struct_ops:
+
+    emit_ld(RV_REG_T1, 16 + (i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
+
+And arch/loongarch/net/bpf_jit.c:store_args() shares the same hardcoded off=
+set:
+
+    emit_insn(ctx, ldd, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP,
+                  16 + (i - LOONGARCH_MAX_REG_ARGS) * 8);
+
+If a struct_ops callback with more than 8 arguments (or 6 on some
+architectures) is executed on these platforms, could it receive out-of-boun=
+ds
+stack memory instead of the actual arguments?
+
+>  	int i, j, slot =3D 0;
 > =20
->  		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
-> =20
-> +		if (is_kfunc_arg_arena(btf, &args[i]) || is_kfunc_arg_arena_nullable(b=
-tf, &args[i])) {
-
-[Severity: High]
-Should check_kfunc_args() or the arena allocator ensure that offset 0 is
-reserved?
-
-If offset 0 is not reserved, the verifier will allow programs to pass a val=
-id
-offset 0 allocation to __arena_nullable arguments. The JIT will then silent=
-ly
-translate this to NULL, causing unexpected behavior in the kfunc since it w=
-ill
-assume the optional argument was not provided.
-
-> +			if (verifier_bug_if(!btf_type_is_ptr(t), env,
-> +					    "kfunc %s arg#%d has __arena tag on non-pointer",
-> +					    func_name, i))
-> +				return -EFAULT;
+>  	/* Store function arguments to stack.
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260726013105.3689=
-867-1-memxor@gmail.com?part=3D1
+867-1-memxor@gmail.com?part=3D8
