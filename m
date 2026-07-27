@@ -1,119 +1,108 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205CD40D58B
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 13:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C25B400964;
+	Mon, 27 Jul 2026 13:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785157757; cv=none; b=HabHvmjwqlJu5U6w9Sw0fU/YdNkkI8d2/yT/mE0wO4dtOnJRK6QlTQVQg8katBnhkHy17XSCi/vCzy8yUj5ZKCFPbLOp21YAX2JHdAPT9l9z+1kbXqJf9xJinkf7weudptrR0kJ/112BT0uTgIPRQa7mUvYWIv1evf5lTKDcDYk=
+	t=1785158361; cv=none; b=kE+g+RF99x4e7udQY8fKYRwREF40CTyy09gQXjmdqauFyelPcxX1QKHunhRh39cOL1uh57iP5MjNHsAgqKowiZ+cbe56CIZcL7EobDE+bU4aJcbQB/J40dU7pn9LkGQpByTJKDiFYCoUsrYkpbXeqF8FZg3vdxhnAoGFU5VFDPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785157757; c=relaxed/simple;
-	bh=53fBBoP9fU3/ThO7t/yfHoDhErj1mOeWD0CuYuQXwE4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ik6YiS6T74auGQJX79LhgVOGZBw0hSvHchr9VwS0Ho6s4G2YKdsci073XOsc6ZBULsKteA+BK67YMAPFobXghGpkVqycU0DCeP6O4cHtbj17gHZJ1n5T396K4GQmrKn+qHHu0RV4VCprjhOZceY9WUS5tYUyQUgIwqEE0L9whA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kJOk9iVg; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785158361; c=relaxed/simple;
+	bh=K2l+eENo+cky8q2QxxBBAwPhS5VVJ5YZNR6NYWB63z4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FKxR049hrEr7W8ZlvyQFxlNAya1ML0dLGrJka+PYAvk64XhqP8mGPqOMq+Zh/FfqFgbngvFDgoKjSCeaI9R4q2gN9LltQfyyvwh85OYikE+8HtZIG5ULX3tqCR6m/1a0fnhaU0NbWTAdZ9mPj87/eKYoNpfzpphjMB0qkfJhsUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=HXBGuYjI; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=iHKmlOo4; arc=none smtp.client-ip=92.243.27.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kJOk9iVg"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493f75f7172so23258185e9.1
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 06:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785157754; x=1785762554; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QUiq0u2Pnu448nBUShPNb5VIb4r8mjI4I6DVC3KHKDo=;
-        b=kJOk9iVgsVxUHaBqq6o8jUeOwa1qdPyRmLxngtXWi+VfzhPMPdE7CUnDGgL8SyRgu/
-         Xg/Eo5eKeYMzaj6DIIxJiS9xoYh8mA70TXhwu51JEDlGbe/8SKEN151VF+LfWBwEfB4e
-         bU0l4G58kTUrCLU8l7F84kLBOGpW/r42AxwL15zS7DxOuqEIotiULTeIIxNxgwdT9HCU
-         96HcbQabfk2j9inpoaCDVvEfQ2fJURzd6ycB+nFPHqdvxJDvIqdvQrKUAw6Ru3RcTsIq
-         M5k7Uhv9AMovnZsb6lMPS2CZRzIKUgFkUEIh8bLTcZrwcJo83liKehG9okFbc53eGtKL
-         zXNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785157754; x=1785762554;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QUiq0u2Pnu448nBUShPNb5VIb4r8mjI4I6DVC3KHKDo=;
-        b=XklbU2Yr0isPBqRs1blNFOuSIL1OzsMmYjf7I7TY/7uKgmtk2dY5vRBl1haUx0qbJV
-         /P3TH0X7VglojS9GAvnWC9ScckQDePcfQ+aBn6lRdqT+/aXMVED4Asb8T2fz2QEcVJ76
-         q3m8sk08XjTik3QfP9/Xih4i9XBmxJX6upEF1y/IbM0GyVZJ/k1BXOI/9muhxZoTrACS
-         1auUCMaSleTQeKkxn9PujTd8HEJQeUe7ruKaEqKD4XoVyTijeTBEFE05iPmnfj2A/FQb
-         Sf9gpqYdaZgMUn9UGdlxPo3MmAPHd1/l9WuZW+FV5wW9JWXTjBuqe/umTlyXIyvKT9rY
-         Bh7Q==
-X-Forwarded-Encrypted: i=1; AHgh+RqjTrlMhTEN1SXXykM5f0g0lOnoFxlWdfEQw7tfEG6AODd+QwNq1PnIYn7Zn1sqPlarO6Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxzQVNBj3aVbu3+8cAqRG/jMDFZfjUmrZtqCzMbYbSYziIAOpP
-	VOAwheXs475vIQ/ZdN8kDje+hwzh2gCutKyG0+WsrVHeCRe8cvUrA6wk
-X-Gm-Gg: AR+sD13sRjYJAuaizbU1oe+zH2q4r8+lLeo2NNvW9xNURszF0eHzXDDpDT0R/AC58Ha
-	/N7hVY0aOdfj22Sggnmp2KQJ0Y1JPUCfb8254Qwqev2/t7pMhfsvs0C5rLONt6RTteVbsuwHfja
-	KJ0DxNq8vgSvPZVJSI3AIFH8EhEZPHr+K//f5hgJNvcAB7JFT4zCdsFf9J0i7/EOA9L/kgNbeug
-	BKSoRouP5+aJnLTBbc3khqCdvFYgnHB12/LT1UVtGQDIQJONGZQZco6LnZvr/h6Aa8MY2DBqXcJ
-	WN26FNOJtVVg0DYhzk+mN7FefyySXF13s8riA8KWMMo8Z03+P9wwQQGgkpkPSkCqAG9LCo4L0eY
-	vnvvrnVMR4lzK3asVrJqd6RKAtyTmhU2qZIsaq76/rpHFe6RgDKFhgkx0uVNS3M0iGJqBmH8gDg
-	bk8r+sgPKOw6hI8fhaWJbUXrtrqgjjV8txjNM1JjWd07sYKPbh
-X-Received: by 2002:a05:600c:3596:b0:496:c379:b2a1 with SMTP id 5b1f17b1804b1-496c379b2a7mr11459335e9.2.1785157754172;
-        Mon, 27 Jul 2026 06:09:14 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:c208:9e32:8612:3f5f? ([2620:10d:c092:500::4:a69])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4957b5ed646sm232662345e9.0.2026.07.27.06.09.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jul 2026 06:09:13 -0700 (PDT)
-Message-ID: <c1b15a2a-88d2-4f30-a827-9a96bc35b365@gmail.com>
-Date: Mon, 27 Jul 2026 14:09:12 +0100
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="HXBGuYjI";
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="iHKmlOo4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1785158351; bh=K2l+eENo+cky8q2QxxBBAwPhS5VVJ5YZNR6NYWB63z4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=HXBGuYjIRRWRtvwTGIElv/CQem3zmz+Idn/TlAAfF2kYf45sL+MoI/e28oMK3XpXj
+	 +q2ha2XgpkO2cYJqG6/DdJJ2FRb8CirCfGE/yg/rUDRFclV9NlEt6qEJNV53ZpoyaD
+	 zjyvkIaJJAfaj+WXuLWmdhnlJYzwsRDWSWz3+88I4s3e1x5Yqup4/MO2UxTA1X77ZK
+	 X6RWX/qZfLM3spsV5sA96y2AAmVXpCcEBPy58U/9jBSfqecpICg3j8TzprprSWnf2K
+	 vOz/9pszXY3IXYYQrV9L88szD5+qL05B4OR5NkFokbG5kDqfsYObqCvesPUGTVWnEZ
+	 0OwDSekkuz6jg==
+Received: by extorris.mess.org (Postfix, from userid 1004)
+	id BCE3B42526; Mon, 27 Jul 2026 14:19:11 +0100 (BST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1785158350; bh=K2l+eENo+cky8q2QxxBBAwPhS5VVJ5YZNR6NYWB63z4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iHKmlOo49WiXb3Kx5maS4vLJf7a77xQ9VLbVTusXs5/Z3Yvd3Ry+aro5Nv9gUmY7N
+	 mDNaNX1SCPF2vjE6as+jVe8ACaMQ0BX2mMgSBJhUbv+4dkeoi7AgX45E6Dq0FtLcae
+	 ZK/FOJaupWBRMcla2oku6YQqNvM80QeTmttYkq9m7Tft3s5O4JrwzSnH1p+RoZokqT
+	 /1jcLTFGTBJToBRfe68fv5kJpngNGUS4q5yAUVzu+pnKNEnluSC2MWEErcqG11UYc5
+	 JTV2wFYBNxZyTq+xIEfKvco3+/kem2zQTGTCnPCS+arn1W0mFECY/cGO+9uU3BSZfC
+	 pzbOopahel5QQ==
+Received: from maru.local (unknown [62.232.99.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by extorris.mess.org (Postfix) with ESMTPSA id B3FB34017A;
+	Mon, 27 Jul 2026 14:19:10 +0100 (BST)
+From: Sean Young <sean@mess.org>
+To: linux-media@vger.kernel.org
+Cc: Sean Young <sean@mess.org>,
+	bpf@vger.kernel.org
+Subject: [PATCH v4 00/15] Fix leaks in rc core
+Date: Mon, 27 Jul 2026 14:18:43 +0100
+Message-ID: <cover.1785158244.git.sean@mess.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpf: Add __bpfcall attribute to
- bpf_task_work_callback()
-To: Heiko Carstens <hca@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Mykyta Yatsenko <yatsenko@meta.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260727093834.2178900-1-hca@linux.ibm.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260727093834.2178900-1-hca@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/27/26 10:38 AM, Heiko Carstens wrote:
-> BPF kCFI support is optional for architectures which support kCFI.
-> If an architecture provides bpf kCFI support it must override the
-> default __bpfcall define (which translates to __nocfi).
-> 
-> Add the missing __bpfcall attribute to bpf_task_work_callback() which
-> calls bpf programs indirectly to avoid CFI checks for such cases.
-> 
-> Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  kernel/bpf/helpers.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 88b38db47de9..9bf82c9ea1da 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -4447,7 +4447,7 @@ static void bpf_task_work_cancel(struct bpf_task_work_ctx *ctx)
->  		bpf_task_work_ctx_put(ctx);
->  }
->  
-> -static void bpf_task_work_callback(struct callback_head *cb)
-> +static __bpfcall void bpf_task_work_callback(struct callback_head *cb)
+Changes since v3:
+ - sashiko had many more good review comments
 
-Thanks for the patch, I've already sent another fix:
-https://lore.kernel.org/all/20260724-task_work_cfi-v1-1-2616691781ed@meta.com/
-Is __bpfcall still needed?
+Changes since v2:
+ - sashiko had many more good review comments
 
->  {
->  	struct bpf_task_work_ctx *ctx = container_of(cb, struct bpf_task_work_ctx, work);
->  	enum bpf_task_work_state state;
+Changes since v1:
+ - sashiko had many good review comments
+ - Added fix rc: Use after free in ir_raw_event_handle()
+ - Added fix meson-ir-tx: Ensure probe error is propagated
+ - Added fix redrat3: Ensure all urbs are suspended
+ - Added fix media: redrat3: Error path leaves device in transmitting state
+ - streamzap fix was incorrect
+ - Other minor fixes
+
+Sean Young (15):
+  media: streamzap: Add missing rc_unregister_device()
+  media: redrat3: Ensure rc device is freed if enable_detector() fails
+  media: redrat3: Ensure we don't read beyond the end of the packet
+  media: redrat3: Ensure all urbs are suspended
+  media: redrat3: Error path leaves device in transmitting state
+  media: sunxi-cir: Ensure no more interrupts can occur before free
+  media: meson-ir-tx: Ensure clock is disabled on unbind
+  media: meson-ir-tx: Ensure rc_free_device() is called on unbind
+  media: meson-ir-tx: Ensure probe error is propagated
+  media: ir-hix5hd2: Ensure rdev is setup before interrupts are enabled
+  media: rc: Use after free in ir_raw_event_handle()
+  media: rc: Fix use after free in bpf progs
+  media: cx88: Specify rc type at rc_allocate_type()
+  media: saa7134: Specify rc type at rc_allocate_type()
+  media: rc: Fix race condition during rc_register_device()
+
+ drivers/media/pci/cx88/cx88-input.c       | 22 ++++++------
+ drivers/media/pci/saa7134/saa7134-input.c |  8 ++---
+ drivers/media/rc/bpf-lirc.c               | 18 +++++++---
+ drivers/media/rc/ir-hix5hd2.c             |  5 +--
+ drivers/media/rc/meson-ir-tx.c            | 14 ++++----
+ drivers/media/rc/rc-ir-raw.c              | 41 +++++++----------------
+ drivers/media/rc/rc-main.c                | 19 ++++++-----
+ drivers/media/rc/redrat3.c                | 35 +++++++++++++++----
+ drivers/media/rc/streamzap.c              |  1 +
+ drivers/media/rc/sunxi-cir.c              |  2 +-
+ 10 files changed, 90 insertions(+), 75 deletions(-)
+
+-- 
+2.55.0
 
