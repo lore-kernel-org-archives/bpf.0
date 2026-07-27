@@ -1,56 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D95D42D77D;
-	Mon, 27 Jul 2026 22:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B57642CAE4;
+	Mon, 27 Jul 2026 22:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785192944; cv=none; b=guDdrzU8MVVVPXePx3QFeMVdGv31aJWEvObzlCqINkRi1JPnPMbhSOnSUDKyzsxwIOVxeiKPBMtcqDlha0zkz/I4Ccc+LLSUnWaLr5z5hQ+zREVS3A1bRfwW9AXgy3M/c63orANDnFOrtCpmzuh0FemLEJNlR5SegZDIYufd5Y4=
+	t=1785192958; cv=none; b=ubyYiWSqIO73ZyXf7PQYLte1Q6f1OK6nwKE1fMggoBYgstZK1Gc1dkUfwUtXNpbjC5MTrnchs5d/aQ+mNXsBfPVMEgcgre46avhNiyKO2rA/W1I+spE5LkzzVMtvTMimZ1Ce/TVOaBgNE4HCB0sRAtGQFWQtWQ67BefwU8vLNDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785192944; c=relaxed/simple;
-	bh=SIFIRMXJ4rPuIRbyY/oXVwFL+9mqEeynymO/dtkY9ks=;
+	s=arc-20240116; t=1785192958; c=relaxed/simple;
+	bh=4+wSuBjD+7eL3D5Q94LrjE5+riuANpFumC772DnL1XY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TEY3YP9NLQ++vytXZLvVwR4n7qMPkPQXbUUBqxBp+wooY1bv/9VGs0VmEuVY9ng4BKeOgVFqUQ1Ziu1hBvcGg0iDgmyjnSxqnkoJWxP12O8EeNfxIaK/TW73MgSNp7NnYHrHwjvoGYdmaohkwiSuVjq6IdXBdYwSDhaNXhOPAqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YcjUL/yz; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hd8GlLkBP+gKBpUhAujRqLAaN2A035L3SS9eaRSt1fv55sJg5n/YS2v2yT56AqaICsGhbSCVQBin/GHi0j9xei2QNsjp4A+ReGv4ITD07EODL8BwegS0cTJjZMvkD4G8svHgu5MJUwfQqghi+mV8av3ho18sHUfXz2/0U4tQDVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U7BF4sMo; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YcjUL/yz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U7BF4sMo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785192943; x=1816728943;
+  t=1785192958; x=1816728958;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=SIFIRMXJ4rPuIRbyY/oXVwFL+9mqEeynymO/dtkY9ks=;
-  b=YcjUL/yzbL3I8iDK3JCl7sjyw16iIM6KL7d+BGLwt1UFYngktuhxI/Ms
-   8nGWXGCEkMLzPcQb68v10OoCOLhrGKh7bE0W2Wje2ZqM2pD+1V9feGDqN
-   CrP8YsFbkXV7r/EQ+8jY9kYEKpeCe7phBtJY7G0TwPxuIdWwnGczhSucC
-   thyJlrOsb1Mshap5e92YUjd//el+Sq1k3fd5Q0fSKCISOOD+c2g5inHeK
-   cX77DvZ4gGDcSOjOkHPG1pLnXZy4VfUnOeHboTMVAdAm3V3ADwCTfb8sg
-   paqhF/BwDIWjVW6rZ67NXnhb3J/Cc6cpDQOKQfVHKfiBczAEdUJxMAth9
-   g==;
-X-CSE-ConnectionGUID: 2jztj3QAQWGw6jWompz00Q==
-X-CSE-MsgGUID: oq9oH0+RT3yvOJqYwAlzAQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11858"; a="108564912"
+  bh=4+wSuBjD+7eL3D5Q94LrjE5+riuANpFumC772DnL1XY=;
+  b=U7BF4sMo5zs0FjXFTDD+SFhI3ErJMCk0UgNFtzT+i/86t22la3VCdC1o
+   s5kBywdl37q6LISYfeZYDIbEZ5qxHouLVvB+rW4t+6oLLaGmGwtPJSIMK
+   IgPTzZEjG3rX6DvgWTCMi9ivEBBvLfSrhLz3jSk/AxQ8BN3i9NVP8MeBI
+   3wkOj2cjMsXdmHu/CKjiu0/Zz4USotL9+7eWL47kM/SNtjU/+BXfw9FAL
+   eJSWfRnysDnRK2jjZyM5+dCanhitOTTEisAklMeT8Op0xCVy4af0ZMeJ9
+   eN/1ft5xbmMu0ElD1SzE/wNZJz043EAXrW31SLHIxsWa7AunuiZUpJW8E
+   Q==;
+X-CSE-ConnectionGUID: JDDT9l0kTQ+jBqwRRV99iw==
+X-CSE-MsgGUID: iJYZX9FJTpWEykJGgfeqhw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11858"; a="88309447"
 X-IronPort-AV: E=Sophos;i="6.25,189,1779174000"; 
-   d="scan'208";a="108564912"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2026 15:55:42 -0700
-X-CSE-ConnectionGUID: r/I01hJ8RWiHGidAPwczmA==
-X-CSE-MsgGUID: e9wXalOvQ4y4+hFTnA/6Jw==
+   d="scan'208";a="88309447"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2026 15:55:57 -0700
+X-CSE-ConnectionGUID: ysLY9BcvTmWCsrz8YpHc2Q==
+X-CSE-MsgGUID: MvbdNkp0SWKYw2Rk1nDBtw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,189,1779174000"; 
-   d="scan'208";a="255227095"
+   d="scan'208";a="259594440"
 Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2026 15:55:41 -0700
-Date: Mon, 27 Jul 2026 15:55:40 -0700
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2026 15:55:57 -0700
+Date: Mon, 27 Jul 2026 15:55:56 -0700
 From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 To: stable@vger.kernel.org, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
 Cc: bpf@vger.kernel.org, x86@kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 6.1.y 1/6] bpf: Support for hardening against JIT spraying
-Message-ID: <20260727-cbpf-jit-spray-hardening-6-1-y-v1-1-eb80dcf1eb6e@linux.intel.com>
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [PATCH 6.1.y 2/6] x86/bugs: Enable IBPB flush on BPF JIT allocation
+Message-ID: <20260727-cbpf-jit-spray-hardening-6-1-y-v1-2-eb80dcf1eb6e@linux.intel.com>
 X-Mailer: b4 0.16-dev
 References: <20260727-cbpf-jit-spray-hardening-6-1-y-v1-0-eb80dcf1eb6e@linux.intel.com>
 Precedence: bulk
@@ -63,115 +64,142 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20260727-cbpf-jit-spray-hardening-6-1-y-v1-0-eb80dcf1eb6e@linux.intel.com>
 
-commit 96cce16e26dd02a8678f1e87f88a4b5cdb63b995 upstream.
+commit a3af84b0fa00ead01fcd0e28b5d773ff25990a0d upstream.
 
-The BPF JIT allocator packs many small programs into larger executable
-allocations and reuses space within those allocations as programs are
-loaded and freed. When fresh code is written into space that a previous
-program occupied, an indirect jump into the new program can reuse a branch
-prediction left behind by the old one.
+Enable hardening against JIT spraying when Spectre-v2 mitigations are in
+use. Specifically, issue an IBPB flush on BPF JIT memory reuse. Skip
+enabling the IBPB flush if the BPF dispatcher is already using a retpoline
+sequence.
 
-Flush the indirect branch predictors before reusing JIT memory so that
-indirect jumps into a newly written program don't reuse predictions from an
-old program that occupied the same space.
+This hardening applies only when BPF-JIT is in use. Guard the enabling
+under CONFIG_BPF_JIT so that bugs.c still builds with CONFIG_BPF_JIT=n.
 
-Introduce bpf_arch_pred_flush_enabled static key and bpf_arch_pred_flush
-static call for flushing the branch predictors on JIT memory reuse.
-Architectures that need a flush, can update it to a predictor flush
-function. By default, its a NOP and does not emit any CALL.
-
-Allocations larger than a pack are not covered by this flush. That is safe
-because cBPF programs (the unprivileged attack surface) are bounded well
-below a pack size. Issue a warning if this assumption is ever violated
-while the flush is active.
+  [ pawan: Use entry_ibpb() instead of write_ibpb(). JIT hardening enable
+	   moved to spectre_v2_select_mitigation() because there is no
+	   spectre_v2_apply_mitigation()]
 
 Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- include/linux/filter.h | 10 ++++++++++
- kernel/bpf/core.c      | 19 +++++++++++++++++++
- 2 files changed, 29 insertions(+)
+ arch/x86/include/asm/nospec-branch.h |  4 +++
+ arch/x86/kernel/cpu/bugs.c           | 50 ++++++++++++++++++++++++++++++++----
+ 2 files changed, 49 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 37260c48fad4..fa7bb6f99598 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -21,6 +21,7 @@
- #include <linux/vmalloc.h>
- #include <linux/sockptr.h>
- #include <crypto/sha1.h>
-+#include <linux/static_call.h>
- #include <linux/u64_stats_sync.h>
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index 818a5913f219..40842aabd217 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -280,6 +280,10 @@ extern void srso_alias_untrain_ret(void);
+ extern void entry_untrain_ret(void);
+ extern void entry_ibpb(void);
  
- #include <net/sch_generic.h>
-@@ -1058,6 +1059,15 @@ extern long bpf_jit_limit_max;
- 
- typedef void (*bpf_jit_fill_hole_t)(void *area, unsigned int size);
- 
-+/*
-+ * Flush the indirect branch predictors before reusing JIT memory, so that
-+ * indirect jumps into a newly written program don't reuse predictions left
-+ * behind by an old program that occupied the same space.
-+ */
-+void bpf_arch_pred_flush(void);
-+DECLARE_STATIC_CALL(bpf_arch_pred_flush, bpf_arch_pred_flush);
-+DECLARE_STATIC_KEY_FALSE(bpf_pred_flush_enabled);
++#ifdef CONFIG_BPF_JIT
++extern void bpf_arch_ibpb(void);
++#endif
 +
- void bpf_jit_fill_hole_with_zero(void *area, unsigned int size);
+ #ifdef CONFIG_X86_64
+ extern void clear_bhb_loop(void);
+ #endif
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index a0b362ac50a1..662d13612ef4 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -16,6 +16,7 @@
+ #include <linux/sched/smt.h>
+ #include <linux/pgtable.h>
+ #include <linux/bpf.h>
++#include <linux/filter.h>
  
- struct bpf_binary_header *
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 77044d4a80cc..4643554c6e3a 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -35,6 +35,7 @@
- #include <linux/bpf_verifier.h>
- #include <linux/nodemask.h>
- #include <linux/nospec.h>
-+#include <linux/static_call.h>
+ #include <asm/spec-ctrl.h>
+ #include <asm/cmdline.h>
+@@ -1298,8 +1299,21 @@ static inline const char *spectre_v2_module_string(void)
+ {
+ 	return spectre_v2_bad_module ? " - vulnerable module loaded" : "";
+ }
++
++/*
++ * The "retpoline sequence" is the "call;mov;ret" sequence that
++ * replaces normal indirect branch instructions. Differentiate
++ * *the* retpoline sequence from the LFENCE-prefixed indirect
++ * branches that simply use the retpoline infrastructure.
++ */
++static inline bool retpoline_seq_enabled(void)
++{
++	return boot_cpu_has(X86_FEATURE_RETPOLINE) && !boot_cpu_has(X86_FEATURE_RETPOLINE_LFENCE);
++}
++
+ #else
+ static inline const char *spectre_v2_module_string(void) { return ""; }
++static inline bool retpoline_seq_enabled(void) { return false; }
+ #endif
  
- #include <asm/barrier.h>
- #include <asm/unaligned.h>
-@@ -852,6 +853,15 @@ void bpf_jit_fill_hole_with_zero(void *area, unsigned int size)
- 	memset(area, 0, size);
+ #define SPECTRE_V2_LFENCE_MSG "WARNING: LFENCE mitigation is not recommended for this CPU, data leaks possible!\n"
+@@ -1780,8 +1794,7 @@ static void __init bhi_select_mitigation(void)
+ 		return;
+ 
+ 	/* Retpoline mitigates against BHI unless the CPU has RRSBA behavior */
+-	if (boot_cpu_has(X86_FEATURE_RETPOLINE) &&
+-	    !boot_cpu_has(X86_FEATURE_RETPOLINE_LFENCE)) {
++	if (retpoline_seq_enabled()) {
+ 		spec_ctrl_disable_kernel_rrsba();
+ 		if (rrsba_disabled)
+ 			return;
+@@ -1803,6 +1816,27 @@ static void __init bhi_select_mitigation(void)
+ 	pr_info("Spectre BHI mitigation: SW BHB clearing on syscall\n");
  }
  
-+DEFINE_STATIC_CALL_NULL(bpf_arch_pred_flush, bpf_arch_pred_flush);
++#ifdef CONFIG_BPF_JIT
++static void __bpf_arch_ibpb(void *unused)
++{
++	entry_ibpb();
++}
 +
-+/*
-+ * Enabled once bpf_arch_pred_flush points at a real flush routine. Lets the
-+ * pack allocator test "is a predictor flush wired up at all" with a cheap
-+ * static branch instead of repeatedly querying the static call target.
-+ */
-+DEFINE_STATIC_KEY_FALSE(bpf_pred_flush_enabled);
++void bpf_arch_ibpb(void)
++{
++	on_each_cpu(__bpf_arch_ibpb, NULL, 1);
++}
 +
- #define BPF_PROG_SIZE_TO_NBITS(size)	(round_up(size, BPF_PROG_CHUNK_SIZE) / BPF_PROG_CHUNK_SIZE)
++static bool __init cpu_wants_ibpb_bpf(void)
++{
++	/* A genuine retpoline already neutralizes ring0 indirect predictions */
++	if (retpoline_seq_enabled())
++		return false;
++
++	return boot_cpu_has(X86_FEATURE_IBPB);
++}
++#endif
++
+ static void __init spectre_v2_select_mitigation(void)
+ {
+ 	enum spectre_v2_mitigation_cmd cmd = spectre_v2_parse_cmdline();
+@@ -1985,6 +2019,14 @@ static void __init spectre_v2_select_mitigation(void)
+ 		pr_info("Enabling Restricted Speculation for firmware calls\n");
+ 	}
  
- static DEFINE_MUTEX(pack_mutex);
-@@ -905,6 +915,14 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
- 
- 	mutex_lock(&pack_mutex);
- 	if (size > BPF_PROG_PACK_SIZE) {
-+		/*
-+		 * Allocations larger than a pack get their own pages, and
-+		 * predictors are not flushed for such allocation. This is only
-+		 * safe because cBPF programs (the unprivileged attack surface)
-+		 * are bounded well below a pack size.
-+		 */
-+		if (static_branch_unlikely(&bpf_pred_flush_enabled))
-+			pr_warn_once("BPF: Predictors not flushed for allocations greater than BPF_PROG_PACK_SIZE\n");
- 		size = round_up(size, PAGE_SIZE);
- 		ptr = module_alloc(size);
- 		if (ptr) {
-@@ -929,6 +947,7 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
- 	pos = 0;
- 
- found_free_area:
-+	static_call_cond(bpf_arch_pred_flush)();
- 	bitmap_set(pack->bitmap, pos, nbits);
- 	ptr = (void *)(pack->ptr) + (pos << BPF_PROG_CHUNK_SHIFT);
- 
++#ifdef CONFIG_BPF_JIT
++	if (cpu_wants_ibpb_bpf()) {
++		static_call_update(bpf_arch_pred_flush, bpf_arch_ibpb);
++		static_branch_enable(&bpf_pred_flush_enabled);
++		pr_info("Enabling IBPB for BPF\n");
++	}
++#endif
++
+ 	/* Set up IBPB and STIBP depending on the general spectre V2 command */
+ 	spectre_v2_cmd = cmd;
+ }
+@@ -3157,9 +3199,7 @@ static const char *spectre_bhi_state(void)
+ 		return "; BHI: BHI_DIS_S";
+ 	else if (boot_cpu_has(X86_FEATURE_CLEAR_BHB_LOOP))
+ 		return "; BHI: SW loop, KVM: SW loop";
+-	else if (boot_cpu_has(X86_FEATURE_RETPOLINE) &&
+-		 !boot_cpu_has(X86_FEATURE_RETPOLINE_LFENCE) &&
+-		 rrsba_disabled)
++	else if (retpoline_seq_enabled() && rrsba_disabled)
+ 		return "; BHI: Retpoline";
+ 	else if (boot_cpu_has(X86_FEATURE_CLEAR_BHB_LOOP_ON_VMEXIT))
+ 		return "; BHI: Vulnerable, KVM: SW loop";
 
 -- 
 2.43.0
