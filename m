@@ -1,117 +1,138 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5565A43A819
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 16:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16AD3AFD0C;
+	Mon, 27 Jul 2026 16:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785171072; cv=none; b=hcrIfKffghzTtVqSHTtji6SYHhdgr0r6+vIWN5Jsl+hcHLl0wdz9IW88T8n7W7/k2/qkk65GcVPpy1i9tS1Nj15rxS79/u95oHmJ90EiQYVWrdpgKmsFSdJ4QtsnV4fK06yCICUbDFqo8Smo+seA7ScL8gUcalk6v0Kgp7wo0Gk=
+	t=1785171497; cv=none; b=ldfoL88D7P7QCk2gPxWCO6h7qeQ5RhwBu3pnqkoprNTQWbweLSVtaXMbAB/BE2h+Htp1KpaA3Ao5AVgPHXsKpoojCkj2FjZ+9cIuXA2P9QK+kVQ+Z5Lh1eQfmYNY/1s0RHCG6yhLiYZBWMHtWmErbp5RtMhl9FAHAwSoP4AAjrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785171072; c=relaxed/simple;
-	bh=dP+w9CgSwbvnICKT89qqNzt182iBYmnd4c7esHRdaqk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=db4oll5C/NMuC3imrvItrFJrqiw8afhpXhHgdbzkd+KM/kTFVQovkoDebQotB4lRZiq8Ku/iU6AHNRkWg03tzRur9NaGnsLXAoaa63WK6TPn0viCQNIC2hbr/oNGNvL1giSEdq7ijJdOF6e55dKVoOLB1OZNCzpCEI8JeTKaBuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ra5C/YCq; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785171497; c=relaxed/simple;
+	bh=BaEzVh8KGJQttZSj+2xNa6zXeW4JqZBpTAF6kb6T0QE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=OqxcFLtOQgM9AjimHt7ux4NMDWTB9B0gWi38ILwejej8J6VaBZfQt+HI7JQp46fjZe3ZWer5oNUaw/7xhHKKZ1IvppO7ejZtTlFp48+eccCTQRTWT+XXrFKzHXgAiF5XiMAbRaN3aaCeVB9TqU2Xh+Wgf/jd5ST/SXns3hD+jV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i/Jm4eCp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ra5C/YCq"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2cf452def93so946585ad.1
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 09:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785171071; x=1785775871; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=dP+w9CgSwbvnICKT89qqNzt182iBYmnd4c7esHRdaqk=;
-        b=ra5C/YCqo4JsVWn5l+0c48RmY+5IptqdaRtjIlgIB4b//jLtIrbhAOmjSq2cjOqo3g
-         6X/hn8BVyxCq5WQruji4ssMN62My40RUryZiXgw9tFsG4LV5CzQWnDm7JI2M0Z9MSohA
-         Onu0ywNNez4//MNpTlWyA8CRXwxnNovRap57tFVM3htoqJYZNyJ3VP+14ry9et56qGiD
-         RmZQ0IixFSREFMUJcUCr7gn8UNzr9rd/I2oPjNXyHZKR6LHQO34Js4krraQpO/8yPOFn
-         MsOqPpiFdYC/tWcVD1pZr6w6cxTnLqvpdcLh+mHMweUqIzAS51zdfxmkNnj8JVssF86P
-         flYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785171071; x=1785775871;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dP+w9CgSwbvnICKT89qqNzt182iBYmnd4c7esHRdaqk=;
-        b=myxZ1QTsgTV4F/Mc/tqQEi9z9hZ0+JNVLnzOhMEoK43CzN4MNhzlRC8o5GyLBUTsXv
-         P2fVG0G0GV8REwL10voExt7SF7w71tXt3kh3+4PviF2PPuashZBUr5zpsjvHeFtkBQk4
-         /Hzfp0kBEg+/5Fqy3Acs0wA7CgkJ+jbnWGGQJFsojXDqE8JRMXzgjCIWa1vw1Vkv0oFb
-         fovPc3SdXwhaJwpq90mF6lOAPew7RDfElRPZD8alKgyC0udAXYf1Obe4U5fF1fbtsYu8
-         t7R2BjOjXZ8uslMnvVuxuqxEw8KmPYlmnl+ovV8dQDhc9CC7+DlEvmUNCDo4g3kGaODn
-         fCMw==
-X-Forwarded-Encrypted: i=1; AHgh+RooXjTb1OYytKbL12BRN7g9wzlUJt+SQ5DxHKSrcrsxJcOlhemYZ3dgL3rsab+nXTHFZww=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVYVk2fVRmiKqLh3RkuyBqn/rdAG3qBJu86KMiVw1ECfDO8xD4
-	iMsf1SMhNB5VyBCjnCxlX3Rb9oLrx9C67zFxhz6NYOztEPSv7ZPw32Kv
-X-Gm-Gg: AR+sD13zVDv64xunDWgSn6QLwH+24u3Dks9UZmTLxFOms1SxQ/hc8qwh5A2jLh1l4Ep
-	Oo3xoeP/qEFvQI58uuxStRTgvvQsE0zeMHvqi4/KfIhjf4YYilwp9H0LjSSc76bSghd5IXbh4n5
-	tKKAy58+JJdsl2fwGxYbUSfnyhgfSrsVxufyPn2xf5M/EQFrR7QgeDG83VEjIyMarhs+PpAI3No
-	pcyoDMja8nvs1swpX6lEztl4r0/1E/k5CSumKYumbtSxL1sNrYDzrxJuUUTcnzGZNSCEtF5FeZf
-	Co0UdpYahfVNf5/K2Dh/l+8P1XkF/k5CUNsdWlTzFx3oTndDpVv7tXyG2ztWtOqLt/S+Z9XAent
-	/toqAkHeAEdfp6LoepXoWKf84GJWDPzv3LTAMFcLmcDezPRfPQ8fziV5c6K0ZKp0dTPVSxW63Mj
-	BufRnJ8R2hPFXA0zeWBy8Kvqca4HyPiZS9XqObVeDxsPDliMsSjBpQPeXmToFngh9fKBfj7dra7
-	y4geKCaa/PKevaH267dAnt725Wa
-X-Received: by 2002:a05:6a20:1602:b0:3bf:bbad:500e with SMTP id adf61e73a8af0-3c6c89c589dmr207113637.5.1785171070520;
-        Mon, 27 Jul 2026 09:51:10 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbbb66b5ffesm3517078a12.19.2026.07.27.09.51.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2026 09:51:09 -0700 (PDT)
-Message-ID: <5a5a12d5309ec799bce8e11d510098df83594257.camel@gmail.com>
-Subject: Re: [PATCH] bpf: normalize arg_track state construction
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Tao Yu <tao1.yu@intel.com>
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- bpf@vger.kernel.org, 	syzbot+0098eed2cc898cdd672f@syzkaller.appspotmail.com
-Date: Mon, 27 Jul 2026 09:51:07 -0700
-In-Reply-To: <20260727030712.1683158-1-tao1.yu@intel.com>
-References: <3274df73849ff8620dfcad063c6af17b10a36982.camel@gmail.com>
-	 <20260727030712.1683158-1-tao1.yu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/Jm4eCp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9212C1F000E9;
+	Mon, 27 Jul 2026 16:58:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785171487;
+	bh=A9bjCVqW/Ej3dLMulthxoTyFz5V81faOSr+gAOE/olo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=i/Jm4eCpGh2eE/GF0a0/6UO6EDBt38eLRhNh0wRLi5Iz79NBA0f/7WjSA9BCfQ+Iq
+	 B/3husOAhcsPhxSFyY20tKzeSkHBd6KBJa+mlmzgnNTSX8vyDo1lAWAjkd3d7FPxsx
+	 j01rtH2V63/OujMeEcrGwuNDzjBg5bl45mcVrRFIIBDagYFZYHnLyJ9mI2SWCk8gYq
+	 Zsmrong6YMMhuJrczsYYq4ADSKuX9eK4ui+UcEbKlX7x1GHOQ2F2bfG2Mhg492P1g6
+	 NT/6YYKFZfOOfZlPodzPjRaqp58pEfcu9bcBpu8mT8kt4cG/yKfIenvY1H/qwbl6v0
+	 LKqqUMbuDz9VQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC 05/11] mm: convert PTE table entries in ptep_get()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Muhammad Usama Anjum" <usama.anjum@arm.com>
+Cc: dri-devel@lists.freedesktop.org, damon@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+In-Reply-To: <20260727164715.2866609-6-usama.anjum@arm.com>
+References: <20260727164715.2866609-1-usama.anjum@arm.com>
+ <20260727164715.2866609-6-usama.anjum@arm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+Date: Mon, 27 Jul 2026 16:58:06 +0000
+Message-Id: <20260727165807.9212C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Mon, 2026-07-27 at 11:07 +0800, Tao Yu wrote:
-> Hi Eduard,
->=20
-> Thanks for pointing this out.
->=20
-> After re-checking the old code, I don't think I can honestly attribute
-> the KMSAN report to one specific assignment.
->=20
-> The old code did have a few patterns that are undesirable for a
-> tagged-union state machine:
-> - in-place downgrades such as off_cnt =3D 0;
-> - manually assembled temporaries such as resolved in
-> =C2=A0 record_load_store_access().
->=20
-> However, I could not prove a concrete source-to-sink path from one of
-> those assignments to the `m |=3D a.mask` read in `__arg_track_join()`.
->=20
-> In particular:
-> - the off_cnt =3D 0 downgrades operate on states that are still
-> =C2=A0 interpreted as frame-based states in source-level logic, so their
-> =C2=A0 causal link to the later .mask read is not proven;
-> - the local resolved temporary is indeed only partially materialized,
-> =C2=A0 but it does not flow into `__arg_track_join()`.
->=20
-> So I think the code change is still reasonable as a state-construction
-> normalization for arg_track, but the original changelog overstated the
-> proven root-cause mechanism.
->=20
-> I've respun the patch as v2, reworded the commit message to describe
-> this as normalizing construction of the tagged-union state, and added
-> the Reported-by tag requested by syzbot.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Incorrect placement of READ_ONCE() around __pte_from_hw() in ptep_=
+get() breaks atomic PTE reads and causes compilation failures for architect=
+ures overriding the hook.
+- [Medium] ptep_get_lockless() fails to apply the __pte_from_hw() conversio=
+n hook when CONFIG_GUP_GET_PXX_LOW_HIGH is enabled.
+--
 
-Hi Tao,
+--- Patch [5]: [PATCH RFC 05/11] mm: convert PTE table entries in ptep_get(=
+) ---
+commit e1a429a7f2c12fbd880800f901c43b4ccbc922d7
+Author: Muhammad Usama Anjum <usama.anjum@arm.com>
 
-Sounds good to me, thank you!
+mm: convert PTE table entries in ptep_get()
+
+This commit introduces a conversion hook __pte_from_hw() for ptep_get(),
+allowing the function to accept a pointer to hw_pte_t and return a logical
+pte_t value. The generic ptep_get() implementation is updated to use this
+new hook.
+
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index dad80d264aac2..3003ac9cd81fe 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -493,7 +493,7 @@ static inline int pudp_set_access_flags(struct vm_are=
+a_struct *vma,
+>  #ifndef ptep_get
+>  static inline pte_t ptep_get(hw_pte_t *ptep)
+>  {
+> -	return READ_ONCE(*ptep);
+> +	return READ_ONCE(__pte_from_hw(*ptep));
+
+[Severity: High]
+Does wrapping __pte_from_hw() inside READ_ONCE() break the atomic read
+semantics and build stability?
+
+READ_ONCE() requires an lvalue to perform a volatile read. If an architectu=
+re
+implements __pte_from_hw() as an inline function returning an rvalue, this
+will cause a compilation error (lvalue required as unary '&' operand).
+
+If implemented as a macro returning a compound literal, it compiles but the
+actual read of *ptep occurs outside the volatile scope during the
+initialization of the stack temporary. This allows the compiler to tear or
+reorder the memory load, potentially breaking the concurrency safety of the
+page table read.
+
+Should this be __pte_from_hw(READ_ONCE(*ptep)) instead, to ensure the memory
+is read atomically before the conversion is applied?
+
+[Severity: Medium]
+Does the lockless fallback loop in ptep_get_lockless() also need to apply
+this new __pte_from_hw() conversion hook?
+
+Looking at ptep_get_lockless() in include/linux/pgtable.h for architectures
+using CONFIG_GUP_GET_PXX_LOW_HIGH, it currently constructs and returns an
+unconverted PTE directly:
+
+	do {
+		pte.pte_low =3D ptep->pte_low;
+		smp_rmb();
+		pte.pte_high =3D ptep->pte_high;
+		smp_rmb();
+	} while (unlikely(pte.pte_low !=3D ptep->pte_low));
+
+	return pte;
+
+If an architecture using this configuration requires a custom hw_pte_t
+conversion, callers might misinterpret the logical bits of the unconverted
+hardware PTE. Is it necessary to apply __pte_from_hw() to the assembled
+PTE before returning it?
+
+>  }
+>  #endif
+> =20
+> diff --git a/include/linux/pgtable_types.h b/include/linux/pgtable_types.h
+> index ed5dba42a4f8c..61afe27307ec2 100644
+> --- a/include/linux/pgtable_types.h
+> +++ b/include/linux/pgtable_types.h
+> @@ -6,6 +6,7 @@
+> =20
+>  #ifndef __HAVE_ARCH_HW_PTE_T
+>  #define hw_pte_t pte_t
+> +#define __pte_from_hw(pte)	(pte)
+>  #endif
+> =20
+>  #endif /* _LINUX_PGTABLE_TYPES_H */
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727164715.2866=
+609-1-usama.anjum@arm.com?part=3D5
