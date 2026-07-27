@@ -1,108 +1,181 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B159B377A92;
-	Mon, 27 Jul 2026 22:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785193020; cv=none; b=fM6ezPIfzC9ZevjwZDlFQO9di/bSd+Y2Vbo07p0Q3OeMozdTlKSILRJi9pNwlBYiYDanOgxtIV5wdgHVRNNr0T36df1On2Bx5x3ajYFJQtGySCNNdZBLMzjyd/fiKQcPH+fXdfSnqNpczklMBJARqbGVGSq0/a3gINlArFpDGu8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785193020; c=relaxed/simple;
-	bh=hbqfyqquiR7qQ6/7govUEoL1nj2YlXuDt8RFXgSOC0o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NNepLzgf67ad+1kqdxl3K/VDhwNaIqViTRy22D1cTYY2WIvwxkmMcVQAtWEtrk+Qca3ZxZYBoMOO2Im3dyGmA3cmdIYt7qCMC1fGa79jbv1ADk/PA7me6OB/MKZ/fc//9XHAgqwF7T7Q4TlxUUvfyBZV4OqhPvfi/6lIMfeZiHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L8+ob4gl; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B7A3F823C
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 23:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785193344; cv=pass; b=l8ESlwJxCuFLDMyLKYIZGeJ1pKct677kh8oqWHWlehCoHl9woFnbyhRgcZtYVweB0h+OulVz9GqaTpxnyGwdIFdNeOiACMTB8I0cksBGRFcTCaMzHcOinsnlD6PYIO25gKtL54XVudP4ipCfPB7O+JiarW9s0wWONcd0TNPrrqw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785193344; c=relaxed/simple;
+	bh=6DoAEKCsNOaUz2PTOJynJRn0qQq/BYfx/LsuRo3yo/Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EduTQ72F/Jmo5RjkndK5vkEmjEH2dqiccZtTIK8gicf1nc2uzJ8qE9yJ1hxel72i4TopvuhgUmq3MVc3FxDA3FwwnXh0t9hyM3lPBRudZ9NY92H7oFYfaLvj5QbAzwueJI5wbqIPc4bYsPxhT4Uf6MOi2WGUjGOl2NRO/cpRqrQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZNzslSXm; arc=pass smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L8+ob4gl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785193019; x=1816729019;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hbqfyqquiR7qQ6/7govUEoL1nj2YlXuDt8RFXgSOC0o=;
-  b=L8+ob4glUfg88e3PSclPsOv/GfTz+PL5heJqmIur1TV23d9vtuSl2opz
-   BMGThV2QhDkE18zG/rqptP2dVg11unEZjw10eaOgZF5xDlr5bQ8HgwFvY
-   SFCW2QedQZJ87FDtLhPYiZSUa3qtq07cRAi8ciQYmsxW4FhUl9/B5KjV1
-   ofGoChlfEFSyG8JUURr3WQEkND3D966Sxa/EiaASlLCWQYUACzBiJYj5c
-   VgQQM385ZgIrOy7Bi3cq4dgaFXVR1CqYstbfAl7Jzr3LtFPGJ457A4FlD
-   82aCX9Cn7tPlKj77AyX2IeRqj6lzhJCj0y0tULXADd7KCO6S3/wpTgdNb
-   g==;
-X-CSE-ConnectionGUID: JHSIo6VZQVqZrQJWo8kReg==
-X-CSE-MsgGUID: t5vgH3jzQeGePlxvvOyezg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11858"; a="84748828"
-X-IronPort-AV: E=Sophos;i="6.25,189,1779174000"; 
-   d="scan'208";a="84748828"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2026 15:56:58 -0700
-X-CSE-ConnectionGUID: 8HPGW4UbQ1WCrcag4wkslg==
-X-CSE-MsgGUID: HfImdwGISy2KkRqrVUt/XA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,189,1779174000"; 
-   d="scan'208";a="258265933"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2026 15:56:58 -0700
-Date: Mon, 27 Jul 2026 15:56:57 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: stable@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>
-Cc: bpf@vger.kernel.org, x86@kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 6.1.y 6/6] bpf: Prefer dirty packs for eBPF allocations
-Message-ID: <20260727-cbpf-jit-spray-hardening-6-1-y-v1-6-eb80dcf1eb6e@linux.intel.com>
-X-Mailer: b4 0.16-dev
-References: <20260727-cbpf-jit-spray-hardening-6-1-y-v1-0-eb80dcf1eb6e@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZNzslSXm"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c15b33f7b23so518356066b.3
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 16:02:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785193341; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NhLlV2MvT8j5uziv1WCD7QoKTaxG6ct3tFU0YdlRnQzh+9q35HnDdG75pYjU2R0vl/
+         G/9k5oBsH5B/7JyMY1PLoEfwrdsb8EHt6pae9yzAVPxQxI6NN8Baj662yusybqw9uod/
+         7Q+z/ZUnFyPeRco4MwerhuPb2KiY1Sw0QIc0b0RkIxIP+YwbH7Vbi0MwDUyiEspD6xs6
+         zMbrmwvVYPdfm8Nq5HHJU9O3b3lr/EhNk37O4iyvclewRUZ0Ykl5qki0O/Na5ZtkaiYB
+         gKpfH5ZaxvytD/8EMBNrF8L77mJc4ORW2XLR6zIW4f8CT+7YtFJ9/74oDOpzlNhTWntJ
+         lGKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9vEbo66DqxPPuInuSLQZriasmmp1SqZtCdl/C/0z3uk=;
+        fh=aYWh8h/GZC2EgYNIUxXJNJP//lbEYAtK75WTuEP/ygA=;
+        b=a1Mnvri/ZxlqEozwqQnWxQRIIf21bAatF/9ENtFEM2jnTw7hSl8mdOTr2XzrlVHKrL
+         QQIH5z8VzN78u+RMGP1mZYN1ttWdk9L9XoHmf+e5+yIpFfJ6e0gwjPQJK91hHYK+Qe+x
+         +OPUFGD57ly+B1HT37+Es98iytCVuq9mBB8F04Esp5VVyWd9cIXgMOvCUFzlCHIV3/0D
+         dUEO8mbIkQv0aKMAMS7uj67D0oU1+qzSWFv86si0VfRRmDhZgh/D6buBhAK5pnmw8rwr
+         vmja6Cvr3u3iPVnUod7OB85JFyD9pLBxc88NQR5gDv/Mw9zLYUocqd4Tt+AkxeNgz7Eo
+         KHbw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785193341; x=1785798141; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=9vEbo66DqxPPuInuSLQZriasmmp1SqZtCdl/C/0z3uk=;
+        b=ZNzslSXmt7WWRg/p1LoZf82UOySdn6xpr8KS+0A8GXyprq/fxjYy68jC/Dl0TGsZJo
+         9UXRHcbTqrPpCGnPytJy7pAMMWqt+s/+eAohdt5PZGrDu9m2uu05pWTQjgw14vWwuJCH
+         PFXXHkImC4SoxejXyVJw5qmsYvlVCDdiCvfGvS72JUBTlwdik/1y4TWcNOABmYiuacb/
+         u5GzZrCrQIOQhnPKBxqsNyM8Gd/UnluRZO/AN8XKCeZ6AMBlOXRWOeDXPGvn7zOZ76bi
+         w2f/84aT3Lc10rkaQuUA0+pFVMIBGhUF1+7e+F0n6fhBDRN1U3hE0gUcymXcpM8EDpgN
+         4BTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785193341; x=1785798141;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9vEbo66DqxPPuInuSLQZriasmmp1SqZtCdl/C/0z3uk=;
+        b=m+aHKKPiE2fv3hxCjkeqxWaBmuQYHvBmVhWMcO0p8g1oEEWGQ3DCVyB30asFF1y11e
+         ssgcTUIbNVXCaPBM8Uah2S2Jh6RVefYAecw8OWfKq1JsmkFhe/pSu3L7+vYV0a3yELwr
+         HB+u/EMMVQ0jr64NX0gWN1ZSZ7CJRImBOgV7p0v2ohT5ik+j+J8u15s3XXv66Iw/1Fz6
+         ZmuLlE/Pso4XP83MHQy+J2UzsL29qdCG8HCFdBZfBHjeus5UTBUycxkQUEBbKZT1QPTa
+         AqKSA2NXewURV2wdUXHS/02rueCmYZ0wRLon6bJWS/mCHll5D7T97VINca8vzQgMABPj
+         bD1g==
+X-Gm-Message-State: AOJu0YwoM4uBkdlhHJn97fp7rxfd0S4i2i6+MVpRAC+ydK+Qy6jfD9gE
+	sO4fuEmMgdi7qSwoeOE3plD877bygBGuIymbhICLjFezP20q0kaSNi/DZ4yWpHMSxgbqrNG3+ts
+	9Q5L/bBzZo+uQZPQBDR4TxjVwfteLUek=
+X-Gm-Gg: AR+sD11HYjVQ6FHN11QpCK47q3MUMjpdXFFikjGquq54ASkKmRb1Zr4E2J0iLpHr/so
+	IExIG5DIgPeth9ctiyt7iRV7j6VpHy8oDMAFhb8Z/p8JtkpYToTb8FeADegZjzLU67xzxiepl7S
+	1/mL6OkPXy2oY7uzxTxMfDPC1KPTXwCybUjEZD8MaR3LuBXkW2kDrXS0QgtKBOdYotzbbk8ahWH
+	ZGfCx1dyNsaljuaGJwSLJD+e9fZqSaLYkpgJS5Yq/dnGlVQIOvux69Azd5oURk96FKq77IpFCCE
+	21JVINb0Q66/fFKIHgCBczg9dh7gg7aWjBtgdWBKleGNYPPiVE4sNdrqvA==
+X-Received: by 2002:a17:907:1c9a:b0:c12:2b09:6c83 with SMTP id
+ a640c23a62f3a-c1f1f09ef40mr511466666b.33.1785193340623; Mon, 27 Jul 2026
+ 16:02:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260727-cbpf-jit-spray-hardening-6-1-y-v1-0-eb80dcf1eb6e@linux.intel.com>
+References: <20260722072326.1545677-1-pulehui@huaweicloud.com> <20260722072326.1545677-2-pulehui@huaweicloud.com>
+In-Reply-To: <20260722072326.1545677-2-pulehui@huaweicloud.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 27 Jul 2026 16:01:59 -0700
+X-Gm-Features: AUfX_mwM_M7QQX0oCn8TYFPP0E5sesd8EN1P-Z14QX45-bcwL_VWS4BSjIB2Q-8
+Message-ID: <CAEf4BzZQo9vidTkr9kORbft9Lhx56JJujWQit40xem40TjSS1A@mail.gmail.com>
+Subject: Re: [PATCH bpf v6 1/4] bpf: Fix potential UAF in bpf_netns_link_update_prog
+To: Pu Lehui <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Amery Hung <ameryhung@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
+	Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Pu Lehui <pulehui@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-commit b72e29e0f7ee329d89f86db8700c8ea99b4a370a upstream.
+On Wed, Jul 22, 2026 at 12:19=E2=80=AFAM Pu Lehui <pulehui@huaweicloud.com>=
+ wrote:
+>
+> From: Pu Lehui <pulehui@huawei.com>
+>
+> In bpf_netns_link_update_prog, the checks for old_prog and prog type
+> are currently performed locklessly before acquiring netns_bpf_mutex.
+> This creates a race condition that can lead to a UAF issue.
+>
+> If two threads concurrently execute BPF_LINK_UPDATE on the same netns
+> link, the following execution path can trigger a UAF:
+>
+> CPU0                                          CPU1
+> bpf_netns_link_update_prog
+>   if (old_prog && old_prog !=3D link->prog)
+>     return -EPERM;
+>                                               bpf_netns_link_update_prog
+>                                                 if (old_prog && old_prog =
+!=3D link->prog)
+>                                                 ...
+>                                                 old_prog =3D xchg(&link->=
+prog, new_prog);
+>                                                 bpf_prog_put(old_prog);
+>   if (new_prog->type !=3D link->prog->type) <-- trigger UAF
+>
+> Fix this by moving the old_prog and prog->type checks inside the
+> netns_bpf_mutex critical section.
+>
+> Fixes: 7f045a49fee0 ("bpf: Add link-based BPF program attachment to netwo=
+rk namespace")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Reviewed-by: Amery Hung <ameryhung@gmail.com>
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> ---
+>  kernel/bpf/net_namespace.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+>
 
-The pack allocator only flushes predictors when reusing a dirty pack for
-cBPF, eBPF allocations never trigger a flush. Currently, eBPF picks the
-first free pack, which could be a clean pack. As an optimization, leaving
-a clean pack for cBPF can avoid flushes.
+the change is good, all other link types do take lock first and then
+do all the checking, netns is the only oddball, but see implementation
+nit below
 
-Prefer dirty packs for eBPF and keep clean packs free for cBPF. This
-mirrors the existing cBPF preference for clean packs: each program kind
-prefers the pack that avoids an extra flush, and falls back to the other
-kind only when no preferred pack has room. eBPF reuse of a dirty pack is
-harmless since eBPF being privileged does not flush.
+> diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
+> index 25f30f9edaef..9fc62db1441c 100644
+> --- a/kernel/bpf/net_namespace.c
+> +++ b/kernel/bpf/net_namespace.c
+> @@ -171,13 +171,17 @@ static int bpf_netns_link_update_prog(struct bpf_li=
+nk *link,
+>         struct net *net;
+>         int idx, ret;
+>
+> -       if (old_prog && old_prog !=3D link->prog)
+> -               return -EPERM;
+> -       if (new_prog->type !=3D link->prog->type)
+> -               return -EINVAL;
+> -
+>         mutex_lock(&netns_bpf_mutex);
+>
+> +       if (old_prog && old_prog !=3D link->prog) {
+> +               ret =3D -EPERM;
+> +               goto out_unlock;
+> +       }
+> +       if (new_prog->type !=3D link->prog->type) {
+> +               ret =3D -EINVAL;
+> +               goto out_unlock;
 
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- kernel/bpf/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+can we use guard() and avoid all the goto jumping?
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 926bf11aeaf2..4ea21434bf78 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -946,10 +946,10 @@ void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns, bool
- 			goto found_free_area;
- 		/*
- 		 * cBPF reuse of a dirty pack triggers a flush, so prefer a
--		 * clean pack for cBPF. eBPF never flushes, so pick the first
--		 * free pack, dirty or clean.
-+		 * clean pack for cBPF. eBPF never flushes, so steer it to a
-+		 * dirty pack and keep clean packs free for cBPF.
- 		 */
--		if (!was_classic || !pack->arch_flush_needed)
-+		if (was_classic ^ pack->arch_flush_needed)
- 			goto found_free_area;
- 		if (!fallback_pack) {
- 			fallback_pack = pack;
-
--- 
-2.43.0
+pw-bot: cr
 
 
+> +       }
+> +
+>         net =3D net_link->net;
+>         if (!net || !check_net(net)) {
+>                 /* Link auto-detached or netns dying */
+> --
+> 2.34.1
+>
