@@ -1,127 +1,81 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16D227BF7C
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 07:30:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3371235674C
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 08:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785137461; cv=none; b=iBAaWK8cyDTPEVqS882oAnSRSKls+nxJUQYmQucFfKbXKVjhpSP3DoeG6yzZGWOXMyF2MUHBwdobfv4zKgHgSKadHU8iEgHdlnfq230Z+Hdpw+VqsOFCNwz3tUrCScseSJ7Ra3CwYhBHYukmM0G6fs1W7KqaNDu/KwGC+AyijTs=
+	t=1785139232; cv=none; b=EXK4+sFlb6jjjVjagNN8HmQQI6XUIMVXuKDIFoSGFK2KUCOHt+ecX/bytK635/VOrOnrP9szSCdQhCiBX7Cj/Sb8hsgvBgh669DZ7AMVruOlKsO190f1n9Jz/MJCL40m0wcRCHruW7sn1+OI0lD0zXLAS+gr7QvfjjDC7hNqMI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785137461; c=relaxed/simple;
-	bh=ZPJKG+xl4t4TjM2rDqu8w++m594RGqMKLAmZmXGVk+4=;
+	s=arc-20240116; t=1785139232; c=relaxed/simple;
+	bh=F6fhJknoV480uTIxhupKlRyYkkjfnvWzDXem+GlFXF0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HiuTz4XDT5tOQW3fRJ0dzE1kAqIj1nrcCwUM8rAde+aTwf3ATvXeqpZqemxf0DWvCpUzergDH8TSH7EF7U4Vdgsg5QJPDWZQL1moUeRnaWI3lvXVyjh012VtmOsfVb+tQ3BqiASRdnyChQkBMemGcZfrJ/Fz7GHA9pU3VKQPF1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g3hUekky; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=h50wuDdxszVgYVdfOFkB8p4huj835BNeyEvQqdOiKPYsOFm3m3JIxzlpVc143x7F7TVMmGy7XjuPlSeUHgJsrUtGG9LwlmRi6iCiLGFlceBBGeSGZKQTOgYTAWxWBq8M8T6srENnDXv+cXsdvB20ZEmGCwxZEmg/kunIztWJYc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=p58xJv/U; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g3hUekky"
-Message-ID: <b45fbc0f-4941-4880-9a4c-7b91198420c0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785137447;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qrIWarYcK/axO6Wo8y7UEi0T0ByoE/cV3aU88cAfZlc=;
-	b=g3hUekkyxQFZhrPlNOVxjGoGGNscI4PmZnhJ/806OBoFWeT2WV6UeFp9c+O1NllXXTpLYK
-	aJQ/da8w5dQF13LYyaHgMilW2rEzvyZHM8irs4rbVXnSnfycdJHNwZmIjZZgqyrPvHXqbv
-	9uZ6xqwqKN166FfcBJCIt5esW7ynsGU=
-Date: Mon, 27 Jul 2026 15:30:21 +0800
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="p58xJv/U"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 802B41A1288;
+	Mon, 27 Jul 2026 08:00:27 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5483E601BE;
+	Mon, 27 Jul 2026 08:00:27 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E64E511C11D0B;
+	Mon, 27 Jul 2026 10:00:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1785139222; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=TCgAr++ZKTBKmHy6N3VhDAe8aZilNVKvNvH0soTVb1M=;
+	b=p58xJv/UlTaDCatpEbF60gVDBUMZIm36zbgwWttdW0gv1Owqma5wAVtIWEcOowNQPypgrl
+	cOlhVAGCjWH+8CA2D92peEJaFY3kXXIXpm8Ri+eLcFKsn3lsUhC+hf6ObSizeFMsCG1/kk
+	w4v4jBljCNPzF7RZsPAnjKXYuQY+e75g0CrAiTS9zlZD/8xHfwo//K6h/gygrjF/Py5lmU
+	mL0pRuASO2Fx5H25C1BSwyFn6Clv/tgyLLSBhOz3VVaIGqrJVWJyef+X4WgVzHYJx3T42D
+	2XPzz8q7HtVtTSZI6qKlRBWXXfSnPuA3nmTaWmtGY5aFjhXWVEHV29bZKQXvHQ==
+Message-ID: <1e258c0f-8663-4dfe-a0aa-7c8be67d6afe@bootlin.com>
+Date: Mon, 27 Jul 2026 10:00:19 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/3] bpf: Add a sleepable page allocator for map
- memory
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260727062521.376231-1-jiayuan.chen@linux.dev>
- <20260727062521.376231-2-jiayuan.chen@linux.dev>
- <20260727063709.99F3B1F000E9@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260727063709.99F3B1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] net: stmmac: Disable queues before netif_tx_disable
+ in xdp_release
+To: muhammad.nazim.amirul.nazle.asmade@altera.com, netdev@vger.kernel.org
+Cc: ansuelsmth@gmail.com, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+ daniel@iogearbox.net, bpf@vger.kernel.org
+References: <20260727030645.13280-1-muhammad.nazim.amirul.nazle.asmade@altera.com>
+Content-Language: en-US
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+In-Reply-To: <20260727030645.13280-1-muhammad.nazim.amirul.nazle.asmade@altera.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-Last-TLS-Session-Version: TLSv1.3
 
+Hi,
 
-On 7/27/26 2:37 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] NUMA Mempolicy Bypass in bpf_map_alloc_page_sleepable() and __bpf_alloc_page()
-> --
->
-> --- Patch [1]: [PATCH bpf-next 1/3] bpf: Add a sleepable page allocator for map memory ---
-> commit 7a6023ef7f19fc884e94ffe457ae83ff0d4b5e1e
-> Author: Jiayuan Chen <jiayuan.chen@linux.dev>
->
-> bpf: Add a sleepable page allocator for map memory
->
-> This commit introduces bpf_map_alloc_page_sleepable() to provide a blocking
-> page allocator for callers known to be in a sleepable context, such as user
-> page fault handlers. This avoids the conservative, non-blocking behavior of
-> can_alloc_pages() which is always false under PREEMPT_RT.
->
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
-> [ ... ]
->> @@ -602,15 +602,14 @@ static bool can_alloc_pages(void)
->>   		!IS_ENABLED(CONFIG_PREEMPT_RT);
->>   }
->>   
->> +#define BPF_PAGE_GFP (GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT | __GFP_NOWARN)
->> +
->>   static struct page *__bpf_alloc_page(int nid)
->>   {
->>   	if (!can_alloc_pages())
->>   		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
->>   
->> -	return alloc_pages_node(nid,
->> -				GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT
->> -				| __GFP_NOWARN,
->> -				0);
->> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
-> [Severity: Medium]
-> This isn't a bug introduced by this patch, but does using alloc_pages_node()
-> here bypass the task's NUMA mempolicy?
->
-> Because alloc_pages_node() ignores task mempolicy, pages might land on the
-> current CPU's local NUMA node instead of the node requested by the task.
-> Could this branch to use a mempolicy-aware allocation when nid is
-> NUMA_NO_NODE?
->
->>   }
-> [ ... ]
->> +/*
->> + * For callers that know they run in a sleepable context, e.g. a user page
->> + * fault handler. can_alloc_pages() is a conservative guess made for BPF
->> + * program context - notably it is always false on PREEMPT_RT - so going
->> + * through bpf_map_alloc_pages() there would needlessly pick the
->> + * non-blocking allocator, which never reclaims and never engages the OOM
->> + * machinery.
->> + */
->> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map, int nid)
->> +{
->> +	might_sleep();
->> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
-> [Severity: Medium]
-> Since this function is intended for user space page fault handlers, will
-> unconditionally calling alloc_pages_node() cause the allocation to ignore
-> the user task's mempolicy?
->
-> Similar to __bpf_alloc_page(), if nid is NUMA_NO_NODE, replacing this with a
-> mempolicy-aware allocation might prevent silent performance regressions from
-> misaligned memory placement during page faults.
->
->> +}
+On 7/27/26 05:06, muhammad.nazim.amirul.nazle.asmade@altera.com wrote:
+> From: Nazim Amirul <muhammad.nazim.amirul.nazle.asmade@altera.com>
+> 
+> stmmac_xdp_release() calls netif_tx_disable() before
+> stmmac_disable_all_queues(), which creates a race window where NAPI
+> is still running while TX is being disabled. If a packet is still
+> queued at that point, it can be processed after TX is stopped,
+> leading to a kernel panic.
+> 
+> Fix this by calling stmmac_disable_all_queues() first to stop NAPI
+> processing before disabling TX, matching the order already used in
+> stmmac_release() since 7028471edb64.
+> 
+> Fixes: 7028471edb64 ("net: ethernet: stmicro: stmmac: first disable all queues and disconnect in release")
+> Signed-off-by: Rohan G Thomas <rohan.g.thomas@altera.com>
+> Signed-off-by: Nazim Amirul <muhammad.nazim.amirul.nazle.asmade@altera.com>
 
+Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-You remind me. But I don't think this is really about (task) mempolicy.
-We should respect map.numa_node/map->numa_node, just like other maps do
-when allocating their elements.
+Maxime
+
 
