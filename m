@@ -1,102 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DA2244661;
-	Mon, 27 Jul 2026 16:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F119F41DE18;
+	Mon, 27 Jul 2026 17:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785171506; cv=none; b=tCi+Lj4jsaGTXx/4PMmDgnyV6OJv/qobilScl7ZZ4l7AP7dDcvYjbDY1xQ/WWBKz08YC0TsO12ii7ldAKV4V1SA0i8pJ4nlbIzzt6wvjkWXXmChsgFR9w5AlyZlgEMow7cFH9xEfo5mWXDIfgzTjd7pXTFy8gKE3U1uahLiTSmM=
+	t=1785172011; cv=none; b=mv8Q3xpUgrfanXjRqcPj4X/vUOoQl8Qkj7GG3eYKXXNu1OcsX28MVAjUD1GNrh6VCNiVvGmz1TEbNAy9N8wZfJP7XAkSRRDJtDIxOxujotUcZhgOKjOdGidodfEe4Vf6ZqVn6O17YTmVa1kXZ9WMRaonwMe5J9MuNHN72dzX1ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785171506; c=relaxed/simple;
-	bh=zeYfh6Ae+1xJhea6+9HT4lCqDt/7bYv2LK0Gd+dP4ds=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=azhWT92MAyXtWE7wjK56F2puUFuaiMAbLfEJQc4VwMU7xVqpLHS04fyJupzOQfP+h0m9yypZ3PY2X5UzEd08EXWH1a0dUWUt4jl+eppJrsUHU/+t8vkC6B8efzkuy2wH2AYk3ZQIjDmL2IzmLcHR2+8AJk2/FtrhYfA/d7lR/0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XdM+l9ol; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785172011; c=relaxed/simple;
+	bh=Zsi1kZF0unNOVf2a36K9DiRowOOX4Al7A3IktzzcEF8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=AFJ6/AUFOcucQ+FakqzGhelGeB3hxvoatVI5+V0b3dojBU7n5aF8mrjmsOwEAhVMY7eogaTSPS5A+tS5kd3V8HUzGTumUrbiOdKy66KpeOYWAt5PMHCAGzy0rKHD5yw9ssDJctFKj7K//FeGbMpsUz/TZIPjEFwcqjPJ7MiQH60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N5F1CbCw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XdM+l9ol"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0377C1F000E9;
-	Mon, 27 Jul 2026 16:58:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N5F1CbCw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC4C1F000E9;
+	Mon, 27 Jul 2026 17:06:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785171504;
-	bh=zeYfh6Ae+1xJhea6+9HT4lCqDt/7bYv2LK0Gd+dP4ds=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XdM+l9olRW8cKalogx7n+VU3fSaNCRSPkhHZMGpLzCiNnF5n2MXamqP4NMDF773oD
-	 GREnikG0Why5GUAYX0IpZTwNhzGp5bqoFZ0pTi/+O9mFL1g7myQ0E72UPFZPwN67P7
-	 vLkGWiGJSKvlxkAerr6IvifRL31O/YDcEVwbm/yFVEB9K1OfnQdyXmJ4aGulx1l8TJ
-	 3zdTwLFo4GTutJPOhxu+P+MyssSMxzGPfj7LOwbVamNxOjols3+UjYMG21tr7V3m8o
-	 EouQobx+MZzv5jPF0GkDVCQFsaqrzLuNfbIHeCVhpRlMHCN9tR5erpTF6gxNXokLCX
-	 Zd2B1b9xWPqtQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 01/11] mm: introduce hw_pte_t for PTE table storage
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Muhammad Usama Anjum" <usama.anjum@arm.com>
-Cc: linux-perf-users@vger.kernel.org, damon@lists.linux.dev, bpf@vger.kernel.org, dri-devel@lists.freedesktop.org
-In-Reply-To: <20260727164715.2866609-2-usama.anjum@arm.com>
-References: <20260727164715.2866609-1-usama.anjum@arm.com>
- <20260727164715.2866609-2-usama.anjum@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Jul 2026 16:58:23 +0000
-Message-Id: <20260727165824.0377C1F000E9@smtp.kernel.org>
+	s=k20260515; t=1785172009;
+	bh=PUxiM2q29sYqI0e4J83UhyhQOLBv6Q/pL5tSceU1zZ0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=N5F1CbCwNE0ldWOX5ySxJMNtga/4uary9c3Zj4vabPQdk4G2JcatbU8bgQo+4CmuE
+	 fg8MGcdlbyvt/3HzoW3qANat9PCoc1WhF7htZJa7I4S+H9X43b6xmMRqaZHRQBSv7Y
+	 2sgtmZGukC6LHby9qsWzRDP+PgKqti7vlElTQVsEV+fTI6fMmCgzf6778gH3VHsOg0
+	 qz974+0Sxr314Hib6q91Mz7/3TyBFvZtfePfY+kVKlghFP48zNhAT2jUsU5jWepyAX
+	 HV9GsER29q+pIJi5pc2cbVDOP+Y/SgtZ1QO2G+Aru92JIEKe6GUpUynQ5cKxX6uj08
+	 Ff2CbL+EU5coA==
+From: Namhyung Kim <namhyung@kernel.org>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ James Clark <james.clark@linaro.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+ Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+In-Reply-To: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
+References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
+Subject: Re: [PATCH v4 0/4] tools/build: Allow versioning of all LLVM tools
+Message-Id: <178517200880.2418719.16918746118553477872.b4-ty@kernel.org>
+Date: Mon, 27 Jul 2026 10:06:48 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c04d2
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The header `<linux/pgtable_types.h>` incorrectly assumes `<asm/p=
-age.h>` universally defines `pte_t` and architecture opt-ins, leading to mi=
-ssing types on x86 and a structural inclusion hazard for opting in.
---
+On Wed, 15 Jul 2026 15:53:47 +0100, James Clark wrote:
+> I ran into the build issue mentioned in the first commit, because using
+> an option like LLVM=-15 is a documented way to build [1], but only
+> some of the LLVM tools defined in tools/ support this.
+> 
+> After fixing that, a lot of other tidyups fell out. I didn't go too far,
+> for example some selftests include tools/testing/selftests/lib.mk which
+> reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+> tools/scripts/Makefile.include and I stopped before touching the former.
+> Some other non build scripts hard code toolchains and I didn't touch
+> those either, this change is only focused on things that already
+> include Makefile.include.
+> 
+> [...]
+Applied to perf-tools-next, thanks!
 
---- Patch [1]: [PATCH RFC 01/11] mm: introduce hw_pte_t for PTE table stora=
-ge ---
-commit de503ea03294c1c9976ce045b5e820dbc0f34eba
-Author: Muhammad Usama Anjum <usama.anjum@arm.com>
+Best regards,
+Namhyung
 
-mm: introduce hw_pte_t for PTE table storage
 
-This commit introduces hw_pte_t as a generic name for a PTE table element.
-It defines it as an alias of pte_t by default, allowing architectures to
-retain their existing representation until they opt in to a distinct type.
-
-> diff --git a/include/linux/pgtable_types.h b/include/linux/pgtable_types.h
-> new file mode 100644
-> index 0000000000000..ed5dba42a4f8c
-> --- /dev/null
-> +++ b/include/linux/pgtable_types.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_PGTABLE_TYPES_H
-> +#define _LINUX_PGTABLE_TYPES_H
-> +
-> +#include <asm/page.h>
-> +
-> +#ifndef __HAVE_ARCH_HW_PTE_T
-> +#define hw_pte_t pte_t
-> +#endif
-
-[Severity: Medium]
-Is <asm/page.h> guaranteed to define pte_t on all architectures before it is
-used here?
-
-On x86, pte_t is defined in <asm/pgtable_types.h>, which is not included by
-<asm/page.h>. This means pte_t might not be defined when the default hw_pte=
-_t
-alias is created.
-
-Could this also create an inclusion hazard for architectures opting in?
-
-If x86 were to opt into hw_pte_t by defining __HAVE_ARCH_HW_PTE_T in
-<asm/pgtable_types.h>, any files including <linux/pgtable_types.h> first wo=
-uld
-incorrectly alias hw_pte_t to pte_t. When <asm/pgtable_types.h> is
-subsequently included, its explicit definition of hw_pte_t would macro-expa=
-nd
-to a conflicting redefinition of pte_t, breaking the build.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727164715.2866=
-609-1-usama.anjum@arm.com?part=3D1
