@@ -1,217 +1,194 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99F578F2F
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 00:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785112823; cv=pass; b=ATHYCLpaI09Wzqbb8b8+Hb0ePNm9hOoNf9utXcm1GNTbl91rUojj59D1lmfCCeZZ2aUaKqC8YdcUl7HtLc1vao7z6Xm4g4KeBogPIKMN5TW0bArAx3woii+XYQ8pLaJ4djR2QiEuavYyp0MzajtxMC/ItZmexPyHNxyoAUgjxyY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785112823; c=relaxed/simple;
-	bh=cu0kBaiNZ+6Ryt7/mxs19i1OzrGh+mdVEoCwxTMVL84=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NDsrjCJ+UO5Qn9FkZTwsCExdNgr5u9VUFhBnw8iZOMB2Jyv9rXqIGfhTv6XM+FR0DSfvSbzrNqGbltCOuLanezOhtOymflhlAkMeGEpYhyPYMAVs0JDsOTIBKWCSeyrR97NL1eWr6zJEpDe7Du7BI/DtOXKn2pAYRQ40PHf1IuI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IXpA880m; arc=pass smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IXpA880m"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5b015b2d792so2247444e87.3
-        for <bpf@vger.kernel.org>; Sun, 26 Jul 2026 17:40:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785112820; cv=none;
-        d=google.com; s=arc-20260327;
-        b=LO7T6CqcAuDoqlness670NPPBwDk/UoRS1YPEeNI0gy58meNlDco62+aj53I3tAJxd
-         Sb7/1cfk075n0gQUn9B9P6VrDl/XjbUUXo75RN3T7f5dUb7+ic+RVtySF8v9wyirB3WW
-         iUYdBBpLhGAfzM3qJDnb66XqZUAfF42Lfzc/vZSJ/g0tRn6To+jC8y9QRLWi+2A3VYte
-         OKo9p+nfvdw/XOHnnlt0J3tHvqRLTYKNwFPd1ugrFj6wUwb/mzegbPIHUlHc7hxWHzDR
-         Ld9y5B/gY39L6+rypbIC55cJ1UDIrDtyHSudstyrqB212FAQpREr6XDGADxDzJUDmg9K
-         k33Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6CyfvHzrX9WXAXlnVNWJsJhYmyyWrG3FuVrwtYk9PvQ=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=ZmVY2MfW/3iyKiiEp9WYcJpmtFvtcV892TBCQnRh5uibUMeQdcNkW6jIRSfd6VK08f
-         peIoL8oVOM7MTT2lU9T+hlBiTlCq9LmSdnNRlU1+0QHUpi8/y/eAnW5sAHEXzwq9t/Ge
-         Ys1NEYm7amVnk2cKuGWUSaGHmGZWIX2tcyENMowiLna3whqXfckObOh6IEk/Omo6mn7w
-         lecfNQZ60kP0nmMsGM0Ls3Yh4SnE30vrgudZQspaNtFhG3Esou12BhdbjezLlBFng1Ha
-         vQ5uAG3gL2RuWDPajPXQn7y31pkGlh6YV1zzTkD+bAkDMAXmbCiCrCAqwZHNpVGH7OiL
-         xioA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785112820; x=1785717620; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6CyfvHzrX9WXAXlnVNWJsJhYmyyWrG3FuVrwtYk9PvQ=;
-        b=IXpA880meO6mTcfmA1Qg50mzA2gtMNQbdheph/7CNQgAW74ZhN2Af5VvwWogp/Eh4n
-         ++p7Rmb7bwzkTIIbaFGtjAeZS0zXVBrYfPCvqRU1WKnyta3Zd4TTcNBDpXf/WtnuDdv3
-         kNXpg+1JwFjj1y9dJXqjZC8hTQ2bLWz7n1pUFzrzWUA+y6bH8DpuJc2iUMKzRoeD15M1
-         /AjqQxNd9HT67DokGRmvPtIaHcxkVtei5SzGZmg4VmSci+ONRALC5NAov3nH0D56Z9lD
-         SedKNzBUzruYu8EXaNYbyd9+FkLUAh6i24HJuAZuAy5HlqNpQhrNXm0vFqwjMXkKoEFt
-         RhOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785112820; x=1785717620;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6CyfvHzrX9WXAXlnVNWJsJhYmyyWrG3FuVrwtYk9PvQ=;
-        b=Q4ErvVRz2uyM2gluCeAxPW1Oap7N+LeuNp1f0guaxv0OgM20nV5V7AkbXmdks6IQ6M
-         gc90faQtxbGpUblX6CeqyhriY37QXTWEVE8MxYnsxH/Hx4mmkC6lcXsLeyHK8vDS7MYG
-         Nf8B+FHhAAer9J4suJRGqZc8rJEJUggZixCURGVbK6dd9ksHYIxFS4OvmS7k0WX/YrPP
-         RNPHqFb9iEm/kYUxtMp3/n33X61VP2+L/YszlbuuXDfDmlZ/eJbc3ITCo6rSuDPYMgss
-         GeHTkd9U+MPovrmSdwpJFexV5y2J8LrzQQXjsLX/QI/jAC8PUqF9paLEQ3dIHEvzZnEq
-         tncA==
-X-Gm-Message-State: AOJu0YxMvzTD8hWx5OcaXKn6wx8AheBDO9Ch1bgTFT80v3QMWi1NPfTW
-	elmq6usCE609WWmm500EGJae6ciabikl8kTMxs4PM+qB7S4z5jt9TasvTkksCxITuj3wPf8pdhq
-	1SaOoFdmGnUcBeenGpNwIxLbWyf6TF7I3Ht3vJ2+SEA==
-X-Gm-Gg: AR+sD13hzkrsxfz/wG2m/4/fylnS+gN4GqwaimEVMLSjJyuQpCpkTJtcA7twZZUZcdw
-	xCfMo5lP920dg3dO82T9jbKuX3UrgAzqTaDblg1ow8snn1dK6Ve3U878aliTPyVJRZHcILC+9iB
-	9m8yb7QJMCHEGtZOBo6kzOeOhZzoniQlbJ6B/h1dZoioql0w0SekH2Zg+a+yFnxoeiYads7I+e8
-	poCHB38Pt4uWDYP+F53qPDqx0E6/EhFGde9skXR8DvIiPJKjW3nbEqeLoAS
-X-Received: by 2002:a05:6512:3195:b0:5b1:1b50:7201 with SMTP id
- 2adb3069b0e04-5b2c1b2ef9emr1184352e87.36.1785112819522; Sun, 26 Jul 2026
- 17:40:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE852346E7D
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 01:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785116912; cv=none; b=WTe+wy1zr9W9USUrBPyYvcJBKmYP+YIjBbDiAVh6obxeDA+XeUnjKKfCoY8pDE1gOxmH+EG3eNDCMaJRi1d+k1Cvdd0R+D9GPhaf0Lwd9+8l87+DXrONL4p/4EzqsALMMhDwu3gkmNpDNz1LSIr5m3jnnKV2UM6nW2E9nIVGeI0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785116912; c=relaxed/simple;
+	bh=aPEEwlRnw3JhKhQsFm8vklsz2pq4RcvfuAKiD7Z7YW0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gs9E3VQj8Ksza71HMY69zzwNjgjFBZwVqK+0R1IS+0hpllOGXeT+WxtC3OXvte5yci8AkwHysfAE55EZZ8atx8KF0UIelN2jiYtTWzGilLAl3TmUcglFf9EbI72UZE0b5BfsyoEB4eeokoxlYe+Z4fchBvZyFcUH7uPJA/vNBIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h7hLS58cFzYQtHW
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 09:47:44 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 85E904058F
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 09:48:21 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgCnl9PhuGZq2lFWAA--.38623S2;
+	Mon, 27 Jul 2026 09:48:18 +0800 (CST)
+Message-ID: <ce469b75-97c3-4574-85a8-a188f2b24130@huaweicloud.com>
+Date: Mon, 27 Jul 2026 09:48:17 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260726235030.1152542-1-dingning04@gmail.com>
- <20260726235030.1152542-3-dingning04@gmail.com> <20260727001354.B3F1E1F000E9@smtp.kernel.org>
-In-Reply-To: <20260727001354.B3F1E1F000E9@smtp.kernel.org>
-From: Ning Ding <dingning04@gmail.com>
-Date: Sun, 26 Jul 2026 17:40:08 -0700
-X-Gm-Features: AUfX_mw5jYf4gaWMG50gpM8nwUKursbmWq_aWool25MmJRYUjdUk2KP0LWD3iMo
-Message-ID: <CAJP4ius__AtzaGNVAPbHn+JyfR6+E8=SHNhcZA-dKdGVfnbk0A@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 2/2] bpf: Reject untrusted pointers in refcount_acquire
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 6/9] bpf, arm64: Fix memory leak in
+ bpf_jit_free
+Content-Language: en-US
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20260725154915.2488611-1-pulehui@huaweicloud.com>
+ <20260725154915.2488611-7-pulehui@huaweicloud.com>
+ <20260725160104.309A31F000E9@smtp.kernel.org>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20260725160104.309A31F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:cCh0CgCnl9PhuGZq2lFWAA--.38623S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxurWUWw4rWF4DKr1rtw1kKrg_yoWrZw1kpF
+	98X3Wak3yqgwn7tF4kXF18ZF1UXw48W3Wjkr1UurW09FnxWr92gFWSk3yUua90yr4UJw4Y
+	qr4kWFy3Ca4kA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUglb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
+	CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+	F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+	kC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+	z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+	AF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+	IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
+	CI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVF
+	xhVjvjDU0xZFpf9x07UE-erUUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-This seems to be a separate issue from the refcount_acquire argument
-check... For a pointer without NON_OWN_REF, code inspection shows that
-direct access can reach verifier_bug(). If that warning is emitted, a
-system configured with panic_on_warn may panic. (haven't reproduced
-that yet)
 
-In my runtime experiment, the stale address was reused for another BPF
-object before physical reclamation. A read through the stale pointer
-returned a value belonging to the recycled object. And I did not
-observe a WARN, panic, physical-kfree UAF, or a successful stale write
-in my experiment configuration. So the current experimental evidence
-shows only a stale read from a recycled object, while the panic only
-remains possibilities in the source code, but haven't done any
-experiments to prove that it is feasible.
 
-Regards,
-Ning Ding
-
-On Sun, Jul 26, 2026 at 5:13=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
->
+On 2026/7/26 0:01, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+> 
 > Pre-existing issues:
-> - [Critical] check_ptr_to_btf_access() incorrectly allows writes to PTR_U=
-NTRUSTED allocated objects or triggers a verifier_bug WARN_ONCE when readin=
-g from them.
+> - [Critical] `bpf_jit_free()` ignores the return value of `bpf_jit_binary_pack_finalize()`, leading to a Use-After-Free and Double Free if finalization fails.
+> - [High] Pre-existing percpu memory leak of `priv_stack_ptr` on BPF JIT compilation failure.
+> - [High] The identical memory leak of `ctx.offset` fixed by this patch in ARM64 remains unfixed in the LoongArch BPF JIT compiler.
 > --
->
-> --- Patch [2]: [PATCH bpf v2 2/2] bpf: Reject untrusted pointers in refco=
-unt_acquire ---
-> commit 80e6c61503b2eee2d4804b0a7ec8927827ed7d92
-> Author: Ning Ding <dingning04@gmail.com>
->
-> bpf: Reject untrusted pointers in refcount_acquire
->
-> This commit fixes an issue where a refcounted map kptr could still be pas=
-sed
-> to bpf_refcount_acquire() after being marked PTR_UNTRUSTED due to
-> bpf_rcu_read_unlock(). It updates check_kfunc_args() to reject PTR_UNTRUS=
-TED
-> arguments for KF_ARG_PTR_TO_REFCOUNTED_KPTR.
->
-> Link: https://lore.kernel.org/r/20260726021304.97ED91F000E9@smtp.kernel.o=
-rg
->
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 1e7343b625de5..63b1d997fe804 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -12414,6 +12414,11 @@ static int check_kfunc_args(struct bpf_verifie=
-r_env *env, struct bpf_kfunc_call_
-> >                       meta->subprogno =3D reg->subprogno;
-> >                       break;
-> >               case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
-> > +                     if (reg->type & PTR_UNTRUSTED) {
-> > +                             verbose(env, "%s is an untrusted refcount=
-ed kptr\n",
-> > +                                     reg_arg_name(env, argno));
-> > +                             return -EACCES;
-> > +                     }
->
-> [Severity: Critical]
-> This is a pre-existing issue, but I noticed a similar problem with
-> PTR_UNTRUSTED handling in check_ptr_to_btf_access() for allocated objects=
-:
->
-> kernel/bpf/verifier.c:check_ptr_to_btf_access() {
-> ...
->                 if (atype !=3D BPF_READ && !type_is_ptr_alloc_obj(reg->ty=
-pe)) {
->                         verbose(env, "only read is supported\n");
->                         return -EACCES;
->                 }
->
->                 if (type_is_alloc(reg->type) && !type_is_non_owning_ref(r=
-eg->type) &&
->                     !(reg->type & MEM_RCU) && !reg_is_referenced(env, reg=
-)) {
->                         verifier_bug(env, "allocated object must have a r=
-eferenced id");
->                         return -EFAULT;
->                 }
-> ...
+> 
+> --- Patch [6]: [PATCH bpf-next v3 6/9] bpf, arm64: Fix memory leak in bpf_jit_free ---
+> commit c1be108f68505531829d01d1fddc5f23ead947da
+> Author: Pu Lehui <pulehui@huawei.com>
+> 
+> bpf, arm64: Fix memory leak in bpf_jit_free
+> 
+> When JIT compilation fails for a subprogram, the BPF core cleans up
+> previously compiled subprograms by calling bpf_jit_free(). This commit adds
+> a missing kvfree(jit_data->ctx.offset) to bpf_jit_free() in ARM64,
+> preventing a memory leak of the JIT context offsets array.
+> 
+>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>> index 4cdc7dfb05ba9..f4e4d4578e38a 100644
+>> --- a/arch/arm64/net/bpf_jit_comp.c
+>> +++ b/arch/arm64/net/bpf_jit_comp.c
+>> @@ -3237,6 +3237,7 @@ void bpf_jit_free(struct bpf_prog *prog)
+> 
+> [Severity: High]
+> This isn't a bug introduced by this patch, but is there a pre-existing
+> percpu memory leak of priv_stack_ptr when JIT compilation fails?
+> 
+> Looking at bpf_int_jit_compile() when build_body() fails, out_free_hdr frees
+> ro_header but does not set it to NULL. In the out_off block:
+> 
+> arch/arm64/net/bpf_jit_comp.c:bpf_int_jit_compile() {
+>      ...
+>      if (!ro_header && priv_stack_ptr) {
+>          free_percpu(priv_stack_ptr);
+>          prog->aux->priv_stack_ptr = NULL;
+>      }
+>      ...
 > }
->
-> Does this logic incorrectly allow writes to PTR_UNTRUSTED allocated objec=
-ts
-> or trigger a verifier_bug WARN_ONCE when reading from them?
->
-> If a program loads a program-allocated kptr containing an RCU-protected f=
-ield
-> inside bpf_rcu_read_lock(), the verifier marks it MEM_ALLOC | MEM_RCU (an=
-d
-> NON_OWN_REF if it contains a bpf_rb_node or bpf_list_node). When the prog=
-ram
-> calls bpf_rcu_read_unlock(), it strips MEM_RCU and adds PTR_UNTRUSTED.
->
-> If the program subsequently tries to read or write this pointer,
-> type_is_ptr_alloc_obj(reg->type) evaluates to true because it ignores
-> PTR_UNTRUSTED, bypassing the read-only check for writes.
->
-> Then, if the pointer lacks NON_OWN_REF, it hits the type_is_alloc() condi=
-tion
-> and triggers a verifier_bug(), leading to a BPF_WARN_ONCE. If it has
-> NON_OWN_REF, it bypasses the verifier_bug() check entirely, and proceeds =
-to
-> allow a memory write to the untrusted pointer.
->
-> Could a malicious BPF program exploit this to achieve a local denial of
-> service via panic_on_warn or a use-after-free memory write?
->
-> >                       if (!type_is_ptr_alloc_obj(reg->type)) {
-> >                               verbose(env, "%s is neither owning or non=
--owning ref\n",
-> >                                       reg_arg_name(env, argno));
->
-> [ ... ]
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260726235030.11=
-52542-1-dingning04@gmail.com?part=3D2
+
+patch 7 has been covered this.
+
+> 
+> Because ro_header is a dangling pointer, this check evaluates to false,
+> skipping the free. Later, when the BPF core aborts and calls
+> bpf_jit_free(prog), prog->jited is 0:
+> 
+> arch/arm64/net/bpf_jit_comp.c:bpf_jit_free() {
+>      if (prog->jited) {
+>          ...
+>      }
+>      ...
+> }
+> 
+> This skips the cleanup block entirely, leaving priv_stack_ptr permanently
+> leaked. Would it be appropriate to address this as well?
+> 
+>>   		 */
+>>   		if (jit_data) {
+>>   			bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
+> 
+> [Severity: Critical]
+> This is a pre-existing issue, but could ignoring the return value of
+> bpf_jit_binary_pack_finalize() here lead to a use-after-free and double free?
+> 
+> If bpf_arch_text_copy() fails during finalization,
+> bpf_jit_binary_pack_finalize() frees the ro_header internally and returns an
+> error:
+
+patch 9 has been covered this.
+
+> 
+> kernel/bpf/core.c:bpf_jit_binary_pack_finalize() {
+>      ...
+>      if (IS_ERR(ptr)) {
+>          bpf_prog_pack_free(ro_header, ro_header->size);
+>          return PTR_ERR(ptr);
+>      }
+>      ...
+> }
+> 
+> Since bpf_jit_free() ignores this error, it proceeds to retrieve the freed
+> header and unconditionally frees it again:
+> 
+> arch/arm64/net/bpf_jit_comp.c:bpf_jit_free() {
+>      ...
+>      prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
+>      hdr = bpf_jit_binary_pack_hdr(prog);
+>      bpf_jit_binary_pack_free(hdr, NULL);
+> }
+> 
+> Inside bpf_jit_binary_pack_free(), it reads ro_header->size (use-after-free)
+> and calls bpf_prog_pack_free() on it again (double free). Can this cause
+> memory corruption?
+> 
+>> +			kvfree(jit_data->ctx.offset);
+> 
+> [Severity: High]
+> This isn't a bug introduced by this patch, but does the LoongArch BPF JIT
+> compiler suffer from this exact same memory leak?
+
+bugfix has been applied to loongarch tree.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20260726&id=47e20d4b3da97ef3881d1e55e43545c22424f3fc
+
+> 
+> Looking at the LoongArch implementation, it uses the same multi-pass logic
+> for subprograms and preserves ctx.offset in jit_data. However, its
+> bpf_jit_free() does not free ctx.offset:
+> 
+> arch/loongarch/net/bpf_jit.c:bpf_jit_free() {
+>      ...
+>      if (jit_data) {
+>          bpf_jit_binary_pack_finalize(jit_data->ro_header, jit_data->header);
+>          kfree(jit_data);
+>      }
+>      ...
+> }
+> 
+> Should a similar kvfree() be added to arch/loongarch/net/bpf_jit.c?
+> 
+>>   			kfree(jit_data);
+>>   		}
+>>   		prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
+> 
+
