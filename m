@@ -1,30 +1,30 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37329346FA1
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 01:49:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D89351C2F
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 02:16:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785116961; cv=none; b=X68C1Oytgq2+ifvv6lr0p0+tl0qaSG2g74Nmf8JJw8BcHCDvQOduvVw0BEg4U1Gr56a66z5Gf/lmPDfW5XJcxoceqePI3JGnZ5AhAUtpoc0wCafpRnnAizpPKlrrBDeVNL3B+8wvWTx42Zg3T67oSFJSQ62TCex0gHptk3jcGDU=
+	t=1785118581; cv=none; b=Jsl0l5KD5W+ADN4tzcHrLSE/cVkc69xsfHkampUe57h4eWLibHGYbCew89+oJKyrPcT0YL8TFjFHX3ivx3kjRq0bc8qon/LHVMl/7V7JVCrLzLS8eQfHfUQ97P0MWISRCX2naR0w90wi4aOG6He/m7lJdeTyDibEjL28gBWzMjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785116961; c=relaxed/simple;
-	bh=386xT8si3MAf5gIsAeAzfgva4234ycPNg7EDcK6TFp0=;
+	s=arc-20240116; t=1785118581; c=relaxed/simple;
+	bh=jn+Q7yCOhIaVwpeesR9ro/EvK9yIjbO8ItSL4uRWVAc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IAK6nxZOZ0awkt59zTr/6+Xcg7ipXkcn/9kjk2uvB9ql5r15/VxObUsaF8zlRPeyjvedle7Vx7tPaVuseFhT+ObvHMi/K1LDUXN/pTUV6WXMvktFVp7TD9TMp7BxgP4Hesag1ReIqxynjQNk7u82tKkg7mQmBMegSaToMioP6jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 In-Reply-To:Content-Type; b=dOEAvXyI2zlDXESW+Uro1l/YP/ZTZxIqzMMNEBLk61YUpi5mNrE+ldo4UMNVLsMRbJJrwptIKLi46n6NkJ5HwnucDL8xrpbuwn65hh7xi33lxOiewNW9OWw7hicSs9XEr72g+STo6VgWU4I7UhgtRUir0q+b1sfppcz8F5FMVIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h7hMD6kPvzKHMPb
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 09:48:24 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 0956B4058F
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 09:49:16 +0800 (CST)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h7hyf5fS1zYQtht
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 10:15:38 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id A351C4056B
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 10:16:15 +0800 (CST)
 Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAnFtIbuWZqg2ZWAA--.38780S2;
-	Mon, 27 Jul 2026 09:49:15 +0800 (CST)
-Message-ID: <183096a4-a348-44d8-9fec-8afea10e8345@huaweicloud.com>
-Date: Mon, 27 Jul 2026 09:49:15 +0800
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34Iduv2ZqmyBZAA--.3224S2;
+	Mon, 27 Jul 2026 10:16:15 +0800 (CST)
+Message-ID: <d00c1124-92bf-42f5-a817-c5a4755ffa59@huaweicloud.com>
+Date: Mon, 27 Jul 2026 10:16:14 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -32,101 +32,98 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 8/9] riscv, bpf: Adjust bpf_func to account
- for CFI offset in bpf_jit_free
+Subject: Re: [PATCH bpf-next v3 7/9] bpf, arm64: Fix private stack leak when
+ JIT failed
 Content-Language: en-US
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 References: <20260725154915.2488611-1-pulehui@huaweicloud.com>
- <20260725154915.2488611-9-pulehui@huaweicloud.com>
- <20260725155706.54C5C1F000E9@smtp.kernel.org>
+ <20260725154915.2488611-8-pulehui@huaweicloud.com>
+ <20260725155535.0398E1F000E9@smtp.kernel.org>
 From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <20260725155706.54C5C1F000E9@smtp.kernel.org>
+In-Reply-To: <20260725155535.0398E1F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgAnFtIbuWZqg2ZWAA--.38780S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFW5Xr1UXw45ZF4xZF48tFb_yoW5JFy3pF
-	n8Gryak3yqgrs7KFsFqw18KFy8Jw48W3WrGryj9ry0gFnxuryIgFna93y8WFZ8GryUJw18
-	XF4DWFy3Ca4rJrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgGb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+X-CM-TRANSID:Syh0CgB34Iduv2ZqmyBZAA--.3224S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFW5Gw4xGF1xZF1xuF45Wrg_yoW8Kry5pw
+	n3uFnxCr4DWr4kKFWvq3WkJF17Xws7KFy5KFW5C3yj93ZI93s7tFyakayUCFW5ArW0qw4Y
+	vryDKrZxC3WkX3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
 	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6x
-	kF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAq
-	x4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6x
-	CaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-	c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-	CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-	MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
-	4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnI
-	WIevJa73UjIFyTuYvjxUrNtxDUUUU
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
+	bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
+	AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
+	42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
+	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+	KfnxnUUI43ZEXa7IU1CPfJUUUUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 
 
-On 2026/7/25 23:57, sashiko-bot@kernel.org wrote:
+On 2026/7/25 23:55, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
 > 
 > Pre-existing issues:
-> - [High] bpf_jit_free() ignores the error return value of bpf_jit_binary_pack_finalize(), leading to a Use-After-Free and Double Free of the JIT ro_header.
+> - [Medium] Memory leak of the BPF private stack in the PowerPC JIT compiler upon JIT failure.
 > --
 > 
-> --- Patch [8]: [PATCH bpf-next v3 8/9] riscv, bpf: Adjust bpf_func to account for CFI offset in bpf_jit_free ---
-> commit a0a806deebfc4afdceb1a23fa093826ade44c8cf
+> --- Patch [7]: [PATCH bpf-next v3 7/9] bpf, arm64: Fix private stack leak when JIT failed ---
+> commit 8de8b0f7fc232dba7540d3099301a4c55f3544c0
 > Author: Pu Lehui <pulehui@huawei.com>
 > 
-> riscv, bpf: Adjust bpf_func to account for CFI offset in bpf_jit_free
+> bpf, arm64: Fix private stack leak when JIT failed
 > 
-> When CFI is enabled, the actual BPF program entry point is shifted forward
-> by a CFI preamble. This commit subtracts the CFI offset from prog->bpf_func
-> in bpf_jit_free() to restore the original JITed allocation address before
-> freeing it, preventing an invalid memory free.
+> This patch fixes a memory leak in the ARM64 BPF JIT compiler. When JIT
+> compilation fails, the private stack percpu memory was being leaked because
+> the cleanup check evaluated to false after a pointer was left dangling. The
+> fix sets the pointer to NULL to ensure proper cleanup.
 > 
->> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
->> index cbfcd287ea166..059db1adeaf8d 100644
->> --- a/arch/riscv/net/bpf_jit_core.c
->> +++ b/arch/riscv/net/bpf_jit_core.c
->> @@ -237,6 +237,7 @@ void bpf_jit_free(struct bpf_prog *prog)
->>   			kvfree(jit_data->ctx.offset);
->>   			kfree(jit_data);
->>   		}
->> +		prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
->>   		hdr = bpf_jit_binary_pack_hdr(prog);
->>   		bpf_jit_binary_pack_free(hdr, NULL);
+>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>> index f4e4d4578e38a..6e036acf80d8b 100644
+>> --- a/arch/arm64/net/bpf_jit_comp.c
+>> +++ b/arch/arm64/net/bpf_jit_comp.c
+>> @@ -2311,6 +2311,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+>>   		bpf_arch_text_copy(&ro_header->size, &header->size,
+>>   				   sizeof(header->size));
+>>   		bpf_jit_binary_pack_free(ro_header, header);
+>> +		ro_header = NULL;
 > 
-> [Severity: High]
-> This is a pre-existing issue, but does ignoring the return value of
-> bpf_jit_binary_pack_finalize() (called just prior to this diff snippet)
-> lead to a use-after-free and double free?
+> [Severity: Medium]
+> This is a pre-existing issue, but while fixing this memory leak for arm64,
+> it appears that the PowerPC JIT compiler has the exact same problem.
+> 
+> In arch/powerpc/net/bpf_jit_comp.c:bpf_int_jit_compile():
+> 
+> 		if (bpf_jit_build_body(fp, code_base, fcode_base, &cgctx, addrs, pass,
+> 				       extra_pass)) {
+> 			bpf_arch_text_copy(&fhdr->size, &hdr->size, sizeof(hdr->size));
+> 			bpf_jit_binary_pack_free(fhdr, hdr);
+> 			goto out_err;
+> 		}
+> 
+> When jumping to the error cleanup path, the JIT binary is freed but the image
+> pointer remains non-NULL.
+> 
+> Then in the cleanup path:
+> 
+> out_addrs:
+> 		if (!image && priv_stack_ptr) {
+> 			fp->aux->priv_stack_ptr = NULL;
+> 			free_percpu(priv_stack_ptr);
+> 		}
+> 
+> Because the image pointer is still non-NULL, this check evaluates to false.
+> Can this also cause the private stack percpu memory to be leaked in the
+> PowerPC JIT? Should a similar fix be applied there?
+> 
+>>   	}
+>>   	goto out_off;
+>>   }
+> 
 
-patch 9 has been covered this.
-
-> 
-> If bpf_jit_binary_pack_finalize() fails, it frees ro_header internally:
-> 
-> kernel/bpf/core.c:bpf_jit_binary_pack_finalize() {
->      ...
->      if (IS_ERR(ptr)) {
->          bpf_prog_pack_free(ro_header, ro_header->size);
->          return PTR_ERR(ptr);
->      }
->      ...
-> }
-> 
-> Back in bpf_jit_free(), we ignore this failure, extract the same freed
-> header via bpf_jit_binary_pack_hdr(), and call bpf_jit_binary_pack_free()
-> which dereferences ro_header->size and frees it again:
-> 
-> kernel/bpf/core.c:bpf_jit_binary_pack_free() {
->      u32 size = ro_header->size;
-> 
->      bpf_prog_pack_free(ro_header, size);
->      ...
-> }
-> 
-> Should bpf_jit_free() check if bpf_jit_binary_pack_finalize() returned
-> an error before attempting to extract and free the header again?
-> 
->>   		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
-> 
+will fix if have new version, or will send new patch
 
