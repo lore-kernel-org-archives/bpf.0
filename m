@@ -1,217 +1,149 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C4A3F1ADB
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 10:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B043E1713
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 10:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785147053; cv=none; b=MAnbnru5/Xca6PpWj1csapblAashxg32/S0ofXFbdqrBZxxjuezOPLc9ACI5ZQYwHhoOFKlUHKZmwG1MfbTTkNHzHv7XSFWWliZMOWkCJ971OGVXQQfoguyckC004xdy+rHtabKishPo3l0U1c5lwRAiPNjGMV9AwRyg5rmDS9I=
+	t=1785148237; cv=none; b=Ijzvx8IU5exwyRLdtvC2IJf6l/LIOx9HKYqoVisBOkSjMNv/EkcCp2mtk8V1gMh0VwzlpX0SsAKEFf7x5Zvnewrwg7IeeZnE3/LSh09fcLdGd0KtchnU+eDe2Ksc1gfD+Yi5jLwpHMJpgVROKkQHiZ1QmAfPZ3ca6GhCPYwAv58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785147053; c=relaxed/simple;
-	bh=81KWZfVGL5O48f5ct6n1xE+qTqvmejayvMfGtVKn7Ec=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PsD8hG7gWfD2BQU1XfzBS7DS30fxXSaM/nZeLEBDk4Eet0ErNf9qR+XMUb49DXAE6aa8CQj/n5DNtCPMlup+nkdeFTTBo2zfBNkrsVh8yd1faYeZClcErM+3uAXX20LIAHAsTwW0YUPVcBjgT072hporsA7qACqMb+YSrYHJfv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IXa+b2/4; arc=none smtp.client-ip=209.85.128.49
+	s=arc-20240116; t=1785148237; c=relaxed/simple;
+	bh=37Co+XwP9uWZp5tfMpf5fcEYp8chfhoFKZKhxZtxJ2I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=txkQo6jkQ5lN08xCeO591PaLecTVkspPTXuxSR9ESe85GYTWMfxToI6tdFDF5D7k1thF20iGR1bpSSzGg5lOKSthjIeSpXgmpXD2ucQqT/6tBvDSwayLQN9VMaIQA4w+OUnHLDDJAmtrbrzeVamJPadNgMfNUCIuGQfIIh7Y83I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mfxaVYGl; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IXa+b2/4"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4955aa106b1so25431525e9.0
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 03:10:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mfxaVYGl"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8487214ad2bso3434647b3a.1
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 03:30:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785147050; x=1785751850; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=nLnBsTaRkUVSdEkbIlIrpALA+/Jwu41Chu/aPM4eBsw=;
-        b=IXa+b2/4i9icXDPKasI62U9pXoQAULCXlSE/jchyMZ80nGnNnoDG452x0f4AozMJYC
-         MRfAYf/MDNK1VFcG5MCpSuaG2FJ+rpfXoKDkwx1tuLtHyEFcasEb2ylqWLLdkwCuNqSh
-         lY5+UiaxyLaQi712HVRRk/nylNN0gPHKnP0BrV6V9WdNhuICtg+N7kB3tXwSCcKZGAFn
-         n5dLQN4qXbIXAZsqZ0z24ki5HRjgU3/nokFCLS5e4K5+BtEcNUU5G0g6xU7XyVZ73iNU
-         kxm7oxH+SvY25jGXOpDG7Bnu2fehusskhmcUMRt6hEa4WxU765nHqegUM6sCJ06yV7Ow
-         SsZA==
+        d=gmail.com; s=20251104; t=1785148228; x=1785753028; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ezCW4lm9mYFN6PTDfYpk3rq7ZibyjvVjQyvO71TAYU4=;
+        b=mfxaVYGlGxaXr0Lm8nh9V23Uuq39BxX4w/YJt6xEWuE3ik8GL1rMeBiX2gW1m1YmVx
+         mSiSeUAPkA7h9so1J2uqS1nfhHWYqkWZeOKzQQm9EwVh6Pk6HZ5JEkka4gHSQ+A7uZuq
+         UxTRKye7tO4X/Mqs+89zEroWqrFMDfqBbPdAJ3fhRoOOZdujJVOZWX9MTM1Ttcvq67vL
+         rKZHxYnys96pYuiTlgnmVgze0AjiJkCDMQjYgUNXp7ZaXtYIYSUbmCNCnQ+tddVibK3I
+         jZLoqn2R43DWgZdbm3wn3LCpULPXX4wz6vtnhtaCFnY3l4xnY6hEV7wDhxn4IEqrv5Ff
+         c4EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785147050; x=1785751850;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=nLnBsTaRkUVSdEkbIlIrpALA+/Jwu41Chu/aPM4eBsw=;
-        b=oHORxnwHygeRDopW3G46X4T5NCeRCCwgG2YJt5RKfnOf5ZUvLkWMWWu5Ya612uzl49
-         aKeiLwjj1NTVPgMyAUW4wqKissENYKIySfWHFNBtVgsFKPxqzOTjguExeQ07FL6L1upb
-         fIEox/fXoWS/BDcBaeo2587KvYGs16L5Iq1ff3ZWnqhK8NybZmkpxPZCa/ASzkcVPMHr
-         65Fz8wN5hRvf+py8g91V4WiH6Zf1UTTbYtPRy05TCMIFVVubP1FdkTUlGWKESwrZRprF
-         W8RNynTxdu3+0D7+vJ0M5DzZlOFctzlthdjPSgJxE52JgK5eBAgxnOvY1SLo+5vaV0xi
-         +Zbg==
-X-Forwarded-Encrypted: i=1; AHgh+Rrm/BG0dMdMTzpD8IUfbz6KXh5usiR4Junw2aFqr9PODFR3raajsB1BwGHGxQKUkqf+m5Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP/R/HHQvR4mxicfguSgJGnl4e2+RQ60xuPEvfWlSYtv5SdgkN
-	0n7oZ3Cq5AXbwRZ4OteSDAaUx7bqcFEdf2Q/Q0A2BH1bZeOCefWxWPq8Cb065w==
-X-Gm-Gg: AR+sD1133Ln9Y7YxhsoW9YOTQZaoU24OINYC6V2cMee/lDBjKMZJIWkjVYt0iJgf+jn
-	jn9V00Suu0md4Iu7mn7+c2+MiGbgmjUUSHZ7EeVtQMweJebmwgza5Uau3zQqWL1nAeAYdxBb94S
-	Zd3Q+6gfJbajbdamf26bvgSrWSZ90flreatjZMFxibJRnsHR9E7y03Vjx6pU38jnTP6Y6hR3Jvp
-	LUT26dp0P10P3NSIxh5OWnK7MJ0DTwxmWrwlif6inm7W5lzOtbOOtUo/55qyefvWfsbJpp6B8Ad
-	GVDoDVum/gE07HC4vEkdYNCgkevNhDmtSdW/jNETf8Jc+6H4Ig+mvNQ9K+mY5wPBQJdKogiC6Rb
-	zzm4m8BWQanS/iozwgoFJ72mAa/RKL0s5tzhmpCdPmXrEsFXPRN9wi6LtCbcCvcDtP15j6ML0+L
-	37S0S4jfwejnhdxhVEmG+OoYg=
-X-Received: by 2002:a05:600c:5487:b0:495:6c44:633f with SMTP id 5b1f17b1804b1-496b6d30541mr85884115e9.31.1785147049718;
-        Mon, 27 Jul 2026 03:10:49 -0700 (PDT)
-Received: from krava (ip-94-113-247-31.net.vodafone.cz. [94.113.247.31])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85c532d4sm46839260f8f.22.2026.07.27.03.10.48
+        d=1e100.net; s=20251104; t=1785148228; x=1785753028;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ezCW4lm9mYFN6PTDfYpk3rq7ZibyjvVjQyvO71TAYU4=;
+        b=Io7POLjD2PoC69YH815NTYHXNZC5fci1Ma/uc52fHowtXoXEqAWF9YrT7fmLr7Dhtz
+         OikyNR9hXYo2fYCpa79vxJEHX9mfErYG2tzVQo2IFSw6FB7aod+ISqh8LwX/GBpJEfeD
+         Gs4In24V187JqG03Scxf1fBg3VdnLgNHTyPmW2McCwBfFCqGFhwaUreTOQQx4kts39bn
+         2hnLkzUqoMn9ACF185ZekdiYJxeou+nU70MSQAiTjxjDQqASbB0A/Fl7rtYA88OGfm4U
+         Vh5r+ZKGb0s7Q1bv55rs8absJcbWB2531d6ukWkMnDDRuRsaH8yM6xP0Dbe+S+zjTK9G
+         UEBA==
+X-Forwarded-Encrypted: i=1; AHgh+RqbDRKcgQnV6O35KGnPWAXT1vXYWt2wMQENTVj0++hMg1+YQIT3cJ6bxLSmZpmVzV2hrB8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwytVDkbqSwzk85xJF68xKTGPjgsjh3OQleJMJrEpc23LC0YTBh
+	UJwBZfE3M4y5ar41owszbPIKP29HxZ/5OU9I+RmV+laXs2k8NFh+hBi6
+X-Gm-Gg: AR+sD107gLRk9WvvGurI8NbHxrE6sy1VCT7P9kk5byO8cxXynfDM1Fld/4ZhvuuUZ94
+	hsOxilqMoClaGUSlfc2eKdBlG9/4ZCdDFXhqKI8Y86Y8GDG8YsJivhLWT+PatL3A+Ny8Yxf7PAN
+	CzuyaVtwLBIxc7ouEXDMjndrWfgRkrpRjrfk0yKnSa+MSEZxjn8oDA/SQvYj0vl9M32Plj5Ua2p
+	0nPobBA9hChmSLUdD4AwRvpcj08TjRBZVuuY+T+P79o8L4pLLtPee4LRfZcK9lYms/ER5XQX7Ga
+	EnBk59B+zDRF+MKW+xef9yy4uIY2k/AtVqBZWBi24MPOvmjMn8lQIi4VKBPcVuJbKFmG6UjUAQq
+	8d08NQ8PIX9nHmiNoIJ6IoVi5kHkvZ1owzigc4HUBqJSyXHpo7FpS6k5S815vF43WbUArxzta
+X-Received: by 2002:a05:6a00:4fd3:b0:842:55b6:f5a1 with SMTP id d2e1a72fcca58-84e5943132cmr6671649b3a.6.1785148227986;
+        Mon, 27 Jul 2026 03:30:27 -0700 (PDT)
+Received: from omen-arch ([147.46.174.207])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e533cb54dsm2823860b3a.31.2026.07.27.03.30.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2026 03:10:49 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 27 Jul 2026 12:10:47 +0200
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, stable@vger.kernel.org,
-	Tao Chen <chen.dylane@linux.dev>, STAR Labs SG <info@starlabs.sg>,
-	bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	Quentin Monnet <qmo@kernel.org>
-Subject: Re: [PATCH bpf-next 9/9] bpf: Disable preemption in __bpf_get_stack
-Message-ID: <amcup1unyLB6rXZ3@krava>
-References: <20260720085351.655075-1-jolsa@kernel.org>
- <20260720085351.655075-10-jolsa@kernel.org>
- <4aa21cf3-0ed6-424c-9c96-425e2e5ed586@linux.dev>
+        Mon, 27 Jul 2026 03:30:26 -0700 (PDT)
+From: Junseo Lim <zirajs7@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Guillaume Nault <gnault@redhat.com>,
+	Fernando Fernandez Mancera <fmancera@suse.de>,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Thomas Graf <tgraf@suug.ch>,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Junseo Lim <zirajs7@gmail.com>
+Subject: [PATCH bpf] lwt_bpf: account for aligned neigh header length
+Date: Mon, 27 Jul 2026 19:30:05 +0900
+Message-ID: <20260727103005.897983-1-zirajs7@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4aa21cf3-0ed6-424c-9c96-425e2e5ed586@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jul 24, 2026 at 01:23:21PM -0700, Ihor Solodrai wrote:
-> On 2026-07-20 1:53 a.m., Jiri Olsa wrote:
-> > From: Daniel Borkmann <borkmann@iogearbox.net>
-> > 
-> > get_perf_callchain() returns a per-CPU perf_callchain_entry buffer and
-> > releases its recursion slot via put_callchain_entry() before returning,
-> > so nothing keeps the entry reserved while __bpf_get_stack() consumes
-> > it below.
-> > 
-> > A preemptible BPF program (e.g. a non-sleepable raw tracepoint program
-> > on a PREEMPT kernel, which runs under migrate_disable() but not
-> > preempt_disable()) can be scheduled out between obtaining the entry
-> > and the copy. Another task scheduled on the same CPU then reuses the
-> > same per-CPU buffer and overwrites trace->nr with a larger value.
-> > copy_len is then computed from the inflated trace->nr and can exceed
-> > the caller's buffer, causing an out-of-bounds write in the memcpy()
-> > and in the build_id path.
-> > 
-> > The rcu_read_lock() previously taken here does not prevent this. It is
-> > only taken on the may_fault path, and under CONFIG_PREEMPT_RCU it does
-> > not disable preemption; it merely keeps perf's callchain buffer array
-> > alive (freed via call_rcu()) and does nothing to stop another task
-> > from reusing the entry.
-> > 
-> > Disable preemption around obtaining the callchain entry and copying
-> > it into the caller's buffer, so the entry cannot be reused underneath
-> > us and trace->nr stays bounded by max_depth. Build ID resolution may
-> > fault and is therefore deferred until after preemption is re-enabled;
-> > by then the instruction pointers have already been copied into buf,
-> > so it operates only on that private copy. Note, preempt_disable() also
-> > subsumes the buffer-lifetime guarantee the rcu_read_lock() provided,
-> > since a preempt-disabled section is an RCU read-side critical section
-> > for the callchain buffers' call_rcu() reclaim.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: c195651e565a ("bpf: add bpf_get_stack helper")
-> > Reported-by: Tao Chen <chen.dylane@linux.dev>
-> > Closes: https://lore.kernel.org/bpf/20260206090653.1336687-1-chen.dylane@linux.dev/
-> > Reported-by: STAR Labs SG <info@starlabs.sg>
-> > Signed-off-by: Daniel Borkmann <borkmann@iogearbox.net>
-> > [ changed Fixes: commit ]
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >   kernel/bpf/stackmap.c | 9 +++------
-> >   1 file changed, 3 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> > index 57cd4c33403b..37f8e46319b3 100644
-> > --- a/kernel/bpf/stackmap.c
-> > +++ b/kernel/bpf/stackmap.c
-> > @@ -819,8 +819,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
-> >   	max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
-> > -	if (may_fault)
-> > -		rcu_read_lock(); /* need RCU for perf's callchain below */
-> > +	preempt_disable();
-> 
-> With the series applied on bpf-ci-like kconfig I get a "suspicious RCU
-> usage" splat on BPF selftests, pasted at the bottom.
-> 
-> AFAIU, the rcu_read_lock() that's removed here was not only
-> controlling the lifetime (which is now covered by preempt_disable),
-> but also putting the RCU read-side annotation for the
-> 
-> 	entries = rcu_dereference(callchain_cpus_entries);
-> 
-> in get_callchain_entry() (callchain.c:163).
-> 
-> preempt_disable() never takes rcu_lock_map, and a sleepable program
-> holds only rcu_read_lock_trace() (rcu_tasks_trace_srcu_struct), which
-> is a different lockmap. So on PREEMPT_RCU + PROVE_RCU the
-> rcu_dereference_check() there now fails (see the splat).
-> 
-> The non-sleepable path is fine because it enters with rcu_read_lock()
-> held via rcu_read_lock_dont_migrate().
-> 
-> I think to fix this we have to keep if (may_fault) rcu_read_lock();
-> alongside preempt_disable(). Something like this:
-> 
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 37f8e46319b3..6be413072ef6 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -820,6 +820,8 @@ static long __bpf_get_stack(struct pt_regs *regs, struct
-> task_struct *task,
->         max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
-> 
->         preempt_disable();
-> +       if (may_fault)
-> +               rcu_read_lock();
-> 
->         if (kernel && task) {
->                 trace = get_callchain_entry_for_task(task, max_depth);
-> @@ -829,6 +831,8 @@ static long __bpf_get_stack(struct pt_regs *regs, struct
-> task_struct *task,
->         }
-> 
->         if (unlikely(!trace) || trace->nr < skip) {
-> +               if (may_fault)
-> +                       rcu_read_unlock();
->                 preempt_enable();
->                 goto err_fault;
->         }
-> @@ -836,6 +840,8 @@ static long __bpf_get_stack(struct pt_regs *regs, struct
-> task_struct *task,
->         trace_nr = callchain_store(trace, buf, size, elem_size, flags);
-> 
->         /* trace should not be dereferenced after this point */
-> +       if (may_fault)
-> +               rcu_read_unlock();
->         preempt_enable();
-> 
->         return callchain_finalize(buf, size, trace_nr, elem_size,
-> user_build_id, user, may_fault);
-> 
-> 
-> I confirmed this diff fixes the splat below.
+ip_finish_output2() expands an skb to LL_RESERVED_SPACE(dev) before LWT
+xmit. An LWT_XMIT BPF program can then modify the skb head and still
+return BPF_OK, so bpf_xmit() rechecks the remaining headroom before the
+skb continues to neighbour output.
 
-yes, I managed to reproduce it as well.. basically just to add
-the preemption_disable/enable hunks and keey rcu locks in place
+That recheck uses dst->dev->hard_header_len. This is not enough for the
+neighbour cached-header path: neigh_hh_output() copies the cached hardware
+header using the aligned hh_cache size, HH_DATA_MOD for short headers or
+HH_DATA_ALIGN(hh_len) otherwise.
 
-> 
-> I guess teaching the perf side to accept rcu_read_lock_sched_held()
-> would also work, but that's out of scope for a bpf fix and may be no
-> less tricky.
+On Ethernet, hard_header_len is 14 but the cached copy needs 16 bytes. If
+an LWT_XMIT BPF program calls bpf_skb_change_head(skb, 1, 0), the skb can
+still have 15 bytes of headroom after the program. xmit_check_hhlen()
+accepts that, after which neigh_hh_output() hits its headroom warning and
+drops the skb.
 
-will check, but you might be right it'd be tricky
+Compare against the aligned hardware header length in xmit_check_hhlen()
+so the BPF_OK path leaves enough headroom for neigh_hh_output()'s cached
+header copy.
 
-thanks,
-jirka
+Fixes: 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel infrastructure")
+Signed-off-by: Junseo Lim <zirajs7@gmail.com>
+---
+Tested on a veth pair with an LWT_XMIT program calling
+bpf_skb_change_head(skb, 1, 0). Before the patch, a UDP packet sent by
+the reproducer triggers the neigh_hh_output() warning and is dropped.
+With the patch, the packet is delivered without the warning.
+
+Below is an excerpt of the warning before the patch:
+
+    WARNING: ./include/net/neighbour.h:538 at ip_finish_output2+0x19f0/0x1f80, CPU#0: lwt_xmit_headro/55
+    Call Trace:
+     __ip_finish_output+0x59b/0x8b0
+     ip_finish_output+0x67/0x390
+     ip_output+0x1db/0x700
+     ip_send_skb+0x1f6/0x270
+     udp_send_skb+0x8d2/0xe00
+     udp_sendmsg+0x1717/0x2620
+     __sys_sendto+0x443/0x4e0
+
+ net/core/lwt_bpf.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+index bf588f508b79..2890aa59a3a0 100644
+--- a/net/core/lwt_bpf.c
++++ b/net/core/lwt_bpf.c
+@@ -169,8 +169,10 @@ static int bpf_output(struct net *net, struct sock *sk, struct sk_buff *skb)
+ 
+ static int xmit_check_hhlen(struct sk_buff *skb, int hh_len)
+ {
+-	if (skb_headroom(skb) < hh_len) {
+-		int nhead = HH_DATA_ALIGN(hh_len - skb_headroom(skb));
++	int hh_alen = HH_DATA_ALIGN(hh_len);
++
++	if (skb_headroom(skb) < hh_alen) {
++		int nhead = HH_DATA_ALIGN(hh_alen - skb_headroom(skb));
+ 
+ 		if (pskb_expand_head(skb, nhead, 0, GFP_ATOMIC))
+ 			return -ENOMEM;
+-- 
+2.55.0
