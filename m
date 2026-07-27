@@ -1,155 +1,112 @@
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002CB233949;
-	Mon, 27 Jul 2026 02:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=58.251.27.85
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 500343A5431;
+	Mon, 27 Jul 2026 02:51:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785120099; cv=none; b=V98XKrqDpcsS2EOEmSWeCRJCqOGzhbtdQATU0QPXb71aoXBIaQ2pXGBkvHRG43sy8IlusjCTl+7ce7J4b9xeuX910+4LOUrFdAOMTzSje3LRlPYHYg29r5sGnaALjWrhDAtBMmBElMFZsNwK2W08zpfVevTrm0LUn6nHkttNVEM=
+	t=1785120670; cv=none; b=kr3nHvoADqf6dJmsCLN3/BTEEoaZs9malqu998nmAhJU9JKwj5hwwJ0iPLkkRkiZJWT7wXsehbNTSmD1b4xM2w8vyk1gKm19oohARZrzpD9k7/I1FbbsF8rCpMkRA83CkLoXyC+09+gClzhB75M924Dq3sOL7fIfqggYWJzO21o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785120099; c=relaxed/simple;
-	bh=0Df5WMixY8o8xPmWKlrg6APmHAxDp4zfSWgmT3miCh8=;
-	h=Message-ID:In-Reply-To:References:Date:Mime-Version:From:To:Cc:
-	 Subject:Content-Type; b=q2WPq/JHLONhSHQz4X/64G5OoOLtAiNSPkmOdkubxVbRgkBVzbH9Y3ibfEzA3+IlxRlQK2QkpsEQFTaCvjhc83pQCSzaRWUVFpFfaIO7tzxWH5FLLq4+7yHi2eyS95f2zotcejdhqg7PUXbab1+ahLjTyw4PRrQ8H4jauLAmTvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=58.251.27.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mxde.zte.com.cn (unknown [10.35.20.121])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mxct.zte.com.cn (FangMail) with ESMTPS id 4h7jKy1pXKz1Dsx;
-	Mon, 27 Jul 2026 10:32:22 +0800 (CST)
-Received: from mxhk.zte.com.cn (unknown [192.168.250.137])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mxde.zte.com.cn (FangMail) with ESMTPS id 4h7jKn2Z2Kz9vSpD;
-	Mon, 27 Jul 2026 10:32:13 +0800 (CST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4h7jKc2f9Hz8Xrrd;
-	Mon, 27 Jul 2026 10:32:04 +0800 (CST)
-Received: from xaxapp05.zte.com.cn ([10.99.98.109])
-	by mse-fl1.zte.com.cn with SMTP id 66R2VvI5049195;
-	Mon, 27 Jul 2026 10:31:57 +0800 (+08)
-	(envelope-from xu.xin16@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Mon, 27 Jul 2026 10:31:58 +0800 (CST)
-X-Zmail-TransId: 2af96a66c31e449-abb4b
-X-Mailer: Zmail v1.0
-Message-ID: <20260727103158658fTr4mVbmUdVPeIguhCrHf@zte.com.cn>
-In-Reply-To: <31dc8d80-83d6-43fa-8e49-b5b9b3a6c648@linux.dev>
-References: 20260726230724742Z4CDN9ntFInEofAf2YxME@zte.com.cn,31dc8d80-83d6-43fa-8e49-b5b9b3a6c648@linux.dev
-Date: Mon, 27 Jul 2026 10:31:58 +0800 (CST)
+	s=arc-20240116; t=1785120670; c=relaxed/simple;
+	bh=OwPkACbEPQSVRVNRHcVlYm1f1y6ZvMPJGiWJUOg34iI=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=nwBviy9UYDuEPqqhJArLv9H8NsF/sw3RftqqbrGIODnhdOME7ZSBdp6Re+bwQI5XoRheihfqZH1TX1QXOTPQ1YfsBxY/XetNrcxkHirSvZanOeHK11iqAMW2k1QLqoGmmk1/dHYwON2MHhbUbc3j8Wxg6qCmJStpRg3+lUciqm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxuKAix2ZqtJoHAA--.3745S3;
+	Mon, 27 Jul 2026 10:49:07 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJDxDcf5xmZqKxQaAA--.8355S2;
+	Mon, 27 Jul 2026 10:48:26 +0800 (CST)
+Subject: Re: [PATCH RFC 2/2] LoongArch: BPF: Eliminate zero/sign extensions
+ for 32-bit operations
+To: Hengqi Chen <hengqi.chen@gmail.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260711101656.7415-1-yangtiezhu@loongson.cn>
+ <20260711101656.7415-3-yangtiezhu@loongson.cn>
+ <CAEyhmHRahSQeasoz2J1QTFcaNCtGPHdH7OT7VC3uKvTy61byfA@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <b20c7963-e1b8-cc37-b16b-52cced81316c@loongson.cn>
+Date: Mon, 27 Jul 2026 10:48:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <xu.xin16@zte.com.cn>
-To: <leon.hwang@linux.dev>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
-        <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
-        <jolsa@kernel.org>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <leon.hwang@linux.dev>
-Subject: =?UTF-8?B?UmU6IFtQQVRDSCBicGYtbmV4dCB2Ml0gYnBmOiBMb2cgZXJyb3IgY29kZSBvbiB0cmFtcG9saW5lIHVubGluayBmYWlsdXJl?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl1.zte.com.cn 66R2VvI5049195
-X-TLS: YES
-X-ENVELOPE-SENDER: xu.xin16@zte.com.cn
-X-SOURCE-IP: 10.35.20.121 unknown Mon, 27 Jul 2026 10:32:22 +0800
-X-CLEAN: YES
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6A66C334.000/4h7jKy1pXKz1Dsx
+MIME-Version: 1.0
+In-Reply-To: <CAEyhmHRahSQeasoz2J1QTFcaNCtGPHdH7OT7VC3uKvTy61byfA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxDcf5xmZqKxQaAA--.8355S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KF1UXr47ur13try8uFWrtFc_yoW8Jw47pr
+	s7KF4Ska1DJrn2vry8ArZrXr43Ar4Yga1kGr1qq3y8Z34a9r1SgFyjga12kFyxCr4xWr4v
+	qF1qvr98ZF45GFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
+	AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+	Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
+	AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
+	cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
+	8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
+	6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jjwZcUUUUU=
 
-> > Replace silent WARN_ON_ONCE with WARN_ONCE that prints the actual error
-> > code from bpf_trampoline_unlink_prog(). This aids debugging of race
-> > conditions during link teardown, while keeping the warning rate limited
-> > to avoid log flooding.
-> > 
-> > This will be very helpful for speeding up trouble-shooting of some crash
-> > UAF due to bpf_trampoline_unlink_prog failures.
-> > 
-> > No functional change intended.
-> 
-> Is it "No change to unlink behavior"?
+On 2026/7/26 下午5:23, Hengqi Chen wrote:
+> On Sat, Jul 11, 2026 at 6:17 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> Eliminate frequent and redundant zero-extensions and sign-extensions
+>> for 32-bit operations. This prevents potential functional bugs caused
+>> by incorrect extension selections and reduces runtime overhead.
 
-Yes.
+...
 
+>> @@ -741,28 +725,32 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+>>          switch (code) {
+>>          /* dst = src */
+>>          case BPF_ALU | BPF_MOV | BPF_X:
+>> +               if (imm == 1) {
+>> +                       emit_insn(ctx, lu32id, reg, 0);
 > 
-> > 
-> > Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> > ---
-> > v1->v2:
-> > 1) clean the subject name by remove 'syscall' suggested by Leon Hwang
-> > https://lore.kernel.org/all/20a444b2-aeed-4af8-ba76-e994e2c14087@linux.dev/
-> > 2) Add up the missed case in kernel/bpf/trampoline.c:bpf_shim_tramp_link_release()
-> > 
-> > kernel/bpf/syscall.c    | 9 ++++++---
-> >  kernel/bpf/trampoline.c | 5 ++++-
-> >  2 files changed, 10 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 6db306d23b47..2348dc33abf4 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -3626,10 +3626,13 @@ static void bpf_tracing_link_release(struct bpf_link *link)
-> >  {
-> >      struct bpf_tracing_link *tr_link =
-> >          container_of(link, struct bpf_tracing_link, link.link);
-> > +    int err;
-> > 
-> > -    WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link.node,
-> > -                        tr_link->trampoline,
-> > -                        tr_link->tgt_prog));
-> > +    err = bpf_trampoline_unlink_prog(&tr_link->link.node,
-> > +                    tr_link->trampoline,
-> > +                    tr_link->tgt_prog);
-> > +    if (err)
-> > +        WARN_ONCE(err, "bpf_trampoline_unlink_prog returns error: %d\n", err);
+> reg ?
 > 
-> 'if (err)' here is unnecessary.
-> 
-> > 
-> >      bpf_trampoline_put(tr_link->trampoline);
-> > 
-> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > index 1a721fc4bef5..dae3c2104ed4 100644
-> > --- a/kernel/bpf/trampoline.c
-> > +++ b/kernel/bpf/trampoline.c
-> > @@ -997,12 +997,15 @@ static void bpf_shim_tramp_link_release(struct bpf_link *link)
-> >  {
-> >      struct bpf_shim_tramp_link *shim_link =
-> >          container_of(link, struct bpf_shim_tramp_link, link.link);
-> > +    int err;
-> > 
-> >      /* paired with 'shim_link->trampoline = tr' in bpf_trampoline_link_cgroup_shim */
-> >      if (!shim_link->trampoline)
-> >          return;
-> > 
-> > -    WARN_ON_ONCE(bpf_trampoline_unlink_prog(&shim_link->link.node, shim_link->trampoline, NULL));
-> > +    err = bpf_trampoline_unlink_prog(&shim_link->link.node, shim_link->trampoline, NULL);
-> > +    if (err)
-> > +        WARN_ONCE(err, "bpf_trampoline_unlink_prog returns error: %d\n", err);
-> 
-> Ditto.
-> 
-> >      bpf_trampoline_put(shim_link->trampoline);
-> >  }
-> > 
-> 
-> Would it be better to include this multi_detach() one?
-> 
->         WARN_ON_ONCE(__bpf_trampoline_unlink_prog(&mnode->node, mnode->trampoline,
->                     NULL, &trampoline_multi_ops, data));
-> 
+>> +                       break;
 
-Sure, what about moving WARNing into __bpf_trampoline_unlink_prog and then the failures of
-__bpf_trampoline_unlink_prog everywhere will be logged.
+...
+
+>>          /* dst = dst & imm */
+>>          case BPF_ALU | BPF_AND | BPF_K:
+>> +               if (is_unsigned_imm12(imm)) {
+>> +                       emit_insn(ctx, andi, dst, dst, imm);
+>> +               } else {
+>> +                       move_imm(ctx, t1, imm);
+>> +                       emit_insn(ctx, and, dst, dst, t1);
+>> +               }
+>> +               emit_insn(ctx, addiw, dst, dst, 0);
+> 
+> break; ?
+
+Thanks for your review.
+As mentioned in the cover letter, this hasn't been tested.
+I just want to confirm that this is the correct direction.
+
+The long-term goal is to eliminate frequent and redundant
+zero-extensions and sign-extensions, but there are still
+some issues to sort out. I will send the formal patch once
+all problems are fixed.
+
+For now, I will send out the stable and verified patches
+first this week.
+
+Thanks,
+Tiezhu
+
