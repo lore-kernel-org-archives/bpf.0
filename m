@@ -1,209 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490323E47B
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 19:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96C03D5C1D
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 20:39:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785181097; cv=none; b=TqlpMLYfRJPjlAkJyKI52hEE/FXaTAiG1mPGJGMjLFgDm6thPlchbczjryXwE5q/SmIKFQmzC7g/EuAHjSATPdpzqSlzZyw9vpa5hKK4YwwzgOqolf5HPoyZEwOBtMd+eLdIZ8aXSJRrtx7XjEGFQGAP8831rxiDPpa1pFTnDO8=
+	t=1785184746; cv=none; b=MT94xqr4Ujt7X+LGKQq91hfkvmX4juKy3c7b1zQ1+fZCVXWzeHRILzV5BUTCZ5eiePxxgtIc+ahfq1UbTzvwNtp1DTyM8DaQRS2YYV1Z8haFK3liGreGcH15G+PbNj4gMm+/kGmMpbu8UIJmA8PPRAq4AmdUPKSuhW3yaZCGhr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785181097; c=relaxed/simple;
-	bh=PUTUq9ooNrbONPOxNvgqYTkR/wYMVFYuT4NPxYX0NKI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YptelEwL8ToWdnXCmjWtYus5MDiFjS1R7TccEiybbK6BTrrWiTwQXYyF0gGDy0tOClX7KeDUzMhejQhnmLCCKvQKau7sp3n9jeTHuZkM2W1agJflGZhewOSZznt4CHmBp7slV7+DOmukEfhYb4YhDA0S/4nlfv1KNpmxVvooXSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kPCw0MFC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785184746; c=relaxed/simple;
+	bh=rpmY80Eh8eu7bZyZWI7vW3/AjCrG0Dm8/g9AVDjL1iA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=E+1VnI8dRBlDcjNn8U4iwfLJLXx9b6L4TTUKxnFjKOsCOU8gKxD/ZVwR70NZAwdkjo6Wm0LGTLJy15IkrqKMoSwahG6ZzvTpsNPPpMh0f1FtVyBP3aRb+J84ifY1xz6zWm9wc+T9VBwyZrVngiR+jgmsaFrzUxmUzHv4F8Wq8bE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fgDATMic; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kPCw0MFC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF6BB1F000E9;
-	Mon, 27 Jul 2026 19:38:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785181095;
-	bh=5JBzxVq+OHGPSXi7HxooEpN/6Q9Y9ugO3DRgL/UVMrI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kPCw0MFCj/nCxcJlkXzP7yvUb4fb+nTgb3z9eR1fD7dMs3fSe1X8ibW8/3itKlSmt
-	 KmTSTR6HdPLsKiYw+dcHxtuqM/uLbDqODuH61Fb7Yz+IWCzhNGLVrYw921NUbz/ZfQ
-	 VhYUlKr95Zbh5HC5yHt+3I9i1PGs1HRM/7VHXg9CjXPE4fwhSfLpPwXJV60yPv2i9k
-	 1iNJIMFXVlBSUuG4rqMXFK1Ug9yR9GBjDIh0qtgK6jjknouQkz+KFXjGwAYPPFfkRL
-	 8391s+h/pN61c/hbfwTu5BrNl6UexTC/zXFiFJ5E8b6lm+VmDhhOz9i8wrFiYHSqNb
-	 xPHAiVGEeMagA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 net-next 1/1] tcp: allow congestion controls to
- override TSO autosizing
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260726193802.397321-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20260726193802.397321-1-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fgDATMic"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ceb096e675so38197215ad.0
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 13:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785184744; x=1785789544; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=BXyVEq/b2FV4LPYAtsaVIrdOJ6rPdn55UofAB2nsa0c=;
+        b=fgDATMicKBIfsGYOVDaf8keTcr1fLn65xps3YcATzSZjpxfLib8dcBbxncIHSRbDBN
+         uS87c7Ks1i0V5+6SA9AGpPJNFW4f7e5YrtSehcx5aI/DgE+HuIi2MRQWX7HCD39wTaRC
+         DTVoKRdVcU8ebqydMBnKVUEiNW1Y2e3AIzWuNa0QSfvldNr3IlaaRXkdCY+6SYGVzlFd
+         W9QQUppHu2vHzUqb0QfyGcdvfr+A8ZiLE5LoFmRhBp6d9D4Upymahi5bHQf6hv1SEgnu
+         ZzHUEsU5xaowilMqWqaDpfke2GgffWZZW1uoyECTkVtQm6G47/jlkc00x0RcDejqyvuo
+         hp2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785184744; x=1785789544;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BXyVEq/b2FV4LPYAtsaVIrdOJ6rPdn55UofAB2nsa0c=;
+        b=dLEpPBwgtdrFat60XZSoA4Y3orWhXk9etBfxiA5t2BDaf2z9vl4kzEcZwjp5Y0I+2P
+         5i0ANxBXpo6X93rSuSk5TMKRJgXJxP5jVeN7urXcKkhlUyJ9qom7OBjBKuFMihdAYMPD
+         OsZhLMDfYmPKVNl4KVfZbLY8gMojCeJSg7wSosWTK51/U6dUlRWKrOh/Cgoo00vynn+K
+         svaMWkeSosXsQooRcZV6PIc/E3BsMuoheuKsEBq6/h+ib4EdHo77cdjjG/NmFbXhtThP
+         nO5xBkEKr+4ENm3UQzG8N/SfefTAh1gY6TK0CfuzL2q3HHoCw6sk0evgJmWzZS9ggkSs
+         VOAg==
+X-Forwarded-Encrypted: i=1; AHgh+RqjRS7ch56qF9tbZ/yJ9XqKGh626lfho1hxLP2MzIWHDsBlfmbtqEuUxOQYzhRYE5fIhXQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEL1ThL/FBFfMqoSJjvzoQqPdVU6uZhsV9mbfsksaJSofyBtbp
+	CHtaMbrRjxWP2X4Luvw78mlUwyitWzTfEa60mwrs32peJYKAdVhLvPHk
+X-Gm-Gg: AR+sD12der68gG9zQ3IqNc8nUlHWHj9IFLQdPwKLf7QzF4erFC5Uvp9NdghaSsY7BF5
+	rsOm/o1GFz2BWC5uJxWN1VzUyRyKlz5/mK02tPVXmK7qGLLp3FnFgRuqtkVNofPMsdyDn1WGlSw
+	8ge4kVKWBDDplezhGVKeFKzRNLN3OWq6NZB0cmg9RxbgWapmCELr7582DuMFI4/VIaMJSEUG9Tp
+	2l3xWak2+L4YFUPc4Y23q45wGhalGg4rzT2eyrg3x1bIQ5dMt+mYv22YjTYZhdWLnC2wD7DE1en
+	eHixv/AY5Ms6gSG5M3es1CBU5+sidAsnSUTZd3G8LoUfyzgrXHXyGEP/9mSqH44c03UKEFdut40
+	415i3tWXI/3tGqY/Q1mJJlSnTawVSIO2KAxtIzuFz07glYphkCMXLCZ9QhCBIx0MbzPzvQwH3tV
+	9DaT/E6BAQ5ZnJzff/34UBKpMCVaApqg==
+X-Received: by 2002:a17:902:e804:b0:2ca:d172:7228 with SMTP id d9443c01a7336-2cfde7a73a4mr102734845ad.11.1785184743944;
+        Mon, 27 Jul 2026 13:39:03 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde7bbde0sm40070865ad.50.2026.07.27.13.39.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2026 13:39:03 -0700 (PDT)
+Message-ID: <d8dd78c7a3d7f023ae115808cb1165f61916b371.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 05/18] bpf: Check helper and kfunc mem+size
+ arguments identically
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net, 
+	memxor@gmail.com, kernel-team@meta.com
+Date: Mon, 27 Jul 2026 13:39:00 -0700
+In-Reply-To: <20260724190813.1458271-6-ameryhung@gmail.com>
+References: <20260724190813.1458271-1-ameryhung@gmail.com>
+	 <20260724190813.1458271-6-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Jul 2026 19:38:15 +0000
-Message-Id: <20260727193815.AF6BB1F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] Moving `min_tso_segs` into an anonymous union breaks the registrat=
-ion and map updates of BPF TCP congestion controls, rendering the BPF CA su=
-bsystem unusable.
-- [High] Aliasing function pointers with different signatures inside a unio=
-n creates severe Control Flow Integrity (CFI) hazards and breaks BPF stub g=
-eneration.
-- [High] Returning 0 from `ca_ops->tso_segs()` causes a permanent stall in =
-the TCP write queue.
---
+On Fri, 2026-07-24 at 12:07 -0700, Amery Hung wrote:
+> Helper ARG_CONST_SIZE and kfunc KF_ARG_PTR_TO_MEM_SIZE memory
+> arguments already share check_mem_size_reg(), but only the kfunc wrapper
+> check_kfunc_mem_size_reg() ran mark_ptr_not_null_reg() on a possibly-NULL
+> pointer before the access check. That call does more than clearing
+> PTR_MAYBE_NULL: it converts special map-value-or-null registers to their
+> real non-NULL type, e.g. a map-in-map value to CONST_PTR_TO_MAP. Without
+> it the register keeps base type PTR_TO_MAP_VALUE and check_map_access()
+> treats it as raw data.
+>=20
+> Because the helper path skipped that step, an un-narrowed map-of-maps
+> value could be passed to a nullable helper mem argument (e.g.
+> bpf_csum_diff()) and read as bytes, leaking the inner map descriptor (a
+> kernel pointer). The kfunc path already rejected the same program.
+>
+> Handle the possibly-NULL pointer in the shared mem-argument checking so
+> helper and kfunc arguments are verified the same way, and drop the now
+> redundant check_kfunc_mem_size_reg() wrapper. Both paths now reject an
+> un-narrowed map-in-map value used as memory.
+>=20
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
 
---- Patch [1]: [PATCH v4 net-next 1/1] tcp: allow congestion controls to ov=
-erride TSO autosizing ---
-commit 986d64ed9a398f1ef7247d7b653292cb0b6d25f3
-Author: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 
-tcp: allow congestion controls to override TSO autosizing
+...
 
-This patch introduces the TCP_CONG_EXACT_TSO_SEGS flag and adds an alternat=
-ive
-tso_segs() callback to tcp_congestion_ops. It allows congestion control
-algorithms to provide an exact TSO segment count instead of just a minimum.
-This is implemented by placing the new callback in a union with the existing
-min_tso_segs() callback.
-
-Link: None
-
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 2c5b889530b55..82cd82a19ff91 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-[ ... ]
-> @@ -1361,8 +1363,16 @@ struct tcp_congestion_ops {
->  	/* hook for packet ack accounting (optional) */
->  	void (*pkts_acked)(struct sock *sk, const struct ack_sample *sample);
-> =20
-> -	/* override sysctl_tcp_min_tso_segs (optional) */
-> -	u32 (*min_tso_segs)(struct sock *sk);
-> +	union {
-> +		/* Used when TCP_CONG_EXACT_TSO_SEGS is not set,
-> +		 * override sysctl_tcp_min_tso_segs (optional)
-> +		 */
-> +		u32 (*min_tso_segs)(struct sock *sk);
-> +		/* Used when TCP_CONG_EXACT_TSO_SEGS is set,
-> +		 * override tcp_tso_autosize (optional)
-> +		 */
-> +		u32 (*tso_segs)(struct sock *sk, u32 mss_now);
-> +	};
-
-[Severity: High]
-Does this anonymous union prevent the BPF TCP congestion control subsystem =
-from
-initializing?
-
-Looking at bpf_struct_ops_desc_init() in kernel/bpf/bpf_struct_ops.c, the B=
-PF
-framework iterates over the members of the struct. If it encounters an
-anonymous member, it explicitly rejects it with an "anon member in struct is
-not supported" warning and aborts the registration:
-
-kernel/bpf/bpf_struct_ops.c:bpf_struct_ops_desc_init() {
-    ...
-    if (!*mname) {
-        pr_warn("anon member in struct %s is not supported\n",
-            st_ops->name);
-        err =3D -EOPNOTSUPP;
-        goto errout;
-    }
-    ...
-}
-
-[Severity: High]
-Can aliasing function pointers with different signatures inside a union cre=
-ate
-Control Flow Integrity (CFI) hazards?
-
-The union aliases min_tso_segs (1 argument) and tso_segs (2 arguments). If a
-congestion control module misconfigures the TCP_CONG_EXACT_TSO_SEGS flag, t=
-he
-kernel might execute an indirect call using a signature that does not match=
- the
-target function's compiled kCFI hash. Would this trigger a kernel panic?
-
-Additionally, does this break BPF stub generation since the static stub
-structure __bpf_ops_tcp_congestion_ops can only populate a single pointer f=
-or
-this memory offset?
-
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> index d7c1444b5e304..0de27a87c39e7 100644
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
-[ ... ]
-> @@ -2278,11 +2278,20 @@ static u32 tcp_tso_segs(struct sock *sk, unsigned=
- int mss_now)
->  	const struct tcp_congestion_ops *ca_ops =3D inet_csk(sk)->icsk_ca_ops;
->  	u32 min_tso, tso_segs;
-> =20
-> -	min_tso =3D ca_ops->min_tso_segs ?
-> -			ca_ops->min_tso_segs(sk) :
-> -			READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
-> +	min_tso =3D READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 468702b09c50..2e56f726c12a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6873,7 +6873,14 @@ static int check_mem_size_reg(struct bpf_verifier_=
+env *env,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool zero_size_allowed,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct bpf_call_arg_meta *meta)
+> =C2=A0{
+> -	int err;
+> +	bool may_be_null =3D type_may_be_null(mem_reg->type);
+> +	struct bpf_reg_state saved_reg;
+> +	int err =3D 0;
 > +
-> +	if (ca_ops->flags & TCP_CONG_EXACT_TSO_SEGS) {
-> +		if (WARN_ON_ONCE(!ca_ops->tso_segs))
-> +			tso_segs =3D tcp_tso_autosize(sk, mss_now, min_tso);
-> +		else
-> +			tso_segs =3D ca_ops->tso_segs(sk, mss_now);
-> +	} else {
-> +		if (ca_ops->min_tso_segs)
-> +			min_tso =3D ca_ops->min_tso_segs(sk);
-> +
-> +		tso_segs =3D tcp_tso_autosize(sk, mss_now, min_tso);
+> +	if (may_be_null) {
+> +		saved_reg =3D *mem_reg;
+> +		mark_ptr_not_null_reg(mem_reg);
 > +	}
-> =20
-> -	tso_segs =3D tcp_tso_autosize(sk, mss_now, min_tso);
->  	return min_t(u32, tso_segs, sk->sk_gso_max_segs);
->  }
+> =C2=A0
+> =C2=A0	/* This is used to refine r0 return value bounds for helpers
+> =C2=A0	 * that enforce this value as an upper bound on return values.
+> @@ -6910,8 +6917,14 @@ static int check_mem_size_reg(struct bpf_verifier_=
+env *env,
 
-[Severity: High]
-Does this code allow ca_ops->tso_segs() to return 0 and stall the socket?
+Nit: change the prototype of the check_mem_size_reg() to have 'access_type'
+     declared as u32? As it is no longer an enum, but a mask.
 
-While tcp_tso_autosize() is guaranteed to return at least 1 (because
-sysctl_tcp_min_tso_segs is strictly clamped to >=3D 1), the new callback ha=
-s no
-minimum bounds check.
+...
 
-If ca_ops->tso_segs() returns 0, tcp_tso_segs() returns 0. When processed in
-tcp_write_xmit(), this forces max_segs =3D 0, bounding cwnd_quota to 0:
+I think there is a followup for this patch, consider the selftest
+added by the next patch:
 
-net/ipv4/tcp_output.c:tcp_write_xmit() {
-    ...
-    cwnd_quota =3D min(cwnd_quota, max_segs);
-    ...
-}
+  int mapofmaps_value_as_helper_mem_buf(struct __sk_buff *skb)
+  {
+	__u32 key =3D 0;
+	void *inner;
 
-This causes tcp_mss_split_point() to receive max_segs =3D 0 and return a li=
-mit of
-0. Then tso_fragment() shrinks the original head SKB to 0 bytes:
+	inner =3D bpf_map_lookup_elem(&outer_map, &key);
+	/* intentionally NOT NULL-checked: reg stays PTR_TO_MAP_VALUE_OR_NULL */
 
-net/ipv4/tcp_output.c:tcp_write_xmit() {
-    ...
-    if (skb->len > limit &&
-        unlikely(tso_fragment(sk, skb, limit, mss_now, gfp)))
-        break;
-    ...
-}
+	/* @from is a nullable read-only mem+size arg; outer value_size is 4 */
+	return bpf_csum_diff(inner, 4, NULL, 0, 0) + skb->len;
+  }
 
-This 0-length SKB appears to permanently trigger the break condition, skipp=
-ing
-dequeue and stalling the write queue on all subsequent calls:
+It reports the following error with this patch-set applied:
 
-net/ipv4/tcp_output.c:tcp_write_xmit() {
-    ...
-    if (TCP_SKB_CB(skb)->end_seq =3D=3D TCP_SKB_CB(skb)->seq)
-        break;
-    ...
-}
+  ; inner =3D bpf_map_lookup_elem(&outer_map, &key); @ verifier_mem_size_re=
+g.c:55
+  5: (18) r1 =3D 0xffff88810813c000       ; R1=3Dmap_ptr(map=3Douter_map,ks=
+=3D4,vs=3D4)
+  7: (85) call bpf_map_lookup_elem#1    ; R0=3Dmap_value_or_null(id=3D1,map=
+=3Douter_map,ks=3D4,vs=3D4)
+  ; return bpf_csum_diff(inner, 4, NULL, 0, 0) + skb->len; @ verifier_mem_s=
+ize_reg.c:59
+  8: (bf) r1 =3D r0                       ; R0=3Dmap_value_or_null(id=3D1,m=
+ap=3Douter_map,ks=3D4,vs=3D4) R1=3Dmap_value_or_null(id=3D1,map=3Douter_map=
+,ks=3D4,vs=3D4)
+  9: (b4) w2 =3D 4                        ; R2=3D4
+  10: (b7) r3 =3D 0                       ; R3=3D0
+  11: (b4) w4 =3D 0                       ; R4=3D0
+  12: (b4) w5 =3D 0                       ; R5=3D0
+  13: (85) call bpf_csum_diff#28
+  R1 type=3Dmap_ptr expected=3Dfp
+                  ^^^^^^^^^^^
+That's not the right thing to report here.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260726193802.3973=
-21-1-chia-yu.chang@nokia-bell-labs.com?part=3D1
+...
