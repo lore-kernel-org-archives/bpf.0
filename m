@@ -1,195 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E467F3CCFA8;
-	Mon, 27 Jul 2026 06:42:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E035B3DAACB;
+	Mon, 27 Jul 2026 06:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785134579; cv=none; b=tKEOu9D3Y/TlFjrznLdaF/CfPaubrZHkeAzB4efXw2RcCwVTSdQO/r0SqY0ZQvAf8vG5x2aKaPU+AsUHSf4IM92K5hTfAx25d3PEHqMHXP+EkxQe8DVZlKexIHPnOMYcipnsRPP3PIjfY7INkCHWKLKn1toYwPgg0sp7iYUvyxo=
+	t=1785135255; cv=none; b=PL+MVHkn6MSW25327IA9+dhQcfyU4MX0oOCN48hUB/++h7u5qZAERtj4WlLslCQce9btCM2fkkTg1J6kDpU8CvGcFKFu4yqV8mpzzu4O/msxymMn0G14hKIb1Yo6FBRKwPJNFO9b7Lifln1fDZy8mu4lLqLY6Yh18dYnQw1JI5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785134579; c=relaxed/simple;
-	bh=gSEwSlOZCOa4il4qf8oOvr3QR5iPqOV9oIf7Qn+Nx0s=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WHAJsBGzQH0LoeNzjbbA8Ap3//uXGeSO337t5JepZsg7FQN3Vz/Ebz5oH+X048SZAYRCOOx9nfsymE9mvlCGpShQdA89YA54IcQBCkZXrGz/4gLw6xlPsrUpkO9IC9ddjfUslEZTIXgaeyYjK7iLd3u1bEiHwLuNEok1LDC8EB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f0fUeYXB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785135255; c=relaxed/simple;
+	bh=mDr9bs2eIz7uHru+obDHb2C3eEpkOkoFNIqSxusjWbM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HWSbF8rqFFfOLUAtnqTzyhO1Hpiz7dN+mytweHUvZrLX1ncgF+P9LOxwAGwlwirC5Q0KUt8EvUYSvK8d0dbVYwOdWZjzxsQ9n5Smm+mjdskG10sTpFw2mVfPJ1/zaigBNShb2LzAp7WhdJRosmwXGuDXFrlYfDmSrOQQbwCSXFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9Mbk2q6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f0fUeYXB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BD81F000E9;
-	Mon, 27 Jul 2026 06:42:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9Mbk2q6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E491F00A3D;
+	Mon, 27 Jul 2026 06:54:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785134577;
-	bh=1SEACZXvvYUeZWcn1NqzzGQ8WAd8S0O+WtLv0hx+3/o=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=f0fUeYXBKgCHZnAIA6HguMBI93cdYs+zoKWuBuSAZjAq/S41yc423rMkEyR2M0+NL
-	 2x73Tf3BKBexrFRReVyZKZcQLy6R9rMZk9iF3+szM1Nhg54jOKDNFLlNfbKdyuKkOU
-	 59y9X6Yck9AI7UBYvVWlAExOD7/ZIwNvAUxhPTjjWAfTCdqaOl3kYmyTcUPtM0dZLE
-	 melG2DoSvvx0rvD+ObnT9XKOKEaaUS/PR9uzvon83/Z9TBrkUxOyGGuxbMKKu5FupA
-	 VRbk8QlO16HBqWwGb1xNI8CfhXSfXz33mM104nRM9vM4K6iyhQsP2TPpeYVQw4pc5G
-	 LNlgA/swREOxA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/3] bpf: arena: allocate the fault-in page
- outside the lock
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20260727062521.376231-3-jiayuan.chen@linux.dev>
-References: <20260727062521.376231-1-jiayuan.chen@linux.dev>
- <20260727062521.376231-3-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Jul 2026 06:42:56 +0000
-Message-Id: <20260727064257.01BD81F000E9@smtp.kernel.org>
+	s=k20260515; t=1785135253;
+	bh=33hCdmqRfua3pjUoVzVwn55n54oEGNtDSm1cqPH3ftU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Y9Mbk2q6d8qa8Tp1YjC+GZZ/sSeY/6Uz8Xg/JYUTAYBB+qaB09uuExJ1OoetJUoUS
+	 Kvd5As2FQCLzr5eOO1CgFFJrbue4TY1i44PtyLDalZOnxEXfPb0y4y76GSwvVCRM3F
+	 ktgv+Erc8DGcHPlUIOcBYoSLGLh5n5xAhkm1xHc+2u9c+PMFPyf0zoJFyv/Qzu1Ivr
+	 O9uNPbv74iE5hNHcgn76jMiouSCjBKL1JjpR+sqQ0lz8EqcPe0HIDAqllgxN9X2J5a
+	 D4+WTeyv4Nej3ryrJv9FvvgcubeL+MaHpd2uA9+DouXqLxvUSNGNs2BsTix5g+EzjD
+	 2d1sGBgGvUw0Q==
+Date: Mon, 27 Jul 2026 08:54:11 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, sdf@fomichev.me, toke@redhat.com,
+	maciej.fijalkowski@intel.com, matt@readmodwrite.com
+Subject: Re: [PATCH net 2/2] veth: fix skb length accounting after XDP frag
+ adjustment
+Message-ID: <amcAk7W4237XKJl1@lore-desk>
+References: <20260727032535.13469-1-sun.jian.kdev@gmail.com>
+ <20260727032535.13469-3-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gIJJ9096ClTqm0ok"
+Content-Disposition: inline
+In-Reply-To: <20260727032535.13469-3-sun.jian.kdev@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+--gIJJ9096ClTqm0ok
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-New issues:
-- [High] Unnecessary sleepable memory allocation introduces a Denial of Ser=
-vice and OOM vector when BPF_F_SEGV_ON_FAULT is set.
-
-Pre-existing issues:
-- [High] Missing lock release before returning VM_FAULT_RETRY causes a lock=
- leak and deadlocks.
---
-
---- Patch [2]: [PATCH bpf-next 2/3] bpf: arena: allocate the fault-in page =
-outside the lock ---
-commit 618b434e77e16e8a5277e1b3cc85c17fc5ef5e7a
-Author: Jiayuan Chen <jiayuan.chen@linux.dev>
-
-bpf: arena: allocate the fault-in page outside the lock
-
-arena_vm_fault() allocated the page while holding arena->spinlock, so it
-could only use the non-blocking allocator. Once the memcg is at
-memory.max that allocation just fails, the fault turns into
-VM_FAULT_SIGSEGV, and the process gets a SIGSEGV on a perfectly valid
-arena address. Hitting memory.max is routine (e.g. page cache from
-reading a big file), so this kills innocent processes.
-
-Preallocate the page before taking the lock, like do_anonymous_page()
-does, so the allocation can sleep and go through reclaim and the OOM
-path, and return VM_FAULT_OOM on failure so the memcg OOM handler runs
-instead of a fake segfault. Also tidy up the error labels.
-
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 34f023a537fe6..22a41e3c53b81 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-> @@ -481,7 +481,8 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
->  	struct bpf_map *map =3D vmf->vma->vm_file->private_data;
->  	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
->  	struct mem_cgroup *new_memcg, *old_memcg;
-> -	struct page *page;
-> +	struct page *page, *new_page =3D NULL;
-> +	vm_fault_t fault_ret;
->  	long kbase, kaddr;
->  	unsigned long flags;
->  	int ret;
-> @@ -489,55 +490,97 @@ static vm_fault_t arena_vm_fault(struct vm_fault *v=
-mf)
->  	kbase =3D bpf_arena_get_kern_vm_start(arena);
->  	kaddr =3D kbase + (u32)(vmf->address);
+On Jul 26, Sun Jian wrote:
+> veth exposes non-linear skb fragments through an xdp_buff. If an XDP
+> program adjusts the fragment area, veth_xdp_rcv_skb() copies
+> xdp_frags_size back to skb->data_len but leaves skb->len containing the
+> old fragment contribution.
+>=20
+> After a fragment shrink, this makes skb_headlen() larger than the actual
+> linear area. In the reproduced UDP receive path, __skb_datagram_iter()
+> copied 1024 bytes past the actual linear tail to userspace, starting at
+> struct skb_shared_info. The copied bytes included the affected skb's
+> nr_frags, xdp_frags_size and a kernel pointer from
+> skb_shinfo(skb)->frags[0]. Real packet data was displaced by the same
+> amount and truncated at the end.
+>=20
+> Subtract the old data_len before replacing it and add the new data_len
+> afterwards, keeping skb->len and skb->data_len synchronized.
+>=20
+> A 60000-byte UDP datagram on a veth pair with MTU 64000 was shortened by
+> 1024 bytes from its fragment area. Before the fix, all 10 runs produced
+> corrupted payloads. After the fix, all 10 runs matched the expected
+> payload exactly.
+>=20
+> Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accept no=
+n-linear skb")
+> Cc: stable@vger.kernel.org
+> Link: https://lore.kernel.org/r/20260720141859.19FF41F000E9@smtp.kernel.o=
+rg
+> Link: https://lore.kernel.org/bpf/al9T9Eto%2FhRIzP5W@boxer/
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> ---
+>  drivers/net/veth.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 00e34afd858e..a956498a073b 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -871,12 +871,14 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth=
+_rq *rq,
+>  		__skb_put(skb, off); /* positive on grow, negative on shrink */
 > =20
-> -	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
-> +	page =3D vmalloc_to_page((void *)kaddr);
-> +	if (!page) {
-> +		/*
-> +		 * Preallocate outside the lock so the allocation can sleep and go
-> +		 * through reclaim (both memcg and global), the way do_anonymous_page()
-> +		 * does. Under arena->spinlock only the non-blocking allocator is
-> +		 * available, which never reclaims.
-> +		 *
-> +		 * This has to be the sleepable variant: VM_FAULT_OOM below is only
-> +		 * meaningful if the OOM machinery was actually engaged. A failure
-> +		 * from the non-blocking allocator engages nothing, so the fault
-> +		 * would be retried forever.
-> +		 */
-> +		bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
-> +		new_page =3D bpf_map_alloc_page_sleepable(map, NUMA_NO_NODE);
+>  	/* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
+> -	 * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
+> +	 * (e.g. bpf_xdp_adjust_tail), update skb length fields here.
+>  	 */
+> +	skb->len -=3D skb->data_len;
+>  	if (xdp_buff_has_frags(xdp))
+>  		skb->data_len =3D skb_shinfo(skb)->xdp_frags_size;
+>  	else
+>  		skb->data_len =3D 0;
+> +	skb->len +=3D skb->data_len;
 
-[Severity: High]
-Is there a potential Denial of Service vector when BPF_F_SEGV_ON_FAULT is s=
-et?
+nit: I guess you can move this one just in the if () branch.
 
-This unconditionally preallocates a page using
-bpf_map_alloc_page_sleepable() before checking the BPF_F_SEGV_ON_FAULT
-flag later in the function.
+Regards,
+Lorenzo
 
-This allocation can block, trigger direct memory reclaim, and invoke the
-OOM killer. Only after this expensive allocation does the code lock, check
-the flag, return VM_FAULT_SIGSEGV, and discard the page.
-
-Could this allow an unprivileged user to force severe memory pressure by
-repeatedly triggering page faults on unallocated addresses?
-
-> +		bpf_map_memcg_exit(old_memcg, new_memcg);
-> +		if (!new_page)
-> +			return VM_FAULT_OOM;
-> +	}
-> +
-> +	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
->  		/* Make a reasonable effort to address impossible case */
-> -		return VM_FAULT_RETRY;
-> +		fault_ret =3D VM_FAULT_RETRY;
-> +		goto out_err;
-> +	}
-
-[Severity: High]
-This is a pre-existing issue, but does returning VM_FAULT_RETRY here
-without releasing the fault lock cause a lock leak?
-
-The memory management subsystem strictly assumes the lock was released
-if VM_FAULT_RETRY is returned. Retrying the fault will leak the read lock
-reference, and if any thread subsequently attempts to acquire the mmap_lock
-for writing, the system could permanently deadlock.
-
->  	page =3D vmalloc_to_page((void *)kaddr);
->  	if (page) {
-> -		if (page =3D=3D arena->scratch_page)
-> +		if (page =3D=3D arena->scratch_page) {
->  			/* BPF triggered scratch here; don't lazy-alloc over it */
-> -			goto out_sigsegv;
-> +			fault_ret =3D VM_FAULT_SIGSEGV;
-> +			goto out_err_locked;
-> +		}
->  		/* already have a page vmap-ed */
->  		goto out;
->  	}
 > =20
-> +	/*
-> +	 * The lockless probe was racy: it saw a page, so nothing was
-> +	 * preallocated, but the re-check under the lock finds it gone - a
-> +	 * concurrent free must have run in between. There is nothing to
-> +	 * install and we cannot allocate under the lock, so retry the fault
-> +	 * and preallocate next time.
-> +	 */
-> +	if (!new_page) {
-> +		fault_ret =3D VM_FAULT_RETRY;
-> +		goto out_err_locked;
-> +	}
-
-[Severity: High]
-Could returning VM_FAULT_RETRY here in this new race handling path also
-leak the fault lock and risk deadlocks, similar to the lock acquisition
-failure above?
-
-> +
->  	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
+>  	skb->protocol =3D eth_type_trans(skb, rq->dev);
 > =20
-> -	if (arena->map.map_flags & BPF_F_SEGV_ON_FAULT)
-> +	if (arena->map.map_flags & BPF_F_SEGV_ON_FAULT) {
->  		/* User space requested to segfault when page is not allocated by bpf =
-prog */
-> -		goto out_sigsegv_memcg;
-> +		fault_ret =3D VM_FAULT_SIGSEGV;
-> +		goto out_err_locked_memcg;
-> +	}
+> --=20
+> 2.43.0
+>=20
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727062521.3762=
-31-1-jiayuan.chen@linux.dev?part=3D2
+--gIJJ9096ClTqm0ok
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCamcAkwAKCRA6cBh0uS2t
+rHeKAP9WM0aDsdQCpR4iXeaiU8QON+HZnBjk1PIiHOzHdwtpNAEAkp988X+xWEwK
+rXOcz3wWG7guotlKNM+aps/holYJvgk=
+=io8E
+-----END PGP SIGNATURE-----
+
+--gIJJ9096ClTqm0ok--
