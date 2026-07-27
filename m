@@ -1,75 +1,75 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B763C457A
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 21:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DE93B14D9
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 22:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785187069; cv=none; b=qdBZXR3v6dVzIJaTbcYOAD3UXet8urFlGwmCsTO9hx2K0+ujmnRCL36QApmsjY19GYGGVZ32dWjyYkZjzsL9r/uX7GwW5yGxUXdRaN8PLR3+Ozmpv8fp3l37akQbU0aWw99KxJ+4zdyXEhpz6a8wS9RJzp2t2kvWIDrY22zc2q0=
+	t=1785191347; cv=none; b=ei42UMCtbtSu/JYXWB35gb9fC1Xt6ZE2/D19Te/1GM1pHUmK6jTbUCkGOMZvokW5rg/bHAI8UQJb11u6KKA0dY/wGNQhIJQTzize+n/fdoX3SqXJ4uJTwu8/O1VHvU9mRtvQvgJubec/5K+LIYqk9gs75sQIMoB5lEjd0Sh80xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785187069; c=relaxed/simple;
-	bh=yQboYwIUzUTJoWchqFU1Un/OZxnTkghgKq2x67H7NnY=;
+	s=arc-20240116; t=1785191347; c=relaxed/simple;
+	bh=c4wSGmQbf5tcw9iM1+QHT3BomJNfyCMt4gl9c5xQm0k=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=t0l0qk/vDhTHYYoI8WgUq+cAGJ+AXZoRxmThoh9MqEyjs5u+Dpd9OJ4xzdJr4Bo5YOQUHLXc+jn6MpyhnabZnEtgnQForSjW9rm0zi/tGNPDQI25MAnK83GkqLI5GWzh7T323dlOr32ahjzc9KU31J4dL+O8Ao3CCAGwowTLel8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dYeXjXGC; arc=none smtp.client-ip=209.85.216.43
+	 Content-Type:MIME-Version; b=AwJVwSfvedBxUsGLyDFECPCposxpRX0vfycuTGv3nWDegA1M03KyIK5k5zTQRw26Cc49wG7dTwxnIXS6TOzjOTXQtakq07iuCJGrHbfI1xiO8TMV1OkH2CsWStdeExIvgVDLxD7bXFjzcnDnGd59/yTTibi7UUX8nEbqoiQeNwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s1hrpQ7r; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dYeXjXGC"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38e88b60121so2558833a91.3
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 14:17:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s1hrpQ7r"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ceab75934dso40742655ad.2
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 15:29:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785187067; x=1785791867; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785191345; x=1785796145; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=eo4mmaPGoZa8sV+pzSrFNAYjgF8kB/NGQfvxfnLW4Iw=;
-        b=dYeXjXGCTnox5WKms2Pxb3lFOvum9lDBjsO/tno0zwDP/3OzXv5iJYOKTCrHC5kqJQ
-         pUJlohiC9vF1E1Sa5PvJKn1/i1EajesNFrIwR83Y5X3iZsGvfZ48cqwy/rkP25uagrDK
-         Zb1MMPpFXsiJ/QQbSeFxDlyw/VS9xqLudlsJJWDigbj6b42jCxeZ3PQZhffnF2erXiRR
-         usXVTxUaA/+xGVIz431AZpQrtgZ/sgrWlZlGLfqnHqclMh4ZdW4ynOiBFFSylL/NZZy3
-         7aL0Ge5UwKAxrVetf8fxUqJO6/u/PNl7gh3VbpUhYDzNUd8abiCJc6nZKpGTPDKn04Gm
-         AONw==
+        bh=Hejzklh+Iaa81aHWLa0mm+DQVlzcyJbzBFSLKDcyWRo=;
+        b=s1hrpQ7rokyZJGMLthMMOh6t6l0nm6QLDQO/tSSTj43MLU/xZezRGjgMeg9TrWvgkD
+         XmoLVG66MabRA2CDHAjTmmjRO1AImyCigvtstEzZ5Fdw5UIplJrhiTjUkhLtGH7PVXpB
+         kMNbtu+T30dXXkrflVMlOpBD3SPUhD2StpxN89tnXqrhdAk214thBLyubOBHeGhEawOw
+         iVnqghDW0Z0eOY/qb+IRO5pfL5PieUwleN6tUpFOq9OeruCAFsT3X5pwBm+kJxiO1Acm
+         Ez/oxfj3ZM3O5kXmU1tou9jT6/xxLwbNpxLUqDQIDWajbw+0jy0Rb5aDvv1UQy7Q/tUS
+         A4EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785187067; x=1785791867;
+        d=1e100.net; s=20251104; t=1785191345; x=1785796145;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=eo4mmaPGoZa8sV+pzSrFNAYjgF8kB/NGQfvxfnLW4Iw=;
-        b=IgnlukP0CoQ+PDjUwdFUidMUNhDGQ397VG+BsZFCG0SvxylyvwSSo0k1LfUiX3qKAi
-         E7fb5m7O97dNVHwhk/vC305NrqKXNpn8hMaWcJ3Q2tOvxnr1VIZJPxcZsZYfMVXahz7P
-         2K0N2IDHOt19zOwEWxvgP/JdOphl9nKl4Fr6hfzY/Uk8xB3dsZqKR92NMvEwOpkikDFC
-         wmF6STxMuRNinWvyKtJfBfHisaeqUEHrX52w8NoeRL3Ad3iLfCtnZoOcHi2Pb2Bac1lp
-         tVEF3gtN8+Ujo6CQGBzXbuTdEKEpO0pt3i9p8Mm69w/NjRmxsp0OGShPNKguCpy0H+X6
-         QPqA==
-X-Forwarded-Encrypted: i=1; AHgh+Rq9noq0arvwGQCYbT2u0H0E+MHZk+vcQx8XvyDBqmgM7J2hR1YOf04E+IlmLyqV194qB6w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDwTAzNvQ9GV3uC/tboFj7zCRkvYXcGNny7TSLe1od7OkXCYab
-	4Yo88E9q5qAhElfJYivjcOpWaIjW55j7oItIQ9J/9Kaw+XQmJzx9xGj4
-X-Gm-Gg: AR+sD11GWgbNBakyNz6IfnwOdjBy9TMRD3vqTUB0RDonkNjxCef0jTOPXkDI7ySJUQb
-	AY+Ww4aJDoFXHqkGOYhqGwOXVs1blG3+XLE+uBsB7sGabgrueqrE/NfB3zl4pJhO/93dub2viUT
-	TSG95gjJgUCn6gmO1M9ZWdxzv0ckSCzdJYd84YFwI6qcdsGzYGoIs64MMae7wCuDjj2dKFRX6HS
-	git8HM8wsvsnyLS2fvnfNOkm6+wHEkLx7fDQIYy1QvUR/a+HnUEAvE3lOt/5+IkAFGy3cyQLexe
-	hPHwJ7nf2r+v5xBj3c0nEvhmRnYCxBAYkG+FVOG2HF4XQek7hvSrjCf4lwPC/U4JkkivheaEcy1
-	tuYAx2i00TDyLpidPhT6TyFUG5rA9JeO2dJnLh1NvxWViWsCaU6OZsLXrUXaVW3KkUKJIizHdwh
-	yGcZ6aGKaRffEj/rYEPOQj4UCzgaREng==
-X-Received: by 2002:a17:90a:d00f:b0:38e:9045:bac0 with SMTP id 98e67ed59e1d1-38f293cf348mr8344259a91.5.1785187067544;
-        Mon, 27 Jul 2026 14:17:47 -0700 (PDT)
+        bh=Hejzklh+Iaa81aHWLa0mm+DQVlzcyJbzBFSLKDcyWRo=;
+        b=YdjUW0MfWnQXYVT5DaBS+Ye8ldQXcgQu8gaT2fTnAn/toWjsEkhzf2Weu10XpyFz/X
+         Wu9iWkLASt5sitxIBGiWD1lxMVItvQBCKfDA9Z5lbIKjOBA5yHzcM34vYmQ/ze1CPK3U
+         SPqdW0/YgPWWjBnbxHVJBhFmRXhtbVi/9jH/yUPrKsMcOrAFRUGOsH3yt9o/o5ayzcUf
+         duwejRkiurgWnaCv/VHfX3mjbFHisvEQ86s+LSQS7fw3Y3tpkBjuvVTHGX6MfMtUNYhD
+         pqEY8W4An4D7vCSP/MvJJUKxKdYl7VBjFqC02ztqkDsfzH7ZT89kQSTpUy4CFhJEdOJo
+         91gw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro5cJHj41rbGFzf2vkFYa451HecIAChhHNMEg05MxGhW4Mt4QkJMibhKVO5vIRLgwCTIVM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBZ3nbI2iR/0lJNhvVgC+Plg3stzWK/1ISafglhhraXEXXQOx8
+	F/jUSoxnTbHMLcb4akSGqXs4s4/bJzOlkhU5wEZlffLuoSBQNc2xZ2LV
+X-Gm-Gg: AR+sD139+u1W1KYxpxSUXJT2w/5i8qeeFJC+w2k9M3RGo2DoYYwBUuM5uSYE7VGr6F6
+	dWQlMgnb9S4R8bWaQ4XDQHuRgEkiUjRPS8DwfRrTinAkVMFh+zetD8cDk8Jv7ftgyQhC3kEV3jL
+	NEtPvI1MSndrZdRQBi2zakoiLooO8fBQ/bKTmvqX8SA8ujLLzMSn/MvsqdZMs9hYFBoVPTOOfaH
+	1XYN/57WXBuU/i1YjysLSd/gnEWmrHq/ZnESFlPLIagklXrRoED4tR0k8gudgczR4NqFSyUoQ/f
+	6Rrb0nv51Br23V8NW3JGvlkyon7zEgpLku3xZBa+quAMKD6NiRO/VcUmoOOU5ERDSHtsJ1ThGEp
+	Xv3+zivaEv2aXugim/T2joJY6oc4uAHFAO3R4eV/rxSLY0a9c/8fzeWGjLYajiF9XdPBbbYjkl/
+	ajCR90uhcuvezYGTPRcA3lTV95u9yAwMpVWwL1FsfO
+X-Received: by 2002:a17:902:ebca:b0:2ca:c4a5:84bb with SMTP id d9443c01a7336-2cfde88a001mr100003495ad.38.1785191345365;
+        Mon, 27 Jul 2026 15:29:05 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f64130e0dsm344276a91.8.2026.07.27.14.17.46
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde7bc57asm41466485ad.45.2026.07.27.15.29.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2026 14:17:46 -0700 (PDT)
-Message-ID: <4b93853207b6b02761af2fc75222ab8b349d7157.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 07/18] bpf: Check fixed-size mem args of
- helpers and kfuncs the same way
+        Mon, 27 Jul 2026 15:29:04 -0700 (PDT)
+Message-ID: <e792057b4f2f8a64aab844ff391c381924933546.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 08/18] bpf: Express ARG_CONST_SIZE_OR_ZERO
+ as ARG_CONST_SIZE | SCALAR_MAYBE_ZERO
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net, 
 	memxor@gmail.com, kernel-team@meta.com
-Date: Mon, 27 Jul 2026 14:17:44 -0700
-In-Reply-To: <20260724190813.1458271-8-ameryhung@gmail.com>
+Date: Mon, 27 Jul 2026 15:29:01 -0700
+In-Reply-To: <20260724190813.1458271-9-ameryhung@gmail.com>
 References: <20260724190813.1458271-1-ameryhung@gmail.com>
-	 <20260724190813.1458271-8-ameryhung@gmail.com>
+	 <20260724190813.1458271-9-ameryhung@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -81,36 +81,30 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Fri, 2026-07-24 at 12:08 -0700, Amery Hung wrote:
+> Add SCALAR_MAYBE_ZERO as an alias of PTR_MAYBE_NULL for scalar size
+> arguments, and define ARG_CONST_SIZE_OR_ZERO as ARG_CONST_SIZE |
+> SCALAR_MAYBE_ZERO instead of a distinct base type. This lets
+> check_func_arg() handle both with a single ARG_CONST_SIZE case, and the
+> redundant compatible_reg_types[] entry is dropped.
+>=20
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
+> =C2=A0include/linux/bpf.h=C2=A0=C2=A0 |=C2=A0 4 +++-
+> =C2=A0kernel/bpf/verifier.c | 12 ++----------
+> =C2=A02 files changed, 5 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index e066f44a9c05..1d537ec557ec 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -748,6 +748,7 @@ extern const struct bpf_map_ops bpf_map_offload_ops;
+> =C2=A0enum bpf_type_flag {
+> =C2=A0	/* PTR may be NULL. */
+> =C2=A0	PTR_MAYBE_NULL		=3D BIT(0 + BPF_BASE_TYPE_BITS),
+> +	SCALAR_MAYBE_ZERO	=3D PTR_MAYBE_NULL,
 
-...
-
-> @@ -6965,10 +6968,12 @@ static int check_mem_reg(struct bpf_verifier_env =
-*env, struct bpf_reg_state *reg
-> =C2=A0		mark_ptr_not_null_reg(reg);
-> =C2=A0	}
-> =C2=A0
-> -	int size =3D base_type(reg->type) =3D=3D PTR_TO_STACK ? -(int)mem_size =
-: mem_size;
-> +	size =3D (!helper && base_type(reg->type) =3D=3D PTR_TO_STACK) ? -(int)=
-mem_size : mem_size;
-                                                   ^^^^^^^^^^^^^^^^^^^^^^^^=
-^^^^^^^^^^^^^^^^^
-When is this negation necessary?
-Is there a way to get rid of it?
-
-> =C2=A0
-> -	err =3D check_helper_mem_access(env, reg, argno, size, BPF_READ, true, =
-meta);
-> -	err =3D err ?: check_helper_mem_access(env, reg, argno, size, BPF_WRITE=
-, true, meta);
-> +	if (access_type & BPF_READ)
-> +		err =3D check_helper_mem_access(env, reg, argno, size, BPF_READ, true,=
- meta);
-> +	if (!err && (access_type & BPF_WRITE))
-> +		err =3D check_helper_mem_access(env, reg, argno, size, BPF_WRITE, true=
-, meta);
-> =C2=A0
-> =C2=A0	if (may_be_null)
-> =C2=A0		*reg =3D saved_reg;
+I'd suggest to avoid adding aliases, this might be error-prone moving
+forward. Is this change crucial for the entire kfunc/helper merge?
+Does not seem to win much on it's own.
 
 ...
