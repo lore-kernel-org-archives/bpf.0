@@ -1,127 +1,195 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 494AD3DAAD4;
-	Mon, 27 Jul 2026 06:37:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E467F3CCFA8;
+	Mon, 27 Jul 2026 06:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785134231; cv=none; b=DFx7blTeZTGJ+QZE9U0PIjgcOMooqvOiDi2aF7RRH7YVqs+oi2PT+1MDaXcAyim6h2K9jrtnF7VWP5sCz4utNNIxWfp15AWl0zXyQt/+1TiGSrhisdgLy0SAPnoh58j2IvezSG8uorluWZalNBxA+secQ9Wzy3+rawCmjKjnkso=
+	t=1785134579; cv=none; b=tKEOu9D3Y/TlFjrznLdaF/CfPaubrZHkeAzB4efXw2RcCwVTSdQO/r0SqY0ZQvAf8vG5x2aKaPU+AsUHSf4IM92K5hTfAx25d3PEHqMHXP+EkxQe8DVZlKexIHPnOMYcipnsRPP3PIjfY7INkCHWKLKn1toYwPgg0sp7iYUvyxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785134231; c=relaxed/simple;
-	bh=/RGcTVT4rqHTsGZ5rX8KrUr9gH/FUZqxDCspVAPrhtY=;
+	s=arc-20240116; t=1785134579; c=relaxed/simple;
+	bh=gSEwSlOZCOa4il4qf8oOvr3QR5iPqOV9oIf7Qn+Nx0s=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=f9n2wVYMoa2FDjRLFXtT8Xn2+9nSQU3xBVpmqJvWSpURgr/5nYA93uyiGLuibVUoG+0L25LarHXAj0PnB9wyFmyhPSsm+SXI1aF70RGQrr7I7l7oWTgp7RsIsWWxD5VS1LAwv90H/7XcbKJtLysNew3H1SDsbXizpKcKHdQ6QKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DuoBJNK4; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=WHAJsBGzQH0LoeNzjbbA8Ap3//uXGeSO337t5JepZsg7FQN3Vz/Ebz5oH+X048SZAYRCOOx9nfsymE9mvlCGpShQdA89YA54IcQBCkZXrGz/4gLw6xlPsrUpkO9IC9ddjfUslEZTIXgaeyYjK7iLd3u1bEiHwLuNEok1LDC8EB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f0fUeYXB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DuoBJNK4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F3B1F000E9;
-	Mon, 27 Jul 2026 06:37:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f0fUeYXB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BD81F000E9;
+	Mon, 27 Jul 2026 06:42:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785134229;
-	bh=CsX0c5I6IcTNrRLJuL360y3d38COmxrp71ovedV2GZE=;
+	s=k20260515; t=1785134577;
+	bh=1SEACZXvvYUeZWcn1NqzzGQ8WAd8S0O+WtLv0hx+3/o=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DuoBJNK4LQIDwk1ypFeLwX/5Bz0cGXbZg+omdAQyzv6T+lk2nBqsrJS1mMbPTkxf1
-	 u1m1s5FPhrpUQfXA7KRLqHFXonJmO/6+yr/YHgRHZVKQ+tLjFvuN8XzDBKgqQrv/6D
-	 V7hYrikHWU2FbWl3q2Fa4XNf8J2h8Jl0CNS2p3Hz43JJ2CaB9Znb+66NJjigjkDjEA
-	 BIG6fSOHEIIcTICitOqlx9LsFeMWKe5B4yRsK7h0mEkUfKkMVaEYGs7azRuNkiBbq7
-	 RUQKfrPnBF8HYBmcsp1IuuFjmjsVFsvTYC1Ay8R+CGw9tTQZmRhy+EziTRgmf/+CMt
-	 tsFAHntA9U0Xg==
+	b=f0fUeYXBKgCHZnAIA6HguMBI93cdYs+zoKWuBuSAZjAq/S41yc423rMkEyR2M0+NL
+	 2x73Tf3BKBexrFRReVyZKZcQLy6R9rMZk9iF3+szM1Nhg54jOKDNFLlNfbKdyuKkOU
+	 59y9X6Yck9AI7UBYvVWlAExOD7/ZIwNvAUxhPTjjWAfTCdqaOl3kYmyTcUPtM0dZLE
+	 melG2DoSvvx0rvD+ObnT9XKOKEaaUS/PR9uzvon83/Z9TBrkUxOyGGuxbMKKu5FupA
+	 VRbk8QlO16HBqWwGb1xNI8CfhXSfXz33mM104nRM9vM4K6iyhQsP2TPpeYVQw4pc5G
+	 LNlgA/swREOxA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/3] bpf: Add a sleepable page allocator for
- map memory
+Subject: Re: [PATCH bpf-next 2/3] bpf: arena: allocate the fault-in page
+ outside the lock
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260727062521.376231-2-jiayuan.chen@linux.dev>
+Cc: linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20260727062521.376231-3-jiayuan.chen@linux.dev>
 References: <20260727062521.376231-1-jiayuan.chen@linux.dev>
- <20260727062521.376231-2-jiayuan.chen@linux.dev>
+ <20260727062521.376231-3-jiayuan.chen@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Jul 2026 06:37:09 +0000
-Message-Id: <20260727063709.99F3B1F000E9@smtp.kernel.org>
+Date: Mon, 27 Jul 2026 06:42:56 +0000
+Message-Id: <20260727064257.01BD81F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] NUMA Mempolicy Bypass in bpf_map_alloc_page_sleepable() and __bp=
-f_alloc_page()
+
+New issues:
+- [High] Unnecessary sleepable memory allocation introduces a Denial of Ser=
+vice and OOM vector when BPF_F_SEGV_ON_FAULT is set.
+
+Pre-existing issues:
+- [High] Missing lock release before returning VM_FAULT_RETRY causes a lock=
+ leak and deadlocks.
 --
 
---- Patch [1]: [PATCH bpf-next 1/3] bpf: Add a sleepable page allocator for=
- map memory ---
-commit 7a6023ef7f19fc884e94ffe457ae83ff0d4b5e1e
+--- Patch [2]: [PATCH bpf-next 2/3] bpf: arena: allocate the fault-in page =
+outside the lock ---
+commit 618b434e77e16e8a5277e1b3cc85c17fc5ef5e7a
 Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-bpf: Add a sleepable page allocator for map memory
+bpf: arena: allocate the fault-in page outside the lock
 
-This commit introduces bpf_map_alloc_page_sleepable() to provide a blocking
-page allocator for callers known to be in a sleepable context, such as user
-page fault handlers. This avoids the conservative, non-blocking behavior of
-can_alloc_pages() which is always false under PREEMPT_RT.
+arena_vm_fault() allocated the page while holding arena->spinlock, so it
+could only use the non-blocking allocator. Once the memcg is at
+memory.max that allocation just fails, the fault turns into
+VM_FAULT_SIGSEGV, and the process gets a SIGSEGV on a perfectly valid
+arena address. Hitting memory.max is routine (e.g. page cache from
+reading a big file), so this kills innocent processes.
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-[ ... ]
-> @@ -602,15 +602,14 @@ static bool can_alloc_pages(void)
->  		!IS_ENABLED(CONFIG_PREEMPT_RT);
->  }
+Preallocate the page before taking the lock, like do_anonymous_page()
+does, so the allocation can sleep and go through reclaim and the OOM
+path, and return VM_FAULT_OOM on failure so the memcg OOM handler runs
+instead of a fake segfault. Also tidy up the error labels.
+
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 34f023a537fe6..22a41e3c53b81 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -481,7 +481,8 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+>  	struct bpf_map *map =3D vmf->vma->vm_file->private_data;
+>  	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
+>  	struct mem_cgroup *new_memcg, *old_memcg;
+> -	struct page *page;
+> +	struct page *page, *new_page =3D NULL;
+> +	vm_fault_t fault_ret;
+>  	long kbase, kaddr;
+>  	unsigned long flags;
+>  	int ret;
+> @@ -489,55 +490,97 @@ static vm_fault_t arena_vm_fault(struct vm_fault *v=
+mf)
+>  	kbase =3D bpf_arena_get_kern_vm_start(arena);
+>  	kaddr =3D kbase + (u32)(vmf->address);
 > =20
-> +#define BPF_PAGE_GFP (GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT | __GFP_NO=
-WARN)
+> -	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+> +	page =3D vmalloc_to_page((void *)kaddr);
+> +	if (!page) {
+> +		/*
+> +		 * Preallocate outside the lock so the allocation can sleep and go
+> +		 * through reclaim (both memcg and global), the way do_anonymous_page()
+> +		 * does. Under arena->spinlock only the non-blocking allocator is
+> +		 * available, which never reclaims.
+> +		 *
+> +		 * This has to be the sleepable variant: VM_FAULT_OOM below is only
+> +		 * meaningful if the OOM machinery was actually engaged. A failure
+> +		 * from the non-blocking allocator engages nothing, so the fault
+> +		 * would be retried forever.
+> +		 */
+> +		bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
+> +		new_page =3D bpf_map_alloc_page_sleepable(map, NUMA_NO_NODE);
+
+[Severity: High]
+Is there a potential Denial of Service vector when BPF_F_SEGV_ON_FAULT is s=
+et?
+
+This unconditionally preallocates a page using
+bpf_map_alloc_page_sleepable() before checking the BPF_F_SEGV_ON_FAULT
+flag later in the function.
+
+This allocation can block, trigger direct memory reclaim, and invoke the
+OOM killer. Only after this expensive allocation does the code lock, check
+the flag, return VM_FAULT_SIGSEGV, and discard the page.
+
+Could this allow an unprivileged user to force severe memory pressure by
+repeatedly triggering page faults on unallocated addresses?
+
+> +		bpf_map_memcg_exit(old_memcg, new_memcg);
+> +		if (!new_page)
+> +			return VM_FAULT_OOM;
+> +	}
 > +
->  static struct page *__bpf_alloc_page(int nid)
->  {
->  	if (!can_alloc_pages())
->  		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
+> +	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
+>  		/* Make a reasonable effort to address impossible case */
+> -		return VM_FAULT_RETRY;
+> +		fault_ret =3D VM_FAULT_RETRY;
+> +		goto out_err;
+> +	}
+
+[Severity: High]
+This is a pre-existing issue, but does returning VM_FAULT_RETRY here
+without releasing the fault lock cause a lock leak?
+
+The memory management subsystem strictly assumes the lock was released
+if VM_FAULT_RETRY is returned. Retrying the fault will leak the read lock
+reference, and if any thread subsequently attempts to acquire the mmap_lock
+for writing, the system could permanently deadlock.
+
+>  	page =3D vmalloc_to_page((void *)kaddr);
+>  	if (page) {
+> -		if (page =3D=3D arena->scratch_page)
+> +		if (page =3D=3D arena->scratch_page) {
+>  			/* BPF triggered scratch here; don't lazy-alloc over it */
+> -			goto out_sigsegv;
+> +			fault_ret =3D VM_FAULT_SIGSEGV;
+> +			goto out_err_locked;
+> +		}
+>  		/* already have a page vmap-ed */
+>  		goto out;
+>  	}
 > =20
-> -	return alloc_pages_node(nid,
-> -				GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT
-> -				| __GFP_NOWARN,
-> -				0);
-> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
+> +	/*
+> +	 * The lockless probe was racy: it saw a page, so nothing was
+> +	 * preallocated, but the re-check under the lock finds it gone - a
+> +	 * concurrent free must have run in between. There is nothing to
+> +	 * install and we cannot allocate under the lock, so retry the fault
+> +	 * and preallocate next time.
+> +	 */
+> +	if (!new_page) {
+> +		fault_ret =3D VM_FAULT_RETRY;
+> +		goto out_err_locked;
+> +	}
 
-[Severity: Medium]
-This isn't a bug introduced by this patch, but does using alloc_pages_node()
-here bypass the task's NUMA mempolicy?
+[Severity: High]
+Could returning VM_FAULT_RETRY here in this new race handling path also
+leak the fault lock and risk deadlocks, similar to the lock acquisition
+failure above?
 
-Because alloc_pages_node() ignores task mempolicy, pages might land on the
-current CPU's local NUMA node instead of the node requested by the task.
-Could this branch to use a mempolicy-aware allocation when nid is
-NUMA_NO_NODE?
-
->  }
-[ ... ]
-> +/*
-> + * For callers that know they run in a sleepable context, e.g. a user pa=
-ge
-> + * fault handler. can_alloc_pages() is a conservative guess made for BPF
-> + * program context - notably it is always false on PREEMPT_RT - so going
-> + * through bpf_map_alloc_pages() there would needlessly pick the
-> + * non-blocking allocator, which never reclaims and never engages the OOM
-> + * machinery.
-> + */
-> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map, int=
- nid)
-> +{
-> +	might_sleep();
-> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
-
-[Severity: Medium]
-Since this function is intended for user space page fault handlers, will
-unconditionally calling alloc_pages_node() cause the allocation to ignore
-the user task's mempolicy?
-
-Similar to __bpf_alloc_page(), if nid is NUMA_NO_NODE, replacing this with a
-mempolicy-aware allocation might prevent silent performance regressions from
-misaligned memory placement during page faults.
-
-> +}
+> +
+>  	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
+> =20
+> -	if (arena->map.map_flags & BPF_F_SEGV_ON_FAULT)
+> +	if (arena->map.map_flags & BPF_F_SEGV_ON_FAULT) {
+>  		/* User space requested to segfault when page is not allocated by bpf =
+prog */
+> -		goto out_sigsegv_memcg;
+> +		fault_ret =3D VM_FAULT_SIGSEGV;
+> +		goto out_err_locked_memcg;
+> +	}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727062521.3762=
-31-1-jiayuan.chen@linux.dev?part=3D1
+31-1-jiayuan.chen@linux.dev?part=3D2
