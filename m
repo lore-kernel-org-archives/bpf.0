@@ -1,136 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57DF427F97;
-	Mon, 27 Jul 2026 17:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5A829898B
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 18:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785172157; cv=none; b=E6P8mtgZOdYdyUyINHfOxEGU6Rf+Eq4OW3RQji2eLLFfMbxcvpOai32QpLTGW1HmDwovDqj64cfP0HTYmZebV6ck69OCqIDJtnspzREVyyl3iWyX9kqL6DQsaEr9i5LvxREV1xj6yTtEx04VfQvAgiGJo/OUlo4MkgdwXrZ9sW8=
+	t=1785177448; cv=none; b=Ic6XPadtKX0uJ/nxHWcuEyAQxCfw4DfI+j7lHoYA/2ramO6Nav9LmfmmoKeZO4+cmOezeqQ9N4rnXMfOR0lhgBBKp+1kI0W8R2gHduPmkbufBRy1LLr+9KpEQpO15ECo4AFYnVn1X9axjn0s0qpS2cyZ6qi9uD0xRt8hr/F2Zg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785172157; c=relaxed/simple;
-	bh=0Jh/HQSKQu5d89MOXnalBDXnDq+NzvYdVc2b7TbAzX0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RIjBrv0nnYcKynA1atYyLkea0SkZALuvnjO27xwqpPiwXRhqKHF0cvAGIoAbf3nYCdxqqzPxvVIzJWWSnK+w1h9DpfWPOP9J1CCRoi00AZiTiQC4oklmyDN6yLyiKX9CsnKjhyLeNIyr12QGtongqkZjLu3qvaoNDtPBpy8+J18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C2zsRbrn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785177448; c=relaxed/simple;
+	bh=TtPN8aCUQenMqqIbbZdXHz28B/vAf+frwqt5lIMsgDg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=V56E6zz5jsfsrwqhBYHXqUArE4BrPX7yd4SiovjUDsR+wsbmJ8Tf5FoTkAv0JuDlGShPmstGrYMn2avZL5uSpAi7HzlQ1iA6YZ++hXMJ5cAnzQupa1+/ZDovvM1loVZR/GbRwJxdjU47xuGVJd6uYH5iZAXnQadzQpVZoOMqMFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JIyMsheO; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C2zsRbrn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 464F11F000E9;
-	Mon, 27 Jul 2026 17:09:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785172155;
-	bh=R5RIhjlhVNK2x7Y1fqqGI/R1pQZMseReL4BIJn/zNrQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=C2zsRbrngaP3oTDgOSU3g6rJG02D43gQgvKoiJUZVfmI8h0iYH3vsZjVD0/5fjtpL
-	 Tk21pTEFdOzZKjOd3Gps6+D9TrZ/8qy4GcV1kjWtOhb+ADc3ma1LAeQ7Ur0hlP4UIC
-	 Epvm1sYvah+nxf5f+bNqcP1h0KbjdhQwaRTtL1AsvuLe9I0FTh7micGAsre26r89ep
-	 Vd0PAW2ZEJE+2Wzbp7CPcaaWKhBQOXgg5yAJ1NUE8uhRtsteql8PxerVro8Ohz0e6F
-	 Wm2a0npzM/pUniYEKcRVamLy/NscRf3riUOmAJlkf4qPZo+T3ItQ1mnX7NRG7+boiE
-	 RX7dycUJMZa+g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 09/11] misc/sgi-gru: use ptep_get() for page-table
- reads
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Muhammad Usama Anjum" <usama.anjum@arm.com>
-Cc: dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, damon@lists.linux.dev
-In-Reply-To: <20260727164715.2866609-10-usama.anjum@arm.com>
-References: <20260727164715.2866609-1-usama.anjum@arm.com>
- <20260727164715.2866609-10-usama.anjum@arm.com>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JIyMsheO"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cab973140bso40929445ad.3
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 11:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785177446; x=1785782246; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=TtPN8aCUQenMqqIbbZdXHz28B/vAf+frwqt5lIMsgDg=;
+        b=JIyMsheOz/4m2yPqLiboIfS+qtv00tcbUPIZLBGCQ/zv6UVsaPFwzJ6LCADjlaD8Tt
+         ++nVSM+uWqLYy7VWPPcjkTqc8VyAMVsV0CpcCKJcrb4xas/zWEYbb9iMC63qeASpPUwh
+         /Ti/gysgS2Ttqqp5RED1faZxENR+C/yLqJP9pfVNwnrqR2gvqULcC36105wDtiKfLz+q
+         GENnOuOm25vZ2cX0j3CCojyrKz2ZhTX5s+7KRz/oCw+7uhxvAaLSvmZ+vOyNd95fdc61
+         t9s3pO7hQfPqEpAM7LKvXbJ/d3Ip4jw+FqphsKEebPRNd3FLliFxnjwumsCmBU69fAz/
+         nWhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785177446; x=1785782246;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TtPN8aCUQenMqqIbbZdXHz28B/vAf+frwqt5lIMsgDg=;
+        b=jZY5yM9H5Bkt4cDSW23e0lmtmypYmIhpDVe1imcTVPbNvCxSSRvsfq63JmCAEdkZ7E
+         qRQBZ5lSYDeNzNueRKag1mYRzsMgT8etEaB4fR2zZLHmA6BgmIHYpRI5ShI9gTroVqPm
+         kpyRQZIlHXyRN8RKvJ9ShiH6XjHQV59PmRaLYH+xIvgXFL/MahvMac1lx86vOP+gpAbk
+         SwHOWUmpv99EP8llgr6zA4/HMiJPC73HZOQ5eWXqZJ8DME6l0y8oa5Pb8iXoED6W/CEV
+         0ii1QID/mYDORRrjHaQJWAYI5ygORnPwAahAb0Ed/wvCoGepL5OzRsTgKNadeDsK4yYW
+         /o6g==
+X-Forwarded-Encrypted: i=1; AHgh+RpuuVrzzDl+s7t/EP58YQbP9e/7xYLLStgXSWx/DrUcNjd7otdDJuMWp9eC7iKLpKV0N+0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzASgvF3qKBangw0iuwJEsXGstABbRgj5C1KS394anTZcqCsOb/
+	nalw5PmLEUPT0IMatxr/N6HPPfcwzHGc9TnoQ4KGKAzCxHdtSBKEO6okpI41vA==
+X-Gm-Gg: AR+sD11ECmWjgOxlVwBSVkM1X1A/Lz7DLOXJtAq4cFOgP0FhOyiPki821VhzTdD2Q1G
+	+alnKkJ/0GdGXq/ytv9QUjlEAbLxQc7cblzIPzafFAe4PnTSsW4+5EKtI5ynrqd3fp0xs8M3HXs
+	WJJ2a4Yqq1Ks98LhKZfe1gotstKL+vff1P5XWqxtIbPUYCJgsaJxAnnYiUG7byESLkHTni+6OA9
+	86iOFDanH6imvq5ycbJAIzsVfJzmFbVk0UkPUmwkZZqchdDb/WvvWzAP8bLieMMNyXpl0HwvIx+
+	8YdHQaMJlTxEUahUJDO7dLy5mMiMDWcVX3GHKRCmExqO+AKvvIZRVdlflUJJSmARyJ4P6qXOwUJ
+	E9Ye81IkF32EltM8VUMOXz8UA9GyYke9M022p5p0WYJumviPuSnohRntC/D3r1yT2kZ9T7AMM98
+	DwBuWSd4gGCjhmNmh6xYumA7DcW4Bdzw==
+X-Received: by 2002:a17:902:ffcb:b0:2ce:faa6:7cbb with SMTP id d9443c01a7336-2cfde78b6ddmr93672355ad.4.1785177446313;
+        Mon, 27 Jul 2026 11:37:26 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde7d5297sm39941085ad.56.2026.07.27.11.37.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2026 11:37:25 -0700 (PDT)
+Message-ID: <4c4b96843caac639112f6e34d271480ad213cb09.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 04/18] bpf: Pass kfunc meta to mem and
+ mem_size check
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net, 
+	memxor@gmail.com, kernel-team@meta.com
+Date: Mon, 27 Jul 2026 11:37:23 -0700
+In-Reply-To: <20260724190813.1458271-5-ameryhung@gmail.com>
+References: <20260724190813.1458271-1-ameryhung@gmail.com>
+	 <20260724190813.1458271-5-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Jul 2026 17:09:14 +0000
-Message-Id: <20260727170915.464F11F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Fri, 2026-07-24 at 12:07 -0700, Amery Hung wrote:
+> kfunc now shares the same bpf_call_arg_meta with helpers. Pass kfunc's
+> own meta to check_mem_reg() and check_kfunc_mem_size() instead of NULL
+> or a temporary meta on the stack.
+>=20
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
 
-Pre-existing issues:
-- [Critical] Lockless page table walk in `atomic_pte_lookup` reads page tab=
-le entries multiple times, causing TOCTOU vulnerabilities (UAF, Wild Read, =
-Privilege Escalation).
-- [Critical] atomic_pte_lookup maps the base of an anonymous THP instead of=
- the requested offset, causing silent data corruption.
---
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 
---- Patch [9]: [PATCH RFC 09/11] misc/sgi-gru: use ptep_get() for page-tabl=
-e reads ---
-commit 24fd6151a0088920cebe4cf33a4840e02a2f4e62
-Author: Muhammad Usama Anjum <usama.anjum@arm.com>
-
-misc/sgi-gru: use ptep_get() for page-table reads
-
-A leaf PMD is being read through ptep_get() by treating the PMD address
-as PTE-sized table storage. ptep_get() now accepts hw_pte_t *, so update
-the cast accordingly.
-
-> diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufa=
-ult.c
-> index 3557d78ee47a2..ff89d34ad2aa4 100644
-> --- a/drivers/misc/sgi-gru/grufault.c
-> +++ b/drivers/misc/sgi-gru/grufault.c
-> @@ -228,10 +228,10 @@ static int atomic_pte_lookup(struct vm_area_struct =
-*vma, unsigned long vaddr,
->  		goto err;
->  #ifdef CONFIG_X86_64
->  	if (unlikely(pmd_leaf(*pmdp)))
-> -		pte =3D ptep_get((pte_t *)pmdp);
-> +		pte =3D ptep_get((hw_pte_t *)pmdp);
->  	else
->  #endif
-> -		pte =3D *pte_offset_kernel(pmdp, vaddr);
-> +		pte =3D ptep_get(pte_offset_kernel(pmdp, vaddr));
-
-[Severity: Critical]
-This is a pre-existing issue, but does this lockless page table walk
-have time-of-check to time-of-use vulnerabilities?
-
-When atomic_pte_lookup() evaluates pmd_leaf(*pmdp) and then rereads *pmdp
-via ptep_get(), if a THP split occurs concurrently (which only takes the
-PMD lock and can run concurrently with mmap_read_lock()), the second read
-could see a PMD pointing to a PTE table. The function would then treat this
-non-leaf PMD as a leaf PTE, extracting the PFN of the PTE table itself.
-Could this cause the GRU hardware TLB to be programmed to grant user-space
-read/write access to its own kernel page tables?
-
-Similarly, if a concurrent MADV_DONTNEED (which runs under mmap_read_lock())
-clears the PMD between pmd_none() and pte_offset_kernel(), could
-pte_offset_kernel() compute a direct-map address of PFN 0 (PAGE_OFFSET),
-resulting in a wild read of physical memory to use as a PTE?
-
-[Severity: Critical]
-This is another pre-existing issue, but does atomic_pte_lookup() map the
-base of an anonymous THP instead of the requested offset, potentially causi=
-ng
-silent data corruption?
-
-Further down in this function, the code does:
-
-	*paddr =3D pte_pfn(pte) << PAGE_SHIFT;
-#ifdef CONFIG_HUGETLB_PAGE
-	*pageshift =3D is_vm_hugetlb_page(vma) ? HPAGE_SHIFT : PAGE_SHIFT;
-#else
-	*pageshift =3D PAGE_SHIFT;
-#endif
-
-When processing a TLB miss for a virtual address mapped by an anonymous THP,
-pmd_leaf(*pmdp) is true. The function extracts the base PFN of the 2MB page
-from the PMD. However, because is_vm_hugetlb_page(vma) evaluates to false
-for anonymous THPs (it only checks for hugetlbfs VMAs), *pageshift is set
-to PAGE_SHIFT (4KB).=20
-
-Because the base PFN of the THP is extracted without adding the offset for
-vaddr, and a 4KB page size is used, does this cause reads and writes to any
-4KB chunk within an anonymous THP to incorrectly access the first 4KB chunk
-of that THP?
-
-> =20
->  	if (unlikely(!pte_present(pte) ||
->  		     (write && (!pte_write(pte) || !pte_dirty(pte)))))
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727164715.2866=
-609-1-usama.anjum@arm.com?part=3D9
+...
