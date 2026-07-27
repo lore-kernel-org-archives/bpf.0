@@ -1,134 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A724332E72F;
-	Mon, 27 Jul 2026 07:28:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16D227BF7C
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 07:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785137316; cv=none; b=jul7U5YNmF7jZ8OofP/a0lMDeC+Ke2fORkB6thSmcBo0C2JS2Kasu2rqhQEaso/5WyPjZoHJEJsvZv8he9CoyOaLMD1qx8Hh7B9tqoBpMw3DduZk+tboRGChWJFWiJ7oyxCVlA1QkIps6kzeCV2L2MwI2rB/IFp7Q3982gLWWVg=
+	t=1785137461; cv=none; b=iBAaWK8cyDTPEVqS882oAnSRSKls+nxJUQYmQucFfKbXKVjhpSP3DoeG6yzZGWOXMyF2MUHBwdobfv4zKgHgSKadHU8iEgHdlnfq230Z+Hdpw+VqsOFCNwz3tUrCScseSJ7Ra3CwYhBHYukmM0G6fs1W7KqaNDu/KwGC+AyijTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785137316; c=relaxed/simple;
-	bh=0RoFe53LUbG0NfmdOBTY0IeOoRHAXMfDJ3ClV2cG6GA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ahp69KTj9lkYaelvI+wYVN5iqz6XeR1vUd8/jOgznbdfolcsnKDfLEenYghWuQdG06trV34llY6ss1hg+tI/drPFOpU+0jSAMledlKASlpUu4ndB0TzkYnY2GrvUvEp+qp6BX2Qj/Vgjh6TlSD+WnkenZCcX27SkgW0JqWlxOw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CgOb80PQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785137461; c=relaxed/simple;
+	bh=ZPJKG+xl4t4TjM2rDqu8w++m594RGqMKLAmZmXGVk+4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HiuTz4XDT5tOQW3fRJ0dzE1kAqIj1nrcCwUM8rAde+aTwf3ATvXeqpZqemxf0DWvCpUzergDH8TSH7EF7U4Vdgsg5QJPDWZQL1moUeRnaWI3lvXVyjh012VtmOsfVb+tQ3BqiASRdnyChQkBMemGcZfrJ/Fz7GHA9pU3VKQPF1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g3hUekky; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CgOb80PQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9C341F00A3A;
-	Mon, 27 Jul 2026 07:28:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785137315;
-	bh=38DHuvCAabQlrtfYzPq5Lk55vq2TctU7JQ1CUslVEO8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=CgOb80PQAgXY3Sbpulo0twNaC3aqbxLwlkNC+40uUZzkr106ujJNX4tExJDCl/anZ
-	 xF9d1LN7oMRFFIGiF3vCi/wQzOAwupx2B0HRlTl3Ro9goRHylcT0ueXieqPNMVr3Yb
-	 3UxrEe315HZe7UpGHk04Dsbh4JeFOkcSMU6qAm5aNlwgHttHlaVhd4LS5baa8m1k3o
-	 uyrk2vJJEOyQdczIL9GyfyOmGnjf5rhnGEEW9MMOCnBNWLa4SqU8qJXxUQzvpqD8nm
-	 P9YXIelxSkCkAbpn7mG+0z1S3/gnukVANxFKKE5M9cCdWb9GHdxSl6YjF9XbNVn9fg
-	 AxzrWzJRHvHnQ==
-Date: Mon, 27 Jul 2026 09:28:32 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me, toke@redhat.com,
-	maciej.fijalkowski@intel.com, matt@readmodwrite.com
-Subject: Re: [PATCH net 2/2] veth: fix skb length accounting after XDP frag
- adjustment
-Message-ID: <amcIoG59kgi4CJbo@lore-desk>
-References: <20260727032535.13469-1-sun.jian.kdev@gmail.com>
- <20260727032535.13469-3-sun.jian.kdev@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g3hUekky"
+Message-ID: <b45fbc0f-4941-4880-9a4c-7b91198420c0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785137447;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qrIWarYcK/axO6Wo8y7UEi0T0ByoE/cV3aU88cAfZlc=;
+	b=g3hUekkyxQFZhrPlNOVxjGoGGNscI4PmZnhJ/806OBoFWeT2WV6UeFp9c+O1NllXXTpLYK
+	aJQ/da8w5dQF13LYyaHgMilW2rEzvyZHM8irs4rbVXnSnfycdJHNwZmIjZZgqyrPvHXqbv
+	9uZ6xqwqKN166FfcBJCIt5esW7ynsGU=
+Date: Mon, 27 Jul 2026 15:30:21 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4pCuQeDAeCzpWUUi"
-Content-Disposition: inline
-In-Reply-To: <20260727032535.13469-3-sun.jian.kdev@gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] bpf: Add a sleepable page allocator for map
+ memory
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260727062521.376231-1-jiayuan.chen@linux.dev>
+ <20260727062521.376231-2-jiayuan.chen@linux.dev>
+ <20260727063709.99F3B1F000E9@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260727063709.99F3B1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
---4pCuQeDAeCzpWUUi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Jul 26, Sun Jian wrote:
-> veth exposes non-linear skb fragments through an xdp_buff. If an XDP
-> program adjusts the fragment area, veth_xdp_rcv_skb() copies
-> xdp_frags_size back to skb->data_len but leaves skb->len containing the
-> old fragment contribution.
->=20
-> After a fragment shrink, this makes skb_headlen() larger than the actual
-> linear area. In the reproduced UDP receive path, __skb_datagram_iter()
-> copied 1024 bytes past the actual linear tail to userspace, starting at
-> struct skb_shared_info. The copied bytes included the affected skb's
-> nr_frags, xdp_frags_size and a kernel pointer from
-> skb_shinfo(skb)->frags[0]. Real packet data was displaced by the same
-> amount and truncated at the end.
->=20
-> Subtract the old data_len before replacing it and add the new data_len
-> afterwards, keeping skb->len and skb->data_len synchronized.
->=20
-> A 60000-byte UDP datagram on a veth pair with MTU 64000 was shortened by
-> 1024 bytes from its fragment area. Before the fix, all 10 runs produced
-> corrupted payloads. After the fix, all 10 runs matched the expected
-> payload exactly.
->=20
-> Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accept no=
-n-linear skb")
-> Cc: stable@vger.kernel.org
-> Link: https://lore.kernel.org/r/20260720141859.19FF41F000E9@smtp.kernel.o=
-rg
-> Link: https://lore.kernel.org/bpf/al9T9Eto%2FhRIzP5W@boxer/
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
->  drivers/net/veth.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 00e34afd858e..a956498a073b 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -871,12 +871,14 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth=
-_rq *rq,
->  		__skb_put(skb, off); /* positive on grow, negative on shrink */
-> =20
->  	/* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
-> -	 * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
-> +	 * (e.g. bpf_xdp_adjust_tail), update skb length fields here.
->  	 */
-> +	skb->len -=3D skb->data_len;
->  	if (xdp_buff_has_frags(xdp))
->  		skb->data_len =3D skb_shinfo(skb)->xdp_frags_size;
->  	else
->  		skb->data_len =3D 0;
-> +	skb->len +=3D skb->data_len;
+On 7/27/26 2:37 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] NUMA Mempolicy Bypass in bpf_map_alloc_page_sleepable() and __bpf_alloc_page()
+> --
+>
+> --- Patch [1]: [PATCH bpf-next 1/3] bpf: Add a sleepable page allocator for map memory ---
+> commit 7a6023ef7f19fc884e94ffe457ae83ff0d4b5e1e
+> Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+>
+> bpf: Add a sleepable page allocator for map memory
+>
+> This commit introduces bpf_map_alloc_page_sleepable() to provide a blocking
+> page allocator for callers known to be in a sleepable context, such as user
+> page fault handlers. This avoids the conservative, non-blocking behavior of
+> can_alloc_pages() which is always false under PREEMPT_RT.
+>
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+> [ ... ]
+>> @@ -602,15 +602,14 @@ static bool can_alloc_pages(void)
+>>   		!IS_ENABLED(CONFIG_PREEMPT_RT);
+>>   }
+>>   
+>> +#define BPF_PAGE_GFP (GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT | __GFP_NOWARN)
+>> +
+>>   static struct page *__bpf_alloc_page(int nid)
+>>   {
+>>   	if (!can_alloc_pages())
+>>   		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
+>>   
+>> -	return alloc_pages_node(nid,
+>> -				GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT
+>> -				| __GFP_NOWARN,
+>> -				0);
+>> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
+> [Severity: Medium]
+> This isn't a bug introduced by this patch, but does using alloc_pages_node()
+> here bypass the task's NUMA mempolicy?
+>
+> Because alloc_pages_node() ignores task mempolicy, pages might land on the
+> current CPU's local NUMA node instead of the node requested by the task.
+> Could this branch to use a mempolicy-aware allocation when nid is
+> NUMA_NO_NODE?
+>
+>>   }
+> [ ... ]
+>> +/*
+>> + * For callers that know they run in a sleepable context, e.g. a user page
+>> + * fault handler. can_alloc_pages() is a conservative guess made for BPF
+>> + * program context - notably it is always false on PREEMPT_RT - so going
+>> + * through bpf_map_alloc_pages() there would needlessly pick the
+>> + * non-blocking allocator, which never reclaims and never engages the OOM
+>> + * machinery.
+>> + */
+>> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map, int nid)
+>> +{
+>> +	might_sleep();
+>> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
+> [Severity: Medium]
+> Since this function is intended for user space page fault handlers, will
+> unconditionally calling alloc_pages_node() cause the allocation to ignore
+> the user task's mempolicy?
+>
+> Similar to __bpf_alloc_page(), if nid is NUMA_NO_NODE, replacing this with a
+> mempolicy-aware allocation might prevent silent performance regressions from
+> misaligned memory placement during page faults.
+>
+>> +}
 
-nit: same here, you can this one just in the if () branch.
 
-Regards,
-Lorenzo
+You remind me. But I don't think this is really about (task) mempolicy.
+We should respect map.numa_node/map->numa_node, just like other maps do
+when allocating their elements.
 
-> =20
->  	skb->protocol =3D eth_type_trans(skb, rq->dev);
-> =20
-> --=20
-> 2.43.0
->=20
-
---4pCuQeDAeCzpWUUi
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCamcIoAAKCRA6cBh0uS2t
-rKvbAP9Q44CWF4MkMCazaAy9Jnug/sOSHR3QDM+sXYVmStw96QEA1GqXILae8eDj
-SZ/s8wWeLcz75Flj4lAGRaTkkrAn/Q0=
-=j2yY
------END PGP SIGNATURE-----
-
---4pCuQeDAeCzpWUUi--
