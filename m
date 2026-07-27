@@ -1,134 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E035B3DAACB;
-	Mon, 27 Jul 2026 06:54:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ACE83DAAB7;
+	Mon, 27 Jul 2026 07:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785135255; cv=none; b=PL+MVHkn6MSW25327IA9+dhQcfyU4MX0oOCN48hUB/++h7u5qZAERtj4WlLslCQce9btCM2fkkTg1J6kDpU8CvGcFKFu4yqV8mpzzu4O/msxymMn0G14hKIb1Yo6FBRKwPJNFO9b7Lifln1fDZy8mu4lLqLY6Yh18dYnQw1JI5o=
+	t=1785136242; cv=none; b=A3X7Ep0Eb/Ax33QdZMxkneNJ+UuGMJCgd3EWlUnnEPPGz2oVHdfui2OmTpVTj0okwrHTFq/gDbYkrpnF6t1FWbIujKWv8OOAlU6QOP3JPu2HBBh3Z0jpkKB9cAGC8Bbz1g9Uc6GYW56ZI9ZzhWSYZEjLdZbAMB4CYRTo6OyzIHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785135255; c=relaxed/simple;
-	bh=mDr9bs2eIz7uHru+obDHb2C3eEpkOkoFNIqSxusjWbM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HWSbF8rqFFfOLUAtnqTzyhO1Hpiz7dN+mytweHUvZrLX1ncgF+P9LOxwAGwlwirC5Q0KUt8EvUYSvK8d0dbVYwOdWZjzxsQ9n5Smm+mjdskG10sTpFw2mVfPJ1/zaigBNShb2LzAp7WhdJRosmwXGuDXFrlYfDmSrOQQbwCSXFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9Mbk2q6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785136242; c=relaxed/simple;
+	bh=iMXvijyU4ZOT0FLE3oXO2jTcavufFEr1j+sMn4IZPK4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=s4zucu0r8vZFiaY1DVMqbQpCv2FvE4Vu716mdDrPa4NNs1wkRZwVVdJ/8ZSTWU4STv488uwBWh/WEKwZRc/QRn570yHpHuE24JrteGb7r+EN8SYPR6wHSSON+XyK7d2FI+UpF5DG7POk8ysPuZI2s+9YVns5gZUXheflbP3I0Zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nwR/fPX7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9Mbk2q6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E491F00A3D;
-	Mon, 27 Jul 2026 06:54:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nwR/fPX7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B531F000E9;
+	Mon, 27 Jul 2026 07:10:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785135253;
-	bh=33hCdmqRfua3pjUoVzVwn55n54oEGNtDSm1cqPH3ftU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Y9Mbk2q6d8qa8Tp1YjC+GZZ/sSeY/6Uz8Xg/JYUTAYBB+qaB09uuExJ1OoetJUoUS
-	 Kvd5As2FQCLzr5eOO1CgFFJrbue4TY1i44PtyLDalZOnxEXfPb0y4y76GSwvVCRM3F
-	 ktgv+Erc8DGcHPlUIOcBYoSLGLh5n5xAhkm1xHc+2u9c+PMFPyf0zoJFyv/Qzu1Ivr
-	 O9uNPbv74iE5hNHcgn76jMiouSCjBKL1JjpR+sqQ0lz8EqcPe0HIDAqllgxN9X2J5a
-	 D4+WTeyv4Nej3ryrJv9FvvgcubeL+MaHpd2uA9+DouXqLxvUSNGNs2BsTix5g+EzjD
-	 2d1sGBgGvUw0Q==
-Date: Mon, 27 Jul 2026 08:54:11 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me, toke@redhat.com,
-	maciej.fijalkowski@intel.com, matt@readmodwrite.com
-Subject: Re: [PATCH net 2/2] veth: fix skb length accounting after XDP frag
- adjustment
-Message-ID: <amcAk7W4237XKJl1@lore-desk>
-References: <20260727032535.13469-1-sun.jian.kdev@gmail.com>
- <20260727032535.13469-3-sun.jian.kdev@gmail.com>
+	s=k20260515; t=1785136240;
+	bh=QE1nhcz7QL2ZAIIYHgj8S7/C9JtQLRsLFH+uEUyscw4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=nwR/fPX7QLkLBoZSao8D+LOlMLvHOZV6dnrEVe0OiXQqWzkHnntVXiEe0rglyHTdx
+	 +rkVsSNDaOeiQpHtSKmv73zgfyQhd+7D29EqKB+HiJMoz2bIuAvlkQxc4ni4k+We6t
+	 VXKsxsXyof6pKB5M+tew6d5DpFrmdXtedb/g/tMIlCQVILAm1OFoPtCKsrTBGsanI5
+	 TpUW/Daiidqf0rjh0jEK/m+Cfi04AkWMqMn+DR3L3eRuN02x1Ji+YuBn3eA+uWh4c5
+	 5H3PcyLw3LgktG6GerdqdjE0YO7bNXEpv0u0VqsyFq/Yp1Q19vuW8iweZ3IuRgKEDN
+	 AoGe9dS7ax1+A==
+Content-Type: multipart/mixed; boundary="===============2056660838945013230=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gIJJ9096ClTqm0ok"
-Content-Disposition: inline
-In-Reply-To: <20260727032535.13469-3-sun.jian.kdev@gmail.com>
+Message-Id: <040c342a22c856b323f1d2c67d2a582f31432ed464121cc73fd60de55f043c93@mail.kernel.org>
+In-Reply-To: <20260727062521.376231-3-jiayuan.chen@linux.dev>
+References: <20260727062521.376231-3-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf-next 2/3] bpf: arena: allocate the fault-in page outside the lock
+From: bot+bpf-ci@kernel.org
+To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,bigeasy@linutronix.de,clrkwllms@kernel.org,rostedt@goodmis.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-rt-devel@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 27 Jul 2026 07:10:38 +0000 (UTC)
 
---gIJJ9096ClTqm0ok
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--===============2056660838945013230==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Jul 26, Sun Jian wrote:
-> veth exposes non-linear skb fragments through an xdp_buff. If an XDP
-> program adjusts the fragment area, veth_xdp_rcv_skb() copies
-> xdp_frags_size back to skb->data_len but leaves skb->len containing the
-> old fragment contribution.
->=20
-> After a fragment shrink, this makes skb_headlen() larger than the actual
-> linear area. In the reproduced UDP receive path, __skb_datagram_iter()
-> copied 1024 bytes past the actual linear tail to userspace, starting at
-> struct skb_shared_info. The copied bytes included the affected skb's
-> nr_frags, xdp_frags_size and a kernel pointer from
-> skb_shinfo(skb)->frags[0]. Real packet data was displaced by the same
-> amount and truncated at the end.
->=20
-> Subtract the old data_len before replacing it and add the new data_len
-> afterwards, keeping skb->len and skb->data_len synchronized.
->=20
-> A 60000-byte UDP datagram on a veth pair with MTU 64000 was shortened by
-> 1024 bytes from its fragment area. Before the fix, all 10 runs produced
-> corrupted payloads. After the fix, all 10 runs matched the expected
-> payload exactly.
->=20
-> Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accept no=
-n-linear skb")
-> Cc: stable@vger.kernel.org
-> Link: https://lore.kernel.org/r/20260720141859.19FF41F000E9@smtp.kernel.o=
-rg
-> Link: https://lore.kernel.org/bpf/al9T9Eto%2FhRIzP5W@boxer/
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
->  drivers/net/veth.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 00e34afd858e..a956498a073b 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -871,12 +871,14 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth=
-_rq *rq,
->  		__skb_put(skb, off); /* positive on grow, negative on shrink */
-> =20
->  	/* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
-> -	 * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
-> +	 * (e.g. bpf_xdp_adjust_tail), update skb length fields here.
->  	 */
-> +	skb->len -=3D skb->data_len;
->  	if (xdp_buff_has_frags(xdp))
->  		skb->data_len =3D skb_shinfo(skb)->xdp_frags_size;
->  	else
->  		skb->data_len =3D 0;
-> +	skb->len +=3D skb->data_len;
+> bpf: arena: allocate the fault-in page outside the lock
+>
+> arena_vm_fault() allocated the page while holding arena->spinlock, so it
+> could only use the non-blocking allocator. Once the memcg is at
+> memory.max that allocation just fails, the fault turns into
+> VM_FAULT_SIGSEGV, and the process gets a SIGSEGV on a perfectly valid
+> arena address. Hitting memory.max is routine (e.g. page cache from
+> reading a big file), so this kills innocent processes.
+>
+> Preallocate the page before taking the lock, like do_anonymous_page()
+> does, so the allocation can sleep and go through reclaim and the OOM
+> path, and return VM_FAULT_OOM on failure so the memcg OOM handler runs
+> instead of a fake segfault. Also tidy up the error labels.
+>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-nit: I guess you can move this one just in the if () branch.
+This looks like a fix for a real bug that could send a SIGSEGV to a
+process on a valid arena address once the memcg hits memory.max.
 
-Regards,
-Lorenzo
+The allocation was moved under arena->spinlock, and the error path
+switched to VM_FAULT_SIGSEGV, when arena_vm_fault() replaced its
+guard(mutex)(&arena->lock) with raw_res_spin_lock_irqsave(&arena->spinlock,
+flags). Should this carry a Fixes: tag pointing at that change?
 
-> =20
->  	skb->protocol =3D eth_type_trans(skb, rq->dev);
-> =20
-> --=20
-> 2.43.0
->=20
+  Fixes: b8467290edab ("bpf: arena: make arena kfuncs any context safe")
 
---gIJJ9096ClTqm0ok
-Content-Type: application/pgp-signature; name=signature.asc
 
------BEGIN PGP SIGNATURE-----
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCamcAkwAKCRA6cBh0uS2t
-rHeKAP9WM0aDsdQCpR4iXeaiU8QON+HZnBjk1PIiHOzHdwtpNAEAkp988X+xWEwK
-rXOcz3wWG7guotlKNM+aps/holYJvgk=
-=io8E
------END PGP SIGNATURE-----
-
---gIJJ9096ClTqm0ok--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30243398938
+--===============2056660838945013230==--
