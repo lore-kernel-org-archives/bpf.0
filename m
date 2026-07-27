@@ -1,168 +1,304 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010029.outbound.protection.outlook.com [52.101.46.29])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CCE43BE62A;
-	Mon, 27 Jul 2026 03:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.29
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785121610; cv=fail; b=BSTzqNaDaf//02nuFR4xWRZtloRB+N4fBkPb2N7y5zGkFMSW8ifPd68KAmORwlxXlaVXfPoKUseb9IYMHyuHKgs+Kq0cPp0BLaS298q29NoihtWs5IZDrHhFTpNwO5iEPDaQT4fKpZ3lxENm2c2QXgtWIL8wTNxQOcybmDMwRgk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785121610; c=relaxed/simple;
-	bh=Hi3ozbyHD/Sj4b7S0QrRRH518t+Nx41WsueReYTyQlA=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=LQoJ0rqWYsRxNb8lIfMOxEpXH16qpWEMiNUQ/taPbtWQVeOl3ffxJlMUL5/XZeAQmyzPt2Ne5uW+r4NvgquW9jyy2JHBef9QCOsgMa5fWzQUXA9V2AeFSfjwB3OMGmyBbmpQXGjHHTrgjlZAHC7XyIt+nsRw742Q2BOJhyahdaI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=DKPucqjC; arc=fail smtp.client-ip=52.101.46.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A59F3BE636
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 03:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785121627; cv=none; b=GD23HjcWpUyAUpdnuxMMTElCaNY4P79MxIw8EncpFAgu5jtHWJ2O0eKFOHUV0fzbs4qjMOtRAi/Mbv2YNNI8rAamja+ESTSnWXfSNxlM2LGJdTUSHJcsaukbe8fSxFHKwWgEFRMAVpbQy4xc76cKDI5Sv0F8Grpfm8MUhkl1t6k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785121627; c=relaxed/simple;
+	bh=mJqacue8S4GbeocFcNdKBc8wRkOp0HnioTmCqMhaFUw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=M0C8EBz+lT98GuR6D2TCxTMctHkCHnID840XitOGFqYLrcPJVIxOIbM9Buj0k/zDI8i+GPTfy5wRxvlPP2KN50KcN7bT13CTSHNW4CaLQL3HZO/r2CEzcdZFNVdBo/U0zBZW+ZvuvOdDYy36pPN6sXZvGEYBGVr0CX/bhy2L2r4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pj6Unl4B; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="DKPucqjC"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Z1cc4qpHi2tUw3iCB4xWsG7KBCcCSn80jkpjbG6PATBq6n0Bw/9X0pDB/Xjlm/2ivsfPpxftjcnSn/hrPcQ4bpO9lBBbJDSi3I2ZOWQg7qPbep/3tG/AFe8dfPlitWmDuiL86fv7Z65r1jA3/CIICF+AROrELJP0s6eDfRhwfKzHD+jQyXN+zn/a35M/IZjJsZYgMyFbLkwXYK5u7N7BY1gMOOPI5gdQewve7j7rQiix+fJUHC7Nb204q/aZYfsg2eThTbnGqOwYSFAJLAJc872DTaf5GHnls28SMWh24kCHlFv00Obka21IMAbyovSMaZTZGnxxUB0eq8GKP/JFDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JhHziu2sy5jBQHkshTnLnnEL2oMAVdslInTxEMS26LA=;
- b=GHjDqkwh7n0FGF9LZQTQi66a64qzBbkipGh3k7Un3ixUlhePNiL1duQt/0phw7ARVxCmZY6q46/CqQZC7FQlY8UP2DouiSSwPdD2c7KV2O+FTw+wI4eGMxam1Zgp2kYWoI8dXferO5/KtyOKORf7Gdj4JR0BlHjo6UwqXE0Tjf0f2Qh3GQcjm8fGxT8sabOwSlOwmP/yC7Qu6V0OU+6NN6AhwiHN0O5YzLZkmSYxDNIhH5a7wQ2TecfM/D6ZOj3qjCcCni27CTslZEVREDVxod1gOyhgJY/KCrfuBUrCzBteNaiE40ETJXy0Ro0FxD5HyBLJr5Qu1nGzT+kLqSYXNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
- dkim=pass header.d=altera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JhHziu2sy5jBQHkshTnLnnEL2oMAVdslInTxEMS26LA=;
- b=DKPucqjCnmO/8MZ38SOqueNZgUfkYJSHVCFaq5ZNS5Issy6TqICzwV8vBEYlL20BZfrAan4kWwF2vpuvLCuA2MJJDXvxwQqowfumHK2EhWX+ewNAhWM9O5L/3n1+gbshE9+yG6gIe3Y+Cc3KICoe28wNOrpNAjFDZoqFVgZ3Kkjsju39pi03mh6StWCdCifBolXkNYvjSJ2ia9LleC2YZNz83sb5008oLQRhh4NgWTDuV4voLZNGlNPt3Zkq/hYtM8tIcE9UVcp9oGLZNMwppcJvdALYbgWsf7DOrOZM0yaYWKxBuYZ2ASiAD5Ib82KLVrOVHBP/Lu76GWCLZ8OjtA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=altera.com;
-Received: from SJ0PR03MB6964.namprd03.prod.outlook.com (2603:10b6:a03:432::18)
- by CO1PR03MB7819.namprd03.prod.outlook.com (2603:10b6:303:276::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.13; Mon, 27 Jul
- 2026 03:06:46 +0000
-Received: from SJ0PR03MB6964.namprd03.prod.outlook.com
- ([fe80::b965:bfa8:58fb:e775]) by SJ0PR03MB6964.namprd03.prod.outlook.com
- ([fe80::b965:bfa8:58fb:e775%4]) with mapi id 15.21.0245.012; Mon, 27 Jul 2026
- 03:06:46 +0000
-From: muhammad.nazim.amirul.nazle.asmade@altera.com
-To: netdev@vger.kernel.org
-Cc: ansuelsmth@gmail.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pj6Unl4B"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785121625; x=1816657625;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mJqacue8S4GbeocFcNdKBc8wRkOp0HnioTmCqMhaFUw=;
+  b=Pj6Unl4BE8s1aoqMG2VQDRUeS4RNaqaec78HLEpwqxSEAS+GIjApOjWi
+   e2t2P76Dipd7e+9YiPP+0G3b8sclMbDc98Tk6XEFKmViAnHIb+XjiFjkW
+   GewD4chRiizb8br2dEP+uPKp+B6ZpkDHhoTBjkMwD3cRNLIGLiawfNcJb
+   MdNuFzpfKzO8H/q+VD0hKoi1JwHeXeFfIxtotbjq5XrDBUjCdWk8NIG98
+   jI2uVSlyt3ztR/NZkQAXUvMBmlxgVkQegU4xnQQw1QKAE46zyJ0vKUwEL
+   w43ufswNICKKhY1eorlCx6ka3zjtCGK+x472k09xaXqY/9u26lO9KCBOr
+   A==;
+X-CSE-ConnectionGUID: zU+SIFvETJmS9HPQWfdAsQ==
+X-CSE-MsgGUID: 2XB/1RqATAybtDmJZItN5g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11857"; a="88222578"
+X-IronPort-AV: E=Sophos;i="6.25,187,1779174000"; 
+   d="scan'208";a="88222578"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2026 20:07:04 -0700
+X-CSE-ConnectionGUID: PCfJ9+fKTeqxBXJ5mYDI0Q==
+X-CSE-MsgGUID: 56RX5CspSdW7C5e+LAGV2Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,187,1779174000"; 
+   d="scan'208";a="254963349"
+Received: from tester.sh.intel.com ([10.112.106.126])
+  by fmviesa006.fm.intel.com with ESMTP; 26 Jul 2026 20:07:03 -0700
+From: Tao Yu <tao1.yu@intel.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
 	daniel@iogearbox.net,
-	bpf@vger.kernel.org
-Subject: [PATCH net] net: stmmac: Disable queues before netif_tx_disable in xdp_release
-Date: Sun, 26 Jul 2026 20:06:45 -0700
-Message-ID: <20260727030645.13280-1-muhammad.nazim.amirul.nazle.asmade@altera.com>
-X-Mailer: git-send-email 2.43.7
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0156.namprd13.prod.outlook.com
- (2603:10b6:a03:2c7::11) To SJ0PR03MB6964.namprd03.prod.outlook.com
- (2603:10b6:a03:432::18)
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	tao1.yu@intel.com,
+	syzbot+0098eed2cc898cdd672f@syzkaller.appspotmail.com
+Subject: [PATCH v2] bpf: normalize arg_track state construction
+Date: Mon, 27 Jul 2026 11:06:43 +0800
+Message-Id: <20260727030643.1682974-1-tao1.yu@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260723055508.1403247-1-tao1.yu@intel.com>
+References: <20260723055508.1403247-1-tao1.yu@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR03MB6964:EE_|CO1PR03MB7819:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb0d74ac-b46b-41e7-27d6-08deeb8c17f2
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|366016|376014|56012099006|11063799006|10067099003|18002099003|55112099003;
-X-Microsoft-Antispam-Message-Info:
-	d5FX1oEy8T9QN7u/PG44RjMeXQqMG3d6v2WMxSMA2E9g8mNUpm7Vygfnu0Yy2CLWbB0ZKq/8nJMcxCTlE4Rc0hlfAwF1XBb+28V9BTOfAkle/3Ky4g+IX7gv9P4tEwBNJ/Wch1IBglP5T8yNXHgelHEsK8Q4RMMc9Rxs+5GCJbyN8Y0/RRy21DEDAsfw7/LghmkUekAhp5o5NuWLmhu3SpE0yzqSTaB33QuyUnuJei0GL3pm9jPtn35iG5dMx0zmpDi8K/9ajWUioHCkzn42Jqw82a/aQGma/9Ph+WEm8WYcRDvseamuTGU5nGo7I6AYaxzcKLhKqu3momCF3I+1dCP2T3zIb4EJVvbyEdkySfa+UQwvnYTWi4tY+hCuV1AiYz36nf7WhtO1Cv7Ca0jVAVpzbo8uPAUjZ70363IpaJV1tzBtiNHX/akFWjzaiAG6CFPsDS8/62AyP/JHbEeNl/icJH+NqYjITD7uShQtzCO96ejl59H9Z+jRFmslK9GmN7jnYpGrhjuvObyM2GREgCuzLMhfJJKD1HyjqWJLV+X0RevNF4xDBqauGaaNjGhZEWij5QeE9dLBFm6S0X6JZHpP/ZxdhanZrLHNlVCiS+73UPWhno0VhLo4UVj7awJ+mdtqB7Lu6fwD7aXCWgn2u9f3EpRtxImOlUs9hxxDTsU=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6964.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(366016)(376014)(56012099006)(11063799006)(10067099003)(18002099003)(55112099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?zfRQqf9cgrxn6fTT+LAujSQnDpqmYFTDNYR/kjdaYOOSc3zTv6iMECTl+FdM?=
- =?us-ascii?Q?Mo0ZapoG5ey1wvpWLe64yYUYFmpJtLo6pgobbTZ1SPzFTu8BzRpNsFljANm8?=
- =?us-ascii?Q?5FqmOXuhSY5bUUtioEyXUWO6brdENQBEih7WVR+MIsxXJ/X9LIXdxKt9gxWM?=
- =?us-ascii?Q?sKxm/RCy2pfFpJuoTpRjrFA/UPyNPqlAIxqQtr8rDLtSG99l3OtUUd/RmvcO?=
- =?us-ascii?Q?iTc6iyItX1XRWwgPD092LdbFfVoVrh2VSDM3N+2/WQ4QNYZSvMslyRep+VwK?=
- =?us-ascii?Q?lcUuTi8aOf3RI/XCfxjIGcrzb40RWZUirZjJHCNjqTm0IGBZgumje2Tbx/D3?=
- =?us-ascii?Q?LE+tR7A4XPDvWd7xq+OrJv3pfeLKinxcuI9/XlnqlyoRNZxvJ0ZL+/eDuYQA?=
- =?us-ascii?Q?uezxm6a0CU03zduhNHmI6M6eOWOnUdvnxvb5ZGOfc0L0+geB+a+msr1fOt5I?=
- =?us-ascii?Q?HJGag5qEzsnya1C4dF9IfbzcUTO89sPBL18tapPz2m+wqpMrcLBxx8KjYBOF?=
- =?us-ascii?Q?O3nentk3NuA0LqZedvkB3eGq/YGuL2UOqAKx8FSVTHA0I29XdLtw7FC9iNoo?=
- =?us-ascii?Q?lxXMHCMEN1ZTnTScI0F3PA/Kv6XFdLsGhbkA4290h/ddOFrUY1KMy8xlNuet?=
- =?us-ascii?Q?1HqMZKJGNFN7jv4KJNctVSqtJfRkWAoH8zyiSIpeNKSEdN/h3kgK4bWyblbg?=
- =?us-ascii?Q?HnRrmF7zynRzg0Sduqd3kIF97agJQgkY6ZrhWwgQltRsxT+QLik47gXMHako?=
- =?us-ascii?Q?IAbKP7xdvGUozEHS4jATsclfQPTbMGtnyaFPHKqWFI5m3pu1CDQMKheUG6qY?=
- =?us-ascii?Q?be2Q+EaBT7sXCTm82m4FERvU4pUmNzh31IQoA6cDnA2i7Ljac+3pun7UCO53?=
- =?us-ascii?Q?kBExukjnAnhUz+0MGxUYjdPC9p6AViB7nMw9WxtEXHXcSrolgbFu4NqJ/wcZ?=
- =?us-ascii?Q?EZHZav88MG4/VXNJP4PLM+cJFIqLGL0QKXTg8fWzI0FQuGQ2HElBGeJOpWlX?=
- =?us-ascii?Q?ACDUP7nMenwk5HCTLnfbHrlmzxkqbhur92mIcL9Zr8yBZYYkl2XM9EmtgHea?=
- =?us-ascii?Q?VzZ3vhgKPxJ+qEJp5BNaZB1GCuxZffMBFJ5q53jwKO0G/u0D6ITbWYPBcnGG?=
- =?us-ascii?Q?M6XsXnGpOV6RB10BKM5DDo4Jti8InbNw+KokSN8vZ8Xv+HI0kYAIvSjIevhL?=
- =?us-ascii?Q?EFBPNzsHfdBRYDrUbLd8bbo+6WrJwxh32vGVRHju4JZxOMSiDwJ1/UgjfhU8?=
- =?us-ascii?Q?rs4mY3wGa1Z8PeAx1O2p/KiykShaH12bu/LIS4as66p3c4PuPOZmwNHimiGs?=
- =?us-ascii?Q?pJUsAujO97ioEKyBpAxEUtBKSpjjd4w6Lmd06byYmVtWTF9XHHzA2WL/BUEf?=
- =?us-ascii?Q?xlzBHOI7KjLrwoLpGezWNktRV4mJYI63grikzXNSqsUYKKsZAn/JJFlUZUwf?=
- =?us-ascii?Q?YmwDbFLSGbIKspYleNCe95pgdElNT2YxD7azEzxsagi1tF86X5LUWGa/l7AD?=
- =?us-ascii?Q?60O3uH66HUIPwMFSYGpQ+saopokiB2NnCzO62iw3dhAO5izw1vCjQMu8ru56?=
- =?us-ascii?Q?cD3dD1c7zZrRPhwdT5h82/Xwc4yHmE5BLqQi8mus+sJDxhPwfQDuLT6/ZQC2?=
- =?us-ascii?Q?aqqAyn+QVj7HVdmmzE3lA5+DitGMdnCAvjdI7ER5+/iTsWYPerfwWWfFD+Jp?=
- =?us-ascii?Q?HMiEFP5KmBkENyRFBoPKRqp0eB4ZJ2kjNAtfOwxffTRdmiyi6zInvrcZ234/?=
- =?us-ascii?Q?OhygYPvibv0SxdeOgydntrkvVn2eiPGp/CrxGApmNXQQ7sf6OvTtG+gkudPa?=
-X-MS-Exchange-AntiSpam-MessageData-1: fZZ2Jgv9LmUqyg==
-X-OriginatorOrg: altera.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb0d74ac-b46b-41e7-27d6-08deeb8c17f2
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6964.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2026 03:06:46.4410
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E9mfNHrW3CJgNmLChDepCnVXXG6hPBLIzfz/jM6LCC1MtwS94b919uhwELGLhZa9wAHzBTge4ENqf1zHcxqKtYXTnxJDtSSJSwIjV375wtm4x+DdM6z+lrUO1LhiSfe+OaCvkmZtTFc/iK2FtLwtRQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR03MB7819
+Content-Transfer-Encoding: 8bit
 
-From: Nazim Amirul <muhammad.nazim.amirul.nazle.asmade@altera.com>
+KMSAN reported an uninitialized read from `a.mask` in
+`__arg_track_join()` during liveness analysis.
 
-stmmac_xdp_release() calls netif_tx_disable() before
-stmmac_disable_all_queues(), which creates a race window where NAPI
-is still running while TX is being disabled. If a packet is still
-queued at that point, it can be processed after TX is stopped,
-leading to a kernel panic.
+=====================================================
+BUG: KMSAN: uninit-value in __arg_track_join+0x15a/0x810 kernel/bpf/liveness.c:743
+ __arg_track_join+0x15a/0x810 kernel/bpf/liveness.c:743
+ arg_track_join+0x186/0x870 kernel/bpf/liveness.c:784
+ compute_subprog_args kernel/bpf/liveness.c:1623 [inline]
+ analyze_subprog+0x3eb0/0xff30 kernel/bpf/liveness.c:1799
+ bpf_compute_subprog_arg_access+0x3ee/0x2370 kernel/bpf/liveness.c:1937
+ bpf_compute_live_registers+0xfdb/0x3090 kernel/bpf/liveness.c:2149
+ bpf_check+0x5bcb/0x9360 kernel/bpf/verifier.c:20065
+ bpf_prog_load+0x28d2/0x2d00 kernel/bpf/syscall.c:3082
+ __sys_bpf+0x8e0/0xee0 kernel/bpf/syscall.c:6274
+ __do_sys_bpf kernel/bpf/syscall.c:6387 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6385 [inline]
+ __ia32_sys_bpf+0xa4/0xf0 kernel/bpf/syscall.c:6385
+ ia32_sys_call+0x33e7/0x4360 arch/x86/include/generated/asm/syscalls_32.h:358
+ do_syscall_32_irqs_on arch/x86/entry/syscall_32.c:83 [inline]
+ __do_fast_syscall_32+0x195/0x470 arch/x86/entry/syscall_32.c:307
+ do_fast_syscall_32+0x37/0x80 arch/x86/entry/syscall_32.c:332
+ do_SYSENTER_32+0x1f/0x30 arch/x86/entry/syscall_32.c:370
+ entry_SYSENTER_compat_after_hwframe+0x84/0x8e
 
-Fix this by calling stmmac_disable_all_queues() first to stop NAPI
-processing before disabling TX, matching the order already used in
-stmmac_release() since 7028471edb64.
+Local variable old created at:
+ arg_track_join+0x86/0x870 kernel/bpf/liveness.c:783
+ compute_subprog_args kernel/bpf/liveness.c:1623 [inline]
+ analyze_subprog+0x3eb0/0xff30 kernel/bpf/liveness.c:1799
 
-Fixes: 7028471edb64 ("net: ethernet: stmicro: stmmac: first disable all queues and disconnect in release")
-Signed-off-by: Rohan G Thomas <rohan.g.thomas@altera.com>
-Signed-off-by: Nazim Amirul <muhammad.nazim.amirul.nazle.asmade@altera.com>
+CPU: 0 UID: 0 PID: 18676 Comm: syz.0.5880 Tainted: G        W           syzkaller #0 PREEMPT(lazy)
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+=====================================================
+
+arg_track is a tagged-union state machine, but a number of transitions
+were previously expressed by mutating selected fields or by manually
+assembling temporary values. This makes the state encoding less explicit
+and weakens the invariant that each logical arg_track state is
+materialized as a complete object.
+
+Normalize arg_track state construction through explicit helpers for the
+special states used by the analysis: ARG_NONE, ARG_UNVISITED,
+offset-imprecise, and ARG_IMPRECISE. Use these helpers consistently
+instead of open-coded partial updates and ad-hoc temporaries.
+
+Besides making the state transitions easier to reason about, this makes
+the state representation explicit at each transition and avoids carrying
+partially materialized union-backed state through by-value copies and
+joins, matching the class of issue reported by KMSAN.
+
+Fixes: bf0c571f7feb ("bpf: introduce forward arg-tracking dataflow analysis")
+Reported-by: syzbot+0098eed2cc898cdd672f@syzkaller.appspotmail.com
+Signed-off-by: Tao Yu <tao1.yu@intel.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/bpf/liveness.c | 65 ++++++++++++++++++++++++++++---------------
+ 1 file changed, 43 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 2a0d7eff88d3..75cb53938519 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7099,15 +7099,15 @@ void stmmac_xdp_release(struct net_device *dev)
- 	struct stmmac_priv *priv = netdev_priv(dev);
- 	u8 chan;
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index 0aadfbae0acc5..58b979c17c3e4 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -607,6 +607,31 @@ enum arg_track_state {
+ 	ARG_IMPRECISE	= -3,	/* lost identity; .mask is arg bitmask */
+ };
  
--	/* Ensure tx function is not running */
--	netif_tx_disable(dev);
--
- 	/* Disable NAPI process */
- 	stmmac_disable_all_queues(priv);
- 
- 	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
- 		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
- 
-+	/* Ensure tx function is not running */
-+	netif_tx_disable(dev);
++static struct arg_track arg_track_state(s8 frame)
++{
++	return (struct arg_track){ .frame = frame };
++}
 +
- 	/* Free the IRQ lines */
- 	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
++static struct arg_track arg_track_none(void)
++{
++	return arg_track_state(ARG_NONE);
++}
++
++static struct arg_track arg_track_unvisited(void)
++{
++	return arg_track_state(ARG_UNVISITED);
++}
++
++static struct arg_track arg_track_off_imprecise(s8 frame)
++{
++	return arg_track_state(frame);
++}
++
++static struct arg_track arg_track_imprecise(u16 mask)
++{
++	return (struct arg_track){ .mask = mask, .frame = ARG_IMPRECISE };
++}
++
+ /* Track callee stack slots fp-8 through fp-512 (64 slots of 8 bytes each) */
+ #define MAX_ARG_SPILL_SLOTS 64
  
+@@ -693,8 +718,8 @@ static struct arg_track arg_single(s8 arg, s16 off)
+  */
+ static struct arg_track arg_merge_offsets(struct arg_track a, struct arg_track b)
+ {
+-	struct arg_track result = { .frame = a.frame };
+-	struct arg_track imp = { .frame = a.frame };
++	struct arg_track result = arg_track_state(a.frame);
++	struct arg_track imp = arg_track_off_imprecise(a.frame);
+ 	int i = 0, j = 0, k = 0;
+ 
+ 	while (i < a.off_cnt && j < b.off_cnt) {
+@@ -747,7 +772,7 @@ static struct arg_track arg_join_imprecise(struct arg_track a, struct arg_track
+ 	else if (b.frame == ARG_IMPRECISE)
+ 		m |= b.mask;
+ 
+-	return (struct arg_track){ .mask = m, .frame = ARG_IMPRECISE };
++	return arg_track_imprecise(m);
+ }
+ 
+ /* Join two arg_track values at merge points */
+@@ -760,7 +785,7 @@ static struct arg_track __arg_track_join(struct arg_track a, struct arg_track b)
+ 	if (a.frame == b.frame && a.frame >= 0) {
+ 		/* Both offset-imprecise: stay imprecise */
+ 		if (a.off_cnt == 0 || b.off_cnt == 0)
+-			return (struct arg_track){ .frame = a.frame };
++			return arg_track_off_imprecise(a.frame);
+ 		/* Merge offset sets; falls back to off_cnt=0 if >4 */
+ 		return arg_merge_offsets(a, b);
+ 	}
+@@ -837,7 +862,7 @@ static void arg_track_alu64(struct arg_track *dst, const struct arg_track *src)
+ 		 * rX += rY where rY is not arg derived
+ 		 * rX += rX
+ 		 */
+-		dst->off_cnt = 0;
++		*dst = arg_track_off_imprecise(dst->frame);
+ 		return;
+ 	}
+ 	if (src->frame >= 0 && dst->frame == ARG_NONE) {
+@@ -845,8 +870,7 @@ static void arg_track_alu64(struct arg_track *dst, const struct arg_track *src)
+ 		 * rX += rY where rX is not arg derived
+ 		 * rY identity leaks into rX
+ 		 */
+-		dst->off_cnt = 0;
+-		dst->frame = src->frame;
++		*dst = arg_track_off_imprecise(src->frame);
+ 		return;
+ 	}
+ 
+@@ -875,7 +899,7 @@ static void arg_padd(struct arg_track *at, s64 delta)
+ 		s16 new_off;
+ 
+ 		if (arg_add(at->off[i], delta, &new_off)) {
+-			at->off_cnt = 0;
++			*at = arg_track_off_imprecise(at->frame);
+ 			return;
+ 		}
+ 		at->off[i] = new_off;
+@@ -901,11 +925,8 @@ static struct arg_track fill_from_stack(struct bpf_insn *insn,
+ 					struct arg_track *at_stack_out,
+ 					int depth)
+ {
+-	struct arg_track imp = {
+-		.mask = (1u << (depth + 1)) - 1,
+-		.frame = ARG_IMPRECISE
+-	};
+-	struct arg_track result = { .frame = ARG_NONE };
++	struct arg_track imp = arg_track_imprecise((1u << (depth + 1)) - 1);
++	struct arg_track result = arg_track_state(ARG_NONE);
+ 	int cnt, i;
+ 
+ 	if (reg == BPF_REG_FP) {
+@@ -940,7 +961,7 @@ static void spill_to_stack(struct bpf_insn *insn, struct arg_track *at_out,
+ 			   int reg, struct arg_track *at_stack_out,
+ 			   struct arg_track *val, u32 sz)
+ {
+-	struct arg_track none = { .frame = ARG_NONE };
++	struct arg_track none = arg_track_none();
+ 	struct arg_track new_val = sz == 8 ? *val : none;
+ 	int cnt, i;
+ 
+@@ -979,7 +1000,7 @@ static void spill_to_stack(struct bpf_insn *insn, struct arg_track *at_out,
+  */
+ static void clear_overlapping_stack_slots(struct arg_track *at_stack, s16 off, u32 sz, int cnt)
+ {
+-	struct arg_track none = { .frame = ARG_NONE };
++	struct arg_track none = arg_track_none();
+ 
+ 	if (cnt == 0) {
+ 		for (int i = 0; i < MAX_ARG_SPILL_SLOTS; i++)
+@@ -1103,7 +1124,7 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	u8 code = BPF_OP(insn->code);
+ 	struct arg_track *dst = &at_out[insn->dst_reg];
+ 	struct arg_track *src = &at_out[insn->src_reg];
+-	struct arg_track none = { .frame = ARG_NONE };
++	struct arg_track none = arg_track_none();
+ 	int r, slot;
+ 
+ 	/* Handle stack arg stores and loads. */
+@@ -1128,7 +1149,7 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 				arg_padd(dst, -(s64)insn->imm);
+ 			else
+ 				/* Any other 64-bit alu on the pointer makes it imprecise */
+-				dst->off_cnt = 0;
++				*dst = arg_track_off_imprecise(dst->frame);
+ 		} /* else if dst->frame is imprecise it stays so */
+ 	} else if (class == BPF_ALU64 && BPF_SRC(insn->code) == BPF_X) {
+ 		if (code == BPF_MOV) {
+@@ -1379,11 +1400,11 @@ static int record_load_store_access(struct bpf_verifier_env *env,
+ 
+ 	/* Resolve offsets: fold insn->off into arg_track */
+ 	if (ptr->off_cnt > 0) {
++		resolved = arg_track_state(ptr->frame);
+ 		resolved.off_cnt = ptr->off_cnt;
+-		resolved.frame = ptr->frame;
+ 		for (oi = 0; oi < ptr->off_cnt; oi++) {
+ 			if (arg_add(ptr->off[oi], insn->off, &resolved.off[oi])) {
+-				resolved.off_cnt = 0;
++				resolved = arg_track_off_imprecise(ptr->frame);
+ 				break;
+ 			}
+ 		}
+@@ -1630,8 +1651,8 @@ static int compute_subprog_args(struct bpf_verifier_env *env,
+ 	struct arg_track (*at_stack_in)[MAX_ARG_SPILL_SLOTS] = NULL;
+ 	struct arg_track *at_stack_out = NULL;
+ 	struct arg_track at_stack_arg_entry[MAX_STACK_ARG_SLOTS];
+-	struct arg_track unvisited = { .frame = ARG_UNVISITED };
+-	struct arg_track none = { .frame = ARG_NONE };
++	struct arg_track unvisited = arg_track_unvisited();
++	struct arg_track none = arg_track_none();
+ 	bool changed;
+ 	int i, p, r, err = -ENOMEM;
+ 
+@@ -1895,7 +1916,7 @@ static int analyze_subprog(struct bpf_verifier_env *env,
+ 	for (int p = po_start; p < po_end; p++) {
+ 		int idx = env->cfg.insn_postorder[p];
+ 		struct arg_track callee_args[MAX_AT_TRACK_REGS] = {};
+-		struct arg_track none = { .frame = ARG_NONE };
++		struct arg_track none = arg_track_none();
+ 		struct bpf_insn *insn = &insns[idx];
+ 		struct func_instance *callee_instance;
+ 		int callee, target;
 -- 
-2.43.7
+2.34.1
 
