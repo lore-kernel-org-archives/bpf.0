@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23581417D9B;
-	Mon, 27 Jul 2026 14:47:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AACB83630B0
+	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 14:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785163652; cv=none; b=XwnGXJ9xFnlUgaeGw7QiGlnGJkCapWh4gXtcKOO4vEvkTj68MlPLeof+SdmllR7sZLTVpekxwy/ju45WwFK6gOJAhtuQPz1L6KipuQiTbRpfTlnlcscz9S8KkZpGbPbbHIrhrh1SRCtzQ5LkZd2G0z0jGTpJA9hXdRqDB2JTfxE=
+	t=1785163940; cv=none; b=JUPermfBcERKOY40oH45qO9ZYSGOUQqiblAs+N50/L6fno6OPLq01J9oheizL/vZmoYj7+IOiLHC6pySiSEFHhejRsu20oXXU4Qk0NEbocDhJX9/Cg+dPrms2no7SmvZVj01EcrBaHlq773BPoNi67QB25m5MhrNmxnRLOWIfTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785163652; c=relaxed/simple;
-	bh=Hd/AHfSTzHHiAtU+zH+SrI35lxZjDlN+3DNALcPdAvw=;
+	s=arc-20240116; t=1785163940; c=relaxed/simple;
+	bh=FcRgAImNnwGe+ukVnJ73LLN5fj5RpHrhASKi8SAOcso=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=CYlYNw07OXAwTZblcuK6avjDzJnARPej0F83C1YO9Uewp2d9Ac5iACKlndqrWWf8ZyOWZeHzTrqb/fyv2u9FsHv6k0Xsq7Jmp0/J0zIvaMhuCKRRLxZPNfRXpZwjQu9Plx7l//+et2J/nPbz3fWneMT6oZJjub2rmrhub3JF7P0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fnCJeQUj; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=s85t9+uvPJftWLy9hru+2RveIPj6MesQpOxOtGs/7sxFvmgC8X5wxwFmEOHwjXpXGFO8/sC16xVqzAC3SravAMrMXNNIQ5EbDlvHlCeKxjn1ZopYruVl4MA6hy4fSSK4q5bBDvw0B1sNBKxZGzzizrdHQGw+9zuKV8vmvEGt6VE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LRzpdNGk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fnCJeQUj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E141F000E9;
-	Mon, 27 Jul 2026 14:47:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LRzpdNGk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72B9C1F000E9;
+	Mon, 27 Jul 2026 14:52:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785163650;
-	bh=Gh+keKc1CwrdfFwv0W4nZGeYEitzShQF3Yp066ZV4qk=;
+	s=k20260515; t=1785163937;
+	bh=GIwybR7W6mWapGWy9TBWhNRTd/97GC3elz+LlCP0ars=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fnCJeQUjr3fjNcZSW2d5wASdSCYp38pfiKcySGkgMKL+LqU3+Xha9IuEcaSAE/Aru
-	 5ulXHWA2qQ6n02kePW//Q6Egnmb3qYq3d7Nvkj3LVIc+6DtkouAFxIB8f/4e0i/mA3
-	 DBFr/aHcX+dh9Tll8NHxgyM0X6GJPSbxLb0yyeLjLv02X7R4ZKiHEgsV8qGX//eBsq
-	 E/PT8co9xgMf0logP+MOnGmwcBhPyPgfWaFANk3ZW05aIsbbI662K6Bu43khztoJT8
-	 rc1jysSc8mcVMGDF2UUxCYgevpaCv9srz7OJmUHGXtrXDcUiLb1jaHBh10fupClBLL
-	 7RHjTpR9P8Utw==
+	b=LRzpdNGk1S8l6dfrq2u00m9Vzd61rktgl0s0qkMjNRFbZ9tSu5BYv3PvhTueOTafL
+	 qwA2M3rhq6JYcL1byw0TyvOCAGtqaBS0/SY4tWA312anrB4BWM7kd/uLPDYoGNWPLI
+	 KP4qyvB8g8Jpk4YT0eOYfkBBhr6x4syG0Qa/id0yTGCJNXWZWW78Bx4TyDaBj+3+xN
+	 Dm4eNWPYx+yA+CiClTm5OHuwHyFO1fnG3wxk1oyl5qRwsohHj6r5IpTULE/vysERFJ
+	 Cv5EVlhvVsN9FNpZ93rIjsaIrckXUPzz1FmGxybDGM6W5Pr6VVktKyL5gYZf7d+hgZ
+	 3R3BSuvQT5M4w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 5/6] s390/bpf: Add kCFI support
+Subject: Re: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct
+ calls
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Heiko Carstens" <hca@linux.ibm.com>
-Cc: "Alexander Gordeev" <agordeev@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Heiko
- Carstens" <hca@linux.ibm.com>, bpf@vger.kernel.org, linux-s390@vger.kernel.org
-In-Reply-To: <20260727140514.116501-6-hca@linux.ibm.com>
-References: <20260727140514.116501-1-hca@linux.ibm.com>
- <20260727140514.116501-6-hca@linux.ibm.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260727142844.21212-2-leon.hwang@linux.dev>
+References: <20260727142844.21212-1-leon.hwang@linux.dev>
+ <20260727142844.21212-2-leon.hwang@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Jul 2026 14:47:30 +0000
-Message-Id: <20260727144730.68E141F000E9@smtp.kernel.org>
+Date: Mon, 27 Jul 2026 14:52:17 +0000
+Message-Id: <20260727145217.72B9C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,60 +49,67 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] The s390 BPF JIT leaks `s390_jit_data` and its associated `jit.add=
-rs` array when JIT compilation fails during a multi-subprogram compilation.
+- [High] Missing RCU read barrier (`rcu_dereference()`) when accessing `dir=
+ect_functions`.
 --
 
---- Patch [5]: [PATCH v2 5/6] s390/bpf: Add kCFI support ---
-commit 90cf9cf344f10dd1f477562c9b9f57c7b89998a9
-Author: Heiko Carstens <hca@linux.ibm.com>
+--- Patch [1]: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for dire=
+ct calls ---
+commit 738274783fa707248af104af5e45da296f7e4d84
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-s390/bpf: Add kCFI support
+arm64: ftrace: enable single ftrace_ops for direct calls
 
-This commit adds kCFI support for BPF on the s390 architecture, mirroring
-the existing arm64 implementation.
+The BPF tracing multi link updates several direct-call sites through one
+ftrace_ops. This commit selects HAVE_SINGLE_FTRACE_DIRECT_OPS on arm64 when
+DYNAMIC_FTRACE_WITH_DIRECT_CALLS is enabled. It also generalizes the
+unreachable-trampoline comment.
 
-> diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-> --- a/arch/s390/net/bpf_jit_comp.c
-> +++ b/arch/s390/net/bpf_jit_comp.c
-
-[ ... ]
-
-> @@ -2401,11 +2417,13 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_v=
-erifier_env *env, struct bpf_pr
->  		jit_data->ctx =3D jit;
->  		jit_data->pass =3D pass;
->  	}
-> -	fp->bpf_func =3D (void *) jit.prg_buf;
-> +	fp->bpf_func =3D (void *)jit.prg_buf + cfi_get_offset();
->  	fp->jited =3D 1;
-> -	fp->jited_len =3D jit.size;
-> +	fp->jited_len =3D jit.size - cfi_get_offset();
-> =20
->  	if (!fp->is_func || extra_pass) {
-> +		for (int i =3D 0; i < fp->len; i++)
-> +			jit.addrs[i] -=3D cfi_get_offset();
->  		bpf_prog_fill_jited_linfo(fp, jit.addrs + 1);
->  free_addrs:
->  		kvfree(jit.addrs);
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 39eba438dad43..94fa6e72c2867 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -188,6 +188,8 @@ config ARM64
+>  		    CLANG_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS)
+>  	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS \
+>  		if DYNAMIC_FTRACE_WITH_ARGS
+> +	select HAVE_SINGLE_FTRACE_DIRECT_OPS \
+> +		if DYNAMIC_FTRACE_WITH_DIRECT_CALLS
 
 [Severity: High]
-This is a pre-existing issue, but does this code leak jit_data and jit.addrs
-when JIT compilation fails during a multi-subprogram compilation?
+This is a pre-existing issue, but by enabling HAVE_SINGLE_FTRACE_DIRECT_OPS
+on arm64, does this expose the architecture to a missing RCU read barrier
+in the ftrace code?
 
-When extra_pass is false and fp->is_func is true in bpf_int_jit_compile(),
-the function skips the block above and returns without freeing jit.addrs
-and jit_data.
+When HAVE_SINGLE_FTRACE_DIRECT_OPS is selected, call_direct_funcs() switches
+from using READ_ONCE(ops->direct_call) to using ftrace_find_rec_direct():
 
-These resources rely on bpf_jit_free() for cleanup on error paths, such as
-when a subsequent subprogram fails to JIT. However, since s390 does not
-implement a custom bpf_jit_free(), the generic version in kernel/bpf/core.c
-is called. This generic function only frees the binary header and leaves
-fp->aux->jit_data behind.
+kernel/trace/ftrace.c:call_direct_funcs() {
+...
+#ifdef CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS
+	addr =3D ftrace_find_rec_direct(ip);
+#else
+...
+}
 
-Could this be repeatedly triggered by a user loading a multi-subprogram BPF
-object that fails during JIT, potentially leading to resource exhaustion?
+Looking at ftrace_find_rec_direct(), it accesses the __rcu pointer
+direct_functions directly without an rcu_dereference():
+
+kernel/trace/ftrace.c:ftrace_find_rec_direct() {
+	struct ftrace_func_entry *entry;
+
+	entry =3D __ftrace_lookup_ip(direct_functions, ip);
+...
+}
+
+Without the READ_ONCE() provided by rcu_dereference(), the compiler might
+reload the pointer between computing the hash key and accessing the bucket
+array inside __ftrace_lookup_ip().
+
+If a concurrent writer substitutes a new hash table with a different size
+between these reloads, could the computed key exceed the new bucket array
+bounds and lead to an out-of-bounds dereference?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727140514.1165=
-01-1-hca@linux.ibm.com?part=3D5
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727142844.2121=
+2-1-leon.hwang@linux.dev?part=3D1
