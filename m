@@ -1,325 +1,240 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7503FBEB8
-	for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 23:56:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB8F13AF2
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 00:08:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785196612; cv=pass; b=rcRA6DO/IgxEVAVlRO9qvT0BddItzc2vcKeBrTP722wrNF91/Naa4OMIhZzRMA21e7+HzNQCX+Lh6eo/PGQyNS1aoDBCCRmfEl2Yqinh4K/N5MnfiwS7uXfXV9zZ1MzHVqHaQUW8vvZ88gozgphMkT5PjiQnKQRflxYOdMwk7vw=
+	t=1785197311; cv=pass; b=PfgIghcTRlM4QyAwEFJpVVt4TGxe2ppKHZmgTlieAaTY0p7IiHMpE4jPdwlTcktDNBBrDztyVEseLrxGmRL8FAPFq6jJbUfEZbDhe2iMXrZ9Y0IaaJOIyRoBvZcN3BtTBZOeGCWHn2fTD16RwrNJLci9AnPMYGpI3QXSU43OPlQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785196612; c=relaxed/simple;
-	bh=YX70+j90p+Q6UdAC/gQObPtCVCCLKJl8HEQaUf+4qPQ=;
+	s=arc-20240116; t=1785197311; c=relaxed/simple;
+	bh=YNlF8a1o3epmZetRCjgDF5EO3Z7GUHs0IcIUsRJBabA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qcJgDHpZQx00allXswVtlCoRE5wsQ08iXpaZAz8vL1FBGr0YalgWM7JJwgk4+eqFjXIjWm9IXA0a/gJEPZHk8E1RRdtPbWGfvuShF954QQu360VdYXcVEeUx0By8rGv8VOP3REHZSQIjFTgt2n+3USk5fhzwnVOugeW2BEWMq/0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e8HnAh97; arc=pass smtp.client-ip=209.85.210.179
+	 To:Cc:Content-Type; b=OBcvlEA9tfMwG7BMLsH+UMjUHQfJOdRMCeCoT/pF5gAl+nYaDxQFQXEWneapSQ5USYuqIjZYl18a4eCoQQWreShDiqFRP6g6Kzo918hrKk0V6Bk1pcF9RjUI28yp7hkFpSO1rgQ6FCnCvR7b9NzaCFxhmvjg64wEc3N2BsVCkfQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2YAcAWo; arc=pass smtp.client-ip=209.85.208.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e8HnAh97"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-84864086bfeso3156827b3a.1
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 16:56:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785196611; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2YAcAWo"
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-39c62764c7cso3402331fa.0
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 17:08:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785197306; cv=none;
         d=google.com; s=arc-20260327;
-        b=dEcPXG2EpCqdZh9QVX6oCwoWzBrpF856oqUlIirOueDVlagrrjdrXOL9B+jLDJ+BLj
-         q6nm2aNomRR6TlkSFVmoBqjEVj5Njr+gmkKDOZQPrMe/2n/iiDafatIgXO2MxWKdQLxs
-         lXKyXTgnyya8ZWrULZcqeEess/HXUMVmSS6zORjJ5aiXRS1OWIsmlXm8+znBAoeAQq2y
-         zBG37Dmp+j/Xw4XN2Emwji0vPKxwysrfc2jeUhODE22nuVbPg2mRUwkaY6CwFrfgCEyb
-         2BWh/Ny3tzVtMj2Bfdb9dJDlL28j561VKYJk3yK0Algl4jZVjJwZa3AXjGE2WvFvlNme
-         OnWA==
+        b=S+bQqHqXcosyNjsvkg1abtvxyeIVd9hkdymarRs7mFL80NbMQ/xgsa2sSx3URVvv2L
+         f02xr1ua//Kk3ZSh9Tcx7GpX8Fggj00OQs+qfSDdU1h5EPGrWf74RC1JvBJ1IQLXRuWv
+         mlJdTM+Pjsf2gfDI4nKzZemHbIMq1Lu58j5Evcag5DtQQ+dZyJ4cD1HJv+7tVKat+8LS
+         rR/aDI9lJUb8rAmF6HS+4gtQ4e/w9tkUeWIsToiB8siD/UMEDVo1Lr4faV8i/LvjQuDh
+         V59j3DuC5WS+pDLw9rnYJRisxNQBHPy5bNOou1qmohxqxWwpmTrV02A+DF+JVx12o0Js
+         gHag==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=9XM/XHX/LkcJNT++tvJJaFRPZGqMOlXBtBfQscR6nn8=;
-        fh=7eoyOfXUpehVHh0e6FcQCsD9SMN+Vtenv0RH2SBGXXs=;
-        b=VMJhO8FJjrQzwcErwxJRpWsoWYjJMs9A/LoprdEDzOOMfWmNyeM98UUh23wmvlomNU
-         MD7dA5bGEZbNaLqCrdX2RtPYn9NhWPqWtCGMZW1tle22qHHywCYDg1OHpxrxhI0WQCGz
-         6qHaJVbti2RncAeWPzM2108r9uwt/ZJxUCYsiJYa5TzoD58Aykl8kghOaimjVOH48PhS
-         Fg5kX+4+pWWwyAJRZhJeJtOZ/WZ9z0W2yuuxwDZbC7BB1BL/x4581bNVKsWzV1doU0r6
-         oUkWdgFPihQis8SsMrD8i8FzG2vmrzrMBCa8rNW6Eo1lHUWxQwGgBYf5EsF+kxICRphf
-         hvsQ==;
+        bh=OX5+Xiyuuua7ItSBWY1/1bwrYmd2boubaHGKa84wHQ0=;
+        fh=Ya005VydBAXggpEquUNhTIiTxaS0F7/YMzwdNXRoFMk=;
+        b=TP+a1W0ZsP54Y26tw/xgzQ8p5ezET8RW9gHA7zIsSn5n8X4nVEghZBnLpsqyZ8G3+W
+         LaNu4G5ZcueILtIlOwHXNPxLvpC39lhzTcrh6yS8qaI2mYhy0f8OYf//qbT731xrpxaV
+         qI9RWZnGIjFMS79Ef0P2u88x2dPLeik2vesjAlsM8dTsi6MDvWlbJtkYhyeHaTZ3rlcQ
+         RonqNeWFG8ifqT7DwA3Mvefx+rx5xb/I4TVvsn2lQ2urY5EaXEs7bCF6TNCe25jAseYg
+         +mHlkRPBkZKJZfdmRYHQ+CZd31PKDVTLwL73sQjyCf4l/tmYEL3WeJMnzYUN7EvHwD0a
+         bSYg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785196611; x=1785801411; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785197306; x=1785802106; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=9XM/XHX/LkcJNT++tvJJaFRPZGqMOlXBtBfQscR6nn8=;
-        b=e8HnAh97bEeTi1wsAfZvWyymhcqVe3OTAA2n3qXtfIqUO8njspgZ3mxuplixG5Y5xP
-         D/X8FfI6EOx2/agYNgyICHO9J7p81Tsy/O0poVNCX1kDqkjcQLRTsTzNV6Z+ubUxm+Ru
-         +kdw7j+uL9AJepKSgFaSWDnLUFkz0hktn9JYK0cQtlO6np12LZ63rOJ5VBG7xAobOZ4z
-         papJXq8rkBNclmng4fvszJRjoYUZF7hfApNuixs4jcFSKTWZ5YBwen/HEzorfq+Cl3f/
-         t/izvEjzhI7wK9uDCG6I4R3Q9nDnqlJs9B6XyK584zwacO/N9V54NZfjc/WDFRSp3h75
-         UnSg==
+        bh=OX5+Xiyuuua7ItSBWY1/1bwrYmd2boubaHGKa84wHQ0=;
+        b=g2YAcAWouoovhZFVFtWesBYYlsyWXZKVJcnQjR63aqShyrW0VVQWmPDHG5Oxpxv60G
+         foUMe3AJ6VnlJYbQ6tMcQXGfd1ZUwS2axug86i5TD6t7RNgz+w7RQLy/xSKwt8hin+FX
+         g+rM0fkqhZ46/SZVkZHBP6KUPftqgMlrIpgFP8wblq5i7FomicfwUoTp9dffX45bprWi
+         iS4P6HD0XMsGUsSKanu6gmikpfJumyv3fec8PAQDIH9rnm9APN2GJjL0+WHQ6F/LEBif
+         Xpms515PC7OART4z3tA0PhExW2fYn/TpWPOEv8fHHRoZZ6fK4pWjmSw/Ju/oZlpGwNNB
+         SpYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785196611; x=1785801411;
+        d=1e100.net; s=20251104; t=1785197306; x=1785802106;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9XM/XHX/LkcJNT++tvJJaFRPZGqMOlXBtBfQscR6nn8=;
-        b=lJEDuLJRZ1dAKE2v8TreWHwNqT++t/fQmqODvbnmy/nfOFa0uwVpccSnac9LtG5adT
-         VR5oyO5aUssXyXmgoEKGI16+NKBUTH9PV/jZ5gNZpPelUqmCMQmAA8XxdUQILLyHGSPC
-         zCf8JucARiOJRsKgFuq2O6etTtZbP4IPAQi0Ov6+6KxiPAlHgUiYxRE8gcyrpdr5qKFn
-         T5s4gLr+eTGTVp+CIegcxDEFlFbbLqRabsUV+mD3EEP1T0TXMhhm1GD/+ay4uo7KGves
-         acay2DWxr98Xt4urNofd0yKz9j9TgADXgav724ZL8f1JuNWKfz/TzfSOznKtYaYTe8mZ
-         tfRg==
-X-Gm-Message-State: AOJu0YyVSsVbyR099bJ3MMTpE9Quh6rwdZxWaH/A2Um7ttkm5ylC6gTx
-	q/IuuJb1eVbhGKLGOysN4KvLLHAhODpU5suQqplaIP/Vz576cbm1Cdb/qP+Q+5aR0DvVu0zaJLG
-	dmni/+PytL0hjCb5c7+VV2kI2MjT5CgcHDXz6
-X-Gm-Gg: AR+sD13FPed9hxwQHIW2YpH4CWliSH4G/CDY70Ev5Dtf+j/03tORr3YIy8++hISDMaI
-	ijLHgt1wrLbtlkej/Paqp+ZB0J7ohALnipw5Ce6PiNktvpHfGVMltsXXYsAm1CGs9lppgXW0tDO
-	SEYKdQyOh7LX71p8FPRkopSrZjLlxBUeGTPstNLC73NFy49zH+QbBCSRynaZH7hRIdJajhB0IS4
-	UWWT1kNgWl68zNkkcWO/6ZOr9TpidVq4fANi/yB5I3KH8ErlH5/VHlPXjM768N93g1qU0/PufeX
-	K1HKgxS8GFTbLeS1Xnxx/qyFnG+hhD+koZzLJoWEVSl1OAcBDOSyIcNL3Q==
-X-Received: by 2002:a05:6a00:9090:b0:848:6e2d:2709 with SMTP id
- d2e1a72fcca58-84e932bbabdmr36270b3a.56.1785196610621; Mon, 27 Jul 2026
- 16:56:50 -0700 (PDT)
+        bh=OX5+Xiyuuua7ItSBWY1/1bwrYmd2boubaHGKa84wHQ0=;
+        b=Pc14MH62sJ4dsuGWwxlSsH1GeBD7WuYUk75QSZ9ZOCitdQQ9NPBsrFE+QoZrCpeF4A
+         ki1FGXBaC79L9kXp7Pm+gNJlV4r8rdLa/Kyk+Be3boXYnxyKNXVe0ftOvMhZpuFOHjOq
+         xn8gExXmBGtK8a4OpEge0NEBqTuhZk+R+iwu057LKs5YoKAqoRm7h5fMmErtDPAGCXrI
+         Jsao8jgPiidMiLEFYz+b+Tq2tI6x1Bww5QL9PayHbvQ/EMPXXwbVFDFuQtgsMpcU5Vrz
+         cRiXA8T8JEZu7wU1Qgyqx7EsVyHeVEtvfEFXFwzaryzmR6la553caJ9BHRfb1gwmYEN+
+         OYmw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp0A2xxhNwlo5j/DXgRUOMjyDVj1JfrKFx4RQyVSFXwHlGhEFG3Gowpi4Lynr53+nqn5Hw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwC1BESjBQMONYnjRHRHRh9Ki+0QCIMGZHtRrhQbzYng7jCJPnC
+	7g/ZghWu93j/ADdAQFkrjNfDkf8lhTpdjttUyP3CnLMkUVEMn/cv+t+w2rWosduOl94tGfIR9eW
+	S/ZVsaBYaGyB3E34ngPgkaLWb6XNUHrk=
+X-Gm-Gg: AR+sD104wJ4Fy1iuuh40cum+2C2XbvKYAFzUHyyxyXaZ3soO4kuSVAyM56MRvXFbO+Z
+	+24F4+eoq52M/nqqhdD5bZMRjpvAIeTtQZDQKyrUoi2uDFuo3qUxVDGJ8QDIGS3MNueCI/wj8tS
+	SlCXsKC2p4CPVQL6QPZ7AM/rcEcwK90mVGsfkGaoyfU/aWp3nJBqQAsIDYdHzhp43do9finHEq7
+	7hF9+E6LipN4Ciu+bQmKiKAjmrIeT8T2fXv1iwrgDae/VbYZfHmpHyWmc6VyZKSM1KLjeFnt2uj
+	QhXMNc33Kh0RHGyfQE8EDoBVTU+7xvE/SOnwwZFlhStecA+geuFKczKFIZ4hJdXUKaCX5WG8crY
+	=
+X-Received: by 2002:a05:6512:b83:b0:5b0:1108:c58b with SMTP id
+ 2adb3069b0e04-5b2d0251425mr11802e87.15.1785197305751; Mon, 27 Jul 2026
+ 17:08:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260722132424.450230-1-puranjay@kernel.org> <20260722132424.450230-5-puranjay@kernel.org>
-In-Reply-To: <20260722132424.450230-5-puranjay@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 27 Jul 2026 16:56:25 -0700
-X-Gm-Features: AUfX_mzw1RvQqP9NGFJ4XgNz6t-tKfOzSovShq-MPeqnZ_WkSZD2IamJqxpHRHQ
-Message-ID: <CAEf4BzZAE9PWy4Y8VDLix=0uKoxGbK23Ln5rmDELBDDk1AFZLw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/6] bpf: Elide range checks when inlining
- bpf_iter_num_new() for constant bounds
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>
+References: <20260725034246.192091-1-blbllhy@gmail.com> <amdJgi0V3YwWE7oL@boxer>
+In-Reply-To: <amdJgi0V3YwWE7oL@boxer>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Tue, 28 Jul 2026 08:07:48 +0800
+X-Gm-Features: AUfX_my7CVZAWJ_zY3gsLevRMQ883H5RL2tkawbZLRybomyRZyxwgSo7Orudwho
+Message-ID: <CAL+tcoA8KPn7z3p7KymQLT4apwcaCy1Yi8P0S5KD-f91jxmwhw@mail.gmail.com>
+Subject: Re: [PATCH net v2] xsk: fix NULL pointer dereference in __xsk_rcv()
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>, magnus.karlsson@intel.com, sdf@fomichev.me, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	horms@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, AutonomousCodeSecurity@microsoft.com, 
+	tgopinath@linux.microsoft.com, kys@microsoft.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 22, 2026 at 6:24=E2=80=AFAM Puranjay Mohan <puranjay@kernel.org=
-> wrote:
->
-> bpf_for() is frequently used with constant bounds, e.g. bpf_for(i, 0, N)
-> with a literal N. In that case bpf_iter_num_new()'s start > end and
-> range > BPF_MAX_LOOPS checks, and their error paths, are decidable at
-> verification time and need not be emitted at all.
->
-> Record, per call site, whether both the start and end arguments are
-> constant with the same value on every visit, mirroring the state tracking
-> bpf_loop() inlining already does. check_kfunc_call() stores this in
-> bpf_insn_aux_data; the multi-visit merge matters because the same call
-> site can be reached with different constants on different paths, in which
-> case it falls back to the general sequence.
->
-> The fold relies on the exact constant values, so the start and end
-> registers are marked precise. Without that the verifier could prune a
-> path reaching the call with different constants before the merge above
-> sees it, and the folded code would run with a stale value.
->
-> When the bounds are known, inline_bpf_iter_num_new() folds the checks and
-> emits only the reachable tail: the iterator init for a valid range, or th=
-e
-> zeroing store plus the -EINVAL / -E2BIG result otherwise. The runtime
-> behaviour is identical to the general sequence and to the kfunc.
->
-> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
->  include/linux/bpf_verifier.h | 13 ++++++
->  kernel/bpf/verifier.c        | 76 +++++++++++++++++++++++++++++++++++-
->  2 files changed, 87 insertions(+), 2 deletions(-)
->
+Hi Maciej,
 
-oh my goodness, please no. you are micro-optimizing
-bpf_iter_num_new(), which is called just *ONCE* and adds all this
-complexity. It's not worth it, at all. please drop.
+On Mon, Jul 27, 2026 at 8:09=E2=80=AFPM Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
+>
+> On Fri, Jul 24, 2026 at 11:42:46PM -0400, Cen Zhang (Microsoft) wrote:
+> > In the __xsk_rcv() multi-buffer path, xsk_buff_alloc() is called in a
+> > loop without checking its return value. xsk_buff_can_alloc() only
+> > counts fill queue entries without validating their addresses, so it
+> > can succeed while xsk_buff_alloc() rejects all remaining entries and
+> > returns NULL.
+> >
+> >   Oops: general protection fault, probably for non-canonical address
+> >    0xdffffc0000000000
+> >   KASAN: null-ptr-deref in range
+> >    [0x0000000000000000-0x0000000000000007]
+> >   RIP: 0010:__xsk_rcv+0x426/0xc20 (net/xdp/xsk.c:350)
+> >   Call Trace:
+> >    xsk_generic_rcv+0x26d/0x5f0
+> >    xdp_do_generic_redirect+0x3c5/0xcf0
+> >    do_xdp_generic+0x92f/0xe70
+> >    __netif_receive_skb_core.constprop.0+0xf7e/0x2b30
+> >
+> > Fix this with a two-stage transaction. First allocate and stage all
+> > buffers required for the packet, recycling all staged buffers with
+> > xsk_buff_free() if any allocation fails. Only after this stage
+> > succeeds, copy the data, reserve the RX descriptors, and release the
+> > buffers in an error-free loop.
+> >
+> > Fixes: 804627751b42 ("xsk: add support for AF_XDP multi-buffer on Rx pa=
+th")
+> > Reported-by: AutonomousCodeSecurity@microsoft.com
+> > Signed-off-by: Cen Zhang (Microsoft) <blbllhy@gmail.com>
 
-the only comparison worth eliminating would be the one done in
-bpf_iter_num_next, but you can't :)
+Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
 
+> > ---
+> > v2:
+> >  - Allocate all packet buffers before reserving RX descriptors.
+> >  - Recycle partially allocated buffers instead of only cancelling the
+> >   RX producer reservations.
+> > Link: https://lore.kernel.org/netdev/20260724164719.99563-1-blbllhy@gma=
+il.com
+> >
+> >  net/xdp/xsk.c | 29 ++++++++++++++++++++++++++---
+> >  1 file changed, 26 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index f906d51b6699..383fc2b1de48 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+> > @@ -298,9 +298,11 @@ static int __xsk_rcv(struct xdp_sock *xs, struct x=
+dp_buff *xdp, u32 len)
+> >       u32 frame_size =3D __xsk_pool_get_rx_frame_size(xs->pool);
+> >       void *copy_from =3D xsk_copy_xdp_start(xdp), *copy_to;
+> >       u32 from_len, meta_len, rem, num_desc;
+> > -     struct xdp_buff_xsk *xskb;
+> > +     struct xdp_buff_xsk *xskb, *tmp;
+> >       struct xdp_buff *xsk_xdp;
+> > +     LIST_HEAD(xsk_buffs);
+> >       skb_frag_t *frag;
+> > +     u32 i;
+> >
+> >       from_len =3D xdp->data_end - copy_from;
+> >       meta_len =3D xdp->data - copy_from;
+> > @@ -343,23 +345,44 @@ static int __xsk_rcv(struct xdp_sock *xs, struct =
+xdp_buff *xdp, u32 len)
+> >               frag =3D  &sinfo->frags[0];
+> >       }
+> >
+> > +     for (i =3D 0; i < num_desc; i++) {
+> > +             xsk_xdp =3D xsk_buff_alloc(xs->pool);
+> > +             if (!xsk_xdp)
+> > +                     goto err_alloc;
+> > +
+> > +             xskb =3D container_of(xsk_xdp, struct xdp_buff_xsk, xdp);
+> > +             if (unlikely(!list_empty(&xskb->list_node)))
+> > +                     goto err_alloc;
+> > +             list_add_tail(&xskb->list_node, &xsk_buffs);
+>
+> could we use existing xsk_buff_add_frag() ?
+> then I presume xsk_buff_free() would understand list and walk through
+> xdp_buff's and free it ?
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 682c2cd3b8443..8c04e2fd80170 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -612,6 +612,15 @@ struct bpf_loop_inline_state {
->         u32 callback_subprogno; /* valid when fit_for_inline is true */
->  };
+Good suggestion, but xsk_buff_add_frag() will add more irrelevant
+stuff like nr_frags, xdp_frags_size, xdp_frags_truesize... They are
+all happening in the softirq context. Refactoring the helper would
+bring more work here.
+
+Honestly, I like the local array which seems simpler/cleaner to understand =
+:)
+
+Thanks,
+Jason
+
 >
-> +struct bpf_iter_num_new_state {
-> +       unsigned int initialized:1; /* set to true upon first entry */
-> +       unsigned int fit_for_inline:1; /* true if start and end are const=
-ant
-> +                                       * with the same value at each cal=
-l
-> +                                       */
-> +       s32 start; /* valid when fit_for_inline is true */
-> +       s32 end;   /* valid when fit_for_inline is true */
-> +};
-> +
->  /* pointer and state for maps */
->  struct bpf_map_ptr_state {
->         struct bpf_map *map_ptr;
-> @@ -661,6 +670,10 @@ struct bpf_insn_aux_data {
->                  * the state of the relevant registers to make decision a=
-bout inlining
->                  */
->                 struct bpf_loop_inline_state loop_inline_state;
-> +               /* if instruction is a call to bpf_iter_num_new this fiel=
-d tracks its start/end
-> +                * arguments to make a decision about eliding the range c=
-hecks when inlining
-> +                */
-> +               struct bpf_iter_num_new_state iter_num_new_state;
->         };
->         union {
->                 /* remember the size of type passed to bpf_obj_new to rew=
-rite R1 */
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index dec6bcba53a22..d5b73ae801944 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -12962,6 +12962,47 @@ static int check_special_kfunc(struct bpf_verifi=
-er_env *env, struct bpf_call_arg
+> I believe we could reuse pool's xskb_list instead of fabricating the
+> on-stack variant here.
 >
->  static int check_return_code(struct bpf_verifier_env *env, int regno, co=
-nst char *reg_name);
->
-> +/*
-> + * bpf_iter_num_new() can be inlined more tightly when its start and end=
- arguments are constant,
-> + * as the range checks and their error paths can then be resolved at rew=
-rite time. Record, per
-> + * call site, whether both arguments are constant with the same value on=
- every visit.
-> + */
-> +static int update_iter_num_new_state(struct bpf_verifier_env *env)
-> +{
-> +       struct bpf_iter_num_new_state *state =3D &cur_aux(env)->iter_num_=
-new_state;
-> +       struct bpf_reg_state *start_reg =3D &cur_regs(env)[BPF_REG_2];
-> +       struct bpf_reg_state *end_reg =3D &cur_regs(env)[BPF_REG_3];
-> +       bool known =3D tnum_is_const(start_reg->var_off) && tnum_is_const=
-(end_reg->var_off);
-> +       s32 start =3D start_reg->var_off.value;
-> +       s32 end =3D end_reg->var_off.value;
-> +       int err;
-> +
-> +       if (!state->initialized) {
-> +               state->initialized =3D 1;
-> +               state->fit_for_inline =3D known;
-> +               state->start =3D start;
-> +               state->end =3D end;
-> +       } else if (state->fit_for_inline) {
-> +               state->fit_for_inline =3D known && state->start =3D=3D st=
-art && state->end =3D=3D end;
-> +       }
-> +
-> +       /*
-> +        * While folding is still viable the decision relies on the exact=
- constant values, so mark
-> +        * the registers precise; otherwise the verifier could prune a pa=
-th that reaches this call
-> +        * with different constants and the folded code would run with a =
-stale value.
-> +        */
-> +       if (state->fit_for_inline) {
-> +               err =3D mark_chain_precision(env, BPF_REG_2);
-> +               if (err)
-> +                       return err;
-> +               err =3D mark_chain_precision(env, BPF_REG_3);
-> +               if (err)
-> +                       return err;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_ins=
-n *insn,
->                             int *insn_idx_p)
->  {
-> @@ -13163,6 +13204,12 @@ static int check_kfunc_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn,
->                 }
->         }
->
-> +       if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_iter_num_new]) =
-{
-> +               err =3D update_iter_num_new_state(env);
-> +               if (err)
-> +                       return err;
-> +       }
-> +
->         for (i =3D 0; i < CALLER_SAVED_REGS; i++) {
->                 u32 regno =3D caller_saved[i];
->
-> @@ -19774,10 +19821,34 @@ static void __fixup_collection_insert_kfunc(str=
-uct bpf_insn_aux_data *insn_aux,
->   * Inline bpf_iter_num_new(). R1 holds the pointer to the iterator, R2 a=
-nd R3 hold the (int)
->   * start and end arguments. Keep in sync with the kfunc in kernel/bpf/bp=
-f_iter.c.
->   */
-> -static int inline_bpf_iter_num_new(struct bpf_insn *insn_buf)
-> +static int inline_bpf_iter_num_new(struct bpf_insn *insn_buf, struct bpf=
-_iter_num_new_state *state)
->  {
->         int i =3D 0;
->
-> +       /*
-> +        * When start and end are constant the range checks and their err=
-or paths fold away,
-> +        * leaving just the state init or the error result.
-> +        */
-> +       if (state->fit_for_inline) {
-> +               s32 start =3D state->start, end =3D state->end;
-> +
-> +               if (start > end) {
-> +                       /* s->cur =3D s->end =3D 0; return -EINVAL; */
-> +                       insn_buf[i++] =3D BPF_ST_MEM(BPF_DW, BPF_REG_1, 0=
-, 0);
-> +                       insn_buf[i++] =3D BPF_MOV64_IMM(BPF_REG_0, -EINVA=
-L);
-> +               } else if ((s64)end - (s64)start > BPF_MAX_LOOPS) {
-> +                       /* s->cur =3D s->end =3D 0; return -E2BIG; */
-> +                       insn_buf[i++] =3D BPF_ST_MEM(BPF_DW, BPF_REG_1, 0=
-, 0);
-> +                       insn_buf[i++] =3D BPF_MOV64_IMM(BPF_REG_0, -E2BIG=
-);
-> +               } else {
-> +                       /* s->cur =3D start - 1; s->end =3D end; return 0=
-; */
-> +                       insn_buf[i++] =3D BPF_ST_MEM(BPF_W, BPF_REG_1, 0,=
- start - 1);
-> +                       insn_buf[i++] =3D BPF_ST_MEM(BPF_W, BPF_REG_1, 4,=
- end);
-> +                       insn_buf[i++] =3D BPF_MOV64_IMM(BPF_REG_0, 0);
-> +               }
-> +               return i;
-> +       }
-> +
->         /* if (start > end) goto einval; */
->         insn_buf[i++] =3D BPF_JMP32_REG(BPF_JSGT, BPF_REG_2, BPF_REG_3, 8=
-);
->         /*
-> @@ -19979,7 +20050,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env =
-*env, struct bpf_insn *insn,
->                 insn_buf[5] =3D BPF_ALU64_IMM(BPF_NEG, BPF_REG_0, 0);
->                 *cnt =3D 6;
->         } else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_iter_nu=
-m_new]) {
-> -               *cnt =3D inline_bpf_iter_num_new(insn_buf);
-> +               *cnt =3D inline_bpf_iter_num_new(insn_buf,
-> +                                              &env->insn_aux_data[insn_i=
-dx].iter_num_new_state);
->         } else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_iter_nu=
-m_next]) {
->                 *cnt =3D inline_bpf_iter_num_next(insn_buf);
->         } else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_iter_nu=
-m_destroy]) {
-> --
-> 2.53.0-Meta
+> > +     }
+> > +
+> >       do {
+> >               u32 to_len =3D frame_size + meta_len;
+> >               u32 copied;
+> >
+> > -             xsk_xdp =3D xsk_buff_alloc(xs->pool);
+> > +             xskb =3D list_first_entry(&xsk_buffs, struct xdp_buff_xsk=
+,
+> > +                                     list_node);
+> > +             list_del_init(&xskb->list_node);
+> > +             xsk_xdp =3D &xskb->xdp;
+> >               copy_to =3D xsk_xdp->data - meta_len;
+> >
+> >               copied =3D xsk_copy_xdp(copy_to, &copy_from, to_len, &fro=
+m_len, &frag, rem);
+> >               rem -=3D copied;
+> >
+> > -             xskb =3D container_of(xsk_xdp, struct xdp_buff_xsk, xdp);
+> >               __xsk_rcv_zc_safe(xs, xskb, copied - meta_len,
+> >                                 rem ? XDP_PKT_CONTD : 0);
+> >               meta_len =3D 0;
+> >       } while (rem);
+> >
+> >       return 0;
+> > +
+> > +err_alloc:
+> > +     list_for_each_entry_safe(xskb, tmp, &xsk_buffs, list_node) {
+> > +             list_del_init(&xskb->list_node);
+> > +             xsk_buff_free(&xskb->xdp);
+> > +     }
+> > +     xs->rx_dropped++;
+> > +     return -ENOMEM;
+> >  }
+> >
+> >  static bool xsk_tx_writeable(struct xdp_sock *xs)
+> > --
+> > 2.53.0
+> >
 >
