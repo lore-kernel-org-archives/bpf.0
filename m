@@ -1,281 +1,395 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16B043302F;
-	Tue, 28 Jul 2026 12:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244C2435A93;
+	Tue, 28 Jul 2026 12:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785241609; cv=none; b=L+258OPm+SnTeiP2CJrsTnluiUMhAKQa+4s6t13gR1OvEYNmf63XdgHsPhxJJele/TDWPxuxq18dtDIaJswtklWmwkjxmjSMZqJHQILRC4cEibJmRVCrEu2IBt8dYeoSOPyA0NjahaAcKlKfu7o78vSuZOa8I/UZbiFZS/PwR9k=
+	t=1785241685; cv=none; b=Uf74ZGFWEkRluRX2YO3xOwnb8GD2I/GZir2JA5s7hUa1JgRZoCiJKoj+yjGJy4Xzae1n3gGvDIJfpGiQO3Ef++RK0mxxEYSCiQ0EKI/XpA5koWNuPh8qvI0N8oAAodpkUYdyBs5Lh40GRg6t9TboJ/mJsNNDZsbcnlrjqJgsFG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785241609; c=relaxed/simple;
-	bh=CmftR+Uc2FulAhzpeWNRVyNZ624y2VtvgpyJWGwwBlM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tQ+VS8GkUa656sTSBnx35uppGjvIzPADavDtlHvpjzyK/o88f/hJHVyQA3FLnyXx9cwdcbGFtB1H3MV+FsqYgNnwHOkyUv8T2B046ZV1cQ1jLDfWxo9v7i/Qcp4nehJrL+ooWn39wIr0US5OPQCRyLwG+eH3qttLeA6HFPtczPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RkwjnDmS; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RkwjnDmS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3CB51F000E9;
-	Tue, 28 Jul 2026 12:26:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785241607;
-	bh=vt+CJvPgKyczXyAdtoV88qBhp4afcyiatTku0ZwlgLA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=RkwjnDmS64pm/DmPqFCIfCwnQdHdazM/1/l2XmCdXFlJ3GXdmOTjev4t3PRrex56N
-	 zYYW2z5f3s4cK6w68uhCmpBC0TVyoWbbCmoScpcSzTe1dcJvt9QzOPKsljwx+LvT1S
-	 U9cRFXaNi3zkrrzQuojn2k+93bF18+ES/QjiPvNeN+UvhFbQLRxdWXADGb6aYZt90p
-	 j1EUWnYe3iMRWeSj8lhGWGjA2TggoeKZyTuJkIJOYCx6K+EHi4lQjORjySrTMmw8jN
-	 6jFD59IFqxu/Ti4XqDmcN0ixxxDH6+ME38K2CziAJbq3xdhmrTJZmtz38bZ6pyS+pM
-	 ngI/uOID+H7VQ==
-From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 28 Jul 2026 14:26:33 +0200
-Subject: [PATCH 2/2] selftests/exec: check that a binfmt_misc instance
- cannot be pinned
+	s=arc-20240116; t=1785241685; c=relaxed/simple;
+	bh=j0FGGqCBY6bvMLM9NgAVoeP4xO5QMK38Mz87CaEquk8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ig7lnhOJ4dpAu0bv+XxzzrlVYYHGslNPOvG70G3eKthOvnHvNCKBGOAYWznet/P7jkG+l+wWOq9rzezkqnJpw4MIWtpyKtlmChsm1RhANaHqqfVe3l91C00f0i7OewbX+5bg8jhz2wcQaYdLY08ARsAfmj+aRpLrtU3AIXZUyz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h8ZTk3qGdzKHMsM;
+	Tue, 28 Jul 2026 20:27:06 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id E6F1F4058F;
+	Tue, 28 Jul 2026 20:27:59 +0800 (CST)
+Received: from localhost.huawei.com (unknown [10.67.174.243])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgDHtUROoGhqdIMFAQ--.41491S4;
+	Tue, 28 Jul 2026 20:27:59 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Anton Protopopov <a.s.protopopov@gmail.com>
+Subject: [PATCH bpf-next v2 2/2] bpf: Remove unnecessary dup/restore subprog_starts and prog clone
+Date: Tue, 28 Jul 2026 20:25:50 +0000
+Message-ID: <7e27df89f8d4e1c8790cd26b4bd30ffbd2926cf6.1785240296.git.xukuohai@huawei.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1785240296.git.xukuohai@huawei.com>
+References: <cover.1785240296.git.xukuohai@huawei.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260728-work-binfmt_misc-selfpin-v1-2-74df5daeca5b@kernel.org>
-References: <20260728-work-binfmt_misc-selfpin-v1-0-74df5daeca5b@kernel.org>
-In-Reply-To: <20260728-work-binfmt_misc-selfpin-v1-0-74df5daeca5b@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Kees Cook <kees@kernel.org>, linux-mm@kvack.org, bpf@vger.kernel.org, 
- Farid Zakaria <farid.m.zakaria@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
- bpf@vger.kernel.org, jannh@google.com, mail@johnericson.me, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>
-X-Mailer: b4 0.16-dev-cca4b
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7434; i=brauner@kernel.org;
- h=from:subject:message-id; bh=CmftR+Uc2FulAhzpeWNRVyNZ624y2VtvgpyJWGwwBlM=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRlzP8XHbF14qzo2Nuvn/toXA25t9lG7uHS9ikdxU/t9
- tw6e1hnfkcpC4MYF4OsmCKLQ7tJuNxynorNRpkaMHNYmUCGMHBxCsBEZlxjZLh4h8Vgw62WGfJ3
- OlqEg+aZFajXOk/YKZ9nGt+3a9mez3KMDFt6V5gYzt+9Pl/9NOO7/5vus7Cm+es9U596f0HT0kX
- ySTwA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgDHtUROoGhqdIMFAQ--.41491S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3Zr45tr15Kw47Jw4rGFyUKFg_yoWDWF4kpF
+	95t3yDCr4qqw40g3srJa18Ary5Ja18Ww15CrW8G34Iqa1jqrn5Wa13K3yvqFWfCry8uw1f
+	Zr4q9r9rW348ZrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUmqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
+	8IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxV
+	A2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+	6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+	C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
+	Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+	WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+	CTnIWIevJa73UjIFyTuYvjxUVg10UUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-An 'F' entry whose interpreter keeps the binfmt_misc superblock alive
-pins the instance that owns it forever. Cover both ways to build that:
+From: Xu Kuohai <xukuohai@huawei.com>
 
-- an interpreter on the instance's own files, control file and entry
-  file alike
+When JIT is required by the bpf program, the kernel rejects the program
+on JIT failure rather than falling back to the interpreter. In this case,
+the subprog_starts duplication/restore and bpf prog clone are unnecessary,
+since they are only used to restore state for the interpreter. So remove
+the duplication/restore for this case.
 
-- and an instance used as an overlayfs lower layer.
-
-Check that an ordinary 'F' registration still succeeds so the fix stays
-honest about not changing what 'F' promises.
-
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- tools/testing/selftests/exec/Makefile              |  10 ++
- tools/testing/selftests/exec/binfmt_misc_selfpin.c | 158 +++++++++++++++++++++
- tools/testing/selftests/exec/config                |   4 +
- 3 files changed, 172 insertions(+)
+ include/linux/filter.h |   9 ++--
+ kernel/bpf/core.c      | 104 +++++++++++++++++++++++------------------
+ kernel/bpf/fixups.c    |  37 +++++++--------
+ 3 files changed, 83 insertions(+), 67 deletions(-)
 
-diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index 45a3cfc435cf..b15505f5e0bc 100644
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -21,6 +21,10 @@ TEST_GEN_PROGS += recursion-depth
- TEST_GEN_PROGS += null-argv
- TEST_GEN_PROGS += check-exec
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 5c072c1360eb..2d1aa062566c 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1356,7 +1356,8 @@ int bpf_jit_get_func_addr(const struct bpf_prog *prog,
  
-+# binfmt_misc must not be reachable as an exec source or as a stacking layer,
-+# or an 'F' entry can pin the instance that owns it. Unprivileged, no bpf.
-+TEST_GEN_PROGS += binfmt_misc_selfpin
-+
- EXTRA_CLEAN := $(OUTPUT)/subdir.moved $(OUTPUT)/execveat.moved $(OUTPUT)/xxxxx*	\
- 	       $(OUTPUT)/S_I*.test
+ const char *bpf_jit_get_prog_name(struct bpf_prog *prog);
  
-@@ -55,3 +59,9 @@ $(OUTPUT)/script-exec.inc: $(CHECK_EXEC_SAMPLES)/script-exec.inc
- 	cp $< $@
- $(OUTPUT)/script-noexec.inc: $(CHECK_EXEC_SAMPLES)/script-noexec.inc
- 	cp $< $@
-+
-+# Reuses setup_userns()/write_file() from the filesystems selftests. Their
-+# wrappers.h wants the uapi headers, so ask for them here rather than widening
-+# CFLAGS for every program in this directory.
-+$(OUTPUT)/binfmt_misc_selfpin: CFLAGS += $(TOOLS_INCLUDES)
-+$(OUTPUT)/binfmt_misc_selfpin: ../filesystems/utils.c
-diff --git a/tools/testing/selftests/exec/binfmt_misc_selfpin.c b/tools/testing/selftests/exec/binfmt_misc_selfpin.c
-new file mode 100644
-index 000000000000..5286b0604eed
---- /dev/null
-+++ b/tools/testing/selftests/exec/binfmt_misc_selfpin.c
-@@ -0,0 +1,158 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * An 'F' entry keeps its interpreter open for as long as the entry exists,
-+ * and the entry only goes away when the binfmt_misc superblock is destroyed.
-+ * An interpreter that lives on a mount which in turn keeps that superblock
-+ * alive therefore pins the instance that owns it, and nothing can break the
-+ * cycle. Check the two ways userspace could arrange for that: an interpreter
-+ * on the binfmt_misc instance itself, and one on a filesystem stacked on it.
-+ *
-+ * Runs unprivileged in a user namespace; binfmt_misc is FS_USERNS_MOUNT.
-+ */
-+#define _GNU_SOURCE
-+#include <fcntl.h>
-+#include <limits.h>
-+#include <sched.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+
-+#include "../filesystems/utils.h"
-+#include "kselftest_harness.h"
-+
-+#define MNT		"/tmp/binfmt_selfpin"
-+#define BACKING		"/tmp/binfmt_selfpin_back"
-+#define LOWER		BACKING "/lower"
-+#define MERGED		"/tmp/binfmt_selfpin_merged"
-+
-+#define MAGIC		"\\xde\\xad"
-+#define RULE(interp)	":selfpin:M::" MAGIC "::" interp ":F"
-+/* Not on the instance, and unlike /bin/true it always exists. */
-+#define INTERP		"/proc/self/exe"
-+
-+#define OPTS_MAX	(3 * PATH_MAX + 64)
-+
-+static int ensure_dir(const char *path)
-+{
-+	if (mkdir(path, 0755) && errno != EEXIST)
-+		return -1;
+-struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog *prog);
++int bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog **pprog,
++			    bool clone_needed, bool *cloned);
+ void bpf_jit_prog_release_other(struct bpf_prog *fp, struct bpf_prog *fp_other);
+ 
+ static inline bool bpf_prog_need_blind(const struct bpf_prog *prog)
+@@ -1508,9 +1509,11 @@ static inline bool bpf_prog_need_blind(const struct bpf_prog *prog)
+ }
+ 
+ static inline
+-struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog *prog)
++int bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog **pprog,
++			    bool clone_needed, bool *cloned)
+ {
+-	return prog;
++	*cloned = false;
 +	return 0;
-+}
-+
-+/* Write @rule to this instance's register file, preserving write(2)'s errno. */
-+static int register_at(struct __test_metadata *_metadata, const char *rule)
-+{
-+	int fd, saved;
-+	ssize_t n;
-+
-+	fd = open(MNT "/register", O_WRONLY);
-+	ASSERT_GE(fd, 0);
-+	n = write(fd, rule, strlen(rule));
-+	saved = errno;
-+	close(fd);
-+	errno = saved;
-+	return n < 0 ? -1 : 0;
-+}
-+
-+/*
-+ * Mount an overlay over @lower using a private upper/work pair, so the two
-+ * mounts this test performs cannot interfere with each other and neither
-+ * overlaps the lower layer.
-+ */
-+static int mount_overlay(const char *lower, int nr)
-+{
-+	char opts[OPTS_MAX], upper[PATH_MAX], work[PATH_MAX];
-+
-+	snprintf(upper, sizeof(upper), "%s/upper%d", BACKING, nr);
-+	snprintf(work, sizeof(work), "%s/work%d", BACKING, nr);
-+	if (mkdir(upper, 0755) || mkdir(work, 0755))
-+		return -1;
-+
-+	snprintf(opts, sizeof(opts), "lowerdir=%s,upperdir=%s,workdir=%s",
-+		 lower, upper, work);
-+	return mount("ovl", MERGED, "overlay", 0, opts);
-+}
-+
-+FIXTURE(selfpin) {
-+};
-+
-+FIXTURE_SETUP(selfpin)
-+{
-+	/* setup_userns() exits rather than returns if this is not there. */
-+	if (access("/proc/self/ns/user", F_OK))
-+		SKIP(return, "kernel without user namespaces");
-+	ASSERT_EQ(setup_userns(), 0);
-+
-+	ASSERT_EQ(ensure_dir(MNT), 0);
-+	if (mount("binfmt_misc", MNT, "binfmt_misc", 0, NULL)) {
-+		int saved = errno;
-+
-+		/* Teardown doesn't run when setup skips, so clean up here. */
-+		rmdir(MNT);
-+		SKIP(return, "no binfmt_misc: %s", strerror(saved));
+ }
+ 
+ static inline void bpf_jit_prog_release_other(struct bpf_prog *fp, struct bpf_prog *fp_other)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 505d134cd264..ab5da3ff941a 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1564,27 +1564,34 @@ void bpf_jit_prog_release_other(struct bpf_prog *fp, struct bpf_prog *fp_other)
+  * Now this function is used only to blind the main prog and must be invoked only when
+  * bpf_prog_need_blind() returns true.
+  */
+-struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog *prog)
++int bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog **pprog,
++			    bool clone_needed, bool *cloned)
+ {
+ 	struct bpf_insn insn_buff[16], aux[2];
+-	struct bpf_prog *clone, *tmp;
++	struct bpf_prog *prog, *orig_prog, *tmp;
+ 	int insn_delta, insn_cnt;
+ 	struct bpf_insn *insn;
+ 	int i, rewritten;
+ 
+-	if (WARN_ON_ONCE(env && env->prog != prog))
+-		return ERR_PTR(-EINVAL);
++	*cloned = false;
++	if (WARN_ON_ONCE(env && env->prog != *pprog))
++		return -EINVAL;
+ 
+-	clone = bpf_prog_clone_create(prog, GFP_USER);
+-	if (!clone)
+-		return ERR_PTR(-ENOMEM);
++	prog = orig_prog = *pprog;
++	/* only clone the prog when we can fall back to the interpreter */
++	if (clone_needed) {
++		prog = bpf_prog_clone_create(orig_prog, GFP_USER);
++		if (!prog)
++			return -ENOMEM;
+ 
+-	/* make sure bpf_patch_insn_data() patches the correct prog */
+-	if (env)
+-		env->prog = clone;
++		*cloned = true;
++		/* make sure bpf_patch_insn_data() patches the correct prog */
++		if (env)
++			env->prog = prog;
 +	}
-+}
+ 
+-	insn_cnt = clone->len;
+-	insn = clone->insnsi;
++	insn_cnt = prog->len;
++	insn = prog->insnsi;
+ 
+ 	for (i = 0; i < insn_cnt; i++, insn++) {
+ 		if (bpf_pseudo_func(insn)) {
+@@ -1605,42 +1612,49 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bp
+ 		    insn[1].code == 0)
+ 			memcpy(aux, insn, sizeof(aux));
+ 
+-		rewritten = bpf_jit_blind_insn(insn, aux, insn_buff,
+-						clone->aux->verifier_zext);
++		rewritten = bpf_jit_blind_insn(insn, aux, insn_buff, prog->aux->verifier_zext);
+ 		if (!rewritten)
+ 			continue;
+ 
+ 		if (env)
+ 			tmp = bpf_patch_insn_data(env, i, insn_buff, rewritten);
+ 		else
+-			tmp = bpf_patch_insn_single(clone, i, insn_buff, rewritten);
++			tmp = bpf_patch_insn_single(prog, i, insn_buff, rewritten);
+ 
+ 		if (IS_ERR_OR_NULL(tmp)) {
+-			if (env)
+-				/* restore the original prog */
+-				env->prog = prog;
+-			/* Patching may have repointed aux->prog during
+-			 * realloc from the original one, so we need to
+-			 * fix it up here on error.
+-			 */
+-			bpf_jit_prog_release_other(prog, clone);
+-			return IS_ERR(tmp) ? tmp : ERR_PTR(-ENOMEM);
++			if (*cloned) {
++				/* roll back to the original prog */
++				*pprog = orig_prog;
++				if (env)
++					env->prog = orig_prog;
++				/* Patching may have repointed aux->prog during
++				 * realloc from the original one, so we need to
++				 * fix it up here on error.
++				 */
++				bpf_jit_prog_release_other(orig_prog, prog);
++			} else {
++				/* just keep the latest successfully patched prog */
++				*pprog = prog;
++			}
++			return IS_ERR(tmp) ? PTR_ERR(tmp) : -ENOMEM;
+ 		}
+ 
+-		clone = tmp;
++		prog = tmp;
+ 		insn_delta = rewritten - 1;
+ 
+ 		if (env)
+-			env->prog = clone;
++			env->prog = prog;
+ 
+ 		/* Walk new program and skip insns we just inserted. */
+-		insn = clone->insnsi + i + insn_delta;
++		insn = prog->insnsi + i + insn_delta;
+ 		insn_cnt += insn_delta;
+ 		i        += insn_delta;
+ 	}
+ 
+-	clone->blinded = 1;
+-	return clone;
++	prog->blinded = 1;
++	*pprog = prog;
 +
-+FIXTURE_TEARDOWN(selfpin)
-+{
-+	/* The namespaces go with the process; just don't litter /tmp. */
-+	umount2(MERGED, MNT_DETACH);
-+	umount2(BACKING, MNT_DETACH);
-+	umount2(MNT, MNT_DETACH);
-+	rmdir(MERGED);
-+	rmdir(BACKING);
-+	rmdir(MNT);
-+}
-+
-+/*
-+ * The instance's own files are regular files the mounter owns, so they can be
-+ * made executable. Opening one for exec still has to fail, otherwise the entry
-+ * pins the very superblock it lives in.
-+ */
-+TEST_F(selfpin, interpreter_on_the_instance)
-+{
-+	ASSERT_EQ(chmod(MNT "/status", 0755), 0);
-+
-+	ASSERT_NE(register_at(_metadata, RULE(MNT "/status")), 0);
-+	EXPECT_EQ(errno, EACCES);
-+}
-+
-+/* Same for an entry file rather than one of the control files. */
-+TEST_F(selfpin, interpreter_on_an_entry)
-+{
-+	ASSERT_EQ(register_at(_metadata, ":victim:M::" MAGIC "::" INTERP ":"), 0);
-+	ASSERT_EQ(chmod(MNT "/victim", 0755), 0);
-+
-+	ASSERT_NE(register_at(_metadata, RULE(MNT "/victim")), 0);
-+	EXPECT_EQ(errno, EACCES);
-+}
-+
-+/*
-+ * A stacking filesystem holds a private clone of each layer for its whole
-+ * lifetime, so an instance used as a layer can be pinned by an interpreter
-+ * that does not live on it at all. Refuse to be a layer.
-+ */
-+TEST_F(selfpin, refuses_to_be_stacked_on)
-+{
-+	ASSERT_EQ(ensure_dir(BACKING), 0);
-+	ASSERT_EQ(mount("tmpfs", BACKING, "tmpfs", 0, NULL), 0);
-+	ASSERT_EQ(mkdir(LOWER, 0755), 0);
-+	ASSERT_EQ(ensure_dir(MERGED), 0);
-+
-+	/* Nothing to prove unless overlayfs works here at all. */
-+	if (mount_overlay(LOWER, 1)) {
-+		if (errno == ENODEV || errno == EPERM)
-+			SKIP(return, "no unprivileged overlayfs");
-+		SKIP(return, "overlayfs unusable here: %s", strerror(errno));
-+	}
-+	ASSERT_EQ(umount(MERGED), 0);
-+
-+	EXPECT_NE(mount_overlay(MNT, 2), 0);
-+}
-+
-+/* An ordinary interpreter still registers with 'F'. */
-+TEST_F(selfpin, ordinary_interpreter_still_works)
-+{
-+	EXPECT_EQ(register_at(_metadata, RULE(INTERP)), 0);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/exec/config b/tools/testing/selftests/exec/config
-index c308079867b3..c03d52d8abee 100644
---- a/tools/testing/selftests/exec/config
-+++ b/tools/testing/selftests/exec/config
-@@ -1,2 +1,6 @@
- CONFIG_BLK_DEV=y
- CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BINFMT_MISC=y
-+CONFIG_OVERLAY_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_USER_NS=y
-
++	return 0;
+ }
+ 
+ bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struct bpf_prog *prog,
+@@ -2630,33 +2644,33 @@ static bool bpf_prog_select_interpreter(struct bpf_prog *fp)
+ 	return select_interpreter;
+ }
+ 
+-static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog)
++static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog,
++					     bool jit_needed)
+ {
+ #ifdef CONFIG_BPF_JIT
++	int err;
++	bool cloned = false;
+ 	struct bpf_prog *orig_prog;
+ 
+ 	if (!bpf_prog_need_blind(prog))
+ 		return bpf_int_jit_compile(env, prog);
+ 
+ 	orig_prog = prog;
+-	prog = bpf_jit_blind_constants(env, prog);
+-	/*
+-	 * If blinding was requested and we failed during blinding, we must fall
+-	 * back to the interpreter.
+-	 */
+-	if (IS_ERR(prog))
+-		goto out_restore;
++	err = bpf_jit_blind_constants(env, &prog, !jit_needed, &cloned);
++	if (err)
++		goto out;
+ 
+ 	prog = bpf_int_jit_compile(env, prog);
+-	if (prog->jited) {
+-		bpf_jit_prog_release_other(prog, orig_prog);
+-		return prog;
++	if (cloned) {
++		if (prog->jited) {
++			bpf_jit_prog_release_other(prog, orig_prog);
++		} else {
++			bpf_jit_prog_release_other(orig_prog, prog);
++			prog = orig_prog;
++		}
+ 	}
+ 
+-	bpf_jit_prog_release_other(orig_prog, prog);
+-
+-out_restore:
+-	prog = orig_prog;
++out:
+ #endif
+ 	return prog;
+ }
+@@ -2686,7 +2700,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+ 		if (*err)
+ 			return fp;
+ 
+-		fp = bpf_prog_jit_compile(env, fp);
++		fp = bpf_prog_jit_compile(env, fp, jit_needed);
+ 		bpf_prog_jit_attempt_done(fp);
+ 		if (!fp->jited && jit_needed) {
+ 			*err = -ENOTSUPP;
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 2cdad2395b71..6da0f8d0b761 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -996,6 +996,8 @@ static u32 *bpf_dup_subprog_starts(struct bpf_verifier_env *env)
+ 
+ static void bpf_restore_subprog_starts(struct bpf_verifier_env *env, u32 *orig_starts)
+ {
++	if (!orig_starts)
++		return;
+ 	for (int i = 0; i < env->subprog_cnt; i++)
+ 		env->subprog_info[i].start = orig_starts[i];
+ 	/* restore the start of fake 'exit' subprog as well */
+@@ -1273,35 +1275,33 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ int bpf_jit_subprogs(struct bpf_verifier_env *env)
+ {
+ 	int err, i;
+-	bool blinded = false;
+ 	struct bpf_insn *insn;
+ 	struct bpf_prog *prog, *orig_prog;
+-	u32 *orig_subprog_starts;
++	u32 *orig_subprog_starts = NULL;
++	bool cloned = false;
+ 
+ 	if (env->subprog_cnt <= 1)
+ 		return 0;
+ 
+ 	prog = orig_prog = env->prog;
+ 	if (bpf_prog_need_blind(prog)) {
+-		orig_subprog_starts = bpf_dup_subprog_starts(env);
+-		if (!orig_subprog_starts) {
+-			err = -ENOMEM;
+-			goto out_cleanup;
++		if (!prog->jit_required) {
++			orig_subprog_starts = bpf_dup_subprog_starts(env);
++			if (!orig_subprog_starts) {
++				err = -ENOMEM;
++				goto out_cleanup;
++			}
+ 		}
+-		prog = bpf_jit_blind_constants(env, prog);
+-		if (IS_ERR(prog)) {
+-			err = -ENOMEM;
+-			prog = orig_prog;
++		err = bpf_jit_blind_constants(env, &prog, !prog->jit_required, &cloned);
++		if (err)
+ 			goto out_restore;
+-		}
+-		blinded = true;
+ 	}
+ 
+ 	err = jit_subprogs(env);
+ 	if (err)
+ 		goto out_jit_err;
+ 
+-	if (blinded) {
++	if (cloned) {
+ 		bpf_jit_prog_release_other(prog, orig_prog);
+ 		kvfree(orig_subprog_starts);
+ 	}
+@@ -1309,13 +1309,13 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env)
+ 	return 0;
+ 
+ out_jit_err:
+-	if (blinded) {
++	if (cloned) {
+ 		bpf_jit_prog_release_other(orig_prog, prog);
+ 		/* roll back to the clean original prog */
+ 		prog = env->prog = orig_prog;
+ 		goto out_restore;
+ 	} else {
+-		if (err != -EFAULT) {
++		if (err != -EFAULT && !prog->jit_required) {
+ 			/*
+ 			 * We will fall back to interpreter mode when err is not -EFAULT, before
+ 			 * that, insn->off and insn->imm should be restored to their original
+@@ -1344,8 +1344,7 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env)
+ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+ {
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+-	struct bpf_prog *prog = env->prog;
+-	struct bpf_insn *insn = prog->insnsi;
++	struct bpf_insn *insn;
+ 	int depth;
+ #endif
+ 	int i, err = 0;
+@@ -1371,7 +1370,7 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+ 			return err;
+ 	}
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+-	if (prog->jit_required) {
++	if (env->prog->jit_required) {
+ 		verbose(env, "program requires BPF JIT compiler but it is not available\n");
+ 		return -EINVAL;
+ 	}
+@@ -1388,7 +1387,7 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+ 		verbose(env, "tail_calls are not allowed in non-JITed programs with bpf-to-bpf calls\n");
+ 		return -EINVAL;
+ 	}
+-	for (i = 0; i < prog->len; i++, insn++) {
++	for (i = 0, insn = env->prog->insnsi; i < env->prog->len; i++, insn++) {
+ 		if (bpf_pseudo_func(insn)) {
+ 			/* When JIT fails the progs with callback calls
+ 			 * have to be rejected, since interpreter doesn't support them yet.
 -- 
-2.53.0
+2.47.3
 
