@@ -1,111 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F623ACF02;
-	Tue, 28 Jul 2026 13:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB2F3AE1A9
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 13:37:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785245430; cv=none; b=ac8zJkCo/5tHttjIOZB9ujYNifyVBFuD9Zxa3e1In/PxI5Ye9GuKFFbWrwmV4KtJzpEYjwdct/DZ4GLkUYT180dbDRI3MMUz7zKoCmI+oMYT/dwbk3BN7MrQljbXOuRwHWi7qy4gNzksd8OsXK54i8itYBX74xkA5Udwbyu4CGY=
+	t=1785245842; cv=none; b=GbfOGn+nfWdTYn/fLPekbRn7jlcn6F8MuWC9Aa2R4X16FRI+1/1ybohHx5vUOF2Ho4Ne9eGmR7HLgPa1+67+gVzOXP2UahisyZgl4hus/xdm6sFP9AvcDK72kXObvhJT9nVbcoeAJXSAfQHNNUk1R9uK4Q4bE2TgPWqoLa8fItg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785245430; c=relaxed/simple;
-	bh=SoBAU7Engs1fLo9xe9F0d1LAQWnIhva3W+U2HFjh1H8=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=uoJeTFZ08Dbmf4iRU25n5QPlCNqRnIiMpyYip1kterAyeXSwvv/g5MfmaNGr8OOID2CCCKJw5IylOvDXf7UJWFlm0rr1tAp0gkn2bkFREr0I2QHAxm9bEp+6DzAhtvfxzIowN2CW5a0KSwirfpGFOc49tmT0CZ6S3bHJ0WG385Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VZTevtNp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785245842; c=relaxed/simple;
+	bh=OsQS28snu694awNh5VfXkbyD/mvcAViP1XZYcEH371M=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=D60bLklGFgDLR8eRdxFebW/RiDlwFuxcJp8d8JMMwfc/N6wPTsDstVaR1tldap1FoO2A/CFm/vCk0AFJxNZVyiXsnzetPkiadX+uuKm8zFDyq9v0TpJCKpQnFWKt2vU16xFkpkXlvArNYgkIdomtRtzy2TzjloY4PPK1UXhMS8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JVFfPtKD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VZTevtNp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F2B51F000E9;
-	Tue, 28 Jul 2026 13:30:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JVFfPtKD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFAFA1F00A3A;
+	Tue, 28 Jul 2026 13:37:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785245426;
-	bh=E7k8qpO7ZE6dySGmGX/R7cCp+G4Bal4pIf1ocTwL8+c=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=VZTevtNpGHn94oGJVcaCIQk1sAFk4Gvcye9pA+TAXvdCzkjDhRs+gijfNbQ1Q0T4X
-	 gQP+AoDx9qrmj3aKshU8ciDC7ZJABP3rK90R3S71L8oatpXzNpL0RdlWVO/250RzLC
-	 qZqds+HC/bNTpKB9Fj+zCH/fB8Y9K/i00tmA7CVnH/U56XsRenKX/r/SRTYLuN3Dye
-	 xAu4pTdtHoY/VhBsYBpNDc3PH8uUb57fCCDy6eGCVIJ/kmzNjkExoodSinQD6i8Rz2
-	 lju85+ObxSz0OLxUZRoLsL6bV0m5u9I5AmlfV/gqZV+Y1BNjrc7Ew5rf13DlMDxCg4
-	 PcICqoLsAMlAw==
+	s=k20260515; t=1785245839;
+	bh=MYkIICDsqoFAls1+GQXDhi+xxDvrTVTI6+Bacg9pFIE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=JVFfPtKDK5oizezPY4iQYB9jwWn5TxSr44SN4gMRa5PJAH+NBiE6xehA7BO2xBQIh
+	 s+2MA+VkMmWIFvfHNJ2oTNMi+z6S68mkwz3IprB66yqHFeDS3WG1NC2ozAlbLsG9BY
+	 CyqxUzF0c9jCt1KAaqZIul6y3DopDimp+4PwZFNf04yncEvzUT8yE8LOQxfY8euzkv
+	 EheHbhsjKHDOFnSfsg+y+3PsIWPBGqk2rUXEzfeIhZ0PpWueGiYyrYMBNHahM/d5H7
+	 NmoUxLkJTbg60hlqgxydaedBGoFC4rbf6gbASbLIO7mjgUdeQnPdSa+Kapp0b6a/iE
+	 sYttJrytZGJqQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf, cgroup: Fix potential UAF in
+ __cgroup_bpf_attach
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pu Lehui" <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260728132336.2857800-1-pulehui@huaweicloud.com>
+References: <20260728132336.2857800-1-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 28 Jul 2026 13:37:18 +0000
+Message-Id: <20260728133718.DFAFA1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 1/2] binfmt_misc: don't let an 'F' entry pin its own
- instance
-From: Christian Brauner <brauner@kernel.org>
-To: sashiko-reviews@lists.linux.dev
-Cc: Christian Brauner <brauner@kernel.org>, bpf@vger.kernel.org
-In-Reply-To: <20260728124404.B23671F00A3A@smtp.kernel.org>
-References: <20260728-work-binfmt_misc-selfpin-v1-0-74df5daeca5b@kernel.org>
- <20260728-work-binfmt_misc-selfpin-v1-1-74df5daeca5b@kernel.org>
- <20260728124404.B23671F00A3A@smtp.kernel.org>
-Date: Tue, 28 Jul 2026 15:30:23 +0200
-Message-Id: <20260728-asymmetrie-waghalsige-luftig-0ad562353bb4@brauner>
-X-Mailer: b4 0.16-dev-cca4b
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1966; i=brauner@kernel.org;
- h=from:subject:message-id; bh=SoBAU7Engs1fLo9xe9F0d1LAQWnIhva3W+U2HFjh1H8=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRlrPuYa7x0567e/oYu5+/RLJPXGAesVp/iE78kSi1+3
- du/VsrHOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACby4yMjw9Iv2Vo2h3xE2PYp
- 3pLbEL6bo740ZJ0O67EFFzetDsp0LGFk+LBktS/bCTv520/mc/9pUfjfL33p5JsFXw5V/t+Yt2l
- FPysA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-> [ ... ]
-> 
-> Looking at the rest of bm_fill_super() in fs/binfmt_misc.c:
-> 
-> 	err = simple_fill_super(sb, BINFMTFS_MAGIC, bm_files);
-> 	if (!err)
-> 		sb->s_op = &s_ops;
-> 	return err;
-> }
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-This _seems_ legit but I need to double-check.
+Pre-existing issues:
+- [High] Replacing a `bpf_link` in single-attach mode leaks the old link, i=
+mbalances the static key, and causes cross-destruction of the new attachmen=
+t when the old link is closed.
+--
 
-> [Severity: High]
-> This is a pre-existing issue, but does this error path permanently leak the 
-> user_namespace reference?
-> 
-> If simple_fill_super() fails, or if a memory allocation failure occurs 
-> earlier in bm_fill_super(), sb->s_root remains NULL. When vfs_get_super() 
-> handles the error, generic_shutdown_super() will skip calling 
-> s_op->put_super(sb). 
-> 
-> Since fc->s_fs_info was already cleared during sget_fc(), does this mean 
-> the user_namespace reference in sb->s_fs_info is never released?
-> 
-> Could an unprivileged local user trigger this by intentionally failing 
-> userns mounts (e.g., via memory exhaustion) to cause resource exhaustion?
-> 
-> 
-> On a related note regarding pre-existing issues, looking at 
-> put_binfmt_handler() in fs/binfmt_misc.c:
-> 
-> static void put_binfmt_handler(struct binfmt_misc *e)
-> {
->         ...
->         if (e->flags & MISC_FMT_OPEN_FILE)
->                 filp_close(e->interp_file, NULL);
->         kfree(e);
-> }
-> 
-> [Severity: High]
-> This is a pre-existing issue, but does this teardown path leak the negative 
-> i_writecount of the interpreter file?
-> 
-> When an entry is registered with the 'F' flag, bm_register_write() uses 
-> open_exec(), which internally decrements the inode's i_writecount to prevent 
-> concurrent writes. While the error path during registration calls 
-> exe_file_allow_write_access(), put_binfmt_handler() only calls filp_close(). 
-> 
-> Since filp_close() does not automatically restore executable write access, 
-> would deleting the binfmt_misc entry permanently leave the binary unwritable 
-> (returning -ETXTBSY) until reboot?
+--- Patch [1]: [PATCH bpf] bpf, cgroup: Fix potential UAF in __cgroup_bpf_a=
+ttach ---
+commit b6405e259cc6a35d8ca8d34002993bcc191a22c5
+Author: Pu Lehui <pulehui@huawei.com>
 
-This is fixed in another patch series of mine.
+bpf, cgroup: Fix potential UAF in __cgroup_bpf_attach
+   =20
+When replacing an existing bpf_link in single-attach case in
+__cgroup_bpf_attach, old_prog is NULL while old_link holds the active
+link. This patch fixes an issue where the cleanup path wrongly treated
+the existing entry as newly allocated, properly restoring state on error.
 
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 4355ccb78a9c6..1c070ae7bf170 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+
+[ ... ]
+
+> @@ -865,6 +868,9 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+> =20
+>  	if (pl) {
+>  		old_prog =3D pl->prog;
+> +		old_link =3D pl->link;
+> +		old_pl_flags =3D pl->flags;
+> +		bpf_cgroup_storages_assign(old_storage, pl->storage);
+>  	} else {
+>  		pl =3D kmalloc_obj(*pl);
+>  		if (!pl) {
+
+[ ... ]
+
+> @@ -912,15 +919,18 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>  		bpf_trampoline_unlink_cgroup_shim(new_prog);
+> =20
+>  cleanup:
+> -	if (old_prog) {
+> +	if (old_prog || old_link) {
+
+[Severity: High]
+This is a pre-existing issue, but since we are properly handling old_link
+in the error path here, should we also address it in the success path?
+
+If old_prog is NULL (which happens when replacing a bpf_link in
+single-attach mode), the success path right above this cleanup label does
+the following:
+
+	if (old_prog) {
+		if (type =3D=3D BPF_LSM_CGROUP)
+			bpf_trampoline_unlink_cgroup_shim(old_prog);
+		bpf_prog_put(old_prog);
+	} else {
+		static_branch_inc(&cgroup_bpf_enabled_key[atype]);
+	}
+
+Since old_prog is NULL, this takes the else branch and incorrectly
+increments the static key, while completely leaking old_link.
+
+When the leaked old_link's file descriptor is eventually closed,
+bpf_cgroup_link_release() will call:
+
+	WARN_ON(__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
+				    link->attach_type, 0));
+
+In single-attach mode, this blindly detaches the active entry (which is
+now the newly attached program or link). This unexpected detachment could
+corrupt the cgroup BPF state and lead to a use-after-free of the new
+program.
+
+>  		pl->prog =3D old_prog;
+> -		pl->link =3D NULL;
+> +		pl->link =3D old_link;
+> +		pl->flags =3D old_pl_flags;
+> +		bpf_cgroup_storages_assign(pl->storage, old_storage);
+>  	}
+>  	bpf_cgroup_storages_free(new_storage);
+> -	if (!old_prog) {
+> +	if (!old_prog && !old_link) {
+>  		hlist_del(&pl->node);
+>  		kfree(pl);
+>  	}
+> +	cgrp->bpf.flags[atype] =3D old_flags;
+>  	return err;
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728132336.2857=
+800-1-pulehui@huaweicloud.com?part=3D1
