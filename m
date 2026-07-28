@@ -1,177 +1,168 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09F633DED9
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 17:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785261446; cv=pass; b=k0GfXGXZq28OgFmzdJIWTQDI9F9AnX3BEWilwrWu59EfKUag/olfnahT+02QRC5OWYOyX/3iTqMnmK4HpnYD8Xw1VMIX8qxOSMheCEpg0zWtBs1rGTQ7Dqujqw6pJuQ1MXUMN6zk9B5oRBFXkdJT5IbdpH8A6zf6EREMR3cxyr4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785261446; c=relaxed/simple;
-	bh=ZbWXmvBiNFCwwNa1ghWV+ngxvzWtq9hDtFfwg7htolI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HP7eAtfqzu5MOmmT1SWLmo2H4uNAvcFcSlwJz1iEsk6H5WilC9Zxn4YHStRjxb4uh4sL/n2cDRgiFKbVZ1y6zeopEvezz2YyE7yQOIl0V5jkAntl7jd7gir49/AeIVAgmB1XgohvyHGDVjQr9vb4F75amaxm8i7NqxrlyASu9Mc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZFSAWMKb; arc=pass smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FB4470133
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 18:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785264766; cv=none; b=VO0LViW+VxWDLWxsLkt7aTTnjdhYp1AR1/J5WirMFOy+upNlIwWMgaCPSULEUKeGULex3bT786MSc9u9i7TK08A053fchUG7mam9CkoE7qNrhvghMZrx1mqIfTJDxv1GPMGpWFn6npVuJ1rH6m1NYQjYbxtOlD+6GDLCCG3+jZk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785264766; c=relaxed/simple;
+	bh=l2Es26jUxus/pyPxMghMUP1yIXuAWO7tK+rKBlkL2CE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=sSqodSjSB3S9TGZ+M+FmP2AK8N7v+vtYn9ZahzXOZ40IztaEUM7axsTjxyI24aueSdiK0mzwgOSGkFeoQiZgsjR/IbV+XpdCC9iIW9khomKDbyVrKSsP3ruhqle6oY8U9hpGGCJY9rfG8j/NrvHCD0XA/KHXSmMzhAdXFws11MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nUxq8Dhq; arc=none smtp.client-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZFSAWMKb"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-8143daf89c7so1913897b3.1
-        for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 10:57:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785261444; cv=none;
-        d=google.com; s=arc-20260327;
-        b=eif6XqKJZhlFrH4ogRX7z07zUsFBsQaSJU9LGTAiuE7jGxgS16Sz11uTlA5MML92Ne
-         WvNf56CaGNCW6vsyDcnPOIiJmNOQAXKRG42/pC2LcSQH4o1kUh1MG0ECFHY+ipCeKOuh
-         UBNcLFX5h2yJVSDhh4km+aZfT5rXStzNuMkxrmHYr1llf1tFiU1BI9cJrNSuCte3DVUg
-         mhvvS86D7xW4nlhl/YGIXL7AzsK1eRU+t65RkOEMkLLZ5hsvn/SEEnuS65u+GWwRNjzI
-         7tKHfSPffIZXNBCBVbQN6QKWZ2MDDJWSsewUp0BCC3HbvOGjof7HUNospJ9EbsgmuLrF
-         QoVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=JwkQxWaMUU0yinFoZtbNLOYmiD3fkrnr5GNpSWEkccM=;
-        fh=6Z4J3xNs+qgwS2aK097++l2x6CIWkNCmJIKZe8W3oU4=;
-        b=ROXWgiGibR/YBHfth3RhCsXvYYqh55e3v5m/uHQFPPjonyx2SS+HHqidnkcdYBXC5N
-         wasiuyF+MIqoZ/76guwysJlFccu0vAcezmYnp7Z9w7cQmbIRLJmKQv3HeI197bfVSIkA
-         oVGKbvsZ15RSOSEYdqRhXL5l2KUM7uSw2hx/gUbfF23jUIGpQS1wUyIYax5mDX6oCjEc
-         pC7sky0nq/oC1lyCh19zLpq233ZckHcq0pBDYe49RLXdEPQ2s+hkRMXyhlvjM3p5OrL4
-         Qk9xQ3cvCoZfsMnjVNsEVXLjLIcU4LtDUo/BSj0z8fpXt5fIr/RoXcaF4PohRz1l9Mnw
-         8FFg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nUxq8Dhq"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2cfbf3e4a63so5097665ad.0
+        for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 11:52:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785261444; x=1785866244; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=JwkQxWaMUU0yinFoZtbNLOYmiD3fkrnr5GNpSWEkccM=;
-        b=ZFSAWMKbXGLjFSODKa0NMg/iP8ItPLI+liBCJyXnxOE019oBg74YH6FuoVWvPFNlNq
-         Swa8VMgyAon/lD5wmOE5iC9AAv23AB4F5BE2pGDtZg2wMTccLYwYcejpsQXYxOEyiG4R
-         Wozhqbiy++xWWWDXLVJ3JU+wz7vb367C5l60l+IeLaKP0se52KKOcxBGWrfzUZroZ9Aj
-         ayaQSbhN4dH/FnYDaqWSUoXjwZpaZSXk/zuSAAUZJ2qS+FX/ewx5xGhi2+hKOsqCwOX0
-         52PpGIMZ55EoawioaWdCnE6cV6QSfFt+XGHuxiBvagHer0/YSAb0ici4ob/h6o7om5Qg
-         j5xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785261444; x=1785866244;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1785264762; x=1785869562; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=JwkQxWaMUU0yinFoZtbNLOYmiD3fkrnr5GNpSWEkccM=;
-        b=HPf8FRSjAKQKjSFw/7fF8TeXHgdlW1kOgerPGFqv0L++1iZDXcoufIbGN9YYmui/bW
-         guyFB9N83tFhJsHycJO4rcsKvUjXrA9RPJVSWp7ZU396/QKqMJK+WIedbwAbSubwkAX7
-         3ktrncEfcaIx4zRe0pYfgBjqjQAUYdU+uxXq1gEE4jNr546KYXTIjCYiCqbBd+5Fh1os
-         yz6qvJScbCTSupqeUsm0dJCtXPzijPO5BEX/WY/FOeg89MwO4yO/a5018EcKIKfcKQa8
-         z1PjYF3kCxgAbCVX4Va2YkAO0pGWRMnIywPt1c+ZvuDr/6INjNxP46hGe9ZTonOD/N/1
-         xo6g==
-X-Gm-Message-State: AOJu0Yw5sRSQeZzBn2CE0fmMQIiv3SXWVH2yP476EwNX5ev7daeP3PiP
-	3dX4bjxEJJm8AHiD1gDwx4Kx8Jo5I7isPMU3VZEcjUDFoVM5WbyagN60G3YCxhAd42LJFfSrHf3
-	AjrVRsAJiqHIeheV0TQRXDTNgvzWhsJY=
-X-Gm-Gg: AR+sD13chlH+FI17ruLeyUxUSUL96d0Iv4vvUs4vQTFXrd/Od8f8O3ZROTo9zyTfOIX
-	UyrwH+BAaTbwA3eqsFrSufFci/kVzHs2JQXVipmTYXsQwGCw/1DzcfyJ2kvM31wOJB1tDlWf6Ay
-	ZODHYsLpCOrk5RAHNyXhQ+V8VkItCumbK4KG9NHlY7Uiy8T/SH0trTy8OWSHH96Jw5FuiTyQXr/
-	p+Jqoif8ExGNrnvf/dW3lyktAj9phkk7u0MgRkHb4iYcsIOJ6RqHyWKdlt9ig==
-X-Received: by 2002:a05:690c:2782:b0:81c:d07d:1761 with SMTP id
- 00721157ae682-81f9941c044mr13274967b3.71.1785261443670; Tue, 28 Jul 2026
- 10:57:23 -0700 (PDT)
+        bh=EURzVSWhRSOOgqb3RqZuisJ1IP2IjYHX1FhuQfx4G4s=;
+        b=nUxq8DhqIxUAbFbipxgS79prGPpoMB7vH9pEPhKrlJv0iGol0LVoyR/7SbZWKE2qEq
+         U2gpHp0APz8HkhJEpOl6P1gDmcDoUtq/6gJFQKQrJWLBn2wXkcS1tnzWrXp1pBuZ0GOi
+         xV97Z6wGae3ZHgMmFRErLmFpo2h5PxLdUWY09qwPam2C3OTWWQv3Y6b0UyN4kPL4mWXp
+         wkRKwV8EqTGg8CUEFGZN8B3bcOdfx4CQsBJanI4+5sANPCCvGTqlgDQzlqU7eK9FW0E/
+         a/AQOdGnEshSlHR932LUj4GSQsg3wUVrsJC8MttLEf/xsp61wM6A02JCmu3EfKpjMIIa
+         xxHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785264762; x=1785869562;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=EURzVSWhRSOOgqb3RqZuisJ1IP2IjYHX1FhuQfx4G4s=;
+        b=TLHCeYWesuRrjx4X8AXcFF1vCwbq11BX+HEqnD0YiQ+uZT/xcCGK34iCBSnQrSkKfi
+         IyVYlgJXerQ6WX9SKhjxja2grNn2Y6CLBgxtdZkMRfOEiHxibdJP6fqwOczTmxuVEVVP
+         3LuOrXN+KjL8OQj8YTP1XyVR6nG9vQ7IZYzt+/chEByhQi2fKgOFljqPSsu5WYQl+SWa
+         LD3RpvSxo57l4kDH7JcxgM9SSxpifx186xOwr6c0Q5wfaukNuGy5RmVHIq4eSZiIPD7k
+         MOAsd0UxO/IvJsB7WyRuQg0dVJp8kk8MMBemcaeyydCwFrbqzM9f5u780+fq3/YnDKX5
+         pQjg==
+X-Forwarded-Encrypted: i=1; AHgh+RoU0qDV1LojTSxmeX/hoNkfkzAelfe7HgOe6pnQyzRyzyO/aruSir+Lfjh6x2pWbW1vSwU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrWHPou+ejcjLeQsNfJQiwkkrp/UQxXtBVZxCoIjtGUfG5ncIq
+	aa+u8S1D2de/aEJY3He0cNhAOz8G33/+eS2cDH5K9CEo/AXvH9tRpAZuI66ll43sGE/8rRl9HAv
+	0NjN0fg==
+X-Received: from plec7.prod.google.com ([2002:a17:902:f307:b0:2c7:f19d:bb15])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f710:b0:2ca:a03a:29b2
+ with SMTP id d9443c01a7336-2d015c9c0c4mr48784125ad.8.1785264762144; Tue, 28
+ Jul 2026 11:52:42 -0700 (PDT)
+Date: Tue, 28 Jul 2026 11:52:41 -0700
+In-Reply-To: <ajvUp_kPJBRZ7k_p@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260724190813.1458271-1-ameryhung@gmail.com> <20260724190813.1458271-6-ameryhung@gmail.com>
- <27739a12b7f7d5cd6e7fceeb389cff0072aefef2.camel@gmail.com>
-In-Reply-To: <27739a12b7f7d5cd6e7fceeb389cff0072aefef2.camel@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 28 Jul 2026 10:57:12 -0700
-X-Gm-Features: AUfX_mzoF6-geHv6sbBDnC4N6hW31P6dBD-df4BcbO5uRaGLFaPTJkc2pjKv3dc
-Message-ID: <CAMB2axPcdjVA6Pwp0TpGpMtJGiOB5khJ4HA13iJ9XT1qpyfNtw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 05/18] bpf: Check helper and kfunc mem+size
- arguments identically
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
-	daniel@iogearbox.net, memxor@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260622-vmscape-bhb-v12-0-76cbda0ae3e5@linux.intel.com>
+ <20260622-vmscape-bhb-v12-7-76cbda0ae3e5@linux.intel.com> <ajvUp_kPJBRZ7k_p@google.com>
+Message-ID: <amj6eYOs70WUPGDG@google.com>
+Subject: Re: [PATCH v12 07/12] static_call: Define EXPORT_STATIC_CALL_FOR_MODULES()
+From: Sean Christopherson <seanjc@google.com>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	David Laight <david.laight.linux@gmail.com>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>, 
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Jul 27, 2026 at 1:51=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Fri, 2026-07-24 at 12:07 -0700, Amery Hung wrote:
->
-> ...
->
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 468702b09c50..2e56f726c12a 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -6873,7 +6873,14 @@ static int check_mem_size_reg(struct bpf_verifie=
-r_env *env,
-> >                             bool zero_size_allowed,
-> >                             struct bpf_call_arg_meta *meta)
-> >  {
-> > -     int err;
-> > +     bool may_be_null =3D type_may_be_null(mem_reg->type);
-> > +     struct bpf_reg_state saved_reg;
-> > +     int err =3D 0;
-> > +
-> > +     if (may_be_null) {
-> > +             saved_reg =3D *mem_reg;
-> > +             mark_ptr_not_null_reg(mem_reg);
-> > +     }
->
-> Also, this pre-existing hack with saved_reg and mark_ptr_not_null_reg()
-> is quite ugly. Consider mark_ptr_not_null_reg():
->
->   static void mark_ptr_not_null_reg(struct bpf_reg_state *reg)
->   {
->         if (base_type(reg->type) =3D=3D PTR_TO_MAP_VALUE) {
->                 const struct bpf_map *map =3D reg->map_ptr;
->
->                 if (map->inner_map_meta) {
->                         reg->type =3D CONST_PTR_TO_MAP;
->                         reg->map_ptr =3D map->inner_map_meta;
->                         /* transfer reg's id which is unique for every ma=
-p_lookup_elem
->                          * as UID of the inner map.
->                          */
->                         if (btf_record_has_field(map->inner_map_meta->rec=
-ord,
->                                                  BPF_TIMER | BPF_WORKQUEU=
-E | BPF_TASK_WORK)) {
->                                 reg->map_uid =3D reg->id;
->                         }
->                 } else if (map->map_type =3D=3D BPF_MAP_TYPE_XSKMAP) {
->                         reg->type =3D PTR_TO_XDP_SOCK;
->                 } else if (map->map_type =3D=3D BPF_MAP_TYPE_SOCKMAP ||
->                            map->map_type =3D=3D BPF_MAP_TYPE_SOCKHASH) {
->                         reg->type =3D PTR_TO_SOCKET;
->                 } else {
->                         reg->type =3D PTR_TO_MAP_VALUE;
->                 }
->                 return;
->         }
->
->         reg->type &=3D ~PTR_MAYBE_NULL;
->   }
->
-> Note that the check_helper_mem_access() already calls base_type(mem_reg),
-> so the '&=3D ~PTR_MAYBE_NULL' part is irrelevant, what matters are the
-> following mutations:
-> - PTR_TO_MAP_VALUE -> CONST_PTR_TO_MAP (plus it's uid, type, ptr)
-> - BPF_MAP_TYPE_XSKMAP -> PTR_TO_XDP_SOCK
-> - BPF_MAP_TYPE_SOCKMAP -> PTR_TO_SOCKET
-> - BPF_MAP_TYPE_SOCKHASH -> PTR_TO_SOCKET
->
-> A better design compared to current temporary fixup for a helper/kfunc
-> call would be to deal with types CONST_PTR_TO_MAP | PTR_MAYBE_NULL,
-> PTR_TO_XDP_SOCK | PTR_MAYBE_NULL etc, instantiated at map lookup.
-> Wdyt?
+On Wed, Jun 24, 2026, Sean Christopherson wrote:
+> On Tue, Jun 23, 2026, Pawan Gupta wrote:
+> > There is EXPORT_STATIC_CALL_TRAMP() that hides the static key from all
+> > modules. But there is no equivalent of EXPORT_SYMBOL_FOR_MODULES() to
+> > restrict symbol visibility to only certain modules.
+> > 
+> > Add EXPORT_STATIC_CALL_FOR_MODULES(name, mods) that wraps both the key and
+> > the trampoline with EXPORT_SYMBOL_FOR_MODULES(), allowing only a limited
+> > set of modules to see and update the static key.
+> > 
+> > The immediate user is KVM, in the following commit.
+> > 
+> > checkpatch reported below warnings with this change that I believe don't
+> > apply in this case:
+> > 
+> >   include/linux/static_call.h:219: WARNING: Non-declarative macros with multiple statements should be enclosed in a do - while loop
+> >   include/linux/static_call.h:220: WARNING: EXPORT_SYMBOL(foo); should immediately follow its function/variable
+> > 
+> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> > ---
+> >  include/linux/static_call.h | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/include/linux/static_call.h b/include/linux/static_call.h
+> > index 78a77a4ae0ea..b610afd1ed55 100644
+> > --- a/include/linux/static_call.h
+> > +++ b/include/linux/static_call.h
+> > @@ -216,6 +216,9 @@ extern long __static_call_return0(void);
+> >  #define EXPORT_STATIC_CALL_GPL(name)					\
+> >  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
+> >  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
+> > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
+> > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
+> > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
+> >  
+> >  /* Leave the key unexported, so modules can't change static call targets: */
+> >  #define EXPORT_STATIC_CALL_TRAMP(name)					\
+> > @@ -276,6 +279,9 @@ extern long __static_call_return0(void);
+> >  #define EXPORT_STATIC_CALL_GPL(name)					\
+> >  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
+> >  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
+> > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
+> > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
+> > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
+> >  
+> >  /* Leave the key unexported, so modules can't change static call targets: */
+> >  #define EXPORT_STATIC_CALL_TRAMP(name)					\
+> > @@ -346,6 +352,8 @@ static inline int static_call_text_reserved(void *start, void *end)
+> >  
+> >  #define EXPORT_STATIC_CALL(name)	EXPORT_SYMBOL(STATIC_CALL_KEY(name))
+> >  #define EXPORT_STATIC_CALL_GPL(name)	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name))
+> > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
+> > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods)
+> >  
+> >  #endif /* CONFIG_HAVE_STATIC_CALL */
+> 
+> Drat, I forgot about this.  Exporting static call trampolines for KVM came up in
+> another conversation[*].  I had already put together patches to effectively default
+> to exporting only the trampoline, and also to deduplicate this code so that the
+> CONFIG_HAVE_STATIC_CALL_INLINE=y / CONFIG_HAVE_STATIC_CALL=y / CONFIG_HAVE_STATIC_CALL=n
+> implementations don't need to copy+paste the same lines of code.
+> 
+> The attached patches touch a lot more code, and will conflict mightily with KVM
+> changes I want to land in 7.3 (more use of a static_call in KVM).  But if we get
+> them applied (to tip tree) shortly after 7.2-rc1 and provide a topic branch/tag,
+> then there shouldn't be too much juggling needed?
+> 
+> If we want to go with the more aggressive cleanup, I'll formally post the patches.
 
-I agree that this is a better approach. This can be another follow-up
-considering that this is an independent refactor and the size of the
-current set.
+*sigh*
 
->
-> ...
+So the patches build, but they aren't fully functional.  If kvm.ko is built as a
+module, trying to load a vendor module will fail due to the trampoline => key table
+only tracking built-in symbols.
+
+Given that all of this is KVM, and that it's far easier to export the static calls
+if and only if there are vendor modules, and only for those vendor modules, I'm
+going to drop the aggressive cleanup and abandon converting KVM's exports to only
+export trampolines, at least until someone else works up the motivation to add
+support for modules.
+
+> [*] https://lore.kernel.org/all/ahhoDGUz39KSGZ6o@google.com
