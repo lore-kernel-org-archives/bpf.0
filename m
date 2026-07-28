@@ -1,87 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799EC3CC7D8
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 07:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E8E3191D3;
+	Tue, 28 Jul 2026 07:37:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785223520; cv=none; b=PtO2oE03C2t+ihuQ850tpAkJAi/52T7w/CGBefD4zzXZTY7M2fBJHE6dk2YFo95sSWNInDF/dxerRpT4bWrAnhwOzCThPclDDZ1P3SSTJCHIOvun642djfQaxTTsYuhrF1ChNVU/51u/BN62rd/j5VRlU//+3ctBaE2Dz/bv6Ug=
+	t=1785224276; cv=none; b=CkBCrLHa8lTNY/SPkjsFYWbdRPblWEqcZ0t7yzozr6NsDd7hydjOPnTRemin1j+V4jMemnf9ceDthszGcUCXiTY93wWw/yqWEFRLioddEYFIpRMC7xpcFG9EWjTcVs6Hz/qFzuC82t+ptJykgkxc3x2cZ/52TGHJbwxCmb4P+vY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785223520; c=relaxed/simple;
-	bh=Lo9XjO3DU9UfMUQ1481XgkhhMQZJ6hWV5TCFqNss5nw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=oBlV3U4oUwuFne7dSoHpjD5qZwoRmlTe+Aib+XBUlzFrInwb40O2Ujexgk4RtXELOD4McvGoVgAQHPtnSIjDYKQfFvI+JIpxB5qyuFe8KphizVZGV8XmnZD6zShZk0zpaHoKuGkC+pxyPdcjCEkDgd2n7gYBKHbxhqOn95X3eFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJHucTEO; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJHucTEO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118D11F000E9;
-	Tue, 28 Jul 2026 07:25:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785223519;
-	bh=VmoJjxPw0tgVnM0ctb80tj3GEAY5ICT3m4IDJ7kWAzs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QJHucTEOdD158jdxgSjw3nu6pg+/Gid0VJgv++bMo0T0d0/fx3im4VhzCIB3UwMr4
-	 +53HF6pZmlsIr03NTLNYck9Ho3+/Fa4buRE5wH6XyQVio1eXmfsKMvzs2P+/OpWNKq
-	 SJryHoFZj2NRtQVIhxhlDMi4OCjPLdQncbpZ1j3zH9M5FXOi8x0yTL3L56S0xYyN4D
-	 2R/IZA70J+kJGxR+amOCGUOLI34wWjL9foii2+Vuxc657NTwSveTxdwHBMBG0NGnMf
-	 NeDWJxRvMj/mSmwpni0Tip2a1sjZdTyKx/imzAL5mPSwl05Ce4IuRW/4TuUdxcfhFI
-	 8vQOWCYxof2MA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] libbpf: don't preserve ownership during install
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Martin Kaiser" <martin@kaiser.cx>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260728071516.2706695-1-martin@kaiser.cx>
-References: <20260728071516.2706695-1-martin@kaiser.cx>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Jul 2026 07:25:17 +0000
-Message-Id: <20260728072519.118D11F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1785224276; c=relaxed/simple;
+	bh=3ne188fbzYrohrPMPCMgrOtWBZZQ5DhvqiSgEIs5lVk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rlB4PhtXiLZ/ltYv0I/OeZ6RRW8p6UWDA0qS6wkqAligeQt1CfwSxhtXm/j66Y+JMd7IC5pwWipIEIyxLsJ3Nxw9K8vJwfT68zmGhOHvZzEwKrpyxEfp9Ov7A6+C3j8oftu56FEKOPgjDskD1nJDWlCg70AogjgExTETESG6Oos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h8S393JL2zYQtvx;
+	Tue, 28 Jul 2026 15:37:09 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 6BBEB40570;
+	Tue, 28 Jul 2026 15:37:48 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBHN0ZLXGhqmhDtAA--.47842S2;
+	Tue, 28 Jul 2026 15:37:48 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf v4] bpf: Fix UAF when reading prog type in bpf_mprog_link
+Date: Tue, 28 Jul 2026 07:42:23 +0000
+Message-Id: <20260728074223.2831773-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgBHN0ZLXGhqmhDtAA--.47842S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCFyUtr4DAw1rtF17uF1Dtrb_yoWrGFWUpF
+	s3J34kGw1jgrW2qw48Zry7ury5uF48Kw17Gas8uw4F9FnI9FyFvryxWr4rZr1rGrWqga93
+	XF1qqFyvk34DZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
+	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+	zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+	CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+	nIWIevJa73UjIFyTuYvjfUonmRUUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The use of the GNU-specific `cp --preserve` extension breaks `ma=
-ke install` on platforms with BSD or BusyBox `cp` implementations (e.g., ma=
-cOS, FreeBSD, Alpine).
---
+From: Pu Lehui <pulehui@huawei.com>
 
---- Patch [1]: [PATCH] libbpf: don't preserve ownership during install ---
-commit 20b6f948388a1067581300a57d47fc33d1950c11
-Author: Martin Kaiser <martin@kaiser.cx>
+In bpf_mprog_link, the code currently allows a user to pass an abnormal
+non-netkit or non-tcx link via relative_fd. If a concurrent
+BPF_LINK_UPDATE is performed on this abnormal link before dereferencing
+link->prog->type in bpf_mprog_link(), it can trigger a UAF issue.
 
-libbpf: don't preserve ownership during install
+CPU0                                      CPU1
+netkit_link_prog_attach
+bpf_mprog_attach
+bpf_mprog_tuple_relative
+bpf_mprog_link
+  /* non-netkit or non-tcx link */
+  link = bpf_link_get_from_fd(id_or_fd);
+                                          BPF_LINK_UPDATE on relative link
+                                          ...
+                                          old_prog = xchg(&link->link.prog, new_prog);
+                                          bpf_prog_put(old_prog);
+  if (type && link->prog->type != type) <-- trigger UAF
 
-This commit modifies the libbpf install_lib target in the Makefile to
-prevent leaking the source tree owner's UID into the root filesystem. It
-replaces the cp -p flag with the --preserve=3Dmode,timestamps flag to only
-preserve specific file attributes during installation.
+The reason for the UAF is that each subsystem provides its own
+protection for link->prog. Since there is no cross subsystem protection
+(if not considering the RCU of prog tear down), dereferencing the prog
+of an anchor link that does not belong to the current subsystem is not
+safe: it may have been freed.
 
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -231,7 +231,7 @@ endef
->  install_lib: all_cmd
->  	$(call QUIET_INSTALL, $(LIB_TARGET)) \
->  		$(call do_install_mkdir,$(libdir_SQ)); \
-> -		cp -fpR $(LIB_FILE) $(DESTDIR)$(libdir_SQ)
-> +		cp -fR --preserve=3Dmode,timestamps $(LIB_FILE) $(DESTDIR)$(libdir_SQ)
+To resolve this, we access link->prog under RCU protection to safely
+fetch the pointer and guarantee its lifetime during the type check.
+Meanwhile, add a comment explaining that when ptype == UNSPEC in
+bpf_mprog_detach, it acts as a wildcard.
 
-[Severity: Medium]
-Will this break the installation process on platforms that do not use GNU
-coreutils?
+Fixes: 053c8e1f235d ("bpf: Add generic attach/detach/query API for multi-progs")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+v4:
+- Access prog->type under rcu protection to simplify the repair logic,
+  and let unconditional detachment make sense when the bare prog or
+  link->prog being detached is NULL.
+- Add Reviewed-by tag by Emil.
+- Separate from patchset [0]. (Andrii)
 
-The --preserve argument is a GNU-specific extension. It appears this might
-cause the make install target to fail with an unrecognized option error on
-systems relying on BSD or BusyBox implementations of cp, such as macOS,
-FreeBSD, or Alpine Linux.
+Link: https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@huaweicloud.com [0]
 
-[ ... ]
+v3: https://lore.kernel.org/bpf/20260722072326.1545677-3-pulehui@huaweicloud.com
+- BPF_F_LINK flag set means the relative id_or_fd is a link, not the object being
+  attached. We can not get the link while attach a bare prog with relative link.
+  So passing expected link type from callers of bpf_mprog_attach/detach. (Sashiko)
+- Add comment to explain that why ptype == UNSPEC. (Emil)
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728071516.2706=
-695-1-martin@kaiser.cx?part=3D1
+v2: https://lore.kernel.org/bpf/20260721041048.1394085-3-pulehui@huaweicloud.com
+- Improve commit msg for patch 2. (Amery)
+
+v1: https://lore.kernel.org/bpf/20260720134547.1289964-3-pulehui@huaweicloud.com
+
+ kernel/bpf/mprog.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
+index 1394168062e8..af3e6c1c6a1f 100644
+--- a/kernel/bpf/mprog.c
++++ b/kernel/bpf/mprog.c
+@@ -10,6 +10,8 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
+ {
+ 	struct bpf_link *link = ERR_PTR(-EINVAL);
+ 	bool id = flags & BPF_F_ID;
++	bool type_mismatch = false;
++	struct bpf_prog *prog;
+ 
+ 	if (id)
+ 		link = bpf_link_by_id(id_or_fd);
+@@ -17,13 +19,20 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
+ 		link = bpf_link_get_from_fd(id_or_fd);
+ 	if (IS_ERR(link))
+ 		return PTR_ERR(link);
+-	if (type && link->prog->type != type) {
++
++	rcu_read_lock();
++	prog = READ_ONCE(link->prog);
++	if (!prog || (type && prog->type != type))
++		type_mismatch = true;
++	rcu_read_unlock();
++
++	if (type_mismatch) {
+ 		bpf_link_put(link);
+ 		return -EINVAL;
+ 	}
+ 
+ 	tuple->link = link;
+-	tuple->prog = link->prog;
++	tuple->prog = prog;
+ 	return 0;
+ }
+ 
+@@ -343,8 +352,8 @@ int bpf_mprog_detach(struct bpf_mprog_entry *entry,
+ 	if (!bpf_mprog_total(entry))
+ 		return -ENOENT;
+ 	ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd, flags,
+-				       prog ? prog->type :
+-				       BPF_PROG_TYPE_UNSPEC);
++				       /* Use UNSPEC as wildcard when prog is NULL */
++				       prog ? prog->type : BPF_PROG_TYPE_UNSPEC);
+ 	if (ret)
+ 		return ret;
+ 	if (dtuple.prog) {
+-- 
+2.34.1
+
