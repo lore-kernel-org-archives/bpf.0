@@ -1,143 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB2F3AE1A9
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 13:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671863AA507;
+	Tue, 28 Jul 2026 13:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785245842; cv=none; b=GbfOGn+nfWdTYn/fLPekbRn7jlcn6F8MuWC9Aa2R4X16FRI+1/1ybohHx5vUOF2Ho4Ne9eGmR7HLgPa1+67+gVzOXP2UahisyZgl4hus/xdm6sFP9AvcDK72kXObvhJT9nVbcoeAJXSAfQHNNUk1R9uK4Q4bE2TgPWqoLa8fItg=
+	t=1785246045; cv=none; b=NEyt4w0FH5hG/W5JCfeYm1iCzBxnlATcgXFVGzEqaxMMMkdeJhulWGqjxlXcuYJxx582vwmHZroUQRlWFwHALn/16KHczSBH3+J72N9nrueZInLewEnGlq9Po6Ke8NBKRgVsRzv9mswgZzhpNmk5Qlr0NX8vZLIcFhUtldSJm6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785245842; c=relaxed/simple;
-	bh=OsQS28snu694awNh5VfXkbyD/mvcAViP1XZYcEH371M=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=D60bLklGFgDLR8eRdxFebW/RiDlwFuxcJp8d8JMMwfc/N6wPTsDstVaR1tldap1FoO2A/CFm/vCk0AFJxNZVyiXsnzetPkiadX+uuKm8zFDyq9v0TpJCKpQnFWKt2vU16xFkpkXlvArNYgkIdomtRtzy2TzjloY4PPK1UXhMS8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JVFfPtKD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785246045; c=relaxed/simple;
+	bh=IsGDfwRBulAR9qotrG5Vf4d8u50Ui+66Ni3KSCVs0K0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=MZrcGuffShwfNatdcADMKYnSvThm7dmiuYc7gCe1oJ4z/gxv/YIGlIeEQdzykGJCkMOiDzbk8pLWUE22V7wWrBs+41DODZ3ymiJkll36ukSYeuiF2DYUHHhl6kOJDkboa+eGjKVH65ThCnmFG3CeG4XN6XrAn5uBcD+0pab2350=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhKjPSeL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JVFfPtKD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFAFA1F00A3A;
-	Tue, 28 Jul 2026 13:37:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhKjPSeL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F42171F000E9;
+	Tue, 28 Jul 2026 13:40:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785245839;
-	bh=MYkIICDsqoFAls1+GQXDhi+xxDvrTVTI6+Bacg9pFIE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JVFfPtKDK5oizezPY4iQYB9jwWn5TxSr44SN4gMRa5PJAH+NBiE6xehA7BO2xBQIh
-	 s+2MA+VkMmWIFvfHNJ2oTNMi+z6S68mkwz3IprB66yqHFeDS3WG1NC2ozAlbLsG9BY
-	 CyqxUzF0c9jCt1KAaqZIul6y3DopDimp+4PwZFNf04yncEvzUT8yE8LOQxfY8euzkv
-	 EheHbhsjKHDOFnSfsg+y+3PsIWPBGqk2rUXEzfeIhZ0PpWueGiYyrYMBNHahM/d5H7
-	 NmoUxLkJTbg60hlqgxydaedBGoFC4rbf6gbASbLIO7mjgUdeQnPdSa+Kapp0b6a/iE
-	 sYttJrytZGJqQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf, cgroup: Fix potential UAF in
- __cgroup_bpf_attach
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pu Lehui" <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260728132336.2857800-1-pulehui@huaweicloud.com>
-References: <20260728132336.2857800-1-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Jul 2026 13:37:18 +0000
-Message-Id: <20260728133718.DFAFA1F00A3A@smtp.kernel.org>
+	s=k20260515; t=1785246044;
+	bh=vOOA4bOpleOp7twfypjugdtV7HCW0d5c8RCs1tu6pKk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=fhKjPSeLzdCi+5ypi1kBW2yvHXH7ovaBl9TSqZwPGyTIMVceNuqz3K68rwIiHFiq2
+	 T/Rd46oU9JcSS4ZftudQKeTBKoWU6d35PEtzaJigRjT1WsY7ZW+dhBThvyJ3zAnWZW
+	 z5C7wa6cQ36UrcQU2Ze3w5cWtw7X6hYn+rsQTjKlmEinuK1QLKum9Y577UdO15qam8
+	 5/28JXm7tD5Pu8WOdt4iMwl8NX8Hn3aFfDD7ewHhHeeOPMM/ZM6yH8JgZbN+woMXiw
+	 R62KS/ifQnK6BBEbL8aRq9RHD+vIuiddpN4jjsF0t5pbN5w4if4UWMyKMMBhjz1+6m
+	 xybNdPQgsZ/fg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1990F380DBDB;
+	Tue, 28 Jul 2026 13:40:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/2] XDP metadata support for DQ RDA
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178524600877.1734420.2380713505253103942.git-patchwork-notify@kernel.org>
+Date: Tue, 28 Jul 2026 13:40:08 +0000
+References: <20260722221634.186886-1-joshwash@google.com>
+In-Reply-To: <20260722221634.186886-1-joshwash@google.com>
+To: Joshua Washington <joshwash@google.com>
+Cc: netdev@vger.kernel.org, hramamurthy@google.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, jordanrhee@google.com,
+ thostet@google.com, nktgrg@google.com, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Hello:
 
-Pre-existing issues:
-- [High] Replacing a `bpf_link` in single-attach mode leaks the old link, i=
-mbalances the static key, and causes cross-destruction of the new attachmen=
-t when the old link is closed.
---
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
---- Patch [1]: [PATCH bpf] bpf, cgroup: Fix potential UAF in __cgroup_bpf_a=
-ttach ---
-commit b6405e259cc6a35d8ca8d34002993bcc191a22c5
-Author: Pu Lehui <pulehui@huawei.com>
+On Wed, 22 Jul 2026 15:16:32 -0700 you wrote:
+> This small series enables XDP metadata support in DQ RDA mode. While
+> space is reserved in the headroom for metadata and the DQ queue format
+> supports the xmo_rx_timestamp metadata operation, support for adjusting
+> the metadata and passing metadata along to SKBs was not actually
+> implemented.
+> 
+> v3:
+>   - Make use of xdp_build_skb methods to implicitly pass on metadata
+>     when constructing SKBs from XDP buffs.
+>   - v2: https://lore.kernel.org/netdev/20260318192450.3400774-1-joshwash@google.com/
+> v2:
+>   - Fix referenced commit hash
+>   - v1: https://lore.kernel.org/netdev/20260316230434.1398828-1-joshwash@google.com/
+> 
+> [...]
 
-bpf, cgroup: Fix potential UAF in __cgroup_bpf_attach
-   =20
-When replacing an existing bpf_link in single-attach case in
-__cgroup_bpf_attach, old_prog is NULL while old_link holds the active
-link. This patch fixes an issue where the cleanup path wrongly treated
-the existing entry as newly allocated, properly restoring state on error.
+Here is the summary with links:
+  - [net-next,v3,1/2] gve: use xdp_build_skb methods for XDP_PASS case
+    https://git.kernel.org/netdev/net-next/c/114928723411
+  - [net-next,v3,2/2] gve: add XDP metadata support for DQ RDA
+    https://git.kernel.org/netdev/net-next/c/871657dc6996
 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 4355ccb78a9c6..1c070ae7bf170 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-[ ... ]
 
-> @@ -865,6 +868,9 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
-> =20
->  	if (pl) {
->  		old_prog =3D pl->prog;
-> +		old_link =3D pl->link;
-> +		old_pl_flags =3D pl->flags;
-> +		bpf_cgroup_storages_assign(old_storage, pl->storage);
->  	} else {
->  		pl =3D kmalloc_obj(*pl);
->  		if (!pl) {
-
-[ ... ]
-
-> @@ -912,15 +919,18 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->  		bpf_trampoline_unlink_cgroup_shim(new_prog);
-> =20
->  cleanup:
-> -	if (old_prog) {
-> +	if (old_prog || old_link) {
-
-[Severity: High]
-This is a pre-existing issue, but since we are properly handling old_link
-in the error path here, should we also address it in the success path?
-
-If old_prog is NULL (which happens when replacing a bpf_link in
-single-attach mode), the success path right above this cleanup label does
-the following:
-
-	if (old_prog) {
-		if (type =3D=3D BPF_LSM_CGROUP)
-			bpf_trampoline_unlink_cgroup_shim(old_prog);
-		bpf_prog_put(old_prog);
-	} else {
-		static_branch_inc(&cgroup_bpf_enabled_key[atype]);
-	}
-
-Since old_prog is NULL, this takes the else branch and incorrectly
-increments the static key, while completely leaking old_link.
-
-When the leaked old_link's file descriptor is eventually closed,
-bpf_cgroup_link_release() will call:
-
-	WARN_ON(__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
-				    link->attach_type, 0));
-
-In single-attach mode, this blindly detaches the active entry (which is
-now the newly attached program or link). This unexpected detachment could
-corrupt the cgroup BPF state and lead to a use-after-free of the new
-program.
-
->  		pl->prog =3D old_prog;
-> -		pl->link =3D NULL;
-> +		pl->link =3D old_link;
-> +		pl->flags =3D old_pl_flags;
-> +		bpf_cgroup_storages_assign(pl->storage, old_storage);
->  	}
->  	bpf_cgroup_storages_free(new_storage);
-> -	if (!old_prog) {
-> +	if (!old_prog && !old_link) {
->  		hlist_del(&pl->node);
->  		kfree(pl);
->  	}
-> +	cgrp->bpf.flags[atype] =3D old_flags;
->  	return err;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728132336.2857=
-800-1-pulehui@huaweicloud.com?part=3D1
