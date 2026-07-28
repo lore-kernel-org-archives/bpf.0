@@ -1,173 +1,141 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D22EF507
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 00:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785197774; cv=pass; b=Ap0sfdPkzYyvGi7UJYXvONFYgq95PGG2iZO+3FF/vjwrlhwUdNkZxb1kPN1eMPPDZM12gQwU3M5JDziGM3dVuTLA5eIcYBmnGDFa5LdeaQMn63h9G5nUKMUoeJrshiiltLda34xJI+Vbimiv+5lD3/3/wJ97OXtzB7aqafxUmFM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785197774; c=relaxed/simple;
-	bh=OPu1jj4LH496RB6yNAmXtndHYPm9Xz1mG8QeRUqkG/Y=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025F111CAF
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 00:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785197968; cv=none; b=ZoTUvCOQCHVCq2/zIxcDxIdXR+yOdfZ3U+vgompxwlhUP/cFlUbysyfRka0y6mQuKSaE73tWoaSQgrfAxQrQZm+IBsu4s+KK9LLtEKmXWlipLRqQoFAlmRtpothkaOph57WZ0Zo/yBmm2MF6f24+8XoxHg6xkd9ZFWtQDk0ztZw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785197968; c=relaxed/simple;
+	bh=qyEXwFI4gcKK6jW9Za99H/FNFPDYPuYWj9DOEKLJSmA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c4v6Rgj3pGsNV5KK5OoajuHovtGpl4A/sCxG869bHEKcM2MCRy2fCyw7T/znX7mM9joYw081ISluZv6orx7ZeHH5nS9NP65s7exFb+X37CpTho4JqHdTOVJLSnTVa5kfQhTiR0nTpyFEWzDEn6KixUOv/Uyn/qyfKu0duAuyB9M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rrD67ZVp; arc=pass smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=azt668KPYAxv5hE1tSrNno7Uih1ZxNcSLU0LTMmyaf/S3tUw14SXMikn99CwSSk6WSgEbE7Kk0hD05bljjHONwlR2nnhF0ruuwE7T/Hl3dtcy6GJ+l/ao7/9IETQ6Q805ilH3q+E/fB/1qgc7qylAXhw6Jf8aNFsjlqU41p0lCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kTHMqoxA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rrD67ZVp"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84a652535dcso2010280b3a.3
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 17:16:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785197773; cv=none;
-        d=google.com; s=arc-20260327;
-        b=BNx+QBMJ7umzqDAAB91LwF2ArXNuFfFMQiCUXk4wj+BLZUV7wYNeIXFphv9/rGbJ5/
-         n+ArDTG6vQ+XsMIRWCENxK0CNGQIhUTS5ACdaIblWgBNUaV1/B5ELkfuxFZ6srpVLQ+0
-         Iew3hO+74wXUrjQWm1KuzPE/TLzbtV79IVQehMQe+uMh4HEpZe8/qjf/qUu7zrYfbSb8
-         lvS7Wo5mWCCmqe0A3npvytHBuA6vv3QG4L9yprZSU2QM/oAUyuxeLYelL7Ee/EUjnF8c
-         5XHFqBFm6pEsVMa0AMktuEaLK+T8kIpU4JQp72qG+bUjrU62QLwKaHXDtKB6fTxqTqXY
-         2Ogw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=cRCUSaQuCFO40hxAqe3Dt0s7qWWyhF8IkCY02drnYGc=;
-        fh=+QC29UjC2J+GJN3V1xCqyq3vUDVqtmteUbv12xBmqXM=;
-        b=YyY4eek7Hm7pwdTZ31tx3tKvYn5ooB11QyEEHmh7lkLRFY3lGkut1emYGQGlctB+A8
-         KUVn6O11y4fFr+Ept80opLHjP1G06Vn/SQlWJIq6hI6q9A275jipZ8gYtuAjwKD6eIZW
-         /fRJIugfLNpYRvnViZIB4eBv5Or0lo6k6pKt46QgT6gcZRLhOhT4tiXZstFM2QOci+yp
-         JRb4y9DTT0yT0it77z428+2zAy+Jjif0mcNiTyXgZBgUDVIEhLEVw2s7XkqMJk2SJumu
-         3FeNmV0/tEl/PmLTKudG2tWP4wUltf/zaCja92rynTLJEJqYnI0D05L8uhyaXUQpwYri
-         62LQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785197773; x=1785802573; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=cRCUSaQuCFO40hxAqe3Dt0s7qWWyhF8IkCY02drnYGc=;
-        b=rrD67ZVpZ2u+R+kw5hX4QkFxQ8D7C2o74r9u5p1dgG3c+QsLNVOYaiajOcwt93UX5a
-         9RLFLiGDB3eVd9OI1geFzJR4DaRluoQEHAJUuJ5xS4pafuUn/K+3k5tREIsNRx4duZ8X
-         vDmM8E87UAVy4Ta/3b3LPsP2a4V3qlsFGcjstJWEisFOGOKqmA5YRIxi+4mQKS6yBKzZ
-         kAAbjeMVDSI7YP5U6SzEhOmriyyTZafhNAjQqI8lQ/+3+fenKnI5b9wUBsI7Iaw2SEbF
-         FlHlBbCBKTBIEWPF9+w/qACN2yRlx6inBzSEM/6/AQH3Y8QRyYM7ElyMpf0p8j/3oGP8
-         c8GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785197773; x=1785802573;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=cRCUSaQuCFO40hxAqe3Dt0s7qWWyhF8IkCY02drnYGc=;
-        b=Lzv+TQZ+br/zVo5FyRPxwqBdqKZESDsEQLzPxz9nNIaa9xl/FFPFrvituVvAUCTKOO
-         lI03Gj2QIcdrvELZ9Cs/HC1EYW0pIAcEpC5baVLzgCJRr+nsdVIgcrZuqREfaxmdYsON
-         gtut+pJsrUN8+uTdv/pY+JJGSl96jQaKHZTcziziIqpwuMsYjAfelP/4G4tQfwCii8ez
-         IHVezeBG4LaWoFzOQA8bDNbvdk6mq2tQMW7FhrBd0zNPAkW4RFqmKUE2mie/4UATbKBY
-         UpZmta9Od3EwXu9PI12++qqLnN+0VXdGl7rxi13RHtCvIxNCsgPkc++eXe7sWd3o88aB
-         iwCg==
-X-Gm-Message-State: AOJu0YzV/EyyOJg4oTiO+LV328AEpViKxziynUskehmdiknuD5euym1X
-	URPIEemD6u9BSunyjj02D4WtkB4JA8HKT8uOBrRzdlzBoD5bSIc8ZHNPWImZScN/JfXJmfDc57O
-	poIiKUxV0K6BVU5Ye9BU+HxH7Hby0+l493H2H0Q8=
-X-Gm-Gg: AR+sD12pB2nVfxgxUkhDf5WwebtnBJTNrgSjUfqfGFtlcjpZyPENr4mgksMO35kkgKE
-	Ou355DixGePwV+wlzbt4mV8IOQw4brjNnwonOFNkAaU21YJ9+qP25DoOR4rzLPSKr9sszEyJgPh
-	DBs6euZritp5iQcTOgzqFbbpNlzsDkPDhE84rroHSIVWrTnWU3ma0NE/asXIbhh8tIpuusaOqvn
-	XHjxiq4PPEb4GBIt88Wzp4Aq38Dtic2mhGvcVRi2iZLA+2M+/V0oM6lDWilKPO9y7pTjjaQsKkz
-	sOj2zNYi2PmVYWtN1mNAVmNc856LSF63zuf5K26L+2DiiVUrm+P0TSMcsg==
-X-Received: by 2002:a05:6a00:ace:b0:847:86b0:888c with SMTP id
- d2e1a72fcca58-84e932eb87bmr78649b3a.48.1785197772833; Mon, 27 Jul 2026
- 17:16:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kTHMqoxA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76AEF1F00A3A
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 00:19:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785197966;
+	bh=qMOdn+I1/gZ8oLSmo4cehJXjB+C0akcp+HdheIDNmYE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=kTHMqoxANv0veYNgyAM8UJchiiZW8EmfXVTWImUcEkNCm0tnhbGTB4AQrg5/ktqv+
+	 hbL4l/qN/5aYJCJgIYWR6PbjjHOscROlTbpMRF/Mz0GlGEjdwjg8PNLZhMumIt1N8N
+	 7tp4v54gUb0v4jkKMF9UrvHCb8Bf2voSSAiSo6TNUDpo2k+1r3YLbI+iuoZZJDfjOW
+	 7fbf5Yu9ugsQLFK/SyUC75kLhHmuSTmcyssaSGicFRrLM/AQh6/q6AooDtX8OMgiHl
+	 HdRmWHE9BSTnmaP8Wm10wFercAdpEi1bOTqTmSfXqa2cqGxhChoMdLJ7XZ/5W0WP9d
+	 GDXj0mD6PYVCg==
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-92edb12cdf2so212001285a.3
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 17:19:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RqzqBtAkqzQY/kwU1rjxswDFOXV6hWmGc7dqbPvB8f4hZNDawChSGYOKalsDfg3rDlFLcE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDg35k5KP/h2J1VVDxVUqoTC2yv8COwTu1n4kVvK7tuWQIJeiv
+	lH23177Cf8+zVhZRoMvpgcrDcig4AjQ8RqG9viaLsAMehVa7AdWJj7CXnuKuVsm3Zjpyocvh1m6
+	6qfzFODnlKvrV5UkB0DiVhe/9DkpE5lM=
+X-Received: by 2002:a05:620a:6cc1:b0:92a:1b20:fe0c with SMTP id
+ af79cd13be357-93302640d80mr12977085a.17.1785197965665; Mon, 27 Jul 2026
+ 17:19:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <178478913040.2.14225985431891987705@digiscrypt.com>
-In-Reply-To: <178478913040.2.14225985431891987705@digiscrypt.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 27 Jul 2026 17:15:58 -0700
-X-Gm-Features: AUfX_mzTyzilfuSXShWJIHugLuRSBwgEnUJ_XMwXagN1X9AA1d8lZBtmHGE6jF4
-Message-ID: <CAEf4BzZAebRDpruMitXanyavq+kJs_nG-2Bypg0eJgSP3q12EA@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: bounds-check struct_ops member offset before
- writing shadow pointer
-To: Naveed Khan <naveed@digiscrypt.com>
-Cc: bpf@vger.kernel.org
+References: <20260722065308.4116186-1-song@kernel.org> <20260722065308.4116186-3-song@kernel.org>
+ <amJhnbom_expRgN2@krava> <CAPhsuW4NKdRmFxsmLoAYKV60NuKoRO-3NKqHAucaXPyFKk4BMw@mail.gmail.com>
+ <amMoJnZUF5flJazb@krava> <CAPhsuW5bhv+CktsvnhEy97KA4oQY1dZfnGkzgKdAZTk77Pe90g@mail.gmail.com>
+ <DK79S0WM9AYK.162USUO6EB2ZA@gmail.com>
+In-Reply-To: <DK79S0WM9AYK.162USUO6EB2ZA@gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Mon, 27 Jul 2026 17:19:13 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5Zf7ufT2iiyQWBdG_7JOuJMJqwf+jHbumMRVPqFGn7pQ@mail.gmail.com>
+X-Gm-Features: AUfX_mwxB-28nxMPs6VKF-hr1qlebpNCBPgapHBKNbaiQ70Q6cf5SkJ8LK2mqVc
+Message-ID: <CAPhsuW5Zf7ufT2iiyQWBdG_7JOuJMJqwf+jHbumMRVPqFGn7pQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add mmap/munmap benchmark for
+ array maps
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 22, 2026 at 11:49=E2=80=AFPM Naveed Khan <naveed@digiscrypt.com=
-> wrote:
+On Fri, Jul 24, 2026 at 6:43=E2=80=AFPM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
 >
-> bpf_object__collect_st_ops_relos() replaces each function pointer in a
-> struct_ops value with a pointer to the corresponding struct bpf_program
-> in the map's shadow data:
+> On Sat Jul 25, 2026 at 2:13 AM CEST, Song Liu wrote:
+> > On Fri, Jul 24, 2026 at 1:54=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> =
+wrote:
+> > [...]
+> >> > If we add a read per page, which is the worst case:
+> >> >
+> >> > before:
+> >> >         nr_threads: 1, map_size: 1048576
+> >> > arraymap-mmap:       throughput: 0.032 =C2=B1 0.000 M ops/s, latency=
+: 31248.846 ns/op
+> >> >
+> >> >         nr_threads: 1, map_size: 8388608
+> >> > arraymap-mmap:       throughput: 0.003 =C2=B1 0.000 M ops/s, latency=
+:
+> >> > 372565.622 ns/op
+> >> >
+> >> >         nr_threads: 1, map_size: 67108864
+> >> > arraymap-mmap:       throughput: 0.000 =C2=B1 0.000 M ops/s, latency=
+:
+> >> > 2061083.005 ns/op
+> >> >
+> >> > after:
+> >> >         nr_threads: 1, map_size: 1048576
+> >> > arraymap-mmap:       throughput: 0.006 =C2=B1 0.000 M ops/s, latency=
+:
+> >> > 170794.193 ns/op
+> >> >
+> >> >         nr_threads: 1, map_size: 8388608
+> >> > arraymap-mmap:       throughput: 0.001 =C2=B1 0.000 M ops/s, latency=
+:
+> >> > 1346389.229 ns/op
+> >> >
+> >> >         nr_threads: 1, map_size: 67108864
+> >> > arraymap-mmap:       throughput: 0.000 =C2=B1 0.000 M ops/s, latency=
+:
+> >> > 10700389.105 ns/op
+> >> >
+> >> > So filling all the pages in the mmap is faster than faulting one pag=
+e at a time
+> >> > in many page faults. IOW, there is a performance regression in this =
+case.
+> >>
+> >> would it make sense to add new map flag for that?
+> >
+> > If possible, I would avoid adding a new flag for this. I think the
+> > regression is on a very special corner case. BPF arena has
+> > similar behavior (fill in page table on fault). So it should be OK
+> > to have array map do the same. WDYT?
+> >
 >
->         *((struct bpf_program **)(st_ops->data + moff)) =3D prog;
+> I think it would make sense to compare cumulative cost of mmap+read-every=
+-page.
+> I am sure it would also be lower before this change, due to the added con=
+text
+> switches for fault on every page access that would be amortized before th=
+is, but
+> may give a better picture about the difference.
 >
-> st_ops->data is allocated with malloc(type->size), so it is exactly
-> map->def.value_size bytes long, and moff is the byte offset of the
-> member being relocated. The only bound placed on moff comes from
-> find_struct_ops_map_by_offset():
->
->         offset - map->sec_offset < map->def.value_size
->
-> so moff can be as large as value_size - 1. The store above is
-> sizeof(struct bpf_program *) bytes wide, and nothing checks that
-> moff + sizeof(struct bpf_program *) stays within value_size.
->
-> libbpf's BTF sanity check does not validate that a struct member's
-> offset plus its size fits within the struct's declared size (see
-> btf_validate_type()), and this relocation runs at bpf_object__open()
-> time, before the kernel validates the struct_ops type. A crafted object
-> with a struct_ops struct whose declared size is small (e.g. 1) but which
-> contains a function-pointer member near the end of (or beyond) that size
-> therefore makes libbpf write up to sizeof(void *) - 1 bytes past the heap
-> allocation - a controlled heap out-of-bounds write reachable purely from
-> opening an untrusted object file.
->
-> Reject such relocations by requiring the whole pointer store to fit
-> within the map value.
->
-> Signed-off-by: Naveed Khan <naveed@digiscrypt.com>
-> ---
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 1368752aa1..1aa2a1d098 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -10529,6 +10529,17 @@ static int bpf_object__collect_st_ops_relos(stru=
-ct bpf_object *obj,
->                         return -EINVAL;
->                 }
->
-> +               /* the shadow pointer stored below is sizeof(struct bpf_p=
-rogram *)
-> +                * bytes wide, so the whole write must fit within st_ops-=
->data,
-> +                * which is only map->def.value_size bytes long. A malfor=
-med BTF
-> +                * can place a member near the end of the value and overf=
-low it.
-> +                */
-> +               if (moff + sizeof(struct bpf_program *) > map->def.value_=
-size) {
-> +                       pr_warn("struct_ops reloc %s: member %s at moff %=
-u overflows map value size %u\n",
-> +                               map->name, name, moff, map->def.value_siz=
-e);
-> +                       return -EINVAL;
-> +               }
-> +
+> I do feel like it's a corner case realistically, and after the first faul=
+t the
+> page remains mapped (and users who care about pages being present can go =
+the
+> route of passing MAP_POPULATE). I am assuming passing that before was a n=
+oop, so
+> it can be added to code in a backwards compatible fashion if someone real=
+ly
+> depends on this?
 
-libbpf doesn't not protect against maliciously crafted ELF, BTF, etc.
-If you don't trust the source of the BPF object file and/or can't
-tolerate process crashing, don't open an untrusted object file.
+Given there is MAP_POPULATE flag, yes, the user can preserve the old
+behavior with this flag. While this requires users to make changes for
+this corner case, I think it is still cleaner than adding a BPF map flag
+for this. If there are no strong objections, I will keep this behavior in v=
+3.
 
-pw-bot: cr
-
-
->                 prog =3D find_prog_by_sec_insn(obj, shdr_idx, insn_idx);
->                 if (!prog) {
->                         pr_warn("struct_ops reloc %s: cannot find prog at=
- shdr_idx %u to relocate func ptr %s\n",
-> --
-> 2.52.0
->
+Thanks,
+Song
