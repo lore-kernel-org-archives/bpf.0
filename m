@@ -1,214 +1,235 @@
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8659A2F25F3;
-	Tue, 28 Jul 2026 02:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A995309EF9
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 03:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785207065; cv=none; b=ujByDDiyV6wSCInA0RKgjYjiJMiGIi23cJX8KvH1H3dUrBJy0Jf1cU/tIl4jVr/fukNbt2FDTiiiED4CfabyEqjEZoPB5J4HQSNpgvfZVeIV2nMtKiNdsCe+Sog7OHxeB+mhurUMYf58f4otui1+I4yW4bNoA7mX8L7uC/9eMKc=
+	t=1785207703; cv=none; b=gch13xXuoXBx3tdLRbgt3EUJ/cfW5PB51ncnWgbagmzkzwvUwRgTW+pj6g2Pqm4z/AuaoQXwxPmsWxYlUVD3zi0ckDtjcghzZUAT7GoH+XUoFP1FmzAX4vurcWZEN+5WRSEdSAq3z7Vzj13btnaFDQKfWYsFihAcYWhhA5gcVUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785207065; c=relaxed/simple;
-	bh=W0BDYtxuDDdRLOUW+Dp+LxIodUKthKlk9kd+76vX//M=;
+	s=arc-20240116; t=1785207703; c=relaxed/simple;
+	bh=SWF3Xg76/jG3GjuNhXbOTWuiv/NKpcBduP7nweZEe68=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QUcqIYfPbdHCcNRk6/4f2NZyN15yNR3LI799FhKywPAutVD4b+/QeJTdNmo6F+wFgzyBb/c6aVuIyFz4iU8SgIDM+S94KLW1O8ACt6jILyWeZcPMWOsRJHm7oBHirewWiVjbkCqIO7KORWFp7DRQWi57B9wS1Dhshe3T+hPOeUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=Mk9Vmt20; arc=none smtp.client-ip=162.62.57.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	 In-Reply-To:Content-Type; b=jYzc0Cvea4Tun8v9TWKXuQA6i2gK89bIQYpKFXuqfWgVjVrQPzn5FEXdf/2h8OuY4v82GS/l8vXvzNg7a+upYnB5tWI19k00/mWmJUDXi5yuYoXw/4ue+rdtk1cm5wjgRKCAgKyDHbP7o0lglnAJ/EIhWiB0Rw8JiGwxaZ4I7Lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RIzzWfqq; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="Mk9Vmt20"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1785207049;
-	bh=cW0TbNCISblwoiaULiHR+ZWC6JdcXp2rxqQLctE2VnU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Mk9Vmt20bk3Aoxd1gHH+7vbcFVUiZOB178RTWFm784elJGlLXUWmU4EWe9YMiFnVG
-	 FI+D6PxfAcpQNe4a/0fPtXnVJGipAz+D5EOxICg/BkRljCjU2gcaIaJKYQ1wjRGS83
-	 zU0yA85zga9aNH8RP4Yfatuoz4b7Q1wuoNFsZSzk=
-Received: from [10.56.52.25] ([39.156.73.14])
-	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
-	id CAD2E6BA; Tue, 28 Jul 2026 10:50:45 +0800
-X-QQ-mid: xmsmtpt1785207045tl40c9evp
-Message-ID: <tencent_185F6B461110090D468588B2422E5955A409@qq.com>
-X-QQ-XMAILINFO: OZsapEVPoiO6qM7uZ4+S4/crVvRsJwd18KbjZMQDojTlKNfqKjjCCplOw9PAQy
-	 PVQeO+EAkQo5jKl+H1imUfVLK22X0ZhsdNs5lylSrHXtlzj7q39ovB15TPr3Jr12AO08bw08Ifa6
-	 bBKCy/p1OKM2qn+Vrk0PBeLNRKRQTuDF87REDN3ktCiAeKi8OTepuiIV3hdB9h+fyqrJ2MUdKyZb
-	 TBREELrZIWZ3d9mnsblXj++8nyBaL6cRcON6pb3EbqGDFH6zivYKO5wnJarGaf1gVslNkd+iqQpA
-	 4/lV/G5D/28wUUv/JH5dKaz83k2Sz3xxsbG/wHmkfWANpzVN4BqoPAD0pyJSn/wlqlwTRByP9qx5
-	 wBJX79rhKgYREVZp8TubJrB5JQxQvZEGy1zFZcrhQmJcLHXV2uIyrDSR4OEteZJ/KIQi2u0EA93n
-	 94t17Frmd+bX6eev936cg68q9NLeG2C33xK50Tgl31bZ+6cl7fc7PJ++iyDerBddPLrZ4M/eMR5Y
-	 GF6eRSWXO7TOjzax1la8pAEDuzIl38V3jPSqc6gTMgwzOfpc78OHLgSlMe+PP6Cgul/iO1P3eBbN
-	 w/YQzUWs4Vw2PgaGhI749Qozu0nwaXDgOXIQvh9/Og3oK7L/ao35wTjZZAQVb9PIL2dGqPiKK6M0
-	 kOC6iEQ6cw3x30pEFJIR2STg8pVKCH2ZReBC/BPKNz2JhlaOjICN+UFrYUN1Ow4A5gx6IGnwHUQH
-	 Ip+ZA5JGH1RhUZq6BCP76zhklUQ2dohy+Q4pAO6qtOSiCdQ7gdyQDRfOacWQrfDjFx9iQljNC/vU
-	 Qjf4YM2kRXAWbLsULFSj9/SH35t5FNDnPIovp/tRt8HvQpC4SBNVONZkTujCFqk04Sl8e3BHtEma
-	 9PFtZRnjazbXzz5VcrEVdpkxMGLoAFXSBvwcr418VNLpaTBvPDnmoOuI47y8XrBl07wPrPfsUH/G
-	 v8o62FwaihSe+0iHpmnx2aAcTF5igb0svrzYhmckewqr1NTBhDelVDLlDThdJyUVM22AGzu8wEY1
-	 BPORCLf5X771zUT+elmG5bfuJR/nAeYcFwFxzawcmq6rTvrI+K6QnZdWZzUfu3KLbVlObYxDjfsF
-	 j1ZwedE1PPWuStnxI=
-X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
-X-OQ-MSGID: <f9a69aed-a050-4ca3-abe5-c32720534430@foxmail.com>
-Date: Tue, 28 Jul 2026 10:50:45 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RIzzWfqq"
+Message-ID: <42f7a2d9-8ffd-4066-bb02-9392ad21a416@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785207697;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=O7ecUA3pSVzIK+RUU1iD1tJsj3Wcw4Lt1xAhQZIlqnc=;
+	b=RIzzWfqqQgjfptayX7ADbBpNVJeNSSZZKnoi15XIhK0sBgM2inw55OkeQtYS8u1c6aS3aS
+	qVRpCDgCGz+qoEFunFWShZ2CcSiPYuLpGn6pCwMUkJpk97H5Bk+tuVOngx+udpxRscaLyj
+	as0YyoyrZ6CSS45OQ0f/vgeHx89DRGs=
+Date: Mon, 27 Jul 2026 20:01:20 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: vmalik@redhat.com, andrii@kernel.org, ast@kernel.org, rongtao@cestc.cn,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
- "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
- <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <cover.1784695085.git.rtoax@foxmail.com>
- <tencent_60882E4BE4F247C5F6D564F41BF1C3004805@qq.com>
- <CAEf4BzbRvjT3X=Ds+YqLiZt=A0ujk1t2GCDcmbdT3+QX+DsQDQ@mail.gmail.com>
-Content-Language: en-US
-From: Rong Tao <rtoax@foxmail.com>
-In-Reply-To: <CAEf4BzbRvjT3X=Ds+YqLiZt=A0ujk1t2GCDcmbdT3+QX+DsQDQ@mail.gmail.com>
+Subject: Re: [PAHOLE v4 2/3] dwarf_loader: Add support for
+ DW_TAG_GNU_annotation
+Content-Language: en-GB
+To: David Faust <david.faust@oracle.com>,
+ Vineet Gupta <vineet.gupta@linux.dev>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, jose.marchesi@oracle.com
+References: <20260602195512.1511013-1-vineet.gupta@linux.dev>
+ <20260602195512.1511013-2-vineet.gupta@linux.dev>
+ <9152fde6-d35c-4688-9ff1-c7fe152c9b2a@linux.dev>
+ <4e425892-2aec-4fee-a199-7fe9c615d982@linux.dev>
+ <252c53f3-3f06-40f4-9cd3-795eb298687c@linux.dev>
+ <c9beceb9-946d-47ce-9311-4b9559f21613@linux.dev>
+ <a0bc5009-0c11-4909-9ae1-7dc873a78ff9@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <a0bc5009-0c11-4909-9ae1-7dc873a78ff9@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-On 7/28/26 06:56, Andrii Nakryiko wrote:
-> On Tue, Jul 21, 2026 at 9:42 PM Rong Tao <rtoax@foxmail.com> wrote:
->> From: Rong Tao <rongtao@cestc.cn>
->>
->> Add string concatenation kfuncs, prototype:
->>
->>    int bpf_strcat(char *dst, u32 dst__sz, const char *src);
->>    int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len);
->>
->> This differs from the glibc library functions strcat and strncat, which,
->> for safety reasons, require the size of the target string's memory space
->> as a parameter.
->>
->> The src parameter cannot directly pass a string constant, such as "XYZ",
->> otherwise it will throw an error "write into map forbidden".
->>
->> Signed-off-by: Rong Tao <rongtao@cestc.cn>
->> ---
->>   kernel/bpf/helpers.c | 75 ++++++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 75 insertions(+)
->>
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index c18f1e16edee..85afff60365c 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -4195,6 +4195,79 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ign, const char *s2__ign,
->>          return __bpf_strnstr(s1__ign, s2__ign, len, true);
->>   }
->>
->> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
->> +{
->> +       int dlen = 0, slen, space, copied;
->> +
->> +       if (sz == 0 || dsz == 0)
->> +               return -EINVAL;
->> +
->> +       while (dlen < dsz && dst[dlen] != '\0')
->> +               dlen++;
->> +
->> +       if (dlen >= dsz)
->> +               return -E2BIG;
->> +
->> +       space = dsz - dlen;
->> +
->> +       slen = bpf_strnlen(src, sz);
->> +       if (space <= slen)
->> +               return -E2BIG;
->> +
->> +       copied = strncpy_from_kernel_nofault(dst + dlen, src, sz);
-> I'm not sure strncpy_from_kernel_nofault() is designed to work
-> correctly if dst can be modified concurrently. Which in BPF case, even
-> though we validate that memory is correct, it still can be modified
-> concurrently in such a way as to cause strncpy_from_kernel_nofault's
-> inner dst[-1] based loop logic to go beyond the boundaries of target
-> buffer.
+
+On 7/16/26 9:12 AM, David Faust wrote:
 >
-> i.e., I don't believe current implementation is concurrency safe
-
-Thank you very much for your reply. There is indeed a thread safety 
-issue. Let's look at a solution. I will submit v6. Thank you ;)
-
-Rong Tao
-
->
-> pw-bot: cr
->
->
->> +       if (copied < 0)
->> +               return copied;
->> +       else if (copied == 0 || copied == 1)
->> +               return dlen;
->> +
->> +       /* The copied character count includes '\0'. */
->> +       return dlen + copied - 1;
->> +}
->> +
->> +/**
->> + * bpf_strcat - Append non-null bytes from a source string, and null-terminate
->> + *              the result
->> + * @dst: Destination string.
->> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
->> + * @src: Source string.
->> + *
->> + * Return:
->> + * * >=0      - Length of the concatenated string.
->> + *
->> + * * %-EINVAL - String @dst__ign is invalid.
->> + * * %-EFAULT - Cannot read or write one of the strings.
->> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
->> + *              @dst__ign is too small.
->> + * * %-ERANGE - One of the strings is outside of kernel address space
->> + */
->> +__bpf_kfunc int bpf_strcat(char *dst, u32 dst__sz, const char *src)
->> +{
->> +       return __bpf_strncat(dst, dst__sz, src, dst__sz);
->> +}
->> +
->> +/**
->> + * bpf_strncat - Append non-null bytes from a source string, and null-terminate
->> + *               the result
->> + * @dst: Destination string.
->> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
->> + * @src: Source string.
->> + * @len: the maximum number of characters to concatenate, the null terminator
->> + *       \0 of the target string @dst will also be included.
->> + *
->> + * Return:
->> + * * >=0      - Length of the concatenated string.
->> + *
->> + * * %-EINVAL - String @dst__ign is invalid.
->> + * * %-EFAULT - Cannot read or write one of the strings.
->> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
->> + *              @dst__ign is too small.
->> + * * %-ERANGE - One of the strings is outside of kernel address space
->> + */
->> +__bpf_kfunc int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len)
->> +{
->> +       return __bpf_strncat(dst, dst__sz, src, len);
->> +}
->> +
->>   #ifdef CONFIG_KEYS
->>   /**
->>    * bpf_lookup_user_key - lookup a key by its serial
->> @@ -4958,6 +5031,8 @@ BTF_ID_FLAGS(func, bpf_strstr);
->>   BTF_ID_FLAGS(func, bpf_strcasestr);
->>   BTF_ID_FLAGS(func, bpf_strnstr);
->>   BTF_ID_FLAGS(func, bpf_strncasestr);
->> +BTF_ID_FLAGS(func, bpf_strcat);
->> +BTF_ID_FLAGS(func, bpf_strncat);
->>   #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
->>   BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
->>   #endif
->> --
->> 2.55.0
+> On 7/1/26 10:14, Yonghong Song wrote:
 >>
+>> On 6/30/26 1:02 PM, Vineet Gupta wrote:
+>>> On 6/17/26 11:18 AM, Vineet Gupta wrote:
+>>>> On 6/3/26 1:08 PM, Yonghong Song wrote:
+>>>>> For decl tag
+>>>>> ============
+>>>>>
+>>>>> $ cat decl_tag.c
+>>>>> /* btf_decl_tag test cases.
+>>>>>      *
+>>>>>      * btf_decl_tag can be attached to:
+>>>>>      *   - global (incl. static) variables
+>>>>>      *   - functions
+>>>>>      *   - function parameters
+>>>>>      *   - struct/union types and their members
+>>>>>      *   - typedefs
+>>>>>      *
+>>>>>      * Build:  clang -O2 -target bpf -g -c decl_tag.c -o decl_tag.o
+>>>>>      *         /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2
+>>>>> -gbtf -g -c decl_tag.c -o decl_tag.o
+>>>>>      * Dump:   bpftool btf dump file decl_tag.o
+>>>>>      */
+>>>>>
+>>>>> #define __tag(x) __attribute__((btf_decl_tag(x)))
+>>>>>
+>>>>> /* tag on a global variable */
+>>>>> int global_var __tag("global_var_tag");
+>>>>>
+>>>>> /* tag on a static variable */
+>>>>> static int static_var __tag("static_var_tag");
+>>>>>
+>>>>> /* multiple tags on one declaration */
+>>>>> int multi_tag_var __tag("tag_a") __tag("tag_b");
+>>>>>
+>>>>> /* tag on struct type and its members */
+>>>>> struct foo {
+>>>>>             int a __tag("member_a_tag");
+>>>>>             int b __tag("member_b_tag");
+>>>>> } __tag("struct_foo_tag");
+>>>>>
+>>>>> /* tag on a typedef */
+>>>>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+>>>>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>>>>>
+>>>>> /* tag on a function and its parameters */
+>>>>> __tag("func_add_tag")
+>>>>> int add(int x __tag("param_x_tag"), int y __tag("param_y_tag"))
+>>>>> {
+>>>>>             return x + y;
+>>>>> }
+>>>>>
+>>>>> /* keep the globals/types alive so they land in BTF */
+>>>>> int use(foo_t1 *f, foo_t2 *g)
+>>>>> {
+>>>>>             return add(global_var + static_var + multi_tag_var, f->a
+>>>>> + g->foo2);
+>>>>> }
+>>>>>
+>>>>> $ /home/yhs/work/gcc-build/opt/gcc-16.1/bin/gcc -O2 -gbtf -g -c
+>>>>> decl_tag.c -o decl_tag.o
+>>>>> decl_tag.c:30:1: warning: ‘btf_decl_tag’ attribute does not apply to
+>>>>> types [-Wattributes]
+>>>>>        30 | } __tag("struct_foo_tag");
+>>>>>           | ^
+>>>>>
+>>>> [snip]
+>>>>
+>>>>> Three decl tags (struct_foo_tag, typedef_foo_tag and typedef_foo2_tag)
+>>>>> are missing here:
+>>>>>
+>>>>> struct foo {
+>>>>>             int a __tag("member_a_tag");
+>>>>>             int b __tag("member_b_tag");
+>>>>> } __tag("struct_foo_tag");
+>>>>>
+>>>>> /* tag on a typedef */
+>>>>> typedef struct foo foo_t1 __tag("typedef_foo_tag");
+>>>>> typedef struct {int foo2;} foo_t2 __tag("typedef_foo2_tag");
+>>>> Semantically what does this mean ? Will the decl tag will be "applied"
+>>>> where ever the type is instantiated ?
+>>> So these are dec tags (not type tags) on typedefs.
+>>> Are these still relevant after the change below for supporting type
+>>> tags on typedefs (and gcc has in flight patches to do the same).
+>>>
+>>>     commit 5754a48780f516cbc06eeb2a31b1e445ddd9c935
+>>>     Author: yonghong-song <yhs@fb.com>
+>>>     Date:   Mon Jun 15 10:51:02 2026 -0700
+>>>          [Clang][BPF] Support btf_type_tag on typedef underlying types
+>>> (#203089)
+>>>          Emil Tsalapatis suggested to add type tag for typedef like below:
+>>>          ```
+>>>            $ cat tag.c
+>>>            #define __type_tag(x) __attribute__((btf_type_tag(x)))
+>>>            struct bar { int c; int d; };
+>>>            typedef struct bar __type_tag("a") bar_t;
+>>>            int use(bar_t *v)
+>>>            {
+>>>              return v->c + v->d;
+>>>            }
+>>>          ```
+>>>          This makes the code simpler -- using `bar_t *v` instead of the
+>>> longer
+>>>          form `struct bar __type_tag("a") *v`.
+>>>          So the goal is to allow type tag for typedef underlying types.
+>>> The
+>>>          following describes the main changes:
+>>>
+>>>
+>>> And if so, how are they semantically different and what's the use case
+>>> fot decl tags on typedefs.
+>> Decl tags and type tags are different in the above. Decl tags will be something like
+>>
+>>       decl_tag -> typedef -> ...
+>>
+>> Type tags will be something like\
+>>
+>>       typedef -> type_tag -> ...
+>>
+>> You can do both decl tag and type dag for the same typedef
+>>
+>>       decl_tag -> typedef -> type_tag -> ...
+>>
+>> There is a selftest (progs/test_btf_decl_tag.c) which has an example with decl_tag
+>> for typedef.
+> Curious about the above commit, in particular "on typedef underlying types".
+>
+> What is the motivation to only support type_tag specifically on the underlying
+> type of a typedef but not elsewhere? Similar to only specifically supporting
+> it in pointers but not elsewhere.
+>
+> I find it exceedingly strange that in this design, iiuc, one could do e.g.:
+>
+>    typedef int __typetag("foo") my_int;
+>    my_int x;
+>
+>    var("x") -> typedef -> type_tag ("foo") -> int;
+>
+> but NOT
+>
+>    int __typetag("foo") x;
+>
+>    var("x") -> type_tag ("foo") -> int;
+>
+>
+>
+> I mean, why not just support type_tag on any type? Like cv-quals.
+
+The original design is for potential use cases. And we don't think
+kernel bpf will handle things like 'var("x") -> type_tag ("foo") -> int;'.
+So we didn't allow arbitrary type_tag and only for cases where kernel bpf
+may use.
+
+>
+>
+>> About the question what is the use case for decl tags for typedef.
+>> The initial llvm implementation is to have more coverage so we do not need
+>> to add them later on. I didn't monitor this and not sure whether anybody
+>> uses it or not.
+>>
+>> But I think gcc should implement
+>>       typedef -> type_tag -> ...
+>> if this is the case, I assume it should be easier for gcc to implement
+>>       decl_tag -> typedef -> ...
+>>
+>>>> OK, opened PR/125862 [1]  for future improvement.
+>>>>
+>>>> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=125862
+>>> If not, we can close this gcc PR as won't fix / not needed.
+>>>
+>>> Thx,
+>>> -Vineet
 
