@@ -1,157 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425A21E832A
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 00:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AC121ADC7
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 00:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785198294; cv=none; b=U8pcHUDhCLs9e4ctBeYt/6mDjaXz4qNL/HWg+GdefkgBK/a26BsFUP17JdjiHhGu+zhskpIQhMZ8eM9sWEuTeZ13d2A/Y48k31ouvhN80XN7AmMp93Sl6wU6MxggUGx2hFoInF9aMN645PL5dYTpTv86kx+vboMSIzddfteJIYU=
+	t=1785199737; cv=none; b=MBldewo+AgNHpjZKUPiWgL3+0l9PnlmXHIDdNZQVEjwUaLvlieeZcbllzsfqIdx2ZeDvNehu+i6F0BPqNjQWF/r3pwypn4pOxnufgzG2rr/qwkF5sEetN8cwh60xluU30sdaInW1uSxLwqwAKR2nfo7O7TR3vrrxo5dC8ugtmn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785198294; c=relaxed/simple;
-	bh=bzSp/UKiM/bHQ4fPIyYdPi0AgKZhuSRo9/8+VJ/fMnA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HA+WbVtUD+jb3NeoO990yYjtuqX6TLKDaWWrlg4W1g5H/Ed3cOdMkxK1HY0yxUSPdbLJMNhDFcqLzU+q5DP92GukmMTeeJcj9pUo1l/lqSFTOw9w/76U8kIUnPhbtqEi0mJzgiuGTOqqLEi+DYYnKcB/ftsytCw1O4AuBFH6kWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f15EH+zI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785199737; c=relaxed/simple;
+	bh=Y+LoYAP9VjQ1WH+0mTFVX5LCQoQHjHxfT6/71MrLKcg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Co7u5xcRwlQ6KvhD8jZnNB3SAOY6QsYzEfZcoGqB9Ky2i8Fh1os83QDhDQFotfRuWouK75QlWfXtWD4chUrKue4QChzeEiviBj8rE8CTvk/x9j/0E6ACkoj40Bc3GqIj36GfbdQUXG/cdI06yM30grnfSjJhWx5rzIukNnUF2N0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ONXPA+y0; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f15EH+zI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C48D11F00A3A
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 00:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785198292;
-	bh=MP3aaWkeb7cPo0VrDnrPMRGB8A7gswa4J5dcafg3MMg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=f15EH+zIB2T75FOJFXBsFVw7zQ5LVX1o11WgqTb0bjEIX0sxRiJddf94xisvkFxdp
-	 B0g1Xs9ReaIjhhGX1SlfhcTrCUYZnqIPhOkzzcKaWCHHI0MutQiAdwS/BSq2F38RiM
-	 MLgyBJcFIw2bmdvr+/KMcjyms9xWU8BjoDVKFu8oWnxhtD/h0pboTBOzS4OcHqQhdu
-	 ZdxDazn7Fb8rQE4tX6qT9f2DzUgiBuFmll1lyCJVRfTeMZmNhnVtUndeC4V3osol4U
-	 A8F1nO7zW9Yc4B3i3A/lomh2JcTOvNYr5divtcB33+E35HbZUsfyd72X9VtmsamvY4
-	 wvGEpu+g47TNA==
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-8ee6912d86dso23335526d6.1
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 17:24:52 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxCn/6rVzxa/bozMBhJq/zLvQfAB+WEX5Q7qFFpei3piLVKwzNb
-	ZaYmzu90ida+l1oV7FGgWAy7mQ7IhSNkQbtHfHlohEk+/ByP6butYmdw7Wb/l1u8jVrfbOqG6ac
-	t99BKevF/GGixEslRLQjhkSXLrQ6ZJNg=
-X-Received: by 2002:a05:6214:4985:b0:907:b32f:9b79 with SMTP id
- 6a1803df08f44-90816f63d78mr1975036d6.6.1785198291909; Mon, 27 Jul 2026
- 17:24:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ONXPA+y0"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3811f512167so3096085a91.3
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 17:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785199734; x=1785804534; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=+wAfON367N7TUqFRglbZOr6w2el4iYP2m0VE4AXYueY=;
+        b=ONXPA+y02wjistWHpL/ovBtxW21OARyei/SrNNIlUnXYIT8Dlgrl4mNX8qBlDePlnA
+         I1YFOhuCAqFagnqbFgQrHNa/kTB/VMFMBIQ1bodDebJrDvL8oSoTQmqMZnDRA0j1gCDY
+         DPgpUb0bXMuDct8mq0H5PHDU73hohf9ttC4vMIHGF502M77R1vgbizGJ6I60LuZszS3z
+         WwqNPE0yDQlEeuq9lz+cvuTD0IpcpOXttDMqV8v4PKEnnQCLaPDQMQzntEoZuMebSWpk
+         DIxjsifH4J2bcixZrHk5vAxqwQhmVni09Idfer3RyOnhOsrUX1b/QLS8yv7p2x+ktgyO
+         LMrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785199734; x=1785804534;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+wAfON367N7TUqFRglbZOr6w2el4iYP2m0VE4AXYueY=;
+        b=ZfzbwC34eP10A3xOtlvRsGyaAeiMdeeKk/88nMD4jxRQMCDL0G4WxFedn5y8qTvi7N
+         CvPDPu5ctQDqaUISgbOwfW+e7F7AVn82IuTNcSQxM2Ak0gE9U5npb6DNo0kyrKTsiOsl
+         ehL7PV+G/HKm4oeTPBbd75Mnt5omfCGoJRmdpoYtqaNZMf7NCGahPrvO493elk9aDbpy
+         0UK+Z8INj04okcOd6bgLYYFxOJCAhG1qotGT4w33ARK8aiZthBxjRng1czN7X667VkQU
+         iBMRWXb51tl12fpTGBmTNTfFmugMVO5ulDCYwTGLQjn5VPnfqdWwC7E9gBySKvGtkv3L
+         YoxQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrIimTIIB6SCmLZ8fx+kKzVupDngpK8cYj5GFkYgomFXuur7g1NTHeGnorgZnILpbs1FEg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFcfZhnbkicoFSIrOT5ras1sVmz20+e8zORn2YTZDB7fEGupLU
+	ByW2JwWDN/ViZgXPVxHg0MExoLlIuNCOq8MfYvM6jjcRD2dFXnFnJhM8VF6RMuaEab8=
+X-Gm-Gg: AR+sD11ZU2AroBp0FraXfb7QiaHQKIdhngpZVoYxrVhcNg0fPGrac7BpGvmJlX+GIkb
+	LjyAkrqAUoXo0Zf9GZzoLjIsAaUx3w+hPM1FQ/B6xOCRUv1vs27CLOnWT228yijkkN/6XGnkyFM
+	yDOKKaWKyBwCK3Yb26stl7RcmlSXwrNqYYTyfJeT/D65Q461thyXoMxjuwhC+nd3hO6hdEBigtH
+	nJmwhLh3gZmQ+3dOhWx+pN/QoESZvPM6vXObNZqS0fapfs8WbT7cCDzTQP3cmS+Ze4sIimFE4fT
+	QLhMc1sDVPEVWfDJv1wdX1Yq3GdeP/Wxp3kwEvsCl2ElAj5rMBysLiFea4QC/bs/J4us4O+jplY
+	QDIkN6hkrIjrR8HM5+13EDafsSRYbgB2MboYVUGd2NqGrL1cyl6eJ2wvGZRihU1wF7vL3Gyle7+
+	1ctQz4kSPtlwlme6tlC4KRFw39DFXpPMPkFdDgoTSEJg==
+X-Received: by 2002:a17:90a:d888:b0:38d:e658:595a with SMTP id 98e67ed59e1d1-38f6a30d87emr171911a91.2.1785199733829;
+        Mon, 27 Jul 2026 17:48:53 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f6414705bsm478503a91.15.2026.07.27.17.48.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jul 2026 17:48:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260722205032.1245094-1-song@kernel.org> <CAEf4BzYjvcnJyC05b39vdoS6kQKQhomXa=fJbZkTTGYZ+g68Ww@mail.gmail.com>
-In-Reply-To: <CAEf4BzYjvcnJyC05b39vdoS6kQKQhomXa=fJbZkTTGYZ+g68Ww@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Mon, 27 Jul 2026 17:24:39 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5w1A7LhupFxd6Va2dr=2E5cfvPsNRpYc6mdSWsQ3B0Lw@mail.gmail.com>
-X-Gm-Features: AUfX_mwZIj_4Gve2zk0GbXNRPtKTqQa0fC91WQdLHL-Ai_tbF7tePZSDyvegnwo
-Message-ID: <CAPhsuW5w1A7LhupFxd6Va2dr=2E5cfvPsNRpYc6mdSWsQ3B0Lw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 0/2] bpf: Populate mmap-able array maps lazily
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 27 Jul 2026 20:48:51 -0400
+Message-Id: <DK9SHN2RV21T.485J38W373WQ@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>, "Clark Williams"
+ <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rt-devel@lists.linux.dev>
+Subject: Re: [PATCH bpf-next 1/3] bpf: Add a sleepable page allocator for
+ map memory
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260727062521.376231-1-jiayuan.chen@linux.dev>
+ <20260727062521.376231-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260727062521.376231-2-jiayuan.chen@linux.dev>
 
-On Mon, Jul 27, 2026 at 5:10=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Mon Jul 27, 2026 at 2:24 AM EDT, Jiayuan Chen wrote:
+> bpf_map_alloc_pages() picks the allocator via can_alloc_pages(), a
+> conservative guess for BPF program context that is always false under
+> PREEMPT_RT. So even a caller that really is sleepable gets the
+> non-blocking allocator, which never reclaims and never engages the OOM
+> machinery.
 >
-> On Wed, Jul 22, 2026 at 1:50=E2=80=AFPM Song Liu <song@kernel.org> wrote:
-> >
-> > An mmap-able BPF array map (BPF_F_MMAPABLE) has its backing memory
-> > vmalloc'ed up front at map creation time. array_map_mmap() then wires u=
-p
-> > the whole mapping eagerly via remap_vmalloc_range(), which calls
-> > vm_insert_page() for every page of the map. This makes every mmap() cos=
-t
-> > O(number of pages): an 8MiB map inserts 2048 PTEs on each mmap() and
-> > tears them all down again on munmap(), even when user space only touche=
-s
-> > a few pages (or none at all).
-> >
-> > This series makes the mapping populate lazily instead, the same way the
-> > arena map already does, turning mmap()/munmap() of an mmap-able array
-> > from O(map size) into O(1). The pages are inserted on demand by a new
-> > map_mmap_fault() callback, dispatched from the shared
-> > bpf_map_default_vmops so that the existing VMA open/close accounting
-> > (VM_MAYWRITE write-active tracking, freeze handling) stays centralized.
-> >
-> > Callers that want the pages populated up front can still request that
-> > explicitly with MAP_POPULATE, matching regular file semantics.
-> > Kernel-side access to the map (via the vmalloc address) is unaffected.
-> >
-> > Patch 1 implements the lazy faulting. Patch 2 adds an "arraymap-mmap"
-> > benchmark that mmap()s/munmap()s an mmap-able array map, useful to
-> > observe how the cost scales with the mapping size.
-> >
-> > Changes in v2:
-> > - Compute the mapping offset with 64-bit arithmetic in array_map_mmap()
-> >   and the fault handler so that a large vm_pgoff cannot overflow the
-> >   bounds check on 32-bit architectures. remap_vmalloc_range(), which is
-> >   no longer used, used to guard against this.
-> > - Benchmark: use the standard -p/--producers option for the thread coun=
-t
-> >   instead of a custom --nr-threads option. The v1 approach set
-> >   env.producer_cnt from validate(), which runs after the framework has
-> >   already sized the producers array, causing an out-of-bounds write.
-> > (Both issues were pointed out by the Sashiko AI review.)
-> >
-> > v1: https://lore.kernel.org/bpf/20260722065308.4116186-1-song@kernel.or=
-g/
-> >
-> > Benchmark results (single producer thread, ./bench -p1):
-> >
-> > Before the patch
-> >   nr_threads: 1, map_size: 1048576
-> > arraymap-mmap: throughput: 0.034 +/- 0.000 M ops/s, latency: 29187.164 =
-ns/op
-> >
-> >   nr_threads: 1, map_size: 8388608
-> > arraymap-mmap: throughput: 0.005 +/- 0.000 M ops/s, latency: 220910.150=
- ns/op
-> >
-> >   nr_threads: 1, map_size: 67108864
-> > arraymap-mmap: throughput: 0.001 +/- 0.000 M ops/s, latency: 1765083.44=
-0 ns/op
-> >
-> > After the patch
-> >   nr_threads: 1, map_size: 1048576
-> > arraymap-mmap: throughput: 0.838 +/- 0.001 M ops/s, latency: 1193.553 n=
-s/op
-> >
-> >   nr_threads: 1, map_size: 8388608
-> > arraymap-mmap: throughput: 0.811 +/- 0.002 M ops/s, latency: 1232.728 n=
-s/op
-> >
-> >   nr_threads: 1, map_size: 67108864
-> > arraymap-mmap: throughput: 0.747 +/- 0.004 M ops/s, latency: 1339.051 n=
-s/op
-> >
-> > Song Liu (2):
-> >   bpf: Populate mmap-able array map memory lazily
-> >   selftests/bpf: Add mmap/munmap benchmark for array maps
-> >
-> >  include/linux/bpf.h                           |   1 +
-> >  kernel/bpf/arraymap.c                         |  43 +++++-
-> >  kernel/bpf/syscall.c                          |  17 +++
-> >  tools/testing/selftests/bpf/Makefile          |   1 +
-> >  tools/testing/selftests/bpf/bench.c           |   4 +
-> >  .../bpf/benchs/bench_arraymap_mmap.c          | 127 ++++++++++++++++++
-> >  .../bpf/benchs/run_bench_arraymap_mmap.sh     |  15 +++
-> >  7 files changed, 204 insertions(+), 4 deletions(-)
-> >  create mode 100644 tools/testing/selftests/bpf/benchs/bench_arraymap_m=
-map.c
-> >  create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_arraym=
-ap_mmap.sh
+> Add bpf_map_alloc_page_sleepable() for callers that know they are
+> sleepable. The next patch uses it from the arena page fault handler.
 >
-> do we really need these benchmarks? yes, it's obvious that not doing
-> anything per-page will be faster :) (I mean, it's good to see that
-> it's 30us for 1MB array, but I don't think we should carry benchmark
-> in the kernel tree)
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-I am OK removing this in v3. AI wrote most of it,  so it is not
-a lot of wasted effort.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Thanks,
-Song
+> ---
+>  include/linux/bpf.h  |  1 +
+>  kernel/bpf/syscall.c | 21 +++++++++++++++++----
+>  2 files changed, 18 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index d9542127dfdf..9ba03622709b 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2779,6 +2779,7 @@ struct bpf_prog *bpf_prog_get_curr_or_next(u32 *id)=
+;
+> =20
+>  int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
+>  			unsigned long nr_pages, struct page **page_array);
+> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map, int=
+ nid);
+>  #ifdef CONFIG_MEMCG
+>  void bpf_map_memcg_enter(const struct bpf_map *map, struct mem_cgroup **=
+old_memcg,
+>  			 struct mem_cgroup **new_memcg);
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 0ff9e3aa293d..cec88450e4ce 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -602,15 +602,14 @@ static bool can_alloc_pages(void)
+>  		!IS_ENABLED(CONFIG_PREEMPT_RT);
+>  }
+> =20
+> +#define BPF_PAGE_GFP (GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT | __GFP_NO=
+WARN)
+> +
+>  static struct page *__bpf_alloc_page(int nid)
+>  {
+>  	if (!can_alloc_pages())
+>  		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
+> =20
+> -	return alloc_pages_node(nid,
+> -				GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT
+> -				| __GFP_NOWARN,
+> -				0);
+> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
+>  }
+> =20
+>  int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
+> @@ -636,6 +635,20 @@ int bpf_map_alloc_pages(const struct bpf_map *map, i=
+nt nid,
+>  	return ret;
+>  }
+> =20
+> +/*
+> + * For callers that know they run in a sleepable context, e.g. a user pa=
+ge
+> + * fault handler. can_alloc_pages() is a conservative guess made for BPF
+> + * program context - notably it is always false on PREEMPT_RT - so going
+> + * through bpf_map_alloc_pages() there would needlessly pick the
+> + * non-blocking allocator, which never reclaims and never engages the OO=
+M
+> + * machinery.
+> + */
+> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map, int=
+ nid)
+> +{
+> +	might_sleep();
+> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
+> +}
+> +
+> =20
+>  static int btf_field_cmp(const void *a, const void *b)
+>  {
+
