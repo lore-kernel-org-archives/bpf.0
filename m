@@ -1,32 +1,32 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC9A471CE6
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 14:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9159F472F64
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 14:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785250721; cv=none; b=QE+sFYQ3F9UL70BS849pFByLbVXYpmhFLNd1dCv/8ydHjVWfrvy/nyCSkWdljwS/HLJkT8QkX6O8Z2yAKUeo1IiIqkEltrWETKS9qUi2HVfzmoB1vl/+It0HOMFwFZYAHfIkCQv7G7OnQjO/0BqPDMShO6tw7wzVTZCyC1BiN5M=
+	t=1785250728; cv=none; b=SscLrcl+Z5Gv8ppX9Dla8ipsBSkz8yx/HAR2/HSonojP1Y8MtlAdrRqD6Q+vFB5mAAcLhw9kAHNyS3qz23b0Q4pwc00CP4oNn0krUiWcwOS+nMsvq3N2SJ5yPCnmyybddmePTUPIrha1BrEk7p4UZWDvefBbLhjiA2UCdS82MA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785250721; c=relaxed/simple;
-	bh=G4CtLr+M3MknCHtQvC/vgRyHZsb8qlk7S4n1YGfo1ck=;
+	s=arc-20240116; t=1785250728; c=relaxed/simple;
+	bh=bwojgRQr90lmAhGXXGohhb+zdoQoSc1vyg7YmLQ9mMQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CUTB7kB9f5bHrsTYSBsvYfqs3AZUl0sSTWI039qh2SAiucb6cGeZnC8OdyF1RqG+TATnHa17hV/I+3a6N6ObjNBoo8DAPQviB0Xd/nkRKNRPWnaGnrfDSkFcGk//GpBCiZa6TwhuxG5veZIHTfPbtOugkTkEIoi1XfAklLdOFFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FyUuOZKa; arc=none smtp.client-ip=95.215.58.183
+	 MIME-Version; b=QrMJvamU1XmXXdmXPIonT7rqxdfkjTErNPuxq5A2i+F4XklCY4bzhVEDXzGLtWiD9yowV1gVyGGO1T5SBbvFJaX4nL2SD/gc59QSYV+d7UI0tNKZxggWArieA3+5TJ4zwEYCw58D4W4Ky5OpSImEcLpmVeuzZT7lq621HHDEt4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fhVTHHIz; arc=none smtp.client-ip=95.215.58.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FyUuOZKa"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fhVTHHIz"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785250717;
+	t=1785250724;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uv2itm2QyKdZXre+WATZYF4NEmrq1a0nmBWmCxqNaa0=;
-	b=FyUuOZKad70trjawBKKTwEOj0Z5AWFbA7DErkKOjOwOJMOX3hMTQX4xCWKHuYHYLjqzNwR
-	gjbs3m9CaSwGHEtXaMrldQ5beSG07ioBTaqDPCgMeZcXlLh1vikaIf6+7yQb7w28BgcdUF
-	SOgfpLCkxvuFAx9fRMmCPIMVwqO7tQ0=
+	bh=NJsuMoUpiF06eY126AXSEObGmfhiEqH3pEWC3kbo1g8=;
+	b=fhVTHHIzNEvjTNKCy251Vc5+wfPW3AApBnmj7ALp/Fx6oQ0KpBxdPW4fJMbvNFvr7Kbr4W
+	MEUPAxwoGJ6ddugx+Cbs/pz+c0+LIhKtlnpxA+rIub+qBEaTM2dEiSkPuBL2OU6P92FNB/
+	FtaiC/Msw7kSp5Bb591BJF63YVLa2ww=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -47,9 +47,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Viktor Malik <vmalik@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH bpf-next 3/6] bpf: Optimize string span kfuncs
-Date: Tue, 28 Jul 2026 22:57:24 +0800
-Message-ID: <20260728145727.45153-4-leon.hwang@linux.dev>
+Subject: [RFC PATCH bpf-next 4/6] bpf: Optimize string substring kfuncs
+Date: Tue, 28 Jul 2026 22:57:25 +0800
+Message-ID: <20260728145727.45153-5-leon.hwang@linux.dev>
 In-Reply-To: <20260728145727.45153-1-leon.hwang@linux.dev>
 References: <20260728145727.45153-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -61,224 +61,189 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Share a direct implementation between bpf_strspn() and bpf_strcspn().
-Read the source string a word at a time and cache set membership in a
-lazily populated 256-bit bitmap, so each required accept or reject byte
-is nofault-loaded at most once.
+Use the word-at-a-time character finder to skip haystack regions which
+cannot begin a match. For case-insensitive searches, check both ASCII
+case variants of the first needle byte.
 
-Use the word-at-a-time character finder after discovering a singleton
-reject set. This avoids inspecting individual source bytes for common
-bpf_strcspn() delimiters.
+At each candidate, use a direct fault-safe word matcher. When both
+strings have the same relative alignment, skip equal words and inspect
+locally loaded bytes only for mismatches and case folding.
 
-Keep set loading lazy, retry from the same byte after a word-load fault,
-and retain the existing NUL, EFAULT, and E2BIG ordering.
+Keep needle-first access, fall back at the same byte after a word-load
+fault, and retain the extra needle-byte check at the search limit so
+fault and boundary behavior remain unchanged.
 
 Assisted-by: Codex:gpt-5.6-sol
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/helpers.c | 175 ++++++++++++++++++++++++++++++-------------
- 1 file changed, 121 insertions(+), 54 deletions(-)
+ kernel/bpf/helpers.c | 142 +++++++++++++++++++++++++++++++++----------
+ 1 file changed, 111 insertions(+), 31 deletions(-)
 
 diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 406aca61789a..af29acc90245 100644
+index af29acc90245..93d5fa409cd7 100644
 --- a/kernel/bpf/helpers.c
 +++ b/kernel/bpf/helpers.c
-@@ -4126,6 +4126,125 @@ __bpf_kfunc int bpf_strlen(const char *s__ign)
- 	return bpf_strnlen(s__ign, XATTR_SIZE_MAX);
+@@ -4281,11 +4281,90 @@ __bpf_kfunc int bpf_strcspn(const char *s__ign, const char *reject__ign)
+ 	return __bpf_strspn(s__ign, reject__ign, true);
  }
  
-+static __always_inline bool
-+bpf_str_set_contains(const unsigned long *set_bits, unsigned char c)
-+{
-+	return set_bits[c / BITS_PER_LONG] & BIT(c % BITS_PER_LONG);
-+}
+-static int __bpf_strnstr(const char *s1, const char *s2, size_t len,
+-			 bool ignore_case)
++#define bpf_str_match_byte(byte1, byte2, ignore_case)	\
++do {							\
++	char __c1 = (byte1);				\
++	char __c2 = (byte2);				\
++							\
++	if (ignore_case) {				\
++		__c1 = tolower(__c1);			\
++		__c2 = tolower(__c2);			\
++	}						\
++	if (__c1 == '\0')				\
++		return -ENOENT;				\
++	if (__c1 != __c2)				\
++		return 0;				\
++} while (0)
 +
 +static __always_inline int
-+bpf_str_set_lookup(const char *set, unsigned long *set_bits, size_t *set_pos, bool *set_complete,
-+		   unsigned char *set_first, unsigned char c)
-+{
-+	unsigned char set_c;
++bpf_str_match_at(const char *s1, const char *s2, size_t limit, bool ignore_case)
+ {
+-	char c1, c2;
+-	int i, j;
++	const struct word_at_a_time constants = WORD_AT_A_TIME_CONSTANTS;
++	unsigned char byte1, byte2, *bytes1, *bytes2;
++	unsigned long word1, word2, data;
++	size_t pos = 0, word_end, i;
 +
-+	if (bpf_str_set_contains(set_bits, c))
-+		return 1;
-+	if (*set_complete)
-+		return 0;
-+
-+	while (*set_pos < XATTR_SIZE_MAX) {
-+		__get_kernel_nofault(&set_c, set + *set_pos, unsigned char, err_out);
-+		if (set_c == '\0') {
-+			*set_complete = true;
-+			return 0;
-+		}
-+
-+		if (*set_pos == 0)
-+			*set_first = set_c;
-+		set_bits[set_c / BITS_PER_LONG] |= BIT(set_c % BITS_PER_LONG);
-+		(*set_pos)++;
-+		if (set_c == c)
-+			return 1;
-+	}
-+	return -E2BIG;
-+
-+err_out:
-+	return -EFAULT;
-+}
-+
-+static __always_inline int
-+bpf_strcspn_single(const char *s, size_t pos, unsigned char reject)
-+{
-+	int ret;
-+
-+	ret = bpf_str_find(s + pos, XATTR_SIZE_MAX - pos, reject, false, true);
-+	if (ret >= 0)
-+		return pos + ret;
-+	return ret == -ENOENT ? -E2BIG : ret;
-+}
-+
-+static int __bpf_strspn(const char *s, const char *set, bool reject)
-+{
-+	unsigned long set_bits[256 / BITS_PER_LONG] = {};
-+	size_t pos = 0, word_end, i, set_pos = 0;
-+	unsigned char c, set_first = 0, *bytes;
-+	bool set_complete = false;
-+	unsigned long word;
-+	int ret;
-+
-+	if (!copy_from_kernel_nofault_allowed(s, 1) ||
-+	    !copy_from_kernel_nofault_allowed(set, 1))
-+		return -ERANGE;
-+
-+	guard(pagefault)();
-+
-+	if (IS_ENABLED(CONFIG_KMSAN))
++	if (IS_ENABLED(CONFIG_KMSAN) ||
++	    !IS_ALIGNED((unsigned long)s1 ^ (unsigned long)s2, sizeof(word1)))
 +		goto byte_at_a_time;
 +
-+	while (!IS_ALIGNED((unsigned long)(s + pos), sizeof(word))) {
-+		__get_kernel_nofault(&c, s + pos, unsigned char, err_out);
-+		if (c == '\0')
-+			return pos;
-+		ret = bpf_str_set_lookup(set, set_bits, &set_pos, &set_complete, &set_first, c);
-+		if (ret < 0)
-+			return ret;
-+		if (ret == reject)
-+			return pos;
++	while (pos < limit && !IS_ALIGNED((unsigned long)(s1 + pos), sizeof(word1))) {
++		__get_kernel_nofault(&byte2, s2 + pos, unsigned char, err_out);
++		if (byte2 == '\0')
++			return 1;
++		__get_kernel_nofault(&byte1, s1 + pos, unsigned char, err_out);
++		bpf_str_match_byte(byte1, byte2, ignore_case);
 +		pos++;
-+		if (reject && set_complete && set_pos == 1)
-+			return bpf_strcspn_single(s, pos, set_first);
 +	}
 +
-+	word_end = pos + round_down(XATTR_SIZE_MAX - pos, sizeof(word));
++	word_end = pos + round_down(limit - pos, sizeof(word1));
 +	while (pos < word_end) {
-+		__get_kernel_nofault(&word, s + pos, unsigned long, byte_at_a_time);
-+		bytes = (unsigned char *)&word;
-+		for (i = 0; i < sizeof(word); i++) {
-+			c = bytes[i];
-+			if (c == '\0')
-+				return pos + i;
-+			ret = bpf_str_set_lookup(set, set_bits, &set_pos, &set_complete,
-+						 &set_first, c);
-+			if (ret < 0)
-+				return ret;
-+			if (ret == reject)
-+				return pos + i;
-+			if (reject && set_complete && set_pos == 1)
-+				return bpf_strcspn_single(s, pos + i + 1, set_first);
++		__get_kernel_nofault(&word2, s2 + pos, unsigned long, byte_at_a_time);
++		if (has_zero(word2, &data, &constants))
++			goto byte_at_a_time;
++		__get_kernel_nofault(&word1, s1 + pos, unsigned long, byte_at_a_time);
++		if (word1 == word2) {
++			pos += sizeof(word1);
++			continue;
 +		}
-+		pos += sizeof(word);
++
++		bytes1 = (unsigned char *)&word1;
++		bytes2 = (unsigned char *)&word2;
++		for (i = 0; i < sizeof(word1); i++)
++			bpf_str_match_byte(bytes1[i], bytes2[i], ignore_case);
++		pos += sizeof(word1);
 +	}
 +
 +byte_at_a_time:
-+	for (; pos < XATTR_SIZE_MAX; pos++) {
-+		__get_kernel_nofault(&c, s + pos, unsigned char, err_out);
-+		if (c == '\0')
-+			return pos;
-+		ret = bpf_str_set_lookup(set, set_bits, &set_pos, &set_complete, &set_first, c);
-+		if (ret < 0)
-+			return ret;
-+		if (ret == reject)
-+			return pos;
-+		if (reject && set_complete && set_pos == 1)
-+			return bpf_strcspn_single(s, pos + 1, set_first);
++	for (; pos < limit; pos++) {
++		__get_kernel_nofault(&byte2, s2 + pos, unsigned char, err_out);
++		if (byte2 == '\0')
++			return 1;
++		__get_kernel_nofault(&byte1, s1 + pos, unsigned char, err_out);
++		bpf_str_match_byte(byte1, byte2, ignore_case);
 +	}
-+	return -E2BIG;
++
++	if (limit == XATTR_SIZE_MAX)
++		return -E2BIG;
++
++	/*
++	 * Read one extra byte from s2 to cover the case when it is a suffix
++	 * of the first limit bytes of s1.
++	 */
++	__get_kernel_nofault(&byte2, s2 + limit, unsigned char, err_out);
++	return byte2 == '\0' ? 1 : -ENOENT;
 +
 +err_out:
 +	return -EFAULT;
 +}
 +
- /**
-  * bpf_strspn - Calculate the length of the initial substring of @s__ign which
-  *              only contains letters in @accept__ign
-@@ -4141,33 +4260,7 @@ __bpf_kfunc int bpf_strlen(const char *s__ign)
-  */
- __bpf_kfunc int bpf_strspn(const char *s__ign, const char *accept__ign)
- {
--	char cs, ca;
--	int i, j;
--
--	if (!copy_from_kernel_nofault_allowed(s__ign, 1) ||
--	    !copy_from_kernel_nofault_allowed(accept__ign, 1)) {
--		return -ERANGE;
--	}
--
--	guard(pagefault)();
++#undef bpf_str_match_byte
++
++static int __bpf_strnstr(const char *s1, const char *s2, size_t len, bool ignore_case)
++{
++	unsigned char first, candidate;
++	size_t pos = 0, limit;
++	int ret, offset;
+ 
+ 	if (!copy_from_kernel_nofault_allowed(s1, 1) ||
+ 	    !copy_from_kernel_nofault_allowed(s2, 1)) {
+@@ -4293,37 +4372,38 @@ static int __bpf_strnstr(const char *s1, const char *s2, size_t len,
+ 	}
+ 
+ 	guard(pagefault)();
 -	for (i = 0; i < XATTR_SIZE_MAX; i++) {
--		__get_kernel_nofault(&cs, s__ign, char, err_out);
--		if (cs == '\0')
--			return i;
--		for (j = 0; j < XATTR_SIZE_MAX; j++) {
--			__get_kernel_nofault(&ca, accept__ign + j, char, err_out);
--			if (cs == ca || ca == '\0')
+-		for (j = 0; i + j <= len && j < XATTR_SIZE_MAX; j++) {
+-			__get_kernel_nofault(&c2, s2 + j, char, err_out);
+-			if (c2 == '\0')
+-				return i;
+-			/*
+-			 * We allow reading an extra byte from s2 (note the
+-			 * `i + j <= len` above) to cover the case when s2 is
+-			 * a suffix of the first len chars of s1.
+-			 */
+-			if (i + j == len)
 -				break;
--		}
+-			__get_kernel_nofault(&c1, s1 + j, char, err_out);
+-
+-			if (ignore_case) {
+-				c1 = tolower(c1);
+-				c2 = tolower(c2);
+-			}
++	__get_kernel_nofault(&first, s2, unsigned char, err_out);
++	if (first == '\0')
++		return 0;
+ 
+-			if (c1 == '\0')
+-				return -ENOENT;
+-			if (c1 != c2)
+-				break;
++	while (pos < XATTR_SIZE_MAX && pos < len) {
++		limit = min_t(size_t, len - pos, XATTR_SIZE_MAX - pos);
++		offset = bpf_str_find(s1 + pos, limit, first, ignore_case, true);
++		if (offset < 0) {
++			if (offset == -ENOENT && limit == XATTR_SIZE_MAX - pos)
++				return -E2BIG;
++			return offset;
+ 		}
 -		if (j == XATTR_SIZE_MAX)
 -			return -E2BIG;
--		if (ca == '\0')
--			return i;
--		s__ign++;
--	}
+-		if (i + j == len)
++		pos += offset;
++
++		/*
++		 * bpf_str_find() also returns the position of a terminating
++		 * NUL. Distinguish it from a first-character match.
++		 */
++		__get_kernel_nofault(&candidate, s1 + pos, unsigned char, err_out);
++		if (candidate == '\0')
+ 			return -ENOENT;
+-		s1++;
++
++		limit = min_t(size_t, len - pos, XATTR_SIZE_MAX);
++		ret = bpf_str_match_at(s1 + pos, s2, limit, ignore_case);
++		if (ret > 0)
++			return pos;
++		if (ret < 0)
++			return ret;
++		pos++;
+ 	}
 -	return -E2BIG;
--err_out:
--	return -EFAULT;
-+	return __bpf_strspn(s__ign, accept__ign, false);
++	return pos == XATTR_SIZE_MAX ? -E2BIG : -ENOENT;
++
+ err_out:
+ 	return -EFAULT;
  }
- 
- /**
-@@ -4185,33 +4278,7 @@ __bpf_kfunc int bpf_strspn(const char *s__ign, const char *accept__ign)
-  */
- __bpf_kfunc int bpf_strcspn(const char *s__ign, const char *reject__ign)
- {
--	char cs, cr;
--	int i, j;
--
--	if (!copy_from_kernel_nofault_allowed(s__ign, 1) ||
--	    !copy_from_kernel_nofault_allowed(reject__ign, 1)) {
--		return -ERANGE;
--	}
--
--	guard(pagefault)();
--	for (i = 0; i < XATTR_SIZE_MAX; i++) {
--		__get_kernel_nofault(&cs, s__ign, char, err_out);
--		if (cs == '\0')
--			return i;
--		for (j = 0; j < XATTR_SIZE_MAX; j++) {
--			__get_kernel_nofault(&cr, reject__ign + j, char, err_out);
--			if (cs == cr || cr == '\0')
--				break;
--		}
--		if (j == XATTR_SIZE_MAX)
--			return -E2BIG;
--		if (cr != '\0')
--			return i;
--		s__ign++;
--	}
--	return -E2BIG;
--err_out:
--	return -EFAULT;
-+	return __bpf_strspn(s__ign, reject__ign, true);
- }
- 
- static int __bpf_strnstr(const char *s1, const char *s2, size_t len,
 -- 
 2.55.0
 
