@@ -1,80 +1,87 @@
-Received: from akranes.kaiser.cx (akranes.kaiser.cx [152.53.16.207])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E380A3CBE7C;
-	Tue, 28 Jul 2026 07:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=152.53.16.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799EC3CC7D8
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 07:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785222950; cv=none; b=Fnu0/XOZvnIIutS6zuVaoUG6nOWoPm9ki2giTm5SUt07RxFDpspxm+aV+DtYULSRgv0pk5W5KlJHyJQ/uTObUyoR270Pp30zC/C6gjAgqsD1J5BW1U4m5tzYXOwsPeJnlOU32Ed3b2n7gnO5wxwHjvb+LTvQX0FJPbJgg2bYo9I=
+	t=1785223520; cv=none; b=PtO2oE03C2t+ihuQ850tpAkJAi/52T7w/CGBefD4zzXZTY7M2fBJHE6dk2YFo95sSWNInDF/dxerRpT4bWrAnhwOzCThPclDDZ1P3SSTJCHIOvun642djfQaxTTsYuhrF1ChNVU/51u/BN62rd/j5VRlU//+3ctBaE2Dz/bv6Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785222950; c=relaxed/simple;
-	bh=3bRn9QdiNFALb300Vgyehoi112zCnIKSmNcTYPB2wWs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UPElj40GJkCOJ3xhoG+fk6qUXZtBw2Yf332015M9OwDdbf9tPm4KBiP4A4wY9AECNaCq4ylDzXGITdHgO6q1eIPtVErxzYv5s3eLlhw+BTnvJc1FdotvIqvM/ABJ/xWvITDnVo4uhTALa1Ja9iHBkzm7V6zRmXObsv7fYBZcTPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kaiser.cx; spf=pass smtp.mailfrom=kaiser.cx; arc=none smtp.client-ip=152.53.16.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kaiser.cx
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaiser.cx
-Received: from ipservice-092-209-184-216.092.209.pools.vodafone-ip.de ([92.209.184.216] helo=nb282.user.codasip.com)
-	by akranes.kaiser.cx with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <martin@kaiser.cx>)
-	id 1woc2E-000000019Yd-2DNb;
-	Tue, 28 Jul 2026 09:15:30 +0200
-From: Martin Kaiser <martin@kaiser.cx>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Martin Kaiser <martin@kaiser.cx>,
-	Florian Schmaus <flo@geekplace.eu>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] libbpf: don't preserve ownership during install
-Date: Tue, 28 Jul 2026 09:14:32 +0200
-Message-ID: <20260728071516.2706695-1-martin@kaiser.cx>
-X-Mailer: git-send-email 2.43.7
+	s=arc-20240116; t=1785223520; c=relaxed/simple;
+	bh=Lo9XjO3DU9UfMUQ1481XgkhhMQZJ6hWV5TCFqNss5nw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=oBlV3U4oUwuFne7dSoHpjD5qZwoRmlTe+Aib+XBUlzFrInwb40O2Ujexgk4RtXELOD4McvGoVgAQHPtnSIjDYKQfFvI+JIpxB5qyuFe8KphizVZGV8XmnZD6zShZk0zpaHoKuGkC+pxyPdcjCEkDgd2n7gYBKHbxhqOn95X3eFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJHucTEO; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJHucTEO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118D11F000E9;
+	Tue, 28 Jul 2026 07:25:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785223519;
+	bh=VmoJjxPw0tgVnM0ctb80tj3GEAY5ICT3m4IDJ7kWAzs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=QJHucTEOdD158jdxgSjw3nu6pg+/Gid0VJgv++bMo0T0d0/fx3im4VhzCIB3UwMr4
+	 +53HF6pZmlsIr03NTLNYck9Ho3+/Fa4buRE5wH6XyQVio1eXmfsKMvzs2P+/OpWNKq
+	 SJryHoFZj2NRtQVIhxhlDMi4OCjPLdQncbpZ1j3zH9M5FXOi8x0yTL3L56S0xYyN4D
+	 2R/IZA70J+kJGxR+amOCGUOLI34wWjL9foii2+Vuxc657NTwSveTxdwHBMBG0NGnMf
+	 NeDWJxRvMj/mSmwpni0Tip2a1sjZdTyKx/imzAL5mPSwl05Ce4IuRW/4TuUdxcfhFI
+	 8vQOWCYxof2MA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] libbpf: don't preserve ownership during install
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Martin Kaiser" <martin@kaiser.cx>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260728071516.2706695-1-martin@kaiser.cx>
+References: <20260728071516.2706695-1-martin@kaiser.cx>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 28 Jul 2026 07:25:17 +0000
+Message-Id: <20260728072519.118D11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-When a libbpf build is integrated into build systems like Yocto, the
-source tree might be owned by a non-root developer user.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The use of the GNU-specific `cp --preserve` extension breaks `ma=
+ke install` on platforms with BSD or BusyBox `cp` implementations (e.g., ma=
+cOS, FreeBSD, Alpine).
+--
 
-The install_lib target in libbpf's Makefile uses cp -p to copy libraries
-and preserve ownership. This leaks the UID of the source tree owner into
-the root filesystem where the libraries are installed.
+--- Patch [1]: [PATCH] libbpf: don't preserve ownership during install ---
+commit 20b6f948388a1067581300a57d47fc33d1950c11
+Author: Martin Kaiser <martin@kaiser.cx>
 
-Update the cp command to preserve only mode and timestamps. The copied
-files will then be owned by the installing user.
+libbpf: don't preserve ownership during install
 
-Suggested-by: Florian Schmaus <flo@geekplace.eu>
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- tools/lib/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This commit modifies the libbpf install_lib target in the Makefile to
+prevent leaking the source tree owner's UID into the root filesystem. It
+replaces the cp -p flag with the --preserve=3Dmode,timestamps flag to only
+preserve specific file attributes during installation.
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index eca584fb061e..0a344ca4e108 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -231,7 +231,7 @@ endef
- install_lib: all_cmd
- 	$(call QUIET_INSTALL, $(LIB_TARGET)) \
- 		$(call do_install_mkdir,$(libdir_SQ)); \
--		cp -fpR $(LIB_FILE) $(DESTDIR)$(libdir_SQ)
-+		cp -fR --preserve=mode,timestamps $(LIB_FILE) $(DESTDIR)$(libdir_SQ)
- 
- SRC_HDRS := bpf.h libbpf.h btf.h libbpf_common.h libbpf_legacy.h	     \
- 	    bpf_helpers.h bpf_tracing.h bpf_endian.h bpf_core_read.h	     \
--- 
-2.43.7
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -231,7 +231,7 @@ endef
+>  install_lib: all_cmd
+>  	$(call QUIET_INSTALL, $(LIB_TARGET)) \
+>  		$(call do_install_mkdir,$(libdir_SQ)); \
+> -		cp -fpR $(LIB_FILE) $(DESTDIR)$(libdir_SQ)
+> +		cp -fR --preserve=3Dmode,timestamps $(LIB_FILE) $(DESTDIR)$(libdir_SQ)
 
+[Severity: Medium]
+Will this break the installation process on platforms that do not use GNU
+coreutils?
+
+The --preserve argument is a GNU-specific extension. It appears this might
+cause the make install target to fail with an unrecognized option error on
+systems relying on BSD or BusyBox implementations of cp, such as macOS,
+FreeBSD, or Alpine Linux.
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728071516.2706=
+695-1-martin@kaiser.cx?part=3D1
