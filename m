@@ -1,240 +1,275 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB8F13AF2
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 00:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD8D157487
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 00:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785197311; cv=pass; b=PfgIghcTRlM4QyAwEFJpVVt4TGxe2ppKHZmgTlieAaTY0p7IiHMpE4jPdwlTcktDNBBrDztyVEseLrxGmRL8FAPFq6jJbUfEZbDhe2iMXrZ9Y0IaaJOIyRoBvZcN3BtTBZOeGCWHn2fTD16RwrNJLci9AnPMYGpI3QXSU43OPlQ=
+	t=1785197314; cv=pass; b=V4lSn969U3/XuasrT5w7XcOF1rfc/E0+yb+/hWuxMEy1gv2X/lrYurX0VnYFTQIvK/fY57UOjsMfnt5vKiJjQqyqIl1F6mOtuDE+XlXczP/NWIkuINJ6vA1QRP3Av7mYKr6LnpOEOn5pkElXMhCD4q+4cDi3RM95YHCVNzxuqaQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785197311; c=relaxed/simple;
-	bh=YNlF8a1o3epmZetRCjgDF5EO3Z7GUHs0IcIUsRJBabA=;
+	s=arc-20240116; t=1785197314; c=relaxed/simple;
+	bh=voxm8VmqWRxT16M4v5FlC9VfSgM+rfNj0Lnz0u8QsYA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OBcvlEA9tfMwG7BMLsH+UMjUHQfJOdRMCeCoT/pF5gAl+nYaDxQFQXEWneapSQ5USYuqIjZYl18a4eCoQQWreShDiqFRP6g6Kzo918hrKk0V6Bk1pcF9RjUI28yp7hkFpSO1rgQ6FCnCvR7b9NzaCFxhmvjg64wEc3N2BsVCkfQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2YAcAWo; arc=pass smtp.client-ip=209.85.208.175
+	 To:Cc:Content-Type; b=o0W6NPsYG0g08q09YUcaE3GfNjwW1eC6uLihvAmx+L8Nj8KuCLsn5ebNAnx87qPviCrCYVbVHM4h6L48eROVZ8VBcvntnZ5BkfeyTM8I3UkbtNmGqn9JMf5ItHiSvnDlLye2ZBoXO3yOAH8czN+/Zj3C4Ns2Ob6aL5AIZSRCZGM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Udu1EkH7; arc=pass smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2YAcAWo"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-39c62764c7cso3402331fa.0
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 17:08:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785197306; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Udu1EkH7"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-848595b338cso3583259b3a.0
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 17:08:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785197312; cv=none;
         d=google.com; s=arc-20260327;
-        b=S+bQqHqXcosyNjsvkg1abtvxyeIVd9hkdymarRs7mFL80NbMQ/xgsa2sSx3URVvv2L
-         f02xr1ua//Kk3ZSh9Tcx7GpX8Fggj00OQs+qfSDdU1h5EPGrWf74RC1JvBJ1IQLXRuWv
-         mlJdTM+Pjsf2gfDI4nKzZemHbIMq1Lu58j5Evcag5DtQQ+dZyJ4cD1HJv+7tVKat+8LS
-         rR/aDI9lJUb8rAmF6HS+4gtQ4e/w9tkUeWIsToiB8siD/UMEDVo1Lr4faV8i/LvjQuDh
-         V59j3DuC5WS+pDLw9rnYJRisxNQBHPy5bNOou1qmohxqxWwpmTrV02A+DF+JVx12o0Js
-         gHag==
+        b=OFyfmwwepKnORU7jsvDPsR7xL6zeVJtNjdJ96M1XkUr1nhonwPpG+D55NXBMejSLcT
+         8NLHmkhEExPhOPnDzAKYZxg0VCFN+CchLOJRkKbspP4k3bAgfLr+8rqcQllPFeJbH/i7
+         AiDaMYdrbISyaYlj8XktR42lhZPidMohMASnydzUdV4of9umcf9kORpNqC288YxshS7D
+         3YV9otvIycGemodQLlHBxpBaloJreH/paSOROxOBFFVZh56CwH57Tg+nDFQ9DxQ7XelV
+         ZHwo0SFIac6Dg55TWmAnL06q4QSBRJ987wUYTkuIiwaP+gZ270fcJTy3E93OHLqorOLF
+         FiOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=OX5+Xiyuuua7ItSBWY1/1bwrYmd2boubaHGKa84wHQ0=;
-        fh=Ya005VydBAXggpEquUNhTIiTxaS0F7/YMzwdNXRoFMk=;
-        b=TP+a1W0ZsP54Y26tw/xgzQ8p5ezET8RW9gHA7zIsSn5n8X4nVEghZBnLpsqyZ8G3+W
-         LaNu4G5ZcueILtIlOwHXNPxLvpC39lhzTcrh6yS8qaI2mYhy0f8OYf//qbT731xrpxaV
-         qI9RWZnGIjFMS79Ef0P2u88x2dPLeik2vesjAlsM8dTsi6MDvWlbJtkYhyeHaTZ3rlcQ
-         RonqNeWFG8ifqT7DwA3Mvefx+rx5xb/I4TVvsn2lQ2urY5EaXEs7bCF6TNCe25jAseYg
-         +mHlkRPBkZKJZfdmRYHQ+CZd31PKDVTLwL73sQjyCf4l/tmYEL3WeJMnzYUN7EvHwD0a
-         bSYg==;
+        bh=sukUGR/r/jcZqixsvEfVTV8/DBs4WxfTg7TXAo14YbY=;
+        fh=qVtT5G4755aEjqfiI9ibJkCwPSxkeQqFp/HyF6+NL2U=;
+        b=UibUvGrOZf7qso6wRpGvgD4nLXrDm9vmA9XH1A09UYYjqxkD6tstGlzTFS55qQY4fz
+         smS2aIQWHt8YYAvF5YzqqxVV2wTAFw1cC/ybxxPHpyNVOKdbGVD4vzImyXGWkVxOlFfu
+         i54RxeB3tS8n8PuSIsT8TvN/caToiLsTvWJKchLQL5GnEi0RIrawtt4wG741wSHUTnXq
+         XPvi377nFN6Y6X6Kp10xDD/3HSEw98Tm7pyl0VUaRJmMDq59jtk8bDDgGq0dBrMcORvU
+         oxaYz5r8fsyO/9Y6tqzkhE3lBGYK5ithLrTX6c2XQqK21v7GnnrQlQpf+Qi/2yWfuisO
+         gIxg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785197306; x=1785802106; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785197312; x=1785802112; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=OX5+Xiyuuua7ItSBWY1/1bwrYmd2boubaHGKa84wHQ0=;
-        b=g2YAcAWouoovhZFVFtWesBYYlsyWXZKVJcnQjR63aqShyrW0VVQWmPDHG5Oxpxv60G
-         foUMe3AJ6VnlJYbQ6tMcQXGfd1ZUwS2axug86i5TD6t7RNgz+w7RQLy/xSKwt8hin+FX
-         g+rM0fkqhZ46/SZVkZHBP6KUPftqgMlrIpgFP8wblq5i7FomicfwUoTp9dffX45bprWi
-         iS4P6HD0XMsGUsSKanu6gmikpfJumyv3fec8PAQDIH9rnm9APN2GJjL0+WHQ6F/LEBif
-         Xpms515PC7OART4z3tA0PhExW2fYn/TpWPOEv8fHHRoZZ6fK4pWjmSw/Ju/oZlpGwNNB
-         SpYQ==
+        bh=sukUGR/r/jcZqixsvEfVTV8/DBs4WxfTg7TXAo14YbY=;
+        b=Udu1EkH7dX5zJ9XeuiSDPxkLIX9//A9IXFij4Ryi4X2C4Z6VKEp+mQyCqz9sMccA5T
+         FCFF8vcsfCApdWHQrIq/rF6JHuSdpIqu9GuTN5GhxZ4Aj5Suf7/HIloYIaWebQjGQ1EH
+         S9VyCw2mXDbDri3lqSxJz92XmZbd/2pKHeaj2a7Wxml7ccnGDkri7ixilGRhGXMFuuxp
+         41bXZKd2JKgmk0SjuINw9mqhKaFHK9M9qsZsiQqz2ko4U+HOj5SQEm17c0jKWfvhIapE
+         aqZPv/1fW9R/vqWfL8ZdD2MBikJlBM1jrwKKYo9XS3hgiI3ET957BRN5XTeW1raedzg9
+         rp1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785197306; x=1785802106;
+        d=1e100.net; s=20251104; t=1785197312; x=1785802112;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OX5+Xiyuuua7ItSBWY1/1bwrYmd2boubaHGKa84wHQ0=;
-        b=Pc14MH62sJ4dsuGWwxlSsH1GeBD7WuYUk75QSZ9ZOCitdQQ9NPBsrFE+QoZrCpeF4A
-         ki1FGXBaC79L9kXp7Pm+gNJlV4r8rdLa/Kyk+Be3boXYnxyKNXVe0ftOvMhZpuFOHjOq
-         xn8gExXmBGtK8a4OpEge0NEBqTuhZk+R+iwu057LKs5YoKAqoRm7h5fMmErtDPAGCXrI
-         Jsao8jgPiidMiLEFYz+b+Tq2tI6x1Bww5QL9PayHbvQ/EMPXXwbVFDFuQtgsMpcU5Vrz
-         cRiXA8T8JEZu7wU1Qgyqx7EsVyHeVEtvfEFXFwzaryzmR6la553caJ9BHRfb1gwmYEN+
-         OYmw==
-X-Forwarded-Encrypted: i=1; AHgh+Rp0A2xxhNwlo5j/DXgRUOMjyDVj1JfrKFx4RQyVSFXwHlGhEFG3Gowpi4Lynr53+nqn5Hw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwC1BESjBQMONYnjRHRHRh9Ki+0QCIMGZHtRrhQbzYng7jCJPnC
-	7g/ZghWu93j/ADdAQFkrjNfDkf8lhTpdjttUyP3CnLMkUVEMn/cv+t+w2rWosduOl94tGfIR9eW
-	S/ZVsaBYaGyB3E34ngPgkaLWb6XNUHrk=
-X-Gm-Gg: AR+sD104wJ4Fy1iuuh40cum+2C2XbvKYAFzUHyyxyXaZ3soO4kuSVAyM56MRvXFbO+Z
-	+24F4+eoq52M/nqqhdD5bZMRjpvAIeTtQZDQKyrUoi2uDFuo3qUxVDGJ8QDIGS3MNueCI/wj8tS
-	SlCXsKC2p4CPVQL6QPZ7AM/rcEcwK90mVGsfkGaoyfU/aWp3nJBqQAsIDYdHzhp43do9finHEq7
-	7hF9+E6LipN4Ciu+bQmKiKAjmrIeT8T2fXv1iwrgDae/VbYZfHmpHyWmc6VyZKSM1KLjeFnt2uj
-	QhXMNc33Kh0RHGyfQE8EDoBVTU+7xvE/SOnwwZFlhStecA+geuFKczKFIZ4hJdXUKaCX5WG8crY
-	=
-X-Received: by 2002:a05:6512:b83:b0:5b0:1108:c58b with SMTP id
- 2adb3069b0e04-5b2d0251425mr11802e87.15.1785197305751; Mon, 27 Jul 2026
- 17:08:25 -0700 (PDT)
+        bh=sukUGR/r/jcZqixsvEfVTV8/DBs4WxfTg7TXAo14YbY=;
+        b=QNqe+D4U+kb1kzWDt8xzEsPWem42XYH1ok5E6bHBYOLWv1FTK4lnFb3qdMaOYt0DUw
+         ErUJB8QSGhObblabRqWBsW/FyriIrdBXJqfAq2UQj3cg0TIIOjgGfXyDEhhwdbUgMxu3
+         Fkg6KFvn1bGGjcnlWm0/XK+MIoobLeSJk6gEF4HUCiYSerXkC1kRf6Hzsx9kWEP3r9bA
+         nj5yH4v9YL8kCHQxNgnnYBmjWTRMQbhMWasPKsN1DCjhtJgTyWtI+LGGVHrQP1FdX1oU
+         YJtMPGA3qu/cdy5kJ6AEv+FF3n0VluQ6plKQ8MyAMnHPlhGUjP8wQXHNApTYqdnsKN48
+         u5wA==
+X-Gm-Message-State: AOJu0YwMYD/DtdoIMIcYEjClEs359j8nFOfRjIL1oTTyIkcHW89kmEIH
+	syt+SXr+xfNRLsklJ03lio+rdrOoEEBO6kg9puev/O661WVoSRlYKH2YYjRwi4ubBsY68lxBECL
+	WWq4ec1RWfxSwEvJStzw8Oqm0DrLRLoE=
+X-Gm-Gg: AR+sD11T5Ik1PYXt5lKtDZ9z8b0iqY+aOHBRlNBICOMEWUyq29Of2Y3Xs+du2MNCzOz
+	F/zXqPr5VRc10lE/8FMLQuMAuh4CpFpuIHlzO0QsWf+jdnO9HV9JXlM9O7OFq7bGNMlWWNB0ySX
+	vcIPXjOUo4HDvTCV8J10Bf4YR3yFg+hDcQM3+XAwGQaVcGJZtfxjicY2eCJL7FjpEI/azzCZAg4
+	Xvf0nyz+QnjJYHfY/9PTch+gL0/SbkUf2QPa4yts0OmfIC/hsVnMNSw3Wxj5DfHuZQaaf8BLPwF
+	ufctIo4C+bmLS4uwo7K59WDM44mmHHTeLzAG29c8ZB1v609VvXfguTj/7A==
+X-Received: by 2002:a05:6a00:3ccf:b0:845:4928:8655 with SMTP id
+ d2e1a72fcca58-84e93334b79mr62636b3a.39.1785197312400; Mon, 27 Jul 2026
+ 17:08:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260725034246.192091-1-blbllhy@gmail.com> <amdJgi0V3YwWE7oL@boxer>
-In-Reply-To: <amdJgi0V3YwWE7oL@boxer>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Tue, 28 Jul 2026 08:07:48 +0800
-X-Gm-Features: AUfX_my7CVZAWJ_zY3gsLevRMQ883H5RL2tkawbZLRybomyRZyxwgSo7Orudwho
-Message-ID: <CAL+tcoA8KPn7z3p7KymQLT4apwcaCy1Yi8P0S5KD-f91jxmwhw@mail.gmail.com>
-Subject: Re: [PATCH net v2] xsk: fix NULL pointer dereference in __xsk_rcv()
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>, magnus.karlsson@intel.com, sdf@fomichev.me, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, AutonomousCodeSecurity@microsoft.com, 
-	tgopinath@linux.microsoft.com, kys@microsoft.com
+References: <20260722205032.1245094-1-song@kernel.org> <20260722205032.1245094-2-song@kernel.org>
+In-Reply-To: <20260722205032.1245094-2-song@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 27 Jul 2026 17:08:17 -0700
+X-Gm-Features: AUfX_mxSUEsOLS6J2baJUEUyxBn2glN1rcHemoFiFBKNS6fJWA3uirM9SWmvtuY
+Message-ID: <CAEf4BzZmStZdra-mf9taSQ2=9ghSJaV_KS-MdsBCGE7upzFmrg@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Populate mmap-able array map memory lazily
+To: Song Liu <song@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Maciej,
-
-On Mon, Jul 27, 2026 at 8:09=E2=80=AFPM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
+On Wed, Jul 22, 2026 at 1:50=E2=80=AFPM Song Liu <song@kernel.org> wrote:
 >
-> On Fri, Jul 24, 2026 at 11:42:46PM -0400, Cen Zhang (Microsoft) wrote:
-> > In the __xsk_rcv() multi-buffer path, xsk_buff_alloc() is called in a
-> > loop without checking its return value. xsk_buff_can_alloc() only
-> > counts fill queue entries without validating their addresses, so it
-> > can succeed while xsk_buff_alloc() rejects all remaining entries and
-> > returns NULL.
-> >
-> >   Oops: general protection fault, probably for non-canonical address
-> >    0xdffffc0000000000
-> >   KASAN: null-ptr-deref in range
-> >    [0x0000000000000000-0x0000000000000007]
-> >   RIP: 0010:__xsk_rcv+0x426/0xc20 (net/xdp/xsk.c:350)
-> >   Call Trace:
-> >    xsk_generic_rcv+0x26d/0x5f0
-> >    xdp_do_generic_redirect+0x3c5/0xcf0
-> >    do_xdp_generic+0x92f/0xe70
-> >    __netif_receive_skb_core.constprop.0+0xf7e/0x2b30
-> >
-> > Fix this with a two-stage transaction. First allocate and stage all
-> > buffers required for the packet, recycling all staged buffers with
-> > xsk_buff_free() if any allocation fails. Only after this stage
-> > succeeds, copy the data, reserve the RX descriptors, and release the
-> > buffers in an error-free loop.
-> >
-> > Fixes: 804627751b42 ("xsk: add support for AF_XDP multi-buffer on Rx pa=
-th")
-> > Reported-by: AutonomousCodeSecurity@microsoft.com
-> > Signed-off-by: Cen Zhang (Microsoft) <blbllhy@gmail.com>
-
-Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
-
-> > ---
-> > v2:
-> >  - Allocate all packet buffers before reserving RX descriptors.
-> >  - Recycle partially allocated buffers instead of only cancelling the
-> >   RX producer reservations.
-> > Link: https://lore.kernel.org/netdev/20260724164719.99563-1-blbllhy@gma=
-il.com
-> >
-> >  net/xdp/xsk.c | 29 ++++++++++++++++++++++++++---
-> >  1 file changed, 26 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > index f906d51b6699..383fc2b1de48 100644
-> > --- a/net/xdp/xsk.c
-> > +++ b/net/xdp/xsk.c
-> > @@ -298,9 +298,11 @@ static int __xsk_rcv(struct xdp_sock *xs, struct x=
-dp_buff *xdp, u32 len)
-> >       u32 frame_size =3D __xsk_pool_get_rx_frame_size(xs->pool);
-> >       void *copy_from =3D xsk_copy_xdp_start(xdp), *copy_to;
-> >       u32 from_len, meta_len, rem, num_desc;
-> > -     struct xdp_buff_xsk *xskb;
-> > +     struct xdp_buff_xsk *xskb, *tmp;
-> >       struct xdp_buff *xsk_xdp;
-> > +     LIST_HEAD(xsk_buffs);
-> >       skb_frag_t *frag;
-> > +     u32 i;
-> >
-> >       from_len =3D xdp->data_end - copy_from;
-> >       meta_len =3D xdp->data - copy_from;
-> > @@ -343,23 +345,44 @@ static int __xsk_rcv(struct xdp_sock *xs, struct =
-xdp_buff *xdp, u32 len)
-> >               frag =3D  &sinfo->frags[0];
-> >       }
-> >
-> > +     for (i =3D 0; i < num_desc; i++) {
-> > +             xsk_xdp =3D xsk_buff_alloc(xs->pool);
-> > +             if (!xsk_xdp)
-> > +                     goto err_alloc;
-> > +
-> > +             xskb =3D container_of(xsk_xdp, struct xdp_buff_xsk, xdp);
-> > +             if (unlikely(!list_empty(&xskb->list_node)))
-> > +                     goto err_alloc;
-> > +             list_add_tail(&xskb->list_node, &xsk_buffs);
+> An mmap-able BPF array map (BPF_F_MMAPABLE) has its backing memory
+> vmalloc'ed up front at map creation time. array_map_mmap() then wired up
+> the whole mapping eagerly via remap_vmalloc_range(), which calls
+> vm_insert_page() for every page of the map. For large maps this makes
+> every mmap() O(number of pages): an 8MiB map inserts 2048 PTEs per
+> mmap() and tears them all down again on munmap(), even when user space
+> only touches a few pages (or none at all).
 >
-> could we use existing xsk_buff_add_frag() ?
-> then I presume xsk_buff_free() would understand list and walk through
-> xdp_buff's and free it ?
-
-Good suggestion, but xsk_buff_add_frag() will add more irrelevant
-stuff like nr_frags, xdp_frags_size, xdp_frags_truesize... They are
-all happening in the softirq context. Refactoring the helper would
-bring more work here.
-
-Honestly, I like the local array which seems simpler/cleaner to understand =
-:)
-
-Thanks,
-Jason
-
+> Populate the mapping lazily instead, the same way the arena map already
+> does. array_map_mmap() now only performs the bounds check and returns,
+> leaving the PTEs unpopulated; the pages are inserted on demand by a new
+> array_map_mmap_fault() handler. Because the memory is already resident,
+> the fault handler simply resolves the vmalloc page and hands it to the
+> fault path.
 >
-> I believe we could reuse pool's xskb_list instead of fabricating the
-> on-stack variant here.
+> To keep the existing VMA open/close accounting (VM_MAYWRITE write-active
+> tracking, freeze handling) centralized, the fault handler is reached
+> through a new optional ->map_mmap_fault callback dispatched from the
+> shared bpf_map_default_vmops, rather than each map installing its own
+> vm_operations_struct.
 >
-> > +     }
-> > +
-> >       do {
-> >               u32 to_len =3D frame_size + meta_len;
-> >               u32 copied;
-> >
-> > -             xsk_xdp =3D xsk_buff_alloc(xs->pool);
-> > +             xskb =3D list_first_entry(&xsk_buffs, struct xdp_buff_xsk=
-,
-> > +                                     list_node);
-> > +             list_del_init(&xskb->list_node);
-> > +             xsk_xdp =3D &xskb->xdp;
-> >               copy_to =3D xsk_xdp->data - meta_len;
-> >
-> >               copied =3D xsk_copy_xdp(copy_to, &copy_from, to_len, &fro=
-m_len, &frag, rem);
-> >               rem -=3D copied;
-> >
-> > -             xskb =3D container_of(xsk_xdp, struct xdp_buff_xsk, xdp);
-> >               __xsk_rcv_zc_safe(xs, xskb, copied - meta_len,
-> >                                 rem ? XDP_PKT_CONTD : 0);
-> >               meta_len =3D 0;
-> >       } while (rem);
-> >
-> >       return 0;
-> > +
-> > +err_alloc:
-> > +     list_for_each_entry_safe(xskb, tmp, &xsk_buffs, list_node) {
-> > +             list_del_init(&xskb->list_node);
-> > +             xsk_buff_free(&xskb->xdp);
-> > +     }
-> > +     xs->rx_dropped++;
-> > +     return -ENOMEM;
-> >  }
-> >
-> >  static bool xsk_tx_writeable(struct xdp_sock *xs)
-> > --
-> > 2.53.0
-> >
+> remap_vmalloc_range() previously guarded against offset overflow; since
+> it is no longer used, array_map_mmap() and the fault handler compute the
+> mapping offset with 64-bit arithmetic so that a large vm_pgoff cannot
+> overflow the bounds check on 32-bit architectures.
+>
+> This turns mmap()/munmap() of an mmap-able array from O(map size) into
+> O(1). Callers that want the pages populated up front can still request
+> that explicitly with MAP_POPULATE, matching regular file semantics.
+> Kernel-side access to the map (via the vmalloc address) is unaffected.
+>
+> Signed-off-by: Song Liu <song@kernel.org>
+> Assisted-by: Claude:claude-opus-4-8
+> ---
+>  include/linux/bpf.h   |  1 +
+>  kernel/bpf/arraymap.c | 43 +++++++++++++++++++++++++++++++++++++++----
+>  kernel/bpf/syscall.c  | 17 +++++++++++++++++
+>  3 files changed, 57 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index e066f44a9c05..b536f3c9e103 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -145,6 +145,7 @@ struct bpf_map_ops {
+>         int (*map_direct_value_meta)(const struct bpf_map *map,
+>                                      u64 imm, u32 *off);
+>         int (*map_mmap)(struct bpf_map *map, struct vm_area_struct *vma);
+> +       vm_fault_t (*map_mmap_fault)(struct bpf_map *map, struct vm_fault=
+ *vmf);
+>         __poll_t (*map_poll)(struct bpf_map *map, struct file *filp,
+>                              struct poll_table_struct *pts);
+>         unsigned long (*map_get_unmapped_area)(struct file *filep, unsign=
+ed long addr,
+> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+> index 248b4818178c..59fda56062a9 100644
+> --- a/kernel/bpf/arraymap.c
+> +++ b/kernel/bpf/arraymap.c
+> @@ -576,17 +576,51 @@ static int array_map_check_btf(struct bpf_map *map,
+>  static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vm=
+a)
+>  {
+>         struct bpf_array *array =3D container_of(map, struct bpf_array, m=
+ap);
+> -       pgoff_t pgoff =3D PAGE_ALIGN(sizeof(*array)) >> PAGE_SHIFT;
+>
+>         if (!(map->map_flags & BPF_F_MMAPABLE))
+>                 return -EINVAL;
+>
+> -       if (vma->vm_pgoff * PAGE_SIZE + (vma->vm_end - vma->vm_start) >
+> +       /* use u64 math so the offset cannot overflow on 32-bit archs */
+> +       if ((u64)vma->vm_pgoff * PAGE_SIZE + (vma->vm_end - vma->vm_start=
+) >
+>             PAGE_ALIGN((u64)array->map.max_entries * array->elem_size))
+>                 return -EINVAL;
+>
+> -       return remap_vmalloc_range(vma, array_map_vmalloc_addr(array),
+> -                                  vma->vm_pgoff + pgoff);
+> +       /*
+> +        * The backing memory is vmalloc'ed up front, so instead of wirin=
+g up
+> +        * every PTE here we let array_map_mmap_fault() insert pages on d=
+emand.
+> +        * remap_vmalloc_range_partial() used to set these flags for us; =
+keep
+> +        * them to preserve behavior (no VMA expansion, excluded from cor=
+edump).
+> +        */
+> +       vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
+> +
+> +       return 0;
+> +}
+> +
+> +static vm_fault_t array_map_mmap_fault(struct bpf_map *map,
+> +                                      struct vm_fault *vmf)
+> +{
+> +       struct bpf_array *array =3D container_of(map, struct bpf_array, m=
+ap);
+> +       pgoff_t pgoff =3D PAGE_ALIGN(sizeof(*array)) >> PAGE_SHIFT;
+> +       struct page *page;
+> +       void *kaddr;
+> +
+> +       /*
+> +        * vmf->pgoff is the page offset within the mapping (vma->vm_pgof=
+f plus
+> +        * the offset of the faulting address). The data pages start afte=
+r the
+> +        * bpf_array header, hence the extra pgoff. This mirrors the offs=
+et that
+> +        * remap_vmalloc_range(vma, ..., vma->vm_pgoff + pgoff) used to a=
+pply.
+> +        */
+> +       kaddr =3D array_map_vmalloc_addr(array) +
+> +               (((u64)vmf->pgoff + pgoff) << PAGE_SHIFT);
+> +
+
+remap_vmalloc_range() uses careful check_shl_overflow() and
+check_add_overflow() checks, while we just (u64) cast and go... should
+we be more careful and avoid some weird edge cases. Not sure if that's
+possible, but maybe better safe than sorry?
+
+> +       page =3D vmalloc_to_page(kaddr);
+> +       if (!page)
+> +               return VM_FAULT_SIGBUS;
+> +
+> +       get_page(page);
+> +       vmf->page =3D page;
+> +
+> +       return 0;
+>  }
+>
+>  static bool array_map_meta_equal(const struct bpf_map *meta0,
+> @@ -812,6 +846,7 @@ const struct bpf_map_ops array_map_ops =3D {
+>         .map_direct_value_addr =3D array_map_direct_value_addr,
+>         .map_direct_value_meta =3D array_map_direct_value_meta,
+>         .map_mmap =3D array_map_mmap,
+> +       .map_mmap_fault =3D array_map_mmap_fault,
+>         .map_seq_show_elem =3D array_map_seq_show_elem,
+>         .map_check_btf =3D array_map_check_btf,
+>         .map_lookup_batch =3D generic_map_lookup_batch,
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 0ff9e3aa293d..fb0e1f55c487 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1077,9 +1077,26 @@ static void bpf_map_mmap_close(struct vm_area_stru=
+ct *vma)
+>                 bpf_map_write_active_dec(map);
+>  }
+>
+> +/*
+> + * Called for maps that populate their memory-mapped region lazily, i.e.=
+ that
+> + * return without wiring up any PTEs from their ->map_mmap callback. Map=
+s that
+> + * populate the whole VMA eagerly (e.g. via remap_vmalloc_range()) never=
+ reach
+> + * here.
+> + */
+> +static vm_fault_t bpf_map_mmap_fault(struct vm_fault *vmf)
+> +{
+> +       struct bpf_map *map =3D vmf->vma->vm_private_data;
+> +
+> +       if (!map->ops->map_mmap_fault)
+> +               return VM_FAULT_SIGBUS;
+> +
+> +       return map->ops->map_mmap_fault(map, vmf);
+> +}
+> +
+>  static const struct vm_operations_struct bpf_map_default_vmops =3D {
+>         .open           =3D bpf_map_mmap_open,
+>         .close          =3D bpf_map_mmap_close,
+> +       .fault          =3D bpf_map_mmap_fault,
+>  };
+>
+>  static int bpf_map_mmap(struct file *filp, struct vm_area_struct *vma)
+> --
+> 2.53.0-Meta
 >
