@@ -1,560 +1,348 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012035.outbound.protection.outlook.com [52.101.66.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6496A456E0F
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 14:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785250756; cv=none; b=ccZzKpCwQqiH1l7RiHMPadyyT+082zmVKs99p9IoMFrMhHU1PEBBBDheorybwRU6XTOqIH06j2Y5G6xP+lPTRX+mVTF3v0+uAtMgkzptdFdD2rfJ+1n96C3FqF/UxhSW32/tE1iazRkXpekSDtglC6OskeWqK7tJbi1da3dhGpk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785250756; c=relaxed/simple;
-	bh=9eEn0qEJRnR/5cn70Fh6aQ7RFYTLSGZ74e1LDz7h24k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rAukgGCy4H3/g6VE4RdPF+QdEvpJN0RoPe+t3hH+aZ0CzwOqxAKDgXLJ7olGKZSyJ8YVfsdIt7xg8j2PXM6WlEOSKUrdYbB/G2UnPnVjDKC7ru8Wefjvi3hKnSDPof/Zl+91ZZNfsszpO1SnTk4OFnLLGJprImlPNgHoC/Ks0jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rWbPVZs3; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78BA32EC0A2;
+	Tue, 28 Jul 2026 15:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785252298; cv=fail; b=B16Xhohp5B2eUx9k9QFX/UBnT7yw7NYWwBt3JdhEafkzQGWQ8kF5eb3Iu854WjSGjEA0gZGtG1so6QRLIHNqRt4FTm6qNjMBqeTJ+fH17SVqQBApKYUXPv+cyvbBCFmttCMRAgSv7jsSrD79zd3WETibfDc7kDGVIa83XH2RJeM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785252298; c=relaxed/simple;
+	bh=+yH3764ucBPyjZjjfAB2r7tkwq/ki3bV7C2QakeoL68=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=qbsbFWorT2rIJ+s5FNTn046HSJ6TTva/IzKL+7xJc0gsqSZ9yQvfzQQvgBgnnLFeCJgU5TDvhs+kZJvpvSlNAEfpgy0i7MXF9Dzwn5yyy7Y4i7LXq9WDEKVVcThF1bOFRLzB+hMnWXeNgFL5YOyaC9SxEUVV8VziPeexNwdhGoA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=JHOyt3rP; arc=fail smtp.client-ip=52.101.66.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rWbPVZs3"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785250752;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LgCQjppLRFp0IsBtPlXOxKWBKQJfQOiCE2ljdTP+yl0=;
-	b=rWbPVZs3kX2UQRxwfJD5nrvtbPgWw/6sWNHPbxgHUL75K4TXsgDaeS5u89tMJXRWPokIkq
-	8vfqTai63iYquQPO/cek7mkhu/l7uDgEQqiExIbffdOmSlTlnNLEoFh+v8bCaZGHrnUpeg
-	QFmMBL0+xTprxWWr0kgseikuHYPe1UU=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Rong Tao <rongtao@cestc.cn>,
-	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
-	Viktor Malik <vmalik@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH bpf-next 6/6] selftests/bpf: Benchmark string kfuncs
-Date: Tue, 28 Jul 2026 22:57:27 +0800
-Message-ID: <20260728145727.45153-7-leon.hwang@linux.dev>
-In-Reply-To: <20260728145727.45153-1-leon.hwang@linux.dev>
-References: <20260728145727.45153-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="JHOyt3rP"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kpzR1u1BGr8CO4+tuQHz6JeCKHLM2hHi5saJOaHeGkHF+3zC9R2iKVRl7FaUgR7f9QEIltW8F1/na3Oxi6SmP00wJcZM/x2IMMhQlQjQxZuth42j/DBA6F5HQ/eYXyUYG1COBwusKnAwrzZ5+pIrg+8UUICeayVfC8+fN9FVHBPortUSfNc5pn0mVmjbmRIW2o/4/u1gwNUE/AQeqT75OqXUeLNb+o+lGkwHOf4CYvVPT/k9DhB/qNOWVbl4XHi9ZYoaeQQoc8G9AEzVRsloeZglu4DfJ7aZe8IkAS8cgI12/C/yoN46/hQKkCoDNd6JurL3VXq7qLgGrcdY5S0XXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7yokbjOEQnGAim1a9xTZ5+Fx5GBw8lyA0w+DiAbwKa8=;
+ b=cSczhHthWEu8/+shXslAELiKx9iGADyDJfaDzVcC3QLf6jZoWGoEOmrNQO/X5jfOzGN0T+EhTUd1nYfpXmYwXY48Ilv3JwIFVKuoox+vNQa5Zp0egckONftAWiVx3B4M5vD7WMiVjBpxbKwPP69GuYkN7GIP8CMiYAYmR68eAPvVt2Srg7nXY1tfEWQzXbQW5Bo14372/S2UTUEH5v3+nxiQcEiszXHI65LKzEyJQCoUDtAwdG/LLmrjpYctZXb2k+mY9+krqyUg9Ahej2ylKVcPS3TtWREcAlH0HuhU6qof+IaydH6LvJPddRZ2XSp9gJiVLitoJYRFfW2iTiqsAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.240) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7yokbjOEQnGAim1a9xTZ5+Fx5GBw8lyA0w+DiAbwKa8=;
+ b=JHOyt3rPZH8dyDBfsipc+iwm0DCvLGJJuQSv0QKBW80LnlcSM5ATY+2CvsR1Ndhm/eOg0L0HYKcyJNz4UZhWzpVHgjvN41m3PqVD4ah9m18Ce9J5rUnwN/DuOGhiEpvYnIAbbjQrD3q4A9R/UuLKO8TXO4wgdUSifdTXBTw6MiTL3ORt5Zxo1iel31vOyL6QhV5Z9btarb2M1nwjxcE7l63K9ayUzCGn7TpotopC3Rvr3UfkEjMAsaUHHZ1jLRHYHCkrJC1eubgnR+bcx2vien7od/sP8wlxk0x1vr/rA8smF/ONsiN4s4lspH3r1SpOP/tXejcUMufSR33z4YIR3Q==
+Received: from DUZP191CA0052.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:4fa::15)
+ by PA1PR07MB10879.eurprd07.prod.outlook.com (2603:10a6:102:4fc::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.12; Tue, 28 Jul
+ 2026 15:24:51 +0000
+Received: from DB5PEPF00014B92.eurprd02.prod.outlook.com
+ (2603:10a6:10:4fa:cafe::9d) by DUZP191CA0052.outlook.office365.com
+ (2603:10a6:10:4fa::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.245.13 via Frontend Transport; Tue,
+ 28 Jul 2026 15:24:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.240)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.2.240 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.2.240;
+ helo=fihe3nok0735.emea.nsn-net.net; pr=C
+Received: from fihe3nok0735.emea.nsn-net.net (131.228.2.240) by
+ DB5PEPF00014B92.mail.protection.outlook.com (10.167.8.230) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.5
+ via Frontend Transport; Tue, 28 Jul 2026 15:24:50 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fihe3nok0735.emea.nsn-net.net (Postfix) with ESMTP id 95ABF236C0;
+	Tue, 28 Jul 2026 18:24:48 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: emil@etsalapatis.com,
+	jolsa@kernel.org,
+	yonghong.song@linux.dev,
+	song@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	memxor@gmail.com,
+	shuah@kernel.org,
+	martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	kuniyu@google.com,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v5 net-next 1/1] tcp: Replace min_tso_segs() with tso_segs() CC callback
+Date: Tue, 28 Jul 2026 17:24:25 +0200
+Message-Id: <20260728152425.649600-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5PEPF00014B92:EE_|PA1PR07MB10879:EE_
+X-MS-Office365-Filtering-Correlation-Id: cf82d1b4-ba72-4d63-843f-08deecbc5dbb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|1800799024|82310400026|36860700016|376014|7416014|921020|3023799007|11063799006|56012099006|10067099003|6133799003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	yZOyfyRHY0Zpmorb0xqb8U3AS5JxGI7NnrOCQwqMHtaGSTxXNbEzuisfZR/MxqcUphTj9ke13JkzxOQo5peF79ofrp2IaDD3s7uwlSiZ4ZKtWum63Q2Hl1IB7QCaqZ3k63fudgGfu2UTUIU8W0nLZ1mLFb9T3P0GQfEYdcfsup5pg5W4kXfYv5OkPPG0G4gLyoZQKkdWvLJjmicgIuXCgt25OiySyTTb79RULNbHWREMIOc0KvAVuUQZ+K4AMP5RWbtEYxWwsc92tSm3FaATECqCMgMi5ztfaVk6bfwH6wNZUZt+WOH8XimK3oNHx7GK6OSl+2LTGt6wSqO+KX8dUbdVTODnDWmuASoZJXcWR5P7yt9F9sZsBJTc28NAGnanCY1vCg/RBPvHSFBGCUeQW9HP667yzbKe+QmJQq0NaBohnqFleWebS25s+SldNsLh6F6IiWb4b2DYrXH20Ok8HN+o2N7A52NCDbiFp0MA0ej7NxSpQnYOAZecmD8yGbSyiDHd0YYysuA9Fx7a3k6SUY4pEv2X1MG0RacDVL1wrMfdIslhBUNVvyjAWK+K/LlWA64KR+WTY0b2unLCd+B5+8Sfncnr6VrnbRe+hTiitG9M7xSVKOlpQmO9VXYzvmekeU/AQYB0SepzVa4twiNreRjcQmGQnCOgpogBFCTyr07wBjL/+Wu3ZMdLPKE+g4L5hMEMClokJLMzokQShgFLAtHmoTUxzNjL47VMMsLlREpqkUaLfl++Q+WCBWh/eW0t
+X-Forefront-Antispam-Report:
+	CIP:131.228.2.240;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0735.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(82310400026)(36860700016)(376014)(7416014)(921020)(3023799007)(11063799006)(56012099006)(10067099003)(6133799003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	JgWYDFWlYLSk5+nFCK7aePOP5a6vXCPr/zHVIbyQ/QNxMGYpcjQZCgo02nGAW7Sc0eblFi0epk6+aTrwhLRb+JkBtCnE8QGS4nuJDd+W1Ot5vbdH9XRZXjQMtovKABwGpYddaF4HBlXytS9BjuBJypFY1nz3MZSmdoLw8ID8wu6Rls5B/RRQaNGkQuFppBw0uzyb/cqLYLCzJRGk1NwI23bzJ8gD5XWFaF2ZzpDCbM3+bLQeGEEDw8acA6025blZ9axqTOhuWk5XSucyRkW7pQAW4kaRloch01NFZZdm6SL90uvHNU8H/KjVKXiiAzd6/3dMFDSbLYWoKTuMek1wruzd02YkN89mVgSfGzqAyROroXZXbdk9B1qKU/mSCOS1n/kpCbHmwyvfjiXSj0ihcy5Q2ERv4DVeV/RKKc0LZ0Z0ngeu5B6jJjzWHtV5nwHK
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2026 15:24:50.2752
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf82d1b4-ba72-4d63-843f-08deecbc5dbb
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.240];Helo=[fihe3nok0735.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DB5PEPF00014B92.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR07MB10879
 
-Add a kfunc-only benchmark covering one representative from each string
-family: bpf_strnchr(), bpf_strcmp(), bpf_strcspn(), and bpf_strnstr().
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-Userspace populates aligned .data buffers once per scenario, before the
-timed program runs. Each BPF program reads those buffers and calls the
-selected kfunc directly.
+This patch replaces existing min_tso_segs() with tso_segs() CC callback
+for CC algorithm to provide explicit tso segment number of each data
+burst and overrides tcp_tso_autosize().
 
-Run the programs through BPF_PROG_TEST_RUN with first, middle, late, and
-terminal scenarios, and report median kernel execution times. Always run
-the complete matrix with fixed repetitions, trials, and warmup settings.
+This change provides below impacts on BPF struct_ops users:
+- The callback is renamed from min_tso_segs to tso_segs
+- The signature gains an extra u32 mss_now argument
+- The return value semantics is changed from "floor value passed into
+  tcp_tso_autosize()" to "final tso_segs value", bypassing autosizing
 
-Extend the generic benchmark framework with a synchronous run callback
-and register the string kfunc benchmark with it. This keeps the finite
-trial matrix out of the producer and consumer timing loop.
+As a result, BPF programs shall be updated, because retuning a small
+constan will now directly limit tso_segs instead of the minimum.
 
-Have the runner save its first result as a temporary baseline and compare
-subsequent runs against it, reporting baseline and current timings with
-their speedup.
+Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Assisted-by: Codex:gpt-5.6-sol
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/testing/selftests/bpf/Makefile          |   2 +
- tools/testing/selftests/bpf/bench.c           |  11 +
- tools/testing/selftests/bpf/bench.h           |   2 +
- .../bpf/benchs/bench_bpf_str_kfuncs.c         | 228 ++++++++++++++++++
- .../bpf/benchs/run_bench_bpf_str_kfuncs.sh    |  98 ++++++++
- .../bpf/progs/bpf_str_kfuncs_bench.c          |  48 ++++
- 6 files changed, 389 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_str_kfuncs.c
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_str_kfuncs.sh
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_str_kfuncs_bench.c
+v5:
+- Revert back to v3 and add Reviewed-by tag
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 55d394438705..e1e9d7ae7cb7 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -977,6 +977,7 @@ $(OUTPUT)/bench_sockmap.o: $(OUTPUT)/bench_sockmap_prog.skel.h
- $(OUTPUT)/bench_lpm_trie_map.o: $(OUTPUT)/lpm_trie_bench.skel.h $(OUTPUT)/lpm_trie_map.skel.h
- $(OUTPUT)/bench_bpf_nop.o: $(OUTPUT)/bpf_nop_bench.skel.h bench_bpf_timing.h
- $(OUTPUT)/bench_xdp_lb.o: $(OUTPUT)/xdp_lb_bench.skel.h bench_bpf_timing.h
-+$(OUTPUT)/bench_bpf_str_kfuncs.o: $(OUTPUT)/bpf_str_kfuncs_bench.skel.h
- $(OUTPUT)/bench_bpf_timing.o: bench_bpf_timing.h
- $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
- $(OUTPUT)/bench: LDLIBS += -lm
-@@ -1003,6 +1004,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_bpf_timing.o \
- 		 $(OUTPUT)/bench_bpf_nop.o \
- 		 $(OUTPUT)/bench_xdp_lb.o \
-+		 $(OUTPUT)/bench_bpf_str_kfuncs.o \
- 		 $(OUTPUT)/usdt_1.o \
- 		 $(OUTPUT)/usdt_2.o \
- 		 #
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 3d9d2cd7764b..c355f824b8ba 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -582,6 +582,7 @@ extern const struct bench bench_lpm_trie_delete;
- extern const struct bench bench_lpm_trie_free;
- extern const struct bench bench_bpf_nop;
- extern const struct bench bench_xdp_lb;
-+extern const struct bench bench_bpf_str_kfuncs;
+v4:
+- Use union for both min_tso_segs() and tso_segs() and a
+
+v3:
+- Update bpf_tcp_ca_tso_segs() to use tcp_tso_autosize()
+- Add divide by 0 protection in case of mss_now=0
+
+v2:
+- Export tcp_tso_autosize()
+---
+ include/net/tcp.h                                | 12 ++++++++++--
+ net/ipv4/bpf_tcp_ca.c                            |  9 ++++++---
+ net/ipv4/tcp_bbr.c                               | 13 ++++++++++---
+ net/ipv4/tcp_output.c                            | 13 +++++++------
+ tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c |  8 ++++----
+ 5 files changed, 37 insertions(+), 18 deletions(-)
+
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 2c5b889530b5..ef9975112f15 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -824,6 +824,9 @@ unsigned int tcp_sync_mss(struct sock *sk, u32 pmtu);
+ unsigned int tcp_current_mss(struct sock *sk);
+ u32 tcp_clamp_probe0_to_user_timeout(const struct sock *sk, u32 when);
  
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -665,6 +666,7 @@ static const struct bench *benchs[] = {
- 	&bench_lpm_trie_free,
- 	&bench_bpf_nop,
- 	&bench_xdp_lb,
-+	&bench_bpf_str_kfuncs,
++u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
++		     int min_tso_segs);
++
+ /* Bound MSS / TSO packet size with the half of the window */
+ static inline int tcp_bound_to_half_wnd(struct tcp_sock *tp, int pktsize)
+ {
+@@ -1361,8 +1364,13 @@ struct tcp_congestion_ops {
+ 	/* hook for packet ack accounting (optional) */
+ 	void (*pkts_acked)(struct sock *sk, const struct ack_sample *sample);
+ 
+-	/* override sysctl_tcp_min_tso_segs (optional) */
+-	u32 (*min_tso_segs)(struct sock *sk);
++	/* Override tcp_tso_autosize (optional)
++	 *
++	 * If provided, this callback returns the final TSO segment number
++	 * and will bypass tcp_tso_autosize() entirely. The implementation
++	 * must derive an appropriate value and ensure the result is valid.
++	 */
++	u32 (*tso_segs)(struct sock *sk, u32 mss_now);
+ 
+ 	/* new value of cwnd after loss (required) */
+ 	u32  (*undo_cwnd)(struct sock *sk);
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index 791e15063237..e5faa38bdd25 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -284,9 +284,12 @@ static void bpf_tcp_ca_pkts_acked(struct sock *sk, const struct ack_sample *samp
+ {
+ }
+ 
+-static u32 bpf_tcp_ca_min_tso_segs(struct sock *sk)
++static u32 bpf_tcp_ca_tso_segs(struct sock *sk, u32 mss_now)
+ {
+-	return 0;
++	if (unlikely(!mss_now))
++		/* No TSO sizing decision. Let caller apply its limits. */
++		return U32_MAX;
++	return tcp_tso_autosize(sk, mss_now, 0);
+ }
+ 
+ static void bpf_tcp_ca_cong_control(struct sock *sk, u32 ack, int flag,
+@@ -320,7 +323,7 @@ static struct tcp_congestion_ops __bpf_ops_tcp_congestion_ops = {
+ 	.cwnd_event_tx_start = bpf_tcp_ca_cwnd_event_tx_start,
+ 	.in_ack_event = bpf_tcp_ca_in_ack_event,
+ 	.pkts_acked = bpf_tcp_ca_pkts_acked,
+-	.min_tso_segs = bpf_tcp_ca_min_tso_segs,
++	.tso_segs = bpf_tcp_ca_tso_segs,
+ 	.cong_control = bpf_tcp_ca_cong_control,
+ 	.undo_cwnd = bpf_tcp_ca_undo_cwnd,
+ 	.sndbuf_expand = bpf_tcp_ca_sndbuf_expand,
+diff --git a/net/ipv4/tcp_bbr.c b/net/ipv4/tcp_bbr.c
+index 82378a2bfd1e..ecf11be46f38 100644
+--- a/net/ipv4/tcp_bbr.c
++++ b/net/ipv4/tcp_bbr.c
+@@ -297,11 +297,18 @@ static void bbr_set_pacing_rate(struct sock *sk, u32 bw, int gain)
+ }
+ 
+ /* override sysctl_tcp_min_tso_segs */
+-__bpf_kfunc static u32 bbr_min_tso_segs(struct sock *sk)
++static u32 bbr_min_tso_segs(struct sock *sk)
+ {
+ 	return READ_ONCE(sk->sk_pacing_rate) < (bbr_min_tso_rate >> 3) ? 1 : 2;
+ }
+ 
++__bpf_kfunc static u32 bbr_tso_segs(struct sock *sk, u32 mss_now)
++{
++	if (unlikely(!mss_now))
++		return bbr_min_tso_segs(sk);
++	return tcp_tso_autosize(sk, mss_now, bbr_min_tso_segs(sk));
++}
++
+ static u32 bbr_tso_segs_goal(struct sock *sk)
+ {
+ 	struct tcp_sock *tp = tcp_sk(sk);
+@@ -1151,7 +1158,7 @@ static struct tcp_congestion_ops tcp_bbr_cong_ops __read_mostly = {
+ 	.undo_cwnd	= bbr_undo_cwnd,
+ 	.cwnd_event_tx_start	= bbr_cwnd_event_tx_start,
+ 	.ssthresh	= bbr_ssthresh,
+-	.min_tso_segs	= bbr_min_tso_segs,
++	.tso_segs	= bbr_tso_segs,
+ 	.get_info	= bbr_get_info,
+ 	.set_state	= bbr_set_state,
  };
+@@ -1163,7 +1170,7 @@ BTF_ID_FLAGS(func, bbr_sndbuf_expand)
+ BTF_ID_FLAGS(func, bbr_undo_cwnd)
+ BTF_ID_FLAGS(func, bbr_cwnd_event_tx_start)
+ BTF_ID_FLAGS(func, bbr_ssthresh)
+-BTF_ID_FLAGS(func, bbr_min_tso_segs)
++BTF_ID_FLAGS(func, bbr_tso_segs)
+ BTF_ID_FLAGS(func, bbr_set_state)
+ BTF_KFUNCS_END(tcp_bbr_check_kfunc_ids)
  
- static void find_benchmark(void)
-@@ -791,6 +793,15 @@ int main(int argc, char **argv)
- 	find_benchmark();
- 	parse_cmdline_args_final(argc, argv);
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index d7c1444b5e30..101ca765a7a9 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2253,8 +2253,8 @@ static bool tcp_nagle_check(bool partial, const struct tcp_sock *tp,
+  * for every 2^9 usec (aka 512 us) of RTT, so that the RTT-based allowance
+  * is below 1500 bytes after 6 * ~500 usec = 3ms.
+  */
+-static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
+-			    int min_tso_segs)
++u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
++		     int min_tso_segs)
+ {
+ 	unsigned long bytes;
+ 	u32 r;
+@@ -2269,6 +2269,7 @@ static u32 tcp_tso_autosize(const struct sock *sk, unsigned int mss_now,
  
-+	if (bench->run) {
-+		if (bench->validate)
-+			bench->validate();
-+		if (bench->setup)
-+			bench->setup();
-+		bench->run();
-+		return 0;
-+	}
-+
- 	setup_benchmark();
+ 	return max_t(u32, bytes / mss_now, min_tso_segs);
+ }
++EXPORT_SYMBOL(tcp_tso_autosize);
  
- 	setup_timer();
-diff --git a/tools/testing/selftests/bpf/bench.h b/tools/testing/selftests/bpf/bench.h
-index 89a3fc72f70e..9351b472d5e4 100644
---- a/tools/testing/selftests/bpf/bench.h
-+++ b/tools/testing/selftests/bpf/bench.h
-@@ -55,6 +55,8 @@ struct bench {
- 	const struct argp *argp;
- 	void (*validate)(void);
- 	void (*setup)(void);
-+	/* Run a synchronous benchmark without producer or consumer threads. */
-+	void (*run)(void);
- 	void *(*producer_thread)(void *ctx);
- 	void *(*consumer_thread)(void *ctx);
- 	void (*measure)(struct bench_res* res);
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_str_kfuncs.c b/tools/testing/selftests/bpf/benchs/bench_bpf_str_kfuncs.c
-new file mode 100644
-index 000000000000..12139054bed5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_bpf_str_kfuncs.c
-@@ -0,0 +1,228 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <errno.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/utsname.h>
-+
-+#include "bench.h"
-+#include "bpf_str_kfuncs_bench.skel.h"
-+
-+#define STR_BENCH_CAP		2048
-+#define STR_BENCH_SCENARIOS	4
-+#define STR_BENCH_REPEAT	100000
-+#define STR_BENCH_TRIALS	9
-+#define STR_BENCH_WARMUP	1000
-+
-+enum benchmark_kind {
-+	BENCH_SCAN,
-+	BENCH_COMPARISON,
-+	BENCH_SPAN,
-+	BENCH_SUBSTRING,
-+	BENCH_COUNT,
-+};
-+
-+struct scenario {
-+	const char *name;
-+	unsigned char payload[STR_BENCH_CAP];
-+	size_t length;
-+	int position;
-+	__u32 want;
-+};
-+
-+struct sample {
-+	double ns_per_op;
-+};
-+
-+struct benchmark {
-+	const char *name;
-+	const char *kfunc;
-+	struct bpf_program *prog;
-+	struct bpf_str_kfuncs_bench *skel;
-+	enum benchmark_kind kind;
-+};
-+
-+struct scenario_spec {
-+	const char *name;
-+	size_t length;
-+	int position;
-+};
-+
-+static const struct scenario_spec scenario_specs[STR_BENCH_SCENARIOS] = {
-+	{ "first",  64,   0    },
-+	{ "middle", 512,  240  },
-+	{ "late",   1536, 1200 },
-+	{ "absent", 2048, -1   },
-+};
-+
-+static const char substring_needle[] = "Host: benchmark.example.com";
-+static const unsigned char dummy_packet[64];
-+
-+static void make_scenario(enum benchmark_kind kind, struct scenario *scenario,
-+			  const struct scenario_spec *spec)
-+{
-+	scenario->name = spec->name;
-+	scenario->length = spec->length;
-+	scenario->position = spec->position;
-+
-+	switch (kind) {
-+	case BENCH_SCAN:
-+		memset(scenario->payload, 'x', scenario->length);
-+		if (spec->position >= 0)
-+			scenario->payload[spec->position] = 'H';
-+		scenario->want = spec->position < 0 ? (__u32)-ENOENT : spec->position;
-+		break;
-+	case BENCH_COMPARISON:
-+		scenario->name = spec->position < 0 ? "equal" : spec->name;
-+		memset(scenario->payload, 'a', scenario->length);
-+		scenario->want = spec->position < 0 ? 0 : (__u32)-1;
-+		break;
-+	case BENCH_SPAN:
-+		memset(scenario->payload, 'a', scenario->length);
-+		if (spec->position >= 0)
-+			scenario->payload[spec->position] = ':';
-+		scenario->want = spec->position < 0 ? scenario->length : spec->position;
-+		break;
-+	case BENCH_SUBSTRING:
-+		memset(scenario->payload, 'x', scenario->length);
-+		if (spec->position >= 0)
-+			memcpy(scenario->payload + spec->position, substring_needle,
-+			       sizeof(substring_needle) - 1);
-+		scenario->want = spec->position < 0 ? (__u32)-ENOENT : spec->position;
-+		break;
-+	case BENCH_COUNT:
-+		break;
-+	}
-+}
-+
-+static void prepare_program_input(const struct benchmark *benchmark,
-+				  const struct scenario *scenario)
-+{
-+	unsigned char *lhs = (unsigned char *)benchmark->skel->data->buffers.lhs.words;
-+	unsigned char *rhs = (unsigned char *)benchmark->skel->data->buffers.rhs.words;
-+
-+	memcpy(lhs, scenario->payload, scenario->length);
-+	lhs[scenario->length] = '\0';
-+
-+	if (benchmark->kind == BENCH_COMPARISON) {
-+		memcpy(rhs, scenario->payload, scenario->length);
-+		if (scenario->position >= 0)
-+			rhs[scenario->position] = 'b';
-+		rhs[scenario->length] = '\0';
-+	}
-+
-+	benchmark->skel->data->payload_length = scenario->length;
-+}
-+
-+static void run_program(const struct benchmark *benchmark, const struct scenario *scenario,
-+			int repeat, struct sample *sample)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	int err;
-+
-+	topts.data_in = dummy_packet;
-+	topts.data_size_in = sizeof(dummy_packet);
-+	topts.repeat = repeat;
-+	err = bpf_prog_test_run_opts(bpf_program__fd(benchmark->prog), &topts);
-+	if (err || topts.retval != scenario->want) {
-+		fprintf(stderr, "%s/%s failed: err=%d retval=%u want=%u\n",
-+			benchmark->name, scenario->name, err, topts.retval, scenario->want);
-+		exit(1);
-+	}
-+	if (sample)
-+		sample->ns_per_op = topts.duration;
-+}
-+
-+static int compare_samples(const void *a, const void *b)
-+{
-+	const struct sample *sa = a;
-+	const struct sample *sb = b;
-+
-+	if (sa->ns_per_op < sb->ns_per_op)
-+		return -1;
-+	if (sa->ns_per_op > sb->ns_per_op)
-+		return 1;
-+	return 0;
-+}
-+
-+static void benchmark_scenario(const struct benchmark *benchmark, const struct scenario *scenario)
-+{
-+	struct sample samples[STR_BENCH_TRIALS];
-+	int i;
-+
-+	prepare_program_input(benchmark, scenario);
-+	run_program(benchmark, scenario, STR_BENCH_WARMUP, NULL);
-+	for (i = 0; i < STR_BENCH_TRIALS; i++)
-+		run_program(benchmark, scenario, STR_BENCH_REPEAT, &samples[i]);
-+
-+	qsort(samples, STR_BENCH_TRIALS, sizeof(*samples), compare_samples);
-+	printf("%-9s %5zu %13.1f\n", scenario->name, scenario->length,
-+	       samples[STR_BENCH_TRIALS / 2].ns_per_op);
-+}
-+
-+static void str_kfuncs_run(void)
-+{
-+	struct benchmark benchmarks[BENCH_COUNT];
-+	struct bpf_str_kfuncs_bench *skel;
-+	struct scenario scenario;
-+	struct utsname uts = {};
-+	int i, j;
-+
-+	setup_libbpf();
-+	skel = bpf_str_kfuncs_bench__open_and_load();
-+	if (!skel) {
-+		fprintf(stderr, "Failed to load BPF skeleton\n");
-+		exit(1);
-+	}
-+
-+	benchmarks[BENCH_SCAN] = (struct benchmark) {
-+		.name = "scan",
-+		.kfunc = "bpf_strnchr",
-+		.prog = skel->progs.scan_kfunc,
-+		.skel = skel,
-+		.kind = BENCH_SCAN,
-+	};
-+	benchmarks[BENCH_COMPARISON] = (struct benchmark) {
-+		.name = "comparison",
-+		.kfunc = "bpf_strcmp",
-+		.prog = skel->progs.compare_kfunc,
-+		.skel = skel,
-+		.kind = BENCH_COMPARISON,
-+	};
-+	benchmarks[BENCH_SPAN] = (struct benchmark) {
-+		.name = "span",
-+		.kfunc = "bpf_strcspn",
-+		.prog = skel->progs.span_kfunc,
-+		.skel = skel,
-+		.kind = BENCH_SPAN,
-+	};
-+	benchmarks[BENCH_SUBSTRING] = (struct benchmark) {
-+		.name = "substring",
-+		.kfunc = "bpf_strnstr",
-+		.prog = skel->progs.substring_kfunc,
-+		.skel = skel,
-+		.kind = BENCH_SUBSTRING,
-+	};
-+
-+	uname(&uts);
-+	printf("BPF string kfunc benchmark\n");
-+	printf("kernel=%s arch=%s repeat=%d trials=%d warmup=%d\n",
-+	       uts.release, uts.machine, STR_BENCH_REPEAT, STR_BENCH_TRIALS, STR_BENCH_WARMUP);
-+
-+	for (i = 0; i < BENCH_COUNT; i++) {
-+		printf("\n%s (%s)\n", benchmarks[i].name, benchmarks[i].kfunc);
-+		printf("%-9s %5s %13s\n", "Scenario", "Bytes", "Kfunc ns/op");
-+
-+		for (j = 0; j < STR_BENCH_SCENARIOS; j++) {
-+			make_scenario(benchmarks[i].kind, &scenario, &scenario_specs[j]);
-+			benchmark_scenario(&benchmarks[i], &scenario);
-+		}
-+	}
-+
-+	bpf_str_kfuncs_bench__destroy(skel);
-+}
-+
-+const struct bench bench_bpf_str_kfuncs = {
-+	.name = "bpf-str-kfuncs",
-+	.run = str_kfuncs_run,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_str_kfuncs.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_str_kfuncs.sh
-new file mode 100755
-index 000000000000..4787176e7717
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_str_kfuncs.sh
-@@ -0,0 +1,98 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+set -euo pipefail
-+
-+cpu=${CPU:-1}
-+report=${REPORT:-bench_bpf_str_kfuncs.tmp}
-+
-+if [[ -z "$report" ]]; then
-+	echo "Report file must not be empty" >&2
-+	exit 2
-+fi
-+
-+tmp=$(mktemp "${report}.tmp.XXXXXX")
-+trap 'rm -f "$tmp"' EXIT
-+
-+sudo taskset -c "$cpu" ./bench bpf-str-kfuncs "$@" > "$tmp"
-+
-+if [[ ! -e "$report" ]]; then
-+	mv "$tmp" "$report"
-+	trap - EXIT
-+	cat "$report"
-+	printf '\nSaved baseline report to %s\n' "$report"
-+	exit
-+fi
-+
-+awk '
-+function fail(message)
-+{
-+	print "Invalid benchmark comparison: " message > "/dev/stderr"
-+	failed = 1
-+	exit 1
-+}
-+
-+FNR == 1 {
-+	file++
-+	kind = ""
-+}
-+
-+$1 ~ /^kernel=/ {
-+	if (file == 1) {
-+		baseline_kernel = $0
-+		baseline_params = $2 " " $3 " " $4 " " $5
-+	} else {
-+		current_kernel = $0
-+		current_params = $2 " " $3 " " $4 " " $5
-+		if (baseline_params != current_params)
-+			fail("architecture or run parameters differ")
-+		print "BPF string kfunc benchmark comparison"
-+		print "baseline " baseline_kernel
-+		print "current  " current_kernel
-+	}
-+	next
-+}
-+
-+$0 ~ /^[[:alpha:]]+ \(bpf_[[:alnum:]_]+\)$/ {
-+	kind = $1
-+	kfunc = $2
-+	gsub(/[()]/, "", kfunc)
-+	next
-+}
-+
-+$1 ~ /^(first|middle|late|absent|equal)$/ && $2 ~ /^[0-9]+$/ {
-+	key = kind SUBSEP $1
-+	if (!kind)
-+		fail("result row without benchmark name")
-+
-+	if (file == 1) {
-+		baseline[key] = $3
-+		baseline_bytes[key] = $2
-+		baseline_count++
-+	} else {
-+		if (!(key in baseline))
-+			fail("baseline is missing " kind "/" $1)
-+		if (baseline_bytes[key] != $2)
-+			fail("byte count differs for " kind "/" $1)
-+		if (kind != last_kind) {
-+			last_kind = kind
-+			printf "\n%s (%s)\n", kind, kfunc
-+			printf "%-9s %5s %15s %14s %9s\n", "Scenario",
-+			       "Bytes", "Baseline ns/op", "Current ns/op",
-+			       "Speedup"
-+		}
-+		printf "%-9s %5d %15.1f %14.1f %8.2fx\n",
-+		       $1, $2, baseline[key], $3, baseline[key] / $3
-+		current_count++
-+	}
-+}
-+
-+END {
-+	if (failed)
-+		exit 1
-+	if (!baseline_kernel || !current_kernel)
-+		fail("missing benchmark metadata")
-+	if (baseline_count != current_count)
-+		fail("different number of result rows")
-+}
-+' "$report" "$tmp"
-diff --git a/tools/testing/selftests/bpf/progs/bpf_str_kfuncs_bench.c b/tools/testing/selftests/bpf/progs/bpf_str_kfuncs_bench.c
-new file mode 100644
-index 000000000000..44a40e42cafa
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_str_kfuncs_bench.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+#define STR_BENCH_CAP 2048
-+
-+static const char span_reject[] __aligned(8) = ":";
-+static const char substring_needle[] __aligned(8) =
-+	"Host: benchmark.example.com";
-+
-+/* Populated by userspace once per scenario, outside the timed program run. */
-+struct {
-+	struct {
-+		__u64 words[(STR_BENCH_CAP + sizeof(__u64)) / sizeof(__u64)];
-+	} lhs;
-+	struct {
-+		__u64 words[(STR_BENCH_CAP + sizeof(__u64)) / sizeof(__u64)];
-+	} rhs;
-+} buffers SEC(".data");
-+
-+__u32 payload_length SEC(".data");
-+
-+SEC("tc")
-+int scan_kfunc(struct __sk_buff *skb)
-+{
-+	return bpf_strnchr((const char *)buffers.lhs.words, payload_length, 'H');
-+}
-+
-+SEC("tc")
-+int compare_kfunc(struct __sk_buff *skb)
-+{
-+	return bpf_strcmp((const char *)buffers.lhs.words, (const char *)buffers.rhs.words);
-+}
-+
-+SEC("tc")
-+int span_kfunc(struct __sk_buff *skb)
-+{
-+	return bpf_strcspn((const char *)buffers.lhs.words, span_reject);
-+}
-+
-+SEC("tc")
-+int substring_kfunc(struct __sk_buff *skb)
-+{
-+	return bpf_strnstr((const char *)buffers.lhs.words, substring_needle, payload_length);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ /* Return the number of segments we want in the skb we are transmitting.
+  * See if congestion control module wants to decide; otherwise, autosize.
+@@ -2278,11 +2279,11 @@ static u32 tcp_tso_segs(struct sock *sk, unsigned int mss_now)
+ 	const struct tcp_congestion_ops *ca_ops = inet_csk(sk)->icsk_ca_ops;
+ 	u32 min_tso, tso_segs;
+ 
+-	min_tso = ca_ops->min_tso_segs ?
+-			ca_ops->min_tso_segs(sk) :
+-			READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
++	min_tso = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
+ 
+-	tso_segs = tcp_tso_autosize(sk, mss_now, min_tso);
++	tso_segs = ca_ops->tso_segs ?
++			ca_ops->tso_segs(sk, mss_now) :
++			tcp_tso_autosize(sk, mss_now, min_tso);
+ 	return min_t(u32, tso_segs, sk->sk_gso_max_segs);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c b/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
+index 0a3e9d35bf6f..58262e490336 100644
+--- a/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
++++ b/tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c
+@@ -10,7 +10,7 @@ extern u32 bbr_sndbuf_expand(struct sock *sk) __ksym;
+ extern u32 bbr_undo_cwnd(struct sock *sk) __ksym;
+ extern void bbr_cwnd_event_tx_start(struct sock *sk) __ksym;
+ extern u32 bbr_ssthresh(struct sock *sk) __ksym;
+-extern u32 bbr_min_tso_segs(struct sock *sk) __ksym;
++extern u32 bbr_tso_segs(struct sock *sk, u32 mss_now) __ksym;
+ extern void bbr_set_state(struct sock *sk, u8 new_state) __ksym;
+ 
+ extern void dctcp_init(struct sock *sk) __ksym;
+@@ -90,9 +90,9 @@ u32 BPF_PROG(ssthresh, struct sock *sk)
+ }
+ 
+ SEC("struct_ops")
+-u32 BPF_PROG(min_tso_segs, struct sock *sk)
++u32 BPF_PROG(tso_segs, struct sock *sk, u32 mss_now)
+ {
+-	return bbr_min_tso_segs(sk);
++	return bbr_tso_segs(sk, mss_now);
+ }
+ 
+ SEC("struct_ops")
+@@ -120,7 +120,7 @@ struct tcp_congestion_ops tcp_ca_kfunc = {
+ 	.cwnd_event	= (void *)cwnd_event,
+ 	.cwnd_event_tx_start = (void *)cwnd_event_tx_start,
+ 	.ssthresh	= (void *)ssthresh,
+-	.min_tso_segs	= (void *)min_tso_segs,
++	.tso_segs	= (void *)tso_segs,
+ 	.set_state	= (void *)set_state,
+ 	.pkts_acked     = (void *)pkts_acked,
+ 	.name		= "tcp_ca_kfunc",
 -- 
-2.55.0
+2.34.1
 
