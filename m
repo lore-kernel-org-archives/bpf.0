@@ -1,124 +1,168 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A64E414A09;
-	Tue, 28 Jul 2026 21:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428BD2BEC23;
+	Tue, 28 Jul 2026 21:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785272972; cv=none; b=lMGjBXuYr6vzJ58+cYLl8IZfEhgjwLp9QBZ9EEUKwnSxwV/rmog9IlyboR35VL9EgqSi2vu7bia6lVldnqslphWM+1e89k3l8HEnR48bKJqvbmip5svDHjqqHGMpccGFM2mduOAUhlgtWIcOpc4B6mo66lVczG7aQUf/8RQKpMU=
+	t=1785275044; cv=none; b=F8HVvgoWd97LExgYeun28cgHYcMhi+vAnZkpMJw7iKgh3XNDC+jGxwwbAm5y5mO6qc2i/PqFEdqjr5OPORDAFQBT80eypF0V8l5NiVJbEUCPId3I8e3j3/illJMpCOmWKcCRQyzaiw6h0mx7Rd4M/Sg7/hnaWr+CQJHIHlmuQrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785272972; c=relaxed/simple;
-	bh=S165AWhYvprY0OIqzoJF8oXM1PUgT43QWtqOabp5gyQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NmoGzTQl8A5F7+IaXA7dmaIO7fBbonAIlo+RHVAZ0E4BagqsmsWKJ1hNS/SFE4ctewUYEjabO17rURWVb7Ui16sT+mnAL9bPDmSjFZ76D6CAbJ37+/N/VhBjaNdXSKNMvBX9R7zoKwDRXH7YUIbnK+sPQnx9j0wF2KciBCPZwsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d8JhbnJC; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1785275044; c=relaxed/simple;
+	bh=ttO3jUQOcykznZwM5kwrVGObJj5pau9iJ/uwxTGbFGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jTboYDYLk5aE33yBZezLG53IZn6wPbkw6Be4E5aXDoa5+AV5xbLr3cVeyDARCVrLFBZf8YArNWMRpmE21sml4pdL3EVoloMl80hpC6mtq2vwhQh/cgel9hcTvL2hSiin+VKFLGboOtTRmpAmPpsoPvCqkWf2OQeppwnoZ5gjRYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FPhHLZmB; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d8JhbnJC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FPhHLZmB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785272971; x=1816808971;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=S165AWhYvprY0OIqzoJF8oXM1PUgT43QWtqOabp5gyQ=;
-  b=d8JhbnJC8T/qDcxSCGeLVwXXVW1UAZT26RV3C7eJdgoZVhEWEMFMtQrp
-   nGQUMwZn3sVfvd3Uxkrs9jQlOwvfXgo2lVDyoSQj+8Q309Yg/vbIyoqrQ
-   Lh7smKTqQdaNZR52VVgp7zt6K6WYRzMQkcMn3gM3Tv0oIs2drL4sYAZeb
-   IbeZpYEIf1Rek5UdxwsBCard5BkAkjcsYrsqlKl9An3e1pKDpJ0MDG24X
-   LXg4PBB4Y4GzJAcRBA5+HcIfOSMFbOfMs9as3ndZRRWvLWXVRJwLo6HfR
-   /+HrLozrFTbBZAy2zvv69j73wVAixx4Jjrr0bjSA2iPUmRbOBChFG7aG2
-   w==;
-X-CSE-ConnectionGUID: Ri2xmw2kRReZQbwDKfJ5KQ==
-X-CSE-MsgGUID: 2vwjd/RnSYa3o4VjYo9Ifg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="85885076"
+  t=1785275042; x=1816811042;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ttO3jUQOcykznZwM5kwrVGObJj5pau9iJ/uwxTGbFGg=;
+  b=FPhHLZmBo+aNq8KKEWaei0mpxVyTMoqtzzkiQuHrNRrSOio7hyIn1A/r
+   e+UmNbUAj6L8V4by3y3jNdeTwpKR9AYq7QeDbr8jxGlbCNWjnMOk8I8Tz
+   NZdUKN4tZgKEM2hG/OTjyXwmQlfJg0Mo4jYYAP+F1vedNF2dMXtuuFvyS
+   4bL7AtmPyjSUA/mmWJYU7VK7xAMilZpxKeeoLdG9F1g8hxWs5f6iMmcaP
+   cY7KqAx+D8KqAUMbjrxxhN9yxkA8YGVXLhaoacvVVKQbO6BMW0XWQPFHx
+   L7L1RDoguAeom8Pe+9m5pDDCLzEmCnL9OfZPVkvgA5DolgAwDQordrbNB
+   g==;
+X-CSE-ConnectionGUID: tgVoHBfoRj2+IxNXvHF0ng==
+X-CSE-MsgGUID: AlKfOYCHSjiSr+v8i87UuQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="86065488"
 X-IronPort-AV: E=Sophos;i="6.25,191,1779174000"; 
-   d="scan'208";a="85885076"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2026 14:09:19 -0700
-X-CSE-ConnectionGUID: h4ipjVblRx66Nf/5HBD0Ug==
-X-CSE-MsgGUID: LU/uXXYnSnuHNMlrQ5flcQ==
+   d="scan'208";a="86065488"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2026 14:44:01 -0700
+X-CSE-ConnectionGUID: rYbvIuCXRVGjCBGBY1Z7NA==
+X-CSE-MsgGUID: qvIerpoSSS6fi7ir/MAg1w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,191,1779174000"; 
-   d="scan'208";a="258558964"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by orviesa010.jf.intel.com with ESMTP; 28 Jul 2026 14:09:18 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: David Carlier <devnexen@gmail.com>,
-	anthony.l.nguyen@intel.com,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	dima.ruinskiy@intel.com,
-	advoretsky@gmail.com,
-	stable@vger.kernel.org,
-	Moriya Kadosh <moriyax.kadosh@intel.com>
-Subject: [PATCH net 08/10] igc: remove napi_synchronize() in igc_down()
-Date: Tue, 28 Jul 2026 14:09:05 -0700
-Message-ID: <20260728210909.3042004-9-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20260728210909.3042004-1-anthony.l.nguyen@intel.com>
-References: <20260728210909.3042004-1-anthony.l.nguyen@intel.com>
+   d="scan'208";a="256484577"
+Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2026 14:44:00 -0700
+Date: Tue, 28 Jul 2026 14:43:43 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, 
+	Nikolay Borisov <nik.borisov@suse.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, David Laight <david.laight.linux@gmail.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jason Baron <jbaron@akamai.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>, 
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v12 07/12] static_call: Define
+ EXPORT_STATIC_CALL_FOR_MODULES()
+Message-ID: <4cemrcri4enbau4wfv7rmdbnzxi24j2b7cmkjlczbdzhq36fmk@nrnfjspbd7ns>
+References: <20260622-vmscape-bhb-v12-0-76cbda0ae3e5@linux.intel.com>
+ <20260622-vmscape-bhb-v12-7-76cbda0ae3e5@linux.intel.com>
+ <ajvUp_kPJBRZ7k_p@google.com>
+ <amj6eYOs70WUPGDG@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <amj6eYOs70WUPGDG@google.com>
 
-From: David Carlier <devnexen@gmail.com>
+On Tue, Jul 28, 2026 at 11:52:41AM -0700, Sean Christopherson wrote:
+> On Wed, Jun 24, 2026, Sean Christopherson wrote:
+> > On Tue, Jun 23, 2026, Pawan Gupta wrote:
+> > > There is EXPORT_STATIC_CALL_TRAMP() that hides the static key from all
+> > > modules. But there is no equivalent of EXPORT_SYMBOL_FOR_MODULES() to
+> > > restrict symbol visibility to only certain modules.
+> > > 
+> > > Add EXPORT_STATIC_CALL_FOR_MODULES(name, mods) that wraps both the key and
+> > > the trampoline with EXPORT_SYMBOL_FOR_MODULES(), allowing only a limited
+> > > set of modules to see and update the static key.
+> > > 
+> > > The immediate user is KVM, in the following commit.
+> > > 
+> > > checkpatch reported below warnings with this change that I believe don't
+> > > apply in this case:
+> > > 
+> > >   include/linux/static_call.h:219: WARNING: Non-declarative macros with multiple statements should be enclosed in a do - while loop
+> > >   include/linux/static_call.h:220: WARNING: EXPORT_SYMBOL(foo); should immediately follow its function/variable
+> > > 
+> > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> > > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> > > ---
+> > >  include/linux/static_call.h | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > > 
+> > > diff --git a/include/linux/static_call.h b/include/linux/static_call.h
+> > > index 78a77a4ae0ea..b610afd1ed55 100644
+> > > --- a/include/linux/static_call.h
+> > > +++ b/include/linux/static_call.h
+> > > @@ -216,6 +216,9 @@ extern long __static_call_return0(void);
+> > >  #define EXPORT_STATIC_CALL_GPL(name)					\
+> > >  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
+> > >  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
+> > > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
+> > > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
+> > > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
+> > >  
+> > >  /* Leave the key unexported, so modules can't change static call targets: */
+> > >  #define EXPORT_STATIC_CALL_TRAMP(name)					\
+> > > @@ -276,6 +279,9 @@ extern long __static_call_return0(void);
+> > >  #define EXPORT_STATIC_CALL_GPL(name)					\
+> > >  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
+> > >  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
+> > > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
+> > > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
+> > > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
+> > >  
+> > >  /* Leave the key unexported, so modules can't change static call targets: */
+> > >  #define EXPORT_STATIC_CALL_TRAMP(name)					\
+> > > @@ -346,6 +352,8 @@ static inline int static_call_text_reserved(void *start, void *end)
+> > >  
+> > >  #define EXPORT_STATIC_CALL(name)	EXPORT_SYMBOL(STATIC_CALL_KEY(name))
+> > >  #define EXPORT_STATIC_CALL_GPL(name)	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name))
+> > > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
+> > > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods)
+> > >  
+> > >  #endif /* CONFIG_HAVE_STATIC_CALL */
+> > 
+> > Drat, I forgot about this.  Exporting static call trampolines for KVM came up in
+> > another conversation[*].  I had already put together patches to effectively default
+> > to exporting only the trampoline, and also to deduplicate this code so that the
+> > CONFIG_HAVE_STATIC_CALL_INLINE=y / CONFIG_HAVE_STATIC_CALL=y / CONFIG_HAVE_STATIC_CALL=n
+> > implementations don't need to copy+paste the same lines of code.
+> > 
+> > The attached patches touch a lot more code, and will conflict mightily with KVM
+> > changes I want to land in 7.3 (more use of a static_call in KVM).  But if we get
+> > them applied (to tip tree) shortly after 7.2-rc1 and provide a topic branch/tag,
+> > then there shouldn't be too much juggling needed?
+> > 
+> > If we want to go with the more aggressive cleanup, I'll formally post the patches.
+> 
+> *sigh*
+> 
+> So the patches build, but they aren't fully functional.  If kvm.ko is built as a
+> module, trying to load a vendor module will fail due to the trampoline => key table
+> only tracking built-in symbols.
+> 
+> Given that all of this is KVM, and that it's far easier to export the static calls
+> if and only if there are vendor modules, and only for those vendor modules, I'm
+> going to drop the aggressive cleanup and abandon converting KVM's exports to only
+> export trampolines, at least until someone else works up the motivation to add
+> support for modules.
 
-When an AF_XDP zero-copy application is killed abruptly, the XSK pool is
-torn down but NAPI keeps polling. igc_clean_rx_irq_zc() then returns the
-full budget on every poll, so napi_complete_done() never clears
-NAPI_STATE_SCHED.
-
-igc_down() calls napi_synchronize() before napi_disable(), so it spins
-forever waiting for that bit and the interface never goes down. Drop the
-napi_synchronize() and let napi_disable() do the job -- it sets
-NAPI_STATE_DISABLE, which forces the stuck poll to complete. Reorder it
-ahead of igc_set_queue_napi() so the NAPI mapping is cleared only after
-polling has stopped, matching the recent igb fix b1e067240379.
-
-Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
-Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: David Carlier <devnexen@gmail.com>
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Reviewed-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
-Tested-by: Moriya Kadosh <moriyax.kadosh@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/igc/igc_main.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 2c9e2dfd8499..b3883a5a7d7a 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -5352,9 +5352,8 @@ void igc_down(struct igc_adapter *adapter)
- 
- 	for (i = 0; i < adapter->num_q_vectors; i++) {
- 		if (adapter->q_vector[i]) {
--			napi_synchronize(&adapter->q_vector[i]->napi);
--			igc_set_queue_napi(adapter, i, NULL);
- 			napi_disable(&adapter->q_vector[i]->napi);
-+			igc_set_queue_napi(adapter, i, NULL);
- 		}
- 	}
- 
--- 
-2.47.1
-
+Thanks for the update. Keeping this patch in the series.
