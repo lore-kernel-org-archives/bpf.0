@@ -1,32 +1,35 @@
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9423313E31;
-	Tue, 28 Jul 2026 03:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F13773164BB;
+	Tue, 28 Jul 2026 03:16:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785208591; cv=none; b=KdhKFkurYYF59vkpCROVyIs16vFtUZXUIB+yyLLYpUxs1FmxlirNveQFA4wAo+blc5+fS1RN6VUiVmL970JK3seum7gAbPEE0dWLy2rfplwbIQdA61nptW+gDU8F6KriexuTr0z/U4FAgfBXJadN5v665oPFte5Xf6XwfYUPCAg=
+	t=1785208593; cv=none; b=TzJjh73s9ZT3YJeZvqb/ndfiyiTqO2NkRhBbWlpVbKHXLfTsS9ZQr+PtFH/O0HIcCcUfeCRH8VBXdRLI/b9K2D89Tj2W7JejogzM4ZcTndl8FN8NjIkPqMDxfiUoUAa6rNURmk52XP6wxHIUSSol753dNXyrW5q6FUnrSQ52pBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785208591; c=relaxed/simple;
-	bh=GYCTHOgVdqTt6JpiejCot5pKLn46PxB3FddKVKPIIks=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GDurTni9/iNcfC44iUXRpUraMF9pjsw0AWZX1he5nn3bCDuYGpkuvId8bNwxSEeAU7UqLRTW/JZK51A3Beb4ZUbTu1OlKwfXklEEd78SOi5yi1wEOkU5sc6E24bSTWz0gH7r94ihHW1jValZLX5L7kXMA9ivU3P0xZFmvSjwsxg=
+	s=arc-20240116; t=1785208593; c=relaxed/simple;
+	bh=+fqtRxrTxSazpe0rr0+vHHjev60NUjxIqJuyUjOiF40=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lHlWUPujerUtSDLqbF/ypjxpci/f910JnIzqHlVJZcJhkfq0zUFFt6iHQmYkg5BqPdg1jsAgOM3cYrr/WoDf2ylbFz/M/qhTSpVQNf47ifePqPLWCE4GgwGmwQiOVhdyX+pvHAQhjIJC/CTBlKxTYD1kj2pISZ0b5SG2uXns89I=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8AxVegEH2hquP8HAA--.4861S3;
-	Tue, 28 Jul 2026 11:16:21 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8BxVeoGH2hqwP8HAA--.26534S3;
+	Tue, 28 Jul 2026 11:16:22 +0800 (CST)
 Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDxPcUAH2hqhzcbAA--.14265S2;
-	Tue, 28 Jul 2026 11:16:17 +0800 (CST)
+	by front1 (Coremail) with SMTP id qMiowJDxPcUAH2hqhzcbAA--.14265S4;
+	Tue, 28 Jul 2026 11:16:21 +0800 (CST)
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
 To: Huacai Chen <chenhuacai@kernel.org>,
 	Hengqi Chen <hengqi.chen@gmail.com>
 Cc: loongarch@lists.linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/2] Refine move_imm() and optimize memory load
-Date: Tue, 28 Jul 2026 11:16:13 +0800
-Message-ID: <20260728031615.9389-1-yangtiezhu@loongson.cn>
+Subject: [PATCH v1 2/2] LoongArch: BPF: Eliminate zero-extension for memory load operations
+Date: Tue, 28 Jul 2026 11:16:15 +0800
+Message-ID: <20260728031615.9389-3-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20260728031615.9389-1-yangtiezhu@loongson.cn>
+References: <20260728031615.9389-1-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,61 +37,91 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxPcUAH2hqhzcbAA--.14265S2
+X-CM-TRANSID:qMiowJDxPcUAH2hqhzcbAA--.14265S4
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7CFW7Xw1xGryxWr1Duw1UCFX_yoW8Xr1kpa
-	9a9F43Kr4kJa4xZ34fCayjqr1Yya1fW397Gayaq34rWrZ8Zr1DXr1Igw4vqFyDA3yFgryF
-	q34rCa4q9a1UJagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+X-Coremail-Antispam: 1Uk129KBj93XoW7Kw4xAFWxurW8CF48ur4kAFc_yoW8uw4Upr
+	W7Crn5CrWvqrZagas7Aw48Wr1akFs3WF13W3sF9a4fJ3WaqrnxWF1fKa1jqF95GrW8Ww18
+	Xrs5Zw13u3Z8ZagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
 	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-	8JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y
-	6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
-	AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE
-	2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
-	C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73
-	UjIFyTuYvjxU7fMaUUUUU
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AK
+	xVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUco7KUUUUU
 
-This series is based on 7.2-rc5 and the following two series:
+The unsigned memory load instructions naturally clear the upper 32 bits
+of the destination register during sub-word and word memory accesses.
 
-Fix and optimize BPF tailcall for LoongArch
-https://lore.kernel.org/loongarch/20260707101508.32283-1-yangtiezhu@loongson.cn/
+Add a look-ahead optimization for the load instructions by checking the
+next instruction. This is achieved by overwriting bpf_jit_needs_zext()
+to return true.
 
-LoongArch: BPF: clean up for build_insn() paths
-https://lore.kernel.org/loongarch/20260711100956.4351-1-yangtiezhu@loongson.cn/
+If insn_is_zext() detects a redundant zero-extension, return 1 to inform
+the outer build_body() to skip the instruction.
 
-The long-term goal is to eliminate frequent and redundant
-zero-extensions and sign-extensions, but there are still
-some issues to sort out. Here is the previous RFC patch:
+For normal loads, this look-ahead is safely restricted to unsigned modes
+(!sign_extend) to preserve signed contexts.
 
-LoongArch: BPF: Eliminate zero/sign extensions for 32-bit operations
-https://lore.kernel.org/loongarch/20260711101656.7415-3-yangtiezhu@loongson.cn/
+With this patch, directly reduce the final JITted image size.
 
-For now, just send out the stable and verified patches
-first.
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/loongarch/net/bpf_jit.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Here are the test results of test_bpf:
-
-fedora@linux:~$ sudo dmesg -c
-fedora@linux:~$ sudo modprobe test_bpf
-fedora@linux:~$ dmesg -t | grep Summary
-test_bpf: Summary: 1061 PASSED, 0 FAILED, [1049/1049 JIT'ed]
-test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
-test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
-
-Tiezhu Yang (2):
-  LoongArch: BPF: Clean up and decouple is32 parameter from move_imm()
-  LoongArch: BPF: Eliminate zero-extension for memory load operations
-
- arch/loongarch/net/bpf_jit.c | 123 ++++++++++++++++++++++-------------
- arch/loongarch/net/bpf_jit.h |   7 +-
- 2 files changed, 79 insertions(+), 51 deletions(-)
-
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 4c54e57455ae..417b69b7ec4a 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -554,6 +554,14 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 			break;
+ 		}
+ 		emit_insn(ctx, dbar, 0b10100);
++
++		/*
++		 * If the next insn is a redundant zext, return 1 to tell
++		 * build_body() to skip it, as atomic load-acquires always
++		 * zero-extend sub-word results.
++		 */
++		if (BPF_SIZE(insn->code) != BPF_DW && insn_is_zext(&insn[1]))
++			return 1;
+ 		break;
+ 	/* store_release(dst_reg + off16, src_reg) */
+ 	case BPF_STORE_REL:
+@@ -1303,6 +1311,14 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 		ret = add_exception_handler(insn, ctx, dst);
+ 		if (ret)
+ 			return ret;
++
++		/*
++		 * If the next insn is a redundant zext, and this is a standard
++		 * unsigned sub-word load where hardware already zero-extends,
++		 * return 1 to tell build_body() to skip it.
++		 */
++		if (BPF_SIZE(code) != BPF_DW && !sign_extend && insn_is_zext(&insn[1]))
++			return 1;
+ 		break;
+ 
+ 	/* *(size *)(dst + off) = imm */
+@@ -2383,6 +2399,11 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+ 	return true;
+ }
+ 
++bool bpf_jit_needs_zext(void)
++{
++	return true;
++}
++
+ bool bpf_jit_inlines_helper_call(s32 imm)
+ {
+ 	switch (imm) {
 -- 
 2.42.0
 
