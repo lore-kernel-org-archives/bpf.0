@@ -1,168 +1,185 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428BD2BEC23;
-	Tue, 28 Jul 2026 21:44:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5D6396D09
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 21:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785275044; cv=none; b=F8HVvgoWd97LExgYeun28cgHYcMhi+vAnZkpMJw7iKgh3XNDC+jGxwwbAm5y5mO6qc2i/PqFEdqjr5OPORDAFQBT80eypF0V8l5NiVJbEUCPId3I8e3j3/illJMpCOmWKcCRQyzaiw6h0mx7Rd4M/Sg7/hnaWr+CQJHIHlmuQrM=
+	t=1785275448; cv=none; b=M1bTokpnXScKL7MjkTIot5LCMxFQDqGYaip91lxnmdmEgKmenS5w8CXYaeW+TT1kxlksnNbvvyWlWZJLWI2ZABZp5iejjdNQwxkaUCnIvlN86zWSoJaFDad73GI3b2Lm4/sdVuHNoLWj+lESDi3FkM+sxrY+rKxLl2axhqpZq34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785275044; c=relaxed/simple;
-	bh=ttO3jUQOcykznZwM5kwrVGObJj5pau9iJ/uwxTGbFGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jTboYDYLk5aE33yBZezLG53IZn6wPbkw6Be4E5aXDoa5+AV5xbLr3cVeyDARCVrLFBZf8YArNWMRpmE21sml4pdL3EVoloMl80hpC6mtq2vwhQh/cgel9hcTvL2hSiin+VKFLGboOtTRmpAmPpsoPvCqkWf2OQeppwnoZ5gjRYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FPhHLZmB; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1785275448; c=relaxed/simple;
+	bh=56djSAQocAzU8YsvSvVYy92bA/jft28BbykaQeuAKTg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=dPzPVb9iHbYmnyXxcjYq9lQNXgbvciNjQ25OjTY+vvQ6nklmeuvRBjFXzVAHEkf7vbsLMc6AuyPJ42ZEyr7HByCQi8Vndi74D0fupMwAMSn9PHHQA7OWTq50pA5DRs4F+9sdhY2VNneds/uOq23H7K5tHusPJ7qj0C2s9q5WgzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NontGgLE; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FPhHLZmB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785275042; x=1816811042;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ttO3jUQOcykznZwM5kwrVGObJj5pau9iJ/uwxTGbFGg=;
-  b=FPhHLZmBo+aNq8KKEWaei0mpxVyTMoqtzzkiQuHrNRrSOio7hyIn1A/r
-   e+UmNbUAj6L8V4by3y3jNdeTwpKR9AYq7QeDbr8jxGlbCNWjnMOk8I8Tz
-   NZdUKN4tZgKEM2hG/OTjyXwmQlfJg0Mo4jYYAP+F1vedNF2dMXtuuFvyS
-   4bL7AtmPyjSUA/mmWJYU7VK7xAMilZpxKeeoLdG9F1g8hxWs5f6iMmcaP
-   cY7KqAx+D8KqAUMbjrxxhN9yxkA8YGVXLhaoacvVVKQbO6BMW0XWQPFHx
-   L7L1RDoguAeom8Pe+9m5pDDCLzEmCnL9OfZPVkvgA5DolgAwDQordrbNB
-   g==;
-X-CSE-ConnectionGUID: tgVoHBfoRj2+IxNXvHF0ng==
-X-CSE-MsgGUID: AlKfOYCHSjiSr+v8i87UuQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="86065488"
-X-IronPort-AV: E=Sophos;i="6.25,191,1779174000"; 
-   d="scan'208";a="86065488"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2026 14:44:01 -0700
-X-CSE-ConnectionGUID: rYbvIuCXRVGjCBGBY1Z7NA==
-X-CSE-MsgGUID: qvIerpoSSS6fi7ir/MAg1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,191,1779174000"; 
-   d="scan'208";a="256484577"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2026 14:44:00 -0700
-Date: Tue, 28 Jul 2026 14:43:43 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, 
-	Nikolay Borisov <nik.borisov@suse.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, David Laight <david.laight.linux@gmail.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jason Baron <jbaron@akamai.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>, 
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v12 07/12] static_call: Define
- EXPORT_STATIC_CALL_FOR_MODULES()
-Message-ID: <4cemrcri4enbau4wfv7rmdbnzxi24j2b7cmkjlczbdzhq36fmk@nrnfjspbd7ns>
-References: <20260622-vmscape-bhb-v12-0-76cbda0ae3e5@linux.intel.com>
- <20260622-vmscape-bhb-v12-7-76cbda0ae3e5@linux.intel.com>
- <ajvUp_kPJBRZ7k_p@google.com>
- <amj6eYOs70WUPGDG@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NontGgLE"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cc891373e0so4318515ad.2
+        for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 14:50:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785275446; x=1785880246; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=x96RRyAuNfwxQVYvVsrta7f+5nGEJEoHlQpXqKpUpao=;
+        b=NontGgLEbC5uhMEz6a47dce0aqXstZZApTUb9X/8TSfKmNhnem0W3RMuhVn8WZ8xW3
+         DdCwFTGkkYAOg+lpGygE7lsqSMimCispjcm8M5xsIKZLqGJSxcCb/bFu1aYo0vyuuV8t
+         vMfHZ2ve2qJo+z5w15d/ltqsXovba8VhSkJQJy9UCDfwdKgRxM2Z+M9JY5xVvSl1YeBO
+         QsTCY6vFLdgzaDYyN1ga5SHDdgTrXfG0+Xp7MJiqDwmQ29LYdR7euVdhMzHPW3PT6Au7
+         1+YtpJ/tk1X2ZT4yDmLUwCV7qNmqTS+8vu5EAL6+RVXgHn0HsvKdr12gtjGv/cdHwoZL
+         k26A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785275446; x=1785880246;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=x96RRyAuNfwxQVYvVsrta7f+5nGEJEoHlQpXqKpUpao=;
+        b=rv1ZxqEI7C2CqWtz6iyEpvmQtngG0E3B+M++N0/Hmg5EoVVuSHqlWDSvsLlpOeU0nc
+         lerHJlacgZN6rdxWMqTlJuEO++ZEYXHwZcOql1xGd4Xp/sEfiXMmRRXuBqIxmrHQyW1b
+         +tnDlYvRCShHW6WXqsKe7jHwtqlb4UNHt7fiFvrY2gm3UNsZaFYCWNqmO2FGbjzavPQJ
+         po0VKbdEyC8ZDzOC3v/aJ7/Iuv9ILP5qMBMkORcC3w29LKP40tD0WbPheRFDQBhOevTK
+         Mr/+eEu/AsZyknf0tad8DaDDB/GdFhneAEjZH97QauWBBG3R/U01f/v3c29qNV3CLd6d
+         NrtA==
+X-Forwarded-Encrypted: i=1; AHgh+RqC/adj8UMtQ+LlNuhlKpnUjvzQLs5GOVVVEDecq0s6m141dJDZYSOoYrG1bovfJNkHUZg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVb0aAiBP39jaHRW0+dcC61/RO0f84btHHihx33fxAA6MSITPq
+	VtgX6XwkydNq+MTIJSlJgaYFbIjIpPYpf+5/JVD6MHRWXGraOJY9rvj+
+X-Gm-Gg: AR+sD13fgZ8SVopL+WYTBfmqJAkGcZ7/EbphejWMPpvwNLPy7Y7EWB13hJgQq3Tdv7Y
+	amMKMe5n/N/Lq3XgTMb2BtVzlIPm1S8rCkAF8wk2r5Qsn0Gwb5upwyY4GKnFRgaYtuCjIKyWcqR
+	kxY7XsjdkCWaIgZOeW86EK6w8OWXJwqweldKjcTtDJiHqxUzoTfTE6RUb/trkYElUdsh0k/Q5vi
+	R7hd8/JHAelfNiacB7202bnYAhgQ1blizaqLkBE2V4lAx4cXuCcWM9K48VCRInMMGcaGHoGDVGG
+	ZaQlmKK5/bkWVQL6fO4W/w7P/EYrNgZi0p2tx3nff2xGt/nvBqzQAalkYqv40p33y6m4cxsmIng
+	HSM3Nrtbs4d0Qfm3U3fOUQg6qpstu/kG6c4VT3Xtbb1pesTo+7GzwpW19MjLUKMC4VuddegSV6C
+	/yKd4gMBfL2Cf3qyw24R+VdU1xULPl65/9xknqxpYNRLxesubLMTtT5+rzDfaDOMi2kNrIIkIA1
+	JNXFikiKoSUvM829+q7Jrvmhs59e/T2PqQdQxGUZHgN1qWK15cVOWgQ
+X-Received: by 2002:a17:903:3c6e:b0:2c9:d539:61e7 with SMTP id d9443c01a7336-2d015c4e34bmr49593855ad.19.1785275445888;
+        Tue, 28 Jul 2026 14:50:45 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:a358:4bd1:35cd:2e45? ([2620:10d:c090:500::5:ff91])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504cc6936sm2183817eec.17.2026.07.28.14.50.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2026 14:50:45 -0700 (PDT)
+Message-ID: <40ad8565f90619452bde3800cb246bf23b0e95e2.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 18/18] bpf: Generate kfunc argument
+ prototype at add-call time
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net, 
+	memxor@gmail.com, kernel-team@meta.com
+Date: Tue, 28 Jul 2026 14:50:43 -0700
+In-Reply-To: <20260724190813.1458271-19-ameryhung@gmail.com>
+References: <20260724190813.1458271-1-ameryhung@gmail.com>
+	 <20260724190813.1458271-19-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <amj6eYOs70WUPGDG@google.com>
 
-On Tue, Jul 28, 2026 at 11:52:41AM -0700, Sean Christopherson wrote:
-> On Wed, Jun 24, 2026, Sean Christopherson wrote:
-> > On Tue, Jun 23, 2026, Pawan Gupta wrote:
-> > > There is EXPORT_STATIC_CALL_TRAMP() that hides the static key from all
-> > > modules. But there is no equivalent of EXPORT_SYMBOL_FOR_MODULES() to
-> > > restrict symbol visibility to only certain modules.
-> > > 
-> > > Add EXPORT_STATIC_CALL_FOR_MODULES(name, mods) that wraps both the key and
-> > > the trampoline with EXPORT_SYMBOL_FOR_MODULES(), allowing only a limited
-> > > set of modules to see and update the static key.
-> > > 
-> > > The immediate user is KVM, in the following commit.
-> > > 
-> > > checkpatch reported below warnings with this change that I believe don't
-> > > apply in this case:
-> > > 
-> > >   include/linux/static_call.h:219: WARNING: Non-declarative macros with multiple statements should be enclosed in a do - while loop
-> > >   include/linux/static_call.h:220: WARNING: EXPORT_SYMBOL(foo); should immediately follow its function/variable
-> > > 
-> > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> > > ---
-> > >  include/linux/static_call.h | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > > 
-> > > diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-> > > index 78a77a4ae0ea..b610afd1ed55 100644
-> > > --- a/include/linux/static_call.h
-> > > +++ b/include/linux/static_call.h
-> > > @@ -216,6 +216,9 @@ extern long __static_call_return0(void);
-> > >  #define EXPORT_STATIC_CALL_GPL(name)					\
-> > >  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
-> > >  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
-> > > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
-> > > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
-> > > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
-> > >  
-> > >  /* Leave the key unexported, so modules can't change static call targets: */
-> > >  #define EXPORT_STATIC_CALL_TRAMP(name)					\
-> > > @@ -276,6 +279,9 @@ extern long __static_call_return0(void);
-> > >  #define EXPORT_STATIC_CALL_GPL(name)					\
-> > >  	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
-> > >  	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
-> > > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
-> > > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
-> > > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
-> > >  
-> > >  /* Leave the key unexported, so modules can't change static call targets: */
-> > >  #define EXPORT_STATIC_CALL_TRAMP(name)					\
-> > > @@ -346,6 +352,8 @@ static inline int static_call_text_reserved(void *start, void *end)
-> > >  
-> > >  #define EXPORT_STATIC_CALL(name)	EXPORT_SYMBOL(STATIC_CALL_KEY(name))
-> > >  #define EXPORT_STATIC_CALL_GPL(name)	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name))
-> > > +#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
-> > > +	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods)
-> > >  
-> > >  #endif /* CONFIG_HAVE_STATIC_CALL */
-> > 
-> > Drat, I forgot about this.  Exporting static call trampolines for KVM came up in
-> > another conversation[*].  I had already put together patches to effectively default
-> > to exporting only the trampoline, and also to deduplicate this code so that the
-> > CONFIG_HAVE_STATIC_CALL_INLINE=y / CONFIG_HAVE_STATIC_CALL=y / CONFIG_HAVE_STATIC_CALL=n
-> > implementations don't need to copy+paste the same lines of code.
-> > 
-> > The attached patches touch a lot more code, and will conflict mightily with KVM
-> > changes I want to land in 7.3 (more use of a static_call in KVM).  But if we get
-> > them applied (to tip tree) shortly after 7.2-rc1 and provide a topic branch/tag,
-> > then there shouldn't be too much juggling needed?
-> > 
-> > If we want to go with the more aggressive cleanup, I'll formally post the patches.
-> 
-> *sigh*
-> 
-> So the patches build, but they aren't fully functional.  If kvm.ko is built as a
-> module, trying to load a vendor module will fail due to the trampoline => key table
-> only tracking built-in symbols.
-> 
-> Given that all of this is KVM, and that it's far easier to export the static calls
-> if and only if there are vendor modules, and only for those vendor modules, I'm
-> going to drop the aggressive cleanup and abandon converting KVM's exports to only
-> export trampolines, at least until someone else works up the motivation to add
-> support for modules.
+On Fri, 2026-07-24 at 12:08 -0700, Amery Hung wrote:
 
-Thanks for the update. Keeping this patch in the series.
+...
+
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index b54c1a5c9b11..0655164e6af2 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+
+...
+
+> @@ -1305,8 +1306,19 @@ static inline u32 type_flag(u32 type)
+>  /* only use after check_attach_btf_id() */
+>  static inline enum bpf_prog_type resolve_prog_type(const struct bpf_prog=
+ *prog)
+>  {
+> -	return (prog->type =3D=3D BPF_PROG_TYPE_EXT && prog->aux->saved_dst_pro=
+g_type) ?
+> -		prog->aux->saved_dst_prog_type : prog->type;
+> +	if (prog->type =3D=3D BPF_PROG_TYPE_EXT) {
+> +		/*
+> +		 * saved_dst_prog_type is only set once check_attach_btf_id()
+> +		 * runs. Before that -- e.g. when generating kfunc prototypes at
+> +		 * add-call time -- fall back to the attach target's type, which
+> +		 * is available from load time and holds the same value.
+> +		 */
+> +		if (prog->aux->saved_dst_prog_type)
+> +			return prog->aux->saved_dst_prog_type;
+> +		if (prog->aux->dst_prog)
+> +			return prog->aux->dst_prog->type;
+
+Let's avoid this fallback and set saved_dst_prog_type
+in syscallc:bpf_prog_load() in the same place where
+`prog->aux->dst_prog =3D dst_prog` is set up.
+
+...
+
+>  static inline bool bpf_prog_check_recur(const struct bpf_prog *prog)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e44fc7296d0c..1ca8779ab59a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+...
+
+> @@ -2806,11 +2823,29 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *e=
+nv, u32 func_id, u16 offset)
+>  	if (err)
+>  		return err;
+> =20
+> +	proto =3D kzalloc_obj(*proto, GFP_KERNEL_ACCOUNT);
+> +	if (!proto)
+> +		return -ENOMEM;
+
+Nit: since `proto` is allocated for each kfunc object I'd embed the
+     structure directly into the struct bpf_kfunc_desc and make the
+     struct bpf_kfunc_desc_tab dynamically allocated by bpf_add_kfunc_call(=
+).
+     As a side-effect, there would be no need in bpf_free_kfunc_desc_tab().
+
+> +
+> +	memset(&meta, 0, sizeof(meta));
+> +	meta.btf =3D kfunc.btf;
+> +	meta.func_id =3D kfunc.id;
+> +	meta.func_proto =3D kfunc.proto;
+> +	meta.func_name =3D kfunc.name;
+> +	meta.kfunc_flags =3D kfunc.flags ? *kfunc.flags : 0;
+> +
+> +	err =3D gen_kfunc_arg_proto(env, &meta, proto);
+> +	if (err) {
+> +		kfree(proto);
+> +		return err;
+> +	}
+> +
+>  	desc =3D &tab->descs[tab->nr_descs++];
+>  	desc->func_id =3D func_id;
+>  	desc->offset =3D offset;
+>  	desc->addr =3D addr;
+>  	desc->func_model =3D func_model;
+> +	desc->proto =3D proto;
+>  	sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+>  	     kfunc_desc_cmp_by_id_off, NULL);
+>  	return 0;
+
+...
+
+> @@ -8858,7 +8893,7 @@ static bool check_raw_mode_ok(const struct bpf_func=
+_proto *fn, struct bpf_call_a
+>  {
+>  	int i;
+> =20
+> -	for (i =3D 0; i < ARRAY_SIZE(fn->arg_type); i++) {
+> +	for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
+
+Nit: here and in other places I'd keep the ARRAY_SIZE for uniformity
+     (and if 5->12 move is bothering, one can break at ARG_DONTCARE).
+
+>  		if (!arg_type_is_raw_mem(fn->arg_type[i]))
+>  			continue;
+>  		if (meta->arg_raw_mem.regno)
+
+...
