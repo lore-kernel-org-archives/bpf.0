@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D8F372663
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 16:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7D1374E5B
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 16:20:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785255642; cv=none; b=a3f9dJyWY0HqU/HgxalHWXBHZoUj5pB8lhny+4Nn6GVEsZEvVo0u3pHkw54JS1Yx31n7SqJGs5vPGGvo+gKSr/Uzdcc5V5mO3M6F+Ju5pegd5zioB9kCbEL3pGzCXDVKYlxD4MiVDCSSMYigieBph1g9lUTUjVlGLhOPpZV+TNc=
+	t=1785255643; cv=none; b=Somn9eRAdxrlMU4OzTMsDTx6Usdg52i5YAKlVUfMvoensYLfE3PopoN4GGttbOFc/bqq7G9EcIsbD/VuJO1VlXpPdAzKDYz6Z2vDmFakjgVwGlYfMNr3JS9NkVJJaW8ITHmO2rg/nvXCB+FnZnbTgBP8f3KHjoO3PqXSmAZdQ0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785255642; c=relaxed/simple;
-	bh=fsOAbdg/27u1kPaKoQBuMDcCdgzOQzpYIgdZNAWd1hM=;
+	s=arc-20240116; t=1785255643; c=relaxed/simple;
+	bh=RriGHHk8QHelciQ80YHU9tP7USX/sL7Y3Z/cFcuJ7So=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bwwxeXwZy7yicFWlMxhpyollJeKoQN/hxegN4BucQgMDbXIySI/C8TaGAzED0tfThllp1IvQ3pEtdTvYE7unCZBX3rUsrYsi84EYJDQc0W9KBJahQIyxPxFJqN/7j+22Ezv1PuysRcB5SFqCpSvyoBw7iDQGBt0xahEYTYPktoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJaBBTre; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Xo/wU9+W5WS9KRcdy6YP4NMkFkjtFLZhEP2Ua/ES7FTYIqNr8g4d4+kY3wQ5tB+BnMMbrnNyJveRA91bc9zLuTPSX0NRX1602Vvirs0K+3DlQfrT8/SaZnFrM/gS13+3RJCHdflkuUTh2U9kKapHCLqEMCFI5Ba9B60AcfiHYaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=idFFK56d; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJaBBTre"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7805A1F00A3A;
-	Tue, 28 Jul 2026 16:20:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="idFFK56d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27EE01F000E9;
+	Tue, 28 Jul 2026 16:20:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785255640;
-	bh=TYSchQDCMy8qqpm5wT4lQccAvQOjCwoKMwTTrWWhgpE=;
+	s=k20260515; t=1785255642;
+	bh=MVbF1oKCjziOwqJXfddlVZjOs0HeJtsThRna7R6p0oA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QJaBBTreG0e5Sh/ssndvvYHc8vDYZr3jf02FhGO6ZNDbB2lg0XTXw+Q4UcVU8PhhT
-	 QoSXi6SsqQQd2Qf8t4wFF4VGzFGf5xzbACnLax2zorfFkHFJqP41s61XprkGbYH2Sm
-	 RWWR1C9ouGIzdFtZOdJfREmn7U5wk7rjqGtdI/F31gp+69KqB+gJhFn7qSBDVnhPnO
-	 zIOTJPFPi3wkeV3VzGtH/HBJlXw0fpmdMlAVvHqGNeAW3rPR7pJzzxHa0tuyH8Vwrt
-	 32lgn/tsNKWGEQJ8J3wzuN0CanseIiBp4DpeHf0fUmh/or7WDrasl69bpLshVl9qpM
-	 9rFleqz5+56WA==
+	b=idFFK56dUDhmiIW/iOZOb5b3CTE9VMHcZFbUeJdfjay2NRAn78HKEqA0WHqjz8o5u
+	 U2eaXyz7FbXWVIxVMp+RPEtgvfIaH+RF9GrP17omvPCatLWOa2tYv+7ELPivur74RI
+	 maiRUtJ0padz5v9FxidTv0X3VwZ1hZkRakj683McMpTH//q4fIefroqE40xR86fYj6
+	 ox+sEhAMnMKat9ljfx3iM7W3NplAbHK+ze9R9w2XDsp5iDspEoaZULFIKsQq+61lTm
+	 rsrp1e7V7qzLEew01ppTR9aH6gbg+gARgqoLmx8QVPhVjDB68fv0sFqWOikjd+wI7Y
+	 ygV/pYG0Ias2Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 3/6] xsk: clear metadata pointer when no timestamp
- is requested
+Subject: Re: [PATCH net 2/6] xsk: pass TX metadata pointer by reference
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Stanislav Fomichev" <sdf.kernel@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260727161959.885642-4-sdf@fomichev.me>
+In-Reply-To: <20260727161959.885642-3-sdf@fomichev.me>
 References: <20260727161959.885642-1-sdf@fomichev.me>
- <20260727161959.885642-4-sdf@fomichev.me>
+ <20260727161959.885642-3-sdf@fomichev.me>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Jul 2026 16:20:40 +0000
-Message-Id: <20260728162040.7805A1F00A3A@smtp.kernel.org>
+Date: Tue, 28 Jul 2026 16:20:41 +0000
+Message-Id: <20260728162042.27EE01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,72 +48,85 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Integer overflow in `xsk_skb_metadata` when calculating `skb->csum=
-_start`, leading to a potential kernel warning and panic (DoS).
+- [Critical] `xsk_tx_metadata_to_compl()` returns early when `meta =3D=3D N=
+ULL` without clearing the `compl` output structure, leading to arbitrary ke=
+rnel memory writes during TX completion.
 --
 
---- Patch [3]: [PATCH net 3/6] xsk: clear metadata pointer when no timestam=
-p is requested ---
-commit 814027e56069dbb5716ac5b9f7f38aebab332dd6
+--- Patch [2]: [PATCH net 2/6] xsk: pass TX metadata pointer by reference -=
+--
+commit 83fcec7a0c0075ec991849b8d99f6d6cd083c335
 Author: Stanislav Fomichev <sdf.kernel@gmail.com>
 
-xsk: clear metadata pointer when no timestamp is requested
+xsk: pass TX metadata pointer by reference
 
-User space can change metadata flags after request processing. Rereading
-them during completion can therefore make the kernel write a timestamp
-that was not requested when the packet was submitted. Clear the metadata
-pointer during request processing unless timestamp completion is requested.
-
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
+Completion handling needs to know whether a timestamp was requested when
+the metadata was processed. Let xsk_tx_metadata_request() update the
+caller's metadata pointer so that decision can be carried forward without
+rereading user-controlled flags.
 
 [ ... ]
 
-> @@ -998,6 +998,8 @@ static int xsk_skb_metadata(struct sk_buff *skb, void=
- *buffer,
-> =20
->  	if (meta->flags & XDP_TXMD_FLAGS_LAUNCH_TIME)
->  		skb->skb_mstamp_ns =3D meta->request.launch_time;
+> diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
+> index 8b51876efbed1..06c081feff42d 100644
+> --- a/include/net/xdp_sock.h
+> +++ b/include/net/xdp_sock.h
+> @@ -153,17 +153,19 @@ static inline void xsk_tx_metadata_to_compl(struct =
+xsk_tx_metadata *meta,
 
-[Severity: High]
-This is a pre-existing issue, but can the checksum offset calculation
-earlier in this function cause an integer overflow?
+[Severity: Critical]
+This isn't a bug introduced by this patch, but I noticed that=20
+xsk_tx_metadata_to_compl() returns early without explicitly clearing the=20
+compl structure when meta is NULL:
 
-When handling XDP_TXMD_FLAGS_CHECKSUM, the code does:
+static inline void xsk_tx_metadata_to_compl(struct xsk_tx_metadata *meta,
+                                            struct xsk_tx_metadata_compl *c=
+ompl)
+{
+        if (!meta)
+                return;
 
-    skb->csum_start =3D hr + csum_start;
+In drivers like mlx5e_xsk_tx(), compl is declared on the stack and passed i=
+n=20
+uninitialized:
 
-On architectures with 64KB pages, csum_start can be large enough that
-adding hr wraps the u16 skb->csum_start. This would result in
-skb->csum_start being smaller than the headroom.
+mlx5e_xsk_tx() {
+        if (xp_tx_metadata_enabled(sq->xsk_pool)) {
+                struct xsk_tx_metadata_compl compl;
 
-If pool->tx_sw_csum is true, this then calls skb_checksum_help(). Inside
-skb_checksum_help(), the offset is calculated by subtracting headroom from
-skb->csum_start, which yields a negative integer due to the wrap-around.
-
-When this negative offset is compared against skb_headlen() (which is
-unsigned), it is implicitly cast to a huge unsigned value:
-
-net/core/dev.c:skb_checksum_help() {
-    ...
-    offset =3D skb_checksum_start_offset(skb);
-    ...
-    if (unlikely(offset >=3D skb_headlen(skb))) {
-        DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
-        WARN_ONCE(true, "offset (%d) >=3D skb_headlen() (%u)\n", ...);
-    ...
+                xsk_tx_metadata_to_compl(meta, &compl);
+                ...
+                mlx5e_xdpi_fifo_push(..., { .xsk_meta =3D compl });
+        }
 }
 
-Could this allow an unprivileged user to trigger a kernel warning and
-potentially panic the system if panic_on_warn is set?
+If an untrusted user sends a packet with invalid flags, causing meta to be=
+=20
+NULL, could the uninitialized stack garbage in compl be pushed to the NAPI =
+TX=20
+completion FIFO? Would this cause the completion path to dereference a garb=
+age=20
+pointer and write a hardware timestamp to arbitrary kernel memory?
 
-> +	if (!(meta->flags & XDP_TXMD_FLAGS_TIMESTAMP))
-> +		meta =3D NULL;
->  	xsk_tx_metadata_to_compl(meta, &skb_shinfo(skb)->xsk_meta);
-> =20
->  	return 0;
+Similarly, in stmmac_xdp_xmit_zc():
+
+stmmac_xdp_xmit_zc() {
+        ...
+        xsk_tx_metadata_to_compl(meta,
+                                 &tx_q->tx_skbuff_dma[entry].xsk_meta);
+}
+
+Could this early return leave a stale pointer from a previous packet in the=
+=20
+descriptor ring, leading to an accidental overwrite of userspace UMEM?
+
+>  /**
+>   *  xsk_tx_metadata_request - Evaluate AF_XDP TX metadata at submission
+> - *  @meta: pointer to AF_XDP metadata area
+> + *  @pmeta: pointer to pointer to AF_XDP metadata area
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260727161959.8856=
-42-1-sdf@fomichev.me?part=3D3
+42-1-sdf@fomichev.me?part=3D2
