@@ -1,154 +1,166 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644F32F12A1
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 02:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103242C21F4;
+	Tue, 28 Jul 2026 02:50:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785206998; cv=none; b=cyDmPxaZJWyVWnBGlZkKizVev5scDnwjnmkZ4BbwrwxxGtarkcV1isWDiX1CFfD3bvdgvB5DL6571wEIErmOnLcDO4naTGxPiL0I7NWxto57vDPe3LAzpVOU/0LJSpZ3tKnbP8gfbqz4Kujo6d7iXOYmjDxevMbVoP+Q4rbBSj0=
+	t=1785207031; cv=none; b=q+QS0+VuzdIiOmH3NgUbuOd3EkTJrIbE+6soYSbZw/NYiRVMIOiO39JXLjUuFQbDJY3w2l21PCPZ/1MVX6XVjiVEfsIreSQvPSGUCp6kcDdm1KflGVxL4j8x/ZuaN89JCLLv4ZL3E+ew0oCi3IZlSYQJpr6GwRPQSxcUAOnq/W8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785206998; c=relaxed/simple;
-	bh=i0mVqTDUN/9+vDDOLv/mAzRRG1/9HWzzbVYqc+RqxLI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=STljhmpsHWSORYVaaQZBM62G+A2m6ts2OobvMXd/TdqCEc+Z4OsXOS23ZgccwwsiRf6htew1pxz2QYY6o3iDKvDjomts2dbLTpJyzGVzIMc3AivDPZQH8VaXZhMV4D1LCEQnBy4Ck457ECzAMp2dmiA6mWLlnlbh32ojuPsln9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JN5q8Sso; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JN5q8Sso"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38759bcd877so2075355a91.2
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2026 19:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785206997; x=1785811797; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jCR20QB8tg3udQ1a+h/sLLlAn/C0I59VUkGk7ueLTTs=;
-        b=JN5q8SsoaK+zu7lEDbM4Idg4JihRnDCPf7IvnAX89qBD5nkGuGvQbT4qWWCnulxs6S
-         MqexYx+CVbpbb19Ap2Kkw0oyojdT0GEXoQbm0W3D1Sa+YgF9hyRu7m0Lr+6zdfCyXX9m
-         QtsY20H88WejC9/uTsxFqlWQ+fmgbyLCsP6+HXXhYvQs9tZWM2hyVMQMtDePoPyzA2kE
-         sx1PXCiXGmDxrV6QFicG3di38oR1OCXQAy/IDzYxjQXTWAO1T2pkFycqekpMjA6CjAyX
-         Ogr96vNWufKdym0oE9xXu3hhwJFqm2xDZ/4lHdku4G5HrIkMAvkl2fVwvJMh5HXOliu+
-         TS9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785206997; x=1785811797;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jCR20QB8tg3udQ1a+h/sLLlAn/C0I59VUkGk7ueLTTs=;
-        b=M83MFxj6YdePrQDB6bQ9PwLEQZtwldN7F/bzlH4OE4/oVs0vVrRvULt4SUAIO9o5sU
-         oyXWn3jcXR3WXuqbNKTGROrreXdTWvHSxmX54wPBNXuz+THSmdaKW4CTKwD1CF6QbAKr
-         0JwgJt/fPTzfCL2Fe/5UqDBTizlAjZnYxsYzbKI4hyDiNy36Zm5cUBXbGjHkHS5xhtkO
-         HT20YZIqIDv8tofHJxRFL4vogVXm/KWRk19Apva31GE/SdXvGMRzzx8Bl4nsmWAhCtrk
-         BWlO+/RqrJVcnqj6teIjTKJjry51oBm9aU+gD1amGi3GtVrO7yF/fCbtO+5iigy2tfBh
-         Ed5Q==
-X-Forwarded-Encrypted: i=1; AHgh+RqebEzeTRhJ0Q0G6JaCkTAzRp0+ojrAkUhapQmZDysLXJEl7IEf744yQNoxLyV8l0w+fEk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIbJFGU74fnUJk5kr740yhRF7o9FJtzcTyuY9w7mNqQOeozHAx
-	gwoVONJDsm+LeYnUS98FAiXaUdT0ItFZNNkx6vuL6/JlitwWOvI9+2HA
-X-Gm-Gg: AR+sD10twTQUqzk2FUpsL3dZWG1U1KsLUQ5yNcjZxLZSQ9Mc7bHU9p/OIYDZW6hii1w
-	M5tFvVWbj8GTnPI6lnplXVQLQYFRWNg0OiqW+mdlTUPnSzgAP3LpKH9zny0wT5Nvsip4lukLj9U
-	+j5FoXrtHAVA2+5jSN/ytekO17ht0vLVRhrMplEXcPs4HXzLeA1wvZHZh6kirL2cX3JXLrVYUo8
-	SkunsmHfmzhBpX6BvQ2XS0jr0TWN9Ug2KF+TRibkZkwk3tSZojiMsPXwfsolXAmBcmspEiIV5ID
-	j5d280IaYhqEy6+VD14sfxJ86h6J9cdTwqFn02bSbHwlE1z1fsJlPpzBt8onKON0t4xANaR7FC5
-	WRLX1FUENwtBY61E1KRti28bUlalEiBoRx8/dG+qitehZb5JyOwM74WpKm11LvtWkUtVMF/ccmh
-	4jZQOo29kujTDQzvmBIivsZxqhzHbSpbu3Vu8nP5plt4BUwZMjcUuMCMk8iXJn
-X-Received: by 2002:a17:90b:2e4f:b0:37f:be6c:f3f2 with SMTP id 98e67ed59e1d1-38f6a31097fmr685575a91.2.1785206996673;
-        Mon, 27 Jul 2026 19:49:56 -0700 (PDT)
-Received: from localhost.localdomain ([101.90.42.31])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f089e3472sm4346867a91.3.2026.07.27.19.49.54
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 27 Jul 2026 19:49:56 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: nathan@kernel.org,
-	nsc@kernel.org
-Cc: linux-kbuild@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v4] kbuild: rpm-pkg: Preserve BTF sections in kernel modules during debuginfo stripping
-Date: Tue, 28 Jul 2026 10:49:50 +0800
-Message-ID: <20260728024950.44946-1-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1785207031; c=relaxed/simple;
+	bh=3o4obqp65zZ9uHCiHOs8iNKIYI46R8sQnrGHVRnMSQQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=EPhZ9EZ34/RO1Z67ygDTeamf9/XiFsCRcPNEJvR5+FrzKf4pPs4xWg9U94JipYbvedUMgXae6/+PPZ2OnPWA+MbsxjO0QCdV/Gi+OArUs5VfCOdTTY2q35F7qdIToXbggl9lZbGil6a1HwemxXdJp+MwBSGmZI5XJie56ha2wRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h8KgW2sZ1zYQttK;
+	Tue, 28 Jul 2026 10:49:43 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 0654E4057A;
+	Tue, 28 Jul 2026 10:50:22 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBHN0bsGGhqasrUAA--.54321S2;
+	Tue, 28 Jul 2026 10:50:21 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf v3] bpf: Fix potential UAF when reading bpf link info
+Date: Tue, 28 Jul 2026 02:54:57 +0000
+Message-Id: <20260728025457.2814876-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgBHN0bsGGhqasrUAA--.54321S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJFyfGryUuF4kAF45tr4xWFg_yoW5Zw4UpF
+	W3J3WDua1rWr4293W7JryUurySgF4DKF1UGF9rX34FyFnIqrZYga4j9rWfZr9IkFyDGryx
+	Xr12vFyYyw1UZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+	W0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+	7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+	1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+	628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
+	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
+	MI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
+	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+	BIdaVFxhVjvjDU0xZFpf9x0JUd-B_UUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-After switching to the kernel's default package scripts for our local
-kernel RPM builds, we noticed that module BTF entries were missing:
+From: Pu Lehui <pulehui@huawei.com>
 
-  $ ls /sys/kernel/btf/
-  vmlinux    <<<< only vmlinux, no module BTF
+In bpf_link_show_fdinfo and bpf_link_get_info_by_fd, link->prog is
+accessed without holding any locks. If the prog is concurrently replaced
+via bpf_link_update, the old prog can be freed, leading to a potential
+UAF issue.
 
-Root cause: find-debuginfo.sh (from the debugedit package) prefers
-eu-strip over strip when elfutils is installed, which is the common
-case on RHEL 9. eu-strip removes non-allocated ELF sections, including
-the .BTF section that contains BPF Type Format information for kernel
-modules. Without .BTF, BPF tools (bpftool, bcc, bpftrace) cannot resolve
-kernel types at runtime, and /sys/kernel/btf/<module> entries are not
-created when modules are loaded.
+Fix this by accessing link->prog under RCU protection to safely fetch
+the pointer and guarantee its lifetime while reading its fields.
 
-Additionally, since commit 8646db238997 ("libbpf,bpf: Share BTF
-relocate-related code with kernel"), modules contain a .BTF.base section
-that maps distilled type IDs to vmlinux types. If .BTF.base is stripped,
-btf_parse_module() falls back to vmlinux BTF directly, causing type ID
-mismatches and rejecting the module's BTF entirely.
-
-Fix by passing --keep-section .BTF and --keep-section .BTF.base via
-_find_debuginfo_opts, which adds -K .BTF and -K .BTF.base to the
-eu-strip/strip command, preserving both sections while allowing normal
-debuginfo extraction to proceed.
-
-After this change, all module BTF files are properly generated:
-
-  $ ls /sys/kernel/btf/
-  aesni_intel         drm                 i2c_i801            mfd_core
-  ahci                drm_client_lib      i2c_mux             net_failover
-  backlight           drm_kms_helper      i2c_smbus           pcspkr
-  ccp                 drm_shmem_helper    input_leds          qemu_fw_cfg
-  dm_log              failover            intel_rapl_common   sch_fq_codel
-  dm_mirror           fat                 intel_rapl_msr      serio_raw
-  dm_mod              fuse                irqbypass           sunrpc
-  dm_region_hash      gf128mul            iTCO_wdt            vfat
-  virtio_balloon      virtio_console      virtio_dma_buf      virtio_gpu
-  virtio_net          virtio_rng          virtio_blk          vmlinux
-  xfs
-
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>
+Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- scripts/package/kernel.spec | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+v3：
+- Initialize prog_id while link->prog may be NULL. (Andrii)
+- Remove misleading commit msg. (Andrii)
+- Add Reviewed-by tags by Amery and Emil.
+- Separate from patchset [0]. (Andrii)
 
-v3->v4: also preserve .BTF.base (sashiko-bot)
-v2->v3: use %{__find_debuginfo} (Nathan)
-v1->v2: check if find-debuginfo.sh supports --keep-section (sashiko-bot)
+Link: https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@huaweicloud.com [0]
 
-diff --git a/scripts/package/kernel.spec b/scripts/package/kernel.spec
-index c732415662ef..46e80970f723 100644
---- a/scripts/package/kernel.spec
-+++ b/scripts/package/kernel.spec
-@@ -67,7 +67,18 @@ This package provides debug information for the kernel image and modules from th
- %undefine _unique_debug_srcs
- %undefine _debugsource_packages
- %undefine _debuginfo_subpackages
+v2: https://lore.kernel.org/bpf/20260721041048.1394085-1-pulehui@huaweicloud.com
+- Remove rcu_read_lock_trace as rcu_read_unlock is sufficient. (Mykyta)
+
+v1: https://lore.kernel.org/bpf/20260720033055.1215477-1-pulehui@huaweicloud.com
+
+ kernel/bpf/syscall.c | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 6db306d23b47..70dca14378bb 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3471,9 +3471,10 @@ static const char *bpf_link_type_strs[] = {
+ static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
+ {
+ 	const struct bpf_link *link = filp->private_data;
+-	const struct bpf_prog *prog = link->prog;
++	const struct bpf_prog *prog;
+ 	enum bpf_link_type type = link->type;
+ 	char prog_tag[sizeof(prog->tag) * 2 + 1] = { };
++	u32 prog_id = 0;
+ 
+ 	if (type < ARRAY_SIZE(bpf_link_type_strs) && bpf_link_type_strs[type]) {
+ 		if (link->type == BPF_LINK_TYPE_KPROBE_MULTI)
+@@ -3490,13 +3491,20 @@ static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
+ 	}
+ 	seq_printf(m, "link_id:\t%u\n", link->id);
+ 
++	rcu_read_lock();
++	prog = READ_ONCE(link->prog);
+ 	if (prog) {
+ 		bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
++		prog_id = prog->aux->id;
++	}
++	rcu_read_unlock();
 +
-+# Preserve .BTF and .BTF.base sections in kernel modules during debuginfo
-+# stripping. find-debuginfo.sh uses eu-strip which removes non-allocated ELF
-+# sections like .BTF by default. .BTF.base is required for BTF distillation
-+# support; without it, module BTF validation fails.
-+%global with_keep_section %(%{__find_debuginfo} --help 2>&1 | grep -c keep-section)
-+%if %{with_keep_section}
-+%global _find_debuginfo_opts -r --keep-section .BTF --keep-section .BTF.base
-+%else
- %global _find_debuginfo_opts -r
-+%endif
++	if (prog) {
+ 		seq_printf(m,
+ 			   "prog_tag:\t%s\n"
+ 			   "prog_id:\t%u\n",
+ 			   prog_tag,
+-			   prog->aux->id);
++			   prog_id);
+ 	}
+ 	if (link->ops->show_fdinfo)
+ 		link->ops->show_fdinfo(link, m);
+@@ -5535,6 +5543,7 @@ static int bpf_link_get_info_by_fd(struct file *file,
+ {
+ 	struct bpf_link_info __user *uinfo = u64_to_user_ptr(attr->info.info);
+ 	struct bpf_link_info info;
++	const struct bpf_prog *prog;
+ 	u32 info_len = attr->info.info_len;
+ 	int err;
+ 
+@@ -5549,8 +5558,12 @@ static int bpf_link_get_info_by_fd(struct file *file,
+ 
+ 	info.type = link->type;
+ 	info.id = link->id;
+-	if (link->prog)
+-		info.prog_id = link->prog->aux->id;
 +
- %global _missing_build_ids_terminate_build 1
- %global _no_recompute_build_ids 1
- %{debug_package}
++	rcu_read_lock();
++	prog = READ_ONCE(link->prog);
++	if (prog)
++		info.prog_id = prog->aux->id;
++	rcu_read_unlock();
+ 
+ 	if (link->ops->fill_link_info) {
+ 		err = link->ops->fill_link_info(link, &info);
 -- 
-2.52.0
+2.34.1
 
