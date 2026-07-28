@@ -1,235 +1,138 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E056413957E
-	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 02:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F28227CCE0
+	for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 02:39:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785206257; cv=none; b=H1EHx3Djhh/cAeEy8PUs+l9PB+71jo+kMRSmUrRsY5VMrzvudz/Kly/65op64gq5YNOHxxUXrlybpSK1a8kN1AujQpdAgiJb7zKiGvboPiKeHPqGORCdoIVkYzfakeIF5o6lFCmcawkmFFYg7lqLz3ZSB2WyLw5CW8QL0osbr8I=
+	t=1785206346; cv=none; b=czK+MLiUtEy+6GFPAgUMPYTaVp0vjOZIyF52WJyYveYWBI+/GduFzpjCKj7fyktq0XlUoHj6zDomkasJzc4als7aAPiqoZ6VpzjJ6BPhIcqkJNGi4lQKJrtM2dXPmogR1fhptgwjs1Mn8est4J1JDVgpjkaodl8XYElp7FC36Fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785206257; c=relaxed/simple;
-	bh=/n+zXG3/H2tPR/U4JMam8SFc7YhOaJWkwmOiRXV+yQ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZAK4q+SEtA7J+H16pq6y2nn6TliuCzQOGwUTBKzbrEUllDU30ttkXggLL/UM+wk/AMsOP6iXZGurRBFu+/E51A2mGld2TBSzHwFMXxD1X/BX8GdCr8WuJ5OAvXOzo/H+UoJOFZ3jtbyxzJ6LIf4BXqXYlh8ddnaepGc7NAchZrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id C238820673397C; Mon, 27 Jul 2026 19:37:22 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: [PATCH dwarves] btf_encoder: Ensure the first same-name function has a non-zero address
-Date: Mon, 27 Jul 2026 19:37:22 -0700
-Message-ID: <20260728023722.1978868-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1785206346; c=relaxed/simple;
+	bh=v2LsHiqJ+crjzKaHY85oT2H5A8FQu+zsipWKzgnz+CE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=B3ZqyG+QWcnnvWyQIGVwvil7DKKGTBAFYzJhWKqTd7Z6opNmk3ACFMcDU2hrTD7BBzHxaHJyyiImbvsanR3OyZe9POd7YS3Vh/T6pI0jQg4kW+FiHgKYTTZYurhKLLTvlUHnJeuDh9arb95dT7JnQXZDqm8ASzp+A8BMnQa7Svg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UxBdYt08; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UxBdYt08"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCF9A1F000E9;
+	Tue, 28 Jul 2026 02:39:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785206345;
+	bh=GoQtLB4s0Y0NKreArpKs8OEXfIXMQAcTITSlqgTq0ck=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=UxBdYt08B2j7IsZFjO1thlv8yZK/slztnMt0MG7lLt5R1lZi4LjQF1tU0WjUZcUEw
+	 Ii1l+fZh/DjHvxh6ScXI6VOhu9R6DbpAZO5OnQH/a5jYCKFriwVK/KQW1nPmF/+QSj
+	 8x/ZSRtVsyZ9sSGplbuXWPfgwg8VmrksOYA4lpoWx5l4gbMUygO4qSVjmrZ8WUmHYm
+	 +/S/hn+O6Ju/heIoCw+Kfv6KEMyzStEZEJBy6WxACvXcnq2V0hxuDmMZG4/2rEUM0X
+	 wf0BLPjG4isAmlGm8usMsgd65Cb6j3dqYz3WeK1HjM7l6B19+ViSMc8sfoLZsziTCG
+	 SjwptJzkgD+SA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2] bpf: Fix potential UAF in
+ bpf_netns_link_update_prog
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pu Lehui" <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260728023259.2813482-1-pulehui@huaweicloud.com>
+References: <20260728023259.2813482-1-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 28 Jul 2026 02:39:04 +0000
+Message-Id: <20260728023904.CCF9A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 
-When true_signature is enabled, the same function can appear as two kinds
-of saved states: an inlined (abstract) instance that carries the original
-source signature with no address, and an out-of-line instance that carrie=
-s
-the reconstructed true signature. saved_functions_combine() compares ever=
-y
-same-name state in a group against the first (anchor) one and, when their
-prototypes differ, marks the function as having an inconsistent prototype=
-.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Without this patch, the first same-name function may be an inlined instan=
-ce
-whose prototype is the original source signature and thus differs from th=
-e
-true signature. The two prototypes are then flagged as inconsistent and,
-because --btf_features=3D+true_signature also enables the default
-consistent_func feature (skip_encoding_btf_inconsistent_proto), which dro=
-ps
-functions flagged with an inconsistent prototype, the whole function is
-dropped from BTF. This primarily affects clang: its signature-changed
-functions keep their original name (no "." suffix), so state->sym is neve=
-r
-set and they bypass btf_encoder__add_true_signature(), falling through to
-this canonical-state path.
+Pre-existing issues:
+- [Critical] Lockless, unprotected access to `link->prog` fields allows Use=
+-After-Free and TOCTOU bugs when a link's program is updated concurrently.
+--
 
-With this patch, same-name functions are sorted so that, if any instance
-has a non-zero address, such an instance becomes the first (anchor). That
-addressed out-of-line instance is the one whose signature represents the
-true signature, so the consistency check compares real instances against
-each other and the function is retained in BTF with its true signature.
+--- Patch [1]: [PATCH bpf v2] bpf: Fix potential UAF in bpf_netns_link_upda=
+te_prog ---
+commit afa2c5a0786c29e2f3227e6c9b10cbfcd8407bc9
+Author: Pu Lehui <pulehui@huawei.com>
 
-It is hard to create a test case where one function is inlined in one
-place and not inlined in another place. So I built the latest bpf-next
-kernel with
-  make LLVM=3D1 -j
-and then did
-  with master branch:
-    pahole -JV --btf_features=3D+true_signature vmlinux >& log.pahole.old
-  with this patch on top of master branch:
-    pahole -JV --btf_features=3D+true_signature vmlinux >& log.pahole.new
-and then get warning messages:
-  grep "skipping BTF encoding of function" log.pahole.old > log.old
-  grep "skipping BTF encoding of function" log.pahole.new > log.new
-and compare log.old and log.new
-  diff log.old log.new > log.diff
+bpf: Fix potential UAF in bpf_netns_link_update_prog
 
-The following are some results:
-  --- log.old     2026-07-27 19:06:20.223881463 -0700
-  +++ log.new     2026-07-27 19:06:28.874109831 -0700
-  @@ -15,45 +15,28 @@
-   ZSTD_getCParams_internal : skipping BTF encoding of function due to un=
-expected register usage for parameter
-   ZSTD_getParams : skipping BTF encoding of function due to unexpected r=
-egister usage for parameter
-   __ata_sff_port_intr : skipping BTF encoding of function due to unexpec=
-ted register usage for parameter
-  -__build_flow_key : skipping BTF encoding of function due to param coun=
-t mismatch; 9 params !=3D 8 params
-  -__build_flow_key : skipping BTF encoding of function due to inconsiste=
-t prototype
-   __collect_tables : skipping BTF encoding of function due to ambiguous =
-address
-   __fl_lookup : skipping BTF encoding of function due to return type mis=
-match
-   __fl_lookup : skipping BTF encoding of function due to ambiguous addre=
-ss
-   __in6_dev_get : skipping BTF encoding of function due to ambiguous add=
-ress
-   __in_dev_get_rcu : skipping BTF encoding of function due to ambiguous =
-address
-  -__instance_destroy : skipping BTF encoding of function due to param ty=
-pe mismatch for param#1 inst !=3D inst
-  -__instance_destroy : skipping BTF encoding of function due to inconsis=
-tet prototype
-   __ioremap_caller : skipping BTF encoding of function due to unexpected=
- register usage for parameter
-  -__ipmr_get_table : skipping BTF encoding of function due to param coun=
-t mismatch; 2 params !=3D 1 params
-  -__ipmr_get_table : skipping BTF encoding of function due to inconsiste=
-t prototype
-   __ipv6_neigh_lookup_noref : skipping BTF encoding of function due to a=
-mbiguous address
-   __key_get : skipping BTF encoding of function due to ambiguous address
-  -__kmem_cache_create : skipping BTF encoding of function due to param c=
-ount mismatch; 5 params !=3D 2 params
-  -__kmem_cache_create : skipping BTF encoding of function due to inconsi=
-stet prototype
-  -__kunmap_atomic : skipping BTF encoding of function due to param count=
- mismatch; 1 params !=3D 0 params
-  -__kunmap_atomic : skipping BTF encoding of function due to inconsistet=
- prototype
-   __map_range : skipping BTF encoding of function due to ambiguous addre=
-ss
-   __map_range_leaf : skipping BTF encoding of function due to ambiguous =
-address
-  -__map_single_page3 : skipping BTF encoding of function due to param co=
-unt mismatch; 3 params !=3D 4 params
-  -__map_single_page3 : skipping BTF encoding of function due to inconsis=
-tet prototype
-   __migrate_disable : skipping BTF encoding of function due to ambiguous=
- address
-   __migrate_enable : skipping BTF encoding of function due to ambiguous =
-address
-   __mod_tree_insert : skipping BTF encoding of function due to unexpecte=
-d register usage for parameter
-   __mptcp_pm_send_ack : skipping BTF encoding of function due to unexpec=
-ted register usage for parameter
-  +__neigh_lookup : skipping BTF encoding of function due to param count =
-mismatch; 3 params !=3D 2 params
-   __neigh_lookup : skipping BTF encoding of function due to ambiguous ad=
-dress
-  -__netdev_walk_all_lower_dev : skipping BTF encoding of function due to=
- param count mismatch; 1 params !=3D 3 params
-  -__netdev_walk_all_lower_dev : skipping BTF encoding of function due to=
- inconsistet prototype
-   __pci_bus_set_current_state : skipping BTF encoding of function due to=
- unexpected register usage for parameter
-   __pskb_trim : skipping BTF encoding of function due to ambiguous addre=
-ss
-   __release_region : skipping BTF encoding of function due to unexpected=
- register usage for parameter
-   __remove_hrtimer : skipping BTF encoding of function due to unexpected=
- register usage for parameter
-   __sk_dst_get : skipping BTF encoding of function due to ambiguous addr=
-ess
-   __skb_complete_tx_timestamp : skipping BTF encoding of function due to=
- unexpected register usage for parameter
-  -__skb_gro_checksum_validate_complete : skipping BTF encoding of functi=
-on due to param count mismatch; 2 params !=3D 1 params
-  -__skb_gro_checksum_validate_complete : skipping BTF encoding of functi=
-on due to inconsistet prototype
-  -__skb_gro_checksum_validate_needed : skipping BTF encoding of function=
- due to param count mismatch; 3 params !=3D 1 params
-  -__skb_gro_checksum_validate_needed : skipping BTF encoding of function=
- due to inconsistet prototype
-   __task_rq_unlock : skipping BTF encoding of function due to unexpected=
- register usage for parameter
-   __tracing_open : skipping BTF encoding of function due to unexpected r=
-egister usage for parameter
-   __tty_buffer_request_room : skipping BTF encoding of function due to u=
-nexpected register usage for parameter
-  @@ -63,44 +46,28 @@
-  ...
+This commit fixes a potential use-after-free in bpf_netns_link_update_prog
+by moving the checks for old_prog and new_prog->type inside the
+netns_bpf_mutex critical section. It also uses guard(mutex) to simplify
+lock management.
 
-With true signature enabled, this patch allows more BTF functions.
+Link: https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@huaw=
+eicloud.com [0]
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- btf_encoder.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+> diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
+> index 25f30f9edaefd..81006a242618d 100644
+> --- a/kernel/bpf/net_namespace.c
+> +++ b/kernel/bpf/net_namespace.c
+> @@ -171,33 +171,28 @@ static int bpf_netns_link_update_prog(struct bpf_li=
+nk *link,
+>  	struct net *net;
+>  	int idx, ret;
+> =20
+> +	guard(mutex)(&netns_bpf_mutex);
+> +
+>  	if (old_prog && old_prog !=3D link->prog)
+>  		return -EPERM;
+>  	if (new_prog->type !=3D link->prog->type)
+>  		return -EINVAL;
+> =20
+[ ... ]
+>  	old_prog =3D xchg(&link->prog, new_prog);
+>  	bpf_prog_put(old_prog);
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index 993a61c..fb2b5b0 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -1519,8 +1519,20 @@ static int saved_functions_cmp(const void *_a, con=
-st void *_b)
- {
- 	const struct btf_encoder_func_state *a =3D _a;
- 	const struct btf_encoder_func_state *b =3D _b;
--
--	return elf_function__name_cmp(a->elf, b->elf);
-+	int ret;
-+
-+	ret =3D elf_function__name_cmp(a->elf, b->elf);
-+	if (ret)
-+		return ret;
-+
-+	/* For the same function, sort the out-of-line (real) instances, which
-+	 * have a function address, before the inlined (abstract) ones, which d=
-o
-+	 * not. saved_functions_combine() compares every state in a group again=
-st
-+	 * the first (anchor) one, so keeping a real instance as the anchor
-+	 * ensures real instances are still compared against each other for
-+	 * prototype consistency.
-+	 */
-+	return (a->addr =3D=3D 0) - (b->addr =3D=3D 0);
- }
-=20
- static int saved_functions_combine(struct btf_encoder *encoder,
-@@ -1536,7 +1548,9 @@ static int saved_functions_combine(struct btf_encod=
-er *encoder,
- 	inconsistent =3D a->inconsistent_proto | b->inconsistent_proto;
- 	uncertain_parm_loc =3D a->uncertain_parm_loc | b->uncertain_parm_loc;
- 	reordered_parm =3D a->reordered_parm | b->reordered_parm;
--	if (!unexpected && !inconsistent && !reordered_parm && !funcs__match(en=
-coder, a, b))
-+
-+	if ((!encoder->true_signature || !!a->addr =3D=3D !!b->addr) &&
-+	    !unexpected && !inconsistent && !reordered_parm && !funcs__match(en=
-coder, a, b))
- 		inconsistent =3D 1;
- 	a->unexpected_reg =3D b->unexpected_reg =3D unexpected;
- 	a->inconsistent_proto =3D b->inconsistent_proto =3D inconsistent;
+[Severity: Critical]
+This is a pre-existing issue, but can this concurrent update race with
+lockless readers of link->prog in other parts of the code?
+
+For example, in bpf_link_get_info_by_fd():
+
+kernel/bpf/syscall.c:bpf_link_get_info_by_fd() {
+    ...
+    if (link->prog)
+        info.prog_id =3D link->prog->aux->id;
+    ...
+}
+
+Or in bpf_link_show_fdinfo():
+
+kernel/bpf/syscall.c:bpf_link_show_fdinfo() {
+    ...
+    const struct bpf_prog *prog =3D link->prog;
+    ...
+    if (prog) {
+        bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
+    ...
+}
+
+Could these lockless reads lead to a use-after-free if a thread executing
+bpf_netns_link_update_prog() swaps link->prog and drops the reference to
+old_prog, and the RCU grace period elapses before the reader accesses the
+freed program's fields?
+
+Similarly, in bpf_mprog_link() in kernel/bpf/mprog.c:
+
+kernel/bpf/mprog.c:bpf_mprog_link() {
+    ...
+    if (type && link->prog->type !=3D type) {
+        bpf_link_put(link);
+        return -EINVAL;
+    }
+   =20
+    tuple->link =3D link;
+    tuple->prog =3D link->prog;
+    ...
+}
+
+Could this lead to a time-of-check to time-of-use error or a dangling
+tuple->prog pointer if a link update occurs concurrently?
+
 --=20
-2.53.0-Meta
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728023259.2813=
+482-1-pulehui@huaweicloud.com?part=3D1
