@@ -1,51 +1,52 @@
-Received: from pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.83.148.184])
+Received: from pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.77.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD792EEE90;
-	Tue, 28 Jul 2026 20:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.83.148.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986C33F5BD8;
+	Tue, 28 Jul 2026 20:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.77.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785270862; cv=none; b=KUlMOWPP4OnH/cFPHFF1am6qbF9Yp1eESi1S6YC9XnYaHuG4FQxLIIRpwtYBW6dwx3l6Dh5TN7ozsekIztD8ppD1HW6Djxb5SflPO8ZYQoNzDuup7fZ7zg3v3uiv9cEN4CVKvwJJ+KrLGsPoOjqEH7eBzAfCx0zPvxUX0gbVLZg=
+	t=1785272276; cv=none; b=ewii+JEJ7jod64sjcw7KPleIaeOSob5QGyc1gzjtiWvicAno70+MjsRbag4CSgftd34AR8bzwSozWZ8rtxrK/LwiVcxUzYNoOWJzEcan8SbnQtNacWE2qI0dKYstGHBcsAJnLlf2+5vkVOsaZqT7bRaIPN0mzaTyC9BfK9EWXkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785270862; c=relaxed/simple;
-	bh=iMynQQeOcSHJktJ6RxML+z4ykMmb7RE+eAa8IkDzUD0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lJ5vWwO8eJVWgw6uUte8nb03qAfZqTGHW/yFEJ+TPr+7PmvJZswLMP5EEjfm93NvBKxVIXA8gD/Zpx5dDMOLG33CtFxHa7EX+FwsbLca46xxvezjYbicuGAGi31Zt4RotR3V5IicNbCAjbj2ICyQazdbgIKbcvVZolr6gvfubwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=YMbcho14; arc=none smtp.client-ip=35.83.148.184
+	s=arc-20240116; t=1785272276; c=relaxed/simple;
+	bh=ZvnPUWrNcaKvQBCRr4k2xw4gaX/UAV4Bgiv0oCYEFjU=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=P/A1SpXgfagsaeIe8RR2/wgmpiW47RBoIlznA5Mg5ISHWCx9MX43YAMaE7lC2aIIFDgYjTw0wgztD3FHFwQrvuk6zVtmwW0vH5wAZOZsuCVKO8fEHMOsLdqorbyxvhO3U0Eldl1/5HuoIKwbswgljmFKY6lWzLWNKgerggRMgBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=qOONYc9P; arc=none smtp.client-ip=44.246.77.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="YMbcho14"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="qOONYc9P"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1785270860; x=1816806860;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NbHYsikM/I/p8dp73VL8XWAfmndZWKcW9lyNqHzg6T4=;
-  b=YMbcho14TKDbLDy693MDk6PEcLyN4kzCcBMCUj/zv+XR51yZmLeCL3to
-   T6zeyPz0ULAGUXdSHYzIn2AjA03FKBgnj9eGPdMf0Mv8reVp2fBkU/h1E
-   IATwoCCjaW/49d3EHsxZ/lbK+nBYKZPVmHBAvNW7w7HHRDbN30olgdMbA
-   KDOzWNe+wEf5bNkYGOpfqbxvdvC4ij3QAspCUPPIGKyHLaFzqnO040325
-   Yce1U4mIBzpbbo3t9hzjj0jYJ70bhoX0iqq03IOypVXbb4SE8P52+9Qcy
-   Bp7LcgWjSy/gWv8UBYP6mk0kAYqKvEnnWFaAdfXsuDo7sLnsMKZM8zml4
-   A==;
-X-CSE-ConnectionGUID: UgMXxCcjTlyiLt1p93c6Ww==
-X-CSE-MsgGUID: Q56Zj4nrRjeW256eF14Bxw==
+  t=1785272273; x=1816808273;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=J4MzSKA9lmF/CEAOgCFqoHzMp6jKD08xpbr1OHrrn1g=;
+  b=qOONYc9Pgiq71tzBrZisa+7Un9Fei+dXZ41UKftchCg0+heHklRBnmcb
+   2NQKINWqHlz6Muv/1eOkpreD9oRGX4LadbHG7gCBYOLbgvFF90tBSszTC
+   6bTF5Dh0+oLnqsKT/+yyOY4mAqbczITNdK07uLbUs9D56qNpS87kbvIRW
+   68sJpE9YVmvp1TL9NOtsnQY/ZPK86f7rouuguFCjrGt3Dxd0SLX+HmLDC
+   hxp6Mbd9gKrUExHbARid9TBcCRw+RdS/DqYySUcMEFzqAurzzOPCzswpD
+   znZ/tmVKXmvn9Rl/UHW4E3Pakm7bD6FpYK6xsDVMQExxlsB8HS6u+iOWB
+   w==;
+X-CSE-ConnectionGUID: CjX8MELRQHa+/K44WAhQKQ==
+X-CSE-MsgGUID: GDO5KOj9SPG1ffO4zGrMOw==
 X-IronPort-AV: E=Sophos;i="6.25,191,1779148800"; 
-   d="scan'208";a="24314889"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2026 20:34:20 +0000
-Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.104:22192]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.25.115:2525] with esmtp (Farcaster)
- id 55988a16-4ccc-4b48-a703-a1ce85c65631; Tue, 28 Jul 2026 20:34:20 +0000 (UTC)
-X-Farcaster-Flow-ID: 55988a16-4ccc-4b48-a703-a1ce85c65631
+   d="scan'208";a="24521913"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2026 20:57:45 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.51:3446]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.56.7:2525] with esmtp (Farcaster)
+ id 7190f09d-bc42-4076-8c0a-a9083cd9506d; Tue, 28 Jul 2026 20:57:45 +0000 (UTC)
+X-Farcaster-Flow-ID: 7190f09d-bc42-4076-8c0a-a9083cd9506d
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Tue, 28 Jul 2026 20:34:20 +0000
+ Tue, 28 Jul 2026 20:57:44 +0000
 Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
  by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Tue, 28 Jul 2026 20:34:19 +0000
+ Tue, 28 Jul 2026 20:57:44 +0000
 From: Jay Wang <wanjay@amazon.com>
 To: <stable@vger.kernel.org>
 CC: <gregkh@linuxfoundation.org>, <sashal@kernel.org>,
@@ -53,10 +54,12 @@ CC: <gregkh@linuxfoundation.org>, <sashal@kernel.org>,
 	Quan Sun <2022090917019@std.uestc.edu.cn>, Yinhao Hu <dddddd@hust.edu.cn>,
 	Kaiyan Mei <M202472210@hust.edu.cn>, Dongliang Mu <dzm91@hust.edu.cn>, "Emil
  Tsalapatis" <emil@etsalapatis.com>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 6.12.y] bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops
-Date: Tue, 28 Jul 2026 20:34:18 +0000
-Message-ID: <20260728203418.26079-1-wanjay@amazon.com>
+Subject: [PATCH 6.12.y v2] bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops
+Date: Tue, 28 Jul 2026 20:57:44 +0000
+Message-ID: <20260728205744.28301-1-wanjay@amazon.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260728203418.26079-1-wanjay@amazon.com>
+References: <20260728203418.26079-1-wanjay@amazon.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,7 +68,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D044UWA002.ant.amazon.com (10.13.139.11) To
+X-ClientProxiedBy: EX19D042UWB002.ant.amazon.com (10.13.139.175) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
@@ -112,14 +115,16 @@ Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 Signed-off-by: Jay Wang <wanjay@amazon.com>
 ---
+v2: rebased onto v6.12.98 to resolve context conflict reported by CI
+
  net/core/filter.c | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/net/core/filter.c b/net/core/filter.c
-index b03621405d062..609a97237b424 100644
+index f54e7152d6879..90e396423eb7a 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -10467,10 +10467,11 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+@@ -10483,10 +10483,11 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
  				      si->dst_reg, si->dst_reg,		      \
  				      offsetof(OBJ, OBJ_FIELD));	      \
  		if (si->dst_reg == si->src_reg)	{			      \
@@ -132,7 +137,7 @@ index b03621405d062..609a97237b424 100644
  		}							      \
  	} while (0)
  
-@@ -10504,10 +10505,11 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+@@ -10520,10 +10521,11 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
  				      si->dst_reg, si->src_reg,		      \
  				      offsetof(struct bpf_sock_ops_kern, sk));\
  		if (si->dst_reg == si->src_reg)	{			      \
