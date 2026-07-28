@@ -1,166 +1,214 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103242C21F4;
-	Tue, 28 Jul 2026 02:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8659A2F25F3;
+	Tue, 28 Jul 2026 02:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785207031; cv=none; b=q+QS0+VuzdIiOmH3NgUbuOd3EkTJrIbE+6soYSbZw/NYiRVMIOiO39JXLjUuFQbDJY3w2l21PCPZ/1MVX6XVjiVEfsIreSQvPSGUCp6kcDdm1KflGVxL4j8x/ZuaN89JCLLv4ZL3E+ew0oCi3IZlSYQJpr6GwRPQSxcUAOnq/W8=
+	t=1785207065; cv=none; b=ujByDDiyV6wSCInA0RKgjYjiJMiGIi23cJX8KvH1H3dUrBJy0Jf1cU/tIl4jVr/fukNbt2FDTiiiED4CfabyEqjEZoPB5J4HQSNpgvfZVeIV2nMtKiNdsCe+Sog7OHxeB+mhurUMYf58f4otui1+I4yW4bNoA7mX8L7uC/9eMKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785207031; c=relaxed/simple;
-	bh=3o4obqp65zZ9uHCiHOs8iNKIYI46R8sQnrGHVRnMSQQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=EPhZ9EZ34/RO1Z67ygDTeamf9/XiFsCRcPNEJvR5+FrzKf4pPs4xWg9U94JipYbvedUMgXae6/+PPZ2OnPWA+MbsxjO0QCdV/Gi+OArUs5VfCOdTTY2q35F7qdIToXbggl9lZbGil6a1HwemxXdJp+MwBSGmZI5XJie56ha2wRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h8KgW2sZ1zYQttK;
-	Tue, 28 Jul 2026 10:49:43 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 0654E4057A;
-	Tue, 28 Jul 2026 10:50:22 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBHN0bsGGhqasrUAA--.54321S2;
-	Tue, 28 Jul 2026 10:50:21 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf v3] bpf: Fix potential UAF when reading bpf link info
-Date: Tue, 28 Jul 2026 02:54:57 +0000
-Message-Id: <20260728025457.2814876-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1785207065; c=relaxed/simple;
+	bh=W0BDYtxuDDdRLOUW+Dp+LxIodUKthKlk9kd+76vX//M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QUcqIYfPbdHCcNRk6/4f2NZyN15yNR3LI799FhKywPAutVD4b+/QeJTdNmo6F+wFgzyBb/c6aVuIyFz4iU8SgIDM+S94KLW1O8ACt6jILyWeZcPMWOsRJHm7oBHirewWiVjbkCqIO7KORWFp7DRQWi57B9wS1Dhshe3T+hPOeUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=Mk9Vmt20; arc=none smtp.client-ip=162.62.57.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="Mk9Vmt20"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1785207049;
+	bh=cW0TbNCISblwoiaULiHR+ZWC6JdcXp2rxqQLctE2VnU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Mk9Vmt20bk3Aoxd1gHH+7vbcFVUiZOB178RTWFm784elJGlLXUWmU4EWe9YMiFnVG
+	 FI+D6PxfAcpQNe4a/0fPtXnVJGipAz+D5EOxICg/BkRljCjU2gcaIaJKYQ1wjRGS83
+	 zU0yA85zga9aNH8RP4Yfatuoz4b7Q1wuoNFsZSzk=
+Received: from [10.56.52.25] ([39.156.73.14])
+	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
+	id CAD2E6BA; Tue, 28 Jul 2026 10:50:45 +0800
+X-QQ-mid: xmsmtpt1785207045tl40c9evp
+Message-ID: <tencent_185F6B461110090D468588B2422E5955A409@qq.com>
+X-QQ-XMAILINFO: OZsapEVPoiO6qM7uZ4+S4/crVvRsJwd18KbjZMQDojTlKNfqKjjCCplOw9PAQy
+	 PVQeO+EAkQo5jKl+H1imUfVLK22X0ZhsdNs5lylSrHXtlzj7q39ovB15TPr3Jr12AO08bw08Ifa6
+	 bBKCy/p1OKM2qn+Vrk0PBeLNRKRQTuDF87REDN3ktCiAeKi8OTepuiIV3hdB9h+fyqrJ2MUdKyZb
+	 TBREELrZIWZ3d9mnsblXj++8nyBaL6cRcON6pb3EbqGDFH6zivYKO5wnJarGaf1gVslNkd+iqQpA
+	 4/lV/G5D/28wUUv/JH5dKaz83k2Sz3xxsbG/wHmkfWANpzVN4BqoPAD0pyJSn/wlqlwTRByP9qx5
+	 wBJX79rhKgYREVZp8TubJrB5JQxQvZEGy1zFZcrhQmJcLHXV2uIyrDSR4OEteZJ/KIQi2u0EA93n
+	 94t17Frmd+bX6eev936cg68q9NLeG2C33xK50Tgl31bZ+6cl7fc7PJ++iyDerBddPLrZ4M/eMR5Y
+	 GF6eRSWXO7TOjzax1la8pAEDuzIl38V3jPSqc6gTMgwzOfpc78OHLgSlMe+PP6Cgul/iO1P3eBbN
+	 w/YQzUWs4Vw2PgaGhI749Qozu0nwaXDgOXIQvh9/Og3oK7L/ao35wTjZZAQVb9PIL2dGqPiKK6M0
+	 kOC6iEQ6cw3x30pEFJIR2STg8pVKCH2ZReBC/BPKNz2JhlaOjICN+UFrYUN1Ow4A5gx6IGnwHUQH
+	 Ip+ZA5JGH1RhUZq6BCP76zhklUQ2dohy+Q4pAO6qtOSiCdQ7gdyQDRfOacWQrfDjFx9iQljNC/vU
+	 Qjf4YM2kRXAWbLsULFSj9/SH35t5FNDnPIovp/tRt8HvQpC4SBNVONZkTujCFqk04Sl8e3BHtEma
+	 9PFtZRnjazbXzz5VcrEVdpkxMGLoAFXSBvwcr418VNLpaTBvPDnmoOuI47y8XrBl07wPrPfsUH/G
+	 v8o62FwaihSe+0iHpmnx2aAcTF5igb0svrzYhmckewqr1NTBhDelVDLlDThdJyUVM22AGzu8wEY1
+	 BPORCLf5X771zUT+elmG5bfuJR/nAeYcFwFxzawcmq6rTvrI+K6QnZdWZzUfu3KLbVlObYxDjfsF
+	 j1ZwedE1PPWuStnxI=
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+X-OQ-MSGID: <f9a69aed-a050-4ca3-abe5-c32720534430@foxmail.com>
+Date: Tue, 28 Jul 2026 10:50:45 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: vmalik@redhat.com, andrii@kernel.org, ast@kernel.org, rongtao@cestc.cn,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
+ "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
+ <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <cover.1784695085.git.rtoax@foxmail.com>
+ <tencent_60882E4BE4F247C5F6D564F41BF1C3004805@qq.com>
+ <CAEf4BzbRvjT3X=Ds+YqLiZt=A0ujk1t2GCDcmbdT3+QX+DsQDQ@mail.gmail.com>
+Content-Language: en-US
+From: Rong Tao <rtoax@foxmail.com>
+In-Reply-To: <CAEf4BzbRvjT3X=Ds+YqLiZt=A0ujk1t2GCDcmbdT3+QX+DsQDQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBHN0bsGGhqasrUAA--.54321S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJFyfGryUuF4kAF45tr4xWFg_yoW5Zw4UpF
-	W3J3WDua1rWr4293W7JryUurySgF4DKF1UGF9rX34FyFnIqrZYga4j9rWfZr9IkFyDGryx
-	Xr12vFyYyw1UZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-	W0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-	7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-	1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
-	628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
-	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
-	MI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
-	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
-	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-	BIdaVFxhVjvjDU0xZFpf9x0JUd-B_UUUUU=
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
 
-In bpf_link_show_fdinfo and bpf_link_get_info_by_fd, link->prog is
-accessed without holding any locks. If the prog is concurrently replaced
-via bpf_link_update, the old prog can be freed, leading to a potential
-UAF issue.
+On 7/28/26 06:56, Andrii Nakryiko wrote:
+> On Tue, Jul 21, 2026 at 9:42 PM Rong Tao <rtoax@foxmail.com> wrote:
+>> From: Rong Tao <rongtao@cestc.cn>
+>>
+>> Add string concatenation kfuncs, prototype:
+>>
+>>    int bpf_strcat(char *dst, u32 dst__sz, const char *src);
+>>    int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len);
+>>
+>> This differs from the glibc library functions strcat and strncat, which,
+>> for safety reasons, require the size of the target string's memory space
+>> as a parameter.
+>>
+>> The src parameter cannot directly pass a string constant, such as "XYZ",
+>> otherwise it will throw an error "write into map forbidden".
+>>
+>> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+>> ---
+>>   kernel/bpf/helpers.c | 75 ++++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 75 insertions(+)
+>>
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index c18f1e16edee..85afff60365c 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -4195,6 +4195,79 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ign, const char *s2__ign,
+>>          return __bpf_strnstr(s1__ign, s2__ign, len, true);
+>>   }
+>>
+>> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
+>> +{
+>> +       int dlen = 0, slen, space, copied;
+>> +
+>> +       if (sz == 0 || dsz == 0)
+>> +               return -EINVAL;
+>> +
+>> +       while (dlen < dsz && dst[dlen] != '\0')
+>> +               dlen++;
+>> +
+>> +       if (dlen >= dsz)
+>> +               return -E2BIG;
+>> +
+>> +       space = dsz - dlen;
+>> +
+>> +       slen = bpf_strnlen(src, sz);
+>> +       if (space <= slen)
+>> +               return -E2BIG;
+>> +
+>> +       copied = strncpy_from_kernel_nofault(dst + dlen, src, sz);
+> I'm not sure strncpy_from_kernel_nofault() is designed to work
+> correctly if dst can be modified concurrently. Which in BPF case, even
+> though we validate that memory is correct, it still can be modified
+> concurrently in such a way as to cause strncpy_from_kernel_nofault's
+> inner dst[-1] based loop logic to go beyond the boundaries of target
+> buffer.
+>
+> i.e., I don't believe current implementation is concurrency safe
 
-Fix this by accessing link->prog under RCU protection to safely fetch
-the pointer and guarantee its lifetime while reading its fields.
+Thank you very much for your reply. There is indeed a thread safety 
+issue. Let's look at a solution. I will submit v6. Thank you ;)
 
-Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
-v3：
-- Initialize prog_id while link->prog may be NULL. (Andrii)
-- Remove misleading commit msg. (Andrii)
-- Add Reviewed-by tags by Amery and Emil.
-- Separate from patchset [0]. (Andrii)
+Rong Tao
 
-Link: https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@huaweicloud.com [0]
-
-v2: https://lore.kernel.org/bpf/20260721041048.1394085-1-pulehui@huaweicloud.com
-- Remove rcu_read_lock_trace as rcu_read_unlock is sufficient. (Mykyta)
-
-v1: https://lore.kernel.org/bpf/20260720033055.1215477-1-pulehui@huaweicloud.com
-
- kernel/bpf/syscall.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6db306d23b47..70dca14378bb 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3471,9 +3471,10 @@ static const char *bpf_link_type_strs[] = {
- static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
- {
- 	const struct bpf_link *link = filp->private_data;
--	const struct bpf_prog *prog = link->prog;
-+	const struct bpf_prog *prog;
- 	enum bpf_link_type type = link->type;
- 	char prog_tag[sizeof(prog->tag) * 2 + 1] = { };
-+	u32 prog_id = 0;
- 
- 	if (type < ARRAY_SIZE(bpf_link_type_strs) && bpf_link_type_strs[type]) {
- 		if (link->type == BPF_LINK_TYPE_KPROBE_MULTI)
-@@ -3490,13 +3491,20 @@ static void bpf_link_show_fdinfo(struct seq_file *m, struct file *filp)
- 	}
- 	seq_printf(m, "link_id:\t%u\n", link->id);
- 
-+	rcu_read_lock();
-+	prog = READ_ONCE(link->prog);
- 	if (prog) {
- 		bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
-+		prog_id = prog->aux->id;
-+	}
-+	rcu_read_unlock();
-+
-+	if (prog) {
- 		seq_printf(m,
- 			   "prog_tag:\t%s\n"
- 			   "prog_id:\t%u\n",
- 			   prog_tag,
--			   prog->aux->id);
-+			   prog_id);
- 	}
- 	if (link->ops->show_fdinfo)
- 		link->ops->show_fdinfo(link, m);
-@@ -5535,6 +5543,7 @@ static int bpf_link_get_info_by_fd(struct file *file,
- {
- 	struct bpf_link_info __user *uinfo = u64_to_user_ptr(attr->info.info);
- 	struct bpf_link_info info;
-+	const struct bpf_prog *prog;
- 	u32 info_len = attr->info.info_len;
- 	int err;
- 
-@@ -5549,8 +5558,12 @@ static int bpf_link_get_info_by_fd(struct file *file,
- 
- 	info.type = link->type;
- 	info.id = link->id;
--	if (link->prog)
--		info.prog_id = link->prog->aux->id;
-+
-+	rcu_read_lock();
-+	prog = READ_ONCE(link->prog);
-+	if (prog)
-+		info.prog_id = prog->aux->id;
-+	rcu_read_unlock();
- 
- 	if (link->ops->fill_link_info) {
- 		err = link->ops->fill_link_info(link, &info);
--- 
-2.34.1
+>
+> pw-bot: cr
+>
+>
+>> +       if (copied < 0)
+>> +               return copied;
+>> +       else if (copied == 0 || copied == 1)
+>> +               return dlen;
+>> +
+>> +       /* The copied character count includes '\0'. */
+>> +       return dlen + copied - 1;
+>> +}
+>> +
+>> +/**
+>> + * bpf_strcat - Append non-null bytes from a source string, and null-terminate
+>> + *              the result
+>> + * @dst: Destination string.
+>> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
+>> + * @src: Source string.
+>> + *
+>> + * Return:
+>> + * * >=0      - Length of the concatenated string.
+>> + *
+>> + * * %-EINVAL - String @dst__ign is invalid.
+>> + * * %-EFAULT - Cannot read or write one of the strings.
+>> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
+>> + *              @dst__ign is too small.
+>> + * * %-ERANGE - One of the strings is outside of kernel address space
+>> + */
+>> +__bpf_kfunc int bpf_strcat(char *dst, u32 dst__sz, const char *src)
+>> +{
+>> +       return __bpf_strncat(dst, dst__sz, src, dst__sz);
+>> +}
+>> +
+>> +/**
+>> + * bpf_strncat - Append non-null bytes from a source string, and null-terminate
+>> + *               the result
+>> + * @dst: Destination string.
+>> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
+>> + * @src: Source string.
+>> + * @len: the maximum number of characters to concatenate, the null terminator
+>> + *       \0 of the target string @dst will also be included.
+>> + *
+>> + * Return:
+>> + * * >=0      - Length of the concatenated string.
+>> + *
+>> + * * %-EINVAL - String @dst__ign is invalid.
+>> + * * %-EFAULT - Cannot read or write one of the strings.
+>> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
+>> + *              @dst__ign is too small.
+>> + * * %-ERANGE - One of the strings is outside of kernel address space
+>> + */
+>> +__bpf_kfunc int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len)
+>> +{
+>> +       return __bpf_strncat(dst, dst__sz, src, len);
+>> +}
+>> +
+>>   #ifdef CONFIG_KEYS
+>>   /**
+>>    * bpf_lookup_user_key - lookup a key by its serial
+>> @@ -4958,6 +5031,8 @@ BTF_ID_FLAGS(func, bpf_strstr);
+>>   BTF_ID_FLAGS(func, bpf_strcasestr);
+>>   BTF_ID_FLAGS(func, bpf_strnstr);
+>>   BTF_ID_FLAGS(func, bpf_strncasestr);
+>> +BTF_ID_FLAGS(func, bpf_strcat);
+>> +BTF_ID_FLAGS(func, bpf_strncat);
+>>   #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
+>>   BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
+>>   #endif
+>> --
+>> 2.55.0
+>>
 
