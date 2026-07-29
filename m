@@ -1,151 +1,142 @@
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD873A9DA2;
-	Wed, 29 Jul 2026 06:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C71D2853F3
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 06:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785305956; cv=none; b=MxaffRaKnBf2b4b3BdMc2/2rXO1Hvj4BGMhinjXmdka+5joWlgDp4mPHoQo7w65wWUflI7K+SlzflI3D/3Ue7XmEb5O2uA5Uqvgf7MPsmYoG3EhodhhzrdM0gEWbkdcNNYZRbwqThJ64ddGVKQ7+IsIhtGXMIz45TCwZ7NwAvhY=
+	t=1785306002; cv=none; b=QjNYG6hOOuXM9xjKZCZADfXIfpTTDRZ12opLEfFx1S5vO3prMtjhfqLI97CF5MheAQC9n092fIb3bIcz0nlhdlEZ7c4H1MZWT+XqqKcdr5OEHR+hTN7gtc830i80vuOM40a2WNphkAQ7JiOz1J+NdDb64qCDoKv+ygB+Oqs8/n8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785305956; c=relaxed/simple;
-	bh=qz44UAtO7AdyJmwwD/K1woukfgLcTtVb9zzDOSnRXko=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=iC/1F3J+N1jWVAIuMYGhcOIFF+WVnRnXtnRcSH9m3xky1kDxYzQInLXsGHw+2QeZuFjCz7My3XzC/RBaT5TspicJcLB/Ytv63cpDkFIP1l3Z53yT11dVxgBWMADU1+dVHoOcqCOou9dtDfU3IT9crBoaTSKdzJCzgzqdhiu0nZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=GOMgr0ko; arc=none smtp.client-ip=212.227.15.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1785306002; c=relaxed/simple;
+	bh=O1mg0t6iuVQ3IJBCvlQsTmp7eEu7IdBq3d4IQADayf8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=mCYWutvP1QowXUtJtidWnA3uPIrrV3cTRlaMXuayD+cil47l0tJgayL2lppksZXvJuUXnbC0KvQLEWuJh09tnSKnKElU7nEv4zXNI9WbEBByJYA0z1KedfaD5yeqeaniDf8hViifVNwOY1CRyRHUSSsHS5OtNX8tEA275l6ChUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K4jkTHJt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="GOMgr0ko"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1785305945; x=1785910745; i=markus.elfring@web.de;
-	bh=El/mzm1rF0aZflL2YJq9q9jDQviDw70X8NWbEdmU0ws=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=GOMgr0koYscXyyVnJsxMhQfIErNJ2puE6rnxivqYTsYO63zLgxm5aGQSLxCFkkY8
-	 PW5+ZiRjlhWHsd4aklFLx+6COA3HVy8Dwafnkx+GitvVRfFCrGUf08tUpkcwkOc60
-	 CpOfO7sa9bmjviuxrjZVRNBeGTxcGfypYj0kbLtb0mrnBGR9O27z+pGM+Dk+UU6py
-	 nvhhZVbGJ0O6MZv9r4+4X8HP1oOj0RKRZ+ry39wGvhjpowF1nCgRMjgpgvOmgi02K
-	 /Ak+j2sd0IuIiANJFwt7tMsdskgijRYsEnNkQ6aRcg1m/7EqVz6aN+57BxCjIeAhQ
-	 6e0hLx3CfsXl+2quog==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from client.hidden.invalid by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MyO0u-1x9llV2NAa-010SIU; Wed, 29
- Jul 2026 08:19:05 +0200
-Message-ID: <aa8628c4-0106-4dcf-afea-b350daef0f96@web.de>
-Date: Wed, 29 Jul 2026 08:18:40 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K4jkTHJt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3EC1F000E9;
+	Wed, 29 Jul 2026 06:20:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785306001;
+	bh=9U1shppFMUQsgbE/c5tFeUZ5Rqr9UBepihgfXV84mho=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=K4jkTHJtp07k1cYkX9Tu/Z/umowR4AUXAo8PIvQYLQkduOdbsE5EZQNZViENeQukl
+	 qt1gOiamYjVpNfETbjkpgkikXe/uiFMOFDtd/cICa5f+qIzNxSyJPrFDfrMaFC+S1+
+	 lMxNFlh3Kv5KoeKB0/Vn1QQFACShUykzhC2V2OBzb24kiHEHnRRNimUawrr7Uiw6pO
+	 Pz8PKRaQw3Pi03CzO6JOzwYLlhaorv5k725v2if1BpdPTXc72PeDPvlEJ36lp/+uwN
+	 P2CpQwahy4ankXUwrzoTcIb/p8BuaICwW0/tLfaD9Zkxu0+WYXVtxw5ndoluxlqUlK
+	 jVQi+wBswR7Xw==
+Content-Type: multipart/mixed; boundary="===============6937139973021121379=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
- bpf@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
-References: <cover.1785158244.git.sean@mess.org>
-Subject: Re: [PATCH v4 00/15] media: Fix leaks in rc core
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <cover.1785158244.git.sean@mess.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:wg8bXsyVfuS8RSFIUQxfqEjtv13yMkPvxot025O4MlwUBm0fw9y
- ZpWSSZYEk7pRxzQ5Qt+DbY1U5esiFl4Ja9QQV0maa+ngE9KhAAICBVd2z7xgbRFu13XMRDv
- DzZ32jSeDNXsLFrM/OsaW/z9tEFmjVO9UPOBcWy2VPcsSmMsl6eBcZavlXpufshM6EVkXyZ
- dqhOJiEfFFuqeazXRTHbg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:lnztmk5GyqY=;zu4IcieqlTXp6igDqEDqGN95U1p
- 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
+Message-Id: <a3aa43df79440fa636555ad987478e6b8409e38fbed641c6557b11e2ba8636d9@mail.kernel.org>
+In-Reply-To: <20260729050204.2586457-1-yonghong.song@linux.dev>
+References: <20260729050204.2586457-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v5 2/3] bpf, x86: Fix trampoline stack size for 128-bit arguments
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,leon.hwang@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 29 Jul 2026 06:20:00 +0000 (UTC)
 
-=E2=80=A6
->   media: rc: Fix use after free in bpf progs
->   media: cx88: Specify rc type at rc_allocate_type()
->   media: saa7134: Specify rc type at rc_allocate_type()
->   media: rc: Fix race condition during rc_register_device()
-=E2=80=A6
+--===============6937139973021121379==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-How do you think about to reorder desirable adjustments for affected modul=
-es?
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index b2feec81e231..01e7ce569c1e 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -3369,11 +3369,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+>  	WARN_ON_ONCE((flags & BPF_TRAMP_F_INDIRECT) &&
+>  		     (flags & ~(BPF_TRAMP_F_INDIRECT | BPF_TRAMP_F_RET_FENTRY_RET)));
+>
+> -	/* extra registers for struct arguments */
+> -	for (i = 0; i < m->nr_args; i++) {
+> -		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+> -			nr_regs += (m->arg_size[i] + 7) / 8 - 1;
+> -	}
+> +	for (i = 0; i < m->nr_args; i++)
+> +		nr_regs += (m->arg_size[i] + 7) / 8 - 1;
+>
+>  	/* x86-64 supports up to MAX_BPF_FUNC_ARGS arguments. 1-6
+>  	 * are passed through regs, the remains are through stack.
 
-Regards,
-Markus
+Does the Fixes: tag target the commit that introduced the bug described in
+the commit message?
+
+The changelog says save_args() overwrites adjacent stack slots because the
+register save area is under-allocated. That mismatch requires the writer of
+the save area to count 2 slots for a 16-byte argument while the accounting
+loop counts 1.
+
+In commit a9c5ad31fbdc (v6.1-era), both sides were symmetric and save_args()
+did not exist yet. The save_regs() function in a9c5ad31fbdc used:
+
+arch/x86/net/bpf_jit_comp.c, save_regs():
+  if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG) {
+          nr_regs = (m->arg_size[i] + 7) / 8;
+          arg_size = 8;
+  } else {
+          nr_regs = 1;
+          arg_size = m->arg_size[i];
+  }
+
+arch_prepare_bpf_trampoline():
+  if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+          extra_nregs += (m->arg_size[i] + 7) / 8 - 1;
+
+Both used the same BTF_FMODEL_STRUCT_ARG condition, so a non-struct 16-byte
+__int128 was accounted for 1 slot and written to 1 slot. No adjacent slot
+was overwritten.
+
+The asymmetry the changelog describes was introduced later, when save_regs()
+was replaced by save_args()/restore_regs() that compute the slot count
+unconditionally:
+
+arch/x86/net/bpf_jit_comp.c (current):
+  save_args():
+      arg_regs = (m->arg_size[i] + 7) / 8;
+  restore_regs():
+      arg_regs = (m->arg_size[i] + 7) / 8;
+  get_nr_used_regs():
+      arg_regs = (m->arg_size[i] + 7) / 8;
+
+versus the STRUCT_ARG-conditional accounting loop this patch deletes. The
+commit that made save_args() unconditional is the one that created the
+mismatch ('bpf, x86: allow function arguments up to 12 for TRACING', Menglong
+Dong, v6.6-era).
+
+The Fixes: tag points at a v6.1-era commit while the real culprit is
+v6.6-era. On a v6.1-v6.5 tree this patch changes nr_regs for an __int128
+from 1 to 2 while save_regs() still writes only 1 slot, which over-allocates
+the save area rather than fixing anything.
+
+---
+
+Kumar Kartikeya Dwivedi raised a concern in v3 about a pahole BTF encoding
+issue with the function bpf_testmod_test_int128_arg(__int128 a, int b, long c)
+in tools/testing/selftests/bpf/test_kmods/bpf_testmod.c.
+
+On x86-64, parameter 'a' consumes rdi:rsi, and 'b' ends up in rdx (not the
+positionally-expected rsi). pahole maps the second parameter positionally to
+rsi, sees 'b' in rdx, and skips BTF encoding for the function.
+
+The comment in the code claiming that putting __int128 first prevents the
+pahole issue is incorrect. Kumar suggested using bpf_testmod_test_int128_arg
+(int b, long c, __int128 a) instead.
+
+Is the pahole patch set 'Encode true signatures in kernel BTF' that you
+mentioned in your response now merged? Without it, will this test fail in CI?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30424886481
+--===============6937139973021121379==--
