@@ -1,98 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053C2396D09
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 21:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0003742A15F
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 21:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785360774; cv=none; b=cIxNdd8+ST0lyMkzM3SJRiVvjtd+tBRLGr9DxT2BGWPtiEGqLU2XX1M21aezTnCwVnoJ1/EhWyNOw0ms+Yvszf6oQx5LrlGbXkDbsEtxwlj9sHkAFF4cEaSqfoz3bdXEBrPfRvtI0E3jdlRJ2NEF6N5aMpDo/Cbo/ve4xj4vfJ8=
+	t=1785360997; cv=none; b=NUd09bzLFVKE14LTpJHxu9RxoEcutI9iCf16Z7LlJz9E/e+ZJyEOc0VNM3P5J7EzH4/XSuKXai2CLEK7peyjD82pnivE2vmLrfuXWIlxQd6+iGAWPj/8Gr/tcc3uDONZykujrMHh1c7O8rNeDLOiDQkfzpm+Nks6/7tTMeZ2BoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785360774; c=relaxed/simple;
-	bh=IxtD7ymO5tEAWU6dIA6Y9MvnE1CHBrUlK5vl9VV1Zas=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fTh7UltfHu6wcaivC4s7/Sy7zk28Et3xehm0By7PHAMkxn1kZ4u5UIz/qhJ9/MoQ1QBpJX0+tpFzFrUDIM77jwL3ugYpCcERLGvON7GvOJNC/OZNdQL0DK/WTuEzUTc3qJu+DAAC7rulzqPsCIXe7whCyHv3LD+XHYxjqiCfqqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TpOsYJWO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785360997; c=relaxed/simple;
+	bh=yR5fKIYVJcWc/ZaDA+dXlb0F+aNrx3vc41X3bspmR9U=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=hrt4mTD0YWfoco+xSaOzzE44cpyDPG9UwI3TfRks1XDFvbGyThTzAPcN0uQ4a/umFwOWwCjvNDpl870qwRI9arSAw1JyiCPFr0AE2ZF168unZmoaZBFBS6GMeeG/lOyMdgyWkHcBVI6tTMJPK1O4gKofxGNRfAx88poIUESusyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=bGt/iEjc; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TpOsYJWO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B0B21F000E9;
-	Wed, 29 Jul 2026 21:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785360767;
-	bh=KlnDbO92qOCe2XbqSQMW6Dp87uAV0EdcWfM5NTpnLIk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TpOsYJWOuSlEZCDDzeMzxsYfTDCECU4K6MSfHbF7oR4KK33AhAK2j/nNmEJ4G3v57
-	 V2zAiAhJKoE/ndXKexzH1RIq/0ZqTV3HhvZ2AOESEjPPhll+Vlt2cX+c7qCxUORcA2
-	 x0QyiC9jwfVma642o7KwtT5DteJaU/NucJDjLJCW/F3W8dXwFidqBSPX98dNcqRNwx
-	 FEGKMrpjECTU1mQ9SHQcEZ1F6vkOueakgiZXLObyoTWXQ4qhFJog8bqwi8LKH73ncy
-	 3QzyE/Q/jP8DtRnOrliejeRj7d1Czvd3acJdD00DMGcQ4PuPbg7F6Tg0Pzf2gGLa2x
-	 /3HgTk7piWfVw==
-Content-Type: multipart/mixed; boundary="===============2869136105008744688=="
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="bGt/iEjc"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cace91f112so17549605ad.0
+        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 14:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785360991; x=1785965791; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=eZQ8VR07pXx0Bw0kE02/jttQnE1Ukn2+Gh6NYsBKzlI=;
+        b=bGt/iEjczv8UstgvnwKYm+qjRwidQ4ojoCXXt2X9+G2W8W31JplSMyMR+TLM/KmRjJ
+         Z7CBoDen2B3CaMCa1IHusGns0SZpeSXXluocFwvHCNKRL6A8akxPudwzcvZR+DIYAUU9
+         1lG4P5YebaXISi5m/j6jxK2MaBG2mY0lrnSFY6fybil3PxNYv9tCgQK2uykudgEk1b30
+         p74u31S0H96Ry+VC4A+CEkDPN5RLDefDfsO7oGVSn1J34jrsXbsXCuseEvw4LaXKsbFS
+         seJgdO3usKU/i0TTQSADESZSo6Q2RVP2hhP4la1zODvYZ2h2sYAB2IyOy7fClGxkizMK
+         Mihw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785360991; x=1785965791;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eZQ8VR07pXx0Bw0kE02/jttQnE1Ukn2+Gh6NYsBKzlI=;
+        b=IOe8yr38/0zl8//NqtgT9xi9Xjdk7NA6vKzqsRkn31hJrS7TqL4ywNOgmd8IDFqgZ2
+         HGJLiCnH2bdtu6fCrDpw1/xIVAbrdNwhD9FyIzgoXNWFKK9VwLRoEAG3u/yb8hZ1rIqX
+         lx0JXUBXo6nFX9ZPnrpyyhwbjFqdeC/rb/EmGxsAuk2ZIkIJHUDDRnq3dXmXNcT+nfvy
+         kUDUdU6Me5Is95Rx33oLz31V9NeLE45l5iS8e5COvkA3J5GH8AC49uqBa2CAGPoTuWCy
+         CDyS8gJUe5DzJtLdWfHpvu3pd4Jo3slr36X9B6K7TXyc5Kbt/Qt4gSWQKY4k2W/O012Q
+         vpaA==
+X-Forwarded-Encrypted: i=1; AHgh+Rrl56KMAE86HhtOhArf0C2AjRy/ci2d/N570yV8iWogBKHbW9k2Ft2Mx7ddla/+AMb7WoU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkMRGQjrV2r75m/JSgpO8g/5HPEPPvh3+3BpEdH/5rBpsX5sJ4
+	/nyLiZGG2HfMhACX+xWLQtKvcIhqa3WhTKd1nb2XOkaQWdfpVpLpMTgz+vxW+kXMItc=
+X-Gm-Gg: AR+sD13dWN3yKNWZVlraFWjzHnboIOyGz1+64PdW2UknovsEb8ePcC9GqeNKONcCe0j
+	izFRamJRmQUee2N5EnKC/GctODIatkKOAwToy2XfJHmqPvmqHJRNlfuZyxxBB0f2ppZMnfsraqY
+	/LMes5v29JgULuzF03qvY1JrMQvEBZgn+MogvnqXri70e13nzgqwZ3Hf5OrwjrpJpHG+Rh0cFAt
+	0TATEQk+2wiE/id3WppU850Vg6xbAthn986t+GVIVbvmXjuEj0gqt5zLEwrVvgcgb5Csj3tGMUK
+	v106zLyK2bSjgSPaaJAD91zGLNziDiBHH8TiGdwMkZED1UfSrhK0yJ+DIKaLJ6SxicglIqARiDd
+	KWSDELx8jcOc9aH+h8IL9yOcg7c/DddG6+seDOLsrEgrflbmT9MVlQACQSZlU+lAnGtrITWDx7a
+	N1EbBH4UYe1y8t58gJTxmROyl1DIVDf0gh1NJmDuVYCSwj
+X-Received: by 2002:a17:902:e5c3:b0:2c9:b8b7:5d27 with SMTP id d9443c01a7336-2d035c1c5f7mr398675ad.1.1785360991192;
+        Wed, 29 Jul 2026 14:36:31 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::1:d447])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504dab154sm14771138eec.26.2026.07.29.14.36.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jul 2026 14:36:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <b1e00928e88dbed4351a92d557de4c85f8a6cb870abc5c4d0b97a08377ccc734@mail.kernel.org>
-In-Reply-To: <20260729203633.213973-2-puranjay@kernel.org>
-References: <20260729203633.213973-2-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next v4 1/6] bpf: Correct the overflow check comment in bpf_iter_num_next()
-From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 29 Jul 2026 21:32:46 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 29 Jul 2026 17:36:28 -0400
+Message-Id: <DKBDNFB3WGPZ.GS7M7MY2HNAB@etsalapatis.com>
+Cc: "Stanislav Fomichev" <sdf@fomichev.me>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Sechang Lim" <rhkrqnwk98@gmail.com>
+Subject: Re: [PATCH bpf] bpf: Reject negative optlen in cgroup getsockopt
+ hook
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Junseo Lim" <zirajs7@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260726070122.2407344-1-zirajs7@gmail.com>
+In-Reply-To: <20260726070122.2407344-1-zirajs7@gmail.com>
 
---===============2869136105008744688==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-> index f5eaeb2493d4..f190f2b25004 100644
-> --- a/kernel/bpf/bpf_iter.c
-> +++ b/kernel/bpf/bpf_iter.c
-> @@ -802,12 +802,14 @@ __bpf_kfunc int *bpf_iter_num_next(struct bpf_iter_num* it)
->  {
->  	struct bpf_iter_num_kern *s = (void *)it;
+On Sun Jul 26, 2026 at 3:01 AM EDT, Junseo Lim wrote:
+> A cgroup getsockopt BPF program can shrink ctx->optlen after the
+> kernel getsockopt handler has run. The kernel-buffer variant, used by
+> TCP_ZEROCOPY_RECEIVE, only rejects values larger than the original
+> length.
 >
-> -	/* check failed initialization or if we are done (same behavior);
-> -	 * need to be careful about overflow, so convert to s64 for checks,
-> -	 * e.g., if s->cur == s->end == INT_MAX, we can't just do
-> -	 * s->cur + 1 >= s->end
-> +	/* Detect the end of the range, or a failed/empty iterator: all of these
-> +	 * leave s->cur + 1 >= s->end. bpf_iter_num_new() set s->cur to start - 1
-> +	 * (which wraps to INT_MAX when start == INT_MIN), so the s->cur + 1 below
-> +	 * is a deliberate 32-bit wraparound that recovers start. As s->cur and
-> +	 * s->end are int, this is an ordinary signed 32-bit compare, exactly what
-> +	 * the inlined bpf_iter_num_next() emits.
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Does this comment reference code that does not exist yet? Grepping the tree
-at de0af07e8966 for 'inline_bpf_iter_num' returns nothing, and
-kernel/bpf/verifier.c only references bpf_iter_num_next via BTF_ID and
-is_bpf_iter_num_api_kfunc - bookkeeping for the KF_ITER_NEXT kfunc, not an
-open-coded instruction sequence.
+> If BPF writes a negative optlen, that value is accepted and propagated
+> back to the TCP getsockopt code. It can then be passed to
+> copy_to_sockptr() as a size_t and trigger the hardened usercopy
+> bytes > INT_MAX warning.
+>
+> Reject negative ctx.optlen in __cgroup_bpf_run_filter_getsockopt_kern(),
+> matching the lower-bound validation already present in the sockptr-based
+> getsockopt hook.
+>
+> Fixes: 9cacf81f8161 ("bpf: Remove extra lock_sock for TCP_ZEROCOPY_RECEIV=
+E")
+> Signed-off-by: Junseo Lim <zirajs7@gmail.com>
 
-The inlining is added three commits later in this series:
-4bb5d9c0aa96 ("bpf: Inline bpf_iter_num_next() kfunc"), which introduces
-inline_bpf_iter_num_next() in kernel/bpf/verifier.c. So the comment added by
-this patch is a forward reference to code that does not exist yet, in a patch
-whose entire stated purpose is to make the comment "describe what actually
-happens".
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Could the patch either drop that clause, or be reordered after 4bb5d9c0aa96
-so the reference resolves?
+It'd be worth resending with a reproducer setting optlen to negative.
 
->  	 */
-> -	if ((s64)(s->cur + 1) >= s->end) {
-> +	if (s->cur + 1 >= s->end) {
->  		s->cur = s->end = 0;
->  		return NULL;
->  	}
+> ---
+> Reproducer and warning:=20
+> https://gist.github.com/ZirAjs/a177ec6d8f2c8ed7d93edca6313a9255
+>
+> Tested by building and booting the patched kernel. The reproducer=20
+> returns -EFAULT and no longer triggers the hardened usercopy warning.
+>
+>  kernel/bpf/cgroup.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 4355ccb78a9c..c04a244fe2e6 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -2235,7 +2235,7 @@ int __cgroup_bpf_run_filter_getsockopt_kern(struct =
+sock *sk, int level,
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> -	if (ctx.optlen > *optlen)
+> +	if (ctx.optlen > *optlen || ctx.optlen < 0)
+>  		return -EFAULT;
+> =20
+>  	/* BPF programs can shrink the buffer, export the modifications.
 
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30490674177
---===============2869136105008744688==--
