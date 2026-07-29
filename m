@@ -1,43 +1,43 @@
-Received: from mail-106118.protonmail.ch (mail-106118.protonmail.ch [79.135.106.118])
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB363939BC
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 19:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555D73B9DA9
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 19:51:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785354659; cv=none; b=NYzI0HbMmYYQG0AlvLIpua8XfEbW06dcE5vnfx7iXM/yeGkyRHvO493D+2Le/doGZkGeJnKV3SEvD9cVfPwJfbpddqEIq5jNCLPkRQHF00Hyi4XbuRaoZUUNbYQ/sDV+lfqQ5sGe27GasDqy/O1IIUWxXoj6qRtGkGOHd3nB1gE=
+	t=1785354667; cv=none; b=BT2I00hJ5yiYtjE4tlejI9MFe38QeYhDoCRwCdGV35wpIeJEI7WDCwkelp5jO4UB3wMOD+93/vxVvjcFg5Sit31T3P5F6Mup9H2/9bxsYXAnYBz3wnomFB0MTZyazMqqcyQHUiFcwjgBj+8UmCck6IyyfFRuZF49GnKifq0znPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785354659; c=relaxed/simple;
-	bh=7qjE66lbftoF/FZ6iILEv4MT6qNGW0bF838J82hpeP4=;
+	s=arc-20240116; t=1785354667; c=relaxed/simple;
+	bh=Du503/ET1tmo+jmtEj+a9ZnrKXcDiKMJ8GSHNO8dI84=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M2C7gHx2pps7hGSDKrcgBfz127g6Ri1A93YOHYqPtwoSBj01S0eQWE3zMpyKmGqq2esbQCfaj+TZEk7AQupqtBQyp86RjCEjxWQPDUsq1KLiNtq4ps4SksknXNQ1wClnje5XINJFT5OvAi08EXjI5lO3OVJFHZpmBkwWpuc2ZIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=BOtA+4kU; arc=none smtp.client-ip=79.135.106.118
+	 MIME-Version:Content-Type; b=ok0qGhye+rHvpvqwMx7no6KySvOEPxsk6u03fvvj0q87fvAuyZqYmqIwHGgWWf3I4oqi5t56CjV70qyvANQZNJsColNlkjqEC8yL/EousvKeVEw7LoIiKZpl/S8PCbVMf6gRx5HpZosBfU6fClHY/NRaT2FOAfRbwpDZ/4sBWbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=X1fJT8Hk; arc=none smtp.client-ip=185.70.43.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="BOtA+4kU"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="X1fJT8Hk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1785354645; x=1785613845;
-	bh=IgbX9ywBcbWKLAy952YwuOY9imXi27foZxzLooDK1Ws=;
+	s=protonmail3; t=1785354661; x=1785613861;
+	bh=vOh9FC5IJnMd9eHEpyyOjlq+Y6nxyDaqxgFfsnVHLyQ=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector;
-	b=BOtA+4kUcOIna4Aq9QPeW6KJMEwrEcwd359BiPsodRZyW1IrxzxEBhbzvb+Rra/c6
-	 o+S3dNcRXwKgtIeZ4gghFZ9/JCG2ZJIcm5CwInnF5aroIm8hCPdvIyjJNVqfVmk8MA
-	 XdxU6c6BxHGK45nfI+Er9jL/aHodIjpS1N4sjVlcsYebw98mZ3SCy5Zr3Z1JcZJhd/
-	 AT5ynzUBBiUkSV7YcIeEuokCSf7t0ge9bwKhiPK++19zk6eZGPjCeRfxCVRboKbm8l
-	 CTXDUBvz5ZoyeCsBL2HXFVeTI8spKUe0e4hjeCWB0HgPwLXtu6EmiCoz+oWR9xlXap
-	 5lVJix5CJAnmg==
-Date: Wed, 29 Jul 2026 19:50:43 +0000
+	b=X1fJT8HktCsPCWmCz9CHBv/krAHpAsM9NMT5GaxLU4ZJo32kLAREGnlizT+iaZZGR
+	 +b/id6HQ2doEfGf/pGSLOY+34iBuySXFKUZ5ShPxfGi4ClJID/d2eHv3f3C0IDtNSR
+	 M1xqUDMFxca2fMRSwFL6aHxi5X/vewG/Kcw+rTPHj4nctatc2LE5o03UPisC6+/7C5
+	 2Re2y5IdEGnrj0vp3W6G4ALqvyb71cjoG+DBq3vse/Fb4SimiXljz7Co6KyW2q465M
+	 ddTLnbfdGo0A8eRRFydlECCQjkA03w/ElyoLPZTjhKd2U02usApJv6icAsL9jo8dDe
+	 vspLYCD7GKQUQ==
+Date: Wed, 29 Jul 2026 19:50:53 +0000
 To: bpf@vger.kernel.org
 From: Vinicius Sampaio <vldsampaio@pm.me>
 Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com, shenghaoyuan0928@163.com, vldsampaio@pm.me, Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Subject: [PATCH bpf-next v2 2/3] bpf: Simplify cnum normalize() implementation
-Message-ID: <20260729194932.292368-3-vldsampaio@pm.me>
+Subject: [PATCH bpf-next v2 3/3] bpf: Avoid redundant min()/max() in cnum signed bounds
+Message-ID: <20260729194932.292368-4-vldsampaio@pm.me>
 In-Reply-To: <20260729194932.292368-1-vldsampaio@pm.me>
 References: <20260729194932.292368-1-vldsampaio@pm.me>
 Feedback-ID: 138063245:user:proton
-X-Pm-Message-ID: a7994b2fe8123ca61338eb29798ff3173e2c5d9b
+X-Pm-Message-ID: 3a8b7207702c8fe948deb912566cc545802fa8c1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,31 +47,43 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-This patch introduces a optimization for the normalize() function.
+This patch simplifies the smin() and smax() calculation by removing the
+integer min and max calculation on the non-overflowing branch. This is a
+valid simplification because when the arc does not cross the signed
+ST_MAX/ST_MIN boundary, the signed order of the endpoints is preserved,
+so base is the signed minimum and base + size is the signed maximum.
+Therefore, the min()/max() calls are redundant.
 
-In normalize(), there's no need to compare cnum.base with ST_MAX,
-because any cnum with size =3D=3D UT_MAX represents the full unsigned domai=
-n
-independently of base, so normalize() can canonicalize all such values
-to base 0. Also, it's a no-op assigning 0 to cnum.base if the cnum is
-already unbounded, so we can remove the base !=3D 0 check too.
+We've also run benchmarks to compare the performance of this change.
+With O2 optimization we have:
 
-We've also run some benchmarks to compare the performance of the new
-implementation, for example, for empty ranges, overflowing ranges
-non-overflowing ranges. We've run the tests with O2 optimization.
+smin() results:
 
-Results:
+        | Test                     | smin        | smin_new    |
+        | ------------------------ | ----------- | ----------- |
+        | empty                    | 1.866 ns/op | 1.477 ns/op |
+        | positive range           | 1.870 ns/op | 1.248 ns/op |
+        | negative range           | 1.657 ns/op | 1.246 ns/op |
+        | cross zero               | 1.870 ns/op | 1.660 ns/op |
+        | signed overflow boundary | 1.463 ns/op | 1.049 ns/op |
+        | signed overflow range    | 1.519 ns/op | 1.050 ns/op |
+        | unsigned overflow range  | 1.883 ns/op | 1.669 ns/op |
+        | full range               | 1.555 ns/op | 1.049 ns/op |
 
-        | Test                    | normalize   | normalize_new |
-        | ----------------------- | ----------- | ------------- |
-        | normal small range      | 1.254 ns/op | 1.049 ns/op   |
-        | full range normalized   | 1.055 ns/op | 1.046 ns/op   |
-        | full range nonzero base | 1.053 ns/op | 1.055 ns/op   |
-        | empty                   | 1.054 ns/op | 1.059 ns/op   |
-        | signed max full range   | 1.051 ns/op | 1.049 ns/op   |
-        | max base singleton      | 1.253 ns/op | 1.045 ns/op   |
+smax() results:
 
-You can check the full implementation of theses tests on this repository:
+        | Test                     | smax        | smax_new    |
+        | ------------------------ | ----------- | ----------- |
+        | empty                    | 1.462 ns/op | 1.456 ns/op |
+        | positive range           | 1.250 ns/op | 1.249 ns/op |
+        | negative range           | 1.259 ns/op | 1.297 ns/op |
+        | cross zero               | 1.471 ns/op | 1.475 ns/op |
+        | signed overflow boundary | 1.056 ns/op | 1.260 ns/op |
+        | signed overflow range    | 1.049 ns/op | 1.259 ns/op |
+        | unsigned overflow range  | 1.470 ns/op | 1.477 ns/op |
+        | full range               | 1.072 ns/op | 1.263 ns/op |
+
+You can check the full implementation of these tests on this repository:
 
         https://github.com/OpenSourceVerif/open-verified-artifacts/tree/cnu=
 m-refactor-verif/cnum/benches
@@ -89,24 +101,82 @@ Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
 Signed-off-by: Vinicius Sampaio <vldsampaio@pm.me>
 Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 ---
- kernel/bpf/cnum_defs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/cnum_defs.h | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
-index ac1f62a0195d..09535edbbafc 100644
+index 09535edbbafc..95452eefe44a 100644
 --- a/kernel/bpf/cnum_defs.h
 +++ b/kernel/bpf/cnum_defs.h
-@@ -181,7 +181,7 @@ void FN(intersect_with_srange)(struct cnum_t *dst, st m=
-in, st max)
-=20
- static inline struct cnum_t FN(normalize)(struct cnum_t cnum)
- {
--=09if (cnum.size =3D=3D UT_MAX && cnum.base !=3D 0 && cnum.base !=3D (ut)S=
-T_MAX)
-+=09if (cnum.size =3D=3D UT_MAX)
- =09=09cnum.base =3D 0;
- =09return cnum;
+@@ -33,7 +33,11 @@ struct cnum_t FN(from_srange)(st min, st max)
+ =09return (struct cnum_t){ .base =3D base, .size =3D size };
  }
+=20
+-/* True if this cnum represents two unsigned ranges. */
++/* True if this cnum represents two unsigned ranges.
++ *
++ * The caller should ensure !is_empty(cnum) holds when calling
++ * this function.
++ */
+ static inline bool FN(urange_overflow)(struct cnum_t cnum)
+ {
+ =09/* Same as cnum.base + cnum.size > UT_MAX but avoids overflow */
+@@ -44,6 +48,9 @@ static inline bool FN(urange_overflow)(struct cnum_t cnum=
+)
+  * cnum{T}_umin / cnum{T}_umax query an unsigned range represented by this=
+ cnum.
+  * If cnum represents a range crossing the UT_MAX/0 boundary, the unbound =
+range
+  * [0..UT_MAX] is returned.
++ *
++ * The caller should ensure !is_empty(cnum) holds when calling
++ * cnum{T}_umin / cnum{T}_umax.
+  */
+ ut FN(umin)(struct cnum_t cnum)
+ {
+@@ -57,7 +64,11 @@ ut FN(umax)(struct cnum_t cnum)
+ }
+ EXPORT_SYMBOL_GPL(FN(umax));
+=20
+-/* True if this cnum represents two signed ranges. */
++/* True if this cnum represents two signed ranges.
++ *
++ * The caller should ensure !is_empty(cnum) holds when calling
++ * this function.
++ */
+ static inline bool FN(srange_overflow)(struct cnum_t cnum)
+ {
+ =09return FN(contains)(cnum, (ut)ST_MAX) && FN(contains)(cnum, (ut)ST_MIN)=
+;
+@@ -67,19 +78,18 @@ static inline bool FN(srange_overflow)(struct cnum_t cn=
+um)
+  * cnum{T}_smin / cnum{T}_smax query a signed range represented by this cn=
+um.
+  * If cnum represents a range crossing the ST_MAX/ST_MIN boundary, the unb=
+ound range
+  * [ST_MIN..ST_MAX] is returned.
++ *
++ * The caller should ensure !is_empty(cnum) holds when calling
++ * cnum{T}_smin / cnum{T}_smax.
+  */
+ st FN(smin)(struct cnum_t cnum)
+ {
+-=09return FN(srange_overflow)(cnum)
+-=09       ? ST_MIN
+-=09       : min((st)cnum.base, (st)(cnum.base + cnum.size));
++=09return FN(srange_overflow)(cnum) ? ST_MIN : (st)cnum.base;
+ }
+=20
+ st FN(smax)(struct cnum_t cnum)
+ {
+-=09return FN(srange_overflow)(cnum)
+-=09       ? ST_MAX
+-=09       : max((st)cnum.base, (st)(cnum.base + cnum.size));
++=09return FN(srange_overflow)(cnum) ? ST_MAX : (st)(cnum.base + cnum.size)=
+;
+ }
+=20
+ /*
 --=20
 2.54.0
 
