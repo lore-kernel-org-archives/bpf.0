@@ -1,135 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD2017D6
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 00:16:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DEC632
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 00:18:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785284182; cv=none; b=X6YDVXEz4OV1CpsxCDZNtZ938jp73th+xCeknG9DlWYH9Oh6XGAzUcf20PHqvYThmGxeA/IrNRxIkwE3Vt8Xrn9Cfm8CGPdCzo+m9qlyrGJmKuHNJezn5uCTMySrOFeueTVrau9AeM/rJcFIsPMxEdT0IJUvtMQ58/oU2ZGqBVg=
+	t=1785284309; cv=none; b=NY/rYQ7xhLjROe2eOstLLlSZ8tzQDI0MaMKT8u0qIZG4IQiAKDPd4ZpTGy/dAAXNtUyBkCYewwJNCotFXg9AcLxgBDpnBI0HyR2FkP6rLcRVzslCAE+HgPwdAWw3TE6kbr645HwWYnY8KhSm7gpbcY6mWedvZOHsyM8K4m+RCZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785284182; c=relaxed/simple;
-	bh=iqmnq2WLnl/8Dkt4x9E42H8YqAebj339W7kILU9LhsM=;
+	s=arc-20240116; t=1785284309; c=relaxed/simple;
+	bh=bITADJx8Odb/BlbWBXnfjmukNUHVf++La2q07Xgia3g=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UQE7spIqXP9+aCyJl/e0ZO6McPEfhyhbfRCAUTygCdXjyHEImW8pugcYotTltTxF6gLVaqs9xVqgtMXSfa9obwJD7KBZPaCladFT5tzeKwCVRrrz13AcPDRR4/xIx6/J/nFMsNDzEBXMmKSAAPDmfdjyn7jlTrWex04gikSuLic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SkRHplKP; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=fSnFMhtEykVHBAmibJXwqBff0gYTZkPa5rQ8QOCIIbRG6pyPhS40b7Ohs9t23MeCIw+4BP38LW4Vl4+HTFTDR0RwxCXa0aHn8JWk0yYySRC50oskbCcyds7C8vzwDEjWaNtUnEM3nIDvpn4zD2wPbj7YTTcZy6Lke48GyDujC0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LkQ71hkh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SkRHplKP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34FA31F000E9;
-	Wed, 29 Jul 2026 00:16:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LkQ71hkh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FC341F000E9;
+	Wed, 29 Jul 2026 00:18:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785284181;
-	bh=tn/yVPBDPIf6BPaPzLaz9jA8XZn2sYsrhIETZmod7Gs=;
+	s=k20260515; t=1785284308;
+	bh=dAeHYoVcHhDLN3jUQIsj5IMjUVP7U7VEZSHSIC0U6j8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SkRHplKPxG2M1FWDYfVQd8IJqXD3Pu34Rrh9WgNQsUIJ4tvPItBPec5Q6ekg63WIE
-	 /+rhbRpIXUuJWor3tiX6QVhxCdhgsIR77XuHp2Dd9rh+Q5tc/fJ/IRd9/wV5LLwqHG
-	 B2VJDQKmOZ4vID6xdL+UqGv7T8k6bJjp1DG/L48i1QZ0Qit32ainong8mS/pGOXaOM
-	 enmL1I1eCAiNmQM8uPF80PycePIN4MJETtpPsIP7uW/VC35rMvrRpx2UJErGYhDvXy
-	 fXrXu0s6CEd1KSDtJm673tEuzpPkO4fOktCitbeX8UP0yAJIPg54cTGtH44qTGbxTz
-	 WABE12zKiprUQ==
+	b=LkQ71hkhoWFHM/gQbht50SFfuGl9ZxlfKzJ2CPzBGe8pv24IcDtCk/ma0zmd0MdNR
+	 X7OWi1poBS0yJntcmXJremCn50UTtIIxwpr1u3GE2vtevDuV3uqxQgQcLhyTOVgfjw
+	 WsQECB6jqbtGwHsBFRAA6Ogzds+oJ5SGtuQBCrHUkXhUkoXiBIVk6ew/6UX68/P3om
+	 5+f0U+mZyzJ/g21M5agkcsTQjJ2nRM6cqfad+KgubMEYUajLlykXqaLvPPXgPl7Yq2
+	 qD8ZSg7XwpRot6iTe+sp/xEzNvGZLbMjHHzS6gQyw9+S9SXucRcYZHbATa8AB0eee8
+	 OemPQ27NwkiVg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/3] selftests/bpf: Route generated test headers to
+Subject: Re: [PATCH 2/3] selftests/bpf: Route libarena build artifacts to
  OUTPUT
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260728-selftests-bpf_oot-v1-1-05feb15d94db@marliere.net>
+In-Reply-To: <20260728-selftests-bpf_oot-v1-2-05feb15d94db@marliere.net>
 References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
- <20260728-selftests-bpf_oot-v1-1-05feb15d94db@marliere.net>
+ <20260728-selftests-bpf_oot-v1-2-05feb15d94db@marliere.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Jul 2026 00:16:20 +0000
-Message-Id: <20260729001621.34FA31F000E9@smtp.kernel.org>
+Date: Wed, 29 Jul 2026 00:18:27 +0000
+Message-Id: <20260729001828.0FC341F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Unescaped path injection in `sed` with the `@` delimiter can cau=
-se verifier tests to be silently skipped if the build path contains an `@` =
-character.
-- [Low] Generated test headers moved to $(OUTPUT) are not cleaned during ou=
-t-of-tree builds because EXTRA_CLEAN is not updated.
+- [Low] The `clean` rule in `selftests/bpf/Makefile` fails to pass the over=
+ridden `OUTPUT` path to the `libarena` sub-make, causing out-of-tree builds=
+ to leak libarena artifacts.
 --
 
---- Patch [1]: [PATCH 1/3] selftests/bpf: Route generated test headers to O=
-UTPUT ---
-commit 63d1e1deab06130ae6d45a6e98fd6e8bf85c23ef
+--- Patch [2]: [PATCH 2/3] selftests/bpf: Route libarena build artifacts to=
+ OUTPUT ---
+commit b4bd21c68fbd2a022ffbf1208ac0ac06aa993754
 Author: Ricardo B. Marli=C3=A8re (SUSE) <ricardo@marliere.net>
 
-selftests/bpf: Route generated test headers to OUTPUT
+selftests/bpf: Route libarena build artifacts to OUTPUT
 
-This commit updates the Makefile to write generated test-runner enumeration
-headers, verifier test lists, and signing certificate headers to $(OUTPUT)
-instead of the source tree during out-of-tree builds. It modifies the
-target prerequisites to ensure the output subdirectories are created before
-generating these headers.
+This commit adds OUTPUT support to libarena's Makefile and propagates it
+from the parent bpf Makefile. It ensures generated files like BPF objects
+and skeleton headers are correctly written into the out-of-tree build
+directory.
 
 > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
 ts/bpf/Makefile
-> index b642ee489ea64..b289183475d4c 100644
+> index b289183475d4c..7d42632f9d424 100644
 > --- a/tools/testing/selftests/bpf/Makefile
 > +++ b/tools/testing/selftests/bpf/Makefile
+[ ... ]
+> @@ -826,7 +826,8 @@ LIBARENA_MAKE_ARGS =3D \
+>  		CLANG=3D"$(CLANG)" \
+>  		BPF_CFLAGS=3D"$(BPF_CFLAGS) $(CLANG_CFLAGS)" \
+>  		BPF_TARGET_ENDIAN=3D"$(BPF_TARGET_ENDIAN)" \
+> -		Q=3D"$(Q)"
+> +		Q=3D"$(Q)" \
+> +		OUTPUT=3D"$(OUTPUT)/libarena"
 
 [ ... ]
 
-> @@ -923,14 +923,14 @@ $(eval $(call DEFINE_TEST_RUNNER,test_maps))
->  # It is much simpler than test_maps/test_progs and sufficiently differen=
-t from
->  # them (e.g., test.h is using completely pattern), that it's worth just
->  # explicitly defining all the rules explicitly.
-> -verifier/tests.h: verifier/*.c
-> -	$(shell ( cd verifier/; \
-> +$(OUTPUT)/verifier/tests.h: verifier/*.c | $(OUTPUT)
-> +	$(shell mkdir -p $(OUTPUT)/verifier && ( \
->  		  echo '/* Generated header, do not edit */'; \
->  		  echo '#ifdef FILL_ARRAY'; \
-> -		  ls *.c 2> /dev/null | sed -e 's@\(.*\)@#include \"\1\"@'; \
-> +		  ls verifier/*.c 2> /dev/null | sed -e 's@\(.*\)@#include "$(CURDIR)/=
-\1"@'; \
-
-[Severity: Medium]
-Does this change introduce a regression if the build path $(CURDIR) contains
-an @ character?
-
-If the user's working directory contains an @ symbol (such as in Jenkins
-workspaces like @tmp), sed fails with a syntax error because @ is used
-as the replacement delimiter.
-
-Since the failure occurs within a subshell (...) > $(OUTPUT)/verifier/tests=
-.h,
-Make ignores the failure and writes an empty test array to the header.
-
-Will this cause the verifier test suite to compile successfully but run zero
-tests?
-
->  		  echo '#endif' \
-> -		) > verifier/tests.h)
-> -$(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(=
-OUTPUT)
-> +		) > $(OUTPUT)/verifier/tests.h)
-> +$(OUTPUT)/test_verifier: test_verifier.c $(OUTPUT)/verifier/tests.h $(BP=
-FOBJ) | $(OUTPUT)
->  	$(call msg,BINARY,,$@)
->  	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+> diff --git a/tools/testing/selftests/bpf/libarena/Makefile b/tools/testin=
+g/selftests/bpf/libarena/Makefile
+> index 5e2ab514805e4..195d5f833186a 100644
+> --- a/tools/testing/selftests/bpf/libarena/Makefile
+> +++ b/tools/testing/selftests/bpf/libarena/Makefile
+[ ... ]
+>  clean:
+> -	$(Q)rm -f *.skel.h *.bpf.o *.linked*.o
+> +	$(Q)rm -f $(OUTPUT)/*.skel.h $(OUTPUT)/*.bpf.o $(OUTPUT)/*.linked*.o
 
 [Severity: Low]
-With the generated test headers moving to $(OUTPUT), will they be left behi=
-nd
-during a clean build?
+Will this fail to clean the libarena artifacts when building out-of-tree?
 
-Looking at EXTRA_CLEAN further down in tools/testing/selftests/bpf/Makefile:
+In the parent bpf/Makefile, the clean target invokes make without the
+LIBARENA_MAKE_ARGS override:
 
-EXTRA_CLEAN :=3D $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
-	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
-	...
+tools/testing/selftests/bpf/Makefile:
+    clean:
+        ...
+        $(Q)$(MAKE) -C libarena clean
 
-Since EXTRA_CLEAN still hardcodes the old relative paths, does this mean
-`make clean O=3Dout` will miss the newly relocated headers in the output
-directory?
+Since OUTPUT is inherited unmodified from the parent Makefile, it resolves
+to the parent directory instead of $(OUTPUT)/libarena/.
+
+Will this cause make clean to inadvertently run rm -f against the parent's
+$(OUTPUT) directory, leaving the actual libarena artifacts behind?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728-selftests-=
-bpf_oot-v1-0-05feb15d94db@marliere.net?part=3D1
+bpf_oot-v1-0-05feb15d94db@marliere.net?part=3D2
