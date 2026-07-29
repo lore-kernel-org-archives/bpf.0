@@ -1,147 +1,156 @@
-Received: from mail-ej2-f1.google.com (mail-ej2-f1.google.com [74.125.228.129])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A930425B0B9
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 06:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.129
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8EE930214B;
+	Wed, 29 Jul 2026 06:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785306610; cv=none; b=nwui+QnppDJxJP2qx9vp4HGvGnaxHFAXRftmNENvrlFSl11I/WB/5FLNbklZQdnZv+CufVVSMqX1cyDZwHsnc+nHpwxx4UWUQStMw3WG2D5MB84nPFCMCL7/4wJ3MpZqYUOeV8luMpwepiUbkcDp8q1zfSWDe63CTEjcCApJzKM=
+	t=1785306876; cv=none; b=Dy9lvFYFMCZjPMPj3HeQssXGWjv33cwkpMwlC3W8GAxpQG1ZeAXPAScK87fQPaWwd5vJf8cFXdpyrlMKgSCOv3BpJgHYncyoeQbjSe+B8QBPjMIVxNXWnuxhbdoHqVJcoDH7rqC/Z3VH5GOPKW+6pU9u/DUTh8tap80QA/J9mg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785306610; c=relaxed/simple;
-	bh=14l0K5+rjPfi76RaZM0/4b9a4gOoD5IXg3XYBWE9p00=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eJVTubGN12IOXB5pMgECtXjqgNVTwuglNgo4Ai46dclcYAW6Wo5oksz0R3RQXyy5jdxJFc/T24L/dXX2aoeGawt/WiaQnika+KYqeC64wm8YFe19LBkD1xZuHQlDGml/83mHK/8PuvLE8M8P6PIpaX3qt+frnYgr6iE1KOawPm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=J9s6Nsc5; arc=none smtp.client-ip=74.125.228.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1785306876; c=relaxed/simple;
+	bh=RLulCHli6NtQc0u/hfK7oen51Chb4TztYQJRBZWKoNA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=qT/cvgDse0suHl3+SAecHIpUpkGOaNpAy/N6mppoYLPWjnV7Fpx8hRBxUMPv/qCoc0H3yTPJXIrhsF1S6tkah38F8haFtJV770c6ITm8wpMg3okMkifnEDDVjRTLHoxcqBN3nI6ewMh/Bk7Y99G9Y41OIEm8HlD0fEDqN6paFUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Mgrr48l1; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="J9s6Nsc5"
-Received: by mail-ej2-f1.google.com with SMTP id a640c23a62f3a-c15be76348eso27257566b.1
-        for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 23:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1785306607; x=1785911407; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=WcYq9jnWmzzj4qks+dqv6sujNo+aNnu+0n4wQ965fu0=;
-        b=J9s6Nsc5b6K/cPEstvbXeTaPClUSB90qbufYokabmtnDppsCCCJniFEd92PBkZFfsh
-         UeCNupl2kE9aTT0B6+kommw7MNAaK6T56UdMn9jHUQtXnVWWpcW0FiVIKjr59sxFrizZ
-         J/YS67YLbg3WL1V04VFuevtQpJ7PoZMvhbwZOw4Vabxcn9aIBkxlV96AgHyymLZl89XA
-         Pk7J8c+qup6MFzXQ9A6JxacWcomLwSpKDHKwkJE2SuGa1//V5oiV53Lb1msccdIg3l2K
-         jWqtO5HHdiWCS1ycc01CkBxEVIvoQKIzH655S6RQOhb9gIG9M5V8LPgd92IuAPATqvlY
-         XMnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785306607; x=1785911407;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WcYq9jnWmzzj4qks+dqv6sujNo+aNnu+0n4wQ965fu0=;
-        b=pNMDP3sZ70Tm0yl1KQ5Dl/sYS1xENWDnfJNjmKa0qI7iDbsXAhvegwDqzmgynjgnZP
-         j6ASbFFfLHHA6LVOE5gRvxEZsg6sql3SK8JXqXPRScku7KePEQpb7/3oQRfKAJXwUmD3
-         LSl1qWXZdum7eIA6PidvJ09SCYyHWYpcX2Q1ybQFV4etHfhKnIJUVlecATorHail3cSH
-         Gmjm1nCDeMT4bmuJdJLaMzGhYSjns9vXhI/Hzq62jmUNr1Ew4uSJP4s44Z0AFvulhquO
-         ksdirimLB7mROmC6j6kfLi99hvNnyPU/pbpeIXOXSrrFEsD91mYJZUaQhVZsupwpfO2P
-         iKrQ==
-X-Gm-Message-State: AOJu0YwVYy+7rF92lZs26Rrgdle2z8S9HxqVTSrhJ88AJ7uxA67aU9bO
-	D4wq3Nm/MfI3nRE7tMt1oFlL0cDYjBYvg0O3EXE6WSf/K9k7XL0N70Zt6J4Mj5XGtfU=
-X-Gm-Gg: AR+sD13If5nLcn10wsFgVpm0b3zkGPD2cYcTF1yXdN6k0DxvLC1ThDeXZEXMxK+ONiq
-	ucYRFlWG9iJd8sgh/qhie5YHe4jI6/QamiitXW9Gl+Lih0K5BAt0ci1glADPQ5nv++BobNL3b6P
-	jxlhxdQ2+h57xnpNrFhYzJO1zCUTOVK8x8uXdxScs5STG9lk0B89MTDgyAkwE6Qx5py04kWp3li
-	3V+GFtQASP1X0Y5yRP5VaF2HyeOl+tlwlwd715/M4CAhU8LUdtbVAxS0sxWz1W3L2Bp5qsZ3gk+
-	15SULEx65vmed3XNUeWvNUC0zJVzrJNf3ujNmDnkvLUsaM8jVgIjQcodk6yXfei7L7TbXN4Tb4F
-	0EVNWP9kXLZEPXvnD8WMittFCGSfxS+sSkOn7Y7rt0W9RbXKfiHibSLFqyqJ4J/RXPML5N8el+g
-	8l/9G9SjwzH4AJqiw2gz1kl4cqJY5NCss2ryysV03ZKSPE35gExZYjOjVHXD9azngox7wC5QNqR
-	HHtKvdPl2VzmHUJfBY=
-X-Received: by 2002:a05:6938:a086:20b0:c1f:7e26:5b94 with SMTP id a640c23a62f3a-c1f7e266377mr135941966b.30.1785306606805;
-        Tue, 28 Jul 2026 23:30:06 -0700 (PDT)
-Received: from u94a (27-53-97-170.adsl.fetnet.net. [27.53.97.170])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f7f0edc1csm853207a91.3.2026.07.28.23.30.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2026 23:30:05 -0700 (PDT)
-Date: Wed, 29 Jul 2026 14:29:53 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Vinicius Sampaio <vldsampaio@pm.me>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, 
-	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com, 
-	shenghaoyuan0928@163.com
-Subject: Re: [PATCH bpf-next 1/2] bpf: Simplify cnum contains() and
- normalize() implementation
-Message-ID: <ammWxQ-PiJ-Z0z67@u94a>
-References: <20260728015601.1567098-1-vldsampaio@pm.me>
- <20260728015601.1567098-2-vldsampaio@pm.me>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Mgrr48l1"
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 701E320B7166;
+	Tue, 28 Jul 2026 23:34:17 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 701E320B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1785306857;
+	bh=8KVi9RLx45DgbP7KCLb+C/3MH3jBqkU3kpDgerni8Ys=;
+	h=From:To:Subject:Date:From;
+	b=Mgrr48l1N5QtHprUqGTB6oC6ojwkqkTtUfA/Igi8C+G2pgOnc2+q3Pb65hPo3Kfyy
+	 vKZT89yqoZY/Gfv6+/+8xTzPOnVqG12VvPkJInrWLmiRiKO4e1K1O6kaB4Ot9prcuo
+	 WY8qi9Ps3WUv1hoW705e+CqwAysiCKdSbjz1p/lI=
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	leon@kernel.org,
+	longli@microsoft.com,
+	kotaranov@microsoft.com,
+	horms@kernel.org,
+	shradhagupta@linux.microsoft.com,
+	ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com,
+	linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org,
+	jacob.e.keller@intel.com,
+	dipayanroy@microsoft.com,
+	leitao@debian.org,
+	kees@kernel.org,
+	john.fastabend@gmail.com,
+	hawk@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	sdf@fomichev.me,
+	yury.norov@gmail.com,
+	pavan.chebbi@broadcom.com,
+	schakrabarti@linux.microsoft.com,
+	gargaditya@linux.microsoft.com
+Subject: [PATCH net-next v13 0/2] net: mana: add ethtool private flag for full-page RX buffers
+Date: Tue, 28 Jul 2026 23:21:27 -0700
+Message-ID: <20260729063347.3388035-1-dipayanroy@linux.microsoft.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260728015601.1567098-2-vldsampaio@pm.me>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 28, 2026 at 01:56:58AM +0000, Vinicius Sampaio wrote:
-> This patch introduces two optimizations one for the normalize() function
-> and other for the contains() function.
+On some ARM64 platforms with 4K PAGE_SIZE, utilizing page_pool
+fragments for allocation in the RX refill path (~2kB buffer per
+fragment) causes 15-20% throughput regression under high connection
+counts (>16 TCP streams at 180+ Gbps). Using full-page buffers on
+these platforms shows no regression and restores line-rate
+performance.
 
-Nit: is there a reason these two optimizations need to land as a single
-commit?
+This behavior is observed on a single platform; other platforms
+perform better with page_pool fragments, indicating this is not a
+page_pool issue but platform-specific.
 
-> In normalize(), there's no need to compare cnum.base with ST_MAX,
-> because any cnum with size == UT_MAX represents the full unsigned domain
-> independently of base, so normalize() can canonicalize all such values
-> to base 0.
-> 
-> In contains(), bearing in mind that a non-empty cnum represents a
-> inclusive circular range in the corresponding unsigned integer domain,
-> membership could be tested by checking whether the distance from the
-> range base to the queried value is within the range size.
-> 
-> This makes the explicit wrapping and non-wrapping cases in contains()
-> unnecessary, since:
-> 
->         v - cnum.base <= cnum.size
-> 
-> is equivalent for both ordinary ranges and ranges that cross the
-> unsigned wrap boundary.
-[...]
-> @@ -181,7 +181,7 @@ void FN(intersect_with_srange)(struct cnum_t *dst, st min, st max)
->  
->  static inline struct cnum_t FN(normalize)(struct cnum_t cnum)
->  {
-> -	if (cnum.size == UT_MAX && cnum.base != 0 && cnum.base != (ut)ST_MAX)
-> +	if (cnum.size == UT_MAX && cnum.base != 0)
->  		cnum.base = 0;
+This series adds an ethtool private flag "full-page-rx" to let the
+user opt in to one RX buffer per page:
 
-Seems right, or at least I could see what semantic `base == ST_MAX` is
-encoding. And normalize does not deal with the empty semantic anyway[1].
-Could we go even further and also drop the `cnum.base != 0`, just
-relying on the `cnum.size == UT_MAX` guard solely?
+  ethtool --set-priv-flags eth0 full-page-rx on
 
->  	return cnum;
->  }
-> @@ -210,12 +210,7 @@ bool FN(is_empty)(struct cnum_t cnum)
->  
->  bool FN(contains)(struct cnum_t cnum, ut v)
->  {
-> -	if (FN(is_empty)(cnum))
-> -		return false;
-> -	if (FN(urange_overflow)(cnum))
-> -		return v >= cnum.base || v <= (ut)cnum.base + cnum.size;
-> -	else
-> -		return v >= cnum.base && v <= (ut)cnum.base + cnum.size;
-> +	return !FN(is_empty)(cnum) && v - cnum.base <= cnum.size;
->  }
+There is no behavioral change by default. The flag can be persisted
+via udev rule for affected platforms.
 
-Make sense, with `v - cnum.base` we are pivoting to a cnum where
+This series depends on the following fixes now merged in net-next:
+  commit 17bfe0a8c014 ("net: mana: Add NULL guards in teardown path to prevent panic on attach failure")
+  commit 5b05aa36ee24 ("net: mana: Skip redundant detach on already-detached port")
 
-  { .base = 0, .size = cnum.size }
+Changes in v13:
+  - Dropped patches 2/4 (mana_detach dealloc bail-out fix) and 4/4
+    (attach failure recovery). Both will be sent as separate series:
+    the dealloc fix as a standalone fix, and the recovery mechanism
+    after concluding pre-allocate-and-replace approach discussion
+    with the HW team.
+  - Removed schedule_port_reset logic from mana_set_priv_flags();
+    on mana_attach() failure, the old priv_flags are restored and
+    the error is returned without scheduling async recovery. 
+Changes in v12:
+  - Added patch 2 to ensure mana_detach() always completes its full
+    teardown even if mana_dealloc_queues() fails, keeping port state
+    consistent for recovery.
+  - Added patch 4 to schedule queue_reset_work when mana_attach()
+    fails during ethtool ring size or channel count changes, with
+    fallback values that maximize recovery chances.
+Changes in v11:
+  - Rebased on net-next
+Changes in v10:
+  - Rebased on net-next which now includes the prerequisite fixes.
+  - Recovery logic in mana_set_priv_flags() leverages the idempotent
+    mana_detach() from the merged fixes.
+Changes in v9:
+  - Added correct tree.
+Changes in v8:
+  - Fixed queue_reset_work recovery by restoring port_is_up before
+    scheduling reset so the handler can properly re-attach.
+  - Simplified "err && schedule_port_reset" to "schedule_port_reset".
+Changes in v7:
+  - Rebased onto net-next.
+  - Retained private flag approach after David Wei's testing on
+    Grace (ARM64) confirmed that fragment mode outperforms
+    full-page mode on other platforms, validating this is a
+    single-platform workaround rather than a generic issue.
+Changes in v6:
+  - Added missed maintainers.
+Changes in v5:
+  - Split prep refactor into separate patch (patch 1/2)
+Changes in v4:
+  - Dropping the smbios string parsing and add ethtool priv flag
+    to reconfigure the queues with full page rx buffers.
+Changes in v3:
+  - changed u8* to char*
+Changes in v2:
+  - separate reading string index and the string, remove inline.
 
-If `v - cnum.base` is within the pivoted cnum, then `v` should be in the
-original cnum as well.
+Dipayaan Roy (2):
+  net: mana: refactor mana_get_strings() and mana_get_sset_count() to
+    use switch
+  net: mana: force full-page RX buffers via ethtool private flag
 
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+ drivers/net/ethernet/microsoft/mana/mana_en.c |  22 ++-
+ .../ethernet/microsoft/mana/mana_ethtool.c    | 169 +++++++++++++++---
+ include/net/mana/mana.h                       |   8 +
+ 3 files changed, 168 insertions(+), 31 deletions(-)
 
-1: https://lore.kernel.org/bpf/7a5c9c3e8ef2cb86b7ae38fb4593e7337e9962c0.camel@gmail.com/
+-- 
+2.43.0
+
