@@ -1,172 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D252E7384;
-	Wed, 29 Jul 2026 08:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212FD437460;
+	Wed, 29 Jul 2026 08:43:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785314495; cv=none; b=MPXH1zDaWFICUOKGzNt3o27kTN9OAPXDUN5WlmO08xCK51Qvcid6YmdPOSXiOwJsDrKHZIcba+eV4lL1A1iXPh4qpBUV5Kn1MOIjMFtBuqCRO1/UW8iY6HWKVbWWw6nw0PqO0kl6PBufqtYJ+X+JvHxGXSIipOUHPhX9TtyhUs0=
+	t=1785314639; cv=none; b=iyKhrqhWcsxrvrSFWPbunmK1tH2UjrVr6mTZjQUC2P937099JwXVj/0nDPtpjsHFlQpbjXHUgoI3uK5FLQAF15XTGI8F28lfwLxghvA+T0NKmEKHKzfJpm/w1uu7faKjA6DeGso3juQpz53CE4eb4CTSWBOAqclmWuLOd7TWma8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785314495; c=relaxed/simple;
-	bh=u2SOOZvwVMrPZ3k9V5rHN4gsDxjj/rWB1OfN5CEMOTI=;
+	s=arc-20240116; t=1785314639; c=relaxed/simple;
+	bh=hY0vGJ5oWpZkjSNNigk0+5X7wMff+4GaaswThuv48yo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gANj8XAaAaVF8zjgLFILVvdv1EaJKUKZHP+WA5WGgsJSXqH0SgwPVPral2abXu4HB/6gy5L9sBgx/Tw1Q4nujNV/lQiYrJyGwuaHZclkrmKWYvrZE22XZ0BHiDbCvxMZUy9K6PAz7pkRi7M9jrFlvMSBdTi+EbazGUrzQRZe78g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kp658xD8; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Y3zP5Mb4TMGKPCVQgnwPbeDi7SBIb9VuRPO2IFdsOGM0PsPDf39Or6L9hzi1aZzhY3TXK7zzLvOe+i9VfYX15P66lAuey5v66w/fvO8tiWluZfwRBCWSZfMzNQlh2TXBvcmmwJodxjHWyIoU3TT8ATIjsI2npJoRT1ZdLKogOI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FH4utjkc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kp658xD8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 868411F000E9;
-	Wed, 29 Jul 2026 08:41:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FH4utjkc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782261F000E9;
+	Wed, 29 Jul 2026 08:43:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785314493;
-	bh=fM8KWGCe4ezTPDWrSrEkw6QIV9Ar9my1ZoqpBIbe9Vc=;
+	s=k20260515; t=1785314637;
+	bh=q3uoDiZ1H0nNWQdRFHwiOJ33C4x0gTBBKZZuXTolWdk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kp658xD8jehoI+ZOpKsSFs3mXxr8DKx4RngMSz8w0HzIewyY1b5RsLQWTcWA06L9p
-	 OAqjy6hvP9G1Gbevhj2BTW45h8KdT59gZNS7y7LfKC19yVB3woeZVT6Wa4o82saLdT
-	 rmNAQgy6pq6CHRo5B0ZRB/CXjhfmOzfwfMOOF2ix8W6vd7m53Nh5qrz4u3Z/+ZhJHz
-	 EIdn/eCHmmXj6Obru2SDYt4mzHGAY7h2YHU1z6j5RDi2ZU4AQ/xcqEfxUHof+MRtIn
-	 7L1Kh4F56JyUfHkm4t08ADpTj6F8SMayCHSJTxf5pwztRR3/AI58okw9fc6ezlAKxa
-	 Ug6zyPdJYkozw==
+	b=FH4utjkcQWqeWmKSDN2sFspZij/0FGJW022rRHCD1O68+ZoW9q8trgwTvfUnX8EHW
+	 yYBITqQfpivnlx8ldeZ9xuQaWLIlPapfFYrc1AM/8e1vRHUrtDzIKVbluy2W/YenIL
+	 ERG56Mkv+SEfLigM9QUz0m9fla1cFUW2aNG2/EQObUoRRQ5XG5QhJByiazPxoDodVl
+	 0aBCgmvn6w+GoZUQ3DXakTiC1fJPZ+ZLV4BMxZ81032fNsn+WoycFUzEYeoZnGH2Cq
+	 glykjnYzvShxmNEc73vQ9Fhy0GnQ2vckVvw/I5+7SMHtfEkaIHrU1Hdu3Fo7TFp+3u
+	 ifZJg185YM+1A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 7/8] mm/slab: introduce kfree_rcu_nolock()
+Subject: Re: [PATCH v5 5/8] mm/slab: allow kfree_rcu_sheaf() on PREEMPT_RT
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?SGFycnkgWW9vIChPcmFjbGUp?= <harry@kernel.org>
-Cc: linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260729-kfree_rcu_nolock-v5-7-a28cdcda9673@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
+In-Reply-To: <20260729-kfree_rcu_nolock-v5-5-a28cdcda9673@kernel.org>
 References: <20260729-kfree_rcu_nolock-v5-0-a28cdcda9673@kernel.org>
- <20260729-kfree_rcu_nolock-v5-7-a28cdcda9673@kernel.org>
+ <20260729-kfree_rcu_nolock-v5-5-a28cdcda9673@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Jul 2026 08:41:33 +0000
-Message-Id: <20260729084133.868411F000E9@smtp.kernel.org>
+Date: Wed, 29 Jul 2026 08:43:57 +0000
+Message-Id: <20260729084357.782261F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] `kfree_rcu_nolock()` and `kvfree_call_rcu()` invoke `__kfree_rcu_s=
-heaf()`, which acquires a `local_trylock()`. This triggers lockdep 'Invalid=
- wait context' warnings and can cause deadlocks on PREEMPT_RT.
-- [Medium] Missing `kasan_record_aux_stack()` in the `fallback` path of `kf=
-ree_call_rcu_nolock()` loses the original free stack trace.
-- [Low] Missing struct pointer cast in the `kfree_rcu_nolock()` macro cause=
-s incompatible pointer type compilation errors when `CONFIG_KVFREE_RCU_BATC=
-HED` is enabled.
+
+New issues:
+- [High] Calling kvfree_call_rcu() or kfree_rcu() on PREEMPT_RT under a raw=
+ spinlock or hardirq context triggers a lockdep 'Invalid wait context' warn=
+ing and potential deadlocks due to unconditional local_trylock() acquisitio=
+n.
+
+Pre-existing issues:
+- [High] Allocating memory with GFP_NOWAIT inside __kfree_rcu_sheaf() can d=
+eadlock on scheduler locks via kswapd wakeup.
 --
 
---- Patch [7]: [PATCH v5 7/8] mm/slab: introduce kfree_rcu_nolock() ---
-commit 34c7828edcaca9e66aa219ee881130dc05e9102d
+--- Patch [5]: [PATCH v5 5/8] mm/slab: allow kfree_rcu_sheaf() on PREEMPT_R=
+T ---
+commit 2f2c22c6e4b6eb6bae0d210e9892e5c589edbd06
 Author: Harry Yoo (Oracle) <harry@kernel.org>
-Subject: mm/slab: introduce kfree_rcu_nolock()
 
-The commit introduces kfree_rcu_nolock() to handle freeing objects in unkno=
-wn
-contexts without deferred processing when possible. It relies on
-__kfree_rcu_sheaf() for the fast path and falls back to defer_kfree_rcu()
-which uses an irq_work.
+mm/slab: allow kfree_rcu_sheaf() on PREEMPT_RT
 
-> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -1124,6 +1125,27 @@ do {								\
->  		kvfree_call_rcu(NULL, (void *) (___p));		\
->  } while (0)
-> =20
-> +/**
-> + * kfree_rcu_nolock() - a version of kfree_rcu() that can be called in a=
-ny context.
-> + * @ptr: pointer to kfree for double-argument invocations.
-> + * @kvrhf: the name of the struct kvfree_rcu_head within the type of @pt=
-r.
-> + *
-> + * With KVFREE_RCU_BATCHED, kfree_rcu_nolock() tries hard to free objects
-> + * without any deferred processing, but may still defer freeing.
-> + * Large kmalloc and vmalloc objects are always deferred.
-> + *
-> + * kfree_rcu_nolock() supports 2-arg variant only.
-> + */
-> +#define kfree_rcu_nolock(ptr, kvrhf)						\
-> +do {										\
-> +	typeof (ptr) ___p =3D (ptr);						\
-> +										\
-> +	if (___p) {								\
-> +		BUILD_BUG_ON(offsetof(typeof(*(ptr)), kvrhf) >=3D 4096);		\
-> +		kfree_call_rcu_nolock(&((___p)->kvrhf), (void *) (___p));	\
+This patch enables kfree_rcu_sheaf() on PREEMPT_RT by passing
+SLAB_FREE_NOLOCK when on PREEMPT_RT, avoiding spinning. It skips
+the lockdep map on PREEMPT_RT to avoid suppressing valid warnings.
 
-[Severity: Low]
-Is a cast to (struct kvfree_rcu_head *) needed here?=20
+Link: https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4d9f98162=
+@kernel.org [1]
+Link: https://lore.kernel.org/linux-mm/40591888-3a87-433e-b3d2-cda1cab543be=
+@kernel.org [2]
 
-Because the caller typically embeds struct rcu_head, passing the member
-address directly to kfree_call_rcu_nolock() results in an incompatible poin=
-ter
-type compilation error when CONFIG_KVFREE_RCU_BATCHED is enabled.
-
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -1296,6 +1296,33 @@ EXPORT_TRACEPOINT_SYMBOL(kmem_cache_alloc);
->  EXPORT_TRACEPOINT_SYMBOL(kfree);
->  EXPORT_TRACEPOINT_SYMBOL(kmem_cache_free);
-> =20
-> +void kfree_call_rcu_nolock(struct kvfree_rcu_head *head, void *ptr)
-> +{
-> +	struct slab *slab;
-> +
-> +	if (!IS_ENABLED(CONFIG_KVFREE_RCU_BATCHED))
-> +		goto fallback;
-> +
-> +	if (unlikely(is_vmalloc_addr(ptr)))
-> +		goto fallback;
-> +
-> +	slab =3D virt_to_slab(ptr);
-> +	if (unlikely(!slab))
-> +		goto fallback;
-> +
-> +	if (unlikely(IS_ENABLED(CONFIG_NUMA) && slab_nid(slab) !=3D numa_mem_id=
-()))
-> +		goto fallback;
-> +
-> +	if (unlikely(!__kfree_rcu_sheaf(slab->slab_cache, ptr, SLAB_FREE_NOLOCK=
-)))
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index d81cc2136c688..9c2cca9add893 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+[ ... ]
+@@ -1987,7 +1995,7 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+ 	if (!head)
+ 		might_sleep();
+=20
+-	if (!IS_ENABLED(CONFIG_PREEMPT_RT) && kfree_rcu_sheaf(ptr))
++	if (kfree_rcu_sheaf(ptr))
+ 		return;
+=20
+ 	// Queue the object but don't yet schedule the batch.
+diff --git a/mm/slub.c b/mm/slub.c
+index 92c99ff34a2c9..6c81722afb18c 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+[ ... ]
+@@ -6100,10 +6101,10 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void *=
+obj, unsigned int free_flags)
+ 	struct slab_sheaf *rcu_sheaf;
+ 	bool allow_spin =3D free_flags_allow_spinning(free_flags);
+=20
+-	if (WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT)))
+-		return false;
++	VM_WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT) && allow_spin);
+=20
+-	lock_map_acquire_try(&kfree_rcu_sheaf_map);
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
++		lock_map_acquire_try(&kfree_rcu_sheaf_map);
+=20
+ 	if (!local_trylock(&s->cpu_sheaves->lock))
 
 [Severity: High]
-Could calling __kfree_rcu_sheaf() here violate the unknown context
-requirement?
+Does this unconditionally acquire a sleepable RT-mutex on PREEMPT_RT?
 
-When kfree_rcu_nolock() or kvfree_call_rcu() are called in a hardirq or NMI
-context, the fastpath unconditionally executes local_trylock() inside
-__kfree_rcu_sheaf():
+Since this patch removes the !IS_ENABLED(CONFIG_PREEMPT_RT) safeguard in
+kvfree_call_rcu(), kfree_rcu_sheaf() can now reach this local_trylock() on
+PREEMPT_RT.
 
-mm/slub.c:__kfree_rcu_sheaf() {
+kvfree_call_rcu() is frequently called from hardirq or raw spinlock context=
+s.
+On PREEMPT_RT, local_trylock() maps to an RT-mutex. Acquiring it from these
+contexts will trigger a lockdep Invalid wait context warning.
+
+Furthermore, if a hardirq interrupts the CPU while it already holds the
+RT-mutex's internal raw wait_lock, can this trylock self-deadlock?
+
+[Severity: High]
+This is a pre-existing issue, but can the empty sheaf allocation in this
+function deadlock on scheduler locks?
+
+Further down in __kfree_rcu_sheaf(), the code does:
+
+    gfp_t gfp =3D allow_spin ? GFP_NOWAIT : __GFP_NOWARN;
     ...
-	if (!local_trylock(&s->cpu_sheaves->lock))
-		goto fail;
-    ...
-}
+    empty =3D alloc_empty_sheaf(s, gfp, alloc_flags);
 
-Because a local_lock on PREEMPT_RT is a sleeping lock, acquiring it under
-a raw spinlock triggers lockdep "Invalid wait context" warnings, and if
-called from NMI context on PREEMPT_RT, it can unconditionally deadlock.
+When allow_spin is true, this uses GFP_NOWAIT, which includes the
+__GFP_KSWAPD_RECLAIM bit.
 
-> +		goto fallback;
-> +
-> +	return;
-> +
-> +fallback:
-> +	defer_kfree_rcu(head);
+If kvfree_call_rcu() is called from scheduler code holding pi_lock or
+rq_lock, and the allocation falls back to the page allocator, it will invoke
+wakeup_kswapd(). This enters the scheduler via try_to_wake_up() and
+attempts to acquire pi_lock or rq_lock again, causing a self-deadlock.
 
-[Severity: Medium]
-Will this lose the original free stack trace if KASAN is enabled?
+Should this use a bare flag like __GFP_NOWARN without reclaim bits?
 
-When the fastpath fails and execution jumps to fallback, the object is defe=
-rred
-to an irq_work without calling kasan_record_aux_stack(). Later, when
-kvfree_call_rcu() is finally invoked in the irq_work context, it will
-record the worker's stack trace instead of the original caller that
-requested the free, making KASAN Use-After-Free reports harder to debug.
+>  		goto fail;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729-kfree_rcu_=
-nolock-v5-0-a28cdcda9673@kernel.org?part=3D7
+nolock-v5-0-a28cdcda9673@kernel.org?part=3D5
