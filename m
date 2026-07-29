@@ -1,64 +1,64 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869773E16A8
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 20:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6D73DD520
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 20:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785357003; cv=none; b=UwCsOgrdOWtn5ib2qiEQhJmhaqTNhGWp1AzMhaceg8TIXHwvjWlmJSbrs1saRIRK50mLuqTYMKPhq/Sq8kRG78PaUtwHNNrAc5kxIVHd9tHpY1yYPL9tvRwBzQ1HlK5zkk4DWyf2+PkEdf+PY2GoxUJxj4YxavApoJlytbzujGg=
+	t=1785357017; cv=none; b=XDiKGicn3xOtUCjiEPpIjJhSrtBPPZnydjTDA8jjQqaouBfKuqPtHBMfb4ILTI9Xh9tmwgCxHOS293bgdno8fBK2ZyL/tK73kYslzFoTDdviEgehpNqZ7lYoz8lM30xgspLI/FQA1+ZIMyK4oW6n5dxBR/1S0/TW3kJudAm4WUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785357003; c=relaxed/simple;
-	bh=NeG2E7o+v7PpBd8N9EmtNU+R1//qVqRyfbrPbCbFDEA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=derW16YY19mR5FY5yixrF2GVhDMcxQZcWqhcz3dD7n9I/PGG7LZ9W+mwsOwKAHHBBbRXcbWdb0xtmcAtqNIlWYfU+KKibwyYJRiEpnP/pKjBZeqNtq2P2634t0J4Cf2UNxHEZJRXrRX7E2Nm+5WEUN2c3XcFAf0afLdlISgLYws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=IzXo+qLz; arc=none smtp.client-ip=209.85.216.45
+	s=arc-20240116; t=1785357017; c=relaxed/simple;
+	bh=TIzvQ5yYUuwHOZxSzc2URBeJxr0Wj/Wxqs1MuDtXDC8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=LI6S4OtXHAwFXErrzZu+UOnJZfZSM+ilNzZ3LYndUjO/Jl2DUohq70dBL45NwotmmKvmSuk0bJoO80E6awOxJb+MXnPfxVKetzW2VAXRYGt3B2ZAEiksnzk2U1NuKG/imUDK9w5jyx/TyPqXKF4diMDBzFKEWZ1oywy7qAMLHoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=snJRu/I1; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="IzXo+qLz"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38125cebfdaso1886941a91.1
-        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 13:29:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="snJRu/I1"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c9eefcf9175so1094041a12.3
+        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 13:30:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785356997; x=1785961797; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785357013; x=1785961813; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=DLPzQAEQsLT2O+fSZwXxQMjGKwKGH7hwJYQcxqODA3s=;
-        b=IzXo+qLzNqvAm+HOPw5+jup2ycvI3OoNnugNPCUsXE3rhF1hO6ek4Hg4zaGNZm2XCi
-         uICfc5TFZyTeCeSGcRCe2ZMsOJkLllsr9aouL42BFzuifEVRiipimqKR/GTzhCtHiQtw
-         OELR5/crzimXGpp0EvK1RVLBiUtNuz22kcF84ei3zJgJeUfjuBqECPHyphYSDux3R7Om
-         K8eubf3sOmU6UvdgRgDsE4SX/HUQ5EtyDVNtuk9xk5N+0iNyUSU+w70yJTkZm6ZB1+pc
-         rs/aiPU7N+Mf/JHcGzI0tPyfT34o31or7ta5FYQGcP1kRd6uvujTS0yFClkS5yNx3yk0
-         hgZg==
+        bh=ShSGDIdvDY2A/E8agT8O3gUlL/J2ljN0bWMP2ClUyTQ=;
+        b=snJRu/I1rxhtPPlplPfA/tc7BkejtbtViAvkD9DjNS3xDMJZBQQsZTurV3pg/2N4uq
+         K91Fx8fV7w9VTZeniNBqT9hxURWsEOZlNmrWu2fzwd4XGRc2hhtO+0FWKTGyyWqZbVnq
+         UJQaX68HBSZ+oobDIoP36ujpXLD6w87OmHfWNMxXiGPntEdVlMtFnbvB4dZ6NrAUfocB
+         Iud3yL+1IOAl0CORgN8OwApT6ivghbj3aAwr4dxAaE6pxSmmtZTC+j1EHnR+vDsmWdLy
+         mQzlUP8Ms7tW7LBb4CUMnUzgbi5H1JbwsFVwaiAuC/tT8omQ+5pmd7prBIlfyXoJTiVG
+         iABg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785356997; x=1785961797;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=1e100.net; s=20251104; t=1785357013; x=1785961813;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=DLPzQAEQsLT2O+fSZwXxQMjGKwKGH7hwJYQcxqODA3s=;
-        b=MRgnPBFx+lSW4kflAIEdx503TUVzuXrd7JUCZKH7B92bxMGenXHa02ShqYi/bFMK+E
-         /ENwQHnZUD5W/7o03T7LO+pZXrZAR0bTJOLQkeLqwFav5WCIlPlB7hcIlhDeF19OW/Pq
-         cp2GoHEUUrxjeepXhkziLxrV8L+fRXNgpx6uq5Xi4cdu5r8yLUW9RP6bMt77tFQqjqkq
-         t5mZ+BAmHIZd0wn6IibGdq5fRfRTu4xog/TmhpsXWVdrFsZlwdkjyDTK+MX9AWTX6RUh
-         f6p0Irh60QBieFqBQkYJPRwMz8AQFcw/DYFMYSER7Nfp34+8346UKwXm/in1zpIHKcyD
-         3NOw==
-X-Forwarded-Encrypted: i=1; AHgh+Rp4EOCVY/xO+oeQj88OyEXe7s0noJJmthM8WLT448l5yk/AasTCr9ahwaPc1yGCnWTYdqU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHdQuNbWvJRxgiEc7xapNUVDK2UxJLNeF8H0JM4U8R1RP5HjGI
-	RrXv44UJqSemATt9tEC7dtykiwOruAPly/VF43/vUds2p5yUJxOTP54D6G1OaOeqhvM=
-X-Gm-Gg: AR+sD1304HWCjwlFssyRwKHI7F1zUmX9MfS+zG29bprjOY2GlEsQvrNGovn+pVewGyY
-	ZGw9SOlt6Rxyi1q4qLqxhYb9iM+tGNV23dlB1KoCWC+ev3GiEnTZQkwLniia/4wU8lX2CHj/l4a
-	xEHEk0O68etNiNu/mr+XOyk4x4VoVjI6NP3Xv9D4nGiSxbvglJIcy6pIQ6zGTeyyI56eHEhXsdr
-	BZd4fGX412NhE1bLB0Q09AMbtWTtoiG9RZ/sRfvDY2Kq6LJBK7FLNLielLUUoO7vGxD7IQsfM2Y
-	qwgLlvZNyP2+Bnt2n1n4vJEhdAFuZMmfO81+LMaJXsChEnkDV6n8/2ITKIetiP1bL4B8Z2oJW0A
-	O1QDrthXQ2TGDU8zkuTLNi9GIjUuBl6vjnqgLtZW16lj1fDLfP0WUyNdB2tMYAEhVvfsBc64k16
-	PjphGGmYwa31QN1DXKcxDr/Erm2k2T+6p9dQsYzUz//JGA
-X-Received: by 2002:a05:6a21:60c8:b0:3b4:8bc6:138 with SMTP id adf61e73a8af0-3c8acbcdd34mr9864636637.23.1785356997286;
-        Wed, 29 Jul 2026 13:29:57 -0700 (PDT)
+        bh=ShSGDIdvDY2A/E8agT8O3gUlL/J2ljN0bWMP2ClUyTQ=;
+        b=ja7fqrtRkTcYE95kGrIJvKujk+7R6nw1r95w1m4tENF/LMZTqeeCOwceou3rxG8XH4
+         T95zFprmdiV9C6/0DUB6aYrzhjJxTEgWUkWZa57FBJKaaSkYTSaLuGJOP+9xmRRAFTdv
+         G34cjCtUDTW07nd9SkE5AlUD853qaCY4YT2s8qqpBdwrvDq8mhl3GuNqYnTbA7GuiWd/
+         qhHWYtmOOKs7pdHC7KBtYcfTbI3LP7vJ5YkzEQR7LLCsvnSpUJj5mNQ2l+jC+eYc/vX/
+         TCAZiDRrhgbr99COZo+m7sy6tfB841G19e89bJzIEqrKLY1b6pbtdIl9aKRiiKHaKqzQ
+         euEw==
+X-Forwarded-Encrypted: i=1; AHgh+RqRlAdAIxPJAxzDo3CxkbXvJ/p3FF982tsFJONRjxyqdrs6TGHZc2ADmQQrU+qsVGnlrOo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFk9v7rRInLRqTv86NS/nPlVP2wtFAQz9xy5sn33qpSclB0G1D
+	XdGThEno6TIC2Ywtmw4DCzX4e20T4qnD0tt/Ld1IbALG0MKq9T7XUUt2IvfhXa22UPE=
+X-Gm-Gg: AR+sD10YWIDS0UhJMK1EDQMOL1VpA9EKy95lCKjvsR8xDENDdFBkuhw+IohOGTyvKPq
+	JNC7f4iz0oMSNWhJ2Rr9T/r0RJpCkhaFd4P1L0bwfU101qX6vMrI26iE9jgsOmjr7iimI2MYkI4
+	g7KxKcCC2GdxKwq7X4Bc0TETF16SO2+MSaJXHLESL7wfAUj3gdA+3PfG5z0/rzQMYJ2vjeWpsA9
+	hPNqPD/a+soofjIpUcHZEa4loP9mf1m4ItOcovoiD1QiTd5Xnx1mbvYCxgGDY6KB6Jbc0B0g7qW
+	qqoJ7G26zKwBJdS36SwrtF3wOsrFFMUS0API7kqAlt6DmDnwBo6rGiQSCMh5Oz+6clvgBZWl0rZ
+	C6w7iGFYEFrTzlBuRruNwiht7iZcbfmGTwNmKr0rsglVELvcYGjO1CoxJ8ElKx0RnqojPNN94th
+	sNkxMfSYByUQiW+rYT9pN2XudrG4BdhjomceYV+4gdsBrSMvwpSUGcBYc=
+X-Received: by 2002:a05:6a21:112:b0:3c3:7bb9:c93 with SMTP id adf61e73a8af0-3c8ba61523bmr9792974637.53.1785357013468;
+        Wed, 29 Jul 2026 13:30:13 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:600::1:d447])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13e7273cd9esm13104919c88.13.2026.07.29.13.29.54
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13e72643a12sm19441406c88.5.2026.07.29.13.30.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2026 13:29:56 -0700 (PDT)
+        Wed, 29 Jul 2026 13:30:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,8 +67,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 29 Jul 2026 16:29:53 -0400
-Message-Id: <DKBC8GAYVMG5.3PGUZKLGR8QW7@etsalapatis.com>
+Date: Wed, 29 Jul 2026 16:30:10 -0400
+Message-Id: <DKBC8NVXBTW8.C20199U1ITBD@etsalapatis.com>
+Cc: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf 2/3] bpf: Extract shared reqsk-to-listener upgrade
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
 To: "Michal Luczaj" <mhal@rbox.co>, "Eric Dumazet" <edumazet@google.com>,
  "Kuniyuki Iwashima" <kuniyu@google.com>, "Paolo Abeni" <pabeni@redhat.com>,
@@ -83,57 +86,114 @@ To: "Michal Luczaj" <mhal@rbox.co>, "Eric Dumazet" <edumazet@google.com>,
  Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
  "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
  "Emil Tsalapatis" <emil@etsalapatis.com>, "Joe Stringer" <joe@wand.net.nz>
-Cc: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf 1/3] bpf, sockmap: Use sock_hold() instead of
- refcount_inc_not_zero() in lookup
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260723-sockmap-lookup-tcp-leak-v1-0-1bbdc58ce514@rbox.co>
- <20260723-sockmap-lookup-tcp-leak-v1-1-1bbdc58ce514@rbox.co>
-In-Reply-To: <20260723-sockmap-lookup-tcp-leak-v1-1-1bbdc58ce514@rbox.co>
+ <20260723-sockmap-lookup-tcp-leak-v1-2-1bbdc58ce514@rbox.co>
+In-Reply-To: <20260723-sockmap-lookup-tcp-leak-v1-2-1bbdc58ce514@rbox.co>
 
 On Thu Jul 23, 2026 at 7:33 AM EDT, Michal Luczaj wrote:
-> psock's hold on the looked up socket isn't dropped until sk_psock_drop() =
-->
-> queue_rcu_work() -> sk_psock_destroy() runs, which happens only after the
-> entry is unlinked and an RCU grace period elapses. Since the lookup runs
-> under RCU, a non-NULL result guarantees sk_refcnt >=3D 1:
-> refcount_inc_not_zero() can never fail here. Use sock_hold() instead.
+> __bpf_sk_lookup() and bpf_sk_lookup() duplicate the same sk_to_full_sk()
+> reqsk-to-listener upgrade. Extract it into a helper.
 >
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> Leave the currently unreachable WARN_ONCE as a defensive assert.
+>
+> No functional change.
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-> ---
->  net/core/sock_map.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 9efbd8ca7db8..ca49bc7f8687 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -392,8 +392,8 @@ static void *sock_map_lookup(struct bpf_map *map, voi=
-d *key)
->  	sk =3D __sock_map_lookup_elem(map, *(u32 *)key);
->  	if (!sk)
->  		return NULL;
-> -	if (sk_is_refcounted(sk) && !refcount_inc_not_zero(&sk->sk_refcnt))
-> -		return NULL;
-> +	if (sk_is_refcounted(sk))
-> +		sock_hold(sk);
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> ---
+>  net/core/filter.c | 57 ++++++++++++++++++++++++-------------------------=
+------
+>  1 file changed, 25 insertions(+), 32 deletions(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index b446aa8be5c3..403aba3ce891 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -7074,6 +7074,27 @@ __bpf_skc_lookup(struct sk_buff *skb, struct bpf_s=
+ock_tuple *tuple, u32 len,
 >  	return sk;
 >  }
 > =20
-> @@ -1218,8 +1218,8 @@ static void *sock_hash_lookup(struct bpf_map *map, =
-void *key)
->  	sk =3D __sock_hash_lookup_elem(map, key);
->  	if (!sk)
->  		return NULL;
-> -	if (sk_is_refcounted(sk) && !refcount_inc_not_zero(&sk->sk_refcnt))
-> -		return NULL;
-> +	if (sk_is_refcounted(sk))
-> +		sock_hold(sk);
+> +static struct sock *
+> +bpf_sk_lookup_full_sk(struct sock *sk)
+> +{
+> +	struct sock *sk2 =3D sk_to_full_sk(sk);
+> +
+> +	/* sk_to_full_sk() may return sk->rsk_listener, make sure the original
+> +	 * sk sock refcnt is decremented to prevent a request_sock leak.
+> +	 */
+> +	if (sk2 !=3D sk) {
+> +		sock_gen_put(sk);
+> +		/* Ensure there is no need to bump sk2 refcnt. */
+> +		if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
+> +			WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
+> +			return NULL;
+> +		}
+> +		sk =3D sk2;
+> +	}
+> +
+> +	return sk;
+> +}
+> +
+>  static struct sock *
+>  __bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 l=
+en,
+>  		struct net *caller_net, u32 ifindex, u8 proto, u64 netns_id,
+> @@ -7083,22 +7104,8 @@ __bpf_sk_lookup(struct sk_buff *skb, struct bpf_so=
+ck_tuple *tuple, u32 len,
+>  					   ifindex, proto, netns_id, flags,
+>  					   sdif);
+> =20
+> -	if (sk) {
+> -		struct sock *sk2 =3D sk_to_full_sk(sk);
+> -
+> -		/* sk_to_full_sk() may return (sk)->rsk_listener, so make sure the ori=
+ginal sk
+> -		 * sock refcnt is decremented to prevent a request_sock leak.
+> -		 */
+> -		if (sk2 !=3D sk) {
+> -			sock_gen_put(sk);
+> -			/* Ensure there is no need to bump sk2 refcnt */
+> -			if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
+> -				WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
+> -				return NULL;
+> -			}
+> -			sk =3D sk2;
+> -		}
+> -	}
+> +	if (sk)
+> +		sk =3D bpf_sk_lookup_full_sk(sk);
+> =20
 >  	return sk;
 >  }
+> @@ -7129,22 +7136,8 @@ bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock=
+_tuple *tuple, u32 len,
+>  	struct sock *sk =3D bpf_skc_lookup(skb, tuple, len, proto, netns_id,
+>  					 flags);
 > =20
+> -	if (sk) {
+> -		struct sock *sk2 =3D sk_to_full_sk(sk);
+> -
+> -		/* sk_to_full_sk() may return (sk)->rsk_listener, so make sure the ori=
+ginal sk
+> -		 * sock refcnt is decremented to prevent a request_sock leak.
+> -		 */
+> -		if (sk2 !=3D sk) {
+> -			sock_gen_put(sk);
+> -			/* Ensure there is no need to bump sk2 refcnt */
+> -			if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
+> -				WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
+> -				return NULL;
+> -			}
+> -			sk =3D sk2;
+> -		}
+> -	}
+> +	if (sk)
+> +		sk =3D bpf_sk_lookup_full_sk(sk);
+> =20
+>  	return sk;
+>  }
 
