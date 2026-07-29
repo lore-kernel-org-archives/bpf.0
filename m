@@ -1,160 +1,147 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f1.google.com (mail-ej2-f1.google.com [74.125.228.129])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23CC4242D65
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 06:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A930425B0B9
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 06:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785306494; cv=none; b=n+x8F3VzgRrYkdoCZy4Xba9Q/AL2IMjO2ShgLehaz7wRpdIKWt40XZ4T+EcUguGhAyNab6y0cBhqaMJH6UckBUKx16uvIZ8N7riApYdJsmtsvS6TrfSQhg7X2Mp0ql4WcSngjJI+yxsCYnghG0xme9qPYQ25dQq0UZvVqxch5eg=
+	t=1785306610; cv=none; b=nwui+QnppDJxJP2qx9vp4HGvGnaxHFAXRftmNENvrlFSl11I/WB/5FLNbklZQdnZv+CufVVSMqX1cyDZwHsnc+nHpwxx4UWUQStMw3WG2D5MB84nPFCMCL7/4wJ3MpZqYUOeV8luMpwepiUbkcDp8q1zfSWDe63CTEjcCApJzKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785306494; c=relaxed/simple;
-	bh=/waf0XQvjk0H10MjZ4QUZRMk5ieelEf0YGayWnrzenI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uyORKWPreXaDw6ou7kFVGdlu/8nQCB0BlS5aKTgKIMb9kL6L/bLmNKUjM4HRKBqM7GmItmKDvDEhkBl09nA+tR0lSgeqUGrQkW6BiyI9D6iO+Xeioi2yjMPHtZOw+w0K1UyeBBDt8KuLdiEW5G5XHQ2Ea/DNwLP+O/uc+7sh12E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lwZWQPhp; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785306610; c=relaxed/simple;
+	bh=14l0K5+rjPfi76RaZM0/4b9a4gOoD5IXg3XYBWE9p00=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eJVTubGN12IOXB5pMgECtXjqgNVTwuglNgo4Ai46dclcYAW6Wo5oksz0R3RQXyy5jdxJFc/T24L/dXX2aoeGawt/WiaQnika+KYqeC64wm8YFe19LBkD1xZuHQlDGml/83mHK/8PuvLE8M8P6PIpaX3qt+frnYgr6iE1KOawPm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=J9s6Nsc5; arc=none smtp.client-ip=74.125.228.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lwZWQPhp"
-Message-ID: <c25b272d-5975-4fd1-be3f-6b5a0522cbee@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785306479;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NTKMOzyJT3XVDunTQT4HsxFCad0Svgvht0V0qG/fe6o=;
-	b=lwZWQPhpVCVxyyBLH1gbsTw6+orejMpom+wCp+OYkEg904a1gUajsX5d472e+U0FPGL2Qu
-	HnHtWjskt7FcdzfRyMZiSZrvgddCEBc1wd8C5FMIRiTn8CskN92cF7WC41KlbESpN2XrhJ
-	cprF/ip5GoY/qZaxdOu3guXg6TNQ/H0=
-Date: Wed, 29 Jul 2026 14:27:48 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="J9s6Nsc5"
+Received: by mail-ej2-f1.google.com with SMTP id a640c23a62f3a-c15be76348eso27257566b.1
+        for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 23:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1785306607; x=1785911407; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=WcYq9jnWmzzj4qks+dqv6sujNo+aNnu+0n4wQ965fu0=;
+        b=J9s6Nsc5b6K/cPEstvbXeTaPClUSB90qbufYokabmtnDppsCCCJniFEd92PBkZFfsh
+         UeCNupl2kE9aTT0B6+kommw7MNAaK6T56UdMn9jHUQtXnVWWpcW0FiVIKjr59sxFrizZ
+         J/YS67YLbg3WL1V04VFuevtQpJ7PoZMvhbwZOw4Vabxcn9aIBkxlV96AgHyymLZl89XA
+         Pk7J8c+qup6MFzXQ9A6JxacWcomLwSpKDHKwkJE2SuGa1//V5oiV53Lb1msccdIg3l2K
+         jWqtO5HHdiWCS1ycc01CkBxEVIvoQKIzH655S6RQOhb9gIG9M5V8LPgd92IuAPATqvlY
+         XMnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785306607; x=1785911407;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WcYq9jnWmzzj4qks+dqv6sujNo+aNnu+0n4wQ965fu0=;
+        b=pNMDP3sZ70Tm0yl1KQ5Dl/sYS1xENWDnfJNjmKa0qI7iDbsXAhvegwDqzmgynjgnZP
+         j6ASbFFfLHHA6LVOE5gRvxEZsg6sql3SK8JXqXPRScku7KePEQpb7/3oQRfKAJXwUmD3
+         LSl1qWXZdum7eIA6PidvJ09SCYyHWYpcX2Q1ybQFV4etHfhKnIJUVlecATorHail3cSH
+         Gmjm1nCDeMT4bmuJdJLaMzGhYSjns9vXhI/Hzq62jmUNr1Ew4uSJP4s44Z0AFvulhquO
+         ksdirimLB7mROmC6j6kfLi99hvNnyPU/pbpeIXOXSrrFEsD91mYJZUaQhVZsupwpfO2P
+         iKrQ==
+X-Gm-Message-State: AOJu0YwVYy+7rF92lZs26Rrgdle2z8S9HxqVTSrhJ88AJ7uxA67aU9bO
+	D4wq3Nm/MfI3nRE7tMt1oFlL0cDYjBYvg0O3EXE6WSf/K9k7XL0N70Zt6J4Mj5XGtfU=
+X-Gm-Gg: AR+sD13If5nLcn10wsFgVpm0b3zkGPD2cYcTF1yXdN6k0DxvLC1ThDeXZEXMxK+ONiq
+	ucYRFlWG9iJd8sgh/qhie5YHe4jI6/QamiitXW9Gl+Lih0K5BAt0ci1glADPQ5nv++BobNL3b6P
+	jxlhxdQ2+h57xnpNrFhYzJO1zCUTOVK8x8uXdxScs5STG9lk0B89MTDgyAkwE6Qx5py04kWp3li
+	3V+GFtQASP1X0Y5yRP5VaF2HyeOl+tlwlwd715/M4CAhU8LUdtbVAxS0sxWz1W3L2Bp5qsZ3gk+
+	15SULEx65vmed3XNUeWvNUC0zJVzrJNf3ujNmDnkvLUsaM8jVgIjQcodk6yXfei7L7TbXN4Tb4F
+	0EVNWP9kXLZEPXvnD8WMittFCGSfxS+sSkOn7Y7rt0W9RbXKfiHibSLFqyqJ4J/RXPML5N8el+g
+	8l/9G9SjwzH4AJqiw2gz1kl4cqJY5NCss2ryysV03ZKSPE35gExZYjOjVHXD9azngox7wC5QNqR
+	HHtKvdPl2VzmHUJfBY=
+X-Received: by 2002:a05:6938:a086:20b0:c1f:7e26:5b94 with SMTP id a640c23a62f3a-c1f7e266377mr135941966b.30.1785306606805;
+        Tue, 28 Jul 2026 23:30:06 -0700 (PDT)
+Received: from u94a (27-53-97-170.adsl.fetnet.net. [27.53.97.170])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f7f0edc1csm853207a91.3.2026.07.28.23.30.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2026 23:30:05 -0700 (PDT)
+Date: Wed, 29 Jul 2026 14:29:53 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Vinicius Sampaio <vldsampaio@pm.me>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, 
+	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com, 
+	shenghaoyuan0928@163.com
+Subject: Re: [PATCH bpf-next 1/2] bpf: Simplify cnum contains() and
+ normalize() implementation
+Message-ID: <ammWxQ-PiJ-Z0z67@u94a>
+References: <20260728015601.1567098-1-vldsampaio@pm.me>
+ <20260728015601.1567098-2-vldsampaio@pm.me>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct
- calls
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: sashiko-reviews@lists.linux.dev, Masami Hiramatsu <mhiramat@kernel.org>,
- bpf@vger.kernel.org
-References: <20260727142844.21212-1-leon.hwang@linux.dev>
- <20260727142844.21212-2-leon.hwang@linux.dev>
- <20260727145217.72B9C1F000E9@smtp.kernel.org>
- <be7399e2-06ac-4e6f-bea7-8c51738a1e4d@linux.dev>
- <20260728114602.62e8852a@gandalf.local.home>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260728114602.62e8852a@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260728015601.1567098-2-vldsampaio@pm.me>
 
-On 28/7/26 23:46, Steven Rostedt wrote:
-> On Tue, 28 Jul 2026 10:19:22 +0800
-> Leon Hwang <leon.hwang@linux.dev> wrote:
+On Tue, Jul 28, 2026 at 01:56:58AM +0000, Vinicius Sampaio wrote:
+> This patch introduces two optimizations one for the normalize() function
+> and other for the contains() function.
+
+Nit: is there a reason these two optimizations need to land as a single
+commit?
+
+> In normalize(), there's no need to compare cnum.base with ST_MAX,
+> because any cnum with size == UT_MAX represents the full unsigned domain
+> independently of base, so normalize() can canonicalize all such values
+> to base 0.
 > 
->> On 27/7/26 22:52, sashiko-bot@kernel.org wrote:
->>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->>>
->>> Pre-existing issues:
->>> - [High] Missing RCU read barrier (`rcu_dereference()`) when accessing `direct_functions`.
->>> --
->>>
->>> --- Patch [1]: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct calls ---
->>> commit 738274783fa707248af104af5e45da296f7e4d84
->>> Author: Leon Hwang <leon.hwang@linux.dev>
->>>
->>> arm64: ftrace: enable single ftrace_ops for direct calls
->>>
->>> The BPF tracing multi link updates several direct-call sites through one
->>> ftrace_ops. This commit selects HAVE_SINGLE_FTRACE_DIRECT_OPS on arm64 when
->>> DYNAMIC_FTRACE_WITH_DIRECT_CALLS is enabled. It also generalizes the
->>> unreachable-trampoline comment.
->>>   
->>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->>>> index 39eba438dad43..94fa6e72c2867 100644
->>>> --- a/arch/arm64/Kconfig
->>>> +++ b/arch/arm64/Kconfig
->>>> @@ -188,6 +188,8 @@ config ARM64
->>>>  		    CLANG_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS)
->>>>  	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS \
->>>>  		if DYNAMIC_FTRACE_WITH_ARGS
->>>> +	select HAVE_SINGLE_FTRACE_DIRECT_OPS \
->>>> +		if DYNAMIC_FTRACE_WITH_DIRECT_CALLS  
->>>
->>> [Severity: High]
->>> This is a pre-existing issue, but by enabling HAVE_SINGLE_FTRACE_DIRECT_OPS
->>> on arm64, does this expose the architecture to a missing RCU read barrier
->>> in the ftrace code?
->>>
->>> When HAVE_SINGLE_FTRACE_DIRECT_OPS is selected, call_direct_funcs() switches
->>> from using READ_ONCE(ops->direct_call) to using ftrace_find_rec_direct():
->>>
->>> kernel/trace/ftrace.c:call_direct_funcs() {
->>> ...
->>> #ifdef CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS
->>> 	addr = ftrace_find_rec_direct(ip);
->>> #else
->>> ...
->>> }
->>>
->>> Looking at ftrace_find_rec_direct(), it accesses the __rcu pointer
->>> direct_functions directly without an rcu_dereference():
->>>
->>> kernel/trace/ftrace.c:ftrace_find_rec_direct() {
->>> 	struct ftrace_func_entry *entry;
->>>
->>> 	entry = __ftrace_lookup_ip(direct_functions, ip);
->>> ...
->>> }
->>>
->>> Without the READ_ONCE() provided by rcu_dereference(), the compiler might
->>> reload the pointer between computing the hash key and accessing the bucket
->>> array inside __ftrace_lookup_ip().
->>>
->>> If a concurrent writer substitutes a new hash table with a different size
->>> between these reloads, could the computed key exceed the new bucket array
->>> bounds and lead to an out-of-bounds dereference?
->>>   
->>
->>
->> Hi Steve, Masami,
->>
->> Could you take a look at this issue? The issue looks legitimate.
+> In contains(), bearing in mind that a non-empty cnum represents a
+> inclusive circular range in the corresponding unsigned integer domain,
+> membership could be tested by checking whether the distance from the
+> range base to the queried value is within the range size.
 > 
-> Yeah, it's possible (but unlikely) for the compiler to do that. But there's
-> nothing harming the code to do:
-
-
-Good to know it's unlikely in practice.
-
-If you don't mind, I'll send a separate patch for the fix based on the
-diff below. It compiles and works fine in my testing.
-
-Thanks,
-Leon
-
+> This makes the explicit wrapping and non-wrapping cases in contains()
+> unnecessary, since:
 > 
-> ( Untested and not even compiled )
+>         v - cnum.base <= cnum.size
 > 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index f93e34dd2328..5ec494790312 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -2639,7 +2639,8 @@ unsigned long ftrace_find_rec_direct(unsigned long ip)
+> is equivalent for both ordinary ranges and ranges that cross the
+> unsigned wrap boundary.
+[...]
+> @@ -181,7 +181,7 @@ void FN(intersect_with_srange)(struct cnum_t *dst, st min, st max)
+>  
+>  static inline struct cnum_t FN(normalize)(struct cnum_t cnum)
 >  {
->  	struct ftrace_func_entry *entry;
->  
-> -	entry = __ftrace_lookup_ip(direct_functions, ip);
-> +	guard(preempt_notrace)();
-> +	entry = __ftrace_lookup_ip(rcu_dereference_sched(direct_functions), ip);
->  	if (!entry)
->  		return 0;
->  
-> 
-> -- Steve
-> 
+> -	if (cnum.size == UT_MAX && cnum.base != 0 && cnum.base != (ut)ST_MAX)
+> +	if (cnum.size == UT_MAX && cnum.base != 0)
+>  		cnum.base = 0;
 
+Seems right, or at least I could see what semantic `base == ST_MAX` is
+encoding. And normalize does not deal with the empty semantic anyway[1].
+Could we go even further and also drop the `cnum.base != 0`, just
+relying on the `cnum.size == UT_MAX` guard solely?
+
+>  	return cnum;
+>  }
+> @@ -210,12 +210,7 @@ bool FN(is_empty)(struct cnum_t cnum)
+>  
+>  bool FN(contains)(struct cnum_t cnum, ut v)
+>  {
+> -	if (FN(is_empty)(cnum))
+> -		return false;
+> -	if (FN(urange_overflow)(cnum))
+> -		return v >= cnum.base || v <= (ut)cnum.base + cnum.size;
+> -	else
+> -		return v >= cnum.base && v <= (ut)cnum.base + cnum.size;
+> +	return !FN(is_empty)(cnum) && v - cnum.base <= cnum.size;
+>  }
+
+Make sense, with `v - cnum.base` we are pivoting to a cnum where
+
+  { .base = 0, .size = cnum.size }
+
+If `v - cnum.base` is within the pivoted cnum, then `v` should be in the
+original cnum as well.
+
+Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+
+1: https://lore.kernel.org/bpf/7a5c9c3e8ef2cb86b7ae38fb4593e7337e9962c0.camel@gmail.com/
