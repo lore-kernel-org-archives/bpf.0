@@ -1,180 +1,133 @@
-Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182504DB54D;
-	Wed, 29 Jul 2026 15:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE093AAF40
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 15:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785338604; cv=none; b=HzQ3DhwWYtl6nu74cBP6wIYIxbBAfYHSTLJOpxKmdKmpgg0n4Fam3oBMCT3V9a5saDzpJSuFeppY7ONZBcpF1y4Pr1p8a9HED7NDQkuWYs83CZhclgEHVjFoTdmZfs/6tX3J6heVx2zEIgJbPj/xHafx7ggm98YYVOA6oXrVAu0=
+	t=1785338706; cv=none; b=alRVhiw2BWWVAPYNmwSfz6s5EYeBZ0n3LfnfyPKBPYfp7ZKa+hmcFaivpRlwvbG9iasSukXJANbwRfknrbufXbsdmq0cT6KHoEo8cckNQ6i+8KCEbxTNpFdWC0a8iZhSNJrpkUUWI08iP4nhGdHWE/mcIs7fsSux2lARkyFzZkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785338604; c=relaxed/simple;
-	bh=JhRsa/+QJ/5jIRYkq2jU5uCGsEOE/Y+PdGu7VsOeChY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BU5D47ItyArv21WLl+ND207ydl78zyvZdSOI0A9hh2EaJL/DhTunj5dLUHKuqYboHukjjiNJglFSw4fLewxQkAFcbUQOmKdk/6SFStIZeRg3YsALrqSENB2D519RKCkUyY83tdNmujGXx56p+44NRRneRjvIa715wUEO2bgeJhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=aP7ZMSMr; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=Qu/jsoQD; arc=none smtp.client-ip=92.243.27.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+	s=arc-20240116; t=1785338706; c=relaxed/simple;
+	bh=/GwVqYjCrMfINxoN+h9JAqBTc9JLZl2Dxr062Uy3dW4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Ab+AxCt3EPp2/DUdB7WUYQCvdxU6mqRxMR2Lrmn//U0Eb8MHmItGKVY3lcngDov4gJrqOVWoG5Z2pgTa3HTwjoceLE8XgOHqCaxBdh1Um30U98A4ewqbHjVhVD1TK7PI/swNKJ7I5TJL/xkgZ0MMlM1gRsBFv4cMcR/W1A76o7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QG+/1X6Q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="aP7ZMSMr";
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="Qu/jsoQD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1785338599; bh=JhRsa/+QJ/5jIRYkq2jU5uCGsEOE/Y+PdGu7VsOeChY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aP7ZMSMrKTTXhdaq6ocEnxKw1TYEP/vyvF9gcVNnkWIqmdkaCyx95zsy1V1V8yI+Y
-	 t9mqevrwZUioKVPCFrEltPu0PLoS7QeX+T4M+OIK1Rf68OLGaBT5sLPi5XhKqp4gPi
-	 /CYg1id5yH3PWI1zuq3p5yx8S8Mw0+U4pPKxXDfRqOu6rBHhmqVEJHvRUInYQ9kSkE
-	 Mq+ApoxLzvckPfGgO5VFVh+C8xKVlHcvFwdFRq1tcfa8fTVvInIXoGdBqSl2RHZ7lH
-	 Dvu5P8MgKxvfmPm9bUG4qF+BaBNH2VflwqetPrN0EmfdryOeL5Hb0GA9OHQrFXoCuF
-	 aq3/aNoavlwSQ==
-Received: by extorris.mess.org (Postfix, from userid 1004)
-	id D343942548; Wed, 29 Jul 2026 16:23:19 +0100 (BST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1785338598; bh=JhRsa/+QJ/5jIRYkq2jU5uCGsEOE/Y+PdGu7VsOeChY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Qu/jsoQDdxe+5yQW8bK7YAj/a2j9NLkQsjNKlqFU2jcWQtYdOMkF9FyjpI+dpBvip
-	 4JqDVasgi7NXB5pXvdi9YqlXWqs5YTavj9qF+aDP+XMrJZBQMbDq53fOnspZN4C9yY
-	 90jjLyLNjPmyjkBy0lMATtt7TiBKlCdyFPQ9Us6JTfbO7W9Clvijh3aBt/XDXWR9tX
-	 qYH7r931K5j4qIZJQPIgGhbSXY2lO4HHyuVrUvBTGPlsiFDpjff7u1IIhW17hu8PFb
-	 EAAabhhGKYk9OkH7C1vRHTubwQ05H1p4T8RxX04ysIH2HKx9Ec0BWrvf/X6HRYkYqd
-	 Uqu/EcSDN7T9g==
-Received: from maru.local (unknown [62.232.99.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by extorris.mess.org (Postfix) with ESMTPSA id 0C21142556;
-	Wed, 29 Jul 2026 16:23:18 +0100 (BST)
-From: Sean Young <sean@mess.org>
-To: linux-media@vger.kernel.org,
-	Sean Young <sean@mess.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>,
-	Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: stable@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v5 15/15] media: rc: Fix use after free in bpf progs
-Date: Wed, 29 Jul 2026 16:22:53 +0100
-Message-ID: <4e85ac724e45244099b242747684529016c5ed83.1785338381.git.sean@mess.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1785338381.git.sean@mess.org>
-References: <cover.1785338381.git.sean@mess.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QG+/1X6Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99031F000E9;
+	Wed, 29 Jul 2026 15:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785338704;
+	bh=pL6UpxxVY7TMdnwZe+YSSrFCVcZF0dvMuRv6bBu27dM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=QG+/1X6QyP2exlampJy9lfsDNUyP0PDqngG4aWr4utR9LlYXEI070uW40uHvEZwtC
+	 ggYGeg8xpneWtdNH4I2IZWUYKSGJIh0Suf+p/wkdKtfJzwlwPFeSuYdNK3wg+A4IX1
+	 3ADyZiitaJ+uIar1GEBROfjclFHcbgB5elSXyMlg69ec/ERq/WezazdhGEN1sEfE0u
+	 LApbfvNmGd/MmLjPrQeBzNxVmo4jOcIV4FpbD7Q7olubnXSRhvoy4pNhPaZgJtAUnO
+	 yZJdwGXZJmmmul7cF4g/LZCdQadYXgwIhrPoBI+7DcLGuFFPSNdMKvK6EqxRsQ6i6+
+	 KE9uNL1nEklRw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v5 net-next 1/1] tcp: Replace min_tso_segs() with
+ tso_segs() CC callback
+Reply-To: sashiko-reviews@lists.linux.dev
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260728152425.649600-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20260728152425.649600-1-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 29 Jul 2026 15:25:04 +0000
+Message-Id: <20260729152504.A99031F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Since commit dccc0c3ddf8f ("media: rc: fix race between unregister and
-urb/irq callbacks"), rcdev->raw is no longer set to NULL after device
-unregister. raw->progs could point to stale data.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Missing bounds check on `ca_ops->tso_segs()` return value causes a=
+n infinite loop and soft lockup
+- [Medium] Exported function `tcp_tso_autosize` lacks BPF kfunc registration
+--
 
-Fixes: dccc0c3ddf8f ("media: rc: fix race between unregister and urb/irq callbacks")
-Signed-off-by: Sean Young <sean@mess.org>
-Cc: stable@vger.kernel.org
----
- drivers/media/rc/bpf-lirc.c  | 18 +++++++++++++-----
- drivers/media/rc/rc-ir-raw.c | 11 +++--------
- 2 files changed, 16 insertions(+), 13 deletions(-)
+--- Patch [1]: [PATCH v5 net-next 1/1] tcp: Replace min_tso_segs() with tso=
+_segs() CC callback ---
+commit 459bb4a577e547baf34fbc452c0b63bca5545c92
+Author: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-diff --git a/drivers/media/rc/bpf-lirc.c b/drivers/media/rc/bpf-lirc.c
-index 2f7564f26445..14ab611e7445 100644
---- a/drivers/media/rc/bpf-lirc.c
-+++ b/drivers/media/rc/bpf-lirc.c
-@@ -148,12 +148,13 @@ static int lirc_bpf_attach(struct rc_dev *rcdev, struct bpf_prog *prog)
- 	if (ret)
- 		return ret;
- 
--	raw = rcdev->raw;
--	if (!raw) {
-+	if (!rcdev->registered) {
- 		ret = -ENODEV;
- 		goto unlock;
- 	}
- 
-+	raw = rcdev->raw;
-+
- 	old_array = lirc_rcu_dereference(raw->progs);
- 	if (old_array && bpf_prog_array_length(old_array) >= BPF_MAX_PROGS) {
- 		ret = -E2BIG;
-@@ -186,12 +187,13 @@ static int lirc_bpf_detach(struct rc_dev *rcdev, struct bpf_prog *prog)
- 	if (ret)
- 		return ret;
- 
--	raw = rcdev->raw;
--	if (!raw) {
-+	if (!rcdev->registered) {
- 		ret = -ENODEV;
- 		goto unlock;
- 	}
- 
-+	raw = rcdev->raw;
-+
- 	old_array = lirc_rcu_dereference(raw->progs);
- 	ret = bpf_prog_array_copy(old_array, prog, NULL, 0, &new_array);
- 	/*
-@@ -235,7 +237,8 @@ void lirc_bpf_free(struct rc_dev *rcdev)
- 	struct bpf_prog_array_item *item;
- 	struct bpf_prog_array *array;
- 
--	array = lirc_rcu_dereference(rcdev->raw->progs);
-+	array = rcu_replace_pointer(rcdev->raw->progs, NULL,
-+				    lockdep_is_held(&ir_raw_handler_lock));
- 	if (!array)
- 		return;
- 
-@@ -316,6 +319,11 @@ int lirc_prog_query(const union bpf_attr *attr, union bpf_attr __user *uattr)
- 	if (ret)
- 		goto put;
- 
-+	if (!rcdev->registered) {
-+		ret = -ENODEV;
-+		goto unlock;
-+	}
-+
- 	progs = lirc_rcu_dereference(rcdev->raw->progs);
- 	cnt = progs ? bpf_prog_array_length(progs) : 0;
- 
-diff --git a/drivers/media/rc/rc-ir-raw.c b/drivers/media/rc/rc-ir-raw.c
-index 86de1b26731d..54b323becb1f 100644
---- a/drivers/media/rc/rc-ir-raw.c
-+++ b/drivers/media/rc/rc-ir-raw.c
-@@ -632,8 +632,11 @@ void ir_raw_event_free(struct rc_dev *dev)
- {
- 	if (dev->raw) {
- 		timer_delete_sync(&dev->raw->edge_handle);
-+		mutex_lock(&ir_raw_handler_lock);
- 		if (dev->raw->thread)
- 			put_task_struct(dev->raw->thread);
-+		lirc_bpf_free(dev);
-+		mutex_unlock(&ir_raw_handler_lock);
- 		kfree(dev->raw);
- 		dev->raw = NULL;
- 	}
-@@ -643,9 +646,6 @@ void ir_raw_event_unregister(struct rc_dev *dev)
- {
- 	struct ir_raw_handler *handler;
- 
--	if (!dev || !dev->raw)
--		return;
--
- 	/*
- 	 * After ir_raw_event_unregister() is called, an sync
- 	 * call to ir_raw_event_handle() can still arrive. This function
-@@ -665,11 +665,6 @@ void ir_raw_event_unregister(struct rc_dev *dev)
- 
- 	lirc_bpf_free(dev);
- 
--	/*
--	 * A user can be calling bpf(BPF_PROG_{QUERY|ATTACH|DETACH}), so
--	 * ensure that the raw member is null on unlock; this is how
--	 * "device gone" is checked.
--	 */
- 	mutex_unlock(&ir_raw_handler_lock);
- }
- 
--- 
-2.55.0
+tcp: Replace min_tso_segs() with tso_segs() CC callback
 
+This commit replaces the min_tso_segs() congestion control callback
+with tso_segs(), passing the mss_now argument to allow the algorithm
+to return an explicit TSO segment number. It bypasses tcp_tso_autosize()
+when the callback is provided, pushing the sizing logic into the CC.
+
+> As a result, BPF programs shall be updated, because retuning a small
+> constan will now directly limit tso_segs instead of the minimum.
+
+This isn't a bug, but there are typos in the commit message here: "retuning"
+and "constan".
+
+> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> index d7c1444b5e304..101ca765a7a92 100644
+> --- a/net/ipv4/tcp_output.c
+> +++ b/net/ipv4/tcp_output.c
+
+[ ... ]
+
+> @@ -2269,6 +2269,7 @@ static u32 tcp_tso_autosize(const struct sock *sk, =
+unsigned int mss_now,
+> =20
+>  	return max_t(u32, bytes / mss_now, min_tso_segs);
+>  }
+> +EXPORT_SYMBOL(tcp_tso_autosize);
+
+[Severity: Medium]
+Is this missing a BTF_ID_FLAGS entry for BPF congestion control algorithms?
+
+The commit notes that BPF programs need to be updated to directly limit
+tso_segs, which implies they might need to call tcp_tso_autosize() to
+replicate the original behavior. While this EXPORT_SYMBOL makes it available
+for loadable kernel modules, without adding it to the
+bpf_tcp_ca_check_kfunc_ids BTF set, the BPF verifier will reject programs
+attempting to use it.
+
+>  /* Return the number of segments we want in the skb we are transmitting.
+>   * See if congestion control module wants to decide; otherwise, autosize.
+> @@ -2278,11 +2279,11 @@ static u32 tcp_tso_segs(struct sock *sk, unsigned=
+ int mss_now)
+>  	const struct tcp_congestion_ops *ca_ops =3D inet_csk(sk)->icsk_ca_ops;
+>  	u32 min_tso, tso_segs;
+> =20
+> -	min_tso =3D ca_ops->min_tso_segs ?
+> -			ca_ops->min_tso_segs(sk) :
+> -			READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
+> +	min_tso =3D READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
+> =20
+> -	tso_segs =3D tcp_tso_autosize(sk, mss_now, min_tso);
+> +	tso_segs =3D ca_ops->tso_segs ?
+> +			ca_ops->tso_segs(sk, mss_now) :
+> +			tcp_tso_autosize(sk, mss_now, min_tso);
+>  	return min_t(u32, tso_segs, sk->sk_gso_max_segs);
+>  }
+
+[Severity: High]
+What happens if the custom congestion control or BPF program returns 0 here?
+
+If ca_ops->tso_segs() returns 0, tcp_tso_segs() will return 0, which gets
+passed back to tcp_write_xmit() as max_segs.
+
+In tcp_write_xmit(), this sets cwnd_quota to 0. When tcp_mss_split_point()
+is called with a 0 cwnd_quota, it returns a limit of 0. This causes
+tso_fragment() to chop 0 bytes off the SKB, resulting in a 0-byte packet
+being sent.
+
+Because the outer loop in tcp_write_xmit() doesn't re-evaluate max_segs,
+won't this get stuck in an infinite loop chopping 0 bytes off the remainder
+SKB, leading to a CPU soft lockup? Does this need a bounds check to clamp
+the minimum return value to 1?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728152425.6496=
+00-1-chia-yu.chang@nokia-bell-labs.com?part=3D1
