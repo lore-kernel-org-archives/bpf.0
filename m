@@ -1,31 +1,35 @@
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5642736B93B
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 05:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5692371041
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 05:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785301336; cv=none; b=n+dMe0FcZmDf55umeDY3OQUTeo0yI8bKWw2QIMhXQPCHPFijjPiKnVxnt9oIhS1X40cyvdeMe357YBji5ELUeDkRECfTioUFamjhiBaFn8RNuVycftgDW3CQxcXQNTBFvWPdY36izmhRP/IWJ1RCh268kiXO1/fTeJl6FmeoY8Y=
+	t=1785301338; cv=none; b=lZU0yJCjR4V346jy+XjlZ3bMbu6u8spPq1OAOEiAflv305q9l9f7Prj38MIfUNdl71vxc+e+BRrVg+4AudK0WhDuvqkOf2tmaufsHgdY4C99KlNq/lTtwMXlAiATVkxFLKTcqsIqkPzYZ9qgb0Dh2IzybYrDIfeogtfMg1qLDzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785301336; c=relaxed/simple;
-	bh=dR7Ts5JBgCfm+8zGsPo71lP9Go0FU36eTcJU86qs3EA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NfOG+wrsb+rQl0tjOz8qL1VldfaLRdpGYM/qfiaq2Yn6na4ktk5DyTmZ7BIr98uQWqzNa1g/E/6DjvaqmeaJv6Vfq78pyic6QpVduG5UIzllqO6OvmINLeVFslCY5RhSxzTOzj0GALE6ZoKJJpEynd5lZD96e0Hrx1Exr2e8XCY=
+	s=arc-20240116; t=1785301338; c=relaxed/simple;
+	bh=xrtkExWCslUFKR/bId8xNwJjYgF4JDwRqy7F8XlW1ME=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Vdpo9c8BjkTFyz/vJyV03dvCHhXlUraJQcSOmd+WIr/yW8vOhxJLLUAwwLCalB2EEqujQokiMikLAb+0YWBJsNufo0j9lpDF1YlggL+KnKFs9vR10fzvMhszjO9K2+UZLYHwMVEX1SfGp7G2ibNnYv5/amqqQWzqEte06ieh9hk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 54FE920A174CCC; Tue, 28 Jul 2026 22:01:54 -0700 (PDT)
+	id 8DBE220A174D25; Tue, 28 Jul 2026 22:02:04 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v5 0/3] bpf: Fix trampoline handling of 128-bit values
-Date: Tue, 28 Jul 2026 22:01:54 -0700
-Message-ID: <20260729050154.2585468-1-yonghong.song@linux.dev>
+	kernel-team@fb.com,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v5 2/3] bpf, x86: Fix trampoline stack size for 128-bit arguments
+Date: Tue, 28 Jul 2026 22:02:04 -0700
+Message-ID: <20260729050204.2586457-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260729050154.2585468-1-yonghong.song@linux.dev>
+References: <20260729050154.2585468-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,52 +38,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The BPF trampoline preserves only 8 bytes of a target function's return
-value (R0), and its register save area under-allocates space for 128-bit
-arguments for x86_64. These two problems lead to memory corruption or
-incorrect values observed by BPF programs and the real caller.
+btf_distill_func_proto() accepts a function argument up to 16 bytes, so a
+128-bit scalar such as __int128 reaches the x86 trampoline with
+arg_size =3D=3D 16. But the current implementation assumes an __int128
+argument only needs one register, so the register save area is
+under-allocated and save_args() overwrites adjacent stack slots.
 
-This series fixes both issues and adds two selftests, otherwise, each of
-them will fail if without the corresponding fix.
+Compute the register count from arg_size for all arguments to fix it.
 
-Changelogs:
-  v4 -> v5:
-    - v4: https://lore.kernel.org/bpf/1c4223ae-a5ba-48a4-95d3-57c8ff24105=
-5@linux.dev/
-    - For function test_fexit_int128_ret(), guard with __x86_64__ and __a=
-arch64__
-      to avoid s390x failure
-  v3 -> v4:
-    - v3: https://lore.kernel.org/bpf/20260710225206.4013062-1-yonghong.s=
-ong@linux.dev/
-    - Add Ack from Leon Hwang
-  v2 -> v3:
-    - v2: https://lore.kernel.org/bpf/20260710182204.1085329-1-yonghong.s=
-ong@linux.dev/
-    - Align __int128 argument at even position enforced by arm64.
-  v1 -> v2:
-    - v1: https://lore.kernel.org/bpf/20260710144404.2579671-1-yonghong.s=
-ong@linux.dev/
-    - Also handle __int128 arguments for x86_64.
+Fixes: a9c5ad31fbdc ("bpf: x86: Support in-register struct arguments in t=
+rampoline programs")
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ arch/x86/net/bpf_jit_comp.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Yonghong Song (3):
-  bpf: Reject >8 byte return values on return-reading trampoline paths
-  bpf, x86: Fix trampoline stack size for 128-bit arguments
-  selftests/bpf: Add tests for >8 byte return value and 128-bit
-    arguments
-
- arch/x86/net/bpf_jit_comp.c                   |  7 ++--
- kernel/bpf/bpf_struct_ops.c                   | 12 +++++++
- kernel/bpf/verifier.c                         | 25 +++++++++++++
- .../bpf/prog_tests/tracing_failure.c          | 20 +++++++++++
- .../selftests/bpf/prog_tests/tracing_struct.c | 36 +++++++++++++++++++
- .../selftests/bpf/progs/tracing_failure.c     |  6 ++++
- .../bpf/progs/tracing_struct_int128.c         | 18 ++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 32 +++++++++++++++++
- 8 files changed, 151 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
-28.c
-
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index b2feec81e231..01e7ce569c1e 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -3369,11 +3369,8 @@ static int __arch_prepare_bpf_trampoline(struct bp=
+f_tramp_image *im, void *rw_im
+ 	WARN_ON_ONCE((flags & BPF_TRAMP_F_INDIRECT) &&
+ 		     (flags & ~(BPF_TRAMP_F_INDIRECT | BPF_TRAMP_F_RET_FENTRY_RET)));
+=20
+-	/* extra registers for struct arguments */
+-	for (i =3D 0; i < m->nr_args; i++) {
+-		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+-			nr_regs +=3D (m->arg_size[i] + 7) / 8 - 1;
+-	}
++	for (i =3D 0; i < m->nr_args; i++)
++		nr_regs +=3D (m->arg_size[i] + 7) / 8 - 1;
+=20
+ 	/* x86-64 supports up to MAX_BPF_FUNC_ARGS arguments. 1-6
+ 	 * are passed through regs, the remains are through stack.
 --=20
 2.53.0-Meta
 
