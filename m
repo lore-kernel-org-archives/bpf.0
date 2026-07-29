@@ -1,160 +1,243 @@
-Received: from mout.web.de (mout.web.de [212.227.15.4])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C9B3EC801;
-	Wed, 29 Jul 2026 14:57:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785337061; cv=none; b=jLrEbc+foFxpU2b17T/l4+BloQ9jAFOVAkZ91Yy105Rg2O5pYGSp2ykpj6VCsdsdihifL7KO9WbUQb6BxyucJhm+daeblRDKXO8/P2lbh0g9iRgaKMq+1vTbQIql3MEhu4PeXP5AfN08omHLcm1dW4oPhhB798J67YLoDuseNlE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785337061; c=relaxed/simple;
-	bh=kwTzCpStkmaiEYwZiSizoIIbS8dAU8QVCIBuDw9oYHU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CFu5ghg0SVEEPbUIxH8N0y0UZFduaNbQxUwcJAiFYDz06N0HaCux7yVjSNseJ0aB7xLcQwL2+oyXKMV8OtBTkGr0jRYDUmNW7nFJbcaw68Y8Luefi0CKjnzjUQDkcmx6WTJuBwtHJXYeFLl+v7G7JGLUToV/DMjLC0CKg1JS2QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Jq/PpMst; arc=none smtp.client-ip=212.227.15.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540683EC800
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 15:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785337249; cv=pass; b=eXQ1tU2VuII/BT13DxuhuR0QGs2Fq/SKdx0hIlQ97F5WZNdglgmzDaezXgwr8gJ2p1Gn2HPOLZ+tBa1jyt9yfddx1huu4N/6efMxgsUl4D3z3O9cls9sqekL5g4DIo9K/ZRZQJtx6q8vWeQ3JiGa13oFhv1tFGHT0EDrjum2EYg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785337249; c=relaxed/simple;
+	bh=WoRDoEi0VL1vigksALz/83dPkS3F5vPYjkl8rzXgfkg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wh3L4teOu4MyQi0L56yKF4p3P5NdRBwjgSFKomoeRAbePV/LfU6T1nLvINBHMdAeS9ETsqmYnQEqr+qV5qCDkB01E44ZOLsBooECSzGlL8Q+sdbBcPhSkLe25ntru+TaV8UuYE1SVW/Wtg68Pet64DMDcf3GSSVof8E2A9a/KfA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=McQ1nMx8; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=jYaEjwpO; arc=pass smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Jq/PpMst"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1785337056; x=1785941856; i=markus.elfring@web.de;
-	bh=I4gUHIkqas/70ho9LgtcWee1qa3Xq2OY0hiL/UkUef8=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=Jq/PpMstKqSkyT8JK2PbQ5KOz2fs+E8gjCUggzg//oEw0gnD00BvJN4bLex7Mzup
-	 bvI3umWGNrAzN/a1gaNngPVgBbqQH1Wo5S7/8a4h9WuDQphT5kIu97ibg9Ifa/1HP
-	 KGjeIy5KnxA4HwzY69dC+oxpFdu/lKm72Y7k0Ve1q277JxGfk2VoSz6mRFvg/E5tw
-	 rPSo3iy3wpPvWoYd98lsKRmu86ftIwtTCKpx0uI2TlvHqdi/BI1pf3trKwnaBnXiU
-	 hEHXhvscmuALOp5YSA6jQHkC0lY45HqMOjdAiVhR6v4Bb0EGKF4pouvm4BFFuPZun
-	 zYl6Pb9+5QrutI1ogg==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from client.hidden.invalid by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MgRMB-1xRRQF3XLT-00gDNe; Wed, 29
- Jul 2026 16:57:36 +0200
-Message-ID: <fb7722ec-245b-4104-a41b-3b5cfdc0e74f@web.de>
-Date: Wed, 29 Jul 2026 16:57:35 +0200
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="McQ1nMx8";
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="jYaEjwpO"
+Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66TDkjOP030617
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 15:00:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=KNsIs+LJSh7r0iAi+d65HQSOE09/M+m4FY1F+mUNWXY=; b=McQ1
+	nMx8M7wPOjuOLAkLDA6WuHxFcrcAStnEaL9XPowHaB61V31/WItQ/KdjBYstRpwK
+	P+O5TLQc91sUMJSjuMaWZyc8qd1Aeg3A7MrBzuKtAkVZ9D2TEjrYp75iz3jQDOja
+	WFnbMcZOrkrsE4DyxHhfuFuY6UhCfcM9qYgnJBF5r88ZTN1MSo+1YXmC8nwwX6ud
+	fyvDRcg+iKR2WyvT8SjElYxyjfR9i80ynYuEp4yEzjRI44b5nuM3wy6zlupaiH5Y
+	eslsUCM8lDphmgvIYrnuVGF0Jb4CsfC8FFNXl8wPmf/x5yjgfL3pdJtA2FWBQRUG
+	vw9r71nevvUHAXnFvw==
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4fq1eem70a-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 15:00:47 +0000 (GMT)
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-80ee3cb097eso19091927b3.1
+        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 08:00:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785337246; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OHEVpvw92gRildDUxB8tzdzdZJrLbzSj5H4B70APnY/RuOaVaaGw+Bth7K+jXX85fW
+         C6Xq4vOaOQAyBzSLw20f4XEssZYVyFdE2pcvCWgxsCmBPOJMVYPEa9IS4rqwGEIMXZp2
+         7QIDoeX9Y7NA6Ngf/QdkWi9Juo6hUh+7zZOK/EWmMcEoocLv7akfRhn6fauozjHcYW3e
+         ul6pa1QfGPZyqpTiFmgklGJlcO8wNHQXQ2RHkz+qYV+egfUkBZKl8uoJtC+GgC35GsX7
+         DexImKxf72ESN6T2KGv5+UsyDB31+5Bft34qpAfRaXdJl2JBxsYajbr9fcV1B39xjbpq
+         CJ+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=KNsIs+LJSh7r0iAi+d65HQSOE09/M+m4FY1F+mUNWXY=;
+        fh=0QRfLx7zOSdmk2TSQqT2C+F7aS8+QlERjLNnzn3wNvc=;
+        b=KkcUkr/XUbkvN7mUHbgp6rDAwliYUPs51EV9td4ETr5fdgtBFEGP2EPuVJHrEX9uaS
+         nIJlNVLYVAv0Hvjf8VuN7UK/RPM0KeOLfE62F5Xd9Yjw0g0P5qSzoHeNlrAHhYr17v/U
+         bix/Tdesc7pvqZ5STcIp72ICsa5ya2MCoE5htv8c6i0Xa+vL5WtyxXXlfJk4hRDvyS5r
+         9MM0aJ9QuHBOIAXsWafF0w8jJaKghav12hW4lYfhCfKEXoUUX2fhqsc3dpKqjCbgHUYH
+         Hbk0nyqsiIWR9MOP8G7y4gNyTSRaz5+L0Dfub5InvMsvJMc7oxZE1CQEHgVZzo4x0UZI
+         JfcA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=crowdstrike.com; s=google; t=1785337246; x=1785942046; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=KNsIs+LJSh7r0iAi+d65HQSOE09/M+m4FY1F+mUNWXY=;
+        b=jYaEjwpOt0oNiX8NA8NagnzYHK9Y5yd9ggDFJRYMNaeuLPXx34rvWe+dVGnTzt/oRu
+         fc9xxLRZL1f2BFkYMK253YThcOZbivV07zlqauFvYvgfS6atsee5fEbVKvzFiSaw2V/s
+         bWcZf53bvzO8Dhpcwm+QEvxuNio7JjUH8NIvPZAKfzC8KFvcybzPvNaa9roxUV7nOkyG
+         qMmHfrhjEAG5AUicPt2OvQ0s+pFxqdFa6estaSvmLastHCGCPmepPsOVNWBNrNcAbXUH
+         UL8vDRjsznZBjoH7xtJ9sWTRgpnMn7ZQu3OGKIh4Rds90MK8HONevIQHot9jMF04yIgU
+         E9Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785337246; x=1785942046;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KNsIs+LJSh7r0iAi+d65HQSOE09/M+m4FY1F+mUNWXY=;
+        b=B16Fef0Fl2K2iV5MDOgPHrgTbPVJ8eO5j2T+hMVgl9hCASemkq9OzdDp+WdByB0Foa
+         iY3lpBzoThGaQdiS7jDBTHsSkji/m3H/WMaJbmFZLQB/mT6QzIDMznGnW06oR8gFox5k
+         Gq5h9lTPMl0VXzS1AjgL18WEIv8cMVLFtdRO8Q0jTu2pc31Y75sEce3BQ4Wpoy3XPOq2
+         pbyKcv10TadYt43vgZKKuRYVjkmxQfzY9mjzHqAOa8RWKKqWor1AF8EHAc+qecsGHAf/
+         EGb4emmjcJ0bVsbnNS0m4sa6ii/mrUl1FTyMXvlRk+rIwVfiC/PRRhbfApfUEZ0ck83T
+         cUnQ==
+X-Gm-Message-State: AOJu0Ywzg8/R4josRcM2HIFkmaj93Hs+1J73kC+GebMRhi8I8G/8e90u
+	Pi8PkSVSEisGZZ7KYFzGpqxJ+LuuefcjdXpGqo4gPj00lgSi/RZkDblxOCuI1LCSjkZsanham/b
+	HF6U3Z5LEaMK1NIAZVotxxNFjVgvdBlG1byo3daJFrDqcAG+WQ2R6xUNC3QFlNfy4iw3HXwLBNK
+	oqMEBhhTpC1xN+ksq+LpegdIVi9zaL
+X-Gm-Gg: AR+sD10HHF3CNht/HaoC5HXYGGOtfqKXhbCpj6Uw+dYor0PVJqJ7c+mLdEi5lvf6BEd
+	KU3Q5w8fkk5Gocz7QlbRMjtHMt6Ta7Vm1AWgLJf+CnQ9iy8/xvxl83ei4VTJdSIzjPlfNLP4E8B
+	xscZUwLUjWqpYexU1utTykpbfpudK7Fa/Z9gR2GraUCk5mglCZdo4a9XU2
+X-Received: by 2002:a05:690c:6a85:b0:7fe:1413:f6b7 with SMTP id 00721157ae682-81f993340e2mr37633027b3.48.1785337244992;
+        Wed, 29 Jul 2026 08:00:44 -0700 (PDT)
+X-Received: by 2002:a05:690c:6a85:b0:7fe:1413:f6b7 with SMTP id
+ 00721157ae682-81f993340e2mr37631177b3.48.1785337242714; Wed, 29 Jul 2026
+ 08:00:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v4 00/15] media: Fix leaks in rc core
-To: Sean Young <sean@mess.org>, linux-media@vger.kernel.org
-Cc: bpf@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- kernel-janitors@vger.kernel.org
-References: <cover.1785158244.git.sean@mess.org>
- <aa8628c4-0106-4dcf-afea-b350daef0f96@web.de>
- <amoUNjKOyFMudlDJ@extorris.mess.org>
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <amoUNjKOyFMudlDJ@extorris.mess.org>
-Content-Type: text/plain; charset=UTF-8
+References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com> <20260729104114.04298a48@gandalf.local.home>
+In-Reply-To: <20260729104114.04298a48@gandalf.local.home>
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Date: Wed, 29 Jul 2026 11:00:31 -0400
+X-Gm-Features: AUfX_mxePSJcFU2kU3VYl-YapXlBxTsM8pdNfueUNu8RCOjDR26LSYERFFJr5l8
+Message-ID: <CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark
+ trampoline/kprobe ftrace_ops permanent
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, jolsa@kernel.org,
+        naveen@kernel.org, davem@davemloft.net, mhiramat@kernel.org,
+        stable@vger.kernel.org, linux-open-source@crowdstrike.com,
+        mbenes@suse.cz
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:WgKmyFfUSoqAbw0FP8RRFj1W0GWQmbRBiGgFe0OC0qNxZkFn/9M
- 7CgaKSncZ0KwJwnK0sR+PTzhO6pkCPO6EGOUuW5RqJr18ojrPuzuV1DzQtiTnwXIxsJr8IH
- Q0UDBNdtQS91OfoAyllZk7lhb0zBzynzT0S9G8+uUZBGQcUbBS01EvhM3Lz789lcTT+p+Z9
- WgABt4mNLY40nAJJwfY8w==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:0VVaLXRWJ9A=;RTdEE/Vo9IMgGgBMHXOTZqUqmAn
- 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
- B6TBdvg3ZBgsVS/zMoVTFc/0jodgGs
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzI5MDEyMSBTYWx0ZWRfX6J2oJq78QyCf
+ 8FFY1aGGjaWOtFYRtD/fQ5OyoEA/93eBy3/Zx+D2E4vggYRJ8kZS9LE2mzhfR/obQNT6tugs7CO
+ qu2JqeLEgVs8dFjME94JCVO77eXSnsKPnHfsjsIU3qu8DCEQ24zH
+X-Authority-Analysis: v=2.4 cv=a4MAM0SF c=1 sm=1 tr=0 ts=6a6a159f cx=c_pps
+ a=72HoHk1woDtn7btP4rdmlg==:117 a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10
+ a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
+ a=t04HzT_fAfAF5W-3wVZy:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=pl6vuDidAAAA:8
+ a=FNDBzpQLrQZLHPu8S4MA:9 a=QEXdDO2ut3YA:10 a=kA6IBgd4cpdPkAWqgNAz:22
+ a=2JgSa4NbpEOStq-L5dxp:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzI5MDEyMSBTYWx0ZWRfX39VKnfwuG0Ea
+ QLkBuEQOw32ud3LtINUkz9d1x4Itgj0wqJuUYlDza/wpSv8bK86lQdLm0O9UtZdLxnkYSfVxeyl
+ BFLYfn78piuKhWajW/HhQf0R7cBXqBZNzmFFZrDvJ6w8UVAuj8DvL9p0vldOAdnQ6jFLa5Fq1OE
+ CYuHkafZlKGO1tX+rs7fExDPRwBwwFD+fH//uNVHlLfRTd/1vrM4o2G5xpYQ3IKHhqdvd5K9uoY
+ SDjhdu+yg+Skr11kjh1QHdRqRfxSf72A3pWxoWW0/mqz613SVoMLkvVtZK/35SHF+l6L6mQO6Cj
+ Imsig5ryN5rsE1ciqn+MEF2zh3End4lvLQy2J9IBBU8Lee4Xeny5TJNWEMhoPemaygyHGyhbQAs
+ GNWRG77w5q/kublFIemDqcTYOuUiHTzZ8h1fAhRbzti5EMPQOLmUL1ypTuDX6dmvEYm8BZu9XAL
+ 2vL+w7M5mPY7h78T2Zg==
+X-Proofpoint-GUID: UA_anCVJXMiC_xUBjeDtonvHPnwzSC9L
+X-Proofpoint-ORIG-GUID: UA_anCVJXMiC_xUBjeDtonvHPnwzSC9L
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11859
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1015 phishscore=0 suspectscore=0 bulkscore=0
+ spamscore=0 malwarescore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607290121
 
->> =E2=80=A6
->>>   media: rc: Fix use after free in bpf progs
->>>   media: cx88: Specify rc type at rc_allocate_type()
->>>   media: saa7134: Specify rc type at rc_allocate_type()
->>>   media: rc: Fix race condition during rc_register_device()
->> =E2=80=A6
->>
->> How do you think about to reorder desirable adjustments for affected mo=
-dules?
->=20
-> I'm not entirely sure what you mean. Do you mean just sort the
-> commits so that media: rc: .. sits next to each other?
-Yes (for example).
+,
 
-Regards,
-Markus
+On Wed, Jul 29, 2026 at 10:40=E2=80=AFAM Steven Rostedt <rostedt@goodmis.or=
+g> wrote:
+>
+> On Tue, 28 Jul 2026 20:59:56 -0400
+> Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
+>
+> > This fixes a long-standing issue: kernel.ftrace_enabled=3D0 silently
+> > disables BPF trampolines (fentry/fexit) and ftrace-based
+> > kprobes/kretprobes. The write succeeds, the hook stops firing with no
+> > error, and re-enabling silently restores it. Livepatch already solved
+> > this for itself via FTRACE_OPS_FL_PERMANENT, which refuses to disable
+> > ftrace while a permanent ops is registered and refuses to register
+> > one while ftrace is disabled[1].
+>
+> The /proc/sys/kernel/ftrace_enabled was added as a "safety kill switch"
+> back when ftrace was first added to the kernel. It's addition was namely
+> there because live runtime modification of kernel code was new and we wer=
+e
+> worried about how stable it could be.
+>
+> Honestly, I would love to get rid of it as today ftrace has proven to be
+> rather stable. But as it is a user space ABI, I'm not sure what will brea=
+k
+> if we do. I wonder if we just make it a nop, and print a message to dmesg
+> saying:
+>
+>   "ftrace_enabled no longer does anything. Please report if you need it t=
+o."
+>
+> ?
+
+Thanks Steven, if you and/or other community members would approve such
+approach I would happily do this instead for a few reasons -
+
+1) Seems like the more correct course of action if idneed this switch
+effectively became obsolete in usage instead of piling extra logic to work
+around it.
+
+2) As I mentioned in the end of the cover letter, I believe for some cases
+such as fsessions/ksessions and multi opts retprobes, this patchset is
+not effective and the issue will persist, requiring a more complicated solu=
+tion
+for them anyway if we want watertight resilience.
+
+If you approve this - I can try what you suggested, this would include
+making the
+knob a NOP with a message, dropping the FTRACE_OPS_FL_PERMANENT
+flag and reverting/cleaning what's possible from the original livepatch pat=
+chset
+that dealt with this issue [1]
+
+One question is what the correct set of tests to run in such a case
+would be to verify
+we didn't break anything. For this patchset I ran BPF and livepatch
+selftest suites, but
+I wonder what else would need to be run.
+
+CC Miroslav for Livepatch.
+
+Thanks,
+Andrey
+
+[1] - https://lore.kernel.org/all/20191016113316.13415-1-mbenes@suse.cz/T/#=
+u
+
+>
+> >
+> > For trampolines this restores a historical property: from 2019-2022
+> > they shared one global direct_ops, marked permanent the same
+> > way[2].It was later lost as a side effect of the 2022
+> > per-trampoline-ops split (patch 1's Fixes tag) and never
+> > restored.[3][4] Kprobes never carried this protection at all, so
+> > for them that is long-standing issue rather than a regression.
+> >
+> > Patch 1: trampolines. Patch 2: classic kprobes/kretprobes. Patch 3:
+> > a selftest covering both directions for all four hook types.
+> >
+> > P.S
+> > I initially implemented a per-record opt-in flag[5], but dropped it
+> > as over-engineering once I saw the original blanket restriction.
+> >
+> > P.P.S
+> > Open question: kprobe.multi/kretprobe.multi/kprobe.session
+> > (fprobe-backed) aren't covered -- return-capturing fprobes share the
+> > function-graph tracer's subops manager with unrelated tracers, so
+> > marking it permanent needs a different, per-record approach. Perhaps
+> > something along the lines of [5].
+>
+> Honestly, I would like to start deprecating that kill switch.
+>
+> For the series:
+>
+> Acked-by: Steven Rostedt <rostedt@goodmis.org>
+>
+> -- Steve
