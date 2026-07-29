@@ -1,112 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DEC632
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 00:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4F1632
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 00:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785284309; cv=none; b=NY/rYQ7xhLjROe2eOstLLlSZ8tzQDI0MaMKT8u0qIZG4IQiAKDPd4ZpTGy/dAAXNtUyBkCYewwJNCotFXg9AcLxgBDpnBI0HyR2FkP6rLcRVzslCAE+HgPwdAWw3TE6kbr645HwWYnY8KhSm7gpbcY6mWedvZOHsyM8K4m+RCZ8=
+	t=1785284505; cv=none; b=DpiTl5doM7eKwSGHfTGWSwCsLBTAcJsap8xDaiQd1xqAF4G09jHEk9w9YNq6Yoyq8d2z1cF1Q+9WPdXudPi3tTlo45uujBzBBLtcTAbAbRGVbijRmbflXzmG1gkRx6WRjZaVDLHS0BEPIsb3vYkzJoNHWRvLbDN49z2yzBEnOIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785284309; c=relaxed/simple;
-	bh=bITADJx8Odb/BlbWBXnfjmukNUHVf++La2q07Xgia3g=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fSnFMhtEykVHBAmibJXwqBff0gYTZkPa5rQ8QOCIIbRG6pyPhS40b7Ohs9t23MeCIw+4BP38LW4Vl4+HTFTDR0RwxCXa0aHn8JWk0yYySRC50oskbCcyds7C8vzwDEjWaNtUnEM3nIDvpn4zD2wPbj7YTTcZy6Lke48GyDujC0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LkQ71hkh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785284505; c=relaxed/simple;
+	bh=79SpWJ9+Brrg4kAk5IM7v00+4qs18CV8xYCgdn+qa+0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=J4bnnLtBkm0+CLFYiOq2HdNhb3n2MuPTFI+PseHlAsYKCTzE7eZ87Wdb6BxGApBevq3fshD9cLreC0YNyz1RTVkW9499a3Cjrc+OCk6iLjpW732/I58J2QAEhAriKRiKxFFSRaXdQ/Fq4HDp2wXjyD8AjW1Pk+HetaEAEGSknYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W5UyGjed; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LkQ71hkh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FC341F000E9;
-	Wed, 29 Jul 2026 00:18:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785284308;
-	bh=dAeHYoVcHhDLN3jUQIsj5IMjUVP7U7VEZSHSIC0U6j8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LkQ71hkhoWFHM/gQbht50SFfuGl9ZxlfKzJ2CPzBGe8pv24IcDtCk/ma0zmd0MdNR
-	 X7OWi1poBS0yJntcmXJremCn50UTtIIxwpr1u3GE2vtevDuV3uqxQgQcLhyTOVgfjw
-	 WsQECB6jqbtGwHsBFRAA6Ogzds+oJ5SGtuQBCrHUkXhUkoXiBIVk6ew/6UX68/P3om
-	 5+f0U+mZyzJ/g21M5agkcsTQjJ2nRM6cqfad+KgubMEYUajLlykXqaLvPPXgPl7Yq2
-	 qD8ZSg7XwpRot6iTe+sp/xEzNvGZLbMjHHzS6gQyw9+S9SXucRcYZHbATa8AB0eee8
-	 OemPQ27NwkiVg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] selftests/bpf: Route libarena build artifacts to
- OUTPUT
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260728-selftests-bpf_oot-v1-2-05feb15d94db@marliere.net>
-References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
- <20260728-selftests-bpf_oot-v1-2-05feb15d94db@marliere.net>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W5UyGjed"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ceae1ed204so5513875ad.0
+        for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 17:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785284504; x=1785889304; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=79SpWJ9+Brrg4kAk5IM7v00+4qs18CV8xYCgdn+qa+0=;
+        b=W5UyGjedXsu68Yvb9J4uCSZfFudTkhcucH5Bpjf8qkekIpp0YR5+v4C1DIXqX7pMw9
+         aTJ9GGm3bq9RMgKaEgjFlyXMPqokcIuFTwU4g9fDdwzeyxrZFFljL1mWK/uSMvoXObHU
+         BUREbej3UYPB/hcqPJsUFOxiqBSFheuhUhoHmuGq5yfDMHI22n/w3Q3OeDBhz7g70pyh
+         lb3VUzo7yHKivHLBz5Jl+McLT4S3yNGAwm02y1hEJVCkBpq0G6SHDO2JbvlfrMe89ZZG
+         l02ottAeHxG9dlNtq7SjNRdWKRRWzB49DLcp0uyxPnTwoGMFzpm3W3YQ5qDMCc2ERJGh
+         RhiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785284504; x=1785889304;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=79SpWJ9+Brrg4kAk5IM7v00+4qs18CV8xYCgdn+qa+0=;
+        b=Q9ltzvFd0uC7+5waeHPv22l6/NNGGDFw0egM/nkUvs4qgTNT7qzts6jc9cqAiZwLVn
+         ve6JSyjw83mhIU/BpHKQCR1WbXhr2pV1Wr1J1k04w60Jjqh+ukT3j2dkF5znF5HpGG5M
+         jTuxn5kiru+6yl7/opoABzmyh1rNzu4L8+d31sHXnPVed0oJ0ZAU+WueUhGcWdcacG6V
+         T1ri+Jx2VVQDFZ+7fBNNbrwq7Bg17OZdY+9U9fX2Ye1aNtvInGFhD//05l5WjdR7xQ/R
+         lSuhzbIEd+uUCJZxNcG1tiexokttuU0Ze7ofOMiUTL97dGl6S/lyR4NeJ0jBdC1c0bXF
+         PIKA==
+X-Forwarded-Encrypted: i=1; AHgh+RoB0L2nhHLVDCFWEv5l2BRyXm0XV8+v0lXkgkv30wHrzptlFRKsfu46w694Wa4YldVzkqk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyrUoXMS19g3ufZMQwhHb3CcDYXJTGh57SET/hB/DKhPMgaMNo
+	XqhRwlZI+ULUBdxuHhc6EVnoSu3aJTcoCTQ3DujM6/2Q1LO01QLOCtnU
+X-Gm-Gg: AR+sD12BKbF1h6NKDm1TwqzR9mlc2cHA9DsOItHoXRksJwur0heDY4NwXoy20DUnvSw
+	wRJ7j85kCdamw/kct6hQ5i8WU8OGw+ON2aD6jYCXXKzLxOoh96mQofU6uYKliraM4+cuRleva5B
+	eQcjEDUXrN/m6XJEPhx3XURhtjqob3ONLqrACJPdLi6rodTBcnWGAjQR695xpwYVPZF5GiIPGpX
+	iaaULH1QKqCCyovwJhOYE0X0YLvtDe15ix6J5KDH1LTI5j7tv54zOk9IKokg1puy2Yh7SZXB3KO
+	EXmUNoT9X87uG/uAtgvQ1huPYmNkn1mkhqmB5JyddXgdBwDcfcWWiopH2IJEw9coMJy4g5jkO+O
+	UkfEJqdy71kgHDavgisSbE27IkEIiq2MLfo+y5G9+M53gskQoyF0VvuSGcOaYvNsJdFO/BPgVUZ
+	7R0Lp9dOSpSR+G6T5+LSwbQCmWH0Dh1xAuTWVBVe2WDSxrmKzryh2sRIeaH7oGA96ReTjjIFPga
+	C1znFmTpldUxURnwgWu8DQuB+ZqX/Mf3gnwkG6lVuy92w==
+X-Received: by 2002:a17:902:e54b:b0:2c1:ee75:56bb with SMTP id d9443c01a7336-2d015ae7bebmr52117405ad.20.1785284503953;
+        Tue, 28 Jul 2026 17:21:43 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:a4d1:33fd:cfd0:d646? ([2620:10d:c090:500::7:3a0a])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504dab0f3sm2841581eec.27.2026.07.28.17.21.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2026 17:21:43 -0700 (PDT)
+Message-ID: <d1744acd96926b27985fb40c61a2bc3640c0d0e2.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/8] resolve_btfids: Index BTF ID symbols by
+ address
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
+Cc: Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+  Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
+ bpf@vger.kernel.org, 	linux-input@vger.kernel.org, kernel-team@meta.com
+Date: Tue, 28 Jul 2026 17:21:41 -0700
+In-Reply-To: <20260722233518.778854-3-ihor.solodrai@linux.dev>
+References: <20260722233518.778854-1-ihor.solodrai@linux.dev>
+	 <20260722233518.778854-3-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Jul 2026 00:18:27 +0000
-Message-Id: <20260729001828.0FC341F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The `clean` rule in `selftests/bpf/Makefile` fails to pass the over=
-ridden `OUTPUT` path to the `libarena` sub-make, causing out-of-tree builds=
- to leak libarena artifacts.
---
+On Wed, 2026-07-22 at 16:35 -0700, Ihor Solodrai wrote:
+> Keep an address-sorted index of parsed .BTF_ids symbols so that the
+> original BTF_ID symbol name can be recovered from an entry address.
+>=20
+> Use the index in find_kfunc_flags() to scan BTF_SET8_KFUNCS entries
+> directly and match each entry back to the requested kfunc.
+>=20
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> ---
 
---- Patch [2]: [PATCH 2/3] selftests/bpf: Route libarena build artifacts to=
- OUTPUT ---
-commit b4bd21c68fbd2a022ffbf1208ac0ac06aa993754
-Author: Ricardo B. Marli=C3=A8re (SUSE) <ricardo@marliere.net>
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 
-selftests/bpf: Route libarena build artifacts to OUTPUT
-
-This commit adds OUTPUT support to libarena's Makefile and propagates it
-from the parent bpf Makefile. It ensures generated files like BPF objects
-and skeleton headers are correctly written into the out-of-tree build
-directory.
-
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index b289183475d4c..7d42632f9d424 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-[ ... ]
-> @@ -826,7 +826,8 @@ LIBARENA_MAKE_ARGS =3D \
->  		CLANG=3D"$(CLANG)" \
->  		BPF_CFLAGS=3D"$(BPF_CFLAGS) $(CLANG_CFLAGS)" \
->  		BPF_TARGET_ENDIAN=3D"$(BPF_TARGET_ENDIAN)" \
-> -		Q=3D"$(Q)"
-> +		Q=3D"$(Q)" \
-> +		OUTPUT=3D"$(OUTPUT)/libarena"
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/libarena/Makefile b/tools/testin=
-g/selftests/bpf/libarena/Makefile
-> index 5e2ab514805e4..195d5f833186a 100644
-> --- a/tools/testing/selftests/bpf/libarena/Makefile
-> +++ b/tools/testing/selftests/bpf/libarena/Makefile
-[ ... ]
->  clean:
-> -	$(Q)rm -f *.skel.h *.bpf.o *.linked*.o
-> +	$(Q)rm -f $(OUTPUT)/*.skel.h $(OUTPUT)/*.bpf.o $(OUTPUT)/*.linked*.o
-
-[Severity: Low]
-Will this fail to clean the libarena artifacts when building out-of-tree?
-
-In the parent bpf/Makefile, the clean target invokes make without the
-LIBARENA_MAKE_ARGS override:
-
-tools/testing/selftests/bpf/Makefile:
-    clean:
-        ...
-        $(Q)$(MAKE) -C libarena clean
-
-Since OUTPUT is inherited unmodified from the parent Makefile, it resolves
-to the parent directory instead of $(OUTPUT)/libarena/.
-
-Will this cause make clean to inadvertently run rm -f against the parent's
-$(OUTPUT) directory, leaving the actual libarena artifacts behind?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728-selftests-=
-bpf_oot-v1-0-05feb15d94db@marliere.net?part=3D2
+...
