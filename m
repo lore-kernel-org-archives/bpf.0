@@ -1,106 +1,65 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170503E763F;
-	Wed, 29 Jul 2026 14:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B516C4D2EF6;
+	Wed, 29 Jul 2026 14:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785336046; cv=none; b=GxwBNrWjy4DRZ1Whl9AQwaEP8437PNbU71mjnlzGlPUCLT25ZJ+qMdfZ5HFb5qfcLWDUKK7bLjHOJiFLbFV5wKMmsJnlE0sS/KJuW0Ar9yc1M9dWBvpMmPUgI2qk+mrDTWiraMGLVTYHQVrVFQj3UywAhFIp2rW0/mlDXyYkeqY=
+	t=1785336891; cv=none; b=D/56KNzWhrLiXVtA3uUrfXp+Xv/J5QqizlzeR4L6lAe14HFElbSiUTDZp6c48c95T2Y6Odzj990lN/iUyyRx0LcFmn2L5iLLiyYjPMAghKumTDri1WgW/8eREE+YrXQpLLndqDqy5VxfeBj4m1HvEEMt/PVHuxZylgWGmAv/nvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785336046; c=relaxed/simple;
-	bh=iC7LSdLV7T1od8xnAA41YHNWP9QOdGmvAAxgkXtGQOA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=og1A/tJRLE5DZnqCAoP5LdP/Jiv+kDtvIRmypVX3cAhkdnqaJE/xljJFo0F0QPTi19g0R24xLrvynyKcXRytZ8D/duMMYb8I3jTYq6KO9jJaV2PCbbBewU572RiGh+XYXs7j2ClBiX4+0u58OxIenGeoiCyChbUD5+TKX9URSfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf17.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 8F4121A0672;
-	Wed, 29 Jul 2026 14:40:41 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf17.hostedemail.com (Postfix) with ESMTPA id A1A2A1B;
-	Wed, 29 Jul 2026 14:40:38 +0000 (UTC)
-Date: Wed, 29 Jul 2026 10:41:14 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <song@kernel.org>,
- <jolsa@kernel.org>, <naveen@kernel.org>, <davem@davemloft.net>,
- <mhiramat@kernel.org>, <stable@vger.kernel.org>,
- <linux-open-source@crowdstrike.com>
-Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark
- trampoline/kprobe ftrace_ops permanent
-Message-ID: <20260729104114.04298a48@gandalf.local.home>
-In-Reply-To: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
-References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1785336891; c=relaxed/simple;
+	bh=0Ceak2M82FucVlHM9Zau0MlNA0nFVtDu+8nn7FI1Pm8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rWOW68kY5KO17qZTQjr2Hk3YMJGwUYVH8gZGCh5CTFD0dAx2/luNXMWdrI/gsVCrNFfMbKGiIvo4LV27QcIPVt31FoZ91QZRRNr4j0Xe+mUvs6JJ4bXGjjt7hU1pRuA9tjbZjBHRPMKu+ncXzG7EAeQGz/x2BvHB7hhzbMAwodM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=UXDvj4TD; arc=none smtp.client-ip=92.243.27.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="UXDvj4TD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+	t=1785336886; bh=0Ceak2M82FucVlHM9Zau0MlNA0nFVtDu+8nn7FI1Pm8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UXDvj4TDkCn1l7vovDPDWecG1XB4GAe1LDu3VH/5ObTIjRTGHSVSXq3CRDvr4fVws
+	 bVrjLCVnlcLZq2lBd7T2PVacP0s1aizdZDuPcVLCjj9959n4jdFTa6uc0dS1HV7HUH
+	 90rdJKUWAFvVDqilNNKsBI1f4Si1VlF9TPLHWl3itX3BWL41fPz2nfK3+5DNtp0jgL
+	 H1cQkkNKEfUySn1yh2tk2c9DVA075NguTcQ25g9j+3iFnMxGgk9qeNH5NTu2x2lzXc
+	 d0k7r6+zc5OuqmuF1U6ZmmrR+Cx2j9jcdinzQ2MsUu0J/HixH4k4h5/dDK7cF1h5vp
+	 EXt3bPCjOWahw==
+Received: by extorris.mess.org (Postfix, from userid 1001)
+	id 3922341CD1; Wed, 29 Jul 2026 15:54:46 +0100 (BST)
+Date: Wed, 29 Jul 2026 15:54:46 +0100
+From: Sean Young <sean@mess.org>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: linux-media@vger.kernel.org, bpf@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH v4 00/15] media: Fix leaks in rc core
+Message-ID: <amoUNjKOyFMudlDJ@extorris.mess.org>
+References: <cover.1785158244.git.sean@mess.org>
+ <aa8628c4-0106-4dcf-afea-b350daef0f96@web.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: A1A2A1B
-X-Stat-Signature: 499kyhgzpha8ede91uyypk9psck4c73c
-X-Rspamd-Server: rspamout03
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18XandzLXTa8+ciNlokeOIqor1xPSfBmv0=
-X-HE-Tag: 1785336038-944796
-X-HE-Meta: U2FsdGVkX1/Q1VMD5PBWVVztUmDRsGyKdjgXyyq8UOEsrvQ4x8MkzXVv1XagktdXZg1hMtLPMbF3NG+14pqvCAulEmETwfclWLYJIdRiZak9IoPT5g5AQigCoGedHitSSmWGanL4HrTJm0lErfH81v8KlhDAZmQZYsgdMsWkNMjy2IJQaC0A2sTvtDwwcdQYm02RzAZu7L41x4P9CEfsnp2T/VfPCN7BNLGDi5y7JeOOHekGj3ZQtSALsU2etuRHhnP5z+yJvx5GFf6Lnxb0tf9dDXZBBVEtiwbg1f1L/hod8IXDzvan3OO3eICs4HYii9aKRI/C0D+DmjpPM54ck9EkdhXVEMsBhzpc5DpAerz3LLWIyijKPpCZ7gXcxIDld4fwbILHnK9sVTCBl1mtdQ==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aa8628c4-0106-4dcf-afea-b350daef0f96@web.de>
 
-On Tue, 28 Jul 2026 20:59:56 -0400
-Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
-
-> This fixes a long-standing issue: kernel.ftrace_enabled=0 silently
-> disables BPF trampolines (fentry/fexit) and ftrace-based
-> kprobes/kretprobes. The write succeeds, the hook stops firing with no
-> error, and re-enabling silently restores it. Livepatch already solved
-> this for itself via FTRACE_OPS_FL_PERMANENT, which refuses to disable
-> ftrace while a permanent ops is registered and refuses to register
-> one while ftrace is disabled[1].
-
-The /proc/sys/kernel/ftrace_enabled was added as a "safety kill switch"
-back when ftrace was first added to the kernel. It's addition was namely
-there because live runtime modification of kernel code was new and we were
-worried about how stable it could be.
-
-Honestly, I would love to get rid of it as today ftrace has proven to be
-rather stable. But as it is a user space ABI, I'm not sure what will break
-if we do. I wonder if we just make it a nop, and print a message to dmesg
-saying:
-
-  "ftrace_enabled no longer does anything. Please report if you need it to."
-
-?
-
+On Wed, Jul 29, 2026 at 08:18:40AM +0200, Markus Elfring wrote:
+> …
+> >   media: rc: Fix use after free in bpf progs
+> >   media: cx88: Specify rc type at rc_allocate_type()
+> >   media: saa7134: Specify rc type at rc_allocate_type()
+> >   media: rc: Fix race condition during rc_register_device()
+> …
 > 
-> For trampolines this restores a historical property: from 2019-2022
-> they shared one global direct_ops, marked permanent the same
-> way[2].It was later lost as a side effect of the 2022
-> per-trampoline-ops split (patch 1's Fixes tag) and never
-> restored.[3][4] Kprobes never carried this protection at all, so
-> for them that is long-standing issue rather than a regression.
-> 
-> Patch 1: trampolines. Patch 2: classic kprobes/kretprobes. Patch 3:
-> a selftest covering both directions for all four hook types.
-> 
-> P.S
-> I initially implemented a per-record opt-in flag[5], but dropped it
-> as over-engineering once I saw the original blanket restriction.
-> 
-> P.P.S
-> Open question: kprobe.multi/kretprobe.multi/kprobe.session
-> (fprobe-backed) aren't covered -- return-capturing fprobes share the
-> function-graph tracer's subops manager with unrelated tracers, so
-> marking it permanent needs a different, per-record approach. Perhaps
-> something along the lines of [5].
+> How do you think about to reorder desirable adjustments for affected modules?
 
-Honestly, I would like to start deprecating that kill switch.
+I'm not entirely sure what you mean. Do you mean just sort the
+commits so that media: rc: .. sits next to each other?
 
-For the series:
 
-Acked-by: Steven Rostedt <rostedt@goodmis.org>
-
--- Steve
+Sean
