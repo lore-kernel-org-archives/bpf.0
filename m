@@ -1,173 +1,182 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCD739E9CF;
-	Wed, 29 Jul 2026 08:35:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEEC1F03DE
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 08:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785314134; cv=none; b=cN1IX/lzP7+aDH6aXx6LzYo2pw1DAjJTqF5Md+wTAjSfX6miIMR/80y4g875SFvIlxA5BmWoRnAdGnmuWoFv/bdZ+ja00szLvPCrWn8f0OMzVC21W1pgMX2Bj69JPxK+NwOdRN+owETTc0Mw+7TnOs8wAq0VdgwTvzIX3JUeJvs=
+	t=1785314250; cv=none; b=IjZxk9sLAxPeLtANuyfHc52Nce7CT1Iy66ji2lEJO30ZhVQNuGRMLXoXZegEMSw/mPH8ZehzPY8nIQXZ0X1BLh3zBYtbnbo1wBWlMNxVdF7sLuE8Uoms1UajZv6LQwhaTGusioK1DAXYhk2ZyxR0LpWISIYy2pKxMZH//u3ITKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785314134; c=relaxed/simple;
-	bh=qQum5Dpv4V8PjFZ8D+X+Nwd/wK6M2Kq2X1CyRKzmdP8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hiyvtKQ/8Gh/kANVNNwZ/nY+WRZx5hZ8Wa9SP5DKfeEO1BM7HeWfNKyPjslrxDoqjsLN4SjMFo5epTprUZzcvOxjERhJluT/+DhuyZzE54Mv6Q4SlLAsx6f0SEdq0U+UDurCm7gGiH8iadFQMtlKT6+EEqdtsnUKkZnNdc5tgLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cKH/2E6z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785314250; c=relaxed/simple;
+	bh=dB5K+/Xq9QaqHEbLAYZyoL6lCfrYbTpgTEMSzgQfflo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZuBLsk60j945+KttNR+A5R8c88FnD46xEVjxDL9xI3tamFLZW7TLkVJON3LYeVuaQsutGrzyNCbwT3p75+VT8v7YTpeA8eti5IYFEnkCAzjKVfsazNUArQAsVuIWcomz/3gucYgBdcSCeppYMbsnPgI1PZ1uOa7xwfcy+tFLy4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JRvuiJ4t; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cKH/2E6z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E2B1F00A3D;
-	Wed, 29 Jul 2026 08:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785314131;
-	bh=eFcRc5Tvt5zIshT2hM+gwbHE4VX2lg6HOcbGfx4QYrE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cKH/2E6zxnPA92nYlcu1vj7TWIdZgS3hP1hViryAWh5Wxb6sJm7c6XenHXGNfwgjB
-	 vpLwx0twqa4Eos/NVKUHa8/6vDNKcx5mCeR3XA272ceuwe0dvI6G9+zRjns6KhnHN+
-	 9FDwkSe8ycWDWjMcZsgcuiZoGkWsk5HiXBuMBc6C2/u4addxoZF2ywFwmPoVbL/oyR
-	 akm2KZ8f/mek5QYqNswPdPMDb2RZ93zZs0JGl2jAwFh8slucRhnEuMQBVvTeBUhZGi
-	 MAaAtI+dcNliJn6LO1D7n0Dk9tvcevFgIH8Cmij2fXKK6SfzaLu00BYQ/BCN5ilk17
-	 sBuimMm9ZzboQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 1/8] mm/slab, slub_kunit: register kprobe to trigger
- _nolock APIs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?SGFycnkgWW9vIChPcmFjbGUp?= <harry@kernel.org>
-Cc: linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260729-kfree_rcu_nolock-v5-1-a28cdcda9673@kernel.org>
-References: <20260729-kfree_rcu_nolock-v5-0-a28cdcda9673@kernel.org>
- <20260729-kfree_rcu_nolock-v5-1-a28cdcda9673@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Jul 2026 08:35:30 +0000
-Message-Id: <20260729083530.B3E2B1F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JRvuiJ4t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785314248; x=1816850248;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dB5K+/Xq9QaqHEbLAYZyoL6lCfrYbTpgTEMSzgQfflo=;
+  b=JRvuiJ4tkl46fvYkxSarD4nFmAR1PJ0kTnTmhia/FnFVljKcKL9LOk+b
+   vhUeJQN5iT7nOcT2HPSZxnWRHdn0NyGfVyFGvuSPJLaj19YboXZ1AyDmK
+   ZgQl/eNKqF3noc/iXEeszCdM9tinFNUyK1Y6qfUy4eLmTRBBahUOWhBgv
+   0od/w9c6uOqfYaNFkcWTLBVRDrs8wp5wMtFgP8yXl/dqg9ogqBhO/Vco+
+   M5zAxJS4JG1vWu65WpXqvwt8Q+8+dScA91NdAXheOgDL/VlOgcyZhg3n0
+   BqsDUtKNJ6PWRHkYOcgadnw2JB9yvNO8EjEZwhALJXZfQsQkXbR8r3cE2
+   Q==;
+X-CSE-ConnectionGUID: EkEgNwJ3S8aTDIfrKv6J/g==
+X-CSE-MsgGUID: 10BKUWc0QA6vT5n2j4kTzA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="85765574"
+X-IronPort-AV: E=Sophos;i="6.25,192,1779174000"; 
+   d="scan'208";a="85765574"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 01:37:27 -0700
+X-CSE-ConnectionGUID: o8f25oJqTmutMbHcGPVAvA==
+X-CSE-MsgGUID: qJEvWb5PTL+m2C0M/1qjCA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,192,1779174000"; 
+   d="scan'208";a="298167910"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 29 Jul 2026 01:37:26 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wozmr-00000000fCR-46DF;
+	Wed, 29 Jul 2026 08:37:15 +0000
+Date: Wed, 29 Jul 2026 16:36:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Song Liu <song@kernel.org>, bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+	kernel-team@meta.com, Song Liu <song@kernel.org>
+Subject: Re: [PATCH v3 bpf-next 1/1] bpf: Populate mmap-able array map memory
+ lazily
+Message-ID: <202607291608.xeQ99Iqz-lkp@intel.com>
+References: <20260729001033.3433328-2-song@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260729001033.3433328-2-song@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Manual cleanup of global kprobe leads to stack Use-After-Free if t=
-he KUnit test aborts.
-- [Medium] Global kprobe registration causes concurrent data races and trig=
-gers test allocations from unrelated system processes.
+Hi Song,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on fdec474c65fd35d5a6e1497ed50a9f98c07192f0]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/bpf-Populate-mmap-able-array-map-memory-lazily/20260729-093241
+base:   fdec474c65fd35d5a6e1497ed50a9f98c07192f0
+patch link:    https://lore.kernel.org/r/20260729001033.3433328-2-song%40kernel.org
+patch subject: [PATCH v3 bpf-next 1/1] bpf: Populate mmap-able array map memory lazily
+config: arm-randconfig-002-20260729 (https://download.01.org/0day-ci/archive/20260729/202607291608.xeQ99Iqz-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260729/202607291608.xeQ99Iqz-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607291608.xeQ99Iqz-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   kernel/bpf/arraymap.c: In function 'array_map_mmap_pages':
+>> kernel/bpf/arraymap.c:659:6: error: implicit declaration of function 'pmd_none'; did you mean 'p4d_none'? [-Werror=implicit-function-declaration]
+     if (pmd_none(*vmf->pmd))
+         ^~~~~~~~
+         p4d_none
+>> kernel/bpf/arraymap.c:673:8: error: implicit declaration of function 'pte_none'; did you mean 'p4d_none'? [-Werror=implicit-function-declaration]
+      if (!pte_none(ptep_get(vmf->pte)))
+           ^~~~~~~~
+           p4d_none
+>> kernel/bpf/arraymap.c:673:17: error: implicit declaration of function 'ptep_get'; did you mean 'btf_get'? [-Werror=implicit-function-declaration]
+      if (!pte_none(ptep_get(vmf->pte)))
+                    ^~~~~~~~
+                    btf_get
+>> kernel/bpf/arraymap.c:682:3: error: implicit declaration of function 'set_pte_range'; did you mean 'free_pgd_range'? [-Werror=implicit-function-declaration]
+      set_pte_range(vmf, folio, page, 1, addr);
+      ^~~~~~~~~~~~~
+      free_pgd_range
+   In file included from include/linux/kallsyms.h:13,
+                    from include/linux/bpf.h:23,
+                    from kernel/bpf/arraymap.c:5:
+>> include/linux/mm.h:3848:2: error: implicit declaration of function 'pte_unmap'; did you mean 'memunmap'? [-Werror=implicit-function-declaration]
+     pte_unmap(pte);     \
+     ^~~~~~~~~
+   kernel/bpf/arraymap.c:689:2: note: in expansion of macro 'pte_unmap_unlock'
+     pte_unmap_unlock(start_pte, vmf->ptl);
+     ^~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +659 kernel/bpf/arraymap.c
+
+   637	
+   638	/*
+   639	 * Fault-around handler: install PTEs for the whole [start_pgoff, end_pgoff]
+   640	 * window under a single page-table lock, so that populating a large mapping
+   641	 * (e.g. mmap(MAP_POPULATE) or a linear access pattern) does not take one full
+   642	 * fault per page.
+   643	 */
+   644	static vm_fault_t array_map_mmap_pages(struct bpf_map *map, struct vm_fault *vmf,
+   645					       pgoff_t start_pgoff, pgoff_t end_pgoff)
+   646	{
+   647		struct bpf_array *array = container_of(map, struct bpf_array, map);
+   648		struct vm_area_struct *vma = vmf->vma;
+   649		unsigned long addr, rss = 0;
+   650		vm_fault_t ret = 0;
+   651		pte_t *start_pte;
+   652		pgoff_t pgoff;
+   653	
+   654		/*
+   655		 * The PTE table for this PMD must already exist; installing it needs
+   656		 * mm-internal helpers. If it is missing, let the regular ->fault path
+   657		 * install it and rely on the next fault-around to batch the rest.
+   658		 */
+ > 659		if (pmd_none(*vmf->pmd))
+   660			return 0;
+   661	
+   662		addr = vma->vm_start + ((start_pgoff - vma->vm_pgoff) << PAGE_SHIFT);
+   663		start_pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf->ptl);
+   664		if (!start_pte)
+   665			return 0;
+   666		vmf->pte = start_pte;
+   667	
+   668		for (pgoff = start_pgoff; pgoff <= end_pgoff;
+   669		     pgoff++, vmf->pte++, addr += PAGE_SIZE) {
+   670			struct folio *folio;
+   671			struct page *page;
+   672	
+ > 673			if (!pte_none(ptep_get(vmf->pte)))
+   674				continue;
+   675	
+   676			page = array_map_fault_page(array, pgoff);
+   677			if (!page)
+   678				continue;
+   679	
+   680			folio = page_folio(page);
+   681			folio_get(folio);
+ > 682			set_pte_range(vmf, folio, page, 1, addr);
+   683			rss++;
+   684			if (addr == vmf->address)
+   685				ret = VM_FAULT_NOPAGE;
+   686		}
+   687	
+   688		add_mm_counter(vma->vm_mm, MM_FILEPAGES, rss);
+   689		pte_unmap_unlock(start_pte, vmf->ptl);
+   690	
+   691		return ret;
+   692	}
+   693	
+
 --
-
---- Patch [1]: [PATCH v5 1/8] mm/slab, slub_kunit: register kprobe to trigg=
-er _nolock APIs ---
-commit a8a477af9c0547e09308b4a325920cd9de52b25e
-Author: Harry Yoo (Oracle) <harry@kernel.org>
-
-    mm/slab, slub_kunit: register kprobe to trigger _nolock APIs
-   =20
-    Since kmalloc_nolock() always fails in NMI and hardirq contexts on
-    PREEMPT_RT, slub_kunit cannot properly test _nolock() APIs.
-   =20
-    Register a kprobe pre-handler to invoke kmalloc_nolock() and
-    kfree_nolock() in the middle of the slab allocator.
-   =20
-    Link: https://lore.kernel.org/linux-mm/20260427-nolock-api-fix-v2-0-a6b=
-83a92d9a4@kernel.org [1]
-    Link: https://lore.kernel.org/linux-mm/6edebc2b-5f5a-4b9c-9a4c-564310ac=
-ee1b@kernel.org  [2]
-
-> diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
-> index fa6d31dbca166..8c2b9911471eb 100644
-> --- a/lib/tests/slub_kunit.c
-> +++ b/lib/tests/slub_kunit.c
-
-[ ... ]
-
-> +#if defined(CONFIG_KPROBES) && defined(CONFIG_SMP)
-> +static int slab_kprobe_pre_handler(struct kprobe *p, struct pt_regs *reg=
-s)
-> +{
-> +	struct test_nolock_context *ctx;
-> +
-> +	ctx =3D container_of(p, struct test_nolock_context, kprobe);
-> +	test_nolock(ctx);
-
-[Severity: Medium]
-Will this handler execute unconditionally for any task that hits the kprobe?
-
-The kprobe is registered globally on slab_attach_kprobe_locked(). Since this
-function is inserted into slab_lockdep_assert_held(), which is heavily used
-in the slab allocator's paths, any task on any CPU performing an allocation
-can trigger the kprobe.
-
-This allows unrelated system processes to execute the test logic concurrent=
-ly.
-Does this code need a check to restrict execution to the test thread, such =
-as
-verifying current against the test task?
-
-Additionally, this can cause data races in test_nolock() since unrelated
-system processes would perform unsynchronized read-modify-write operations =
-on
-the stack-allocated ctx variables:
-
-lib/tests/slub_kunit.c:test_nolock() {
-    ...
-    if (objp)
-        ctx->alloc_ok++;
-    else
-        ctx->alloc_fail++;
-    ...
-}
-
-> +	return 0;
-> +}
-> +
-> +static bool register_slab_kprobes(struct test_nolock_context *ctx)
-> +{
-> +	ctx->kprobe.symbol_name =3D "slab_attach_kprobe_locked";
-> +	ctx->kprobe.pre_handler =3D slab_kprobe_pre_handler;
-> +
-> +	if (register_kprobe(&ctx->kprobe))
-> +		return false;
-> +	return true;
-> +}
-
-[ ... ]
-
-> +static void test_kmalloc_kfree_nolock_kprobe(struct kunit *test)
-> +{
-> +	struct test_nolock_context ctx =3D { .test =3D test };
-> =20
-> -cleanup:
-> -	perf_event_disable(ctx.event);
-> -	perf_event_release_kernel(ctx.event);
-> +	if (!register_slab_kprobes(&ctx))
-> +		kunit_skip(test, "Failed to register kprobe, skipping");
-> =20
-> -	kunit_info(test, "callback_count: %d, alloc_ok: %d, alloc_fail: %d\n",
-> -		   ctx.callback_count, ctx.alloc_ok, ctx.alloc_fail);
-> +	test_kmalloc_kfree();
-> =20
-> -	if (alloc_fail)
-> -		kunit_skip(test, "Allocation failed");
-> +	unregister_slab_kprobes(&ctx);
-
-[Severity: High]
-Can this manual unregistration lead to a stack use-after-free if the KUnit
-test aborts before completing?
-
-If the test aborts (for example, due to a KUnit timeout which is possible
-given the system-wide contention caused by the global kprobe), the thread
-could exit and its stack memory would be freed, bypassing this manual
-cleanup.
-
-If the global kprobe remains active and continues to fire for other tasks,
-would the pre-handler then dereference the ctx pointer, pointing to freed
-stack memory?
-
-Could kunit_add_action() be used to ensure the cleanup is always executed
-even if the test aborts?
-
->  	KUNIT_EXPECT_EQ(test, 0, slab_errors);
->  }
->  #endif
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729-kfree_rcu_=
-nolock-v5-0-a28cdcda9673@kernel.org?part=3D1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
