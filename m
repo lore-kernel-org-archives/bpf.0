@@ -1,154 +1,169 @@
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17D3411F82;
-	Wed, 29 Jul 2026 10:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC3F83DB62B;
+	Wed, 29 Jul 2026 10:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785319340; cv=none; b=PJNMEfQYhXquDCOcDConQKT5hlSI2+UbFWYCnsprkBOxon8fo2Bimqle1kqQp7GlAfW+SYCicsFpiCGQ+XDOo2kefh4ZTib9GGVTTup9omdGdRaJFo6pswdFSCPLvl0Usz/jKiJ+3Ic7ZIT9wKBl8wHUATjVj2Ou2azNX/8d+BI=
+	t=1785320383; cv=none; b=tTr/qx5flGvUhuWkYSp0rprUulXZtzpudAVZ6IEG6FfBsfbtDjm7qfz7hAO3EeXQAElEJUl53xzX63k/JtohfXF3Et4F5BUebuGaT0Jqru+pFRTf0arUY1JuZLn5Vye/GNrdyws8iDah7f/Mqb0moSylLO70U3sc8CguJEBVfOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785319340; c=relaxed/simple;
-	bh=9PfxBrDiMYUxWpyNHKjtCgvCSLmjTslVE0viAZX8wTs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Snt57iKycMNw1Cb5tSdIJvn0Qv0TxW8ZFU97pPOgIJIy606b+I/V6bSqt0UjgCH8yGp4zSWGSt3OSLF0BJ4EU5EkyYzM16Dn9ybzOuq+9jP2F9LX/DxiK8PEAU8FuFlWkqawgyDs8+Nfk60yPCiJBtSGS4fZUMFmgPp6MKbZ9ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=WelTDRu+; arc=none smtp.client-ip=113.46.200.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1785320383; c=relaxed/simple;
+	bh=sePxyCJHuzEGyx2LqXN3a8pwxTYqAvr8Ds0lIwLelXU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HmUtzlKD+VwvxKnQ6Hsl3jzbaQm4aX+MioVZ8EeYbSCREnYa0SYI6LJTua5mBDOGqfpmErcZ6uZrTv3zUhFQLDTPV2UsQA4lk7cMekCi8iNZAXUX1l/Cos7LZoz0FIdUZF8mqXFJpMHRACyOB1NJI88Qy2LfhEhqx+KKsKAim/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FE0GRe0O; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="WelTDRu+"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=IRTu9j5y5y9a1YTDJl0H4rANLraEGK96ArcaCizkdM0=;
-	b=WelTDRu+uivCh7iBOPgbw5rxwQrvsEA/HpKLGNNVQhbHxIM8zuwneVukpRa3FCL3HA6eRRMAf
-	5ggGwPriu25KU66NTFtCvbm2ML4bTIp2DiTeXqbNwZs/Edl6lrRlDNYwfq5+qI2YqWZVbb0zzm/
-	FlP2Nnvnja33+JBdrDMF3A4=
-Received: from mail.maildlp.com (unknown [172.19.162.144])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4h971043cvz12LHh;
-	Wed, 29 Jul 2026 17:52:36 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 67EBA40538;
-	Wed, 29 Jul 2026 18:02:06 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Wed, 29 Jul
- 2026 18:02:05 +0800
-Message-ID: <a528cfaf-42bf-41e8-be61-32693334a39c@huawei.com>
-Date: Wed, 29 Jul 2026 18:02:05 +0800
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FE0GRe0O"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66T7mVIS3510234;
+	Wed, 29 Jul 2026 10:13:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=20PLe0W5WCIDnL84N1zaO+HLc/2Flu
+	i3NV1Ycbs9FQE=; b=FE0GRe0Ogg0GxdOaqXto7RlECSlIgi6U4FPECF0W06Wbwd
+	M7AONk2CWa7g6JpJI2ObBumRdUA1swYmrWpTmd7Yhg8jwPbDZPgtdHdki7lJdXyx
+	a5ku0VmqhUWIT7fE2R31EKwMjGZ2WPjK8OmL/dgfnk9UoMkRCYyUVAcgLhPRPvN0
+	kLIPDOKCSIvgAGARWTb1EH2yPFCJ8AUOWyTqPNEJnE/lDGlRVk3V4VuWQqKVkVwv
+	H1IG3I44nBqMpAKFAi/QqfRPlQYTmOhtD2sUL446yWQE95juDDEVE2tYcHYUFzYi
+	2UV21GPh0m5G/vyMvB1cyXeyKTzcyGbuTrgbPIEQ==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fmv0ns9wk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 Jul 2026 10:13:24 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66T9uISf001554;
+	Wed, 29 Jul 2026 10:13:23 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fn9pge0sk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 Jul 2026 10:13:22 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66TADL8529688252
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 29 Jul 2026 10:13:21 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E576B20063;
+	Wed, 29 Jul 2026 10:13:20 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 75E452005A;
+	Wed, 29 Jul 2026 10:13:19 +0000 (GMT)
+Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.224.92.206])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed, 29 Jul 2026 10:13:19 +0000 (GMT)
+Date: Wed, 29 Jul 2026 12:13:18 +0200
+From: Alexander Gordeev <agordeev@linux.ibm.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Muhammad Usama Anjum <usama.anjum@arm.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tursulin@ursulin.net>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <liam@infradead.org>,
+        Lorenzo Stoakes <ljs@kernel.org>, Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+        Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, SJ Park <sj@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, Miaohe Lin <linmiaohe@huawei.com>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@gentwo.org>, Mike Rapoport <rppt@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, ziy@nvidia.com, pfalcato@suse.de,
+        ryan.roberts@arm.com, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-parisc@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, damon@lists.linux.dev
+Subject: Re: [PATCH RFC 00/11] mm: distinguish PTE table storage from PTE
+ values
+Message-ID: <7813b5fe-e767-442c-a356-afc1a5c567ad-agordeev@linux.ibm.com>
+References: <20260727164715.2866609-1-usama.anjum@arm.com>
+ <2c19247e-bee6-45f4-a353-2fcc60db26e6@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf, cgroup: Fix potential UAF in __cgroup_bpf_attach
-Content-Language: en-US
-To: Pu Lehui <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
-	<eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai
- Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, Song Liu
-	<song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
-	<emil@etsalapatis.com>
-References: <20260728132336.2857800-1-pulehui@huaweicloud.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260728132336.2857800-1-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2c19247e-bee6-45f4-a353-2fcc60db26e6@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzI5MDA4MCBTYWx0ZWRfX5gvztvTGa1TS
+ cVvs9sLHjmDvl0pv/qnDx3AnLV3WD1PhcS6rWZcrYanN4eoy1jfYhO0/byBUN7m85v7yOdOHFEd
+ jkwp4KNx5XSDCb91frhZzFZIHZypXvU=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzI5MDA4MCBTYWx0ZWRfX1UTcCITLhsoM
+ WVmB1D9GH0QMtrIKGHgL7p0GW+jxunYYOgpbX+DXyGN5j53LZmEz/XAfzXnJVoe6iYvkeEMQ0zl
+ U72YvirOw6n7XecUaLxufeDZ3k7zUoWhwsOzzDr2PnO5B+rHRlQanyNs10kmLyGk0SbO5yjhmsl
+ X/wsvmN7W20tzA/W6s+/Go/LRPoLITRcA0wiEE2RX3SL5wjJQy6dbIfOKXB23C7J+7CUDxsv1hH
+ 2UL0d8RcWDG1m2MOfvzdP1DDLgoJ5qa4fNMDY3Dujfh/q4BEQ3LxkwjYYEZLquYPNzSt8jlE0CR
+ W0NplSr/y92efigHBaNWZE689G10/Vfvu4jsCRV1WwdOJDDLrJCdFPCcT3EXgYundIBLpChodfB
+ V3DgSeKuQKYmWhytTg7Qp/bafc3JxPNb2dXgROBBI3XlcwL1Fe7vq5FAcDbVZ+iHosYceQA6qsM
+ opbeSLXsz6GP+frEBNA==
+X-Authority-Analysis: v=2.4 cv=b5WCJNGx c=1 sm=1 tr=0 ts=6a69d244 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=kj9zAlcOel0A:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=17MMwBHFoGJDYN7e9MwA:9
+ a=CjuIK1q_8ugA:10
+X-Proofpoint-GUID: 83X-ft2oRkMXo03OQPgEqsBuw75g_R7Y
+X-Proofpoint-ORIG-GUID: 83X-ft2oRkMXo03OQPgEqsBuw75g_R7Y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-29_03,2026-07-28_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 clxscore=1011 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607290080
 
+On Tue, Jul 28, 2026 at 09:26:06PM +0200, David Hildenbrand (Arm) wrote:
+> > The generic definition aliases hw_pte_t to pte_t, so this series preserves
+> > the representation and behaviour of every architecture. ptep_get() keeps
+> > its existing READ_ONCE() semantics and converts the stored element through
+> > __pte_from_hw(). An architecture can later define a distinct hw_pte_t and
+> > convert its PTE interfaces to make the distinction compiler-enforced.
+> > Architecture PTE implementations and most architecture code are
+> > deliberately left for those later opt-in conversions.
+...
+> Do you have a pointer at the arm64 part, so people can get a feeling for how an
+> actual hw_pte_t implementation can look like.
 
-On 2026/7/28 21:23, Pu Lehui wrote:
-> From: Pu Lehui <pulehui@huawei.com>
+May be we need the generic hw_pte_t implementation as { pte_t pte; }
+right away?
+
+Also, can you envision a case when sizeof(pte_t) != sizeof(hw_pte_t)?
+If not, the compile-time check is worth adding.
+
+> -- 
+> Cheers,
 > 
-> When replacing an existing bpf_link in single-attach case in
-> __cgroup_bpf_attach, old_prog is NULL while old_link holds the active
-> link. If attachment fails midway (bpf_trampoline_link_cgroup_shim or
-> update_effective_progs), the cleanup check `if (!old_prog)` wrongly
-> treats the existing pl entry as newly allocated, calling kfree() and
-> causing a UAF.
-> 
-> Additionally, original flags and storage state are not restored on
-> failure.
-> 
-> Fix this by checking `!old_prog && !old_link` before freeing pl, and
-> properly restoring all previous states on error.
+> David
 
-Nack, sorry for the noise.
-
-link attach only support BPF_F_ALLOW_MULTI mode, so it will not occur 
-UAF pl.
-
-But there still remain an invalid storage access issue. I have been 
-mentioned and fix it in v2. Hope that will fix.
-
-https://lore.kernel.org/bpf/20260729100208.3076769-1-pulehui@huaweicloud.com/T/#u
-
-> 
-> Fixes: af6eea57437a ("bpf: Implement bpf_link-based cgroup BPF program attachment")
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> ---
->   kernel/bpf/cgroup.c | 16 +++++++++++++---
->   1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index e2fa0ebeed83..e22e7dfe0022 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -811,10 +811,13 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->   {
->   	u32 saved_flags = (flags & (BPF_F_ALLOW_OVERRIDE | BPF_F_ALLOW_MULTI));
->   	struct bpf_prog *old_prog = NULL;
-> +	struct bpf_cgroup_link *old_link = NULL;
->   	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
->   	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
-> +	struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
->   	struct bpf_prog *new_prog = prog ? : link->link.prog;
->   	enum cgroup_bpf_attach_type atype;
-> +	u32 old_flags, old_pl_flags;
->   	struct bpf_prog_list *pl;
->   	struct hlist_head *progs;
->   	int err;
-> @@ -865,6 +868,9 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->   
->   	if (pl) {
->   		old_prog = pl->prog;
-> +		old_link = pl->link;
-> +		old_pl_flags = pl->flags;
-> +		bpf_cgroup_storages_assign(old_storage, pl->storage);
->   	} else {
->   		pl = kmalloc_obj(*pl);
->   		if (!pl) {
-> @@ -884,6 +890,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->   	pl->link = link;
->   	pl->flags = flags;
->   	bpf_cgroup_storages_assign(pl->storage, storage);
-> +	old_flags = cgrp->bpf.flags[atype];
->   	cgrp->bpf.flags[atype] = saved_flags;
->   
->   	if (type == BPF_LSM_CGROUP) {
-> @@ -912,15 +919,18 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->   		bpf_trampoline_unlink_cgroup_shim(new_prog);
->   
->   cleanup:
-> -	if (old_prog) {
-> +	if (old_prog || old_link) {
->   		pl->prog = old_prog;
-> -		pl->link = NULL;
-> +		pl->link = old_link;
-> +		pl->flags = old_pl_flags;
-> +		bpf_cgroup_storages_assign(pl->storage, old_storage);
->   	}
->   	bpf_cgroup_storages_free(new_storage);
-> -	if (!old_prog) {
-> +	if (!old_prog && !old_link) {
->   		hlist_del(&pl->node);
->   		kfree(pl);
->   	}
-> +	cgrp->bpf.flags[atype] = old_flags;
->   	return err;
->   }
->   
+Thanks!
