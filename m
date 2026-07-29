@@ -1,43 +1,43 @@
-Received: from mail-08.mail-europe.com (mail-08.mail-europe.com [57.129.93.249])
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164A93AEF5A
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 19:15:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.129.93.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A153AFD06
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 19:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785352532; cv=none; b=LgxEy9R8z5HYMSrGECIENMj1+mPcjYOrjKQvE/nIlU1H94sVrCmXPhRp9CvsVn4tnrhd2kB4y7lFY9NabrjTAc6PUhP4IxKeMzk2l0U3H77HBTOJqiLlQTCNVD3Gi0y2WHn+j7/Ws4WmNnN7AbPadO17Fi2VqxUzMT7YXDEAGxY=
+	t=1785352899; cv=none; b=prfwBECIEqQfTbKBDAj8fLqHd0pzr/OjGuveB1nU3qf5CR91e19jXBdzH8O2azXx+eyP7lHj8q0nQQbg0vaOQ0P76eMwmUoh7vmfeD25GKG9yPkKgHwZ+y7RvTPiMIV+j6baajVj9OeCLQ4eznhHFiQDjzM8Sr48SRb0kl2SYNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785352532; c=relaxed/simple;
-	bh=2B1dM+OwAXcLq/+ZJdhX2Rq1qFGLFP83XO/PgWg0s7k=;
+	s=arc-20240116; t=1785352899; c=relaxed/simple;
+	bh=WtdS2Li9xdf9VdqeWPxFgfobm82WvYQjCAwciK4fzGo=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hQS9uXxvYWPkJfguNxL8g33+unrJgHvviH3zu654wDBc65KKyAsXDruiGq5rFedUvWAF+s+nrUOoIh5Iz+uZ3d92+yVxHZC+wa98IcYSmTji3CCMDqdqkkSPpUJENr18BoJePnW0dgz7GlzPhswI8TnoMBQ/oUEa0JqR2DPYKV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=AcvQLg7R; arc=none smtp.client-ip=57.129.93.249
+	 MIME-Version:Content-Type; b=TyqkSLR+YFrUCVFtgMIW8Epfm8/mAgZSBFIbLm9Tc6ZKZMW27spnRAHtIjuIF044gMG1lNxql8lihkcVFO18Aes08+TF2pANV77VXhxzWJMRj+dPkhDvLSHckla/TDrSEmDZPHIw1TMvLPsbVRrzXb+ApeGsww2Jbdo+jQnDOKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=QcKntdBl; arc=none smtp.client-ip=185.70.43.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="AcvQLg7R"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="QcKntdBl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1785352518; x=1785611718;
-	bh=2B1dM+OwAXcLq/+ZJdhX2Rq1qFGLFP83XO/PgWg0s7k=;
+	s=protonmail3; t=1785352885; x=1785612085;
+	bh=f8GQiFPeNGLMMFvkMsXfFB70VMTDduncNDJ9Qa4FRmM=;
 	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
 	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
 	 Message-ID:BIMI-Selector;
-	b=AcvQLg7RWSsf26ng3BnAupxfW2IHgEEyym5tqjNvkuMZC481zLPBBsXGu/dC1n6Ff
-	 GgnXmIOpbmZZBBTlaiy7nGuBwfo046aruQa7XCpDydoMOWBqSb1I0Syn5KDlHTgGmV
-	 xYC8wYW49tjenpGsFPiepBIAYGT4edZhYhpF2XK4+xU2CcHPrGERLZIH07wrh1SK8i
-	 /d9ZeBPjNxS3ciWiKKjuMQD5IDCmXJFp28f5dOs/x/Efqx1lKn25KcmMOdC7VfZi/g
-	 zM+l9zy+yS/bSZStHUM1R5UABRsZL6bcC2RXSiEqBZhsq7danEw7C4b1wV5B57PV6L
-	 13AKKYxc5Etjw==
-Date: Wed, 29 Jul 2026 19:15:12 +0000
+	b=QcKntdBlRfq7Xjswd/H/I3cJcK+tgKXmT7FaOyRmEVYq0NNnb5tKFBNkFg6UpHbec
+	 MN1NF8amaZC5XsX0H1yNgk7cYMDiiDa9Q2oPcNIbYkTelIvPITvQAK8HLDyj89kn/g
+	 DaU3DGVhiQCmPKMk7NYwdAcS3Ut5NY3qyduKn2Vi4ppOA6QKCacrux3s/KORRTdL23
+	 VFSvUcCZ3qqtS7AePmalxD4fkwsGqvc+mdEkbOXk/OqGf5EXA+fRAWyTKzQBJ67tNa
+	 bTowfy0uIM6o2RNXne2KVvs3GLEPZ4vJqOQY2z4teSRjVfEFD3VQxIIuzvs8wYNKk1
+	 98wwI3ML9ruSw==
+Date: Wed, 29 Jul 2026 19:21:19 +0000
 To: shung-hsi.yu@suse.com
 From: Vinicius Sampaio <vldsampaio@pm.me>
 Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, martin.lau@linux.dev, sdf@fomichev.me, shenghaoyuan0928@163.com, song@kernel.org, tangyazhou518@outlook.com, vldsampaio@pm.me, yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next 1/2] bpf: Simplify cnum contains() and normalize() implementation
-Message-ID: <20260729191536.274062-1-vldsampaio@pm.me>
-In-Reply-To: <ammWxQ-PiJ-Z0z67@u94a>
-References: <20260728015601.1567098-1-vldsampaio@pm.me> <20260728015601.1567098-2-vldsampaio@pm.me> <ammWxQ-PiJ-Z0z67@u94a>
+Subject: Re: [PATCH bpf-next 2/2] bpf: Avoid redundant min()/max() in cnum signed bounds
+Message-ID: <20260729192144.276697-1-vldsampaio@pm.me>
+In-Reply-To: <ammvMH-I4088A3AX@u94a>
+References: <20260728015601.1567098-1-vldsampaio@pm.me> <20260728015601.1567098-3-vldsampaio@pm.me> <ammvMH-I4088A3AX@u94a>
 Feedback-ID: 138063245:user:proton
-X-Pm-Message-ID: 0bc612a55f4800a3d96e42536c3ff8bc83fe0b83
+X-Pm-Message-ID: 1bd7a2874f1fb4e2059cb687d8f775fbd7fdb62e
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,15 +47,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-> Nit: is there a reason these two optimizations need to land as a single
-> commit?
+> Nit: if we are adding these it would perhaps be helpful to add similar
+> comment to {u,s}range_overflow as well. AFAICT
+> {u,s}{min,max,range_overflow} should be the only cnum function that is
+> not expected to take on an empty cnum.
+>=20
+> Thought I'd prefer something along the lines of
+>=20
+>   caller should ensure !is_empty(cnum) holds when calling
 
-No. I will split them into separate commits in v2.
-
-> Could we go even further and also drop the `cnum.base !=3D 0`, just
-> relying on the `cnum.size =3D=3D UT_MAX` guard solely?
-
-Yes, assigning zero again is harmless. I will simplify this in v2.
-
-Thanks for the review and the Acked-by.
+I'll change the comment to match what you've suggested and add it to
+{u,s}range_overflow then. Thanks for the review and Acked-by.
 
