@@ -1,107 +1,126 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66CCC306768
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 01:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F334034389F
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 02:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785289267; cv=none; b=fVqkAtAkRlx2BHrMyAFLMawo/MMyW1O4Cj5Qmkw2vzrxDLP3uIvOEH5nXT1WfWfXjX42d1OssOoC6m8ClbtS82404mAW30vyTPRTz9qKrdOUpAdXv9eBu4EgSDIo0CWhy4vj7jIq4HG/l9il6lKy8yKEm14HfRuKKv4Vvamek9Y=
+	t=1785292197; cv=none; b=AizA01rn+UnvZhJGE3/8yQWSKJdGljfK8MVT2tqA0ECSfaIe8vpi/COh7ZGiaWyKTqecqlhlPSS6ye90LhZD11oHUw2hjV3bH3GWU0ban+wLz981uy5h3bEP92M3hV+pvvaXWVFUiJW4tBhZmfBlITl/iSXGhfmMm7RNhN51oIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785289267; c=relaxed/simple;
-	bh=4C2QnvxvaRO2l9zCru75rbjXH21xX9Xdq14ne3kNWgM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=K3jWho2K4ljUyxcUsYzpaoqvIBtW04pUnTTENyZ7nvX9z6YFlC8p+DYUA7ob8I9IYs/Tc9yufrN2LLKEJcHCXfVej3Y3TYt8mcl8p/0RcJk5i81i1EYVSGBB9ocAEE+Ia1AZDPrKezXPIDp/Fej7IOTNSh07S++V/mYW5zXtg30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M0peHaNK; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785292197; c=relaxed/simple;
+	bh=S/5a3tZKaG1DhHr+vr7kXCnj7Webr6UiI9jqlWXgH/g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u4kpDc5zIUxXQ4DhuK9J8XKPrMDfnHnE0eAu2+vlVjZ5K6VasBR3eXEpOnKwITgXaaqRNHYolcIn2QBzdUtws9V5/TpAOY5gNC1cz3F06C4yQxKSA7oXulSX9dWTQqMm/XXCVQFY8v6iIKSOAdGMx4PpgjLH9TRB5YIHW4BdgYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uIsOq2l6; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0peHaNK"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-845c92bc464so380964b3a.2
-        for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 18:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785289266; x=1785894066; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=4C2QnvxvaRO2l9zCru75rbjXH21xX9Xdq14ne3kNWgM=;
-        b=M0peHaNK/ZNhGUX1doLvXtKm3p8TaE+EA/7qkBjJr4f83+r1+i8pEbHKL4uLWZBGlp
-         BEIf7QD1DVTSLkwy1kU7H49YLlmRUoXXIrKpkz+224w9GHUCy0tEdLDS1rRQ7zansPPa
-         eT73YaVu8KSPWjr1RzvmHspETgGqTVMbeWaM4LLiyeO1Rz2WnToXf1K+H3+3YhFSUjhc
-         ElBJyDzOd7BGFItD5Ox2Cb2oty7XB07lkw4LWFVOCQgBst4B5iA6HvPTfY25Z/dmnYeF
-         Fkk7WyOODPuKbSf0xZTq8adObUMSMEG6Cl+nblxk98ok39wOtswMVCX3usSGfTFkE9Pd
-         QQrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785289266; x=1785894066;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4C2QnvxvaRO2l9zCru75rbjXH21xX9Xdq14ne3kNWgM=;
-        b=pETOWZL/IhrGzjBYo8c9oaGR4e13YzUs6mTzqA0syH4GEeEaJWVRIqeDkJ7+SXdPjd
-         x+ff48Pp5I35sRZQM1Tygiw6+Xq1SrdpEhXY1pbKroVxNODIqSv5qLw+5ZokjImh8V3D
-         imfBJUlH86bY8TGTbiXEogpG9W2+1FoO/i+BA7WYQbs3YaCKp5H+RNpb+N8b6LSrKJ23
-         RO9yvKh1P2HSNdPaQ+UNin5Ug9KRNsXLp/q6MLhuy4NUIscX0ZsoIyTmK8zI4OEeZ8TP
-         hhe/8VjU1li4daxcyOu7Nvywej6FNKnEBqhvwYqq5aqgDx/rtl6YwwBSwHE/pNmnLMrH
-         VCoA==
-X-Forwarded-Encrypted: i=1; AHgh+Rrm4bDSlCCIpHyJmhoo2MEPZU6bbqPnC8e055XfxOZu1hYnNnVThAg2SjZ3flIlRHYh8/U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHpVac474oCvbP8BaE7aKIvB0UZAKZuXE16vsRay78dbvOTa/1
-	5C4jp2s8PG9m296qqq88WgYT7JfJnaOUnzEqmd0pAJ9ra7qk6MEe0l/J
-X-Gm-Gg: AR+sD13nVX3MOwpkfEw+QxlucrvtqRG8KE9MYaef+hwsDllIsSi1uTclpHwASHkdkOW
-	VdrdneDBUG9UeIqBSqW9+Q1CFdYSnzi/wgJEsOvXyuWKWy2IL3aDJDh4V8NuPbs2h47nW66dsnW
-	R8P/d/mZw71+NCZwlq0pKcgRwK3YJ5x1L6/TGh/ExzNFsEN6UOudAdqeU9+atX89jywSqMrlZLb
-	TTU1hNhJSK6OlcViU4cmFIUQBWwUZHYj7vj2NGPvRhRxsM5gTN2NMAwpcfhZWJ8yo0nVMSPoTik
-	Zo96WrlOZ05VX4UDLRDsv7oZPkgw0CQ6Mjk9+yQ6MkZTPLIpJI7A6CLf0NfS2rrFW8V7IwE6CiN
-	8lWFzgkIGcosNAIzLb7Iz8zrSp3NnU/taQ2xfSlrWsTqY1Eh+sPYxdyxiI4DiZQtK+ZG64t7ial
-	E39dXVBN+sMoNCkV7A47OwiCaNjuGyvp85JI3QcaW38OaKskvwSrmpY2/3p6HAvaAMA6nZT83Hw
-	W5N5JBdKd5eU4922mrI66whl749dclvVfpLEY8Bjkacfyynt9OoOtZyzZ+3iuU=
-X-Received: by 2002:a05:6a00:178b:b0:848:42a7:1854 with SMTP id d2e1a72fcca58-84e93256a18mr4906859b3a.39.1785289265641;
-        Tue, 28 Jul 2026 18:41:05 -0700 (PDT)
-Received: from ?IPv6:2605:8d80:58a5:c474:f5cf:239:70ad:a743? ([2605:8d80:58a5:c474:f5cf:239:70ad:a743])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbdba447107sm194328a12.21.2026.07.28.18.40.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2026 18:41:05 -0700 (PDT)
-Message-ID: <c35c87fadd24aa77d107fa2213f4455448b619a7.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 8/8] resolve_btfids: Enforce consistent
- kfunc flags across BTF ID sets
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-  Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
- bpf@vger.kernel.org,  linux-input@vger.kernel.org, kernel-team@meta.com
-Date: Tue, 28 Jul 2026 18:40:46 -0700
-In-Reply-To: <20260722233518.778854-9-ihor.solodrai@linux.dev>
-References: <20260722233518.778854-1-ihor.solodrai@linux.dev>
-	 <20260722233518.778854-9-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uIsOq2l6"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785292192;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bgK4DkmBX3WByoHXl7Q/Ih8jzCTq/qOCycXaOJxX9Qs=;
+	b=uIsOq2l6e8igoM1RmPvodxi5IDAu9uX8uvK5vKuHWUPdf8QiDo59TEQCfKe/KZ2xaIs5tc
+	4l90xgNtZIaxeMOqjnfVLTG1BLFPZA90eKKieTpZLfqeu2AU4vhe0/WTsmfueCExAdVed+
+	0qak5n1me/BSuTKP7Y7Tpr5AGgXKwj4=
+From: Chenguang Zhao <chenguang.zhao@linux.dev>
+To: chenhuacai@kernel.org,
+	kernel@xen0n.name,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	yangtiezhu@loongson.cn
+Cc: hengqi.chen@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	chenguang.zhao@linux.dev,
+	Chenguang Zhao <zhaochenguang@kylinos.cn>
+Subject: [PATCH v4 0/4] LoongArch bpf kptr xchg inline support
+Date: Wed, 29 Jul 2026 10:28:33 +0800
+Message-Id: <20260729022837.355549-1-chenguang.zhao@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-eOn Wed, 2026-07-22 at 16:35 -0700, Ihor Solodrai wrote:
-> A kfunc may be listed in several BTF ID sets, which is expected
-> because different kfuncs are available to BPF programs depending on
-> their type.
->=20
-> However kfunc flags across different BTF ID sets must be consistent [1].
-> The flags should be considered a part of the kfunc declaration,
-> because they influence its BTF representation and verifier handling.
->=20
-> Enforce the kfunc flag consistency in resolve_btifds by hard failing
-> on error and blocking kernel (or module) build.
->=20
-> [1] https://lore.kernel.org/bpf/9b2196dd-443b-4632-ae11-030cdbdc59b4@linu=
-x.dev/
->=20
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
+From: Chenguang Zhao <zhaochenguang@kylinos.cn>
 
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
+This series enables the BPF verifier to inline bpf_kptr_xchg()
+into BPF_XCHG on LoongArch64, and fixes the underlying JIT
+atomic ordering that makes such inlining safe.
 
-...
+The BPF verifier can lower bpf_kptr_xchg() to a single BPF_XCHG
+atomic when the JIT advertises ptr xchg support via
+bpf_jit_supports_ptr_xchg(). This removes helper-call overhead
+from the kptr exchange fast path. Inlining is only correct when
+the JITed exchange provides the same sequentially consistent
+ordering as the bpf_kptr_xchg() helper.
+
+Patch 1 fixes memory ordering for all value-returning BPF atomic
+RMW operations emitted by the LoongArch bpf JIT. Per LKMM,
+value-returning atomic RMW must provide sequentially consistent
+ordering. Plain AMO instructions and bare ll/sc loops on LoongArch
+do not satisfy this by themselves:
+ - BPF_FETCH (ADD/AND/OR/XOR): switch to am*_db.{b,h,w,d}
+ - BPF_XCHG: switch to amswap_db.{b,h,w,d}
+ - BPF_CMPXCHG: emit dbar 0x700 after the ll/sc loop, matching
+   __WEAK_LLSC_MB in cmpxchg.h
+Non-value-returning RMW ops (plain BPF_ADD, BPF_AND, etc.)
+remain weakly ordered, consistent with LKMM. This fix is independent
+of kptr inlining and benefits all BPF programs using value-returning
+atomics on LoongArch.
+
+Patch 2 implements bpf_jit_supports_ptr_xchg() so the verifier
+may inline bpf_kptr_xchg() on LoongArch64.
+
+Patches 3 and 4 extend bpf selftests: functional coverage via
+kptr_xchg_inline, and an optional kptr-xchg benchmark to compare
+helper vs inlined paths.
+
+Chenguang Zhao (4):
+  LoongArch: bpf: Fix memory ordering for value-returning atomics
+  LoongArch: bpf: Advertise JIT support for kptr xchg inline
+  selftests/bpf: Enable kptr_xchg_inline test on LoongArch
+  selftests/bpf: Add kptr-xchg benchmark
+
+ arch/loongarch/include/asm/inst.h             | 18 ++++
+ arch/loongarch/net/bpf_jit.c                  | 37 ++++---
+ tools/testing/selftests/bpf/Makefile          |  2 +
+ tools/testing/selftests/bpf/bench.c           |  2 +
+ .../selftests/bpf/benchs/bench_kptr_xchg.c    | 96 +++++++++++++++++++
+ .../bpf/prog_tests/kptr_xchg_inline.c         |  3 +-
+ .../selftests/bpf/progs/kptr_xchg_bench.c     | 49 ++++++++++
+ 7 files changed, 192 insertions(+), 15 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
+
+---
+v4:
+ - Resend patches against new kernel.
+
+v3:
+ - https://lore.kernel.org/all/1782119051687451.15056.seg@mailgw.kylinos.cn/
+
+v2:
+ - https://lore.kernel.org/all/20260603100438.2177817-1-zhaochenguang@kylinos.cn/
+
+v1:
+ - https://lore.kernel.org/all/20260602021515.214560-1-zhaochenguang@kylinos.cn/
+
+-- 
+2.25.1
+
