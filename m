@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4056E2D97A6
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 20:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312E73FBEC2
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 20:37:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785357439; cv=none; b=EcH0em8dOQQmgxmkXKAmhKrzCvsygMQy/pRwZNiF6kYXppdzmN6QjCBV2KTSwpfAYpGsBJ6/RkqanRS9laucgXeAmPZiFdAPsPXJbQXRoUKWMLELxvEu4F0CzYbKGBds8KkiltJ3C/0nxVF4Q6vpsS7g0NcdsTPYSvABGc7UPtA=
+	t=1785357445; cv=none; b=tZdWs2/4RVIXujB7Bg22hPKG5/g9shPV9vqKZHboJ/A/FHsOEziD6amYwNJVFSOxI8JDnhwIm5peM/XTBlvmV5EOEK1EDVf2ZG3toYC+KMsr6DMq7VvU5oic15Zn/nfBx1Iq1O60/7rdiC0G/q2X+tJK58omCabRO1YrSFCLQlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785357439; c=relaxed/simple;
-	bh=jZUrZe41kgSQgUVC80U4oVNsu9gg/ZY8Ms5CkXRBZEE=;
+	s=arc-20240116; t=1785357445; c=relaxed/simple;
+	bh=hBEF+kk0CUTCv9EVKQqF3fY2umSOGj238FwnEsVpV1k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bMGbdni/choR8lnPR/1U46uDqzuVgapFx9fay85GSncBdWmYngnCw5FZss5TjoiPEVH7tNXkyurw1ox6H2b2md2FbenRLWhnE/4X3skE0ZOQwUMvD0GgjCJfsNIz26WO7axVoQqcFWnEYGS9v4IPZYOgGXFk0sCydbLgsQFkY1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yt1RSpBK; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=ELR2LJX9SjMU2lnL7noR1nodvFZZtPSpFB3FMUFOiA3H730GaMYEomUcXCur2MHvNG3i1DuUh0PwxeMkbDqEoYYSyRXhAGB7tbdU3nZPUG5NPhwr6MBMQexrd2aj6PMNTs3sIx5A13ek0xAD/TkpyxU2RnOXQx2mMG0R0Xw0WPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A0YSrEts; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yt1RSpBK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB8B1F00A3E;
-	Wed, 29 Jul 2026 20:37:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A0YSrEts"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA971F00A3F;
+	Wed, 29 Jul 2026 20:37:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785357420;
-	bh=LVXYiXfm48dV4vPQH3biW9WfmYq0XJAQk/XFUNe5erc=;
+	s=k20260515; t=1785357427;
+	bh=WcvuoBKsVAdSG6bbGQqQwtBbPvwUOLvjGk58eVLViLI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Yt1RSpBKBwcTo9bNJxSJEZzrRZ0eUoVUilBVUWW0rDIY7d0ViPZLXxeyCaffKDUSz
-	 GdLepsE1anorxhzSGkcgzcvDz2HSjWh58gAKY/s5OWTMpbSZwA9vDtRtvcVtmzcY9g
-	 jMrhC6SncdToN89EfQW0mxsFlXApAADAtXTpyDKECFMNDsdMN2JP8yF8w6tWiRjdaa
-	 ACuoYE/TaeiWjNQMLl4FN+wB1eoqN2qh79+RxJZA7k939DH28XELyC3ige9Q9gUIsF
-	 lgIIBppMYoNTM1RkZfqutDa9FnpNYegJ8n4Gv1qP6brM2sI9cGV7YL5B9LWijXkdcn
-	 TvqTMVPZ1kxmw==
+	b=A0YSrEtsrY3I6wgHPfgWCdIE8GK+vCbpdsWV/pAdaOT8H3BXfiYi1zP9mhsbespLn
+	 GOlCx5rECi6vGqq9PcljpngaCZen00lpRjrJv5US1wBIt3KJcVrrsLKjCRQrjMB9Zj
+	 O8W96HL/AEnu1kUV5jYqfnlgRw0extqNELa92kW/URFUcO3KwxftNaf3Gm1h60IjtO
+	 vgMle13Bz+RMrHKzRnOowBCnXBy1dYKhxuyVN9T6GY1L4yHlsJDiAYFzk/VJ0QcBaO
+	 RkCOKkObI5uwMGk4HpRxPhHdxJEe9T3os4kAXYLuD3ILa/0DpYqGHkeX6gN6Ae9fSH
+	 Zp4qpymgHva4Q==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -37,9 +37,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
 	"Song Liu" <song@kernel.org>,
 	"Yonghong Song" <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v4 3/6] bpf: Inline bpf_iter_num_next() kfunc
-Date: Wed, 29 Jul 2026 13:36:23 -0700
-Message-ID: <20260729203633.213973-4-puranjay@kernel.org>
+Subject: [PATCH bpf-next v4 5/6] selftests/bpf: Verify inlined numeric iterator shape with __xlated
+Date: Wed, 29 Jul 2026 13:36:25 -0700
+Message-ID: <20260729203633.213973-6-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260729203633.213973-1-puranjay@kernel.org>
 References: <20260729203633.213973-1-puranjay@kernel.org>
@@ -51,75 +51,119 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_iter_num_next() is called on every iteration of a bpf_for() loop and
-is the hot path of the numeric open-coded iterator. It only advances the
-on-stack iterator state and returns a pointer to it, so open-coding it in
-the verifier removes a function call from each loop iteration.
+Add an __xlated test to the open-coded iterator suite that pins the shape
+of the inlined bpf_iter_num_{new,next,destroy}() rewrites. The program is a
+naked function, so there is no compiler-generated glue and the whole
+inlined program is matched instruction for instruction: bpf_iter_num_new()
+emits the range check (distance computation and both the -EINVAL and -E2BIG
+paths), and bpf_iter_num_next()/destroy() are inlined too.
 
-Inline it in bpf_fixup_kfunc_call() by replacing the call with an
-equivalent instruction sequence. R1 holds the pointer to the on-stack
-bpf_iter_num; the returned pointer to s->cur is R1 itself since s->cur is
-the first member.
+The tests are pinned to x86_64 and arm64 (bpf_jit_needs_zext() == false):
+on arches that need explicit zero-extension the verifier interleaves
+"wN = wN" insns into the inlined body, which would not match the fixed
+instruction sequence. The inlining itself is arch independent, so checking
+it on these arches is sufficient.
 
-s->cur and s->end are int, so the kfunc's s->cur + 1 >= s->end test is a
-signed 32-bit comparison of (s->cur + 1) against s->end, with s->cur + 1
-computed as a 32-bit int. Sign-extending both sides of a comparison of
-two int values does not change its result, so the inlined code uses a
-32-bit compare and needs no sign extension.
-
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- kernel/bpf/verifier.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ tools/testing/selftests/bpf/progs/iters.c | 83 +++++++++++++++++++++++
+ 1 file changed, 83 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7400515ae1296..3a3d096f3966e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19810,6 +19810,34 @@ static int inline_bpf_iter_num_new(struct bpf_insn *insn_buf)
- 	return i;
+diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
+index 0fa70b133d932..62d7df9e80beb 100644
+--- a/tools/testing/selftests/bpf/progs/iters.c
++++ b/tools/testing/selftests/bpf/progs/iters.c
+@@ -88,6 +88,89 @@ int iter_err_unsafe_asm_loop(const void *ctx)
+ 	return 0;
  }
  
 +/*
-+ * Inline bpf_iter_num_next(). R1 holds the pointer to the iterator. Keep in sync with the
-+ * kfunc in kernel/bpf/bpf_iter.c.
++ * Naked function, so there is no compiler-generated glue and the whole inlined program can be
++ * matched. Pinned to arches whose JITs zero-extend 32-bit writes implicitly
++ * (bpf_jit_needs_zext() == false); on arches that need explicit zero-extension the verifier
++ * interleaves "wN = wN" insns and the fixed shape below would not match. The inlining itself is
++ * arch independent, so checking it on these arches is sufficient.
++ *
++ * bpf_iter_num_new() emits the full range check (distance computation and both the -EINVAL and
++ * -E2BIG error paths); bpf_iter_num_next() and bpf_iter_num_destroy() are inlined too.
 + */
-+static int inline_bpf_iter_num_next(struct bpf_insn *insn_buf)
++SEC("raw_tp")
++__arch_x86_64
++__arch_arm64
++__success
++__xlated("r6 = r10")
++__xlated("r6 += -8")
++__xlated("call unknown")
++__xlated("r3 = r0")
++__xlated("r3 &= 65535")
++__xlated("r1 = r6")
++__xlated("r2 = 0")
++/* bpf_iter_num_new(&it, 0, <non-const>) with the range check kept */
++__xlated("if w2 s> w3 goto pc+8")
++__xlated("w0 = w3")
++__xlated("w0 -= w2")
++__xlated("if r0 > 0x800000 goto pc+8")
++__xlated("w2 += -1")
++__xlated("*(u32 *)(r1 +0) = r2")
++__xlated("*(u32 *)(r1 +4) = r3")
++__xlated("r0 = 0")
++__xlated("goto pc+5")
++__xlated("*(u64 *)(r1 +0) = 0")
++__xlated("r0 = -22")
++__xlated("goto pc+2")
++__xlated("*(u64 *)(r1 +0) = 0")
++__xlated("r0 = -7")
++__xlated("r1 = r6")
++/* bpf_iter_num_next(&it) */
++__xlated("r0 = *(u32 *)(r1 +0)")
++__xlated("w0 += 1")
++__xlated("r2 = *(u32 *)(r1 +4)")
++__xlated("if w0 s>= w2 goto pc+3")
++__xlated("*(u32 *)(r1 +0) = r0")
++__xlated("r0 = r1")
++__xlated("goto pc+2")
++__xlated("*(u64 *)(r1 +0) = 0")
++__xlated("r0 = 0")
++__xlated("if r0 != 0x0 goto pc-11")
++__xlated("r1 = r6")
++/* bpf_iter_num_destroy(&it) is inlined to a nop */
++__xlated("goto pc+0")
++__xlated("r0 = 0")
++__xlated("exit")
++int __naked iter_num_new_inlined(void)
 +{
-+	int i = 0;
-+
-+	/*
-+	 * s->cur and s->end are int, so the kfunc's s->cur + 1 >= s->end check is a signed 32-bit
-+	 * comparison of (s->cur + 1) against s->end and needs no sign extension.
-+	 */
-+	insn_buf[i++] = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 0);
-+	insn_buf[i++] = BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1);
-+	insn_buf[i++] = BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 4);
-+	/* if ((s32)(s->cur + 1) >= (s32)s->end) goto done; */
-+	insn_buf[i++] = BPF_JMP32_REG(BPF_JSGE, BPF_REG_0, BPF_REG_2, 3);
-+	/* s->cur++; return &s->cur; */
-+	insn_buf[i++] = BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0, 0);
-+	insn_buf[i++] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
-+	insn_buf[i++] = BPF_JMP_A(2);
-+	/* done: s->cur = s->end = 0; return NULL; */
-+	insn_buf[i++] = BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0);
-+	insn_buf[i++] = BPF_MOV64_IMM(BPF_REG_0, 0);
-+
-+	return i;
++	asm volatile (
++		/* r6 points to struct bpf_iter_num on the stack */
++		"r6 = r10;"
++		"r6 += -8;"
++		/* non-constant end so the range checks are kept */
++		"call %[bpf_get_prandom_u32];"
++		"r3 = r0;"
++		"r3 &= 0xffff;"
++		"r1 = r6;"
++		"r2 = 0;"
++		"call %[bpf_iter_num_new];"
++	"1:"
++		"r1 = r6;"
++		"call %[bpf_iter_num_next];"
++		"if r0 != 0 goto 1b;"
++		"r1 = r6;"
++		"call %[bpf_iter_num_destroy];"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32),
++		  __imm(bpf_iter_num_new),
++		  __imm(bpf_iter_num_next),
++		  __imm(bpf_iter_num_destroy)
++		: __clobber_common, "r6"
++	);
 +}
 +
- int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		     struct bpf_insn *insn_buf, int insn_idx, int *cnt)
- {
-@@ -19941,6 +19969,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		*cnt = 6;
- 	} else if (desc->func_id == special_kfunc_list[KF_bpf_iter_num_new]) {
- 		*cnt = inline_bpf_iter_num_new(insn_buf);
-+	} else if (desc->func_id == special_kfunc_list[KF_bpf_iter_num_next]) {
-+		*cnt = inline_bpf_iter_num_next(insn_buf);
- 	}
- 
- 	if (env->insn_aux_data[insn_idx].arg_prog) {
+ SEC("raw_tp")
+ __success
+ int iter_while_loop(const void *ctx)
 -- 
 2.53.0-Meta
 
