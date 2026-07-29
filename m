@@ -1,42 +1,40 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59AAB37CD37;
-	Wed, 29 Jul 2026 17:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49592382281;
+	Wed, 29 Jul 2026 17:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785346329; cv=none; b=OQSQDwAJAFkBuQYF/0ilOSG6LYQRdIbnvY0y3OYEFXD4YxpB/tz+CO6k84jOebQtTr+alrsg3n/b51fj59m/wHlVcI10TUHTOF8LFKfNms3IX8EyW3DqAQcl9T2LhzZyxeYmkipF8FLZch4FvCcu2f95heemeqaptc46ewdmyXk=
+	t=1785346679; cv=none; b=qn+A7fVCK2A59HFcaBtpZrQ15KHj+eCkD6XQzjWxqDYVeAGdM3/sz3oQFsbvZnwxIEH7rAzbYxgHnXvG5K02+r2aZzSe9V8DNI2du+t5nxRphHr0ptCYQ2V7qcTUL297PvC971sWkmbDtftfMU61MgaEWGnBGYjr6wcz5hAmiUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785346329; c=relaxed/simple;
-	bh=jzLKPOJfZi/ERyCqbefXUD/njeS+E0E8wHwLbTiO7wo=;
+	s=arc-20240116; t=1785346679; c=relaxed/simple;
+	bh=kMRSqskHIZrtbFWKTm+34eU3QqdSmBHIzkXZaJIAV30=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gcZvoL97xA02bLB6xLJGkar3IMHy6XmqB6nrfVm98v/NX7bgfWLOBGgRraYgGRboLEn4IgmjAVlaVmdOKV4e05fkwNmJeL0egxPFcWxu4FgtbMSTYJx+fghE2Asui3xgqVrpJG8b1jtDWgOpZj0D2ioOArSnLiQHW1hFcPqOb/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+	 MIME-Version:Content-Type; b=ABXrqtHk8eV+BpTHQXdfsXMm57rIHsKuRU4LWvkxqIgzVTSdcZ4nVnBc4+KsOQ/T1FPhY2uht/NQTa6xKofsf45bih3xyYogGgLziJC/+cw4sznuGuJaqO2Tlh7Rr9erlOOHCVvVO4WSfF1bPcG1RcnAXh8/V77gngZC4Gh8TWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf20.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id B1FB8A0779;
-	Wed, 29 Jul 2026 17:32:04 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id 3F12220025;
-	Wed, 29 Jul 2026 17:32:01 +0000 (UTC)
-Date: Wed, 29 Jul 2026 13:32:32 -0400
+Received: from omf17.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id 1D7621C0FA1;
+	Wed, 29 Jul 2026 17:37:54 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf17.hostedemail.com (Postfix) with ESMTPA id 232CC1B;
+	Wed, 29 Jul 2026 17:37:51 +0000 (UTC)
+Date: Wed, 29 Jul 2026 13:38:26 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
- bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, song@kernel.org, jolsa@kernel.org, naveen@kernel.org,
- davem@davemloft.net, mhiramat@kernel.org, stable@vger.kernel.org,
- linux-open-source@crowdstrike.com, mbenes@suse.cz
-Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark
- trampoline/kprobe ftrace_ops permanent
-Message-ID: <20260729133232.1e6c79eb@gandalf.local.home>
-In-Reply-To: <CAHk-=wjzHTuomhTegkD69veDVRxprX8NB=i7A+BEB2-v6v5n+g@mail.gmail.com>
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
+ naveen@kernel.org, davem@davemloft.net, mhiramat@kernel.org,
+ stable@vger.kernel.org, linux-open-source@crowdstrike.com
+Subject: Re: [RFC PATCH bpf-next 3/3] selftests/bpf: add ftrace_permanent
+ test
+Message-ID: <20260729133826.46c7d049@gandalf.local.home>
+In-Reply-To: <CAOu3gNiThogqw_RzEOujeEt3dMqz513ZJdjCDp3nFr3GxvVumA@mail.gmail.com>
 References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
-	<20260729104114.04298a48@gandalf.local.home>
-	<CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
-	<20260729113136.32af2a4d@gandalf.local.home>
-	<CAHk-=wjzHTuomhTegkD69veDVRxprX8NB=i7A+BEB2-v6v5n+g@mail.gmail.com>
+	<20260729005959.3853865-4-andrey.grodzovsky@crowdstrike.com>
+	<amn-vbX6AitcIcC0@krava>
+	<CAOu3gNiThogqw_RzEOujeEt3dMqz513ZJdjCDp3nFr3GxvVumA@mail.gmail.com>
 X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -46,103 +44,27 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 3F12220025
-X-Stat-Signature: 5xdgoxrisbw3orwf73efo6xozpqu9cxj
+X-Stat-Signature: stz9xiecarhnkqnnhw17k1uwtjqhtr1x
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 232CC1B
 X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/xEXo6II7fWdCqKMnxVwogpUqOt5SbSV4=
-X-HE-Tag: 1785346321-509819
-X-HE-Meta: U2FsdGVkX19mhPo7qBAXnNQCBh4LMj2QLHcRYchT8qWobOEEwXW4ZN10LX7yP6HicrvpMS3PmTfz+8dBqQtTOTBzxWF2kA/hfjwIXdj1LbV8inBszGIpuwrMUczTITGSzYH5UP4NOPQy21Nqye7bojQLH7UGWTc4RRXB+sY3o/n7rW6ekE4lj46B7mEUc/nvDr3p5dt8dKycHwJox2qJK2v3uSjuKe8ReEwna2bThWB3mOMNs7u+Mw/dbWKhNiXLqsjjE6Qh+IrPF0d0cYI8SxtdXHGUOAZv5Vodv9gg8rLUEMdMR3qAzCWgvkEhbse18fd/QnnfcdL9g1V9Q/S/9DUCmSCPw4PCOXR7AqehOmfB39KMEAISYDsGDHdamvxK+c8MSaz5El6ZP2/KANDZp4rWAwTwTS8AbtmgZJLcuwoQarjjolUCFGW3LP4wi7F9
+X-Session-ID: U2FsdGVkX196tv3Qn/I4MovrL0nmfVF8XnN5xSIjHa4=
+X-HE-Tag: 1785346671-787363
+X-HE-Meta: U2FsdGVkX1/03ONXSJarh6357eAnWESbpWOcztRtxB+5YLFfs/aHWLoxBd+sWawa2w9M420uuTL1XOCFLcrsf8Dy1r+k0sQdZ9EVssHd58V6BxWHL8h1RTzeUX1ydtMA3RmhwZmPri+ospw+9ngOEP3rZF6KyyfSXuXDP70ud2MRTbDChd56xYxNKnwoQnfYg/h3YCNihGdWG9qLn5/mFd7EFiGN/Ch4224YGTvkDH0NzRZL+WhxSD/xBxu9CIYTU+Hguxcx2YG60PY2wgtPFVL8omk23EVunpVsKiQxase1f1gN5YaCsByXmBytx2OSyAh9Gdr0gMrVd8j8HEc0u1chIj3az2HI
 
-On Wed, 29 Jul 2026 08:47:33 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Wed, 29 Jul 2026 13:16:01 -0400
+Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
 
-> On Wed, 29 Jul 2026 at 08:31, Steven Rostedt <rostedt@goodmis.org> wrote:
-> >  
-> > > > Honestly, I would love to get rid of it as today ftrace has proven to be
-> > > > rather stable. But as it is a user space ABI, I'm not sure what will break
-> > > > if we do. I wonder if we just make it a nop, and print a message to dmesg
-> > > > saying:
-> > > >
-> > > >   "ftrace_enabled no longer does anything. Please report if you need it to."
-> > > >
-> > > > ?  
-> > >
-> > > Thanks Steven, if you and/or other community members would approve such
-> > > approach I would happily do this instead for a few reasons -  
-> >
-> > It's actually if Linus is OK with this approach.  
-> 
-> The rule is always the same, and I don't understand why there's any
-> discussion about it because it's been stated a million times: we can
-> try to make any ABI changes at all, and what matters is whether it
-> breaks somebodys setup.
-> 
-> If people rely on old behavior, it can't change. And if people don't,
-> nobody cares. It really is that simple. That is literally the
-> DEFINITION of "don't break user space".
+> Thank you, Jiri. I will address this once the decision on whether to
+> proceed with this
+> route or, just make ftrace_enabled obsolete, is made.
 
-That's basically what I said. I was just restating it and not asking if I
-was correct. I added you more for the below information you added.
+Note, the ftrace_enabled becoming obsolete *can* be reverted if it breaks
+somebody's tool. So still be ready with this patch set.
 
-> 
-> Whether something is user-*VISIBLE* in theory is entirely immaterial
-> except in the sense of "be careful, this needs testing and may have to
-> be reverted". So user-visibility isn't a "don't do it", it's a "do it
-> carefully, and knowing that you may have to revert immediately if
-> somebody complains".
-
-Totally agree.
-
-> 
-> So changing user-visible things is potentially a lot of wasted effort,
-> and needs loving care and follow-up.
-> 
-> So everybody should typically avoid changing user-visible things
-> because it's potentially painful and developer-intensive, but not
-> because it can't be done.
-> 
-> All that matters is whether real user workloads regress.
-> 
-> And please make sure that any changed behaviour is really obvious, so
-> that people don't spend lots of time chasing down *why* something
-> broke. A kernel printk is generally way too subtle - and no, the
-> tracing "make the printk extra ugly with crazy ASCII barfics" model is
-> not an improvement.
-> 
-> It might be better to actually return an error to user space so that
-> users can see that setting ftrace_enabled to zero failed and it would
-> show up in user logs. kernel developers may think that kernel logs are
-> important, but users seldom even think about them. Of course, that can
-> then cause even worse regressions, so there's a balance here.
-> 
-> End result: don't do user visible changes unless you really really
-> care. And then you spend the extra effort.
-
-Honestly, I don't know of any tooling that would use this kill-switch or
-any reason to do so. For live kernel patching and for BPF, it doesn't even
-work. Hasn't for some time. It's now a "kill some ftrace but not all".
-
-Hence, again, the switch itself is rather useless.
-
-It now is starting to cause a burden, as there's internal code depending on
-ftrace functionality to always be working and can cause some nasty
-undefined behavior if someone were to set that kill switch to zero. The
-solution is to either play whack-a-mole and make sure all those use cases
-have the PERMANENT flag set so the kill-switch does not affect them. Or we
-simply disable the kill-switch.
-
-But I like your idea about it returning -ENOSUP if someone tries to set it
-to zero. Doing that and the printk should let people know why it didn't
-work if they do care.
-
-And yes, we need to be ready to revert it if someone does come back and say
-their tooling broke because of it.
-
-Andrey, care to make a patch to do that?
-
-Have setting it to zero return -ENOSUP and print a message saying:
-
- "The ftrace_enabled file is deprecated and no longer disables ftrace"
+Also note, I have had success in getting changes that do break user space
+by fixing that user space so it's not broken again. But then I have to wait
+until all distros (including Debian Stable) have that version of the tool
+before I can add the change that broke it.
 
 -- Steve
