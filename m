@@ -1,178 +1,139 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CCD430789;
-	Wed, 29 Jul 2026 07:54:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555993BFE34
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 07:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785311653; cv=none; b=UGDQDWqy7ZrJZwBcb+mv7gJT3uhfd69nRePZQ8QIELWw98ahaRgwhHN2ftDBaTYZTxBPIz5ERERnbAM+LtfKT5O+86dzup6QLPxaszDf4XP+XT6Th8vTSF6BQ75UPgs0t1KQETCJf78hrJM7CrhUbmDAmE2bEDU/28ZbYPzSWrA=
+	t=1785311955; cv=none; b=os8Is6k3ggqoaqSluRztZq4MxBurFicb6jXRW65xk0Pr7sLpXlmfCgOWr7JjJR4Un250VHlsE63vgBTPWK7lH65WUudlsA5Qm+JQVJSaQ2BzESZP8B12ucGpBE8aDNRREwcaA2hufm611E/+XcCXzcgYzrCv9/oodKTEIMqCHo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785311653; c=relaxed/simple;
-	bh=+QAuJHU6SgyBKECnDX+nf45rdY70yAkmP+fph6HnnCI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JRz40S/QZ/Wpqn3oxOyZBfOZ4SxlM84qEdlKEp7YoG+tzbvAuipJi5vlZ3JMYd0JE+750WfcBZal/d3xOfeFV+YrFfFq5ZRy5XxeHimEfgOOzq2/9QCcGVgcs1Vpw3O+vJcGhuU176z7kSuBfYy3RAgX99Of7TqEHWxRNObKRiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Rho0aQ6u; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1785311955; c=relaxed/simple;
+	bh=oJKg+sWU08019AgYZ3mLYhBvl4jR2MRhBkXkAFvkC1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q51qpUxFjaQGtmqrgFMjkpKCsN1MAStNwbv+znqRLIJFUhi84zBEABnCQCRRqmjBVcggbkHsK9LBGyZwAflgkbnu1TR8YIFvalNr4VCQvlaLDY0ts/956lvpYDfbAu7YZO1qtkspWjOeE8dih6TxCu9o9da+lGy2IKVo3C7vtYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WcRSDCud; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Rho0aQ6u"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=NY
-	CRsjdNejY70awpeyUxSlEcWOiioWnto7d+vTISsuc=; b=Rho0aQ6uqpi2DV1bZc
-	MW/wLFfZLWZI3ghcT82lYfcpqTZwNgrGmkzJ+7qOO17ytC3WlFh9T0iPWaapXhHJ
-	j4j2KUuRRf3kwNvM81LJi5pswMkjBN697fhIgzMqEYmM/NMsEYCGQtMerL3ADr+C
-	G7Ns7ZjQai9yvnCaAl4A5FZvw=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDHpqZzsWlqBGZiMg--.45309S2;
-	Wed, 29 Jul 2026 15:53:24 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org
-Subject: [BUG: 6.6.y] bpf fentry hook on _raw_spin_lock_irqsave triggers hard lockup
-Date: Wed, 29 Jul 2026 15:53:22 +0800
-Message-Id: <20260729075322.628521-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WcRSDCud"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-69f7af97316so1023999a12.0
+        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 00:59:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1785311951; x=1785916751; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BSu7JL8uetpoTT8PchWK8VOr9P/UrPvyuqFyAo+g8/A=;
+        b=WcRSDCudtq5vhvlWKkN4slemiGg4Kr1keB6tQZxE6pEZ0KZsXWljNxNL0qkyVEz6Ms
+         EGP7ra+hCGWL5+dWBtmZKAcbw+OHRU5P31AQupQb6WQghKGH/VzVO6ubW2CWiqjiEiZR
+         Acilgofi5mBU4gipmvpg4Z/5UUB5cFEUQjYnKC4EEHsUyvEFCEe/nOHMProhHTAbLrsj
+         lDz2BEqy+L22di7txcvji5KxfXsjyGJIc9S5SnizseyU11LBA/MM6sbONfoiPHo+nqdH
+         ELZftCgfD1JAo94qTy+/Ac8C6YdUKPyHhqGIocrXeum7q2VNHEhmaEdJeo130c3dZAZD
+         vBvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785311951; x=1785916751;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BSu7JL8uetpoTT8PchWK8VOr9P/UrPvyuqFyAo+g8/A=;
+        b=lQevpdn7blHiqzfIvD8XbZVQj+rwt4OvyQDzm6e7ZRf0L5In8VKAAcIYp3445E2qZl
+         6RpK595I0+c+/lprnU2uEzAXbBqGcK2qVlCtV6iamVrWjD1ea0oTjNz0lVvzTT0a51Cr
+         bELE4syJIZTiiSY2QQE0U4r9BbUwJR9QNyY4Aqh9RSVsFwL8YlDdv8E4aZgCajlabwZG
+         TG54sN06gnSnx1I4JecJqQG+wRB5HyCJB40Gcbf7usLm1LKIAV/YvoFzSs9xEzkNQyvI
+         Jo7V1dCJjwX6bAx3L7PjH6aMSRn87OOe0Ueu/VivPSysfQ0FjDHVQi/aYPnWCNpZJj7V
+         JhxQ==
+X-Gm-Message-State: AOJu0Ywq0rPCY0MlOCzQq9JeeveqSNLntkmDZdtFFYr4LDRfKgn2MevA
+	ylchI9TLPD6LKRQXPjvOP/DbVbcz9gQk1vmwA8FZ6YZKp7ZHzXHr1sypf+iBrEULRDo=
+X-Gm-Gg: AR+sD11eh3vptBtBW7oiYOvlI/gLkblRT3UjTFm2LOVDl410vgOrTW8XDKFmS19TBgq
+	uzcruMoaupExcCkj4vwcnaYYVyj1OY5XRFQOMZMhUdLP+GVE0X+8nCSRfIYIDUlS6kRXviY2OMm
+	bpQEa+5qwCk1vsFacwxiUicY8n9cn6tHbp54ru+viQoDIgrhNwSt3TcR/ninrTg+z8nvtedTwI6
+	R/yiR2nOxKqSz9BFS5Fx2q6q5kaBrf4H041Vn81rBGz39V+bO9/bdGgx/Pv6H41eDC04kQbjNnn
+	0Se8tG7DhoUT8iDAOd+1pQMpG1oJ3Kl5VGUlsmHGwiF7xRBJD5u6sfpGRStQGAPzHKmK/UC7f8d
+	S0+yUpaS7pUmi1CSJsFGWs/mq8WzOVk1YWxVkSilFTz66cfa69U6MJ0leqQjV3l+wxcibxvCAod
+	ZC69GjUjHUASuaJ8u4rh3wUcjOW11Ty4pc0TTDt3wPGZbGEb1miO0R7f8ndhl5DQeN6QkoeIpLq
+	jCVCmT9SrDm7+F+JBg=
+X-Received: by 2002:a17:907:843:b0:c15:b68a:5e16 with SMTP id a640c23a62f3a-c1f724ea439mr293651866b.60.1785311951475;
+        Wed, 29 Jul 2026 00:59:11 -0700 (PDT)
+Received: from u94a (27-53-97-170.adsl.fetnet.net. [27.53.97.170])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d022bc821asm7390775ad.41.2026.07.29.00.59.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jul 2026 00:59:10 -0700 (PDT)
+Date: Wed, 29 Jul 2026 15:59:02 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Vinicius Sampaio <vldsampaio@pm.me>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, 
+	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com, 
+	shenghaoyuan0928@163.com
+Subject: Re: [PATCH bpf-next 2/2] bpf: Avoid redundant min()/max() in cnum
+ signed bounds
+Message-ID: <ammvMH-I4088A3AX@u94a>
+References: <20260728015601.1567098-1-vldsampaio@pm.me>
+ <20260728015601.1567098-3-vldsampaio@pm.me>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDHpqZzsWlqBGZiMg--.45309S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGr1rZr4kZw1xAFyUur4xCrg_yoWrXF1kpF
-	W3tF9IkwnrZF18Wr48uF1vvF47AwsFgw4fGrW8Ga4rA3W5XFs8XF1xCFyYvryYvr4xWr10
-	kryqqas8A34jyr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbCztUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8RZ+9mppsXb2JQAA34
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260728015601.1567098-3-vldsampaio@pm.me>
 
-When attaching fentry programs to _raw_spin_lock_irqsave/_raw_spin_unlock_irqrestore on
-the v6.6 kernel and using the BPF ring buffer within BPF programs, we encounter a hard LOCKUP.
+On Tue, Jul 28, 2026 at 01:57:18AM +0000, Vinicius Sampaio wrote:
+> This patch simplifies the smin() and smax() calculation by removing the
+> integer min and max calculation on the non-overflowing branch. This is a
+> valid simplification because when the arc does not cross the signed
+> ST_MAX/ST_MIN boundary, the signed order of the endpoints is preserved,
+> so base is the signed minimum and base + size is the signed maximum.
+> Therefore, the min()/max() calls are redundant.
+[...]
+> --- a/kernel/bpf/cnum_defs.h
+> +++ b/kernel/bpf/cnum_defs.h
+> @@ -44,6 +44,9 @@ static inline bool FN(urange_overflow)(struct cnum_t cnum)
+>   * cnum{T}_umin / cnum{T}_umax query an unsigned range represented by this cnum.
+>   * If cnum represents a range crossing the UT_MAX/0 boundary, the unbound range
+>   * [0..UT_MAX] is returned.
+> + *
+> + * The empty cnum doesn't produce any meaningful value, so you should avoid
+> + * calling cnum{T}_umin / cnum{T}_umax with it.
+>   */
+>  ut FN(umin)(struct cnum_t cnum)
+>  {
+> @@ -67,19 +70,18 @@ static inline bool FN(srange_overflow)(struct cnum_t cnum)
+>   * cnum{T}_smin / cnum{T}_smax query a signed range represented by this cnum.
+>   * If cnum represents a range crossing the ST_MAX/ST_MIN boundary, the unbound range
+>   * [ST_MIN..ST_MAX] is returned.
+> + *
+> + * The empty cnum doesn't produce any meaningful value, so you should avoid
+> + * calling cnum{T}_smin / cnum{T}_smax with it.
 
-Reproducible BPF code is shown below:
+Nit: if we are adding these it would perhaps be helpful to add similar
+comment to {u,s}range_overflow as well. AFAICT
+{u,s}{min,max,range_overflow} should be the only cnum function that is
+not expected to take on an empty cnum.
 
-static inline int test(void *ctx)
-{
-        struct event *event;
+Thought I'd prefer something along the lines of
 
-        event = reserve_buf(sizeof(*event));
-        if (!event)
-                return 0;
+  caller should ensure !is_empty(cnum) holds when calling
 
-        submit_buf(ctx, event, sizeof(*event));
+>   */
+>  st FN(smin)(struct cnum_t cnum)
+>  {
+> -	return FN(srange_overflow)(cnum)
+> -	       ? ST_MIN
+> -	       : min((st)cnum.base, (st)(cnum.base + cnum.size));
+> +	return FN(srange_overflow)(cnum) ? ST_MIN : (st)cnum.base;
+>  }
+>  
+>  st FN(smax)(struct cnum_t cnum)
+>  {
+> -	return FN(srange_overflow)(cnum)
+> -	       ? ST_MAX
+> -	       : max((st)cnum.base, (st)(cnum.base + cnum.size));
+> +	return FN(srange_overflow)(cnum) ? ST_MAX : (st)(cnum.base + cnum.size);
+>  }
 
-        return 0;
-}
-
-SEC("fentry/_raw_spin_lock_irqsave")
-int BPF_PROG(aa)
-{
-        return test(ctx);
-}
-
-SEC("fentry/_raw_spin_unlock_irqrestore")
-int BPF_PROG(bb)
-{
-        return test(ctx);
-}
-
-We suspect the hard LOCKUP is caused by the call chain:
-aa->test->reserve_buf->_raw_spin_lock_irqsave->_raw_spin_unlock_irqrestore->bb->test->reserve_buf->_raw_spin_lock_irqsave.
-
-Mainline has merged the rqspinlock patchset
-(https://lore.kernel.org/all/20250411101759.4061366-1-memxor@gmail.com/)
-which resolves this issue. Should we backport the fix?
-
-Alternatively, would a fix modeled after this patch
-https://lore.kernel.org/bpf/20201029071925.3103400-3-songliubraving@fb.com/
-as outlined below be viable?
-
---- a/kernel/bpf/ringbuf.c
-+++ b/kernel/bpf/ringbuf.c
-@@ -30,6 +30,7 @@ struct bpf_ringbuf {
- 	struct page **pages;
- 	int nr_pages;
- 	raw_spinlock_t spinlock ____cacheline_aligned_in_smp;
-+	int __percpu *ringbuf_lock;
- 	/* For user-space producer ring buffers, an atomic_t busy bit is used
- 	 * to synchronize access to the ring buffers in the kernel, rather than
- 	 * the spinlock that is used for kernel-producer ring buffers. This is
-@@ -165,6 +166,8 @@ static void bpf_ringbuf_notify(struct irq_work *work)
-  * considering that the maximum value of data_sz is (4GB - 1), there
-  * will be no overflow, so just note the size limit in the comments.
-  */
-+static void bpf_ringbuf_free(struct bpf_ringbuf *rb);
-+
- static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
- {
- 	struct bpf_ringbuf *rb;
-@@ -178,6 +181,12 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
- 	init_waitqueue_head(&rb->waitq);
- 	init_irq_work(&rb->work, bpf_ringbuf_notify);
- 
-+	rb->ringbuf_lock = __alloc_percpu_gfp(sizeof(int), sizeof(int), GFP_USER);
-+	if (!rb->ringbuf_lock) {
-+		bpf_ringbuf_free(rb);
-+		return NULL;
-+	}
-+
- 	rb->mask = data_sz - 1;
- 	rb->consumer_pos = 0;
- 	rb->producer_pos = 0;
-@@ -215,6 +224,7 @@ static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
- 
- static void bpf_ringbuf_free(struct bpf_ringbuf *rb)
- {
-+	free_percpu(rb->ringbuf_lock);
- 	irq_work_sync(&rb->work);
- 
- 	/* copy pages pointer and nr_pages to local variable, as we are going
-@@ -418,9 +428,19 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
- 
- 	cons_pos = smp_load_acquire(&rb->consumer_pos);
- 
-+	preempt_disable();
-+	if (unlikely(__this_cpu_inc_return(*rb->ringbuf_lock) != 1)) {
-+		__this_cpu_dec(*rb->ringbuf_lock);
-+		preempt_enable();
-+		return NULL;
-+	}
-+
- 	if (in_nmi()) {
--		if (!raw_spin_trylock_irqsave(&rb->spinlock, flags))
-+		if (!raw_spin_trylock_irqsave(&rb->spinlock, flags)) {
-+			__this_cpu_dec(*rb->ringbuf_lock);
-+			preempt_enable();
- 			return NULL;
-+		}
- 	} else {
- 		raw_spin_lock_irqsave(&rb->spinlock, flags);
- 	}
-@@ -449,6 +469,8 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
- 	if (new_prod_pos - cons_pos > rb->mask ||
- 	    new_prod_pos - pend_pos > rb->mask) {
- 		raw_spin_unlock_irqrestore(&rb->spinlock, flags);
-+		__this_cpu_dec(*rb->ringbuf_lock);
-+		preempt_enable();
- 		return NULL;
- 	}
- 
-@@ -461,6 +483,8 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
- 	smp_store_release(&rb->producer_pos, new_prod_pos);
- 
- 	raw_spin_unlock_irqrestore(&rb->spinlock, flags);
-+	__this_cpu_dec(*rb->ringbuf_lock);
-+	preempt_enable();
- 
- 	return (void *)hdr + BPF_RINGBUF_HDR_SZ;
- }
-
-Thanks,
-Feng
-
+Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
