@@ -1,142 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C71D2853F3
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 06:20:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A38242D65
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 06:21:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785306002; cv=none; b=QjNYG6hOOuXM9xjKZCZADfXIfpTTDRZ12opLEfFx1S5vO3prMtjhfqLI97CF5MheAQC9n092fIb3bIcz0nlhdlEZ7c4H1MZWT+XqqKcdr5OEHR+hTN7gtc830i80vuOM40a2WNphkAQ7JiOz1J+NdDb64qCDoKv+ygB+Oqs8/n8=
+	t=1785306082; cv=none; b=I9ySyYZIHWqdtwHmwOzQiBWkL32nMqI9XvFfkq27EoyBlJ8SRLsU5NMm2MU2zl3k2MLVlWA83NoxVnPiVGhsbmbDstkXVcKvQfPrIxNLLKleI1e9FnimIvbujlCipdlEQ2PZaXA6Tp7TH/cFgJFpbnEjdbOo4OAPfnoOrSphjuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785306002; c=relaxed/simple;
-	bh=O1mg0t6iuVQ3IJBCvlQsTmp7eEu7IdBq3d4IQADayf8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=mCYWutvP1QowXUtJtidWnA3uPIrrV3cTRlaMXuayD+cil47l0tJgayL2lppksZXvJuUXnbC0KvQLEWuJh09tnSKnKElU7nEv4zXNI9WbEBByJYA0z1KedfaD5yeqeaniDf8hViifVNwOY1CRyRHUSSsHS5OtNX8tEA275l6ChUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K4jkTHJt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785306082; c=relaxed/simple;
+	bh=3WBsiyY9qUufI0RlY+S1NJo5l3NON9wsCYHvoOzrRBs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ZXhywPwkHxZJUpvU6xX4Dcw+EQYKeKlg8arBrglP5KwAAHiD3OyF2TOAiFuRwVADt/uLpjKKcKSCsEM0ct3n8hHFYGs9kPU1fxi2Y2tvdQ7kckFTzsH2e/CrSBRMhBECy24bBXOiAg7tXjozrqAIQ4agfFHY2WqcA/37SZmiu0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QVwNNIRr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K4jkTHJt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3EC1F000E9;
-	Wed, 29 Jul 2026 06:20:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QVwNNIRr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A321F000E9;
+	Wed, 29 Jul 2026 06:21:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785306001;
-	bh=9U1shppFMUQsgbE/c5tFeUZ5Rqr9UBepihgfXV84mho=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=K4jkTHJtp07k1cYkX9Tu/Z/umowR4AUXAo8PIvQYLQkduOdbsE5EZQNZViENeQukl
-	 qt1gOiamYjVpNfETbjkpgkikXe/uiFMOFDtd/cICa5f+qIzNxSyJPrFDfrMaFC+S1+
-	 lMxNFlh3Kv5KoeKB0/Vn1QQFACShUykzhC2V2OBzb24kiHEHnRRNimUawrr7Uiw6pO
-	 Pz8PKRaQw3Pi03CzO6JOzwYLlhaorv5k725v2if1BpdPTXc72PeDPvlEJ36lp/+uwN
-	 P2CpQwahy4ankXUwrzoTcIb/p8BuaICwW0/tLfaD9Zkxu0+WYXVtxw5ndoluxlqUlK
-	 jVQi+wBswR7Xw==
-Content-Type: multipart/mixed; boundary="===============6937139973021121379=="
+	s=k20260515; t=1785306081;
+	bh=yoZAAQIijs7R+9k6rTLsJ+snQrUhI1oZsUSJ8Vc6pDE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=QVwNNIRrnnMiI18BmKkYkFb0rSVrxlIRrOH2u3zHXtEbK4ZcX+mTMV4qK39smqUbI
+	 67EqEfwZeSfNs+yDgUmh1GMax2I0VjOL0uRh2EotXnNrUfV71UkyzSYN9LWiSPQ3/K
+	 eTAQYXgk/N3BXOir68HbWPgQFZwhdLTecukb24J7XkYa7mOtgMokfGipRMAlJD6UIr
+	 NhFLba3y6fuKWpZ1P9Bk+jvKw5qjxeEP1Ne+grP2Ghhk5UN6EY1GTmzO6cMb4BJwrw
+	 ov4ivf49MVhCkhyMmMEmc/lkikLaWwq0FOZ6cq7bwaKXORdrYqSA3cjMdkhjMKqt+C
+	 mUoMIdgBUbM0w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4] bpf: log error code on trampoline unlink
+ =?utf-8?b?ZmFpbHVyZcKg?=
+Reply-To: sashiko-reviews@lists.linux.dev
+To: xu.xin16@zte.com.cn
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260729141159128mEJmS_aujBKr-cBu1p_UI@zte.com.cn>
+References: <20260729141159128mEJmS_aujBKr-cBu1p_UI@zte.com.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 29 Jul 2026 06:21:20 +0000
+Message-Id: <20260729062120.C9A321F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <a3aa43df79440fa636555ad987478e6b8409e38fbed641c6557b11e2ba8636d9@mail.kernel.org>
-In-Reply-To: <20260729050204.2586457-1-yonghong.song@linux.dev>
-References: <20260729050204.2586457-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v5 2/3] bpf, x86: Fix trampoline stack size for 128-bit arguments
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,leon.hwang@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 29 Jul 2026 06:20:00 +0000 (UTC)
 
---===============6937139973021121379==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index b2feec81e231..01e7ce569c1e 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -3369,11 +3369,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
->  	WARN_ON_ONCE((flags & BPF_TRAMP_F_INDIRECT) &&
->  		     (flags & ~(BPF_TRAMP_F_INDIRECT | BPF_TRAMP_F_RET_FENTRY_RET)));
->
-> -	/* extra registers for struct arguments */
-> -	for (i = 0; i < m->nr_args; i++) {
-> -		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
-> -			nr_regs += (m->arg_size[i] + 7) / 8 - 1;
-> -	}
-> +	for (i = 0; i < m->nr_args; i++)
-> +		nr_regs += (m->arg_size[i] + 7) / 8 - 1;
->
->  	/* x86-64 supports up to MAX_BPF_FUNC_ARGS arguments. 1-6
->  	 * are passed through regs, the remains are through stack.
+Pre-existing issues:
+- [Critical] Preexisting Use-After-Free vulnerability when bpf_trampoline_u=
+nlink_prog fails. This problem wasn't introduced by this patch, but the cal=
+lers unconditionally drop BPF program references even when detachment fails.
+--
 
-Does the Fixes: tag target the commit that introduced the bug described in
+--- Patch [1]: [PATCH bpf-next v4] bpf: log error code on trampoline unlink=
+ failure=C2=A0 ---
+commit 04adb71914e050f3eeb5224ff162eb88dcf506a9
+Author: Xu Xin <xu.xin16@zte.com.cn>
+
+bpf: log error code on trampoline unlink failure=20
+
+This commit replaces silent WARN_ON_ONCE macros with WARN_ONCE to print the
+actual error code from bpf_trampoline_unlink_prog(). This is intended to
+help debug race conditions and use-after-free crashes during link teardown.
+
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 0ff9e3aa293d5..b4b4fc49bba79 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3547,10 +3547,12 @@ static void bpf_tracing_link_release(struct bpf_l=
+ink *link)
+>  {
+>  	struct bpf_tracing_link *tr_link =3D
+>  		container_of(link, struct bpf_tracing_link, link.link);
+> +	int err;
+> =20
+> -	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link.node,
+> -						tr_link->trampoline,
+> -						tr_link->tgt_prog));
+> +	err =3D bpf_trampoline_unlink_prog(&tr_link->link.node,
+> +					tr_link->trampoline,
+> +					tr_link->tgt_prog);
+> +	WARN_ONCE(err, "bpf_trampoline_unlink_prog returns error: %d\n", err);
+> =20
+>  	bpf_trampoline_put(tr_link->trampoline);
+
+[Severity: Critical]
+This is a pre-existing issue, but does dropping the program reference here
+lead to a use-after-free if the unlink actually fails?
+
+If bpf_trampoline_update() fails during the teardown process, the active
+trampoline image retains the call to the BPF program:
+
+kernel/bpf/trampoline.c:__bpf_trampoline_unlink_prog() {
+    ...
+    bpf_trampoline_remove_prog(tr, node);
+    return bpf_trampoline_update(tr, true /* lock_direct_mutex */, ops, dat=
+a);
+}
+
+When this error bubbles up to bpf_tracing_link_release(), the active image
+is left intact and continues to jump to the BPF program. However, we proceed
+to unconditionally call bpf_prog_put() shortly after the trampoline put:
+
+kernel/bpf/syscall.c:bpf_tracing_link_release() {
+    ...
+    err =3D bpf_trampoline_unlink_prog(...);
+    WARN_ONCE(err, ...);
+   =20
+    bpf_trampoline_put(tr_link->trampoline);
+   =20
+    /* tgt_prog is NULL if target is a kernel function */
+    if (tr_link->tgt_prog)
+        bpf_prog_put(tr_link->tgt_prog);
+}
+
+Once the RCU grace period elapses, the BPF program's memory will be freed.
+Could the active trampoline then jump into freed memory the next time the
+targeted kernel function executes, resulting in the UAF crash mentioned in
 the commit message?
 
-The changelog says save_args() overwrites adjacent stack slots because the
-register save area is under-allocated. That mismatch requires the writer of
-the save area to count 2 slots for a 16-byte argument while the accounting
-loop counts 1.
+[ ... ]
 
-In commit a9c5ad31fbdc (v6.1-era), both sides were symmetric and save_args()
-did not exist yet. The save_regs() function in a9c5ad31fbdc used:
-
-arch/x86/net/bpf_jit_comp.c, save_regs():
-  if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG) {
-          nr_regs = (m->arg_size[i] + 7) / 8;
-          arg_size = 8;
-  } else {
-          nr_regs = 1;
-          arg_size = m->arg_size[i];
-  }
-
-arch_prepare_bpf_trampoline():
-  if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
-          extra_nregs += (m->arg_size[i] + 7) / 8 - 1;
-
-Both used the same BTF_FMODEL_STRUCT_ARG condition, so a non-struct 16-byte
-__int128 was accounted for 1 slot and written to 1 slot. No adjacent slot
-was overwritten.
-
-The asymmetry the changelog describes was introduced later, when save_regs()
-was replaced by save_args()/restore_regs() that compute the slot count
-unconditionally:
-
-arch/x86/net/bpf_jit_comp.c (current):
-  save_args():
-      arg_regs = (m->arg_size[i] + 7) / 8;
-  restore_regs():
-      arg_regs = (m->arg_size[i] + 7) / 8;
-  get_nr_used_regs():
-      arg_regs = (m->arg_size[i] + 7) / 8;
-
-versus the STRUCT_ARG-conditional accounting loop this patch deletes. The
-commit that made save_args() unconditional is the one that created the
-mismatch ('bpf, x86: allow function arguments up to 12 for TRACING', Menglong
-Dong, v6.6-era).
-
-The Fixes: tag points at a v6.1-era commit while the real culprit is
-v6.6-era. On a v6.1-v6.5 tree this patch changes nr_regs for an __int128
-from 1 to 2 while save_regs() still writes only 1 slot, which over-allocates
-the save area rather than fixing anything.
-
----
-
-Kumar Kartikeya Dwivedi raised a concern in v3 about a pahole BTF encoding
-issue with the function bpf_testmod_test_int128_arg(__int128 a, int b, long c)
-in tools/testing/selftests/bpf/test_kmods/bpf_testmod.c.
-
-On x86-64, parameter 'a' consumes rdi:rsi, and 'b' ends up in rdx (not the
-positionally-expected rsi). pahole maps the second parameter positionally to
-rsi, sees 'b' in rdx, and skips BTF encoding for the function.
-
-The comment in the code claiming that putting __int128 first prevents the
-pahole issue is incorrect. Kumar suggested using bpf_testmod_test_int128_arg
-(int b, long c, __int128 a) instead.
-
-Is the pahole patch set 'Encode true signatures in kernel BTF' that you
-mentioned in your response now merged? Without it, will this test fail in CI?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30424886481
---===============6937139973021121379==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729141159128mE=
+JmS_aujBKr-cBu1p_UI@zte.com.cn?part=3D1
