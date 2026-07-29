@@ -1,289 +1,231 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013023.outbound.protection.outlook.com [52.101.72.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24532469849
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 16:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785344327; cv=pass; b=j+myfoR8D/Co7PpXlZjPBpBFwPEbH47BGp2KFw13MTbcqzB/uoZeejzllsSsVLs8jQAikE7N4Cp8ieKGj5Na2w/wyB2zW5M2OrMG9YlvVJSW1ldToeV0mz7lNe9FuVEBVbohxL1QSPKgw+zGGzuoHwEByksPyzOqd7CIAloE1is=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785344327; c=relaxed/simple;
-	bh=Ak/U6hwwxMcUe9I9fETxH6dCF6CGhoLRTTeI/ZY+LVU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oAJEua7wEJTxScbGk3K3uKSMteD6XODrtV3+AIhUPnfY17GivmTSdEblbIz0/M0ZMUZkbrEuPzoZEqcSJBdggj09obU3gj4Vc4+XGBt9ARLmLgr1lVy9tbrCpQdxZ7NsZtsochTyMKmtmMRjJzAAv8NO5/36Ai5EvqguFYZKzwQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IIYlg2wz; arc=pass smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C3B304BB3;
+	Wed, 29 Jul 2026 17:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.23
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785344673; cv=fail; b=ev5b/OXnzfcSAiq7J+APRMfVynL+lqxok9VhJS9tJU0hfQhPpAg4vDkMVVxJw8HNqfjhWfBqbfsYeZqAq3XeTYrO0OnbWnXNFSRJZzvS2sKJVIH0iJpKobgepmrtH6SPSkbldhiZ3bUJA2txTo2p9LsJs34FuaOTzU1sV5aE0AM=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785344673; c=relaxed/simple;
+	bh=PK8yOMUXakZ2cfqZghzpzJKHldPrTnlcNVBxo9DqwIs=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=l3u0eU8NrTvladr1zozXuYqpM7KUylpeb+zemOG5fcOmwo2X8w+LAUox1XhCVaudufhnoLf2s0lRqEPdoUW9mrH0WT+DGN8XNZw85tTsJlanAGJr2Z7DVzLWvOLXYVylb1jv3N0p3UAShtaltFmNq6D5WYBUkY7eW3lI0dzNhmw=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BncRAtb1; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BncRAtb1; arc=fail smtp.client-ip=52.101.72.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IIYlg2wz"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-69c20ba892eso108950a12.1
-        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 09:58:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785344324; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Q/BSoPU66jc4KZeAY5ksPtapLd5oJsRAVHo0nQyAXcN22kaKsDImdIz5B5tmMAk+3g
-         x0VSfX8NXYuZkVFOxtvZgBJoQeGf2oCehHqVQKcw6U5Evf/USdQKZydqM+Q20fFyH1wf
-         O/l08EHSHhsyCCfBtTGy781r1b/D9HUSfGArVc3g/aTrSnmVd6pWy1tcY9ZPQwXH0tF4
-         MfsLPIHymCKaKaCfu/LYIBgjZkysd0YnJUchfDPzS1S7v9gPElgAG1Ms5L0E35+jeCYI
-         VcHvmyvb0Ef3XFGezTwUeqI5Xyhwf2Sc84iz7U2DXwWKSfFgd5kZV5AO9py6ckYA+hWF
-         ywTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=FWzDG+ffAQlStkRpHvHJS6/rK/dWRxR6zPkTRl8EPvk=;
-        fh=LKGfUj0v36GWZKXUvA4BuuQNer3CiaxXUtYelmTZ2N8=;
-        b=WogA5IbwvsAlUjjrn0aX7hZO2iw03HboxHl1eskHnJpSE3SpvwvI9l2PleXN1stFgD
-         Dt0xFGwn0EDGDgUrgkJ32WAtltng8RUlMjUjmy37uzSnbdnfERXJu0+Ax48Qa6glTyjr
-         D5nTVoz/hS+BEhl2+2oSkOa5vOtYE0qwxyLzqhP+Ucb/JqAoPTA5XjPW7pfCkHkRqMFY
-         ioSIgeZjY7xtH7b4k9TWMbiCmbrGQD5LzzEBJWP0SFMmALGp/qfFXPRyIOd0tA4oYYcX
-         F+q2nncBZDo+eum5gy/dH09FUL3tUFpcA4/QVy5p5bV8k+FsD/39tzbK/As9Tlems7XU
-         Rphw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785344324; x=1785949124; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=FWzDG+ffAQlStkRpHvHJS6/rK/dWRxR6zPkTRl8EPvk=;
-        b=IIYlg2wzcQLc9MMiRJ/yMogiMUomrVzBAFrOd6vJfMRSED+BUpSWCHG5Fk9NWQR0Qc
-         IEgmREIAB2J8PFLqbMyXvr+baEJjI50pptLZTcrlylAvn+1UZyLSa6Je9YOyFY8Q2JQU
-         kvjxlrWqr0YnziLmtMx9RH25cJeDdxSAkJeL/9ZanopkTqR7bGaB1n2inv8MpEFmkacj
-         KYpPC7Ilv2bsHU0j4Ni2sW3mxe3hUYCYTkExp1Y4WColSS8ujzRebbQiSzoovOoB/+sm
-         WMoXbOOioRQftCz8j2isNkcPJWZ1VGzI8eZ1EYDM6F6gUSzFIKS2g1UsEuG1xNXS4Hn+
-         ayBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785344324; x=1785949124;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FWzDG+ffAQlStkRpHvHJS6/rK/dWRxR6zPkTRl8EPvk=;
-        b=Vr3glwzQVUEmCKvVoZVzEI0lxANQBGJe2w0OPXg/FBQKf67qUrkBp6+Eq1lFMrt8+W
-         c/fNtaFCncAPh3DxSUH+emuHpn1JiyQ0sYsD65hvhOTDfvsM6mXC064ng8ZhsMw4gZzF
-         9tnmOPI3lI497Zd7m5MeuTFaq87lg4lAl7n1vMCujGlTDul9q8TceMLu5RdJ264BxgRz
-         3AxC4W1UhpvH4sxonakiThXRO+AArLLnr8CZ3bi5nZ70TfFKxg7WVqmjRs+xLmkY4zdz
-         NWcNSUZzbCtd0bubKTzxTPf86ZsMANJ8sPlfcmlB/J5yDuOJDPAUyC0w50ViLtFGpahg
-         HR1A==
-X-Forwarded-Encrypted: i=1; AHgh+Rqnu9IaN6Hk13RNO8vjeMVX3f6LTSvoZXRuf2HndJmPsOAcR35m99WoIBzn+ttbHFvlzeg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9MGq7n5Z+T9W7FvjHR12p7t4hwWSq7WwAupzUZSmZThV8qoO1
-	bUo4EyVyItAr81hps4R1wKyxyR0cP8BL+cpqualbqqHgSiWlVHIaoadSpcW9RrTwe6+W8bRg3Ms
-	qGOrM6RY8dJ2ogPd9bvtcVFFfxXwLlC0=
-X-Gm-Gg: AR+sD13tvXVC5Y0JERrE/6f31PWyC2ptomCHutiIDqtlhE4ZYXe10FRblKzzlIMg7Ap
-	+Z+jOQKKjV0obkvMZIITjPFWEG/aJp24CxGtxumAPsJyWjjBli3AyAc5b9KQgho0O6i5RRnOgvt
-	I+rkqMC66AWuI29nJ3TchMTDHJC6nTX1XzH4+TUfKiabQFUmAz6TRcFlyX2b5iBZZxPn0d7GDRt
-	Mk3tsU9vL/ziN+6OJ4SZhC6YyUEDp/1AsJ7Yw+EEnWkgdKungAtb2HDj+3meZSCyG0NXdgh7pab
-	lz6y55HlhRev7YphUPvaV9HyZ4PTIEVcmNmk3+QhW+j1AifMVs1f+BcpfKzh
-X-Received: by 2002:a17:907:3d02:b0:c12:7f75:7900 with SMTP id
- a640c23a62f3a-c1f8cd08f80mr195416466b.27.1785344324039; Wed, 29 Jul 2026
- 09:58:44 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BncRAtb1";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BncRAtb1"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=NmDnOTYzQKdlDmLOueJT/hHtzqxVh0I5we3J8aFCT9jDLn7+8+Uoz3cigQWlTpBx5HRs0yoyCS0cXNQMW50t5S+56L4G1khCVHdVW5/21N3OH4gA5AbC1RDP2llHU0XtYVqTwgutaE+qjwPxaTn10YQ7cAFR8DVcwc0tV2jQj8NfOWJwjOB6Dt3XNcy5mCdMnFfP8ugQu+zrP5xHDauzCjQKztHztHCCBU9OO8Ovcp5X6NXIWW8QafVsgo5TBMfdogfDi6fV9UIudfea6F25DIzVWXH6guGZCAzVgcwjPwWZqc9B1KxZxUXOb+xJg7rRKCatCxfQ0D9KJAgskwfU9w==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PbbUS/qk5aVVW1vC8+CkjZ6Px4apThCtOkwiM7lkMQk=;
+ b=f2xFDZA3UPyvngFDD/STe3RXTpQOVspNn6JE3vNWTs8noJ4YKFe4YahPycpku7fPOHenG/nbqRyV8v81tkdRERUZWu9JsegXS4p44Wv8M4swK6BF4Mwvp3Y8sjuE6/7AoOXqie97R2VMcMYoxs7aDP40KO/uCPdvHRfff+pHJYeuY3sQyRlpya6r3Vu7k0iiX7upBpdyu93ZjCoHvi6TdUh6cFmyC6dd/b8Cu/9XqWFZlKd4uvmAqCUfVtEEn+1GGdyaredG5JwYwKkRB2FhWD5c7y3DiwQ6+YQZLmEoAh4qp6x5GxWcKGwTLFxwyaKBGJ0IGfMqLLQuKeQMRqaqRg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=suse.de smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PbbUS/qk5aVVW1vC8+CkjZ6Px4apThCtOkwiM7lkMQk=;
+ b=BncRAtb1wxWuxlYq3hw2v/M+04GjdKg+y4JuhjiTTj6i7XFl/6Jgw2fj+4b0moZKpngDIgLO6TQajpcJFf7aQKeCWM0Dyr1FxXKWsS/BxLIciiQgFsBGYHYVGXc59i+87QMOgh3eg+DLAUo73vT/abtt5OLSRIIXj/lENHQ9qeY=
+Received: from DU7PR01CA0023.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:50f::20) by DU4PR08MB11101.eurprd08.prod.outlook.com
+ (2603:10a6:10:576::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.12; Wed, 29 Jul
+ 2026 17:04:26 +0000
+Received: from DU6PEPF0000A7E1.eurprd02.prod.outlook.com
+ (2603:10a6:10:50f:cafe::36) by DU7PR01CA0023.outlook.office365.com
+ (2603:10a6:10:50f::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.12 via Frontend Transport; Wed,
+ 29 Jul 2026 17:04:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ DU6PEPF0000A7E1.mail.protection.outlook.com (10.167.8.40) with Microsoft SMTP
+ Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.5 via
+ Frontend Transport; Wed, 29 Jul 2026 17:04:26 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xahEWMRLnwid9CUeH2xMEOsP0mG5mVIig03K9CrPeXgnE2GOpBr+kyZG+F2d35nN7dR9xvnXrP7djuCDDm0yGzzPCPLmwN9HVJRprqNsY1afrMOM76IATPc6Bx7cxzusYrxGi0huWmRQGSfB0QfwawPJIKbKFggt3SIihvOynDbEk3eLLBRhW2rqGskNlTyPWDq8w218z4dshXjQG7JrtiCZb8UUmiCp9IeCf02pp5vMYisEfl/Fqb9WAWkRqg1ftPnNj9ppDIsf9Q6yGfC8fiNJoUKPfwXfvqkzxfOvFUxsmrsXu6aIvBBVboUs/a/ltqbKrpSiLr2Tbuo+ui5Ynw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PbbUS/qk5aVVW1vC8+CkjZ6Px4apThCtOkwiM7lkMQk=;
+ b=O/164cDNkIYfZ57+OU0eVLSYvhlM5ZSK1fDakvR237cxTdJV425e5h40oM0+vWNWTYYZbjS2OvWO1AwvWygrxMBzG+ve9IVN63Qhel7K8uGgreqLZI/laB970xYq/Xnv3k6qIohwLrGyn85FCaC0O5tBWx1IcDyuQtd4HwwoU0YnPOX9oqrN4gFotW/HHWygtNEzbgx7cniww0Dz6kHuixHYY1RiZxaM3z4S5QTYNUjH6fy5mvJNpJuQ6fgPcNbXpY5xk2fXVvexrXE7I9tC2S7p7aDARcljsa4nhrjA8kxpcNWfdxBXYzmwgly8WQqD4llBzx2j+05RCCurppSevQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PbbUS/qk5aVVW1vC8+CkjZ6Px4apThCtOkwiM7lkMQk=;
+ b=BncRAtb1wxWuxlYq3hw2v/M+04GjdKg+y4JuhjiTTj6i7XFl/6Jgw2fj+4b0moZKpngDIgLO6TQajpcJFf7aQKeCWM0Dyr1FxXKWsS/BxLIciiQgFsBGYHYVGXc59i+87QMOgh3eg+DLAUo73vT/abtt5OLSRIIXj/lENHQ9qeY=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
+ by FRRPR08MB11966.eurprd08.prod.outlook.com (2603:10a6:d10:1d0::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.12; Wed, 29 Jul
+ 2026 17:03:24 +0000
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.21.0270.009; Wed, 29 Jul 2026
+ 17:03:23 +0000
+Message-ID: <e0f68f91-629a-4aa7-bad9-11ef7dafce4d@arm.com>
+Date: Wed, 29 Jul 2026 18:03:19 +0100
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@arm.com, Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Dimitri Sivanich
+ <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Juergen Gross <jgross@suse.com>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ David Hildenbrand <david@kernel.org>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, SJ Park <sj@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Miaohe Lin <linmiaohe@huawei.com>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+ Mike Rapoport <rppt@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ ziy@nvidia.com, agordeev@linux.ibm.com, ryan.roberts@arm.com,
+ linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-parisc@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, damon@lists.linux.dev
+Subject: Re: [PATCH RFC 09/11] misc/sgi-gru: use ptep_get() for page-table
+ reads
+To: Pedro Falcato <pfalcato@suse.de>
+References: <20260727164715.2866609-1-usama.anjum@arm.com>
+ <20260727164715.2866609-10-usama.anjum@arm.com>
+ <amnxCmFU40QQaxTx@pedro-suse.lan>
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+Content-Language: en-US
+In-Reply-To: <amnxCmFU40QQaxTx@pedro-suse.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P302CA0023.GBRP302.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c1::15) To VI1PR08MB3421.eurprd08.prod.outlook.com
+ (2603:10a6:803:80::16)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260722023004.1497923-2-sanghyun.park.cnu@gmail.com>
-In-Reply-To: <20260722023004.1497923-2-sanghyun.park.cnu@gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Wed, 29 Jul 2026 17:58:30 +0100
-X-Gm-Features: AUfX_mzDf5F25JYt9yoajr0h05-J_vf1T6_c6FUoxZftM_aMhuMw32pTVAD0Y3Y
-Message-ID: <CANk7y0hwPBrMi4hMaBvDP41x0oyEFERsf9=TeSZga5Q0SxwimQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Fix mmap_lock leak in irq_work path
-To: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Sun Jian <sun.jian.kdev@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	syzbot+cdd6c0925e12b0af60cc@syzkaller.appspotmail.com, sashiko-bot@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-TrafficTypeDiagnostic:
+	VI1PR08MB3421:EE_|FRRPR08MB11966:EE_|DU6PEPF0000A7E1:EE_|DU4PR08MB11101:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37141c21-a2fe-40d9-70d3-08deed937228
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|7416014|4143699003|10067099003|11063799006|56012099006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ DaJWhsTZTSxcIZbwinfD8XxtPw/2f++czvjbD1W4bd4XreSaU6D3188u9w9GWQdT1JXBI8k6WeoGO6ebdA1+x5ERQkgaS+IvsRPUFarLXoyLSoHZCSpfHIwd8F8MDWoNeQ1ES6E/mzkjlk9uqRqSUEnOeLxSkLZi6rsNJwpm6ua931PyYrgJVmT6wev4vTkMgr6syRqwCjlvl016KdBkPiyWoyKxZXNeor7nen405U+6SC5mEjJpEHoT80H3kzt3gxPjjZbNpd4hPE5DyqouQQ/VsqiaVT4B5FfF36BO841Sp/Xl1P8QhSFShghy3xRKonzeQ6A/ywt8H9Xc7keLkphSLfy4PtFSq3IQ9cNDuKln6Hvy3wazEyx/gr/sfCYkTZxE2WgTQ2sOWSeZfWA0h0Bs//n0R4D2bofUttfS5x1z/oSEZO66wztXTfYvOjSF4x+5WgQMtt44LAKW9yT0uqPjlfJb31GONqzqwi6bX+GqpqX9cYgrlXmoVI+N1K5HndLAeojNGxA1aOc+48bNI+LQ644ttsRtlgno3Kz2zTeOy2B2aSZkC+ecrjfht61nUE2Ky3+IWsStwYWvifvhWPtHsv2iZXgW/f3/PHUR8FXVam5L1/5xsQl5FIGgf0hMGGNYQ2A4WaTk1Pb40YB1BVCnjNZIvY4oAW6YwLT8GW4=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(7416014)(4143699003)(10067099003)(11063799006)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ ZiugpGqFJussUsX96Dr0qNIxsdKxjJBS2tE8DuDcDfFRexZmwdjfLQBMcHCaqX8OW1QUx7kPU5UoDm0xLd+5To+L1Lwby9UJzIjM7tj6tA5Gw+zuycwLiOY/6k46sQqIznBHfE1A0FGGTlp4WsiYDINkUezqpj2bXuRimKRIR8fvUQKmBSt1LLeBmJQ2za0zrmj0rciHYG5LhQEQzEyqn2YhvwKI5abL5D/+qqH+vCRW9DPPMD/dKpxd8el7hfi9uzaC51A5QUOe3GYui2sBAzf/m04Y5tcPJZU+DTlZbZmqZ/j2M/F5BLeLb4tlW6TNh/xL4+oFjqd9nq4+N9gbjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FRRPR08MB11966
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DU6PEPF0000A7E1.eurprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	e588c869-dbac-40f5-682d-08deed934bdf
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|35042699022|14060799003|7416014|376014|23010399003|82310400026|36860700016|10067099003|4143699003|11063799006|56012099006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	HZfv24VYe2JXYJAVJ8cbRwULxYvRmalqgSIXDe+knxEVlgHAPn9PPAf7kwpuL2ydxaiYsToXHlAkBS0LLuUKzr6nueoTKcHRPlCscEzoHwtnrm4ZNVHtjxcwYzGoB6WAVI4gTES5V6J9EmIBlLY8NSIIYlR8LmBLgDduZZojsn+7VGMv7irEFiSoEgoIAhiOGx5pJrJIxWMbpEsQoep7yRtrOVB9UJg5KewP/dARA0RQGrt0A0kuGvyrcTGbBDC83rHvkS5JNzq+Jh1T8z3Gnhkw8OBdxHzf06nkf73xC1WRYuetSD4Udb4jIKKNhY3KOh8F7iVmr9ateNzuV50BamA/dLDrabuDQvoZyLW4tgArGvIEj3wdiHMvJspE45X9YANv0OxzY6PSOipCQuXD4P3Qn+u79XXXVBP11nQYW4IO5mvrftVB5S4tKrUbL7U7vzxw8w3umcj58TMkUsPeihGI1QKx+laLMHAa/Rwne4jdaktvund2DCX129NZoR3GCYwuC0waE384Cdv1hdOJ6hcZ8QG5n/r98HfJH0AyUtF4cfDzPNAsT09pGrBHIuawEEhqXQ60Oq/8yzx1Ct7mWTUqwfnvM9qo1upZXE0DB3U+ZiABJdnAWT8TdsY2JJd/QnUo8SJQDgaGtdLRRT4HWxxHDS9jzq7ugfLO2LwIS66DeqnLIHFjboOHcRlllKB148X/q0MFK/9a6Ce3Nsb8hQ==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(35042699022)(14060799003)(7416014)(376014)(23010399003)(82310400026)(36860700016)(10067099003)(4143699003)(11063799006)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	rVI+erN+tDK1bV2DaYVwEmRJDr4VXLVJC5i79Kwb6sY1tPpWPXDqyUvP/xGW2XsYbrI+7Wwi2BotLdlKPoK9b3n/U3Xl2foE2DFyjt+FCP46rO0Amkyn6h47Sgz2sqnuHI9loq0WbH19gPc+hxNxudzSfRRHOUW6vYyByqqbsq61kJzPy1RIjrjh8haoNQr5uUiQDCN518XDGA85hrv+CaQkKIj5ON3Q/fosJjMkX4lA5OU6W2iHLJUjz7wGYwts8jKk8vVybK+CL9aPF2+mNnzVXByXoH8iSxQIR6UShOdPnVt8EAtAyhS4LbxwtwTMnJNVVJO8nLEOf1Cz0eeIlyRjIO6c33byzt2IWrDNksjzAFpYRANtjC9ItlXIYppOcCXRWmciPDCiIDth7BHg5Vafj95ym4Z+Bs5+vT7lY8fwr4K4ZhzRH7o9McHNO91R
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2026 17:04:26.3745
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37141c21-a2fe-40d9-70d3-08deed937228
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU6PEPF0000A7E1.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR08MB11101
 
-On Wed, Jul 22, 2026 at 3:31=E2=80=AFAM Sanghyun Park
-<sanghyun.park.cnu@gmail.com> wrote:
->
-> stack_map_get_build_id_offset() introduced a per-CPU irq_work to defer
-> mmap_read_unlock() from NMI context, and bpf_find_vma() later reused the
-> same mmap_unlock_work. Both callers only check whether the work is busy
-> before taking mmap_lock, so a nested caller can reuse the slot before the
-> first caller queues it. Two read locks may then be acquired while only on=
-e
-> deferred unlock runs, leaking a read lock and blocking exit_mmap().
->
-> Reserve the per-CPU slot before mmap_read_trylock(). Use the same wrapper
-> in stackmap and bpf_find_vma() so both callers release the reservation on
-> trylock failure. Release it after the irq_work callback unlocks the mm.
->
-> Fixes: bae77c5eb5b2 ("bpf: enable stackmap with build_id in nmi context")
-> Reported-by: syzbot+cdd6c0925e12b0af60cc@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=3Dcdd6c0925e12b0af60cc
-> Reported-by: sashiko-bot@kernel.org
-> Closes: https://lore.kernel.org/r/20260630033745.B80201F000E9@smtp.kernel=
-.org
-> Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-> ---
->  kernel/bpf/mmap_unlock_work.h | 37 +++++++++++++++++++++++++++++++----
->  kernel/bpf/stackmap.c         |  3 +--
->  kernel/bpf/task_iter.c        |  7 +++----
->  3 files changed, 37 insertions(+), 10 deletions(-)
->
-> diff --git a/kernel/bpf/mmap_unlock_work.h b/kernel/bpf/mmap_unlock_work.=
-h
-> index 5d18d7d85bef9..d416e4337635f 100644
-> --- a/kernel/bpf/mmap_unlock_work.h
-> +++ b/kernel/bpf/mmap_unlock_work.h
-> @@ -4,12 +4,14 @@
->
->  #ifndef __MMAP_UNLOCK_WORK_H__
->  #define __MMAP_UNLOCK_WORK_H__
-> +#include <linux/atomic.h>
->  #include <linux/irq_work.h>
->
->  /* irq_work to run mmap_read_unlock() in irq_work */
->  struct mmap_unlock_irq_work {
->         struct irq_work irq_work;
->         struct mm_struct *mm;
-> +       atomic_t active;
->  };
->
->  DECLARE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
-> @@ -18,8 +20,8 @@ DECLARE_PER_CPU(struct mmap_unlock_irq_work, mmap_unloc=
-k_work);
->   * We cannot do mmap_read_unlock() when the irq is disabled, because of
->   * risk to deadlock with rq_lock. To look up vma when the irqs are
->   * disabled, we need to run mmap_read_unlock() in irq_work. We use a
-> - * percpu variable to do the irq_work. If the irq_work is already used
-> - * by another lookup, we fall over.
-> + * percpu variable to do the irq_work. The active flag reserves the slot
-> + * before mmap_read_trylock() and until the irq_work callback consumes m=
-m.
->   */
->  static inline bool bpf_mmap_unlock_get_irq_work(struct mmap_unlock_irq_w=
-ork **work_ptr)
->  {
-> @@ -29,9 +31,10 @@ static inline bool bpf_mmap_unlock_get_irq_work(struct=
- mmap_unlock_irq_work **wo
->         if (irqs_disabled()) {
->                 if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
->                         work =3D this_cpu_ptr(&mmap_unlock_work);
-> -                       if (irq_work_is_busy(&work->irq_work)) {
-> -                               /* cannot queue more up_read, fallback */
-> +                       if (irq_work_is_busy(&work->irq_work) ||
-> +                           atomic_cmpxchg_acquire(&work->active, 0, 1)) =
-{
->                                 irq_work_busy =3D true;
-> +                               work =3D NULL;
->                         }
->                 } else {
->                         /*
-> @@ -46,6 +49,32 @@ static inline bool bpf_mmap_unlock_get_irq_work(struct=
- mmap_unlock_irq_work **wo
->         return irq_work_busy;
->  }
->
-> +static inline void bpf_mmap_unlock_put_irq_work(struct mmap_unlock_irq_w=
-ork *work)
-> +{
-> +       if (work)
-> +               atomic_set_release(&work->active, 0);
-> +}
-> +
-> +/*
-> + * Try to take mm->mmap_lock for reading on behalf of a BPF helper that =
-may
-> + * run with IRQs disabled. On success, *work is the slot to hand to
-> + * bpf_mmap_unlock_mm() (NULL when the unlock can be done inline); on fa=
-ilure
-> + * no slot stays reserved and the caller must fall back.
-> + */
-> +static inline bool bpf_mmap_read_trylock(struct mm_struct *mm,
-> +                                        struct mmap_unlock_irq_work **wo=
-rk)
-> +{
-> +       if (bpf_mmap_unlock_get_irq_work(work))
-> +               return false;
-> +
-> +       if (!mmap_read_trylock(mm)) {
-> +               bpf_mmap_unlock_put_irq_work(*work);
-> +               return false;
-> +       }
-> +
-> +       return true;
-> +}
-> +
->  static inline void bpf_mmap_unlock_mm(struct mmap_unlock_irq_work *work,=
- struct mm_struct *mm)
->  {
->         if (!work) {
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 41fe87d7302f2..166fc8efab8b2 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -415,7 +415,6 @@ static void stack_map_get_build_id_offset(struct bpf_=
-stack_build_id *id_offs,
->                                           u32 trace_nr, bool user, bool m=
-ay_fault)
->  {
->         struct mmap_unlock_irq_work *work =3D NULL;
-> -       bool irq_work_busy =3D bpf_mmap_unlock_get_irq_work(&work);
->         bool has_user_ctx =3D user && current && current->mm;
->         struct stack_map_build_id_cache cache =3D {};
->         struct vm_area_struct *vma;
-> @@ -430,7 +429,7 @@ static void stack_map_get_build_id_offset(struct bpf_=
-stack_build_id *id_offs,
->          * fallback is used for kernel stack (!user) on a stackmap with
->          * build_id.
->          */
-> -       if (!has_user_ctx || irq_work_busy || !mmap_read_trylock(current-=
->mm)) {
-> +       if (!has_user_ctx || !bpf_mmap_read_trylock(current->mm, &work)) =
-{
->                 /* cannot access current->mm, fall back to ips */
->                 for (i =3D 0; i < trace_nr; i++)
->                         stack_map_build_id_set_ip(&id_offs[i]);
-> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> index b256fb9c1214e..e66e3484f923d 100644
-> --- a/kernel/bpf/task_iter.c
-> +++ b/kernel/bpf/task_iter.c
-> @@ -755,7 +755,6 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, =
-u64, start,
->  {
->         struct mmap_unlock_irq_work *work =3D NULL;
->         struct vm_area_struct *vma;
-> -       bool irq_work_busy =3D false;
->         bool __maybe_unused mmput_needed =3D false;
->         struct mm_struct *mm;
->         int ret =3D -ENOENT;
-> @@ -792,9 +791,7 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, =
-u64, start,
->         if (!mm)
->                 return -ENOENT;
->
-> -       irq_work_busy =3D bpf_mmap_unlock_get_irq_work(&work);
-> -
-> -       if (irq_work_busy || !mmap_read_trylock(mm)) {
-> +       if (!bpf_mmap_read_trylock(mm, &work)) {
->                 ret =3D -EBUSY;
->                 goto out;
->         }
-> @@ -1191,6 +1188,8 @@ static void do_mmap_read_unlock(struct irq_work *en=
-try)
->
->         work =3D container_of(entry, struct mmap_unlock_irq_work, irq_wor=
-k);
->         mmap_read_unlock_non_owner(work->mm);
-> +       work->mm =3D NULL;
-> +       bpf_mmap_unlock_put_irq_work(work);
->  }
->
->  static int __init task_iter_init(void)
-> --
-> 2.48.1
+On 29/07/2026 1:36 pm, Pedro Falcato wrote:
+> On Mon, Jul 27, 2026 at 05:47:00PM +0100, Muhammad Usama Anjum wrote:
+>> A leaf PMD is being read through ptep_get() by treating the PMD address
+>> as PTE-sized table storage. ptep_get() now accepts hw_pte_t *, so update
+>> the cast accordingly.
+>>
+>> pte_offset_kernel() also returns hw_pte_t *. Get pte_t value by calling
+>> ptep_get().
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+>> ---
+>>  drivers/misc/sgi-gru/grufault.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+>> index 3557d78ee47a2..ff89d34ad2aa4 100644
+>> --- a/drivers/misc/sgi-gru/grufault.c
+>> +++ b/drivers/misc/sgi-gru/grufault.c
+>> @@ -228,10 +228,10 @@ static int atomic_pte_lookup(struct vm_area_struct *vma, unsigned long vaddr,
+>>  		goto err;
+>>  #ifdef CONFIG_X86_64
+>>  	if (unlikely(pmd_leaf(*pmdp)))
+>> -		pte = ptep_get((pte_t *)pmdp);
+>> +		pte = ptep_get((hw_pte_t *)pmdp);
+>>  	else
+>>  #endif
+>> -		pte = *pte_offset_kernel(pmdp, vaddr);
+>> +		pte = ptep_get(pte_offset_kernel(pmdp, vaddr));
+>>  
+>>  	if (unlikely(!pte_present(pte) ||
+>>  		     (write && (!pte_write(pte) || !pte_dirty(pte)))))
+> 
+> This code is super, super broken. Can we remove this ASAP? For starters,
+> we're using is_vm_hugetlb_page() to detect page shift, the code does not
+> grab refs on the pages, uses pte_offset_kernel() on user page tables,
+> does not handle PUD-level hugepages, does not handle PMD-level hugepages on !x86_64,
+> does not hold page table locks nor check for pte table retraction, etc
+> 
+> I don't think I need to go on.
+This and parisc both have dead code. I'll send separate patches to remove
+dead code.
 
+-- 
+Thanks,
+Usama
 
-
-Thanks for this, it looks good to me.
-
-Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
