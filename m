@@ -1,113 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FA01DDC07
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 09:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9324446051;
+	Wed, 29 Jul 2026 09:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785318125; cv=none; b=CX9+LWCT+16/jKpnIfhBjOKTUh91qAs0UiKmjtkS8W2y3YVcFTbb8RVRuRjDhLMh4E7jv/pqR2+HdqE09z1viK4KfkXeKf0DwZhdXAcafMMO6masvAPHTnUkQXIGFYWEYjSniFmh3BuQhQBbd60QaeszgRYc+C0+N77LqM6XmfY=
+	t=1785319058; cv=none; b=m57qGocsLVJEiEuKWQTUDw+kiYDBZ1tqr2tWeti+or5acr3alfJio7rRyvfjH9k0irhXwAIR4dGFbc8TfUjlly1UVhe16Zd/auOvgv9M0qI3S/U1HtEXSVT6WJkTM5mjlxizJaJvVMVEWYLe6RBJEPvj8kU/8+fQ7IrGnyagLlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785318125; c=relaxed/simple;
-	bh=J/fDNQQuFco6MdxTguqqdquvp+Q2RzUjnsVUmPCMshA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=uswL8yqDeW6+x2VNvBD8yBbVuqKfnmf0tD3teqF3ZtiaoXj8hlcyMCW2eI2u/RAF994xmNH38/CMRl0NRIkDE//NOM3oTa6k5gwmFlmn4NI61/TgnlhGFY3R7cehi7HnEpdW3UdixYts28Tkb0lhkOTCWWMp3CU+doanhWfEauo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OgsFOdVv; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OgsFOdVv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E5B1F00A3A;
-	Wed, 29 Jul 2026 09:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785318122;
-	bh=+IzggYMJe1yBUHdmRhgMvkLPgXqmAA/k3KzU7AMA5Bg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=OgsFOdVvJSxPUVt+0dUTQZH37pwsWte8TDXyh5N/pblWqhpKbQhmBM3mbhqbLpC+q
-	 +SMs9ooCg3u31BvH8LN2CkmyVMLZE5yFj9en4XIlXrPAxQioQQxhJHKrcYS1q822t+
-	 DDOEG4r5lAXsyzY9mdjc8/tUo+TfK/D9t1KvDjawQnFzBoaYXrpz09CYTkT56u1pBW
-	 bwKX/miDvbg6Qg25CRxDdd3N+sXTQrOr8himMlSr36TU69aEVX/o12ixRbucc9N0XY
-	 B1uiIMj/uMsvTSinOEiUupKsebjJl7NBhcRN6A0z++KRX8RJYXaRIq/kQS4M+EY/u9
-	 D81d6XXudEKpA==
-Content-Type: multipart/mixed; boundary="===============2784815537815203087=="
+	s=arc-20240116; t=1785319058; c=relaxed/simple;
+	bh=u7oF3dbU1XTbhZ2SZQ1tDGZQxH/4GGE6U7t8gmPhivQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Aj5h4EuyQQaVwMWVzrVJsPNJ30p/K6XiEwPUvH6X1Xb1Zy9bd9/tnmpl7Icb06hIqrWaiF7uwjegw5RzO4uRTXkCYM2xbeUC1aTCwOduZN0Y9+iTLra48hIyAXrUi7ux2EHY6fQl/MZ5YRIpoiqBSl6yep17OPzOiGIt9/gnt/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4h975v0pqrzYQv5j;
+	Wed, 29 Jul 2026 17:56:51 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id EBC2C4056D;
+	Wed, 29 Jul 2026 17:57:31 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgB3Z0aKzmlq6DNyAQ--.24092S2;
+	Wed, 29 Jul 2026 17:57:31 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf v2] bpf, cgroup: Fix invalid storage access after __cgroup_bpf_attach failed
+Date: Wed, 29 Jul 2026 10:02:08 +0000
+Message-Id: <20260729100208.3076769-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <dd41555c6d2b250898a2b307d853d956f00aca31b6deb021ab72dc4e3c05f940@mail.kernel.org>
-In-Reply-To: <20260729083807.1588544-5-jolsa@kernel.org>
-References: <20260729083807.1588544-5-jolsa@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 04/11] bpf: Use stack id functions instead of __bpf_get_stackid
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: bpf@vger.kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,songliubraving@fb.com,yhs@fb.com,qmo@kernel.org,chen.dylane@linux.dev,info@starlabs.sg,contact@arnaud-lcm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 29 Jul 2026 09:42:01 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgB3Z0aKzmlq6DNyAQ--.24092S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr1rZryUJw47tFWrKr1fXrb_yoW5urW3pF
+	4kX3Z8Ja15X39YvF1kt39FvF1rGa10qr1jkrZ8tw1Fkay7KF90g34xuryYvFy3ZF17ur1S
+	yrn09r4qkF1jqFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
+	MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+	VFxhVjvjDU0xZFpf9x0JUd-B_UUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
---===============2784815537815203087==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Pu Lehui <pulehui@huawei.com>
 
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 366195b08c79a..43b1e5436047d 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
+Sashiko reported a potential invalid storage access issue after
+replacing a cgroup bpf prog.
 
-[ ... ]
+This occurs in the following scenario:
+1. prog1 with storage is attached to a cgroup in multi-attach mode.
+2. prog1 is replaced with prog2 using BPF_F_REPLACE in multi-attach
+   mode, but fails midway (e.g. in bpf_trampoline_link_cgroup_shim or
+   update_effective_progs).
+3. A new prog3 is attached to the cgroup in multi-attach mode.
 
-> @@ -674,6 +675,7 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
->  	   struct bpf_map *, map, u64, flags)
->  {
->  	struct perf_event *event = ctx->event;
-> +	struct stack_map_bucket *new_bucket;
->  	struct perf_callchain_entry *trace;
->  	struct stackid stackid;
->  	bool kernel, user;
-> @@ -701,7 +703,6 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
->
->  	if (kernel) {
->  		trace->nr = nr_kernel;
-> -		ret = __bpf_get_stackid(&stackid, map, trace, flags);
->  	} else { /* user */
->  		u64 skip = flags & BPF_F_SKIP_FIELD_MASK;
->
-> @@ -710,12 +711,22 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
->  			return -EFAULT;
->
->  		flags = (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
-> -		ret = __bpf_get_stackid(&stackid, map, trace, flags);
->  	}
->
-> +	ret = stackid_fastpath(&stackid, map, trace, flags);
-> +	if (ret != -ENOENT)
-> +		goto error;
-> +
-> +	new_bucket = stackid_new_bucket(&stackid, map);
-> +	if (new_bucket) {
-> +		trace->nr = nr;
-> +		return stackid_install(&stackid, map, new_bucket, flags);
-> +	}
-> +	ret = -ENOMEM;
-> +
-> +error:
->  	/* restore nr */
->  	trace->nr = nr;
-> -
->  	return ret;
->  }
+The reason is that __cgroup_bpf_attach overwrites pl->storage with the
+new storage prior to attachment completion. When attachment fails
+midway, the cleanup path calls bpf_cgroup_storages_free(new_storage) to
+free the newly allocated storage, but fails to restore pl->storage back
+to old_storage.
 
-This isn't a bug, but since the goto error label is reached when
-stackid_fastpath() succeeds and returns a valid stack id, would out: read
-better here?  The next patch in the series uses out: for the same pattern
-in bpf_get_stackid().
+Consequently, the still-active prog1 holds invalid or dangling storage
+pointers, leading to an invalid memory access when prog1 executes and
+calls bpf_get_local_storage. Additionally, original pl->flags and
+cgrp->bpf.flags[atype] are left unrestored.
 
-Also, stackid_install() doesn't look at trace, so could the trace->nr = nr
-restoration be done in just one place?  Right now it appears both inside
-the if (new_bucket) branch and under the label.
+Fix this by saving old_pl_flags, old_storage, and old_flags prior to the
+update, and properly restoring all of them in the cleanup path on error.
 
-
+Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs on the same cgroup")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+v2:
+- Remove the link relative code as link only support
+  BPF_F_ALLOW_MULTI attach, so will not occur UAF pl.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30437558115
---===============2784815537815203087==--
+v1: https://lore.kernel.org/bpf/20260728132336.2857800-1-pulehui@huaweicloud.com
+
+ kernel/bpf/cgroup.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index e2fa0ebeed83..be24ca453cab 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -813,8 +813,10 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 	struct bpf_prog *old_prog = NULL;
+ 	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+ 	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
++	struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+ 	struct bpf_prog *new_prog = prog ? : link->link.prog;
+ 	enum cgroup_bpf_attach_type atype;
++	u32 old_flags, old_pl_flags;
+ 	struct bpf_prog_list *pl;
+ 	struct hlist_head *progs;
+ 	int err;
+@@ -865,6 +867,8 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 
+ 	if (pl) {
+ 		old_prog = pl->prog;
++		old_pl_flags = pl->flags;
++		bpf_cgroup_storages_assign(old_storage, pl->storage);
+ 	} else {
+ 		pl = kmalloc_obj(*pl);
+ 		if (!pl) {
+@@ -884,6 +888,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 	pl->link = link;
+ 	pl->flags = flags;
+ 	bpf_cgroup_storages_assign(pl->storage, storage);
++	old_flags = cgrp->bpf.flags[atype];
+ 	cgrp->bpf.flags[atype] = saved_flags;
+ 
+ 	if (type == BPF_LSM_CGROUP) {
+@@ -915,12 +920,15 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+ 	if (old_prog) {
+ 		pl->prog = old_prog;
+ 		pl->link = NULL;
++		pl->flags = old_pl_flags;
++		bpf_cgroup_storages_assign(pl->storage, old_storage);
+ 	}
+ 	bpf_cgroup_storages_free(new_storage);
+ 	if (!old_prog) {
+ 		hlist_del(&pl->node);
+ 		kfree(pl);
+ 	}
++	cgrp->bpf.flags[atype] = old_flags;
+ 	return err;
+ }
+ 
+-- 
+2.34.1
+
