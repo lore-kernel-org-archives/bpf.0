@@ -1,133 +1,174 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE093AAF40
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 15:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5EE3C1D78;
+	Wed, 29 Jul 2026 15:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785338706; cv=none; b=alRVhiw2BWWVAPYNmwSfz6s5EYeBZ0n3LfnfyPKBPYfp7ZKa+hmcFaivpRlwvbG9iasSukXJANbwRfknrbufXbsdmq0cT6KHoEo8cckNQ6i+8KCEbxTNpFdWC0a8iZhSNJrpkUUWI08iP4nhGdHWE/mcIs7fsSux2lARkyFzZkE=
+	t=1785339075; cv=none; b=t7t73cQXl/vGWsrE/8x0kJhrE0DZvLuc7ve7VGZSOq2sXT/KoiVWBnK69fwbnQwGp6ac3gSEnrDPSbJhPQZuVkD4bA0MZ9Sv33kfYo7rI3k1wVE5oo3KiXVVC0EKqflFO9ENlDLUoNs3F2U5m/MiGdYKUb+55vQr01zXwSOWVno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785338706; c=relaxed/simple;
-	bh=/GwVqYjCrMfINxoN+h9JAqBTc9JLZl2Dxr062Uy3dW4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ab+AxCt3EPp2/DUdB7WUYQCvdxU6mqRxMR2Lrmn//U0Eb8MHmItGKVY3lcngDov4gJrqOVWoG5Z2pgTa3HTwjoceLE8XgOHqCaxBdh1Um30U98A4ewqbHjVhVD1TK7PI/swNKJ7I5TJL/xkgZ0MMlM1gRsBFv4cMcR/W1A76o7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QG+/1X6Q; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QG+/1X6Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99031F000E9;
-	Wed, 29 Jul 2026 15:25:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785338704;
-	bh=pL6UpxxVY7TMdnwZe+YSSrFCVcZF0dvMuRv6bBu27dM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QG+/1X6QyP2exlampJy9lfsDNUyP0PDqngG4aWr4utR9LlYXEI070uW40uHvEZwtC
-	 ggYGeg8xpneWtdNH4I2IZWUYKSGJIh0Suf+p/wkdKtfJzwlwPFeSuYdNK3wg+A4IX1
-	 3ADyZiitaJ+uIar1GEBROfjclFHcbgB5elSXyMlg69ec/ERq/WezazdhGEN1sEfE0u
-	 LApbfvNmGd/MmLjPrQeBzNxVmo4jOcIV4FpbD7Q7olubnXSRhvoy4pNhPaZgJtAUnO
-	 yZJdwGXZJmmmul7cF4g/LZCdQadYXgwIhrPoBI+7DcLGuFFPSNdMKvK6EqxRsQ6i6+
-	 KE9uNL1nEklRw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 net-next 1/1] tcp: Replace min_tso_segs() with
- tso_segs() CC callback
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260728152425.649600-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20260728152425.649600-1-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Jul 2026 15:25:04 +0000
-Message-Id: <20260729152504.A99031F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1785339075; c=relaxed/simple;
+	bh=mCrppwFzqJJ3wA+pXsNCVDraYaxnPzZ7fkcGZbHDj0A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZydRpSG/Jkc/GySjeXHANHewqxgXkDcW4ZN4s+H4ckU/eP/o+sDGk3XNiI4CvPYRsbvvjuEQSB91h4x4D81cJLRLU2NlOkb/HDwbe9shaDK/iibhxJiMKD2CJXMJVylC5iJaiV4w1q9sqtTYMZe6BiQWHuVB7jFLP66PPzFkNvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf05.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 881C0A0702;
+	Wed, 29 Jul 2026 15:31:04 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id 187762000E;
+	Wed, 29 Jul 2026 15:31:01 +0000 (UTC)
+Date: Wed, 29 Jul 2026 11:31:36 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, song@kernel.org, jolsa@kernel.org, naveen@kernel.org,
+ davem@davemloft.net, mhiramat@kernel.org, stable@vger.kernel.org,
+ linux-open-source@crowdstrike.com, mbenes@suse.cz, Linus Torvalds
+ <torvalds@linux-foundation.org>
+Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark
+ trampoline/kprobe ftrace_ops permanent
+Message-ID: <20260729113136.32af2a4d@gandalf.local.home>
+In-Reply-To: <CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
+References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
+	<20260729104114.04298a48@gandalf.local.home>
+	<CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Stat-Signature: fi7kd9udmk8fragx7joh8yamexgf4j44
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 187762000E
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19TYrfKJHtehk40lCha/ZA9AhcvzQlaqVE=
+X-HE-Tag: 1785339060-4129
+X-HE-Meta: U2FsdGVkX1/nZ9MxXgktekmcCky5uR/3BC1TA3nmiHmC+yuqKFVTke/NdY7s8PcjAZtNIp5ezjyQCHtLutnOHPayYSaJ2QvGkJYCgtEdSki3mKRx+DjQD8LpoeeFIKzKqsjGBQvW+QXgEFz1LP+ILBP5ElNrlZoxjb8yeMf7B/TyFgdLtvAPVg1IzjinRa6Unwnlmww2cw3pgcMYDuzu12R/TWi0Gci2/Hsu5JBi8PcSfSLxNa4JdxIhNXYTDNY3/Dmp21dVagWyVZ/q6jkkeAYzbIwzihsctnolT1qkGdKzkH6uDVW0UBz84GE4j03JDRpBqXoZgvLavngGIL/WmU3F4CDTwtn5iQ+kg5Uvwx4czWp3GZ42PA2jc1H0aMBeYEyRKG6ULYPO+4rqNb1up0gZS5worSRnGI9/aaJgKQU=
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Missing bounds check on `ca_ops->tso_segs()` return value causes a=
-n infinite loop and soft lockup
-- [Medium] Exported function `tcp_tso_autosize` lacks BPF kfunc registration
---
 
---- Patch [1]: [PATCH v5 net-next 1/1] tcp: Replace min_tso_segs() with tso=
-_segs() CC callback ---
-commit 459bb4a577e547baf34fbc452c0b63bca5545c92
-Author: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+[ Adding Linus in case he cares ]
 
-tcp: Replace min_tso_segs() with tso_segs() CC callback
+On Wed, 29 Jul 2026 11:00:31 -0400
+Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
 
-This commit replaces the min_tso_segs() congestion control callback
-with tso_segs(), passing the mss_now argument to allow the algorithm
-to return an explicit TSO segment number. It bypasses tcp_tso_autosize()
-when the callback is provided, pushing the sizing logic into the CC.
+> ,
+>=20
+> On Wed, Jul 29, 2026 at 10:40=E2=80=AFAM Steven Rostedt <rostedt@goodmis.=
+org> wrote:
+> >
+> > On Tue, 28 Jul 2026 20:59:56 -0400
+> > Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
+> > =20
+> > > This fixes a long-standing issue: kernel.ftrace_enabled=3D0 silently
+> > > disables BPF trampolines (fentry/fexit) and ftrace-based
+> > > kprobes/kretprobes. The write succeeds, the hook stops firing with no
+> > > error, and re-enabling silently restores it. Livepatch already solved
+> > > this for itself via FTRACE_OPS_FL_PERMANENT, which refuses to disable
+> > > ftrace while a permanent ops is registered and refuses to register
+> > > one while ftrace is disabled[1]. =20
+> >
+> > The /proc/sys/kernel/ftrace_enabled was added as a "safety kill switch"
+> > back when ftrace was first added to the kernel. It's addition was namely
+> > there because live runtime modification of kernel code was new and we w=
+ere
+> > worried about how stable it could be.
+> >
+> > Honestly, I would love to get rid of it as today ftrace has proven to be
+> > rather stable. But as it is a user space ABI, I'm not sure what will br=
+eak
+> > if we do. I wonder if we just make it a nop, and print a message to dme=
+sg
+> > saying:
+> >
+> >   "ftrace_enabled no longer does anything. Please report if you need it=
+ to."
+> >
+> > ? =20
+>=20
+> Thanks Steven, if you and/or other community members would approve such
+> approach I would happily do this instead for a few reasons -
 
-> As a result, BPF programs shall be updated, because retuning a small
-> constan will now directly limit tso_segs instead of the minimum.
+It's actually if Linus is OK with this approach.
 
-This isn't a bug, but there are typos in the commit message here: "retuning"
-and "constan".
+>=20
+> 1) Seems like the more correct course of action if idneed this switch
+> effectively became obsolete in usage instead of piling extra logic to work
+> around it.
+>=20
+> 2) As I mentioned in the end of the cover letter, I believe for some cases
+> such as fsessions/ksessions and multi opts retprobes, this patchset is
+> not effective and the issue will persist, requiring a more complicated so=
+lution
+> for them anyway if we want watertight resilience.
+>=20
+> If you approve this - I can try what you suggested, this would include
+> making the
+> knob a NOP with a message, dropping the FTRACE_OPS_FL_PERMANENT
+> flag and reverting/cleaning what's possible from the original livepatch p=
+atchset
+> that dealt with this issue [1]
+>=20
+> One question is what the correct set of tests to run in such a case
+> would be to verify
+> we didn't break anything. For this patchset I ran BPF and livepatch
 
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> index d7c1444b5e304..101ca765a7a92 100644
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
+Hah! That's the key question isn't it? It's a user space visible knob. I
+don't have anything that uses it, but I have no idea of there's a tool out
+there that does. Linus's rule is to not break user space. If nothing uses
+it, then it's OK to get rid of (as getting rid of it will not break user
+space). But, if something uses it for a good reason, then we are stuck with
+it. We really will not know until we disable it and somebody complains.
 
-[ ... ]
+-- Steve
 
-> @@ -2269,6 +2269,7 @@ static u32 tcp_tso_autosize(const struct sock *sk, =
-unsigned int mss_now,
-> =20
->  	return max_t(u32, bytes / mss_now, min_tso_segs);
->  }
-> +EXPORT_SYMBOL(tcp_tso_autosize);
 
-[Severity: Medium]
-Is this missing a BTF_ID_FLAGS entry for BPF congestion control algorithms?
 
-The commit notes that BPF programs need to be updated to directly limit
-tso_segs, which implies they might need to call tcp_tso_autosize() to
-replicate the original behavior. While this EXPORT_SYMBOL makes it available
-for loadable kernel modules, without adding it to the
-bpf_tcp_ca_check_kfunc_ids BTF set, the BPF verifier will reject programs
-attempting to use it.
+> selftest suites, but
+> I wonder what else would need to be run.
+>=20
+> CC Miroslav for Livepatch.
+>=20
+> Thanks,
+> Andrey
+>=20
+> [1] - https://lore.kernel.org/all/20191016113316.13415-1-mbenes@suse.cz/T=
+/#u
+>=20
+> > =20
+> > >
+> > > For trampolines this restores a historical property: from 2019-2022
+> > > they shared one global direct_ops, marked permanent the same
+> > > way[2].It was later lost as a side effect of the 2022
+> > > per-trampoline-ops split (patch 1's Fixes tag) and never
+> > > restored.[3][4] Kprobes never carried this protection at all, so
+> > > for them that is long-standing issue rather than a regression.
+> > >
+> > > Patch 1: trampolines. Patch 2: classic kprobes/kretprobes. Patch 3:
+> > > a selftest covering both directions for all four hook types.
+> > >
+> > > P.S
+> > > I initially implemented a per-record opt-in flag[5], but dropped it
+> > > as over-engineering once I saw the original blanket restriction.
+> > >
+> > > P.P.S
+> > > Open question: kprobe.multi/kretprobe.multi/kprobe.session
+> > > (fprobe-backed) aren't covered -- return-capturing fprobes share the
+> > > function-graph tracer's subops manager with unrelated tracers, so
+> > > marking it permanent needs a different, per-record approach. Perhaps
+> > > something along the lines of [5]. =20
+> >
+> > Honestly, I would like to start deprecating that kill switch.
+> >
+> > For the series:
+> >
+> > Acked-by: Steven Rostedt <rostedt@goodmis.org>
+> >
+> > -- Steve =20
 
->  /* Return the number of segments we want in the skb we are transmitting.
->   * See if congestion control module wants to decide; otherwise, autosize.
-> @@ -2278,11 +2279,11 @@ static u32 tcp_tso_segs(struct sock *sk, unsigned=
- int mss_now)
->  	const struct tcp_congestion_ops *ca_ops =3D inet_csk(sk)->icsk_ca_ops;
->  	u32 min_tso, tso_segs;
-> =20
-> -	min_tso =3D ca_ops->min_tso_segs ?
-> -			ca_ops->min_tso_segs(sk) :
-> -			READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
-> +	min_tso =3D READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_min_tso_segs);
-> =20
-> -	tso_segs =3D tcp_tso_autosize(sk, mss_now, min_tso);
-> +	tso_segs =3D ca_ops->tso_segs ?
-> +			ca_ops->tso_segs(sk, mss_now) :
-> +			tcp_tso_autosize(sk, mss_now, min_tso);
->  	return min_t(u32, tso_segs, sk->sk_gso_max_segs);
->  }
-
-[Severity: High]
-What happens if the custom congestion control or BPF program returns 0 here?
-
-If ca_ops->tso_segs() returns 0, tcp_tso_segs() will return 0, which gets
-passed back to tcp_write_xmit() as max_segs.
-
-In tcp_write_xmit(), this sets cwnd_quota to 0. When tcp_mss_split_point()
-is called with a 0 cwnd_quota, it returns a limit of 0. This causes
-tso_fragment() to chop 0 bytes off the SKB, resulting in a 0-byte packet
-being sent.
-
-Because the outer loop in tcp_write_xmit() doesn't re-evaluate max_segs,
-won't this get stuck in an infinite loop chopping 0 bytes off the remainder
-SKB, leading to a CPU soft lockup? Does this need a bounds check to clamp
-the minimum return value to 1?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260728152425.6496=
-00-1-chia-yu.chang@nokia-bell-labs.com?part=3D1
