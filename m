@@ -1,35 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C623A43B6E5;
-	Wed, 29 Jul 2026 08:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD3839C006;
+	Wed, 29 Jul 2026 08:21:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785313309; cv=none; b=YKwhDpFpbuMW7eQQkX4UgTueLee1NXOhnW5i37QwOTeQA4SbhbghIaBg84A43Ec58MVJ1GHebbgCM75L/mYf3W4r4n6lc/3isEwFfSLxE2LxaVcSG2/APGedtAdYAWzkk+guBm12aE25LYUpHQZyn+tseh8AioMgh8O5tYZxIgE=
+	t=1785313316; cv=none; b=De6L3cPfQ8AyoZb8EkStcwbZwnqX5jRNsdB9slFukvn4JLCj6/U2UQrzumoo2asbvZk96ydVi7rCcWjmLedetTGZDYxHYb9CTgkkDk2VKLwymnl9/nWlA3fASou5SuZw0sK8G7WQDvdVLiMOKaUqOtpg+TPxKGI/NjoiV65G6J8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785313309; c=relaxed/simple;
-	bh=Ey+f8l4XLsfaOdZL079filXHp5bMK0zVH0fewLSr8Sc=;
+	s=arc-20240116; t=1785313316; c=relaxed/simple;
+	bh=pEit+LBwxHmHFgVdifKiVdt1Lat/ZS4nleuXr7OMXQ8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VPi8YJpkEijL2h7lZvXTzLtbdGjuq4IxxkIJ/YpB/m2SLvvbOVGnCthDWntmBshiQNBIzF1LwUGY3YiI1s4Y0lJcVnQymd27NQAXu5OPDGSV7tpj6Ny3+Lwyo5AXQrB9Fvv6aOGFLk3da2Zg5uGM7xUHl/AlDUeFtahx4+fMl8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oS+hQaMG; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=KnjtMYk7JS8sOoD28HcAu1dnooi3GHDZvQYZJq45O055a1FayQWQ2tDwAgWSiEueg7q6npkQ64IrXRIivL4wjo+DbVRNbCFyySp3NZWR4XwvkeiypWOETShJBZGPGInDRXKvoDew77WAXfKnA3qkhRcdRNsz53sK/khJeiifgZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XG3Ggfgb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oS+hQaMG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D6381F000E9;
-	Wed, 29 Jul 2026 08:21:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XG3Ggfgb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 057B01F00A3D;
+	Wed, 29 Jul 2026 08:21:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785313293;
-	bh=Yh8xxI8IwkcJ1dgmcaV/tWyT7/NE7RNTeAYVA+pLPVw=;
+	s=k20260515; t=1785313306;
+	bh=bQgXQ3LLqCfSQ6+KzSoXpszX0uTxmBCepjeRS5yTims=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=oS+hQaMG3f6p6s7y/83Mm3dEGgnbZoVpbILKW5IQqB2FRaoafWmSSfqKJ1GbMEdZw
-	 uxBQl02M/lJTnRFU+bZMBp2iulIr8apVlUhWl1X6FVTL2ieZDFRlUNMck5LjkF45CS
-	 L7ilohbFxfs1L3NkG04/b1MFVGjsjYR5WITomXWwlB30UlvK9yJMJ3gaS3pEcROlZ+
-	 gUGD3pdPjcaoZFilBzsCLlZOW1ERpsSjMTjMk0Uh4Mq3sGRH/NMLQ02fGpMqHpGxPP
-	 5ACWQqvBYRgFInQOb3z+G9Ni4GTTl9MqR5Ri4xnNilCBYEfOjWu1C9ZNX7cI/NLRjk
-	 6h66VScPdLprQ==
+	b=XG3GgfgbwN5JSIG+Ed5Pb4FlPiIFQ826L07JPsO6aBK/Sg+x/F3TWY9hbXHJ41/ru
+	 Pbk6jkGViyZpKlf7aZ4NQMKjfkK3l3++D2P9BIyUN6xgIFIIigs1iZz76vS5/lHsnt
+	 5knwB9IeIWZHAldZlXGazvhy9furSjIxQDxQ+fYw41UtVnnEJBCsEaL1KvLSEi64p6
+	 Znj/ZhHdpncq0IViJyq9wv5j9xCk7vJlI32tcu8ofOVsw5ID4ATjidUs09loM9ERLW
+	 u00VSO0zQe+1R+qBjYbF0rDQylGtYItM/nNBwYUPcICmSX0/Js0ErTLOTU6L4D39Lh
+	 rhpNnEkcmfIXA==
 From: "Harry Yoo (Oracle)" <harry@kernel.org>
-Date: Wed, 29 Jul 2026 17:20:14 +0900
-Subject: [PATCH v5 6/8] mm/slab: introduce struct kvfree_rcu_head for
- kvfree_rcu batching
+Date: Wed, 29 Jul 2026 17:20:16 +0900
+Subject: [PATCH v5 8/8] slub_kunit: extend the test for kfree_rcu_nolock()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +37,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260729-kfree_rcu_nolock-v5-6-a28cdcda9673@kernel.org>
+Message-Id: <20260729-kfree_rcu_nolock-v5-8-a28cdcda9673@kernel.org>
 References: <20260729-kfree_rcu_nolock-v5-0-a28cdcda9673@kernel.org>
 In-Reply-To: <20260729-kfree_rcu_nolock-v5-0-a28cdcda9673@kernel.org>
 To: Vlastimil Babka <vbabka@kernel.org>, 
@@ -64,290 +63,151 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  "Harry Yoo (Oracle)" <harry@kernel.org>
 X-Mailer: b4 0.14.3
 
-rcu_head is overkill for kvfree_rcu() because the callback
-function is always either kfree(), vfree(), or free_large_kmalloc(),
-and thus there is no need for a function pointer.
+When slub_kunit is not built-in, call kfree_rcu() and kfree_rcu_nolock()
+to test kfree_rcu_nolock() in slub_kunit.
 
-kvfree_rcu batching reuses the field to store the start address
-of an object, however, this is not strictly needed because we can
-calculate the start address in the slowpath. For the purpose of
-kvfree_rcu batching, it is sufficient to implement a linked list using
-a single pointer.
+Rename the test case as the test covers more _nolock() APIs.
 
-Introduce a new struct called kvfree_rcu_head (the name was suggested
-by Vlastimil Babka), which is similar to rcu_head but is only a single
-pointer to build a linked list, without a function pointer, when
-CONFIG_KVFREE_RCU_BATCHED=y.
-
-When kvfree_rcu is not batched, kvfree_rcu_head is the same size
-as rcu_head. Note that shrinking struct kvfree_rcu_head on
-CONFIG_KVFREE_RCU_BATCHED=n kernels would inevitably require additional
-complexity and also some sort of batching (which defeats the purpose of
-the config option) because it cannot fall back to call_rcu().
-
-For now there are no user-visible changes to the API. k[v]free_rcu()
-simply casts rcu_head to kvfree_rcu_head. While this does not affect
-the API, it allows kfree_rcu_nolock() to reuse kvfree_rcu batching
-as a fallback when trylock or sheaf allocation fails.
-
-Stop storing the object pointer in rcu_head.func and instead calculate
-the object's start address in kvfree_rcu_list(). Factor out the existing
-logic to calculate the start address from kvfree_rcu_cb() to
-kvmalloc_obj_start_addr(). To avoid losing the KASAN tag, calculate
-the offset and subtract it from the address of the kvfree_rcu_head.
-
+Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
 Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
 ---
- include/linux/rcupdate.h   | 10 ++++++----
- include/linux/types.h      |  8 ++++++++
- include/trace/events/rcu.h |  2 +-
- mm/slab.h                  | 32 ++++++++++++++++++++++++++++++++
- mm/slab_common.c           | 17 ++++++++---------
- mm/slub.c                  | 40 +++++++++-------------------------------
- 6 files changed, 64 insertions(+), 45 deletions(-)
+ lib/tests/slub_kunit.c | 47 ++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 30 insertions(+), 17 deletions(-)
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 5e95acc33989..ef5bb6981133 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -1098,19 +1098,21 @@ static inline void rcu_read_unlock_migrate(void)
- /*
-  * In mm/slab_common.c, no suitable header to include here.
-  */
--void kvfree_call_rcu(struct rcu_head *head, void *ptr);
-+void kvfree_call_rcu(struct kvfree_rcu_head *head, void *ptr);
- 
- /*
-  * The BUILD_BUG_ON() makes sure the rcu_head offset can be handled. See the
-  * comment of kfree_rcu() for details.
-  */
--#define kvfree_rcu_arg_2(ptr, rhf)					\
-+#define kvfree_rcu_arg_2(ptr, kvrhf)					\
- do {									\
- 	typeof (ptr) ___p = (ptr);					\
-+	struct kvfree_rcu_head *___head;				\
- 									\
- 	if (___p) {							\
--		BUILD_BUG_ON(offsetof(typeof(*(ptr)), rhf) >= 4096);	\
--		kvfree_call_rcu(&((___p)->rhf), (void *) (___p));	\
-+		BUILD_BUG_ON(offsetof(typeof(*(ptr)), kvrhf) >= 4096);	\
-+		___head = (struct kvfree_rcu_head *) &(___p)->kvrhf;	\
-+		kvfree_call_rcu(___head, (void *) (___p));		\
- 	}								\
- } while (0)
- 
-diff --git a/include/linux/types.h b/include/linux/types.h
-index 93166b0b0617..8b0976669d66 100644
---- a/include/linux/types.h
-+++ b/include/linux/types.h
-@@ -255,6 +255,14 @@ struct callback_head {
- } __attribute__((aligned(sizeof(void *))));
- #define rcu_head callback_head
- 
-+#ifdef CONFIG_KVFREE_RCU_BATCHED
-+struct kvfree_rcu_head {
-+	struct kvfree_rcu_head *next;
-+};
-+#else
-+#define kvfree_rcu_head rcu_head
-+#endif
-+
- typedef void (*rcu_callback_t)(struct rcu_head *head);
- typedef void (*call_rcu_func_t)(struct rcu_head *head, rcu_callback_t func);
- 
-diff --git a/include/trace/events/rcu.h b/include/trace/events/rcu.h
-index 5fbdabe3faea..a74027126a2f 100644
---- a/include/trace/events/rcu.h
-+++ b/include/trace/events/rcu.h
-@@ -625,7 +625,7 @@ TRACE_EVENT_RCU(rcu_invoke_callback,
-  */
- TRACE_EVENT_RCU(rcu_invoke_kvfree_callback,
- 
--	TP_PROTO(const char *rcuname, struct rcu_head *rhp, unsigned long offset),
-+	TP_PROTO(const char *rcuname, struct kvfree_rcu_head *rhp, unsigned long offset),
- 
- 	TP_ARGS(rcuname, rhp, offset),
- 
-diff --git a/mm/slab.h b/mm/slab.h
-index d13a0f6b7a1b..ec72ed95c21b 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -347,6 +347,37 @@ static inline unsigned int obj_to_index(const struct kmem_cache *cache,
- 	return __obj_to_index(cache, slab_address(slab), obj);
+diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
+index 8c2b9911471e..e3b63f0338d5 100644
+--- a/lib/tests/slub_kunit.c
++++ b/lib/tests/slub_kunit.c
+@@ -162,7 +162,10 @@ static void test_kmalloc_redzone_access(struct kunit *test)
  }
  
-+/*
-+ * kvfree_rcu_head offset can be only less than page size.
-+ * Calculate the start address while preserving the KASAN tag.
-+ */
-+static inline void *kvmalloc_obj_start_addr(void *head)
-+{
-+	unsigned long offset;
-+
-+	if (unlikely(is_vmalloc_addr(head))) {
-+		offset = offset_in_page(head);
-+	} else {
-+		struct slab *slab = virt_to_slab(head);
-+
-+		if (!slab) {
-+			offset = offset_in_page(head);
-+		} else if (is_kfence_address(head)) {
-+			offset = head - kfence_object_start(head);
-+		} else {
-+			struct kmem_cache *s = slab->slab_cache;
-+			unsigned int idx = __obj_to_index(s, slab_address(slab), head);
-+			void *obj = slab_address(slab) + s->size * idx;
-+
-+			obj = fixup_red_left(s, obj);
-+			obj = kasan_reset_tag(obj);
-+			offset = kasan_reset_tag(head) - obj;
+ struct test_kfree_rcu_struct {
+-	struct rcu_head rcu;
++	union {
++		struct rcu_head rcu;
++		struct kvfree_rcu_head kvrcu;
++	};
+ };
+ 
+ static void test_kfree_rcu(struct kunit *test)
+@@ -296,7 +299,7 @@ static void test_krealloc_redzone_zeroing(struct kunit *test)
+ #if defined(CONFIG_PERF_EVENTS) || (defined(CONFIG_KPROBES) && defined(CONFIG_SMP))
+ #define NR_ITERATIONS 1000
+ #define NR_OBJECTS 1000
+-static void *objects[NR_OBJECTS];
++static struct test_kfree_rcu_struct *objects[NR_OBJECTS];
+ 
+ struct test_nolock_context {
+ 	struct kunit *test;
+@@ -311,15 +314,16 @@ struct test_nolock_context {
+ #endif
+ };
+ 
+-static void test_kmalloc_kfree(void)
++static void test_kmalloc_and_friends(void)
+ {
+ 	int i, j;
++	bool can_use_kfree_rcu = !IS_BUILTIN(CONFIG_SLUB_KUNIT_TEST);
+ 
+ 	for (i = 0; i < NR_ITERATIONS; i++) {
+ 		for (j = 0; j < NR_OBJECTS; j++) {
+-			gfp_t gfp = (i % 2) ? GFP_KERNEL : GFP_KERNEL_ACCOUNT;
++			gfp_t gfp = (i & 1) ? GFP_KERNEL : GFP_KERNEL_ACCOUNT;
+ 
+-			objects[j] = kmalloc(64, gfp);
++			objects[j] = kmalloc_obj(*objects[j], gfp);
+ 			if (!objects[j]) {
+ 				j--;
+ 				while (j >= 0)
+@@ -328,26 +332,35 @@ static void test_kmalloc_kfree(void)
+ 			}
+ 		}
+ 
+-		for (j = 0; j < NR_OBJECTS; j++)
+-			kfree(objects[j]);
++		for (j = 0; j < NR_OBJECTS; j++) {
++			if (can_use_kfree_rcu && (i & 2))
++				kfree_rcu(objects[j], rcu);
++			else
++				kfree(objects[j]);
 +		}
-+	}
-+
-+	return head - offset;
-+}
-+
- /*
-  * State of the slab allocator.
-  *
-@@ -910,6 +941,7 @@ void __check_heap_object(const void *ptr, unsigned long n,
- 			 const struct slab *slab, bool to_user);
- 
- void deferred_work_barrier(void);
-+void defer_kfree_rcu(struct kvfree_rcu_head *head);
- 
- static inline bool slub_debug_orig_size(struct kmem_cache *s)
- {
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 9c2cca9add89..691ce6db4519 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -1379,7 +1379,7 @@ struct kvfree_rcu_bulk_data {
- 
- struct kfree_rcu_cpu_work {
- 	struct rcu_work rcu_work;
--	struct rcu_head *head_free;
-+	struct kvfree_rcu_head *head_free;
- 	struct rcu_gp_oldstate head_free_gp_snap;
- 	struct list_head bulk_head_free[FREE_N_CHANNELS];
- 	struct kfree_rcu_cpu *krcp;
-@@ -1415,7 +1415,7 @@ struct kfree_rcu_cpu_work {
- struct kfree_rcu_cpu {
- 	// Objects queued on a linked list
- 	// through their rcu_head structures.
--	struct rcu_head *head;
-+	struct kvfree_rcu_head *head;
- 	unsigned long head_gp_snap;
- 	atomic_t head_count;
- 
-@@ -1556,12 +1556,12 @@ kvfree_rcu_bulk(struct kfree_rcu_cpu *krcp,
- }
- 
- static void
--kvfree_rcu_list(struct rcu_head *head)
-+kvfree_rcu_list(struct kvfree_rcu_head *head)
- {
--	struct rcu_head *next;
-+	struct kvfree_rcu_head *next;
- 
- 	for (; head; head = next) {
--		void *ptr = (void *) head->func;
-+		void *ptr = kvmalloc_obj_start_addr(head);
- 		unsigned long offset = (void *) head - ptr;
- 
- 		next = head->next;
-@@ -1585,7 +1585,7 @@ static void kfree_rcu_work(struct work_struct *work)
- 	unsigned long flags;
- 	struct kvfree_rcu_bulk_data *bnode, *n;
- 	struct list_head bulk_head[FREE_N_CHANNELS];
--	struct rcu_head *head;
-+	struct kvfree_rcu_head *head;
- 	struct kfree_rcu_cpu *krcp;
- 	struct kfree_rcu_cpu_work *krwp;
- 	struct rcu_gp_oldstate head_gp_snap;
-@@ -1716,7 +1716,7 @@ kvfree_rcu_drain_ready(struct kfree_rcu_cpu *krcp)
- {
- 	struct list_head bulk_ready[FREE_N_CHANNELS];
- 	struct kvfree_rcu_bulk_data *bnode, *n;
--	struct rcu_head *head_ready = NULL;
-+	struct kvfree_rcu_head *head_ready = NULL;
- 	unsigned long flags;
- 	int i;
- 
-@@ -1979,7 +1979,7 @@ void __init kfree_rcu_scheduler_running(void)
-  * be free'd in workqueue context. This allows us to: batch requests together to
-  * reduce the number of grace periods during heavy kfree_rcu()/kvfree_rcu() load.
-  */
--void kvfree_call_rcu(struct rcu_head *head, void *ptr)
-+void kvfree_call_rcu(struct kvfree_rcu_head *head, void *ptr)
- {
- 	unsigned long flags;
- 	struct kfree_rcu_cpu *krcp;
-@@ -2017,7 +2017,6 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
- 			// Inline if kvfree_rcu(one_arg) call.
- 			goto unlock_return;
- 
--		head->func = ptr;
- 		head->next = krcp->head;
- 		WRITE_ONCE(krcp->head, head);
- 		atomic_inc(&krcp->head_count);
-diff --git a/mm/slub.c b/mm/slub.c
-index 6c81722afb18..774104267f3c 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -6720,43 +6720,21 @@ static void free_large_kmalloc(struct page *page, void *object)
-  */
- void kvfree_rcu_cb(struct rcu_head *head)
- {
--	void *obj = head;
--	struct page *page;
--	struct slab *slab;
--	struct kmem_cache *s;
--	void *slab_addr;
-+	void *obj;
-+
-+	obj = kvmalloc_obj_start_addr(head);
- 
- 	if (is_vmalloc_addr(obj)) {
--		obj = (void *) PAGE_ALIGN_DOWN((unsigned long)obj);
- 		vfree(obj);
--		return;
--	}
--
--	page = virt_to_page(obj);
--	slab = page_slab(page);
--	if (!slab) {
--		/*
--		 * rcu_head offset can be only less than page size so no need to
--		 * consider allocation order
--		 */
--		obj = (void *) PAGE_ALIGN_DOWN((unsigned long)obj);
--		free_large_kmalloc(page, obj);
--		return;
--	}
--
--	s = slab->slab_cache;
--	slab_addr = slab_address(slab);
--
--	if (is_kfence_address(obj)) {
--		obj = kfence_object_start(obj);
- 	} else {
--		unsigned int idx = __obj_to_index(s, slab_addr, obj);
-+		struct page *page = virt_to_page(obj);
-+		struct slab *slab = page_slab(page);
- 
--		obj = slab_addr + s->size * idx;
--		obj = fixup_red_left(s, obj);
-+		if (slab)
-+			slab_free(slab->slab_cache, slab, obj, _RET_IP_);
-+		else
-+			free_large_kmalloc(page, obj);
  	}
--
--	slab_free(s, slab, obj, _RET_IP_);
  }
  
- /**
+ static void test_nolock(struct test_nolock_context *ctx)
+ {
+-	void *objp;
++	struct test_kfree_rcu_struct *objp;
+ 	gfp_t gfp;
++	bool can_use_kfree_rcu = !IS_BUILTIN(CONFIG_SLUB_KUNIT_TEST);
+ 
+ 	/* __GFP_ACCOUNT to test kmalloc_nolock() in alloc_slab_obj_exts() */
+-	gfp = (ctx->callback_count % 2) ? 0 : __GFP_ACCOUNT;
+-	objp = kmalloc_nolock(64, gfp, NUMA_NO_NODE);
++	gfp = (ctx->callback_count & 1) ? 0 : __GFP_ACCOUNT;
++	objp = kmalloc_nolock(sizeof(*objp), gfp, NUMA_NO_NODE);
+ 
+ 	if (objp)
+ 		ctx->alloc_ok++;
+ 	else
+ 		ctx->alloc_fail++;
+ 
+-	kfree_nolock(objp);
++	if (can_use_kfree_rcu && (ctx->callback_count & 2))
++		kfree_rcu_nolock(objp, kvrcu);
++	else
++		kfree_nolock(objp);
++
+ 	ctx->callback_count++;
+ }
+ #endif
+@@ -397,14 +410,14 @@ static void disable_perf_events(struct test_nolock_context *ctx)
+ 	perf_event_release_kernel(ctx->event);
+ }
+ 
+-static void test_kmalloc_kfree_nolock_perf(struct kunit *test)
++static void test_kmalloc_nolock_and_friends_perf(struct kunit *test)
+ {
+ 	struct test_nolock_context ctx = { .test = test };
+ 
+ 	if (!enable_perf_events(&ctx))
+ 		kunit_skip(test, "Failed to enable perf event, skipping");
+ 
+-	test_kmalloc_kfree();
++	test_kmalloc_and_friends();
+ 
+ 	disable_perf_events(&ctx);
+ 	KUNIT_EXPECT_EQ(test, 0, slab_errors);
+@@ -438,14 +451,14 @@ static void unregister_slab_kprobes(struct test_nolock_context *ctx)
+ 	unregister_kprobe(&ctx->kprobe);
+ }
+ 
+-static void test_kmalloc_kfree_nolock_kprobe(struct kunit *test)
++static void test_kmalloc_nolock_and_friends_kprobe(struct kunit *test)
+ {
+ 	struct test_nolock_context ctx = { .test = test };
+ 
+ 	if (!register_slab_kprobes(&ctx))
+ 		kunit_skip(test, "Failed to register kprobe, skipping");
+ 
+-	test_kmalloc_kfree();
++	test_kmalloc_and_friends();
+ 
+ 	unregister_slab_kprobes(&ctx);
+ 	KUNIT_EXPECT_EQ(test, 0, slab_errors);
+@@ -477,10 +490,10 @@ static struct kunit_case test_cases[] = {
+ 	KUNIT_CASE(test_leak_destroy),
+ 	KUNIT_CASE(test_krealloc_redzone_zeroing),
+ #ifdef CONFIG_PERF_EVENTS
+-	KUNIT_CASE_SLOW(test_kmalloc_kfree_nolock_perf),
++	KUNIT_CASE_SLOW(test_kmalloc_nolock_and_friends_perf),
+ #endif
+ #if defined(CONFIG_KPROBES) && defined(CONFIG_SMP)
+-	KUNIT_CASE_SLOW(test_kmalloc_kfree_nolock_kprobe),
++	KUNIT_CASE_SLOW(test_kmalloc_nolock_and_friends_kprobe),
+ #endif
+ 	{}
+ };
 
 -- 
 2.53.0
