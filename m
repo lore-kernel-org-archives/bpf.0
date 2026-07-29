@@ -1,278 +1,177 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB6D37EFFB
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 02:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785292212; cv=none; b=oUmooCQt220QsEgsCpPQBmAUA+dXoMQQ8Cmd6ozGp/dFOSqBm6ndJAmF81wAmXS8E7nq69Ga6aUjk1HhfGQdz6o5H3FeGzxnRmfjUdbATyjXv0AciLpI5V3aMlvnuELXt1w+gwZLoSNXq4rHHP+L/3+FtKPZFNXtXeKSMf2/R60=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785292212; c=relaxed/simple;
-	bh=Dp5GppK4ZvVX+9JPvJB+9cuubEsYP4GcZG5AFv0g7BM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=q2/ax1aCkCeCPNC3ANLXktYlJr4b8sHkYCO82ba0Xsg1yLGb1AoWAGfhoMkaTjKtVJfH4/hOpP9O0e8mm7/lIlZlAuCJbnxP6NtQ01oCnrxYINJC28ZdkJEWHUCPYQTdQaMrafS59ULra7AbbSUugjC/tYvGt9ib/oC7zv+taNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=W+bBnAr5; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42013233944
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 03:31:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785295900; cv=pass; b=i1VSHSh+5K2efZHv/oKqY2CClyNpVQqZpt1eAUq7mVG7LqomtR3Ap/M0qxDOGEitqkN4K9mxi+WjX7UAzTEwgjJCxBYDKOu9yz/e7cDDoatNkXPnlXgwUgMdA/eHpx8m/FfG8393lRDYyMR3Gd73XHAIXvNBMA9s6IoStjXBYH8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785295900; c=relaxed/simple;
+	bh=8INSsvIsr0EcFor0KjhMqLit17i8jgQhYiGlfRY+r1w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Gz6QB4/nWa019tSFiJ8ClLBrOvtzsXy5wjzPG0FFHpAmqRteebmuZeBXMfRSx9/WnHQUslJp9vW7JynD1/Zu2a0XYZQemKGfRGfw535xbRWzUyvj2aSzgC6nMo8HbwzbHZJzQmb9mFLPJJID4hdv7H3lCDr9dRaEwpzUr6+L89k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LZkFzDLJ; arc=pass smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="W+bBnAr5"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785292209;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=53rSFkRK1meF5ukodk7lUVFAh+3imCSI4cF438grTO8=;
-	b=W+bBnAr5on7CqNhsijDkum2f14Xg+CG76EhQKbEegjroovmn8LyHQC6ek+V/5uMXBFNVJk
-	/4DcllPcQFz9ofTfoZmQmUsMWzDCHT7wgX1k9V4C6IYPva/oZVTfxClMzUVAmDb7075xxk
-	1NO4/ZpjYcfBumSHu/Scr2tr8jC7iOk=
-From: Chenguang Zhao <chenguang.zhao@linux.dev>
-To: chenhuacai@kernel.org,
-	kernel@xen0n.name,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	yangtiezhu@loongson.cn
-Cc: hengqi.chen@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	chenguang.zhao@linux.dev,
-	Chenguang Zhao <zhaochenguang@kylinos.cn>
-Subject: [PATCH v4 4/4] selftests/bpf: Add kptr-xchg benchmark
-Date: Wed, 29 Jul 2026 10:28:37 +0800
-Message-Id: <20260729022837.355549-5-chenguang.zhao@linux.dev>
-In-Reply-To: <20260729022837.355549-1-chenguang.zhao@linux.dev>
-References: <20260729022837.355549-1-chenguang.zhao@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LZkFzDLJ"
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-6689402c7bfso460401d50.1
+        for <bpf@vger.kernel.org>; Tue, 28 Jul 2026 20:31:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785295898; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Uct7S5NFC/SINFdkkcmf8L74qxkOd+7YDiWDL3NsSn00TkCELyG4yYgxH/Z6R/tq3b
+         YjCTnXcrKM9MymSfhLDpPHrZDs+699tWPL5R9H/uZjaeCcNr9a3CLlPQF7+fh0J5OTwH
+         +sskwSNFO0/o9om8Rts2GogxMQqoU3b5P5fWZBm5/HF8A73zzq0C+AC6HoMD2sz6TVk+
+         Cwcg4MmaZjiLIlfhtGFogOwFRv3pz7Fzx+XXYWoC7qoYfO6tF3iDillfWdxRyHuNz/Yr
+         65m3h4iNfMIB3apw/tseweJh8mQ2mgaud9qidF0UJQyDZdtMSgjs3YpCefyHSPdppw4P
+         BGyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pe0CzKtFSobq234+zo2ouN0uSG2sSCPEWeoFaE53a50=;
+        fh=mWZleR1vIa+bHHjpTNl40vDfbWLAjQx1tM91pFt+tk4=;
+        b=iYlkyaESbe7ld5Q92vZ1OzBsO+KJBlXTFzpSjKy2IjtufpXGEOB4XbQonKsqXii+Z8
+         YiBmzUqLsYn6wJsk5pYrTwmSiX7V0GCyBHymTsG+HrbctCJO13h3j9Ic8JsnJmfUS+FD
+         GfZ5dEROazBd2E7Dqq88IbFFnhL9CSSG0EGRrhpiAkorX2eBWsNyqjM834YfNeE4xdMk
+         cI+Os4NVqxRBCG5OQatJEIqSjTjD1J6xley7m5RT3zp1BeNJrc37PGmMwtCX/cYLPbXG
+         w7sjy2mp5NSTsCD2TRlftviG3jvRU3aB1TwtJeKNtwssF99cpNev9aYc0tC2bU87tzAI
+         k/Kw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785295898; x=1785900698; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=pe0CzKtFSobq234+zo2ouN0uSG2sSCPEWeoFaE53a50=;
+        b=LZkFzDLJYcHyEVQjUK2tiKOjy7g93DUrCPtLUfOlKgu79bnoTMVwilsZVc8hrngfNM
+         ADOlYWZA3nrXD1n+8NY/xS0vkN0Qp63wg23bsn0nvHU0qtDh5avpk6hxEjlc5s3FDXMz
+         oKBYX/GiJW104aKxw32AK6W6TJco/J+A4eBos1lRYZhbJJqP22ZgscRYXYz62TSrzucY
+         ckTDgmyNQ0OFbuYwbGUSsxBxfy3t8vyWZdvECPQ+ET322LT2n7E+kvdIJ5X6+lwAdhRw
+         33VItxbVf1TDbxYqV2P6aplA6tZKMCL0umNJjy9Wi25WpbMsaGxr1xYh+N3cvSfnmpdW
+         vBUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785295898; x=1785900698;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=pe0CzKtFSobq234+zo2ouN0uSG2sSCPEWeoFaE53a50=;
+        b=jIBMmvM0EDfaWBjJcpDPMg5vB3PXMyH8WfIEXXAzaO1IYBxebdEtWn3xiP5gyTj0NU
+         1QKSHwnho0Fvs1YxHodGAsTLqCYkvnhhLpWisSlhpuyie0WhC1ivgRCmvCH1a/LLcmRF
+         gJO2pbQKWHbnhKrWq+NSY4q0kWsR6kX5JCsN17T+/TQKbQWRC/Dw7Rx6qZHBrYMuV3nV
+         uIUoBJ+N0JY7o8hnTts/PP8+BiNRQeh2704tjhXZkRrtkvebPL4T/+wK/kjX/McIXDbh
+         JRWfIxPd8tIEkwSos5D+Bga4z5WsneHVB+qPpoXhfxbwk/+ztom6ol+JlEhAwsKpfLCk
+         O/XQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpSxR3wlpuPRfGM9GWqQm+AXNftO9aSqwfou2ZrgGvrfWOhnnSpDIAkVRWQwbHsxz5H7/c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yydkf91AsQ1l5hDp5MJjCaFeVxKiYsFLcN7bJ9KIaTb8b1MjHUK
+	UdeIA3Lndwr2H4MXflzNkn5Qqh5kFRMXV6o/J2DSw1OfriecYLqGgKQ3/q7ckCgNVZz69ncGRCv
+	vvOxKrujwzyC/Z3QfEOAtnjo8DOoDuGE=
+X-Gm-Gg: AR+sD12CqnGUR4uQ2UUZuk9/7pUVwdIQ1Rsig7nMLPGqzduX+p3m4ieVPelmW4FdLwa
+	2ZInYeC4LykOVyD5QW+BWaXG/DaQSwZVJvAcsXLOkcRnbXRDB1UWUZ7WtJJKGwbnUzcHpTZ2tlR
+	jMAnL5MuBzXV7aCqFDh0b4oA1JGP00YKSW4cvIhR5g+Lqbg8inxjvzzN43HT5kfVOfbAoGl4Vs4
+	SlEILw/+5vcSpQAadq4udgr1pGntTh7wz3fpWMjavPXFkZWdCqyCCjqnvfXRr+kwbdhoFtF79xs
+	ik5O2QKq+nFkbGb+xcIWP0Vw3nSxPjLcwBCQPklCKVVXRyqCtrIdPnIfTghHDH0J7a/QJIfFBOw
+	WVbu3WCDnM6wa8OXn1qA=
+X-Received: by 2002:a05:690e:4295:20b0:667:b57b:8697 with SMTP id
+ 956f58d0204a3-669057f5bc3mr1697637d50.61.1785295898162; Tue, 28 Jul 2026
+ 20:31:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260727032535.13469-1-sun.jian.kdev@gmail.com>
+ <20260727032535.13469-3-sun.jian.kdev@gmail.com> <amcIoG59kgi4CJbo@lore-desk>
+In-Reply-To: <amcIoG59kgi4CJbo@lore-desk>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Wed, 29 Jul 2026 11:31:28 +0800
+X-Gm-Features: AUfX_mzCCj-Rhe2GnR_T5jwxAsRWw1WjvNw_V50aUcanGkk---NpUHWw-SrR344
+Message-ID: <CABFUUZG+g_g_7N9D477vJW2c141-WhWL2JG8oc-y3OoF9QePdA@mail.gmail.com>
+Subject: Re: [PATCH net 2/2] veth: fix skb length accounting after XDP frag adjustment
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	andrew+netdev@lunn.ch, horms@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, toke@redhat.com, 
+	maciej.fijalkowski@intel.com, matt@readmodwrite.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Chenguang Zhao <zhaochenguang@kylinos.cn>
+On Mon, Jul 27, 2026 at 3:28=E2=80=AFPM Lorenzo Bianconi <lorenzo@kernel.or=
+g> wrote:
+>
+> On Jul 26, Sun Jian wrote:
+> > veth exposes non-linear skb fragments through an xdp_buff. If an XDP
+> > program adjusts the fragment area, veth_xdp_rcv_skb() copies
+> > xdp_frags_size back to skb->data_len but leaves skb->len containing the
+> > old fragment contribution.
+> >
+> > After a fragment shrink, this makes skb_headlen() larger than the actua=
+l
+> > linear area. In the reproduced UDP receive path, __skb_datagram_iter()
+> > copied 1024 bytes past the actual linear tail to userspace, starting at
+> > struct skb_shared_info. The copied bytes included the affected skb's
+> > nr_frags, xdp_frags_size and a kernel pointer from
+> > skb_shinfo(skb)->frags[0]. Real packet data was displaced by the same
+> > amount and truncated at the end.
+> >
+> > Subtract the old data_len before replacing it and add the new data_len
+> > afterwards, keeping skb->len and skb->data_len synchronized.
+> >
+> > A 60000-byte UDP datagram on a veth pair with MTU 64000 was shortened b=
+y
+> > 1024 bytes from its fragment area. Before the fix, all 10 runs produced
+> > corrupted payloads. After the fix, all 10 runs matched the expected
+> > payload exactly.
+> >
+> > Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accept =
+non-linear skb")
+> > Cc: stable@vger.kernel.org
+> > Link: https://lore.kernel.org/r/20260720141859.19FF41F000E9@smtp.kernel=
+.org
+> > Link: https://lore.kernel.org/bpf/al9T9Eto%2FhRIzP5W@boxer/
+> > Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> > ---
+> >  drivers/net/veth.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> > index 00e34afd858e..a956498a073b 100644
+> > --- a/drivers/net/veth.c
+> > +++ b/drivers/net/veth.c
+> > @@ -871,12 +871,14 @@ static struct sk_buff *veth_xdp_rcv_skb(struct ve=
+th_rq *rq,
+> >               __skb_put(skb, off); /* positive on grow, negative on shr=
+ink */
+> >
+> >       /* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
+> > -      * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
+> > +      * (e.g. bpf_xdp_adjust_tail), update skb length fields here.
+> >        */
+> > +     skb->len -=3D skb->data_len;
+> >       if (xdp_buff_has_frags(xdp))
+> >               skb->data_len =3D skb_shinfo(skb)->xdp_frags_size;
+> >       else
+> >               skb->data_len =3D 0;
+> > +     skb->len +=3D skb->data_len;
+>
+> nit: same here, you can this one just in the if () branch.
+>
+> Regards,
+> Lorenzo
+>
+> >
+> >       skb->protocol =3D eth_type_trans(skb, rq->dev);
+> >
+> > --
+> > 2.43.0
+> >
+Hi Lorenzo,
 
-Add a bpf selftest benchmark that exercises bpf_kptr_xchg() in a tight loop
-so helper vs inlined JIT paths can be compared on supported architectures.
+Thanks. I will address this in v2.
 
-Signed-off-by: Chenguang Zhao <zhaochenguang@kylinos.cn>
----
- tools/testing/selftests/bpf/Makefile          |  2 +
- tools/testing/selftests/bpf/bench.c           |  2 +
- .../selftests/bpf/benchs/bench_kptr_xchg.c    | 96 +++++++++++++++++++
- .../selftests/bpf/progs/kptr_xchg_bench.c     | 49 ++++++++++
- 4 files changed, 149 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
- create mode 100644 tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b642ee489ea6..6dfc81748584 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -980,6 +980,7 @@ $(OUTPUT)/bench_lpm_trie_map.o: $(OUTPUT)/lpm_trie_bench.skel.h $(OUTPUT)/lpm_tr
- $(OUTPUT)/bench_bpf_nop.o: $(OUTPUT)/bpf_nop_bench.skel.h bench_bpf_timing.h
- $(OUTPUT)/bench_xdp_lb.o: $(OUTPUT)/xdp_lb_bench.skel.h bench_bpf_timing.h
- $(OUTPUT)/bench_bpf_timing.o: bench_bpf_timing.h
-+$(OUTPUT)/bench_kptr_xchg.o: $(OUTPUT)/kptr_xchg_bench.skel.h
- $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
- $(OUTPUT)/bench: LDLIBS += -lm
- $(OUTPUT)/bench: $(OUTPUT)/bench.o \
-@@ -1005,6 +1006,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_bpf_timing.o \
- 		 $(OUTPUT)/bench_bpf_nop.o \
- 		 $(OUTPUT)/bench_xdp_lb.o \
-+		 $(OUTPUT)/bench_kptr_xchg.o \
- 		 $(OUTPUT)/usdt_1.o \
- 		 $(OUTPUT)/usdt_2.o \
- 		 #
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 3d9d2cd7764b..550290d6701a 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -582,6 +582,7 @@ extern const struct bench bench_lpm_trie_delete;
- extern const struct bench bench_lpm_trie_free;
- extern const struct bench bench_bpf_nop;
- extern const struct bench bench_xdp_lb;
-+extern const struct bench bench_kptr_xchg;
- 
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -665,6 +666,7 @@ static const struct bench *benchs[] = {
- 	&bench_lpm_trie_free,
- 	&bench_bpf_nop,
- 	&bench_xdp_lb,
-+	&bench_kptr_xchg,
- };
- 
- static void find_benchmark(void)
-diff --git a/tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c b/tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
-new file mode 100644
-index 000000000000..b8a0d346fda6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
-@@ -0,0 +1,96 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2026. Loongson Technology Corporation Limited */
-+#include <argp.h>
-+#include "bench.h"
-+#include "kptr_xchg_bench.skel.h"
-+
-+static struct ctx {
-+	struct kptr_xchg_bench *skel;
-+} ctx;
-+
-+static struct {
-+	__u32 nr_loops;
-+} args = {
-+	.nr_loops = 256,
-+};
-+
-+enum {
-+	ARG_NR_LOOPS = 7000,
-+};
-+
-+static const struct argp_option opts[] = {
-+	{ "nr_loops", ARG_NR_LOOPS, "nr_loops", 0,
-+	  "Set number of bpf_kptr_xchg() calls per trigger"},
-+	{},
-+};
-+
-+static error_t parse_arg(int key, char *arg, struct argp_state *state)
-+{
-+	switch (key) {
-+	case ARG_NR_LOOPS:
-+		args.nr_loops = strtol(arg, NULL, 10);
-+		break;
-+	default:
-+		return ARGP_ERR_UNKNOWN;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct argp bench_kptr_xchg_argp = {
-+	.options = opts,
-+	.parser = parse_arg,
-+};
-+
-+static void validate(void)
-+{
-+	if (env.consumer_cnt != 0) {
-+		fprintf(stderr, "benchmark doesn't support consumer!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void *producer(void *input)
-+{
-+	while (true)
-+		syscall(__NR_getpgid);
-+
-+	return NULL;
-+}
-+
-+static void measure(struct bench_res *res)
-+{
-+	res->hits = atomic_swap(&ctx.skel->bss->hits, 0);
-+}
-+
-+static void setup(void)
-+{
-+	struct bpf_link *link;
-+
-+	setup_libbpf();
-+
-+	ctx.skel = kptr_xchg_bench__open_and_load();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	ctx.skel->data->nr_loops = args.nr_loops;
-+
-+	link = bpf_program__attach(ctx.skel->progs.benchmark);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+}
-+
-+const struct bench bench_kptr_xchg = {
-+	.name = "kptr-xchg",
-+	.argp = &bench_kptr_xchg_argp,
-+	.validate = validate,
-+	.setup = setup,
-+	.producer_thread = producer,
-+	.measure = measure,
-+	.report_progress = ops_report_progress,
-+	.report_final = ops_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c b/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
-new file mode 100644
-index 000000000000..363883073e2c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2026. Loongson Technology Corporation Limited */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_experimental.h"
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define MAX_XCHG_LOOPS 4096
-+
-+struct bin_data {
-+	char blob[32];
-+};
-+
-+#define private(name) SEC(".bss." #name) __hidden __attribute__((aligned(8)))
-+
-+private(kptr) struct bin_data __kptr *ptr;
-+u32 nr_loops = 256;
-+long hits;
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int benchmark(void *ctx)
-+{
-+	struct bin_data *old;
-+	u32 i;
-+
-+	for (i = 0; i < MAX_XCHG_LOOPS; i++) {
-+		if (i >= nr_loops)
-+			break;
-+
-+		old = bpf_kptr_xchg(&ptr, NULL);
-+		if (old)
-+			bpf_obj_drop(old);
-+	}
-+
-+	__sync_add_and_fetch(&hits, i);
-+	return 0;
-+}
-+
-+/*
-+ * BTF FUNC records are not generated for kfuncs referenced only through
-+ * optimized paths. Keep bpf_obj_drop() visible to libbpf's kfunc linker.
-+ */
-+void __btf_root(void)
-+{
-+	bpf_obj_drop(NULL);
-+}
--- 
-2.25.1
-
+Thanks,
+Sun Jian
