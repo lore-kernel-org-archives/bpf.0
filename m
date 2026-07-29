@@ -1,132 +1,131 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B343E7145;
-	Wed, 29 Jul 2026 08:39:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BD53E7145;
+	Wed, 29 Jul 2026 08:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785314386; cv=none; b=L9IiQ1X4CZWrBIBaJMpu5ihkfA1zY7ijpNyybOkU8CKPWOdo4k3DYSvE9pofQox/e09i6x5CK7ESivDa/Nh9jpXvBWCUGAhSOkrKtcwpPGBiZ3ToXVtNI508Wk9EfO6fCJSIAhNbBpGzUy9llDD2Rf1uNQJT6G1FM9fggBn45PY=
+	t=1785314391; cv=none; b=o8We4qi2cFQJGEsUISCp/kdyoe+jz8kWE+uPVvuzWK9YwwMdCtSD93rUl59B/avzLBaPC1UK0I5qC4y7FSkWBVoXh43hzZqOIZzC9ddCsTxJD0oXf0ss3Qmv5aA/pyuHOQ1XsozW4i/nNQc91sO2mTTEaK4P6B9Sco0g+Fpvd8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785314386; c=relaxed/simple;
-	bh=RRVkrYeQQVMXVobe9JHbaHLfsMmPqxUihHjEkD0LTH0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=W3bWV3Huk4skAxHhWG1fJiMn1JoVVPRTlJf7uWqU99kYM3aWsYsUXiTpU4pPW860XoEGf1OiMFcaCK2DAX8ITVUIWfM3M6+VyTbeBRPwMOvOmzZfb8n9E6c4xzqg/UeSUANf9Z8izf94cjdGMUCldW+X9TzC7j3aEDntamjF7a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ku3E0xer; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785314391; c=relaxed/simple;
+	bh=GUzSoFaKz5DMVCWuwVcFwOo+QdbAuDd5B/SZRt3XeKM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=D5f7qdT3N0Xbp/0TSqAGd9VjDYQirHVgnVLIITvN9YUtK8vqPgyaIYKMaj1wObXKw8g4vJvW8l1kqGeNc6z6ep5ChstLM5Lxxchx5GL33vSLvh4htnvmKFCgvG710PNnOwm4tb7OAyeflR7f8KIsJz9H3f8LQIH1oMzsK16CQTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aChbaZEX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ku3E0xer"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F2C1F000E9;
-	Wed, 29 Jul 2026 08:39:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aChbaZEX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8141F000E9;
+	Wed, 29 Jul 2026 08:39:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785314385;
-	bh=ZStxgCGXhRzyZgjW57H6UDqdrjQi9HHAJLdBh2z8exI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Ku3E0xerGqmQGgx3aQNe5qsBkdkI5Un0VMEwtuZ3fJ85dzpAIAF9x1KopU6JGmQ8b
-	 JA+jXmZK5hU+MSsYOaeGUA8ZaAeROgpZkTt52zVpLvcEJtD3QxW7RLtSv2DV5tI1D5
-	 xZEMZQtTOWEbVV+ke/iXZZ3xNBjWtGAVqDd69Z2rnaU5oE7GnwaH5ej6q/oJ3Wm1f0
-	 BWP3kIvU0oFkzcXxg4p1CDafufv/EFwo0hLwsrzMWQcDzrBP6e2aS4eQcYwaNELWwv
-	 /+lDjZJbBhWaIgSjcZxYTUoAGgdAAZIGIcvLRY5XZPcL9yqhMyJ4PS+Q2j42aQnoPP
-	 p46BajW7to53w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 8/8] slub_kunit: extend the test for
- kfree_rcu_nolock()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?SGFycnkgWW9vIChPcmFjbGUp?= <harry@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
-In-Reply-To: <20260729-kfree_rcu_nolock-v5-8-a28cdcda9673@kernel.org>
-References: <20260729-kfree_rcu_nolock-v5-0-a28cdcda9673@kernel.org>
- <20260729-kfree_rcu_nolock-v5-8-a28cdcda9673@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Jul 2026 08:39:44 +0000
-Message-Id: <20260729083944.B0F2C1F000E9@smtp.kernel.org>
+	s=k20260515; t=1785314389;
+	bh=cTkdOFU+9thCF8abUe4ScDrwFUe6cCFgBFE87DzMCY4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=aChbaZEXcvZPLJz+8LIFkjnmkXs4qrkAH0ujz42OprAAVN6UIatJ0lbZJ/T6hLsNr
+	 UiL13LJW0u1UDc68W0Ad60vD3vbjZaNbgiBHC+WHEdIv/BQ+yO3jETp7MfW+u9yUXS
+	 fPodOhI1RJXcSpvNMMa7/J30svjZyO+72r+qE7iLFgFRrqNhUcpNQ0zyjIdcKmmAWL
+	 PYwKoAI5v6kUodPdetc2NgoQsNtq9JhJJPkytDOyoSMs+zgOSMFUKafw8gzLv5/ULt
+	 HDtMe8Ek9kiF3qWKpmRen2WSd8rEDQQCcwNiEZN94FUGfJg1/PCSZ7Sv6mmh8i0hwb
+	 zXGSU6TPhjYuQ==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: stable@vger.kernel.org,
+	Tao Chen <chen.dylane@linux.dev>,
+	STAR Labs SG <info@starlabs.sg>,
+	bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Arnaud Lecomte <contact@arnaud-lcm.com>
+Subject: [PATCHv2 bpf-next 10/11] bpf: Disable preemption in __bpf_get_stack
+Date: Wed, 29 Jul 2026 10:38:06 +0200
+Message-ID: <20260729083807.1588544-11-jolsa@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260729083807.1588544-1-jolsa@kernel.org>
+References: <20260729083807.1588544-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Missing synchronization for deferred RCU frees causes KUnit test=
- suite contamination and false negatives.
---
+From: Daniel Borkmann <borkmann@iogearbox.net>
 
---- Patch [8]: [PATCH v5 8/8] slub_kunit: extend the test for kfree_rcu_nol=
-ock() ---
-commit 975207c355ab3b2db3420df72699cb12e4769b5e
-Author: Harry Yoo (Oracle) <harry@kernel.org>
+get_perf_callchain() returns a per-CPU perf_callchain_entry buffer and
+releases its recursion slot via put_callchain_entry() before returning,
+so nothing keeps the entry reserved while __bpf_get_stack() consumes
+it below.
 
-slub_kunit: extend the test for kfree_rcu_nolock()
-   =20
-When slub_kunit is not built-in, call kfree_rcu() and kfree_rcu_nolock()
-to test kfree_rcu_nolock() in slub_kunit.
-   =20
-Rename the test case as the test covers more _nolock() APIs.
+A preemptible BPF program (e.g. a non-sleepable raw tracepoint program
+on a PREEMPT kernel, which runs under migrate_disable() but not
+preempt_disable()) can be scheduled out between obtaining the entry
+and the copy. Another task scheduled on the same CPU then reuses the
+same per-CPU buffer and overwrites trace->nr with a larger value.
+copy_len is then computed from the inflated trace->nr and can exceed
+the caller's buffer, causing an out-of-bounds write in the memcpy()
+and in the build_id path.
 
-> diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
-> index 8c2b9911471eb..e3b63f0338d5f 100644
-> --- a/lib/tests/slub_kunit.c
-> +++ b/lib/tests/slub_kunit.c
-[ ... ]
-> @@ -397,14 +410,14 @@ static void disable_perf_events(struct test_nolock_=
-context *ctx)
->  	perf_event_release_kernel(ctx->event);
->  }
-> =20
-> -static void test_kmalloc_kfree_nolock_perf(struct kunit *test)
-> +static void test_kmalloc_nolock_and_friends_perf(struct kunit *test)
->  {
->  	struct test_nolock_context ctx =3D { .test =3D test };
-> =20
->  	if (!enable_perf_events(&ctx))
->  		kunit_skip(test, "Failed to enable perf event, skipping");
-> =20
-> -	test_kmalloc_kfree();
-> +	test_kmalloc_and_friends();
-> =20
->  	disable_perf_events(&ctx);
->  	KUNIT_EXPECT_EQ(test, 0, slab_errors);
+The rcu_read_lock() taken here alone does not prevent this. It is
+only taken on the may_fault path, and under CONFIG_PREEMPT_RCU it does
+not disable preemption; it merely keeps perf's callchain buffer array
+alive (freed via call_rcu()) and does nothing to stop another task
+from reusing the entry.
 
-[Severity: Medium]
-Will this evaluate slab_errors before all asynchronous frees complete?
+Disable preemption around obtaining the callchain entry and copying
+it into the caller's buffer, so the entry cannot be reused underneath
+us and trace->nr stays bounded by max_depth. Build ID resolution may
+fault and is therefore deferred until after preemption is re-enabled;
+by then the instruction pointers have already been copied into buf,
+so it operates only on that private copy. Note, preempt_disable() also
+subsumes the buffer-lifetime guarantee the rcu_read_lock() provided,
+since a preempt-disabled section is an RCU read-side critical section
+for the callchain buffers' call_rcu() reclaim.
 
-Since test_kmalloc_and_friends() queues objects via kfree_rcu() and
-kfree_rcu_nolock(), the callbacks could execute in softirq context later.
-If they interrupt a subsequent KUnit test, slab_add_kunit_errors() could
-attribute any SLUB errors from these deferred frees to the next test, causi=
-ng
-it to falsely fail while causing this test to falsely pass.
+Cc: stable@vger.kernel.org
+Fixes: c195651e565a ("bpf: add bpf_get_stack helper")
+Reported-by: Tao Chen <chen.dylane@linux.dev>
+Closes: https://lore.kernel.org/bpf/20260206090653.1336687-1-chen.dylane@linux.dev/
+Reported-by: STAR Labs SG <info@starlabs.sg>
+Signed-off-by: Daniel Borkmann <borkmann@iogearbox.net>
+[ changed Fixes: commit ]
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ kernel/bpf/stackmap.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Should we add a synchronization call like kvfree_rcu_barrier() before
-checking slab_errors?
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index bdf48a7ad2e8..f4827afbfed9 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -820,6 +820,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 
+ 	if (may_fault)
+ 		rcu_read_lock(); /* need RCU for perf's callchain below */
++	preempt_disable();
+ 
+ 	if (kernel && task) {
+ 		trace = get_callchain_entry_for_task(task, max_depth);
+@@ -831,6 +832,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 	if (unlikely(!trace) || trace->nr < skip) {
+ 		if (may_fault)
+ 			rcu_read_unlock();
++		preempt_enable();
+ 		goto err_fault;
+ 	}
+ 
+@@ -839,6 +841,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 	/* trace should not be dereferenced after this point */
+ 	if (may_fault)
+ 		rcu_read_unlock();
++	preempt_enable();
+ 
+ 	return callchain_finalize(buf, size, trace_nr, elem_size, user_build_id, user, may_fault);
+ 
+-- 
+2.54.0
 
-[ ... ]
-> @@ -438,14 +451,14 @@ static void unregister_slab_kprobes(struct test_nol=
-ock_context *ctx)
->  	unregister_kprobe(&ctx->kprobe);
->  }
-> =20
-> -static void test_kmalloc_kfree_nolock_kprobe(struct kunit *test)
-> +static void test_kmalloc_nolock_and_friends_kprobe(struct kunit *test)
->  {
->  	struct test_nolock_context ctx =3D { .test =3D test };
-> =20
->  	if (!register_slab_kprobes(&ctx))
->  		kunit_skip(test, "Failed to register kprobe, skipping");
-> =20
-> -	test_kmalloc_kfree();
-> +	test_kmalloc_and_friends();
-> =20
->  	unregister_slab_kprobes(&ctx);
->  	KUNIT_EXPECT_EQ(test, 0, slab_errors);
-
-[Severity: Medium]
-Does this test case need synchronization for the same reason?
-
-Without a barrier before evaluating slab_errors, deferred RCU frees from
-test_kmalloc_and_friends() might leak into the next KUnit test and cause
-false test failures.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729-kfree_rcu_=
-nolock-v5-0-a28cdcda9673@kernel.org?part=3D8
