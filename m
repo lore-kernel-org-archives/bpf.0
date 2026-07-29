@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405063F6615
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4056E2D97A6
 	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 20:37:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785357433; cv=none; b=uXDCOq1err9Q4vFV1Nrm15GAs+WbOxn0lMmmVKpNHuAJ7NbCwX6yztMx/yXgTSnRn6B9L0P9DjftEjGUFnQxdNf2+TpZ1iVBIbDGnf2ULNWWl2Mo+AjzL8OpPzJl22WTtM9oXTkU3DbaHB/Ztbd7qiC+Is6WY2XoPLXH0wg827I=
+	t=1785357439; cv=none; b=EcH0em8dOQQmgxmkXKAmhKrzCvsygMQy/pRwZNiF6kYXppdzmN6QjCBV2KTSwpfAYpGsBJ6/RkqanRS9laucgXeAmPZiFdAPsPXJbQXRoUKWMLELxvEu4F0CzYbKGBds8KkiltJ3C/0nxVF4Q6vpsS7g0NcdsTPYSvABGc7UPtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785357433; c=relaxed/simple;
-	bh=F/DGbDyMBXt3PN3odH1cDrMs+dSXhmTu7Q801PPJqMI=;
+	s=arc-20240116; t=1785357439; c=relaxed/simple;
+	bh=jZUrZe41kgSQgUVC80U4oVNsu9gg/ZY8Ms5CkXRBZEE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ln7+MO/3SYMGGgUYHgIpIoSe4jlWXt0pwCqCq/RaJY/wqfVZV2LJ3U1yhUkUlwXWkM2E8UkcM9+xMWSAK2AYrlalyFDYhqlr1zY5QUT4g4xTd6Pf6y9u9YUgZUSEuMBPVH0A9HPitDZnNBUavNUi24YY62MVAht76hlDIKZ+2q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IHGQUfns; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=bMGbdni/choR8lnPR/1U46uDqzuVgapFx9fay85GSncBdWmYngnCw5FZss5TjoiPEVH7tNXkyurw1ox6H2b2md2FbenRLWhnE/4X3skE0ZOQwUMvD0GgjCJfsNIz26WO7axVoQqcFWnEYGS9v4IPZYOgGXFk0sCydbLgsQFkY1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yt1RSpBK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IHGQUfns"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 846CA1F000E9;
-	Wed, 29 Jul 2026 20:37:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yt1RSpBK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB8B1F00A3E;
+	Wed, 29 Jul 2026 20:37:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785357423;
-	bh=6AZoUrSJodQIbTSUnINZGkcLQO0yiub3aucjNDtOsTw=;
+	s=k20260515; t=1785357420;
+	bh=LVXYiXfm48dV4vPQH3biW9WfmYq0XJAQk/XFUNe5erc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=IHGQUfnsqu91RMU6KXnbv03ioFgns5NVJnanyjto2DY0wcthpuVD/N7VNApXmSTwb
-	 l3CyxGY/h8+qyHO/k+bnYKeh75iPEnqNZn2oaO2G6U58Ieufx7XZffICF5HPvjgy60
-	 vRoeNgKpjkwjqy/d1fa8wybQIVFfZAO3RkEWlWzwe2noJ9cYCopjdni3h1P7LF+znU
-	 IUYHhtYtGE3pkgqPvBitVcwq+ZNdZmVeRHGPe1fXPipZf1f7gOqHNLLjzNzTP14R9z
-	 JCl8XGIWWCWM/lDeWj6tGuG0bByFPFO1TI79/pLx0+sxG+aF6lmH70TxF8uUCO5krx
-	 JTZjQXG6Z4C/g==
+	b=Yt1RSpBKBwcTo9bNJxSJEZzrRZ0eUoVUilBVUWW0rDIY7d0ViPZLXxeyCaffKDUSz
+	 GdLepsE1anorxhzSGkcgzcvDz2HSjWh58gAKY/s5OWTMpbSZwA9vDtRtvcVtmzcY9g
+	 jMrhC6SncdToN89EfQW0mxsFlXApAADAtXTpyDKECFMNDsdMN2JP8yF8w6tWiRjdaa
+	 ACuoYE/TaeiWjNQMLl4FN+wB1eoqN2qh79+RxJZA7k939DH28XELyC3ige9Q9gUIsF
+	 lgIIBppMYoNTM1RkZfqutDa9FnpNYegJ8n4Gv1qP6brM2sI9cGV7YL5B9LWijXkdcn
+	 TvqTMVPZ1kxmw==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -37,9 +37,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
 	"Song Liu" <song@kernel.org>,
 	"Yonghong Song" <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v4 4/6] bpf: Inline bpf_iter_num_destroy() as a no-op
-Date: Wed, 29 Jul 2026 13:36:24 -0700
-Message-ID: <20260729203633.213973-5-puranjay@kernel.org>
+Subject: [PATCH bpf-next v4 3/6] bpf: Inline bpf_iter_num_next() kfunc
+Date: Wed, 29 Jul 2026 13:36:23 -0700
+Message-ID: <20260729203633.213973-4-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260729203633.213973-1-puranjay@kernel.org>
 References: <20260729203633.213973-1-puranjay@kernel.org>
@@ -51,75 +51,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_iter_num_destroy() ends every bpf_for() loop. The kfunc only zeroed
-the 8-byte on-stack iterator state, but once destroy() returns that slot
-is no longer tracked as iterator state, so nothing reads it and the
-zeroing is dead work.
+bpf_iter_num_next() is called on every iteration of a bpf_for() loop and
+is the hot path of the numeric open-coded iterator. It only advances the
+on-stack iterator state and returns a pointer to it, so open-coding it in
+the verifier removes a function call from each loop iteration.
 
-Drop it on both sides: make the bpf_iter_num_destroy() kfunc a no-op, and
-inline the call in bpf_fixup_kfunc_call() to a single BPF_JA 0 (nop) so
-the per-loop call is removed without emitting any store. The nop is
-elided by the JITs.
+Inline it in bpf_fixup_kfunc_call() by replacing the call with an
+equivalent instruction sequence. R1 holds the pointer to the on-stack
+bpf_iter_num; the returned pointer to s->cur is R1 itself since s->cur is
+the first member.
 
-The emitted instruction is plain BPF and is handled by the interpreter,
-so interpreter fallback stays correct and no jit_required marking is
-needed.
+s->cur and s->end are int, so the kfunc's s->cur + 1 >= s->end test is a
+signed 32-bit comparison of (s->cur + 1) against s->end, with s->cur + 1
+computed as a 32-bit int. Sign-extending both sides of a comparison of
+two int values does not change its result, so the inlined code uses a
+32-bit compare and needs no sign extension.
 
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- kernel/bpf/bpf_iter.c |  8 +++++---
- kernel/bpf/verifier.c | 14 ++++++++++++++
- 2 files changed, 19 insertions(+), 3 deletions(-)
+ kernel/bpf/verifier.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index f190f2b250048..ff2055399f3c0 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -821,9 +821,11 @@ __bpf_kfunc int *bpf_iter_num_next(struct bpf_iter_num* it)
- 
- __bpf_kfunc void bpf_iter_num_destroy(struct bpf_iter_num *it)
- {
--	struct bpf_iter_num_kern *s = (void *)it;
--
--	s->cur = s->end = 0;
-+	/*
-+	 * Nothing to do: the stack slot backing the iterator is no longer
-+	 * tracked as iterator state once destroy() returns, so its contents do
-+	 * not matter. The verifier inlines this call away entirely.
-+	 */
- }
- 
- __bpf_kfunc_end_defs();
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3a3d096f3966e..36f3e80d2f0b9 100644
+index 7400515ae1296..3a3d096f3966e 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -19838,6 +19838,18 @@ static int inline_bpf_iter_num_next(struct bpf_insn *insn_buf)
+@@ -19810,6 +19810,34 @@ static int inline_bpf_iter_num_new(struct bpf_insn *insn_buf)
  	return i;
  }
  
 +/*
-+ * Inline bpf_iter_num_destroy(). The stack slot is no longer tracked as iterator state after
-+ * destroy(), so nothing has to be done to it; emit a nop just to drop the call. Keep in sync
-+ * with the kfunc in kernel/bpf/bpf_iter.c.
++ * Inline bpf_iter_num_next(). R1 holds the pointer to the iterator. Keep in sync with the
++ * kfunc in kernel/bpf/bpf_iter.c.
 + */
-+static int inline_bpf_iter_num_destroy(struct bpf_insn *insn_buf)
++static int inline_bpf_iter_num_next(struct bpf_insn *insn_buf)
 +{
-+	insn_buf[0] = BPF_JMP_A(0);
++	int i = 0;
 +
-+	return 1;
++	/*
++	 * s->cur and s->end are int, so the kfunc's s->cur + 1 >= s->end check is a signed 32-bit
++	 * comparison of (s->cur + 1) against s->end and needs no sign extension.
++	 */
++	insn_buf[i++] = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 0);
++	insn_buf[i++] = BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1);
++	insn_buf[i++] = BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 4);
++	/* if ((s32)(s->cur + 1) >= (s32)s->end) goto done; */
++	insn_buf[i++] = BPF_JMP32_REG(BPF_JSGE, BPF_REG_0, BPF_REG_2, 3);
++	/* s->cur++; return &s->cur; */
++	insn_buf[i++] = BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0, 0);
++	insn_buf[i++] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
++	insn_buf[i++] = BPF_JMP_A(2);
++	/* done: s->cur = s->end = 0; return NULL; */
++	insn_buf[i++] = BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0);
++	insn_buf[i++] = BPF_MOV64_IMM(BPF_REG_0, 0);
++
++	return i;
 +}
 +
  int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
  		     struct bpf_insn *insn_buf, int insn_idx, int *cnt)
  {
-@@ -19971,6 +19983,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+@@ -19941,6 +19969,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		*cnt = 6;
+ 	} else if (desc->func_id == special_kfunc_list[KF_bpf_iter_num_new]) {
  		*cnt = inline_bpf_iter_num_new(insn_buf);
- 	} else if (desc->func_id == special_kfunc_list[KF_bpf_iter_num_next]) {
- 		*cnt = inline_bpf_iter_num_next(insn_buf);
-+	} else if (desc->func_id == special_kfunc_list[KF_bpf_iter_num_destroy]) {
-+		*cnt = inline_bpf_iter_num_destroy(insn_buf);
++	} else if (desc->func_id == special_kfunc_list[KF_bpf_iter_num_next]) {
++		*cnt = inline_bpf_iter_num_next(insn_buf);
  	}
  
  	if (env->insn_aux_data[insn_idx].arg_prog) {
