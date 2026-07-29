@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7953A374E4C;
-	Wed, 29 Jul 2026 08:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435E5427F9E
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 08:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785314829; cv=none; b=lhJaWjWmwqgSuTYNVQeNyCvZnjg1yj+LDk+FjuzHBkvvu9d9WUAWLfL8/Q6uRxvlfXgPyHxko83Kv2h2xPn5Fk7q+BcEtY4CjD3SRiKK9PPDEoYu2uxANBp1O8rVD+XDdk5gQUu+crxWsgYobeFbMPTrMIU7DBqGwNXBTWYdZ6Q=
+	t=1785315098; cv=none; b=Kp7iLMywMQlPI01gzskcs9XyDM1z5t7T2Dbl5YyFgzet/THxcwYzENit+yXJ2t71RaTd+lfre5Hl2oD/5bHy/GC1tqjX8SgkaC8psx/JFcUl18ZFmP11t5GkSmUHFGFRYKh3+r5uZNWrSzhWHerM07RYW6MTxlM3b1ZmXtNtogU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785314829; c=relaxed/simple;
-	bh=OgxgtKIq8dcyNvYKKR/6GETKf1/gTOuCFbBrJURsINk=;
+	s=arc-20240116; t=1785315098; c=relaxed/simple;
+	bh=XXlAOvmWcwfCHCku4Do8gUW4MI4lUS7LC30u8y86x4A=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=snZAKlZHjnRkCztLMDAvoFDzC9eDNjul7+nN3caSVfh3yzJ+a5jjFGUhUOlRf1OPVWMLFJuBVX3A2fTtX33STmUIgCTwwD5+7ahVV0AsiA6csytkJZkyu7+o3w8e49AKoYF8/whoAoVHrBt5U/gtZ1tbBTzU6yS9hQpvIlG88WU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7vr8Ofr; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=LbUU3BdpPb2e4C0fbLHvZ6bwWq6pGh72gqZ+Ur9p2ennjGBbW0qBMJVnFXdTnfybHNe6r7GX/Is48F9xVN7hSMBP4U1HAwFuHXcr6asR4g1YEvEE/y7MSQVJ0FdLHpu9sxvNOVluV7wFH7zx7HkBhL0QTNA23KjholShGhQ5xRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SvxtKjRE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7vr8Ofr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D129D1F000E9;
-	Wed, 29 Jul 2026 08:47:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SvxtKjRE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E9B71F000E9;
+	Wed, 29 Jul 2026 08:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785314828;
-	bh=COUG6vwBfwWK327LF5v5Zcp0tkukUE4wOju+wfvnk90=;
+	s=k20260515; t=1785315096;
+	bh=y3HOcq2fog/GZC6CqaXbx5l40RTqrhGIyZfk9PtYH/Y=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=i7vr8Ofro5Lr6eeJd772kVxA9a406dGTNYvRcKw8NdBIp4yo95YZhwely0JfoeDEI
-	 briZMWgA4Anl7Ud6bYVrokjXpYhAXbviVxPBCQ+aLEaPIVq6G2XkbyE7i/IJ4SOtQJ
-	 w/X3LJ8jw+thwXaaVZfZ3AwSOA/5nOEURrAx/fGuDXeYZGrxvrYZnPRiaZ8gR9xk6I
-	 PO5YujL7t/pJqDZXcia/CkHzSbJJp5sWaK56NGm8eOPX03HEoucFXWqYNBTPqbfEgB
-	 DGpM5vzkpdpjV1T+4+o7w2SUyLTgorPRgsQc5v04eBAqwainBnongxC+GzPJYpAU82
-	 FmUU55OLIGkhw==
+	b=SvxtKjRET9mu4hWWINdXi716K+9hf3Ib0w1WsS4TlEp2HGtSoRSwLKo6Q5oHWrB6S
+	 UJlqwStwRG4PNokg2uq0VDG1tkIX2/qehVxHlXm4AX+Pq5rBV9NqhBan71NXSnpwJh
+	 m+2qejsJJMO+MAhzZccK3PUWb39mB76uRudAncJ2zUXOpv9RHG9uHgoayDvw9b7om6
+	 wp/cN0DkGzP4AAeRJ3tyt0WxvIyrlR0IrWlqmDPVXd5fWwoBjuk35jNk5I0l1XlyFJ
+	 BAdYX/IRCnaYxhatHts2Kz5g/gm1h7vZ7D3d6TILvE/3ZZ7l4cs+vE69wcEDeDGgAU
+	 D7E/ViWtnu/Sg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 3/8] mm/slab: use call_rcu() in unknown context if
- irqs are enabled
+Subject: Re: [PATCHv2 bpf-next 01/11] bpf: Factor stackid_init function from
+ __bpf_get_stackid
 Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?SGFycnkgWW9vIChPcmFjbGUp?= <harry@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org
-In-Reply-To: <20260729-kfree_rcu_nolock-v5-3-a28cdcda9673@kernel.org>
-References: <20260729-kfree_rcu_nolock-v5-0-a28cdcda9673@kernel.org>
- <20260729-kfree_rcu_nolock-v5-3-a28cdcda9673@kernel.org>
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260729083807.1588544-2-jolsa@kernel.org>
+References: <20260729083807.1588544-1-jolsa@kernel.org>
+ <20260729083807.1588544-2-jolsa@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Jul 2026 08:47:07 +0000
-Message-Id: <20260729084707.D129D1F000E9@smtp.kernel.org>
+Date: Wed, 29 Jul 2026 08:51:36 +0000
+Message-Id: <20260729085136.9E9B71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,67 +47,87 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] The modified fallback condition `!allow_spin && irqs_disabled()` i=
-s completely dead code because `allow_spin` evaluates to true unconditional=
-ly, rendering the intended NMI protection for `call_rcu()` ineffective.
+
+Pre-existing issues:
+- [High] A TOCTOU race with `sysctl_perf_event_max_stack` causes an integer=
+ underflow in the `max_depth - skip` calculation, leading to a massive heap=
+ buffer overflow when copying stack traces.
 --
 
---- Patch [3]: [PATCH v5 3/8] mm/slab: use call_rcu() in unknown context if=
- irqs are enabled ---
-commit f7ce8e162ca9c0e62e67afe017d8855bcf7b7674
-Author: Harry Yoo (Oracle) <harry@kernel.org>
+--- Patch [1]: [PATCHv2 bpf-next 01/11] bpf: Factor stackid_init function f=
+rom __bpf_get_stackid ---
+commit 94626e7c900d701c2d2326e06f48ebc28e1f6e93
+Author: Jiri Olsa <jolsa@kernel.org>
 
-mm/slab: use call_rcu() in unknown context if irqs are enabled
+bpf: Factor stackid_init function from __bpf_get_stackid
 
-This commit updates the fallback condition in __kfree_rcu_sheaf() to check
-if IRQs are disabled, allowing direct use of call_rcu() when IRQs are
-enabled. It assumes that if IRQs are enabled, re-entrance into call_rcu()
-cannot occur.
+The new stackid_init function stores all the necessary bits for stackid
+trace and it will be used by other functions in following changes.
 
-Link: https://lore.kernel.org/linux-mm/CAADnVQKRVD5ZSnEKbZZU7w86gHbGHUug2pv=
-zpgZTngNS+fg4rw@mail.gmail.com
-
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 2c5ba8c326e73..bb0f2975c95b1 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -6157,8 +6157,12 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void =
-*obj, unsigned int free_flags)
->  	if (likely(rcu_sheaf->size < s->sheaf_capacity)) {
->  		rcu_sheaf =3D NULL;
->  	} else {
-> -		if (unlikely(!allow_spin)) {
-> -			/* call_rcu() cannot be called in an unknown context */
-> +		/*
-> +		 * With !allow_spin, we might have interrupted call_rcu()'s
-> +		 * IRQ-disabled critical section. If IRQs are not disabled,
-> +		 * we know that's not the case.
-> +		 */
-> +		if (unlikely(!allow_spin && irqs_disabled())) {
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index 41fe87d7302f2..0eafe55b18289 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -504,33 +504,54 @@ get_callchain_entry_for_task(struct task_struct *ta=
+sk, u32 max_depth)
+[ ... ]
+> +static int stackid_init(struct stackid *stackid, struct bpf_map *map,
+> +			struct perf_callchain_entry *trace, u64 flags)
+>  {
+>  	struct bpf_stack_map *smap =3D container_of(map, struct bpf_stack_map, =
+map);
+> -	struct stack_map_bucket *bucket, *new_bucket, *old_bucket;
+> -	u32 hash, id, trace_nr, trace_len, i, max_depth;
+>  	u32 skip =3D flags & BPF_F_SKIP_FIELD_MASK;
+> -	bool user =3D flags & BPF_F_USER_STACK;
+> -	u64 *ips;
+> -	bool hash_matches;
+> +	u32 max_depth;
+> =20
+>  	if (trace->nr <=3D skip)
+>  		/* skipping more than usable stack trace */
+>  		return -EFAULT;
+> =20
+>  	max_depth =3D stack_map_calculate_max_depth(map->value_size, stack_map_=
+data_size(map), flags);
+> -	trace_nr =3D min_t(u32, trace->nr - skip, max_depth - skip);
+> -	trace_len =3D trace_nr * sizeof(u64);
+> -	ips =3D trace->ip + skip;
+> -	hash =3D jhash2((u32 *)ips, trace_len / sizeof(u32), 0);
+> -	id =3D hash & (smap->n_buckets - 1);
+> -	bucket =3D READ_ONCE(smap->buckets[id]);
+> +	stackid->nr =3D min_t(u32, trace->nr - skip, max_depth - skip);
 
 [Severity: High]
-Does this make the fallback condition completely dead code?
+This is a pre-existing issue, but can this max_depth - skip calculation
+underflow?
 
-Since __kfree_rcu_sheaf() is only invoked by kfree_rcu_sheaf() in
-mm/slab_common.c with the SLAB_FREE_DEFAULT (0) flag:
+If a BPF program is attached to a perf event using bpf_get_stackid_pe(),
+the callchain is generated using the current sysctl_perf_event_max_stack
+limit. If an administrator concurrently reduces sysctl_perf_event_max_stack=
+ to
+a value smaller than the skip parameter, stack_map_calculate_max_depth()
+clamps max_depth to this new smaller sysctl value:
 
-mm/slab_common.c:kfree_rcu_sheaf() {
+kernel/bpf/stackmap.c:stack_map_calculate_max_depth() {
     ...
-    return __kfree_rcu_sheaf(s, obj, SLAB_FREE_DEFAULT);
+    u32 curr_sysctl_max_stack =3D READ_ONCE(sysctl_perf_event_max_stack);
+    ...
+    if (max_depth > curr_sysctl_max_stack)
+        return curr_sysctl_max_stack;
+    return max_depth;
 }
 
-The allow_spin variable will evaluate to true unconditionally. This makes
-!allow_spin always false, which prevents this fallback path from executing.
+This would cause max_depth - skip to underflow into a huge u32 value. Since
+min_t() is used with u32, a large trace->nr - skip could be selected, which
+might exceed the stackmap bucket capacity and lead to a heap buffer overflow
+when copying the stack trace later in __bpf_get_stackid():
 
-If an eBPF tracing program calls kfree_rcu() from an NMI context exactly wh=
-en
-the CPU's RCU sheaf becomes full, could the code now invoke call_rcu() and
-corrupt RCU per-CPU data structures?
+    memcpy(new_bucket->data, stackid->ips, stackid->len);
 
->  			rcu_sheaf->size--;
->  			local_unlock(&s->cpu_sheaves->lock);
->  			goto fail;
+Does this sequence need to be protected against sysctl changes between trace
+gathering and max_depth calculation?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729-kfree_rcu_=
-nolock-v5-0-a28cdcda9673@kernel.org?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729083807.1588=
+544-2-jolsa@kernel.org?part=3D1
