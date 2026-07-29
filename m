@@ -1,72 +1,43 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4F5F30C158;
-	Wed, 29 Jul 2026 06:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CCD430789;
+	Wed, 29 Jul 2026 07:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785306877; cv=none; b=gUm5eRkw/tVNIyM0KmdFJS0sPdNhk3Yxz+gzy8N9P95uPblNGr6skW+HdV8lwwsyo28xT5kA+IJf+sNu3PHnyLLrJFa4RPeHww1n3pP4RpMNqgVGL3iBrFENyUyVkEoQeGCvf660WR8SlQ3mFgzuyYntoWxXLZm1IXj/zCU+VbY=
+	t=1785311653; cv=none; b=UGDQDWqy7ZrJZwBcb+mv7gJT3uhfd69nRePZQ8QIELWw98ahaRgwhHN2ftDBaTYZTxBPIz5ERERnbAM+LtfKT5O+86dzup6QLPxaszDf4XP+XT6Th8vTSF6BQ75UPgs0t1KQETCJf78hrJM7CrhUbmDAmE2bEDU/28ZbYPzSWrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785306877; c=relaxed/simple;
-	bh=Ugmyof3onGTBz25sg2kprtpm2EWLkbRs09cTkGbDbLo=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c3Z3doJPRbQnZ81NFT2q9iwu+UyoqfF2jtJfLGeHW6xp8v2tVpoGZBVfrQjqbkIRCA3XTJki9TK2VlVdgbooPBLTRvOYZcurwmcl8N9rkfGCaidHkoLVRHt6tdtl34VgSxz0CuIpH0GpLgMLSC3PROzLS5WTZr7WEAsJ1xjhO/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=GZIHkBT0; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1785311653; c=relaxed/simple;
+	bh=+QAuJHU6SgyBKECnDX+nf45rdY70yAkmP+fph6HnnCI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JRz40S/QZ/Wpqn3oxOyZBfOZ4SxlM84qEdlKEp7YoG+tzbvAuipJi5vlZ3JMYd0JE+750WfcBZal/d3xOfeFV+YrFfFq5ZRy5XxeHimEfgOOzq2/9QCcGVgcs1Vpw3O+vJcGhuU176z7kSuBfYy3RAgX99Of7TqEHWxRNObKRiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Rho0aQ6u; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="GZIHkBT0"
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 90C8720B7169;
-	Tue, 28 Jul 2026 23:34:18 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 90C8720B7169
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1785306858;
-	bh=Yljp5YSERSxDw0VU1Q+HUZYXqeMzSIUZRi3ZK406MOE=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=GZIHkBT0SQRG/BNdK4NjodlNfyKdT4gvbOI8zbGjvvx7HlDXP2dn9GE0Wyrfnf4Y9
-	 7L0VHrtoNfW6XMUCGAN6M2Ps4rRu+qLV9mtRKDqe5pcyg3Uo/x7sc+r+VHxFMuipxl
-	 frSfpltSl7IKYW4q/zce6iDpfCxHaxDGZC5LlXTw=
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: kys@microsoft.com,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	decui@microsoft.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	leon@kernel.org,
-	longli@microsoft.com,
-	kotaranov@microsoft.com,
-	horms@kernel.org,
-	shradhagupta@linux.microsoft.com,
-	ssengar@linux.microsoft.com,
-	ernis@linux.microsoft.com,
-	linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	stephen@networkplumber.org,
-	jacob.e.keller@intel.com,
-	dipayanroy@microsoft.com,
-	leitao@debian.org,
-	kees@kernel.org,
-	john.fastabend@gmail.com,
-	hawk@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Rho0aQ6u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=NY
+	CRsjdNejY70awpeyUxSlEcWOiioWnto7d+vTISsuc=; b=Rho0aQ6uqpi2DV1bZc
+	MW/wLFfZLWZI3ghcT82lYfcpqTZwNgrGmkzJ+7qOO17ytC3WlFh9T0iPWaapXhHJ
+	j4j2KUuRRf3kwNvM81LJi5pswMkjBN697fhIgzMqEYmM/NMsEYCGQtMerL3ADr+C
+	G7Ns7ZjQai9yvnCaAl4A5FZvw=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDHpqZzsWlqBGZiMg--.45309S2;
+	Wed, 29 Jul 2026 15:53:24 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: bpf@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: andrii@kernel.org,
+	eddyz87@gmail.com,
 	ast@kernel.org,
-	sdf@fomichev.me,
-	yury.norov@gmail.com,
-	pavan.chebbi@broadcom.com,
-	schakrabarti@linux.microsoft.com,
-	gargaditya@linux.microsoft.com
-Subject: [PATCH net-next v13 2/2] net: mana: force full-page RX buffers via ethtool private flag
-Date: Tue, 28 Jul 2026 23:21:29 -0700
-Message-ID: <20260729063347.3388035-3-dipayanroy@linux.microsoft.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260729063347.3388035-1-dipayanroy@linux.microsoft.com>
-References: <20260729063347.3388035-1-dipayanroy@linux.microsoft.com>
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org
+Subject: [BUG: 6.6.y] bpf fentry hook on _raw_spin_lock_irqsave triggers hard lockup
+Date: Wed, 29 Jul 2026 15:53:22 +0800
+Message-Id: <20260729075322.628521-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,246 +45,134 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDHpqZzsWlqBGZiMg--.45309S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr1rZr4kZw1xAFyUur4xCrg_yoWrXF1kpF
+	W3tF9IkwnrZF18Wr48uF1vvF47AwsFgw4fGrW8Ga4rA3W5XFs8XF1xCFyYvryYvr4xWr10
+	kryqqas8A34jyr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbCztUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8RZ+9mppsXb2JQAA34
 
-On some ARM64 platforms with 4K PAGE_SIZE, page_pool fragment
-allocation in the RX refill path can cause 15-20% throughput
-regression under high connection counts (>16 TCP streams).
+When attaching fentry programs to _raw_spin_lock_irqsave/_raw_spin_unlock_irqrestore on
+the v6.6 kernel and using the BPF ring buffer within BPF programs, we encounter a hard LOCKUP.
 
-Add an ethtool private flag "full-page-rx" that allows the user to
-force one RX buffer per page, bypassing the page_pool fragment path.
-This restores line-rate (180+ Gbps) performance on affected platforms.
+Reproducible BPF code is shown below:
 
-Usage:
-  ethtool --set-priv-flags eth0 full-page-rx on
+static inline int test(void *ctx)
+{
+        struct event *event;
 
-There is no behavioral change by default. The flag must be explicitly
-enabled by the user or udev rule.
+        event = reserve_buf(sizeof(*event));
+        if (!event)
+                return 0;
 
-The existing single-buffer-per-page logic for XDP and jumbo frames is
-consolidated into a new helper mana_use_single_rxbuf_per_page() which
-is now the single decision point for both the automatic and
-user-controlled paths.
+        submit_buf(ctx, event, sizeof(*event));
 
-Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
-Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
----
- drivers/net/ethernet/microsoft/mana/mana_en.c | 22 ++++-
- .../ethernet/microsoft/mana/mana_ethtool.c    | 94 +++++++++++++++++++
- include/net/mana/mana.h                       |  8 ++
- 3 files changed, 122 insertions(+), 2 deletions(-)
+        return 0;
+}
 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index 89e7f59f635d..d859c2eae0a5 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -755,6 +755,25 @@ static void *mana_get_rxbuf_pre(struct mana_rxq *rxq, dma_addr_t *da)
- 	return va;
- }
- 
-+static bool
-+mana_use_single_rxbuf_per_page(struct mana_port_context *apc, u32 mtu)
-+{
-+	/* On some platforms with 4K PAGE_SIZE, page_pool fragment allocation
-+	 * in the RX refill path (~2kB buffer) can cause significant throughput
-+	 * regression under high connection counts. Allow user to force one RX
-+	 * buffer per page via ethtool private flag to bypass the fragment
-+	 * path.
-+	 */
-+	if (apc->priv_flags & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF))
-+		return true;
+SEC("fentry/_raw_spin_lock_irqsave")
+int BPF_PROG(aa)
+{
+        return test(ctx);
+}
+
+SEC("fentry/_raw_spin_unlock_irqrestore")
+int BPF_PROG(bb)
+{
+        return test(ctx);
+}
+
+We suspect the hard LOCKUP is caused by the call chain:
+aa->test->reserve_buf->_raw_spin_lock_irqsave->_raw_spin_unlock_irqrestore->bb->test->reserve_buf->_raw_spin_lock_irqsave.
+
+Mainline has merged the rqspinlock patchset
+(https://lore.kernel.org/all/20250411101759.4061366-1-memxor@gmail.com/)
+which resolves this issue. Should we backport the fix?
+
+Alternatively, would a fix modeled after this patch
+https://lore.kernel.org/bpf/20201029071925.3103400-3-songliubraving@fb.com/
+as outlined below be viable?
+
+--- a/kernel/bpf/ringbuf.c
++++ b/kernel/bpf/ringbuf.c
+@@ -30,6 +30,7 @@ struct bpf_ringbuf {
+ 	struct page **pages;
+ 	int nr_pages;
+ 	raw_spinlock_t spinlock ____cacheline_aligned_in_smp;
++	int __percpu *ringbuf_lock;
+ 	/* For user-space producer ring buffers, an atomic_t busy bit is used
+ 	 * to synchronize access to the ring buffers in the kernel, rather than
+ 	 * the spinlock that is used for kernel-producer ring buffers. This is
+@@ -165,6 +166,8 @@ static void bpf_ringbuf_notify(struct irq_work *work)
+  * considering that the maximum value of data_sz is (4GB - 1), there
+  * will be no overflow, so just note the size limit in the comments.
+  */
++static void bpf_ringbuf_free(struct bpf_ringbuf *rb);
 +
-+	/* For xdp and jumbo frames make sure only one packet fits per page. */
-+	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc))
-+		return true;
-+
-+	return false;
-+}
-+
- /* Get RX buffer's data size, alloc size, XDP headroom based on MTU */
- static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
- 			       int mtu, u32 *datasize, u32 *alloc_size,
-@@ -765,8 +784,7 @@ static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
- 	/* Calculate datasize first (consistent across all cases) */
- 	*datasize = mtu + ETH_HLEN;
- 
--	/* For xdp and jumbo frames make sure only one packet fits per page */
--	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc)) {
-+	if (mana_use_single_rxbuf_per_page(apc, mtu)) {
- 		if (mana_xdp_get(apc)) {
- 			*headroom = XDP_PACKET_HEADROOM;
- 			*alloc_size = PAGE_SIZE;
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-index 482cd16009ab..7e441d6ae5dc 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-@@ -133,6 +133,10 @@ static const struct mana_stats_desc mana_phy_stats[] = {
- 	{ "hc_tc7_tx_pause_phy", offsetof(struct mana_ethtool_phy_stats, tx_pause_tc7_phy) },
- };
- 
-+static const char mana_priv_flags[MANA_PRIV_FLAG_MAX][ETH_GSTRING_LEN] = {
-+	[MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF] = "full-page-rx"
-+};
-+
- static int mana_get_sset_count(struct net_device *ndev, int stringset)
+ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
  {
- 	struct mana_port_context *apc = netdev_priv(ndev);
-@@ -144,6 +148,10 @@ static int mana_get_sset_count(struct net_device *ndev, int stringset)
- 		       ARRAY_SIZE(mana_phy_stats) +
- 		       ARRAY_SIZE(mana_hc_stats)  +
- 		       num_queues * (MANA_STATS_RX_COUNT + MANA_STATS_TX_COUNT);
-+
-+	case ETH_SS_PRIV_FLAGS:
-+		return MANA_PRIV_FLAG_MAX;
-+
- 	default:
- 		return -EINVAL;
- 	}
-@@ -192,6 +200,14 @@ static void mana_get_strings_stats(struct mana_port_context *apc, u8 **data)
- 	}
- }
+ 	struct bpf_ringbuf *rb;
+@@ -178,6 +181,12 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
+ 	init_waitqueue_head(&rb->waitq);
+ 	init_irq_work(&rb->work, bpf_ringbuf_notify);
  
-+static void mana_get_strings_priv_flags(u8 **data)
-+{
-+	int i;
-+
-+	for (i = 0; i < MANA_PRIV_FLAG_MAX; i++)
-+		ethtool_puts(data, mana_priv_flags[i]);
-+}
-+
- static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
- {
- 	struct mana_port_context *apc = netdev_priv(ndev);
-@@ -200,6 +216,9 @@ static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
- 	case ETH_SS_STATS:
- 		mana_get_strings_stats(apc, &data);
- 		break;
-+	case ETH_SS_PRIV_FLAGS:
-+		mana_get_strings_priv_flags(&data);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -756,6 +775,78 @@ static int mana_get_link_ksettings(struct net_device *ndev,
- 	return 0;
- }
- 
-+static u32 mana_get_priv_flags(struct net_device *ndev)
-+{
-+	struct mana_port_context *apc = netdev_priv(ndev);
-+
-+	return apc->priv_flags;
-+}
-+
-+static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
-+{
-+	struct mana_port_context *apc = netdev_priv(ndev);
-+	u32 changed = apc->priv_flags ^ priv_flags;
-+	u32 old_priv_flags = apc->priv_flags;
-+	int err = 0;
-+
-+	if (!changed)
-+		return 0;
-+
-+	/* Reject unknown bits */
-+	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
-+		return -EINVAL;
-+
-+	apc->priv_flags = priv_flags;
-+
-+	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
-+		if (!apc->port_is_up)
-+			return 0;
-+
-+		/* If XDP is attached or MTU is jumbo, single-buffer-per-page
-+		 * is already forced regardless of this flag. Skip the
-+		 * expensive detach/attach cycle since nothing changes.
-+		 */
-+		if (ndev->mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 ||
-+		    mana_xdp_get(apc))
-+			return 0;
-+
-+		/* Block RDMA from grabbing the vport during detach/attach */
-+		mutex_lock(&apc->vport_mutex);
-+		apc->channel_changing = true;
-+		mutex_unlock(&apc->vport_mutex);
-+
-+		err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
-+		if (err) {
-+			netdev_err(ndev,
-+				   "Insufficient memory for new allocations\n");
-+			apc->priv_flags = old_priv_flags;
-+			goto clear_flag;
-+		}
-+
-+		err = mana_detach(ndev, false);
-+		if (err) {
-+			netdev_err(ndev, "mana_detach failed: %d\n", err);
-+			apc->priv_flags = old_priv_flags;
-+			goto out;
-+		}
-+
-+		err = mana_attach(ndev);
-+		if (err) {
-+			netdev_err(ndev, "mana_attach failed: %d\n", err);
-+			apc->priv_flags = old_priv_flags;
-+		}
++	rb->ringbuf_lock = __alloc_percpu_gfp(sizeof(int), sizeof(int), GFP_USER);
++	if (!rb->ringbuf_lock) {
++		bpf_ringbuf_free(rb);
++		return NULL;
 +	}
 +
-+out:
-+	mana_pre_dealloc_rxbufs(apc);
-+clear_flag:
-+	mutex_lock(&apc->vport_mutex);
-+	apc->channel_changing = false;
-+	mutex_unlock(&apc->vport_mutex);
-+
-+	return err;
-+}
-+
- const struct ethtool_ops mana_ethtool_ops = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_CQE_FRAMES |
- 				     ETHTOOL_COALESCE_RX_USECS |
-@@ -766,6 +857,7 @@ const struct ethtool_ops mana_ethtool_ops = {
- 				     ETHTOOL_COALESCE_USE_ADAPTIVE_TX,
- 	.op_needs_rtnl		= ETHTOOL_OP_NEEDS_RTNL_SCHANNELS |
- 				  ETHTOOL_OP_NEEDS_RTNL_SRINGPARAM |
-+				  ETHTOOL_OP_NEEDS_RTNL_SPFLAGS |
- 				  ETHTOOL_OP_NEEDS_RTNL_GLINK,
- 	.get_ethtool_stats	= mana_get_ethtool_stats,
- 	.get_sset_count		= mana_get_sset_count,
-@@ -783,4 +875,6 @@ const struct ethtool_ops mana_ethtool_ops = {
- 	.set_ringparam          = mana_set_ringparam,
- 	.get_link_ksettings	= mana_get_link_ksettings,
- 	.get_link		= ethtool_op_get_link,
-+	.get_priv_flags		= mana_get_priv_flags,
-+	.set_priv_flags		= mana_set_priv_flags,
- };
-diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-index 226b61504596..768d9f9bf167 100644
---- a/include/net/mana/mana.h
-+++ b/include/net/mana/mana.h
-@@ -31,6 +31,12 @@ enum TRI_STATE {
- 	TRI_STATE_TRUE = 1
- };
+ 	rb->mask = data_sz - 1;
+ 	rb->consumer_pos = 0;
+ 	rb->producer_pos = 0;
+@@ -215,6 +224,7 @@ static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
  
-+/* MANA ethtool private flag bit positions */
-+enum mana_priv_flag_bits {
-+	MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF = 0,
-+	MANA_PRIV_FLAG_MAX,
-+};
-+
- /* Number of entries for hardware indirection table must be in power of 2 */
- #define MANA_INDIRECT_TABLE_MAX_SIZE 512
- #define MANA_INDIRECT_TABLE_DEF_SIZE 64
-@@ -565,6 +571,8 @@ struct mana_port_context {
- 	u32 rxbpre_headroom;
- 	u32 rxbpre_frag_count;
+ static void bpf_ringbuf_free(struct bpf_ringbuf *rb)
+ {
++	free_percpu(rb->ringbuf_lock);
+ 	irq_work_sync(&rb->work);
  
-+	u32 priv_flags;
-+
- 	struct bpf_prog *bpf_prog;
+ 	/* copy pages pointer and nr_pages to local variable, as we are going
+@@ -418,9 +428,19 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
  
- 	/* Create num_queues EQs, SQs, SQ-CQs, RQs and RQ-CQs, respectively. */
--- 
-2.43.0
+ 	cons_pos = smp_load_acquire(&rb->consumer_pos);
+ 
++	preempt_disable();
++	if (unlikely(__this_cpu_inc_return(*rb->ringbuf_lock) != 1)) {
++		__this_cpu_dec(*rb->ringbuf_lock);
++		preempt_enable();
++		return NULL;
++	}
++
+ 	if (in_nmi()) {
+-		if (!raw_spin_trylock_irqsave(&rb->spinlock, flags))
++		if (!raw_spin_trylock_irqsave(&rb->spinlock, flags)) {
++			__this_cpu_dec(*rb->ringbuf_lock);
++			preempt_enable();
+ 			return NULL;
++		}
+ 	} else {
+ 		raw_spin_lock_irqsave(&rb->spinlock, flags);
+ 	}
+@@ -449,6 +469,8 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
+ 	if (new_prod_pos - cons_pos > rb->mask ||
+ 	    new_prod_pos - pend_pos > rb->mask) {
+ 		raw_spin_unlock_irqrestore(&rb->spinlock, flags);
++		__this_cpu_dec(*rb->ringbuf_lock);
++		preempt_enable();
+ 		return NULL;
+ 	}
+ 
+@@ -461,6 +483,8 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
+ 	smp_store_release(&rb->producer_pos, new_prod_pos);
+ 
+ 	raw_spin_unlock_irqrestore(&rb->spinlock, flags);
++	__this_cpu_dec(*rb->ringbuf_lock);
++	preempt_enable();
+ 
+ 	return (void *)hdr + BPF_RINGBUF_HDR_SZ;
+ }
+
+Thanks,
+Feng
 
