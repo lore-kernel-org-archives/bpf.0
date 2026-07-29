@@ -1,142 +1,120 @@
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B16F242D65;
-	Wed, 29 Jul 2026 06:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.30.148.34
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E46A2F1FDF;
+	Wed, 29 Jul 2026 06:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785305530; cv=none; b=W6pi81VQUHGyxVstTLOo6P08YrdQx8ixPBjF3rHiESFOkosMO0l0I7r6hvFpMSa8OQZcYH6gjKbgYFa1ODLMsNdwHb7NjUUEQ5QuRRtTXVDQF1E3o1tQm/9LbLcx7Ay5CtBVfNvalT5CvTnFjT/V8N71JBu8mIPKV9DtIr0+djg=
+	t=1785305708; cv=none; b=I0rU9qxq1dC8MJRRsvkYKgxwvJnnmHgvEfu0fw57dF981rzn+OywZ3w5fC40M1e6/pLJZggfu3eNqw3wfPWl/5rc0K+sfp8fDLDTCOAHi8GQTCFUBQ6M8A0zki11Lsu3iBFf6vrlije1T81AcBgIIyDL5wIKxSTfK5BYVSG3kd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785305530; c=relaxed/simple;
-	bh=CRhl/ZOEP5d/PKh7HyBPjbtuw4t71FgUaBnYMmjCaOE=;
-	h=Message-ID:Date:Mime-Version:From:To:Cc:Subject:Content-Type; b=bNrzNdSoyYLUK/p4zkoM0332egR/OWZNQbpl6jeBNQ19r068nFICKQsjTLhku3SxM478RAhXpuEYTPxOZsFEhJLTh9n+WZM66O9RIkBvu5dAdc6PLMJrNzlm7bSwmHHX5FuONJTqVGSR1vqkKKS5KB8PAcKLcfwZuLRrS4uO/Bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=160.30.148.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4h926Y438Yz5B10S;
-	Wed, 29 Jul 2026 14:12:05 +0800 (CST)
-Received: from xaxapp04.zte.com.cn ([10.99.98.157])
-	by mse-fl1.zte.com.cn with SMTP id 66T6Bv8G008017;
-	Wed, 29 Jul 2026 14:11:57 +0800 (+08)
-	(envelope-from xu.xin16@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Wed, 29 Jul 2026 14:11:59 +0800 (CST)
-X-Zmail-TransId: 2afa6a6999afbf1-9c312
-X-Mailer: Zmail v1.0
-Message-ID: <20260729141159128mEJmS_aujBKr-cBu1p_UI@zte.com.cn>
-Date: Wed, 29 Jul 2026 14:11:59 +0800 (CST)
+	s=arc-20240116; t=1785305708; c=relaxed/simple;
+	bh=Dyz6tGY6B3aaF93zhwMg2q7MWVE9jLXxpLiL3NiMJ4M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KKHJ9YjH5Vk7giE0lSA29r3PYZd2szlF6n/Nq9bRzqUdI7IJcyaLdzn++hLR7AyjKNjb1ZPdm3R0ESEfinAvptlt4SXRSpavnKQjwEMhP5kES+zNYYmtlC50kOmRB5S5pvbYPJ4Ql2Tm5MCT3NctrABzu8+DYRJqRbwWJmVfyHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=VQVGSqgV; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="VQVGSqgV"
+Received: by linux.microsoft.com (Postfix, from userid 1204)
+	id 99B5C20B7166; Tue, 28 Jul 2026 23:14:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 99B5C20B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1785305685;
+	bh=sY/yKp5MJMHtbiEF0TrBRS5ReV7Q7c3RY1ClyW70uQA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VQVGSqgVDvQDpHktoSYuyCgimSHuB5mCg2xyqINx5tjs9hDwXyXCa6hO9GtXKgbDc
+	 Fa6jaWCSnHZ2+jNg5Wwsau42RGAT7sWvj5bTjSW81kxKKuTj8/PzLNckSx5OQO00gW
+	 4MdtUTXVawxuhpVUrGZYXv54Oeu/kFRNuKQSHRlw=
+Date: Tue, 28 Jul 2026 23:14:45 -0700
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, leon@kernel.org,
+	longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
+	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
+	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org, jacob.e.keller@intel.com,
+	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
+	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
+	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
+	yury.norov@gmail.com, pavan.chebbi@broadcom.com,
+	schakrabarti@linux.microsoft.com, gargaditya@linux.microsoft.com
+Subject: Re: [PATCH net-next v12 4/4] net: mana: recover port on attach
+ failure in ethtool operations
+Message-ID: <ammaVReMMz+W22Gy@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20260711041415.3008868-1-dipayanroy@linux.microsoft.com>
+ <20260711041415.3008868-5-dipayanroy@linux.microsoft.com>
+ <d2014044-d410-466a-ae66-2a173dbdba82@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <xu.xin16@zte.com.cn>
-To: <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
-        <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
-        <jolsa@kernel.org>, <emil@etsalapatis.com>
-Cc: <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <xu.xin16@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGJwZi1uZXh0IHY0XSBicGY6IGxvZyBlcnJvciBjb2RlIG9uIHRyYW1wb2xpbmUgdW5saW5rIGZhaWx1cmXCoA==?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl1.zte.com.cn 66T6Bv8G008017
-X-TLS: YES
-X-ENVELOPE-SENDER: xu.xin16@zte.com.cn
-X-SOURCE-IP: 10.5.228.132 unknown Wed, 29 Jul 2026 14:12:05 +0800
-X-CLEAN: YES
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6A6999B5.002/4h926Y438Yz5B10S
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d2014044-d410-466a-ae66-2a173dbdba82@redhat.com>
 
-From: Xu Xin <xu.xin16@zte.com.cn>
+On Thu, Jul 23, 2026 at 12:18:22PM +0200, Paolo Abeni wrote:
+> On 7/11/26 6:10 AM, Dipayaan Roy wrote:
+> > When mana_attach() fails during ethtool ring size or channel count
+> > changes, the port is left in a broken state with no recovery
+> > mechanism, requiring manual intervention to bring the port back up.
+> > 
+> > On VM SKUs without a netvsc fallback interface, this results in
+> > complete loss of network connectivity to the VM.
+> > 
+> > Fix by scheduling queue_reset_work when mana_attach() fails. The
+> > preceding patch ensures mana_detach() always completes its full
+> > teardown (netif_device_detach + cleanup), so the reset handler's
+> > mana_detach() takes the "already detached" early return, preserving
+> > port_st_save for a successful mana_attach() recovery.
+> > 
+> > When mana_attach() fails, choose retry values that maximize recovery
+> > chances: if the operation was an increase, fall back to the previous
+> > working values; if it was a decrease but still above default, fall
+> > back to defaults; otherwise use the minimum supported values.
+> > 
+> > Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+> > Tested-by: Aditya Garg <gargaditya@linux.microsoft.com>
+> > Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+> sashiko gemini sees quite a bit of problem with the above approach:
+> 
+> https://sashiko.dev/#/patchset/20260711041415.3008868-1-dipayanroy%40linux.microsoft.com
+> 
+> Also, changing user-setting in case of fallback is quite a bad thing to
+> be avoided.
+> 
+> Skimming over the code, it looks like than pre-allocate all the
+> resources and to a replace instead of detach/attach() looks feasible. I
+> suggest investigating such path. I also think that this last patch (and
+> possibly 2/4) could/should be in separate series.
+> 
+> Finally and most relevant thing; AI review comments should be explicitly
+> acknowledged by either debating them or addressing them. In both cases a
+> reply on the ML is expected.
+> 
+> /P
 
-Replace silent WARN_ON_ONCE with WARN_ONCE that prints the actual error
-code from bpf_trampoline_unlink_prog(). This aids debugging of race
-conditions during link teardown, while keeping the warning rate limited
-to avoid log flooding.
+Hi Paolo,
 
-This will be very helpful for speeding up trouble-shooting of some crash
-UAF due to bpf_trampoline_unlink_prog failures.
+Thank you for the review.
 
-No change to unlink behavior.
+Accepting the feedback on 4/4 and working on the
+pre-allocate-and-replace approach you suggested. We are discussing with
+the HW/NIC team and investigating pre-allocating the queue resources from HW
+while a set already exists, as with this patch we are trying to handle
+and recover from failures caused due to HW/NIC resource exhaustion for
+queues.
 
-Signed-off-by: Xu Xin <xu.xin16@zte.com.cn>
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
----
-Change log:
-- Small fixes according to the v3 disccusion:
-  https://lore.kernel.org/all/82926caa-e16a-457a-8d75-61dfc8dac102@linux.dev/
+I will drop 4/4 from this series in v13 and stick to only the ethtool
+private flag changes. Will send out a separate series for the problem
+currently discussed in 4/4 once all the above points are concluded.
 
- kernel/bpf/syscall.c    |  8 +++++---
- kernel/bpf/trampoline.c | 12 ++++++++----
- 2 files changed, 13 insertions(+), 7 deletions(-)
+For 2/4 I will send it as a fixes patch to net as it will be common for
+all functions calling mana_detach.
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6db306d23b47..52c57f8beb37 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3626,10 +3626,12 @@ static void bpf_tracing_link_release(struct bpf_link *link)
- {
- 	struct bpf_tracing_link *tr_link =
- 		container_of(link, struct bpf_tracing_link, link.link);
-+	int err;
-
--	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link.node,
--						tr_link->trampoline,
--						tr_link->tgt_prog));
-+	err = bpf_trampoline_unlink_prog(&tr_link->link.node,
-+					tr_link->trampoline,
-+					tr_link->tgt_prog);
-+	WARN_ONCE(err, "bpf_trampoline_unlink_prog returns error: %d\n", err);
-
- 	bpf_trampoline_put(tr_link->trampoline);
-
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 1a721fc4bef5..49dceea3d51e 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -997,12 +997,15 @@ static void bpf_shim_tramp_link_release(struct bpf_link *link)
- {
- 	struct bpf_shim_tramp_link *shim_link =
- 		container_of(link, struct bpf_shim_tramp_link, link.link);
-+	int err;
-
- 	/* paired with 'shim_link->trampoline = tr' in bpf_trampoline_link_cgroup_shim */
- 	if (!shim_link->trampoline)
- 		return;
-
--	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&shim_link->link.node, shim_link->trampoline, NULL));
-+	err = bpf_trampoline_unlink_prog(&shim_link->link.node, shim_link->trampoline, NULL);
-+	WARN_ONCE(err, "bpf_trampoline_unlink_prog returns error: %d\n", err);
-+
- 	bpf_trampoline_put(shim_link->trampoline);
- }
-
-@@ -1712,15 +1715,16 @@ int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracing_multi_
- {
- 	struct bpf_tracing_multi_data *data = &link->data;
- 	struct bpf_tracing_multi_node *mnode;
--	int i;
-+	int i, err;
-
- 	trampoline_lock_all();
-
- 	for_each_mnode(mnode, link) {
- 		data->entry = &mnode->entry;
- 		bpf_trampoline_multi_attach_init(mnode->trampoline);
--		WARN_ON_ONCE(__bpf_trampoline_unlink_prog(&mnode->node, mnode->trampoline,
--					NULL, &trampoline_multi_ops, data));
-+		err = __bpf_trampoline_unlink_prog(&mnode->node, mnode->trampoline, NULL,
-+					&trampoline_multi_ops, data);
-+		WARN_ONCE(err, "__bpf_trampoline_unlink_prog returns error: %d\n", err);
- 	}
-
- 	if (ftrace_hash_count(data->unreg))
--- 
-2.25.1
+Regards
+Dipayaan Roy
