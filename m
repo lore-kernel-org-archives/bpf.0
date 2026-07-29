@@ -1,80 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-43103.protonmail.ch (mail-43103.protonmail.ch [185.70.43.103])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8813E024B;
-	Wed, 29 Jul 2026 23:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F39B24DCF6
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 23:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.103
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785367328; cv=none; b=LAwOUTN1mCQhGk4DfL9fu6PJnYUgpL+SEqtEW/dLp9QbDW8DpwNqVEKivTccCByrSgFiou753ByhIlVeUeJ03yTYXlBkXtIcxg5qdkPQ/nn2Glk3c2q0MWtQz1NaT5gr4+F5qH+bYb2mxe29gBjwkrA4la9TkIQiDCiJVICnP9U=
+	t=1785368802; cv=none; b=uxOS4qKeCuOxyrJrqnax78LlYxTBo58z7Nx80G8oHK63m94EfNiaPGRvMPKCAF2VeJKyYT2N0s7U+DfWfUEaFit1xAXjoCCEzE5VQGoKau8Jzs3pw8atIE4y/4sr6e+E5ZPKNcv3l9PZLyFaIWk9P44oQNH0O3FkYUkmP8Oe14E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785367328; c=relaxed/simple;
-	bh=Xy45rUtew1tuvisF77eUYR63ZJSLTXWJGkFjO5MAu2Q=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=EfMh3ViRBEF1Uz3eMRglywr6nzA2qmT3FagtXYh3k0uXeKOUN5PoCd++aChf3xz1GaDgmb32HYcwDkQ0IiE+7caoFcefQON7YmD6fncb2/zSrz0TCSPWRXKEVoC4hYoD4MJAkJ/Db86lhq1z4coOLUvQBysV3kw6CjMm4fPdgqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=esP5wMLN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785368802; c=relaxed/simple;
+	bh=3bX1AlQ9+actuodNRWzQ0iapuaNo6l70NyQNvr+JeI4=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mDElbppcmtmzyvmdk3lY/AGqHZrnR4szhG9B2UCMFi7ZDBqF9LPaL/kLycGt65UlCp+/DavyThnVLm6AAzJSZfB8CD7+HjykP2kyJ/mjDfLLEiyJlmfJOMigtdJPKOm5wx/DyW5Po9c7m1Ge4GDR+cw4mr+DHcKzkhZFag7/HeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=LRpqR8cL; arc=none smtp.client-ip=185.70.43.103
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="esP5wMLN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8592C1F000E9;
-	Wed, 29 Jul 2026 23:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785367327;
-	bh=CN254wpYvZtbq8sUbWx5jFepkYm3YYA/esEWQiGkpJk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=esP5wMLNRu1/uEroQaaGDYLsrKNjS8eYx+klEMnzc3Y3h3OtN+I+XmXhJSPIu/Hdq
-	 Kdo7GnVk71S8stnsYcf3GLy82QJgXyROYMOxjaCyeazYcFkXdjkfV1+3wHWYRQyYjW
-	 +L9C6YCFx418S66YeJOwIRXWUqlFSKVHmCvhn0sPIXX2wFQpyxq5DiAFViBToaEztS
-	 dBo3WlFz7l3eR9kioduVwQhkmUlrg7QttyHUBL/7JEnjeFD4jfE7NwqGvy0SlOTPM/
-	 k0DR7qL5gTCLiZLSYkA+XOVVoZbEXtXpCYMSeIdadle1pzW7KGFjfpViRoKksJhvnF
-	 ViSVfBDPrsr0w==
-From: Nathan Chancellor <nathan@kernel.org>
-To: nsc@kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Cc: linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
- Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20260728024950.44946-1-laoar.shao@gmail.com>
-References: <20260728024950.44946-1-laoar.shao@gmail.com>
-Subject: Re: [PATCH v4] kbuild: rpm-pkg: Preserve BTF sections in kernel
- modules during debuginfo stripping
-Message-Id: <178536731492.3649112.13944152410837051411.b4-ty@b4>
-Date: Wed, 29 Jul 2026 16:21:54 -0700
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="LRpqR8cL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1785368789; x=1785627989;
+	bh=3bX1AlQ9+actuodNRWzQ0iapuaNo6l70NyQNvr+JeI4=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=LRpqR8cLO9dR8WwQ7uDXKsZuplOeIbls8e+AN0dqE6BJl1PxJnB2QvQbXU7SsSj9R
+	 v7iLOgOBwoBv1KEXTlBrMyaZhoDfYsivx4V6UZ3HPVSHYqBhuIE1Z3PYAAy7dFT9se
+	 U/ig8eXOAp9uNSOIPXT68ZBESCwrSoyl8vTZI1epgJ+FWWQm2by1ZYF5MSlzwFCjfl
+	 fgecUIzvcVp4Uitl6yjQolAyFumOnWUDoWn2ODuW3vOKJKKtuv2QGYlYW5fZjJbJ5U
+	 XZxYld2UUsSd0jCwn9P3OhjlU4bJ/2RO9aMui6vdCX9MNU8ccjhdTDqWDcxFhCOxqy
+	 WdCkWxQcA9Qmg==
+Date: Wed, 29 Jul 2026 23:46:22 +0000
+To: bot+bpf-ci@kernel.org
+From: Vinicius Sampaio <vldsampaio@pm.me>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, clm@meta.com, daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, ihor.solodrai@linux.dev, john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, martin.lau@kernel.org, martin.lau@linux.dev, sdf@fomichev.me, shenghaoyuan0928@163.com, shung-hsi.yu@suse.com, song@kernel.org, tangyazhou518@outlook.com, vldsampaio@pm.me, yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Simplify cnum contains() implementation
+Message-ID: <20260729234645.370109-1-vldsampaio@pm.me>
+In-Reply-To: <0e15ace88b847a4a307530925c47c092b8182c820ba512f48a1da3e9a463b3a6@mail.kernel.org>
+References: <20260729194932.292368-2-vldsampaio@pm.me> <0e15ace88b847a4a307530925c47c092b8182c820ba512f48a1da3e9a463b3a6@mail.kernel.org>
+Feedback-ID: 138063245:user:proton
+X-Pm-Message-ID: a9063638b2b0622b15250083ad86e92cd323bc95
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=791; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Xy45rUtew1tuvisF77eUYR63ZJSLTXWJGkFjO5MAu2Q=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlZ3XJFwkfeMocfuLxij9aSDUyvn22s/LLdwe2G2NuFX
- q8fKp/+31HKwiDGxSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmskCUkaHFW+nTE4mPzCU7
- HTczXxe1yNE+GmJz/bbvtXubL8nFmd5n+GdkxnXh/sWEsO1/OMVOcv27v6z3aPPi7a6V4UzFc/Z
- 77WEEAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 28 Jul 2026 10:49:50 +0800, Yafang Shao wrote:
-> kbuild: rpm-pkg: Preserve BTF sections in kernel modules during debuginfo stripping
+> This isn't a bug, but since the table shows the new form slower for the
+> non-overflow and singleton cases, would it read better to describe this a=
+s a
+> simplification (one uniform branch-free predicate instead of a wrap/no-wr=
+ap
+> split) rather than an optimization?
 
-Applied to
+Agree, I'll change that in the next patch.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-fixes-unstable
+> This isn't a bug, but could the changelog wording be tidied on the next s=
+pin:
+> 'a optimization' -> 'an optimization', 'a inclusive circular range' -> 'a=
+n
+> inclusive circular range', 'theses tests' -> 'these tests', and 'soundnes=
+s
+> of this operations' -> 'soundness of these operations'?
 
-Thanks!
-
-[1/1] kbuild: rpm-pkg: Preserve BTF sections in kernel modules during debuginfo stripping
-      https://git.kernel.org/kbuild/c/e5a259d98823a
-
-Please look out for regression or issue reports or other follow up
-comments, as they may result in the patch/series getting dropped or
-reverted. Patches applied to an "unstable" branch are accepted pending
-wider testing in -next and any post-commit review; they will generally
-be moved to the main branch in a week if no issues are found.
-
-Best regards,
--- 
-Cheers,
-Nathan
-
+Ok! I'll fix that.
 
