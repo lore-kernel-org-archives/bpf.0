@@ -1,217 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B602E4A1382;
-	Wed, 29 Jul 2026 16:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6380546D2A5
+	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 16:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785342191; cv=none; b=Enmah0sS4A3lw4JxrL1jbopDikvw9DdzgZWXw9RkE53r952tTsnkxOfAV2D2k89J8OpgNh1Z3ltLGODfv+oHgVQZc2JzqgcbbfJ35qRfq/uHkQzmz067DCtr6Bdbe5NR49io8W4oxJAYIJ5fseKDmNizZeLu5P80C5TdhVf9zX8=
+	t=1785342591; cv=none; b=k3PM7RGNTI/XcV1rpIgkchaKrAmI+hLBZWcZETNNNfUIFFgMnpH2BivQQmd5lS4LoIbE37YrTqxp2yCxlc8NBJKcrdgV9+DbZFYavfOurFqyPj29gWrLW11+1QsJ4nRv2M6wm+kKiZ4qoUbLqsrE20txzlsC3SNWIEBzDjVbh+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785342191; c=relaxed/simple;
-	bh=3Nrj7MYaV+B661FGHyMq0qhnY8DEnnKPHWNlSvA/QEA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Or1FaLpfM6jj4F7r2vT8UDPGQUg031p6cyALNc3KYGzV89ULugUMqd96QZYaVzt0KylTw2BywgNd51PQDEznH3oXvGOIc3fg7t9ZgB+o0ekOjcJxFVSRcZBtYx0wUrwy6zg3fOjk7y72CRMInanbJkVqspc++ZlZJ0Ufxmbum1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XOsziYA0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785342591; c=relaxed/simple;
+	bh=R3lUFwXzA6Utc8Qmizb9zVXH9qJGnpDmVVKh5fC1sUc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=OLGmnghiGX2b26pcCts2/wr/yRUvKMn6MvP9JaeZZgoUflGH6hL57uCxEXXRX/SYM3V0jt4mCBIp0/P0bMBPmcqerkv3PIvyvjb2Ph8HEsYi4z7I6DRiK63FtSUCXwgxgFpsuawuo7wb1JiHKwvRPJYPhC6MwjNtoiufa4ZGF8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZtgYFZ2e; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XOsziYA0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D521F000E9;
-	Wed, 29 Jul 2026 16:23:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785342189;
-	bh=k50VSnd710We+fVtOTrhdmwkyjGgUp0cnxwlHAkvR1Y=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XOsziYA02/UxDUcsvfl0LugbJGLYgKA+qNJd0xB5tGLtCyIzELxgUgXAiqFjsGru7
-	 ZHqKwFxnqYsvLU8AaY8g8N6NJJec7E6Le+UwikFsi2G63mSMOPeOqPFKkZEs+FJxFq
-	 g3wq2HpeDdo/bJ9/MitDKqZEd/uKzEiH7QHB5w3uVN4OIK8hgiwNGAr4zEtkS2y/rz
-	 lkJQaxRstHbz1+tkOUrv/xr0uyvu1QuLcOvdqD+BKCw2XpYx6DQXKqkPMnpvwCptzz
-	 1Uwcb2N4KgQjwmKLtROENXF3wDoayZpbljUb5JHm/KSpY6KyReTdwSQqJNvlDlxtc6
-	 GTNf3OUEco/iQ==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: Lai Jiangshan <jiangshanlai@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Boqun Feng <boqun@kernel.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Matt Fleming <mfleming@cloudflare.com>,
-	"Harry Yoo (Oracle)" <harry@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	rcu@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZtgYFZ2e"
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-92e54f8c051so64721885a.3
+        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 09:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785342585; x=1785947385; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YaMgBKE4IT7GHc8dKZ/bu4hutKGY9j/cGc76tkbN8yg=;
+        b=ZtgYFZ2eWkhuGGMDXhroyuZQI8hwTLcYaa8NSDzBk/kmSztyCwiu717evu5D7+0BH5
+         WT5zfhitoDa8VfsNrqEF0E8zuE9oNVkx2wQGOZ3rob8i51GIrbxBxXUiNAWIUFaFSZp1
+         ozjNYHCL8wYdr23vxXnzodUkgHWXs4TDYga8YQdxQVXx5kWWW01KJqmP7koxHODzlmw9
+         26uWTsCMg4lhoIEz4INiu/HFFNb82WQDtz0HhJD+/b5OsRQaBLbFiyKJ3n/UUps1Knzl
+         B5G9nCJtS8kb0j2jLO1Rg83B9pcT69DSeAomPb031V3oOhzEHwS0ejS+4kEpsxnD4LPB
+         PhTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785342585; x=1785947385;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=YaMgBKE4IT7GHc8dKZ/bu4hutKGY9j/cGc76tkbN8yg=;
+        b=QJwKP0zlkTKskg0KdxxVQ+Paq8iIvXdrwHSXSLLceGdVeoEsL5yv40G715sn6MuqGZ
+         ltf3Qwjp4lDY5MuAuz8x0mNNHtBhX7JpLcXEujgkvvhejJ9NXclYy8NfRZX/ix2Zs8Ot
+         rC0z8Mx18UQn2oCbT29OPGmEGRRs1kAX8VEV9GU2V9y1sS1jRFnCOWAHx1KGM/Ef2Ri0
+         HTjvoQ1tkxiZToKbHOxmDJ3C8umR5sP5pXxF7doekg3yHcf7o34eZ+vZMWvuoK26VLqs
+         GzCS5ww4r8x08LfFR7u2X/PuHkBzfK+fwCdduiD67OMuy9iGUzyELS/mBruTCWmTeyRJ
+         C08g==
+X-Forwarded-Encrypted: i=1; AHgh+RrX+roy9mAnZBnlBp69IQvXGbMGzTo6d43PsHG8NIRCuNKr222l244I976BPBDg0iauYV8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0Zq6RI7lVW2/fmI5DPFTW4EBTV9NI4qeOkYpM9FllcUcvAZsC
+	4pOrxXbWJ+LBOoG30PRETQjzvcNWsdSKdgSL7JSINbL0a5+KXYWVwflt
+X-Gm-Gg: AR+sD11J5LxLXTLlsknm5pMk1KVGNNuXJnzvuXwtWfduv5yG6g66V19GKroQVGVa1n3
+	T1p4PNwf/T4aSbMVcc6z30o1SvhqH+fe4HpZmA5NaDKLJRkOgQThqctLZJeDOOsp7OeVrphZcbC
+	bPP4I6aWt7vYko9vcG7oWwC5Qd7fCkSS/BHmX3/wtA6FuiORYbbZRAuSOln9sRYRglvS97RSqdg
+	GRmkhpp4HMWZ5YFrulCe7U/tZot20abNXozrNnEXCSYKFtnMdK0vxIUs+SY0pHozXkKZ9S0bVn3
+	noaynmL1y76rjD9amzqEULiQ3VhDFIjfnFivO7xZVg2kVAGboBbseujUJ4WWojotg9MGmgRCCi0
+	C4YKTXL2mwGE0EISXcpu/8v1SsNnWvQIWKI122I3PpsVIv0mdIqfjpkAixHfl+m9F/FbiLBgH1B
+	ZCu4f0JXx2nZNQFEz7JCxxDcv2+sh/jSlI3SUQkaHUv9vF2CLtwPYt2919lQsFV4+xBlBL1VaGp
+	9yPwg==
+X-Received: by 2002:a05:620a:284a:b0:92e:bd6f:b166 with SMTP id af79cd13be357-9330266c55emr706970885a.63.1785342585335;
+        Wed, 29 Jul 2026 09:29:45 -0700 (PDT)
+Received: from localhost.localdomain ([187.15.144.227])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-933e7318180sm201745885a.28.2026.07.29.09.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jul 2026 09:29:44 -0700 (PDT)
+From: Nicholas Dudar <main.kalliope@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	tsbogend@alpha.franken.de,
+	johan.almbladh@anyfinetworks.com,
+	paulburton@kernel.org
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	philmd@oss.qualcomm.com,
+	visitorckw@gmail.com,
 	bpf@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: [PATCH 6/6] selftests/bpf: Add a call_srcu() re-entry reproducer
-Date: Wed, 29 Jul 2026 09:22:05 -0700
-Message-ID: <20260729162207.1567770-7-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260729162207.1567770-1-puranjay@kernel.org>
-References: <20260729162207.1567770-1-puranjay@kernel.org>
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/2] bpf, mips: Add signed div/mod support
+Date: Wed, 29 Jul 2026 12:29:29 -0400
+Message-Id: <20260729162931.2369353-1-main.kalliope@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add a test that re-enters call_srcu() from a BPF program, exercising the
-any-context safety of call_srcu() (and thus call_rcu_tasks_trace(), which
-is call_srcu() on rcu_tasks_trace_srcu_struct).
+The MIPS JITs select division and modulo implementations from the BPF
+class and opcode, but do not inspect insn->off. BPF_SDIV and BPF_SMOD
+therefore use unsigned instructions, or unsigned C helpers for ALU64
+on 32-bit MIPS.
 
-An fentry program on rcu_segcblist_enqueue() fires in the middle of
-call_srcu()'s enqueue -- that function is reached from
-srcu_gp_start_if_needed() with the srcu_data ->lock held.  From there the
-program performs a task-storage delete, whose only deferred work is
-call_rcu_tasks_trace(), re-entering the enqueue on the same CPU.  The
-triggering thread is pinned to one CPU and matched by TID, so the program
-fires only for the test's own delete.
+Patch 1 factors division and modulo emission into helpers. Patch 2
+uses insn->off to select the signed instructions and helpers.
 
-Without the call_srcu() any-context fix the nested call re-takes the same
-sdp lock and self-deadlocks (AA); with it the nested __call_srcu() sees
-interrupts disabled and defers via irq_work, so the delete returns and
-the test passes.  Because it can hang an unfixed kernel, it is meant to
-run against a kernel carrying the fix.
+Tested with test_bpf under QEMU on MIPS32r2, MIPS64r2, MIPS32r6, and
+MIPS64r6, with CONFIG_BPF_JIT_ALWAYS_ON=y. Patch 1 produced the base
+failure set on each target. With both patches, all 16 SDIV/SMOD cases
+passed. Fourteen failed on the base; two already passed. No test
+changed from PASS to FAIL.
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- .../selftests/bpf/prog_tests/rcu_reentry.c    | 58 +++++++++++++++++++
- .../testing/selftests/bpf/progs/rcu_reentry.c | 45 ++++++++++++++
- 2 files changed, 103 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
- create mode 100644 tools/testing/selftests/bpf/progs/rcu_reentry.c
+v2:
+- split out the div/mod helpers as Philippe suggested
+- use an unsigned quotient intermediate in the signed remainder helper
+- rebase onto bpf-next at fdec474c65fd
+- test the base, patch 1, and the full series on four MIPS targets
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/rcu_reentry.c b/tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
-new file mode 100644
-index 0000000000000..f6ecd93be30f4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
-@@ -0,0 +1,58 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Exercise re-entry into call_srcu() from BPF; see progs/rcu_reentry.c. */
-+#define _GNU_SOURCE
-+#include <sched.h>
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+#include "rcu_reentry.skel.h"
-+
-+static int sys_pidfd_open(pid_t pid, unsigned int flags)
-+{
-+	return syscall(__NR_pidfd_open, pid, flags);
-+}
-+
-+void test_rcu_reentry(void)
-+{
-+	struct rcu_reentry *skel;
-+	int err, pidfd = -1, map_fd;
-+	__u64 val = 1;
-+	cpu_set_t set;
-+
-+	skel = rcu_reentry__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
-+
-+	err = rcu_reentry__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto out;
-+
-+	/* Keep the re-entry on a single CPU. */
-+	CPU_ZERO(&set);
-+	CPU_SET(0, &set);
-+	if (sched_setaffinity(0, sizeof(set), &set))
-+		perror("sched_setaffinity");
-+
-+	pidfd = sys_pidfd_open(getpid(), 0);
-+	if (!ASSERT_GE(pidfd, 0, "pidfd_open"))
-+		goto out;
-+	map_fd = bpf_map__fd(skel->maps.task_stg);
-+	err = bpf_map_update_elem(map_fd, &pidfd, &val, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "boot_create"))
-+		goto out;
-+
-+	/* Arm the handler for this thread, then trigger call_rcu_tasks_trace(). */
-+	skel->bss->target_pid = syscall(__NR_gettid);
-+	err = bpf_map_delete_elem(map_fd, &pidfd);
-+	ASSERT_OK(err, "boot_delete");
-+
-+	/* Only Tree SRCU enqueues via rcu_segcblist_enqueue(); skip elsewhere. */
-+	if (!skel->bss->hits) {
-+		test__skip();
-+		goto out;
-+	}
-+	ASSERT_EQ(skel->bss->reentered, 1, "reentry_deferred");
-+out:
-+	if (pidfd >= 0)
-+		close(pidfd);
-+	rcu_reentry__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/rcu_reentry.c b/tools/testing/selftests/bpf/progs/rcu_reentry.c
-new file mode 100644
-index 0000000000000..d92a927ff51c0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/rcu_reentry.c
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Re-enter call_srcu() from a BPF program.  fentry on rcu_segcblist_enqueue()
-+ * fires inside call_srcu()'s enqueue (reached from srcu_gp_start_if_needed()
-+ * with the srcu_data ->lock held); the handler then calls call_rcu_tasks_trace()
-+ * -- itself call_srcu() on rcu_tasks_trace_srcu_struct -- re-entering the same
-+ * srcu_data on the same CPU.
-+ */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, __u64);
-+} task_stg SEC(".maps");
-+
-+int target_pid;
-+int hits;
-+int reentered;
-+
-+SEC("fentry/rcu_segcblist_enqueue")
-+int BPF_PROG(reenter)
-+{
-+	struct task_struct *cur;
-+
-+	if (reentered || !target_pid)
-+		return 0;
-+
-+	cur = bpf_get_current_task_btf();
-+	if (!cur || cur->pid != target_pid)
-+		return 0;
-+
-+	/* Re-enter via a task-storage delete, which calls call_rcu_tasks_trace(). */
-+	__sync_fetch_and_add(&hits, 1);
-+	bpf_task_storage_get(&task_stg, cur, 0, BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	bpf_task_storage_delete(&task_stg, cur);
-+
-+	reentered = 1;
-+	return 0;
-+}
+v1: https://lore.kernel.org/bpf/20260716211055.2569433-1-main.kalliope@gmail.com/
+
+Nicholas Dudar (2):
+  bpf, mips: Factor out div/mod emission helpers
+  bpf, mips: Add support for BPF_SDIV and BPF_SMOD
+
+ arch/mips/include/asm/uasm.h   |  6 +++
+ arch/mips/mm/uasm-mips.c       | 10 +++++
+ arch/mips/mm/uasm.c            | 20 ++++++---
+ arch/mips/net/bpf_jit_comp.c   | 53 +++++++++++++++++-------
+ arch/mips/net/bpf_jit_comp.h   |  5 ++-
+ arch/mips/net/bpf_jit_comp32.c | 30 +++++++++-----
+ arch/mips/net/bpf_jit_comp64.c | 74 +++++++++++++++++++++++-----------
+ 7 files changed, 143 insertions(+), 55 deletions(-)
+
+
+base-commit: fdec474c65fd35d5a6e1497ed50a9f98c07192f0
 -- 
-2.53.0-Meta
-
+2.34.1
