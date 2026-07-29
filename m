@@ -1,129 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A500C48BD57
-	for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 15:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D37F3B0588;
+	Wed, 29 Jul 2026 15:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.18.0.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785339338; cv=none; b=BOMLmuWwH9bred4aph9d2erQDIXj7NhnqN0t4VTV0vD8NcRe3HX6DupNbngmuDh1fu9aPPDmEnJl9GFriL0ntlCaTNPbyj+sPG2SIvTbWbHpk5Q1pWTLcrpHN8r7RvDT6uoi1Hv2WY4tNx7TdWBmw0+zU90dBUCvLmbm1IJyNWw=
+	t=1785339828; cv=none; b=Da+GO8U2tmkdBMrlDWDTlXH0l+R3Kg6ZObGd3VdW23GpfE/73FpPWSj0wFfBytqdR0MB8YNfcW7UQDvrbmL3jNMbN6UI6wXxY+NkPEP/JYvAaxOAVcWRV2MgVBo80UQ3+gBxNuatVXnAhZP8hjYRC9beIiOlH3GoMuGBkDaI/0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785339338; c=relaxed/simple;
-	bh=rnSkMEK+L7j2wb+/lh4gdkGBjMR2YrUERmSTTFv8S1I=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GYIOFAHan3Puwl4xLy/wOYwDlNGFXfmtDUJIWVeWQ+unVZJLIrDpHGqkqxaP9t/c+0S/SvJrYQdLqr/RkSVc16YmPxK0DFLMdi9+apCj9keO570MqrPK400sJQs1Yk2YYLujkaVsRupcNGLTdHzegtxq/abJqkGReHKffDk9eSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B+ly5BY8; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B+ly5BY8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3E2E1F000E9;
-	Wed, 29 Jul 2026 15:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785339337;
-	bh=aZ9/hHqtB2pPKfFGIpoSrZVhEZo8riPnvJ+jxB7pNKA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=B+ly5BY8CLbMU/1PlU3MD2kEvH8PolWL3ws7llN3rXY4+ef8Msjr1OTIy/oGqZhQP
-	 23j1BR2GD+ccWHLiBzQaM4kQCu2RQLTQOxu+/fc9sENumfkuV2/1EJdC9g47ajy7g1
-	 lIbGBLK8HCzLJAKNjQ5Fuwt87ps0UsCbI6DfwF6QNL/IkiLSIXo5vjc8hVCv9Aw2ek
-	 iweXn0Uv8+TlB/gaZ7LhXqkrn/u+H1I6ip5HeL6yfD0rqxXZJWBIab6mpE+kdv3Iw4
-	 7XmcKQ6uxnD/XqnAF1weRALwzcC90wu0oxFoPHXlEDQOOl0MTQGswYSNb0A4ERpbRq
-	 3NJgqGbtUv1mw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v4 3/4] bpf: Propagate untrusted pointer state in
- commuted arithmetic
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yiyang Chen" <chenyy23@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260729-c3-035-public-bpf-v4-v4-3-8ee297e2346b@mails.tsinghua.edu.cn>
-References: <20260729-c3-035-public-bpf-v4-v4-0-8ee297e2346b@mails.tsinghua.edu.cn>
- <20260729-c3-035-public-bpf-v4-v4-3-8ee297e2346b@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Jul 2026 15:35:36 +0000
-Message-Id: <20260729153536.F3E2E1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1785339828; c=relaxed/simple;
+	bh=n+OIYeEljDWlRl0C6Am1X/IEiYXD24oHIXdVO6kiqhM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=qc/t+iNysBPnel4zGGFJgxQEtPbvGRIKkwpKkpoxgyxvL7OoOWzNBc69uipJofq8sTUwkolmdiuYhvyUIduLk8mqp4apJmgKh4CvmzzgN8H01u1RQSt7yx+Hw4/Om4oo5mkp/zYY4OGUB6l59bR5fzR4loilJs9Pub+rKY6cIx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=nefkom.net; arc=none smtp.client-ip=212.18.0.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nefkom.net
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
+	by mail-out.m-online.net (Postfix) with ESMTP id 4h9GZf4tnSz1r76q;
+	Wed, 29 Jul 2026 17:33:46 +0200 (CEST)
+Received: from frontend03.mail.m-online.net (unknown [192.168.6.182])
+	by mail-out.m-online.net (Postfix) with ESMTP id 4h9GZd5PxKz1r76N;
+	Wed, 29 Jul 2026 17:33:45 +0200 (CEST)
+Received: from localhost (dynscan3.mnet-online.de [192.168.6.87])
+	by mail.m-online.net (Postfix) with ESMTP id 4h9GZc6bK4z1qqlR;
+	Wed, 29 Jul 2026 17:33:44 +0200 (CEST)
+X-Virus-Scanned: amavis at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.6.182])
+ by localhost (dynscan3.mail.m-online.net [192.168.6.87]) (amavis, port 10024)
+ with ESMTP id 2RfyXQOV-4tV; Wed, 29 Jul 2026 17:33:42 +0200 (CEST)
+X-Auth-Info: VCaU+Zseds5u9u17y8N+aMLm8e/BxzICWNOqLIomY/S/yBOX39UsP47/EU2cR1FB
+Received: from igel.home (aftr-62-216-202-129.dynamic.mnet-online.de [62.216.202.129])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.mnet-online.de (Postfix) with ESMTPSA;
+	Wed, 29 Jul 2026 17:33:42 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+	id 741042C0B95; Wed, 29 Jul 2026 17:33:41 +0200 (CEST)
+From: Andreas Schwab <schwab@linux-m68k.org>
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: geert@linux-m68k.org,  ast@kernel.org,  daniel@iogearbox.net,
+  andrii@kernel.org,  eddyz87@gmail.com,  memxor@gmail.com,
+  martin.lau@linux.dev,  song@kernel.org,  yonghong.song@linux.dev,
+  jolsa@kernel.org,  jserv@ccns.ncku.edu.tw,  eleanor15x@gmail.com,
+  marscheng@google.com,  linux-kernel@vger.kernel.org,
+  linux-m68k@lists.linux-m68k.org,  bpf@vger.kernel.org,  Daniel Palmer
+ <daniel@thingy.jp>
+Subject: Re: [PATCH bpf-next v4 RESEND] m68k, bpf: Add initial BPF JIT
+ compiler support
+In-Reply-To: <20260729002737.1008358-1-visitorckw@gmail.com>
+References: <20260729002737.1008358-1-visitorckw@gmail.com>
+Date: Wed, 29 Jul 2026 17:33:41 +0200
+Message-ID: <871pclresq.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] sanitize_err prints the wrong register name for immediate operat=
-ions (BPF_K) when R0 contains a pointer.
---
+On Jul 29 2026, Kuan-Wei Chiu wrote:
 
---- Patch [3]: [PATCH bpf v4 3/4] bpf: Propagate untrusted pointer state in=
- commuted arithmetic ---
-commit 74ae77e327bede792130d0bf76a485d3ad9ef6b4
-Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-
-bpf: Propagate untrusted pointer state in commuted arithmetic
-
-This patch modifies the BPF verifier's pointer arithmetic logic by moving
-the early return for untrusted PTR_TO_MEM accesses. Placing it after the
-pointer state is fully propagated ensures that operations like scalar +=3D
-untrusted_pointer correctly leave the destination register as a PTR_TO_MEM.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index cdb61fab84351..fdc5fbb1f78ca 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -13707,13 +13707,6 @@ static int adjust_ptr_min_max_vals(struct bpf_ve=
-rifier_env *env,
->  		return -EACCES;
->  	}
-> =20
-> -	/*
-> -	 * Accesses to untrusted PTR_TO_MEM are done through probe
-> -	 * instructions, hence no need to track offsets.
-> -	 */
-> -	if (base_type(ptr_reg->type) =3D=3D PTR_TO_MEM && (ptr_reg->type & PTR_=
-UNTRUSTED))
-> -		return 0;
-> -
->  	switch (base_type(ptr_reg->type)) {
->  	case PTR_TO_CTX:
->  	case PTR_TO_MAP_VALUE:
-
-[ ... ]
-
-> @@ -13750,6 +13743,13 @@ static int adjust_ptr_min_max_vals(struct bpf_ve=
-rifier_env *env,
->  	if (dst_reg !=3D ptr_reg)
->  		*dst_reg =3D *ptr_reg;
-> =20
-> +	/*
-> +	 * Accesses to untrusted PTR_TO_MEM are done through probe
-> +	 * instructions, hence no need to track offsets.
-> +	 */
-> +	if (base_type(ptr_reg->type) =3D=3D PTR_TO_MEM && (ptr_reg->type & PTR_=
-UNTRUSTED))
-> +		return 0;
+> +static void emit_alu32_k(const struct bpf_insn *insn, struct jit_ctx *ctx)
+> +{
+> +	const s8 *dst = bpf2m68k[insn->dst_reg];
+> +	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
+> +	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
+> +	s8 d_reg;
 > +
->  	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type) ||
->  	    !check_reg_sane_offset_ptr(env, ptr_reg, ptr_reg->type))
->  		return -EINVAL;
+> +	d_reg = bpf_get_reg32(dst[1], tmp1[1], ctx);
+> +
+> +	switch (BPF_OP(insn->code)) {
+> +	case BPF_MOV:
+> +		emit_16(ctx, 0x203c | (d_reg << 9));		/* move.l #imm, dst */
+> +		emit_32(ctx, insn->imm);
+> +		break;
+> +	case BPF_ADD:
+> +		emit_16(ctx, 0x0680 | d_reg);			/* addi.l #imm, dst */
+> +		emit_32(ctx, insn->imm);
+> +		break;
+> +	case BPF_SUB:
+> +		emit_16(ctx, 0x0480 | d_reg);			/* subi.l #imm, dst */
+> +		emit_32(ctx, insn->imm);
+> +		break;
+> +	case BPF_AND:
+> +		emit_16(ctx, 0x0280 | d_reg);			/* andi.l #imm, dst */
+> +		emit_32(ctx, insn->imm);
+> +		break;
+> +	case BPF_OR:
+> +		emit_16(ctx, 0x0080 | d_reg);			/* ori.l #imm, dst */
+> +		emit_32(ctx, insn->imm);
+> +		break;
+> +	case BPF_XOR:
+> +		emit_16(ctx, 0x0a80 | d_reg);			/* eori.l #imm, dst */
+> +		emit_32(ctx, insn->imm);
+> +		break;
+> +	case BPF_LSH:
+> +	case BPF_RSH:
+> +	case BPF_ARSH:
+> +		emit_16(ctx, 0x203c | (tmp2[1] << 9));		/* move.l #imm, count */
+> +		emit_32(ctx, insn->imm & 0x1f);
 
-[Severity: Medium]
-Does sanitize_err() print the wrong register name for immediate operations
-(BPF_K) when R0 contains a pointer?
+That can be moveq.  Also, for the other cases, if imm is in the range of
+moveq it is worthwhile to load it into a temporary register.
 
-When an immediate pointer arithmetic operation is rejected, sanitize_err()
-is called downstream of this offset checking logic:
-
-kernel/bpf/verifier.c:sanitize_err() {
-    ...
-    u32 dst =3D insn->dst_reg, src =3D insn->src_reg;
-    ...
-    case REASON_TYPE:
-        verbose(env, "R%d has pointer with unsupported alu operation, %s\n",
-                regs[src].type =3D=3D SCALAR_VALUE ? dst : src, err);
-}
-
-For BPF_K operations, insn->src_reg is 0. If a pointer was previously placed
-in R0, or if R0 is uninitialized, regs[0].type will not be SCALAR_VALUE.
-The ternary operation will then incorrectly choose src (R0) instead of the
-destination register, emitting a confusing diagnostic message.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729-c3-035-pub=
-lic-bpf-v4-v4-0-8ee297e2346b@mails.tsinghua.edu.cn?part=3D3
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
