@@ -1,199 +1,194 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2AB3B530F
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 21:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785448232; cv=pass; b=CgZzJEYLV0iHcsqfQsXXPqau2Po2PXL3mebqimtLJifmjf1kECfYHPUzfYyYu7X3/Ds6P+CbT5+IHK228YHnwOKI5BJBhRST3+UPxJhFN8LehAWLLek4tuvU27X2TaMQ2CIKwj18Ej2C2pk3IZYVpXJ1sCTBkAOip561isEZevw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785448232; c=relaxed/simple;
-	bh=hohf4egGI2FtTcoVSfXr/8H7yG8jREFXZ386prEXqNk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aTCeexqwzeWPmugIclreHg09WQYLuc0wCpvmG+PeKWIsdugfhZZXoC29IpAj253ZuyFmMvRe/wnBx32RRjX0pt1UvwW8j+2zLIfsRHjPsnzZmWcTyFiplqbJX0fFZtLhNPoR8DBMusJlAg+GBHVHHJpd3dqyfXmEaR5Oh/Pqyus=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GDZoUNNd; arc=pass smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7609124DCF6;
+	Thu, 30 Jul 2026 22:01:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785448879; cv=none; b=iu7TEZHL0AN/p68xuzGEbbswC/XZ9HEZvgD675PYBu7ExrUVTTURLMK8dCTrcPHJamOB2MGJad57TDRHERV36oAiIiQv5AzKaLUCocDBPFq4pGOX5oGErirBpr3FBeTo+0hbaXQoAhs8YDDuyqP5axbmJbcvJEpuYlu49YuXlG4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785448879; c=relaxed/simple;
+	bh=sQQNI0T320x5izTnyyq6J5o0mamqvX++AhBGZawqwr0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Zlv/ssJAdaGWluwJQf6dfH7Dg9dMVlaS8rIz4AoGjJ8R2v5CDE+7D+/NS9ZSKt3xl++AR+y3xArxx4NzxaIxRZ1KO++CAfVR6dOFUJab7OB6Ak1R7B3BjljaD+MO6wqxRvFrxrxH54qwyNrXhTXC7hL3Dxe51R46wNY/IJ9vybM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=OV3ArW9R; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GDZoUNNd"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-84536ecfc5bso402476b3a.2
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 14:50:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785448230; cv=none;
-        d=google.com; s=arc-20260327;
-        b=cVu4bkoQ9NTuyEKyBsmOO0Fh7CdiCG/+gjuLaKQCzk8qSCBylTidBN/erZ9Hdx+OEx
-         6ZxzBlCIif2J3KFuKKG0R6p+19NHeYwpo08VAmn3vm8Tjdsch+XybpZKyAdlF8ofFbyd
-         r+wGBGBNTV75TvglHEi26ySiz40RXRe8PyO4LsxoHdxHPLmiyDVzYfxPDAal8XRA9e7H
-         aUAUb688P0rjyBJcDrn7EV+HxtkyUXZd7vfUmbhWynsLEjVvN1XSpOGIi3yn3QrO32nu
-         rudqXQQwACjR5qfIhLk/NLXb8pnjo7cOD6nMZOkvIC9lMojmGCUpRPKXXMF1YmDVd+QS
-         5H8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qr4nYzV06iZ6tNUQg08yVYJfq6vZPcikx9TBCQwP+fk=;
-        fh=7eoyOfXUpehVHh0e6FcQCsD9SMN+Vtenv0RH2SBGXXs=;
-        b=gQO88981+KJm6UIBzRjJNc6r16ZhHAJZ30e9yTXR6qoDjbwLw6wK7KFipoBaXElIk0
-         uQEwrRxDgsKZkUv5LrfJMbJ+Jdb9qobknnVmBBcU3+nKxiBiLe617z62Xcr21kxiR0ea
-         lA1+gegMEPhXJWTpZbQE4O154Le5dUM+QUJttZ+77KCYvYzbnIW6afm1GWJaAWy33jpt
-         RxUCq4W04k5qxHKecWk8bSRqGNCNeF3KFlLZurzgggKVTzQlrd4MBnGN2FpRmxIbWKyR
-         uStpHcnbBI0y88QmYtDi6gKapJu7UXp/UoXoisOcRh5c2XsxcfWZKl8xE/sEmS+DaJY3
-         Y0wQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785448230; x=1786053030; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=qr4nYzV06iZ6tNUQg08yVYJfq6vZPcikx9TBCQwP+fk=;
-        b=GDZoUNNd+TzbEb62ebAOM2yLnNkyzU7iyqcWtyVD+6kZBjM+m6arClUeb6kqfrZM1I
-         NOfCei4+g9tMQa6ZkSusgTh0zk4cK9XOfTmQldKyhN5iK8yuAUtS9u/Q60dzzUJsFzoZ
-         9X6JVssiYpRpUuJCKZgeh7Nrx9T3gaOkChIq3lhTotJRtmFqjz8CWMqBi4K8vp07WVYb
-         PyT0LGeIkRFRhcYixKacPkohu5yjXyJM5E5/axhSsJPgNSID6k8X0n4uKiFBkcdr7REW
-         4t/PadjZ3PhUlUPNJXcu5d3axitbgs2SoLOpEVP4Aqo3KHb/e4Nop3lxsJ2amUx5Qm3K
-         Z//g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785448230; x=1786053030;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qr4nYzV06iZ6tNUQg08yVYJfq6vZPcikx9TBCQwP+fk=;
-        b=r5lnwwVbKFPQj4kYlRKcLJm6dY7nS5vN/TWa7ZxFGmJUIPCr6GU3E5OLriTb1PRqrn
-         Z9zlvByrPKLCzAypgYCXNIqhnn6S9kOi/4+ufVlc2rI+eeB+bgS07wUdbwLWE+a9n+90
-         27zu2SP9ra/D2qANZrVPQPUdQKGLmn8O3BDaPK9uIW/P3LqT4sCedf4y53JValWAtDp+
-         djKFJ4HT1Uk0LiySt4XLZilvIl74WXhEKExVpeAMOrcv5Ed7F2YWP4o6xhPTGLouo3HF
-         UaAhHgvKQNzpKSMxKktT0N7OL2UDZm5x65gY/ZHu4K7RAkknDDMcKh8k/tOnnlznRk6X
-         FckA==
-X-Gm-Message-State: AOJu0YxMgObdMZZY3CYJllv5ZJa9V0/ORU3omKnr9tz/fvlP+8Tfueu0
-	uOnuVlsly0a3/gyr8j5vR3FWN8wDLeBcmhB5vL+sL7Dykz8N1R4zMxG6JnswdQmLpGXbfzxaWIs
-	UdIJIRPR39WZ27obPXD4m5SDKZaf9Kek=
-X-Gm-Gg: AR+sD12n8GMzcLSVvVis7xlwW/KyuQd06I/gmP8nuX5ulj+sYQKMIuMScXXstWz00zO
-	ESoTK2gBEhp96ujPBz43rIdh8PvWvgUcZYd9VyB/jwUWpCEqf+gYfwHt+NGXagR66j+x6RNfeM1
-	UoEGrhkS+hEGBV7kRi3BSqRT9qmLCkRIZgq7r5ReIB9Tnx8b7JnpxLpcq/phvTF1BzbDGURPb9J
-	oxMDX7x4hVkfRrbVsej+HT2WVFhe1CdGEsZWIkx0yslNYg5GqnuBE57sGEBnMZ1mCf1XXavwDQi
-	Jp+Cw2MJuw2BOTALQqCE5RB1YIoBvJg6QHkrtoyHermMjC3tNJf/+DjsFBVJSmgmMAmMxLwwE1O
-	uSm01Iptu3DUvohooQOA8F3gLtBRSupVkL3Qqm7l6fw==
-X-Received: by 2002:a05:6a00:39a8:b0:848:5d9b:6885 with SMTP id
- d2e1a72fcca58-84ebc494624mr3853705b3a.77.1785448230084; Thu, 30 Jul 2026
- 14:50:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="OV3ArW9R"
+Received: from pps.filterd (m0528008.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66UL1wL33369365;
+	Thu, 30 Jul 2026 15:01:10 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps82601-s2048-2026-q3; bh=UkH7mKEM9
+	P7dqP/Lb82d88AqlrpsQErduRlaXFMEngE=; b=OV3ArW9RFioggVk+ukIwRScYb
+	/Ry3kjWsOLKKVH2UVK1ciF+eIV5cMT6dF1S8RBncB/8hem9aS3W3nF5VppSLyG4P
+	II+/zv4j+hO7MORcLwJma7N0hoAwduNhcI5QZ+FzL08u01HW8cBETF60imIgk3SX
+	+kwfWSwxXDX2/bko+Sb3xf3tJkcwCz6trVuwjYLkUeIQPcLh3Y27v1WQq+r6s0D/
+	cc1gcrJO4VtU5ai20jvt3tlo1Xkb82YlqzUvwoHISHRPYnO0OQ2yB5kjI/LuE7xT
+	FiXI9CyvuiLbH2xdVh5ln9Ck+l6geFiBnuBXrIaK8oGphdG+J33+jMXbWqfsQ==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4fqrn90upq-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Thu, 30 Jul 2026 15:01:10 -0700 (PDT)
+Received: from localhost (2620:10d:c0a8:1b::8e35) by mail.thefacebook.com
+ (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.45; Thu, 30 Jul
+ 2026 22:01:09 +0000
+From: Tejas Birajdar <tejasbirajdar@meta.com>
+To: Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>,
+        <netdev@vger.kernel.org>
+CC: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        "David
+ S . Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tejas Birajdar
+	<tejasbirajdar@meta.com>,
+        Sashiko <sashiko-bot@kernel.org>
+Subject: [PATCH net-next v3] tcp: honor BPF_SOCK_OPS_RWND_INIT on the active connect path
+Date: Thu, 30 Jul 2026 15:00:55 -0700
+Message-ID: <20260730220055.2946171-1-tejasbirajdar@meta.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260729203633.213973-1-puranjay@kernel.org> <20260729203633.213973-5-puranjay@kernel.org>
-In-Reply-To: <20260729203633.213973-5-puranjay@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 30 Jul 2026 14:50:08 -0700
-X-Gm-Features: AUfX_mwh63B5ZHu3IhBP5FloepQsAFJ5ABaPcXTi1eojCM6b1KoPr9MNU0nEOVA
-Message-ID: <CAEf4BzYuQxx2Oa8hhqhmaP1FAFcamNW_QHRwxGv_GXKHpdvXgg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 4/6] bpf: Inline bpf_iter_num_destroy() as a no-op
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMwMDE1OCBTYWx0ZWRfX8J5ZCRBZNJSG
+ 7H6m7brEmwavmDpmn6rumA7DtK7y9i0/w4BN5CICAKG+LEBUUsqMB6p7OUQ+mg6AGB4W7VOXasI
+ bt3E3QNwXQL6CrH+eyY778tQzj4Tjx4sYrkAopefF5Bp70e9KeESYo8DO77jkWih1Pvs4vEHpaL
+ QBlmK2vOXY5XrW8UYTvO2WGCf86PTFlDLYcB4Fkf+86BFxvXW6AbDOn3+mq5EWQhSfHAYGGEXih
+ TWG/2/d3RKb1PMzErsTra5FC27dFpSEqLql6Mz/oYMpFklmhhPhMk1WtY4a8NVL14bj48Z8ydyG
+ DuUa/cGsd2D2WcUlFXSoAoqpG1vHkHkXqEw3fJrQIFYCfhm7e7gAmDhTxwJtD6J/TDxOpxMrLSD
+ a/OoBzqSn8H7b8l4ncxTNkBHBPg93GhMZ8J4TQR6V+4BKk027nOnj6r+kj0zhzthgbax0T8dMLB
+ 4E5URz+mNkJa7+dpLoQ==
+X-Authority-Analysis: v=2.4 cv=cpGrVV4i c=1 sm=1 tr=0 ts=6a6bc9a6 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
+ a=_1IyUuN4QrATX339ibzo:22 a=VwQbUJbxAAAA:8 a=VabnemYjAAAA:8 a=1XWaLZrsAAAA:8
+ a=20KFwNOVAAAA:8 a=4XeK37IC55s43dnOpu4A:9 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMwMDE1OCBTYWx0ZWRfXzl+zEcI6hfGX
+ auRwOi6hYx3cmqyfekwqp8XZdOqL0Dfti67YOL5arF7UPQ23foYC1hplkLaFGweR1wdxjnAUW3f
+ sbXuhZ8ZvsdpS493sOCncB1X+rkXnQQ=
+X-Proofpoint-ORIG-GUID: MV0HKsZ3_ja9AdgYCADM9FxARXy9_Yft
+X-Proofpoint-GUID: MV0HKsZ3_ja9AdgYCADM9FxARXy9_Yft
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-30_06,2026-07-30_01,2025-10-01_01
 
-On Wed, Jul 29, 2026 at 1:37=E2=80=AFPM Puranjay Mohan <puranjay@kernel.org=
-> wrote:
->
-> bpf_iter_num_destroy() ends every bpf_for() loop. The kfunc only zeroed
-> the 8-byte on-stack iterator state, but once destroy() returns that slot
-> is no longer tracked as iterator state, so nothing reads it and the
-> zeroing is dead work.
->
-> Drop it on both sides: make the bpf_iter_num_destroy() kfunc a no-op, and
-> inline the call in bpf_fixup_kfunc_call() to a single BPF_JA 0 (nop) so
-> the per-loop call is removed without emitting any store. The nop is
-> elided by the JITs.
->
-> The emitted instruction is plain BPF and is handled by the interpreter,
-> so interpreter fallback stays correct and no jit_required marking is
-> needed.
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
->  kernel/bpf/bpf_iter.c |  8 +++++---
->  kernel/bpf/verifier.c | 14 ++++++++++++++
->  2 files changed, 19 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-> index f190f2b250048..ff2055399f3c0 100644
-> --- a/kernel/bpf/bpf_iter.c
-> +++ b/kernel/bpf/bpf_iter.c
-> @@ -821,9 +821,11 @@ __bpf_kfunc int *bpf_iter_num_next(struct bpf_iter_n=
-um* it)
->
->  __bpf_kfunc void bpf_iter_num_destroy(struct bpf_iter_num *it)
->  {
-> -       struct bpf_iter_num_kern *s =3D (void *)it;
-> -
-> -       s->cur =3D s->end =3D 0;
-> +       /*
-> +        * Nothing to do: the stack slot backing the iterator is no longe=
-r
-> +        * tracked as iterator state once destroy() returns, so its conte=
-nts do
-> +        * not matter. The verifier inlines this call away entirely.
-> +        */
+BPF_SOCK_OPS_RWND_INIT lets a sockops BPF program pick the initial TCP
+receive window, e.g. to advertise a larger window up front in environments
+where that is known to be safe. Today it is only effective for the passive
+(listener) side; on the active (connect) side the value is computed and
+then silently discarded.
 
-verbose, drop the comment or have /* no-op */
+On the passive path tcp_openreq_init_rwin() inflates full_space when the
+program returns a non-zero window, so tcp_select_initial_window() can offer
+it:
 
->  }
->
->  __bpf_kfunc_end_defs();
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 3a3d096f3966e..36f3e80d2f0b9 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19838,6 +19838,18 @@ static int inline_bpf_iter_num_next(struct bpf_i=
-nsn *insn_buf)
->         return i;
->  }
->
-> +/*
-> + * Inline bpf_iter_num_destroy(). The stack slot is no longer tracked as=
- iterator state after
-> + * destroy(), so nothing has to be done to it; emit a nop just to drop t=
-he call. Keep in sync
-> + * with the kfunc in kernel/bpf/bpf_iter.c.
-> + */
-> +static int inline_bpf_iter_num_destroy(struct bpf_insn *insn_buf)
-> +{
-> +       insn_buf[0] =3D BPF_JMP_A(0);
-> +
-> +       return 1;
-> +}
+	else if (full_space < (u64)rcv_wnd * mss)
+		full_space = min_t(u64, (u64)rcv_wnd * mss, INT_MAX);
 
-again, inline the inlining logic
+tcp_select_initial_window() only clamps the requested window *down* to the
+available space, so without inflating the space first the BPF reply can
+never raise the offered window above tcp_full_space(sk).
 
+tcp_connect_init() calls tcp_rwnd_init_bpf() but never inflates full_space,
+so on connect() the requested window is clamped back to tcp_full_space(sk)
+(~64KB at the default rcvbuf) and the program's value is ignored.
 
-also, bpf_patch_insn_single doesn't support deleting an instruction,
-we have to have BPF_JMP_A?
+Inflate full_space in tcp_connect_init() as well; tp->advmss is the mss the
+listener path uses (both are tcp_mss_clamp(tp, dst_metric_advmss(dst))).
+Read full_space after tcp_rwnd_init_bpf() so a program that also adjusts
+SO_RCVBUF is still reflected. Compute the inflated value in u64 and clamp
+to INT_MAX to avoid overflow (full_space is int, rcv_wnd is u32), and
+apply the same overflow fix to the existing listener-side computation.
 
+tcp_select_initial_window() itself also computes init_rcv_wnd * mss in
+32-bit when clamping the offered window down to the requested value. A
+large requested window (init_rcv_wnd greater than ~2.9M segments at
+1460 mss) wraps this multiply and collapses the offered window to a tiny
+value, so compute it in u64 as well.
 
-> +
->  int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *=
-insn,
->                      struct bpf_insn *insn_buf, int insn_idx, int *cnt)
->  {
-> @@ -19971,6 +19983,8 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env =
-*env, struct bpf_insn *insn,
->                 *cnt =3D inline_bpf_iter_num_new(insn_buf);
->         } else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_iter_nu=
-m_next]) {
->                 *cnt =3D inline_bpf_iter_num_next(insn_buf);
-> +       } else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_iter_nu=
-m_destroy]) {
-> +               *cnt =3D inline_bpf_iter_num_destroy(insn_buf);
->         }
->
->         if (env->insn_aux_data[insn_idx].arg_prog) {
-> --
-> 2.53.0-Meta
->
+Fixes: 13d3b1ebe287 ("bpf: Support for setting initial receive window")
+Suggested-by: Eric Dumazet <edumazet@google.com>
+Suggested-by: Paolo Abeni <pabeni@redhat.com>
+Suggested-by: Sashiko <sashiko-bot@kernel.org>
+Signed-off-by: Tejas Birajdar <tejasbirajdar@meta.com>
+---
+v3:
+  - Also compute init_rcv_wnd * mss in u64 in tcp_select_initial_window();
+    a large requested window otherwise overflows the 32-bit multiply and
+    collapses the offered window.
+v2: https://lore.kernel.org/netdev/20260723214208.3655474-1-tejasbirajdar@meta.com/
+  - Compute the inflated full_space in u64 and clamp to INT_MAX in both the
+    connect and listener paths; read full_space after tcp_rwnd_init_bpf().
+v1: https://lore.kernel.org/netdev/20260722170033.2763794-1-tejasbirajdar@meta.com/
+
+Verified on the connect path with packetdrill: the offered initial window
+now tracks the BPF-requested value, and a large request that previously
+overflowed no longer collapses it. No new failures in the in-tree
+packetdrill selftests.
+
+ net/ipv4/tcp_minisocks.c | 4 ++--
+ net/ipv4/tcp_output.c    | 8 ++++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+index ddc4b17a826b..f8c1123aba43 100644
+--- a/net/ipv4/tcp_minisocks.c
++++ b/net/ipv4/tcp_minisocks.c
+@@ -453,8 +453,8 @@ void tcp_openreq_init_rwin(struct request_sock *req,
+ 	rcv_wnd = tcp_rwnd_init_bpf((struct sock *)req);
+ 	if (rcv_wnd == 0)
+ 		rcv_wnd = dst_metric(dst, RTAX_INITRWND);
+-	else if (full_space < rcv_wnd * mss)
+-		full_space = rcv_wnd * mss;
++	else if (full_space < (u64)rcv_wnd * mss)
++		full_space = min_t(u64, (u64)rcv_wnd * mss, INT_MAX);
+ 
+ 	/* tcp_full_space because it is guaranteed to be the first packet */
+ 	tcp_select_initial_window(sk_listener, full_space,
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index d7c1444b5e30..fcaa04e65189 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -251,7 +251,7 @@ void tcp_select_initial_window(const struct sock *sk, int __space, __u32 mss,
+ 		(*rcv_wnd) = space;
+ 
+ 	if (init_rcv_wnd)
+-		*rcv_wnd = min(*rcv_wnd, init_rcv_wnd * mss);
++		*rcv_wnd = min_t(u64, *rcv_wnd, (u64)init_rcv_wnd * mss);
+ 
+ 	*rcv_wscale = 0;
+ 	if (wscale_ok) {
+@@ -4103,6 +4103,7 @@ static void tcp_connect_init(struct sock *sk)
+ 	const struct dst_entry *dst = __sk_dst_get(sk);
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	__u8 rcv_wscale;
++	int full_space;
+ 	u16 user_mss;
+ 	u32 rcv_wnd;
+ 
+@@ -4137,10 +4138,13 @@ static void tcp_connect_init(struct sock *sk)
+ 		WRITE_ONCE(tp->window_clamp, tcp_full_space(sk));
+ 
+ 	rcv_wnd = tcp_rwnd_init_bpf(sk);
++	full_space = tcp_full_space(sk);
+ 	if (rcv_wnd == 0)
+ 		rcv_wnd = dst_metric(dst, RTAX_INITRWND);
++	else if (full_space < (u64)rcv_wnd * tp->advmss)
++		full_space = min_t(u64, (u64)rcv_wnd * tp->advmss, INT_MAX);
+ 
+-	tcp_select_initial_window(sk, tcp_full_space(sk),
++	tcp_select_initial_window(sk, full_space,
+ 				  tp->advmss - (tp->rx_opt.ts_recent_stamp ? tp->tcp_header_len - sizeof(struct tcphdr) : 0),
+ 				  &tp->rcv_wnd,
+ 				  &tp->window_clamp,
+-- 
+2.53.0-Meta
+
