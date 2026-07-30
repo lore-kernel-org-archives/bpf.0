@@ -1,55 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8CE470431;
-	Thu, 30 Jul 2026 23:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17574746BE;
+	Thu, 30 Jul 2026 23:16:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785453206; cv=none; b=T7WpFuBhMcKsNL3SnYVvg5tVaLKCO05uFGXpSOcslpZopKgjINIBP5YlmdqNafrjl0oR+WQwV30cKpKaxK8lbyuRvvvYCiHHLjpAHfkdd9sT4KLsq81oiiyWH0fd6H9JW0TdaP3nnwIEBSnmrbt6hFM4qSWz6Cn/iQRwAG/lgTI=
+	t=1785453395; cv=none; b=rVyox/pdPEokEJgPI0d5t8k8m9xDJAC5GpgITXvTLujknNCU9wuzCXAUEMjNMecy1IVp/bFETY+BYeLaJY9dmFgtMo7VYo/vj7/C0i1R06T/8VkNLl6Aigm2mqKtG93+1tZ0Ge7N3+UcsKXFqjH8+YlxyvvU38wY4sHU4hG0myg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785453206; c=relaxed/simple;
-	bh=avxepvZWWju9S7sHePRsNaozNupgLVuPcY9AFQUoQls=;
+	s=arc-20240116; t=1785453395; c=relaxed/simple;
+	bh=36kYkotD8232ypRfirwVZhUMIect2XGvgSaIGIyh4rQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DLIrWr2xjW2N3lCZsrSn8iIg5eSLNua1a+a1we1VX/f7RVCHPonTNdUTsKdX8IphLE5XaVLiIt7uFU6Of5bWgnXZf7jjnISqPGPPyegJliVToBjr5T+EFb2695+wF+D+V7izB82ZNhJHzYzhrSqJ2HynY9eS1/4BNl33lv+rHV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WK+wCzpB; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=YzQnmd++rC51pF2WW+5wbQcKcmqhW4YnrdY0LzBpbaVhC6gw0Gi1bSWR0itrnzcX92u7rRyUdlr6lSf9vlmpDLSiQvs+47+CLVr7Av95gPpHxJnfXxq7OahXpw/RP/GDoiXxW2wtn7+qutc3KME4WMd4YdkNBXhodikoh1GhthI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DKBAehAq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WK+wCzpB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC601F000E9;
-	Thu, 30 Jul 2026 23:13:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DKBAehAq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66BDD1F000E9;
+	Thu, 30 Jul 2026 23:16:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785453204;
-	bh=l3JegJnkroH/Y9kwd0pWelpz0EiOXDJ6YnZdI9R3F0k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=WK+wCzpBsLbH6FC4gbaY6beR0/fFuzz5P+DCY/UXVeCbI5z2ByCNglf/K1DmkfznQ
-	 yf5OI5Ds0rIfDagDLa0RaJZkrQvrtiSZSUfcWLy0QPH1TvvTd+szToa8HLhJ+ybMLO
-	 o6YDuOkoO4SJGb6TWoe4Jt1zQ4fdwsTU6q3zFPGIKGVDhcOLFYWGL7cXA+YESVrX99
-	 GIPFj/tKDsZvN/oxIZvxOKCOBxtDbxxkGSZISXKbex/AIJk4uvq4nW0+8RWlUdMIHA
-	 hPHSLFzgVDesiuzU+u4JuUTd8RfTH6AT2benCMCnLGgEyoOzKESyjamXcKYnPAZOh3
-	 bDYfGyRWTlUEg==
-Date: Thu, 30 Jul 2026 16:13:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
-	Juergen Christ <jchrist@linux.ibm.com>,
-	Ilya Leoshkevich <iii@linux.ibm.com>,
-	Dominik Steenken <dost@de.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Maxim Khmelevskii <max@linux.ibm.com>,
-	Jens Remus <jremus@linux.ibm.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <kees@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+	s=k20260515; t=1785453393;
+	bh=pz7js+sw+oGFa3XXwr87Lwi5nwnCOQLMdwo5OYMhKOI=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=DKBAehAqh+FWn2+2t465MzHwhgA0UJytnSQpcuvINZgzdSI4Q8UD7+EsoAJ+j7IGo
+	 ApKpRXzTNfCc3COocftZzOcen+jHkQjXqCnV1BcwEcbUHoJrUnepZWBuNZOA1FCNsv
+	 SG3CMOCeOyiJ+YYC/jUFneyCIVoERlbBnYfDVP2UiMyoeq7EUTsy6TB9BmLcJnQl/I
+	 BgLa+fNtJfT//HdLV6bx/NMqUQbvyZr10hP5Z5SPRKCj7y46S6qiKBgI9ud46M6a3T
+	 zeN9EqGt/MXxXPaOW8HUYIJ+1F3BhCKvQVUDEVFDlVeyEqlQo/gQZOv4WKA8qHUYPM
+	 ds2GSBD2nqMzw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 2B348CE0F69; Thu, 30 Jul 2026 16:16:33 -0700 (PDT)
+Date: Thu, 30 Jul 2026 16:16:33 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Zqiang <qiang.zhang@linux.dev>
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, llvm@lists.linux.dev,
-	bpf@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] s390: Add kCFI support
-Message-ID: <20260730231317.GA2423962@ax162>
-References: <20260727140514.116501-1-hca@linux.ibm.com>
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Matt Fleming <mfleming@cloudflare.com>,
+	"Harry Yoo (Oracle)" <harry@kernel.org>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH 1/6] rcu: Make call_rcu() safe to call from any context
+Message-ID: <f1ab8c9b-6c81-4603-bf1c-6097f8864c77@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260729162207.1567770-1-puranjay@kernel.org>
+ <20260729162207.1567770-2-puranjay@kernel.org>
+ <6ad0805c551a62283dca666fbace7302e2236e3a@linux.dev>
+ <26382afc-4dde-4d2e-ba62-39f12010a3e1@paulmck-laptop>
+ <8884edd1f124bcae9e8197e33cb7fbd63ad429f0@linux.dev>
+ <125e6af2-e09f-49b4-9dca-5c216e632665@paulmck-laptop>
+ <9a11a80b88e62b5cf4112970017087a787f1fdea@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,50 +73,225 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260727140514.116501-1-hca@linux.ibm.com>
+In-Reply-To: <9a11a80b88e62b5cf4112970017087a787f1fdea@linux.dev>
 
-On Mon, Jul 27, 2026 at 04:05:07PM +0200, Heiko Carstens wrote:
-> v2:
-> - Select ARCH_USES_CFI_GENERIC_LLVM_PASS [Nathan Chancellor]
-> - Add CONFIG_FUNCTION_GRAPH_TRACER guard to ftrace stub [bot+bpf-ci]
-> - Add additional CFI offset adjustments to bpf code [sashiko-bot]
-> - Move bpf patch before ARCH_SUPPORTS_CFI is selected, since there are
->   functions with missing __bpfcall atttribute [sashiko-bot]
+On Thu, Jul 30, 2026 at 11:05:35PM +0000, Zqiang wrote:
+> > 
+> > On Thu, Jul 30, 2026 at 10:40:21PM +0000, Zqiang wrote:
+> > 
+> > > 
+> > > On Thu, Jul 30, 2026 at 12:20:54PM +0000, Zqiang wrote:
+> > >  
+> > >  > 
+> > >  > call_rcu() touches its per-CPU callback list only with interrupts
+> > >  > disabled: the enqueue runs under local_irq_save() (plus the nocb locks
+> > >  > when offloaded), as do callback invocation and grace-period work. A
+> > >  > call_rcu() that arrives with interrupts already disabled may be
+> > >  > interrupting one of those, so enqueuing directly could corrupt the list
+> > >  > or deadlock -- as an NMI or re-entrant instrumentation can.
+> > >  > 
+> > >  > Defer in that case: stage the callback on a per-CPU llist and kick an
+> > >  > irq_work that re-issues it once interrupts are back on, going straight to
+> > >  > the enqueue so it cannot defer again. Callers that merely hold interrupts
+> > >  > off are deferred too, which is harmless. Skip the gate while the
+> > >  > scheduler is down (RCU_SCHEDULER_INACTIVE): irq_work is not usable until
+> > >  > init_IRQ(), yet rcu_init() already calls call_rcu().
+> > >  > 
+> > >  > rcu_barrier() flushes pending deferred callbacks first: it waits out each
+> > >  > online CPU's irq_work and drains an offline CPU's list directly, as that
+> > >  > irq_work may never run again. rcutree_migrate_callbacks() also drains an
+> > >  > outgoing CPU's ->defer_head, so a callback deferred late in the offline
+> > >  > path runs even without an rcu_barrier(). The irq_work is
+> > >  > IRQ_WORK_INIT_HARD so the re-issue runs promptly and callbacks do not back
+> > >  > up; on PREEMPT_RT a non-HARD irq_work would run in a kthread that can be
+> > >  > delayed under load. A new hidden CONFIG_RCU_DEFER gates the code and the
+> > >  > IRQ_WORK dependency; without it call_rcu() enqueues directly as before.
+> > >  > 
+> > >  > Under CONFIG_PROVE_RCU, warn if the direct path is reached from NMI, which
+> > >  > would mean interrupts were enabled on NMI entry.
+> > >  > 
+> > >  > Suggested-by: Paul E. McKenney <paulmck@kernel.org>
+> > >  > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> > >  > ---
+> > >  > kernel/rcu/Kconfig | 6 +++
+> > >  > kernel/rcu/rcu.h | 15 ++++++
+> > >  > kernel/rcu/tree.c | 120 +++++++++++++++++++++++++++++++++++++++++----
+> > >  > kernel/rcu/tree.h | 5 ++
+> > >  > 4 files changed, 136 insertions(+), 10 deletions(-)
+> > >  > 
+> > >  > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> > >  > index f15da8038d0ba..1a5fb3156c062 100644
+> > >  > --- a/kernel/rcu/Kconfig
+> > >  > +++ b/kernel/rcu/Kconfig
+> > >  > @@ -175,6 +175,12 @@ config RCU_STALL_COMMON
+> > >  > config RCU_NEED_SEGCBLIST
+> > >  > def_bool ( TREE_RCU || TREE_SRCU || TASKS_RCU_GENERIC )
+> > >  > 
+> > >  > +# The deferral (and the IRQ_WORK it uses) is only needed where call_rcu() /
+> > >  > +# call_srcu() can be invoked while a callback-list operation is in flight.
+> > >  > +config RCU_DEFER
+> > >  > + def_bool HAVE_NMI || KPROBES || FUNCTION_TRACER || TRACEPOINTS
+> > >  > + select IRQ_WORK
+> > >  > +
+> > >  > config RCU_FANOUT
+> > >  > int "Tree-based hierarchical RCU fanout value"
+> > >  > range 2 64 if 64BIT
+> > >  > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> > >  > index 39a9f6fa9a7b2..ed6604445f2ac 100644
+> > >  > --- a/kernel/rcu/rcu.h
+> > >  > +++ b/kernel/rcu/rcu.h
+> > >  > @@ -572,6 +572,21 @@ static inline void tasks_cblist_init_generic(void) { }
+> > >  > #define RCU_SCHEDULER_INIT 1
+> > >  > #define RCU_SCHEDULER_RUNNING 2
+> > >  > 
+> > >  > +/*
+> > >  > + * Should a call_rcu()/call_srcu() callback be deferred rather than enqueued
+> > >  > + * now? Defer whenever interrupts are disabled: a callback-list operation may
+> > >  > + * be in flight on this CPU, so enqueuing now could corrupt it. But not while
+> > >  > + * the scheduler is down -- early boot is single-threaded and can call this
+> > >  > + * before init_IRQ() makes irq_work usable (e.g. rcu_init()'s self-tests).
+> > >  > + */
+> > >  > +static inline bool should_rcu_defer(void)
+> > >  > +{
+> > >  > + if (!IS_ENABLED(CONFIG_RCU_DEFER))
+> > >  > + return false;
+> > >  > +
+> > >  > + return irqs_disabled() && rcu_scheduler_active != RCU_SCHEDULER_INACTIVE;
+> > >  > +}
+> > >  > +
+> > >  > enum rcutorture_type {
+> > >  > RCU_FLAVOR,
+> > >  > RCU_TASKS_FLAVOR,
+> > >  > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > >  > index 21b6ce1dffb63..93c4242345e67 100644
+> > >  > --- a/kernel/rcu/tree.c
+> > >  > +++ b/kernel/rcu/tree.c
+> > >  > @@ -24,6 +24,7 @@
+> > >  > #include <linux/smp.h>
+> > >  > #include <linux/rcupdate_wait.h>
+> > >  > #include <linux/interrupt.h>
+> > >  > +#include <linux/llist.h>
+> > >  > #include <linux/sched.h>
+> > >  > #include <linux/sched/debug.h>
+> > >  > #include <linux/nmi.h>
+> > >  > @@ -3148,21 +3149,27 @@ static void check_cb_ovld(struct rcu_data *rdp)
+> > >  > raw_spin_unlock_rcu_node(rnp);
+> > >  > }
+> > >  > 
+> > >  > -static void
+> > >  > -__call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy_in)
+> > >  > +/*
+> > >  > + * The callback list is only ever accessed with interrupts disabled (enqueue,
+> > >  > + * callback invocation, grace-period work). A call_rcu() with interrupts already
+> > >  > + * disabled may interrupt one of those, so __call_rcu_common() defers: the
+> > >  > + * callback is staged on a per-CPU llist that an irq_work re-issues once
+> > >  > + * interrupts are on. Only CONFIG_RCU_DEFER kernels can hit this.
+> > >  > + */
+> > >  > +static void rcu_defer_drain(struct irq_work *iw);
+> > >  > +
+> > >  > +/*
+> > >  > + * Enqueue @head on this CPU's rcu_segcblist. Also called by rcu_defer_drain()
+> > >  > + * to re-issue a deferred callback, so it must not re-check the deferral
+> > >  > + * condition. Either caller may have interrupts already disabled.
+> > >  > + */
+> > >  > +static void rcu_do_enqueue(struct rcu_head *head, rcu_callback_t func, bool lazy_in)
+> > >  > {
+> > >  > static atomic_t doublefrees;
+> > >  > unsigned long flags;
+> > >  > bool lazy;
+> > >  > struct rcu_data *rdp;
+> > >  > 
+> > >  > - /* Misaligned rcu_head! */
+> > >  > - WARN_ON_ONCE((unsigned long)head & (sizeof(void *) - 1));
+> > >  > -
+> > >  > - /* Avoid NULL dereference if callback is NULL. */
+> > >  > - if (WARN_ON_ONCE(!func))
+> > >  > - return;
+> > >  > -
+> > >  > if (debug_rcu_head_queue(head)) {
+> > >  > /*
+> > >  > * Probable double call_rcu(), so leak the callback.
+> > >  > @@ -3206,6 +3213,83 @@ __call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy_in)
+> > >  > local_irq_restore(flags);
+> > >  > }
+> > >  > 
+> > >  > +/*
+> > >  > + * Re-issue deferred callbacks, going straight to the enqueue so they cannot
+> > >  > + * defer again. defer_lock is held across llist_del_all() and the re-issue so
+> > >  > + * the drainers -- this CPU's irq_work, rcu_defer_flush() and
+> > >  > + * rcutree_migrate_callbacks() -- serialize and never leave a callback off
+> > >  > + * ->defer_head yet not on a callback list.
+> > >  > + */
+> > >  > +static void rcu_defer_drain(struct irq_work *iw)
+> > >  > +{
+> > >  > + struct rcu_data *rdp = container_of(iw, struct rcu_data, defer_work);
+> > >  > + struct llist_node *node, *next;
+> > >  > + unsigned long flags;
+> > >  > +
+> > >  > + raw_spin_lock_irqsave(&rdp->defer_lock, flags);
+> > >  > + llist_for_each_safe(node, next, llist_del_all(&rdp->defer_head)) {
+> > >  > + struct rcu_head *head = (struct rcu_head *)node;
+> > >  > +
+> > >  > + rcu_do_enqueue(head, head->func, false);
+> > >  > + }
+> > >  > + raw_spin_unlock_irqrestore(&rdp->defer_lock, flags);
+> > >  > +}
+> > >  > +
+> > >  > +/* Stage @head for this CPU's irq_work when call_rcu() cannot enqueue now. */
+> > >  > +static void call_rcu_defer(struct rcu_head *head, rcu_callback_t func)
+> > >  > +{
+> > >  > + struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
+> > >  > +
+> > >  > + head->func = func;
+> > >  > + if (llist_add((struct llist_node *)head, &rdp->defer_head))
+> > >  > + irq_work_queue(&rdp->defer_work);
+> > >  > 
+> > >  > If current CPU is isolation and nozh_full, maybe we should avoid to
+> > >  > queue irq_work to current CPUs(include srcu, tasks-rcu) ?
+> > >  > 
+> > >  > Maybe can wrap a helper function:
+> > >  > 
+> > >  > bool rcu_irq_work_queue(struct irq_work *iw) 
+> > >  > {
+> > >  > if (in_nmi())
+> > >  > return irq_work_queue(iw);
+> > >  > 
+> > >  > int cpu = smp_processor_id();
+> > >  > if (!housekeeping_test_cpu(cpu, HK_TYPE_KERNEL_NOISE))
+> > >  > cpu = housekeeping_any_cpu(HK_TYPE_KERNEL_NOISE);
+> > >  > 
+> > >  > return irq_work_queue_on(iw, cpu);
+> > >  > }
+> > >  > 
+> > >  You lost me on this one. We cannot invoke call_rcu() and friends unless
+> > >  we are running in kernel context, so usermode operation has already
+> > >  been interrupted, perhaps due to a configuration error that failed to
+> > >  direct interrupts away from the current CPU. In that case, is the added
+> > >  disruption of the irq-work really worth worrying about?
+> > >  
+> > >  The irqs_disabled() can return true, even if we not in hardirq context,
+> > >  for example, before this we invoke local_irq_save() to disable local
+> > >  CPU's irq.
+> > >  If a userspace application bound to isolate and nohz_full CPUS, and
+> > >  cycle enters the kernelspace do wakeup. we use ebpf hook tracepoint in 
+> > >  try_to_wake_up(), in ebpf code, the call_rcu() or call_srcu() check
+> > >  irq_disabled() return true, enter defer path, trigger irq_work to current
+> > >  CPUs, can make some noise.
+> > >  
+> > >  Did I miss something?
+> > > 
+> > No, what you described really can happen, but only if the application
+> > does a system call that does a fair amount of work. In that case,
+> > is the overhead of the irq-work measureable compared to the total
+> > system-call overhead?
+> > 
+> > Don't get me wrong, it might well be measureable. But I do need to see
+> > hard numbers to justify the added complexity.
 > 
-> v1:
-> Add s390 kCFI support using the generic support provided by clang.
-> This comes with a couple of limitations:
+> Ok, I see.  
 > 
-> The generic kCFI implementation does not generate a .kcfi_traps section,
-> nor is a special instruction used in case a checksum mismatch is detected.
-> 
-> This means in case of a checksum mismatch the kernel just crashes.
-> It should be quite easy to tell by the surrounding code that a crash
-> happened because of a checksum mismatch.
-> 
-> If clang and/or gcc provide a .kcfi_traps section it will be possible to
-> print proper CFI messages instead of just crashing the kernel (enable
-> ARCH_USES_CFI_TRAPS).
-> 
-> In addition this also means that CFI_PERMISSIVE does not work. Even if the
-> option is selected the kernel will crash in case of a checksum mismatch.
-> 
-> However it seems to be acceptable to enable kCFI support to the kernel now
-> even if it is not perfect. Later s390 specific clang and gcc extensions are
-> required to improve this.
+> We have similar scenarios on our product, I'm trying to measure it.
 
-Yes, getting coverage over s390 specific code and drivers is worthwhile,
-even if there is no architecture specific expansion available yet, since
-most problems should be visible with either implementation. Getting that
-sooner rather than later would be nice to avoid the panic when a CFI
-check fails and make debugging easier but we will take what we can get.
+Looking forward to seeing what you come up with!
 
-I tested clang-18 and clang-23 with defconfig + CFI, which both properly
-fails the CFI_FORWARD_PROTO LKDTM test. I built allmodconfig (which now
-includes CFI=y) with both compilers, which showed no issues.
-
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
--- 
-Cheers,
-Nathan
+							Thanx, Paul
