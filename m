@@ -1,153 +1,231 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4B93AFCE3;
-	Thu, 30 Jul 2026 23:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785455734; cv=none; b=JXwrJrRI4yUjxI6GL+nMlkyGBemFnHIT4Kzo+sN0yzAe3wFVgPeB5fRzDA5v7nNmdCT4jJy0wDNuiqi/6Ubu3TDHBmHFF9mO3l4TEqPb6ObAfADn/yTgfjVAxIZyiEh5aB6F0vb2MrfUaqGNqk8MmZbafHWd2GOrQiS0vieOTRQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785455734; c=relaxed/simple;
-	bh=SHi8hrGUVMlXpUQThGcl02Kp25AXCrQA3skq36nYaNw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nx0VmoTbR5tFanPSHvjwLuS/04B7PX6uRI9+Y4GMGPs7SWQhzjotyUrqBnYGa56J6DPouitu1xvP9iNVxiWRBH/KmHjNuUjJ5LhEyd1QXk58zZ6Jr0CC0cpO+SRtWGlQQR3V+TKsaz68cUvxWHDwIH/8nRqTmexxHLPUQHgjbgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eDLKaG8l; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA8E3ABD88
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 23:55:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785455739; cv=pass; b=UZAme7xJMHoTA6kYILQs15yb+MLb9Vp0vq5gh0pR5tKb7UtBBV2CAc96Y5aq9lDNNQRpjmQkc8MHXfmRNBwS7a7Qd6L3uZ34bQvSH2zohNcU5ffZOUIEr6j4SPco1XLn0E/3gMtUErmmoEfv9NKWisrwjiMI65AoDzLmMRA7EWM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785455739; c=relaxed/simple;
+	bh=hV5KLaAmEHz7Ic3f8xOxjqxj04qxIB9m3dv29dZ9WV4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=msnuSCXHQB1kSMSt8l3ldJtZvuzCc0WqsvODyTQI9PLbiUvBDCIukuZ57JoXmzLH80SaS4ZnaZedaZKbZxKYhleKXu2EPMP3KNYuk+PjXQteiwEJEaAhGmQhPhbM1TutUUVaSveK/OuroB87hc3Lv9TPmBL+XML21e/uOknSULs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QlGabdku; arc=pass smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eDLKaG8l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02691F000E9;
-	Thu, 30 Jul 2026 23:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785455732;
-	bh=enAXmSOcZALStM88krp1E0Bemr2SIz+zXReAN6uGbt4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eDLKaG8lWRAEDtU9loukW/gsRMvzKbo8TXu8cG3OXRbTigJvL8sG9+OQJrLodvUKn
-	 RdCDhKXgmMKVAEefvOHkNEScUof+vmD45v4aaJby1yKPjfP7fXvkYwr3cSlqYit8NB
-	 bLVlDpoz9rf8+5Y4tAFhOsCHbR3AmliZMXCIaIrr6AeqtSaEnEPn5HXEcT6LtAFC4V
-	 xvuzumsT2kfr7xOAZM5Cimp7lttItwKyDN7L4h28w3jKIWsWUy/U5loFOrT1vTCbYx
-	 3wCLVthCeGdwZkiXZ3V1WpjL+Bg5LbxKk3p5mKzm+ikveTuwnpdwQrKNPLbA1jwFiX
-	 nM7xowUxg7zgg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 bpf-next 4/4] selftests/bpf: add tests for
- bpf_init_inode_xattr kfunc
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "David Windsor" <dwindsor@gmail.com>
-Cc: selinux@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260730234533.1912709-5-dwindsor@gmail.com>
-References: <20260730234533.1912709-1-dwindsor@gmail.com>
- <20260730234533.1912709-5-dwindsor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 30 Jul 2026 23:55:32 +0000
-Message-Id: <20260730235532.B02691F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QlGabdku"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84861fc51f5so337802b3a.1
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 16:55:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785455737; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Iyca5/U4SmuftLT6+lYcLTFUoS823RQbMovGyCIao6cTj0girP9ASdNQddLM+4FoNq
+         YEbbevUmRT+KrLnS2Ctms8f99671UAkFRXrLG4Vwi1dDyq2KhWliacoDqOFFDimbVVFV
+         TWoPGFkiD4UZnJQBUNbMRFO4tSkt6g9Y5BJ8uyNh7LzpQ2PdA/c4eoruqmWMNW/muirX
+         2/BgDDVy5A4ri2GSGw7sEoB4ZIoE4pcTfgQarNxeFpACG7sYHZe+Q6sn9jPmtbm2vpqV
+         Kmv+uA0mQUQT7ME3pClTtfMULQb69xCkoRGB9x+k62gsGCI4SKkWRO1jun378OMAVAyP
+         tmWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=CCRaa9xG8Lu3CwSdJQLZiNXOhmRsZ3XnJvX/nF5Nkg0=;
+        fh=wuZdHJzBerA61ub8T2GrIbsGHZ9BgIt3I3k/cIziLbs=;
+        b=LM9yuFZNCWMHuMftPFQj90hCePohYpY9p6U5Rr4eBuepGujYuBvFm7rZWLknt8s7Ga
+         k3n14c3vb7MGaWQMhsu+50g+2yHGtT/Ki/ZHCpUBiyqbLgmMQLGapuu3RLtr4PFC0PKP
+         GW8pDPfEHhUoWbtRkQyBfMKwSGaV1eEq1ciA3T2CyeAaxj32gLdrtiiW4pjhbOsggazd
+         1izdRGmZRJfCdVyLI+fUuueflIWRYX/Wk7/erhKMkmULGVUDf/7/gZglVsDne3uCalrv
+         xtjXm0fA1GXSdWNdPJMdViyjRNOXNRTNtnlIaOJRZ5IndOgYeIbd4yE2NCROyEI0jRhT
+         5k2Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785455737; x=1786060537; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=CCRaa9xG8Lu3CwSdJQLZiNXOhmRsZ3XnJvX/nF5Nkg0=;
+        b=QlGabdku0Tis2lK4OWjEHuAAYzLt5MjAmJv+VTLvMrizha141ZO7yF1h9JI0lff6tj
+         +RuzrwXFAJVnhw/EydgI1F90qWzEC2WCGMhg9YaSFls4tMYM82jiTDDVP6ykMnnVDUJf
+         4cxo2I8OA1E0t8JYZw43QMgeUa03svKz1ykf1gCO41Phw6szNf9JzUrC88VNMn3ExdBe
+         ILqNKZfNEomBfgkRqqywfenbajbOi5O3MGQkvOJn+P3jUq1t08xH+z4Offq3nvZMoyge
+         bSlvmxLmBFAd3mkPgoXBmoh+ohPXrSqSMfSXOOPOFqrwH5ltT3dSy34lXvxHU1GsztQL
+         W1XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785455737; x=1786060537;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CCRaa9xG8Lu3CwSdJQLZiNXOhmRsZ3XnJvX/nF5Nkg0=;
+        b=E5brS2OyOJVyWSMkE/qpZwx+SV0dsIaKm3OhFrekHKQFaPb5s2972PlVn7zoo8a5mW
+         YZA9TauVDjO4iHmVlbgg4Qn/3+gslVY/CW5kEom5V4ARK4nQ7G6MTOw/Emf3J5Nn+iQK
+         8zi08RZ8DPk73C+Apz/h22jzAipk+LbHxnxxt7t/Oqi6IB7ZA2z6WEG4oG+9WjqX2V7y
+         Td2LvBVoi1uFVCdA0eVVZf6Z8pmcUolHFSS2xf+NwjAAOm7qjfFExj8nosChlbiAfcrE
+         jzHbYNEZ5o88Tx4WCY2mz35iwlCCl/byyxfpWsjhlwqUeDY+SmmqTMJvl2eQqLZtcMwn
+         w9MQ==
+X-Gm-Message-State: AOJu0Yw0yAcTlqu0ruoALMS/Gr6Gq3nUFRViXU7qMkzynnUwoP9iO7yn
+	JAmP93lJM9BMH4VjSCYFWK2VGuE91pXuSvEwtGjCvV94fnPC+MRbnmZPkZwiK9s11gRSxr8EGox
+	PrSdMiVTG8p/QVe/CohQsFFk8jkglGIM=
+X-Gm-Gg: AR+sD11SOFNw3dl688Gx2LF9xoAxhGZHCpHltWXUOlOICDDPZkAbM3i8WCNeSbo1D8K
+	4HjdaombAiZ9cmgb656GAzS9zZ1p/EySnsDhqwpquQwk85v+m/Qmt2e3uMtNjzjHooAct2kDrfa
+	cz4M4PR1pXVfdjy4rWmknEsS8+8S9E6L5f6egpSG3SwHM5/G2lEfOSmfz0lLTogcxJVNmnQXBE3
+	jMvA0SqY0jl48YM1/cX+FRvt/xgs50pBDWmmPMUQfboE8aSEkr1CCILFLwoTHyJCLAfcqOPIGf5
+	RUrHFYRcofBymJKe70YpZc1/2MqjkEjGR3usmjFFjA6R/vIi0/Oekmjg2hv8ddJJYl0R1dlKo91
+	8SPgcAIUr6dViseC6Uv5FFe+w1LWYa8/MR/+ZNsIviA==
+X-Received: by 2002:a05:6a00:cce:b0:847:8e98:9a4b with SMTP id
+ d2e1a72fcca58-84ebc2422a4mr4253539b3a.34.1785455737231; Thu, 30 Jul 2026
+ 16:55:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260730-b4-fix_btf_tracefs-v1-1-5f10b728f51e@meta.com>
+In-Reply-To: <20260730-b4-fix_btf_tracefs-v1-1-5f10b728f51e@meta.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 30 Jul 2026 16:55:22 -0700
+X-Gm-Features: AUfX_mz01KsvC0dTQTZpCMew9O6d6Q6PCq2A8CWuLf7bfi4pR2EqEu-Q6tBwvaU
+Message-ID: <CAEf4BzZXu=E-E+_DXukwuzdGAH6LwxhFuWkX5j6Os1YAn3Vtcg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] tracing: Make per-template BTF id lists file-local
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, rostedt@goodmis.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	memxor@gmail.com, linux-trace-kernel@vger.kernel.org, 
+	linux-next@vger.kernel.org, broonie@kernel.org, 
+	Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Silent test skipping if the testfile exists from a previous abor=
-ted run.
-- [Low] Multi-line comment does not follow the required BPF subsystem style.
---
+On Thu, Jul 30, 2026 at 5:52=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+> From: Mykyta Yatsenko <yatsenko@meta.com>
+>
+> DECLARE_EVENT_CLASS emitted __bpf_trace_btf_ids_<call> through
+> BTF_ID_LIST_GLOBAL, i.e. a global symbol named after the event class.
+> The class name is not unique across the kernel, so the symbol
+> multiply-defines whenever two translation units instantiate the same
+> class.
+>
+> Switch to the file-local BTF_ID_LIST: the list is reached
+> only through the event_class_<call>.btf_ids pointer, initialised in the
+> same unit, so tracefs readers never reference the symbol by name and
+> resolve_btfids still fills the now-local .BTF_ids entries.
+>
+> The handcrafted syscall classes are the one cross-unit consumer: give
+> them their own local BTF_ID_LIST rather than importing the generated
+> sys_{enter,exit} lists, which are now file-local.
+>
+> Fixes: eadc0725ab8d3 ("tracing: Expose tracepoint BTF ids via tracefs")
+> Reported-by: Mark Brown <broonie@kernel.org>
+> Closes: https://lore.kernel.org/all/ff58b01c-3f5e-4d55-be82-609d2faaf12e@=
+sirena.org.uk/
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+>  include/trace/trace_events.h  |  6 ++++--
+>  kernel/trace/trace_syscalls.c | 22 ++++++++++++++--------
+>  2 files changed, 18 insertions(+), 10 deletions(-)
+>
+> diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+> index 09ad57ac4b73..45ffbe04b580 100644
+> --- a/include/trace/trace_events.h
+> +++ b/include/trace/trace_events.h
+> @@ -404,10 +404,12 @@ static inline notrace int trace_event_get_offsets_#=
+#call(         \
+>   *   [0] FUNC   __bpf_trace_<call>     (the BPF dispatcher)
+>   *   [1] STRUCT trace_event_raw_<call> (the ring-buffer record)
+>   * Exposed via the events/<sys>/<name>/btf_ids tracefs file.
+> + *
+> + * File-local: the class name is not unique, so a global symbol would
+> + * clash across translation units.
 
---- Patch [4]: [PATCH v6 bpf-next 4/4] selftests/bpf: add tests for bpf_ini=
-t_inode_xattr kfunc ---
-commit a299ac47c44a77d98dbdf43f3ba7c981f13fd930
-Author: David Windsor <dwindsor@gmail.com>
+drop this comment? not super useful and file-local is default behavior
+for BTF_ID_LIST anyways
 
-selftests/bpf: add tests for bpf_init_inode_xattr kfunc
+>   */
+>  #define _TRACE_BTF_IDS_DECLARE(call)                                   \
+> -       extern u32 __bpf_trace_btf_ids_##call[];                        \
+> -       BTF_ID_LIST_GLOBAL(__bpf_trace_btf_ids_##call, 2)               \
+> +       BTF_ID_LIST(__bpf_trace_btf_ids_##call)                         \
+>         BTF_ID(func,   __bpf_trace_##call)                              \
+>         BTF_ID(struct, trace_event_raw_##call)
+>
 
-This commit adds selftests for BPF atomic inode xattr labeling in
-the inode_init_security hook.
+This should go into Steven's tree, not bpf-next, right?
 
-> --- a/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
+> diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.=
+c
+> index 48ef1a93e576..9b5931f2f280 100644
+> --- a/kernel/trace/trace_syscalls.c
+> +++ b/kernel/trace/trace_syscalls.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/ftrace.h>
+>  #include <linux/perf_event.h>
+>  #include <linux/xarray.h>
+> +#include <linux/btf_ids.h>
+>  #include <asm/syscall.h>
+>
+>  #include "trace_output.h"
+> @@ -1305,13 +1306,18 @@ struct trace_event_functions exit_syscall_print_f=
+uncs =3D {
+>
+>  #ifdef CONFIG_BPF_EVENTS
+>  /*
+> - * BTF id lists generated by DECLARE_EVENT_CLASS for the sys_enter and
+> - * sys_exit tracepoints. The auto-generated event_class_sys_{enter,exit}
+> - * is unused (per-syscall events share the handcrafted classes below),
+> - * but the id lists themselves are global and reusable.
+> + * BTF id lists for the shared sys_enter/sys_exit dispatcher tracepoints=
+,
+> + * resolved by resolve_btfids. Defined locally rather than importing the
+> + * DECLARE_EVENT_CLASS-generated lists, which are now file-local to the
+> + * translation unit that instantiates the tracepoint.
 
-[ ... ]
+drop "resolved by resolve_btfids", and drop the part about defined
+locally because file-local, too much Claude style
 
-> @@ -268,6 +269,155 @@ static void test_fsverity(void)
->  	remove(testfile);
->  }
-> =20
-> +static void test_init_inode_xattr(void)
-> +{
-> +	struct test_init_inode_xattr *skel =3D NULL;
-> +	int fd =3D -1, err;
-> +	char value_out[64];
+>   */
+> -extern u32 __bpf_trace_btf_ids_sys_enter[];
+> -extern u32 __bpf_trace_btf_ids_sys_exit[];
+> +BTF_ID_LIST(syscall_enter_btf_ids)
+> +BTF_ID(func,   __bpf_trace_sys_enter)
+> +BTF_ID(struct, trace_event_raw_sys_enter)
 > +
-> +	/* This test must be run from a fs that calls
-> +	 * security_inode_init_security().
-> +	 */
-
-[Severity: Low]
-This isn't a bug, but does this multi-line comment violate the BPF subsystem
-style guidelines? The guidelines prefer the opening /* on its own line:
-
-	/*
-	 * This test must be run from a fs that calls
-	 * security_inode_init_security().
-	 */
-
-> +	const char *testfile_new =3D "/dev/shm/test_progs_fs_kfuncs_new";
-> +
-> +	skel =3D test_init_inode_xattr__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "test_init_inode_xattr__open_and_load"))
-> +		return;
-> +
-> +	skel->bss->monitored_pid =3D getpid();
-> +	err =3D test_init_inode_xattr__attach(skel);
-> +	if (!ASSERT_OK(err, "test_init_inode_xattr__attach"))
-> +		goto out;
-> +
-> +	/* Trigger inode_init_security */
-> +	fd =3D open(testfile_new, O_CREAT | O_RDWR, 0644);
-
-[Severity: Medium]
-Could this result in silently skipping the test if the file already exists
-from a previous aborted run?
-
-By omitting O_EXCL, if the test file is already present, open() will not
-create a new inode. This means the inode_init_security hook won't trigger,
-and the test will hit the skip condition below. Should we use
-O_CREAT | O_EXCL | O_RDWR here to ensure we always create a new inode?
-
-> +	if (!ASSERT_GE(fd, 0, "create_file"))
-> +		goto out;
-> +
-> +	/*
-> +	 * Probably should not be needed as we will be labeling a file
-> +	 * in /dev/shm, but just in case we check if the hook was actually
-> +	 * called.
-> +	 */
-> +	if (!skel->bss->hook_ran) {
-> +		printf("%s:SKIP:inode_init_security hook was not invoked\n",
-> +		       __func__);
-> +		test__skip();
-> +		goto out;
-> +	}
-
-[ ... ]
-
-> +static void test_init_inode_xattr_slot_limit(void)
-> +{
-
-[ ... ]
-
-> +	/* Trigger inode_init_security once with all programs attached. */
-> +	fd =3D open(testfile_slot, O_CREAT | O_RDWR, 0644);
-
-[Severity: Medium]
-Does this face the same issue where a pre-existing file from a previous
-aborted run could cause the test to silently skip?=20
-
-Adding O_EXCL would guarantee the inode is created and the hook is
-triggered.
-
-> +	if (!ASSERT_GE(fd, 0, "create_file"))
-> +		goto out;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730234533.1912=
-709-1-dwindsor@gmail.com?part=3D4
+> +BTF_ID_LIST(syscall_exit_btf_ids)
+> +BTF_ID(func,   __bpf_trace_sys_exit)
+> +BTF_ID(struct, trace_event_raw_sys_exit)
+>  #endif
+>
+>  struct trace_event_class __refdata event_class_syscall_enter =3D {
+> @@ -1321,7 +1327,7 @@ struct trace_event_class __refdata event_class_sysc=
+all_enter =3D {
+>         .get_fields     =3D syscall_get_enter_fields,
+>         .raw_init       =3D init_syscall_trace,
+>  #ifdef CONFIG_BPF_EVENTS
+> -       .btf_ids        =3D __bpf_trace_btf_ids_sys_enter,
+> +       .btf_ids        =3D syscall_enter_btf_ids,
+>  #endif
+>  };
+>
+> @@ -1336,7 +1342,7 @@ struct trace_event_class __refdata event_class_sysc=
+all_exit =3D {
+>         .fields         =3D LIST_HEAD_INIT(event_class_syscall_exit.field=
+s),
+>         .raw_init       =3D init_syscall_trace,
+>  #ifdef CONFIG_BPF_EVENTS
+> -       .btf_ids        =3D __bpf_trace_btf_ids_sys_exit,
+> +       .btf_ids        =3D syscall_exit_btf_ids,
+>  #endif
+>  };
+>
+>
+> ---
+> base-commit: eadc0725ab8d38c05148fce49f8d5c6a0e01f062
+> change-id: 20260730-b4-fix_btf_tracefs-fdafda5fdb5b
+>
+> Best regards,
+> --
+> Mykyta Yatsenko <yatsenko@meta.com>
+>
