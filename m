@@ -1,56 +1,57 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADCB32C0261;
-	Thu, 30 Jul 2026 05:46:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F545331EDF;
+	Thu, 30 Jul 2026 05:46:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785390400; cv=none; b=NVagojjSUAock3vDUlkPFnzbsJ/0Yi/nCbWhSsTtyJOP/ILrGQ/EsgR6gDF6aXx32THzgR+sea2ifMrI63hdX3NnWwtnbYciqKFeZYLjMUN+QpWSxdLu9NViklLZQbFq+hitgdvJxtwZvcfp00Mqm0dAQA1oqp9esV4ptlWKAi4=
+	t=1785390403; cv=none; b=ibsejitSaumjtsbnw0IuM53O3xy3qCpDzApikkvpnFRKdR2K03O8Kd2cr3RVbXtpnTXMwuFDF7YPku9cp7f0rc7kkVGJqFrugOYrTW3NIVG68+3zewbT/11tImhoJ6EAqvqFIHN90UBmYsEF3k0cGP8Nas0kjQVOitPQL0pGxCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785390400; c=relaxed/simple;
-	bh=ZyyV1/VIB/5/GmK+31AaOGnwB0YC+nk9pnjkyBLgRN4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KnBvoLeVt0bHPbxu60TCaNaCC6XV4UQcm+WMS61P/W2xf2KtdYLnspq7GKvZWjQiylbQQVxvd5vdJnX5NyQpXNO5JK4EU/eeZ2sDvV+63tHn4UtTJmz3aV4+aaboEq9ZFhxo8pKX0GRcoXCGSqlZSMGxyhBvIi7buUs8+6GtIow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lvBHY093; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1785390403; c=relaxed/simple;
+	bh=bS/tVn+SGfaNFyKySS5zLI/EazofPS6dYGhJKU3nPj8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ub5Jj2qvqQqkO9Ui/lOF0p+CzSMakI5qbWkeHkvtB01l3skfzjn9t7WLD0BaLGL5ycLZsX6loCwGm12Y1N26/up8mDyV5DqhHf3YRGMPU7MsWFXdOAi5l6DOuhLdIGT6rn/uLwOpS5qllXcnKUX1ZGCS1jhKT07M3ER1m2Z3vXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=E/beDa0x; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lvBHY093"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66U3mAf21825092;
-	Thu, 30 Jul 2026 05:46:14 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="E/beDa0x"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66U3mWcY1949656;
+	Thu, 30 Jul 2026 05:46:17 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=Vk8qJ46qKbE3TIZrGVczuBO0DF0zm9W1gqqH2GnOO
-	R0=; b=lvBHY093tK1eFqAOq2NvF9ZzVHZtMT2QxLg/qSf9Q35TmJlWCz+79y4fA
-	HHDHuMelCuYQsCodkdZ4eo760MVwmWxQBf/wrKpiD8BaUKTftECmv/gVDBruCUyt
-	JWvUH4WEKWlxOPU1RW2ihUwZbW9KzuzK+R4f+mzUHJFNXvUbHrnTn/VOOatWD615
-	IvJkStNxaRvR3HroIB3B21MR3xFv7+4cEbJ2VLcoKIdHZgI8TAnd9NTuWKNNfV7O
-	Dww7RyIn93YnWyQjHKaUdInZROMaulxOIkBa6WAeUOpkkKgidnL2lWGEvmKRmNFn
-	x6anDhLxDm3hY8kBH97aezubnmuyQ==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fmuyjdbgm-1
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=lYQcFjm5Tz7CZkime
+	WHcrXDTk81MsYoSAgGM9iHh7D4=; b=E/beDa0xRk4usstUShlNxwoo2L7w+SE5Y
+	OrgaoE9eQjvdfTLrYvH3inhPbZ0hyYGb89i5WTHRKvlvsUu3HB1mjbbYPh0sdtwH
+	MueY/yHk0i+5z3RvcT0LG1zLBtMfDDyi7IioaEf4o/NLPrhg7f6b72PN47doPihV
+	3EEV2xvlJhBj04RZA5onKTmqmKXpXs4osWJQwDtbPd4M+Or9LuJZy5Sl+ckKZqCM
+	qBOdoUTAcVWR+4lhn3flgrbN/qMEYWpaCkj2vNtu7r1Gwk0t1nWdaqprHt3gyiRg
+	mqw9f9g6JDiX80L/z50Hi/sdHwffrWW8FekkftwaGubzel3DwAzOg==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fmuwd5c49-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jul 2026 05:46:13 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66U5fHwj024108;
-	Thu, 30 Jul 2026 05:46:12 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fn7uwa2hn-1
+	Thu, 30 Jul 2026 05:46:17 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66U5fKDn021706;
+	Thu, 30 Jul 2026 05:46:16 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fna5y9p33-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jul 2026 05:46:12 +0000 (GMT)
+	Thu, 30 Jul 2026 05:46:16 +0000 (GMT)
 Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66U5k8YE7733506
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66U5kCFJ29426012
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Jul 2026 05:46:08 GMT
+	Thu, 30 Jul 2026 05:46:12 GMT
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4A8E52004B;
+	by IMSVA (Postfix) with ESMTP id F22AA20040;
+	Thu, 30 Jul 2026 05:46:11 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AD7FC20043;
 	Thu, 30 Jul 2026 05:46:08 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C8BBF20040;
-	Thu, 30 Jul 2026 05:46:04 +0000 (GMT)
 Received: from li-1cb9f04c-2ae1-11b2-a85c-a8a0a83790a8.bl1-in.ibm.com (unknown [9.123.13.162])
 	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 30 Jul 2026 05:46:04 +0000 (GMT)
+	Thu, 30 Jul 2026 05:46:08 +0000 (GMT)
 From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org
@@ -58,10 +59,12 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
         memxor@gmail.com, hbathini@linux.ibm.com, chleroy@kernel.org,
         maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
         skb99@linux.ibm.com
-Subject: [PATCH v2 0/2] powerpc64/bpf: Fix PCREL build breaks
-Date: Thu, 30 Jul 2026 11:16:01 +0530
-Message-ID: <cover.1785339155.git.skb99@linux.ibm.com>
+Subject: [PATCH v2 1/2] powerpc64/bpf: Fix build break in bpf_jit_emit_func_call_rel()
+Date: Thu, 30 Jul 2026 11:16:02 +0530
+Message-ID: <e8e582fb425db165a72f00e3337cdf4c6ae383ad.1785387718.git.skb99@linux.ibm.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <cover.1785387718.git.skb99@linux.ibm.com>
+References: <cover.1785387718.git.skb99@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,67 +74,88 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMwMDAzMyBTYWx0ZWRfX0v4h06hZa1vP
- 7hHOBLr1JuGxvXw/8/5EjQHEVYpYKH9MwF8QqJbKvFP2FXhSTCp7rBLRgqroHQFoegBwoE+5+o/
- C3d7j5tM27BPO3CFBYWN5xf5jc0nP7I=
-X-Proofpoint-GUID: 7upmFhgn04MGLvDSNUPBL0UT8lHAZfcG
-X-Proofpoint-ORIG-GUID: 68m4NMtou1aLhg9FGF8fbngmd1PnDPEf
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMwMDAzMyBTYWx0ZWRfX3nNZgSeLv4sM
- ZJrqu611mifc+2YhY8cMUKvzX7PIZ1osyz2GJp0UblXaveUE0d32OZA2od563zIA1MuWZNW+/i5
- xD+DdQ/mTbRcQ0YuL3J7BAXqoli7Xbjzot7kIimUYQb2BI4psHggJq5DyOmUZjSoz8YmnncwOnQ
- nNk0/krGcGg2t26LSUVuYtq+jqnIW01tWf2i0dhmAv5Woi3ifOlbI90eCSk/0YqfJLMSJ2v5d8R
- 2PHYa7bw9lDtlj+1jn8EI/57nPFILm3uCR6j5yKwVXDgOuBi4O4+7z4jUV/bnI7qt6QYAWDaCZc
- GrG/4AEFrdgBbAjd9+Ji+IWs4Qm0GX/g5syoRzg2eT30db3Vde79uIlgs/5PRem/KjjmZPMDbL8
- Bex7Um8eBb5uuMxEiWdgbNGJffWVPi5vUBkcCwensVnzbxbjS6O83bylhzSuSpc96z5dttOPUp8
- 57ta1TkacwgfpQuBoRA==
-X-Authority-Analysis: v=2.4 cv=X5Vi7mTe c=1 sm=1 tr=0 ts=6a6ae525 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+X-Proofpoint-ORIG-GUID: LVSvdAN3P8yvUrS_40NVsyJ4GFqp65dZ
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMwMDAzMyBTYWx0ZWRfX1PVch7u1owBl
+ PbxBG91M80J24+NY1JbLk/EI+awMOgZhpZl8w7hlECp+IMAAzSE/xHKEGY6nWAdsCOgoOo3CIf3
+ D5ERiJRc0zbEiX6hhUUPqWeoVu7C6bI=
+X-Authority-Analysis: v=2.4 cv=E/z9Y6dl c=1 sm=1 tr=0 ts=6a6ae529 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
  a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=uP0FO7UWW_-64gk7dT4A:9
+ a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=1PX3H1HrtLKQNjst9QwA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMwMDAzMyBTYWx0ZWRfX/NmgTy0eoSU/
+ FHcC3z5NaolrJ0sx4upmgMBgJmGvEx8tSRrgPZrLTGHE82ypUYttHF4iShvJ+GY+zuFpleREbpE
+ pHPJEeNvayhXUEci0cCAP5oDcRtak2oXJq6DMXewcjdiien8zJGGa9p3NgAKP32mOpHrTXFR7Qw
+ pAYz8yPkQUGVqceS9SJqn7n5d7i0oASuXSsWH9F8bkb6tWfdxt2o6MI1y7Lxaygv2tzOH1F1xUy
+ 4rh6rJZcOFyN2z9PFC4aR/ZtVtALdsLOKN767u4Q03ghJhSsKmFYr6MtxP8UNWDvBBKePz2Rjf6
+ nEmhZqEba5T0Zv7usaE7hC2RjEzTaNcL3IWBmkIUwcH0YLIUoLvismGDH24Ye7KR9uuYr4vmkWm
+ /6Mt0O0v5rMsERdlUAx9zVEc4nEbZ+GdgVRZNcPVVcrv8+Ijhx4JqCT7P9chuFRIuAdbZutM8K1
+ dqxsQoInX9sLM1/PueQ==
+X-Proofpoint-GUID: VNMakwWAtmfPvUBiq6yIIq116-Y2ehz8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-30_01,2026-07-29_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 phishscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2607300033
-Message-ID: <20260730054601._CalO76tlRqNJagIp7rI2hUXw2V5FueR_a40iWUsYb4@z>
+ adultscore=0 priorityscore=1501 spamscore=0 clxscore=1015 phishscore=0
+ lowpriorityscore=0 bulkscore=0 malwarescore=0 impostorscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607300033
 
-This series fixes two build failures that occur when
-CONFIG_PPC_KERNEL_PCREL is enabled on powerpc64.
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
 
-Patch 1 fixes unused variable warnings in bpf_jit_emit_func_call_rel() by
-moving variable declarations to their respective conditional blocks where
-they are actually used, rather than declaring them at function scope.
+With CONFIG_PPC_KERNEL_PCREL enabled, build breaks with below error:
 
-Patch 2 fixes a linker error in arch_bpf_timed_may_goto() by using the
-CFUNC() macro for external C function calls. The macro properly handles
-the @notoc annotation required for PCREL builds, informing the linker
-that TOC restoration is not needed.
+  CC      mm/dmapool.o
+  CC      fs/readdir.o
+arch/powerpc/net/bpf_jit_comp64.c: In function 'bpf_jit_emit_func_call_rel':
+arch/powerpc/net/bpf_jit_comp64.c:475:13: error: unused variable 'ret' [-Werror=unused-variable]
+  475 |         int ret;
+      |             ^~~
 
-Both issues were introduced by commit b55b6b9ad76c ("powerpc64/bpf: Add
-powerpc64 JIT support for timed may_goto").
+Commit b55b6b9ad76c ("powerpc64/bpf: Add powerpc64 JIT support for timed may_goto")
+introduced "ret" at function scope, but it is only used within its
+respective conditional blocks. Same holds true for reladdr. Move both
+variable declarations to the scopes where they are actually used:
+"reladdr" to the CONFIG_PPC_KERNEL_PCREL block and "ret" to the non-PCREL
+else block.
 
-Changes in v2:
-- Patch 1: Move variable declarations to conditional blocks instead of
-  using __maybe_unused (feedback from Christophe)
-- Patch 2: No changes
+Fixes: b55b6b9ad76c ("powerpc64/bpf: Add powerpc64 JIT support for timed may_goto")
+Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+---
+ arch/powerpc/net/bpf_jit_comp64.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-v1: https://lore.kernel.org/all/cover.1785339155.git.skb99@linux.ibm.com/
-
-Madhavan Srinivasan (1):
-  powerpc64/bpf: Fix build break in bpf_jit_emit_func_call_rel()
-
-Saket Kumar Bhaskar (1):
-  powerpc64/bpf: Fix build break for arch_bpf_timed_may_goto
-
- arch/powerpc/net/bpf_jit_comp64.c     | 2 +-
- arch/powerpc/net/bpf_timed_may_goto.S | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index dab106cae22b..fc9db691e820 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -471,8 +471,6 @@ static int bpf_jit_emit_func_call(u32 *image, struct codegen_context *ctx, u64 f
+ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func)
+ {
+ 	unsigned long func_addr = func ? ppc_function_entry((void *)func) : 0;
+-	long __maybe_unused reladdr;
+-	int ret;
+ 
+ 	/* bpf to bpf call, func is not known in the initial pass. Emit 5 nops as a placeholder */
+ 	if (!func) {
+@@ -487,6 +485,8 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
+ 	}
+ 
+ #ifdef CONFIG_PPC_KERNEL_PCREL
++	long reladdr;
++
+ 	reladdr = func_addr - local_paca->kernelbase;
+ 
+ 	/*
+@@ -525,7 +525,7 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
+ 	EMIT(PPC_RAW_BCTRL());
+ #else
+ 	if (core_kernel_text(func_addr)) {
+-		ret = bpf_jit_emit_func_call(image, ctx, func_addr, _R12);
++		int ret = bpf_jit_emit_func_call(image, ctx, func_addr, _R12);
+ 		if (ret)
+ 			return ret;
+ 	} else {
 -- 
 2.54.0
 
