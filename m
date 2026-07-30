@@ -1,259 +1,137 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3EFF3822AB
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 19:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785441394; cv=pass; b=CUVc5yqcL9JuVnwbAPtSdc8RgLGMO47o3IwwLAMzAnhY3blO1R/Srda3w5vgO8EdrComQ+uxC62VfrJw308MyX6g2ADLuKlaAZcxkfBAv+Pl0Yhk82iGayvQW+gt7w9u6UTYszBgdEaX1VOD9JRQ7tJ1cwLNzXeRiu6RLEzV4FM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785441394; c=relaxed/simple;
-	bh=Fd1f99vygy+qd1Txs8X/LRlu3cQ5f0p0/unNHTb7UvY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G4efPFYCZJ/yqJaHplu5KHxTH/3BbhqVpC08OBvp6f4Q0cz4cMcU7mfPR2SjaOSFUEgK7YTCUgJqFrZ9u54+rayWaa1gUGDSpgFN4ASa5jqaeIkzC1HyacWx1/8vmr23f3BOGf30eRbpJIcqrVnQ3bMI4xFdiIQ/M0jV7rxeuUI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R+zpmeNw; arc=pass smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8262B3C1F4B
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 21:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785445805; cv=none; b=IiF3hlmu4DW9Qu3zwNtimvhOJ4SFPGpuHmKHfi3dzYn0X55Ducz3t9Kvld3RuoH1NuOaWWiW1nO+VSAZU/UfJr8CA5YhMGTxvWzWK4zibs5Jzoipkl4jElxM9smTR5YWZhXit9/IeRgN/ZzirvYJtGwOI/KLUChX3oDvzdIV1Jk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785445805; c=relaxed/simple;
+	bh=h4gAl5X4nGE0SU+Gh3X/MeeFPIcUPYTfpNfqjtezBaA=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=fMphIFiSTnxGV/99ePsjteW4ir/t6mNVjqTwumCXcCae2AzfXpCmYGBWFdV11WCPbuXwGI/P2S911JiiLuW0j8ao6QU2nePn/bLio73jiA4h/hvgg3ZZh5yE2l06hGhl2vWazhONqyxWfB7fZPUS3p9GUmViQdxEnkybMaQTYs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fczzRw2g; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R+zpmeNw"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-848d21bbaffso357042b3a.0
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 12:56:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785441392; cv=none;
-        d=google.com; s=arc-20260327;
-        b=g1J7t9wXI1kFStCk03LxcusEgb/lHKLiiULi9ycXHs9xs9blC0lNSdHxeZujscluQg
-         qM3Ilu0MtMesoT/Cg1fTsT2hOVl8AUOIN+j3aU+PDzvl8nty/6bIWlIemPmFNEX5B02c
-         xMM5YcBZ8DesuaKa4L5Pn3+r8scV7I7eqNX5y2NrA45REx62QIW2AkRUFwVt66M8qaO/
-         25eM2lksGPE7deMfB2fwP8qd3pvu7nech2I5b0kctyRvvLZadYoFTjrwOQudbX8TF4va
-         xXwqYPgNgHFl0Z1jeRFFHjms3RxL+1OiZETXg2BfQ4o1DtVYLbV6mCeDTOgGW/sy7a9a
-         B0bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qLJjqOKfhyu7g7JHPGSZLeYWicOZ0Mup3q40HiWWSR0=;
-        fh=CmKmxDUyN7lH3oA6KJMehtrTUrjvAABI79H/kDMEgKY=;
-        b=bP69hwxffnZIqytzdGch9ohFZdhVMcWYAhlyd7u3JmoUMQo0NvRto2QExDMjs6jPBX
-         yxwCoeXgQq+xdMxysz+thGaGsbxr4OoWGHJXv86lcLQPjp2YCPsuXgVlkxsOTO1DJYZA
-         xp/KZl3zUaoiYpuej7tnb23AkSMl/SVsNME9i2sYy44AXpjDGvd5nnlJTdezI7Ow3MeD
-         9pI0Qqa9t3sg3CDBQL1p000EqOy0jiOMOi2Ff2p5l3ckTSUtDeYrYXOSW2SUnxbQJChv
-         CwNMV2nLQpSQrZDiwutKQ4P+WPIxycMLDPNqlT6brL0yBmd7w/Ih83wEqw44R9hasfa8
-         F7yw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fczzRw2g"
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-92e533aacf2so17566185a.2
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 14:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785441392; x=1786046192; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=qLJjqOKfhyu7g7JHPGSZLeYWicOZ0Mup3q40HiWWSR0=;
-        b=R+zpmeNwpb0tTZhPzKBk1xNQvVtRfZ7O4Hqk1zmHS6n1as4eig2rQQvlmIcKyMRXAo
-         kXNGG/gvyVCavWDL72/E3cxXmdc9pBhAacrBHKCkiVDhvjFSsP3pk8OsZLrmh97Ltw8/
-         iqGs1SO7W06O07AnWfV0lbEPD5YXeWRSQi0euaT8wh/19VIRigWN4EqQzu4KBcg70J1v
-         GH5nMmqZj4WvjRqWkca649m4c5pkbdK/jnsCXvfALJ/CWt2hQrPU7yFE9BaWjSorhlJT
-         dPJ0mMjsm4rzgpN3jooOTHGIf7DsCzNw/DrlYdnuO1On5g9cIQ79Uf3+HzObtqlf3Jyk
-         VLQA==
+        d=paul-moore.com; s=google; t=1785445802; x=1786050602; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=lMLsf+LQaJK9TyVbvhOADIYNpgfmalBwRgJCFWQKWPY=;
+        b=fczzRw2g8JaX6smDaTZ1xAWIookwAoR0D/4mwj9qfdsvrT7xHZK7cUCTG/iaRkHggR
+         P3+FocISR0RAqycHZjKdHWOKhym2LY4kDNpJitfSn1SLsP0xJldbL6dnOQiOH+Ui8UO0
+         0s0iikmvOL5UJp8pwQK+3zogN5R8tgZiWKl76qP7zUMCexyqTjscuP09H47el/A5LOPQ
+         bLAyklxxIuDg1PEhhjAUarpxLsz/dzQ2nx+5CRrhHNyoAb765r33FrSBLNFCzRh86N+G
+         hs6CfIpW2mf0Oi0YshQ5vbz8SdmW0ePcRjHnZpBqKUUGsXip8dYktnA8REVJHQrMq9lN
+         Y3bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785441392; x=1786046192;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785445802; x=1786050602;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-type:mime-version:message-id:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qLJjqOKfhyu7g7JHPGSZLeYWicOZ0Mup3q40HiWWSR0=;
-        b=B17pU+f+UX1OODRo+rqoEaLuVi/V/NFnjydzdWHC6vqh3OTGi9bRLOFHdw2Orwj4jn
-         r0SVUFSWgtBlghnmevAnA0/hkDnawSfU2YWBjxIgJlmFT3GbwQzfrech3QHUoQUx7kZ0
-         z5eRmEH6YZkM9fJQIIMP6fxx5xvCa8kBJCiK1jPbZuwxux1b+vI2b4ztJO7RV0Mbow/A
-         LlEa308wEFO6VIyflPrbcqRUR19ty8GgFzHJTaRyAbhevxRp/AUGH/uMhn8UIMb5nWa/
-         32i4XkRRbxiwVqefBzUl2crbprUIjMuHN8tpHc1VUuiv+GvGXUVPGUmpQONRUFj2UKnY
-         A3yQ==
-X-Gm-Message-State: AOJu0YxQot3C536DPYhYHYKiJ7SYkj04gNUHHI8kml356tt93ivviZiJ
-	O17WcAWbCWzKzwjiX3J+BUKvmDCJ8J5rNyiJ7EAs7Pv8+pnSA0wQgqkV8mrxyf/SYO9diUseGWK
-	RtEYFrrbU9l1lYKrD95a0PPWaIs3jHZ4=
-X-Gm-Gg: AR+sD11HvU9mWsK3z02GVZUy1BpgWfHEDunPPmadXU6d72ZvVtpL0d5P4y0FkGU+jX2
-	GuJ+7c69oIZ3iGX93ItKFjDJWyoH/dKUrH3I8D2+Paq3mG+11sts8Hp088FKQSD8Y55b4s2wOMC
-	zydd04F86Z7wmvXanBb6AFSR0Le9V1YK+xs+eWfV3Qf/7xhoCz1BI6WGSHQBre9+e3t4P6qRcSs
-	EIuagRSBPJMUeI7LTH8HubUmwghDsMl8oGAQRo8Go3aDNsPa0adBLX38W6rZrWcuRsOQRGfqbpR
-	PkVf3FuOEDGDrr9Js3Cx+qbsUbts5LXxhwHbW+uQ9bAruVC4MtAnAAmNt6NVkDen6Dl7zo9o1K7
-	MojoDX30trnnKeWPF5vqwLKd144FtLm2lfQAZyGTZjw==
-X-Received: by 2002:a05:6a00:928f:b0:847:904c:8452 with SMTP id
- d2e1a72fcca58-84ebc3cfb0cmr3687688b3a.38.1785441391979; Thu, 30 Jul 2026
- 12:56:31 -0700 (PDT)
+        bh=lMLsf+LQaJK9TyVbvhOADIYNpgfmalBwRgJCFWQKWPY=;
+        b=F53jI0/C0pltUzLXSZrdWI2ZvZSwhihbt9UTfj91/PmoJ9gFqqxXUV5pT7gP+uqnMW
+         TX8aSBZOwTPvhIVJASFKOfRzyuKlk0huysuSsSmxhS8LlObCxtF+vW2scxEV9KKBjtEk
+         oIjbzPZAEu8885lDtm1h3lTVe0GcssyX6gcGsFHnXjLMXWLh0p7ZH4VpdOjp2kOx1dVb
+         fYPyU62Da5qdvgGwgq0E3tvr6tzef51wGsEuMuJBExq/i7iphoLDrv8Hsr6Pddw2+SL/
+         25YgyOpsaGecFfy3aKqM9y98COOuZYSy9xC7UkG2OHREhEzjFogbkDQIjakcHxTbKlUq
+         mw9A==
+X-Forwarded-Encrypted: i=1; AHgh+RomeqwVig96RpaGW2DJh+eSzESeTytF6b1u4iln/7r1ENl5qIMGhaa9dUbakgq+O9f116s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlpClPiiFvq5FJFpsbCgUvtqOm8SpamxpUX5JcYrIr6chSE+ZY
+	eLbZNq7Ka0eK7QtDC93h5GlLd/ZN9Kacu7+L+V1FcH1cj1yZzaGcFc0gcJ9XkdMuTg==
+X-Gm-Gg: AR+sD11adawf9Yf3qH4tFuruGymyQur/G3xIzSydMvGL7RQ2zH6aHfUeuXq1fcIB45m
+	btm/SOwEEyg/GVDd6eyed2WddVWWY7Onn41mbVUhZUnDq/lt1HoSdIg6SeUib/hGtNSvHij9Fut
+	a6CLxaFP94oUByxOtci91KCullogkpLNwigbp/ANw+TIXOd38Fo4am0BpttIVAszpnuvVkJFaRg
+	UjZSovxV8We+DuS5i2B1YTYDaPKGZiS5q9yCPtFP3pUvIkPRHV7zbufgr8gPcg1gfYr6t9nA0dG
+	KzYIMok8+iGwGBOuYz3VC/qb6DMyt8KVx9IB2xKdXySynhUzS73nz8Wzh99mSDqQtQIOfaBsdj5
+	H10fR6xlGDOvjbUle/ptS9JKZVsuwWI2SeBA89qUVjEZtTj7KGL9QuYdXvy6UYH+R5pm+N0IPof
+	4WnyHTWQaIqEHAabesAYRmE9qrPaM/+B+eN83sJUjYEO9nxjXgyTwI3FzrwgEy5pTEHmU3U3csi
+	WiDB+DjS8QWQEaIEEUDSqSiTr+M8au1LcO9TPKycm5I
+X-Received: by 2002:ac8:7e81:0:b0:51c:1d18:2fe9 with SMTP id d75a77b69052e-52b3836970emr48411021cf.5.1785445802045;
+        Thu, 30 Jul 2026 14:10:02 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-9083fdbc35fsm1954776d6.24.2026.07.30.14.10.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2026 14:10:00 -0700 (PDT)
+Date: Thu, 30 Jul 2026 17:10:00 -0400
+Message-ID: <db6fe5d2d4081f20f85abc6020b831fd@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260616155716.2631508-1-puranjay@kernel.org> <20260616155716.2631508-3-puranjay@kernel.org>
-In-Reply-To: <20260616155716.2631508-3-puranjay@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 30 Jul 2026 12:56:14 -0700
-X-Gm-Features: AUfX_mypllbuQtwnAyQGtjj8wrW31i_okmt7jn4Zb1OXf9HqTBm6BS29OcrxDXw
-Message-ID: <CAEf4BzYrwthXzMP-oyxfnFyFm+N0ZD_cEB8Sz7pYn97RMPgb7w@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] perf/core: Clear the whole branch entry in perf_clear_branch_entry()
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>, 
-	Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Stephane Eranian <eranian@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif <usama.arif@linux.dev>, 
-	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20260729_1758/pstg-lib:20260730_1437/pstg-pwork:20260729_1758
+From: Paul Moore <paul@paul-moore.com>
+To: Carlos Llamas <cmllamas@google.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, "Christian Brauner (Amutable)" <brauner@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: kernel-team@android.com, linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, linux-fsdevel@vger.kernel.org, Carlos Llamas <cmllamas@google.com>, stable@vger.kernel.org, "open list:SELINUX SECURITY MODULE" <selinux@vger.kernel.org>, "open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
+Subject: Re: [PATCH] selinux: bpf: check SBLABEL_MNT before isec init
+References: <20260730181008.3654413-1-cmllamas@google.com>
+In-Reply-To: <20260730181008.3654413-1-cmllamas@google.com>
 
-On Tue, Jun 16, 2026 at 8:57=E2=80=AFAM Puranjay Mohan <puranjay@kernel.org=
-> wrote:
->
-> perf_clear_branch_entry_bitfields() resets the bitfields of struct
-> perf_branch_entry one at a time and deliberately leaves from/to alone,
-> since callers overwrite those immediately. The list of assignments has to
-> be kept in sync with the struct by hand, and it has already drifted:
-> new_type and priv were added to perf_branch_entry but never cleared here,
-> so stale values can leak into the records handed to userspace.
->
-> Clear the entry with a single struct assignment instead:
->
->         *br =3D (struct perf_branch_entry){ };
->
-> Every caller writes from/to right after the clear, so zeroing them as wel=
-l
-> is harmless and the dead stores are elided on the x86 LBR read paths.
-> There is no longer anything to keep in sync when a field is added.
->
-> The helper no longer touches only the bitfields, so rename it to
-> perf_clear_branch_entry() and update the callers, fixing up the
-> br+nr/br+out spacing on the touched lines while at it.
->
-> Fixes: b190bc4ac9e6 ("perf: Extend branch type classification")
-> Fixes: 5402d25aa571 ("perf: Capture branch privilege information")
-> Suggested-by: James Clark <james.clark@linaro.org>
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+On Jul 30, 2026 Carlos Llamas <cmllamas@google.com> wrote:
+> 
+> selinux_inode_init_security() marks the isec as initialized before
+> checking if mount labeling is supported (SBLABEL_MNT). This was fine
+> until commit 9722955b5430 ("bpf: Add simple xattr support to bpffs"),
+> where genfscon bpffs mounts fail the SBLABEL_MNT check as expected (no
+> xattrs) and yet leave the isec->initialized. This breaks subsequent
+> calls to inode_doinit_with_dentry().
+> 
+> Do the SBLABEL_MNT check before the inode security is initialized.
+> 
+> Cc: stable@vger.kernel.org
+> Closes: https://lore.kernel.org/all/akWdcp6P0FkNDzBk@google.com/
+> Fixes: 9722955b5430 ("bpf: Add simple xattr support to bpffs")
+> Signed-off-by: Carlos Llamas <cmllamas@google.com>
+> Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
 > ---
->  arch/x86/events/amd/brs.c   |  2 +-
->  arch/x86/events/amd/lbr.c   |  2 +-
->  arch/x86/events/intel/lbr.c |  6 +++---
->  drivers/perf/arm_brbe.c     |  2 +-
->  include/linux/perf_event.h  | 16 ++--------------
->  5 files changed, 8 insertions(+), 20 deletions(-)
->
+>  security/selinux/hooks.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 8d6945edae7a..09a12eb8652c 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -2980,6 +2980,10 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+>  	if (rc)
+>  		return rc;
+>  
+> +	if (!selinux_initialized() ||
+> +	    !(sbsec->flags & SBLABEL_MNT))
+> +		return -EOPNOTSUPP;
 
-Another one for tip/perf probably?... Puranjay, maybe send the first
-two patches separately?
+If we're moving this check, we should probably just move it to right
+after we assign 'sbsec' at the top of the function.  The calls to
+inode_mode_to_security() and selinux_determine_inode_label() aren't
+doing anything useful in either the !selinux_initialized() or !SBLABEL_MNT
+cases so let's avoid the unnecessary work.
 
+>  	/* Possibly defer initialization to selinux_complete_init. */
+>  	if (sbsec->flags & SE_SBINITIALIZED) {
+>  		struct inode_security_struct *isec = selinux_inode(inode);
+> @@ -2988,10 +2992,6 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+>  		isec->initialized = LABEL_INITIALIZED;
+>  	}
+>  
+> -	if (!selinux_initialized() ||
+> -	    !(sbsec->flags & SBLABEL_MNT))
+> -		return -EOPNOTSUPP;
+> -
+>  	xattr = lsm_get_xattr_slot(xattrs, xattr_count);
+>  	if (xattr) {
+>  		rc = security_sid_to_context_force(newsid,
+> -- 
+> 2.55.0.508.g3f0d502094-goog
 
-> diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
-> index 06f35a6b58a5..68c5f42965e9 100644
-> --- a/arch/x86/events/amd/brs.c
-> +++ b/arch/x86/events/amd/brs.c
-> @@ -343,7 +343,7 @@ void amd_brs_drain(void)
->
->                 rdmsrq(brs_from(brs_idx), from);
->
-> -               perf_clear_branch_entry_bitfields(br+nr);
-> +               perf_clear_branch_entry(br + nr);
->
->                 br[nr].from =3D from;
->                 br[nr].to   =3D to;
-> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-> index d24da377df77..08401fd60585 100644
-> --- a/arch/x86/events/amd/lbr.c
-> +++ b/arch/x86/events/amd/lbr.c
-> @@ -181,7 +181,7 @@ void amd_pmu_lbr_read(void)
->                     entry.to.split.reserved)
->                         continue;
->
-> -               perf_clear_branch_entry_bitfields(br + out);
-> +               perf_clear_branch_entry(br + out);
->
->                 br[out].from    =3D sign_ext_branch_ip(entry.from.split.i=
-p);
->                 br[out].to      =3D sign_ext_branch_ip(entry.to.split.ip)=
-;
-> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-> index 72f2adcda7c6..295da179fa74 100644
-> --- a/arch/x86/events/intel/lbr.c
-> +++ b/arch/x86/events/intel/lbr.c
-> @@ -755,7 +755,7 @@ void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc=
-)
->
->                 rdmsrq(x86_pmu.lbr_from + lbr_idx, msr_lastbranch.lbr);
->
-> -               perf_clear_branch_entry_bitfields(br);
-> +               perf_clear_branch_entry(br);
->
->                 br->from        =3D msr_lastbranch.from;
->                 br->to          =3D msr_lastbranch.to;
-> @@ -846,7 +846,7 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc=
-)
->                 if (abort && x86_pmu.lbr_double_abort && out > 0)
->                         out--;
->
-> -               perf_clear_branch_entry_bitfields(br+out);
-> +               perf_clear_branch_entry(br + out);
->                 br[out].from     =3D from;
->                 br[out].to       =3D to;
->                 br[out].mispred  =3D mis;
-> @@ -920,7 +920,7 @@ static void intel_pmu_store_lbr(struct cpu_hw_events =
-*cpuc,
->                 to =3D rdlbr_to(i, lbr);
->                 info =3D rdlbr_info(i, lbr);
->
-> -               perf_clear_branch_entry_bitfields(e);
-> +               perf_clear_branch_entry(e);
->
->                 e->from         =3D from;
->                 e->to           =3D to;
-> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-> index ba554e0c846c..effbdeacfcbb 100644
-> --- a/drivers/perf/arm_brbe.c
-> +++ b/drivers/perf/arm_brbe.c
-> @@ -604,7 +604,7 @@ static bool perf_entry_from_brbe_regset(int index, st=
-ruct perf_branch_entry *ent
->                 return false;
->
->         brbinf =3D bregs.brbinf;
-> -       perf_clear_branch_entry_bitfields(entry);
-> +       perf_clear_branch_entry(entry);
->         if (brbe_record_is_complete(brbinf)) {
->                 entry->from =3D bregs.brbsrc;
->                 entry->to =3D bregs.brbtgt;
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 48d851fbd8ea..e034be4a473a 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1467,21 +1467,9 @@ static inline u32 perf_sample_data_size(struct per=
-f_sample_data *data,
->         return size;
->  }
->
-> -/*
-> - * Clear all bitfields in the perf_branch_entry.
-> - * The to and from fields are not cleared because they are
-> - * systematically modified by caller.
-> - */
-> -static inline void perf_clear_branch_entry_bitfields(struct perf_branch_=
-entry *br)
-> +static inline void perf_clear_branch_entry(struct perf_branch_entry *br)
->  {
-> -       br->mispred     =3D 0;
-> -       br->predicted   =3D 0;
-> -       br->in_tx       =3D 0;
-> -       br->abort       =3D 0;
-> -       br->cycles      =3D 0;
-> -       br->type        =3D 0;
-> -       br->spec        =3D PERF_BR_SPEC_NA;
-> -       br->reserved    =3D 0;
-> +       *br =3D (struct perf_branch_entry){ };
->  }
->
->  extern void perf_output_sample(struct perf_output_handle *handle,
-> --
-> 2.53.0-Meta
->
+--
+paul-moore.com
