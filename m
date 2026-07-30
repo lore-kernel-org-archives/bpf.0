@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C35433BC0;
-	Thu, 30 Jul 2026 13:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EC3431492;
+	Thu, 30 Jul 2026 13:35:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785418498; cv=none; b=NjXlxQdEsN1cy2sj3CUN7WeSVvYkg2erdiWe0E8se0HaJj/8VGzvJUDD2hvg7EN+xcMBNU2xOIpRVKdynE1SeLtGv6DKYrNZ1LY/Kr4U/HXkPvb3MOLaz6J0YeKOFt7s0y1U6IgkS5OuEYpCfTE/ykTIJs+Sb4ZBilWaqbkRBhQ=
+	t=1785418501; cv=none; b=dwkGgW+/yFd/77geM2METwjvx9K+BSSxSXlp2i1/evwWPwt1LXTTefdp7ciJxvJfU0on4yyBljj9ggrv5pcazwEHc2YPAZ14S3sJjqg3UX1uOqhUhKos1E+J59LpkHuLuCkxodtG31/gCXZCXLq4D4yzI0SvDmA9Q+FmnKZfXrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785418498; c=relaxed/simple;
-	bh=32k07tMwHqC5jGfUk0ymZm+EDDpXO5+ws18gTB9e3BM=;
+	s=arc-20240116; t=1785418501; c=relaxed/simple;
+	bh=Gn0L9OCCHVtAN3s+6K4JE9GEN3K6+4FF0wdBr+LTonA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gTr47kzaGFc8ZL0MboUpTx5wvfDnDjKG08K5yU4tcTxys7nqIzl9GFTyZDWN0WqxQk0HJc8LdcfBZBS0Grcmm25PMsMktJQCRjCyNCPRInEsgFwmtguPxgBxrqrGRLPgnxWpr2YX4nfSe9xigRS3biAt7qhai2N5mksGKu80+Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PcGCKWg/; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=QnYNKkEnYoRnCFz2mAsGS87YVYBxzzmTLv1mWOZFzLO1FGe3dNTxDkbT2v8oMqkT1dBj4SlEl0ENHJlQ0qwlNpgbAfkeKLWGO8IdCE5d1LquFlY6zN3ivpq9t10nBXFyB4PlYFM/LQlxYyI3MsRBL92KViGSwId7ItfEagQelbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cu64TiMf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PcGCKWg/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 800551F000E9;
-	Thu, 30 Jul 2026 13:34:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cu64TiMf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2501F00A3A;
+	Thu, 30 Jul 2026 13:34:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785418497;
-	bh=y6UdV8Ljrrj/Do3m3HasiOXKs4+5D49mrjlgSbHcrEc=;
+	s=k20260515; t=1785418500;
+	bh=glwkVERW7ziUEdmJ5pBGKBLfhupGXbebMY+STyIuEXg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=PcGCKWg/n5+tn7N8bWHivTcGSG0ld/p+OkLj4N4PVITGIQY1s0MfnH4gDQG3uFqQW
-	 9LEh0RQAg8FA5aGd8aC4yJXmNvlVwy5LJRN9fYt9677JJh+4VNaJyexnTeoQeyUwXM
-	 /ntE+5isrw2PEmx5xCpUZu8a3iUFx8d4TOA0kn43O91DhKFfm2LPJRl2xUkocpY8rp
-	 3dH+S/Z7WCgv1NoJ4N8Xz/dmnFYOxjAO/lv/mOwpKTw3Db5MEcq78Y8rkk6vGP4CJC
-	 ozAgo/n8epvjB535lsC2tA+lasUZXvS2JdJzs8eyOk/4OXcIh1k1ey1tc2Z/gBBOri
-	 UJRmr5yuSW7PA==
+	b=Cu64TiMfuoZAOxhGBh6YH2GiTNw4VGXDyLDbET6iIlrXeda3LZOSjOvnsuW+nMiFi
+	 d9Halxeg2rGDdV/xqHtCdCZDDtx7MVr7kTnEf0fYKRFZoIzgMHjroBhzE2e/aNdmqr
+	 IaeIZkB0Ar0kw/ylD8TDFhVizOMh17RmuQ08pLJaiXkMvCAII3VjElmOAa973nCK7z
+	 yYboVKOOGY6NWKhHJpeE0St0FYgYDdsplT9KCW3C1vRgy1RjNfP6HDXaXi6R8SmDns
+	 L8P/I6egVHNouWeT60xNc9euJWxfjCNE0rFBx1AIE/ZKOLSk77/tbdkIxDnb7CH2Vs
+	 kzN/Zx6vgAoUg==
 From: Christian Brauner <brauner@kernel.org>
-Date: Thu, 30 Jul 2026 15:34:07 +0200
-Subject: [PATCH 5/9] selftests/exec: share the bpf handler preconditions
+Date: Thu, 30 Jul 2026 15:34:08 +0200
+Subject: [PATCH 6/9] binfmt_misc: carry pre-opened interpreters in struct
+ binfmt_misc_interp
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,7 +38,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260730-work-binfmt_misc-preopen-v1-5-4a0b0da71f16@kernel.org>
+Message-Id: <20260730-work-binfmt_misc-preopen-v1-6-4a0b0da71f16@kernel.org>
 References: <20260730-work-binfmt_misc-preopen-v1-0-4a0b0da71f16@kernel.org>
 In-Reply-To: <20260730-work-binfmt_misc-preopen-v1-0-4a0b0da71f16@kernel.org>
 To: linux-fsdevel@vger.kernel.org
@@ -48,86 +49,301 @@ Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
  jannh@google.com, mail@johnericson.me, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.16-dev-3e0c3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2488; i=brauner@kernel.org;
- h=from:subject:message-id; bh=32k07tMwHqC5jGfUk0ymZm+EDDpXO5+ws18gTB9e3BM=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRlB72blqW+hGOS7eS4xBcPU4zuB7y/53L2SMczuT8TV
- u8I3n1+fkcpC4MYF4OsmCKLQ7tJuNxynorNRpkaMHNYmUCGMHBxCsBEhJYyMtx3i65N5DN/Hz61
- 9W3Arcy6m625O9WVF31NmtWl670wRZeR4em8qniuznqun6uXrlqlu+eFSvXZhYlxB54+7W246Tf
- xFjsA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10142; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=Gn0L9OCCHVtAN3s+6K4JE9GEN3K6+4FF0wdBr+LTonA=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRlB72TSb5btnBpym+2m/dEfjZmbXFM+vxiiZBoyYnCX
+ WK9EfFTOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACayr5Xhf3W5bnGT5rIpTItL
+ T629eKl1mouC8Fxv7YDOOQK3ymckzmBk+L7IduW9mbd/H7s97+VFrtVsfxdaTz24zDSu+frp+uf
+ 7ipgB
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-The bpf handler fixture opens with three probes, each with its own SKIP.
-More fixtures with the same needs are about to be added, so hoist the
-probes into a helper that reports the first missing precondition.
+An 'F' entry opens its interpreter at registration and every exec runs a
+clone of that file. The file lives in a bare struct file pointer next to
+the path it came from and put_binfmt_handler() closes it as a special
+case.
+
+Give the pre-opened interpreter a type of its own instead. struct
+binfmt_misc_interp carries the file, the path it was opened from and a
+selection name in a single allocation and is linked on a list that the
+entry owns and tears down in put_binfmt_handler(). An 'F' entry binds a
+single interpreter under the empty name and hands out clones of it as
+before.
+
+The open moves into open_interp_file() and works exactly as the
+open-coded block in bm_register_write() did. It is opened for execution
+at registration time, in the writer's context and with the credentials
+the register file was opened with.
+
+The entry can now own objects before it is published, so make
+put_binfmt_handler() the single teardown. create_entry() returns the
+entry with its reference held and every failure path in
+bm_register_write() simply puts it. That also replaces the open-coded
+bpf_ops release.
+
+No functional changes. A later patch lets a 'B' entry bind multiple
+interpreters selected by name per exec and reuses all of this.
 
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- tools/testing/selftests/exec/binfmt_misc_bpf.c | 43 ++++++++++++++++----------
- 1 file changed, 27 insertions(+), 16 deletions(-)
+ fs/binfmt_misc.c | 151 +++++++++++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 119 insertions(+), 32 deletions(-)
 
-diff --git a/tools/testing/selftests/exec/binfmt_misc_bpf.c b/tools/testing/selftests/exec/binfmt_misc_bpf.c
-index c6f5e8f34985..71bb6d8b4517 100644
---- a/tools/testing/selftests/exec/binfmt_misc_bpf.c
-+++ b/tools/testing/selftests/exec/binfmt_misc_bpf.c
-@@ -106,6 +106,30 @@ static int check_output(const char *cmd, const char *expected)
- 	return strncmp(buf, expected, strlen(expected)) ? -1 : 0;
+diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
+index ca7840b01a2b..afd8a737c95b 100644
+--- a/fs/binfmt_misc.c
++++ b/fs/binfmt_misc.c
+@@ -24,6 +24,7 @@
+ #include <linux/fs_context.h>
+ #include <linux/init.h>
+ #include <linux/kstrtox.h>
++#include <linux/list.h>
+ #include <linux/magic.h>
+ #include <linux/module.h>
+ #include <linux/printk.h>
+@@ -98,6 +99,24 @@ static const struct binfmt_misc_flag *misc_flag_by_char(const char c)
+ 	return NULL;
  }
  
-+/* Does the kernel BTF know struct binfmt_misc_ops (CONFIG_BINFMT_MISC_BPF)? */
-+static bool have_binfmt_misc_ops(void)
-+{
-+	struct btf *btf = btf__load_vmlinux_btf();
-+	bool have;
++/**
++ * struct binfmt_misc_interp - an interpreter an entry was registered with
++ * @list: link in the entry's list, in registration order
++ * @file: the file, opened at registration and never resolved again
++ * @path: the path it was registered under, used as the name the interpreter
++ *        runs under; stored after @name in the same allocation
++ * @name: the name a load program selects it by; empty for the fixed
++ *        interpreter of a static 'F' entry
++ *
++ * Owned by the entry and living exactly as long as it does.
++ */
++struct binfmt_misc_interp {
++	struct list_head	list;
++	struct file		*file;
++	const char		*path;
++	char			name[];
++};
 +
-+	have = btf && btf__find_by_name_kind(btf, "binfmt_misc_ops",
-+					     BTF_KIND_STRUCT) >= 0;
-+	btf__free(btf);
-+	return have;
+ struct binfmt_misc_entry {
+ 	struct hlist_node node;
+ 	unsigned long flags;		/* type, status, etc. */
+@@ -108,9 +127,9 @@ struct binfmt_misc_entry {
+ 	const char *interpreter;	/* filename of interpreter */
+ 	char *name;
+ 	struct dentry *dentry;
+-	struct file *interp_file;
+ 	const struct binfmt_misc_ops *bpf_ops;	/* bpf-backed handler ('B') */
+ 	const char *bpf_ops_name;
++	struct list_head interps;	/* the interpreters it bound */
+ 	refcount_t users;		/* sync removal with load_misc_binary() */
+ 	struct rcu_head rcu;
+ 	char buf[];			/* register string, fields point in here */
+@@ -233,6 +252,82 @@ static struct binfmt_misc_entry *get_binfmt_handler(struct binfmt_misc *misc,
+ 	return search_binfmt_handler(misc, bprm);
+ }
+ 
++/* Undo the open_exec() a pre-opened interpreter file came from. */
++static void close_interp_file(struct file *f)
++{
++	if (IS_ERR_OR_NULL(f))
++		return;
++	exe_file_allow_write_access(f);
++	filp_close(f, NULL);
 +}
 +
-+/* The reason bpf handler cases cannot run here, NULL if they can. */
-+static const char *bpf_handler_unsupported(void)
++/*
++ * Open an interpreter @path for execution: now, in the writer's context,
++ * and - since binfmt_misc mounts can be unprivileged - with @cred, the
++ * credentials the control file being written was opened with, not the
++ * writer's own.
++ */
++static struct file *open_interp_file(const struct cred *cred, const char *path)
 +{
-+	if (getuid() != 0)
-+		return "test must be run as root";
-+	if (!have_binfmt_misc_ops())
-+		return "no struct binfmt_misc_ops in the kernel BTF (CONFIG_BINFMT_MISC_BPF)";
-+	if (!binfmt_misc_available())
-+		return "no binfmt_misc";
-+	return NULL;
++	struct file *f;
++
++	scoped_with_creds(cred)
++		f = open_exec(path);
++	if (IS_ERR(f))
++		pr_notice("register: failed to install interpreter %s\n", path);
++	return f;
 +}
 +
- /* An attached handler with its 'B' entry activated. */
- struct bpf_case {
- 	struct bpf_object *obj;
-@@ -190,23 +214,10 @@ FIXTURE(bpf_handler) {
- FIXTURE_SETUP(bpf_handler)
++/* Release the interpreters an entry was registered with. */
++static void entry_put_interpreters(struct binfmt_misc_entry *e)
++{
++	struct binfmt_misc_interp *interp, *tmp;
++
++	list_for_each_entry_safe(interp, tmp, &e->interps, list) {
++		list_del(&interp->list);
++		close_interp_file(interp->file);
++		kfree(interp);
++	}
++}
++
++/**
++ * entry_attach_interpreter - bind an opened interpreter to @e
++ * @e: entry being configured
++ * @name: name a load program can select it by; empty for the fixed
++ *        interpreter of a static entry
++ * @path: the path @f was opened from
++ * @f: the interpreter, opened for execution
++ *
++ * Every exec runs a clone of @f, so the path decided which file is bound
++ * and nothing else: it is not resolved again, in any namespace.
++ *
++ * The caller has to have established that @e cannot be matched yet, and
++ * owns @f until this succeeds.
++ *
++ * Return: 0 on success, a negative errno on failure
++ */
++static int entry_attach_interpreter(struct binfmt_misc_entry *e,
++				    const char *name, const char *path,
++				    struct file *f)
++{
++	size_t nlen = strlen(name), plen = strlen(path);
++	struct binfmt_misc_interp *interp;
++
++	/* One allocation, both strings in it, like the entry's own buffer. */
++	interp = kmalloc(struct_size(interp, name, nlen + plen + 2),
++			 GFP_KERNEL_ACCOUNT);
++	if (!interp)
++		return -ENOMEM;
++
++	interp->path = interp->name + nlen + 1;
++	strscpy(interp->name, name, nlen + 1);
++	strscpy(interp->name + nlen + 1, path, plen + 1);
++	interp->file = f;
++	list_add_tail(&interp->list, &e->interps);
++	pr_debug("register: interpreter: %s {%s}\n", name, path);
++	return 0;
++}
++
+ static void bm_entry_free_rcu(struct rcu_head *rcu)
  {
- 	char src[PATH_MAX];
--	struct btf *btf;
--
--	if (getuid() != 0)
--		SKIP(return, "test must be run as root");
-+	const char *why = bpf_handler_unsupported();
+ 	struct binfmt_misc_entry *e = container_of(rcu, struct binfmt_misc_entry, rcu);
+@@ -249,21 +344,22 @@ static void bm_entry_free_rcu(struct rcu_head *rcu)
+  *
+  * Free entry syncing with load_misc_binary() and defer final free to
+  * load_misc_binary() in case it is using the binary type handler we were
+- * requested to remove.
++ * requested to remove. Also the teardown for a registration that fails
++ * before add_entry() publishes the entry.
+  */
+ static void put_binfmt_handler(struct binfmt_misc_entry *e)
+ {
++	if (IS_ERR_OR_NULL(e))
++		return;
++
+ 	if (refcount_dec_and_test(&e->users)) {
+-		if (e->flags & MISC_FMT_OPEN_FILE) {
+-			exe_file_allow_write_access(e->interp_file);
+-			filp_close(e->interp_file, NULL);
+-		}
++		entry_put_interpreters(e);
+ 		/* Walkers may still dereference this entry, even sleeping. */
+ 		call_srcu(&bm_entries_srcu, &e->rcu, bm_entry_free_rcu);
+ 	}
+ }
  
--	/* The kernel must know struct binfmt_misc_ops (CONFIG_BINFMT_MISC_BPF). */
--	btf = btf__load_vmlinux_btf();
--	if (!btf || btf__find_by_name_kind(btf, "binfmt_misc_ops",
--					   BTF_KIND_STRUCT) < 0) {
--		btf__free(btf);
--		SKIP(return,
--		     "no struct binfmt_misc_ops in the kernel BTF (CONFIG_BINFMT_MISC_BPF)");
+-DEFINE_FREE(put_binfmt_handler, struct binfmt_misc_entry *, if (_T) put_binfmt_handler(_T))
++DEFINE_FREE(put_binfmt_handler, struct binfmt_misc_entry *, put_binfmt_handler(_T))
+ 
+ /**
+  * current_binfmt_misc - get the binfmt_misc instance of the caller's user namespace
+@@ -392,12 +488,15 @@ static struct file *entry_open_interpreter(const struct binfmt_misc_entry *e,
+ 					   const char *interpreter)
+ {
+ 	struct file *interp_file __free(fput) = NULL;
++	struct binfmt_misc_interp *interp;
+ 	int retval;
+ 
+ 	if (!(e->flags & MISC_FMT_OPEN_FILE))
+ 		return open_exec(interpreter);
+ 
+-	interp_file = file_clone_open(e->interp_file);
++	/* An 'F' entry pre-opened exactly one interpreter. */
++	interp = list_first_entry(&e->interps, struct binfmt_misc_interp, list);
++	interp_file = file_clone_open(interp->file);
+ 	if (IS_ERR(interp_file))
+ 		return interp_file;
+ 
+@@ -718,6 +817,7 @@ static struct binfmt_misc_entry *create_entry(const char __user *buffer,
+ 	p = buf = e->buf;
+ 
+ 	memset(e, 0, sizeof(*e));
++	INIT_LIST_HEAD(&e->interps);
+ 	if (copy_from_user(buf, buffer, count))
+ 		return ERR_PTR(-EFAULT);
+ 
+@@ -842,6 +942,8 @@ static struct binfmt_misc_entry *create_entry(const char __user *buffer,
+ 	    e->interpreter[0] != '/')
+ 		return ERR_PTR(-EINVAL);
+ 
++	/* Born holding one reference; put_binfmt_handler() is the teardown. */
++	refcount_set(&e->users, 1);
+ 	return no_free_ptr(e);
+ }
+ 
+@@ -1167,7 +1269,6 @@ static int add_entry(struct binfmt_misc_entry *e, struct super_block *sb)
+ 		return -ENOMEM;
+ 	}
+ 
+-	refcount_set(&e->users, 1);
+ 	e->dentry = dentry;
+ 	inode->i_private = e;
+ 	inode->i_fop = &bm_entry_operations;
+@@ -1187,9 +1288,8 @@ static int add_entry(struct binfmt_misc_entry *e, struct super_block *sb)
+ static ssize_t bm_register_write(struct file *file, const char __user *buffer,
+ 			       size_t count, loff_t *ppos)
+ {
+-	struct binfmt_misc_entry *e __free(kfree) = NULL;
++	struct binfmt_misc_entry *e __free(put_binfmt_handler) = NULL;
+ 	struct super_block *sb = file_inode(file)->i_sb;
+-	struct file *f = NULL;
+ 	int err;
+ 
+ 	e = create_entry(buffer, count);
+@@ -1206,33 +1306,20 @@ static ssize_t bm_register_write(struct file *file, const char __user *buffer,
+ 	}
+ 
+ 	if (e->flags & MISC_FMT_OPEN_FILE) {
+-		/*
+-		 * Now that we support unprivileged binfmt_misc mounts make
+-		 * sure we use the credentials that the register @file was
+-		 * opened with to also open the interpreter. Before that this
+-		 * didn't matter much as only a privileged process could open
+-		 * the register file.
+-		 */
+-		scoped_with_creds(file->f_cred)
+-			f = open_exec(e->interpreter);
+-		if (IS_ERR(f)) {
+-			pr_notice("register: failed to install interpreter file %s\n",
+-				 e->interpreter);
++		struct file *f = open_interp_file(file->f_cred, e->interpreter);
++
++		if (IS_ERR(f))
+ 			return PTR_ERR(f);
++		err = entry_attach_interpreter(e, "", e->interpreter, f);
++		if (err) {
++			close_interp_file(f);
++			return err;
+ 		}
+-		e->interp_file = f;
+ 	}
+ 
+ 	err = add_entry(e, sb);
+-	if (err) {
+-		if (f) {
+-			exe_file_allow_write_access(f);
+-			filp_close(f, NULL);
+-		}
+-		if (e->bpf_ops)
+-			binfmt_misc_put_ops(e->bpf_ops);
++	if (err)
+ 		return err;
 -	}
--	btf__free(btf);
--
--	if (!binfmt_misc_available())
--		SKIP(return, "no binfmt_misc");
-+	if (why)
-+		SKIP(return, "%s", why);
  
- 	/* Shared test interpreter. */
- 	ASSERT_EQ(artifact_path(src, sizeof(src), "binfmt_bpf_interp"), 0);
+ 	/* The entry is owned by its inode now. */
+ 	retain_and_null_ptr(e);
 
 -- 
 2.53.0
