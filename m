@@ -1,65 +1,65 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F9D3B19D6
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 06:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B8449620
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 06:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785393053; cv=none; b=PRZ1UG9M+MLcOJeo245WjFr2Qkn1TvmBkUbMM3ExXGsyrILmrkBBCoJk6kRMg0n0ZFFmxgKlPOMbM2hZV2Qq9nM1xi945e2470d7jsLhFR4lTVUYIjnx360aBctHojmBPB1w0Y7w5NseYTFKVXAw1fPW9Xe7wR6JjQGV++QmQPc=
+	t=1785393234; cv=none; b=u0vMdIRACwyY6Oi7YDBohaX1YHy9lHjkGBPgHmhaJiWopZLnH6Uicxrpn81JoIh93MBISvfPKqq9ku4YGN6OSkBBFfwRR1ZFBHQneW3IKiHAglcksgIDlNMmGxfTx1WdmntU8HN7QvA+SzkoZdhRXfEzJNKOOSSdbwrwK5hed4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785393053; c=relaxed/simple;
-	bh=yMQpoF8DD4VnQlsoAsOC+G3DWvFvHyp5SxTVysKpeDw=;
+	s=arc-20240116; t=1785393234; c=relaxed/simple;
+	bh=1buAZ1J3EJzoK3uKXKjU8iSDVuQnXlUsbpZQK3NC29U=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=RhNa1Jzu+/MAMVOESa87bpMZzEaggQXmGnRSrn8CdANGAOUKA2eKn2gHFJBqcx3Mn6Icu+6BOA5T48XMmg6Ohz23MkJuxRLWZqa2pt7wKcHjyPS5YDvmknh1Ik7tdNCjv0HxutNOBBdb6TiY0sKZBcTrIthCdxHwJL5X6fLSl4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=MASYlQ67; arc=none smtp.client-ip=209.85.214.172
+	 References:In-Reply-To; b=RDZ/h8jc1v+9uwshtrr01WsW7Xc0PTACZrMWAY71XsqbXBNXKQrBKHquWRvMcPeDnk4SBbOjNh66RgflukI4ChMu5BpMQMwF5K6UJojg6QSXm/9TJn0kOQUeonTPFs6VNaBZ2PCS6NiBU00L999JAHMjOoY2voWHVJ87yvXF0A0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=w8/bRkfL; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="MASYlQ67"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cedda2ce6fso15290485ad.1
-        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 23:30:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="w8/bRkfL"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84eb992a881so328761b3a.2
+        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 23:33:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785393049; x=1785997849; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785393232; x=1785998032; darn=vger.kernel.org;
         h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=iPeTC0M7DIZ2pnkA7MkWgScCORZlZeaBMPqwxcNhcbk=;
-        b=MASYlQ677jQz136qQyPLxJtmnVeGJHb0KQVGD9r3ZqW6iL/CQI2kHpZbHaWLIQ9Snc
-         D/C8zd+eBFs0mMBVNraaeMXeKwoXDkOoDwkFeNE9WG3g876t5o0XuWAMbq6l/jbno7qK
-         Fk+CXzDrYiQoxHIGPlOuz32mnQ9JOFxnjv8cw2OYMe0WhJd8Yhe/EdtqnFANDyGWZgoK
-         kqwGWjBsoyKfyLAxha3PbILlQKG3dSQiFWswv+jCd/HZaROsJ6xJ9k9ksbiUesNIIMYl
-         g+18Imbx3bAoN6g/1d5tdDjug8JSwteW+J/gSwPFGWmkadRH1sRTsyeIutmZXXZbgyI0
-         On/g==
+        bh=mmztpyGDT8bXM2TJcNunZC5IJZ+7bFWL4gwiWczYTvc=;
+        b=w8/bRkfLWuCSkZLyzKyPtgJPSq27rBmNSb3ShYEQsr49NjJAtspoHIg55jNjQzpxxw
+         n5bH9u83YHuyw0tjWrvckXwV6DStqLSdc6zKdwYfPUJrnGwZVgIsPfnn0qJYzwk39s41
+         KGV0EDTj95zciNj+a5JoZ6LRjzgaSxUnQXJ0o8ApqOPA8j1cNZfY32boE1tEMitwm6H5
+         2HAIl/WpnWvlRRamsuYGUxOQ1ruokZFJzgiUIkRjeJHcSapqBrijurEDB8GSdPwwGPmW
+         pK4ina6WUBhg5taYJjZ7iVk7co3pWDDnd3N7jCUojcaRPSVbQK5VJli9XWLUc4Gm0vRn
+         EP8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785393049; x=1785997849;
+        d=1e100.net; s=20251104; t=1785393232; x=1785998032;
         h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=iPeTC0M7DIZ2pnkA7MkWgScCORZlZeaBMPqwxcNhcbk=;
-        b=I57/NSwarL8OKyHMaOeQhky4iTdDZd7SluSMwc9T+H0hUEE6YoBD4D8DHa5nUSFqds
-         ujvqihorQSrOjArMwvm82djZK1Ast2OKiyPEjH9u6vW/Hg7J2J2yOTbKM/ezwRuZ474M
-         BYtOPnYYvKjlZSozUAhWcwO5fmHA/GRx8eponga88OvzpGokiO9TsTzumWerjdb6YuNJ
-         8/EUc64U5PzeOAzOi02MP1A944rkgqTYiLUYXgjJypnG0tvenAn2G1xDxR0V/+QkfzdL
-         N2BU/kv2ghYS2rn0npu6vEiEW7RHZKxoG6rGGNJRjd4XRdM5bYl7heIITPixHiIF23l/
-         utSg==
-X-Forwarded-Encrypted: i=1; AHgh+RrcrMGfpPx0TC7g9vKy+QifHyIe74Jnc2KWHMssr99A9Dzk6hLUpnImmuip85Wy/bGNFv0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsuhwZUcEeKseTz5cMhzNeLLw1Y9CJu/veIZ0tpSJLkzRdF9fv
-	L5Yq7A/RbUqNBoj4muWwCd6yNnLsOdbRN0A4x4PMHRUjVlIxLLsk0AhiRg4l24hljkU=
-X-Gm-Gg: AR+sD11UkzhvKtxdnmADbJKgf9hBsWvJvumI31JemsJiYFQx803DS6lz68vJnQVCCZY
-	mEGS9LOgB5kWD20WQt6/7AB7CaLhjerviUiqM+Mlu1D2uBPitI5OUNUV7+qvpsbk82fkHXO7I8U
-	QRtEQlV0aOUf0fVWbWJp8g44k3CsVjPB918w0hbihY8YTUfe8BA8g/rSJ3RZtqbytA2XBwcIcKM
-	C2H/yN7bNNcWdGHopC5hjVTaGAx/tgaaWDgQgYnBq8mQq5opfqkhFvAlscFrL4AzVeTSzXfayHC
-	HvfKOAuDkbqmM25qqEZnJuwUDf2XxwZQ+FeJsWP5YLxbvm1DV/99vYFtswy6lzMF04mKjsJkoyb
-	/1JEZjg45GzhwASCPKnsogRXrD3XEL0PVS8NF2VCg4P2hryUeVv+Q2EYt00eQD/SXxOMpKpiaru
-	F0Iv2E81EFIgF0OqgSv1LdH1QhMflEh7iyM2tu0bgyC4VhVBqzgvoU2lQRfQIyy4MwuBQ9Ynh1v
-	85u+G8KuFxbvudZeA==
-X-Received: by 2002:a17:903:94d:b0:2ca:ed41:d337 with SMTP id d9443c01a7336-2d035d2d515mr14197995ad.43.1785393049372;
-        Wed, 29 Jul 2026 23:30:49 -0700 (PDT)
+        bh=mmztpyGDT8bXM2TJcNunZC5IJZ+7bFWL4gwiWczYTvc=;
+        b=Qi446q2i/ZpX+5/iMsJzEdvl3zbt9d2ba/SeJraMcAjzAqc/bqslLowDN89KFTqB/M
+         BkGCM+HrN3tdWf3YpDtsHyRW1rfuOmqBYYceJb8xrA8N6yLHoLlsGWzdB3trUTS1APK7
+         yJUh0ujo9GVUrSmiciqKKlB6aB/KchKDqi9bqOydRX5bo6UOXH9imgzFRZJzvDrPdi7h
+         xpj8BGxQrcPtSRzFGzhMdYuHV/uhvRQrHXJSM6reIqP8BPHcxFxWlbjDCOQ4hvUzuvfc
+         5qRIYmGTozDlg5I2xvGrOswOH9fFoaV5BENZTGTi3UjZRB0ZpyEix/1Xw9n2tQ+Q7lQL
+         a9eA==
+X-Forwarded-Encrypted: i=1; AHgh+RozRQAXr4v70KfYMIvGG574VVKV74g/u4kxoZSuvxxunyr6aAkTn1SGTudf1MWaAHXo01E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxzs6Uh4AP9h8f/W2YaJc3/gSBCtqpj5kwHR+MuaGt5IFp8pMjM
+	z+RlTQRaqrtXNqvSeC1Wr9UZXS1+PhmeK0NNLWHohxknhCh7kZlchsT6GN50X49EHsY=
+X-Gm-Gg: AR+sD13gdbKnq70aP6ehQycOybKo93VO7DiAl7qlIMXhMU+Say+YIuWdF0DrjD7bdVA
+	5CLDOZ/0BTGZxogUye2qwC7kErhveFklWy4qZ151J2SV9RgSyusOdvVryHoLoxMoRddhUreFD9E
+	HrJIod1n2ibUm/XQ57pNNGanex2CBA8+hBKEEE1wGz1pQyc11ZU5kjCvcnQkHztIGMdtpjFsY99
+	Z6DPKT9jFNT+SU41ZHanxfKVnUJZAB4ABEVpeHUkc5ZQ4e1bHunVkSFDOEwV5ePVUp90AH2vwOS
+	/aW4tf18WNi3P/zPd6V51voUe/uOSMi/RMJoh/TNV8UdxinqJh41DBPvbcTergHQOQd0vAVdCze
+	c/U38eZ1qc90fSS2+Z1XPXsKjnKi6BA/3fVTfI+vDPtgIqSW65rN0P6TfZIp+Wx8E0oD1Gj/riQ
+	JY+XH37RtsY5+jYYpccHjtyEZ1uIG9is7jir7p2GfMdiN51pM0gvvyK8MYd04HfLNnvVlAb8RGn
+	bjrHtZS3Y1YWSlSd/IJhkAWaA0t
+X-Received: by 2002:a05:6a00:1748:b0:84e:1c87:e6dd with SMTP id d2e1a72fcca58-84ebc1fd7efmr1496664b3a.7.1785393231861;
+        Wed, 29 Jul 2026 23:33:51 -0700 (PDT)
 Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d022a15199sm21124435ad.17.2026.07.29.23.30.48
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84ea03869d2sm2439128b3a.49.2026.07.29.23.33.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2026 23:30:48 -0700 (PDT)
+        Wed, 29 Jul 2026 23:33:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,118 +68,122 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 30 Jul 2026 02:30:47 -0400
-Message-Id: <DKBP0J41TSLU.1V96E2XEEIOOA@etsalapatis.com>
-Subject: =?utf-8?q?Re:_[PATCH_bpf-next_v4]_bpf:_log_error_code_on_trampoline_unlin?= =?utf-8?q?k_failure=C2=A0?=
+Date: Thu, 30 Jul 2026 02:33:50 -0400
+Message-Id: <DKBP2V5WYH31.3QHSY5V8WTNDD@etsalapatis.com>
+Subject: Re: [PATCH bpf v2] bpf, cgroup: Fix invalid storage access after
+ __cgroup_bpf_attach failed
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: <xu.xin16@zte.com.cn>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <john.fastabend@gmail.com>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>
-Cc: <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+To: "Pu Lehui" <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Song Liu" <song@kernel.org>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Pu Lehui"
+ <pulehui@huawei.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260729141159128mEJmS_aujBKr-cBu1p_UI@zte.com.cn>
-In-Reply-To: <20260729141159128mEJmS_aujBKr-cBu1p_UI@zte.com.cn>
+References: <20260729100208.3076769-1-pulehui@huaweicloud.com>
+In-Reply-To: <20260729100208.3076769-1-pulehui@huaweicloud.com>
 
-On Wed Jul 29, 2026 at 2:11 AM EDT, xu.xin16 wrote:
-> From: Xu Xin <xu.xin16@zte.com.cn>
+On Wed Jul 29, 2026 at 6:02 AM EDT, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
 >
-> Replace silent WARN_ON_ONCE with WARN_ONCE that prints the actual error
-> code from bpf_trampoline_unlink_prog(). This aids debugging of race
-> conditions during link teardown, while keeping the warning rate limited
-> to avoid log flooding.
+> Sashiko reported a potential invalid storage access issue after
+> replacing a cgroup bpf prog.
 >
-> This will be very helpful for speeding up trouble-shooting of some crash
-> UAF due to bpf_trampoline_unlink_prog failures.
+
+Nit: No need to mention Sashiko reports in the commit message imo,
+the Reported-by is enough and imo it makes it confusing for people
+not familiar with the system.
+
+> This occurs in the following scenario:
+> 1. prog1 with storage is attached to a cgroup in multi-attach mode.
+> 2. prog1 is replaced with prog2 using BPF_F_REPLACE in multi-attach
+>    mode, but fails midway (e.g. in bpf_trampoline_link_cgroup_shim or
+>    update_effective_progs).
+> 3. A new prog3 is attached to the cgroup in multi-attach mode.
 >
-> No change to unlink behavior.
+> The reason is that __cgroup_bpf_attach overwrites pl->storage with the
+> new storage prior to attachment completion. When attachment fails
+> midway, the cleanup path calls bpf_cgroup_storages_free(new_storage) to
+> free the newly allocated storage, but fails to restore pl->storage back
+> to old_storage.
 >
-> Signed-off-by: Xu Xin <xu.xin16@zte.com.cn>
-> Acked-by: Leon Hwang <leon.hwang@linux.dev>
+> Consequently, the still-active prog1 holds invalid or dangling storage
+> pointers, leading to an invalid memory access when prog1 executes and
+> calls bpf_get_local_storage. Additionally, original pl->flags and
+> cgrp->bpf.flags[atype] are left unrestored.
+>
+> Fix this by saving old_pl_flags, old_storage, and old_flags prior to the
+> update, and properly restoring all of them in the cleanup path on error.
+>
+> Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs o=
+n the same cgroup")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-The Sashiko concern seems valid, please let me know if you are
-planning on looking into it otherwise I can take a look.
-
 > ---
-> Change log:
-> - Small fixes according to the v3 disccusion:
->   https://lore.kernel.org/all/82926caa-e16a-457a-8d75-61dfc8dac102@linux.=
-dev/
+> v2:
+> - Remove the link relative code as link only support
+>   BPF_F_ALLOW_MULTI attach, so will not occur UAF pl.
 >
->  kernel/bpf/syscall.c    |  8 +++++---
->  kernel/bpf/trampoline.c | 12 ++++++++----
->  2 files changed, 13 insertions(+), 7 deletions(-)
+> v1: https://lore.kernel.org/bpf/20260728132336.2857800-1-pulehui@huaweicl=
+oud.com
 >
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 6db306d23b47..52c57f8beb37 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -3626,10 +3626,12 @@ static void bpf_tracing_link_release(struct bpf_l=
-ink *link)
->  {
->  	struct bpf_tracing_link *tr_link =3D
->  		container_of(link, struct bpf_tracing_link, link.link);
-> +	int err;
+>  kernel/bpf/cgroup.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 >
-> -	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link.node,
-> -						tr_link->trampoline,
-> -						tr_link->tgt_prog));
-> +	err =3D bpf_trampoline_unlink_prog(&tr_link->link.node,
-> +					tr_link->trampoline,
-> +					tr_link->tgt_prog);
-> +	WARN_ONCE(err, "bpf_trampoline_unlink_prog returns error: %d\n", err);
->
->  	bpf_trampoline_put(tr_link->trampoline);
->
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index 1a721fc4bef5..49dceea3d51e 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -997,12 +997,15 @@ static void bpf_shim_tramp_link_release(struct bpf_=
-link *link)
->  {
->  	struct bpf_shim_tramp_link *shim_link =3D
->  		container_of(link, struct bpf_shim_tramp_link, link.link);
-> +	int err;
->
->  	/* paired with 'shim_link->trampoline =3D tr' in bpf_trampoline_link_cg=
-roup_shim */
->  	if (!shim_link->trampoline)
->  		return;
->
-> -	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&shim_link->link.node, shim_lin=
-k->trampoline, NULL));
-> +	err =3D bpf_trampoline_unlink_prog(&shim_link->link.node, shim_link->tr=
-ampoline, NULL);
-> +	WARN_ONCE(err, "bpf_trampoline_unlink_prog returns error: %d\n", err);
-> +
->  	bpf_trampoline_put(shim_link->trampoline);
->  }
->
-> @@ -1712,15 +1715,16 @@ int bpf_trampoline_multi_detach(struct bpf_prog *=
-prog, struct bpf_tracing_multi_
->  {
->  	struct bpf_tracing_multi_data *data =3D &link->data;
->  	struct bpf_tracing_multi_node *mnode;
-> -	int i;
-> +	int i, err;
->
->  	trampoline_lock_all();
->
->  	for_each_mnode(mnode, link) {
->  		data->entry =3D &mnode->entry;
->  		bpf_trampoline_multi_attach_init(mnode->trampoline);
-> -		WARN_ON_ONCE(__bpf_trampoline_unlink_prog(&mnode->node, mnode->trampol=
-ine,
-> -					NULL, &trampoline_multi_ops, data));
-> +		err =3D __bpf_trampoline_unlink_prog(&mnode->node, mnode->trampoline, =
-NULL,
-> +					&trampoline_multi_ops, data);
-> +		WARN_ONCE(err, "__bpf_trampoline_unlink_prog returns error: %d\n", err=
-);
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index e2fa0ebeed83..be24ca453cab 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -813,8 +813,10 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>  	struct bpf_prog *old_prog =3D NULL;
+>  	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] =3D {};
+>  	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] =3D=
+ {};
+> +	struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] =3D=
+ {};
+>  	struct bpf_prog *new_prog =3D prog ? : link->link.prog;
+>  	enum cgroup_bpf_attach_type atype;
+> +	u32 old_flags, old_pl_flags;
+>  	struct bpf_prog_list *pl;
+>  	struct hlist_head *progs;
+>  	int err;
+> @@ -865,6 +867,8 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+> =20
+>  	if (pl) {
+>  		old_prog =3D pl->prog;
+> +		old_pl_flags =3D pl->flags;
+> +		bpf_cgroup_storages_assign(old_storage, pl->storage);
+>  	} else {
+>  		pl =3D kmalloc_obj(*pl);
+>  		if (!pl) {
+> @@ -884,6 +888,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>  	pl->link =3D link;
+>  	pl->flags =3D flags;
+>  	bpf_cgroup_storages_assign(pl->storage, storage);
+> +	old_flags =3D cgrp->bpf.flags[atype];
+>  	cgrp->bpf.flags[atype] =3D saved_flags;
+> =20
+>  	if (type =3D=3D BPF_LSM_CGROUP) {
+> @@ -915,12 +920,15 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>  	if (old_prog) {
+>  		pl->prog =3D old_prog;
+>  		pl->link =3D NULL;
+> +		pl->flags =3D old_pl_flags;
+> +		bpf_cgroup_storages_assign(pl->storage, old_storage);
 >  	}
->
->  	if (ftrace_hash_count(data->unreg))
+>  	bpf_cgroup_storages_free(new_storage);
+>  	if (!old_prog) {
+>  		hlist_del(&pl->node);
+>  		kfree(pl);
+>  	}
+> +	cgrp->bpf.flags[atype] =3D old_flags;
+>  	return err;
+>  }
+> =20
 
