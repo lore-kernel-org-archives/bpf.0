@@ -1,252 +1,143 @@
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011027.outbound.protection.outlook.com [52.101.65.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4A83BB9F8;
-	Thu, 30 Jul 2026 10:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.27
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785407206; cv=fail; b=S6GsIAiiRjI4e+cnek4oO1jCPmyD9PS81vbtREV5jIf1GUJRRNVW5pFZv1XTK3LR/eWwo9tPfccqcIgM1Mr8D+LEUOXS/3L28vz//5vXthtXn1yZU20epQLXmd9Jt9cmQ50WKH269Pb9IUMIhRADx8RoMTW8ZxX2P+n6DVRkdSY=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785407206; c=relaxed/simple;
-	bh=vei0dWvSA4vDN9NFvw1n+jaZ2T18Jlx6yF1dtC1TiTk=;
-	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=gQlSRp5zi+b0sQOjH/0v8u3TTmlSCG1wCwZLBOZNImPzAwAct3BmtnJ289Kl1Kg3m5x7dUJniXld/1kuyXZVt7rjo+2ViWyROZiuNBg30rCUUlvcI/9H/xOcWujfPUSZftpaPldGNl2tnfwTAk0qLAdxP/Ii6XHNZhYBRhRFMsc=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=I3KGM4Ub; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=I3KGM4Ub; arc=fail smtp.client-ip=52.101.65.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3394640860E
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 10:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785409113; cv=none; b=LnVKTysYkFzVD+Htr37G7UbksReRGqHrCscma8eV/dIHLcOKTMVt75cYZ9SPYshIoRd/0HoEU7e9P0dHdmNnvGT1nz1bRdKMFqRDfmNjsnD+1nwocauXT5QKkml7+ueOsGxFbcTP48mXoH4PqAtwDpnOA5DQT8BRRhgm3jWOOAE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785409113; c=relaxed/simple;
+	bh=OUZJe9ibUbTY3/iskfpej3snXo+kezysiy+SxHFR7w4=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nqb+aDE9xnzRME5DCr9mjOcuo4WSo1bhzdHV+FDsPDtJQ302c//0pAlaAl8m5pobWXIPH2tN/ZT10nVAEkrRCzIRr109yYZrYY0tk+nwbi2Dry3aOltJNTtma1kS0OFPH1VtBWkZBk0x+iZsRHqkREVYuLMmr61nnpdueqcSLWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p0mjHqGu; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="I3KGM4Ub";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="I3KGM4Ub"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=sRJc0rLoy8gcF3NArSz9853A6rzaldEhaXQkIWreqs4Pz76rSuPtvxl/BnyUN7w6CVyP7Ge2OZUWzEFIGGIthJqhU+MP9jyDAMvVefoMcbcIUzRNX6Vx7E/b2V6dYQKjBR28/MkRTJlWZxy68/rL12ysH5rApRmFQTgk2+KGdn8JRi6p+Lk714qR0Pcv6mq39GmE5Ugij29SUXqtlMveWiKB9Vbm5s8jfMpZJQG358xVnRYvLPyWSw1OYKXCoDwcJCc/WL7Iz1hHfF9jcBHRLRgLfOx2FtgSEqLB7+X3lw9RO3tSS1TO+EUUWpiyBG/FRLJd5ZfhdiVodtRqD38w1Q==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W3wZAwMMPZoTgl0+TvR5LTWocvVN0gVFmphGcUzdiRM=;
- b=ABJ1CrzgUr48o1FG28XFjvNGL6JjE12+0r7ORKJRgCdjIYWom0mdjODfLK1UWdcZ1C2PqYjKzIUGvv34YkHSpb+7HxdW3OGz9tFeOPQZt7YuFzaRw9HKGEARi/53RhKle0DNY+MgzIA5E/UMWkAZTn2ed7+M8bOfHUzSeHt/wwJi1/NhsOZXM8DNgqQkTS/ebHJXZug854AQ6870OnD30ED7bK2vUPVFHeWC/VWPjrVc0TO23Gxoh7SrJPg3nBKqetZKJq9nVUYk6BuFARoI81nXE3SftoXfPJ3LohWaOr4YLYIwuJd1fD/CN7kxbOMxToGMqBmay5vDyQBUSxDz8g==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W3wZAwMMPZoTgl0+TvR5LTWocvVN0gVFmphGcUzdiRM=;
- b=I3KGM4UbiK3WIJNvtMLyCLKEtgAXgD6bn0xN3RM8BZUiRELjJKB8aNg0GS0K0Zkm8DgbPZTATfeO89kDomtxbUreYjDNWfu2IAQJ0kt8rZD/6dyYZfSbFtfCeNR43NYJtBUMxXjH5BfKeE1xftNRWFhpLkvvVhRAM+3b6bPrwKM=
-Received: from DB9PR02CA0009.eurprd02.prod.outlook.com (2603:10a6:10:1d9::14)
- by AS4PR08MB7758.eurprd08.prod.outlook.com (2603:10a6:20b:515::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.12; Thu, 30 Jul
- 2026 10:26:38 +0000
-Received: from DU2PEPF0001E9C3.eurprd03.prod.outlook.com
- (2603:10a6:10:1d9:cafe::4f) by DB9PR02CA0009.outlook.office365.com
- (2603:10a6:10:1d9::14) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.14 via Frontend Transport; Thu,
- 30 Jul 2026 10:26:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DU2PEPF0001E9C3.mail.protection.outlook.com (10.167.8.72) with Microsoft SMTP
- Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.5 via
- Frontend Transport; Thu, 30 Jul 2026 10:26:37 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JDk6Z05YfJ98U+ROp9YQdvIgUvkAtmelCatjajEmueB0eqWoORKpIhSBuCWJg34MDT2YYcVhzaT+UFHip6u+ZDFk8Ll6OJiE5FaULhQ/dcbHjaiQXr4qMWeENZoIgTdzfYE6OYkbYmGscMVE8dMLgn4V2CxeRAiMB7O7PQ45JFDFbcnXJll0lDLF+1iflOy43hFBsVUFWFQCwpdQP3YtatJ3B/KzCxs4NZfWv2sVLI8lL7+i5J1VbrhK/D8xgDcGs1XkLch7eSwMOfHxEIKwUghWx3muEZRg0m67eH3bodkccjFs/Z0zY5G+i5d6Ia5KRdKMgLBv0RYK3NageiSCdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W3wZAwMMPZoTgl0+TvR5LTWocvVN0gVFmphGcUzdiRM=;
- b=sF1ye7kIvwABa0k/uw5UtDb/io5ZKbiWz0C1UkI+KXUOucKXfwVcyW4TsIAfR4XxHS8lf3++fFrreuLymWXgiEJC5UBQu2FDNEpAE19alIoXox1cgU97AmS9AauP9zCjWyy8ZXDx5JpUWLfn2fUFaqkl7gq9B59dHyLEEa1s26ds8TRtfxtMBtasP4sJKQthSYe/URkdMuCgbBR1My4lGgXtmetVSAx3FyPTElnVzxHDYIg12xYdq9FcRhs/OdKtqrsInhPY+GQyqV5vS4IGj0QSzYpIyFFnCaFggPyeyULfuNxwXEyf48i21grm3tUkToFKBn6g3mDYs0V/iyGmLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W3wZAwMMPZoTgl0+TvR5LTWocvVN0gVFmphGcUzdiRM=;
- b=I3KGM4UbiK3WIJNvtMLyCLKEtgAXgD6bn0xN3RM8BZUiRELjJKB8aNg0GS0K0Zkm8DgbPZTATfeO89kDomtxbUreYjDNWfu2IAQJ0kt8rZD/6dyYZfSbFtfCeNR43NYJtBUMxXjH5BfKeE1xftNRWFhpLkvvVhRAM+3b6bPrwKM=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
- by PAVPR08MB8799.eurprd08.prod.outlook.com (2603:10a6:102:32b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.14; Thu, 30 Jul
- 2026 10:25:32 +0000
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.21.0270.009; Thu, 30 Jul 2026
- 10:25:32 +0000
-Message-ID: <cc3cbd79-d606-41dc-a83e-220ccc220ea8@arm.com>
-Date: Thu, 30 Jul 2026 11:25:29 +0100
-User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com, Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Dimitri Sivanich
- <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Juergen Gross <jgross@suse.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- David Hildenbrand <david@kernel.org>,
- Pasha Tatashin <pasha.tatashin@soleen.com>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Uladzislau Rezki <urezki@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, SJ Park <sj@kernel.org>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Miaohe Lin <linmiaohe@huawei.com>, Dennis Zhou <dennis@kernel.org>,
- Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
- Mike Rapoport <rppt@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- ziy@nvidia.com, pfalcato@suse.de, ryan.roberts@arm.com,
- linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-parisc@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, damon@lists.linux.dev
-Subject: Re: [PATCH RFC 05/11] mm: convert PTE table entries in ptep_get()
-To: Alexander Gordeev <agordeev@linux.ibm.com>
-References: <20260727164715.2866609-1-usama.anjum@arm.com>
- <20260727164715.2866609-6-usama.anjum@arm.com>
- <34eed5fd-c569-49d8-bc4d-a3d4b1207fbd-agordeev@linux.ibm.com>
- <fec9e0c7-07c3-442c-819b-f9f5316cb6a2@arm.com>
- <9ac3f058-2a22-4801-8633-65635053c8ea-agordeev@linux.ibm.com>
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-Content-Language: en-US
-In-Reply-To: <9ac3f058-2a22-4801-8633-65635053c8ea-agordeev@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0318.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:390::17) To VI1PR08MB3421.eurprd08.prod.outlook.com
- (2603:10a6:803:80::16)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p0mjHqGu"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c12614b81c9so354716166b.3
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 03:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785409110; x=1786013910; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BtmEW6LmpN3hbmzYM7Cf4iCPw5cw70uOQWik1DIJVKg=;
+        b=p0mjHqGuHmE4rHDrfSwM/V0o+jJpbKJ7EJO6fvpk+LTEC1E/PoFtOUISPW/6oQIWxp
+         CszJci8hAV4UeJeSWR9WG2mJ77RujcSGRnrgVYLbFNjCHBiYmQNM9CTO+si5Vs9M9YRI
+         JqJBktYIKXYOQBl82moIa0O6XBc8w1X95iloT2zFsb7oe2gdkMNDw5skKO+kpbIQ8x0I
+         ATSktbcUXeQdRajCoLvE5G3Kqb13U3EKsReQRc7PxFqF08BUfIJ8+qQQNQctKCIPfDzw
+         9PMceRqdnZoVj3E6xXO37Zm1aqbaYgrMxG26zUDPTa23Mv/+k2oB2TYx2RpwY2havJ/e
+         vV0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785409110; x=1786013910;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BtmEW6LmpN3hbmzYM7Cf4iCPw5cw70uOQWik1DIJVKg=;
+        b=WKKWC3APv1gXY0MFPn9VaHtfKjMFSKLSGTW0GOFKZyXSXmbtqxoLiilqz7Wg1DVCRy
+         rcTwvaoUPXUwDU8VwmABFAxjFzS6y0AVdEXaCsPay6mUPP8flSgoTtdpVXTtC0DfnSQ2
+         TDRhHGF+DXWGZwqvD6a57FWF8I3BeyQInXrD15WI1Rx9dMoE6PdVEG8vxkIOv4bOUNX4
+         TqgJVKUvRuNQfWUgLvjBBVXAF30sw25SXaCj7dd4MQVFu4SdExE3tD4QX/nECudveeKn
+         KlN8Izc61pxj3iW7/QmCI+LJ6xZozlQRiSzsAMJ5/C0DY1AUbuDLLDPce7i2/HtqjVIz
+         yong==
+X-Forwarded-Encrypted: i=1; AHgh+Rr38GWRC+9ZCzA+eLeQOC4VCBXiyO1rr2N2/zubbzthj6KnHGBsPzoZ6EOpZLBUlEPaw48=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+1SQf/ojFX656llGV3g2WAPFXWbVEx3t657CD63WIAC4lFeg1
+	O5gL859dM3W3elWqwz8d5Ds1Qbm+b/fd9jZ/R6eU56+POKXtc/e9lXW/
+X-Gm-Gg: AR+sD10052ClwuilC67wmKq56iNX1uTAO0RPdEps24L4HJvr9gk3BHeCVikFnBjevBY
+	NZmBc5BaJq/IaJmfzAq0RjyQRCkZ2cGsMlsXuglAvvlleT/F6nK5L9bwoWNE57BYZYlvNzwGpJ8
+	QZBM5BmFlfaD3j+JVwUwkZupsF1GmJOLktYdIXQXwHYWyXhQ4mUN65uLxdqTW5fRhDjzFR5nSiN
+	aOoDf6j3t7Uxos/TBoPX/EHuYLetkxXDzpkO39vacHvuKlZmVMfxzsndiNgC/1eeH7EuwF/7LcO
+	49SlRz1/3ZrH9UPSNKxrXSLE6GWfQKiS0QwTZzYwlJK/8K1VDzaAAi1BMaxcTPNPSLOeJ2z+b4I
+	xS7OF2o0WvT93mmc+3dYRBC/Z3xzaAOaQx52cTVnWiYQGVlgYfNfcY3t1/WbTZ7+Zemke/2VrKO
+	drai/H6qrcQampTRoC2vJzMn+3gWUE1tNSOMK9R/lfo1/m7t4=
+X-Received: by 2002:a17:907:9443:b0:c1c:4afd:8d8c with SMTP id a640c23a62f3a-c1fa558e48emr104613966b.14.1785409110114;
+        Thu, 30 Jul 2026 03:58:30 -0700 (PDT)
+Received: from krava ([173.38.220.35])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1fa8578015sm55934266b.18.2026.07.30.03.58.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2026 03:58:29 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 30 Jul 2026 12:58:27 +0200
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Jiri Olsa <olsajiri@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct
+ calls
+Message-ID: <amsuU7eXuoziObdh@krava>
+References: <20260727142844.21212-1-leon.hwang@linux.dev>
+ <20260727142844.21212-2-leon.hwang@linux.dev>
+ <amnqXeC6D4mjcAe_@krava>
+ <d745ca80-6516-4c61-8107-88c6a2d9cea4@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	VI1PR08MB3421:EE_|PAVPR08MB8799:EE_|DU2PEPF0001E9C3:EE_|AS4PR08MB7758:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2ed62004-bbf5-4e4d-44e5-08deee2509ae
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|7416014|376014|23010399003|1800799024|366016|10067099003|4143699003|11063799006|56012099006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info-Original:
- bXoevxLyBomTzrUcrVhun0Lz2qvSwqjhqFFv+0ABdtpcPStwD5Hf1TDhqSe6LXZw/RcSmI8TgDhUuUgRZ8IzmdSe9EwwmXnYb8gOnnxQheQPRyNeLSm+QZpL9Jyn9F2ukAQypbuSj+yOY6FQRKtildCDNSrBXYt8lQsM43yNUPSSHqfcRGjt2gbPe01TXLohTFVnQahK8mNAG3aCg8e5ATUKoB4j1boNWR5bqhE11KZoIHKyrQ9rGMLHo+utUPmD14NYZ2FeZ5LsVK4yqjha6ZE9NIfBRFQ6cbeM0Wcke0zMh5NmmncdG1DHtV3WmQlYYOBd3O9llxqeE+fPwbgprPki19mkYjuVsr2T2oveffhVTfiVHWIHobneT5i3NEKBi7jzrX7D9xRYjgT9qEY5aVcFkh/m7H3tYN5zON+LPD9KSqTMDI8orON72pqvLBPvfDcp2iWdDLy6W2PoQR/XaZ+j/kwupVpFzIC+wxl5pX7MvLvB1IeAnp4McwatuYW/vlE/E37hGQjM5FQuI3q2jrWQuXA8Usdm9xZLvsaIeiRVfq6akZTBTuKZuRUQRvRJYByjY5lNjOxXNzDgsifEw2kb5UD7kTHTofzUwTsnzHlgkCh3nnbV2DZY4orM2j0B3VJoRa7yNgbm6B1vJCVelxM1FXpCB095oQdEwc7XLes=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(1800799024)(366016)(10067099003)(4143699003)(11063799006)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- fRfLvb6r8bsLj3g3MnaBsYK69jHABWYM5adlkAvFoXPc0l1et+e3sDQ3fVIRsEzSSUHvudUiLQSN1kl8DLhZgvreDww/cFr1g86SOnt7wO2FBTIUO/ZzlkT8Wvwu46XHD4O+KL+0Cg/Diiz2llOOhpq4aiE6EXMnR9Jty79jMbo4WlVoDwk7rCf0ZFgswXd0qvS4UDhThZBdUyZiw6CtADRjNgY5a9diCihtmRmWmQpuHqLJKwydC+Dpvuc9V5JKWLq1AXqkddTyT6hxcedajVUdf8dGPi6m5F3LRifURcDqh+yjXIqzzZzhIheI+Vld8LNBlcPPqqB+vdkb22xPOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB8799
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DU2PEPF0001E9C3.eurprd03.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	17a892ef-686f-4e19-2c23-08deee24e2a3
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|35042699022|376014|7416014|36860700016|23010399003|14060799003|1800799024|82310400026|56012099006|11063799006|10067099003|4143699003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	Z1BAaOk6B9uCMw7HqCIVFa23sWZ/KUwa1hSxiZ+zIwpADynN/vhnmecI9+b7C6DFpmJ67xEAkEyLjiB9o6OSPEl4wH8ezUIcep3QykY3naEnwIxg4xPleEV/W2cWBnoIrmiG0D/Wi7RAwLiwKowSiTaFlvNdh2oqksCuZqTHhS5KCB12G8rDx0rWEU62yEJ4DlX5UGrU0s0oERsJl4LqX2Zfe5zuy4oZf6C1P9htyUrB7o7c2pDexCAPr8UZfui8XYb/U4ExxaFK/dVp3IWrow2dGgAL06mh7t7HvNAiwHfPmf+Zzql+HGuYvL5a2vSFSDu1JNzqCjpQ3hIbUPpGpGOwjiPFLzwjdrz12bVOpZ+HM4VI3tD1ratUjYqQmZE1bxgzeriMQCp8DXI2tU4jzf0jYjOTEbziNyqSXOuo9upQhlKgcTz9JhLst2wRl5NTxqkaBWSmaCT0Xh114NhpfAqJpJ7gTMgGufMAHLEjbCUSBQvEezNCpdJopO61udd8ML0JiNs/RkWGEcY9ZNOFUxy+/k+6Jkh3zcanQesE39dtNFrGdLlcIhQTd7M5/s1uCcGJWrXEBthPk59n/bHlnjh00Wo8VtRHIrbbniIceIYHIEP9hzZRptCmqm0bw+Grp4mwkRN0IjgCYIN6M+8TD/Wh4ZBHHjv64DSmyAo0IiNsoLT+CVKXOJNqVrmUFwCAtEgXXgU8hgMQIzvBb63v5Q==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(35042699022)(376014)(7416014)(36860700016)(23010399003)(14060799003)(1800799024)(82310400026)(56012099006)(11063799006)(10067099003)(4143699003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	jp8hMIbXZEYBINRi8OIiVYCjAxWHMFaXfKeVo6xRWmXbe3ar6XJ0MFjdSsFmetL1MZUnz047Doifpuq9kGIPdWUzBlRHWb02yz1SEdzs9MBiRzo6ZrYJKpYiMta+6R9EYpgfnerBlOBrP+O1U9KAwNUFppmcKoRyqrxdgI8DagKKw7pEaS9V54HMRUyCNG3xqM+2i0HmePDEV97XBbmN9IuMZEO4X9LY2132llfEx44J2W9a4rxE4kobhz+FIbs6IeZAChBLFUuqXD0XcQXk71PdtZxD45+nCovImRvfKyBCT7843oEa365lFiGacSFfnNapSWJZhTuNpY4qm2GBZ6OWY0lDl63lvKVoPbJ3RAZkSw9r0oOFno1rt4zdXpayntNaX9zEDJxRBiEEiDYVpS1HSr8KCuKXJojlwJ/dx5KWMhiTUVer/j29V9G+mHuZ
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2026 10:26:37.6141
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ed62004-bbf5-4e4d-44e5-08deee2509ae
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU2PEPF0001E9C3.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR08MB7758
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d745ca80-6516-4c61-8107-88c6a2d9cea4@linux.dev>
 
-On 30/07/2026 11:24 am, Alexander Gordeev wrote:
-> On Thu, Jul 30, 2026 at 11:11:35AM +0100, Muhammad Usama Anjum wrote:
->> On 30/07/2026 11:08 am, Alexander Gordeev wrote:
->>> On Mon, Jul 27, 2026 at 05:46:56PM +0100, Muhammad Usama Anjum wrote:
->>>> ptep_get() now accepts a pointer to hw_pte_t storage but must continue to
->>>> return a logical pte_t value. Add __pte_from_hw() as the conversion hook
->>>> and apply it in the generic ptep_get() implementation.
->>>>
->>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->>>> ---
->>>>  include/linux/pgtable.h       | 2 +-
->>>>  include/linux/pgtable_types.h | 1 +
->>>>  2 files changed, 2 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
->>>> index dad80d264aac2..3003ac9cd81fe 100644
->>>> --- a/include/linux/pgtable.h
->>>> +++ b/include/linux/pgtable.h
->>>> @@ -493,7 +493,7 @@ static inline int pudp_set_access_flags(struct vm_area_struct *vma,
->>>>  #ifndef ptep_get
->>>>  static inline pte_t ptep_get(hw_pte_t *ptep)
->>>>  {
->>>> -	return READ_ONCE(*ptep);
->>>> +	return READ_ONCE(__pte_from_hw(*ptep));
->>>
->>> Should it be something like?
->>>
->>> 	return __pte_from_hw(READ_ONCE(*ptep));
->> I'd thought about it. My thinking is that we should get the pte_t first before
->> before calling READ_ONCE(). Please correct me what makes more sense?
+On Thu, Jul 30, 2026 at 11:05:42AM +0800, Leon Hwang wrote:
+> On 29/7/26 19:56, Jiri Olsa wrote:
+> > On Mon, Jul 27, 2026 at 10:28:43PM +0800, Leon Hwang wrote:
+> >> The BPF tracing multi link updates several direct-call sites through one
+> >> ftrace_ops. Its implementation is therefore gated by
+> >> HAVE_SINGLE_FTRACE_DIRECT_OPS in addition to
+> >> DYNAMIC_FTRACE_WITH_DIRECT_CALLS.
+> >>
+> >> Select HAVE_SINGLE_FTRACE_DIRECT_OPS whenever arm64 enables dynamic ftrace
+> >> direct calls. This enables BPF tracing multi links on arm64. Also
+> >> generalize the unreachable-trampoline comment because the single-ops path
+> >> does not use ops->direct_call.
+> > 
+> > hi,
+> > iirc arm needs ops->direct_call for trampolines to work properly,
+> > that's the reason we enabled single ftrace_ops on x86 only:
+> > 
+> >   424f6a361096 bpf,x86: Use single ftrace_ops for direct calls
+> > 
+> > I don't understand the arm usage of op->direct_call, but it looks like
+> > (codex thinks) that the fast path won't always work without op->direct_call
+> > being set
 > 
-> I have a problem with "get the pte_t first" part ;) I think what we want
-> is atomically read the hw_pte_t from the HW table and then convert the
-> result to pte_t.
-Got it. I'll fix it in the next version.
-
 > 
->>>
->>>>  }
->>>>  #endif
->>>>  
->>>> diff --git a/include/linux/pgtable_types.h b/include/linux/pgtable_types.h
->>>> index ed5dba42a4f8c..61afe27307ec2 100644
->>>> --- a/include/linux/pgtable_types.h
->>>> +++ b/include/linux/pgtable_types.h
->>>> @@ -6,6 +6,7 @@
->>>>  
->>>>  #ifndef __HAVE_ARCH_HW_PTE_T
->>>>  #define hw_pte_t pte_t
->>>> +#define __pte_from_hw(pte)	(pte)
->>>>  #endif
->>>>  
->>>>  #endif /* _LINUX_PGTABLE_TYPES_H */
->>>> -- 
->>>> 2.47.3
->>>>
->>
->> -- 
->> Thanks,
->> Usama
->>
+> In theory, op->direct_call is the fallback for the case:
+> HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS=y, out-of-range target, and non-BPF
+> direct ops. This is what Codex thinks about.
+> 
+> However, after searching the call sites of
+> register_ftrace_direct()/__modify_ftrace_direct() in kernel, which would
+> set ops->direct_call, the actual callers are in bpf/trampoline.c, which
+> have been gated with HAVE_SINGLE_FTRACE_DIRECT_OPS. That said, for
+> normal usage of HAVE_SINGLE_FTRACE_DIRECT_OPS=y, op->direct_call is unused.
+> 
+> If someone uses register_ftrace_direct() or
+> modify_ftrace_direct/_nolock() outside BPF in the future,
+> op->direct_call will be used.
 
--- 
-Thanks,
-Usama
+so any 2nd user on the same function triggers the slow path,
+and that's fine, the single_ops handles slow path correctly
 
+but IIUC the out-of-range target will now always go through slow path,
+which in current code it doesn't, right?
+
+jirka
