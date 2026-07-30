@@ -1,142 +1,109 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A3739DBD7
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 13:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB43432E6A;
+	Thu, 30 Jul 2026 14:07:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785419312; cv=none; b=aqrdO0gUoeZS8v3opj4rJm9zaGMG5Svb/jd2BwYBN5L96igw8/w4LYYwO1ga848552dI09V4ee0bRz40KvUeCEFAIXfeGuE65fNbdpajc5bn3M0SyDmYVeMDF6/tTbegswiD950TZgxkXwBUc74XrxDjai/Dt259z7/g6lJia+8=
+	t=1785420431; cv=none; b=p9AYT48Gay2HStDhY9QKjLhiGy8mTcpabJRpXy4EAA88CfnRJC8WSty2OIqECkIMTFalizMeNwX4c+/7EyqMq51TSAISUxoiwEyB+1SjL5pN/4X4JyWwSXrCPUN0my/PsTqdkbSq1WRGm2+qfma67qmBh/zHoC6AMNDADtMnELk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785419312; c=relaxed/simple;
-	bh=vCQIJUU9nXDr4xoQdwGY1bHF89iCiRm/jH6lv31XiEw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HiuYodpd3fkdJthxvf1y1c+7t10oDZLQy/iOk9y8K4xArlwZ9nsa6j7MuIUZVKaM+ZnM/04DpOgQGMmfahdxN1wgVuEZyLX+N296Kb1xPbO/kYlBAxi7TFu+AXmbwWVAMSO9QV7JLfaY8pHhz0qj9oj9CJ4zu9obaoPsxkGhBdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cszu2rmz; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785420431; c=relaxed/simple;
+	bh=HLfB78vNC0yjT2zF/niDrwupE1UuT6JJmS49+HNeJP8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d6K8e6OI6e4FCe5zvKyvxSAstt0yNctak7zCfJdxr5FNBbwvvOX22a2740/6thyj/gXMV4VPe1y/FoQfeovHeK3aBx/Oe6g1d0p12wFEtag+UYUwH6vICsnmfE9OidHxrTznCLqlxrZZf2BKQeYEtlW3ivcDsoM8AIM2qbkQv6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=JruAloCF; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cszu2rmz"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c15cf78d1a2so260823066b.1
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 06:48:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785419309; x=1786024109; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qVywrhfa15eapzigH1Kkl2ZWf3WvjIE2DixDgT8FK2I=;
-        b=cszu2rmz1JKNb1TvoCdQexeFaZxd94J1lCPiwhMjX2JhE+gZhUZ/q5AfYubvkyoVYt
-         U8aVoG5fy0mN0cZyVqaFVxxPt/XYNdVXgIvv2UixfVSgvpdUVuqP7MiRVUxLbEnGL9y6
-         eBZxPqcJmsPjXHLP9PNPXglYF6lLabI1rB97gHqeFYzuxZI9VnsUdQlksnJN+F95r7lN
-         s9WEdpF8Zh/nlcvRDiis7y447O1pPConYAKMS5dp7Pzj992/d92oXKOtXIrsZXzPynEu
-         QgpsdydMrTu7UhUlS9dQXAQKTFujXqcCnYMc+wc6r5OXf2e1y74ANFSyHYHHBbE8XGWM
-         g+5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785419309; x=1786024109;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=qVywrhfa15eapzigH1Kkl2ZWf3WvjIE2DixDgT8FK2I=;
-        b=gL6xM7Dk4sjzHpOKGDLqDReMDOSZX/KpKUKlMc2VmNRUpg6vc9AdLzlAKgZIQrfyCg
-         kFlDRxLRaNw1kaMyNMTu/4cAMkzUwiSSqIzLpclR4DiSKiUml0GWSyBUItMZ1XaYixDG
-         P2WxCfVckteAmc4P/+QyaCUS7Wfo0Uilny4HOkAC3f7vmDgPUlNV6QMZDc1cWYtelLZj
-         j/MAeQY/j0oWLmBNwhXFhHCDFnhDG2P55BrnuDB4Vty64Mnk16Ynjz8en7xMBSSFUB/8
-         1XiJ2CCoQFEAO+UyuLlS2h8zFqJ3Cq5zONi63lr9zcrUOagfaIrp+ScXtpPjHjSqp4Fk
-         /Npw==
-X-Gm-Message-State: AOJu0YxoI/qYNf/3UHuIl3jLol2PN6/BP3bVKhI0qt31bQEKmAXD6Rze
-	vfcX+w6r4DzrLHIuUBGR+MNCK4qO/i2B/u9+46fh0lVca8VIb6THEz3S
-X-Gm-Gg: AR+sD10gctEK1wUcXzZw6NHfSr64Z/0Ti8yCyBkOaoxvOG2Odzi8xYPAFiQtzdgrTva
-	9eRvBgCL6pfBqU1sr5m7tEXwA/+Kyp+fCOHnid5I9sFjBqgm7ZQnHrvf0XH/1+e3pw2EMkvv1N2
-	Yg7MqiN8D/gwyW+xrAH6m1G0nxdd547NqZjj/LYLsMGPNJeSLhDN2CSTh6CrDf8f4CHNWAPZ8eJ
-	hw5cqP5S9pSSObSlnAFStuwhYzlt0vG/cPc85uNLzxwmckXIumLTzQ1Aho1YDWOYp3HdTOv6vVq
-	Tq1p1zqksCCzqJ0FDJ5jyZrNE5NRfhNmtfzWe6JCvn6lMX+2vQe5j3D47WqMlxzGfgDulI8yG2d
-	PXsLdQsjZ3ADWd3wtxRyuIjUx4yQuDCOgD4p4LKCKIlZ+VCZTMN/qw9NosLWYHPhohkSGwI78TE
-	jssK3SGCWXzY3Z4UDwX8LJ2aGxfj/+2uxAfLvXNJMwdYC/0e4I31kQfFNcK70nFGgbLQ/0XRsli
-	mJ3S1uf71/YXW6MI2Z5U41AHbMC/x4jM9NK5AxfhTU5O7rv
-X-Received: by 2002:a17:907:db15:b0:c12:80f6:7fac with SMTP id a640c23a62f3a-c1fa575322dmr126619166b.36.1785419308681;
-        Thu, 30 Jul 2026 06:48:28 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:50b3:c1a9:d2a7:4006? ([2a02:8109:a307:d900:50b3:c1a9:d2a7:4006])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1fa851b723sm70384766b.12.2026.07.30.06.48.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jul 2026 06:48:28 -0700 (PDT)
-Message-ID: <e248c9d5-862e-4783-a984-ab29cb8f16f8@gmail.com>
-Date: Thu, 30 Jul 2026 14:48:25 +0100
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="JruAloCF"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=PLkeg63OuLCVxSyZVT3FGznGIpDxUacdB3JC+M2Czpc=; b=JruAloCFq/byX902aD6eb4nSmJ
+	bpfmu/SXtypm50k/hfRBOvP6it/z0APmDVQDTWrPjumMRGG0LWjP2/LGKwl8/ecdBsoTVGJ5Ptzh3
+	gZ5fFaZ5HF2WTw6QpSrIrFKHJgnbk4to5b4wCE/CswWZ6ILaUoOL4+ukFOnZLxltSF7+A7CeWTUY9
+	Z/D+IoHIcvlw85VXICazmvxGAudPMceZS4m1giLr+ZJwkwewLS6iRI0dFrJkWtfrmqPgj7TFHtOsx
+	yVZHX5GnuKGAptpU6MoKnNMsWTsNspG20QtN19pdXc6wFrgC3OSBGUlKeRx1ovL3qwQyqPmmE++y6
+	Frj56npw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wpRPN-009IEB-2U;
+	Thu, 30 Jul 2026 14:06:50 +0000
+Date: Thu, 30 Jul 2026 07:06:44 -0700
+From: Breno Leitao <leitao@debian.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>, rostedt@goodmis.org, 
+	pjaroszynski@nvidia.com
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, puranjay@kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com, dcostantino@meta.com
+Subject: Re: [PATCH] mm/kmemleak: report RCU-tasks quiescent states during
+ the scan
+Message-ID: <amtZNwxZ3gpOsPER@gmail.com>
+References: <20260720-kmemleak_rcu_task-v1-1-5b460ade777d@debian.org>
+ <20260720153917.2e428e489cd0873ac6d4e6da@linux-foundation.org>
+ <5b83b0a0-708a-458a-bdbd-41c6d4610349@paulmck-laptop>
+ <amCT9QEgJRsLIb_y@gmail.com>
+ <ffa5d8d2-1157-4a30-995c-ddae3566e3a4@paulmck-laptop>
+ <amM1xUOhcpGpqIpe@gmail.com>
+ <39c90e82-f785-4b47-9571-dd4b1339d685@paulmck-laptop>
+ <amdWVTs0WKOxguxP@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] tracing: Make per-template BTF id lists
- file-local
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260730-b4-fix_btf_tracefs-v1-1-5f10b728f51e@meta.com>
- <20260730130352.476D51F00A3A@smtp.kernel.org>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260730130352.476D51F00A3A@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <amdWVTs0WKOxguxP@gmail.com>
+X-Debian-User: leitao
 
+On Mon, Jul 27, 2026 at 06:04:37AM -0700, Breno Leitao wrote:
+> I found 3 different cases on Meta fleet, where rcu task stalls show up:
+...
+> 3) Nvidia driver
+>   * stuck in nv_procfs_read_lock_params
 
+I've investigated this issue. The nvidia driver contains the following
+locking pattern:
 
-On 7/30/26 2:03 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Using `BTF_ID_LIST()` instead of `BTF_ID_LIST_GLOBAL()` for tracepoint classes introduces significant BSS memory bloat when `CONFIG_DEBUG_INFO_BTF` is disabled.
-> --
-> 
-> --- Patch [1]: [PATCH bpf-next] tracing: Make per-template BTF id lists file-local ---
-> commit 49d7faf72ef8695ae45768a193f5a09e2cfe872d
-> Author: Mykyta Yatsenko <yatsenko@meta.com>
-> 
-> tracing: Make per-template BTF id lists file-local
-> 
-> This commit converts trace event BTF id lists from global to file-local to
-> avoid symbol clashes when multiple translation units instantiate the same
-> class. It also explicitly provides local BTF id lists for handcrafted syscall
-> events.
-> 
-> Link: https://lore.kernel.org/all/ff58b01c-3f5e-4d55-be82-609d2faaf12e@sirena.org.uk/
-> 
->> diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
->> index 09ad57ac4b73e..45ffbe04b5805 100644
->> --- a/include/trace/trace_events.h
->> +++ b/include/trace/trace_events.h
->> @@ -404,10 +404,12 @@ static inline notrace int trace_event_get_offsets_##call(		\
->>   *   [0] FUNC   __bpf_trace_<call>     (the BPF dispatcher)
->>   *   [1] STRUCT trace_event_raw_<call> (the ring-buffer record)
->>   * Exposed via the events/<sys>/<name>/btf_ids tracefs file.
->> + *
->> + * File-local: the class name is not unique, so a global symbol would
->> + * clash across translation units.
->>   */
->>  #define _TRACE_BTF_IDS_DECLARE(call)					\
->> -	extern u32 __bpf_trace_btf_ids_##call[];			\
->> -	BTF_ID_LIST_GLOBAL(__bpf_trace_btf_ids_##call, 2)		\
->> +	BTF_ID_LIST(__bpf_trace_btf_ids_##call)				\
->>  	BTF_ID(func,   __bpf_trace_##call)				\
->>  	BTF_ID(struct, trace_event_raw_##call)
-> 
-> [Severity: Medium]
-> Does changing this to BTF_ID_LIST() introduce significant BSS memory bloat
-> when CONFIG_DEBUG_INFO_BTF is disabled?
-> 
-> When CONFIG_DEBUG_INFO_BTF is disabled, the fallback for BTF_ID_LIST is
-> defined as:
-> 
-> include/linux/btf_ids.h:
-> #define BTF_ID_LIST(name) static u32 __maybe_unused name[128];
-> 
-> BTF_ID_LIST_GLOBAL(..., 2) only allocated 2 elements (8 bytes), but this
-> fallback statically allocates a 128-element u32 array (512 bytes) per
-> instance.
-> 
-> Because _TRACE_BTF_IDS_DECLARE is instantiated via DECLARE_EVENT_CLASS for
-> over a thousand trace event classes across the kernel, this seems to silently
-> add roughly 750 KB of wasted BSS memory.
-> 
-I'll follow up on this
+        static inline int nv_down_read_interruptible(struct rw_semaphore *lock)
+        {
+                while (!down_read_trylock(lock))
+                {
+                        if (signal_pending(current))
+                        return -EINTR;
+                        cond_resched();
+                }
+                return 0;
+        }
 
+Code at: https://github.com/NVIDIA/open-gpu-kernel-modules/blob/452cec62d827034798072827d3866d1881662b77/kernel-open/common/inc/nv-lock.h#L54
+
+The lock is never acquired, and cond_resched() provides insufficient
+scheduling relief.
+
+This triggers a more severe issue with ftrace, which holds ftrace_lock
+across RCU synchronization:
+
+        mutex_lock(&ftrace_lock);
+                ftrace_shutdown(struct ftrace_ops *ops, int command) {
+                        synchronize_rcu_tasks_rude();
+                        synchronize_rcu_tasks();
+                }
+        mutex_unlock(&ftrace_lock);
+
+Since nv_down_read_interruptible() spins indefinitely, ftrace_lock
+now becomes completely wedged.
+
+I suppose we want two things:
+
+1) change cond_resched() with cond_resched_tasks_rcu_qs()
+2) Avoiding holding the ftrace lock while calling
+   synchronize_rcu_tasks()? It can take up to 10 minutes on a healthy
+   system to be releasd, right?
+
+--breno
