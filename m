@@ -1,114 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745B61DA60D
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 01:01:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B296936EA8B;
+	Thu, 30 Jul 2026 02:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785373299; cv=none; b=lBVdBC7pbHW0D41SnTcZN626tcX4YksVus/h6THYNHlIZoteuLV67M7japQcopZIamdDB5KjpBun8UfgoaR/cKS9VK49+cCbh85IT+vsHfKwwyOzZ5C2tJOkUd/pccL7mNfZnqJmm2Ar7NwzPTQj513S9d1lLo/rmsYGhy8y5j8=
+	t=1785379008; cv=none; b=U7qQKz6FJJEg2erj0bdo9vBE1mtKYhtAHDEeQiRJuWyc2Jv+F6WGeF2JPnAWpGd1JdaldGipPB2PJ9yD1X8u9agaz13vKS+0hCa51h5fNrqJTySjIpKS7pzPfnLjZdYgIG/OVCkPS4d6BUPbwHDEeH4P1H1ti92lt4nXTUL8U0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785373299; c=relaxed/simple;
-	bh=TOvogJZTxyBlbZeidme1IMp54EckoWTgQYP562eCWOA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=B70In3vBNWXWEdIj/BIZm8chPwYgo90LnagdhSBeiVjNf3TxPnWjkTF4o1rVmiMJz2ssnpMaW7R48kpjGAljZc9EpYlGhv+hh3dvWWFxud04z4/49Jotd2PMPFglvj8KmuFlScvCAIzt9D+sp9+UZlvvv00ZodM98SlCnCGw0Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vjahb4vA; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785379008; c=relaxed/simple;
+	bh=vhu+M6y29brDW/JoVQtWD0Yic3mIsKecTXpWZatT/oI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SsX2my/bqoN+e5dPmHBVN3dVm75BplKOL3shamIjp4gs66G1FVYqkYSFMzvJOqOaNehAqJwjUHUdMQhvQtNmZtxsgKK/nK9PYk5GkH9/R+KKdvcZy1ix+WkoNOm4G+OEmy0FXMF1JKQxcqG4yjADKpxM1gJQrhqleayS8MlMSyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ScVuJ1Na; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vjahb4vA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 122A51F000E9;
-	Thu, 30 Jul 2026 01:01:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785373298;
-	bh=WaQmumtEIjxt5+NpnhtOggxXieWKz6W/L/swvjxuG80=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Vjahb4vAQfwcNKfaPQUwl7RxH8e0hB+gGePoFnEL4pGhBD9ruTSeJ6pudUls3k+RC
-	 /DGJDdRyLNq6DubM1KXodzqpkvNV4rA4bGLun3vMPa3U56wNvETYg7YdFm/hutlZeS
-	 enDi/ewgm6WBh4K5qDjgWFguMx01qO8hs8i+0xz9wzCaN7SJNFUis7ns+WzGLrQ4Ya
-	 mLfvZB4JfZRusIV/prUwwJPJyctiBDNVXDzq6KkURk0AazOE8dFeBG+LHQ74zFOQmf
-	 ZmjinrhQxNhcD1K67v6r7BO9EY5qCdW2rxY9j5OFvST3N9W7qAhFfZGQBTFt5GGOXI
-	 DWgoJszHFEuNg==
-Content-Type: multipart/mixed; boundary="===============8536028787354132834=="
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ScVuJ1Na"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66U0lgIu1572893;
+	Thu, 30 Jul 2026 02:36:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=JWmBmj
+	CVDwZRVgRCNJvQM8+svXnp9KhE6SAWLtH/3TE=; b=ScVuJ1NayI3lRygF+o6LEG
+	TmvAoG0OT48oqr33uRetOXtafCqwT8zBHtNYHcfJAMMvVrAWZF22KEj3S5Zb0fQ0
+	5cLNfus0Q++AmSCIq7xHuPxgP2179ZiOTus6muDOjCGvrgfxP07yPYcmc3tMzqp9
+	N+/EkG6H4yj5tOkQUnqQMyOet/6PL5mREhBNi+0DyYo+pxv5WDbemPtrTFD6uZOs
+	U5iC2qSRfXGhcrOgEhegvC00M48Q5k0lmLlDTV+gBqoZnVUdEp8EEC8LAdgZj8KE
+	VTe8h/kdQ/V/kPsRtwhVcBMvb44GsMHvKklDbyejj/IsuFewqOvjv/5rZ7VXbovg
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fmv0xwpbk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 30 Jul 2026 02:36:16 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66U2QH3l017828;
+	Thu, 30 Jul 2026 02:36:15 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fn8fk9e11-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 30 Jul 2026 02:36:15 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66U2aD7u22151794
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 30 Jul 2026 02:36:14 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B04E258059;
+	Thu, 30 Jul 2026 02:36:13 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2514358043;
+	Thu, 30 Jul 2026 02:36:08 +0000 (GMT)
+Received: from [9.43.84.46] (unknown [9.43.84.46])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 30 Jul 2026 02:36:07 +0000 (GMT)
+Message-ID: <4ae1d899-9948-4904-ac3f-9096722fec8b@linux.ibm.com>
+Date: Thu, 30 Jul 2026 08:06:05 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <776af17a5b92e5d99bf506310ed77ae3343147e2d516494b4d548e2fad7b6b66@mail.kernel.org>
-In-Reply-To: <20260730001145.381820-2-vldsampaio@pm.me>
-References: <20260730001145.381820-2-vldsampaio@pm.me>
-Subject: Re: [PATCH bpf-next v3 1/3] bpf: Simplify cnum contains() by removing redundant branches
-From: bot+bpf-ci@kernel.org
-To: vldsampaio@pm.me,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,tangyazhou518@outlook.com,shenghaoyuan0928@163.com,vldsampaio@pm.me,shung-hsi.yu@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 30 Jul 2026 01:01:37 +0000 (UTC)
-
---===============8536028787354132834==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> commit d2e5a95c6c27e8fdd19a942255f933b33741c758
-> Author:     Vinicius Sampaio <vldsampaio@pm.me>
-> AuthorDate: Thu Jul 30 00:11:34 2026 +0000
-> Commit:     Kernel Patches Daemon <kernel-patches-bot@fb.com>
-> CommitDate: Wed Jul 29 17:23:31 2026 -0700
->
->     bpf: Simplify cnum contains() by removing redundant branches
->
->     This patch simplifies the contains() implementation.
-
-This isn't a bug, but could the opening line be dropped or rephrased?
-It restates the subject line and uses the "This patch" phrasing that
-Documentation/process/submitting-patches.rst discourages in favor of
-imperative mood. The substantive rationale about circular ranges starts
-in the next paragraph and could lead directly.
-
->
->     Bearing in mind that a non-empty cnum represents an inclusive circular
->     range in the corresponding unsigned integer domain, membership could be
->     tested by checking whether the distance from the range base to the
->     queried value is within the range size.
->
->     This makes the explicit wrapping and non-wrapping cases in contains()
->     unnecessary, since:
->
->             v - cnum.base <= cnum.size
->
->     is equivalent for both ordinary ranges and ranges that cross the
->     unsigned wrap boundary.
-
-[ ... ]
-
->     Co-developed-by: Yazhou Tang <tangyazhou518@outlook.com>
->     Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
->     Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
->     Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
->     Signed-off-by: Vinicius Sampaio <vldsampaio@pm.me>
->     Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
->
-> diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
-> index a90e317e3578..ac1f62a0195d 100644
-> --- a/kernel/bpf/cnum_defs.h
-> +++ b/kernel/bpf/cnum_defs.h
-> @@ -210,12 +210,7 @@ bool FN(is_empty)(struct cnum_t cnum)
->
->  bool FN(contains)(struct cnum_t cnum, ut v)
->  {
-> -	if (FN(is_empty)(cnum))
-> -		return false;
-> -	if (FN(urange_overflow)(cnum))
-> -		return v >= cnum.base || v <= (ut)cnum.base + cnum.size;
-> -	else
-> -		return v >= cnum.base && v <= (ut)cnum.base + cnum.size;
-> +	return !FN(is_empty)(cnum) && v - cnum.base <= cnum.size;
->  }
->
->  bool FN(is_const)(struct cnum_t cnum)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] powerpc64/bpf: Fix build break in
+ bpf_jit_emit_func_call_rel()
+To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+        memxor@gmail.com, hbathini@linux.ibm.com, mpe@ellerman.id.au,
+        npiggin@gmail.com
+References: <cover.1785339155.git.skb99@linux.ibm.com>
+ <aafc721911eefc4ee376e27a0f4cebb82e3ee336.1785339155.git.skb99@linux.ibm.com>
+ <8e3aa8f3-c264-4568-a973-0595914f89df@kernel.org>
+Content-Language: en-US
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+In-Reply-To: <8e3aa8f3-c264-4568-a973-0595914f89df@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-GUID: RMQB6wyc4ftPbs__6eTBf88MgEEngaiM
+X-Proofpoint-ORIG-GUID: dR6o8elzLtdLXeAAayH8PQTskXNHloRe
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMwMDAxMyBTYWx0ZWRfX2V+CTuSM/kUQ
+ nu5kRf0buTv9k5mSCx1vdJQQhuGkgL0acZAnVmOF/ksgi0Hmb0m6BStpxxFCZ4FRKzb0OAHWYk/
+ B2Grlzq1AZ2GcoRvVGlSeaSE1Vjit8o=
+X-Authority-Analysis: v=2.4 cv=dYuwG3Xe c=1 sm=1 tr=0 ts=6a6ab8a0 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
+ a=C62OpMNfUQH9adNov7cA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMwMDAxMyBTYWx0ZWRfX1xXu4sh6ECLs
+ zZlLmDP4JBwjnL+fVrLtOsvSTAe8ejelU+WY2D7iU+5R83JXCEekBUXHmpt6vGh9CmXmkUf1ci4
+ bckvQUgaDL6oWIqR2FsotGKUe33PVJstDq0sshZcJ5PpYURjk3tlyOTVMX906GIan94irJwd/c2
+ /Gwp3zqE0yxgkPwpCkOJjaQs6r4uQ/vD9MGJyMX91I1qLaDgiQSMB2hnkJB4DE9MVBWEiihUSZz
+ ZZnMytpPglvTWOYjD39FHMbc5cEYNDc9MKBR37lV3iyRAhcAKcsfn8Qb3Y4ITnhz0YDjBFyHoUX
+ bmntOnbPYm4Hx51AGQSiHCejLwVCLjVhU8krTxAh+o9mZwcSRr7w9wPO8V7nm6oZfiW6EAQL6Zv
+ cK7f+oPh9vJqccrUVNcXw9gHIzsdzcQ/kYpU3a/Ij/Ry0O1zJK+PAcM//JlkdEnolkbJrxXkdaL
+ y5uozkF6TRkY1lLfdvw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-29_09,2026-07-29_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 impostorscore=0 clxscore=1015 phishscore=0 malwarescore=0
+ spamscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607300013
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+On 7/29/26 10:15 PM, Christophe Leroy (CS GROUP) wrote:
+>
+>
+> Le 29/07/2026 à 18:03, Saket Kumar Bhaskar a écrit :
+>> From: Madhavan Srinivasan <maddy@linux.ibm.com>
+>>
+>> With CONFIG_PPC_KERNEL_PCREL enabled, build breaks with below error:
+>>
+>>    CC      mm/dmapool.o
+>>    CC      fs/readdir.o
+>> arch/powerpc/net/bpf_jit_comp64.c: In function 
+>> 'bpf_jit_emit_func_call_rel':
+>> arch/powerpc/net/bpf_jit_comp64.c:475:13: error: unused variable 
+>> 'ret' [-Werror=unused-variable]
+>>    475 |         int ret;
+>>        |             ^~~
+>>
+>> commit b55b6b9ad76c ("powerpc64/bpf: Add powerpc64 JIT support for 
+>> timed may_goto")
+>> introduced "ret" variable to bpf_jit_emit_func_call_rel() and it is 
+>> used only in
+>> else block of CONFIG_PPC_KERNEL_PCREL, fix by adding a "__maybe_unused"
+>
+> __maybe_unused doesn't fix the problem, it just hides it under the 
+> carpet.
+>
+My bad, took the precedence from reladdr, may be it is better to change 
+that too then
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30502671499
---===============8536028787354132834==--
+Maddy
+> ret is used at only one place, move it's declaration their:
+>
+> #else
+>     if (core_kernel_text(func_addr)) {
+>         int ret = bpf_jit_emit_func_call(image, ctx, func_addr, _R12);
+>         if (ret)
+>             return ret;
+>     } else {
+>
+>>
+>> Fixes: b55b6b9ad76c ("powerpc64/bpf: Add powerpc64 JIT support for 
+>> timed may_goto")
+>> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+>> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+>> ---
+>>   arch/powerpc/net/bpf_jit_comp64.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/powerpc/net/bpf_jit_comp64.c 
+>> b/arch/powerpc/net/bpf_jit_comp64.c
+>> index dab106cae22b..63952ef19256 100644
+>> --- a/arch/powerpc/net/bpf_jit_comp64.c
+>> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+>> @@ -472,7 +472,7 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 
+>> *fimage, struct codegen_context *
+>>   {
+>>       unsigned long func_addr = func ? ppc_function_entry((void 
+>> *)func) : 0;
+>>       long __maybe_unused reladdr;
+>> -    int ret;
+>> +    int __maybe_unused ret;
+>>         /* bpf to bpf call, func is not known in the initial pass. 
+>> Emit 5 nops as a placeholder */
+>>       if (!func) {
+>
