@@ -1,156 +1,125 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB01435510
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 13:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238143BFAE2;
+	Thu, 30 Jul 2026 13:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785417878; cv=none; b=Af7sbjh10/DVUCZO21GXxAaLvx54TQc6EnfBsFwmvdULeRwpmSIaXVs/dUxNdoR2BaEkFztr1/Wj4t7LEeLugmmcCwIaS3HoBvA13OeGCvGvTx3/76Hdl3ncw1n7dm29RThbfXAjF6LBmPX0eixega7+Ef8n4PUsuse8LJAp1ag=
+	t=1785418483; cv=none; b=N6gQ9h/hCDmIZ5La6+uJf3tfqM3uTRayQPw+V86TyNM3NEC4LaXaBmKHz38uVS5CQiIMl9wj2Y2eR3GJApekew0zElYevQ8NX3GF0w1NKh64fDwZNIT8dZwTlO92wb5uSHWnH1W1cmuW0AdXzN3TI40KGp7QIAU4/e2vC2rWEbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785417878; c=relaxed/simple;
-	bh=1bmQ3RAxzKe2E3N+fs3vbfkvhQw0L5IsZeWyc9BpdRg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ki6geFaO9xPXhoVq0wqys5m3kzH1CbC5wKu5K9fP82f7PcILPG/gQTmjLYj5AUvA/YaeIxX2CwXqmneSfxuqfc5ASsyzo1z5mAGbX5+WemiiV15lltvnNOmtNRfs5q7jzSOzlTtkL5ZAtipkthMYn8/MmXPHPO6Zk9q6BKr5s5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=blTFJ+Kw; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+	s=arc-20240116; t=1785418483; c=relaxed/simple;
+	bh=io4rvUC7+JoPMBsCH5pmm5CbseXDfdm4tqym72NwEk4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QEjx+vyNxKwPso8Dmy8LS2r0cfsk+KzVEdLPbI4paUCywO8ZVJszpet39duXMDTYPo3bexvzi4kDugrv4i43JVTx0o97IZaceKIjWyC6JAuSQh2xTtfOK0oH1QifZ6V4tk708uZR7nPBh+X1nDO8f8eK1v6BQPg2wkKVlY/AJHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oeZmocRT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="blTFJ+Kw"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4957eefd361so14667475e9.1
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 06:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1785417872; x=1786022672; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=wTNiZqsPvsvAsqdJI3NYqaSJTMEuvNjWMEi2TBFAAqs=;
-        b=blTFJ+KwnlkNkWzRNAxS6s0Y97LiwFlTGmcXqZhN5tnW7ZSNHgSaCmBTeBpo+UzieD
-         x0w3k+O1zEB/Nd36E/sGWVyNoHZqyj7EhLx4+x4+GFZL0ZXG/QBGjHCg1roGOWK20s0f
-         dkrE1T7JpcILsj2NN6cu/71VdbE4irtTTIyQtI80K2BbWTC2uKh4PdoAIznjp1ws4Ntx
-         QFhg16TBZWjpPbFcNTUDnYcYsJ0UzhqX5A68E3C+9e8+RumP0+Xen3oWx2oRkWvS8THf
-         hyY8NHfhO6/zzQuYNzuVYuzjo8NPiVAiysD3dGUouSSpd8P2CNPO3KlOjEZicfXnWesx
-         rKvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785417872; x=1786022672;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wTNiZqsPvsvAsqdJI3NYqaSJTMEuvNjWMEi2TBFAAqs=;
-        b=fJP8OHv+egYA7hMqU0ZhEHYbVLWwHnSUqtCkvwNK1gFPqrI1lHt+RzzEddJYyFiHRh
-         u7gKrdQS7z5Mi8fFhl+ICffutYYeDdPwWAoyxE/RuHCW9x8SaGMObcztmSQZ9Qh41DO9
-         yE0Kmmur9RPHvKqb4KftKIINxa3j8Q9ETyB1s/2dyra8iBVuvr6GAjzCJ8doniQ2Ao0I
-         WfIDAnVoBuJcDYWYRUO9c7ESZHwNv+YCkdoimA5YNlDY2mjBy+035Z+smyHjstkZKToc
-         O2GMrRSLbVYw1qabGXg535OMPSfcuwF4+NpmC7Zlf2iPDWkk+dN006SEHWbQqruzNkGb
-         6tbA==
-X-Forwarded-Encrypted: i=1; AHgh+RqJtJ8xjDmBK66pN6Lo/PL/eLCJbWloP8d88L/heYYxJYelPi+CeTZIuwsB4L/RdYhvzqI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTYqwr3Q5f2q+jrXNIjF28peinBDPeDlKiKIeuMufij4Y5wbT+
-	ENiYPnmluRkB52XdKNZENnM/ioSEhpeGW3lIyQ5IibsBOhRruV9e4wi8KWvGS1NAxFU=
-X-Gm-Gg: AR+sD11Zk20mYZxeTn1b+H8JL1YyhyOjv6frBYhtATs0MgtMkHuyRTpXwO17PIKZNne
-	ikcJA8uQHf9szky1ZyBEFS/Suk4lneZ2z5F1QX61mvy5ka0BqUr6XPfQ8krRz1/ziCAJOlCPyI+
-	JiiAwt75LGGsudlY8wzITBuLMRVkQsDRxfmVMwUMSz8Tg7Sd6Ca5Y+TF3BmNNWg7Oxmhh/V8V9J
-	PtmCOrpbqT3F/h5oWcm1QAKPKD3VbhaumcK/ktn4I34rbBLJPKn5W4122wwX0C1z7YddKb/LN6v
-	ZeF7KnCNAhCSEpVGO1ywuasYd6Hj7xsBJpzVy61MC1YrhzCOXvzS7EnZDDiZsjXSB9IACgR0iY/
-	wY50ZG+6ZrYf3eNLZSALWi7yVTdv8DQ2OPYii38H/CTIKfExdxTiWp+sLP5gClnBDNE7fQpTnrb
-	DKNnPluCNfmHX1oQWoceWMMhvHUewtwVt4Hrv+7OO/5CfL/mGaZPSo/guyZlyCE5uzpS8tcQXAR
-	r2TyUI5q1kXcZCczlplpDBor/AxGKW+WSvaRuNl8IwIRcLctqvIW0YI/dNr86V4jyBB9uvfcPA1
-	JfNMr3Y9buz9W3+WQE6HlnkjH/FzMG2NNpgSYbGFHRUOQw==
-X-Received: by 2002:a05:600c:8b66:b0:496:c1f3:e8f9 with SMTP id 5b1f17b1804b1-49800ea1378mr34361415e9.20.1785417871594;
-        Thu, 30 Jul 2026 06:24:31 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49801c073a3sm8655585e9.4.2026.07.30.06.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 06:24:30 -0700 (PDT)
-Date: Thu, 30 Jul 2026 14:24:28 +0100
-From: Daniel Thompson <daniel@riscstar.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alex Elder <elder@riscstar.com>, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH] net: stmmac: Avoid freeing and re-requesting IRQ during
- XDP set prog
-Message-ID: <amtQjCV6Oi7UI97t@aspen.lan>
-References: <20260706-tc956x-stmmac-no_irq_teardown-v1-1-df009d0272bf@riscstar.com>
- <akzLgrzsw4xYmnLH@aspen.lan>
- <9f949b97-da81-4bdc-8be5-68f7883d768c@lunn.ch>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oeZmocRT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CE221F000E9;
+	Thu, 30 Jul 2026 13:34:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785418481;
+	bh=cTKth7UNQeBwmsZO2B2Pp13WvIQsQKMZ6nrWV73pGKM=;
+	h=From:Subject:Date:To:Cc;
+	b=oeZmocRTJDKm7/UH/6M2EoYytUvah2fMlxFriOxG1INcFHLoBFl+ggFV5uJK30tEQ
+	 NQtHGLQ8xlDiwVIfFdoSN+WwbIaAROECahisvdnxdYm4ELvwtBk4bm0AyK4Ga95lOK
+	 VRIIfaiOMgFTHC+uGMcc5ahTxyT87qsPdMGyvdMk2pyoT/RRIwZ3fGdFUraLnjYVlY
+	 43u6SmbFPDntakSdhbZe0BnnRes+93D8j3e9LBb8kuyBGMdwQZEc7clypNfAgQcp1S
+	 M68f0sWObqvXuhw/WrrtRO79N07GJalU462KMbshwv8xCCYcqqLZRO+ahPiynaFDo+
+	 /PJivJEAGNU+Q==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/9] binfmt_misc: bind interpreters to a bpf-backed entry
+Date: Thu, 30 Jul 2026 15:34:02 +0200
+Message-Id: <20260730-work-binfmt_misc-preopen-v1-0-4a0b0da71f16@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f949b97-da81-4bdc-8be5-68f7883d768c@lunn.ch>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMpSa2oC/yWMUQ6CMBAFr0L22yUFFIJXIcbQdiuroSVdRBPC3
+ S3yOZP3ZgWhyCRwzVaItLBw8AmKUwZm6P2DkG1iKFVZq6Zs8RPiCzV7N873kcXgFClM5LGtL5X
+ TrS2sOkO6J+/4+093t4PlrZ9k5r23L3QvhDr23gy7Wpxgk1f5EYdt+wFB2SGQnQAAAA==
+X-Change-ID: 20260729-work-binfmt_misc-preopen-9653fb9d1d04
+To: linux-fsdevel@vger.kernel.org
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Kees Cook <kees@kernel.org>, linux-mm@kvack.org, bpf@vger.kernel.org, 
+ Jonathan Corbet <corbet@lwn.net>, Farid Zakaria <farid.m.zakaria@gmail.com>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+ jannh@google.com, mail@johnericson.me, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>
+X-Mailer: b4 0.16-dev-3e0c3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3493; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=io4rvUC7+JoPMBsCH5pmm5CbseXDfdm4tqym72NwEk4=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRlB71bM6l2ccmN36uk9y1vqdhqbFj+XT5qzgXTDQqai
+ 7ao/VD92FHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjAR9QpGhokyak8Kd06PN9Dw
+ nii75EnMjCe3YqrbHladb974muFH+2yG/24yM2O3qC356rI9+0q6vJXrlvDjXwIc/m8NsHmz4uV
+ pP3YA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Tue, Jul 07, 2026 at 02:30:44PM +0200, Andrew Lunn wrote:
-> On Tue, Jul 07, 2026 at 10:48:50AM +0100, Daniel Thompson wrote:
-> > On Mon, Jul 06, 2026 at 05:17:58PM +0100, Daniel Thompson wrote:
-> > > Currently stmmac will run a full cycle of IRQ tear down and setup when
-> > > setting up a new XDP program. This makes tuning TSN systems difficult
-> > > because whenever a new XDP program is installed then the irq threads will
-> > > be stopped and restarted which will undo any thread tuning.
-> > >
-> > > The problem is avoided by removing stmmac_free_irq()/stmmac_request_irq()
-> > > from stmmac_xdp_release()/stmmac_xdp_open().
-> > >
-> > > stmmac_free_irq() implicitly synchronizes interrupts and, with that
-> > > removed, I was unable to prove that later actions in
-> > > stmmac_xdp_release() are safe when there are concurrent interrupts. To
-> > > avoid problems let's also move the code to disable DMA interrupts earlier
-> > > in the sequence and explicitly sync the interrupts handler(s).
-> > >
-> > > Signed-off-by: Daniel Thompson <daniel@riscstar.com>
-> > > <snip>
-> > > @@ -7156,10 +7201,8 @@ int stmmac_xdp_open(struct net_device *dev)
-> > >  	stmmac_reset_queues_param(priv);
-> > >
-> > >  	/* DMA CSR Channel configuration */
-> > > -	for (chan = 0; chan < dma_csr_ch; chan++) {
-> > > +	for (chan = 0; chan < dma_csr_ch; chan++)
-> > >  		stmmac_init_chan(priv, priv->ioaddr, priv->plat->dma_cfg, chan);
-> > > -		stmmac_disable_dma_irq(priv, priv->ioaddr, chan, 1, 1);
-> > > -	}
-> >
-> > Sashiko picked up that stmmac_init_chan() has the effect of enabling DMA
-> > irqs, making this code unsafe.
-> >
-> > Given stmmac_xdp_open() can only be called on a running interface (and that
-> > stmmac_xdp_open() explicitly sets sph) then re-initializing with stmmac_init_chan()
-> > should have no effect and we can drop that as well.
->
-> Something i like to see is symmetry. In theory, stmmac_xdp_open() and
-> stmmac_xdp_release() should be mirrors of each other. But i don't see
-> anything like the opposite of stmmac_init_chan() in
-> stmmac_xdp_release(). So i can well understand that something is
-> wrong.
->
-> Maybe rather than just fixing this IRQ issue, you can look at both
-> functions and see about making them symmetric? I've no idea what that
-> actually entails, it could be a can of worms, which is not so uncommon
-> with stmmmac.
+A 'B' entry's load program hands the kernel an absolute path and
+open_exec() resolves it at exec time in the mount namespace of whoever
+runs the binary. So the handler names an interpreter but never gets to
+say which file that is. Whoever controls the filesystem view of the exec
+does.
 
-After review I found that moving the disable to stmmac_xdp_release()
-does and removing the call the stmmac_init_chan() gets things most of
-the way there. After these changes every action in stmmac_xdp_release()
-can now be traced by to corresponding restore code in stmmac_xdp_open().
+Static entries have had the answer for a while. 'F' opens the file at
+registration and every exec runs a clone of it. I can't just reuse it as
+it stands. It pre-opens the one interpreter named in the register string
+and a 'B' entry has no fixed interpreter. The program picks per exec,
+and a qemu-user shaped handler wants one per guest architecture. So it
+may want a whole set of them and that doesn't fit in a register string.
 
-It's not fully symmetric because activity in open does not appear in
-reverse order compared to release. However it definitely moves things
-in the right direction because the new stmmac_disable_all_dma_irq()
-function pairs nicely with stmmac_enable_all_dma_irq().
+An entry is matchable the moment it is registered, so everything it
+needs has to fit in that one write. Patch 1 adds a 'D' flag that creates
+the entry disabled and splits a registration into create and activate:
 
+    echo ':qemu:B::::qemu_user:D' > register
+    echo '+aarch64 /usr/bin/qemu-aarch64' > qemu
+    echo '+arm /usr/bin/qemu-arm' > qemu
+    echo 1 > qemu
 
-Daniel.
+Each path is opened by its write, with the credentials the entry file was
+opened with. Same open_exec() call, same place as 'F'. The program picks
+one per exec with bpf_binprm_select_interp() and gets a clone of the
+file. Nothing is resolved again, in any namespace.
+
+A 'D' entry simply isn't hashed until that first '1', so the rcu
+insertion that publishes the entry also publishes its interpreters and
+the exec side needs no barriers. Reading the entry file doesn't take any
+locks either. Bindings are rcu-published and the open file already pins
+everything the read looks at. We use paths, not fds which makes the
+config remain nice and static and can be shipped via /etc/binfmt.d.
+
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+Christian Brauner (9):
+      binfmt_misc: let a register string create an entry disabled
+      selftests/exec: let binfmt_flag_supported() return a bool
+      selftests/exec: test registering an entry disabled
+      binfmt_misc: document registering an entry disabled
+      selftests/exec: share the bpf handler preconditions
+      binfmt_misc: carry pre-opened interpreters in struct binfmt_misc_interp
+      binfmt_misc: let a 'B' entry bind its interpreters
+      selftests/exec: test interpreters bound to a 'B' entry
+      binfmt_misc: document interpreters bound by a 'B' entry
+
+ Documentation/admin-guide/binfmt-misc.rst          |  75 +++-
+ fs/binfmt_misc.c                                   | 459 +++++++++++++++++----
+ fs/binfmt_misc_bpf.c                               |  75 +++-
+ fs/exec.c                                          |   2 +
+ include/linux/binfmt_misc.h                        |  39 +-
+ include/linux/binfmts.h                            |   3 +
+ tools/testing/selftests/exec/Makefile              |  11 +-
+ tools/testing/selftests/exec/binfmt_bind_interp.c  |  14 +
+ tools/testing/selftests/exec/binfmt_misc_bpf.c     | 306 ++++++++++++--
+ tools/testing/selftests/exec/binfmt_misc_common.h  |  45 +-
+ .../testing/selftests/exec/binfmt_misc_disabled.c  | 172 ++++++++
+ .../selftests/exec/binfmt_misc_transparent.c       |   2 +-
+ tools/testing/selftests/exec/interp_bind.bpf.c     |  76 ++++
+ 13 files changed, 1164 insertions(+), 115 deletions(-)
+---
+base-commit: 4bdcf682a476e8d9f52b2c5c01e998d70e45656c
+change-id: 20260729-work-binfmt_misc-preopen-9653fb9d1d04
+
