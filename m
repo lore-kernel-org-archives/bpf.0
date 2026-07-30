@@ -1,189 +1,116 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B8449620
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 06:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAF649620;
+	Thu, 30 Jul 2026 06:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785393234; cv=none; b=u0vMdIRACwyY6Oi7YDBohaX1YHy9lHjkGBPgHmhaJiWopZLnH6Uicxrpn81JoIh93MBISvfPKqq9ku4YGN6OSkBBFfwRR1ZFBHQneW3IKiHAglcksgIDlNMmGxfTx1WdmntU8HN7QvA+SzkoZdhRXfEzJNKOOSSdbwrwK5hed4c=
+	t=1785393279; cv=none; b=VLRk8ExP/lzPRJo/utF4i0HoRTbWHIOJOZ7C2zPpLT0LaLYV+AltfPok1UpUrxC9WcJV4HGERJejyxuNhQq/PSRo9GkZG1vnJNgddp+hFBzsU4mvc2hlEBRApzSilQZNPsOg7Bv8YDdm36lKPpkectap9ZwSRs28p0rv7cJQX7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785393234; c=relaxed/simple;
-	bh=1buAZ1J3EJzoK3uKXKjU8iSDVuQnXlUsbpZQK3NC29U=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=RDZ/h8jc1v+9uwshtrr01WsW7Xc0PTACZrMWAY71XsqbXBNXKQrBKHquWRvMcPeDnk4SBbOjNh66RgflukI4ChMu5BpMQMwF5K6UJojg6QSXm/9TJn0kOQUeonTPFs6VNaBZ2PCS6NiBU00L999JAHMjOoY2voWHVJ87yvXF0A0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=w8/bRkfL; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1785393279; c=relaxed/simple;
+	bh=uUrJGfaBIb7mDA4YBbtbfsAXDxZqOs8qYQYrmWapWeM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BF3TV6fJ26G0oB4v/5mxyQxyG6sLffgc9gYEexjkmefiYVbsAxWUrnkCmDnf+jnSL1rmEVA5IL22loUYWlX7CW5+Yukp4xL2obFZ16jOZKII0cpq+eSprzfpRVnN0yaZ3ibzU/iopBV0TiCF6S9Z6IO0eLlk8AnXjMUpTC4VElg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U3LhnaM3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="w8/bRkfL"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84eb992a881so328761b3a.2
-        for <bpf@vger.kernel.org>; Wed, 29 Jul 2026 23:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785393232; x=1785998032; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=mmztpyGDT8bXM2TJcNunZC5IJZ+7bFWL4gwiWczYTvc=;
-        b=w8/bRkfLWuCSkZLyzKyPtgJPSq27rBmNSb3ShYEQsr49NjJAtspoHIg55jNjQzpxxw
-         n5bH9u83YHuyw0tjWrvckXwV6DStqLSdc6zKdwYfPUJrnGwZVgIsPfnn0qJYzwk39s41
-         KGV0EDTj95zciNj+a5JoZ6LRjzgaSxUnQXJ0o8ApqOPA8j1cNZfY32boE1tEMitwm6H5
-         2HAIl/WpnWvlRRamsuYGUxOQ1ruokZFJzgiUIkRjeJHcSapqBrijurEDB8GSdPwwGPmW
-         pK4ina6WUBhg5taYJjZ7iVk7co3pWDDnd3N7jCUojcaRPSVbQK5VJli9XWLUc4Gm0vRn
-         EP8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785393232; x=1785998032;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mmztpyGDT8bXM2TJcNunZC5IJZ+7bFWL4gwiWczYTvc=;
-        b=Qi446q2i/ZpX+5/iMsJzEdvl3zbt9d2ba/SeJraMcAjzAqc/bqslLowDN89KFTqB/M
-         BkGCM+HrN3tdWf3YpDtsHyRW1rfuOmqBYYceJb8xrA8N6yLHoLlsGWzdB3trUTS1APK7
-         yJUh0ujo9GVUrSmiciqKKlB6aB/KchKDqi9bqOydRX5bo6UOXH9imgzFRZJzvDrPdi7h
-         xpj8BGxQrcPtSRzFGzhMdYuHV/uhvRQrHXJSM6reIqP8BPHcxFxWlbjDCOQ4hvUzuvfc
-         5qRIYmGTozDlg5I2xvGrOswOH9fFoaV5BENZTGTi3UjZRB0ZpyEix/1Xw9n2tQ+Q7lQL
-         a9eA==
-X-Forwarded-Encrypted: i=1; AHgh+RozRQAXr4v70KfYMIvGG574VVKV74g/u4kxoZSuvxxunyr6aAkTn1SGTudf1MWaAHXo01E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxzs6Uh4AP9h8f/W2YaJc3/gSBCtqpj5kwHR+MuaGt5IFp8pMjM
-	z+RlTQRaqrtXNqvSeC1Wr9UZXS1+PhmeK0NNLWHohxknhCh7kZlchsT6GN50X49EHsY=
-X-Gm-Gg: AR+sD13gdbKnq70aP6ehQycOybKo93VO7DiAl7qlIMXhMU+Say+YIuWdF0DrjD7bdVA
-	5CLDOZ/0BTGZxogUye2qwC7kErhveFklWy4qZ151J2SV9RgSyusOdvVryHoLoxMoRddhUreFD9E
-	HrJIod1n2ibUm/XQ57pNNGanex2CBA8+hBKEEE1wGz1pQyc11ZU5kjCvcnQkHztIGMdtpjFsY99
-	Z6DPKT9jFNT+SU41ZHanxfKVnUJZAB4ABEVpeHUkc5ZQ4e1bHunVkSFDOEwV5ePVUp90AH2vwOS
-	/aW4tf18WNi3P/zPd6V51voUe/uOSMi/RMJoh/TNV8UdxinqJh41DBPvbcTergHQOQd0vAVdCze
-	c/U38eZ1qc90fSS2+Z1XPXsKjnKi6BA/3fVTfI+vDPtgIqSW65rN0P6TfZIp+Wx8E0oD1Gj/riQ
-	JY+XH37RtsY5+jYYpccHjtyEZ1uIG9is7jir7p2GfMdiN51pM0gvvyK8MYd04HfLNnvVlAb8RGn
-	bjrHtZS3Y1YWSlSd/IJhkAWaA0t
-X-Received: by 2002:a05:6a00:1748:b0:84e:1c87:e6dd with SMTP id d2e1a72fcca58-84ebc1fd7efmr1496664b3a.7.1785393231861;
-        Wed, 29 Jul 2026 23:33:51 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84ea03869d2sm2439128b3a.49.2026.07.29.23.33.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2026 23:33:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U3LhnaM3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6391F000E9;
+	Thu, 30 Jul 2026 06:34:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785393278;
+	bh=7TW3V65Ed9QROSvOoOYcEkM/qCbnhSzbOuwkLOL4aPQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=U3LhnaM3LleXLXiVai+NylyKynb6c6mGY1S+5Ggv0xMro+AAD1GmJ/XDul7KscPHE
+	 HTSpQouH7r+qV86PV4sLBzOKNJEICwPZorDcuJ1wKadqKBVSCE/tlT+4cOyU9AoQ9H
+	 Z/vei2FPemFXnHjNh1K8M92rUfkYYk/BHxWQB9FRsM3scvWXI/G6wkO6PqfdnGdDTk
+	 s2X1gQBEluqigaPA4kNLmDbh89OkeTlTUk88avlbnTv9AUnfMC/XzdItf3GYMzY4jp
+	 2/pfzhQnhovTPHnzdzOrak2/kS+5otrzIl1dNL4GTo6fHA3vVCgsPcIVcGpHuLeBLQ
+	 i3aWx0hkUF9qA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v13 2/2] net: mana: force full-page RX buffers
+ via ethtool private flag
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
+Cc: bpf@vger.kernel.org, linux-hyperv@vger.kernel.org
+In-Reply-To: <20260729063347.3388035-3-dipayanroy@linux.microsoft.com>
+References: <20260729063347.3388035-1-dipayanroy@linux.microsoft.com>
+ <20260729063347.3388035-3-dipayanroy@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 30 Jul 2026 06:34:37 +0000
+Message-Id: <20260730063437.EF6391F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 30 Jul 2026 02:33:50 -0400
-Message-Id: <DKBP2V5WYH31.3QHSY5V8WTNDD@etsalapatis.com>
-Subject: Re: [PATCH bpf v2] bpf, cgroup: Fix invalid storage access after
- __cgroup_bpf_attach failed
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Pu Lehui" <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Song Liu" <song@kernel.org>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Pu Lehui"
- <pulehui@huawei.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260729100208.3076769-1-pulehui@huaweicloud.com>
-In-Reply-To: <20260729100208.3076769-1-pulehui@huaweicloud.com>
 
-On Wed Jul 29, 2026 at 6:02 AM EDT, Pu Lehui wrote:
-> From: Pu Lehui <pulehui@huawei.com>
->
-> Sashiko reported a potential invalid storage access issue after
-> replacing a cgroup bpf prog.
->
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Nit: No need to mention Sashiko reports in the commit message imo,
-the Reported-by is enough and imo it makes it confusing for people
-not familiar with the system.
+Pre-existing issues:
+- [High] Use-after-free of BPF program when mana_pre_alloc_rxbufs fails dur=
+ing XDP setup
+--
 
-> This occurs in the following scenario:
-> 1. prog1 with storage is attached to a cgroup in multi-attach mode.
-> 2. prog1 is replaced with prog2 using BPF_F_REPLACE in multi-attach
->    mode, but fails midway (e.g. in bpf_trampoline_link_cgroup_shim or
->    update_effective_progs).
-> 3. A new prog3 is attached to the cgroup in multi-attach mode.
->
-> The reason is that __cgroup_bpf_attach overwrites pl->storage with the
-> new storage prior to attachment completion. When attachment fails
-> midway, the cleanup path calls bpf_cgroup_storages_free(new_storage) to
-> free the newly allocated storage, but fails to restore pl->storage back
-> to old_storage.
->
-> Consequently, the still-active prog1 holds invalid or dangling storage
-> pointers, leading to an invalid memory access when prog1 executes and
-> calls bpf_get_local_storage. Additionally, original pl->flags and
-> cgrp->bpf.flags[atype] are left unrestored.
->
-> Fix this by saving old_pl_flags, old_storage, and old_flags prior to the
-> update, and properly restoring all of them in the cleanup path on error.
->
-> Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs o=
-n the same cgroup")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+--- Patch [2]: [PATCH net-next v13 2/2] net: mana: force full-page RX buffe=
+rs via ethtool private flag ---
+commit 2ea505589c71d255969461add82f06436f8f8e80
+Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+net: mana: force full-page RX buffers via ethtool private flag
 
-> ---
-> v2:
-> - Remove the link relative code as link only support
->   BPF_F_ALLOW_MULTI attach, so will not occur UAF pl.
->
-> v1: https://lore.kernel.org/bpf/20260728132336.2857800-1-pulehui@huaweicl=
-oud.com
->
->  kernel/bpf/cgroup.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index e2fa0ebeed83..be24ca453cab 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -813,8 +813,10 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->  	struct bpf_prog *old_prog =3D NULL;
->  	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] =3D {};
->  	struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] =3D=
- {};
-> +	struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] =3D=
- {};
->  	struct bpf_prog *new_prog =3D prog ? : link->link.prog;
->  	enum cgroup_bpf_attach_type atype;
-> +	u32 old_flags, old_pl_flags;
->  	struct bpf_prog_list *pl;
->  	struct hlist_head *progs;
->  	int err;
-> @@ -865,6 +867,8 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
-> =20
->  	if (pl) {
->  		old_prog =3D pl->prog;
-> +		old_pl_flags =3D pl->flags;
-> +		bpf_cgroup_storages_assign(old_storage, pl->storage);
->  	} else {
->  		pl =3D kmalloc_obj(*pl);
->  		if (!pl) {
-> @@ -884,6 +888,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->  	pl->link =3D link;
->  	pl->flags =3D flags;
->  	bpf_cgroup_storages_assign(pl->storage, storage);
-> +	old_flags =3D cgrp->bpf.flags[atype];
->  	cgrp->bpf.flags[atype] =3D saved_flags;
-> =20
->  	if (type =3D=3D BPF_LSM_CGROUP) {
-> @@ -915,12 +920,15 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->  	if (old_prog) {
->  		pl->prog =3D old_prog;
->  		pl->link =3D NULL;
-> +		pl->flags =3D old_pl_flags;
-> +		bpf_cgroup_storages_assign(pl->storage, old_storage);
->  	}
->  	bpf_cgroup_storages_free(new_storage);
->  	if (!old_prog) {
->  		hlist_del(&pl->node);
->  		kfree(pl);
->  	}
-> +	cgrp->bpf.flags[atype] =3D old_flags;
->  	return err;
->  }
-> =20
+This commit adds an ethtool private flag to force one RX buffer per page,
+bypassing the page_pool fragment path. This is intended to restore
+line-rate throughput on certain ARM64 platforms with 4K PAGE_SIZE.
 
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers=
+/net/ethernet/microsoft/mana/mana_ethtool.c
+> index 482cd16009abb..7e441d6ae5dce 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+[ ... ]
+> @@ -756,6 +775,78 @@ static int mana_get_link_ksettings(struct net_device=
+ *ndev,
+[ ... ]
+> +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+> +{
+[ ... ]
+> +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
+[ ... ]
+> +		err =3D mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
+> +		if (err) {
+> +			netdev_err(ndev,
+> +				   "Insufficient memory for new allocations\n");
+> +			apc->priv_flags =3D old_priv_flags;
+> +			goto clear_flag;
+> +		}
+
+[Severity: High]
+This isn't a bug introduced by this patch, but while reviewing the callers
+of mana_pre_alloc_rxbufs(), does a failure during XDP setup leave a dangling
+pointer?
+
+In drivers/net/ethernet/microsoft/mana/mana_bpf.c:mana_xdp_set(),
+apc->bpf_prog is updated before the allocation:
+
+        apc->bpf_prog =3D prog;
+
+If the allocation fails, the function returns early without cleaning up:
+
+        err =3D mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
+        if (err) {
+                NL_SET_ERR_MSG_MOD(extack,
+                                   "XDP: Insufficient memory ...");
+                return err;
+        }
+
+The core network stack handles the error by releasing its reference to the
+new BPF program, which may then be freed. Because the early return skips
+the err_dealloc_rxbuffs label, apc->bpf_prog is never reverted to old_prog.
+Could a subsequent interface flap execute mana_attach() and assign this
+freed BPF program to the hardware RX queues, causing a use-after-free?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260729063347.3388=
+035-1-dipayanroy@linux.microsoft.com?part=3D2
