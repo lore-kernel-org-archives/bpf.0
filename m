@@ -1,82 +1,149 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F3B43078B;
-	Thu, 30 Jul 2026 13:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EEA2439359
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 13:43:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785418532; cv=none; b=kWsQZ3JLnFpEjzhxdCoIK5s8gxDIQVfZRd3CGq2l1HcvMe1G7E8EAMRDCkpbjfDB76lWuL9N3etgsUjamg9FIn1wMlG4wFfKABppqgfYMvo57xhPmTJQOdrp7ErcSC7TkybQT6JSuN0AkqEBRyVXzPOtfkNM/LyKwo9lci5RFlQ=
+	t=1785419024; cv=none; b=GsTwsfkfv7Zhht2L7xJ55AFOKy/MriFrou76MblbVTO7/8GJHP9B05W4smcAWebZokJKNpfkHkJXO58uysOVPvQrNgnH4oSEpuXnc+g8hxr4uFbfODBP9NKXBoiY6hWd7W6tt6EOztcR4+Qz5gHuPji2632PE0SZNbKS1uQyz4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785418532; c=relaxed/simple;
-	bh=Gd4CVRXHjGRZ7SXbAMmBL1rNORTNXLyX+Y4Y3ao/bxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MxLVFJrpIctSg9gvZ/Zkq/1lINRr2tFoN/kBYEEHOckPHwh+DHBy6knS3ZGcUsgztgf8nUgy0Q3VZy/3eBL0kzJ65rsdjH0ESm9zLfMBnLF1hd/S3IIV1xS04MTfe4nljLW/7zWhAvBk7DKWyxYSiMyNpnBadLkq1yJ2a1jbb1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=rg9kiSct; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1785419024; c=relaxed/simple;
+	bh=IjUWUxvhZnzai6pgDuX7LgOB658l0XXeyj263Uv8xcI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DSCmtmEOuBdbWh2X0W9eAJ06lODv819DIj5C9Ks4ykoEWzBeTBi+R9zcvcIlu9g5t+M8+jVEPzDrFxakRdybbSKSJNLD0wYx9jIrIqdKA/40sKv0RBVW+QAzVsCtz5P7J6K51a6MI7L2m26nAp4ij82ymeAL4PPKLSjg0Uq7Jss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ls3V21wX; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="rg9kiSct"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=BlBBYwRTDRAaiDfmDKu0GwfXvFKTY8AE4ZGeeeheVu4=; b=rg9kiSct5RsdD6WKRqypNdkEGp
-	KtuI1/9rIQPhGOXgZtqcDiVXyWmAi9A5qqqZl8VRunovPlSSzj9B9K9wZmvRyYqQA/l9fg55o7BVF
-	KVCjrYNwP3tXBh0UHymSYZ8gYLTXr3HHXQF+ROdplejQU3NFpa6IXeWxeYp0usCmsX9A=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wpQuj-00F0oL-Ax; Thu, 30 Jul 2026 15:35:09 +0200
-Date: Thu, 30 Jul 2026 15:35:09 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Daniel Thompson <daniel@riscstar.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alex Elder <elder@riscstar.com>, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH] net: stmmac: Avoid freeing and re-requesting IRQ during
- XDP set prog
-Message-ID: <ad3249e5-c607-4516-bf2e-63879e168272@lunn.ch>
-References: <20260706-tc956x-stmmac-no_irq_teardown-v1-1-df009d0272bf@riscstar.com>
- <akzLgrzsw4xYmnLH@aspen.lan>
- <9f949b97-da81-4bdc-8be5-68f7883d768c@lunn.ch>
- <amtQjCV6Oi7UI97t@aspen.lan>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ls3V21wX"
+Message-ID: <6a20bbdd-2557-4db8-8839-e2f53857ced9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785419020;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HSUgRH1bkQ5B4oh0ZVWuwBgDEXcmcvDDnq0a/P5vrsQ=;
+	b=Ls3V21wXHbtGvyQz8L2ldqSAAri+UREahyAkxB6rics/4Y8xopWC41GTkFtFrSkO/2ehFj
+	e2HsaG/qOEAb727k5eVx159xZYBOyiuO+614OyvFQ+HYHGphu5EBYkqlVFMoK6AW4kLCY2
+	dx/PMRxRnIFV49oSVLM70LSxjc9uoSw=
+Date: Thu, 30 Jul 2026 21:43:31 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <amtQjCV6Oi7UI97t@aspen.lan>
+Subject: Re: [PATCHv2 bpf-next 05/11] bpf: Disable preemption in
+ bpf_get_stackid
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ stable@vger.kernel.org, Tao Chen <chen.dylane@linux.dev>,
+ bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <songliubraving@fb.com>,
+ Yonghong Song <yhs@fb.com>, Quentin Monnet <qmo@kernel.org>,
+ STAR Labs SG <info@starlabs.sg>, Arnaud Lecomte <contact@arnaud-lcm.com>
+References: <20260729083807.1588544-1-jolsa@kernel.org>
+ <20260729083807.1588544-6-jolsa@kernel.org>
+ <78c72a5b-0db5-47da-8b35-e6a2e6976d7c@linux.dev> <ams3yHvqyXrWAbBV@krava>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <ams3yHvqyXrWAbBV@krava>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> After review I found that moving the disable to stmmac_xdp_release()
-> does and removing the call the stmmac_init_chan() gets things most of
-> the way there. After these changes every action in stmmac_xdp_release()
-> can now be traced by to corresponding restore code in stmmac_xdp_open().
+On 2026/7/30 19:38, Jiri Olsa wrote:
+> On Wed, Jul 29, 2026 at 06:30:26PM +0800, Leon Hwang wrote:
+>> On 29/7/26 16:38, Jiri Olsa wrote:
+>>> The get_perf_callchain call needs disabled preemption plus we need
+>>> it disabled as long as we access its returned trace entries buffer.
+>>>
+>>> Note the bpf_get_stackid_pe function is executed already with
+>>> preemption disabled.
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Fixes: d5a3b1f69186 ("bpf: introduce BPF_MAP_TYPE_STACK_TRACE")
+>>> Reported-by: Tao Chen <chen.dylane@linux.dev>
+>>> Closes: https://lore.kernel.org/bpf/20260206090653.1336687-2-chen.dylane@linux.dev/
+>>> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+>>> ---
+>>>  kernel/bpf/stackmap.c | 19 +++++++++++++------
+>>>  1 file changed, 13 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+>>> index 43b1e5436047..e48ddb4edd47 100644
+>>> --- a/kernel/bpf/stackmap.c
+>>> +++ b/kernel/bpf/stackmap.c
+>>> @@ -624,30 +624,37 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+>>>  	struct perf_callchain_entry *trace;
+>>>  	struct stackid stackid;
+>>>  	bool kernel = !user;
+>>> +	int err = -EFAULT;
+>>>  	u32 max_depth;
+>>> -	int err;
+>>>  
+>>>  	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
+>>>  			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
+>>>  		return -EINVAL;
+>>>  
+>>>  	max_depth = stack_map_calculate_max_depth(map->value_size, elem_size, flags);
+>>> +
+>>> +	preempt_disable();
+>>
+>> Better to use the guard-style guard(preempt)() in this series.
+> 
+> we prefer to call stackid_install with preemption enabled
 
-Great, thanks for finding time to look at this.
 
-> It's not fully symmetric because activity in open does not appear in
-> reverse order compared to release. However it definitely moves things
-> in the right direction ....
+Understand.
 
-We cannot expect stmmac to be fixed all at once, it has too many
-issues. Maybe we can ask developers who need to touch some code to
-spend a little bit of time to also do some fixup in that area. So we
-slowly chip away at the problems.
+I wonder if we could avoid the "goto out".
 
-Thanks
-	Andrew
+scoped_guard(preempt) { ... } might work here.
+
+But "goto out" is fine with me as well.
+
+Thanks,
+Leon
+
+> 
+> jirka
+> 
+>>
+>> Thanks,
+>> Leon
+>>
+>>>  	trace = get_perf_callchain(regs, kernel, user, max_depth,
+>>>  				   false, false, 0);
+>>>  
+>>>  	if (unlikely(!trace))
+>>>  		/* couldn't fetch the stack trace */
+>>> -		return -EFAULT;
+>>> +		goto out;
+>>>  
+>>>  	err = stackid_fastpath(&stackid, map, trace, flags);
+>>>  	if (err != -ENOENT)
+>>> -		return err;
+>>> +		goto out;
+>>>  
+>>>  	new_bucket = stackid_new_bucket(&stackid, map);
+>>> -	if (!new_bucket)
+>>> -		return -ENOMEM;
+>>> +	if (new_bucket) {
+>>> +		preempt_enable();
+>>> +		return stackid_install(&stackid, map, new_bucket, flags);
+>>> +	}
+>>> +	err = -ENOMEM;
+>>>  
+>>> -	return stackid_install(&stackid, map, new_bucket, flags);
+>>> +out:
+>>> +	preempt_enable();
+>>> +	return err;
+>>>  }
+>>>  
+>>>  const struct bpf_func_proto bpf_get_stackid_proto = {
+>>
+
