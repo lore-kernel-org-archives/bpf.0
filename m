@@ -1,213 +1,179 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2753E49D5
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 22:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECAF336897F
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 23:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785451952; cv=pass; b=Qs215oK0cBqlPWS4ZC72/9lQsCCGxs+0fJjiL95yhCpTO+FbCjl2pcBZL8QKh1Iw6MnVmU++RTRVQ0OjE/PqDKPjPSvCEFwuyGQuBeF48axCmmPn3tgE3W7kGY1sWq0OEE0JwlfjOu+aJbgwKiNsHCXbixTeN0rjmtxBrZ9P5sw=
+	t=1785452506; cv=pass; b=qIGESEjconOqffWrirtqTAMQTVf0dGVPQYiGsgzrvySFWHuDbHulchjUt8QerKhoOcOJ2bt4IVzBYSQnwnbguIDeWwy+iiDnARJFtvof804eohBITVXA8s2vZwxoZn6GHn3P4jcMUmMr/o68Aw/GH8SsMn/SpdJtusvCZP/jh8g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785451952; c=relaxed/simple;
-	bh=xakOe7onQvx4wiZDCNi7JSD0SnMEIMMivTi6oZqsI8E=;
+	s=arc-20240116; t=1785452506; c=relaxed/simple;
+	bh=e0EcIf399xNKKchZ3dfrBmyOcFx9SYjxIQFiZ4f3oKo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aWTZ4CpglbDEjASTZNswxCKtzBN4TXseg0g9hLABF81N2j1IwmliIKL2rcmaJKHSeMONu7f8yPxevDti+Boa2H15he0v0Az2h97VsB9QvGq5nW1Twv4SXlTlG0lm7yfrSXt+YY41x2XhvApvjs36KhzWsGkR74x4yRXNiUjBLPA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FO5vg3+T; arc=pass smtp.client-ip=209.85.210.175
+	 To:Cc:Content-Type; b=JLC9f20DvfcAEYn/kshT8CDuYwLnMzaYdj3x5FjejQc4WumkZb4qPD7h5IdYrL2LVUoVo/Qr/y/b1ZU+CgZEzZz1WlMMLf111U2clw5RTPMCKQRTlhUhPqRycAjittmhoK/5IL/JjvMdkPmuxWFvVA7QnpOBfS8/+4wT1SWSxPE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QPmJLdzO; arc=pass smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FO5vg3+T"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84e84a6c4bfso172170b3a.1
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 15:52:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785451951; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QPmJLdzO"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8487088510aso476751b3a.0
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 16:01:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785452504; cv=none;
         d=google.com; s=arc-20260327;
-        b=dt+1Sq9NtGmiAe1AOJlkB1gCwxD+uyyKfusN82JxmMb8IuZUiuX46ixn5Yz7edQIPR
-         b3WMdjOIQZ5xKF2rlrwDYgCm4NvYCs/+B/ZzPE0cKEavjFvafct+bZGVoiGT8jHdNBg3
-         z3AyhX+2GtAzHhdtZIY5uGdaU9GHNJyseFv6CKhoZRRKXH16XEyM4DY5ow6jE9lGHw08
-         N8LFz0vMf29j9Nc5WZRhWHymIxoVrMclfIj1HfDE3HDVG5/9LRCkodNmoU/lB8Bi2wUc
-         nt1fucv9HPu4wL5PnTZ2L8Hc9aJ9CQDwI6KUUuQYBlaRTm0C8K48AzD8kGegHkuZjtW/
-         GXFw==
+        b=BoNaNpzNFFmD6V2sFpxhp+tuxmvr5F9ZQNytf1VhLS8PwnIcPagE/DlpfjED5/P34H
+         I/l5i4bWowTVX5Q7bo/3kxnmmVPHmzbF3eYRcZS+V8z4BQAOyqFrh0beaqApLXzlZoaj
+         S74Sf7G3xoiZrKOcTkiHmvD+YTgcKbWTTwE2vNu7nERDmZiBWOIv8iBzVgHER+8vJe7u
+         CsfcHQlWAILNYRukKmqcxhwxWEWtRgBu7DtF80NLuSDN0IJ5h5MptVKa5kd6Ajm5YKUo
+         C56ElzEJvVB1VBvIG4Y1EAMUD9iEm6JLi25gRV0BCSJGpAs3hTV0TpFOCTmwHLvjo6F5
+         wr4w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=kK5U4QwGT9O9VQ+w4BY9Dom3H1xqRqoq0z8HNkQ4nwk=;
-        fh=TmFTo7DVi7fmnwpD4VsHCbHZP61LxF2EIi5KSUngQps=;
-        b=sBp/STEf+xfavbjbjckjngUm3Zt/Bqis+fB0lbIlgBYNKtmNIXjRkv6UQmuPkR0VUC
-         5yu0dho9FeGrD1/LwsO/0jXwk5ljsPa6an5MAXYbiTVIIPbY962We21ms0zdkUiqtHDF
-         AO0LdXWC4EuWkOF5sKNyEyzey7OEzNs5DEClCxtSXOS1b/E1x8KnMBhydCNFhiQhflAS
-         9S3wOgs/9BJRN0P5L+D98CHZwDCFJPLJGgIVBFtr/w0AUw3wYWZfkhDqusRUO1/EJsWc
-         Ecrth/A1Lsa+YOJmmVYFk9f5+mJtiDZLjHVuki1mgyF3EkUlux52iouyW3iR6Px2XqvF
-         AcEw==;
+        bh=pFtG538FVlXpB9nXr+oNs3sXJNnCPQ5ybWYzjPcKAKw=;
+        fh=hDhpngdGB6+8lT3IQjg/bJSGHdpzdmrY6OYZRfdlI94=;
+        b=NPNPrm8daDdco3CYK11itijvyUvPTM+I5ul+Ax2eqt0b8E+EvMUGju3jORuls5xEjp
+         oot6nWkbi2+4lZMcKLmh5ibo+THu0jW86VJeKVowZ12FnVSqroRacOV1pJaKepzGU24l
+         FIICOAJrd1R4nV34NcUkBfg0Jx0FKfCTAtjhCnmaMpzhmrH/AKMipIFT7142ZdMBrd2g
+         edMDl94DpCN0l14YnX7lG6+3hmb/MIl4pZBXBB1CvDYkNFP3/7jyQ+5+hRq1cLZDV6eA
+         WQmRnf3CVMMaTOfkiU1zYD+W8Vi12vnfpyqsUHsMA/6z0a1cO/gW3+/24BPAbeiVQhni
+         AQKQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785451951; x=1786056751; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785452504; x=1786057304; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=kK5U4QwGT9O9VQ+w4BY9Dom3H1xqRqoq0z8HNkQ4nwk=;
-        b=FO5vg3+TyGAVZMr43F51pzQdtfCSiJs/TIRpBFM6nJPe0jwHqNY0Mc9mt6t+GvPAXG
-         aV86+NRYvPrFtotONJS5wxcCiaVaOrNBLq6yQt7UoS2xLF8Irr8cF7C49+FdcZH6Xp5o
-         5CV/wCPENc5tr87+OD390TmxT2XeHdRynPhjKRVhT47L7DeOHBqYCaVYdu0+uZwDeNOh
-         s9NCIL1LZLskAN0kxhh+PCRu5wJgpsM6DdKoNPU0P/nZM1l7KjIMso1ZpcL8C2xuSK/r
-         jdeezhAi3ltYfzjLYdb1MEyKN91ZH9nHfxeZv5O8PXXEE9xWrDRODxMzZsq94Hi1oHMn
-         8K0w==
+        bh=pFtG538FVlXpB9nXr+oNs3sXJNnCPQ5ybWYzjPcKAKw=;
+        b=QPmJLdzObXblMiFZZra8dC0BgY/CxfkChwKuIkuTyrzRpMb+Smffoz77XafVXsTa3P
+         1AMqlIIBq6xgNdyUZBwHvFWGH42bGq7AjJz5Il5sgAAQszaZTH/uTACQ0Qm03GEJ/CoZ
+         eHwUdKIiEIbj3fF1z14citI/KUOLXv+TVWvXw+QgWh8Y0O0MLS4r49S0gVW28bL76l3+
+         dVQ2G+Tq5IKBxLri2UbSHNp86ox5vav1BvvQ8cS3VC7qqIyAFYBgZj7C/cEqWQpUYVr0
+         ZUo261VWEvXtWTo4idpG0vO5F7kCmXi98KAPvrAkYKVNBkcDGFUqN2D7Sf4Lq2GiVIxa
+         FHdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785451951; x=1786056751;
+        d=1e100.net; s=20251104; t=1785452504; x=1786057304;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=kK5U4QwGT9O9VQ+w4BY9Dom3H1xqRqoq0z8HNkQ4nwk=;
-        b=lbc7HjkIuhxeCUA4KhOsGSVpVHE2mPmMvA1tPuMA4elTBSJ9Fm0L6opcGK9QvpMeQP
-         vDO+kYst+Gc74sZkpjB5y91ZfQDNJ5XFC/Np4mcoJGwWSu3WrCsSD/nu6Y4JHpADKyMk
-         OSB/K1rch41+o+LjvmGQaJAg6KowxJROOsgxiF+hmu4bnGJfVr7jSdTBM+tIHA1NekOA
-         6grCY2rz8B8fUonsiiWgrWIPl+J68GfGXknrHL/42/wi+exKxwhSQ1ESjQmqxPXz291z
-         +aPuLwABRm5VTcH0TmNoFHVbhbwQnLgTSZgcrvHxCHppadStTqx4OLpESDJPBZbH6kAb
-         48qw==
-X-Forwarded-Encrypted: i=1; AHgh+RoMbZEehoWm4U8YTNcKLqlBRVCDdc7dksaZKFPvKjQVsBkIEKrjZrBw8mm8Bet9UK8SCpc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJJAX/k4A5PBxQVJEnxCZ7lXrGvgt0pvFLcQcUGXy7g8+VxRk+
-	hEr49zm4dNqvBzcfW0BmOKCkc2sU0u0L07gehhKKyTiZcC7j5qUn+T11fwNmbpx9nifWw1MXam9
-	6MuYdnp1Q9GmJnTIWwNaGyVAzdnFcL8U=
-X-Gm-Gg: AR+sD12rrsgzAxtUtr3bqPHe9cfxINMgLSvxq4+oIBzKyPHHBESuW/YBMMPlB3OaP98
-	CKwDERO9bJUxLcIuzQAqbQnBxBEmPStdQ2z5vpTJBBD3C4GMxooETqpKLr/4LTEzcdxpV1WeSYJ
-	uihEVpv0VLmKihyumIM2ugr8qHgSO0R5ZHeOBzZj/sbxaiu5pxzqZsEPvXFYapCXgksqQ+HA3we
-	a6N1i8G83AhOewMp7PzBH1jEBQnEG/qxMETlkfbPR5o0MpmjgZ2UQZ5OluZkzkHiT5mu0Md3T3h
-	AE9JROXnPqNF+HRRUpTd1GmdwqVjUnrZtwECYnRPkDUeP8XjNPJSidKyt9EgjVXXZXlEFDpabHC
-	OWgd7V49RcpsZvC/fArMYccEvlW0HXFPib41rwCU+DBjluFZG8YHE
-X-Received: by 2002:a05:6a00:ad2:b0:847:8d0e:5d83 with SMTP id
- d2e1a72fcca58-84eca755e6bmr1544377b3a.26.1785451950568; Thu, 30 Jul 2026
- 15:52:30 -0700 (PDT)
+        bh=pFtG538FVlXpB9nXr+oNs3sXJNnCPQ5ybWYzjPcKAKw=;
+        b=WUyRGCt05RMIOPjJm7u/9BgKS8n2ZiNwHOmNmrMufv7SIfGlZ0I5gezdG2M90vj8C1
+         8orNKZhBRvPL2+rTqedciqqJZRy+0jYe/uC5hBKwkMb69ohd1fmbGpGsAm4mC1NkfARj
+         MuOfqTyuRhYpM3VYwKA/CAM5Yb/SOX6Vh4FDDuS1uFJBJd+uOBMImsDj4uIMBfM0xooJ
+         xMzb1mV0tEGAzpOcZSKcXbI93imzW5yYiZo6CYC2r3f3zqIewo5/18A1SjocF+Yov7WK
+         MkQZm/0eA/nU0pEW7AWkBZcFHZUJPG4snHAJiLUWiqGqez+BVTK8EnTvnE+PWOC+3NIE
+         1a1Q==
+X-Forwarded-Encrypted: i=1; AHgh+Ro/j6WzCuXWOgYyfGnC1ptJRApWmvi1Iofa/IUdh+H2/fmMiliOP6Ymy43+t1dlNKdX0+4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt8R487GzR9hvSYc0os822tSCqxnfEEyccylz0oZHcGgjjAe7A
+	o2yEhBXwl9O9UQOOS9Dl5i7S6anoXPiJDG2ECPE0jrnWkFt7EsThipVV34WPK037viz+RAXvjCg
+	HlaUygfUFsFLPWLAmuxD7njzZJtwFfRI=
+X-Gm-Gg: AR+sD13n9XFe3paWry6e18H4VwBm+APxh4Gjzhi+e4xMAYCGte5zQw0I++mL1+Ee5cc
+	UzsqQCpGIA5G+wrWSLS/cdPhQnEzoEP6PRHBdrd5nVUlF41CfFledlHOxSakuGbwZ/q5bzEufYu
+	u3TM6xiCiSLdcvc36eaQ7IXxWySrZRd6mqBHg17PJ+DIgXsLW4WUhukcYYMqQcQt3gD447OScFN
+	5vFwb97P83bwQafJNDjWqZAtGrEXY9uO+Cks7n4d1Kbvj00Z9poWIGwW/EJ6HH3ckkObcJ6Fgvt
+	M+B3ykqI02TXfWSsHUBDv39m+vqlPMUMNCma7YpIy+CikvvpmhPDyZHoXzSUVIlT6hh8bsLfVlh
+	7AymbdHbJd5R8jgH4K45qOnv+8eXKjAXChJdhJ5hWnw==
+X-Received: by 2002:a05:6a00:cca:b0:848:2f73:8ffc with SMTP id
+ d2e1a72fcca58-84ecb994a61mr1553018b3a.69.1785452504115; Thu, 30 Jul 2026
+ 16:01:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260729083807.1588544-1-jolsa@kernel.org> <20260729083807.1588544-6-jolsa@kernel.org>
- <78c72a5b-0db5-47da-8b35-e6a2e6976d7c@linux.dev> <ams3yHvqyXrWAbBV@krava> <6a20bbdd-2557-4db8-8839-e2f53857ced9@linux.dev>
-In-Reply-To: <6a20bbdd-2557-4db8-8839-e2f53857ced9@linux.dev>
+References: <20260729083807.1588544-1-jolsa@kernel.org> <20260729083807.1588544-9-jolsa@kernel.org>
+In-Reply-To: <20260729083807.1588544-9-jolsa@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 30 Jul 2026 15:52:14 -0700
-X-Gm-Features: AUfX_myM53Q2L3UJ-nKNITC_joYJHuC0YcFLOr-SZmQSfciKfcDnBLGJiXibq7g
-Message-ID: <CAEf4Bzbe1tETVtVMxkaURSoW1PmVfWnR9Kd9iwaPskzCwij7rA@mail.gmail.com>
-Subject: Re: [PATCHv2 bpf-next 05/11] bpf: Disable preemption in bpf_get_stackid
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, stable@vger.kernel.org, 
-	Tao Chen <chen.dylane@linux.dev>, bpf@vger.kernel.org, 
+Date: Thu, 30 Jul 2026 16:01:28 -0700
+X-Gm-Features: AUfX_mxlIqp8k9-YiMjbbhF584kWEf_ZieJfMoz242UWMEE7juCILCPfLTm8CnM
+Message-ID: <CAEf4BzZWgmL39Q8kQNu8B=-B1Vw2OipHvCaLbxCgU9XE6aNfVg@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf-next 08/11] bpf: Restore trace->nr value properly in bpf_get_stack_pe
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Sashiko <sashiko-bot@kernel.org>, bpf@vger.kernel.org, 
 	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
 	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, Quentin Monnet <qmo@kernel.org>, 
-	STAR Labs SG <info@starlabs.sg>, Arnaud Lecomte <contact@arnaud-lcm.com>
+	Tao Chen <chen.dylane@linux.dev>, STAR Labs SG <info@starlabs.sg>, 
+	Arnaud Lecomte <contact@arnaud-lcm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 30, 2026 at 6:43=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
+On Wed, Jul 29, 2026 at 1:39=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> On 2026/7/30 19:38, Jiri Olsa wrote:
-> > On Wed, Jul 29, 2026 at 06:30:26PM +0800, Leon Hwang wrote:
-> >> On 29/7/26 16:38, Jiri Olsa wrote:
-> >>> The get_perf_callchain call needs disabled preemption plus we need
-> >>> it disabled as long as we access its returned trace entries buffer.
-> >>>
-> >>> Note the bpf_get_stackid_pe function is executed already with
-> >>> preemption disabled.
-> >>>
-> >>> Cc: stable@vger.kernel.org
-> >>> Fixes: d5a3b1f69186 ("bpf: introduce BPF_MAP_TYPE_STACK_TRACE")
-> >>> Reported-by: Tao Chen <chen.dylane@linux.dev>
-> >>> Closes: https://lore.kernel.org/bpf/20260206090653.1336687-2-chen.dyl=
-ane@linux.dev/
-> >>> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> >>> ---
-> >>>  kernel/bpf/stackmap.c | 19 +++++++++++++------
-> >>>  1 file changed, 13 insertions(+), 6 deletions(-)
-> >>>
-> >>> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> >>> index 43b1e5436047..e48ddb4edd47 100644
-> >>> --- a/kernel/bpf/stackmap.c
-> >>> +++ b/kernel/bpf/stackmap.c
-> >>> @@ -624,30 +624,37 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, r=
-egs, struct bpf_map *, map,
-> >>>     struct perf_callchain_entry *trace;
-> >>>     struct stackid stackid;
-> >>>     bool kernel =3D !user;
-> >>> +   int err =3D -EFAULT;
-> >>>     u32 max_depth;
-> >>> -   int err;
-> >>>
-> >>>     if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
-> >>>                            BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID=
-)))
-> >>>             return -EINVAL;
-> >>>
-> >>>     max_depth =3D stack_map_calculate_max_depth(map->value_size, elem=
-_size, flags);
-> >>> +
-> >>> +   preempt_disable();
-> >>
-> >> Better to use the guard-style guard(preempt)() in this series.
-> >
-> > we prefer to call stackid_install with preemption enabled
+> In bpf_get_stack_pe The __bpf_get_stack call changes trace->nr value,
+> so both kernel and user path need to restore its value back.
 >
->
-> Understand.
->
-> I wonder if we could avoid the "goto out".
->
-> scoped_guard(preempt) { ... } might work here.
 
-+1, came here to say the same, I think it should be
+something feels off here, this trace_in->nr restoration just in
+bpf_get_stack_pe is weird. maybe we should either make sure
+__bpf_get_stack doesn't modify trace_in->nr or restores it before
+returning to bpf_get_stack_pe()?..
 
-scoped_guard(preempt) {
-   ... do all the things with direct return ...
-}
-
-/* we got new bucket here */
-
-return stackid_install(...);
-
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Fixes: e17d62fedd10 ("bpf: Refactor stack map trace depth calculation int=
+o helper function")
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  kernel/bpf/stackmap.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
 >
-> But "goto out" is fine with me as well.
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index 05269f2a9e08..875f530f3597 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -942,9 +942,9 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_da=
+ta_kern *, ctx,
+>         struct pt_regs *regs =3D (struct pt_regs *)(ctx->regs);
+>         struct perf_event *event =3D ctx->event;
+>         struct perf_callchain_entry *trace;
+> +       __u64 nr, nr_kernel;
+>         bool kernel, user;
+>         int err =3D -EINVAL;
+> -       __u64 nr_kernel;
 >
-> Thanks,
-> Leon
+>         if (!(event->attr.sample_type & PERF_SAMPLE_CALLCHAIN))
+>                 return __bpf_get_stack(regs, NULL, NULL, buf, size, flags=
+, false /* !may_fault */);
+> @@ -962,15 +962,12 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_=
+data_kern *, ctx,
+>                 goto clear;
 >
-> >
-> > jirka
-> >
-> >>
-> >> Thanks,
-> >> Leon
-> >>
-> >>>     trace =3D get_perf_callchain(regs, kernel, user, max_depth,
-> >>>                                false, false, 0);
-> >>>
-> >>>     if (unlikely(!trace))
-> >>>             /* couldn't fetch the stack trace */
-> >>> -           return -EFAULT;
-> >>> +           goto out;
-> >>>
-> >>>     err =3D stackid_fastpath(&stackid, map, trace, flags);
-> >>>     if (err !=3D -ENOENT)
-> >>> -           return err;
-> >>> +           goto out;
-> >>>
-> >>>     new_bucket =3D stackid_new_bucket(&stackid, map);
-> >>> -   if (!new_bucket)
-> >>> -           return -ENOMEM;
-> >>> +   if (new_bucket) {
-> >>> +           preempt_enable();
-> >>> +           return stackid_install(&stackid, map, new_bucket, flags);
-> >>> +   }
-> >>> +   err =3D -ENOMEM;
-> >>>
-> >>> -   return stackid_install(&stackid, map, new_bucket, flags);
-> >>> +out:
-> >>> +   preempt_enable();
-> >>> +   return err;
-> >>>  }
-> >>>
-> >>>  const struct bpf_func_proto bpf_get_stackid_proto =3D {
-> >>
+>         nr_kernel =3D count_kernel_ip(trace);
+> +       nr =3D trace->nr;
+>
+>         if (kernel) {
+> -               __u64 nr =3D trace->nr;
+> -
+>                 trace->nr =3D nr_kernel;
+>                 err =3D __bpf_get_stack(regs, NULL, trace, buf, size, fla=
+gs, false /* !may_fault */);
+>
+> -               /* restore nr */
+> -               trace->nr =3D nr;
+>         } else { /* user */
+>                 u64 skip =3D flags & BPF_F_SKIP_FIELD_MASK;
+>
+> @@ -981,12 +978,13 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_=
+data_kern *, ctx,
+>                 flags =3D (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
+>                 err =3D __bpf_get_stack(regs, NULL, trace, buf, size, fla=
+gs, false /* !may_fault */);
+>         }
+> -       return err;
+>
+> +       /* restore nr */
+> +       trace->nr =3D nr;
+>  clear:
+> -       memset(buf, 0, size);
+> +       if (err < 0)
+> +               memset(buf, 0, size);
+>         return err;
+> -
+>  }
+>
+>  const struct bpf_func_proto bpf_get_stack_proto_pe =3D {
+> --
+> 2.54.0
 >
