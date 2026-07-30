@@ -1,117 +1,168 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0E33C3F76
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 08:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785400276; cv=pass; b=opK+wm1je/q8Zdn9gXua9FE3K5KMVFV8NudewUsvmLkRe/xHFCRSKpdm3W/EWjnYU8jwPOB+jnGPa3jHSHwcSwjLBZj70aoV9zSo0torwLlKrq43rBFymVlDXp1862DmsDMHKbgnnuSVJ2KV99Ubza3cM5WMNVHgZIfOPGHjix4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785400276; c=relaxed/simple;
-	bh=UyGpFZHBuLi7sb7D2H3adTyPghwkWlzs4kttoVoTpWA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dUYZlLp+cDAvg02u7p9xINIrq2s43/7Uzb2Wq56ePjTUMJa7a5fzCGnHjudPucyJLO6RlWv/F0KVcvF7348S7nnW4MZ59aa+QBZWBx0VvdQtFcSp9inU+gfdGrVBdZGgKzxasvX3MfBDudn/AMkNBeOxGf6KDVb1U2qlPxI74CQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQgWoJ0B; arc=pass smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43673D8128
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 08:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785401131; cv=none; b=kXD1/bMxq752mhpFzWsZYmzKLYhePJ6QNz3NESynU6/bpW9mQjsDTModktlg6fBD5zyUnaZQVSNiWBu4P2IdCECQrJ+IpMOfUXWN6x9yi/8/c1gexosBEsfjUg68HQ5jpUCYACPK7ccFMGb5L/Up3i7ecAmXGGyBzt9KfXM5Ejs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785401131; c=relaxed/simple;
+	bh=sC9lPD1w0NqaXrCcspRVIT6YfcbV+JFCEhrHkXgg8FY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tQSAp5Sj5rI8BY8z4BSs0iaCoFXeZJuqhMDjR4GL8hEmqCg5a+s+TAmS6Rc7KbfZbypBlKZcaCM91op8dPB7OYyr7FNJvnLM388hPVpCGmjYFiSVvp0t34unqc0hK6UAHw5uyg2I69tzUSUTGYCs9q8rtjDJwzXE4zaA57Y5G88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UbrY2QQ5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=nbwRBdCO; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQgWoJ0B"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-69f734cd461so252820a12.0
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 01:31:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785400266; cv=none;
-        d=google.com; s=arc-20260327;
-        b=m/nCQVTBLaLzM0uOAIFE5eQFykZ7M+Uen6TbGLM13kTxKDSabSVcGQw/8jdkYFGkFQ
-         IvclWPxEl6mkMeQU6SuqRIKMMlgetv1AqDNKwUbw+nMQOgw0Ny6nC7XYIPdiSHMy4GI1
-         gwSbON1gCYMAvxoRQyviJ7UqkwN7EhwMUXxOegq2ik7cIhKCnSzHDKFypfBZmnmPwgFg
-         BDuw+JitLeGxlIaMziMbECE0W4vIacNjVs8xxG0zawhq8IXHpoPztXEkHqQo3F3GYVru
-         ZCvzcpLCbz+se/nfMEWwIH5mEy6d3rBmLBcNgijiYUtduJg0euXERC10jA88jtoyC0vm
-         CbpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=UyGpFZHBuLi7sb7D2H3adTyPghwkWlzs4kttoVoTpWA=;
-        fh=aSPAvcB54LVMBTwimS/ysizhe/jGjmg19xHIutrTTMM=;
-        b=nSsj7M0Uct/meyMNEXrApd56cfZmpW5xeP0Ba8v9bmXNYMS2QLRzrZDs3Iftw0GyOC
-         gCBEQcwfk5CyXH9+mmmawYDo9qcDttDILmR8cQQ/k0CDCSSx7zAqgPLc1+61Y0A3xS88
-         XPtxAH7TZxrlBwHxZf7gx+cYag7Q0gyf4eZxp/QtFiehuSuCx/OxwDwKRtO1g7/hthBx
-         cm5l7PuJe248OkkovC0JAtDArBUOBCkeeqH2Wwhi1hZYOt162VzosKLTQbuvScw7gNPj
-         EyGUV1KyqTmUnELBIBkjN3Jrn75vlw5JSmr81TY0V9nK8TzgCHrFKGTOU/9s8zIKfkLj
-         HEFA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UbrY2QQ5";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="nbwRBdCO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785401128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KUB53N8ZW7olaQibApR60mfiLMJvQ7kWg88nhg9lW2Y=;
+	b=UbrY2QQ59GGDsmiBrY0MIXksLsqCmEivqsKWBAxkkWmboY2Jy1u0vkARcWkyZykHVnjjP3
+	xcsTDMxLzF9LmN/QvdGbTomZV/V4x7IpTN7+cAFaHDbEW0p6dQ52hDQTWniEUz1o7mzEj+
+	KwA40MEvorJXWogOOFQpcfZkQyf78io=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-421-6a_ITZ2iNHqmk9wonnH3rQ-1; Thu, 30 Jul 2026 04:45:27 -0400
+X-MC-Unique: 6a_ITZ2iNHqmk9wonnH3rQ-1
+X-Mimecast-MFC-AGG-ID: 6a_ITZ2iNHqmk9wonnH3rQ_1785401126
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-492488f8583so16321765e9.2
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 01:45:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785400266; x=1786005066; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=UyGpFZHBuLi7sb7D2H3adTyPghwkWlzs4kttoVoTpWA=;
-        b=FQgWoJ0Ban7tkpBIKsbVb1GhdVRoDo24YlMgFlki9j0l/FrFMU0x90zTbpVnvDiDYz
-         a48u9VKaiivILVKwNQzBUdLJU2aMhJaaK+rk45p1OC/D/CCTBIlNUVkC9lFaIdWIwWkn
-         G9VFtal4QUBUje+zolTUwBtxivKmgWV+9ImN7csnM6AYp68ZOD16BaFlw9A0AD0MablN
-         mjCSr797LW5khJOUgofZt1MFtI0J34cO//1I2B7VKKVpjcOqIDijSfYVyMWn2SUWQ7HW
-         by7YM+2W2FgkJHHd6414dS4i2TWsVYGD+NcFFlu6Oy+3B77GHCnKLWoGbarBEMHkhm38
-         4/Jg==
+        d=redhat.com; s=google; t=1785401126; x=1786005926; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KUB53N8ZW7olaQibApR60mfiLMJvQ7kWg88nhg9lW2Y=;
+        b=nbwRBdCOcTangZpKTpm45qKbap7OVzTqhldDy/yDR8G2Z+yRceg3/ihjkukhUj1XZU
+         Az9O3/s9jLqx8SyfkPdNiKcasKS6BZkiR8IVka8fEfg3Rj/EQ//nShKzKqXvzmn+O36z
+         PzqLNe1IPiWzV4SzDg3mmNV2dkTozj2CkqWNEnM6P7SM+VOLsPHAlivhHGMES8mwTjnP
+         2tDMl3VfOmDm/LbKTxXbHx2UKcEzWdHsx694TGZu08bNmwiSiKvv6uSijwhgl697ms3n
+         8jQCklXQBm0jIkux2/XbgsosGDsrxXMW/HS/NOpP9UyaaJYjmN6vOfOb9K2ZxoCKsUB4
+         2QEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785400266; x=1786005066;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UyGpFZHBuLi7sb7D2H3adTyPghwkWlzs4kttoVoTpWA=;
-        b=l0DxrSGCAOEbqo/KWsPwUjJ3gsHEqoQYCUJU9Z+gBLFibSNXGt8m5sV5zPWfAExVUG
-         jpoWnJca+cFC4XJa+VgUnrC3zoOLAhv5HwpA/sVLqBwI1csxoRKZns73KgXDDUj4s/pQ
-         DLYxkrssBL8fGqsJJNc4vlrxAtRiYV2OYMkjWO+rHqzfw+5g4xEVtn+CaOIMLhVTkBMF
-         YukCAqOrCmtGCfMcjy8RmI29JOtJwN/Ri+I1oGKmciNqAbzMmtxuIE+I1bzovxQFq4D8
-         emGZj3dLRKID/LWreTzvqEuyykQqH8iAKp2RCMrhjtVokPhdHRuOJXxNA7OAxHNwZ56k
-         GRVA==
-X-Forwarded-Encrypted: i=1; AHgh+RorvWUHZOXkL8m0xzqr/tbKDzm6y7TTEkGIcn5/Hup03/toExZwkoeKWcZem+5qFnJwgWM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOSQD9YLK630VFFb39h4KDOKuPPxQMJYJDYcUFrRaIpVSnu+QH
-	8uNo1fUtaCfDmbhWbtdXKuIDK3XNWxLBLhdRRAnuunyLhOh7g1MNRIXUfAYJLDWDX4kE7v/qIeY
-	kkM4HJ66ZQrfBMiOEFxscs7lXXUtl+JM=
-X-Gm-Gg: AR+sD11yXhjErjEipF1Ru7w/ICpK7B0auBgl2wD4grlRvZnlCfPqviPYMrFmTmEAxD6
-	H71UdRGLhEgH/3Llqiz5KloqWFnV8Ksi4k3zVeiSbXDLbly2drS8ZxXsMixAzF/aKDOvWOss2YX
-	KQQmTLEsv3UEnujhvifySouKNGpDT4cpfQMY7QqzLhPyhYZZHCknCbePIDbNdcWF4w6bSwbciwn
-	YY2OkYvO7B23CQ0Zs7eE8L34V3QyOYy7D2Qrj8AstcWrP5jLNXPDtodYM4277moDR93Jpe921WQ
-	glwj1LUnpjXQhe+XohJ1jxo56VzPkAsVaXuTuiCtQgFNlxnSMqlCvmHxaN94IXRcMDXnIc4leA=
-	=
-X-Received: by 2002:a05:6402:2792:b0:6a0:eb:ae4b with SMTP id
- 4fb4d7f45d1cf-6a07b53987dmr789961a12.0.1785400265443; Thu, 30 Jul 2026
- 01:31:05 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785401126; x=1786005926;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=KUB53N8ZW7olaQibApR60mfiLMJvQ7kWg88nhg9lW2Y=;
+        b=QVfP5fl8GYf+XnhS0bNJwRqz7OxhiGnROFkbovj94acRp99eCx/7AVn4gQ3qFE0zzW
+         W5xzgp+ClcmBi+FhmRpgAOs2AOO/jANxWdLNN4Q5xwpgNrWgnZBojozYauVxZvWX0Cxg
+         Pmw+4IO02Vs/EemtQh4tXZk9Rjd7VNoWCvOtf7KfWaelC5DKW0UeUe9rnwO2pfMOgNBm
+         v4ABU9tjCHbSdfymzptAmXOsiAiSzZ9DjcjAjIzOkoqIw7jIqnU/PRhdpehJssZ2U6gf
+         gHA6j/TruJcoy0i1jiui56HL+PR8t/DCVCGIxwAWy+j27uPX7q3aD5hq95hvic5zE93z
+         jkVA==
+X-Forwarded-Encrypted: i=1; AHgh+RqMTEmGiTXur4Kr3XLacpVhie5L6znJCFLo1f/Lj5gO72JQCfUHikMXTrl1EN/y2ka8HvE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYMlu6vMx9Pm/wbTg2XaOQqPFwzR99EBrNT0rgaw/LRArygfsB
+	poJOCDFaxrfqCaRvq8jV1Q6Ti14TX1xoq6q7+GY6zmWv5ly9zqrMWSkZa5aLLY8gfM0sNgcB2FG
+	aRFXsCAE8l7r4QGCQL7ajL7tOrHe4CpbhsWx0HQ/G41t88N0W8QQYXg==
+X-Gm-Gg: AR+sD10tCTKQ6I6fDCtiutl3mcjNLqnHJ5iZvLN4D3ZLBV6EKehFtFqD2cXk3nLXa24
+	vRZrsFUGrLByZUeOSys//73MKBPJcUaE7ouUP9Yvi+dgHbP2TIm8XwAiczw2ZfIGnWV6OURZwjk
+	a/1GT+W0o5rdK+1XNgAin/MtrOX+0kkSaKb1uoLVRhMsQzXOcSKvZBJnuEavmLBNE3pXTVU82tS
+	Wd0uPCs/ZRk6WLqdOidrBZ9KYtgT3ZRATj2jJP/it0cVsPVGcbkJ18FCoQCnmztXVSwWHExQKV6
+	SpNG24AaDmPK0TjYVCBVhUKHrfezNrZKx7fy1V0EDZYhYiaKdgcRFqXJCCKYOekDJXbJ9Dkp3HL
+	pwhp4OQgtHGdbOzVTPw6q/tTk7qS0mNSTL1D2ps3QMZQ+8E08ioxBw8yIu/HQDXLpJ4DPwHkaP2
+	MXjQ==
+X-Received: by 2002:a05:600c:4248:b0:493:f78f:cd70 with SMTP id 5b1f17b1804b1-49800ebefc7mr12654565e9.18.1785401125999;
+        Thu, 30 Jul 2026 01:45:25 -0700 (PDT)
+X-Received: by 2002:a05:600c:4248:b0:493:f78f:cd70 with SMTP id 5b1f17b1804b1-49800ebefc7mr12654155e9.18.1785401125431;
+        Thu, 30 Jul 2026 01:45:25 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:5521:6b10:58fd:68f:7756:389d? ([2a0d:3344:5521:6b10:58fd:68f:7756:389d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-498010aaceasm43139675e9.12.2026.07.30.01.45.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jul 2026 01:45:24 -0700 (PDT)
+Message-ID: <049f7b53-8bbe-4ee8-a347-6c07ee11c1ac@redhat.com>
+Date: Thu, 30 Jul 2026 10:45:23 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260729163141.213611-1-nicoyip.dev@gmail.com> <DKBP6A3V5I02.3GNQ1SEZST1F0@etsalapatis.com>
-In-Reply-To: <DKBP6A3V5I02.3GNQ1SEZST1F0@etsalapatis.com>
-From: Chengfeng Ye <nicoyip.dev@gmail.com>
-Date: Thu, 30 Jul 2026 16:30:53 +0800
-X-Gm-Features: AUfX_mzP2_dgrdwIJfpJtiwvx7D1iQ4FEUItWv_JG1MEc41mX0jP5E3An5U4l64
-Message-ID: <CAAo+4rWZAdy=6HAHiysb86E5eFmXsWNZACtf_eBzFNqg=9EJhw@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: Fix netns reference imbalance in conntrack kfuncs
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, netfilter-devel@vger.kernel.org, 
-	coreteam@netfilter.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2] tcp: honor BPF_SOCK_OPS_RWND_INIT on the
+ active connect path
+To: Tejas Birajdar <tejasbirajdar@meta.com>,
+ Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>,
+ netdev@vger.kernel.org
+Cc: Jakub Kicinski <kuba@kernel.org>, "David S . Miller"
+ <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260723214208.3655474-1-tejasbirajdar@meta.com>
+From: Paolo Abeni <pabeni@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20260723214208.3655474-1-tejasbirajdar@meta.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 30, 2026 at 2:38=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.c=
-om> wrote:
-> Sashiko is right on this regarding all other fields of opts having the
-> same issue. While they can't lead to a crash, let's still snapshot them
-> at the beginning of the function so they don't change from under us.
-> This is still far from ideal - we may read an inconsistent snapshot of
-> the struct - but it's backed by BPF program-controlled memory so AFAICT
-> this is the best we can do.
->
-> pw-bot: cr
+On 7/23/26 11:42 PM, Tejas Birajdar wrote:
+> BPF_SOCK_OPS_RWND_INIT lets a sockops BPF program pick the initial TCP
+> receive window, e.g. to advertise a larger window up front in environments
+> where that is known to be safe. Today it is only effective for the passive
+> (listener) side; on the active (connect) side the value is computed and
+> then silently discarded.
+> 
+> On the passive path tcp_openreq_init_rwin() inflates full_space when the
+> program returns a non-zero window, so tcp_select_initial_window() can offer
+> it:
+> 
+> 	else if (full_space < (u64)rcv_wnd * mss)
+> 		full_space = min_t(u64, (u64)rcv_wnd * mss, INT_MAX);
+> 
+> tcp_select_initial_window() only clamps the requested window *down* to the
+> available space, so without inflating the space first the BPF reply can
+> never raise the offered window above tcp_full_space(sk).
+> 
+> tcp_connect_init() calls tcp_rwnd_init_bpf() but never inflates full_space,
+> so on connect() the requested window is clamped back to tcp_full_space(sk)
+> (~64KB at the default rcvbuf) and the program's value is ignored.
+> 
+> Inflate full_space in tcp_connect_init() as well; tp->advmss is the mss the
+> listener path uses (both are tcp_mss_clamp(tp, dst_metric_advmss(dst))).
+> Read full_space after tcp_rwnd_init_bpf() so a program that also adjusts
+> SO_RCVBUF is still reflected. Compute the inflated value in u64 and clamp
+> to INT_MAX to avoid overflow (full_space is int, rcv_wnd is u32), and
+> apply the same overflow fix to the existing listener-side computation.
+> 
+> Fixes: 13d3b1ebe287 ("bpf: Support for setting initial receive window")
+> Suggested-by: Eric Dumazet <edumazet@google.com>
+> Signed-off-by: Tejas Birajdar <tejasbirajdar@meta.com>
+> ---
+> v2:
+>   - Do the inflated full_space arithmetic in u64 and clamp to INT_MAX to
+>     avoid overflow, and apply the same fix to the existing listener path
+>     in tcp_openreq_init_rwin().
+>   - Read full_space after tcp_rwnd_init_bpf() so a program that also raises
+>     SO_RCVBUF via bpf_setsockopt() is reflected in the offered window.
+>   - Re-ran the sockops BPF/RWND functional test and the full in-tree
+>     packetdrill regression suite on the revised code (details below).
+> v1: https://lore.kernel.org/netdev/20260722170033.2763794-1-tejasbirajdar@meta.com/
+> 
+> Functional test: a cgroup sockops BPF program returning
+> skops->reply = N for BPF_SOCK_OPS_RWND_INIT was attached to the
+> connecting socket and driven with packetdrill on the active-open
+> (connect) path (advmss 1460, negotiated wscale 8). The offered window on
+> the first post-handshake ACK now tracks the requested value:
+> 
+>   req_segs   offered window (bytes)   = req_segs * advmss
+>   256        373760
+>   1024       1495040  (~1.43 MB)
+>   4096       5980160  (~5.7 MB)
 
-No problem, v2 was just sent.
+The still present, sashiko reported, integer overflow in
+tcp_select_initial_window() looks real to me, and the last value in the
+above table is greater than the overflow threshold, so I'm wondering
+what I'm missing here?
+
+I *think* you should additionally take care of tcp_select_initial_window().
+
+/P
+
