@@ -1,43 +1,39 @@
-Received: from mail-24418.protonmail.ch (mail-24418.protonmail.ch [109.224.244.18])
+Received: from mail-106119.protonmail.ch (mail-106119.protonmail.ch [79.135.106.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58603CB918
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 10:18:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C853CB918
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 10:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785406727; cv=none; b=T4+akaHOwc67P9e01j67UNIospY3115HER9g3gViwZUKXEg5ULiLSUG1necdkfbV4Q1yR4HUuX0Puho/HY7D8CwBG9IaMwiCxXPBCN6pTdrMMaYyfML6M9dVpU1NBVrdWZHMBWlhoS7BgknMLIolv3R3YN4vjjxVj9Qx4FoIe04=
+	t=1785406888; cv=none; b=CC+78+EhaB/YfDLNxT+9BzHkKThTyaVWdHbt+w1vZA7CkT49FRFcP2oeTzSCAuPRUX2rsaJj8/Lacl3NEsuMYjGjr5EJrcLmsolZC4ClgJpQwlqiGC+cHVblln/A67prbukl/s0BS/hQe7AYdm5t9MD9v7g7XuqFtVJ9IktgOtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785406727; c=relaxed/simple;
-	bh=+n/TZd302S+TadP1DYmqoFLPMNwVQUEVvWv0ZGn5ORM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E0CoqwDrGSH3T6F4Z3YJTty/jdGuRUIlZPRcDxAnWLgZtx0lPeDA8DChRC6dmD4ZVFA5rxVNdoZ0ENbz1G4YBBC+3OpPbSrr2g2c2/prqcmj9KHudBRpV5rp0xaCPSUy4xQVHiAqDgRLryKHdB3KCYLSxacvKqFy8KvK4HAhD9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=aSphMS78; arc=none smtp.client-ip=109.224.244.18
+	s=arc-20240116; t=1785406888; c=relaxed/simple;
+	bh=a7ZV9jeFyKWn2ARkaPUvfcLR4cMRhJSdbrjzW+QDizs=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=WnCHrxedg8ISBd4tJVd4PbMipsR8ZAq9YgTsYFt4sz+DLP3fIrA87MSCDqjchjOOeISDgf5r0PyYtRSlfQcViub5Kii/ORlGiG7dftAObcuABxMe7CzQlvelNz0JDiCa6HJMS+ye26SlIfphPG5tj4taqx/dnfDVsIp3jKDwQ9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=p7BOjzTo; arc=none smtp.client-ip=79.135.106.119
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="aSphMS78"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="p7BOjzTo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1785406712; x=1785665912;
-	bh=+n/TZd302S+TadP1DYmqoFLPMNwVQUEVvWv0ZGn5ORM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=aSphMS78VJTbKJHGM6e+rKYXgH75SVOAov9WtxiJ28xD4XqSIuoxbd0M5/YGUOcMJ
-	 Ms5VrzPuZoXnhJMWeYij+6t2HTxnzkAL9LzETnOaVAMfwIDpPfUhi2Ungd6/yH+Sh7
-	 3Y9S1TkITcfVUH+GaikeG2gS1Yt/vcWZfTah0fGfuLr05TlzHpVvuMJmRbU83nPaFu
-	 dUV+GBJfp/PVJx2ikPl0L+q4u3RfkiBJ+6Ted8XXPLd15bdWrGs7vNYWYZGEc7cC8d
-	 kSdsECBgrNnQW3HAs8Ds0bZ03WV2dr+tFXfzQM5gKRQ4aP9DOUQi+hINTHTpUU+c2/
-	 MRpvONfupemBw==
-Date: Thu, 30 Jul 2026 10:18:26 +0000
-To: bot+bpf-ci@kernel.org
+	s=protonmail3; t=1785406877; x=1785666077;
+	bh=jSAj8cLFx8oGxMGo4+7jwjYLO0k71WOFz0qHCjb6DFI=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=p7BOjzToUo1jaGP7BBt3FoTWT6MAyvVaYtNK2yrq5UxKEMTEDX88i4vkwqu/a6vS1
+	 he1oz/R4o0BzD/0dxFKqduqd3xvFc/95A6e3hhRqC16YKKapGXmx1aDqKKPLsgM6dX
+	 uSrImhDUq6MkGhAhJ0A/ciWcJcF6/qKYB1ItFah+iPkfGPsjvhF9PF6XUX/T5LaWwI
+	 EYVa84rWW2kHK9k6VWb89rDsmyE9u6Hpj/pU4m40VVqLEB5kcky38L6J/V8xU7d6DB
+	 EjT460DxcCmQlf4gXbe9FoGT2hkPY2Oc/788i6b0+z6rl8O8Fu9MAQpqDv+p0mpH6k
+	 tOnDWl+5uxY9g==
+Date: Thu, 30 Jul 2026 10:21:11 +0000
+To: bpf@vger.kernel.org
 From: Vinicius Sampaio <vldsampaio@pm.me>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, clm@meta.com, daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, ihor.solodrai@linux.dev, john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, martin.lau@kernel.org, martin.lau@linux.dev, sdf@fomichev.me, shenghaoyuan0928@163.com, shung-hsi.yu@suse.com, song@kernel.org, tangyazhou518@outlook.com, vldsampaio@pm.me, yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v3 1/3] bpf: Simplify cnum contains() by removing redundant branches
-Message-ID: <20260730101849.14282-1-vldsampaio@pm.me>
-In-Reply-To: <776af17a5b92e5d99bf506310ed77ae3343147e2d516494b4d548e2fad7b6b66@mail.kernel.org>
-References: <20260730001145.381820-2-vldsampaio@pm.me> <776af17a5b92e5d99bf506310ed77ae3343147e2d516494b4d548e2fad7b6b66@mail.kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, tangyazhou518@outlook.com, shenghaoyuan0928@163.com, vldsampaio@pm.me
+Subject: [PATCH bpf-next v4 0/3] Simplify min()/max(), contains() and normalize() cnum implementation
+Message-ID: <20260730102129.15209-1-vldsampaio@pm.me>
 Feedback-ID: 138063245:user:proton
-X-Pm-Message-ID: a961edcb85583d67c6c929cc347b19785036f7d1
+X-Pm-Message-ID: 989a68b1b8ecf06818ada1d1418a09ed036d3f36
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,11 +43,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-> This isn't a bug, but could the opening line be dropped or rephrased?
-> It restates the subject line and uses the "This patch" phrasing that
-> Documentation/process/submitting-patches.rst discourages in favor of
-> imperative mood. The substantive rationale about circular ranges starts
-> in the next paragraph and could lead directly.
+This patches simplifies some functions of the cnum implementation:
 
-Sure, no problem.
+- smin()/smax()
+- contains()
+- normalize()
+
+---
+
+v3 -> v4:
+
+    - Remove the opening line of commits regarding contains() and
+      normalize() simplification.
+
+v2 -> v3:
+
+    - Change 'optimization' to 'simplification' in commit descriptions.
+    - Fix typos in commit description.
+    - Make commit messages about contains() and normalize()
+      simplification more descriptive.
+    - Make '/*' be on its own line in {u,s}range_overflow comments.
+
+v1 -> v2:
+
+    - Split the contains and normalize changes into 2 patches.
+    - Added comments regarding the use of empty cnum's in
+      {u,s}range_overflow().
+    - Fixed typing mistake in cover letter (removed the `fix` word).
+
+v3: https://lore.kernel.org/bpf/20260730001145.381820-1-vldsampaio@pm.me/
+v2: https://lore.kernel.org/bpf/20260729194932.292368-1-vldsampaio@pm.me/
+v1: https://lore.kernel.org/bpf/20260728015601.1567098-1-vldsampaio@pm.me/
+
+Vinicius Sampaio (3):
+  bpf: Simplify cnum contains() by removing redundant branches
+  bpf: Simplify cnum normalize() by dropping unnecessary comparisons
+  bpf: Avoid redundant min()/max() in cnum signed bounds
+
+ kernel/bpf/cnum_defs.h | 37 ++++++++++++++++++++++---------------
+ 1 file changed, 22 insertions(+), 15 deletions(-)
+
+--=20
+2.54.0
+
 
