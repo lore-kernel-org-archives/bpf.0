@@ -1,138 +1,96 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A7A13D51E
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 19:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C80837F8DD;
+	Thu, 30 Jul 2026 19:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785439956; cv=none; b=LhE6aASqgmW2GUAgDFix6DTDhEH4zWiBpCsuaIf7vu6uDaDpWF3wEPvlUop1OFe7dgNAWNAafvbU4IgnvArptbbwnDHs8w/kE+bDlorQmUuBFd6j6hahUDcFS1EULtDUCOTtSVHlnCf0+N1AWX6f73kCg9Dfm1TnQ5farBVb890=
+	t=1785441055; cv=none; b=piqunOzCKtTt+2paULOpC6DyXCYxbvBJ7g9SWVRS3WN0Y8OgC/lU0cS3pYK3HI5ag2mBHj5aMufwQtUkQbPFlRG1opIbscXCdaiHcovocwBz0hEpzhEnLyL/p3p4LJvFXnPy/j9pLDHw+H2w5z9tdgtqTyNa1WN628sjtRrTTrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785439956; c=relaxed/simple;
-	bh=FVAkC+7LmP1MK7FCjI0hOZYPokCItuic/3GUX2deHnc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p5dzES3zl8U1dkEy0ej1/qX2P6wtFmoWq7QeosarhkcgnwvB+FLwqem5mBAWlvGwIb/uWseqV0WbDvPAcPgSZZLJWZt0h0CDHcnxAJQuiKH2uzXWCcVUD3Ry0cehqSAKCYhJW67zX8iK0IjLeS/7nxtnPhMcw7Os6aSkXXRGfZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hTpPxLKO; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785441055; c=relaxed/simple;
+	bh=i2/cVmXCrW9BryXa2vAAKLowHunURJoY1H8OwdQ951w=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Ufr2IH6pRcawa7e/37ogYsp0MUj8+N0DD2NqB/YOqdD1G466iVeGkQ58YGUf88D3thQTrMR7/n0Uq8zZngbzAFUMimt4H9ET/WkN56GXlYXwddflnV0kNGYBnytgBp30BT7qiRFeWsFuYX76FSIAS0w7FtSH6kKVd6SskGHsos8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iCe8Kewv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hTpPxLKO"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-84861fc51f5so236444b3a.1
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 12:32:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785439955; x=1786044755; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OaufhRrPIIlGU9PSko9eDMbVVZpm59g+vXiWTKqYEnk=;
-        b=hTpPxLKOmjxEBxZIbXlISDB67vb3LXTvkaiLrFf3Qdw5GgCI+YBZrQJhwiqNGv5NLO
-         DRNe30lgtdmBiQDx/Ckpm61JAtewMTB1IbkdCiaoNvERqpzhtjbkBKYugO9w45Th6Vi4
-         Ckj6aqh/UhfWmIaosgYk/OqPzVv7XFlub/1LMVhicr/u0Fz8F78eAaFDb3IK+rYi0mZY
-         P62T26yX5WfhG6OjdDj5pLPrdM8DuR3dlo8Kk2Mjy5c1JQbOp6C344rVYjm8pllFqjgI
-         wiC47WrgWLSkZRY+RvRTCMWcyUViDAQAZOJXB1ifyZdoCdmRVe/jRYHT0/JVJgtI4cC+
-         VN1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785439955; x=1786044755;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OaufhRrPIIlGU9PSko9eDMbVVZpm59g+vXiWTKqYEnk=;
-        b=WrpXzQuSALGkRC7xVAK+Kz91BMnSc8yntrt0uYkSPQikh0LjZVGvmdRBnRZp6TlxUF
-         IJXQOHTRNPLEFn9Kfje+Ygkc+NVnLjjy9ixpT7kZNlD3Hbt97ahKXKAuEksR/mTjVJmo
-         43SLxGSdSFUzofDr+zbCU8YhluW8fGd5jEiU8nrqOV+jMNFObm1J3gE6hPcXEnnlHl4Y
-         Nvas476G9LMosnAN8VLdckfNST+qr9/C8MCbrwCW3aI5B97Q2/7vdZy5/LqwSvdJ0IVW
-         JQMQgt5FetJ2KwIkOWuu83q2wICq1iFEwmUWT/YIdc/BWhklZbadO2O8DYxaJ28yWfH8
-         Vi/Q==
-X-Forwarded-Encrypted: i=1; AHgh+RqtcVJcu9uRskZ5fj8mBvww9a/G0aqPixER7qQnYnTdyTYGLE64D9Q1wXXFFo8VGrh0FSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPGI2o5NYAT7lR+S0KGc70IMW+6RXqM6DVa04OglUPB8wjvbFU
-	jMlBquBJsJk+rwSg0BkpABcOnJo6bT4ukEEp7i73UVEmqhdVMrwS6h53
-X-Gm-Gg: AR+sD13+cLverm5OS9Qty8pxSGYc2KJqAku4zvV/q0z+TzbBmPWboFiQZ/1QSSJPWY9
-	qpXVPvL6ZT8vo5AloRvd9hsXp0ZmmdlktCDHaPV2bk8yFRodg2jFE7c5Z3VSNO1cfhZGS9iV8XG
-	81dArYOLgfQgQh+Ewi2gKr9g60lwha1D1ImG8b2Bri1mizw+BJMD3ogFizKigFncMqYJXARZN0h
-	AK7pruDA4yblFjlHO2PQmyqb4u20+oOkwuFtCxgEDYlcVgj40JFYDdndvOx+zkra0UVz7cf2lts
-	7w1PeXm72d6sIyyLGHzlVW+L+I4ejHr2UU84iDqJdNSq1+Yg3cTf1iRr53K1Rxp4B6bSj1pRx6d
-	KpcRtIcySSFDKkFVFkBcAhGnr1c2otF+MysLRKXSyn5c2DsquflK88BXidOPxzDM9ACWlscqUWW
-	VMxI4NobPav/HtsnwawrZ9YhtevykEjwpU2zAjSA3buA+MUcIvbl83SWm8U/Xm
-X-Received: by 2002:a05:6a00:c82:b0:84c:518b:d915 with SMTP id d2e1a72fcca58-84ebc4022b4mr3494498b3a.65.1785439954744;
-        Thu, 30 Jul 2026 12:32:34 -0700 (PDT)
-Received: from google.com ([118.150.148.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e9fe240acsm3526682b3a.7.2026.07.30.12.32.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 12:32:34 -0700 (PDT)
-Date: Fri, 31 Jul 2026 03:32:26 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: will@kernel.org, joro@8bytes.org, akpm@linux-foundation.org
-Cc: robin.murphy@arm.com, nicolinc@nvidia.com, cychu@google.com,
-	hhchung@google.com, amitamishra@google.com, marscheng@google.com,
-	linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org, jserv@ccns.ncku.edu.tw,
-	eleanor15x@gmail.com, kpsingh@kernel.org, mattbobrowski@google.com,
-	song@kernel.org, jolsa@kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-	memxor@gmail.com, martin.lau@linux.dev, yonghong.song@linux.dev,
-	emil@etsalapatis.com, rostedt@goodmis.org, mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] lib/sort: Clean up sort_nonatomic() and
- sort_r_nonatomic()
-Message-ID: <amumyk_cHcffv9CC@google.com>
-References: <20260730181216.2709088-1-visitorckw@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iCe8Kewv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2EB41F000E9;
+	Thu, 30 Jul 2026 19:50:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785441053;
+	bh=8cdlBhGlMUA6Q/pUQ1Hw/rksA2rbbugAxiF6zwjVMe4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=iCe8KewvUCBuF0WDps8fnV6U0Sf+5Ob+GP5+UwJn2INWM6/1k5GfLkM/t49+n9DU0
+	 Hrg2N6KjeMTaF7KFItpLb/2UwV58wL8PAdJUzjcqBws7XqKspN4o+1115OEC6xpFoJ
+	 4GJv5uI4b1XZu6Dc3zmnZ/KYtI8vcj9xiZKlgLeamunqzX7E0ajKM6ZBad3bf/eNe+
+	 Cmu/RvMr6Glug+jFZtOM9qYk9qvQiZsLEg8aY0Wyt/CTlAXUcw1aD+/D56uFa1Z9nP
+	 LBzoZRFz7itxWlFM4uWp4pNOj2u9f22T1PdgCdgqqh/DJ8+0udfpzO88O5kphCPH1O
+	 Vv4p3k+aY8+5A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 939573811A70;
+	Thu, 30 Jul 2026 19:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260730181216.2709088-1-visitorckw@gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v1 0/8] resolve_btfids: Discover kfuncs from BTF
+ ID
+ sets
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178544101714.4157510.6877511193196128541.git-patchwork-notify@kernel.org>
+Date: Thu, 30 Jul 2026 19:50:17 +0000
+References: <20260722233518.778854-1-ihor.solodrai@linux.dev>
+In-Reply-To: <20260722233518.778854-1-ihor.solodrai@linux.dev>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, memxor@gmail.com, bentiss@kernel.org, jikos@kernel.org,
+ emil@etsalapatis.com, jolsa@kernel.org, bpf@vger.kernel.org,
+ linux-input@vger.kernel.org, kernel-team@meta.com
 
-+Cc maintainers/reviewers of kernel/trace/bpf_trace.c
+Hello:
 
-On Thu, Jul 30, 2026 at 06:12:14PM +0000, Kuan-Wei Chiu wrote:
-> Remove the sort_nonatomic() and sort_r_nonatomic() APIs from the kernel
-> library.
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Wed, 22 Jul 2026 16:35:10 -0700 you wrote:
+> This series develops resolve_btfids in preparation for bringing
+> kernel-specific BTF transformations in tree, which will reduce kbuild
+> dependency on pahole's features.
 > 
-> Currently, the arm-smmu-v3 driver is the sole in-tree user of 
-> sort_nonatomic(). Because the array size being sorted is small in
-
-I just realized that I missed another in-tree user: sort_r_nonatomic()
-is actually being used in kernel/trace/bpf_trace.c.
-
-Looking at the bpf code, the array size there is bounded by
-MAX_TRACING_MULTI_CNT, which is set to (1u << 20). I guess sorting an
-array of this size in a single go could potentially cause scheduling
-latency spikes on certain configurations if we don't yield the cpu.
-
-Because of this, it seems my proposal to completely remove
-sort_r_nonatomic() and sort_nonatomic() from the core library was
-premature.
-
-Please let me know if you think otherwise, or if there is any
-alternative approach for check_dup_ids() that would allow us to safely
-drop sort_r_nonatomic(). Otherwise, please disregard this series.
-
-Regards,
-Kuan-Wei
-
-> practice, there is no real risk of triggering a soft lockup. Therefore,
-> the periodic cond_resched() calls provided by the _nonatomic variant
-> are unnecessary.
+> resolve_btfids currently identifies kfuncs by reading the "bpf_kfunc"
+> decl tags pahole emits into vmlinux BTF. The series switches the
+> source of truth to the BTF ID sets registered with
+> BTF_KFUNCS_START()/END() in the kernel, which is the mechanism BPF
+> verifier uses.
 > 
-> With the only in-tree user updated, the _nonatomic APIs are no longer
-> needed anywhere in the kernel. Removing them effectively drops the
-> wrapper function and eliminates the may_schedule branch from the
-> innermost loop of the core sorting logic, slightly simplifying the code.
-> 
-> Kuan-Wei Chiu (2):
->   iommu/arm-smmu-v3: Replace sort_nonatomic() with sort()
->   Revert "lib/sort.c: add _nonatomic() variants with cond_resched()"
-> 
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |   6 +-
->  include/linux/sort.h                        |  11 --
->  lib/sort.c                                  | 110 ++++++--------------
->  3 files changed, 34 insertions(+), 93 deletions(-)
-> 
-> -- 
-> 2.55.0.508.g3f0d502094-goog
-> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v1,1/8] resolve_btfids: Implement generic ensure_mem() to grow arrays
+    https://git.kernel.org/bpf/bpf-next/c/47d62db55043
+  - [bpf-next,v1,2/8] resolve_btfids: Index BTF ID symbols by address
+    https://git.kernel.org/bpf/bpf-next/c/c5ab68a5fa92
+  - [bpf-next,v1,3/8] resolve_btfids: Keep collected kfuncs in a rbtree
+    https://git.kernel.org/bpf/bpf-next/c/e4293c31a320
+  - [bpf-next,v1,4/8] libbpf: Export btf__find_by_name_kind_own()
+    https://git.kernel.org/bpf/bpf-next/c/ef242559eb48
+  - [bpf-next,v1,5/8] resolve_btfids: Fix the _impl lookup for module BTF
+    https://git.kernel.org/bpf/bpf-next/c/91efe50e3042
+  - [bpf-next,v1,6/8] HID: bpf: Make syscall kfunc flags match the struct_ops set
+    https://git.kernel.org/bpf/bpf-next/c/5c4923172dae
+  - [bpf-next,v1,7/8] resolve_btfids: Discover kfuncs from BTF ID sets
+    https://git.kernel.org/bpf/bpf-next/c/f9f60d41ba2c
+  - [bpf-next,v1,8/8] resolve_btfids: Enforce consistent kfunc flags across BTF ID sets
+    https://git.kernel.org/bpf/bpf-next/c/140a3479ef66
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
