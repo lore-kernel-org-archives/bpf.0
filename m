@@ -1,86 +1,33 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43673D8128
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 08:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127BE3F12D0;
+	Thu, 30 Jul 2026 09:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785401131; cv=none; b=kXD1/bMxq752mhpFzWsZYmzKLYhePJ6QNz3NESynU6/bpW9mQjsDTModktlg6fBD5zyUnaZQVSNiWBu4P2IdCECQrJ+IpMOfUXWN6x9yi/8/c1gexosBEsfjUg68HQ5jpUCYACPK7ccFMGb5L/Up3i7ecAmXGGyBzt9KfXM5Ejs=
+	t=1785402082; cv=none; b=DJzqjkRWB9jg9aZJMKG9JVLe8dW94GMSfmGVL7FSvRtV/LonazIRX9EW+x49KWToqz+oWqLw9t8slh8hDMmBRTn7LPPbkPRvUtKa/smAujM+P622lQKIzkTnUPcvrfRQWVlY+f0Gw7bc+GGsYAUqoInefuw0C2q2JCMw3LEr1WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785401131; c=relaxed/simple;
-	bh=sC9lPD1w0NqaXrCcspRVIT6YfcbV+JFCEhrHkXgg8FY=;
+	s=arc-20240116; t=1785402082; c=relaxed/simple;
+	bh=EgrgXehS8Eem5zAeSBXtfk3b1tTF3b01oPe3aMZL8Lk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tQSAp5Sj5rI8BY8z4BSs0iaCoFXeZJuqhMDjR4GL8hEmqCg5a+s+TAmS6Rc7KbfZbypBlKZcaCM91op8dPB7OYyr7FNJvnLM388hPVpCGmjYFiSVvp0t34unqc0hK6UAHw5uyg2I69tzUSUTGYCs9q8rtjDJwzXE4zaA57Y5G88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UbrY2QQ5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=nbwRBdCO; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 In-Reply-To:Content-Type; b=PjNLpL0HAFyK9V0byRHNsNOVonvg354qCQGEpMjuMwDVRuYjTKeKeabau09hfqqO9ywvkqmKaR8hMskIPjk6iiy/nbmCIZ+5u8gsQvSy8KDzejm3BqPlSM03VYXtyTPtbZAwQ1noebfDrbS5DdCHR75XkHWs8R46RrbUdjU+IUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cMAAyTQe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UbrY2QQ5";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="nbwRBdCO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785401128;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KUB53N8ZW7olaQibApR60mfiLMJvQ7kWg88nhg9lW2Y=;
-	b=UbrY2QQ59GGDsmiBrY0MIXksLsqCmEivqsKWBAxkkWmboY2Jy1u0vkARcWkyZykHVnjjP3
-	xcsTDMxLzF9LmN/QvdGbTomZV/V4x7IpTN7+cAFaHDbEW0p6dQ52hDQTWniEUz1o7mzEj+
-	KwA40MEvorJXWogOOFQpcfZkQyf78io=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-421-6a_ITZ2iNHqmk9wonnH3rQ-1; Thu, 30 Jul 2026 04:45:27 -0400
-X-MC-Unique: 6a_ITZ2iNHqmk9wonnH3rQ-1
-X-Mimecast-MFC-AGG-ID: 6a_ITZ2iNHqmk9wonnH3rQ_1785401126
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-492488f8583so16321765e9.2
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 01:45:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1785401126; x=1786005926; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KUB53N8ZW7olaQibApR60mfiLMJvQ7kWg88nhg9lW2Y=;
-        b=nbwRBdCOcTangZpKTpm45qKbap7OVzTqhldDy/yDR8G2Z+yRceg3/ihjkukhUj1XZU
-         Az9O3/s9jLqx8SyfkPdNiKcasKS6BZkiR8IVka8fEfg3Rj/EQ//nShKzKqXvzmn+O36z
-         PzqLNe1IPiWzV4SzDg3mmNV2dkTozj2CkqWNEnM6P7SM+VOLsPHAlivhHGMES8mwTjnP
-         2tDMl3VfOmDm/LbKTxXbHx2UKcEzWdHsx694TGZu08bNmwiSiKvv6uSijwhgl697ms3n
-         8jQCklXQBm0jIkux2/XbgsosGDsrxXMW/HS/NOpP9UyaaJYjmN6vOfOb9K2ZxoCKsUB4
-         2QEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785401126; x=1786005926;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=KUB53N8ZW7olaQibApR60mfiLMJvQ7kWg88nhg9lW2Y=;
-        b=QVfP5fl8GYf+XnhS0bNJwRqz7OxhiGnROFkbovj94acRp99eCx/7AVn4gQ3qFE0zzW
-         W5xzgp+ClcmBi+FhmRpgAOs2AOO/jANxWdLNN4Q5xwpgNrWgnZBojozYauVxZvWX0Cxg
-         Pmw+4IO02Vs/EemtQh4tXZk9Rjd7VNoWCvOtf7KfWaelC5DKW0UeUe9rnwO2pfMOgNBm
-         v4ABU9tjCHbSdfymzptAmXOsiAiSzZ9DjcjAjIzOkoqIw7jIqnU/PRhdpehJssZ2U6gf
-         gHA6j/TruJcoy0i1jiui56HL+PR8t/DCVCGIxwAWy+j27uPX7q3aD5hq95hvic5zE93z
-         jkVA==
-X-Forwarded-Encrypted: i=1; AHgh+RqMTEmGiTXur4Kr3XLacpVhie5L6znJCFLo1f/Lj5gO72JQCfUHikMXTrl1EN/y2ka8HvE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYMlu6vMx9Pm/wbTg2XaOQqPFwzR99EBrNT0rgaw/LRArygfsB
-	poJOCDFaxrfqCaRvq8jV1Q6Ti14TX1xoq6q7+GY6zmWv5ly9zqrMWSkZa5aLLY8gfM0sNgcB2FG
-	aRFXsCAE8l7r4QGCQL7ajL7tOrHe4CpbhsWx0HQ/G41t88N0W8QQYXg==
-X-Gm-Gg: AR+sD10tCTKQ6I6fDCtiutl3mcjNLqnHJ5iZvLN4D3ZLBV6EKehFtFqD2cXk3nLXa24
-	vRZrsFUGrLByZUeOSys//73MKBPJcUaE7ouUP9Yvi+dgHbP2TIm8XwAiczw2ZfIGnWV6OURZwjk
-	a/1GT+W0o5rdK+1XNgAin/MtrOX+0kkSaKb1uoLVRhMsQzXOcSKvZBJnuEavmLBNE3pXTVU82tS
-	Wd0uPCs/ZRk6WLqdOidrBZ9KYtgT3ZRATj2jJP/it0cVsPVGcbkJ18FCoQCnmztXVSwWHExQKV6
-	SpNG24AaDmPK0TjYVCBVhUKHrfezNrZKx7fy1V0EDZYhYiaKdgcRFqXJCCKYOekDJXbJ9Dkp3HL
-	pwhp4OQgtHGdbOzVTPw6q/tTk7qS0mNSTL1D2ps3QMZQ+8E08ioxBw8yIu/HQDXLpJ4DPwHkaP2
-	MXjQ==
-X-Received: by 2002:a05:600c:4248:b0:493:f78f:cd70 with SMTP id 5b1f17b1804b1-49800ebefc7mr12654565e9.18.1785401125999;
-        Thu, 30 Jul 2026 01:45:25 -0700 (PDT)
-X-Received: by 2002:a05:600c:4248:b0:493:f78f:cd70 with SMTP id 5b1f17b1804b1-49800ebefc7mr12654155e9.18.1785401125431;
-        Thu, 30 Jul 2026 01:45:25 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:5521:6b10:58fd:68f:7756:389d? ([2a0d:3344:5521:6b10:58fd:68f:7756:389d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-498010aaceasm43139675e9.12.2026.07.30.01.45.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jul 2026 01:45:24 -0700 (PDT)
-Message-ID: <049f7b53-8bbe-4ee8-a347-6c07ee11c1ac@redhat.com>
-Date: Thu, 30 Jul 2026 10:45:23 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cMAAyTQe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C16F51F00A3A;
+	Thu, 30 Jul 2026 09:01:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785402080;
+	bh=CepvrJSCofuW+Rbn27Rzxe0iX7nFeJvfMACrLN8SBXg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=cMAAyTQeOGqrx75vLFrjVKl+Q6ZyYvMe3VzKiXO3gT454huGwem31nWyXRv/q9dlS
+	 E3hQqIi3kmO60/5toa+zlCHUuM+g8Wqeu3nhCRRJ+Sf0qZx2N3FkcFXK6YLhYRpLQr
+	 t/KYFLKt7fKulDxc4uMA3avGCvf+riDMcZSldx4g+Drk+cDrNxW3LqOsYnI8qChyzL
+	 7VHsgrGNTwXbiZ3BhGlFN+vSFe+V/f8AsAU+/6IPpBHgp5VswFdaspZ9ChgObfb20X
+	 +Kdl7lpr/DuwRf+dyPvrYDM1Pns9x4LuCF0BroserOpfZgvlmji+6LlA5kagPgRpPY
+	 2550ObpT+Lr8A==
+Message-ID: <47b147f2-8c10-4ae4-8023-94839f1110a8@kernel.org>
+Date: Thu, 30 Jul 2026 11:01:12 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -88,81 +35,165 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2] tcp: honor BPF_SOCK_OPS_RWND_INIT on the
- active connect path
-To: Tejas Birajdar <tejasbirajdar@meta.com>,
- Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>,
- netdev@vger.kernel.org
-Cc: Jakub Kicinski <kuba@kernel.org>, "David S . Miller"
- <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260723214208.3655474-1-tejasbirajdar@meta.com>
-From: Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH v5 0/8] mm/slab: introduce kfree_rcu_nolock() and improve
+ slub_kunit coverage
+To: Harry Yoo <harry@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Pedro Falcato <pfalcato@suse.de>, Suren Baghdasaryan <surenb@google.com>,
+ Shengming Hu <hu.shengming@zte.com.cn>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev, rcu@vger.kernel.org, bpf@vger.kernel.org
+References: <20260729-kfree_rcu_nolock-v5-0-a28cdcda9673@kernel.org>
+ <5342124c-4847-4e93-92a4-f3512928c4d1@kernel.org>
+ <f97853e9-3021-4f20-81d3-4bb710ca444a@kernel.org>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
 Content-Language: en-US
-In-Reply-To: <20260723214208.3655474-1-tejasbirajdar@meta.com>
+Autocrypt: addr=vbabka@kernel.org; keydata=
+ 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
+In-Reply-To: <f97853e9-3021-4f20-81d3-4bb710ca444a@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/23/26 11:42 PM, Tejas Birajdar wrote:
-> BPF_SOCK_OPS_RWND_INIT lets a sockops BPF program pick the initial TCP
-> receive window, e.g. to advertise a larger window up front in environments
-> where that is known to be safe. Today it is only effective for the passive
-> (listener) side; on the active (connect) side the value is computed and
-> then silently discarded.
+On 7/30/26 05:08, Harry Yoo wrote:
 > 
-> On the passive path tcp_openreq_init_rwin() inflates full_space when the
-> program returns a non-zero window, so tcp_select_initial_window() can offer
-> it:
 > 
-> 	else if (full_space < (u64)rcv_wnd * mss)
-> 		full_space = min_t(u64, (u64)rcv_wnd * mss, INT_MAX);
+> On 7/29/26 11:14 PM, Vlastimil Babka (SUSE) wrote:
+>> On 7/29/26 10:20, Harry Yoo (Oracle) wrote:
+>> 
+>> ...
+>> 
+>>> 8:  8e69c83a1e52 ! 8:  aeaf2ab60046 slub_kunit: extend the test for kfree_rcu_nolock()
+>>>     @@ lib/tests/slub_kunit.c: struct test_nolock_context {
+>>>      -			gfp_t gfp = (i % 2) ? GFP_KERNEL : GFP_KERNEL_ACCOUNT;
+>>>      +			gfp_t gfp = (i & 1) ? GFP_KERNEL : GFP_KERNEL_ACCOUNT;
+>>>       
+>>>     - 			objects[j] = kmalloc_obj(*objects[j], gfp);
+>>>     +-			objects[j] = kmalloc(64, gfp);
+>>>     ++			objects[j] = kmalloc_obj(*objects[j], gfp);
+>>>       			if (!objects[j]) {
+>>>     + 				j--;
+>>>     + 				while (j >= 0)
+>>>      @@ lib/tests/slub_kunit.c: static void test_kmalloc_kfree(void)
+>>>       			}
+>>>       		}
+>>>
+>>> Link: https://lore.kernel.org/linux-mm/20260427-nolock-api-fix-v2-0-a6b83a92d9a4@kernel.org [1]
+>>> Link: https://lore.kernel.org/linux-mm/6edebc2b-5f5a-4b9c-9a4c-564310acee1b@kernel.org  [2]
+>>> Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+>>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+>>> Link: https://lore.kernel.org/linux-mm/872bd673-3d45-4111-8a41-31185db3ece5@kernel.org
+>>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+>>> Link: https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4d9f98162@kernel.org [1]
+>>> Link: https://lore.kernel.org/linux-mm/40591888-3a87-433e-b3d2-cda1cab543be@kernel.org [2]
+>>> Suggested-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+>>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+>>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+>>> Signed-off-by: Harry Yoo (Oracle) <harry@kernel.org>
+>> 
+>> Wonder what produced this weird block of assorted trailers? "b4 prep
+>> --compare-to vX" never did that for me?
 > 
-> tcp_select_initial_window() only clamps the requested window *down* to the
-> available space, so without inflating the space first the BPF reply can
-> never raise the offered window above tcp_full_space(sk).
+> Interesting. I checked it again with `b4 prep --compare-to v4`, but the
+> command didn't produce this. Looking at the cover letter
+> `b4 prep --edit-cover` It's not even there.
 > 
-> tcp_connect_init() calls tcp_rwnd_init_bpf() but never inflates full_space,
-> so on connect() the requested window is clamped back to tcp_full_space(sk)
-> (~64KB at the default rcvbuf) and the program's value is ignored.
-> 
-> Inflate full_space in tcp_connect_init() as well; tp->advmss is the mss the
-> listener path uses (both are tcp_mss_clamp(tp, dst_metric_advmss(dst))).
-> Read full_space after tcp_rwnd_init_bpf() so a program that also adjusts
-> SO_RCVBUF is still reflected. Compute the inflated value in u64 and clamp
-> to INT_MAX to avoid overflow (full_space is int, rcv_wnd is u32), and
-> apply the same overflow fix to the existing listener-side computation.
-> 
-> Fixes: 13d3b1ebe287 ("bpf: Support for setting initial receive window")
-> Suggested-by: Eric Dumazet <edumazet@google.com>
-> Signed-off-by: Tejas Birajdar <tejasbirajdar@meta.com>
-> ---
-> v2:
->   - Do the inflated full_space arithmetic in u64 and clamp to INT_MAX to
->     avoid overflow, and apply the same fix to the existing listener path
->     in tcp_openreq_init_rwin().
->   - Read full_space after tcp_rwnd_init_bpf() so a program that also raises
->     SO_RCVBUF via bpf_setsockopt() is reflected in the offered window.
->   - Re-ran the sockops BPF/RWND functional test and the full in-tree
->     packetdrill regression suite on the revised code (details below).
-> v1: https://lore.kernel.org/netdev/20260722170033.2763794-1-tejasbirajdar@meta.com/
-> 
-> Functional test: a cgroup sockops BPF program returning
-> skops->reply = N for BPF_SOCK_OPS_RWND_INIT was attached to the
-> connecting socket and driven with packetdrill on the active-open
-> (connect) path (advmss 1460, negotiated wscale 8). The offered window on
-> the first post-handshake ACK now tracks the requested value:
-> 
->   req_segs   offered window (bytes)   = req_segs * advmss
->   256        373760
->   1024       1495040  (~1.43 MB)
->   4096       5980160  (~5.7 MB)
+> Probably it was produced during b4 send --no-sign? hmm...
 
-The still present, sashiko reported, integer overflow in
-tcp_select_initial_window() looks real to me, and the last value in the
-above table is greater than the overflow threshold, so I'm wondering
-what I'm missing here?
+Hmm let's see if it ever happens again.
 
-I *think* you should additionally take care of tcp_select_initial_window().
+>>> ---
+>>> Harry Yoo (Oracle) (8):
+>>>       mm/slab, slub_kunit: register kprobe to trigger _nolock APIs
+>>>       mm/slab: handle the !allow_spin case in kfree_rcu_sheaf()
+>>>       mm/slab: use call_rcu() in unknown context if irqs are enabled
+>>>       mm/slab: extend deferred free mechanism to handle rcu sheaves
+>>>       mm/slab: allow kfree_rcu_sheaf() on PREEMPT_RT
+>>>       mm/slab: introduce struct kvfree_rcu_head for kvfree_rcu batching
+>>>       mm/slab: introduce kfree_rcu_nolock()
+>>>       slub_kunit: extend the test for kfree_rcu_nolock()
+>>>
+>>>  include/linux/rcupdate.h   |  32 ++++++-
+>>>  include/linux/slab.h       |  16 +---
+>>>  include/linux/types.h      |   8 ++
+>>>  include/trace/events/rcu.h |   2 +-
+>>>  lib/tests/slub_kunit.c     | 190 ++++++++++++++++++++++++++++-----------
+>>>  mm/slab.h                  |  52 ++++++++++-
+>>>  mm/slab_common.c           |  81 +++++++++++++----
+>>>  mm/slub.c                  | 220 ++++++++++++++++++++++++++++-----------------
+>>>  8 files changed, 433 insertions(+), 168 deletions(-)
+>> 
+>> Applied to slab/for-7.3/kfree_rcu_nolock and merged go slab/for-next, thanks!
+> 
+> Thanks a lot!
+> 
+>> Used slab/for-next-fixes as a base for a better topic branch indepdencence.
+> 
+> Ah, I see. thanks.
+> 
+> So slab/for-next is not a good base unless it depends too much on
+> existing commits on the branch?
+> 
+> And usually it's better to use the base (slab/for-next-fixes,
+> in this case) of slab/for-next as a base?
 
-/P
+Yeah. Hopefully we'll figure out some documented guidelines for this in the
+upcoming mm-next meetings.
+
+>>> ---
+>>> base-commit: ffc64805cebac330b2a60b2f1f144fcc35b8ab46
+>>> change-id: 20260615-kfree_rcu_nolock-e5502555992f
+>>>
+>>> Best regards,
+> 
 
