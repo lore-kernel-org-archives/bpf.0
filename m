@@ -1,136 +1,78 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E91476CDC;
-	Thu, 30 Jul 2026 23:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A375039E191;
+	Thu, 30 Jul 2026 23:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785454655; cv=none; b=tO/hoHmOAzalU7Zr9o8r4ZiHUTDOCRqYbsNXURfaqWZnDAQYq32vwaSnIfMeHDQIWnYNx9xKcdvAUU81/irmW1YQfnp+lhmQaXzuAKzYEIFK7XbriYePyB77Vx8HxCucVarUorWXIekuPvMsI4WGrZd/F/86boL5NC9G+7RSJ7o=
+	t=1785454853; cv=none; b=HEDkhFPXqDcsGjzchI9/uYx35EE6I79SbKvHQgrhEpqSgfX92QNlYAYIZRN6zl9bFCvVDOn8eha95qPHUz8RUfXL8d/a4VYvTLyvnGArtwSlyp2ootKDqvvaE2s5JuoTZVmp3Gu+mcXibwqYXzagsP3IDWz8XUTi9O6OpkhCQnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785454655; c=relaxed/simple;
-	bh=CHae/PQNyGnK+cAwdETrjX+TvDIGQh4fuLvoP+AlPlY=;
+	s=arc-20240116; t=1785454853; c=relaxed/simple;
+	bh=iBNd4K+O4tno7LXYELuL3uAd+WPSyAbldMr9oM3VMKo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KRsHMQViD+kPIlNeplGog035/ihNjM4dow6xHMckzLtUW57rEh6nPgkOKyNLeRvBb5MILicHt8nhu+DB/SZMal9acyE33ys3PimjFKu55erSp1i4nuzLVlcTfTH+X0T9HVFe+iZvxBhzWRDsm5RhYBjyXQVp115NJ0yQarBJW6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=gLAtWP2Z; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=eMjf/t3OZl9dO/BlkAqi+vPlj18C6pqqdITUvodLeCtfqZct/hV8POjtsnHr/sK3fJCbzSr2i1J/AJ2lb5RE6TNN06Cnw6FfrYvw9qUrvp+I1mRc8S0NSjmHTf/bEwr1leUtKzwYWoW7DFeYSnmcr32CIICOIYR0JAyeRDmMUvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hyY23R6k; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gLAtWP2Z"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=CAtKSI6m+4Gh/IO7Lr6iBocpHFoEfkL6KKgxA4beTgg=; b=gLAtWP2ZiiTF5jaWCra5e/pq8h
-	0CXiMcbEcrBaokrjOC9e5/zFgU2ADom77GKb7KUNm/ayEyf9H0gIsg5aFPAd1lIloek+6RDMIQkDu
-	jFM+EeGiHejlCeIGaZFwj+GTB/sQHGzDneDBnSWQjJS8eREfWFpjPLNy4SIAXCbIKfEjP49br+DmF
-	tpnBD+HYhX2tx8OT/k4I9sWUfRrw3kmo8jHKJAafKTyGGk0rhpzWcYDL2mnKsyE2HAxxpYox3/L2d
-	qdl+w6Kk9vSNumwm2ldLTxQ27yPjw/PDMlNoqGkmWGbUYcPKIXsv1/5AC6QaJeTUMzSPPsPfh+7uu
-	bt1ADutg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wpaJW-00000004bEg-1els;
-	Thu, 30 Jul 2026 23:37:22 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id EF7BF3004C9; Fri, 31 Jul 2026 01:37:20 +0200 (CEST)
-Date: Fri, 31 Jul 2026 01:37:20 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hyY23R6k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6901F000E9;
+	Thu, 30 Jul 2026 23:40:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785454851;
+	bh=H07kJpzbq3Hf65M0/NsKGMsxVsYpVDaw4sf2gDu2Lfs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hyY23R6kNcDsGqR9CnHDy+2L2E9FpG5zbiakWGA3tnCJ82tnDU3ByK8Zjm63T7HEg
+	 OxVwHmNkZasV6uTMtFSfkflWGZLwt2MuGDoOLlX+THF11XYNogFI9hcYQFq21tWSxB
+	 IiON8mat8caB7+zC2Nhg4f3TDINAkWsV/RA0I5HwJUWE68XX3QqPJcUuvFtNZvw6fh
+	 X1g0Xxon+6zuXREcdfLeiPjY3yEVpJBxzkQXKO5PfSpfyiri6VutrqgVvAUslbG+mW
+	 STx5fJcMil6zy2QPnqemHt04IVBopGvpG88211PueeilEYvJblBasDbX6Rqj2pJvPL
+	 Jxo89pbn2hlqw==
+Date: Thu, 30 Jul 2026 16:40:50 -0700
+From: Kees Cook <kees@kernel.org>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
+	Juergen Christ <jchrist@linux.ibm.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Dominik Steenken <dost@de.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Maxim Khmelevskii <max@linux.ibm.com>,
+	Jens Remus <jremus@linux.ibm.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>, rcu@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/2] uprobes: Switch uretprobes_srcu to
- SRCU-fast-updown
-Message-ID: <20260730233720.GC776954@noisy.programming.kicks-ass.net>
-References: <20260706172744.3920417-1-puranjay@kernel.org>
- <20260706172744.3920417-3-puranjay@kernel.org>
- <CAEf4BzaDSeUxeZmHjXRYXnXDZj8Obwd3rmOsfNygjcXJ0yy5bA@mail.gmail.com>
- <DK4I97UIL347.3P2KEBO828JK8@gmail.com>
- <CAEf4Bza3LeVB-z3jwMdnBGLdjpPr9tZFhGHt5pUwui64ZX66Lw@mail.gmail.com>
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, llvm@lists.linux.dev,
+	bpf@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] s390: Add kCFI support
+Message-ID: <202607301639.13BBC08@keescook>
+References: <20260727140514.116501-1-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4Bza3LeVB-z3jwMdnBGLdjpPr9tZFhGHt5pUwui64ZX66Lw@mail.gmail.com>
+In-Reply-To: <20260727140514.116501-1-hca@linux.ibm.com>
 
-On Thu, Jul 30, 2026 at 03:27:27PM -0700, Andrii Nakryiko wrote:
-> On Tue, Jul 21, 2026 at 12:44 PM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> >
-> > On Fri Jul 10, 2026 at 11:23 PM CEST, Andrii Nakryiko wrote:
-> > > On Mon, Jul 6, 2026 at 10:28 AM Puranjay Mohan <puranjay@kernel.org> wrote:
-> > >>
-> > >> uretprobes_srcu currently uses normal SRCU, which issues
-> > >> two smp_mb() per read lock/unlock pair. This overhead is
-> > >> paid on every uretprobe hit.
-> > >>
-> > >> Switch to SRCU-fast-updown, which eliminates the per-reader
-> > >> memory barriers by moving the ordering cost to the
-> > >> grace-period side (synchronize_rcu() instead of smp_mb()).
-> > >> This is acceptable because grace periods (uprobe
-> > >> unregistration) are infrequent compared to reader-side
-> > >> uretprobe hits.
-> > >>
-> > >> The updown flavor is required because the SRCU read lock is
-> > >> taken in prepare_uretprobe() when a return instance is
-> > >> created and is held until that return instance is finalized.
-> > >> The traced thread returns to user space in between, so the
-> > >> lock is inherently released in a different context from
-> > >> where it was acquired: on the normal return path via
-> > >> uprobe_handle_trampoline() -> hprobe_finalize(), or from
-> > >> ri_timer() (expiry) or dup_utask() (fork) via
-> > >> hprobe_expire(). srcu_down_read_fast() / srcu_up_read_fast()
-> > >> are designed for this acquire-here / release-elsewhere
-> > >> pattern and, unlike the same-context srcu_read_lock_fast()
-> > >> variant, do not carry the lockdep read-side tracking that
-> > >> would warn on it.
-> > >>
-> > >> The short, same-context SRCU sections in ri_timer() and
-> > >> dup_utask() (which guard the uprobe against reuse across the
-> > >> hprobe_expire() cmpxchg) instead use guard(srcu_fast_updown)
-> > >> for proper lockdep coverage.
-> > >>
-> > >> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> > >> ---
-> > >>  include/linux/uprobes.h |  5 +++--
-> > >>  kernel/events/uprobes.c | 29 +++++++++++++++++------------
-> > >>  2 files changed, 20 insertions(+), 14 deletions(-)
-> > >>
-> > >
-> > > Very straightforward replacement and will improve performance, thanks!
-> > > LGTM. Peter or Mingo, I assume you guys will want to route this
-> > > through your tip tree, right?
-> > >
-> > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > >
-> >
-> > Hi Peter, Ingo,
-> >
-> > Gentle ping for this.
-> >
-> 
-> Another ping, please consider applying, thanks!
+On Mon, Jul 27, 2026 at 04:05:07PM +0200, Heiko Carstens wrote:
+> Add s390 kCFI support using the generic support provided by clang.
 
-Got them, thanks!
+Awesome!
+
+Is there anyone you know that might be able to review the GCC KCFI
+series[1], perhaps with an eye towards providing the s390 back-end
+implementation?
+
+-Kees
+
+[1] https://inbox.sourceware.org/gcc-patches/20260716005527.it.950-kees@kernel.org/
+
+-- 
+Kees Cook
