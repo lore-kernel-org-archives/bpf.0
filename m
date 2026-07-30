@@ -1,175 +1,63 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B296936EA8B;
-	Thu, 30 Jul 2026 02:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67AF36EAB8;
+	Thu, 30 Jul 2026 02:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785379008; cv=none; b=U7qQKz6FJJEg2erj0bdo9vBE1mtKYhtAHDEeQiRJuWyc2Jv+F6WGeF2JPnAWpGd1JdaldGipPB2PJ9yD1X8u9agaz13vKS+0hCa51h5fNrqJTySjIpKS7pzPfnLjZdYgIG/OVCkPS4d6BUPbwHDEeH4P1H1ti92lt4nXTUL8U0U=
+	t=1785379231; cv=none; b=AetYvPEboFIC/7pTKg7sgV64w6IdtZxyDzchMLeuyuO6LHFoGQNe0e73/GkAeWBawAWFei0GpVOE5yLc/RZfUJpN3oRaBENNBT+yjn0aHi6i8oOI0jn0Z+ppjYF5vFCSBaLeTBPeb32/qcLvi6q/6wuWGHLLIKt8hPbmyRpcDfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785379008; c=relaxed/simple;
-	bh=vhu+M6y29brDW/JoVQtWD0Yic3mIsKecTXpWZatT/oI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SsX2my/bqoN+e5dPmHBVN3dVm75BplKOL3shamIjp4gs66G1FVYqkYSFMzvJOqOaNehAqJwjUHUdMQhvQtNmZtxsgKK/nK9PYk5GkH9/R+KKdvcZy1ix+WkoNOm4G+OEmy0FXMF1JKQxcqG4yjADKpxM1gJQrhqleayS8MlMSyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ScVuJ1Na; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1785379231; c=relaxed/simple;
+	bh=FHV3yx0HyV7LrdZ7Z27HxNKxFi5eNlJ1OUboqjhOOwY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=E6MeYApO8feOjZe/W1x7zMcY6ZeT7mQfXHhf75knCl1T5uqHCWhJcexUQNj7yrlb0bVjH3R8shReEKnbLwnyJM+KEtk/d/3sgWNn6snKsPGj7SWGdQUKj6vXUNxcoT8rbsYpd8ULI1P8yHz0ljWRdHpEaVdUk5c2OsOXQrZr6XE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikKghXWl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ScVuJ1Na"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66U0lgIu1572893;
-	Thu, 30 Jul 2026 02:36:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=JWmBmj
-	CVDwZRVgRCNJvQM8+svXnp9KhE6SAWLtH/3TE=; b=ScVuJ1NayI3lRygF+o6LEG
-	TmvAoG0OT48oqr33uRetOXtafCqwT8zBHtNYHcfJAMMvVrAWZF22KEj3S5Zb0fQ0
-	5cLNfus0Q++AmSCIq7xHuPxgP2179ZiOTus6muDOjCGvrgfxP07yPYcmc3tMzqp9
-	N+/EkG6H4yj5tOkQUnqQMyOet/6PL5mREhBNi+0DyYo+pxv5WDbemPtrTFD6uZOs
-	U5iC2qSRfXGhcrOgEhegvC00M48Q5k0lmLlDTV+gBqoZnVUdEp8EEC8LAdgZj8KE
-	VTe8h/kdQ/V/kPsRtwhVcBMvb44GsMHvKklDbyejj/IsuFewqOvjv/5rZ7VXbovg
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fmv0xwpbk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jul 2026 02:36:16 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66U2QH3l017828;
-	Thu, 30 Jul 2026 02:36:15 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fn8fk9e11-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jul 2026 02:36:15 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66U2aD7u22151794
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Jul 2026 02:36:14 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B04E258059;
-	Thu, 30 Jul 2026 02:36:13 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2514358043;
-	Thu, 30 Jul 2026 02:36:08 +0000 (GMT)
-Received: from [9.43.84.46] (unknown [9.43.84.46])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 30 Jul 2026 02:36:07 +0000 (GMT)
-Message-ID: <4ae1d899-9948-4904-ac3f-9096722fec8b@linux.ibm.com>
-Date: Thu, 30 Jul 2026 08:06:05 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikKghXWl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 641C51F00A3D;
+	Thu, 30 Jul 2026 02:40:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785379230;
+	bh=RZbhRJJBFL+blJ2QAZwZ7Rdj2VHRXGXPq+mw5wsxmX8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ikKghXWl7avLYv7wsUALwuCaEgON1Enbib9Lksm3tKOWSlSCQBpkmHzX+/g8vabsV
+	 ckX1QvA43R0dJV993WYlJpcdzF+05Cu1t4MJwmKG2K2XiwKqG3xurzclxt3Ek6eJH4
+	 cBZBrHvJzQU/3igqCYRZYqAkzTy5c0lPXE/dxvNgMVgio+mfavodBrF4BNNI4jsHlw
+	 bHz7dWwjPfbGQCmm2PSyvSEX1KM5Kc4liC/9hR2gJ6GIuQ30vfickhKHdYudJYzKdc
+	 S7mML6ZI6BV4RZRW8J1X9T42xLM8O+bYVx7C5P7sCQwkotrJBgShvLvUDiDdETA5f4
+	 8zHIPqElyaN8Q==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org
+Cc: Sasha Levin <sashal@kernel.org>,
+	gregkh@linuxfoundation.org,
+	jiayuan.chen@linux.dev,
+	martin.lau@kernel.org,
+	bpf@vger.kernel.org,
+	Quan Sun <2022090917019@std.uestc.edu.cn>,
+	Yinhao Hu <dddddd@hust.edu.cn>,
+	Kaiyan Mei <M202472210@hust.edu.cn>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jay Wang <wanjay@amazon.com>
+Subject: Re: [PATCH 6.18.y] bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops
+Date: Wed, 29 Jul 2026 22:39:58 -0400
+Message-ID: <20260729223316.stable-0002@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260728202658.8687-1-wanjay@amazon.com>
+References: <20260728202658.8687-1-wanjay@amazon.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] powerpc64/bpf: Fix build break in
- bpf_jit_emit_func_call_rel()
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-        memxor@gmail.com, hbathini@linux.ibm.com, mpe@ellerman.id.au,
-        npiggin@gmail.com
-References: <cover.1785339155.git.skb99@linux.ibm.com>
- <aafc721911eefc4ee376e27a0f4cebb82e3ee336.1785339155.git.skb99@linux.ibm.com>
- <8e3aa8f3-c264-4568-a973-0595914f89df@kernel.org>
-Content-Language: en-US
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-In-Reply-To: <8e3aa8f3-c264-4568-a973-0595914f89df@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: RMQB6wyc4ftPbs__6eTBf88MgEEngaiM
-X-Proofpoint-ORIG-GUID: dR6o8elzLtdLXeAAayH8PQTskXNHloRe
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMwMDAxMyBTYWx0ZWRfX2V+CTuSM/kUQ
- nu5kRf0buTv9k5mSCx1vdJQQhuGkgL0acZAnVmOF/ksgi0Hmb0m6BStpxxFCZ4FRKzb0OAHWYk/
- B2Grlzq1AZ2GcoRvVGlSeaSE1Vjit8o=
-X-Authority-Analysis: v=2.4 cv=dYuwG3Xe c=1 sm=1 tr=0 ts=6a6ab8a0 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
- a=C62OpMNfUQH9adNov7cA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMwMDAxMyBTYWx0ZWRfX1xXu4sh6ECLs
- zZlLmDP4JBwjnL+fVrLtOsvSTAe8ejelU+WY2D7iU+5R83JXCEekBUXHmpt6vGh9CmXmkUf1ci4
- bckvQUgaDL6oWIqR2FsotGKUe33PVJstDq0sshZcJ5PpYURjk3tlyOTVMX906GIan94irJwd/c2
- /Gwp3zqE0yxgkPwpCkOJjaQs6r4uQ/vD9MGJyMX91I1qLaDgiQSMB2hnkJB4DE9MVBWEiihUSZz
- ZZnMytpPglvTWOYjD39FHMbc5cEYNDc9MKBR37lV3iyRAhcAKcsfn8Qb3Y4ITnhz0YDjBFyHoUX
- bmntOnbPYm4Hx51AGQSiHCejLwVCLjVhU8krTxAh+o9mZwcSRr7w9wPO8V7nm6oZfiW6EAQL6Zv
- cK7f+oPh9vJqccrUVNcXw9gHIzsdzcQ/kYpU3a/Ij/Ry0O1zJK+PAcM//JlkdEnolkbJrxXkdaL
- y5uozkF6TRkY1lLfdvw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-29_09,2026-07-29_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 impostorscore=0 clxscore=1015 phishscore=0 malwarescore=0
- spamscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607300013
 
+> [PATCH 6.18.y] bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops
 
-On 7/29/26 10:15 PM, Christophe Leroy (CS GROUP) wrote:
->
->
-> Le 29/07/2026 à 18:03, Saket Kumar Bhaskar a écrit :
->> From: Madhavan Srinivasan <maddy@linux.ibm.com>
->>
->> With CONFIG_PPC_KERNEL_PCREL enabled, build breaks with below error:
->>
->>    CC      mm/dmapool.o
->>    CC      fs/readdir.o
->> arch/powerpc/net/bpf_jit_comp64.c: In function 
->> 'bpf_jit_emit_func_call_rel':
->> arch/powerpc/net/bpf_jit_comp64.c:475:13: error: unused variable 
->> 'ret' [-Werror=unused-variable]
->>    475 |         int ret;
->>        |             ^~~
->>
->> commit b55b6b9ad76c ("powerpc64/bpf: Add powerpc64 JIT support for 
->> timed may_goto")
->> introduced "ret" variable to bpf_jit_emit_func_call_rel() and it is 
->> used only in
->> else block of CONFIG_PPC_KERNEL_PCREL, fix by adding a "__maybe_unused"
->
-> __maybe_unused doesn't fix the problem, it just hides it under the 
-> carpet.
->
-My bad, took the precedence from reladdr, may be it is better to change 
-that too then
+Queued for 6.18 and 6.12, thanks. I took the v2 for 6.12.
 
-Maddy
-> ret is used at only one place, move it's declaration their:
->
-> #else
->     if (core_kernel_text(func_addr)) {
->         int ret = bpf_jit_emit_func_call(image, ctx, func_addr, _R12);
->         if (ret)
->             return ret;
->     } else {
->
->>
->> Fixes: b55b6b9ad76c ("powerpc64/bpf: Add powerpc64 JIT support for 
->> timed may_goto")
->> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
->> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
->> ---
->>   arch/powerpc/net/bpf_jit_comp64.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/powerpc/net/bpf_jit_comp64.c 
->> b/arch/powerpc/net/bpf_jit_comp64.c
->> index dab106cae22b..63952ef19256 100644
->> --- a/arch/powerpc/net/bpf_jit_comp64.c
->> +++ b/arch/powerpc/net/bpf_jit_comp64.c
->> @@ -472,7 +472,7 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 
->> *fimage, struct codegen_context *
->>   {
->>       unsigned long func_addr = func ? ppc_function_entry((void 
->> *)func) : 0;
->>       long __maybe_unused reladdr;
->> -    int ret;
->> +    int __maybe_unused ret;
->>         /* bpf to bpf call, func is not known in the initial pass. 
->> Emit 5 nops as a placeholder */
->>       if (!func) {
->
+-- 
+Thanks,
+Sasha
