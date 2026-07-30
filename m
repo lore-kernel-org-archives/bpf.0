@@ -1,112 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA7834A795
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 11:37:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CC8417369
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 11:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785411460; cv=none; b=MjKdIlMmNWEeZy4bO1+uXg62CEb55sNce2yKhNyO5J6W0zJ+esNc/WWBIIYXyrj8STpKjlAVi/SiC8ZZxiadURYQQLekzIOKX+Pl+E2goEHoNxtQ3sRBIvxNDFypeum0FmMe1THBhJQY2c1q2Yy83AOr3edVs8gXM/APsIMHv6I=
+	t=1785411535; cv=none; b=pDn1B/PlpIgnfrTH8GZXP4avWNl5iUC5zUC+N1a7t0YfhqvHZM8AkXpd4WU2WOrTEzx/4uieuinIqC3dKQO27UQVdXCRRIqAjeuGlM/MMwZuQTxCxS6unuROr8JvjBWjGrela66TEAO8fMPX8hRJ/8VbjQVN6MGkbZTVZd8mbL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785411460; c=relaxed/simple;
-	bh=O0OtPeUSWRYiN6CFTiFeczSMniCFap2N+yqNH9ypFFc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SZ+q8Ppugb5dokDiBziWBviZ6Px5lHIRsqLSURUPAg53XG7Fhm3P9FSyHXsA5WT7JklWtN72Oiaqxz14APxzU7p7/BFYr3Ii7Ph0axg8p8TmQHRtLg2YIn9PcIgNcjvQyf24m8gmqucvGdEQkmr6uf/B32Vudta49upchYbIP5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D6kQ3z8p; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785411535; c=relaxed/simple;
+	bh=iHqcO2Rnwzd2L6OufeDd5pmiMKk3eaglPKa6bUr+zcM=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R+cV1y1zHcLWFWZ8YdrwLaXZZ1u7Xolcdr/dsVuPoSfBPanZqjCNgn4k6DZD6/UPvi0HzpzoMN3nnW4mtb9XOz5TBELbL6p20S99nrk0oRn337Liqhd0ZdeKw0PAH1z88Y6xgKul1KUbr/QujYJ/PXczDZs5tyJwhndJg47/ziw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jf9On7wZ; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6kQ3z8p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C901F000E9;
-	Thu, 30 Jul 2026 11:37:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785411458;
-	bh=S++E3S5MtPQ6gFN6N00vgRX0sQr7pXu2+KjqN5rdTpQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D6kQ3z8plfHsON1NoTtY30kB5sR6U/n3OYASpE332IK59qpCDKVU+SO6zi8Sea4LG
-	 0WgcBBTEx3wY8shNlOup5hLLK5LPSZ+Ti9184Bwawv+sdXFW0JtGCUYmIg/Q4SxXQs
-	 uCoThS6u6nEkNfGhFAoCJBuaDGQ0vVq6M/7zEFFTQm0VYfbVHP79lz7+1y5UVkqIlW
-	 khkYgRlfVnqK8xoA2up8XSEaZkT4Kqtyo9wrM7xEyZvF88E40KRllpOI4OiZGiuQRd
-	 qx5ythPO9sfN6vP4HbHK2ZANFO3QQb5mMBxeELHe8G8KefuD/R0AmB+fI+D42zktXb
-	 rmd4tZm0EIvlg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] selftests: net: reuseport_bpf_numa: consider cpuless
- numa node
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Feng Tang" <feng.tang@linux.alibaba.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260730113040.75718-1-feng.tang@linux.alibaba.com>
-References: <20260730113040.75718-1-feng.tang@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 30 Jul 2026 11:37:37 +0000
-Message-Id: <20260730113738.41C901F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jf9On7wZ"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c1712a04ddaso335528966b.2
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 04:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785411532; x=1786016332; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=plwMvaUEY9e4Fyn22yn6zx4oz4Vgz2fcf+cgeq068e0=;
+        b=jf9On7wZ7ubfCfF3H+VRwPMPf77nbTNmT2eFrx/RzP2STYTsNF3YlpqYDk/GzUmJWV
+         46ii+55bow6qfkVVGeDxLHTSbKowqf9VW1JVFHg3N0ZViQZqqGxX94iTElE2YMXHoQJP
+         DhS8AUgdAkT3FcZ8o5aJrWqzWEm5TNTIJIuA/zij/oiMLIEx0pkd11DpUF/dRhviYClc
+         JEyVE0ZYAOP51aFElNbGTPTPQ1VG12v+oZqI4q1cP3OhCS+v6QNspu2nLcGgTCg9zxdt
+         rTeJfC8VkUHcdXTe0S0oHNVU/Q4DNkCHQgkexkHy9xYhqarjmHLjEmIPaY/+NF6BTSES
+         Ce8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785411532; x=1786016332;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=plwMvaUEY9e4Fyn22yn6zx4oz4Vgz2fcf+cgeq068e0=;
+        b=G8FZgIpB/STYNUbz1SoQlUf3D/Uswxj/QdOU/wQdxsPIXo1Kl2XIPgxhKcPwmPT0ov
+         DU9alK98AnpQUfewrdtNld+D6zk1FK7jSlcE/H4MF2VwQ1wkFDK26BL3GvgL1WdwvlaW
+         M3sQzMKLSqDk27neSEaRVj259v9/lxllsyLwbC1FrSQ4B3j2+yv5NnP0VIhxd1O3TFAv
+         4LIJte+6cynlqpZ46+F70bF+XBuku16vrXjElWVqC+p88vXkv0vviXg6E1Y6JqCKiIgr
+         28ZB4Tyf4EXLB/9FvW+OddJ8n38P8iRNzxUvN46J2DBbdEZKsyfPE+4jROlTdgFuWI5A
+         W3xw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp5+UFRpksvNBn440Ok8ReQk08JhXhDp2fp5U1bPn48fwo+BgGzpnPhntEXkL42C/6E3hA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YytFtZQ6w898jsS5Hfs7R2PvQiPsguMPXJJOLZlc7pmTsSRexV6
+	dmbJR/aXD5lttRmoLQWxxQ5bwkeSCacRV1/H8QoRW/ZB8QKK8EEbCEcd
+X-Gm-Gg: AR+sD12k2X0j4CzcMHNliX50+fEwzvkzfBoelkTmcrOFUgQ2xZwy5casNh96bpRaT/U
+	2Xoe2n6+pqyVSiRYZeYyeP/yrT1Euc3O0/15AKcoeIMFML0NdntIiWra/ggaJxexIxeI+rWv2lB
+	+3U9oC9ML0yFclBzDACcLqZkgdR/d3qe4qSwz/GpjvVwpMlZUAoDAYQ4eLsKxtBV0y1EHosamwN
+	0ik/lVSC4FZO4BvE7tjY4fD+nqGdiPcgZVF2DMARDaUe3Q7ulGczrXZmCShTb5cIwK0Drek2RbM
+	lcDqXQzxhlRrdYVQDvmsunlj7XjubLCEm96zg/uj5CxHHGtBpICjPSZbMUOtQvNM3tKW2NyWMDF
+	Ci9f4u/TCvfUFxi9f5T86HB21u69AH3mUggM1yTaDfMS1RrhLOmaBnUIncMf/wLHxaj+WrPKSwM
+	SVJnepEd/AqWfPvdAclcZBVABrMe5Tn5kJ7ywd71oib72HyZ8=
+X-Received: by 2002:a17:907:c1c:b0:c1f:983a:368c with SMTP id a640c23a62f3a-c1fa5753beemr105392866b.49.1785411531532;
+        Thu, 30 Jul 2026 04:38:51 -0700 (PDT)
+Received: from krava ([173.38.220.35])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1fa8b6da32sm57922366b.39.2026.07.30.04.38.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2026 04:38:51 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 30 Jul 2026 13:38:48 +0200
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, stable@vger.kernel.org,
+	Tao Chen <chen.dylane@linux.dev>, bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Quentin Monnet <qmo@kernel.org>, STAR Labs SG <info@starlabs.sg>,
+	Arnaud Lecomte <contact@arnaud-lcm.com>
+Subject: Re: [PATCHv2 bpf-next 05/11] bpf: Disable preemption in
+ bpf_get_stackid
+Message-ID: <ams3yHvqyXrWAbBV@krava>
+References: <20260729083807.1588544-1-jolsa@kernel.org>
+ <20260729083807.1588544-6-jolsa@kernel.org>
+ <78c72a5b-0db5-47da-8b35-e6a2e6976d7c@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <78c72a5b-0db5-47da-8b35-e6a2e6976d7c@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Missing NULL check for cpumask allocation in is_cpuless_node()
-- [Medium] Missing return value check for numa_node_to_cpus() leading to ma=
-sked errors
---
+On Wed, Jul 29, 2026 at 06:30:26PM +0800, Leon Hwang wrote:
+> On 29/7/26 16:38, Jiri Olsa wrote:
+> > The get_perf_callchain call needs disabled preemption plus we need
+> > it disabled as long as we access its returned trace entries buffer.
+> > 
+> > Note the bpf_get_stackid_pe function is executed already with
+> > preemption disabled.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: d5a3b1f69186 ("bpf: introduce BPF_MAP_TYPE_STACK_TRACE")
+> > Reported-by: Tao Chen <chen.dylane@linux.dev>
+> > Closes: https://lore.kernel.org/bpf/20260206090653.1336687-2-chen.dylane@linux.dev/
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  kernel/bpf/stackmap.c | 19 +++++++++++++------
+> >  1 file changed, 13 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> > index 43b1e5436047..e48ddb4edd47 100644
+> > --- a/kernel/bpf/stackmap.c
+> > +++ b/kernel/bpf/stackmap.c
+> > @@ -624,30 +624,37 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+> >  	struct perf_callchain_entry *trace;
+> >  	struct stackid stackid;
+> >  	bool kernel = !user;
+> > +	int err = -EFAULT;
+> >  	u32 max_depth;
+> > -	int err;
+> >  
+> >  	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
+> >  			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
+> >  		return -EINVAL;
+> >  
+> >  	max_depth = stack_map_calculate_max_depth(map->value_size, elem_size, flags);
+> > +
+> > +	preempt_disable();
+> 
+> Better to use the guard-style guard(preempt)() in this series.
 
---- Patch [1]: [PATCH] selftests: net: reuseport_bpf_numa: consider cpuless=
- numa node ---
-commit 806931cbf2ad9438843e4d30f69b4887e641f7d2
-Author: Feng Tang <feng.tang@linux.alibaba.com>
+we prefer to call stackid_install with preemption enabled
 
-selftests: net: reuseport_bpf_numa: consider cpuless numa node
+jirka
 
-This patch addresses a failure in the 'reuseport_bpf_numa' selftest on
-platforms with CXL memory where one node is cpuless. It introduces an
-is_cpuless_node() check to skip memory-only NUMA nodes during the binding
-test.
-
-> diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.c b/tools/tes=
-ting/selftests/net/reuseport_bpf_numa.c
-> index 8ec52fc5ef41b..197dbfc475f65 100644
-> --- a/tools/testing/selftests/net/reuseport_bpf_numa.c
-> +++ b/tools/testing/selftests/net/reuseport_bpf_numa.c
-[ ... ]
-> @@ -104,13 +104,35 @@ static void attach_bpf(int fd)
->  	close(bpf_fd);
->  }
-> =20
-> -static void send_from_node(int node_id, int family, int proto)
-> +static inline bool is_cpuless_node(int node_id)
-> +{
-> +	struct bitmask *cpumask;
-> +	bool ret =3D false;
-> +
-> +	cpumask =3D numa_allocate_cpumask();
-> +
-> +	numa_node_to_cpus(node_id, cpumask);
-
-[Severity: Medium]
-Will this crash if numa_allocate_cpumask() fails to allocate memory?
-
-It looks like cpumask could be NULL here, which is passed directly to
-numa_node_to_cpus() and numa_bitmask_weight() without validation.
-
-> +	if (!numa_bitmask_weight(cpumask))
-> +		ret =3D true;
-
-[Severity: Medium]
-What happens if numa_node_to_cpus() fails?
-
-It can return a negative error value, leaving the cpumask unmodified with
-zero bits set. Because the return value is not checked,
-numa_bitmask_weight(cpumask) will evaluate to 0. Does this cause the functi=
-on
-to return true and silently skip testing on nodes where an error occurs,
-rather than reporting the infrastructure issue?
-
-> +
-> +	numa_bitmask_free(cpumask);
-> +	return ret;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730113040.7571=
-8-1-feng.tang@linux.alibaba.com?part=3D1
+> 
+> Thanks,
+> Leon
+> 
+> >  	trace = get_perf_callchain(regs, kernel, user, max_depth,
+> >  				   false, false, 0);
+> >  
+> >  	if (unlikely(!trace))
+> >  		/* couldn't fetch the stack trace */
+> > -		return -EFAULT;
+> > +		goto out;
+> >  
+> >  	err = stackid_fastpath(&stackid, map, trace, flags);
+> >  	if (err != -ENOENT)
+> > -		return err;
+> > +		goto out;
+> >  
+> >  	new_bucket = stackid_new_bucket(&stackid, map);
+> > -	if (!new_bucket)
+> > -		return -ENOMEM;
+> > +	if (new_bucket) {
+> > +		preempt_enable();
+> > +		return stackid_install(&stackid, map, new_bucket, flags);
+> > +	}
+> > +	err = -ENOMEM;
+> >  
+> > -	return stackid_install(&stackid, map, new_bucket, flags);
+> > +out:
+> > +	preempt_enable();
+> > +	return err;
+> >  }
+> >  
+> >  const struct bpf_func_proto bpf_get_stackid_proto = {
+> 
