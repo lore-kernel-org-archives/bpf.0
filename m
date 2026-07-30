@@ -1,179 +1,155 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECAF336897F
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 23:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785452506; cv=pass; b=qIGESEjconOqffWrirtqTAMQTVf0dGVPQYiGsgzrvySFWHuDbHulchjUt8QerKhoOcOJ2bt4IVzBYSQnwnbguIDeWwy+iiDnARJFtvof804eohBITVXA8s2vZwxoZn6GHn3P4jcMUmMr/o68Aw/GH8SsMn/SpdJtusvCZP/jh8g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785452506; c=relaxed/simple;
-	bh=e0EcIf399xNKKchZ3dfrBmyOcFx9SYjxIQFiZ4f3oKo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JLC9f20DvfcAEYn/kshT8CDuYwLnMzaYdj3x5FjejQc4WumkZb4qPD7h5IdYrL2LVUoVo/Qr/y/b1ZU+CgZEzZz1WlMMLf111U2clw5RTPMCKQRTlhUhPqRycAjittmhoK/5IL/JjvMdkPmuxWFvVA7QnpOBfS8/+4wT1SWSxPE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QPmJLdzO; arc=pass smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE7C3B42C4
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 23:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785452645; cv=none; b=jn5JnxOiQ62S5esfY9ROJ9lfQRHv76gQfkV7iJ59x9gxHDFPL9bqOfZzKflM34ZCK1nXhFWLcQsDLA+9Qj/PoyTsWYH/EqATT0RHDEj+457VjYsTzAC+TQiIQH53vapC9N93cNW62v47dCxDsQasXCeoyF63GJ0l8+PmQrgOZ80=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785452645; c=relaxed/simple;
+	bh=d4woD7hqYoPXEohXiOL20f0tSRpzoG5kZLjT/jPNQFA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CZ3rt4CqQy7vmmSAAakPnyLFyu/U3G0NOI9qBZGip1+qg8mhy6A07bSLtPfJ4Ts02N5GmuKklziqJB1ZjdAqBmldtirYPQlEYZHJF4HJiaPAisQ+zPQN6ZcZcNtCP+5uiDeDtAeNmGWb38LuzKJjUNY3ReZ8RrYhf6SubjWYfnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ByXJ6MS1; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QPmJLdzO"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8487088510aso476751b3a.0
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 16:01:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785452504; cv=none;
-        d=google.com; s=arc-20260327;
-        b=BoNaNpzNFFmD6V2sFpxhp+tuxmvr5F9ZQNytf1VhLS8PwnIcPagE/DlpfjED5/P34H
-         I/l5i4bWowTVX5Q7bo/3kxnmmVPHmzbF3eYRcZS+V8z4BQAOyqFrh0beaqApLXzlZoaj
-         S74Sf7G3xoiZrKOcTkiHmvD+YTgcKbWTTwE2vNu7nERDmZiBWOIv8iBzVgHER+8vJe7u
-         CsfcHQlWAILNYRukKmqcxhwxWEWtRgBu7DtF80NLuSDN0IJ5h5MptVKa5kd6Ajm5YKUo
-         C56ElzEJvVB1VBvIG4Y1EAMUD9iEm6JLi25gRV0BCSJGpAs3hTV0TpFOCTmwHLvjo6F5
-         wr4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=pFtG538FVlXpB9nXr+oNs3sXJNnCPQ5ybWYzjPcKAKw=;
-        fh=hDhpngdGB6+8lT3IQjg/bJSGHdpzdmrY6OYZRfdlI94=;
-        b=NPNPrm8daDdco3CYK11itijvyUvPTM+I5ul+Ax2eqt0b8E+EvMUGju3jORuls5xEjp
-         oot6nWkbi2+4lZMcKLmh5ibo+THu0jW86VJeKVowZ12FnVSqroRacOV1pJaKepzGU24l
-         FIICOAJrd1R4nV34NcUkBfg0Jx0FKfCTAtjhCnmaMpzhmrH/AKMipIFT7142ZdMBrd2g
-         edMDl94DpCN0l14YnX7lG6+3hmb/MIl4pZBXBB1CvDYkNFP3/7jyQ+5+hRq1cLZDV6eA
-         WQmRnf3CVMMaTOfkiU1zYD+W8Vi12vnfpyqsUHsMA/6z0a1cO/gW3+/24BPAbeiVQhni
-         AQKQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785452504; x=1786057304; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=pFtG538FVlXpB9nXr+oNs3sXJNnCPQ5ybWYzjPcKAKw=;
-        b=QPmJLdzObXblMiFZZra8dC0BgY/CxfkChwKuIkuTyrzRpMb+Smffoz77XafVXsTa3P
-         1AMqlIIBq6xgNdyUZBwHvFWGH42bGq7AjJz5Il5sgAAQszaZTH/uTACQ0Qm03GEJ/CoZ
-         eHwUdKIiEIbj3fF1z14citI/KUOLXv+TVWvXw+QgWh8Y0O0MLS4r49S0gVW28bL76l3+
-         dVQ2G+Tq5IKBxLri2UbSHNp86ox5vav1BvvQ8cS3VC7qqIyAFYBgZj7C/cEqWQpUYVr0
-         ZUo261VWEvXtWTo4idpG0vO5F7kCmXi98KAPvrAkYKVNBkcDGFUqN2D7Sf4Lq2GiVIxa
-         FHdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785452504; x=1786057304;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pFtG538FVlXpB9nXr+oNs3sXJNnCPQ5ybWYzjPcKAKw=;
-        b=WUyRGCt05RMIOPjJm7u/9BgKS8n2ZiNwHOmNmrMufv7SIfGlZ0I5gezdG2M90vj8C1
-         8orNKZhBRvPL2+rTqedciqqJZRy+0jYe/uC5hBKwkMb69ohd1fmbGpGsAm4mC1NkfARj
-         MuOfqTyuRhYpM3VYwKA/CAM5Yb/SOX6Vh4FDDuS1uFJBJd+uOBMImsDj4uIMBfM0xooJ
-         xMzb1mV0tEGAzpOcZSKcXbI93imzW5yYiZo6CYC2r3f3zqIewo5/18A1SjocF+Yov7WK
-         MkQZm/0eA/nU0pEW7AWkBZcFHZUJPG4snHAJiLUWiqGqez+BVTK8EnTvnE+PWOC+3NIE
-         1a1Q==
-X-Forwarded-Encrypted: i=1; AHgh+Ro/j6WzCuXWOgYyfGnC1ptJRApWmvi1Iofa/IUdh+H2/fmMiliOP6Ymy43+t1dlNKdX0+4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzt8R487GzR9hvSYc0os822tSCqxnfEEyccylz0oZHcGgjjAe7A
-	o2yEhBXwl9O9UQOOS9Dl5i7S6anoXPiJDG2ECPE0jrnWkFt7EsThipVV34WPK037viz+RAXvjCg
-	HlaUygfUFsFLPWLAmuxD7njzZJtwFfRI=
-X-Gm-Gg: AR+sD13n9XFe3paWry6e18H4VwBm+APxh4Gjzhi+e4xMAYCGte5zQw0I++mL1+Ee5cc
-	UzsqQCpGIA5G+wrWSLS/cdPhQnEzoEP6PRHBdrd5nVUlF41CfFledlHOxSakuGbwZ/q5bzEufYu
-	u3TM6xiCiSLdcvc36eaQ7IXxWySrZRd6mqBHg17PJ+DIgXsLW4WUhukcYYMqQcQt3gD447OScFN
-	5vFwb97P83bwQafJNDjWqZAtGrEXY9uO+Cks7n4d1Kbvj00Z9poWIGwW/EJ6HH3ckkObcJ6Fgvt
-	M+B3ykqI02TXfWSsHUBDv39m+vqlPMUMNCma7YpIy+CikvvpmhPDyZHoXzSUVIlT6hh8bsLfVlh
-	7AymbdHbJd5R8jgH4K45qOnv+8eXKjAXChJdhJ5hWnw==
-X-Received: by 2002:a05:6a00:cca:b0:848:2f73:8ffc with SMTP id
- d2e1a72fcca58-84ecb994a61mr1553018b3a.69.1785452504115; Thu, 30 Jul 2026
- 16:01:44 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ByXJ6MS1"
+Message-ID: <77edc25d-a521-4f65-84ed-dbb016593902@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785452631;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OAzNMKmzxCFzEOWAiEeFQaer1iebyg6cnDmy70dSSVc=;
+	b=ByXJ6MS1MhKl0IZKznqW2J5nDrksOfD/dwgBIHmiEQXINrWpU3ijNcB6h40pP7yFC5i1vM
+	gUD57GI4yWuIFnk56E1motluBATL65JoyAMundcpQ2zA2vs6bjJIR14Nd3A/OfA2iTBfTn
+	CMAjhXxMsRAxvi87UlEJeKSsQFE83ms=
+Date: Thu, 30 Jul 2026 16:03:33 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260729083807.1588544-1-jolsa@kernel.org> <20260729083807.1588544-9-jolsa@kernel.org>
-In-Reply-To: <20260729083807.1588544-9-jolsa@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 30 Jul 2026 16:01:28 -0700
-X-Gm-Features: AUfX_mxlIqp8k9-YiMjbbhF584kWEf_ZieJfMoz242UWMEE7juCILCPfLTm8CnM
-Message-ID: <CAEf4BzZWgmL39Q8kQNu8B=-B1Vw2OipHvCaLbxCgU9XE6aNfVg@mail.gmail.com>
-Subject: Re: [PATCHv2 bpf-next 08/11] bpf: Restore trace->nr value properly in bpf_get_stack_pe
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Sashiko <sashiko-bot@kernel.org>, bpf@vger.kernel.org, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, Quentin Monnet <qmo@kernel.org>, 
-	Tao Chen <chen.dylane@linux.dev>, STAR Labs SG <info@starlabs.sg>, 
-	Arnaud Lecomte <contact@arnaud-lcm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct
+ calls
+To: Leon Hwang <leon.hwang@linux.dev>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260727142844.21212-1-leon.hwang@linux.dev>
+ <20260727142844.21212-2-leon.hwang@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260727142844.21212-2-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Jul 29, 2026 at 1:39=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> In bpf_get_stack_pe The __bpf_get_stack call changes trace->nr value,
-> so both kernel and user path need to restore its value back.
->
+On 7/27/26 7:28 AM, Leon Hwang wrote:
+> The BPF tracing multi link updates several direct-call sites through one
+> ftrace_ops. Its implementation is therefore gated by
+> HAVE_SINGLE_FTRACE_DIRECT_OPS in addition to
+> DYNAMIC_FTRACE_WITH_DIRECT_CALLS.
+> 
+> Select HAVE_SINGLE_FTRACE_DIRECT_OPS whenever arm64 enables dynamic ftrace
+> direct calls. This enables BPF tracing multi links on arm64. Also
+> generalize the unreachable-trampoline comment because the single-ops path
+> does not use ops->direct_call.
 
-something feels off here, this trace_in->nr restoration just in
-bpf_get_stack_pe is weird. maybe we should either make sure
-__bpf_get_stack doesn't modify trace_in->nr or restores it before
-returning to bpf_get_stack_pe()?..
+Hi Leon,
 
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Fixes: e17d62fedd10 ("bpf: Refactor stack map trace depth calculation int=
-o helper function")
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+I don't think this change can land as is yet. The series doesn't even
+apply cleanly to bpf-next, but that's minor.
+
+More importantly, it depends on Jose's series [1], which is not in the
+mainline yet. And there Mark has raised performance concerns [2] and
+the discussion still seems to be open.
+
+[1] https://lore.kernel.org/all/20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev/
+[2] https://lore.kernel.org/all/amjnf5gz0xP5PTSB@J2N7QTR9R3/
+
+> 
+> Assisted-by: Codex:gpt-5.6-sol
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  kernel/bpf/stackmap.c | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
->
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 05269f2a9e08..875f530f3597 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -942,9 +942,9 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_da=
-ta_kern *, ctx,
->         struct pt_regs *regs =3D (struct pt_regs *)(ctx->regs);
->         struct perf_event *event =3D ctx->event;
->         struct perf_callchain_entry *trace;
-> +       __u64 nr, nr_kernel;
->         bool kernel, user;
->         int err =3D -EINVAL;
-> -       __u64 nr_kernel;
->
->         if (!(event->attr.sample_type & PERF_SAMPLE_CALLCHAIN))
->                 return __bpf_get_stack(regs, NULL, NULL, buf, size, flags=
-, false /* !may_fault */);
-> @@ -962,15 +962,12 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_=
-data_kern *, ctx,
->                 goto clear;
->
->         nr_kernel =3D count_kernel_ip(trace);
-> +       nr =3D trace->nr;
->
->         if (kernel) {
-> -               __u64 nr =3D trace->nr;
-> -
->                 trace->nr =3D nr_kernel;
->                 err =3D __bpf_get_stack(regs, NULL, trace, buf, size, fla=
-gs, false /* !may_fault */);
->
-> -               /* restore nr */
-> -               trace->nr =3D nr;
->         } else { /* user */
->                 u64 skip =3D flags & BPF_F_SKIP_FIELD_MASK;
->
-> @@ -981,12 +978,13 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_=
-data_kern *, ctx,
->                 flags =3D (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
->                 err =3D __bpf_get_stack(regs, NULL, trace, buf, size, fla=
-gs, false /* !may_fault */);
->         }
-> -       return err;
->
-> +       /* restore nr */
-> +       trace->nr =3D nr;
->  clear:
-> -       memset(buf, 0, size);
-> +       if (err < 0)
-> +               memset(buf, 0, size);
->         return err;
-> -
->  }
->
->  const struct bpf_func_proto bpf_get_stack_proto_pe =3D {
-> --
-> 2.54.0
->
+>  arch/arm64/Kconfig         | 2 ++
+>  arch/arm64/kernel/ftrace.c | 3 +--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 0de419ed780f..c98dca76859b 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -188,6 +188,8 @@ config ARM64
+>  		    CLANG_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS)
+>  	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS \
+>  		if DYNAMIC_FTRACE_WITH_ARGS
+> +	select HAVE_SINGLE_FTRACE_DIRECT_OPS \
+> +		if DYNAMIC_FTRACE_WITH_DIRECT_CALLS\
+
+The select is only conditional on DYNAMIC_FTRACE_WITH_DIRECT_CALLS, so
+it can be set along with HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS. And AFAIU
+this would make the fast path effectively dead: every BPF direct call
+routed through ftrace_caller now goes through the slow path.
+
+As Mark noted in the other thread, on arm64 trampolines come from
+EXECMEM_BPF, so they always land out of BL range (chance of landing in
+range is 256M/terabytes).
+
+I vibe-slop-coded a benchmark and ran it on a Neoverse V2 machine, and
+toggling your config change seems to be causing a 1.3x regression in
+the tracing overhead:
+
+  do-nothing fentry (r0=0; exit) on __arm64_sys_getpid, 20 M calls, min-of-N, several boots. Results:
+
+              untraced (base)   traced        overhead
+  Kernel A    ~128 ns/call      ~145.5 ns     ~17.6 ns   (fast path: br x17)
+  Kernel B    ~127 ns/call      ~150.4 ns     ~23.4 ns   (slow path: save regs + call_direct_funcs + hash)
+
+This confirms Jiri's suspicion.
+
+However my understanding is the regression should mostly disappear in
+case some version of in-range trampoline allocation on arm64 lands.
+
+So, I think the landing sequence should be something like follows:
+  * in-range BPF-trampoline allocation that Jose proposed [3]
+  * then HAVE_SINGLE_FTRACE_DIRECT_OPS selection
+
+After all of that reaches mainline, then a selftest patch can go
+through the bpf-next.
+
+[3] https://lore.kernel.org/all/amn7cBQ-cqs2XlKV@linux.dev/
+
+>  	select HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS \
+>  		if (DYNAMIC_FTRACE_WITH_ARGS && !CFI && \
+>  		    (CC_IS_CLANG || !CC_OPTIMIZE_FOR_SIZE))
+> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+> index e1a3c0b3a051..56ba72a87dfa 100644
+> --- a/arch/arm64/kernel/ftrace.c
+> +++ b/arch/arm64/kernel/ftrace.c
+> @@ -301,8 +301,7 @@ static bool ftrace_find_callable_addr(struct dyn_ftrace *rec,
+>  
+>  	/*
+>  	 * If a custom trampoline is unreachable, rely on the ftrace_caller
+> -	 * trampoline which knows how to indirectly reach that trampoline
+> -	 * through ops->direct_call.
+> +	 * trampoline which knows how to indirectly reach that trampoline.
+>  	 */
+>  	if (*addr != FTRACE_ADDR && !reachable_by_bl(*addr, pc))
+>  		*addr = FTRACE_ADDR;
+
