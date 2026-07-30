@@ -1,119 +1,134 @@
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F392A45A288
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 18:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCFD468C14
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 19:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785437427; cv=pass; b=lr/KViKyrWH3MOconqve2lqdzTWhpAwKFK+nEzJaIRd+8Ey0wex5ir7fV1lVlruZEsEX8XampQ9yRgolSpKRgf9SR54txq1d0Z1uC4BOSEnux/n+ZYCcE4KtdzzpZ1BvkSamTbluLpdVTv4RW2QXAh2Xody4+HY3V6gWtvQ8qBo=
+	t=1785438556; cv=pass; b=POUKLTb1N31uske75j9bR5YKC12WPwIamfcpilxvb/ifOJXGUng/TxTFmlRErAneJmkTejm1Gqo5UeFIPCdFogTpu1au0SVarQ3BmnT3uoPgqUNF5Dmfm2qikP06nIPXjamEwnNpRC8lohPJc52NTubK8iKbD8Z+aHrKtimL3y0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785437427; c=relaxed/simple;
-	bh=xNy/bcDVAaOXHFeFKod/slRT1Pma9CINKHcuSvnIRJU=;
+	s=arc-20240116; t=1785438556; c=relaxed/simple;
+	bh=v0u4alOrwq5rTIgb2VMXyJVDRLR5K6pdRFLGd6pBE08=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JMKkjmn74GX1CcHPuTiFx74ayd9Ccw2mixkqT/Z/O0uXoU63au5BbdN5j/c2XVCT3OH5mxWnpoDT+P7alR1COHEEiSA/PEIH+4D/TYrVwYoWvh0+SPKwrJzyKZGDvRvFHkT7Loo1SZfPEZguMEvCUJN4UokhdeEQ4MGCzRHpLoc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f8Ej7zYc; arc=pass smtp.client-ip=209.85.160.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=pdivSXdKK27ns8uls+fNQCQzvM9g3cTgA2xJ0+R+bb5BGAOtV+5klvWPFp4arCDE5C5U9P3GcdrJyvGLAXpgYAwfEsLjnw6aYYh06APHSfR8Bmh0f8lBxEqfDiygotVElPhmKiefyBKMyXNQR931e5oeAC3gtkbhse4rKC+ZWTQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JhZDEtfN; arc=pass smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f8Ej7zYc"
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-43ccd4f6f6eso169230fac.0
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 11:50:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785437425; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JhZDEtfN"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c9cf07d2df6so120360a12.2
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 12:09:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785438545; cv=none;
         d=google.com; s=arc-20260327;
-        b=bIzoNVkZJI5dYGNb48fHJnK3HKCZJKdfg2EOJNbr++roN4+caV0hDkkOAVjwJN0kjo
-         mTN6hVSPCQ0qBz73f49uMYFe42/LmeOzbCiLCmYmbK5runHz5HLBP9VVy+Hw2ZC+QTTt
-         T+9bqV0LYOeb0F+NI2uzMqXD5EYm5SKo8PglluYqCtu+GQE5LNKadFNHC4fFwzgQWX5h
-         /OBWVHqd0v33SogLEjB2YlRf9iLOXO2IL1o7q1DqilbU0n3iU5zYr1yLMgWHK/Cou2D8
-         7gbNfy1PEcsE7kBcSxjcpCogkuq6YbBppkdsAqme2pTIOBduZ0J77Dj7dcSozCvpdXL1
-         Wp2Q==
+        b=ZA6fofipvesiV6nZSmEKeMHDOXfnIgy0Je1mlD0MqovWlbt4VzTq2VZWsI23HHYYWl
+         FHHaDQ5IskeLxlih2wzEY7pVOpLN2aviz2r7s7EwIBaywVKJ9P26/SRP1pD7aUdOCzZG
+         9R7LLoW6Rg/zaDZ3aAgXwxYxxL6BttsC0DeLeIG2cKSKfVq30N/pii6RDhfXq2GQ/Nnu
+         bXOeBP43zoHxyPSycLwAVitg8CeOlS/AH4YHzScXnRyt2nOdgHK1U0qTcfLwsp2Nvcsg
+         lNRUz0qubuCAtFhkbveqBUchvqp18ki2HMmBkYKW2J+/W1bFwcIcu7Sf15m4UgJqfRbe
+         nnag==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=xNy/bcDVAaOXHFeFKod/slRT1Pma9CINKHcuSvnIRJU=;
-        fh=RuNLubCzUhjd6fSu1EH5LkqigPyZ61NiTGc2GlZs+a0=;
-        b=HMHXkmCIM1/3KoapUSFhTSwWXoH5+JYvZS0nof1ZFZpE+QAcnHjY3JJURzlOjqzlf6
-         qy3dDFi0SLwlKJNQ+IyBstf5RtodxqS8kGUY02tlkcLPqS0UXlAH95CFs4UABiW90Pua
-         cAH6AeX1a9//ihjHqvap3ysFKV/x/isf7xHdQ6uOSJt7MeUAjI73KzOHFsLhTq0BWYwg
-         RPSo5gOISMbH6wy+0lBggHYqTQishIuPAzdO9ycJdrAfiyiTshdMpo5G3ARagSie38xF
-         DgxpCsN6dsFxFmOfpET8gdThrQpxuOMMSDEMzGmOoodfqYnKJOrcCSoHAKg1+IhDsWIe
-         goaA==;
+        bh=v0u4alOrwq5rTIgb2VMXyJVDRLR5K6pdRFLGd6pBE08=;
+        fh=/adD2kRSRK62LOmMYTlPn6jdFjHgpAzJIgFs5FBaZz8=;
+        b=QT9UeRrDjAgLPMfQ2oV3Uy5VfMT4ocmvWklYNeH+R+ukmltH5AskrTVdv/R16eIUg5
+         rzBFHRXMZyiD7589fWnGN6CDNZwb8pLCiZjRosJslWpRwfSf2SDN8iU41UqKlM8vZhaa
+         68AHDX7AWsXJvdl3DlPK52lgtR10E3RutVXwvgV5TbkIMH+6nTg2rcwksDImx+QhLewE
+         2BC+L/FwIoogfvmJuFgJFcDTZAJ/23sFCpXvZAoejh/WHHLllViJI/9hQ4v/uz9LbFRe
+         HHHLMWsXoyk03KhhXCH8jnUQ12xTV6k+Ygyd98c2UR8LJ3w3AOeHpSQhbldhojNRJ0Sz
+         iSiA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785437425; x=1786042225; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1785438545; x=1786043345; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=xNy/bcDVAaOXHFeFKod/slRT1Pma9CINKHcuSvnIRJU=;
-        b=f8Ej7zYcREBo1Ix7zZLzyYMQJtQKmTw4vQxRTwvgZZ4l45bRzkXbQePryCxlA6Gpym
-         usN/hO1GLpIZSxskRSKwpaR8otVXoEkHEd3JjzWhJL3aLkcfslWeD48SDFTXsi0PqLKN
-         dhnwpfW4BT+GatS98gLfA+20Qdb3t0C5y0NDuNNK8ecekSSTGBi7r+BZol9czngbZhNW
-         1ASfRJ8CxI4ptIlM4fLxkEwKq3qaEaT3qx1+FkZrY4QBhxQr06m33FACAdtcWh2LVMcO
-         KAsDdfDivuX3+EnVudaXUvGbdN6y1GS41aw+5dGCImrGPpIx0wz3azmyE2bpaxUfXkie
-         M4Cg==
+        bh=v0u4alOrwq5rTIgb2VMXyJVDRLR5K6pdRFLGd6pBE08=;
+        b=JhZDEtfNfKMycngnSwvncmYLhOvKEwzTOng/b4QAOLsvwodB7BnVJQF0Bc+3GAC/ME
+         A7XI1z88dGu1qC9pVkuBF/7LS6rqmyKNgQ2yx6eDmWibHxwqapqpOaRwwBzWB9pc/WrA
+         VbquWnlC3Jkuejx4WM+xYAuWTtF8zegKGn1uHk1CnGDeT5UHkv5PEE+YcyahXum6h95U
+         sd6vrPmFcIEFdog+auR+n0Le8dsa5BZTPdQ+/KvL3zmsOgAPExgwT/uaih5nkkBbjMVu
+         Hn5O1kb2cXIKg7eHQqZgX9vByjyGMmUDhVRVyD1K5BU3HoOChxqy79p49OdL7uFv61dx
+         FpWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785437425; x=1786042225;
+        d=1e100.net; s=20251104; t=1785438545; x=1786043345;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xNy/bcDVAaOXHFeFKod/slRT1Pma9CINKHcuSvnIRJU=;
-        b=WdABJdMRcf9tvAE34cxe8ucPXTth2rYlVVw1/ZJ7mxt93GoGrP7XkRPjHLuycTHWGo
-         +HI16oRKkyXPsPbr5XjCHQgjmVqYVEzWFLImRby2WzGvjpqwiLrZ2doX27BL0TB8l8iu
-         xCokME9DrFK9BvPlMFt/5veJkaO2RCaYj2R+I2ainij3cI/8tr0ejmfu2i/+G5eHXiAv
-         9u7vZZM9t0EOfzZQAx3r1cmyfpOm6iIQxJiOyHsgPTG7Bn42hhUSYydXyy4+5Onj7N8I
-         wmByJ/gKpp32rGLwNI8Puooj3083eVSQuI5J/7JSWDkJ+fNwqbpc618LMgwwUFkRdqFc
-         F+AA==
-X-Forwarded-Encrypted: i=1; AHgh+RpFk2gAWSkt1AC1Om0B+OUUlNUZ0m/PZ4yRp2MtS5n9O1wWFiT9763NfV+A/7shI3Nxmn0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJzR4zvPsN3CdFu+mEWEt7S5atE7doYk0TfDJIY44NNILUFeRT
-	ZfvPwVWkn0foBKS851fv3CEhqvqStIuDS+Zg1eYT22lCXi2IrnoqEDSeMePDBAz0JpAby3SenLY
-	jCthcJpFqBtwPKWNtqB0Z4UbRRvRE0pE=
-X-Gm-Gg: AR+sD12fj6mSC3qySM3HWXm3hLnGT/UzyVuA+Bt5KBHhqyOxjhbGY04vFSTgFSgEF8e
-	HzoDNYGWH5baj44NoIHb+bXMmQG6V93f6f67U87Ve0Mc2i9ObiIUR+o05IUSC4qQGUt99Wj/0xh
-	ZdJv5kUCgsBkpXVPsajdliBWXFSnNiHgqC2uxlyqh5BwL6ZGYNykyvKDDvYFf6Ss1WQN3TN3hKt
-	sLZe+z3RGcE8AAg3vZP8yDtZSmynYyhkBT5b3uYQkXT4sS/8Ev5dDY/sUgCUvlEBt+aEWn70GE+
-	JkGWZ2xTWz84g+tpFIy4I/msFRI/oSjZBiDAe259ge9G
-X-Received: by 2002:a05:6870:8a29:b0:456:b249:700c with SMTP id
- 586e51a60fabf-458c0e1c200mr2600508fac.19.1785437424719; Thu, 30 Jul 2026
- 11:50:24 -0700 (PDT)
+        bh=v0u4alOrwq5rTIgb2VMXyJVDRLR5K6pdRFLGd6pBE08=;
+        b=UQ4SFLyMQlXtIe0p09Mp2R9LKgLkXh8GRLepla4wtZIzfHqDGbIvDUtxF1udwxyeUk
+         0A5/L3slYeObWcylFdh5Lnr25kKGzgkJi6SPZ4yYmG/4hU3JI7sHyTlxPj+vl3R5GB4Z
+         q/P4aHP2LxnF271PPhEiEUw6Y4dSqOw5paYoFy/KrRVKltO1b0K8xzJGOQZqyD28XQWw
+         ucOw3VJfX4nyVl/+kGfzr9xs58m0Dq9y+hN16EjjOrLv9mcvIPgvCVGdZm+5L4jnhG1X
+         aRHFIbrhR4NsX8HlJnzn4K8yABdDgsoZaGo9OzzgL0DufUMXyLyJ2ctL3/USWmHBHaUP
+         z16Q==
+X-Forwarded-Encrypted: i=1; AHgh+RrJb9ciRRU25g97xlE23Q+ccqEDVrM9nHf9eZG9wf10B3lnRks22TYHnZM5TpdfeGg1nn8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqgKbqPBeDrOJMS5BKueqQjcMpKX+oYoqPRC4vM8uIZRaqu+nr
+	U7EjG8SuEQpCcB5BrHv9BiHvn2i224T2HlIaXeW5ERXMXyv54kjIWYwi3fcQTvGPpSGJtiZ00+L
+	PaZG7ymViz7U2tuF7/cd2AtHSj+aE1tXR0DUMQNtA
+X-Gm-Gg: AR+sD12agDdSknsKz1btnPNXijXJtYDeacHedXPyRiGfGIt05SaZIs5HStUSloTRFTe
+	h2TWIqx836zlU7B58aRjYxACC/7mzC4sZ3QVp1qIXcYoms1fKcOSmw7m4tovZClRZ1ZwwWWjais
+	GZtiY82KchRKIiqjfNL1e24/f69/wySBFakMBcOx4B06ELFFajQmGIbdmA6L8uW3ksoFvcRaXbl
+	NfLJ35gj9sVuZLLVWMFk9oJv1Geq/QOUmW3k1/5mv+rGfCUNrFRbKhNY8Nwv2+71CrMViyTqLQg
+	f6wyq7kN+2T+Ymdzg7XQQvEBg6rXcwOaVc6dg8FnweiW1/QofFJE+i86yXnQfF5H/TL3VIs4aTC
+	MTx+tQc3ySgjRXbLbLcbtToeFyWWdns3bAYJRbcfye7kjCHZgg+NnWxewtA==
+X-Received: by 2002:a05:6a20:93a1:b0:3b4:870e:6f44 with SMTP id
+ adf61e73a8af0-3c9007f3948mr3817709637.35.1785438544828; Thu, 30 Jul 2026
+ 12:09:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <01421d53-c379-4044-9da3-5990186303ef@iogearbox.net> <20260730181008.3654413-1-cmllamas@google.com>
-In-Reply-To: <20260730181008.3654413-1-cmllamas@google.com>
-From: Stephen Smalley <stephen.smalley.work@gmail.com>
-Date: Thu, 30 Jul 2026 14:50:13 -0400
-X-Gm-Features: AUfX_mw-sWflnKZtGKmCqYRU0sb3jjE3qrtGy_CKaW2nfsOdhimFd1pr1NGG468
-Message-ID: <CAEjxPJ47CTKXxx_DvSbuO5F28T-eNPnQQ+Gm_-qaAeb6R3wPfQ@mail.gmail.com>
-Subject: Re: [PATCH] selinux: bpf: check SBLABEL_MNT before isec init
-To: Carlos Llamas <cmllamas@google.com>
-Cc: Paul Moore <paul@paul-moore.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	"Christian Brauner (Amutable)" <brauner@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	linux-fsdevel@vger.kernel.org, stable@vger.kernel.org, 
-	"open list:SELINUX SECURITY MODULE" <selinux@vger.kernel.org>, 
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
+References: <20260717-bpf-iter-tcp-refcnt-v2-1-8e81f0ac6f3e@linux.dev>
+ <20260717025253.23EEB1F000E9@smtp.kernel.org> <DK4HTPHX3NL8.2N1FK8D2N9521@gmail.com>
+ <ami0NJ9s6ZhXVZb5@linux.dev>
+In-Reply-To: <ami0NJ9s6ZhXVZb5@linux.dev>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Thu, 30 Jul 2026 21:08:49 +0200
+X-Gm-Features: AUfX_mxYi3q4TNHstbDXLu_iANX6UYVzbjhCpb708Ut7DV_hLNVXcExA87EeG_E
+Message-ID: <CAAVpQUAOzzhG6x96EM=Mk3EgYhmvoyTo0P5tAFh_237QWE-v0A@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] bpf: tcp: Fix use-after-free in bpf_iter_tcp_established_batch()
+To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 30, 2026 at 2:10=E2=80=AFPM Carlos Llamas <cmllamas@google.com>=
- wrote:
+On Tue, Jul 28, 2026 at 4:10=E2=80=AFPM Jose Fernandez (Anthropic)
+<jose.fernandez@linux.dev> wrote:
 >
-> selinux_inode_init_security() marks the isec as initialized before
-> checking if mount labeling is supported (SBLABEL_MNT). This was fine
-> until commit 9722955b5430 ("bpf: Add simple xattr support to bpffs"),
-> where genfscon bpffs mounts fail the SBLABEL_MNT check as expected (no
-> xattrs) and yet leave the isec->initialized. This breaks subsequent
-> calls to inode_doinit_with_dentry().
+> On Tue, Jul 21, 2026 at 09:24:05PM +0200, Kumar Kartikeya Dwivedi wrote:
+> > On Fri Jul 17, 2026 at 4:52 AM CEST, sashiko-bot wrote:
+> > > [Severity: Low]
+> > > Does this multi-line comment follow the BPF subsystem comment style?
+> > > The BPF subsystem guide expects the opening block to be on its own li=
+ne:
 >
-> Do the SBLABEL_MNT check before the inode security is initialized.
+> On the comment-style note, checkpatch accepts both block comment forms
+> and the one used here matches the surrounding code in
+> net/ipv4/tcp_ipv4.c, so I don't think the bot's flag applies. Either way
+> is fine by me, whatever the maintainers prefer.
 >
-> Cc: stable@vger.kernel.org
-> Closes: https://lore.kernel.org/all/akWdcp6P0FkNDzBk@google.com/
-> Fixes: 9722955b5430 ("bpf: Add simple xattr support to bpffs")
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
+> > > Pre-existing issues:
+> > > - [High] Double-put and wild pointer dereference of batch sockets on =
+the
+> > > first bpf_iter_tcp_realloc_batch failure path.
+> >
+> > Hi Kuniyuki,
+> > Thoughts on the fix and Sashiko's concern? (The latter should be probab=
+ly be
+> > fixed separately, if needed).
+>
+> The double-put is pre-existing and already fixed separately by
+> 980a81345275 ("bpf: tcp: fix double sock release on batch realloc"),
+> now in the bpf tree. The hunks are disjoint, so this series applies
+> cleanly on top of it.
 
-Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+Sorry for the delay, I was on vacation for two weeks.
+
+I'll review the patch.
+
+Thanks
