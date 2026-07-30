@@ -1,108 +1,303 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCFF3B2FF8
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 08:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3672E3C9429
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 08:30:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785399959; cv=none; b=DCgBNsKblMn+/4BjmaSAh05G/nQr0tvZd2vj+ZQ3W4TsJdt/qXQ/X0kXUl1lEFH1R6YPT6w8oUlNkyaQfmHyS8sv0hnk980oxER3HCDg2WMFcBFIG7Tnjq0kWr5vjZZCHC3l6YGOrMY9S0vAuIs5Jr9BAKvRG8/eeywtpgNY8Ic=
+	t=1785400221; cv=none; b=ZJqZU6u1l09CRuOkO71wFk9lU+7wAdylaoFF460fT/iWoiuliTljbZMlT8u3fJ6Rjs890T6iGSfeZ1BgCTm9rpsAdF/yA0JjN0PDZWf/hoBY+HpHfkw81uHZJT/YCGacPCLeWhfXJWStpWcA7Q8/MSUTl8g1DPZ3rUrnAcOPuMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785399959; c=relaxed/simple;
-	bh=C4Dp81+yrf8RNuNIOEBP8kLYNnF4h2mYnD9L4fn2tnM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SVjq4zltG9gu/Fw4qh2AvyjnYRThALC+do6ZwBs6UTY89AKdGmJDGg4OaLd0Uvf5VN+R+Yu7lZAppx+xu/kCLWzzc9L48DKT8AF0VVuJNbdjLEb8vB4eHD8/8tPaD0c36PqXvZ93gkmXP1nF0DUN4eoHXR+NAOP9nS4u8LtYCxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YyGmLfRl; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1785400221; c=relaxed/simple;
+	bh=SKCawZyJ18LIWo/TXdAjj24mqMeJQGIHXE6x68vNbwA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lbO7tI/VbAwbEIyXkobLe37HYtQjdfuG2no47FlopX1wuE+k1ncykmX5b9mvZpKypB/XpP1L4F37OAjA3H90KpmgOCx1Mpa1vmbVU7EhiVKgIxojPeoaQk5kGMi7tn96d3W57Y54IduJFQoyoBxPg5xe56FfE6r/8M1pyOroMMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S5jraFo9; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YyGmLfRl"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4954aff6088so17002025e9.3
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 01:25:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S5jraFo9"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-81ef8adf7a7so1656797b3.3
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 01:30:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1785399956; x=1786004756; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=+khihSFp8xIqvD5iaqe5AnFSih+L44scJGPk6G96Z6g=;
-        b=YyGmLfRlW4B2nNd4BLXk49a7u1JpGiHkopgEEOcL9UUwm4YzJNkbcDyU6jfr2iLFy7
-         o2kwSU5yTioK4mV9hDxv4Qa+or6nbBgd2E0I3jTQqt4SgdZ5BPfaqjvKkR0tbKPTFvfx
-         XvU9ssaMb5r+y04cD7eL3LyC5l0GOh1gZU7F8/QrdZm8MEii/2lnTbL6PNFvYKQcm1b2
-         JCDnocvX+4z1vCzbGHFcEpy3uXlQ9HUgIOk7Z9ZhIRYNt2MOkHPn5Shmg2UOZmB3PvTI
-         1/qH3Ua57tBr4cQ6H7k1f24BsZOYnRqODrgWNHPZ0eptcnSHvV1qcTOw87XY2cz9K/bD
-         3YNw==
+        d=gmail.com; s=20251104; t=1785400218; x=1786005018; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LOsNwn1XETjvDtGfeNQeQJmlf7vcHA2X05x3Dyf3ZGg=;
+        b=S5jraFo9In0fPWE9ay7C87WbXsVkrgKV8vakMvzVMaETLgDveph1a8ke9M3ArZd0o0
+         UlSS8D22DXs6X51UvMBf+bSJtD7cpCYFaw3Gk8HRjzUDD2ZPrd5hCXGG8Rn6FbOA7rRX
+         ZFqGL9Jt78L5hiS3ENoYqIhJGYRME9Sz5kJPQgsqObSulQFHnDaEEihvAekVpkig6vQl
+         /xpc39p2uII1cIQmYih/pbFOIlT6Bdc7/a2pgUF8YzRoK3VM9phoOIXLakdIJ+NiFG8B
+         8rlphXKgbwbGFJNw7osEGqRcDgB2cEyBj0wGDzR+8OIcDXWJxgkxsA/W16yw6nja+1ey
+         1gpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785399956; x=1786004756;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+khihSFp8xIqvD5iaqe5AnFSih+L44scJGPk6G96Z6g=;
-        b=TPjfod+LhMoCzWUR2uL39aUXsIq/aB6L22gtVbtRVEH4o4vYjMp0lmUf7vfvE3dkHQ
-         evXfIeDGgzwWp/xAfG/XFxohWvcwP3QgZq8wwz8hOqo1jTGZHrBImLs7U0mJRJM+6S+D
-         ErXmIzyp5Jt2YQDnFe21lW1taxVbliJ+L9+bZeo+vvuD5Vjbw3/hdScOFBddp/VBHCxp
-         kAsk/YtQX62poxZqg9mJKllLtYhBDmKd22TR0Z+UZhye7VdzdHgoN5UUiV4gdD80Pw6e
-         YmNeGhDD8YEOTOnQlBVNs1GvPzwsY5pl3o4rY/0lrFm9QnQjz04eSv4WRUYAqMYiU9KL
-         kOoQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rqow6wwaCp0/3mhDN26vfAzlB9pw6Lf7OdjcAdABW8ARKjhpew47+TCaRHV8AYXAjo7PzU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjZtBt/4YZ5azwwgUUq9UEDbQWoHtb9dwKF92iU+yZWKoaJtg0
-	I+ojaU38MTRVb7JYnZ56ckTfmIP4S+eTVUi/AnFlmys6MX/rt0Af1Pr6Tqjpe8QcZEI=
-X-Gm-Gg: AR+sD11SEnBs+DPn9UR7kZ/DL7Gde8wrdoe3Ri44STnvTroZUUC8mib0D+nIGq8rigp
-	StLSCmRknWBgunh5OM71qghfk6A0rTJJ8jIvxpOBqUR/+wd6MtjFDXmGSICJjJrIrR85KLjMxS2
-	19m4M3IQKw8YVg69aAz+axTOmmpDauZ8dLGvGj0zUyX+QFAgjgb10CFjGL9gjDGzoZt4RZQ8Aqu
-	tvFavxMTwOrc7Y9SR2TwyTs4byRVHrKmUdxXw1D3ThERfzZqM8P5zo8Ux32Vfuni+7K03/DN8+L
-	c+RKJ7nuowIUKD4+opDW4G1aPOIJKzMu1a+IWVP1BydPZOBGlDkn7tLZ4S5vYkRjoF4rh26z8FM
-	vDNhqXoaAYQVBPIxlGlZW2HwwgS+H5Ue4DhELq3DFfSwK25EUxGAc6+NDH2nZqA/EuHoqEAIEqK
-	jfvWh4m19hZ7bBUsOvIaOemddnqj7hMgW6UPDT9k4B2dmAFiKHoPgk4bDUKe1IWsbqeo60wHwrN
-	TwwgD5KeM0jXBs=
-X-Received: by 2002:a05:600c:500d:b0:495:4e17:cad5 with SMTP id 5b1f17b1804b1-49800eac18amr18818185e9.26.1785399955724;
-        Thu, 30 Jul 2026 01:25:55 -0700 (PDT)
-Received: from u94a (61-227-70-26.dynamic-ip.hinet.net. [61.227.70.26])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504927a7bsm20164432eec.0.2026.07.30.01.25.51
+        d=1e100.net; s=20251104; t=1785400218; x=1786005018;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=LOsNwn1XETjvDtGfeNQeQJmlf7vcHA2X05x3Dyf3ZGg=;
+        b=CHcdmeDMHgHJEXVBkLmB/3iKA2EjjythhmMghARFsXlQ7MSwGxvsG133HIlAHRVQJm
+         dH2a5tqRA8+ZTSWKtdYhsoAdEKBYzNCI7+TdKD0ec2k/IL8pxpDTJ2UXbeGgHC9Vp3kC
+         IJWwl8QYXMUv2qBIzVySnBQ9KMy1ovC0rConlhVhEe65gtp0UHhC3essEF6dEwHq8hku
+         /xHOYKu9pJUByyVBMyopQ3Cx/1jJMLfkjZr3zQ7N4Vl9ZmlA+B6BHJ7SU+311pCFzRHd
+         coAtWUEJMMWTsLqFvXcrI7tVCQOjDi2mMNp8R847mSS/RJ9ScgZqIT1ID8Eu0XXldIXr
+         +Rcw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro2IAgOOEKW9ejrfE0HpOEhyLBDBPIjdnQc7/h7BJqVm6K2EOaGCqMBC2dHadYYZXkoXaI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzABDo68XspOx90eLJUY1ew3qbeSoEPw042mFH41L2hp5UIUH5
+	ZygRG8woPReLJdOCPZYjVL30JBy2lohw+rjirx2+EbJorYz/sUVBlh5R
+X-Gm-Gg: AR+sD10YJ5cVKKEQ/IcEzzuVzyok3PHWy8TcAjqC/0W942gb2nVZ30S9XkzgHpTbvoY
+	mQ2qWELIkgbbP9CWEI8sH5ANBIUELngHheidsj0+rtr5NdU3wMDBodr0unNLLdTANawEMh4fPDW
+	cTN3wYxahcY7IFK9Ke4BSIgKJQEr+myfDj2h2/yMhwNUP0aSBO4wQG2Y8IQSn3bZZFoGa2YmAbG
+	mFX9pJx3mcMg/RFyiCLlw805FZJf2I8MzIaFGigbF7PNwT10vYBjJxfnW21tb49loHbmrAflVdM
+	lCB6vHYSLN0gz0MZzi+q6P4gYaSIy9Fi6WEm1mdy3M99zTnvxFW8zGAI6U5yT97ujbosHWZuTwv
+	1mSq5Mh/IDT/O506EHOGQAIL3+Ta1ZdSkurh8smRw4iapeO8xIFVTbb+eGCfGt9Y4N4Q5ZjDfsO
+	zjn/IER6ttq9anredE/6crnZQOaASWVbK7VLOhs/xisbDhV/bolojZ1tC29Kt6bMvD8qEWHl00Z
+	axdP9/L6Pqbijpn/8yKS7r3ulI0iNGuN9pjNJE/TCLzGpLs+O28tEg=
+X-Received: by 2002:a05:690c:c4f1:b0:81f:45f0:21d7 with SMTP id 00721157ae682-81fb8741de0mr19462267b3.0.1785400218085;
+        Thu, 30 Jul 2026 01:30:18 -0700 (PDT)
+Received: from localhost.localdomain (45.78.65.84.16clouds.com. [45.78.65.84])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81fb8a89719sm6356597b3.27.2026.07.30.01.30.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 01:25:54 -0700 (PDT)
-Date: Thu, 30 Jul 2026 16:25:47 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: chenyy23@mails.tsinghua.edu.cn
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Daniel Wade <danjwade95@gmail.com>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf v4 2/4] bpf: Preserve pointer state for commuted
- arithmetic
-Message-ID: <amsJ3D8P46GcsKwp@u94a>
-References: <20260729-c3-035-public-bpf-v4-v4-0-8ee297e2346b@mails.tsinghua.edu.cn>
- <20260729-c3-035-public-bpf-v4-v4-2-8ee297e2346b@mails.tsinghua.edu.cn>
+        Thu, 30 Jul 2026 01:30:17 -0700 (PDT)
+From: Chengfeng Ye <nicoyip.dev@gmail.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Chengfeng Ye <nicoyip.dev@gmail.com>
+Subject: [PATCH bpf v2] bpf: Fix netns reference imbalance in conntrack kfuncs
+Date: Thu, 30 Jul 2026 16:29:58 +0800
+Message-ID: <20260730082958.2065194-1-nicoyip.dev@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260729163141.213611-1-nicoyip.dev@gmail.com>
+References: <20260729163141.213611-1-nicoyip.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260729-c3-035-public-bpf-v4-v4-2-8ee297e2346b@mails.tsinghua.edu.cn>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 29, 2026 at 03:18:28PM +0000, Yiyang Chen via B4 Relay wrote:
-> From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> 
-> When scalar += pointer is handled in adjust_ptr_min_max_vals(), the
-> destination register inherits the pointer state from the source pointer.
-> Copying only selected fields is fragile because pointer provenance is
-> tracked by several bpf_reg_state fields.
-> 
-> Use the caller's temporary offset register to preserve the scalar operand
-> while replacing the destination with the full pointer state. This preserves
-> the frame number for PTR_TO_STACK registers and keeps parent identity
-> fields consistent.
-> 
-> Fixes: f4d7e40a5b71 ("bpf: introduce function calls (verification)")
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> Tested-by: Daniel Wade <danjwade95@gmail.com>
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+The opts argument of the BPF conntrack kfuncs can point to a shared
+map value.  __bpf_nf_ct_lookup() and __bpf_nf_ct_alloc_entry() read
+opts->netns_id separately when acquiring and releasing the network
+namespace reference.
 
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+The reference imbalance can occur as follows:
+
+  CPU 0                                  CPU 1
+  read opts->netns_id (-1)
+  skip get_net_ns_by_id()
+                                         write opts->netns_id (id)
+  read opts->netns_id (id)
+  put_net(net) /* no matching get */
+
+The reverse transition leaks the reference.  Repeating the unmatched put
+can destroy a live namespace and crash later users.
+
+The kernel reported:
+
+  Oops: general protection fault, probably for non-canonical address
+  KASAN: null-ptr-deref in range [0x00000000000000e8-0x00000000000000ef]
+  RIP: 0010:bpf_prog_test_run_xdp+0x52c/0x1700
+  Call Trace:
+   __sys_bpf+0x1662/0x50c0
+   __x64_sys_bpf+0x73/0xb0
+   do_syscall_64+0xf9/0x540
+   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+  Kernel panic - not syncing: Fatal exception
+
+Snapshot every input field of opts with READ_ONCE() before validating or
+using it.  The netns_id snapshot keeps the namespace get/put pair
+balanced, while the other snapshots keep the remaining options from
+changing partway through an invocation.  The individual reads can still
+observe an inconsistent combination during a concurrent update, but each
+selected field value remains stable for that invocation.
+
+Fixes: aed8ee7feb44 ("net: netfilter: Deduplicate code in bpf_{xdp,skb}_ct_lookup")
+Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert CT")
+Signed-off-by: Chengfeng Ye <nicoyip.dev@gmail.com>
+---
+Changes in v2:
+- Snapshot l4proto, ct_zone_id, ct_zone_dir, and the reserved bytes in
+  addition to netns_id, as requested in review.
+- Rebase onto current bpf/master.
+
+Please queue this fix for stable kernels.
+
+ net/netfilter/nf_conntrack_bpf.c | 76 ++++++++++++++++++++++----------
+ 1 file changed, 52 insertions(+), 24 deletions(-)
+
+diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
+index f98d1d4b42c3..c3395cb98c00 100644
+--- a/net/netfilter/nf_conntrack_bpf.c
++++ b/net/netfilter/nf_conntrack_bpf.c
+@@ -122,42 +122,56 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
+ 	struct nf_conntrack_tuple otuple, rtuple;
+ 	struct nf_conntrack_zone ct_zone;
+ 	struct nf_conn *ct;
++	u16 ct_zone_id;
++	s32 netns_id;
++	u8 ct_zone_dir = 0;
++	u8 reserved[3] = {};
++	u8 l4proto;
+ 	int err;
+ 
+ 	if (!(opts_len == NF_BPF_CT_OPTS_SZ || opts_len == 12))
+ 		return ERR_PTR(-EINVAL);
++
++	netns_id = READ_ONCE(opts->netns_id);
++	l4proto = READ_ONCE(opts->l4proto);
++	ct_zone_id = READ_ONCE(opts->ct_zone_id);
+ 	if (opts_len == NF_BPF_CT_OPTS_SZ) {
+-		if (opts->reserved[0] || opts->reserved[1] || opts->reserved[2])
++		ct_zone_dir = READ_ONCE(opts->ct_zone_dir);
++		reserved[0] = READ_ONCE(opts->reserved[0]);
++		reserved[1] = READ_ONCE(opts->reserved[1]);
++		reserved[2] = READ_ONCE(opts->reserved[2]);
++		if (reserved[0] || reserved[1] || reserved[2])
+ 			return ERR_PTR(-EINVAL);
+ 	} else {
+-		if (opts->ct_zone_id)
++		if (ct_zone_id)
+ 			return ERR_PTR(-EINVAL);
+ 	}
+ 
+-	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
++	if (unlikely(netns_id < BPF_F_CURRENT_NETNS))
+ 		return ERR_PTR(-EINVAL);
+ 
+-	err = bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
++	err = bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, l4proto,
+ 				    IP_CT_DIR_ORIGINAL, &otuple);
+ 	if (err < 0)
+ 		return ERR_PTR(err);
+ 
+-	err = bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
++	err = bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, l4proto,
+ 				    IP_CT_DIR_REPLY, &rtuple);
+ 	if (err < 0)
+ 		return ERR_PTR(err);
+ 
+-	if (opts->netns_id >= 0) {
+-		net = get_net_ns_by_id(net, opts->netns_id);
++	if (netns_id >= 0) {
++		net = get_net_ns_by_id(net, netns_id);
+ 		if (unlikely(!net))
+ 			return ERR_PTR(-ENONET);
+ 	}
+ 
+ 	if (opts_len == NF_BPF_CT_OPTS_SZ) {
+-		if (opts->ct_zone_dir == 0)
+-			opts->ct_zone_dir = NF_CT_DEFAULT_ZONE_DIR;
+-		nf_ct_zone_init(&ct_zone,
+-				opts->ct_zone_id, opts->ct_zone_dir, 0);
++		if (ct_zone_dir == 0) {
++			ct_zone_dir = NF_CT_DEFAULT_ZONE_DIR;
++			opts->ct_zone_dir = ct_zone_dir;
++		}
++		nf_ct_zone_init(&ct_zone, ct_zone_id, ct_zone_dir, 0);
+ 	} else {
+ 		ct_zone = nf_ct_zone_dflt;
+ 	}
+@@ -171,7 +185,7 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
+ 	__nf_ct_set_timeout(ct, timeout * HZ);
+ 
+ out:
+-	if (opts->netns_id >= 0)
++	if (netns_id >= 0)
+ 		put_net(net);
+ 
+ 	return ct;
+@@ -186,46 +200,60 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
+ 	struct nf_conntrack_tuple tuple;
+ 	struct nf_conntrack_zone ct_zone;
+ 	struct nf_conn *ct;
++	u16 ct_zone_id;
++	s32 netns_id;
++	u8 ct_zone_dir = 0;
++	u8 reserved[3] = {};
++	u8 l4proto;
+ 	int err;
+ 
+ 	if (!opts || !bpf_tuple)
+ 		return ERR_PTR(-EINVAL);
+ 	if (!(opts_len == NF_BPF_CT_OPTS_SZ || opts_len == 12))
+ 		return ERR_PTR(-EINVAL);
++
++	netns_id = READ_ONCE(opts->netns_id);
++	l4proto = READ_ONCE(opts->l4proto);
++	ct_zone_id = READ_ONCE(opts->ct_zone_id);
+ 	if (opts_len == NF_BPF_CT_OPTS_SZ) {
+-		if (opts->reserved[0] || opts->reserved[1] || opts->reserved[2])
++		ct_zone_dir = READ_ONCE(opts->ct_zone_dir);
++		reserved[0] = READ_ONCE(opts->reserved[0]);
++		reserved[1] = READ_ONCE(opts->reserved[1]);
++		reserved[2] = READ_ONCE(opts->reserved[2]);
++		if (reserved[0] || reserved[1] || reserved[2])
+ 			return ERR_PTR(-EINVAL);
+ 	} else {
+-		if (opts->ct_zone_id)
++		if (ct_zone_id)
+ 			return ERR_PTR(-EINVAL);
+ 	}
+-	if (unlikely(opts->l4proto != IPPROTO_TCP && opts->l4proto != IPPROTO_UDP))
++	if (unlikely(l4proto != IPPROTO_TCP && l4proto != IPPROTO_UDP))
+ 		return ERR_PTR(-EPROTO);
+-	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
++	if (unlikely(netns_id < BPF_F_CURRENT_NETNS))
+ 		return ERR_PTR(-EINVAL);
+ 
+-	err = bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
++	err = bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, l4proto,
+ 				    IP_CT_DIR_ORIGINAL, &tuple);
+ 	if (err < 0)
+ 		return ERR_PTR(err);
+ 
+-	if (opts->netns_id >= 0) {
+-		net = get_net_ns_by_id(net, opts->netns_id);
++	if (netns_id >= 0) {
++		net = get_net_ns_by_id(net, netns_id);
+ 		if (unlikely(!net))
+ 			return ERR_PTR(-ENONET);
+ 	}
+ 
+ 	if (opts_len == NF_BPF_CT_OPTS_SZ) {
+-		if (opts->ct_zone_dir == 0)
+-			opts->ct_zone_dir = NF_CT_DEFAULT_ZONE_DIR;
+-		nf_ct_zone_init(&ct_zone,
+-				opts->ct_zone_id, opts->ct_zone_dir, 0);
++		if (ct_zone_dir == 0) {
++			ct_zone_dir = NF_CT_DEFAULT_ZONE_DIR;
++			opts->ct_zone_dir = ct_zone_dir;
++		}
++		nf_ct_zone_init(&ct_zone, ct_zone_id, ct_zone_dir, 0);
+ 	} else {
+ 		ct_zone = nf_ct_zone_dflt;
+ 	}
+ 
+ 	hash = nf_conntrack_find_get(net, &ct_zone, &tuple);
+-	if (opts->netns_id >= 0)
++	if (netns_id >= 0)
+ 		put_net(net);
+ 	if (!hash)
+ 		return ERR_PTR(-ENOENT);
+-- 
+2.43.0
