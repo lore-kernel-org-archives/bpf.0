@@ -1,179 +1,174 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3253F35AC16;
-	Thu, 30 Jul 2026 21:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785446811; cv=none; b=Pb5zyHszsZw6fGC6soqq0PHiTo9mmWju4xiZcAQQjR6fXre2bkf1K3rgcvXO8Mema+2k5ftQix+mUnj1B6iAp3malubIWhzTxdBX8E/qjxWfcD0DDg6aSSgaif8Co7CW45dLwonCisbzd+HiozTaeUjjp39sFFKm1Unqgt7+Ej0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785446811; c=relaxed/simple;
-	bh=2SCuZOqKAdpoa0BhbxQUQzzzpHbhr3HvDOex/0THDAM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DjxphNVQL8HAcLg4JSdugOvnx2uaNbqFCw6fl8hb+Fpr1ueDgvg5zW6br7gVQ7v9ETZ4xwXdhGMvd44HhX4Zmt1oXpkI5eOjj5b/w+aHpXbc6owDW+rIw0lZF+v7ybfJyFXluR0oxXyMJ5usUuKyndgfWkG41PcMD2SYsFGJ7Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hzwLx8/N; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30971392C36
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 21:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785448211; cv=pass; b=B4ofswJ5G7SLuBJ2QQlbn3MlTbx1qcnzgN3GrFXBc+oIaUMT3IoUiDp5nI0d7xAjfbLNja8+6QX+xqK8LXnrUEae7vG+XySavUD5dLEHmUHT1/eN40PA+1hYBHIoVEn4c+GhlHsC9Qn3iYne2YoizPbc2w3OvSsCukqjoPx/384=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785448211; c=relaxed/simple;
+	bh=lhOrI1N7wsPIhHX/Ncz+GqJjJ8JEMYX//C6lZD5Necc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UAr2KQ48AonMkvJwE373CZ61JfjtIFDBsm1P669crGuUBDZ6vxkuSxE3d8I5SMuL1diQAB6JOkXQbOTWK3NM2e5DbfxXXqcKImQefkFMWIkBhmlu1ZQYJzjiofnxRsv6Sf9dG3D/FQfdLEWxJ7T5+LV1nRXxffKlyvTXp0gCrIw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IpvDi7yi; arc=pass smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hzwLx8/N"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A246440E014C;
-	Thu, 30 Jul 2026 21:26:46 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id z5j5ovdkJOp4; Thu, 30 Jul 2026 21:26:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1785446792; bh=/UfwfMQb84HOLsF5rxaMcowx7tLIOiJ1m0KFTpO5g5k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hzwLx8/NxVyYc2ZU91vSepHfJ0kTKRdNfB/swQ/gtxoViqb+9nhMeHFve2yG3EBsK
-	 LpbyVCmZ4sVijqY4pseFE1/yhEIkJgiR1/pwKNBs+BYz+nFgGCrLBHkPsiyHKfFMTB
-	 XXD5ZYP1q7HmB7sjOHrD/0dlfTtZJ3+qZLd1glMTKCQiO9Aac46JIgfLN0JPLJeFPy
-	 LSVlbV915O0ojrU8eSpiW1wFdtus37f7nhtvXOrhzPTOt5ISd/y/WjSOousRgwamhD
-	 CPG5J+1r1aDXvhL6ca2xSyDO41neVbc5+5GEgYPOflquh0YsWaCqUbRq5VVXSkSQsd
-	 Y75vKiqBd0MpL/FX90z5aq1nBxXK0wsozBkgZ/Ptk/WFQDj5dfSOTGJwDqB+1aIhLK
-	 0pyoalk+evpySz2wtUc+i1eH/n6gfRQlPA72tVN3hUs47DXNicflwqKkYizFS/D1tf
-	 TWAW3jh61wYYLITD6XSGtKGAzyR4Eh/IcQfZCxwbGvcp63Ak9lgiY2/1KQQF9Isp4E
-	 02+zXHfY0gUctcekGRIGtJn6IQkZmQ0AKhXeDCpiIPy5oxQnfFcBrTFW6Uwg6OxYIh
-	 lLnw1dwxnA39WkcTmJuHBZoZp4JhhOyuxmDOKlV4P0b7Guh8n1ULhqInzVXGW3C5lf
-	 Tc3NoQnoTLaM3cJ9gTbSCz5A=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::1b])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0FF2740E00C4;
-	Thu, 30 Jul 2026 21:26:16 +0000 (UTC)
-Date: Thu, 30 Jul 2026 14:26:13 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>,
-	Ingo Molnar <mingo@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>, bpf@vger.kernel.org,
-	kernel-team@meta.com, kasan-dev@googlegroups.com,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 5/5] x86/cpu: Don't reset boot CPU cpuinfo in
- identify_cpu()
-Message-ID: <20260730212613.GJamvBdRJ5H98hTWS8@fat_crate.local>
-References: <20260704002046.3859585-1-ihor.solodrai@linux.dev>
- <20260704002046.3859585-6-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IpvDi7yi"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8453427d3f4so437000b3a.3
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 14:50:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785448209; cv=none;
+        d=google.com; s=arc-20260327;
+        b=LAGSMQ2kupMOY+dOBtLeSZLo99Iy5swB7wmQbgKwrhysEQh06cFC/B64dU4uop+ulJ
+         w+41KIZV746YYR+CtruVsG2Yg/NuUCWQ+kr/WEaSzcPUJpuk490M4Xqw+uUQ/bcle7xp
+         e2cR+ahHKjwnU5Tcgyew3KHPXqY/lp6HaYSo+guKGoQGQ+S1BCvO15ULcllsm/kKPDb/
+         /QUkMMnoWzoHoiYgLWkL02nfjR+KUDUaXvhUyVRXBPGlKciQEyMVCRUL3UR4Ok1gUwwf
+         b29U/ithbkQkwkHQKN67ffp8TdZCv4jaVrdpXxuunNYRVV+KY3n4faMCzNgI/UShnTmG
+         e8WQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2PJMwdgLmdvY40COdI1+KD93CM7q7y14zmADccaz8tw=;
+        fh=7eoyOfXUpehVHh0e6FcQCsD9SMN+Vtenv0RH2SBGXXs=;
+        b=i4At+jVVMpZmi0mVn+ijlmPDIE4fJYkh+++DYprz959tKfENlmgXXNPTaNiFgbnoAP
+         wWPLtmBGY80q3vrsZUMchIsfAN3m7Ip3wt3PwmOAtj6FbVtrgTr55a5H+590jcqYX4w1
+         jGnXgF7Sb3ogWNnGyGgTxfosSSO8QDP/KEhypUEbZj4SgEUeRpBDIZODKSHWGlnEPOsO
+         TDBhjIB+0cDvzQTQQMPIrpJTq9guFlfQwMFshSsgeecfosa6SDW6qVTClFi6t72Lsql0
+         94dSTdFwzKCKkd6IcDmjLPxEx9WzT79xSN5xQwHnCsIu8nRzR5VgSAr9IcmBm2QOT9VE
+         xWng==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785448209; x=1786053009; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2PJMwdgLmdvY40COdI1+KD93CM7q7y14zmADccaz8tw=;
+        b=IpvDi7yit83FZO150Xw+sSHLr7/drfLaZBOv5oZUgynbbRKRQk4Oqr+04hRoUJCD9v
+         uKm5Y+2gmiR3d4IqrQoBd4WWfv2FZIn3ll9Dy1Dvbo5FHqj/l0w/bqTb8gbdLg1n2RA0
+         EZN20bfYED5QkQmC0KS24MOewALZSSlUc3+iDUGCq68wgAncay2Rq2yAq2xPZifPKaXa
+         vWy/QP1RMJ7OwjYHlf3fBBeFLVbQMfni1YIlxhBikZ+G7f6FiF9GCYL/ZfhI+0Vs8+0O
+         NmSC5WZUg8aZb1W8Z5G9GKCmMNBYtitJoF2DYR/xKMgvbHQ9lQe6C1jKWs7cTR8wD8zg
+         Uhdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785448209; x=1786053009;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2PJMwdgLmdvY40COdI1+KD93CM7q7y14zmADccaz8tw=;
+        b=X+HOi3RLkWe0I/rVme3i4CPVzj9zHve2Iqznr81mTdmfTkvxdC6ktckiJGBz/YcqO8
+         WrOvj1BGuPDho0TaLyjtpHWv3UcFFTRKYwSAxaOft1uAn620sKdrbaOire+zQfDLqiCW
+         lcF98/Uqu43uWlWuWe6afufkMHfkPbEEsoQQRV00zUuVfO75CHBeb4ANzWxioiIea7YD
+         3hxWbIeo5ghQR15PXx7wBoVilibFGAqA9kqGfgtP77/tsX6dP5Qrt6r9ehMy7TCOSAMS
+         IohqlGDdNKHc74aCIqie2lAhU2w0jdm0fAZonyzFnF8IHCb1wxKrqxE9bn6syyer82zh
+         huSg==
+X-Gm-Message-State: AOJu0Yzr/kN8dr0xiD3rCe9lKQ5RWhk4ISJVtFhRyQ9gJCraom1bJI0s
+	mWPfcaPCWkwBoKPmz8YCsvvzrja95892cD9QMi69uFSBnMfpieaegOyYLeBHO/WQ00RW5is5jPE
+	tO2yBOb9NsC3jtCp8CpSA9A+O5Fta+uU=
+X-Gm-Gg: AR+sD13XpP9jEA667L1limrtpdT42ZrwHt2Vcmmcuf/NmDttY37ll6ZrY2FX2mj57cO
+	afoGLINbAq/+vLGqkRQZoUM7G2gAt5l84MkQ3ioR8Nh82wAkpZwrc0d4XBjpWzBiPNDci0KfI5u
+	WENiYWj/aXmm0fUjESHO8mE56u+uhu/UZm7qBpV3dwd4qx15JNk+xM7mKgi3XEtBi6Ihpbzfr+h
+	uQVNdvNt7PZoy/foPdWDEsN6w7FvFTDHVm5eHJw2h3FS6b/C9CJIY0KPKPMb/uMjWFqyHRnmfec
+	Lya+kkw4Gbne7apC/bEYVLKDAOThvjP8gKvo9dPzNPlU2315d9fwgmGgIjOHGpxpzH9dR6U749W
+	MOfYBg9PC6rtV/+XZ84urMKZWjqqOLR3V2u863+sqBQ==
+X-Received: by 2002:a05:6a00:a227:b0:848:55a6:fce with SMTP id
+ d2e1a72fcca58-84ebc4221b6mr3785247b3a.62.1785448209334; Thu, 30 Jul 2026
+ 14:50:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260704002046.3859585-6-ihor.solodrai@linux.dev>
+References: <20260729203633.213973-1-puranjay@kernel.org> <20260729203633.213973-2-puranjay@kernel.org>
+In-Reply-To: <20260729203633.213973-2-puranjay@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 30 Jul 2026 14:49:54 -0700
+X-Gm-Features: AUfX_mx8neQncAEpXE_n3-JDiGSk_md9UCkjplR-fcM2rC020NS8T8WtKnD5Gug
+Message-ID: <CAEf4BzYvGPYa6CdoPwMFGq3L+cdQT7FJu6si8icP==fc_6797w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/6] bpf: Correct the overflow check comment
+ in bpf_iter_num_next()
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 03, 2026 at 05:20:46PM -0700, Ihor Solodrai wrote:
-> identify_cpu() used to rebuild c->x86_capability from scratch:
-> init_cpu_info() memsets the capability array to zero and
-> identify_cpu() then re-reads CPUID. On the boot CPU identify_cpu()
-> runs after local_irq_enable() and before alternatives are patched. An
-> interrupt delivered in the window between the memset() and
-> get_cpu_cap() therefore will observe cleared x86_capability [1].
-> 
-> However the boot CPU's capabilities have already been scanned, with
-> interrupts off, by early_identify_cpu(). So move the init_cpu_info()
-> call out of identify_cpu() into its callers, and skip it for the boot
-> CPU on 64-bit.
-> 
-> Secondary CPUs call init_cpu_info() then identify_cpu() from
-> identify_secondary_cpu(), with interrupts off, exactly as
-> before. 32-bit still resets in identify_boot_cpu(): it relies on the
-> reset for the no-CPUID cpuid_level default.
-
-Ok, this commit message is all over the place. Please structure it something
-like this:
-
-1. Prepare the context for the explanation briefly.
-
-2. Explain the problem at hand.
-
-3. "It happens because of <...>"
-
-4. "Fix it by doing X"
-
-5. "(Potentially do Y)."
-
-And some of those above are optional depending on the issue being
-explained.
-
-Also, do not talk about what your patches do - that should (hopefully) be
-visible from the diff itself. Rather, talk about *why* you're doing what
-you're doing.
-
-In the patches where you do only mechanical movement, add
-
-"No functional changes."
-
-to the commit message to denote that.
-
-
-> [1] https://lore.kernel.org/bpf/20260610175651.647515-1-ihor.solodrai@linux.dev/
-> 
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+On Wed, Jul 29, 2026 at 1:36=E2=80=AFPM Puranjay Mohan <puranjay@kernel.org=
+> wrote:
+>
+> bpf_iter_num_next() decides whether the iterator is exhausted with:
+>
+>         if ((s64)(s->cur + 1) >=3D s->end) {
+>
+> The comment above it claimed the (s64) cast was needed to be careful
+> about overflow, "e.g., if s->cur =3D=3D s->end =3D=3D INT_MAX, we can't j=
+ust do
+> s->cur + 1 >=3D s->end". That reasoning is wrong: s->cur + 1 is evaluated
+> in int and wraps *before* the cast, so casting the already-wrapped result
+> to s64 changes nothing. For s->cur =3D=3D s->end =3D=3D INT_MAX the plain
+> s->cur + 1 >=3D s->end and the (s64) version both evaluate to false, and
+> more generally the two are identical for all inputs (sign-extending both
+> operands of a signed compare never changes its result).
+>
+> The wraparound of s->cur + 1 is in fact intentional and load-bearing:
+> bpf_iter_num_new() initializes s->cur to start - 1, which wraps to
+> INT_MAX when start =3D=3D INT_MIN, and the wrapping s->cur + 1 recovers
+> start on the first call. Using real 64-bit arithmetic ((s64)s->cur + 1)
+> would instead break iterators starting at INT_MIN.
+>
+> Drop the redundant cast and rewrite the comment to describe what actually
+> happens. No functional change; the kernel builds with -fno-strict-overflo=
+w
+> so the signed wraparound is well defined.
+>
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 > ---
->  arch/x86/kernel/cpu/common.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 8f093c6c7ccc..cd3d7c37c174 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -1986,8 +1986,6 @@ static void identify_cpu(struct cpuinfo_x86 *c)
->  
->  	c->loops_per_jiffy = loops_per_jiffy;
->  
-> -	init_cpu_info(c);
-> -
->  	if (!cpuid_feature())
->  		identify_cpu_without_cpuid(c);
->  
-> @@ -2156,6 +2154,13 @@ static void identify_cpu_32(struct cpuinfo_x86 *c)
->  
->  static __init void identify_boot_cpu(void)
+>  kernel/bpf/bpf_iter.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+> index f5eaeb2493d4a..f190f2b250048 100644
+> --- a/kernel/bpf/bpf_iter.c
+> +++ b/kernel/bpf/bpf_iter.c
+> @@ -802,12 +802,14 @@ __bpf_kfunc int *bpf_iter_num_next(struct bpf_iter_=
+num* it)
 >  {
-> +	/*
-> +	 * The boot CPU's capabilities were already scanned in early_identify_cpu().
-> +	 * However 32-bit still needs to init_cpu_info() here for the no-CPUID
-> +	 * cpuid_level default.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_X86_32))
-> +		init_cpu_info(&boot_cpu_data);
->  	identify_cpu(&boot_cpu_data);
->  	if (HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT))
->  		pr_info("CET detected: Indirect Branch Tracking enabled\n");
-> @@ -2178,6 +2183,7 @@ void identify_secondary_cpu(unsigned int cpu)
->  		*c = boot_cpu_data;
->  	c->cpu_index = cpu;
->  
-> +	init_cpu_info(c);
->  	identify_cpu(c);
->  	identify_cpu_32(c);
+>         struct bpf_iter_num_kern *s =3D (void *)it;
+>
+> -       /* check failed initialization or if we are done (same behavior);
+> -        * need to be careful about overflow, so convert to s64 for check=
+s,
+> -        * e.g., if s->cur =3D=3D s->end =3D=3D INT_MAX, we can't just do
+> -        * s->cur + 1 >=3D s->end
+> +       /* Detect the end of the range, or a failed/empty iterator: all o=
+f these
+> +        * leave s->cur + 1 >=3D s->end. bpf_iter_num_new() set s->cur to=
+ start - 1
+> +        * (which wraps to INT_MAX when start =3D=3D INT_MIN), so the s->=
+cur + 1 below
+> +        * is a deliberate 32-bit wraparound that recovers start. As s->c=
+ur and
+> +        * s->end are int, this is an ordinary signed 32-bit compare, exa=
+ctly what
+> +        * the inlined bpf_iter_num_next() emits.
+>          */
 
-Also, when you look at the final version, do you see how identify_cpu() and
-identify_cpu_32() are soo close together so that you can basically move the
-body of identify_cpu_32() to the end of identify_cpu() and then you don't need
-that helper either.
+this is really Claude-style verboseness. let's just say that num iter
+maintains an invariant that either s->cur < s->end or s->cur =3D=3D s->end
+=3D=3D 0, in both cases s->cur + 1 can't overflow int.
 
-Other than that, the flows do look better. 32-bit still needs dealing with the
-no-CPUID case but that's for another day. I can't really find it in me to
-care, actually, 32-bit needs to go away and we'll simplify a looot of code. Oh
-well.
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> -       if ((s64)(s->cur + 1) >=3D s->end) {
+> +       if (s->cur + 1 >=3D s->end) {
+>                 s->cur =3D s->end =3D 0;
+>                 return NULL;
+>         }
+> --
+> 2.53.0-Meta
+>
