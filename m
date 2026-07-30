@@ -1,149 +1,107 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EEA2439359
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 13:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D9730DEB2
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 13:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785419024; cv=none; b=GsTwsfkfv7Zhht2L7xJ55AFOKy/MriFrou76MblbVTO7/8GJHP9B05W4smcAWebZokJKNpfkHkJXO58uysOVPvQrNgnH4oSEpuXnc+g8hxr4uFbfODBP9NKXBoiY6hWd7W6tt6EOztcR4+Qz5gHuPji2632PE0SZNbKS1uQyz4c=
+	t=1785419146; cv=none; b=G/Bvzyj/Vb07fHc22rAsNUFlkBtIArYv4/It+cpoIA4Y27QF6FvCx/Qq9+R1RjAOl+y+Apa9dc8IhpDLAkgAk0w87u6r9KjlmQO1lTBdxl6/bTVeV+RLK2ljjs9kCF12t1/LWbsBHwoqNRYEmdaeX/Zrlq9+kVoLxrRaYr+4jTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785419024; c=relaxed/simple;
-	bh=IjUWUxvhZnzai6pgDuX7LgOB658l0XXeyj263Uv8xcI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DSCmtmEOuBdbWh2X0W9eAJ06lODv819DIj5C9Ks4ykoEWzBeTBi+R9zcvcIlu9g5t+M8+jVEPzDrFxakRdybbSKSJNLD0wYx9jIrIqdKA/40sKv0RBVW+QAzVsCtz5P7J6K51a6MI7L2m26nAp4ij82ymeAL4PPKLSjg0Uq7Jss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ls3V21wX; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785419146; c=relaxed/simple;
+	bh=+Qf6reX397qPyNLRKzXpTON85DDsGg52k3v/VcPqm+4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=rz+CLPdoWVhOFPTPNRXdgftcka9Hd4NKMU4el9nfrffSLUJBoiLWoZ+lousT+QkBEL26BzKP3jAMTaVZy/WiM+gtHFpcyOaB2HiM1gH+SMPxO4q+2RcYG+L5c7We2aYmpMV2/0grSR+KJf8V6IS+RvR6GbJTrF9Iuh+9dJY8VA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bt7HlKd/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ls3V21wX"
-Message-ID: <6a20bbdd-2557-4db8-8839-e2f53857ced9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785419020;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HSUgRH1bkQ5B4oh0ZVWuwBgDEXcmcvDDnq0a/P5vrsQ=;
-	b=Ls3V21wXHbtGvyQz8L2ldqSAAri+UREahyAkxB6rics/4Y8xopWC41GTkFtFrSkO/2ehFj
-	e2HsaG/qOEAb727k5eVx159xZYBOyiuO+614OyvFQ+HYHGphu5EBYkqlVFMoK6AW4kLCY2
-	dx/PMRxRnIFV49oSVLM70LSxjc9uoSw=
-Date: Thu, 30 Jul 2026 21:43:31 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bt7HlKd/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451731F000E9;
+	Thu, 30 Jul 2026 13:45:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785419145;
+	bh=TnhqTmPfkGTR5NglgS7LuSRtlUoALZ6makZ1/i8Bfss=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Bt7HlKd/JDC9p3hI7hlEFEPfLU3tjVRhZXD9LjSj+nxsBjbXIq/OlbGLaqZ9bgGsQ
+	 5qqM2mOqq1NM6u4Agm/W2mYGBbMr2biQTyTsg3AVr09YhG4QvnlAbd3XHIlz+J2yyo
+	 VUfMZwZQSnyGLruAkChK4bpHZCZ825PKkTTmOyb2FWPjEyqqBWsO6wiyU6ghUPOOiv
+	 XA1cKYPaFagN+CUL4ktCu+ltyy1QvazuJYbutKp7zB2ooWRdKj/Jul0M8HywCF6utA
+	 lQiLGrl1PnOublyE3rLbM69AMuClhsaDtbmVBE8kovvY7xTsr32FXZJN/CEtp8/Za3
+	 /eIZs7ktiRtJw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 3/9] selftests/exec: test registering an entry disabled
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Christian Brauner" <brauner@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260730-work-binfmt_misc-preopen-v1-3-4a0b0da71f16@kernel.org>
+References: <20260730-work-binfmt_misc-preopen-v1-0-4a0b0da71f16@kernel.org>
+ <20260730-work-binfmt_misc-preopen-v1-3-4a0b0da71f16@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 30 Jul 2026 13:45:44 +0000
+Message-Id: <20260730134545.451731F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCHv2 bpf-next 05/11] bpf: Disable preemption in
- bpf_get_stackid
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- stable@vger.kernel.org, Tao Chen <chen.dylane@linux.dev>,
- bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <songliubraving@fb.com>,
- Yonghong Song <yhs@fb.com>, Quentin Monnet <qmo@kernel.org>,
- STAR Labs SG <info@starlabs.sg>, Arnaud Lecomte <contact@arnaud-lcm.com>
-References: <20260729083807.1588544-1-jolsa@kernel.org>
- <20260729083807.1588544-6-jolsa@kernel.org>
- <78c72a5b-0db5-47da-8b35-e6a2e6976d7c@linux.dev> <ams3yHvqyXrWAbBV@krava>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <ams3yHvqyXrWAbBV@krava>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 2026/7/30 19:38, Jiri Olsa wrote:
-> On Wed, Jul 29, 2026 at 06:30:26PM +0800, Leon Hwang wrote:
->> On 29/7/26 16:38, Jiri Olsa wrote:
->>> The get_perf_callchain call needs disabled preemption plus we need
->>> it disabled as long as we access its returned trace entries buffer.
->>>
->>> Note the bpf_get_stackid_pe function is executed already with
->>> preemption disabled.
->>>
->>> Cc: stable@vger.kernel.org
->>> Fixes: d5a3b1f69186 ("bpf: introduce BPF_MAP_TYPE_STACK_TRACE")
->>> Reported-by: Tao Chen <chen.dylane@linux.dev>
->>> Closes: https://lore.kernel.org/bpf/20260206090653.1336687-2-chen.dylane@linux.dev/
->>> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
->>> ---
->>>  kernel/bpf/stackmap.c | 19 +++++++++++++------
->>>  1 file changed, 13 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
->>> index 43b1e5436047..e48ddb4edd47 100644
->>> --- a/kernel/bpf/stackmap.c
->>> +++ b/kernel/bpf/stackmap.c
->>> @@ -624,30 +624,37 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
->>>  	struct perf_callchain_entry *trace;
->>>  	struct stackid stackid;
->>>  	bool kernel = !user;
->>> +	int err = -EFAULT;
->>>  	u32 max_depth;
->>> -	int err;
->>>  
->>>  	if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
->>>  			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
->>>  		return -EINVAL;
->>>  
->>>  	max_depth = stack_map_calculate_max_depth(map->value_size, elem_size, flags);
->>> +
->>> +	preempt_disable();
->>
->> Better to use the guard-style guard(preempt)() in this series.
-> 
-> we prefer to call stackid_install with preemption enabled
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] The `removed_by_remove_all` test permanently clears all active `bi=
+nfmt_misc` entries system-wide, destroying the host system's configuration.
+--
 
+--- Patch [3]: [PATCH 3/9] selftests/exec: test registering an entry disabl=
+ed ---
+commit 887542eb0fe41cea7f35d27e339ff39a03f72a8a
+Author: Christian Brauner <brauner@kernel.org>
 
-Understand.
+selftests/exec: test registering an entry disabled
 
-I wonder if we could avoid the "goto out".
+This commit adds a test for the 'D' flag in binfmt_misc, which allows
+registering an entry in a disabled state. It verifies that the entry does
+not dispatch until enabled, retains the correct status, and can be toggled
+or removed.
 
-scoped_guard(preempt) { ... } might work here.
+> diff --git a/tools/testing/selftests/exec/binfmt_misc_disabled.c b/tools/=
+testing/selftests/exec/binfmt_misc_disabled.c
+> new file mode 100644
+> index 0000000000000..47c9e8a4ee42a
+> --- /dev/null
+> +++ b/tools/testing/selftests/exec/binfmt_misc_disabled.c
 
-But "goto out" is fine with me as well.
+[ ... ]
 
-Thanks,
-Leon
+> +/* '-1' to the status file sweeps a staged entry with everything else. */
+> +TEST_F(disabled, removed_by_remove_all)
+> +{
+> +	int fd;
+> +
+> +	ASSERT_EQ(write_reg(RULE("D")), 0);
+> +	EXPECT_TRUE(entry_shows(ENTRY, "disabled"));
+> +
+> +	fd =3D open(BINFMT_DIR "/status", O_WRONLY | O_CLOEXEC);
+> +	ASSERT_GE(fd, 0);
+> +	ASSERT_EQ(write(fd, "-1", 2), 2);
 
-> 
-> jirka
-> 
->>
->> Thanks,
->> Leon
->>
->>>  	trace = get_perf_callchain(regs, kernel, user, max_depth,
->>>  				   false, false, 0);
->>>  
->>>  	if (unlikely(!trace))
->>>  		/* couldn't fetch the stack trace */
->>> -		return -EFAULT;
->>> +		goto out;
->>>  
->>>  	err = stackid_fastpath(&stackid, map, trace, flags);
->>>  	if (err != -ENOENT)
->>> -		return err;
->>> +		goto out;
->>>  
->>>  	new_bucket = stackid_new_bucket(&stackid, map);
->>> -	if (!new_bucket)
->>> -		return -ENOMEM;
->>> +	if (new_bucket) {
->>> +		preempt_enable();
->>> +		return stackid_install(&stackid, map, new_bucket, flags);
->>> +	}
->>> +	err = -ENOMEM;
->>>  
->>> -	return stackid_install(&stackid, map, new_bucket, flags);
->>> +out:
->>> +	preempt_enable();
->>> +	return err;
->>>  }
->>>  
->>>  const struct bpf_func_proto bpf_get_stackid_proto = {
->>
+[Severity: High]
+Could this inadvertently clear the host's global binfmt_misc configuration?
 
+Writing "-1" to the status file triggers a removal of all binfmt_misc
+entries system-wide. Since this test requires root privileges to run, but
+doesn't appear to call unshare(CLONE_NEWNS) to isolate its mount namespace,
+wouldn't this wipe out all active binfmt_misc registrations on the host
+system running the selftests?
+
+Other tests in the same directory (like binfmt_misc_selfpin.c) unshare the
+namespace before modifying global settings. Does this test need a similar
+isolation step to prevent breaking existing host configurations for
+utilities like qemu-user-static or WINE?
+
+> +	close(fd);
+> +
+> +	EXPECT_NE(access(BINFMT_DIR "/" ENTRY, F_OK), 0);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730-work-binfm=
+t_misc-preopen-v1-0-4a0b0da71f16@kernel.org?part=3D3
