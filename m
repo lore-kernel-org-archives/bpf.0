@@ -1,315 +1,121 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 411643AB496
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 18:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F19842D751
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 18:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785434890; cv=none; b=D87WKGrUNyoltqMMKhS+TWtb9L8sH+t6sBilIqCXLv3vHNPjzN/3IGivH6Q50muFPOj0oAaX53jy3mmqlhpdmTuSKk+pZPyu9E7fMR0B8BhZhUD8lCdAjv+FLVh5sGsjljEfaUyfAMJxgrla0gLyEBD/+0sdl5bLR6u8UyBQUb8=
+	t=1785435019; cv=none; b=m78kGZJNACjQPR8HrsT7spiIGL5NCdEdWJa/ShB02OPwQW+mrjdqCCh+7OJxuh+ygnUyLPOdgIIxuNcTgfMNKIckaxKF9ICGtgLp1HdTZ2MhOz3eErLLo0wBo07BgmlmQSYKT9PkKErt/24+Ceml5oQHc6Bslyvd7qRTos0nzqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785434890; c=relaxed/simple;
-	bh=tSrfAlD2lgvetemBvKtXVwnOZ3zgTipsfi54/ygirdk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=YOF9UF0RGNrdbHJfdnRLi9nSSRFg8f2JrXwie+XM9e+lw1z9VofRsAGlMX/Z5ECEDF5+SmfHpbuLBhxwE2R/ngUwehZeEWQ7OBPz0gS8flfy/++jybYjfhtar8/2pH+OKeW53E+jB0AP0PKPQsOaZPsrX7IN07wiXjdeSEXLfe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=F4O1RutH; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1785435019; c=relaxed/simple;
+	bh=j4uG85a/lUOWlekw+/37SW+8lcXDbeUugVTGhEIFrNI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=c+RwlYduXtFlBnonxaVTM/5NosCTo97SwbDTbStMdIhwTq+DOPmF0g+KrTbLrO3fkzZqosScUeyMfsGG/tp/F6RkHMmckM13TUiSi8FFPngpf63ozz5ka6wIML4e99Mp2m8uMO5Wf3b89ut59zlgtksab0zUvO5V/0PdrwRVjhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TSsF5K32; arc=none smtp.client-ip=209.85.216.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="F4O1RutH"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ceb096e675so1303865ad.0
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 11:08:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TSsF5K32"
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-388cfc4848dso185078a91.3
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 11:10:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785434886; x=1786039686; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=MACLsRcN4y51CiS0cg9uBHC3yOz6OO5aiyPbHKz0564=;
-        b=F4O1RutH5IeHSzSijnjVocM1MevwxvLe6eAp7cFBulON+cfgjjHsAuNcD4uIOFXD/q
-         uZP+GdHXEOejEfsg8x79ILuL6FL5azukOHtPe+lJ9YWpvyKAkFT4t+MZLDL+HrkBaYwZ
-         nDwcvG9iqmXbM125tjkeZCrrUaKA8rdXylb1rK69c+3a7sD/vxn5UHcOVcMWprjMwHZ2
-         iZJ1/706phe3wEOvGVIHM80Bi7GGw5UWZxA0QAmS1n72KNW6pNyHao9n3QbDbBUj2P79
-         2G/Ba8FE1Vyb1nANAmA+oB3b7DH824xeqFR6o4Tqj1DT1ZgEFLthChidf/xqgcqcYvbq
-         HXWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785434886; x=1786039686;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1785435012; x=1786039812; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MACLsRcN4y51CiS0cg9uBHC3yOz6OO5aiyPbHKz0564=;
-        b=Zzi28Zu5jnhYJVNb0y03LmIoiq47yv9tvlu9mn/JvlO1rlKEuQ0fWuGnREvPP1dd3m
-         5L9o78H/kY+FLXuQXPQjbGx16W0ipNrWMPPbeJVowxiO9O20g/vfqp4EK7e1ZB3bPoLk
-         bCt9RJHs73lv4oY8IoJUUEfRbUDx38ZUn0ylJ6RebtlhYJ29yRTpmL4md6m3vDN9ZHdO
-         9Sn+loHMXWy7CrscDBjegRAPS1b8SayGT90CU453eGwTvLFSoxiSWTV6eku37p1LKurK
-         zWKF5DqOGRAXpE5t1dPrEvkQ/iNcQn55Ety1XqXjux4ZpMudvy1oS1NTv7WSnUMQuBnh
-         i0gA==
-X-Forwarded-Encrypted: i=1; AHgh+RpnslzbAjIPvynb6XUd2Dj2zYqD/ePQuTbBBTMIzyYVqEHSxiR/3Sn1h/yhPOC3zoB8WqI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyPXsm6JAZrT2p49fp/S8U6s/I6qPb4ouucZkQxKjvu/+Gv6li
-	HNCvvZ/BqJeusbO7OrG1yFBK9xCYDeo9nBkKSpwjKoFxqzZ79WGlwGTx9WE01tREWH4=
-X-Gm-Gg: AR+sD10HWPXQrHmnJAXlbQm/EBTyxjP7axwDRG78h5pKSgnSp+P3gdqd2ePsQS0HsV0
-	Vgkc2mM70k/Wels+gB61prHsymoWlvL1lD5QhO864vIsc9T8wKyRy8v5boQzU7GVz4UAT2R+SlN
-	+B0gIM69k1KRGg4vUH9Ab59OJiWeUY0aE1zIuCadUd+hZrPUFA/DCOhZlTDXdjIZd02FDt9DADv
-	KczDCHpLPWnJLRSevhzdTYi8q19QgpcO2flzKWmZthiJAuDfJABpmljmZYYjXorbtFR5Fp735AC
-	Z/R4+8k5SIAF8VCM8idVUdzf6nCV1MqLgAajc7bJo0xKUrP6s8nwN37eMwGECr7HltMMHofGswr
-	iUQF14qK+yC/Hp+Y398NtvREa32sjjz9clvTyvEJ67RyMfkXVTYYyk0SUxLyRNuD8CQnAY7esGg
-	kvYfCfzs88HZdkbkzNQwg83YTdTY2xXRyKw4pVnBatOpa+x0SP+du/em62piCVkzP7it8zQAELR
-	4vn8Nzv/fYQb/EuCQ==
-X-Received: by 2002:a17:902:ccd2:b0:2c6:90ec:f601 with SMTP id d9443c01a7336-2d035b85755mr32939755ad.8.1785434886244;
-        Thu, 30 Jul 2026 11:08:06 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d022bf845asm29948135ad.60.2026.07.30.11.08.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jul 2026 11:08:05 -0700 (PDT)
+        bh=/J+SX8dpZwKLLQ+HLHdBpKmApVdFrMwrn1102lcbc08=;
+        b=TSsF5K32AejbDCJcn/YMBtVjqzkong6JGX2vhYbaLeOHfH9HkOtH4up5GFBy5+S6hj
+         j0Ncik84ofrqHEJDw0TXEvrYl2YvwzWAg4FOoyPh9gTwVf7B5Ffen91Skpwa4Y8KXI/E
+         Lxql/Rb73H6IUHxNYRFEbsJoKWKGZHtqhs8EQ0qfBQWe3NDYUOmd295fZDHNcsC8JVTT
+         2iTnq6LO3Eaz9WIuHtcbQA8JFJFiedfx0texYuMq+3HrUYUtOCiFGcgeWf0zvs7PUGfu
+         Ps5SzA5e+eIKNYLamcBucKAB3J3LNZcT7G7KOlQMy+npBuSSYOCCXvHejM8a2z3wsclW
+         qZQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785435012; x=1786039812;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/J+SX8dpZwKLLQ+HLHdBpKmApVdFrMwrn1102lcbc08=;
+        b=jIhfIxT7Hl51rKpukYorXLP5WIJSVLLnzoD2x9h0wA+Yhr33ViPyTPX/v8D6t0wA3L
+         D5UecDsT3/FzZKZUK1WP1KppuJwCpOBpFtq2bbjJ3CCvYxcQJJNDkC/Mo3rNCgIJbz1w
+         Mqb4oQFq0ADuqNGqE5wWjqvQCcEO/Ae5gVc6PSrSHoYlAFDp4Zk93FI2VyINP6aJbVX6
+         M6RF2goOZcjLjpsceeHho4vHh0tM4dVW6hPbcYR9bfARMGhoeJ/9xdhF2lOZsydi6hsg
+         JrMPuKX9iZGtbUzO2/pa3S59n2AXAdNUlZmLNrg2XngFqNl5fBmOT02+zwwmXVbUFaQG
+         24Xg==
+X-Forwarded-Encrypted: i=1; AHgh+Roq+4JuliQ6M1DvG59XpDTZXvTbtI2a1lqWY0V9Nxyqe5zgbryIJppENrndLmLObeXPlG0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMt/NbI54+9ov0bRxxqO4COh0DpNoCDtzXcTOuA/uD7fjP6fFS
+	Op+oGIJtBNCcE2dOA2KNuLjRn2GbWxwJa3OzNTlHspa1sDhWZbmfnH2VSWkLXb9Ii+mGm8ld+DR
+	bandQEmdUQpPL+Q==
+X-Received: from dybvk8.prod.google.com ([2002:a05:7301:53c8:b0:30f:45f6:de06])
+ (user=cmllamas job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:4c4b:b0:38f:c71:2342 with SMTP id 98e67ed59e1d1-38f9c00dfb9mr2757140a91.31.1785435012102;
+ Thu, 30 Jul 2026 11:10:12 -0700 (PDT)
+Date: Thu, 30 Jul 2026 18:10:07 +0000
+In-Reply-To: <01421d53-c379-4044-9da3-5990186303ef@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 30 Jul 2026 14:08:04 -0400
-Message-Id: <DKC3UER7LFE1.229F428MUH14A@etsalapatis.com>
-Cc: <netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf v2] bpf: Fix netns reference imbalance in conntrack
- kfuncs
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Chengfeng Ye" <nicoyip.dev@gmail.com>, "Pablo Neira Ayuso"
- <pablo@netfilter.org>, "Florian Westphal" <fw@strlen.de>, "Phil Sutter"
- <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
- <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Lorenzo Bianconi"
- <lorenzo@kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260729163141.213611-1-nicoyip.dev@gmail.com>
- <20260730082958.2065194-1-nicoyip.dev@gmail.com>
-In-Reply-To: <20260730082958.2065194-1-nicoyip.dev@gmail.com>
+References: <01421d53-c379-4044-9da3-5990186303ef@iogearbox.net>
+X-Mailer: git-send-email 2.55.0.508.g3f0d502094-goog
+Message-ID: <20260730181008.3654413-1-cmllamas@google.com>
+Subject: [PATCH] selinux: bpf: check SBLABEL_MNT before isec init
+From: Carlos Llamas <cmllamas@google.com>
+To: Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, "Christian Brauner (Amutable)" <brauner@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>
+Cc: kernel-team@android.com, linux-kernel@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, linux-fsdevel@vger.kernel.org, 
+	Carlos Llamas <cmllamas@google.com>, stable@vger.kernel.org, 
+	"open list:SELINUX SECURITY MODULE" <selinux@vger.kernel.org>, 
+	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu Jul 30, 2026 at 4:29 AM EDT, Chengfeng Ye wrote:
-> The opts argument of the BPF conntrack kfuncs can point to a shared
-> map value.  __bpf_nf_ct_lookup() and __bpf_nf_ct_alloc_entry() read
-> opts->netns_id separately when acquiring and releasing the network
-> namespace reference.
->
-> The reference imbalance can occur as follows:
->
->   CPU 0                                  CPU 1
->   read opts->netns_id (-1)
->   skip get_net_ns_by_id()
->                                          write opts->netns_id (id)
->   read opts->netns_id (id)
->   put_net(net) /* no matching get */
->
-> The reverse transition leaks the reference.  Repeating the unmatched put
-> can destroy a live namespace and crash later users.
->
-> The kernel reported:
->
->   Oops: general protection fault, probably for non-canonical address
->   KASAN: null-ptr-deref in range [0x00000000000000e8-0x00000000000000ef]
->   RIP: 0010:bpf_prog_test_run_xdp+0x52c/0x1700
->   Call Trace:
->    __sys_bpf+0x1662/0x50c0
->    __x64_sys_bpf+0x73/0xb0
->    do_syscall_64+0xf9/0x540
->    entry_SYSCALL_64_after_hwframe+0x77/0x7f
->   Kernel panic - not syncing: Fatal exception
->
-> Snapshot every input field of opts with READ_ONCE() before validating or
-> using it.  The netns_id snapshot keeps the namespace get/put pair
-> balanced, while the other snapshots keep the remaining options from
-> changing partway through an invocation.  The individual reads can still
-> observe an inconsistent combination during a concurrent update, but each
-> selected field value remains stable for that invocation.
->
-> Fixes: aed8ee7feb44 ("net: netfilter: Deduplicate code in bpf_{xdp,skb}_c=
-t_lookup")
-> Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert C=
-T")
-> Signed-off-by: Chengfeng Ye <nicoyip.dev@gmail.com>
+selinux_inode_init_security() marks the isec as initialized before
+checking if mount labeling is supported (SBLABEL_MNT). This was fine
+until commit 9722955b5430 ("bpf: Add simple xattr support to bpffs"),
+where genfscon bpffs mounts fail the SBLABEL_MNT check as expected (no
+xattrs) and yet leave the isec->initialized. This breaks subsequent
+calls to inode_doinit_with_dentry().
 
-Looking a lot better, one nit: We don't really need to read reserve[]
-into a separate variable. We use it only once, so reading it into the
-stack isn't giving us anything, in contrast to all other fields.
+Do the SBLABEL_MNT check before the inode security is initialized.
 
-The bot's ordering nit is also a nice-to-have.
+Cc: stable@vger.kernel.org
+Closes: https://lore.kernel.org/all/akWdcp6P0FkNDzBk@google.com/
+Fixes: 9722955b5430 ("bpf: Add simple xattr support to bpffs")
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+---
+ security/selinux/hooks.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-pw-bot: cr
-
-> ---
-> Changes in v2:
-> - Snapshot l4proto, ct_zone_id, ct_zone_dir, and the reserved bytes in
->   addition to netns_id, as requested in review.
-> - Rebase onto current bpf/master.
->
-> Please queue this fix for stable kernels.
->
->  net/netfilter/nf_conntrack_bpf.c | 76 ++++++++++++++++++++++----------
->  1 file changed, 52 insertions(+), 24 deletions(-)
->
-> diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrac=
-k_bpf.c
-> index f98d1d4b42c3..c3395cb98c00 100644
-> --- a/net/netfilter/nf_conntrack_bpf.c
-> +++ b/net/netfilter/nf_conntrack_bpf.c
-> @@ -122,42 +122,56 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf=
-_sock_tuple *bpf_tuple,
->  	struct nf_conntrack_tuple otuple, rtuple;
->  	struct nf_conntrack_zone ct_zone;
->  	struct nf_conn *ct;
-> +	u16 ct_zone_id;
-> +	s32 netns_id;
-> +	u8 ct_zone_dir =3D 0;
-> +	u8 reserved[3] =3D {};
-> +	u8 l4proto;
->  	int err;
-> =20
->  	if (!(opts_len =3D=3D NF_BPF_CT_OPTS_SZ || opts_len =3D=3D 12))
->  		return ERR_PTR(-EINVAL);
-> +
-> +	netns_id =3D READ_ONCE(opts->netns_id);
-> +	l4proto =3D READ_ONCE(opts->l4proto);
-> +	ct_zone_id =3D READ_ONCE(opts->ct_zone_id);
->  	if (opts_len =3D=3D NF_BPF_CT_OPTS_SZ) {
-> -		if (opts->reserved[0] || opts->reserved[1] || opts->reserved[2])
-> +		ct_zone_dir =3D READ_ONCE(opts->ct_zone_dir);
-> +		reserved[0] =3D READ_ONCE(opts->reserved[0]);
-> +		reserved[1] =3D READ_ONCE(opts->reserved[1]);
-> +		reserved[2] =3D READ_ONCE(opts->reserved[2]);
-> +		if (reserved[0] || reserved[1] || reserved[2])
->  			return ERR_PTR(-EINVAL);
->  	} else {
-> -		if (opts->ct_zone_id)
-> +		if (ct_zone_id)
->  			return ERR_PTR(-EINVAL);
->  	}
-> =20
-> -	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
-> +	if (unlikely(netns_id < BPF_F_CURRENT_NETNS))
->  		return ERR_PTR(-EINVAL);
-> =20
-> -	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
-> +	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, l4proto,
->  				    IP_CT_DIR_ORIGINAL, &otuple);
->  	if (err < 0)
->  		return ERR_PTR(err);
-> =20
-> -	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
-> +	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, l4proto,
->  				    IP_CT_DIR_REPLY, &rtuple);
->  	if (err < 0)
->  		return ERR_PTR(err);
-> =20
-> -	if (opts->netns_id >=3D 0) {
-> -		net =3D get_net_ns_by_id(net, opts->netns_id);
-> +	if (netns_id >=3D 0) {
-> +		net =3D get_net_ns_by_id(net, netns_id);
->  		if (unlikely(!net))
->  			return ERR_PTR(-ENONET);
->  	}
-> =20
->  	if (opts_len =3D=3D NF_BPF_CT_OPTS_SZ) {
-> -		if (opts->ct_zone_dir =3D=3D 0)
-> -			opts->ct_zone_dir =3D NF_CT_DEFAULT_ZONE_DIR;
-> -		nf_ct_zone_init(&ct_zone,
-> -				opts->ct_zone_id, opts->ct_zone_dir, 0);
-> +		if (ct_zone_dir =3D=3D 0) {
-> +			ct_zone_dir =3D NF_CT_DEFAULT_ZONE_DIR;
-> +			opts->ct_zone_dir =3D ct_zone_dir;
-> +		}
-> +		nf_ct_zone_init(&ct_zone, ct_zone_id, ct_zone_dir, 0);
->  	} else {
->  		ct_zone =3D nf_ct_zone_dflt;
->  	}
-> @@ -171,7 +185,7 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_s=
-ock_tuple *bpf_tuple,
->  	__nf_ct_set_timeout(ct, timeout * HZ);
-> =20
->  out:
-> -	if (opts->netns_id >=3D 0)
-> +	if (netns_id >=3D 0)
->  		put_net(net);
-> =20
->  	return ct;
-> @@ -186,46 +200,60 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct ne=
-t *net,
->  	struct nf_conntrack_tuple tuple;
->  	struct nf_conntrack_zone ct_zone;
->  	struct nf_conn *ct;
-> +	u16 ct_zone_id;
-> +	s32 netns_id;
-> +	u8 ct_zone_dir =3D 0;
-> +	u8 reserved[3] =3D {};
-> +	u8 l4proto;
->  	int err;
-> =20
->  	if (!opts || !bpf_tuple)
->  		return ERR_PTR(-EINVAL);
->  	if (!(opts_len =3D=3D NF_BPF_CT_OPTS_SZ || opts_len =3D=3D 12))
->  		return ERR_PTR(-EINVAL);
-> +
-> +	netns_id =3D READ_ONCE(opts->netns_id);
-> +	l4proto =3D READ_ONCE(opts->l4proto);
-> +	ct_zone_id =3D READ_ONCE(opts->ct_zone_id);
->  	if (opts_len =3D=3D NF_BPF_CT_OPTS_SZ) {
-> -		if (opts->reserved[0] || opts->reserved[1] || opts->reserved[2])
-> +		ct_zone_dir =3D READ_ONCE(opts->ct_zone_dir);
-> +		reserved[0] =3D READ_ONCE(opts->reserved[0]);
-> +		reserved[1] =3D READ_ONCE(opts->reserved[1]);
-> +		reserved[2] =3D READ_ONCE(opts->reserved[2]);
-> +		if (reserved[0] || reserved[1] || reserved[2])
->  			return ERR_PTR(-EINVAL);
->  	} else {
-> -		if (opts->ct_zone_id)
-> +		if (ct_zone_id)
->  			return ERR_PTR(-EINVAL);
->  	}
-> -	if (unlikely(opts->l4proto !=3D IPPROTO_TCP && opts->l4proto !=3D IPPRO=
-TO_UDP))
-> +	if (unlikely(l4proto !=3D IPPROTO_TCP && l4proto !=3D IPPROTO_UDP))
->  		return ERR_PTR(-EPROTO);
-> -	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
-> +	if (unlikely(netns_id < BPF_F_CURRENT_NETNS))
->  		return ERR_PTR(-EINVAL);
-> =20
-> -	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
-> +	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, l4proto,
->  				    IP_CT_DIR_ORIGINAL, &tuple);
->  	if (err < 0)
->  		return ERR_PTR(err);
-> =20
-> -	if (opts->netns_id >=3D 0) {
-> -		net =3D get_net_ns_by_id(net, opts->netns_id);
-> +	if (netns_id >=3D 0) {
-> +		net =3D get_net_ns_by_id(net, netns_id);
->  		if (unlikely(!net))
->  			return ERR_PTR(-ENONET);
->  	}
-> =20
->  	if (opts_len =3D=3D NF_BPF_CT_OPTS_SZ) {
-> -		if (opts->ct_zone_dir =3D=3D 0)
-> -			opts->ct_zone_dir =3D NF_CT_DEFAULT_ZONE_DIR;
-> -		nf_ct_zone_init(&ct_zone,
-> -				opts->ct_zone_id, opts->ct_zone_dir, 0);
-> +		if (ct_zone_dir =3D=3D 0) {
-> +			ct_zone_dir =3D NF_CT_DEFAULT_ZONE_DIR;
-> +			opts->ct_zone_dir =3D ct_zone_dir;
-> +		}
-> +		nf_ct_zone_init(&ct_zone, ct_zone_id, ct_zone_dir, 0);
->  	} else {
->  		ct_zone =3D nf_ct_zone_dflt;
->  	}
-> =20
->  	hash =3D nf_conntrack_find_get(net, &ct_zone, &tuple);
-> -	if (opts->netns_id >=3D 0)
-> +	if (netns_id >=3D 0)
->  		put_net(net);
->  	if (!hash)
->  		return ERR_PTR(-ENOENT);
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 8d6945edae7a..09a12eb8652c 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -2980,6 +2980,10 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+ 	if (rc)
+ 		return rc;
+ 
++	if (!selinux_initialized() ||
++	    !(sbsec->flags & SBLABEL_MNT))
++		return -EOPNOTSUPP;
++
+ 	/* Possibly defer initialization to selinux_complete_init. */
+ 	if (sbsec->flags & SE_SBINITIALIZED) {
+ 		struct inode_security_struct *isec = selinux_inode(inode);
+@@ -2988,10 +2992,6 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+ 		isec->initialized = LABEL_INITIALIZED;
+ 	}
+ 
+-	if (!selinux_initialized() ||
+-	    !(sbsec->flags & SBLABEL_MNT))
+-		return -EOPNOTSUPP;
+-
+ 	xattr = lsm_get_xattr_slot(xattrs, xattr_count);
+ 	if (xattr) {
+ 		rc = security_sid_to_context_force(newsid,
+-- 
+2.55.0.508.g3f0d502094-goog
 
