@@ -1,137 +1,179 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8262B3C1F4B
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 21:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3253F35AC16;
+	Thu, 30 Jul 2026 21:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785445805; cv=none; b=IiF3hlmu4DW9Qu3zwNtimvhOJ4SFPGpuHmKHfi3dzYn0X55Ducz3t9Kvld3RuoH1NuOaWWiW1nO+VSAZU/UfJr8CA5YhMGTxvWzWK4zibs5Jzoipkl4jElxM9smTR5YWZhXit9/IeRgN/ZzirvYJtGwOI/KLUChX3oDvzdIV1Jk=
+	t=1785446811; cv=none; b=Pb5zyHszsZw6fGC6soqq0PHiTo9mmWju4xiZcAQQjR6fXre2bkf1K3rgcvXO8Mema+2k5ftQix+mUnj1B6iAp3malubIWhzTxdBX8E/qjxWfcD0DDg6aSSgaif8Co7CW45dLwonCisbzd+HiozTaeUjjp39sFFKm1Unqgt7+Ej0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785445805; c=relaxed/simple;
-	bh=h4gAl5X4nGE0SU+Gh3X/MeeFPIcUPYTfpNfqjtezBaA=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=fMphIFiSTnxGV/99ePsjteW4ir/t6mNVjqTwumCXcCae2AzfXpCmYGBWFdV11WCPbuXwGI/P2S911JiiLuW0j8ao6QU2nePn/bLio73jiA4h/hvgg3ZZh5yE2l06hGhl2vWazhONqyxWfB7fZPUS3p9GUmViQdxEnkybMaQTYs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fczzRw2g; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1785446811; c=relaxed/simple;
+	bh=2SCuZOqKAdpoa0BhbxQUQzzzpHbhr3HvDOex/0THDAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DjxphNVQL8HAcLg4JSdugOvnx2uaNbqFCw6fl8hb+Fpr1ueDgvg5zW6br7gVQ7v9ETZ4xwXdhGMvd44HhX4Zmt1oXpkI5eOjj5b/w+aHpXbc6owDW+rIw0lZF+v7ybfJyFXluR0oxXyMJ5usUuKyndgfWkG41PcMD2SYsFGJ7Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hzwLx8/N; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fczzRw2g"
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-92e533aacf2so17566185a.2
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 14:10:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1785445802; x=1786050602; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-type:mime-version:message-id:date:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lMLsf+LQaJK9TyVbvhOADIYNpgfmalBwRgJCFWQKWPY=;
-        b=fczzRw2g8JaX6smDaTZ1xAWIookwAoR0D/4mwj9qfdsvrT7xHZK7cUCTG/iaRkHggR
-         P3+FocISR0RAqycHZjKdHWOKhym2LY4kDNpJitfSn1SLsP0xJldbL6dnOQiOH+Ui8UO0
-         0s0iikmvOL5UJp8pwQK+3zogN5R8tgZiWKl76qP7zUMCexyqTjscuP09H47el/A5LOPQ
-         bLAyklxxIuDg1PEhhjAUarpxLsz/dzQ2nx+5CRrhHNyoAb765r33FrSBLNFCzRh86N+G
-         hs6CfIpW2mf0Oi0YshQ5vbz8SdmW0ePcRjHnZpBqKUUGsXip8dYktnA8REVJHQrMq9lN
-         Y3bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785445802; x=1786050602;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :content-type:mime-version:message-id:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=lMLsf+LQaJK9TyVbvhOADIYNpgfmalBwRgJCFWQKWPY=;
-        b=F53jI0/C0pltUzLXSZrdWI2ZvZSwhihbt9UTfj91/PmoJ9gFqqxXUV5pT7gP+uqnMW
-         TX8aSBZOwTPvhIVJASFKOfRzyuKlk0huysuSsSmxhS8LlObCxtF+vW2scxEV9KKBjtEk
-         oIjbzPZAEu8885lDtm1h3lTVe0GcssyX6gcGsFHnXjLMXWLh0p7ZH4VpdOjp2kOx1dVb
-         fYPyU62Da5qdvgGwgq0E3tvr6tzef51wGsEuMuJBExq/i7iphoLDrv8Hsr6Pddw2+SL/
-         25YgyOpsaGecFfy3aKqM9y98COOuZYSy9xC7UkG2OHREhEzjFogbkDQIjakcHxTbKlUq
-         mw9A==
-X-Forwarded-Encrypted: i=1; AHgh+RomeqwVig96RpaGW2DJh+eSzESeTytF6b1u4iln/7r1ENl5qIMGhaa9dUbakgq+O9f116s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlpClPiiFvq5FJFpsbCgUvtqOm8SpamxpUX5JcYrIr6chSE+ZY
-	eLbZNq7Ka0eK7QtDC93h5GlLd/ZN9Kacu7+L+V1FcH1cj1yZzaGcFc0gcJ9XkdMuTg==
-X-Gm-Gg: AR+sD11adawf9Yf3qH4tFuruGymyQur/G3xIzSydMvGL7RQ2zH6aHfUeuXq1fcIB45m
-	btm/SOwEEyg/GVDd6eyed2WddVWWY7Onn41mbVUhZUnDq/lt1HoSdIg6SeUib/hGtNSvHij9Fut
-	a6CLxaFP94oUByxOtci91KCullogkpLNwigbp/ANw+TIXOd38Fo4am0BpttIVAszpnuvVkJFaRg
-	UjZSovxV8We+DuS5i2B1YTYDaPKGZiS5q9yCPtFP3pUvIkPRHV7zbufgr8gPcg1gfYr6t9nA0dG
-	KzYIMok8+iGwGBOuYz3VC/qb6DMyt8KVx9IB2xKdXySynhUzS73nz8Wzh99mSDqQtQIOfaBsdj5
-	H10fR6xlGDOvjbUle/ptS9JKZVsuwWI2SeBA89qUVjEZtTj7KGL9QuYdXvy6UYH+R5pm+N0IPof
-	4WnyHTWQaIqEHAabesAYRmE9qrPaM/+B+eN83sJUjYEO9nxjXgyTwI3FzrwgEy5pTEHmU3U3csi
-	WiDB+DjS8QWQEaIEEUDSqSiTr+M8au1LcO9TPKycm5I
-X-Received: by 2002:ac8:7e81:0:b0:51c:1d18:2fe9 with SMTP id d75a77b69052e-52b3836970emr48411021cf.5.1785445802045;
-        Thu, 30 Jul 2026 14:10:02 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-9083fdbc35fsm1954776d6.24.2026.07.30.14.10.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 14:10:00 -0700 (PDT)
-Date: Thu, 30 Jul 2026 17:10:00 -0400
-Message-ID: <db6fe5d2d4081f20f85abc6020b831fd@paul-moore.com>
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hzwLx8/N"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A246440E014C;
+	Thu, 30 Jul 2026 21:26:46 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id z5j5ovdkJOp4; Thu, 30 Jul 2026 21:26:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1785446792; bh=/UfwfMQb84HOLsF5rxaMcowx7tLIOiJ1m0KFTpO5g5k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hzwLx8/NxVyYc2ZU91vSepHfJ0kTKRdNfB/swQ/gtxoViqb+9nhMeHFve2yG3EBsK
+	 LpbyVCmZ4sVijqY4pseFE1/yhEIkJgiR1/pwKNBs+BYz+nFgGCrLBHkPsiyHKfFMTB
+	 XXD5ZYP1q7HmB7sjOHrD/0dlfTtZJ3+qZLd1glMTKCQiO9Aac46JIgfLN0JPLJeFPy
+	 LSVlbV915O0ojrU8eSpiW1wFdtus37f7nhtvXOrhzPTOt5ISd/y/WjSOousRgwamhD
+	 CPG5J+1r1aDXvhL6ca2xSyDO41neVbc5+5GEgYPOflquh0YsWaCqUbRq5VVXSkSQsd
+	 Y75vKiqBd0MpL/FX90z5aq1nBxXK0wsozBkgZ/Ptk/WFQDj5dfSOTGJwDqB+1aIhLK
+	 0pyoalk+evpySz2wtUc+i1eH/n6gfRQlPA72tVN3hUs47DXNicflwqKkYizFS/D1tf
+	 TWAW3jh61wYYLITD6XSGtKGAzyR4Eh/IcQfZCxwbGvcp63Ak9lgiY2/1KQQF9Isp4E
+	 02+zXHfY0gUctcekGRIGtJn6IQkZmQ0AKhXeDCpiIPy5oxQnfFcBrTFW6Uwg6OxYIh
+	 lLnw1dwxnA39WkcTmJuHBZoZp4JhhOyuxmDOKlV4P0b7Guh8n1ULhqInzVXGW3C5lf
+	 Tc3NoQnoTLaM3cJ9gTbSCz5A=
+Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::1b])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0FF2740E00C4;
+	Thu, 30 Jul 2026 21:26:16 +0000 (UTC)
+Date: Thu, 30 Jul 2026 14:26:13 -0700
+From: Borislav Petkov <bp@alien8.de>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>, bpf@vger.kernel.org,
+	kernel-team@meta.com, kasan-dev@googlegroups.com,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 5/5] x86/cpu: Don't reset boot CPU cpuinfo in
+ identify_cpu()
+Message-ID: <20260730212613.GJamvBdRJ5H98hTWS8@fat_crate.local>
+References: <20260704002046.3859585-1-ihor.solodrai@linux.dev>
+ <20260704002046.3859585-6-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20260729_1758/pstg-lib:20260730_1437/pstg-pwork:20260729_1758
-From: Paul Moore <paul@paul-moore.com>
-To: Carlos Llamas <cmllamas@google.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, "Christian Brauner (Amutable)" <brauner@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Cc: kernel-team@android.com, linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, linux-fsdevel@vger.kernel.org, Carlos Llamas <cmllamas@google.com>, stable@vger.kernel.org, "open list:SELINUX SECURITY MODULE" <selinux@vger.kernel.org>, "open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
-Subject: Re: [PATCH] selinux: bpf: check SBLABEL_MNT before isec init
-References: <20260730181008.3654413-1-cmllamas@google.com>
-In-Reply-To: <20260730181008.3654413-1-cmllamas@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260704002046.3859585-6-ihor.solodrai@linux.dev>
 
-On Jul 30, 2026 Carlos Llamas <cmllamas@google.com> wrote:
+On Fri, Jul 03, 2026 at 05:20:46PM -0700, Ihor Solodrai wrote:
+> identify_cpu() used to rebuild c->x86_capability from scratch:
+> init_cpu_info() memsets the capability array to zero and
+> identify_cpu() then re-reads CPUID. On the boot CPU identify_cpu()
+> runs after local_irq_enable() and before alternatives are patched. An
+> interrupt delivered in the window between the memset() and
+> get_cpu_cap() therefore will observe cleared x86_capability [1].
 > 
-> selinux_inode_init_security() marks the isec as initialized before
-> checking if mount labeling is supported (SBLABEL_MNT). This was fine
-> until commit 9722955b5430 ("bpf: Add simple xattr support to bpffs"),
-> where genfscon bpffs mounts fail the SBLABEL_MNT check as expected (no
-> xattrs) and yet leave the isec->initialized. This breaks subsequent
-> calls to inode_doinit_with_dentry().
+> However the boot CPU's capabilities have already been scanned, with
+> interrupts off, by early_identify_cpu(). So move the init_cpu_info()
+> call out of identify_cpu() into its callers, and skip it for the boot
+> CPU on 64-bit.
 > 
-> Do the SBLABEL_MNT check before the inode security is initialized.
+> Secondary CPUs call init_cpu_info() then identify_cpu() from
+> identify_secondary_cpu(), with interrupts off, exactly as
+> before. 32-bit still resets in identify_boot_cpu(): it relies on the
+> reset for the no-CPUID cpuid_level default.
+
+Ok, this commit message is all over the place. Please structure it something
+like this:
+
+1. Prepare the context for the explanation briefly.
+
+2. Explain the problem at hand.
+
+3. "It happens because of <...>"
+
+4. "Fix it by doing X"
+
+5. "(Potentially do Y)."
+
+And some of those above are optional depending on the issue being
+explained.
+
+Also, do not talk about what your patches do - that should (hopefully) be
+visible from the diff itself. Rather, talk about *why* you're doing what
+you're doing.
+
+In the patches where you do only mechanical movement, add
+
+"No functional changes."
+
+to the commit message to denote that.
+
+
+> [1] https://lore.kernel.org/bpf/20260610175651.647515-1-ihor.solodrai@linux.dev/
 > 
-> Cc: stable@vger.kernel.org
-> Closes: https://lore.kernel.org/all/akWdcp6P0FkNDzBk@google.com/
-> Fixes: 9722955b5430 ("bpf: Add simple xattr support to bpffs")
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
-> Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 > ---
->  security/selinux/hooks.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  arch/x86/kernel/cpu/common.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 8d6945edae7a..09a12eb8652c 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -2980,6 +2980,10 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
->  	if (rc)
->  		return rc;
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 8f093c6c7ccc..cd3d7c37c174 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -1986,8 +1986,6 @@ static void identify_cpu(struct cpuinfo_x86 *c)
 >  
-> +	if (!selinux_initialized() ||
-> +	    !(sbsec->flags & SBLABEL_MNT))
-> +		return -EOPNOTSUPP;
-
-If we're moving this check, we should probably just move it to right
-after we assign 'sbsec' at the top of the function.  The calls to
-inode_mode_to_security() and selinux_determine_inode_label() aren't
-doing anything useful in either the !selinux_initialized() or !SBLABEL_MNT
-cases so let's avoid the unnecessary work.
-
->  	/* Possibly defer initialization to selinux_complete_init. */
->  	if (sbsec->flags & SE_SBINITIALIZED) {
->  		struct inode_security_struct *isec = selinux_inode(inode);
-> @@ -2988,10 +2992,6 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
->  		isec->initialized = LABEL_INITIALIZED;
->  	}
+>  	c->loops_per_jiffy = loops_per_jiffy;
 >  
-> -	if (!selinux_initialized() ||
-> -	    !(sbsec->flags & SBLABEL_MNT))
-> -		return -EOPNOTSUPP;
+> -	init_cpu_info(c);
 > -
->  	xattr = lsm_get_xattr_slot(xattrs, xattr_count);
->  	if (xattr) {
->  		rc = security_sid_to_context_force(newsid,
-> -- 
-> 2.55.0.508.g3f0d502094-goog
+>  	if (!cpuid_feature())
+>  		identify_cpu_without_cpuid(c);
+>  
+> @@ -2156,6 +2154,13 @@ static void identify_cpu_32(struct cpuinfo_x86 *c)
+>  
+>  static __init void identify_boot_cpu(void)
+>  {
+> +	/*
+> +	 * The boot CPU's capabilities were already scanned in early_identify_cpu().
+> +	 * However 32-bit still needs to init_cpu_info() here for the no-CPUID
+> +	 * cpuid_level default.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_X86_32))
+> +		init_cpu_info(&boot_cpu_data);
+>  	identify_cpu(&boot_cpu_data);
+>  	if (HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT))
+>  		pr_info("CET detected: Indirect Branch Tracking enabled\n");
+> @@ -2178,6 +2183,7 @@ void identify_secondary_cpu(unsigned int cpu)
+>  		*c = boot_cpu_data;
+>  	c->cpu_index = cpu;
+>  
+> +	init_cpu_info(c);
+>  	identify_cpu(c);
+>  	identify_cpu_32(c);
 
---
-paul-moore.com
+Also, when you look at the final version, do you see how identify_cpu() and
+identify_cpu_32() are soo close together so that you can basically move the
+body of identify_cpu_32() to the end of identify_cpu() and then you don't need
+that helper either.
+
+Other than that, the flows do look better. 32-bit still needs dealing with the
+no-CPUID case but that's for another day. I can't really find it in me to
+care, actually, 32-bit needs to go away and we'll simplify a looot of code. Oh
+well.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
