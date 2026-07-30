@@ -1,194 +1,128 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7609124DCF6;
-	Thu, 30 Jul 2026 22:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD483DA7D4
+	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 22:07:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785448879; cv=none; b=iu7TEZHL0AN/p68xuzGEbbswC/XZ9HEZvgD675PYBu7ExrUVTTURLMK8dCTrcPHJamOB2MGJad57TDRHERV36oAiIiQv5AzKaLUCocDBPFq4pGOX5oGErirBpr3FBeTo+0hbaXQoAhs8YDDuyqP5axbmJbcvJEpuYlu49YuXlG4=
+	t=1785449239; cv=none; b=TwBAdJnLjQQLiUjT+xsTLszCzxRx0sj1xCIA/47cqVt/ryVkjSj6ISxH7SkqvGbxozhvWOLU6KoX9ytmhxZ+w/x5buCp8234lIdjhsr/BArO961H8gcSXIfjjrMAeVEoyUvPzbSWugliNp5bGebaWcXoFPYf7s153iXDBJ8gThI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785448879; c=relaxed/simple;
-	bh=sQQNI0T320x5izTnyyq6J5o0mamqvX++AhBGZawqwr0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Zlv/ssJAdaGWluwJQf6dfH7Dg9dMVlaS8rIz4AoGjJ8R2v5CDE+7D+/NS9ZSKt3xl++AR+y3xArxx4NzxaIxRZ1KO++CAfVR6dOFUJab7OB6Ak1R7B3BjljaD+MO6wqxRvFrxrxH54qwyNrXhTXC7hL3Dxe51R46wNY/IJ9vybM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=OV3ArW9R; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1785449239; c=relaxed/simple;
+	bh=hUl2zOVyzUL8lT3SiYapCjovg+lHxQaZIYKJ8BlXglU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YVLp4+ZF7/Ta+aDcLuw3jIrJYtGxBRTFZ1hPXIkTcDGECkO41CdhVVeGiSzzyAfiCtq96J5IqmaHwaA9tFEHr3+AZS1le+o6ZxDlAZ9ybNAnBbqE9goz7b4DzDjOxcnMJYCfafntX5ziedMDdkjvq3CZC18ENgzO30am74821ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VXKviWlt; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="OV3ArW9R"
-Received: from pps.filterd (m0528008.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66UL1wL33369365;
-	Thu, 30 Jul 2026 15:01:10 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pps82601-s2048-2026-q3; bh=UkH7mKEM9
-	P7dqP/Lb82d88AqlrpsQErduRlaXFMEngE=; b=OV3ArW9RFioggVk+ukIwRScYb
-	/Ry3kjWsOLKKVH2UVK1ciF+eIV5cMT6dF1S8RBncB/8hem9aS3W3nF5VppSLyG4P
-	II+/zv4j+hO7MORcLwJma7N0hoAwduNhcI5QZ+FzL08u01HW8cBETF60imIgk3SX
-	+kwfWSwxXDX2/bko+Sb3xf3tJkcwCz6trVuwjYLkUeIQPcLh3Y27v1WQq+r6s0D/
-	cc1gcrJO4VtU5ai20jvt3tlo1Xkb82YlqzUvwoHISHRPYnO0OQ2yB5kjI/LuE7xT
-	FiXI9CyvuiLbH2xdVh5ln9Ck+l6geFiBnuBXrIaK8oGphdG+J33+jMXbWqfsQ==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4fqrn90upq-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 30 Jul 2026 15:01:10 -0700 (PDT)
-Received: from localhost (2620:10d:c0a8:1b::8e35) by mail.thefacebook.com
- (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.45; Thu, 30 Jul
- 2026 22:01:09 +0000
-From: Tejas Birajdar <tejasbirajdar@meta.com>
-To: Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>,
-        <netdev@vger.kernel.org>
-CC: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        "David
- S . Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tejas Birajdar
-	<tejasbirajdar@meta.com>,
-        Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH net-next v3] tcp: honor BPF_SOCK_OPS_RWND_INIT on the active connect path
-Date: Thu, 30 Jul 2026 15:00:55 -0700
-Message-ID: <20260730220055.2946171-1-tejasbirajdar@meta.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VXKviWlt"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cab97c86bdso21745ad.1
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 15:07:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785449237; x=1786054037; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vdkvtQLWpcWGFw82Hi5kFN/C9JuaGxTc6QXo/A4PB+U=;
+        b=VXKviWltygZBhIUkoOLT7VHl2k2xtoKQag7xfM1vfgUpf7y/3JnAbcn8oJKtYJHmN5
+         LSyJKaTY32D/ChgDDyundLtIVjDPBtF5NBEqkABNORv4UQeqQE3YX8/tZAKalcxLYzpr
+         7alRMO8gO1XZn5M3o19A93TKYIMJotzA8LwitqV8Jup8QLj13ohXkbOVfMhdRxHzRzA+
+         PNMJ9GZt9s+rfXJbrBV6xjuffXQgg3J3RwWXMBLKjKRuT7BfzuSX05+jsoK0OkFVChtR
+         LKzgbp8Yhx+pBDrGvKqCs6hnaqMuUSjsdN/nSXbm8ipuTNbYWdd/7Jnz+jAAX4Msc+iL
+         Te0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785449237; x=1786054037;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vdkvtQLWpcWGFw82Hi5kFN/C9JuaGxTc6QXo/A4PB+U=;
+        b=kCxQQYFFr86ulshi+8u9W6xSyErOczddx5lJAZCfLg9VxNpAV1ZL3TiZ5pFozSaWpR
+         mSOdFZmG+zSCRuNfYqHxKN/1prhij6KRqN4DEQ9LrTTPRyDePP67rV0M65ziFXEmtBh3
+         Rn0aD7xU2SxwtujenNbq8WyEhtIcbPWo4T82IiDMomiZvzwmiWOt6eMSfI7yHdvYDqXT
+         1KusZ1zPUxtuNmabrN5ZFDLjAt4mr4x0wPQQ41lqN7P2t3epc/odnLsrFAJWhf+o0iXN
+         Ag8EjaiqpOYQhJmgVRW9v2QsL+7FugJIT2I+Kjo2VfViP0LLolaLd828NdFE/t6gKcxE
+         KEyw==
+X-Forwarded-Encrypted: i=1; AHgh+RpeHgVKi8x0QznVLZAH+uD/EUBBQtdGuGsVf0Ra1LiLemxI3Ecpc230dcWiSELxD03YTik=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdbwgS4sM0Me8ZPjnjOZJMR6ztyNx/auMVqpNrKMR5ntpu4SqB
+	h3oi16RHUjSCtOucd64s6CWT7yFCI1qRQvHxacBYo5RjaiKN0TpZ25ZfOToUAWNcRA==
+X-Gm-Gg: AR+sD12TJiQ+ok3MtPQT9jklNw25TUDQSdchZHtpeBDEX/lLwEZ6t4NQ/OHXQBC3cMV
+	FTcxFG0PxaGvkSozRBxdkt69dqVp+7zXA+cvuGfenWHXC9cwMLlxAA8XMwvrVLSV0CkatZoVF0V
+	kUBpy68Xf1mjl5JxT1nyVuPIrCN8QVXP+njBSztnQLgmVzM/qBYSMwHRFZaI5e9jWT/6IY+u1Mk
+	P6UwlKwAPCrfSxTitq3HfZmqZZgv6aXwFLpvb9+Cl9aMPVDrw1s9acypdJgtnSI7CRTMC9pvHYq
+	EBziRFl4u5YOXohGatJIYTk4ORqFDPw6sUWY6llS1aEEPDks5XTJR1i9HMhu8G2acoYGm27NK6s
+	atFjhjSV1+oLu6l09KbHZq3cjKa9O3/+b/DdCpWbrZqSKEU+tERug5Lyo89qzOhJGUR4NPDiGyj
+	Ohnj2IdZ2IamhSFVHasa25d15CqxH1MbkiB3fx2bZXudoeiukrgnX/eAul/7rD1UANGDE+g0WgM
+	kIybwkFWe5k6NKvZB8QpTOYdDYsjoLP2F6/14cAVf3F7SuianUoRsWtAJM899tGHihK/f24LUVF
+	FvRKihAJRsiBYcllkA==
+X-Received: by 2002:a17:903:2385:b0:2ca:e0db:3cc with SMTP id d9443c01a7336-2d043edec5bmr1360785ad.11.1785449236599;
+        Thu, 30 Jul 2026 15:07:16 -0700 (PDT)
+Received: from google.com (193.67.125.34.bc.googleusercontent.com. [34.125.67.193])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84ea00507b0sm3691939b3a.14.2026.07.30.15.07.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2026 15:07:14 -0700 (PDT)
+Date: Thu, 30 Jul 2026 22:07:10 +0000
+From: Carlos Llamas <cmllamas@google.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	"Christian Brauner (Amutable)" <brauner@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, kernel-team@android.com,
+	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+	"open list:SELINUX SECURITY MODULE" <selinux@vger.kernel.org>,
+	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
+Subject: Re: [PATCH] selinux: bpf: check SBLABEL_MNT before isec init
+Message-ID: <amvLDoB4g7NMlf4R@google.com>
+References: <20260730181008.3654413-1-cmllamas@google.com>
+ <db6fe5d2d4081f20f85abc6020b831fd@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMwMDE1OCBTYWx0ZWRfX8J5ZCRBZNJSG
- 7H6m7brEmwavmDpmn6rumA7DtK7y9i0/w4BN5CICAKG+LEBUUsqMB6p7OUQ+mg6AGB4W7VOXasI
- bt3E3QNwXQL6CrH+eyY778tQzj4Tjx4sYrkAopefF5Bp70e9KeESYo8DO77jkWih1Pvs4vEHpaL
- QBlmK2vOXY5XrW8UYTvO2WGCf86PTFlDLYcB4Fkf+86BFxvXW6AbDOn3+mq5EWQhSfHAYGGEXih
- TWG/2/d3RKb1PMzErsTra5FC27dFpSEqLql6Mz/oYMpFklmhhPhMk1WtY4a8NVL14bj48Z8ydyG
- DuUa/cGsd2D2WcUlFXSoAoqpG1vHkHkXqEw3fJrQIFYCfhm7e7gAmDhTxwJtD6J/TDxOpxMrLSD
- a/OoBzqSn8H7b8l4ncxTNkBHBPg93GhMZ8J4TQR6V+4BKk027nOnj6r+kj0zhzthgbax0T8dMLB
- 4E5URz+mNkJa7+dpLoQ==
-X-Authority-Analysis: v=2.4 cv=cpGrVV4i c=1 sm=1 tr=0 ts=6a6bc9a6 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=_1IyUuN4QrATX339ibzo:22 a=VwQbUJbxAAAA:8 a=VabnemYjAAAA:8 a=1XWaLZrsAAAA:8
- a=20KFwNOVAAAA:8 a=4XeK37IC55s43dnOpu4A:9 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMwMDE1OCBTYWx0ZWRfXzl+zEcI6hfGX
- auRwOi6hYx3cmqyfekwqp8XZdOqL0Dfti67YOL5arF7UPQ23foYC1hplkLaFGweR1wdxjnAUW3f
- sbXuhZ8ZvsdpS493sOCncB1X+rkXnQQ=
-X-Proofpoint-ORIG-GUID: MV0HKsZ3_ja9AdgYCADM9FxARXy9_Yft
-X-Proofpoint-GUID: MV0HKsZ3_ja9AdgYCADM9FxARXy9_Yft
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-30_06,2026-07-30_01,2025-10-01_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <db6fe5d2d4081f20f85abc6020b831fd@paul-moore.com>
 
-BPF_SOCK_OPS_RWND_INIT lets a sockops BPF program pick the initial TCP
-receive window, e.g. to advertise a larger window up front in environments
-where that is known to be safe. Today it is only effective for the passive
-(listener) side; on the active (connect) side the value is computed and
-then silently discarded.
+On Thu, Jul 30, 2026 at 05:10:00PM -0400, Paul Moore wrote:
+> On Jul 30, 2026 Carlos Llamas <cmllamas@google.com> wrote:
+> > 
+> > selinux_inode_init_security() marks the isec as initialized before
+> > checking if mount labeling is supported (SBLABEL_MNT). This was fine
+> > until commit 9722955b5430 ("bpf: Add simple xattr support to bpffs"),
+> > where genfscon bpffs mounts fail the SBLABEL_MNT check as expected (no
+> > xattrs) and yet leave the isec->initialized. This breaks subsequent
+> > calls to inode_doinit_with_dentry().
+> > 
+> > Do the SBLABEL_MNT check before the inode security is initialized.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Closes: https://lore.kernel.org/all/akWdcp6P0FkNDzBk@google.com/
+> > Fixes: 9722955b5430 ("bpf: Add simple xattr support to bpffs")
+> > Signed-off-by: Carlos Llamas <cmllamas@google.com>
+> > Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+> > ---
+> >  security/selinux/hooks.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> > index 8d6945edae7a..09a12eb8652c 100644
+> > --- a/security/selinux/hooks.c
+> > +++ b/security/selinux/hooks.c
+> > @@ -2980,6 +2980,10 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+> >  	if (rc)
+> >  		return rc;
+> >  
+> > +	if (!selinux_initialized() ||
+> > +	    !(sbsec->flags & SBLABEL_MNT))
+> > +		return -EOPNOTSUPP;
+> 
+> If we're moving this check, we should probably just move it to right
+> after we assign 'sbsec' at the top of the function.  The calls to
+> inode_mode_to_security() and selinux_determine_inode_label() aren't
+> doing anything useful in either the !selinux_initialized() or !SBLABEL_MNT
+> cases so let's avoid the unnecessary work.
 
-On the passive path tcp_openreq_init_rwin() inflates full_space when the
-program returns a non-zero window, so tcp_select_initial_window() can offer
-it:
-
-	else if (full_space < (u64)rcv_wnd * mss)
-		full_space = min_t(u64, (u64)rcv_wnd * mss, INT_MAX);
-
-tcp_select_initial_window() only clamps the requested window *down* to the
-available space, so without inflating the space first the BPF reply can
-never raise the offered window above tcp_full_space(sk).
-
-tcp_connect_init() calls tcp_rwnd_init_bpf() but never inflates full_space,
-so on connect() the requested window is clamped back to tcp_full_space(sk)
-(~64KB at the default rcvbuf) and the program's value is ignored.
-
-Inflate full_space in tcp_connect_init() as well; tp->advmss is the mss the
-listener path uses (both are tcp_mss_clamp(tp, dst_metric_advmss(dst))).
-Read full_space after tcp_rwnd_init_bpf() so a program that also adjusts
-SO_RCVBUF is still reflected. Compute the inflated value in u64 and clamp
-to INT_MAX to avoid overflow (full_space is int, rcv_wnd is u32), and
-apply the same overflow fix to the existing listener-side computation.
-
-tcp_select_initial_window() itself also computes init_rcv_wnd * mss in
-32-bit when clamping the offered window down to the requested value. A
-large requested window (init_rcv_wnd greater than ~2.9M segments at
-1460 mss) wraps this multiply and collapses the offered window to a tiny
-value, so compute it in u64 as well.
-
-Fixes: 13d3b1ebe287 ("bpf: Support for setting initial receive window")
-Suggested-by: Eric Dumazet <edumazet@google.com>
-Suggested-by: Paolo Abeni <pabeni@redhat.com>
-Suggested-by: Sashiko <sashiko-bot@kernel.org>
-Signed-off-by: Tejas Birajdar <tejasbirajdar@meta.com>
----
-v3:
-  - Also compute init_rcv_wnd * mss in u64 in tcp_select_initial_window();
-    a large requested window otherwise overflows the 32-bit multiply and
-    collapses the offered window.
-v2: https://lore.kernel.org/netdev/20260723214208.3655474-1-tejasbirajdar@meta.com/
-  - Compute the inflated full_space in u64 and clamp to INT_MAX in both the
-    connect and listener paths; read full_space after tcp_rwnd_init_bpf().
-v1: https://lore.kernel.org/netdev/20260722170033.2763794-1-tejasbirajdar@meta.com/
-
-Verified on the connect path with packetdrill: the offered initial window
-now tracks the BPF-requested value, and a large request that previously
-overflowed no longer collapses it. No new failures in the in-tree
-packetdrill selftests.
-
- net/ipv4/tcp_minisocks.c | 4 ++--
- net/ipv4/tcp_output.c    | 8 ++++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index ddc4b17a826b..f8c1123aba43 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -453,8 +453,8 @@ void tcp_openreq_init_rwin(struct request_sock *req,
- 	rcv_wnd = tcp_rwnd_init_bpf((struct sock *)req);
- 	if (rcv_wnd == 0)
- 		rcv_wnd = dst_metric(dst, RTAX_INITRWND);
--	else if (full_space < rcv_wnd * mss)
--		full_space = rcv_wnd * mss;
-+	else if (full_space < (u64)rcv_wnd * mss)
-+		full_space = min_t(u64, (u64)rcv_wnd * mss, INT_MAX);
- 
- 	/* tcp_full_space because it is guaranteed to be the first packet */
- 	tcp_select_initial_window(sk_listener, full_space,
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index d7c1444b5e30..fcaa04e65189 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -251,7 +251,7 @@ void tcp_select_initial_window(const struct sock *sk, int __space, __u32 mss,
- 		(*rcv_wnd) = space;
- 
- 	if (init_rcv_wnd)
--		*rcv_wnd = min(*rcv_wnd, init_rcv_wnd * mss);
-+		*rcv_wnd = min_t(u64, *rcv_wnd, (u64)init_rcv_wnd * mss);
- 
- 	*rcv_wscale = 0;
- 	if (wscale_ok) {
-@@ -4103,6 +4103,7 @@ static void tcp_connect_init(struct sock *sk)
- 	const struct dst_entry *dst = __sk_dst_get(sk);
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	__u8 rcv_wscale;
-+	int full_space;
- 	u16 user_mss;
- 	u32 rcv_wnd;
- 
-@@ -4137,10 +4138,13 @@ static void tcp_connect_init(struct sock *sk)
- 		WRITE_ONCE(tp->window_clamp, tcp_full_space(sk));
- 
- 	rcv_wnd = tcp_rwnd_init_bpf(sk);
-+	full_space = tcp_full_space(sk);
- 	if (rcv_wnd == 0)
- 		rcv_wnd = dst_metric(dst, RTAX_INITRWND);
-+	else if (full_space < (u64)rcv_wnd * tp->advmss)
-+		full_space = min_t(u64, (u64)rcv_wnd * tp->advmss, INT_MAX);
- 
--	tcp_select_initial_window(sk, tcp_full_space(sk),
-+	tcp_select_initial_window(sk, full_space,
- 				  tp->advmss - (tp->rx_opt.ts_recent_stamp ? tp->tcp_header_len - sizeof(struct tcphdr) : 0),
- 				  &tp->rcv_wnd,
- 				  &tp->window_clamp,
--- 
-2.53.0-Meta
-
+Ha! That is a really good point. Let me move the check further up then.
