@@ -1,102 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF636489880
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 21:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0247357D0B;
+	Fri, 31 Jul 2026 21:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785533902; cv=none; b=XT8teTPSDvBi3bRKB5N6vlbd4S6A3/Qvl83tJL1OgULZ4i3zWwLC/2k7k3SOUQEdA+jBQPFCbb8vkt3TMXiKukuMDZ1HBe1NthIIW9x4Bih2MbBiC42c32fg3noptqxSm/iWMN4yY308CuAXKTF686Ue0IGwuNdQ8zjXtb+Ihq4=
+	t=1785534138; cv=none; b=adCXGXCPl5z+khrvV0F2PVZOdy0Ga7sinj4aZd8EzgiUkNaANWEwNB43Ath71U2ynUTypxh1ABfzJgszSNczL/ddsBrK+fzcaH4ZTzYiYvG0LlKPzg4G5WBbQHo/qrgyUiFBhGVkoam/SLEoqBVlaGMV1PowND0cw4ROw6xt1nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785533902; c=relaxed/simple;
-	bh=5yymTRsDeWV96GVI5Zr/FeQhkll+/4LUkJU/GB1avgw=;
+	s=arc-20240116; t=1785534138; c=relaxed/simple;
+	bh=0NOOYwwQ1TIVKt92gkmVVRgXfsAdTy/V3Md4uvzdGuI=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=qwd8mC/r5TNc0MbyIz3QdfnHSoz5VbqrbVDzT3EgUeg6ZuTEC7TugUebaqY2/y//MW5yw/V2xbKznGKFbPiCA1kR9Hkv42MJPtwJ7sZMyfPtpq5MB4zrWndauYwpNGwWHZVG3uiDb63A1ycGeqhdA5xClrTQnfEv2psT1dKH8cY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k55cph3A; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=bkpmSq2AAuNcGwpOsjp2oxGpGDvRDSzAbJKwMtN5ic9ReFwzWQnzgjSNZabduKaCKNC2f0QUVrfbSqGHi4wQF0tIK4ePszJ5XG8AokdRDdFdd0q3yDucMknMuppHaRYQJ++JDb4mxkSBYfxKZjKfI8wQ31JIsRl0sR28G9pOdkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+xKsEbs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k55cph3A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEC951F00AC4;
-	Fri, 31 Jul 2026 21:38:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+xKsEbs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4AD1F00AC4;
+	Fri, 31 Jul 2026 21:42:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785533900;
-	bh=kLPZnKrG6CTUfcnq81OUJQYrrSjdL6mCYCb4FAZu5dY=;
+	s=k20260515; t=1785534137;
+	bh=+YeiBRqriyWttSnuVzJ8T2X/WzHiPJ8L0llstU+niuM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=k55cph3A9GhiBv4C3LqSCAOq4NKRKQX04/4WZecmEBdwOtVDzJ+06hpNHJpI2XBPH
-	 m2wtUmXgASlWcXToYUPPTewpia0HdCcOakCrtxNFl7TABu6HTJ+yAFq6TdYE3CA8V/
-	 HrxCXtYBZ8tmtOZhk+SrdXsppgzsYccP6CIuoD0U1lw6CMwRjxkUEYVb/WvknXd/i+
-	 Q3z2cn6rRqgdFRv9iViKeHlkjiUn84AHd+DvgvjVIRG7jHoj3wFrTg9aD/NdC2upn9
-	 NMQQqPn7v5EqF14QvhcbkJV8zSncjlRDVQBiQNc6Q4SvzlTLONQelbvVxrzzQqUdLp
-	 3QAyvs4cJV1QQ==
-Content-Type: multipart/mixed; boundary="===============4348476322274397925=="
+	b=g+xKsEbsDA8dZ/RaksT9NkQFNEAGRd2/OCnGdcBJYszTJO4OcnKXIIWcMvd0rq2Y5
+	 We+xV1qBOp8pk7uqX6W/cc2612jOiHVxu2r+8NU2B6HXpO/bvlsD+ubQrJPzhFK55P
+	 oNoV4aaCzDEz8rXyhDTqYQpplNhViZd5yZCHxrfeUv4kTzu9QDawzyp1ayhjLcexLb
+	 B4EFSVW/vJMr51xqalCYJN65Fs3VtPoAfSN5kACPD+6QWIWcT35aE8gXojtuXzri94
+	 lOT/Lc2+0UOARXpOrHWHAXdQeUaSq9Z6+o/g/glRh83e654dOVCHWOX23jIwuFpD88
+	 LBKyqIfHZqTDA==
+Content-Type: multipart/mixed; boundary="===============2028487587190646803=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0f2e2ab963398c775f5eed7438c6c4054d61e3da6e0a7ae731b56813ad016ab1@mail.kernel.org>
-In-Reply-To: <20260730102129.15209-2-vldsampaio@pm.me>
-References: <20260730102129.15209-2-vldsampaio@pm.me>
-Subject: Re: [PATCH bpf-next v4 1/3] bpf: Simplify cnum contains() by removing redundant branches
+Message-Id: <ca219edf78ea1ea8db81654d615a481b4837a6c9bc971b91050c2be047f65c10@mail.kernel.org>
+In-Reply-To: <20260728031615.9389-2-yangtiezhu@loongson.cn>
+References: <20260728031615.9389-2-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v1 1/2] LoongArch: BPF: Clean up and decouple is32 parameter from move_imm()
 From: bot+bpf-ci@kernel.org
-To: vldsampaio@pm.me,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,tangyazhou518@outlook.com,shenghaoyuan0928@163.com,vldsampaio@pm.me,shung-hsi.yu@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 31 Jul 2026 21:38:19 +0000 (UTC)
+To: yangtiezhu@loongson.cn,chenhuacai@kernel.org,hengqi.chen@gmail.com
+Cc: loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 31 Jul 2026 21:42:16 +0000 (UTC)
 
---===============4348476322274397925==
+--===============2028487587190646803==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
-> index a90e317e3578..ac1f62a0195d 100644
-> --- a/kernel/bpf/cnum_defs.h
-> +++ b/kernel/bpf/cnum_defs.h
-
-[ ... ]
-
->  bool FN(contains)(struct cnum_t cnum, ut v)
+> diff --git a/arch/loongarch/net/bpf_jit.h b/arch/loongarch/net/bpf_jit.h
+> index a8e29be35fa8..9438fce49e69 100644
+> --- a/arch/loongarch/net/bpf_jit.h
+> +++ b/arch/loongarch/net/bpf_jit.h
+> @@ -137,7 +137,7 @@ static inline void move_addr(struct jit_ctx *ctx, enum loongarch_gpr rd, u64 add
+>  	emit_insn(ctx, lu52id, rd, rd, imm_63_52);
+>  }
+>
+> -static inline void move_imm(struct jit_ctx *ctx, enum loongarch_gpr rd, long imm, bool is32)
+> +static inline void move_imm(struct jit_ctx *ctx, enum loongarch_gpr rd, long imm)
 >  {
-> -	if (FN(is_empty)(cnum))
-> -		return false;
-> -	if (FN(urange_overflow)(cnum))
-> -		return v >= cnum.base || v <= (ut)cnum.base + cnum.size;
-> -	else
-> -		return v >= cnum.base && v <= (ut)cnum.base + cnum.size;
-> +	return !FN(is_empty)(cnum) && v - cnum.base <= cnum.size;
+>  	long imm_11_0, imm_31_12, imm_51_32, imm_63_52, imm_51_0, imm_51_31;
+>
+> @@ -150,7 +150,7 @@ static inline void move_imm(struct jit_ctx *ctx, enum loongarch_gpr rd, long imm
+>  	/* addiw rd, $zero, imm_11_0 */
+>  	if (is_signed_imm12(imm)) {
+>  		emit_insn(ctx, addiw, rd, LOONGARCH_GPR_ZERO, imm);
+> -		goto zext;
+> +		return;
+>  	}
+>
+>  	/* ori rd, $zero, imm_11_0 */
+>  	if (is_unsigned_imm12(imm)) {
+>  		emit_insn(ctx, ori, rd, LOONGARCH_GPR_ZERO, imm);
+>  		goto zext;
+                     ^^^^^^^^^^
+
+Does this code compile? The is_signed_imm12 branch now returns early, but
+the is_unsigned_imm12 branch still jumps to the zext label that was removed
+by the same commit:
+
+> @@ -195,9 +195,6 @@ static inline void move_imm(struct jit_ctx *ctx, enum loongarch_gpr rd, long imm
+>  		if (!is_signed_imm52(imm))
+>  			emit_insn(ctx, lu52id, rd, rd, imm_63_52);
+>  	}
+> -
+> -zext:
+> -	emit_zext_32(ctx, rd, is32);
 >  }
 
+This dangling goto zext; at the is_unsigned_imm12 path has no target after
+the label was deleted. Should this become 'return;' to match the
+is_signed_imm12 path?
+
 [ ... ]
 
->     We've also run some benchmarks to compare the performance of the new
->     implementation, for example, for empty ranges, overflowing ranges
->     non-overflowing ranges. We've run the tests with O2 optimization.
->
->     Results:
->
->             | Test                 | contains    | contains_new |
->             | -------------------- | ----------- | ------------ |
->             | empty                | 1.511 ns/op | 1.479 ns/op  |
->             | non-overflow inside  | 1.156 ns/op | 1.270 ns/op  |
->             | non-overflow outside | 1.053 ns/op | 1.258 ns/op  |
->             | overflow high side   | 1.469 ns/op | 1.257 ns/op  |
->             | overflow low side    | 1.469 ns/op | 1.270 ns/op  |
->             | overflow outside     | 1.478 ns/op | 1.256 ns/op  |
->             | singleton inside     | 1.049 ns/op | 1.256 ns/op  |
->             | singleton outside    | 1.051 ns/op | 1.254 ns/op  |
->             | full range           | 1.053 ns/op | 1.256 ns/op  |
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 2738b4db1165..d676936e5b98 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
 
-This isn't a bug, but would the changelog be tighter without the
-benchmark table? The deltas look like measurement noise and several
-rows show the new version as slightly slower. The substantive part is
-the equivalence argument showing why 'v - cnum.base <= cnum.size' works
-for both wrapping and non-wrapping cases. If the numbers are meant to
-demonstrate no performance regression, would a one-line summary be
-clearer?
+[ ... ]
+
+> @@ -765,7 +765,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+>  	/* dst = imm */
+>  	case BPF_ALU | BPF_MOV | BPF_K:
+>  	case BPF_ALU64 | BPF_MOV | BPF_K:
+> -		move_imm(ctx, dst, imm, is32);
+> +		move_imm(ctx, dst, imm);
+> +		emit_zext_32(ctx, dst, is32);
+>  		break;
+
+[ ... ]
+
+> @@ -843,12 +847,13 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+>  	case BPF_ALU | BPF_DIV | BPF_K:
+>  	case BPF_ALU64 | BPF_DIV | BPF_K:
+>  		if (!off) {
+> -			move_imm(ctx, t1, imm, is32);
+> +			move_imm(ctx, t1, imm);
+> +			emit_zext_32(ctx, t1, is32);
+
+All these call sites were updated to the three-argument form (as expected
+after move_imm changed from taking four parameters to three). However:
+
+build_insn() has a BPF_NEG case just before the BPF_AND case. Can you check
+whether it was updated? Looking at the diff hunks: the BPF_MOD | BPF_K case
+ends near line 895, and the next hunk starts at BPF_AND | BPF_K near line
+918. The BPF_ALU/BPF_ALU64 | BPF_NEG cases fall between these two hunks, so
+they would not appear in the diff if they were left unchanged. If the NEG
+case still has 'move_imm(ctx, t1, imm, is32);' with four arguments, that
+would be a function call with too many arguments and fail to compile.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30534991827
---===============4348476322274397925==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30326478489
+--===============2028487587190646803==--
