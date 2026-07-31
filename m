@@ -1,259 +1,315 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B934424DCF9
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 20:48:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785530929; cv=pass; b=jkkYvmo6xYjB/UUzo+FyGDYq+wPcjmjV/NVJZZGr9Mv0aoNMChwdeJSl13qgnwgpP43FjBgJ7vtEylzhYkWAH22Wa67IqYlreD7iSLVGd7n+sM9enoSff/8KTq2XhbGp5S29HfN37m8I73qfcWrCPf9RO8G8fhhG3tgX9qxw6zo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785530929; c=relaxed/simple;
-	bh=M8VnBEn1fzw+IBCpYk4jT3YhvULPCFsyVr4mz7NayKA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aP2UHttTggVn0N9QHUUMOdoN2ERzcpK7P2ldkgoGMDBug3ZXphtf47l6YhPXgp+FbxRadsqOZJHkCJilDd9Nj7b/TAjWY6USGrg1CjyEotWezytbzDkXr6xs1aGROubOygvuAPWfPm1C3NvrZ3FCfL5+eHlE3J3mleHYQPSonJM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=LdHFbH20; arc=pass smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B2337757D
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 20:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785531146; cv=none; b=ZzzAKZMustTHKdX/2zczIsiZi45ZZ9b97iFAXepeAlIPiNyp61w21pkRmYB0Xfgbi03YxIFcuc5eB0aelNv7M+yvArQqc6GlZeB+iLsk3Q1BG7qrw7CyRLeEKgKi6XvVgmutu72GFMlQPcKPrxPCNDZ8G4ZNFiL+uFi/9HdCdTY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785531146; c=relaxed/simple;
+	bh=sLjIwu4tmNHdvcjwg/pEi7VShxPEnzLfOCPpy3bjzng=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=mrP7YuWwdnLDtU19kPftQ+0ClIMHQ3uc5px9u7ShdRMJzAlTai+uon+F3/zIkPRzbv8tDUFcHRTv9EX9t6g8GDuHnTcrcswlNX8HVIZHLxrIfaefjy4rKllvsXkoSzomAf19IZJdmYd1APM3YDTLKdE9cDoUaIr9x2rQu1n0BlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=BKF0MIdH; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="LdHFbH20"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38e7109321dso886033a91.3
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 13:48:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785530927; cv=none;
-        d=google.com; s=arc-20260327;
-        b=iyUlWK0J8PFBE7lvGuyQu3nRQ7S/aDAPEwPQmcFDcxq3Y9bJbGtB6yDXGlfJaBLn/T
-         mm1jt61PJ4WqhpvflUIXcNRjKhy+Xr1FmNnyw2QCASWUIajJonMK47szo/r1bITlnNyu
-         AA2qrR3bv15UO/M1OzCYL4Xr8RsYwlXRCAEvJpx+PDD/B5FUAtG4F0zjGCiHzJvfV+Ln
-         Tp6uGbyq4RwlbFPUvS1bpDQa6SIKv+GxF5BBFGN0jyJvzKnfKRnDyLw8pv0hWOi3i16s
-         bHrklEE9n5vjwRdhw9ZlYnMpRpUzoFNvfYI3r6Sfe8w1s0xCRmWD9oO59rVrzAJcFT++
-         P0mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=n99Y4TVdVLwkrmbFc6xvkbJUkFajn56eSscgelJgGwE=;
-        fh=kcD8SjW/khqftD27Ii1B6WFqAlc45ReZAA12XOYoW2E=;
-        b=pbN+xBNbGLZm48FTHvgsRrggxikQn3OcocIQWRGbh3/LQTUoIJSAh2KPHCc9PAjMeI
-         qBr0FMRBFfe1wa9eVTj4hH6yS4cPWqS2X8vAdHAA5hhDoedx4vXUCqbiLTVX+vKwD6dS
-         7XnbmnJwvW1GYsu38tsmqIjx16c1UuCZ8W2E6S9pcJhKY6KvgB2Vl09+KYa0W5LeuxyS
-         BSxiRSVOrkkqLNBAQNVhC6A1NQQhZ6CdOAfGU3t96OEPSQBTi8ouNXUUq7gvvRuP1xV3
-         dU+ZZd2uE9jmm12jIeQXuHxLt7QjVi4KO0v1h8t1pk5F1mn89Qhn6IYixj6G95FqGile
-         fzwA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="BKF0MIdH"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38ea87caafeso1244279a91.3
+        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 13:52:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1785530927; x=1786135727; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=n99Y4TVdVLwkrmbFc6xvkbJUkFajn56eSscgelJgGwE=;
-        b=LdHFbH20iCZVdvfuvpPkfYhY6pFn0NbfBZM5U58l9BQg2+6m8rZ+bUHF8qH19sXw5Q
-         wDxZeTkPpvyefiTYrBQ1nJWXiGVQWvsrrP46ruNDRUxJghwLLaRnCX5I/hm8ws8TNxuK
-         weSJbzouzt30b0fh72kvnGnVRemdDNcpUN+Pu6mNibI6yQe6VFweS6kyNnz/r0XdgoB6
-         /97UTU8mULx8K+Q48/y0eDhW/h4sYhi117eAuYl7jAmXBDXLVvulBBzUysScDAno6yl4
-         owulwUZTveoQTyt6lOdiqcV8j1xtFIMm2HDSa/p3zN+pL7EiE89JWCI1JKT1l/3lpxDx
-         9v4g==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785531143; x=1786135943; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=7+TPRx2tkhyaW3YvrP0FE1NEWjjzjNC+jDfcFdsC2BU=;
+        b=BKF0MIdHOsgciPrK/bIMfDIPTjHPSHeoVWrXEVV2QZ0pryRR4t6enKiJc0djfTUeul
+         x+5bPmxfmFnGsv/DoZ7lO/ftOBiugS8tG70M6MglBnbWNlq7XL+rOWxJG5a5nb9zyTmA
+         mNelYGsD29U5g86EwQP0GhqZ9t8ZdqSmBaXovEgjXTCQDmQzOvM0Bkm2emw0tdfSz3hO
+         xiMg1YRVavd08dq2out6yr3tex58Qd0bB2zY69cQfrzu56+ukZqX2Ch4IHaAg2cpehq7
+         37gzVC+f8itfFXkRNY7Uhlju3GRTmC/Xk5zGATp/Ucowsb1cRSpVBIUP0HX1wAGF1s+U
+         hfFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785530927; x=1786135727;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785531143; x=1786135943;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=n99Y4TVdVLwkrmbFc6xvkbJUkFajn56eSscgelJgGwE=;
-        b=gF6rcXYdINLNaCnpyX+fuhFFnw9GkCk+po79ru2atA8D5HMTyG/PI1fun3HOENsnM0
-         TBkxgIu9QruGGmXtAzqrYHgj4nJmO6m3fOSz/jEz16OIoACV8KNK1xWmPgVl0SRfJqsR
-         PNaHQ3kIlXAsyCPstX37uGoz82/TIeLZscaDAfLjTed4K6Wzb4xdNt31kPeaGx/+ymt+
-         +e/7iVQvvl7lGr7g4MtuflyytJUge/f54JQdYVmBDHWprScJoG1G0gu5ZZy0UvDseug0
-         314QTXz/nyk/N/o8IhFiRs+tZYf99TAXmqgSzm1yyLwXdcLf0JSVRTPcEx5u6CQrpPxG
-         hkyA==
-X-Forwarded-Encrypted: i=1; AHgh+RpTPa7WCZJVAHS4R8bO805WGYdL8LHSiraQmumo8ejxCqXvb9jWpmB3NHL1N7seBKdO/RM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxpx99ipmMAAevBMZOJGvY/QnTvxSp86KFE73ixisCOxjJDGCvi
-	Uz7tH5L2ZzmewZc47r4A/jlzyzaGZXcfGEKvD8r6Cp+ONmMyiK7Q+hm7nnRGK4aRalnDVRgs9PC
-	dGoetfSD+TXHfmszDLZpEANoojFNYHcIcAH7nNfAY
-X-Gm-Gg: AR+sD113fpLRmLEyhjfjdPxmthfA9BBcoCW2KI4K9KP5Cdy652ksXegGbhj71p3C/p2
-	bXnT1oMpa4v0tYovxRbrIsCxZ5dLKQOs59aAV81gwJu10IGbQb96wJxKT4Z9uIlFTm2N+QaeYpN
-	HXHKDJVhKzOWE5t+YfO9WMMYWviRPXpv6vmhkXT/a2km0Cr1LhfRwmFdSO0ODijfNCYMIW21gSL
-	lscqkw2kJ9ve1XtQswg06ROILlIYfgqv5KTeaqG8Junv+yhQnOkTR0SrDt8P4jMiw7r/qfe3a9E
-	X8hQ92fxM/WY6Is75vtrN2nlFnUaDdQ7p6lDynDt+YLz
-X-Received: by 2002:a17:90b:4c44:b0:38e:21da:9257 with SMTP id
- 98e67ed59e1d1-38fbc55a8ffmr1001602a91.37.1785530926988; Fri, 31 Jul 2026
- 13:48:46 -0700 (PDT)
+        bh=7+TPRx2tkhyaW3YvrP0FE1NEWjjzjNC+jDfcFdsC2BU=;
+        b=oN61SYFHgOdmpsew4NtFl3jWjG+hX/FxBk+zmbN9taxFc5lTHaqEQRpctEQ1zkehfZ
+         /0JmpatGPcH5Db9O9NpsRWdHHoepty+umG0xdbWB7SAEUa7pMVZGPZbA9IDujDtGZlAl
+         MVwBwD2bMYMub4ne0A41le5oVBub1MqKJRD/hqEHtJXofm5+mg/97F6WFIWeWQQ4odr/
+         EYAm5z/o6cij9n9HnAjMH34Xx2RctPt5msvBjeBPrdDApUc9xT4XHGnCSAmGoZfbRau2
+         YZRrT9zPaX8d2PtEiKnZ/F0n3H1xoFN8U1MhAirg+MAOvUUzgNWglP5dENg6qJP5LjTV
+         fmgA==
+X-Forwarded-Encrypted: i=1; AHgh+Rp7kqcV7+0B8HfHMpTK/lTsPuYVe3V3XPY+l0zvySRhOBZjbY+wN2AUk97MRZwAB2ekhPY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRdb1CG3d6IAB/YnBE2HqZmY5QRt54ScQCnLxA+eP2YZhmkvmt
+	TS9s431KnsMBygchcppWjmzAWgeA6XY9V3N2jkPnfGhaHJ8He+GphVQi3z5D1cF4IbU=
+X-Gm-Gg: AR+sD11dQHs6TCl46TikmMIVH82NrCzT6IKe3QE0KDmoigFlKVLnOwrMVuq+GkgYcTk
+	N+ZpbDBHvoFQ3s2Oldo6D9d4ixR/CqJe57hbLJZwpp0QrdgQQ9SLpw6wMl7d0GMCE57OOJYu+8i
+	UJckzTou5MEurPMRayNVnXFU3bfr6shfpmv+28AQ9VejQLCAwzpRH9BHUZxy5DQHrNQJtpRdqRZ
+	QTt3r9izRr/kvnQwTkMPK0TrybcGFucjN3AwDSDGbv6+NGxLvEDkhJEBwJI/eKMhcyJt3jpdfuy
+	qNOEH0nwX4k/+IRGEEYSO4UizwM0iBbKmc0gWayGwCvEl8r+i+7TthB4Ww8WGXnLqHZYcC634JS
+	qhKhkXpDuzgPAropIJrbcYqN5H32VUCezVkfIZyRUiTaPOaKc2VQRW9CHyLOGEj2OxLIutThl73
+	Cz3eTF3rdd7LaFBtl9Z2RjtkE2XRfyNaobVTfHbJY2ixvZERL1NfjAu1vKma7yOa2wu/G3c+xC6
+	K/hUx7L4tBNJyKqH+by/vlgVauL6Q==
+X-Received: by 2002:a17:90b:5888:b0:38e:7268:220c with SMTP id 98e67ed59e1d1-38fbc4eb925mr1073811a91.32.1785531142984;
+        Fri, 31 Jul 2026 13:52:22 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38fb29836e7sm713472a91.1.2026.07.31.13.52.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Jul 2026 13:52:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com> <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
- <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
- <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
- <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
- <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com> <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
- <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com> <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
- <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com> <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
- <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com> <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
- <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com> <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
- <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com>
-In-Reply-To: <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 31 Jul 2026 16:48:34 -0400
-X-Gm-Features: AUfX_mygZc7iXRdpSQn--2JfmeRTMiYoMN85HlxYxxZIHazgpGRFnpSW3d_XCEA
-Message-ID: <CAHC9VhQ24fp7_sy1=NiWkfzPLSM35ugSCOKDKxnm6H9W-pDa6Q@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 31 Jul 2026 16:52:20 -0400
+Message-Id: <DKD1YQ8Z52QD.HUDM65AALUYG@etsalapatis.com>
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Chengfeng Ye" <nicoyip.dev@gmail.com>, "Pablo Neira Ayuso"
+ <pablo@netfilter.org>, "Florian Westphal" <fw@strlen.de>, "Phil Sutter"
+ <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
+ <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
+ <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Jesper Dangaard Brouer" <hawk@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Lorenzo Bianconi"
+ <lorenzo@kernel.org>
+Cc: <netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf v3] bpf: Fix netns reference imbalance in conntrack
+ kfuncs
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260731160921.3245840-1-nicoyip.dev@gmail.com>
+In-Reply-To: <20260731160921.3245840-1-nicoyip.dev@gmail.com>
 
-On Fri, Jul 31, 2026 at 4:16=E2=80=AFPM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
-> On Fri Jul 31, 2026 at 10:01 PM CEST, Paul Moore wrote:
-> > On Fri, Jul 31, 2026 at 3:20=E2=80=AFPM Kumar Kartikeya Dwivedi
-> > <memxor@gmail.com> wrote:
-> >> On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
-> >> > On Fri, Jul 31, 2026 at 2:50=E2=80=AFPM Kumar Kartikeya Dwivedi
-> >> > <memxor@gmail.com> wrote:
-> >> >> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
-> >> >> > On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartikeya Dwivedi
-> >> >> > <memxor@gmail.com> wrote:
-> >> >> >> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
-> >> >> >> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kartikeya Dwive=
-di
-> >> >> >> > <memxor@gmail.com> wrote:
-> >> >> >> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
-> >> >> >> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartikeya Dw=
-ivedi
-> >> >> >> >> > <memxor@gmail.com> wrote:
-> >> >> >> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wrote:
-> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moore <pau=
-l@paul-moore.com> wrote:
-> >> >> >
-> >> >> > ...
-> >> >> >
-> >> >> >> Yes, I understand you feel it should be placed under security/. =
-You are entitled
-> >> >> >> to your opinion.
-> >> >> >>
-> >> >> >> No, I do not think the newly added kfunc is a big enough layerin=
-g violation such
-> >> >> >> that we need to do it ASAP, disregarding everything else outline=
-d above. I am
-> >> >> >> sure you see that too. There are several other instances of simi=
-lar kfuncs.
-> >> >> >>
-> >> >> >> Therefore, please attempt to meet me halfway here.
-> >> >> >
-> >> >> > I'm happy to work with you, and/or anyone else, who wants to work=
- on
-> >> >> > finding a way to test kfuncs that live in security/bpf_lsm_kfuncs=
-.c.
-> >> >>
-> >> >> Right, and for that file to exist, you need to get everyone (FS, BP=
-F folks) to
-> >> >> agree on whether placing all such kfuncs there makes sense. It is n=
-ot for both
-> >> >> of us to decide on our own. So let's revisit this whole topic once =
-you've done
-> >> >> that exercise.
-> >> >
-> >> > The kfunc that David has proposed must be located in
-> >> > security/bpf_lsm_kfuncs.c, similar to the VFS kfuncs and
-> >> > fs/bpf_fs_kfuncs.c.  If you read David's bpf_init_inode_xattr() kfun=
-c
-> >>
-> >> Sigh.
-> >>
-> >> I now went and read the archives, and Christian already told you no be=
-fore [0],
-> >> which I missed in my first read. So two people whom this code affects =
-already
-> >> objected to your proposal.
-> >
-> > As mentioned previously, David's kfunc has nothing to do with the VFS.
-> > Look at the code if you haven't already and you'll see what I mean.
-> > The only relevance to the VFS is the fact that "inode" and "xattr" are
-> > used in the name; David's currently proposed kfunc is an LSM kfunc,
-> > not a VFS kfunc.
+On Fri Jul 31, 2026 at 12:09 PM EDT, Chengfeng Ye wrote:
+> The opts argument of the BPF conntrack kfuncs can point to a shared
+> map value.  __bpf_nf_ct_lookup() and __bpf_nf_ct_alloc_entry() read
+> opts->netns_id separately when acquiring and releasing the network
+> namespace reference.
 >
-> I am sorry, I read it and I don't see why it is an LSM kfunc. It is absol=
-utely a
-> VFS kfunc, that is using LSM APIs to some end. The LSM specific bits are =
-already
-> in security/.
-
-We clearly have different opinions on the matter.  I've mentioned why
-I believe it is a LSM kfunc, I would be interested to hear why you
-believe it is a VFS kfunc (what VFS functions does it call, what VFS
-variables does it manipulate, etc.).
-
-> > If you find yourself required to abide by Christian's comment, despite
-> > this not being a VFS kfunc, that's fine, but this puts us at a
-> > stalemate and David will need to find another approach for his work.
+> The reference imbalance can occur as follows:
 >
-> Paul, let me remind you of another email you sent [0], in which you contr=
-adict
-> yourself. I don't know what caused you to get confused over the month.
+>   CPU 0                                  CPU 1
+>   read opts->netns_id (-1)
+>   skip get_net_ns_by_id()
+>                                          write opts->netns_id (id)
+>   read opts->netns_id (id)
+>   put_net(net) /* no matching get */
 >
-> In it, you tell David to move *LSM* bits into security_lsmxattr_add(), wh=
-ich has
-> been done in patch 2. Thus, by your own characterization, it means the re=
-st is
-> *not LSM* code.
+> The reverse transition leaks the reference.  Repeating the unmatched put
+> can destroy a live namespace and crash later users.
 >
-> Quoting you verbatim:
-> > As I said previously, if you absolutely insist on the kfunc being in
-> > the VFS kfunc file, the LSM specific bits need to be abstracted out
->                         ^^^^^^^^^^^^^^^
-> > into an LSM function.
+> The kernel reported:
 >
-> You yourself made the point in that same email that the kfunc can stay in=
- the
-> current file once LSM bits were moved out, and your request was honored.
+>   Oops: general protection fault, probably for non-canonical address
+>   KASAN: null-ptr-deref in range [0x00000000000000e8-0x00000000000000ef]
+>   RIP: 0010:bpf_prog_test_run_xdp+0x52c/0x1700
+>   Call Trace:
+>    __sys_bpf+0x1662/0x50c0
+>    __x64_sys_bpf+0x73/0xb0
+>    do_syscall_64+0xf9/0x540
+>    entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>   Kernel panic - not syncing: Fatal exception
 >
-> At this point, anybody reading this thread will only see your position as=
- a way
-> to undermine David's work and waste everyone's time, such that you can gr=
-ind an
-> axe against BPF folks. It's a repeating pattern.
+> Snapshot every input field of opts with READ_ONCE() before validating or
+> using it.  The netns_id snapshot keeps the namespace get/put pair
+> balanced, while the other snapshots keep the remaining options from
+> changing partway through an invocation.  The individual reads can still
+> observe an inconsistent combination during a concurrent update, but each
+> selected field value remains stable for that invocation.
+>
+> Fixes: aed8ee7feb44 ("net: netfilter: Deduplicate code in bpf_{xdp,skb}_c=
+t_lookup")
+> Fixes: d7e79c97c00c ("net: netfilter: Add kfuncs to allocate and insert C=
+T")
+> Signed-off-by: Chengfeng Ye <nicoyip.dev@gmail.com>
 
-It seems foolish to speculate on what *everyone* reading this thread
-might be thinking, but since the discussion has decayed to the point
-where we are spelunking archives for quotes, let me provide my comment
-from David's v5 patchset where I explain myself:
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-"I'm sorry David, now that I'm seeing this function again, especially
-with the LSM specific bits extracted into a LSM function, this absolutely
-belongs somewhere under security/.  It's only callable from within a
-BPF LSM callback and all it does outside of some BPF pointer boilerplate
-is call right back into a LSM helper function."
+> ---
+> Changes in v3:
+> - Inline the one-use reserved-byte READ_ONCE() checks instead of
+>   copying them into a local array.
+> - Reorder the new local declarations in reverse-xmas-tree order.
+>
+> Link: https://lore.kernel.org/bpf/20260730082958.2065194-1-nicoyip.dev@gm=
+ail.com/ [v2]
+>
+> Changes in v2:
+> - Snapshot l4proto, ct_zone_id, ct_zone_dir, and the reserved bytes in
+>   addition to netns_id, as requested in review.
+> - Rebase onto bpf/master.
+>
+> Link: https://lore.kernel.org/bpf/20260729163141.213611-1-nicoyip.dev@gma=
+il.com/ [v1]
+>
+> Please queue this fix for stable kernels.
+>
+>  net/netfilter/nf_conntrack_bpf.c | 72 +++++++++++++++++++++-----------
+>  1 file changed, 48 insertions(+), 24 deletions(-)
+>
+> diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrac=
+k_bpf.c
+> index f98d1d4b42c3..c2df7c948281 100644
+> --- a/net/netfilter/nf_conntrack_bpf.c
+> +++ b/net/netfilter/nf_conntrack_bpf.c
+> @@ -122,42 +122,54 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf=
+_sock_tuple *bpf_tuple,
+>  	struct nf_conntrack_tuple otuple, rtuple;
+>  	struct nf_conntrack_zone ct_zone;
+>  	struct nf_conn *ct;
+> +	u8 ct_zone_dir =3D 0;
+> +	u16 ct_zone_id;
+> +	s32 netns_id;
+> +	u8 l4proto;
+>  	int err;
+> =20
+>  	if (!(opts_len =3D=3D NF_BPF_CT_OPTS_SZ || opts_len =3D=3D 12))
+>  		return ERR_PTR(-EINVAL);
+> +
+> +	netns_id =3D READ_ONCE(opts->netns_id);
+> +	l4proto =3D READ_ONCE(opts->l4proto);
+> +	ct_zone_id =3D READ_ONCE(opts->ct_zone_id);
+>  	if (opts_len =3D=3D NF_BPF_CT_OPTS_SZ) {
+> -		if (opts->reserved[0] || opts->reserved[1] || opts->reserved[2])
+> +		ct_zone_dir =3D READ_ONCE(opts->ct_zone_dir);
+> +		if (READ_ONCE(opts->reserved[0]) ||
+> +		    READ_ONCE(opts->reserved[1]) ||
+> +		    READ_ONCE(opts->reserved[2]))
+>  			return ERR_PTR(-EINVAL);
+>  	} else {
+> -		if (opts->ct_zone_id)
+> +		if (ct_zone_id)
+>  			return ERR_PTR(-EINVAL);
+>  	}
+> =20
+> -	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
+> +	if (unlikely(netns_id < BPF_F_CURRENT_NETNS))
+>  		return ERR_PTR(-EINVAL);
+> =20
+> -	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
+> +	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, l4proto,
+>  				    IP_CT_DIR_ORIGINAL, &otuple);
+>  	if (err < 0)
+>  		return ERR_PTR(err);
+> =20
+> -	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
+> +	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, l4proto,
+>  				    IP_CT_DIR_REPLY, &rtuple);
+>  	if (err < 0)
+>  		return ERR_PTR(err);
+> =20
+> -	if (opts->netns_id >=3D 0) {
+> -		net =3D get_net_ns_by_id(net, opts->netns_id);
+> +	if (netns_id >=3D 0) {
+> +		net =3D get_net_ns_by_id(net, netns_id);
+>  		if (unlikely(!net))
+>  			return ERR_PTR(-ENONET);
+>  	}
+> =20
+>  	if (opts_len =3D=3D NF_BPF_CT_OPTS_SZ) {
+> -		if (opts->ct_zone_dir =3D=3D 0)
+> -			opts->ct_zone_dir =3D NF_CT_DEFAULT_ZONE_DIR;
+> -		nf_ct_zone_init(&ct_zone,
+> -				opts->ct_zone_id, opts->ct_zone_dir, 0);
+> +		if (ct_zone_dir =3D=3D 0) {
+> +			ct_zone_dir =3D NF_CT_DEFAULT_ZONE_DIR;
+> +			opts->ct_zone_dir =3D ct_zone_dir;
+> +		}
+> +		nf_ct_zone_init(&ct_zone, ct_zone_id, ct_zone_dir, 0);
+>  	} else {
+>  		ct_zone =3D nf_ct_zone_dflt;
+>  	}
+> @@ -171,7 +183,7 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_s=
+ock_tuple *bpf_tuple,
+>  	__nf_ct_set_timeout(ct, timeout * HZ);
+> =20
+>  out:
+> -	if (opts->netns_id >=3D 0)
+> +	if (netns_id >=3D 0)
+>  		put_net(net);
+> =20
+>  	return ct;
+> @@ -186,46 +198,58 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct ne=
+t *net,
+>  	struct nf_conntrack_tuple tuple;
+>  	struct nf_conntrack_zone ct_zone;
+>  	struct nf_conn *ct;
+> +	u8 ct_zone_dir =3D 0;
+> +	u16 ct_zone_id;
+> +	s32 netns_id;
+> +	u8 l4proto;
+>  	int err;
+> =20
+>  	if (!opts || !bpf_tuple)
+>  		return ERR_PTR(-EINVAL);
+>  	if (!(opts_len =3D=3D NF_BPF_CT_OPTS_SZ || opts_len =3D=3D 12))
+>  		return ERR_PTR(-EINVAL);
+> +
+> +	netns_id =3D READ_ONCE(opts->netns_id);
+> +	l4proto =3D READ_ONCE(opts->l4proto);
+> +	ct_zone_id =3D READ_ONCE(opts->ct_zone_id);
+>  	if (opts_len =3D=3D NF_BPF_CT_OPTS_SZ) {
+> -		if (opts->reserved[0] || opts->reserved[1] || opts->reserved[2])
+> +		ct_zone_dir =3D READ_ONCE(opts->ct_zone_dir);
+> +		if (READ_ONCE(opts->reserved[0]) ||
+> +		    READ_ONCE(opts->reserved[1]) ||
+> +		    READ_ONCE(opts->reserved[2]))
+>  			return ERR_PTR(-EINVAL);
+>  	} else {
+> -		if (opts->ct_zone_id)
+> +		if (ct_zone_id)
+>  			return ERR_PTR(-EINVAL);
+>  	}
+> -	if (unlikely(opts->l4proto !=3D IPPROTO_TCP && opts->l4proto !=3D IPPRO=
+TO_UDP))
+> +	if (unlikely(l4proto !=3D IPPROTO_TCP && l4proto !=3D IPPROTO_UDP))
+>  		return ERR_PTR(-EPROTO);
+> -	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
+> +	if (unlikely(netns_id < BPF_F_CURRENT_NETNS))
+>  		return ERR_PTR(-EINVAL);
+> =20
+> -	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, opts->l4proto,
+> +	err =3D bpf_nf_ct_tuple_parse(bpf_tuple, tuple_len, l4proto,
+>  				    IP_CT_DIR_ORIGINAL, &tuple);
+>  	if (err < 0)
+>  		return ERR_PTR(err);
+> =20
+> -	if (opts->netns_id >=3D 0) {
+> -		net =3D get_net_ns_by_id(net, opts->netns_id);
+> +	if (netns_id >=3D 0) {
+> +		net =3D get_net_ns_by_id(net, netns_id);
+>  		if (unlikely(!net))
+>  			return ERR_PTR(-ENONET);
+>  	}
+> =20
+>  	if (opts_len =3D=3D NF_BPF_CT_OPTS_SZ) {
+> -		if (opts->ct_zone_dir =3D=3D 0)
+> -			opts->ct_zone_dir =3D NF_CT_DEFAULT_ZONE_DIR;
+> -		nf_ct_zone_init(&ct_zone,
+> -				opts->ct_zone_id, opts->ct_zone_dir, 0);
+> +		if (ct_zone_dir =3D=3D 0) {
+> +			ct_zone_dir =3D NF_CT_DEFAULT_ZONE_DIR;
+> +			opts->ct_zone_dir =3D ct_zone_dir;
+> +		}
+> +		nf_ct_zone_init(&ct_zone, ct_zone_id, ct_zone_dir, 0);
+>  	} else {
+>  		ct_zone =3D nf_ct_zone_dflt;
+>  	}
+> =20
+>  	hash =3D nf_conntrack_find_get(net, &ct_zone, &tuple);
+> -	if (opts->netns_id >=3D 0)
+> +	if (netns_id >=3D 0)
+>  		put_net(net);
+>  	if (!hash)
+>  		return ERR_PTR(-ENOENT);
 
-You are welcome to view that however you like.  I saw the v5 patchset
-and the nature of the kfunc became painfully obvious to me so I
-changed my opinion.
-
-> I tried my best to engage in good faith, but it is clearly not working.
-
-I've been working with David and providing feedback for a while now
-(perhaps before you started commenting? not sure on that), and I'm
-continuing to engage with David, you, and anyone else who wants to
-comment on this thread.
-
-[NOTE: Dropped Matt's address due to bounces, see my other email in
-this thread about that.]
-
---=20
-paul-moore.com
