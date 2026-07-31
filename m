@@ -1,231 +1,143 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA8E3ABD88
-	for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 23:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785455739; cv=pass; b=UZAme7xJMHoTA6kYILQs15yb+MLb9Vp0vq5gh0pR5tKb7UtBBV2CAc96Y5aq9lDNNQRpjmQkc8MHXfmRNBwS7a7Qd6L3uZ34bQvSH2zohNcU5ffZOUIEr6j4SPco1XLn0E/3gMtUErmmoEfv9NKWisrwjiMI65AoDzLmMRA7EWM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785455739; c=relaxed/simple;
-	bh=hV5KLaAmEHz7Ic3f8xOxjqxj04qxIB9m3dv29dZ9WV4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=msnuSCXHQB1kSMSt8l3ldJtZvuzCc0WqsvODyTQI9PLbiUvBDCIukuZ57JoXmzLH80SaS4ZnaZedaZKbZxKYhleKXu2EPMP3KNYuk+PjXQteiwEJEaAhGmQhPhbM1TutUUVaSveK/OuroB87hc3Lv9TPmBL+XML21e/uOknSULs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QlGabdku; arc=pass smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFAA4415F1D;
+	Fri, 31 Jul 2026 00:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785456003; cv=none; b=ToZJJEM0KkalGBCyQ8ziJLGmDSh2QzzYuEMvoEJXXz7S+vmxXVO8m+6KJnXGUqUriccIj2xFO4gBFzQoDO+sbUGfky/WsiL0oRLWg0faUxNxJpIsJsDnUEW9/xktNJY31qjHpN17nkHyy7Od/LBakDHziHxVR2HNo5n4AwFMTO0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785456003; c=relaxed/simple;
+	bh=XWZfmUqBlmZIv+Cc4+NkDTwkqL0Bl67aH8g6GVZ5ShI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Wy0aVLPfgQAwOGZpJxIydD0ECMhXElmF7m8gzNNHlpDJNapkPuyQYRfv66Cnq9/H25wzfYCniZE8GmoGGyExUif1d6tdSORezpyExVJE4rCRAG8oI8RNyx3Jjm2Ooi1e5Wx3GBzZHZ4OYy0pYO9dO8YuVcxEGIs4WavIBjezqGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LkKtQ27L; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QlGabdku"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84861fc51f5so337802b3a.1
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 16:55:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785455737; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Iyca5/U4SmuftLT6+lYcLTFUoS823RQbMovGyCIao6cTj0girP9ASdNQddLM+4FoNq
-         YEbbevUmRT+KrLnS2Ctms8f99671UAkFRXrLG4Vwi1dDyq2KhWliacoDqOFFDimbVVFV
-         TWoPGFkiD4UZnJQBUNbMRFO4tSkt6g9Y5BJ8uyNh7LzpQ2PdA/c4eoruqmWMNW/muirX
-         2/BgDDVy5A4ri2GSGw7sEoB4ZIoE4pcTfgQarNxeFpACG7sYHZe+Q6sn9jPmtbm2vpqV
-         Kmv+uA0mQUQT7ME3pClTtfMULQb69xCkoRGB9x+k62gsGCI4SKkWRO1jun378OMAVAyP
-         tmWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=CCRaa9xG8Lu3CwSdJQLZiNXOhmRsZ3XnJvX/nF5Nkg0=;
-        fh=wuZdHJzBerA61ub8T2GrIbsGHZ9BgIt3I3k/cIziLbs=;
-        b=LM9yuFZNCWMHuMftPFQj90hCePohYpY9p6U5Rr4eBuepGujYuBvFm7rZWLknt8s7Ga
-         k3n14c3vb7MGaWQMhsu+50g+2yHGtT/Ki/ZHCpUBiyqbLgmMQLGapuu3RLtr4PFC0PKP
-         GW8pDPfEHhUoWbtRkQyBfMKwSGaV1eEq1ciA3T2CyeAaxj32gLdrtiiW4pjhbOsggazd
-         1izdRGmZRJfCdVyLI+fUuueflIWRYX/Wk7/erhKMkmULGVUDf/7/gZglVsDne3uCalrv
-         xtjXm0fA1GXSdWNdPJMdViyjRNOXNRTNtnlIaOJRZ5IndOgYeIbd4yE2NCROyEI0jRhT
-         5k2Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785455737; x=1786060537; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=CCRaa9xG8Lu3CwSdJQLZiNXOhmRsZ3XnJvX/nF5Nkg0=;
-        b=QlGabdku0Tis2lK4OWjEHuAAYzLt5MjAmJv+VTLvMrizha141ZO7yF1h9JI0lff6tj
-         +RuzrwXFAJVnhw/EydgI1F90qWzEC2WCGMhg9YaSFls4tMYM82jiTDDVP6ykMnnVDUJf
-         4cxo2I8OA1E0t8JYZw43QMgeUa03svKz1ykf1gCO41Phw6szNf9JzUrC88VNMn3ExdBe
-         ILqNKZfNEomBfgkRqqywfenbajbOi5O3MGQkvOJn+P3jUq1t08xH+z4Offq3nvZMoyge
-         bSlvmxLmBFAd3mkPgoXBmoh+ohPXrSqSMfSXOOPOFqrwH5ltT3dSy34lXvxHU1GsztQL
-         W1XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785455737; x=1786060537;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CCRaa9xG8Lu3CwSdJQLZiNXOhmRsZ3XnJvX/nF5Nkg0=;
-        b=E5brS2OyOJVyWSMkE/qpZwx+SV0dsIaKm3OhFrekHKQFaPb5s2972PlVn7zoo8a5mW
-         YZA9TauVDjO4iHmVlbgg4Qn/3+gslVY/CW5kEom5V4ARK4nQ7G6MTOw/Emf3J5Nn+iQK
-         8zi08RZ8DPk73C+Apz/h22jzAipk+LbHxnxxt7t/Oqi6IB7ZA2z6WEG4oG+9WjqX2V7y
-         Td2LvBVoi1uFVCdA0eVVZf6Z8pmcUolHFSS2xf+NwjAAOm7qjfFExj8nosChlbiAfcrE
-         jzHbYNEZ5o88Tx4WCY2mz35iwlCCl/byyxfpWsjhlwqUeDY+SmmqTMJvl2eQqLZtcMwn
-         w9MQ==
-X-Gm-Message-State: AOJu0Yw0yAcTlqu0ruoALMS/Gr6Gq3nUFRViXU7qMkzynnUwoP9iO7yn
-	JAmP93lJM9BMH4VjSCYFWK2VGuE91pXuSvEwtGjCvV94fnPC+MRbnmZPkZwiK9s11gRSxr8EGox
-	PrSdMiVTG8p/QVe/CohQsFFk8jkglGIM=
-X-Gm-Gg: AR+sD11SOFNw3dl688Gx2LF9xoAxhGZHCpHltWXUOlOICDDPZkAbM3i8WCNeSbo1D8K
-	4HjdaombAiZ9cmgb656GAzS9zZ1p/EySnsDhqwpquQwk85v+m/Qmt2e3uMtNjzjHooAct2kDrfa
-	cz4M4PR1pXVfdjy4rWmknEsS8+8S9E6L5f6egpSG3SwHM5/G2lEfOSmfz0lLTogcxJVNmnQXBE3
-	jMvA0SqY0jl48YM1/cX+FRvt/xgs50pBDWmmPMUQfboE8aSEkr1CCILFLwoTHyJCLAfcqOPIGf5
-	RUrHFYRcofBymJKe70YpZc1/2MqjkEjGR3usmjFFjA6R/vIi0/Oekmjg2hv8ddJJYl0R1dlKo91
-	8SPgcAIUr6dViseC6Uv5FFe+w1LWYa8/MR/+ZNsIviA==
-X-Received: by 2002:a05:6a00:cce:b0:847:8e98:9a4b with SMTP id
- d2e1a72fcca58-84ebc2422a4mr4253539b3a.34.1785455737231; Thu, 30 Jul 2026
- 16:55:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LkKtQ27L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576791F000E9;
+	Fri, 31 Jul 2026 00:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785456002;
+	bh=973DWxHnldpIeidO3QnYB0kn6LB8ZXOP+kfVfsDlnKY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LkKtQ27LOFzJpgMFDUrBzZBh5aAFfgbcVhxehaglJqFVNOO/Y8p/YoQdlAD9LLelj
+	 DH6JTHv0kgzHULQAZvxhEQhg71WixYTvUNIS5Oys3Ndvp7JvvAUcfcG9LjrP4Wv8vM
+	 2JJ4Y5cgRDY3U6bhsb856mW4VPd+dVwv9hK5JXRFgxtwA1DOE5zwJ0ioYrQvXyETTb
+	 UVWWc5vZrFxA3C+zQ4gOpEGjVCzmCFl2omlmCkld3TcKcjodfFfDAZhHVzaSS18ATr
+	 VFoALddERNRqIbBjaCXHpksAJDXjt7/dgfYpHI04Wt3s0jI4BCqa900Ibvhm8Lu9ee
+	 NU8XFPwkJ3hRQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v6 bpf-next 2/4] security: add security_lsmxattr_add()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "David Windsor" <dwindsor@gmail.com>
+Cc: bpf@vger.kernel.org, selinux@vger.kernel.org
+In-Reply-To: <20260730234533.1912709-3-dwindsor@gmail.com>
+References: <20260730234533.1912709-1-dwindsor@gmail.com>
+ <20260730234533.1912709-3-dwindsor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 31 Jul 2026 00:00:01 +0000
+Message-Id: <20260731000002.576791F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260730-b4-fix_btf_tracefs-v1-1-5f10b728f51e@meta.com>
-In-Reply-To: <20260730-b4-fix_btf_tracefs-v1-1-5f10b728f51e@meta.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 30 Jul 2026 16:55:22 -0700
-X-Gm-Features: AUfX_mz01KsvC0dTQTZpCMew9O6d6Q6PCq2A8CWuLf7bfi4pR2EqEu-Q6tBwvaU
-Message-ID: <CAEf4BzZXu=E-E+_DXukwuzdGAH6LwxhFuWkX5j6Os1YAn3Vtcg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] tracing: Make per-template BTF id lists file-local
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, rostedt@goodmis.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	memxor@gmail.com, linux-trace-kernel@vger.kernel.org, 
-	linux-next@vger.kernel.org, broonie@kernel.org, 
-	Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 30, 2026 at 5:52=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> DECLARE_EVENT_CLASS emitted __bpf_trace_btf_ids_<call> through
-> BTF_ID_LIST_GLOBAL, i.e. a global symbol named after the event class.
-> The class name is not unique across the kernel, so the symbol
-> multiply-defines whenever two translation units instantiate the same
-> class.
->
-> Switch to the file-local BTF_ID_LIST: the list is reached
-> only through the event_class_<call>.btf_ids pointer, initialised in the
-> same unit, so tracefs readers never reference the symbol by name and
-> resolve_btfids still fills the now-local .BTF_ids entries.
->
-> The handcrafted syscall classes are the one cross-unit consumer: give
-> them their own local BTF_ID_LIST rather than importing the generated
-> sys_{enter,exit} lists, which are now file-local.
->
-> Fixes: eadc0725ab8d3 ("tracing: Expose tracepoint BTF ids via tracefs")
-> Reported-by: Mark Brown <broonie@kernel.org>
-> Closes: https://lore.kernel.org/all/ff58b01c-3f5e-4d55-be82-609d2faaf12e@=
-sirena.org.uk/
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  include/trace/trace_events.h  |  6 ++++--
->  kernel/trace/trace_syscalls.c | 22 ++++++++++++++--------
->  2 files changed, 18 insertions(+), 10 deletions(-)
->
-> diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
-> index 09ad57ac4b73..45ffbe04b580 100644
-> --- a/include/trace/trace_events.h
-> +++ b/include/trace/trace_events.h
-> @@ -404,10 +404,12 @@ static inline notrace int trace_event_get_offsets_#=
-#call(         \
->   *   [0] FUNC   __bpf_trace_<call>     (the BPF dispatcher)
->   *   [1] STRUCT trace_event_raw_<call> (the ring-buffer record)
->   * Exposed via the events/<sys>/<name>/btf_ids tracefs file.
-> + *
-> + * File-local: the class name is not unique, so a global symbol would
-> + * clash across translation units.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] The dynamically allocated `xattr->name` pointer is used after bein=
+g freed by `security_inode_init_security()` in the ocfs2 filesystem.
+--
 
-drop this comment? not super useful and file-local is default behavior
-for BTF_ID_LIST anyways
+--- Patch [2]: [PATCH v6 bpf-next 2/4] security: add security_lsmxattr_add(=
+) ---
+commit cefa37d110516b84cf53133f4f60bba93ba53641
+Author: David Windsor <dwindsor@gmail.com>
 
->   */
->  #define _TRACE_BTF_IDS_DECLARE(call)                                   \
-> -       extern u32 __bpf_trace_btf_ids_##call[];                        \
-> -       BTF_ID_LIST_GLOBAL(__bpf_trace_btf_ids_##call, 2)               \
-> +       BTF_ID_LIST(__bpf_trace_btf_ids_##call)                         \
->         BTF_ID(func,   __bpf_trace_##call)                              \
->         BTF_ID(struct, trace_event_raw_##call)
->
+security: add security_lsmxattr_add()
+   =20
+This commit adds security_lsmxattr_add(), which claims a slot in the
+inode_init_security xattr array on behalf of the calling LSM. It fills the
+slot with a dynamically allocated copy of the given name and value.
 
-This should go into Steven's tree, not bpf-next, right?
-
-> diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.=
-c
-> index 48ef1a93e576..9b5931f2f280 100644
-> --- a/kernel/trace/trace_syscalls.c
-> +++ b/kernel/trace/trace_syscalls.c
-> @@ -9,6 +9,7 @@
->  #include <linux/ftrace.h>
->  #include <linux/perf_event.h>
->  #include <linux/xarray.h>
-> +#include <linux/btf_ids.h>
->  #include <asm/syscall.h>
->
->  #include "trace_output.h"
-> @@ -1305,13 +1306,18 @@ struct trace_event_functions exit_syscall_print_f=
-uncs =3D {
->
->  #ifdef CONFIG_BPF_EVENTS
->  /*
-> - * BTF id lists generated by DECLARE_EVENT_CLASS for the sys_enter and
-> - * sys_exit tracepoints. The auto-generated event_class_sys_{enter,exit}
-> - * is unused (per-syscall events share the handcrafted classes below),
-> - * but the id lists themselves are global and reusable.
-> + * BTF id lists for the shared sys_enter/sys_exit dispatcher tracepoints=
-,
-> + * resolved by resolve_btfids. Defined locally rather than importing the
-> + * DECLARE_EVENT_CLASS-generated lists, which are now file-local to the
-> + * translation unit that instantiates the tracepoint.
-
-drop "resolved by resolve_btfids", and drop the part about defined
-locally because file-local, too much Claude style
-
->   */
-> -extern u32 __bpf_trace_btf_ids_sys_enter[];
-> -extern u32 __bpf_trace_btf_ids_sys_exit[];
-> +BTF_ID_LIST(syscall_enter_btf_ids)
-> +BTF_ID(func,   __bpf_trace_sys_enter)
-> +BTF_ID(struct, trace_event_raw_sys_enter)
+> diff --git a/security/security.c b/security/security.c
+> index 2ad7f09c1a611..ae72102cd29b8 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+[ ... ]
+> @@ -1376,6 +1377,101 @@ int security_inode_init_security(struct inode *in=
+ode, struct inode *dir,
+[ ... ]
+> +int security_lsmxattr_add(struct lsm_xattrs *xattrs, u64 lsm_id,
+> +			  const char *name_extra, const void *value,
+> +			  size_t value_len)
+> +{
+[ ... ]
+> +	/* Combine xattr value + name into one allocation. */
+> +	xattr_value =3D kmalloc(value_len + name_len + 1, GFP_NOWAIT);
+> +	if (!xattr_value)
+> +		return -ENOMEM;
 > +
-> +BTF_ID_LIST(syscall_exit_btf_ids)
-> +BTF_ID(func,   __bpf_trace_sys_exit)
-> +BTF_ID(struct, trace_event_raw_sys_exit)
->  #endif
->
->  struct trace_event_class __refdata event_class_syscall_enter =3D {
-> @@ -1321,7 +1327,7 @@ struct trace_event_class __refdata event_class_sysc=
-all_enter =3D {
->         .get_fields     =3D syscall_get_enter_fields,
->         .raw_init       =3D init_syscall_trace,
->  #ifdef CONFIG_BPF_EVENTS
-> -       .btf_ids        =3D __bpf_trace_btf_ids_sys_enter,
-> +       .btf_ids        =3D syscall_enter_btf_ids,
->  #endif
->  };
->
-> @@ -1336,7 +1342,7 @@ struct trace_event_class __refdata event_class_sysc=
-all_exit =3D {
->         .fields         =3D LIST_HEAD_INIT(event_class_syscall_exit.field=
-s),
->         .raw_init       =3D init_syscall_trace,
->  #ifdef CONFIG_BPF_EVENTS
-> -       .btf_ids        =3D __bpf_trace_btf_ids_sys_exit,
-> +       .btf_ids        =3D syscall_exit_btf_ids,
->  #endif
->  };
->
->
-> ---
-> base-commit: eadc0725ab8d38c05148fce49f8d5c6a0e01f062
-> change-id: 20260730-b4-fix_btf_tracefs-fdafda5fdb5b
->
-> Best regards,
-> --
-> Mykyta Yatsenko <yatsenko@meta.com>
->
+> +	memcpy(xattr_value, value, value_len);
+> +	memcpy(xattr_value + value_len, suffix, suffix_len);
+> +	if (extra_len)
+> +		memcpy(xattr_value + value_len + suffix_len, name_extra,
+> +		       extra_len);
+> +	((char *)xattr_value)[value_len + name_len] =3D '\0';
+> +
+> +	xattr =3D lsm_get_xattr_slot(xattrs);
+> +	if (!xattr) {
+> +		kfree(xattr_value);
+> +		return -ENOSPC;
+> +	}
+> +
+> +	xattr->value =3D xattr_value;
+> +	xattr->name =3D (const char *)xattr_value + value_len;
+
+[Severity: High]
+Does this code cause a use-after-free for filesystems like ocfs2?
+
+Looking at ocfs2, the ocfs2_initxattrs() callback saves the xattr->name
+pointer directly into si->name, assuming it has a static lifetime (which
+was true for SELinux and Smack):
+
+fs/ocfs2/xattr.c:ocfs2_initxattrs() {
+    ...
+    si->name =3D xattr_array->name;
+    ...
+}
+
+But here xattr->name points inside the dynamically allocated xattr->value
+block. When security_inode_init_security() completes, it frees
+xattr->value:
+
+security/security.c:security_inode_init_security() {
+    ...
+    ret =3D initxattrs(inode, xattrs.xattrs, fs_data);
+out:
+    for (; xattrs.xattr_count > 0; xattrs.xattr_count--)
+        kfree(xattrs.xattrs[xattrs.xattr_count - 1].value);
+    ...
+}
+
+After this free, ocfs2_mknod() will call ocfs2_calc_xattr_init(), which
+dereferences the now-dangling si->name pointer:
+
+fs/ocfs2/xattr.c:ocfs2_calc_xattr_init() {
+    ...
+    s_size =3D ocfs2_xattr_entry_real_size(strlen(si->name),
+                                         si->value_len);
+    ...
+}
+
+Could the dynamically allocated name trigger a use-after-free here?
+
+> +	xattr->value_len =3D value_len;
+> +
+> +	return 0;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730234533.1912=
+709-1-dwindsor@gmail.com?part=3D2
