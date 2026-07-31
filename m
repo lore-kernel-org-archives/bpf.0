@@ -1,141 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic301-38.consmr.mail.ne1.yahoo.com (sonic301-38.consmr.mail.ne1.yahoo.com [66.163.184.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F3A356778;
-	Fri, 31 Jul 2026 22:27:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27CA2D0C64
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 22:37:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.184.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785536857; cv=none; b=aY3gdi1UwrbY7x17O3/06sEFqM1JZqvK4yG0ZLBtHuO9RSCgb83/ID6953nDyl/a0shjRLHFyKy3D38vfa0dHlkmqvNYEPLT51tsOF3VbF8Qr7nVF58Xzdfy616fmBum73UR/hOqK3TBvte0z5YjbDV/FNdnawuZQWdyGBlO1vY=
+	t=1785537479; cv=none; b=GzyNuT0ps/QWS7GLzk7KFqjCObsujgvqXADkOEwh7zctU0Xq/eMBQIB9viQbk4FJCyst4hYRyf59rxnFyF+GrQAV6rUldw5fm/PrMH+bpmMvdHKDeoOGRxrJp4CaGhMZSJEovsgzbjGFz8m92p20/2Sjmz+MqAbnkgbVqCpzTzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785536857; c=relaxed/simple;
-	bh=Lfnemmz47gmo7djm2yI3PwzWmPHLWWJUfd00PKL56NQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=d6z82Ij5i78UcEpGGs7yXSBJuBNXCCTa6zL9ws9yUfi5heUbW8+g720Oa+Aj+q2sO8xoeC7lSJRQfAhBqyuJmrecevBsgOjZzCpy4A+EbSb2fLVDMRWYm/fvYjWJjVtE2KvctOeUDnlFSjT7yrWxrgkwF0cIKhX+P4vYb0Ycn4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZXT9lieS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785537479; c=relaxed/simple;
+	bh=YAt9eFIIe3D3n5l6qZabScoWy3yuTrRj2itu8f37lrE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T5DD0ciy6mRa4ibeNVFMa+dSuX3hmsx8VB68OQLae39GE79xcl2pxZ+jdDPnktLPi+x/7KPP1DRzMyNynwrGH3y1PZKhNm8wPLhGC9iVc0Jk6dFF5n1dlOtaYZ614FkrjTxUzpxhDHf1vcTBQ2K7MBPhOWSFznTJxbpHF8aKaL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=ay9AHfbt; arc=none smtp.client-ip=66.163.184.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZXT9lieS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7067F1F00AC4;
-	Fri, 31 Jul 2026 22:27:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785536856;
-	bh=KQWZeeZCL8xrIL69ruHh64PY14nCMvAY6JiFhCzu4H0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ZXT9lieSxswJongpa+/MBoXII2sCbWcAhBMkcgQoklXUXldYSIwjn8Ssor8Yd8xdY
-	 YSj6r67RYsdmxpwcOqMpz8jWHQtraCPu1/MHbNK8hQ6+U2K9ODGM+81elA3YdshBtc
-	 yh8DmPEoQJ53zyYJqSJqYjh9uXoo+3fHpJDkCb8zAstUTEKeUg2czeVj5QjJ/pXVTL
-	 bnTSHctdUkhf03uAfnWSRAYg6OwaJ3lbHlIWmmM6TVwOLR+OKk2x7IJFQeW+f7YFGB
-	 iL/iLG1WTyb+4UC1S6QBlpgRiL/ndVKUMcQyd5P/HkrGEiqqyOv8G2twROLF60Xvtk
-	 J62IW/Kl9aPIw==
-Content-Type: multipart/mixed; boundary="===============3865849069632465672=="
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="ay9AHfbt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1785537476; bh=YAt9eFIIe3D3n5l6qZabScoWy3yuTrRj2itu8f37lrE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ay9AHfbtsbLRQ1fofoThOuhGngmXRHE3DHUQGz44f9qs6nQkhqZZzuwkItC013+J7gI46rb1La7gspsYUNpU6OxYJnQ1ukF23CK9GgJgyb3EYXIuOArLyYGS02Zb5umqFvDQ5vb2tY90JEQqlXzUVeCsE3cd4kzvAQGS5Wq0kekz2qx+6hB5MWfbEwDOOlLb+kzupc/QpnHy3AZ5kDpeyX+vgJgpu/tuSOlnMr0aqlUuKHTydofhgxQswQMmUxxR95RXKywWIt5vPsfgADGjiuzlEwGWqH6x03+7gKQ0uKjlhQaTrWmWhjaTD4SdfcZ/S65P8IqKoPH6Umz34IsXQA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1785537476; bh=lo14Dy3UOZPug2Z97R8Jpqluog13iWoSvhzfkqGa7R4=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=dgv9j1ZS8byWqAcTH6UODyi9mFfslFdS5nGJ8gLt7aNV7OS/7zw48usl21XxT1qb+KTr5k4m3fzXdiOx1THH0LwcRbRwRsDu7qbGF+NU79fQk+DRPXRNs0plF/aiR1QCcxzF4nJRf/x/KDG9upJhSiR55brkyCdtPQeaHJrXx8Y6C75OmnRIb4scsjhupVDSmXGm9p1LlfVArrS5jQI6Up7++eGkIe78077JAy0Z6u7wSh1Z+nvWFyxlY2t9dXS/2GcsjqNUfZijR//gSHf2AUJde5Univ4Ht6wSrnkUHO4oI5JCsWctz2WW1SjSj+vCXonoHmJaiu+TtpR2R1mFZw==
+X-YMail-OSG: YHJjAkoVM1nbExbT1WhaofDuzzQwMyU89QRdv7cR2RIQJCwn6DPP9ZTUIKkRQdF
+ xT_Oz_UlCSAw7c1vgqD0uLC0pF_sk0_vJdvgpTMOtDTuni5H3xnsH_S.fc.Ilv6S8QQYAKpLmEmU
+ ydA21HbC2I1ItCn5q3LZU8qCLEWokbEeM5E0KEriu3cdpo3LC70.37bziH1Bd5NcQQ0shoAz_UlE
+ PsBRawdr0n8OVh4uINhNO9eDtAI.hDtnYstENakSS9mqkVtuuAXfHjRlPzw_9.0w6p6uAXefcXw6
+ XhQswurRqoXC2mVocE3yfPp15hpCG7C8ejviSoZTH5GGDjt0SKLpdvLxqiNBHSFVRKFwZIoCIsLo
+ b6P9G1vH8PoYXP.gFS9BQ3X3vWJhKoJ1Ep6C...EI1nwf2vi0uViuJL0EpN4dmuD0L5vLRu5uWUW
+ SzJBvo1oaO_8hTBrbN1wFfRq_UVqj_DLIHQPXU65OnvjWR7ngPTCS0h5lW2ETwHDPDr4D_OHZzOV
+ a7tU52eS4wipUErgx0nMVxs9SwMEb_dTrFA.eflJbPNRTeGr6PFiSRWk.dus3dwFESU.vbjFnBh0
+ a4nNvBGbTrWOJhnOyGLAObaaF3p_BmjoQYD1qEg18bMIjudW0NJLIRW10qIXNuQUJ9gePrGVBYHw
+ afVdAfBOs5HUp6aHLAJTnX.TCga7OYYHVYX8j2GO3Zpph2WQg8.q9s80FtvnscAALmaQGA7AW7_4
+ 9rI6kZV8R2Ur.WcSRyMjOHQPyF2RiOSw556obSFeEAz0hOK_pXnGFLM.s7mwpl5ImLoEzUL4TTXu
+ 7LbsId4wgrSO9Ychch6rQlC_w2UY390vPo9l2KAUSvOTi3kCrdFelb8.tiV317_GhX3j6Wz.okY1
+ mnSvPzqFDjaPgkGSYXiJsFSiX8XtkwML7azKdl8.H5MLhQpgdUagfb2Mh_3A.1_rSnVmoh0OmAGI
+ ti1j0cz4RBl_HPjiztuxBiAy1gSpIayk1ys.4TaLcPRksl5cagXIS7MYh.KzrqJeT._wlem6M28h
+ xlY2Y6yFpZ8Mgm7JuHrdXkrA3DM01XBAMCorDIv4ONtt49N8Sj9S6ckvXciF15rO5ctxa2a9pSQR
+ w_InH_U.r62YJNMfZ5pBGAUImcjE0YMfDK0y7bVXWXZjlDrN_8kl2sJIgynSbWb8h0ZLE1QywtXG
+ pTSqiWOTFFNcXrDrJKUnxrWkJLadP8qdQJP5PNxPmLY0IWWtyBTRt_CrI8NBF9lUo4nBIXQ18C7u
+ 79qHIN8W_pChGYyiLpG7aQdCJVdfMVsX4zbxV1Z7m7T0zYNm8y_IhvW4EgwFFNfC77MLefLvCdsf
+ fYu8KU6x3.JGWh5vgrebsq_x3NO1k27U1CcUGSZo2C633eajxXPUasJoisG2vBg1c4otYIG732w8
+ LuMp7Bpi_TYmLIFEDoU55fejyc2IYbCQ4ABBVE8vsEuD36y3XuAjiOvShHr4H6pnoOEDG8QxRila
+ i_fqx8p1eZMvs.PHt._hHR9GryyGIx48ofEWXU_wPWXL8FEQFdTMHX.y7GtUx2zWXYzaUktZSxsp
+ jMDW.eDzTyP_0aeUjqExGH6Hll27nX9qJzhuBwWgUIYAv6QVuyQvKXndKIAHO5MyGc834jurXI3k
+ EdO.9vhrCunIP8izzOFq03c6vIiAHZspfi0f19atmMBM.S.c._HV1jgQ.7nuFt13AR0.R7J0JPi0
+ s8s.WxzQurLtukSYyAWruJbdfu9xS4adpRjcsxAHLntfNqpUYTfOkGaXlaZJtXxZCEWvat_m5u5j
+ OFYwx3OK3L71iPrrP26AuWcGNU0G3haguQF_sJ1E2Tyad7DP.eaeV0wUnxmRuwn3nEORS2ngPXXm
+ Jf.PjWF9cX63wR5vLi2A2OJ_4ZzA05yeJXxrMQgDiy33._KHfkNhCMar13YpHMgdwjxW0a1Vjvl_
+ waO8O_B4qMVVrzrcStZQA9OtZhAv4.hqEEyC.AmaOgwuUp1c0.TN7iepWCGHqpfygk.RDzi3uci8
+ epIHhMGYvkgmrNJSXfPh97LRTZFjZT23i6TpU9BEaTmEXT7ub9nmDnsRNYPHWYzmf7CRmNXTUvIX
+ xNpY1aMmOdjKiLpyzgMMgZewKktMgM3czgli1RebJZMklJx9XXlPV.7NO04YVjLXBqToEiGTi8b4
+ IX159.23JZ1lJdf0r6ElxNK.Ut75K_J0bBV6Rei0GgxZZnRL7HpDbC45SHxOVudsF2B9.BCt7Dd1
+ WIbMQpdn8cTyM6gdCt5E4XOGY08pPGnu8qDhloApOEDNLKWdXVVrRblNdF4gpYR6iCzoJug--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 58773052-9edc-4e5b-b181-54767b6ce249
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Fri, 31 Jul 2026 22:37:56 +0000
+Received: by hermes--production-gq1-7749664df-wnjhm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID af5aeb6cb25895ee9689066a9446e5bc;
+          Fri, 31 Jul 2026 22:27:38 +0000 (UTC)
+Message-ID: <45d2738f-de04-43cb-b37f-4370e6232678@schaufler-ca.com>
+Date: Fri, 31 Jul 2026 15:27:35 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c832e29380545375b9898d4bf6066d0f989dc1065b4c155513d1321ab38db56f@mail.kernel.org>
-In-Reply-To: <20260730234533.1912709-4-dwindsor@gmail.com>
-References: <20260730234533.1912709-4-dwindsor@gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
-From: bot+bpf-ci@kernel.org
-To: dwindsor@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,jolsa@kernel.org,memxor@gmail.com,emil@etsalapatis.com,mattbobrowski@google.com,paul@paul-moore.com,jmorris@namei.org,serge@hallyn.com,casey@schaufler-ca.com,stephen.smalley.work@gmail.com,omosnace@redhat.com,zohar@linux.ibm.com,roberto.sassu@huawei.com,dmitry.kasatkin@gmail.com,eric.snowberg@oracle.com,viro@zeniv.linux.org.uk,brauner@kernel.org,jack@suse.cz,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-security-module@vger.kernel.org,linux-fsdevel@vger.kernel.org,linux-integrity@vger.kernel.org,selinux@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,dwindsor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 31 Jul 2026 22:27:34 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Paul Moore <paul@paul-moore.com>
+Cc: David Windsor <dwindsor@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260730234533.1912709-1-dwindsor@gmail.com>
+ <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
+ <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
+ <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com>
+ <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
+ <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com>
+ <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
+ <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com>
+ <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
+ <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com>
+ <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
+ <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com>
+ <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
+ <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com>
+ <CAHC9VhQ24fp7_sy1=NiWkfzPLSM35ugSCOKDKxnm6H9W-pDa6Q@mail.gmail.com>
+ <DKD2R5268G2C.TPLR4XMTZ91R@gmail.com>
+ <CAHC9VhQNozNGH4o=8D6wxks4deZ2eVOHmxFK=fvjhkCC0JSCkw@mail.gmail.com>
+ <DKD3I17NPS96.3G49BTZ4ZVUVV@gmail.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <DKD3I17NPS96.3G49BTZ4ZVUVV@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.26180 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
---===============3865849069632465672==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 7/31/2026 3:04 PM, Kumar Kartikeya Dwivedi wrote:
+> On Fri Jul 31, 2026 at 11:49 PM CEST, Paul Moore wrote:
+>> On Fri, Jul 31, 2026 at 5:29 PM Kumar Kartikeya Dwivedi
+>> <memxor@gmail.com> wrote:
+>>> On Fri Jul 31, 2026 at 10:48 PM CEST, Paul Moore wrote:
+>>>> On Fri, Jul 31, 2026 at 4:16 PM Kumar Kartikeya Dwivedi
+>>>> <memxor@gmail.com> wrote:
+>>>>> On Fri Jul 31, 2026 at 10:01 PM CEST, Paul Moore wrote:
+>>>>>> On Fri, Jul 31, 2026 at 3:20 PM Kumar Kartikeya Dwivedi
+>>>>>> <memxor@gmail.com> wrote:
+>>>>>>> On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
+>>>>>>>> On Fri, Jul 31, 2026 at 2:50 PM Kumar Kartikeya Dwivedi
+>>>>>>>> <memxor@gmail.com> wrote:
+>>>>>>>>> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
+>>>>>>>>>> On Fri, Jul 31, 2026 at 2:18 PM Kumar Kartikeya Dwivedi
+>>>>>>>>>> <memxor@gmail.com> wrote:
+>>>>>>>>>>> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
+>>>>>>>>>>>> On Fri, Jul 31, 2026 at 12:32 PM Kumar Kartikeya Dwivedi
+>>>>>>>>>>>> <memxor@gmail.com> wrote:
+>>>>>>>>>>>>> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
+>>>>>>>>>>>>>> On Fri, Jul 31, 2026 at 11:44 AM Kumar Kartikeya Dwivedi
+>>>>>>>>>>>>>> <memxor@gmail.com> wrote:
+>>>>>>>>>>>>>>> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wrote:
+>>>>>>>>>>>>>>>> On Fri, Jul 31, 2026 at 11:17 AM Paul Moore <paul@paul-moore.com> wrote:
+>> ...
+>>
+>>> I think you keep forgetting that you cannot unilaterally decide this. Both VFS
+>>> and BPF people have told you that it does not make sense. What was clearly LSM
+>>> specific code has been moved under security/ already.
+>> I'm charged with doing the Right Thing for the LSM framework, and in
+>> my opinion it is in the best interest of the LSM framework that the
+>> kfunc being proposed lives in security/bpf_lsm_kfuncs.c, just as the
+>> VFS kfuncs live in fs/bpf_fs_kfuncs.c.
+>>
+> I think the "Right Thing" would be caring about your users and the project
+> moving forward, who want this functionality, and figuring out the best way to
+> make it happen while working collaboratively with others. Life is full of
+> tradeoffs.
 
-> diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-> index f1863a891db6..7b55073934e0 100644
-> --- a/fs/bpf_fs_kfuncs.c
-> +++ b/fs/bpf_fs_kfuncs.c
-> @@ -11,7 +11,9 @@
->  #include <linux/file.h>
->  #include <linux/kernfs.h>
->  #include <linux/mm.h>
-> +#include <linux/security.h>
->  #include <linux/xattr.h>
-> +#include <uapi/linux/lsm.h>
+It certainly is. Paul has taken a stance that supports the ongoing maintenance
+of the LSM subsystem. It does not have a stable API in support of the rapid
+development of Linux kernel features *outside of* the LSM infrastructure. That is,
+people like you. If LSM hook implementations were spread throughout the kernel
+code it would be much more difficult for poor hobbyist LSM developers like me
+to track them down when making changes. Changes like the ones you require.
+This is about being able to continue supporting the latest and greatest additions
+to the system. Like yours, io_uring and the network protocol d'jour.
+
+Please don't lecture us on collaboration and trade-offs. We live and breath that.
+
 >
->  __bpf_kfunc_start_defs();
+> Instead of dictating how others should bend over backwards to agree to your
+> arbitrary rules on code organization, which they don't agree with.
 >
-> @@ -379,6 +381,44 @@ __bpf_kfunc struct inode *bpf_real_data_inode(struct file *file)
->  	return d_real_inode(file_dentry(file));
->  }
+> Everyone you've pitched your idea on code organization to disagrees with you.
+> Yet, you remain adamant that it's the only way forward.
 >
-> +/**
-> + * bpf_init_inode_xattr - set an xattr on a new inode from inode_init_security
-> + * @xattrs: inode_init_security xattr state from the hook context
-> + * @name__str: xattr name (e.g., "bpf.file_label")
-> + * @value_p: dynptr containing the xattr value
-> + *
-> + * Only callable from lsm/inode_init_security programs.
-> + *
-> + * Return: 0 on success, -EOPNOTSUPP if the filesystem does not accept
-> + *         xattrs at inode creation, negative error on other failures.
-> + */
-> +__bpf_kfunc int bpf_init_inode_xattr(struct lsm_xattrs *xattrs,
-> +				     const char *name__str,
-> +				     const struct bpf_dynptr *value_p)
-
-Paul Moore raised a concern about the location of this kfunc. As the LSM
-maintainer, he stated that this kfunc must be placed in
-security/bpf_lsm_kfuncs.c to be acceptable.
-
-In the v6 discussion, he explained: "The new LSM kfunc must go in
-security/bpf_lsm_kfuncs.c; if that isn't acceptable to the BPF developers
-then David will need to find a new way that doesn't involve kfuncs."
-
-Kumar Kartikeya Dwivedi disagreed with this placement requirement, arguing
-that it should remain in fs/ with other kfuncs. This represents an
-unresolved maintainer disagreement.
-
-Should this kfunc be moved to security/bpf_lsm_kfuncs.c as the LSM
-maintainer requested, or does this need further discussion between the BPF
-and LSM maintainers before merging?
-
-Reference: https://lore.kernel.org/all/CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com/
-
-> +{
-> +	struct bpf_dynptr_kern *value_ptr = (struct bpf_dynptr_kern *)value_p;
-> +	const void *value;
-> +	u32 value_len;
-> +
-> +	if (!name__str)
-> +		return -EINVAL;
-> +	if (strncmp(name__str, XATTR_BPF_LSM_SUFFIX,
-> +		    sizeof(XATTR_BPF_LSM_SUFFIX) - 1))
-> +		return -EPERM;
-> +
-> +	if (!xattrs->xattrs)
-> +		return -EOPNOTSUPP;
-> +
-> +	value_len = __bpf_dynptr_size(value_ptr);
-> +	value = __bpf_dynptr_data(value_ptr, value_len);
-> +	if (!value)
-> +		return -EINVAL;
-> +
-> +	return security_lsmxattr_add(xattrs, LSM_ID_BPF,
-> +				     name__str + sizeof(XATTR_BPF_LSM_SUFFIX) - 1,
-> +				     value, value_len);
-> +}
-> +
->  __bpf_kfunc_end_defs();
+> Materially, both you and I know nothing of consequence would happen if the kfunc
+> stays where it is.
 >
->  BTF_KFUNCS_START(bpf_fs_kfunc_set_ids)
-> @@ -390,6 +430,7 @@ BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE)
->  BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
->  BTF_ID_FLAGS(func, bpf_remove_dentry_xattr, KF_SLEEPABLE)
->  BTF_ID_FLAGS(func, bpf_real_data_inode, KF_SLEEPABLE | KF_RET_NULL)
-> +BTF_ID_FLAGS(func, bpf_init_inode_xattr)
->  BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30592505811
---===============3865849069632465672==--
+> As a consequence, everyone suffers because they first need to satisfy your whims
+> on how all code and kfuncs written thus far are wrong, and need to be moved
+> around ASAP, including the one being proposed.
+>
+> Not only is that a disservice to your users, but also people who've reviewed
+> code (apart from you), and more importantly the person who worked on this patch
+> set for several months.
+>
+> At least a month ago, you had the good sense of not dying over this hill.
+>
+>> [...]
