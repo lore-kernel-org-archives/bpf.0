@@ -1,198 +1,169 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65ED443F0B3
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 15:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0BA43B48D
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 15:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.176
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785511109; cv=pass; b=BcewNEqhujHm03+EV20rJk8V99Q888e/G1CJfrn0krzTYlaCNe6+DXec2h39d6746t5WP5qqPJVRmq7reffmaQHQ7H6AvtjqBb3jFj9b9ppr1iCw+B4eX2YAQpMtq538Of+rjxjMukU/5CD4+THhSbGMrDTsZGYqA2ZDB78grDE=
+	t=1785511312; cv=pass; b=W9hVU1j7DOQjOFKCWRwRDxxygDZH3THZ2QS4ePqn/7mPN8jI577R+hC30WXU9mpkO/t1S248ny9Sqld5mCDfIfuyvRW4hS4Kx4kUpLfNy/i0M+hY5z1rTk36luSIz9rT3LWsm0cMwXGiqL92o+57EfiARNXJTzvyi0xlMNRcgw4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785511109; c=relaxed/simple;
-	bh=chfVzJeTQjSbzx3vPhdLe6Aosf8+Gh5xMo2mpbfajNU=;
+	s=arc-20240116; t=1785511312; c=relaxed/simple;
+	bh=v+WL3XoOwQikXd2JtezOQGH92bijGZnMB9gOFI0vCIY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OlA2VPPSLWg2ZwiqWqRa9pscCSzx8KuuiTS8m2pwX1hTDIlLe5/wdpjCpqCYBunMGBX1vbol6kL7W1LdpczvzWPa/ZYG6xFcSYhbEKaO1CXbpoZzhmD0HoKHrKuzUAUfc6cxUzVHDWyzcR1bTOv2etfEHui2JjtP1w9iPLp0C6g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n+D/859z; arc=pass smtp.client-ip=209.85.210.171
+	 To:Cc:Content-Type; b=uj8WL62Sw0QuCUILN+GpqNSjRtJ0SIOk6Iz7TMBsE9jDBNEAeTsNHxga/99EiDfnp/05v/8IaOoNTGKCtN9qUWrX4WF6XsWA+H4WGTlbwsW9SW64ztjBKsxSXbifNXtQga0ZH5+ZUqfEel9YT0XfhfV8QAq7w1vAlHmv6LIS+LI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQeqDpEH; arc=pass smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n+D/859z"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8487214ad2bso1679030b3a.1
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 08:18:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785511108; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQeqDpEH"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-84a2dcede83so1647846b3a.3
+        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 08:21:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785511305; cv=none;
         d=google.com; s=arc-20260327;
-        b=fegEkjArdnZprDbkNVmtw9rHpiY9GLqUphzkOCvQYR3g0CuEVCYZy+UInP2oQSOMrk
-         c9JmxZOH0ZOMGhMKaGmUt2rGmhUxZCo9dMhh7qykPPVFGPlJu61H217BbSsYlVtmTgV7
-         n6hrvVnhK8kvNa/K1BcDRHj44iAX+BI0Dlg0nGxaEbY/7xUPqs+6+KOGr+AO56mbNhuK
-         0ykdPzLTm8HIBI8CvEord8CSvXGeV/5yU5iUxmsZl9OTSXZLK3kKwl0fuvk7erx+kxXx
-         IYRrKIT0gVt1H6xiza0gxyHrMh64SYduwZTAQuCKhmEerLiN4Sm6S1I10JqCj7cEZCWe
-         bwZw==
+        b=R6nbA8oMdqhFacm8BRgnwU9ODbcx/Fu1/296pY7DlPjSa0CfVLNEXUq9L4dq0aYyau
+         opkvjoxN6dKSSIkpzq5/MPCvLto4UUvXLJg8B9TL9u9kiCXEMaidL+ypGf6PynjB6aBw
+         UBRSBlxrt9d8/3pCM2I5Wc4ar5H9gP3RTya9nTEZAtqXufgvT02oOW55njOtco2DhkGq
+         iJUDePvbFIGmwr2CBtrGarCq2QqaY/jA045fJmP4ohsAD/+UFAay8sa0JcjZF6PS//65
+         Ac/xPbsL+tApihv1lRLmISK73c1gX18x/T+y5jAOo+M47bDL9VVcVbcXqkkV0X79E/2e
+         bjoQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=VOuuaXCuP7sxLKwstq+rEEGqoqff9gkJvO6v1dD1d8w=;
-        fh=qBbwu35lH5PnYIlJ2vv6c5Zhi+C5J9NHUWjZN0eGCxk=;
-        b=BfxxLci+iU6S3N5McVl+hEH2MlqrNinwW1Ixg7tpSJWpGo96IEQMMoFMTC71I/sOx3
-         z9ghYLO8lQciUp/ch1Xq4KKlqRPgCxUJ3YiOhBvNore3bQVElGyXzRZvmgARcnXeKZbL
-         tQeYbM8m0L6K08RSEVDF3DB3UuhzbtkY2Am4zoRDcd+vWQZBoVdmEofL441n1PBb+d+u
-         CO8HDRxAs04ppIlZjeUhp9B4ppfokawQvBwfTzAf+z2uaUGhgK6m+i99rGkMO0ahTfVW
-         zaX4/QkYQbPmwGRVg8v87BMjGEfGS0GO9UEyA7RldUtpSr6nGpdAbVA5dE971Frgka6E
-         K9yg==;
+        bh=p9+LRn/SvSrh7d6/E5JqQArA7jl7jdT+NZc32lFMXxY=;
+        fh=ZD+TWjvdVv6CQAJ03pcYJ5YB24ceDiblC/Zer5CxQ0A=;
+        b=F0YAh3k9sv6+I6BSYrzu5InvnKLze42CUvWRF8+5oFU0oGdRLce/lFGBek/be2+Rip
+         usLq3Zmu6LeurppTjQ2Z+ypCx1xIfGn6KvWjRqN8DAADq/7o577BXdYom0OoHTw9GZcR
+         UCw3WaPaEA8kTsEASzG/lSV3owbt1IoW9H3Ed0clX2cQsfT+CWrgBzUWn8Ei4EUp6Afa
+         TDvLeJlnFh6KzpgMCU8MopTclBKvQ4ZT0GBPx37caegtLXeQvj8dh2sDqTzW4p0gD/tD
+         JGkXGh0DMUQ/sDXUZUx7Yv+svNFgeLjtqtau3eeCzJYJalA01TcAyvwRQAHoL4l9di7a
+         PvTQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785511108; x=1786115908; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785511305; x=1786116105; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=VOuuaXCuP7sxLKwstq+rEEGqoqff9gkJvO6v1dD1d8w=;
-        b=n+D/859z0M/qP2WR6eLkArz0gL4NXFgUUNpU/n7hFqyhASswZyI8pVu5ZrfU9+dqXX
-         nzpMftPE7soQHzrMen1Feths4CwlVecd8tHybCEG6RPaUHBJ9mYUPXct0z7O/ES+F2gI
-         jF7kas3SxKXkQAckSL3f1oWyhKs/wAbj9/AwCFYz7khWIODKC1lfOVZaPsCv99glOKpU
-         iZZ4W4yGHutrFd5Qz+eHZ2OpUNGA8a1plfoGIU67xOLq+MKEgpOrORAbAJyMzvX9SOeA
-         HU+t9oBPnNAufT+9QzStC7JE5ILxsZmfU48nn0Byx6KKvhBNeXy1crbknWjZff+Ajf2v
-         Nlcg==
+        bh=p9+LRn/SvSrh7d6/E5JqQArA7jl7jdT+NZc32lFMXxY=;
+        b=MQeqDpEHId0AWi0fgHZhE1c71pI0bvQX5eTFev+whg/QuqGJdhQX8ac8o/w2I91UTm
+         MGkSTswyKgaeoFfVRoSOLX/4EAbb2u0vq/rqvhvbSOzlU1u7hGsyJN8oeQHcIDYxQ/Su
+         61hScehPZXmT9xHG0S5L/LePjdMg2ogk3DTyPKzbhI/j+5ZC+tztzfFqdL4Cgbyiu+U7
+         MF6soGGw+PeXaMxAji8TpP5tZmiWTMTqT7qc3G33uGv0xX3Bu2LX2V4X1ZJNUvlHUDyl
+         vwv9CxogyV2tqUquBhiBZPY0E3Btq+QcLYoeYUFc/kAJC/KKmSNxgq3lCERZw6qAEbD8
+         mAfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785511108; x=1786115908;
+        d=1e100.net; s=20251104; t=1785511305; x=1786116105;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=VOuuaXCuP7sxLKwstq+rEEGqoqff9gkJvO6v1dD1d8w=;
-        b=X2vJhlZ3s+m+/yt+c63b+HrgBkwjIaCAzVxj+JzB4KEkzzlP+5hQzKBF/mFP7JRpQi
-         dKtwP4G8xc3XcojuoU3Sxkh4h29rwZU5dXAtOtCk2Se+ib/05R7rQxV4gMf9todwhw+X
-         PMowK+dQiTz3EqIzaeCTc/gTHpr7J7ijYQYYbZSsyE2i8mFTFLaeuPlwUY/HonMgjJBr
-         5zyEPY81zg296B0cJf+zfhGM+wrTX/Iyln1ZAAkuNaTsVjIxon0yAhs03/N4vtzXGhgf
-         +OGq3CBdSe+KB/ZYHI+vnZ5ptVU6AY+2ZwY3CjXGzRtiKrQ4vP4Mjw86rkD3WXcAX5rZ
-         /vdg==
-X-Forwarded-Encrypted: i=1; AHgh+RpC5qiZQ11zcZ8QBfPFv3M1dP09IgKSO9xypsRdAnR8CCVMklf9ht5zOscnx9olCvLDMaY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz34gwvAhK+5ef6kvG9j5oZj4KdEO6ceyP9KBXZb2uqblZMj+AF
-	QNfVRPc62bk6JDzgtjzxd808Ro0MnjBl9R9ikkCsnYTeez5Nt1yp4V2KBGGH71V2yJlFuC9zGKD
-	Nx93I4JESNvKx8qaZF1mL3i8jg9+4SHk=
-X-Gm-Gg: AR+sD11KzQ9TuglWY9A+pFecWUZU9y2mYOcaCUmPZIgYWVWlom5Xd+KV65wQZFP7Tpn
-	Fh2bhEzFahLjGq5/N5aaesZgzZWDxCrlOk/BP9AntxMTQL3XDFppT2jdLij52Klr/uS9JkXOMKN
-	XrKx53E+k6je2gSTDQGIH6s2NXfr7nSj0MkVqdvFOK+no5+3GIEDoX6AjmuvZYU8NADF3jFI6YJ
-	NfYIYCR83Kxsz2uhCKPqT1PKDQ/XeFDE7O94hc0X1ER+nZJYQMxcDhwbAdlKiyOc1/FppQKbmoP
-	711aBvIFbxPPga3tq2iQ+tlriQf/IpaxA0YZnek5KRCFKk9H+IC0SxkM1sJUXkAIMoCsemYCeAj
-	C77Z3jcjwaxZwcq9mZy1/KyjbiA==
-X-Received: by 2002:a05:6a00:94fd:b0:848:2c2e:c7a3 with SMTP id
- d2e1a72fcca58-84ee47e4316mr88460b3a.16.1785511107513; Fri, 31 Jul 2026
- 08:18:27 -0700 (PDT)
+        bh=p9+LRn/SvSrh7d6/E5JqQArA7jl7jdT+NZc32lFMXxY=;
+        b=e7l/hd+bJLBD1f7ImEkaffE4aSC9E/Nzy8fxRCAh9ilkL5E9a0XXdfHbfKhJMh0Ngm
+         4q/3NyQdNb2aNmwq4JTegQU+pWxTPrNv92pW+uXZzhrbqhmLqYLDHudx6foKzZT6EV/Y
+         CPSdIJdhbVzU9Sdcd6qCtexG3YIt9Zb7A1xcZnZTVS7saN24DDmaoNfwbeENAYcH2PVC
+         EZGSyYv4qc06BGNjHcg4qNUHgRkOMuNNQ6ezJNieqLGzhzeC7TAvob1X8dMIwNnSUa2v
+         El8h8vXBDi0BKejUUScEvakn3iTVSra1ELqoNDXexwMEtf39/Iquq3vLXY5Mm2PqnC5T
+         dYuA==
+X-Gm-Message-State: AOJu0YzKGIJTUGBufbdPYCPNORd7Y58G98JHnAgLz2peMS6KYCqxOHIM
+	WuNuWpxdPTB6bVncyB8IYFaoJJXZDtwrqW9+NBDYDKU6RSScJawb9ukRHGW07cgO84FLP6zUIT7
+	gxhDrHXDw7iwPZxUGxo3GiAx3a2Sz7wcIGxyTeT8=
+X-Gm-Gg: AR+sD10Hz42t32AiZcAwIpXTQy1gHTSAOxw25EzHhv7scA1qKewOVY7QjagURJ/cE9t
+	J0GSVHetZx5LU7xUv1SIwAZ6n1+VzPir6jCKIbZXR9VpNMSwpJGjh5gT+Pn9tkD67cjMl1IcpnQ
+	36ZkxsqNDx8Qle+Sl7kl2+Sia7as/YcxEFB1XLW2j++32TIjuVn6tDysCl95xR8GMnTtrs1NeFe
+	56h5LnGeKXiXI1MtJZQPcjdFhFPSBeHPfnDwPNhOyFUAX7lX4GQfDea8EJmA3IDz0jouZeZxHAu
+	6huvJDrS44pVnampiUUVo+u4/NUMU2ytxcxZVkK7An2CC665fcdXbJVA3AYDQoBS/gxuayQR68m
+	lsubNMowMaKXg1YtLh+h9crpqBg==
+X-Received: by 2002:a05:6a00:418d:b0:848:2f77:e2dc with SMTP id
+ d2e1a72fcca58-84ee49aa19bmr73028b3a.69.1785511304566; Fri, 31 Jul 2026
+ 08:21:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260729083807.1588544-1-jolsa@kernel.org> <20260729083807.1588544-12-jolsa@kernel.org>
- <CAEf4BzYvmVJ7bFZ_dmW-HbwwM1yUxzs40yHNdF_JTn+Hr+0w4A@mail.gmail.com> <amykLSjSzayP4WHa@krava>
-In-Reply-To: <amykLSjSzayP4WHa@krava>
+References: <20260725132624.78373-1-leon.hwang@linux.dev> <CAEf4BzaoQaODE4F1wfrp37=83bePY=gKpunacKr3rmO230+B3Q@mail.gmail.com>
+ <66eaf62b-202b-45b9-8934-fbbc80caa84a@linux.dev>
+In-Reply-To: <66eaf62b-202b-45b9-8934-fbbc80caa84a@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 31 Jul 2026 08:18:15 -0700
-X-Gm-Features: AUfX_mwD2HKwvrwhCDe-0LGRMqvPmSikoTaOZkWKBbiOqII39yaydWeqyBt9B-Y
-Message-ID: <CAEf4BzY8Mn1oRofO4oeujUmihizZt_DkKuBdtjM3TyfgP8a=iA@mail.gmail.com>
-Subject: Re: [PATCHv2 bpf-next 11/11] bpf: Clear buf on error in __bpf_get_task_stack
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Sashiko <sashiko-bot@kernel.org>, bpf@vger.kernel.org, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, Quentin Monnet <qmo@kernel.org>, 
-	Tao Chen <chen.dylane@linux.dev>, STAR Labs SG <info@starlabs.sg>, 
-	Arnaud Lecomte <contact@arnaud-lcm.com>
+Date: Fri, 31 Jul 2026 08:21:32 -0700
+X-Gm-Features: AUfX_mwX1Lnn-oFVg3jgqe6P4ofXoWURmDZdlHg78-NJyoQdPMHudZHx9cqdijU
+Message-ID: <CAEf4BzbjmW0e6DqFLUAyV+m_usHSkHpux3AdS72bJtsmYQC_LA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/2] bpf: Fix sleepable check for tracing prog
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, Sechang Lim <rhkrqnwk98@gmail.com>, 
+	Varun R Mallya <varunrmallya@gmail.com>, Viktor Malik <vmalik@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 31, 2026 at 6:33=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
+On Thu, Jul 30, 2026 at 10:20=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
+wrote:
 >
-> On Thu, Jul 30, 2026 at 04:11:02PM -0700, Andrii Nakryiko wrote:
-> > On Wed, Jul 29, 2026 at 1:40=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wr=
-ote:
-> > >
-> > > Both bpf_get_task_stack and bpf_get_task_stack helpers that use
-> > > __bpf_get_task_stack have buf defined as ARG_PTR_TO_UNINIT_MEM
-> > > argument, and we should initialize the buf on every return path.
-> > >
+> On 31/7/26 08:07, Andrii Nakryiko wrote:
+> > On Sat, Jul 25, 2026 at 6:27=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
+v> wrote:
+> >>
+> >> When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing =
+prog
+> >> is allowed to attach to '__x64_'-alike prefix symbols.
+> >>
+> >> It is because the verifier does not verify whether the symbol is a ker=
+nel
+> >> function or a bpf prog. That said, a sleepable tracing prog is allowed=
+ to
+> >> attach to a bpf prog target whose name has '__x64_'-alike prefix.
+> >>
+> >> For example, a sleepable fentry prog attaches to a '__x64_sys_nop' XDP
 > >
-> > why "should"? what's the point to initialize it to all zeroes if we
-> > failed to get stack trace? we shouldn't allow grabbing stack trace
-> > without CAP_PERFMON, and with CAP_PERFMON we shouldn't be worried
-> > about "leaking kernel memory" because CAP_PERFMON is plenty privileged
-> > and allows to access any kernel memory.
+> > we do have addr, so we should be able to distinguish between attaching
+> > to kernel function vs BPF program, no?
 >
-> hum __bpf_get_stack already clears buf on error, so I did not question it=
- ;-)
 >
-> there's this comment:
+> Yes, we can distinguish a bpf prog from a kernel function by addr.
 >
->         /* Pointer to memory does not need to be initialized, since helpe=
-r function
->          * fills all bytes or clears them in error case.
->          */
->         ARG_PTR_TO_UNINIT_MEM           =3D MEM_UNINIT | MEM_WRITE | ARG_=
-PTR_TO_MEM,
->
-> IIUC from verifier POV bpf_get_task_stack switches un-initialized buffer =
-to
-> initialized regardless of the returned error and such buffer could be the=
-n
-> passed to another helper that allows only initialized buffer
+> I'd prefer passing 'tgt_prog' to btf_id_allow_sleepable() as a simple
+> change.
 >
 
-We used to not allow to read stack slots that were not initialized,
-but then we changed that and we treat uninitialized stack slot as just
-unknown scalar, so it wouldn't be a problem.
+I don't think there is a need for new tgt_prog argument, we can just
+check that supplied btf is not kernel/module BTF (see btf_is_kernel())
 
-But for consistency, let's clear it. Looking at the code some more, we
-set the "tail" of buffer on success with zeroes as well, which makes
-it possible to use buffer as hashmap key (deterministic zeroes at the
-end will result in the same key for the same stack trace), so ack for
-the change, but motivation is not preventing reading uninitialized
-memory, it's more the usability angle.
-
-> jirka
+> >
+> >> prog, and copies buffer from a user pointer with bpf_copy_from_user()
+> >> helper. After attaching the XDP prog to lo interface, the kernel BUG
+> >> could be triggered by 'ping -c 1 -W 1 127.0.0.1':
+> >>
+> >> [    3.460756] BUG: sleeping function called from invalid context at k=
+ernel/bpf/trampoline.c:1324
+> >>
+> >> Fix it by disallowing sleepable tracing prog always when its target is
+> >> bpf prog.
+> >
+> > what happens when we freplace sleepable BPF program/subprogram with
+> > another sleepable BPF subprogram? And same question for sleepable
+> > fentry/fexit program attaching to sleepable BPF program? Is it
+> > something that just cannot work or we can actually allow that?
 >
-> >
-> > or am I missing more reasoning behind this change?
-> >
-> > > Adding missing buf memset for __bpf_get_task_stack fail paths.
-> > > The __bpf_get_stack call does clear the buf properly.
-> > >
-> > > Fixes: 06ab134ce8ec ("bpf: Refcount task stack in bpf_get_task_stack"=
-)
-> > > Fixes: b992f01e6615 ("bpf: Guard against accessing NULL pt_regs in bp=
-f_get_task_stack()")
-> > > Reported-by: Sashiko <sashiko-bot@kernel.org>
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  kernel/bpf/stackmap.c | 7 +++++--
-> > >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> > > index f4827afbfed9..9ab0c2523a41 100644
-> > > --- a/kernel/bpf/stackmap.c
-> > > +++ b/kernel/bpf/stackmap.c
-> > > @@ -890,14 +890,17 @@ static long __bpf_get_task_stack(struct task_st=
-ruct *task, void *buf, u32 size,
-> > >         struct pt_regs *regs;
-> > >         long res =3D -EINVAL;
-> > >
-> > > -       if (!try_get_task_stack(task))
-> > > +       if (!try_get_task_stack(task)) {
-> > > +               memset(buf, 0, size);
-> > >                 return -EFAULT;
-> > > +       }
-> > >
-> > >         regs =3D task_pt_regs(task);
-> > >         if (regs)
-> > >                 res =3D __bpf_get_stack(regs, task, buf, size, flags,=
- may_fault);
-> > > +       else
-> > > +               memset(buf, 0, size);
-> > >         put_task_stack(task);
-> > > -
-> > >         return res;
-> > >  }
-> > >
-> > > --
-> > > 2.54.0
-> > >
+>
+> Currently, sleepable freplace/fentry/fexit progs are already disallowed
+> from attaching to bpf prog, because btf_id_allow_sleepable() returns
+> -EINVAL for them (except for this BUG).
+>
+> Since no one has proposed relaxing the restriction, I'd like to keep it
+> as-is when fixing this BUG.
+>
+> I'm not sure whether allowing it would introduce any issue.
+>
+> Thanks,
+> Leon
+>
+> > [...]
+>
+>
