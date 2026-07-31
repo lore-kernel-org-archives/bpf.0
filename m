@@ -1,230 +1,184 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E1117993
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 00:18:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1C1250BF2
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 00:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785457100; cv=none; b=oSrKNsRNqo10GcpUsa4D0pR04fyw4JrbyUz/39iAHzrBCiEANvdJLMyh9aUApIKWejwn4DSrSThslMG9a6DtO9kzMuMd6fwK948af75KHXRGzbeRmFY0xdB4+bYR5e6MtPWGzklerf5jgR51Jx9pPsYZ8jhUBDzKPLwK1Sl9e24=
+	t=1785457804; cv=none; b=lzPNKM0LkElywZLqFW1F94jcJFv1QE7v4O4Sf6I7Fkvc4Si4hXWig61ftuXKzHzCprlzV/U+QtYPmShigUCG0n6RYdItakMQde1L9vvxp3PLKRePzv0zDe1eqP7aPQTjp9vitHnDBNUAMFzIZFlpATDPyjy9/QM8fGvvKwuopjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785457100; c=relaxed/simple;
-	bh=d71qq8IeroOX81lWUMlvZ1oPsNcK1R28/HBOYSVyITg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=eGDLOAbtYXu4htFWqJAPIOlwne0taDKsXndPY8ilFxdC3+QWUr1IRlLe3rBpbu9bP1s0Z4hyNCJEnhwZ3aSn+bbGS5QEMjgORiH1NGJWUZ1afsui8SBCDkrKGN29Nxxa73XbJ4ye08/C0CbFJ2lSF/0H27iG0DEz9Ngf9wo5Z+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DqJ7RSC3; arc=none smtp.client-ip=209.85.161.42
+	s=arc-20240116; t=1785457804; c=relaxed/simple;
+	bh=mSA3vRjYQjkXAyBy0gklxrbC1mTx7y/m2jr4N1Je8Os=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OvcpPlm4HxJoWBHde3Z4Px3XNekadIUHKIrdmD82CBE6FBh0ggQJX0zHWTxHywwJOQSuE9mbpUBcq6AYoSpv5GoDHQDf+WhTjpKlwnQj8oYwmFMIVzpI7zpCaS6pHMNiyugjkgrnEdZh71BuRwZm3SSLiq6/JDTuvKMp6c0bMGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EwxqFIMF; arc=none smtp.client-ip=209.85.128.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DqJ7RSC3"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6ab04bbcc11so117869eaf.0
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 17:18:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EwxqFIMF"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-81e6f2ee60bso19975997b3.1
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 17:30:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785457098; x=1786061898; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=pgfjfo9Gag5kWKb0bLxwyUihgIZfRY7YyhtakKFQe0M=;
-        b=DqJ7RSC3BvBdxHU4KFiOMByCqPOKjRMq5BkFdfihot3h6VILPlLrAAy17Vj9Pzw7tr
-         ML+iSsULjXMuiiphnX1PcQ6xQHuaPeNbRc0rYCe6n20ROZ2Z8iMPnGs7Wt4TQOUkDo+C
-         pMzhbKy4KKxwJ9GAbyW9llkRKg1ogLJoLlc6MOQ8XSgdX2TNFBlcZUPN2TNtJA935CJ6
-         5QrUX63jf6uMJaWzziZeVscD0HKhjVVh3xdM5AkWcK9IsL6ikkjCy+aZzyIySjQTVH72
-         xxFKsJiTpI9NKTRQ5emlyxYpBLbKnq7bPbfYXJxKriWWI746GAn737anMFKTVLn3YdiK
-         PTyw==
+        d=gmail.com; s=20251104; t=1785457801; x=1786062601; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=QRMRalxGkRReFOWmTtsSnVADD1z6LkTNb+5taBWJoZU=;
+        b=EwxqFIMFvVUmFVdYV5X440E85cyFAcPSUY2+eXVBkCulCL2ViBocSBzLREXA+liC85
+         kMsCV8YkNLf08UP7KXFtZae6Yr+Cpk5Auq+Ena8CqScIlF7bOgLTpO9p02dNWG4zgnKD
+         Q1AP/OzJu2USsiwRmkL7vwxqrsv7C5b+b52D9Xbb6ccxrBZyUUuuym+CGiAJBZZi7uCw
+         4zdyRGMvvH/lmAvCVdjg70+All/gdaPxvhD9H1x9DUPhb5zZ2J72TQzoGCtlhtihbtrn
+         S5zn5rt+FyjUrLI19qr8qF9I1zWVceq/wLzfUP0+QSLne15v5uybxm38zcWkdxDYlV5r
+         +MAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785457098; x=1786061898;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=pgfjfo9Gag5kWKb0bLxwyUihgIZfRY7YyhtakKFQe0M=;
-        b=CeHFNqVP1uSpTJzidz3j989PH3qK7Tb/BBZspwJ9jslWPrnAhsftNCAySgrZS3bz3M
-         X1sGjeSSOM6kYghxl2OLLZhet3ayr+gwL315dkg5e+SpLDZXe5akBjSiMl2AfbUm1GOJ
-         A2ueRtdE+fNVJ+WNUr2PCG8pthuKv7FvelOp5q0EeeKJFritl+k74HcHXVr1dlJi3qm7
-         otgV+aGaLoOnUtcnEHm5XzrPsnEW5iyQ4pRo3ASPAJ/CPdGZFNWzj442ZkP4NASh9fgw
-         feyvJlox2fP8GlASp4jrPkO1bGkgq8rYGI87T8lKs83hpLbVpFR6tJPe10KuLQcwAXGi
-         mKZA==
-X-Gm-Message-State: AOJu0Yxumqy5cQEWwJyH9ZfLcUcMeR9ytNO1Gc87C7UaxxuSh0t1CBQN
-	TEVdcTDeIfJhsDhGecSW3HiYhLUnE4JGxieyH0VOIKBpxPYoFCOalv6c
-X-Gm-Gg: AR+sD12+ywJJMyHoWvwIjyt8YReoHpoVIncVdnzjoEgrwM6/lTpExgca71XSRqW6rdf
-	SkMDwki4a9+SBceegWMUu6alBT0gZ/ePlrkurminYb9DCA2XZXnDFVMv61GRamRf3XSVcZYOJHK
-	tjVD24k/tL/+Qdod8W25o9gGr0baomkafO8t9WgMNECz4CbcShvU80F9FRt8QDmBoqiFvYP6ztZ
-	aB+er4SYv6KNfZ6769j6kuaVNOFGNTsPws75v8oropW2IGK1NHBSZy98WysSxyqfiXDejhqXoUZ
-	9A39cBTQD3WWWCrQ3ME0N0Ujvfj9rxSPlgyY9gryfXQr37e3AtGURNa9NYONgNDAk+69aePrhIW
-	mtcgS3eZAEPTFTa+sV1onwDgY28RxcFCt/WiqLCcY8+xE27gLcxyYoGtRXzS3tQHmofDq2eCxMi
-	oZlvrkq0Kqm0WU4no5fxhiTSAwQwt5ZN/n66W6y9OFHCXF6ETdb80=
-X-Received: by 2002:a05:6820:1523:b0:6aa:e844:fb2c with SMTP id 006d021491bc7-6acbbcfa05bmr3160087eaf.7.1785457097970;
-        Thu, 30 Jul 2026 17:18:17 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:75::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-458c29d51f9sm3579066fac.16.2026.07.30.17.18.17
+        d=1e100.net; s=20251104; t=1785457801; x=1786062601;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=QRMRalxGkRReFOWmTtsSnVADD1z6LkTNb+5taBWJoZU=;
+        b=TkFOrPCujR86VelcolhZVqvV35ZMU8vwOgC2R5X6HFU7WPfE+QvrI1Lm5tVWBsgxbT
+         EejqSrijgL0rl8+5EBUhRFBGPGVwVE5jfcHCiHvRz4Ggl4J4XCEmppMgdOy3eN/Q0HK3
+         d5B4uilsMlJpIua+TMPG0ngn5IxrUyrFIL0FZ4w415Trt+Yv4+LGZcvAY0jaF7K2L13+
+         UT9D6NPKvk/18Umsi3uO5TAWLwH90jy+Dh5dEi2ubJXTR9MEcExrcUT+dYumk62DfZ2z
+         SZLjfSRn82RMvxauzIeL3QwRmZq8XyCi/zIREn86dNK/Jd3+XBeVtyd0Sql1sCOMM5+b
+         y4CA==
+X-Gm-Message-State: AOJu0Yz/bjCcKU0UsGRjkxcbcf6CzLwjZNW6myGLtMwjOEIyGF8MGG2q
+	LasSNSndmG7njZL5795CAaSAOliUY1FNl5I1iZ2t5k1gtS6Gt+pOHTwgdwqjsP09
+X-Gm-Gg: AR+sD13Kpd+BS8pLDt/GfEJ+CrANbH86BxrWYBlruLiIm0yEKhrYknWKMIIH1vOGlSO
+	L30GQ8iJrbk5TM948R0wjty/UPKhmsWwM5NOBMGCW8WqR8ZGYOroEnHBON4CLvUWjIZx+n4uIvp
+	dJoJjHkExEljcdXCdcY3Nb47o2EoShMdV3naGe7+//XXw2rpkA3OldkA3tKrhQ1h5vb5hlclx56
+	z+tu7GqE0Yv4r4g389UAwAvDqDuPqMIW6j+dMhBSZxr42fU9bhg79ZB0JGBKMc9w7lPM+jo3elk
+	LjfG5aWG6o1UxmyECtAHtVf6OsSIBvCjBS6XBQw3W5UgV2s8DPtHQkfUpoAQWdrmtS6ZCCxAKRB
+	hvvMxAPIkjohFAQy0gVHRQm5ce3OPg3kD1w3hFJwiNBT7JTBIFvUiGXt9GhsC+UFD8UkZTSA3w6
+	1I5zUBwK1EI2pAiUAFhtlZcysDp03LILJwb6yBAOV5NpdoJpo88ij9Mw4iHIo2kc5TrUYUkw==
+X-Received: by 2002:a05:690c:a01b:b0:81e:94bd:6473 with SMTP id 00721157ae682-81fc1896b01mr15268507b3.30.1785457801138;
+        Thu, 30 Jul 2026 17:30:01 -0700 (PDT)
+Received: from TurinLinux.home ([187.15.144.227])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6692c6e8de7sm2355997d50.4.2026.07.30.17.29.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 17:18:17 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Thu, 30 Jul 2026 17:17:39 -0700
-Subject: [PATCH v2] tracing: Make per-template BTF id lists file-local
+        Thu, 30 Jul 2026 17:30:00 -0700 (PDT)
+From: Nicholas Dudar <main.kalliope@gmail.com>
+To: bpf@vger.kernel.org,
+	udknight@gmail.com,
+	x86@kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	tglx@kernel.org,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	hpa@zytor.com,
+	linux-kernel@vger.kernel.org,
+	visitorckw@gmail.com
+Subject: [PATCH bpf-next v3] bpf, x86: Add support for BPF_SDIV and BPF_SMOD in the i386 JIT
+Date: Thu, 30 Jul 2026 20:29:50 -0400
+Message-Id: <20260731002950.179573-1-main.kalliope@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260730-b4-fix_btf_tracefs-v2-1-6b66da8dc103@meta.com>
-X-B4-Tracking: v=1; b=H4sIAKLpa2oC/33NQQ6DIBBA0auQWUsDtNSGVe/RGAMyU2ehGCDGx
- nj3ph6g2794f4eCmbGAEztkXLlwmsEJ0wgYRj+/UXIEJ8Aoc1ftVclwk8RbHyr1NfsBqUiKnqK
- 3FIMN0AhYMhJvJ/rqGgEjl5ry53ys+lf/cquWWlrSKrTmQVbjc8LqL0OaoDuO4wu4ngrAswAAA
- A==
-X-Change-ID: 20260730-b4-fix_btf_tracefs-fdafda5fdb5b
-To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
- eddyz87@gmail.com, memxor@gmail.com, rostedt@goodmis.org, 
- linux-trace-kernel@vger.kernel.org
-Cc: linux-next@vger.kernel.org, broonie@kernel.org, 
- Mykyta Yatsenko <yatsenko@meta.com>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785457095; l=5490;
- i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=hmaukBcIfLOTdQ4K7uDmftM8WKS7YD5n5UlweCXdDHA=;
- b=fVM3/kxj79XdSqH8qx+eMR/f7HOKUIFDiHVoL+xBuLTybZOgRdF1P2TPVOY1vX7O/gHQfHFUr
- vEcDxPBp1iWD7LLCR9VEiKsuoy75N8lKZUUuYzQztWx6g8gpRSWPu++
-X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
- pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
+Content-Transfer-Encoding: 8bit
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+emit_ia32_div_mod_r() emits an unsigned divide (xor edx,edx + div ecx)
+for BPF_DIV and BPF_MOD regardless of the instruction's signedness, so
+the i386 JIT does not implement signed BPF_SDIV and BPF_SMOD (off == 1),
+which get an unsigned quotient and remainder rather than the verifier's
+and the interpreter's signed result for negative operands.
 
-DECLARE_EVENT_CLASS emitted __bpf_trace_btf_ids_<call> through
-BTF_ID_LIST_GLOBAL, i.e. a global symbol named after the event class.
-The class name is not unique across the kernel, so the symbol
-multiply-defines whenever two translation units instantiate the same
-class.
+Add signed support. Pass the instruction to emit_ia32_div_mod_r() and,
+on the signed path (off == 1), emit cdq + idiv ecx instead of
+xor edx,edx + div ecx, mirroring the cdq/idiv-vs-xor/div split the
+x86_64 JIT uses. bpf_do_misc_fixups() rewrites the zero-divisor and
+INT_MIN/-1 cases out of the instruction stream before the JIT runs.
 
-Switch to the file-local BTF_ID_LIST: the list is reached
-only through the event_class_<call>.btf_ids pointer, initialised in the
-same unit, so tracefs readers never reference the symbol by name and
-resolve_btfids still fills the now-local .BTF_ids entries.
+The RV32 JIT has the same gap.
 
-The handcrafted syscall classes are the one cross-unit consumer: give
-them their own local BTF_ID_LIST rather than importing the generated
-sys_{enter,exit} lists.
-
-Fixes: eadc0725ab8d3 ("tracing: Expose tracepoint BTF ids via tracefs")
-Reported-by: Mark Brown <broonie@kernel.org>
-Closes: https://lore.kernel.org/all/ff58b01c-3f5e-4d55-be82-609d2faaf12e@sirena.org.uk/
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
+Assisted-by: Claude:claude-opus-4-8
 ---
-Changes in v2:
-- Emit the per-class BTF id list only under CONFIG_DEBUG_INFO_BTF;
-  without BTF the ids are unresolved and BTF_ID_LIST falls back to a
-  128-entry (512-byte) per-class stub, adding hundreds of KB of BSS
-  across the ~1000 event classes (reported in review of v1).
-- Link to v1: https://patch.msgid.link/20260730-b4-fix_btf_tracefs-v1-1-5f10b728f51e@meta.com
----
-Changes in v2:
-- Emit the per-class BTF id list only under CONFIG_DEBUG_INFO_BTF;
-without BTF the ids are unresolved and BTF_ID_LIST falls back to a
-128-entry stub.
-- Remove verbose comments (Andrii)
-- Link to v1: https://patch.msgid.link/20260730-b4-fix_btf_tracefs-v1-1-5f10b728f51e@meta.com
----
- include/trace/trace_events.h  |  7 +++----
- kernel/trace/trace_syscalls.c | 27 ++++++++++++++-------------
- 2 files changed, 17 insertions(+), 17 deletions(-)
+v3:
+- Correct the incomplete recipient list.
 
-diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
-index 09ad57ac4b73..93011f800d0f 100644
---- a/include/trace/trace_events.h
-+++ b/include/trace/trace_events.h
-@@ -398,7 +398,7 @@ static inline notrace int trace_event_get_offsets_##call(		\
- #define _TRACE_PERF_INIT(call)
- #endif /* CONFIG_PERF_EVENTS */
- 
--#ifdef CONFIG_BPF_EVENTS
-+#if defined(CONFIG_BPF_EVENTS) && defined(CONFIG_DEBUG_INFO_BTF)
- /*
-  * Per-template BTF id list, populated at link time by resolve_btfids:
-  *   [0] FUNC   __bpf_trace_<call>     (the BPF dispatcher)
-@@ -406,8 +406,7 @@ static inline notrace int trace_event_get_offsets_##call(		\
-  * Exposed via the events/<sys>/<name>/btf_ids tracefs file.
+v2:
+- Frame as adding support and drop the Fixes tag, per Pu Lehui [1].
+- Pass struct bpf_insn * to emit_ia32_div_mod_r() rather than separate
+  op and is_signed parameters, per Kuan-Wei Chiu.
+
+v2: https://lore.kernel.org/bpf/20260714023939.616686-1-main.kalliope@gmail.com/
+v1: https://lore.kernel.org/bpf/20260713185848.120137-1-main.kalliope@gmail.com/
+[1]: https://lore.kernel.org/bpf/fa8a040f-64c4-484f-9538-fb0ec287639f@huawei.com/
+
+ arch/x86/net/bpf_jit_comp32.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
+index 852baf2e4db4..012161da3e82 100644
+--- a/arch/x86/net/bpf_jit_comp32.c
++++ b/arch/x86/net/bpf_jit_comp32.c
+@@ -432,11 +432,13 @@ static inline void emit_ia32_to_be_r64(const u8 dst[], s32 val,
+  * ALU operation (32 bit)
+  * dst = dst (div|mod) src
   */
- #define _TRACE_BTF_IDS_DECLARE(call)					\
--	extern u32 __bpf_trace_btf_ids_##call[];			\
--	BTF_ID_LIST_GLOBAL(__bpf_trace_btf_ids_##call, 2)		\
-+	BTF_ID_LIST(__bpf_trace_btf_ids_##call)				\
- 	BTF_ID(func,   __bpf_trace_##call)				\
- 	BTF_ID(struct, trace_event_raw_##call)
+-static inline void emit_ia32_div_mod_r(const u8 op, const u8 dst, const u8 src,
+-				       bool dstk, bool sstk, u8 **pprog)
++static inline void emit_ia32_div_mod_r(const struct bpf_insn *insn, const u8 dst,
++				       const u8 src, bool dstk, bool sstk, u8 **pprog)
+ {
+ 	u8 *prog = *pprog;
+ 	int cnt = 0;
++	const u8 op = BPF_OP(insn->code);
++	const bool is_signed = (insn->off == 1);
  
-@@ -417,7 +416,7 @@ static inline notrace int trace_event_get_offsets_##call(		\
- #else
- #define _TRACE_BTF_IDS_DECLARE(call)
- #define _TRACE_BTF_IDS_INIT(call)
--#endif /* CONFIG_BPF_EVENTS */
-+#endif /* CONFIG_BPF_EVENTS && CONFIG_DEBUG_INFO_BTF */
+ 	if (sstk)
+ 		/* mov ecx,dword ptr [ebp+off] */
+@@ -454,10 +456,17 @@ static inline void emit_ia32_div_mod_r(const u8 op, const u8 dst, const u8 src,
+ 		/* mov eax,dst */
+ 		EMIT2(0x8B, add_2reg(0xC0, dst, IA32_EAX));
  
- #include "stages/stage6_event_callback.h"
+-	/* xor edx,edx */
+-	EMIT2(0x31, add_2reg(0xC0, IA32_EDX, IA32_EDX));
+-	/* div ecx */
+-	EMIT2(0xF7, add_1reg(0xF0, IA32_ECX));
++	if (is_signed) {
++		/* cdq */
++		EMIT1(0x99);
++		/* idiv ecx */
++		EMIT2(0xF7, add_1reg(0xF8, IA32_ECX));
++	} else {
++		/* xor edx,edx */
++		EMIT2(0x31, add_2reg(0xC0, IA32_EDX, IA32_EDX));
++		/* div ecx */
++		EMIT2(0xF7, add_1reg(0xF0, IA32_ECX));
++	}
  
-diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
-index 48ef1a93e576..e35744049e3f 100644
---- a/kernel/trace/trace_syscalls.c
-+++ b/kernel/trace/trace_syscalls.c
-@@ -9,6 +9,7 @@
- #include <linux/ftrace.h>
- #include <linux/perf_event.h>
- #include <linux/xarray.h>
-+#include <linux/btf_ids.h>
- #include <asm/syscall.h>
- 
- #include "trace_output.h"
-@@ -1303,15 +1304,15 @@ struct trace_event_functions exit_syscall_print_funcs = {
- 	.trace		= print_syscall_exit,
- };
- 
--#ifdef CONFIG_BPF_EVENTS
--/*
-- * BTF id lists generated by DECLARE_EVENT_CLASS for the sys_enter and
-- * sys_exit tracepoints. The auto-generated event_class_sys_{enter,exit}
-- * is unused (per-syscall events share the handcrafted classes below),
-- * but the id lists themselves are global and reusable.
-- */
--extern u32 __bpf_trace_btf_ids_sys_enter[];
--extern u32 __bpf_trace_btf_ids_sys_exit[];
-+#if defined(CONFIG_BPF_EVENTS) && defined(CONFIG_DEBUG_INFO_BTF)
-+/* BTF id lists for the shared sys_enter/sys_exit dispatcher tracepoints. */
-+BTF_ID_LIST(syscall_enter_btf_ids)
-+BTF_ID(func,   __bpf_trace_sys_enter)
-+BTF_ID(struct, trace_event_raw_sys_enter)
-+
-+BTF_ID_LIST(syscall_exit_btf_ids)
-+BTF_ID(func,   __bpf_trace_sys_exit)
-+BTF_ID(struct, trace_event_raw_sys_exit)
- #endif
- 
- struct trace_event_class __refdata event_class_syscall_enter = {
-@@ -1320,8 +1321,8 @@ struct trace_event_class __refdata event_class_syscall_enter = {
- 	.fields_array	= syscall_enter_fields_array,
- 	.get_fields	= syscall_get_enter_fields,
- 	.raw_init	= init_syscall_trace,
--#ifdef CONFIG_BPF_EVENTS
--	.btf_ids	= __bpf_trace_btf_ids_sys_enter,
-+#if defined(CONFIG_BPF_EVENTS) && defined(CONFIG_DEBUG_INFO_BTF)
-+	.btf_ids	= syscall_enter_btf_ids,
- #endif
- };
- 
-@@ -1335,8 +1336,8 @@ struct trace_event_class __refdata event_class_syscall_exit = {
- 	},
- 	.fields		= LIST_HEAD_INIT(event_class_syscall_exit.fields),
- 	.raw_init	= init_syscall_trace,
--#ifdef CONFIG_BPF_EVENTS
--	.btf_ids	= __bpf_trace_btf_ids_sys_exit,
-+#if defined(CONFIG_BPF_EVENTS) && defined(CONFIG_DEBUG_INFO_BTF)
-+	.btf_ids	= syscall_exit_btf_ids,
- #endif
- };
- 
+ 	if (op == BPF_MOD) {
+ 		if (dstk)
+@@ -1795,14 +1804,14 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		case BPF_ALU | BPF_MOD | BPF_X:
+ 			switch (BPF_SRC(code)) {
+ 			case BPF_X:
+-				emit_ia32_div_mod_r(BPF_OP(code), dst_lo,
++				emit_ia32_div_mod_r(insn, dst_lo,
+ 						    src_lo, dstk, sstk, &prog);
+ 				break;
+ 			case BPF_K:
+ 				/* mov ecx,imm32*/
+ 				EMIT2_off32(0xC7, add_1reg(0xC0, IA32_ECX),
+ 					    imm32);
+-				emit_ia32_div_mod_r(BPF_OP(code), dst_lo,
++				emit_ia32_div_mod_r(insn, dst_lo,
+ 						    IA32_ECX, dstk, false,
+ 						    &prog);
+ 				break;
 
----
-base-commit: eadc0725ab8d38c05148fce49f8d5c6a0e01f062
-change-id: 20260730-b4-fix_btf_tracefs-fdafda5fdb5b
-
-Best regards,
---  
-Mykyta Yatsenko <yatsenko@meta.com>
-
+base-commit: 863f3ddd0b8ac65abfb50d3be0869268ac0e277b
