@@ -1,237 +1,301 @@
-Received: from mail-pj2-f3.google.com (mail-pj2-f3.google.com [74.125.227.131])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3BE364925
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 06:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28322F7EE6
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 06:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785478923; cv=none; b=m5SUBUKj4go4iLjSvxSh1ZjpZP+L78gxtm3fUkyL+0ng9nUSdKCeT1cDEWgJaJKcqdItgXQpspVM4b47bHa+fyFHhqZuZQCHMqQZ9EkI7MxFy5JFamYWE4LPtoQuL7WtDbP2tzlnQ+8/GTBrD+ZfXNUIil52XAOOlv/5eKL+Nhc=
+	t=1785480831; cv=none; b=Axo7g6SZeNQJ/FvTVS0Tp4kiNeetnKkd9Oae85NBp0TWWH/v2kyaq8paxHR0px6t7SDGDTI3Czfbm2uHJ9OBQ7VexEHzgGSovKu+UG/LnjD9fS+UEAsrctDhemBcv49OrbGJ0YXhL7gru1YtfrzVNUh1kRlnnrRgx3AGGtXRUjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785478923; c=relaxed/simple;
-	bh=nPKboyd59q6zKuiDUV4Q6HkuhovxWt2tkPrXASBc8+c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d5jtpmwF+ZPVyAMRW6WAwIGKb0M0YjVkFzcgDXb0SgkpGWvC2AiFQdK5d15AYKaxR7RQLGNj8+OVPPgf2v6OM4arAlGroCav88T847IYfudkgsr7lwlNER/rAOp9In08aXXnGcwMO0Z98twA8DBSiYysNYk7mL+iMU0nNTYrNhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai; spf=pass smtp.mailfrom=nebusec.ai; dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b=J2txtWpl; arc=none smtp.client-ip=74.125.227.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
+	s=arc-20240116; t=1785480831; c=relaxed/simple;
+	bh=n4H77HhyFq+APQR29K1dkMr3hRDR1FB0yWjCqMMi42Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O5B5vweyX0fbDnQnbr5rGsKh23plq7DlSFOFSOYdemV8LcmjwRtHYz0dwVmxKQ3GiyTJY0tENnkqYgBk9isWaHRh6g5zYC7dIj0dxsgNkjBR+CPmHqf4ADQRxHcO6FLl3gLTGu3dMunOXSFigpNDijRzj5CRfIJwWTdpd06fUqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gkBPGGPW; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b="J2txtWpl"
-Received: by mail-pj2-f3.google.com with SMTP id d9443c01a7336-2ccb0e85312so3435385ad.0
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 23:22:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gkBPGGPW"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-69ff40d9cbcso1053421a12.0
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 23:53:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nebusec.ai; s=google; t=1785478921; x=1786083721; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=aA/LiyJzEP6luazmq5MF2VDFG+Y6mIgTBGcPWqORlJE=;
-        b=J2txtWpl3zpCAq9i20RY53UUX5tUqrNeOIehZe96D4djdhXETX3XI99tB/qOmu/pTQ
-         zzXtf7+muwRS5DYt4j7XKUTrcEQoBFwSd93mZEXab3sBfMnQueiVnl7na7dEvd7uWnv/
-         R2y+qOWegrt1TKGh8d7XIwbuDTbhSxHnuRx3Rq+vKxA6QmOua1aMDJwjKms4+HY7lF2p
-         o534jEMNc8PWn0bGyqqXWx81C3WZ55SpTa7AS5UGlzm1Rz+MiSwOW4BzHyxSNX7/UlA1
-         Hv9g2WJmryhy5cvewkAHWL+6MdnKWPKIBnBgzQ0lwOjwkjrV+6hcl76YN72Q1+8KTpEH
-         Jh3w==
+        d=suse.com; s=google; t=1785480828; x=1786085628; darn=vger.kernel.org;
+        h=content-type:in-reply-to:autocrypt:from:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=n4H77HhyFq+APQR29K1dkMr3hRDR1FB0yWjCqMMi42Q=;
+        b=gkBPGGPWCfg9pRpyWGiaR5LL1jWVeRSCiAaBr8sJ1fFIhDnH7ZOs9XkQdnqZkSV7ze
+         kJLFOluheQ2xYv5UByeRvWtJcbAkkmKnWrTYq8arZ5lbZYKWqGDULdOUlim/B+fmpmJY
+         rVrsGtlqtwSaO3wgC84OoqZNzma9/9k8d0/aaVS7g51B3s+ZuGmvuikgdj3QN2qSqQde
+         Y+pR3eAtgHgGG3z5cA1PMT6oMjz5pF2tgO6ZRuxoXFMKNO5Nu15WtbYTSJ7u6Bogo5Xi
+         sRiOGMUkjLwdv4FyEe0cXhQLOCgmtRnuGQiSnIPHZYXDLHU1MO1m+2WHSD8E6G1kiJKf
+         Q+ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785478921; x=1786083721;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=aA/LiyJzEP6luazmq5MF2VDFG+Y6mIgTBGcPWqORlJE=;
-        b=XNwx+JoAcEyYrsOp7yoVO4i/Kk6USmNXLGtOiRrbM0H2iS8kcaVQdsZ4S8bKmVhg0m
-         KwwSdN58x0mMQ9XHc9tsvtUFwbgjJJpKSIEWosXv5WlmSm3GacdlgaRMEgkTt+K8gLGt
-         6rU4PA/DcuVgJFSWOvQ6Kj4LjcP1AKBRP1ypf4xNusDb/2Il4QnS1BVMpoj1rZLnTdEl
-         YZl+H9Y8tqVN3KTtp13IzetMV51eTUw5JLtLfFP8dLxEWTcUyu7P95W8jIHJH0MmnNXh
-         lsbN18EL5kCtCxuUrs24k9Ji2Bi/ce3SkOzJjFOEAYp4ecfGWEX0CB3foqLrWwj555L+
-         wJYQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqaSJ1T2XFAOxhHj8zSSV40fKrm9r0RORNYDWIlD61J9Og3gueKfCYXybOw8fxMxRN+wis=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEOvB2UXTwAjLE00Cygfebmn+nkZ2NZRA6YF/ZsQy4f3g9s+Jq
-	D06SDSytP4MTxKi1TWfyX7KrOk7rEywgnk3MKU8iShk60HN9xLJLpn1lOgtKJ1wNVaaq
-X-Gm-Gg: AR+sD1140S94aiq54rDU0QmwvEvYa5zHV+NdEqLLA8Wnb8Cs9cZxHm7GVp54Obr6/n2
-	lERI4OtS0fS8cspZxSD42zTqdgAcpR7xhzVTcsWo6bD3RVBYR9ah79VHaui/vAv5S9x4L99MXMq
-	eTF9piBv0DLKQXYEd44TpyAL70ftRYx7iJSfUBR6Z+05jBAljhuPOx+qxBiUCwPO77w3a1QYksw
-	1LH/UF4Tsi6wlBRAqSpu6/jupVphLgA2kdRXQr+hoVW2ntr8GmUu8xgIHPtqOUFubreDsBgFLtv
-	cR42GCeOfu1cVbd3yQm4uE6pIOmB6KBkYIRTmy3txfZfu87WcVYllFHYcq+G+OlnUx4XvEFilVD
-	W0HNy5vX8bBXo1BjMlaqn5Tfm/Hpt6qsvd+GzlSDcIjA0HSmYfZ55Fjma60TwCzHtP2YiQniQrZ
-	gPkExoebMbeOu9f84ThaG8t3iN9gsDf4vZgQIE6hk24KzduVos+bdwr4vBTfipcjeB+SffPBJ6b
-	ixv
-X-Received: by 2002:a17:902:d4ca:b0:2cf:bf32:ba6c with SMTP id d9443c01a7336-2d046e8699emr9077365ad.26.1785478920646;
-        Thu, 30 Jul 2026 23:22:00 -0700 (PDT)
-Received: from Roxy.localdomain ([203.175.14.58])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04b165e99sm827565ad.83.2026.07.30.23.21.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 23:21:59 -0700 (PDT)
-From: Zhiling Zou <zhilinz@nebusec.ai>
-To: idosch@nvidia.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	razor@blackwall.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	dsahern@kernel.org,
-	horms@kernel.org,
-	yuehaibing@huawei.com,
-	kuniyu@google.com,
-	aleksander.lobakin@intel.com,
-	maoyixie.tju@gmail.com,
-	thorsten.blum@linux.dev,
-	kees@kernel.org,
-	vega@nebusec.ai,
-	zhilinz@nebusec.ai
-Subject: [PATCH net v2 1/1] net: cap advertised device headroom
-Date: Fri, 31 Jul 2026 14:21:43 +0800
-Message-ID: <0ae4aa29223b89049727aec4d36f144bad41537e.1785476387.git.zhilinz@nebusec.ai>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20251104; t=1785480828; x=1786085628;
+        h=content-type:in-reply-to:autocrypt:from:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=n4H77HhyFq+APQR29K1dkMr3hRDR1FB0yWjCqMMi42Q=;
+        b=kt0PjqfJCQ8Jl0JRsyHK7yjUQtwDyFVII8UGYDL2309pZTg0drzdcViHODcCjxG3WI
+         U+3O0HexiWaJVgfSV1NpVXoiRCJ+6XdOcfAcML7Tvcay6I+htgG9VuGwzt6J5/axW+O6
+         cz2YxSLgGF9uu4+JzIIfc8ey3Xsaq+SabqpsKmY4uRaN03gswvsZf7k+oM5NsgoUkYtk
+         hUbsUzkO6hIHlWsJ80qNgPsCzTGCSJeSQLxLcqZqlddGynlBRlGLXk9/WESFiXEi7IFX
+         NPfPv00nHUvH3QiI7T5DnzIeZuFdf3L8JzPcdBy7xAK2aUwuSi9A3thsXCFgE1FRoFdf
+         DTbw==
+X-Forwarded-Encrypted: i=1; AHgh+RoQGNS+BDswaOdyFNyN58CHthhRoDoAzsNRpKDO/kl3lDLMhLKfcvm/5zgsw/STKaSLZ/A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrBNecD4UUCZ4egzNCH0uiABqKu/uhfXE1yocCi4fhtRQTyUDj
+	aBDu9+9TAlB9fpVvug5KpBYi28oH1JuAqc7WUJP5lANMkdjBdpim4yHgIRhoRI/Z+QU=
+X-Gm-Gg: AR+sD139Hy4WfhRQNexgsEteolwijjhd6y2xneYCqeS939UCo4/LETfFYzVzpGXrw92
+	BsSZlC0cvZJQJdxr4Hs/NWZ5ne56xCZwjmHcWf0FFEFeMQEvFJtYSF3yY3QpieSYKVMS7hCF32u
+	97XZ4oaQlkKV6tVJK6eh8HsZHGo7QWvfaUt6Q3Bb5Q9WkrXAmnR4Ucx1PhCI4HEorxFRi+d6vqF
+	1etjbf1HI8oKxwtqrQsDcIykYPEGR4X+bE67C4UvntG9FM9G5ikIjFS9PzTeR5iflL+7Th2V16e
+	rfIhbZDrloohGIenhRjbrfHx/cMGx3t/z95ktBqXxHlYIHCahdyVRA0EyNWh33/pImcwrEdztOo
+	xUU/Ro6/4p2hXHSP07wPL4rLdU+AXswnmwnhf45ATVJ4RGPvF5TEHCchP1vzs08Wfm9Qqwy4fHe
+	89s6tpoU79dCVTYHMZti8/R4+0Unafl4gJ7XfA2IVFRPsN5IL5ViDzFXM0hmTC34kdRylWaIsns
+	c3ovtlJmDIdysfiQRmd2iZwBmjZCrkIgc63mhWmKu6taHw1ur1s+/jFbURRjVueu8fM4+cd2YDU
+	MClRkBmsamtFB0g=
+X-Received: by 2002:a05:6402:1598:b0:6a0:4777:dd70 with SMTP id 4fb4d7f45d1cf-6a098d1a47dmr407946a12.38.1785480828368;
+        Thu, 30 Jul 2026 23:53:48 -0700 (PDT)
+Received: from ?IPV6:2a00:12d0:af5d:ad01:5d3f:14e6:9bcb:5112? (2a00-12d0-af5d-ad01-5d3f-14e6-9bcb-5112.ip.tng.de. [2a00:12d0:af5d:ad01:5d3f:14e6:9bcb:5112])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a09c660f6fsm300735a12.25.2026.07.30.23.53.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jul 2026 23:53:48 -0700 (PDT)
+Message-ID: <41414c5b-e98a-4a55-ac87-ca982b248ca3@suse.com>
+Date: Fri, 31 Jul 2026 08:53:46 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 01/11] mm: introduce hw_pte_t for PTE table storage
+To: Anshuman Khandual <anshuman.khandual@arm.com>,
+ Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Dimitri Sivanich
+ <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Stefano Stabellini <sstabellini@kernel.org>,
+ Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ David Hildenbrand <david@kernel.org>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, SJ Park <sj@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Miaohe Lin <linmiaohe@huawei.com>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+ Mike Rapoport <rppt@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ ziy@nvidia.com, pfalcato@suse.de, agordeev@linux.ibm.com,
+ ryan.roberts@arm.com, linux-kernel@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-parisc@vger.kernel.org, xen-devel@lists.xenproject.org,
+ linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, damon@lists.linux.dev
+References: <20260727164715.2866609-1-usama.anjum@arm.com>
+ <20260727164715.2866609-2-usama.anjum@arm.com>
+ <6xah74eadjmo2bozyr62wcxo4hhpsiufx2mshh7tztyy2dzzps@63m327m7pl5u>
+Content-Language: en-US
+From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
+Autocrypt: addr=jgross@suse.com; keydata=
+ xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
+ ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
+ dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
+ NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
+ XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
+ AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
+ CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
+ mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
+ G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
+ kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
+ Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
+ RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
+ vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
+ sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
+ aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
+ w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
+ auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
+ 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
+ fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
+ HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
+ QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
+ ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
+In-Reply-To: <6xah74eadjmo2bozyr62wcxo4hhpsiufx2mshh7tztyy2dzzps@63m327m7pl5u>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------BRsY7KwrAyVfl7uL5YKoDvH1"
 
-IP tunnel and netkit devices can publish headroom values that are derived
-from user-created stacked devices or directly supplied netlink attributes.
-These values are later used by IP output paths when reserving link-layer
-space before storing skb header offsets, which are 16-bit fields.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------BRsY7KwrAyVfl7uL5YKoDvH1
+Content-Type: multipart/mixed; boundary="------------f4U4I64f0aRScntXRDIXzWi4";
+ protected-headers="v1"
+From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
+To: Anshuman Khandual <anshuman.khandual@arm.com>,
+ Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Dimitri Sivanich
+ <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Stefano Stabellini <sstabellini@kernel.org>,
+ Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ David Hildenbrand <david@kernel.org>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, SJ Park <sj@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Miaohe Lin <linmiaohe@huawei.com>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+ Mike Rapoport <rppt@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ ziy@nvidia.com, pfalcato@suse.de, agordeev@linux.ibm.com,
+ ryan.roberts@arm.com, linux-kernel@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-parisc@vger.kernel.org, xen-devel@lists.xenproject.org,
+ linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, damon@lists.linux.dev
+Message-ID: <41414c5b-e98a-4a55-ac87-ca982b248ca3@suse.com>
+Subject: Re: [PATCH RFC 01/11] mm: introduce hw_pte_t for PTE table storage
+References: <20260727164715.2866609-1-usama.anjum@arm.com>
+ <20260727164715.2866609-2-usama.anjum@arm.com>
+ <6xah74eadjmo2bozyr62wcxo4hhpsiufx2mshh7tztyy2dzzps@63m327m7pl5u>
+In-Reply-To: <6xah74eadjmo2bozyr62wcxo4hhpsiufx2mshh7tztyy2dzzps@63m327m7pl5u>
 
-The dynamic tunnel transmit path already caps growing needed_headroom at
-512. Apply the same limit when tunnel link configuration publishes
-needed_headroom or hard_header_len from an underlying route, and reject
-netkit devices created with IFLA_NETKIT_HEADROOM above that value.
+--------------f4U4I64f0aRScntXRDIXzWi4
+Content-Type: multipart/mixed; boundary="------------w4qlMsrvnQhbrwqQH7WX0LG8"
 
-Keep bogus device headroom out of the control path instead of checking
-every affected IP send path.
+--------------w4qlMsrvnQhbrwqQH7WX0LG8
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Fixes: 1a37e412a022 ("net: Use 16bits for *_headers fields of struct skbuff")
-Cc: stable@vger.kernel.org
-Reported-by: Vega <vega@nebusec.ai>
-Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
----
-changes in v2:
-- Move the fix from IP send paths to tunnel and netkit device control paths.
-- Cap advertised IP tunnel headroom at 512 and reject netkit headroom
-  values above that limit at device creation.
-- v1 Link: https://lore.kernel.org/all/0c6c64e9bbd71a0decc8504a384061e0e631be13.1785054561.git.zhilinz@nebusec.ai/
+T24gMzEuMDcuMjYgMDc6NDksIEFuc2h1bWFuIEtoYW5kdWFsIHdyb3RlOg0KPiBPbiBNb24s
+IEp1bCAyNywgMjAyNiBhdCAwNTo0Njo1MlBNICswMTAwLCBNdWhhbW1hZCBVc2FtYSBBbmp1
+bSB3cm90ZToNCj4+IHB0ZV90IGlzIHVzZWQgYm90aCBmb3IgbG9naWNhbCBQVEUgdmFsdWVz
+IGFuZCBmb3IgZW50cmllcyBzdG9yZWQgaW4gYSBQVEUNCj4+IHRhYmxlLCBzbyBwdGVfdCAq
+IGRvZXMgbm90IGRpc3Rpbmd1aXNoIGEgcG9pbnRlciB0byBhIGNvcGllZCB2YWx1ZSBmcm9t
+IGENCj4+IHBvaW50ZXIgdG8gdGFibGUgc3RvcmFnZS4NCj4gDQo+IFNob3VsZCB3ZSByYXRo
+ZXIgY2FsbCB0aGVtIGFzICJMaW51eCBQVEUiIGFuZCAiSFcgUFRFIiBpbnN0ZWFkID8NCg0K
+V2hhdCBhYm91dCAiU1cgUFRFIj8NCg0KDQpKdWVyZ2VuDQo=
+--------------w4qlMsrvnQhbrwqQH7WX0LG8
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
- drivers/net/netkit.c     |  5 ++++-
- include/net/ip_tunnels.h | 11 +++++++++--
- net/ipv4/ip_tunnel.c     |  2 +-
- net/ipv6/ip6_gre.c       |  6 ++++--
- net/ipv6/ip6_tunnel.c    |  5 +++--
- net/ipv6/sit.c           |  2 +-
- 6 files changed, 22 insertions(+), 9 deletions(-)
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index a3931cd821321..d8e9ce1c659d0 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -25,6 +25,8 @@
- #define NETKIT_NUM_RX_QUEUES_REAL 1
- #define NETKIT_NUM_TX_QUEUES_REAL 1
- 
-+#define NETKIT_HEADROOM_MAX 512
-+
- struct netkit {
- 	__cacheline_group_begin(netkit_fastpath);
- 	struct net_device __rcu *peer;
-@@ -1244,7 +1246,8 @@ static const struct nla_policy netkit_policy[IFLA_NETKIT_MAX + 1] = {
- 	[IFLA_NETKIT_MODE]		= NLA_POLICY_MAX(NLA_U32, NETKIT_L3),
- 	[IFLA_NETKIT_POLICY]		= { .type = NLA_U32 },
- 	[IFLA_NETKIT_PEER_POLICY]	= { .type = NLA_U32 },
--	[IFLA_NETKIT_HEADROOM]		= { .type = NLA_U16 },
-+	[IFLA_NETKIT_HEADROOM]		= NLA_POLICY_MAX(NLA_U16,
-+							 NETKIT_HEADROOM_MAX),
- 	[IFLA_NETKIT_TAILROOM]		= { .type = NLA_U16 },
- 	[IFLA_NETKIT_SCRUB]		= NLA_POLICY_MAX(NLA_U32, NETKIT_SCRUB_DEFAULT),
- 	[IFLA_NETKIT_PEER_SCRUB]	= NLA_POLICY_MAX(NLA_U32, NETKIT_SCRUB_DEFAULT),
-diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
-index d708b66e55cda..85e3455cea259 100644
---- a/include/net/ip_tunnels.h
-+++ b/include/net/ip_tunnels.h
-@@ -629,8 +629,7 @@ struct metadata_dst *iptunnel_metadata_reply(struct metadata_dst *md,
- int skb_tunnel_check_pmtu(struct sk_buff *skb, struct dst_entry *encap_dst,
- 			  int headroom, bool reply);
- 
--static inline void ip_tunnel_adj_headroom(struct net_device *dev,
--					  unsigned int headroom)
-+static inline unsigned int ip_tunnel_limit_headroom(unsigned int headroom)
- {
- 	/* we must cap headroom to some upperlimit, else pskb_expand_head
- 	 * will overflow header offsets in skb_headers_offset_update().
-@@ -640,6 +639,14 @@ static inline void ip_tunnel_adj_headroom(struct net_device *dev,
- 	if (headroom > max_allowed)
- 		headroom = max_allowed;
- 
-+	return headroom;
-+}
-+
-+static inline void ip_tunnel_adj_headroom(struct net_device *dev,
-+					  unsigned int headroom)
-+{
-+	headroom = ip_tunnel_limit_headroom(headroom);
-+
- 	if (headroom > READ_ONCE(dev->needed_headroom))
- 		WRITE_ONCE(dev->needed_headroom, headroom);
- }
-diff --git a/net/ipv4/ip_tunnel.c b/net/ipv4/ip_tunnel.c
-index 9d114bd575f92..5b1f180485d42 100644
---- a/net/ipv4/ip_tunnel.c
-+++ b/net/ipv4/ip_tunnel.c
-@@ -317,7 +317,7 @@ static int ip_tunnel_bind_dev(struct net_device *dev)
- 		mtu = min(tdev->mtu, IP_MAX_MTU);
- 	}
- 
--	dev->needed_headroom = t_hlen + hlen;
-+	dev->needed_headroom = ip_tunnel_limit_headroom(t_hlen + hlen);
- 	mtu -= t_hlen + (dev->type == ARPHRD_ETHER ? dev->hard_header_len : 0);
- 
- 	if (mtu < IPV4_MIN_MTU)
-diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-index b843116e9b703..04ac007ebcc87 100644
---- a/net/ipv6/ip6_gre.c
-+++ b/net/ipv6/ip6_gre.c
-@@ -1137,8 +1137,10 @@ static void ip6gre_tnl_link_config_route(struct ip6_tnl *t, int set_mtu,
- 			return;
- 
- 		if (rt->dst.dev) {
--			unsigned short dst_len = rt->dst.dev->hard_header_len +
--						 t_hlen;
-+			unsigned int dst_len;
-+
-+			dst_len = ip_tunnel_limit_headroom(rt->dst.dev->hard_header_len +
-+							   t_hlen);
- 
- 			if (t->dev->header_ops)
- 				dev->hard_header_len = dst_len;
-diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
-index bf8e40af60b08..403995273cbae 100644
---- a/net/ipv6/ip6_tunnel.c
-+++ b/net/ipv6/ip6_tunnel.c
-@@ -1522,8 +1522,9 @@ static void ip6_tnl_link_config(struct ip6_tnl *t)
- 			tdev = __dev_get_by_index(t->net, p->link);
- 
- 		if (tdev) {
--			dev->needed_headroom = tdev->hard_header_len +
--				tdev->needed_headroom + t_hlen;
-+			dev->needed_headroom = ip_tunnel_limit_headroom(tdev->hard_header_len +
-+									tdev->needed_headroom +
-+									t_hlen);
- 			mtu = min_t(unsigned int, tdev->mtu, IP6_MAX_MTU);
- 
- 			mtu = mtu - t_hlen;
-diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-index a38b24fb83842..19b7fa8d1a2a0 100644
---- a/net/ipv6/sit.c
-+++ b/net/ipv6/sit.c
-@@ -1131,7 +1131,7 @@ static void ipip6_tunnel_bind_dev(struct net_device *dev)
- 		WRITE_ONCE(dev->mtu, mtu);
- 		hlen = tdev->hard_header_len + tdev->needed_headroom;
- 	}
--	dev->needed_headroom = t_hlen + hlen;
-+	dev->needed_headroom = ip_tunnel_limit_headroom(t_hlen + hlen);
- }
- 
- static void ipip6_tunnel_update(struct ip_tunnel *t,
--- 
-2.43.0
+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
+kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
+=3DeeAB
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------w4qlMsrvnQhbrwqQH7WX0LG8--
+
+--------------f4U4I64f0aRScntXRDIXzWi4--
+
+--------------BRsY7KwrAyVfl7uL5YKoDvH1
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmpsRnoFAwAAAAAACgkQsN6d1ii/Ey/0
++Af+LOETmiWDtYgZgC25DuWMp+4L5NyNITZaMb2C+ABgCkNfzqMcNtWSNk+JJzaB6hI7CZVtXOyx
+C1BoB0Fu/IHEX1h7Yg4K1ioAh2SLzQsdlMwc3ccJAAvp9Eo6epm1vOmVDINqjoi4xu61L0M12heD
+FLKsZAcd5yhOcg5mGmdZSniMILaMfmcRbzE3nQ1LJcS9mWFe4fFFZJ4OTaOduPMhwV6YQJgVN1Vx
+/xWzbtBOPQ9qzjkjyownpcHtHYqI9vaMrG1B2XnHR2zJObPXbM5NT3luR6vqCrMZEq7LIlex4FDe
+SDzOyTnt3oU2QGZCcz+k+jU+wOUa3QFM7tihNiQN4w==
+=4r2J
+-----END PGP SIGNATURE-----
+
+--------------BRsY7KwrAyVfl7uL5YKoDvH1--
