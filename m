@@ -1,156 +1,140 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C61E38DD3
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 00:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785456438; cv=pass; b=AhgzZhakFFsGE3bCy2zQ7WmsBb1dVxxeBBk7jX/j62D1NHqaItGfL1CH3TT9+klt9Z1ROSOf2plq9CoQXo9bVyAqLjlut6HK6IO4xjazXN1O7WqDj4dGc/Qym1kFG7rUGujDgBZCs9SyHTBFPwiPDj8ud0pTene8CR4+/XvFOb8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785456438; c=relaxed/simple;
-	bh=IQgcCgUN9ob2aK8ni//osqPFYvEUV2QuifcC8kLAH3s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RdmAzuXxKsr424sJVuM1wSspz6HwZmP0CM3/0XNneL6evEbxJGYXYTHSHWn73cJMNWT69DEM5F38R8TI+HgA4WwMdlcv3kv1sivmt3dqUCWjg8nYmbfa/NgZCbZrtfd2BR6dOAanXxv4maEU/K9bIEEcgpbkHMb8Ut5oSLNkJE0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eqmcu73C; arc=pass smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eqmcu73C"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-84e3007a2b7so398032b3a.0
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 17:07:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785456436; cv=none;
-        d=google.com; s=arc-20260327;
-        b=AxDikuJZpeDCeMKHhkUH009s5/LH0oSYev4faQyljhcwFLPWkKYgoDYBW2IcbrHZdQ
-         gkocgIB5hbVawdhxVJuWUN+ebjCM5IbrCGugq1gwmk//vOZhFJsOWH9GJLCYJ7x+8cPV
-         pnSj6HA6mAZjUrM9nekeA8ARcd3PcDPBgsTnbnIvnJlG15bSJZkn2bd0f5SMaPZmx2Rw
-         HZedX40JzEdpCMdF/V7ikKrDvWdBANP4jSqU+L4/4Y3XDEDXWH3zowLd1YL8/TYCd3oU
-         NRYABZ3RNDDnmq9AlZ/5j4nFsuS3bcO5Ru0bThUSvdY4u3bqI7J7h9AoP6685wPwhGPE
-         5H8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Ywzw2pnBpZ6rcuHQ5GQtNDziaj0w2OV9J3er0qRqvRs=;
-        fh=ZD+TWjvdVv6CQAJ03pcYJ5YB24ceDiblC/Zer5CxQ0A=;
-        b=EJmSSbR8VhG47z3b9iHFsmD1OjgTqVfBgIpFKr1yT/1qicDfSRc7JFH5/QjIvX7rGf
-         lAVhfmdyQBisHqdyILyTTQdA5ddWOEpKjlchkUsnasfcq034Zjfn3UFCXVgPf+vJ7F8l
-         fzS1hDbyAG85+u+RdVlWmgNRvn5eWny5FrTf9C+mToszIe0KRUDDrm7JVEyD1P5R8EVL
-         tzqouh/u8pVTKTLFXiESP+h74InI3G39wE8A7Bp/DcOeGFuCCYTg9TNC3czi+wXxZxY5
-         hq9IWaEpOJmpL1e1XEyzq7iOdVH1P5+af+Lexo1Z+SxcKy54C6QJs7/k9aBszwJ+AQ38
-         QN+g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785456436; x=1786061236; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ywzw2pnBpZ6rcuHQ5GQtNDziaj0w2OV9J3er0qRqvRs=;
-        b=eqmcu73CpPSiKFhkKn1kG4usgrTsv4Vsy+qAGJPjME0CR3ZnnhO/hgAW21Zl2Hs/rZ
-         w+cHqyDxFRmjTz2wQu9fRwECJnWsgtX6atJXYmGhv+n8duBKm2Qis2CKOs2voFx9Oiib
-         o/tfN2Ga6oM9m9arEwHorpfpbX4k9DOilBaKbBNPsIhphy/1q+4LPlrfFHUumwbfw55r
-         lUyZXDtxjFOPOLuCj3IxSz4n4BvEevUl02KJnz2QwVIWi9XDHkVxTZ/aQLfjje+HfC/b
-         2DRVEo7zSdY0MSbsOHbdBvVxPEaIrQjhTNuKBRFjgA2f+UMR8XKdmhkPfiCguGduEM4y
-         /W4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785456436; x=1786061236;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ywzw2pnBpZ6rcuHQ5GQtNDziaj0w2OV9J3er0qRqvRs=;
-        b=dLtErBgKdnkVni9rs4fdBFq71HjIxZX/bhricpLpbR/l1uUqbnC78/DYkA23AtvEwi
-         BtV38qkk+WFc52SRLjVx+714MeyM93FD5LM4q7BrkMRkCytvtpTumKi2Ibm+8H1Wt9vu
-         U2zv3oqmnOP5fosqhAaY7DO1rx0nFWSfV/0EV5QPekAYYG4+maZnI62mskqlB4M+aa81
-         WGLQJOC/qvRZYmUstr4DDzDFU6qjTFfItb2LVSGPb+kC4Ip/esPZw8DneUtLkT8veVe4
-         V6VQKBF6eAHkCHlTvK4C4xPqP5zQSQ/JMH4g9FuOU1/NvzHxybFSgQn25ld/a/fvZmZV
-         JQ5g==
-X-Gm-Message-State: AOJu0YyjklvKfYdQeRt5zpKj1HGAZAKht2Mt+FsGB5FJsWT56TPeIAwy
-	IYnYcRpnNq5tYrAoiERTpgCBjkqwGpqZuByv/OioEveoXeE+GGlZiDyk1IYoKELOvoP/PpaX5SZ
-	fuJZb+AaJGLhN3Uti0cD/uS1Tuvh+6cs=
-X-Gm-Gg: AR+sD11gE8KCZ66mSm/ldsb2Tj1uOXSxYv6lhWfTeZi+YXnBZ+qUVWbPhhOfvmFsdh1
-	RKB1HmYagl+NXNEFCcOQhZ0DaudZr3sbAJjMUZOM7uNxsPQ8TA25dc+DTNkF5nUs+jIE6O/0iCS
-	yYDJEcUrOQZKZrXcrQCwJvjji4YclHr2Sn9eet3pC5mE3thexyAUB6NwiTjHtzsrnmcl3Mi6+Od
-	XKJ/f18VSmSYzSmlEBjiZUMPXY/QWzV7fqncGCfDhoCc5E1FNtaKqInsT8F7N7p4l76LWM8eUaR
-	jjum2mn/sJaQdHNztz0oxce94TVE3obaHH+kQH3d23Hv4uijQE1ib5IWYffaKDwppzUGH1gp2dj
-	fGYI4H2CWtZff6fi7OSyYaRjbaKFxgGhRDz4zoKltfFpPEOztQqL/iw==
-X-Received: by 2002:a05:6a00:10d2:b0:842:614e:cc94 with SMTP id
- d2e1a72fcca58-84ebc241216mr4383107b3a.26.1785456436320; Thu, 30 Jul 2026
- 17:07:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA21288AD;
+	Fri, 31 Jul 2026 00:08:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785456523; cv=none; b=MD3MD4XSqP+JQUTFmNPO8bt/QEeu0x8+ufMD7fF8tFc+PKYYen8X/8DpZMtcMC9Pt5C/j1vrOIHCNifXkylSmAdkBMDbvvnfAR8QGuogcdh/OD1A7zKKG5dF2rpysTgfw3wDs+KTH0BX5tzSmHIjXOoro2slcOfRq479CylU7yA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785456523; c=relaxed/simple;
+	bh=lV4Y4nf5AeHDdQZbAkGFS1iUqCawwFfne4/QCeMicwM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=krPu7f+Top8XxtRoZk8jm5vouBriX20zuGJTCaXecRn2tEIE47RpGEnOfkvRkf619r2lngy1d+Y6R7hedgOkKOukvOtrd9WasKa9Yqc8t0aDlgJSEJ0srwaNrRTbdNQ1x3SbF6wRHZsCO3K6XKOexhugEola+HjiNKxZS7L83sY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf01.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id CC3A71A0329;
+	Fri, 31 Jul 2026 00:08:37 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id 0CC7D60010;
+	Fri, 31 Jul 2026 00:08:34 +0000 (UTC)
+Date: Thu, 30 Jul 2026 20:09:13 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <live-patching@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <corbet@lwn.net>, <jpoimboe@kernel.org>,
+ <shuah@kernel.org>, <jolsa@kernel.org>, <mbenes@suse.cz>,
+ <mhiramat@kernel.org>, <stable@vger.kernel.org>,
+ <linux-open-source@crowdstrike.com>
+Subject: Re: [RFC PATCH bpf-next 2/2] selftests/livepatch: update
+ test-ftrace.sh for deprecated ftrace_enabled
+Message-ID: <20260730200913.59a541db@gandalf.local.home>
+In-Reply-To: <20260730163544.2042327-3-andrey.grodzovsky@crowdstrike.com>
+References: <20260730163544.2042327-1-andrey.grodzovsky@crowdstrike.com>
+	<20260730163544.2042327-3-andrey.grodzovsky@crowdstrike.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260725132624.78373-1-leon.hwang@linux.dev>
-In-Reply-To: <20260725132624.78373-1-leon.hwang@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 30 Jul 2026 17:07:02 -0700
-X-Gm-Features: AUfX_mw0ZEm9k-Ub0vT04vq0qsIVheV8T4aJPOF6Vp_lZfK9C9VKzujLurVt-sw
-Message-ID: <CAEf4BzaoQaODE4F1wfrp37=83bePY=gKpunacKr3rmO230+B3Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Fix sleepable check for tracing prog
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Sechang Lim <rhkrqnwk98@gmail.com>, 
-	Varun R Mallya <varunrmallya@gmail.com>, Viktor Malik <vmalik@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 0CC7D60010
+X-Stat-Signature: dary9efr8fa175tbga7ng7rcqoyinkxm
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18OUhYxQpcApacRfZUnO8zlNndNAgZBitI=
+X-HE-Tag: 1785456514-63941
+X-HE-Meta: U2FsdGVkX18kfK7tNELfjIWCMK1BpCKR7uHnwmI96UwuVZdrw77nEqub+9YRLdQ+gGofUnBkclMbECoYWg6XA9j17jHgeIklcgRslgDlRNvM3SZOLnysNysD0hqx5V6n0no5cc91Zl5vLwI6PdZ+TCfg1nDWOZNOTvl0jx+A2gvNMBZDQKdDzvs6LriK8C2ku0sGSJpZKb0jpdM7eJVsD0Fzz3ubMLDBWRby0e5KUwWRTjjIPrkF+GBMj/5CnlZxr4s5suf5J8+6T3gYa3WsYu7FQvedpBYQa13ao74T9dqpXLtRYtKp33Toy9A9rT7bWetuIYcLWwhm5tk/5u2eUlSVFka/AiXt
 
-On Sat, Jul 25, 2026 at 6:27=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing pro=
-g
-> is allowed to attach to '__x64_'-alike prefix symbols.
->
-> It is because the verifier does not verify whether the symbol is a kernel
-> function or a bpf prog. That said, a sleepable tracing prog is allowed to
-> attach to a bpf prog target whose name has '__x64_'-alike prefix.
->
-> For example, a sleepable fentry prog attaches to a '__x64_sys_nop' XDP
+On Thu, 30 Jul 2026 12:35:44 -0400
+Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
 
-we do have addr, so we should be able to distinguish between attaching
-to kernel function vs BPF program, no?
+> kernel.ftrace_enabled=0 is now always refused, so the old scenario
+> (disable, fail to load a livepatch, re-enable, load) no longer applies.
+> Replace it with a single check that the write is refused with the new
+> error, and drop the now-stale disable/reload flow.
+> 
+> Assisted-by: Claude:claude-sonnet-5
+> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> ---
+>  .../selftests/livepatch/test-ftrace.sh        | 49 ++-----------------
+>  1 file changed, 3 insertions(+), 46 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+> index d2c3dea63104..c88f4d13a134 100755
+> --- a/tools/testing/selftests/livepatch/test-ftrace.sh
+> +++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+> @@ -9,56 +9,13 @@ MOD_LIVEPATCH=test_klp_livepatch
+>  setup_config
+>  
+>  
+> -# - turn ftrace_enabled OFF and verify livepatches can't load
+> -# - turn ftrace_enabled ON and verify livepatch can load
+> -# - verify that ftrace_enabled can't be turned OFF while a livepatch is loaded
+> +# - verify that kernel.ftrace_enabled=0 is refused (deprecated knob)
+>  
+> -start_test "livepatch interaction with ftrace_enabled sysctl"
+> +start_test "ftrace_enabled sysctl write is refused (deprecated)"
+>  
+> -set_ftrace_enabled 0
+> -load_failing_mod $MOD_LIVEPATCH
+> -
+> -set_ftrace_enabled 1
+> -load_lp $MOD_LIVEPATCH
+> -if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
+> -	echo -e "FAIL\n\n"
+> -	die "livepatch kselftest(s) failed"
+> -fi
+> -
 
-> prog, and copies buffer from a user pointer with bpf_copy_from_user()
-> helper. After attaching the XDP prog to lo interface, the kernel BUG
-> could be triggered by 'ping -c 1 -W 1 127.0.0.1':
->
-> [    3.460756] BUG: sleeping function called from invalid context at kern=
-el/bpf/trampoline.c:1324
->
-> Fix it by disallowing sleepable tracing prog always when its target is
-> bpf prog.
+This test should work for both old and new kernels. I would have it still
+do everything here but if setting ftrace_enabled returns -EOPNOTSUPP then
+do the simple path.
 
-what happens when we freplace sleepable BPF program/subprogram with
-another sleepable BPF subprogram? And same question for sleepable
-fentry/fexit program attaching to sleepable BPF program? Is it
-something that just cannot work or we can actually allow that?
+-- Steve
 
->
-> Changes:
-> v1 -> v2:
-> * Drop redundant 'prog->sleepable' check.
-> * Collect Acked-by from Viktor, Thanks.
-> * v1: https://lore.kernel.org/bpf/20260724141422.10463-1-leon.hwang@linux=
-.dev/
->
-> Leon Hwang (2):
->   bpf: Fix sleepable check for tracing prog
->   selftests/bpf: Verify rejection of sleepable tracing prog
->
->  kernel/bpf/verifier.c                         |  9 ++-
->  .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 57 +++++++++++++++++++
->  .../selftests/bpf/progs/fentry_sleepable.c    | 19 +++++++
->  tools/testing/selftests/bpf/progs/xdp_dummy.c |  6 ++
->  4 files changed, 88 insertions(+), 3 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/progs/fentry_sleepable.c
->
-> --
-> 2.55.0
+
+> -# Check that ftrace could not get disabled when a livepatch is enabled
+>  set_ftrace_enabled --fail 0
+> -if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
+> -	echo -e "FAIL\n\n"
+> -	die "livepatch kselftest(s) failed"
+> -fi
+> -disable_lp $MOD_LIVEPATCH
+> -unload_lp $MOD_LIVEPATCH
+>  
+> -check_result "livepatch: kernel.ftrace_enabled = 0
+> -% insmod test_modules/$MOD_LIVEPATCH.ko
+> -livepatch: enabling patch '$MOD_LIVEPATCH'
+> -livepatch: '$MOD_LIVEPATCH': initializing patching transition
+> -livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
+> -livepatch: failed to patch object 'vmlinux'
+> -livepatch: failed to enable patch '$MOD_LIVEPATCH'
+> -livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
+> -livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+> -livepatch: '$MOD_LIVEPATCH': unpatching complete
+> -insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
+> -livepatch: kernel.ftrace_enabled = 1
+> -% insmod test_modules/$MOD_LIVEPATCH.ko
+> -livepatch: enabling patch '$MOD_LIVEPATCH'
+> -livepatch: '$MOD_LIVEPATCH': initializing patching transition
+> -livepatch: '$MOD_LIVEPATCH': starting patching transition
+> -livepatch: '$MOD_LIVEPATCH': completing patching transition
+> -livepatch: '$MOD_LIVEPATCH': patching complete
+> -livepatch: sysctl: setting key \"kernel.ftrace_enabled\": Device or resource busy
+> -% echo 0 > $SYSFS_KLP_DIR/$MOD_LIVEPATCH/enabled
+> -livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
+> -livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+> -livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+> -livepatch: '$MOD_LIVEPATCH': unpatching complete
+> -% rmmod $MOD_LIVEPATCH"
+> +check_result "livepatch: sysctl: setting key \"kernel.ftrace_enabled\": Operation not supported"
+>  
+>  
+>  # - verify livepatch can load
+
