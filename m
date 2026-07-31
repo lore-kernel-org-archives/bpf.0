@@ -1,65 +1,66 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB2632FA1B
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 22:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A775637F8D7
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 22:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785535293; cv=none; b=nmePeqmTcI2pkfzFk3lh2BOywKwgVRP6Qgp0Eou5DjKNu269A/cVcuVBuj9R0dOo2tYaMPucDx/QswhFN8nHz0SqiOWDgnYT9ZDhfSweay9FOVPiIKxKfPp3l2KZnbVnG4/+IUV6XwPlll2vDj1pJqOW7l2TyIz5jUn7mDvIMOA=
+	t=1785535479; cv=none; b=mQ9p87xPywAFLd7Xpsh7nhGEcd+qwXigNbV4ztK7jxIiScVQMtz0MnlIRBerTcp7EQIcs0xGYrje8Zqpj1IR82eWpLWnVIG+zIYLs/O1aWzTvU8Rn3qvSCi0ogViTijA0oNVOtUZO9j+M+/qIwMbo2SiajVpgSVzgKWZEbKZOSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785535293; c=relaxed/simple;
-	bh=fsEN3aHTvcdNaNYshTiJkJoF8283TgjYZ3ydNbtaphM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=dEluXO6PeeRd0tSW3bjfmpSCgsImA/ef/9sWV5jRtHHriSpT6JGaLttA4oHRWosQJwOeh5ee0bF6qRvBWiKYR4kPUs7D92YFvFMyg2HKCLBJdybHjfBUtVTgApaUku9Sw0VpV65ASbgcNZkhwlxGoQKEhrN+ClU39WktwaXZaIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=i4e6PEIH; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1785535479; c=relaxed/simple;
+	bh=i2mO12QQOJ2mz4UuDmayqPHsK2P8n8l4gan0qKokjpE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=q3HaswKrymlLAaMFpwd7TSE5bQy/D33IrvMgV3AhBrnev2m/YTYEmCPqzLSVM+7Q3wnIpjk487ZiRCrfvZr+FzaUmM3RTTttt1/FVrTO0YVP2gF+CTDLX5/Aqux8W4Pn8ORa0p7wPWAZYH3B2j0F3nFdMSEGyL1hbTt5y5roH10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIYc7LW1; arc=none smtp.client-ip=74.125.225.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="i4e6PEIH"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8485bd28dd0so1847538b3a.2
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 15:01:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIYc7LW1"
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-46e747fbf36so755485f8f.0
+        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 15:04:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785535290; x=1786140090; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=gmail.com; s=20251104; t=1785535476; x=1786140276; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=LInvsh+o7eZdRJnFCjJWIgKTGJuBuiNZTLf/LFOi0bk=;
-        b=i4e6PEIHX2IbhWvvBNojunUgeCBy+AL6ofFLt0bJeZa2XwuvgJa+jMR66pZf5mFJT1
-         HRX3hYJbM5XN2Uw3qTw9vB3SWofLiNx9w8mpE/K8TjNIkaIL56FZWjX9Th+UTHkX5/XF
-         d6+NOlZTIwaMeF7XSm21oTLX9bEb5xGdGrFnibPatmI589/HFUwoG4EFS8Jlt/xITVr/
-         TkutAuLICSq8IrKa2ygqSNg0JNiREKonaFdY8VgulNSuLbRClqfIZu5a3/5EFyv5Wb7M
-         jim5xcfQIS7X5XK0YOiR12uGldbSv0+YwDfPNGYyQVYvzGM4EDStLTA1yp6lfJ9+M49J
-         4R/g==
+        bh=i2mO12QQOJ2mz4UuDmayqPHsK2P8n8l4gan0qKokjpE=;
+        b=PIYc7LW15LqbZkuMZDZjDpDgb1MFX210iD/B31BuAI42dM5EYfOBbO/Fh10jSoFIY/
+         0u1l8A5Hx7/s+GvcEcBhy8cURVeHM5Mo+PR2U7rr73gqoB0XO+TXH85kpIDxV9MxO2iF
+         u5ejd1oHvPWQcEiG7F/4S55oI4uG4XLG4Fc4TUFTmrClQjiESbHEt1YOsgEWzsglrFRj
+         cfYQblJxRtDV8yHUAR3tZg0wJFtDXzgtj5vCiP2rW7j2OTqYYiQy3oAnl8sPTXBC3Vgd
+         TNwm9tvwJZIo2J7M9aGAO+ZMMIfT6tWgpS1BgGWNZrZbwtFrUtc2kldvKC34K9wz5nQC
+         kzjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785535290; x=1786140090;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20251104; t=1785535476; x=1786140276;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=LInvsh+o7eZdRJnFCjJWIgKTGJuBuiNZTLf/LFOi0bk=;
-        b=lE+RGsz01oMIQFFUdhsQ3/973b5lINPhueHyOzdFQgQxrFOiR2IHhsQzsMYphZ0upn
-         L+xzGSrxi66Awj4T5p3wpVEaLbG26tRBhB6PyNOEmpcilRS9vTVgHqNu0VlbzWuiChYU
-         2eoGyEXZS9rM5zQk4plEXpi71sAD+24vsaXvuVaPrP4wF69hHtTj+EgTtbDNYD+egaCJ
-         4pMWQBZ7seJAgDRDTnGwv9tw3rO9X3/5H4rv7V4OfaaOsGQXMUaEu4RA4jN2dhHv+Hxw
-         AJOkrgJximxb5mNi+O2QoWyhzFJ6NaUJwYmGIZgE9qXA+JSZctJSHXqE0RuiYJmn3OPA
-         cJyQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqN2iXg9boeQLxX0eNwi6o5DeYKubfR0pL4fSGm+xvr+Uzjq+9oULv58x2u1EFoh5xEVa4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxddV7orQR1IDG08ll3qe2L0SEwDHbVg7kEc++z3jiAGFr7eL0
-	awtfsemXReP8SPQcu1wtiPzaSm2GTND1g3TvTnX5MUQ7o/camkc9NvoJw78YcubbYgc=
-X-Gm-Gg: AR+sD13yRjWllaMv+aKyZQoLagLS4z6Iu4KWyhpdWdCh3nyToLcEOZTnXvv1mXygM//
-	oBvJTqpL8Fefg/KPbCAJPAy6m79G6SUFfdbT4337MW1P7B0NZ5Sxxzf9mn9OoDq94gnhNL+wvjl
-	BQO/ql84IbvBO+FL65qBzTW7ppFqXDR00KFY8/5pbHK+7wkreQeYzTJ/loHNt3GbDZRSXBdHF7E
-	JSHyRFrEgnCq4+gbfhMicz3g6Vk1/zl7fTUPF9luDMDjt/eftqQ3vxf2bkMTd3BWebPIPegHPcM
-	65brraUHZMpg0YW1iSGpJnJighgAlKaZ4Yl1Dk2TtsX5Bnvbsj9ThGqcU8alhRL/OEgDYAvLmSi
-	fLZeUKJPA4q7b7HrelDGxffIlQ+voCwqgkY/AZDmYJZB90ntUlfsloJ/I+AnZ0DjCYlKLTYEuTn
-	PNfWsXiv/GRlH55/2gOQ+VEeOKVm2UrTyU2/9Ztpk+CGJ6uxvOlmfVaZ/6M6lEIsEm+cBHKpXui
-	2eo+zsOBN28EXMgze7XfqvoeAC7
-X-Received: by 2002:a05:6a00:2e89:b0:84e:89a:b8f7 with SMTP id d2e1a72fcca58-84ee479034bmr1080128b3a.11.1785535289828;
-        Fri, 31 Jul 2026 15:01:29 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84edc2a8223sm951614b3a.28.2026.07.31.15.01.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jul 2026 15:01:29 -0700 (PDT)
+        bh=i2mO12QQOJ2mz4UuDmayqPHsK2P8n8l4gan0qKokjpE=;
+        b=s/YZcO3/IDGPHKGQUqmpi1IUJfISHCSF8drDM2fC81idYkrEmjyCmq0cD4va822Sjx
+         q2Jfl+C7RKKL74YkwQ/MYc0bg552bRst7OC9HqA69w/FQZQ+SKo1ebeKr8Tg8VgxO7IM
+         fc7KfMFcKnhSzC3s/tT+b7XjIofZVBGPMIfSRX5BtgQKqI702cehR0NL3t7Bts/oqBFl
+         oSyIulRO9p9IagjvUd4Q/KQonn6IBrc8le3gkYGkBkSMfpT2xj9MuLjwSfi1fBtNqmsG
+         CD3Bq1XehI1adOV+EmAJg42na7psjW/pH9khqYWuR+hkJkQdve/6nQugk9+EEwun8NP7
+         h8lQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rpvo87PvMs/3bx78zEVXGoqAKW1nbLJ/EEXFM0MfFWdA2nT8R3i14UpG3iMctpC/XSyHAw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8qDVcpnFd5Fo1r2O6QSyXO6dwhUbiaKypqZzgDQrS+a3WNgFe
+	gCoTmMGUpg8YD2GK0z4V3n7+A3V0j3/iQD0jHxpy1qJQo5Hvh6rtI9MN
+X-Gm-Gg: AR+sD12mEYHhVqQGT+UhXKby2pA5qpeadx2hH0n9/f3EzJDnVpHzMXiy2KZLY7VE3Nh
+	bNIghV43VqiZ4xVILuXBNW1ahX5LS2hqbHnK6p/fxWkvaWySa5ZGHraF6c8cAL2Hc2HGr+crRjo
+	3ioerxjtg7y1SES8wTwv/xBMtYqVryx3vBmbRQUsPFkAaWC3kdjbGfoTr3ZnaN9m9o/82hvlrZ8
+	vtvoyODW5rx+HTPkB1S8op2wLlrDuYpYamN1z0GebMjApkcLDGWhI3iSLTCOKyE3rv19bQQlSQv
+	yUwJ8YBSSKBe+wgScMdO4nXJIfh2Rz6wvuOlJBtF3vK+zjAZelhSKnOXFxZatF8pMn0VDEPAsPH
+	+AXKk8H4raw80coIg25PPgt6Y+QhqH4ISR9sy7FPElW2I2NerVTa8pCk67wHHQjItpwXelIzAbf
+	6hg+GEPOp9fyduiKKTbEAqcG5XgwTT5j/9ZQWmItNuph+/+iOD63qocLAlYCzidUOr1jKqpfbSz
+	NLDqziHYXPv73g63fO6YwS6RxV66z8bpuKuDKgW5PdJLnp7GB/l7dh2ZGjjlUdy6wYEGCkTsoQ8
+	roafaL+infm9UujggcUGxpGOMfQ=
+X-Received: by 2002:a05:6000:2707:b0:47f:7005:285e with SMTP id ffacd0b85a97d-47fd72f988emr1633857f8f.53.1785535475666;
+        Fri, 31 Jul 2026 15:04:35 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd45a1240sm9623006f8f.36.2026.07.31.15.04.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2026 15:04:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,225 +69,125 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 31 Jul 2026 18:01:28 -0400
-Message-Id: <DKD3FNK5CT7H.3CCFT5539KE2F@etsalapatis.com>
-Subject: Re: [PATCH bpf-next v3 15/15] selftests/bpf: Add test for
- bpf_tcp_ops header option hooks
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Amery Hung" <ameryhung@gmail.com>, <bpf@vger.kernel.org>
-Cc: <netdev@vger.kernel.org>, <alexei.starovoitov@gmail.com>,
- <andrii@kernel.org>, <daniel@iogearbox.net>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@kernel.org>, <shakeel.butt@linux.dev>,
- <roman.gushchin@linux.dev>, <kuniyu@google.com>,
- <kerneljasonxing@gmail.com>, <kernel-team@meta.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260706171918.317102-1-ameryhung@gmail.com>
- <20260706171918.317102-16-ameryhung@gmail.com>
-In-Reply-To: <20260706171918.317102-16-ameryhung@gmail.com>
+Date: Sat, 01 Aug 2026 00:04:34 +0200
+Message-Id: <DKD3I17NPS96.3G49BTZ4ZVUVV@gmail.com>
+Cc: "David Windsor" <dwindsor@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "James
+ Morris" <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, "Casey
+ Schaufler" <casey@schaufler-ca.com>, "Stephen Smalley"
+ <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
+ "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
+ <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
+ <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
+ Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+ <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Paul Moore" <paul@paul-moore.com>
+X-Mailer: aerc 0.21.0
+References: <20260730234533.1912709-1-dwindsor@gmail.com>
+ <20260730234533.1912709-4-dwindsor@gmail.com>
+ <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
+ <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
+ <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
+ <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
+ <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com>
+ <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
+ <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com>
+ <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
+ <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com>
+ <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
+ <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com>
+ <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
+ <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com>
+ <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
+ <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com>
+ <CAHC9VhQ24fp7_sy1=NiWkfzPLSM35ugSCOKDKxnm6H9W-pDa6Q@mail.gmail.com>
+ <DKD2R5268G2C.TPLR4XMTZ91R@gmail.com>
+ <CAHC9VhQNozNGH4o=8D6wxks4deZ2eVOHmxFK=fvjhkCC0JSCkw@mail.gmail.com>
+In-Reply-To: <CAHC9VhQNozNGH4o=8D6wxks4deZ2eVOHmxFK=fvjhkCC0JSCkw@mail.gmail.com>
 
-On Mon Jul 6, 2026 at 1:19 PM EDT, Amery Hung wrote:
-> Add a test exercising the bpf_tcp_ops parse_hdr, hdr_opt_len and
-> write_hdr_opt members together with the header option helpers.
+On Fri Jul 31, 2026 at 11:49 PM CEST, Paul Moore wrote:
+> On Fri, Jul 31, 2026 at 5:29=E2=80=AFPM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+>> On Fri Jul 31, 2026 at 10:48 PM CEST, Paul Moore wrote:
+>> > On Fri, Jul 31, 2026 at 4:16=E2=80=AFPM Kumar Kartikeya Dwivedi
+>> > <memxor@gmail.com> wrote:
+>> >> On Fri Jul 31, 2026 at 10:01 PM CEST, Paul Moore wrote:
+>> >> > On Fri, Jul 31, 2026 at 3:20=E2=80=AFPM Kumar Kartikeya Dwivedi
+>> >> > <memxor@gmail.com> wrote:
+>> >> >> On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
+>> >> >> > On Fri, Jul 31, 2026 at 2:50=E2=80=AFPM Kumar Kartikeya Dwivedi
+>> >> >> > <memxor@gmail.com> wrote:
+>> >> >> >> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
+>> >> >> >> > On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartikeya Dwive=
+di
+>> >> >> >> > <memxor@gmail.com> wrote:
+>> >> >> >> >> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
+>> >> >> >> >> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kartikeya D=
+wivedi
+>> >> >> >> >> > <memxor@gmail.com> wrote:
+>> >> >> >> >> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
+>> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartikey=
+a Dwivedi
+>> >> >> >> >> >> > <memxor@gmail.com> wrote:
+>> >> >> >> >> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wro=
+te:
+>> >> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moore =
+<paul@paul-moore.com> wrote:
 >
-> The struct_ops program (progs/bpf_tcp_ops_hdr.c) reserves space in
-> hdr_opt_len via bpf_reserve_hdr_opt(), writes an experimental option in
-> write_hdr_opt via bpf_store_hdr_opt(), and recovers it in parse_hdr via
-> bpf_load_hdr_opt() on the incoming skb. Each hook bumps a counter and the
-> parse hook records the option payload, so the three callbacks and all
-> three overloaded helpers are covered.
+> ...
 >
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> ---
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-Since the struct_ops methods are wrapping the existing sockops code I
-don't think we need more extensive tests (e.g., trying to exhaust=20
-all available space with reserve).
-
->  .../bpf/prog_tests/bpf_tcp_ops_hdr.c          | 77 +++++++++++++++++
->  .../selftests/bpf/progs/bpf_tcp_ops_hdr.c     | 83 +++++++++++++++++++
->  2 files changed, 160 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_hd=
-r.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpf_tcp_ops_hdr.c
+>> I think you keep forgetting that you cannot unilaterally decide this. Bo=
+th VFS
+>> and BPF people have told you that it does not make sense. What was clear=
+ly LSM
+>> specific code has been moved under security/ already.
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_hdr.c b/t=
-ools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_hdr.c
-> new file mode 100644
-> index 000000000000..244605e69e40
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_hdr.c
-> @@ -0,0 +1,77 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +
-> +#include <test_progs.h>
-> +#include <network_helpers.h>
-> +#include "cgroup_helpers.h"
-> +#include "bpf_tcp_ops_hdr.skel.h"
-> +
-> +#define CGROUP_PATH	"/bpf_tcp_ops_hdr"
-> +#define TEST_NETNS	"bpf_tcp_ops_hdr"
-> +
-> +#define TEST_OPT_D0	0xAB
-> +#define TEST_OPT_D1	0xCD
-> +
-> +static void run_hdr_opt(void)
-> +{
-> +	struct bpf_tcp_ops_hdr *skel =3D NULL;
-> +	struct bpf_link *link =3D NULL;
-> +	struct netns_obj *ns =3D NULL;
-> +	int cgroup_fd, lfd =3D -1, fd =3D -1;
-> +
-> +	cgroup_fd =3D test__join_cgroup(CGROUP_PATH);
-> +	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-> +		return;
-> +
-> +	ns =3D netns_new(TEST_NETNS, true);
-> +	if (!ASSERT_OK_PTR(ns, "netns_new"))
-> +		goto done;
-> +
-> +	skel =3D bpf_tcp_ops_hdr__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +		goto done;
-> +
-> +	link =3D bpf_map__attach_cgroup_opts(skel->maps.test_hdr_ops, cgroup_fd=
-, NULL);
-> +	if (!ASSERT_OK_PTR(link, "attach_cgroup"))
-> +		goto done;
-> +
-> +	/*
-> +	 * One direction of data is enough to exercise all hooks: both peers
-> +	 * share the cgroup struct_ops, so the sender runs hdr_opt_len/write
-> +	 * and the receiver runs parse.
-> +	 */
-> +	lfd =3D start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
-> +	if (!ASSERT_GE(lfd, 0, "start_server"))
-> +		goto done;
-> +
-> +	fd =3D connect_to_fd(lfd, 0);
-> +	if (!ASSERT_OK_FD(fd, "connect_to_fd"))
-> +		goto done;
-> +
-> +	if (!ASSERT_OK(send_recv_data(lfd, fd, 64), "send_recv_data"))
-> +		goto done;
-> +
-> +	/* Reserve + write hooks ran while sending. */
-> +	ASSERT_GT(skel->bss->hdr_opt_len_cnt, 0, "hdr_opt_len_cnt");
-> +	ASSERT_GT(skel->bss->write_cnt, 0, "write_cnt");
-> +	/* Parse hook ran and recovered our option on the receive side. */
-> +	ASSERT_GT(skel->bss->parse_cnt, 0, "parse_cnt");
-> +	ASSERT_GT(skel->bss->found_cnt, 0, "found_cnt");
-> +	ASSERT_EQ(skel->bss->found_d0, TEST_OPT_D0, "found_d0");
-> +	ASSERT_EQ(skel->bss->found_d1, TEST_OPT_D1, "found_d1");
-> +
-> +done:
-> +	if (fd >=3D 0)
-> +		close(fd);
-> +	if (lfd >=3D 0)
-> +		close(lfd);
-> +	bpf_link__destroy(link);
-> +	bpf_tcp_ops_hdr__destroy(skel);
-> +	netns_free(ns);
-> +	close(cgroup_fd);
-> +}
-> +
-> +void test_bpf_tcp_ops_hdr(void)
-> +{
-> +	run_hdr_opt();
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_tcp_ops_hdr.c b/tools/=
-testing/selftests/bpf/progs/bpf_tcp_ops_hdr.c
-> new file mode 100644
-> index 000000000000..46618a604d96
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/bpf_tcp_ops_hdr.c
-> @@ -0,0 +1,83 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +/* Experimental option kind and payload written/parsed by this test. */
-> +#define TEST_OPT_KIND	0xFD
-> +#define TEST_OPT_LEN	4
-> +#define TEST_OPT_D0	0xAB
-> +#define TEST_OPT_D1	0xCD
-> +
-> +int hdr_opt_len_cnt;
-> +int write_cnt;
-> +int parse_cnt;
-> +int found_cnt;
-> +__u8 found_d0;
-> +__u8 found_d1;
-> +
-> +SEC("struct_ops")
-> +void BPF_PROG(test_hdr_opt_len, struct sock *sk, struct sk_buff *skb,
-> +	      struct request_sock *req, struct sk_buff *syn_skb,
-> +	      enum tcp_synack_type synack_type, unsigned int *remaining)
-> +{
-> +	hdr_opt_len_cnt++;
-> +
-> +	/* Reserve TEST_OPT_LEN bytes; the helper decrements *remaining. Stacks
-> +	 * with other progs in the cgroup hierarchy.
-> +	 */
-> +	bpf_reserve_hdr_opt(ctx, TEST_OPT_LEN, 0);
-> +}
-> +
-> +SEC("struct_ops")
-> +void BPF_PROG(test_write_hdr_opt, struct sock *sk, struct sk_buff *skb,
-> +	      struct request_sock *req, struct sk_buff *syn_skb,
-> +	      enum tcp_synack_type synack_type, __u32 opt_off)
-> +{
-> +	__u8 opt[TEST_OPT_LEN] =3D {
-> +		TEST_OPT_KIND, TEST_OPT_LEN, TEST_OPT_D0, TEST_OPT_D1,
-> +	};
-> +
-> +	/* bpf_store_hdr_opt() takes the program ctx (the kernel reads the
-> +	 * outgoing skb from it); it appends after any options already written
-> +	 * in the reserved window, rejects duplicates, and confines the write t=
-o
-> +	 * the header option scratch. Stacks across progs in the cgroup hierarc=
-hy.
-> +	 */
-> +	if (bpf_store_hdr_opt(ctx, opt, sizeof(opt), 0))
-> +		return;
-> +
-> +	write_cnt++;
-> +}
-> +
-> +SEC("struct_ops")
-> +void BPF_PROG(test_parse_hdr, struct sock *sk, struct sk_buff *skb)
-> +{
-> +	__u8 opt[TEST_OPT_LEN] =3D {
-> +		TEST_OPT_KIND, TEST_OPT_LEN, TEST_OPT_D0, TEST_OPT_D1,
-> +	};
-> +
-> +	parse_cnt++;
-> +
-> +	/* Look up the experimental option written by test_write_hdr_opt() in
-> +	 * the incoming skb. For an experimental kind the search matches on the
-> +	 * 2-byte magic in opt[2..3]; on a match the found option is copied bac=
-k
-> +	 * into opt[].
-> +	 */
-> +	if (bpf_load_hdr_opt(ctx, opt, sizeof(opt), 0) < 0)
-> +		return;
-> +
-> +	found_d0 =3D opt[2];
-> +	found_d1 =3D opt[3];
-> +	found_cnt++;
-> +}
-> +
-> +SEC(".struct_ops.link")
-> +struct bpf_tcp_ops test_hdr_ops =3D {
-> +	.hdr_opt_len	=3D (void *)test_hdr_opt_len,
-> +	.write_hdr_opt	=3D (void *)test_write_hdr_opt,
-> +	.parse_hdr	=3D (void *)test_parse_hdr,
-> +};
-> +
-> +char _license[] SEC("license") =3D "GPL";
+> I'm charged with doing the Right Thing for the LSM framework, and in
+> my opinion it is in the best interest of the LSM framework that the
+> kfunc being proposed lives in security/bpf_lsm_kfuncs.c, just as the
+> VFS kfuncs live in fs/bpf_fs_kfuncs.c.
+>
 
+I think the "Right Thing" would be caring about your users and the project
+moving forward, who want this functionality, and figuring out the best way =
+to
+make it happen while working collaboratively with others. Life is full of
+tradeoffs.
+
+Instead of dictating how others should bend over backwards to agree to your
+arbitrary rules on code organization, which they don't agree with.
+
+Everyone you've pitched your idea on code organization to disagrees with yo=
+u.
+Yet, you remain adamant that it's the only way forward.
+
+Materially, both you and I know nothing of consequence would happen if the =
+kfunc
+stays where it is.
+
+As a consequence, everyone suffers because they first need to satisfy your =
+whims
+on how all code and kfuncs written thus far are wrong, and need to be moved
+around ASAP, including the one being proposed.
+
+Not only is that a disservice to your users, but also people who've reviewe=
+d
+code (apart from you), and more importantly the person who worked on this p=
+atch
+set for several months.
+
+At least a month ago, you had the good sense of not dying over this hill.
+
+> [...]
