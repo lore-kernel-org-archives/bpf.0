@@ -1,92 +1,152 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D58430F92D;
-	Fri, 31 Jul 2026 06:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B2233A9F3
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 09:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785481187; cv=none; b=rd02oQ92CBQRNDFeHXm3Svbic1eHfTnNf6lzrhuy8ObKalEOsu3O64rcXa6Uu28lxpyYTh5vQIGBlQv2ulmLBzXwgfVv1gPJ62XUYbqcZSSIS9ubHCwVnE0hKVG5yAaXDd22qNN3TeefWCetkir4MU9CiBk3bzAdXY+IodDDxhw=
+	t=1785488709; cv=none; b=YYIoVA1uEb9a+wnyanNKCYDySpj2gQryNZNYwfu1Dd/ULHVw9dwqhR9hfyHhUsps7o7QhKaOQ9eRZPqTbpbWF3YloOGVLJeUmoQrK4gK3gXRtAad6l6n7VqXRKB3MxSMygPF9cY2x0SZv+1tgup2TUcTgBXLf/reRmaGsfOWze8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785481187; c=relaxed/simple;
-	bh=OAzUPG308bSFiJus+9fUvVqFx60KXPL0dOljxnhzkyQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MXFcULYmNl+QwbUgZXlR8UFAFBON1S1kNhivjmUnSxphO2Kef8rCR07f29c4+fW0pSHF8nwhFGtxc9cMVQrHjxliJyTAcASsIJXy273Tuee/RtifWDD1qtIEYiqQvyTC6Zc1xc+6goxb81lMawyiq5bZYosrOWA8+wZMgw6S74o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=QC02GEhf; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1785488709; c=relaxed/simple;
+	bh=Rgvp+VDe50RFmnt3GDcvFMv2kutgcrdQ+nvZuRjgL4s=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=hojDBIMSTnI/QKFk9f2Lg66zGcQBWJfJQW7oTWVDmPuDWLL4QEV4KwPsa3pGid/0b5gFpLMeP6XYfvuyRdp1EIXnCu4K0Ru4uWHHmyAs7AgvnPpZw9EbqcCDrXZSiZVYD5ETeRvBo2PGOsqYd3Adw60XwGe2vwmzuHse0dyEgNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=TUXBFs5V; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=+OoQnUju; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=hQ+MEyAl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ygQvoYlP; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="QC02GEhf"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1855820E3;
-	Thu, 30 Jul 2026 23:59:40 -0700 (PDT)
-Received: from localhost (a085714.arm.com [10.164.19.28])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F1523F86F;
-	Thu, 30 Jul 2026 23:59:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1785481184; bh=OAzUPG308bSFiJus+9fUvVqFx60KXPL0dOljxnhzkyQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QC02GEhfCiI0em67YgTLHRPfaCb/dfs+G3WtGfvhepMbRXWH055GKUXJXt6pMlijz
-	 hT9rJRKzYW9aKfsLaUp7wjeWgB7ykVkZ7QlwPmt8SYdkcC4HSzMtMhiD9uqxfhjbvP
-	 vXMSQz6l2emXPCT4oaiM9BcgLtdshUgS/uOEQARE=
-Date: Fri, 31 Jul 2026 12:29:40 +0530
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-To: =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Cc: Muhammad Usama Anjum <usama.anjum@arm.com>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Dimitri Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	Helge Deller <deller@gmx.de>, Stefano Stabellini <sstabellini@kernel.org>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	David Hildenbrand <david@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, SJ Park <sj@kernel.org>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, 
-	Mike Rapoport <rppt@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, ziy@nvidia.com, 
-	pfalcato@suse.de, agordeev@linux.ibm.com, ryan.roberts@arm.com, 
-	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-parisc@vger.kernel.org, xen-devel@lists.xenproject.org, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, kasan-dev@googlegroups.com, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	damon@lists.linux.dev
-Subject: Re: [PATCH RFC 01/11] mm: introduce hw_pte_t for PTE table storage
-Message-ID: <dzpt4ays25vvoyt56oy4iatfbqwp7z4gdsxumirv3v2nbvhoy4@73upph7f2hbk>
-References: <20260727164715.2866609-1-usama.anjum@arm.com>
- <20260727164715.2866609-2-usama.anjum@arm.com>
- <6xah74eadjmo2bozyr62wcxo4hhpsiufx2mshh7tztyy2dzzps@63m327m7pl5u>
- <41414c5b-e98a-4a55-ac87-ca982b248ca3@suse.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="TUXBFs5V";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="+OoQnUju";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="hQ+MEyAl";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ygQvoYlP"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6BE037DE66;
+	Fri, 31 Jul 2026 09:04:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1785488700; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EJQ4tixhl8ptjgMIavI7XAafyovWW2/pjPwbVKZ9qCs=;
+	b=TUXBFs5VU4QTjJ+ld+ZEO+/kbccW6Xfo9yJzPfmjqQXN7kS2TBcqB9mcEn4RkkrVyXylZG
+	DhYhywXSLPn4MqMQ43Sn2jiVzWX1N8eCGoKCm2kI3KU+B+9BigZ2BD0mt7tMf+SYrMExom
+	zNEByG513PJJFgJ8jEvkYjzhmQSDAZ0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1785488700;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EJQ4tixhl8ptjgMIavI7XAafyovWW2/pjPwbVKZ9qCs=;
+	b=+OoQnUju4OO0pobXcUva5FKg1kkdWogjmFncP+88WfSsFhsBMQMAzKThEv9VIH2LdoxlcS
+	Rvq6SSbvr/0W2qBw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1785488696; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EJQ4tixhl8ptjgMIavI7XAafyovWW2/pjPwbVKZ9qCs=;
+	b=hQ+MEyAldBM3OnOxkZvz0PXovu0b5pRHrWcxgPegN3SUgZaZQPQ7f2CKWCLs5Pnq+G+H53
+	JuZcmDScHAPtmeF+E6G2Uuw4G1ku0Fvk/vYStYnu35YG3COZmHrUp25VFB/eUMRo0zNhRx
+	WzAWY0AUtpAxxSllkPNiwLcKL8akwQI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1785488696;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EJQ4tixhl8ptjgMIavI7XAafyovWW2/pjPwbVKZ9qCs=;
+	b=ygQvoYlPBIn2DiLAe2c2Epc/QF3L6r5f6dFatvmbq+efUxC8NvNidn8c6thYfMJLIy/d9f
+	erPub4HH5gDlCnCg==
+Date: Fri, 31 Jul 2026 11:04:56 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Steven Rostedt <rostedt@goodmis.org>
+cc: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>, bpf@vger.kernel.org, 
+    linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org, 
+    linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net, 
+    jpoimboe@kernel.org, shuah@kernel.org, jolsa@kernel.org, 
+    mhiramat@kernel.org, stable@vger.kernel.org, 
+    linux-open-source@crowdstrike.com
+Subject: Re: [RFC PATCH bpf-next 2/2] selftests/livepatch: update test-ftrace.sh
+ for deprecated ftrace_enabled
+In-Reply-To: <20260730200913.59a541db@gandalf.local.home>
+Message-ID: <alpine.LSU.2.21.2607311104390.25165@pobox.suse.cz>
+References: <20260730163544.2042327-1-andrey.grodzovsky@crowdstrike.com> <20260730163544.2042327-3-andrey.grodzovsky@crowdstrike.com> <20260730200913.59a541db@gandalf.local.home>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <41414c5b-e98a-4a55-ac87-ca982b248ca3@suse.com>
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.976];
+	MIME_GOOD(-0.10)[text/plain];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:helo,pobox.suse.cz:mid,crowdstrike.com:email]
 
-On Fri, Jul 31, 2026 at 08:53:46AM +0200, Jürgen Groß wrote:
-> On 31.07.26 07:49, Anshuman Khandual wrote:
-> > On Mon, Jul 27, 2026 at 05:46:52PM +0100, Muhammad Usama Anjum wrote:
-> > > pte_t is used both for logical PTE values and for entries stored in a PTE
-> > > table, so pte_t * does not distinguish a pointer to a copied value from a
-> > > pointer to table storage.
-> > 
-> > Should we rather call them as "Linux PTE" and "HW PTE" instead ?
+On Thu, 30 Jul 2026, Steven Rostedt wrote:
+
+> On Thu, 30 Jul 2026 12:35:44 -0400
+> Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
 > 
-> What about "SW PTE"?
+> > kernel.ftrace_enabled=0 is now always refused, so the old scenario
+> > (disable, fail to load a livepatch, re-enable, load) no longer applies.
+> > Replace it with a single check that the write is refused with the new
+> > error, and drop the now-stale disable/reload flow.
+> > 
+> > Assisted-by: Claude:claude-sonnet-5
+> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> > ---
+> >  .../selftests/livepatch/test-ftrace.sh        | 49 ++-----------------
+> >  1 file changed, 3 insertions(+), 46 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+> > index d2c3dea63104..c88f4d13a134 100755
+> > --- a/tools/testing/selftests/livepatch/test-ftrace.sh
+> > +++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+> > @@ -9,56 +9,13 @@ MOD_LIVEPATCH=test_klp_livepatch
+> >  setup_config
+> >  
+> >  
+> > -# - turn ftrace_enabled OFF and verify livepatches can't load
+> > -# - turn ftrace_enabled ON and verify livepatch can load
+> > -# - verify that ftrace_enabled can't be turned OFF while a livepatch is loaded
+> > +# - verify that kernel.ftrace_enabled=0 is refused (deprecated knob)
+> >  
+> > -start_test "livepatch interaction with ftrace_enabled sysctl"
+> > +start_test "ftrace_enabled sysctl write is refused (deprecated)"
+> >  
+> > -set_ftrace_enabled 0
+> > -load_failing_mod $MOD_LIVEPATCH
+> > -
+> > -set_ftrace_enabled 1
+> > -load_lp $MOD_LIVEPATCH
+> > -if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
+> > -	echo -e "FAIL\n\n"
+> > -	die "livepatch kselftest(s) failed"
+> > -fi
+> > -
+> 
+> This test should work for both old and new kernels. I would have it still
+> do everything here but if setting ftrace_enabled returns -EOPNOTSUPP then
+> do the simple path.
 
-Both Linux PTE or SW PTE would be better than current Logical PTE description.
+Yes, please. It would be ideal.
 
-
+Miroslav
