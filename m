@@ -1,148 +1,133 @@
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D936836A34F
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 11:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785496323; cv=pass; b=GETwdM+97qfYiaGhC68s359ybByKaGMdBRs0Ce7Yg2mklM9j0CQjnyRWllyuqbnNb00ustD9imLHTBlO7JyojK0KAfATWDw9Fc2Txk1ohAEE8pL10et+I9NH+IoX/zW40whcweFOCVOUnsZZ6kZBtNXyElzy7DgyDyBtsekJwkg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785496323; c=relaxed/simple;
-	bh=GaDzXFtfihQ/z5HATF8t67Y3zZbev/3uNuuYK2MsaUA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ookg06fNknL4KoBVE91XIwVtVdJTMM1lZDrMU+eCFExmRPje1Ur/hAFnz7IUhWVM6L8j8UT7d9U+4b+A53DcEKMIyEimMmqPYvk2iMslxOgxoh/DP5fxNmlx1ucJf29Gs/wmbxwcdmiUBBkS74b2Fd1Z75KIyJqH7kztA96kZBU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com; spf=none smtp.mailfrom=anyfinetworks.com; dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b=LzI354A9; arc=pass smtp.client-ip=209.85.217.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=anyfinetworks.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F643C4562;
+	Fri, 31 Jul 2026 11:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785497753; cv=none; b=TCdEQUJ8twpoi6Sj4ZDhv4HGZi3mzjNSSKVJhIkBp+AWFHGXhbv3vb3JRDhVg2Xq1uEYYO7mpfQsF59ZiKGiObXZXthA89Svw6wL9VlNOtPh/MzO/AtuzQmWRVpbni7sloewK430L51TldGDTVMjhU3W/6mJdj+eOqc+N5yd/i8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785497753; c=relaxed/simple;
+	bh=ZEnn4WmQmKAI8sHaa1voIHm3tmdCq7iMx5mxhYf2aok=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R8UVLUPaBGu6b4NU60FHWsv7ewn+Qx4b0oIHhYuV/Jt8UAJediHUZ/oT6TyTvs5OySlBYirSY3jUXBxqp5x/x4EACEa2VeXWKXPxJbImCHCRKezNJxp5aKm7fC7Gcz22txJS2g8V5rmu9GuPwX/G/4XcnycX51c8Ll+5WJBo8cE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=n/Oxvwcl; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b="LzI354A9"
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-73720e58dafso397225137.1
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 04:12:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785496321; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GGhSDdLJjElsIn3W1OjhC4MU7GMr4rYlJQoC9RYFaYrS0RqXf7IIq/k2q87LNj49+1
-         f2dpRB+GM0wkFZHnG8k3nGssZjNWV5smQ28JmdoDJN9Me/X7KGYlHvshit6dQY8s8hOz
-         itMdHlwIOuo1Aoii9NZJsH4eF2S2/opb1WbJe8hx78atRuT+ai4knEL/RNXgcUGzrNlO
-         Sioj1l571tq4Gi41ocjQH7ZrUKu1xLbJWVDU/eyi46wgnRQpe48WobX0ZMRC2f3wR8yP
-         oz20Ry8MzgSimI1aDRR+hLjRmpDt1+hcmoTQdoRZ8cd3I9ZpxFAiI5a1AQTpsOaN2var
-         3ERA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ej9GV30+BCqZMeRlC3tn+HUH0chPghFY3P2/QiZciOA=;
-        fh=zItVDO6YSWOvBiDv8qRTc2wlRGtmp8UHlRMwZhRaXZ4=;
-        b=QjW5Bt+5vSu5XA+mtl7zLntzRAc/K+8fDNBUfwiRsvLPReXXBJuVcbM5oz5JhKQayK
-         Y6hSqr5q0SrIpQ2eOHpCRxh7x6zudPgcW8FgmjsmRY3PU+fRnPLdmHe1ZWRxqWNjH7jH
-         agKF0uNWrCG/z4SjIZ/HNXxyqN7RfcfE7d4/oCOvitFt8KVMfhFKhBFmELjqPLW+3aI3
-         Y8a4CLz1tz1MsZYy0Qlw+6vQ8I0jxIaL42eA5DaFvyGuEp3LbFW3kq2ORdVec0mTfRnd
-         p2Cjp3wJ9pm/C71in3cqDr+XCbkt2V5S6gLwqP9LwEiXDqdvs9zRaEiasWElJaeuKmTn
-         bDOg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20251104.gappssmtp.com; s=20251104; t=1785496321; x=1786101121; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ej9GV30+BCqZMeRlC3tn+HUH0chPghFY3P2/QiZciOA=;
-        b=LzI354A9GhQyR2BYAKtnZcFbAXdvQRUnQCMm6Wq7wUki5HtFKFyMRLR3C1wnBuCzId
-         a4H1/pNnSzQyCd8TtHxobQXsEMDhGF9d4DiCpUAiIoB1P+Yc+bSF9AWNIpSpwG8RYKIP
-         jnsvHzq3lB2BSmo/Kq6m1YbO69j5mudUMv0R7erRjvgDksgOVH3G7D9uaVlPILY+kbBh
-         IOYZ0MzFqYbl2yCA6uJiyU7maYBCX6UXC2zuCC4UDy6DbMuXDG1e9vEoH+KzvSIktMfG
-         m1ds6Yi3wWJDdZ/Qj/yMrw9oMwsjz+BwcXGr8boHgNkdzwtl17itFG4mmaN8+6JnKBp3
-         x/ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785496321; x=1786101121;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ej9GV30+BCqZMeRlC3tn+HUH0chPghFY3P2/QiZciOA=;
-        b=YzO/9+gKBL0xnqsf+snybNvBbmrB2KmgPWVW8fe/uZlwEWy6U1nKrdBGrDnBjn7oFE
-         PpyVYcfwMSz0ONp/jZnWtP2QCHpDJ725y2bsnAReNsVJbc9b+WEDQGZJwQACFjGA6cdk
-         fS8YoEleMH86Y5Wes34FF1iINsfp44xZo0OFSfnATM67i3y+PBc4FwARqRn0cd/Ny4xs
-         daqkCbmRbbGgX8kuoCU4qJ7wuYgUTg+3nCPH+dTs1KPHOXEWg71lV1CWW774vXxmZynC
-         XPgS1KSjM8pV8iUuZ0MSqoXvK0DgX2yWKNXOc173vXRBEmXAc7G3KLoxmKYqQBi5WcjP
-         PLwA==
-X-Forwarded-Encrypted: i=1; AHgh+RqV4+8HaOmFWO4/3+NK76eNleUp74scTRy6I4ZAIFljAsYwB5KkrIIhV3yBKa647Xuffkc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4W7dDLMMxHiszxQ+73lMkx7ubIYsftaSK0JXbW36yX2XCMI/G
-	RbGu1ALdJFkMzsnmconC8CKV0JKoFyxNk7jK8c+XYAeoFvT04KeI5HhKExRdbN1VAa6ogq2PEd2
-	akMuQS/oxkFhtvmyMgdEFedyX1BozdSliSgQf0zYvvA==
-X-Gm-Gg: AR+sD10hJa25VlPcrRom6bdzsy7DsBX8TLfUusCPudb52bJR7l1Ck3r4Dy42c+r1EgG
-	VN9yDIvxgQUpAwOaXtwKQZkWsEjF+bAfKNjCxPz5RSDrJ7l2hwdNNtGyk9tl6SGnS4QP5AQldr5
-	QOjoqkIp8KOY061hTCUCNOvSArCjkMAUCm99oUMyobOxMDTFo0wyk8n2QrZRkZ4ceFD9CfelCjC
-	Jf2OEDANC3gdFlltYrUtpcg4tHvUruny4xQiRLDTPKn2VVmq2ebbACZOhZ/eUQAnmY+i/PHtjMA
-	mfDOAC834DWBceqkEkNElWWFjeg7g5679JZZ093YAg97
-X-Received: by 2002:a05:6102:3ed0:b0:739:a2d:9621 with SMTP id
- ada2fe7eead31-758fd904565mr729008137.13.1785496320808; Fri, 31 Jul 2026
- 04:12:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="n/Oxvwcl"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66V8I7743630951;
+	Fri, 31 Jul 2026 11:35:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=UczLz+y9JDcwKHO6WRrGOu37PzSf4Z
+	qpbe7gTtmLZFM=; b=n/Oxvwcl7gk8rkJmIN3/HQYVHALbcY/zjlaCXe1xnFtmtV
+	8vuNJqd9aHCnc+nDpTq211483QR6Nnd8umg0rwZ+VCaxyHuxV2kMqB/kDwU0Xu+W
+	Y/DgkDzHKDJL2fT9YVgWszsLlCXxiox3TwQmCjohTq9sIUZwb+yPvkwD1tdJTOkG
+	17KrUuOSC+vpMh7vsRFWyvciUC+HtdN9/ZByaWHiJ2ABCi+W9OUiXe1pTG/mfz21
+	bETz8CqPGxzrGr67iA3u7urohdfUC32+dGWyttcxzPHdkDTf+3zZUgFNvp/wnWuY
+	N1MLSmRIBwkXW+cEYKNF/ofnLTTuwSEc87cAH+1g==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fmuycvpgk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 Jul 2026 11:35:34 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66VBQj50022323;
+	Fri, 31 Jul 2026 11:35:33 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fn9pgqgx3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 Jul 2026 11:35:33 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66VBZT3L29098492
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 31 Jul 2026 11:35:29 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5A5F820043;
+	Fri, 31 Jul 2026 11:35:29 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9DADF20040;
+	Fri, 31 Jul 2026 11:35:28 +0000 (GMT)
+Received: from osiris (unknown [9.111.91.157])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 31 Jul 2026 11:35:28 +0000 (GMT)
+Date: Fri, 31 Jul 2026 13:35:27 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
+        Juergen Christ <jchrist@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Dominik Steenken <dost@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Maxim Khmelevskii <max@linux.ibm.com>,
+        Jens Remus <jremus@linux.ibm.com>,
+        Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>, llvm@lists.linux.dev,
+        bpf@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] s390: Add kCFI support
+Message-ID: <20260731113527.8638Ade-hca@linux.ibm.com>
+References: <20260727140514.116501-1-hca@linux.ibm.com>
+ <20260730231317.GA2423962@ax162>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260729162931.2369353-1-main.kalliope@gmail.com> <20260729162931.2369353-3-main.kalliope@gmail.com>
-In-Reply-To: <20260729162931.2369353-3-main.kalliope@gmail.com>
-From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date: Fri, 31 Jul 2026 13:11:48 +0200
-X-Gm-Features: AUfX_mxGN1QiilF-Xg5FxW-6pbW5ca66fBUh4YARL74VZrPibHZ8mVvz9mZTewE
-Message-ID: <CAM1=_QS79dDBfaaNQXnWd61AqHd1M4o9aDMMiftnoJveNr=FZg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf, mips: Add support for BPF_SDIV and BPF_SMOD
-To: Nicholas Dudar <main.kalliope@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, tsbogend@alpha.franken.de, paulburton@kernel.org, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
-	philmd@oss.qualcomm.com, visitorckw@gmail.com, bpf@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260730231317.GA2423962@ax162>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: O-s-9cx409rLfs3zvVfFHrgQoilUdFuE
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzMxMDA4NSBTYWx0ZWRfXx2XNXH7cGIMs
+ lYv97SCQCafug3lbM2l7FugJlkLcx0E2CyHzB5YKWTy2G3AsL0szo3haKiu/A50b/6HsdfyEghx
+ Ra1B+LZ0SbH2r6wudzWhL8oey83xFGIBl78PHV/9NystPfhb8zIscJkxFBs/XzXWXqicdh0N3WE
+ 8oWGJzJLetqZTXlK3jW9miuCpOCdVh/pdG4Y+qQ0WTplyCFmxccVEx5+7jw/UxL1f5LSaL6uhag
+ GQu8ed2kjB/TsJB437upF1H5tCI3jYB+OyHPMHGoNhy6xd2m4jTR/dNPfJfcwNIbkGWuW2CNNeE
+ /XGZC5PMSxhOgYs1LCgss2+HAPOW/5a9VZtVi0oRB/8scKOiNeVAs3H90KuZ5QMgKvHxvuPT5/g
+ 3HFw1px2bpPzB/pkrd9w5pJZeCVnmKvPDM+SqxJpFgDVt4Xk2szfct92WCVNnzT/+Kl4+Cx4LH/
+ zcB781EjmLnT1OqHpqg==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzMxMDA4NSBTYWx0ZWRfX2M6yMXeAl32K
+ cSudhB0GRyt4k20xftFbdj+f+kPwTUfIOQu0KKgmoZMjTgE53wx6w5eTmpZMwZ6hLYfZVaJG9Wu
+ 6Ur8hhAguoTQzrZAETbHnOKBxlICyKY=
+X-Authority-Analysis: v=2.4 cv=AZeB2XXG c=1 sm=1 tr=0 ts=6a6c8886 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=kj9zAlcOel0A:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8
+ a=-nT90WUhznJSjK878QMA:9 a=CjuIK1q_8ugA:10 a=zZCYzV9kfG8A:10
+X-Proofpoint-GUID: xm3HIybxnMdWNVlq31DFn1JvRXPHtsa8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-31_03,2026-07-30_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 priorityscore=1501 phishscore=0 adultscore=0 impostorscore=0
+ clxscore=1015 malwarescore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607310085
 
-On Wed, Jul 29, 2026 at 6:30=E2=80=AFPM Nicholas Dudar <main.kalliope@gmail=
-.com> wrote:
->
-> The MIPS JITs handle BPF_DIV and BPF_MOD without inspecting
-> insn->off, which distinguishes BPF_SDIV and BPF_SMOD. Signed
-> operations therefore use unsigned instructions, or unsigned helpers
-> for ALU64 on 32-bit MIPS, and produce unsigned results for negative
-> operands.
+On Thu, Jul 30, 2026 at 04:13:17PM -0700, Nathan Chancellor wrote:
+> On Mon, Jul 27, 2026 at 04:05:07PM +0200, Heiko Carstens wrote:
+> > Add s390 kCFI support using the generic support provided by clang.
+> 
+> Yes, getting coverage over s390 specific code and drivers is worthwhile,
+> even if there is no architecture specific expansion available yet, since
+> most problems should be visible with either implementation. Getting that
+> sooner rather than later would be nice to avoid the panic when a CFI
+> check fails and make debugging easier but we will take what we can get.
+> 
+> I tested clang-18 and clang-23 with defconfig + CFI, which both properly
+> fails the CFI_FORWARD_PROTO LKDTM test. I built allmodconfig (which now
+> includes CFI=y) with both compilers, which showed no issues.
+> 
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-Thanks for the patch! In addition to your SDIV/SMOD fixes, I would
-like to bring the MIPS JIT to full v4 compliance. All the tests in
-test_bpf should be jit'ed and pass. Let me know if you are already
-working on the remaining v4 support, otherwise I could look into it.
-
-> arch/mips/include/asm/uasm.h   |  6 ++++
-> arch/mips/mm/uasm-mips.c       | 10 ++++++
-> arch/mips/mm/uasm.c            | 20 ++++++++----
-
-Consider making the uasm additions a separate patch. It would be more clear=
- IMO.
-
-> +static s64 jit_smod64(s64 a, s64 b)
-> +{
-> +       u64 quot =3D div64_s64(a, b);
-> +
-> +       return a - quot * b;
-
-Should not "quot" be s64? It would be more clear to not rely on
-implicit signed/unsigned promotions.
-
-> @@ -650,6 +665,7 @@ int build_insn(const struct bpf_insn *insn, struct ji=
-t_context *ctx)
->         u8 code =3D insn->code;
->         s16 off =3D insn->off;
->         s32 imm =3D insn->imm;
-> +       bool is_signed =3D off =3D=3D 1;
-
-The interpretation of the offset field is opcode-specific. The
-SDIV/SMOD instructions are encoded as DIV/MOD with off =3D 1. MOVSX
-instead use off to encode the width of the load.
-
-Please propagate the raw offset value and do the interpretation in the
-div/mod helpers instead. This also makes it easier to add the
-remaining v4 instructions later.
-
-Thanks,
-Johan
+Thanks a lot!
