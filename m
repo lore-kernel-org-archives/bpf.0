@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D152F2EB874
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 01:35:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5568F489864
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 01:57:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785461701; cv=none; b=Yi91BvgeKAp/CnBQkxbMttMTFumVaGTVmGveZnSwx17jGWHvm71G9s7F7cjvaBx2dyJ+5n8HRrsNJm09sjExNLucec0/WkhaGxDKj6r9ZgNCuWyOpu8KbZ5wM/W5tAvtgmJbY/Ju/JnwZ3HoahspyzKFn0npxYNSjyFcsLxMozg=
+	t=1785463031; cv=none; b=PIRImolKqUed+zXDvhW3CmjhT/jbGoKJjKFAEc4I6I87nfkRLa2Kp8SjsBMM9Nei05kjff4UdlG/eTtRqrqbJlppus8GbAb0Z1MtlvVSkbvHHAh04uZJCYSqegZjfp3d6QRPZ5NHlE8ej762acxQAYjvK9lxJc1UE+xX94U68X0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785461701; c=relaxed/simple;
-	bh=ykDBKNBnmx5ovyBdBiQsx2wY+67prha4G4+vltw/80I=;
+	s=arc-20240116; t=1785463031; c=relaxed/simple;
+	bh=gZkm1syO+s0i8V+AsbbyroBK479jVF82fNMvsPESfLk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IfY2COD58M9XgOSufOtH5Jw91A7FKZAK4vPp0RsI/xkzfPzW7JTwfvnJkG4fIOWj/B76TPTgpqc6okx7vaWKZ/ZAfSng7MRiN2MiUn/CZvv3umJwBFOtnoVZYEd5Keg3Na594c9QdgclCmAFFf0WDwTgZpbm0H7kALzZJMgFn6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dj9fleLl; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=imoWnbmq6nBGaRb+fXNfkprzeSyzu9Jt+0t6G+SysNxtuXfXoXJvQATfrLKyS8ZJ0DIv27MXxeMC2Fl66Hi8o3pF6YeBslOgAjPUsE8CYJ/qixsy+6cZLs5a+IWT1Cqp39XR/4v6a5XDs1FX/69PxJEPQgPJVyxNQ4kpN7WFZ30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lc99Hg+d; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dj9fleLl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2491F000E9;
-	Fri, 31 Jul 2026 01:35:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lc99Hg+d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A83E01F000E9;
+	Fri, 31 Jul 2026 01:57:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785461700;
-	bh=GjbLMaRYgRpU3CtFbeYHS+CaA2z3C2n67x1c1wIPvvY=;
+	s=k20260515; t=1785463029;
+	bh=4MyEbIiCe0exnd9LBi6nDW+V07+I5AN/JRO3UPDHItk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Dj9fleLlNX8JfK/XZNWvSyDNeItQmrUuvWx0IW1w7voOAozURaGkKchS2RxQ1Ogjc
-	 87i1vDCB9tnu7jSntvHaPebiEA9PeUD4K1q+tWnlXqlGf+K0i+dfuZDe3PfGhyy0+r
-	 zAyPIjYrXSd1DUFOW0ncvzXMMceEObmhe6S2BgNXhwKIsoHoN59M/a6rNCARZfqg3u
-	 n95p2q+jLxfo8535LH58ZEdDIKAEUgPMADroTgc4PPtFaOkqJRTWAnAIJ+0OTctPeg
-	 0RNfSUyxDDgO0Cbk+FiYlrDNObjbwjDF2Xt0d4DYi45El5CHiZ5gjQmdVa0L3Sx1+m
-	 zWZoeu51tIVXA==
+	b=lc99Hg+dSovZGuX/9j2i1rYNq4D6WkiFPOpGHoetMfT4JhUPDy9ypVvncGycW4pyy
+	 qFMsprz+EiMwH8tvbEyLS9CNRMncg7fjMdiL+RlYAF1Tf+RVIjJhzhDvuNf8sSgaGF
+	 VSKKfM8DWON0I88+FzcIRWfF0EijNMH1o8tXXiqVCnu9/7Xq92Qehm4hlkeOwnk32B
+	 EFVcyzsq0Fd3mAXgKGFimqfI1yHgJ1cBbRRkhYzsTIggb8HEK2dDy8UeP8ylRXnYkx
+	 MKOdr8Nf2NyDwBMSRDKG83iFifs0QjmiCNPWAi+IWJw+YUZaX+NrBlKPGDLPf27UVb
+	 B4UGbuV8/ihvQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: htab: Split htab_elem_lru and
- htab_elem_pcpu off of htab_elem
+Subject: Re: [PATCH bpf-next v2 2/2] bpf: htab: Reduce elem_size by 8 bytes
+ for small key sizes
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "T.J. Mercier" <tjmercier@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260731010645.3965783-2-tjmercier@google.com>
+In-Reply-To: <20260731010645.3965783-3-tjmercier@google.com>
 References: <20260731010645.3965783-1-tjmercier@google.com>
- <20260731010645.3965783-2-tjmercier@google.com>
+ <20260731010645.3965783-3-tjmercier@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 31 Jul 2026 01:34:59 +0000
-Message-Id: <20260731013500.5D2491F000E9@smtp.kernel.org>
+Date: Fri, 31 Jul 2026 01:57:09 +0000
+Message-Id: <20260731015709.A83E01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,54 +47,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Multi-line comment does not follow the preferred BPF subsystem styl=
-e.
+- [High] Eliding the 32-bit hash field for small keys causes lockless RCU l=
+ookups to suffer from torn reads, leading to false positive matches when el=
+ements are concurrently recycled.
 --
 
---- Patch [1]: [PATCH bpf-next v2 1/2] bpf: htab: Split htab_elem_lru and h=
-tab_elem_pcpu off of htab_elem ---
-commit d1965b9ee7c9db7418fb306ab2fc480a8cd067d3
+--- Patch [2]: [PATCH bpf-next v2 2/2] bpf: htab: Reduce elem_size by 8 byt=
+es for small key sizes ---
+commit 1a9b131810714c16f6fb58fbc067753c917cf3cd
 Author: T.J. Mercier <tjmercier@google.com>
 
-bpf: htab: Split htab_elem_lru and htab_elem_pcpu off of htab_elem
+bpf: htab: Reduce elem_size by 8 bytes for small key sizes
 
-This commit eliminates per-element memory overhead by splitting the generic
-htab_elem structure into dedicated structures for different map types. It
-introduces struct htab_elem_pcpu and struct htab_elem_lru, and updates
-struct bpf_htab to track a dynamic key offset for element accesses.
+This commit reduces the element size of standard and PCPU hash maps for sma=
+ll
+key sizes by removing the 32-bit hash value and padding. It introduces
+htab_has_hash() to conditionally bypass hash checking and storage when the =
+key
+size is less than or equal to the word size.
 
 > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 9f394e1aa2e85..f54366da459f5 100644
+> index f54366da459f5..82b19bd543109 100644
 > --- a/kernel/bpf/hashtab.c
 > +++ b/kernel/bpf/hashtab.c
-> @@ -117,11 +119,27 @@ struct htab_elem {
+[ ... ]
+> @@ -618,6 +625,12 @@ static struct bpf_map *htab_map_alloc(union bpf_attr=
+ *attr)
+> =20
+>  	bpf_map_init_from_attr(&htab->map, attr);
+> =20
+> +	/* Avoid hash memory use and comparisons where unnecessary.
+> +	 * u32 hash reads are always atomic. If we elide them, key comparisons =
+must also be atomic
+> +	 * to avoid false positive key matches due to torn key reads / writes. =
+So check key_size.
+> +	 */
+> +	htab->has_hash =3D htab_is_lru(htab) || htab->map.key_size > sizeof(uns=
+igned long);
+
+[Severity: High]
+While the comment correctly notes that key comparisons must be atomic when =
+the
+hash is elided, are runtime memcmp() and memcpy() operations actually atomic
+for all key sizes <=3D 8 bytes (such as 3, 5, 6, or 7 bytes)?
 
 [ ... ]
+> @@ -761,10 +776,16 @@ static struct htab_elem *lookup_elem_raw(struct bpf=
+_htab *htab,
+>  	struct hlist_nulls_node *n;
+>  	struct htab_elem *l;
+> =20
+> -	hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
+> -		if (htab_elem_hash(htab, l) =3D=3D hash &&
+> -		    !memcmp(htab_elem_key(htab, l), key, key_size))
+> -			return l;
+> +	if (htab_has_hash(htab)) {
+> +		hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
+> +			if (htab_elem_hash(htab, l) =3D=3D hash &&
+> +			    !memcmp(htab_elem_key(htab, l), key, key_size))
+> +				return l;
+> +	} else {
+> +		hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
+> +			if (!memcmp(htab_elem_key(htab, l), key, key_size))
+> +				return l;
+> +	}
+> =20
+>  	return NULL;
+>  }
 
-> +struct htab_elem_lru {
-> +	struct htab_node node;
-> +	struct bpf_lru_node lru_node;
-> +	u32 hash;
-> +	char key[] __aligned(8);
-> +};
-> +
-> +/* Only for non-preallocated PCPU maps. Preallocated PCPU maps don't need
-> + * ptr_to_pptr, and use htab_elem.
-> + */
+[Severity: High]
+Can this lockless memcmp() result in a torn read and a false positive match?
 
-[Severity: Low]
-This isn't a bug, but does this multi-line comment violate the modern BPF
-subsystem comment style? The BPF guidelines specify that the opening slash
-and star should reside on their own line, with the text beginning on the
-following line.
+In preallocated BPF hash maps, deleted elements are immediately pushed to a
+lockless freelist without an RCU grace period. If a reader is preempted whi=
+le
+examining an element, and another thread reallocates and writes to that
+element's key using a non-atomic memcpy() (such as in alloc_htab_elem()), t=
+he
+reader might observe a torn mixture of the old and new key.
 
-> +struct htab_elem_pcpu {
-> +	struct htab_node node;
-> +	void *ptr_to_pptr;
->  	u32 hash;
->  	char key[] __aligned(8);
->  };
+Without the 32-bit atomic hash check acting as a filter, could this torn re=
+ad
+randomly match the reader's target key, causing the lookup to return an
+unrelated map element?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260731010645.3965=
-783-1-tjmercier@google.com?part=3D1
+783-1-tjmercier@google.com?part=3D2
