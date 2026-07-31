@@ -1,64 +1,65 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A9532B11E
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 02:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81432317145
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 02:21:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785464490; cv=none; b=Y0e1K4GVCBqYwdOJuLE/pNS+3UzLZ0jlJaj8UX0wPcSirjadMCNDomTehXIxRJ3tw677XSKyWCnOXOCVcPoFpecqQsmP9PVRhvEsRMyG/yLCLb0KAgeorSitsiH4+aewzbfRLCqw3sqD5JVxidTgkA7I2rgVGtyaurR3Sw/N0eM=
+	t=1785464493; cv=none; b=EBK5gkARgsyLtGsWwjSCv4DvVXZyQVK81AisNH8oBY0LcLcDgw/5QPoZbpbLi+bD+w65Pp7TASOYcpgjGSPs9bgdwaxcOuJ8Zg+eOHdBt4pkVfoJf6dnR60lgn+DEJ0paYetTbwiP1PpGpNXzpo+iaUt9Knw114ALP09deBhVIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785464490; c=relaxed/simple;
-	bh=8CZuZUF4yZqOhhlu7a9VfiLoBIOnNth3ho1a5v4N4nI=;
+	s=arc-20240116; t=1785464493; c=relaxed/simple;
+	bh=79WDRkozdtPmwEzHohevZNQHC9JEcAYV/9wC5vE8rxs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NcqHAbg2rTm62mWZxwaTpb0T02MkgBZ15lXBHi1+8oz4yJDGSO/B2vfizQI/uTTXy0/p1zUH8D0y28woZXGF76WKEXnhtzgUfeGqQMF6jMGi4qgo5yfeOR8CT1sCxPLVXiT0J/VujDozIro7vIPNuq2ldmIepE1m3JsdCzjUC/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j0+zv721; arc=none smtp.client-ip=209.85.128.176
+	 MIME-Version:Content-Type; b=ZO4PI7Y22ybBMybhXqi8pLMRvzN3iMlSBnP7BPKLmTv6HeJ1Idw+Wi81Fn3zD3LcxchFP3FHbIOv7T7gF1RELNiJvpXYFgeycE41Y6AJBQIZHuH083fmD44kWi9HkBTLb8DZ3ZEDKDZ4mlxiq8ZmqUUTWEIjN4bSaDNiJX5eTgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WupicYBQ; arc=none smtp.client-ip=74.125.224.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j0+zv721"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-81e9f7491ffso7837577b3.0
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 19:21:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WupicYBQ"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-66893db7bccso573106d50.1
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 19:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785464487; x=1786069287; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=pGCBiJwuFidm0XWVpVouPl8UKmEaO4aYAkoooI4m9uE=;
-        b=j0+zv721AWeSEmTALkJ0kPOdOHyKhV9W34sTdS5GsT1Vgruk7Hz3ys5tFci0qYH0P9
-         P36SFeQ1jxomG/Dvb2D81Lr+YLUh9oMO17ddIFKjH+0R5mRT5yQRKhtbQahodkXlU3BT
-         KVXiulkhC7woioK3whqqHsoGSnquIppOYbHvyVekBp8fCzUhNc078XoX0ZjbCVEmtb2C
-         J7l2S1pIuUFF/uMrLV5vWPf8gGCsjU/UQ8PpMAYMriqRQfMQza+V1c/LdsSo9AGDMyMX
-         zz84w6gcjZ96Rk5wxvqyzl3IoKC2mxl6QiT8yCqBXMjojEtYTh9O7kC+5gKFFTj6HJXZ
-         0kAA==
+        d=gmail.com; s=20251104; t=1785464489; x=1786069289; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gwkoVULYCNdZKy6/P+qRyiCnYdc6+SQZGzQ9Pl5KsVU=;
+        b=WupicYBQR+MFEssGq+5oDBuybXWThbZGLiMqb8xJsbxlvzlWoyYAsFj+WsgV7pArDJ
+         L1YLlSEmO4503spnE6luy395kkPhjlN0IyNCjecQHlZmjBMmLH7sh4XhrRblABaAJHJ7
+         qUcbjy/x0VFE6DrwSOlpMVIKxp0FZKK+5eu+pm0NYD8I1XqPkeiknZ96O4DM0E1xJ618
+         sRF9sbjufcJirNGlk9ioCHtpzoWc0wVUveg1nfJgaplnTEJiKOdhvDT0kYIk1x4TcjBl
+         2MFAi+7zqHIPxLC3J5VvoMWjltaQ9MaYIEWs5M3tx1QU19as80grBjX4hnt5eaxRKBkY
+         yw7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785464487; x=1786069287;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pGCBiJwuFidm0XWVpVouPl8UKmEaO4aYAkoooI4m9uE=;
-        b=mSFFdf8LEGeXaWovl7PJTAR5Rn3SNeCoNU7WT4R+V2BaIX+8T/RI1IM9/9ceMl4AHV
-         CWi0S3ivIkUfRs1O6vP3fF0YMKLuu1YZsLiST/6NXQsabf6w9KMlWDFxkk+JmZ+V9Tz4
-         tQP+N25zvWOsYUGolbSRkC+d4SqJgCc/2yGfQpOqD1OoRl3XCZ0m6nNjj/mW6JqAf6ur
-         WPxXJVlg4QwMIImnam1c4I7r31z+d+PXN6ojRSs7iNqHBdJyaIVQ9F8goBo3NxxbRuIF
-         eOMybQ4rd6CKsLwh+W0afvSrUim/jBukdxwtbaY/c8LD8gWq574aaTg6J8Qd8XH52yo8
-         Mxzw==
-X-Forwarded-Encrypted: i=1; AHgh+RozLxs8K122dRE8n5xXr+Yp+o7Vxmi4gd4HZmezcYOx3HohzKT2UuamxqD0auhn8cA7/+E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDjhxey0HdGQEs1XYNNHKpQ4EpoxGMzF0f1U73toCdo3R5dIa2
-	HojtulHZkL/lk+58UREbr+YkaQAza1bKHCTBnhsOq9zyHPC9uL8E+IdD
-X-Gm-Gg: AR+sD132htnJqfU6epY9olK9ACDI3bHBPLg7fB4d2qxqBeEV9/hQtqkJ7UEksqK4zn9
-	OiMsApqEr1gakbFVirRJkYQ0bjtHZepzRqnfULj/MsCpzTmk9Y6iKYHBPnEZf0iYpXaPFKQThV0
-	DBWzg8zBOcRUeUlSNmfHvR0mhtPfipSy+iSutCJp7nbQwRV06jUFczjLkP3+Xqfkbz8IMSAnlKo
-	9nrHdAIl97weEP46RsChjo5pYLXA/xsVfS+hOkpX8xK9f04IUfdQ4atK+h+4Q58bl4/mP/ftROc
-	5gmR/+/mIJCXsvQ299lXNPyojSr1mrjJRQReAHvQJ7Yyg8aC0I9g/D+p0VZl3Ef1AFGP77SP30l
-	6Qverv5b55hxSM4SpWhfWVf+botpGPBRjPgQ7zGbKmnrGZHcevMqlTOjl5NGua/I+f1B2VYtCKF
-	5ty3ECDSjnYepNVrKVVb4GMTQCtK7nr5AF0SOagGUdAYxm2kxRaqv3JE5TZjyEJdnOxUs73JVcQ
-	vfOYWle9Y3/b8+V0LQApw==
-X-Received: by 2002:a05:690c:c02:b0:81e:a425:fe7d with SMTP id 00721157ae682-81fcb9cdbc1mr766227b3.28.1785464487279;
-        Thu, 30 Jul 2026 19:21:27 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785464489; x=1786069289;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gwkoVULYCNdZKy6/P+qRyiCnYdc6+SQZGzQ9Pl5KsVU=;
+        b=X15z/YuNMGwc3ehUUFmC80jQbz95KRjxKoNOVoGeg4LcKHT5wc5JOCd7hTiCjHw38F
+         hvBCL+fEMcThplWibB/IXND3FdGG6BEr8LhfGZelC6L0i8qzJ28Bt+fcJPmJNYz5uPlh
+         9E0/sNFkhQbQx7i3Txd4HIi5nK3pFA0gOGL6eOTqDuoo/UyHTNG22hLQAkAVGHiQplNj
+         WMcR6S2sF45DCtcStoFeQUUUumB/gMh/se/Mr8ifC/RFYOC05g0KqTh2OLjf7YIl6GG8
+         qVr9hXAtR5BMcqMG4Tb/EjXFc45foORASn3gd79EEHR6N4/t0qYz0SWZbjC0wrWFMC48
+         SGCg==
+X-Forwarded-Encrypted: i=1; AHgh+RqL6QBVJv9GompXEqnGFTu+sQgs2qFuzicz9qRyx7FihlST1Oi+gHI359upvGFrW4N+D08=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4GQzJGLgJX1Psha7fHmP73pjy4uhrCzTZs9xSfzlxRjyqQsne
+	zhPRZUloo04Cp3AavZr8m7V6psyCn5G3moZRTOJGsE67oIMB2geMBu+g
+X-Gm-Gg: AR+sD13hWTgHVBBR8dYq2jfTQXn5q3/OHidmaM4tmKdr6NQHtyJIBPZ4z+Xvv8+IgCx
+	Asff2gFu7JPNrGbSUJtEs27QtNo9SbrjiZ4gqqiGZ1ffDVpqdMXGsjDzEBNnbUhHFQMSTPqMK6x
+	Wi26JYVXB5Wg5BVZ98G2fmoTi+NCDUwbuLPi89i6zQGrlfLeLH4/e+qNZ1Cev4nI211oQArMX2K
+	9co1raw7Cnorj8oP2R7T1+NNVmfOtEmrhl5lSQcQdeUtZx6OQmXLwKv0yw7PRrdPMTcvpEcR4Zo
+	Le6hCGTzXbbUC/rdWtfKXmmfjD/K/WtveqXGkD3jV37k8GsLaMZR7AoKtxP0kowPtZPhrwPW6lw
+	5eQoZhfE0hmtSR7Rpe1Bk7Ao1Tjzx2V6AgejOHXdtQJk/1saozgKU9BKp7qTkH2WLYk0yqsGIOW
+	FH9Fk7JDKT2+ScsVu9ApsdmftvmRz0Zu5Dp4Q+mExUCfJoH8nEmk50fnwYlBSdTpBMPQgE7p+9R
+	xS3do4Xnb0McuScp7Hp9w==
+X-Received: by 2002:a05:690c:64c1:b0:7ff:1399:9317 with SMTP id 00721157ae682-81fcb970fbbmr616447b3.11.1785464489235;
+        Thu, 30 Jul 2026 19:21:29 -0700 (PDT)
 Received: from zenbox ([2600:1700:18fb:6011:e94:8a83:feea:6720])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81fb8b26e8bsm20519047b3.47.2026.07.30.19.21.26
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81fb8b26e8bsm20519047b3.47.2026.07.30.19.21.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 19:21:27 -0700 (PDT)
+        Thu, 30 Jul 2026 19:21:28 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -79,9 +80,9 @@ Cc: gnoack@google.com,
 	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [PATCH bpf-next 10/13] bpf: Add the bpf_landlock_restrict_binprm kfunc
-Date: Thu, 30 Jul 2026 22:20:43 -0400
-Message-ID: <20260731022047.189137-11-utilityemal77@gmail.com>
+Subject: [PATCH bpf-next 11/13] selftests/bpf: Add tests for the Landlock policy kfuncs
+Date: Thu, 30 Jul 2026 22:20:44 -0400
+Message-ID: <20260731022047.189137-12-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260731022047.189137-1-utilityemal77@gmail.com>
 References: <20260731022047.189137-1-utilityemal77@gmail.com>
@@ -91,133 +92,642 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add the enforcement kfunc for Landlock rulesets:
+Exercise the LSM policy kfuncs end to end and cover the verifier-time
+restrictions enforced by the BPF-side kfunc filter.
 
-  bpf_landlock_restrict_binprm(bprm, ruleset, flags)
+The success flow mirrors the intended deployment: a syscall program,
+run by the test runner through BPF_PROG_RUN, acquires the ruleset
+created by the runner from its fd (resolved in the runner's own fd
+table) and parks it in a map kptr slot; a program attached to the
+sleepable bprm_creds_for_exec() hook takes it from the map, enforces
+it on the monitored execution with bpf_landlock_restrict_binprm()
+with flags configured per scenario, and puts it back for the next
+execution.  The runner creates a real Landlock ruleset handling
+LANDLOCK_ACCESS_FS_WRITE_FILE without any rule and checks that:
 
-It restricts the credentials prepared in @bprm with @ruleset, so that
-the executed task starts confined by it, through
-security_bprm_enforce_policy_kptr() invoked with LSM_ID_LANDLOCK.
-When Landlock is compiled out or not enabled in the LSM order, the
-call fails with -EOPNOTSUPP.
+- a monitored child ends up landlocked (writing to a tmp file fails
+  while a control execution succeeds);
+- the audit log flags are accepted;
+- LANDLOCK_RESTRICT_SELF_TSYNC is rejected with -EINVAL and leaves
+  the execution unrestricted;
+- a second bpf_landlock_restrict_binprm() call on the same execution
+  replaces the previously staged domain instead of failing or
+  stacking;
+- a staged restriction is discarded when the execution fails after
+  the bprm hook: the child execs an ENOEXEC file with a restriction
+  staged, and after the failed execve(2) verifies that it is not
+  landlocked;
+- a negative fd resolved through the acquire kfunc returns NULL.
 
-The kfunc keeps the BPF-facing interface strongly BTF-typed: with
-kfunc arguments trusted by default, both the binprm (from the LSM
-hook context) and the ruleset (an acquired reference) must be trusted
-pointers whose provenance the verifier guarantees, not merely
-type-matching ones.
+The failure programs check that verification rejects:
+- a tracing program calling the kfuncs (LSM and syscall programs
+  only),
+- an LSM program calling the acquire kfunc (syscall programs only,
+  where the ruleset fd is meaningful),
+- a syscall program calling the enforcement kfunc (sleepable bprm
+  LSM hooks only),
+- an LSM program on a hook other than the sleepable bprm hooks,
+- a non-sleepable LSM program on an allowed hook,
+- a program leaking the acquired ruleset reference.
 
-The flags take the landlock_restrict_self(2) flags with their usual
-semantics.  Only LANDLOCK_RESTRICT_SELF_TSYNC is rejected (-EINVAL),
-as it targets the calling threads rather than the execution.
-
-The filter makes enforcement exclusive to the sleepable LSM programs
-attached to the bprm_creds_for_exec() or bprm_creds_from_file()
-hooks.
+The test needs CONFIG_SECURITY_LANDLOCK and the landlock LSM enabled
+in the test kernel; the runner skips if the Landlock syscalls are
+unavailable.
 
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- kernel/bpf/bpf_lsm.c | 50 +++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 47 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/config            |   1 +
+ tools/testing/selftests/bpf/config.x86_64     |   2 +-
+ .../bpf/prog_tests/lsm_policy_kfuncs.c        | 329 ++++++++++++++++++
+ .../bpf/progs/lsm_policy_kfuncs_failure.c     | 100 ++++++
+ .../bpf/progs/lsm_policy_kfuncs_success.c     | 107 ++++++
+ 5 files changed, 538 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_policy_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_success.c
 
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index 9ff1c35fcd6e..67aa902f1257 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -486,8 +486,8 @@ int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
- struct bpf_landlock_ruleset {};
- 
- /*
-- * The sleepable LSM hooks bpf_landlock_put_ruleset() may be called
-- * from.
-+ * The sleepable LSM hooks bpf_landlock_restrict_binprm() and
-+ * bpf_landlock_put_ruleset() may be called from.
-  */
- BTF_SET_START(bpf_landlock_kfunc_hooks)
- BTF_ID(func, bpf_lsm_bprm_creds_for_exec)
-@@ -535,6 +535,42 @@ __bpf_kfunc void bpf_landlock_put_ruleset(struct bpf_landlock_ruleset *ruleset)
- 	security_policy_kptr_put(LSM_ID_LANDLOCK, &policy);
- }
- 
-+/**
-+ * bpf_landlock_restrict_binprm - Enforce a Landlock ruleset on exec
-+ *                                credentials
-+ * @bprm: execution context providing the prepared credentials to
-+ *        restrict
-+ * @ruleset: Landlock ruleset to enforce
-+ * @flags: landlock_restrict_self(2) flags, except
-+ *         %LANDLOCK_RESTRICT_SELF_TSYNC
-+ *
-+ * Restrict the credentials prepared in @bprm with @ruleset, so that
-+ * the executed task starts confined by it, following the same domain
-+ * composition rules as landlock_restrict_self(2).  The restriction is
-+ * staged and only committed at the execution's point of no return: an
-+ * execution that fails before that point is unaffected, and a later
-+ * call on the same execution replaces a previously staged
-+ * restriction.  @ruleset is only borrowed: the caller keeps its
-+ * reference.
-+ *
-+ * The landlock_restrict_self(2) flags apply with their usual
-+ * semantics.  Only %LANDLOCK_RESTRICT_SELF_TSYNC is rejected, as it
-+ * targets the calling threads rather than the execution.
-+ *
-+ * Return: 0 on success, -EOPNOTSUPP if the Landlock LSM is not
-+ * enabled, -EINVAL if @flags contains an unsupported flag, other
-+ * negative values on failure as for landlock_restrict_self(2).
-+ */
-+__bpf_kfunc int bpf_landlock_restrict_binprm(struct linux_binprm *bprm,
-+					     struct bpf_landlock_ruleset *ruleset,
-+					     u32 flags)
-+{
-+	union lsm_policy_kptr policy = { .landlock.ruleset = ruleset };
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index ea7044f30adc..2fa734497461 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -120,6 +120,7 @@ CONFIG_SAMPLES=y
+ CONFIG_SAMPLE_LIVEPATCH=m
+ CONFIG_SECURITY=y
+ CONFIG_SECURITYFS=y
++CONFIG_SECURITY_LANDLOCK=y
+ CONFIG_SYN_COOKIES=y
+ CONFIG_TEST_BPF=m
+ CONFIG_UDMABUF=y
+diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
+index 523e0d29bbd4..2c4d857f69f5 100644
+--- a/tools/testing/selftests/bpf/config.x86_64
++++ b/tools/testing/selftests/bpf/config.x86_64
+@@ -125,7 +125,7 @@ CONFIG_LEGACY_VSYSCALL_NONE=y
+ CONFIG_LOG_BUF_SHIFT=21
+ CONFIG_LOG_CPU_MAX_BUF_SHIFT=0
+ CONFIG_LOGO=y
+-CONFIG_LSM="selinux,bpf,integrity"
++CONFIG_LSM="landlock,selinux,bpf,integrity"
+ CONFIG_MAC_PARTITION=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_MCORE2=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_policy_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/lsm_policy_kfuncs.c
+new file mode 100644
+index 000000000000..c91929f98e88
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/lsm_policy_kfuncs.c
+@@ -0,0 +1,329 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright © 2026 Justin Suess <utilityemal77@gmail.com> */
 +
-+	return security_bprm_enforce_policy_kptr(LSM_ID_LANDLOCK, bprm,
-+						 &policy, flags);
++#include <test_progs.h>
++#include <errno.h>
++#include <linux/landlock.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/stat.h>
++#include <sys/syscall.h>
++#include <sys/wait.h>
++#include <unistd.h>
++
++#include "lsm_policy_kfuncs_success.skel.h"
++#include "lsm_policy_kfuncs_failure.skel.h"
++
++/* Fallbacks for old system headers. */
++#ifndef LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON
++#define LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON (1U << 1)
++#endif
++#ifndef LANDLOCK_RESTRICT_SELF_TSYNC
++#define LANDLOCK_RESTRICT_SELF_TSYNC (1U << 3)
++#endif
++
++static int create_ruleset(void)
++{
++	const struct landlock_ruleset_attr attr = {
++		.handled_access_fs = LANDLOCK_ACCESS_FS_WRITE_FILE,
++	};
++
++	return syscall(__NR_landlock_create_ruleset, &attr, sizeof(attr), 0);
 +}
 +
- /* Destructor for referenced bpf_landlock_ruleset kptrs. */
- __bpf_kfunc void bpf_landlock_put_ruleset_dtor(void *ruleset)
- {
-@@ -550,6 +586,7 @@ BTF_KFUNCS_START(bpf_landlock_kfunc_ids)
- BTF_ID_FLAGS(func, bpf_landlock_get_ruleset_from_fd,
- 	     KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_landlock_put_ruleset, KF_RELEASE | KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_landlock_restrict_binprm, KF_SLEEPABLE)
- BTF_KFUNCS_END(bpf_landlock_kfunc_ids)
- 
- BTF_ID_LIST(bpf_landlock_dtor_ids)
-@@ -558,6 +595,8 @@ BTF_ID(func, bpf_landlock_put_ruleset_dtor)
- 
- BTF_ID_LIST_SINGLE(bpf_landlock_get_ruleset_ids, func,
- 		   bpf_landlock_get_ruleset_from_fd)
-+BTF_ID_LIST_SINGLE(bpf_landlock_restrict_binprm_ids, func,
-+		   bpf_landlock_restrict_binprm)
- 
- /*
-  * BPF_PROG_TYPE_LSM and BPF_PROG_TYPE_SYSCALL share their kfunc
-@@ -566,7 +605,10 @@ BTF_ID_LIST_SINGLE(bpf_landlock_get_ruleset_ids, func,
-  * in the fd table of the task that set the ruleset up, so
-  * bpf_landlock_get_ruleset_from_fd() is exclusive to syscall
-  * programs, which run in that task's context; an LSM program runs in
-- * the context of the task it mediates.
-+ * the context of the task it mediates.  Enforcement is exclusive to
-+ * the sleepable bprm LSM hooks the policy operation is specified
-+ * for, and the release kfunc is allowed wherever a reference can be
-+ * held.
-  */
- static int bpf_landlock_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
- {
-@@ -575,6 +617,8 @@ static int bpf_landlock_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
- 
- 	switch (prog->type) {
- 	case BPF_PROG_TYPE_SYSCALL:
-+		if (kfunc_id == bpf_landlock_restrict_binprm_ids[0])
-+			return -EACCES;
- 		return 0;
- 	case BPF_PROG_TYPE_LSM:
- 		if (kfunc_id == bpf_landlock_get_ruleset_ids[0])
++static void reset_prog_state(struct lsm_policy_kfuncs_success *skel)
++{
++	skel->bss->called = false;
++	skel->bss->no_ruleset = false;
++	skel->bss->restrict_err = -1;
++	skel->bss->restrict2_err = -1;
++	skel->bss->kfunc_flags = 0;
++	skel->bss->double_call = false;
++}
++
++/*
++ * Runs the syscall program that acquires the ruleset from
++ * @ruleset_fd, in the runner's fd table, and parks it in the map kptr
++ * slot for the LSM program.
++ */
++static int load_ruleset_into_map(struct lsm_policy_kfuncs_success *skel)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	int err;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.load_ruleset),
++				     &opts);
++	if (!ASSERT_OK(err, "load_ruleset_run"))
++		return -1;
++	if (!ASSERT_OK(opts.retval, "load_ruleset_retval"))
++		return -1;
++	ASSERT_TRUE(skel->bss->got_null_for_bad_fd, "bad_fd_null");
++	return 0;
++}
++
++/*
++ * Forks a child that execs "sh -c '<shell_cmd>'".  The monitored pid
++ * is only known, and can only be published to the BPF program, once
++ * the child exists: the child waits on a pipe until the parent has
++ * updated it.  Returns the child's exit status, or -1 on error.
++ */
++static int run_exec_child(struct lsm_policy_kfuncs_success *skel,
++			  bool monitored, const char *shell_cmd)
++{
++	int pipe_fds[2], status;
++	char buf = 0;
++	pid_t pid;
++
++	if (!ASSERT_OK(pipe(pipe_fds), "pipe"))
++		return -1;
++
++	pid = fork();
++	if (!ASSERT_GE(pid, 0, "fork")) {
++		close(pipe_fds[0]);
++		close(pipe_fds[1]);
++		return -1;
++	}
++	if (pid == 0) {
++		char *argv[] = { "sh", "-c", (char *)shell_cmd, NULL };
++
++		close(pipe_fds[1]);
++		read(pipe_fds[0], &buf, 1);
++		close(pipe_fds[0]);
++		execv("/bin/sh", argv);
++		exit(127);
++	}
++	close(pipe_fds[0]);
++	skel->bss->monitored_pid = monitored ? pid : 0;
++	write(pipe_fds[1], &buf, 1);
++	close(pipe_fds[1]);
++
++	if (!ASSERT_EQ(waitpid(pid, &status, 0), pid, "waitpid"))
++		return -1;
++	if (!ASSERT_TRUE(WIFEXITED(status), "child_exited"))
++		return -1;
++	return WEXITSTATUS(status);
++}
++
++/*
++ * Exit codes: 4 = unexpected write outcome, 0 = everything as
++ * expected.
++ */
++static void format_child_cmd(char *cmd, size_t len, bool expect_write_ok,
++			     const char *tmp_path)
++{
++	if (expect_write_ok)
++		snprintf(cmd, len, "echo x > %s || exit 4; exit 0", tmp_path);
++	else
++		snprintf(cmd, len,
++			 "if echo x > %s 2>/dev/null; then exit 4; fi; exit 0",
++			 tmp_path);
++}
++
++static void test_restrict_binprm(void)
++{
++	struct lsm_policy_kfuncs_success *skel = NULL;
++	char tmp_path[] = "/tmp/lsm_policy_kfuncs_XXXXXX";
++	char cmd[256];
++	int ruleset_fd, tmp_fd, ret;
++
++	tmp_fd = mkstemp(tmp_path);
++	if (!ASSERT_GE(tmp_fd, 0, "mkstemp"))
++		return;
++	close(tmp_fd);
++
++	ruleset_fd = create_ruleset();
++	if (ruleset_fd < 0) {
++		if (errno == EOPNOTSUPP || errno == ENOSYS)
++			test__skip();
++		else
++			ASSERT_GE(ruleset_fd, 0, "landlock_create_ruleset");
++		goto out_unlink;
++	}
++
++	skel = lsm_policy_kfuncs_success__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		goto out;
++	skel->bss->ruleset_fd = ruleset_fd;
++
++	if (!ASSERT_OK(lsm_policy_kfuncs_success__attach(skel), "skel_attach"))
++		goto out;
++
++	if (load_ruleset_into_map(skel))
++		goto out;
++
++	/* Control: an unmonitored execution may write to the tmp file. */
++	reset_prog_state(skel);
++	format_child_cmd(cmd, sizeof(cmd), true, tmp_path);
++	ret = run_exec_child(skel, false, cmd);
++	if (!ASSERT_EQ(ret, 0, "control_child_exit"))
++		goto out;
++	ASSERT_FALSE(skel->bss->called, "control_not_monitored");
++
++	/*
++	 * A monitored execution starts landlocked: the ruleset handles
++	 * LANDLOCK_ACCESS_FS_WRITE_FILE without any rule, so the write
++	 * must fail.
++	 */
++	reset_prog_state(skel);
++	format_child_cmd(cmd, sizeof(cmd), false, tmp_path);
++	ret = run_exec_child(skel, true, cmd);
++	if (!ASSERT_EQ(ret, 0, "restricted_child_exit"))
++		goto out;
++	ASSERT_TRUE(skel->bss->called, "lsm_prog_called");
++	ASSERT_FALSE(skel->bss->no_ruleset, "ruleset_in_map");
++	ASSERT_EQ(skel->bss->restrict_err, 0, "restrict_binprm");
++
++	/* The audit log flags of landlock_restrict_self(2) apply too. */
++	reset_prog_state(skel);
++	skel->bss->kfunc_flags = LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON;
++	format_child_cmd(cmd, sizeof(cmd), false, tmp_path);
++	ret = run_exec_child(skel, true, cmd);
++	if (!ASSERT_EQ(ret, 0, "log_flags_child_exit"))
++		goto out;
++	ASSERT_EQ(skel->bss->restrict_err, 0, "log_flags_restrict_binprm");
++
++	/*
++	 * LANDLOCK_RESTRICT_SELF_TSYNC targets the calling threads, not
++	 * an execution: the kfunc must reject it and the execution must
++	 * stay unrestricted.
++	 */
++	reset_prog_state(skel);
++	skel->bss->kfunc_flags = LANDLOCK_RESTRICT_SELF_TSYNC;
++	format_child_cmd(cmd, sizeof(cmd), true, tmp_path);
++	ret = run_exec_child(skel, true, cmd);
++	if (!ASSERT_EQ(ret, 0, "tsync_child_exit"))
++		goto out;
++	ASSERT_TRUE(skel->bss->called, "tsync_prog_called");
++	ASSERT_EQ(skel->bss->restrict_err, -EINVAL, "tsync_rejected");
++
++	/*
++	 * A second call on the same execution replaces the staged
++	 * domain (and releases the first one): the result is a single
++	 * restriction, not an error.
++	 */
++	reset_prog_state(skel);
++	skel->bss->double_call = true;
++	format_child_cmd(cmd, sizeof(cmd), false, tmp_path);
++	ret = run_exec_child(skel, true, cmd);
++	if (!ASSERT_EQ(ret, 0, "double_child_exit"))
++		goto out;
++	ASSERT_EQ(skel->bss->restrict_err, 0, "double_restrict_first");
++	ASSERT_EQ(skel->bss->restrict2_err, 0, "double_restrict_second");
++out:
++	lsm_policy_kfuncs_success__destroy(skel);
++	close(ruleset_fd);
++out_unlink:
++	unlink(tmp_path);
++}
++
++/*
++ * Checks that a staged restriction is discarded, and the staged
++ * domain released, when the execution fails after the bprm hook: the
++ * calling task must not end up landlocked.
++ */
++static void test_restrict_binprm_discard(void)
++{
++	struct lsm_policy_kfuncs_success *skel = NULL;
++	char tmp_path[] = "/tmp/lsm_policy_kfuncs_XXXXXX";
++	char garbage_path[] = "/tmp/lsm_policy_garbage_XXXXXX";
++	int ruleset_fd = -1, tmp_fd, garbage_fd, pipe_fds[2], status;
++	char buf = 0;
++	pid_t pid;
++
++	tmp_fd = mkstemp(tmp_path);
++	if (!ASSERT_GE(tmp_fd, 0, "mkstemp"))
++		return;
++	close(tmp_fd);
++
++	/*
++	 * An executable file that no binfmt handler accepts: the exec
++	 * fails with ENOEXEC after bprm_creds_for_exec() has run.
++	 */
++	garbage_fd = mkstemp(garbage_path);
++	if (!ASSERT_GE(garbage_fd, 0, "mkstemp_garbage"))
++		goto out_unlink;
++	if (!ASSERT_EQ(write(garbage_fd, "junk\n", 5), 5, "write_garbage")) {
++		close(garbage_fd);
++		goto out_unlink;
++	}
++	if (!ASSERT_OK(fchmod(garbage_fd, 0700), "chmod_garbage")) {
++		close(garbage_fd);
++		goto out_unlink;
++	}
++	close(garbage_fd);
++
++	ruleset_fd = create_ruleset();
++	if (ruleset_fd < 0) {
++		if (errno == EOPNOTSUPP || errno == ENOSYS)
++			test__skip();
++		else
++			ASSERT_GE(ruleset_fd, 0, "landlock_create_ruleset");
++		goto out_unlink;
++	}
++
++	skel = lsm_policy_kfuncs_success__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		goto out;
++	skel->bss->ruleset_fd = ruleset_fd;
++	reset_prog_state(skel);
++
++	if (!ASSERT_OK(lsm_policy_kfuncs_success__attach(skel), "skel_attach"))
++		goto out;
++
++	if (load_ruleset_into_map(skel))
++		goto out;
++
++	if (!ASSERT_OK(pipe(pipe_fds), "pipe"))
++		goto out;
++
++	pid = fork();
++	if (!ASSERT_GE(pid, 0, "fork"))
++		goto out;
++	if (pid == 0) {
++		char *argv[] = { "garbage", NULL };
++		int fd;
++
++		close(pipe_fds[1]);
++		read(pipe_fds[0], &buf, 1);
++		close(pipe_fds[0]);
++		execv(garbage_path, argv);
++		/*
++		 * The failed execution must leave no trace: no
++		 * Landlock domain, i.e. writing must still work
++		 * (exit 6).
++		 */
++		fd = open(tmp_path, O_WRONLY | O_TRUNC);
++		if (fd < 0)
++			exit(6);
++		close(fd);
++		exit(0);
++	}
++	close(pipe_fds[0]);
++	skel->bss->monitored_pid = pid;
++	write(pipe_fds[1], &buf, 1);
++	close(pipe_fds[1]);
++
++	if (!ASSERT_EQ(waitpid(pid, &status, 0), pid, "waitpid"))
++		goto out;
++	if (!ASSERT_TRUE(WIFEXITED(status), "child_exited"))
++		goto out;
++	ASSERT_EQ(WEXITSTATUS(status), 0, "discard_child_exit");
++	ASSERT_TRUE(skel->bss->called, "lsm_prog_called");
++	ASSERT_EQ(skel->bss->restrict_err, 0, "restrict_binprm");
++out:
++	lsm_policy_kfuncs_success__destroy(skel);
++	if (ruleset_fd >= 0)
++		close(ruleset_fd);
++out_unlink:
++	unlink(garbage_path);
++	unlink(tmp_path);
++}
++
++void test_lsm_policy_kfuncs(void)
++{
++	if (test__start_subtest("restrict_binprm"))
++		test_restrict_binprm();
++	if (test__start_subtest("restrict_binprm_discard"))
++		test_restrict_binprm_discard();
++	RUN_TESTS(lsm_policy_kfuncs_failure);
++}
+diff --git a/tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_failure.c b/tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_failure.c
+new file mode 100644
+index 000000000000..0335db547040
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_failure.c
+@@ -0,0 +1,100 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright © 2026 Justin Suess <utilityemal77@gmail.com> */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++struct bpf_landlock_ruleset;
++
++extern struct bpf_landlock_ruleset *
++bpf_landlock_get_ruleset_from_fd(int fd) __ksym;
++extern void
++bpf_landlock_put_ruleset(struct bpf_landlock_ruleset *ruleset) __ksym;
++extern int bpf_landlock_restrict_binprm(struct linux_binprm *bprm,
++					struct bpf_landlock_ruleset *ruleset,
++					u32 flags) __ksym;
++
++/*
++ * The LSM policy kfuncs are limited to LSM and syscall programs by
++ * the BPF-side kfunc filter: a tracing program calling one must fail
++ * verification.
++ */
++SEC("tp_btf/task_newtask")
++__failure __msg("calling kernel function bpf_landlock_get_ruleset_from_fd is not allowed")
++int BPF_PROG(tracing_prog, struct task_struct *task, u64 clone_flags)
++{
++	struct bpf_landlock_ruleset *ruleset;
++
++	ruleset = bpf_landlock_get_ruleset_from_fd(-1);
++	if (ruleset)
++		bpf_landlock_put_ruleset(ruleset);
++	return 0;
++}
++
++/*
++ * A ruleset fd is only meaningful in the fd table of the task that
++ * set the ruleset up: the acquire kfunc is exclusive to syscall
++ * programs and must be rejected in an LSM program, even on an
++ * allowed hook.
++ */
++SEC("lsm.s/bprm_creds_for_exec")
++__failure __msg("calling kernel function bpf_landlock_get_ruleset_from_fd is not allowed")
++int BPF_PROG(lsm_get, struct linux_binprm *bprm)
++{
++	struct bpf_landlock_ruleset *ruleset;
++
++	ruleset = bpf_landlock_get_ruleset_from_fd(-1);
++	if (ruleset)
++		bpf_landlock_put_ruleset(ruleset);
++	return 0;
++}
++
++/*
++ * Enforcement needs an execution to restrict: the enforcement kfunc
++ * is exclusive to the sleepable bprm LSM hooks and must be rejected
++ * in a syscall program.
++ */
++SEC("syscall")
++__failure __msg("calling kernel function bpf_landlock_restrict_binprm is not allowed")
++int syscall_restrict(void *ctx)
++{
++	return bpf_landlock_restrict_binprm(NULL, NULL, 0);
++}
++
++/*
++ * Any LSM attach point other than the sleepable bprm hooks must be
++ * rejected.
++ */
++SEC("lsm.s/file_open")
++__failure __msg("calling kernel function bpf_landlock_put_ruleset is not allowed")
++int BPF_PROG(wrong_hook, struct file *file)
++{
++	bpf_landlock_put_ruleset(NULL);
++	return 0;
++}
++
++/*
++ * The kfuncs may sleep: a non-sleepable program on an allowed hook
++ * must be rejected.
++ */
++SEC("lsm/bprm_creds_for_exec")
++__failure
++__msg("program must be sleepable to call sleepable kfunc bpf_landlock_put_ruleset")
++int BPF_PROG(nonsleepable_prog, struct linux_binprm *bprm)
++{
++	bpf_landlock_put_ruleset(NULL);
++	return 0;
++}
++
++/* An acquired ruleset reference must be released before returning. */
++SEC("syscall")
++__failure __msg("Unreleased reference")
++int leak_ruleset(void *ctx)
++{
++	bpf_landlock_get_ruleset_from_fd(-1);
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_success.c b/tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_success.c
+new file mode 100644
+index 000000000000..2107206ae144
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_success.c
+@@ -0,0 +1,107 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright © 2026 Justin Suess <utilityemal77@gmail.com> */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++struct bpf_landlock_ruleset;
++
++extern struct bpf_landlock_ruleset *
++bpf_landlock_get_ruleset_from_fd(int fd) __ksym;
++extern void
++bpf_landlock_put_ruleset(struct bpf_landlock_ruleset *ruleset) __ksym;
++extern int bpf_landlock_restrict_binprm(struct linux_binprm *bprm,
++					struct bpf_landlock_ruleset *ruleset,
++					u32 flags) __ksym;
++
++struct ruleset_slot {
++	struct bpf_landlock_ruleset __kptr *ruleset;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct ruleset_slot);
++} ruleset_map SEC(".maps");
++
++int monitored_pid;
++int ruleset_fd;
++u32 kfunc_flags;
++bool double_call;
++bool got_null_for_bad_fd;
++bool no_ruleset;
++int restrict_err;
++int restrict2_err;
++bool called;
++
++/*
++ * Runs in the test runner's context through BPF_PROG_RUN:
++ * @ruleset_fd is resolved in the runner's fd table and the acquired
++ * ruleset is handed to the LSM program through the map kptr slot.
++ */
++SEC("syscall")
++int load_ruleset(void *ctx)
++{
++	struct bpf_landlock_ruleset *ruleset, *old;
++	struct ruleset_slot *slot;
++	int key = 0;
++
++	slot = bpf_map_lookup_elem(&ruleset_map, &key);
++	if (!slot)
++		return 1;
++
++	/* A fd that is not a Landlock ruleset must resolve to NULL. */
++	ruleset = bpf_landlock_get_ruleset_from_fd(-1);
++	if (!ruleset)
++		got_null_for_bad_fd = true;
++	else
++		bpf_landlock_put_ruleset(ruleset);
++
++	ruleset = bpf_landlock_get_ruleset_from_fd(ruleset_fd);
++	if (!ruleset)
++		return 2;
++
++	old = bpf_kptr_xchg(&slot->ruleset, ruleset);
++	if (old)
++		bpf_landlock_put_ruleset(old);
++	return 0;
++}
++
++SEC("lsm.s/bprm_creds_for_exec")
++int BPF_PROG(restrict_exec, struct linux_binprm *bprm)
++{
++	struct bpf_landlock_ruleset *ruleset, *old;
++	struct ruleset_slot *slot;
++	int key = 0;
++
++	if (monitored_pid != (bpf_get_current_pid_tgid() >> 32))
++		return 0;
++
++	called = true;
++
++	slot = bpf_map_lookup_elem(&ruleset_map, &key);
++	if (!slot)
++		return 0;
++
++	ruleset = bpf_kptr_xchg(&slot->ruleset, NULL);
++	if (!ruleset) {
++		no_ruleset = true;
++		return 0;
++	}
++
++	restrict_err = bpf_landlock_restrict_binprm(bprm, ruleset, kfunc_flags);
++	if (double_call)
++		/* Replaces the domain staged by the first call. */
++		restrict2_err = bpf_landlock_restrict_binprm(bprm, ruleset,
++							     kfunc_flags);
++
++	/* Keep the ruleset for the next monitored execution. */
++	old = bpf_kptr_xchg(&slot->ruleset, ruleset);
++	if (old)
++		bpf_landlock_put_ruleset(old);
++	return 0;
++}
 -- 
 2.54.0
 
