@@ -1,67 +1,67 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584472D1913
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 13:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8A2411A01
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 13:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785504819; cv=none; b=mDv/M33XhXc7eQuFH/UYtGSqMrEUrVQS4MTX01MHoyIGcEc2ru8oFNsId3hnbD5VLijPfaaJ7oUXaWT63NzzfH+pZ1tsxFWyYlZbKgxrVQuTP9DZt+4N3tDGdo8GBVErjal91KMuHU5vrSrpLzF6ao0jB4SIbwO3APmwq16J/nQ=
+	t=1785504828; cv=none; b=p6TlbayYmueoZwGtNN0BQ+8loDcj/mJp4yMJ/sNdoXV+nTtIXeoC3iU8IIsedttls/qgOgrZAr0MIW4L3LoBEIv7x3Fi2g+AHjyc97q+esFE4xfqmNojpepB0iUj3EGbFli1pz9s9vxusETgg9IdT69KthVqIvFM8Lwlq76yk7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785504819; c=relaxed/simple;
-	bh=K7Jt/03j2E/nBWtbs3xzvPMx8diVxInfuo7eQUCGPek=;
+	s=arc-20240116; t=1785504828; c=relaxed/simple;
+	bh=E6iVu8a/ec9mnm9FMCXI6Nm/poLUIfvZ4FKSyQhg698=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kkw/CXDV8lmm3n9RfeGHPFVG3Xjzw98X82zM+y2d6iLCdZBsDtJLViSibpID9IQv68RQraMNOAOdtVKe07+OfWPtkgs041nRXaFS5Mn7cNMjnQ5OBFl1YAWRau89LkhKpTBl1uqfoJJEpDKxA1hLJwg1xQ+45r/OzkBmXYMfFAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oHHonUc4; arc=none smtp.client-ip=209.85.208.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=XQ4TpXfbAo122JdNmaPH9XluuW3kMfCQqVA5eY4rzkABHb8n5Ziv+ovl0xA+ufvTuC1wkVB39fjZQWf0M45+c4D4S3NBMd7hWU4RVkW+m8HEWte6Hl5fd6zueJGtw6YvPV0sNgUsEtw4HYeScCIoLGtDse+lpY4LcYzgH/m7Ihs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UKWx98DE; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oHHonUc4"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-69c7ab350e9so1642670a12.0
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 06:33:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UKWx98DE"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-69c5fda04a8so1855556a12.1
+        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 06:33:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785504817; x=1786109617; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785504825; x=1786109625; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:date
          :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nT/A7StUBJVo+5huVgI7XcKfAIWGaG1tCoqkKTZnw9I=;
-        b=oHHonUc4H0XZ+DLtWfUdQNa8wXeaCN1Java/yVBLC670XC6UoFh/i0Kt4VnUYx2a+Q
-         uLFd6jLZGRlkK3EhHEFob4v43VheVbcMxUqIoriMNJwQb+NI07Rhb22ZTA0OTC0M2t2G
-         pXH/uYInxL7rolbalZeWh+eGnZxPnc1pJOFTJrAxB5cJCw3TDV425en7kGV7EMTdpdbW
-         n8YdW+FSaGubXSYm9VdbfvFeRu9RikmV40VkCBDfY1ffF11SYQjXlnmnl8oIRVBAN86m
-         fdTgsDAh/SiyHFE8O9xtE1uW4iz/MawYcC5+afIhygX7JypTXQzZwlBFvM++g03WMlJ3
-         +r8A==
+        bh=vjaUc1SiB8XTSSq8oTqhInDIunuYgzO6br5wDyE4FFc=;
+        b=UKWx98DES9tDlhDASZky1IrN/Xca41vBU9nj+MLl5LlyYuQt78G0+z6thUP6gwhKy0
+         LdR40NiEP1TwI3EJ8dCnNTDwLK3x0ipWQ7nLOrDuIp4cw2yUkQoP9xEX2EUirjBHraYS
+         7nd5GklAJNpK8UUlvzywi0aViCJP4bf0vIXb9cD4AjWG3Sa3dx/JhlYf67h7KUDtF3FJ
+         OwEwUjuGAeligvNtRLdccVwJM1yMfB92Ir0AZNAXXUhMPJhWtW1jpIUbzKll0ZH/4qaS
+         DZW8bmCoHRACIBaZE0h0G67AcGFKYEY4T9sI60g1Rk277KafVzt9pjoIN0bYPcNfBfUi
+         vV7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785504817; x=1786109617;
+        d=1e100.net; s=20251104; t=1785504825; x=1786109625;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:date
          :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=nT/A7StUBJVo+5huVgI7XcKfAIWGaG1tCoqkKTZnw9I=;
-        b=tDMhasI9ZhVcW8PkmTrp6lzqjA8oF72OC1GVPkapqG0aWvR7M5R1FPyDvE1d5nteik
-         +UiGoxur/6wnAU6kNaEmuPSH17XP1RvEy+dlCiC11IvQZf0FUL7vcC+N4M05lXefDztt
-         8eEuKbq2T9Lb/A6EHQQHyYD3qVGG/CdJDYvxVd4iK+EXqlW2ozWTNAf10r/JQSphKuS2
-         7DL+kcC0qomrSZnLEqTvr7CVv3bU+gVRUpygvYdaXen94/YMZcon+uj6CYKcc5rf3uRG
-         vYJ2vasl7dcEwqQ6DOT9NE2U9Pw8oVSqDBew5Ps7RcQqumF+NiICYSUq+68DvBsNIPif
-         A0mg==
-X-Forwarded-Encrypted: i=1; AHgh+Rr6YneZurpQQltBEGkgFvsYlYgqPnA178T1hptlNgY8B8/9I7xJWeY2dKhGjak1Ohm8qMc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztDrVuIv/fRrXMWQTju6V8AqPuzk3mhVLLxXWw3M6gxTKy9S8M
-	kUpVFdApNzkZZjWRz4aEPwMZxy38vnJTykfZsf+gmQmMJJc9qDhEq3do
-X-Gm-Gg: AR+sD13YnajP//2HeFDL+ZHWHj57aiwubp8zogUxGDgQh81zoH15WNUcYguseGuP9RR
-	A5Wt/bu82yhaPTmXM2gm5f0p51VySlofjtLNBK3WgJxYHuN1nm+uCzV6OusN2wev1BWHjUHOZR+
-	fNQ7Neh/ApY6GZmz8+W5rnoh4ydg309q015JG0j/Nyt0XsOOZBGHGNkYFtfyz2pKLvNCZniHFVY
-	00UNBcOQUxdcD0siegZOMGfWv0H/S76zNiDMVfZ5A9w9mX8DEZ850Js08IKnhArSc8hi0nCEpvD
-	dq/Xyk3fY0Of8caL96lQpE3b8xyhbIYnw9xbcI0fxP0Xs9TKvEblTT92LnN/QQBvo4ZPjiLaeZ5
-	io6lpvXe6k26Enm5y6GzihjmAFz/k/ykARPbVLdL9RvUseRB60vT708HowVdnSArmH0PgiDf/gd
-	nfMf1jk30ByUPmaMGEtg/w0byA3M/WKcK9CVMO/2LS8T/OaGvnAFdMIPS+KA==
-X-Received: by 2002:a05:6402:528e:b0:69a:9355:d1ca with SMTP id 4fb4d7f45d1cf-6a098d0d7e8mr1070663a12.42.1785504816272;
-        Fri, 31 Jul 2026 06:33:36 -0700 (PDT)
+        bh=vjaUc1SiB8XTSSq8oTqhInDIunuYgzO6br5wDyE4FFc=;
+        b=rGAaw/duQv532+YgH7JfNyjZYpSC3hCLyN4XfAZkdvSm708uFKAw8+RqT2cAis9Fz2
+         p1VxDnE3S3nkKwMWotcVe56Ub1bv+0LPA6JKrflWFHCIUqI0FrKfuDO9fZ1v9qCkUGLi
+         cITejBaf9VA8kHSn9gjn33jos9x/QeGpwt7vlqb/HUMS8chus5aAooRwFuYCfm/6nI31
+         GHLbtoEcexHGusGejz0KYWQAZGBUTbByu/8g0AKzDad/0E4KHX5jBnYP6PPzaJSN0oq5
+         y//8b/1wUkXzCng7l5ZPgA21/+qp9OrYnqwd9La7nbGsdcInncQv/ERBPOWzPQmeMzGd
+         hrQg==
+X-Forwarded-Encrypted: i=1; AHgh+RqgoFzYfa4h4hLrvqVcVtOseY/xJbivsRR1xBwGiqnW5/wFE1Ml9ypptCAMyAMdXNs8Tcw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxax1T3C13vkMXKb7zsKMqIPtsPG3x1oWIMyTDLv6naEATuncxV
+	NihgphZyKHyiWJbaLG6TCtPWbNmbvrHxU9IeJTTYP5pdyLggJjF4V7sz
+X-Gm-Gg: AR+sD11yTdZ5TFv5w/vhkIbVbWmm+NS0mPiMov3LvuH8zay2HNPIY986KsfabtHZAuO
+	MATZGgUrgW3QNjBofCfsYVyj3x1o4S0OI875wWecYVmN3D7sS3VDG3CmzY9+/DLJlyN8UzSUIpT
+	+kV/tgsckTNmu0RgGMleWGiwthcnNA9NEKr/MXSJL+1N9uvBcLSQWaZb9LQIH60bMYZV5sfcXUQ
+	60KYT/jpT/BvwHxemCKKFqx/ddR7vQoQEZy941RMoFd21OKesl5CAj65ccYbqasVvPUTD+8vLbz
+	ru988m8BaDRSvTIrwCGzmLhCqA5yXjvuaGER1wOft2AEVTDeGWU8K9QuAJ3gSjr+il/FCtAT++F
+	X/ZGATg0okjYewc737Tv3j/qa0UlWkdMsbpx6BzpfhLyvIetX7T5EwzbR8ydEO2XclJNTqmyDlb
+	vAmy9TLZCR3UdZQvKacFO3K4KYDmKGPn/xuMHcSMG8F0ujAQwchubuH8c/lg==
+X-Received: by 2002:a05:6402:2106:b0:699:fbe4:16d5 with SMTP id 4fb4d7f45d1cf-6a0987cc820mr1092010a12.1.1785504824434;
+        Fri, 31 Jul 2026 06:33:44 -0700 (PDT)
 Received: from krava ([173.38.220.53])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a09c6551cbsm1467494a12.20.2026.07.31.06.33.35
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a09c5a0556sm1856441a12.5.2026.07.31.06.33.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2026 06:33:35 -0700 (PDT)
+        Fri, 31 Jul 2026 06:33:43 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 31 Jul 2026 15:33:33 +0200
+Date: Fri, 31 Jul 2026 15:33:42 +0200
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -73,12 +73,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Quentin Monnet <qmo@kernel.org>, Tao Chen <chen.dylane@linux.dev>,
 	STAR Labs SG <info@starlabs.sg>,
 	Arnaud Lecomte <contact@arnaud-lcm.com>
-Subject: Re: [PATCHv2 bpf-next 11/11] bpf: Clear buf on error in
- __bpf_get_task_stack
-Message-ID: <amykLSjSzayP4WHa@krava>
+Subject: Re: [PATCHv2 bpf-next 08/11] bpf: Restore trace->nr value properly
+ in bpf_get_stack_pe
+Message-ID: <amykNotpsnxhWNYI@krava>
 References: <20260729083807.1588544-1-jolsa@kernel.org>
- <20260729083807.1588544-12-jolsa@kernel.org>
- <CAEf4BzYvmVJ7bFZ_dmW-HbwwM1yUxzs40yHNdF_JTn+Hr+0w4A@mail.gmail.com>
+ <20260729083807.1588544-9-jolsa@kernel.org>
+ <CAEf4BzZWgmL39Q8kQNu8B=-B1Vw2OipHvCaLbxCgU9XE6aNfVg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -88,75 +88,82 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzYvmVJ7bFZ_dmW-HbwwM1yUxzs40yHNdF_JTn+Hr+0w4A@mail.gmail.com>
+In-Reply-To: <CAEf4BzZWgmL39Q8kQNu8B=-B1Vw2OipHvCaLbxCgU9XE6aNfVg@mail.gmail.com>
 
-On Thu, Jul 30, 2026 at 04:11:02PM -0700, Andrii Nakryiko wrote:
-> On Wed, Jul 29, 2026 at 1:40 AM Jiri Olsa <jolsa@kernel.org> wrote:
+On Thu, Jul 30, 2026 at 04:01:28PM -0700, Andrii Nakryiko wrote:
+> On Wed, Jul 29, 2026 at 1:39 AM Jiri Olsa <jolsa@kernel.org> wrote:
 > >
-> > Both bpf_get_task_stack and bpf_get_task_stack helpers that use
-> > __bpf_get_task_stack have buf defined as ARG_PTR_TO_UNINIT_MEM
-> > argument, and we should initialize the buf on every return path.
+> > In bpf_get_stack_pe The __bpf_get_stack call changes trace->nr value,
+> > so both kernel and user path need to restore its value back.
 > >
 > 
-> why "should"? what's the point to initialize it to all zeroes if we
-> failed to get stack trace? we shouldn't allow grabbing stack trace
-> without CAP_PERFMON, and with CAP_PERFMON we shouldn't be worried
-> about "leaking kernel memory" because CAP_PERFMON is plenty privileged
-> and allows to access any kernel memory.
+> something feels off here, this trace_in->nr restoration just in
+> bpf_get_stack_pe is weird. maybe we should either make sure
+> __bpf_get_stack doesn't modify trace_in->nr or restores it before
+> returning to bpf_get_stack_pe()?..
 
-hum __bpf_get_stack already clears buf on error, so I did not question it ;-)
-
-there's this comment:
-
-        /* Pointer to memory does not need to be initialized, since helper function
-         * fills all bytes or clears them in error case.
-         */
-        ARG_PTR_TO_UNINIT_MEM           = MEM_UNINIT | MEM_WRITE | ARG_PTR_TO_MEM,
-
-IIUC from verifier POV bpf_get_task_stack switches un-initialized buffer to
-initialized regardless of the returned error and such buffer could be then
-passed to another helper that allows only initialized buffer
+I think it'd be cleaner not to modify the trace->nr and just
+pass the wanted count as argument, will check
 
 jirka
 
 > 
-> or am I missing more reasoning behind this change?
-> 
-> > Adding missing buf memset for __bpf_get_task_stack fail paths.
-> > The __bpf_get_stack call does clear the buf properly.
-> >
-> > Fixes: 06ab134ce8ec ("bpf: Refcount task stack in bpf_get_task_stack")
-> > Fixes: b992f01e6615 ("bpf: Guard against accessing NULL pt_regs in bpf_get_task_stack()")
 > > Reported-by: Sashiko <sashiko-bot@kernel.org>
+> > Fixes: e17d62fedd10 ("bpf: Refactor stack map trace depth calculation into helper function")
 > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > > ---
-> >  kernel/bpf/stackmap.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> >  kernel/bpf/stackmap.c | 14 ++++++--------
+> >  1 file changed, 6 insertions(+), 8 deletions(-)
 > >
 > > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> > index f4827afbfed9..9ab0c2523a41 100644
+> > index 05269f2a9e08..875f530f3597 100644
 > > --- a/kernel/bpf/stackmap.c
 > > +++ b/kernel/bpf/stackmap.c
-> > @@ -890,14 +890,17 @@ static long __bpf_get_task_stack(struct task_struct *task, void *buf, u32 size,
-> >         struct pt_regs *regs;
-> >         long res = -EINVAL;
+> > @@ -942,9 +942,9 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
+> >         struct pt_regs *regs = (struct pt_regs *)(ctx->regs);
+> >         struct perf_event *event = ctx->event;
+> >         struct perf_callchain_entry *trace;
+> > +       __u64 nr, nr_kernel;
+> >         bool kernel, user;
+> >         int err = -EINVAL;
+> > -       __u64 nr_kernel;
 > >
-> > -       if (!try_get_task_stack(task))
-> > +       if (!try_get_task_stack(task)) {
-> > +               memset(buf, 0, size);
-> >                 return -EFAULT;
-> > +       }
+> >         if (!(event->attr.sample_type & PERF_SAMPLE_CALLCHAIN))
+> >                 return __bpf_get_stack(regs, NULL, NULL, buf, size, flags, false /* !may_fault */);
+> > @@ -962,15 +962,12 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
+> >                 goto clear;
 > >
-> >         regs = task_pt_regs(task);
-> >         if (regs)
-> >                 res = __bpf_get_stack(regs, task, buf, size, flags, may_fault);
-> > +       else
-> > +               memset(buf, 0, size);
-> >         put_task_stack(task);
+> >         nr_kernel = count_kernel_ip(trace);
+> > +       nr = trace->nr;
+> >
+> >         if (kernel) {
+> > -               __u64 nr = trace->nr;
 > > -
-> >         return res;
+> >                 trace->nr = nr_kernel;
+> >                 err = __bpf_get_stack(regs, NULL, trace, buf, size, flags, false /* !may_fault */);
+> >
+> > -               /* restore nr */
+> > -               trace->nr = nr;
+> >         } else { /* user */
+> >                 u64 skip = flags & BPF_F_SKIP_FIELD_MASK;
+> >
+> > @@ -981,12 +978,13 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
+> >                 flags = (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
+> >                 err = __bpf_get_stack(regs, NULL, trace, buf, size, flags, false /* !may_fault */);
+> >         }
+> > -       return err;
+> >
+> > +       /* restore nr */
+> > +       trace->nr = nr;
+> >  clear:
+> > -       memset(buf, 0, size);
+> > +       if (err < 0)
+> > +               memset(buf, 0, size);
+> >         return err;
+> > -
 > >  }
 > >
+> >  const struct bpf_func_proto bpf_get_stack_proto_pe = {
 > > --
 > > 2.54.0
 > >
