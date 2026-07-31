@@ -1,157 +1,198 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E90C402B8A
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 15:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65ED443F0B3
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 15:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785511039; cv=pass; b=A0EtQs5q+ythS+GUR+GKsZbp+4DoY3fQcuW7Zfvb+nHOaQrZfvDk8klbygcrjeNdGnkDR/5SSIfFxqkv3FYWAXPLxD2/cYMoPvc/gvSYiR25qP9FOCUeItmECKaaJJM+X9ZwyKXtFpiMeFrliRnX6/TptAzl1MYqujlZLwzguSo=
+	t=1785511109; cv=pass; b=BcewNEqhujHm03+EV20rJk8V99Q888e/G1CJfrn0krzTYlaCNe6+DXec2h39d6746t5WP5qqPJVRmq7reffmaQHQ7H6AvtjqBb3jFj9b9ppr1iCw+B4eX2YAQpMtq538Of+rjxjMukU/5CD4+THhSbGMrDTsZGYqA2ZDB78grDE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785511039; c=relaxed/simple;
-	bh=MaagnOxntbuxGRXITbLMVGEEGsWlGpeYqyeDM+L3JQ0=;
+	s=arc-20240116; t=1785511109; c=relaxed/simple;
+	bh=chfVzJeTQjSbzx3vPhdLe6Aosf8+Gh5xMo2mpbfajNU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l8E+0ChGwmlDWjKvFwCGkFmSS/PSB/kYsKZ2KolZ/vEERALCySAVCjSSDlwbu0UMNIPXt4xualpJKCLpOMvw7fQOHYzLUdY75b9nKzpKdlzhksqviBlZtqN8O+F+5IbMxeBV4amuJV4bajsp7KPwNPa8v21VY9+aYfs42dgrpaw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=C5URBVxJ; arc=pass smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	 To:Cc:Content-Type; b=OlA2VPPSLWg2ZwiqWqRa9pscCSzx8KuuiTS8m2pwX1hTDIlLe5/wdpjCpqCYBunMGBX1vbol6kL7W1LdpczvzWPa/ZYG6xFcSYhbEKaO1CXbpoZzhmD0HoKHrKuzUAUfc6cxUzVHDWyzcR1bTOv2etfEHui2JjtP1w9iPLp0C6g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n+D/859z; arc=pass smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="C5URBVxJ"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cacf197759so15113245ad.2
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 08:17:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785511036; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n+D/859z"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8487214ad2bso1679030b3a.1
+        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 08:18:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785511108; cv=none;
         d=google.com; s=arc-20260327;
-        b=DJl4w3UHQGLNaGSXSEqn2jCJ8n2vW1Hs6FI18QPkPw4Oyf9Qk4dKhqx49wWuiPXUEF
-         TZnhymo6+Rm3hu3ms5bd6eqfs9jGnkKaF+lJhm+ICRyCatMAugC7KyhEKz9wPYwG61Tn
-         sOsvXk70ZJuGV195drE5j6PS4v8qhCrGttiiCDupF2ciLp3x/yeIGbA96UwL3uJbiNkk
-         A9kwmFAjm8AMyfiqYQawRQMtFqAOwrxRF/L4WURbxF62nDryMYAvQn9lYvbEBrRaKF5B
-         qXKPn9Fnpgj7m9KjXu9868SA+YIs4w7bUl3YcRL47yqofyIQvieiSzY1XuX07wm3kOM/
-         7p0w==
+        b=fegEkjArdnZprDbkNVmtw9rHpiY9GLqUphzkOCvQYR3g0CuEVCYZy+UInP2oQSOMrk
+         c9JmxZOH0ZOMGhMKaGmUt2rGmhUxZCo9dMhh7qykPPVFGPlJu61H217BbSsYlVtmTgV7
+         n6hrvVnhK8kvNa/K1BcDRHj44iAX+BI0Dlg0nGxaEbY/7xUPqs+6+KOGr+AO56mbNhuK
+         0ykdPzLTm8HIBI8CvEord8CSvXGeV/5yU5iUxmsZl9OTSXZLK3kKwl0fuvk7erx+kxXx
+         IYRrKIT0gVt1H6xiza0gxyHrMh64SYduwZTAQuCKhmEerLiN4Sm6S1I10JqCj7cEZCWe
+         bwZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=MaagnOxntbuxGRXITbLMVGEEGsWlGpeYqyeDM+L3JQ0=;
-        fh=hRzLdaJJGyGFFtsIXRIj9I1FUphJdidhC012ZyBV9bo=;
-        b=Q/fSDPHYrWupzxBZ2SDiuOm0k9Q2zUshWmQS3QVjAFo/U2fMpjTjKtgoBJ7EdHCECy
-         H20iMSbA4dIVfFryv4xrIAOuHDZWNfdntQnrw+jZcbjPAe0JKOyM+dpuXktMDSd5eR9H
-         4nvX1J0esbnBOEjbOQl0HbyrkjyEZS0RUtSQNDBZRS5I4RtK5rmIjceFZx5lM9e0vKv0
-         AB/zqcgoLDbaI4boVNhjtPTfalG3i6oKak8pcRdbVhoMUHLseweTu2VN+bLmxKs9sYp8
-         OYl+3XVaFhyobntw1BmPmAGxRKlxVPKAraNcd6pcVB9bjGaZwS13n6LG52Ej2kAQ31WB
-         HLRA==;
+        bh=VOuuaXCuP7sxLKwstq+rEEGqoqff9gkJvO6v1dD1d8w=;
+        fh=qBbwu35lH5PnYIlJ2vv6c5Zhi+C5J9NHUWjZN0eGCxk=;
+        b=BfxxLci+iU6S3N5McVl+hEH2MlqrNinwW1Ixg7tpSJWpGo96IEQMMoFMTC71I/sOx3
+         z9ghYLO8lQciUp/ch1Xq4KKlqRPgCxUJ3YiOhBvNore3bQVElGyXzRZvmgARcnXeKZbL
+         tQeYbM8m0L6K08RSEVDF3DB3UuhzbtkY2Am4zoRDcd+vWQZBoVdmEofL441n1PBb+d+u
+         CO8HDRxAs04ppIlZjeUhp9B4ppfokawQvBwfTzAf+z2uaUGhgK6m+i99rGkMO0ahTfVW
+         zaX4/QkYQbPmwGRVg8v87BMjGEfGS0GO9UEyA7RldUtpSr6nGpdAbVA5dE971Frgka6E
+         K9yg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1785511036; x=1786115836; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785511108; x=1786115908; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=MaagnOxntbuxGRXITbLMVGEEGsWlGpeYqyeDM+L3JQ0=;
-        b=C5URBVxJ5tERBLgnpI1F6Uk1I8wczA1DgsZx6wU5E29TDJD9OlexQVboj2ikm7m4Vo
-         G+DVy29rCfY3z8DteBOBZrGBt0A6NzbErXM1yBfFloMA1eBgxFG47mHi78CJI7hh5MTS
-         Kajg4htZS9wNxXJmoOulS7kZUqkRiOhQe3zOkrQpebhQd9lt9YZIF1/aHmfGmxtjhxGa
-         rD/2gv7lce/d0vipnWSBIgY6IZW6n4Z1DEk+Iv3wdUrZyhATZdXzysAX6p/yE0ZA9PHy
-         G4lifiyT6/Kvh4p2Q7Ogfwx4NUJ17PuYzIPlojAjBifCDzNPoMo0FU5DWkCLgTqj15n3
-         ZXew==
+        bh=VOuuaXCuP7sxLKwstq+rEEGqoqff9gkJvO6v1dD1d8w=;
+        b=n+D/859z0M/qP2WR6eLkArz0gL4NXFgUUNpU/n7hFqyhASswZyI8pVu5ZrfU9+dqXX
+         nzpMftPE7soQHzrMen1Feths4CwlVecd8tHybCEG6RPaUHBJ9mYUPXct0z7O/ES+F2gI
+         jF7kas3SxKXkQAckSL3f1oWyhKs/wAbj9/AwCFYz7khWIODKC1lfOVZaPsCv99glOKpU
+         iZZ4W4yGHutrFd5Qz+eHZ2OpUNGA8a1plfoGIU67xOLq+MKEgpOrORAbAJyMzvX9SOeA
+         HU+t9oBPnNAufT+9QzStC7JE5ILxsZmfU48nn0Byx6KKvhBNeXy1crbknWjZff+Ajf2v
+         Nlcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785511036; x=1786115836;
+        d=1e100.net; s=20251104; t=1785511108; x=1786115908;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MaagnOxntbuxGRXITbLMVGEEGsWlGpeYqyeDM+L3JQ0=;
-        b=bK2u3hkteoXEBLMKrcEjFe6CNsbueGhOG//IZ+L0G010Ty484urWgOsl7JnYasqTyj
-         n2SStnod9fiTPAueB2pQHy2yd0GAqPGchOl15Fg+iBXHkkuQP1z/OG/dzFaM3CYaX8tr
-         PBJ7U2/fqEVVkEiC1zw8ywnxQC7gYhT+l8JO5W77thYadMpG4j0zB/LqQitXmk8nZ296
-         nUlrm5uhP9jZ3pdL4uuAx/+WIvqtuVrRNsNEUzaMeThdbGvMSiTZbCW0HwiogWQFly8o
-         2iISCo+bXysrCwPhFKHPFMbVdSTTKl2V054oRNkLXrXTmI1HznDedBmsZsGtaEuqOZpt
-         i5Ig==
-X-Forwarded-Encrypted: i=1; AHgh+RqUge1H3vn3+58w8YLpLNlJTjQc/aur3frnWDgpucO3VAIfn7YiXRCPi8Yfjo6eumNfCAc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/YTW20TQx1kEZ7JadcTYkMYsAxPCtSQShzPuEuMVqsliC/YAR
-	/1PrCHKWiv8Id4iS/xPJxjFn5d8GG2/uWhA1YnkUpvEfKEDyk85d2HYPoJhORLQxFHzwfNlUZ+t
-	v1MOTnB04xREkn5MPfpDyJP9pusClphKow+1BrdMj
-X-Gm-Gg: AR+sD10zSARH1Pg2wNukNmK/4L0bk/7T5NoqXj9+6q55Rqabq9+UY7okiQYPV4A8tQ5
-	WugKwNWsCDfS8UvPyn1bs5qyXZWQ9YEjXdO+NmC/9KxR+ugqeV6AK66BoOl3Yby9YdZAJ1qTclX
-	aR0SvZ7yFFUOkZG7QQ4q49NG2cVq8eJAamVecO4eWXWRWxsd1iNiFNDt/1Vb3dAp5HO9KtgiV1D
-	t/gvLDf7WOSxJAF0a/JkJrNEcJcQrCI5CeD6YS0tb4d0hSHMgkLczffwZ4YqPIW93d4jGAl5O1N
-	HuYQiNgAPsqMzmWvsfUT9Ekhi3ylL2RGr95pN3MmqBrD
-X-Received: by 2002:a17:902:ecd1:b0:2ca:b89:7bcf with SMTP id
- d9443c01a7336-2d0523b96d8mr3879785ad.22.1785511036384; Fri, 31 Jul 2026
- 08:17:16 -0700 (PDT)
+        bh=VOuuaXCuP7sxLKwstq+rEEGqoqff9gkJvO6v1dD1d8w=;
+        b=X2vJhlZ3s+m+/yt+c63b+HrgBkwjIaCAzVxj+JzB4KEkzzlP+5hQzKBF/mFP7JRpQi
+         dKtwP4G8xc3XcojuoU3Sxkh4h29rwZU5dXAtOtCk2Se+ib/05R7rQxV4gMf9todwhw+X
+         PMowK+dQiTz3EqIzaeCTc/gTHpr7J7ijYQYYbZSsyE2i8mFTFLaeuPlwUY/HonMgjJBr
+         5zyEPY81zg296B0cJf+zfhGM+wrTX/Iyln1ZAAkuNaTsVjIxon0yAhs03/N4vtzXGhgf
+         +OGq3CBdSe+KB/ZYHI+vnZ5ptVU6AY+2ZwY3CjXGzRtiKrQ4vP4Mjw86rkD3WXcAX5rZ
+         /vdg==
+X-Forwarded-Encrypted: i=1; AHgh+RpC5qiZQ11zcZ8QBfPFv3M1dP09IgKSO9xypsRdAnR8CCVMklf9ht5zOscnx9olCvLDMaY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz34gwvAhK+5ef6kvG9j5oZj4KdEO6ceyP9KBXZb2uqblZMj+AF
+	QNfVRPc62bk6JDzgtjzxd808Ro0MnjBl9R9ikkCsnYTeez5Nt1yp4V2KBGGH71V2yJlFuC9zGKD
+	Nx93I4JESNvKx8qaZF1mL3i8jg9+4SHk=
+X-Gm-Gg: AR+sD11KzQ9TuglWY9A+pFecWUZU9y2mYOcaCUmPZIgYWVWlom5Xd+KV65wQZFP7Tpn
+	Fh2bhEzFahLjGq5/N5aaesZgzZWDxCrlOk/BP9AntxMTQL3XDFppT2jdLij52Klr/uS9JkXOMKN
+	XrKx53E+k6je2gSTDQGIH6s2NXfr7nSj0MkVqdvFOK+no5+3GIEDoX6AjmuvZYU8NADF3jFI6YJ
+	NfYIYCR83Kxsz2uhCKPqT1PKDQ/XeFDE7O94hc0X1ER+nZJYQMxcDhwbAdlKiyOc1/FppQKbmoP
+	711aBvIFbxPPga3tq2iQ+tlriQf/IpaxA0YZnek5KRCFKk9H+IC0SxkM1sJUXkAIMoCsemYCeAj
+	C77Z3jcjwaxZwcq9mZy1/KyjbiA==
+X-Received: by 2002:a05:6a00:94fd:b0:848:2c2e:c7a3 with SMTP id
+ d2e1a72fcca58-84ee47e4316mr88460b3a.16.1785511107513; Fri, 31 Jul 2026
+ 08:18:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com> <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com> <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
-In-Reply-To: <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 31 Jul 2026 11:17:04 -0400
-X-Gm-Features: AUfX_my_07XA5O156m3d-t8I3fv7r1HuUVA6nIPOKrM8LOdCX7kqs7sLBvl0mUM
-Message-ID: <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: David Windsor <dwindsor@gmail.com>
+References: <20260729083807.1588544-1-jolsa@kernel.org> <20260729083807.1588544-12-jolsa@kernel.org>
+ <CAEf4BzYvmVJ7bFZ_dmW-HbwwM1yUxzs40yHNdF_JTn+Hr+0w4A@mail.gmail.com> <amykLSjSzayP4WHa@krava>
+In-Reply-To: <amykLSjSzayP4WHa@krava>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 31 Jul 2026 08:18:15 -0700
+X-Gm-Features: AUfX_mwD2HKwvrwhCDe-0LGRMqvPmSikoTaOZkWKBbiOqII39yaydWeqyBt9B-Y
+Message-ID: <CAEf4BzY8Mn1oRofO4oeujUmihizZt_DkKuBdtjM3TyfgP8a=iA@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf-next 11/11] bpf: Clear buf on error in __bpf_get_task_stack
+To: Jiri Olsa <olsajiri@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+	Andrii Nakryiko <andrii@kernel.org>, Sashiko <sashiko-bot@kernel.org>, bpf@vger.kernel.org, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, Quentin Monnet <qmo@kernel.org>, 
+	Tao Chen <chen.dylane@linux.dev>, STAR Labs SG <info@starlabs.sg>, 
+	Arnaud Lecomte <contact@arnaud-lcm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 30, 2026 at 8:01=E2=80=AFPM David Windsor <dwindsor@gmail.com> =
-wrote:
-> On Thu, Jul 30, 2026 at 7:53=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
+On Fri, Jul 31, 2026 at 6:33=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Thu, Jul 30, 2026 at 04:11:02PM -0700, Andrii Nakryiko wrote:
+> > On Wed, Jul 29, 2026 at 1:40=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wr=
+ote:
+> > >
+> > > Both bpf_get_task_stack and bpf_get_task_stack helpers that use
+> > > __bpf_get_task_stack have buf defined as ARG_PTR_TO_UNINIT_MEM
+> > > argument, and we should initialize the buf on every return path.
+> > >
 > >
-> > Based on our discussion in the v5 patchset, I was expecting to see
-> > this under security/; did something happen, or was there some
-> > confusion?
+> > why "should"? what's the point to initialize it to all zeroes if we
+> > failed to get stack trace? we shouldn't allow grabbing stack trace
+> > without CAP_PERFMON, and with CAP_PERFMON we shouldn't be worried
+> > about "leaking kernel memory" because CAP_PERFMON is plenty privileged
+> > and allows to access any kernel memory.
+>
+> hum __bpf_get_stack already clears buf on error, so I did not question it=
+ ;-)
+>
+> there's this comment:
+>
+>         /* Pointer to memory does not need to be initialized, since helpe=
+r function
+>          * fills all bytes or clears them in error case.
+>          */
+>         ARG_PTR_TO_UNINIT_MEM           =3D MEM_UNINIT | MEM_WRITE | ARG_=
+PTR_TO_MEM,
+>
+> IIUC from verifier POV bpf_get_task_stack switches un-initialized buffer =
+to
+> initialized regardless of the returned error and such buffer could be the=
+n
+> passed to another helper that allows only initialized buffer
+>
+
+We used to not allow to read stack slots that were not initialized,
+but then we changed that and we treat uninitialized stack slot as just
+unknown scalar, so it wouldn't be a problem.
+
+But for consistency, let's clear it. Looking at the code some more, we
+set the "tail" of buffer on success with zeroes as well, which makes
+it possible to use buffer as hashmap key (deterministic zeroes at the
+end will result in the same key for the same stack trace), so ack for
+the change, but motivation is not preventing reading uninitialized
+memory, it's more the usability angle.
+
+> jirka
+>
 > >
->
-> Nothing happened, perhaps some confusion. I was basing the placement
-> off of Kumar's comment in v5:
->
-> > I don't think we should do that in v6 though. What you're describing af=
-fects all
-> other xattr kfuncs. That's a broader discussion we should have separately=
- when
-> folks are back from vacation, and more importantly involve FS folks where=
- the
-> code currently lives. As you say yourself, the lines are blurry, xattrs a=
-re as
-> much a filesystem concept.
->
-> My take on this was, leave it in fs/ for now and then litigate the
-> placement of all of the fs-related kfuncs after bpf_init_inode_xattr
-> lands.
->
-> Happy to place this in security/ in v7, if that's preferred. Apologies
-> if I misread the thread.
-
-Okay, it looks like there was some confusion/misunderstanding.
-
-My understanding of Kumar's comments was that he was referring to the
-exisiting LSM related kfuncs that are located in fs/bpf_fs_kfuncs.c,
-not necessarily the new kfunc you are proposing in this patchset.
-Kumar is welcome to correct either one or both of us, if we read that
-wrong :)
-
-However, regardless of Kumar's intent, speaking as the LSM maintainer,
-my stance on this is that the kfunc you are proposing must live in
-security/bpf_lsm_kfuncs.c to be acceptable.
-
---=20
-paul-moore.com
+> > or am I missing more reasoning behind this change?
+> >
+> > > Adding missing buf memset for __bpf_get_task_stack fail paths.
+> > > The __bpf_get_stack call does clear the buf properly.
+> > >
+> > > Fixes: 06ab134ce8ec ("bpf: Refcount task stack in bpf_get_task_stack"=
+)
+> > > Fixes: b992f01e6615 ("bpf: Guard against accessing NULL pt_regs in bp=
+f_get_task_stack()")
+> > > Reported-by: Sashiko <sashiko-bot@kernel.org>
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
+> > >  kernel/bpf/stackmap.c | 7 +++++--
+> > >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> > > index f4827afbfed9..9ab0c2523a41 100644
+> > > --- a/kernel/bpf/stackmap.c
+> > > +++ b/kernel/bpf/stackmap.c
+> > > @@ -890,14 +890,17 @@ static long __bpf_get_task_stack(struct task_st=
+ruct *task, void *buf, u32 size,
+> > >         struct pt_regs *regs;
+> > >         long res =3D -EINVAL;
+> > >
+> > > -       if (!try_get_task_stack(task))
+> > > +       if (!try_get_task_stack(task)) {
+> > > +               memset(buf, 0, size);
+> > >                 return -EFAULT;
+> > > +       }
+> > >
+> > >         regs =3D task_pt_regs(task);
+> > >         if (regs)
+> > >                 res =3D __bpf_get_stack(regs, task, buf, size, flags,=
+ may_fault);
+> > > +       else
+> > > +               memset(buf, 0, size);
+> > >         put_task_stack(task);
+> > > -
+> > >         return res;
+> > >  }
+> > >
+> > > --
+> > > 2.54.0
+> > >
