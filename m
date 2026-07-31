@@ -1,184 +1,176 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1C1250BF2
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 00:30:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785457804; cv=none; b=lzPNKM0LkElywZLqFW1F94jcJFv1QE7v4O4Sf6I7Fkvc4Si4hXWig61ftuXKzHzCprlzV/U+QtYPmShigUCG0n6RYdItakMQde1L9vvxp3PLKRePzv0zDe1eqP7aPQTjp9vitHnDBNUAMFzIZFlpATDPyjy9/QM8fGvvKwuopjI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785457804; c=relaxed/simple;
-	bh=mSA3vRjYQjkXAyBy0gklxrbC1mTx7y/m2jr4N1Je8Os=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OvcpPlm4HxJoWBHde3Z4Px3XNekadIUHKIrdmD82CBE6FBh0ggQJX0zHWTxHywwJOQSuE9mbpUBcq6AYoSpv5GoDHQDf+WhTjpKlwnQj8oYwmFMIVzpI7zpCaS6pHMNiyugjkgrnEdZh71BuRwZm3SSLiq6/JDTuvKMp6c0bMGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EwxqFIMF; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6148B175A9D
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 00:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785457854; cv=pass; b=ptMaDb5zobzi6clJ0IwRhDhre2NIG+ra7dA9Cq0Xf2IRdZK34mmJY0TeRhLlviuMPOvGEUWCb9k+iZc8jf1kAff3xFsXwjk6THyXDicmiutzYkJ0Efmxi7COYT5mgrbQBWM0pVykLLd7DN7lSsr1voqLzmOHfkvP32yCTOXG650=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785457854; c=relaxed/simple;
+	bh=kXfPPOebYPDWBl85UP8B8XOrtKMOHRhmU5KZ3uXt7Xo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OBdFZiDqQPIeYyHyxEkHqpnKPgR/w1lJ4nT4rmEY40anOOjsHZjUMFkeLg5P4Ze8QQVIC2T39rjC4ggfR0VLeovOc7++ah7azyl39dpAb67hPRXqWTig6tmLIMxHkSRlNZdw3PoPuAy9+zozdq8Ba2rKtsHxaRu1Kwm9YRlWDaA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RlQMF+Nb; arc=pass smtp.client-ip=209.85.222.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EwxqFIMF"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-81e6f2ee60bso19975997b3.1
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 17:30:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RlQMF+Nb"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-92e99ef0902so27295985a.2
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 17:30:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785457852; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OQ195oftpQ/lyBMk4GhHuPO5uon0jNc2NQjhcyfhAsRZz0+d0L7TRdj+WGhnKUlXWu
+         nOBtM/0A3DtK7TH5KQUegpgvDJhGHCEYdNsGj46MD0OnwPeC5TXzQwwvFdKGbZYVMLuS
+         nOd2BcrQfDmTokCBRcfL8hKGODdXdVUSy2nh4HmQk9SqielSZF1PY0cZqvuCiAZxi0tJ
+         VP1Bb88bSHZRh1F2dmYGRjGXPtXdcgj8k4mp7+WxlwsI1vsMGWGzGI1/rdalr7DTRsA/
+         gqrq9YtAMv3NrjYWbHxre/8J7aFgnRQ6tFrGafjWArCjbeBxS2LuDasqUrfN+8TrVQPa
+         PV6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=BynZKIsVSQr3F1TFU0TVk73YY94J3F9HvqIoa9Y7ly8=;
+        fh=S6DDseF5h3+g4zAU2M40h9tycaIPHDMVdwvfM/5iAnk=;
+        b=V6svqu5NztMaXk2ImRFAwzs4qJR+PWFbAQnP9j/XLYylqIwS21HWVJ8EMeJWTYpGIE
+         0SQH0MR/DrdYXLsn9Ldidfkq+ZDn1pzgesnSMwqSYdKNqlzR34wu8L2xXRapUclCjQp5
+         mKR8tSCc6auIzzHh8wX2kDuE+8YBwzoSGVTu4brOfBCr5jC+x+3yXwRqjwzSDh5/r2yQ
+         9OTBM4fA9ebxUdayZdlbGzXbLW1V22O4gnHQziCNVxQAtv7UIJMXH/rJxJFzWABn/h5e
+         uZUuGWd6QBzSwBGlTEP6KIaYcntR89aQdVS8t79BZWju1iKenHAPP3ihVQKeujOnNC7h
+         ONHg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785457801; x=1786062601; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QRMRalxGkRReFOWmTtsSnVADD1z6LkTNb+5taBWJoZU=;
-        b=EwxqFIMFvVUmFVdYV5X440E85cyFAcPSUY2+eXVBkCulCL2ViBocSBzLREXA+liC85
-         kMsCV8YkNLf08UP7KXFtZae6Yr+Cpk5Auq+Ena8CqScIlF7bOgLTpO9p02dNWG4zgnKD
-         Q1AP/OzJu2USsiwRmkL7vwxqrsv7C5b+b52D9Xbb6ccxrBZyUUuuym+CGiAJBZZi7uCw
-         4zdyRGMvvH/lmAvCVdjg70+All/gdaPxvhD9H1x9DUPhb5zZ2J72TQzoGCtlhtihbtrn
-         S5zn5rt+FyjUrLI19qr8qF9I1zWVceq/wLzfUP0+QSLne15v5uybxm38zcWkdxDYlV5r
-         +MAw==
+        d=gmail.com; s=20251104; t=1785457852; x=1786062652; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BynZKIsVSQr3F1TFU0TVk73YY94J3F9HvqIoa9Y7ly8=;
+        b=RlQMF+NbuVfQlwlrTknuL/DbLOi6ZU1MwIbd7k/2qwIlrGBNxcCpd2tsgOKVY53QB9
+         RaOVQ/WTxJ22cA4J7KSMxse39A0L62ESJvdYGhA7h1unEfGjdnwTO4QCs4MUP7CY22wh
+         lCpbwU1SJxlxXSLkrKbRnOK9xXwpnyANKdxhgvmuAImv0o4JaiKEW5wjyi4fG9wD2Z07
+         2cEjGh83nZIyUD9OiM6tOr/jsy81U14ZkieiOFWVnfxWfcfpRgwbhmO9MY8nM3tWlgSL
+         zf0m3NzfY4WwEyAF4rLQKqI4MKUDe9jRfsnVGiyojq+FDeZP29CiRivuE0I5Ffjtlytp
+         +25A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785457801; x=1786062601;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QRMRalxGkRReFOWmTtsSnVADD1z6LkTNb+5taBWJoZU=;
-        b=TkFOrPCujR86VelcolhZVqvV35ZMU8vwOgC2R5X6HFU7WPfE+QvrI1Lm5tVWBsgxbT
-         EejqSrijgL0rl8+5EBUhRFBGPGVwVE5jfcHCiHvRz4Ggl4J4XCEmppMgdOy3eN/Q0HK3
-         d5B4uilsMlJpIua+TMPG0ngn5IxrUyrFIL0FZ4w415Trt+Yv4+LGZcvAY0jaF7K2L13+
-         UT9D6NPKvk/18Umsi3uO5TAWLwH90jy+Dh5dEi2ubJXTR9MEcExrcUT+dYumk62DfZ2z
-         SZLjfSRn82RMvxauzIeL3QwRmZq8XyCi/zIREn86dNK/Jd3+XBeVtyd0Sql1sCOMM5+b
-         y4CA==
-X-Gm-Message-State: AOJu0Yz/bjCcKU0UsGRjkxcbcf6CzLwjZNW6myGLtMwjOEIyGF8MGG2q
-	LasSNSndmG7njZL5795CAaSAOliUY1FNl5I1iZ2t5k1gtS6Gt+pOHTwgdwqjsP09
-X-Gm-Gg: AR+sD13Kpd+BS8pLDt/GfEJ+CrANbH86BxrWYBlruLiIm0yEKhrYknWKMIIH1vOGlSO
-	L30GQ8iJrbk5TM948R0wjty/UPKhmsWwM5NOBMGCW8WqR8ZGYOroEnHBON4CLvUWjIZx+n4uIvp
-	dJoJjHkExEljcdXCdcY3Nb47o2EoShMdV3naGe7+//XXw2rpkA3OldkA3tKrhQ1h5vb5hlclx56
-	z+tu7GqE0Yv4r4g389UAwAvDqDuPqMIW6j+dMhBSZxr42fU9bhg79ZB0JGBKMc9w7lPM+jo3elk
-	LjfG5aWG6o1UxmyECtAHtVf6OsSIBvCjBS6XBQw3W5UgV2s8DPtHQkfUpoAQWdrmtS6ZCCxAKRB
-	hvvMxAPIkjohFAQy0gVHRQm5ce3OPg3kD1w3hFJwiNBT7JTBIFvUiGXt9GhsC+UFD8UkZTSA3w6
-	1I5zUBwK1EI2pAiUAFhtlZcysDp03LILJwb6yBAOV5NpdoJpo88ij9Mw4iHIo2kc5TrUYUkw==
-X-Received: by 2002:a05:690c:a01b:b0:81e:94bd:6473 with SMTP id 00721157ae682-81fc1896b01mr15268507b3.30.1785457801138;
-        Thu, 30 Jul 2026 17:30:01 -0700 (PDT)
-Received: from TurinLinux.home ([187.15.144.227])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6692c6e8de7sm2355997d50.4.2026.07.30.17.29.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 17:30:00 -0700 (PDT)
-From: Nicholas Dudar <main.kalliope@gmail.com>
-To: bpf@vger.kernel.org,
-	udknight@gmail.com,
-	x86@kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	tglx@kernel.org,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	hpa@zytor.com,
-	linux-kernel@vger.kernel.org,
-	visitorckw@gmail.com
-Subject: [PATCH bpf-next v3] bpf, x86: Add support for BPF_SDIV and BPF_SMOD in the i386 JIT
-Date: Thu, 30 Jul 2026 20:29:50 -0400
-Message-Id: <20260731002950.179573-1-main.kalliope@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20251104; t=1785457852; x=1786062652;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BynZKIsVSQr3F1TFU0TVk73YY94J3F9HvqIoa9Y7ly8=;
+        b=UnUusvsSsDxbQK5PLsA9C7Z6EhTsZxKwRiilKlB0kDZGnbCa0HmbX96Kx5yb5CYoMX
+         +MdjevLhpVB/mlEh7WiCbicxarlQeRgaQgfU2cpXuko0tPb4Ugp0SyI+LaJOKq7YJywQ
+         uhzqR9PfhTsQrySWDcnpaDv6oz4RZJoa5znt9W8lDyzyVytAZmW5lHPJQ6Mr+nqy3Lq2
+         jxSj0PTn1kxNQKqEw0B+ga/24L52me1bNwYK0OI4WA/HAdv4SBQE9XBvuU5HdcaF1+Tf
+         B4LaOfnLKwABaKZBSOxyNFKtkiO6WLnm53Xoz7rdLetmkS1J+cIBmCgFF8haDAw43Icy
+         50CQ==
+X-Gm-Message-State: AOJu0YwfMW4VtfcrfA1EcKdSwFY0Iac40FyCnsAV3waT4+ax0V5StGBO
+	zaUWPfo6YM9Hn2zVTGDb7lfDYY5KgXTS3UHS1jA1Nfz+G+vHrKB+o8tzyqzYH8r6/gAhfsct2MQ
+	qtD3IkzEE/csWbrIZW0tzMBZQ9sxAx+5xi8FO
+X-Gm-Gg: AR+sD13QsOGCqJiRHyQ1GhXvTU7/TL2e5IqEamWNwTz4MA3vO/MZCR0a3WwmAEHNKa1
+	stbv3dpuFNEPdMjH/FMGtxnNnviQMgiu4y3PPDoPm4j2otENYn0wCIkGAWyk11xrF1ilGkZ6uRc
+	bl7OlJU8z0hEqDha6eo+UhRdzmRODEGfq52/TfyN5TqNSb3Sv45ezXW3KH5zpvL7T0XKdXaPlgV
+	AfreBd55JvIKMXlBVZf/ARrDgww1ppGAMVJXOjp8KPaPtGlA+KOPlc3Snh1vNFY/kDfO4kdDqJK
+	hO+Cdk+IcxdRwv/gnaa0AmLUG9I90bzM8VdZOLYvMEHsr/nt49NHK5hiJj+2g/h7+eKEafKaO3I
+	=
+X-Received: by 2002:a05:6214:ac2:b0:8fd:6de3:dd78 with SMTP id
+ 6a1803df08f44-90842411b43mr799656d6.58.1785457852231; Thu, 30 Jul 2026
+ 17:30:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260730234533.1912709-1-dwindsor@gmail.com> <20260730234533.1912709-3-dwindsor@gmail.com>
+ <20260731000002.576791F000E9@smtp.kernel.org>
+In-Reply-To: <20260731000002.576791F000E9@smtp.kernel.org>
+From: David Windsor <dwindsor@gmail.com>
+Date: Thu, 30 Jul 2026 20:30:40 -0400
+X-Gm-Features: AUfX_mxUC87VovUpF6S3n0z22UxNvx0DUvlrhBrcBBLnihCTSSPd1G8mlTOLx6g
+Message-ID: <CAEXv5_gTJcP5BkSysZujLxiUcjbbBNi_NNbAnOJsQQVLyO9HoQ@mail.gmail.com>
+Subject: Re: [PATCH v6 bpf-next 2/4] security: add security_lsmxattr_add()
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-emit_ia32_div_mod_r() emits an unsigned divide (xor edx,edx + div ecx)
-for BPF_DIV and BPF_MOD regardless of the instruction's signedness, so
-the i386 JIT does not implement signed BPF_SDIV and BPF_SMOD (off == 1),
-which get an unsigned quotient and remainder rather than the verifier's
-and the interpreter's signed result for negative operands.
+On Thu, Jul 30, 2026 at 8:00=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> > +int security_lsmxattr_add(struct lsm_xattrs *xattrs, u64 lsm_id,
+> > +                       const char *name_extra, const void *value,
+> > +                       size_t value_len)
+> > +{
+> [ ... ]
+> > +     /* Combine xattr value + name into one allocation. */
+> > +     xattr_value =3D kmalloc(value_len + name_len + 1, GFP_NOWAIT);
+> > +     if (!xattr_value)
+> > +             return -ENOMEM;
+> > +
+> > +     memcpy(xattr_value, value, value_len);
+> > +     memcpy(xattr_value + value_len, suffix, suffix_len);
+> > +     if (extra_len)
+> > +             memcpy(xattr_value + value_len + suffix_len, name_extra,
+> > +                    extra_len);
+> > +     ((char *)xattr_value)[value_len + name_len] =3D '\0';
+> > +
+> > +     xattr =3D lsm_get_xattr_slot(xattrs);
+> > +     if (!xattr) {
+> > +             kfree(xattr_value);
+> > +             return -ENOSPC;
+> > +     }
+> > +
+> > +     xattr->value =3D xattr_value;
+> > +     xattr->name =3D (const char *)xattr_value + value_len;
+>
+> [Severity: High]
+> Does this code cause a use-after-free for filesystems like ocfs2?
+>
+> Looking at ocfs2, the ocfs2_initxattrs() callback saves the xattr->name
+> pointer directly into si->name, assuming it has a static lifetime (which
+> was true for SELinux and Smack):
+>
+> fs/ocfs2/xattr.c:ocfs2_initxattrs() {
+>     ...
+>     si->name =3D xattr_array->name;
+>     ...
+> }
+>
+> But here xattr->name points inside the dynamically allocated xattr->value
+> block. When security_inode_init_security() completes, it frees
+> xattr->value:
+>
+> security/security.c:security_inode_init_security() {
+>     ...
+>     ret =3D initxattrs(inode, xattrs.xattrs, fs_data);
+> out:
+>     for (; xattrs.xattr_count > 0; xattrs.xattr_count--)
+>         kfree(xattrs.xattrs[xattrs.xattr_count - 1].value);
+>     ...
+> }
+>
+> After this free, ocfs2_mknod() will call ocfs2_calc_xattr_init(), which
+> dereferences the now-dangling si->name pointer:
+>
+> fs/ocfs2/xattr.c:ocfs2_calc_xattr_init() {
+>     ...
+>     s_size =3D ocfs2_xattr_entry_real_size(strlen(si->name),
+>                                          si->value_len);
+>     ...
+> }
+>
+> Could the dynamically allocated name trigger a use-after-free here?
+>
 
-Add signed support. Pass the instruction to emit_ia32_div_mod_r() and,
-on the signed path (off == 1), emit cdq + idiv ecx instead of
-xor edx,edx + div ecx, mirroring the cdq/idiv-vs-xor/div split the
-x86_64 JIT uses. bpf_do_misc_fixups() rewrites the zero-divisor and
-INT_MIN/-1 cases out of the instruction stream before the JIT runs.
+This is real. ocfs stashes the name pointer beyond the call; it's the
+only fs who does so. We can special-case ocfs and be done with it.
+Will do this in v7.
 
-The RV32 JIT has the same gap.
-
-Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
-Assisted-by: Claude:claude-opus-4-8
----
-v3:
-- Correct the incomplete recipient list.
-
-v2:
-- Frame as adding support and drop the Fixes tag, per Pu Lehui [1].
-- Pass struct bpf_insn * to emit_ia32_div_mod_r() rather than separate
-  op and is_signed parameters, per Kuan-Wei Chiu.
-
-v2: https://lore.kernel.org/bpf/20260714023939.616686-1-main.kalliope@gmail.com/
-v1: https://lore.kernel.org/bpf/20260713185848.120137-1-main.kalliope@gmail.com/
-[1]: https://lore.kernel.org/bpf/fa8a040f-64c4-484f-9538-fb0ec287639f@huawei.com/
-
- arch/x86/net/bpf_jit_comp32.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-index 852baf2e4db4..012161da3e82 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -432,11 +432,13 @@ static inline void emit_ia32_to_be_r64(const u8 dst[], s32 val,
-  * ALU operation (32 bit)
-  * dst = dst (div|mod) src
-  */
--static inline void emit_ia32_div_mod_r(const u8 op, const u8 dst, const u8 src,
--				       bool dstk, bool sstk, u8 **pprog)
-+static inline void emit_ia32_div_mod_r(const struct bpf_insn *insn, const u8 dst,
-+				       const u8 src, bool dstk, bool sstk, u8 **pprog)
- {
- 	u8 *prog = *pprog;
- 	int cnt = 0;
-+	const u8 op = BPF_OP(insn->code);
-+	const bool is_signed = (insn->off == 1);
- 
- 	if (sstk)
- 		/* mov ecx,dword ptr [ebp+off] */
-@@ -454,10 +456,17 @@ static inline void emit_ia32_div_mod_r(const u8 op, const u8 dst, const u8 src,
- 		/* mov eax,dst */
- 		EMIT2(0x8B, add_2reg(0xC0, dst, IA32_EAX));
- 
--	/* xor edx,edx */
--	EMIT2(0x31, add_2reg(0xC0, IA32_EDX, IA32_EDX));
--	/* div ecx */
--	EMIT2(0xF7, add_1reg(0xF0, IA32_ECX));
-+	if (is_signed) {
-+		/* cdq */
-+		EMIT1(0x99);
-+		/* idiv ecx */
-+		EMIT2(0xF7, add_1reg(0xF8, IA32_ECX));
-+	} else {
-+		/* xor edx,edx */
-+		EMIT2(0x31, add_2reg(0xC0, IA32_EDX, IA32_EDX));
-+		/* div ecx */
-+		EMIT2(0xF7, add_1reg(0xF0, IA32_ECX));
-+	}
- 
- 	if (op == BPF_MOD) {
- 		if (dstk)
-@@ -1795,14 +1804,14 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 		case BPF_ALU | BPF_MOD | BPF_X:
- 			switch (BPF_SRC(code)) {
- 			case BPF_X:
--				emit_ia32_div_mod_r(BPF_OP(code), dst_lo,
-+				emit_ia32_div_mod_r(insn, dst_lo,
- 						    src_lo, dstk, sstk, &prog);
- 				break;
- 			case BPF_K:
- 				/* mov ecx,imm32*/
- 				EMIT2_off32(0xC7, add_1reg(0xC0, IA32_ECX),
- 					    imm32);
--				emit_ia32_div_mod_r(BPF_OP(code), dst_lo,
-+				emit_ia32_div_mod_r(insn, dst_lo,
- 						    IA32_ECX, dstk, false,
- 						    &prog);
- 				break;
-
-base-commit: 863f3ddd0b8ac65abfb50d3be0869268ac0e277b
+> > +     xattr->value_len =3D value_len;
+> > +
+> > +     return 0;
+> > +}
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730234533.19=
+12709-1-dwindsor@gmail.com?part=3D2
