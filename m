@@ -1,149 +1,138 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4671036E47E
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 19:25:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D7C3B637A
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 19:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785525904; cv=none; b=aH827L0eB6FqFl2YFYb1Ig8NQqaJ72Do4bYyWf2MTIFBVe1GN1H7wnvi9Ba0AOjRwS2p7injE80MmyApcr8kh3YicE72xwbnIKO0psjNuvchDbaXLEJyTKrj2p8/vOEp891UxYsuTCvhv2H37P/wNOvOhhhkJsw0Wl8um/7LWfU=
+	t=1785525997; cv=none; b=R85ysf3hj6C0PK8rcAx34gO+zh/WIr1UGdEG9ZhIAf5FkmezV4jrAxrLLYCC0B5lIOPmdoiWX9Q/cFfEk9XBxaBN+m76R+SOinszkkSfMGg1Zm/6LEUVBj/JhTE+AAL7oZyUMrXp1rYlUM47vI4rdR3TctoFgt2eEOmgrsf85aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785525904; c=relaxed/simple;
-	bh=+236ZUiGE1UTZf5D568G34CzbrXLYB0nlzUL2poy9i8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C8u7Pq41JYwVnFDuu7gB0hrbqoCmQdQKOEwNKfki5SdwbtcH5H9fpUc+yOxSxinmX4d0pXDeRHkwUWaodvIXFng9aHCx0jeAxdbDorMXu/Wbeh+MBhr4cq5NeOF8TVhDqD7R4qsOku0lS5HqYgMJlCMr6bnQyJK3ZRszDDmEcxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hDaDBSRc; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785525997; c=relaxed/simple;
+	bh=4Umsazmsjz5P1aeiTFAbn6V8f+uc+/ZVWTbKPct4BpU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=hvUmHIgJG+pgX1gq+53ozAr3mc220nSoQ/9V7SYm+zNZeXnCTBrsO/Hgh6G3bPMuYl/bhDi1alTeb1JAtsU1ZuiQv5TXCOz24/v12+QUhHLPvPXNrVgJ0FpBgkdFr3rgZI7G+JlLp9CEamWd6TZ7oCEemopB0oUSBvqFAMjQomc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mB1Do2Sz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hDaDBSRc"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-81e86df8987so19554857b3.3
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 12:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785525902; x=1786130702; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1w94Tr21pSE0EfOV5IzEh1sDDQbxXsJWYMJqC312JyA=;
-        b=hDaDBSRc0QKOuNvST+/T/jfxPa2Fpoz8ME9z9I9oDw8WVw8NHeH+0D9RADBTtbBxw9
-         gvtOU8qz28kcY3iwi9qP19EnV6CglGpxXbFu5DjDB+6ZETOTW43PljvJHgnVib2coAjl
-         yt4/LV1PnZPsrlmdu0/iXjSRiWQO5KXZOCUGmXS2pyH2POeRe5Vb3Uhz5yz5Twr+Z7se
-         Rz/xoN86rPd6fxf9JZC4LyjOkQcvkH8ng39GB/9VPXx/Wff/K1798fjEfFtqeV1ioIyz
-         FvcAmE0LLnJ5F0oWfc4nfh/KeS07cwzyNgUmx7+8Sp0+DtigjFjehvkOxyZIZV0Z5j74
-         9TNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785525902; x=1786130702;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=1w94Tr21pSE0EfOV5IzEh1sDDQbxXsJWYMJqC312JyA=;
-        b=W+iVGayO5IGDr4BMLgXnPOW/dP/xqEuNKBmAmE5h6Ii85j69bbbSkDUaTbVld4Ve3G
-         mE0AgAeWZrgyGzbSABuD0W9hS+AX7oV9qANlIA3K96aC8YNeLvEvwHIBRqAvV+8coeBj
-         2CELcIg0njxR4cuY8LkIHoKRcjJ4+iRRxAXAMujTyFjgiPBHBSjF5nL6x1dcTn8c69wW
-         FJJBBwkGrqQAehxpSTl0JS5F196J80YGOxfvB+tsBVaThhZO2TV/KMdBCXJcI0f1z8Tn
-         JffL98chkL5REVImtVFvJ/scVRkdJMwtPTo8gMma4PYfLGd9qxLb99ypQBi2NDMN0oM7
-         bBow==
-X-Gm-Message-State: AOJu0YyDDU8+2Xs630GMUT0JGJf6Gdb8WNJIukeiotw3Pt66cuSgblCb
-	EsR/pa5gpWlCgpdx9AVknne7soNZZciwVPceRkSgRUeFKyIqVWMw0ZyZW14Exgdd
-X-Gm-Gg: AR+sD12TCmBDx2bZrSujQApbWD57BqbGmrhOglq6wQbZ1JA6JdZzzpkTAj264Ej9Fuj
-	wp2B0NVrh2NDd5SdN7IZv8lb2u5OB2EPY9XUOPy11iA/vgmrDYXsYUVCYRXlOMlApaXa9AhKaQg
-	enWwGrby1aPDzC3yQoPuhRMb0J075xUgXyDxF+iHzHtnHCXFM1vlJ6EpwIQ8Re5G0imMXnYIDbo
-	2UT564zd0CPZWaYCRH+C9HRRc3NSjqYaH7iVDNFK6rUYCumPKpDrI0ggOexOdsDR4PlyRswhWEh
-	4N9bMwhECNC4mynM6HqkZFB34RlqtI6O9I3NxUo4Lino1Y2TjCTN/sJ/woswZGwlhSVnY41lvJY
-	CNKD2aRerli3ZS3jUP63O9b28HxBe3wx3LO7011br3oprUa5WaCUCeMfU4cYEB7+gy56DUQqd/d
-	YJgLeonBWvkS5qG8opJIg05tjYZB5lmR6qY2pMlftGewTLLQTMzxEYPyr2lWey/0odTq0iWXDUj
-	rGIbrtIBOzPR2V6rLqMjQA=
-X-Received: by 2002:a05:690c:6d0b:b0:7fd:ddb0:2622 with SMTP id 00721157ae682-81fd49bfea7mr14802447b3.6.1785525902064;
-        Fri, 31 Jul 2026 12:25:02 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:d52:64e9:32ac:b832])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81fccf30319sm13142527b3.6.2026.07.31.12.25.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2026 12:25:01 -0700 (PDT)
-Date: Fri, 31 Jul 2026 15:25:01 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: sashiko-reviews@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mB1Do2Sz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8111F00AC4;
+	Fri, 31 Jul 2026 19:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785525995;
+	bh=GBPRI4bfLA6B5fkfuDezFPhxUT5ubh7uKxvcw8OJ4m0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=mB1Do2SzFxGDG3s4iUD0yBfKsGy2JJOQkKTra1Mw7sgxTcLeT1Iy9S6avfEKwCmUt
+	 AYOir8NEwR7DoUT2tbTfiBtAGCUv5fTsxNX/ggGNxXo5IMIQ53GLgYX84AJduVRMPy
+	 mxl1gT2TufvJMTqx3Q2lZhRP9DOI5DaF5fyi6j1I0Vy4ny/rD6hW36O8nQ590LPE/4
+	 m4CUmyPSHY9ZdqVLW/qfDuaDRD9TvzIPs3WoLzh99VRD0nOVj3hUKhgkg2BYriA9bM
+	 ndNcD9riSgvCWMvKCTj418vIW+8kX4mF8QoQoNzbmgcNRfVdw/XF5Mo6Z8VEzMmgHD
+	 eELpsHjVvmJ2Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 3/5] bpf: infer zext_dst based on static
+ register liveness analysis
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eduard Zingerman" <eddyz87@gmail.com>
 Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 12/13] landlock: Document the BPF kfunc interface
-Message-ID: <amzzYACkhCpraJLO@zenbox>
-References: <20260731022047.189137-1-utilityemal77@gmail.com>
- <20260731022047.189137-13-utilityemal77@gmail.com>
- <20260731024550.A713C1F000E9@smtp.kernel.org>
+In-Reply-To: <20260731-static-zext-v1-3-98a4dc73e94b@gmail.com>
+References: <20260731-static-zext-v1-0-98a4dc73e94b@gmail.com>
+ <20260731-static-zext-v1-3-98a4dc73e94b@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 31 Jul 2026 19:26:34 +0000
+Message-Id: <20260731192635.8B8111F00AC4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260731024550.A713C1F000E9@smtp.kernel.org>
 
-On Fri, Jul 31, 2026 at 02:45:50AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The kfunc filter excessively restricts `bpf_landlock_put_ruleset`, contradicting the documented intent and severely limiting ruleset lifecycle management.
->
-> [...]
->
-> [Severity: Medium]
-> Does the kfunc filter excessively restrict bpf_landlock_put_ruleset,
-> contradicting the documented intent?
-> 
-> Looking at bpf_landlock_kfunc_filter() in kernel/bpf/bpf_lsm.c, it appears
-> to apply -EACCES to bpf_landlock_put_ruleset for most program types and hooks:
-> 
-> kernel/bpf/bpf_lsm.c:bpf_landlock_kfunc_filter() {
-> 	if (!btf_id_set8_contains(&bpf_landlock_kfunc_ids, kfunc_id))
-> 		return 0;
-> 
-> 	switch (prog->type) {
-> // ...
-> 	case BPF_PROG_TYPE_LSM:
-> // ...
-> 		if (!btf_id_set_contains(&bpf_landlock_kfunc_hooks,
-> 					 prog->aux->attach_btf_id))
-> 			return -EACCES;
-> 
-> 		return 0;
-> 	default:
-> 		return -EACCES;
-> 	}
-> }
-> 
-> This prevents BPF programs of types other than SYSCALL or two specific
-> sleepable LSM hooks from legitimately dropping a reference to a
-> bpf_landlock_ruleset they acquire from a map via bpf_kptr_xchg().
-> 
-> The verifier forces the program to drop the acquired reference, but rejects
-> the call to bpf_landlock_put_ruleset().
-> 
-> Additionally, looking at bpf_landlock_kfunc_ids:
-> 
-> kernel/bpf/bpf_lsm.c:
-> BTF_ID_FLAGS(func, bpf_landlock_put_ruleset, KF_RELEASE | KF_SLEEPABLE)
-> 
-> The KF_SLEEPABLE flag seems to prevent calling the release kfunc from
-> non-sleepable programs, even though the underlying release mechanism
-> (security_policy_kptr_put) is designed to support non-sleepable contexts.
-> 
-> Could this severely limit ruleset lifecycle management by making the kptr
-> functionally unusable across most BPF program types?
->
-Sashiko repeated this same feedback a few times.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] Incorrect static liveness tracking for 64-bit conditional jump=
+s leads to missing zero-extensions (`zext_dst`), resulting in verifier/runt=
+ime state divergence and potential privilege escalation.
+--
 
-It seems reasonable.
+--- Patch [3]: [PATCH bpf-next 3/5] bpf: infer zext_dst based on static reg=
+ister liveness analysis ---
+commit ab8592d6a434dbfed0cbb0bd067d9032b308db8d
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-I don't see why the bpf_landlock_put_ruleset's allowed calling context
-can't be broadened out.
+bpf: infer zext_dst based on static register liveness analysis
 
-It's probably ok to allow it for all BPF_PROG_TYPE_LSM programs
-(including non-sleepable ones) in addition to BPF_PROG_TYPE_SYSCALL, and
-drop KF_SLEEPABLE in accordance with the security_policy_kptr_put docs
-stating that the hook consumer cannot sleep.
+This commit replaces the dynamic subreg_def based zero-extension
+tracking with static liveness analysis to correctly infer zext_dst
+and prevent missing zero-extensions on architectures like s390x.
 
-Same goes for the bpf_landlock_ruleset dtor.
+Link: https://lore.kernel.org/bpf/CAGKGUv=3DsOuqQtA1Ub-5JXfA4FPosJFYKAQE4B7=
+9cK+P1erxqtg@mail.gmail.com/
 
-Justin
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> index c996b8a03e792..ea002550671a8 100644
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
+> @@ -2317,9 +2318,18 @@ int bpf_compute_live_registers(struct bpf_verifier=
+_env *env)
+>  	}
+> =20
+>  	for (i =3D 0; i < insn_cnt; ++i) {
+> +		int def32 =3D bpf_insn_def32(&insns[i]);
+> +		u32 out =3D state[i].out;
+>  		u32 in =3D state[i].in;
+> =20
+>  		insn_aux[i].live_regs_before =3D mask_lo(in) | mask_hi(in);
+> +		/*
+> +		 * On architectures where 32-bit operations do not reset upper halves
+> +		 * of the registers, the verifier needs to zero extend a destination
+> +		 * register if an instruction defines a 32-bit subregister and the
+> +		 * upper half of that register is alive after the instruction.
+> +		 */
+> +		insn_aux[i].zext_dst =3D def32 >=3D 0 && (mask_hi(out) & BIT(def32));
 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260731022047.189137-1-utilityemal77@gmail.com?part=12
+[Severity: Critical]
+Does this code correctly evaluate liveness for 64-bit conditional jumps?
+
+The new zext_dst logic relies on mask_hi(out) accurately reflecting if the
+upper half of a register is alive.
+
+However, looking at compute_insn_live_regs() in kernel/bpf/liveness.c for
+conditional jumps:
+
+    const u8 class =3D BPF_CLASS(insn->code);
+    const u8 code =3D BPF_OP(insn->code);
+    ...
+    case BPF_JMP:
+    case BPF_JMP32:
+        switch (code) {
+        ...
+        default:
+            def =3D 0;
+            if (BPF_SRC(insn->code) =3D=3D BPF_K)
+                use =3D dst;
+            else
+                use =3D dst | (code =3D=3D BPF_JMP32 ? src : src32);
+        }
+
+Can the code variable ever equal BPF_JMP32?
+
+BPF_OP() extracts the operation code (which is a multiple of 16), while
+BPF_JMP32 is a class (0x06). This means the check code =3D=3D BPF_JMP32 eva=
+luates
+to false, and the source register usage always falls back to src32, even for
+64-bit jumps (BPF_JMP).
+
+If a 32-bit operation defines a register, and it is followed by a 64-bit
+conditional jump using that register as a source with no other uses of the
+upper 32 bits, the upper half won't be marked as alive.
+
+As a result, zext_dst wouldn't be set, which could lead to the JIT skipping
+the mandatory zero extension. This would cause the 64-bit jump to compare
+against uninitialized garbage in the upper bits, potentially allowing
+out-of-bounds access.
+
+Should this check use class =3D=3D BPF_JMP32 instead?
+
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260731-static-zex=
+t-v1-0-98a4dc73e94b@gmail.com?part=3D3
