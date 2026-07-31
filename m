@@ -1,136 +1,326 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5568F489864
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 01:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861AC242D72
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 02:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785463031; cv=none; b=PIRImolKqUed+zXDvhW3CmjhT/jbGoKJjKFAEc4I6I87nfkRLa2Kp8SjsBMM9Nei05kjff4UdlG/eTtRqrqbJlppus8GbAb0Z1MtlvVSkbvHHAh04uZJCYSqegZjfp3d6QRPZ5NHlE8ej762acxQAYjvK9lxJc1UE+xX94U68X0=
+	t=1785464475; cv=none; b=aef0j36pr1AZVkxF4M6oXZVCXanzFFoos3fMYooWo1SCa1MJg0aCTyTrYgnWBwUP3yyIhZFqgd4ddeXwUO0ybzbLHTUi+OFjp+29GDcJc4tVvu1AVZM97B9SRQphAtxVa8642zN1QRH32MQ8B8C8EkCbQJDNLsnAWcV8yzvDUoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785463031; c=relaxed/simple;
-	bh=gZkm1syO+s0i8V+AsbbyroBK479jVF82fNMvsPESfLk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=imoWnbmq6nBGaRb+fXNfkprzeSyzu9Jt+0t6G+SysNxtuXfXoXJvQATfrLKyS8ZJ0DIv27MXxeMC2Fl66Hi8o3pF6YeBslOgAjPUsE8CYJ/qixsy+6cZLs5a+IWT1Cqp39XR/4v6a5XDs1FX/69PxJEPQgPJVyxNQ4kpN7WFZ30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lc99Hg+d; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785464475; c=relaxed/simple;
+	bh=QFIcGV8zKMtTMfMUX1CnB1PUghN3M7CbeL+Pl/Mt0tw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=esCCR2Y4exR/yCQjIW4mvc5yaTjrDRWXwLBR/uhRqlXcJsOEJDgGrwAFQJaHU8BBwTbgsjEAHSs7cDU38f0JuRyZ6st3RNfcdp3NLdUFhNTvtK3mw11YIUehTTJ9T7xR8q0vaNN1kkL7F22L3DgjoQEd0YW0mvNJPUipWXlw6Mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CxkXArwF; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lc99Hg+d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A83E01F000E9;
-	Fri, 31 Jul 2026 01:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785463029;
-	bh=4MyEbIiCe0exnd9LBi6nDW+V07+I5AN/JRO3UPDHItk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lc99Hg+dSovZGuX/9j2i1rYNq4D6WkiFPOpGHoetMfT4JhUPDy9ypVvncGycW4pyy
-	 qFMsprz+EiMwH8tvbEyLS9CNRMncg7fjMdiL+RlYAF1Tf+RVIjJhzhDvuNf8sSgaGF
-	 VSKKfM8DWON0I88+FzcIRWfF0EijNMH1o8tXXiqVCnu9/7Xq92Qehm4hlkeOwnk32B
-	 EFVcyzsq0Fd3mAXgKGFimqfI1yHgJ1cBbRRkhYzsTIggb8HEK2dDy8UeP8ylRXnYkx
-	 MKOdr8Nf2NyDwBMSRDKG83iFifs0QjmiCNPWAi+IWJw+YUZaX+NrBlKPGDLPf27UVb
-	 B4UGbuV8/ihvQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 2/2] bpf: htab: Reduce elem_size by 8 bytes
- for small key sizes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260731010645.3965783-3-tjmercier@google.com>
-References: <20260731010645.3965783-1-tjmercier@google.com>
- <20260731010645.3965783-3-tjmercier@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 31 Jul 2026 01:57:09 +0000
-Message-Id: <20260731015709.A83E01F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CxkXArwF"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-80bb41f7f3cso5012247b3.2
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 19:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785464471; x=1786069271; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zgXsqlz9cgHr5MWxiJUtzX4iz4009qsJEQz6j+XHtu8=;
+        b=CxkXArwF3+pcKh4b3Qclzz4jNvBL+WfTnDg0w1jlPXgbWQ9sJsxDd8kIoZBqiKykAg
+         oZB5HyDWrSwc7+bJcfyTLYNIhj0Du3jYNk83lAv9Frh6W6D8ttDNRqPj03e8P5UH50TV
+         Oz99WSD+qxF/HwZ2EuV8o/r71SutpGdPJwUIGYURy8Z7ZITMLsn1YpnblOsZ2PimB8qI
+         SL1MjLrjv+QhoY9qMPM4z7BBjS+OKo9/WipGvwjWHrw5z7hD13DNlfOQle8iUWDcOAig
+         HJ34pRLY/afma6EbOW2eMIxWRWDNPLvBIOYl2E7KM4x1/mmRZtUHJ8B9yKReLrIKuWin
+         aFSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785464471; x=1786069271;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=zgXsqlz9cgHr5MWxiJUtzX4iz4009qsJEQz6j+XHtu8=;
+        b=E75FH3HTllJs9DuCYJJ0ujme8iZ6gvGuKCMF6OsRU1/JNMgRSes4lC5a/NsUrSLQ75
+         f3KthtVqTVU/6JfZPiSbySFBsKjRjCYK0jl0zD/mAEg7+8k6ndr31mWKX71rc9KTMnWH
+         LX4PjJ6Y20NtFyIgb/YZmtGdhw3pvZFtFb+yMA7tGdcfFmVKpF7wZx/jBfuW/3NuFOPk
+         WHcu1hLh4lZBKYwJcvnbfY+2fuxeufQOeOM0r8SzueDu9HIOTSLIfQpvAh3Dy4hFcjg/
+         DDFI7Fg0jr2VfhFWpivAbU+ONWmJGlysDEqtmJ9l7mdTPk28SY6Hx+CVEkHqXDALT++t
+         e/mQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rrcer0FO+VDtjoMb2tjJJBqZQpE7rkZpo4XWgC1H9gI71GmIl0U7D0ViJ+28gigSFbAPHk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyzdp+JNXYrksQ+mq57HfhnlKySbMEkoyOaybEra4XPBSEyjVSw
+	P74/dNDSz/37GcN6N7vFPJNOkqIj8lviWoNnNTIGPzJUOUEAkm4yf9Bp4tFtusDK
+X-Gm-Gg: AR+sD10B/lvNgC8RtnW6WpVlEYv5ZWtwr8F5mSE2ZSL7iH23dwGD19cB2WFYFqcZd0U
+	mBWFe7qMkDA1po8mNQdh2gjRQ+koJjEaNIpg0phkLB2IKOySnX0h1N+MxGi0aV5wOH5hDimEUDd
+	e3GN/WKalX3C9Q8lDR5Bhk2/GQXJc43pe7RhcuCqWlAos3kUEoWfbXd/C1Jvx8AyV/MdoJCzv3X
+	x28h0kDs4wC/oWEaMOPStieZbGEMdfevMAkyfr7x/KnJd+ZlFVi755+/4pubJiCXSA67dau3sA7
+	K0srbrqi4eoRAkHWrD2nxKa2F4UIOggCaexbMu6bEwper+mlOX82Bj0qhzzSCnImm+1Wpu24c+H
+	eW1nmM+/CW7dYSuV9R6BS+b5QJkJhXUttYJE9SvrKTvxgN8ckvsCWypFQmlMpMRaLby0Fb8DLED
+	B7BY7ZfOT8RcBLYSqvzHCQR3Yklsr+PFRSB/AqGMvPrLpJurjTnViGlO55OUt4Z+s9CmQzdtqTL
+	xohK2OP0TrHSrNJF3VQrw==
+X-Received: by 2002:a05:690c:6f12:b0:7f8:7e11:d023 with SMTP id 00721157ae682-81fcbc24a34mr424837b3.49.1785464471301;
+        Thu, 30 Jul 2026 19:21:11 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:e94:8a83:feea:6720])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81fb8b26e8bsm20519047b3.47.2026.07.30.19.21.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2026 19:21:10 -0700 (PDT)
+From: Justin Suess <utilityemal77@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	kpsingh@kernel.org,
+	paul@paul-moore.com,
+	mic@digikod.net,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	kees@kernel.org
+Cc: gnoack@google.com,
+	jack@suse.cz,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	martin.lau@linux.dev,
+	m@maowtm.org,
+	bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Justin Suess <utilityemal77@gmail.com>
+Subject: [PATCH bpf-next 00/13] BPF interface for applying Landlock rulesets
+Date: Thu, 30 Jul 2026 22:20:33 -0400
+Message-ID: <20260731022047.189137-1-utilityemal77@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Eliding the 32-bit hash field for small keys causes lockless RCU l=
-ookups to suffer from torn reads, leading to false positive matches when el=
-ements are concurrently recycled.
---
+Howdy,
 
---- Patch [2]: [PATCH bpf-next v2 2/2] bpf: htab: Reduce elem_size by 8 byt=
-es for small key sizes ---
-commit 1a9b131810714c16f6fb58fbc067753c917cf3cd
-Author: T.J. Mercier <tjmercier@google.com>
+This series lets BPF programs apply an existing, userspace-created
+Landlock ruleset to a program during exec.  The goal is unchanged from
+the RFC [1]: BPF does not create, inspect, or mutate Landlock policy,
+it only decides whether a ruleset that was already created and
+validated through Landlock's existing userspace API should be applied,
+based on runtime exec context.
 
-bpf: htab: Reduce elem_size by 8 bytes for small key sizes
+Motivation
+---
+Deploying Landlock today requires the sandboxed program's
+cooperation.  A process can only restrict itself, so applying a
+policy system-wide means wrapping every launch path with a helper
+that calls landlock_restrict_self(2) before exec, and anything
+spawned outside those wrappers runs unconfined.  Supervising exec
+from userspace instead (ptrace, seccomp user notifications) is racy
+and slow.  Meanwhile, the tools that do enforce system-wide policy
+with BPF LSM programs today (container security agents such as
+KubeArmor and Tetragon) end up reimplementing path-based access
+control in BPF, fraught with horrors of path reconstruction, bind
+mounts, rename races, and worse, which is exactly the problem Landlock
+already solves in the kernel, with maintained and versioned semantics.
 
-This commit reduces the element size of standard and PCPU hash maps for sma=
-ll
-key sizes by removing the 32-bit hash value and padding. It introduces
-htab_has_hash() to conditionally bypass hash checking and storage when the =
-key
-size is less than or equal to the word size.
+This series composes BPF and Landlock along their natural grain.  The
+intended deployment: a supervisor creates one ruleset per policy
+class through the existing syscalls, a syscall BPF program parks
+them in map kptr fields, and an LSM BPF program picks which (if
+any) to apply to an execution based on its runtime context.  The
+policy semantics stay Landlock's; BPF contributes only the
+programmable decision of when and to whom.  Deciding inside the
+exec path closes the race a userspace supervisor cannot: the
+policy is in place before the first instruction of the new program
+runs.
 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index f54366da459f5..82b19bd543109 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-[ ... ]
-> @@ -618,6 +625,12 @@ static struct bpf_map *htab_map_alloc(union bpf_attr=
- *attr)
-> =20
->  	bpf_map_init_from_attr(&htab->map, attr);
-> =20
-> +	/* Avoid hash memory use and comparisons where unnecessary.
-> +	 * u32 hash reads are always atomic. If we elide them, key comparisons =
-must also be atomic
-> +	 * to avoid false positive key matches due to torn key reads / writes. =
-So check key_size.
-> +	 */
-> +	htab->has_hash =3D htab_is_lru(htab) || htab->map.key_size > sizeof(uns=
-igned long);
+Addressing RFC feedback
+---
 
-[Severity: High]
-While the comment correctly notes that key comparisons must be atomic when =
-the
-hash is elided, are runtime memcmp() and memcpy() operations actually atomic
-for all key sizes <=3D 8 bytes (such as 3, 5, 6, or 7 bytes)?
+The original thread at [1] received useful feedback from the BPF,
+LSM and Landlock maintainers. I've hopefully been able to address
+all of it here.
 
-[ ... ]
-> @@ -761,10 +776,16 @@ static struct htab_elem *lookup_elem_raw(struct bpf=
-_htab *htab,
->  	struct hlist_nulls_node *n;
->  	struct htab_elem *l;
-> =20
-> -	hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
-> -		if (htab_elem_hash(htab, l) =3D=3D hash &&
-> -		    !memcmp(htab_elem_key(htab, l), key, key_size))
-> -			return l;
-> +	if (htab_has_hash(htab)) {
-> +		hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
-> +			if (htab_elem_hash(htab, l) =3D=3D hash &&
-> +			    !memcmp(htab_elem_key(htab, l), key, key_size))
-> +				return l;
-> +	} else {
-> +		hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
-> +			if (!memcmp(htab_elem_key(htab, l), key, key_size))
-> +				return l;
-> +	}
-> =20
->  	return NULL;
->  }
+The interface is redesigned around the conclusions of the RFC thread.
+While it's been over a week since sending [2] detailing some of the
+redesign, I figure it's better to show the code.
 
-[Severity: High]
-Can this lockless memcmp() result in a torn read and a false positive match?
+Four main takeaways came out of the RFC feedback:
 
-In preallocated BPF hash maps, deleted elements are immediately pushed to a
-lockless freelist without an RCU grace period. If a reader is preempted whi=
-le
-examining an element, and another thread reallocates and writes to that
-element's key using a non-atomic memcpy() (such as in alloc_htab_elem()), t=
-he
-reader might observe a torn mixture of the old and new key.
+1) no kernel or BPF code may call directly into an individual LSM,
+every LSM interface must go through the LSM framework.
 
-Without the 32-bit atomic hash check acting as a filter, could this torn re=
-ad
-randomly match the reader's target key, causing the lookup to return an
-unrelated map element?
+2) LSMs interact with the kernel subsystems through LSM hooks. kfuncs
+are just hooks from the LSM perspective.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260731010645.3965=
-783-1-tjmercier@google.com?part=3D2
+3) A new map type is untenable; new maps will not be added for single
+consumers. Especially because new map types become ABI.
+
+4) We must implement a generic interface usable by all LSM, without
+forgoing the type safety guarantees provided by BPF or making
+a ioctl-like multiplexer.
+
+This series does all, as proposed in [2]: the BPF subsystem owns
+per-LSM, strongly typed kfuncs in kernel/bpf/bpf_lsm.c, and every
+kfunc call passes through a generic LSM hook.  Individual LSMs
+implement ordinary LSM hooks and define no BPF interfaces at all.
+
+The three generic hooks carry the policy reference across the LSM
+boundary in union lsm_policy_kptr, tagged by the LSM_ID_* value passed
+alongside.  The shims dispatch only to the LSM matching that id
+(following the setprocattr pattern) and return -EOPNOTSUPP when it is
+compiled out or not enabled, so program loading stays independent of
+the boot-time LSM configuration and kernel/bpf/ has no build-time
+dependency on Landlock.
+
+The LSM hooks
+===
+
+  security_policy_kptr_from_fd(lsmid, fd, &policy)
+  security_policy_kptr_put(lsmid, &policy)
+  security_bprm_enforce_policy_kptr(lsmid, bprm, &policy, flags)
+
+Landlock implements them as ordinary LSM hooks.  The from_fd hook
+validates a ruleset fd the same way as the Landlock syscalls; the
+enforce hook stages a restriction on the credentials prepared for an
+execution, computed by the same helpers as landlock_restrict_self(2);
+and a bprm_committing_creds() hook applies it past the exec point of
+no return, where nothing can fail.  An execution either starts
+confined by the domain or leaves the calling task untouched: a failed
+execution releases the staged restriction when its aborted credentials
+are freed, so no domain is created for an execution that never
+happens.
+
+The Landlock kfuncs
+===
+
+  bpf_landlock_get_ruleset_from_fd(fd)   KF_ACQUIRE | KF_RET_NULL
+  bpf_landlock_restrict_binprm(bprm, ruleset, flags)
+  bpf_landlock_put_ruleset(ruleset)      KF_RELEASE
+
+All sleepable-only.  The acquire kfunc is exclusive to syscall
+programs, which run in the context of the task whose fd table gives a
+ruleset fd meaning; enforcement is exclusive to LSM programs attached
+to bprm_creds_for_exec or bprm_creds_from_file; release works in both.
+A kptr destructor is registered so acquired rulesets can be stashed in
+ordinary map kptr fields, which is why the put hook must tolerate
+non-sleepable contexts (the free is deferred).
+
+The selftests exercise the deployment described above end to end:
+a syscall program acquires the supervisor's ruleset and parks it in
+a map kptr field; the LSM program takes it from the map and enforces
+it on the executions it monitors.  The landlock_restrict_self(2)
+flags apply with their usual semantics, except
+LANDLOCK_RESTRICT_SELF_TSYNC, which targets the calling threads
+rather than the execution and is rejected with -EINVAL.
+
+Changes since the RFC (quite big):
+- every kfunc call now passes through a generic LSM hook; the kfuncs
+  moved from security/landlock to kernel/bpf/bpf_lsm.c and nothing
+  calls directly into Landlock
+- the BPF-facing interface stays strongly typed per LSM; the tagged
+  union only travels across the LSM boundary. This is superior to
+  the void* model proposed in [2].
+- BPF_MAP_TYPE_LANDLOCK_RULESET is nixed: the acquire kfunc plus an
+  ordinary map kptr field with a registered destructor replaces the
+  dedicated map type
+- the whole restriction is now staged in the bprm credentials and
+  applied at bprm_committing_creds(), where nothing can fail, instead
+  of only staging the no_new_privs bit
+- domain allocations on the kfunc path no longer charge the mediated
+  task's memcg: the enforce hook computes the restriction in a root
+  memcg charging scope
+- LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS was split into its own series
+  [3] and is not carried here; this series only stages the
+  Landlock domain. Nothing about it was necessary for this series.
+- no new UAPI: no map type, no new flag, no ABI bump (since this
+  series touches no Landlock ABI directly and the kfunc/syscall
+  side share common code paths).
+
+Subsystem Summary
+---
+
+To LSM maintainers: This was the biggest change. There are three new
+generic hooks and the union lsm_policy_kptr to abstract the lsm-specific
+features declared next to lsm_prop in security.h with one member per
+participating LSM.  The hooks are ordinary, LSM-agnostic entry points
+usable by any kernel-internal caller, with targeted dispatch by lsm_id
+following the setprocattr precedent. It will return -EOPNOTSUPP when the
+named LSM is compiled out or disabled.  Nothing in security/ knows about
+BPF, and BPF knows nothing about the enabled LSMs.
+
+To Landlock maintainers: there is no ABI or behavior change for
+existing users.  The hook implementations reuse the syscall code
+paths: ruleset fd validation is shared with the Landlock syscalls,
+and the restriction is computed by the same helpers as
+landlock_restrict_self(2), factored into prepare/apply steps so
+future restrict_self features can hopefully work for both entry
+points.  What is new is the entry point: a restriction staged on the
+bprm credentials and committed at bprm_committing_creds(), past the
+point of no return. The memory accounting issue pointed out by
+Mickaël is addressed as well. [4]
+
+To BPF maintainers: BPF owns the three strongly typed kfuncs in
+kernel/bpf/bpf_lsm.c, gated per program type (acquire in syscall
+programs, enforcement in sleepable LSM programs on the two bprm
+hooks), with a registered kptr destructor so rulesets can live in
+ordinary map kptr fields.  No new map type, no BPF internals touched.
+kernel/bpf/ has no build-time dependency on Landlock or any other LSM
+since it just calls the LSM hooks.
+
+Patches 1-3 add the LSM hooks, 4-5 prepare Landlock (fd lookup
+exposure, the restrict_self refactoring), 6 implements the hooks,
+7-10 add the BPF-owned kfuncs, 11 selftests (end-to-end enforcement,
+TSYNC rejection, staged-restriction replacement and discard on a
+failed exec, plus six verifier rejection cases), 12-13 documentation.
+
+Tested with a BPF CI run and manual run of the Landlock selftests.
+
+Based on bpf-next/master, but applies cleanly to lsm/next.
+
+[1] https://lore.kernel.org/linux-security-module/20260407200157.3874806-1-utilityemal77@gmail.com/
+[2] https://lore.kernel.org/linux-security-module/al_TBtXYUNGLZHC2@zenbox/
+[3] https://lore.kernel.org/linux-security-module/20260717220320.1030123-1-utilityemal77@gmail.com/
+[4] https://lore.kernel.org/linux-security-module/20260701.ze4eph1eKo7a@digikod.net/
+
+Justin Suess (13):
+  lsm: Add LSM hook security_policy_kptr_from_fd
+  lsm: Add LSM hook security_policy_kptr_put
+  lsm: Add LSM hook security_bprm_enforce_policy_kptr
+  landlock: Expose the ruleset fd lookup to the rest of Landlock
+  landlock: Factor the credential restriction out of
+    landlock_restrict_self()
+  landlock: Implement the LSM policy kptr hooks
+  bpf: Add the LSM policy kfunc infrastructure
+  bpf: Add the bpf_landlock_put_ruleset kfunc and ruleset destructor
+  bpf: Add the bpf_landlock_get_ruleset_from_fd kfunc
+  bpf: Add the bpf_landlock_restrict_binprm kfunc
+  selftests/bpf: Add tests for the Landlock policy kfuncs
+  landlock: Document the BPF kfunc interface
+  lsm: Document the LSM policy kptr hooks
+
+ Documentation/security/landlock.rst           |  25 ++
+ Documentation/security/lsm-development.rst    |  27 ++
+ include/linux/lsm_hook_defs.h                 |   5 +
+ include/linux/security.h                      |  43 +++
+ kernel/bpf/bpf_lsm.c                          | 202 +++++++++++
+ security/landlock/Makefile                    |   2 +
+ security/landlock/bpf.c                       | 130 +++++++
+ security/landlock/bpf.h                       |  21 ++
+ security/landlock/cred.c                      | 116 +++++-
+ security/landlock/cred.h                      |  51 +++
+ security/landlock/limits.h                    |   4 +
+ security/landlock/ruleset.c                   |   2 +-
+ security/landlock/ruleset.h                   |   3 +
+ security/landlock/setup.c                     |   2 +
+ security/landlock/syscalls.c                  |  70 +---
+ security/security.c                           | 106 ++++++
+ tools/testing/selftests/bpf/config            |   1 +
+ tools/testing/selftests/bpf/config.x86_64     |   2 +-
+ .../bpf/prog_tests/lsm_policy_kfuncs.c        | 329 ++++++++++++++++++
+ .../bpf/progs/lsm_policy_kfuncs_failure.c     | 100 ++++++
+ .../bpf/progs/lsm_policy_kfuncs_success.c     | 107 ++++++
+ 21 files changed, 1292 insertions(+), 56 deletions(-)
+ create mode 100644 security/landlock/bpf.c
+ create mode 100644 security/landlock/bpf.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_policy_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_success.c
+
+
+base-commit: f0e80dee4e32fd11e6ee1b714b75f681c7cafd3e
+-- 
+2.54.0
+
