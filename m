@@ -1,175 +1,211 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F74E356771
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 03:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785468266; cv=none; b=LSjhZ7+AE7D6JdScMY5uvS5hOATM6LTLi70BKAxBYlsDusRcBRq4bbaQoTuJ5d82QcjpuVYJkVJmYUDhlG2xZQlXSG0inJH+bgkerUmGvr/K0UiR/VN1z8Rg3nskJFwUBZkgpSlNlfJOcOupQJzAUNlbmqqdlyYKRU5Mh6AuD20=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785468266; c=relaxed/simple;
-	bh=QCmNAq7aCQLV03SF/CeI12nYPYT+cLzDIfhbN9XF/Bg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P/et9nww0fdq12c0WXI0kp3uLu12lMWTw5RUypMQC22OmR2/jmGyepQ46uR1jZDcNEHvf5eNgTZ/C/4ImYOeT6EkBuIM9SgavtYi0IzEembGaSrQByf/6oQbTniWdw6F4i+C3TbND+yCR1rLtgEoD2vws6xZb8xIML98f8m+cic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CM4rOyEK; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90187257844
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 04:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785471818; cv=pass; b=nkuXSKyNyxIosxQawzJ6wTvXx0AMSB3EwUB3m4DMXJsrXCwzePiXf5ergw2Y7LOSwN7TP2FYaWuvwKaYOlQZv3KbpZTBHOXdggxvQQa0pUqKEelBw7BHUNXepW/reR9DshYIu8ad2RfHAkuz9Qie65TlNYIuR2Sd7Jhw2I1gXvc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785471818; c=relaxed/simple;
+	bh=d8XVobV4f1c+aHxqrgj49foH+hRs5Yx/Yh9s/mtmIyw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CGgTzt5WNYw/PjqtvMSYkM803vnYprYlepptrUXS6AnSXTpflh1K+A2QYGTQy2alcZTfV90vwcuRRFjeDN7xf5YDbt31Mbs2VSliWeMRVorksoCBDdr6FTEGkUfLJlMM1rc1bhf8VIg4xkJpyk9h++NjFZ2QerRz4nhPuJNFVCo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai; spf=pass smtp.mailfrom=nebusec.ai; dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b=YImVmLMv; arc=pass smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CM4rOyEK"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cc7ef7ec27so5966305ad.1
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 20:24:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b="YImVmLMv"
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5b021916bd3so388488e87.3
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 21:23:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785471815; cv=none;
+        d=google.com; s=arc-20260327;
+        b=cyjCTIz3k8eA2wQwmiq2lZpLRUJxk4faVU05Qxp8M9o0JNthMOMTKkqRdVXJfXm4kv
+         2qahH+8sJ88V/qrmtgUVDnzJ9eTRQF6aNEuZlxTuogsvfnXBUULPOLmbvJrvKDRxZ/sI
+         3CTHp5BvLfamiX7SPup0dzWS3/l5O8LkOPHJwWhtfuJ6VcCc9HA9MwJ+6l1SY9Pviozo
+         emN2nTwUD6SmbDKOVf2GhRdzjKOTtObiI/KgsrjeR4MgqWnrGsltGHz8oY93jN5SybEk
+         LkSiY0JEQasOJo2krNZF2LkOGue0cyOiueFTEtyDLbaXtEwbHqUznBOU8QuCXQGjGPF6
+         1oAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=YEF63KKv4BGb0adjwnJYNRW696B86fut4j/pm9Gf2gc=;
+        fh=H4OZuWlEUK0zO/MQZZqJ/cGZOFiVwKIfYw8NE9lp+Ig=;
+        b=beBgZtUFEoNut0M64p6b5OBVm1y52Ypgqwt2XuuedQIShMnquDNCRJGCL7v7uDIHRF
+         of3F/qkmuKpnBo2rN9Lf5fsw4cdTNua3UvtsaHTAvkUf5SgFOH2odSV7tJ32/DeKn3QA
+         9r4Wj5KSdh5Daf4qM9ZSAMCHGUMuiPH6T1SOvxtNqmCGsipBCjY3MYMTrweocteLay0i
+         IWuV7bart7ubUqFUf4KviVmtMJcFCg2VSd0WaHJQbTNOi4RpmxbqzVQNYy/mwPl42GMK
+         LNgwXiwisfHqvJGwxJtSR8rq2OpT0sDZRa+L7OHMqu6ahwItdh++5XmxYnkk85bpu9V6
+         cf/Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785468264; x=1786073064; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=mDiNHR6lmF8BBewyLoqotO1eTvzYBv3I+mg7fsH65Xw=;
-        b=CM4rOyEKWCE23uFCGnvBwbY/Qi/Afn+0rGiuEYXyoi15jSwJ75Fekng/1zCy1/QHil
-         yln0hR/iwQU8SMz9lJrePVF3j4jP37oGwRQMrf1Rd54n6eMj/6fsrh9IDq+W793sCpXy
-         1/NUoJya9LvJxNrHxboyQDrxRSrEPEoE+ol4V++M2zd0mtAxbKBcgVX4LU2delvq8VMJ
-         yA4fo4hz01Zjw/8REg41+nI2UXFOwNrwOsjwGvFHL5iP1v2VUmhuZWJ8JN2hGBSNnpqH
-         QRu65ip9A3iDfhoe/wRRDO/s77df/3Di9Bs5hSrD9Qh1SLgmLaTsEjCX7WSPgOavQlos
-         MQhg==
+        d=nebusec.ai; s=google; t=1785471815; x=1786076615; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=YEF63KKv4BGb0adjwnJYNRW696B86fut4j/pm9Gf2gc=;
+        b=YImVmLMvhzf8z9HA4URgiD+Nx4xZqKHR+zrEhV4Zf5Mm8ffKOHtkAzqUHBbQH57IJd
+         MycN30ft+LQ7S9LKVU9j/h1pG8SnxO9VH6tgdwWy4wkg4DPO5EIrneriVIPrZMiPEYvQ
+         oAv8PmusLPc0uvJIGvY70aOMKlfCKDdIRVeJh0XnXE1gHuPfoKNnZMZmcOzLLd+sL7oB
+         lzJ+2rCJtbtT5u159ODBvhsXAE53Xdt0eo7oQ8Fo6hXrc/6BnkiWrohIS0hrnehUcoJ4
+         mMh9sK+TJ/wupV9hta2dT7CIfZGuBlkdxQow9LHdJpt9f9NXmo6j1Fb6VNkHzH2uJStG
+         QfoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785468264; x=1786073064;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mDiNHR6lmF8BBewyLoqotO1eTvzYBv3I+mg7fsH65Xw=;
-        b=UikS1YYEQJzbwXBJ9puDBAspX9HzoBYnJ47aLGLjt9KRKrrQZgz32/CrpTtmon72El
-         Y2p0c4oAExYMgU4kifiBg5MsPrecfGC5Qt5sdjLoPMV7qvTBEHrKr8h5+eYysJKD+6qK
-         NhedrRFSoVQ8YuUnt+ObgB9gvMLyu8ytN5ND7Izt+MU5wc184B7yMvNgjsX9tWGX19gG
-         ftlBuGEDBtMEUGwGJzpP750/95epQpxR0BoYtTLMBE1Q48xJGTchfwlXIAMhc1B8xR8A
-         ZHu9xczZAH0h8ytRVRJg62sUUN89pQe5SeAV3LA8se8XtpgSPs2SpGZFLpXJqJHMoXzP
-         ZwYA==
-X-Forwarded-Encrypted: i=1; AHgh+RrHV9WqLS3SS0SW26Zx9iWEoYSlSQFKVQliaHb+47tqAsYtWn9m7wLkbXfShcKqkpuGvlo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybQUElyHQKzo7pJevWslfkokI4UkvE438zWiv2wbvzN6xX8vis
-	nZyBU+bI8Rj1ueLZ7FFgAczOaX5pRpkuMnqoroE5V4CyYjD1LSiqam/2
-X-Gm-Gg: AR+sD11ElnhoJsu5e+/qjxlqDZnXu8AdqwVo3OBifZpuMsqlS4EsH06OBIz7AmjD+mz
-	FbExyziztlxntaFRKiTFZSpcoWoTGaDJFQyXAjDdwPpLG1s3o67Ay5Nvrr89fs7xtokj7Uqi2bJ
-	ybf9S9wj7JY6nw7qNq4QXP6VEU7/dT+V7gE7Jw1Rb/sfQHfA5CQ+E35Z3MtJWqNfVCcaKVuv86f
-	9D5W90htN05UZiNW/pJbvxbaeHCz27uDZwiOftshbXaquo81SrgS7ruk2gkJmnQ3fbnGJaAw25I
-	AVihMHqpujZqfJ8ic/0XOKtaDigEyNfskgiMZCdr8ilcMXviP9j/JKEAJNejF4SF7zHEn1JVXDT
-	HvJulOyUzGD8nHPuU+a0AjUvHwHPg/6SxsrIvsw18w3o4Zwgx9hw15AvKCl8eFtqi3wKSGgmQe+
-	hC9+4TVJcofAWbf2+b3oCfbpa7XhqR8PTxQFHHcvOMW9DasRRr9fETEmM8gtqetw5NaZAguCKK8
-	LufMxwvIQLGsbh18JhbcmP18LYz0fA964EErC8wRYi04Rg2
-X-Received: by 2002:a17:903:2f0f:b0:2c6:90ec:f601 with SMTP id d9443c01a7336-2d046d7b74bmr5195485ad.8.1785468264475;
-        Thu, 30 Jul 2026 20:24:24 -0700 (PDT)
-Received: from localhost.localdomain ([202.8.105.119])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d047c42b4bsm869275ad.78.2026.07.30.20.24.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 20:24:24 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Krishna Kumar <krikku@gmail.com>,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>,
-	maciej.fijalkowski@intel.com,
-	stable@vger.kernel.org
-Subject: [PATCH net v2 2/2] veth: fix skb length accounting after XDP frag adjustment
-Date: Thu, 30 Jul 2026 20:23:57 -0700
-Message-ID: <20260731032357.6114-3-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260731032357.6114-1-sun.jian.kdev@gmail.com>
-References: <20260731032357.6114-1-sun.jian.kdev@gmail.com>
+        d=1e100.net; s=20251104; t=1785471815; x=1786076615;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YEF63KKv4BGb0adjwnJYNRW696B86fut4j/pm9Gf2gc=;
+        b=U/nqiJGRFochbSRQhkVi0QHgO9I4twCZ18PCCBTeatJdJEL62x3Lo/XDYFJBgq0v11
+         1zRW+MUFsgb08UfGK3PiPwVOHrG8hqh6cB33woq7CMvJMy9vvCW/O3x132NMPws66Hxn
+         WSPMVdstvGTYHHmNv4xhNvctIsI6oETsRxLVwJQluyuEnBrZYvbX8EduGikNMYjrliOI
+         uLGlDW0Qk8PUAffIeZUNsy83cGiQF6zbyYNbz7njEl5BaO+H7cL1JJyrBWcupUSDb7bM
+         tPxsdRKWLnM30vpQfZdLuU8wYOu+DmuIs5lL8fu2LnzVxSR81riNSA4dxU01M6IgsExn
+         lrxQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqaT3blz8gK4iifbH4GIQhj1aLqGODIX2ItZUOOw/qlpkGBHiekUKuengQSAT5xbd8sVSY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyckQiOxVcyiYD0RiUywGD1CjIvcFv4OjtFtEKj+bmm8WwC6BK
+	xQe+kVEzuzZoqTAZjy+tv8ZotDlvYekOTITRdfRTcOICV2FrKfzTiDElhwWhy4hxiZQcUqzkE/8
+	5vhLcJzgsNMrLWOcankxVZFccRNMflSsX5XLD36aVN7A=
+X-Gm-Gg: AR+sD13exc3AORkD3Cb5/64meExkBst/eRFLRsk+RBIljYnf2+nRWyuKwEO7wGxM5mI
+	f1Ix4RzG+9Iw+LRJcVlypt4C5f194p+fB9aAXLmuNG49VOWOnjMwuSXIR3iuWxxkN5VGg7YAVHi
+	PrdJ2VSRNdQBN74u6HbPd24CwsZ37OST3WgsNb+8B8PSLUqEhh3mcvp2hFiaA2dO/PWQz8lIOC4
+	+UPLC3keweq1pgG0BacUHLSjBFthjBTZP0lP0FQPWiYE/DGmICbcBaoRgjNmoa4tF4Pqq3+rX0L
+	7BOPyOw0/TKyXEc/hlUa9P51iihRICl93EfFpIKCRC8=
+X-Received: by 2002:a05:6512:3b8b:b0:5b2:a75f:8a6 with SMTP id
+ 2adb3069b0e04-5b2e1fe41a6mr126120e87.29.1785471814675; Thu, 30 Jul 2026
+ 21:23:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260730153832.11238-1-zihanx@nebusec.ai> <amvaYrq3bpuT5sqQ@devvm7509.cco0.facebook.com>
+In-Reply-To: <amvaYrq3bpuT5sqQ@devvm7509.cco0.facebook.com>
+From: zihan xi <zihanx@nebusec.ai>
+Date: Fri, 31 Jul 2026 12:23:18 +0800
+X-Gm-Features: AUfX_myoVJBFE4xAA7RCHkS5VXGuAzSaWkESMT-Rr-o36wq7xz9sbNUMDv0bnDU
+Message-ID: <CAANe3eRzp3v=+LE+UOtpYpTEpQYvTp5gFRhjZVkx5jqSNuPk5Q@mail.gmail.com>
+Subject: Re: [PATCH net v2 0/1] xsk: fix unaccounted ring allocations causing
+ memory exhaustion
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
+	maciej.fijalkowski@intel.com, sdf@fomichev.me, davem@davemloft.net, 
+	edumazet@google.com, pabeni@redhat.com, horms@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
+	vega@nebusec.ai
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-veth exposes non-linear skb fragments through an xdp_buff. If an XDP
-program adjusts the fragment area, veth_xdp_rcv_skb() copies
-xdp_frags_size back to skb->data_len but leaves skb->len containing the
-old fragment contribution.
+On Fri, Jul 31, 2026 at 7:19=E2=80=AFAM Stanislav Fomichev <sdf.kernel@gmai=
+l.com> wrote:
+>
+> On 07/30, Zihan Xi wrote:
+> > Hi Linux kernel maintainers,
+> >
+> > We found and validated a issue in net/xdp/xsk_queue.c. The bug is reach=
+able by a
+> > non-root user via user and net namespace.
+> > We've tested it, and it should not affect any other functionality.
+> >
+> > We will provide detailed information about the bug
+> > in this email, along with a PoC to trigger it.
+> >
+> > ---- details below ----
+> >
+> > Bug details:
+> >
+> > AF_XDP lets user space allocate RX, TX, UMEM fill and UMEM completion
+> > rings with setsockopt() and mmap them into the process. The shared
+> > xskq_create() helper allocates the ring backing memory, but unlike UMEM
+> > registration it does not account those pages against RLIMIT_MEMLOCK /
+> > user->locked_vm.
+> >
+> > As a result, a process with CAP_NET_RAW in a user and network namespace
+> > can request very large rings and pin a large amount of kernel memory
+> > before bind or any packet I/O. In our original report the resulting OOM
+> > ended in a panic because that guest had panic_on_oom enabled. The panic
+> > was only the environment-specific end result; the bug itself is the
+> > missing resource boundary that lets ring allocations consume excessive
+> > memory in the first place.
+> >
+> > The first version tried to bound these allocations with sysctl_optmem_m=
+ax,
+> > but that was the wrong resource model. We also evaluated a memcg-accoun=
+ted
+> > vmalloc path as suggested,
+>
+> [..]
+>
+> > but memcg attribution by itself did not impose
+> > a default enforcement boundary in our validation setup.
+>
+> Can you expand on this? Maybe we don't pass some GFP_ACCOUNT flag or
+> something?
+>
+> > AF_XDP already
+> > uses RLIMIT_MEMLOCK / user->locked_vm to bound pinned UMEM pages, and t=
+he
+> > ring pages are likewise user-controlled, mmapable and long-lived. This
+> > version therefore accounts AF_XDP ring allocations with the existing
+> > mm_account_pinned_pages() helper and unaccounts them when the queue is
+> > destroyed, so ring memory is constrained by the same default limit mode=
+l
+> > already used for AF_XDP UMEM pages.
+>
+> We get RLIMIT_MEMLOCK just because the users do mmap(), nothing af_xdp
+> specific. Idk, manually doing accounting seems a bit wrong, memcg/kmem se=
+ems
+> like the way to go. (also, panic on oom also still seems wrong)
 
-After a fragment shrink, this makes skb_headlen() larger than the actual
-linear area. In the reproduced UDP receive path, __skb_datagram_iter()
-copied 1024 bytes past the actual linear tail to userspace, starting at
-struct skb_shared_info. The copied bytes included the affected skb's
-nr_frags, xdp_frags_size and a kernel pointer from
-skb_shinfo(skb)->frags[0]. Real packet data was displaced by the same
-amount and truncated at the end.
+Hi Stanislav,
 
-Subtract the old data_len before replacing it and add the new data_len
-afterwards, keeping skb->len and skb->data_len synchronized.
+Thanks, this is helpful.
 
-The fragment accounting must run before the linear tail adjustment:
-when bpf_xdp_adjust_tail() shrinks the packet into the linear area it
-releases all fragments, and __skb_put() requires skb->data_len == 0
-by that point.
+For the memcg experiment, it was not a case of missing GFP_ACCOUNT.
 
-A 60000-byte UDP datagram on a veth pair with MTU 64000 was shortened by
-1024 bytes from its fragment area. Before the fix, all 10 runs produced
-corrupted payloads. After the fix, all 10 runs matched the expected
-payload exactly.
+I changed the AF_XDP ring allocation path in xskq_create() to use an
+accounted VM_USERMAP vmalloc path, and the local repro logs showed that
+the allocation did in fact reach __vmalloc_node_range_noprof() with
+GFP_KERNEL_ACCOUNT set.
 
-Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accept non-linear skb")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/bpf/al9T9Eto%2FhRIzP5W@boxer/
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- drivers/net/veth.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+The relevant serial log lines from the memcg-accounted prototype were:
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 00e34afd858e..348391e87e14 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -865,18 +865,25 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
- 
- 	skb_reset_mac_header(skb);
- 
--	/* check if bpf_xdp_adjust_tail was used */
--	off = xdp->data_end - orig_data_end;
--	if (off != 0)
--		__skb_put(skb, off); /* positive on grow, negative on shrink */
--
- 	/* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
--	 * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
-+	 * (e.g. bpf_xdp_adjust_tail). Remove the old fragment contribution
-+	 * from skb->len before updating data_len, then add the new one back.
-+	 * This must precede the linear tail adjustment below: a changed
-+	 * data_end implies that no fragments remain, and __skb_put() requires
-+	 * a linear skb.
- 	 */
--	if (xdp_buff_has_frags(xdp))
-+	skb->len -= skb->data_len;
-+	if (xdp_buff_has_frags(xdp)) {
- 		skb->data_len = skb_shinfo(skb)->xdp_frags_size;
--	else
-+		skb->len += skb->data_len;
-+	} else {
- 		skb->data_len = 0;
-+	}
-+
-+	/* check if bpf_xdp_adjust_tail was used */
-+	off = xdp->data_end - orig_data_end;
-+	if (off != 0)
-+		__skb_put(skb, off); /* positive on grow, negative on shrink */
- 
- 	skb->protocol = eth_type_trans(skb, rq->dev);
- 
--- 
-2.43.0
+    poc invoked oom-killer:
+gfp_mask=3D0x402dc2(GFP_KERNEL_ACCOUNT|__GFP_HIGHMEM|__GFP_ZERO|__GFP_NOWAR=
+N),
+order=3D0, oom_score_adj=3D0
+     __vmalloc_node_range_noprof+0x2f7/0x8e0
+     ? xskq_create+0x23/0xf0
+     xskq_create+0xb8/0xf0
 
+and also:
+
+    oom-kill:constraint=3DCONSTRAINT_NONE,nodemask=3D(null),cpuset=3D/,mems=
+_allowed=3D0
+
+So what I was trying to describe was not that memcg accounting was
+missing or broken. In the validation setup, the task was running without
+an effective memcg limit, so adding GFP_KERNEL_ACCOUNT changed
+attribution, but did not create an effective enforcement boundary there.
+The ring allocation was still only constrained by global memory pressure
+in that environment.
+
+I agree with your point that panic_on_oom only affected the final
+observable outcome. The panic itself was not the core issue; it just
+made the memory exhaustion easier to observe.
+
+I also understand your concern that charging these allocations to
+RLIMIT_MEMLOCK / locked_vm is probably the wrong direction if the
+intended ownership model for this memory is memcg/kmem rather than a
+separate AF_XDP-side accounting model.
+
+Given that, I will stop pursuing the RLIMIT_MEMLOCK approach for now
+and re-evaluate whether there is a memcg-native way to address this, or
+whether this is better treated as something that should be handled by
+cgroup policy.
+
+Thanks,
+Zihan
