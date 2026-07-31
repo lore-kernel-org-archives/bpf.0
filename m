@@ -1,169 +1,228 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A79369D74
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 22:23:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785536595; cv=pass; b=ownlhCmyXcvLD3BHDozsN/aQbnlTa3WwLMNDptTvjCAt3cPRw52VP6CHMcT5YX2wiUSu1ZiRRnwJcbnHjvvO83oerY+6OayRjuiJYUhMo810eVkIQCLMc0KclSegg2r+omVAQo0YNAvoJiQ3UtR0BoDPKs5xUs0Zg/A1kPghZ9E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785536595; c=relaxed/simple;
-	bh=WWC//Uy5P2vJL7f4I2irNaI5LhMsKvWd5AiC4Vo3R54=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WETIkY3hlxAH1pTrkBqB4dMY7Mr6wRJUzTGHYlx8Bl7BDy+4Ph8bh960sRZrLQ/f9jawfjHulPMnJtafYlctTnTPc1e7oP6ZdgkK1SYGQj3r+C/TwTVcv8jqzg15ZuCG1p0um4uZhxlsg5eF+mUanEhFhnVBkhNTDEPhYJfuWfo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=azYAMVWj; arc=pass smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D871799F;
+	Fri, 31 Jul 2026 22:24:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785536647; cv=none; b=Z5I71eVA1qMKO7jyb2b2gJiQoX4SvcSJzrDiTlHjwBgzENpP0tiqZ73WWkehnlrek/JE7uPjyXsbQyrs79SGw+pr6dBl/TWGbOjSaXXfP5zE5YWmNNJslxrj0d3fpCpNJpwJNvXOWcMqXb+76ZbHYPJTX2XN/fEPxOQJUolgni4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785536647; c=relaxed/simple;
+	bh=pZlDBW6wFmBMfiD7gvv+9wWnzXa9gTqOU3IgdZHxurI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=tFpQMGaHaq3m1ctv3Zhen2TmMlnMuwRJBQGsAu+pK03jScW1ijHv4lYyhcGtjwtskhCsEK6Cyl1HHkJTPuxHHCbtP2bFIZAwpEnkqoI0fKQ7y4rximpP2RQEL/GPEbYobo3e1WRFQ68D+p5qiFTY/v2/NXoRruns1JXf7GDOMmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PaEQg0g/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="azYAMVWj"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-84862b0d5aeso1949871b3a.2
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 15:23:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785536593; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ZYbFZxxIa9R3hYjeCrTq7N0BpZlPLsLNcDhALv4LPmo/C6GP/OFIUczKUmDVCTeR9q
-         tFtCxli/CLlabDWXkkeEqrDH1zbxhqXy3Q5ggPeeAfmH38ocbOj/F4hpEw/QQOEj5u24
-         P432lGxWDZWDrs7K359W6T43F1YZVqnfFGJWZRKTUmPH6AXCqDwWICkNBV1RqNNU+UfV
-         LHRFteQhOVZZVhQZlUD+rXymnSWIxlhYTBfI5kAfaqHg/fBtSxcVlsEFeRP8TVO3dED/
-         91HVVRhgiRB1psDc8UU6IaB35kOu40xnXUXFC/4oc7rstiXGJd3jbV+lWf2VV/jRPC1+
-         r5gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=WWC//Uy5P2vJL7f4I2irNaI5LhMsKvWd5AiC4Vo3R54=;
-        fh=Zeq+yFfkNmx059GTIf9yfqUhnQOyQPd4dqPQ/DssTCs=;
-        b=XRnMLuDuJxQDjVJN83yCNMQrtseYv+Mh37utEeetL/YN+l/E/ZY/3hO/lAELB4XL68
-         Zhst72BIrz5xKt+RlItudIvNnxfGQifPk7HpdrWLxm10oc5XysEXdGakM8geLT9DQinL
-         +xrB1wCx+U03zNhNbh5lbGcKiMhy1hVApn5SJEJbxeBOPYjkZycrR0/4LPtpuqNZVfXJ
-         ECGGUhaOnGmW2BMUlD5BO44PpFci0eZicula6wQkuyWgy+KsWSqUwAtQUcjhIskpyNl+
-         e9pQjyDPyvO5xM1NLGsRjTNwrfIuIy1D4vTXABBdLdzm7y84rCjWtxxH4RU7v2pS1ZpS
-         WxRg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1785536593; x=1786141393; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=WWC//Uy5P2vJL7f4I2irNaI5LhMsKvWd5AiC4Vo3R54=;
-        b=azYAMVWjhYdwMzeWcI05q+xknmIUABIj20r9StipuVxCW9z+9th7XSxJqAvVXfLmGe
-         kwiyItVFAYt+/ueem29u5RRBWGKKVb/wEmoj2QlgXoncZDuBe7sHY2+mO9KYLJQkzMyP
-         eZzNV/8pcDHq3R1KiUYE5q4288oLsAtCZCxriuDmXBAyNDhifmb+sHXOEmyYaL22lye2
-         BMRteaBReo5RF62tMgo4B/Fz0XbfFvMDQqUJBYYrxNMBbIc0v5bNJQh42DHKyBp4+gev
-         EPWOPkGDeGFMIo+IqbnsjD4/JzZJmej3g8N9b4AvPsvs9jJVId27rbMrogTfmo7xAwdr
-         2akQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785536593; x=1786141393;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WWC//Uy5P2vJL7f4I2irNaI5LhMsKvWd5AiC4Vo3R54=;
-        b=fnxBcUw5RsV7CtMMkvA4oUboTRUe1zqVcsQbcWyJ9RsaXKlm/IUciQQF1b1i9mM+ob
-         gBWQQPH92Arn1x6k8TR17wkGs4mk2E7WhyaB5k+rA7Bl+RWDhev845xy4A9cwFbidfEG
-         mhpHtZfGsWkdXyL6iRwFTbk1U7OAYHU6PIT8leEatF2LIFPcIsHQFvZnr3vFoXkd6N2K
-         /pHghQfPFU/T5Kq7lem1u8O01EAX+RZG4xhi8iGKLnGt4toBFGzzNOu4xRdPjLC7c0WV
-         /QwYeHDLs8/p+gMYSQktJ+A3ATWsaZsFRMxdvn2lJUgHbD5te4nvvpVyQmWR8DPEwSuq
-         /YmA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqlm4KIwuNvhj6YBmrsxBzgvK56P4NHxwe6BgiaFl2LPILqrbg7viEYOY9Z8uuzv43XA30=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyht+oJg+uF7ROSrS7sCc6uAuMFXL0Kr9AyGfLrdVMV9q41nJ/f
-	eHgwcDhbO+wEP5oBfDLCFjWCDfYUe0ZrdY/gRkfwdkskteQzlW6/BBzDHmIGMTSlDpZNpLyeOwU
-	ryZ22T2ADBFDK+RpzVCSY8yRv/6+SXSAo7JmcG2ow
-X-Gm-Gg: AR+sD13XGiCtJ6d3yp87wqsDr+Ot2y2bs966EunrmgAoj3xqoxRB2aKR7OvFz5qvtlb
-	EMm0+RdrViJL9seO406a449Bi/vOYmYYSCoUW2PlsSuPTYT3UfnscyS6JftyqB37ggnIGAztUi6
-	3jJmoJ7SE9YS4K4MbrvYBdAQal3f/Zg08fJwwZOtvj4PvEGsykdboHsXFU+zmimGMSpdUjMqCk1
-	9wUoLxz9X3SEf+ioWiXJlTqTmIlBYwfeE/AMCjlBdRTa4o912PUh+Qu8vo6Fy/hgnY3bsfljTiC
-	7TOhB+u2aeNZsLOMviT97ixudhu989QfwrG4R+XN4xyi
-X-Received: by 2002:a05:6a20:e20f:b0:3c3:c3fb:2473 with SMTP id
- adf61e73a8af0-3c92a53cb12mr1339830637.20.1785536593141; Fri, 31 Jul 2026
- 15:23:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PaEQg0g/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 938D11F00AC4;
+	Fri, 31 Jul 2026 22:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785536645;
+	bh=Uo/MlC3YOMWoUPCUcPdIAEmndEKoNUaoCcxG1B29CzM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=PaEQg0g/7nzGdaHF7IK/MLSyJ2o3cA+FjIF+4sRrBCHZdpAGf1zzieJdYkXk1YrQf
+	 lVUDeTBZVrOx8tUFBnNIta5B3TXOWUnJtDbK+ym42/VEnLwD2nxz9EEoazjk9bo5Fm
+	 hI5hQOBPtxE2HtfTLjS5z0a8F/JEG+6EjJFfVwjDobLI1pHIm3ncMpDF4+pcoehTEg
+	 I/QWMatYCAttxkgZYKW9MKUpnQOzVox3WD56AGy9gdzyE/1r3Ttlsq3qgZsmlSNI29
+	 xomjMBYNsQOeFm6w5Mnf5wg11GLMY1THEetYjTmLV9jjsp1IQgtq/scMCAnYq2qXxQ
+	 UexdvsD9EqUxw==
+Content-Type: multipart/mixed; boundary="===============8898737113916352117=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com> <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
- <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
- <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
- <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
- <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com> <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
- <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com> <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
- <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com> <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
- <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com> <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
- <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com> <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
- <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com> <CAHC9VhQ24fp7_sy1=NiWkfzPLSM35ugSCOKDKxnm6H9W-pDa6Q@mail.gmail.com>
- <DKD2R5268G2C.TPLR4XMTZ91R@gmail.com> <CAHC9VhQNozNGH4o=8D6wxks4deZ2eVOHmxFK=fvjhkCC0JSCkw@mail.gmail.com>
- <DKD3I17NPS96.3G49BTZ4ZVUVV@gmail.com>
-In-Reply-To: <DKD3I17NPS96.3G49BTZ4ZVUVV@gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 31 Jul 2026 18:23:01 -0400
-X-Gm-Features: AUfX_myDvAP-mn0LUSqkiSdO37b1-jlQ3lFWXPwWxDYV3yXxAuKFWzBHOxeX2Yo
-Message-ID: <CAHC9VhQmb=v3-T5HZUzfr_me6S7bo6sX0Vs4nDFQZnMe+SQOMQ@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <ea9b8de8b22eb98e115d87edf25dbf6793b5b00aadc9cb62ca09402e689545d8@mail.kernel.org>
+In-Reply-To: <20260731022047.189137-6-utilityemal77@gmail.com>
+References: <20260731022047.189137-6-utilityemal77@gmail.com>
+Subject: Re: [PATCH bpf-next 05/13] landlock: Factor the credential restriction out of landlock_restrict_self()
+From: bot+bpf-ci@kernel.org
+To: utilityemal77@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,kpsingh@kernel.org,paul@paul-moore.com,mic@digikod.net,viro@zeniv.linux.org.uk,brauner@kernel.org,kees@kernel.org
+Cc: gnoack@google.com,jack@suse.cz,song@kernel.org,yonghong.song@linux.dev,martin.lau@linux.dev,m@maowtm.org,bpf@vger.kernel.org,linux-security-module@vger.kernel.org,linux-kernel@vger.kernel.org,utilityemal77@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 31 Jul 2026 22:24:04 +0000 (UTC)
 
-On Fri, Jul 31, 2026 at 6:04=E2=80=AFPM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
-> On Fri Jul 31, 2026 at 11:49 PM CEST, Paul Moore wrote:
-> > On Fri, Jul 31, 2026 at 5:29=E2=80=AFPM Kumar Kartikeya Dwivedi
-> > <memxor@gmail.com> wrote:
-> >> On Fri Jul 31, 2026 at 10:48 PM CEST, Paul Moore wrote:
-> >> > On Fri, Jul 31, 2026 at 4:16=E2=80=AFPM Kumar Kartikeya Dwivedi
-> >> > <memxor@gmail.com> wrote:
-> >> >> On Fri Jul 31, 2026 at 10:01 PM CEST, Paul Moore wrote:
-> >> >> > On Fri, Jul 31, 2026 at 3:20=E2=80=AFPM Kumar Kartikeya Dwivedi
-> >> >> > <memxor@gmail.com> wrote:
-> >> >> >> On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
-> >> >> >> > On Fri, Jul 31, 2026 at 2:50=E2=80=AFPM Kumar Kartikeya Dwived=
-i
-> >> >> >> > <memxor@gmail.com> wrote:
-> >> >> >> >> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
-> >> >> >> >> > On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartikeya Dwi=
-vedi
-> >> >> >> >> > <memxor@gmail.com> wrote:
-> >> >> >> >> >> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
-> >> >> >> >> >> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kartikeya=
- Dwivedi
-> >> >> >> >> >> > <memxor@gmail.com> wrote:
-> >> >> >> >> >> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
-> >> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartik=
-eya Dwivedi
-> >> >> >> >> >> >> > <memxor@gmail.com> wrote:
-> >> >> >> >> >> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor w=
-rote:
-> >> >> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moor=
-e <paul@paul-moore.com> wrote:
+--===============8898737113916352117==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-...
+> diff --git a/security/landlock/cred.c b/security/landlock/cred.c
+> index cc419de75cd6b..13b3952c31c57 100644
+> --- a/security/landlock/cred.c
+> +++ b/security/landlock/cred.c
 
-> As a consequence, everyone suffers because they first need to satisfy you=
-r whims
-> on how all code and kfuncs written thus far are wrong, and need to be mov=
-ed
-> around ASAP, including the one being proposed.
+[ ... ]
 
-That's not a reasonble or truthful summary of things, I've only
-requested that David locate his proposed kfunc in
-security/bpf_lsm_kfuncs.c, I never suggested he move any others.
+> @@ -8,14 +8,114 @@
+>   */
+>
+>  #include <linux/binfmts.h>
+> +#include <linux/bits.h>
+>  #include <linux/cred.h>
+> +#include <linux/err.h>
+> +#include <linux/errno.h>
+>  #include <linux/lsm_hooks.h>
+> +#include <uapi/linux/landlock.h>
+>
+>  #include "common.h"
+>  #include "cred.h"
+> +#include "domain.h"
+>  #include "ruleset.h"
+>  #include "setup.h"
 
---=20
-paul-moore.com
+[ ... ]
+
+> +int landlock_prepare_restriction(
+> +	const struct landlock_cred_security *const llcred,
+> +	struct landlock_ruleset *const ruleset, const u32 flags,
+> +	struct landlock_restriction *const restriction)
+> +{
+> +#ifdef CONFIG_AUDIT
+> +	/* Translates "off" and "on" flags to booleans. */
+> +	const bool log_same_exec =
+> +		!(flags & LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF);
+> +	const bool log_new_exec =
+> +		!!(flags & LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON);
+> +	const bool log_subdomains =
+> +		!(flags & LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF);
+> +	const bool prev_log_subdomains = !llcred->log_subdomains_off;
+> +#endif /* CONFIG_AUDIT */
+> +
+> +	*restriction = (struct landlock_restriction){};
+> +
+> +#ifdef CONFIG_AUDIT
+> +	restriction->log_subdomains_off = !prev_log_subdomains ||
+> +					  !log_subdomains;
+> +#endif /* CONFIG_AUDIT */
+> +
+> +	if (!ruleset)
+> +		return 0;
+> +
+> +	restriction->domain = landlock_merge_ruleset(llcred->domain, ruleset);
+> +	if (IS_ERR(restriction->domain)) {
+> +		const int err = PTR_ERR(restriction->domain);
+> +
+> +		restriction->domain = NULL;
+> +		return err;
+> +	}
+> +
+> +#ifdef CONFIG_AUDIT
+> +	restriction->domain->hierarchy->log_same_exec = log_same_exec;
+> +	restriction->domain->hierarchy->log_new_exec = log_new_exec;
+> +	if ((!log_same_exec && !log_new_exec) || !prev_log_subdomains)
+> +		restriction->domain->hierarchy->log_status =
+> +			LANDLOCK_LOG_DISABLED;
+> +#endif /* CONFIG_AUDIT */
+> +
+> +	return 0;
+> +}
+
+This isn't a bug, but would keeping the merged domain in a local (as the
+pre-refactor new_dom did) and only storing it into restriction->domain on
+success read a bit closer to the surrounding landlock code, and let the
+explicit NULL reset go away?
+
+The merged domain is only ever referred to through restriction->domain:
+five uses in the error handling and three restriction->domain->hierarchy->...
+chains for the audit configuration. The code this was factored out of used
+a local for exactly this (struct landlock_ruleset *const new_dom =
+landlock_merge_ruleset(...), then new_dom->hierarchy->log_same_exec = ...),
+and the neighbouring landlock code consistently uses that shape (e.g.
+security/landlock/syscalls.c: ruleset = landlock_get_ruleset_from_fd(...);
+if (IS_ERR(ruleset)) return PTR_ERR(ruleset);).
+
+A local struct landlock_ruleset *domain assigned to restriction->domain on
+success would also fold the explicit restriction->domain = NULL; reset away,
+since restriction is already zeroed by the *restriction = (struct
+landlock_restriction){}; above.
+
+> diff --git a/security/landlock/cred.h b/security/landlock/cred.h
+> index f287c56b5fd4b..1d5039b46ce7a 100644
+> --- a/security/landlock/cred.h
+> +++ b/security/landlock/cred.h
+> @@ -20,6 +20,31 @@
+>  #include "ruleset.h"
+>  #include "setup.h"
+>
+> +/**
+> + * struct landlock_restriction - Computed credential restriction
+> + *
+> + * The result of landlock_prepare_restriction(): the new state that
+> + * enforcing a ruleset with a set of landlock_restrict_self(2) flags
+> + * gives to a credential, decoupled from its application.  It is
+> + * enforced with landlock_apply_restriction(), either right away
+> + * (landlock_restrict_self(2)) or after a staging period (restriction
+> + * of an execution).
+> + */
+> +struct landlock_restriction {
+> +	/**
+> +	 * @domain: New domain to enforce, owning a reference.  NULL if the
+> +	 * restriction only carries a log configuration change.
+> +	 */
+> +	struct landlock_ruleset *domain;
+> +#ifdef CONFIG_AUDIT
+> +	/**
+> +	 * @log_subdomains_off: New value of the credentials'
+> +	 * @landlock_cred_security.log_subdomains_off.
+> +	 */
+> +	u8 log_subdomains_off : 1;
+> +#endif /* CONFIG_AUDIT */
+> +};
+
+This isn't a bug, but would &landlock_cred_security.log_subdomains_off
+work better here, so the rendered docs link to the other struct the way
+ruleset.h does for &landlock_ruleset.root_inode?
+
+The member description cross-references another struct's member with
+@landlock_cred_security.log_subdomains_off. Per
+Documentation/doc-guide/kernel-doc.rst, @parameter is for members of the
+struct being documented (formatting only, no cross-referencing), while a
+member of a different struct is written &struct_name.member to generate an
+actual cross-reference.
+
+cred.h is pulled into the rendered docs by
+Documentation/security/landlock.rst (.. kernel-doc::
+security/landlock/cred.h), so the reference renders as plain bold text
+instead of a link to struct landlock_cred_security. The surrounding
+subsystem already uses the & form for this, e.g.
+security/landlock/ruleset.h:71 (Type of &landlock_ruleset.root_inode's node
+keys).
+
+> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+> index 9af2407274b25..899601af7c4e1 100644
+> --- a/security/landlock/syscalls.c
+> +++ b/security/landlock/syscalls.c
+
+This isn't a bug, but since this hunk drops the last BIT() and
+hierarchy/LANDLOCK_LOG_* users in this file, could <linux/bitops.h> and
+"domain.h" be dropped from syscalls.c too, mirroring the includes added to
+cred.c?
+
+Moving the domain merge and audit-log configuration into cred.c removes the
+last users of two includes in syscalls.c, but both includes stay.
+<linux/bitops.h> (earlier in the file) was needed only for the
+BIT(new_dom->num_layers - 1) in the deleted domain_exec update, and
+"domain.h" only for LANDLOCK_LOG_DISABLED and the
+new_dom->hierarchy->log_* stores.
+
+Grepping the post-patch file for every symbol either header declares
+(BIT/GENMASK/hweight/fls/test_bit/set_bit/... and LANDLOCK_LOG_*,
+landlock_hierarchy, landlock_details, landlock_init_hierarchy_log,
+landlock_get_hierarchy, landlock_put_hierarchy, LANDLOCK_PATH_MAX_SIZE)
+returns no hits.
+
+cred.c correctly gains <linux/bits.h> and "domain.h" in the same commit,
+so the dependency moved rather than disappeared. Note <linux/compiler_types.h>
+is still needed (__always_inline at line 66) even though the
+__maybe_unused user went away.
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30599733854
+--===============8898737113916352117==--
