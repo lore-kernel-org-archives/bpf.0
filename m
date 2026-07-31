@@ -1,178 +1,182 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E5444AB62
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 16:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33634519B9
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 16:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785514470; cv=none; b=Nb7rPLQR7N6VYKOyccgyU/lFTSrIyZcrYHtRndb5DactRFV3+gxosgmoOpXwbOragv5pRjLkLm7dgdxB9Y/Zs5phihkHgdf6nx6JgIswgEnq6aXbu5w6GFsMJD2TVvUN5sx/vCsCUeQ1Ax7+C2h+f/ZV0WkSxZUStfwapLiwtCU=
+	t=1785515538; cv=none; b=WWuFh5mo20deQ2NIXcuQlbzduTlP8PPquzS8iHQRyQAE+pRxSDFLKL2pKSCuLt9JNd6ERVISVPhA+x3BjUDcdZ+pfHKzok2Y6oR241za7Hf1LGqawmegAZTranmg0daw+mqCfoPD+Z1Yp9A/hEH7S0QwsD2hXx7YB569eiUjTXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785514470; c=relaxed/simple;
-	bh=5JOON6ugIR1d0E8GVuOUtOJ3ZKqEXg05GE7/ZQCPswQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rk7xoEXgxq9C7Z1bQECk0rFCezM0x7tgHzo/xhBHR4xH9jqysaNdoYCXs6GM147eEIsQ88dLM0xM+VArUPiT2+8wq83S6xJ+r/7oKuSp9Ew66V6MhkXenkUi3hPbuCf8LLHgruCl81QFf/Hk6BuP25UH0tk7hOTKmPC1KcdWUmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mQSwsN4j; arc=none smtp.client-ip=209.85.210.174
+	s=arc-20240116; t=1785515538; c=relaxed/simple;
+	bh=9HFGiNNNAUH+NXm19RvmGJwmOISH+nDndQe11ccbYuw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=hqgkxrY65h7W6UF+FpcQvK+RCsIMTls9jhxmGHU9fR1S9YvM5+gwJefAfdF2kHk4Mt2k1hISKArtrNWIVty+0Pvyqe4hTi4UOSe4+oXZjIGYhbI8Re2Fo+gq0iOtPrpssffJ8BFMs4Ap2AIxpHFyEv94gsG1YqIfzJTlXw9K/Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yq2ri5FP; arc=none smtp.client-ip=74.125.225.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQSwsN4j"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-848595b338cso1512049b3a.0
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 09:14:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yq2ri5FP"
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-4700bd8aed1so47087f8f.1
+        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 09:32:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785514457; x=1786119257; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ARP06WocnAfqnx38wlDxcCLXWFVWx/Pmv/oo2KGc88Y=;
-        b=mQSwsN4j+iPqK1SZXszssvWrdmhQznA/7W3S9fp8U4Hry/ph2QHPOG7UXwrxbjWM/M
-         zG/oG9FoFwmvvrC2lcwEclq5o0d4+S6fAkb6uvlHHS231qRdi2GLz1vQVs6erN8SNPPP
-         OvXM+nKv1SkISqIlARlEpKCxmuiEP/3OoGZIk7IeSUNR+aHmODDwaIv6K2PGBMIJFiq5
-         ALvxLtAmGe4jKnLSwMsRUsZ40vgDHgkP0uZDrQNvWkn7+kBHe8q2rvAwufm9SVz3qIqU
-         7PyMMgJpegkbscWILnXQUi+9pOTA2AQ8x9tYRHRmAg7SHuBLLYpBb+gBVrlecc8PzwEi
-         F5ZA==
+        d=gmail.com; s=20251104; t=1785515534; x=1786120334; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=aUmR71V4eGCOh/F9b0SbwQJJGIMeqY66EO2STeKizkI=;
+        b=Yq2ri5FPbQJ1F4uB/eXjU4yL6HWzrOTKf9c4Xq+kZsfcpu/XGsIrybdMN3YrtEJTKj
+         goum9m7pj2R3M8ivlQ+VDMbDwl0OzIB3a1qavcLW97XEHUsv5K4woOUpGv/iSOuygqhh
+         xhhGtT1l3wudfOMd/gYJYeox1zanwTegbFoe9CDDbokmy5HkjZVDv5+HMu8OXQwxtkVM
+         VY7jxXSHg8kyEVizv7FOJfqgtA9IwI6Af3RuOXdG5pt2WLXvkUcWKchb0Al2Ogs3QLvb
+         g/0tL/nwbmvLoQ+6/ao19dheXt0N4EVK6p57+Qmg9JDSjKXQeirDl1nnuiiYVF71e7db
+         p4pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785514457; x=1786119257;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ARP06WocnAfqnx38wlDxcCLXWFVWx/Pmv/oo2KGc88Y=;
-        b=XatNsz1bfMJj7TOAFvdIgqKWyksE52s1FyZDCjZzMNktofpk13QJcwf1loJRdMXeSE
-         u6krXkJ9EKcpqdMxny14Uw2X88ZGN6ptNy3UrEZd9LryABT5f+iDBDd2KQKSElr1V/OL
-         nWvfN5XGXzRAlWTjEue4bmUtz9aJWTiEq8r4/ipBJ+KFrTH19W6BUy2aO8e0dKG/9tYr
-         vNxn1CpqKGh1tRhlH7/FMnxQ/g04wWSyxBGRl8Zp/N+ga4DGHnjSCKs8BGOTjRDedvJc
-         BOlU0cqXwN9MwFQ8IzJeUu9AzMKJUgyrmr/xaVdQ/XJVNq5CtKANPNaxONz+xzBYuKVj
-         vraA==
-X-Forwarded-Encrypted: i=1; AHgh+RqbnLGUg9z6G7It4JjyX3cNNUopzv61r8bwaD05XjQiFQ2vHXkQnk0ICvuU16DRQWZN+MU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUwB73v3qTqi0kin/Vk3WVIG11gZAIKrFsfqsp+8VDO+HdfSqX
-	OYbaPCkjON36ByZYNK9yhTVHZ/nylHB9PuS9LJiFivztkR84ey47V+wx
-X-Gm-Gg: AR+sD10Fy4ZvjkNCNq6ukoz+zKWjCc/RrKcriaa13dR9i4NV0jaZLdyK5nvcywM0DPT
-	a9vbGPhliJ0Uz4b46T2oXpUlKs7CFj+5BiAXM29Ap5JjxBvHrNMPe/nt40HilHc6BR3ma29w7Fd
-	fri6tGSYIJUQUEyi0qgD5dTyNflIbLYJyfhFkA1AD0mtrZDyVD4qzxg6iT3d41bAok8xg7JsTPI
-	9Hnj79qVYvYuMYoRaRt14NaXe31NfSnF7U7TkyYWf67ywfrKr9BbvLTzMRGi0r19XhUUrZao0NT
-	UXYltIeLgL+tRm2KYjqoDWdlUoxtO36eJblyqX31WZepP1WPhhYR1otpS61YT8JQJEJswmYsI6I
-	OZo2QixagZx12l0obMmwa5xXtDOyBSk0gdGQ6XOjwlRyESkA5zYTPKEeUvTF9Jz+ParmqjIgyRI
-	nsN8m6YOH14zkcUEZNPLpyz5eRHX0XbsGv0h8Ju1gJHfyp3oDJu7Qw20x2+xyGLHTkZ0QAq+ntf
-	KU/nxnAkS5yvasLpv/j9K7EwCZnmpxmtZKZzoMIz0szmm5hJAANu8aoR10=
-X-Received: by 2002:a05:6a21:330e:b0:3c4:3454:38a7 with SMTP id adf61e73a8af0-3c92a864157mr343544637.54.1785514457056;
-        Fri, 31 Jul 2026 09:14:17 -0700 (PDT)
-Received: from ?IPV6:2601:646:8f02:5350:ce4:701d:f6e3:3a6b? ([2601:646:8f02:5350:ce4:701d:f6e3:3a6b])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153e0700e8sm7237107eec.24.2026.07.31.09.14.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jul 2026 09:14:15 -0700 (PDT)
-Message-ID: <80687d9c-9c27-494c-b3f2-efd0230b1895@gmail.com>
-Date: Fri, 31 Jul 2026 09:14:13 -0700
+        d=1e100.net; s=20251104; t=1785515534; x=1786120334;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=aUmR71V4eGCOh/F9b0SbwQJJGIMeqY66EO2STeKizkI=;
+        b=TCa5HVyplz+GCO/chvgoC4QvHS8+cdeVC6MUSoa9KW5/NJfK59+5rM06x0B3IYiNzH
+         eS/2AsJA8xZONejbVUfVzx01y9KPZ+DajL1Y6+xc75RKUqMDyJYkzrj1k1z1irI8uJmF
+         aAWSK2HFwR7Fk+KMfU5HHBAU3okuI+OxP72yV9tPTaWLxPWvlKeGYkVT2LQPEP//XFlD
+         n5H6+AsNxXz0X20oxq5KZY/g3wAKFn0w+UwRBjUAQda/nrDZGa4OD9LepQC46DwelYsc
+         CWC/PyDo7GURUGwlKEvSt19yBrcJsTMe4LulCIUlPKfbQjVVzAo+Gmgh7T7RQfk4V/DK
+         fczQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rp09BUVgfYhpSTvC94l2BkgxQ4bMhbNIKt2k5eYX5uCpXnFe6X3LgiCTriv4WbEgyfUsgo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0YK+GfkjCFQKz7NJtPFfMfC/PlziXIsdlL/a0e1e2uPS97S3r
+	OKV6ql9mC7nIgSSKhREv1cWhKOT1hvWOb5BCeBCx4MS95KJyiCA1mf2U
+X-Gm-Gg: AR+sD11IWGAO5nnLMj8nnl5OJX5OF4Fcilk57Xu51wIZHx1hIP/ukwCQk6dihDf+4eb
+	SGQr5mXh9EPyvq/adFZcR2vHXk+fnZZ4SutP8WdyXXYjyiLonVXm/KDcDmHKjCuKsdpeSw1uvlv
+	MZsD+hffIkQT0MmboyALA10YqiyPRyJsxZPagbV5k2DgioupmIesdzaBqFJ9yRalCn2UrK9Cv7a
+	ywbo2ULRtJqQ9VKAu7zXr5qAHsV6siLeY5m5aKptGjAd119AMdkqSwtyju+7fckmxp2i0HbwvR/
+	EADo3VUen/KAS4HiCujN5tl+DIygvXGUSEk2orgqAnO7lq88/uTBqA8/xrFY1HIpuKeGDBG9CBg
+	m8H2snQCtCU6kp6DTXbBn7IEavpnyxS2/pL+xbdnNGqhp4w3PIcArn7kkbfnET4QHaWwNFuceOy
+	2Ygl9T7AtYNVxBeI9TaqgwRLr8Yccle/frMBQ/thFC5zKwHXdU7afP1xp/dVWxH0dvs4UV45vcw
+	IT5+JF9QWeh4sstEyb440F4jd8ySLv9kb4ytArr5AIEl0Fqynwun5H8e8LWTk3lKIQrHBZoshqs
+	qLNkEzmmNNh6wN2SuF7UwTbtyZc=
+X-Received: by 2002:a05:6000:481e:b0:47f:8cd3:4bed with SMTP id ffacd0b85a97d-47fd725b19fmr763298f8f.5.1785515534056;
+        Fri, 31 Jul 2026 09:32:14 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd41e296csm6524909f8f.12.2026.07.31.09.32.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2026 09:32:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2 2/2] veth: fix skb length accounting after XDP frag
- adjustment
-To: Sun Jian <sun.jian.kdev@gmail.com>, netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Kuniyuki Iwashima <kuniyu@google.com>,
- Hangbin Liu <liuhangbin@gmail.com>, Krishna Kumar <krikku@gmail.com>,
- Samiullah Khawaja <skhawaja@google.com>,
- Martin Karsten <mkarsten@uwaterloo.ca>, Lorenzo Bianconi
- <lorenzo@kernel.org>, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
- <toke@redhat.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- maciej.fijalkowski@intel.com, stable@vger.kernel.org
-References: <20260731032357.6114-1-sun.jian.kdev@gmail.com>
- <20260731032357.6114-3-sun.jian.kdev@gmail.com>
-Content-Language: en-US
-From: Mohsin Bashir <mohsin.bashr@gmail.com>
-In-Reply-To: <20260731032357.6114-3-sun.jian.kdev@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 31 Jul 2026 18:32:13 +0200
+Message-Id: <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com>
+Cc: "David Windsor" <dwindsor@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Matt
+ Bobrowski" <mattbobrowski@google.com>, "James Morris" <jmorris@namei.org>,
+ "Serge E . Hallyn" <serge@hallyn.com>, "Casey Schaufler"
+ <casey@schaufler-ca.com>, "Stephen Smalley"
+ <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
+ "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
+ <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
+ <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
+ Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+ <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Paul Moore" <paul@paul-moore.com>
+X-Mailer: aerc 0.21.0
+References: <20260730234533.1912709-1-dwindsor@gmail.com>
+ <20260730234533.1912709-4-dwindsor@gmail.com>
+ <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
+ <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
+ <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
+ <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
+ <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com>
+ <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
 
+On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
+> On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+>> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wrote:
+>> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moore <paul@paul-moore.c=
+om> wrote:
+>> >>
+>> >>
+>> >> Okay, it looks like there was some confusion/misunderstanding.
+>> >>
+>> >> My understanding of Kumar's comments was that he was referring to the
+>> >> exisiting LSM related kfuncs that are located in fs/bpf_fs_kfuncs.c,
+>> >> not necessarily the new kfunc you are proposing in this patchset.
+>> >> Kumar is welcome to correct either one or both of us, if we read that
+>> >> wrong :)
+>> >>
+>> >
+>> > Yes, after another reading, that does appear to be the case =3D).
+>> >
+>> > We'll need v7 anyway to fix the ocfs-related UAF the bot found.
+>> >
+>>
+>> Since there is confusion, let me clear it up.
+>>
+>> I meant it for all of them. I don't think it makes sense to keep this on=
+e in
+>> security/ when others are in fs/bpf_fs_kfuncs.c. That confusing limbo st=
+ate is
+>> worse than just placing it where others already are.
+>>
+>> As I already said, the discussion around whether all of them they should=
+ go in
+>> security/ is orthogonal and should be done separately; it isn't producti=
+ve to
+>> repeatedly bring it up in the context of this patch set.
+>>
+>> I honestly don't get the urgency; it will be a mechanical change if we n=
+eed to
+>> make such changes. The worst outcome would be stalling David's work over=
+ it.
+>>
+>> As for landing this stuff, we can let Paul take the patches touching sec=
+urity/
+>> and route the rest (3-4) through bpf-next after the merge window. We nee=
+d them
+>> to go through BPF CI anyway to ensure nothing breaks.
+>
+> Some existing LSM kfuncs are located in the wrong files.  I'm not
+> suggesting that David needs to fix the existing problems, but there is
+> no reason to keep making the same mistakes.  The new LSM kfunc must go
+> in security/bpf_lsm_kfuncs.c; if that isn't acceptable to the BPF
+> developers then David will need to find a new way that doesn't involve
+> kfuncs.
 
+What "mistakes"? Really? It's just code organization bureaucracy. Calling i=
+t a
+mistake is just blowing things out of proportion.
 
-On 7/30/26 8:23 PM, Sun Jian wrote:
-> veth exposes non-linear skb fragments through an xdp_buff. If an XDP
-> program adjusts the fragment area, veth_xdp_rcv_skb() copies
-> xdp_frags_size back to skb->data_len but leaves skb->len containing the
-> old fragment contribution.
-> 
-> After a fragment shrink, this makes skb_headlen() larger than the actual
-> linear area. In the reproduced UDP receive path, __skb_datagram_iter()
-> copied 1024 bytes past the actual linear tail to userspace, starting at
-> struct skb_shared_info. The copied bytes included the affected skb's
-> nr_frags, xdp_frags_size and a kernel pointer from
-> skb_shinfo(skb)->frags[0]. Real packet data was displaced by the same
-> amount and truncated at the end.
-> 
-> Subtract the old data_len before replacing it and add the new data_len
-> afterwards, keeping skb->len and skb->data_len synchronized.
-> 
-> The fragment accounting must run before the linear tail adjustment:
-> when bpf_xdp_adjust_tail() shrinks the packet into the linear area it
-> releases all fragments, and __skb_put() requires skb->data_len == 0
-> by that point.
-> 
-> A 60000-byte UDP datagram on a veth pair with MTU 64000 was shortened by
-> 1024 bytes from its fragment area. Before the fix, all 10 runs produced
-> corrupted payloads. After the fix, all 10 runs matched the expected
-> payload exactly.
-> 
-> Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accept non-linear skb")
-> Cc: stable@vger.kernel.org
-> Link: https://lore.kernel.org/bpf/al9T9Eto%2FhRIzP5W@boxer/
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
->   drivers/net/veth.c | 23 +++++++++++++++--------
->   1 file changed, 15 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 00e34afd858e..348391e87e14 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -865,18 +865,25 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->   
->   	skb_reset_mac_header(skb);
->   
-> -	/* check if bpf_xdp_adjust_tail was used */
-> -	off = xdp->data_end - orig_data_end;
-> -	if (off != 0)
-> -		__skb_put(skb, off); /* positive on grow, negative on shrink */
-> -
->   	/* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
-> -	 * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
-> +	 * (e.g. bpf_xdp_adjust_tail). Remove the old fragment contribution
-> +	 * from skb->len before updating data_len, then add the new one back.
-> +	 * This must precede the linear tail adjustment below: a changed
-> +	 * data_end implies that no fragments remain, and __skb_put() requires
-> +	 * a linear skb.
->   	 */
-> -	if (xdp_buff_has_frags(xdp))
-> +	skb->len -= skb->data_len;
-> +	if (xdp_buff_has_frags(xdp)) {
->   		skb->data_len = skb_shinfo(skb)->xdp_frags_size;
-> -	else
-> +		skb->len += skb->data_len;
-> +	} else {
->   		skb->data_len = 0;
-> +	}
-> +
-> +	/* check if bpf_xdp_adjust_tail was used */
-> +	off = xdp->data_end - orig_data_end;
-> +	if (off != 0)
-> +		__skb_put(skb, off); /* positive on grow, negative on shrink */
->   
->   	skb->protocol = eth_type_trans(skb, rq->dev);
->   
+I don't think you can simply decide this unilaterally either. Do you take f=
+ull
+responsibility that kfuncs going there won't introduce BPF side regressions=
+? Who
+makes sure patches touching the new location run through BPF CI? All of thi=
+s
+needs to be thought through before we decide upon anything.
 
-I am most likely missing something here but what happens if we have 
-frags and we attempt to advance data_end while leaving some frags 
-present (e.g., bpf_xdp_pull_data())? Looks like, in that case we would 
-issue __skb_put(skb, off) with off > 0 and we would hit 
-SKB_LINEAR_ASSERT() because skb is still non-linear?
+Thus, I am simply asking you to be reasonable: let's help David make progre=
+ss,
+and get the changes landed. FS, BPF, and LSM folks can then decide on where=
+ to
+copy paste the existing kfuncs later.
+
+So David, please send the v7 once you've address Sashiko's concern. We are
+almost there, and you've been at it for a long time.
