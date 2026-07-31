@@ -1,176 +1,114 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6148B175A9D
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 00:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785457854; cv=pass; b=ptMaDb5zobzi6clJ0IwRhDhre2NIG+ra7dA9Cq0Xf2IRdZK34mmJY0TeRhLlviuMPOvGEUWCb9k+iZc8jf1kAff3xFsXwjk6THyXDicmiutzYkJ0Efmxi7COYT5mgrbQBWM0pVykLLd7DN7lSsr1voqLzmOHfkvP32yCTOXG650=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785457854; c=relaxed/simple;
-	bh=kXfPPOebYPDWBl85UP8B8XOrtKMOHRhmU5KZ3uXt7Xo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OBdFZiDqQPIeYyHyxEkHqpnKPgR/w1lJ4nT4rmEY40anOOjsHZjUMFkeLg5P4Ze8QQVIC2T39rjC4ggfR0VLeovOc7++ah7azyl39dpAb67hPRXqWTig6tmLIMxHkSRlNZdw3PoPuAy9+zozdq8Ba2rKtsHxaRu1Kwm9YRlWDaA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RlQMF+Nb; arc=pass smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EDA1290DBB;
+	Fri, 31 Jul 2026 00:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785458634; cv=none; b=R8I6LgsiQOLd3CYy8FNRc7fB2weS7ET6PhrQGEb2+N3T77RUSmQdsbsYX57kxhYU2AwspAaaszP74iSMrZne/3JRVjUGKj44xsSeVj7j8zcCkf91nGsCTJh/Xi+g8Gpw+Sk+W+l39tWs5d1XX8USwofJrLAg/M0IfNk1stqGy/s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785458634; c=relaxed/simple;
+	bh=wG2dMQr6fnGnd/It+1xMbwLtOnqk3333NaZf0Z0xeQw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DTCQWKcJ7/ZNKWvFJeYIeqzJ0HXJrXtnxNYDdnXQjOgwXABaTbUMRFZM1r27xZbQK8lPmwQcy6pGvYaF+y5IWzNE+QPwGEwCx9YaukdqgbIyheiGaelmr4eTDWsWt/mpGSlme3iOtyhnn/r8D5dJW1K4YNO5djLzKnW4w+VK2LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MpDCbj5J; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RlQMF+Nb"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-92e99ef0902so27295985a.2
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 17:30:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785457852; cv=none;
-        d=google.com; s=arc-20260327;
-        b=OQ195oftpQ/lyBMk4GhHuPO5uon0jNc2NQjhcyfhAsRZz0+d0L7TRdj+WGhnKUlXWu
-         nOBtM/0A3DtK7TH5KQUegpgvDJhGHCEYdNsGj46MD0OnwPeC5TXzQwwvFdKGbZYVMLuS
-         nOd2BcrQfDmTokCBRcfL8hKGODdXdVUSy2nh4HmQk9SqielSZF1PY0cZqvuCiAZxi0tJ
-         VP1Bb88bSHZRh1F2dmYGRjGXPtXdcgj8k4mp7+WxlwsI1vsMGWGzGI1/rdalr7DTRsA/
-         gqrq9YtAMv3NrjYWbHxre/8J7aFgnRQ6tFrGafjWArCjbeBxS2LuDasqUrfN+8TrVQPa
-         PV6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=BynZKIsVSQr3F1TFU0TVk73YY94J3F9HvqIoa9Y7ly8=;
-        fh=S6DDseF5h3+g4zAU2M40h9tycaIPHDMVdwvfM/5iAnk=;
-        b=V6svqu5NztMaXk2ImRFAwzs4qJR+PWFbAQnP9j/XLYylqIwS21HWVJ8EMeJWTYpGIE
-         0SQH0MR/DrdYXLsn9Ldidfkq+ZDn1pzgesnSMwqSYdKNqlzR34wu8L2xXRapUclCjQp5
-         mKR8tSCc6auIzzHh8wX2kDuE+8YBwzoSGVTu4brOfBCr5jC+x+3yXwRqjwzSDh5/r2yQ
-         9OTBM4fA9ebxUdayZdlbGzXbLW1V22O4gnHQziCNVxQAtv7UIJMXH/rJxJFzWABn/h5e
-         uZUuGWd6QBzSwBGlTEP6KIaYcntR89aQdVS8t79BZWju1iKenHAPP3ihVQKeujOnNC7h
-         ONHg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785457852; x=1786062652; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BynZKIsVSQr3F1TFU0TVk73YY94J3F9HvqIoa9Y7ly8=;
-        b=RlQMF+NbuVfQlwlrTknuL/DbLOi6ZU1MwIbd7k/2qwIlrGBNxcCpd2tsgOKVY53QB9
-         RaOVQ/WTxJ22cA4J7KSMxse39A0L62ESJvdYGhA7h1unEfGjdnwTO4QCs4MUP7CY22wh
-         lCpbwU1SJxlxXSLkrKbRnOK9xXwpnyANKdxhgvmuAImv0o4JaiKEW5wjyi4fG9wD2Z07
-         2cEjGh83nZIyUD9OiM6tOr/jsy81U14ZkieiOFWVnfxWfcfpRgwbhmO9MY8nM3tWlgSL
-         zf0m3NzfY4WwEyAF4rLQKqI4MKUDe9jRfsnVGiyojq+FDeZP29CiRivuE0I5Ffjtlytp
-         +25A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785457852; x=1786062652;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BynZKIsVSQr3F1TFU0TVk73YY94J3F9HvqIoa9Y7ly8=;
-        b=UnUusvsSsDxbQK5PLsA9C7Z6EhTsZxKwRiilKlB0kDZGnbCa0HmbX96Kx5yb5CYoMX
-         +MdjevLhpVB/mlEh7WiCbicxarlQeRgaQgfU2cpXuko0tPb4Ugp0SyI+LaJOKq7YJywQ
-         uhzqR9PfhTsQrySWDcnpaDv6oz4RZJoa5znt9W8lDyzyVytAZmW5lHPJQ6Mr+nqy3Lq2
-         jxSj0PTn1kxNQKqEw0B+ga/24L52me1bNwYK0OI4WA/HAdv4SBQE9XBvuU5HdcaF1+Tf
-         B4LaOfnLKwABaKZBSOxyNFKtkiO6WLnm53Xoz7rdLetmkS1J+cIBmCgFF8haDAw43Icy
-         50CQ==
-X-Gm-Message-State: AOJu0YwfMW4VtfcrfA1EcKdSwFY0Iac40FyCnsAV3waT4+ax0V5StGBO
-	zaUWPfo6YM9Hn2zVTGDb7lfDYY5KgXTS3UHS1jA1Nfz+G+vHrKB+o8tzyqzYH8r6/gAhfsct2MQ
-	qtD3IkzEE/csWbrIZW0tzMBZQ9sxAx+5xi8FO
-X-Gm-Gg: AR+sD13QsOGCqJiRHyQ1GhXvTU7/TL2e5IqEamWNwTz4MA3vO/MZCR0a3WwmAEHNKa1
-	stbv3dpuFNEPdMjH/FMGtxnNnviQMgiu4y3PPDoPm4j2otENYn0wCIkGAWyk11xrF1ilGkZ6uRc
-	bl7OlJU8z0hEqDha6eo+UhRdzmRODEGfq52/TfyN5TqNSb3Sv45ezXW3KH5zpvL7T0XKdXaPlgV
-	AfreBd55JvIKMXlBVZf/ARrDgww1ppGAMVJXOjp8KPaPtGlA+KOPlc3Snh1vNFY/kDfO4kdDqJK
-	hO+Cdk+IcxdRwv/gnaa0AmLUG9I90bzM8VdZOLYvMEHsr/nt49NHK5hiJj+2g/h7+eKEafKaO3I
-	=
-X-Received: by 2002:a05:6214:ac2:b0:8fd:6de3:dd78 with SMTP id
- 6a1803df08f44-90842411b43mr799656d6.58.1785457852231; Thu, 30 Jul 2026
- 17:30:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MpDCbj5J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1085B1F000E9;
+	Fri, 31 Jul 2026 00:43:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785458630;
+	bh=y1cTrfSjEicTSohljYkboJ2gRQlh32PgZX/BaD7HEwY=;
+	h=From:To:Cc:Subject:Date;
+	b=MpDCbj5JyGWGY0KSIvpo/K84czQls7HhZiMW8tVKj9PdHeU79hSLN/QhYkzutBQro
+	 LXkqZ8623DyleOZ7jB72Zc5SfL01ogDeDRkEGk9N3n4qq6kr3UlVTAH0uNZI66ESzA
+	 jHzzBU+JNnNjxwT6Em+GJMBTfb8nO0+Am8khhTOREodYAdZ2k98rtOTn+/wUckWRlv
+	 d90+gOQAOLHfbwrF2gAbwsfnPvCkbIDTCxw6PQV22lMO/Ak7qygiVpfwjjDi/WkZQQ
+	 LaYF/3ONoELSOvcu/vVkxI2EaJroOntKDm9/EnojmHnhAsoJHLR0LLoIqAVw4xeciB
+	 OIQsIhGqKCtww==
+From: Eric Biggers <ebiggers@kernel.org>
+To: fsverity@lists.linux.dev
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	stable@vger.kernel.org
+Subject: [PATCH] fsverity: Fix bpf_get_fsverity_digest() dynptr assumptions
+Date: Fri, 31 Jul 2026 00:39:25 +0000
+Message-ID: <20260731003925.2728977-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.55.0.508.g3f0d502094-goog
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com> <20260730234533.1912709-3-dwindsor@gmail.com>
- <20260731000002.576791F000E9@smtp.kernel.org>
-In-Reply-To: <20260731000002.576791F000E9@smtp.kernel.org>
-From: David Windsor <dwindsor@gmail.com>
-Date: Thu, 30 Jul 2026 20:30:40 -0400
-X-Gm-Features: AUfX_mxUC87VovUpF6S3n0z22UxNvx0DUvlrhBrcBBLnihCTSSPd1G8mlTOLx6g
-Message-ID: <CAEXv5_gTJcP5BkSysZujLxiUcjbbBNi_NNbAnOJsQQVLyO9HoQ@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 2/4] security: add security_lsmxattr_add()
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 30, 2026 at 8:00=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> > +int security_lsmxattr_add(struct lsm_xattrs *xattrs, u64 lsm_id,
-> > +                       const char *name_extra, const void *value,
-> > +                       size_t value_len)
-> > +{
-> [ ... ]
-> > +     /* Combine xattr value + name into one allocation. */
-> > +     xattr_value =3D kmalloc(value_len + name_len + 1, GFP_NOWAIT);
-> > +     if (!xattr_value)
-> > +             return -ENOMEM;
-> > +
-> > +     memcpy(xattr_value, value, value_len);
-> > +     memcpy(xattr_value + value_len, suffix, suffix_len);
-> > +     if (extra_len)
-> > +             memcpy(xattr_value + value_len + suffix_len, name_extra,
-> > +                    extra_len);
-> > +     ((char *)xattr_value)[value_len + name_len] =3D '\0';
-> > +
-> > +     xattr =3D lsm_get_xattr_slot(xattrs);
-> > +     if (!xattr) {
-> > +             kfree(xattr_value);
-> > +             return -ENOSPC;
-> > +     }
-> > +
-> > +     xattr->value =3D xattr_value;
-> > +     xattr->name =3D (const char *)xattr_value + value_len;
->
-> [Severity: High]
-> Does this code cause a use-after-free for filesystems like ocfs2?
->
-> Looking at ocfs2, the ocfs2_initxattrs() callback saves the xattr->name
-> pointer directly into si->name, assuming it has a static lifetime (which
-> was true for SELinux and Smack):
->
-> fs/ocfs2/xattr.c:ocfs2_initxattrs() {
->     ...
->     si->name =3D xattr_array->name;
->     ...
-> }
->
-> But here xattr->name points inside the dynamically allocated xattr->value
-> block. When security_inode_init_security() completes, it frees
-> xattr->value:
->
-> security/security.c:security_inode_init_security() {
->     ...
->     ret =3D initxattrs(inode, xattrs.xattrs, fs_data);
-> out:
->     for (; xattrs.xattr_count > 0; xattrs.xattr_count--)
->         kfree(xattrs.xattrs[xattrs.xattr_count - 1].value);
->     ...
-> }
->
-> After this free, ocfs2_mknod() will call ocfs2_calc_xattr_init(), which
-> dereferences the now-dangling si->name pointer:
->
-> fs/ocfs2/xattr.c:ocfs2_calc_xattr_init() {
->     ...
->     s_size =3D ocfs2_xattr_entry_real_size(strlen(si->name),
->                                          si->value_len);
->     ...
-> }
->
-> Could the dynamically allocated name trigger a use-after-free here?
->
+The BPF verifier and the dynptr abstraction ensure that the memory space
+referenced by a dynptr remains valid.  They do not, however, provide any
+guarantee that the contents of the memory are stable.  kfuncs are
+expected to remain memory-safe even if concurrent modifications occur.
 
-This is real. ocfs stashes the name pointer beyond the call; it's the
-only fs who does so. We can special-case ocfs and be done with it.
-Will do this in v7.
+bpf_get_fsverity_digest() didn't follow that: it could crash if
+arg->digest_size was concurrently modified.
 
-> > +     xattr->value_len =3D value_len;
-> > +
-> > +     return 0;
-> > +}
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260730234533.19=
-12709-1-dwindsor@gmail.com?part=3D2
+Fix that by using the known-good value hash_alg->digest_size instead.
+
+Also correctly handle sizes over INT_MAX, which previously caused an
+integer overflow and crash.  __bpf_dynptr_size() returns a u64.
+
+Fixes: 67814c00de31 ("bpf, fsverity: Add kfunc bpf_get_fsverity_digest")
+Cc: stable@vger.kernel.org
+Signed-off-by: Eric Biggers <ebiggers@kernel.org>
+---
+ fs/verity/measure.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/fs/verity/measure.c b/fs/verity/measure.c
+index cfe2d5e535f9..f8b3526af004 100644
+--- a/fs/verity/measure.c
++++ b/fs/verity/measure.c
+@@ -122,11 +122,11 @@ __bpf_kfunc int bpf_get_fsverity_digest(struct file *file, const struct bpf_dynp
+ {
+ 	const struct bpf_dynptr_kern *digest_ptr = (struct bpf_dynptr_kern *)digest_p;
+ 	const struct inode *inode = file_inode(file);
+-	u32 dynptr_sz = __bpf_dynptr_size(digest_ptr);
++	u64 dynptr_sz = __bpf_dynptr_size(digest_ptr);
+ 	struct fsverity_digest *arg;
+ 	const struct fsverity_info *vi;
+ 	const struct fsverity_hash_alg *hash_alg;
+-	int out_digest_sz;
++	u64 out_digest_sz;
+ 
+ 	if (dynptr_sz < sizeof(struct fsverity_digest))
+ 		return -EINVAL;
+@@ -150,11 +150,13 @@ __bpf_kfunc int bpf_get_fsverity_digest(struct file *file, const struct bpf_dynp
+ 	out_digest_sz = dynptr_sz - sizeof(struct fsverity_digest);
+ 
+ 	/* copy digest */
+-	memcpy(arg->digest, vi->file_digest,  min_t(int, hash_alg->digest_size, out_digest_sz));
++	memcpy(arg->digest, vi->file_digest,
++	       min(hash_alg->digest_size, out_digest_sz));
+ 
+ 	/* fill the extra buffer with zeros */
+ 	if (out_digest_sz > hash_alg->digest_size)
+-		memset(arg->digest + arg->digest_size, 0, out_digest_sz - hash_alg->digest_size);
++		memset(arg->digest + hash_alg->digest_size, 0,
++		       out_digest_sz - hash_alg->digest_size);
+ 
+ 	return 0;
+ }
+
+base-commit: f5098b6bae761e346ebcd9da7f95622c04733cff
+-- 
+2.55.0.508.g3f0d502094-goog
+
