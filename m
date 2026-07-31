@@ -1,125 +1,140 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288C72E7367
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 01:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785459734; cv=none; b=PrZYYUR7RA/wd15M/aUt7Z5dQJ7D4vzkNPGQmjkpAwds/qS6uwtJEhYf0ZKy6staqKvElVN2RmP6N8R07V1mUWnSIAtVJvt3u4AVOnttg9+rdVlPGGVSdmfzDo1HVxeWmSWnq/z9amvC8ZxjfOhJBMpI4ic7kTQuoaHlzrDYXe8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785459734; c=relaxed/simple;
-	bh=HOz4uN4n+bL54A4PkKqrJDZWDdQ6XJWD8wfPEva1sUw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D2SA0c8DWxC5tbSpBan5gxzpUMu2Vps+ErJJad+QAg6u5wLmXG4rbpPYOTlUFv/YP0i9uLeqkuieOlwgYQirmViJT70VDp6mBROM6bDg+fpW8lCnTDRh6j8CHOr1fr7ywPVGse5jlLeWyeukAdR94rLftFiU9IkqTVLh/dkKt7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=maKEzPYA; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E031145B27
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 01:06:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785460008; cv=pass; b=KiJosg6CljITDDde078H58/fRDFQB94JhJSQZ/oLDwLZ2I77RHljId8j+S9lluE+NS6NNZLxML4OI3x2MmMd+rBZVpsU7oAJyW7p2rB8fVr3HCKLeH39VJ6ipzhyCRXI9LTflg7+7c0t7BKSpf29i1KoIHLU7v3rOqyFXprOrQk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785460008; c=relaxed/simple;
+	bh=3aSJo7NI0/BigI7Mtd/Ltf6FSWBj3N6e3vsgJQ9x/yw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Az4TurmJVbM+AlT0IYBGAWenANjpDKgvoxby/gLY1HhU0W0MSpQzMuyi8fcmi2TTPvRHlpl/vSc0dXuHRUG4BSz8jNR2LkiGH7j9P3jRnjQAB+76Us4zeqcbZ6pCAZ1/96dE6UDb5Oi5nEYEkioBNLTn10SumVVHTYKUYYnJkt4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b8NzlhX7; arc=pass smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="maKEzPYA"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1785459728; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	bh=V2Uhm2DyoVU7u3oHG6Ka3Uwg6kU8mde481VD3EZjD/k=;
-	b=maKEzPYAkHdKDqO9/FS9UEpc/1XeDXnvljGtsWXepHRIetrq1Y8YpjWN1+O5kFMhvrnXeYaP6Ud6Td4+Yhsr388sWgYXWdqcU0rw9dCqo8ECpPfgIEwN32zYhovDPLkOjYU0O3rdD3SJC3zJZF7HrGTlcZeOf1cuH0lWqY4l/bQ=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=feng.tang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0X86N8GH_1785459727;
-Received: from localhost(mailfrom:feng.tang@linux.alibaba.com fp:SMTPD_---0X86N8GH_1785459727 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Fri, 31 Jul 2026 09:02:08 +0800
-Date: Fri, 31 Jul 2026 09:02:07 +0800
-From: Feng Tang <feng.tang@linux.alibaba.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, Andi Kleen <andi@firstfloor.org>
-Subject: Re: [PATCH] selftests: net: reuseport_bpf_numa: consider cpuless
- numa node
-Message-ID: <amv0DwQoeESq2Cp7@U-2FWC9VHC-2323.local>
-References: <20260730113040.75718-1-feng.tang@linux.alibaba.com>
- <20260730113738.41C901F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b8NzlhX7"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-698411099d6so6411a12.0
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 18:06:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785460005; cv=none;
+        d=google.com; s=arc-20260327;
+        b=boSWj7jp+if/vZJM2dC/d/Yxv381yUQMRVazNTqWbPQ9aaJwjqegS7BPwGQ5/19iVe
+         C8ysuu1YS/2e9COSXmYI78xzephzB32wdKCEis7vDS9ADDvw4MTwYVTMwnEix1J9y+j3
+         tXeG+EwRuvrfIiNUpk2/14tPrc+WTDsIEZ1zO9ZkNg9bDsQ7wEYvavsu7gmohBBnelv+
+         ndYu5nu3hOrCRyfYLjSzM/307MN4+d7IWP4O87vjB6g6ubH8ittiuC4HOaqXNZgOwoYf
+         xtxzLVq4RIRVRCTJVr2JMso71P7pKdnQnI//qD0Ow1hq8cx7DJ/NZcazRxpgq9wwLRau
+         2Duw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3aSJo7NI0/BigI7Mtd/Ltf6FSWBj3N6e3vsgJQ9x/yw=;
+        fh=8BdnSTId84WHKnbJPDC9emYMZ2yR4onDiZemygXsTgQ=;
+        b=FUWEHEIB4BcsBVSpLNHe4HNS+TCKiTOT56O6cgAXdHVUFa9e7HGQhdlIxrh+M0Fy7I
+         p060ny3gzHn3VUIsOSw5WRAftKZmN2cXH1T2lcJgaiwGJCyKL5snFY0r+kd04j5eza+7
+         4jizy7gLT582r7ytnfQgdQqtAo0LPqJRvMF+DYWBX/EHUb5zBqdNRX6U4Qt5irkWkrbR
+         +QG7v3NjedJa5SGj88jbyyporN+oAobcHKy/exkdwpxOWfDZqASs7Rk+TF1n7yYrSJbF
+         CNkW85yQr+GP9CREW9tZ6l/j2R2i87PeMpk+Kc1K610ZT9gAn2Q7QIQXGUCmw7OZcp44
+         3qGg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785460005; x=1786064805; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3aSJo7NI0/BigI7Mtd/Ltf6FSWBj3N6e3vsgJQ9x/yw=;
+        b=b8NzlhX7wwn0H/hD8CYOYYrrXUuI38Bb6hE75QooNIk86txSfrcGnafIocK8YAyVjJ
+         YDhbR7S/baK1HY01J3XWxSLR6W6Pbny/d1JFLztGjSur5jS2okGilAS75EvNLew2E/Mo
+         c14sgkMqKTBK3tyTOBLdq+G9S2s9O72B/U7PfzfTmd6oVHpq3oCCAzuckyHVv3ytK2Nm
+         /T1sAXyFMyu0K5G77owe5DksMTc8grmB+zOqyXflCYZ/QHPVFfFL1V9rkPIs2joyZCHi
+         0vQxR1fNmEplpwcaqxN1ivvTf/9N0Xgwt0kDD+95MIt49Ari7XYuZV1mUkuyvWzdrB19
+         tKfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785460005; x=1786064805;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3aSJo7NI0/BigI7Mtd/Ltf6FSWBj3N6e3vsgJQ9x/yw=;
+        b=ebm7D3q2CfnXS0HzPqZXON8isIJzAfTtbMdZb1LPeeU4WHebYdBR+0QU5uvkS8rP7C
+         H12e+qfAlRC0Ehl8lxXBLyZvei4E8ym/JdikGqT5VTpCPQxM4Emx20hmXTP4D+agd6VX
+         x590nNxvTtJUBmv0bJEeDj24iVLnT7LOKKoDO1N/kzAJZBRKvlU5wyjaP+rynRzshrlx
+         HCbhQmp4XM1bgcURqNiwmXkVet5JtP2WKgRDMdDoQC2LUuZ/rN6U0G/BDpwFyy7MU/Zc
+         tVFYoR0jo62aTjY/8YZPZQK5PPmui4bcmRTmt4tJpa+jizCBlQCVYv7MTWh5NLB8Kgbp
+         MNrw==
+X-Forwarded-Encrypted: i=1; AHgh+RrZ4oABYs3GGGRDbSQMkuiZNAzCIvhWFUQk7i9VTHk3Tx07S4to2AZPj8qOu/lKu7u+IZ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5WThhVmkRxOtKTC9pFTIKtkmeKV6xgAwOrFEeXQMirsWHBWTb
+	stpZoZBJ1UGFNPaa4vpL2DKYBKDFxP5pASlj0PM4OlL9VKBrOjt7FT0L48yvrR+goCmPYKPaOjS
+	5cmwOXQaHK6XmRG9XeW0Af+YFKi/jTCIgnmJANB5R
+X-Gm-Gg: AR+sD10ZN/M35b8PV1Dcms8s1Fi4t9YsoZ+zA/rmiITkcZHbWvJ/V9SlVGySy73LfpE
+	9brfE8P1D/Uy3Jfvfc10tSj+WXPw/9cdaa2n5IZDViGeM1VxNnQ0VfXCynLPA86ULW9dEcP3+/2
+	i1EmABigdHQicnAXuigeeCcOPiybSpNxvq5B1XWr2+VMN4i7IdDfEtZQdY6128uO6m1nv+doHPR
+	Zx/f/nF+FyCPIxtAc3LP0ls25wC9mgsujMzq5DXxpcBXB2I9smEV3aiFDU88PQV7K4wX2f3r2Bf
+	+X1rOjV4E7yqwlaYA4I15svwDYYLd0k/w9z8i691HE1D2rLeCRJx2BDWkFT72aAuK6WSf4YaUOo
+	Q5iocJDeHerbxeq6zaeslmydZUGa3des=
+X-Received: by 2002:a05:6402:544:b0:69f:2c93:b7cc with SMTP id
+ 4fb4d7f45d1cf-6a09820dee1mr7011a12.9.1785460004523; Thu, 30 Jul 2026 18:06:44
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260730113738.41C901F000E9@smtp.kernel.org>
+References: <20260722203801.1854941-1-tjmercier@google.com>
+ <b8541508-5046-448c-b32d-40c7ad79b1e9@gmail.com> <CABdmKX3Jhrb3G3_25CN+TAG8oSgOqJwr0xi8XUC8c7RsCS=h-A@mail.gmail.com>
+ <dc95818f-eb75-4389-be28-b1128126b92c@gmail.com>
+In-Reply-To: <dc95818f-eb75-4389-be28-b1128126b92c@gmail.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Thu, 30 Jul 2026 18:06:32 -0700
+X-Gm-Features: AUfX_mz3gZMvntWT2ZXD_0nx7Sf8pZoTmY7GAYqdViyxlEbZ_EdHEHVzO7O3TZQ
+Message-ID: <CABdmKX39yhgZU9ATzzjmnvCbNqO1i=2KwuroL3YDsgMN+DVp7Q@mail.gmail.com>
+Subject: Re: [PATCH 0/2] bpf: htab: Reduce memory use of hash maps
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the review!
+On Fri, Jul 24, 2026 at 7:35=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+> On 7/23/26 6:22 PM, T.J. Mercier wrote:
+> > On Thu, Jul 23, 2026 at 7:11=E2=80=AFAM Mykyta Yatsenko
+> > <mykyta.yatsenko5@gmail.com> wrote:
+> >>
+> >> On 7/22/26 9:37 PM, T.J. Mercier wrote:
+> >>> Memory is expensive and scarce these days. This series reduces the
+> >>> memory use of BPF hash maps by eliminating the per-element overheads
+> >>> below. This saves up to 50% of per-element memory use for standard an=
+d
+> >>> PCPU hash maps. The memory use of LRU hash maps is unaffected.
+> >>>
+> >>
+> >> I understand that these savings calculations do not account for the el=
+ement
+> >> value overhead of per-CPU maps, which make up most of the map memory
+> >> consumption. Realistically we won't see any memory savings for per-CPU=
+ maps.
+> >
+> > Yes, I did not look at BPF_MAP_TYPE_PERCPU_ARRAY at all. 95% of the
+> > memory used by all of our BPF maps comes from hashmaps affected by
+> > these changes. We only have 7 BPF_MAP_TYPE_PERCPU_ARRAY maps and they
+> > consume only about 12 KiB. (I know a few of those PCPU arrays are just
+> > to avoid 128 / 256 byte BPF stack allocations.)
+> >
+> >
+>
+> BTW, did you look into BPF_MAP_TYPE_RHASH? It does not
+> yield much memory savings compared to normal hashmap, but performance
+> is better in some scenarios.
+>
+> Link: https://lore.kernel.org/all/20260605-rhash-v7-0-5b8e05f8630d@meta.c=
+om/
 
-Add Andi
-
-On Thu, Jul 30, 2026 at 11:37:37AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Medium] Missing NULL check for cpumask allocation in is_cpuless_node()
-> - [Medium] Missing return value check for numa_node_to_cpus() leading to masked errors
-> --
-> 
-> --- Patch [1]: [PATCH] selftests: net: reuseport_bpf_numa: consider cpuless numa node ---
-> commit 806931cbf2ad9438843e4d30f69b4887e641f7d2
-> Author: Feng Tang <feng.tang@linux.alibaba.com>
-> 
-> selftests: net: reuseport_bpf_numa: consider cpuless numa node
-> 
-> This patch addresses a failure in the 'reuseport_bpf_numa' selftest on
-> platforms with CXL memory where one node is cpuless. It introduces an
-> is_cpuless_node() check to skip memory-only NUMA nodes during the binding
-> test.
-> 
-> > diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.c b/tools/testing/selftests/net/reuseport_bpf_numa.c
-> > index 8ec52fc5ef41b..197dbfc475f65 100644
-> > --- a/tools/testing/selftests/net/reuseport_bpf_numa.c
-> > +++ b/tools/testing/selftests/net/reuseport_bpf_numa.c
-> [ ... ]
-> > @@ -104,13 +104,35 @@ static void attach_bpf(int fd)
-> >  	close(bpf_fd);
-> >  }
-> >  
-> > -static void send_from_node(int node_id, int family, int proto)
-> > +static inline bool is_cpuless_node(int node_id)
-> > +{
-> > +	struct bitmask *cpumask;
-> > +	bool ret = false;
-> > +
-> > +	cpumask = numa_allocate_cpumask();
-> > +
-> > +	numa_node_to_cpus(node_id, cpumask);
-> 
-> [Severity: Medium]
-> Will this crash if numa_allocate_cpumask() fails to allocate memory?
-> 
-> It looks like cpumask could be NULL here, which is passed directly to
-> numa_node_to_cpus() and numa_bitmask_weight() without validation.
- 
-Good point. 
-
-If the allocation fail, will return 'false' to let the code go the
-original flow.
-
-
-> > +	if (!numa_bitmask_weight(cpumask))
-> > +		ret = true;
-> 
-> [Severity: Medium]
-> What happens if numa_node_to_cpus() fails?
-> 
-> It can return a negative error value, leaving the cpumask unmodified with
-> zero bits set. Because the return value is not checked,
-> numa_bitmask_weight(cpumask) will evaluate to 0. Does this cause the function
-> to return true and silently skip testing on nodes where an error occurs,
-> rather than reporting the infrastructure issue?
-
-From the code logic (with above change), the 'node_id' and 'cpumask' have
-both been validated, and this numa_node_to_cpus() is very unlikely to fail
-here upon reading libnuma source code.
-
-Thanks,
-Feng
-
-> > +
-> > +	numa_bitmask_free(cpumask);
-> > +	return ret;
-> > +}
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260730113040.75718-1-feng.tang@linux.alibaba.com?part=1
+Thanks, I've started to take a look and asked some other coworkers to as we=
+ll.
