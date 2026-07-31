@@ -1,144 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF045443E4E;
-	Fri, 31 Jul 2026 15:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785513088; cv=none; b=rSF6RNjVUbwPQ4s2IY9fqvqlM4PhCdsRNAdy734qyPPHdO14J1AXZz9GsWxUnozv6xJhngCB/fQ4eQ6EAzAqTSSW3+T+ZuC8/nA4eZpNlEoAPULXzMH9qjoypr4zD8aKHwWxsb0gQLPByaB8H2EoGcaFpL7Ty2bbVVNNisFI8/Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785513088; c=relaxed/simple;
-	bh=szgs2jPpP6tr7AX87ml+XBCh8VQp1L2+yHgcR7Rfh2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aSTeRcm02rPMH97cpVnqkBGWhNUNE9F4MW/p9MJbTjID98k45gT+toAcZAjh/raNiqYoLGbJK/0/1NgQdxSKgb3n3wuv4iekHZ4mCv1HdM3kc0wm7VFu61gdIkC+MVMNTveaugWxU/j9C9nFBmPKQM2/+WO23kargSdho5zoCV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXccFGlZ; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76073442B37
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 15:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785513247; cv=pass; b=Hlbwfeq4jd66OJsh9p6GVUQ26/bfijtlbAilVOJBmsMC5PvSZjcXsczkIj7CmSRbyprJpLVjh2hojymndh4QME3sxwEP/hMyIzS+G3/KFPGzwXCO175Zj6FB68YD4dS+pjpXtbgHPKhwXirRYeh8jk4HfyRU2MNzqwuBQfKrc8Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785513247; c=relaxed/simple;
+	bh=NdjZUpmzPZnbev3nErg8Ah5yqfjCOeg4X4X3Z2k7pW8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gsYTyMx/Edlhnh6gi83fh9mx9/UW/v8wK48gO/7uapQa+gsyouYchLb5n4mM4yPea/NBE9IkWlCG9W+5ho9X04Be2uSv8Ex5NAzvOTFawSdxbepoSOMipHhofSDYYhXPfx8cqzgFbnxNWrl+WhClk4ECz/qjGKevL2yaFRRNl0o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ovj9T6dv; arc=pass smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXccFGlZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB6671F00AC4;
-	Fri, 31 Jul 2026 15:51:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785513085;
-	bh=s12AyduCIyBKzqbHeg9g0WAJ6BYr8XQzZgYUoa0mUH8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=mXccFGlZVO6HL6MurSgPVeacjXZfwB89pu/+N2fC1UaMmQUdbAXVNslqGfWU2qJg1
-	 9o60zXGesEArABHIr1AKkQRhLOD/L8EJL2JtOKYV855MYYmWZ8D+PNh6mI8CI6Euk5
-	 w0jl0KVBkb1Lv5Cgsf4Brlr5tTsRTQWyXbdqj9kIq/9ZF9Bz7KKa7yuCbmCzedv3g3
-	 R2OOwcrYEFrqqL8PJDg1dcNe1Q+NUT7ifuJ/cVzBD0dwc2YfFeUFQjvlUh+EkU1A7S
-	 sQh2Q31W/pX1bdJVpx4ENk4CUBExSw2SL6wHPxPvx985B1BBStYwSI+ghR9bDA4h4d
-	 qOs8SeD60fq/w==
-Date: Fri, 31 Jul 2026 17:51:23 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Krishna Kumar <krikku@gmail.com>,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	maciej.fijalkowski@intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH net v2 1/2] net: fix skb length accounting after generic
- XDP frag adjustment
-Message-ID: <amzEe12ZVF3kQYkP@lore-desk>
-References: <20260731032357.6114-1-sun.jian.kdev@gmail.com>
- <20260731032357.6114-2-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ovj9T6dv"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c16794450aeso167478666b.2
+        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 08:54:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785513245; cv=none;
+        d=google.com; s=arc-20260327;
+        b=fhCz+W1wrldoPwOIPqfnx5G84DN1SCc8akQomjtPhl7XU8HKNIP2E571SM7hpqy7PE
+         SjJfNfwwVvTNsMPn8u/lbRcitDb04AzOLIcFjs42e9yZQnvw0w6vPPSh+GFEglO1Hzpy
+         Pm4yssXlcdh/CFVxWVcB987gT/rrrxq2pM5fVqdvh/kw1sA4jhfStacQA1xH00GWSKLS
+         ybGt7iFPnzKB3qj6Bp0pFYOvd1Rv4qZf8rmRHMxpwuExMlkIyFW4oQ8pEetH6qBR0D0V
+         GS0LbXsq43od2LO70cLvLa56UCDpnslMoYy/yhObo5xKI68YSXkSea1DvPYACUF0lplk
+         tUtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=AUMtluikfNRsC8Z97PB9sPGKAI0yWhOSoIYDn0tGlXs=;
+        fh=jT1HXWBa+0yIeZWXshyhsSrnuihNE+ry+k7Rcm1wtko=;
+        b=oTMZShtYxr7bU/5IwjG7kWb4iVwxTEchqJQ9kt/hfabh65u50zZkkqyLISQKJBanDu
+         PPNTXmIrjBGr/FxN3YN3kI2moRU+efjGde+LtSCjpmrUXWL8HbtDYSZzlgbg3rqt9EWS
+         nPFf2eNoKalXnedr8qgRWIu82bhAQUrMYOmav0LuEGJLdQzfsWucxw0UIr7QsEouksuE
+         ThKv5s0FXH0j85+Nz0ZCmBokV6roTlnJbO+LrB9VYAUO2gAIeAbdcJxILwGzJCFbzBQT
+         mPIBf4Xs+2d/BfRBipBkQhe1xugJ4cMxtljS0poq8y5vEmc8H326DC5cWw/r6YCLOR69
+         Df+Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785513245; x=1786118045; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AUMtluikfNRsC8Z97PB9sPGKAI0yWhOSoIYDn0tGlXs=;
+        b=Ovj9T6dvfrqi7Fjb6LI7ewOrAsaXe1PQul4uGXl7vrX59UKJrY7IImsY3Ou/2kYZVH
+         n/ABKgdR92URlX4tZeFFC7TtS7i3wwmsKXhraKBBZB0PYZAYJdmXn8+XiiulrgW1Vpbs
+         aA00gvHZNYXDwadmNdzKi0TFB4IY/Zy2kSuGeVpkRzRuufM65kE7V80qY6HsvV4OAqPn
+         z5xqQb4/9PvNyrmP4FbEvSUwL9ldeYALje9JkEwX0hip2aXreIjdg4BSTQG9kXjoTMig
+         ppORU5DLmiICruySbckr6nlqvxqMZ92sBTnEBWwgPaqtt5nEMeYa5sk3xXTNkz7fiERx
+         2Dfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785513245; x=1786118045;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=AUMtluikfNRsC8Z97PB9sPGKAI0yWhOSoIYDn0tGlXs=;
+        b=MNgj0tMK9Voj7K516+sTJENwu27/v7uvMoSGfhjhdsVDA6DyroowA/vGi5W0WN4uav
+         gvs9AEBgGYACJdoNByp/2/rhZpiEStTfl31dvxYFm3nEmSPSp+aDMXMKFgzSf0/QDmmp
+         d40/bDoscjKCka5BCNhYd1Jivg1AE+djECGn2BRKIrTpru5IYAduDNO2G1F04xfE07GN
+         zLkZmaIw/zoM1hdAOj7Sbp/FQFZQwiynIndU96TIum84QOifetGtmtXC2SI3pR7tYZfe
+         +yr3QmkzeVHTo3P6fooCvgDtRx3j1T/tfMrN8xLcjHJsi8KGp4Ehg7lIB0w43tgnycpm
+         0u0Q==
+X-Forwarded-Encrypted: i=1; AHgh+RrHrbi5dGPOzjAkC9V2cEk06q9BofOnVkM2wMbXnaPZhDPDa1MiIJXbKsK3vGZdOA1em1U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaiKkwk0xBNRItmJFXBZVCe2fiUyeod0E0EbHUyLcCwo9fnHVC
+	8MfFhC4G/iwU9lBMJvxbDWTeC1CNpJLvo4Z2bVS4h9DKajFj58ffH35omgND6AY8FOxX8xPmJ54
+	E+As9j0Ef4OPraFFi8acj/96mPIsNKnM=
+X-Gm-Gg: AR+sD13cmuXsR7HaeKLlF7zRjfVuJxH/CcIv5VdmKa1j7IQJosfBxmyHEd+Jh8MqG0y
+	JSjJCyB/jxmNBLJANpRoWBgNRVEmlsYZdzx7i5zgwTraVldjEug5nZU/iO15sUguOs2B9gl0+Di
+	bjpfy5lQdtRnMsdIUU3/7JfECwMESvGpywWKNuADXPuT3J+4fR6C4qOdZYAcemGbQHqZpEyXoDv
+	bbpmc58uxcnlcQeJydQZ6oBOfmiFK5r94ViggYsbundCFYCEW9vElXqJkjJvR1CfhVVxtS8wT03
+	o1yKPH1PtG5BVnw3C/V7FrNXto7JcIm/LUDBgouNWIHlWQ==
+X-Received: by 2002:a17:907:e1cd:20b0:c19:80cf:4c75 with SMTP id
+ a640c23a62f3a-c1fe7f3c548mr8494566b.20.1785513244463; Fri, 31 Jul 2026
+ 08:54:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/TwNh9MoKEPtMbBg"
-Content-Disposition: inline
-In-Reply-To: <20260731032357.6114-2-sun.jian.kdev@gmail.com>
+References: <20260729162931.2369353-1-main.kalliope@gmail.com>
+ <20260729162931.2369353-3-main.kalliope@gmail.com> <CAM1=_QS79dDBfaaNQXnWd61AqHd1M4o9aDMMiftnoJveNr=FZg@mail.gmail.com>
+In-Reply-To: <CAM1=_QS79dDBfaaNQXnWd61AqHd1M4o9aDMMiftnoJveNr=FZg@mail.gmail.com>
+From: Nicholas Dudar <main.kalliope@gmail.com>
+Date: Fri, 31 Jul 2026 11:53:52 -0400
+X-Gm-Features: AUfX_myt_kB7E8Gv4Te28D81GXbe5vzIGv6mSlzfyJbuG7pj3zf6QT86W9HaaAw
+Message-ID: <CAJZwKkgXoHhaej_hkBfytY_6N0PdpwfGMt+GUcHJGyaH0+e7RA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] bpf, mips: Add support for BPF_SDIV and BPF_SMOD
+To: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, tsbogend@alpha.franken.de, paulburton@kernel.org, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	philmd@oss.qualcomm.com, visitorckw@gmail.com, bpf@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---/TwNh9MoKEPtMbBg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Johan,
 
-> Generic XDP exposes non-linear skb fragments through an xdp_buff. If an
-> XDP program adjusts the fragment area, bpf_prog_run_generic_xdp() copies
-> xdp_frags_size back to skb->data_len but leaves skb->len containing the
-> old fragment contribution.
->=20
-> After a fragment shrink, this makes skb_headlen() larger than the actual
-> linear area. In the reproduced UDP receive path, __skb_datagram_iter()
-> copied 1024 bytes past the actual linear tail to userspace, starting at
-> struct skb_shared_info. The copied bytes included the affected skb's
-> nr_frags, xdp_frags_size and a kernel pointer from
-> skb_shinfo(skb)->frags[0]. Real packet data was displaced by the same
-> amount and truncated at the end.
->=20
-> Subtract the old data_len before replacing it and add the new data_len
-> afterwards, keeping skb->len and skb->data_len synchronized.
->=20
-> A 60000-byte UDP datagram on a veth pair with MTU 64000 was shortened by
-> 1024 bytes from its fragment area. Before the fix, all 10 runs produced
-> corrupted payloads. After the fix, all 10 runs matched the expected
-> payload exactly.
->=20
-> Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in gene=
-ric mode")
-> Cc: stable@vger.kernel.org
-> Link: https://lore.kernel.org/bpf/al9T9Eto%2FhRIzP5W@boxer/
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Thanks for having a look.
 
-Acked-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> Let me know if you are already working on the remaining v4 support,
+> otherwise I could look into it.
 
-> ---
->  net/core/dev.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
->=20
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 5933c5dab09e..5c37cf6c4aa1 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -5517,12 +5517,16 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb,=
- struct xdp_buff *xdp,
->  	}
-> =20
->  	/* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
-> -	 * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
-> +	 * (e.g. bpf_xdp_adjust_tail). Remove the old fragment contribution
-> +	 * from skb->len before updating data_len, then add the new one back.
->  	 */
-> -	if (xdp_buff_has_frags(xdp))
-> +	skb->len -=3D skb->data_len;
-> +	if (xdp_buff_has_frags(xdp)) {
->  		skb->data_len =3D skb_shinfo(skb)->xdp_frags_size;
-> -	else
-> +		skb->len +=3D skb->data_len;
-> +	} else {
->  		skb->data_len =3D 0;
-> +	}
-> =20
->  	/* check if XDP changed eth hdr such SKB needs update */
->  	eth =3D (struct ethhdr *)xdp->data;
-> --=20
-> 2.43.0
->=20
+I'm working on separate MOVSX and MEMSX patches. Would you be willing to
+take BSWAP and JMP32_JA? If you've already started with a different split,
+let me know.
 
---/TwNh9MoKEPtMbBg
-Content-Type: application/pgp-signature; name=signature.asc
+> Consider making the uasm additions a separate patch.
 
------BEGIN PGP SIGNATURE-----
+Agreed. I plan to structure v3 as:
+  1. Factor the existing DIV/MOD emission into helpers.
+  2. Add the signed DIV/MOD uasm emitters separately.
+  3. Add SDIV/SMOD support in the MIPS BPF JITs.
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCamzEewAKCRA6cBh0uS2t
-rJKIAPwIOifZCbi4bNYaPci1bdVKfal+1DrlN1kJ8grHMI8Q2QEAtE8RyN2jX5nX
-/ZfFfChpNvx0x57wBuT/8TQBRG70gw4=
-=GYlU
------END PGP SIGNATURE-----
+> Should not "quot" be s64?
 
---/TwNh9MoKEPtMbBg--
+Yes. I will make quot s64 so the remainder calculation stays in signed
+arithmetic.
+
+> Please propagate the raw offset value and do the interpretation in the
+> div/mod helpers instead.
+
+I'll pass the raw s16 off value through immediate validation and
+register emission, and interpret off == 1 only in DIV/MOD-specific paths.
+That leaves MOVSX free to interpret off as its source width.
+
+I will validate each series boundary on MIPS32r2, MIPS64r2, MIPS32r6, and
+MIPS64r6, and build the complete v3 together with the MOVSX and MEMSX
+candidates before posting it.
+
+Does that sound ok?
+
+Thanks,
+Nicholas
