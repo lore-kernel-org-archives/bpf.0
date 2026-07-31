@@ -1,64 +1,64 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5573F310645
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 02:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DC6318BB5
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 02:21:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785464479; cv=none; b=abDLc7MCkHxrLbxyo/j86Zt3wCklxMs+5ea9EAZmkXvFjFdGdb4+5/0A+hi21jGviW8oJidcTqMzEjbVAQXmtorzIkt1/uDUmcR7zJyu2Rx1G/Y8op41AL0/08W5OXs+00WgLV405So5t9dlsAhFy2Nl1GTGqqgy0F9Chb/cX88=
+	t=1785464480; cv=none; b=XnQmjljVFlxjKzDH5Dj1E/e3tuAJ2SfEa6Uw8IH7pBZwlZyHHJrGPePMMGWM9Rw+XDpZwxVy4Oweg4kGiEKxPZUfq+vctBytuo/8hMI93PnLBDs3rGzE2jJvYbSxxYGIkVhvG/qmTCYTqIB1kPIoVb/aY9TAnGbo+NeEZJsiH/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785464479; c=relaxed/simple;
-	bh=Eb0i9E1Gj/ePAHcgoR0E+HEHOHcL5jShkypGqqir1ck=;
+	s=arc-20240116; t=1785464480; c=relaxed/simple;
+	bh=zF0tqApE3olWAH+8tKR7/tJlMlF9wC9LvCeUj33ogrE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YVq17fqUfFR2+kFw7OzBXGUW/p9lpj13VrjC6zpmoYZ1BWVoLbXSVbucvhLbbZWQWFAYObqMQdCfS8+32WA8iX0z1LugMlHPrS3NNPlpmefQvOJQr/P21lPtyq/Jf2a2juqvSCljmIePBaiX1ipTqBY5BWJ9YhsU5Bddp4ReA54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJxwxulJ; arc=none smtp.client-ip=209.85.128.179
+	 MIME-Version; b=MzBK97WaXGr9vRCu2ILPdU/V0YfltpS7+VN8lJG3rC7KHxFptwYr5/rxF1IKvxio/hE4Q7ASoY4tSkHYysevP1lNKMo3UFsvQNbE4AGxJWrJQuXxZdU6lAojHwRah2IG+JK5bVRSRnmwvq4NyLAvtNevvVvPqeVzRiL4FWOPDrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P20tIPxW; arc=none smtp.client-ip=209.85.128.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJxwxulJ"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-81fc442789cso7352597b3.3
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 19:21:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P20tIPxW"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-81f36179d72so7493287b3.2
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2026 19:21:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785464475; x=1786069275; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785464476; x=1786069276; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=x5Hdd2d+rIeKOx6QkydL222RNNm3Nsb20BqP+/GgTXI=;
-        b=BJxwxulJGiu8pnn2NjZ51oNybQpxsSLHfraJNiYIN5Pog1iJ41uon7qfTFXLmmhhwM
-         DPGrlM6rOK68sPT0KTry+I+0He3WbcyZAwyrqKR54PYqpo6Ltb5PIBfRIa5Ly1QtXPwj
-         QHZvdf7Knk4cI4u7g6MHun4qc/mt8bPnwfUAjApf0iwtQwf3k2h9hv5tGQAnf+e5OztB
-         XAf8HmtkoJAhNoF8PZhzPG6ZlPjmbwkR62ywTzBHdZW88ZD6JtIJ+UsMlTpfZGpKdpQo
-         +Khw4xap3TR2Sv4A6PYBQxJdU/p/Nhov8Dh2Xqz7Q1adTVoh3yDX+PTEn9iocwNEY4Sw
-         5iIg==
+        bh=dtKbTJ5THz2A+MXeqySnkUBiio4mcHLmT5n5t78F/X0=;
+        b=P20tIPxW9iNwVUVyuwRVUOttXxFxiun5NslGeoiklCtpix/JbiGVJUmtBLvFWCWQ4T
+         b/LPj+33jY5vbTp8pjUgKxuuTCniwXtSkxYtFiQLXw+Ap0GbTHG3M7oaeUsidsBqH4OW
+         ZBCGyTHq47pZ4ySL8xJ7wuuaFFJY2FxlCwi+EvIQRbLSQk7CNnt6vD7076PNFJaoj/uJ
+         6kkSD+hwjNkzGc6YOTcs/0Z8vRgDokCO0vgz+0FydaS2S+KahUrIxnW1hyP5tcKGuTl0
+         a+SZPJuoHtbZ00+7sX5+YuJPYKesVCp+vFPs2PmfyH4vPh9X0nkPFd/T4vlEmI6MRmZu
+         3O+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785464475; x=1786069275;
+        d=1e100.net; s=20251104; t=1785464476; x=1786069276;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=x5Hdd2d+rIeKOx6QkydL222RNNm3Nsb20BqP+/GgTXI=;
-        b=VsOuZV3+0rySrLHVMDQypEKNOIGFYKV6aNzG7q8AZ4zX+DZUO1ZM+BDFCXlZWK+Yuh
-         oa1EP/yE4b68sRedbWVCw4spOJfjGAO51bU0lJfjHSnMLXnKkoF+sCgRhLw8PPy+m8DR
-         lg82r4v889Vd1UhU7gwhCznGXnGAgK3o9XUBsWTKfubMwq1xY/PmCgy6hyYXBrjK5s5a
-         j983Kwnyjs3Pc3j0ijfQCSZZwT3Ud5ndEoeAy2iYglCi0ai9CtWv8eDzZb27kufiee8W
-         8EFDHXjADcO3QV6/SvASOSzJjWEaZJUGPeUEGIqoep0NJmlBJi2DeZdaKEYphFY4w5L7
-         niRA==
-X-Forwarded-Encrypted: i=1; AHgh+RokjsBiLDkDsO+ebEID2/X1367p/jrMt5ELwnM5fIVnkbLYMVcfhRATOTN0tlOuPBykgpk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFjCCDxznrerE+zE8bldsd2kkn/OTFOoLb65kSLjG4D0DnRWK3
-	GBKQz8J1tn1/uQ8arrnffZD1lHZONZTNER3/3Ve6Ko4rdoWjZ1iD5sWv
-X-Gm-Gg: AR+sD11wumpIns8V5SWC+3uNPfA4QPi50u9N4G5CRC3e9E29KUDrhE2pgAN+62oZWm0
-	0wgNB67+7SQHJXuedOh/EC4xbrTY08Ke9IyvfesABEm4q5iggIonSpvxDOlknGlb+/ELZGhep7D
-	FpVUDS2P54hC1qy7xMGOU2koZfmyZ9xmu0qq7wqSDIKy8lApPAuBqjoXV3fwFi0+pduOpFEJxa+
-	e9fYEMMvgHBZqtWYi6j92cGOmE+9X/zLjp3Jy2wo4bhbsAdAFfO6ciFFCo+s6AaDT4M8YtNUv1l
-	BH7H4bn9EV1sAtPeEgOgHBapTmFLIY+0j5kcifV2q52JPe0fYbKSWyAWHUFqqhY6UCzqgW/cMW4
-	sEwRsPDjG1iiIRGhv87lEgAosCBlCpNtdTuIQKDtjFwtPQdQ+Mqlty79euNLMnVLs0CTuQ9K6o1
-	Hzr51PeMDIInlysgVDLiolq9IrU4ldAHO9tqbrngHHZFodgSwWhrMpCKJ/fjrIVEKGqZKWAKMIM
-	z6yEoDfNC/bF31Lifpf4A==
-X-Received: by 2002:a05:690c:4d09:b0:81f:3b6d:a0c2 with SMTP id 00721157ae682-81fcbbb0bd4mr506707b3.42.1785464474838;
-        Thu, 30 Jul 2026 19:21:14 -0700 (PDT)
+        bh=dtKbTJ5THz2A+MXeqySnkUBiio4mcHLmT5n5t78F/X0=;
+        b=JxCEfZgJtgqH0Yf5NwZY9kD/ueG1X7Cx+3+dn6KY1WatpsvlU8Y2+PLVEsMq6cfhd9
+         WPjMHEIh0JJi62wDYICXCWmjwoDOqf8u0CYmCMF0MfaJRrv3or3Dhy1hPiNLIIjNJRCV
+         TB4KHMCMXW8lWFbpHZgjXdG3ay4mCLQu2L7o7DWGb8UdZizVsszQzrgxSj9blBoanOBo
+         ORJ5pkNrRu67SUaqeJKuiSRwYyTqMfmTEDYPTNfLQUde/iCHOErRyHkS+W6KK/fRORP5
+         90ERHS6LQPzKKYwgKtpo/aGqVqDJcMkBY2/KOXOAuDE3TeD2pmhW6+iTKZxQ6m+Y19+q
+         6EaQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoYXDvGZ4dIZTq8bYCjt5L6SsqDn7yB7BM/qpgoJEWivoF0HYRr65onkKTyy6Dz27G2D3A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhovpCVS0+RdYUnq/7L2DhWFEKrJxEON5mLYkhm1lQnsaFU8Zd
+	OxTaS/Y1Z2ccTuwQyRaR3MXeL7ukWTJmXpY7/72r0XTw/BWsF2eTssRZ
+X-Gm-Gg: AR+sD10SMAZm8u2GsvuDZm5FtT6Jeg6pzsf+Ock6Z19JFRdGqFCbxarsT56xGWdSYDT
+	v8iW0/jBldWcgbLXAH/iejfHZ6lvglAK5HSFNXM8cuP25Fnarg7A/Umb/PwVf2taedcZqv8cwkX
+	c8NCVzAmVpqiLuoeo720egYwSVvV7Q5u3zC344gCBNUQvdh+kWTsJP25/xN3cKyOEHcjxbJdGj0
+	4QZP0vXWvomJIUz39Aif7nllFwuks+qFN1yo1n+kZXHgcsRaa//6Makk30fp6Izxbnm0bg3cIgK
+	TNB5WLF3zzJkBhum+UOKvOyb12mOp5ORVlnsNKd5pyuiA0aVW61RFcbunRMX89avruJPKKu8P2D
+	1FB20HyOinfPzdFk9ffAihNBIqI3eaAzbyo0XQh9ACyEuGVvJUdWOJZ0JONnNQprBG9WQRO+p2Z
+	qV9A18DH1c8B7V51ew/2KfRIICbtlMnXU6KV8SmeSzTPiUDXzZUmqIaZBCzNi6bQJty22xPxc6U
+	dMXhobdERuRu4Mjm+b+GJmOnfnZvU6/
+X-Received: by 2002:a05:690c:38a:b0:81f:69e:1c70 with SMTP id 00721157ae682-81fcbb3fcb6mr634587b3.38.1785464476435;
+        Thu, 30 Jul 2026 19:21:16 -0700 (PDT)
 Received: from zenbox ([2600:1700:18fb:6011:e94:8a83:feea:6720])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81fb8b26e8bsm20519047b3.47.2026.07.30.19.21.14
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81fb8b26e8bsm20519047b3.47.2026.07.30.19.21.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 19:21:14 -0700 (PDT)
+        Thu, 30 Jul 2026 19:21:16 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -80,9 +80,9 @@ Cc: gnoack@google.com,
 	linux-kernel@vger.kernel.org,
 	Justin Suess <utilityemal77@gmail.com>,
 	Casey Schaufler <casey@schaufler-ca.com>
-Subject: [PATCH bpf-next 02/13] lsm: Add LSM hook security_policy_kptr_put
-Date: Thu, 30 Jul 2026 22:20:35 -0400
-Message-ID: <20260731022047.189137-3-utilityemal77@gmail.com>
+Subject: [PATCH bpf-next 03/13] lsm: Add LSM hook security_bprm_enforce_policy_kptr
+Date: Thu, 30 Jul 2026 22:20:36 -0400
+Message-ID: <20260731022047.189137-4-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260731022047.189137-1-utilityemal77@gmail.com>
 References: <20260731022047.189137-1-utilityemal77@gmail.com>
@@ -94,120 +94,149 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the generic LSM hook releasing a reference obtained through
-security_policy_kptr_from_fd():
+Add a generic LSM hook enforcing an LSM policy object on the
+credentials prepared for an execution:
 
-  security_policy_kptr_put(lsmid, &policy)
+  security_bprm_enforce_policy_kptr(lsmid, bprm, &policy, flags)
 
-The shim uses the same targeted dispatch by @lsmid as the get hook:
-only the implementation registered by the matching LSM is called, and
-it only ever reads its own member of union lsm_policy_kptr, so a
-policy object only ever travels back to the LSM that produced it.
-The hook is void: releasing a reference cannot fail.  A reference can
-only come from the matching LSM's policy_kptr_from_fd hook, so a
-dispatch miss means a caller passed the wrong lsmid or an LSM
-implemented the get hook without the put hook; the shim warns instead
-of silently leaking the reference.
+The policy object is obtained from the owning LSM through
+security_policy_kptr_from_fd(), travels in that LSM's member of
+union lsm_policy_kptr, and is handed back only to that same LSM: the
+shim uses the same targeted dispatch by @lsmid as the policy kptr
+lifetime hooks, and returns -EOPNOTSUPP when no active LSM matches.
 
-An implementation must support being called from a context that cannot
-sleep: the release of BPF managed references may be driven from object
-destructors.
+This is the first policy operation backed by the BPF-owned LSM
+kfuncs: it lets a sleepable LSM BPF program attached to
+bprm_creds_for_exec() or bprm_creds_from_file() arrange for the
+executed task to start confined by a policy created through the LSM's
+own userspace API, e.g. a Landlock ruleset applied to a binprm.  The
+BPF-facing kfunc keeps the policy pointer strongly BTF-typed all the
+way to the union member the implementing LSM reads back.
 
-Like the get hook, this hook is excluded from the "bpf" LSM's
-attachment points, as the targeted dispatch makes an attachment there
-unreachable.
+The hook contract is LSM agnostic: any LSM with a notion of a
+per-task policy object can implement it, with its own semantics for
+how the policy composes with restrictions the credentials already
+carry and for the meaning of @flags, unsupported values of which it
+must reject with -EINVAL.  Implementations can rely on being called
+only between the preparation and the commitment of the bprm's
+credentials.
+
+Like the policy kptr lifetime hooks, this hook is excluded from the
+"bpf" LSM's attachment points, as the targeted dispatch makes an
+attachment there unreachable.
 
 Cc: Paul Moore <paul@paul-moore.com>
 Cc: Casey Schaufler <casey@schaufler-ca.com>
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- include/linux/lsm_hook_defs.h |  1 +
- include/linux/security.h      |  6 ++++++
+ include/linux/lsm_hook_defs.h |  2 ++
+ include/linux/security.h      | 12 ++++++++++
  kernel/bpf/bpf_lsm.c          |  1 +
- security/security.c           | 27 +++++++++++++++++++++++++++
- 4 files changed, 35 insertions(+)
+ security/security.c           | 41 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 56 insertions(+)
 
 diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index afd5b3f932a9..0800622e317f 100644
+index 0800622e317f..a70edbd7b761 100644
 --- a/include/linux/lsm_hook_defs.h
 +++ b/include/linux/lsm_hook_defs.h
-@@ -454,6 +454,7 @@ LSM_HOOK(int, 0, bpf_token_cmd, const struct bpf_token *token, enum bpf_cmd cmd)
- LSM_HOOK(int, 0, bpf_token_capable, const struct bpf_token *token, int cap)
+@@ -455,6 +455,8 @@ LSM_HOOK(int, 0, bpf_token_capable, const struct bpf_token *token, int cap)
  LSM_HOOK(int, -EOPNOTSUPP, policy_kptr_from_fd, int fd,
  	 union lsm_policy_kptr *policy)
-+LSM_HOOK(void, LSM_RET_VOID, policy_kptr_put, union lsm_policy_kptr *policy)
+ LSM_HOOK(void, LSM_RET_VOID, policy_kptr_put, union lsm_policy_kptr *policy)
++LSM_HOOK(int, -EOPNOTSUPP, bprm_enforce_policy_kptr, struct linux_binprm *bprm,
++	 union lsm_policy_kptr *policy, u32 flags)
  #endif /* CONFIG_BPF_SYSCALL */
  
  LSM_HOOK(int, 0, locked_down, enum lockdown_reason what)
 diff --git a/include/linux/security.h b/include/linux/security.h
-index db807e61d310..5017a335918c 100644
+index 5017a335918c..40dfa96b6a71 100644
 --- a/include/linux/security.h
 +++ b/include/linux/security.h
-@@ -2331,6 +2331,7 @@ extern int security_bpf_token_cmd(const struct bpf_token *token, enum bpf_cmd cm
- extern int security_bpf_token_capable(const struct bpf_token *token, int cap);
+@@ -2332,6 +2332,10 @@ extern int security_bpf_token_capable(const struct bpf_token *token, int cap);
  extern int security_policy_kptr_from_fd(u64 lsmid, int fd,
  					union lsm_policy_kptr *policy);
-+extern void security_policy_kptr_put(u64 lsmid, union lsm_policy_kptr *policy);
+ extern void security_policy_kptr_put(u64 lsmid, union lsm_policy_kptr *policy);
++extern int security_bprm_enforce_policy_kptr(u64 lsmid,
++					     struct linux_binprm *bprm,
++					     union lsm_policy_kptr *policy,
++					     u32 flags);
  #else
  static inline int security_bpf(int cmd, union bpf_attr *attr,
  			       unsigned int size, bool kernel)
-@@ -2390,6 +2391,11 @@ static inline int security_policy_kptr_from_fd(u64 lsmid, int fd,
+@@ -2396,6 +2400,14 @@ static inline void security_policy_kptr_put(u64 lsmid,
+ 					    union lsm_policy_kptr *policy)
  {
- 	return -EOPNOTSUPP;
  }
 +
-+static inline void security_policy_kptr_put(u64 lsmid,
-+					    union lsm_policy_kptr *policy)
++static inline int security_bprm_enforce_policy_kptr(u64 lsmid,
++						    struct linux_binprm *bprm,
++						    union lsm_policy_kptr *policy,
++						    u32 flags)
 +{
++	return -EOPNOTSUPP;
 +}
  #endif /* CONFIG_SECURITY */
  #endif /* CONFIG_BPF_SYSCALL */
  
 diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index 9fa514204fb5..e9059d43e92c 100644
+index e9059d43e92c..d847a180489f 100644
 --- a/kernel/bpf/bpf_lsm.c
 +++ b/kernel/bpf/bpf_lsm.c
-@@ -57,6 +57,7 @@ BTF_ID(func, bpf_lsm_xfrm_decode_session)
- BTF_ID(func, bpf_lsm_ismaclabel)
+@@ -58,6 +58,7 @@ BTF_ID(func, bpf_lsm_ismaclabel)
  BTF_ID(func, bpf_lsm_file_alloc_security)
  BTF_ID(func, bpf_lsm_policy_kptr_from_fd)
-+BTF_ID(func, bpf_lsm_policy_kptr_put)
+ BTF_ID(func, bpf_lsm_policy_kptr_put)
++BTF_ID(func, bpf_lsm_bprm_enforce_policy_kptr)
  BTF_SET_END(bpf_lsm_disabled_hooks)
  
  /* List of LSM hooks that should operate on 'current' cgroup regardless
 diff --git a/security/security.c b/security/security.c
-index 14fd8b878cd0..fd535bd00c24 100644
+index fd535bd00c24..e9d8c9492bdb 100644
 --- a/security/security.c
 +++ b/security/security.c
-@@ -5479,6 +5479,33 @@ int security_policy_kptr_from_fd(u64 lsmid, int fd,
- 	return LSM_RET_DEFAULT(policy_kptr_from_fd);
+@@ -5506,6 +5506,47 @@ void security_policy_kptr_put(u64 lsmid, union lsm_policy_kptr *policy)
+ 	WARN_ON_ONCE(1);
  }
  
 +/**
-+ * security_policy_kptr_put() - Put a reference on an LSM policy object
++ * security_bprm_enforce_policy_kptr() - Enforce a policy on exec credentials
 + * @lsmid: LSM_ID_* value of the LSM owning @policy
-+ * @policy: the policy object, in the member of the LSM identified by
-+ *          @lsmid
++ * @bprm: execution context providing the prepared credentials to restrict
++ * @policy: the policy object to enforce, in the member of the LSM
++ *          identified by @lsmid
++ * @flags: LSM-specific enforcement flags
 + *
-+ * Release a reference previously obtained with
-+ * security_policy_kptr_from_fd().  Only the hook implementation
-+ * of the LSM identified by @lsmid is called, and @policy must have
-+ * been obtained from that same LSM.  An implementation must support
-+ * being called from a context that cannot sleep: the release of BPF
-+ * managed references may be driven from object destructors.
++ * Ask the LSM identified by @lsmid to restrict the credentials
++ * prepared in @bprm with @policy, so that the executed task starts
++ * confined by it.  @policy must have been obtained from the same LSM
++ * with security_policy_kptr_from_fd(); the hook borrows the
++ * reference and the caller remains responsible for releasing it.
++ * Only the hook implementation of the LSM identified by @lsmid is
++ * called: an LSM never receives a policy object meant for another LSM.
++ *
++ * This hook may only be called from an exec security context where
++ * @bprm's credentials are prepared but not yet committed, i.e. from a
++ * bprm_creds_for_exec() or bprm_creds_from_file() hook.
++ *
++ * How @policy composes with restrictions the credentials already
++ * carry is defined by the implementing LSM, as is the meaning of
++ * @flags, unsupported values of which it must reject with -EINVAL.
++ *
++ * Return: Returns 0 on success, -EOPNOTSUPP if the LSM does not
++ * implement the hook, negative values on other failures.
 + */
-+void security_policy_kptr_put(u64 lsmid, union lsm_policy_kptr *policy)
++int security_bprm_enforce_policy_kptr(u64 lsmid, struct linux_binprm *bprm,
++				      union lsm_policy_kptr *policy, u32 flags)
 +{
 +	struct lsm_static_call *scall;
 +
-+	lsm_for_each_hook(scall, policy_kptr_put) {
++	lsm_for_each_hook(scall, bprm_enforce_policy_kptr) {
 +		if (scall->hl->lsmid->id != lsmid)
 +			continue;
-+		scall->hl->hook.policy_kptr_put(policy);
-+		return;
++		return scall->hl->hook.bprm_enforce_policy_kptr(bprm, policy,
++								 flags);
 +	}
-+	/* A held reference implies the matching LSM implements the hook. */
-+	WARN_ON_ONCE(1);
++	return LSM_RET_DEFAULT(bprm_enforce_policy_kptr);
 +}
 +
  /**
