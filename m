@@ -1,138 +1,183 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D7C3B637A
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 19:26:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC2E30E828;
+	Fri, 31 Jul 2026 19:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785525997; cv=none; b=R85ysf3hj6C0PK8rcAx34gO+zh/WIr1UGdEG9ZhIAf5FkmezV4jrAxrLLYCC0B5lIOPmdoiWX9Q/cFfEk9XBxaBN+m76R+SOinszkkSfMGg1Zm/6LEUVBj/JhTE+AAL7oZyUMrXp1rYlUM47vI4rdR3TctoFgt2eEOmgrsf85aQ=
+	t=1785526270; cv=none; b=HKVm5LkRWBbVFF2kDNRIQNMnNCYA7yphu/lB807ZGyHCWdXHVa3cRWyJUcHW8QPEEaMjWc1MGiIHynmFILFwRg2fz1sAJ2NWskAbMwZ35JfOslVVwMQ5nGNvkKOn2y3vRFrUaR9zzXC+lhdO2DDXzAp/VluK8cumndPel0oRWVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785525997; c=relaxed/simple;
-	bh=4Umsazmsjz5P1aeiTFAbn6V8f+uc+/ZVWTbKPct4BpU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hvUmHIgJG+pgX1gq+53ozAr3mc220nSoQ/9V7SYm+zNZeXnCTBrsO/Hgh6G3bPMuYl/bhDi1alTeb1JAtsU1ZuiQv5TXCOz24/v12+QUhHLPvPXNrVgJ0FpBgkdFr3rgZI7G+JlLp9CEamWd6TZ7oCEemopB0oUSBvqFAMjQomc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mB1Do2Sz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785526270; c=relaxed/simple;
+	bh=Dc7jPJAk64RxNM/7y+bu/S155812HcJ3njKa5UlP0Pg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RJPGr5raiKVnD97njcoB+EAV8SgdcETls7ROhogQoTQ/g9JycpgNCnRyFODRbEKWcqJQtLZRp6e9C/nlOEuH79WxdLt23y/VNtM7MFWZ7qhr1RLfbUXuak8kRl0stInxksCeZe28OGiGCa9eZfz0QDiBTlmQ74FxDoDF3CiBAS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F54A4otb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mB1Do2Sz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8111F00AC4;
-	Fri, 31 Jul 2026 19:26:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F54A4otb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7070A1F00ACA;
+	Fri, 31 Jul 2026 19:31:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785525995;
-	bh=GBPRI4bfLA6B5fkfuDezFPhxUT5ubh7uKxvcw8OJ4m0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mB1Do2SzFxGDG3s4iUD0yBfKsGy2JJOQkKTra1Mw7sgxTcLeT1Iy9S6avfEKwCmUt
-	 AYOir8NEwR7DoUT2tbTfiBtAGCUv5fTsxNX/ggGNxXo5IMIQ53GLgYX84AJduVRMPy
-	 mxl1gT2TufvJMTqx3Q2lZhRP9DOI5DaF5fyi6j1I0Vy4ny/rD6hW36O8nQ590LPE/4
-	 m4CUmyPSHY9ZdqVLW/qfDuaDRD9TvzIPs3WoLzh99VRD0nOVj3hUKhgkg2BYriA9bM
-	 ndNcD9riSgvCWMvKCTj418vIW+8kX4mF8QoQoNzbmgcNRfVdw/XF5Mo6Z8VEzMmgHD
-	 eELpsHjVvmJ2Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 3/5] bpf: infer zext_dst based on static
- register liveness analysis
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260731-static-zext-v1-3-98a4dc73e94b@gmail.com>
-References: <20260731-static-zext-v1-0-98a4dc73e94b@gmail.com>
- <20260731-static-zext-v1-3-98a4dc73e94b@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 31 Jul 2026 19:26:34 +0000
-Message-Id: <20260731192635.8B8111F00AC4@smtp.kernel.org>
+	s=k20260515; t=1785526268;
+	bh=hOWWK484LjgnipuNokg+evFEZ4SCjh/DsjNI6Uzrl/k=;
+	h=From:To:Cc:Subject:Date;
+	b=F54A4otb/m/U+KO4fBucJwty06n5jBCbEjHXgcDAnVLsq6tPcXvBb9ELro4JuaU1n
+	 4ftAv2HMOb5hNzxoPEelAntaGnpOXYIJVhz/QAyKEW/oamQBH/feaxSAnggb/dnVZW
+	 eWKaVYhkYEIO1LqermMIZV3uC1uol/DqGllrH1McM2nGmkSED8abyjyAy/4Qop/WMI
+	 PE7WihRzF3TPWXaSOr+GjOW6zB1bogkH1uW5xsuEFD/qFuWgoB2zTc9EpFFhu2DK9k
+	 JqzDtxX7JbcEkGEOl3zA/7rFj+yNF+5rTyvwpsDjqiIQos1OcWwEbq0MoXH93ApXC1
+	 eDgtziNGBA7hg==
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Jiri Olsa <jolsa@kernel.org>,
+	Clark Williams <williams@redhat.com>,
+	dwarves@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Mark Wieelard <mjw@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: [PATCHES 00/12] pahole: Support more rust tags and references to dwz alternate debug files
+Date: Fri, 31 Jul 2026 16:30:48 -0300
+Message-ID: <20260731193102.110693-1-acme@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] Incorrect static liveness tracking for 64-bit conditional jump=
-s leads to missing zero-extensions (`zext_dst`), resulting in verifier/runt=
-ime state divergence and potential privilege escalation.
---
+Hi,
 
---- Patch [3]: [PATCH bpf-next 3/5] bpf: infer zext_dst based on static reg=
-ister liveness analysis ---
-commit ab8592d6a434dbfed0cbb0bd067d9032b308db8d
-Author: Eduard Zingerman <eddyz87@gmail.com>
+Add support for Rust discriminated unions (enums with explicit
+discriminants).
 
-bpf: infer zext_dst based on static register liveness analysis
+Rust enums like Option<u32> and Result<i32,u8> are represented in DWARF
+as DW_TAG_variant_part containing DW_TAG_variant children with
+discriminant values. These patches:
 
-This commit replaces the dynamic subreg_def based zero-extension
-tracking with static liveness analysis to correctly infer zext_dst
-and prevent missing zero-extensions on architectures like s390x.
+  - Load DW_TAG_variant_part containers with discriminant tracking
+  - Populate DW_TAG_variant children with discriminant values
+  - Handle DW_FORM_block encoding for discriminant values
+  - Handle DW_TAG_subprogram inside DW_TAG_enumeration (Rust methods)
+  - Encode variant parts as BTF_KIND_UNION members
 
-Link: https://lore.kernel.org/bpf/CAGKGUv=3DsOuqQtA1Ub-5JXfA4FPosJFYKAQE4B7=
-9cK+P1erxqtg@mail.gmail.com/
+Before: Rust Option<u32> showed as empty struct (0 members)
 
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index c996b8a03e792..ea002550671a8 100644
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-> @@ -2317,9 +2318,18 @@ int bpf_compute_live_registers(struct bpf_verifier=
-_env *env)
->  	}
-> =20
->  	for (i =3D 0; i < insn_cnt; ++i) {
-> +		int def32 =3D bpf_insn_def32(&insns[i]);
-> +		u32 out =3D state[i].out;
->  		u32 in =3D state[i].in;
-> =20
->  		insn_aux[i].live_regs_before =3D mask_lo(in) | mask_hi(in);
-> +		/*
-> +		 * On architectures where 32-bit operations do not reset upper halves
-> +		 * of the registers, the verifier needs to zero extend a destination
-> +		 * register if an instruction defines a 32-bit subregister and the
-> +		 * upper half of that register is alive after the instruction.
-> +		 */
-> +		insn_aux[i].zext_dst =3D def32 >=3D 0 && (mask_hi(out) & BIT(def32));
+After:  Shows None and Some variants with correct layout
 
-[Severity: Critical]
-Does this code correctly evaluate liveness for 64-bit conditional jumps?
+  === pahole --expand_types output ===
+  struct Option<u32> {
+      struct None {
+      } __attribute__((__aligned__(4)));
+      struct Some {
+          /* XXX 4 bytes hole, try to pack */
+          u32  __0 __attribute__((__aligned__(4)));  /*  4  4 */
+      } __attribute__((__aligned__(4)));
+  } __attribute__((__aligned__(4)));
 
-The new zext_dst logic relies on mask_hi(out) accurately reflecting if the
-upper half of a register is alive.
+BTF has no discriminated-union kind, so variant parts are tentatively
+encoded as BTF_KIND_UNION with overlapping members at offset 0. Further
+discussion is needed to see if we can keep that.
 
-However, looking at compute_insn_live_regs() in kernel/bpf/liveness.c for
-conditional jumps:
+DW_FORM_block byte order fix: uses CU-recorded endianness instead of
+assuming little-endian when decoding DW_AT_const_value and
+DW_AT_default_value. Fixes cross-endian DWARF processing (e.g.  reading
+big-endian s390x debug info on x86).
 
-    const u8 class =3D BPF_CLASS(insn->code);
-    const u8 code =3D BPF_OP(insn->code);
-    ...
-    case BPF_JMP:
-    case BPF_JMP32:
-        switch (code) {
-        ...
-        default:
-            def =3D 0;
-            if (BPF_SRC(insn->code) =3D=3D BPF_K)
-                use =3D dst;
-            else
-                use =3D dst | (code =3D=3D BPF_JMP32 ? src : src32);
-        }
+Also add support for cross-CU type references and dwz alternate debug
+files.
 
-Can the code variable ever equal BPF_JMP32?
+This is needed to improve the support for, among other things, Rust, as
+noticed in the pretty printing or a perf binary that has rust objects
+linked, built by clang/llvm that use cross-CU references.
 
-BPF_OP() extracts the operation code (which is a multiple of 16), while
-BPF_JMP32 is a class (0x06). This means the check code =3D=3D BPF_JMP32 eva=
-luates
-to false, and the source register usage always falls back to src32, even for
-64-bit jumps (BPF_JMP).
+DW_TAG_imported_unit support:
 
-If a 32-bit operation defines a register, and it is followed by a 64-bit
-conditional jump using that register as a source with no other uses of the
-upper 32 bits, the upper half won't be marked as alive.
+  Handle same-file partial units where types are shared across CUs
+  via DW_TAG_imported_unit. Force-merge CUs that contain inter-CU
+  references (DW_FORM_ref_addr) so type lookups resolve correctly.
 
-As a result, zext_dst wouldn't be set, which could lead to the JIT skipping
-the mandatory zero extension. This would cause the 64-bit jump to compare
-against uninitialized garbage in the upper bits, potentially allowing
-out-of-bounds access.
+  Fix cus__merging_cu failing to detect DW_FORM_ref_addr when
+  DW_FORM_implicit_const causes dwarf_getabbrevattr() to fail.
 
-Should this check use class =3D=3D BPF_JMP32 instead?
+dwz alternate debug file support:
 
->  	}
+  Handle DW_FORM_GNU_ref_alt references to dwz-compressed alternate
+  debug files (.dwz). Pre-processes all alternate partial units with
+  separate hash tables and dedup tracking.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260731-static-zex=
-t-v1-0-98a4dc73e94b@gmail.com?part=3D3
+  Before (Firefox): 1774 "has no entry in cu" errors
+  After:  processes cleanly with 0 errors
+
+  Firefox uses dwz compression which moves common types into a
+  separate .dwz file and replaces duplicates with DW_FORM_GNU_ref_alt
+  references. pahole now pre-loads the alternate file's partial units,
+  resolves all cross-file references, and processes Firefox DWARF
+  cleanly.
+
+Includes inter-CU type reference comparison test and
+vmlinux_comparison.py for DWARF/BTF analysis across kernel configs.
+
+Known limitations:
+  - Pruning of unreferenced alt PUs is conservatively over-approximated
+  - Merged-CU path is single-threaded by design
+
+This makes pahole to be able to support more of the CONFIG_DEBUG_ DWARF
+options, including DWARF5 and compression, see the latest patch in the
+series for more details about how this table is produced:
+
+  ┌───────────────────────────┬─────────┬─────┬───────────────────────────────────┬─────────┬───────┬──────────┬────────┬──────────┬─────────┐
+  │ File                      │  Size   │ Ver │ Producer                          │  DWARF  │  BTF  │ DW-Hash  │ DW-Out │ BTF-Hash │ BTF-Out │
+  ├───────────────────────────┼─────────┼─────┼───────────────────────────────────┼─────────┼───────┼──────────┼────────┼──────────┼─────────┤
+  │ vmlinux.dwarf4            │ 835.7MB │   4 │ GNU C11 16.1.1 -gdwarf-4          │ 599.2MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+  │ vmlinux.dwarf5            │ 736.3MB │   5 │ GNU C11 16.1.1 -gdwarf-5          │ 499.7MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+  │ vmlinux.dwarf5.zlib       │ 497.8MB │   5 │ GNU C11 16.1.1 -gdwarf-5 -gz=zlib │ 261.2MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+  │ vmlinux.dwarf5.zstd       │ 454.7MB │   5 │ GNU C11 16.1.1 -gdwarf-5 -gz=zstd │ 218.1MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+  │ vmlinux.toolchain_default │ 736.3MB │   5 │ GNU C11 16.1.1                    │ 499.7MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+  └───────────────────────────┴─────────┴─────┴───────────────────────────────────┴─────────┴───────┴──────────┴────────┴──────────┴─────────┘
+
+Split DWARF support (skeleton CUs) will be supported in upcoming work,
+so as to cover all the possibilities the kernel build system offers
+for generating DWARF.
+
+- Arnaldo
+
+Arnaldo Carvalho de Melo (12):
+  dwarf_loader: Initial support for DW_TAG_variant_part
+  dwarf_loader: Initial support for DW_TAG_subprogram in DW_TAG_enumeration
+  dwarf_loader: Populate DW_TAG_variant children in DW_TAG_variant_part
+  btf_encoder: Encode variant parts as union members in BTF
+  dwarf_loader: Handle DW_FORM_block in attr_numeric for Rust discriminant values
+  dwarf_loader: Allow forcing the merge of CUs for solving inter CU tag references
+  dwarf_loader: Support DW_TAG_imported_unit for same-file partial units
+  dwarf_loader: Fix cus__merging_cu failing to detect DW_FORM_ref_addr
+  dwarf_loader: Add cu parameter to tag__set_spec() and dwarf_tag__set_attr_type()
+  dwarf_loader: Support DW_FORM_GNU_ref_alt references to dwz alternate debug files
+  tests: Add inter-CU type reference comparison test
+  scripts: Add vmlinux_comparison.py for DWARF/BTF analysis
+
+ btf_encoder.c                 |  66 ++-
+ ctf_encoder.c                 |  34 +-
+ dwarf_loader.c                | 873 ++++++++++++++++++++++++++++++----
+ dwarves.c                     |  77 ++-
+ dwarves.h                     |  63 ++-
+ dwarves_emit.c                |  10 +-
+ dwarves_fprintf.c             |  54 ++-
+ man-pages/pahole.1            |  18 +-
+ pahole.c                      |  20 +-
+ scripts/vmlinux_comparison.py | 367 ++++++++++++++
+ tests/block_endian.sh         | 146 ++++++
+ tests/dwz_alt_file.sh         | 204 ++++++++
+ tests/inter_cu_refs.sh        |  50 ++
+ tests/prettify_perf.data.sh   |   4 +-
+ 14 files changed, 1854 insertions(+), 132 deletions(-)
+ create mode 100755 scripts/vmlinux_comparison.py
+ create mode 100755 tests/block_endian.sh
+ create mode 100755 tests/dwz_alt_file.sh
+ create mode 100755 tests/inter_cu_refs.sh
+
+-- 
+2.55.0
+
