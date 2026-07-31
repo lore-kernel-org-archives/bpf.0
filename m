@@ -1,104 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C921D36F8E7
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 20:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785529485; cv=none; b=dxuNd6a9NuPrq5TjRJ1ctq1mRJTCA+Q0OspgvkVbCZNJaatmjgrdPeB5kYa4xko9LMxUMNtASiJOYO511pFXJcXu69zIt3TRV6znR0c33d9GLTD+M4qvne7EaxfwLcmyeBA8t2SUkp8m9JVHQmN3invelSPk9XQnbyFMlTAL6+8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785529485; c=relaxed/simple;
-	bh=LQ4MkgJBtKW0EhB8H1/+eRss4hn9vJEBw+Hb1rqSlJQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=uHyenibiOBKoL75/xOe0y1WIqeXdNpr+HRvW7zro4LtNHtV52g/eIFp9M+F2wk4uYAPkIH36ATrUrpnGwLd4xpXwDBMBL/lRXKJ+f5YQnHYV+4WTPOgW85Eb9v0GxZa0Nms+14pCxdVfIiQUwgW5i4uOg+qVFiaS9JU+JUTsLRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cVmHFJVH; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095E637C911
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 20:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785529857; cv=pass; b=r+lXHeJvdWUuwD9T1StDYWR9V3B8ICzkXJXJPfY02uFd7pQpn/YyBm/AhlIayUXPV18cu/ruA6y1j0ujUYHUv334WZNxDvnriHZLoP+CCwDitc4/JvAvJfMy1UGElGwoP+wQNVjkET0B2P5RxF8/CxgdQ93SRzh5bELwbyp1hcA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785529857; c=relaxed/simple;
+	bh=6OZybQH9mjdmuIJ0VC3HF4/1LHBpsWKz2iwSWBXuZog=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S8ZDFqeojIFjPkUS61n/z/S8qS/RL9IfrJicAws8JmxYWR1/ZTRxwmWP5qJyAdeovS7u4X37yPnhd0q69Qd7yjTTt/vFa8FeiNuEWZSTCcRNMjtcI1udIvBuyl3oOK/GtWqAk9YAZe6qOd1LG6JA56LiM8vWPOsRoZaCeDh/Y1E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KN4eoMOb; arc=pass smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cVmHFJVH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D097E1F00AC4;
-	Fri, 31 Jul 2026 20:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785529484;
-	bh=0i0BDEuOA/mHx7nii3jbyMYYg/lDwARABjPhLov2G9o=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=cVmHFJVHG5BIUXdbn9h9/Xt/9yzc62NgZqtgnE18ATJnSs4Jm7PwgtA99SjT3Fi/8
-	 MCONUhOStq/fFP6ohUi4gCrSWMBpsyQMRY34mRv7NCv1z0b6COPPqOJPInVYrfHBSV
-	 PUgYt9oXaqp+bPd9zm8FwiH7UNFdGzHpO3YdKprogjE1rrwoFWYXpad1EAGTE22AZY
-	 0kkyc7F/0fiaDL6tOOd8MehHrc3myCWzlqXLrjsH6UN+YWUZ7mZM/xVSVCddhxX2da
-	 eIaMNpZ6JLM7qfkPwC5L8zITGp1zy8kkysfZkfA7PfWWbfIxTJ6ND02hWo4DxK+1uP
-	 EnVoR/kN5A7fw==
-Content-Type: multipart/mixed; boundary="===============1310453833229460925=="
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KN4eoMOb"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38d489b6b71so1446954a91.0
+        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 13:30:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785529853; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NMv7SfA+p6+j/hTw7yA0ZKnlAO9C1LqYutZ4vqJ0oUTdrhzWZOT01vlmsbQ+hGLcNi
+         7cYkJcd2Dy0xAGllbi6eeVVTEHVI3rrUacXTTqgyxM3VD71WEVqsCb1rNgXSON5JDdUn
+         5izbcERZXAzuC8UuG5rksaJ8DgSqLNrKayG9BPYaffwiwlYYpcBLssF5rKobhcb9hCgN
+         /VRqBnhB9Uu+ZlqV0wQvLypphwnx1h5B8XlBOUSPMqNVpu1tJDERYwOhBQMVhcfw6C6u
+         8+5me/PJ1NQSIy4/LKMseXWyEJ7FJ7pBcvBncFOeeu/Zh0DQ04LunFScQ8oMNRjMzS2I
+         iy3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sJPatjaoGt9TgsVyGfH9eHA98XjRAYWgm2TTNnuirns=;
+        fh=ImDiRxVt7yGBhQUQMK6+mljnaRMCZ5h4PjAExcaArsM=;
+        b=DSWmlYsYgYN83rXqwouBgTBhopcIuqat+Ze/h7yanpMAJdTs9B7Gd8aEES9kiTPE9o
+         NT2XI+0ofeiOGml6Ag4g9tNWC7SrKCOtXK7tCgQFZ/AxJy6rLUlwfCw5K5DNKYIQ+ow9
+         UGhETtSg2yl0Zdh2/I3PCA/6BHjwT9Mhl/zSU9+5NQ2n6pmLS0gdnTZuPrGvQ+/IL/bf
+         1M7iD0Svd9nV1qH9LtDlVESM9iK9BIfE4vRX/cdesd+IVH4CJrQp6pc71eqX6G0MPQAZ
+         zGyLkKnUFdgHbFHRnN20aiz/NyM6vtcTrUJFhRp3+PMKwZhSt7IGbJ6cVJNUbtcNMVVA
+         OuqA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1785529853; x=1786134653; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=sJPatjaoGt9TgsVyGfH9eHA98XjRAYWgm2TTNnuirns=;
+        b=KN4eoMObbRKuK2oVBAZMpz/oMX6pfSX80SxISod+oCf8IKcSC4PyK6R99/4ceS1Eod
+         7jPwZ7Tbr9c62tawWPGHzaD+yLkjJDCFL3ZOrLnsKLSNbPQCH/tzmzffzoWPgGxbP2/s
+         zvAlnU3TGwEdqiYmJjJQdfCbN+O+6tFRLx9ujfCcfJVZyTZ268BUch+FyXdzUPD3wPDS
+         BYs6VYlJ/jYPqUe+ikA236WwJpvto9vIcz283p2YSjEmgHCyQzhv5fnHjXF7Cq7qRpt6
+         8+4XCkC3wK8GzDjK5fAkikHUfjQIgAoLtJpCQTnLCKNIk1W6CjP1yY7qvNCvLpd50AIm
+         NvzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785529853; x=1786134653;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=sJPatjaoGt9TgsVyGfH9eHA98XjRAYWgm2TTNnuirns=;
+        b=GDNxpTPRXLxdHTmT8lTkOnRqU+H0qW2ac79OyP4F8aVuWHAG4Lx8zBQrCWW7dDiahA
+         5p2aqecIaCOyHpKpQIt+J2v2m5Gdtc1UNw4vQJ3s40Pba8PZXGA2awRVSeTx2ZDGN4go
+         aWkByKAGDQqYsK9HvAvll6hcy5Ywe4W7MiUV3XFzpR6nlajY6heuV59byshcUavLIFn1
+         +A659SzsJpWgOm14HYUx8JAhYEAD3CuaUTGoNWwyJtU+mJf3Dp4XuI7bDhfuOdROHdq1
+         6g2H9pQ0cvsaHKEyL0wsYNC4aqMbz55mox5MryUx2LJA7dQtTd7XDnWNlCOqsp+6wESq
+         Htbg==
+X-Forwarded-Encrypted: i=1; AHgh+RpbPpfE0q5g2rV2KmEFU9OeOlKB1Y1TTVVJwXA3c9wn60NzDZW3MDpzNRE/Oo1AJmzOG/M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkVyi7B4MtHQ/pGZcLuv4UgPK7/Ru9OX7+m480jsKUNqG5iwlX
+	8yZOXco1CRJcb2JsSXgTyOeiXtnlLJnwOZHG+T72gM8R2ZzvEecj/haiM+lgACw8n6hB/Cm+/SC
+	GTL7gzbsUTQIcKRRAfzAHBcltpTjee0l79dzFaeXe
+X-Gm-Gg: AR+sD12g0zV0GKIZ2vWV0bpc2iolGyoZQ0ZniZc/iB92d94XHq3vPY35d24DzyqNUri
+	R/oqa+/wW7W/lkvm8A29BSYSSgRB+s4A5BqjQZ1Weu4e1RmAAJZELfYNNiVJq3fCvffIW7kPUbq
+	MWIF1TmZv2WKB9CiyUiLR2zgMhhD7KzkVrFSWGv9fKMUCJHDKt/aXDjKRmWPdxALhI5U2pVr1Fm
+	peQK3qFxlPi3oXH91p428WPg/UWtGvfWSFrTJJhwY7Us05DXW1LDMyIzrZ25MwH+5rJ3hijEkKg
+	rWqP/qPiZnefgVasOvbpVsAOh2Oe92WFlu5Nrz35hD/h
+X-Received: by 2002:a17:90b:524b:b0:38f:2168:b9cb with SMTP id
+ 98e67ed59e1d1-38fbc3e5c67mr938294a91.9.1785529852735; Fri, 31 Jul 2026
+ 13:30:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <00c332237fb39899a63235c07cc1d51ab4df2bb5213a6ba93dd186250ccc54df@mail.kernel.org>
-In-Reply-To: <20260731-static-zext-v1-1-98a4dc73e94b@gmail.com>
-References: <20260731-static-zext-v1-1-98a4dc73e94b@gmail.com>
-Subject: Re: [PATCH bpf-next 1/5] bpf: do not print a newline after disassembly in bpf_verbose_insn()
-From: bot+bpf-ci@kernel.org
-To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
-Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,iii@linux.ibm.com,gimm78064@gmail.com,qmo@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 31 Jul 2026 20:24:43 +0000 (UTC)
+References: <20260731022047.189137-1-utilityemal77@gmail.com>
+In-Reply-To: <20260731022047.189137-1-utilityemal77@gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 31 Jul 2026 16:30:39 -0400
+X-Gm-Features: AUfX_mxKHXyCJl3oze3VVACC862OElbuxSdP7kNF71uPYmySH4_LSdAxPXYGbl0
+Message-ID: <CAHC9VhSSzNBCSvy4cQHh6OOM4-EvHF+bmrB9=V1y=Lj53RvxQQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 00/13] BPF interface for applying Landlock rulesets
+To: Justin Suess <utilityemal77@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	kpsingh@kernel.org, mic@digikod.net, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, kees@kernel.org, gnoack@google.com, jack@suse.cz, 
+	song@kernel.org, yonghong.song@linux.dev, martin.lau@linux.dev, m@maowtm.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============1310453833229460925==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/bpf/bpftool/xlated_dumper.c b/tools/bpf/bpftool/xlated_dumper.c
-> index 5e7cb8b36fef2..7b33d847d800c 100644
-> --- a/tools/bpf/bpftool/xlated_dumper.c
-> +++ b/tools/bpf/bpftool/xlated_dumper.c
-
-[ ... ]
-
-> @@ -417,6 +412,7 @@ void dump_xlated_for_graph(struct dump_data *dd, void *buf_start, void *buf_end,
+On Thu, Jul 30, 2026 at 10:21=E2=80=AFPM Justin Suess <utilityemal77@gmail.=
+com> wrote:
 >
->  		printf("%u: ", insn_off);
->  		print_bpf_insn(&cbs, cur, true);
-> +		printf("\\l\\\n");
+> Howdy,
 >
->  		if (opcodes) {
->  			printf("\\ \\ \\ \\ ");
+> This series lets BPF programs apply an existing, userspace-created
+> Landlock ruleset to a program during exec.  The goal is unchanged from
+> the RFC [1]: BPF does not create, inspect, or mutate Landlock policy,
+> it only decides whether a ruleset that was already created and
+> validated through Landlock's existing userspace API should be applied,
+> based on runtime exec context.
+>
+> Motivation
+> ---
+> Deploying Landlock today requires the sandboxed program's
+> cooperation.  A process can only restrict itself, so applying a
+> policy system-wide means wrapping every launch path with a helper
+> that calls landlock_restrict_self(2) before exec, and anything
+> spawned outside those wrappers runs unconfined.  Supervising exec
+> from userspace instead (ptrace, seccomp user notifications) is racy
+> and slow.  Meanwhile, the tools that do enforce system-wide policy
+> with BPF LSM programs today (container security agents such as
+> KubeArmor and Tetragon) end up reimplementing path-based access
+> control in BPF, fraught with horrors of path reconstruction, bind
+> mounts, rename races, and worse, which is exactly the problem Landlock
+> already solves in the kernel, with maintained and versioned semantics.
+>
+> This series composes BPF and Landlock along their natural grain.  The
+> intended deployment: a supervisor creates one ruleset per policy
+> class through the existing syscalls, a syscall BPF program parks
+> them in map kptr fields, and an LSM BPF program picks which (if
+> any) to apply to an execution based on its runtime context.  The
+> policy semantics stay Landlock's; BPF contributes only the
+> programmable decision of when and to whom.  Deciding inside the
+> exec path closes the race a userspace supervisor cannot: the
+> policy is in place before the first instruction of the new program
+> runs.
 
-This isn't a bug, but now that no disasm.c format string carries a
-newline and dump_xlated_for_graph() emits "\\l\\\n" itself, is the
-'\n' arm of print_insn_for_graph() still reachable?
+Discretionary models are fun, and useful in certain situations, but
+they do have their limitations ;)  To be fair, mandatory models have
+their limitations too :)
 
-Looking at print_insn_for_graph():
+I've only just barely skimmed some of the patches in this patchset,
+and I didn't have a chance to fully read your reply in the previous
+revision yet, so I wanted to get you a quick response here ... as
+incomplete as it may be.
 
-static void __printf(2, 3)
-print_insn_for_graph(void *private_data, const char *fmt, ...)
-{
-	...
-	p = buf;
-	while (*p != '\0') {
-		if (*p == '\n') {
-			memmove(p + 3, p, strlen(buf) + 1 - (p - buf));
-			/* Align each instruction dump row left. */
-			*p++ = '\\';
-			*p++ = 'l';
-			/* Output multiline concatenation. */
-			*p++ = '\\';
-		} else if (*p == '<' || *p == '>' || *p == '|' || *p == '&') {
-	...
-}
+As you may, or may not have seen, there is currently an ongoing debate
+regarding the location of LSM kfuncs that will impact this patchset.
+Sadly, we don't appear to be approaching an agreement on this issue
+which introduces some additional risk to this patchset.  We'll have to
+see how that ends up, but I just wanted you to be aware of the
+situation.
 
-It looks like the `if (*p == '\n')` arm no longer has any producer,
-since this patch drops '\n' from all 34 verbose() format strings in
-kernel/bpf/disasm.c and the interpolated values (symbol names parsed
-with sscanf "%s") cannot contain whitespace either. Could this arm be
-dropped so only the '<'/'>'/'|'/'&' escaping remains?
+I need to look closer at both the LSM hooks and the BPF kfuncs before
+I can really definitively comment on them.  It looks like there has
+been some progress towards an LSM agnostic interface, but I'm
+concerned more work might be needed.  However, as I said earlier, a
+closer examination is needed and perhaps that will reveal something
+different.
 
-Note this would also retire the latent `memmove(p + 3, ...)` expansion
-that had no headroom check against the 64-byte buf.
+It's also worth mentioning that this functionality looks an awful lot
+like a call to lsm_set_self_attr(LSM_ATTR_EXEC,
+<lsm_ctx:LSM_ID_LANDLOCK>, size, 0) with a lsm_ctx::ctx set to a
+policy fd.  Once again, perhaps a closer inspection will reveal that
+it is nothing like that, but it kept popping into my head while
+reading things so I wanted to mention it, especially as it a lot of
+the framework infrastructure already exists.
 
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30658911996
---===============1310453833229460925==--
+--=20
+paul-moore.com
