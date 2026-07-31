@@ -1,137 +1,89 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB2436A37B
-	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 20:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785528454; cv=pass; b=IBBa+5ScJsjd4fVzj1Z1NJ4v/TFeQZPvWeMIKmXTVHJ9wP4LkG9YJm1WwhQpno3wJMAc2OqEPjydiQPY3Qx7bzg786DdfdcuVBjmKiQ0cnxcru1/SR7SrlFDuSqXo7wcdhbPvEFshnu1fOsUrtV40QX5h0GLBABVjovpwU8e4tY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785528454; c=relaxed/simple;
-	bh=HaZxmJqYx+9+QhSynH8AmDcWjKIvancPwzCQZQKd8SY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W3aFDzgLhzB1/lKYO6JzO+2lkfJKP0LjpqWvys8ClMwQ/wze46lkT8N69dH8E6EfsKK+Ab2icQkCVX7B6vZ3LsX6NAhwjalVvyD43/tO+4o2cI/eltKi+fsh+c01nRQSse+3YAOiw9Y9VsrfWp+tsUTsOGbdTYUmjs7DZ1b362M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=NPlVNPEd; arc=pass smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0180334888F
+	for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 20:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785528595; cv=none; b=Ikw0zcKJgupwcBFWSUu2erP5872t9LX/MT568+oBP+XDji+ZP2+62AR8bbsxkEYnRuQZWGujSQZ4UCQXcQKR0yoNxya9igIiqZua61h+R4qpQlyCVqAwf8gtBKCMHDISJFynjRo6ZHLcS9r2zSRI9IYu9G/4UVnzKesXw43qLeY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785528595; c=relaxed/simple;
+	bh=g5/7271p85oAFH7CnX6LEhojBJAeOSW1YL/XFb0Tq6k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=cWrDi3BjoGK3IqSP2sieii+IidqESkuXB/IEGrD1p5Ka904EtQwbEqqCs2vPDOXdV8wYBHaYGJj4a72KSuRZkz8Mw1sx4WjYTP0HiDaRpdjYMs9s8XAxvVYnzZ2tnSXY1704EZi7a2wq2dPQ8Uvn/Puc/zPIi4YxW76bFRhn/l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jugLYeNN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="NPlVNPEd"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-84eb992a881so1360261b3a.2
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 13:07:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785528452; cv=none;
-        d=google.com; s=arc-20260327;
-        b=gHNMapfGj+2aCaN6jzZ5J3+EEbdicXI3ynxoUWKDpJqoi+BaSOfRidG2Z2JUpF8rYt
-         4pqbLnXLUi6hSioEim4vNr5W0HFfImTwrzZnNl7HVlFAKvThnFqssyZQoTb5aHp45eku
-         Z4tPbgcn8P7Xf2Dme5zN7nIddwobbviWnpIMPkt2fqa9Y3ZU26r4Hhay0d1hjXege2KY
-         AzRYEBlYprRIC+KWV4aDZreAG34K25EoXGrKzPunQy+8UNIElpVxsnysdW1vDhHVt/UM
-         2ZRjnkGoUy9INd+At827rJFHpKtfHBwLKrh9MAVv3L+lmpNR2glSBchgOGsCz0cj8YhC
-         ByqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=IINxWFvd1Xd2t87DnvaxuJRBg50D9LzcF6dTbifwyFw=;
-        fh=mZnTAocp6pY3B8U/xX/O6xf5o4kTowujB9xDhCXtDfA=;
-        b=nVbiROtYSXMPoT3t4RmvAg5qc/RlXrYB4l+SiTuwuZ9K2tepWYIvS9RZUJ2XKYlbfW
-         zPfVvVWu8UlIhoRdqarvb2/W6d+OEDO69BNfN3oF6/Vc3g4tpd3+8vmoF0a3cnG+leHG
-         DIE7eV2Kh0ABb7p1/X/XBE1HugoiJ5whjZuZ0XGwsF68CqKXYgX4PWkq3n2rayouS2ip
-         wczmOK2qi6WtFCCXTkYr/oc73SRHPJQh4BBHvsPy1lpU8qJLpli7iZ56rxT1CgLAE6sQ
-         eRpBvs8MVEaBGjCVWDdMmt7bm9uuSis25Wwrox3L8xqxL9fiepkndHrrBRMshZvoUMhv
-         1aVQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1785528452; x=1786133252; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IINxWFvd1Xd2t87DnvaxuJRBg50D9LzcF6dTbifwyFw=;
-        b=NPlVNPEdkpYXPJZFPwbxsaV60UpEogskvIjAU9EuMgFV1M1pdX30eUEMpNbcZd94b1
-         2gRxZ3L7whZk6DM0OCU5ZE0mVe9F7l1VNH9e5D1dLNE3sapfOKBfrNlY2INCBYhaUU+D
-         Qy1Pq0Ja2OghaPhJ5SD2MfpL2GfwXjc6A41eRM7Wh98mjqfHH7/FYowwpjUsLil1FBHa
-         hktynS0v4DT82vvLWYbcGZiCfnJ6rBbK4zjySew1QGWe7DAEKDYewlDQqsklNKGmC0T1
-         dOLfERsr1Ca8HHki5+fMgF87EdRPhNsNTZ2h2dVCEHY8YScFMiyAoVk66LKpMADwZxDn
-         +GsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785528452; x=1786133252;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IINxWFvd1Xd2t87DnvaxuJRBg50D9LzcF6dTbifwyFw=;
-        b=LtEqDQu9ML/WpMLtAkpdBZ19XftkR3p0WpKQ7Ic7NDB/3PJFJ4m2+cTwoDOFPEuC6v
-         ao1097pTuVxN/UNVb2By7kC3066/KZieBKwB7k0q+jptDTaagpEU62MDF7oybaj4ZrT9
-         vTiIFG3tsDU+xyR1K1ZmuR8rWYiHOCYsUNYA4YU3eUwRBBwP2rvmRkfkzPQmsjaOCsAB
-         5kLJtAoI1P01IDHDXf+t8nHcdRK8UedryWzBYg7F8D++hA+k9XITg2bjiD9vwv2RbK/k
-         D5JhL6YWN4st6Ikou42bFZ/cdCMEr8/Afuo8b42+jqt19+KvPtI6nbHJiivBmp++L5/s
-         7AHA==
-X-Forwarded-Encrypted: i=1; AHgh+Rp9t1rGsrybLzDcSLU8YowUJmYbBVq7adEXM/Sxbz72CTWj/LgsZXFLgE5ALVJEVDKAnHk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMbUBnVQXP9yRrmNgIopSVJMNAsHHe6vU+p7X8C4yDTLuUcEq9
-	VKQ4bQ5ik4vBCIDUlCdWCwkygXx/2jwieVnOKFhmtiE3UNyXvb4t2pxgfBwPIfYzVDdKHb0mUb9
-	+AS5OR05/8PE1vKu5EI6vo6HOxAvgGOs+zLcqwaJn
-X-Gm-Gg: AR+sD13G97AsN744oZ2c8/VtAE5JC8WcgFv4o+hxHezaVLB4PXLoGFeRvOY63fiANOX
-	910KIqIFj9vMFMbiH5lOMayC5LQk5f6bJRmSBYuSuPCpW7yiKvxEu40aU6fzgSi32R1ChXJQSFD
-	Gfs176peJxGZudcZeIhtnigXqfukPSBYkyR073mW+0le9N+XS6WGn2UNdhdPZX8suxoKUwLVm6/
-	Y5MkAlIGIGkx0gdHsfMkEN1GHIc3lmHp1C8lJUKA8C4HUqBgdYRxrtrXzvRFFTWeUvx3jcFP1Oe
-	usic8hc4vCvAkEEmoNHXad8Tnafjb3RNh5OmDySpaAXqxfDOzsMYUqs=
-X-Received: by 2002:a05:6a00:9094:b0:847:7a61:e68e with SMTP id
- d2e1a72fcca58-84ee482cf83mr862916b3a.31.1785528452555; Fri, 31 Jul 2026
- 13:07:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jugLYeNN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C744F1F00AC4;
+	Fri, 31 Jul 2026 20:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785528593;
+	bh=f16mOQSNxS4D8SDYYsrlnADD0ZYBWEuRxdxkLf5M2Ic=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=jugLYeNN4ygpOj7Pum/0DW5jKQqbCXjz9mfaG/oOhB5AXBUs4zCQpsCAu/M71vi4u
+	 DoMx17xyOFu3Kho6PTXvlXcT6SvDWBz8oxGu1dBUmMsIOdSEa4yJpprM2g1gznHTPo
+	 3JwdskI3wkt7g/2x0JBoSwxuxBL0gwjQCoyXHFgpkXeeMJxg96mPbmOUP2x5l1MKmU
+	 9VA52f2FI9LIWQehwInEAJ63tgOPVXxPmdjLhCy/gU6jqYldKgjZJfoYPIOCYZNXKN
+	 xoASAcxHuQPeEPQ50ThqL/jAxsAYjztA/Uk8qTcJMZLEc8X76PA5Z3JfC8GMCCqPxt
+	 bf/2hAgo/RzmA==
+Content-Type: multipart/mixed; boundary="===============9125118984046841705=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com> <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
- <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
- <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
- <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
- <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com> <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
- <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com> <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
- <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com> <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
- <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com> <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
- <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com> <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
-In-Reply-To: <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 31 Jul 2026 16:07:20 -0400
-X-Gm-Features: AUfX_mwbFUF3u9BOCn6R0bUcxbx1dq-jZz_UTL6QyKSEwU_IdbxDl3CNhAP30WA
-Message-ID: <CAHC9VhR8RpkP-N4J0wGbv167NctjFTOg5Z+n4_M0pjp3Fbnamw@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <41de1b91c637814541763c352b7254d39f2f44cb4810e646022f31c98e55a37f@mail.kernel.org>
+In-Reply-To: <20260731-static-zext-v1-4-98a4dc73e94b@gmail.com>
+References: <20260731-static-zext-v1-4-98a4dc73e94b@gmail.com>
+Subject: Re: [PATCH bpf-next 4/5] bpf: simplify the bpf_is_reg64() signature
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,iii@linux.ibm.com,gimm78064@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 31 Jul 2026 20:09:52 +0000 (UTC)
 
-On Fri, Jul 31, 2026 at 4:01=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
+--===============9125118984046841705==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> bpf: simplify the bpf_is_reg64() signature
 >
-> ...
+> After the previous commit this function is only used in a context
+> where destination register's property is queried.
+> Hence, simplify the function by removing the 'regno' and 't'
+> parameters.
 
-Completely unrelated to everything else in this thread, does anyone
-reading this know if Matt Bobrowski is still at Google?  I've been
-getting bounces on his @google.com address for a few weeks now, I'm
-assuming others have as well?  If anyone is still in touch with Matt,
-can you ask him to update his address in MAINTAINERS?  Failing that,
-can we at least remove his email from MAINTAINERS (feel free to leave
-his name if possible?) so we don't keep getting bounces on postings?
+The changelog appears to undercount the removed parameters. Looking at the
+actual signature change:
 
-[NOTE: for obvious reasons I dropped Matt's address from this email]
+include/linux/bpf_verifier.h:
+-bool bpf_is_reg64(struct bpf_insn *insn, u32 regno, struct bpf_reg_state *reg, enum bpf_reg_arg_type t);
++bool bpf_is_reg64(struct bpf_insn *insn);
 
---=20
-paul-moore.com
+Three parameters are dropped: regno, reg, and t. The message mentions only
+'regno' and 't', omitting 'struct bpf_reg_state *reg'.
+
+The reg parameter isn't incidental: it was the only pointer argument, both
+call sites passed NULL for it, and its removal retires the contract that
+the BPF_STX SRC_OP arm relied on. The fixups.c comment at line 622
+explicitly documented this:
+
+kernel/bpf/fixups.c:
+    /* NOTE: arg "reg" (the fourth one) is only used for
+     *       BPF_STX + SRC_OP, so it is safe to pass NULL
+     *       here.
+     */
+    if (bpf_is_reg64(&insn)) {
+
+Could the message say 'removing the regno, reg and t parameters' (or
+'removing all parameters except insn') so readers following the series can
+account for all three removals?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30658911996
+--===============9125118984046841705==--
