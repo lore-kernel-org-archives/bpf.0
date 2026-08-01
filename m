@@ -1,81 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B5A39A7F6
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 01:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767347260D;
+	Sat,  1 Aug 2026 01:32:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785546650; cv=none; b=tU2RoJXnAKtm38rM4JuonPpAbbIYa/LRMf3TfeYA3V3EKphEZ4TL9w/bxblmTAmhKOPehDpxRIV2KV4g1ccMgck9+iqywe/eCx45sKCNTM8XhTTME7gk1/GtEVtJGeU+cgwszKUzZSsHJCXv92C4v2UbcPnsgPzTUd6X+uk+j7k=
+	t=1785547923; cv=none; b=I9PKvFp+X4NbEH5M2a+5wmFrTfOJYw9cpQVUh1UtzJhTT9yQk2LzelLfhQSxFVYcIF7ObsflLhT2f/ZKqXFM+5YpqgDe92EZRFojGH5UmfAJX1txXzQrqkMdTwnxPTHUir4Aji2fRRfShJ4tus4HEW1xx2IqGUFnSPHEYCyxdPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785546650; c=relaxed/simple;
-	bh=RDZjSRT8QJnJ5Jpyee1OCFFvPnxuHYic8Gz9F9dgqf4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ibUR24I0hhY5T3uWFfyUeylCV6B3l8esODFh0V3nNtQHnXrDawKrAbi//L7WZUuDqoslhikjjIDr0eoWGbL+yyeX8OE7e1TgbT1nHRYtjcBmqz0k0LtvKljUfntDeyJg/cKQ00GAGZJDem+zMGCnEydh1tZ1/ZdRhM7RYcknF4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q0KLArVW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785547923; c=relaxed/simple;
+	bh=f8rY+JwJnopqDv8WVaYlI8s7YX4pYGbTOexdqm1Itek=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=kmN/jbUshY5x0YTkt+civ9E78ZXVfS//+8ZnLVpevAkEv8KlEDI8IhAVfnaleJ6pCyGJsK1x3u4LbtTeRHsOQA4FpxWdVK5wGf+cTMgL1/DuDt0LEuD6lVNL2LKIrVg5G/JkPYumXWdiqWBAXf53GuoYpsv2lhtX4cUMFQsK4rA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fS+Ls4Yd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q0KLArVW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7083A1F00AC4;
-	Sat,  1 Aug 2026 01:10:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fS+Ls4Yd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2962C1F00AC4;
+	Sat,  1 Aug 2026 01:32:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785546649;
-	bh=Evmqmk+2/MG1Y8i+0TU8L8MiRP6wuHVJhxfeMMRhc7k=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Q0KLArVW2O2rT+2K38yMgqU/cWH7i9KM1ubqUczYkxEXlPIFTctVpaQ9BXw7GS7AV
-	 GJ4HSUeJmZaKS8P02JjvxQlmqBmogOzv+9VQn0GZ767wWOuWij9Xf+Mg33xY249x+P
-	 /UnXCFg6VzBy/2zLHYVwvKuk1yS+DFQ/iDSAWY0B3MIXZ1Az/3BhJlfZU7gQlY8pzd
-	 YC4wMLDd6ftWw6L/AXPS7DdS2UZpMaad7db6NY5IGrgpJWqaTyTVAFo/0XUIu9F1iV
-	 +bHRF7PYnep7fnrdX0sgthMC+1t04BfOFzkJGb27SqE7/M+aGEWgi6WnJSKwV74pZU
-	 i3FPCZvDO8nLA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5689E392665F;
-	Sat,  1 Aug 2026 01:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1785547922;
+	bh=FygqdHscPa55VsrCF2NTgQpIKjXqAw47+DFt/URfP8U=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=fS+Ls4Ydtdbjl89EYdZfZAV+PWtXkSgr/NDCIT7e5makeNJZLj4Q25AzWjWb+5oq6
+	 GlIAUdZVPB40D3QcuZ5TccEOL4i4qO8sYM4EtITIxWh0gwywoakjYw2H0smvp5MsN8
+	 P+X1kzVp3kAofNhjryO6tvsd60rX47HMxNXhzwrzzvBFPbfx2RWdocD+mcH1FUFM6F
+	 8jp8KW7XEV5caTcXDXOPvr9Vd4sEynmISASvntBOkSFctuWrwzcyGpEMjCDh5pjkZu
+	 n3Ac+rwVrOgq2u6vFsLRrnn/jJNAaViEdWpMItNqf6Nn/rO1lxdu3Izge/qeMeonZp
+	 FFLdPjM8MlmXQ==
+Content-Type: multipart/mixed; boundary="===============3185519639301511561=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v5 0/3] bpf: Fix trampoline handling of 128-bit
- values
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178554661214.974239.3202155911510305468.git-patchwork-notify@kernel.org>
-Date: Sat, 01 Aug 2026 01:10:12 +0000
-References: <20260729050154.2585468-1-yonghong.song@linux.dev>
-In-Reply-To: <20260729050154.2585468-1-yonghong.song@linux.dev>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, kernel-team@fb.com
+Message-Id: <5846008399c0c914c487eb22a9548201420ea5a14b3a4293735411e3a9726961@mail.kernel.org>
+In-Reply-To: <20260728115036.2049536-1-tushar.vyavahare@intel.com>
+References: <20260728115036.2049536-1-tushar.vyavahare@intel.com>
+Subject: Re: [PATCH net-next v3] selftests/xsk: decouple xskxceiver and xdp apps from test_progs objects
+From: bot+bpf-ci@kernel.org
+To: tushar.vyavahare@intel.com,netdev@vger.kernel.org,magnus.karlsson@intel.com,maciej.fijalkowski@intel.com,stfomichev@gmail.com,kernelxing@tencent.com,davem@davemloft.net,kuba@kernel.org,pabeni@redhat.com,ast@kernel.org,daniel@iogearbox.net,tirthendu.sarkar@intel.com,tushar.vyavahare@intel.com,andrii.nakryiko@gmail.com
+Cc: bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat,  1 Aug 2026 01:32:01 +0000 (UTC)
 
-Hello:
+--===============3185519639301511561==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This series was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 55d394438705..2749b26fd4cd 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -932,17 +932,26 @@ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
+>  	$(call msg,BINARY,,$@)
+>  	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+>
+> -# Include find_bit.c to compile xskxceiver.
+> -EXTRA_SRC := $(TOOLSDIR)/lib/find_bit.c prog_tests/test_xsk.c prog_tests/test_xsk.h
+> -$(OUTPUT)/xskxceiver: $(EXTRA_SRC) xskxceiver.c xskxceiver.h $(OUTPUT)/network_helpers.o $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
+> +# Keep xskxceiver independent from test_progs object dependencies.
+> +$(OUTPUT)/xskxceiver: xskxceiver.c xsk.c network_helpers.c \
+> +			   $(TOOLSDIR)/lib/find_bit.c prog_tests/test_xsk.c \
+> +			   xskxceiver.h xsk.h network_helpers.h \
+> +			   prog_tests/test_xsk.h test_progs.h bpf_util.h \
+> +			   $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
+>  	$(call msg,BINARY,,$@)
+>  	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+>
+> -$(OUTPUT)/xdp_hw_metadata: xdp_hw_metadata.c $(OUTPUT)/network_helpers.o $(OUTPUT)/xsk.o $(OUTPUT)/xdp_hw_metadata.skel.h | $(OUTPUT)
+> +$(OUTPUT)/xdp_hw_metadata: xdp_hw_metadata.c xsk.c network_helpers.c \
+> +			   $(TOOLSDIR)/lib/find_bit.c xdp_metadata.h \
+> +			   xsk.h network_helpers.h test_progs.h bpf_util.h \
+> +			   $(OUTPUT)/xdp_hw_metadata.skel.h $(BPFOBJ) | $(OUTPUT)
+>  	$(call msg,BINARY,,$@)
+>  	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
 
-On Tue, 28 Jul 2026 22:01:54 -0700 you wrote:
-> The BPF trampoline preserves only 8 bytes of a target function's return
-> value (R0), and its register save area under-allocates space for 128-bit
-> arguments for x86_64. These two problems lead to memory corruption or
-> incorrect values observed by BPF programs and the real caller.
-> 
-> This series fixes both issues and adds two selftests, otherwise, each of
-> them will fail if without the corresponding fix.
-> 
-> [...]
+This isn't a bug, but does xdp_hw_metadata actually need
+$(TOOLSDIR)/lib/find_bit.c? Nothing in xdp_hw_metadata.c, xsk.c or
+network_helpers.c seems to pull in <linux/bitmap.h> or the find_*_bit
+helpers, unlike prog_tests/test_xsk.c in the xskxceiver rule.
 
-Here is the summary with links:
-  - [bpf-next,v5,1/3] bpf: Reject >8 byte return values on return-reading trampoline paths
-    https://git.kernel.org/bpf/bpf-next/c/c48796aa6c39
-  - [bpf-next,v5,2/3] bpf, x86: Fix trampoline stack size for 128-bit arguments
-    https://git.kernel.org/bpf/bpf-next/c/814cba835ef6
-  - [bpf-next,v5,3/3] selftests/bpf: Add tests for >8 byte return value and 128-bit arguments
-    https://git.kernel.org/bpf/bpf-next/c/13cc6b788b1a
+The xskxceiver rule genuinely needs find_bit.c because
+prog_tests/test_xsk.c includes <linux/bitmap.h> and calls bitmap_full(),
+bitmap_zero(), and __set_bit(). The pre-patch xdp_hw_metadata rule did not
+list find_bit.c either. The only bit-field work in xdp_hw_metadata.c is
+FIELD_GET on GENMASK constants, which doesn't require find_bit helpers.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+> -$(OUTPUT)/xdp_features: xdp_features.c $(OUTPUT)/network_helpers.o $(OUTPUT)/xdp_features.skel.h | $(OUTPUT)
+> +$(OUTPUT)/xdp_features: xdp_features.c network_helpers.c xdp_features.h \
+> +			   network_helpers.h \
+> +			   test_progs.h bpf_util.h $(OUTPUT)/xdp_features.skel.h \
+> +			   $(BPFOBJ) | $(OUTPUT)
+>  	$(call msg,BINARY,,$@)
+>  	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+
+This isn't a bug, but could the xdp_features prerequisite list be packed
+into two continuation lines to match the density of the xskxceiver and
+xdp_hw_metadata rules just above? The current wrapping spreads the
+prerequisites over four lines with one line carrying only network_helpers.h
+and the final line carrying just $(BPFOBJ) | $(OUTPUT), while both rules
+above group their prerequisites more densely at the same indentation.
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30676354696
+--===============3185519639301511561==--
