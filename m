@@ -1,62 +1,62 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53DE7350285
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 07:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9FB25D53B
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 07:46:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785570409; cv=none; b=HxnDKG5XnZkYkEoFKKeg41LiHhucaXZuUaTw1OjHh/SdeRc50WP+R13D1EImgdRk1OfQBjVIaZcYcXzlvHSH9qPdJTHuZsxwS0THxDK//MuiuosxyZvTro+YBw+OJ4G7nu9AkByshWXFSPgFSYdD7xvNh4tW8Hj4SOZsQ/uAZhU=
+	t=1785570411; cv=none; b=p6kYwji98P+876alJfbGZRF2XHYbvtXQkSHkJ95D8yz7PBC0/Y8W0nIzYmdHl8z6lP2IqsV3+5CPKJHVzkrmNSluO/5zSF1G1FutjcF8aH/G1X4hRWsP9VXzbD2LDUoUEXYByXCoDpbe6GS2bRwxPCpnG3xEyfQxTzv6qtDhNf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785570409; c=relaxed/simple;
-	bh=ALaemY/eXxfnRyItTlKyt20t5FCFf2oUoNhTrYMPUFI=;
+	s=arc-20240116; t=1785570411; c=relaxed/simple;
+	bh=sAOBY3lMsG/VSnNpOOS6RV5gvvsj3lHwZGRJA7ygHEo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fNapUypN5ABTgLFP1Ga5dyAcJzHoHnArpo8M58SCT40b0zjdWRcrBrarfFbbML8+/Ewk8UxGGlzvUFABYSQqK2N2IvZW+/x0WZ4Xdew+xdtnu/AVMO+pLb7orotxxNl4q0NDobQuy0W5Pmve+vvwC892SklxmD/ffHx5CtbpoMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CGmMD9JR; arc=none smtp.client-ip=209.85.214.172
+	 MIME-Version; b=Ag3b/4Ox7CIFZ61lzvI8ssGBtTv2enJJVjg8S0w6LouLVrkWlXQhyrw402TVSwk7KWZlD8MYe6VJfP2bfI2IZep0jzJx53ZqKhsa0wykf2NxZSXoxZU11uPvNFGKf3RY5No4/6X7mudGfHQrKyzNc4D887HnfXl4giRBZc6+e0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OkEzB208; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CGmMD9JR"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cedda2ce6fso14621765ad.1
-        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 00:46:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OkEzB208"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-ca766c1c9ccso996727a12.0
+        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 00:46:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785570407; x=1786175207; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785570409; x=1786175209; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=rjhTHf2XLXNXzE77GZdDfci/SD/X5/txEVNM9cMJMUY=;
-        b=CGmMD9JRsqxA2W5rKJPb/D6qTt5R3nceDDZR1l1dlLDLSd8ZqqQ49a5XnJqs1In+Ke
-         i6tQlFStnumH4tusBFxq4NjQ7o5dpWDJrsCBpcu/1ShViIPpys9RxOqFxSV3wMX44aT+
-         yLWEEi9nM80HG43KiAvTYWhksn63tbBrgu4o4mzP/LS3NiJoZvTjYYvXOBeW//9PBx9q
-         2hDkO4H8D+Qg6hnRzjuhdyUnPu3zLe371fzlzh17PgUwGGtpnk7bcQnD+8LMHfIpLmgh
-         iorVNRsQ/QJIuVSSYD7NKHW4MjGJA9/D2FG80bTRubtLZX8/ZjxrSRE7bPdyXulyHHez
-         6hRA==
+        bh=E/Q/t5Oe85IlCuMFlB37C6PXpvLcTIEfO2XLq0Y3ClQ=;
+        b=OkEzB208OhSYjjbjSVfrkFw2KSnPLb+5s8ZtWz0svdA//rJpiXzuMnauTBfcDtM+Sz
+         DvM3RYEeu6eaNaXumORCFfJf7HyPU0ORd+unw5QNVivc/wLnWv1nLIZ8xyTWFMz0FxxD
+         ZUiT3bsbUi+Lm/tsDhLz8Jp3x7HSFQp1t2vKUDjKGMuMT1pa/vw46meJ2P508hxJW5wG
+         zqhDEcRgRQgR55S8HsVrCWFxItJ70Rv3V82fP52i+0brbPjtiUHy8abhujEOdiP/HpZy
+         t4g3unQWAvCWY5rz6eNvynonILeFat6tXF16uxB3PrfdlFEDqu7X8cetcgYLMRspbmDu
+         vB4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785570407; x=1786175207;
+        d=1e100.net; s=20251104; t=1785570409; x=1786175209;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=rjhTHf2XLXNXzE77GZdDfci/SD/X5/txEVNM9cMJMUY=;
-        b=nKUNIs2xPNd4dgeLieQQ+jrxfnI1qT6Jd8jZg7stjosWet1sf3ZjVBx5jUWNZt1lSP
-         btEOw/y8XfBwQ/syTJgfLy/QfeBYUmD10GOxJS25ALXZa/iwyu2R2hlI0kWO2vgM0aCE
-         vqlTDI6T7Aaz8Y9qD+1jJIMdGJcNIsnoN+ztbw08j4reHnQfmJFuhW1CsPJRsHtr/RaL
-         sJ0ZmTToGnhO0YB+5wC0u7Tvd6lC7cVv+aQLBA9NJ4H4A87jMYnQONko86WPUWmoRzLi
-         u+RTeJUmn6A+b/lhgCUTg5T32MWx9ZJB54MBnQ3x4cKVEd/yhRfyQyK5gqGDyM8ZMo+Y
-         Bw5Q==
-X-Gm-Message-State: AOJu0YxX2Yt8Fype7TuTh9oWNRTi8zDvjCRcv3myjie8wKALPThNv3O8
-	9UbIZjwIwbKNqX1syudejb+V5knT7mPsMEYXXAuqL0fUa7sP3SGzaScQYrCioQ==
-X-Gm-Gg: AR+sD13+ULw2VcwO8UFix6tg8b6vFK4ZPo5sZiih3mhOvikcBfiU6zsrjQuSa7D4334
-	8HsoVUoB4vLrbgnWk07D5Ax9KuMZY7Ifg2U3dq3Eh6OcGNldk4ttsVd9EpDnYTZkID1vLV0ZrFL
-	9JjRf2opWKSNMQUM1Cinp7psCDXyo5HOtTW4850rdUzTh8x/nt888P41Zremny4KMzKTp11Pals
-	MJy+4l7EV50R+yvca82JmO6OQaRbmO8Xav7LuKeUGWwC+fdRG1c4+rJ/uv8QCTxX009pMjogJ2u
-	yr5A7RFRWRzbQLP936CBFY58S7aNyetMOdb+uzBOlM58pikJJTWMAdx/vIEfTVbjv1r1HU5WRDI
-	2OQZtae/STaH2AzhD89Ijmi+FmmGGukhVJPzmGs/f+Jai8FyM5rBW3p5DEqiBWQvm3r34BrRpDu
-	iN4su7UxvRSwhFE9iQEh4auRBm4iyQz7UPQWtuNPBi4jCPBGn0wg==
-X-Received: by 2002:a17:903:1b6c:b0:2c9:97a7:71af with SMTP id d9443c01a7336-2d05249c287mr25730165ad.42.1785570407534;
-        Sat, 01 Aug 2026 00:46:47 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:5::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04ae19fb5sm15066505ad.9.2026.08.01.00.46.46
+        bh=E/Q/t5Oe85IlCuMFlB37C6PXpvLcTIEfO2XLq0Y3ClQ=;
+        b=aJG4Amat0tiZwpJW22s4xZxzBOAQkbq2JOfDNc7plrSuHEx40Z391TAn92kKsMNL0D
+         ocF6kbXGcn68DGFYjrd5RJZU18ShAz/xSLBs2WImhZ+BlxxRrZkfLSNFkz0khbsQnNw7
+         GYu4jW0wdHevCj0uL8nkjlJPWoX5Surr02y64m1xqFsnlabe5H9RrGRFD+tj4o5MLdSN
+         lsneYa/e8mDAPsOad5PNVbQR0PlTsyk0n36XxqmSQrcboi+B5ahcMCB2qOaF8dnQwHsP
+         guxtFG6JvmRdNC9680rZHzsrk5hQUIk4aFFvKbFqvCxkhOY/Wm0gD4dv1Jic06CmoUh+
+         oUVg==
+X-Gm-Message-State: AOJu0Yx/MT6Pq/XDdJSaoCFmT76aA3rRCvH/Y+2jJD0e67QEMyk5lBFN
+	kEC19Q86q6QQiHl3ei135MVMO2rMFIblnyC4U322MSPhfydyYKQLtEsjNzEqcw==
+X-Gm-Gg: AR+sD11+ix+0aJqDktkh0fROQ5I/9xyVukQQ1Vw0662GeqhfYXXtdV9g+qYFdUj+5PV
+	WmRlPJ+79iuH3NSEpo4w1JVz+H4t4AGqVJoiZ4j1ALJotiyc9424JhM2Eml7xuOEYA/os5CqBcD
+	B/RxntZkc/ureauO7+5nhlW90BnEn4rMwFKVKYh05oQgy53kuglN+VaaOlCVqLD9Dp3pXRc3ZGm
+	9CcTRZRqfstjU1/ZynQlHsg1lmEv464CBq59Ih/O6+MadmlKyrJHBW3vzu7Tt+nqOyyZyPV0MeG
+	Tdu8Bso1RFWaT4b0t4x6gOVikluJDGml3rbLkxCCd4W7sg11LWusI073J9K8uRsOcF+SCn/lYC0
+	c4P7Qba2aJfzYPsUweVikASbIh46Q+TF1dFGwhg5bXW07VitjxNlH1NnthJ4yjtSrqnoj6gyqlW
+	OPRaARNb8b0/dtgOmzlp4vGc8St/r5RNMA3AVhmD10Y+2AwbYiRiI=
+X-Received: by 2002:a05:6a00:4b43:b0:845:e9ff:5d97 with SMTP id d2e1a72fcca58-84ee4812b75mr2093707b3a.12.1785570408997;
+        Sat, 01 Aug 2026 00:46:48 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:4a::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84edbd3a4b6sm1395550b3a.4.2026.08.01.00.46.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2026 00:46:47 -0700 (PDT)
+        Sat, 01 Aug 2026 00:46:48 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -66,9 +66,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 07/18] selftests/bpf: Test map lookup result refinement
-Date: Sat,  1 Aug 2026 00:46:22 -0700
-Message-ID: <20260801074633.1595644-8-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v3 08/18] bpf: Check fixed-size mem args of helpers and kfuncs the same way
+Date: Sat,  1 Aug 2026 00:46:23 -0700
+Message-ID: <20260801074633.1595644-9-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260801074633.1595644-1-ameryhung@gmail.com>
 References: <20260801074633.1595644-1-ameryhung@gmail.com>
@@ -80,117 +80,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A map-of-maps lookup value is refined to a map pointer (map_ptr_or_null)
-at lookup time by refine_map_lookup_value(). Test that it is rejected
-wherever a raw map value would be read as bytes, so the inner map
-descriptor cannot leak.
+Fixed-size memory arguments went through two paths: helpers called
+check_helper_mem_access() directly, while kfuncs and global subprogs
+used check_mem_reg(). Route the helper MEM_FIXED_SIZE case through
+check_mem_reg() too so all three share the same check.
+
+This also fixes a bug in the helper path. When passing a NULL to
+PTR_MAYBE_NULL | ARG_PTR_TO_FIXED_SIZE_MEM argument, the program would
+be falsely rejected by check_helper_mem_access(). This is not
+triggerable since there is no such kind of helper. Also, note that
+check_reg_type() still make sure NULL cannot be passed to an argument
+not marked with PTR_MAYBE_NULL.
+
+It also tightens the poisoned-stack-slot check. check_mem_reg() encoded
+"a STACK_POISON slot may be read" as a negative access size for any
+PTR_TO_STACK argument, but that is only sound for global subprogs, where
+static stack liveness proved the callee body does not read those slots
+(2cb27158adb3 ("bpf: poison dead stack slots")). Since check_mem_reg() is
+also used for kfuncs, kfuncs accidentally inherited it and could read a
+poisoned (dead, possibly uninitialized) stack slot. Restrict the negative
+size to global subprogs (meta == NULL) so kfuncs, like helpers, require
+the whole argument initialized.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../bpf/progs/verifier_map_lookup_refine.c    | 73 +++++++++++++++++++
- 2 files changed, 75 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_map_lookup_refine.c
+ kernel/bpf/verifier.c | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index be97f6887f0e..41cd071d016a 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -61,6 +61,7 @@
- #include "verifier_loops1.skel.h"
- #include "verifier_lwt.skel.h"
- #include "verifier_map_in_map.skel.h"
-+#include "verifier_map_lookup_refine.skel.h"
- #include "verifier_map_ptr.skel.h"
- #include "verifier_map_ptr_mixing.skel.h"
- #include "verifier_map_ret_val.skel.h"
-@@ -215,6 +216,7 @@ void test_verifier_liveness_exp(void)         { RUN(verifier_liveness_exp); }
- void test_verifier_loops1(void)               { RUN(verifier_loops1); }
- void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
- void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
-+void test_verifier_map_lookup_refine(void)    { RUN(verifier_map_lookup_refine); }
- void test_verifier_map_ptr(void)              { RUN(verifier_map_ptr); }
- void test_verifier_map_ptr_mixing(void)       { RUN(verifier_map_ptr_mixing); }
- void test_verifier_map_ret_val(void)          { RUN(verifier_map_ret_val); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_map_lookup_refine.c b/tools/testing/selftests/bpf/progs/verifier_map_lookup_refine.c
-new file mode 100644
-index 000000000000..c01abf54923d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_map_lookup_refine.c
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "bpf_kfuncs.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct inner_map {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} inner_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__array(values, struct inner_map);
-+} outer_map SEC(".maps") = {
-+	.values = { [0] = &inner_map },
-+};
-+
-+SEC("?tc")
-+__failure __msg("type=map_ptr_or_null expected=fp")
-+int mapofmaps_value_as_kfunc_mem_buf(struct __sk_buff *skb)
-+{
-+	struct bpf_dynptr dptr;
-+	__u32 key = 0;
-+	void *inner;
-+	char *p;
-+
-+	inner = bpf_map_lookup_elem(&outer_map, &key);
-+	/* intentionally NOT NULL-checked: type is map_ptr_or_null */
-+
-+	bpf_dynptr_from_skb(skb, 0, &dptr);
-+	/* arg3 is mem+size */
-+	p = bpf_dynptr_slice(&dptr, 0, inner, 4);
-+	if (p)
-+		return p[0];
-+	return 0;
-+}
-+
-+SEC("?tc")
-+__failure __msg("type=map_ptr_or_null expected=fp")
-+int mapofmaps_value_as_helper_mem_buf(struct __sk_buff *skb)
-+{
-+	__u32 key = 0;
-+	void *inner;
-+
-+	inner = bpf_map_lookup_elem(&outer_map, &key);
-+	/* intentionally NOT NULL-checked: type is map_ptr_or_null */
-+
-+	/* arg1 is mem+size */
-+	return bpf_csum_diff(inner, 4, NULL, 0, 0) + skb->len;
-+}
-+
-+SEC("?tc")
-+__failure __msg("type=map_ptr_or_null expected=fp")
-+int mapofmaps_value_as_helper_fixed_mem(struct __sk_buff *skb)
-+{
-+	char th[sizeof(struct tcphdr)] = {};
-+	__u32 key = 0;
-+	void *inner;
-+
-+	inner = bpf_map_lookup_elem(&outer_map, &key);
-+	/* intentionally NOT NULL-checked: type is map_ptr_or_null */
-+
-+	/* arg1 is fixed-sized mem */
-+	return bpf_tcp_raw_check_syncookie_ipv4(inner, (void *)th);
-+}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index cb805bc97604..e1d4820d19ff 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6669,7 +6669,7 @@ static int check_stack_range_initialized(
+ 	 */
+ 	bool clobber = type == BPF_WRITE;
+ 	/*
+-	 * Negative access_size signals global subprog/kfunc arg check where
++	 * Negative access_size signals global subprog arg check where
+ 	 * STACK_POISON slots are acceptable. static stack liveness
+ 	 * might have determined that subprog doesn't read them,
+ 	 * but BTF based global subprog validation isn't accurate enough.
+@@ -6933,9 +6933,10 @@ static int check_mem_size_reg(struct bpf_verifier_env *env,
+ }
+ 
+ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+-			 argno_t argno, u32 mem_size, struct bpf_call_arg_meta *meta)
++			 argno_t argno, u32 mem_size, enum bpf_access_type access_type,
++			 struct bpf_call_arg_meta *meta)
+ {
+-	int err;
++	int size, err = 0;
+ 
+ 	if (bpf_register_is_null(reg))
+ 		return 0;
+@@ -6946,10 +6947,16 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
+ 		return -EACCES;
+ 	}
+ 
+-	int size = base_type(reg->type) == PTR_TO_STACK ? -(int)mem_size : mem_size;
++	/*
++	 * Only a global subprog (meta == NULL) may read poisoned stack slots:
++	 * its static stack liveness proved the callee body skips them.
++	 */
++	size = (!meta && base_type(reg->type) == PTR_TO_STACK) ? -(int)mem_size : mem_size;
+ 
+-	err = check_helper_mem_access(env, reg, argno, size, BPF_READ, true, meta);
+-	err = err ?: check_helper_mem_access(env, reg, argno, size, BPF_WRITE, true, meta);
++	if (access_type & BPF_READ)
++		err = check_helper_mem_access(env, reg, argno, size, BPF_READ, true, meta);
++	if (!err && (access_type & BPF_WRITE))
++		err = check_helper_mem_access(env, reg, argno, size, BPF_WRITE, true, meta);
+ 
+ 	return err;
+ }
+@@ -8455,9 +8462,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		 * next is_mem_size argument below.
+ 		 */
+ 		if (arg_type & MEM_FIXED_SIZE) {
+-			err = check_helper_mem_access(env, reg, argno, fn->arg_size[arg],
+-						      arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ,
+-						      false, meta);
++			err = check_mem_reg(env, reg, argno_from_reg(regno), fn->arg_size[arg],
++					    arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ, meta);
+ 			if (err)
+ 				return err;
+ 			if (arg_type & MEM_ALIGNED)
+@@ -9229,7 +9235,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
+ 			ret = check_func_arg_reg_off(env, reg, argno, ARG_DONTCARE);
+ 			if (ret < 0)
+ 				return ret;
+-			if (check_mem_reg(env, reg, argno, arg->mem_size, NULL))
++			if (check_mem_reg(env, reg, argno, arg->mem_size, BPF_READ | BPF_WRITE, NULL))
+ 				return -EINVAL;
+ 			if (!(arg->arg_type & PTR_MAYBE_NULL) &&
+ 			    (type_may_be_null(reg->type) || bpf_register_is_null(reg))) {
+@@ -12379,7 +12385,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 					ref_tname, PTR_ERR(resolve_ret));
+ 				return -EINVAL;
+ 			}
+-			ret = check_mem_reg(env, reg, argno, type_size, meta);
++			ret = check_mem_reg(env, reg, argno, type_size, BPF_READ | BPF_WRITE, meta);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
 -- 
 2.52.0
 
