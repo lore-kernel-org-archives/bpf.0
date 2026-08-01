@@ -1,118 +1,131 @@
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459AF3AEF46
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 05:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2AE3B27D3
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 05:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785561192; cv=none; b=lkJYFoZ2782U7vx4A2+nf1ZLayHvpsA8JMoyK3w7jAARzherkFGXexLlJ4JQKXPuWWkLHo+NMAE5pEHDuVuP5FgRuqEUV14xH4Pz6fiqzvVvuVDq7XjtWWInDe4W3N07/7YVjAojpsfaTkABLkBio5dJF1K1ebVBb7KyJ12oFd4=
+	t=1785561202; cv=none; b=ivt1hR1PBFj8QOlWhfFlXkpi0UbJPo63cxmQVtPW7FlgfnzoMZ/WYZkdTl5gJSNOWGyqOVSmOFvbuWFRlgik1RVAVzbZM2lfwiBRf0fg1mfr6Htlr752xx88aqIl9mVu/5eSrk3GpmbhyNVrqja6d8p1hrhaVANomtOIZ0o+6tM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785561192; c=relaxed/simple;
-	bh=25QkIyti4jfl2dpoGtxp57JIya14rWwPoMAhxmEB9A8=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=E3pm6UkT3QpQANjshl3wQWxTJunVcXu9so3BItfmLc0VpxT/70hJpfO8zRXjGkODgoRVYiPNNSO3B6EWV0vp3TlWgPzt7j5L8CodjLXb7LHawFtZ3O3O1G4QEYbGO+3JOKq5f6nLsPxpMv+P0fBuvqZN418l8XkRfsyjT9/2bxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--shivajikant.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ncUqAk0M; arc=none smtp.client-ip=209.85.216.71
+	s=arc-20240116; t=1785561202; c=relaxed/simple;
+	bh=axuNdE1mwbFWEpJB6Ct9uJBJt9kptYoIs2A9D8C/nKg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=YX/AcA19H5PlcUjfvG+Q2ElMHSxl+cyN4LO7G7UEPZKhBmeXQu6RvLDaRAH2dKEoKljVavJ7AGISlOaYgaMTbScBQwzJOWMmp6wQJq/TGhEO+cNZR9wt7uN4zLG1lmUzC7Fwtb8y94IdyCMORWXII6CUYjaCnm/S5NL6AVTf4Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--shivajikant.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UhQhbsy+; arc=none smtp.client-ip=209.85.215.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--shivajikant.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ncUqAk0M"
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3823dcc1647so2464297a91.3
-        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 22:13:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UhQhbsy+"
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cb835525b13so1970281a12.1
+        for <bpf@vger.kernel.org>; Fri, 31 Jul 2026 22:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785561190; x=1786165990; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mZyjRsYLJLAU7i/3YxTAQp7fjMphrbBH834dIHuncHY=;
-        b=ncUqAk0MGWv1nsUYA3UU/CH5HH2kCoGjSOep/Db5Kvs6XYzXHZW64ZX9F6n/qTEmfp
-         lBmoO/1ey72co7qQwr9tJEzr01lvs8wEq2aBkmWuQuWlWL3mOYXiVqTJTppd+41mRueF
-         UaVXBl08mH/6QEUmSI8s/3TQU2IR9qXYJDbkkoPcomzdYAdRNcrC1POirOhS0US55TQ/
-         aodZTwajK2giG44/NtPqsm/f1EZmE5UnS0Ab3KAolZ7tgusJldqR2AC8tX66yav/mh71
-         lUdVKFigW8/egj58dJx8zB+HIxAlDeI2PBSlgj8fTOqqvJxBvAKInRoWNePWjVDC5p75
-         XW0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785561190; x=1786165990;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1785561200; x=1786166000; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=mZyjRsYLJLAU7i/3YxTAQp7fjMphrbBH834dIHuncHY=;
-        b=K6FaIBSs0LnVJGGSmX+9qBh5YXWaScgR3tqOruW1k9pUmHidzHJbbbJ/PFPJ6rXGdF
-         24+yJi7wuUdTHsv49tOdjXkDg4dl+7ioHjtV32T62Db5ChjZ9aNpLS1AqTKDup1HrNN2
-         w+GDvzEbjQpq4p/TgdiOGNVLBRttHTKBstmRupR5kWn/z14JagJqnyNu2W8odh3GAF1u
-         QhiNf7B5W/PVS1dl7d7gMcZpClKgoPAbCueNW7uunM2N3xTtNQ+FHN6nixAgJyOuE///
-         kllsPyFpp71acshy4+RkRMQfLalXhL6CMc7df5tN/0I4jrPwYQfORCfYxlxidlUdFIhG
-         Kjtg==
-X-Gm-Message-State: AOJu0YwMsUx7rT4SxC3EgGgA7Jgq/XvvylbkY4OMqdHo08+ava4H/xOg
-	/Ysd0mRzA1K0PD8LHSaLS+Y/QDAE0OGsTNwKR1km1jla/Ev6CwkWa4bEs9OG/sqT+tcIPIVYxl6
-	6zdFpL8p2ai0xtZA8BLNyzkQea3NyQTtZszSFLU8q6OArJDm8uCjFrU//5kkmQrtBhk+Qb5oDRx
-	4B1imnZLkAPmujrIOsRbwPIXwtoqTM/JZbqNlqaO1udtowUiAmnHfsvnFSsi8=
-X-Received: from pjv15.prod.google.com ([2002:a17:90b:564f:b0:38e:b851:fec5])
+        bh=bYqwZAvPaq1z+L+b1vgHCEIGBd9UB7fT/g85RdNXiY0=;
+        b=UhQhbsy+GmJIyGe0fZBTuxo0fq79HcWzVNUemSHrJT2hL6m8a7ZwGmh0d5i7+PcC7j
+         A88rgaCMr68/Ugdq3dJ4eMPdtYhL7egXg7hQau07J8RflMYXrPAtEazaJsxyDEED+rtj
+         Ve32norAb13y6V/mt+x/mSpdn8MoVfwWUOGifh4FZKZ93Alo7U/8oebJ6TFEUgXrUc0x
+         HE3W7yNFkFql/LmO5E1p1cQiSQ18lAaTa+TcI4YCFHqVoQc/ZADrJtXSmc13cILKAk48
+         qHKBwZtpRbV1z1/ez5AeGOYoyjtiFtl0OR4uGZrlxdwSS9Afn6TOvIBQZc+ffeByX4SC
+         i5zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785561200; x=1786166000;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=bYqwZAvPaq1z+L+b1vgHCEIGBd9UB7fT/g85RdNXiY0=;
+        b=NZx9yxWz3eWR5VlE0RTE4zhuttYKL8wWFkH0rcKEucAB3aRafZyg4tvB9Kl4FM6W0v
+         X+HT6GmXvOKQeoXeBx6/UupRdqkPoHrb3jZHnf/CIzUVHmanq+Sad9E5BIoz2+gbyW7/
+         k+Qt6reI9lAqvRvrgmbaQxoDjM506d+USZ7TFxiaRJ1jaq1wFaeOe3WOfEK0Z0QKr7/w
+         gfL6PZC1/LEZ8Vdeod6+vzEqHWHrgyP/kGWse+d+yuvEYA94+7K9v65VzpbLjP4KiCaA
+         8fDI+3KmDAyrNf4Opnk9ihNZbL9l8tOxk/KsRkbVHMlJeQupUo2Xunl60vjOBBmMTYuW
+         S2dw==
+X-Gm-Message-State: AOJu0Yy8TC0ssqcPaoWFYsZv37Qrd1Kzm/RQV8yhHwW6QLVOvIwzadPA
+	lIj3x2k8ntVT1ojeMM9pt2g7WuUStgGAFDgOfcubiKBI6v0N3KoSW9alKC23nsOyYOFufdToviq
+	tky5Q6kk3cmPDOuc/Bc42ucPBg7cQIg9IjdyMONjwbGqEOXQDOWoHN708c9K47RLHS2Zyf/BCKm
+	FTOwtFyAmRqZky+Fdf7dlo8gAR3mc5JbCndhn2i7dIPQEJLq2xxwUI3LWN0/8=
+X-Received: from pgnh22.prod.google.com ([2002:a63:3856:0:b0:c9a:53ea:434a])
  (user=shivajikant job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:2d4c:b0:381:23d5:693f with SMTP id 98e67ed59e1d1-38fbc4ea9f8mr2221027a91.28.1785561190254;
- Fri, 31 Jul 2026 22:13:10 -0700 (PDT)
-Date: Sat,  1 Aug 2026 05:12:59 +0000
+ 2002:a05:6a21:e081:b0:3b4:75c0:3ec0 with SMTP id adf61e73a8af0-3c92a75521amr2048634637.30.1785561199861;
+ Fri, 31 Jul 2026 22:13:19 -0700 (PDT)
+Date: Sat,  1 Aug 2026 05:13:00 +0000
+In-Reply-To: <20260801051307.478469-1-shivajikant@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260801051307.478469-1-shivajikant@google.com>
 X-Mailer: git-send-email 2.55.0.508.g3f0d502094-goog
-Message-ID: <20260801051307.478469-1-shivajikant@google.com>
-Subject: [PATCH bpf-next v2 1/2] bpf: Allow IP_TRANSPARENT and
- IPV6_TRANSPARENT in bpf_{set,get}sockopt()
+Message-ID: <20260801051307.478469-2-shivajikant@google.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add IP_TRANSPARENT and
+ IPV6_TRANSPARENT to setget_sockopt
 From: Shivaji Kant <shivajikant@google.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org, kuniyu@google.com, anubhavsinggh@google.com, 
-	Shivaji Kant <shivajikant@google.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Shivaji Kant <shivajikant@google.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
+	Hoyeon Lee <hoyeon.lee@suse.com>, Guillaume Maudoux <layus.on@gmail.com>, 
+	Leon Hwang <leon.hwang@linux.dev>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Currently, bpf_setsockopt() and bpf_getsockopt() for SOL_IP and SOL_IPV6
-only allow a small subset of socket options (such as IP_TOS,
-IPV6_TCLASS, and IPV6_AUTOFLOWLABEL). Calling bpf_setsockopt() with
-IP_TRANSPARENT or IPV6_TRANSPARENT fails with -EINVAL.
-
-Transparent proxying (TPROXY) and related networking components often
-rely on IP_TRANSPARENT and IPV6_TRANSPARENT to enable binding sockets
-to non-local IP addresses.
-
-Allow IP_TRANSPARENT for SOL_IP in sol_ip_sockopt() and
-IPV6_TRANSPARENT for SOL_IPV6 in sol_ipv6_sockopt().
+Add test coverage for IP_TRANSPARENT and IPV6_TRANSPARENT socket options
+in the setget_sockopt BPF selftest to verify bpf_setsockopt() and
+bpf_getsockopt() helpers.
 
 Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
 Tested-by: Anubhav Singh <anubhavsinggh@google.com>
 Signed-off-by: Shivaji Kant <shivajikant@google.com>
 ---
- net/core/filter.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/bpf/progs/bpf_tracing_net.h | 2 ++
+ tools/testing/selftests/bpf/progs/setget_sockopt.c  | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index c21c1daecf9d..04a9f9d8d07b 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5645,6 +5645,7 @@ static int sol_ip_sockopt(struct sock *sk, int optname,
+diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+index c4b438854565..593b38f90417 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
++++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+@@ -31,10 +31,12 @@
+ #define __SO_ACCEPTCON		(1 << 16)
  
- 	switch (optname) {
- 	case IP_TOS:
-+	case IP_TRANSPARENT:
- 		if (*optlen != sizeof(int))
- 			return -EINVAL;
- 		break;
-@@ -5671,6 +5672,7 @@ static int sol_ipv6_sockopt(struct sock *sk, int optname,
- 	switch (optname) {
- 	case IPV6_TCLASS:
- 	case IPV6_AUTOFLOWLABEL:
-+	case IPV6_TRANSPARENT:
- 		if (*optlen != sizeof(int))
- 			return -EINVAL;
- 		break;
+ #define IP_TOS			1
++#define IP_TRANSPARENT		19
+ 
+ #define SOL_IPV6		41
+ #define IPV6_TCLASS		67
+ #define IPV6_AUTOFLOWLABEL	70
++#define IPV6_TRANSPARENT	75
+ 
+ #define TC_ACT_UNSPEC		(-1)
+ #define TC_ACT_OK		0
+diff --git a/tools/testing/selftests/bpf/progs/setget_sockopt.c b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+index 636a7cd8e2fa..d96e99b67aeb 100644
+--- a/tools/testing/selftests/bpf/progs/setget_sockopt.c
++++ b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+@@ -69,12 +69,14 @@ static const struct sockopt_test sol_tcp_tests[] = {
+ 
+ static const struct sockopt_test sol_ip_tests[] = {
+ 	{ .opt = IP_TOS, .new = 0xe1, .expected = 0xe1, .tcp_expected = 0xe0, },
++	{ .opt = IP_TRANSPARENT, .flip = 1, },
+ 	{ .opt = 0, },
+ };
+ 
+ static const struct sockopt_test sol_ipv6_tests[] = {
+ 	{ .opt = IPV6_TCLASS, .new = 0xe1, .expected = 0xe1, .tcp_expected = 0xe0, },
+ 	{ .opt = IPV6_AUTOFLOWLABEL, .flip = 1, },
++	{ .opt = IPV6_TRANSPARENT, .flip = 1, },
+ 	{ .opt = 0, },
+ };
+ 
 -- 
 2.55.0.508.g3f0d502094-goog
 
