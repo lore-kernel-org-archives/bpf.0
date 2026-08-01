@@ -1,63 +1,63 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE4D273D6D
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 10:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AD0273D6D
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 10:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785580012; cv=none; b=Rq+PNpKs0/T4K0IOXs+xE+A5WcC2QqiK8CCQ5SYQY3xHp0z3KHsBawrOqidIBXIXKsPJWRVZBdwDYUKlp9fEowvJO/OB7w2a7HRkZgOHgaIbQAI37WIfykZ55ronP8pdgrUxV0BVWYPse9WEFSGUXZEHQmsprEACumkeItANcXc=
+	t=1785580024; cv=none; b=HCstSWfQ6Vs17XQ+2RpyT3fXvYZzJ3ajM4AWU+f8bjuGD0EHOw1iuMKMaiQk74bXB4QM4CVYK+ME9k10A45Zr8IA7xPNrDSpGfTW9LyhY8AkQzeE2EKSk3ZAGsLtjciURS/QNYnWCuUwKxRvjg2S215vqzXDxmst7y/1BT/2L8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785580012; c=relaxed/simple;
-	bh=s50HQiVyrsCromL2L3q/RiNQ/gpasUsy6U2BsrMt2zA=;
+	s=arc-20240116; t=1785580024; c=relaxed/simple;
+	bh=UGaXKViydcNHgiIYJqkogJCCwyxdJr51ddIZCkZf78c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N8RggS9s7tDT46NYBvw1rtekFU4zFWLZitItxU3W6j+4uxunRtpce7RSya9g+ebSdx7ioyOJ55wsqJApgapqNq7duFJEgSr7LKhujbepW6tWaM4osPvsnfdGAWwR9jB+ARdNjSXHDPNalV+XuTpA0acMQeHKRSivrc85j9BvXpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qRbcxWaX; arc=none smtp.client-ip=209.85.210.172
+	 MIME-Version; b=XnAZlhcwUjyvZkybpcQzVFHOfwncS0LXV2a2TN+TLbxhTTPgbpcjBW6KX2xeS9C739P2GXZ0dVspSpC9gpBhSfrMMkgUk0+F3eCR+MNY/NIRN6/FouympFDDwjcjm7I04Dq8F4ek81dhZARdLAI3aFDLbAu1U2fyvxNGUYV9lXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pQU4W2wn; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qRbcxWaX"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8484f229529so1588893b3a.2
-        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 03:26:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pQU4W2wn"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84864086bfeso2038624b3a.1
+        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 03:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785580011; x=1786184811; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785580022; x=1786184822; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=AwaHtEcTDpeuOMoaChwOIDZAJW1zODbpeMqtETGYSvk=;
-        b=qRbcxWaX0CyLMPbwSkZiZohfcb4iKjeaCOGeQ+X61FadKLPgVliQeajveZP16axz6E
-         HHUSKbT0NdEmeH2DxdOU/wqjevmUeAASgCoBW5qFFs5WrPt3NXe4XPRDYA01Q2bQA9MT
-         c/ARQ+E++xjC44BjNNgomQKjlLH2HXq/pMVm/jTxHXZ4HmIoaYf5kusTkJy67O5QUXHt
-         T2O8s9Ac9N3pk/G3U/l/sk0/kNz5OpDGlfZ75Ja6EhwsWW+XkfmpjbRXFBsR7gL1oaR2
-         nlHV1YI5RQqIsDB7RHszf+bYvfNp3hBh6dDbbBXsld0eA9fJjV2mcdjLmD4096212XiH
-         D2GA==
+        bh=Bm6tU6uRMhMFMi+BnhXh/n8qQcLZIiln365T8/pycxA=;
+        b=pQU4W2wn02nUIRwKm+okywFas6jfqzAZV/KNEQDXKeTQvJgYn4wOsjvrv3wUyJCniI
+         zCTDGX//qMlZrNeEzcXz03rrKPfteFNZq88nvlEvkStc5lxJna6sByDwItCqg4w6Vdvr
+         NmiiCDO2nMlEm/w7Ckgh9BERs15k0F8tuq9RSnwG8Uh1hlvpGdZSLZF4zvKIWYudsW0F
+         A2eKeJlRyOSmIDTisWccc3NWEk9vDlI0n5s4eY5WwLc8Vk/sh/d1bxeHHHN9BxwctyFy
+         dpDavudRRjqoKRaS+adJSxnMtTVtjQRtO1w7PlBRkl6qHw52/ZhVSKNAEkESmijy9x/Y
+         6CpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785580011; x=1786184811;
+        d=1e100.net; s=20251104; t=1785580022; x=1786184822;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=AwaHtEcTDpeuOMoaChwOIDZAJW1zODbpeMqtETGYSvk=;
-        b=LLR2lZ2Ocbdjla9W9uTQdeJnb9nUnUPMus9PQwV/cOJNR88Xx7FlJnE3QmGvqdge/o
-         e2e7bPfJ1+5RBhCoxUO2Xjvssniyo2QHBfQ1xEY44FNT2Ct8qP4DLwr4Osf3VcnYoEmG
-         G5ftdfvNkVHAkwPNGgMQb+BsFjpYgCvbDaSQpLnnjICWy3ksjhWDLSwU42kZP0zcKnkF
-         izJ2qN8a+XyzKw8LqRivuTO+VQpmsKQcUk39Qs7DRXwJ5s1LOdPogdXEoMWZxGjui/DO
-         imQwuFUOGuwXvaPZctoEkKGIohoJuqPChHgOkngtsq96hyi+jK4Ax6aueXQN1JNkmdfc
-         L54A==
-X-Forwarded-Encrypted: i=1; AHgh+Ro32oVfa1oUTKglIXUPoG5Njg9moLXGMLzhItf6gM8i47ta/l3+PHz46XURPZuoHIhGQgk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyuz6V/tYaa76sUiAwLm+KM3/fhZM+n6uuAMA2/GTVtcAVOM7Qo
-	2YDQA12baKS/smKzVN86J7HsEwaTLCFM5cOhDEWNL3e3jllPAWoNhblL
-X-Gm-Gg: AR+sD12vnk6LNhyXmh6VH0JSIZNAIxRndsTvpr1DLe5pLJxhhDEUWQJNGvWFpBaTyYa
-	kmTJ5ROPW32l/xCwAWcBmWUaM1HydvDFS3YZ8OvY8g811aYuioOpmyQLHJ83Fo5VsuuHeC7BP1E
-	uA7onATR6ADj8VXzZEh+W/XcpudgPjnqX5qKdjROWNoDipPN4Gr1dwTiv0I5gccR8xNAhVz4O4P
-	n3JqMfanokH5ldjU49QqIqF0gG4ibfXrGPhx0oFKm0CJWhs0Ix5465c3QRq45iKscjSXxTlDrjX
-	+0NEHlHghoR+n5leMvc8pZ+yex4c4sUpWQ/L4TAiFdEfsIK1KxKPkOUIDPH7FU/Q4RWKIuIcJPc
-	pqfn9oXM0emGsJIFUq0taN16p88d5L3rQ+2xc24Y3X7r0xJKDOxbWWHe9SOqjzblrPPD/hmHbp3
-	kL0dK+6aYCL/BUnm6nhpW7OgC3TL7JlpWOqBC1BiEpMdpkMCATZvGJmYM=
-X-Received: by 2002:a05:6a00:4190:b0:847:99bb:b6d0 with SMTP id d2e1a72fcca58-84ee479b0cfmr2404289b3a.15.1785580010742;
-        Sat, 01 Aug 2026 03:26:50 -0700 (PDT)
+        bh=Bm6tU6uRMhMFMi+BnhXh/n8qQcLZIiln365T8/pycxA=;
+        b=GCwENDbS81Ge+zWjLWt6xrhM8nhh9eWArmQ5VGn9TH7qWcPd5+l13TaRoFCMqKPJdl
+         t2wx0RmnY/VBAICKixq1rDDpYAw0qDh+3RHiOBjvPBAe47msMkKdK/6n+Ha19L7QjH7t
+         39hvLn+qoGvk1q3rNqgbIS3KGagSsMWMzivqfRDZ4M6Lj7IxofJ/7pSilRzWDSgg57V3
+         GdNO+kKsW9qcSDV2A773yL+bw02so/BD9FuVIshMOZUHhNHHupqnv8zOMVecOlyvVowx
+         2gRVjrz2WjE8gR6nxt9QNUHMgtmpb8OLD4cxq06wgU0ZFokRr0/USVhlCtFYmGlP6IF2
+         cp3g==
+X-Forwarded-Encrypted: i=1; AHgh+RrC9bwFglGu/saM49pB5FMXbbkT+V/2c7Q89zE8Tp7cM4zuIzX4ZbazsJPZPSNIYtWqS3E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOtydeoiXTHDqgLLkVxIyA/OttvmjCo3HSF/Vl8T7ZFzr4gk+w
+	vP/fKcIiDtHCfVRrMrQArYDX4BLAINITsrH5p9h9uCE+nKhzB19qpby6
+X-Gm-Gg: AR+sD11+qxgKwQzNWw1H/WykYtHVf3jUWiosVYNCH3RUF4qdmUdLRku9Yh3Sdc9y+zP
+	Ds2q/AeOlXvFkGXjUR+QAii1Rj+ir+fKPLfRZlK1CAs/th9Nva6JZu5mkh1dNkYpEc7KwqVHc00
+	uLxs7GS69hU44nFwb9j8aRpQgXrT/eWkjSVmrKRGiTZIsDkkgtqtrp8ukUTGMY1ecUaFTwjepJz
+	3nrVxe42xrnADzI4zadfzll4MDKes1qMFX6xKrD9qQNpYMEC/Si9vuvS8Pg63hHEIfsg4d/n1hn
+	2kwo5TGgEiSDj5o4iwwIRSw+YogbCAYE3L87KqjeG9GX3GID7nfM5yNkxAuljMKix40QorZwFXz
+	t9TYoRPTic/Qbt5vaYVSL35mVdKZjaEaG3LWM6qVRILCkF8SuKsehs2mwr1YhttQ9MqVZ0+X6q+
+	oxMWyHoanNHgPaaqlAOUXDfb/oaYdAUDe+9q7mgzt7voLe6TTVkdX/Gdw=
+X-Received: by 2002:a05:6a00:410a:b0:848:2f84:739 with SMTP id d2e1a72fcca58-84ee4960de6mr2519444b3a.76.1785580021850;
+        Sat, 01 Aug 2026 03:27:01 -0700 (PDT)
 Received: from omen-arch ([147.46.174.207])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84edc51cca2sm1526886b3a.61.2026.08.01.03.26.45
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84edc51cca2sm1526886b3a.61.2026.08.01.03.26.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2026 03:26:49 -0700 (PDT)
+        Sat, 01 Aug 2026 03:27:01 -0700 (PDT)
 From: Junseo Lim <zirajs7@gmail.com>
 To: John Fastabend <john.fastabend@gmail.com>,
 	Jakub Sitnicki <jakub@cloudflare.com>,
@@ -76,9 +76,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Junseo Lim <zirajs7@gmail.com>
-Subject: [PATCH bpf v2 1/2] bpf, sockmap: settle sk_forward_alloc for strparser SK_PASS
-Date: Sat,  1 Aug 2026 19:26:32 +0900
-Message-ID: <20260801102633.1872012-2-zirajs7@gmail.com>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Cover strparser self-pass forward allocation
+Date: Sat,  1 Aug 2026 19:26:33 +0900
+Message-ID: <20260801102633.1872012-3-zirajs7@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260801102633.1872012-1-zirajs7@gmail.com>
 References: <20260801102633.1872012-1-zirajs7@gmail.com>
@@ -90,117 +90,230 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The strparser SK_PASS path can queue cloned skbs back to the same
-socket. A single TCP receive skb may be split into multiple strparser
-messages, and each cloned message still carries the receive owner from
-the TCP receive path.
+Add a sockmap_strp regression test for strparser SK_PASS delivery to the
+same socket. A one-byte stream parser splits a single write into many
+messages, repeatedly exercising receive ownership transitions while the
+skbs remain queued.
 
-sk_psock_skb_ingress_self() reassigns receive ownership with
-skb_set_owner_r(). That first orphans the skb, which runs the existing
-receive destructor, and then charges the skb to the socket again. When
-this is repeated for strparser clones, sk_forward_alloc can already be
-in deficit before the next owner transition. Releasing the queued skbs
-can then uncharge more memcg pages than were reserved and trigger a
-page_counter underflow.
+Verify through INET_DIAG_MEMINFO that sk_forward_alloc does not become
+negative after the self-pass path is exercised.
 
-Call sk_rmem_schedule() with a size of zero before skb_set_owner_r()
-for strparser self-pass skbs. Use the zero-sized reservation to top up
-any existing sk_forward_alloc deficit without reserving the skb's full
-truesize again, then let skb_set_owner_r() perform the receive-owner
-transition. Apply the same handling when retrying the skb from the psock
-backlog.
-
-Fixes: 144748eb0c44 ("bpf, sockmap: Fix incorrect fwd_alloc accounting")
-Reported-by: Sechang Lim <rhkrqnwk98@gmail.com>
-Suggested-by: Emil Tsalapatis <emil@etsalapatis.com>
 Signed-off-by: Junseo Lim <zirajs7@gmail.com>
 ---
- net/core/skmsg.c | 33 ++++++++++++++++++++++-----------
- 1 file changed, 22 insertions(+), 11 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_strp.c   | 171 ++++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_strp.c   |   6 +
+ 2 files changed, 177 insertions(+)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 2521b643fa05..ce5ad8160282 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -586,7 +586,8 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+index 1d7231728eaf..c7ad21d0bbf4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+@@ -1,5 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <error.h>
++#include <linux/inet_diag.h>
++#include <linux/netlink.h>
++#include <linux/rtnetlink.h>
++#include <linux/sock_diag.h>
+ #include <netinet/tcp.h>
+ #include <test_progs.h>
+ #include "sockmap_helpers.h"
+@@ -460,6 +464,171 @@ static void test_sockmap_strp_parser_reject(void)
+ 	test_sockmap_strp__destroy(strp);
  }
  
- static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb,
--				     u32 off, u32 len, bool take_ref);
-+				     u32 off, u32 len, bool take_ref,
-+				     bool settle_fwd_alloc);
- 
- static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
- 				u32 off, u32 len)
-@@ -595,12 +596,9 @@ static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
- 	struct sk_msg *msg;
- 	int err;
- 
--	/* If we are receiving on the same sock skb->sk is already assigned,
--	 * skip memory accounting and owner transition seeing it already set
--	 * correctly.
--	 */
- 	if (unlikely(skb->sk == sk))
--		return sk_psock_skb_ingress_self(psock, skb, off, len, true);
-+		return sk_psock_skb_ingress_self(psock, skb, off, len, true,
-+						 skb_bpf_strparser(skb));
- 	msg = sk_psock_create_ingress_msg(sk, skb);
- 	if (!msg)
- 		return -EAGAIN;
-@@ -618,12 +616,14 @@ static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
- 	return err;
- }
- 
--/* Puts an skb on the ingress queue of the socket already assigned to the
-- * skb. In this case we do not need to check memory limits or skb_set_owner_r
-- * because the skb is already accounted for here.
-+/* Puts an skb on the ingress queue for psock->sk.
-+ *
-+ * Before assigning receive ownership to a direct strparser SK_PASS clone,
-+ * settle any existing sk_forward_alloc deficit from earlier clone charges.
-  */
- static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb,
--				     u32 off, u32 len, bool take_ref)
-+				     u32 off, u32 len, bool take_ref,
-+				     bool settle_fwd_alloc)
- {
- 	struct sk_msg *msg = alloc_sk_msg(GFP_ATOMIC);
- 	struct sock *sk = psock->sk;
-@@ -631,6 +631,13 @@ static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb
- 
- 	if (unlikely(!msg))
- 		return -EAGAIN;
++/* Read sk_forward_alloc through inet_diag meminfo. */
++static int sockmap_strp_get_fwd_alloc(int sock, int *fwd_alloc)
++{
++	struct sockaddr_storage local = {}, peer = {};
++	struct sockaddr_in *local_in, *peer_in;
++	socklen_t addr_len = sizeof(local);
++	char buf[1024];
++	struct {
++		struct nlmsghdr nlh;
++		struct inet_diag_req_v2 req;
++	} req = {
++		.nlh = {
++			.nlmsg_len = sizeof(req),
++			.nlmsg_type = SOCK_DIAG_BY_FAMILY,
++			.nlmsg_flags = NLM_F_REQUEST,
++			.nlmsg_seq = 1,
++		},
++		.req = {
++			.sdiag_family = AF_INET,
++			.sdiag_protocol = IPPROTO_TCP,
++			.idiag_ext = 1 << (INET_DIAG_MEMINFO - 1),
++			.idiag_states = ~0U,
++			.id.idiag_cookie = {
++				INET_DIAG_NOCOOKIE,
++				INET_DIAG_NOCOOKIE,
++			},
++		},
++	};
++	int diag_fd, ret, err = -ENOENT;
 +
-+	if (settle_fwd_alloc &&
-+	    !sk_rmem_schedule(sk, skb, 0)) {
-+		kfree(msg);
-+		return -EAGAIN;
++	if (getsockname(sock, (struct sockaddr *)&local, &addr_len))
++		return -errno;
++	addr_len = sizeof(peer);
++	if (getpeername(sock, (struct sockaddr *)&peer, &addr_len))
++		return -errno;
++
++	local_in = (struct sockaddr_in *)&local;
++	peer_in = (struct sockaddr_in *)&peer;
++	req.req.id.idiag_sport = local_in->sin_port;
++	req.req.id.idiag_dport = peer_in->sin_port;
++	req.req.id.idiag_src[0] = local_in->sin_addr.s_addr;
++	req.req.id.idiag_dst[0] = peer_in->sin_addr.s_addr;
++
++	diag_fd = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC,
++			 NETLINK_SOCK_DIAG);
++	if (diag_fd < 0)
++		return -errno;
++
++	ret = send(diag_fd, &req, sizeof(req), 0);
++	if (ret < 0) {
++		err = -errno;
++		goto out;
++	}
++	if (ret != sizeof(req)) {
++		err = -EIO;
++		goto out;
 +	}
 +
- 	skb_set_owner_r(skb, sk);
- 
- 	/* This is used in tcp_bpf_recvmsg_parser() to determine whether the
-@@ -1017,6 +1024,8 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 		 * retrying later from workqueue.
- 		 */
- 		if (skb_queue_empty(&psock->ingress_skb)) {
-+			bool settle_fwd_alloc = false;
++	ret = recv(diag_fd, buf, sizeof(buf), 0);
++	if (ret < 0) {
++		err = -errno;
++		goto out;
++	}
 +
- 			len = skb->len;
- 			off = 0;
- 			if (skb_bpf_strparser(skb)) {
-@@ -1024,8 +1033,10 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
++	for (struct nlmsghdr *nlh = (struct nlmsghdr *)buf;
++	     NLMSG_OK(nlh, ret); nlh = NLMSG_NEXT(nlh, ret)) {
++		struct inet_diag_msg *msg = NLMSG_DATA(nlh);
++		struct rtattr *attr;
++		int len;
++
++		if (nlh->nlmsg_type == NLMSG_ERROR) {
++			err = -EINVAL;
++			goto out;
++		}
++		if (nlh->nlmsg_type == NLMSG_DONE)
++			break;
++
++		len = nlh->nlmsg_len - NLMSG_LENGTH(sizeof(*msg));
++		for (attr = (struct rtattr *)(msg + 1); RTA_OK(attr, len);
++		     attr = RTA_NEXT(attr, len)) {
++			struct inet_diag_meminfo *minfo;
++
++			if (attr->rta_type != INET_DIAG_MEMINFO)
++				continue;
++			minfo = RTA_DATA(attr);
++			*fwd_alloc = (__s32)minfo->idiag_fmem;
++			err = 0;
++			goto out;
++		}
++	}
++
++out:
++	close(diag_fd);
++	return err;
++}
++
++/* Test strparser SK_PASS delivery to the same socket. */
++static void test_sockmap_strp_self_pass_fwd_alloc(void)
++{
++	struct test_sockmap_strp *strp = NULL;
++	char snd[4 * 1024];
++	int c = -1, p = -1;
++	int fwd_alloc;
++	int sndbuf = sizeof(snd);
++	int zero = 0;
++	char rcv;
++	int sent, recvd;
++	int map;
++	int err;
++
++	memset(snd, 0xa5, sizeof(snd));
++
++	strp = test_sockmap_strp__open_and_load();
++	if (!ASSERT_OK_PTR(strp, "test_sockmap_strp__open_and_load"))
++		return;
++
++	map = bpf_map__fd(strp->maps.sock_map);
++	err = xbpf_prog_attach(bpf_program__fd(strp->progs.prog_skb_parser_one),
++			       map, BPF_SK_SKB_STREAM_PARSER, 0);
++	if (err)
++		goto out_destroy;
++
++	err = xbpf_prog_attach(bpf_program__fd(strp->progs.prog_skb_verdict_pass),
++			       map, BPF_SK_SKB_STREAM_VERDICT, 0);
++	if (err)
++		goto out_destroy;
++
++	err = create_pair(AF_INET, SOCK_STREAM, &c, &p);
++	if (!ASSERT_OK(err, "create_pair"))
++		goto out_destroy;
++
++	err = xsetsockopt(c, SOL_SOCKET, SO_SNDBUF, &sndbuf, sizeof(sndbuf));
++	if (err)
++		goto out_destroy;
++
++	err = xsetsockopt(p, SOL_SOCKET, SO_RCVBUF, &sndbuf, sizeof(sndbuf));
++	if (err)
++		goto out_destroy;
++
++	err = xbpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
++	if (err)
++		goto out_destroy;
++
++	sent = send(c, snd, sizeof(snd), MSG_DONTWAIT);
++	if (!ASSERT_EQ(sent, sizeof(snd), "send"))
++		goto out_destroy;
++
++	recvd = recv_timeout(p, &rcv, sizeof(rcv), MSG_DONTWAIT,
++			     IO_TIMEOUT_SEC);
++	if (!ASSERT_EQ(recvd, sizeof(rcv), "recv_timeout") ||
++	    !ASSERT_EQ(rcv, snd[0], "data mismatch"))
++		goto out_destroy;
++
++	err = sockmap_strp_get_fwd_alloc(p, &fwd_alloc);
++	if (!ASSERT_OK(err, "sockmap_strp_get_fwd_alloc") ||
++	    !ASSERT_GE(fwd_alloc, 0, "sk_forward_alloc"))
++		goto out_destroy;
++out_destroy:
++	test_sockmap_strp__destroy(strp);
++	if (c >= 0)
++		close(c);
++	if (p >= 0)
++		close(p);
++}
++
+ void test_sockmap_strp(void)
+ {
+ 	if (test__start_subtest("sockmap strp tcp pass"))
+@@ -482,4 +651,6 @@ void test_sockmap_strp(void)
+ 		test_sockmap_strp_dispatch_pkt(AF_INET, SOCK_STREAM);
+ 	if (test__start_subtest("sockmap strp parser reject pkt mod"))
+ 		test_sockmap_strp_parser_reject();
++	if (test__start_subtest("sockmap strp self pass fwd alloc"))
++		test_sockmap_strp_self_pass_fwd_alloc();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_strp.c b/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
+index fe88fa6d40bc..682e53d40751 100644
+--- a/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
+@@ -50,6 +50,12 @@ int prog_skb_parser_partial(struct __sk_buff *skb)
+ 	return 10;
+ }
  
- 				off = stm->offset;
- 				len = stm->full_len;
-+				settle_fwd_alloc = true;
- 			}
--			err = sk_psock_skb_ingress_self(psock, skb, off, len, false);
-+			err = sk_psock_skb_ingress_self(psock, skb, off, len,
-+							false, settle_fwd_alloc);
- 		}
- 		if (err < 0) {
- 			spin_lock_bh(&psock->ingress_lock);
++SEC("sk_skb/stream_parser")
++int prog_skb_parser_one(struct __sk_buff *skb)
++{
++	return 1;
++}
++
+ SEC("sk_skb/stream_parser")
+ int prog_skb_parser_resize(struct __sk_buff *skb)
+ {
 -- 
 2.55.0
 
