@@ -1,62 +1,62 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9FB25D53B
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 07:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E11F3ACA79
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 07:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785570411; cv=none; b=p6kYwji98P+876alJfbGZRF2XHYbvtXQkSHkJ95D8yz7PBC0/Y8W0nIzYmdHl8z6lP2IqsV3+5CPKJHVzkrmNSluO/5zSF1G1FutjcF8aH/G1X4hRWsP9VXzbD2LDUoUEXYByXCoDpbe6GS2bRwxPCpnG3xEyfQxTzv6qtDhNf4=
+	t=1785570414; cv=none; b=sFLDJl1KTswEESAB8FHu59RqwgRxGJNT/ssFNSpzWZBopN7gEFXxAqE6Pz0U9bviLSzZWYlmr2oxwzUm8cAtKS78I8+pwTbJ21DqN0qZ4s5pbiRuGqnWUlQjMCj8rOiwVLuXwlzvSNLTOjrtZheLKVF1fkxWSla/B7u2SCc5/LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785570411; c=relaxed/simple;
-	bh=sAOBY3lMsG/VSnNpOOS6RV5gvvsj3lHwZGRJA7ygHEo=;
+	s=arc-20240116; t=1785570414; c=relaxed/simple;
+	bh=q7t9fb3BHMcZF/OV7sOtb5eOtqnFpOeL6X8eXyL86sE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ag3b/4Ox7CIFZ61lzvI8ssGBtTv2enJJVjg8S0w6LouLVrkWlXQhyrw402TVSwk7KWZlD8MYe6VJfP2bfI2IZep0jzJx53ZqKhsa0wykf2NxZSXoxZU11uPvNFGKf3RY5No4/6X7mudGfHQrKyzNc4D887HnfXl4giRBZc6+e0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OkEzB208; arc=none smtp.client-ip=209.85.215.180
+	 MIME-Version; b=cnOxRpGnIbDbugvU4ircNC+W0ClTeIx2YVNcxCUzHi8q6WTkk94YFmIODFkCcPl7i6umL/x7KOcZR4hm9HFri8sD+OVoqoktOiVJ3wx1qjmLB5Ekp1l5SHq4hXqRKshgXgiCj+SGez4NHdWdjujoJXLBr/9nmCvxnrcoCrigfSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VpIZwsQn; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OkEzB208"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-ca766c1c9ccso996727a12.0
-        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 00:46:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VpIZwsQn"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ceab75934dso19962175ad.2
+        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 00:46:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785570409; x=1786175209; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785570411; x=1786175211; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=E/Q/t5Oe85IlCuMFlB37C6PXpvLcTIEfO2XLq0Y3ClQ=;
-        b=OkEzB208OhSYjjbjSVfrkFw2KSnPLb+5s8ZtWz0svdA//rJpiXzuMnauTBfcDtM+Sz
-         DvM3RYEeu6eaNaXumORCFfJf7HyPU0ORd+unw5QNVivc/wLnWv1nLIZ8xyTWFMz0FxxD
-         ZUiT3bsbUi+Lm/tsDhLz8Jp3x7HSFQp1t2vKUDjKGMuMT1pa/vw46meJ2P508hxJW5wG
-         zqhDEcRgRQgR55S8HsVrCWFxItJ70Rv3V82fP52i+0brbPjtiUHy8abhujEOdiP/HpZy
-         t4g3unQWAvCWY5rz6eNvynonILeFat6tXF16uxB3PrfdlFEDqu7X8cetcgYLMRspbmDu
-         vB4w==
+        bh=qN2ZrSU6IBObp8J1Uf2vqaF4HfcX+Rjl7MXg0Kuox+c=;
+        b=VpIZwsQnLXjddmpXzrQXf2ZUGCfs6LoApd4aP1asCQ9sZSBZ/7r29YLVtZs1nKKhMo
+         p9l0FaqF5hjaq7igJsbnm7ZRzMk6hmgpkMbbagd0sUeUCWAK3srtCDMEj7tQ3fMvFcQo
+         ujvZ2seEBlT6kpzLanIC5DdVwcitZ6QFVihEd/WgtjJOtV3UvpeE/BGJsn6vKvNBHA6A
+         KPRWOtr5p3guLvUlx8u4V9V/lfmQF9w3nFM0nXgdxRB9HAuYxlyMx2V/HCwmLDgnO+E9
+         H931j7SjZXXh+WNxG8YAJbgNTsHcghEoo+CpnRR+FW3PWuox2idBdULgSGZB2v+j+aYP
+         ahLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785570409; x=1786175209;
+        d=1e100.net; s=20251104; t=1785570411; x=1786175211;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=E/Q/t5Oe85IlCuMFlB37C6PXpvLcTIEfO2XLq0Y3ClQ=;
-        b=aJG4Amat0tiZwpJW22s4xZxzBOAQkbq2JOfDNc7plrSuHEx40Z391TAn92kKsMNL0D
-         ocF6kbXGcn68DGFYjrd5RJZU18ShAz/xSLBs2WImhZ+BlxxRrZkfLSNFkz0khbsQnNw7
-         GYu4jW0wdHevCj0uL8nkjlJPWoX5Surr02y64m1xqFsnlabe5H9RrGRFD+tj4o5MLdSN
-         lsneYa/e8mDAPsOad5PNVbQR0PlTsyk0n36XxqmSQrcboi+B5ahcMCB2qOaF8dnQwHsP
-         guxtFG6JvmRdNC9680rZHzsrk5hQUIk4aFFvKbFqvCxkhOY/Wm0gD4dv1Jic06CmoUh+
-         oUVg==
-X-Gm-Message-State: AOJu0Yx/MT6Pq/XDdJSaoCFmT76aA3rRCvH/Y+2jJD0e67QEMyk5lBFN
-	kEC19Q86q6QQiHl3ei135MVMO2rMFIblnyC4U322MSPhfydyYKQLtEsjNzEqcw==
-X-Gm-Gg: AR+sD11+ix+0aJqDktkh0fROQ5I/9xyVukQQ1Vw0662GeqhfYXXtdV9g+qYFdUj+5PV
-	WmRlPJ+79iuH3NSEpo4w1JVz+H4t4AGqVJoiZ4j1ALJotiyc9424JhM2Eml7xuOEYA/os5CqBcD
-	B/RxntZkc/ureauO7+5nhlW90BnEn4rMwFKVKYh05oQgy53kuglN+VaaOlCVqLD9Dp3pXRc3ZGm
-	9CcTRZRqfstjU1/ZynQlHsg1lmEv464CBq59Ih/O6+MadmlKyrJHBW3vzu7Tt+nqOyyZyPV0MeG
-	Tdu8Bso1RFWaT4b0t4x6gOVikluJDGml3rbLkxCCd4W7sg11LWusI073J9K8uRsOcF+SCn/lYC0
-	c4P7Qba2aJfzYPsUweVikASbIh46Q+TF1dFGwhg5bXW07VitjxNlH1NnthJ4yjtSrqnoj6gyqlW
-	OPRaARNb8b0/dtgOmzlp4vGc8St/r5RNMA3AVhmD10Y+2AwbYiRiI=
-X-Received: by 2002:a05:6a00:4b43:b0:845:e9ff:5d97 with SMTP id d2e1a72fcca58-84ee4812b75mr2093707b3a.12.1785570408997;
-        Sat, 01 Aug 2026 00:46:48 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:4a::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84edbd3a4b6sm1395550b3a.4.2026.08.01.00.46.48
+        bh=qN2ZrSU6IBObp8J1Uf2vqaF4HfcX+Rjl7MXg0Kuox+c=;
+        b=sOFzPtyXHGEmUGp1DDWzl53hVfOL9MnVWbzjpLPFS9BQDo5YB9FU+RdAtItqUNRBoR
+         o/mQDBjFefcBh1jCvhnVs6vQze1DDVmJ88vft4KuBB4A5nNR18dWMfuBwqS/9UpyWx+X
+         3ZsJWP56J3OWobp2Aimj18GnoeHJb2PSCO8S0OVi+eB6MAk+YOlyqJg5pgJ2y8svpsiv
+         kyGLG1ZbVAcC6thT1Inq0D3DkKjwMo2BnaeXdZJYX53V7dBzf1UjYDSyqot4iGVpRf8B
+         gtnKO3mBRZ9kqF/3VEdEvrfF0K7nFBL7hWn19tQnFSyUmKvahAHTbHCVVUSxUxX+AGBY
+         WGgQ==
+X-Gm-Message-State: AOJu0YwISoeu8jFKSz0ejgURnk1j25glqDUzTjeboN+90+DB/Y0nFvCA
+	w5SjqpbcNtjeHPG0b5tCCuKEY0pnwqvMxisDZbAmqg7JVn1P7FGelPhLJ3YMJg==
+X-Gm-Gg: AR+sD116JWZmP1rc+8CZKMPxvVMB7fIz5vbj1LA6LrE6KPd33vuZiA84sF1ADtedoWW
+	aARsr7u6HZGXonwXHb+2An49jOvixWATqKYFGzM6VjNmlF898N6s+N8NS9f9TpKc8cNIbML85N5
+	x/3Fey9GgQ98FUotY0QSlulgCVfEsfh0Xp/NSpWFa0AlYEeY6JznxpQGSI3OgBS6vrzPwZdxorY
+	gRqrdD7yopMslveHuEh2QIGDwGcCmlhUkwNetcOpw846ZzZCUkOm/0hvzaBt9RaWJG3f/Vtcvw7
+	0ULRvHcgsF+Myj9oBRnFw0KujCkbq5ob2rPRRrrwfnsqSK2patJzDXouG5r7R8Twwr9o7RXD/C9
+	+CMiayl0DXzuslZgzQVTExQn86cm1oTLQPNVMzoXcRiY7Glt7WZ6OCd3mOTsygdI7hSkYO8NglC
+	yRsZo+e5p/2NZLZ6LTg+7N1XV0JM2G5Hw97VQTk3oDE6TE3qLOYHY=
+X-Received: by 2002:a17:902:ebc3:b0:2c9:ae0b:61e3 with SMTP id d9443c01a7336-2d05221f96fmr28357335ad.2.1785570410454;
+        Sat, 01 Aug 2026 00:46:50 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:4f::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04b0eb7c3sm15086715ad.54.2026.08.01.00.46.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2026 00:46:48 -0700 (PDT)
+        Sat, 01 Aug 2026 00:46:49 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -66,9 +66,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 08/18] bpf: Check fixed-size mem args of helpers and kfuncs the same way
-Date: Sat,  1 Aug 2026 00:46:23 -0700
-Message-ID: <20260801074633.1595644-9-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v3 09/18] bpf: Rename ARG_CONST_SIZE{,_OR_ZERO} to ARG_MEM_SIZE{,_OR_ZERO}
+Date: Sat,  1 Aug 2026 00:46:24 -0700
+Message-ID: <20260801074633.1595644-10-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260801074633.1595644-1-ameryhung@gmail.com>
 References: <20260801074633.1595644-1-ameryhung@gmail.com>
@@ -80,109 +80,1200 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fixed-size memory arguments went through two paths: helpers called
-check_helper_mem_access() directly, while kfuncs and global subprogs
-used check_mem_reg(). Route the helper MEM_FIXED_SIZE case through
-check_mem_reg() too so all three share the same check.
+ARG_CONST_SIZE does not require a constant: check_mem_size_reg() accepts
+any bounded scalar and verifies the memory access against its maximum
+(reg_umax). Rename ARG_CONST_SIZE and ARG_CONST_SIZE_OR_ZERO to
+ARG_MEM_SIZE and ARG_MEM_SIZE_OR_ZERO to reflect that. ARG_CONST_ALLOC_
+SIZE_OR_ZERO, which does require a constant, is left unchanged.
 
-This also fixes a bug in the helper path. When passing a NULL to
-PTR_MAYBE_NULL | ARG_PTR_TO_FIXED_SIZE_MEM argument, the program would
-be falsely rejected by check_helper_mem_access(). This is not
-triggerable since there is no such kind of helper. Also, note that
-check_reg_type() still make sure NULL cannot be passed to an argument
-not marked with PTR_MAYBE_NULL.
-
-It also tightens the poisoned-stack-slot check. check_mem_reg() encoded
-"a STACK_POISON slot may be read" as a negative access size for any
-PTR_TO_STACK argument, but that is only sound for global subprogs, where
-static stack liveness proved the callee body does not read those slots
-(2cb27158adb3 ("bpf: poison dead stack slots")). Since check_mem_reg() is
-also used for kfuncs, kfuncs accidentally inherited it and could read a
-poisoned (dead, possibly uninitialized) stack slot. Restrict the negative
-size to global subprogs (meta == NULL) so kfuncs, like helpers, require
-the whole argument initialized.
+Pure rename, no functional change.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c | 28 +++++++++++++++++-----------
- 1 file changed, 17 insertions(+), 11 deletions(-)
+ include/linux/bpf.h                           |   4 +-
+ include/linux/bpf_verifier.h                  |   2 +-
+ kernel/bpf/backtrack.c                        |   2 +-
+ kernel/bpf/bpf_lsm.c                          |   4 +-
+ kernel/bpf/btf.c                              |   2 +-
+ kernel/bpf/cgroup.c                           |   8 +-
+ kernel/bpf/helpers.c                          |  26 ++--
+ kernel/bpf/ringbuf.c                          |   2 +-
+ kernel/bpf/stackmap.c                         |  10 +-
+ kernel/bpf/syscall.c                          |   4 +-
+ kernel/bpf/verifier.c                         |  11 +-
+ kernel/trace/bpf_trace.c                      |  62 +++++-----
+ net/core/filter.c                             | 116 +++++++++---------
+ .../bpf/progs/mem_rdonly_untrusted.c          |   2 +-
+ .../selftests/bpf/progs/verifier_bounds.c     |   2 +-
+ .../progs/verifier_helper_access_var_len.c    |   6 +-
+ .../bpf/progs/verifier_helper_value_access.c  |   2 +-
+ 17 files changed, 132 insertions(+), 133 deletions(-)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7bfc28673124..be53655d1362 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -888,8 +888,8 @@ enum bpf_arg_type {
+ 	ARG_PTR_TO_MEM,		/* pointer to valid memory (stack, packet, map value) */
+ 	ARG_PTR_TO_ARENA,
+ 
+-	ARG_CONST_SIZE,		/* number of bytes accessed from memory */
+-	ARG_CONST_SIZE_OR_ZERO,	/* number of bytes accessed from memory or 0 */
++	ARG_MEM_SIZE,		/* number of bytes accessed from memory */
++	ARG_MEM_SIZE_OR_ZERO,	/* number of bytes accessed from memory or 0 */
+ 
+ 	ARG_PTR_TO_CTX,		/* pointer to context */
+ 	ARG_ANYTHING,		/* any (initialized) argument is ok */
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 682c2cd3b844..bb0d43814e90 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -15,7 +15,7 @@
+  * ensures that umax_value + (int)off + (int)size cannot overflow a u64.
+  */
+ #define BPF_MAX_VAR_OFF	(1 << 29)
+-/* Maximum variable size permitted for ARG_CONST_SIZE[_OR_ZERO].  This ensures
++/* Maximum variable size permitted for ARG_MEM_SIZE[_OR_ZERO].  This ensures
+  * that converting umax_value to int cannot overflow.
+  */
+ #define BPF_MAX_VAR_SIZ	(1 << 29)
+diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+index 2e4ae0ef0860..2f473ad4fd7c 100644
+--- a/kernel/bpf/backtrack.c
++++ b/kernel/bpf/backtrack.c
+@@ -636,7 +636,7 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+  * r5 += 1
+  * ...
+  * call bpf_perf_event_output#25
+- *   where .arg5_type = ARG_CONST_SIZE_OR_ZERO
++ *   where .arg5_type = ARG_MEM_SIZE_OR_ZERO
+  *
+  * and this case:
+  * r6 = 1
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 3983b4ce73c8..82c5988417a0 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -186,7 +186,7 @@ static const struct bpf_func_proto bpf_ima_inode_hash_proto = {
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	= &bpf_ima_inode_hash_btf_ids[0],
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ 	.allowed	= bpf_ima_inode_hash_allowed,
+ };
+ 
+@@ -205,7 +205,7 @@ static const struct bpf_func_proto bpf_ima_file_hash_proto = {
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	= &bpf_ima_file_hash_btf_ids[0],
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ 	.allowed	= bpf_ima_inode_hash_allowed,
+ };
+ 
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 4eeeaeb69790..5e8ac45ce56a 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -8709,7 +8709,7 @@ const struct bpf_func_proto bpf_btf_find_by_name_kind_proto = {
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg2_type	= ARG_CONST_SIZE,
++	.arg2_type	= ARG_MEM_SIZE,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 4355ccb78a9c..fb9357b64cad 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -2305,7 +2305,7 @@ static const struct bpf_func_proto bpf_sysctl_get_name_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_WRITE,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -2347,7 +2347,7 @@ static const struct bpf_func_proto bpf_sysctl_get_current_value_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_3(bpf_sysctl_get_new_value, struct bpf_sysctl_kern *, ctx, char *, buf,
+@@ -2367,7 +2367,7 @@ static const struct bpf_func_proto bpf_sysctl_get_new_value_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_3(bpf_sysctl_set_new_value, struct bpf_sysctl_kern *, ctx,
+@@ -2393,7 +2393,7 @@ static const struct bpf_func_proto bpf_sysctl_set_new_value_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ };
+ 
+ static const struct bpf_func_proto *
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index e472535bce85..4709a5ad0474 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -278,7 +278,7 @@ const struct bpf_func_proto bpf_get_current_comm_proto = {
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE,
++	.arg2_type	= ARG_MEM_SIZE,
+ };
+ 
+ #if defined(CONFIG_QUEUED_SPINLOCKS) || defined(CONFIG_BPF_ARCH_SPINLOCK)
+@@ -539,7 +539,7 @@ const struct bpf_func_proto bpf_strtol_proto = {
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg2_type	= ARG_CONST_SIZE,
++	.arg2_type	= ARG_MEM_SIZE,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_FIXED_SIZE_MEM | MEM_UNINIT | MEM_WRITE | MEM_ALIGNED,
+ 	.arg4_size	= sizeof(s64),
+@@ -567,7 +567,7 @@ const struct bpf_func_proto bpf_strtoul_proto = {
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg2_type	= ARG_CONST_SIZE,
++	.arg2_type	= ARG_MEM_SIZE,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_FIXED_SIZE_MEM | MEM_UNINIT | MEM_WRITE | MEM_ALIGNED,
+ 	.arg4_size	= sizeof(u64),
+@@ -583,7 +583,7 @@ static const struct bpf_func_proto bpf_strncmp_proto = {
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg2_type	= ARG_CONST_SIZE,
++	.arg2_type	= ARG_MEM_SIZE,
+ 	.arg3_type	= ARG_PTR_TO_CONST_STR,
+ };
+ 
+@@ -627,7 +627,7 @@ const struct bpf_func_proto bpf_get_ns_current_pid_tgid_proto = {
+ 	.arg1_type	= ARG_ANYTHING,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type      = ARG_PTR_TO_UNINIT_MEM,
+-	.arg4_type      = ARG_CONST_SIZE,
++	.arg4_type      = ARG_MEM_SIZE,
+ };
+ 
+ static const struct bpf_func_proto bpf_get_raw_smp_processor_id_proto = {
+@@ -653,7 +653,7 @@ const struct bpf_func_proto bpf_event_output_data_proto =  {
+ 	.arg2_type      = ARG_CONST_MAP_PTR,
+ 	.arg3_type      = ARG_ANYTHING,
+ 	.arg4_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type      = ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type      = ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ BPF_CALL_3(bpf_copy_from_user, void *, dst, u32, size,
+@@ -675,7 +675,7 @@ const struct bpf_func_proto bpf_copy_from_user_proto = {
+ 	.might_sleep	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
+@@ -706,7 +706,7 @@ const struct bpf_func_proto bpf_copy_from_user_task_proto = {
+ 	.might_sleep	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg4_btf_id	= &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+@@ -1093,10 +1093,10 @@ const struct bpf_func_proto bpf_snprintf_proto = {
+ 	.gpl_only	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_MEM_OR_NULL | MEM_WRITE,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_PTR_TO_CONST_STR,
+ 	.arg4_type	= ARG_PTR_TO_MEM | PTR_MAYBE_NULL | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ static void *map_key_from_value(struct bpf_map *map, void *value, u32 *arr_idx)
+@@ -1888,7 +1888,7 @@ static const struct bpf_func_proto bpf_dynptr_from_mem_proto = {
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL | MEM_UNINIT | MEM_WRITE,
+ };
+@@ -1943,7 +1943,7 @@ static const struct bpf_func_proto bpf_dynptr_read_proto = {
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_PTR_TO_DYNPTR,
+ 	.arg4_type	= ARG_ANYTHING,
+ 	.arg5_type	= ARG_ANYTHING,
+@@ -2004,7 +2004,7 @@ static const struct bpf_func_proto bpf_dynptr_write_proto = {
+ 	.arg1_type	= ARG_PTR_TO_DYNPTR,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg4_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+ 
+diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+index 35ae64ade36b..c1bf7a197a96 100644
+--- a/kernel/bpf/ringbuf.c
++++ b/kernel/bpf/ringbuf.c
+@@ -634,7 +634,7 @@ const struct bpf_func_proto bpf_ringbuf_output_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_CONST_MAP_PTR,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 41fe87d7302f..463f94ba1cc4 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -781,7 +781,7 @@ const struct bpf_func_proto bpf_get_stack_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -797,7 +797,7 @@ const struct bpf_func_proto bpf_get_stack_sleepable_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -831,7 +831,7 @@ const struct bpf_func_proto bpf_get_task_stack_proto = {
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	= &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -848,7 +848,7 @@ const struct bpf_func_proto bpf_get_task_stack_sleepable_proto = {
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	= &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -911,7 +911,7 @@ const struct bpf_func_proto bpf_get_stack_proto_pe = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 0ff9e3aa293d..67704ddd29cb 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -6544,7 +6544,7 @@ static const struct bpf_func_proto bpf_sys_bpf_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_ANYTHING,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ };
+ 
+ const struct bpf_func_proto * __weak
+@@ -6591,7 +6591,7 @@ static const struct bpf_func_proto bpf_kallsyms_lookup_name_proto = {
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_FIXED_SIZE_MEM | MEM_UNINIT | MEM_WRITE | MEM_ALIGNED,
+ 	.arg4_size	= sizeof(u64),
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index cb805bc97604..e1d4820d19ff 100644
+index e1d4820d19ff..5655e1ef8ba8 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -6669,7 +6669,7 @@ static int check_stack_range_initialized(
- 	 */
- 	bool clobber = type == BPF_WRITE;
- 	/*
--	 * Negative access_size signals global subprog/kfunc arg check where
-+	 * Negative access_size signals global subprog arg check where
- 	 * STACK_POISON slots are acceptable. static stack liveness
- 	 * might have determined that subprog doesn't read them,
- 	 * but BTF based global subprog validation isn't accurate enough.
-@@ -6933,9 +6933,10 @@ static int check_mem_size_reg(struct bpf_verifier_env *env,
- }
+@@ -7704,8 +7704,7 @@ static int process_iter_next_call(struct bpf_verifier_env *env, int insn_idx,
  
- static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
--			 argno_t argno, u32 mem_size, struct bpf_call_arg_meta *meta)
-+			 argno_t argno, u32 mem_size, enum bpf_access_type access_type,
-+			 struct bpf_call_arg_meta *meta)
+ static bool arg_type_is_mem_size(enum bpf_arg_type type)
  {
--	int err;
-+	int size, err = 0;
- 
- 	if (bpf_register_is_null(reg))
- 		return 0;
-@@ -6946,10 +6947,16 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
- 		return -EACCES;
- 	}
- 
--	int size = base_type(reg->type) == PTR_TO_STACK ? -(int)mem_size : mem_size;
-+	/*
-+	 * Only a global subprog (meta == NULL) may read poisoned stack slots:
-+	 * its static stack liveness proved the callee body skips them.
-+	 */
-+	size = (!meta && base_type(reg->type) == PTR_TO_STACK) ? -(int)mem_size : mem_size;
- 
--	err = check_helper_mem_access(env, reg, argno, size, BPF_READ, true, meta);
--	err = err ?: check_helper_mem_access(env, reg, argno, size, BPF_WRITE, true, meta);
-+	if (access_type & BPF_READ)
-+		err = check_helper_mem_access(env, reg, argno, size, BPF_READ, true, meta);
-+	if (!err && (access_type & BPF_WRITE))
-+		err = check_helper_mem_access(env, reg, argno, size, BPF_WRITE, true, meta);
- 
- 	return err;
+-	return type == ARG_CONST_SIZE ||
+-	       type == ARG_CONST_SIZE_OR_ZERO;
++	return type == ARG_MEM_SIZE || type == ARG_MEM_SIZE_OR_ZERO;
  }
-@@ -8455,9 +8462,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		 * next is_mem_size argument below.
- 		 */
- 		if (arg_type & MEM_FIXED_SIZE) {
--			err = check_helper_mem_access(env, reg, argno, fn->arg_size[arg],
--						      arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ,
--						      false, meta);
-+			err = check_mem_reg(env, reg, argno_from_reg(regno), fn->arg_size[arg],
-+					    arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ, meta);
- 			if (err)
- 				return err;
- 			if (arg_type & MEM_ALIGNED)
-@@ -9229,7 +9235,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 			ret = check_func_arg_reg_off(env, reg, argno, ARG_DONTCARE);
- 			if (ret < 0)
- 				return ret;
--			if (check_mem_reg(env, reg, argno, arg->mem_size, NULL))
-+			if (check_mem_reg(env, reg, argno, arg->mem_size, BPF_READ | BPF_WRITE, NULL))
- 				return -EINVAL;
- 			if (!(arg->arg_type & PTR_MAYBE_NULL) &&
- 			    (type_may_be_null(reg->type) || bpf_register_is_null(reg))) {
-@@ -12379,7 +12385,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
- 					ref_tname, PTR_ERR(resolve_ret));
- 				return -EINVAL;
- 			}
--			ret = check_mem_reg(env, reg, argno, type_size, meta);
-+			ret = check_mem_reg(env, reg, argno, type_size, BPF_READ | BPF_WRITE, meta);
- 			if (ret < 0)
- 				return ret;
- 			break;
+ 
+ static bool arg_type_is_raw_mem(enum bpf_arg_type type)
+@@ -7851,8 +7850,8 @@ static const struct bpf_reg_types dynptr_types = {
+ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
+ 	[ARG_PTR_TO_MAP_KEY]		= &mem_types,
+ 	[ARG_PTR_TO_MAP_VALUE]		= &mem_types,
+-	[ARG_CONST_SIZE]		= &scalar_types,
+-	[ARG_CONST_SIZE_OR_ZERO]	= &scalar_types,
++	[ARG_MEM_SIZE]			= &scalar_types,
++	[ARG_MEM_SIZE_OR_ZERO]		= &scalar_types,
+ 	[ARG_CONST_ALLOC_SIZE_OR_ZERO]	= &scalar_types,
+ 	[ARG_CONST_MAP_PTR]		= &const_map_ptr_types,
+ 	[ARG_PTR_TO_CTX]		= &context_types,
+@@ -8470,13 +8469,13 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 				err = check_ptr_alignment(env, reg, 0, fn->arg_size[arg], true);
+ 		}
+ 		break;
+-	case ARG_CONST_SIZE:
++	case ARG_MEM_SIZE:
+ 		err = check_mem_size_reg(env, reg_state(env, regno - 1), reg,
+ 					 argno_from_reg(regno - 1), argno,
+ 					 fn->arg_type[arg - 1] & MEM_WRITE ? BPF_WRITE : BPF_READ,
+ 					 false, meta);
+ 		break;
+-	case ARG_CONST_SIZE_OR_ZERO:
++	case ARG_MEM_SIZE_OR_ZERO:
+ 		err = check_mem_size_reg(env, reg_state(env, regno - 1), reg,
+ 					 argno_from_reg(regno - 1), argno,
+ 					 fn->arg_type[arg - 1] & MEM_WRITE ? BPF_WRITE : BPF_READ,
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 76ab51deaa6b..891897f8a1b3 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -221,7 +221,7 @@ const struct bpf_func_proto bpf_probe_read_user_proto = {
+ 	.gpl_only	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
+@@ -258,7 +258,7 @@ const struct bpf_func_proto bpf_probe_read_user_str_proto = {
+ 	.gpl_only	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
+@@ -273,7 +273,7 @@ const struct bpf_func_proto bpf_probe_read_kernel_proto = {
+ 	.gpl_only	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
+@@ -308,7 +308,7 @@ const struct bpf_func_proto bpf_probe_read_kernel_str_proto = {
+ 	.gpl_only	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
+@@ -328,7 +328,7 @@ static const struct bpf_func_proto bpf_probe_read_compat_proto = {
+ 	.gpl_only	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
+@@ -347,7 +347,7 @@ static const struct bpf_func_proto bpf_probe_read_compat_str_proto = {
+ 	.gpl_only	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ #endif /* CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE */
+@@ -383,7 +383,7 @@ static const struct bpf_func_proto bpf_probe_write_user_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_ANYTHING,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ };
+ 
+ #define MAX_TRACE_PRINTK_VARARGS	3
+@@ -418,7 +418,7 @@ static const struct bpf_func_proto bpf_trace_printk_proto = {
+ 	.gpl_only	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg2_type	= ARG_CONST_SIZE,
++	.arg2_type	= ARG_MEM_SIZE,
+ };
+ 
+ static void __set_printk_clr_event(struct work_struct *work)
+@@ -474,9 +474,9 @@ static const struct bpf_func_proto bpf_trace_vprintk_proto = {
+ 	.gpl_only	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg2_type	= ARG_CONST_SIZE,
++	.arg2_type	= ARG_MEM_SIZE,
+ 	.arg3_type	= ARG_PTR_TO_MEM | PTR_MAYBE_NULL | MEM_RDONLY,
+-	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg4_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ const struct bpf_func_proto *bpf_get_trace_vprintk_proto(void)
+@@ -518,9 +518,9 @@ static const struct bpf_func_proto bpf_seq_printf_proto = {
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	= &btf_seq_file_ids[0],
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ 	.arg4_type      = ARG_PTR_TO_MEM | PTR_MAYBE_NULL | MEM_RDONLY,
+-	.arg5_type      = ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type      = ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ BPF_CALL_3(bpf_seq_write, struct seq_file *, m, const void *, data, u32, len)
+@@ -535,7 +535,7 @@ static const struct bpf_func_proto bpf_seq_write_proto = {
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	= &btf_seq_file_ids[0],
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ BPF_CALL_4(bpf_seq_printf_btf, struct seq_file *, m, struct btf_ptr *, ptr,
+@@ -559,7 +559,7 @@ static const struct bpf_func_proto bpf_seq_printf_btf_proto = {
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	= &btf_seq_file_ids[0],
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -633,7 +633,7 @@ static const struct bpf_func_proto bpf_perf_event_read_value_proto = {
+ 	.arg1_type	= ARG_CONST_MAP_PTR,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ };
+ 
+ const struct bpf_func_proto *bpf_get_perf_event_read_value_proto(void)
+@@ -730,7 +730,7 @@ static const struct bpf_func_proto bpf_perf_event_output_proto = {
+ 	.arg2_type	= ARG_CONST_MAP_PTR,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ static DEFINE_PER_CPU(int, bpf_event_output_nest_level);
+@@ -996,7 +996,7 @@ static const struct bpf_func_proto bpf_d_path_proto = {
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	= &bpf_d_path_btf_ids[0],
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_WRITE,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.allowed	= bpf_d_path_allowed,
+ };
+ 
+@@ -1053,9 +1053,9 @@ const struct bpf_func_proto bpf_snprintf_btf_proto = {
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_MEM | MEM_WRITE,
+-	.arg2_type	= ARG_CONST_SIZE,
++	.arg2_type	= ARG_MEM_SIZE,
+ 	.arg3_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+ 
+@@ -1218,7 +1218,7 @@ const struct bpf_func_proto bpf_get_branch_snapshot_proto = {
+ 	.gpl_only	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ BPF_CALL_3(get_func_arg, void *, ctx, u32, n, u64 *, value)
+@@ -1421,7 +1421,7 @@ static const struct bpf_func_proto bpf_perf_event_output_proto_tp = {
+ 	.arg2_type	= ARG_CONST_MAP_PTR,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ BPF_CALL_3(bpf_get_stackid_tp, void *, tp_buff, struct bpf_map *, map,
+@@ -1462,7 +1462,7 @@ static const struct bpf_func_proto bpf_get_stack_proto_tp = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -1524,12 +1524,12 @@ BPF_CALL_3(bpf_perf_prog_read_value, struct bpf_perf_event_data_kern *, ctx,
+ }
+ 
+ static const struct bpf_func_proto bpf_perf_prog_read_value_proto = {
+-         .func           = bpf_perf_prog_read_value,
+-         .gpl_only       = true,
+-         .ret_type       = RET_INTEGER,
+-         .arg1_type      = ARG_PTR_TO_CTX,
+-         .arg2_type      = ARG_PTR_TO_UNINIT_MEM,
+-         .arg3_type      = ARG_CONST_SIZE,
++	.func           = bpf_perf_prog_read_value,
++	.gpl_only       = true,
++	.ret_type       = RET_INTEGER,
++	.arg1_type      = ARG_PTR_TO_CTX,
++	.arg2_type      = ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type      = ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
+@@ -1566,7 +1566,7 @@ static const struct bpf_func_proto bpf_read_branch_records_proto = {
+ 	.ret_type       = RET_INTEGER,
+ 	.arg1_type      = ARG_PTR_TO_CTX,
+ 	.arg2_type      = ARG_PTR_TO_MEM_OR_NULL | MEM_WRITE,
+-	.arg3_type      = ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type      = ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type      = ARG_ANYTHING,
+ };
+ 
+@@ -1646,7 +1646,7 @@ static const struct bpf_func_proto bpf_perf_event_output_proto_raw_tp = {
+ 	.arg2_type	= ARG_CONST_MAP_PTR,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ extern const struct bpf_func_proto bpf_skb_output_proto;
+@@ -1701,7 +1701,7 @@ static const struct bpf_func_proto bpf_get_stack_proto_raw_tp = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+diff --git a/net/core/filter.c b/net/core/filter.c
+index c21c1daecf9d..eb4d299b1fec 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -1747,7 +1747,7 @@ static const struct bpf_func_proto bpf_skb_store_bytes_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+ 
+@@ -1784,7 +1784,7 @@ static const struct bpf_func_proto bpf_skb_load_bytes_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ };
+ 
+ int __bpf_skb_load_bytes(const struct sk_buff *skb, u32 offset, void *to, u32 len)
+@@ -1823,7 +1823,7 @@ static const struct bpf_func_proto bpf_flow_dissector_load_bytes_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(bpf_skb_load_bytes_relative, const struct sk_buff *, skb,
+@@ -1867,7 +1867,7 @@ static const struct bpf_func_proto bpf_skb_load_bytes_relative_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+ 
+@@ -2063,9 +2063,9 @@ static const struct bpf_func_proto bpf_csum_diff_proto = {
+ 	.pkt_access	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_MEM | PTR_MAYBE_NULL | MEM_RDONLY,
+-	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg2_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_PTR_TO_MEM | PTR_MAYBE_NULL | MEM_RDONLY,
+-	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg4_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+ 
+@@ -2626,7 +2626,7 @@ static const struct bpf_func_proto bpf_redirect_neigh_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_ANYTHING,
+ 	.arg2_type      = ARG_PTR_TO_MEM | PTR_MAYBE_NULL | MEM_RDONLY,
+-	.arg3_type      = ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type      = ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -4199,7 +4199,7 @@ static const struct bpf_func_proto bpf_xdp_load_bytes_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ };
+ 
+ int __bpf_xdp_load_bytes(struct xdp_buff *xdp, u32 offset, void *buf, u32 len)
+@@ -4231,7 +4231,7 @@ static const struct bpf_func_proto bpf_xdp_store_bytes_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ };
+ 
+ int __bpf_xdp_store_bytes(struct xdp_buff *xdp, u32 offset, void *buf, u32 len)
+@@ -4794,7 +4794,7 @@ static const struct bpf_func_proto bpf_skb_event_output_proto = {
+ 	.arg2_type	= ARG_CONST_MAP_PTR,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ BTF_ID_LIST_SINGLE(bpf_skb_output_btf_ids, struct, sk_buff)
+@@ -4808,7 +4808,7 @@ const struct bpf_func_proto bpf_skb_output_proto = {
+ 	.arg2_type	= ARG_CONST_MAP_PTR,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ static unsigned short bpf_tunnel_key_af(u64 flags)
+@@ -4891,7 +4891,7 @@ static const struct bpf_func_proto bpf_skb_get_tunnel_key_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -4926,7 +4926,7 @@ static const struct bpf_func_proto bpf_skb_get_tunnel_opt_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ };
+ 
+ static struct metadata_dst __percpu *md_dst;
+@@ -5008,7 +5008,7 @@ static const struct bpf_func_proto bpf_skb_set_tunnel_key_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -5036,7 +5036,7 @@ static const struct bpf_func_proto bpf_skb_set_tunnel_opt_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ };
+ 
+ static const struct bpf_func_proto *
+@@ -5208,7 +5208,7 @@ static const struct bpf_func_proto bpf_xdp_event_output_proto = {
+ 	.arg2_type	= ARG_CONST_MAP_PTR,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ BTF_ID_LIST_SINGLE(bpf_xdp_output_btf_ids, struct, xdp_buff)
+@@ -5222,7 +5222,7 @@ const struct bpf_func_proto bpf_xdp_output_proto = {
+ 	.arg2_type	= ARG_CONST_MAP_PTR,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg5_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ BPF_CALL_1(bpf_get_socket_cookie, struct sk_buff *, skb)
+@@ -5769,7 +5769,7 @@ const struct bpf_func_proto bpf_sk_setsockopt_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(bpf_sk_getsockopt, struct sock *, sk, int, level,
+@@ -5786,7 +5786,7 @@ const struct bpf_func_proto bpf_sk_getsockopt_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(bpf_sk_setsockopt_nodelay, struct sock *, sk, int, level,
+@@ -5810,7 +5810,7 @@ const struct bpf_func_proto bpf_sk_setsockopt_nodelay_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(bpf_unlocked_sk_setsockopt, struct sock *, sk, int, level,
+@@ -5827,7 +5827,7 @@ const struct bpf_func_proto bpf_unlocked_sk_setsockopt_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(bpf_unlocked_sk_getsockopt, struct sock *, sk, int, level,
+@@ -5844,7 +5844,7 @@ const struct bpf_func_proto bpf_unlocked_sk_getsockopt_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(bpf_sock_addr_setsockopt, struct bpf_sock_addr_kern *, ctx,
+@@ -5861,7 +5861,7 @@ static const struct bpf_func_proto bpf_sock_addr_setsockopt_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(bpf_sock_addr_getsockopt, struct bpf_sock_addr_kern *, ctx,
+@@ -5878,7 +5878,7 @@ static const struct bpf_func_proto bpf_sock_addr_getsockopt_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ static int sk_bpf_set_get_bypass_prot_mem(struct sock *sk,
+@@ -5923,7 +5923,7 @@ static const struct bpf_func_proto bpf_sock_create_setsockopt_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(bpf_sock_create_getsockopt, struct sock *, sk, int, level,
+@@ -5949,7 +5949,7 @@ static const struct bpf_func_proto bpf_sock_create_getsockopt_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(bpf_sock_ops_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+@@ -5975,7 +5975,7 @@ static const struct bpf_func_proto bpf_sock_ops_setsockopt_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ static int bpf_sock_ops_get_syn(struct bpf_sock_ops_kern *bpf_sock,
+@@ -6085,7 +6085,7 @@ static const struct bpf_func_proto bpf_sock_ops_getsockopt_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_ANYTHING,
+ 	.arg4_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_2(bpf_sock_ops_cb_flags_set, struct bpf_sock_ops_kern *, bpf_sock,
+@@ -6152,7 +6152,7 @@ static const struct bpf_func_proto bpf_bind_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ };
+ 
+ #ifdef CONFIG_XFRM
+@@ -6205,7 +6205,7 @@ static const struct bpf_func_proto bpf_skb_get_xfrm_state_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+ #endif
+@@ -6612,7 +6612,7 @@ static const struct bpf_func_proto bpf_xdp_fib_lookup_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type      = ARG_PTR_TO_CTX,
+ 	.arg2_type      = ARG_PTR_TO_MEM | MEM_WRITE,
+-	.arg3_type      = ARG_CONST_SIZE,
++	.arg3_type      = ARG_MEM_SIZE,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -6672,7 +6672,7 @@ static const struct bpf_func_proto bpf_skb_fib_lookup_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type      = ARG_PTR_TO_CTX,
+ 	.arg2_type      = ARG_PTR_TO_MEM | MEM_WRITE,
+-	.arg3_type      = ARG_CONST_SIZE,
++	.arg3_type      = ARG_MEM_SIZE,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -6870,7 +6870,7 @@ static const struct bpf_func_proto bpf_lwt_in_push_encap_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg4_type	= ARG_CONST_SIZE
++	.arg4_type	= ARG_MEM_SIZE
+ };
+ 
+ static const struct bpf_func_proto bpf_lwt_xmit_push_encap_proto = {
+@@ -6880,7 +6880,7 @@ static const struct bpf_func_proto bpf_lwt_xmit_push_encap_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg4_type	= ARG_CONST_SIZE
++	.arg4_type	= ARG_MEM_SIZE
+ };
+ 
+ #if IS_ENABLED(CONFIG_IPV6_SEG6_BPF)
+@@ -6924,7 +6924,7 @@ static const struct bpf_func_proto bpf_lwt_seg6_store_bytes_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg4_type	= ARG_CONST_SIZE
++	.arg4_type	= ARG_MEM_SIZE
+ };
+ 
+ static void bpf_update_srh_state(struct sk_buff *skb)
+@@ -7013,7 +7013,7 @@ static const struct bpf_func_proto bpf_lwt_seg6_action_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg4_type	= ARG_CONST_SIZE
++	.arg4_type	= ARG_MEM_SIZE
+ };
+ 
+ BPF_CALL_3(bpf_lwt_seg6_adjust_srh, struct sk_buff *, skb, u32, offset,
+@@ -7254,7 +7254,7 @@ static const struct bpf_func_proto bpf_skc_lookup_tcp_proto = {
+ 	.ret_type	= RET_PTR_TO_SOCK_COMMON_OR_NULL,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+@@ -7273,7 +7273,7 @@ static const struct bpf_func_proto bpf_sk_lookup_tcp_proto = {
+ 	.ret_type	= RET_PTR_TO_SOCKET_OR_NULL,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+@@ -7292,7 +7292,7 @@ static const struct bpf_func_proto bpf_sk_lookup_udp_proto = {
+ 	.ret_type	= RET_PTR_TO_SOCKET_OR_NULL,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+@@ -7316,7 +7316,7 @@ static const struct bpf_func_proto bpf_tc_skc_lookup_tcp_proto = {
+ 	.ret_type	= RET_PTR_TO_SOCK_COMMON_OR_NULL,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+@@ -7340,7 +7340,7 @@ static const struct bpf_func_proto bpf_tc_sk_lookup_tcp_proto = {
+ 	.ret_type	= RET_PTR_TO_SOCKET_OR_NULL,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+@@ -7364,7 +7364,7 @@ static const struct bpf_func_proto bpf_tc_sk_lookup_udp_proto = {
+ 	.ret_type	= RET_PTR_TO_SOCKET_OR_NULL,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+@@ -7402,7 +7402,7 @@ static const struct bpf_func_proto bpf_xdp_sk_lookup_udp_proto = {
+ 	.ret_type       = RET_PTR_TO_SOCKET_OR_NULL,
+ 	.arg1_type      = ARG_PTR_TO_CTX,
+ 	.arg2_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type      = ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type      = ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type      = ARG_ANYTHING,
+ 	.arg5_type      = ARG_ANYTHING,
+ };
+@@ -7426,7 +7426,7 @@ static const struct bpf_func_proto bpf_xdp_skc_lookup_tcp_proto = {
+ 	.ret_type       = RET_PTR_TO_SOCK_COMMON_OR_NULL,
+ 	.arg1_type      = ARG_PTR_TO_CTX,
+ 	.arg2_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type      = ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type      = ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type      = ARG_ANYTHING,
+ 	.arg5_type      = ARG_ANYTHING,
+ };
+@@ -7450,7 +7450,7 @@ static const struct bpf_func_proto bpf_xdp_sk_lookup_tcp_proto = {
+ 	.ret_type       = RET_PTR_TO_SOCKET_OR_NULL,
+ 	.arg1_type      = ARG_PTR_TO_CTX,
+ 	.arg2_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type      = ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type      = ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type      = ARG_ANYTHING,
+ 	.arg5_type      = ARG_ANYTHING,
+ };
+@@ -7470,7 +7470,7 @@ static const struct bpf_func_proto bpf_sock_addr_skc_lookup_tcp_proto = {
+ 	.ret_type	= RET_PTR_TO_SOCK_COMMON_OR_NULL,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+@@ -7489,7 +7489,7 @@ static const struct bpf_func_proto bpf_sock_addr_sk_lookup_tcp_proto = {
+ 	.ret_type	= RET_PTR_TO_SOCKET_OR_NULL,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+@@ -7508,7 +7508,7 @@ static const struct bpf_func_proto bpf_sock_addr_sk_lookup_udp_proto = {
+ 	.ret_type	= RET_PTR_TO_SOCKET_OR_NULL,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ 	.arg4_type	= ARG_ANYTHING,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+@@ -7828,9 +7828,9 @@ static const struct bpf_func_proto bpf_tcp_check_syncookie_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID_SOCK_COMMON,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(bpf_tcp_gen_syncookie, struct sock *, sk, void *, iph, u32, iph_len,
+@@ -7897,9 +7897,9 @@ static const struct bpf_func_proto bpf_tcp_gen_syncookie_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID_SOCK_COMMON,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ 	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg5_type	= ARG_CONST_SIZE,
++	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
+@@ -8053,7 +8053,7 @@ static const struct bpf_func_proto bpf_sock_ops_load_hdr_opt_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_WRITE,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -8131,7 +8131,7 @@ static const struct bpf_func_proto bpf_sock_ops_store_hdr_opt_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_MEM_SIZE,
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+@@ -8226,7 +8226,7 @@ static const struct bpf_func_proto bpf_tcp_raw_gen_syncookie_ipv4_proto = {
+ 	.arg1_type	= ARG_PTR_TO_FIXED_SIZE_MEM | MEM_RDONLY,
+ 	.arg1_size	= sizeof(struct iphdr),
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ BPF_CALL_3(bpf_tcp_raw_gen_syncookie_ipv6, struct ipv6hdr *, iph,
+@@ -8258,7 +8258,7 @@ static const struct bpf_func_proto bpf_tcp_raw_gen_syncookie_ipv6_proto = {
+ 	.arg1_type	= ARG_PTR_TO_FIXED_SIZE_MEM | MEM_RDONLY,
+ 	.arg1_size	= sizeof(struct ipv6hdr),
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+-	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	= ARG_MEM_SIZE_OR_ZERO,
+ };
+ 
+ BPF_CALL_2(bpf_tcp_raw_check_syncookie_ipv4, struct iphdr *, iph,
+@@ -11731,7 +11731,7 @@ static const struct bpf_func_proto sk_reuseport_load_bytes_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ };
+ 
+ BPF_CALL_5(sk_reuseport_load_bytes_relative,
+@@ -11749,7 +11749,7 @@ static const struct bpf_func_proto sk_reuseport_load_bytes_relative_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+ 	.arg3_type	= ARG_PTR_TO_UNINIT_MEM,
+-	.arg4_type	= ARG_CONST_SIZE,
++	.arg4_type	= ARG_MEM_SIZE,
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+ 
+diff --git a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
+index 5b4453747c23..0952d1ebf0f1 100644
+--- a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
++++ b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
+@@ -137,7 +137,7 @@ int helper_param_not_ok(void *ctx)
+ 
+ 	p = bpf_rdonly_cast(0, 0);
+ 	/*
+-	 * Any helper with ARG_CONST_SIZE_OR_ZERO constraint will do,
++	 * Any helper with ARG_MEM_SIZE_OR_ZERO constraint will do,
+ 	 * the most permissive constraint
+ 	 */
+ 	bpf_copy_from_user(p, 0, (void *)42);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index bc038ac2df98..1a273e416fed 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -1195,7 +1195,7 @@ l0_%=:	r1 = r6;					\
+ 	r3 += -8;					\
+ 	r5 = 0;						\
+ 	/* The 4th argument of bpf_skb_store_bytes is defined as \
+-	 * ARG_CONST_SIZE, so 0 is not allowed. The 'r4 != 0' \
++	 * ARG_MEM_SIZE, so 0 is not allowed. The 'r4 != 0' \
+ 	 * is providing us this exclusion of zero from initial \
+ 	 * [0, 7] range.				\
+ 	 */						\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c b/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
+index f2c54e4d89eb..343fc08d9747 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
++++ b/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
+@@ -85,7 +85,7 @@ __naked void stack_bitwise_and_zero_included(void)
+ 	r2 += -64;					\
+ 	r4 = 0;						\
+ 	/* Call bpf_ringbuf_output(), it is one of a few helper functions with\
+-	 * ARG_CONST_SIZE_OR_ZERO parameter allowed in unpriv mode.\
++	 * ARG_MEM_SIZE_OR_ZERO parameter allowed in unpriv mode.\
+ 	 * For unpriv this should signal an error, because memory at &fp[-64] is\
+ 	 * not initialized.				\
+ 	 */						\
+@@ -278,7 +278,7 @@ __naked void stack_jmp_no_min_check(void)
+ 	r2 += -64;					\
+ 	r4 = 0;						\
+ 	/* Call bpf_ringbuf_output(), it is one of a few helper functions with\
+-	 * ARG_CONST_SIZE_OR_ZERO parameter allowed in unpriv mode.\
++	 * ARG_MEM_SIZE_OR_ZERO parameter allowed in unpriv mode.\
+ 	 * For unpriv this should signal an error, because memory at &fp[-64] is\
+ 	 * not initialized.				\
+ 	 */						\
+@@ -778,7 +778,7 @@ __naked void variable_memory_8_bytes_leak(void)
+ 	r3 += 1;					\
+ 	r4 = 0;						\
+ 	/* Call bpf_ringbuf_output(), it is one of a few helper functions with\
+-	 * ARG_CONST_SIZE_OR_ZERO parameter allowed in unpriv mode.\
++	 * ARG_MEM_SIZE_OR_ZERO parameter allowed in unpriv mode.\
+ 	 * For unpriv this should signal an error, because memory region [1, 64]\
+ 	 * at &fp[-64] is not fully initialized.	\
+ 	 */						\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c b/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c
+index 6d2a38597c34..c6603a118fdc 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c
++++ b/tools/testing/selftests/bpf/progs/verifier_helper_value_access.c
+@@ -91,7 +91,7 @@ l0_%=:	exit;						\
+ 
+ /* Call a function taking a pointer and a size which doesn't allow the size to
+  * be zero (i.e. bpf_trace_printk() declares the second argument to be
+- * ARG_CONST_SIZE, not ARG_CONST_SIZE_OR_ZERO). We attempt to pass zero for the
++ * ARG_MEM_SIZE, not ARG_MEM_SIZE_OR_ZERO). We attempt to pass zero for the
+  * size and expect to fail.
+  */
+ SEC("tracepoint")
 -- 
 2.52.0
 
