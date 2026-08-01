@@ -1,66 +1,66 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424E73B71BD
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 17:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19383B5F5D
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 17:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785605710; cv=none; b=AWV8Ttk7nhqM+Ip5nm57thNcJ2qluC+CwEjYx8qlT2VaAcmAx+63ua+PfPw3NZ6K8aMi+W0L7zNamfiSsODzO/Ae4ub1M3zSERkvFz/Q/R7DA02zuz42VtXciz0iePQJcRyqLXxPEdlZT5mmE12k4XmRMxMyYL5HEPQX2pAa44A=
+	t=1785605893; cv=none; b=EzJMF4TNweAviGKbNcgSHgUmtB0uNTXMPuapQFGt3llWuqsoGWRZP6rKOi7XffTqea+bzRsCKo3FpiaRhyL/zLJ5uJGT90K3F6UoyOzmbsDtBqtORPjr4YCg2dlARlq+PawU4mKrw8Z0eA3NuPWNlrVZqk9/ypkhSqzp4irA41I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785605710; c=relaxed/simple;
-	bh=qrkQjH/yPS0Ki/jy3KZEKed04xYWuEysIpsTesxuj9o=;
+	s=arc-20240116; t=1785605893; c=relaxed/simple;
+	bh=h1I5cBGaL4NNtruvUDMk6k72yunOA/sUN+iC6Di/G7Q=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=D1FVSFFAFIp/F5z8043ciKj9ViGHR1YGcP64BnzRLt7TM/4Yh/xu4WU+3lgOsWQGW04D/NSxQBE1tXmrtqICRDZYY81GZZKtGwIDn/ZkaL9ZMYg8XLKTnI5QDy8sfGb3vqjFaqlg3fW2PASua+H5pdkpC5+9JEiIEVYsgcQj/qA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rw+Xa1p8; arc=none smtp.client-ip=74.125.225.64
+	 References:In-Reply-To; b=UcogRpAFgLsVRwMRVXyLs1Lo86914tEPHAb4faxvqVV47UQEEpnj++3EOS0tfTMmb2DFCDxUe+AVRLIkAWE5e9C0S4H7It1sAQ1NoOTz/xi1KS4hWbJEABQRQprVwRjT9vn6TV8ruaJUZhHfbdt/ya8j0eBEC4IioDPi+c7Rbws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mGgsdVI6; arc=none smtp.client-ip=74.125.225.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rw+Xa1p8"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4784b41f3aeso647360f8f.1
-        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 10:35:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mGgsdVI6"
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47f9c6bc99eso646732f8f.0
+        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 10:38:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785605706; x=1786210506; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785605890; x=1786210690; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=ug8010ZyC+kV7fl3Lgjmm0rAlYJx/RD0vaE5unAL+gA=;
-        b=Rw+Xa1p8b+Q79mnXdJ3t5QFA2uR/kKEh6P6I2IoRK6Rd92rsgaZLhgvhvbm0jCOONX
-         aHeGv00bIRehPZdrWYaGE0j06rj/RX8uz39hyuV+nkRv9NVc7I9A+y1ScfHGMxrEg9hp
-         n+Bp4SUWZGV2YwpUu59Wns178tBo7etr4lNs1mzuD4qy6plxhYuVx1U4FVwve+9LrAQv
-         9RNFLHT0wkX707mSzZFDhXuHGBcEwNN7ahUuQuyISR8T40BNM4/0ZlayqG74B8J43eBj
-         wiSwRw+mKONjCCUKACsLoV+6xofUDY9/EklE3b1oVuYTyVaNgd2mM3oKz1a7MWcof9q1
-         8X9w==
+        bh=3nDM0mc96Bzr18k4xoBHNsXxvKjDpatYOwOhRrLaoyo=;
+        b=mGgsdVI6YR+M1FrcqYnt02Rc/Y6TDJiSbOtcpg9qQhYb3gX3LcDq7b50KPjgOXraAq
+         cCtEJQhPKQsAOdEHqUTajSXGtrUsGOH7TY5ZpDwezW4+utkwxAXSs/ATE0x3BFIKs/ar
+         JoCbExesPFxGzYMprEhIw91wrN6PNauKjXXGDdYT1oPGOJ2SnzWqaojmns3DQunFOcca
+         /SQlzIKrgGm/9pchfYIChDj1KRS0PbksPIHmAMMzw/RGxfqyiGh1qRhG7T3bRIXVCmsd
+         wlso9lP0WFhVUh4i1WeVluz/kJgs/NU3YGDlK7iIKff8nUa74XCBWUjkJtR5Mufv0sOW
+         ZANg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785605706; x=1786210506;
+        d=1e100.net; s=20251104; t=1785605890; x=1786210690;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ug8010ZyC+kV7fl3Lgjmm0rAlYJx/RD0vaE5unAL+gA=;
-        b=bFIvFeEx5I7kaokh1niRxnD6HIUdy1O/JfAS/xqCnRQGJZdjubmWiaEYfEv3b7s9JN
-         +lkOaZoO1cup5ErEjutKm3tGuIKo4a9avwOh5oBO+oL/sQMNQWwbeF805mp+a3KLI+DR
-         ubF/LhIbUkQyWUnfwB5TxI2EPJWIkeQki/pvVfghCb4cKDHhePAmO4RrypXCsrWxlhQg
-         BJITEg63jr3tk/acZqMBzQH5k37N0iEWm4xNJq0q3kofBhpouYlEDfUK6EOTQR8xVT/p
-         3OH/YtJ7J59gGKWoRAJWLhnU3M5YG06pkYCucxDTTAsBQuNB5BUPJBtFm8RZrOlKl7Tw
-         fL3Q==
-X-Forwarded-Encrypted: i=1; AHgh+Rr7ybXj+MkChsd3b4WFZ673i8pbv7+RczGKnVixiKkZ/8pra0odblN9SzwWCZiFL2hgK5U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXIPU2wzGuLlzw9Ghv0I81XaMsua75l/9lLWvfrAlXaMnDseUI
-	cIbh9WcFP7Neq+0rNIRgXGgMawF+hS21dQwNloglCpN7XdWyDj5vd+fy
-X-Gm-Gg: AR+sD10RU2uGTYzLw/Ar4p1OK2cbQOYT5YvJqaXP7HQJd3YUFOderHLakW3GnnOmq+T
-	ktynel8ksdzjeVr1O1PVE8xwXhUCGdLTRyh5rzDzzh7Fop9sdrsldjvaR6uX/DqHMQQFNBqo/n3
-	46iMtS+NzSP27qtmC2Wcni45I/jtg8pu6nORN5RguHoPLBthEg3lnAkE74724mV7uiuqMQSWVia
-	4MkJjkRDhhWHKxndhTOJPRxxjS+T8fnFKv57SWDP9ye4I5I0oHHG/Lt0DmrQUrfHufciLg1bhij
-	+Yw0cZorZxksE/+HKp28hDzQzFtr0cFR6SL4cLYWdHBg+rPvbWWbzlKBfcqkpsPOW0J35L8WFUw
-	KrRxNfS36EFEFkRUDbMqW94UKW12yOj/vlzN45GQXKXm6aEo66bd2GDyX9YQtW/c4EXpoZdTeX9
-	1Siztl2srVay+ntjO8sQmyhJVWJ/86hnPrWAkDvmFsLP/H/BVvoJmcg1ouq4eCMQgniiFqBqAHc
-	Q6o8rLdWTaGVAwXaF0y24IzOPpLBDmI1eNSx9fJCFYjLZBr/ncqzYpSuGRFqz1eFT2X51QeZsa2
-	1hPb2eoORwkoC4AMgBUj5dk5xrHyQxJUz/ENMg==
-X-Received: by 2002:a05:600c:c4a3:b0:493:a613:56b2 with SMTP id 5b1f17b1804b1-4980c64b5c2mr55006905e9.8.1785605706390;
-        Sat, 01 Aug 2026 10:35:06 -0700 (PDT)
+        bh=3nDM0mc96Bzr18k4xoBHNsXxvKjDpatYOwOhRrLaoyo=;
+        b=W29iMFidMrVVh8r8dlCuca6t2pM4NjS59hqCiCYcSVGMvmBKS2cnC5tppPBP+iX60T
+         PnjIgyiTi+yOuD260Rc7tomQawXhd8mO5yPqvooMct6tZ//8Z8mL1Wwiu8Vk1XWMtg+b
+         +EnP6EYKYW9b3P1Bd5VfZIr46ZMPEfRqWU9e+F61mKVemjyJRXivaA6XREQ2OsGgByqo
+         FBb+NRnMZuTEzz1J91KlrkI19R+kaWsibQ8URsTFgiqQeuOSxqyIiwT6oq9V1YLc8Tyr
+         fgFccc+llP7tAgPGFoVbVAzpMsupS6GiNzLMycfXvEjjE2Z5E1vZQgjlI2h8XZLt/+Px
+         QYZw==
+X-Forwarded-Encrypted: i=1; AHgh+RrAaudgWV7dyiFvplDlkWOHQqcY2SQuGr9LoSE5Ah8j/gIhjvujXlnYENQMrZsSmfOZ4NA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1dXAyQEjiPFMtxP10/17pQISADLwyf16Vq0NpcpKT0fY9Fcgb
+	iunTnihIq0u7e3D0hKwPkty8PGW9CB4P8iyjomhkJuempHZFfwl45wOV
+X-Gm-Gg: AR+sD10dKlJPnoq+zCCFmTkrKXjaP/QrJqH/MlbhYZiskkZi+NLTzND4/sVqqby2TsE
+	SylXBFpkECd7CmRu1TB44LqADtW37WH0rWZQqXuaU5AVZq4QuR+LlaSvJ0qo/BSI+ne7ZN3/mbd
+	l/CsoIl1mEYItBwmqJ3SUkh96lafagCqbhBMqdBdg3bymONRcQIATxNQjYsQbyOrcHTUU1pjrSD
+	gu+zreeEN88cnQIKtzx13MQLJzzamlbH0MB93P+hMisP5o7Sw0Jsfe2K4IOENkgz20mv2aEY+4K
+	U/nX+hydulySxS8Nf9m5dBJTMWOh2+66Ca6IW5o48oRvDKsZ5QxVEB308aQXNPQsFIHEmBl15MA
+	7XxymIEUURHoJkPnqF9+J2M01IqdCT8HiUow/53HYaKCz8iH+h2KdgAlIlo0n/VriVAo5eCy5O7
+	HDiA1N1gTRaPjYXPsOmRXd9CvoVVbwxnQsuRETdIDiuxL6gyrWbAHWvn9j0hDh/RK2ITEJoOleO
+	tyGUZPKU+apwBbIVTfOk8S2NOjw7SvebFbxCV87JYraqq96edoZrnap+2KZAA5kZDwXAJJW0Cl8
+	vrSgom5tOHIqv62vDkKWldUmJ20=
+X-Received: by 2002:a5d:4acf:0:b0:47d:f441:5f93 with SMTP id ffacd0b85a97d-47fd72c560bmr6890615f8f.25.1785605889988;
+        Sat, 01 Aug 2026 10:38:09 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49808199f2csm98595505e9.5.2026.08.01.10.35.04
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd41d17f2sm20504660f8f.2.2026.08.01.10.38.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2026 10:35:04 -0700 (PDT)
+        Sat, 01 Aug 2026 10:38:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,8 +69,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 01 Aug 2026 19:35:04 +0200
-Message-Id: <DKDSE8AVM7Q3.3KZHCSNL4NT4L@gmail.com>
+Date: Sat, 01 Aug 2026 19:38:08 +0200
+Message-Id: <DKDSGKU7WKI2.3UV1GEZW2VZWY@gmail.com>
 Cc: <fsverity@lists.linux.dev>, <bpf@vger.kernel.org>,
  <linux-kernel@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
  "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
@@ -85,26 +85,32 @@ To: "Eric Biggers" <ebiggers@kernel.org>
 X-Mailer: aerc 0.21.0
 References: <20260731003925.2728977-1-ebiggers@kernel.org>
  <DKDRHTVNMQ2E.1FCTWQZO2EB7Z@gmail.com> <20260801171549.GB3567@quark>
-In-Reply-To: <20260801171549.GB3567@quark>
+ <DKDSE8AVM7Q3.3KZHCSNL4NT4L@gmail.com>
+In-Reply-To: <DKDSE8AVM7Q3.3KZHCSNL4NT4L@gmail.com>
 
-On Sat Aug 1, 2026 at 7:15 PM CEST, Eric Biggers wrote:
-> On Sat, Aug 01, 2026 at 06:52:45PM +0200, Kumar Kartikeya Dwivedi wrote:
->> > Also correctly handle sizes over INT_MAX, which previously caused an
->> > integer overflow and crash.  __bpf_dynptr_size() returns a u64.
->> >
+On Sat Aug 1, 2026 at 7:35 PM CEST, Kumar Kartikeya Dwivedi wrote:
+> On Sat Aug 1, 2026 at 7:15 PM CEST, Eric Biggers wrote:
+>> On Sat, Aug 01, 2026 at 06:52:45PM +0200, Kumar Kartikeya Dwivedi wrote:
+>>> > Also correctly handle sizes over INT_MAX, which previously caused an
+>>> > integer overflow and crash.  __bpf_dynptr_size() returns a u64.
+>>> >
+>>>
+>>> I guess this occurs when using file dynptrs? Otherwise the size is capp=
+ed to
+>>> DYNPTR_SIZE_MASK.
 >>
->> I guess this occurs when using file dynptrs? Otherwise the size is cappe=
-d to
->> DYNPTR_SIZE_MASK.
+>> Yes, though it looks like __bpf_dynptr_data_rw() excludes file dynptrs.
+>> So this particular issue might be unreachable.  Still seems like a good
+>> idea to match the u64 type that __bpf_dynptr_size() returns though.
+>>
 >
-> Yes, though it looks like __bpf_dynptr_data_rw() excludes file dynptrs.
-> So this particular issue might be unreachable.  Still seems like a good
-> idea to match the u64 type that __bpf_dynptr_size() returns though.
+> I don't see this in patchwork, so you might have to resend this with [PAT=
+CH
+> bpf-next] subject again to trigger CI if you want this to go through bpf =
+tree.
 >
 
-I don't see this in patchwork, so you might have to resend this with [PATCH
-bpf-next] subject again to trigger CI if you want this to go through bpf tr=
-ee.
+Sorry, [PATCH bpf], rather.
 
-> - Eric
+>> - Eric
 
