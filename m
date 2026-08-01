@@ -1,173 +1,188 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECE231B82B
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 08:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785572796; cv=pass; b=V7UnESWUdouGRDi/53BNyULbqQFNv/EZPwgnCRBTcr9ln+7dxtNwxMCVwZYSp7OQLBmwvn5zu+3PwuGlzPR2UTNeHnMhfy73IU/KZA12N9rFyqcUBiY0xM8om8YQdu4E0oPvUgDGP8fxQr3jlXPNxl8VLk7H4WIxA5FCPRXhKT8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785572796; c=relaxed/simple;
-	bh=rwbztR+hc2uf4NW6P64LcIx3lFOd0TUXp7tH63qzotM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YTvd4PVPquJvFmrr4OxFFSJXlfWOcM0FRRv9KtRDpnMoqcvxaZxOTM8WsACAcy8kflRKTDjBKa78eo+HU88wOnw7ryGgtK5oQf9FkS2h/HuJOt0LGedq2lZxyWUlkY5vQHDBGugcIdwYYV+1oA6VmkQRtCp1ny2q0Jr3/MJUI9E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rnGhTGaW; arc=pass smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78D6273D6D;
+	Sat,  1 Aug 2026 08:34:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785573297; cv=none; b=OZ+a3xmBFgRExLWBVG6hFwHpNE0EIjzbCxcdXzal+Fj95RAekJRni+uWZajbKA7HvJcpWTwIzBjJIGvm/HsYzuxIrdnJMn9pt5zrdI5T6rPrN8xJUP3kHY/yp1ZkJUqHJB2zug1Zam2+gVA8oONw/JXx7hqf93S7Cs/xTBlanXU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785573297; c=relaxed/simple;
+	bh=D2XhRQ9aDr3wx0Fde00d1IVLMP0QSC+BSHaDEOmBv/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PK5xCU94q+S4yFl8gfbUwhY6e7hy+O5nS6Cg9rCzOM+FwxkGrAnnytJGz3jEodASnJT0MeWv8nh9dEsRkMZcoQ+xl22CEQ/B3wysPNzxQSOAhphBF2WkJBM99kYxGKc0rpv+vAw3vxxBdQDJYHRsRDbMrl043uHh4WYBL8ysoxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=r1Jx8jvk; arc=none smtp.client-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rnGhTGaW"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-698ae09e356so2765157a12.2
-        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 01:26:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785572793; cv=none;
-        d=google.com; s=arc-20260327;
-        b=FeoiQC2IvJ282LTaHs0R+qP7C3qc6bRyj9ZwG91TF321mZpgS1xWxBSX8xwRHVfK0s
-         M/mViLRIpDhJy9RTtTnZ9dvC/VIB/GSjeJBvSslKmC5lLX16phIisCD1hPNU3LaSRsjm
-         vk5i/BtLOIChMdF1BAPMmHSJYAKHLqFpxkBYYHPXPfIEtGhIapJzQBLGsdfWiN0pgeQ9
-         pYRlq4ZUx4dvplR9BsjPbRLx3DF/QgF5Lmml85e9Xo5C7YXHhLa2BYJRmQX7lyQ9UbIg
-         IZrhlEt3mkyA8XIiNM2ucHOV7UdC8fMP3sD6Rxi7JNMURSvGrS4TtdVpyezlrW/VmvE2
-         Y2RQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=v3XtcaEtapzo0C+g3F49Pk9t9Zu0qXoECLQCWK9Pwg4=;
-        fh=WTX9IFbhlveKCXOC3oai5WSXhQU9wF9dYI6Ui2imNZk=;
-        b=PcqTdjCTxXoa4PpRW72dAbi084PqS1klJ1gHnUzIplZiCI251JqRmM21I2RvwH9dtE
-         fU3YbaQ/iFBRoBCYiPfomATqNvg6ZUujATSg5DVaseR2XUYXnuNSrL9BaEUUWwORelnF
-         Otu2XYVm5rWDih8UjJQy2AoQBGYa45MRMg8Cz72bjHUKXQkcoj3OzQw5aKZoFsZip1iN
-         R4c2YkF8xIZPcQ66S1Xc+OFvO+LPgASTZehNg5EzV0LGBhkBtIf9ZS1F9hm9NciBWy2d
-         mRETY3okTgmqXhepWt6Mc/oAA0DqedD6hY3hPY/tTQywLDhkBrVt7ZMuHRhMoConfyG9
-         3iZw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785572793; x=1786177593; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=v3XtcaEtapzo0C+g3F49Pk9t9Zu0qXoECLQCWK9Pwg4=;
-        b=rnGhTGaWKkq/v3nEBLyvK+2YOZWKUomjW2Voi/ck4gmDmM/7uZVmf9Urs05duP08fl
-         0CSlhIVZv9mE4M15CnCBGtUuSLq9xatr1Rkl+CCooMb8rFjXED0PLoUyvOe7QSeNh8PA
-         vIfo1O6CwZzIsmnIp5Uof7L7V5LxuiACuqdMK5IzU8N1XIA71RARdBXjdHAGVXa1izj5
-         qq2QTplgCf1uVBE5hWIF/rjxj3B10p4zHVHgpSSORD78Worwe+PCZgvRgiJh5TaV8VLu
-         jksY1SivSVcaX1WsBXJ3seN09Z2chA3rqZtTy+DwZofOzfn8gC5n0qlFNli/32aGeOF/
-         oGmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785572793; x=1786177593;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=v3XtcaEtapzo0C+g3F49Pk9t9Zu0qXoECLQCWK9Pwg4=;
-        b=Q/4JieHKfr1uaNin9UMhe0eUtdj8rCXp3uk9wvHST07ZS815vmKC/IWuBCdgU4STur
-         NsJ5+w5I/rH2JpvLqfGS1PYZdzo8cWTcxt9XHTsm4VrMKloz9oMINjLFOKWN1+hkWc1R
-         LbKUJ/FFp/zAB8P+R7h2YblUYQMebquHd+ptl/B1/XsEFBiPGXRy9ihdaS16SwKNYQpE
-         oz5NCiBlY4N4/UxVdsQZBAm8xxfnakgb4Zpc/hw2FhCKCJRlmcUOR3OOIErg8mZYNNGo
-         8neLUQMkOfC0YB1IKKOgTrDkiTy1+3Xi6BGfmashXAGRZIP1omieeJrybnWNs00G+G0K
-         vBOA==
-X-Forwarded-Encrypted: i=1; AHgh+RpqInyLP8nA/D7qBKF5bNkslAr6I2ClVsEC/swKmFM0t44SHHRXdaMw6cyNr2dYVs+VLLw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7FvPWoSn97Aeze0La1LOsMTC3gmmkhaeNUA6udSfTDp51Ehnz
-	LYRendns8labnSDsDViC4tjJms8gncgRhOwsWv9ZTHy0IHhrm2RAYoA+aa6g4CnfE+Sx11HZqZ+
-	Y4LEsiA5aZofByGLriV+zieFdgN7Bdr4=
-X-Gm-Gg: AR+sD11kS+BVfNaAKMOKdPjjxY3eKiwxEF92EWitOXa1VtmdzhhLtJRziAzMceURuMX
-	xAJTdR05NPS/ur88rI6G2YZBFN6Gtvx5t915fIP8o83TI35Hr68d7Cce++6AhYe+1lfR8N9lxPN
-	zBb4tBabnwRApeF3iAHtlxeAdmgIj1cVFbWqkFcyfY2FabT43uU5+86Sz1k4audEBxxFrezsppz
-	KG07/1Bvb5BK1Dm0en4MhEsQJtIL966+r3iBElUX8ES099gJ1FcO+tUdTYc8cX1ZsGVx52upVng
-	fMJaHLomJOPlk0i5Cc0lgsH2kT7xU8BMTeLKhSP52qjhUw==
-X-Received: by 2002:a05:6402:44da:b0:69a:b38d:403c with SMTP id
- 4fb4d7f45d1cf-6a0a7c6b782mr1461832a12.7.1785572792620; Sat, 01 Aug 2026
- 01:26:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="r1Jx8jvk"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Ho/q32AcbYFvSnd9s+n2PIJxfB/MItoG1fAzyJ5oEHY=; b=r1Jx8jvki8JkOpQeblmg2V3ogn
+	7jMteEyL4NEQS0LxO88nzK3y6PpyHEiPKPzeM5khp1wTsdRj8K+B6rAF3kgOiHOrebN6CCIWBzPl3
+	KplZxMqZcs+u6n6MHkh6uKmdJjfsTC9IRTDWBYYFT0OH4ohv/bKGSMW6pk54ZxRTBlkFYCv8bLS31
+	9sUP2wNe/6AWFVVBl7S6JZCa8xSg2l6f1koOY5sgdkr4toc+tH2UdGEyC4xN854iJS0aJrr3WXlhM
+	Wh59WNv/KocYzQccNsrzi0HAEh1WNlA7gE+2A02QqS+LMS16d5d3JWx6kxUiKH5Pqmn7o4wsMI6SH
+	mv3Xhdaw==;
+Received: from [151.115.150.205] (port=47632 helo=gepetto..)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.5)
+	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
+	id 1wq5BH-0000000AYsZ-04fq;
+	Sat, 01 Aug 2026 10:34:53 +0200
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+To: bpf@vger.kernel.org
+Cc: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>,
+	stable@vger.kernel.org
+Subject: [PATCH v2 bpf] bpf: harden bloom filter sizing and indexing on 32-bit kernels
+Date: Sat,  1 Aug 2026 08:34:04 +0000
+Message-ID: <20260801083436.4014218-1-Jeremy.Jean@oss.cyber.gouv.fr>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260726070122.2407344-1-zirajs7@gmail.com> <DKBDNFB3WGPZ.GS7M7MY2HNAB@etsalapatis.com>
-In-Reply-To: <DKBDNFB3WGPZ.GS7M7MY2HNAB@etsalapatis.com>
-From: =?UTF-8?B?7J6E7KSA7ISc?= <zirajs7@gmail.com>
-Date: Sat, 1 Aug 2026 17:26:21 +0900
-X-Gm-Features: AUfX_my-pYFZ-XPP8zv7R4daRh3IROnR0mixq9YUOBqskq85YnbAh1a2KU5vdAg
-Message-ID: <CAB4FuGYv8eUAWzJZB7HbOTktYq-RKB35roAqsT52WxHh_P3VJg@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: Reject negative optlen in cgroup getsockopt hook
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Sechang Lim <rhkrqnwk98@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-scw-domain: oss.cyber.gouv.fr
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-Thanks for the review.
+bloom_map_alloc() has two 32-bit-specific problems when the computed
+bitmap reaches the U32_MAX fallback case.
 
-The reproducer already sets ctx->optlen to a negative value (-11) in
-the cgroup BPF program:
+First, BITS_TO_BYTES(U32_MAX) is evaluated with 32-bit arithmetic. The
+addition performed by DIV_ROUND_UP wraps, so the map allocates only the
+fixed-size bloom filter object while keeping bitset_mask == U32_MAX.
+Subsequent updates can then write past the allocated object.
 
-/* ctx->optlen =3D -11; */
-BPF_MOV64_IMM(BPF_REG_2, -11),
-BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_2,
-            offsetof(struct bpf_sockopt, optlen)),
+Second, fixing only the allocation size is not sufficient. The bloom hash
+is a u32, but set_bit() takes a signed long bit number and x86 test_bit()
+eventually feeds the index to variable_test_bit(long, ...). On 32-bit
+kernels, hashes in [0x80000000, U32_MAX] therefore become negative bit
+offsets. x86 bt/bts with a memory operand interpret those offsets relative
+to the supplied base, so a map with bitset_mask == U32_MAX can read or
+write before bloom->bitset even after allocating the full 512 MiB bitmap.
 
-https://gist.github.com/ZirAjs/a177ec6d8f2c8ed7d93edca6313a9255
+Keep the U32_MAX fallback, but split each hash into a word pointer and an
+in-word bit number before calling test_bit() or set_bit(). The bitops
+argument is then always in [0, BITS_PER_LONG - 1], while BIT_WORD(h) still
+selects the intended word in the full bitmap.
 
-The PASS/FAIL output only checks the behavior before and after applying the
-patch. Without the patch, the negative value reaches copy_to_sockptr() and
-triggers the warning. With the patch, getsockopt() rejects it with -EFAULT.
+Compute the bitset size from (u64)bitset_mask + 1 before passing the final
+size to bpf_map_area_alloc(). This fixes the original under-allocation and
+keeps the allocated storage consistent with the addressable bitset.
 
-Would you prefer that I include the reproducer directly in the patch
-submission rather than only linking to the gist?
+Exploitation note: local privilege escalation is possible on a 32-bit x86
+kernel using the under-allocation bug from a binary with CAP_BPF.
 
-On Thu, Jul 30, 2026 at 6:36=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis.c=
-om> wrote:
->
-> On Sun Jul 26, 2026 at 3:01 AM EDT, Junseo Lim wrote:
-> > A cgroup getsockopt BPF program can shrink ctx->optlen after the
-> > kernel getsockopt handler has run. The kernel-buffer variant, used by
-> > TCP_ZEROCOPY_RECEIVE, only rejects values larger than the original
-> > length.
-> >
-> > If BPF writes a negative optlen, that value is accepted and propagated
-> > back to the TCP getsockopt code. It can then be passed to
-> > copy_to_sockptr() as a size_t and trigger the hardened usercopy
-> > bytes > INT_MAX warning.
-> >
-> > Reject negative ctx.optlen in __cgroup_bpf_run_filter_getsockopt_kern()=
-,
-> > matching the lower-bound validation already present in the sockptr-base=
-d
-> > getsockopt hook.
-> >
-> > Fixes: 9cacf81f8161 ("bpf: Remove extra lock_sock for TCP_ZEROCOPY_RECE=
-IVE")
-> > Signed-off-by: Junseo Lim <zirajs7@gmail.com>
->
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
->
-> It'd be worth resending with a reproducer setting optlen to negative.
->
-> > ---
-> > Reproducer and warning:
-> > https://gist.github.com/ZirAjs/a177ec6d8f2c8ed7d93edca6313a9255
-> >
-> > Tested by building and booting the patched kernel. The reproducer
-> > returns -EFAULT and no longer triggers the hardened usercopy warning.
-> >
-> >  kernel/bpf/cgroup.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> > index 4355ccb78a9c..c04a244fe2e6 100644
-> > --- a/kernel/bpf/cgroup.c
-> > +++ b/kernel/bpf/cgroup.c
-> > @@ -2235,7 +2235,7 @@ int __cgroup_bpf_run_filter_getsockopt_kern(struc=
-t sock *sk, int level,
-> >       if (ret < 0)
-> >               return ret;
-> >
-> > -     if (ctx.optlen > *optlen)
-> > +     if (ctx.optlen > *optlen || ctx.optlen < 0)
-> >               return -EFAULT;
-> >
-> >       /* BPF programs can shrink the buffer, export the modifications.
->
+Fixes: 9330986c0300 ("bpf: Add bloom filter map implementation")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+---
+Changes in v2:
+- Address AI reviews.
+- Split full-width hashes into a word pointer and an in-word bit number
+  before calling bitops, so upper-half u32 hashes cannot become negative
+  offsets on 32-bit kernels.
+- Drop the redundant final u64 add-overflow check; bitset_bytes is bounded
+  at 512 MiB once it is computed from bitset_mask.
+
+ kernel/bpf/bloom_filter.c | 30 +++++++++++++++++++++---------
+ 1 file changed, 21 insertions(+), 9 deletions(-)
+
+diff --git a/kernel/bpf/bloom_filter.c b/kernel/bpf/bloom_filter.c
+index b73336c..f111d26 100644
+--- a/kernel/bpf/bloom_filter.c
++++ b/kernel/bpf/bloom_filter.c
+@@ -33,6 +33,22 @@ static u32 hash(struct bpf_bloom_filter *bloom, void *value,
+ 	return h & bloom->bitset_mask;
+ }
+ 
++/*
++ * Some 32-bit architectures take a signed long bit number in bitops. Split
++ * the full u32 hash into a word pointer and an in-word bit number so upper
++ * half hashes cannot become negative offsets.
++ */
++static bool bloom_test_bit(struct bpf_bloom_filter *bloom, u32 bit)
++{
++	return test_bit(bit % BITS_PER_LONG,
++			bloom->bitset + BIT_WORD(bit));
++}
++
++static void bloom_set_bit(struct bpf_bloom_filter *bloom, u32 bit)
++{
++	set_bit(bit % BITS_PER_LONG, bloom->bitset + BIT_WORD(bit));
++}
++
+ static long bloom_map_peek_elem(struct bpf_map *map, void *value)
+ {
+ 	struct bpf_bloom_filter *bloom =
+@@ -41,7 +57,7 @@ static long bloom_map_peek_elem(struct bpf_map *map, void *value)
+ 
+ 	for (i = 0; i < bloom->nr_hash_funcs; i++) {
+ 		h = hash(bloom, value, map->value_size, i);
+-		if (!test_bit(h, bloom->bitset))
++		if (!bloom_test_bit(bloom, h))
+ 			return -ENOENT;
+ 	}
+ 
+@@ -59,7 +75,7 @@ static long bloom_map_push_elem(struct bpf_map *map, void *value, u64 flags)
+ 
+ 	for (i = 0; i < bloom->nr_hash_funcs; i++) {
+ 		h = hash(bloom, value, map->value_size, i);
+-		set_bit(h, bloom->bitset);
++		bloom_set_bit(bloom, h);
+ 	}
+ 
+ 	return 0;
+@@ -94,9 +110,10 @@ static int bloom_map_alloc_check(union bpf_attr *attr)
+ 
+ static struct bpf_map *bloom_map_alloc(union bpf_attr *attr)
+ {
+-	u32 bitset_bytes, bitset_mask, nr_hash_funcs, nr_bits;
++	u32 bitset_mask, nr_hash_funcs, nr_bits;
+ 	int numa_node = bpf_map_attr_numa_node(attr);
+ 	struct bpf_bloom_filter *bloom;
++	u64 bitset_bytes;
+ 
+ 	if (attr->key_size != 0 || attr->value_size == 0 ||
+ 	    attr->max_entries == 0 ||
+@@ -127,21 +144,16 @@ static struct bpf_map *bloom_map_alloc(union bpf_attr *attr)
+ 	if (check_mul_overflow(attr->max_entries, nr_hash_funcs, &nr_bits) ||
+ 	    check_mul_overflow(nr_bits / 5, (u32)7, &nr_bits) ||
+ 	    nr_bits > (1UL << 31)) {
+-		/* The bit array size is 2^32 bits but to avoid overflowing the
+-		 * u32, we use U32_MAX, which will round up to the equivalent
+-		 * number of bytes
+-		 */
+-		bitset_bytes = BITS_TO_BYTES(U32_MAX);
+ 		bitset_mask = U32_MAX;
+ 	} else {
+ 		if (nr_bits <= BITS_PER_LONG)
+ 			nr_bits = BITS_PER_LONG;
+ 		else
+ 			nr_bits = roundup_pow_of_two(nr_bits);
+-		bitset_bytes = BITS_TO_BYTES(nr_bits);
+ 		bitset_mask = nr_bits - 1;
+ 	}
+ 
++	bitset_bytes = BITS_TO_BYTES((u64)bitset_mask + 1);
+ 	bitset_bytes = roundup(bitset_bytes, sizeof(unsigned long));
+ 	bloom = bpf_map_area_alloc(sizeof(*bloom) + bitset_bytes, numa_node);
+ 
+-- 
+2.47.3
