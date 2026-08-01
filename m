@@ -1,71 +1,73 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B13C26CE11
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 12:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9880517B505
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 13:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785588962; cv=none; b=DdlqRc0pPVE/ALQrJcxWnBiRjWB/99z2kzzxNSWw7GWeAJMez1wEaZ479e03rUyry6HY8Jn9mZOuJem5o2AoPCECoSZ1saHn5h+zUT+WRjJDLDm7oO0yPO7xbCyRdAJhQswcvL9o/QLnZb/gh9CC+sIiVhq+nquFFFAttAOBdXc=
+	t=1785589421; cv=none; b=r1grOpJWJZUWotk7QYOFT7Bd8ULjMpyTSGh19N/4krwMhHAIHtuGWqWBFcGUSm118Hu9qmIuNKkCjV4GUxlMWcAdczKW+RdByJHisdZ0DRWzpa235G3pLJfnZT7ukus0aXidYPi30JFIQZlMRBFSlpcFC1W6jMAHSFSYQInhXu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785588962; c=relaxed/simple;
-	bh=lCMhQDZ4j1i9eJ05uc/LHgMnsi7rTcH25lhjvEDnelI=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=YxWVDqVedMn4NfKs799rqtSpYmVtPGcs4e09dgYZJsLWgztr4ohOSIcd215QOgI22s/6GPVsQB/xb0d9Z3d/+8n4GHvaRFZ0L6Ft1VIPf4eRRZV+XgqOOFylMLLo6Z6FPXaWl12ZajKSb88ZtgrfVvCp0J+PZehh/Zf8rsLrS/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net; spf=pass smtp.mailfrom=bobrowski.net; dkim=pass (2048-bit key) header.d=bobrowski.net header.i=@bobrowski.net header.b=ZSBKHu4a; arc=none smtp.client-ip=209.85.215.172
+	s=arc-20240116; t=1785589421; c=relaxed/simple;
+	bh=JFwfi9dbKX/euBP0yZ2Dolwafn3XksN2JHdb7UuHaHU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=l6z4Nq+vVKvIk0O0MijVb/JLNuU+PEeHjSXDwlFR+Pam/bUsQJpZekJg8hmwuUN9HWMkgKTZn9B6hOGFu10gXmvH7Upgj48ojh0ncNdKPmKSWQqF0Sen330ugW5gbIF/tcf+TKwIx1V5mOzIIjHr4Xl6giYBA77oBzbzMqEy7FQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net; spf=pass smtp.mailfrom=bobrowski.net; dkim=pass (2048-bit key) header.d=bobrowski.net header.i=@bobrowski.net header.b=Opj2JAMN; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bobrowski.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bobrowski.net header.i=@bobrowski.net header.b="ZSBKHu4a"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-ca7c1176317so1690329a12.1
-        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 05:55:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bobrowski.net header.i=@bobrowski.net header.b="Opj2JAMN"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2cf52d15d88so15684745ad.2
+        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 06:03:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bobrowski.net; s=google; t=1785588959; x=1786193759; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :message-id:subject:to:from:date:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=lCMhQDZ4j1i9eJ05uc/LHgMnsi7rTcH25lhjvEDnelI=;
-        b=ZSBKHu4aZ5AHVxAs0RERrGiVxgTYd4loH77Lc6g2M+ajZVgWJMqvNzieEw/HRT1soA
-         JXfBY2HOGwkiWmbrSSi7XiHzWoH4yI94qYFV7jaCYohWIFdrJQcsoz8nD08dslLuTTFF
-         nDq/sU0i3MzAJB51j63LF1yDiWs5sh4pr8fU2Atvq+IDoF5u/U1ihPhLDZ2BsoC9XTKO
-         +F9uOu4lx4Eonarc4YI2QD/O8C6bs9vrtPYhNMrEhVIDdtGjC3zpOz+baRFbw853l+Al
-         +mXNmpEAo1W/SWl9PL307BrVTQ+dpnV2xn84ucD/T0qTQx7k2lgDRgF1sgpnWFCszVfT
-         lBfw==
+        d=bobrowski.net; s=google; t=1785589419; x=1786194219; darn=vger.kernel.org;
+        h=content-disposition:content-type:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uOnBwUwt1o/UpHuKkwuSQpQ1MWvUSQDoDNOR96t9v6I=;
+        b=Opj2JAMNEi47F4+jzyoFZCWLhMil/nQ82voxTHrxh6HKhmGL+p59HPOl5MVlxHMf3T
+         sIKDkTD3VmelrUGnl7sHDSWrW3asGEoO97NTCItgKGjcMsi6rUPrTjNIhNpwanl4IRE6
+         OF1qj6MpmS4JJkzYlz9e4NDWIajH/xWRuK4tvns5Ujmj7rAobk1YMArjtsaUnQSiKYhH
+         g/MEhcWRtyXfcPJerMEGmXw+j3o1uiYbiTvHxpKTKrsq3vn/3S0N2b2Avp+JG42Uh+/p
+         KD3iRsmee9vzqiVUymCVq2l0iH/uhIoLOMbUw89IOkYZeC11duk2F2Ug1i4EXy4pLjuz
+         TEOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785588959; x=1786193759;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :message-id:subject:to:from:date:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=lCMhQDZ4j1i9eJ05uc/LHgMnsi7rTcH25lhjvEDnelI=;
-        b=Xg9NX//ZjRxvAqHxlzy1FC1ATxAASYucmPLmWmKt/+48dLXoiA1bssF3xEjH8k6G2L
-         55cx3+m1sW1l5qVHQXzLLo54GhYFKQESAvE6X8ae84/EkgudDUNBrHqwwaT2PE0faU5k
-         fwNXQvX01NRqHOq6Yo+iTrpuN9psAHXyML2OuYXofytKcn55aFwJ64HBeMIf+CALZIew
-         onD9sUx9XsHvNawyHQCHJByyJ8EWEHohwZvsjB3qSEg7hdt6cabkQBL7KGFo7qYCG5pH
-         pqI54Ij3t39oe7pHrmOAJ0PyrFpB39odLcvYa987yb4Zsl+oTy/fUiB2ajLYcVA0CRSm
-         C64g==
-X-Gm-Message-State: AOJu0Ywr071qVwMKZzsJoCrvq/ZJ96mrvSQZ294paEB9S8/3/ODfzZs+
-	lRLAJks7qN9oEaBi+vb+CWUEtteA+1yPN56wr35ee+L9OoX93o9iiQB+w5mQU8zZxj02Nw4XKRW
-	vcmHPYg==
-X-Gm-Gg: AR+sD12YPB+ohILdCe8q93Dk+HQl7jzZMxb959KQYy/YbTUZ8C4uef0YBmKr28oR6Q8
-	DgOj782Xz8DDU64mPfqyGVb+Vi7mlV/CRyK+Z76Wlvgalq1Df/9L9IVhV4uEsSb9Js/te+otqq6
-	h5Vbh5fqlewIXHcf/ozHw+j0YnVUQ+BHW3Ie+YheetLYxhePUDr4dHx/Iy88yyHxU5wfyDwoaMu
-	unrFHyZGoGpm49aoAVHBdXfggQ7ABSmoJ4WZ0lmJz5hQdDINUwHkjT1PCcpSiQ4as7/1iC91rcR
-	TwwdhOBMBQdZiTJBAFfPo4Bxss8h7i9X34p4DuRti0AsXhZucWJf/GC2OyU9Sl/kkTzNUKeaf9G
-	3hfk3zcBaypmm+RCzommGwwKcQfa1U4vN1ASdKac4ndIFqlnthOxpoG03xtKjBf7g1pbms8BGrZ
-	5wkjLxR2sPLnACVtoZKM/LjKEiB15XJz8DQb+CFD40KkwQjaOMNE646POQ6RrR1FbqHCOkcowRX
-	TXbbjKI7hbjRJTiQS/stt0vmPCPpxmp7plMxmO9sfE=
-X-Received: by 2002:a05:6a20:728d:b0:3c0:b766:74f4 with SMTP id adf61e73a8af0-3c92a7545a7mr3390226637.31.1785588959405;
-        Sat, 01 Aug 2026 05:55:59 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785589419; x=1786194219;
+        h=content-disposition:content-type:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=uOnBwUwt1o/UpHuKkwuSQpQ1MWvUSQDoDNOR96t9v6I=;
+        b=XhptrCue8p2WvEJwso9A1k9EFBe1h4aQ8QQBwxEBhULUS5CT1KBmwcuq9J/nb5GiGg
+         OZJAwIFpJ6eL59v+bdfSgIJlNLg18nn8ROAs5BZq9Y8QqA7Hev9jNf5H84ClHZEIwblD
+         4yPFhIljgJLIkueaQy+u2MSkVzz5TW12tFqgdeytR0Hd7bq4jOkHUlQ8ONWTNMUXG23I
+         tQL4RTO5Tg3OSmSNwXEL64D9/e/OHBL+N89roJurV1eh/OEZQJPWRNxYeC8crZeiGyHa
+         THmRCjuXGMKC+WH9/gzdDrgDGVsvqOKKf8BqjuEBtOGWHDp4/iI51FMxk5Rau46hVPhW
+         za/w==
+X-Gm-Message-State: AOJu0YzuN2d3E54bVC7MWlPkK6oZPgqXfWZf/5frYJP2EYCqJDVsBL3F
+	zQzysr/WjrLW8R4EHkNsgusS1TXqzCGyYhzAhTFCmW9cbe70D3xEIMEFxeAplDqdjD8qwOavN16
+	1jt+X5+C+
+X-Gm-Gg: AR+sD137CQm8vNbhSE10nhlbXk6BQrolSq5KjW8WHWPgUtTZDYyxZ/VQdxE08xhvojz
+	B0HtNsUKBg1SBTXtlf74AxpHTTQHm/v2NvAxt1gO56TCbwnxUgAdtho0pwqzCeyA6Z4QHY7fS1P
+	ZjgkEwGxvLbHiFJoMBA7H0CsOuefr3vXqpKBHx+/qAKUuYr3/qudGBPKaseyEG6Rjhl80v9xwx+
+	/hFUPB7f63/25j2gdYL7D9CVDWdAFnnZ4wo1W9N8HcMIFbF+wYhvj5i1djDrhHeIXuJzyIm7eRl
+	3a2KijSeTDXEHKg5oxLfMyCSs2F69TutqIuQ92WScsaWEFohlruYyzMLc5bDF8jHdt/ELfALX/y
+	46OlGKBzhib8hWPVzdBwjfraWaX8wmIiGM+gycJFsqBU9UMEJZYLOdWsinwJ5tzrcb2nqiB8jt9
+	tZL6Sqm/RCjV0ZXy04q2hnMxzKa4U8c9hih2S9cVjd3uqH+IYBXVKPDAlSYckmTDLVWhd5fsQ9y
+	zYmk6XUv8R1kEQnhp/X2n+Pw9hdnMtXnKsVrNbFznQ=
+X-Received: by 2002:a17:90b:3b83:b0:381:973e:fa08 with SMTP id 98e67ed59e1d1-38fbc48ec1cmr3094656a91.18.1785589418781;
+        Sat, 01 Aug 2026 06:03:38 -0700 (PDT)
 Received: from lima-development (202.128.115.4.nsw.leaptel.network. [202.128.115.4])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153e18e114sm29978339eec.28.2026.08.01.05.55.57
-        for <bpf@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153dd4e47dsm26153787eec.3.2026.08.01.06.03.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2026 05:55:59 -0700 (PDT)
-Date: Sat, 1 Aug 2026 22:55:55 +1000
+        Sat, 01 Aug 2026 06:03:38 -0700 (PDT)
+Date: Sat, 1 Aug 2026 23:03:30 +1000
 From: Matt Bobrowski <matt@bobrowski.net>
 To: bpf@vger.kernel.org
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-Message-ID: <am3rqHmP9-64T7k7@lima-development>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, kpsingh@kernel.org
+Subject: [PATCH] bpf: update BPF LSM maintainer list
+Message-ID: <am3uorMW7_UWA5An@lima-development>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,9 +76,32 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHC9VhR8RpkP-N4J0wGbv167NctjFTOg5Z+n4_M0pjp3Fbnamw@mail.gmail.com>
 
-Yes, I've recently left Google. Unfortunatley I lost access to my
-mattbobrowski@google.com mail address before having a chance to update
-the relevant MAINTAINERS entry with my new mail address. Anyway, I've
-literally just sent a patch to the mailing list to address this.
+I've recently left Google, so my mattbobrowski@google.com mail address
+is now inactive. Update the BPF LSM maintainer entry with a mail
+address that I do still have access to and use.
+
+Note that I lost access to my mattbobrowski@google.com mail address
+before being able to make this MAINTAINER entry change from it.
+
+Signed-off-by: Matt Bobrowski <matt@bobrowski.net>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 32ca23e58f2b..e46c57f8493c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5030,7 +5030,7 @@ F:	kernel/bpf/ringbuf.c
+ 
+ BPF [SECURITY & LSM] (Security Audit and Enforcement using BPF)
+ M:	KP Singh <kpsingh@kernel.org>
+-M:	Matt Bobrowski <mattbobrowski@google.com>
++M:	Matt Bobrowski <matt@bobrowski.net>
+ L:	bpf@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/bpf/prog_lsm.rst
+-- 
+2.47.3
+
