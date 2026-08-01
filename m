@@ -1,137 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1031EFF8D
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 08:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C54B30D418
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 08:22:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785572242; cv=none; b=I+sH3xm6BGGC+fQYh18srOfQfImf9d4yhHJSsPqeKA3E+kVbdbATWl/0GhI7eMFcrf228uSadm0Zi+4zux5kLm6OCB6KHVh/sHVtqAOhwgNAY5kjD0LzRRBvtMCJ3RAWSNcnrKp4hEe3OkHkSbkLGq2RxyrpXForDFvy2WtNnOg=
+	t=1785572567; cv=none; b=Ua0VMsY9NaUXI61L3z4KmeYpdPqv0qSPAh5suOyFA3jPS+xs0iQPBWnw9dB75K5WgzHsECjxrekdL4ataeAsxzjj5eNW4NNW92Fmuza+Ln8HTP8zgcv1dc30Ca45KnUGb9dAPaSSLX4s/nn5kOy11veRWmciHlGMFWX/5XuJOXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785572242; c=relaxed/simple;
-	bh=QI9nLXTa9zvtQCDmxHqwWFh301i4Br6mvV/vttiHjPI=;
+	s=arc-20240116; t=1785572567; c=relaxed/simple;
+	bh=AnbVpZkqyR8h+kWxc2FOql+eeEgyklGJeaIL1Z2vTwE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JLnhFDUmDlK2m8EtzKy+2kLGObM24cXNXXqIKyUszcnKSajaFVeEffvm01yWAjVhcib5YFk0E5eF5C8kGVSvBHXMfyBM0R0ZcIKRbGNrkBYiqvi11KNtCgdzdbYECQlg84QfyCZY6bS76ug9ey1GC+WPnrQpiOfEs1/GXzQEs1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gABBMQV7; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=lmy5WNV/HuOVblLCaJWlfl4H+6ptRthHBJmUu1hQYIrnCENsHZFeRxteKRQDvTEQz/LpZB0sJczvsyKz1FEW3xL6A7Alip2uRwGrby6/Foe0Wv9qSGAcOZ2Bsdhc2CRB2To96rBVVmYsiCjUgTgN0rPVMxiVvkhHFV9lK2GiB9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n2mTrjSF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gABBMQV7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132401F00AC4;
-	Sat,  1 Aug 2026 08:17:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n2mTrjSF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FB41F00AC4;
+	Sat,  1 Aug 2026 08:22:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785572241;
-	bh=WPfHahc3m3oDauoQf9pvRdz+UEOc5J/9eUJZ55Wnd80=;
+	s=k20260515; t=1785572566;
+	bh=wllY/ovpHwf47UYHnBw4k/CL4JxdegD1mMGKxewYS84=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gABBMQV7Nbz96IjT+FbIDPAZYF8yb/Rf4QEPCsfB9+/NAHa1sxxfKa+aXez3xmEqr
-	 x06wDgALf3x1FYFzR5sIeuRRGuVzYPZL0maaIojOdNUwaZgI7LnA206B22n9a6MDqu
-	 KG8JRHxK5HBvOAYBOIDIIN0HrtR6TVl+HduMh1Xnl7CHuVLNgh917PXsKlM4uLwc4p
-	 wk/fGQew0BegK8Yig1hFe1UkiIpZPv622B3qKMDHWPryEuaOPh9WHsENVVi8rQUGvb
-	 yuSgnfh9+QQdYnmphVwz/orxg7IgIOGW/u5dfBhtN0YjMxJwxHEWHOI+jLxh3ELSS9
-	 a9nbxsaZorbpw==
+	b=n2mTrjSFplmaIZ17pRzLf6b3lpA5cgv8XZ01rxJv0BeQCLztqw2dZc4qyujFDqg/b
+	 ThpEBu/LQ2vBXMXISO3ziiPL9195a0ivnY2W7OJedYbY7ylRZ1A3tAyqUSjjqdpwUT
+	 xbALIN0TX4CV4mQIxM52cG7vQ6ZYgABAIfmthrz+XkneMgRbefseqg8girMUZHWx1l
+	 phe9V9/McToHDMyO5h5d8aJvBZwfaQ//t8otf2KE52HoVJSkSfhlheSfn9mY6I4IQE
+	 oQmqjb87WHnK3r9KcwLIZER78nKGGJT1DpQvWGBeMNQvIUiK+OvCMpKj7jqnAKyyf2
+	 EuU6ByugCM0Uw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 08/18] bpf: Check fixed-size mem args of
- helpers and kfuncs the same way
+Subject: Re: [PATCH bpf-next v3 15/18] bpf: Classify kfunc pointer arguments
+ from BTF, resolve type against the register
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Amery Hung" <ameryhung@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260801074633.1595644-9-ameryhung@gmail.com>
+In-Reply-To: <20260801074633.1595644-16-ameryhung@gmail.com>
 References: <20260801074633.1595644-1-ameryhung@gmail.com>
- <20260801074633.1595644-9-ameryhung@gmail.com>
+ <20260801074633.1595644-16-ameryhung@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 01 Aug 2026 08:17:20 +0000
-Message-Id: <20260801081721.132401F00AC4@smtp.kernel.org>
+Date: Sat, 01 Aug 2026 08:22:45 +0000
+Message-Id: <20260801082246.17FB41F00AC4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-New issues:
-- [High] Kfuncs taking uninitialized memory arguments via the `__uninit` an=
-notation are falsely rejected when passed uninitialized stack slots.
-
-Pre-existing issues:
-- [Critical] The verifier fails to check if the size argument for `KF_ARG_P=
-TR_TO_MEM_SIZE` kfuncs is a scalar, allowing BPF programs to pass kernel po=
-inters as size arguments, leading to an out-of-bounds access.
+- [Medium] Allowing PTR_TO_BTF_ID as a KF_ARG_PTR_TO_MEM argument is either=
+ broken or fundamentally unsafe due to unvalidated access flags.
 --
 
---- Patch [8]: [PATCH bpf-next v3 08/18] bpf: Check fixed-size mem args of =
-helpers and kfuncs the same way ---
-commit bcee13ba62b78a9328164e2486f3c31a7fddb8a0
+--- Patch [15]: [PATCH bpf-next v3 15/18] bpf: Classify kfunc pointer argum=
+ents from BTF, resolve type against the register ---
+commit d5adf1f80d7ac5827091492c5099bcb0c05e15d1
 Author: Amery Hung <ameryhung@gmail.com>
 
-bpf: Check fixed-size mem args of helpers and kfuncs the same way
+bpf: Classify kfunc pointer arguments from BTF, resolve type against the re=
+gister
 
-Fixed-size memory arguments went through two paths: helpers called
-check_helper_mem_access() directly, while kfuncs and global subprogs
-used check_mem_reg(). Route the helper MEM_FIXED_SIZE case through
-check_mem_reg() too so all three share the same check.
+This commit changes kfunc pointer argument classification to rely strictly
+on BTF rather than register state. It introduces support for passing a
+PTR_TO_BTF_ID as a fixed-size memory buffer when pointing to a scalar struc=
+t.
+
+>     The new design now accepts one previously rejected case: passing
+>     PTR_TO_BTF_ID to a pointer to scalar w/o a following __sz/__szk. The
+>     argument will be classified as KF_ARG_PTR_TO_MEM | MEM_FIXED_SIZE. The
+>     PTR_TO_BTF_ID register will go through check_mem_reg() ->
+>     check_helper_mem_access() -> check_ptr_to_btf_access(), and by defaul=
+t only
+>     read is allowed.
+
+[Severity: Medium]
+Will this newly accepted case always fail verification?
+
+While the commit message states that "by default only read is allowed,"
+the call to check_mem_reg() for KF_ARG_PTR_TO_MEM arguments
+unconditionally demands BPF_READ | BPF_WRITE access. This causes
+check_ptr_to_btf_access() to reject standard kernel pointers with -EACCES.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index f61771e2a8b27..9e0c7f0a15c15 100644
+> index 1ccf3b764c515..9045369ba5694 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-
+> @@ -11405,37 +11414,37 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env =
+*env,
 [ ... ]
+> -	/* This is the catch all argument type of register types supported by
+> -	 * check_helper_mem_access. However, we only allow when argument type is
+> -	 * pointer to scalar, or struct composed (recursively) of scalars. When
+> -	 * arg_mem_size is true, the pointer can be void *.
+> +	/* A pointer to a struct without a size argument is classified as KF_AR=
+G_PTR_TO_BTF_ID */
+> +	if (btf_type_is_struct(ref_t))
+> +		return KF_ARG_PTR_TO_BTF_ID;
+> +
+> +	/*
+> +	 * Otherwise this is a fixed-size memory buffer supported by
+> +	 * check_helper_mem_access(): a pointer to a scalar or a struct of
+> +	 * scalars. The access size is derived from the pointed-to BTF type.
+>  	 */
+> -	if (!btf_type_is_scalar(ref_t) && !__btf_type_is_scalar_struct(env, met=
+a->btf, ref_t, 0) &&
+> -	    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
+> -		verbose(env, "%s pointer type %s %s must point to %sscalar, or struct =
+with scalar\n",
+> -			reg_arg_name(env, argno),
+> -			btf_type_str(ref_t), ref_tname, arg_mem_size ? "void, " : "");
+> +	if (!btf_type_is_scalar(ref_t) &&
+> +	    !__btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
+> +		verbose(env, "%s pointer type %s %s must point to scalar, or struct wi=
+th scalar\n",
+> +			reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
+>  		return -EINVAL;
+>  	}
+> -	return arg_mem_size ? KF_ARG_PTR_TO_MEM : KF_ARG_PTR_TO_MEM | MEM_FIXED=
+_SIZE;
+> +	return KF_ARG_PTR_TO_MEM | MEM_FIXED_SIZE;
+>  }
 
-> @@ -12379,7 +12385,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
-nv *env, struct bpf_call_arg_me
->  					ref_tname, PTR_ERR(resolve_ret));
->  				return -EINVAL;
->  			}
-> -			ret =3D check_mem_reg(env, reg, argno, type_size, meta);
-> +			ret =3D check_mem_reg(env, reg, argno, type_size, BPF_READ | BPF_WRIT=
-E, meta);
+[Severity: Medium]
+When get_kfunc_ptr_arg_type() returns KF_ARG_PTR_TO_MEM | MEM_FIXED_SIZE for
+a PTR_TO_BTF_ID, or when check_kfunc_args() falls through to KF_ARG_PTR_TO_=
+MEM,
+it verifies the argument as a memory buffer:
 
-[Severity: High]
-Does this change break BPF programs that pass uninitialized stack slots to
-kfuncs using the __uninit annotation?
+kernel/bpf/verifier.c:check_kfunc_args() {
+    ...
+		case KF_ARG_PTR_TO_MEM:
+			if (kf_arg_type & MEM_FIXED_SIZE) {
+				resolve_ret =3D btf_resolve_size(btf, ref_t, &type_size);
+                ...
+				ret =3D check_mem_reg(env, reg, argno, type_size, BPF_READ | BPF_WRITE,=
+ meta);
+    ...
+}
 
-Because check_mem_reg() is now unconditionally called with
-BPF_READ | BPF_WRITE here, it seems to mandate initialization for __uninit
-kfunc arguments as well, which should only require BPF_WRITE.
+Because check_mem_reg() is passed BPF_READ | BPF_WRITE, it requires write
+access. When this goes through check_helper_mem_access() and reaches
+check_ptr_to_btf_access(), it will be rejected because atype !=3D BPF_READ:
 
->  			if (ret < 0)
->  				return ret;
->  			break;
->  		case KF_ARG_PTR_TO_MEM_SIZE:
->  		{
->  			struct bpf_reg_state *buff_reg =3D reg;
->  			const struct btf_param *buff_arg =3D &args[i];
->  			struct bpf_reg_state *size_reg =3D get_func_arg_reg(caller, regs, i +=
- 1);
->  			const struct btf_param *size_arg =3D &args[i + 1];
->  			argno_t next_argno =3D argno_from_arg(i + 2);
-> =20
->  			if (!bpf_register_is_null(buff_reg) || !is_kfunc_arg_nullable(meta->b=
-tf, buff_arg)) {
->  				ret =3D check_mem_size_reg(env, buff_reg, size_reg, argno, next_argn=
-o,
->  							 BPF_READ | BPF_WRITE, true, meta);
->  				if (ret < 0) {
-[ ... ]
->  			}
-> =20
->  			/* Skip next '__sz' or '__szk' argument */
->  			i++;
->  			break;
+kernel/bpf/verifier.c:check_ptr_to_btf_access() {
+    ...
+		if (atype !=3D BPF_READ && !type_is_ptr_alloc_obj(reg->type)) {
+			verbose(env, "only read is supported\n");
+			return -EACCES;
+		}
+    ...
+}
 
-[Severity: Critical]
-This isn't a bug introduced by this patch, but does the verifier fail to
-enforce that the size argument is a scalar for KF_ARG_PTR_TO_MEM_SIZE?
-
-The loop uses i++ to skip the next iteration, which completely bypasses the
-btf_type_is_scalar validation for the size argument. check_mem_size_reg()
-also assumes the register is a SCALAR_VALUE without verifying it.
-
-If a BPF program passes a pointer register (like PTR_TO_STACK with a zero
-offset) as the size argument, reg_umax evaluates to 0, which passes the
-verifier's size checks. At runtime, the full kernel pointer address could be
-used as the size, potentially allowing an out-of-bounds memory access.
+Could this unconditionally break the newly introduced feature for standard
+(non-allocated) kernel pointers? Also, if the BPF_READ | BPF_WRITE flag were
+simply changed to BPF_READ to pass verification, could it introduce a
+vulnerability since the verifier cannot guarantee that the underlying kfunc
+will not write to the buffer?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260801074633.1595=
-644-1-ameryhung@gmail.com?part=3D8
+644-1-ameryhung@gmail.com?part=3D15
