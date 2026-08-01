@@ -1,131 +1,128 @@
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB37A3793DE
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 09:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785577500; cv=pass; b=gM4qSgcuk+RjSVA/PXPJtMwcPAm7wBsnbmxxAqkXMNP+Y0ZK3xtXfW4R/vbAZPK1xAS5MaE86anCUTrCjiPmObDB/LTxW0W70RRC7u9QT9Ptsobnt1rlprQ+NubYB+8QnxMH0FxnVnePexmbxjzy/LuxvW7I0mv9IcU2DAHWN/c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785577500; c=relaxed/simple;
-	bh=+8T3x6BTgIdAaarTuQS+9WrA0w1pBOk6DXEebwZZ/y8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ExW78/JzS6B9Sk4kcHsWWDk3Gk+96NSSwNgFhxWbqrhIZQamR4JeDYd0iFdbX6dVJwEo9MZdI8VE1VvQiiGr5AYwErcKcLvRqvECBMJoBVEnUzWaWMwNy+2PNki032d9e3s8e6JOD9KmgfXefaaT9QEKbDJ+IYoKH8DCDrw+LDg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com; spf=none smtp.mailfrom=anyfinetworks.com; dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b=ZkqxCZrC; arc=pass smtp.client-ip=209.85.221.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=anyfinetworks.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22AA39478F
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 10:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785580006; cv=none; b=oHctqX0jeeP42oHsaE4qYTxfl9kaoLJKmzo83f1nePXp6FkA42mPpfQg9xTyTrg/gn2KXxAem+dqEl07M8QkkxoiAz+k3Tc3VxeSRKJTk9wLxW2yDPtdJlDR94+Jq+fftCc9oCd56/ClcfPYgMSzaldJL8Xk9JFfT7HeY1f/nvQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785580006; c=relaxed/simple;
+	bh=Zwc86HUtruMG/EmLSrSa+RpCw92UAOseOeQ8S/PILIo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ws0R5TxJczU4rMXf6ZVmOi0mfdgpJmHp0oKvdKudiy6/scguqHIROAvudRhRX+pJtX2fJt5YqXbaDvKXu6sPdT7N22mHFrgDmYC/VcaeB/d1wf6hE6xk0DsS1+8JMAlgiLTGVTvfksKvNOt+mV/z2C9cqmnneBsarWuhcDmNWw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SUQkvjJF; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b="ZkqxCZrC"
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-5bfaa014978so831064e0c.3
-        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 02:44:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785577497; cv=none;
-        d=google.com; s=arc-20260327;
-        b=BMJ0sJtkW0VbLx0jVJw/shKI2bKBNjaf2qXoYICxt0kKQChTLfMYLrqF3ybxYKXb2t
-         FkW3pf5GblEG4jyec5HjVarrHROxkazjXQEIKgnGmVLV234qgS/J1n7O6gF234mCI/X3
-         nD6vLAGCXgbrRb3NiDBMU5MJmwwZ5KzoyEJoSxvG47zeLASvyusZ9QAmFCayvprfPZOT
-         +dowueTEuE+Plwf+j9IO3CfjY3hSkJxhG97ipkisoEsxfImHxn16LkNDSe3BKmX309gf
-         Ul1p4htUcLmvuU3x6xL1j8/7NiHU/iKwdiEyz98xcX/fwiLHD4+8+hVtTlrDdTz1v7EG
-         LufQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=+8T3x6BTgIdAaarTuQS+9WrA0w1pBOk6DXEebwZZ/y8=;
-        fh=MYsHdBGttvDePHrNP1u7cU34ccyKKdhpkJZfOHC5QqM=;
-        b=GacR4J3BN3zNJ1GSKW1em2YJPFZ23mWmR4W5LwBWfxzubaNhjpkdrvLLR0GFkRPtyJ
-         L6e0lHkhHhMqqi1cPwPz1CLbsdMa4nzNphJvzh3UV3IzsfeWmKzrPVMuMmWjLcGZWhFO
-         rGcJ1Xue4dXy0A7Z3iAnOBrqjvCMZ/dt4/SGpGpq3D6NQDkOOayDJol2XkGQumdDE+Dz
-         M70/N1dYWbi9fY0SSi/qrapNHuNIELBLDhOvHxoX5bpmWaMOLRss5B9W7KXFcX6Xwf5P
-         EnDXcun4H6cycae1x05hj1LGROQ/n/da5I5wTZ3UqJobzAAv8oFJVCQyyyOfHteakgRS
-         QVMA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SUQkvjJF"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84e507b079dso1338934b3a.0
+        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 03:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20251104.gappssmtp.com; s=20251104; t=1785577497; x=1786182297; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+8T3x6BTgIdAaarTuQS+9WrA0w1pBOk6DXEebwZZ/y8=;
-        b=ZkqxCZrCW8CLOm1gLO9RqcOQhVJ37cU7GbI/7EgTXtPb/Zg7NB0nI3sOVEcLey3gyz
-         GT+iMQwKgwsOH4Ajd8QtSSsXbHgMOqQS6D28N+ykBAWiMVNGpsGHNJXklb/VgwqXUkbM
-         qWMIyiNvhs7InDxV0fcC6/UcnlyRqy1tiMNR809VQ+h716Qm036c7GrWaI53vw1JgduR
-         +RpbWk7uzUiArxY49qNFwtUWcC8D+9/WLvCj9l1MGsBT/xTo8VqG61e08Bx6tzyRC2MQ
-         MUBNsrXlDXw/Rai3Pb+WxOPjab/2i9wpKINySe4vW+T6UIS7NJxX1uD0WCnRiNiET147
-         23Fw==
+        d=gmail.com; s=20251104; t=1785580004; x=1786184804; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=loteGSmf6bFZ3Hf8K/Dm/4Iq7ljKU7ceZ3pBEFBprz4=;
+        b=SUQkvjJFqCXD9tXAOjgkk/NpkBzbJ+uhGzhebIE+nFMOPYJKTR4zQ184dtdTQHHrCB
+         hMpOxOsDuihQ5lUUIpcvulgbt/o+DHqnBdkV7/w1US38ivyrj5/n/qwdC94smNV3ysEY
+         qHM9fYj4XkJILIlt4v/SkA/HP1r4RX5qBAUbmVwUdMTS9qne4ZjazLmRkrO4EPB+8uCd
+         5mtqNLjQZ5Oh82x1nVUDiawScqSVWgkDFupbuu9i/yOKLzTSr+f4OL+xcfV4/J1SXhaf
+         Gs1sKNlH3omYRIBouRzfB4WOCAA3eN3GU5Uf/IuUy6id4xXtkYR9d2wnXH73vkpciq9X
+         y7oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785577497; x=1786182297;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=+8T3x6BTgIdAaarTuQS+9WrA0w1pBOk6DXEebwZZ/y8=;
-        b=aFcdiqAyCeC5YcowU3mzn2l499O13rAQ9XPNlEPLmry8jr5KVm/rR3yWRm1hHApI1f
-         X4JB7FwcE9LfYL7MphGeEbBrecZYNIJXbCs+9LaS4NHOkwDwIJjRcgKrBig876nKsIdk
-         FLirwDhWta27M0FdvkaS56W9YQg5awYdxhKLeqzgsBvDcS5G8sAenE7QX9NpqbjhuWkA
-         PL+bWDIeTdmDCucqp/H+Jr5hxgpQUefpYOm2wAAeGZ2QsbqivP9rxULvbvXr7RpjmyuP
-         uu/jDX8Kn78McvOW00QuGVvnFsGA40itwUSLcSlI7u/j/QGfZCRWBB9724xC80sjATkf
-         B24w==
-X-Forwarded-Encrypted: i=1; AHgh+RoCNIOVgemhplLjnG9S7A5PTp5faZUX51Tpwc86RGUqO6kQPxqBE0pVHDNCf6C69HRJ9/A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0kiRyv7I35Y7CBfwscy+swf2lMqDvx/3ww+uuL1ZFboiMCtMZ
-	m83etJDr4JO3xw9zXwa+HKSa9rE1vQogJz4B5DgmC3ISUmNgC1u4biVjudmWiT/j4fBbtEBpde6
-	sQZQAE/R11Q9i+QJSptD8Nv37Mj2GT+/VLLqwHh6xKg==
-X-Gm-Gg: AR+sD13s9iO+bki2mQVmr/jXuXEHtd/3LB6gMe3TT+zPy39DJt18FCMSOknDu0ShMH8
-	eUp3/8p8NtTEkz57soaULipeEQWjYzgHvKUtWVKiL7hELpVTE5Vfrd0WpIVBh0qAnmQdFmYFi8o
-	oEBgGmcke1kf2uQ39Wo7rccSB3eiWGoE+Aey5QYfG9RDdJsXe7SCrDJeGKWDCFMxwVMM/JOHegp
-	94D9Dd1QCPDCj+5y2N43cTOInN0blk0N2B6jhimSBcsLpyJ6yYJJnsxcfRHif+Zr5jr5HDfe6IH
-	/PXNfPqJavIWRl/L/xucz+L90S3mQd3GUcoun8ObVTU=
-X-Received: by 2002:a05:6102:e0f:b0:74a:b1ee:e034 with SMTP id
- ada2fe7eead31-75b223602a6mr2689929137.8.1785577497619; Sat, 01 Aug 2026
- 02:44:57 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785580004; x=1786184804;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=loteGSmf6bFZ3Hf8K/Dm/4Iq7ljKU7ceZ3pBEFBprz4=;
+        b=WlRsqOtOjWcvAtNE875SFmAgJ5uVFFK2ZFiXqqbOdvv4upUD4AauRaNBm1HUFspzYH
+         wbZgzqjgT97nNAAKfOlZ8bYI48TCsekPWf8DNrPOLhIM3LEoL+xIzX3s3JTy3H7fmwjg
+         ZpcMN55tvxqTe4EAzatreXbVEwy4GA2Oy/oXTEGimPxRiFzEPXUpmcMWS2TeqzHzJP90
+         JBhntrnAHVoWhOQZgzzCo9FoIMBKHoj+esl2CdewLxEkM+Y5yh9vbe80RUrKOvollRtv
+         5oMJbPZLETmUWD6DooyO5vFeoePzZz9x/LMofiFcejZ24aoS9IsoucUoV89ypEyu5gPr
+         trHQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoY6dSGHaWqAySQcvN6fyAIxQ5VT1hmGT6iGwO8ao5bsN49Q8OQOndsslTllmWaVMaP8jw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWTZtZs3A6qGew+EGO0YXK9EP3jvwdtFHOdX+WfThzjCwUpykV
+	MMbVWkDAgzTJyR/YiheZTXiBGR6Eg7R8YBoA8KGMP3muC0+fRsH+SSTn
+X-Gm-Gg: AR+sD13Tnm8d1uBtXB7zkn6HJG1DYDqacaP+PyOWkwx0/ACg/NSfHnd7Dof3HI6o3Tt
+	8xeDPSYv+lSyLI58dZCExuqvHHHhFCcjg/e4a0XnqiIwNZc81SmerJiGTKofpE+vg5QczynUOCb
+	nusyTd0I+C74p3LCG4c1HS+1ibhOvh1VQRA5/8khWFfeCgloFeuimyh+jj5cQOD9kvp0Mu6elmA
+	gTImd5Ishv+LkHz9Agqw396ibnax1v2aOq1Aig3rgV+dF10JCx1rIT8KdJQbNGj/Wz0Sg1g64ke
+	LLL0O/d6+o73tiunnDaL/WT5RyDibjZCASOZcY36bNBVWH3UCIopTmq/9h2TEjLWdRVIpJnMjBS
+	1bO0AFaLqMND/FBaiDgwXo27oJHpkEFjbUQj3CQqZi0cSdup6L6Fa/lb9QCzT3eN4Ws1zkHn6LU
+	ViDanPZjtikzI0rGCYKVw/aP3yHPfHHW+23jGdrznMEWAEC7iMSI/x9hS2MYvZhg3PhQ==
+X-Received: by 2002:a05:6a00:8d1:b0:847:9c06:2bef with SMTP id d2e1a72fcca58-84ee47f2c8fmr2410929b3a.29.1785580004050;
+        Sat, 01 Aug 2026 03:26:44 -0700 (PDT)
+Received: from omen-arch ([147.46.174.207])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84edc51cca2sm1526886b3a.61.2026.08.01.03.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Aug 2026 03:26:43 -0700 (PDT)
+From: Junseo Lim <zirajs7@gmail.com>
+To: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Junseo Lim <zirajs7@gmail.com>
+Subject: [PATCH bpf v2 0/2] bpf, sockmap: fix forward allocation accounting in strparser self-pass path
+Date: Sat,  1 Aug 2026 19:26:31 +0900
+Message-ID: <20260801102633.1872012-1-zirajs7@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260729162931.2369353-1-main.kalliope@gmail.com>
- <20260729162931.2369353-3-main.kalliope@gmail.com> <CAM1=_QS79dDBfaaNQXnWd61AqHd1M4o9aDMMiftnoJveNr=FZg@mail.gmail.com>
- <CAJZwKkgXoHhaej_hkBfytY_6N0PdpwfGMt+GUcHJGyaH0+e7RA@mail.gmail.com>
-In-Reply-To: <CAJZwKkgXoHhaej_hkBfytY_6N0PdpwfGMt+GUcHJGyaH0+e7RA@mail.gmail.com>
-From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date: Sat, 1 Aug 2026 11:44:45 +0200
-X-Gm-Features: AUfX_mzaM7ZKuNLIM5NDcwTn1wPXRR6WpbSUQa-TuJLiyYJnFzRMKLFC3IL_-jc
-Message-ID: <CAM1=_QQ7XiJEozaetLt_+kVn91YAXWpJK_pyfT9=paXseW=wwA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf, mips: Add support for BPF_SDIV and BPF_SMOD
-To: Nicholas Dudar <main.kalliope@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, tsbogend@alpha.franken.de, paulburton@kernel.org, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
-	philmd@oss.qualcomm.com, visitorckw@gmail.com, bpf@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Nicholas,
+The strparser SK_PASS path can queue cloned skbs back to the same socket.
+When one TCP receive skb is split into many strparser messages, repeated
+receive-owner transitions can leave sk_forward_alloc in deficit before
+the next skb_set_owner_r() charge. Teardown can then uncharge more memcg
+pages than were reserved and trigger a page_counter underflow warning.
 
-Thanks for putting in the work on this.
+Fix this by settling any existing sk_forward_alloc deficit with
+sk_rmem_schedule(sk, skb, 0) before skb_set_owner_r() for strparser
+self-pass skbs. The same handling is used when retrying from the psock
+backlog.
 
-> I'm working on separate MOVSX and MEMSX patches. Would you be willing to
-> take BSWAP and JMP32_JA?
+Patch 2 adds a sockmap_strp selftest using a one-byte stream parser and
+an SK_PASS verdict program. The test checks INET_DIAG_MEMINFO to verify
+that sk_forward_alloc does not go negative after exercising the self-pass
+delivery path.
 
-Yes. I think BSWAP and JMP32_JA will be independent of the SDIV/SMOD
-and MOVSX/MEMSX handling, so we can work in parallel on this.
+Changelog:
+v1 -> v2:
+- Keep skb_set_owner_r() and use sk_rmem_schedule(sk, skb, 0) to settle
+  sk_forward_alloc instead of skipping the owner transition.
+  (Emil Tsalapatis)
+- Apply the same handling to psock backlog retries.
+- Add a sockmap_strp selftest based on the reproducer.
+- Add a Reported-by tag.
+- Change the Fixes tag to point to the commit that introduced the issue.
 
-> I'll pass the raw s16 off value through immediate validation and
-> register emission, and interpret off == 1 only in DIV/MOD-specific paths.
-> That leaves MOVSX free to interpret off as its source width.
+v1: https://lore.kernel.org/bpf/20260723065244.186916-1-zirajs7@gmail.com/T/
 
-Great.
+Junseo Lim (2):
+  bpf, sockmap: settle sk_forward_alloc for strparser SK_PASS
+  selftests/bpf: Cover strparser self-pass forward allocation
 
-> I will validate each series boundary on MIPS32r2, MIPS64r2, MIPS32r6, and
-> MIPS64r6, and build the complete v3 together with the MOVSX and MEMSX
-> candidates before posting it.
+ net/core/skmsg.c                              |  33 ++--
+ .../selftests/bpf/prog_tests/sockmap_strp.c   | 171 ++++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_strp.c   |   6 +
+ 3 files changed, 199 insertions(+), 11 deletions(-)
 
-Good. I also have a QEMU test setup that I will use for verification:
-mips32, mips32r2, mips32r6 and mips64 (pre-R6), both big and little
-endian.
+-- 
+2.55.0
 
-> Does that sound ok?
-
-Yes, sounds like a good plan.
-
-Thanks,
-Johan
