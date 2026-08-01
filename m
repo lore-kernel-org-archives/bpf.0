@@ -1,165 +1,90 @@
-Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E281B3F9FB
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 23:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84970179A3
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 23:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785626120; cv=none; b=MZQiwD3Y/YPFv790O8gRkp540g1GgvrMbKKHZDHVTDulmA+2L/dpJYGYv0mXJ/dYHwkIjZRyxiLEyzOkGpCjtnBEbZF4S6UlV0A2LhPWHDkUc1qY3tiWsDA7bWGpUxhuk1kieNwuaE+oXPl0pgCyOu9StXkqPIbJSVe8CMe4IbE=
+	t=1785627403; cv=none; b=W+0fVQmI8ni46nsiWRsjML8Cirb3DU2yXW2oh0B4LVGAyN0FaFCbt/im4fFpIFubF/QRCMy3K0tWoRwwM6k5Z2ZTApLVgIhefgb/18lSqQILFHmPftfOTD0YTUKZq/L9g5vPKf3O074bOOwsR20SKGBedQLunNg9NiZelHybD4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785626120; c=relaxed/simple;
-	bh=uYWMWTB2xfhuBvHHIxzDNU0Hyt+RGxbNFHvWkvXIEGg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=V270VybSOED+DupH+wjF0yQY63MAkbeQwdK58kfn3v4ygHN0ht8BzCEW062da4Buccog6wD/Y3ev/aFbjz6G7eHlDwgCk1dHJiVwLzrTAQ3q5xglCzR3fgtYYu0/BUuTdbkyODet+TmRmPJc/qhI8cwkXFJ+4fNffEDjhPcQLlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UVMbcZjW; arc=none smtp.client-ip=74.125.225.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785627403; c=relaxed/simple;
+	bh=5m0PKeeySIkaelIXA6fWrNGoNihdofrT7vkUqI2mHh0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Lqhl74N9WDvjCeTmwdOI8pvxIRKaHiqldS9rQ05Grp6Sa4luPFmVBxo1kop/X22k/jJKl+k8lJNefc4xGmfhz96dQ1Sj9tV3ZxxVQ9hrrk2hixqxJZyTjwPPNY5iY//oZwS1MFFENq+GjYgsi4v3UDqCpCp3oOZtWU8FgTy+wUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yn6Hzb/V; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UVMbcZjW"
-Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-47f7f93b3d4so624874f8f.1
-        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 16:15:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785626117; x=1786230917; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=UDVgfDsUWPp4vaDuL46w9X9y1PG9/aWOLcGBDuH/lFk=;
-        b=UVMbcZjW4WbeHzCMLRhu40BXj0YZY+TMyvjV9zQc+aT3XVW8A40A7rb9gDdusLFKL7
-         vrRzzrsNR3lb00H6VWr5+/dwAJIr5uyP162Ocy1TB8mYd+QLWsnOXXot3h75+mFmUBSr
-         rToa7S0qacNITz6NN5CiQIXu4Mpn5mewNT2Q4s4v2g3BYJONDBniNjBWvGffidh025bC
-         FE3Q9EOnANJItJsKUdry4udk4LV1y5EWLxiu0ZyQYk49lCHip90LL/F3i9WylUkMrpXr
-         4uYzXcSBP22v+BjXnPGRlMEZDCEZq/gfKPDWcU2cQp5WNduSHSl7kiPodlO+V9Cw7Uxd
-         U3Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785626117; x=1786230917;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UDVgfDsUWPp4vaDuL46w9X9y1PG9/aWOLcGBDuH/lFk=;
-        b=caJpvjPRJMcydkjdKSNXIyMxGKIGFji1rQsGd80ww8ZrVY6gAfi9kIZuCzpU8aU6+K
-         TroKQVLy3et6+GNDyhPWkDOVd7e7mYtKnhHOlQ67xqq3nkSA3H55FdM3qs8JMm8ynxOJ
-         OYyub54ZtRmN5c0/XVkBDD7WV5W9O0Ug6DeavvXjy57wtzkUhGtEay6UrdI4OcbwGGh4
-         YfvlMYvHkMuHk9c1ekN2BsqeOTZU6TGMVvZpotzpr9QDykNdF/mINutdwNXkxFYBZ0PZ
-         dGUMVbA1cM1VtZY2AVrcv5vhukfa1BqSPlCC9J8lISRnNQw6e7pHnyJmD0QQdjKUmViU
-         S0Zw==
-X-Gm-Message-State: AOJu0Yy9gvqd2RKn8mK0eKQltrqrSyxbLkfcTd5M1S00WqS970dYhqlm
-	qKQg9JHMWGYADU3h1Ff8fnTc7k2D9mJ6GEtB5A0pnK5mQDjDXawhM3rm7ZfAQ+8b
-X-Gm-Gg: AR+sD117QR/vRp5YTeMqp9bO9XNycWlm+SbVc9gXz22UMQ8yU5Y9IGjl7X9PNP91WSu
-	WnPsR4WvV4/SHAUxu8yzXd0C/7odJoWAT6zH3uG49nnbUWVr4pXyO26JsvJEnVWvQYKfH+MtTjS
-	mZy3B1ovwNRbA9oux+wTqAVjzRzjoJHG3hV+gCYFZSUQHsltic2XITtUJ4ZYSAkX5rGQkCyEtTM
-	l7jI82ShjqiKje4o76Q6G7AwRyKqrH9Zq/4AHJBiemr74EKlEYXPmiC33NbCIZccYODhcvY/P2E
-	yunkI6PGomkLzdclogKOdEwR3oEEd1BfjnL0SCievuBBR3fD7PoZ55Mzdqdm5XGyKNFR1FNhL5Z
-	q+ESVoeWPm26m8UyfIiAOafsfW93XjutXpzX2nAvmWS4HS6c7MdZdOY3x/uuiCh89egSSVYitTr
-	IQHLSJqXudjxQq+6a3BqENVKnvWgkEOD8RI++ymI1SawUdEfwwQsDIYYG856B4bV3OM9aeUWRdn
-	Wqe5naX6EAz3tS5mVPbK+gaL4xScPIz0vtXNK1+Q7XBjjcWQBtycM2u73ObNt6nUBjH3sxxjPeH
-	T0nOJTp3KJC8pTNYbMz59mW3s3k=
-X-Received: by 2002:a05:600c:6989:b0:495:6338:1453 with SMTP id 5b1f17b1804b1-4980c680bd5mr94148515e9.16.1785626116985;
-        Sat, 01 Aug 2026 16:15:16 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49807b6093fsm53217885e9.1.2026.08.01.16.15.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2026 16:15:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yn6Hzb/V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA131F00AC4;
+	Sat,  1 Aug 2026 23:36:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785627402;
+	bh=7kQeCFyAZMXWYXGLsmMtF3gtC7GJ21/oLxHafQ4CY5k=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Yn6Hzb/VhbEKg/aQEaJ7e3SSsJ5MyLYvZETVbKVB9X2y9iNxyhWC4khPQs1EbtsKl
+	 S2KpQL2DfQL931Y7TQgrLaGfqlHl11DrPgKzGYH6/bMLCuTdg5RbhLPj+dTd75eGlJ
+	 mMMGHQbUlUeKIRD2aZKHqdF9vg+g6BAu1SF/q7GfRWW7K3Tm9Thu7f3HTTzdZRUmTv
+	 mFsldLWcq9dDziqkpU/+swBkmHuLFIG8ATn/rgZ2eH6ejKR8zG0lIe/ZqRSiM2hVD+
+	 JYd0cMWI7WTJy3nD0b27GJuWjrK4znPFWtikcwXBjlwAUFbe0BDV75Kc4lZ0KSqt0u
+	 sh7isIOXKMm1w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next] selftests: drv-net: enable devmem TCP in the
+ test config
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260731-selftests-devmem-config-v1-1-098014348d9d@meta.com>
+References: <20260731-selftests-devmem-config-v1-1-098014348d9d@meta.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 01 Aug 2026 23:36:41 +0000
+Message-Id: <20260801233642.1CA131F00AC4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 02 Aug 2026 01:15:16 +0200
-Message-Id: <DKDZMPBQ6PXU.GQXFOI3BXGJY@gmail.com>
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v1 1/3] bpf: Show more useful info in stack
- depth stats
-X-Mailer: aerc 0.21.0
-References: <20260801230400.850271-1-memxor@gmail.com>
- <20260801230400.850271-2-memxor@gmail.com>
- <20260801231113.D0B711F00AC4@smtp.kernel.org>
-In-Reply-To: <20260801231113.D0B711F00AC4@smtp.kernel.org>
 
-On Sun Aug 2, 2026 at 1:11 AM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Medium] The new stack depth verifier log format breaks stack metrics p=
-arsing in the `veristat` tool.
-> --
->
-> --- Patch [1]: [PATCH bpf-next v1 1/3] bpf: Show more useful info in stac=
-k depth stats ---
-> commit f7cb915ff02de7a02fe7b2353a1f2d77e1852496
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->
-> bpf: Show more useful info in stack depth stats
->
-> This commit changes the output format of stack depth statistics in the BP=
-F
-> verifier log. It replaces the old subprogram index-based format with a cl=
-earer
-> name and depth format, avoiding hard-to-read sequences.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 8d0635ee48c7e..51ac0a9ae3394 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -18703,10 +18703,18 @@ static void print_verification_stats(struct bp=
-f_verifier_env *env)
->>  	if (env->log.level & BPF_LOG_STATS) {
->>  		verbose(env, "verification time %lld usec\n",
->>  			div_u64(env->verification_time, 1000));
->> -		verbose(env, "stack depth %d", env->subprog_info[0].stack_depth);
->> -		for (i =3D 1; i < subprog_cnt; i++)
->> -			verbose(env, "+%d", env->subprog_info[i].stack_depth);
->> -		verbose(env, " max %d\n", env->max_stack_depth);
->> +		verbose(env, "stack depth");
->> +		for (i =3D 0; i < subprog_cnt; i++) {
->> +			const char *name =3D env->subprog_info[i].name;
->> +
->> +			if (name && name[0])
->> +				verbose(env, " %s=3D%d", name,
->> +					env->subprog_info[i].stack_depth);
->> +			else
->> +				verbose(env, " subprog[%d]=3D%d", i,
->> +					env->subprog_info[i].stack_depth);
->> +		}
->> +		verbose(env, " max=3D%d\n", env->max_stack_depth);
->
-> [Severity: Medium]
-> Does this change break the veristat tool's parsing of stack depths?
->
-> Looking at tools/testing/selftests/bpf/veristat.c in parse_verif_log(), i=
-t
-> appears to rely on the old format using a hardcoded string and splitting =
-by
-> the plus sign:
->
-> tools/testing/selftests/bpf/veristat.c:parse_verif_log() {
->     ...
->     if (2 =3D=3D sscanf(cur, "stack depth %511s max %ld", stack, &s->stat=
-s[MAX_STACK]))
->     ...
->     while ((token =3D strtok_r(cnt++ ? NULL : stack, "+", &state))) {
->         if (sscanf(token, "%d", &sub_stack) =3D=3D 0)
->             break;
->     ...
-> }
->
-> Since the verifier now outputs max=3D%ld instead of max %ld, and the indi=
-vidual
-> depths are formatted as name=3Ddepth rather than numbers separated by a p=
-lus
-> sign, will veristat silently fail to parse STACK and MAX_STACK metrics wh=
-en
-> processing BPF objects?
->
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Adding `CONFIG_NET_DEVMEM=3Dy` to the config fragment is ineffectiv=
+e because `NET_DEVMEM` is a hidden symbol with no prompt.
+--
 
-Fixed in patch 2. It is an open question whether we care about format
-compatibility, in that case we will need further adjustments to parse both =
-kinds
-of output (for older and newer kernels).
+--- Patch [1]: [PATCH net-next] selftests: drv-net: enable devmem TCP in th=
+e test config ---
+commit 07d433d344dd104ff54b719b50d995dfb8a6b2be
+Author: Bobby Eshleman <bobbyeshleman@meta.com>
 
-> [ ... ]
+selftests: drv-net: enable devmem TCP in the test config
 
+This commit updates the selftests network hardware config fragment to enabl=
+e=20
+CONFIG_SYNC_FILE to satisfy dependencies for DMA_SHARED_BUFFER, and explici=
+tly=20
+adds CONFIG_NET_DEVMEM.
+
+> diff --git a/tools/testing/selftests/drivers/net/hw/config b/tools/testin=
+g/selftests/drivers/net/hw/config
+> index ed8642b68094f..d89a9ba176558 100644
+> --- a/tools/testing/selftests/drivers/net/hw/config
+> +++ b/tools/testing/selftests/drivers/net/hw/config
+> @@ -15,11 +15,13 @@ CONFIG_IPV6_SIT=3Dy
+>  CONFIG_IPV6_TUNNEL=3Dy
+>  CONFIG_NET_CLS_ACT=3Dy
+>  CONFIG_NET_CLS_BPF=3Dy
+> +CONFIG_NET_DEVMEM=3Dy
+
+[Severity: Low]
+Is this assignment effective? Since NET_DEVMEM is a hidden config symbol=20
+(defined with def_bool y and no prompt string in net/Kconfig), Kconfig=20
+silently ignores manual assignments in config fragments.
+
+It should be automatically enabled when its dependencies are satisfied=20
+(which the addition of CONFIG_SYNC_FILE helps achieve), making this=20
+explicit entry redundant.
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260731-selftests-=
+devmem-config-v1-1-098014348d9d@meta.com?part=3D1
