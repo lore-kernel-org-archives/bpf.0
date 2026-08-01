@@ -1,132 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF02C31715D
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 06:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF99368D77
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 07:46:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785565337; cv=none; b=LhXUW6uy/UwlfxLUGLKL6ARZS232pbZ/SKa7R3waA0njt6SQDAoE1JTZ6F8DEBv6nodlAXG25HO2YZoTdFefde9A7L0+eUwyi2c9vjlbcezitpqvA+fym8wLytLKF3UalkLVBFpahpDlU9EYFle30Qu8kZ3YMyVhzyO5UWtVXQM=
+	t=1785570397; cv=none; b=BsajeJloOl3hZXDCnEZ6JQ5eex1ghtB5QjfHtmgMo5+cQOnTFcg3Dxdq1Lxoj5mQd4dfD6Pb5kHdOMLlJJCgWae4DejhpK29bzH9sAFcPOmiuYOFjG5iRLXRGs/oZn7W0iW1jymnRoHBKZ+zdS7LmKZ3iMDHcsz5oIA7OjgF2XE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785565337; c=relaxed/simple;
-	bh=vn27u9poBCCez1Cy7RylQPOsZTX4h2Ekr9br/OYewyk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QWPxotCWsOu9liLN4dj30AK/d/EXHSNs648VyRSXJ/9OzFRhGjKWqPjx4P5VgRe4OKzjZw/mcLBKtGXHEUao25nP8H/PcHhoL0l/sVeI1WeL8lQMXnf3HV47VoNYxGKJd5yGPnTqbSG0eIl9A+eNlC215UcU92PmlsTaffSgHtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lPWcjesD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785570397; c=relaxed/simple;
+	bh=tQSvnLWWUOryEyrc8hXwxzvabc7lJ+K4EA1NPdIxK4o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W1jPWTFqDBlRb902aOtfcmMxEeif5L9O8hsVQi1D05rYDVnN5qF5t+MmEe4zbvZa2uwn2Rikk8C2XsEtF++KQqSJFVl134VonRAtSPUXKCAvR4Drd3vpRpQj5A7ZUY6+DaTa0IoGUmhk4agi1f+dVz0EOVlIGVQGW94ycThdvOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C1vZekg+; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lPWcjesD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43E8C1F00AC4;
-	Sat,  1 Aug 2026 06:22:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785565335;
-	bh=Apdpp437ite3K+JVTWewTDhniP6Cpg/QAOYxA51HH/g=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lPWcjesDxuaec/fVnJXzgJtPrS3Vw6II2YNaHNcE0+ix49maiOLNfn/Bm31EDjXQf
-	 5P+zIPlrgDPhwFvaYNehlXflAi3PudXtgj3boUT+eCuF7+7YhwVMB5ShYIFvGEJG83
-	 4T8YOZk4V39wzuJzhpVAdPg4qprHQC491utzs3oTfnX6H9IvamoBnKDRwXv9pobDOj
-	 nAAWAkxTT4lhVeD8qiRSrn/+1khSJrsMAfjxqJxNtFIXuXIjvL7LwtyjLFgNZgxU5d
-	 jeAFGGeWomqJMdGu5vinR3Had96G9bK+ySxQY8+NpZbrI6Un/SqHE6zYVvnU1XXQVq
-	 9RqTnTas4mI2g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v2 1/1] net: cap advertised device headroom
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Zhiling Zou" <zhilinz@nebusec.ai>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <0ae4aa29223b89049727aec4d36f144bad41537e.1785476387.git.zhilinz@nebusec.ai>
-References: <0ae4aa29223b89049727aec4d36f144bad41537e.1785476387.git.zhilinz@nebusec.ai>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 01 Aug 2026 06:22:14 +0000
-Message-Id: <20260801062215.43E8C1F00AC4@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C1vZekg+"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-84a2dcede83so2573128b3a.3
+        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 00:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785570396; x=1786175196; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=bZw4nIzdHIckredH7aGM0VMLQoQFkf8fWuN6zvirYTw=;
+        b=C1vZekg+VJFO3PtY3suLLBKrMGjtS3htHUkkoOrRjJ1YkwMLFAMs45F0srUaoNVn0U
+         dmp+hVKxWalK5GT4J+p2qk8dfMZ/IZ9tM3nW2mjXblwOAN0lRX27t6PsYD2zqsrZbfTA
+         pAprGuWk2KEfd6Ub8djw5Zwico6QKHyXOGAYriMk2HpSSquqM6PoqS9eVmh6kTqVB2oo
+         +OKnAstbqb0vLuZB8LOwNHfWbEh5ruHCN2XFEQfyO/HAuyz0UhUVL0psuit6/YrIOd0J
+         LW3IBqeDVPSsDyXxjJYSuB2U9uOPZ/tYmrSmdSGOgF70hR3wcY8jhWwuh1Op2A8hcJRN
+         HC0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785570396; x=1786175196;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=bZw4nIzdHIckredH7aGM0VMLQoQFkf8fWuN6zvirYTw=;
+        b=sg/nE3KwAaexxWU2U7oeIXoqf51LG/gHGX20ks6IWtWDBCUW2zF5si8VnykA2nh+Gg
+         N+zMeh/bzQek/P0s71mL6Wlz8Je9rJlPrjuyeQUT3fUBFZ+r5k9gYRrTaqyiNUMYWQPH
+         QsOc1X5JZITs/9fjIW3ibQr36szW7PSzgZScQB9wfHp9wm7tOwOQZ7yq/u6I9z6I/QUS
+         /sXRVH+AB6cyGpye96mxyy4MVo6+dxdHJeMb6/W/r4QmxODtZnijhbpTf92THF5uOlA0
+         cUMgZ+pRyYwuTyGRE6QL7WAWaO7qPkHoVNA5E4K1hceRXYPliSp2IyXzJepIIPFvh6z1
+         xFKw==
+X-Gm-Message-State: AOJu0Yzfe7lW8fkLnaoIktye/TvxdUEvUJ8WEjepmM6AQS8P1Q6v5wGm
+	2nPBEKp1u/fNCFgYnSzqAYUTbWIBmsZhnv7/5cPCSGUK02c48sHIQZmRXB1Pxw==
+X-Gm-Gg: AR+sD10f0cxLIG00Y+/2nxyVuHpgrB1fKrB89FFy29LvwwCJgNQD3F2ul7yuBzPL6WZ
+	bx6sDr4oD4l9kSgVpGbt66064phMhSGzY3+lxdNS88o4rx8QX8imPGfOiox9nNCW8YrJejEbXXD
+	ubfvv4zs8X1zlEA1LpMsETR5AnZWs9ktusaVVrDPcD8D0ZSV9y4pq1EKTLaRHhGwH59m8K3WHpp
+	4UL59DrlHJFepiDhrhG5+mWhpTYHiukvwGNkJG0rBKoOmE1o7ipi7UCb2gof9ReBS0u9H54c8Uo
+	eZVMTfDAPixH3jAvSO67KEuM9a5OYyzGJzW1g0FkiTwpFH7BPWxsSm8Oc6olmssUkVVAnyJQijn
+	NX8k+6TFF5Ad8Kvmpid21XT2y5UBYv9wwFinKV3A/nNy1gFICTB03EYmaCkdzXg4m0egh+SiAHk
+	W1Mxcm/2VRICx8pIG9nry7kMVYaqWrktIN4TRZeynxLDAAfYabufY=
+X-Received: by 2002:a05:6a00:6088:b0:845:d284:9e14 with SMTP id d2e1a72fcca58-84ee4956428mr2282291b3a.59.1785570395605;
+        Sat, 01 Aug 2026 00:46:35 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:47::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84edc29e6f0sm1390335b3a.39.2026.08.01.00.46.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Aug 2026 00:46:34 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v3 00/18] Generate bpf_func_proto for kfunc
+Date: Sat,  1 Aug 2026 00:46:15 -0700
+Message-ID: <20260801074633.1595644-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Hi,
 
-Pre-existing issues:
-- [High] The patch attempts to prevent 16-bit skb header offset overflows b=
-y capping `needed_headroom` to 512 at device configuration. However, this o=
-nly mitigates overflows caused by a single massive headroom allocation. It =
-fails to prevent cumulative overflows in the data path. An attacker can cha=
-in multiple tunnels and interpose a qdisc like `netem` to bypass the `dev_x=
-mit_recursion()` limit (since `netem` defers transmission to a timer, unwin=
-ding the call stack and resetting the recursion counter). Because `needed_h=
-eadroom` is capped, `skb_cow_head()` will repeatedly calculate a small `del=
-ta` and trigger `pskb_expand_head()`. Each call increments the 16-bit heade=
-r offsets. After enough chained transmissions (e.g., ~1600 tunnels), the of=
-fsets will exceed 65535 and wrap around, leading to out-of-bounds reads or =
-writes when the headers are accessed.
---
+This is the second of three patch sets to unify kfunc and helper
+argument verification. It:
 
---- Patch [1]: [PATCH net v2 1/1] net: cap advertised device headroom ---
-commit 9a8b47db3e094ff90f0e4cb79a3ba54d0ddcaab8
-Author: Zhiling Zou <zhilinz@nebusec.ai>
+  1) further aligns the kfunc and helper argument checks,
+  2) makes kfunc argument type classification depend solely on BTF, and
+  3) generates a bpf_func_proto for each kfunc.
 
-net: cap advertised device headroom
-   =20
-IP tunnel and netkit devices can publish headroom values that are derived
-from user-created stacked devices or directly supplied netlink attributes.
-The dynamic tunnel transmit path already caps growing needed_headroom at
-512.
+With classification now a pure function of the kfunc's BTF, it is computed
+once at add-call time and cached in the generated bpf_func_proto, rather
+than re-derived on every verification of the call. Along the way it also
+fixes a few issues.
 
-Link: https://lore.kernel.org/all/0c6c64e9bbd71a0decc8504a384061e0e631be13.=
-1785054561.git.zhilinz@nebusec.ai/
+The next patch set will align the argument register compatibility checks
+and route helper and kfunc argument verification through a single shared
+function.
 
-> diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
-> index d708b66e55cda..85e3455cea259 100644
-> --- a/include/net/ip_tunnels.h
-> +++ b/include/net/ip_tunnels.h
-> @@ -629,8 +629,7 @@ struct metadata_dst *iptunnel_metadata_reply(struct m=
-etadata_dst *md,
->  int skb_tunnel_check_pmtu(struct sk_buff *skb, struct dst_entry *encap_d=
-st,
->  			  int headroom, bool reply);
-> =20
-> -static inline void ip_tunnel_adj_headroom(struct net_device *dev,
-> -					  unsigned int headroom)
-> +static inline unsigned int ip_tunnel_limit_headroom(unsigned int headroo=
-m)
->  {
->  	/* we must cap headroom to some upperlimit, else pskb_expand_head
->  	 * will overflow header offsets in skb_headers_offset_update().
-> @@ -640,6 +639,14 @@ static inline void ip_tunnel_adj_headroom(struct net=
-_device *dev,
->  	if (headroom > max_allowed)
->  		headroom =3D max_allowed;
-> =20
-> +	return headroom;
-> +}
 
-[Severity: High]
-This is a pre-existing issue, but does capping needed_headroom to 512 here
-completely mitigate the 16-bit header offset overflow in
-skb_headers_offset_update()?
+[1/3] https://lore.kernel.org/bpf/20260715064047.1793790-1-ameryhung@gmail.com/
 
-While this prevents a single massive allocation from overflowing the offset=
-s,
-it seems it doesn't prevent cumulative overflows in the data path. If a deep
-chain of network tunnels is created and a delaying qdisc (like netem) is
-attached to each to bypass the dev_xmit_recursion() limit (since netem
-defers transmission to a timer, unwinding the call stack and resetting
-the recursion counter), skb_cow_head() could repeatedly calculate a small
-delta and trigger pskb_expand_head().
 
-Each call increments the 16-bit header offsets in
-skb_headers_offset_update():
+Changelog
 
-net/core/skbuff.c:skb_headers_offset_update() {
-    ...
-    skb->mac_header +=3D off;
-    ...
-}
+v2 -> v3:
+ - Drop a patch that introduces SCALAR_MAYBE_ZERO (Eduard)
+ - Drop patch make helper handle mem+size at mem arg, and instead make
+   kfunc also handle mem+size at size
+ - patch 5: New patch replacing temporary mark_ptr_not_null_reg hack
+   with refine_ptr_not_null_reg (Eduard)
+ - patch 8: Only allow global subprog to read poisoned stack slots
+   (Eduard)
+ - patch 11: Test a precision gap when passing NULL to nullable-mem +
+   size arg (Eduard)
+ - patch 15: Reorganize BTF_ID, MEM, MEM+SIZE classification for
+   clarity (Eduard)
+ - patch 18: Emded bpf_func_proto in bpf_kfunc_desc and dynamically
+   resize bpf_kfunc_desc_tab; Record saved_dst_prog_type early in
+   bpf_prog_load to avoid introducing a fallback logic in
+   resolve_prog_type (Eduard)
 
-After enough chained transmissions, could the offsets exceed 65535 and wrap
-around, leading to out-of-bounds reads or writes when the network layers
-access the wrapped header pointers?
+   Link: https://lore.kernel.org/bpf/20260724190813.1458271-1-ameryhung@gmail.com/
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/0ae4aa29223b8904972=
-7aec4d36f144bad41537e.1785476387.git.zhilinz@nebusec.ai?part=3D1
+v1 -> v2:
+ - patch 2: use reg_arg_name() for the map-mismatch message; derive the
+   object register correctly on both helper and kfunc paths
+ - patch 3: reject non-CONST_PTR_TO_MAP regs (base_type check) to fix
+   map-value type confusion
+ - patch 15: also reject referenced regs with unsafe modifiers (e.g.
+   MEM_PERCPU)
+ - patch 17: reject non-SCALAR_VALUE for KF_ARG_MEM_SIZE 
+
+
+Amery Hung (17):
+  bpf: Drop process_timer_func wrappers
+  bpf: Unify const map ptr argument checking for helpers and kfuncs
+  bpf: Split kfunc map argument into __const_map and __map
+  bpf: Pass kfunc meta to mem and mem_size check
+  bpf: Check helper and kfunc mem+size arguments identically
+  selftests/bpf: Test map lookup result refinement
+  bpf: Check fixed-size mem args of helpers and kfuncs the same way
+  bpf: Rename ARG_CONST_SIZE{,_OR_ZERO} to ARG_MEM_SIZE{,_OR_ZERO}
+  bpf: Fold __szk const size handling into the scalar arg path
+  selftests/bpf: Test __szk precision with a NULL nullable buffer
+  bpf: Classify kfunc mem_size args from BTF without register state
+  bpf: Handle NULL kfunc pointer args without a KF_ARG_PTR_TO_NULL type
+  bpf: Distinguish fixed- and variable-size kfunc mem args with
+    MEM_FIXED_SIZE
+  bpf: Classify kfunc pointer arguments from BTF, resolve type against
+    the register
+  bpf: Tag nullable kfunc pointer args with PTR_MAYBE_NULL
+  bpf: Classify scalar kfunc arguments from BTF
+  bpf: Generate kfunc argument prototype at add-call time
+
+Eduard Zingerman (1):
+  bpf: Resolve map lookup result type at lookup time
+
+ Documentation/bpf/kfuncs.rst                  |  30 +-
+ include/linux/bpf.h                           |  40 +-
+ include/linux/bpf_verifier.h                  |  22 +-
+ kernel/bpf/backtrack.c                        |   2 +-
+ kernel/bpf/bpf_lsm.c                          |   4 +-
+ kernel/bpf/btf.c                              |   2 +-
+ kernel/bpf/cgroup.c                           |   8 +-
+ kernel/bpf/helpers.c                          |  42 +-
+ kernel/bpf/ringbuf.c                          |   2 +-
+ kernel/bpf/stackmap.c                         |  10 +-
+ kernel/bpf/syscall.c                          |   8 +-
+ kernel/bpf/verifier.c                         | 830 ++++++++++--------
+ kernel/trace/bpf_trace.c                      |  62 +-
+ net/core/filter.c                             | 116 +--
+ .../selftests/bpf/prog_tests/verifier.c       |   4 +
+ .../selftests/bpf/progs/cgrp_kfunc_failure.c  |   2 +-
+ .../testing/selftests/bpf/progs/dynptr_fail.c |   2 +-
+ .../bpf/progs/mem_rdonly_untrusted.c          |   2 +-
+ .../selftests/bpf/progs/task_kfunc_failure.c  |   2 +-
+ .../selftests/bpf/progs/verifier_bounds.c     |   2 +-
+ .../progs/verifier_helper_access_var_len.c    |   6 +-
+ .../bpf/progs/verifier_helper_value_access.c  |   2 +-
+ .../selftests/bpf/progs/verifier_map_in_map.c |   2 +-
+ .../bpf/progs/verifier_map_lookup_refine.c    |  73 ++
+ .../bpf/progs/verifier_mem_size_reg.c         |  28 +
+ .../selftests/bpf/progs/verifier_vfs_reject.c |   6 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |   6 +-
+ 27 files changed, 766 insertions(+), 549 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_map_lookup_refine.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_mem_size_reg.c
+
+-- 
+2.52.0
+
