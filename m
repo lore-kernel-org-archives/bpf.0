@@ -1,111 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767347260D;
-	Sat,  1 Aug 2026 01:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58C51DFFD
+	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 01:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785547923; cv=none; b=I9PKvFp+X4NbEH5M2a+5wmFrTfOJYw9cpQVUh1UtzJhTT9yQk2LzelLfhQSxFVYcIF7ObsflLhT2f/ZKqXFM+5YpqgDe92EZRFojGH5UmfAJX1txXzQrqkMdTwnxPTHUir4Aji2fRRfShJ4tus4HEW1xx2IqGUFnSPHEYCyxdPU=
+	t=1785548002; cv=none; b=HQB8IB1OnwsbjLsJGkYhE81Kul82YD0SJd0tX3DScw0NIILNBOo1NoE6Quy75Ye3M5RNzK65VzPqCqEc8rpms90I0QGf+qXJvHvXb8x/buw+OOD7BOIsp6izv1JZHYBSLrnSaF1e7cYm9gCOyKhmPY2OqQzV0W7vh4/zZXVhV6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785547923; c=relaxed/simple;
-	bh=f8rY+JwJnopqDv8WVaYlI8s7YX4pYGbTOexdqm1Itek=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=kmN/jbUshY5x0YTkt+civ9E78ZXVfS//+8ZnLVpevAkEv8KlEDI8IhAVfnaleJ6pCyGJsK1x3u4LbtTeRHsOQA4FpxWdVK5wGf+cTMgL1/DuDt0LEuD6lVNL2LKIrVg5G/JkPYumXWdiqWBAXf53GuoYpsv2lhtX4cUMFQsK4rA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fS+Ls4Yd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785548002; c=relaxed/simple;
+	bh=8evT8uslq+X3gKy+Wo9GCQoh3rkY/MOMd5y7ztLsykc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=jmqLbDAJ5P+OTEUg1O//Qu5uF5FA9N4Q6XLZge2AabIjrL8fqlvrM3YVgFn6wDjfO6Hsz3VFaK+TOOe6mZRuuv1l3IPRmFvfzv6cdSjkFsVonhnRDsAj8vRV7CqKrJFBgyizGiQDHf4zwLRqb6qcQ2lY3alxnwvSxllmqfxFD18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TjVBdq6K; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fS+Ls4Yd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2962C1F00AC4;
-	Sat,  1 Aug 2026 01:32:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TjVBdq6K"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ABC51F00AC4;
+	Sat,  1 Aug 2026 01:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785547922;
-	bh=FygqdHscPa55VsrCF2NTgQpIKjXqAw47+DFt/URfP8U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fS+Ls4Ydtdbjl89EYdZfZAV+PWtXkSgr/NDCIT7e5makeNJZLj4Q25AzWjWb+5oq6
-	 GlIAUdZVPB40D3QcuZ5TccEOL4i4qO8sYM4EtITIxWh0gwywoakjYw2H0smvp5MsN8
-	 P+X1kzVp3kAofNhjryO6tvsd60rX47HMxNXhzwrzzvBFPbfx2RWdocD+mcH1FUFM6F
-	 8jp8KW7XEV5caTcXDXOPvr9Vd4sEynmISASvntBOkSFctuWrwzcyGpEMjCDh5pjkZu
-	 n3Ac+rwVrOgq2u6vFsLRrnn/jJNAaViEdWpMItNqf6Nn/rO1lxdu3Izge/qeMeonZp
-	 FFLdPjM8MlmXQ==
-Content-Type: multipart/mixed; boundary="===============3185519639301511561=="
+	s=k20260515; t=1785548001;
+	bh=WNn/P84kPCyCz4pd6vR4BWpkcXQIJJm8rucZwFeLCLM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=TjVBdq6KUtPFcuiBRa1snQLuXCfzhy6UedbTsmKT3TjgHMAmFsHql883JF9xptQ7E
+	 2ADna+pcircU8K3YBHyB0wmV5pzcBagd520vDHomT2LPjJKSqk4KbDGrkl/9sCQpId
+	 hME6rt2g1sxl70u7e0ZwMKlaoSHEtqv1V/HeZ1z0UBYJvq9VSNU5B3mPI0Ow0mJjEs
+	 wkES7VZuNgZw4nuKPLZyyNVuvikVxcyAesFyjdSXnUysTbo8xVPOuv9PBw9iaWu4XG
+	 jH787oDwOXY6dESrOoCN0uAdN7RPYV+aV76tGxCDukRRZW072UMCPVolGiYYWdRq7C
+	 z7Pp9JGZN13NQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: verify zext_dst
+ annotations for various instructions
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eduard Zingerman" <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260731-static-zext-v2-5-da4aa161e8c5@gmail.com>
+References: <20260731-static-zext-v2-0-da4aa161e8c5@gmail.com>
+ <20260731-static-zext-v2-5-da4aa161e8c5@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 01 Aug 2026 01:33:20 +0000
+Message-Id: <20260801013321.6ABC51F00AC4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <5846008399c0c914c487eb22a9548201420ea5a14b3a4293735411e3a9726961@mail.kernel.org>
-In-Reply-To: <20260728115036.2049536-1-tushar.vyavahare@intel.com>
-References: <20260728115036.2049536-1-tushar.vyavahare@intel.com>
-Subject: Re: [PATCH net-next v3] selftests/xsk: decouple xskxceiver and xdp apps from test_progs objects
-From: bot+bpf-ci@kernel.org
-To: tushar.vyavahare@intel.com,netdev@vger.kernel.org,magnus.karlsson@intel.com,maciej.fijalkowski@intel.com,stfomichev@gmail.com,kernelxing@tencent.com,davem@davemloft.net,kuba@kernel.org,pabeni@redhat.com,ast@kernel.org,daniel@iogearbox.net,tirthendu.sarkar@intel.com,tushar.vyavahare@intel.com,andrii.nakryiko@gmail.com
-Cc: bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat,  1 Aug 2026 01:32:01 +0000 (UTC)
 
---===============3185519639301511561==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Missing bpf_testmod dependency check in test_verifier_zext, caus=
+ing spurious test failures when the module is not loaded.
+--
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 55d394438705..2749b26fd4cd 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -932,17 +932,26 @@ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
->  	$(call msg,BINARY,,$@)
->  	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
->
-> -# Include find_bit.c to compile xskxceiver.
-> -EXTRA_SRC := $(TOOLSDIR)/lib/find_bit.c prog_tests/test_xsk.c prog_tests/test_xsk.h
-> -$(OUTPUT)/xskxceiver: $(EXTRA_SRC) xskxceiver.c xskxceiver.h $(OUTPUT)/network_helpers.o $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
-> +# Keep xskxceiver independent from test_progs object dependencies.
-> +$(OUTPUT)/xskxceiver: xskxceiver.c xsk.c network_helpers.c \
-> +			   $(TOOLSDIR)/lib/find_bit.c prog_tests/test_xsk.c \
-> +			   xskxceiver.h xsk.h network_helpers.h \
-> +			   prog_tests/test_xsk.h test_progs.h bpf_util.h \
-> +			   $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
->  	$(call msg,BINARY,,$@)
->  	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
->
-> -$(OUTPUT)/xdp_hw_metadata: xdp_hw_metadata.c $(OUTPUT)/network_helpers.o $(OUTPUT)/xsk.o $(OUTPUT)/xdp_hw_metadata.skel.h | $(OUTPUT)
-> +$(OUTPUT)/xdp_hw_metadata: xdp_hw_metadata.c xsk.c network_helpers.c \
-> +			   $(TOOLSDIR)/lib/find_bit.c xdp_metadata.h \
-> +			   xsk.h network_helpers.h test_progs.h bpf_util.h \
-> +			   $(OUTPUT)/xdp_hw_metadata.skel.h $(BPFOBJ) | $(OUTPUT)
->  	$(call msg,BINARY,,$@)
->  	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+--- Patch [5]: [PATCH bpf-next v2 5/5] selftests/bpf: verify zext_dst annot=
+ations for various instructions ---
+commit 9e656f5e6b04a69526327df6f70d8c362d02d3d4
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-This isn't a bug, but does xdp_hw_metadata actually need
-$(TOOLSDIR)/lib/find_bit.c? Nothing in xdp_hw_metadata.c, xsk.c or
-network_helpers.c seems to pull in <linux/bitmap.h> or the find_*_bit
-helpers, unlike prog_tests/test_xsk.c in the xskxceiver rule.
+selftests/bpf: verify zext_dst annotations for various instructions
 
-The xskxceiver rule genuinely needs find_bit.c because
-prog_tests/test_xsk.c includes <linux/bitmap.h> and calls bitmap_full(),
-bitmap_zero(), and __set_bit(). The pre-patch xdp_hw_metadata rule did not
-list find_bit.c either. The only bit-field work in xdp_hw_metadata.c is
-FIELD_GET on GENMASK constants, which doesn't require find_bit helpers.
+This commit adds a suite of selftests to verify the verifier's zero extensi=
+on
+behavior across various instructions and state pruning scenarios. It covers
+cases like 32-bit and 64-bit operations, atomic instructions, kfunc paramet=
+ers,
+and CFG edge cases.
 
->
-> -$(OUTPUT)/xdp_features: xdp_features.c $(OUTPUT)/network_helpers.o $(OUTPUT)/xdp_features.skel.h | $(OUTPUT)
-> +$(OUTPUT)/xdp_features: xdp_features.c network_helpers.c xdp_features.h \
-> +			   network_helpers.h \
-> +			   test_progs.h bpf_util.h $(OUTPUT)/xdp_features.skel.h \
-> +			   $(BPFOBJ) | $(OUTPUT)
->  	$(call msg,BINARY,,$@)
->  	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+> index be97f6887f0e7..fba562c819691 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+[ ... ]
+> @@ -277,6 +278,7 @@ void test_irq(void)			      { RUN(irq); }
+>  void test_verifier_mtu(void)		      { RUN(verifier_mtu); }
+>  void test_verifier_jit_inline(void)               { RUN(verifier_jit_inl=
+ine); }
+>  void test_verifier_ctx_ptr_param(void)       { RUN(verifier_ctx_ptr_para=
+m); }
+> +void test_verifier_zext(void)                 { RUN_TESTS(verifier_zext)=
+; }
 
-This isn't a bug, but could the xdp_features prerequisite list be packed
-into two continuation lines to match the density of the xskxceiver and
-xdp_hw_metadata rules just above? The current wrapping spreads the
-prerequisites over four lines with one line carrying only network_helpers.h
-and the final line carrying just $(BPFOBJ) | $(OUTPUT), while both rules
-above group their prerequisites more densely at the same indentation.
+[Severity: Medium]
+Since verifier_zext.c calls bpf_kfunc_call_test4 (an extern kfunc from
+bpf_testmod), will this test fail spuriously if bpf_testmod is not loaded?
 
+Should this check env.has_testmod and call test__skip() before RUN_TESTS
+to gracefully skip the test when the module is unavailable?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30676354696
---===============3185519639301511561==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260731-static-zex=
+t-v2-0-da4aa161e8c5@gmail.com?part=3D5
