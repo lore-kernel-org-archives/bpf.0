@@ -1,117 +1,68 @@
-Received: from mail-wm2-f8.google.com (mail-wm2-f8.google.com [74.125.225.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8FC3890F0
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 16:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E0925B09C;
+	Sat,  1 Aug 2026 17:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785603170; cv=none; b=PNM4ho52APHTyrua49pAGa2Q4oUHT7H8PyZaNW3z8mhz+DCRpamZRSf5IDSWQatcLzT/p4qvSY0LWtFV7C52ZVrSQAYnE5MKwdVtz+sewAe7MAXi8wNO5fBGCpUTG4G4xUyQLSUtZGm6d7EaOd8K24xY1HIECv/rKr+koNtUeAo=
+	t=1785604552; cv=none; b=gfAKg1849Dj/5rvTRF6fsKiTX9umO/W656yiAzCPqoPOaeoi5Nbz+WxFf+V1FDeENCQ0nna1WOKr7XM3ROB0Cw0wPAk98DJdw36+CayI8refceciLcv8aAwdy6eejtqKUdAo8zRa2GrS8FFyMj/sEvp9kZm5VSSTyg3sjcbnRXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785603170; c=relaxed/simple;
-	bh=KgdOOMyZqtF9at8+Chv5TnjOOT3t+C5+wsxUxONLNNI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=IjQwBkG6kuAaocpuwMMZlsk7DGaz5g0odKRg4V/+Kk/qxJe6p5Lk0IR9yZNdJltVdSLg8YcGxuPVEiDk2JqnejEU6HqNtnI4oKhRTqnPW7VgVxEmsvJ3+F0hB7hjNb0u6FqGf8DmiPGdidUNpX9LRgjgTE59efZb03Nsy6wgDl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kW8mZCcu; arc=none smtp.client-ip=74.125.225.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785604552; c=relaxed/simple;
+	bh=bUOAQR5q4kA41Cpj4Srt3WibasPOLQjv4wA/qW/rYCs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QFp1jSkdtbJj0SoM7/VWyYtSF11Cbhqah0rIVnanHMWez89NHBY5DV9G5zZ/oOGDWEm/Ny6M+qLSeTvd4Qby6ifcU9AgoTpVjvwIrqFQcAAtvLKN98jHwXipdrxJOPJMPNyTMsIVRAajl3UbgI6JPC+v9GeHIJzRYHCy4uriGIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GQrCGkY7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kW8mZCcu"
-Received: by mail-wm2-f8.google.com with SMTP id 5b1f17b1804b1-4956bc73c0eso4164495e9.1
-        for <bpf@vger.kernel.org>; Sat, 01 Aug 2026 09:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785603166; x=1786207966; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=wIeansZilxyffldQc11/VX8an2oLgIWn7z7CoIfg0tI=;
-        b=kW8mZCcuJkv5kOqCwhFSmru0R6wA0mH5LZTWEBDQafnO+bMZ4udYRdC2N902z/0bto
-         WMTOgdZq7UHijeqc9PjTQryAi+UiHIgbTDwfDFFttMpbc7vsh9gGMaiEz0Sn92lLW4ad
-         S7w2m+ggMgs8mN1QC3VbZvyhSr2zJdqI0QuFQoXWFS+YYZceA230zBiGqTODDJINI+Go
-         CjazApNM+7L0Is+mPdU30TB0ImbnaBucVANoq+bCQ/kYscu/CYXipbDuUK/5rRIzrwEI
-         dcRvts40qfYHFnjF6EuBcDZIafsM8jUovFfWSy4NiBpeFHeK3j1OGpzfIPrgwAkcIlv/
-         XLQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785603166; x=1786207966;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wIeansZilxyffldQc11/VX8an2oLgIWn7z7CoIfg0tI=;
-        b=rMyOOKaYvDJ8uwjO1dCM7CHvrrVY6Xr66BEVmtIhDTImwsGXY19OOxPOGI8YYNHbOj
-         T/t1IN0ulB6T0IavQ+Xrp7r6UWFm3S79ITrrev+rxHmcegM011XzeapaDvoo4T8Fm9+/
-         umuHMpfLjdHhZ6Hmr2QyE6SO5sCN5C90UQ7Cpn4DKgJIj56/jXDZMp2drWK6IUBIhDp/
-         FsFRB0HJ32P//XZ87JfOVIbwqbeYAxtNVa2t9u8bXBuIVX1DQm9IaCYdqciT0AyPzTs2
-         fumHw25ZB6yxDrmajpNEYEsn7ylpzZGOmj6ePPOmJt5UYZ/gswdh4kObFYq/9HNsdudO
-         ZtmQ==
-X-Gm-Message-State: AOJu0YwVo+f2VoIlC9L9/GCVvF5dywmUHLMIAITdRjHuX6v9mlU0shVh
-	Ir2KBC4hKobvToByHl2xdr/4U4xjxJsyS9RjgnzTQ3F0jehfVM1c2Ci0
-X-Gm-Gg: AR+sD10fIaY3vXwTDyAwhqiQC85q9GakkMZJ+T11I1W+aoTLh+AIRFIpEFx+Ie5sNlQ
-	K6thx33anA1rBaWM4lKVgoqN8OdZ6vr9CpatcUj/c5BtOaX4cU3jT1NpWo7lYtFjiAFLFbMKXpY
-	4nIvpxcNqZSrcfShmQ8n4hy0kUKA/Q0oeh4jdXlbw+igNu9eIDUy87Ulg0+y4xjyFUhvRg9BsIE
-	HSSBVTXqgUlq26tBNK4oVgHFQC26inZfrPZAO34xDreVTA8hYK/VPR//9pfKy40J90voM7sT5Kb
-	a0idxWgjD0t0loWYtdn4T458yHz7Bg61KyN15AaO5zJdDgzJ5G+MX95G7ehxlgrqoRXdrEV4de0
-	Cd9XsmlWmTucFxvJ6A21Oag2gMbvE2hKjL/I1V7s7dLqulxVU9pZkNZeLozoYI3pfNq38Wkp5C3
-	6NKVME/vMm7fBtI188bADAglFgScT+hpd3NnqDZxSZN4nPBklCENv1meX4Wk2nVYuHGhTTtJKl5
-	N/eTU5adjFTqEMxR7ezfsW4I4lBp2lX7lnG/pSkoXnnDWuSlqQ74PFDNW+axaGLkv36wT1RVOVY
-	N2x/G7rr7UV2FEnqDUyZIvzeDEM=
-X-Received: by 2002:a05:600c:8b17:b0:495:4491:b8c2 with SMTP id 5b1f17b1804b1-4980c66c926mr70298535e9.3.1785603166215;
-        Sat, 01 Aug 2026 09:52:46 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49808191ef9sm78066875e9.1.2026.08.01.09.52.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2026 09:52:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQrCGkY7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752131F00AC4;
+	Sat,  1 Aug 2026 17:15:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785604550;
+	bh=KdDXDmp7FAJf5kIwU0xoHMb5HTMwunbkXtS6iAf1grM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=GQrCGkY7yOKeCBmmET5+jvtjqoD3j2CN3YrY7FGfFq75WjGnfFjrtE7spy7v9Xa7y
+	 ltkQa16/yt7SM9pOwNEMYMokLI+rOWL9/KuHHtxpdey2/eaKVcX0ieQLWSuOHaflUM
+	 3w7q+ZkSvF8q+n1ulAh/5Bxm8NL3UxvDU0283/fkYSpKu+AR4VC4XYnSV9Kf9c1xeZ
+	 fhxB/N95eQTlfn4Lo6yZOVj0mnwE4dPAT5a23J/tkTodTrZfHgcW9OA9No9WRVYnlm
+	 drAJFO1+LmgVyJ5dVs2um5KpsoKX4CNm0JRQKEV1r84Q/bemZsM8ctJL19rCosMYO8
+	 sRWmHU5EQlAoQ==
+Date: Sat, 1 Aug 2026 10:15:49 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: fsverity@lists.linux.dev, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Jiri Olsa <jolsa@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH] fsverity: Fix bpf_get_fsverity_digest() dynptr
+ assumptions
+Message-ID: <20260801171549.GB3567@quark>
+References: <20260731003925.2728977-1-ebiggers@kernel.org>
+ <DKDRHTVNMQ2E.1FCTWQZO2EB7Z@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 01 Aug 2026 18:52:45 +0200
-Message-Id: <DKDRHTVNMQ2E.1FCTWQZO2EB7Z@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Jiri Olsa" <jolsa@kernel.org>,
- <stable@vger.kernel.org>
-Subject: Re: [PATCH] fsverity: Fix bpf_get_fsverity_digest() dynptr
- assumptions
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Eric Biggers" <ebiggers@kernel.org>, <fsverity@lists.linux.dev>
-X-Mailer: aerc 0.21.0
-References: <20260731003925.2728977-1-ebiggers@kernel.org>
-In-Reply-To: <20260731003925.2728977-1-ebiggers@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DKDRHTVNMQ2E.1FCTWQZO2EB7Z@gmail.com>
 
-On Fri Jul 31, 2026 at 2:39 AM CEST, Eric Biggers wrote:
-> The BPF verifier and the dynptr abstraction ensure that the memory space
-> referenced by a dynptr remains valid.  They do not, however, provide any
-> guarantee that the contents of the memory are stable.  kfuncs are
-> expected to remain memory-safe even if concurrent modifications occur.
->
-> bpf_get_fsverity_digest() didn't follow that: it could crash if
-> arg->digest_size was concurrently modified.
->
-> Fix that by using the known-good value hash_alg->digest_size instead.
->
+On Sat, Aug 01, 2026 at 06:52:45PM +0200, Kumar Kartikeya Dwivedi wrote:
+> > Also correctly handle sizes over INT_MAX, which previously caused an
+> > integer overflow and crash.  __bpf_dynptr_size() returns a u64.
+> >
+> 
+> I guess this occurs when using file dynptrs? Otherwise the size is capped to
+> DYNPTR_SIZE_MASK.
 
-This makes sense.
+Yes, though it looks like __bpf_dynptr_data_rw() excludes file dynptrs.
+So this particular issue might be unreachable.  Still seems like a good
+idea to match the u64 type that __bpf_dynptr_size() returns though.
 
-> Also correctly handle sizes over INT_MAX, which previously caused an
-> integer overflow and crash.  __bpf_dynptr_size() returns a u64.
->
-
-I guess this occurs when using file dynptrs? Otherwise the size is capped t=
-o
-DYNPTR_SIZE_MASK.
-
-> Fixes: 67814c00de31 ("bpf, fsverity: Add kfunc bpf_get_fsverity_digest")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Eric Biggers <ebiggers@kernel.org>
-> ---
-
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-> [...]
+- Eric
