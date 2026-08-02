@@ -1,90 +1,66 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84970179A3
-	for <bpf@vger.kernel.org>; Sat,  1 Aug 2026 23:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359C035966
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 00:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785627403; cv=none; b=W+0fVQmI8ni46nsiWRsjML8Cirb3DU2yXW2oh0B4LVGAyN0FaFCbt/im4fFpIFubF/QRCMy3K0tWoRwwM6k5Z2ZTApLVgIhefgb/18lSqQILFHmPftfOTD0YTUKZq/L9g5vPKf3O074bOOwsR20SKGBedQLunNg9NiZelHybD4A=
+	t=1785630931; cv=none; b=o19dJ14UKqGCq5CKcRMXk5pRJqKYMnFCw+ruCXJZB5Tq7sGPoHalCJ7DW4Foi4CzQgi/egN/mbIvGpAV7xK15LJBKJLUjczNVCK9j6NnvEE76Yp04/Dqp41HVOCNEZnFMayziYmULKZNRMpeKkM4uvIyamK+T11ariohsNwCIrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785627403; c=relaxed/simple;
-	bh=5m0PKeeySIkaelIXA6fWrNGoNihdofrT7vkUqI2mHh0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Lqhl74N9WDvjCeTmwdOI8pvxIRKaHiqldS9rQ05Grp6Sa4luPFmVBxo1kop/X22k/jJKl+k8lJNefc4xGmfhz96dQ1Sj9tV3ZxxVQ9hrrk2hixqxJZyTjwPPNY5iY//oZwS1MFFENq+GjYgsi4v3UDqCpCp3oOZtWU8FgTy+wUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yn6Hzb/V; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785630931; c=relaxed/simple;
+	bh=jBANdLZovRwxDpHB4Wsy/dBzDoJ7BCyAg5rcyYtuYZM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=LXR8GbVOrRzE790yrmZIL7CmbfwwaTKoV5TZll5w4KqPGKXsY+NkNtIjhyAcqLAA5NQyqK7UDTzQSjC+5Jm6+xkTWbEVPr4lwNInMfgcwJv7zKdskyRIfVpCvRlgOVoxViwUgzn/a0jrkvzqNo2Y3wiLWP4f2ZMXCRbQBk1QssI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K7c1JR8G; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yn6Hzb/V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA131F00AC4;
-	Sat,  1 Aug 2026 23:36:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K7c1JR8G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD9E1F00AC4;
+	Sun,  2 Aug 2026 00:35:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785627402;
-	bh=7kQeCFyAZMXWYXGLsmMtF3gtC7GJ21/oLxHafQ4CY5k=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Yn6Hzb/VhbEKg/aQEaJ7e3SSsJ5MyLYvZETVbKVB9X2y9iNxyhWC4khPQs1EbtsKl
-	 S2KpQL2DfQL931Y7TQgrLaGfqlHl11DrPgKzGYH6/bMLCuTdg5RbhLPj+dTd75eGlJ
-	 mMMGHQbUlUeKIRD2aZKHqdF9vg+g6BAu1SF/q7GfRWW7K3Tm9Thu7f3HTTzdZRUmTv
-	 mFsldLWcq9dDziqkpU/+swBkmHuLFIG8ATn/rgZ2eH6ejKR8zG0lIe/ZqRSiM2hVD+
-	 JYd0cMWI7WTJy3nD0b27GJuWjrK4znPFWtikcwXBjlwAUFbe0BDV75Kc4lZ0KSqt0u
-	 sh7isIOXKMm1w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next] selftests: drv-net: enable devmem TCP in the
- test config
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260731-selftests-devmem-config-v1-1-098014348d9d@meta.com>
-References: <20260731-selftests-devmem-config-v1-1-098014348d9d@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 01 Aug 2026 23:36:41 +0000
-Message-Id: <20260801233642.1CA131F00AC4@smtp.kernel.org>
+	s=k20260515; t=1785630929;
+	bh=jBANdLZovRwxDpHB4Wsy/dBzDoJ7BCyAg5rcyYtuYZM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=K7c1JR8GRIPd4dJXzR9hqICkR8Ikp3ekDab9PwnnwW8HpZriPur909A9jqBdkwp1t
+	 etQJi/T6idqFl7hM+VJqHQdlRWsnDarPACGn1g7ySjEgSKpvXMd6pIu6nDiLj95WMD
+	 xbi9iL3xG8i+keFP3bCYZeKV658gM/eMUH8jYnrc9BKSqGWVRMN8gWiywT6DOy3MBO
+	 LNvmtWozJaVibDxqptYnO8hb0v4z9b1FtIx8ibOoj9vqdIGtDHvE9jDYVHgBpk49Te
+	 jZcbK/A8NB5xKBdjpcRtfCsj/PBV/G/fmVTmzkQaO6g0LJxmHCc3qYHhP4Rj8FKWu5
+	 RkLicONYu1RMg==
+Content-Type: multipart/mixed; boundary="===============6590588458749993319=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <7774125f64e5ed29193b1307ea349e8a5b9ea9b4f84d0549e00670c511630e0b@mail.kernel.org>
+In-Reply-To: <20260801230400.850271-2-memxor@gmail.com>
+References: <20260801230400.850271-2-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/3] bpf: Show more useful info in stack depth stats
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun,  2 Aug 2026 00:35:29 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Adding `CONFIG_NET_DEVMEM=3Dy` to the config fragment is ineffectiv=
-e because `NET_DEVMEM` is a hidden symbol with no prompt.
---
+--===============6590588458749993319==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---- Patch [1]: [PATCH net-next] selftests: drv-net: enable devmem TCP in th=
-e test config ---
-commit 07d433d344dd104ff54b719b50d995dfb8a6b2be
-Author: Bobby Eshleman <bobbyeshleman@meta.com>
+> bpf: Show more useful info in stack depth stats
+>
+> Currently, the output of stack depth statistics is two crude, with a
+> list of captured stack depths ordered by the subprog numbers. The actual
+> subprog numbers are determined by libbpf, hence it is hard to associate
+> the stack depth statistic back to the subprog by name.
 
-selftests: drv-net: enable devmem TCP in the test config
+This isn't a bug, but there's a typo here - "is two crude" should be
+"is too crude".
 
-This commit updates the selftests network hardware config fragment to enabl=
-e=20
-CONFIG_SYNC_FILE to satisfy dependencies for DMA_SHARED_BUFFER, and explici=
-tly=20
-adds CONFIG_NET_DEVMEM.
 
-> diff --git a/tools/testing/selftests/drivers/net/hw/config b/tools/testin=
-g/selftests/drivers/net/hw/config
-> index ed8642b68094f..d89a9ba176558 100644
-> --- a/tools/testing/selftests/drivers/net/hw/config
-> +++ b/tools/testing/selftests/drivers/net/hw/config
-> @@ -15,11 +15,13 @@ CONFIG_IPV6_SIT=3Dy
->  CONFIG_IPV6_TUNNEL=3Dy
->  CONFIG_NET_CLS_ACT=3Dy
->  CONFIG_NET_CLS_BPF=3Dy
-> +CONFIG_NET_DEVMEM=3Dy
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-[Severity: Low]
-Is this assignment effective? Since NET_DEVMEM is a hidden config symbol=20
-(defined with def_bool y and no prompt string in net/Kconfig), Kconfig=20
-silently ignores manual assignments in config fragments.
-
-It should be automatically enabled when its dependencies are satisfied=20
-(which the addition of CONFIG_SYNC_FILE helps achieve), making this=20
-explicit entry redundant.
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260731-selftests-=
-devmem-config-v1-1-098014348d9d@meta.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30723212958
+--===============6590588458749993319==--
