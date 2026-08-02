@@ -1,172 +1,211 @@
-Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8114E237180;
-	Sun,  2 Aug 2026 15:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A753290AA
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 19:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785685612; cv=none; b=qUHq4Nlp+kqbCqbviax1tpNdNBlQHjvL5EASw098k+WDHor+vPGLqhlXD54WrUytGr+fxHEj5SbPdRjZRxoioSiIlrCVp2auMoPeeOIeFyr9rPB7LB94tNRCahrrVQWuqd5oL84c80T2e77G8eaNwIK/HlwzEtJLxLFyePEi2kA=
+	t=1785700620; cv=none; b=lCoDTGLLwlUWICbvZgHXJqbvFj7sQ8C4Lgfj3KKsoeL5Ln8zwV3HgEz0p0yska588ZjbltxqX9z6u58ZnPA4dMFDHhKb3pXNy7Vmwil90Yoay99F49nVHg83lMy1xguxBFmzdoQ4m6AEA3DEI8ZaKhMpKGYn3r+NR6vH3G+cLLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785685612; c=relaxed/simple;
-	bh=IfrwjOpzPnpV9Q+Tru6a26fgTY45Egp/KC1PG3FiSs0=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=J7orzNbVci+x5Y+dHFm9bYT10KJ4OKUewgEUqTn4XTLeoRkA5TuMmwbsYb4suRSHo2p2M3d53MXZIVxHJz/YJ3PmHl98fabuImTTXyttIC9k2K/Gbpcs/cP5VAWSDdz8/8DPWQ+H6GAsBZ8TqWX1gQAurNEyFaEYw2Ej4t+TXtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=pass smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=tZ48CzR0; arc=none smtp.client-ip=162.62.57.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyyself.name
+	s=arc-20240116; t=1785700620; c=relaxed/simple;
+	bh=V1IzwZdk2mYsbL+TYSbB+904Wbwqx0+Hj3gAzFn1/gM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=Uk8u9BvoEmRqc5k5ssDgkoTbi/J+mN2Wqhnf1fjB9PiQM294TQspDb41DlLH0k1v7IMmNwoNExo/yq9KixGk2MSiOSMtu+s4DB95gXGR5AMskNDBePTDvCaKyOu8DGd0Xfw0It3nC2Vma5H7m/aYRnvIRRmEralN61gQy5eDYyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JPJEjBvB; arc=none smtp.client-ip=74.125.225.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="tZ48CzR0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1785685604; bh=J4VqWLfvWNBX30FARDgxlRiuvqFbIs6GXH5ot/8285s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=tZ48CzR0S8U1Ex6XrH5R9lrA5dKl4bytBCDo4XMR2R04lPslSe41JZFs/cb+jZc/b
-	 DDMT8OsB77X+m3rL3ut12+jC71Cxa1PAxCusEgApvJJSesfKskDkRGJRmpkHNCy5ok
-	 +ggWZDt8rjj7a93OEmvqX27CI/KJJH/k86m0yYZs=
-Received: from halo.lan ([240e:379:2238:cc00:262b:8ebc:c000:80a0])
-	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
-	id BA820436; Sun, 02 Aug 2026 23:46:40 +0800
-X-QQ-mid: xmsmtpt1785685600t8z39glaz
-Message-ID: <tencent_607CBA8237DA438E36B844318B21538DE008@qq.com>
-X-QQ-XMAILINFO: MIB/1UGyXKa7T8S0WAGwz5545nqgzT3DySR5JVCmudQCDCEhls3oawacPvze7B
-	 1UD2Y0+5Gt/t3gUSK7PRsE2XkvL2JSIk7AuVmI0WjKYFhAZ4U7DVhhLa6OTSvS4bB+97kmOvzmGS
-	 oCItJTU5/m0/vuz4DRmuDvKD0YkNrRu9XGEs20w5eV64aZclAIQAGVln62rHk1G4wteZMW1aSlqL
-	 OoSsC84tO3SWltdhpfJsToUvKkLbxhgrAlf8K4jErE52MnRnMPWsYWt5MrH+okgvHOyLrKAHGCcf
-	 t22s8rtDxaGCaLcXK6s3mZ764U9REXO/9E/0mT/8H4jjDnilk8Oomm5D8pqJqMnPoPP2Z36dwknp
-	 ChVqiRO9hMxsX2Nt2v9SZ36iPr7yaU1unT9oX4EiRGN9+wkxmsSChd9xOH5s6Suj3zHaVwUuRful
-	 LwEk4haMuJTfz6kf4lqEAsAeG89gKlm/iDT0mfj2rz0E9i1PKGt5cPN2ENNGCKGrmODWpoBNL2Lx
-	 8fNys0wx3heCoOvWVToORWzcbwy/G/PZc3IAos/Z6qhYmC4ZRfZoz9lc4DF+l7Q/cHxbE3nLYDUJ
-	 QP3MI2GvkMOVvhvNjm8ziFIl35mJ/Ae5iQRMYRNjxGnKJp1wJLbqU/kXWz7T3d+wMaeh5VxxBMVk
-	 rw0Xm06nAWlnBL6snbxyjiUmNxDW3Xq7ConHyVLF1NsGTIXfL3tGcPE4niDDNv0irMiEDsTx2u/6
-	 WE92GxSG+9j07d81uDyloPF4X5E9K7EjQvCt0Gyh7S4FFYbN0VM5JdTKXA09xGhN8pHer0qFFxqH
-	 Mh1OkMtM1bC004Op3sELeyR0IEGiKY0FjIfRsY6kJ08zGyvCvqwgL2f65gIdg+M4C/IWeYJSeJnG
-	 b56GYpIrrY3iDMMfRWcQ1Zo3Cofg3mTPljucXyjzr2RQpqx+/NY40+pJwFk3SilxKusRaSTCCcJP
-	 K3elLgB+D274qcoKu4fwxy6ZQnkLV0thDWl/jU7IhDx0ozJP9JPNVGbrupnKVlddxbRsrARbs23Q
-	 skmfgiOcWe/be+Pg98K7Od4WydbJq34u+UJUdU1ccO0Gxq8/b1KzdH3NsmCdxj2c1unitAgnORou
-	 BSkR9xp1gV0N/HVJ9g3WKa5Oj997QQCGxlzT77vNtU1mrqZwGtNqzJ3sKPuQ==
-X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
-From: Yangyu Chen <cyy@cyyself.name>
-To: Sukhdeep Singh <sukhdeeps@marvell.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Mina Almasry <almasrymina@google.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-	Igor Russkikh <irusskikh@marvell.com>,
-	Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Yangyu Chen <cyy@cyyself.name>
-Subject: [PATCH net 2/2] net: atlantic: free RX pages of consumed but not refilled buffers
-Date: Sun,  2 Aug 2026 23:46:38 +0800
-X-OQ-MSGID: <20260802154638.40342-1-cyy@cyyself.name>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <tencent_29B860317921D68DE77C718242DA418EB608@qq.com>
-References: <tencent_29B860317921D68DE77C718242DA418EB608@qq.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JPJEjBvB"
+Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-498079e98beso2327475e9.1
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 12:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785700615; x=1786305415; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=JTBPTzllvI8xs8/vG3mDDWRwtzJsDWx33RPIMSsvnUQ=;
+        b=JPJEjBvBF7xyzqUoFyBAIghjH58WnXzFxVfErKwGuuOSySo2FUWTvTd27IEBHsP3Gt
+         civTkE697WTW2P2ZJvKZHYgoU24/p7WmlZwXatafsBc3hKikV0u3kNDVlu72a6WHRzql
+         3Gs+m82ifJdlZ6RVhY1LJ19mICiTUMJaNgntgS8LfGa8+MZ80HpR822zyfdYXVLs9RPm
+         3IEVTf/BIToDeIZ3FqQk6YJ+qic6xzQS/SM2D1aP6syCa1AO+Vl79XbbySoWekk6HEov
+         RCIBA9vdPQCcSBluXL/c84eADiFt51PlsNxpUSKIqjWZy15ZDPWJ1sFojmZGmiM28ouF
+         RooQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785700615; x=1786305415;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JTBPTzllvI8xs8/vG3mDDWRwtzJsDWx33RPIMSsvnUQ=;
+        b=S7kMS0M1FK/1Xn7YS+bZFcrOLnZyBocdcpitjsbHpyakdh56iKzBedF6gBhd9efbFh
+         2leW7qCowahgSlnH+sUlqQTdiJF3h604qudpR+CgwMY1ZWl0r1a58GfyKyFjtmhpZjVC
+         w/3mrXpoEWExIq0Da/DCLzdL8tZ2r0ONSrFVAHxw82dW/MslOlbXO2/64DBDYsawUoI1
+         /g28AZKdkSPZJeDOF07mBysfqLYv0HzuG2tK80qTQoMNl7DzmN0aoii6nex2HUjwBiYj
+         7WA/yBM0zMM6CdcSRe5JC5KCrDNAzpYMOZasCjZtsIsEVwjK757oAuBToy9+osWjeD7y
+         pAaQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpQfz81ptU73Mdna33JPjeGeCxuzKkxwCMUYa9zAUb5Hf25KxKfUpP+DF2ntvfkZqHlZFk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyehFTabQuK+c+NB9ySLXXjXAQ4iRjmL5shAZN2gzFJ6ap+2thr
+	qxCSFSdjXly0QJ0Fjd7vGMYZpzcLtCJMTq8JUFRhF5ffdSpsUc36Jj+f
+X-Gm-Gg: AR+sD12wFB3uLZKWV0/xyBpW6fzqXFSgv3VJEC4Pv96GcnL6bCSWYmVvvr3/o+2LSIv
+	xSfgbGc2puYFe/WTg4HncYt5brO/XL2EawnnnpVLuzYacRwdxiZ8U44m3H4yJFBcIr1tqOE+Sp+
+	vtKRaeaVh8vMepJ2rncSfRoEuG4Hk+J/5XHjGysR3WOKEvP/2qlSvBN/ufi16OYblVIsvIGS2Gk
+	FX2YNtjqkHF6ZfoBLuk/RNIM2l1Pyq0ich/thMrNd4JU78bxxzlbykzuxgcKAWLhyytuERKoGf1
+	y6agUDoHT09lZHvlcraBOKo8l02KwflwHrhSj7qIWdgzGr76RwUtUYFjm8m3SMpyvcgjAncPgIu
+	xzdk9jtM3YQptMRK2p5zNWIiZW7iwqhpuhENqe0R4wFn/mtWXg/aXtrQoBCY67DbbW+G76AU6CH
+	69kDZnNDxIlS7Sa7UoKLm5z7RpdNMAtJvbp0/9vdkSs8Vpuwm1QDl53CxX6kDjJsI24RJkSthW7
+	dcUHiqEYC0R2D8b608pghCw+drv9Q37GS/+Wzf1wFistXIUzOeiByihpzPeg/SuxCIJkRhZx68L
+	kAjkaKa6+CYhmQvjTMCnD3qBFSPj
+X-Received: by 2002:a05:600c:470a:b0:496:c18c:f998 with SMTP id 5b1f17b1804b1-4980c6a2241mr163673185e9.19.1785700615172;
+        Sun, 02 Aug 2026 12:56:55 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd458adc9sm27799191f8f.27.2026.08.02.12.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Aug 2026 12:56:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 02 Aug 2026 21:56:53 +0200
+Message-Id: <DKEQ1D0U77V6.1EMGXI819YAW9@gmail.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: <paulmck@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>
+Cc: "Lai Jiangshan" <jiangshanlai@gmail.com>, "Josh Triplett"
+ <josh@joshtriplett.org>, =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
+ "Frederic Weisbecker" <frederic@kernel.org>, "Neeraj Upadhyay"
+ <neeraj.upadhyay@kernel.org>, "Joel Fernandes" <joelagnelf@nvidia.com>,
+ "Boqun Feng" <boqun@kernel.org>, "Uladzislau Rezki" <urezki@gmail.com>,
+ "Davidlohr Bueso" <dave@stgolabs.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Steven Rostedt" <rostedt@goodmis.org>, "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>, "Zqiang" <qiang.zhang@linux.dev>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Matt Fleming"
+ <mfleming@cloudflare.com>, "Harry Yoo (Oracle)" <harry@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <rcu@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-rt-devel@lists.linux.dev>
+Subject: Re: [PATCH 0/6] rcu,srcu: Make call_rcu()/call_srcu() safe from any
+ context
+X-Mailer: aerc 0.21.0
+References: <20260729162207.1567770-1-puranjay@kernel.org>
+ <0096fbf8-c3be-4388-a60b-1968664e4f27@paulmck-laptop>
+In-Reply-To: <0096fbf8-c3be-4388-a60b-1968664e4f27@paulmck-laptop>
 
-aq_ring_rx_deinit() only walks [sw_head, sw_tail), the region posted to
-hardware. Since the page reuse strategy was added, a cleaned RX buffer
-keeps its page (and its DMA mapping) in the ring for reuse, and refill
-is batched: aq_ring_rx_fill() returns early until AQ_CFG_RX_REFILL_THRES
-slots are free. Slots that were consumed but not yet reposted therefore
-sit in the complementary [sw_tail, sw_head) gap with a live page, and
-the deinit walk never visits them: up to a refill batch worth of pages
-and DMA mappings leak on every interface down.
+On Thu Jul 30, 2026 at 5:07 AM CEST, Paul E. McKenney wrote:
+> On Wed, Jul 29, 2026 at 09:21:59AM -0700, Puranjay Mohan wrote:
+>> call_rcu() and call_srcu() only ever touch their per-CPU callback lists
+>> with interrupts disabled: the enqueue runs under local_irq_save() (and t=
+he
+>> nocb locks when offloaded), and so do callback invocation and grace-peri=
+od
+>> work.  That is fine as long as call_rcu() itself is invoked with
+>> interrupts enabled, but it is not always.  An NMI handler can call
+>> call_rcu(), and instrumentation can reenter it.  The case that prompted
+>> this is a BPF program attached to rcu_segcblist_enqueue() that frees an
+>> object: the free reaches call_rcu_tasks_trace(), which is call_srcu()
+>> under the hood, back on the same CPU with the srcu_data lock already hel=
+d,
+>> and it deadlocks on that lock.  Either way, enqueuing directly can corru=
+pt
+>> the list or deadlock.
+>>
+>> Rather than scatter context checks through the enqueue, make it defer
+>> whenever interrupts are disabled: stage the callback on a per-CPU lockle=
+ss
+>> list and re-issue it from an irq_work once interrupts are back on, going
+>> straight to the enqueue helper so the re-issue cannot defer again.  Only
+>> the drain side takes a lock; the staging is a bare llist_add() and stays
+>> safe from NMI.  This is behind a new hidden CONFIG_RCU_DEFER, which is s=
+et
+>> wherever a reentrant enqueue is possible (HAVE_NMI, KPROBES,
+>> FUNCTION_TRACER or TRACEPOINTS); without it call_rcu() enqueues exactly =
+as
+>> before.
+>>
+>> CPU offline is the awkward part.  A callback can be deferred very late i=
+n
+>> the outgoing CPU's teardown -- from do_idle() or cpuhp_ap_report_dead(),
+>> past the CPUHP_AP_SMPCFD_DYING flush that would otherwise run the irq_wo=
+rk
+>> -- so the irq_work can no longer run there to re-issue it.  rcu_barrier(=
+)
+>> and srcu_barrier() therefore drain the deferred lists themselves before
+>> they wait: for online CPUs they wait the irq_work out, and for offline
+>> ones they drain the list directly, since that irq_work may never run
+>> again.  rcutree_migrate_callbacks() drains the outgoing CPU's list too, =
+so
+>> a late deferral still lands on a callback list even when nobody calls a
+>> barrier.  To keep those three drainers from stepping on each other, the
+>> drain holds a per-CPU raw lock across the llist_del_all() and the
+>> re-issue, so a drainer never returns having pulled callbacks off the
+>> deferred list but not yet put them on a callback list.  Every lock the
+>> re-issue touches (nocb, rcu_node, srcu_data) is already raw, so the
+>> nesting is fine.
+>>
+>> The irq_work is IRQ_WORK_INIT_HARD.  It is not needed for correctness, b=
+ut
+>> a non-HARD irq_work runs from a kthread on PREEMPT_RT and can be delayed
+>> under load, letting deferred callbacks pile up; running the re-issue in
+>> hard-irq context keeps that from turning into an OOM.
+>>
+>> Patches 1 and 2 do Tree and Tiny RCU, 3 and 4 Tree and Tiny SRCU.  Patch=
+ 5
+>> teaches rcutorture to issue ->call() from a perf-overflow NMI -- the
+>> nmi_calls parameter, on by default -- on the flavors that advertise it,
+>> and checks that every callback issued from NMI is later invoked.  Patch =
+6
+>> adds the BPF reentry reproducer described above.
+>
+> Nice!  I applied this series to -rcu for testing and review.  Patch 6
+> might want to go up a different path, but let's see how it goes.
+> If it goes via -rcu, it will need an appropriate ack.
+>
 
-Walk the whole ring instead and release whatever is still there. Also
-bail out if the buffer ring is already gone: a partial
-aq_ptp_ring_alloc() failure frees the ring but leaves aq_nic set, so
-aq_ptp_ring_deinit() still gets here on the unwind path.
+I think it makes sense to take it through your tree for now. If there are i=
+ssues
+when we get these changes on BPF side (with the selftest), we'll fix forwar=
+d. If
+we take it now, it will end up deadlocking the CI, so should come with the
+relevant changes once trees are synced.
 
-Fixes: 46f4c29d9de6 ("net: aquantia: optimize rx performance by page reuse strategy")
-Cc: stable@vger.kernel.org # v5.2+
-Reviewed-by: Sukhdeep Singh <sukhdeeps@marvell.com>
-Assisted-by: Claude:claude-fable-5
-Signed-off-by: Yangyu Chen <cyy@cyyself.name>
----
+You can add my ack when taking it in.
 
-Notes:
-    Without this fix, the page_pool conversion posted for net-next turns the missed
-    pages into fragments that page_pool_destroy() waits for forever.
-    Reproduced on an AQC100 with the conversion applied and this fix
-    reverted -- ordinary small received frames (<= 256 byte header-only
-    packets, e.g. ping replies or pure TCP ACKs) are enough to populate
-    the [sw_tail, sw_head) gap:
-    
-      ping -c 200 -i 0.005 <peer>%enp99s0
-      ip link set enp99s0 down
-    
-    One short ping flow left three of the eight RX rings' pools with
-    stranded fragments, and page_pool_release_retry() warns for each of
-    them every 60 seconds, indefinitely:
-    
-      [278084.929092] page_pool_release_retry() stalled pool shutdown: id 123, 1 inflight 60 sec
-      [278084.961064] page_pool_release_retry() stalled pool shutdown: id 126, 1 inflight 60 sec
-      [278084.961087] page_pool_release_retry() stalled pool shutdown: id 125, 6 inflight 60 sec
-      [278145.346737] page_pool_release_retry() stalled pool shutdown: id 123, 1 inflight 120 sec
-      [278145.378745] page_pool_release_retry() stalled pool shutdown: id 125, 6 inflight 120 sec
-      [278145.378759] page_pool_release_retry() stalled pool shutdown: id 126, 1 inflight 120 sec
-    
-    With this patch the whole ring is walked at deinit, the pages are
-    released, and the pools drain immediately. On the current code the
-    same gap leaks the pages and their DMA mappings silently.
-    
-    Applies and was build- and runtime-tested independently of the
-    page_pool conversion, against the current page reuse scheme.
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
- .../net/ethernet/aquantia/atlantic/aq_ring.c  | 22 +++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-index 81685a4dc5a6..e1193c6719d9 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-@@ -950,15 +950,29 @@ int aq_ring_rx_fill(struct aq_ring_s *self)
- 
- void aq_ring_rx_deinit(struct aq_ring_s *self)
- {
--	if (!self)
-+	unsigned int i;
-+
-+	if (!self || !self->buff_ring)
- 		return;
- 
--	for (; self->sw_head != self->sw_tail;
--		self->sw_head = aq_ring_next_dx(self, self->sw_head)) {
--		struct aq_ring_buff_s *buff = &self->buff_ring[self->sw_head];
-+	/* Release every page still owned by the ring.
-+	 *
-+	 * Walking [sw_head, sw_tail) is not enough: refill is batched
-+	 * (aq_ring_rx_fill() waits for AQ_CFG_RX_REFILL_THRES free slots),
-+	 * so slots that were cleaned but not yet reposted accumulate in the
-+	 * [sw_tail, sw_head) gap, and they keep their page for reuse. Walk
-+	 * the whole ring and release whatever is left.
-+	 */
-+	for (i = 0; i < self->size; i++) {
-+		struct aq_ring_buff_s *buff = &self->buff_ring[i];
-+
-+		if (!buff->rxdata.page)
-+			continue;
- 
- 		aq_free_rxpage(&buff->rxdata, aq_nic_get_dev(self->aq_nic));
- 	}
-+
-+	self->sw_head = self->sw_tail;
- }
- 
- void aq_ring_free(struct aq_ring_s *self)
--- 
-2.47.3
+> 							Thanx, Paul
+>
+>> Puranjay Mohan (6):
+>>   rcu: Make call_rcu() safe to call from any context
+>>   rcu: Make Tiny call_rcu() safe to call from any context
+>>   srcu: Make call_srcu() safe to call from any context
+>>   srcu: Make Tiny call_srcu() safe to call from any context
+>>   rcutorture: Exercise ->call() from NMI context
+>>   selftests/bpf: Add a call_srcu() re-entry reproducer
+>>
+>>  include/linux/srcutiny.h                      |  11 +-
+>>  include/linux/srcutree.h                      |   4 +
+>>  kernel/rcu/Kconfig                            |   6 +
+>>  kernel/rcu/rcu.h                              |  18 +++
+>>  kernel/rcu/rcutorture.c                       | 115 +++++++++++++++
+>>  kernel/rcu/srcutiny.c                         |  53 ++++++-
+>>  kernel/rcu/srcutree.c                         | 138 +++++++++++++++++-
+>>  kernel/rcu/tiny.c                             | 101 ++++++++++---
+>>  kernel/rcu/tree.c                             | 122 ++++++++++++++--
+>>  kernel/rcu/tree.h                             |   5 +
+>>  .../selftests/bpf/prog_tests/rcu_reentry.c    |  58 ++++++++
+>>  .../testing/selftests/bpf/progs/rcu_reentry.c |  45 ++++++
+>>  12 files changed, 636 insertions(+), 40 deletions(-)
+>>  create mode 100644 tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
+>>  create mode 100644 tools/testing/selftests/bpf/progs/rcu_reentry.c
+>>
+>>
+>> base-commit: 9dc303e69bcd49f9668ca090ae45325269531fbb
+>> --
+>> 2.53.0-Meta
+>>
 
