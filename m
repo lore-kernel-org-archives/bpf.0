@@ -1,238 +1,107 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FCF33122A
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 23:32:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8707D23393A
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 23:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785713550; cv=none; b=ZWafVi+XG64pTesMrAGJyqed0QXvyRT/ExWq+yM7N72baIEUIRu2FqK7KlCSwQ5WMIbhaM5ZnBciGs5XdBhpgzhvZWZ4p1YLLjL/x/4N98bkipdnezwVg7tCv49BMfMx21qUyhumLtI9xqAdsstIbkv+m3QogGMiM4THcX0xVXw=
+	t=1785713899; cv=none; b=Qtx5FnyP+ojBSrFh+zdJWVU8MEN7eOpey1ykQAnIJwgaL+9oyHli1N5mzIdELzMK+Ezt5skmk40HaZx97LEWs7c444mh9WYG7RfSfacVwbWyylopnK49titXeqlkWFns6xBiLQ7zQE1xpRtpkV2RRf1LnE/Fwi3RPMMFTF3bBOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785713550; c=relaxed/simple;
-	bh=dFJcQMAil6Rc6y/t5g1S2gR4M4zDnqkrhPL4MIUApg0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=cQ9XBwXFcKmfrIKmxP2MVHGG8WxEdKSGNAXNexTO3hyY9QLRguVBZ9vIfL2TuxJ8aQGYcKTGL91xsDusQeLAJ0K/+sBtKbT5UcBJjmIyyLAiPwlSBvkdFeu4ZGc8slBttYSc9SL1BA0Nr/qGNzCHLCG2kqOd+bx0tPYmNGSU/T8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ax8bQ1xY; arc=none smtp.client-ip=74.125.225.138
+	s=arc-20240116; t=1785713899; c=relaxed/simple;
+	bh=+C+wAbM1mITAmu2SoMdnGJhuiekScTlWDtdGlyj7mIk=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=jaVIolzLxCD/94BSnt6E/re0oGQ5bMm/Qx31i1Tk8uJALevKgtdWqCnhAXzeQq6zYS3JibrYFkWf6j96pMgn4TSTN/nkAYH4axKzUSKk6VBBwBUW/bfEN86nDT5mwKct7a+I9Ii0h67ttPrh0xcTkQ0Zwxo4DJ3neXLMy3X3cho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YYlbh9aG; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ax8bQ1xY"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495459712d2so2727295e9.1
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 16:32:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YYlbh9aG"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c9e7391839cso2453152a12.0
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 16:38:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785713547; x=1786318347; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
+        d=gmail.com; s=20251104; t=1785713898; x=1786318698; darn=vger.kernel.org;
+        h=message-id:date:references:in-reply-to:cc:to:from:subject
+         :content-transfer-encoding:content-type:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Wuve+ygXJV5dqDNQOvrNoXCyKoiwGqRf0o6QCP7Pj5E=;
-        b=ax8bQ1xYBhjLsBwDYruD3cX8/vFLfnNykwubARwGVFU4GpRQGTdojcel/RfnAtW8zb
-         kyvl32Qv+z3rHwAfClKIOOlreKdWEAgu+pq2jhIP3J6bZMb2T66YABHZIFzob2CmgDiC
-         HYkfWX63yoG7t5Q9pesklur09zMeTnCojnEHTOZ9x4iUOXGNY+JJI8ESN+//oVXb2TPH
-         BSwZZ7kGBVtak2SbUedTtWVNr9zdWD4hvBkw04DoBSZRPEZhrIv/WtS6hahAz5r9sLpd
-         wOuAKNrKZAPu4ITi3gwBQ+v/tdkbCKeQc+i17fNpk+O1cWgYyMNwcLNxzd+l0GTYExOA
-         TqTg==
+        bh=wVC6ZNErkENuKY2q+iSkfidbrSUBAoqUgOYVFs+1qAw=;
+        b=YYlbh9aG/5p3MO7w8lG5dTZWl3W20Mf3k8T6t6m62k2OuWpe6W5MWaiEAPN444ilhw
+         DwxtTpNELhEb7CAdmXWh+v/ovdmQsnqjdnuZRf+J4zW9hU8/bdNerhldwOIK8llRaDuu
+         YnSX7ko3jWJzNJ+KVOkhO73o1f1ZNv9Rke7/Koo5QfqBExT1LNfB0d9kSItbR3vrkoZ8
+         oixPN1+dijiYV70x7fic4bMNp1iCtfNpr88Vd6ncX0aQ0KBHYmDAkq8lyGJNt2bP1yj5
+         H8/vx5s6Ni2e+DOL23P11zGXrJzXZx2NkOOkAI2bQTS+yTVg4sStJsHW/897c4gssZnF
+         q3Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785713547; x=1786318347;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785713898; x=1786318698;
+        h=message-id:date:references:in-reply-to:cc:to:from:subject
+         :content-transfer-encoding:content-type:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Wuve+ygXJV5dqDNQOvrNoXCyKoiwGqRf0o6QCP7Pj5E=;
-        b=cJ5qcMagD1FyOqeRRhr+nANWlCLX6umDFYAJtx0GJoOMFEhC0+FpZVdsOO9lu1aaFj
-         7y73D2j9wJv8sCtBl5R98AwGcQhqBJmF1M+E1c5XbsKsCMgQkCXjLZRdLhc1WDK+lmq8
-         6lds6r/8atpsuYyHM/cwYL4e4N7s1QLZBxIMM7esHUuBInCW8jkVWo0tCpztU9Sbj6SD
-         2uBzjK37jKpoIlbO/IE10fT9bizwJuwHBLg1S01XUXCCzgn6akibC7csMX2JOz3aTqet
-         XrCPLRRLn/0f6d1sqar5+9CajNrJQsMAjjwBTmHlXIwFsvBXjRQtnJ5LhLYYFctdTOms
-         vTYA==
-X-Forwarded-Encrypted: i=1; AHgh+RpXbjxlzS5JeCibuTphGZZbEFgeZFi3aJycovU80MAGdGxfPW9gUbLOdz8d/BBkllcuGRQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUuanYMc4FHKOBS4x6O4aErwbPSqt/+XSRF3HVnRsMJ8yJlCy7
-	9LXWFXyD1Oeo3hcP92Iubu3qGAvOSi8OLtzr3fU7LWXzQuY2qAM6vpzt
-X-Gm-Gg: AR+sD11MonhzI6mqHOvGioIpblUSYX4r2a5RrOEXfcoC+QGl0BWn9GBK/73+JPappJq
-	GCRS+CmXcKg0tGIRYi6UNaY3wDzSHqYT4exHCXC9f4SyqpGRbjSxwEeF7cwFU+UaaKfgsMnnH3P
-	W29Qo5B/WHJXMJNEjIhs0LvbIHV11MVOrSSGE3cxzS3rzQm9ZgHNTQnegTrexBzrZQGsTn6KPE4
-	XoMoLIKKh31VNUnW2V80JZxBGm3Ep4ZLJCRuTVdXVSfDIBvfiIydZIndLqkzc4TNNTHPiS7d5iI
-	XPS/vKmcQdAlm/6tvkdI8QicRPsixl8XD3Tijt5yuM0UDgBGlfNP8QNvOIS+1tsz7NAyeNhoui7
-	Tew027Ku5lU5ZSHT7qP+EdfKCNTW7hEbfolxgor+r0ec/J0/Y174Glr5nc/IAtXyM1HF/dGov1u
-	0vrecUoKpOtTjgXUs6Bj37yRiktgR0tlNV6sALDfLWtYvAGL5vMbppki1VsLRC86+a+4xzakWWO
-	1dVCUNDxqgC2FN3gzWlb1simKMEbMR0g9bokQ0cv5MdDyqMd+N4EkfymwzSZo1Zv9YMREZPEmig
-	7xHQ2hS9P83TXeArW/yd8PjMaHE=
-X-Received: by 2002:a05:600d:8492:b0:496:c2fd:1731 with SMTP id 5b1f17b1804b1-4980c64b96dmr114476095e9.1.1785713546677;
-        Sun, 02 Aug 2026 16:32:26 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49807b5f007sm166475845e9.6.2026.08.02.16.32.26
+        bh=wVC6ZNErkENuKY2q+iSkfidbrSUBAoqUgOYVFs+1qAw=;
+        b=axQm4F3brUuXDVh95MCUAOOrprc4E18l7uvowpYWFMX0aYePZzI6ZrLiEs8ffSNm2U
+         NfPFVCgN96l2qLEcowEcZQNKZXSuKMQx4OdjdKAnVpn86cynTAr6WYpS/vmjFbpeg9s3
+         ZN30y9ERIyBMhtlXVVdkKi0Yr6761nny6Cf2//neA0D9uwvTP4S/g0CRdTLz2Hvx1g8J
+         CElQ0ueWsEld5xO6nP5kMvd86Z8GPwIBQU0WdV5ExSjnq1vmHHTxVKfAhlXXmm59bjww
+         S5BvWHZqFpQyvrXitHys7Vu1BiqZr5XjMM7FkBE/mW/kslSyx8vpFlkbjPQ2L/6SNR2y
+         vu7w==
+X-Forwarded-Encrypted: i=1; AHgh+Rr/T4J2cCMp1TlPyA6u6xNdAoCr20Ck4QgVM60smx6XcmykNAP3fhYrK5RO82VqXWsW1lw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP+PfyXbDsNFoTx72yMrQoOmHgGa3OAXS1JHlwZVwEGqWDEXym
+	MBrgnJ7XLoMJaaexUXtoy/tMWflcG3+6c+7F2zl3dI9JcBzMePmpH26ZSkc7A+d9
+X-Gm-Gg: AR+sD12IoAhV3K1vYTaDRQnLDNfMkai9AOk8JNGAdMz5/YGyJLyYnuvvKxKZcwR3gt7
+	ygCmqyezXVGz69tstmyo6VgsVUrJffLMfWaHgtzxpke+GWEL56kAu8uPgc+jF9+fkGZbxVLKCR0
+	3vg2fd599RDmyvvOzFlfIiTLtUTvqpcmzd9Rm0O9UvSJnHaGpCfn4yhsm3N+e4QVxxUTzH9HbEl
+	WgMevn4B8YAyXvib0NctA1+7avDWpJ6EogPxSMmutEu31beOScloQQwzn+YmaJukj747oFr1QvI
+	ceivdKz8wZQh5UV5YEvD3Vf8IwH+NuHSaOEbv3iG2Qw4ieTBUNywV28kssdiwAiIub4WfFK84ze
+	O9l6A6SNl/Otc3cqZSjZVGhjA+DfrFyXfHlB4tE9YqtSf0y9iAQBBrF24StNX14ciOI2IJHTzXm
+	D55VoKDL5mzYjMv9RhhB00UNtEeXTksvhGYsPz8N6hgOlwG2De7c6ZjsbdNTxm6meuEw==
+X-Received: by 2002:a05:6a21:6b0f:b0:39c:126c:93b5 with SMTP id adf61e73a8af0-3c92a5d6d28mr7873983637.21.1785713897970;
+        Sun, 02 Aug 2026 16:38:17 -0700 (PDT)
+Received: from [127.0.0.2] ([73.222.46.22])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fab4e44bcsm35070094c88.12.2026.08.02.16.38.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 16:32:26 -0700 (PDT)
+        Sun, 02 Aug 2026 16:38:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 01:32:26 +0200
-Message-Id: <DKEUME1DRKOR.2R2XVNQDZKVSR@gmail.com>
-To: "Ning Ding" <dingning04@gmail.com>, <bpf@vger.kernel.org>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <martin.lau@linux.dev>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <emil@etsalapatis.com>, <shuah@kernel.org>, <danieltimlee@gmail.com>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: Reject writes through untrusted allocated
- pointers
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260726021304.97ED91F000E9@smtp.kernel.org>
- <20260728033837.1466123-1-dingning04@gmail.com>
-In-Reply-To: <20260728033837.1466123-1-dingning04@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 1/9] binfmt_misc: let a register string create an entry
+ disabled
+From: Farid Zakaria <farid.m.zakaria@gmail.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Jan Kara <jack@suse.cz>, Kees Cook <kees@kernel.org>, linux-mm@kvack.org, 
+ bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+ Farid Zakaria <farid.m.zakaria@gmail.com>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+ jannh@google.com, mail@johnericson.me
+In-Reply-To: <20260730-work-binfmt_misc-preopen-v1-1-4a0b0da71f16@kernel.org>
+References: <20260730-work-binfmt_misc-preopen-v1-0-4a0b0da71f16@kernel.org>
+ <20260730-work-binfmt_misc-preopen-v1-1-4a0b0da71f16@kernel.org>
+Date: Sun, 02 Aug 2026 16:37:58 -0700
+Message-Id: <178571387898.1880415.17662890925792360904.b4-review@b4>
+X-Mailer: b4 0.15.2
 
-On Tue Jul 28, 2026 at 5:38 AM CEST, Ning Ding wrote:
-> A kptr loaded under an RCU read lock has MEM_ALLOC set. After
-> bpf_rcu_read_unlock(), the verifier marks it PTR_UNTRUSTED, but
-> check_ptr_to_btf_access() still allows writes because
-> type_is_ptr_alloc_obj() ignores that flag.
->
-> Reject writes through MEM_ALLOC pointers that are PTR_UNTRUSTED. Reads
-> remain allowed and are converted to probe-memory accesses.
->
-> Also skip the owning-reference check for these pointers, since they no
-> longer have a live reference after leaving the RCU critical section.
->
-> Add verifier tests for the rejected write and permitted read cases.
->
-> Fixes: 503e4def5414 ("bpf: Replace open code with for allocated object ch=
-eck")
-> Closes: https://lore.kernel.org/all/20260726021304.97ED91F000E9@smtp.kern=
-el.org/
-> Assisted-by: Codex:gpt-5.6-sol
-> Signed-off-by: Ning Ding <dingning04@gmail.com>
-> ---
+On Thu, 30 Jul 2026 15:34:03 +0200, Christian Brauner <brauner@kernel.org> wrote:
+> diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
+> index 707f8a14f8a6..ca7840b01a2b 100644
+> --- a/fs/binfmt_misc.c
+> +++ b/fs/binfmt_misc.c
+> @@ -75,6 +86,7 @@ static const struct binfmt_misc_flag misc_flags[] = {
+>  	{ 'F', MISC_FMT_OPEN_FILE,	0,			"open interpreter file now"	},
+>  	{ 'T', MISC_FMT_TRANSPARENT,	MISC_FMT_OPEN_BINARY,	"transparent"			},
+>  	{ 'L', MISC_FMT_LOADER,		0,			"loader substitution"		},
+> +	{ 'D', MISC_FMT_DISABLED,	0,			"register disabled"		},
 
-Same comment for this one, split kernel and selftests into separate patches=
-.
+AI brought up an interesting point that this now changes the set of
+valid delimiters which you might want to call out in the commit message.
 
->  kernel/bpf/verifier.c                         |  6 +-
->  .../bpf/progs/local_kptr_stash_fail.c         | 58 +++++++++++++++++++
->  2 files changed, 62 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7aa47342dc65..24c151ad2e62 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5804,13 +5804,15 @@ static int check_ptr_to_btf_access(struct bpf_ver=
-ifier_env *env,
->  		 * program allocated objects (which always have id > 0),
->  		 * but not for untrusted PTR_TO_BTF_ID | MEM_ALLOC.
->  		 */
-> -		if (atype !=3D BPF_READ && !type_is_ptr_alloc_obj(reg->type)) {
-> +		if (atype !=3D BPF_READ &&
-> +		    (!type_is_ptr_alloc_obj(reg->type) || reg->type & PTR_UNTRUSTED)) =
-{
->  			verbose(env, "only read is supported\n");
->  			return -EACCES;
->  		}
+For instance 'DnameDMD0DmagicDDinterpD' was allowed before.
+It might be a very obscure feature to pick a delimiter because
+https://docs.kernel.org/admin-guide/binfmt-misc.html does not even
+mention it beyond 'where you can choose the : upon your needs'.
 
-There is a PTR_UNTRUSTED check already earlier in this function, why is tha=
-t not
-working or not enough?
-
-pw-bot: cr
-
->
->  		if (type_is_alloc(reg->type) && !type_is_non_owning_ref(reg->type) &&
-> -		    !(reg->type & MEM_RCU) && !reg_is_referenced(env, reg)) {
-> +		    !(reg->type & (MEM_RCU | PTR_UNTRUSTED)) &&
-> +		    !reg_is_referenced(env, reg)) {
->  			verifier_bug(env, "allocated object must have a referenced id");
->  			return -EFAULT;
->  		}
-> diff --git a/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c b/=
-tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
-> index fcf7a7567da2..d7b8cd6458bb 100644
-> --- a/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
-> @@ -8,14 +8,22 @@
->  #include "../bpf_experimental.h"
->  #include "bpf_misc.h"
->
-> +extern void bpf_rcu_read_lock(void) __ksym;
-> +extern void bpf_rcu_read_unlock(void) __ksym;
-> +
->  struct node_data {
->  	long key;
->  	long data;
->  	struct bpf_rb_node node;
->  };
->
-> +struct plain_data {
-> +	long key;
-> +};
-> +
->  struct map_value {
->  	struct node_data __kptr *node;
-> +	struct plain_data __kptr *plain;
->  };
->
->  struct node_data2 {
-> @@ -31,6 +39,7 @@ struct node_data2 {
->   * [35] TYPE_TAG 'kptr_ref' type_id=3D34
->   */
->  struct node_data *just_here_because_btf_bug;
-> +struct plain_data *just_here_because_btf_bug2;
->
->  struct {
->  	__uint(type, BPF_MAP_TYPE_ARRAY);
-> @@ -82,4 +91,53 @@ long drop_rb_node_off(void *ctx)
->  	return 0;
->  }
->
-> +SEC("?tc")
-> +__failure __msg("only read is supported")
-> +long write_untrusted_alloc_obj(void *ctx)
-> +{
-> +	struct map_value *mapval;
-> +	struct node_data *res;
-> +	int idx =3D 0;
-> +
-> +	mapval =3D bpf_map_lookup_elem(&some_nodes, &idx);
-> +	if (!mapval)
-> +		return 1;
-> +
-> +	bpf_rcu_read_lock();
-> +	res =3D mapval->node;
-> +	if (!res) {
-> +		bpf_rcu_read_unlock();
-> +		return 2;
-> +	}
-> +	barrier_var(res);
-> +	bpf_rcu_read_unlock();
-> +
-> +	res->key =3D 42;
-> +	return 0;
-> +}
-> +
-> +SEC("?tc")
-> +__success
-> +long read_untrusted_alloc_obj(void *ctx)
-> +{
-> +	struct map_value *mapval;
-> +	struct plain_data *res;
-> +	int idx =3D 0;
-> +
-> +	mapval =3D bpf_map_lookup_elem(&some_nodes, &idx);
-> +	if (!mapval)
-> +		return 1;
-> +
-> +	bpf_rcu_read_lock();
-> +	res =3D mapval->plain;
-> +	if (!res) {
-> +		bpf_rcu_read_unlock();
-> +		return 2;
-> +	}
-> +	barrier_var(res);
-> +	bpf_rcu_read_unlock();
-> +
-> +	return res->key;
-> +}
-> +
->  char _license[] SEC("license") =3D "GPL";
-
+-- 
+Farid Zakaria <farid.m.zakaria@gmail.com>
