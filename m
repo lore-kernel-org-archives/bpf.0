@@ -1,66 +1,66 @@
 Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02B535CB87
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 23:22:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071F839020C
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 23:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785712956; cv=none; b=J2jZoZ8oTnGP8p2cd072CY+F2PUgLKbR0WUN+cZQxsS/nkM4d0BfDykT2f0SOcjDHGs/SkS+4pbOf93/zGc9ha/4tbMH/TURETd4yZoft/iw7JpbM1xzo48P502tOFSCaszbKYu4PUx2KBqxEalIwx6Guuh7VgjyZloBtubv4J4=
+	t=1785713403; cv=none; b=OKbPotgPUZ1Em+U74AEsLdJWZMWyfmUJtzdnBJkbOo78Q1YS3omBRt7LpmIH5Ejn3SOhjzcZPT3RoXC0GhZeBqsb7vz9lbFXgFXGduvsAtr4CEB9QVWwbHATjZXiONi8gUm+rQH8kXsgRhrMdbdTw9b9o2ihCMJ/Y21pjUM6HnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785712956; c=relaxed/simple;
-	bh=yYBkCJueX6Kc2AmnzeucM2qqGpcSOnx/no1rkxLanPE=;
+	s=arc-20240116; t=1785713403; c=relaxed/simple;
+	bh=x5lKFfvdF480SWOzJUIRkM/Ff/SmxozioCEOu5Cixds=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=KU6pbvr+L3QDn9jkjca7kxBN4icU4LuMIYo4d5oeHBttMwjm5BxlrGBgC89V87CqJj23ssMvnSY5sL8NLRzfsVroi2A9CumfUXnHLSsT/QXkrxSivpmYCCIqs/NneKGWyYOLYV3/Cgb/OSuGAxDx4u0BFL9LFiytO06ZaZZIMT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ll6RJMj4; arc=none smtp.client-ip=74.125.225.65
+	 References:In-Reply-To; b=bBjzOvJrRkhhvOcZmc4vSjuupqoHCadksUn46+L6EeIuc3kPHXC39YTx5Lp5ElvAUKd6WJUgIeTowTQ6qzPWIkAp3z4WXKQWghhsI2eh5FA72DzjqvDN2KdO32xA6Ms49Bpr1JDlegd9MZQ0iI8ubLKedGGCwcZZnGCWfbctr+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pwhue7PO; arc=none smtp.client-ip=74.125.225.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ll6RJMj4"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47fcb9d4b33so1415468f8f.0
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 16:22:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pwhue7PO"
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47fd1b2021fso962508f8f.1
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 16:30:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785712952; x=1786317752; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785713400; x=1786318200; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=j4pa8BZIB2gNIeGlkaWBqhpoJbI1D4n977OZhkSLC7U=;
-        b=Ll6RJMj49qo1f5vp3uAmvVbLE40l37PwVGDONfEpneUi5YZUU3hvrVdw2Po3SUYQSs
-         z1/5u5LzEy29rGXavolo5Gcq6BBnb2FpY32UKrxvl9OYnV/Jm3QigHrjbZo1LKAjYN4k
-         daD1rG56W7a+/zzSVpDiFcnZx3A8DVBl2V2/Asmml6no/4KUislLN3zjBxIwTuhA4x46
-         I1jLGzVY6t8qQ1sQZ0QEE+j9iMSjf+3Nd+KNSuG69/238YWuEn9YZpEzPMGpVauzlizA
-         +AhmRNu9C6erB+rtrsNDp6v7fvSRAI+YFOOzqgfiKjLQ1HqGWogWZSYC3BU0i2oFYK6c
-         I7BQ==
+        bh=qloiq+gAZjkY4WR0kgpXILM6cA5GObA2GquhuAHRPJQ=;
+        b=pwhue7POWJQnTf1xP7UiwBLugGpmO+FA4+jBgjjdHdA90txRIx85szAYes8bawR0gf
+         TZwgNKRVPKdLoyLAF/jM9kgJ9uwxBhD4+FqsykTgJGPAtM5Q2cOetjFV/TNgyRqUdBnT
+         pvzDvI3h7zfhZj/4uszuPpoLyy8lKf7c0I9DW+awetj7cUw//xZN+UGaoWanFz2R9cUp
+         RJGtUbkQ89H3yBh84WiHEvXTdCcd4rRRUGwK/LQsVMLpFNMMp7f53dxL/qd4EPdez8N/
+         461oiQhVluLiCzA9+X0ErUcmCRtArSVjL/tgYld49UrYM0mKPgA6w/wIkl6VJu7fT5cN
+         UQrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785712952; x=1786317752;
+        d=1e100.net; s=20251104; t=1785713400; x=1786318200;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=j4pa8BZIB2gNIeGlkaWBqhpoJbI1D4n977OZhkSLC7U=;
-        b=cv4c+jDdqONE0lQ1o0CDGn0K9JrT/zYkcHlJ9QoMvUYW+ZkmgN2Yw4f5vOwNYXn1ne
-         VyXrgHOs0AL9ZTBecY6xAnnv0OsE4iEtTL1kOAeGJo0/bx6pzwOs3G+ZGZiYsQGhHpmE
-         lxwomQ3jB3+aOp+L9/+l/ZPjxFjWWmx3ysNAHAxshxT0mjgltoHSl4NZh1WgwcvDkKzs
-         ISgwkUvmSI07e6sSn/kKiPFzaCV+jSyNpqbkhTwXGdJZ2BDkS6Wz3ME2ZulEkDAus0W0
-         tbOoXS9Lz6Z2LYZzh9i9chA0/tKQrP1iA4y72GNYfb6Hsdfr/n+HI/aAcuRbXTVAbaMJ
-         y6Gg==
-X-Forwarded-Encrypted: i=1; AHgh+RoU8tBPOgUympI18HV+ORrarFL/e9zmOL0ZtyaAb7BuT7fdD+YMfdYTstxBh7NCEZQ1krg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqZwhPJ3Wpx28h8H3fS1P5E8ttyEYAWlD0CRsVUPKOQi0EcDD9
-	oJamA8RNwe+VnoIt/58DetpSCxUAgIf7IBYCyBcDErETLpt15wzFIUpK
-X-Gm-Gg: AR+sD12ANsjTdvkA1KzlocDxPxty4ZAmApgtP7Rb1aXgGm1/gOIY+IgiEAWH7/fzGJH
-	Psidurhkd81IYJQDxvv0+Yx5iCVqDRAaMO73njbd4UGgSJ2S6T5Zep1uj8L4qpaEd4znHymbxBC
-	PMS/44WdO0m1qulPrjEDE2HyXAJKgkxUmm5056hsU21V0rVemBbn9hDR6hbvPbhgPH+owz3g6lu
-	72581xAbLlvsLZSJIegoNAwVUUi8udTZSvGpy/+DSh4c6KsmF03hsVqkBa7CrDvpeczc9asKaLl
-	G/CKhe3NL+QpcfV7DjXOlmR+/P3XmUn30Yjz5IHEQvBFtziyeAdlbgaJxJZV8gkP8jSQNBprxqX
-	YJaaGK+FOfTL8J8iHei6tJt+1v0SDPWTGwrG9JaPk8nS5INk1o1GacMAj6n/Y41t5AVAR+ZEQ1Z
-	Xlt3Nbo/nqtV944K4SXSZ3Oc2jPxclOBrXQWVaOunSTj7D54oOy1gvPCgdfiSu5YfYghkJa/fZT
-	ay1ViuUvxzLyFlm1OsCvt0eHxKSLqyu7QgM+uGbmQbyoNwa8tIh8eXG5NQjBxYUNT+9hdIiQ8Ek
-	hs4GwOH0il2VgwfcKt1l1EOfKY8=
-X-Received: by 2002:a05:6000:1787:b0:47f:9283:1fbe with SMTP id ffacd0b85a97d-47fd7262860mr20618429f8f.0.1785712952118;
-        Sun, 02 Aug 2026 16:22:32 -0700 (PDT)
+        bh=qloiq+gAZjkY4WR0kgpXILM6cA5GObA2GquhuAHRPJQ=;
+        b=HfNBv+QkK3iDAKGQmIcBnok0q6Y2y8yF13C47rchGDknqV9VEdE4S1/24NDBS1M6lS
+         DbodvSVCjdvucE2ogdfRxW3qGskbDCQmQkPdRErwqkyatwqmfPWDuCsaKbNeOHlmuSj3
+         muvYFRo/C92bplpXEpuaBYZU3xuxa9/J/ujQWEDz41aN+1qfO9B0G+NuUlD+dlsg+NWd
+         HJfy6aFNykbDi7godK36euSifi1RLceD1bZl2PPpdVp+D+EhymYZINg4SPEd/9K0tBWh
+         Nb+4bblLMIocJGaSRWW/LccqeQtMooAwmtOKiDYNuqYJoCopoFnJ6YNcDOhyp56TB0c6
+         e5Uw==
+X-Forwarded-Encrypted: i=1; AHgh+RrOg5JjeYGVkycP8+je66Vg2rHv8J/xpy3ZQnVMwzR8PLdn8nlTmRbVyq2NNM9cMcIatSE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHOMarCG0k+y9002Nv/6ynaPbbvBFKJy/D0XCitNYJG4vLa1eq
+	WqRrO7h3kevUWiGee1UvmDbNin2BSDMHh+f/GEhu389JWDy7W5LvTNW9h9bEDkJq
+X-Gm-Gg: AR+sD13DGcRIKUly0Gg48x/q8BHWy4cZepBI/ChIhlADM+N7u0XOYk+PLxJSvrSs2tv
+	TJCyR5fZqW+fprP7mR5/7pDRuEAEcpToPoFIluNEIbo283w8M6oZt6/dAXUAfJaYksDDyjjC7xo
+	sW5t5p20wxIPfoIYH3IckPGjR6JliPxbf7/55kZGise0A/5IqTIIrybSGDkG8KHoMBMsFP7g0wd
+	BfrxZ8NZF5U+OEIkehopzYJgooJerIOW8Vj1FSQ5HCZQMHhJ1ogC1KX3LSCTNc8OcZGi/gPSAro
+	ACuSjd8oVRP7gK4uoMZ+aVOxYQ6CmmpLggsJPae3S8ZbqzkDT6lcbzkXd1yWiolrIAYkQWYAP9G
+	lg+JzhzQGrPbBAw1bSDECSpaJs7h6NJCoZKI0+V9jiiidUE2dyABb2fYDFeSIGmGJ1oEBxt5xVk
+	n6gs/jbBRZ0aRhyn39kfRp/ahAyWQ7yxGh9J4QonUEnrczeSZcKMGdZda1NRzv38eeuALGcj5t3
+	coqSi7FBkF819guDYn453Rt77244rZU+MDcF0GbGTs/0l2JIisdoGQYGsVfojuppyVPO4ewQ3kl
+	7q2cpPtxTZ+wXSjZODSSswylhQU=
+X-Received: by 2002:adf:e781:0:b0:47f:4ac9:98bc with SMTP id ffacd0b85a97d-47fd72c68aamr14387804f8f.24.1785713400050;
+        Sun, 02 Aug 2026 16:30:00 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd4562a38sm26713398f8f.21.2026.08.02.16.22.31
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd41e296csm25035908f8f.12.2026.08.02.16.29.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 16:22:31 -0700 (PDT)
+        Sun, 02 Aug 2026 16:29:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,252 +69,110 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 01:22:31 +0200
-Message-Id: <DKEUESWLOHMH.4KP4IBSQ9ZV6@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan"
- <shuah@kernel.org>, "Justin Suess" <utilityemal77@gmail.com>, "Amery Hung"
- <ameryhung@gmail.com>, "Dave Marchevsky" <davemarchevsky@fb.com>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: Invalidate RCU pointers after final spin
- unlock
+Date: Mon, 03 Aug 2026 01:29:59 +0200
+Message-Id: <DKEUKIOKSY28.2XVQVGCKLI40C@gmail.com>
+Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <martin.lau@linux.dev>, <davem@davemloft.net>,
+ <greg@kroah.com>
+Subject: Re: [PATCH bpf v2 2/2] bpf: Reject untrusted pointers in
+ refcount_acquire
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 To: "Ning Ding" <dingning04@gmail.com>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0
-References: <20260802231248.2781334-1-dingning04@gmail.com>
-In-Reply-To: <20260802231248.2781334-1-dingning04@gmail.com>
+References: <20260726235030.1152542-1-dingning04@gmail.com>
+ <20260726235030.1152542-3-dingning04@gmail.com>
+In-Reply-To: <20260726235030.1152542-3-dingning04@gmail.com>
 
-On Mon Aug 3, 2026 at 1:12 AM CEST, Ning Ding wrote:
-> A verifier-tracked spin lock provides implicit RCU protection while held.
-> Consequently, a kptr loaded from a lock-protected map value is marked
-> MEM_RCU.
+On Mon Jul 27, 2026 at 1:50 AM CEST, Ning Ding wrote:
+> After bpf_rcu_read_unlock(), a refcounted map kptr is marked
+> PTR_UNTRUSTED because it is no longer protected by RCU. The
+> refcounted-kptr argument check ignores PTR_UNTRUSTED and still allows
+> bpf_refcount_acquire() on that pointer.
 >
-> process_spin_lock() invalidates non-owning references on unlock, but leav=
-es
-> RCU-protected references intact. This is correct while another RCU contex=
-t
-> remains active. However, for a sleepable program, releasing its final loc=
-k
-> can end the only RCU-protected context. The verifier then allows a MEM_RC=
-U
-> pointer to be used after its protection has ended.
+> However, if another thread removes the object and drops its last referenc=
+e, the
+> stale address can later be reused for another refcounted object. A
+> CAP_BPF-only reproducer observed bpf_refcount_acquire() returning
+> non-NULL through such a stale pointer.
 >
-> Invalidate RCU-protected references when a successful unlock changes
-> in_rcu_cs() from true to false. Non-sleepable programs remain in their
-> invocation-wide implicit RCU context, and an explicit RCU read-side secti=
-on
-> continues to protect pointers across the unlock.
+> Reject PTR_UNTRUSTED refcounted-kptr arguments and add a regression
+> test.
 >
-> A task kptr retained across the final unlock can race with removal of the
-> map kptr and bpf_task_release(). This was confirmed to result in a
-> task_struct use-after-free in __bpf_get_task_stack().
->
-> Add a negative sleepable regression and positive non-sleepable and explic=
-it
-> RCU controls.
->
-> Fixes: 5861d1e8dbc4 ("bpf: Allow bpf_spin_{lock,unlock} in sleepable prog=
-s")
-> Assisted-by: Codex:gpt-5.6-sol
-> Assisted-by: ChatGPT:GPT-5.6-Pro
+> Fixes: 7c50b1cb76ac ("bpf: Add bpf_refcount_acquire kfunc")
+> Reported-by: sashiko-bot@kernel.org
+> Link: https://lore.kernel.org/r/20260726021304.97ED91F000E9@smtp.kernel.o=
+rg
+> Assisted-by: Codex:gpt-5
 > Signed-off-by: Ning Ding <dingning04@gmail.com>
 > ---
 
-It makes sense, but split the kernel side fix and selftests into two separa=
-te
-patches. The list has several examples. Also, I don't think this is as seri=
-ous,
-so please target bpf-next in the respin.
+Same comment as the new set; split kernel commits and selftest commits into
+separate ones. As for the fix, I think it would make more sense if
+type_is_ptr_alloc_obj() was fixed to PTR_UNTRUSTED by definition, instead o=
+f
+having to add extra checks on top.
 
 pw-bot: cr
 
->  kernel/bpf/verifier.c                         |  5 ++
->  .../selftests/bpf/prog_tests/task_kfunc.c     |  2 +
->  .../selftests/bpf/progs/task_kfunc_common.h   | 12 +++++
->  .../selftests/bpf/progs/task_kfunc_failure.c  | 24 ++++++++++
->  .../selftests/bpf/progs/task_kfunc_success.c  | 48 +++++++++++++++++++
->  5 files changed, 91 insertions(+)
+>  kernel/bpf/verifier.c                         |  5 ++++
+>  .../bpf/progs/refcounted_kptr_fail.c          | 27 +++++++++++++++++++
+>  2 files changed, 32 insertions(+)
 >
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fdc5fbb1f78c..aea9fdbbd33a 100644
+> index 1e7343b625de..63b1d997fe80 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -204,6 +204,7 @@ static int acquire_reference(struct bpf_verifier_env =
-*env, int insn_idx, int par
->  static int release_reference_nomark(struct bpf_verifier_state *state, in=
-t id);
->  static int release_reference(struct bpf_verifier_env *env, int id);
->  static void invalidate_non_owning_refs(struct bpf_verifier_env *env);
-> +static void invalidate_rcu_protected_refs(struct bpf_verifier_env *env);
->  static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env);
->  static bool is_tracing_prog_type(enum bpf_prog_type type);
->  static int ref_set_non_owning(struct bpf_verifier_env *env,
-> @@ -7051,6 +7052,7 @@ static int process_spin_lock(struct bpf_verifier_en=
-v *env, struct bpf_reg_state
->  			return err;
->  		}
->  	} else {
-> +		bool was_in_rcu_cs;
->  		void *ptr;
->  		int type;
->
-> @@ -7078,10 +7080,13 @@ static int process_spin_lock(struct bpf_verifier_=
-env *env, struct bpf_reg_state
->  			verbose(env, "%s_unlock cannot be out of order\n", lock_str);
->  			return -EINVAL;
->  		}
-> +		was_in_rcu_cs =3D in_rcu_cs(env);
->  		if (release_lock_state(cur, type, reg->id, ptr)) {
->  			verbose(env, "%s_unlock of different lock\n", lock_str);
->  			return -EINVAL;
->  		}
-> +		if (was_in_rcu_cs && !in_rcu_cs(env))
-> +			invalidate_rcu_protected_refs(env);
->
->  		invalidate_non_owning_refs(env);
->  	}
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/=
-testing/selftests/bpf/prog_tests/task_kfunc.c
-> index e6e95c1416e6..fbd7855712c1 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> @@ -176,6 +176,8 @@ static const char * const success_tests[] =3D {
->  	"test_task_from_pid_current",
->  	"test_task_from_pid_invalid",
->  	"task_kfunc_acquire_trusted_walked",
-> +	"task_kfunc_acquire_after_spin_unlock_non_sleepable",
-> +	"task_kfunc_acquire_after_spin_unlock_explicit_rcu",
->  	"test_task_kfunc_flavor_relo",
->  	"test_task_kfunc_flavor_relo_not_found",
->  };
-> diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_common.h b/tool=
-s/testing/selftests/bpf/progs/task_kfunc_common.h
-> index e9c4fea7a4bb..052c9d0e3e2a 100644
-> --- a/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-> +++ b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-> @@ -20,6 +20,18 @@ struct {
->  	__uint(max_entries, 1);
->  } __tasks_kfunc_map SEC(".maps");
->
-> +struct task_kptr_lock_value {
-> +	struct bpf_spin_lock lock;
-> +	struct task_struct __kptr * task;
-> +};
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__type(key, int);
-> +	__type(value, struct task_kptr_lock_value);
-> +	__uint(max_entries, 1);
-> +} task_kptr_lock_map SEC(".maps");
-> +
->  struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
->  void bpf_task_release(struct task_struct *p) __ksym;
->  struct task_struct *bpf_task_from_pid(s32 pid) __ksym;
-> diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/too=
-ls/testing/selftests/bpf/progs/task_kfunc_failure.c
-> index 8942b5478129..7a0c7ee95511 100644
-> --- a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-> +++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-> @@ -378,3 +378,27 @@ int BPF_PROG(task_kfunc_release_in_map, struct task_=
-struct *task, u64 clone_flag
->
->  	return 0;
->  }
-> +
-> +SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-> +__failure __msg("R1 must be a rcu pointer")
-> +int BPF_PROG(task_kfunc_acquire_after_final_spin_unlock)
-> +{
-> +	struct task_kptr_lock_value *v;
-> +	struct task_struct *task, *acquired;
-> +	int key =3D 0;
-> +
-> +	v =3D bpf_map_lookup_elem(&task_kptr_lock_map, &key);
-> +	if (!v)
-> +		return 0;
-> +
-> +	bpf_spin_lock(&v->lock);
-> +	task =3D v->task;
-> +	bpf_spin_unlock(&v->lock);
-> +	if (!task)
-> +		return 0;
-> +
-> +	acquired =3D bpf_task_acquire(task);
-> +	if (acquired)
-> +		bpf_task_release(acquired);
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_success.c b/too=
-ls/testing/selftests/bpf/progs/task_kfunc_success.c
-> index d63a79ee33dc..2bab7634c9df 100644
-> --- a/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-> +++ b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-> @@ -6,6 +6,7 @@
->  #include <bpf/bpf_helpers.h>
->
->  #include "../bpf_experimental.h"
-> +#include "bpf_misc.h"
->  #include "task_kfunc_common.h"
->
->  char _license[] SEC("license") =3D "GPL";
-> @@ -366,6 +367,53 @@ int BPF_PROG(task_kfunc_acquire_trusted_walked, stru=
-ct task_struct *task, u64 cl
+> @@ -12414,6 +12414,11 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_kfunc_call_
+>  			meta->subprogno =3D reg->subprogno;
+>  			break;
+>  		case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
+> +			if (reg->type & PTR_UNTRUSTED) {
+> +				verbose(env, "%s is an untrusted refcounted kptr\n",
+> +					reg_arg_name(env, argno));
+> +				return -EACCES;
+> +			}
+>  			if (!type_is_ptr_alloc_obj(reg->type)) {
+>  				verbose(env, "%s is neither owning or non-owning ref\n",
+>  					reg_arg_name(env, argno));
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/t=
+ools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> index acd3e81a3916..80b92d7ec9ca 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> @@ -127,6 +127,33 @@ long refcount_acquire_rcu_map_kptr_unchecked_drop(vo=
+id *ctx)
 >  	return 0;
 >  }
 >
-> +SEC("fentry/" SYS_PREFIX "sys_getpgid")
-> +int BPF_PROG(task_kfunc_acquire_after_spin_unlock_non_sleepable)
+> +SEC("?tc")
+> +__failure __msg("is an untrusted refcounted kptr")
+> +long refcount_acquire_after_rcu_unlock(void *ctx)
 > +{
-> +	struct task_kptr_lock_value *v;
-> +	struct task_struct *task, *acquired;
-> +	int key =3D 0;
+> +	struct map_value_refcount_only *mapval;
+> +	struct node_refcount_only *n, *m;
+> +	int idx =3D 0;
 > +
-> +	v =3D bpf_map_lookup_elem(&task_kptr_lock_map, &key);
-> +	if (!v)
-> +		return 0;
-> +
-> +	bpf_spin_lock(&v->lock);
-> +	task =3D v->task;
-> +	bpf_spin_unlock(&v->lock);
-> +	if (!task)
-> +		return 0;
-> +
-> +	acquired =3D bpf_task_acquire(task);
-> +	if (acquired)
-> +		bpf_task_release(acquired);
-> +	return 0;
-> +}
-> +
-> +SEC("fentry.s/" SYS_PREFIX "sys_getpgid")
-> +int BPF_PROG(task_kfunc_acquire_after_spin_unlock_explicit_rcu)
-> +{
-> +	struct task_kptr_lock_value *v;
-> +	struct task_struct *task, *acquired;
-> +	int key =3D 0;
-> +
-> +	v =3D bpf_map_lookup_elem(&task_kptr_lock_map, &key);
-> +	if (!v)
-> +		return 0;
+> +	mapval =3D bpf_map_lookup_elem(&stashed_refcount_only, &idx);
+> +	if (!mapval)
+> +		return 1;
 > +
 > +	bpf_rcu_read_lock();
-> +	bpf_spin_lock(&v->lock);
-> +	task =3D v->task;
-> +	bpf_spin_unlock(&v->lock);
-> +	if (task) {
-> +		acquired =3D bpf_task_acquire(task);
-> +		if (acquired)
-> +			bpf_task_release(acquired);
+> +	n =3D mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 2;
 > +	}
 > +	bpf_rcu_read_unlock();
+> +
+> +	m =3D bpf_refcount_acquire(n);
+> +	if (m)
+> +		bpf_obj_drop(m);
+> +
 > +	return 0;
 > +}
 > +
->  SEC("syscall")
->  int test_task_from_vpid_current(const void *ctx)
->  {
+>  SEC("?tc")
+>  __failure __msg("Unreleased reference id=3D3 alloc_insn=3D{{[0-9]+}}")
+>  long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
 
