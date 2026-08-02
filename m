@@ -1,64 +1,64 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27FEE3195F9
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 20:24:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5942E889C
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 20:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785702280; cv=none; b=u+bEYfb8to5pEv0KhZFmpF3jcHw7ii3Mem8csVa/5+kvN8ufEwoAUe9l1/re7xyU1SdLb0JjA82WPoSkSYHWnpALBWICGvwKigL83ahSABd+PExJqWubFGyehjeAulYl53RITDR0RDcAacS8aWRGV8ftsM4WrL6oOQv6/GhItlI=
+	t=1785702282; cv=none; b=Pa6DmI+fXcsTHjDaJGSUD1lp6GCcqUi8tGT1LZg0ZmZA9+GUxpdSmwacBc3qSvNzDhxMkZ5ZZ0VbKyucNkKPmgy/YGgabg43D7cYxuNoXdIHHNLD4fIYu6FO0tH2HBNJSVUQPG4OAJJah/onA22Fz3B7ajKJEicEQb7ZcXTYLUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785702280; c=relaxed/simple;
-	bh=JtA7+KWTZI5IrlH11sJQg6KPWDI4/2tf6fBc2zdM8bU=;
+	s=arc-20240116; t=1785702282; c=relaxed/simple;
+	bh=rZqZlq13WUFWamD5cUH8KWm73/irTJSbXxYewpiNbmo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ejMZV5H9xlJukbheJhPaDaoACtCN/Saa6qn+eYa0dDNi2pRqfvDhSobwoEbBpVn7Vy/c1gpcZMPVp/WGu/nc99sRGFcf0i+qv4hXsAcWLzPHz3vi1z3GaN3D5yOcdrijwA8S17ycGl5h4uJMDbn8pmVMfUObyrUuOYkh2VAWNrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qITSPZBg; arc=none smtp.client-ip=209.85.214.179
+	 MIME-Version:Content-Type; b=b/SITLaq/YcRhYjnFQm77fqPHU9GSCkYhRqaCox8JPLvEoZpQPpzHkG7kCMgzjB4U907j0hxgfFPlHrYXV3vJiuIY+BAgIRDFDNR5ItXIJ2Os1f8Uqh87zlv+fwLREMUa4KS+QL9jX3iJa7BX9B06YsIeqdt5MZcgYoZ4GSXAVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LlQf6MBY; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qITSPZBg"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cfbbdfa60bso20695475ad.3
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 13:24:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LlQf6MBY"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cfff5f88dbso29997885ad.3
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 13:24:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785702278; x=1786307078; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785702280; x=1786307080; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=YoxESrYKH532kdDMRu842kKI0hmGAo+SQlnBS2Xaedk=;
-        b=qITSPZBgKQ3hB++cOdknRUhlyYsgeviF62DjWFuKdlhinCXGZMnVx/56+wfTqk7JhH
-         J4qSFtrF4uCEHzI3GbS29/m5FVdCPjejjpebERgYh1mbSSD2rKjQcvw3qLfUqtoWSkJt
-         wq4m9jdoD3R9zrSGeT19hwsDqgB/AZUOV8hf5UsdMu5V79b6E30CeD2Tg9Fyrv5mhcwD
-         Jeq+uib6EiAW4Knne7qXTxs4w9/JxaV9VgRJuPg4AtH+9UurpeuRI7CjpzphgTNIDaNV
-         ZQqn8p/6O7V2WV4/Oogg0/MpkRyMLRnRJ1BSlceBSaWrQ2Bv/FS/bqlR7olK/wp+4OHa
-         HOWA==
+        bh=cLuiLudAIUtByBQfABUGlNgCq8xi5/+gVi4LmPchv6g=;
+        b=LlQf6MBYlJUXsS/QxO8aSMJbluas9aSLMVHLjL8BAEbdMtMpWb16AWrQQEF3mk1I2K
+         tbI5lq49Esp5uu9lk6iphOsDhR87qqH2rWtIbBErcPK4eBNL4dTaIv/FnDKNbB9sYVbc
+         Dq8HoyhSAClHGAakmifj8HshnggpcJejLH2/Pbq0VUVx2rkFpPhZCexaY3YEnV+gtJok
+         ceZsAMGe2z1YzyCNgGvPNYzxGMYimd6rX7qq4T76SZc5eAjYvkHz1zLO44oOaoszOuX5
+         0rmoXwULg5WG3AELt4jejpVMadEYBMANUKP4eh4uyXYwFLywtdqkVdQlLGpOT8wZmTk8
+         BEug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785702278; x=1786307078;
+        d=1e100.net; s=20251104; t=1785702280; x=1786307080;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=YoxESrYKH532kdDMRu842kKI0hmGAo+SQlnBS2Xaedk=;
-        b=PczMpvwrljoT+S8qQk4UAjUonAXtZONIc/pcCZNF+tUVjifrC4a5lVtWpZyGPow6OL
-         Fihpn3y0ZU+R35sczIT9CuHE7V4qp4C18U+Aav006lrF9pg5d2cMLb4SabDFJ/2YSaGA
-         5Hbds8ZN+ZcrYnynH6dxioRPeOELjjM902dy+AkUXYXPFO9shrM6pB8NuOCMDtWvUHUR
-         UEgmfxEbdvBlb5vqlgIMrEMzbL32Y83CKHJpgoKj0Sl3aLFrrM0yKg/Ld8+qeldJK4V8
-         0hd6myBaGXZwwPitnj/xF1vr0yVeyuWCKopcAhJT0ebi9RgguwYgM1LqQAy15XWrZVaP
-         YN7Q==
-X-Gm-Message-State: AOJu0Yztu8GWDDYVzzXNG5mR0K9BDBrTgFXX4IHnn8TGX9dhsEqNPVz6
-	AfkouN+oyBKvXdhpcO/9cGg1sQofQSfvERRwwcUpYuzIJ/UaZZnJNgFTmpUhGA==
-X-Gm-Gg: AR+sD103ho6zHJAq7E1acId/ySpF4izmRqpKAUJSBxO7ClomJswSZoy+n98TJmeGB0h
-	gvlMNjURG5l1ur9usmaDltyIIQNJXQ5tLMGvBM73Er5/caS5fAKXwM3cROjBURA2hpCgfLwZppB
-	5Kdx7n1D1bcA2R7N5QmbP+f0LNH4m2K9jBwH8EgS2VbmdEeSJYSWW4yf3CsxaIa1jHDl+lQZt7g
-	P+aplDLItscDDyy7ur/xatkasJ1dUdZlS3cZPPzcR0AQBzjX7W52k52BDXMX3yx8jpT0ykTA2dH
-	/yb1dn9VyrvKEfWfLT2ZMv08wW4Z2gzfhzdQiRDI049Zr5GTJH7uLZeHIrvppEy36WzbVlTYbwp
-	X9BoVFz7/TDxVACQ62S/xKmWv26bQsGK6nh/BHpEUFm5UybENGUszdKMOIS5m56KUJgMiI9A7MB
-	TyH0sr7wBqY3vC582SO0a5jFIhMw2OFLz0t6KkuZIfaqlGL8GCocLeKMH19LEeoEt3mH1S1+wv9
-	CgAkg==
-X-Received: by 2002:a17:902:c40c:b0:2cf:c6f2:6083 with SMTP id d9443c01a7336-2d0523bd68bmr73395215ad.33.1785702278301;
-        Sun, 02 Aug 2026 13:24:38 -0700 (PDT)
+        bh=cLuiLudAIUtByBQfABUGlNgCq8xi5/+gVi4LmPchv6g=;
+        b=jXnZkTCY4uRHxd/ad5j2pwhWGz8D2SIXEMfjNiajYMkdoLp0GRD6gF2CJpUMJuAF68
+         Luvh+5jri7jvuKKAKFMw46yfyMG2jig5+ZYaW+Lrr6IB2lqN3rOYo5wsr+901zo/vZEw
+         tmx9PI/mMk3kgii3edTrlIp3EVdywQVWuwqxr/i7PEucGBvHxhK+sF6mDltw2EbyXZGP
+         Amcg0WgNvmZBFHLG7FW1HM5vTPChWS4I9VAx/sVVdIe2Uv0lAwDZzXVB/8VaqQF/E0Mi
+         Gc/t8hi2H09QxRvxZC//cpKrMinvYqlM1qAnp0gLwlfsbR/6ZZ2dFi6kHSRovfkPtFUm
+         K4UQ==
+X-Gm-Message-State: AOJu0Yz/svDlBuhG+jD9igBmhW6N0uC5jTfryb7uWRhvV4GdvirgNBAS
+	airXd5iwqwZP04gxtdJvfV17XDaUA4TCSxtkpnu6t7hukJY/lhpErX2newzTtA==
+X-Gm-Gg: AR+sD133OCIeMIRTGzgmfnsxeeW5mJZsVv/4OHjL59ZQhPVex2aXL421u+sP38/jvmj
+	OFXHe/Kp3gUQMRUnJu5gvCTojfHIvO4a23u6tYJYMtzIhQWCBFJtU62U1Vg/EbdZRm/cXEDR505
+	g/gOa/9oQBP+E0IuOzcIUTJzL4vOiN6V/GmlKrc+MhkOSLci4vTQZEH8sm1pSClhwDAZzIHfJC2
+	hrjxA0m3iLd9uv4o6gxwlRX+ADwyGrCQ3itwnUrCu4B7C0esAJfTbgUUMQUrLlhCiQjHz8b8SaF
+	zRe28O1HPPYEGdNwUBjUKSxnqdmDayDty5pbrg2Dg9nOFaw8aRrFawePdTx/plCNXVX7dE3LEgW
+	7ElkOVzmPSbmh4MsWXj4eHDBYHU1ZN8AMXuTCU1cmnBfdmFmvApgbXfW/kKtFU+vCCnUUuF1IwR
+	6UzXiA5rIV958MRnP5x049m913PLKeDe+X5LeVb6Oc8/mdqcuQafpvYwDHX5V78K7Qws4OwV/lC
+	gaZ6Q==
+X-Received: by 2002:a17:902:e849:b0:2d0:3412:a3f0 with SMTP id d9443c01a7336-2d0522340damr70024455ad.19.1785702279864;
+        Sun, 02 Aug 2026 13:24:39 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04b0ea128sm28590865ad.40.2026.08.02.13.24.36
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04b0ea128sm28590865ad.40.2026.08.02.13.24.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 13:24:37 -0700 (PDT)
+        Sun, 02 Aug 2026 13:24:39 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -70,9 +70,9 @@ Cc: andrii@kernel.org,
 	iii@linux.ibm.com,
 	gimm78064@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v3 4/5] bpf: simplify the bpf_is_reg64()
-Date: Sun,  2 Aug 2026 13:24:20 -0700
-Message-ID: <20260802-static-zext-v3-4-3456b2604574@gmail.com>
+Subject: [PATCH bpf-next v3 5/5] selftests/bpf: verify zext_dst annotations for various instructions
+Date: Sun,  2 Aug 2026 13:24:21 -0700
+Message-ID: <20260802-static-zext-v3-5-3456b2604574@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260802-static-zext-v3-0-3456b2604574@gmail.com>
 References: <20260802-static-zext-v3-0-3456b2604574@gmail.com>
@@ -85,210 +85,448 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-After the previous commit bpf_is_reg64() is only used in a context
-where destination register's property is queried, and only for
-instructions for which insn_def_regno() >= 0.
-Hence, simplify the function by:
-- removing unused parameters;
-- removing code paths considering BPF_JMP{,32} instructions;
-- streamlining the condition expressions.
+Includes the following test cases:
+- a test showing that zero extension flags do not propagate through
+  state pruning in the unpatched kernel.
+- a 32-bit subregister consumed by MOV32 and ALU32 operations
+  (never zext'ed);
+- a 64-bit MOV (never zext'ed);
+- a narrow (32-bit) BPF_LDX load whose result is read as 64-bit;
+- 32-bit atomic fetch_add and cmpxchg whose result is read as 64-bit;
+- a CFG case where a 32-bit definition's upper half is used only on one
+  of two branches;
+- no zext for dead registers;
+- LD_ABS defines only lower 32 bits, hence needs zext when the result
+  is used as 64-bits;
+- helper, kfunc and subprogram parameters are considered to use full
+  64 bits;
+- a 32-bit subregister consumed by JMP32 (X/K) operations;
+- a 32-bit subregister consumed by JMP (X/K) operations;
+- a 64-bit register consumed by both JMP and JMP32 operations
+  (never zext'ed);
+- ALU64 operation on arena pointer;
+- memory loads using BPF_PROBE_MEM instructions.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |  1 -
- kernel/bpf/fixups.c          | 51 ++++++++++++++++++++++---
- kernel/bpf/verifier.c        | 90 --------------------------------------------
- 3 files changed, 45 insertions(+), 97 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/verifier.c |   2 +
+ tools/testing/selftests/bpf/progs/verifier_zext.c | 388 ++++++++++++++++++++++
+ 2 files changed, 390 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 956243547446..39b0db2a4f17 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1626,7 +1626,6 @@ struct bpf_kfunc_desc_tab {
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index be97f6887f0e..fba562c81969 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -124,6 +124,7 @@
+ #include "verifier_jit_inline.skel.h"
+ #include "irq.skel.h"
+ #include "verifier_ctx_ptr_param.skel.h"
++#include "verifier_zext.skel.h"
  
- /* Functions exported from verifier.c, used by fixups.c */
--bool bpf_is_reg64(struct bpf_insn *insn, u32 regno, struct bpf_reg_state *reg, enum bpf_reg_arg_type t);
- void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len);
- void bpf_mark_subprog_exc_cb(struct bpf_verifier_env *env, int subprog);
- bool bpf_allow_tail_call_in_subprogs(struct bpf_verifier_env *env);
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 6125598d16a8..7b3510d46b37 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -44,6 +44,49 @@ static int insn_def_regno(const struct bpf_insn *insn)
- 	}
- }
+ #define MAX_ENTRIES 11
  
-+/*
-+ * For use only in combination with insn_def_regno() >= 0.
-+ * Returns TRUE if the destination register operates on 64-bit,
-+ * otherwise return FALSE.
-+ */
-+static bool bpf_is_reg64(struct bpf_insn *insn)
+@@ -277,6 +278,7 @@ void test_irq(void)			      { RUN(irq); }
+ void test_verifier_mtu(void)		      { RUN(verifier_mtu); }
+ void test_verifier_jit_inline(void)               { RUN(verifier_jit_inline); }
+ void test_verifier_ctx_ptr_param(void)       { RUN(verifier_ctx_ptr_param); }
++void test_verifier_zext(void)                 { RUN_TESTS(verifier_zext); }
+ 
+ static int init_test_val_map(struct bpf_object *obj, char *map_name)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_zext.c b/tools/testing/selftests/bpf/progs/verifier_zext.c
+new file mode 100644
+index 000000000000..2dd3ea661b77
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_zext.c
+@@ -0,0 +1,388 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "../../../include/linux/filter.h"
++#include <bpf_arena_common.h>
++#include <bpf/bpf_core_read.h>
++#include "bpf_misc.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 1);
++} arena SEC(".maps");
++
++extern long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
++
++/* to retain debug info for BTF generation */
++void __kfunc_btf_root(void)
 +{
-+	u8 class = BPF_CLASS(insn->code);
-+	u8 mode = BPF_MODE(insn->code);
-+	u8 size = BPF_SIZE(insn->code);
-+	u8 op = BPF_OP(insn->code);
-+	bool mode_mem;
-+
-+	/* subregister endiness swap */
-+	if ((class == BPF_ALU || class == BPF_ALU64) && op == BPF_END && insn->imm != 64)
-+		return false;
-+
-+	/* w0 += 1 */
-+	if (class == BPF_ALU && op != BPF_END)
-+		return false;
-+
-+	/* cast from as(1) to as(0), PTR_TO_ARENA is 32-bit */
-+	if (insn->code == (BPF_ALU64 | BPF_MOV | BPF_X) &&
-+	    insn->off == BPF_ADDR_SPACE_CAST && insn->imm == 1)
-+		return false;
-+
-+	/* non 64-bit, non signed extended loads */
-+	mode_mem = mode == BPF_MEM || mode == BPF_PROBE_MEM || mode == BPF_PROBE_MEM32;
-+	if (class == BPF_LDX && mode_mem && size != BPF_DW)
-+		return false;
-+
-+	/* atomics, see insn_def_regno() */
-+	if (class == BPF_STX && size != BPF_DW)
-+		return false;
-+
-+	/* both LD_IND and LD_ABS return 32-bit data. */
-+	if (class == BPF_LD && (mode == BPF_IND || mode == BPF_ABS))
-+		return false;
-+
-+	/* Conservatively return true at default. */
-+	return true;
++	bpf_kfunc_call_test4(0, 0, 0, 0);
++	bpf_arena_alloc_pages(0, 0, 0, 0, 0);
++	bpf_rdonly_cast(0, 0);
 +}
 +
- /*
-  * Return the 32-bit subregister defined by INSN, or -1 if INSN does not
-  * explicitly define a 32-bit value.
-@@ -52,7 +95,7 @@ int bpf_insn_def32(struct bpf_insn *insn)
- {
- 	int dst_reg = insn_def_regno(insn);
- 
--	if (dst_reg < 0 || bpf_is_reg64(insn, dst_reg, NULL, DST_OP))
-+	if (dst_reg < 0 || bpf_is_reg64(insn))
- 		return -1;
- 
- 	return dst_reg;
-@@ -619,11 +662,7 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
- 			if (load_reg == -1)
- 				continue;
- 
--			/* NOTE: arg "reg" (the fourth one) is only used for
--			 *       BPF_STX + SRC_OP, so it is safe to pass NULL
--			 *       here.
--			 */
--			if (bpf_is_reg64(&insn, load_reg, NULL, DST_OP)) {
-+			if (bpf_is_reg64(&insn)) {
- 				if (class == BPF_LD &&
- 				    BPF_MODE(code) == BPF_IMM)
- 					i++;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e51cf5238f60..45d4c0a00a5d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3027,96 +3027,6 @@ static void mark_stack_slots_scratched(struct bpf_verifier_env *env,
- 		mark_stack_slot_scratched(env, spi - i);
- }
- 
--/* This function is supposed to be used by the following 32-bit optimization
-- * code only. It returns TRUE if the source or destination register operates
-- * on 64-bit, otherwise return FALSE.
-- */
--bool bpf_is_reg64(struct bpf_insn *insn,
--	      u32 regno, struct bpf_reg_state *reg, enum bpf_reg_arg_type t)
--{
--	u8 code, class, op;
--
--	code = insn->code;
--	class = BPF_CLASS(code);
--	op = BPF_OP(code);
--	if (class == BPF_JMP) {
--		/* BPF_EXIT for "main" will reach here. Return TRUE
--		 * conservatively.
--		 */
--		if (op == BPF_EXIT)
--			return true;
--		if (op == BPF_CALL) {
--			/* BPF to BPF call will reach here because of marking
--			 * caller saved clobber with DST_OP_NO_MARK for which we
--			 * don't care the register def because they are anyway
--			 * marked as NOT_INIT already.
--			 */
--			if (insn->src_reg == BPF_PSEUDO_CALL)
--				return false;
--			/* Helper call will reach here because of arg type
--			 * check, conservatively return TRUE.
--			 */
--			if (t == SRC_OP)
--				return true;
--
--			return false;
--		}
--	}
--
--	if (class == BPF_ALU64 && op == BPF_END && (insn->imm == 16 || insn->imm == 32))
--		return false;
--
--	if (class == BPF_ALU64 || class == BPF_JMP ||
--	    (class == BPF_ALU && op == BPF_END && insn->imm == 64))
--		return true;
--
--	if (class == BPF_ALU || class == BPF_JMP32)
--		return false;
--
--	if (class == BPF_LDX) {
--		if (t != SRC_OP)
--			return BPF_SIZE(code) == BPF_DW || BPF_MODE(code) == BPF_MEMSX;
--		/* LDX source must be ptr. */
--		return true;
--	}
--
--	if (class == BPF_STX) {
--		/* BPF_STX (including atomic variants) has one or more source
--		 * operands, one of which is a ptr. Check whether the caller is
--		 * asking about it.
--		 */
--		if (t == SRC_OP && reg->type != SCALAR_VALUE)
--			return true;
--		return BPF_SIZE(code) == BPF_DW;
--	}
--
--	if (class == BPF_LD) {
--		u8 mode = BPF_MODE(code);
--
--		/* LD_IMM64 */
--		if (mode == BPF_IMM)
--			return true;
--
--		/* Both LD_IND and LD_ABS return 32-bit data. */
--		if (t != SRC_OP)
--			return  false;
--
--		/* Implicit ctx ptr. */
--		if (regno == BPF_REG_6)
--			return true;
--
--		/* Explicit source could be any width. */
--		return true;
--	}
--
--	if (class == BPF_ST)
--		/* The only source register for BPF_ST is a ptr. */
--		return true;
--
--	/* Conservatively return true at default. */
--	return true;
--}
--
- static int __check_reg_arg(struct bpf_verifier_env *env, struct bpf_reg_state *regs, u32 regno,
- 			   enum bpf_reg_arg_type t)
- {
++SEC("socket")
++__flag(BPF_F_TEST_STATE_FREQ)
++__flag(BPF_F_TEST_RND_HI32)
++__success __retval(0)
++__naked void zext_lost_across_checkpoint(void)
++{
++	asm volatile ("									\
++	call %[bpf_ktime_get_ns];							\
++	r8 = r0;									\
++	r6 = 0xdeadbeefcafebabe ll;	/* inject some value for r6's upper half */	\
++	if r8 != 0 goto 1f;		/* fall-through cached first, branch pruned */	\
++	r6 = 32;			/* full 64-bit def */				\
++	goto 2f;									\
++1:	w6 = 32;			/* 32-bit def, zext mark lost */		\
++2:	r0 = r6;			/* buggy verifier believed upper 32 bits are 0 */ \
++					/* and thus did not zero extended w6 = 32. */	\
++	r0 >>= 32;									\
++	exit;										\
++"	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
++
++/* 32-bit ALU result read as 64-bit -> zext */
++SEC("socket")
++__success __log_level(2)
++__msg("w1 = w0{{ +}}; zext")
++__naked void zext_alu32_hi_used(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w1 = w0;					\
++	r0 = r1;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* 32-bit ALU result read only as 32-bit -> no zext */
++SEC("socket")
++__success __log_level(2)
++__not_msg("; zext")
++__naked void no_zext_alu32_hi_unused(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w1 = w0;		/* MOV */		\
++	w2 = w1;					\
++	w2 += w1;		/* ALU32, BPF_X */	\
++	w2 += 1;		/* ALU32, BPF_K */	\
++	w2 = w2;		/* keep w2 alive for previous instruction */ \
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* 64-bit definition is never zero extended */
++SEC("socket")
++__success __log_level(2)
++__not_msg("r1 = r0{{.*}}; zext")
++__naked void no_zext_mov64(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r1 = r0;					\
++	r0 = r1;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* Narrow load result read as 64-bit -> zext */
++SEC("socket")
++__success __log_level(2)
++__msg("r1 = *(u32 *)(r10 -8){{ +}}; zext")
++__naked void zext_narrow_load_hi_used(void)
++{
++	asm volatile ("					\
++	r0 = 0;						\
++	*(u64 *)(r10 - 8) = r0;				\
++	r1 = *(u32 *)(r10 - 8);				\
++	r0 = r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/* 32-bit atomic fetch result read as 64-bit -> zext */
++SEC("socket")
++__success __log_level(2)
++__msg("r1 = atomic_fetch_add((u32 *)(r10 -8), r1){{ +}}; zext")
++__naked void zext_atomic_fetch32_hi_used(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64 *)(r10 - 8) = r1;				\
++	w1 = 1;						\
++	.8byte %[fetch_add32];				\
++	r0 = r1;					\
++	exit;						\
++"	:
++	: __imm_insn(fetch_add32,
++		     BPF_ATOMIC_OP(BPF_W, BPF_ADD | BPF_FETCH, BPF_REG_10, BPF_REG_1, -8))
++	: __clobber_all);
++}
++
++/* 32-bit atomic cmpxchg result (r0) read as 64-bit -> zext */
++SEC("socket")
++__success __log_level(2)
++__msg("r0 = atomic_cmpxchg((u32 *)(r10 -8), r0, r1){{ +}}; zext")
++__naked void zext_cmpxchg32_hi_used(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64 *)(r10 - 8) = r1;				\
++	w0 = 0;						\
++	w1 = 1;						\
++	.8byte %[cmpxchg32];				\
++	r2 = r0;					\
++	r0 = r2;					\
++	exit;						\
++"	:
++	: __imm_insn(cmpxchg32,
++		     BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, BPF_REG_10, BPF_REG_1, -8))
++	: __clobber_all);
++}
++
++/* 32-bit def before a branch, upper half used on one branch -> zext */
++SEC("socket")
++__success __log_level(2)
++__msg("w6 = 32{{ +}}; zext")
++__naked void zext_cfg_hi_used_one_branch(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w6 = 32;					\
++	if r0 == 0 goto 1f;				\
++	r0 = r6;					\
++	exit;						\
++1:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* r1's upper half is dead, so 'w1 = 1' must NOT be marked for zero extension. */
++SEC("socket")
++__success __log_level(2)
++__not_msg("w1 = 1{{.*}}; zext")
++__naked void no_zext_other_reg_hi_used(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r6 = r0;					\
++	r6 <<= 32;					\
++	w1 = 1;						\
++	r0 = r6;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* LD_ABS defines r0; when r0 is read as 64-bit it must be zero extended */
++SEC("socket")
++__success __log_level(2)
++__msg("r0 = *(u8 *)skb[0]{{.*}}; zext")
++__naked void zext_ld_abs_hi_used(void)
++{
++	asm volatile ("					\
++	r6 = r1;					\
++	r0 = *(u8 *)skb[0];				\
++	r7 = r0;					\
++	r0 = r7;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/* Helper parameters are read as 64-bit (call_use_mask() fallback) */
++SEC("socket")
++__success __log_level(2)
++__msg("w2 = 1{{ +}}; zext")
++__naked void helper_param_read_as_64bit(void)
++{
++	asm volatile ("					\
++	r1 = r10;					\
++	r1 += -8;					\
++	w2 = 1;						\
++	call %[bpf_trace_printk];			\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_trace_printk)
++	: __clobber_all);
++}
++
++static __used __naked int subprog_reads_arg_as_64bit(void)
++{
++	asm volatile ("					\
++	r0 = r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/* subprogram parameters are conservatively read as 64-bit */
++SEC("socket")
++__success __log_level(2)
++__msg("w1 = w0{{ +}}; zext")
++__naked void subprog_param_read_as_64bit(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w1 = w0;					\
++	call subprog_reads_arg_as_64bit;		\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* kfunc parameters are zero extended */
++SEC("tc")
++__success __log_level(2)
++__msg("w1 = 1{{ +}}; zext")
++__msg("w2 = 1{{ +}}; zext")
++__msg("w3 = 1{{ +}}; zext")
++__msg("w4 = 1{{ +}}; zext")
++__naked void kfunc_param_read_per_btf(void)
++{
++	asm volatile ("					\
++	w1 = 1;						\
++	w2 = 1;						\
++	w3 = 1;						\
++	w4 = 1;						\
++	call bpf_kfunc_call_test4;			\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__success __log_level(2)
++__not_msg("; zext")
++__naked void alu32_and_32bit_conditional(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w1 = w0;					\
++	if w1 > 42 goto 1f;		/* BPF_K */	\
++	w2 = 28;					\
++	if w2 > w1 goto 1f;		/* BPF_X */	\
++	r0 = 0;						\
++1:	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__success __log_level(2)
++__msg("w1 = w0{{ +}}; zext")
++__naked void alu32_and_64bit_conditional(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w1 = w0;					\
++	if r1 > 42 goto 1f;		/* BPF_K */	\
++	r2 = 28;					\
++	if r2 > r1 goto 1f;		/* BPF_X */	\
++	r0 = 0;						\
++1:	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__success __log_level(2)
++__not_msg("; zext")
++__naked void alu64_and_conditionals(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r1 = r0;					\
++	if w1 > 42 goto 1f;		/* BPF_K */	\
++	if r1 > 42 goto 1f;		/* BPF_K */	\
++	r2 = 28;					\
++	if w2 > w1 goto 1f;		/* BPF_X */	\
++	if r2 > r1 goto 1f;		/* BPF_X */	\
++	r0 = 0;						\
++1:	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__arch_s390x
++__xlated("7: w1 = w0")
++__xlated("8: w1 = w1")
++__xlated("9: w1 += 8")
++__xlated("10: w1 = w1")
++__naked void arena_ptr(void)
++{
++	asm volatile ("					\
++	r1 = %[arena] ll;				\
++	r2 = 0;						\
++	r3 = 1;						\
++	r4 = 0;						\
++	r5 = 0;						\
++	call %[bpf_arena_alloc_pages];			\
++	r1 = addr_space_cast(r0, 0, 1);	/* needs zext */\
++	r1 += 8;			/* needs zext */\
++	*(u64 *)(r1 +0) = 42;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_arena_alloc_pages),
++	  __imm_addr(arena)
++	: __clobber_all);
++}
++
++#endif
++
++/* Check if probe mem loads keep their zero extension. */
++SEC("socket")
++__success __log_level(2)
++__arch_s390x
++__xlated("3: r1 = *(u64 *)(r0 +0)")
++__xlated("4: r2 = *(u32 *)(r0 +0)")
++__xlated("5: w2 = w2")
++__xlated("6: r3 = *(u16 *)(r0 +0)")
++__xlated("7: w3 = w3")
++__xlated("8: r4 = *(u8 *)(r0 +0)")
++__xlated("9: w4 = w4")
++__naked void probe_mem(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	r2 = 0;						\
++	call %[bpf_rdonly_cast];			\
++	r1 = *(u64 *)(r0 + 0);	/* BPF_PROBE_MEM */	\
++	r2 = *(u32 *)(r0 + 0);	/* BPF_PROBE_MEM */	\
++	r3 = *(u16 *)(r0 + 0);	/* BPF_PROBE_MEM */	\
++	r4 = *(u8 *)(r0 + 0);	/* BPF_PROBE_MEM */	\
++	r0 = r1;		/* make the registers used */ \
++	r0 += r2;					\
++	r0 += r3;					\
++	r0 += r4;					\
++1:	exit;						\
++"	:
++	: __imm(bpf_rdonly_cast)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
 
 -- 
 2.53.0
