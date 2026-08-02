@@ -1,151 +1,180 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8748E489882;
-	Sun,  2 Aug 2026 09:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D52E1F30BB
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 11:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785663901; cv=none; b=Qga+IzQZ3XfzhK+5FX9K5QA1yYruN3aldymGFRx7M8/hTGdRJUXPUbouN0wU/73MxQE6AIi+umEOCOpTuOltEFqN/D0if4YTme1ImiIEyPEbOJ+kwxJCUG1Fbp9D6avKaKSp+3lgyOraO4IdDPOFqtwtKk0rwOoNF/ALPHNNzGU=
+	t=1785669694; cv=none; b=Y9RugyyOa8p4LhJAdRsWosDMY1FYR+VgZ8KeYRAkXzkn4jpkAPULM4GyFYtgfzyx6glidUMA12NJ9ifR736otxgiQoxTzqKLmF6BIFHZq4g+86Ql+Stk0sdaiyOcl2jCw70sr2Ee6dMXiuIuvhPhBRReGy5IumMkxwidE3IQWE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785663901; c=relaxed/simple;
-	bh=Ww/YiWup2i15UucCBJ3OoekI3XS9iRZ0GCoteRPBGjg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=S75GXmJjfo7a0RocGYS6i2uSWg7PDmr9a33jGA5aCia8OPLd3dIIXRciJPuA7BpooMz0iKjL1V/vdQvSo3o3SOHo3fhyw6eNj7/T6LgZ6orXYWAuTEHF6P506xreUrxpvWsltG44SUO6Pfy3NmGrzAt1FNFzJyFf86oZeza/EnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hCZf82C0kzKHMbX;
-	Sun,  2 Aug 2026 17:44:48 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 75FD34056E;
-	Sun,  2 Aug 2026 17:44:49 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBHN0aQEW9qkilYAw--.4417S2;
-	Sun, 02 Aug 2026 17:44:49 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Andy Chiu <andybnac@gmail.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	bpf@vger.kernel.org,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH] riscv: ftrace: Fix ftrace_modify_call failure on kprobed functions
-Date: Sun,  2 Aug 2026 09:49:29 +0000
-Message-Id: <20260802094929.3978390-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1785669694; c=relaxed/simple;
+	bh=SAx48VPpjV1C3AuUQ2meuLcGqLHTYa9IkFEkWSYx9ak=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nmJx3+2LvXdZMwQCcY2wYdq5lszImVmx/bKUTgeJ7iDR+2SSLO/3uH4ge/fkOv1dgTF/X2BawF8lbb1XY/dR+kv2zRLh2Ezg8Yz+NcXofZgkv+AZ2n1wxiV4iL958DiKwYx9gN50lYPJgreZC8sxf1tkKf/iSAm7zbcFfFry/04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VGcWG6t2; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VGcWG6t2"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so2332025a91.0
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 04:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785669693; x=1786274493; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=bek7NZHZI39nYrjpJV/gsIRm/qNeyP8rpucs5jMbA8c=;
+        b=VGcWG6t2yglWSpOFmCtmfeLpYHaS6laA6m3x73sE1C8k69HdT7NNzyhBZ8NU7BOi/4
+         BAizjLMVRPd+DAvDGtHZn6JdKG5XwK3kcvC71GwtNUt5SOfMx7EGqhWfFSWgyavWYMfT
+         OXYw0iiJCEc4YT7NQimtt86yJ/Yc3Z90ZjEs65UMN41RrA/cu70u7cmsjiwQA9EDwO2l
+         J3uWEy2sdfPnrDOuI7pKnhq/L5aKff8nApkb+0T/RZWIEtvpeSz5bOXRPTS5gJDukYVN
+         CU54/hGgP1M6I+zy5uZwcrAM+Q2Lh1mkCgIsEfi44Q7kA8HKNcwUMI9yXm9Cj645Y3K1
+         MnzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785669693; x=1786274493;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bek7NZHZI39nYrjpJV/gsIRm/qNeyP8rpucs5jMbA8c=;
+        b=F0YkUkCAmQ6kBv1GfIQozt1MqytZveaiUlFRreLxt9FnC39MFLNs5mMK3fwK6lmU78
+         nK57x9Ww4cSCXHXuUEesFmqvdlUDU+lQBcI6yeyA4NVCe5ZHzun7V0rWB1vLa9y2gwxp
+         tpUWUF2ulFjlD9YDs0HyIzE6W1UyzUD5Vw+1o38nabUYnDN9mRXTf43RQekUO8bNkTm+
+         vZKpMCtsJkHnXldUMziZsWg+7it40PDBtAPrKqUDicZ7D7qxXP5WGV/l7AxYQnPF8gyQ
+         zfkBWbEwjG2J8yrfylFHl/ZY1/y7Vb5JCm+9+YH0HQXRqPVW9RH0KZOGWjVsTQSBEUfr
+         XYVg==
+X-Gm-Message-State: AOJu0Yy5c7w6D4JPenGbJn+6rBex4/oZkIucyb4tKoeyTCDIzErNEZjM
+	u7ylnMxvyL50Sb4UPz6/2gcFxM7M9QZdBLQoj+PsMo7eBLPiUlgeHRwi
+X-Gm-Gg: AR+sD13yolqMLwmhO2QcTxAIjqr9PuieHF9GqqyXM65zpLe2+w9bVubLXSO4RLU0eIa
+	zfnoaEWjYgfjDzMjJAR7QmBTgVLD4juCoY/4J8cp7dH+LASSyrb7X/qqkE9L0N1aMft5agBgPj1
+	zb4+glTzZwm/j6ywYy0Qh1FqZMV5aXJjUT/JkH0g35zJRAMyNXWD1B88ddRycCma+xw6jQW3g+5
+	35D+AD85x9/50CZllF/X4rdjUf81iRVhMwlTK+wnnH+EVoZqomcfP9VY7fcuvIgm0Wbilxherpc
+	S2zV3WM+8DiaBczpVmDIi0x6t/yBKzfO6shev+qsjX087reGriLLci9nJSLH0pm93lwfD7HTW//
+	qvntw6OuuXaeZZ9Z3Ks9WEd9sjQV9y9BB2reaBEpfoAzASg2vos8iSqwep+Dp/UGVhKppXyg20l
+	H+HuIEe3eiJqxAGUK2gG7eEnbJNjGDruRMmHDu3CcN0A28XJ4HH9QzuMoBDOp2xpmzCXtW2O00m
+	dBvgBF2ThtFdwbQ
+X-Received: by 2002:a17:90a:dfc4:b0:38e:6aa7:68ad with SMTP id 98e67ed59e1d1-38fbc409a15mr5983638a91.5.1785669692687;
+        Sun, 02 Aug 2026 04:21:32 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38fb30a3c75sm2723278a91.9.2026.08.02.04.21.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Aug 2026 04:21:32 -0700 (PDT)
+Message-ID: <c4f702276cffa8d133bea614a9eac94164357870.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/5] bpf: simplify the bpf_is_reg64()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Date: Sun, 02 Aug 2026 04:21:28 -0700
+In-Reply-To: <20260801013453.2B6081F00AC4@smtp.kernel.org>
+References: <20260731-static-zext-v2-0-da4aa161e8c5@gmail.com>
+	 <20260731-static-zext-v2-4-da4aa161e8c5@gmail.com>
+	 <20260801013453.2B6081F00AC4@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBHN0aQEW9qkilYAw--.4417S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw4kAF4DArW5CF45Wr1fXrb_yoW5trW5pF
-	yakw1qkr4rAanrKFZrKwn8urs7t3yDA34UAF93Ja4rAa4qkr15Jw4Ikr4ktr98ArZ8Jryf
-	Z34qyr4UGryUAw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
-	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-	zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
-	CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-	nIWIevJa73UjIFyTuYvjfUonmRUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
+On Sat, 2026-08-01 at 01:34 +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+> - [High] `bpf_is_reg64()` incorrectly identifies 32-bit `BPF_PROBE_MEM` a=
+nd `BPF_PROBE_MEM32` loads as 64-bit defining instructions, bypassing expli=
+cit zero-extensions.
+> - [Low] Stale comment referencing a deleted parameter of `bpf_is_reg64`.
+> --
+>=20
+> --- Patch [4]: [PATCH bpf-next v2 4/5] bpf: simplify the bpf_is_reg64() -=
+--
+> commit ee97fd37754941b6dd81dccf5f68e7f82c74ea6d
+> Author: Eduard Zingerman <eddyz87@gmail.com>
+>=20
+> bpf: simplify the bpf_is_reg64()
+>=20
+> This patch simplifies the bpf_is_reg64() function by removing unused
+> parameters and code paths related to BPF_JMP instructions. It also
+> streamlines the condition expressions for identifying 64-bit registers.
+>=20
+> > diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> > index 6125598d16a84..ac0a388b40218 100644
+> > --- a/kernel/bpf/fixups.c
+> > +++ b/kernel/bpf/fixups.c
+> [ ... ]
+> > @@ -44,6 +44,42 @@ static int insn_def_regno(const struct bpf_insn *ins=
+n)
+> > =C2=A0	}
+> > =C2=A0}
+> > =C2=A0
+> > +/*
+> > + * For use only in combination with insn_def_regno() >=3D 0.
+> > + * Returns TRUE if the destination register operates on 64-bit,
+> > + * otherwise return FALSE.
+> > + */
+> > +static bool bpf_is_reg64(struct bpf_insn *insn)
+> > +{
+> > +	u8 class =3D BPF_CLASS(insn->code);
+> > +	u8 mode =3D BPF_MODE(insn->code);
+> > +	u8 size =3D BPF_SIZE(insn->code);
+> > +	u8 op =3D BPF_OP(insn->code);
+> [ ... ]
+> > +	/* non 64-bit loads */
+> > +	if (class =3D=3D BPF_LDX && mode =3D=3D BPF_MEM && size !=3D BPF_DW)
+> > +		return false;
+>=20
+> [Severity: High]
+> Does this condition miss BPF_PROBE_MEM and BPF_PROBE_MEM32 loads?
+>=20
+> Because this check strictly matches the BPF_MEM mode, it seems these othe=
+r
+> 32-bit load modes would bypass this check and fall through to returning t=
+rue.
+>=20
+> Could this cause bpf_insn_def32() to inappropriately return -1, skipping
+> necessary zero-extension for architectures that rely on explicit BPF_ZEXT=
+_REG
+> patching? If so, the upper 32 bits might contain garbage data, potentiall=
+y
+> leading to out-of-bounds memory accesses if the register is later used in=
+ an
+> address calculation.
 
-We are frequently hitting the following splat during the riscv bpf
-selftests:
+I don't think this is exploitable. Both BPF_PROBE_MEM and BPF_PROBE_MEM32 a=
+re
+inserted by bpf_convert_ctx_accesses, that directly modify insn->code,
+w/o call to bpf_patch_*(). Hence bpf_is_reg64 is not invoked for these
+converted instructions second time. Hence the aux->zext_dst flag for such
+instructions retains it's original inference.
 
-00000000026dc75a: expected (7c3ff297) but got (00100073)
-------------[ ftrace bug ]------------
-ftrace failed to modify
-[<ffffffff03c44c1c>] bpf_kfunc_common_test+0x4/0x20 [bpf_testmod]
- actual:   e7:82:c2:ce
-Updating ftrace call site to call a different ftrace function
-ftrace record flags: 80100002
- (2)
- expected tramp: ffffffff80043904
-------------[ cut here ]------------
-WARNING: kernel/trace/ftrace.c:2278 at ftrace_bug+0x46e/0x4b0, CPU#1: test_progs/98
-...
-[<ffffffff80008f4e>] ftrace_bug+0x46e/0x4b0
-[<ffffffff803d3e86>] ftrace_replace_code+0x16e/0x170
-[<ffffffff803d42b6>] ftrace_modify_all_code+0x12e/0x1b8
-[<ffffffff800430f4>] arch_ftrace_update_code+0x14/0x28
-[<ffffffff803e0324>] ftrace_startup+0x14c/0x2a0
-[<ffffffff803e133c>] ftrace_startup_subops+0x584/0x1050
-[<ffffffff804500e6>] register_ftrace_graph+0x4e6/0x1018
-[<ffffffff804cf9f6>] register_fprobe_ips+0xc66/0x12f8
-[<ffffffff8049abe8>] bpf_kprobe_multi_link_attach+0x5d8/0xe68
-[<ffffffff8050fcaa>] __sys_bpf+0x3d5a/0x47f0
-[<ffffffff805107ee>] __riscv_sys_bpf+0xae/0x168
-[<ffffffff80034d78>] syscall_handler+0x60/0x100
-[<ffffffff8228b4f4>] do_trap_ecall_u+0x174/0x208
-[<ffffffff822b69c4>] handle_exception+0x16c/0x178
+Nevertheless, I modified condition to include BPF_PROBE_MEM{,32}
+to make it future proof.
 
-After debugging, it can be triggered by similar commands below:
-```
-echo do_nanosleep > set_ftrace_filter
-echo function > current_tracer
-echo 'p do_nanosleep' > kprobe_events
-echo 1 > events/kprobes/enable
-echo 'f do_nanosleep' > dynamic_events
-echo 1 > events/fprobes/enable
-```
-
-The reason is that attaching a kprobe to an ftrace-traced function entry
-replaces its initial auipc insn with ebreak. When ftrace_modify_call
-later runs, it expects auipc insn, so verification fails and triggers
-ftrace_bug.
-
-The expected auipc logic remains conceptually unchanged, and kprobe
-single-stepping ensures normal execution. Therefore, if the first insn
-is ebreak, bypassing the check to continue patching the jalr insn is
-safe and avoids ftrace failures.
-
-Fixes: b2137c3b6d7a ("riscv: ftrace: prepare ftrace for atomic code patching")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- arch/riscv/kernel/ftrace.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-index b430edfb83f4..be8b68514417 100644
---- a/arch/riscv/kernel/ftrace.c
-+++ b/arch/riscv/kernel/ftrace.c
-@@ -12,6 +12,7 @@
- #include <linux/stop_machine.h>
- #include <asm/cacheflush.h>
- #include <asm/text-patching.h>
-+#include <asm/insn.h>
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
- void ftrace_arch_code_modify_prepare(void)
-@@ -63,7 +64,9 @@ static int __ftrace_modify_call(unsigned long source, unsigned long target, bool
- 		if (copy_from_kernel_nofault(replaced, (void *)source, 2 * MCOUNT_INSN_SIZE))
- 			return -EFAULT;
- 
--		if (replaced[0] != call[0]) {
-+		/* Bypass the check if the auipc insn is a kprobe breakpoint */
-+		if (replaced[0] != call[0] &&
-+		    !(riscv_insn_is_ebreak(replaced[0]) || riscv_insn_is_c_ebreak(replaced[0]))) {
- 			pr_err("%p: expected (%08x) but got (%08x)\n",
- 			       (void *)source, call[0], replaced[0]);
- 			return -EINVAL;
--- 
-2.34.1
-
+> > +
+> > +	/* atomics, see insn_def_regno() */
+> > +	if (class =3D=3D BPF_STX && size !=3D BPF_DW)
+> > +		return false;
+> [ ... ]
+> > @@ -623,7 +659,7 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_ve=
+rifier_env *env,
+> > =C2=A0			 *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_STX + SRC_OP, so it=
+ is safe to pass NULL
+> > =C2=A0			 *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 here.
+> > =C2=A0			 */
+> > -			if (bpf_is_reg64(&insn, load_reg, NULL, DST_OP)) {
+> > +			if (bpf_is_reg64(&insn)) {
+>=20
+> [Severity: Low]
+> This isn't a bug, but should the comment directly above this call be remo=
+ved
+> as well?=20
+>=20
+> It references a fourth parameter that has been deleted by this patch, whi=
+ch
+> could be confusing for future readers.
+>=20
+> > =C2=A0				if (class =3D=3D BPF_LD &&
+> > =C2=A0				=C2=A0=C2=A0=C2=A0 BPF_MODE(code) =3D=3D BPF_IMM)
+> > =C2=A0					i++;
