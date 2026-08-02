@@ -1,111 +1,112 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE7522ACFA
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 22:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C1422ACFA
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 22:41:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785710357; cv=none; b=Bc9tRFSM5k4zEVjUzh4t66H1bEyZbVjs10/+3A/wWKTKq2KRQYhi6gfDQwAkP8Fsr+TJuYFafaCRmD0j/1S7CzVzKGH+qaemUr8IXh436K3N6CBtUY6ycic5gBgvhgNt8qIfJqCgEGLcPv8kUQK8VuycpybuVqCu1hro8bGtw2I=
+	t=1785710476; cv=none; b=MoqEYIee0G5w0nFc0LvuxmHbM3fojjlidS+GshJN/SSvpmt/EDiaTrK1sHPIq6hxqOjojijhq/4dxSdCa8PFmys3srdYvaeC0nv6BP02hHKVQfyrRJZauonXxL/XdZ8ls+/FfdqHhVNy6LeaYMImh4dXRihlKoUteAGufZex5pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785710357; c=relaxed/simple;
-	bh=8vaTgEIdvakKStMiKg7m2x+kVPrWx2Km017GA/F7zkQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=fbUixjbPLaLnC1oWz2q/A+f1kjDAF2VD8EJoQT2lZHxv2jrlWaOBbqRZLzbdecM5C4J+Lqa84Zqb89BD5eeQRLXYt9WzXup1B9ljYteYHPhSL9QYReBe7cN9ZOUI9SJf+9qGhfVkFA0HJxvIoy54UW42DBiX5/ChyOcF49Klgdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jzKKX9Hv; arc=none smtp.client-ip=74.125.225.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785710476; c=relaxed/simple;
+	bh=SgUymoBlhuDuXFAQ7He6FfGYxYy29GI6S1Ybw7CX9TQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=lmaRxX2g0bguaWBPctEhp+g9AdYqWum2JhiAGw6AEyr/sUO143bZfeq7Uo1nOCFw6q2FS4cML8ppr/Nbuc5KLSj4LAc8kl8Qzq5EN+LecRLekyxbSx+hOensTEb3PWRkA2n2UOyrj8gmgXXOpOL/Pa8faLTML229ZNGm1VnZWtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UoZKAXTm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jzKKX9Hv"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4784b41f3aeso950506f8f.1
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 15:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785710354; x=1786315154; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=N48AUYYm3tvPPvR8l4uGebJkWsX1ctx2eFfv0MaLibI=;
-        b=jzKKX9HvB9QEfVL7lubzp/QGOVRImaI6vmSnHDWOvflom1yG9naTR2/xMX+S79m6LH
-         Mn9IxZYLvogoeO/DEnoG/hPKNcD8s1JLwotMA07lwXNfKQrMQB9qefW/tIq8g4ZcEpLD
-         ijAPL3FA/ybKhti6pQcoq1H/ZSyFNu1lTyiqhL5D7TUn4Y5c+dzetAFKvTMzUbXRoc1R
-         I7yAW/Ed3yHUL8fSqkxlEX1jMdKNJp39dLJMvSghpMOTl5Fhx/o7Zi71ygY92QUzK1lq
-         1ahkYbCRZIerxaZ70V/tmDECMCmyl3NuyFOK+o9QtA2YWDrh//z8dWZclINRMB2H8Tlr
-         l+Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785710354; x=1786315154;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=N48AUYYm3tvPPvR8l4uGebJkWsX1ctx2eFfv0MaLibI=;
-        b=IPK7TUzomP++V8jFooVfr7CjQzydbPybaX/pCfwSkfvLGR4pWkSnScShkFU+uKYyI1
-         0lnmpqGb0VPhLGcnp4ifWcDHs/aaupK71PjcqvZfb3AaZLVe9YpfmmUV7PeRBXqZ+CpT
-         r7hlkpcePS+WvVVM5imIosQi/a3OwcIO8VjmMMVxf60d9G6aO74i3t5h7O+zuY8CXnpr
-         gMxWVqSTPcrmbLGGo8alhCnrHtTJ7bxhKZMyHUJ+kg+han9IoM2Qsh6yHUHNwATvER3z
-         kfi9nKF96oOEmv1Xa0nzzzVqdn0xm+40WMotdXtx25fTib9HMKVrpLJvgy2q1Seu2GwF
-         q7bA==
-X-Forwarded-Encrypted: i=1; AHgh+RqDFRFNAdX+WX19IR2sPBQeYvJR9gzn6ROkyHoMWi1uYz2vMdUJPtoLz1It9O8zB/GFj9Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFYeV6lj5IUQtkF5GLNHxLhxEpit5vJD9KJYHJst7YfIHWqhfM
-	X9EfPsgeF1mubdrlyFkzpcFmxdxsq6Rmq92cIL1g9UEQ1VynR7xxMCUV
-X-Gm-Gg: AR+sD12oDOIhDc0ODtJzN7hNKnleAdhPXyVjI4u/ImKUnwdvR0Xqp38qMbxSAo/rOdv
-	R3I2JU5x8S9BKMbcJZq1HJtm8aBUNC8xxpoVIhGd6qJ6QOw4vH+WnmugF6P5okmgJBcfEFQIHdE
-	PEUMcjHaFLXWPzZTllU7IAcEZZ1LNKzoUb13BfF2+xVu/BGN1jdjzFYAv8Da0vxyeCu/HM7d9kp
-	S1VcIt7TB+SQwQM/nCaolOTVDcto2Ykk1g8ckox48jCRId8lsXjnehVpmX5X2+x7GrSYHeykG/q
-	mwp4HwpOsudVzun/pBIQmJ3I0HZGO3C8SqiIXL2LEvc6/aw9hD8XdHZAKAiiZ+zd3drGtt0kneK
-	vfTwJh53+ykrsINtQQaoRyKAbVdRuf5yCToQ4EkIE1v0YfLxJ0tN9L6gIu4+IGVPgJ9Xw+M2biS
-	aesGQEExBe9SIiJJudFEdZu4SI7AHzztKFIBldWwgoMTP/Jrjv7kIRVdQ9paWaRSF3pEZA7JUw3
-	vKHoTmpSuRor5lcl6ldut95JHx9RhNjcua4BOcGSnqUiiYzw+vohavlbNwi/e7y46+gduqZl1FC
-	xZcdXT+g1E17QXSUYmiqKTAmhHo=
-X-Received: by 2002:a05:6000:4615:b0:47f:8887:3b07 with SMTP id ffacd0b85a97d-47fd72d320amr19682761f8f.13.1785710354168;
-        Sun, 02 Aug 2026 15:39:14 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd456a6cbsm24268638f8f.23.2026.08.02.15.39.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 15:39:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UoZKAXTm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9638C1F00A3A;
+	Sun,  2 Aug 2026 22:41:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785710474;
+	bh=Ewpws/G+IGLtwBzYcAausDrvvHEZMVGFD+Bt/3M1wHw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=UoZKAXTmRaXoaOgtsGv/kv87CHh/6g7yOm37/QtZFs6X0VHrpFlpii5HilXQc4n7F
+	 OqfOqduQFgl1xKNvHqbHIjQ2fPE8HM78flNh1rQeLhnsrjyXePoSUfKEHE/1S8Re6e
+	 HmV+5/b5rdR0WqbbFq2/94lpOtHL0MqF03ZrpeLRMuB5KgeeLxFWcojT8RLbJCQu2i
+	 WPD10yr6r3CdKYz+a4mJVTvTjH8xHLDBMBU1xtau3/nl/PCar3zif86Rf53NWcYQ+A
+	 ilESAawVWcoKhwyHkL+XNIJzBRqU5R1LlenSExPNJ/OTzopmfK7qjgoBt1PKJwbNiE
+	 0DdWTRh9Tqw0g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5A0D23809A3D;
+	Sun,  2 Aug 2026 22:40:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 00:39:13 +0200
-Message-Id: <DKETHNFBZBMY.1SRGR8U8AVYAB@gmail.com>
-Cc: <alexei.starovoitov@gmail.com>, <andrii@kernel.org>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <kernel-team@meta.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Subject: Re: [PATCH bpf-next v3 00/18] Generate bpf_func_proto for kfunc
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Amery Hung" <ameryhung@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178571043614.1504719.8056919816890329289.git-patchwork-notify@kernel.org>
+Date: Sun, 02 Aug 2026 22:40:36 +0000
 References: <20260801074633.1595644-1-ameryhung@gmail.com>
 In-Reply-To: <20260801074633.1595644-1-ameryhung@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
+ kernel-team@meta.com
 
-On Sat Aug 1, 2026 at 9:46 AM CEST, Amery Hung wrote:
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+
+On Sat,  1 Aug 2026 00:46:15 -0700 you wrote:
 > Hi,
->
+> 
 > This is the second of three patch sets to unify kfunc and helper
 > argument verification. It:
->
+> 
 >   1) further aligns the kfunc and helper argument checks,
 >   2) makes kfunc argument type classification depend solely on BTF, and
 >   3) generates a bpf_func_proto for each kfunc.
->
-> With classification now a pure function of the kfunc's BTF, it is compute=
-d
-> once at add-call time and cached in the generated bpf_func_proto, rather
-> than re-derived on every verification of the call. Along the way it also
-> fixes a few issues.
->
-> The next patch set will align the argument register compatibility checks
-> and route helper and kfunc argument verification through a single shared
-> function.
->
-
-I adjusted the commit log for patch 15 per your correction. If there are an=
-y
-other changes, let's do them as follow ups or in the 3rd tranche of changes=
-.
-
-Applied, thanks.
-
+> 
 > [...]
+
+Here is the summary with links:
+  - [bpf-next,v3,01/18] bpf: Drop process_timer_func wrappers
+    https://git.kernel.org/bpf/bpf-next/c/70a841617aa8
+  - [bpf-next,v3,02/18] bpf: Unify const map ptr argument checking for helpers and kfuncs
+    https://git.kernel.org/bpf/bpf-next/c/b33d09b4d914
+  - [bpf-next,v3,03/18] bpf: Split kfunc map argument into __const_map and __map
+    https://git.kernel.org/bpf/bpf-next/c/c82b998777b7
+  - [bpf-next,v3,04/18] bpf: Pass kfunc meta to mem and mem_size check
+    https://git.kernel.org/bpf/bpf-next/c/9f52714dd89b
+  - [bpf-next,v3,05/18] bpf: Resolve map lookup result type at lookup time
+    https://git.kernel.org/bpf/bpf-next/c/341d227fa5db
+  - [bpf-next,v3,06/18] bpf: Check helper and kfunc mem+size arguments identically
+    https://git.kernel.org/bpf/bpf-next/c/d4e7fb59c0d4
+  - [bpf-next,v3,07/18] selftests/bpf: Test map lookup result refinement
+    https://git.kernel.org/bpf/bpf-next/c/e6d200dd1026
+  - [bpf-next,v3,08/18] bpf: Check fixed-size mem args of helpers and kfuncs the same way
+    https://git.kernel.org/bpf/bpf-next/c/e566701b9b0c
+  - [bpf-next,v3,09/18] bpf: Rename ARG_CONST_SIZE{,_OR_ZERO} to ARG_MEM_SIZE{,_OR_ZERO}
+    https://git.kernel.org/bpf/bpf-next/c/c0e091f30f0d
+  - [bpf-next,v3,10/18] bpf: Fold __szk const size handling into the scalar arg path
+    https://git.kernel.org/bpf/bpf-next/c/f16e80c2c451
+  - [bpf-next,v3,11/18] selftests/bpf: Test __szk precision with a NULL nullable buffer
+    https://git.kernel.org/bpf/bpf-next/c/f88caee62e45
+  - [bpf-next,v3,12/18] bpf: Classify kfunc mem_size args from BTF without register state
+    https://git.kernel.org/bpf/bpf-next/c/ea5ab2389801
+  - [bpf-next,v3,13/18] bpf: Handle NULL kfunc pointer args without a KF_ARG_PTR_TO_NULL type
+    https://git.kernel.org/bpf/bpf-next/c/76fb08750481
+  - [bpf-next,v3,14/18] bpf: Distinguish fixed- and variable-size kfunc mem args with MEM_FIXED_SIZE
+    https://git.kernel.org/bpf/bpf-next/c/90990ee10be8
+  - [bpf-next,v3,15/18] bpf: Classify kfunc pointer arguments from BTF, resolve type against the register
+    https://git.kernel.org/bpf/bpf-next/c/c9e995ba0d11
+  - [bpf-next,v3,16/18] bpf: Tag nullable kfunc pointer args with PTR_MAYBE_NULL
+    https://git.kernel.org/bpf/bpf-next/c/ba5b99470c40
+  - [bpf-next,v3,17/18] bpf: Classify scalar kfunc arguments from BTF
+    https://git.kernel.org/bpf/bpf-next/c/1690dcf27c73
+  - [bpf-next,v3,18/18] bpf: Generate kfunc argument prototype at add-call time
+    https://git.kernel.org/bpf/bpf-next/c/a49b70400b9d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
