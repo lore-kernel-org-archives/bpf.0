@@ -1,211 +1,97 @@
-Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A753290AA
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 19:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F06426A0B9
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 20:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785700620; cv=none; b=lCoDTGLLwlUWICbvZgHXJqbvFj7sQ8C4Lgfj3KKsoeL5Ln8zwV3HgEz0p0yska588ZjbltxqX9z6u58ZnPA4dMFDHhKb3pXNy7Vmwil90Yoay99F49nVHg83lMy1xguxBFmzdoQ4m6AEA3DEI8ZaKhMpKGYn3r+NR6vH3G+cLLc=
+	t=1785702067; cv=none; b=JfCopw8koXwltt2bebVE0uwDpZjFYHozmKFoUH7S7K1VAF9rxfnqg+orF9u7U64T/QmrGwGcBefV54VVVRZDC5rSgSwce8V4Q3VazFrIPVRAj0pkB1J9zouiCfiDrdvNAHcTVaX1TjTNftjtWOE88iH9ztFavt0l3XzMqd95eGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785700620; c=relaxed/simple;
-	bh=V1IzwZdk2mYsbL+TYSbB+904Wbwqx0+Hj3gAzFn1/gM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=Uk8u9BvoEmRqc5k5ssDgkoTbi/J+mN2Wqhnf1fjB9PiQM294TQspDb41DlLH0k1v7IMmNwoNExo/yq9KixGk2MSiOSMtu+s4DB95gXGR5AMskNDBePTDvCaKyOu8DGd0Xfw0It3nC2Vma5H7m/aYRnvIRRmEralN61gQy5eDYyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JPJEjBvB; arc=none smtp.client-ip=74.125.225.135
+	s=arc-20240116; t=1785702067; c=relaxed/simple;
+	bh=25YexXeXitb17ga4HG2cR9kvtu8K5w4d6g2q3n//Zis=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=V9TPFR1WLLahPvkn60AtV/mejhsSWtye07cas/lZyyIblQUt3c+zSLgWiDjP80d4F5jJMHc7CcHEIUPjsuuz6N7fh3xLwFCuL0wyiOzuRldRZR5FDZNIqOeWIJQjmKKcdQvDJLTZqo4jL7XJ/V/A9sixF4n88njw4Od9a2w6OSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bTHaIeIY; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JPJEjBvB"
-Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-498079e98beso2327475e9.1
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 12:56:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bTHaIeIY"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8487088510aso2747342b3a.0
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 13:21:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785700615; x=1786305415; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=JTBPTzllvI8xs8/vG3mDDWRwtzJsDWx33RPIMSsvnUQ=;
-        b=JPJEjBvBF7xyzqUoFyBAIghjH58WnXzFxVfErKwGuuOSySo2FUWTvTd27IEBHsP3Gt
-         civTkE697WTW2P2ZJvKZHYgoU24/p7WmlZwXatafsBc3hKikV0u3kNDVlu72a6WHRzql
-         3Gs+m82ifJdlZ6RVhY1LJ19mICiTUMJaNgntgS8LfGa8+MZ80HpR822zyfdYXVLs9RPm
-         3IEVTf/BIToDeIZ3FqQk6YJ+qic6xzQS/SM2D1aP6syCa1AO+Vl79XbbySoWekk6HEov
-         RCIBA9vdPQCcSBluXL/c84eADiFt51PlsNxpUSKIqjWZy15ZDPWJ1sFojmZGmiM28ouF
-         RooQ==
+        d=gmail.com; s=20251104; t=1785702066; x=1786306866; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=25YexXeXitb17ga4HG2cR9kvtu8K5w4d6g2q3n//Zis=;
+        b=bTHaIeIYYcR21wcYJO0EFuvQei0G2VcZ8OLlm2NWQRl7IwbiOFjsPn5WBfPDAcv9oK
+         vow8DPf5imDkVvRL8pRmg+4trRrgtYpPlP6G8+xz62tOo3Fg5cPc0XgyrrmTqX9WD1N/
+         NIki2ObzOzN9yhG4V4MvN5q/nHH6UudPlGSv44Y8VXvSRFFu9Ax+iNPZb2WcCn0ZBhxI
+         w9uqx1uuaqmWcYcbtEwv0I8MJiSx56PhCw8FlCyGJlOFhGG5sfDMEQnvsk0Iw0dqvwt7
+         vkXDwGmiWq0s4WuwXBN8Y2kXz9u6ZokDJ7eA+xjTW35fLr/9hTfXwDinXvG9pl/6LfZ+
+         G+tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785700615; x=1786305415;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785702066; x=1786306866;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=JTBPTzllvI8xs8/vG3mDDWRwtzJsDWx33RPIMSsvnUQ=;
-        b=S7kMS0M1FK/1Xn7YS+bZFcrOLnZyBocdcpitjsbHpyakdh56iKzBedF6gBhd9efbFh
-         2leW7qCowahgSlnH+sUlqQTdiJF3h604qudpR+CgwMY1ZWl0r1a58GfyKyFjtmhpZjVC
-         w/3mrXpoEWExIq0Da/DCLzdL8tZ2r0ONSrFVAHxw82dW/MslOlbXO2/64DBDYsawUoI1
-         /g28AZKdkSPZJeDOF07mBysfqLYv0HzuG2tK80qTQoMNl7DzmN0aoii6nex2HUjwBiYj
-         7WA/yBM0zMM6CdcSRe5JC5KCrDNAzpYMOZasCjZtsIsEVwjK757oAuBToy9+osWjeD7y
-         pAaQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpQfz81ptU73Mdna33JPjeGeCxuzKkxwCMUYa9zAUb5Hf25KxKfUpP+DF2ntvfkZqHlZFk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyehFTabQuK+c+NB9ySLXXjXAQ4iRjmL5shAZN2gzFJ6ap+2thr
-	qxCSFSdjXly0QJ0Fjd7vGMYZpzcLtCJMTq8JUFRhF5ffdSpsUc36Jj+f
-X-Gm-Gg: AR+sD12wFB3uLZKWV0/xyBpW6fzqXFSgv3VJEC4Pv96GcnL6bCSWYmVvvr3/o+2LSIv
-	xSfgbGc2puYFe/WTg4HncYt5brO/XL2EawnnnpVLuzYacRwdxiZ8U44m3H4yJFBcIr1tqOE+Sp+
-	vtKRaeaVh8vMepJ2rncSfRoEuG4Hk+J/5XHjGysR3WOKEvP/2qlSvBN/ufi16OYblVIsvIGS2Gk
-	FX2YNtjqkHF6ZfoBLuk/RNIM2l1Pyq0ich/thMrNd4JU78bxxzlbykzuxgcKAWLhyytuERKoGf1
-	y6agUDoHT09lZHvlcraBOKo8l02KwflwHrhSj7qIWdgzGr76RwUtUYFjm8m3SMpyvcgjAncPgIu
-	xzdk9jtM3YQptMRK2p5zNWIiZW7iwqhpuhENqe0R4wFn/mtWXg/aXtrQoBCY67DbbW+G76AU6CH
-	69kDZnNDxIlS7Sa7UoKLm5z7RpdNMAtJvbp0/9vdkSs8Vpuwm1QDl53CxX6kDjJsI24RJkSthW7
-	dcUHiqEYC0R2D8b608pghCw+drv9Q37GS/+Wzf1wFistXIUzOeiByihpzPeg/SuxCIJkRhZx68L
-	kAjkaKa6+CYhmQvjTMCnD3qBFSPj
-X-Received: by 2002:a05:600c:470a:b0:496:c18c:f998 with SMTP id 5b1f17b1804b1-4980c6a2241mr163673185e9.19.1785700615172;
-        Sun, 02 Aug 2026 12:56:55 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd458adc9sm27799191f8f.27.2026.08.02.12.56.54
+        bh=25YexXeXitb17ga4HG2cR9kvtu8K5w4d6g2q3n//Zis=;
+        b=me5rZwtgkjZRIl9xLGBLhoWdxu0zbHM6nQKCdurb0MR1DfzrFOOksU0NeoE0d3dkpJ
+         D2x/q0LQe8/QSG6z9SU+MfTsRGRfMXoZJ2GfSl+5lFcD8e8aTz8MuyQfZ9NoolDMQbzf
+         B/glCxLKIpJDCpZvMuKm+wH+5qzAQgW/nINFl5Zvc7pnWsUi/HrjG2IbWpZWt0VNcG6D
+         IKf45wj1HiMMkZ43of/y20t+K3lMoh2mUzVJCz3UGxLU+ndAYrKG3TxYJtZt9ZHdZuO7
+         uSAiErWZosWg+qgP9/+eYeX/VEPJtYSgQl2VXaqKo5SLcBi6bT5EsoRWhDLYXC3IFrYR
+         4z0w==
+X-Gm-Message-State: AOJu0YyTYn+z9Llpkr9wzvO0JwuittvShYoy3r9qbzhOzlqu21UJboSd
+	xZSiLjXsLL6Dx2lySQ+1aWPQbwxkhi2Mx4Szcfk4I3EdQOTBzIlTWh9A
+X-Gm-Gg: AR+sD10spQkyvtMc0mgbXpDHj4StWLci5uiGQ63EvRa2/0oWryqHxj581hFxtLwzZ3T
+	RODgCG8dyPUQ0G5InXRErRkV3j9aKer3syFhsz7v5CNyQfI4SjMJfaPHket4rXVBKlbOC8cSCQp
+	d5rRIA1/8hXaKxBZABOG+ARUygyd4YI1ERUlLkOCB8NQqaJqCrKlLXHStA7RSQp0c/hTnrgvvpv
+	tKLNZjB56lLvEXQFd5bLLHS8GFW6auyp2wW0MKBo9Zls7cDe4m/BADGpfMOH9UwiihF0J1VU4oN
+	pDs3h3+jNO9dOoar5XZHU+Ooi81GAXQtRTgMO6Mc3NWuxw+kQF4M/CdsvimqQwXZwJ0kMxpMPTi
+	9VSLE2hmAo7/BniiXFXWDdn7k+C4JQVBZDbz5kciiMZBd1E54TGZomlfR31wUAnAGRObMSQiVkr
+	7mLyfhqZ+cZ04lJ/Dzmn03C6lkwaj1KF0NVR16kgHd+tXCEgnD0rhnzfWGNVstJYTIZ7KDP2gzC
+	6keFuVJJhViLOkt
+X-Received: by 2002:a05:6a00:ccb:b0:848:5cf5:5040 with SMTP id d2e1a72fcca58-84ee478e9f0mr6046036b3a.10.1785702065625;
+        Sun, 02 Aug 2026 13:21:05 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbe39474fa2sm2716859a12.0.2026.08.02.13.21.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 12:56:54 -0700 (PDT)
+        Sun, 02 Aug 2026 13:21:04 -0700 (PDT)
+Message-ID: <8aed3bc7d57cca396f7b6f8591cc8b714c8d1559.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: verify zext_dst
+ annotations for various instructions
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Min-gyu Kim <gimm78064@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, 	martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev, 	memxor@gmail.com, iii@linux.ibm.com
+Date: Sun, 02 Aug 2026 13:21:02 -0700
+In-Reply-To: <CAGKGUvk1gRbwXgO8eB_5G=PYGiTNMa8=c=f8Yie-ZwABZny=Zw@mail.gmail.com>
+References: <20260731-static-zext-v2-0-da4aa161e8c5@gmail.com>
+	 <20260731-static-zext-v2-5-da4aa161e8c5@gmail.com>
+	 <CAGKGUvk1gRbwXgO8eB_5G=PYGiTNMa8=c=f8Yie-ZwABZny=Zw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 02 Aug 2026 21:56:53 +0200
-Message-Id: <DKEQ1D0U77V6.1EMGXI819YAW9@gmail.com>
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <paulmck@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>
-Cc: "Lai Jiangshan" <jiangshanlai@gmail.com>, "Josh Triplett"
- <josh@joshtriplett.org>, =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
- "Frederic Weisbecker" <frederic@kernel.org>, "Neeraj Upadhyay"
- <neeraj.upadhyay@kernel.org>, "Joel Fernandes" <joelagnelf@nvidia.com>,
- "Boqun Feng" <boqun@kernel.org>, "Uladzislau Rezki" <urezki@gmail.com>,
- "Davidlohr Bueso" <dave@stgolabs.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Steven Rostedt" <rostedt@goodmis.org>, "Mathieu Desnoyers"
- <mathieu.desnoyers@efficios.com>, "Zqiang" <qiang.zhang@linux.dev>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Matt Fleming"
- <mfleming@cloudflare.com>, "Harry Yoo (Oracle)" <harry@kernel.org>,
- <linux-kernel@vger.kernel.org>, <rcu@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-rt-devel@lists.linux.dev>
-Subject: Re: [PATCH 0/6] rcu,srcu: Make call_rcu()/call_srcu() safe from any
- context
-X-Mailer: aerc 0.21.0
-References: <20260729162207.1567770-1-puranjay@kernel.org>
- <0096fbf8-c3be-4388-a60b-1968664e4f27@paulmck-laptop>
-In-Reply-To: <0096fbf8-c3be-4388-a60b-1968664e4f27@paulmck-laptop>
+MIME-Version: 1.0
 
-On Thu Jul 30, 2026 at 5:07 AM CEST, Paul E. McKenney wrote:
-> On Wed, Jul 29, 2026 at 09:21:59AM -0700, Puranjay Mohan wrote:
->> call_rcu() and call_srcu() only ever touch their per-CPU callback lists
->> with interrupts disabled: the enqueue runs under local_irq_save() (and t=
-he
->> nocb locks when offloaded), and so do callback invocation and grace-peri=
-od
->> work.  That is fine as long as call_rcu() itself is invoked with
->> interrupts enabled, but it is not always.  An NMI handler can call
->> call_rcu(), and instrumentation can reenter it.  The case that prompted
->> this is a BPF program attached to rcu_segcblist_enqueue() that frees an
->> object: the free reaches call_rcu_tasks_trace(), which is call_srcu()
->> under the hood, back on the same CPU with the srcu_data lock already hel=
-d,
->> and it deadlocks on that lock.  Either way, enqueuing directly can corru=
-pt
->> the list or deadlock.
->>
->> Rather than scatter context checks through the enqueue, make it defer
->> whenever interrupts are disabled: stage the callback on a per-CPU lockle=
-ss
->> list and re-issue it from an irq_work once interrupts are back on, going
->> straight to the enqueue helper so the re-issue cannot defer again.  Only
->> the drain side takes a lock; the staging is a bare llist_add() and stays
->> safe from NMI.  This is behind a new hidden CONFIG_RCU_DEFER, which is s=
-et
->> wherever a reentrant enqueue is possible (HAVE_NMI, KPROBES,
->> FUNCTION_TRACER or TRACEPOINTS); without it call_rcu() enqueues exactly =
-as
->> before.
->>
->> CPU offline is the awkward part.  A callback can be deferred very late i=
-n
->> the outgoing CPU's teardown -- from do_idle() or cpuhp_ap_report_dead(),
->> past the CPUHP_AP_SMPCFD_DYING flush that would otherwise run the irq_wo=
-rk
->> -- so the irq_work can no longer run there to re-issue it.  rcu_barrier(=
-)
->> and srcu_barrier() therefore drain the deferred lists themselves before
->> they wait: for online CPUs they wait the irq_work out, and for offline
->> ones they drain the list directly, since that irq_work may never run
->> again.  rcutree_migrate_callbacks() drains the outgoing CPU's list too, =
-so
->> a late deferral still lands on a callback list even when nobody calls a
->> barrier.  To keep those three drainers from stepping on each other, the
->> drain holds a per-CPU raw lock across the llist_del_all() and the
->> re-issue, so a drainer never returns having pulled callbacks off the
->> deferred list but not yet put them on a callback list.  Every lock the
->> re-issue touches (nocb, rcu_node, srcu_data) is already raw, so the
->> nesting is fine.
->>
->> The irq_work is IRQ_WORK_INIT_HARD.  It is not needed for correctness, b=
-ut
->> a non-HARD irq_work runs from a kthread on PREEMPT_RT and can be delayed
->> under load, letting deferred callbacks pile up; running the re-issue in
->> hard-irq context keeps that from turning into an OOM.
->>
->> Patches 1 and 2 do Tree and Tiny RCU, 3 and 4 Tree and Tiny SRCU.  Patch=
- 5
->> teaches rcutorture to issue ->call() from a perf-overflow NMI -- the
->> nmi_calls parameter, on by default -- on the flavors that advertise it,
->> and checks that every callback issued from NMI is later invoked.  Patch =
-6
->> adds the BPF reentry reproducer described above.
->
-> Nice!  I applied this series to -rcu for testing and review.  Patch 6
-> might want to go up a different path, but let's see how it goes.
-> If it goes via -rcu, it will need an appropriate ack.
->
+On Sat, 2026-08-01 at 23:56 +0900, Min-gyu Kim wrote:
 
-I think it makes sense to take it through your tree for now. If there are i=
-ssues
-when we get these changes on BPF side (with the selftest), we'll fix forwar=
-d. If
-we take it now, it will end up deadlocking the CI, so should come with the
-relevant changes once trees are synced.
+...
 
-You can add my ack when taking it in.
+> For this exact v2 series, please feel free to add:
+>=20
+> =C2=A0 Tested-by: Min-gyu Kim <gimm78064@gmail.com>
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Thank you for testing. I am about to send v3, given the wording above
+I'm not transferring the tested-by tag. Feel free to join the
+discussion for v3.
 
-> 							Thanx, Paul
->
->> Puranjay Mohan (6):
->>   rcu: Make call_rcu() safe to call from any context
->>   rcu: Make Tiny call_rcu() safe to call from any context
->>   srcu: Make call_srcu() safe to call from any context
->>   srcu: Make Tiny call_srcu() safe to call from any context
->>   rcutorture: Exercise ->call() from NMI context
->>   selftests/bpf: Add a call_srcu() re-entry reproducer
->>
->>  include/linux/srcutiny.h                      |  11 +-
->>  include/linux/srcutree.h                      |   4 +
->>  kernel/rcu/Kconfig                            |   6 +
->>  kernel/rcu/rcu.h                              |  18 +++
->>  kernel/rcu/rcutorture.c                       | 115 +++++++++++++++
->>  kernel/rcu/srcutiny.c                         |  53 ++++++-
->>  kernel/rcu/srcutree.c                         | 138 +++++++++++++++++-
->>  kernel/rcu/tiny.c                             | 101 ++++++++++---
->>  kernel/rcu/tree.c                             | 122 ++++++++++++++--
->>  kernel/rcu/tree.h                             |   5 +
->>  .../selftests/bpf/prog_tests/rcu_reentry.c    |  58 ++++++++
->>  .../testing/selftests/bpf/progs/rcu_reentry.c |  45 ++++++
->>  12 files changed, 636 insertions(+), 40 deletions(-)
->>  create mode 100644 tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
->>  create mode 100644 tools/testing/selftests/bpf/progs/rcu_reentry.c
->>
->>
->> base-commit: 9dc303e69bcd49f9668ca090ae45325269531fbb
->> --
->> 2.53.0-Meta
->>
-
+...
