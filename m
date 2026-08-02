@@ -1,178 +1,217 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5096305691
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 22:03:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785708194; cv=none; b=e0G8hyWbqrCjBU6osgg0I+R61VBZZcw4hFIAP32i6WKhuSQdTlvq+tzWgAQQ8UtKNiNeJM3cCr9p8xND/xg7956fINksxcs0ogkmeU3i0qJF2ZvhR2IfS7/0T3J+Csm5E2Z97oNuh04wPreQbH35ilugJXwDQVZTLXWiXrX+FhI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785708194; c=relaxed/simple;
-	bh=cg+7Ch9aHIa6Vq2B92HiEt2e0Fs/Ws+yHrKFCt+u87Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SlGa032EvV5zC9FZsHxzXJqPVqJ8QEHHQOoMgA1dXdmF/GMBwtTKNIleYyyII/QMQeERvVckqgIQAQ33eQCnrDffbLV15NzxaFF1Bg8Ct/4NGVpBBXXMM/xBAbFnAutnKfyww5OC8gAfu4dkbMMj+WTEEiaMVdyVoBhhnkEhuOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aUNGjSqu; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BFC3451AA
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 22:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785708628; cv=pass; b=VuAZq0/q9bQWmt48P9AuKeOaiYz9PhlgQyoqv4qQxUFEZyJEht4xGWJmCpNIqguVqDvV/wL//xF1bc34PqrL0hDyDjdqxaExsC3ZCs64mwKKoj7K2Bf22xHwim+gsOolFWkbsdyCYVq/95DVKAfoZ91msEQQAZyPAgn66rwElfY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785708628; c=relaxed/simple;
+	bh=eRFtgMKw1bXZ8HlsKfgvbOPiqlVoMRsIBxoFY7IYE2k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ru/GctDeowAV1a8kfESgQh5e00CsuJOtmqISa+Sq1RiqBMtdyQoqtic8f4g7AmhaSl5t86uuG4255DDV2pH3Kc0eEC57DGNuJdoQLImrOV61RvksJg3eKjjjp9XjrodThOQyFSaaSEC6sOPVHxm/SIE8Kx1b1pF9j3mvrnM9MD0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fm67dw9O; arc=pass smtp.client-ip=209.85.128.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aUNGjSqu"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ceab75934dso30864035ad.2
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 15:03:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fm67dw9O"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-8143daf89c7so25271967b3.1
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 15:10:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785708626; cv=none;
+        d=google.com; s=arc-20260327;
+        b=L5/Yk9M6NbujvnPqJRQPDe/Y4zvpR4rcJP0QgWhZjtM5F0ZM/Aw2JXl7GjNSt07/1w
+         k83TKmklhvCgOJCzdDFilb+4LjQLIFmRlcMLmdVTgmr/nB8z1MK4SxfthFol8nPA3XuQ
+         Y4X5yJntMhOrL3F43n9aPARDIxvb6MzKL+KxD2U0CKtvuCghemnaaq197R0qAJpXDBFM
+         b52KjhClz4gZcMyUDkDKgAXZGwP/nuMVfib89EzUSCaAfNuXagiW+n62DeDQ5TAS1OIu
+         6zr/+EMcaV08N3wifSSguEMQ1Cb48Ey5ZrsGX5N7Gq4LXt7BiFm0OtdjOFhqAO3cRYeT
+         w3Dg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=HMbJsCNToR/i0i6p/qewgiU8kiE/Udu1Ph+qBECWycA=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=h75JF11I3n2Jx3++rtAydVFhMLHardv2l9C5JiQO8Sn5E1Bm417e12LWDcjw3qRWAQ
+         QkB9ILYQPphwXPstj+6lbKUjpUclYq8luw+aL0tPMk/msyzluuDUAW3aClBlhOY/5jgs
+         OMDQRudhUMqk7jsCsEgoqHoR2c8+dSRpNnR0DxPmssekHPzNoTNV/H0A3IYGjarWFjjN
+         kB2/fZXBM5iVwF6YpKGkZBMErJf91sgE4Tsj7wD5RTsc/7XUK89xQuBsGWAKp6SYmPPQ
+         LBIlurNOYdWjWhK7mezVwzeM0CD+TKZJlBwY4VcsiG5x4wjQR7F6Wt1dbPTHm83D7Zjo
+         cXcQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785708192; x=1786312992; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=rso656z6JgjKhE+rXeO/Oj6U0G1cByYn8hzhK+WCWVM=;
-        b=aUNGjSquKuuD2reVJqKtTUxBacIbd/jNjDRD+Ft/ZO8X0+UWw4c7n3LFbkW0LwchCS
-         L7hrk9WulEKXGCkY2gNkQpmyP5r+NQuPgSnO6YmOpTnqVSYgXsBJpD//ulbrgnGVdNvz
-         68gLm4l62bAnNcAr5tnErKInGvgjm0lnbBLfhMK91enuUOxD5oORBHEu0qNGbaNx06xs
-         gsH4VGBk9SlGP1hDIEsCN1sHYRLzcRUExny0o/Ha5noh/HmS5nrrT7H2BOpMfzMuJE0K
-         t4W+ud0XfPhSzSS/kpyqRQrrcItrFksuT0Ny5OIigv+jw+an1c9Wy+yE3hRJZc9/9PDO
-         iKCw==
+        d=gmail.com; s=20251104; t=1785708626; x=1786313426; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HMbJsCNToR/i0i6p/qewgiU8kiE/Udu1Ph+qBECWycA=;
+        b=Fm67dw9OL35WfLAG7hUeuetlQYifeFekL/gbCd62AIKuVZzyaMBkq0CgoaVhjLVYKq
+         3iuJB5+SnInVIIjlnNqH5vNHK6q2k/knghhUKnDFh9/bFtkXaX/7pGoI5sG7exGRfJ6G
+         AgBZP+VCwWZytx4S6Y9F0Tm7mgTT2inU0nmueAPSApIAnkZJGogbLB6v+yc5S+Rp7ySJ
+         U6Zfcj8VaC13F32yqZktJEAV3GINczTezN+WvN6mUBL+CZY06hSRFSKTxQ8Ut3zFkmQU
+         HYpsGAoWws0Fl0ktPYg8seuMidBcA0QQBy19PbHyF9Bqapq0/3zfgP3K9Nlhk1YFdWog
+         2YTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785708192; x=1786312992;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1785708626; x=1786313426;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rso656z6JgjKhE+rXeO/Oj6U0G1cByYn8hzhK+WCWVM=;
-        b=n3h1pvMMO8KF5dKxMHzmOL6n1alBH4oDTTpHnItTJPN8iLF3bp+sv2o8f3/8JjrC3O
-         /8hzFwTnGdR0QdRUSSXVSiP3kBhbrusgy0csIOc4e1pY8TyWQYB0IWW3SxCQntcLOq2P
-         oQaIZjP/TJUzp55usM2RCKlJg4pBuNWVeX8pqZUTj/kwNS94RykVzCYFYAojonqH5IyT
-         iO7AYehuXjUh0ngqNiUASHVnbrIzhC1wWEaowyiTaj1VN7QtddZFGsEPPPLpTNrW1vH+
-         UoWfiZUUmfOfymClimwHXkZMJRNYCSMa7cHFsMIfuhmfeODh+7EwsCQGgesrJTDT0eqw
-         E7FA==
-X-Forwarded-Encrypted: i=1; AHgh+RqQIG9Vbh35E3lLMYdHKdmKy9uQt7xbv8A3AmFfMf0BIp/IFO0Z8KYn1tJ20G9xKvu9U8g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzrhmp70A4yMXBuaGGNI/LZNoMviW13MJ5qfEcF92z1KVyMBC6j
-	VnAVhJc5Kcimozhk6gyFYctcoUZrDb8B/v7vBsqC3XNFRqqAbnmL7RRF
-X-Gm-Gg: AR+sD12Y75x37xmJJfiWSegpiDU48NC9DgnnnN3dLeAhfMi5S8airXT+4vmw8EY8sOL
-	Ljby7yWIwIaLgXaObMHN1Ax8i3Tsdbjj7lSlC8TEb2irNPZeek8lHyTsIS25vis068wLnkoml/B
-	ig3lci3+mcxmEfStT74OSGY9eyx4P+V7hxPgU3+3ZBoRvWRKSk3LBe+oc3IL/l0fbAAtlYR8bAJ
-	45PvmzrLpfhpNR0R6GGvMDYtbm+EF43Ou3B9Mtk0hbjP+FZicEJmgju8HF+cn5kMtP9/u9J6qmV
-	cHOIeI1YIGYbtIqi8yYVqhZ8HY+m5Q2ahB31ZTUuk8DVEeWpFuvMYMYZA7GZNUE3qlqFSX7SDhw
-	UabtUNJ/nxBTdwLX3EPRIkcNX7EC2Zv9C1ly3qu5WMOPc674zh0agVr4BsRmJs2OTdzj8lLhhMu
-	pWrQYVB+4kkXPMKivZP6jWlFohwqH57wYZESJ9Z/L6zs9KCSYiL1UH0rrZq5wHGVbOiPQKnKy+E
-	6YFOWQopi7F1Jif
-X-Received: by 2002:a17:903:1450:b0:2ca:62e:cc4f with SMTP id d9443c01a7336-2d05246fdc7mr79414455ad.23.1785708192066;
-        Sun, 02 Aug 2026 15:03:12 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04ae5a91asm28503055ad.21.2026.08.02.15.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 15:03:11 -0700 (PDT)
-Message-ID: <9baf4dfa07d070ad9f0f1751193e6df51750515f.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/3] bpf: Show more useful info in stack
- depth stats
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil Tsalapatis
- <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Sun, 02 Aug 2026 15:03:09 -0700
-In-Reply-To: <DKESN3I6A9IA.270SX0UXGSEJ3@gmail.com>
-References: <20260801230400.850271-1-memxor@gmail.com>
-	 <20260801230400.850271-2-memxor@gmail.com>
-	 <ae774dbff74cb78cff1fe27915a9bd8fc4bd990f.camel@gmail.com>
-	 <DKESN3I6A9IA.270SX0UXGSEJ3@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+        bh=HMbJsCNToR/i0i6p/qewgiU8kiE/Udu1Ph+qBECWycA=;
+        b=GrE62AGUEix3/0oD2kEUV76hDHKCsUQuT9CNd26NJUZineqUB7fcYV/mNxnkHS4rwp
+         9ysKT2nEQmM/YzDKsIEhXJoamiCCHoXotx8eevV9NsLnww+/n+GOjO7Ucq69dHQTzv5c
+         lQcqtpIQ2OvQW/g4CjCE1Odum/+9Bdc2914oIlbJl9VFETL7z2SjSrp5zyBiyBIPRpnx
+         +qe0pHS2wN1XRWubgdW1DDuivpIMNsih7pqMsZMdU4TRMSGxGetZ4cExOlLKqxwnMgN1
+         qbB9VtQqPzhCvblzw6Qp9DmsytUCDNFVWi90BzfcpB0wHS5SeS1QKpetyYaC4Mlp2OSu
+         eUYQ==
+X-Gm-Message-State: AOJu0YzlXLsXuaS9n7SLxOtTe7DfzDknXO6FXlDjjMYUfhxtf7e61LWO
+	CAOGtZoVeLkCyqTWK+DqAzW3NhmeUBxMtKCAnO6WrEdi087HwH+L/k1ud5wDXHHTqhaRmOdTque
+	HpIWZCnfoznk1kwkBmu6NLtIISjqMONexQ7eH
+X-Gm-Gg: AR+sD11n14MaWAdxMi6crcucpvejeliBX952mDqICqm5zvekXqcRHnSbGUxWhAXI4vU
+	NACTt2OFGrMyEs+0xU5jo7ljhOTOVvmfG9R0mBEpwusgw+mhnbzw+30fxdkzamzE+IH0aOQAg9J
+	qex/bfzaVGXCdB9heoZIZonBlrTwPHr8prcwmxX3T9YcL5kXffz4djd1+U/y/E9P/UUgMhyywnH
+	ETlxYhumuVzvSKIuIyT73i3jznxXf5qV7yzdAZFFKQvBB7C8BS+NnCmeI/yvhpGvHz7JH0Cf4lf
+	SgCcjDiusEa4dzGd2SWkFb1Gh6AkM2KGdxJ5o2GwuLua
+X-Received: by 2002:a05:690c:2789:b0:81f:653a:fb41 with SMTP id
+ 00721157ae682-81fd4a21645mr111501377b3.10.1785708625995; Sun, 02 Aug 2026
+ 15:10:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260801074633.1595644-1-ameryhung@gmail.com> <20260801074633.1595644-9-ameryhung@gmail.com>
+ <20260801081721.132401F00AC4@smtp.kernel.org>
+In-Reply-To: <20260801081721.132401F00AC4@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Sun, 2 Aug 2026 15:10:13 -0700
+X-Gm-Features: AUfX_mzVImaE8JC5A3oWIPJkUofdwX7NRxxR6LIPEWhmJ9KnoyJHqX6SEXaktl4
+Message-ID: <CAMB2axNktmWPs80p9Xw72Rr-Mexdbd6O5HfMXhgByVwscNW6sA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 08/18] bpf: Check fixed-size mem args of
+ helpers and kfuncs the same way
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 2026-08-02 at 23:59 +0200, Kumar Kartikeya Dwivedi wrote:
-> On Sun Aug 2, 2026 at 11:02 PM CEST, Eduard Zingerman wrote:
-> > On Sun, 2026-08-02 at 01:03 +0200, Kumar Kartikeya Dwivedi wrote:
-> > > Currently, the output of stack depth statistics is two crude, with a
-> > > list of captured stack depths ordered by the subprog numbers. The act=
-ual
-> > > subprog numbers are determined by libbpf, hence it is hard to associa=
-te
-> > > the stack depth statistic back to the subprog by name.
-> > >=20
-> > > Change the format to:
-> > > stack depth <subprog>=3D<depth> ... max=3D<depth>
-> > >=20
-> > > In case the subprog name is not specified, use subprog[N] as the stri=
-ng.
-> > >=20
-> > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > ---
-> > > =C2=A0kernel/bpf/verifier.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 16 ++++++++++++----
-> > > =C2=A0.../bpf/progs/verifier_basic_stack.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 4 ++--
-> > > =C2=A0.../bpf/progs/verifier_bpf_fastcall.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 | 19 +++++++++++--------
-> > > =C2=A0.../bpf/progs/verifier_private_stack.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0 9 ++++++---
-> > > =C2=A0.../selftests/bpf/progs/verifier_var_off.c=C2=A0=C2=A0=C2=A0 |=
-=C2=A0 4 ++--
-> > > =C2=A05 files changed, 33 insertions(+), 19 deletions(-)
-> > >=20
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 8d0635ee48c7..51ac0a9ae339 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -18703,10 +18703,18 @@ static void print_verification_stats(struct=
- bpf_verifier_env *env)
-> > > =C2=A0	if (env->log.level & BPF_LOG_STATS) {
-> > > =C2=A0		verbose(env, "verification time %lld usec\n",
-> > > =C2=A0			div_u64(env->verification_time, 1000));
-> > > -		verbose(env, "stack depth %d", env->subprog_info[0].stack_depth);
-> > > -		for (i =3D 1; i < subprog_cnt; i++)
-> > > -			verbose(env, "+%d", env->subprog_info[i].stack_depth);
-> > > -		verbose(env, " max %d\n", env->max_stack_depth);
-> > > +		verbose(env, "stack depth");
-> > > +		for (i =3D 0; i < subprog_cnt; i++) {
-> > > +			const char *name =3D env->subprog_info[i].name;
-> > > +
-> > > +			if (name && name[0])
-> > > +				verbose(env, " %s=3D%d", name,
-> > > +					env->subprog_info[i].stack_depth);
-> > > +			else
-> > > +				verbose(env, " subprog[%d]=3D%d", i,
-> > > +					env->subprog_info[i].stack_depth);
-> >=20
-> > That would be not very convenient to parse by veristat,
-> > but I'd print every subprogram on it's own line.
-> >=20
->=20
-> I can do that, but let's agree on the format before I get to it.
-> How should it look like? Prefix with stack depth every line, and print st=
-ack
-> depth max ... as the very first line? Like so:
->=20
-> stack depth max N
-> stack depth subprog 0 <name> N
-> ...
-> stack depth subprog N <name> N
->=20
-> ?
+On Sat, Aug 1, 2026 at 1:17=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+>
+> New issues:
+> - [High] Kfuncs taking uninitialized memory arguments via the `__uninit` =
+annotation are falsely rejected when passed uninitialized stack slots.
+>
+> Pre-existing issues:
+> - [Critical] The verifier fails to check if the size argument for `KF_ARG=
+_PTR_TO_MEM_SIZE` kfuncs is a scalar, allowing BPF programs to pass kernel =
+pointers as size arguments, leading to an out-of-bounds access.
+> --
+>
+> --- Patch [8]: [PATCH bpf-next v3 08/18] bpf: Check fixed-size mem args o=
+f helpers and kfuncs the same way ---
+> commit bcee13ba62b78a9328164e2486f3c31a7fddb8a0
+> Author: Amery Hung <ameryhung@gmail.com>
+>
+> bpf: Check fixed-size mem args of helpers and kfuncs the same way
+>
+> Fixed-size memory arguments went through two paths: helpers called
+> check_helper_mem_access() directly, while kfuncs and global subprogs
+> used check_mem_reg(). Route the helper MEM_FIXED_SIZE case through
+> check_mem_reg() too so all three share the same check.
+>
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index f61771e2a8b27..9e0c7f0a15c15 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+>
+> [ ... ]
+>
+> > @@ -12379,7 +12385,7 @@ static int check_kfunc_args(struct bpf_verifier=
+_env *env, struct bpf_call_arg_me
+> >                                       ref_tname, PTR_ERR(resolve_ret));
+> >                               return -EINVAL;
+> >                       }
+> > -                     ret =3D check_mem_reg(env, reg, argno, type_size,=
+ meta);
+> > +                     ret =3D check_mem_reg(env, reg, argno, type_size,=
+ BPF_READ | BPF_WRITE, meta);
+>
+> [Severity: High]
+> Does this change break BPF programs that pass uninitialized stack slots t=
+o
+> kfuncs using the __uninit annotation?
+>
+> Because check_mem_reg() is now unconditionally called with
+> BPF_READ | BPF_WRITE here, it seems to mandate initialization for __unini=
+t
+> kfunc arguments as well, which should only require BPF_WRITE.
 
-Ideally I'd drop the "stack depth " prefix after the first one and
-just add an indentation instead. But that would be hard for veristat
-to parse. So let's settle on your suggested version.
+First of all, this is not a change introduced by this patch. kfunc
+already calls check_helper_mem_access() with BPF_READ and then
+BPF_WRITE.
 
-> > > +		}
-> > > +		verbose(env, " max=3D%d\n", env->max_stack_depth);
-> >=20
-> > I think check_max_stack_depth_subprog() needs a similar update,
-> > at the moment it reports a not very helpful error like this:
-> >=20
-> > =C2=A0 combined stack size of 34 calls is 528. Too large
-> >=20
-> > Printing the offending spine would be helpful.
-> >=20
->=20
-> I'll do that in verifier errors patch set. This is just for the verificat=
-ion
-> stats, that are outside its scope.
+This is also not an issue unless a a new unpreviledged kfunc that
+takes __uninit arg is introduced. There are two kinds of existing
+kfuncs with __uninit arg: bpf_dynptr_from_xxx() and
+scx_bpf_cid_topo(). The former, while being unpreviledged kfuncs,
+checks their __uninit dynptr argument through process_dynptr_func(),
+which directly calls check_mem_access() to simulate byte-by-byte
+write. The later is a previledged kfunc, which means
+check_stack_range_initialized() will see env->allow_uninit_stack =3D
+true and allow reading uninit stack slot on BPF_READ and then mark the
+stack slot as STACK_MISC on BPF_WRITE.
 
-Fine by me
+
+>
+> >                       if (ret < 0)
+> >                               return ret;
+> >                       break;
+> >               case KF_ARG_PTR_TO_MEM_SIZE:
+> >               {
+> >                       struct bpf_reg_state *buff_reg =3D reg;
+> >                       const struct btf_param *buff_arg =3D &args[i];
+> >                       struct bpf_reg_state *size_reg =3D get_func_arg_r=
+eg(caller, regs, i + 1);
+> >                       const struct btf_param *size_arg =3D &args[i + 1]=
+;
+> >                       argno_t next_argno =3D argno_from_arg(i + 2);
+> >
+> >                       if (!bpf_register_is_null(buff_reg) || !is_kfunc_=
+arg_nullable(meta->btf, buff_arg)) {
+> >                               ret =3D check_mem_size_reg(env, buff_reg,=
+ size_reg, argno, next_argno,
+> >                                                        BPF_READ | BPF_W=
+RITE, true, meta);
+> >                               if (ret < 0) {
+> [ ... ]
+> >                       }
+> >
+> >                       /* Skip next '__sz' or '__szk' argument */
+> >                       i++;
+> >                       break;
+>
+> [Severity: Critical]
+> This isn't a bug introduced by this patch, but does the verifier fail to
+> enforce that the size argument is a scalar for KF_ARG_PTR_TO_MEM_SIZE?
+
+Not a pre-existing bug. Currently get_kfunc_ptr_arg_type() does
+mandate the register passed to __sz or __szk args to be scalar.
+
+>
+> The loop uses i++ to skip the next iteration, which completely bypasses t=
+he
+> btf_type_is_scalar validation for the size argument. check_mem_size_reg()
+> also assumes the register is a SCALAR_VALUE without verifying it.
+>
+> If a BPF program passes a pointer register (like PTR_TO_STACK with a zero
+> offset) as the size argument, reg_umax evaluates to 0, which passes the
+> verifier's size checks. At runtime, the full kernel pointer address could=
+ be
+> used as the size, potentially allowing an out-of-bounds memory access.
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260801074633.15=
+95644-1-ameryhung@gmail.com?part=3D8
