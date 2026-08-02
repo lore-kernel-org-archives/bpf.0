@@ -1,93 +1,67 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652B8270EC3
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 20:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E05F22CBD9;
+	Sun,  2 Aug 2026 20:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785703473; cv=none; b=NkiWgxCW8E6xZhzogD1knyDYzLjFmZNHjvtV38bv8W1SsgoxW2bgBjeW388E8RSDhPaYumqb2XB1991Pw7JdLvHMw0+O5DPi0YhmVW20dCziwFSChKOMFL1sV7/a4joz9TqbD08oJmr1MGRGBWx+jAlsYL1Jgy8SY3UJOG3v9Jc=
+	t=1785703630; cv=none; b=e2mH7fLAEWGZNx73Fn92cpQ0yBMHKh5Wi6hqj/hViLH45ADRESQdP4kYn3qZeCCr75jxBUNx8FqIikhztv/2Rfn5h6VIWUEWZUxPsZZEmSTKKI+2jeDuAghSfcuf9nmWQk9Xw/L0ZHGlH4bIxaO00ADSmC1bCUMFSTxUKGwq7OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785703473; c=relaxed/simple;
-	bh=XoF2yLF3AcvHIdTsY8+5xQfUf5rqYNg3g91Py3R48nM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jf2/IAOl+2r69Bd64XKZPtvCxfPc879uRYgBoGW0+cZtgWxc7y07rH7SMc/LxmTDucM24RqlgX2nWWMltG9j0KhPmwvd187PF+4s2EUuzltVQYJE4Mi/3NwZKRUIBCwRpG965kLIVFt64gnbh806bbcbsqsyZ3+doe3Xk9IfYII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CYQqho85; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785703630; c=relaxed/simple;
+	bh=F5oX/jszxsav1DpNItKt47lDP8ox3JEfhfTCJmFUqOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=StXV1RjsebfjX8Z9O8tPSGjcxlehyDHTU/3XVgbB2tz8H3OCcOzXCYvLeSYhBju9E6OGjbOEqzrAXk/buDtt2jMqTmdtjHVGKdh8jljIyz57MfqBfMyUE56NExmJYXrGp5drz40z6jc8u1hFbLA8F53lIfLU89P9vHD5e9aPFew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HzIwO+GP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CYQqho85"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4954a32cf1eso5941515e9.3
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 13:44:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785703471; x=1786308271; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=J0Po6SXhfV2vXQAkV6y/NPCPoeX6dz+V1IoPOu929LY=;
-        b=CYQqho85vIYW54C7T/LuNZF+XP6kEz6GqinVZd1K45OrdACOK4fgJjVPvVO9V/TLu+
-         m5pzpiGV/TT81y2lwNF1tE1gvBLvRi8pfB/TeJtePmAma7/nUFgWzswVXoVH39GROu20
-         hWLe5PVSruXssnNjOS0qPqI4Fy2+SG6Cqs4/FAHqpS+a5S7sPzEPvYmbNfaKczaNow5+
-         m8UgU3VvNGlj5t2NRX0l+o7yaC2JLHk4Z2luVhn7c9PFQim8qf492rpDwas2Z76XPoFz
-         HcrnR7n4R0YLzFJzxC0k8l3b4MbRPKpR2MS36dL5ADVdngCYazpAb+bDmVxFnl81Sebs
-         cePw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785703471; x=1786308271;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=J0Po6SXhfV2vXQAkV6y/NPCPoeX6dz+V1IoPOu929LY=;
-        b=IxEnqIcbBnNgYenRqqpXimN/P9QAE6XHdafpQVIpSF65hSLwhhs5MCsmEbrxgygbI6
-         mKCXSQPFLCpAPkaa9cVKwhwxQ26PCP1TA/4ihBv3lfX2BG3iRFQSTKDX65QofjcGInuX
-         XSyavS8Xjc5BFzj5O/zRhQb4riUPYMHLupkF8I67aeDIqxP6NmvEdqoJnA00eRNXFJF9
-         I7PPd/frXvnx6RCmI20AJf54H/De+jRP6u5O17EOpGs39rllP51Ndg8DapCODr9PCGZ7
-         gBpmoRICO6SznTMqFOY7YJDUrZ6WdWzvZ4hea2mqVp7gVbvswJ+BjS1A4hHLG8nHhlRj
-         uTKg==
-X-Forwarded-Encrypted: i=1; AHgh+RrG0M7P/qXb8mjHi1eKhT+XK1FsWKv4RcfrEC28fQt+un4KsDVRRjMufIUDDhzoRVzPNwA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjVXoZTZYHb/MGCRw+CZWPzxnYO0Ujyph9qozK9NSvJZZPD4wz
-	DB6RjR4B9CV8tMBqjOqLB9WedcAj1ryil9UT+1b0ayD1gD0Cbe3/YiVS
-X-Gm-Gg: AR+sD12/rNwcupuqYhaE7vbYfPvQ9UNxhIvCHCl0mudf5fbxXQOAriqRtXjvG5Gg5pi
-	y/Tu0+MeyhHsk6yI3LzdUeDF2kzpiWd+RdJIs8g2TRGSGRMGE7OJIwex6DVHL7s7P5/dhpmn1PS
-	7UzGW0usGFUK75wiVIGEHol/hrModda9iUJhHREe/nNBMKc2X9Jo2ptUGI9KITBNjHxsOADiL1/
-	qlRlehgsAEykF/R02Pak6QQlYiD+osfrgh4dkiOcpsXwt4i9vw0RgkJsMNSpZJaBBS9OcojbVxh
-	aLn0n9NRFRMxCUUdTRI8a/pSGeueYIJaOMQKFSZERI6WkBqZ7hluewxchSNMmS9Ak8R4aSjvTl7
-	EJdtkUYn84fvmob3EgKvJSK3rM0kwz308wQSrEADiFIVUqSPChsmzUZVGpy7hIjCw4WAvzKT9kR
-	7nye4xbdxQiv+0uttmNjfFg7RYHzHgSetD5X777F53Sem4qsk8
-X-Received: by 2002:a05:600c:a4d:b0:493:e46e:157d with SMTP id 5b1f17b1804b1-4980c693eaemr164544645e9.19.1785703470644;
-        Sun, 02 Aug 2026 13:44:30 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49807b8d04fsm218215135e9.3.2026.08.02.13.44.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 13:44:29 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sun, 2 Aug 2026 22:44:27 +0200
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzIwO+GP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E061F000E9;
+	Sun,  2 Aug 2026 20:47:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785703629;
+	bh=ZEpbOoyAgd8U9otS3+svfsLTO28M4sOEaw9r2Tv89HE=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=HzIwO+GP+fXxGRnEgpXFRWrtZBcAE8WwgC6eIH9booxA+wf4wATM+IWSUQTtKoiPg
+	 5jO4bfuxL+/g4FgofthE1PrvwbDx2Vw947mGeh/xONG8pw0xcdqKPjZlbt+EIe7ISy
+	 10MNUaKW8Hs3E3rxDrt1rU5Yiq8VV1LC+WyqoviXVF4TATdq+RQem85mT+/z1CiKAc
+	 fRdwFLEpVeJj6qBtmHc94he2e2L4ERx4HyDouVfuddb3tRSsZkVLeTdNLfZOOgljCz
+	 IAq+dIE7XzED+PACUqqV0zv1wOTGV1HbrRMGyOe9sLZXDhJhoO8L8rxVyiEYyr7gqm
+	 sZcaAguEmSgIA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id C9931CE1887; Sun,  2 Aug 2026 13:47:08 -0700 (PDT)
+Date: Sun, 2 Aug 2026 13:47:08 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Zqiang <qiang.zhang@linux.dev>,
 	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct
- calls
-Message-ID: <am-sK_buCVI3khJv@krava>
-References: <20260727142844.21212-1-leon.hwang@linux.dev>
- <20260727142844.21212-2-leon.hwang@linux.dev>
- <amnqXeC6D4mjcAe_@krava>
- <d745ca80-6516-4c61-8107-88c6a2d9cea4@linux.dev>
- <amsuU7eXuoziObdh@krava>
- <3f8e64b4-e60a-4eba-afb6-5af668ac1f85@linux.dev>
+	Matt Fleming <mfleming@cloudflare.com>,
+	"Harry Yoo (Oracle)" <harry@kernel.org>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH 0/6] rcu,srcu: Make call_rcu()/call_srcu() safe from any
+ context
+Message-ID: <22a89293-b622-42c0-81a5-6b92160e0046@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260729162207.1567770-1-puranjay@kernel.org>
+ <0096fbf8-c3be-4388-a60b-1968664e4f27@paulmck-laptop>
+ <DKEQ1D0U77V6.1EMGXI819YAW9@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -96,63 +70,105 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3f8e64b4-e60a-4eba-afb6-5af668ac1f85@linux.dev>
+In-Reply-To: <DKEQ1D0U77V6.1EMGXI819YAW9@gmail.com>
 
-On Fri, Jul 31, 2026 at 10:30:37AM +0800, Leon Hwang wrote:
-> On 30/7/26 18:58, Jiri Olsa wrote:
-> > On Thu, Jul 30, 2026 at 11:05:42AM +0800, Leon Hwang wrote:
-> >> On 29/7/26 19:56, Jiri Olsa wrote:
-> >>> On Mon, Jul 27, 2026 at 10:28:43PM +0800, Leon Hwang wrote:
-> >>>> The BPF tracing multi link updates several direct-call sites through one
-> >>>> ftrace_ops. Its implementation is therefore gated by
-> >>>> HAVE_SINGLE_FTRACE_DIRECT_OPS in addition to
-> >>>> DYNAMIC_FTRACE_WITH_DIRECT_CALLS.
-> >>>>
-> >>>> Select HAVE_SINGLE_FTRACE_DIRECT_OPS whenever arm64 enables dynamic ftrace
-> >>>> direct calls. This enables BPF tracing multi links on arm64. Also
-> >>>> generalize the unreachable-trampoline comment because the single-ops path
-> >>>> does not use ops->direct_call.
-> >>>
-> >>> hi,
-> >>> iirc arm needs ops->direct_call for trampolines to work properly,
-> >>> that's the reason we enabled single ftrace_ops on x86 only:
-> >>>
-> >>>   424f6a361096 bpf,x86: Use single ftrace_ops for direct calls
-> >>>
-> >>> I don't understand the arm usage of op->direct_call, but it looks like
-> >>> (codex thinks) that the fast path won't always work without op->direct_call
-> >>> being set
+On Sun, Aug 02, 2026 at 09:56:53PM +0200, Kumar Kartikeya Dwivedi wrote:
+> On Thu Jul 30, 2026 at 5:07 AM CEST, Paul E. McKenney wrote:
+> > On Wed, Jul 29, 2026 at 09:21:59AM -0700, Puranjay Mohan wrote:
+> >> call_rcu() and call_srcu() only ever touch their per-CPU callback lists
+> >> with interrupts disabled: the enqueue runs under local_irq_save() (and the
+> >> nocb locks when offloaded), and so do callback invocation and grace-period
+> >> work.  That is fine as long as call_rcu() itself is invoked with
+> >> interrupts enabled, but it is not always.  An NMI handler can call
+> >> call_rcu(), and instrumentation can reenter it.  The case that prompted
+> >> this is a BPF program attached to rcu_segcblist_enqueue() that frees an
+> >> object: the free reaches call_rcu_tasks_trace(), which is call_srcu()
+> >> under the hood, back on the same CPU with the srcu_data lock already held,
+> >> and it deadlocks on that lock.  Either way, enqueuing directly can corrupt
+> >> the list or deadlock.
 > >>
+> >> Rather than scatter context checks through the enqueue, make it defer
+> >> whenever interrupts are disabled: stage the callback on a per-CPU lockless
+> >> list and re-issue it from an irq_work once interrupts are back on, going
+> >> straight to the enqueue helper so the re-issue cannot defer again.  Only
+> >> the drain side takes a lock; the staging is a bare llist_add() and stays
+> >> safe from NMI.  This is behind a new hidden CONFIG_RCU_DEFER, which is set
+> >> wherever a reentrant enqueue is possible (HAVE_NMI, KPROBES,
+> >> FUNCTION_TRACER or TRACEPOINTS); without it call_rcu() enqueues exactly as
+> >> before.
 > >>
-> >> In theory, op->direct_call is the fallback for the case:
-> >> HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS=y, out-of-range target, and non-BPF
-> >> direct ops. This is what Codex thinks about.
+> >> CPU offline is the awkward part.  A callback can be deferred very late in
+> >> the outgoing CPU's teardown -- from do_idle() or cpuhp_ap_report_dead(),
+> >> past the CPUHP_AP_SMPCFD_DYING flush that would otherwise run the irq_work
+> >> -- so the irq_work can no longer run there to re-issue it.  rcu_barrier()
+> >> and srcu_barrier() therefore drain the deferred lists themselves before
+> >> they wait: for online CPUs they wait the irq_work out, and for offline
+> >> ones they drain the list directly, since that irq_work may never run
+> >> again.  rcutree_migrate_callbacks() drains the outgoing CPU's list too, so
+> >> a late deferral still lands on a callback list even when nobody calls a
+> >> barrier.  To keep those three drainers from stepping on each other, the
+> >> drain holds a per-CPU raw lock across the llist_del_all() and the
+> >> re-issue, so a drainer never returns having pulled callbacks off the
+> >> deferred list but not yet put them on a callback list.  Every lock the
+> >> re-issue touches (nocb, rcu_node, srcu_data) is already raw, so the
+> >> nesting is fine.
 > >>
-> >> However, after searching the call sites of
-> >> register_ftrace_direct()/__modify_ftrace_direct() in kernel, which would
-> >> set ops->direct_call, the actual callers are in bpf/trampoline.c, which
-> >> have been gated with HAVE_SINGLE_FTRACE_DIRECT_OPS. That said, for
-> >> normal usage of HAVE_SINGLE_FTRACE_DIRECT_OPS=y, op->direct_call is unused.
+> >> The irq_work is IRQ_WORK_INIT_HARD.  It is not needed for correctness, but
+> >> a non-HARD irq_work runs from a kthread on PREEMPT_RT and can be delayed
+> >> under load, letting deferred callbacks pile up; running the re-issue in
+> >> hard-irq context keeps that from turning into an OOM.
 > >>
-> >> If someone uses register_ftrace_direct() or
-> >> modify_ftrace_direct/_nolock() outside BPF in the future,
-> >> op->direct_call will be used.
-> > 
-> > so any 2nd user on the same function triggers the slow path,
-> > and that's fine, the single_ops handles slow path correctly
-> > 
-> > but IIUC the out-of-range target will now always go through slow path,
-> > which in current code it doesn't, right?
-> > 
+> >> Patches 1 and 2 do Tree and Tiny RCU, 3 and 4 Tree and Tiny SRCU.  Patch 5
+> >> teaches rcutorture to issue ->call() from a perf-overflow NMI -- the
+> >> nmi_calls parameter, on by default -- on the flavors that advertise it,
+> >> and checks that every callback issued from NMI is later invoked.  Patch 6
+> >> adds the BPF reentry reproducer described above.
+> >
+> > Nice!  I applied this series to -rcu for testing and review.  Patch 6
+> > might want to go up a different path, but let's see how it goes.
+> > If it goes via -rcu, it will need an appropriate ack.
+> >
 > 
-> Right.
+> I think it makes sense to take it through your tree for now. If there are issues
+> when we get these changes on BPF side (with the selftest), we'll fix forward. If
+> we take it now, it will end up deadlocking the CI, so should come with the
+> relevant changes once trees are synced.
 > 
-> Pls see the sibling thread with Ihor. With in-range BPF trampoline
-> allocation, the slow-path regression should mostly disappear.
+> You can add my ack when taking it in.
 > 
-> Let's continue the discussion in that thread.
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-please paste the link/subject for that thread
+Very good, and I will apply this on my next rebase.
 
-thanks,
-jirka
+							Thanx, Paul
+
+> >> Puranjay Mohan (6):
+> >>   rcu: Make call_rcu() safe to call from any context
+> >>   rcu: Make Tiny call_rcu() safe to call from any context
+> >>   srcu: Make call_srcu() safe to call from any context
+> >>   srcu: Make Tiny call_srcu() safe to call from any context
+> >>   rcutorture: Exercise ->call() from NMI context
+> >>   selftests/bpf: Add a call_srcu() re-entry reproducer
+> >>
+> >>  include/linux/srcutiny.h                      |  11 +-
+> >>  include/linux/srcutree.h                      |   4 +
+> >>  kernel/rcu/Kconfig                            |   6 +
+> >>  kernel/rcu/rcu.h                              |  18 +++
+> >>  kernel/rcu/rcutorture.c                       | 115 +++++++++++++++
+> >>  kernel/rcu/srcutiny.c                         |  53 ++++++-
+> >>  kernel/rcu/srcutree.c                         | 138 +++++++++++++++++-
+> >>  kernel/rcu/tiny.c                             | 101 ++++++++++---
+> >>  kernel/rcu/tree.c                             | 122 ++++++++++++++--
+> >>  kernel/rcu/tree.h                             |   5 +
+> >>  .../selftests/bpf/prog_tests/rcu_reentry.c    |  58 ++++++++
+> >>  .../testing/selftests/bpf/progs/rcu_reentry.c |  45 ++++++
+> >>  12 files changed, 636 insertions(+), 40 deletions(-)
+> >>  create mode 100644 tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
+> >>  create mode 100644 tools/testing/selftests/bpf/progs/rcu_reentry.c
+> >>
+> >>
+> >> base-commit: 9dc303e69bcd49f9668ca090ae45325269531fbb
+> >> --
+> >> 2.53.0-Meta
+> >>
+> 
