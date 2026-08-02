@@ -1,190 +1,178 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44083C2D
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 21:32:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785706340; cv=pass; b=sj+3yEdjjMWKb7Ltq80gr/c7WE+PBtI/G3wBNOrafmg+1jqYJMztsvOE/x1VOFZg+frf0v9QY4L7aFh6SIVPzkwjRbV7QJAIvkVMYL44uTk41gvr54s9S6W/SyABbOK1xGv+BNq8WTaCT0kmZE2wW2kze2pPc3r0UICgpsoT2E8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785706340; c=relaxed/simple;
-	bh=LSdofW40K1EnTz6Jum+TcVZgzGModR9w4wfzh8tJwkc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tDZ8gpSbtm7lPqDERcVllFjVH7d34ii79jc3snl4k3Y3arJi5Z+mVHrY8S8gmahmRcECOWEsROlw4rOdJ8mjh14adrlaf+tTu8WzXQpAzlpbOogwotGZAZHdo6ZFqW+ES8nD4yU9dbM7b+RytPpf1r0nHwxjLr1IcLhhX4IlVdA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZjrL+/80; arc=pass smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BCD33FE33
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 21:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785706865; cv=none; b=B0eTtsIgU1pQCSIv6QRY/pUoI4U4EmO7m9H28X813FbMl9U1DKdOd61GmC3LVc2okIdTP3G70Myk8fgCMOD4sttqcDAX8ZAxCELLaFjC8KgWIkEG76Oe8TBl8163ugSFjcu7k7OEnJhzqaecuDb6MIbFQSaPNwOwNpzeL4IZpWQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785706865; c=relaxed/simple;
+	bh=bCXNjXX0avt03pnSKeFnS+FeRIoVIWYVEuLEN25JckU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XcnxWGNDQLyBzDTHByrY5jEaHNaY8Z19hO65tv7H/+p6JR6lEoOxTDrCPhKVDV1Sb8n9UyFZkB9vTsNQOx0dAESTuKC/RxAzyf08xktByJd33MRkx3fLwvgkAg3k2YWKVgfs4/l2CDZ0tlT6fPUeJ6jY3DIbUEYbyOtx/k1m4Zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E+cgYUuv; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZjrL+/80"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-81dfdbd86d1so27259107b3.1
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 14:32:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785706338; cv=none;
-        d=google.com; s=arc-20260327;
-        b=smaCKDJBtryVdEcuWjq7ZN8e/KOc6nZzAZ3b9s/M1a5vOIVSy1v9E2zXlo9KsZ8bjx
-         jEqPkm9r2wYiAipeclhJGODfWlI2s9xM1HWr6KxWyyDNAg3tfG0R/VfFLS83spZdB+wW
-         AEQzGCdTy8EDSEBIn6zLhCuTS1bujp/zer1ctClASv1z3IXqzFLJCa/iXKnVmNHqh8UC
-         Lln8P5DgmxEjoFNJUeYh51Hjmle4OSbiFiPfyrfqd83af3Za4CbkV7kRaxAwoQdNwmlt
-         5+iKduxCExVedsegHWQ8sED5fQ6jIbNRUn4dey2VQu9lD5tVGsSBr3Wj0mqNxfAZAn6W
-         +WgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jJx4JmOa+C9zdV1VuAKgN9Q8DVXUZ1IOUzDIkXM6rE8=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=oJ1pTIki2EKzVhtIBcoM41kNiN0KERD16/ODEEvv5NJAbjJGhevfmW8S/tAtz8mNhO
-         +mIvxr+SQs65Llb76y/Y/cM1ZQY87l60NEp15MLuiwyB9kQI8HpKoPvL0C7FMIlepHqA
-         KhGEf90V1eL19qawNQzY3psKMZC0KI8j0z+Sp3CaMcqykcsiZ6hDNfzqsoarNYmyUGpW
-         zpYbz/Ej/eoe24gN34Js30YJG3g6q+siELFCVuzN0OiWpaTier/dAmZ4M2e/z5LljDC5
-         G9Xlai3XS7zeevGd2xDr/EstBP3PxtWcCri8RchVa1Hd8yifl9USEUKVa9ow7xFBSIt+
-         BEjw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E+cgYUuv"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84e84a6c4bfso2269189b3a.1
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 14:41:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785706338; x=1786311138; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jJx4JmOa+C9zdV1VuAKgN9Q8DVXUZ1IOUzDIkXM6rE8=;
-        b=ZjrL+/80tTXDE0oGiLTea7AAl79dBwOO9pWFuyyUm2TZv+/kEE4xOljeiariM9cgo3
-         D4e2rknpRMF7+gwJLj4GvTDX6RXvmTfWUyDn/yQAotl0DFwFM+3c0JXXu8bQ7iG9ZQL+
-         A7zpGdOHY9aIo25/FRFpq1IT7PXeU7vwd+LM4nodWr8IUIDR0gx2qOgwCMyVxOKx6YsR
-         6HqICODjvskzVp34SW4ik8/bI0OTFDpHIFt7wbrVe/BqPsPRPPqLh0Gtp2PvMe3gFi0O
-         Zbll42QLAZJqZ345o+gorJbx9DXIRkKHjxEvegoUgz92O6K/IrMNcVTwdXrbHRTeeYeQ
-         CGnw==
+        d=gmail.com; s=20251104; t=1785706863; x=1786311663; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=+gUf7+fY5UlM4xOtPRiTooHEsPXbpqsZ+m9BdccM8yQ=;
+        b=E+cgYUuvYHnZbbaBtnggvzR9rhD7BLGpTvul7owlTXzBAqi8R4gY+/msgSYQK6AQnx
+         PAnIqW/yJMRrzSDaVIfSvi0cPfC+LqzyUCwRfjI4rVShkflaqd2LP84BU2DZeoyXrX9+
+         hQi9K6Y2przu614jTPSzVep+mFMjiB5h2Iu9S3ZugyezrVSXVkkYdfMze0xvw0U+zcWh
+         ezLOeOKxe45ky0koxbmxXHrx6hvrGabf3krNu6TBWMehAjkBELnPlGz7xLXZ0ZJ/23iu
+         DKlbM2dzyapZN6/OClVGXWiI9Fy1T6dvz9s4n/KI8Rw7/IIsGnlnepgdmwMwx2gFUofQ
+         edCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785706338; x=1786311138;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785706863; x=1786311663;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jJx4JmOa+C9zdV1VuAKgN9Q8DVXUZ1IOUzDIkXM6rE8=;
-        b=tFcdTBbPhYkI4e0wfZvif3BVFIXyQge+N7Chb8rtN8Ksa3J5zKAXkjVrPjGITuB3gt
-         a6jPGgiZuEkjPKE+4B3ttK2GM5rXmZHc6DVhQ2mOdfULDuyumNOG09p/fj8oIwWAK9nu
-         YAKRrlt9BR+SFqlV2LtgkyD0xC5R/Pils2zSglGchkkREAn9+mYHFlEbvDCur7OvQXV7
-         RunIxctwc6yR2q1RK9PW0BiGE1wPPqc+3bE+uY+xijjc1iLgoKo6Vp1w3EsQsXiFbcyv
-         E5zgkxn/kMqnLpjkMCnLWMeuvIWMYpVDUIFoFr0M7/WoeAQpfoDSvY0HLDfOFvGFF7YA
-         8DGg==
-X-Gm-Message-State: AOJu0Yz5Qe0M9qJzXBVs0wQEeTDSdtffux1BSVq7z0XBMZytUhJQKD9w
-	MUWExMWDHXUxUhjLcJCXXc119PD6H7ROzfZIrQ4JzhxqMMh/RmA5V9bTUYEF3oKavpr2gjTLMNO
-	ihU2qyFK1rd73PGDDCkFjO5zkRmPOqMPB8y/H
-X-Gm-Gg: AR+sD116cxsnPD88YsIXs7HLmoefv/R21qGyterBehazwWu1uC9mZFA4qpnB6nLl9YJ
-	R8A2G/WPZrEzg3rx3aayKibaTMWktZsKC3sSN6IBfyKrs0r4oN67aPmkcY9ZWqcCKF9zsp/d9Be
-	VTCN9blNGtdr9Vw1SUnr0WsRLukakH08YnefgoBYuUbv3vIcMvvXAabVtovG5JmwQDeFRpEsC2f
-	n1XrDXWX7zZtxLKNA58xYqm6d5kYP4TrXFjNc2p2+rjBvSGHH9/CEh/4M1W3Pu+vlMd6QWw8Xwj
-	2tO3wRPdun77lQPYl87dIeX6knsxKT0tD3fC0UoaRIjN
-X-Received: by 2002:a05:690c:6e12:b0:80d:66b2:82c with SMTP id
- 00721157ae682-81fd4a95542mr106658587b3.16.1785706337663; Sun, 02 Aug 2026
- 14:32:17 -0700 (PDT)
+        bh=+gUf7+fY5UlM4xOtPRiTooHEsPXbpqsZ+m9BdccM8yQ=;
+        b=CjLswt7ViDlBElqRSyHcENirdl4vaKmu/pNYGHHl6EljrdZdpRnm6uMkwSu5LqrMJU
+         O2XiMBA7lmgcZdd3GyJeRzTyFvLvX/vlWhdQjcOBE3Rr610Q+1pIRMl4TbzIkowczEqE
+         pGkq0cPtNnBiwjvpzR2vEQ8pf+Nv2gdifKLNLamAdvhS/+b11pzPnKQJFNoYZ108gFNA
+         DesWtPn1xl2aklSbKLjWY827VeS6meKMI0UGSlySut0r5cBNqSrO9T/BZzrZ/L5/GRML
+         y+Ho6f/G06uXTh8w6/zAUKUvTPOldjyrt6oeM6EzR6cZUFYUFOBrmJRiQvRv+jaUlCO5
+         LPRg==
+X-Gm-Message-State: AOJu0YwvHiyb//+ohFHgZ5GCz0Lqx9Km3O16AyodvS7IOhT6zUq5yXTE
+	0KXEHCKBEjkmBBKE6uZy4H7eradXVBuzMGYL3TIQvHir49cfF9ZAYTSzffl7eA==
+X-Gm-Gg: AR+sD1303JcnElnwyEKrJGu2snu3V+p1mGJBcZUts7xwlGim+R2FEu9w3U/j3R4YGqW
+	SSbzFRu1gqCXUz5SHVB+0euoWblDO/7A3Ngh5TJMmtVNkRnK5Jzb3uOMzdhfozXPguK5LGNtYvd
+	08ziN5RuR3osYEPu70LnHWMgL8HM7c8a27aHrUTt6TwgalMDcFK+06BrjhEwNCifQhopM2K6y6u
+	vKpbinNcBTKGCD1IPhdeN9I7m+3q0kNM0E98G1j9ipvHwMuho6zgzGX1OstgtJ4tq2eaE8Bp5Q0
+	oOZyWXFIWHzjmwe9xeFD2NAlMHaatTCzwn0iNfOyXT1vWjnHNYhBlyFtPaImqFCZiTnNZ3Ey6gR
+	wmUuQIVW0fqYMFxBzfUFeg/qoxrCWqJyfbAcdha9zPzgzm8V8igo5Y3XjigsKmuxXFekQI6i0xE
+	J0nmvlVmbnR/jpaMlDrhIaYKiFJnE6r34ciBgOABq0Env8sDr38vg4N3uFM6SSlEYgOIAbTJOLm
+	ry74My6UTwHPe25
+X-Received: by 2002:a05:6a00:2d0c:b0:848:55a6:fbe with SMTP id d2e1a72fcca58-84ee499d324mr6616437b3a.35.1785706863118;
+        Sun, 02 Aug 2026 14:41:03 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84edc3d88b9sm2755821b3a.51.2026.08.02.14.41.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Aug 2026 14:41:02 -0700 (PDT)
+Message-ID: <20e990a0389bea4acb526dd7756699a95b0779b9.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/5] bpf: simplify the bpf_is_reg64()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Date: Sun, 02 Aug 2026 14:40:59 -0700
+In-Reply-To: <20260802212700.A46CF1F000E9@smtp.kernel.org>
+References: <20260802-static-zext-v3-0-3456b2604574@gmail.com>
+	 <20260802-static-zext-v3-4-3456b2604574@gmail.com>
+	 <20260802212700.A46CF1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260801074633.1595644-1-ameryhung@gmail.com> <20260801074633.1595644-13-ameryhung@gmail.com>
- <20260801080940.55E721F00AC4@smtp.kernel.org>
-In-Reply-To: <20260801080940.55E721F00AC4@smtp.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Sun, 2 Aug 2026 14:32:06 -0700
-X-Gm-Features: AUfX_mx9aBcMfMpdFxjzBrFWO3FK-gseHqnYyXY08NFWybw3UAkapxJ-BhWDtZ8
-Message-ID: <CAMB2axP6CHeFRbBFxqnM9Ficnp-KgT+sYKVFVbdLX1b6jraXhA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 12/18] bpf: Classify kfunc mem_size args from
- BTF without register state
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Aug 1, 2026 at 1:09=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+On Sun, 2026-08-02 at 21:26 +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
 e(s) to consider:
-> - [High] Removing the register type check from `is_kfunc_arg_mem_size()` =
-allows a BPF program to pass a pointer register as a memory size parameter =
-(`__sz`), which triggers a `verifier_bug` and a kernel warning.
+> - [Critical] bpf_is_reg64() fails to identify BPF_ADDR_SPACE_CAST operati=
+ons with imm =3D=3D 1U << 16 as 32-bit when the arena has BPF_F_NO_USER_CON=
+V set, leading to missing zero-extension and possible sandbox escape.
+> - [Critical] Unconditional overwrite of `zext_dst` destroys manual overri=
+des for `PTR_TO_ARENA` arithmetic, leading to missing zero-extensions and a=
+rbitrary kernel memory access.
 > --
->
-> --- Patch [12]: [PATCH bpf-next v3 12/18] bpf: Classify kfunc mem_size ar=
-gs from BTF without register state ---
-> commit e7666ea9e561228e1708d772f8e42d33c514cde8
-> Author: Amery Hung <ameryhung@gmail.com>
->
-> bpf: Classify kfunc mem_size args from BTF without register state
->
-> This commit removes register state checks from is_kfunc_arg_mem_size() an=
-d
-> is_kfunc_arg_const_mem_size(). It relies solely on BTF to classify kfunc
-> memory size arguments to further decouple argument type classification fr=
-om
-> register state.
->
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 6fc22a4e38b26..d65da54f9c0f8 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -10785,26 +10785,24 @@ static bool is_kfunc_rcu_protected(struct bpf=
-_call_arg_meta *meta)
-> >  }
-> >
-> >  static bool is_kfunc_arg_mem_size(const struct btf *btf,
-> > -                               const struct btf_param *arg,
-> > -                               const struct bpf_reg_state *reg)
-> > +                               const struct btf_param *arg)
-> >  {
-> >       const struct btf_type *t;
-> >
-> >       t =3D btf_type_skip_modifiers(btf, arg->type, NULL);
-> > -     if (!btf_type_is_scalar(t) || reg->type !=3D SCALAR_VALUE)
-> > +     if (!btf_type_is_scalar(t))
->
-> [Severity: High]
-> Does removing this SCALAR_VALUE check allow a BPF program to pass a point=
-er
-> register instead of a scalar to a kfunc's size argument, potentially
-> triggering a verifier_bug()?
+>=20
+> --- Patch [4]: [PATCH bpf-next v3 4/5] bpf: simplify the bpf_is_reg64() -=
+--
+> commit 4ece654ab9bc1fb0f5d2f2cc247cae7c94f2cb89
+> Author: Eduard Zingerman <eddyz87@gmail.com>
+>=20
+> bpf: simplify the bpf_is_reg64()
+>=20
+> This commit simplifies bpf_is_reg64() by removing unused parameters,
+> removing BPF_JMP instructions handling, and streamlining conditions. It
+> also moves the function to kernel/bpf/fixups.c.
+>=20
+> > diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> > index 6125598d16a84..7b3510d46b377 100644
+> > --- a/kernel/bpf/fixups.c
+> > +++ b/kernel/bpf/fixups.c
+>=20
+> [ ... ]
+>=20
+> > @@ -44,6 +44,49 @@ static int insn_def_regno(const struct bpf_insn *ins=
+n)
+> > =C2=A0	}
+> > =C2=A0}
+> > =C2=A0
+> > +/*
+> > + * For use only in combination with insn_def_regno() >=3D 0.
+> > + * Returns TRUE if the destination register operates on 64-bit,
+> > + * otherwise return FALSE.
+> > + */
+> > +static bool bpf_is_reg64(struct bpf_insn *insn)
+> > +{
+> > +	u8 class =3D BPF_CLASS(insn->code);
+> > +	u8 mode =3D BPF_MODE(insn->code);
+> > +	u8 size =3D BPF_SIZE(insn->code);
+> > +	u8 op =3D BPF_OP(insn->code);
+> > +	bool mode_mem;
+> > +
+> > +	/* subregister endiness swap */
+> > +	if ((class =3D=3D BPF_ALU || class =3D=3D BPF_ALU64) && op =3D=3D BPF=
+_END && insn->imm !=3D 64)
+> > +		return false;
+> > +
+> > +	/* w0 +=3D 1 */
+> > +	if (class =3D=3D BPF_ALU && op !=3D BPF_END)
+> > +		return false;
+> > +
+> > +	/* cast from as(1) to as(0), PTR_TO_ARENA is 32-bit */
+> > +	if (insn->code =3D=3D (BPF_ALU64 | BPF_MOV | BPF_X) &&
+> > +	=C2=A0=C2=A0=C2=A0 insn->off =3D=3D BPF_ADDR_SPACE_CAST && insn->imm =
+=3D=3D 1)
+> > +		return false;
+>=20
+> [Severity: Critical]
+> Does this logic miss identifying BPF_ADDR_SPACE_CAST operations with
+> imm =3D=3D 1U << 16 as 32-bit?
+>=20
+> If the arena has BPF_F_NO_USER_CONV set, bpf_do_misc_fixups() rewrites
+> all BPF_ADDR_SPACE_CAST instructions (including imm =3D=3D 1U << 16) into
+> a 32-bit MOV to explicitly clear the upper 32 bits.
 
-The issue is only temporary. It is not bisect safe but simplifies the
-patches. The issue will go away after patch 17 once
-check_mem_size_reg() is dispatched on KF_ARG_MEM_SIZE.
+I think this is a pre-existing bug.
+I'll add a test.
 
->
-> If get_kfunc_ptr_arg_type() sets arg_mem_size purely based on BTF,
-> check_kfunc_args() will process the memory pointer argument, peek ahead a=
-t
-> the size argument, and call check_mem_size_reg():
+...
 
-A later patch will also defer mem+size checking to KF_ARG_MEM_SIZE
-similar to helper (look back) so check_mem_size_reg() will only be
-called after size if validated.
-
->
-> kernel/bpf/verifier.c:check_kfunc_args() {
->     ...
->     ret =3D check_mem_size_reg(env, buff_reg, size_reg, argno, next_argno=
-,
->                              BPF_READ | BPF_WRITE, true, meta);
->     ...
-> }
->
-> This happens before the main loop reaches the size argument and ensures i=
-t is
-> a SCALAR_VALUE.
->
-> If a pointer register with a fixed zero offset is passed,
-> check_mem_size_reg() might assume it is a valid scalar value of 0, pass t=
-he
-> boundary checks, and call mark_chain_precision(). This explicitly trigger=
+> > +/*
+> > + * Return the 32-bit subregister defined by INSN, or -1 if INSN does n=
+ot
+> > + * explicitly define a 32-bit value.
+> > + */
+> > +int bpf_insn_def32(struct bpf_insn *insn)
+> > +{
+> > +	int dst_reg =3D insn_def_regno(insn);
+> > +
+> > +	if (dst_reg < 0 || bpf_is_reg64(insn))
+> > +		return -1;
+>=20
+> [Severity: Critical]
+> Would this unconditional behavior inadvertently overwrite manual override=
 s
-> verifier_bug(env, "backtracking misuse") if the register is not a
-> SCALAR_VALUE.
->
-> Could this lead to a kernel panic on systems with panic_on_warn=3D1?
->
-> >               return false;
-> >
-> >       return btf_param_match_suffix(btf, arg, "__sz");
-> >  }
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260801074633.15=
-95644-1-ameryhung@gmail.com?part=3D12
+> for PTR_TO_ARENA arithmetic?
+
+No it won't.
+convert_ctx_access() downgrades those operations to BPF_ALU.
+There is also a test to check this.
+
+...
