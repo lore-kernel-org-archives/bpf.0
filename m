@@ -1,112 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C1422ACFA
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 22:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A8429C35A
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 22:52:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785710476; cv=none; b=MoqEYIee0G5w0nFc0LvuxmHbM3fojjlidS+GshJN/SSvpmt/EDiaTrK1sHPIq6hxqOjojijhq/4dxSdCa8PFmys3srdYvaeC0nv6BP02hHKVQfyrRJZauonXxL/XdZ8ls+/FfdqHhVNy6LeaYMImh4dXRihlKoUteAGufZex5pc=
+	t=1785711133; cv=none; b=JGm6rngY39ia8alBZKP+YTRzr/i3QW8/LIpEqvLNBqoqkYxU9zISBJv5wm6vgR4ro7lqJvdjE7+vURCeuNKKvCtE/+P5kygiOLR0aaz/qQi5mhp5ZO5Ddg26rDkARvVXLZ7A4YxYLpXwZUNKU+Fha389ziEq1pM7EZXFF/ug81c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785710476; c=relaxed/simple;
-	bh=SgUymoBlhuDuXFAQ7He6FfGYxYy29GI6S1Ybw7CX9TQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lmaRxX2g0bguaWBPctEhp+g9AdYqWum2JhiAGw6AEyr/sUO143bZfeq7Uo1nOCFw6q2FS4cML8ppr/Nbuc5KLSj4LAc8kl8Qzq5EN+LecRLekyxbSx+hOensTEb3PWRkA2n2UOyrj8gmgXXOpOL/Pa8faLTML229ZNGm1VnZWtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UoZKAXTm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785711133; c=relaxed/simple;
+	bh=2Ie6Tc+daqXc9lWNzWs2UECFqalPOJIGOSaDr6qJotE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AuFPwQbXni+QzHEM1hiFfrDuYhxmqGROlEoEOjl4zL/7wul9EryqOnoEtPPOwpABrsUCD20BssFuDiAYQfNddeclEYvV52uJJXjM4ZJcMSpmMtz9ojf8uehj+k1fK1/R4VC6SBZSjTl113wg3ebzGfolDe4CSuNzuz/+6j7F0yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pi2HBriD; arc=none smtp.client-ip=74.125.225.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UoZKAXTm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9638C1F00A3A;
-	Sun,  2 Aug 2026 22:41:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785710474;
-	bh=Ewpws/G+IGLtwBzYcAausDrvvHEZMVGFD+Bt/3M1wHw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=UoZKAXTmRaXoaOgtsGv/kv87CHh/6g7yOm37/QtZFs6X0VHrpFlpii5HilXQc4n7F
-	 OqfOqduQFgl1xKNvHqbHIjQ2fPE8HM78flNh1rQeLhnsrjyXePoSUfKEHE/1S8Re6e
-	 HmV+5/b5rdR0WqbbFq2/94lpOtHL0MqF03ZrpeLRMuB5KgeeLxFWcojT8RLbJCQu2i
-	 WPD10yr6r3CdKYz+a4mJVTvTjH8xHLDBMBU1xtau3/nl/PCar3zif86Rf53NWcYQ+A
-	 ilESAawVWcoKhwyHkL+XNIJzBRqU5R1LlenSExPNJ/OTzopmfK7qjgoBt1PKJwbNiE
-	 0DdWTRh9Tqw0g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5A0D23809A3D;
-	Sun,  2 Aug 2026 22:40:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pi2HBriD"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495501e57beso4844315e9.1
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 15:52:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785711130; x=1786315930; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=CL4hRxa/gfQr8GTGJSeS4vmV/jQAwaQ5XDEGNXS+nL0=;
+        b=Pi2HBriDW5zQnRYMfnHp7CAsW9KIsa9qroWxOeWP6hleDLbxQNZGzwbGVQPiur+JMv
+         gtvzest0npyh5WjaTIBHZ/cHG+FD0BnvwnS1DFXOXKBCxNC3hLPafO7fft+sqxeMQa+L
+         qO54gA2ecW+1ag7MXgVPfWjHTvYMeLwq+LVEHIxzEMANfgzQcD6x7/VgNvkusRwloZF0
+         luOiECrCcW4huWo8f9ARuxOK1N3D7PwN3vS6hnknK5Zw2bx0qfBDLsplR5krOb15fP65
+         0puCsTFLimB1RSq2V5VuoM+AWpklwDuBjAiLiOO7kYjV/bh5taMu389/Q4gRWCePoIbl
+         sjug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785711130; x=1786315930;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=CL4hRxa/gfQr8GTGJSeS4vmV/jQAwaQ5XDEGNXS+nL0=;
+        b=sesF081oT41HxyFaiz54ik1tKJG1hxQtm7ERSWxrsyRTMgMJ2qqQJW8vzHa23zH5wS
+         uVUMlPi5VDfnQ1DB1g5+BuSqF1sRsxniWVOQDHFip0MzSg0aW1e5lWChG8UHxs4j6+ER
+         j4qXr+8lwhkTWiRMaaO2H/yN+eLiIREcXy1wryanSUQ8BQtRyf95b+F2EC30/cL3cD5F
+         HKZUV3f1xIeXDpcp1AmzCL/vxTydfKS19WVcewKV/wEFD60PgALwDqSP6EJNWOASESou
+         VZcH1YrKLiHBYBEUiNVCQYiRj0wN0bynQMUNLMI5c8YU8Umc+YNqewHVeE8s+7IciQld
+         4H9w==
+X-Gm-Message-State: AOJu0Yyk98P0A/6KrDlrMC0d7ZZf1Jv6hKeNLGneLUMBjuT/Yv2BdLra
+	rOi6rM+7YR+qfKfCZUY8YSnuW5hBFx3FRHWtdQ5Lk48R5+cTzFzvyrczSnxFuCqa
+X-Gm-Gg: AR+sD12ol/7vkKvY+QiGjp4NjCu5DJhK+z4pQlZdGoe6Ism1huhIu2K6DrIKQO1yp9S
+	6/A3gZg+EctZM+xcZ8LEOKF/Gj4mCe/bT7Cl7vGB8aKr11Dpcp21/ycxiwTAkhDkd8FQZaPGZJW
+	OvUzzzdficmPvtiVUBw4u05N4wUyBywY+91srVREB7FrI7OFjEhAEioh9xUQTwp3DozAJdUiwNt
+	o+MAhPQJkZ4o0LHdGY8+Q88gPsORXvIMCqr2TfItYIbxrg2DyWriSPjiuccK6x5LZSK9+7X+jpi
+	qlZ0DwSgofSfRMSaXneJg9/0ch65PstYAKJjGkEsH9C5+sCnvsqeFUJiab8MyfDv6k7BRmBIFsn
+	TBjfJFtOF4FX8re7ivIndLv5QvtsehjZ19yLnx/R8scKQBy1/RI6gAV2kT3QZzkIujg1RCQsnbJ
+	9lEDGAwwQAxhR87tyclVSeyuFv/VwQvHLq0ob4VLx43vxgXJdspTqkVfTP7TCipiZIPf8O7yLbI
+	9wccz0O1CAjf3zo9F+xUJPBxrK0nhM8ukh2khRqgcqrQFSwJYV1KMzGoWRgDUoMM5D6KDeAqldS
+	siAjJBzQVwsLSxFh2dAA0rxUsHTcpQxcHwjljRyLt5+XszQLsA==
+X-Received: by 2002:a05:600c:4747:b0:495:734e:4825 with SMTP id 5b1f17b1804b1-4980c674a20mr136572805e9.16.1785711129958;
+        Sun, 02 Aug 2026 15:52:09 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49808199a5csm241112525e9.4.2026.08.02.15.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Aug 2026 15:52:09 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2 0/3] Improve stack depth verification stats output
+Date: Mon,  3 Aug 2026 00:52:04 +0200
+Message-ID: <20260802225209.2511758-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1210; i=memxor@gmail.com; h=from:subject; bh=2Ie6Tc+daqXc9lWNzWs2UECFqalPOJIGOSaDr6qJotE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JISv/5H+95Pr81+ueyv490Nm9eO3ej1wR3HdST082u5rxt vFq5s4ZHaUsDGJcDLJiiiwl//cxGZ+o/B1ou4wbZg4rE8gQBi5OAZjINXuGf2Z7jC/s/TTrI3+e faeZw+NrS3rcPzOez3rconI1QMas7wAjw9/0HyIZC83eZB68WPgi59U5+2O1fJxy68Ms2A1UXp1 z4QYA
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 00/18] Generate bpf_func_proto for kfunc
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178571043614.1504719.8056919816890329289.git-patchwork-notify@kernel.org>
-Date: Sun, 02 Aug 2026 22:40:36 +0000
-References: <20260801074633.1595644-1-ameryhung@gmail.com>
-In-Reply-To: <20260801074633.1595644-1-ameryhung@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
- kernel-team@meta.com
 
-Hello:
+Some improvements for more clarity in the stack depth verification
+statistics output. See commit logs for details.
 
-This series was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+Changelog:
+----------
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260801230400.850271-1-memxor@gmail.com
 
-On Sat,  1 Aug 2026 00:46:15 -0700 you wrote:
-> Hi,
-> 
-> This is the second of three patch sets to unify kfunc and helper
-> argument verification. It:
-> 
->   1) further aligns the kfunc and helper argument checks,
->   2) makes kfunc argument type classification depend solely on BTF, and
->   3) generates a bpf_func_proto for each kfunc.
-> 
-> [...]
+ * Use multi-line format. (Eduard)
+ * Adjust veristat to work with old and new format.
+ * Adjust selftest log_level without new option. (Eduard)
 
-Here is the summary with links:
-  - [bpf-next,v3,01/18] bpf: Drop process_timer_func wrappers
-    https://git.kernel.org/bpf/bpf-next/c/70a841617aa8
-  - [bpf-next,v3,02/18] bpf: Unify const map ptr argument checking for helpers and kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/b33d09b4d914
-  - [bpf-next,v3,03/18] bpf: Split kfunc map argument into __const_map and __map
-    https://git.kernel.org/bpf/bpf-next/c/c82b998777b7
-  - [bpf-next,v3,04/18] bpf: Pass kfunc meta to mem and mem_size check
-    https://git.kernel.org/bpf/bpf-next/c/9f52714dd89b
-  - [bpf-next,v3,05/18] bpf: Resolve map lookup result type at lookup time
-    https://git.kernel.org/bpf/bpf-next/c/341d227fa5db
-  - [bpf-next,v3,06/18] bpf: Check helper and kfunc mem+size arguments identically
-    https://git.kernel.org/bpf/bpf-next/c/d4e7fb59c0d4
-  - [bpf-next,v3,07/18] selftests/bpf: Test map lookup result refinement
-    https://git.kernel.org/bpf/bpf-next/c/e6d200dd1026
-  - [bpf-next,v3,08/18] bpf: Check fixed-size mem args of helpers and kfuncs the same way
-    https://git.kernel.org/bpf/bpf-next/c/e566701b9b0c
-  - [bpf-next,v3,09/18] bpf: Rename ARG_CONST_SIZE{,_OR_ZERO} to ARG_MEM_SIZE{,_OR_ZERO}
-    https://git.kernel.org/bpf/bpf-next/c/c0e091f30f0d
-  - [bpf-next,v3,10/18] bpf: Fold __szk const size handling into the scalar arg path
-    https://git.kernel.org/bpf/bpf-next/c/f16e80c2c451
-  - [bpf-next,v3,11/18] selftests/bpf: Test __szk precision with a NULL nullable buffer
-    https://git.kernel.org/bpf/bpf-next/c/f88caee62e45
-  - [bpf-next,v3,12/18] bpf: Classify kfunc mem_size args from BTF without register state
-    https://git.kernel.org/bpf/bpf-next/c/ea5ab2389801
-  - [bpf-next,v3,13/18] bpf: Handle NULL kfunc pointer args without a KF_ARG_PTR_TO_NULL type
-    https://git.kernel.org/bpf/bpf-next/c/76fb08750481
-  - [bpf-next,v3,14/18] bpf: Distinguish fixed- and variable-size kfunc mem args with MEM_FIXED_SIZE
-    https://git.kernel.org/bpf/bpf-next/c/90990ee10be8
-  - [bpf-next,v3,15/18] bpf: Classify kfunc pointer arguments from BTF, resolve type against the register
-    https://git.kernel.org/bpf/bpf-next/c/c9e995ba0d11
-  - [bpf-next,v3,16/18] bpf: Tag nullable kfunc pointer args with PTR_MAYBE_NULL
-    https://git.kernel.org/bpf/bpf-next/c/ba5b99470c40
-  - [bpf-next,v3,17/18] bpf: Classify scalar kfunc arguments from BTF
-    https://git.kernel.org/bpf/bpf-next/c/1690dcf27c73
-  - [bpf-next,v3,18/18] bpf: Generate kfunc argument prototype at add-call time
-    https://git.kernel.org/bpf/bpf-next/c/a49b70400b9d
+Kumar Kartikeya Dwivedi (3):
+  bpf: Show more useful info in stack depth stats
+  selftests/bpf: Adjust veristat stack depth parsing
+  selftests/bpf: Test stack depth stats without BTF subprog names
 
-You are awesome, thank you!
+ kernel/bpf/verifier.c                         | 13 +++++++----
+ .../bpf/progs/verifier_basic_stack.c          |  4 ++--
+ .../bpf/progs/verifier_bpf_fastcall.c         | 23 ++++++++++++-------
+ .../bpf/progs/verifier_private_stack.c        | 15 +++++++++---
+ .../selftests/bpf/progs/verifier_var_off.c    |  4 ++--
+ tools/testing/selftests/bpf/test_verifier.c   |  2 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |  6 ++++-
+ tools/testing/selftests/bpf/veristat.c        | 16 +++++++++----
+ 8 files changed, 58 insertions(+), 25 deletions(-)
+
+
+base-commit: 8f876c773b79ed66dadc9507f50dbff39c6a9ec7
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.53.0
 
