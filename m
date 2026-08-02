@@ -1,71 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639071B3B19
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 02:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88941A285
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 07:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785639544; cv=none; b=eOUGm3nNzCQKpYVf0D7UE8qGX3dwF3xXEsPcstlR5zSkGls+ndyk0ERHH+/EZJ0IiKW98kuODJszjDC/7+cbBmKr3Q4PjwUht7zbPphWZTg/1LeebSdl8lUMgtoN8Wl+xCQkSQdTBqJvh9dM4S9lDr2ZGoxhQEH6qfnLJrc7j8E=
+	t=1785656879; cv=none; b=mTIV8AVSfEwMXRP2ZwYbtJqVHUDQ+4v2AUiCZ/jvet02NL3ZazAGbwZH58dHsNuyWwxQMZSheqTDfCBKe37W4r1JV3DfVz3AGuiyDTYg5FOYuNsWk1waPK/giC/wdc+hg+vfpa6q5TOAEKY1nVYzbB05yRJqUFS1CxOHPAD0VDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785639544; c=relaxed/simple;
-	bh=/kI/uQPh08nBC+0A1WngsWcVx2slFH6YI60SAvHFtFM=;
+	s=arc-20240116; t=1785656879; c=relaxed/simple;
+	bh=XjPQ/xZWThddxTJkuGLtSU3m012G+3vFPGZbmTmZY5Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nDhkowjvkGIl52+VmdFLEyrlhyWCeIi+cYlqGy226sgE7EF5cqe+laJgRS8lds4J9IynCrmL4aWSJ166LwxZ9zH+HUvvKxVDa9HQ+T6n6ogNy1Bo4cxH67YKmQtA39lY3FwOpLMNR7ooCDnb+qQm1w6/tMrfsk3DbFRdrjgJaeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dcmgMzFG; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=b+xqfOKT8PaDdMMwvavnziWusZWfeeVQ01VWyQi9rW108Rdt7U9Wu4bIqtlD5vx4OW41SDqjSqGicNCF6KBZkV19WwtZGbMoK9kx3rPaOupGM238IUJ6zPf71iSGNmEPOQg51H/0yAnbADrSIEUNbOmYQPcs0GMOY12SpVB2J9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Kdtd+QI3; arc=none smtp.client-ip=115.124.30.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dcmgMzFG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE241F00AC4;
-	Sun,  2 Aug 2026 02:59:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785639543;
-	bh=O9/UOn0VzUwljjyURZfIwqsLzvzqkevEdbiLoOiL1F4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=dcmgMzFGYoM70SKPq3fpXRicIhjbpOHbZrVeh4mdZHgvAQc9U7w762ae/cYwT/JW2
-	 6CKWLxfuu+bj2/gd6m8M1fco/8FGuSqbZZEwyRhWNjaF3Gi0QT47DPG9RkktmbWjgq
-	 bodWIYMRqxtTwSbZeqWskBDIR73r3VTWufX0luvMvJyQWQ44DDAOxcDyiUxWkW0ips
-	 n/pECsrr6DySN4FkByicZVZBCyIKgFPSBZrYWYzSbLrNdNOIQI3N9r2V+zLijHOsBE
-	 m8fZAfWnPWtXb0xP1Oo8Da67oaYU6ydbj5Jxo5IpV6Gid836lIwXBR6XDpaFVr/fHR
-	 eWPSnAiBiXjqA==
-Date: Sat, 1 Aug 2026 16:59:01 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Imran Khan <imran.f.khan@oracle.com>
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 0/6] workqueue: introduce BPF iterators for
- workqueues, worker pools and pending work
-Message-ID: <am6ydQ0kl-KVOf_F@slm.duckdns.org>
-References: <20260728065525.653171-1-imran.f.khan@oracle.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Kdtd+QI3"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1785656868; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=/NS4NnWVSUKGBz+I/sNmTYwrW0tng0AM1n4B2vTPhSI=;
+	b=Kdtd+QI3f+xGc8p0C/D7L2kMRYyTNqyCgpU4KMm2Ad20CpGkxRgaWHghAHK7h1da6YL4GYPfM2Za65+4O+xSWwyBvW40qdB9yp2+4uB/n+k/NjoXNMuMQHUlAQ+sCPupSNw0Fm+xvyEDRoFbNozc30tLolod4MfR0QLM24zlefs=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=feng.tang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0X8BjgAK_1785656867;
+Received: from localhost(mailfrom:feng.tang@linux.alibaba.com fp:SMTPD_---0X8BjgAK_1785656867 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Sun, 02 Aug 2026 15:47:47 +0800
+Date: Sun, 2 Aug 2026 15:47:46 +0800
+From: Feng Tang <feng.tang@linux.alibaba.com>
+To: Andi Kleen <andi@firstfloor.org>
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: [PATCH] selftests: net: reuseport_bpf_numa: consider cpuless
+ numa node
+Message-ID: <am72IsHVw_CuO_RJ@U-2FWC9VHC-2323.local>
+References: <20260730113040.75718-1-feng.tang@linux.alibaba.com>
+ <20260730113738.41C901F000E9@smtp.kernel.org>
+ <amv0DwQoeESq2Cp7@U-2FWC9VHC-2323.local>
+ <amz-m8cu0lYc8LzR@firstfloor.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260728065525.653171-1-imran.f.khan@oracle.com>
+In-Reply-To: <amz-m8cu0lYc8LzR@firstfloor.org>
 
-Hello,
-
-On Tue, Jul 28, 2026 at 02:55:19PM +0800, Imran Khan wrote:
-> Nearly every subsystem defers work to workqueues, and their state can
-> already be observed on a live system, just not at a granularity that is
-> convenient to consume. sysrq dumps every workqueue and pool to the kernel
-> log in a fixed format, with no way to select or aggregate; the WQ_SYSFS
-> interface only covers workqueues that ask for it and exposes attributes
-> rather than runtime state; and the drgn scripts under tools/workqueue/ need
-> a debuginfo-equipped userspace and read the state from the outside, without
-> the locks that protect it.
+On Fri, Jul 31, 2026 at 12:59:23PM -0700, Andi Kleen wrote:
+> > > Will this crash if numa_allocate_cpumask() fails to allocate memory?
+> > > 
+> > > It looks like cpumask could be NULL here, which is passed directly to
+> > > numa_node_to_cpus() and numa_bitmask_weight() without validation.
+> >  
+> > Good point. 
+> > 
+> > If the allocation fail, will return 'false' to let the code go the
+> > original flow.
 > 
-> This series adds BPF iterators for workqueues, worker pools and pending
-> work items, so that this state can be walked from inside the kernel, under
-> the right locking, with filtering and aggregation done in place and only
-> the interesting part copied to userspace.
+> 
+> While it's technically true, checking for out of memory in ring 3
+> (or at least other checking than exit(1) on error) is usually 
+> useless. Most of the time when this would fail you're as likely
+> to just get killed by the OOM killer, as well as the harness that
+> called you. Maybe it could happen without that with some very tight
+> ulimit settings, but with that not much else will work anyways.
+> Also these paths are basically never exercised so likely buggy
+> when non trivial.
 
-I'm not necessarily against it but what are the use cases here? If for
-debugging, isn't drgn + hooking into tracepoints mostly enough? Can you give
-concrete examples where bpf iterators are essential?
+Good point.
 
-Thanks.
+> 
+> For libnuma if you set numa_exit_on_error to 1 it will always
+> exiting after printing an error. That includes the allocation
+> functions.
+ 
+Good to know that!
 
--- 
-tejun
+> 
+> 
+> > > > +		ret = true;
+> > > 
+> > > [Severity: Medium]
+> > > What happens if numa_node_to_cpus() fails?
+> > > 
+> > > It can return a negative error value, leaving the cpumask unmodified with
+> > > zero bits set. Because the return value is not checked,
+> > > numa_bitmask_weight(cpumask) will evaluate to 0. Does this cause the function
+> > > to return true and silently skip testing on nodes where an error occurs,
+> > > rather than reporting the infrastructure issue?
+> > 
+> > From the code logic (with above change), the 'node_id' and 'cpumask' have
+> > both been validated, and this numa_node_to_cpus() is very unlikely to fail
+> > here upon reading libnuma source code.
+> 
+> Yes it's unlikely to fail.
+ 
+Thanks for confirming it!
+
+- Feng
+
+> -Andi
