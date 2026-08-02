@@ -1,170 +1,295 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7140E3290BA
-	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 23:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C1833B6D6
+	for <bpf@vger.kernel.org>; Sun,  2 Aug 2026 23:14:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785712153; cv=none; b=uokMp/rfbMf/hkVeHvdL0zHzfH9If0AQFDSiQFSl+X5TdJKN1lBlU4tUy+WZPA4nSzPiQeMxK2DE/t7lXZWcLfxCjIJN/SBqdk/VJme2UJX3ddpf3YsQfLXqWDQ40OcTee9P99Vf3+R2YRl0SQnBRQBjU0r0cB9IJQV3Pml8TT8=
+	t=1785712443; cv=none; b=gQYOK5fD+NBrPCHq0EANFUu28FzSPidzvk7FwgMH2/w56jzo09PrPHAYUx++f8VT2gv0iR/Zd8htnutvLcNjycvf0HUtGkpYIwD4iep9R2mBuQfAGslgjhcAgETnGVVVJJFyHdzdUNlqmSwt43SbY5bHFKq6niGxkdNsAhBTVRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785712153; c=relaxed/simple;
-	bh=RX1VMfBz7J22ekT4x+p61ELsTSvDTroV4KGXGIm1qp4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=mAZYBOsy2Xbn1fWaYFM2vE5ZG6F6luF+yr4Xdr0Sn8fDcTr6bYCsJlS015+RIft/fS9it7zKk37CKHxt6a1aipXLRVkvEzcbVIxY+VSXTQnH5NS7zTA6LYiIS2Cl31HeKyx1CWU8dMszuALfdUQ4vfww7i2gV5+VY12duVkW3ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iQWb5Vxq; arc=none smtp.client-ip=74.125.225.64
+	s=arc-20240116; t=1785712443; c=relaxed/simple;
+	bh=k1fkw7WNhvI6GXASm5e75WiACpnhQ9kNrN2Sioy4TK4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AJVpKBilJCSmiZclbKOmstBX2Jv9OhJRymjlR6XAIvvX9SRoiEXeiE6nNExnj6Yk3CTHFMp3GppqqrGCukp4TW0YVmvuIY8E6/F9DrjAX7DI0yrHCfvR4Z6Rex2pvsTHF6RaXDLnWdjff4ziFVdpuqVansMWe+5cHSw3O1roMuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qulABJSz; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iQWb5Vxq"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4784b41f3aeso957271f8f.1
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 16:09:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qulABJSz"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ce7d2adef4so45919905ad.3
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 16:14:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785712150; x=1786316950; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=lfeEUlf77ZiQWMgQd598a4lPStxyxdqvSqA/as60x8k=;
-        b=iQWb5Vxq91aF3fl1r0on6pJlpE1EAXwBDz5wXVY13Perh+5+FJEXYjoQf+dMIoq1Jr
-         huYP6HZL2zFKm7b5UwyXeBVTqvAocOFXpLVbYDJbvkfjqdkYUK/jipr4oHPZ7S2/1YRi
-         r8ksv852FazhZPcWT233aFzOij6YQuXALUioZQLAfdhRZN5LGBIzXM/B289hOkE+GVzQ
-         6AroxvI9lVHeBQ6buqsfUa7gFRvoBylGTk3y4d1DCtk+xYLkpLopdDlSjCMeaCmdV0b7
-         ceOPtjDbaYujnkwhe31KHPzwzgzxJsETg7zCpwzB4Z/UBipIkjoOJMoIUfwj3e8FVPiu
-         Dwhg==
+        d=gmail.com; s=20251104; t=1785712440; x=1786317240; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pU4v6hRTUge0KrXkRRWZsd+tc6Y5PUpwswApZzkRyGg=;
+        b=qulABJSzgzKFfh5fmuaasYELrpznotCNM96Bs85ZqE3KClAwAUCpaSj5Zp+bWvY+PF
+         WG/TXebrIpN5/L/TA4qdiw4Ztn8y/6X/8hk4Gg27zQRgx9ha2RlObrpa6vTrecJCQ8YG
+         NKtX/UWfhNVyBD9CtgaHH1RthYnJTcA/6sX34y79UmEloh1afU439U090YihQPtBg9am
+         e/HPJt+dfOzt1wl9hwipUaabpZqpZhliYi4oNCQWCNLJDVVjEMfH4IgO37D15aI2rsV+
+         55v0kdhqKcj/9bIzyIg2I75ZN3bR2pdeLq/cScrprKzgCsD+GU696WMPUypB0gK60Alk
+         07rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785712150; x=1786316950;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=lfeEUlf77ZiQWMgQd598a4lPStxyxdqvSqA/as60x8k=;
-        b=L4JH2IaKIkfvvTxLz9L4KT2ZgkaHcdawi8wfKKSuBADMcnmezSX+z7GyFfbGdGxZcI
-         FmOuljNx51h4uJnkG8UW7kvEunbnOx+sYgS94uAWZh8XOP+wOnncXt/IDOmThdsH0fqc
-         YxXEXBhovJi5JJ+N6kfu3D2TPoz7oAWK1GIBk7Yzn7UocgKjEN7d/kh6ZZgL7+lQ1SIF
-         N5PnC4Se8EU5FgbIe2AgSjAAZKxq3NFgdV4Xnho8gGnCGZJ2zikqBGn+1C3DCoEQpnH/
-         GyqudnxveTvzU0CH9E7f1kN1koEmTrGfCX8ZyW5Ijdl5JiGDCvALuRpquGdizWp9yxCy
-         Ckwg==
-X-Gm-Message-State: AOJu0YxP/EMvYqJBAS4H4GfpV9D0r/+Y5ho1LjlZWShGm+1G4SoY8VJZ
-	dJVoIO0ly6Uz+aZ2Z4QVPlPUsaNsqFfCIqSsOiJ6/+dTE08O4c3YYrFhekFsX88m
-X-Gm-Gg: AR+sD11cTA0yF74dANdXBGj0wET2EarwUs62rXgtXFMIh1QsOcmBQ2TGOlzZUPRLHiw
-	FfgR5/pKuSSn5ylPc5GC5EEZUdYpqi009AvcYrazCU14hdjkSpB9IaWajzJM9MWSOerAYsurCx3
-	atAeB7MGLnhS3wqh0C+6+5RnASDU71vznDUaHBgiL+Y4eWG5VnHHwoAmWm1nTcJg7Cry6NP7nI5
-	SW4LqLM2c5eBvFWuaCPeOnQA3SyTaPFuSO1MmUwEltMTnlGyHJvJKTLss+L4Rvdsgo7ByjherrL
-	XKmZJweOZAJZ2hasUd2SnB3mg9bYP4ag5h9YxuWiR0W4ztXVSmMOsQaWLYTDvqAxUMFJFAXu5at
-	Y0oQGm07q5uZZo+Hn2HVxro2T9bZmEYeJXSzde8DhehkIQRH4USvFHLqvZITkmsZJKpJy33Xsh7
-	NzIbuvSVEiBOF9Q+7Shlw5uknJ2UhbRFZ/9c7d8OWwj4YpBcYEcPyPjlLYsQJx8fHDbv+rPNtKH
-	65d6vFFdV3UGPxl/EDVuaonDnEuqq3EUJDGAr8arL1KOlnF8lPBID5a6wT+/j+uJlXdPQYlrNVr
-	FQ0sAt/psL5eO0lP4nftWYbNBdDC
-X-Received: by 2002:a05:6000:178d:b0:47f:86af:8fdd with SMTP id ffacd0b85a97d-47fd72c74bbmr18934300f8f.3.1785712149545;
-        Sun, 02 Aug 2026 16:09:09 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd456a5a4sm27561230f8f.20.2026.08.02.16.09.09
+        d=1e100.net; s=20251104; t=1785712440; x=1786317240;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pU4v6hRTUge0KrXkRRWZsd+tc6Y5PUpwswApZzkRyGg=;
+        b=ceVZ5oaSOGxj4pMKATEDlb/eqkC4nx0Ai0iZEzEtx8qYQ0cQfDpESL8Z4Idfu1eP7e
+         2igvx+U/aUBm0djrKiIB7wwYEX4VO+1hkNRMRR0+ABy2MWRxCg9xhsjk9MLoLx6WP7iN
+         snqbvdKMG1B68zWLoyMMIwm1eEw6kJ+QcPChIhQPKK4308ljBkX+tYsBi55aGxGEZ4/R
+         BgVM8nrTmU1sgdx4Hy6/Sk/gjOd2h9I4qXfVTb6NZvQoUxYg925p5XbGXTyffsY3nG5m
+         /KsXXA0N0GNrV1dPGstvoc0XS37G6msf68C1DLDMjNIUmzAKQTlLbNdkrJ5q0RdG6itI
+         9blQ==
+X-Gm-Message-State: AOJu0Yz37S0Byy/HUflZoynA43beJaW3HqtB/efP+e80WDeNxT7enbRt
+	+1ShgdBBsqpnGCNpRVZdZlpcYP6Qb9csjXzjrmIf5Muj5Q7sVFeZhtyZdEBVWKB8
+X-Gm-Gg: AR+sD13ajt507bhLf5gjM8p1gj4nZFhdywELDIKLHUm+DKr/73HAFXzfrfrnu6Fvo3t
+	+QcC4cnpW/AEtLIyvUx7OZUpQsvxiWdXle2IMqWRpMGNZeEBmq2C4JVBtybOh6xeVMHeuldYsnO
+	XYepLqFWuOOhwEShkhVOwST/kFkZFgssmcHN6zcQXzVD6cd8l1qwM0ven95qGEdMtO6zYrTIIZp
+	F7bTBpqZk0iQz9PJhDOuIzHXXMX2rcz4eqrcIa2/UEsjIlWRDK4J31bg5IbFDucBKjv/w0wnaXQ
+	9NR498oPTiqqab0uzgXtQe8/B7JZdTsk8v2GFGwTa5SesW8A8xh+rWoLXSpxBllhQHDqiii+8SH
+	faJASafcJavExJ+uoGTY+SsXgjoB6AthkTByXWBHWnyotM363EnC85NRvFJt6T9Gj9q60VtZ+PH
+	XtFGRwt6PvtWAwH0JD7137FYntoz9YccDc8TU2j0HzmjY2zMlM1woM13KokHaARZHINrKDCV3go
+	4sZg71aj66gKicw
+X-Received: by 2002:a17:903:2b0b:b0:2bf:dd0:c8b1 with SMTP id d9443c01a7336-2d052035401mr83974545ad.0.1785712439995;
+        Sun, 02 Aug 2026 16:13:59 -0700 (PDT)
+Received: from patterson.cs.ubc.ca (patterson.cs.ubc.ca. [198.162.52.65])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04ae67d0esm29110265ad.30.2026.08.02.16.13.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 16:09:09 -0700 (PDT)
+        Sun, 02 Aug 2026 16:13:59 -0700 (PDT)
+From: Ning Ding <dingning04@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Ning Ding <dingning04@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Justin Suess <utilityemal77@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf] bpf: Invalidate RCU pointers after final spin unlock
+Date: Sun,  2 Aug 2026 16:12:37 -0700
+Message-ID: <20260802231248.2781334-1-dingning04@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 01:09:08 +0200
-Message-Id: <DKEU4K708GAQ.2VC887YB976SN@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Show more useful info in stack
- depth stats
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, "Roman Gushchin"
- <roman.gushchin@linux.dev>
-X-Mailer: aerc 0.21.0
-References: <20260802225209.2511758-1-memxor@gmail.com>
- <20260802225209.2511758-2-memxor@gmail.com>
- <20260802230435.7F4331F000E9@smtp.kernel.org>
-In-Reply-To: <20260802230435.7F4331F000E9@smtp.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon Aug 3, 2026 at 1:04 AM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Medium] The commit changes the verifier's 'stack depth' log format fro=
-m a single-line format (`stack depth %d+%d...+%d max %d`) to a multi-line f=
-ormat (`stack depth max %d` followed by per-subprogram lines). However, it =
-fails to update the `veristat` tool in the BPF selftests, which relies on p=
-arsing the old format to collect stack depth statistics. When `veristat` at=
-tempts to parse the new verifier log, the hardcoded `sscanf` string (`"stac=
-k depth %511s max %ld"`) matches only the first word (`"max"`) but fails on=
- the rest, leading to broken and unpopulated `STACK` and `MAX_STACK` metric=
-s.
-> --
->
-> --- Patch [1]: [PATCH bpf-next v2 1/3] bpf: Show more useful info in stac=
-k depth stats ---
-> commit f4a761d5dad941fea12558fab4093ec6ef3e52da
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->
-> bpf: Show more useful info in stack depth stats
->
-> This commit updates the BPF verifier's stack depth statistics logging to =
-print
-> the maximum stack depth and each subprogram's stack depth on separate lin=
-es.
-> It also updates various selftests to match the new output format.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index e6f35f4e715b6..74a92036d84e7 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -18703,10 +18703,15 @@ static void print_verification_stats(struct bp=
-f_verifier_env *env)
->>  	if (env->log.level & BPF_LOG_STATS) {
->>  		verbose(env, "verification time %lld usec\n",
->>  			div_u64(env->verification_time, 1000));
->> -		verbose(env, "stack depth %d", env->subprog_info[0].stack_depth);
->> -		for (i =3D 1; i < subprog_cnt; i++)
->> -			verbose(env, "+%d", env->subprog_info[i].stack_depth);
->> -		verbose(env, " max %d\n", env->max_stack_depth);
->> +		verbose(env, "stack depth max %d\n", env->max_stack_depth);
->> +		for (i =3D 0; i < subprog_cnt; i++) {
->> +			const char *name =3D env->subprog_info[i].name;
->> +
->> +			if (!name || !name[0])
->> +				name =3D "<unknown>";
->> +			verbose(env, "stack depth subprog %d %s %d\n", i, name,
->> +				env->subprog_info[i].stack_depth);
->> +		}
->
-> [Severity: Medium]
-> Will this break the veristat tool's ability to collect stack depth statis=
-tics?
->
-> Looking at parse_verif_log() in tools/testing/selftests/bpf/veristat.c, t=
-he
-> parser still expects the old single-line format:
->
->     if (2 =3D=3D sscanf(cur, "stack depth %511s max %ld", stack, &s->stat=
-s[MAX_STACK]))
->         continue;
->
->     while ((token =3D strtok_r(cnt++ ? NULL : stack, "+", &state))) {
->         if (sscanf(token, "%d", &sub_stack) =3D=3D 0)
->             break;
->         s->stats[STACK] +=3D sub_stack;
->     }
->
-> With the new multi-line format emitted here, it appears this parsing logi=
-c
-> will silently fail to extract the stack depth numbers, leaving the STACK =
-and
-> MAX_STACK metrics unpopulated when comparing regressions. Does veristat.c
-> need to be updated to match the new verifier output format?
+A verifier-tracked spin lock provides implicit RCU protection while held.
+Consequently, a kptr loaded from a lock-protected map value is marked
+MEM_RCU.
 
-Hi Roman,
+process_spin_lock() invalidates non-owning references on unlock, but leaves
+RCU-protected references intact. This is correct while another RCU context
+remains active. However, for a sleepable program, releasing its final lock
+can end the only RCU-protected context. The verifier then allows a MEM_RCU
+pointer to be used after its protection has ended.
 
-I think Sashiko should look at patches later in the stack to see whether th=
-e
-issue it is pointing out will already be addressed later. Bisection related
-concerns are different, but this (and many others) do not fall in that cate=
-gory.
-This is a recurring source of various reports now. It isn't a big deal, but
-would be good to improve upon.
+Invalidate RCU-protected references when a successful unlock changes
+in_rcu_cs() from true to false. Non-sleepable programs remain in their
+invocation-wide implicit RCU context, and an explicit RCU read-side section
+continues to protect pointers across the unlock.
 
-Thanks
+A task kptr retained across the final unlock can race with removal of the
+map kptr and bpf_task_release(). This was confirmed to result in a
+task_struct use-after-free in __bpf_get_task_stack().
+
+Add a negative sleepable regression and positive non-sleepable and explicit
+RCU controls.
+
+Fixes: 5861d1e8dbc4 ("bpf: Allow bpf_spin_{lock,unlock} in sleepable progs")
+Assisted-by: Codex:gpt-5.6-sol
+Assisted-by: ChatGPT:GPT-5.6-Pro
+Signed-off-by: Ning Ding <dingning04@gmail.com>
+---
+ kernel/bpf/verifier.c                         |  5 ++
+ .../selftests/bpf/prog_tests/task_kfunc.c     |  2 +
+ .../selftests/bpf/progs/task_kfunc_common.h   | 12 +++++
+ .../selftests/bpf/progs/task_kfunc_failure.c  | 24 ++++++++++
+ .../selftests/bpf/progs/task_kfunc_success.c  | 48 +++++++++++++++++++
+ 5 files changed, 91 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fdc5fbb1f78c..aea9fdbbd33a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -204,6 +204,7 @@ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx, int par
+ static int release_reference_nomark(struct bpf_verifier_state *state, int id);
+ static int release_reference(struct bpf_verifier_env *env, int id);
+ static void invalidate_non_owning_refs(struct bpf_verifier_env *env);
++static void invalidate_rcu_protected_refs(struct bpf_verifier_env *env);
+ static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env);
+ static bool is_tracing_prog_type(enum bpf_prog_type type);
+ static int ref_set_non_owning(struct bpf_verifier_env *env,
+@@ -7051,6 +7052,7 @@ static int process_spin_lock(struct bpf_verifier_env *env, struct bpf_reg_state
+ 			return err;
+ 		}
+ 	} else {
++		bool was_in_rcu_cs;
+ 		void *ptr;
+ 		int type;
+ 
+@@ -7078,10 +7080,13 @@ static int process_spin_lock(struct bpf_verifier_env *env, struct bpf_reg_state
+ 			verbose(env, "%s_unlock cannot be out of order\n", lock_str);
+ 			return -EINVAL;
+ 		}
++		was_in_rcu_cs = in_rcu_cs(env);
+ 		if (release_lock_state(cur, type, reg->id, ptr)) {
+ 			verbose(env, "%s_unlock of different lock\n", lock_str);
+ 			return -EINVAL;
+ 		}
++		if (was_in_rcu_cs && !in_rcu_cs(env))
++			invalidate_rcu_protected_refs(env);
+ 
+ 		invalidate_non_owning_refs(env);
+ 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+index e6e95c1416e6..fbd7855712c1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+@@ -176,6 +176,8 @@ static const char * const success_tests[] = {
+ 	"test_task_from_pid_current",
+ 	"test_task_from_pid_invalid",
+ 	"task_kfunc_acquire_trusted_walked",
++	"task_kfunc_acquire_after_spin_unlock_non_sleepable",
++	"task_kfunc_acquire_after_spin_unlock_explicit_rcu",
+ 	"test_task_kfunc_flavor_relo",
+ 	"test_task_kfunc_flavor_relo_not_found",
+ };
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_common.h b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
+index e9c4fea7a4bb..052c9d0e3e2a 100644
+--- a/tools/testing/selftests/bpf/progs/task_kfunc_common.h
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
+@@ -20,6 +20,18 @@ struct {
+ 	__uint(max_entries, 1);
+ } __tasks_kfunc_map SEC(".maps");
+ 
++struct task_kptr_lock_value {
++	struct bpf_spin_lock lock;
++	struct task_struct __kptr * task;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, int);
++	__type(value, struct task_kptr_lock_value);
++	__uint(max_entries, 1);
++} task_kptr_lock_map SEC(".maps");
++
+ struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
+ void bpf_task_release(struct task_struct *p) __ksym;
+ struct task_struct *bpf_task_from_pid(s32 pid) __ksym;
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+index 8942b5478129..7a0c7ee95511 100644
+--- a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+@@ -378,3 +378,27 @@ int BPF_PROG(task_kfunc_release_in_map, struct task_struct *task, u64 clone_flag
+ 
+ 	return 0;
+ }
++
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__failure __msg("R1 must be a rcu pointer")
++int BPF_PROG(task_kfunc_acquire_after_final_spin_unlock)
++{
++	struct task_kptr_lock_value *v;
++	struct task_struct *task, *acquired;
++	int key = 0;
++
++	v = bpf_map_lookup_elem(&task_kptr_lock_map, &key);
++	if (!v)
++		return 0;
++
++	bpf_spin_lock(&v->lock);
++	task = v->task;
++	bpf_spin_unlock(&v->lock);
++	if (!task)
++		return 0;
++
++	acquired = bpf_task_acquire(task);
++	if (acquired)
++		bpf_task_release(acquired);
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_success.c b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
+index d63a79ee33dc..2bab7634c9df 100644
+--- a/tools/testing/selftests/bpf/progs/task_kfunc_success.c
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
+@@ -6,6 +6,7 @@
+ #include <bpf/bpf_helpers.h>
+ 
+ #include "../bpf_experimental.h"
++#include "bpf_misc.h"
+ #include "task_kfunc_common.h"
+ 
+ char _license[] SEC("license") = "GPL";
+@@ -366,6 +367,53 @@ int BPF_PROG(task_kfunc_acquire_trusted_walked, struct task_struct *task, u64 cl
+ 	return 0;
+ }
+ 
++SEC("fentry/" SYS_PREFIX "sys_getpgid")
++int BPF_PROG(task_kfunc_acquire_after_spin_unlock_non_sleepable)
++{
++	struct task_kptr_lock_value *v;
++	struct task_struct *task, *acquired;
++	int key = 0;
++
++	v = bpf_map_lookup_elem(&task_kptr_lock_map, &key);
++	if (!v)
++		return 0;
++
++	bpf_spin_lock(&v->lock);
++	task = v->task;
++	bpf_spin_unlock(&v->lock);
++	if (!task)
++		return 0;
++
++	acquired = bpf_task_acquire(task);
++	if (acquired)
++		bpf_task_release(acquired);
++	return 0;
++}
++
++SEC("fentry.s/" SYS_PREFIX "sys_getpgid")
++int BPF_PROG(task_kfunc_acquire_after_spin_unlock_explicit_rcu)
++{
++	struct task_kptr_lock_value *v;
++	struct task_struct *task, *acquired;
++	int key = 0;
++
++	v = bpf_map_lookup_elem(&task_kptr_lock_map, &key);
++	if (!v)
++		return 0;
++
++	bpf_rcu_read_lock();
++	bpf_spin_lock(&v->lock);
++	task = v->task;
++	bpf_spin_unlock(&v->lock);
++	if (task) {
++		acquired = bpf_task_acquire(task);
++		if (acquired)
++			bpf_task_release(acquired);
++	}
++	bpf_rcu_read_unlock();
++	return 0;
++}
++
+ SEC("syscall")
+ int test_task_from_vpid_current(const void *ctx)
+ {
+-- 
+2.43.0
+
