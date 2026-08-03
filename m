@@ -1,74 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40FD1FC7C5
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 08:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259273AAF52;
+	Mon,  3 Aug 2026 08:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785746954; cv=none; b=M3/eTHOSmoDlsgd6Yk+1X0ix9wxfvnulnKYGMZRg+ztRS264MGYAnKx1rkj9hFRCYCk3MG0YU5fyQVJM1C/UbebxkF3wOcCc2xoGTHT+CzHljb/XqKkmqgEP9hiWT2B6QAtnbGNvelBxiIgc6Z5XOk/CnZr/LpFbhms0GsuZWNc=
+	t=1785747558; cv=none; b=Mki8jxfl+tgxQ5LlCApKM0hQUCNbyq5EjfhGlqD+xKxxxSskk/ioTLBLFUE7LxKAnaavIPKJBM23+naHsK4TEHnlkHo0VisnmfTf9LPWU+8cR8j99TdK/9hizyP6T1s+h5dqNvjlQNV4sZbCMwSiUNLMr4av0vjRQfOQAafgP44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785746954; c=relaxed/simple;
-	bh=DE/j9qH4y45AL9P502yI7iGHisWVYQIWxWrATODlI3Y=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HUT2Mmfkds9KYgHEK+RD6UV+Mrg0L/NCUR6vTHrz06arrUqI0cGyBbQNNCaZISKBVkV32yC4Y0BFhAKPg9PKTX34gFK9xMhZnmafY5uxKpx185Odu4i68DEGfuzau7LT2/1QLdia6BWvRZwach7/ib/B6bNOwZqLJa0sW8GaWgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BP8TJXkh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785747558; c=relaxed/simple;
+	bh=Uz7pQWv7kH8qOAbxa29cop3HtGle5l8g08h0cTTulEw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Uxcb6jKFeSKNUR5n3Smu+OVWyrnODn3tr76zUnB+v+VyZ19ru0TEf7ngoSTJqur9rh48KDNdTm9Zxk6ZxwL/bER7b1uzSAs9CW+byu+Qomc3/oGm2VYMfQpFyG4KL1RDXmEtvt37tku5mUjY9jxX5wwrcYe6JONsQExitHXRYjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JEVzOADs; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=d7YtTSpN; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BP8TJXkh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086631F000E9;
-	Mon,  3 Aug 2026 08:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785746953;
-	bh=DE/j9qH4y45AL9P502yI7iGHisWVYQIWxWrATODlI3Y=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BP8TJXkh0NSKkp1+GLBLNDnb9Y+R7XOgUqPf2R0aBISQc5tBDCjQdNN0HeRNOCt7j
-	 7mVA2FcHoKoMG3zSze33/SGCtqfJB8R4NckD9vCVt1MPEsoJG2xqziDX1/VF05p2oa
-	 9Ntm0RRySwHaCmD9U9Zu+XXiz7OYqylPA5OrrQHzyYhYlRYaoq0X66xp8DIWOOUno4
-	 nKROQarDHYLp4HGxyVHbhaIZeyGu9sV4mrA/h3tjHPceRsYPfZa3rGTsZDKoIYwpbR
-	 B3y047xTz5FgW7uE5/z4FLFzm66Y1u3PCKZrj3BssQ/FHEX+x+VHWZDO6FhAjCTFwm
-	 nz2oF5DTQY6mg==
-Content-Type: multipart/mixed; boundary="===============2376386106992387411=="
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JEVzOADs";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="d7YtTSpN"
+Date: Mon, 3 Aug 2026 10:59:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1785747555;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CjR9KfNljtdyMcyqsTTvIsJbyXaYhF+J/Xq/oM2Nk10=;
+	b=JEVzOADsT37vlekMQ+SfvBqewzo4W021OPOfEZHQrzpzOj2KmltVIeXierbL5HmRzGN3Hz
+	2NTykRCZO0UyedhOSb4c1H5QLN9SZyPtKzM5be/OqPbPRoLUBg3K20sxe8k53GFhbN7ocK
+	PbbtQuGE1SBqLjLX1KHoP/4b8gI8x49jOioXAZ6oJ9o+CpubA7AQrEcK8CJZ/oR8g5trvc
+	JMgPl5uLlXiN3yCi3aN/m7KDN13kXRatjww+hEr5VJKndi2ja7WHRjzg1150hRMK6azUaR
+	oD/OG+/aWEBw2qMZ7ibEykAsRd5HChh7Oz9hgROy59obcjpAkuLi3SfD+fAVIA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1785747555;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CjR9KfNljtdyMcyqsTTvIsJbyXaYhF+J/Xq/oM2Nk10=;
+	b=d7YtTSpN2lynxkdzc3ogMAqhlbgP+9AlKdNK+OZV38DruunGWtEf4YUJgw9xgALKDSZUEP
+	tKClnbMHqVwWBTDQ==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Andrew Morton <akpm@linux-foundation.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next] btf: Remove the dependency on BPF_SYSCALL
+Message-ID: <20260803105558-f788c3d1-b159-4a79-ab22-3d784322dbbf@linutronix.de>
+References: <20260803-btf-dep-bpf-syscall-v1-1-a03291e27888@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <94b5d9e94c85101e583bb249deb47fd5187d4823fba0f71a03832b1e5b9adb0e@mail.kernel.org>
-In-Reply-To: <20260803072733.191502-3-memxor@gmail.com>
-References: <20260803072733.191502-3-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/3] selftests/bpf: Adjust veristat stack depth parsing
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  3 Aug 2026 08:49:12 +0000 (UTC)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260803-btf-dep-bpf-syscall-v1-1-a03291e27888@linutronix.de>
 
---===============2376386106992387411==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Aug 03, 2026 at 09:52:39AM +0200, Thomas Weißschuh wrote:
+> BTF has become useful without the BPF syscall being present.
+> It is used by debuggers and introspection tools like pahole.
+> The dependency prevents the usage of BTF without pulling in the
+> rest of the BPF subsystem.
+> 
+> Remove the dependency.
 
-> selftests/bpf: Adjust veristat stack depth parsing
->
-> The verifier now reports stack depth statistics using one record per line.
-> Teach veristat to parse the new maximum and per-subprogram records while
-> retaining support for the legacy one-line format used by older kernels.
->
-> Increase the bounded backward scan so it can include all 256 per-subprogram
-> records.
->
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Please disregard this patch.
+Sashiko found a few valid issues:
 
-This isn't a bug, but would it be worth a sentence on the `stack[512] = {}`
-initializer? With the new one-record-per-line format the legacy
-`stack depth %511s max %ld` branch never fires, so the trailing strtok_r()
-loop would otherwise run over an uninitialized buffer - that seems worth
-calling out in the changelog rather than leaving it to be inferred from the
-diff.
+https://sashiko.dev/#/patchset/20260803-btf-dep-bpf-syscall-v1-1-a03291e27888%40linutronix.de
+
+The patch somehow passed the 0day bot. I'll investigate.
+
+Also pahole is perfectly fine using DWARF debug data.
+If no debug information is available at all, it prints an error about
+missing BTF information, which confused me.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30794340667
---===============2376386106992387411==--
+Thomas
