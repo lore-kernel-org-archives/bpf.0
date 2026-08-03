@@ -1,66 +1,66 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96B7265CBE
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 00:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B451C1A304A
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 00:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785717012; cv=none; b=hF+n+x1us263eQs/HPgBxUpsI6x+ZunokSxQtcmR5XX0k//ENDrrWRigrcwZFoHr2O9ow+uiHIt/c3/IACfwn2qHhJTrYoeLjnX8JECnlmvLDWRLkOOGjBbLZDBQA80C1XGRVUgyUGMEWdzbq3XlTk3yUmxFOGlYTOqUoCIKVcs=
+	t=1785717633; cv=none; b=IaR6L5pWBGH6h6K01IIVTjATg9ewTEgqHHYY/cay08oHhs66mUdwv6gyYygibaYfBUk/A3+52i0BooeIm/0aB61CAB0Fzw2oh9M4zzJ2zAVhM2+s16f1tjqIRofC0PP2TqWmJDAs+1QET7oEoWhFhfHAdqvasQHaIh/lXv95h6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785717012; c=relaxed/simple;
-	bh=MgL/A1OL5VxKOy8fuemacuOQqMhbRsRzexGTXwULKm8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=GGoCB+KUpP/EHJIKz4nER0b1O5Xqk8C2F+zVMivKkzMdS/oPr2Qt04c5ee3M09mnZdYLc/oLAI0krA0irbKyqrD7bS/vVD674dQPqlUlZkKf4KHLYqYJI99v2fAoU/qUs2AiwjoPzD7dFhZ9AX2vHCO+332koSMbkW4dgzraOwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zj6Bta+D; arc=none smtp.client-ip=74.125.225.65
+	s=arc-20240116; t=1785717633; c=relaxed/simple;
+	bh=/mACxZZwEKJ5gpt07hvtk/cbTmXUD15e6iSgcnOknOY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=NmAZS4ZXnmB1yclc6caLjm2UyTu7LvSChBaLb3HGj3OmdMep8g1RA883QiEwRt9C3xfAfKV4H9Hr2msiROZegxDcUJ+Vsxi05xNVaaLN6OXd02e/JGCqQOR2fpOsqZM13iL3i853UJl2RkI0mn4qMe0FRT/s8FsMVTVQs8/Aphw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IjjH7QHb; arc=none smtp.client-ip=74.125.225.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zj6Bta+D"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-473b8c0fd5aso581634f8f.1
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 17:30:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IjjH7QHb"
+Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-47301772842so1266403f8f.0
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 17:40:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785717008; x=1786321808; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20251104; t=1785717630; x=1786322430; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=XJtB3G2q64cgAdmsXjeDVMSjpj2t0iKFamiuOTeDEY0=;
-        b=Zj6Bta+DkFDTmctquAgTKQwH0Zj3b4jieGW2yCMX1nWYz59eEbGWrb9f2rLkIWV2EU
-         M/ZQDc3ERkr0/CVXZHlrupH/YUBafnnXeeEQjPEUBnQV+nfMAdFllgzfWMgX+XFh+mc2
-         Ij97L6psvikHVqSoYxlJuZAqRkLX/41CmCYk3OqeuOk7AdFRnwrXnu2zdppHbS5eS4gx
-         NfOcZBxvMJKyseq9A6fIH7y3BEk1L6ZCYoF9PxUUpXH8otU8Wn3s3a5Py1Nxh91aE3TV
-         LIGxtAmsjGusF4lXVAS/lkBNmjRdTsBZ+CWT9FZ9kuviuOWZeeZ3t5bFe+V9+IzOikFw
-         deRQ==
+        bh=KAVJwf6OZRJ9HJCTTVbmQgyajaZ1dQtBfrxUO9czUd0=;
+        b=IjjH7QHbQJIqq3hzzvTO4TsQ49aGxq0yJOJeMv4KZ0aPyrRXb6R4DsNJHUYM6xiIyp
+         lzbbHUG4ALIvkU3cpou61mH6iR4K0XIxXfUMajdy571cHbVFSJiJI9UdRvgBaLvA2Abd
+         03ZpZf1LmGWGAlDyXoNrqjE+MTNfbwXdIHIMFJs7HcUlXemvuIjyC1Uwd7bxgB7y5Rae
+         R9VullZZQGBf6PrDRf2UEPXFRcuoTkTaSDRoqcZUxau228H3Wgmo5qL9r+z+3eYlGYv8
+         8oMsyOtPz/X0d9AX4xhNk2CzEk2ekofdLr8nn/spuIyn3cPzli/21dPKUhcqOIJoJzhP
+         zDuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785717008; x=1786321808;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1785717630; x=1786322430;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=XJtB3G2q64cgAdmsXjeDVMSjpj2t0iKFamiuOTeDEY0=;
-        b=QGFKzVnbCcHo9KUV7Ki/jp58G7VpQj1isH2WJIcFrryWgswAVoRTQbrQGdzQv8IQAV
-         ZZh3nDDTrmeh6NzG9C5J9dMbzage2j3Pm0ydsH91OOPtx5OrhZSDmROF+t4MRE8Dmy6n
-         EZQXHQ4I6IKjDveejPEYQDZxeQqFTDpS9S3+Q7to6aplBF3VQA+DVgRX+Dki1I+Hj69t
-         QmtHpHN2jaF+NgdWqnYkzIH5GVs5YpEext5Pk8wh9pQAEWoZVdZ0ySS5UX131tHnsuRP
-         0s37lgKtN0TZ0aFAKiIJrjcLsz9gk8r7BnbrCOwMjx70IXBwcTD06SaFynlYl4tF9Yjl
-         Y+vg==
-X-Forwarded-Encrypted: i=1; AHgh+RowVKAwmq3DeiWC8V4Ve6mm0gMyFwqpVMOClhXU1YYANSiryKifyJdsGG4cgxtXuI7W3pc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQtH2MlsIkX0L0lGvqwVF7GH/Awr4325tb28dTS3PYH9wXCnD/
-	Zj2O/IvEbgEQEAGOBgak6Q/TVXv2rp4ha3JCcduGXqOL8N5Nkzen/Psc
-X-Gm-Gg: AR+sD136HTc+JiGOkG5PVA/1jjzQvUCaEjt/9ZQmDqHUzfgYds1UV24Pfk7yCeW0Hpj
-	Uoc7fmn99Q6JHjSia5vfNA2FN8MdhiZRyZoxsqkKhXwKoyfUiGwrukHLivh9cQAWm1jbqRRK33P
-	HDI2+FqKHKiR0HBMXJ2LzFvMWFFApRUGsa1EYT9Hp2KwahEJVObz2JDbz8HxWa6gTUDKVVQKenp
-	dP3vl780WsoiEXaz563h4JhRxLx/6pjh2OeG+GhLfySaVqT1sRS3JnWRi47SjL+x0XZPc4Ojn3d
-	BsHQeH5Ne4/3XkPIfbVgHmDzz+gH3/iUkEx2itgYL7d7e8FLIC+TB9+V0IQ9L14SPlPoJ+kAgDH
-	3TqejmcmXxgy0WWXfsE0JCluCQdUw68CYLBjGJjdecIwMVk2QWPKqGxzS/P2NhB2RAFdBeKK1sx
-	VhQ4hDoi87w7VpoUeHhT5zgCaiJIWBND7bT475EH8ghoRh413BFJ6R0ZIz6XJLaYgDw7dZ1vSA3
-	/rNr48aHK5DTobqJPWPWY+p2lhynVkYPkzZtl6husMkAdEtFJXOiXPKcTC665A/wc5ilJmuFvo/
-	PPWvMZL7ma7a2GJmz++NpbJiqF8ily1qs04R8A==
-X-Received: by 2002:a5d:5f42:0:b0:47f:90a4:ff42 with SMTP id ffacd0b85a97d-47fd72ba4dfmr20398387f8f.5.1785717008087;
-        Sun, 02 Aug 2026 17:30:08 -0700 (PDT)
+        bh=KAVJwf6OZRJ9HJCTTVbmQgyajaZ1dQtBfrxUO9czUd0=;
+        b=AQy6Xc67mkVtWWG5wfQuB7O6xuBlgLb5Yt51Iv7tV6qt/jt1pX0dY5ZXAXSjmjsLMa
+         QvZLEFmxndxl7GR6YPJJe4b5svPubv41erRtE4165MVrztmljx/XkdhEhVl2FLuDA3et
+         7EH1l7G0gFU24qGqfG5+Woz35wby6iwc3TRsZKonoRPoBld4eKhKu6HdmxlaCPlhELFS
+         eTgy6Y5+Zq95egmN9B0lOQ2Zr93jADe30GuRZ9Cj1EMZdMpyhP9yg9NyiteKCA6+8vfP
+         1UAvtTUEJWn7MS36yj8XfJB/FaHtSouSBYjeXCnT2w9LbC0JoXryFE5EvZwN9S8lCDsv
+         AV3A==
+X-Forwarded-Encrypted: i=1; AHgh+RqcnuK6DwHnMO/jecynYJz//KfCkoN2PgwIS9PObwT51KkMm7vIgGow7QvUYnJYxI7VvGM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYMg+9RQpjmph/I6WtuUepTXP/6lPhRKeIz5fP2c6NZxNa01EX
+	4UpYycERdfN5IVEbAwLBm+q5dBMGjGC0ssewe2XHzs1LfbFe7GhY9MUR
+X-Gm-Gg: AR+sD139S6hpcQOLMbNdocNbksJtPWQWKTEIiun0Q1a8dhXNArpxYz2QUh4iEEmjVfs
+	LjSrnHYLM/4IM7oYquzDgtzXhocymh0AVJhSURYCusUOXfpPpYLU05z6lLIk1H3kkQE+qNYxwq/
+	Kp6/bnuWIJ6hqDWPpSFmbZlkcpV/NoTPdnPYYUWn5A6OH7Zg0m0Pu15X/Yc2O5/9+BetiwmvAMi
+	DkanfrIq7GWBC0BK7vjCbP1PJ2/ugBs/U5N5ujMrACI9K0dVTVWct9/i3WTaYNxSrOAtPkO96Pb
+	G4oXfBK79mVpv6ROkxx782zXfrRbhye0Y56RuDn2KnXBhDqHC6LGjulPIABpSxC0XOU069a0VhO
+	RD+4xChwGIpoNBW07saOSwwVrHt0+w+qRda7vTfPUGBkMGLXiTzwA0u2lXmDryltI6QLXXqIFYb
+	E40Fq6aQPBcjONUdV/z/A7mEfCi87HNXKF651pOf3JUCIUBAConolmxVBvw6ESwOR6JnOGqcxS+
+	Tu6DOjCug2QT76rtDKAd9E/vICZg9Yc7ZRYmbfaABzd7LLwi54P8mwYVh8AHp3nuJeE4PPxqUH4
+	EXPusYIC70xi6pcjUtg/vBC7YRwl1bRLs+EJya4=
+X-Received: by 2002:a05:6000:43d4:10b0:47f:90df:4ec6 with SMTP id ffacd0b85a97d-47fd72a00bemr16278055f8f.6.1785717629792;
+        Sun, 02 Aug 2026 17:40:29 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd458b05fsm27676880f8f.28.2026.08.02.17.30.06
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd458adc9sm29222772f8f.27.2026.08.02.17.40.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 17:30:06 -0700 (PDT)
+        Sun, 02 Aug 2026 17:40:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,100 +69,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 02:30:05 +0200
-Message-Id: <DKEVUJFTGKN5.HQGLRFLQMISY@gmail.com>
-Cc: "Eric Dumazet" <edumazet@google.com>, "Neal Cardwell"
- <ncardwell@google.com>, "David S. Miller" <davem@davemloft.net>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
- Horman" <horms@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Jiayuan Chen" <jiayuan.chen@linux.dev>, "Emil
- Tsalapatis" <emil@etsalapatis.com>
-Subject: Re: [PATCH bpf v3] bpf: tcp: Fix use-after-free in
- bpf_iter_tcp_established_batch()
+Date: Mon, 03 Aug 2026 02:40:26 +0200
+Message-Id: <DKEW2GPED8SX.1WM65Z05MZN7G@gmail.com>
+To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <eddyz87@gmail.com>, <emil@etsalapatis.com>, <kkd@meta.com>,
+ <kernel-team@meta.com>, <martin.lau@kernel.org>, <yonghong.song@linux.dev>,
+ <clm@meta.com>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Show more useful info in stack
+ depth stats
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Kuniyuki Iwashima" <kuniyu@google.com>, "Jose Fernandez (Anthropic)"
- <jose.fernandez@linux.dev>
 X-Mailer: aerc 0.21.0
-References: <20260730-bpf-iter-tcp-refcnt-v3-1-754b9c8a6717@linux.dev>
- <CAAVpQUAoxyhmfbfCGeMUyQK7F4RifMsFDM0XyDqO9SOMZmASvA@mail.gmail.com>
-In-Reply-To: <CAAVpQUAoxyhmfbfCGeMUyQK7F4RifMsFDM0XyDqO9SOMZmASvA@mail.gmail.com>
+References: <20260802225209.2511758-2-memxor@gmail.com>
+ <02a0523b31767a3994eb6a379dfdc83217749f99f89ebc71a4aaa0d6940f45c5@mail.kernel.org>
+In-Reply-To: <02a0523b31767a3994eb6a379dfdc83217749f99f89ebc71a4aaa0d6940f45c5@mail.kernel.org>
 
-On Fri Jul 31, 2026 at 7:39 AM CEST, Kuniyuki Iwashima wrote:
-> On Fri, Jul 31, 2026 at 12:33=E2=80=AFAM Jose Fernandez (Anthropic)
-> <jose.fernandez@linux.dev> wrote:
->>
->> reqsk_queue_hash_req() publishes a TCP_NEW_SYN_RECV request_sock onto
->> the ehash chain, drops the bucket lock, and only afterwards sets
->> rsk_refcnt to 3.
->>
->> Lockless readers such as __inet_lookup_established() handle this with
->> refcount_inc_not_zero(), but bpf_iter_tcp_established_batch() uses plain
->> sock_hold() while holding the bucket lock, on the assumption that the
->> lock guarantees sk_refcnt > 0. That assumption does not hold for
->> request_sock:
->>
->>   CPU 0                                CPU 1
->>   -----                                -----
->>   tcp_conn_request()
->>    reqsk_queue_hash_req()
->>     inet_ehash_insert(req)
->>      spin_lock(bucket)
->>      __sk_nulls_add_node_rcu(req)      // rsk_refcnt =3D=3D 0
->>      spin_unlock(bucket)
->>                                        bpf_iter_tcp_established_batch()
->>                                         spin_lock(bucket)
->>                                         sock_hold(req)   <-- addition on=
- 0
->>                                         spin_unlock(bucket)
->>     refcount_set(&req->rsk_refcnt, 3)  // clobbers saturated value
->>
->> which surfaces as:
->>
->>   refcount_t: addition on 0; use-after-free.
->>   WARNING: lib/refcount.c:25 at refcount_warn_saturate+0x48/0x90, CPU#1
->>   Call Trace:
->>    bpf_iter_tcp_established_batch+0x14e/0x170
->>    bpf_iter_tcp_batch+0x53/0x200
->>    bpf_iter_tcp_seq_next+0x27/0x70
->>    bpf_seq_read+0x107/0x410
->>    vfs_read+0xb9/0x380
->>
->> The iterator's stolen reference is lost when the publishing CPU's
->> refcount_set() overwrites the count, leaving the socket one reference
->> short. When the last legitimate owner drops its reference the reqsk is
->> freed while still reachable, leading to use-after-free.
->>
->> This reproduces in seconds with tcp_syncookies=3D0, a handful of threads
->> doing connect()/close() to a local listener while others read an
->> iter/tcp link in a tight loop.
->>
->> Use refcount_inc_not_zero() and skip the socket on failure. A skipped
->> socket is still part of the bucket, so keep counting it in expected.
->> The reallocations are sized from expected, and a request sock whose
->> refcount gets published while the lock is held across the last realloc
->> must already have room.
->>
->> A skipped socket is counted in expected but never batched, so end_sk
->> can be short of expected on a batch that is actually complete. Decide
->> completeness by whether the walk left any socket behind instead. The
->> WARN after the locked realloc checks the same, replacing an
->> end_sk =3D=3D expected check that could not hold on that path since
->> commit cdec67a489d4 ("bpf: tcp: Make sure iter->batch always
->> contains a full bucket snapshot").
->>
->> If every matching socket in a bucket is mid-init (refcount 0), end_sk
->> stays 0. Advance to the next bucket rather than returning a batch entry
->> that was never filled this round.
->>
->> Fixes: 04c7820b776f ("bpf: tcp: Bpf iter batching and lock_sock")
->> Assisted-by: Claude:unspecified
->> Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+On Mon Aug 3, 2026 at 2:21 AM CEST, bot+bpf-ci wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index b274004fccfd9..3b61897ed0d2a 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -18777,10 +18777,15 @@ static void print_verification_stats(struct bp=
+f_verifier_env *env)
+>>  	if (env->log.level & BPF_LOG_STATS) {
+>>  		verbose(env, "verification time %lld usec\n",
+>>  			div_u64(env->verification_time, 1000));
+>> -		verbose(env, "stack depth %d", env->subprog_info[0].stack_depth);
+>> -		for (i =3D 1; i < subprog_cnt; i++)
+>> -			verbose(env, "+%d", env->subprog_info[i].stack_depth);
+>> -		verbose(env, " max %d\n", env->max_stack_depth);
+>> +		verbose(env, "stack depth max %d\n", env->max_stack_depth);
+>> +		for (i =3D 0; i < subprog_cnt; i++) {
+>> +			const char *name =3D env->subprog_info[i].name;
+>> +
+>> +			if (!name || !name[0])
+>> +				name =3D "<unknown>";
+>> +			verbose(env, "stack depth subprog %d %s %d\n", i, name,
+>> +				env->subprog_info[i].stack_depth);
+>> +		}
 >
-> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+> This isn't a bug, but could the name lookup here reuse subprog_name()?
+> It is already in this file and several other verbose() sites use it,
+> for example in do_check_common()'s caller:
 >
-> Thanks !
+> kernel/bpf/verifier.c
+> 	...
+> 		} else if (env->log.level & BPF_LOG_LEVEL) {
+> 			verbose(env, "Func#%d ('%s') is safe for any args that match its proto=
+type\n",
+> 				i, subprog_name(env, i));
+> 		}
+> 	...
+>
+> subprog_name() returns "" when there is no func_info, so the
+> !name[0] fallback would still catch it:
+>
 
-pw-bot is asleep. Applied to bpf.
+This nit is fine.
+
+> kernel/bpf/verifier.c:subprog_name() {
+> 	if (!env->prog->aux->func_info)
+> 		return "";
+>
+> 	info =3D &env->prog->aux->func_info[subprog];
+> 	return btf_type_name(env->prog->aux->btf, info->type_id);
+> }
+>
+> There is also fmt_subprog() in kernel/bpf/liveness.c doing the same
+> name-or-fallback formatting, so this is a third variant of the same
+> lookup.
+>
+
+That's too far fetched, and changes the format, I'll go with using subprog_=
+name().
+
+>>  		verbose(env, "insns processed %d", env->subprog_info[0].insn_processe=
+d);
+>>  		for (i =3D 1; i < subprog_cnt; i++)
+>>  			if (bpf_subprog_is_global(env, i))
+>
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/307718=
+45943
+
