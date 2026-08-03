@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9683406822;
-	Mon,  3 Aug 2026 12:15:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D9E3655F3;
+	Mon,  3 Aug 2026 12:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785759329; cv=none; b=ZOcMFI8JQgXO+3UKkjjLdKNndO/Z6vLL5a68FxMudu97nwPaPitK3uk7xaOdnuz4LSCvNh16PPYPAENo4meaeV6zvkZTquXj40BqRrMhmV5bnDeei05+nzwSkAGzGSKKgjYXIQHdGRwp3G9bK8HhK4fHT8+MQn7UPeGyg29TQCQ=
+	t=1785759332; cv=none; b=o8QuFiJ4Sk6djFUj2fX72kQq5/fwdNv2p2yMmSpGCpZvdUYvy1eHkR+wZMqoD7et/P7Pk/mq4kuzpCqvPx1XzoFDS/wKChYDS5MuoAtl8hlNlurLEA3pCTGfeIm8hQdGoRJPF5AqfRp/0Fybc73wv1/dGmHWzKYt1yzhSYpRd9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785759329; c=relaxed/simple;
-	bh=PImZ5+k3jMoTX28E8qhoeuXRjw+pYMUOFIcPhrFW/TM=;
+	s=arc-20240116; t=1785759332; c=relaxed/simple;
+	bh=nSNdnjq7YkG/2XIcevKtHnOJSe05oVkWuRmNilxKg40=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sUA/LZaP7tUr4j5STiBB1jUG7VIYo0UYrqy5D+Y08NAtLHSdPF6EMd0lYofFB2fRMbHAczQ0FOxVt5lhPqKM6gFfOt2KnAMDVwTpRpKP7C8f9zpDjR0IGhMYs78lF7RsBMuMPwmDRfGOAnCaBfSIaMBa+BIl6yp0lPdQHHAeHqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FwEjg8yt; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=JB5PuE7MUkVSDRpNAKa20DoWD5+rWu/pBU2IMGXOS+oHVYsDzXrlkQsSYhnb/rB8NpR2d8ARoadx1kYBv21okzrjeAwds5t5LL4h7J7VT60nDinumr0ob6Pu6n4SW5SmU2QDhKhQ31O0Ut3eWBbJcLgf4D2tsqa9l1pWde3vL+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TkekdQCz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FwEjg8yt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14EB91F00A3A;
-	Mon,  3 Aug 2026 12:15:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TkekdQCz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F73A1F00A3D;
+	Mon,  3 Aug 2026 12:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785759324;
-	bh=D2Rl97NSLMDDjgLpCbEgbfCYGpNmImEFbOqRGKOWqHs=;
+	s=k20260515; t=1785759328;
+	bh=imchk58sWwG609wF4sWviopwLcUSeECBG8nRog6W56I=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=FwEjg8ytRRjlCirzGeKDlrIae4cstHl9EMKHUG9MCKw2DQsRDi3lPKQrVIohza5Uk
-	 wu9Q4eDBAQfi+hojiTZnRFFKSdaED5+Ef2oBKjWEr6V4pdaj4kfjM75bIay4QsHg6/
-	 CnhZDZ0io7WIa0cRCyS6qwS2L3+5zxg0wi2h5nMpNicFipa97ojwaiPdM73ElcNL2j
-	 RYFOJ3dSMsPWT+WMmPefyEsL6r3o+EIa7qvsMPUMH3UbsGUcSjTNsZwnku4xVCC3fB
-	 TQtsAyqQI0cMRggVIF0zk2wvtt6q10NWnXlOn3qtgeQ92qLEDwtm4YYT0HisHDUeNN
-	 WtXKhrxDB2wKg==
+	b=TkekdQCz6F42VNW5kcnVPdqnV8E9Dj0r/zxHqrcZzn6Laj+ioypmrHvSIFkIEbC/U
+	 0/JvflWrwt62FApPeV0NGlg76Xa6MrHvRYOJsBgeDr8ugbzGPs9rB5QqrOFoK7AGcA
+	 ENtUsjShnoiQfCYGXtut/IumVj11vGPkJr1lEbWLmS0QrnSwsP032G9heD849XoxR9
+	 wtsheISpKpmwOq4C1Ulf9V0+vWXCZf0j1+MusQ8/9hQJ3iBOcgd1KGFXP0E3YKrrp4
+	 cbmgjCDtfj4mJ7eV33oMQwW1btql/dcNPZtGmzijwZYnJJ1e7vihERV1jG96xYwmMh
+	 xRyn6KyhgOeMA==
 From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 03 Aug 2026 14:15:00 +0200
-Subject: [PATCH 1/3] binfmt_misc: correctly account pre-opened interpreters
+Date: Mon, 03 Aug 2026 14:15:01 +0200
+Subject: [PATCH 2/3] selftests/exec: test the pre-opened interpreter limit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,7 +37,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260803-work-binfmt_misc-interplimit-v1-1-4a2435500bd9@kernel.org>
+Message-Id: <20260803-work-binfmt_misc-interplimit-v1-2-4a2435500bd9@kernel.org>
 References: <20260803-work-binfmt_misc-interplimit-v1-0-4a2435500bd9@kernel.org>
 In-Reply-To: <20260803-work-binfmt_misc-interplimit-v1-0-4a2435500bd9@kernel.org>
 To: linux-fsdevel@vger.kernel.org
@@ -46,186 +46,410 @@ Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
  Farid Zakaria <farid.m.zakaria@gmail.com>, jannh@google.com, 
  mail@johnericson.me, "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.16-dev-f2f85
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6690; i=brauner@kernel.org;
- h=from:subject:message-id; bh=PImZ5+k3jMoTX28E8qhoeuXRjw+pYMUOFIcPhrFW/TM=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQVtIVlzhR44CkpLMZ09H5Gvth/iwjeXYWypeln6vmiF
- J+kRRZ3lLIwiHExyIopsji0m4TLLeep2GyUqQEzh5UJZAgDF6cATOShGCPD/Zyu+x6LNDlPT5dN
- TLtkJ3ticdjDjSvfP1P+xNAW8vKgMsNPxk2n5Se6J8z6uPHeZya7fxw5nGYSz7S/Lbz8oXqqwJT
- FLAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=12952; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=nSNdnjq7YkG/2XIcevKtHnOJSe05oVkWuRmNilxKg40=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQVtIVZy1YHrr45c7Zb9vudB1vF/7Fme8Tx/N7j6NnH+
+ mThpRXuHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABOx52BkePE6PveRD5PXNYXP
+ Rd1GW/52tnB0N05f1bu6oTu/7eKH14wMm7bs4xWt/rdy4pWPsheeuzAtMp3L1fVURXSDnnrrq7Z
+ TrAA=
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-An 'F' entry, and every interpreter a 'B' entry binds, holds a file open
-from registration until the entry goes away, pinning the file, its inode,
-the mount it came from and that mount's superblock. Nothing bounds how
-many of those a user namespace can hold. An entry binds at most
-BINFMT_MISC_INTERP_MAX interpreters, but nothing caps the entries.
+- an interpreter opened at registration is charged
+- an interpreter a 'B' entry binds is charged too
+- an entry that opens none is not
+- removing an entry gives the charge back
+- a nested user namespace cannot buy itself budget by raising its own limit
 
-Charge each binding to the user namespace and uid that makes it against a
-new UCOUNT_BINFMT_MISC_INTERPRETERS. Going over budget causes -ENOSPC.
-
-A per-instance cap would suck. Instances are keyed on the user
-namespace. So any constant is multiplied by the number of namespaces the
-caller creates. Creating those is virtually free. A ucount charges the
-namespace and every one of its ancestors. And a namespace can raise only
-its own limit. So nesting buys nothing.
-
-The knob is /proc/sys/user/max_binfmt_misc_interpreters. Leave it at the
-max_threads/2 default fork_init() gives a new type. No existing
-configuration comes close to that.
-
-binfmt_misc is tristate, which makes it the first ucount user that can be
-built as a module. Export inc_ucount() and dec_ucount(); without them
-CONFIG_BINFMT_MISC=m fails to link. Export them to binfmt_misc alone:
-charging a ucount type is not something a module has any business doing
-in general, and the list is trivial to extend if a second user shows up.
-init_user_ns and init_binfmt_misc are already exported for the same
-module.
+Skips where the sysctl or binfmt_misc is missing. The 'B' case lives in
+binfmt_misc_bpf.c because binding needs a handler. It binds from a child
+in a user namespace of its own, through the fd the child inherited, so
+the charge lands on the child while the interpreter is still opened with
+the entry file's credentials, and nothing outside the child sees a
+changed limit.
 
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- fs/binfmt_misc.c               | 16 ++++++++++++++--
- include/linux/binfmt_misc.h    |  3 +++
- include/linux/user_namespace.h |  3 +++
- kernel/ucount.c                |  6 ++++++
- 4 files changed, 26 insertions(+), 2 deletions(-)
+ tools/testing/selftests/exec/.gitignore            |   1 +
+ tools/testing/selftests/exec/Makefile              |   6 +
+ tools/testing/selftests/exec/binfmt_misc_bpf.c     |  70 +++++++
+ .../selftests/exec/binfmt_misc_interplimit.c       | 232 +++++++++++++++++++++
+ 4 files changed, 309 insertions(+)
 
-diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
-index ad8c4f64bf10..a3aa42fd5761 100644
---- a/fs/binfmt_misc.c
-+++ b/fs/binfmt_misc.c
-@@ -289,6 +289,7 @@ static void entry_put_interpreters(struct binfmt_misc_entry *e)
- 	list_for_each_entry_safe(interp, tmp, &e->interps, list) {
- 		list_del(&interp->list);
- 		close_interp_file(interp->file);
-+		dec_ucount(interp->ucounts, UCOUNT_BINFMT_MISC_INTERPRETERS);
- 		kfree(interp);
- 	}
- }
-@@ -307,7 +308,8 @@ static void entry_put_interpreters(struct binfmt_misc_entry *e)
-  * The caller has to have validated @name and @path, established that @e
-  * cannot be matched yet, and owns @f until this succeeds.
-  *
-- * Return: 0 on success, a negative errno on failure
-+ * Return: 0 on success, -ENOSPC if the entry is full or the binder is out of
-+ *         UCOUNT_BINFMT_MISC_INTERPRETERS budget, a negative errno on failure
-  */
- static int entry_attach_interpreter(struct binfmt_misc_entry *e,
- 				    const char *name, const char *path,
-@@ -315,22 +317,32 @@ static int entry_attach_interpreter(struct binfmt_misc_entry *e,
- {
- 	size_t nlen = strlen(name), plen = strlen(path);
- 	struct binfmt_misc_interp *interp;
-+	struct ucounts *ucounts;
+diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
+index fbbb1600ddb9..e42ecd4c908d 100644
+--- a/tools/testing/selftests/exec/.gitignore
++++ b/tools/testing/selftests/exec/.gitignore
+@@ -20,6 +20,7 @@ xxxxxxxx*
+ pipe
+ S_I*.test
+ binfmt_misc_bpf
++binfmt_misc_interplimit
+ binfmt_bpf_interp
+ binfmt_bpf_app
+ binfmt_misc_transparent
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index 410c93606a0c..b640af8f02b5 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -25,6 +25,10 @@ TEST_GEN_PROGS += check-exec
+ # or an 'F' entry can pin the instance that owns it. Unprivileged, no bpf.
+ TEST_GEN_PROGS += binfmt_misc_selfpin
  
- 	if (binfmt_misc_find_interp(&e->interps, name))
- 		return -EEXIST;
- 	if (list_count_nodes(&e->interps) >= BINFMT_MISC_INTERP_MAX)
- 		return -ENOSPC;
- 
-+	/* The binding keeps a file open, so charge it to whoever binds it. */
-+	ucounts = inc_ucount(current_user_ns(), current_euid(),
-+			     UCOUNT_BINFMT_MISC_INTERPRETERS);
-+	if (!ucounts)
-+		return -ENOSPC;
++# The interpreters an 'F' or 'B' entry pre-opens are charged against
++# UCOUNT_BINFMT_MISC_INTERPRETERS. Unprivileged, no bpf.
++TEST_GEN_PROGS += binfmt_misc_interplimit
 +
- 	/* One allocation, both strings in it, like the entry's own buffer. */
- 	interp = kmalloc(struct_size(interp, name, nlen + plen + 2),
- 			 GFP_KERNEL_ACCOUNT);
--	if (!interp)
-+	if (!interp) {
-+		dec_ucount(ucounts, UCOUNT_BINFMT_MISC_INTERPRETERS);
- 		return -ENOMEM;
+ # 'D' (register disabled) binfmt_misc test: an entry that exists but does
+ # not dispatch until it is enabled. Static magic entry, no bpf toolchain.
+ TEST_GEN_PROGS += binfmt_misc_disabled
+@@ -104,6 +108,8 @@ $(OUTPUT)/script-noexec.inc: $(CHECK_EXEC_SAMPLES)/script-noexec.inc
+ # CFLAGS for every program in this directory.
+ $(OUTPUT)/binfmt_misc_selfpin: CFLAGS += $(TOOLS_INCLUDES)
+ $(OUTPUT)/binfmt_misc_selfpin: ../filesystems/utils.c
++$(OUTPUT)/binfmt_misc_interplimit: CFLAGS += $(TOOLS_INCLUDES)
++$(OUTPUT)/binfmt_misc_interplimit: ../filesystems/utils.c
+ 
+ # --- binfmt_misc bpf ('B') handler test ---------------------------------
+ # The struct_ops bpf objects are compiled against the running kernel's BTF.
+diff --git a/tools/testing/selftests/exec/binfmt_misc_bpf.c b/tools/testing/selftests/exec/binfmt_misc_bpf.c
+index 2c7b63075f1d..b2a4518901b0 100644
+--- a/tools/testing/selftests/exec/binfmt_misc_bpf.c
++++ b/tools/testing/selftests/exec/binfmt_misc_bpf.c
+@@ -38,6 +38,7 @@
+ #define _GNU_SOURCE
+ #include <elf.h>
+ #include <limits.h>
++#include <sched.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -65,6 +66,9 @@
+ #define BIND_RISCV_PATH	"/tmp/binfmt_bind_riscv"
+ #define BIND_EXPECT	"BIND_RAN "
+ #define BIND_MAX	100
++#define INTERP_LIMIT	"/proc/sys/user/max_binfmt_misc_interpreters"
++/* Exit status of the binding child when it cannot set up a budget of its own. */
++#define BIND_NO_BUDGET	200
+ 
+ /* A minimal 64-bit little-endian ELF header, padded to the read size. */
+ static int create_fake_elf(const char *path, unsigned short machine)
+@@ -378,6 +382,57 @@ static int entry_bind(const char *entry, const char *name, const char *path)
+ 	return entry_command(entry, cmd);
+ }
+ 
++/* Set the interpreter budget of this namespace. */
++static int write_interp_limit(const char *val)
++{
++	ssize_t n;
++	int fd;
++
++	fd = open(INTERP_LIMIT, O_WRONLY | O_CLOEXEC);
++	if (fd < 0)
++		return -1;
++	n = write(fd, val, strlen(val));
++	close(fd);
++	return n < 0 ? -1 : 0;
++}
++
++/*
++ * The errno a bind is refused with when the writer is a child that has spent
++ * the budget of a user namespace of its own, 0 if it succeeded and -1 if the
++ * child could not set itself up. The fd is opened here and inherited, so the
++ * interpreter is still opened with this process's credentials.
++ */
++static int bind_out_of_budget(const char *entry, const char *name,
++			      const char *path)
++{
++	char cmd[PATH_MAX], file[PATH_MAX];
++	int fd, status, retval;
++	pid_t pid;
++
++	snprintf(file, sizeof(file), BINFMT_DIR "/%s", entry);
++	snprintf(cmd, sizeof(cmd), "+%s %s\n", name, path);
++
++	fd = open(file, O_WRONLY | O_CLOEXEC);
++	if (fd < 0)
++		return -1;
++
++	pid = fork();
++	if (pid == 0) {
++		ssize_t n;
++
++		/* A namespace of its own, with nothing left in it to spend. */
++		if (unshare(CLONE_NEWUSER) || write_interp_limit("0"))
++			_exit(BIND_NO_BUDGET);
++		n = write(fd, cmd, strlen(cmd));
++		_exit(n < 0 ? errno : 0);
 +	}
- 
- 	interp->path = interp->name + nlen + 1;
- 	strscpy(interp->name, name, nlen + 1);
- 	strscpy(interp->name + nlen + 1, path, plen + 1);
- 	interp->file = f;
-+	interp->ucounts = ucounts;
- 	/* Publish the node: a lockless cat may be walking the list. */
- 	list_add_tail_rcu(&interp->list, &e->interps);
- 	pr_debug("register: interpreter: %s {%s}\n", name, path);
-diff --git a/include/linux/binfmt_misc.h b/include/linux/binfmt_misc.h
-index 072e4b3dd78d..8045b10dd3e5 100644
---- a/include/linux/binfmt_misc.h
-+++ b/include/linux/binfmt_misc.h
-@@ -7,6 +7,7 @@
- struct bpf_prog;
- struct file;
- struct linux_binprm;
-+struct ucounts;
- struct user_namespace;
- 
- #define BINFMT_MISC_OPS_NAME_MAX 16
-@@ -21,6 +22,7 @@ struct user_namespace;
-  * struct binfmt_misc_interp - an interpreter an entry was registered with
-  * @list: link in the entry's list, in registration order
-  * @file: the file, opened at registration and never resolved again
-+ * @ucounts: the UCOUNT_BINFMT_MISC_INTERPRETERS charge the binding took
-  * @path: the path it was registered under, used as the name the interpreter
-  *        runs under; stored after @name in the same allocation
-  * @name: the name the load program selects it by; empty for the fixed
-@@ -33,6 +35,7 @@ struct user_namespace;
- struct binfmt_misc_interp {
- 	struct list_head	list;
- 	struct file		*file;
-+	struct ucounts		*ucounts;
- 	const char		*path;
- 	char			name[];
- };
-diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
-index 9c3be157397e..e38d9e60569f 100644
---- a/include/linux/user_namespace.h
-+++ b/include/linux/user_namespace.h
-@@ -57,6 +57,9 @@ enum ucount_type {
- #ifdef CONFIG_FANOTIFY
- 	UCOUNT_FANOTIFY_GROUPS,
- 	UCOUNT_FANOTIFY_MARKS,
-+#endif
-+#if IS_ENABLED(CONFIG_BINFMT_MISC)
-+	UCOUNT_BINFMT_MISC_INTERPRETERS,
- #endif
- 	UCOUNT_COUNTS,
- };
-diff --git a/kernel/ucount.c b/kernel/ucount.c
-index d6dc3e859f12..ec8b1445e287 100644
---- a/kernel/ucount.c
-+++ b/kernel/ucount.c
-@@ -4,6 +4,7 @@
- #include <linux/sysctl.h>
- #include <linux/slab.h>
- #include <linux/cred.h>
-+#include <linux/export.h>
- #include <linux/hash.h>
- #include <linux/kmemleak.h>
- #include <linux/user_namespace.h>
-@@ -89,6 +90,9 @@ static const struct ctl_table user_table[] = {
- 	UCOUNT_ENTRY("max_fanotify_groups"),
- 	UCOUNT_ENTRY("max_fanotify_marks"),
- #endif
-+#if IS_ENABLED(CONFIG_BINFMT_MISC)
-+	UCOUNT_ENTRY("max_binfmt_misc_interpreters"),
-+#endif
- };
- #endif /* CONFIG_SYSCTL */
- 
-@@ -233,6 +237,7 @@ struct ucounts *inc_ucount(struct user_namespace *ns, kuid_t uid,
- 	put_ucounts(ucounts);
- 	return NULL;
++	close(fd);
++	if (pid < 0 || waitpid(pid, &status, 0) != pid || !WIFEXITED(status))
++		return -1;
++	retval = WEXITSTATUS(status);
++	return retval == BIND_NO_BUDGET ? -1 : retval;
++}
++
+ FIXTURE(bound_interp) {
+ 	char obj[PATH_MAX];
+ 	struct bpf_case c;
+@@ -565,4 +620,19 @@ TEST_F(bound_interp, capped_bindings)
+ 	EXPECT_EQ(entry_bind("test_interp_bind", "over", BIND_FIRST), -ENOSPC);
  }
-+EXPORT_SYMBOL_FOR_MODULES(inc_ucount, "binfmt_misc");
  
- void dec_ucount(struct ucounts *ucounts, enum ucount_type type)
- {
-@@ -243,6 +248,7 @@ void dec_ucount(struct ucounts *ucounts, enum ucount_type type)
- 	}
- 	put_ucounts(ucounts);
- }
-+EXPORT_SYMBOL_FOR_MODULES(dec_ucount, "binfmt_misc");
- 
- long inc_rlimit_ucounts(struct ucounts *ucounts, enum rlimit_type type, long v)
- {
++/* A binding pins a file: it is charged, and refused once the budget is out. */
++TEST_F(bound_interp, bindings_are_charged)
++{
++	int err = bind_out_of_budget("test_interp_bind", "third", BIND_FIRST);
++
++	if (err < 0)
++		SKIP(return, "no user namespaces or no " INTERP_LIMIT);
++
++	/* The charge follows the writer, not the entry file it writes to. */
++	EXPECT_EQ(err, ENOSPC);
++
++	/* The budget was the only thing in the way. */
++	EXPECT_EQ(entry_bind("test_interp_bind", "third", BIND_FIRST), 0);
++}
++
+ TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/exec/binfmt_misc_interplimit.c b/tools/testing/selftests/exec/binfmt_misc_interplimit.c
+new file mode 100644
+index 000000000000..bf611c551784
+--- /dev/null
++++ b/tools/testing/selftests/exec/binfmt_misc_interplimit.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * A pre-opened interpreter - what 'F' gives a static entry and what a 'B'
++ * entry binds - keeps a file open for as long as the entry lives, so it pins
++ * the mount it came from. It costs no file descriptor, and binfmt_misc is
++ * FS_USERNS_MOUNT, so an unprivileged user namespace can create them without
++ * bound. Check that UCOUNT_BINFMT_MISC_INTERPRETERS bounds it, that an entry
++ * that pre-opens nothing is not charged, that removing an entry gives the
++ * charge back, and that nesting a user namespace does not evade it.
++ *
++ * Runs unprivileged in a user namespace.
++ */
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <limits.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/mount.h>
++#include <sys/stat.h>
++#include <unistd.h>
++
++#include "../filesystems/utils.h"
++#include "kselftest_harness.h"
++
++#define MNT		"/tmp/binfmt_interplimit"
++#define NESTED_MNT	"/tmp/binfmt_interplimit_nested"
++#define LIMIT_SYSCTL	"/proc/sys/user/max_binfmt_misc_interpreters"
++
++#define MAGIC		"\\xde\\xad"
++/* Not on the instance, and unlike /bin/true it always exists. */
++#define INTERP		"/proc/self/exe"
++
++/* Small enough to fill by hand, big enough that a refund is visible. */
++#define LIMIT		4
++
++/* What UCOUNT_ENTRY() lets a namespace raise its own limit to. */
++#define LIMIT_MAX	"2147483647"
++
++static int ensure_dir(const char *path)
++{
++	if (mkdir(path, 0755) && errno != EEXIST)
++		return -1;
++	return 0;
++}
++
++/* Write @val to @path, preserving write(2)'s errno for the caller. */
++static int write_keep_errno(const char *path, const char *val)
++{
++	int fd, saved;
++	ssize_t n;
++
++	fd = open(path, O_WRONLY | O_CLOEXEC);
++	if (fd < 0)
++		return -1;
++	n = write(fd, val, strlen(val));
++	saved = errno;
++	close(fd);
++	errno = saved;
++	return n < 0 ? -1 : 0;
++}
++
++static int set_limit(const char *val)
++{
++	return write_keep_errno(LIMIT_SYSCTL, val);
++}
++
++static int register_at(const char *mnt, const char *rule)
++{
++	char path[PATH_MAX];
++
++	snprintf(path, sizeof(path), "%s/register", mnt);
++	return write_keep_errno(path, rule);
++}
++
++/* An 'F' entry: one interpreter pre-opened at registration, one charge. */
++static int register_fixed(const char *mnt, const char *name)
++{
++	char rule[PATH_MAX];
++
++	snprintf(rule, sizeof(rule), ":%s:M::" MAGIC "::" INTERP ":F", name);
++	return register_at(mnt, rule);
++}
++
++/* The same entry without 'F': the interpreter is opened per exec instead. */
++static int register_plain(const char *mnt, const char *name)
++{
++	char rule[PATH_MAX];
++
++	snprintf(rule, sizeof(rule), ":%s:M::" MAGIC "::" INTERP ":", name);
++	return register_at(mnt, rule);
++}
++
++static int remove_entry(const char *mnt, const char *name)
++{
++	char path[PATH_MAX];
++
++	snprintf(path, sizeof(path), "%s/%s", mnt, name);
++	return write_keep_errno(path, "-1\n");
++}
++
++static bool entry_exists(const char *mnt, const char *name)
++{
++	char path[PATH_MAX];
++
++	snprintf(path, sizeof(path), "%s/%s", mnt, name);
++	return access(path, F_OK) == 0;
++}
++
++/* Register @n 'F' entries, each with a name of its own. */
++static int fill_budget(const char *mnt, unsigned int n)
++{
++	char name[32];
++	unsigned int i;
++
++	for (i = 0; i < n; i++) {
++		snprintf(name, sizeof(name), "fixed%u", i);
++		if (register_fixed(mnt, name))
++			return -1;
++	}
++	return 0;
++}
++
++FIXTURE(interp_limit) {
++};
++
++FIXTURE_SETUP(interp_limit)
++{
++	/* setup_userns() exits rather than returns if this is not there. */
++	if (access("/proc/self/ns/user", F_OK))
++		SKIP(return, "kernel without user namespaces");
++	ASSERT_EQ(setup_userns(), 0);
++
++	/* CAP_SYS_RESOURCE in this namespace is what makes it writable. */
++	if (set_limit(LIMIT_MAX)) {
++		if (errno == ENOENT)
++			SKIP(return, "kernel without " LIMIT_SYSCTL);
++		SKIP(return, "cannot set the limit: %s", strerror(errno));
++	}
++
++	ASSERT_EQ(ensure_dir(MNT), 0);
++	if (mount("binfmt_misc", MNT, "binfmt_misc", 0, NULL)) {
++		int saved = errno;
++
++		/* Teardown doesn't run when setup skips, so clean up here. */
++		rmdir(MNT);
++		SKIP(return, "no binfmt_misc: %s", strerror(saved));
++	}
++}
++
++FIXTURE_TEARDOWN(interp_limit)
++{
++	/* The namespaces go with the process; just don't litter /tmp. */
++	umount2(NESTED_MNT, MNT_DETACH);
++	umount2(MNT, MNT_DETACH);
++	rmdir(NESTED_MNT);
++	rmdir(MNT);
++}
++
++/* Every pre-opened interpreter is charged, and the budget is a hard stop. */
++TEST_F(interp_limit, fixed_interpreters_are_charged)
++{
++	char buf[32];
++
++	snprintf(buf, sizeof(buf), "%u", LIMIT);
++	ASSERT_EQ(set_limit(buf), 0);
++
++	ASSERT_EQ(fill_budget(MNT, LIMIT), 0);
++
++	EXPECT_NE(register_fixed(MNT, "over"), 0);
++	EXPECT_EQ(errno, ENOSPC);
++
++	/* A refused registration leaves nothing behind. */
++	EXPECT_FALSE(entry_exists(MNT, "over"));
++}
++
++/* An entry that pre-opens nothing pins nothing, so it is not charged. */
++TEST_F(interp_limit, plain_entries_are_not_charged)
++{
++	ASSERT_EQ(set_limit("0"), 0);
++
++	EXPECT_EQ(register_plain(MNT, "plain"), 0);
++	EXPECT_TRUE(entry_exists(MNT, "plain"));
++
++	/* ... while the same entry with 'F' has nothing to spend. */
++	EXPECT_NE(register_fixed(MNT, "fixed"), 0);
++	EXPECT_EQ(errno, ENOSPC);
++}
++
++/* Removing an entry closes its interpreters and gives the charge back. */
++TEST_F(interp_limit, removal_refunds_the_charge)
++{
++	char buf[32];
++
++	snprintf(buf, sizeof(buf), "%u", LIMIT);
++	ASSERT_EQ(set_limit(buf), 0);
++
++	ASSERT_EQ(fill_budget(MNT, LIMIT), 0);
++	ASSERT_NE(register_fixed(MNT, "over"), 0);
++
++	ASSERT_EQ(remove_entry(MNT, "fixed0"), 0);
++	EXPECT_EQ(register_fixed(MNT, "over"), 0);
++}
++
++/*
++ * The charge walks the ancestors, so a namespace cannot buy itself budget by
++ * nesting: it may raise only its own limit, and the parent it was created
++ * from is charged for every binding made below it.
++ */
++TEST_F(interp_limit, nesting_does_not_evade_it)
++{
++	char buf[32];
++
++	snprintf(buf, sizeof(buf), "%u", LIMIT);
++	ASSERT_EQ(set_limit(buf), 0);
++	ASSERT_EQ(fill_budget(MNT, LIMIT), 0);
++
++	ASSERT_EQ(setup_userns(), 0);
++	ASSERT_EQ(set_limit(LIMIT_MAX), 0);
++
++	ASSERT_EQ(ensure_dir(NESTED_MNT), 0);
++	ASSERT_EQ(mount("binfmt_misc", NESTED_MNT, "binfmt_misc", 0, NULL), 0);
++
++	/* A fresh instance with an unlimited budget of its own, and yet: */
++	EXPECT_NE(register_fixed(NESTED_MNT, "nested"), 0);
++	EXPECT_EQ(errno, ENOSPC);
++
++	/* The nested instance works for anything that pins no file. */
++	EXPECT_EQ(register_plain(NESTED_MNT, "nested_plain"), 0);
++}
++
++TEST_HARNESS_MAIN
 
 -- 
 2.53.0
