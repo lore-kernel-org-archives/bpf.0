@@ -1,125 +1,144 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137BC19DF62
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 02:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785723644; cv=pass; b=NpHvENowrld90u2sPQ2ktwCKEO1BgApAhc7vhPRLClTPAeu9nRky5TjAc0qYqZoWNUjz+VkJ8pJrm9QD5z4zl/vdiWz7hs+7eUc4aIt/9S2Wh5FNLymmEiHyWEzi6QBW6p0rPBKw02H7m4N3ro707waw4tb55LoI8WVoMXiNnvQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785723644; c=relaxed/simple;
-	bh=nHOdUJiFOBdWfwScJY9o0u/7iDJXeJBSazB/azPRC0s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M5DB3bwfXLDtUK0cjATAOAhtr2B87R4pQVFG9MRiVASZkxvdfPwYg9ap3QNuu1fndPHTlQXtP36eS4kuGAGVpncRV+SqaTCijUK8m+qNnTV3e4zVNdH/RMWXyG5YZHD+A6RYEuKjHxo5USVcAOBujo+dbG+Q2I0985G4hCviwMc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NWZ3GLQA; arc=pass smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB0930F526
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 02:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785724132; cv=none; b=OrKb3adSOIaapjeeIFMpWTHuQJPvuq4KId5vu2aJOkR6BHJL8b8bHQVyC5Cx20xfYFvuiiOFwRvwlhWaPnIrCYbG77C0QjUjBwluGLyoYELbWJK6YbmOBDBly3vzd0A4+gRB0mBcX4izgi7ywHbExVicH9XN3EcsCh8t+Pe4brk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785724132; c=relaxed/simple;
+	bh=nkG2rJXEEJSPsdeY++AM8bHYFpXtt3/YNhjuEeVJjko=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=QAZ6518CU3X/20CHUUHu1fgo+0sATeDWgA6jdFmaEDwvHTsyKIUcjaK9N3oYsoBpl8xVdMpB9shL3TEAGSk0X7la10Zu0/8csO0qOsyFcSu3UDOjvjiQQ5DdHPukau19pl035/WnuQ4ecS7LIOGNqB4aEg7Vb6LoaOM3eOz42fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KYEGKHLH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWZ3GLQA"
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-92f03daaa97so157868685a.2
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 19:20:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785723642; cv=none;
-        d=google.com; s=arc-20260327;
-        b=MFJ2Q4ehbLAQDlrpTCOIp3nQRmrjz0godrC8uCBlh+GYevn/voHQZ9Z/se6oktD4R8
-         JffNswA12MjoDtjXpvpaKm6qml1kve0lVsLkfPseoeFWynbhd5L9tW+72LCGP+qAXyyp
-         MUWWpJFksVC+P1bGkcvczVuu4FJIDyDKJdno0M7Swv/UGze93Cgq/lt9Lnx7diT3OgQM
-         Tz4+32CsZC5RVlprqjSIr0Fm2DEE/yRd1obWlCCpMOaI2uXePK+Ns1IKVEcGZTLnlDfC
-         1hxtoPHKeDLxHZzCUGC04afnV+sF+mYWGRU8Hsjrc7SLSe4+KbhikCrBljf++6LsQU2k
-         Um8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=I8x/5zsaEEccMOJBOWfmd8QIoQoaOAGrwb7utr6PXbU=;
-        fh=aPsC+eNXzNnD2UcNUare9DxS3XhsQTPLsqBLfiP32lY=;
-        b=XjRJ7SuzCkKxjEX0gdnO92Cw+RwwnyCYSnflfFKb89CjqTxPdSs7qix2gJDbbEgAZ9
-         sNLaMEh6kluhXo2zWmFREYOiRye+cL+bDO0IXjSO5uINIWgtVJaKdI+2QMcHBMCK7new
-         Jb3O+kTkq0p26RWVH0MjeaKz3fXVpFE+MdUrkTKvjuhChyVG44t64C6+uHr85NnMbOXG
-         dVqtDvpER3JGidIMMTUdZX7R71jOqtiaYHGf79I16DHN5PK6S6Q11ekshg0C5/7GaHbK
-         B34iTIZI66UKuwt/2XNPRvepFlVEVgoMEYECzm7kz63RK08KwB60OBBMRkSpJn/Tp0A7
-         bgbw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785723642; x=1786328442; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=I8x/5zsaEEccMOJBOWfmd8QIoQoaOAGrwb7utr6PXbU=;
-        b=NWZ3GLQAGqQSzgwOPT4lFaw4cOve7T5RD0heRas2pZpdKIF/Lp2+KC9Mw3t1HeiTFd
-         GrOUtxgJcVvz3rSGmNt0Fh4Qkg53AFskH1z579ju8uYQUasR8njLzFLTGoJab8s4XmBj
-         tqRvaM94XbeYzngAplYkvXrefspFSs3Jt4jK9Wrc1Hucd/Nks5hwY9NKT607PWpvIOmZ
-         c7N9UwsgVLeNf51ToYRNT/H0MYWanTThWn6XYITOCRUGvy+8tP2Wc+eOdZZXYvPVJzbl
-         YGh9PAZ0ef119cGCtDk7cjbB6e4sn25FyEG7HvNHMnDx5Fiv7a41V2yWl02UKJ8f7TGo
-         nasw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785723642; x=1786328442;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=I8x/5zsaEEccMOJBOWfmd8QIoQoaOAGrwb7utr6PXbU=;
-        b=r2Vzf3kPzsk/jTg4yCQM3v0D3cR9WaGGfYwURTxuOyPOiNIGiao+Q4EAJG+GwHLpvA
-         qeQ2zKriu48paoL6PZM7ToymhWsQXRAfwB3ztVYhMPou0772r+kiRPrjTMsl8T99XkLD
-         XTIx+RaTB378zHNbxUIYMvJb/xxOEevFOZt+ri71LnViuQmFdYZn081a8bAm9/wMvA02
-         ZuX3250XqhcZ5e6ymREpfm4Fa75yf6qnD4b0fDtlmCl3bjKJWl9B3b692vgNuhXIQrxs
-         gLwRp3kFR66WekuUybbTZqESHOSJRGG7Mk1I6CBIvwuTPfhDFJ2yWxIVupZViCECifpu
-         YRww==
-X-Gm-Message-State: AOJu0YzaMDb8nXuw0Nc/0fv+UaMV2YfvrhY9D7OVq78fj46HfruDezEW
-	KITB4tMvb3GSlGzLU4UuVSWilxyFEy8z5qnmuu2m7vZ8//2/BVJo3kSPz8g1N1LN7+C5OsjzFir
-	UbZADBE46RTzftKc/kcUczY+3IAr8O38ItXkw
-X-Gm-Gg: AR+sD10wtzZEVgOLWIFv9K5l/lxg+02tNFY/poOCqwBJRT7j2zOM+tsEmDMPXxucrDl
-	kotePGBrB0qIXNUfpA2DSkjNyNwksV3nokk93qFBibyIq/WkIP34azBm1Mhrysr3rGs2SLXHI2c
-	A0jsV82RBA+NtdnU2oKOgqMmJKmjW9qtGl2uBSs94svxpxuryAu1Xe+KOLWkPWMEAnoPtVOfAIf
-	CANOMm/TshtBUduVHBOXsQJVQ0bXlQaFhAQ7Xwya9QZ90ll5wJUxSJvOP0D9Dwmp8CkIy3D6hOV
-	uNjW8GUsfV8yhwdGVCbV7lKRxir6N8s0/hywvXbMmZa2pW+GwalaFm452OtAKlnDaRIGdP7Ttuc
-	=
-X-Received: by 2002:a05:620a:6e19:b0:92e:b1ca:8ea3 with SMTP id
- af79cd13be357-934a0afee70mr1278443185a.47.1785723641894; Sun, 02 Aug 2026
- 19:20:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYEGKHLH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 785B81F00ADF;
+	Mon,  3 Aug 2026 02:28:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785724130;
+	bh=T6jYh40DzacNFpd7onPEpjt2TPlgdizGDp1nV6KU+rI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=KYEGKHLHa1P6gQv7uQrRasILrg9Is7qprA2t1w19bNdTBV0cEdV6fZ/NewKNEDmif
+	 mdZMwYPPW47j03GPdfQISvtQhbHWXjH966cwo36qp47pb5g0rY8ADn+q0m3PM+1Lci
+	 ORkjqd/ybBOC6nJ4/hYywn0wzYKlsUmCS+2I+XLF1arXnaA1J6ovb5A3n6AkhARtRS
+	 RM+u6ha47MRyQDZJW7JT9bd3SDdFicyX/aYeKTFqWA32fgIl1ILiHZPh6idAem+lue
+	 OGOFt23/yFqqiWfvUpDEm4BxNDbrxL7RPtLPkccg/C0vkGG3kFBwg3s/oKyZc9BGPV
+	 lL+Gc6gkoIxJA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next] bpf: add BPF_F_SEALED flag to seal BPF links
+ at creation
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "David Windsor" <dwindsor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260803021643.2189641-1-dwindsor@gmail.com>
+References: <20260803021643.2189641-1-dwindsor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 03 Aug 2026 02:28:50 +0000
+Message-Id: <20260803022850.785B81F00ADF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260803021643.2189641-1-dwindsor@gmail.com>
-In-Reply-To: <20260803021643.2189641-1-dwindsor@gmail.com>
-From: David Windsor <dwindsor@gmail.com>
-Date: Sun, 2 Aug 2026 22:20:28 -0400
-X-Gm-Features: AUfX_mysI4MMhh5J0Ey1f-wf9yEiswfDecbNV8kHCQXUVpaN2rD_qs5ei3LWkQU
-Message-ID: <CAEXv5_iXbExVvOSyOu_BsNeAjhqBOf3880vfUDbfLNmKPgLVXA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: add BPF_F_SEALED flag to seal BPF links at creation
-To: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 2, 2026 at 10:16=E2=80=AFPM David Windsor <dwindsor@gmail.com> =
-wrote:
->
-> Introduce a new BPF_F_SEALED flag for BPF_LINK_CREATE that creates the
-> link permanently sealed. A sealed link can never have its program
-> replaced via BPF_LINK_UPDATE, can never be detached via BPF_LINK_DETACH,
-> and holds an extra self-reference that is never released, so the link and
-> its program attachment persist until the machine reboots, even after user
-> space closes every fd referring to it. There is no way to unseal a link.
->
-> The sealed state is tracked by a new bool field on struct bpf_link.
->
-> Signed-off-by: David Windsor <dwindsor@gmail.com>
-> ---
->  include/linux/bpf.h            |  2 ++
->  include/uapi/linux/bpf.h       |  1 +
->  kernel/bpf/syscall.c           | 41 +++++++++++++++++++++++++++++++---
->  tools/include/uapi/linux/bpf.h |  1 +
->  4 files changed, 42 insertions(+), 3 deletions(-)
->
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] The BPF_F_SEALED flag is applied via a file descriptor lookup afte=
+r the FD has been exposed to user space, creating a TOCTOU race that allows=
+ cross-object sabotage and unauthorized link sealing.
+- [High] The implementation of BPF_F_SEALED introduces a permanent memory l=
+eak, enabling a Denial of Service (DoS) via kernel resource exhaustion.
+- [Medium] Concurrent executions of `link_seal_fd` on the same link can lea=
+k multiple self-references due to a missing atomic read-modify-write.
+--
 
-There is deliberately no selftest for this, as running any such
-selftest would necessarily create a sealed link, which cannot be
-cleaned up.
+--- Patch [1]: [PATCH bpf-next] bpf: add BPF_F_SEALED flag to seal BPF link=
+s at creation ---
+commit f9d98fb378be461fdf9509562339b45a07b8d912
+Author: David Windsor <dwindsor@gmail.com>
+
+bpf: add BPF_F_SEALED flag to seal BPF links at creation
+
+This commit introduces a new BPF_F_SEALED flag for BPF_LINK_CREATE that
+creates a permanently sealed link. A sealed link cannot have its program
+replaced, cannot be detached, and holds an extra self-reference so it
+persists until reboot.
+
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 94091130bcc50..e8bd57d5c907a 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+[ ... ]
+> @@ -5776,17 +5777,41 @@ static int bpf_map_do_batch(const union bpf_attr =
+*attr,
+>  	return err;
+>  }
+> =20
+> +/* Seal the just-created link: take a self-reference that is never relea=
+sed. */
+> +static void link_seal_fd(int fd)
+> +{
+> +	struct bpf_link *link;
+> +
+> +	link =3D bpf_link_get_from_fd(fd);
+> +	if (IS_ERR(link))
+> +		return;
+> +
+> +	if (!READ_ONCE(link->sealed)) {
+
+[Severity: Medium]
+Is this flag check safe against concurrent execution?
+
+If the file descriptor is raced via dup2(), multiple threads might enter
+link_seal_fd() for the same victim link concurrently. Since the READ_ONCE()
+and WRITE_ONCE() are not atomic, could multiple threads observe false and
+increment the link reference count multiple times?
+
+> +		bpf_link_inc(link);
+> +		WRITE_ONCE(link->sealed, true);
+
+[Severity: High]
+Does taking a self-reference here without any release path allow users to
+exhaust kernel memory?
+
+Since link_detach() explicitly returns -EPERM for sealed links, a user could
+repeatedly create sealed links and close the fds, leaking the bpf_link and
+bpf_prog indefinitely. Is there an administrative way to reclaim this memor=
+y?
+
+> +	}
+> +
+> +	bpf_link_put_direct(link);
+> +}
+[ ... ]
+> @@ -5880,6 +5905,9 @@ static int link_create(union bpf_attr *attr, bpfptr=
+_t uattr)
+>  out:
+>  	if (ret < 0)
+>  		bpf_prog_put(prog);
+> +out_seal:
+> +	if (ret >=3D 0 && seal)
+> +		link_seal_fd(ret);
+
+[Severity: High]
+Does looking up the link from the file descriptor here create a race
+condition?
+
+By the time link_create() reaches this point, attach functions called
+earlier have already installed the fd into the process's file descriptor
+table.
+
+Could a concurrent thread use dup2() to overwrite this fd with one pointing
+to a different victim bpf_link before link_seal_fd() executes? This would
+cause the system to permanently seal the victim link instead of the newly
+created one.
+
+>  	return ret;
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803021643.2189=
+641-1-dwindsor@gmail.com?part=3D1
