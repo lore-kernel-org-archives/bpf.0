@@ -1,238 +1,149 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2520338F945
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 19:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785784471; cv=none; b=jsOKL8Vzp8NeLqlbsNJjXP8RsE7Y/SA+aLpRYFTJCFtoxZUN4vai9x/ncNkOkOKevNtt/EgppzMqE/LzhPk20o1aZm4dJ9QfbRl1SzZmjZalTTiFL84eJtb0pgBVxCL5Iwf5gf/F7I7RfQlq2xC6yPvZLgEe7XJrlMBkNdG1dKo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785784471; c=relaxed/simple;
-	bh=9KSbiGVVYKU93vLwTvYSSfP2Tu15/HNk/7REk/scI6M=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=UY2rsqrbbEPJ4kNADYVja8bRk6jrRg7teBJP1KhEzJfT2OVnydM1EYPzcQk+ZjpAeHwmRectRPigEwEDb06l79YQLk0E8zuQ2oGgEApKyR35eVP31RuvnZOAz6uSKJFkCIOnkPplno1HcqBVuifC3cRkTGKZYI1Kz1ah8hMZOqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Eug6At+W; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCA83A0E8A
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 19:48:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785786516; cv=pass; b=PdcabJihWOB9Vz+/Iv3N1ySe1aYzJWq3Q93mHfLsY0yzVNjvuSKTBxyPZBlIFI4nmyMf0KPCuoomqaiqHTocOeOygGKVKpR0IHzAztwd/gAao+5/9GtaY54sw8YdSH4ZMWU5iAWVlc2A0OT0awx8xYO8iVfO1Pgh+vVA9SLg5nw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785786516; c=relaxed/simple;
+	bh=8uk1eqYtcP37aMfvUdzoQpZ9Trs9Os3/bWv4dhfB5nM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PTuSnJZ+0nZ19ObuDhDMFm/aAhWtlulTsby9QOhzF9IJcmXWBC82fQUjAsCt13KgPDJfjoNqUuHwowJdEORJ6T2F/7Xy+pvrz4pu1WajXVl0a4nOuA7FXWQIivCLPRIcUgs7Ou4b5JMo+x+sRqqtuG437yrL3ZJTFJFSKI8o69k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OJ27+dM5; arc=pass smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eug6At+W"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so9519345e9.0
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 12:14:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OJ27+dM5"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8485ef63b68so4110821b3a.1
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 12:48:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785786514; cv=none;
+        d=google.com; s=arc-20260327;
+        b=PzDCpBt0pgbyunRkYUVbXv0ho2fN+uXrO3yuPRbM2NA4ABOQDzDCBk34I4Jqkqo3T4
+         zMPSYWdY26LBCsACu80BWrhDr2VchDHeDSwFIHtCbt8xiHXsfuv/GELkjna2mJuCe4Ka
+         XurgLjSLrQg/1eDbo3RStpGTk4ZX7dPyTWlAfwAemD1MbULZAW5+0DB5+RzcQJOoROyJ
+         TPuSoiseotVmJg0hvBkCU1Cu5QzPuElqxoRsTOP+A2HQI2bKHx+zmsax37jE17HGslXW
+         ZvplygfOAPtL0NRUDBUxRY6I2k6n6AmSrPEhrxSnxG3meQTHHU7spLQ3W5tz7QfTL+4s
+         Dzmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Y5wvfIwSx21ee7WFRp/KStftuR8cZ/Pg2yrO4T18fHo=;
+        fh=wHuiVW7+cSGi8lDsjv95MnsGFVbmaO0/sJyvUF+XqSM=;
+        b=J1W4aMdOUtutepIFHhq0dmzorR/t13n7Ns+2reOpZxWbQpAdIpFiIfkVNXsgsJmsUq
+         ijfS8HeEjUjU8wbB5HghIvnFsnP/vwOcy7N1z3e5spVpCugiBIt5mqDB907EoJyGI9Sg
+         OdBpeie783tPBcb0YBC7WhJ4ONgY3bFSSyklgmDPnjutD9Vbfja7v8wx4m9mHqU3W6c8
+         dnRQ96qrpJuYzSwuABwhEzzzPJvH3/s+gpbocE2fL7DtgC5ZprPIBGTHbqoXcF5emcQR
+         7G11a/lzSEMFAO0u7s1czruvF/vjx/M5qgxKkFyOclxFTyXzGEGI+KWHde+or06dBCbF
+         /OcQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785784468; x=1786389268; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=0+Dtt+qJBPTI4+fmnWaoabqJejFJgvFqXohqyKLWEac=;
-        b=Eug6At+Wqb+TIi2YmKUtYOhSlvxGTBqdzwUZp3MX69StmBo/JOU3E84uRE3RdB3Q5I
-         jWiPMB5z5LdD+Mjr+bC8YnOIquqRYRkT9T3N7nzlC66wdKPitcyr6ehmlVtVMPltOy//
-         v7cdCJbe2t2VVI4/EFzofHuN4W2XFErQ5T6vjb7JM9j/5kAOnOfWqoxeS9Hb1CR81Xnh
-         2WbjpITUioyXB/NyvI2knE5fAU7mkQ6UQ0Dl9MtOdyov7EbOAsy88WpkoKZP0WMlngP0
-         OyRNxWx/b24BBe+zHVhyQbNHtOG60WRwRLVTzakNZPX3L/L2vyr67uuaDIsYql4t1tQH
-         cPqA==
+        d=gmail.com; s=20251104; t=1785786514; x=1786391314; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Y5wvfIwSx21ee7WFRp/KStftuR8cZ/Pg2yrO4T18fHo=;
+        b=OJ27+dM5PoW9Roe7FnZJgHRT9O89S3GD40ZJLUky9Z8vQzdE9Bs8e0+tUJ5rHS1nou
+         +tlmXzDwQ+mWraklUCFOqfl41uduDcv/MO78itRWdWyxi4FJGcpMI3yrwuqYjH7GEZEA
+         EE8N3oW4JiUxWLQ63aWkVZmhnRM6MnLri9fYKktvavAlz0Hie7meF0Lk0EVJDGQFNrp7
+         0evyP4TEQopVzMWx572Ginhl6Cuem22Iz/n//xETMLkK94R4yMaiYEijtx5HNmd0xQVq
+         1rWYWs15hmDshdE0Hamybav7xxmnbGtUNQeOvdiv1waJnNipRAqfha8BDBQ/1ORhANLq
+         aVwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785784468; x=1786389268;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785786514; x=1786391314;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=0+Dtt+qJBPTI4+fmnWaoabqJejFJgvFqXohqyKLWEac=;
-        b=AHZsBenrkFHZGfU2f/aLItudkyk785ZancSTsCKM2/PnyUAyO0Fkzdkklpxp/vLAVX
-         26pGG/GrsTKTLdpTVJLIFffH9+LKGEEOujI6zAH+xejOf+grW/IJmPiT5M1g0aHiyLgw
-         pXY/whRAnHsp7Ku/vKnTEzKLDYUZWC96zLgBA92oTuVGVZSbsXaDgZgvgf1OS2HT5Fr2
-         rXeE2U87eV5MCaqseOgl6QBF1xQwU6ZwyaOxvSnBYsXBCN7Bco/n8wcix2GLPFLUw0Aj
-         3a0bMNyxPjeRENkzDxDYn8Y1f5nXMmCY8gdOhhWyXYKkpws4wjYA2okSdIRetHvl5Y2/
-         sU8w==
-X-Forwarded-Encrypted: i=1; AHgh+Ro3JCx65lzIWvwg5JOZgzOmjz70EDzIsXxNQJVhw8sR6BQjYlIzLs7ek78r2RCRHv6xA7g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUNbpHPzji9DG6S9dBRI7jeC0WiEDOnJFFHCYUXX18R2sJtOC7
-	ngsunRbBoLRc0fKw1ZvndV5rn/NKI0mdfGdlD0q9s71MYdEmswZ0Pktm
-X-Gm-Gg: AR+sD137jfz2E2rCts5VY2Tslog8xAc2rX0pHP6JNesA+0a1E0O/kPlourZuri9GCjG
-	/OzqJX7WjCPPgyOlDloMvWBRmdaPHuDV6Dh6DrFHExpKBx2iwyFBWCKn4AKBA+FPuJCH1WGJM14
-	uzBqVlmWsopYtOhkmZYTsFrUgUSclr0CzFCqwerz+pY2zbhJ3UYkRbmIbKwB1RW6YyFB5+Wb6r2
-	nxfjELFSlxWfkmMEWqC9rTBkqZdNca3NvuVPfq4KDlYKFtZAoLKb5cJXv4ho0WVuuvMtG4nQ0HF
-	sJQ3WfC33g3ELw5qGwtyhLMYxatwv8Lfu37JuvAMXUzrdhg6CNAlynGkz/Yq+6XAms1wWqnZVe/
-	a4sgMuD1mX//A4KVOR1eNBazxT3o0w014woiuZQbcvlD+vrD4ZPrltdMqx6K1YBGE0W0xFBl18f
-	zU9W5JR1wMX4sOOm9j+fkjr55ME9VVkjzWjFIV6Yr/PS9QwyYJQWT5WvuZtBXYf5G5qkV2+UAZ3
-	qJXPjC3gq1SL6NZ/7fcf3Wi+C4Ih63DEpp/7IDOYK0+zvf6g5+soEIE7kKXitpbsO+ZHarZI4Vf
-	xXXodQviD7/KJYGndgLMC0vaOzA55PvSpatJwg==
-X-Received: by 2002:a05:600c:8b33:b0:495:779a:ed33 with SMTP id 5b1f17b1804b1-4980c66c798mr289237635e9.7.1785784468115;
-        Mon, 03 Aug 2026 12:14:28 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49949fef72esm19303915e9.15.2026.08.03.12.14.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 12:14:27 -0700 (PDT)
+        bh=Y5wvfIwSx21ee7WFRp/KStftuR8cZ/Pg2yrO4T18fHo=;
+        b=TFlY3pHy1xW8qogQvUcGZYji4nk/5rE2QWOEyjmcrYXSu5bgYDc+Si/cnwNdyZ9nJd
+         KdEAaId3GmsaSxbiDfmypugL5xFF108OaIvHD3hKAfvlr4GSNPqh9Z3YTVki0+Si5IbS
+         +GTJoHD5EHaNBbbtSRSDEhSIEol915BXbXoTzSUb8eR0Wf2XfCLL5NciW+mgV3IeF0q+
+         IWXFNRhsPXhFuNbLF4xuu0yGCKN77iJUOEYYN6NLDNHZoOF8GHB3kK4tywX94LCqBoQ4
+         YukUmG0PJO9hIRK2KUHwVI+YLYArc0AlE0i/H8OMGROR7yRfZksQezFKep15Q0wQWr/8
+         Zg7A==
+X-Gm-Message-State: AOJu0YzjXsCKEh8oaVQJpLTrx5mZejtbJzEKkppqyPM+WfizUcc5Fnv/
+	FQjcUaTkdekj/AyGM31aVdrOauLo4ievnUMJHpJecXFV7bZZZZFeDJ+2oQXi00CJlhKcA6z4T/F
+	kS1QWZeqbnWpNqzL0DdyDHmWALeCutHEMT4Bk
+X-Gm-Gg: AR+sD10BoDRmD11M4rVd4WCp4A0w/V50iTI0hbuMC8+T1j1dkG+1r44bfIO2kK5NJ2r
+	PlAgRfYNOmkaxh/DwOH73rK0qvBnpj2TJBwHu1uOK3L3WXVUzytptnPgSin9rPlFmJFQxW+0g0U
+	e9aLEp1tJgWNJwShaBXtZsPYLXoIm0s0/P9jado6hegm8NfzVET+SQJHQyPpBH2gxoAOWw5l2FG
+	FwvG+ZNJQhDNR6Kt72WK0ujI2uvCvMmj90WlZUlCpEgYqa9xbd6Ilx9h5rtN6T+WbeQacNYQ3vS
+	m4PmZs8hjJIfR+qnkKK7aJD4UaWYGvPgWpWufARHCx+fiPZqXzEhmLM3QoVriIUCzKAd3zJEkts
+	nRFdhernnofVuZPGxeRHpYKQgM97zt4nLwSkZyCdWGA==
+X-Received: by 2002:a05:6a00:9283:b0:848:19f6:4dfb with SMTP id
+ d2e1a72fcca58-84ee48ca014mr10039301b3a.56.1785786514228; Mon, 03 Aug 2026
+ 12:48:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260803072733.191502-1-memxor@gmail.com> <20260803072733.191502-2-memxor@gmail.com>
+In-Reply-To: <20260803072733.191502-2-memxor@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 3 Aug 2026 12:48:19 -0700
+X-Gm-Features: AUfX_mxjq3rbD8MM9D0mIhzRyI45pmcTSkXAOixNqeDfilVk_oo99C80J_EvkRg
+Message-ID: <CAEf4BzZwSogfspAQG6M4X5V4P+=-W1_hV65+6vpTDy5aaVYmPg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/3] bpf: Show more useful info in stack depth stats
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 21:14:27 +0200
-Message-Id: <DKFJREUTB93P.18LYK6Z4GHBUC@gmail.com>
-To: "Daniel Borkmann" <daniel@iogearbox.net>, "Pu Lehui"
- <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Martin KaFai
- Lau" <martin.lau@linux.dev>, "Yonghong Song" <yonghong.song@linux.dev>,
- "Song Liu" <song@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Pu Lehui" <pulehui@huawei.com>
-Subject: Re: [PATCH bpf v4] bpf: Fix UAF when reading prog type in
- bpf_mprog_link
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260728074223.2831773-1-pulehui@huaweicloud.com>
- <da7357fe-9d64-4e9c-a0f6-573a9761c8b2@iogearbox.net>
-In-Reply-To: <da7357fe-9d64-4e9c-a0f6-573a9761c8b2@iogearbox.net>
 
-On Mon Aug 3, 2026 at 9:00 PM CEST, Daniel Borkmann wrote:
-> On 7/28/26 9:42 AM, Pu Lehui wrote:
->> From: Pu Lehui <pulehui@huawei.com>
->>
->> In bpf_mprog_link, the code currently allows a user to pass an abnormal
->> non-netkit or non-tcx link via relative_fd. If a concurrent
->> BPF_LINK_UPDATE is performed on this abnormal link before dereferencing
->> link->prog->type in bpf_mprog_link(), it can trigger a UAF issue.
->>
->> CPU0                                      CPU1
->> netkit_link_prog_attach
->> bpf_mprog_attach
->> bpf_mprog_tuple_relative
->> bpf_mprog_link
->>    /* non-netkit or non-tcx link */
->>    link =3D bpf_link_get_from_fd(id_or_fd);
->>                                            BPF_LINK_UPDATE on relative l=
-ink
->>                                            ...
->>                                            old_prog =3D xchg(&link->link=
-.prog, new_prog);
->>                                            bpf_prog_put(old_prog);
->>    if (type && link->prog->type !=3D type) <-- trigger UAF
->>
->> The reason for the UAF is that each subsystem provides its own
->> protection for link->prog. Since there is no cross subsystem protection
->> (if not considering the RCU of prog tear down), dereferencing the prog
->> of an anchor link that does not belong to the current subsystem is not
->> safe: it may have been freed.
->>
->> To resolve this, we access link->prog under RCU protection to safely
->> fetch the pointer and guarantee its lifetime during the type check.
->> Meanwhile, add a comment explaining that when ptype =3D=3D UNSPEC in
->> bpf_mprog_detach, it acts as a wildcard.
->>
->> Fixes: 053c8e1f235d ("bpf: Add generic attach/detach/query API for multi=
--progs")
->> Reported-by: Sashiko <sashiko-bot@kernel.org>
->> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->> ---
->> v4:
->> - Access prog->type under rcu protection to simplify the repair logic,
->>    and let unconditional detachment make sense when the bare prog or
->>    link->prog being detached is NULL.
->> - Add Reviewed-by tag by Emil.
->> - Separate from patchset [0]. (Andrii)
->>
->> Link: https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@h=
-uaweicloud.com [0]
->>
->> v3: https://lore.kernel.org/bpf/20260722072326.1545677-3-pulehui@huaweic=
-loud.com
->> - BPF_F_LINK flag set means the relative id_or_fd is a link, not the obj=
-ect being
->>    attached. We can not get the link while attach a bare prog with relat=
-ive link.
->>    So passing expected link type from callers of bpf_mprog_attach/detach=
-. (Sashiko)
->> - Add comment to explain that why ptype =3D=3D UNSPEC. (Emil)
->>
->> v2: https://lore.kernel.org/bpf/20260721041048.1394085-3-pulehui@huaweic=
-loud.com
->> - Improve commit msg for patch 2. (Amery)
->>
->> v1: https://lore.kernel.org/bpf/20260720134547.1289964-3-pulehui@huaweic=
-loud.com
->>
->>   kernel/bpf/mprog.c | 17 +++++++++++++----
->>   1 file changed, 13 insertions(+), 4 deletions(-)
->>
->> diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
->> index 1394168062e8..af3e6c1c6a1f 100644
->> --- a/kernel/bpf/mprog.c
->> +++ b/kernel/bpf/mprog.c
->> @@ -10,6 +10,8 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
->>   {
->>   	struct bpf_link *link =3D ERR_PTR(-EINVAL);
->>   	bool id =3D flags & BPF_F_ID;
->> +	bool type_mismatch =3D false;
->> +	struct bpf_prog *prog;
->>
->>   	if (id)
->>   		link =3D bpf_link_by_id(id_or_fd);
->> @@ -17,13 +19,20 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
->>   		link =3D bpf_link_get_from_fd(id_or_fd);
->>   	if (IS_ERR(link))
->>   		return PTR_ERR(link);
->> -	if (type && link->prog->type !=3D type) {
->> +
->> +	rcu_read_lock();
->> +	prog =3D READ_ONCE(link->prog);
->> +	if (!prog || (type && prog->type !=3D type))
->> +		type_mismatch =3D true;
->> +	rcu_read_unlock();
+On Mon, Aug 3, 2026 at 12:27=E2=80=AFAM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
 >
-> Hm, what about progs under rcu_read_lock_trace cases, wouldn't the UAF
-> still be there?
+> Currently, stack depth statistics are too crude, listing captured depths =
+in
+> subprogram-number order. Since libbpf determines those numbers, it is har=
+d to
+> associate each depth with its subprogram name.
 >
-> Even though the diff is smaller, I'd kind of lean towards link->type
-> testing since this addresses the underlying issue and avoids touching
-> the prog completely.. do you want me to look into it and also add a
-> BPF selftest to it as patch 2/2?
+> Print the maximum stack depth and each subprogram on separate lines:
+>
+> stack depth max <depth>
+> stack depth subprog <number> <name> <depth>
+>
+> When no subprogram name is available, print <unknown>.
+>
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  kernel/bpf/verifier.c                         | 13 +++++++----
+>  .../bpf/progs/verifier_basic_stack.c          |  4 ++--
+>  .../bpf/progs/verifier_bpf_fastcall.c         | 23 ++++++++++++-------
+>  .../bpf/progs/verifier_private_stack.c        | 15 +++++++++---
+>  .../selftests/bpf/progs/verifier_var_off.c    |  4 ++--
+>  5 files changed, 40 insertions(+), 19 deletions(-)
 >
 
-I think Pu's implication was that an RCU tasks trace GP would imply RCU gp,=
- thus
-using RCU read lock for protection in both cases would be sufficient for th=
-e
-link's free path to wait for this reader. More context is available in [0].=
- I do
-think this merits a comment for clarity, even in [0] I explicitly commented
-about it everywhere even when it felt unnecessary.
+given we are going for quite verbose one line per prog/subprog format
+anyways, let's make it actually even more useful and emit
+insns_processed as well? I'd probably keep total line (processed N
+insns (limit 1000000) ...) for backwards compat, but also have
+per-subprog + main prog line with insns stat and stack depth,
+something like
 
-I didn't closely follow this set of fixes (those in addition to this) yet b=
-ut in
-general, we also need to be careful about tracepoint BPF links. Those will =
-only
-wait for SRCU gp, which is not implied for rcu_read_lock() etc., so will ne=
-ed
-their own distinct critical section. The fix pertaining to that was in [1].
+subprog 1 (sub1) insns 123 stack 16
+subprog 2 (sub2) insns 345 stack 32
+prog (main_one) insns 643 stack 64
+processed 9999 insns (limit 1000000) max_states_per_insn 0
+total_states 1 peak_states 1 mark_read 0
 
-  [0]: https://lore.kernel.org/bpf/20260407162234.785270-1-memxor@gmail.com
-  [1]: https://lore.kernel.org/bpf/20260331211021.1632902-2-memxor@gmail.co=
-m
+wdyt?
 
->> +	if (type_mismatch) {
->>   		bpf_link_put(link);
->>   		return -EINVAL;
->>   	}
->>
->>   	tuple->link =3D link;
->> -	tuple->prog =3D link->prog;
->> +	tuple->prog =3D prog;
->>   	return 0;
->>   }
->>
->> @@ -343,8 +352,8 @@ int bpf_mprog_detach(struct bpf_mprog_entry *entry,
->>   	if (!bpf_mprog_total(entry))
->>   		return -ENOENT;
->>   	ret =3D bpf_mprog_tuple_relative(&rtuple, id_or_fd, flags,
->> -				       prog ? prog->type :
->> -				       BPF_PROG_TYPE_UNSPEC);
->> +				       /* Use UNSPEC as wildcard when prog is NULL */
->> +				       prog ? prog->type : BPF_PROG_TYPE_UNSPEC);
->>   	if (ret)
->>   		return ret;
->>   	if (dtuple.prog) {
+this will give better and more targeted information on where you
+should look for w.r.t. verification optimization opportunities
 
+and we can later add some other useful stats per-subprog/main prog as
+necessary without any major breakage (tool just need to assume there
+might be more stuff after "stack N" eventually
+
+[...]
