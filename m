@@ -1,248 +1,136 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615D037AA9E
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 11:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9823D401A25
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 11:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785756402; cv=none; b=sqaXqplqu/hOGUQB5dGuYT+NsyYqF1/mYJl4SyQVNEeXmaGxLpqmXCCpYuJr8WOpPkeI7uomrA5yCykZzFue0EqDJAdT7UI4OQ4vkMsbJU+K4KQkNsCJ+xCkmCCnlqDHWvdrAhVo889OO+BOjFLEkcWtqPjDyO+/OB2l9C2r1P0=
+	t=1785756737; cv=none; b=ArFQZK952ZHW9qNRVthEPeCnMFmM9zr8gTvkiqak4L2BlV1jZ3CJImLlJiJUlp0OkOvZWIAjeTbviSE6Dnn0tHCupMo5kqycH9fYPsazQWiXz88gxOV5k/HL/jqMn+mosI3czGavCC/ys2yNFT0ar+B/Z7NrVG3DLiH0kXbp/9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785756402; c=relaxed/simple;
-	bh=teD57BmaN/6FLsS0871dabp8VMTB8OpEMm2R1Ln41/k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sX9V9FCh+ceDRceKfVSpTRKi57amhak49I6ePzLr3u4rgzSvWUocUDSXZR8rNI+8N8UDG/gPYmLVC196wnMoJo8K21sAqNKzEjJLM7D+wdeeltc5XO1ufuKB0qOzU8xEyx70eM3a09/r3lnl7LbFYUTcjR+/VeIYADEF3v5Ijv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jujkhxA3; arc=none smtp.client-ip=209.85.215.182
+	s=arc-20240116; t=1785756737; c=relaxed/simple;
+	bh=mpngfkvKH8vqQe6md2oQv+d5bXyGWY+0TQm/G7ADKFQ=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pOQmwfaBP2PRx6h6f7CgNeZlKBvc6BZm6OwsyyCf1z/nBuSHQHZ/mdlQcnF/3MzSYMH6E7Fa2gv25ZqNtf5frZUBJn/GpFTiKOy0uvvlH1daPdVhpkpp+krr92/Jwr5tMkqonkrS+KHWR/R5b5m8eHAi9GIWAc/B6zy2p/Gh5LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NlLY2mFV; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jujkhxA3"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-ca00f126b7eso1814673a12.2
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 04:26:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NlLY2mFV"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-47ddf7b09e5so3493747f8f.1
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 04:32:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785756401; x=1786361201; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=yd9zapz3XgaX48J0GHwdbeC00T0Ul3oy7R9EcO1SBMc=;
-        b=jujkhxA3ePTHOvTyZTkDhtJ4BJ4h8PD96yjeVfgXiz5vx/t0B8nxCwY7ntuxRp94/u
-         j/6zkPHn3IFxtQoyveDbKFHUkKhVHwHB1j9oyvl2X5B5DaQrZFaPzPCCHx8OByFJnxev
-         t8WaR2wToLDP5ePgXxYI26kdiur5baHpqOUpzgme5j5NYHkWuh9CCgzLc2vCHMm+yUMj
-         A38KRtyA808lvO2FmDJtEsCqpbnK7LFkQqHLPiZ9QAjwOPgj+HGr8zpNKWCLYgJwuj2E
-         64VCc1uEOwG0gX9FG91e4rNYH1PXAr0pJJoijHHQqkfuaoynDA5a09ue061kE5YdMkGS
-         xs5w==
+        d=gmail.com; s=20251104; t=1785756734; x=1786361534; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=4zWdkPq4xP0BoTt8wzn9Jb+qkkuLG7cfYkno38Rp6ZI=;
+        b=NlLY2mFVX8MdiCdjbpNGfgGvMxvyPWcqlarjVz9b2eSGwultpnElUz7h9vfEpIjF3I
+         Ss/aXRh2D7QFxmNGHb81Ux0H5f08/pAhZJeJANRCSe56GQoCB0uzXLw28uZGLtHyKiX2
+         xkaotiNsJsnvMX6ub9ffcjCo8ufsTgmqFCDYGOB+NgyWr5J3ocRNKMacbMHk/XgP8rQk
+         z7otdPMBWZYMMcGUtFlV8qCgo4RPfrjxqBG3UF/W9fkyfp8PNrgeKVQwF6+So2oD0//D
+         CCOW0Ib2UDTf2/mCg9ZnaHIGlP7bjXbFZAuOeULZFEgvCOBZBr8A5MEYxRLjGDKpuwkr
+         iOng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785756401; x=1786361201;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yd9zapz3XgaX48J0GHwdbeC00T0Ul3oy7R9EcO1SBMc=;
-        b=JALa1hhnqERgva8iTDW2IW8v1KC3M1CFCXX8U5eVyIiSgfb4og1KGFvuvM9a7rtALj
-         IS7nFwMZil80ZpeoUFu+dXBR/dGOxPN/KR3L7S0dXia+c5yvnddnOw1OB0Z8Bf2S0zbN
-         xp8yF/MV++sZK6IFCxw9ARm7Ekpwomzih/Qi6UbtukBtsBsNkDWq574GI1URO3CWc5rQ
-         6A4TD1AqpfBBh2qa/WHuThNZBB3VJnVTh6oAPFe5LNCxETj/mg9hRe86nhuIaF9NvDOw
-         eWSArysD0vQ7bwWzC4xsyIdw4x9fkTvGtiTDv3zDaY8glaCW+tQ0sLrOQzD2QCCAB/qN
-         oKCw==
-X-Gm-Message-State: AOJu0YxIAby4FQfJMB63VYMaGnE8ODu7BhKWDu1O6KKUc+GolQbfwNeW
-	QUVoUraUxbKTMHyb5Gh4jeCABebijH9MKN69SLpDcwaq9SylyL/YptNdoHg6yg==
-X-Gm-Gg: AR+sD10g90phYbmqaB5jFM0kbaOKJHjNkjIKFz/4bW56vS1mJ7lDOLtlFgI55Zhalqi
-	NVct2F6naQLmEZJa6Ms5rpC/080H/FX+51I+g6RTco+gD+BerW56+q9i5XWFVToHfEWsJK23zX+
-	3PJf4DSukl25iNjnJF/rRP/zA46UfCz5DRmkhVKHgxF4A2DA8c0Rl1s5XqqF/2Uc3EcKp7+MWD0
-	6eHSSz2lkSJpW9EMDQcy5+nbrjNao1Y+ostTMEYOd0c73WK+74QyBDPKpVodOAqCcvVGdVvQxRa
-	eoPtTnw8OsXnwGpTifZPRnpw/sT2OR7XI3kghc0Y+f+Wmwp1a2tKVQ5fUgMee0PLWNk4k0tBLi4
-	ePMsCFbPVjWEjfBSbZf1P4WNTHxydaPdMPCkIAlUmpXtPb4/eZ/k1tIVEyvgivTsKcKQc5HoEpC
-	xpRBh5SCWK8UOrg/6BeoevcTytqggv5cDoYs2oc5aiqfuXS2xDeed42hUe/nYSGlr2Kyp/1VVW1
-	4x9ZyBjXJAYuFiO
-X-Received: by 2002:a05:6a00:3a11:b0:84e:89a:b8ec with SMTP id d2e1a72fcca58-84ee4813a74mr9061209b3a.11.1785756400724;
-        Mon, 03 Aug 2026 04:26:40 -0700 (PDT)
-Received: from patterson.cs.ubc.ca (patterson.cs.ubc.ca. [198.162.52.65])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84edc2a8223sm3494930b3a.28.2026.08.03.04.26.39
+        d=1e100.net; s=20251104; t=1785756734; x=1786361534;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4zWdkPq4xP0BoTt8wzn9Jb+qkkuLG7cfYkno38Rp6ZI=;
+        b=QIv+gXRqL+Tv9y/5MDnc+QFVBBA392DrpLbFVkBPruUatxTTz1bJyLBoyQzgRRstOt
+         T5ijkQwkW8SV+JtGNEfmpiEtS4JK+toQeqZ8SSK4DPfs0//4EoO2O1abAal7bI/14muK
+         MfR4xtUL97m2l+3rolWnH6C4ni+5kB+rBdcrvMIgYjLFU9SOaAuJ0q2FkTsHo96Ktc++
+         0KS176MxR0g43jCpNnZgZ7/UuXva0Dj/eaek5AnM/ckuFwVtZwnvAyNJxN6/KZehjECW
+         PDcRVTyQyuZVmcoB/o4TQDpcFbZH8nzm+gabaUUjgymUvo/Ls/AYqGAE02IM12C7RjDw
+         tbOQ==
+X-Gm-Message-State: AOJu0YwcUwxZGRL6sGOpkyCICmisVIGpMBPJeTN3XsGKulZd9pb8ddGr
+	aQyBcy41MJBPptpY/IQtpyyfweACv6pBbrYjnju5qKIH6Lu5NK4g+IrSq+s+aw==
+X-Gm-Gg: AR+sD13Me6i6BOHGKTW26AOMuDc1Eci26PmquCmOpGMbiMpLDLBvVpbomEGQtbviIyu
+	zRbDncYbsZ6j/BO9ykGvfnKIgxudHFO8mxS056bT2uPwnzFM+bWsMe5o2z2egLFsBLEvwpIcJP+
+	/r6hcwaePwSWUengIwMjKbRM8rqG3H9y+5UaDEELE9W04IX64RM8jcyDmKgE5987CVxpFQ2VcfJ
+	KwzkCDBTTo9mmcWokq/XnIwU/f3ccCcCcFkBJWl4WNXkAjWCYQIypkdIEZPZxjWeobkBmIj+BHf
+	3d3RnuHvhErBOJ9OWiTIYz1cuAQMHRiSJ+ol4T5SghZubjCumN5E6yRWxTw7ssK1pm0fSnQi0xX
+	uA2qEQ++01oJJgK4obBXrVgsJMOr+++WpPZEoo2SLxBJUzb0llBiwDDTQIlfxkI037NGq/Ra9zh
+	jOI/VJPQBIZMTDQtTvvSadgXvt29BtIZXtyA==
+X-Received: by 2002:a5d:588d:0:b0:47f:7129:e30 with SMTP id ffacd0b85a97d-47fd72a8e52mr24421890f8f.11.1785756733521;
+        Mon, 03 Aug 2026 04:32:13 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::86b6])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd458ab61sm32877610f8f.25.2026.08.03.04.32.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 04:26:40 -0700 (PDT)
-From: Ning Ding <dingning04@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Ning Ding <dingning04@gmail.com>,
+        Mon, 03 Aug 2026 04:32:12 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 3 Aug 2026 13:32:11 +0200
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Justin Suess <utilityemal77@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test RCU pointer invalidation after spin unlock
-Date: Mon,  3 Aug 2026 04:26:09 -0700
-Message-ID: <20260803112615.3362122-3-dingning04@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260803112615.3362122-1-dingning04@gmail.com>
-References: <20260803112615.3362122-1-dingning04@gmail.com>
+	Eduard Zingerman <eddyz87@gmail.com>, kernel-team@fb.com
+Subject: Re: [PATCH bpf-next] bpf: Remove unused BTF_FMODEL_STRUCT_ARG
+Message-ID: <anB8O5Rxmgrt95Uo@krava>
+References: <20260803052726.2821447-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260803052726.2821447-1-yonghong.song@linux.dev>
 
-The verifier previously accepted a task kptr after the final spin unlock
-ended its RCU protection in a sleepable program. The pointer could then be
-used after the task was freed.
+On Sun, Aug 02, 2026 at 10:27:26PM -0700, Yonghong Song wrote:
+> Commit 814cba835ef6 ("bpf, x86: Fix trampoline stack size for 128-bit
+> arguments") changed the x86 trampoline to compute the number of
+> registers from arg_size for every argument, which removed the last user
+> of BTF_FMODEL_STRUCT_ARG. No other architecture or verifier code looks
+> at the flag, so remove the macro and the code in __get_type_fmodel_flags()
+> which sets it.
+> 
+> Keep BTF_FMODEL_SIGNED_ARG at BIT(1) rather than renumbering it to
+> BIT(0), so BIT(0) is available for a future flag.
+> 
+> No functional change.
+> 
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 
-Add a negative test for that case. Add positive controls showing that the
-pointer remains valid in a non-sleepable program and while an explicit RCU
-read-side section is still active.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-Assisted-by: Codex:gpt-5.6-sol
-Assisted-by: ChatGPT:GPT-5.6-Pro
-Signed-off-by: Ning Ding <dingning04@gmail.com>
----
- .../selftests/bpf/prog_tests/task_kfunc.c     |  2 +
- .../selftests/bpf/progs/task_kfunc_common.h   | 12 +++++
- .../selftests/bpf/progs/task_kfunc_failure.c  | 24 ++++++++++
- .../selftests/bpf/progs/task_kfunc_success.c  | 48 +++++++++++++++++++
- 4 files changed, 86 insertions(+)
+jirka
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-index e6e95c1416e65..fbd7855712c1a 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-@@ -176,6 +176,8 @@ static const char * const success_tests[] = {
- 	"test_task_from_pid_current",
- 	"test_task_from_pid_invalid",
- 	"task_kfunc_acquire_trusted_walked",
-+	"task_kfunc_acquire_after_spin_unlock_non_sleepable",
-+	"task_kfunc_acquire_after_spin_unlock_explicit_rcu",
- 	"test_task_kfunc_flavor_relo",
- 	"test_task_kfunc_flavor_relo_not_found",
- };
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_common.h b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-index e9c4fea7a4bba..052c9d0e3e2a8 100644
---- a/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-@@ -20,6 +20,18 @@ struct {
- 	__uint(max_entries, 1);
- } __tasks_kfunc_map SEC(".maps");
- 
-+struct task_kptr_lock_value {
-+	struct bpf_spin_lock lock;
-+	struct task_struct __kptr * task;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, int);
-+	__type(value, struct task_kptr_lock_value);
-+	__uint(max_entries, 1);
-+} task_kptr_lock_map SEC(".maps");
-+
- struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
- void bpf_task_release(struct task_struct *p) __ksym;
- struct task_struct *bpf_task_from_pid(s32 pid) __ksym;
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-index 5c99b1e6532bf..c0e7216b34193 100644
---- a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-@@ -378,3 +378,27 @@ int BPF_PROG(task_kfunc_release_in_map, struct task_struct *task, u64 clone_flag
- 
- 	return 0;
- }
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("R1 must be a rcu pointer")
-+int BPF_PROG(task_kfunc_acquire_after_final_spin_unlock)
-+{
-+	struct task_kptr_lock_value *v;
-+	struct task_struct *task, *acquired;
-+	int key = 0;
-+
-+	v = bpf_map_lookup_elem(&task_kptr_lock_map, &key);
-+	if (!v)
-+		return 0;
-+
-+	bpf_spin_lock(&v->lock);
-+	task = v->task;
-+	bpf_spin_unlock(&v->lock);
-+	if (!task)
-+		return 0;
-+
-+	acquired = bpf_task_acquire(task);
-+	if (acquired)
-+		bpf_task_release(acquired);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_success.c b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-index d63a79ee33dce..2bab7634c9dfd 100644
---- a/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-@@ -6,6 +6,7 @@
- #include <bpf/bpf_helpers.h>
- 
- #include "../bpf_experimental.h"
-+#include "bpf_misc.h"
- #include "task_kfunc_common.h"
- 
- char _license[] SEC("license") = "GPL";
-@@ -366,6 +367,53 @@ int BPF_PROG(task_kfunc_acquire_trusted_walked, struct task_struct *task, u64 cl
- 	return 0;
- }
- 
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int BPF_PROG(task_kfunc_acquire_after_spin_unlock_non_sleepable)
-+{
-+	struct task_kptr_lock_value *v;
-+	struct task_struct *task, *acquired;
-+	int key = 0;
-+
-+	v = bpf_map_lookup_elem(&task_kptr_lock_map, &key);
-+	if (!v)
-+		return 0;
-+
-+	bpf_spin_lock(&v->lock);
-+	task = v->task;
-+	bpf_spin_unlock(&v->lock);
-+	if (!task)
-+		return 0;
-+
-+	acquired = bpf_task_acquire(task);
-+	if (acquired)
-+		bpf_task_release(acquired);
-+	return 0;
-+}
-+
-+SEC("fentry.s/" SYS_PREFIX "sys_getpgid")
-+int BPF_PROG(task_kfunc_acquire_after_spin_unlock_explicit_rcu)
-+{
-+	struct task_kptr_lock_value *v;
-+	struct task_struct *task, *acquired;
-+	int key = 0;
-+
-+	v = bpf_map_lookup_elem(&task_kptr_lock_map, &key);
-+	if (!v)
-+		return 0;
-+
-+	bpf_rcu_read_lock();
-+	bpf_spin_lock(&v->lock);
-+	task = v->task;
-+	bpf_spin_unlock(&v->lock);
-+	if (task) {
-+		acquired = bpf_task_acquire(task);
-+		if (acquired)
-+			bpf_task_release(acquired);
-+	}
-+	bpf_rcu_read_unlock();
-+	return 0;
-+}
-+
- SEC("syscall")
- int test_task_from_vpid_current(const void *ctx)
- {
--- 
-2.43.0
-
+> ---
+>  include/linux/bpf.h | 3 ---
+>  kernel/bpf/btf.c    | 2 --
+>  2 files changed, 5 deletions(-)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 356884587ae1..73bacfc6444d 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1207,9 +1207,6 @@ struct bpf_prog_offload {
+>  	u32			jited_len;
+>  };
+>  
+> -/* The argument is a structure or a union. */
+> -#define BTF_FMODEL_STRUCT_ARG		BIT(0)
+> -
+>  /* The argument is signed. */
+>  #define BTF_FMODEL_SIGNED_ARG		BIT(1)
+>  
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 5e8ac45ce56a..42414633cf26 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -7533,8 +7533,6 @@ static u8 __get_type_fmodel_flags(const struct btf_type *t)
+>  {
+>  	u8 flags = 0;
+>  
+> -	if (btf_type_is_struct(t))
+> -		flags |= BTF_FMODEL_STRUCT_ARG;
+>  	if (btf_type_is_signed_int(t))
+>  		flags |= BTF_FMODEL_SIGNED_ARG;
+>  
+> -- 
+> 2.53.0-Meta
+> 
+> 
