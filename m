@@ -1,46 +1,46 @@
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C484E3C1091;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23A43AC0CB;
 	Mon,  3 Aug 2026 09:01:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785747716; cv=none; b=o+2eHw2KVqAkSgM7Eq1qwE93Uc0zUCD6rMn3ucOpzmOx3svtQB8YREDisynHZ4nJUJDBeQejTsSsF9amDGQExHEV8p1dKTDuT5n4QkH/rDxJ+LmmBYvHXjW3kA2Ao5I5w7LzJxtTYkF2vwivkfR6qGDDTcuDw/0jiFs/ikGVy6Y=
+	t=1785747717; cv=none; b=hlYlKfsFblmS6G8j2Pkt2f3Hs7E/0vx1fKzh1zs3vVZ2BHWFl+FZ6rjjx69MXQnmQx4OQEMt8M7brIEBqI9qlGTpdO9Disnrw4WhlQAsg4xRS+BFVDOeugejb4vFIbe1B6YRp7YOrt6yVWYtctshXT6CiT5drTwghBQpf9PmscA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785747716; c=relaxed/simple;
-	bh=OYQWZ1Rq3jJDct9MnaqzOWQDNdnk8i34MWsJ7KFrCYk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=J0q6f6lvembgau9a7piIQnsJQWS1+DCAchl6QF0HAnawFCd8NE1pCM+AH0hWEcpmGjNYWPIZcVvcPYDrFS6TCCq3qzuAE7ZLLbqm1ylF+cB9LZhiQEj355709YME2duehz7pYQfgvt34a+oXwbyYgn9qVVmHmr3hfmSYpJ/my/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=nOshWfSJ; arc=none smtp.client-ip=185.226.149.38
+	s=arc-20240116; t=1785747717; c=relaxed/simple;
+	bh=Z9oJOKfNkMISTXBIhGkL4Euhy5QznNcG5muaM0JGi2c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ultD8gvT4c/GboEb5E5NMbrvBjMN6aX3orrhzrf10PtwHWQ/B3Myc+cO9fhfrkEen+iYnIqJXfDFw2DSfJdWbGpMoGJcrhSqSBjfZACa0wo/sQgwqoRsi0iYeppRo4gM8P3VfN/G6nHGpA4PX2oh4YyBst7l2VVCdY3to7zdgs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=gTwEnd3z; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="nOshWfSJ"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="gTwEnd3z"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
 	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1wqoYE-003g9M-Kt; Mon, 03 Aug 2026 11:01:38 +0200
+	id 1wqoYB-003g8t-2e; Mon, 03 Aug 2026 11:01:35 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-Id:Date:Subject:From; bh=rBy6bqDwvwo9+dG2U6PXcupUrsrlG336xuKDiR0Q/LM=
-	; b=nOshWfSJDyPGKs6iqNmK0KHGfw89v64HrebFPiLVpiBoUPrJWfOi9tagw3vpDysaJ4y5n6iI2
-	Yf+hAzIfRzClQxn9Bz8f0gTNg4Mjqms1318cwnsXUe2KqgrtfA4aAV9KiB8UGxx7rjKVaTS3Fi1s8
-	08PwwvjI5E3t5pISkKiweZ8Yn+WXtz3g8ApxQyEdVKjadP0TQpORZDcpBuaACGOiRPdN+9czO7Bjt
-	OmK5CmMRDrtme70swq+73jNgx+EMoTbOitfvkyQ5mCg+Is1un1wSbt5NtWqpZtfE+yiip5r9SW7di
-	MFUE6Mv8VP4uosMRyeTH+cuDeVyRVjFEonV1fA==;
+	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=pfSMmgoKMBdfU0Z5WR10/bxb8fMdxnB7dgEW4lMNPXo=; b=gTwEnd3zDCZo3WCrhJdOL9TN5m
+	pJobiDQ8x+5Hsh616A4UmOEt1T+G3+EO2KnBNIIvdVABZGThGuxBXvpqyNGldLoy7m158gq8rBedd
+	aDaCPrLZBp+C5J2mShAZz36sLCnXkL4ekA7BRT7MapealYMIJ4Ug6VQ/JVB/MFMkyPQsib+opqwIi
+	/Vkogq2wK96uL70B6vsVLhJlW0JK8v0Gmo9IwXy0XA+DD+F9h1ISuFcrq3FWOK2Nhu1W4mBJXXfMT
+	+hxlmuR3jIkeykOA66LO1AqwbmfZ+Kw1KzWAPtcx9mQUmlE+sSxLTBpXozZ+/1bIPXxUZzVDWy1Vl
+	9/W6Spyw==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1wqoYE-0003xs-32; Mon, 03 Aug 2026 11:01:38 +0200
+	id 1wqoY9-0006d2-If; Mon, 03 Aug 2026 11:01:33 +0200
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1wqoXr-00GDCj-Bq;
-	Mon, 03 Aug 2026 11:01:15 +0200
+	id 1wqoXs-00GDCj-KX;
+	Mon, 03 Aug 2026 11:01:17 +0200
 From: Michal Luczaj <mhal@rbox.co>
-Subject: [PATCH bpf v2 0/2] bpf: Fix socket leaks around
- connect(AF_UNSPEC)+listen()
-Date: Mon, 03 Aug 2026 11:00:41 +0200
-Message-Id: <20260803-sockmap-lookup-tcp-leak-v2-0-306e025bfe66@rbox.co>
+Date: Mon, 03 Aug 2026 11:00:42 +0200
+Subject: [PATCH bpf v2 1/2] bpf: Extract shared reqsk-to-listener upgrade
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,11 +49,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WNQQ6CMBREr0L+2pq2CBJX3MOwaD8fqShtWiAYw
- t0tde1uZjIzb4NA3lCAW7aBp8UEY8do5CkD7NX4IGba6EFyWfJSVixYHN7KsZe1w+zYhFGSGph
- ulVY58SrHAuLaeerMmp7voF0HzS8Ms34STsfnUetNmKz/JP4iUjmhrjL/i1oE40xo3WJRIRXiU
- ntt1zNaaPZ9/wLqkJjs0wAAAA==
-X-Change-ID: 20260628-sockmap-lookup-tcp-leak-bdaba3e083c5
+Message-Id: <20260803-sockmap-lookup-tcp-leak-v2-1-306e025bfe66@rbox.co>
+References: <20260803-sockmap-lookup-tcp-leak-v2-0-306e025bfe66@rbox.co>
+In-Reply-To: <20260803-sockmap-lookup-tcp-leak-v2-0-306e025bfe66@rbox.co>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -70,94 +68,106 @@ To: Alexei Starovoitov <ast@kernel.org>,
  Jakub Sitnicki <jakub@cloudflare.com>, 
  Jiayuan Chen <jiayuan.chen@linux.dev>, Joe Stringer <joe@wand.net.nz>
 Cc: Michal Luczaj <mhal@rbox.co>, bpf@vger.kernel.org, 
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Sashiko <sashiko-bot@kernel.org>
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Mailer: b4 0.15.2
 
-This is a follow-up to Sashiko's report[1].
+__bpf_sk_lookup() and bpf_sk_lookup() duplicate the same sk_to_full_sk()
+reqsk-to-listener upgrade. Extract it into a helper.
 
-Several BPF socket helpers acquire a socket reference only when
-sk_is_refcounted() == true, and release it, independently, by
-re-evaluating sk_is_refcounted() again at the time the release runs. TCP
-connect(AF_UNSPEC)+listen() sets SOCK_RCU_FREE on an established socket.
-If that happens while a reference is outstanding, the release side sees
-sk_is_refcounted() == false and skips the put; the socket is leaked.
+Leave the currently unreachable WARN_ONCE as a defensive assert.
 
-unreferenced object 0xffff88811617ce00 (size 3200):
-  comm "softirq", pid 0, jiffies 4294848512
-  hex dump (first 32 bytes):
-    7f 00 00 01 7f 00 00 01 4d 43 02 f6 00 00 00 00  ........MC......
-    02 00 07 41 00 00 00 00 00 00 00 00 00 00 00 00  ...A............
-  backtrace (crc fb5bd4c8):
-    kmem_cache_alloc_noprof+0x53e/0x640
-    sk_prot_alloc+0x69/0x240
-    sk_clone+0x79/0x1230
-    inet_csk_clone_lock+0x30/0x760
-    tcp_create_openreq_child+0x34/0x2750
-    tcp_v4_syn_recv_sock+0x12e/0x1080
-    tcp_check_req+0x447/0x2310
-    tcp_v4_rcv+0x1026/0x3c90
-    ip_protocol_deliver_rcu+0x93/0x340
-    ip_local_deliver_finish+0x356/0x5c0
-    ip_local_deliver+0x184/0x4a0
-    ip_rcv+0x4f4/0x5b0
-    __netif_receive_skb_one_core+0x153/0x1b0
-    process_backlog+0x28d/0x1190
-    __napi_poll+0xab/0x520
-    net_rx_action+0x3f0/0xca0
-
-The approach taken is to make acquire and release unconditional and
-symmetric.
-
-[1]: https://lore.kernel.org/bpf/20260701235552.2B0AA1F00A3F@smtp.kernel.org/
+No functional change.
 
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
-Changes in v2:
-- Defer "Use sock_hold() instead of refcount_inc_not_zero() in lookup" to
-  bpf-next [John]
-- Fix comment style [Sashiko]
-- Link to v1: https://patch.msgid.link/20260723-sockmap-lookup-tcp-leak-v1-0-1bbdc58ce514@rbox.co
+ net/core/filter.c | 58 +++++++++++++++++++++++++------------------------------
+ 1 file changed, 26 insertions(+), 32 deletions(-)
 
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-To: "David S. Miller" <davem@davemloft.net>
-To: Eric Dumazet <edumazet@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Simon Horman <horms@kernel.org>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-To: Willem de Bruijn <willemb@google.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: Joe Stringer <joe@wand.net.nz>
-Cc: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 11bb0d236822..fede810ef37f 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7079,6 +7079,28 @@ __bpf_skc_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+ 	return sk;
+ }
+ 
++static struct sock *
++bpf_sk_lookup_full_sk(struct sock *sk)
++{
++	struct sock *sk2 = sk_to_full_sk(sk);
++
++	/*
++	 * sk_to_full_sk() may return sk->rsk_listener, make sure the original
++	 * sk sock refcnt is decremented to prevent a request_sock leak.
++	 */
++	if (sk2 != sk) {
++		sock_gen_put(sk);
++		/* Ensure there is no need to bump sk2 refcnt. */
++		if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
++			WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
++			return NULL;
++		}
++		sk = sk2;
++	}
++
++	return sk;
++}
++
+ static struct sock *
+ __bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+ 		struct net *caller_net, u32 ifindex, u8 proto, u64 netns_id,
+@@ -7088,22 +7110,8 @@ __bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+ 					   ifindex, proto, netns_id, flags,
+ 					   sdif);
+ 
+-	if (sk) {
+-		struct sock *sk2 = sk_to_full_sk(sk);
+-
+-		/* sk_to_full_sk() may return (sk)->rsk_listener, so make sure the original sk
+-		 * sock refcnt is decremented to prevent a request_sock leak.
+-		 */
+-		if (sk2 != sk) {
+-			sock_gen_put(sk);
+-			/* Ensure there is no need to bump sk2 refcnt */
+-			if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
+-				WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
+-				return NULL;
+-			}
+-			sk = sk2;
+-		}
+-	}
++	if (sk)
++		sk = bpf_sk_lookup_full_sk(sk);
+ 
+ 	return sk;
+ }
+@@ -7134,22 +7142,8 @@ bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+ 	struct sock *sk = bpf_skc_lookup(skb, tuple, len, proto, netns_id,
+ 					 flags);
+ 
+-	if (sk) {
+-		struct sock *sk2 = sk_to_full_sk(sk);
+-
+-		/* sk_to_full_sk() may return (sk)->rsk_listener, so make sure the original sk
+-		 * sock refcnt is decremented to prevent a request_sock leak.
+-		 */
+-		if (sk2 != sk) {
+-			sock_gen_put(sk);
+-			/* Ensure there is no need to bump sk2 refcnt */
+-			if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
+-				WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
+-				return NULL;
+-			}
+-			sk = sk2;
+-		}
+-	}
++	if (sk)
++		sk = bpf_sk_lookup_full_sk(sk);
+ 
+ 	return sk;
+ }
 
----
-Michal Luczaj (2):
-      bpf: Extract shared reqsk-to-listener upgrade
-      bpf: Unconditionally take socket references in lookup helpers
-
- net/core/filter.c   | 83 +++++++++++++++++++++++++++--------------------------
- net/core/sock_map.c |  4 +--
- 2 files changed, 45 insertions(+), 42 deletions(-)
----
-base-commit: e5fd3f514e27db1f05fbd72ba615d74941e23c51
-change-id: 20260628-sockmap-lookup-tcp-leak-bdaba3e083c5
-
-Best regards,
---  
-Michal Luczaj <mhal@rbox.co>
+-- 
+2.55.0
 
