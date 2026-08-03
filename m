@@ -1,238 +1,204 @@
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC193AE6F7;
-	Mon,  3 Aug 2026 08:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.30.148.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853193B42CD;
+	Mon,  3 Aug 2026 08:42:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785746479; cv=none; b=tGsB4HxNGOfoEqvKSRBMSlp01+OiO5ElGtpFzvnOSERPxpPGOHgkFPSvoAa3RwmeirZupwuvjybLpNdSS652LWZFKBsAOgJRi3J9pCLOFfxt4mQNI1y0uuQi7uTfPTGq+QSpMKrmjhumqAy9kmoXN5NkTKEbFk60UHU2cxNQxeg=
+	t=1785746524; cv=none; b=HgsnMVXPx3ixMzCHVWO78ac5stRApn9M+QbGWfjlLQtLubD6LJb5rlsD0Loas7L9FVVm/IHQchogEPdHN8YoWUoDkUdohWeVyTTyKHo+rTnf8W9u3u+ALfHBQzbZyyzl0qgQfIIqrkr8A1QQtdz6GHOTl8vMT0kuLlO4/dkAGSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785746479; c=relaxed/simple;
-	bh=6+T4Rp+/210xeXHDQrkHJTrQBSWI9D+PyfxlKVA4unY=;
-	h=Message-ID:In-Reply-To:References:Date:Mime-Version:From:To:Cc:
-	 Subject:Content-Type; b=ng/bltIuRIZVBxmvA+1fInK3gEt8iYfcpeqVKXXywHvbnPZl3lvFCryAYB1zOJt/v/94860cEQ/V2D5bmAkcWHeaYjATcGSpwEOeS1DemVHzIfdzaXs8736Zb3m5knF8LoMokbn13lsJGYpyJ+R1lXEch8E2VETR+l9pInuyNWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=160.30.148.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4hD9BF0qxZz5D3wR;
-	Mon, 03 Aug 2026 16:41:09 +0800 (CST)
-Received: from xaxapp04.zte.com.cn ([10.99.98.157])
-	by mse-fl1.zte.com.cn with SMTP id 6738ev8c075356;
-	Mon, 3 Aug 2026 16:40:58 +0800 (+08)
-	(envelope-from hu.shengming@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Mon, 3 Aug 2026 16:41:00 +0800 (CST)
-X-Zmail-TransId: 2af96a70541c80c-c1f25
-X-Mailer: Zmail v1.0
-Message-ID: <20260803164100146bmbohzeWRTxPqAo8gHSBg@zte.com.cn>
-In-Reply-To: <anBAiTl_16H7NqEr@dev>
-References: 20260729-kfree_rcu_nolock-v5-3-a28cdcda9673@kernel.org,20260730192119586UvhYMv4xrNqaZLKIJH9X0@zte.com.cn,anBAiTl_16H7NqEr@dev
-Date: Mon, 3 Aug 2026 16:41:00 +0800 (CST)
+	s=arc-20240116; t=1785746524; c=relaxed/simple;
+	bh=AAmPH4AFTnSwsOZoxTqdCqduB2kcebf3tQWBS4gCNMU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=reduDe64+D3AEoNkO1hFmbpQ/Davi1gDSlXwLFdcE8bHFYel59JJdi96IAgCFLHLm+oKqQZup9XeRXqRX9V171XyylcZ0RVjbt0qaECSn54wSf0gVDIWgQkbHEyVeP/pF9hephjZaPOlswOOOM+GY92/mAGE3xNZUsuwT28Q0sQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cUXJtip9; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cUXJtip9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AC181F00A3A;
+	Mon,  3 Aug 2026 08:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785746523;
+	bh=keLCU7WQK3zBMIhP1foWN89TjNNLSy9Gap6tFdyl+AA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=cUXJtip9YBUW764F+VRZxrDxJVSnguZ6ciIRUm9T9fWAmH32vG1RANmQt2AvNfcNW
+	 1npUkf+cYb9NTaycdr5xE+9JgNfJ28gutrmZnoHy4crZeCZi3Qzail6hfMsJHzginD
+	 hpT3zYoJKYPAi5A6YWvUKte5BwRO1XFJf2+nVmYRUTqqB+75c3wiBC+LCWSAck6a0a
+	 1r1hrvtmSxFyAg0WtDuMmwhiKB6aHOilg5OR6REnK5swZP1spdDTWfD8y7GhndixMi
+	 zPwdnginWDnMU3whZXJsfw6C+w+P6NcXD4ZWqK+8gAPBmuH490pJ/GpNzvgAezgZHi
+	 RmDI31BDKW5jw==
+Date: Mon, 3 Aug 2026 10:42:00 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: sun jian <sun.jian.kdev@gmail.com>
+Cc: Mohsin Bashir <mohsin.bashr@gmail.com>, netdev@vger.kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Krishna Kumar <krikku@gmail.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Martin Karsten <mkarsten@uwaterloo.ca>,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	maciej.fijalkowski@intel.com, stable@vger.kernel.org
+Subject: Re: [PATCH net v2 2/2] veth: fix skb length accounting after XDP
+ frag adjustment
+Message-ID: <anBUWIxmURvbr04i@lore-desk>
+References: <20260731032357.6114-1-sun.jian.kdev@gmail.com>
+ <20260731032357.6114-3-sun.jian.kdev@gmail.com>
+ <80687d9c-9c27-494c-b3f2-efd0230b1895@gmail.com>
+ <CABFUUZGTJptpOKKAeU3ThibmPpXize4Eud2=EBX-vqaX3YH4pg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <hu.shengming@zte.com.cn>
-To: <harry@kernel.org>
-Cc: <vbabka@kernel.org>, <akpm@linux-foundation.org>, <hao.li@linux.dev>,
-        <cl@gentwo.org>, <rientjes@google.com>, <roman.gushchin@linux.dev>,
-        <ast@kernel.org>, <andrii@kernel.org>, <puranjay@kernel.org>,
-        <ameryhung@gmail.com>, <bigeasy@linutronix.de>, <clrkwllms@kernel.org>,
-        <rostedt@goodmis.org>, <paulmck@kernel.org>, <frederic@kernel.org>,
-        <neeraj.upadhyay@kernel.org>, <joelagnelf@nvidia.com>,
-        <josh@joshtriplett.org>, <boqun@kernel.org>, <urezki@gmail.com>,
-        <mathieu.desnoyers@efficios.com>, <jiangshanlai@gmail.com>,
-        <qiang.zhang@linux.dev>, <pfalcato@suse.de>, <surenb@google.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linux-rt-devel@lists.linux.dev>, <rcu@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-Subject: =?UTF-8?B?UmU6IFtQQVRDSCB2NSAzLzhdIG1tL3NsYWI6IHVzZSBjYWxsX3JjdSgpIGluIHVua25vd24gY29udGV4dCBpZiBpcnFzIGFyZSBlbmFibGVk?=
-Content-Type: multipart/mixed;
-	boundary="=====_001_next====="
-X-MAIL:mse-fl1.zte.com.cn 6738ev8c075356
-X-TLS: YES
-X-ENVELOPE-SENDER: hu.shengming@zte.com.cn
-X-SOURCE-IP: 10.5.228.132 unknown Mon, 03 Aug 2026 16:41:09 +0800
-X-CLEAN: YES
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6A705425.000/4hD9BF0qxZz5D3wR
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="YM0lzDBH++kuull8"
+Content-Disposition: inline
+In-Reply-To: <CABFUUZGTJptpOKKAeU3ThibmPpXize4Eud2=EBX-vqaX3YH4pg@mail.gmail.com>
 
+--YM0lzDBH++kuull8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+> On Sat, Aug 1, 2026 at 12:14=E2=80=AFAM Mohsin Bashir <mohsin.bashr@gmail=
+=2Ecom> wrote:
+> >
+> >
+> >
+> > On 7/30/26 8:23 PM, Sun Jian wrote:
+> > > veth exposes non-linear skb fragments through an xdp_buff. If an XDP
+> > > program adjusts the fragment area, veth_xdp_rcv_skb() copies
+> > > xdp_frags_size back to skb->data_len but leaves skb->len containing t=
+he
+> > > old fragment contribution.
+> > >
+> > > After a fragment shrink, this makes skb_headlen() larger than the act=
+ual
+> > > linear area. In the reproduced UDP receive path, __skb_datagram_iter()
+> > > copied 1024 bytes past the actual linear tail to userspace, starting =
+at
+> > > struct skb_shared_info. The copied bytes included the affected skb's
+> > > nr_frags, xdp_frags_size and a kernel pointer from
+> > > skb_shinfo(skb)->frags[0]. Real packet data was displaced by the same
+> > > amount and truncated at the end.
+> > >
+> > > Subtract the old data_len before replacing it and add the new data_len
+> > > afterwards, keeping skb->len and skb->data_len synchronized.
+> > >
+> > > The fragment accounting must run before the linear tail adjustment:
+> > > when bpf_xdp_adjust_tail() shrinks the packet into the linear area it
+> > > releases all fragments, and __skb_put() requires skb->data_len =3D=3D=
+ 0
+> > > by that point.
+> > >
+> > > A 60000-byte UDP datagram on a veth pair with MTU 64000 was shortened=
+ by
+> > > 1024 bytes from its fragment area. Before the fix, all 10 runs produc=
+ed
+> > > corrupted payloads. After the fix, all 10 runs matched the expected
+> > > payload exactly.
+> > >
+> > > Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to accep=
+t non-linear skb")
+> > > Cc: stable@vger.kernel.org
+> > > Link: https://lore.kernel.org/bpf/al9T9Eto%2FhRIzP5W@boxer/
+> > > Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> > > ---
+> > >   drivers/net/veth.c | 23 +++++++++++++++--------
+> > >   1 file changed, 15 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> > > index 00e34afd858e..348391e87e14 100644
+> > > --- a/drivers/net/veth.c
+> > > +++ b/drivers/net/veth.c
+> > > @@ -865,18 +865,25 @@ static struct sk_buff *veth_xdp_rcv_skb(struct =
+veth_rq *rq,
+> > >
+> > >       skb_reset_mac_header(skb);
+> > >
+> > > -     /* check if bpf_xdp_adjust_tail was used */
+> > > -     off =3D xdp->data_end - orig_data_end;
+> > > -     if (off !=3D 0)
+> > > -             __skb_put(skb, off); /* positive on grow, negative on s=
+hrink */
+> > > -
+> > >       /* XDP frag metadata (e.g. nr_frags) are updated in eBPF helpers
+> > > -      * (e.g. bpf_xdp_adjust_tail), we need to update data_len here.
+> > > +      * (e.g. bpf_xdp_adjust_tail). Remove the old fragment contribu=
+tion
+> > > +      * from skb->len before updating data_len, then add the new one=
+ back.
+> > > +      * This must precede the linear tail adjustment below: a changed
+> > > +      * data_end implies that no fragments remain, and __skb_put() r=
+equires
+> > > +      * a linear skb.
+> > >        */
+> > > -     if (xdp_buff_has_frags(xdp))
+> > > +     skb->len -=3D skb->data_len;
+> > > +     if (xdp_buff_has_frags(xdp)) {
+> > >               skb->data_len =3D skb_shinfo(skb)->xdp_frags_size;
+> > > -     else
+> > > +             skb->len +=3D skb->data_len;
+> > > +     } else {
+> > >               skb->data_len =3D 0;
+> > > +     }
+> > > +
+> > > +     /* check if bpf_xdp_adjust_tail was used */
+> > > +     off =3D xdp->data_end - orig_data_end;
+> > > +     if (off !=3D 0)
+> > > +             __skb_put(skb, off); /* positive on grow, negative on s=
+hrink */
+> > >
+> > >       skb->protocol =3D eth_type_trans(skb, rq->dev);
+> > >
+> >
+> > I am most likely missing something here but what happens if we have
+> > frags and we attempt to advance data_end while leaving some frags
+> > present (e.g., bpf_xdp_pull_data())? Looks like, in that case we would
+> > issue __skb_put(skb, off) with off > 0 and we would hit
+> > SKB_LINEAR_ASSERT() because skb is still non-linear?
+>=20
+> Hi Mohsin,
+>=20
+> Thanks for catching this. You're right that bpf_xdp_pull_data() can advan=
+ce
+> data_end while leaving frags present. I'll investigate this path and foll=
+ow up.
+>=20
+> Thanks,
+> Sun Jian
 
---=====_001_next=====
-Content-Type: multipart/related;
-	boundary="=====_002_next====="
+I guess we should implement the same approach used in
+bpf_prog_run_generic_xdp(), something like:
 
+	if (off) {
+		skb_set_tail_pointer();
+		skb->len +=3D off;
+	}
 
---=====_002_next=====
-Content-Type: multipart/alternative;
-	boundary="=====_003_next====="
+Regards,
+Lorenzo
 
+--YM0lzDBH++kuull8
+Content-Type: application/pgp-signature; name=signature.asc
 
---=====_003_next=====
-Content-Type: text/plain;
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
+-----BEGIN PGP SIGNATURE-----
 
-SGFycnkgd3JvdGU6DQo+IE9uIFRodSwgSnVsIDMwLCAyMDI2IGF0IDA3OjIxOjE5UE0gKzA4MDAs
-IGh1LnNoZW5nbWluZ0B6dGUuY29tLmNuIHdyb3RlOg0KPiA+IEhhcnJ5IHdyb3RlOg0KPiA+ID4g
-Y2FsbF9yY3UoKSBkaXNhYmxlcyBJUlFzIHdpdGggbG9jYWxfaXJxX3NhdmUoKSB0byBwcm90ZWN0
-IGl0cyBwZXItY3B1DQo+ID4gPiBkYXRhIHN0cnVjdHVyZXMuIFRoZXJlZm9yZSwgaWYgSVJRcyBh
-cmUgbm90IGRpc2FibGVkLCB0aGV5IGNhbm5vdCBiZQ0KPiA+ID4gY29ycnVwdGVkIGJ5IHJlZW50
-cmFuY2UgaW50byBjYWxsX3JjdSgpLiBTbyBmYWxsIGJhY2sgdG8gdGhlIGRlZmVycmVkDQo+ID4g
-PiBwYXRoIG9ubHkgd2hlbiAhYWxsb3dfc3BpbiAmJiBpcnFzX2Rpc2FibGVkKCkuDQo+ID4gPiAN
-Cj4gPiA+IFRoZSBSQ1Ugc3Vic3lzdGVtIGRvZXMgbm90IGd1YXJhbnRlZSB0aGlzIGNvbnRyYWN0
-dWFsbHksIGFuZCB0aGlzDQo+ID4gPiBvcHRpbWl6YXRpb24gcmVsaWVzIG9uIFJDVSdzIGltcGxl
-bWVudGF0aW9uIGRldGFpbHMuIElkZWFsbHksIGl0IHNob3VsZA0KPiA+ID4gYmUgcmVtb3ZlZCBv
-bmNlIGNhbGxfcmN1X25vbG9jaygpIGlzIHN1cHBvcnRlZCBieSB0aGUgUkNVIHN1YnN5c3RlbS4N
-Cj4gPiA+IA0KPiA+ID4gTGluazogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtbW0vQ0FB
-RG5WUUtSVkQ1WlNuRUtiWlpVN3c4NmdIYkdIVXVnMnB2enBnWlRuZ05TK2ZnNHJ3QG1haWwuZ21h
-aWwuY29tDQo+ID4gPiBTdWdnZXN0ZWQtYnk6IEFsZXhlaSBTdGFyb3ZvaXRvdiA8YXN0QGtlcm5l
-bC5vcmc+DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBIYXJyeSBZb28gKE9yYWNsZSkgPGhhcnJ5QGtl
-cm5lbC5vcmc+DQo+ID4gPiAtLS0NCj4gPiA+ICBtbS9zbHViLmMgfCA4ICsrKysrKy0tDQo+ID4g
-PiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gPiA+
-IA0KPiA+ID4gZGlmZiAtLWdpdCBhL21tL3NsdWIuYyBiL21tL3NsdWIuYw0KPiA+ID4gaW5kZXgg
-MmM1YmE4YzMyNmU3Li5iYjBmMjk3NWM5NWIgMTAwNjQ0DQo+ID4gPiAtLS0gYS9tbS9zbHViLmMN
-Cj4gPiA+ICsrKyBiL21tL3NsdWIuYw0KPiA+ID4gQEAgLTYxNTcsOCArNjE1NywxMiBAQCBib29s
-IF9fa2ZyZWVfcmN1X3NoZWFmKHN0cnVjdCBrbWVtX2NhY2hlICpzLCB2b2lkICpvYmosIHVuc2ln
-bmVkIGludCBmcmVlX2ZsYWdzKQ0KPiA+ID4gICAgICBpZiAobGlrZWx5KHJjdV9zaGVhZi0+c2l6
-ZSA8IHMtPnNoZWFmX2NhcGFjaXR5KSkgew0KPiA+ID4gICAgICAgICAgcmN1X3NoZWFmID0gTlVM
-TDsNCj4gPiA+ICAgICAgfSBlbHNlIHsNCj4gPiA+IC0gICAgICAgIGlmICh1bmxpa2VseSghYWxs
-b3dfc3BpbikpIHsNCj4gPiA+IC0gICAgICAgICAgICAvKiBjYWxsX3JjdSgpIGNhbm5vdCBiZSBj
-YWxsZWQgaW4gYW4gdW5rbm93biBjb250ZXh0ICovDQo+ID4gPiArICAgICAgICAvKg0KPiA+ID4g
-KyAgICAgICAgICogV2l0aCAhYWxsb3dfc3Bpbiwgd2UgbWlnaHQgaGF2ZSBpbnRlcnJ1cHRlZCBj
-YWxsX3JjdSgpJ3MNCj4gPiA+ICsgICAgICAgICAqIElSUS1kaXNhYmxlZCBjcml0aWNhbCBzZWN0
-aW9uLiBJZiBJUlFzIGFyZSBub3QgZGlzYWJsZWQsDQo+ID4gPiArICAgICAgICAgKiB3ZSBrbm93
-IHRoYXQncyBub3QgdGhlIGNhc2UuDQo+ID4gPiArICAgICAgICAgKi8NCj4gPiA+ICsgICAgICAg
-IGlmICh1bmxpa2VseSghYWxsb3dfc3BpbiAmJiBpcnFzX2Rpc2FibGVkKCkpKSB7DQo+ID4gDQo+
-ID4gTEdUTSENCj4gPiBSZXZpZXdlZC1ieTogU2hlbmdtaW5nIEh1IDxodS5zaGVuZ21pbmdAenRl
-LmNvbS5jbj4NCj4gDQo+IFRoYW5rcyBhIGxvdCwgU2hlbmdtaW5nIQ0KPiANCg0KSSdtIGdsYWQg
-dG8gaGF2ZSB0aGUgb3Bwb3J0dW5pdHkgdG8gbGVhcm4gZnJvbSB5b3VyIHdvcmshDQoNCj4gPiBJ
-IGluaXRpYWxseSB3b25kZXJlZCB3aGV0aGVyIGluX25taSgpIHNob3VsZCBhbHNvIGJlIGNoZWNr
-ZWQgaGVyZS4NCj4gPiBIb3dldmVyLCBpcnFzX2Rpc2FibGVkKCkgYWxyZWFkeSBjb3ZlcnMgdGhl
-IHJlbGV2YW50IHJlZW50cmFuY3kgY2FzZSwNCj4gPiBzaW5jZSBjYWxsX3JjdSgpIGRpc2FibGVz
-IElSUXMgd2hpbGUgbW9kaWZ5aW5nIGl0cyBwZXItQ1BVIGRhdGEuDQo+IA0KPiBFeGFjdGx5LCB0
-aGF0IHdhcyBteSByZWFzb25pbmcgOykNCj4gDQo+IEFzIGEgc2lkZSBub3RlIHRoZXJlIGlzIGFu
-IGF0dGVtcHQgdG8gZG8gdGhpcyBpbiBjYWxsX3JjdSgpIGluc3RlYWQgb2YNCj4gc2xhYjoNCj4g
-DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDI2MDcyOTE2MjIwNy4xNTY3NzcwLTEt
-cHVyYW5qYXlAa2VybmVsLm9yZw0KPiANCj4gSnVzdCBGWUkuDQoNClRoYW5rcyBmb3Igc2hhcmlu
-ZyB0aGlzIHVwZGF0ZS4gSXQncyBleGNpdGluZyB0byBzZWUgdGhlIFJDVSBzdWJzeXN0ZW0NCmNv
-bnRpbnVpbmcgdG8gZXZvbHZlIGFuZCBnYWluIGJyb2FkZXIgc3VwcG9ydC4NCg0KLS0NCldpdGgg
-QmVzdCBSZWdhcmRzLA0KU2hlbmdtaW5n
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCanBUWAAKCRA6cBh0uS2t
+rKJxAQCQx9l9vI+JhD4aLxY3M5M93S1Mnk8c49lxrJ0nHzQm+wEA0lEj4L5etXeB
+pV6N1BBBrN4bVsy29Mv9eV621WyLwQk=
+=seow
+-----END PGP SIGNATURE-----
 
-
---=====_003_next=====
-Content-Type: text/html ;
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-PGRpdiBjbGFzcz0iemNvbnRlbnRSb3ciPjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+SGFy
-cnkgd3JvdGU6PC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7IE9uIFRodSwg
-SnVsIDMwLCAyMDI2IGF0IDA3OjIxOjE5UE0gKzA4MDAsIGh1LnNoZW5nbWluZ0B6dGUuY29tLmNu
-IHdyb3RlOjwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyAmZ3Q7IEhhcnJ5
-IHdyb3RlOjwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyAmZ3Q7ICZndDsg
-Y2FsbF9yY3UoKSBkaXNhYmxlcyBJUlFzIHdpdGggbG9jYWxfaXJxX3NhdmUoKSB0byBwcm90ZWN0
-IGl0cyBwZXItY3B1PC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsg
-Jmd0OyBkYXRhIHN0cnVjdHVyZXMuIFRoZXJlZm9yZSwgaWYgSVJRcyBhcmUgbm90IGRpc2FibGVk
-LCB0aGV5IGNhbm5vdCBiZTwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyAm
-Z3Q7ICZndDsgY29ycnVwdGVkIGJ5IHJlZW50cmFuY2UgaW50byBjYWxsX3JjdSgpLiBTbyBmYWxs
-IGJhY2sgdG8gdGhlIGRlZmVycmVkPC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4m
-Z3Q7ICZndDsgJmd0OyBwYXRoIG9ubHkgd2hlbiAhYWxsb3dfc3BpbiAmYW1wOyZhbXA7IGlycXNf
-ZGlzYWJsZWQoKS48L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPiZndDsgJmd0OyAm
-Z3Q7Jm5ic3A7PC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsgJmd0
-OyBUaGUgUkNVIHN1YnN5c3RlbSBkb2VzIG5vdCBndWFyYW50ZWUgdGhpcyBjb250cmFjdHVhbGx5
-LCBhbmQgdGhpczwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyAmZ3Q7ICZn
-dDsgb3B0aW1pemF0aW9uIHJlbGllcyBvbiBSQ1UncyBpbXBsZW1lbnRhdGlvbiBkZXRhaWxzLiBJ
-ZGVhbGx5LCBpdCBzaG91bGQ8L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPiZndDsg
-Jmd0OyAmZ3Q7IGJlIHJlbW92ZWQgb25jZSBjYWxsX3JjdV9ub2xvY2soKSBpcyBzdXBwb3J0ZWQg
-YnkgdGhlIFJDVSBzdWJzeXN0ZW0uPC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4m
-Z3Q7ICZndDsgJmd0OyZuYnNwOzwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0
-OyAmZ3Q7ICZndDsgTGluazogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtbW0vQ0FBRG5W
-UUtSVkQ1WlNuRUtiWlpVN3c4NmdIYkdIVXVnMnB2enBnWlRuZ05TK2ZnNHJ3QG1haWwuZ21haWwu
-Y29tPC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsgJmd0OyBTdWdn
-ZXN0ZWQtYnk6IEFsZXhlaSBTdGFyb3ZvaXRvdiAmbHQ7YXN0QGtlcm5lbC5vcmcmZ3Q7PC9kaXY+
-PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsgJmd0OyBTaWduZWQtb2ZmLWJ5
-OiBIYXJyeSBZb28gKE9yYWNsZSkgJmx0O2hhcnJ5QGtlcm5lbC5vcmcmZ3Q7PC9kaXY+PGRpdiBz
-dHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsgJmd0OyAtLS08L2Rpdj48ZGl2IHN0eWxl
-PSJsaW5lLWhlaWdodDoxLjUiPiZndDsgJmd0OyAmZ3Q7Jm5ic3A7IG1tL3NsdWIuYyB8IDggKysr
-KysrLS08L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPiZndDsgJmd0OyAmZ3Q7Jm5i
-c3A7IDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pPC9kaXY+
-PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsgJmd0OyZuYnNwOzwvZGl2Pjxk
-aXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyAmZ3Q7ICZndDsgZGlmZiAtLWdpdCBhL21t
-L3NsdWIuYyBiL21tL3NsdWIuYzwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0
-OyAmZ3Q7ICZndDsgaW5kZXggMmM1YmE4YzMyNmU3Li5iYjBmMjk3NWM5NWIgMTAwNjQ0PC9kaXY+
-PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsgJmd0OyAtLS0gYS9tbS9zbHVi
-LmM8L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPiZndDsgJmd0OyAmZ3Q7ICsrKyBi
-L21tL3NsdWIuYzwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyAmZ3Q7ICZn
-dDsgQEAgLTYxNTcsOCArNjE1NywxMiBAQCBib29sIF9fa2ZyZWVfcmN1X3NoZWFmKHN0cnVjdCBr
-bWVtX2NhY2hlICpzLCB2b2lkICpvYmosIHVuc2lnbmVkIGludCBmcmVlX2ZsYWdzKTwvZGl2Pjxk
-aXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyAmZ3Q7ICZndDsmbmJzcDsgJm5ic3A7ICZu
-YnNwOyBpZiAobGlrZWx5KHJjdV9zaGVhZi0mZ3Q7c2l6ZSAmbHQ7IHMtJmd0O3NoZWFmX2NhcGFj
-aXR5KSkgezwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyAmZ3Q7ICZndDsm
-bmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7IHJjdV9zaGVhZiA9IE5VTEw7PC9kaXY+
-PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsgJmd0OyZuYnNwOyAmbmJzcDsg
-Jm5ic3A7IH0gZWxzZSB7PC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZn
-dDsgJmd0OyAtJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7IGlmICh1bmxpa2VseSghYWxsb3df
-c3BpbikpIHs8L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPiZndDsgJmd0OyAmZ3Q7
-IC0mbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAvKiBjYWxsX3JjdSgp
-IGNhbm5vdCBiZSBjYWxsZWQgaW4gYW4gdW5rbm93biBjb250ZXh0ICovPC9kaXY+PGRpdiBzdHls
-ZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsgJmd0OyArJm5ic3A7ICZuYnNwOyAmbmJzcDsg
-Jm5ic3A7IC8qPC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsgJmd0
-OyArJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyogV2l0aCAhYWxsb3dfc3Bpbiwg
-d2UgbWlnaHQgaGF2ZSBpbnRlcnJ1cHRlZCBjYWxsX3JjdSgpJ3M8L2Rpdj48ZGl2IHN0eWxlPSJs
-aW5lLWhlaWdodDoxLjUiPiZndDsgJmd0OyAmZ3Q7ICsmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJz
-cDsgJm5ic3A7KiBJUlEtZGlzYWJsZWQgY3JpdGljYWwgc2VjdGlvbi4gSWYgSVJRcyBhcmUgbm90
-IGRpc2FibGVkLDwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyAmZ3Q7ICZn
-dDsgKyZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsqIHdlIGtub3cgdGhhdCdzIG5v
-dCB0aGUgY2FzZS48L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPiZndDsgJmd0OyAm
-Z3Q7ICsmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7Ki88L2Rpdj48ZGl2IHN0eWxl
-PSJsaW5lLWhlaWdodDoxLjUiPiZndDsgJmd0OyAmZ3Q7ICsmbmJzcDsgJm5ic3A7ICZuYnNwOyAm
-bmJzcDsgaWYgKHVubGlrZWx5KCFhbGxvd19zcGluICZhbXA7JmFtcDsgaXJxc19kaXNhYmxlZCgp
-KSkgezwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyAmZ3Q7Jm5ic3A7PC9k
-aXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7ICZndDsgTEdUTSE8L2Rpdj48ZGl2
-IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPiZndDsgJmd0OyBSZXZpZXdlZC1ieTogU2hlbmdtaW5n
-IEh1ICZsdDtodS5zaGVuZ21pbmdAenRlLmNvbS5jbiZndDs8L2Rpdj48ZGl2IHN0eWxlPSJsaW5l
-LWhlaWdodDoxLjUiPiZndDsmbmJzcDs8L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUi
-PiZndDsgVGhhbmtzIGEgbG90LCBTaGVuZ21pbmchPC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWln
-aHQ6MS41Ij4mZ3Q7Jm5ic3A7PC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij48YnI+
-PC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij5JJ20gZ2xhZCB0byBoYXZlIHRoZSBv
-cHBvcnR1bml0eSB0byBsZWFybiBmcm9tIHlvdXIgd29yayE8L2Rpdj48ZGl2IHN0eWxlPSJsaW5l
-LWhlaWdodDoxLjUiPjxicj48L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPiZndDsg
-Jmd0OyBJIGluaXRpYWxseSB3b25kZXJlZCB3aGV0aGVyIGluX25taSgpIHNob3VsZCBhbHNvIGJl
-IGNoZWNrZWQgaGVyZS48L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPiZndDsgJmd0
-OyBIb3dldmVyLCBpcnFzX2Rpc2FibGVkKCkgYWxyZWFkeSBjb3ZlcnMgdGhlIHJlbGV2YW50IHJl
-ZW50cmFuY3kgY2FzZSw8L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPiZndDsgJmd0
-OyBzaW5jZSBjYWxsX3JjdSgpIGRpc2FibGVzIElSUXMgd2hpbGUgbW9kaWZ5aW5nIGl0cyBwZXIt
-Q1BVIGRhdGEuPC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7Jm5ic3A7PC9k
-aXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7IEV4YWN0bHksIHRoYXQgd2FzIG15
-IHJlYXNvbmluZyA7KTwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyZuYnNw
-OzwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyBBcyBhIHNpZGUgbm90ZSB0
-aGVyZSBpcyBhbiBhdHRlbXB0IHRvIGRvIHRoaXMgaW4gY2FsbF9yY3UoKSBpbnN0ZWFkIG9mPC9k
-aXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7IHNsYWI6PC9kaXY+PGRpdiBzdHls
-ZT0ibGluZS1oZWlnaHQ6MS41Ij4mZ3Q7Jm5ic3A7PC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWln
-aHQ6MS41Ij4mZ3Q7IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDI2MDcyOTE2MjIwNy4x
-NTY3NzcwLTEtcHVyYW5qYXlAa2VybmVsLm9yZzwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0
-OjEuNSI+Jmd0OyZuYnNwOzwvZGl2PjxkaXYgc3R5bGU9ImxpbmUtaGVpZ2h0OjEuNSI+Jmd0OyBK
-dXN0IEZZSS48L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPjxicj48L2Rpdj48ZGl2
-IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPlRoYW5rcyBmb3Igc2hhcmluZyB0aGlzIHVwZGF0ZS4g
-SXQncyBleGNpdGluZyB0byBzZWUgdGhlIFJDVSBzdWJzeXN0ZW08L2Rpdj48ZGl2IHN0eWxlPSJs
-aW5lLWhlaWdodDoxLjUiPmNvbnRpbnVpbmcgdG8gZXZvbHZlIGFuZCBnYWluIGJyb2FkZXIgc3Vw
-cG9ydC48L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPjxicj48L2Rpdj48ZGl2IHN0
-eWxlPSJsaW5lLWhlaWdodDoxLjUiPi0tPC9kaXY+PGRpdiBzdHlsZT0ibGluZS1oZWlnaHQ6MS41
-Ij5XaXRoIEJlc3QgUmVnYXJkcyw8L2Rpdj48ZGl2IHN0eWxlPSJsaW5lLWhlaWdodDoxLjUiPlNo
-ZW5nbWluZzwvZGl2PjwvZGl2Pg==
-
-
---=====_003_next=====--
-
---=====_002_next=====--
-
---=====_001_next=====--
-
+--YM0lzDBH++kuull8--
