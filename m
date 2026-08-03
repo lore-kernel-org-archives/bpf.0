@@ -1,117 +1,132 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE2E937AA9E;
-	Mon,  3 Aug 2026 10:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D08379974
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 10:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785753839; cv=none; b=tphuynl73A4YxLijvBM0teCLgAPd0lxvMjmPS6/rdoFywH1RuUNVvmGQ+Ne5d4oX8iwQMqxjZn1DH84jE23PgQt+A9VJEHPc5aPJ5EnKwg1Fx6MCa+z0Ui0TzukYBcNmcKcj23HAixekJDegMRru8qEt8/Apsgat3sx3dPuhQNE=
+	t=1785754253; cv=none; b=KXvZ4/KH9zdWXsd9ybCY0WUpK5to0f/xHCXn9Zd77ZekIOIap+/cVpn2as35DD2fkjFD+wfK3SzoNdby7tzqh6RDjEIzHWOs72Tdpdby0uY9DLfLr3sGoea+y/5zJAKpDNJo52UBARcSwbB44g5alP/LtXF+aFyxJ2ddZ9gxF94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785753839; c=relaxed/simple;
-	bh=spa257znP8NXhKnNJ4GeagVPQqom2J9S+l2Rk/fa+IE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hcG4x0h+mmt3l/y8oVLqJ4YBu3M6xjT/t1NJ4m9qim8vN8mw6npS6lBei7T6wXxdlSgJufXEwKV17a9grxP9XuMuNwVR/DaNULj97jRBjxqy6oV5OVoDMFnbP75xoE5P4VA/siZZXs3aeNeEqZUSM3E4qedJ3EqDlvE25ciagw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=qgjcrsDB; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1785754253; c=relaxed/simple;
+	bh=ijhPBqMJjgnaI51qrF53bMM6qhVWtCoq7+D0ObZEL7g=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=hd3DKE0X0Cr6xLzYZaz8yEgu93hcndTnyZdpx3j4BNx6n0gN6VKvuJcNaW4hffWM6n16jV0i3ixV+eSr1x6Dqz0TSWZg7nUQt2oq9YO/040lgkLM1pOdNYo1XZMNgkbs0EM3QDxO85wqemp5TkudQGW/3U156y9/qMrJWhAtiDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kLxXenI3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="qgjcrsDB"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1wqq91-001sPk-6F; Mon, 03 Aug 2026 12:43:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=k1yWqb+Ce/M20wgB+/QGxvzPnAaiZPWRZcxBnwBy4x4=; b=qgjcrsDB/wCPNk70+uuXQwySky
-	bmGMounFRfX5iGjuj9Z8qjyA3TLv+eyuXf2WiO9FFrmdNqJl5M72lmQXN2RE49E12Arlvo+fqOvvR
-	wzxdf7eLnLkR1Zc+xpnbBwTLIt6uC2mrMe2scMlvilfLAbgaSw4EOXB00NssNXoSs92a3mSYRVIxB
-	TDbMY8Wc9Ho9JxGyoVbc2zRPEhhPMlwd1Avy/ofzvsT5l/oiCEQzRxiUcZY2FqrOSZ6KNU611Z6w0
-	dFDmnTVzqFB5rLtLmQiYXBDDMRoY8nOlkpIopzjU6Xk5OMnEVkqn2PZI107D6RQaTQjxzYGfHM/bG
-	SZ+VaL6A==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1wqq8z-0003rZ-PW; Mon, 03 Aug 2026 12:43:41 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	id 1wqq8h-00G30o-0s;
-	Mon, 03 Aug 2026 12:43:23 +0200
-Message-ID: <329fffdc-9e4b-4812-8140-e0bf947e4ac6@rbox.co>
-Date: Mon, 3 Aug 2026 12:43:21 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLxXenI3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C7B1F00A3D;
+	Mon,  3 Aug 2026 10:50:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785754251;
+	bh=J2gJRVTn3n6G/S0hNnOUd18cfwePRymQtUpfiN4lKMY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kLxXenI31IpLYBvDovtHZmGGHKfF1OEKr51uRFyi+PDAKG3v/ZC0szQNtCINtZfon
+	 14K1wXRjy3u/6l6H27fAYsGnWjcy5Ho5QTWIfgBptPpuKHQS/bde9i29Cw7uzUevcQ
+	 HolIHEK3GyZdzdOQfTXkfMqZwqdpGDmf8NKaN/3fBDpfQY2jY9hNw/aNgzRlGQHzH2
+	 5xATrLeFT7mxxK48o37vi2glAVJseZQHrXN19yOOuyefdujT4/ubGRxd1DE0Z8xpDR
+	 WBgxNXa0ZYoH9JRvb8bGxG/93HhdX7eQObLTTfCpViA0M/k/rodu9WU2l8v1Axpg8k
+	 DXbaBzuekm9gw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] bpf: disable lockdep while running BPF on lock_release
+Reply-To: sashiko-reviews@lists.linux.dev
+To: quanyeyang <quanyemostima@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260803-fix-lock-tracepoint-bpf-lockdep-v1-1-91fb7afb526a@gmail.com>
+References: <20260803-fix-lock-tracepoint-bpf-lockdep-v1-1-91fb7afb526a@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 03 Aug 2026 10:50:51 +0000
+Message-Id: <20260803105051.92C7B1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 1/2] bpf: Extract shared reqsk-to-listener upgrade
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, john.fastabend@gmail.com,
- sdf@fomichev.me, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, kuniyu@google.com, willemb@google.com,
- jakub@cloudflare.com, jiayuan.chen@linux.dev, joe@wand.net.nz
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260803-sockmap-lookup-tcp-leak-v2-1-306e025bfe66@rbox.co>
- <43cad9ddcd7b1c7541a179444b27cd6b40fdf32f7aabfff2080c12bfc945dc94@mail.kernel.org>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <43cad9ddcd7b1c7541a179444b27cd6b40fdf32f7aabfff2080c12bfc945dc94@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 8/3/26 11:44, bot+bpf-ci@kernel.org wrote:
->> diff --git a/net/core/filter.c b/net/core/filter.c
->> index 11bb0d236822..fede810ef37f 100644
->> --- a/net/core/filter.c
->> +++ b/net/core/filter.c
->> @@ -7079,6 +7079,28 @@ __bpf_skc_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
->>  	return sk;
->>  }
->>
->> +static struct sock *
->> +bpf_sk_lookup_full_sk(struct sock *sk)
->> +{
-> 
-> This isn't a bug, but since this helper only converts a reqsk to its
-> listener rather than performing a lookup, would a name outside the
-> bpf_sk_lookup_* family - say sk_lookup_full_sk() or
-> bpf_reqsk_to_listener() - read more clearly next to
-> bpf_sk_lookup_tcp()/bpf_sk_lookup_udp() and struct bpf_sk_lookup?
-> 
-> The bpf_sk_lookup_ prefix in this file already denotes the BPF helper family
-> (bpf_sk_lookup_tcp(), bpf_sk_lookup_udp(), bpf_sk_lookup_assign(),
-> bpf_sk_lookup_enabled) and the UAPI context type struct bpf_sk_lookup /
-> struct bpf_sk_lookup_kern. Sitting about 20 lines above bpf_sk_lookup()
-> itself, the name reads like another lookup entry point rather than a
-> reqsk-to-listener conversion.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-I've meant it to be a bpf-lookup helper, not a bpf lookup-helper. So yeah,
-I'm happy to change it to something more appropriate. sk_lookup_full_sk() then?
+New issues:
+- [High] Disabling lockdep during `trace_call_bpf` for `lock_release` hides=
+ valid lock inversions and allows silent physical deadlocks.
+- [High] Temporarily disabling lockdep globally via `lockdep_off()` in `tra=
+ce_call_bpf()` unintentionally blinds lockdep to any hardware interrupts an=
+d softirqs that preempt the BPF program.
 
->> +	struct sock *sk2 = sk_to_full_sk(sk);
->> +
->> +	/*
->> +	 * sk_to_full_sk() may return sk->rsk_listener, make sure the original
->> +	 * sk sock refcnt is decremented to prevent a request_sock leak.
->> +	 */
->> +	if (sk2 != sk) {
->> +		sock_gen_put(sk);
->> +		/* Ensure there is no need to bump sk2 refcnt. */
->> +		if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
->> +			WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
->> +			return NULL;
->> +		}
->> +		sk = sk2;
->> +	}
->> +
->> +	return sk;
->> +}
-> 
-> [ ... ]
+Pre-existing issues:
+- [High] The patch fails to disable lockdep for BPF programs attached to `l=
+ock_release` via raw tracepoints.
+--
+
+--- Patch [1]: [PATCH] bpf: disable lockdep while running BPF on lock_relea=
+se ---
+commit 4871557897dd6c7f2fd05dc2170475d6e2824a6e
+Author: quanyeyang <quanyemostima@gmail.com>
+
+bpf: disable lockdep while running BPF on lock_release
+
+trace_lock_release() runs before __lock_release(), so the lock is
+still on the held stack when attached BPF programs execute. This patch marks
+lock_release with TRACE_EVENT_FL_BPF_NO_LOCKDEP and temporarily disables
+lockdep around bpf_prog_run_array() for that event to avoid false recursive
+locking warnings.
+
+Closes: https://syzkaller.appspot.com/bug?extid=3Def8d17bae14efb960935
+
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 75495a5c35079..f2460f3c860e0 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+
+[ ... ]
+
+> @@ -144,8 +146,12 @@ unsigned int trace_call_bpf(struct trace_event_call =
+*call, void *ctx)
+>  	 * rcu_dereference() which is accepted risk.
+>  	 */
+>  	rcu_read_lock();
+> +	if (no_lockdep)
+> +		lockdep_off();
+
+[Severity: High]
+Could this introduce a regression by suppressing valid warnings about real
+physical lock deadlocks caused by BPF programs?
+
+If a BPF program attached to lock_release acquires a kernel lock, the CPU
+physically holds the original lock while executing the BPF program. If the
+BPF lock ordering violates the kernel's lock graph, wouldn't this cause a
+silent deadlock without any lockdep warning?
+
+[Severity: High]
+Could this also introduce a regression by unintentionally blinding lockdep =
+to
+hardware interrupts and softirqs?
+
+trace_call_bpf() for lock_release can execute with hardware interrupts
+enabled. The lockdep_off() macro increments current->lockdep_recursion.
+If a hardware interrupt fires while the BPF program is executing, it runs
+in a context where current->lockdep_recursion > 0.
+
+Does this mean all lock acquisitions in the interrupt handler and
+subsequent softirqs will completely bypass lockdep tracking?
+
+[Severity: High]
+This is a pre-existing issue, but does this approach fail to disable lockdep
+for BPF programs attached to lock_release via raw tracepoints?
+
+If a user attaches a BPF program using the raw tracepoint interface
+(raw_tracepoint/lock_release), the kernel dispatches this through
+__bpf_trace_run() which bypasses trace_call_bpf() completely.
+
+Will the false positive lockdep warning still trigger for raw tracepoints
+since they lack this lockdep suppression logic?
+
+>  	ret =3D bpf_prog_run_array(rcu_dereference(call->prog_array),
+>  				 ctx, bpf_prog_run);
+> +	if (no_lockdep)
+> +		lockdep_on();
+>  	rcu_read_unlock();
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803-fix-lock-t=
+racepoint-bpf-lockdep-v1-1-91fb7afb526a@gmail.com?part=3D1
