@@ -1,108 +1,103 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57F439A4BA
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 07:48:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA2C3128B6;
+	Mon,  3 Aug 2026 07:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785743307; cv=none; b=W4vPwShrGcsOkgd5gFI6ZnI0yS3CDr371bIoAFiBjupel7nfz0JxTbdQlFSFk+LlIWFAL2kb3XMAFT8JQwq7eaVLzKcagMi2DJlFnTbK0IAJbgDinjHdA1DvhO39doOj1k4DUDT7AGsoWD6WjLdCoyBjOYdlJCEUvK5r/Egcxso=
+	t=1785743595; cv=none; b=Wv96Hy36l9En/mzA5cw+0c5jh8G/yLiKrhhr3MeW5cJsLDq/PPjCWP4OslZwQ82K8I0JnjwO2R8hNyz36dMk8ETLv+LeGs5JZUrmCU0HqcKFP4LirVQGjMy6k15c2iU19LyKvKZnga5TFhrT59PD/b54r6GYYMxP6rqTAdXrjiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785743307; c=relaxed/simple;
-	bh=WP7UlNML4eFKaUB/akoYBbWYzA9MjAvgTSFnhPtEPxs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=X4nYs9tC+qw3gIj6UwgGA4R5LIaU37+dCUB69PYflfCGrFgKdx59O21i2tF5wv7dFFXeISZ82O8rx2Irf3vUFfnsfV8UWcv9mbQ2doiYAd8hK30dwAR6hDHED9fNjSZI3DPv+3gHKXU346fFpYNA/Cn/R77+bnWuuriqWMwbr04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oCdbVwOm; arc=none smtp.client-ip=74.125.225.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785743595; c=relaxed/simple;
+	bh=zumDTv5YwuxKPGlkXIOGUk4c2rGlfu5DlUHEN/GR+Dc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZKZZwIly+PTaRwIVgaugN1c4hGZfhKo/lIvPPStEz2TSmt/mQAaBKFiQBUXj6PkLV3hoObbeMbFyUyXzViCfQawM9kTl19MQ6F4y9kT5dQ8dlqQpogZD6p9cKBn/erEhtMNgT8xXuh3n62ZtDipCjR5GRUtlqoSdOO6HZBUZ6CY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NKvUM6ui; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=+5gkZPfc; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oCdbVwOm"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49553da76dcso7093265e9.1
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 00:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785743304; x=1786348104; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=WP7UlNML4eFKaUB/akoYBbWYzA9MjAvgTSFnhPtEPxs=;
-        b=oCdbVwOmBt7BmJT1vmJdR83JB8maIhFNXFMsXkvgXuxfUAmIVlr/JC9jQAb1UjVnkL
-         7qr8wO4zBGhjZNezQo9oib8Iwexd/QyfminQyg+WW1ktOsJ/wbQI36SY1IvOiX9A07E7
-         /2SIRZyWz6x+hwazqIMbK3ggsreGpntLzxUUnnf/jsE9izvekkmuXYM8oLIFra2KnOs+
-         4dctW++HIIFMh5015CfBaZzxnHKlU2SSxsGhOpsyfXgUnVsLpLt2138N/QKc3Pg5sfD3
-         hBz1tDMWH+heVCsMHFfGusvmBxd4HT28rDZYbsb21EY6Pyj2F5OX1nZtYI2iW/E2n0HM
-         gvNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785743304; x=1786348104;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WP7UlNML4eFKaUB/akoYBbWYzA9MjAvgTSFnhPtEPxs=;
-        b=pPD3+OP+vOce1yHK9LCTe0Y4kztqj+LZ7PNSP/T9BdqWt06YhrjIKZ8Q/C1xph6rpZ
-         iBE0oRmFjKRa00jjF3Ze5kg3zngB0e73wWr04CIOfOWe0pItGPKtx1W03GY78VcFePy1
-         j6tIWjixrPjo1Oe0i+NWYjK0prkYuOvjnJZecwiIxJADPz4Bb38S91SpnHMtVnYf0/xe
-         G9GjObW3F26i4uSnJ+k0p0XxAhOwOO1eGKwJFMGkGXRC2AuQaXjNwlxPN/YoYwrgReBr
-         qZeOsn6UmwxbSKmS+yVRy13m3v4wup1WO4NLVaigsNDSI8GIOSF0cq+BiRxNb44cj8F7
-         zgaw==
-X-Gm-Message-State: AOJu0Yz10iYAhtxUi/Py+zBB6yJxFwjmXdFqW/GNX1d4+TMq23WWdyjR
-	1FDPwcGorSHkuBKusZN3mElVasLxkitPqKvyYI6KwxCluvx/2OFvYcfA
-X-Gm-Gg: AR+sD12Ma6qbBJQIVdpVPIJBAhghGW76INkV3jASByIpl1fXL6gJgK1CTkY40w2DKL1
-	RRK8tJIzr0hWCoYCNk7qhk0XpzXyvo4T/ZR1+fgPurEjgPQFEudxpp90IQIHNZNNCYUdLhh1EM/
-	rME6eSg2EFMngqC0qHWPVkmcplPbetHVqtoCGHD6Sa1yolJjK6t2r0mrPGlXhxaaTpy6hqiNGAV
-	vYgH+1iNcs2M+mqWO+eNzAsIxoMTkmk8QC07fXCcNKrKmlnbwjJ10T+fgEpuwSkiitPeBQPKws/
-	NfbuXyDkIH8Lpo2s/wa5rYlaOOKICATK/P6YUUWJCZrbY59MSUgl+g0dtXYUylVPqVnQQ9+hA58
-	BN4GsQUAFb5nhUtyFAkUbPoMW8G+Z8ak+ZAXCa92YTvG+zGaJs2eFyvIqWkue3+5QdMQa6V70Dh
-	lYag5oFgRhShWjWj0ROGDgCcmtGk/qtZ2Rvl37rG8++/14GSeNafjcMIIXUs0ctT7/01fNc+iA3
-	HZLoibSI3DUT+2wMiGmw4SkUfNmexO77rHjF32bJPdhfYG2j5Ve2zLkLkK872WhFBf/jyd/vIEL
-	YMWX/R6LUtMycW44dE/zeVLJEuQ=
-X-Received: by 2002:a05:600c:3e15:b0:495:5dcc:52b4 with SMTP id 5b1f17b1804b1-4980c649cbcmr196808925e9.3.1785743303614;
-        Mon, 03 Aug 2026 00:48:23 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4980878dd0asm203855055e9.14.2026.08.03.00.48.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 00:48:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NKvUM6ui";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="+5gkZPfc"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1785743592;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yLWrh3nf7QHINPJYlFQu73T+dpLYwGxbvXRvM6iGuYo=;
+	b=NKvUM6uiH67G2Glga6Gyd/RHeMbOHzCs5pyD61mXml9IDHx9jMIMp+VEEA8cxwXaT/Fxi7
+	8Ew+r/j6s2jYy77OUlXwTjvPEhsmLhq3sAzfY0A2nqf5stmSnZBFPQjqU0Y1PMxAaNJGTW
+	rP+uURPHsHUFONUdU/RtX+RnaLD9Y/lOZog1BqyEqhrOp/HjlouqedqlDNdPQymoW6t/qH
+	tB9Zpxh6tuL/Iy8yeB3JkJN+uYoaMLGQK6Wf/7uhXs+XOLvT+yXA41XrOXKAr/HRKgP9y8
+	eQZKl0PVSmN1HFr23XjzVywebdjcth9A9Aj6tcob1px1sFL6lw4akW47mKR/ag==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1785743592;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yLWrh3nf7QHINPJYlFQu73T+dpLYwGxbvXRvM6iGuYo=;
+	b=+5gkZPfcqtft+yePL1vgen5in5mW7TfwbntfE0PY7cy48Qroci1e2jgBK9vDJKe84x1W3/
+	LPEuvlvOhxZ6FfCQ==
+Date: Mon, 03 Aug 2026 09:52:39 +0200
+Subject: [PATCH bpf-next] btf: Remove the dependency on BPF_SYSCALL
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 09:48:22 +0200
-Message-Id: <DKF56470QYCP.3SPZ9DJ1AVLOK@gmail.com>
-Cc: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <martin.lau@linux.dev>,
- <davem@davemloft.net>, <greg@kroah.com>
-Subject: Re: [PATCH bpf v2 2/2] bpf: Reject untrusted pointers in
- refcount_acquire
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Ning Ding" <dingning04@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260726235030.1152542-1-dingning04@gmail.com>
- <20260726235030.1152542-3-dingning04@gmail.com>
- <DKEUKIOKSY28.2XVQVGCKLI40C@gmail.com>
- <CAJP4iuuYfqFChH1P2=3Q6WxHbMTNnAkCagR2k+Lr4W155gCj3A@mail.gmail.com>
- <DKF31NEIMOOB.2CPM6KGVXD73K@gmail.com>
- <CAJP4iuuz0T694PnyZmcq9f9PaQLX2kV+Sd+veQN+uydsvZ=BFA@mail.gmail.com>
- <DKF3XPW4HDQK.FDJMYDLGXZ60@gmail.com>
- <CAJP4iuskVz4RUrXKcnNhcAwMwcNjCP-Pzpc6=HqfWoDpHKWgWA@mail.gmail.com>
- <DKF4LVGKEKE2.2LUROK1TAUGZ0@gmail.com>
- <CAJP4iuvL2=72SUwjHeN7mDLKOSkM-KKvBVYrE40R+rnOJs9P-w@mail.gmail.com>
-In-Reply-To: <CAJP4iuvL2=72SUwjHeN7mDLKOSkM-KKvBVYrE40R+rnOJs9P-w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260803-btf-dep-bpf-syscall-v1-1-a03291e27888@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MywqDMBAAf0X23IUkBYX+Sukhj11dCGnISlHEf
+ 2/0ODAzByg1IYXXcECjn6h8Swf7GCAuvsyEkjqDM24009NiWBkTVQyVUXeNPmd01pD37IKJDL2
+ sjVi2+/qGSyy0rfA5zz+o6MKPbwAAAA==
+X-Change-ID: 20260731-btf-dep-bpf-syscall-210eaaf2b0cf
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785743592; l=1068;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=zumDTv5YwuxKPGlkXIOGUk4c2rGlfu5DlUHEN/GR+Dc=;
+ b=9YH686mREGpk9bDXOALVrlvxCCkq1BhnTtJToi8I6Y08E0LUXU2hzHQWZkS9D5s16d6b525TK
+ Y2Dty9vQBnJA8LNJWRtFlarkHZdvfVv2QyeSieMat8HaBZ8vgiYwqIC
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Mon Aug 3, 2026 at 9:44 AM CEST, Ning Ding wrote:
->> In addition, I would add a comment saying that the BPF_WRITE case for th=
-e
->> type_is_untrusted_ptr_alloc_obj() types was already rejected earlier, so=
- this
->> check only permits reads on them.
->
-> Thanks, I=E2=80=99m preparing the respin and will check every
-> type_is_ptr_alloc_obj() caller to decide whether it should use the new
-> stricter one or stay the same.
+BTF has become useful without the BPF syscall being present.
+It is used by debuggers and introspection tools like pahole.
+The dependency prevents the usage of BTF without pulling in the
+rest of the BPF subsystem.
 
-Sounds good. I'd still keep type_is_ptr_alloc_obj() as the naming for stric=
-ter
-one, but auditing all users sounds good. On quick skim I don't think we nee=
-d to
-relax anything except this case.
+Remove the dependency.
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+ lib/Kconfig.debug | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 1244dcac2294..f9dc5b60d834 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -399,7 +399,6 @@ config DEBUG_INFO_BTF
+ 	bool "Generate BTF type information"
+ 	depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
+ 	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
+-	depends on BPF_SYSCALL
+ 	depends on PAHOLE_VERSION >= 122
+ 	# pahole uses elfutils, which does not have support for Hexagon relocations
+ 	depends on !HEXAGON
+
+---
+base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+change-id: 20260731-btf-dep-bpf-syscall-210eaaf2b0cf
+
+Best regards,
+--  
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
