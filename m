@@ -1,174 +1,76 @@
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903B731E841
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 02:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161662E717B
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 02:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785724859; cv=none; b=WcIjz+UU0Ck0fdgf2doPF7ejP1deCLGgVe5NHcQOQENuUA7ukaYgUNsjJiTqYDTtiSg1sdqO6AFQc/h6mkSqxVYLKySHgTyOrflA/w/Qb8UJlAX88A/sRJtLHSDhJplNFD/zsMpC59q597CUkPs70PY6Pg+2sEYl8238V60twgE=
+	t=1785725057; cv=none; b=N99VKupuFq6x1uwTQgSz3tUvVejKpxZnlDC2v1f9kOuanxhIO9AUxGVSiqZ1nS1/qUZgOMHoG9IvMaq5h+UfZNYlT+fOL6/iLirvcY4zPsXEyeUNYEjRAQgP3HEAxQhzJFJZ+0cMHdykyBv4yWgnN6xg/I6E8WQbZLoUUt/LmS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785724859; c=relaxed/simple;
-	bh=V12ASciSa9z17EEHyojZHfiANVo6NJO3YJFnNUsbwcc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=iTCggkeMYYARc4blrjEbFEuf7r1hD0hsXQIo+7mzB0ykpsE+DAP1nTkOERMwR7XsOjAwXZ4C6Zconil6GDofZQp8BqTv7p2krKGlWW9wxBEyw2mRvAwN7hQ0YBc/+mHst805t9jH1o2hOheigDwT+JB9unPChjShz98TLpsG/Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nWuroo8p; arc=none smtp.client-ip=209.85.128.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785725057; c=relaxed/simple;
+	bh=K5s9lTAQPLH/FEQye48lkO8oviReYqMjahuDwGe1BD8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WPp8Jp8Hue+l0vNkHWoKinEYILTVgWTaErRfCMgkNAXtNyzxNeAvPYp+OEEf8YmOia2ueRE2GnoTZSJVS4I6GZCVu0Q07rOco/vYnTDCh6S+XBnCUFCva6aQDcczk/c21j8d83QPbOHKhFB2G0xdCqc35U1H/g6belLk8T9N4pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o/5jzC0A; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nWuroo8p"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-495437bb891so12011615e9.1
-        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 19:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785724854; x=1786329654; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Y09hJ5Io2GpptPqETZD+Irw+fm7ptkyY3J5ec/RiLWU=;
-        b=nWuroo8pFIWSz1ZrXbzjpDwycJyt8w0e+L70/V2vdhNGZ6m0OoMDlVSFdSbnXU1Be3
-         S2jjXF143epaLOOHnSwlA0sjzFCGwt0vPqeEIns+EnupnUzDPzMsgWq4X9JqXB1R1LI6
-         qknMRGMSd/hXBoy//G2k7sBr3Ka5pzGhtOfzrMWJ7sKwzd81/1dugdnMYH12BqpywSow
-         0OE2awBSxlFCJtlPMhuHHHy4dpjaZiwjAQfrFmyJThgptr00fw8zwblwtB0Kj5b61Wa7
-         uk9MvcIitkP1hxVEZRCvVQFvPTYRYIlXzBkcItpbNFbAOOqyM+yYQz9hytZkuDxIpLrh
-         sDUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785724854; x=1786329654;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Y09hJ5Io2GpptPqETZD+Irw+fm7ptkyY3J5ec/RiLWU=;
-        b=mXa+98/odLncU5Ox0V9WTIRcH4IIjF3sx/wWNQeI4CNlkPZMLGQwkPfHMvUnhPFSrB
-         gVwIix2lIPkRJ7YhYGivJM7XVeYWB1/cw9/7iBlR3ddHoFJeGm37ABSHtxlXCQfsJ+Ui
-         6REk6Z2knWwnRKOAxSzxfQQcmRv9hlFJ/do3JRg+ufhueas0soL82jh/YMQvzV7Fdlqs
-         Bghp0YMVejrO8NzZEb/euKMaL+b7bE3LPHEYIaUEPr0cgJflKLPGF4RdvJ4ReAjxbFR+
-         QcmaEWncxC4FjqLvJJDQ5VpDig5AB6YLz1FX23CC7wm5GsLSNsbmEbq3reB6NMQnm+aF
-         fK1Q==
-X-Forwarded-Encrypted: i=1; AHgh+RoYizjdrCYeaojt+wfsOPNT2N8GmyGQi0SCV/pe2ShRLyme6/F37V8ZXQksgpTXTCulT5o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yztxbza+RvLCW389Rf2RLE0IJR/sfXbJnPWRfw7rkKkqEi7QO6O
-	nWqTzC39t5g0EzbSr89Ejsfya/ydUMFwiU+Rlf8K4AAvw1wFAQgHhlUlU8xgCu6Q
-X-Gm-Gg: AR+sD11LQx9lhppZCBP4/DEeVEnqZIjZ98Qoc/NgzIHQ3IobLkqI8Urkj+v994jPPez
-	oqaO1DMKFGFyiTDyLjM2jDW7b5zEzSkqH++7r+sVjgGWA2A1Kc85X4jsuvZ5Kg2N7q8G1NrqBqO
-	/zykAPDuZKnrRriWj4V5OH/ZD6swLe6TUkoS9HEGEmR4/DPxyYEvOIDwqkODu8xplLW4WJ98nie
-	Oz3WsrXWHNO8X+KE7uEHQtdamFAgWq8x+Fbv2zyPVg0P41XJle2wzRj3VIw1mP7Pf0IwxroJWoT
-	Ix3IfYUxv8V3mqG7kTnoVEPKZNN/PYrPcQjpJUbdUnhyg8WChfD+rur0QzMcQjUiKRSN4RuMudi
-	MXHVN90cYObdiPjFxtBdb1+HrcQxbGx2NSKQiBrT1Xi/9cXfaujcxt0jXCFQxANuoq7pQwllPdu
-	vFnpNqdCqFLr0h/PBllzYNaUKjScnaIac4NpESrrlgrOAfr7JLHm1Op4fh/Cp0tb5ZMy8S1mhS4
-	paTzwB6vwX4qU28oBIk7Yw6VsT3pVMdEIsWTGoPiUuKb2gu8JYRtH/O+fOqtFkTnd3sKH6+Tm2J
-	sD1PmIdF2Ky5QJT1Dhhp8mCBVoM=
-X-Received: by 2002:a05:600c:2d14:b0:493:e686:6134 with SMTP id 5b1f17b1804b1-4980f00bfd5mr110879745e9.7.1785724854222;
-        Sun, 02 Aug 2026 19:40:54 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd458adc9sm30089527f8f.27.2026.08.02.19.40.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 19:40:52 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o/5jzC0A"
+Message-ID: <a68933c3-39d6-414e-b869-bb3fd1a6b4ba@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785725052;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IaMVPcpYZB9rfzDTPJpCcq6FfrbIBXVXDRiLOonr2y4=;
+	b=o/5jzC0A+DN9k4z4e8lt4e557gg1qfJvrH/ssib85T1UJ9IghuOeHSnBKFV40eYczdoe9o
+	b91BQhtfrCcS9x2msiG9q0Ym9LIK50Z2kJ3G3bSidiLKnoCXUDxcTFNrF7AjPBBg55zQ9X
+	TiBilDU0qG/u0GGN0AlCf77pWYO2ixg=
+Date: Mon, 3 Aug 2026 10:44:04 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next] bpf: add BPF_F_SEALED flag to seal BPF links at
+ creation
+To: David Windsor <dwindsor@gmail.com>, bpf@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+References: <20260803021643.2189641-1-dwindsor@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260803021643.2189641-1-dwindsor@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 04:40:50 +0200
-Message-Id: <DKEYMNC99ODB.23WY3OTYMSHYR@gmail.com>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <pulehui@huawei.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2] bpf: roll back stream capacity when
- allocation fails
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Jianlin Shi" <shijianlin11@foxmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
- <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
-In-Reply-To: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon Jul 20, 2026 at 7:13 AM CEST, Jianlin Shi wrote:
-> bpf_stream_push_str() accounts the string length before allocating a
-> stream element. If the allocation fails, the length remains charged even
-> though no element is queued and therefore cannot be released by a reader.
-> Repeated failures can exhaust the stream capacity permanently until the
-> BPF program is freed.
->
-> Roll back the capacity charge when creating the stream element fails.
->
-> Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
-> Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
-> ---
+On 3/8/26 10:16, David Windsor wrote:
+> Introduce a new BPF_F_SEALED flag for BPF_LINK_CREATE that creates the
+> link permanently sealed. A sealed link can never have its program
+> replaced via BPF_LINK_UPDATE, can never be detached via BPF_LINK_DETACH,
+> and holds an extra self-reference that is never released, so the link and
+> its program attachment persist until the machine reboots, even after user
+> space closes every fd referring to it. There is no way to unseal a link.
+> 
+> The sealed state is tracked by a new bool field on struct bpf_link.
 
-Sorry about the delay. This particular fix is correct, but I'd prefer if we
-could refactor bpf_stream_release_capacity() to accept length as its second
-parameter and then use it here, to drop dependency on 'elem'. That also bet=
-ter
-mirrors the consume side.
 
-As for other Sashiko concerns, since you will respin, you can append more
-patches to the series.
+Why do you want BPF_F_SEALED? What's your case for it?
 
-Regarding the three issues pointed out by Sashiko in reply to v2, they all =
-look
-valid to me. For the staging leak, ss->len should only be increased after
-__bpf_stream_push_str() succeeds. We shoulf fix that.
+I think 'sealed' should be set before allocating the FD to avoid the
+race issues reported by Sashiko.
 
-On the read side, account for any bytes successfully copied before a fault =
-and
-return that byte count, returning -EFAULT only when no bytes were copied. S=
-o a
-partial buffer which allows copying some bytes successfully and fails the r=
-est,
-we should return the partial count of bytes copied.
+Thanks,
+Leon
 
-For oversized formatted output, keeping the current behavior of dropping th=
-e
-message seems reasonable, but -ENOMEM is misleading. Since the formatter's
-return value excludes the trailing NUL and a value greater than or equal to
-MAX_BPRINTF_BUF indicates truncation, please reject such lengths with -E2BI=
-G,
-preferably before charging stream capacity. This also fixes the boundary ca=
-se
-where a length of MAX_BPRINTF_BUF currently copies the trailing NUL into th=
-e
-stream.
-
-So use the actual formatted length, capped at MAX_BPRINTF_BUF - 1 (vscnprin=
-tf()
-for the staged path), so oversized messages are truncated without copying t=
-he
-trailing NUL.
-
-Please also add selftests for such cases. For the partial unmapped buffer, =
-you
-could map a page and pass a buffer straddling the page boundary, such that =
-we
-take a fault when copying into the remainder.
-
-pw-bot: cr
-
-> v2:
-> - Retarget to bpf-next as suggested by Pu Lehui.
->
->  kernel/bpf/stream.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-> index be9ce98e9..4b8a74b91 100644
-> --- a/kernel/bpf/stream.c
-> +++ b/kernel/bpf/stream.c
-> @@ -79,7 +79,14 @@ static int bpf_stream_push_str(struct bpf_stream *stre=
-am, const char *str, int l
->  {
->  	int ret =3D bpf_stream_consume_capacity(stream, len);
->
-> -	return ret ?: __bpf_stream_push_str(&stream->log, str, len);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D __bpf_stream_push_str(&stream->log, str, len);
-> +	if (ret)
-> +		atomic_sub(len, &stream->capacity);
-> +
-> +	return ret;
->  }
->
->  static struct bpf_stream *bpf_stream_get(enum bpf_stream_id stream_id, s=
-truct bpf_prog_aux *aux)
-
+> [...]
