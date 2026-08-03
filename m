@@ -1,84 +1,88 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F3F34251B
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 11:25:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FF43B4EB3
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 11:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785756333; cv=none; b=dxsd168MtC3+jxS2VFco/1yLHi5u3LEnyaN5hyUnhkB4SZ+xbvSbnSXb5YUxceBbWTj9yC/v234C/MPoZAp+3DPUUjhSfIxEsYPHPAqBWk/J6bZPBFrBeFdHPAs81dBMiDEYmp/1UhIrSv5jUU3xfgPyB+iBwIVM5hzh4pO+xww=
+	t=1785756340; cv=none; b=GrU1CH5SQTRW5/o5w7iRpnElZPUCkfV1NSX+qR/RClPGX9mdjAun5KkwGDl/BjneSEID+E3P/EY/13kgrP0Cm7PmavZhK6P2t8bPhRLobKyXSvry4kxGsTi0zlN/VRJ/rtDNuDGSENQ9nABYa7j0WSiAtkjJ59nF7pjIzygi4EI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785756333; c=relaxed/simple;
-	bh=Y9AIsjPbIPGueDse8hHLQDqbfy+XindtGyBeUBP/rvM=;
+	s=arc-20240116; t=1785756340; c=relaxed/simple;
+	bh=3D5E0Lg5JRXAFqtPciAWQdBsJA6gxPLeVVy3eBFgJWw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k0lrnPoOSNV2cgmsFm09UhmeF0Qf31BWnmR+YW0ViMoBsCnKq6lcNejribua/4SLOZTXK7Vxoon0jpHXR+PdesmIxDWbYq9lhgWu2UX6JDR62t3QU0SpL4SrEAvnkr1cKw9b1nHsVAJw5ddIOf3X8SDvJdCxoce6Q3bpQtHtDaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7Ewn73U; arc=none smtp.client-ip=209.85.214.180
+	 MIME-Version; b=Sa8SehTJOi2SNyEXMTIhQ8WCrGKSZ1EExoDc14sTWKQ6MoAup79YQUO9/uJZ/T3XKiwKjy/R3+p6RVI/XuPej/8KjCrgg4bjiGDhSiB/jxMcCengbQVeA60epymiaduXkJNmrQpJSMxHQ0HIWk6MBoXKLSSz8UCvYMkyzOgoslw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bmk9Wrpk; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7Ewn73U"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cc7ef7ec27so35639715ad.1
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 04:25:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bmk9Wrpk"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2cab973140bso39231205ad.3
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 04:25:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785756332; x=1786361132; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785756337; x=1786361137; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=k5tDp607U3XC+GO+sC+Kbg0SxU3/bHhXF0A90r92Gwc=;
-        b=S7Ewn73UrqgDwTQJGK1LAqjznD8pKBeh0BS7XZMFPS474diUB1PCzn8kakXEqN5x9y
-         iEXvYo3mhJJWC/cmHQ4hO5dlg5cZKucC4g7r0SmmzA7od9l4cAmbEP4Yc6lgWyt2rz2x
-         MlbNko9QoRf2vC0BpG56ReCP2wuk6wfx9Bp4WYmP0oQXcyUpCfxZ7d1aehAhU7YpJI7T
-         ipHHOg1MtWxDbILdaVWXCVXLkwXtOFRaE9iyZsu6PMqtBHLmyY3Ki6V3dr9uYnrzMt8c
-         xC7zHwAcoRp9G9tZbSCcYlCfdM50EtckpzS07hA6r3zyYJsFhqfU3mbACKqJTZAE0sU8
-         zQnA==
+        bh=Ff8M+EQ6msWxWzt89+Hwii7UDIx1WOzy+ofanQLYJRM=;
+        b=bmk9WrpkeR/pHSdMq+DQUhUKI25DBP9CqCMreF9NyDwkTE4jDS+ZqKz3I9yTrMbvUc
+         fYFgauIGuym/mVVFU1lDg9KPvgy2t39N4nOwZRJPrziG37Yj8gcMyl/TIYeF7zJPMsJO
+         dBCeYamCWdJAWT8wagm+ED0CL9VqN9xUWSLvio+hYjrLZbAiolWT+aK2+fddOQcdmPos
+         AXv/Zf6b7cKbgF/BZFpRF5DCBREy3e9IgsBlsS48wr9x7how26Y4zzwIDhohnC1KwAvr
+         L6H05UwrE0gwEtufEQh5QK1FZQNs/KeS06uylRCcs04X7YeUtmVmd0q2qX2HuNZch/Xb
+         UWhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785756332; x=1786361132;
+        d=1e100.net; s=20251104; t=1785756337; x=1786361137;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=k5tDp607U3XC+GO+sC+Kbg0SxU3/bHhXF0A90r92Gwc=;
-        b=isIhnMuyaP8upDfPay+Lx+3juToPO1jINUWgVnYrWaqoYWBakzdQoQ6rz/3Y0Vle/o
-         tFIMtNzp4LPy4pFchZHSUNuMNXoGUQ6u/5iMzPVclQwJP1BVBZbQ4mJcUFEPz0STNTDU
-         3dXVuUkV+8+TnCWoczLELIzkrMhUnpbJOa+JqAxfNcB5zKrwmNBfoiBO6xIS0GOEkjX6
-         PeFYjA2FBnlMBM3FYlh0o4hpz0BF0MRQ9LSz4wokhu7PW37mxAzlOTsMQklNbP7pVW3P
-         lWKjeFNro+RyaWM5jaaXnGimRsQog4MH9+U9zJB59+FlZ4PWt60HS7bd1rWSfmmnlJ6X
-         s3rg==
-X-Gm-Message-State: AOJu0YwjZNAavcg6ie8FJ22IciSkuNTfaYvAsLTQEhp79A/lE+aRu1OL
-	tEPtFXxom3waAukeyiudJmhEcQCoEf2TDoqCtfp+cgB93AKT+x3/d6ao0oShKU8j
-X-Gm-Gg: AR+sD11f3DFUi+MTjSBgFkGV4zs+dEZq2GCbYHr70HXVJOEE2LTXNhp9xIu63SKfAtP
-	VeT9T3mUSZMh8kpmkZGYNhRT0T5Aj1Uo/TiDT0Id1917CaD32+uhl7rzXA14UKkDaApn72FZ+9s
-	jtaNK7jNIEZ3d+F1/1/txbxy+sc0mxLaExX7Jk/eGdOcB5O6zitAdCfthU7aowbKOlXwM+Ra84r
-	csbrBzmFdV5d80iiWeiEupUzbk3DvjAp/ye9J54Nfhzat2P767R4jCsGtRIyYfEEwD/HBQFClCQ
-	q9tIvt4E3q8tYR6jLCuPbvHqjZ6f+094Ug49uWeD/pjmPW24FCJG/9qpGNN+LeUN+LwJsrYILLw
-	il3eiPu7kkr39W0y/Nv3xJKGYNtVIL/i6r38ejafeXu0eq8mVKJb1R3N6IRQWmV5s9RPDlrLMRB
-	vcNSNJ1nydFDRvJrtA09AGanqFsxrjpnrj2w1jeEV9FwIUtEFdZldwR95jKrYDI4VYm4tJLLuxh
-	PGSqcjOGJaW48uo
-X-Received: by 2002:a17:903:1a06:b0:2ca:d172:7228 with SMTP id d9443c01a7336-2d0521b6908mr100228275ad.11.1785756331838;
-        Mon, 03 Aug 2026 04:25:31 -0700 (PDT)
+        bh=Ff8M+EQ6msWxWzt89+Hwii7UDIx1WOzy+ofanQLYJRM=;
+        b=amM824ymXtFhbDpmt6mqZJ0Jk7JZldwLULZPaADe2gukox6g7OjO4J5tEkRMZpy/Ym
+         jdI8MPiGMUvAKRCW1gF23VTIRNlwjPVua/ESSZq2UxrrRnp1HW7UKHnhKHrPQsQ3LFvq
+         9+cO+ToI3Q/FWygOXoY1gXHHCLHdYZFr9zPN4sgy2TVghlYFho7wq44wTiPnNaYqLpwy
+         hzsFdi9mx/NvAdBi6eIsUKdwM+xYx38oj9SBoNdGEREvHAw24a8XS4LnBKr4giw2lsDM
+         j/0FiYEGt/tmHKFtiEjXG2CHm6gTmIPr7ggrCUElAVgmts6skNk1rVh6kRlkIKDvbTYf
+         a5xg==
+X-Gm-Message-State: AOJu0Yx3SzZNzbbdDj7MvSHef4v3+HIlRdc7zbkvRhjJ5XU/mjywSf2C
+	QhvoP7wu9N5l/HKYgR/0DnF7SmImMz1INjHei+eVssHm9Ydr3id+xo5RD9RWkaiC
+X-Gm-Gg: AR+sD10/HL75qA2+KFUszNtWhWYcGykQLu2yzpqJ8zqiqbzuQeYEobQlH6N0Zmz2rDy
+	2tnQEk6MBf6v9+5J1QfSjzfVZcA2DbPOx0zJn4Iqwf4c1qHSGWSUU4xY9qWEKjUHeYhib/7ZnFw
+	T9zfG2SUYH9U/hklEzcFgKNIlNxYGJtRonxBvwd46j6yQrxvtLtc3HfkTyyeZhSxxOEJO0U1l56
+	azUCDnldBswUZdDDzkRTEYehJ9Cfi0sDOaw60VdADl4RSzWfVTK8ihfAAUxS4jBC7IQ4yo7ijPj
+	0otgdHAMzVEibboL7rQT6x+/6K0PvYpSS+C5v0WrzBpUbrM/eWAmVHrQtoeLJb5F9WzxF5K6Dhl
+	z4esPOHaAcunu5nGdkaEWI8Aovf9XSuAkXGZjhf0oqN7X+wQthUBIYBf+9k9Xese2mPYjOPtpc1
+	/xSn0YABQTI3gZQ5iUQ2bF1e59t0XeKgBfVJ2ucyiIA/hLNGp1QMoHgaPH9uIEAcOEa6ChfVPNV
+	3/90F78+z1iJXpLDv6VroJ/WVA=
+X-Received: by 2002:a17:902:e950:b0:2c6:90ec:f601 with SMTP id d9443c01a7336-2d05219d40emr97049545ad.8.1785756337361;
+        Mon, 03 Aug 2026 04:25:37 -0700 (PDT)
 Received: from patterson.cs.ubc.ca (patterson.cs.ubc.ca. [198.162.52.65])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04ae5a91asm36190685ad.21.2026.08.03.04.25.31
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04ae5a91asm36190685ad.21.2026.08.03.04.25.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 04:25:31 -0700 (PDT)
+        Mon, 03 Aug 2026 04:25:36 -0700 (PDT)
 From: Ning Ding <dingning04@gmail.com>
 To: bpf@vger.kernel.org
 Cc: memxor@gmail.com,
 	greg@kroah.com,
 	Ning Ding <dingning04@gmail.com>,
-	stable@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Dave Marchevsky <davemarchevsky@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Justin Suess <utilityemal77@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Kaitao Cheng <chengkaitao@kylinos.cn>,
+	Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v3 1/4] bpf: Keep refcount_acquire nullable for borrowed RCU kptrs
-Date: Mon,  3 Aug 2026 04:22:08 -0700
-Message-ID: <20260803112218.3361213-2-dingning04@gmail.com>
+Subject: [PATCH bpf v3 2/4] selftests/bpf: Test refcount_acquire return nullability
+Date: Mon,  3 Aug 2026 04:22:09 -0700
+Message-ID: <20260803112218.3361213-3-dingning04@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260803112218.3361213-1-dingning04@gmail.com>
 References: <20260803112218.3361213-1-dingning04@gmail.com>
@@ -90,38 +94,179 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The verifier can mistake an RCU-loaded map kptr for an owned reference and
-assume bpf_refcount_acquire() cannot return NULL. The kfunc uses
-refcount_inc_not_zero(), so it can return NULL after the last reference is
-dropped. Passing that unchecked result to bpf_obj_drop() can crash the
-kernel.
+The verifier could accept an unchecked bpf_refcount_acquire() result for a
+borrowed RCU-loaded map kptr. If the call returns NULL, passing the result
+to bpf_obj_drop() can crash the kernel.
 
-Only treat the argument as owned when the verifier tracks an acquired
-reference for it. Borrowed pointers remain nullable, while owned pointers
-keep the existing behavior.
+Add tests showing that an owned input remains non-NULL, a checked borrowed
+result is accepted, and an unchecked borrowed result is rejected.
 
-Fixes: 1b12171533a9 ("bpf: Mark direct ld of stashed bpf_{rb,list}_node as non-owning ref")
-Cc: stable@vger.kernel.org
 Assisted-by: Codex:gpt-5.5
 Assisted-by: ChatGPT:GPT-5.6-Thinking
 Signed-off-by: Ning Ding <dingning04@gmail.com>
 ---
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/bpf/progs/refcounted_kptr.c     | 61 +++++++++++++++++++
+ .../bpf/progs/refcounted_kptr_fail.c          | 47 ++++++++++++++
+ 2 files changed, 108 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fdc5fbb1f78ca..c47328be2505e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12419,7 +12419,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 					reg_arg_name(env, argno));
- 				return -EINVAL;
- 			}
--			if (!type_is_non_owning_ref(reg->type))
-+			if (!type_is_non_owning_ref(reg->type) && reg_is_referenced(env, reg))
- 				meta->arg_owning_ref = true;
+diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+index 61906f48025cc..fd35093285c0d 100644
+--- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
++++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+@@ -23,6 +23,15 @@ struct map_value {
+ 	struct node_data __kptr *node;
+ };
  
- 			rec = reg_btf_record(reg);
++struct node_refcount_only {
++	long key;
++	struct bpf_refcount refcount;
++};
++
++struct map_value_refcount_only {
++	struct node_refcount_only __kptr *node;
++};
++
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY);
+ 	__type(key, int);
+@@ -30,6 +39,13 @@ struct {
+ 	__uint(max_entries, 2);
+ } stashed_nodes SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, int);
++	__type(value, struct map_value_refcount_only);
++	__uint(max_entries, 1);
++} stashed_refcount_only SEC(".maps");
++
+ struct node_acquire {
+ 	long key;
+ 	long data;
+@@ -832,6 +848,51 @@ long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("tc")
++__success
++long refcount_acquire_owning_input_no_null_check(void *ctx)
++{
++	struct node_refcount_only *n, *m;
++
++	n = bpf_obj_new(typeof(*n));
++	if (!n)
++		return 1;
++
++	m = bpf_refcount_acquire(n);
++	bpf_obj_drop(m);
++	bpf_obj_drop(n);
++
++	return 0;
++}
++
++SEC("tc")
++__success
++long refcount_acquire_rcu_map_kptr_null_checked(void *ctx)
++{
++	struct map_value_refcount_only *mapval;
++	struct node_refcount_only *n, *m;
++	int idx = 0;
++
++	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
++	if (!mapval)
++		return 1;
++
++	bpf_rcu_read_lock();
++	n = mapval->node;
++	if (!n) {
++		bpf_rcu_read_unlock();
++		return 2;
++	}
++	m = bpf_refcount_acquire(n);
++	bpf_rcu_read_unlock();
++
++	if (!m)
++		return 3;
++	bpf_obj_drop(m);
++
++	return 0;
++}
++
+ static long __stash_map_empty_xchg(struct node_data *n, int idx)
+ {
+ 	struct map_value *mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
+diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+index 024ef2aae2008..acd3e81a39168 100644
+--- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+@@ -19,6 +19,15 @@ struct node_refcounted {
+ 	struct bpf_refcount refcount;
+ };
+ 
++struct node_refcount_only {
++	long key;
++	struct bpf_refcount refcount;
++};
++
++struct map_value_refcount_only {
++	struct node_refcount_only __kptr *node;
++};
++
+ extern void bpf_rcu_read_lock(void) __ksym;
+ extern void bpf_rcu_read_unlock(void) __ksym;
+ 
+@@ -28,6 +37,13 @@ private(A) struct bpf_rb_root groot __contains(node_acquire, node);
+ private(B) struct bpf_spin_lock lock;
+ private(B) struct bpf_list_head head __contains(node_refcounted, list);
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, int);
++	__type(value, struct map_value_refcount_only);
++	__uint(max_entries, 1);
++} stashed_refcount_only SEC(".maps");
++
+ static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
+ {
+ 	struct node_acquire *node_a;
+@@ -80,6 +96,37 @@ long refcount_acquire_maybe_null(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("?tc")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
++long refcount_acquire_rcu_map_kptr_unchecked_drop(void *ctx)
++{
++	struct map_value_refcount_only *mapval;
++	struct node_refcount_only *tmp, *n, *m;
++	int idx = 0;
++
++	tmp = bpf_obj_new(typeof(*tmp));
++	if (!tmp)
++		return 3;
++	bpf_obj_drop(tmp);
++
++	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
++	if (!mapval)
++		return 1;
++
++	bpf_rcu_read_lock();
++	n = mapval->node;
++	if (!n) {
++		bpf_rcu_read_unlock();
++		return 2;
++	}
++	m = bpf_refcount_acquire(n);
++	bpf_rcu_read_unlock();
++
++	bpf_obj_drop(m);
++
++	return 0;
++}
++
+ SEC("?tc")
+ __failure __msg("Unreleased reference id=3 alloc_insn={{[0-9]+}}")
+ long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
 -- 
 2.43.0
 
