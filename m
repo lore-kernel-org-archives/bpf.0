@@ -1,135 +1,165 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41BE401A38;
-	Mon,  3 Aug 2026 11:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F704028C4
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 11:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785756743; cv=none; b=inOTQwu+0Cbq64EHRmnHB/IRx/1PEvTRFrKROnVnVPOUiqL4PAL/ms8okA+5RU94K8Lp4l1ybSQt8Fti9iD9yZ8Mb0j1eJDPHwfmMTLZURwaYQ84z0tQOSDVCsx2ZTeixlta3SkX8Aes/MJIpqD1/w2lxPxZytLa3JQngikGm1Y=
+	t=1785757370; cv=none; b=mxGJ9IxtKwxezYrNxv2/ue4nih9DjwUwp4vFVQ1et1pBZuf5/tq6uNuBVoeAvXKjNybCr2yEXFDs1rN5JI7wXEs5Ca8AamGecLNguU6xl7xB63BXW69yCHtaARYet20t5xN/8539DA2d/7OEfczIhyGkNRcJc+mqu5uefWS9BRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785756743; c=relaxed/simple;
-	bh=cwnNEFwBgSf0j3qHZHUIxmgsg6LjKcjbotuwnnZFla8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZYOm9El4u+7y7OwC0WL9p4T6+niUtfenFHpeU8sOYGepgcD6VkxlT/GTLU5sDAivzF35szxsQPgUgm1l7p3w8+wtB5j6CMa1jm+H0eOtLXAl0B5Oc3Lwc4856xsSOdxJmpoOKNFJOZwbiCsIp2B6VdRoSZP+gLI9ihiOcFfMNCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tRADKcL8; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1785757370; c=relaxed/simple;
+	bh=EoBJn323TIy1KMOZADmdbo1IaAhJXEp2vRvB924koCw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xg7g0EqlyI4mJAhJcdgBvDsz0uOIBjgGx3vRlEQT9a6xMgFQG9f8DsRF+juseX1AKmpvdaXwvIFwiniic3KEL7GYYYXlrdqXwSZEsDiGROPurkNX8rwsFsK5NjH5JrScIxZzS6+JLiMUggwToQzqOqGAF1S/vcWaWcoM8Ap7bBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=S5HP9WXs; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tRADKcL8"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 672Llgu4167209;
-	Mon, 3 Aug 2026 11:32:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=LtVbvSuBXjK37EiKWKtzc+M2G/g6wv
-	6sTQsbFc+thKs=; b=tRADKcL89WwYouQwSfue3HAeGc+0KFFQlt8ttudQJ+gwoT
-	Qk7MSLzXiWlmh1JiNPxuP53kmvYpaPewVkyzY8VamjBxFMLwupB10QFt9v2MTrHv
-	CHPJ+WGDi6OWnq4bjVXGT1+S9mTdkNY4sTPfps7cxU5u8PmGdm16AVl1qjbQkse7
-	tjciNktTy3DsYn901k18qJRYc4SsmksSyAoD+lB9GUYgITv2snvzcAAPioz4wg3I
-	M/vB5aulu8XLkkGizzMMBJPOt21athk9FPMPN0ClrKNQD6kzAqCqJMoyfnP9kZ5h
-	GpXcWEk3QkXuvWOVU3DhGh+oh5a0bVo1aC1YmiYw==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fs77g0a04-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Aug 2026 11:32:03 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 673BQKpY021651;
-	Mon, 3 Aug 2026 11:32:02 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fsv4jw4m1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Aug 2026 11:32:02 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 673BVtoB29688218
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 3 Aug 2026 11:31:55 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 984292004B;
-	Mon,  3 Aug 2026 11:31:55 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F36DF20043;
-	Mon,  3 Aug 2026 11:31:54 +0000 (GMT)
-Received: from localhost (unknown [9.87.133.185])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon,  3 Aug 2026 11:31:54 +0000 (GMT)
-Date: Mon, 3 Aug 2026 13:31:53 +0200
-From: Vasily Gorbik <gor@linux.ibm.com>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
-        Juergen Christ <jchrist@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Dominik Steenken <dost@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Maxim Khmelevskii <max@linux.ibm.com>,
-        Jens Remus <jremus@linux.ibm.com>,
-        Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>, llvm@lists.linux.dev,
-        bpf@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] s390: Add kCFI support
-Message-ID: <ttj6yp5@ub.hpns>
-References: <20260727140514.116501-1-hca@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="S5HP9WXs"
+Message-ID: <db99502e-ddf8-42e4-beb5-65d866a820ea@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785757356;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WDaB8Vf+UkRRfG5S/URFrbambtsY/cWlKTatsH5ESA8=;
+	b=S5HP9WXsgdXtiP9X1r6rvUgv9HgG6ipC2bNs1YtBcagjqgc0+irFyU5CBGP+n8B9yoDJUi
+	KigEmokgZbhCX1SWLlEfSKJfYBZt95qJx/YOeXRpHOr7udQxRp3pcAGI7bw4uBJPrBz05D
+	gNjVUvM/ARCwroi/9Bu/ySw7dgLi564=
+Date: Mon, 3 Aug 2026 19:42:19 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260727140514.116501-1-hca@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODAzMDEwMSBTYWx0ZWRfX0+RsWmMmZc0a
- 2S2u6hy+sk+he+w/r57W/ARqowhb+DKzOWwkPqc9m1G9bcqmHINHoFezNX5Gf64cjOHUtRtwJKJ
- 4IudQuLn0EDhuRGErtVZ7FIPogS+pQWeiOuUNzGRRUQf2PwWkQCseRk5JPiSpmNv0cly1ldHQrp
- aLEOucUiRpC2eMD82+WPANPAVmjHTMYSNK6tSZUumltY7M7cGfRpEsTKiP6o+W1PTo56nKuzBCY
- w4KsCtbx8SpSJ9M4N5iiauxZTBUxV7ni9/uv1N85ptHKLpXtdHP0nIHUtvZrhnJz/qVO64zu+6x
- geuc8EA19GWqmVy2vsLiYv0ghDuNX7sjvh10L/DgnEGSYvfrRLGEZ8yvV8cgW67fhorcWawZ4Dj
- SrNh8gySljOkPT2yIgGyAZOwW7qB5tBQr1BNlODiTNsiAt920/Lc2qgx/5JdEr0bTSTexABAfaO
- zyfU/d35u9GDjtzJ76A==
-X-Authority-Analysis: v=2.4 cv=WIFPmHsR c=1 sm=1 tr=0 ts=6a707c33 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=iaD2VS8y51Av8r_WQYEA:9
- a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: S5Yxxw9XBRsJyYqAAF0aNjAGA9Youc-a
-X-Proofpoint-ORIG-GUID: dqxDAyJQK-Pp7rMXWZvQv9Ftv1oBawp7
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODAzMDEwMSBTYWx0ZWRfX+ICqe7BwLuwU
- vX60jDd02PqQOIEUMy2opcpdiQp+g3Ax/Itv+CvTtgb7TaeA+CPOo+pHvtOtI6C8OWrmOjUK/0P
- R9N75l7zUB8UyYZlclPMSy9P6Mx78wE=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-02_06,2026-07-30_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0 malwarescore=0
- suspectscore=0 clxscore=1011 impostorscore=0 bulkscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608030101
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Add a test for arena fault-in
+ under memory.max
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev
+References: <20260727062521.376231-1-jiayuan.chen@linux.dev>
+ <20260727062521.376231-4-jiayuan.chen@linux.dev>
+ <DK9SMAEXY39E.195HV3J7GB8AI@etsalapatis.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <DK9SMAEXY39E.195HV3J7GB8AI@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jul 27, 2026 at 04:05:07PM +0200, Heiko Carstens wrote:
-> Heiko Carstens (6):
->   s390/tools: Pass symbol name to do_relocs()
->   s390/tools/relocs: Ignore __kcfi_typeid_ relocations
->   s390: Add ftrace_stub_graph
->   s390/diag: Generate CFI type information for assembly functions
->   s390/bpf: Add kCFI support
->   s390/Kconfig: Select ARCH_SUPPORTS_CFI
-> 
->  arch/s390/Kconfig               |   2 +
->  arch/s390/include/asm/cfi.h     |   7 ++
->  arch/s390/kernel/mcount.S       |   9 +-
->  arch/s390/kernel/text_amode31.S |  13 +--
->  arch/s390/net/bpf_jit_comp.c    |  28 +++++-
->  arch/s390/tools/relocs.c        | 158 +++++++++++++++++++++++++++++++-
->  6 files changed, 203 insertions(+), 14 deletions(-)
->  create mode 100644 arch/s390/include/asm/cfi.h
 
-Applied, thank you!
+On 7/28/26 8:54 AM, Emil Tsalapatis wrote:
+> On Mon Jul 27, 2026 at 2:24 AM EDT, Jiayuan Chen wrote:
+>> A child joins a memcg capped at 64M and faults an arena in until it runs
+>> out of the budget. Without the kernel fix the child dies with SIGSEGV on
+>> a valid arena address; with it, the child is killed by the memcg OOM
+>> killer.
+>>
+>> With the fix:
+>>
+>>    serial_test_arena_memcg:PASS:child killed by signal
+>>    serial_test_arena_memcg:PASS:not killed by SIGSEGV
+>>    #5       arena_memcg:OK
+>>
+>>    # dmesg
+>>     arena_vm_fault+0x655/0xa90
+>>    Memory cgroup out of memory: Killed process 512, file-rss:67920kB
+>>
+>> Without the fix:
+>>
+>>    serial_test_arena_memcg:PASS:child killed by signal
+>>    serial_test_arena_memcg:FAIL:not killed by SIGSEGV: actual 11
+>>    #5       arena_memcg:FAIL
+>>
+>>    # dmesg
+>>    test_progs[508]: segfault at 100004025000 ...
+>>
+>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>> ---
+>>   .../selftests/bpf/prog_tests/arena_memcg.c    | 158 ++++++++++++++++++
+>>   .../testing/selftests/bpf/progs/arena_memcg.c |  24 +++
+>>   2 files changed, 182 insertions(+)
+>>   create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+>>   create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+>> new file mode 100644
+>> index 000000000000..9665946fa29e
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+>> @@ -0,0 +1,158 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +#include <test_progs.h>
+>> +#include <fcntl.h>
+>> +#include <signal.h>
+>> +#include <sys/mman.h>
+>> +#include <sys/wait.h>
+>> +#include <unistd.h>
+>> +#include <sys/user.h>
+>> +#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
+>> +#include <unistd.h>
+>> +#define PAGE_SIZE getpagesize()
+>> +#endif
+>> +
+>> +#include "cgroup_helpers.h"
+>> +#include "arena_memcg.skel.h"
+>> +
+>> +#define CG_PATH		"/arena_memcg"
+>> +
+>> +/* Budget the arena gets on top of whatever is already charged after load. */
+>> +#define ARENA_BUDGET	(64 * 1024 * 1024)
+>> +
+>> +/*
+>> + * cgroup_helpers builds paths from getpid(), but the work dir belongs to the
+>> + * process that set the environment up. The child references it through that
+>> + * pid, so build the path explicitly.
+>> + */
+>> +static void cg_file_path(char *buf, size_t sz, pid_t owner, const char *file)
+>> +{
+>> +	snprintf(buf, sz, "/mnt/cgroup-test-work-dir%d%s/%s", owner, CG_PATH, file);
+> These are copied over from cgroup_helpers.c, but it's not obvious they
+> originate from there. Maybe let's move them to cgroup_helpers.h where we
+> can use them everywhere for consistency.
+
+Agreed.
+
+
+>
+> The main issue I see is that this only triggers consistently with PREEMPT_RT, correct?
+
+
+It's not RT specified issue.
+
+
+> I tried with the default vmtest config we have but it does not trigger
+> at all. More importantly, it doesn't trigger reliably with PREEMPT_RT,
+> either. Does it for you? Can we cycle forks/frees multiple times to try
+> and trigger this more reliably?
+
+
+
+I stated vm(RT and non-RT) locally and ran test_progs 100 times and all 
+tests passed.
+
+I also used official bpf CI(non-RT) to run selftest, but still all tests 
+passed...
+
+So I'm not clear which config is associated with...
+https://github.com/kernel-patches/bpf/actions/runs/30795982316
+https://github.com/kernel-patches/bpf/actions/runs/30798024430
+https://github.com/kernel-patches/bpf/actions/runs/30801539977
+https://github.com/kernel-patches/bpf/actions/runs/30808717560
+
+
