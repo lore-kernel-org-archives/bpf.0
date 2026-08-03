@@ -1,143 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7648432BD6;
-	Mon,  3 Aug 2026 18:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785781888; cv=none; b=oWHJyhHK7Ilq39PqE9PCvnDEkdeP/4efWO3SBvkcW3IYhX3I2aWveOF+v+krH/uogVi38Kcz/OV2QrIu8aaYE/zlbBydj1bEHCgoSEZSq3GxWVo5MordsKO4lqJgIuFKjWciJtmshD3QB2N9fSFGY6lY3Wh6gDYGrSbjz04y+YI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785781888; c=relaxed/simple;
-	bh=ORmrjWH6PYG89lW3BxSPLQ3W/1WLUC9v8LP+zDsaYsY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Aa1GHTbEcRd+36xljeWogqzFxWYJ1306sEB50N7hgaTraqh8viJEe1sB6rPriRvJnIqZvjJtqKxGlkjT9CXH6fBkzEZDYyGHQ4yeBKrSoeAYb+RUX21LPf1usXHlOTluf+ojIgh0hbsLkVeDSc2vIcDBjvQmQpy/pCTXAyaqloY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nNRVmRH5; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CA5432312
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 18:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785781931; cv=pass; b=qwQ8rRM8Y3wSX7D3MiqU+Vhy2ihkgZ/1pH4LwZQXyMaMZM69HhYRJ0KGBcURuj7VKdT2zGXI2a4TV7NIgQE1NnXFMoVbOy2dwWp01hfgs8OJBhq8HDqwFipxZrR/8915bI56DxTQtcO6LKtRzuDJ36fQy4JWAn2gxLGdRV5letE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785781931; c=relaxed/simple;
+	bh=VWbjPp6NkbMPfq2XEGlQC1OmjdeNiTHMdP+BoLTJlbU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iAoYdclOsaJsDNKBmxLEypihg2siktGLOZTjOoAtCiC8yyeAoGCug3qlGFKMrpwKodMZKofjXbwplY55e3q48JDJk3A5AizMpGoCDX8INnpUvZ99PLnd4+7XATt0gLnmPnJ22IUYi07J367ot3oPwjWUdtUEkjIJRctfwEq7mXc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QD6ij8es; arc=pass smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nNRVmRH5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2ADE1F00A3A;
-	Mon,  3 Aug 2026 18:31:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785781887;
-	bh=5xtlVD0klhuaHx6l0gKPmqIZkjnFcL+17TAbXpxQWtc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=nNRVmRH5yMSPdYKFAfQN52QFxQELFbNEvRheJvpafgLfUEpa8opeDsiyCjrSkCKQA
-	 L5v0j+WWosvrJwLnYFlhqYLg/aMTkrw1qOKD5KGLIA9JUsoIAkj96taOngCrnjvS9f
-	 BiNmDjixj1wYi9B6sAabxuHBxTFhbi5O1VJc/CH3RjTtu0qv5rDbE9404MI+iCRmfb
-	 +fb1ZaMP7+z/jMv+g1v3GqMF+8HB6MkHpn8rMHP8xxP3+YrwoZkpIgH7+/G65u7eLf
-	 TAa4nGrZ9KUeNTpZD2gsRnVJjicN6zLwYUWDhKdX1R5VehgOSrTh6Xdb7nqupdABG4
-	 hV9wbF+KRq8rg==
-Content-Type: multipart/mixed; boundary="===============7125088897932189663=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QD6ij8es"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cacef7d299so20005ad.1
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 11:32:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785781929; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BFZNhKQeXgQoj+vnEcfN87xYntdMmDvG9DghqGmJzkGMB/iuy0dQ6jrz9lS+M+JEaS
+         3vJw5yanXdvZa48da3SinIRFx+5jW8DJD6GprfVMtH/gAaG44EKQws2TBHTZu5Q7gM+0
+         tOFsRoCSRUaeXHDUZGwQTfZ4U+5NjAhirff3Y9EhIlgHY9YFoZXdS+aaQqUlxHD17mgz
+         NKJDR4kavZnydhUUtP3EHpU0x1gRa523ojt34fyPL9f46BWY34jWs4o1PVGArQ6dzI5P
+         +5UvgiakA8XAxmIZZFv6ATxbDpg355ZLVrHEOlUDEblvUvMYboZljWa58mOPfryY7HoY
+         YH2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=VWbjPp6NkbMPfq2XEGlQC1OmjdeNiTHMdP+BoLTJlbU=;
+        fh=KdDpD2DEnNk7tEV8yWJs+kj5/QTlv4QSYUX+0TFFXb8=;
+        b=BFiuzrnUGN9HeHlV5bpSNXUy8o6x9hYwY6uMCuNT01Y98J82aj/r1FocFCHWfkp8T6
+         ejk4LGDGGQSB+34FjSfpYdMaSZfxhrSKy5f27TOy/uKnPQya3Wsr7iLm4BY4UPOAPA7H
+         LSqzKj2wuUbCHzESOJyS6vUunN2nwNYj0OBQ0LqjM0tvJmP2CosmbOnjucU2ph52Uo8x
+         TfujbmSbtcY7FL2re/crKxQ+aPOm1jfsMwUEIW07WaD4EqFm6IUnrLDZlvDuPBPDLO8r
+         puuGHO9QvF615b6tkDIe3INwrNdHl4ku+qCrifFm6HMCY4IF2EwHnAhsSt6Qls325Nko
+         pxvg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785781929; x=1786386729; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=VWbjPp6NkbMPfq2XEGlQC1OmjdeNiTHMdP+BoLTJlbU=;
+        b=QD6ij8esOYUdm2Uo++y+AEpUjnjjH0LBBYwmfY+bS9fhjaa2Jz6yMUdQJ6rdyiwJJR
+         Zpz6Ccu0E2qvoLIpHHRrJbUpvsUgTTyibW1YsdH8XtzWuNkma/PviKEf0T0Yat+QTnB7
+         8gq0Rwl42AoT1/z212tY8xY5VqAEHBNvDvaTAke2qiNRpZLr5iHz9XkOS6DSdyt5ae74
+         LI158rARYwKARIaxOCcK4NC3AfJoq6grQFB43hawuf8s+05uQn0jI67WEe6++/G5FC/v
+         g6S6JrG2Zxe5lWJMOro7sp7lK1yaAvlNbcJ3iRN7EJDv9iE99pweW6M+vXQU2Oo1Ydgo
+         Dr+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785781929; x=1786386729;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VWbjPp6NkbMPfq2XEGlQC1OmjdeNiTHMdP+BoLTJlbU=;
+        b=Y2AVhnXtk7xJFgCSyoCmCwAnp4axeqPnvZWI3apAoeANanZMrzUV2rNTexCRlB0brp
+         u/VQ3BYSSvIGG4uDcmYJ1GdxiQYotnxAg6GUL1JXYWLqWlFNddRIqwaAtNXaBD8peICM
+         yiO0YfusZUz2xQiY5OocOwi8HkrBpQbp+NCOrN14nkkrWGuMbwvsN1unKyTqcDYm9p+Q
+         +eowV5rMJru3qH0/LmSIEfjBJXmv/Smp4No8O4pjDOnojzgZwzAqxIQnrcIJ4E92tW11
+         LecIrcR7NCtQphPDoXHNyCR9baqWM3tTlXgc/u04IOtaBZdgNkz3un/L5Nw792fpm+ri
+         S3gA==
+X-Forwarded-Encrypted: i=1; AHgh+RouOV9hXu/dpPkZC8S2KRLbEjVJxdr0R/lMfccFIUWXKGRWm4YFXq8SpVFeOxgVaJdfNRo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJmKzEUmaklDJ0nO95M7tUflZyDzcHq2GNNswVTrxCPEZdMUGP
+	Smxx/ciqWaQKZpm18qaD9HVKYUobrCOcUY96cnYlGSYc0fQvfI5GgjMlgtvf35snktlG1dsKlYN
+	PjGLwByoSMVOXmkOU4CNMcgMn0wmS/WJd43run12Q
+X-Gm-Gg: AR+sD118o0SPOwFYGVHj9WYL0/7rY5+jxGei44NfBLZxJ4vTHqIXyzOacuYjcTqeMOg
+	cwTrurEN5UUfmZ205E4gWPP6MI8L6+cixe0xhxtY6FLgOrYODSQdyF8BaRII8FVDcRwoOe1ZDrU
+	NrJJbXdNsVFC9aABuzFcdZyyuiQNvX8Oe9MfQimhGkmdBIMOP5WCNftsdQfan/IBhwBwWbpLbqT
+	rWkNQxgs7H1HvUjCeQbjFU8WfSlcp9HkKGZdlmm8mzbAALCEaKPfKDlBhCnsXWVfPRPHMqWKbnI
+	jxiFht3DS9jaNCEgvaeMk5LBja0rrPqM/bG3UGo30o9T
+X-Received: by 2002:a17:902:e945:b0:2d0:8b22:7eaa with SMTP id
+ d9443c01a7336-2d08cb31baamr1688045ad.20.1785781928753; Mon, 03 Aug 2026
+ 11:32:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6d96174316041032ba75e8b9901245772bd4aad2873b795fd71df038bf909763@mail.kernel.org>
-In-Reply-To: <20260803170251.1898102-5-vineet.gupta@linux.dev>
-References: <20260803170251.1898102-5-vineet.gupta@linux.dev>
-Subject: Re: [bpf-next 4/4] selftests/bpf: vmtest.sh: preserve command quoting when running in the VM
-From: bot+bpf-ci@kernel.org
-To: vineet.gupta@linux.dev,bpf@vger.kernel.org,ast@kernel.org,eddyz87@gmail.com,andrii@kernel.org,ihor.solodrai@linux.dev
-Cc: linux-kernel@vger.kernel.org,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  3 Aug 2026 18:31:26 +0000 (UTC)
+References: <tencent_29B860317921D68DE77C718242DA418EB608@qq.com> <tencent_EEDC35FAF2750A3A6A0B39BAE0E2C484860A@qq.com>
+In-Reply-To: <tencent_EEDC35FAF2750A3A6A0B39BAE0E2C484860A@qq.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 3 Aug 2026 11:31:56 -0700
+X-Gm-Features: AUfX_my3dNHecsoUf8e69cV4C1hLKJkdXZo40JvErJWzFKOvN7k3ok7JtkXPFd4
+Message-ID: <CAHS8izPdDV88eP90R2sVa_dLUy=btQWTHJ804g5TrDh_2xKKLw@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] net: atlantic: free stranded TX buffers on ring deinit
+To: Yangyu Chen <cyy@cyyself.name>
+Cc: Sukhdeep Singh <sukhdeeps@marvell.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Richard Cochran <richardcochran@gmail.com>, 
+	Lino Sanfilippo <LinoSanfilippo@gmx.de>, Igor Russkikh <irusskikh@marvell.com>, 
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============7125088897932189663==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-> index 9ca8022853933..6a3d026d76bd6 100755
-> --- a/tools/testing/selftests/bpf/vmtest.sh
-> +++ b/tools/testing/selftests/bpf/vmtest.sh
-> @@ -428,8 +428,17 @@ main()
+On Sun, Aug 2, 2026 at 8:46=E2=80=AFAM Yangyu Chen <cyy@cyyself.name> wrote=
+:
 >
->  	if [[ $# -eq 0  && "${debug_shell}" == "no" ]]; then
->  		echo "No command specified, will run ${DEFAULT_COMMAND} in the vm"
-> -	else
-> -		command="$@"
-> +	elif [[ $# -gt 0 ]]; then
-> +		# Quote each argument so the command survives into the guest: the
-> +		# host expands ${command} into the generated init script, which
-> +		# the guest bash then parses as shell source. Without the %q
-> +		# escapes an argument with a space or a glob (e.g. -a 'verifier_*')
-> +		# is re-split and expanded against /root/bpf there.
-> +		#
-> +		# Skip this when there is no command: printf '%q ' would still
-> +		# apply the format once and emit '', which is not the empty
-> +		# command that -s (debug shell) expects.
-> +		command=$(printf '%q ' "$@")
->  	fi
+> aq_vec_deinit() drains the TX rings with a single aq_ring_tx_clean()
+> call, which frees at most AQ_CFG_TX_CLEAN_BUDGET (256) descriptors and
+> stops at hw_head, which no longer moves once aq_vec_stop() has stopped
+> the hardware and NAPI. Completed descriptors beyond the budget and
+> everything still posted in [hw_head, sw_tail) keep their skb or
+> xdp_frame when the interface goes down: aq_vec_ring_free() then frees
+> the buffer ring and the references are lost for good.
 >
->  	local kconfig_file="${OUTPUT_DIR}/latest.config"
-
-The commit message states:
-
->     Note this makes the trailing command strictly an argv rather than a shell
->     snippet: passing it pre-quoted as one word, e.g.
+> Today this is a silent memory leak on every interface down under
+> TX/XDP_TX load. With the conversion of the RX path to page_pool posted
+> for net-next it becomes much more visible: XDP_TX frames carry fragment
+> references on the RX ring's page_pool, so a single stranded frame keeps
+> the pool's inflight count above zero forever. page_pool_destroy() then
+> never completes, the pool is leaked together with its pages, and
+> "page_pool_release_retry() stalled pool shutdown" is warned every 60
+> seconds from that point on, on every ifdown, XDP detach or ring resize
+> under XDP_TX load.
 >
->             vmtest.sh -- "./test_progs -t foo"
+> Bring back aq_ring_tx_deinit() as it was before the removal and use it
+> for teardown again, with one extension: TX rings can hold xdp_frames
+> nowadays, so release those too. They are returned with
+> xdp_return_frame() since this runs in process context.
 >
->     no longer works, and neither does embedding guest-side shell syntax such
->     as ';' or a redirection. Neither form is documented - usage() and
->     README.rst both show the command unquoted - and 'sh -c ...' still works.
+> Fixes: eb36bedf28be ("net: aquantia: remove function aq_ring_tx_deinit")
+> Cc: stable@vger.kernel.org # v4.11+
+> Reviewed-by: Sukhdeep Singh <sukhdeeps@marvell.com>
+> Assisted-by: Claude:claude-fable-5
+> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
 
-Is the claim about README.rst accurate? Looking at
-tools/testing/selftests/bpf/README.rst lines 106-115, there is a
-documented vmtest.sh invocation whose trailing command is explicitly
-quoted:
+FWIW,
 
-  $ PLATFORM=riscv64 CROSS_COMPILE=riscv64-linux-gnu- \
-    tools/testing/selftests/bpf/vmtest.sh \
-    -l <path of local rootfs image> -- \
-    ./test_progs -d \
-        \"$(cat tools/testing/selftests/bpf/DENYLIST.riscv64 | ... | tr -s '\n' ',' )\"
+Acked-by: Mina Almasry <almasrymina@google.com>
 
-The `\"` are escaped in the user's host shell, so vmtest.sh's main()
-receives argv[3] as the literal 10-character string `",exceptions,"`
-including the double quotes.
+I've noticed these claude-generated commit messages are unusually
+large compared to the human written ones. In the future try reviewing
+the commit msg manually and making sure the amount of detail makes
+sense.
 
-Under the old `command="$@"`, the guest bash's second parse of the init
-script performed quote removal on those literal quotes, so test_progs
-received `-d ,exceptions,`. That is exactly what the `\"` in the recipe
-are for: they survive the host and are consumed by the guest.
+You can put extra details under the `---`
 
-With `command=$(printf '%q ' "$@")` the quotes are escaped
-(`\",exceptions,\"`) and reach the binary verbatim, so test_progs now
-receives `-d ",exceptions,"`.
-
-Downstream that argument goes to parse_arg() ARG_TEST_NAME_GLOB_DENYLIST
--> parse_test_list() (tools/testing/selftests/bpf/testing_helpers.c),
-which strtok_r()s on ',' and hands each field to insert_test() with
-is_glob_pattern=true. So the filter list becomes three globs instead of
-one: ["] [exceptions] ["], two of which can never match a test name in
-glob_match() (test_progs.c).
-
-For DENYLIST.riscv64 as it stands today the damage is confined to those
-two junk filters, because the file's first line is a comment and
-therefore reduces to an empty leading field.
-
-The same recipe applied to a denylist file whose first line is a real
-entry silently drops that entry. With DENYLIST.asan-shaped input:
-
-  OLD guest -> test_progs -d [*arena*,task_local_data,uprobe_multi_test,]
-    filters: [*arena*] [task_local_data] [uprobe_multi_test]
-  NEW guest -> test_progs -d ["*arena*,task_local_data,uprobe_multi_test,"]
-    filters: ["*arena*] [task_local_data] [uprobe_multi_test] ["]
-
-`"*arena*` matches nothing, so the *arena* tests are no longer denied
-and run anyway, a silent loss of denylist coverage rather than an error.
-
-Should the commit message be corrected to acknowledge that README.rst
-does document a quoted invocation that breaks with this change, and
-should README.rst lines 109-115 be updated in the same patch to remove
-the now-harmful `\"`?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30836252778
---===============7125088897932189663==--
+--=20
+Thanks,
+Mina
