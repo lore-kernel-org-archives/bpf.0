@@ -1,149 +1,95 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCA83A0E8A
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 19:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785786516; cv=pass; b=PdcabJihWOB9Vz+/Iv3N1ySe1aYzJWq3Q93mHfLsY0yzVNjvuSKTBxyPZBlIFI4nmyMf0KPCuoomqaiqHTocOeOygGKVKpR0IHzAztwd/gAao+5/9GtaY54sw8YdSH4ZMWU5iAWVlc2A0OT0awx8xYO8iVfO1Pgh+vVA9SLg5nw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785786516; c=relaxed/simple;
-	bh=8uk1eqYtcP37aMfvUdzoQpZ9Trs9Os3/bWv4dhfB5nM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PTuSnJZ+0nZ19ObuDhDMFm/aAhWtlulTsby9QOhzF9IJcmXWBC82fQUjAsCt13KgPDJfjoNqUuHwowJdEORJ6T2F/7Xy+pvrz4pu1WajXVl0a4nOuA7FXWQIivCLPRIcUgs7Ou4b5JMo+x+sRqqtuG437yrL3ZJTFJFSKI8o69k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OJ27+dM5; arc=pass smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73973A9861
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 19:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785786535; cv=none; b=OZZ5kUvvutX0t2w843bzZk+iAD1PYphrwVTtgNr545P+FJN2wr7Kxxi9T/YnQz+OSMMZ8r+2Jt18wDPkC+ts1vaYy8ICfAv36gtmfqG7bvIlBsvuyegPCkop/U/ANr+QmIc74NhiMPbL7jhDLksBH4VbgcJ2MURl45uSpQd4HHI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785786535; c=relaxed/simple;
+	bh=MtrOz9e1XaQQI9fz0YpsBcbmXW3bvacusp8dfGi6s3Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J+Q7OoPR3ZBVUaLfsnGhO2XoHu2tzbDT6A5pOl0Jfc5f6gMdbBr423qiq+i8aE/SdfCl6d0hVCAPiCnTkcMHmBZb13Nm7EIwAmmCuovTPVUNAfXFPzp3NrzE1eE8Ro7bOQNZ2VKv0ufLPembDTJKP2LthUSbJN6iIfDQ8Nvyk54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p3Mf2r5J; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OJ27+dM5"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8485ef63b68so4110821b3a.1
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 12:48:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785786514; cv=none;
-        d=google.com; s=arc-20260327;
-        b=PzDCpBt0pgbyunRkYUVbXv0ho2fN+uXrO3yuPRbM2NA4ABOQDzDCBk34I4Jqkqo3T4
-         zMPSYWdY26LBCsACu80BWrhDr2VchDHeDSwFIHtCbt8xiHXsfuv/GELkjna2mJuCe4Ka
-         XurgLjSLrQg/1eDbo3RStpGTk4ZX7dPyTWlAfwAemD1MbULZAW5+0DB5+RzcQJOoROyJ
-         TPuSoiseotVmJg0hvBkCU1Cu5QzPuElqxoRsTOP+A2HQI2bKHx+zmsax37jE17HGslXW
-         ZvplygfOAPtL0NRUDBUxRY6I2k6n6AmSrPEhrxSnxG3meQTHHU7spLQ3W5tz7QfTL+4s
-         Dzmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Y5wvfIwSx21ee7WFRp/KStftuR8cZ/Pg2yrO4T18fHo=;
-        fh=wHuiVW7+cSGi8lDsjv95MnsGFVbmaO0/sJyvUF+XqSM=;
-        b=J1W4aMdOUtutepIFHhq0dmzorR/t13n7Ns+2reOpZxWbQpAdIpFiIfkVNXsgsJmsUq
-         ijfS8HeEjUjU8wbB5HghIvnFsnP/vwOcy7N1z3e5spVpCugiBIt5mqDB907EoJyGI9Sg
-         OdBpeie783tPBcb0YBC7WhJ4ONgY3bFSSyklgmDPnjutD9Vbfja7v8wx4m9mHqU3W6c8
-         dnRQ96qrpJuYzSwuABwhEzzzPJvH3/s+gpbocE2fL7DtgC5ZprPIBGTHbqoXcF5emcQR
-         7G11a/lzSEMFAO0u7s1czruvF/vjx/M5qgxKkFyOclxFTyXzGEGI+KWHde+or06dBCbF
-         /OcQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785786514; x=1786391314; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Y5wvfIwSx21ee7WFRp/KStftuR8cZ/Pg2yrO4T18fHo=;
-        b=OJ27+dM5PoW9Roe7FnZJgHRT9O89S3GD40ZJLUky9Z8vQzdE9Bs8e0+tUJ5rHS1nou
-         +tlmXzDwQ+mWraklUCFOqfl41uduDcv/MO78itRWdWyxi4FJGcpMI3yrwuqYjH7GEZEA
-         EE8N3oW4JiUxWLQ63aWkVZmhnRM6MnLri9fYKktvavAlz0Hie7meF0Lk0EVJDGQFNrp7
-         0evyP4TEQopVzMWx572Ginhl6Cuem22Iz/n//xETMLkK94R4yMaiYEijtx5HNmd0xQVq
-         1rWYWs15hmDshdE0Hamybav7xxmnbGtUNQeOvdiv1waJnNipRAqfha8BDBQ/1ORhANLq
-         aVwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785786514; x=1786391314;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Y5wvfIwSx21ee7WFRp/KStftuR8cZ/Pg2yrO4T18fHo=;
-        b=TFlY3pHy1xW8qogQvUcGZYji4nk/5rE2QWOEyjmcrYXSu5bgYDc+Si/cnwNdyZ9nJd
-         KdEAaId3GmsaSxbiDfmypugL5xFF108OaIvHD3hKAfvlr4GSNPqh9Z3YTVki0+Si5IbS
-         +GTJoHD5EHaNBbbtSRSDEhSIEol915BXbXoTzSUb8eR0Wf2XfCLL5NciW+mgV3IeF0q+
-         IWXFNRhsPXhFuNbLF4xuu0yGCKN77iJUOEYYN6NLDNHZoOF8GHB3kK4tywX94LCqBoQ4
-         YukUmG0PJO9hIRK2KUHwVI+YLYArc0AlE0i/H8OMGROR7yRfZksQezFKep15Q0wQWr/8
-         Zg7A==
-X-Gm-Message-State: AOJu0YzjXsCKEh8oaVQJpLTrx5mZejtbJzEKkppqyPM+WfizUcc5Fnv/
-	FQjcUaTkdekj/AyGM31aVdrOauLo4ievnUMJHpJecXFV7bZZZZFeDJ+2oQXi00CJlhKcA6z4T/F
-	kS1QWZeqbnWpNqzL0DdyDHmWALeCutHEMT4Bk
-X-Gm-Gg: AR+sD10BoDRmD11M4rVd4WCp4A0w/V50iTI0hbuMC8+T1j1dkG+1r44bfIO2kK5NJ2r
-	PlAgRfYNOmkaxh/DwOH73rK0qvBnpj2TJBwHu1uOK3L3WXVUzytptnPgSin9rPlFmJFQxW+0g0U
-	e9aLEp1tJgWNJwShaBXtZsPYLXoIm0s0/P9jado6hegm8NfzVET+SQJHQyPpBH2gxoAOWw5l2FG
-	FwvG+ZNJQhDNR6Kt72WK0ujI2uvCvMmj90WlZUlCpEgYqa9xbd6Ilx9h5rtN6T+WbeQacNYQ3vS
-	m4PmZs8hjJIfR+qnkKK7aJD4UaWYGvPgWpWufARHCx+fiPZqXzEhmLM3QoVriIUCzKAd3zJEkts
-	nRFdhernnofVuZPGxeRHpYKQgM97zt4nLwSkZyCdWGA==
-X-Received: by 2002:a05:6a00:9283:b0:848:19f6:4dfb with SMTP id
- d2e1a72fcca58-84ee48ca014mr10039301b3a.56.1785786514228; Mon, 03 Aug 2026
- 12:48:34 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p3Mf2r5J"
+Message-ID: <2af4a79b-8b97-47d7-9589-53ba9b2b9d2c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785786521;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pE0xBbCk1DUJFkU84tTR7Yk/pEsr/WpnPdo7d6grOuw=;
+	b=p3Mf2r5Jkj53TzSjT5oq15UdVfRCDlLLBVu9a6Nos0ictHPRDO9AJ8h4/F0JN8zLgeEbZs
+	A/ZVjXymGP9abxuNMjUoOI5UoW2SvZ9aW9x4TJx3uT2D896MnuULqMIiJaqGeh88RTwUm/
+	kQTkZUv6r1AyEbu5uw6kDhKGXAaLKi0=
+Date: Mon, 3 Aug 2026 12:48:13 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260803072733.191502-1-memxor@gmail.com> <20260803072733.191502-2-memxor@gmail.com>
-In-Reply-To: <20260803072733.191502-2-memxor@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 3 Aug 2026 12:48:19 -0700
-X-Gm-Features: AUfX_mxjq3rbD8MM9D0mIhzRyI45pmcTSkXAOixNqeDfilVk_oo99C80J_EvkRg
-Message-ID: <CAEf4BzZwSogfspAQG6M4X5V4P+=-W1_hV65+6vpTDy5aaVYmPg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/3] bpf: Show more useful info in stack depth stats
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [bpf-next 2/4] selftests/bpf: add --no-error-summary to skip
+ end-of-run error log dump
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ eddyz87@gmail.com, andrii@kernel.org, ihor.solodrai@linux.dev
+Cc: linux-kernel@vger.kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com
+References: <20260803170251.1898102-3-vineet.gupta@linux.dev>
+ <a3942d6763816245bb6610aa892f1251aa5ba08a9a698a6646e3ebdb097df33b@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <a3942d6763816245bb6610aa892f1251aa5ba08a9a698a6646e3ebdb097df33b@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Aug 3, 2026 at 12:27=E2=80=AFAM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
+On 8/3/26 11:15 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+>> index aa06bab309665..8ee46745e2e85 100644
+>> --- a/tools/testing/selftests/bpf/test_progs.c
+>> +++ b/tools/testing/selftests/bpf/test_progs.c
+> [ ... ]
 >
-> Currently, stack depth statistics are too crude, listing captured depths =
-in
-> subprogram-number order. Since libbpf determines those numbers, it is har=
-d to
-> associate each depth with its subprogram name.
+>> @@ -1686,9 +1696,12 @@ static void calculate_summary_and_print_errors(struct test_env *env)
+>>   	 * We only print error logs summary when there are failed tests and
+>>   	 * verbose mode is not enabled. Otherwise, results may be inconsistent.
+>>   	 *
+>> +	 * --no-error-summary only elides the human readable dump: the walk
+>> +	 * still happens so the JSON report keeps its per-test results.
+>>   	 */
+>> -	if (!verbose() && fail_cnt) {
+>> -		printf("\nAll error logs:\n");
+>> +	if (!verbose() && fail_cnt && (env->error_summary || w)) {
+>> +		if (env->error_summary)
+>> +			printf("\nAll error logs:\n");
+> Does the comment match what the code does?  The comment says "the walk
+> still happens", but the guard now requires either env->error_summary or w
+> to be non-NULL.
 >
-> Print the maximum stack depth and each subprogram on separate lines:
+> When --no-error-summary is passed without --json-summary, both
+> env->error_summary and w are false/NULL, so the entire for loop at the
+> bottom of this function gets skipped, not just the human readable output.
 >
-> stack depth max <depth>
-> stack depth subprog <number> <name> <depth>
->
-> When no subprogram name is available, print <unknown>.
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> The walk does happen with --no-error-summary --json-summary FILE (where
+> w != NULL), but not in the no-JSON case. Could the comment be more
+> specific, maybe "the walk still happens when a JSON report was requested,
+> so the JSON report keeps its per-test results"?
+
+Good catch indeed the comment overstate it. Will reword in v2.
+
+Thx,
+-Vineet
+
 > ---
->  kernel/bpf/verifier.c                         | 13 +++++++----
->  .../bpf/progs/verifier_basic_stack.c          |  4 ++--
->  .../bpf/progs/verifier_bpf_fastcall.c         | 23 ++++++++++++-------
->  .../bpf/progs/verifier_private_stack.c        | 15 +++++++++---
->  .../selftests/bpf/progs/verifier_var_off.c    |  4 ++--
->  5 files changed, 40 insertions(+), 19 deletions(-)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 >
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30836252778
 
-given we are going for quite verbose one line per prog/subprog format
-anyways, let's make it actually even more useful and emit
-insns_processed as well? I'd probably keep total line (processed N
-insns (limit 1000000) ...) for backwards compat, but also have
-per-subprog + main prog line with insns stat and stack depth,
-something like
-
-subprog 1 (sub1) insns 123 stack 16
-subprog 2 (sub2) insns 345 stack 32
-prog (main_one) insns 643 stack 64
-processed 9999 insns (limit 1000000) max_states_per_insn 0
-total_states 1 peak_states 1 mark_read 0
-
-wdyt?
-
-this will give better and more targeted information on where you
-should look for w.r.t. verification optimization opportunities
-
-and we can later add some other useful stats per-subprog/main prog as
-necessary without any major breakage (tool just need to assume there
-might be more stuff after "stack N" eventually
-
-[...]
