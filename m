@@ -1,63 +1,67 @@
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBB6427F94
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 18:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BD44322E7
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 18:46:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785782794; cv=none; b=VNsVFXcx2+phOQnIc+4BA+g2UbnStemJqBvTAX9scN4WBzjxfYvdY5tLXL6bvCzuk4FYD8CNdx8XOUB/q2Z+5qdqUiiisjEs8doCj4adVRK+bEzcyD0zXP40dP1KZEDvl3Ka9pYk4CeRmCl3x2Ifxnqtwih6FsWKodkZXSj1h5I=
+	t=1785782795; cv=none; b=UnedMZJL6GqxcpseRIfYOz7dlZUvZSDVaTBKnv2DuKWQIZ35gTnLQZF0IiKZyTlqqSlJFpdeJUai8Dg1W+wIIq1MJ5uwaDHAixl6GE+HH4R02BWfSU8xxDPcD58Bm27r0OCWqUpAGlcRLzzDFElYD3Zi4OlyTJ1zfzkezCwVyRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785782794; c=relaxed/simple;
-	bh=qdnMi5UKmgwLH3Yxi/4yylk2ifjbYPC1D6DDNsZGTnE=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=gB3S4u6hIGWhjGIWFXvTkGMV8XivjaaqmWARg4QrhVzbzTnv2MddthlFuisrPK5v0Z+p1Un9684NzM0BY2XMSROxhR3WexuUkp8Jz2NDmcfal0WrOPyqQkN8pd5Q9toH6Wdv4UHsmOuPrndV3XU9M/tEpFwSbV2gdjNff7Y/hW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fN+gSSww; arc=none smtp.client-ip=209.85.215.200
+	s=arc-20240116; t=1785782795; c=relaxed/simple;
+	bh=frH6jsEdOdsfiylCZZU+8mNGyrjO4vDVEUrOEZEaJOY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=OtkEvhVFZtCllmcAr+DU7tAvkfBZeoVC2cv0UYWwa3XfWO31HjmwqfjzLXPUew/MsBn8xh8H/Z58Q6VBHQg8y4lRwPRruGGxVfoU8b3/c2qeePCW6ITAVRMp1W4ZTAT4q2urLoA+G/ValU+zk4BVtn/FHwFQUt3lRRkurcB8zR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RPhVQiiV; arc=none smtp.client-ip=209.85.210.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fN+gSSww"
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cb835525b10so4999826a12.2
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 11:46:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RPhVQiiV"
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-8484f26852dso4209977b3a.1
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 11:46:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785782793; x=1786387593; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=v2GbAn1mai/t41mi3VJpzRReRyT0xUGHdjiq3a6bBNg=;
-        b=fN+gSSwwaznRreLjWz0RFNxG/wuY2FiYwSTL1bvm6edZUXQztTWpEvPhvvPxUm8Gia
-         4mpvvivS6Pso/muyH/RLHVJSevK0YjikEER4j1OnNq2JFk6PANegTo5WZCkgbW39zFSN
-         88nOcEfY2UUwrFBvQiT8uzYbdWJggk4JOA4EqC5c5EouZw+getrWvt4veFOTl2B8W60W
-         J98SVJDmpftpT7FcbNkBizme2ZCpTn2YyQEirbaFy8vXJxVGbN5g9KIpnyC/4ejOVjV7
-         M1c8zUu6yai0Zb2FDTEjYqprXCrOToZkgIgKOSq1NqwzKlGbd2/eYee3dRk3twUTjVdh
-         HLLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785782793; x=1786387593;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1785782794; x=1786387594; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=v2GbAn1mai/t41mi3VJpzRReRyT0xUGHdjiq3a6bBNg=;
-        b=TiniR9x/GpLGeUcS9do+CoT5YaQbEKO4YUzOqFeWtwZWh8/8Odk0MuONMN+kRDQhc3
-         FqzEIelN74j2nkSBIN0fQNwVeaoMDnk9bysgmR+wdgAx599hRor0kfdB2AG3p63bhjbp
-         08/6brp1N08aIm9DyIZeKDlBGQZDpGL80yhKYEcynQXQm4UsyDPnE9kCzLM7aYuyYpxo
-         UgnWsvKuAHETOnWgSoWDQQRskPglQH1J5O51MpJ6SZUtInvK771cxRzOSNxNmAXvivGk
-         uWHu5wXSkhprm1mvEElWxHvQEj/+J68Of8sMTYlBLpinQRP7u6WdspNJ1T4wwHnAlIe1
-         uyug==
-X-Forwarded-Encrypted: i=1; AHgh+RoUPwWbvlkdAfbTwJbHYRwl85ynleWi/ncSbnA1LV87e4/vyVSdnY+IVkpfogAEzOIMZw8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw266a+Jj64s8PHVGAFn/RwJY61sSFetF7RehbvqxZu1IMjRQna
-	BleMVSfpEX8cDg2Jnh6afLQ5rgSXncj3Qki3Hlmk2P8HwnDqmWW8M73+2PsCFNr2AEPggQLFtbl
-	pbewUzY/Ay3D8Xs/BB4uzXH0PQQ==
-X-Received: from pglg5.prod.google.com ([2002:a63:1105:0:b0:cbe:408a:5061])
+        bh=w7ASYggieirjDdtwumqn+FDfbcMK1nGnAGwXV10QRd8=;
+        b=RPhVQiiVi1bz+RotG2Qq2bhDLzD8jNN9c+6VdJjcOEM10hNY3MHg6IB1SzNX5h2R0W
+         +nGVmIcgbc3hwVIciQmUPM1OtGeH4wRv9l8tv9Zu7oJ4XWtDl9C/BslYO2eklbG7ryKD
+         V0PjopqziA/Hlwebb6k1mi9hZvrfDuG+2EJIDGn71RsTtx2hCVlL0h40VvlVqxQLmJHm
+         jVVwZgRTDZLkSvJqhy6wSv3qX/K0Hesv9uZDzowg/ry5YHQUkvB2+C9+YB4phbKqGDTM
+         2rKGED1mQhwTlLrzhj/VY2DR4wCkpgRuasH6ALOMUbXdlB4hn25EXTepwqCe/N6Yzz/O
+         ufOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785782794; x=1786387594;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=w7ASYggieirjDdtwumqn+FDfbcMK1nGnAGwXV10QRd8=;
+        b=tMyoKxh/krWWw9BnPnUXy3NPg7wMjYeiwtfO9JuswtEx7hLj6SksiJfNLGYAkWm3En
+         U+T+dypGx3QRXpDa6TIjTMD2MUersd2m/kcebDClqq4jz0Pv3A7ItDfSRYR6CTfhk/lO
+         RrR4Id/ehgu4ZID0XDKjYig0zs4N8qI6nx5s8Yw8qC/Gny9k6W05BaoKA5MUPM2f07cH
+         0g8W5TZT4UfEPZKag4NknUuDRBkhRImuAqCHYpvNNnIhqB/i6SSCqk4UUsXkidnbxqVD
+         AM8oDYjOhA5zbEAT79CgOs97rrCERNEwlGnckpa+peSsml0P0yTZXc+ACAfb+wfGdMGP
+         RFIA==
+X-Forwarded-Encrypted: i=1; AHgh+Rp6QdbvHdn0Mj5yS5PVmGDnxrd6RC2ziXDBeUJtSLTiDNEyHY3QzyV17LDbLn/oHdrhC5Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywkep733GezIKziaq555MbfAW5PsVU3eM0ndO/1fgUVXUQktlt5
+	hkkm3epZXw7x7U+WRxPEuumqU0xa5z8+q25pEi1Pzljp+Q/OPHqa1aFgFXfuZHx6SO8u3m/ddfR
+	bXjXRqkyTvznS9xFduOoeBTdtQQ==
+X-Received: from pfblr45.prod.google.com ([2002:a05:6a00:73ad:b0:845:f28c:430e])
  (user=hramamurthy job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:4cc5:b0:3c3:a140:938a with SMTP id adf61e73a8af0-3c92a83766emr10702634637.45.1785782792425;
- Mon, 03 Aug 2026 11:46:32 -0700 (PDT)
-Date: Mon,  3 Aug 2026 18:46:15 +0000
+ 2002:a05:6a00:9296:b0:847:8dec:1427 with SMTP id d2e1a72fcca58-84ee47dc388mr10092613b3a.8.1785782793256;
+ Mon, 03 Aug 2026 11:46:33 -0700 (PDT)
+Date: Mon,  3 Aug 2026 18:46:16 +0000
+In-Reply-To: <20260803184630.3813311-1-hramamurthy@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260803184630.3813311-1-hramamurthy@google.com>
 X-Mailer: git-send-email 2.55.0.571.g244d577d93-goog
-Message-ID: <20260803184630.3813311-1-hramamurthy@google.com>
-Subject: [PATCH net-next v3 00/15] gve: AdminQ mode related refactors
+Message-ID: <20260803184630.3813311-2-hramamurthy@google.com>
+Subject: [PATCH net-next v3 01/15] gve: don't pass in unused parameter to gve_adminq_free
 From: Harshitha Ramamurthy <hramamurthy@google.com>
 To: netdev@vger.kernel.org
 Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch, 
@@ -69,73 +73,64 @@ Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch,
 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-This series is preparing the driver for the addition of a new control
-plane mode(MailboxQ) by commonizing and reusing as much code as possible.
-MailboxQ is a new control plane infrastructure which uses mailbox queues.
-This is a new control plane to communicate with the device when the driver
-is running on bare-metal instances as well as newer versions of the device.
+Clean up gve_adminq_free to not take in an unused parameter.
 
-This series contains 2 main changes to the gve driver's existing control
-plane(AdminQ):
-1) refactor some initialization/teardown path methods to make it work for
-   both control planes.
-2) add gve_ctrl_ops structure to the driver for various control plane
-   operations
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Jordan Rhee <jordanrhee@google.com>
+Signed-off-by: Harshitha Ramamurthy <hramamurthy@google.com>
+---
+ drivers/net/ethernet/google/gve/gve_adminq.c | 2 +-
+ drivers/net/ethernet/google/gve/gve_adminq.h | 2 +-
+ drivers/net/ethernet/google/gve/gve_main.c   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-The refactors are mainly around the init, reset and recover paths so that
-functionalities could be moved into the control ops like 'set_num_queues',
-'set_num_ntfy_blks' etc.
-
-This patch series only sets the control ops for AdminQ mode. This is
-intended as a preparation for adding MailboxQ mode in upcoming series
-which will add the new control plane infrastructure and then introduce
-the corresponding control ops for MailboxQ mode.
-
-The entire list of future patches can be found here for reference:
-https://github.com/hramamurthy12/linux/commits/gve-mailbox-queues/
-
-Changes in v3:
-- Fix driver compatibility verification in the reset and recovery paths (patches 2, 8).
-- Mark gve_adminq_get_device_properties() with __maybe_unused ahead of its usage (patch 7).
-- Refine error handling and resource cleanup in reset, probe, and queue creation paths (patches 8, 9, 11, 14).
-- Keep IRQ doorbell allocation/release in control plane resource helpers (patch 12).
-- Minor fixes: fix TOCTOU issue for link speed, correct kdoc comments, and remove redundant teardown calls (patches 4, 11, 15). 
-- v2: https://lore.kernel.org/netdev/20260602235900.3050782-1-hramamurthy@google.com/
-
-Changes in v2:
-- Rebased against latest net-next to resolve apply failure for patch 5
-- Fixed a few typos in commit messages of patch 9 and 14
-- Fixed a kdoc warning in patch 9
-- v1: https://lore.kernel.org/netdev/20260601175437.3767283-1-hramamurthy@google.com/
-
-Harshitha Ramamurthy (9):
-  gve: don't pass in unused parameter to gve_adminq_free
-  gve: refactor initialization with helper functions
-  gve: add a few helper functions to set device properties
-  gve: add struct gve_device_info to hold device properties
-  gve: introduce control plane operations structure
-  gve: introduce ctrl ops to set vectors and Qs
-  gve: introduce gve_adminq_get_device_properties()
-  gve: refactor gve_init_priv for reset path
-  gve: add ctrl ops to for queue operations
-
-Joshua Washington (6):
-  gve: simplify reset logic
-  gve: add gve_ctrl_ops for gve initialization/teardown sequences
-  gve: split up notify block allocation and setup paths
-  gve: introduce new methods to handle IRQ doorbells
-  gve: setup and teardown management interrupts
-  gve: add link status/speed ctrl ops
-
- drivers/net/ethernet/google/gve/gve.h         |  88 +-
- drivers/net/ethernet/google/gve/gve_adminq.c  | 432 ++++++--
- drivers/net/ethernet/google/gve/gve_adminq.h  |  25 +-
- drivers/net/ethernet/google/gve/gve_dqo.h     |   2 +-
- drivers/net/ethernet/google/gve/gve_ethtool.c |   5 +-
- .../net/ethernet/google/gve/gve_flow_rule.c   |  15 +-
- drivers/net/ethernet/google/gve/gve_main.c    | 936 +++++++++---------
- 7 files changed, 947 insertions(+), 556 deletions(-)
-
+diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
+index 08587bf40ed4..70ffed8b52c3 100644
+--- a/drivers/net/ethernet/google/gve/gve_adminq.c
++++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+@@ -385,7 +385,7 @@ void gve_adminq_release(struct gve_priv *priv)
+ 	gve_clear_admin_queue_ok(priv);
+ }
+ 
+-void gve_adminq_free(struct device *dev, struct gve_priv *priv)
++void gve_adminq_free(struct gve_priv *priv)
+ {
+ 	if (!gve_get_admin_queue_ok(priv))
+ 		return;
+diff --git a/drivers/net/ethernet/google/gve/gve_adminq.h b/drivers/net/ethernet/google/gve/gve_adminq.h
+index 22a74b6aa17e..8e80f36116ec 100644
+--- a/drivers/net/ethernet/google/gve/gve_adminq.h
++++ b/drivers/net/ethernet/google/gve/gve_adminq.h
+@@ -620,7 +620,7 @@ union gve_adminq_command {
+ static_assert(sizeof(union gve_adminq_command) == 64);
+ 
+ int gve_adminq_alloc(struct device *dev, struct gve_priv *priv);
+-void gve_adminq_free(struct device *dev, struct gve_priv *priv);
++void gve_adminq_free(struct gve_priv *priv);
+ void gve_adminq_release(struct gve_priv *priv);
+ int gve_adminq_describe_device(struct gve_priv *priv);
+ int gve_adminq_configure_device_resources(struct gve_priv *priv,
+diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
+index e4d78ae52daf..30bf6df4ebc5 100644
+--- a/drivers/net/ethernet/google/gve/gve_main.c
++++ b/drivers/net/ethernet/google/gve/gve_main.c
+@@ -2506,14 +2506,14 @@ static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
+ 	bitmap_free(priv->xsk_pools);
+ 	priv->xsk_pools = NULL;
+ err:
+-	gve_adminq_free(&priv->pdev->dev, priv);
++	gve_adminq_free(priv);
+ 	return err;
+ }
+ 
+ static void gve_teardown_priv_resources(struct gve_priv *priv)
+ {
+ 	gve_teardown_device_resources(priv);
+-	gve_adminq_free(&priv->pdev->dev, priv);
++	gve_adminq_free(priv);
+ 	bitmap_free(priv->xsk_pools);
+ 	priv->xsk_pools = NULL;
+ }
 -- 
 2.55.0.571.g244d577d93-goog
 
