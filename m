@@ -1,163 +1,173 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C88C42CAFB
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 13:46:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785764773; cv=pass; b=psXa2Fk0beHsXQ3WxDlyCSB6BDzSu/qcQbErIIgwO4HCeD04jqGiL+Ru/Pjb/0NQJ1Mt5Nm1Romn2lDejwbae6ZvuCxrr507ihg9smniC4qa7WumEw5Jgqgy2PiQnn03+goIyn5Snx9cxQP4CXylFey4Sj4thOZhtRmLCVAYeRw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785764773; c=relaxed/simple;
-	bh=Ee4kLdXfVk2GCa9eJc5mwREr0xBuHFjtFrr8xmqcFZ8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uxVhhg+iB5TLO2RBqHaMY397jAMbz7N9phXkDbngZ5meHXTCjswao0tJKGHZz3G0NhRhSkrxFT8XYvcPzF/MCQDEdR3hA54vaJtsiKBCGgQk6rU0MW17C55o2OGirBU/t1PTi9EnuysBeoNHsDzjsjneK6lmpQKaP9pk6OZ2Ay8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nXbfito7; arc=pass smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852C24156C5;
+	Mon,  3 Aug 2026 13:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785764938; cv=none; b=tA1QVDxL8o37sEFK8ziUs3/yLyHTI8jqkT5VK2KEVXLAX/YNVZe9UgaedzZffekSpEYRAPdyRpLIzg/jgImk+QdiSCB9iiLf7jtpKiBw0D1OZd24dNb7SpxgHmLQP8EZeaC7p9z1a5ogP1GRmsPrjk4Tlt3a+Z45VT7mbuX7FCc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785764938; c=relaxed/simple;
+	bh=y2vq0Rtvi23xC3UBGRZhXisy0K7tCU/fz7MqhkHwOeI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jAYJx2JLNrhnmGLr1e4kyJZWAHZwRW6jB4mqBUjRuioY/ks3HFfKQsUd7gL2D6j/K4+kZbnRelDyB4IqR+AJrFsfPsUjWPA0EZ/PX+RdoMhUP0/BAp4/fZt0UUiJsIJlcjFiuLPqO/qsLaLGtmLkUhq6u4ae3rBKI7RNKzbEx6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c+Fvwqim; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nXbfito7"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-80814edb536so48120107b3.2
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 06:46:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785764771; cv=none;
-        d=google.com; s=arc-20260327;
-        b=KvSTY5zHFkWTNFRQhvZ5BrD36moXmdx1xp66ll3C7T4JWpfqFy20zduqfhLnx9nuHM
-         EDU1wc1mxh5JVD9/Flfj5aQt8PXo0mT9UpFmUWTySdJI18nPTIDBfXBXAekLsZZuE96X
-         +xzwivyAVprjyiOlurvyGVfyXSIkFm6xDBFiCaQiXi3P/aqoLYGLgcwGfvieSv43CSjV
-         pE+K6kx+za13rFPp1CahCb73DgYbMYa91fc68Zm7aJSQhqeJMF6CAIeB/KxVm9TK4hzi
-         Mo5qvE6yW65TRwuKjU/ST0enefDavHZbvqGd+szxesFFAe4n1b/n2XTquGSSjMpebEnS
-         Xg3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=aFLLowd+OV3t61SPjHw+s1uSeKRn83nLQOLuHiouvho=;
-        fh=tFjM1lce2Q/ffzu1PTOmuGHmBMKNr6L+5IVFo7RJ0Xc=;
-        b=H0fPIzWZxCucSwQDykNZAoF8w46Pqe5ubK66cGKrKKpAYsKzVAMqv8+DsFNieJVsf5
-         phG+X0zP9tSyvQBmR1YrAYREhdZfDFgsPiAsVFBp/Zgoe8+Iyk1ZIaKQfLZ1VvDCoBTw
-         Pwc0Sm49U5HR9cwm+tNO6289ndfbAPABIEcsKJEqADX2vm9ZQvv4/ceNWxL77sLiMI2g
-         uDYO57LF95uYmbdhZnEFK+8zcwR3oYNhzuK9bD9k10/RkcEr9hLEFLy5FmXRA+qUV18S
-         nfIeO2a+QvQJ+Den5EF65NNgp5L95SM/WaBtx+OpTTM6rLLeoKonjaf+juJyTye9V9+U
-         khtw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785764771; x=1786369571; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=aFLLowd+OV3t61SPjHw+s1uSeKRn83nLQOLuHiouvho=;
-        b=nXbfito7PDF93pQpmw29hqbkWhUvQ73zky3hp6Bha5drCbQD2XsTDNwd2Z6nwkkyvt
-         vIHAIELyySxnFuG1tpS2FJ4Vo6E4yc4PcA3b/GeOn9mDkObjc135jTL/n75KY4fsW5D8
-         r5b/B7u1UikAZyq54DNI3ynFsG5LPulnqi9hzJVP++qNciT52FQPvYWwOCtnQFRsDISl
-         RER6C/KlN5WYjpxkePB8PCQ3g2dvxwB2zF7EwMtfYwjWRXCwTqeIzZgrsCFzsZVe1Qch
-         A19qkKZh5/v/P82qv4AwDId1VFaITh3/UmBJckfPfx/T2/vXestDLyg9fdcIjsshjqOF
-         CdTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785764771; x=1786369571;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aFLLowd+OV3t61SPjHw+s1uSeKRn83nLQOLuHiouvho=;
-        b=SVgSHPqIiXi/mKRVfSSf3neIgfDanw6JCLO9EWtYa02As3qNH84l/77vbLEj4gPCHe
-         uGxT0PcGxHdpWVXuMVwyZvRcq7VYb312l7SVRG4D6Sc8eKIKVTAS0sH0OavOOrYcwfgU
-         PRfHivRlF6jKZdXvG3oHa1GBOIwYQRFLi6LFEH4tWT5PPi3U+bBKzSyMkcSFWX5kiTO8
-         +7PTLCR22EBj0qdWw3E92IJURugU6TLRQwOEbUu1TDYJ9XDnoQCx0jjlZ/A9QFjXsdCl
-         7AzqVoPaPiJVejabr6niRcwEpqP7R+ziIJxarUw+Ye3bgL5klT/YTigzJCuGGzpQePk2
-         bMWw==
-X-Forwarded-Encrypted: i=1; AHgh+RrDr79cZPfcVxyftwY9aAijwHqRAKKHfGfnzjvLYUH+Pp91Faq6WRviSgaxwniwbqysIbA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeWwOItQYL/u4ejkYg+FvHB1biVsE7siPsXZl7DZgyrZ4gYhMc
-	jpFFy0a0wLRhShoV21VqeIQdjHFMmg2pf0H9+h5vRydC1+wdQ1c9+2YDXu2jqcyuRJ5V0WmQHyg
-	8C5elGWM55sAFp5LsdLGQ8jAVR5njQos=
-X-Gm-Gg: AR+sD10dFJ8CyK3fPzDCeeQW+S3e7fP/EZJaYedcJYvpTRbPrPjA6uX27lU3RGcLnfP
-	SzdqZS2dOvcdJvl9x4rwzKMNfJkljrOAbbRE2kOYf/SM05l3TwOZgPUn8pqgb87kjeujDMz36Ka
-	JGg18Pu7m4iUPPzCk48gARfWW0h+XLMOOJIUDazToX3GVtFMI5nO4tcLr+MFO3An240Q+v2CdOu
-	hmj+vrLgHLcWYCF/y5dZZsmqR3KeMMwYnZ1hqBQz6KkMsHhMJL3FbCGIWN9zRDOECBRDqBIKmtg
-	23xq1FXc3BPXk2awObIkxkvJ39dnqqXw/cRJ7WFW8XgDJr9D3+zsGYdx
-X-Received: by 2002:a05:690c:6e0e:b0:81d:489e:8847 with SMTP id
- 00721157ae682-81fd49c716cmr144522987b3.2.1785764770880; Mon, 03 Aug 2026
- 06:46:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c+Fvwqim"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E38C41F000E9;
+	Mon,  3 Aug 2026 13:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785764937;
+	bh=Jxuvs5IAsxwP+L5G5fsI4l4NRqBN57QdSr9PqE5QsQY=;
+	h=From:To:Cc:Subject:Date;
+	b=c+FvwqimBWULXLkd1RWk3on+ftVmi/q5Q3qJBY9Ku7w2vVepH8QwJ1B3HjPMZJ7i2
+	 wQzf2cfUCz8LBJsowngZ4+vsz7D5uivFi+vcj+Z7G+V3aSuqSS4ziVMuUgmtKQJOwZ
+	 dfzrAFHZhOw+MZziW1BIDiAJS11YF1SU9d3BLRowSKXBDR18n8/tu02pE+zZkilke0
+	 6mSY+JP9MwuV7/qbPSowsRu2RNYMld8eNF0tTvNDVr3c0qdgQjrBRQRnaddy5Wf6aH
+	 qRWFASAkmWEwAuqD1YyXbaAlYuRMNj9JofarISmgI3Z6uMUCfmri9NLwYDfqpCKcpn
+	 R1qY+KBm6awzg==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: "Lai Jiangshan" <jiangshanlai@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	"Josh Triplett" <josh@joshtriplett.org>,
+	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
+	"Frederic Weisbecker" <frederic@kernel.org>,
+	"Neeraj Upadhyay" <neeraj.upadhyay@kernel.org>,
+	"Joel Fernandes" <joelagnelf@nvidia.com>,
+	"Boqun Feng" <boqun@kernel.org>,
+	"Uladzislau Rezki" <urezki@gmail.com>,
+	"Davidlohr Bueso" <dave@stgolabs.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Matt Fleming <mfleming@cloudflare.com>,
+	"Harry Yoo (Oracle)" <harry@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	rcu@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH v2 0/6] rcu,srcu: Make call_rcu()/call_srcu() safe from any context
+Date: Mon,  3 Aug 2026 06:48:16 -0700
+Message-ID: <20260803134839.2103051-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260803112218.3361213-2-dingning04@gmail.com> <a66afeeafca30042408238757e166de2d5ed5bc93a4098e0d57627c63ed7efb2@mail.kernel.org>
-In-Reply-To: <a66afeeafca30042408238757e166de2d5ed5bc93a4098e0d57627c63ed7efb2@mail.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Mon, 3 Aug 2026 06:45:59 -0700
-X-Gm-Features: AUfX_mygFOBvWcZJpU-pd4J_Eq18s-OyZUvHm9LKyyCuB02wT2BpWLcTbEZuahI
-Message-ID: <CAMB2axObnCmR91CTZjf8egdskM-DGVqaArK5n+YYmACUfSOOAA@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 1/4] bpf: Keep refcount_acquire nullable for
- borrowed RCU kptrs
-To: bot+bpf-ci@kernel.org
-Cc: dingning04@gmail.com, bpf@vger.kernel.org, memxor@gmail.com, 
-	greg@kroah.com, stable@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, davemarchevsky@fb.com, 
-	linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com, 
-	ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 3, 2026 at 6:14=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
->
-> > bpf: Keep refcount_acquire nullable for borrowed RCU kptrs
-> >
-> > The verifier can mistake an RCU-loaded map kptr for an owned reference =
-and
-> > assume bpf_refcount_acquire() cannot return NULL. The kfunc uses
-> > refcount_inc_not_zero(), so it can return NULL after the last reference=
- is
-> > dropped. Passing that unchecked result to bpf_obj_drop() can crash the
-> > kernel.
-> >
-> > Only treat the argument as owned when the verifier tracks an acquired
-> > reference for it. Borrowed pointers remain nullable, while owned pointe=
-rs
-> > keep the existing behavior.
-> >
-> > Fixes: 1b12171533a9 ("bpf: Mark direct ld of stashed bpf_{rb,list}_node=
- as non-owning ref")
+call_rcu() and call_srcu() only ever touch their per-CPU callback lists
+with interrupts disabled: the enqueue runs under local_irq_save() (and the
+nocb locks when offloaded), and so do callback invocation and grace-period
+work.  That is fine as long as call_rcu() itself is invoked with
+interrupts enabled, but it is not always.  An NMI handler can call
+call_rcu(), and instrumentation can reenter it.  The case that prompted
+this is a BPF program attached to rcu_segcblist_enqueue() that frees an
+object: the free reaches call_rcu_tasks_trace(), which is call_srcu()
+under the hood, back on the same CPU with the srcu_data lock already held,
+and it deadlocks on that lock.  Either way, enqueuing directly can corrupt
+the list or deadlock.
 
-^^^ The fix tag is correct.
+Rather than scatter context checks through the enqueue, make it defer
+whenever interrupts are disabled: stage the callback on a per-CPU lockless
+list and re-issue it from an irq_work once interrupts are back on, going
+straight to the enqueue helper so the re-issue cannot defer again.  Only
+the drain side takes a lock; the staging is a bare llist_add() and stays
+safe from NMI.  This is behind a new hidden CONFIG_RCU_DEFER, which is set
+wherever a reentrant enqueue is possible (HAVE_NMI, KPROBES,
+FUNCTION_TRACER or TRACEPOINTS); without it call_rcu() enqueues exactly as
+before.
 
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
+CPU offline is the awkward part.  A callback can be deferred very late in
+the outgoing CPU's teardown -- from do_idle() or cpuhp_ap_report_dead(),
+past the CPUHP_AP_SMPCFD_DYING flush that would otherwise run the irq_work
+-- so the irq_work can no longer run there to re-issue it.  rcu_barrier()
+and srcu_barrier() therefore drain the deferred lists themselves before
+they wait: for online CPUs they wait the irq_work out, and for offline
+ones they drain the list directly, since that irq_work may never run
+again.  rcutree_migrate_callbacks() drains the outgoing CPU's list too, so
+a late deferral still lands on a callback list even when nobody calls a
+barrier.  To keep those three drainers from stepping on each other, the
+drain holds a per-CPU raw lock across the llist_del_all() and the
+re-issue, so a drainer never returns having pulled callbacks off the
+deferred list but not yet put them on a callback list.  Every lock the
+re-issue touches (nocb, rcu_node, srcu_data) is already raw, so the
+nesting is fine.
 
->
-> Does this Fixes tag point to the right commit?
->
-> Looking at the code change, the fix adds && reg_is_referenced(env, reg)
-> to an existing condition that checks !type_is_non_owning_ref(reg->type).
-> The problem being fixed is that the verifier incorrectly assumes pointers
-> that are not non-owning refs must be owning refs, which fails to account
-> for borrowed RCU pointers.
->
-> The commit 1b12171533a9 added logic to mark certain pointers as
-> non-owning refs, but the bug appears to originate from commit
-> 7793fc3babe9 ("bpf: Make bpf_refcount_acquire fallible for non-owning
-> refs"), which introduced the logic:
->
->   if (!type_is_non_owning_ref(reg->type))
->       meta->arg_owning_ref =3D true;
->
-> That commit incorrectly assumed pointers that are not non-owning refs
-> must be owning refs, missing the case of borrowed RCU pointers which are
-> neither. The current fix addresses this by verifying the verifier tracks
-> an acquired reference before treating the pointer as owned.
->
-> Should the Fixes tag be:
->
->   Fixes: 7793fc3babe9 ("bpf: Make bpf_refcount_acquire fallible for non-o=
-wning refs")
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/308109=
-49269
+The drain re-issues with interrupts disabled, so instrumentation on the
+enqueue path can re-enter call_rcu()/call_srcu() from inside it, stage
+another callback, re-raise the irq_work, and the drain never finishes.  A
+per-CPU flag set across the re-issue catches that: a deferral that arrives
+while this CPU is draining, and is not from an NMI, is dropped with a
+warning instead of staged.  Dropping leaks that callback, but the
+alternative is a CPU that never leaves the drain, and the producer is a
+BPF program that emits one callback per enqueue, so there is nothing
+finite to wait for.  Instrumenting the irq_work machinery itself can still
+loop, as it can for any irq_work user, and is not something this series
+can fix.
+
+The irq_work is IRQ_WORK_INIT_HARD.  It is not needed for correctness, but
+a non-HARD irq_work runs from a kthread on PREEMPT_RT and can be delayed
+under load, letting deferred callbacks pile up; running the re-issue in
+hard-irq context keeps that from turning into an OOM.
+
+Patches 1 and 2 do Tree and Tiny RCU, 3 and 4 Tree and Tiny SRCU.  Patch 5
+teaches rcutorture to issue ->call() from a perf-overflow NMI -- the
+nmi_calls parameter, on by default -- on the flavors that advertise it,
+and checks that every callback issued from NMI is later invoked.  Patch 6
+adds the BPF reentry reproducer described above.
+
+Changelog:
+v1: https://lore.kernel.org/all/20260729162207.1567770-1-puranjay@kernel.org/
+Changes in v2:
+- Fixed the re-entry livelock Zqiang spotted: a BPF program on the enqueue
+  path re-enters call_srcu() from inside srcu_defer_drain(), stages another
+  callback and re-raises the irq_work, so the drain never finishes.  A
+  per-CPU flag now drops such a deferral, with a warning, unless it comes
+  from an NMI.
+- cleanup_srcu_struct(): drain the deferred callbacks before syncing
+  ->irq_work rather than after, since re-issuing one can start a grace
+  period and re-queue that irq_work (Zqiang).
+- Tiny SRCU: sync ->defer_iw in cleanup_srcu_struct() as well, so a
+  deferred callback is re-issued onto ->srcu_cb_head where the leak checks
+  can see it instead of being stranded on a soon-to-be-freed srcu_struct.
+- Added Kumar's ack to the BPF selftest patch.
+
+Puranjay Mohan (6):
+  rcu: Make call_rcu() safe to call from any context
+  rcu: Make Tiny call_rcu() safe to call from any context
+  srcu: Make call_srcu() safe to call from any context
+  srcu: Make Tiny call_srcu() safe to call from any context
+  rcutorture: Exercise ->call() from NMI context
+  selftests/bpf: Add a call_srcu() re-entry reproducer
+
+ include/linux/srcutiny.h                      |  11 +-
+ include/linux/srcutree.h                      |   4 +
+ kernel/rcu/Kconfig                            |   6 +
+ kernel/rcu/rcu.h                              |  17 ++
+ kernel/rcu/rcutorture.c                       | 112 +++++++++++++
+ kernel/rcu/srcutiny.c                         |  63 +++++++-
+ kernel/rcu/srcutree.c                         | 150 +++++++++++++++++-
+ kernel/rcu/tiny.c                             | 104 +++++++++---
+ kernel/rcu/tree.c                             | 132 +++++++++++++--
+ kernel/rcu/tree.h                             |   5 +
+ .../selftests/bpf/prog_tests/rcu_reentry.c    |  58 +++++++
+ .../testing/selftests/bpf/progs/rcu_reentry.c |  45 ++++++
+ 12 files changed, 666 insertions(+), 41 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
+ create mode 100644 tools/testing/selftests/bpf/progs/rcu_reentry.c
+--
+2.53.0-Meta
+
