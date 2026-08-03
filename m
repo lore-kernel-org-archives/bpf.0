@@ -1,127 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5363D38910D
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 13:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155B8401A08;
+	Mon,  3 Aug 2026 13:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785763196; cv=none; b=iLlOdYyQTaSxWssSNH1g2SKL8zGLuPPUIrHGcLt0xoEbIHj8oDWP7miG6CWqgIZE4Qjnc3+NBONYINzl3PTYPOvoTPhBsyNGMpY+PRsXmeW/RAKvQQYaiNlVNlBaSMRLS+sy5U2JiyyWZ1sG+Ow+MqZMOKh798XhbC7yNcNcI8E=
+	t=1785763765; cv=none; b=Q+Gf61Lq4NeZJCuL0duOXZv+VRAkZLhSy0dZbLLeib9V+oYIFK2Th/OtkFM8av7yLXQhQcq5hUIvcDQ3FPLSQ+Rn/QkmXLMk7dfCAhbmgG9Wb+MAuVUrdci1mInCsm9W4G1wYus9UOaRPCsO+1PMZtq8k47cDc9NSjEStCQGe0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785763196; c=relaxed/simple;
-	bh=Bm/LnULlofAwwFp2t2QdIQpOI6W+9D8kqw/LMmkAFVM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QAdoy6padA4Jk9tWiuC1wxybY/AhQvJYX1lfRDOI9cDZX+cRIqTDF8Icxg8kuqrIiWyiC5xMWiU6igojFNRexLWU+2LaQ9o/QWSMOZNbl9e1nz7SZUDSiWjP6tkAyJRGfAC+afWhbk0iQoKpqxbD5ey1rrIEnGvPch10l8MaJLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hp5sThs0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785763765; c=relaxed/simple;
+	bh=yn8jsw+4QKQ3tHe1ufSA5Y4pVDUfd6U2P4HJKtq+8NY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N7HTE3XUksIlBuSwQhmmGACd96wNuY7utAZxKthPxQvsDab4K5bg7CAwC9t80RXtboJX4BBmTGRr0DC5yvRPB0TKCDolCszpPfkAHUz4+RI3nJS8Z1Kcg4AFMIVQLCbAXsdptx123K7WL7SvmxSgqvfqanX1D1nii/anUjacyPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Cp4s9GJ8; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hp5sThs0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67ECE1F00A3D;
-	Mon,  3 Aug 2026 13:19:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785763187;
-	bh=166GvoZbT74ERtHwAgiH/vGMkZIJSXj34ndKN0lk/uk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Hp5sThs0HPdicuyhqSIkC40Ycizg48CYELhK2y9qXHx56oVN4sa1A6IDLtSSX9xtt
-	 7lIX+8yB2lhgsry/ZgO6/6rm7TocG6s0FU+lhYll90W8UN7FYv/Z3AlEJRGfst6gOr
-	 Y1GOyTZAkTw//v9QVgEybB3V6X/WpDZ4cAy5ZVc5WYijDH2W9Vw9f+tT25gu1E+YPO
-	 kt/VCsap7DZovinkyzxvrquRD4WSDDeuWitqbeng+h7f6xL4WU138IT3uK2rRYSWGO
-	 vhtx8TSZRHkPGYK01gV+NaM8BDEEpFjV7ntIeYiezFxbmNPPMf0s4dArcTEe9TZW9F
-	 Zg+82mUfJeb5A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 1/9] bpf: Support __arena and
- __arena_nullable kfunc argument suffixes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260803125115.2264733-2-memxor@gmail.com>
-References: <20260803125115.2264733-1-memxor@gmail.com>
- <20260803125115.2264733-2-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 03 Aug 2026 13:19:46 +0000
-Message-Id: <20260803131946.67ECE1F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Cp4s9GJ8"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=DIKEvCjFiUxOaUWyROjjbnCY/A5WneBoEyL145Ck1dI=; b=Cp4s9GJ87k77UmWE3xLa5fGyjx
+	AX5zrTMWkDlmQ8Cl9NyGAclBGdmoROijNVFetalMg6sHpkgjq+s2FjHgxKkN+2m3PfgX4e6y+Ryx/
+	IIlioH+favDV8cC8//sBat4dO67lKQ0KDmH7ZyFsQvs3KpOWfRWE8qqrE4pzV6JRPM56ANxbPmvc9
+	DnPwGh6pE81xxZVp6W+KmNaaF7AJAB9sHl2G5NBsyXK7bIQSXFmELJ0sE/71/CriMsCH5XGNUTQ6g
+	fI7hIq5EoE5CP/EmUW9KuvjxnDiE8F//uyyPfj0NEHqhfyz3Ndq8YljzXgtLbl8eSTAsx8a7+Yasr
+	lmGDvteQ==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wqsMR-000O8k-1M;
+	Mon, 03 Aug 2026 15:05:43 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wqsMP-0008bI-1u;
+	Mon, 03 Aug 2026 15:05:41 +0200
+Message-ID: <dc180ce3-e222-4c67-b44b-f792930afd8f@iogearbox.net>
+Date: Mon, 3 Aug 2026 15:05:40 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 0/9] Fixes for bpf_jit_free
+To: Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>,
+ Huacai Chen <chenhuacai@kernel.org>, Ilya Leoshkevich <iii@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Helge Deller <deller@gmx.de>, "David S. Miller" <davem@davemloft.net>,
+ Shahab Vahedi <list+bpf@vahedi.org>, Hari Bathini <hbathini@linux.ibm.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Naveen N Rao <naveen@kernel.org>, Pu Lehui <pulehui@huawei.com>
+References: <20260725154915.2488611-1-pulehui@huaweicloud.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260725154915.2488611-1-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28081/Mon Aug  3 08:25:52 2026)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Valid allocated arena objects at page offset 0 are incorrectly tra=
-nslated to NULL when passed to __arena_nullable kfunc arguments.
---
+Hi Pu,
 
---- Patch [1]: [PATCH bpf-next v3 1/9] bpf: Support __arena and __arena_nul=
-lable kfunc argument suffixes ---
-commit d1b161404c5304b1bf05e11ad5b7dc889d1dcee6
-Author: Tejun Heo <tj@kernel.org>
+On 7/25/26 5:49 PM, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+> 
+> Fixes for bpf_jit_free identified by Sashiko, as previously noted in [0].
+> 
+> Link: https://lore.kernel.org/bpf/28ba19a4-b487-49fd-bbba-04410acdb113@iogearbox.net/ [0]
 
-bpf: Support __arena and __arena_nullable kfunc argument suffixes
+Given you need to introduce a bpf_jit_free multiple times in the various
+JITs, could you rather look into moving this code into the core so core BPF
+code can handle this? Then it would also be easier to test in CI if we can
+consolidate the subprogram failure handling.
 
-This commit adds support for __arena and __arena_nullable kfunc argument
-suffixes, allowing kfuncs to receive directly dereferenceable kernel addres=
-ses
-for arena pointers. It updates the verifier to distill these into argument
-flags for the JIT to retrieve.
+Thanks,
+Daniel
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b274004fccfd9..4c50237f49f13 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -12154,6 +12167,31 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_call_arg_me
-> =20
->  		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
-> =20
-> +		if (base_type(kf_arg_type) =3D=3D KF_ARG_PTR_TO_ARENA) {
+> v3:
+> - Add fix for private stack leak on arm64. (Sashiko)
+> - Some minor fixes.
+> 
+> v2: https://lore.kernel.org/bpf/20260725102020.2287770-1-pulehui@huaweicloud.com
+> - Fix JITs not freeing leftover jit_data when jit_subprogs() aborts. (Sashiko)
+> - Drop fix for loongarch as it's applied.
+> 
+> v1: https://lore.kernel.org/bpf/20260722112754.1615201-1-pulehui@huaweicloud.com
+> 
+> 
+> Pu Lehui (9):
+>    bpf: Extract the bpf_jit_binary_hdr helper
+>    s390/bpf: Fix memory leak in bpf_jit_free
+>    parisc: Fix memory leak in bpf_jit_free
+>    bpf, sparc64: Fix memory leak in bpf_jit_free
+>    ARC, bpf: Fix memory leak in bpf_jit_free
+>    bpf, arm64: Fix memory leak in bpf_jit_free
+>    bpf, arm64: Fix private stack leak when JIT failed
+>    riscv, bpf: Adjust bpf_func to account for CFI offset in bpf_jit_free
+>    bpf: Fix double-free RO header in bpf_jit_free
+> 
+>   arch/arc/net/bpf_jit_core.c      | 19 +++++++++++++++++++
+>   arch/arm64/net/bpf_jit_comp.c    |  6 +++---
+>   arch/loongarch/net/bpf_jit.c     |  6 ++----
+>   arch/parisc/net/bpf_jit_core.c   | 19 +++++++++++++++++++
+>   arch/powerpc/net/bpf_jit_comp.c  |  5 +++--
+>   arch/riscv/net/bpf_jit_core.c    |  8 +++-----
+>   arch/s390/net/bpf_jit_comp.c     | 19 +++++++++++++++++++
+>   arch/sparc/net/bpf_jit_comp_64.c | 19 +++++++++++++++++++
+>   arch/x86/net/bpf_jit_comp.c      |  7 ++-----
+>   include/linux/filter.h           |  2 ++
+>   kernel/bpf/core.c                | 19 ++++++++++---------
+>   11 files changed, 101 insertions(+), 28 deletions(-)
+> 
 
-[Severity: High]
-Can a valid allocated arena object at page offset 0 be incorrectly translat=
-ed
-to NULL when passed to an __arena_nullable kfunc argument?
-
-Looking at arena_map_alloc() in kernel/bpf/arena.c, the range tree of free
-pages includes page offset 0:
-
-    err =3D range_tree_set(&arena->rt, 0, attr->max_entries);
-
-If a user process mmaps the arena or sets map_extra at an address where the
-lower 32 bits are zero (e.g., 0x7f0000000000), a BPF program could allocate
-an object that gets offset 0. When passed to an __arena_nullable kfunc
-argument, the JIT would see the lower 32 bits as exactly zero.
-
-Since the commit message states that __arena_nullable skips the rebase when
-the truncated value (arena offset 0) is zero to preserve NULL, would this
-cause the kfunc to incorrectly assume a valid optional argument is absent
-and lead to dropped data or logic errors?
-
-> +			if (!bpf_jit_supports_arena_args()) {
-> +				verbose(env, "JIT does not support kfunc %s() with arena pointer arg=
-uments\n",
-> +					func_name);
-> +				return -ENOTSUPP;
-> +			}
-> +			if (!env->prog->aux->arena) {
-> +				verbose(env,
-> +					"%s arena pointer requires a program with an associated arena\n",
-> +					reg_arg_name(env, argno));
-> +				return -EINVAL;
-> +			}
-> +			if (regno < 0) {
-> +				verbose(env, "%s arena pointer cannot be a stack argument\n",
-> +					reg_arg_name(env, argno));
-> +				return -EINVAL;
-> +			}
-> +			if (reg->type !=3D PTR_TO_ARENA && reg->type !=3D SCALAR_VALUE) {
-> +				verbose(env, "%s is not a pointer to arena or scalar\n",
-> +					reg_arg_name(env, argno));
-> +				return -EINVAL;
-> +			}
-> +			continue;
-> +		}
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803125115.2264=
-733-1-memxor@gmail.com?part=3D1
