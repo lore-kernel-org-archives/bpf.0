@@ -1,268 +1,405 @@
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B0F43C05D
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 18:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.71
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785782814; cv=none; b=XOyBFPeCvS3WOaJiq1oogTncpmLC4xncVuWAA2SUX1LEJVI0wwk3e4LkqvWNj45R+4G0pjZTV9kloYbyZ/vsqEaTNy0ZsRKK/FLJl8Oyw8AVriXafAPUjL0sZqAk2ZZqsTUgYwe1YeV86BWYhA1driR0kTkBJwpuZklcarusb3c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785782814; c=relaxed/simple;
-	bh=+5keIfq+ahGjGb23E34eAMBpGZbIe+0PkejsdNponjM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=cOcaVQLOxKuLeNebOE/bvbec7UoSMNtIoIIzmlZUmYE5dN+Nz3E1OLkjOMq+hqd+fF9YsQF26klxNtuk3mxuB4X12fHRY1Xg/PAHyuqo5zSBe+wVodzjFTOimI766KtyBfYRH7b+WGjPmLD7KxfJ3iL+U6oDno6aJz6Ox/lZh7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gjgFgxM2; arc=none smtp.client-ip=209.85.216.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA494334BC
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 18:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785783292; cv=pass; b=EsuG/0CqxyvoJK+uFFGkzSOc1JL9Z1JrXLQtkCs+pwKA9LpEG5Ry3RY0cFbR+LiBJvhiE6jrJGawgpE8+n6Gnd7C/SzXyBh6trNJD1fxQ/+lvjW+5VbNZ/jyFXU+qCYZzjxx6Vn3ZEKjImqQ4976VuHa/O3N3wTFZSDPXabeJy4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785783292; c=relaxed/simple;
+	bh=nslW9JE0t9+4wF3BOQF76vvMcWmxIHMVVjC8H216PkY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DZ8guDhS+VfzT/p6nMKu6/gqrTZhHNRwBkV2XkJ7YpnJNdWKmSt/hescxAMtJU+Kj3s3NCQEUCmI74EbLnvIEyFPI2e8SYd1KrC675+sEW3+JS3On9zpqyr4/5yCw+D4smuIMgvfODq2V9AkQwGrC1YvbaAgfNlwCFBGy1Z6O58=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G2hEq1FF; arc=pass smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gjgFgxM2"
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-38fa7b09921so6512741a91.1
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 11:46:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G2hEq1FF"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c1f758014b8so333792866b.3
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 11:54:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785783288; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NRdZUx0OCJEMotss26niQxwY0PrNjmS0vKf/gvsOQXdVvM0e0LPn0vKtIWKhBrmh7K
+         jvYP5SNndRShrKeu5H4EzLSq6tImg9CjYlck8ZTv0h8MPivPrzwAwMeseFuAz2fFVGac
+         g9WnCVJ6U/D/OGHuDNPHS4ObRWAEEvd4GtPrVL5pAOygcvmbfA5axaudA76CQ6X4rxql
+         vx8yV23ZjkYlRQ+R3J/+tDlfUP8w7ifw2/QjPIKn0w1YjbSX47FeBAflb8B3XCEO9Lg3
+         kUcAiF+EMvOKbpsYNkXLIEg86QK5esrnF/aGaIKkpGn7pfxm1KpOwLg5FrQv7vBkAVNr
+         Wuuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=x1AIPF5SDT4J7PNUPtkxqesvFiiIPup4Fza0Vbizlw8=;
+        fh=/brKxvpalpog8EBiE3aQAdYaFNCXMRNw8xSOSEkFukU=;
+        b=eHBBMsp7hmtyxSrEcb7YiZyFDDcwLkKGgms/AlaQns7/b9f/FJUpxtDwWZrXlbgTOf
+         w1Ci/IQAETXgbH8YY03UzJL1iSeOf6mR9FuOsMc0nBpk/ysLU2sfZ37qgxd2vsToDeRh
+         sYor1QGsT8K3snHEX0uva27bUg1VrEmDQjvEePv8yl24CBCsDXuQ49xBDCGd+Jk+c5cd
+         HoxC0kyjjTZQ2RtHGlJnqtpikwZlHdaLYAqgX81VfsLV8bKL7PC/BeZGduQ1XbzhhorH
+         80PCAFp7BzuYHf3BCuyf0JDV9jA3QPAN0nzw5oJVbzMBfloXzb7O8qRvXPPv0McigU9Q
+         5HsA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785782809; x=1786387609; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=cw3abLLZFYPMN/Q20aJiudIzDZfANzTR+tzIkHl7qzg=;
-        b=gjgFgxM2dDXovNc7p/JLjANNzHnbt/S/yh0aBLdV6Z2R8XI477HASIx6ygntorMrjw
-         d3/8IghTkyEA0hVHMjXYXjGnsrMvHPTuJy0STUTBAs0Y4fSsI2i0mJM3IS7mgOqKjFa2
-         VTHxQegL3aSnU8H+9fbGvAwz7wMeuj2f7urDaqmJtNrFtJ4zCsUN5wzfZnY41n+7d8PN
-         ot/w2v8qRf43oRCSMq7gFRN14INCScc5XSTSWatDf/ZddFtwZiZ4TouAqZ1Q9Jwi1fF4
-         uaUcT4yAHjI/en4I3OAVf45ofCyHhkLYAZCgWKHe9+AnzRYbnOGZ+0VF+AN80igkMvsq
-         HS8g==
+        d=gmail.com; s=20251104; t=1785783288; x=1786388088; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=x1AIPF5SDT4J7PNUPtkxqesvFiiIPup4Fza0Vbizlw8=;
+        b=G2hEq1FFiuJWtjyABgEJdUg8ZOnS9h7SkPiCd0yODXQ9FG6TKjZ9lSq3tl1707dRVf
+         sAqhA7UIFlICSOXMyTH836OGIljd5bGBVwGEmWZHyxmdgKbEuafeDcxRlO3vDkWdEMsq
+         +9HJRBoQB/NOMlUxpBt5+av/2xTf+rmxrFTPIXDq/uwXobvwSRLHXhUQGQ0lQW8tYHAa
+         skCOMqM3jS95s8N49EcOJ4AUKihOF1WrjJKioXJJgI17FDyLKvX7rko8KtNm8evrw/El
+         0PmYQOTbtunNDng/yjjPagmKKxbGU3Ecwj8+zE+Y3GJKbFBDfIwu7hz/9s6fWmy5s0ml
+         Oa5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785782809; x=1786387609;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=cw3abLLZFYPMN/Q20aJiudIzDZfANzTR+tzIkHl7qzg=;
-        b=ASMBSqMwIAK/X4E+ARLRP3ODEo2hgtdO9WzDecGfhytTs3cOfRt02XVELCtiV492/o
-         ZVEh/pVXKGBQtCmQjDz5+ZH3EGsbYNHfcomHX96AsK43UgkFWm2+0M2KZIidpMFNPOCY
-         AxEqKle0ZFWtbUy8/x/MJnurSWzF46j5q9C9l9TQlUFZP1HLVsNjtwZ2Ds+YS3R4XI1y
-         mu/wA31LsR+YzCboPM5coBHhOfWN7DzitiCAUg8lPJK95iwjpVkAKdfoH7OupoIfn/K1
-         Aqs+MwYcCED8PFfYiTJr5G+leU8+MtyohKQUKVewKmr+XM6cxZ3FdqaJn8vAFxmUl1vS
-         qMTQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrQgI29XnpkGk39nOAzjQNNxJxSSCPUDbQbq18EKbbzi5XU2AHxls1EmXuSDJkDWSPfeYc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3nhCzSuAlo9x63dNdW9p36m5nsk1JJwFmYdsyHDyZjTiZsDn3
-	LHBbbcsV3+NfF0o7/PG06d6C+XdFBjk3DzxrKvYJPtKqV2WIQRpzUUhq1cCCfcRtRA25sJTQngq
-	GOnlsjJb2n2YSNAttykz2+s7F7A==
-X-Received: from pjuu7.prod.google.com ([2002:a17:90b:5867:b0:38d:f003:cd24])
- (user=hramamurthy job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:57e6:b0:38d:e658:5959 with SMTP id 98e67ed59e1d1-38fbc3e596cmr10248328a91.5.1785782805278;
- Mon, 03 Aug 2026 11:46:45 -0700 (PDT)
-Date: Mon,  3 Aug 2026 18:46:30 +0000
-In-Reply-To: <20260803184630.3813311-1-hramamurthy@google.com>
+        d=1e100.net; s=20251104; t=1785783288; x=1786388088;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=x1AIPF5SDT4J7PNUPtkxqesvFiiIPup4Fza0Vbizlw8=;
+        b=Pw8eqwVqb8In+V0xwv6dkDbIzxdkg/7hpV+YAhbJdcSukEXVizdqm7jEJUKWQ7deuo
+         T6y0fijsUAGbVGITq0gUiQtZ3kVAG5N/tuZjgZsedmzcac4AHBxifmE3vv8X1VxIMLdZ
+         0uZza4p3AhAAyEXMNNGOtRCb1pH+ScYGlSebOVGo7rVC2K0QYzoS8YyMyTnLgDGCCOcn
+         rIdBwY1mSTEMtbhkdja0tgdRyspWBDzm+hyKnU1pAGy7SC6Enqnha/727TRSJB4+jLyX
+         sZsN84Ry/1pJmDRHyk1Fcx6eTURT5/dD9i4dibtFV/qLF9I5nwWiGNMfTSovRhJK2ck8
+         Ffrw==
+X-Gm-Message-State: AOJu0YyagKod+Vm1CWbPeJ/Ie7yjrUCvDUqTE6UpeDOHsKjI9qF5COTT
+	WIQ0oTlnMSKkpxjhVw+mbfF3ukiJks6boQw25PQScD9EL/i74Xzia8zPkI/hTfwf+zaRBdK3zCj
+	5BN038SPWJc7VhpNAwV7vk/1lSA2gMrmIThAfH+s=
+X-Gm-Gg: AR+sD11pW/mZchN9YdexiYgUawN/UnmAsL62gZbilJcMHPkYH/kyQTlpcyqW3kPGNAx
+	ATYS3T4fwOFLgrfnrkVtwj2OaUW7z3djpcn+LNuLqrxsH9ySJdUg0QJO6NYJGIJ+p0zpC2V6brD
+	qPXMtKmlxiCH7SNhhluxMVBDRL3BgFxjHchjeuAJsNXj67pSUO49qAyjQ3+PuVYlKL/ywthSjs3
+	bPMSQgVeermpgRoJZv4v6ZcmLWBRW1naZSvEvLKHaPesKVuFcpEQLsuf8BxhgL7y3otVrfLdW5l
+	Hh1o8BvmhPVs07e/yObVqH8MwItNGFFoM/QbUs1Y3of/ZBZXvm07misAk0EL
+X-Received: by 2002:a17:907:1c22:b0:c15:d4f8:dade with SMTP id
+ a640c23a62f3a-c1fe7eebb0amr1012287766b.2.1785783287476; Mon, 03 Aug 2026
+ 11:54:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260803184630.3813311-1-hramamurthy@google.com>
-X-Mailer: git-send-email 2.55.0.571.g244d577d93-goog
-Message-ID: <20260803184630.3813311-16-hramamurthy@google.com>
-Subject: [PATCH net-next v3 15/15] gve: add link status/speed ctrl ops
-From: Harshitha Ramamurthy <hramamurthy@google.com>
-To: netdev@vger.kernel.org
-Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, sdf@fomichev.me, jordanrhee@google.com, 
-	willemb@google.com, nktgrg@google.com, maolson@google.com, thostet@google.com, 
-	jacob.e.keller@intel.com, debarghyak@google.com, kees@kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+MIME-Version: 1.0
+References: <20260616155716.2631508-1-puranjay@kernel.org> <20260616155716.2631508-4-puranjay@kernel.org>
+ <8a24abbc-10bc-42bb-8fee-0a174d8f1751@linaro.org>
+In-Reply-To: <8a24abbc-10bc-42bb-8fee-0a174d8f1751@linaro.org>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Mon, 3 Aug 2026 19:54:33 +0100
+X-Gm-Features: AUfX_mwx8Ydt3A9LE8X-Qfww0uHrsaIvN1PiEerTcOucV_-waglDDq-7iwaK1XQ
+Message-ID: <CANk7y0inRXCUKtuio3Cb03DvuNPq6yp1o+tsE8PZitrY0LaOPQ@mail.gmail.com>
+Subject: Re: [PATCH v5 3/4] perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
+To: James Clark <james.clark@linaro.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Shuah Khan <shuah@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, Stephane Eranian <eranian@google.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif <usama.arif@linux.dev>, 
+	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Joshua Washington <joshwash@google.com>
-
-Refactor link status check to use a control plane op. Introduce
-new op for retrieving the link status in AQ mode. This op reads
-the link status from the device status register and stores the
-value in priv.
-
-Also add an op for retrieving link speed in AQ mode which calls into
-gve_adminq_report_link_speed.
-
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Reviewed-by: Jordan Rhee <jordanrhee@google.com>
-Signed-off-by: Joshua Washington <joshwash@google.com>
-Signed-off-by: Harshitha Ramamurthy <hramamurthy@google.com>
----
-Changes in v3:
-  - Fix kdoc typo ("set link status" -> "set link speed")
-  - Copy link speed into local variable instead of reading twice to
-    prevent TOCTOU issue.
-
- drivers/net/ethernet/google/gve/gve.h         |  5 ++++
- drivers/net/ethernet/google/gve/gve_adminq.c  | 10 +++++++
- drivers/net/ethernet/google/gve/gve_adminq.h  |  1 +
- drivers/net/ethernet/google/gve/gve_ethtool.c |  3 +--
- drivers/net/ethernet/google/gve/gve_main.c    | 26 ++++++++++++-------
- 5 files changed, 33 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
-index 38b93238e2ca..8e34e9f75006 100644
---- a/drivers/net/ethernet/google/gve/gve.h
-+++ b/drivers/net/ethernet/google/gve/gve.h
-@@ -846,6 +846,8 @@ struct gve_device_info {
-  * @reset_flow_rules: Flush all flow rules from device
-  * @create_queues: Sends commands to the device to create TX/RX queues.
-  * @destroy_queues: Sends commands to the device to destroy TX/RX queues.
-+ * @report_link_status: Set link status into @priv->link_up
-+ * @report_link_speed: Set link speed into @priv->link_speed
-  */
- struct gve_ctrl_ops {
- 	int (*map_db_bar)(struct gve_priv *priv);
-@@ -866,6 +868,8 @@ struct gve_ctrl_ops {
- 	int (*reset_flow_rules)(struct gve_priv *priv);
- 	int (*create_queues)(struct gve_priv *priv);
- 	int (*destroy_queues)(struct gve_priv *priv);
-+	int (*report_link_status)(struct gve_priv *priv);
-+	int (*report_link_speed)(struct gve_priv *priv);
- };
- 
- struct gve_priv {
-@@ -967,6 +971,7 @@ struct gve_priv {
- 
- 	/* Gvnic device link speed from hypervisor. */
- 	u64 link_speed;
-+	bool link_up;
- 	bool up_before_suspend; /* True if dev was up before suspend */
- 
- 	bool mgmt_irq_requested;
-diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-index b04968257355..fe975d1547b2 100644
---- a/drivers/net/ethernet/google/gve/gve_adminq.c
-+++ b/drivers/net/ethernet/google/gve/gve_adminq.c
-@@ -1834,3 +1834,13 @@ int gve_adminq_create_queues(struct gve_priv *priv)
- 
- 	return err;
- }
-+
-+int gve_adminq_report_link_status(struct gve_priv *priv)
-+{
-+	u32 status;
-+
-+	status = ioread32be(&priv->reg_bar0->device_status);
-+	WRITE_ONCE(priv->link_up,
-+		   !!(GVE_DEVICE_STATUS_LINK_STATUS_MASK & status));
-+	return 0;
-+}
-diff --git a/drivers/net/ethernet/google/gve/gve_adminq.h b/drivers/net/ethernet/google/gve/gve_adminq.h
-index 03e8318f7327..82413369dec9 100644
---- a/drivers/net/ethernet/google/gve/gve_adminq.h
-+++ b/drivers/net/ethernet/google/gve/gve_adminq.h
-@@ -643,6 +643,7 @@ int gve_adminq_report_stats(struct gve_priv *priv, u64 stats_report_len,
- 			    dma_addr_t stats_report_addr, u64 interval);
- int gve_adminq_verify_driver_compatibility(struct gve_priv *priv);
- int gve_adminq_get_device_properties(struct gve_priv *priv);
-+int gve_adminq_report_link_status(struct gve_priv *priv);
- int gve_adminq_report_link_speed(struct gve_priv *priv);
- int gve_adminq_add_flow_rule(struct gve_priv *priv, struct gve_adminq_flow_rule *rule, u32 loc);
- int gve_adminq_del_flow_rule(struct gve_priv *priv, u32 loc);
-diff --git a/drivers/net/ethernet/google/gve/gve_ethtool.c b/drivers/net/ethernet/google/gve/gve_ethtool.c
-index dd1c44fedc77..a3220c651438 100644
---- a/drivers/net/ethernet/google/gve/gve_ethtool.c
-+++ b/drivers/net/ethernet/google/gve/gve_ethtool.c
-@@ -749,12 +749,11 @@ static int gve_get_link_ksettings(struct net_device *netdev,
- 	int err = 0;
- 
- 	if (priv->link_speed == 0)
--		err = gve_adminq_report_link_speed(priv);
-+		err = priv->ctrl_ops->report_link_speed(priv);
- 
- 	cmd->base.speed = priv->link_speed;
- 
- 	cmd->base.duplex = DUPLEX_FULL;
+On Mon, Aug 3, 2026 at 12:07=E2=80=AFPM James Clark <james.clark@linaro.org=
+> wrote:
+>
+>
+>
+> On 16/06/2026 16:57, Puranjay Mohan wrote:
+> > Enable bpf_get_branch_snapshot() on ARM64 by implementing the
+> > perf_snapshot_branch_stack static call for BRBE.
+> >
+> > BRBE is paused before masking exceptions to avoid branch buffer
+> > pollution from trace_hardirqs_off(). Exceptions are then masked with
+> > local_daif_save() to prevent PMU overflow pseudo-NMIs from interfering.
+> > If an overflow between pause and DAIF save re-enables BRBE, the snapsho=
+t
+> > detects this via BRBFCR_EL1.PAUSED and bails out.
+> >
+> > Branch records are read using perf_entry_from_brbe_regset() with a NULL
+> > event pointer to bypass event-specific filtering. The buffer is
+> > invalidated after reading.
+> >
+> > Introduce a for_each_brbe_entry() iterator to deduplicate bank
+> > iteration between brbe_read_filtered_entries() and the snapshot.
+> >
+> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> > Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> > ---
+> >   drivers/perf/arm_brbe.c  | 128 ++++++++++++++++++++++++++++++++------=
 -
- 	return err;
- }
- 
-diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-index 484f5a54a408..19e4b56238a0 100644
---- a/drivers/net/ethernet/google/gve/gve_main.c
-+++ b/drivers/net/ethernet/google/gve/gve_main.c
-@@ -1502,15 +1502,18 @@ static int gve_close(struct net_device *dev)
- 	return err;
- }
- 
--static void gve_handle_link_status(struct gve_priv *priv, bool link_status)
-+static void gve_handle_link_status(struct gve_priv *priv)
- {
-+	bool link_up;
-+
- 	if (!gve_get_napi_enabled(priv))
- 		return;
- 
--	if (link_status == netif_carrier_ok(priv->dev))
-+	link_up = READ_ONCE(priv->link_up);
-+	if (link_up == netif_carrier_ok(priv->dev))
- 		return;
- 
--	if (link_status) {
-+	if (link_up) {
- 		netdev_info(priv->dev, "Device link is up.\n");
- 		netif_carrier_on(priv->dev);
- 	} else {
-@@ -1537,7 +1540,6 @@ static int gve_set_xdp(struct gve_priv *priv, struct bpf_prog *prog,
- {
- 	struct bpf_prog *old_prog;
- 	int err = 0;
--	u32 status;
- 
- 	old_prog = READ_ONCE(priv->xdp_prog);
- 	if (!netif_running(priv->dev)) {
-@@ -1564,8 +1566,8 @@ static int gve_set_xdp(struct gve_priv *priv, struct bpf_prog *prog,
- 		bpf_prog_put(old_prog);
- 
- out:
--	status = ioread32be(&priv->reg_bar0->device_status);
--	gve_handle_link_status(priv, GVE_DEVICE_STATUS_LINK_STATUS_MASK & status);
-+	priv->ctrl_ops->report_link_status(priv);
-+	gve_handle_link_status(priv);
- 	return err;
- }
- 
-@@ -1998,11 +2000,11 @@ static void gve_turnup(struct gve_priv *priv)
- 
- static void gve_turnup_and_check_status(struct gve_priv *priv)
- {
--	u32 status;
-+	const struct gve_ctrl_ops *ops = priv->ctrl_ops;
- 
- 	gve_turnup(priv);
--	status = ioread32be(&priv->reg_bar0->device_status);
--	gve_handle_link_status(priv, GVE_DEVICE_STATUS_LINK_STATUS_MASK & status);
-+	ops->report_link_status(priv);
-+	gve_handle_link_status(priv);
- }
- 
- static struct gve_notify_block *gve_get_tx_notify_block(struct gve_priv *priv,
-@@ -2326,12 +2328,14 @@ static void gve_service_task(struct work_struct *work)
- {
- 	struct gve_priv *priv = container_of(work, struct gve_priv,
- 					     service_task);
-+	const struct gve_ctrl_ops *ops = priv->ctrl_ops;
- 	u32 status = ioread32be(&priv->reg_bar0->device_status);
- 
- 	gve_handle_status(priv, status);
- 
- 	gve_handle_reset(priv);
--	gve_handle_link_status(priv, GVE_DEVICE_STATUS_LINK_STATUS_MASK & status);
-+	ops->report_link_status(priv);
-+	gve_handle_link_status(priv);
- }
- 
- static void gve_set_netdev_xdp_features(struct gve_priv *priv)
-@@ -2456,6 +2460,8 @@ static const struct gve_ctrl_ops gve_adminq_ops = {
- 	.teardown_mgmt_irq	= gve_adminq_teardown_mgmt_irq,
- 	.create_queues		= gve_adminq_create_queues,
- 	.destroy_queues		= gve_adminq_destroy_queues,
-+	.report_link_status	= gve_adminq_report_link_status,
-+	.report_link_speed	= gve_adminq_report_link_speed,
- };
- 
- static int gve_init_priv(struct gve_priv *priv)
--- 
-2.55.0.571.g244d577d93-goog
+> >   drivers/perf/arm_brbe.h  |   9 +++
+> >   drivers/perf/arm_pmuv3.c |   5 +-
+> >   3 files changed, 120 insertions(+), 22 deletions(-)
+> >
+> > diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
+> > index effbdeacfcbb..a141ad7abcf2 100644
+> > --- a/drivers/perf/arm_brbe.c
+> > +++ b/drivers/perf/arm_brbe.c
+> > @@ -9,6 +9,7 @@
+> >   #include <linux/types.h>
+> >   #include <linux/bitmap.h>
+> >   #include <linux/perf/arm_pmu.h>
+> > +#include <asm/daifflags.h>
+> >   #include "arm_brbe.h"
+> >
+> >   #define BRBFCR_EL1_BRANCH_FILTERS (BRBFCR_EL1_DIRECT   | \
+> > @@ -256,6 +257,14 @@ static bool valid_brbe_version(int brbe_version)
+> >              brbe_version =3D=3D ID_AA64DFR0_EL1_BRBE_BRBE_V1P1;
+> >   }
+> >
+> > +static __always_inline bool cpu_has_brbe(void)
+>
+> This should be more like cpu_valid_brbe_version(). has_brbe() only
+> implies that the CPU has BRBE, not that it's a version that the driver
+> supports. And it's actually just a wrapper around valid_brbe_version()
+> that accesses the ID reg on that CPU, not a functionally different check.
+>
+> But it also looks like valid_brbe_version() isn't called from anywhere
+> else, so why not delete that function and use its name for the new one?
 
+I will do that in next version
+
+>
+> > +{
+> > +     u64 aa64dfr0 =3D read_sysreg_s(SYS_ID_AA64DFR0_EL1);
+> > +     int brbe =3D cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA=
+64DFR0_EL1_BRBE_SHIFT);
+> > +
+> > +     return valid_brbe_version(brbe);
+> > +}
+> > +
+> >   static void select_brbe_bank(int bank)
+> >   {
+> >       u64 brbfcr;
+> > @@ -271,6 +280,20 @@ static void select_brbe_bank(int bank)
+> >       isb();
+> >   }
+> >
+> > +static inline void __brbe_advance(int *bank, int *idx, int nr_hw)
+> > +{
+> > +     if (++(*idx) >=3D BRBE_BANK_MAX_ENTRIES &&
+> > +         *bank * BRBE_BANK_MAX_ENTRIES + *idx < nr_hw) {
+> > +             *idx =3D 0;
+> > +             select_brbe_bank(++(*bank));
+> > +     }
+> > +}
+> > +
+> > +#define for_each_brbe_entry(idx, nr_hw)                               =
+       \
+> > +     for (int __bank =3D (select_brbe_bank(0), 0), idx =3D 0;         =
+   \
+> > +          __bank * BRBE_BANK_MAX_ENTRIES + idx < (nr_hw);            \
+> > +          __brbe_advance(&__bank, &idx, (nr_hw)))
+> > +
+> >   static bool __read_brbe_regset(struct brbe_regset *entry, int idx)
+> >   {
+> >       entry->brbinf =3D get_brbinf_reg(idx);
+> > @@ -474,11 +497,9 @@ unsigned int brbe_num_branch_records(const struct =
+arm_pmu *armpmu)
+> >
+> >   void brbe_probe(struct arm_pmu *armpmu)
+> >   {
+> > -     u64 brbidr, aa64dfr0 =3D read_sysreg_s(SYS_ID_AA64DFR0_EL1);
+> > -     u32 brbe;
+> > +     u64 brbidr;
+> >
+> > -     brbe =3D cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA64DF=
+R0_EL1_BRBE_SHIFT);
+> > -     if (!valid_brbe_version(brbe))
+> > +     if (!cpu_has_brbe())
+> >               return;
+> >
+> >       brbidr =3D read_sysreg_s(SYS_BRBIDR0_EL1);
+> > @@ -618,10 +639,10 @@ static bool perf_entry_from_brbe_regset(int index=
+, struct perf_branch_entry *ent
+> >
+> >       brbe_set_perf_entry_type(entry, brbinf);
+> >
+> > -     if (!branch_sample_no_cycles(event))
+> > +     if (!event || !branch_sample_no_cycles(event))
+> >               entry->cycles =3D brbinf_get_cycles(brbinf);
+> >
+> > -     if (!branch_sample_no_flags(event)) {
+> > +     if (!event || !branch_sample_no_flags(event)) {
+> >               /* Mispredict info is available for source only and compl=
+ete branch records. */
+> >               if (!brbe_record_is_target_only(brbinf)) {
+> >                       entry->mispred =3D brbinf_get_mispredict(brbinf);
+> > @@ -774,32 +795,97 @@ void brbe_read_filtered_entries(struct perf_branc=
+h_stack *branch_stack,
+> >   {
+> >       struct arm_pmu *cpu_pmu =3D to_arm_pmu(event->pmu);
+> >       int nr_hw =3D brbe_num_branch_records(cpu_pmu);
+> > -     int nr_banks =3D DIV_ROUND_UP(nr_hw, BRBE_BANK_MAX_ENTRIES);
+> >       int nr_filtered =3D 0;
+> >       u64 branch_sample_type =3D event->attr.branch_sample_type;
+> >       DECLARE_BITMAP(event_type_mask, PERF_BR_ARM64_MAX);
+> >
+> >       prepare_event_branch_type_mask(branch_sample_type, event_type_mas=
+k);
+> >
+> > -     for (int bank =3D 0; bank < nr_banks; bank++) {
+> > -             int nr_remaining =3D nr_hw - (bank * BRBE_BANK_MAX_ENTRIE=
+S);
+> > -             int nr_this_bank =3D min(nr_remaining, BRBE_BANK_MAX_ENTR=
+IES);
+> > +     for_each_brbe_entry(i, nr_hw) {
+> > +             struct perf_branch_entry *pbe =3D &branch_stack->entries[=
+nr_filtered];
+> >
+> > -             select_brbe_bank(bank);
+> > +             if (!perf_entry_from_brbe_regset(i, pbe, event))
+> > +                     break;
+> >
+> > -             for (int i =3D 0; i < nr_this_bank; i++) {
+> > -                     struct perf_branch_entry *pbe =3D &branch_stack->=
+entries[nr_filtered];
+> > +             if (!filter_branch_record(pbe, branch_sample_type, event_=
+type_mask))
+> > +                     continue;
+> >
+> > -                     if (!perf_entry_from_brbe_regset(i, pbe, event))
+> > -                             goto done;
+> > +             nr_filtered++;
+> > +     }
+> >
+> > -                     if (!filter_branch_record(pbe, branch_sample_type=
+, event_type_mask))
+> > -                             continue;
+> > +     branch_stack->nr =3D nr_filtered;
+> > +}
+> >
+> > -                     nr_filtered++;
+> > -             }
+> > +/*
+> > + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
+> > + * self-recording and return 0 if the snapshot state appears disturbed=
+.
+> > + */
+> > +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries, =
+unsigned int cnt)
+> > +{
+> > +     unsigned long flags;
+> > +     int nr_hw, nr_copied =3D 0;
+> > +     u64 brbfcr, brbcr;
+> > +
+> > +     if (!cnt)
+> > +             return 0;
+>
+> If you're trying to avoid branches before pausing BRBE, can't you check
+> this after the pause?
+
+will drop this in the next version and this is just an optimization.
+
+>
+> > +
+> > +     /* Guard against running on a CPU without BRBE (e.g. big.LITTLE).=
+ */
+> > +     if (!cpu_has_brbe())
+> > +             return 0;
+> > +
+> > +     /*
+> > +      * Pause BRBE first to avoid recording our own branches. The
+> > +      * sysreg read/write and ISB are branchless, so pausing before
+> > +      * checking BRBCR avoids polluting the buffer with our own
+> > +      * conditional branches.
+> > +      */
+> > +     brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
+> > +     brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
+> > +     write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>
+> Can this work without first disabling interrupts? Sashiko pointed it
+> out, but I think it's correct. If you read an active state into brbfcr,
+> then the PMU event fires and disables BRBE, then you disable interrupts,
+> then you would restore an active state when it should be inactive.
+> Surely the only way to do it properly is to disable interrupts before
+> touching anything at all, if the PMU handler is also touching the same
+> registers?
+>
+> If you want to avoid trace_hardirqs_off() can you make a new
+> raw_local_daif_save() that disables interrupts and then call
+> trace_hardirqs_off() yourself after pausing BRBE? Or not call
+> trace_hardirqs_off() at all? There is a comment mentioning something
+> like that in arch/arm64/kernel/suspend.c.
+
+Yes. I'll add raw_local_daif_save()/raw_local_daif_restore() and mask befor=
+e
+touching any BRBE register, which fixes the stale restore. trace_hardirqs_o=
+ff()
+then moves below the pause so lockdep still sees a balanced off/on pair whi=
+le
+its branches land in an already paused buffer.
+
+>
+> Also, disabling interrupts doesn't stop the PMU event from overflowing
+> and changing the state of PAUSED either. I think this is another path
+> that leads to you restoring the wrong state, so don't you also need to
+> disable the PMU?
+
+Hardware only sets PAUSED on a BRBE freeze event (RBHYTD), and a freeze nee=
+ds
+BRBE to not already be paused (RNXCWF). So once we have paused, nothing cha=
+nges
+underneath us and the PMU does not need disabling. It would not help anyway=
+:
+armv8pmu_stop() calls brbe_disable(), which zeroes BRBCR_EL1 and discards t=
+he
+records we came to read.
+
+You are right that a freeze can still land in the window between reading BR=
+BFCR
+and setting PAUSED, and restoring the value we read would then clear a PAUS=
+ED
+bit the hardware set. So v6 checks PMOVSCLR_EL0 and leaves BRBE paused if a
+counter has overflowed. Reads of PMOVSCLR are non-destructive and it stays =
+set
+until the overflow handler clears it, so it is still visible after we have =
+set
+PAUSED ourselves:
+
+        if (!valid_brbe_version())
+                return 0;
+
+        flags =3D raw_local_daif_save();
+
+        brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
+        brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
+
+        write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+        isb();
+
+        trace_hardirqs_off();
+
+        /* BRBCR_EL1 is zero while the driver has BRBE disabled. */
+        if (!brbcr)
+                goto restore;
+
+        ... read the records ...
+
+        if ((brbfcr & BRBFCR_EL1_PAUSED) || read_pmovsclr())
+                brbfcr |=3D BRBFCR_EL1_PAUSED;
+        else
+                brbe_invalidate();
+restore:
+        write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
+        isb();
+        local_daif_restore(flags);
+
+If BRBE stays paused the records are left alone, they belong to the pending
+overflow handler. Otherwise recording resumes and the records either side o=
+f
+the pause are not contiguous (RPKZCF), so they are discarded.
+
+What do you think about this?
+
+Thanks,
+Puranjay
