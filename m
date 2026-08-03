@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968602D8795
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 21:03:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99EB2D8795
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 21:03:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785791029; cv=none; b=MRLeFU0T8G6OaUjt3HiGMRsjmod09fmh6w7JTCeYzYF/U76ahw0D4Il3LwJrLHWdsvji4jG8NV+gfLVUy/swEGJbEEYAGFiQPo67ZqfcsY6sWKNrSj6o2O5yxpkEbDkcT7maH2D4qPF1e4F9AMkTJcO9j4qSdeDKg19IpVqu9fg=
+	t=1785791041; cv=none; b=NxUfWMPlqx2gkDT7k0NEsITtWSi070osC8J6BFWSHkReEBgKmmDsOlRxp//xU+vAIRpr3dauGtM6SJm3ztQ9qzLYsM56AZ2S9P8RYu/jHH5j6Bo8OlfBKZFW4Dpeo+9f0oFgpcBruR9WhPowXbzW+uZlFcUqjoUcJ96SFe0lvoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785791029; c=relaxed/simple;
-	bh=k7CCtHK/oNMb8FVph54COnEFbjoe1YQrLr1SDBU/DMk=;
+	s=arc-20240116; t=1785791041; c=relaxed/simple;
+	bh=W2cGqnusXD2LFqDYrdLnj0cewoGr0NYqM2L+7sGk158=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mnc4xZeFVXdk079VrkqJWlDDbvnKMc0xmfKy6egSsXCF7npFK44K/bbVo1IioGSuQ5+k8hPb1wB5Dvy5adUNjxEe6zDKMYNKd23iSbI2IBcr/3dDRjg7o91SpSnnPtg7IrK3BG/FAwMZp1XIOxWcazrqfgAECLdiHDTT7RlLJkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ErEPWDre; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=olVif98TSv8hHy0UIIhEkzH/q6ltfWSElEeB3/gXSD62JZL1Fg8D2Ya0CcOUm4KspkO3toBXi66+nOQ5GeYZfJJArZocJxgySEe78qsGAl0VdUrMMF8+nUnW/lOsjI30u1Tez6dkJ6iIVr+xG2fpWF7Ei+2MfXHIN5z08D/mtQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GpqCRGvs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ErEPWDre"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AA51F000E9;
-	Mon,  3 Aug 2026 21:03:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GpqCRGvs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEC8A1F000E9;
+	Mon,  3 Aug 2026 21:03:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785791028;
-	bh=w9UHud3szGDTlvzvwPzDBOJsasb3yiGf0KNdE6SSZzg=;
+	s=k20260515; t=1785791039;
+	bh=+SX8NxUbZeYfjH43erTRUuQb/35jvvrPydgzwfAAIdc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ErEPWDreP9go4H3DzaR/tv9UK9EW9W+L/ibI8+2Z+4RC26LFRqHET+Hdhr+vs2t5Y
-	 1tlYfRlFKEwO6sPFgSiq8t5pf/VntR51u14eZYshhIFVPzQSMg4G57s2ZgPovp2xwW
-	 vtUQa2FkhDYNx8IVwnJP4jEIy2pht5HcmrrYSyXLN2LvfZgAUOoYG6hrF9yJuiIEak
-	 aJhvCfShEJJpFL2+UBnhKunNiVrnDVb5HVCNLoA89LsB8ufiO6soHvGeK4gguHahTO
-	 dQ2edPbm9wm3GjssCKkzUDE96QF9ciSlI/6jXpegk57QxrcOvTcnJV3Mj7SjePJd3g
-	 +0yG1/CzFDKcg==
+	b=GpqCRGvsJfOOSg0f+NSxU/pqTBvU++6BwvXjiD8rDtGWpw5iPfBjizLrzE4JUMNNr
+	 q0XZadVxARxSI6pS8u+UBtShp+C4m5GldZkLCKuhTjs+E5Of5L8qYq5GXbveaVfFIP
+	 W3O8LkQjdXhMg3RoKpSeqpXzSd5MnYuFoCY9eUgGbUxitYajo0GjCVIW3P9KCiogdw
+	 hzrkEKWPUD2vL0hO0La7uR32Xc3mR0XizKENoa8C87KkSp6R0ZPQ6lcA/y+uNIFTO7
+	 yv5kvieoEDGNyAQIROvEMrzez+ovxOBfyZyQXU13U7EjdLWbulEOl71TE1haybQR0U
+	 /1nHyzXW5VGJQ==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -39,9 +39,9 @@ Cc: bpf@vger.kernel.org,
 	Tao Chen <chen.dylane@linux.dev>,
 	STAR Labs SG <info@starlabs.sg>,
 	Arnaud Lecomte <contact@arnaud-lcm.com>
-Subject: [PATCHv3 bpf-next 11/12] bpf: Avoid changing callchain in bpf_get_stack_pe
-Date: Mon,  3 Aug 2026 23:01:48 +0200
-Message-ID: <20260803210149.296496-12-jolsa@kernel.org>
+Subject: [PATCHv3 bpf-next 12/12] bpf: Avoid changing callchain in bpf_get_stackid_pe
+Date: Mon,  3 Aug 2026 23:01:49 +0200
+Message-ID: <20260803210149.296496-13-jolsa@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260803210149.296496-1-jolsa@kernel.org>
 References: <20260803210149.296496-1-jolsa@kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There's no need to modify the trace object bpf_get_stack_pe, we just
+There's no need to modify the trace object bpf_get_stackid_pe, we just
 need to pass the needed callchain length in separate argument.
 
 This way we can have callchain pointers const and remove the trace->nr
@@ -62,113 +62,129 @@ modification and restoration.
 Assisted-by: Codex:GPT-5.5
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/stackmap.c | 36 +++++++++++++++---------------------
- 1 file changed, 15 insertions(+), 21 deletions(-)
+ kernel/bpf/stackmap.c | 39 +++++++++++++++++----------------------
+ 1 file changed, 17 insertions(+), 22 deletions(-)
 
 diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index ab5c9bf5fec5..19858e1562ce 100644
+index 19858e1562ce..da72efc8b774 100644
 --- a/kernel/bpf/stackmap.c
 +++ b/kernel/bpf/stackmap.c
-@@ -661,7 +661,7 @@ const struct bpf_func_proto bpf_get_stackid_proto = {
- 	.arg3_type	= ARG_ANYTHING,
- };
+@@ -506,7 +506,7 @@ get_callchain_entry_for_task(struct task_struct *task, u32 max_depth)
  
--static __u64 count_kernel_ip(struct perf_callchain_entry *trace)
-+static __u64 count_kernel_ip(const struct perf_callchain_entry *trace)
- {
- 	__u64 nr_kernel = 0;
- 
-@@ -741,15 +741,15 @@ const struct bpf_func_proto bpf_get_stackid_proto_pe = {
- 	.arg3_type	= ARG_ANYTHING,
- };
- 
--static u32 callchain_store(struct perf_callchain_entry *trace, void *buf,
--			   u32 elem_size, u64 flags)
-+static u32 callchain_store(const struct perf_callchain_entry *trace, u32 trace_nr,
-+			   void *buf, u32 elem_size, u64 flags)
- {
- 	bool user_build_id = flags & BPF_F_USER_BUILD_ID;
- 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
--	u32 trace_nr, copy_len;
+ struct stackid {
+ 	struct stack_map_bucket *bucket;
 -	u64 *ips;
 +	const u64 *ips;
-+	u32 copy_len;
- 
--	trace_nr = trace->nr - skip;
-+	trace_nr = trace_nr - skip;
- 	copy_len = trace_nr * elem_size;
- 
- 	ips = trace->ip + skip;
-@@ -833,7 +833,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 		goto err_fault;
- 	}
- 
--	trace_nr = callchain_store(trace, buf, elem_size, flags);
-+	trace_nr = callchain_store(trace, trace->nr, buf, elem_size, flags);
- 
- 	/* trace should not be dereferenced after this point */
- 	if (may_fault)
-@@ -935,8 +935,8 @@ const struct bpf_func_proto bpf_get_task_stack_sleepable_proto = {
- 	.arg4_type	= ARG_ANYTHING,
+ 	u32  nr;
+ 	u32  len;
+ 	u32  hash;
+@@ -515,21 +515,21 @@ struct stackid {
  };
  
--static int __bpf_get_stack_pe(struct perf_callchain_entry *trace, void *buf, u32 size,
--			      u64 flags)
-+static int __bpf_get_stack_pe(const struct perf_callchain_entry *trace, u32 trace_nr,
-+			      void *buf, u32 size, u64 flags)
+ static int stackid_init(struct stackid *stackid, struct bpf_map *map,
+-			struct perf_callchain_entry *trace, u64 flags)
++			const struct perf_callchain_entry *trace, u32 trace_nr, u64 flags)
  {
- 	bool user_build_id = flags & BPF_F_USER_BUILD_ID;
- 	u64 skip = flags & BPF_F_SKIP_FIELD_MASK;
-@@ -952,12 +952,12 @@ static int __bpf_get_stack_pe(struct perf_callchain_entry *trace, void *buf, u32
- 		return -EINVAL;
+ 	struct bpf_stack_map *smap = container_of(map, struct bpf_stack_map, map);
+ 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+ 	u32 max_depth;
  
- 	max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
--	trace->nr = min_t(u32, trace->nr, max_depth);
-+	trace_nr = min_t(u32, trace_nr, max_depth);
- 
--	if (trace->nr < skip)
-+	if (trace_nr < skip)
+-	if (trace->nr <= skip)
++	if (trace_nr <= skip)
+ 		/* skipping more than usable stack trace */
  		return -EFAULT;
  
--	nr_trace = callchain_store(trace, buf, elem_size, flags);
-+	nr_trace = callchain_store(trace, trace_nr, buf, elem_size, flags);
- 	return callchain_finalize(buf, size, nr_trace, elem_size, flags, false /* !may_fault */);
+ 	max_depth = stack_map_calculate_max_depth(map->value_size, stack_map_data_size(map), flags);
+-	stackid->nr = min_t(u32, trace->nr - skip, max_depth - skip);
++	stackid->nr = min_t(u32, trace_nr - skip, max_depth - skip);
+ 	stackid->len = stackid->nr * sizeof(u64);
+ 	stackid->ips = trace->ip + skip;
+-	stackid->hash = jhash2((u32 *)stackid->ips, stackid->len / sizeof(u32), 0);
++	stackid->hash = jhash2((const u32 *)stackid->ips, stackid->len / sizeof(u32), 0);
+ 	stackid->id = stackid->hash & (smap->n_buckets - 1);
+ 	stackid->bucket = READ_ONCE(smap->buckets[stackid->id]);
+ 	stackid->hash_matches = stackid->bucket && stackid->bucket->hash == stackid->hash;
+@@ -537,11 +537,12 @@ static int stackid_init(struct stackid *stackid, struct bpf_map *map,
  }
  
-@@ -965,8 +965,8 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
- 	   void *, buf, u32, size, u64, flags)
+ static int stackid_fastpath(struct stackid *stackid, struct bpf_map *map,
+-			    struct perf_callchain_entry *trace, u64 flags)
++			    const struct perf_callchain_entry *trace, u32 trace_nr,
++			    u64 flags)
  {
- 	struct pt_regs *regs = (struct pt_regs *)(ctx->regs);
+ 	int err;
+ 
+-	err = stackid_init(stackid, map, trace, flags);
++	err = stackid_init(stackid, map, trace, trace_nr, flags);
+ 	if (err)
+ 		return err;
+ 
+@@ -640,7 +641,7 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+ 			/* couldn't fetch the stack trace */
+ 			return -EFAULT;
+ 
+-		err = stackid_fastpath(&stackid, map, trace, flags);
++		err = stackid_fastpath(&stackid, map, trace, trace->nr, flags);
+ 		if (err != -ENOENT)
+ 			return err;
+ 
+@@ -676,12 +677,13 @@ static __u64 count_kernel_ip(const struct perf_callchain_entry *trace)
+ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
+ 	   struct bpf_map *, map, u64, flags)
+ {
 +	const struct perf_callchain_entry *trace;
  	struct perf_event *event = ctx->event;
+ 	struct stack_map_bucket *new_bucket;
 -	struct perf_callchain_entry *trace;
+ 	struct stackid stackid;
  	bool kernel, user;
- 	int err = -EINVAL;
  	__u64 nr_kernel;
-@@ -989,13 +989,7 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
++	u32 trace_nr;
+ 	int ret;
+ 
+ 	/* perf_sample_data doesn't have callchain, use bpf_get_stackid */
+@@ -701,13 +703,13 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
+ 		return -EFAULT;
+ 
  	nr_kernel = count_kernel_ip(trace);
+-	__u64 nr = trace->nr; /* save original */
  
  	if (kernel) {
--		__u64 nr = trace->nr;
--
 -		trace->nr = nr_kernel;
--		err = __bpf_get_stack_pe(trace, buf, size, flags);
--
--		/* restore nr */
--		trace->nr = nr;
-+		err = __bpf_get_stack_pe(trace, nr_kernel, buf, size, flags);
++		trace_nr = nr_kernel;
  	} else { /* user */
  		u64 skip = flags & BPF_F_SKIP_FIELD_MASK;
  
-@@ -1003,7 +997,7 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
++		trace_nr = trace->nr;
+ 		skip += nr_kernel;
  		if (skip > BPF_F_SKIP_FIELD_MASK)
- 			goto clear;
+ 			return -EFAULT;
+@@ -715,21 +717,14 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
  		flags = (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
--		err = __bpf_get_stack_pe(trace, buf, size, flags);
-+		err = __bpf_get_stack_pe(trace, trace->nr, buf, size, flags);
  	}
  
- clear:
+-	ret = stackid_fastpath(&stackid, map, trace, flags);
++	ret = stackid_fastpath(&stackid, map, trace, trace_nr, flags);
+ 	if (ret != -ENOENT)
+-		goto out;
++		return ret;
+ 
+ 	new_bucket = stackid_new_bucket(&stackid, map);
+-	if (new_bucket) {
+-		trace->nr = nr;
++	if (new_bucket)
+ 		return stackid_install(&stackid, map, new_bucket, flags);
+-	}
+-	ret = -ENOMEM;
+-
+-out:
+-	/* restore nr */
+-	trace->nr = nr;
+-	return ret;
++	return -ENOMEM;
+ }
+ 
+ const struct bpf_func_proto bpf_get_stackid_proto_pe = {
 -- 
 2.54.0
 
