@@ -1,76 +1,119 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161662E717B
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 02:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77982AD3C
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 03:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785725057; cv=none; b=N99VKupuFq6x1uwTQgSz3tUvVejKpxZnlDC2v1f9kOuanxhIO9AUxGVSiqZ1nS1/qUZgOMHoG9IvMaq5h+UfZNYlT+fOL6/iLirvcY4zPsXEyeUNYEjRAQgP3HEAxQhzJFJZ+0cMHdykyBv4yWgnN6xg/I6E8WQbZLoUUt/LmS4=
+	t=1785726901; cv=none; b=kqTA1bMsqk3dgN6W8dyTz3WmEGn/hkQCu9BrfQyh7niBWTOn2JApSOaGG+69+prU+FAFOt1mo0smWltTLTH8jOATL1JnkHy+Sc7lscFfxFpN1Wc+V/JN2NxizBbAIC3ZIab++bP3gVRWNWmPuT5742vsGClSrcb0k7dOSaMzNpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785725057; c=relaxed/simple;
-	bh=K5s9lTAQPLH/FEQye48lkO8oviReYqMjahuDwGe1BD8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WPp8Jp8Hue+l0vNkHWoKinEYILTVgWTaErRfCMgkNAXtNyzxNeAvPYp+OEEf8YmOia2ueRE2GnoTZSJVS4I6GZCVu0Q07rOco/vYnTDCh6S+XBnCUFCva6aQDcczk/c21j8d83QPbOHKhFB2G0xdCqc35U1H/g6belLk8T9N4pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o/5jzC0A; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785726901; c=relaxed/simple;
+	bh=vpJIGXu0nzrV/bpHaq9mbTPX9L+mvyrvG2X3T8VGG78=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FhfZ+0m6Ie48YGotPhZ14GrE/GGNM9XS3Rd2hbnOjEAoP6dLGMMYp/GZae2yRaLBkOJQs11+Sn0PEPxJpkKBFWYATJHtPvYbSk3Sb0gUXlw2SndoCH5Nzup/5E63lWxSE9ZA0YlQBbBPdhA6OF/ug5PqP7WUcOpUcEBPIg37L5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i0QFpbND; arc=none smtp.client-ip=74.125.225.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o/5jzC0A"
-Message-ID: <a68933c3-39d6-414e-b869-bb3fd1a6b4ba@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785725052;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IaMVPcpYZB9rfzDTPJpCcq6FfrbIBXVXDRiLOonr2y4=;
-	b=o/5jzC0A+DN9k4z4e8lt4e557gg1qfJvrH/ssib85T1UJ9IghuOeHSnBKFV40eYczdoe9o
-	b91BQhtfrCcS9x2msiG9q0Ym9LIK50Z2kJ3G3bSidiLKnoCXUDxcTFNrF7AjPBBg55zQ9X
-	TiBilDU0qG/u0GGN0AlCf77pWYO2ixg=
-Date: Mon, 3 Aug 2026 10:44:04 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i0QFpbND"
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47fcb9d4b33so1460481f8f.0
+        for <bpf@vger.kernel.org>; Sun, 02 Aug 2026 20:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785726898; x=1786331698; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Hna1dmBx6znS9FIWRPUvRRLQzTARisbvU5IyeP1LGLo=;
+        b=i0QFpbNDLkffiJbCGZlDCpz8jFee+Tb5ma3eW0bXkNdxNiEKx55tuXPgkMpMRU3z36
+         uqrYql+rg8Y71v2GaabJZ/Xm4mYP4tfa9h0Cfx174MfzyrW/3GjlgstfDPIfFfiV9tvt
+         ip4SpGC1Gqdx/Hol/23ZXziPNznO9zsLh7kn558rujCGrUQOxmjJn+IePoR4bPcDa4e7
+         ppCLXHLvr6fRp8vkjhHBhBPMUdRTetfOUOW8aHAoONI+6153BgvI7YIHt2hBJkQzdkou
+         HckmEuUCYPItXFIl6jZmY5m0EWI/5o/ZOhJ3/23/uQTLLs+pBRdPraucGc3tTYhqRJ64
+         Xw3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785726898; x=1786331698;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Hna1dmBx6znS9FIWRPUvRRLQzTARisbvU5IyeP1LGLo=;
+        b=etmV9i6jPQ399TF1nYN33T3/4U9mQMAM59p/K9Hklgm+z3RBDJDmC1uPHHgOIC+2Wx
+         AFSb9HWQMDyf8vaNVfhcB30rqEstmeympH4YOSuY19BWSlskbG2iIkTlOC8upHZHtbIp
+         dDKGj/om+/Fv4pga8Q3VefB/iH+vQ3ty/AgIvkGUM7Tdar1KelEdRE/5dM/oIbRz0amv
+         UInUbBWNr4C6yD8UyiYYKCShtjMqysk3EhKgRvSlxh9pVB3D7bJruOAUeqq35NafueYi
+         aM3Vddo2wdQJuTHqyM9wZATmlySeHdi+JWTwIpRljSaNjVSPSrUQ27qJvAtE1G8MyroS
+         i5aw==
+X-Gm-Message-State: AOJu0Yzgsj15qnzYPFxsxL2XghtlRoy2UVrgTpZIzwMOgZrNEJqgzdIU
+	R3KTLFNOIfPCtwBVOw86AfEYDdNzi/HzbXkaSPm2q4JQArDzpIvP/NHaWqICBfeU
+X-Gm-Gg: AR+sD12vkvodW74F3CxXARfmQcmNEhxSnHXsVt0nVVTg/v1PsLrZsGDxUxkOcnshAbM
+	dQ7GBc9dIoL7sQwBG9JIibbj0CfO3rFCDjyYGKv6zBu1NQKZNtK9RpipaLfcGJkeCLTHL35MgbP
+	5rZPUwOkbyE2SCDHUToAz0LNaKI+qV3meFRKMwNwfo6AZgXkyGJseBqealG+lGaQEROvm99TpQP
+	ZXnKgkGEXv/gJ1ROjWMeEwLVeRVbQgxB5JFjucWhgPaeYd2bh5IwLbej1Dpou3wjqbgod+2hSTY
+	ABiyO1JzENdQraTDq7yaq7GNOaMsTxQ/FvURUoofxu+5e44PBZ4cg8bZeqrpJ+GX1JCNZlBBs1x
+	tETGESuxVqu1LyDyArdcJXRsYUZdS3aXO0E4t1GhXIq6yWWfv5ap3QdTERQIH1bYEuwmrpvQ44W
+	A6labEOBXvPid6DFq0os9wf/oaNEIPan5fcAbnQVviQkiUuYn5wpb316+TGrt3d6E3oBfccsRMh
+	c3s4jH274v0mwNTkMlt5CNQ6d6fz5r9RDfvNkR2M1qdFAUeZp+aS4lSeceN8ZbYRBdR1nDsL8xd
+	c1BPHBH6VBgpX139ukJo/cyPUpc=
+X-Received: by 2002:a05:600c:917:b0:496:c06b:9fb4 with SMTP id 5b1f17b1804b1-4980c65c487mr122254995e9.14.1785726898098;
+        Sun, 02 Aug 2026 20:14:58 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49807b9441csm179644845e9.4.2026.08.02.20.14.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Aug 2026 20:14:57 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v3 0/3] Improve stack depth verification stats output
+Date: Mon,  3 Aug 2026 05:14:52 +0200
+Message-ID: <20260803031457.3115812-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next] bpf: add BPF_F_SEALED flag to seal BPF links at
- creation
-To: David Windsor <dwindsor@gmail.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>
-References: <20260803021643.2189641-1-dwindsor@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260803021643.2189641-1-dwindsor@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1364; i=memxor@gmail.com; h=from:subject; bh=vpJIGXu0nzrV/bpHaq9mbTPX9L+mvyrvG2X3T8VGG78=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIauAfbqfeOqHZYER5uIyUdGWb+SSTxb4WikUrWEOL1m04 G0Gy92OUhYGMS4GWTFFlpL/+5iMT1T+DrRdxg0zh5UJZAgDF6cATMR7LsM/fYGcJX/mqbNJ27dt KSqx2PV2tvNVE9HJiTNuWT18cUEhmZHhUExaw807HzMEN3F+YajSsWMUV9pzZDWDmpb3/vkGsS8 ZAA==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-On 3/8/26 10:16, David Windsor wrote:
-> Introduce a new BPF_F_SEALED flag for BPF_LINK_CREATE that creates the
-> link permanently sealed. A sealed link can never have its program
-> replaced via BPF_LINK_UPDATE, can never be detached via BPF_LINK_DETACH,
-> and holds an extra self-reference that is never released, so the link and
-> its program attachment persist until the machine reboots, even after user
-> space closes every fd referring to it. There is no way to unseal a link.
-> 
-> The sealed state is tracked by a new bool field on struct bpf_link.
+Some improvements for more clarity in the stack depth verification
+statistics output. See commit logs for details.
+
+Changelog:
+----------
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260802225209.2511758-1-memxor@gmail.com
+
+ * Reuse subprog_name() to fetch subprogram names. (BPF CI Bot)
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260801230400.850271-1-memxor@gmail.com
+
+ * Use multi-line format. (Eduard)
+ * Adjust veristat to work with old and new format.
+ * Adjust selftest log_level without new option. (Eduard)
+
+Kumar Kartikeya Dwivedi (3):
+  bpf: Show more useful info in stack depth stats
+  selftests/bpf: Adjust veristat stack depth parsing
+  selftests/bpf: Test stack depth stats without BTF subprog names
+
+ kernel/bpf/verifier.c                         | 13 +++++++----
+ .../bpf/progs/verifier_basic_stack.c          |  4 ++--
+ .../bpf/progs/verifier_bpf_fastcall.c         | 23 ++++++++++++-------
+ .../bpf/progs/verifier_private_stack.c        | 15 +++++++++---
+ .../selftests/bpf/progs/verifier_var_off.c    |  4 ++--
+ tools/testing/selftests/bpf/test_verifier.c   |  2 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |  6 ++++-
+ tools/testing/selftests/bpf/veristat.c        | 16 +++++++++----
+ 8 files changed, 58 insertions(+), 25 deletions(-)
 
 
-Why do you want BPF_F_SEALED? What's your case for it?
+base-commit: 8f876c773b79ed66dadc9507f50dbff39c6a9ec7
+-- 
+2.53.0
 
-I think 'sealed' should be set before allocating the FD to avoid the
-race issues reported by Sashiko.
-
-Thanks,
-Leon
-
-> [...]
