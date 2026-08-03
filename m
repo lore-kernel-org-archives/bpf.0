@@ -1,48 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC215306B08;
-	Mon,  3 Aug 2026 21:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968602D8795
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 21:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785791018; cv=none; b=OnVywrZH/skmyFUdxvg57otDzoJQqHyXs7sTh/3g5Pq4iac5U0BkeSFRIY56slUy+PjfDuXoMCvE4YtXe74Lbho9jTZqCZtPL3MyX0xl3RmnsNwnGdDBURJivKutxMiVXENK+yqJ4GWvDe9C/gogXfArzS4wWy7e/Ay3QhYS0uk=
+	t=1785791029; cv=none; b=MRLeFU0T8G6OaUjt3HiGMRsjmod09fmh6w7JTCeYzYF/U76ahw0D4Il3LwJrLHWdsvji4jG8NV+gfLVUy/swEGJbEEYAGFiQPo67ZqfcsY6sWKNrSj6o2O5yxpkEbDkcT7maH2D4qPF1e4F9AMkTJcO9j4qSdeDKg19IpVqu9fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785791018; c=relaxed/simple;
-	bh=Zbxq8EfJE7QGrneYnP0uesJXOE3cP/aTkkhLdWwNLdY=;
+	s=arc-20240116; t=1785791029; c=relaxed/simple;
+	bh=k7CCtHK/oNMb8FVph54COnEFbjoe1YQrLr1SDBU/DMk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dPlZ9R2lTij1n/MVkiDW3PUtbTAeepbvxWqdN0eucASbp0vvlNPN+aNArgz6DtoTlsWhr+J9CvKWRoxPAtswnHnpd8fpyZGB8q+wvF47nRhec/AVKOaKLq9hmO1rlFjX6XzAJe5IMBuFF7IhF0qdgSUPG+472eU6I4k+kUUy2zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hJOq+TYb; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=Mnc4xZeFVXdk079VrkqJWlDDbvnKMc0xmfKy6egSsXCF7npFK44K/bbVo1IioGSuQ5+k8hPb1wB5Dvy5adUNjxEe6zDKMYNKd23iSbI2IBcr/3dDRjg7o91SpSnnPtg7IrK3BG/FAwMZp1XIOxWcazrqfgAECLdiHDTT7RlLJkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ErEPWDre; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hJOq+TYb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E621F00A3A;
-	Mon,  3 Aug 2026 21:03:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ErEPWDre"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AA51F000E9;
+	Mon,  3 Aug 2026 21:03:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785791016;
-	bh=Qnfh4JICYJ9FlGz1GzIOCgZ9rF5GyvVrf/jtdXjAtwY=;
+	s=k20260515; t=1785791028;
+	bh=w9UHud3szGDTlvzvwPzDBOJsasb3yiGf0KNdE6SSZzg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=hJOq+TYbhERt3CaXXmqQorC7KxksL81B59ZfcMpW4D0Vxfw+8FL8yda2OArxX4uHl
-	 qu8I6amDO/UEM8v2If3pPBssAQwujknCQH3aWOry3Di2wD72AH5da4XpZ8kC6WghiL
-	 /OP0E1R7tJ8A/gjDMXG2EsHsQnEqzjcWE9ZtFQzamZt65dc6llGS1+6aYlEqVSYU7G
-	 tdJgT+68nv3BG3R+BLaeuv4PKleU/TM0CXPLfi5n89HnSLVyFsYJ7BgNiE84mRw3wp
-	 F+OUcDxVxmjQu0ZhNdxc/oZVvLePyZ+3OvHY316kUbsrbDwSwPjZA6fpjWEr59fkQb
-	 c6YfGgQ4zK/wA==
+	b=ErEPWDreP9go4H3DzaR/tv9UK9EW9W+L/ibI8+2Z+4RC26LFRqHET+Hdhr+vs2t5Y
+	 1tlYfRlFKEwO6sPFgSiq8t5pf/VntR51u14eZYshhIFVPzQSMg4G57s2ZgPovp2xwW
+	 vtUQa2FkhDYNx8IVwnJP4jEIy2pht5HcmrrYSyXLN2LvfZgAUOoYG6hrF9yJuiIEak
+	 aJhvCfShEJJpFL2+UBnhKunNiVrnDVb5HVCNLoA89LsB8ufiO6soHvGeK4gguHahTO
+	 dQ2edPbm9wm3GjssCKkzUDE96QF9ciSlI/6jXpegk57QxrcOvTcnJV3Mj7SjePJd3g
+	 +0yG1/CzFDKcg==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>
-Cc: stable@vger.kernel.org,
-	Tao Chen <chen.dylane@linux.dev>,
-	STAR Labs SG <info@starlabs.sg>,
-	bpf@vger.kernel.org,
+Cc: bpf@vger.kernel.org,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Song Liu <songliubraving@fb.com>,
 	Yonghong Song <yhs@fb.com>,
 	Quentin Monnet <qmo@kernel.org>,
+	Tao Chen <chen.dylane@linux.dev>,
+	STAR Labs SG <info@starlabs.sg>,
 	Arnaud Lecomte <contact@arnaud-lcm.com>
-Subject: [PATCHv3 bpf-next 10/12] bpf: Disable preemption in __bpf_get_stack
-Date: Mon,  3 Aug 2026 23:01:47 +0200
-Message-ID: <20260803210149.296496-11-jolsa@kernel.org>
+Subject: [PATCHv3 bpf-next 11/12] bpf: Avoid changing callchain in bpf_get_stack_pe
+Date: Mon,  3 Aug 2026 23:01:48 +0200
+Message-ID: <20260803210149.296496-12-jolsa@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260803210149.296496-1-jolsa@kernel.org>
 References: <20260803210149.296496-1-jolsa@kernel.org>
@@ -54,78 +53,122 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Daniel Borkmann <borkmann@iogearbox.net>
+There's no need to modify the trace object bpf_get_stack_pe, we just
+need to pass the needed callchain length in separate argument.
 
-get_perf_callchain() returns a per-CPU perf_callchain_entry buffer and
-releases its recursion slot via put_callchain_entry() before returning,
-so nothing keeps the entry reserved while __bpf_get_stack() consumes
-it below.
+This way we can have callchain pointers const and remove the trace->nr
+modification and restoration.
 
-A preemptible BPF program (e.g. a non-sleepable raw tracepoint program
-on a PREEMPT kernel, which runs under migrate_disable() but not
-preempt_disable()) can be scheduled out between obtaining the entry
-and the copy. Another task scheduled on the same CPU then reuses the
-same per-CPU buffer and overwrites trace->nr with a larger value.
-copy_len is then computed from the inflated trace->nr and can exceed
-the caller's buffer, causing an out-of-bounds write in the memcpy()
-and in the build_id path.
-
-The rcu_read_lock() taken here alone does not prevent this. It is
-only taken on the may_fault path, and under CONFIG_PREEMPT_RCU it does
-not disable preemption; it merely keeps perf's callchain buffer array
-alive (freed via call_rcu()) and does nothing to stop another task
-from reusing the entry.
-
-Disable preemption around obtaining the callchain entry and copying
-it into the caller's buffer, so the entry cannot be reused underneath
-us and trace->nr stays bounded by max_depth. Build ID resolution may
-fault and is therefore deferred until after preemption is re-enabled;
-by then the instruction pointers have already been copied into buf,
-so it operates only on that private copy. Note, preempt_disable() also
-subsumes the buffer-lifetime guarantee the rcu_read_lock() provided,
-since a preempt-disabled section is an RCU read-side critical section
-for the callchain buffers' call_rcu() reclaim.
-
-Cc: stable@vger.kernel.org
-Fixes: c195651e565a ("bpf: add bpf_get_stack helper")
-Reported-by: Tao Chen <chen.dylane@linux.dev>
-Closes: https://lore.kernel.org/bpf/20260206090653.1336687-1-chen.dylane@linux.dev/
-Reported-by: STAR Labs SG <info@starlabs.sg>
-Signed-off-by: Daniel Borkmann <borkmann@iogearbox.net>
-[ changed Fixes: commit ]
+Assisted-by: Codex:GPT-5.5
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/stackmap.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/bpf/stackmap.c | 36 +++++++++++++++---------------------
+ 1 file changed, 15 insertions(+), 21 deletions(-)
 
 diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 7f728d319a65..ab5c9bf5fec5 100644
+index ab5c9bf5fec5..19858e1562ce 100644
 --- a/kernel/bpf/stackmap.c
 +++ b/kernel/bpf/stackmap.c
-@@ -817,6 +817,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+@@ -661,7 +661,7 @@ const struct bpf_func_proto bpf_get_stackid_proto = {
+ 	.arg3_type	= ARG_ANYTHING,
+ };
  
- 	if (may_fault)
- 		rcu_read_lock(); /* need RCU for perf's callchain below */
-+	preempt_disable();
+-static __u64 count_kernel_ip(struct perf_callchain_entry *trace)
++static __u64 count_kernel_ip(const struct perf_callchain_entry *trace)
+ {
+ 	__u64 nr_kernel = 0;
  
- 	if (kernel && task) {
- 		trace = get_callchain_entry_for_task(task, max_depth);
-@@ -828,6 +829,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 	if (unlikely(!trace) || trace->nr < skip) {
- 		if (may_fault)
- 			rcu_read_unlock();
-+		preempt_enable();
+@@ -741,15 +741,15 @@ const struct bpf_func_proto bpf_get_stackid_proto_pe = {
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
+-static u32 callchain_store(struct perf_callchain_entry *trace, void *buf,
+-			   u32 elem_size, u64 flags)
++static u32 callchain_store(const struct perf_callchain_entry *trace, u32 trace_nr,
++			   void *buf, u32 elem_size, u64 flags)
+ {
+ 	bool user_build_id = flags & BPF_F_USER_BUILD_ID;
+ 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+-	u32 trace_nr, copy_len;
+-	u64 *ips;
++	const u64 *ips;
++	u32 copy_len;
+ 
+-	trace_nr = trace->nr - skip;
++	trace_nr = trace_nr - skip;
+ 	copy_len = trace_nr * elem_size;
+ 
+ 	ips = trace->ip + skip;
+@@ -833,7 +833,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
  		goto err_fault;
  	}
  
-@@ -836,6 +838,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+-	trace_nr = callchain_store(trace, buf, elem_size, flags);
++	trace_nr = callchain_store(trace, trace->nr, buf, elem_size, flags);
+ 
  	/* trace should not be dereferenced after this point */
  	if (may_fault)
- 		rcu_read_unlock();
-+	preempt_enable();
+@@ -935,8 +935,8 @@ const struct bpf_func_proto bpf_get_task_stack_sleepable_proto = {
+ 	.arg4_type	= ARG_ANYTHING,
+ };
  
- 	return callchain_finalize(buf, size, trace_nr, elem_size, flags, may_fault);
+-static int __bpf_get_stack_pe(struct perf_callchain_entry *trace, void *buf, u32 size,
+-			      u64 flags)
++static int __bpf_get_stack_pe(const struct perf_callchain_entry *trace, u32 trace_nr,
++			      void *buf, u32 size, u64 flags)
+ {
+ 	bool user_build_id = flags & BPF_F_USER_BUILD_ID;
+ 	u64 skip = flags & BPF_F_SKIP_FIELD_MASK;
+@@ -952,12 +952,12 @@ static int __bpf_get_stack_pe(struct perf_callchain_entry *trace, void *buf, u32
+ 		return -EINVAL;
  
+ 	max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
+-	trace->nr = min_t(u32, trace->nr, max_depth);
++	trace_nr = min_t(u32, trace_nr, max_depth);
+ 
+-	if (trace->nr < skip)
++	if (trace_nr < skip)
+ 		return -EFAULT;
+ 
+-	nr_trace = callchain_store(trace, buf, elem_size, flags);
++	nr_trace = callchain_store(trace, trace_nr, buf, elem_size, flags);
+ 	return callchain_finalize(buf, size, nr_trace, elem_size, flags, false /* !may_fault */);
+ }
+ 
+@@ -965,8 +965,8 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
+ 	   void *, buf, u32, size, u64, flags)
+ {
+ 	struct pt_regs *regs = (struct pt_regs *)(ctx->regs);
++	const struct perf_callchain_entry *trace;
+ 	struct perf_event *event = ctx->event;
+-	struct perf_callchain_entry *trace;
+ 	bool kernel, user;
+ 	int err = -EINVAL;
+ 	__u64 nr_kernel;
+@@ -989,13 +989,7 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
+ 	nr_kernel = count_kernel_ip(trace);
+ 
+ 	if (kernel) {
+-		__u64 nr = trace->nr;
+-
+-		trace->nr = nr_kernel;
+-		err = __bpf_get_stack_pe(trace, buf, size, flags);
+-
+-		/* restore nr */
+-		trace->nr = nr;
++		err = __bpf_get_stack_pe(trace, nr_kernel, buf, size, flags);
+ 	} else { /* user */
+ 		u64 skip = flags & BPF_F_SKIP_FIELD_MASK;
+ 
+@@ -1003,7 +997,7 @@ BPF_CALL_4(bpf_get_stack_pe, struct bpf_perf_event_data_kern *, ctx,
+ 		if (skip > BPF_F_SKIP_FIELD_MASK)
+ 			goto clear;
+ 		flags = (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
+-		err = __bpf_get_stack_pe(trace, buf, size, flags);
++		err = __bpf_get_stack_pe(trace, trace->nr, buf, size, flags);
+ 	}
+ 
+ clear:
 -- 
 2.54.0
 
