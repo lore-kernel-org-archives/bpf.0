@@ -1,98 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7755B392C27;
-	Mon,  3 Aug 2026 12:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D86408614
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 12:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785759333; cv=none; b=qm/DaRzoZvq3Gj8vFZyKuyPhcwXBYbXz9mo7gt7AXfNeDPd2XO1Tb/XHVY8ZG76BRpVNou3q/BpaB0mf0WmUBf1YVEk9KE+9TXMf7MENCb7Wbvkri2iaM/sbAjPDQJNz57J4vICKrP8+6Piv3qdh/JIDZbwOwooT9E6TGaOZepA=
+	t=1785759368; cv=none; b=dJ+if4E1+E52d6TgaIY55j0qaUVKEp2YCcD5q7cliNDua4PMN7/LVQxJSOebAdP2aFzVOeuuE9LN2dH8fRdRc2TU60wO5IcF4BSCdO9bnSq/aDIm/akBfdeAYUEbX3ZgDr8ewXjo2y9AMlfqFfR/2XwOTnTvloyFJdN3hD70sd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785759333; c=relaxed/simple;
-	bh=2n5y7obkLAnf5oBtFkR2gN8H7OTFfUdPsI44hm+1s90=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lZMx570N9tKHkfF9YGWrvp/m2xe/TnWPdYOHXP+8vdi2cESH87El9K1P07qLDFLLckeWSJJJzuPUWbFgKIRZEgeXCyuZ0CT2N0VBF6u+sJEicl7vP6tps929GcTFfAVS1/KpGDiLgevcdROeMB3zO8NL+RtmJyyBZ2cLVX/3rdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EFKPUPrP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785759368; c=relaxed/simple;
+	bh=eGJP5JpZ7NVynKsatncjx+ngzI7UgZglI/sW87qWUfA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PKeuRj34zItNi9MXBl51WVO531ojB0ExK8vG0s7ZQcQFBfhPoGe9fDtADPoVRzj/0GgaLrPn0U29vD9yX2jzYnhdT7THD0d3FJo734zUCST4yt+nV24JkZeMkHBo9iVvptTcPjPNa9a1qG7DoVS9z8o6+Z+x014ief3lsPPOU3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai; spf=pass smtp.mailfrom=nebusec.ai; dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b=I77Pdct3; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EFKPUPrP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F6E1F000E9;
-	Mon,  3 Aug 2026 12:15:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785759331;
-	bh=poueR7DfB9aIGfWVmCWpCQzsUcIx1p6d9MpQRvHzhFc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=EFKPUPrPVthfkr8KU/etmkk+cysO6CYYC+ELmo719CZWR5PhxFFMQsC5n0aIoxd6X
-	 85mn1cl1SvdTx+AkJVZeTWt2+Bg2pd8W6RS1xY3pDFP/c50ZzBbC2WColtvL3ZWLpD
-	 jkyj/mVmPKqUvwUbcsNvgLxtR641CCzOcEhQgUGXtLdwj1EjQgTJt4VDGcor321Gj6
-	 u7dvmsh6JxE8X6Qqjlz1cdad2sWuhECnWGjX/K2wnoaGXv2flIAWzJ0dEIRPrqFWIp
-	 ZOTyBCM0R7d0LdQMI3R2iRIISbftI+I+ypvr307yqDIeCEn+BW2oH/LnsCsa83wx9t
-	 G7rvEsyxxxFrA==
-From: Christian Brauner <brauner@kernel.org>
-Date: Mon, 03 Aug 2026 14:15:02 +0200
-Subject: [PATCH 3/3] binfmt_misc: document the pre-opened interpreter limit
+	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b="I77Pdct3"
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-51c16ac21acso19757841cf.0
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 05:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nebusec.ai; s=google; t=1785759363; x=1786364163; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=GkOKniZRC1idBdL8qT7wVf89hPYa4Ml27SMbxT6diJc=;
+        b=I77Pdct3f4tQxu56Y/eY5BIuQKuNzGEL5CH1Ue//hEXgY9fpFRzFPNCd/HjDuMtbTt
+         L4ugulpFm//iDU+ixP6HLQ2I5qPWGeZcex6AlLF22ZZNIXIk9jVAlDIaNsp6r+qqdLK1
+         nBk+h93shiGk2Jst1/p1HWB2TfGn4xomWyFvblaAwjP52UNmEscsnFN7sujEU17DPAL/
+         0/VNcwtFTJTprCJOMc8lpIPwXUO0hs1bcQ8VjZi3QsqiRYrfyGPI8JuvsSyJDeQEkae1
+         0BqrhMibSs4HMUjwQGi7lsJxpzLXlNej81Ztk0hJgM2+3uNxNULfe+lnuK7yUswJuaQa
+         w5lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785759363; x=1786364163;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GkOKniZRC1idBdL8qT7wVf89hPYa4Ml27SMbxT6diJc=;
+        b=qFkb3PVD6v/SibAdbKFtrGKwt+OkgjDpRBs1BAdSxPV30PoAAt1MvpWkfeZDhHOm3j
+         a3aCVPgoJaYsxvwlQJMJZRig2UIctzGOKBGAIwcLyipMOa9OlKnbuVOdgKtbiOdOhICD
+         3wKEV3PC9HkiYrVQSGugc77FuwE71JSgOgplSiuxegbv7bXWX6ayrHE7N8L1A8klr2u1
+         eIcMjjFtJ5jan/E1t8zLWzpN1cNL73ZNBfxA+1IARoIizFIK4a0K/aKznVWIq13pqrSA
+         ZXPzc7Witl1Hd0ToQWemhracNcR+FrdsSBakEQ2ZTyhCta94+irEsqlDROfkKEBXj9YU
+         fN2A==
+X-Forwarded-Encrypted: i=1; AHgh+Rrcrik4pJXTU+YqgKYfCLj1drniUNGDOFIaSVfggOjFwv202iJojBaUmY64cYmtg0z8shc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0Qofn/gQZWh0xq0sEpumZv677bEIJy5XvF5+kaby5MO+GsBFM
+	mxFTwNOLWSvsRDrAaZPUqrMyCIve4Gd3caqpHZdlXEssNALVe0VUv9mR/cHJ8Zal6+gohiAS50o
+	ad1+ryhK/3Wd5zg==
+X-Gm-Gg: AR+sD10cc+/TtXwW/z8yohMj6mX0RSzlTm6LHTAwwSUK5IQw/HlA2GvvSlsKPmmVlaD
+	iE9kbsJXAYW+yZ7RBzNh9KNyxVbfmfRpbA9F89BLegPauoApd+3tRshaH9vokMlUWi+/SXkJxrl
+	6KOHgPKo/8yHqMGY1yW2GbUIbTi+KHgkxVzmmYrLmSp8SgZfaiB5IVclYpVi9kXB+7vdjGgq+TY
+	38nOQUlr9LSKcvrC8RO1zqAYA1idGj4TA8peeXQZ6LQ3lhVngqTRBx7gZJPUD8UXBSL4gev9gKQ
+	J/cQjkykoneYfqs6sWTOz4M8enq4cPNOUGEoDZKnIyA2ZHwMbpcP6nd/vom0h0Qlm0k98NNk0a3
+	/DbtX+3OIM74+1dbJTPtprfIjpdLX/VWPLkUNAr0IlH6C4KkYsaXt0aPgURa16JBnofg2L0CRzh
+	95GML1XIqqdRodugnVh0gcBMxuEs2kHrYKRLrNW/phwqorkrOtsjWgJwY7bVGB/bYoUkTuxpwT6
+	09+bxLVdXKzRCU=
+X-Received: by 2002:a05:622a:1e0e:b0:528:3c2c:5c72 with SMTP id d75a77b69052e-52b5679527amr193003071cf.32.1785759362991;
+        Mon, 03 Aug 2026 05:16:02 -0700 (PDT)
+Received: from Roxy.localdomain ([203.175.14.32])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-52b4e7ee1b7sm59323971cf.5.2026.08.03.05.15.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Aug 2026 05:16:02 -0700 (PDT)
+From: Zhiling Zou <zhilinz@nebusec.ai>
+To: netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	liuhangbin@gmail.com,
+	kafai@fb.com,
+	toke@redhat.com,
+	vega@nebusec.ai,
+	zhilinz@nebusec.ai
+Subject: [PATCH net 1/1] xdp: reject clones that overrun skb_shared_info tailroom
+Date: Mon,  3 Aug 2026 20:15:32 +0800
+Message-ID: <6b2afef5d1738763c6965e8e466eb16e43e4f956.1785757386.git.zhilinz@nebusec.ai>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1785757386.git.zhilinz@nebusec.ai>
+References: <cover.1785757386.git.zhilinz@nebusec.ai>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260803-work-binfmt_misc-interplimit-v1-3-4a2435500bd9@kernel.org>
-References: <20260803-work-binfmt_misc-interplimit-v1-0-4a2435500bd9@kernel.org>
-In-Reply-To: <20260803-work-binfmt_misc-interplimit-v1-0-4a2435500bd9@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Kees Cook <kees@kernel.org>, linux-mm@kvack.org, bpf@vger.kernel.org, 
- Farid Zakaria <farid.m.zakaria@gmail.com>, jannh@google.com, 
- mail@johnericson.me, "Christian Brauner (Amutable)" <brauner@kernel.org>
-X-Mailer: b4 0.16-dev-f2f85
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2057; i=brauner@kernel.org;
- h=from:subject:message-id; bh=2n5y7obkLAnf5oBtFkR2gN8H7OTFfUdPsI44hm+1s90=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQVtIVlPlu66fpst9a3+8UeB+9cvX8e92uvguBznxwkT
- rIV7ovz6ihlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZjIMlmGv+I7X++6Irt706Zd
- Ny2iD60T5HoY3uffGXWY9z3zfuFjZ2QZGdZu/MS5LIbtE/cs+ZWTpz8SOjxtm8XTo6sk6yIsmue
- feMYNAA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-Document how pre-opened interpreters are accounted.
+xdpf_clone() clones broadcast copies into a single page and sets
+frame_sz to PAGE_SIZE. __xdp_build_skb_from_frame() later treats that
+page like a normal XDP frame and expects the usual skb_shared_info
+tailroom at the end of the buffer.
 
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+The current check only rejects frames whose linear xdp_frame header,
+headroom, and packet data exceed PAGE_SIZE. A source frame backed by a
+larger allocation can still satisfy that check while extending into the
+clone's required shared-info area. When such a clone is converted back
+into an skb, build_skb_around() places skb_shared_info over live packet
+bytes and later writes can corrupt XDP return metadata.
+
+Reject clones unless their linear area fits inside
+SKB_WITH_OVERHEAD(PAGE_SIZE), matching the tailroom requirement already
+enforced by the XDP-to-skb conversion path.
+
+Fixes: e624d4ed4aa8 ("xdp: Extend xdp_redirect_map with broadcast support")
+Cc: stable@vger.kernel.org
+Reported-by: Vega <vega@nebusec.ai>
+Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
 ---
- Documentation/admin-guide/binfmt-misc.rst | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ net/core/xdp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/binfmt-misc.rst b/Documentation/admin-guide/binfmt-misc.rst
-index 622b5d8c8995..d26b63a27c25 100644
---- a/Documentation/admin-guide/binfmt-misc.rst
-+++ b/Documentation/admin-guide/binfmt-misc.rst
-@@ -128,6 +128,11 @@ There are some restrictions:
-    named by an absolute path. It is opened when the binary is executed, so
-    a relative one would be resolved against the working directory of
-    whoever runs the binary
-+ - the amount of pre-opened interpreters by ``F``, or bound to a ``B`` entry
-+   is limited by the ``/proc/sys/user/max_binfmt_misc_interpreters`` sysctl. A
-+   registration past the limit is refused with ``-ENOSPC``. This limits an
-+   unprivileged namespace pinning files. A nested namespace can raise only its
-+   own limit and every ancestor is charged too
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 9890a30584ba7..0194e69da339a 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -871,7 +871,7 @@ struct xdp_frame *xdpf_clone(struct xdp_frame *xdpf)
+ 	headroom = xdpf->headroom + sizeof(*xdpf);
+ 	totalsize = headroom + xdpf->len;
  
- 
- To use binfmt_misc you have to mount it first. You can mount it with
-@@ -215,10 +220,9 @@ with the credentials the entry file was opened with, exactly the way ``F``
- pre-opens a static entry's interpreter; the paths must be absolute. The
- path is everything past the first space, so there is nothing it cannot
- express, and no interpreter has to fit in a register string. An entry
--binds at most 100 interpreters; a write past that is refused with
--``-ENOSPC``. To bind a file that has no path of its own - already
--unlinked, a ``memfd``, or reachable only in another mount namespace -
--open it and write ``/proc/self/fd/N``.
-+binds at most 100 interpreters, and each one is charged against
-+``max_binfmt_misc_interpreters`` like any other binding. A write past either
-+limit is refused with ``-ENOSPC``.
- 
- The ``load`` program then selects one per exec by name with the
- ``bpf_binprm_select_interp()`` kfunc, and every exec runs a clone of the
-
+-	if (unlikely(totalsize > PAGE_SIZE))
++	if (unlikely(totalsize > SKB_WITH_OVERHEAD(PAGE_SIZE)))
+ 		return NULL;
+ 	page = dev_alloc_page();
+ 	if (!page)
 -- 
-2.53.0
+2.43.0
 
