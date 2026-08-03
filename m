@@ -1,32 +1,32 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEBA415F3E
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 17:03:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF63C41D136
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 17:03:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785776599; cv=none; b=Xbk2EWNv94ZNqcDxpE1/sSiS30VCLMJOnAbDtqJH0CXMLEvp0ghwkVFzr7Jb8aaUHYyI5Jxwqsh4FKObYLV7hUfBm4TeB8h+nfK43ftHXmYns1dNkZBtcyjPLYzh1W3nfw4K8hfF1U0l55MIp1TOUowpiO48/QROATqYooGyfLI=
+	t=1785776600; cv=none; b=D9p2PVQMIaVwEHnUTz65F1NYkQii/v2iI0HPoV+ntw9FeFDn5gkByltJKcyZ6hPCrWlW8rD3IVRDI38sKIw0OgQMH7rQZX2N4ni4fn45arnxTj3K18KWAp0ugUNAxmvwvVCOAq038hCNTWil8xAr9LTTEBGfNRIEyOG0rN9247o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785776599; c=relaxed/simple;
-	bh=PntVbVoJ3cP5UK/Pf1vcwbAos9ji3QPpXIrkcKvezDc=;
+	s=arc-20240116; t=1785776600; c=relaxed/simple;
+	bh=AomQnBJrOabZeFIgszGdHUBOPU2NS3CZgOB9fea5+CE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QVBV8lXurs5zPP9dHtITSPQjeXu6SwJ5EKNhxo5AFt0MIhKmyFt5fTmqKJLCTtbYQENmRHAfrqXT9PD5KFfRld1tDnsCkqVElGUu8JzTsVu/SEKDd4JZA97SuyUpY0xxwNvAZrSE9WfgPNWBQxoASAr8nH7NlECwhR0e5WDCSbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UF6oUA2Z; arc=none smtp.client-ip=95.215.58.188
+	 MIME-Version; b=QoRWY8FzSaLJz+pQ83xKO6GaxXYrjKG3fF+DTjB9R+F4cVlarm4AWdcnbRANkjvfkj21WDmh0cYQCUYmUgg8D+MpCcqTSpdWjD5OPl+hOjfcDv2Yf/SineBDPHIfBFRu+55zXE1YtUII0M7DutTv0hm7qDhz5MWf8MbuqCQR0sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NHlwlQNZ; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UF6oUA2Z"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NHlwlQNZ"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785776586;
+	t=1785776590;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=G6aMs96tVFxUGKFV9Stb3Pdz8RGhtrcoFiiFq+FcCd4=;
-	b=UF6oUA2Z4LOrfOoeKtrJ5pKILoHVnms1z3EF/+DSFSp/6COTluhB143eKXwL79iEYmoMlY
-	/dq2uC201bz9yHrt00ae1YeAHUwHX1eh/+OPalHMob1Ty5c0M+25cJE2bX1f1hJq5OXsOd
-	1c3jRvLq68AD5ofAKvuLY92iFib4fS4=
+	bh=mkwIs7oH/Bj4wRZsMV4sV1xxa0iYAnaHv7HnajZqz60=;
+	b=NHlwlQNZNfm377C2L3c2HQkFZLaLXz/e0cw/19B7pcR+Zkd1z+7c3SZkGbMyOgsuDfytg7
+	6WOJ6Y87jKC5FqkM9pRgvRr5YhdWDe18mjvln9Cbj1ffXoNGw2Vh0i9JzutFZqlgm40GQ6
+	bA19fxCm9AtLVx3BM1XsgB1UIfDiIuA=
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -35,9 +35,9 @@ To: bpf@vger.kernel.org,
 	Ihor Solodrai <ihor.solodrai@linux.dev>
 Cc: linux-kernel@vger.kernel.org,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [bpf-next 2/4] selftests/bpf: add --no-error-summary to skip end-of-run error log dump
-Date: Mon,  3 Aug 2026 10:02:49 -0700
-Message-ID: <20260803170251.1898102-3-vineet.gupta@linux.dev>
+Subject: [bpf-next 4/4] selftests/bpf: vmtest.sh: preserve command quoting when running in the VM
+Date: Mon,  3 Aug 2026 10:02:51 -0700
+Message-ID: <20260803170251.1898102-5-vineet.gupta@linux.dev>
 In-Reply-To: <20260803170251.1898102-1-vineet.gupta@linux.dev>
 References: <20260803170251.1898102-1-vineet.gupta@linux.dev>
 Precedence: bulk
@@ -49,186 +49,77 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-By default test_progs re-prints the aggregated error logs of all failed
-tests at the end of the run (when not in verbose mode), starting with
-"All error logs:".
+vmtest.sh captures the trailing command with command="$@", which flattens
+the arguments into a single space-separated string, and then pastes it
+into the generated guest init script:
 
-With bpf-gcc the current failures and a couple runaway 1M fails cause a
-huge print overhead/delay at the end.
+        cd /root/bpf
+        echo ${command}
+        stdbuf -oL -eL ${command}
 
-Add a subtractive --no-error-summary flag, gated on a new
-env.error_summary field which defaults to true, so the default behavior
-is unchanged. Passing --no-error-summary suppresses the final
-"All error logs:" dump.
+That here-doc is unquoted, so the host expands ${command} and the
+flattened text lands in the script verbatim. The guest bash then parses
+those lines as shell source, re-splitting the text on whitespace and
+glob-expanding it against /root/bpf. As a result any command with a glob
+or an argument containing spaces is corrupted before it reaches the test
+binary. For example:
 
-Only the human readable output is elided. dump_test_log() also emits the
-per-test and per-subtest entries of the --json-summary "results" array,
-so it keeps being called (via a new @quiet argument) and the JSON report
-is bit for bit what it was before.
+        vmtest.sh -- ./test_progs -a 'verifier_*'
 
+has 'verifier_*' expanded in the guest into the matching object/skeleton
+files (verifier_align.bpf.o verifier_align.skel.h ...), so test_progs is
+handed a list of filenames instead of the intended name filter and runs no
+matching tests.
+
+Quote each argument with printf '%q ' so the command is reproduced
+verbatim inside the VM: the escaped text goes through exactly one round
+of quote removal when the guest parses the init script, yielding the
+original argv with globs and special characters intact. The common case
+(e.g. -t <name>) is unaffected.
+
+Only do this when there is a command to quote. printf '%q ' with no
+arguments still applies the format once and emits '', which the -s
+(debug shell) path would take for a real command and try to run.
+
+Note this makes the trailing command strictly an argv rather than a shell
+snippet: passing it pre-quoted as one word, e.g.
+
+        vmtest.sh -- "./test_progs -t foo"
+
+no longer works, and neither does embedding guest-side shell syntax such
+as ';' or a redirection. Neither form is documented - usage() and
+README.rst both show the command unquoted - and 'sh -c ...' still works.
+
+Fixes: c9709f52386d ("bpf: Helper script for running BPF presubmit tests")
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- tools/testing/selftests/bpf/test_progs.c | 41 ++++++++++++++++--------
- tools/testing/selftests/bpf/test_progs.h |  1 +
- 2 files changed, 29 insertions(+), 13 deletions(-)
+ tools/testing/selftests/bpf/vmtest.sh | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index aa06bab30966..8ee46745e2e8 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -424,10 +424,12 @@ static void jsonw_write_log_message(json_writer_t *w, char *log_buf, size_t log_
- 	}
- }
+diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+index 9ca802285393..6a3d026d76bd 100755
+--- a/tools/testing/selftests/bpf/vmtest.sh
++++ b/tools/testing/selftests/bpf/vmtest.sh
+@@ -428,8 +428,17 @@ main()
  
-+/* @quiet elides the human readable output, the JSON report is unaffected */
- static void dump_test_log(const struct prog_test_def *test,
- 			  const struct test_state *test_state,
- 			  bool skip_ok_subtests,
- 			  bool par_exec_result,
-+			  bool quiet,
- 			  json_writer_t *w)
- {
- 	bool test_failed = test_state->error_cnt > 0;
-@@ -449,7 +451,7 @@ static void dump_test_log(const struct prog_test_def *test,
- 	if (verbose() && !par_exec_result)
- 		return;
+ 	if [[ $# -eq 0  && "${debug_shell}" == "no" ]]; then
+ 		echo "No command specified, will run ${DEFAULT_COMMAND} in the vm"
+-	else
+-		command="$@"
++	elif [[ $# -gt 0 ]]; then
++		# Quote each argument so the command survives into the guest: the
++		# host expands ${command} into the generated init script, which
++		# the guest bash then parses as shell source. Without the %q
++		# escapes an argument with a space or a glob (e.g. -a 'verifier_*')
++		# is re-split and expanded against /root/bpf there.
++		#
++		# Skip this when there is no command: printf '%q ' would still
++		# apply the format once and emit '', which is not the empty
++		# command that -s (debug shell) expects.
++		command=$(printf '%q ' "$@")
+ 	fi
  
--	if (test_state->log_cnt && print_test)
-+	if (test_state->log_cnt && print_test && !quiet)
- 		print_test_log(test_state->log_buf, test_state->log_cnt);
- 
- 	if (w && print_test) {
-@@ -471,15 +473,16 @@ static void dump_test_log(const struct prog_test_def *test,
- 		if ((skip_ok_subtests && !subtest_failed) || subtest_filtered)
- 			continue;
- 
--		if (subtest_state->log_cnt && print_subtest) {
-+		if (subtest_state->log_cnt && print_subtest && !quiet) {
- 			print_test_log(subtest_state->log_buf,
- 				       subtest_state->log_cnt);
- 		}
- 
--		print_subtest_name(test->test_num, i + 1,
--				   test->test_name, subtest_state->name,
--				   test_result(subtest_state->error_cnt,
--					       subtest_state->skipped));
-+		if (!quiet)
-+			print_subtest_name(test->test_num, i + 1,
-+					   test->test_name, subtest_state->name,
-+					   test_result(subtest_state->error_cnt,
-+						       subtest_state->skipped));
- 
- 		if (w && print_subtest) {
- 			jsonw_start_object(w);
-@@ -496,7 +499,8 @@ static void dump_test_log(const struct prog_test_def *test,
- 		jsonw_end_object(w);
- 	}
- 
--	print_test_result(test, test_state);
-+	if (!quiet)
-+		print_test_result(test, test_state);
- }
- 
- /* A bunch of tests set custom affinity per-thread and/or per-process. Reset
-@@ -899,6 +903,7 @@ enum ARG_KEYS {
- 	ARG_JSON_SUMMARY = 'J',
- 	ARG_TRAFFIC_MONITOR = 'm',
- 	ARG_WATCHDOG_TIMEOUT = 'w',
-+	ARG_NO_ERROR_SUMMARY = -2,
- };
- 
- static const struct argp_option opts[] = {
-@@ -931,6 +936,8 @@ static const struct argp_option opts[] = {
- #endif
- 	{ "watchdog-timeout", ARG_WATCHDOG_TIMEOUT, "SECONDS", 0,
- 	  "Kill the process if tests are not making progress for specified number of seconds." },
-+	{ "no-error-summary", ARG_NO_ERROR_SUMMARY, NULL, 0,
-+	  "Do not re-print the aggregated error logs of failed tests at the end of the run." },
- 	{},
- };
- 
-@@ -1132,6 +1139,9 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
- 	case ARG_DEBUG:
- 		env->debug = true;
- 		break;
-+	case ARG_NO_ERROR_SUMMARY:
-+		env->error_summary = false;
-+		break;
- 	case ARG_JSON_SUMMARY:
- 		env->json = fopen(arg, "w");
- 		if (env->json == NULL) {
-@@ -1304,7 +1314,7 @@ static void dump_crash_log(void)
- 
- 	if (env.test) {
- 		env.test_state->error_cnt++;
--		dump_test_log(env.test, env.test_state, true, false, NULL);
-+		dump_test_log(env.test, env.test_state, true, false, false, NULL);
- 	}
- }
- 
-@@ -1462,7 +1472,7 @@ static void run_one_test(int test_num)
- 
- 	free(stop_libbpf_log_capture());
- 
--	dump_test_log(test, state, false, false, NULL);
-+	dump_test_log(test, state, false, false, false, NULL);
- }
- 
- struct dispatch_data {
-@@ -1623,7 +1633,7 @@ static void *dispatch_thread(void *ctx)
- 		} while (false);
- 
- 		pthread_mutex_lock(&stdout_output_lock);
--		dump_test_log(test, state, false, true, NULL);
-+		dump_test_log(test, state, false, true, false, NULL);
- 		pthread_mutex_unlock(&stdout_output_lock);
- 	} /* while (true) */
- error:
-@@ -1686,9 +1696,12 @@ static void calculate_summary_and_print_errors(struct test_env *env)
- 	 * We only print error logs summary when there are failed tests and
- 	 * verbose mode is not enabled. Otherwise, results may be inconsistent.
- 	 *
-+	 * --no-error-summary only elides the human readable dump: the walk
-+	 * still happens so the JSON report keeps its per-test results.
- 	 */
--	if (!verbose() && fail_cnt) {
--		printf("\nAll error logs:\n");
-+	if (!verbose() && fail_cnt && (env->error_summary || w)) {
-+		if (env->error_summary)
-+			printf("\nAll error logs:\n");
- 
- 		/* print error logs again */
- 		for (i = 0; i < prog_test_cnt; i++) {
-@@ -1698,7 +1711,8 @@ static void calculate_summary_and_print_errors(struct test_env *env)
- 			if (!state->tested || !state->error_cnt)
- 				continue;
- 
--			dump_test_log(test, state, true, true, w);
-+			dump_test_log(test, state, true, true,
-+				      !env->error_summary, w);
- 		}
- 	}
- 
-@@ -2028,6 +2042,7 @@ int main(int argc, char **argv)
- 
- 	env.secs_till_notify = 10;
- 	env.secs_till_kill = 120;
-+	env.error_summary = true;
- 	err = argp_parse(&argp, argc, argv, 0, NULL, &env);
- 	if (err)
- 		return err;
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index 2cf950afcd85..e66d5c457901 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -105,6 +105,7 @@ struct test_env {
- 	struct test_selector tmon_selector;
- 	bool verifier_stats;
- 	bool debug;
-+	bool error_summary;
- 	enum verbosity verbosity;
- 
- 	bool jit_enabled;
+ 	local kconfig_file="${OUTPUT_DIR}/latest.config"
 -- 
 2.55.0
 
