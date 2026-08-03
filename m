@@ -1,237 +1,252 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F326372673
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 10:00:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785751247; cv=none; b=me8sPfoXuEZMDEujjRhgfI7wApfaX/gfpugVOEaBg/R+8AjSY/HTqLRQo4A7EaKVuRZohL2JKohHTiFYPAHOCsaV2Ek+u9OVSxtV65aRoLhSMwm+GlzwMPAQ7BQf7U4cJH1qBX+ZxE+t6uf/VTlUFj2Q3M/uwQ/7nQyxKd7NRas=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785751247; c=relaxed/simple;
-	bh=HCC8D+G0rb1aAiQw9n58KzRT16izY5PvVK0a7SdEOV8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ENy/2qiAzYyMg1yceZl5Do5i+0MEyNIjHMGeqnZP+LdIV6ZxDzwnswPNySkVtyexuMe2MgIiCRaCuV7X7Z6MN3Uf8YTxIiaSNsEh6sHr8jkg4A1KARBPxhwIPQP6Ac71D6JSluagwmxxIEBFWi0oncoJsJRsISGY1VaSExI8lx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DuBz7l6Z; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D21BB37757D
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 10:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785752089; cv=pass; b=qfIS/ZPEeW+ENJCuLMeJ9wgwNQ03joRJb807K2tSXFd4CnUMMfo5fJs4DM5FWqp+Gk1BZinJ6reIKdWLm/w9YMF3wMoop8o7G6u9w2xtx5FRPM1hfHRGNZio05IEo0u06N/M8ojmx/Q9g3TeTred1/DQzodqHbjf+9w9sEPSmvY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785752089; c=relaxed/simple;
+	bh=gAGAUv0xZN3unMadQ+Q0yg6cGFB8E+F+y+wNougceUU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l7LvC5AwV43wTjHeaGHzmXrCVT0swnbFlzgQ3O1tHn9y/PLyb4hg9z60V4jKgMfZHdSuBbdQHyAE6RjdPPuBj0YHCaQid737QixfC1gYcMzJfocBGfqMGzuM/QmBz0KKmUqh84UcEIupr0ZQN1xPQX/WrO5eRqy5NrD+wrDlGKk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eJf/F4UL; arc=pass smtp.client-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DuBz7l6Z"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c15dd4b9132so496162566b.1
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 03:00:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eJf/F4UL"
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-66807ba2f0fso4562805d50.3
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 03:14:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785752086; cv=none;
+        d=google.com; s=arc-20260327;
+        b=KNA62hvwWvTKjAqCHkJgzHf+IED1U/j7jPS61hrWokLU43Ci9LuaWmsgOUEzghJNtm
+         jkAdRKViAhxYbPkuBql8aWVvzX85jf9NK+FH7z1yqZPPwi4CwzAuAAPKbu/8vbc/lTvP
+         S0Hjz+Ke2WvsoUHcwsLhevIvYwfoNN8bm6xdW9Qq+oeSfDVxNlOylVnYfavSRKKgzkYa
+         TxTO7TVIm7o3gyRxuTPKatYRUdnulejLFdHa1lSNR2iO+8tkjrP+UsJ3F0r7UipaRAV7
+         PWJCVavCZO09O/CcPZNMO/j90cXMg/4dQWr2tgkKhorOVJVvZfaSfgl0CWq5Ui3XOVkm
+         2BZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=BzmVrf3A5yS5pBlOOrTATRIeczmTdyqSxUxktv0y96U=;
+        fh=FWM9lHjBraw64J1actj3TBwFs2Cs739fUYuurhFfQj0=;
+        b=JhMuc8PsNp5/4bU0h7/SEC4JMa5JAq8v7H0c6jQGleYSFpZOUE26/vpu2BTt9dD5xI
+         5yspoNDMOGH1OKv/x3nibp4eO/Nzzj+sR0GqC6qO6+dj0ypBdzgUihqvCIVu7NBySIFU
+         YR3pNrnziFcZ+BjbXOa8qym6MgZb56ZPTqVAv/J2vHjRnFfVkmgyv6BOkSTVhP9Wpt0M
+         tiqR1Mo8ulOok0A5aO+CMWeJIxwZDQrrt4oEoJfUztlLOGC8SZKyMYJ25BI0KI+oMblt
+         5UlSafiFBFXRoDVnPMdwkT/0G6J96Q07oZtXuFXbkw6Y3QX1rgl5Nh0Pddey3KKaDZBu
+         Dz6g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1785751243; x=1786356043; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QxMk4MUQUDc+H1bfo3Qxr4A1ELX+7kM8nIGEj1DxyWY=;
-        b=DuBz7l6ZSRxVFCHSNJMdxDJNRgWuPAIaYRV4P/nwAWpahXGH1xyKUxYztOFOcxfxAu
-         tIS40BzBHNqPTy/epf8/Zq07KMoyZdHtTgz+n5xdAMxw4slNASF+EmzOvtFrzzpZS67N
-         frno3LKE4doXKzEJtXvQRUy8gM3mN5umH5y4W1GB/E1sPfJ30BIAxxDsKvH5zqdbQJYI
-         mMf9etBmeAlBwqSprXkSVZQrWRdh9aLUfvy3NK91vHhycH2Hh34mLzmrqeDUuYLPfipU
-         UuwBO9QdgenZvKFEdno7Dkgwzoo9GwwiijaYHx/iJbJpZIX+MtcA+wloYa22FlickLPo
-         OZuA==
+        d=gmail.com; s=20251104; t=1785752086; x=1786356886; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BzmVrf3A5yS5pBlOOrTATRIeczmTdyqSxUxktv0y96U=;
+        b=eJf/F4ULf+4f76f8Q/NN/yD7rLBvEv6Zim1LMt8046dW/OeU1xjUtqrIZfVlSERmN1
+         7Qd1Z4Z+KWEHVv7clMkcwonP6sygNbnTfNd31lx0Jbl1Qiav/Ldkf4kFXsyIrbI7foMk
+         lFsWnV7XotIMAR/1rB7mU/0RcQ0PBWerMI4W+HVREg7CwIy+tXXtbD4S8IVMcr47/BIX
+         2sBWNzQMWbnbYIUncUzhfCYnxWm9bxzba6xqwp65Qs676u78TUfgNNbED8WePG5DiaID
+         nLdpMDWL9u77jl8sEubLn0dCZP9V3S7Sgkt5LQewzr4vDY/9fVZTcT42g+suUham/e07
+         KJ/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785751243; x=1786356043;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QxMk4MUQUDc+H1bfo3Qxr4A1ELX+7kM8nIGEj1DxyWY=;
-        b=sJYyvIiTVRxF/NNopEEPcJLj8uPKQY0BIZ9X/dbUPYhGBgoTQCW7eBcYVV6y6JBRlo
-         GArTcMgO/r5gsepjckZAvU1i7R5u3E1XtetgWsiyGBX7WLQeDXg6wUOIXmMEX8frqe1k
-         sTpc6OKQ8pyEn2y8crhFXNvyej5pFzP4IXdMcAUrTVBajaMWZLCvDSFWl+SgX+5yTi62
-         xaoj4bka9Fve3uw+FPGnetu9qbYYAIINNaaniZoFv3fY62B7Bwu7NS8GAKBG7N/KGTn3
-         AbNo7cCMeeaLtdwuJzzqYV0802zHytCtoxt18TvEd+41CVQ6OU4wVwOgjFNDur9GlHGm
-         eJKQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpjhSVicIuEYkndc8O3sFvy5jNF8vV0+iy5zhkp9nTPEjU/47GHWyKtU6iuJFOu1g/Ht+4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGt2+pgCOgtpN1FmHhPwIvRQBV3+ZEmYJOvFX+E3oiUY5fV9XW
-	iyV/Y2r1LFGgpf9x+ALHCxWAiNG2tIXeHiNXJqySjlIFn7+6wIBQVx11eSyPyq+xLzYfAhqRCj2
-	yNI88
-X-Gm-Gg: AR+sD136ECI2lt1cVtTi4ZfU2g8lZ4He7X6kmUiCJS0Svn9kE9XrYocBSwvzFdLu/8G
-	kgl7ewgnqeRq9RTxcfpEDw1fxSZqp8kiL3xp5/S8b69kgV4vcIfsoz11b2SYZHsMjcuoWFU1Ww5
-	laG/z+Moe7A5FxRHcEbvJ5Ouz6qiwADSQlLzj9EtgS5VhfcwWK+0tCfrzDu8RZ1Rl840xkko+V1
-	z3rz1pEzTWty8NNv29yjaH/HatNyXIUNWptJHja/BPBg5F/AOr7XMZLtloE4eI28ESbDiopmTBj
-	XoMwEC35fe/o/anFNcZ1yz4oCMnWXjBdG+rnUX3A8L67+IFV+L5xlJwUFy9WCf3k9T8JBOCajUK
-	3DJqzKQ+No1GR7ukTob7yrd57Pb8dZtzDz3EGmQ8Q1V4I6eWxXEOxEGmhegaM8VWbN6/ZVr5lYH
-	+YBB52qnc+pGFREjREy2YovWGjX4264T3ZDaeUY4rlpfk671mHSc5/cJoIB83Uk5b4tYVIh97xb
-	SEvHlE=
-X-Received: by 2002:a17:906:a98:b0:c19:611c:fa94 with SMTP id a640c23a62f3a-c1fe7f520f5mr446666366b.27.1785751242813;
-        Mon, 03 Aug 2026 03:00:42 -0700 (PDT)
-Received: from [192.168.1.183] ([37.18.141.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1fd3c5b387sm496061166b.2.2026.08.03.03.00.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Aug 2026 03:00:41 -0700 (PDT)
-Message-ID: <9f2c4bbd-5889-4899-b96d-41566363c408@linaro.org>
-Date: Mon, 3 Aug 2026 11:00:44 +0100
+        d=1e100.net; s=20251104; t=1785752086; x=1786356886;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BzmVrf3A5yS5pBlOOrTATRIeczmTdyqSxUxktv0y96U=;
+        b=fdvrhI//gQZQHsnQrQBbcvm263+Q7Iu1iQU4iwDcCpSAoMy+bOfg/HryznXR5OsnbO
+         ifj5V8LDCmiKf2cP9T+hefN7t4sSxiX0a+y64W+i84PavZmoxkYDZGU3ripa2imqflG9
+         bK5XDRueENkqk7wUPcDu4nkAoEd0TTidtYZmWi5Z107SWaG9wmc/o+mB4weSikQ7Dhrj
+         zXuyCvZ5XESrwtm76RW3goYAJRCaU7J6L5EMLwB22xpLVjaW5LK9NIhHmGXCRPmbVFTp
+         iB486XBudfhxUN7fI5PLqwik2Olj4bZUuY72uTnlMv6ABIhwPmzLw1cyklzpxVI8lgpO
+         RTJw==
+X-Forwarded-Encrypted: i=1; AHgh+RoHvneW8O7d7rjnU7SdXx76Md1HK/3fPj2QIGkb9vKt0ZGJHi//c4jeDl7hz8QdM5a7fts=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxxt63rA0G0vvz2dd9x4nHG8oxvk2i4m0EVKMBOK76ZACCT9j1j
+	Q0ngP+5inE9Af3D4dUfxXg499ucfAUfZib1XpJPVDt6rEDyW/Hx33yO/Jma5QdON15TTMYelMUw
+	VDotV3FyNUUS8fS0lK51tinjYjI8E+Tk=
+X-Gm-Gg: AR+sD13bawngO3dXNNZzExX43B82jt6MQmret6Mj5YnBdzs+CIN16g9eH76raLRTt6g
+	j1J/dN4aixVT5u+FojomgXeKXKFoUD7qGg0uTOZ8gQ3od6RkhUk9UrUr91aET89J6lxWI1GM9W2
+	ZxW8dgRqFe/xnQvFQ26v3sx+FlrdESrFdxh7AHQhhzwNLjkkDr9Qs5O9T05ByrsaB4QxDSfV6FE
+	LJK0S+VDSi+3eX4pkgg3r5GabK258yeBECXgHUbiN6ZZHI6eEL4AiYo52E3PvT6KDCVevqx8o/z
+	I3OF10NA55NPC3zsZBXHS4eE8SWmk1uZ/hV0SPRDMHY00BvEgT0bVffU2j4G/cG8Lou3wy329W1
+	pk+XnUuDxxvZwyYsWct2vRMQ=
+X-Received: by 2002:a05:690e:4810:b0:664:f064:f663 with SMTP id
+ 956f58d0204a3-6694f15a12cmr8115341d50.28.1785752085633; Mon, 03 Aug 2026
+ 03:14:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/4] perf/core: Clear the whole branch entry in
- perf_clear_branch_entry()
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Leo Yan <leo.yan@arm.com>,
- Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>,
- Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
- Stephane Eranian <eranian@google.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif
- <usama.arif@linux.dev>, linux-arm-kernel@lists.infradead.org,
- linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20260616155716.2631508-1-puranjay@kernel.org>
- <20260616155716.2631508-3-puranjay@kernel.org>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20260616155716.2631508-3-puranjay@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260731032357.6114-1-sun.jian.kdev@gmail.com>
+ <20260731032357.6114-3-sun.jian.kdev@gmail.com> <80687d9c-9c27-494c-b3f2-efd0230b1895@gmail.com>
+ <CABFUUZGTJptpOKKAeU3ThibmPpXize4Eud2=EBX-vqaX3YH4pg@mail.gmail.com> <anBUWIxmURvbr04i@lore-desk>
+In-Reply-To: <anBUWIxmURvbr04i@lore-desk>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Mon, 3 Aug 2026 18:14:34 +0800
+X-Gm-Features: AUfX_mzdeHrInwG6bTPBGc0xnW3lweBnwEFe9T99a8tN3R763lJ6zfwZrV1QoDY
+Message-ID: <CABFUUZGYauuj1EpwzfhwWrqQY8zaE7SFk-UAbwxy3qCbEDWKjg@mail.gmail.com>
+Subject: Re: [PATCH net v2 2/2] veth: fix skb length accounting after XDP frag adjustment
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Mohsin Bashir <mohsin.bashr@gmail.com>, netdev@vger.kernel.org, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu <liuhangbin@gmail.com>, 
+	Krishna Kumar <krikku@gmail.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Martin Karsten <mkarsten@uwaterloo.ca>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	maciej.fijalkowski@intel.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Aug 3, 2026 at 4:42=E2=80=AFPM Lorenzo Bianconi <lorenzo@kernel.org=
+> wrote:
+>
+> > On Sat, Aug 1, 2026 at 12:14=E2=80=AFAM Mohsin Bashir <mohsin.bashr@gma=
+il.com> wrote:
+> > >
+> > >
+> > >
+> > > On 7/30/26 8:23 PM, Sun Jian wrote:
+> > > > veth exposes non-linear skb fragments through an xdp_buff. If an XD=
+P
+> > > > program adjusts the fragment area, veth_xdp_rcv_skb() copies
+> > > > xdp_frags_size back to skb->data_len but leaves skb->len containing=
+ the
+> > > > old fragment contribution.
+> > > >
+> > > > After a fragment shrink, this makes skb_headlen() larger than the a=
+ctual
+> > > > linear area. In the reproduced UDP receive path, __skb_datagram_ite=
+r()
+> > > > copied 1024 bytes past the actual linear tail to userspace, startin=
+g at
+> > > > struct skb_shared_info. The copied bytes included the affected skb'=
+s
+> > > > nr_frags, xdp_frags_size and a kernel pointer from
+> > > > skb_shinfo(skb)->frags[0]. Real packet data was displaced by the sa=
+me
+> > > > amount and truncated at the end.
+> > > >
+> > > > Subtract the old data_len before replacing it and add the new data_=
+len
+> > > > afterwards, keeping skb->len and skb->data_len synchronized.
+> > > >
+> > > > The fragment accounting must run before the linear tail adjustment:
+> > > > when bpf_xdp_adjust_tail() shrinks the packet into the linear area =
+it
+> > > > releases all fragments, and __skb_put() requires skb->data_len =3D=
+=3D 0
+> > > > by that point.
+> > > >
+> > > > A 60000-byte UDP datagram on a veth pair with MTU 64000 was shorten=
+ed by
+> > > > 1024 bytes from its fragment area. Before the fix, all 10 runs prod=
+uced
+> > > > corrupted payloads. After the fix, all 10 runs matched the expected
+> > > > payload exactly.
+> > > >
+> > > > Fixes: 718a18a0c8a6 ("veth: Rework veth_xdp_rcv_skb in order to acc=
+ept non-linear skb")
+> > > > Cc: stable@vger.kernel.org
+> > > > Link: https://lore.kernel.org/bpf/al9T9Eto%2FhRIzP5W@boxer/
+> > > > Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> > > > ---
+> > > >   drivers/net/veth.c | 23 +++++++++++++++--------
+> > > >   1 file changed, 15 insertions(+), 8 deletions(-)
+> > > >
+> > > > diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> > > > index 00e34afd858e..348391e87e14 100644
+> > > > --- a/drivers/net/veth.c
+> > > > +++ b/drivers/net/veth.c
+> > > > @@ -865,18 +865,25 @@ static struct sk_buff *veth_xdp_rcv_skb(struc=
+t veth_rq *rq,
+> > > >
+> > > >       skb_reset_mac_header(skb);
+> > > >
+> > > > -     /* check if bpf_xdp_adjust_tail was used */
+> > > > -     off =3D xdp->data_end - orig_data_end;
+> > > > -     if (off !=3D 0)
+> > > > -             __skb_put(skb, off); /* positive on grow, negative on=
+ shrink */
+> > > > -
+> > > >       /* XDP frag metadata (e.g. nr_frags) are updated in eBPF help=
+ers
+> > > > -      * (e.g. bpf_xdp_adjust_tail), we need to update data_len her=
+e.
+> > > > +      * (e.g. bpf_xdp_adjust_tail). Remove the old fragment contri=
+bution
+> > > > +      * from skb->len before updating data_len, then add the new o=
+ne back.
+> > > > +      * This must precede the linear tail adjustment below: a chan=
+ged
+> > > > +      * data_end implies that no fragments remain, and __skb_put()=
+ requires
+> > > > +      * a linear skb.
+> > > >        */
+> > > > -     if (xdp_buff_has_frags(xdp))
+> > > > +     skb->len -=3D skb->data_len;
+> > > > +     if (xdp_buff_has_frags(xdp)) {
+> > > >               skb->data_len =3D skb_shinfo(skb)->xdp_frags_size;
+> > > > -     else
+> > > > +             skb->len +=3D skb->data_len;
+> > > > +     } else {
+> > > >               skb->data_len =3D 0;
+> > > > +     }
+> > > > +
+> > > > +     /* check if bpf_xdp_adjust_tail was used */
+> > > > +     off =3D xdp->data_end - orig_data_end;
+> > > > +     if (off !=3D 0)
+> > > > +             __skb_put(skb, off); /* positive on grow, negative on=
+ shrink */
+> > > >
+> > > >       skb->protocol =3D eth_type_trans(skb, rq->dev);
+> > > >
+> > >
+> > > I am most likely missing something here but what happens if we have
+> > > frags and we attempt to advance data_end while leaving some frags
+> > > present (e.g., bpf_xdp_pull_data())? Looks like, in that case we woul=
+d
+> > > issue __skb_put(skb, off) with off > 0 and we would hit
+> > > SKB_LINEAR_ASSERT() because skb is still non-linear?
+> >
+> > Hi Mohsin,
+> >
+> > Thanks for catching this. You're right that bpf_xdp_pull_data() can adv=
+ance
+> > data_end while leaving frags present. I'll investigate this path and fo=
+llow up.
+> >
+> > Thanks,
+> > Sun Jian
+>
+Hi Lorenzo,
 
+> I guess we should implement the same approach used in
+> bpf_prog_run_generic_xdp(), something like:
+>
+>         if (off) {
+>                 skb_set_tail_pointer();
+>                 skb->len +=3D off;
+>         }
+Yes, that makes sense. I confirmed Mohsin's case: bpf_xdp_pull_data()
+can advance data_end while keeping frags, so the current v2 can hit
+SKB_LINEAR_ASSERT() through __skb_put() on a non-linear skb.
 
-On 16/06/2026 16:57, Puranjay Mohan wrote:
-> perf_clear_branch_entry_bitfields() resets the bitfields of struct
-> perf_branch_entry one at a time and deliberately leaves from/to alone,
-> since callers overwrite those immediately. The list of assignments has to
-> be kept in sync with the struct by hand, and it has already drifted:
-> new_type and priv were added to perf_branch_entry but never cleared here,
-> so stale values can leak into the records handed to userspace.
-> 
-> Clear the entry with a single struct assignment instead:
-> 
-> 	*br = (struct perf_branch_entry){ };
-> 
-> Every caller writes from/to right after the clear, so zeroing them as well
-> is harmless and the dead stores are elided on the x86 LBR read paths.
-> There is no longer anything to keep in sync when a field is added.
-> 
-> The helper no longer touches only the bitfields, so rename it to
-> perf_clear_branch_entry() and update the callers, fixing up the
-> br+nr/br+out spacing on the touched lines while at it.
-> 
-> Fixes: b190bc4ac9e6 ("perf: Extend branch type classification")
-> Fixes: 5402d25aa571 ("perf: Capture branch privilege information")
-> Suggested-by: James Clark <james.clark@linaro.org>
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
->   arch/x86/events/amd/brs.c   |  2 +-
->   arch/x86/events/amd/lbr.c   |  2 +-
->   arch/x86/events/intel/lbr.c |  6 +++---
->   drivers/perf/arm_brbe.c     |  2 +-
->   include/linux/perf_event.h  | 16 ++--------------
->   5 files changed, 8 insertions(+), 20 deletions(-)
-> 
-> diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
-> index 06f35a6b58a5..68c5f42965e9 100644
-> --- a/arch/x86/events/amd/brs.c
-> +++ b/arch/x86/events/amd/brs.c
-> @@ -343,7 +343,7 @@ void amd_brs_drain(void)
->   
->   		rdmsrq(brs_from(brs_idx), from);
->   
-> -		perf_clear_branch_entry_bitfields(br+nr);
-> +		perf_clear_branch_entry(br + nr);
->   
->   		br[nr].from = from;
->   		br[nr].to   = to;
-> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-> index d24da377df77..08401fd60585 100644
-> --- a/arch/x86/events/amd/lbr.c
-> +++ b/arch/x86/events/amd/lbr.c
-> @@ -181,7 +181,7 @@ void amd_pmu_lbr_read(void)
->   		    entry.to.split.reserved)
->   			continue;
->   
-> -		perf_clear_branch_entry_bitfields(br + out);
-> +		perf_clear_branch_entry(br + out);
->   
->   		br[out].from	= sign_ext_branch_ip(entry.from.split.ip);
->   		br[out].to	= sign_ext_branch_ip(entry.to.split.ip);
-> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-> index 72f2adcda7c6..295da179fa74 100644
-> --- a/arch/x86/events/intel/lbr.c
-> +++ b/arch/x86/events/intel/lbr.c
-> @@ -755,7 +755,7 @@ void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc)
->   
->   		rdmsrq(x86_pmu.lbr_from + lbr_idx, msr_lastbranch.lbr);
->   
-> -		perf_clear_branch_entry_bitfields(br);
-> +		perf_clear_branch_entry(br);
->   
->   		br->from	= msr_lastbranch.from;
->   		br->to		= msr_lastbranch.to;
-> @@ -846,7 +846,7 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc)
->   		if (abort && x86_pmu.lbr_double_abort && out > 0)
->   			out--;
->   
-> -		perf_clear_branch_entry_bitfields(br+out);
-> +		perf_clear_branch_entry(br + out);
->   		br[out].from	 = from;
->   		br[out].to	 = to;
->   		br[out].mispred	 = mis;
-> @@ -920,7 +920,7 @@ static void intel_pmu_store_lbr(struct cpu_hw_events *cpuc,
->   		to = rdlbr_to(i, lbr);
->   		info = rdlbr_info(i, lbr);
->   
-> -		perf_clear_branch_entry_bitfields(e);
-> +		perf_clear_branch_entry(e);
->   
->   		e->from		= from;
->   		e->to		= to;
-> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-> index ba554e0c846c..effbdeacfcbb 100644
-> --- a/drivers/perf/arm_brbe.c
-> +++ b/drivers/perf/arm_brbe.c
-> @@ -604,7 +604,7 @@ static bool perf_entry_from_brbe_regset(int index, struct perf_branch_entry *ent
->   		return false;
->   
->   	brbinf = bregs.brbinf;
-> -	perf_clear_branch_entry_bitfields(entry);
-> +	perf_clear_branch_entry(entry);
->   	if (brbe_record_is_complete(brbinf)) {
->   		entry->from = bregs.brbsrc;
->   		entry->to = bregs.brbtgt;
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 48d851fbd8ea..e034be4a473a 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1467,21 +1467,9 @@ static inline u32 perf_sample_data_size(struct perf_sample_data *data,
->   	return size;
->   }
->   
-> -/*
-> - * Clear all bitfields in the perf_branch_entry.
-> - * The to and from fields are not cleared because they are
-> - * systematically modified by caller.
-> - */
-> -static inline void perf_clear_branch_entry_bitfields(struct perf_branch_entry *br)
-> +static inline void perf_clear_branch_entry(struct perf_branch_entry *br)
->   {
-> -	br->mispred	= 0;
-> -	br->predicted	= 0;
-> -	br->in_tx	= 0;
-> -	br->abort	= 0;
-> -	br->cycles	= 0;
-> -	br->type	= 0;
-> -	br->spec	= PERF_BR_SPEC_NA;
-> -	br->reserved	= 0;
-> +	*br = (struct perf_branch_entry){ };
->   }
->   
->   extern void perf_output_sample(struct perf_output_handle *handle,
+I tested the skb_set_tail_pointer() + skb->len update approach locally
+with a forced-tailroom reproducer, and it fixes that path. I will fold
+this into v3.
 
-Reviewed-by: James Clark <james.clark@linaro.org>
-
+Thanks,
+Sun Jian
+>
+> Regards,
+> Lorenzo
