@@ -1,156 +1,125 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0F91E7C23
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 07:21:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6D6395AF7
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 07:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785741721; cv=none; b=hygkgcWYLj6y8mE3Br96wQcB9Lz4ef+9eyiQP/eNSHFzQlMQjs7ZkZBwet3Yc9nLji4U5OJfPnxtR5Rk04dQEV7kwGjSH0khE4jw/Iw4nbsWuWsOjs9TeNkLHMy2YYWSbiViUsaRBpRD8z+WxnTBgoxjRyFsp8yGs5yJ3fdcfRU=
+	t=1785742057; cv=none; b=hhJLamCGzHy21N7Ehr4j7/Wm40MfsTxhCbE3+Ic8W9sC16gBNPffmZOfi9FbCY0HKF/H3czfxGMx1kOf9R7/0Z9LPNkVD6ITxvBHh9ZDW5xAQ3I2odBPk8FMYRUXhtkDqGVAByfOYe9ROrrDAyjJEI7ApKXve0vBh++6NZVcc7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785741721; c=relaxed/simple;
-	bh=be/mZNkQL+C9lM8B9kvWX+b8vj1wX1nOekJqxAYw65c=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=kUNZnruMnvrNJykPdXzcxS/u+cVYXVF9GRd3lot9MyPllMsfTsiaefLGmx1cUal3paNmFW9Dq0YrmwbfZ0q33KAvqpOv7ziCNbtWxF6VQ5Q90xd2uVwtXTfHf+eghqL3TNS43k9NYQK/KmNqDbtr6ROoZqNTJoPfCCOsAfIvO3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GQv6lsCs; arc=none smtp.client-ip=74.125.225.65
+	s=arc-20240116; t=1785742057; c=relaxed/simple;
+	bh=eRm0CvS4BfJiNgfFY39Wpe6TWmHRjH0WsglsS/pdmY4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IEoWXdhx2ukJcLeRmB6vz7LnLUas87j0OENpxUwnkcbMkEJNqfbfjoBQ9YNiQSGDv+93sD4PvASRNer3Jr0MhXunvqGLUw0Ps+owN7YOnYy+L9KJzuczVeYW+IkrfAUPfuSfUo2BX9OrksWgcQCUoI+MwWlBD50REijUayDON8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mCxQphfr; arc=none smtp.client-ip=74.125.225.135
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GQv6lsCs"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-473913157edso1060237f8f.1
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 00:21:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mCxQphfr"
+Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-49579f38cdbso1457165e9.0
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 00:27:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785741717; x=1786346517; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=il18rGcPk+ZSsfswMbxUr7Bg2PaROYJ6WaJMJe/bAHo=;
-        b=GQv6lsCsBK0WXNkcXthru7TqAW5g2PNV07tamQrfk6R7X1C5TJui3JZYQpzVuSAKt4
-         aIiMzgqZ8ybOABcVetI3LctxEl7uR5fOd3ztFdSzdzW9SKeHCgvEMEszhpQVjHOfDzJ8
-         GkGjZnBekokN9vAYAdf6pQKWWjGHoCEORhBXsLlNsb8PHGDOXBaUJI1cYsjhsFrr2Zms
-         NaQ/JiPgKe8J0fHdYG0JRd8/hkXfr+q/3OchcDD8VsLkZxMixgDWbiaSFB7pt8u/4kGy
-         y2i+RL7yfUS8XokdH7W95FrYvy8JLHFj/0bKKM2a07rA7YZAijMZEXA02y7ooxlh9Z8e
-         Ei3w==
+        d=gmail.com; s=20251104; t=1785742054; x=1786346854; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=0vzwedFlW2YR8OeXvZzLj7hCG1v8iR3G8VOAaPvg9yI=;
+        b=mCxQphfrCjRWGxebw05hW2D4ba07t5vHC9+HIl5saltLMnDG0vgfuKw6uMvW97EE/y
+         D7fuNWGbXoGT7GhVZ5xL2UDAF+iXW263UyO0/RTEiIW/+FH+QTMo0TFBVfgW/qWNs7x8
+         JApzY1EA+7DMNhnd6+AODHrFEjZtpIdztdrpW2enPJnWblmcrs2MeTqOsmpT/xJwkN9d
+         7XIXsLI9L+ie31T81G0WsfWI4gMm67AqUg7DH0wpMllnOjYagHn2iSUWIj+rXAGVHowz
+         a23Nl5FGUdEk834UEtaAlZjRbwYjjnj57BCr53tMaGyd6NWIE+DvGuYV4/BBfe86/j1G
+         AnPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785741717; x=1786346517;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=il18rGcPk+ZSsfswMbxUr7Bg2PaROYJ6WaJMJe/bAHo=;
-        b=i3wFxTFYHYBFIi1UDa+1v4jeLToSnmYzGZJkiPVMP/Cnr7JtvmBsm6NVcolF3OGbH1
-         I030FPy6FPXWL/BDv5s79BvR8Sj2xrBNtTc/pEf5Nhp1saS9IXV+g+q6YT/rerw0HVWi
-         2EgNhqYje6z7x2KLcXsBLWOR8pibfeM8iXN/N/AeK8O9cGpeVd1Gno9In38FL3o1fFIU
-         B1jeyOUx2IfKVaMK2xz4ViQGGWGRcetArrCVSgjXRMlY1iY2S/PHpjfVF9C/iQ4tK/8I
-         +NDGoeA7SYc6ujuLX5IzYKbrmzOWY1PCusSGzsCTN4/cgQh768uUc27DE41+M6Jd4WJp
-         5sgA==
-X-Gm-Message-State: AOJu0Yz2zjRdsAkQ111k2kH2Iv5PUqdVapONDvU7EHWZiVCeGVZU31gT
-	3szsjmoxcFt+5eSnD1OS8rWI0Oi8gZcGAcKy9T2469YhtdiLNdX5rzxn
-X-Gm-Gg: AR+sD13hpDWOX8b2h6v4ukYvRdb3wx1iTFYf7vel4HxfTCX9bu72aNRsmo9Tn2qs0rs
-	HP5e/3F7KOYEpK1MAicN5U6ECWgp9tinyv1Ab4cvsymsAQh99g/4x8BsFUTw98tU4vuaGp+pXaF
-	eQcmmYKhDNXuUeoYFhqvSXoDt5vPeJYfLBnLlO78ZYwJfR0qr1Kt2YhgISBThlD7LsFkkrnRxsy
-	xDgq0rATR/POaFbqZzPRyQbJzZ9uvLH4ARaGCl6MSp4VUjD5Wm/TkkYW3m1udLZXMatvuVaU4cT
-	53MSWnZ6ORgf4uKCZ23a1Ti6VPQpG8/4WSj2GzDhiJ7g4z0IWVuEiKAX5CbNXRRH8drTHWp/aU3
-	hG2bw/8nw/fZWQ/bVCx7+QAlPBTlIPBthjF/zt2mpB+wzr/Y1/qnwHiwP2gnPWvKLt9FSmMcsrG
-	3ai6scswwuhbdfcmOPKpkC91YWxGfqHfTEZgMfZZYsJavUCwSepqK3uwC1qtZ4EsptCOjLyChyN
-	6IOd2EUPeq8E/YukDajf76XLwhLl/IexYhKY4wKE2yEcixwRWuHT1qK2bWoEA6cWiPFaoOJhPCR
-	6qkdziio+i5ym35hThw20SD9E/rwhwXZSBqwrg==
-X-Received: by 2002:a05:6000:22c5:b0:47f:97bf:d891 with SMTP id ffacd0b85a97d-47fd72a5b52mr19364695f8f.1.1785741717288;
-        Mon, 03 Aug 2026 00:21:57 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785742054; x=1786346854;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=0vzwedFlW2YR8OeXvZzLj7hCG1v8iR3G8VOAaPvg9yI=;
+        b=FjlXm5WHOUN6F0gFmPHA0+nNNnIgmHjvHLhHFG0Yil09d+kkfIH8MnuLxx0mOKsBUB
+         Ti9w3U7YXd8+KF5zPIw6D7Uz+lrhyoFfNYIVONeGQgD5jk7RnzFux8KCXO4e+h4VrUrU
+         IC94bvg9B+Cm9TjGw508wrRwj0TDBxJXSLjigsuuUrUNK+tCophNkbZd569rijhrJ7Q5
+         LKZ/PRHYggYj+ce496Ew1i7mQea2JhkgzJXIrqvzWz/4QJjd3QJsej4Ucr5GQ/xTjhQJ
+         mIPEK4pV7Wo+PvT6CUySpOF9b006Cj5yO7v1bo6riOtH5JVizXpr2VErZJq5blOPTDOD
+         +Usw==
+X-Gm-Message-State: AOJu0YyQSnARoKfK0ydiBu6cXxH1b0YT5QxOsjeGmFPj3oktkBGQU2RA
+	mCe2vSWtNgL590q90Ce+rvGl6Jpzsp9FIuoGavciYRwNCit4+VDy9I39BgtNHk3+
+X-Gm-Gg: AR+sD11yMc9Q2ZNyMqBF4WUtqeQ7pArcbodRRdqqwB0xQ+E+vOa91MBnBw5z4uzBUO8
+	v+xteFMsTXnutYRR5kdDDX9lK63uGhnwoiRpd+rtOqI8iayB04P0YMEdEDz39FUYCOOXQOWkDpJ
+	Y37khgOwH0KSJdDroXWU1ykmTJhubw8a38p44C9X2JHjgPA2zTqYE9Srk/0jNq9/uf5S2kBLFqe
+	opRo6UQbH35LkYvvkTv9N4TvRbl1mvgI+toSXxSp1qT/kVjs+RL8raZ1dEeyVPKeac45kbPvuGE
+	W5b2J3QxmQ7q9pKnIW1+UoanNGInSe4aj8zWgzQkjz5PczTmzbFIwkulUtzZDlpKgHAc6yYDLfZ
+	UpWiO5+BS70pqYVdFFDiyM8No+lYn+/aebbH4Eoi4UB9xUCpwIrG+gG6AzMW8vk9RX+PFRtwIck
+	FkCCCUj+6jlMjXMUruvHP6NQnHJ8jqfwfAa5KMEj4pLCbWUFpKkW8J6P2RRjB9HL4kucFNSgN3C
+	VSUUI8QbLUurf0zdsnNCP2hptNo9QAkgMbFD0f8YdxKEbxobRX3rwozJ9nb1z1NM5vbSgi7+fd8
+	4RjWzwSV0ByfoFBG8EZURcqOflk=
+X-Received: by 2002:a05:600c:4e89:b0:495:5e3d:15e1 with SMTP id 5b1f17b1804b1-4980c6788f8mr179468335e9.16.1785742054338;
+        Mon, 03 Aug 2026 00:27:34 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd41e296csm27862829f8f.12.2026.08.03.00.21.56
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49807b59a5bsm199964875e9.3.2026.08.03.00.27.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 00:21:56 -0700 (PDT)
+        Mon, 03 Aug 2026 00:27:34 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v4 0/3] Improve stack depth verification stats output
+Date: Mon,  3 Aug 2026 09:27:28 +0200
+Message-ID: <20260803072733.191502-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 09:21:56 +0200
-Message-Id: <DKF4LVGKEKE2.2LUROK1TAUGZ0@gmail.com>
-Subject: Re: [PATCH bpf v2 2/2] bpf: Reject untrusted pointers in
- refcount_acquire
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Ning Ding" <dingning04@gmail.com>
-Cc: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <martin.lau@linux.dev>,
- <davem@davemloft.net>, <greg@kroah.com>
-X-Mailer: aerc 0.21.0
-References: <20260726235030.1152542-1-dingning04@gmail.com>
- <20260726235030.1152542-3-dingning04@gmail.com>
- <DKEUKIOKSY28.2XVQVGCKLI40C@gmail.com>
- <CAJP4iuuYfqFChH1P2=3Q6WxHbMTNnAkCagR2k+Lr4W155gCj3A@mail.gmail.com>
- <DKF31NEIMOOB.2CPM6KGVXD73K@gmail.com>
- <CAJP4iuuz0T694PnyZmcq9f9PaQLX2kV+Sd+veQN+uydsvZ=BFA@mail.gmail.com>
- <DKF3XPW4HDQK.FDJMYDLGXZ60@gmail.com>
- <CAJP4iuskVz4RUrXKcnNhcAwMwcNjCP-Pzpc6=HqfWoDpHKWgWA@mail.gmail.com>
-In-Reply-To: <CAJP4iuskVz4RUrXKcnNhcAwMwcNjCP-Pzpc6=HqfWoDpHKWgWA@mail.gmail.com>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1578; i=memxor@gmail.com; h=from:subject; bh=eRm0CvS4BfJiNgfFY39Wpe6TWmHRjH0WsglsS/pdmY4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavA6VqQWcGhCVufXrk54YDqgqWJXF4LxFa28gXoskg+N ju9z9avo5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABOpdGZkuJWh/OvIv3Othn/f NS6I4qhjmySfKnb22Wtme/WDOwxO7mBk+HlFYUmiQL7ZmlXrGIXzZXv9M1d9Et6//NPFqx12Ti2 iDAA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-On Mon Aug 3, 2026 at 9:10 AM CEST, Ning Ding wrote:
->> It will work, you can test it yourself. Reads on PTR_UNTRUSTED is fine, =
-it gets
->> handled by the BPF_PROBE_MEM loads, which handle use-after-free safely.
->
-> But if we apply the one-line change to type_is_ptr_alloc_obj(), the
-> read-only test I added will be rejected. SInce the read will hit that
-> code block and trigger the allocated object must have a referenced
-> id".
-> if (type_is_alloc(reg->type) &&
->     !type_is_non_owning_ref(reg->type) &&
->     !(reg->type & MEM_RCU) &&
->     !reg_is_referenced(env, reg)) {
-> verifier_bug(env, "allocated object must have a referenced id");
-> return -EFAULT;
-> }
+Some improvements for more clarity in the stack depth verification
+statistics output. See commit logs for details.
 
-We can make a specific exception in this case IMO. That is easier to reason
-about than allowing it by default everywhere. We can even add a comment abo=
-ut
-it.
+Changelog:
+----------
+v3 -> v4
+v3: https://lore.kernel.org/bpf/20260803031457.3115812-1-memxor@gmail.com
 
->
-> There are 2 possible solutions:
-> 1. Split the type_is_ptr_alloc_obj into 2 helpers, one is only
-> checking whether the pointer has PTR_TO_BTF_ID | MEM_ALLOC, the other
-> one checks if it is also trusted:
-> static inline bool type_is_any_ptr_alloc_obj(u32 type)
-> {
-> return base_type(type) =3D=3D PTR_TO_BTF_ID &&
->        type_flag(type) & MEM_ALLOC;
-> }
-> static inline bool type_is_ptr_alloc_obj(u32 type)
-> {
-> return type_is_any_ptr_alloc_obj(type) &&
->        !(type_flag(type) & PTR_UNTRUSTED);
-> }
+ * Read names from subprog_info directly to avoid an out-of-bounds access
+   when func_info validation fails. (BPF CI Bot)
 
-I would just create another more specific type_is_untrusted_ptr_alloc_obj()=
-.
-Tighten existing type_is_ptr_alloc_obj() to exclude untrusted case.
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260802225209.2511758-1-memxor@gmail.com
 
-Then just add "&& !type_is_untrusted_ptr_alloc_obj(...)" to the list of exi=
-sting
-checks before the error you pointed out above.
+ * Reuse subprog_name() to fetch subprogram names. (BPF CI Bot)
 
-In addition, I would add a comment saying that the BPF_WRITE case for the
-type_is_untrusted_ptr_alloc_obj() types was already rejected earlier, so th=
-is
-check only permits reads on them.
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260801230400.850271-1-memxor@gmail.com
 
-Then the test you mentioned should continue passing.
+ * Use multi-line format. (Eduard)
+ * Adjust veristat to work with old and new format.
+ * Adjust selftest log_level without new option. (Eduard)
 
-> reg_btf_record() will use type_is_any_ptr_alloc_obj since it only
-> looks up metadata, while bpf_refcount_acquire should use
-> type_is_ptr_alloc_obj.
+Kumar Kartikeya Dwivedi (3):
+  bpf: Show more useful info in stack depth stats
+  selftests/bpf: Adjust veristat stack depth parsing
+  selftests/bpf: Test stack depth stats without BTF subprog names
 
-Is reg_btf_record() going to ever get such a pointer as input? From my curs=
-ory
-look that doesn't seem so. It was happening before since such pointers coul=
-d be
-passed around to helpers or kfuncs. That should not be the case anymore.
+ kernel/bpf/verifier.c                         | 13 +++++++----
+ .../bpf/progs/verifier_basic_stack.c          |  4 ++--
+ .../bpf/progs/verifier_bpf_fastcall.c         | 23 ++++++++++++-------
+ .../bpf/progs/verifier_private_stack.c        | 15 +++++++++---
+ .../selftests/bpf/progs/verifier_var_off.c    |  4 ++--
+ tools/testing/selftests/bpf/test_verifier.c   |  2 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |  6 ++++-
+ tools/testing/selftests/bpf/veristat.c        | 16 +++++++++----
+ 8 files changed, 58 insertions(+), 25 deletions(-)
 
->
-> 3. Keep the untrusted pointer check on top like the current patch.
+
+base-commit: 8f876c773b79ed66dadc9507f50dbff39c6a9ec7
+-- 
+2.53.0
 
