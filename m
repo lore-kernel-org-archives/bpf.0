@@ -1,202 +1,126 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF51640F73A
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 14:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785768050; cv=pass; b=AcdfF8VwbkFaHZ2euGBBEVlZNOmb738NcC2c+K7lFYr8Xeurv65g/EhtX/0CHT5duwDAOcF7debubJFNw95te9kVotKL8hZQLyYiNGEkk9t75rt20B4sZTVPV2d2hPtYlz7p3KyozjuXSQ9I+xbUqO+AA45TdCuM0c6CkHHtE04=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785768050; c=relaxed/simple;
-	bh=5kebS8pMZi+Qnu3Pne9n+Gcqlzlf9paHIC1+/HJAbOI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NOCNOq7bfihIGtIHsMKbSBTM5TJ8FTBKZNAZsAIuXLgqmUmqkOE2KFuPu0YApNjDmM2GaSbCUs6se0Wh0xgZyGY5y0jmSg//7khQALTsA4YJHHzyaYaSikUYmnSqxTbGVob+w5nE4O/KHBWlRoJR5DHfiirv+Ab2i1sEmfRjGsw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tz5rfNOQ; arc=pass smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2772E368D59;
+	Mon,  3 Aug 2026 14:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.237.72.81
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785768288; cv=none; b=gJeU2KHmiOAkJDvPwqGUaeP0I3L8DvbpHNzI1uf8ECPJod6lto0qjFQ/iK0rrHVTBAWXMGPCqXwQQolXF7SUzZBOUzltBTrrr4t7/so767qOnklCKW0udEajhwcvUVEFTFLymRElP7+l0KYceFeBJdOkcr9d/wl10cHq6vMae/Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785768288; c=relaxed/simple;
+	bh=cKci1TH0Ez5V7bHDCnmcc02yMbytcHg/z6mm5mPDOAg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DXhK/A9vxUa+DVq12jy8u1+ZvJNVLuD5vUSoJWeW49HAr+8Fws65BkhYy+vcEgk3pvHuEmZdlHbv307j/TB38lMFD2n9F8hZghIcqDFEZDP9qvVDD0UenYbt24+dsEsOaqQuQsQZ6L/vzjMMXcbUA7rS/1wCybWhx1jUVDAruEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Tk9j9fuB; arc=none smtp.client-ip=52.237.72.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tz5rfNOQ"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c197eaaab00so563040166b.0
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 07:40:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785768047; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IhQoD7sgSPSM7zVnj3+sxPy9jRtGEqFZrWQZxbCKXxDfQ4+JrfG17dCiwi0VHf5iWv
-         KZprnKjFj6GNvJ19MpGKYRyqAYC6n2LuEHNDYiqbjVFI3O7GNGTRwHxsMqr22Wg1ogcq
-         LuUOvwZIuH7QIDXBQvc3/LyGzEJC2t3kx5EzhDBuZAASghVTgT1KEKGtYu1ZeAhHozID
-         jQub8NCUYjj8Zs8d9s5FY6uFj6L8nWzRtfxXNHQsUXKevYs61oFaed9RMAFJGX69fjwD
-         1NmkfBSXYHVJQp/MmA73t2Y/NuFrU2QuqWKtZDv8YNGTHtDyqMzuyK4TYNpqOtdRFcf/
-         XpZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=43vcEMd1q8IU7lDqptyYtNca+YC1kL3gqmLuBjWx/68=;
-        fh=W4zgvaciPvu+gyNBZoCQAqBlb+JTJZHKnm39esXowU8=;
-        b=DuSUS6+8x1MHu6CfYnhqSueDpmDthe4oNlBjO1qM0rVJe/U8jzBw2F/XhAAuf/SfuI
-         lPGml4WdIvEwZQPXC8oOyLRQKparbLo1rhEQ2MuTaR32edtkmWpIIS4T390iEUiu8Kn7
-         jhmqLIUcogvy8O0bXUE6TSN4HLxqC+LdpZslhO23yi1ejGLe/f4ygMC8YYQ9cuQg6x1G
-         7pifTM/y/ZHjCsfhJ1CW/i4hAPeoAcpm+4OFJ81Ahh4TLFZ62Auv82WPZu8Xjs3dd4l6
-         ZvM4ctQlQmuN9kzgWx8e3kUgrgDV+Rgk9wAhGuax5etlvcWjKP/sFhPF3mscuVmhZZX2
-         kzyA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Tk9j9fuB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785768047; x=1786372847; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=43vcEMd1q8IU7lDqptyYtNca+YC1kL3gqmLuBjWx/68=;
-        b=Tz5rfNOQzchdtn/Ks/onHMHuRnDgH0pVeptuXyu6TmgTbyHH6p4hIis2w3G5urNRNZ
-         fC6E6xRWZRqhV9Bi3M6TlcRLo+ysuiwcjN9Rb3pMUs0MlvPFPFOlxzuP8R31g8MnKFEi
-         qDWXdxoklygg/KNPiNiKSHJacPtyzW2I6OAKw6ugRbe9mxLePzw5uTE6GMU97hqvWOtw
-         KwWfb9SVUCCzui4n/MQWlgLeI3F62ZfIS/rmbS9Ug+GidBt5Ck8ji6BuSrp94Fzn0zd4
-         RVIrjMjRW8582oV6xmLu5Mge6Tm0Ex2WcVKgI1rwCjCo2ZDnjYaY1Hf9g2ExOH9RlANX
-         lPZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785768047; x=1786372847;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=43vcEMd1q8IU7lDqptyYtNca+YC1kL3gqmLuBjWx/68=;
-        b=TzY3ioSYNjZh+lx0g3T8xcIJa+1INRk9wYKe8U+NqSb5BOgbYBAlRTvq1OTUzAXL+2
-         YcaKBrtxI88rPQY7bt+7Ve7AyXHjPR4S1T3CJlr+fgXZRahPDCb+LuT8/BbeYsAYVfna
-         ntsz1A9wqw2Bc9e/4GjZlwy++xFY8z5BIQ5PXXXNzlK+auaLP8lyA8DUw4Gh4rNHGpKm
-         YwfGrK2HyH6YDSksl5bIZ4M1bcqZuGlRlR481tM53bCNly/bYNz+kOIGt2DY0PteW/q9
-         TT6Wkq2PDiDcXHn6jdOBufBvglUz6/zD9WlCM9esbz9VH3HsnbF3ro/DZGgXsh2bckeu
-         pQaA==
-X-Gm-Message-State: AOJu0YxnhNJjJSdiQTjWoSY5eJE1XxgETbezE4GPoneVIJIuiIEncJ5l
-	YI82TuwUs5Q23iG96/BtaUVSpa74T99uBfvW0jKV7/vGkY/NrXO0CQowlCS7nd0jVKM2BcN2G4w
-	6aAzLiPJRyJjqEaEzuynAX7Vegz8jovjtqcC857g=
-X-Gm-Gg: AR+sD114NGppNL0L4g17iLedFmsQxSb4DJrPIJC56g89aYNMv7cz14h+KxAimvTJzLF
-	tA42pa/mWW5pTOwJm7M0cl/oJ5nunjGaQtzANLIBe19oQwX42LszgiBJHN9GwdOpiqVI65RhS0z
-	Z3qDrIjQKUD8vmojTNrO9J9XguTWqX6UnAsAvX8Y0tcIgPdAcd4SBl33rvgzfq3kv+iVLawt7Ad
-	vKTv8Qb2dKQQ0IBpqiJEHjYHfR96T7q9WOUgiCe1rjLVpJGvZCAmoW+FLQbgR4s22fd7xMG+NP2
-	UgoCRw9pVKd7HmkCbgmZnkXOtgpPGk45XppyKZvgLxwMA6pcbzQC4oeIlIYALJ6R0+HbWi8=
-X-Received: by 2002:a17:906:7186:b0:c1c:2aa5:322b with SMTP id
- a640c23a62f3a-c1fe8168601mr589342466b.2.1785768046472; Mon, 03 Aug 2026
- 07:40:46 -0700 (PDT)
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	To:Cc; bh=BuFYpnazeC9wBh0083FQMdu+tEEZaeoj8Txamw5fU1o=; b=Tk9j9f
+	uBWErLkXReytXBU8b4H3TiA0cc3EhTlnOG/7tFCgOtFdoXuLGizZkNob8nYTGMjM
+	V2PfvaCOPuP/7lFq/PvBmuyLn5agU5eLicPfecv2G1pdiqX2iguIsslR9YjDu+XR
+	20Tn2r8athiza6ZaMacrTbZ3s8dr8/7qOrIRU=
+Received: from [172.17.0.4] (unknown [101.6.30.195])
+	by web1 (Coremail) with SMTP id yAQGZQC3WspHqXBqgy0HAQ--.34642S2;
+	Mon, 03 Aug 2026 22:44:26 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Date: Mon, 03 Aug 2026 14:44:20 +0000
+Subject: [PATCH bpf] bpf: Fix sanitize_err() register selection for BPF_K
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260803134839.2103051-1-puranjay@kernel.org> <20260803135329.2327280-2-puranjay@kernel.org>
- <20260803143505.2E3D21F00A3A@smtp.kernel.org>
-In-Reply-To: <20260803143505.2E3D21F00A3A@smtp.kernel.org>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Mon, 3 Aug 2026 15:40:32 +0100
-X-Gm-Features: AUfX_myg5FkRhhwJrWlROWqtotno0-Pomq3l_iqF2gTN_FLgC2KCpZALE0D3KSY
-Message-ID: <CANk7y0g+Yf0Vy0jZCoD6NicDXdJ=wo4WpmiBLo3MPqKaNUXO-w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] rcu: Make Tiny call_rcu() safe to call from any context
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260803-c3-035-sanitize-err-v1-v1-1-93e5ff61731f@mails.tsinghua.edu.cn>
+X-B4-Tracking: v=1; b=H4sIAEOpcGoC/x3MwQqDMAyA4VcpORtoGxzFV5EdWk22XDpJh4jiu
+ 6/s+B3+/4LGptxgchcY79r0UzvC4GB55/pi1LUboo8PnzzhQuhpxJarfvVkZDPcA1JmiUUSpSL
+ Q481Y9PiPZyibwPO+f+4DOMVtAAAA
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Sashiko AI review <sashiko-bot@kernel.org>, 
+ Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785768267; l=2164;
+ i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
+ bh=cKci1TH0Ez5V7bHDCnmcc02yMbytcHg/z6mm5mPDOAg=;
+ b=1yBvR9if8q7FnaAaQOXmwkmfPZmMlj0CiPFAv6/sz6mJ4HrCrzKG+O6qZW1wy1wzC1IJP+VnA
+ fPVXB6M2cJXAvlKfnJAi93OLieW10BlOb1ipwtO1ZDzdZ404OOlW5WM
+X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
+ pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
+X-CM-TRANSID:yAQGZQC3WspHqXBqgy0HAQ--.34642S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur4kGF18GrWDWr4DZr15XFb_yoW8trWfpw
+	48uwnxtrWktr1Uu3WDAa129ayjka1fAa13uw1UJ3ySvr9Iyrn5CFWIgrySqa4Yyry0k340
+	yr4F9rW0v34UAFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9q1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28E
+	F7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzx
+	vE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY20_GrWk
+	Jr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5c
+	I20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxE
+	wVAFwVW5XwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4rKr1UJr1l4I8I3I
+	0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+	GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+	0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
+	rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJbIYCTnIWIevJa73UjIFyTuYvjfUIKZXDUUUU
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On Mon, Aug 3, 2026 at 3:35=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [High] Relocating `debug_rcu_head_queue()` into `rcu_do_enqueue()` bypa=
-sses double-free detection for deferred callbacks, silently corrupting the =
-lockless list and inducing a permanent hard livelock during `rcu_defer_drai=
-n()`.
-> - [Medium] Invalid `WARN_ON_ONCE` in `call_rcu()` falsely flags safe NMI =
-executions due to a flawed concurrency assumption.
-> --
->
-> --- Patch [2]: [PATCH v2 2/6] rcu: Make Tiny call_rcu() safe to call from=
- any context ---
-> commit 866e1596ae5a7314657b9b0164dfabf922016c70
-> Author: Puranjay Mohan <puranjay@kernel.org>
->
-> rcu: Make Tiny call_rcu() safe to call from any context
->
-> Give Tiny call_rcu() the same treatment as Tree RCU.  When interrupts are
-> disabled and the scheduler is up, stage the callback on a lockless list
-> that an irq_work re-issues later.  One global list and irq_work suffice
-> since Tiny RCU is uniprocessor, and there is no CPU-offline drain.
->
-> > diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
-> > index dccccd6be9411..5736b964d8ee1 100644
-> > --- a/kernel/rcu/tiny.c
-> > +++ b/kernel/rcu/tiny.c
->
-> [ ... ]
->
-> > @@ -42,8 +44,86 @@ static struct rcu_ctrlblk rcu_ctrlblk =3D {
->
-> [ ... ]
->
-> > +static void call_rcu_defer(struct rcu_head *head, rcu_callback_t func)
-> > +{
-> > +     /* A re-entrant call_rcu() during the drain would livelock it; dr=
-op it. */
-> > +     if (rcu_defer_draining && !in_nmi()) {
-> > +             WARN_ONCE(1, "call_rcu() re-entered during callback drain=
-; leaking callback\n");
-> > +             return;
-> > +     }
-> > +     head->func =3D func;
-> > +     if (llist_add((struct llist_node *)head, &rcu_defer_list))
->
-> [Severity: High]
-> Does moving the debug_rcu_head_queue() check into rcu_do_enqueue() bypass
-> double-free detection for deferred callbacks?
->
-> If a double-free occurs, llist_add() will be called twice on the same nod=
-e here,
-> corrupting the lockless list by creating a circular link (head->next =3D =
-head).
->
-> When the irq_work executes rcu_defer_drain(), won't the llist_for_each_sa=
-fe()
-> iteration infinitely hang on the circular list before the delayed debug c=
-heck
-> can prevent the livelock?
->
-> > +             irq_work_queue(&rcu_defer_iw);
-> > +}
->
-> [ ... ]
->
-> > @@ -157,29 +237,15 @@ EXPORT_SYMBOL_GPL(synchronize_rcu);
-> >   */
-> >  void call_rcu(struct rcu_head *head, rcu_callback_t func)
-> >  {
-> > -     static atomic_t doublefrees;
-> > -     unsigned long flags;
->
-> [ ... ]
->
-> > +     if (should_rcu_defer()) {
-> > +             call_rcu_defer(head, func);
-> >               return;
-> >       }
-> >
-> > -     head->func =3D func;
-> > -     head->next =3D NULL;
-> > -
-> > -     local_irq_save(flags);
-> > -     *rcu_ctrlblk.curtail =3D head;
-> > -     rcu_ctrlblk.curtail =3D &head->next;
-> > -     local_irq_restore(flags);
-> > +     /* An NMI reaching here entered with irqs enabled, so the enqueue=
- can race. */
-> > +     WARN_ON_ONCE(IS_ENABLED(CONFIG_PROVE_RCU) && in_nmi());
->
-> [Severity: Medium]
-> Is this concurrency assumption backwards?
->
-> If an NMI interrupted a context where IRQs were enabled, that interrupted
-> context could not have been in the middle of rcu_do_enqueue() because
-> rcu_do_enqueue() disables IRQs via local_irq_save().
->
-> Since it's impossible for the NMI to race with rcu_do_enqueue() in this
-> scenario, will this falsely trigger kernel warnings during safe NMI
-> executions?
+sanitize_err() determines whether the source or destination register holds
+the pointer by inspecting regs[insn->src_reg]. For BPF_K instructions,
+src_reg is zero because the offset is encoded as an immediate. R0 must
+therefore not influence the register reported for REASON_TYPE.
 
-This code assumes that irqs_disabled() returns true in NMI handlers,
-so the execution should not reach this warning in NMI handlers.
+Treat BPF_K as an immediate scalar source and select the destination
+register for the diagnostic.
+
+Fixes: a15970d916b3 ("bpf: Simplify sanitize_err() signature")
+Reported-by: Sashiko AI review <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/bpf/20260729153536.F3E2E1F000E9@smtp.kernel.org/
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+---
+This follows up on Eduard's request to special-case BPF_K when selecting
+the register reported by sanitize_err():
+https://lore.kernel.org/bpf/a9475d6a37b2569aaa754c5b2186ba53b37c405d.camel@gmail.com/
+---
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fdc5fbb1f78ca..e5a8547ad7231 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -13562,6 +13562,7 @@ static int sanitize_err(struct bpf_verifier_env *env, const struct bpf_insn *ins
+ 	static const char *err = "pointer arithmetic with it prohibited for !root";
+ 	const char *op = BPF_OP(insn->code) == BPF_ADD ? "add" : "sub";
+ 	u32 dst = insn->dst_reg, src = insn->src_reg;
++	bool src_is_imm = BPF_SRC(insn->code) == BPF_K;
+ 	struct bpf_reg_state *regs = cur_regs(env);
+ 
+ 	switch (reason) {
+@@ -13571,7 +13572,7 @@ static int sanitize_err(struct bpf_verifier_env *env, const struct bpf_insn *ins
+ 		break;
+ 	case REASON_TYPE:
+ 		verbose(env, "R%d has pointer with unsupported alu operation, %s\n",
+-			regs[src].type == SCALAR_VALUE ? dst : src, err);
++			src_is_imm || regs[src].type == SCALAR_VALUE ? dst : src, err);
+ 		break;
+ 	case REASON_PATHS:
+ 		verbose(env, "R%d tried to %s from different maps, paths or scalars, %s\n",
+
+---
+base-commit: e5fd3f514e27db1f05fbd72ba615d74941e23c51
+change-id: 20260803-c3-035-sanitize-err-v1-3aef2bf838bf
+-- 
+2.43.0
+
