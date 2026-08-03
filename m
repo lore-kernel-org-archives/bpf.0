@@ -1,70 +1,87 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E345834251B
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 11:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F3F34251B
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 11:25:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785756330; cv=none; b=Oj5q7o17AcBzDUk+ZsivPl25TxcM2jrjnMpQ/QM7JL12XrxsiILYNpYHF2assW6NDM4lVDWMY9wZWtW422wFtNSytgnnDjX3ozCiImZL3VfLsjPDQjq3MNyu3exQre3hKGBss23ySb+2nJr24fiAyQi1FxRyU3VtZvkMz8wdrS0=
+	t=1785756333; cv=none; b=dxsd168MtC3+jxS2VFco/1yLHi5u3LEnyaN5hyUnhkB4SZ+xbvSbnSXb5YUxceBbWTj9yC/v234C/MPoZAp+3DPUUjhSfIxEsYPHPAqBWk/J6bZPBFrBeFdHPAs81dBMiDEYmp/1UhIrSv5jUU3xfgPyB+iBwIVM5hzh4pO+xww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785756330; c=relaxed/simple;
-	bh=o9w+XRZkB8Z9THjwP9EBPcysOJkhYIcBAHpiusrp6LI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UhwFlHdstO7Qs83Jn4G4WjhuNiwWpIMGFblFQCUQPu27raVfaRT6veP5lNGrk6cdJX5+yqqUAfKg47ffuWYTQavrGL3+QzkY0I1qQ7D7KVhiR2LxeeIA123U4MpcN0VAXSXimziTgRJ2fXnvuxvQggjtfaInncHworz3mO1VYjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=INM1rm2t; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1785756333; c=relaxed/simple;
+	bh=Y9AIsjPbIPGueDse8hHLQDqbfy+XindtGyBeUBP/rvM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=k0lrnPoOSNV2cgmsFm09UhmeF0Qf31BWnmR+YW0ViMoBsCnKq6lcNejribua/4SLOZTXK7Vxoon0jpHXR+PdesmIxDWbYq9lhgWu2UX6JDR62t3QU0SpL4SrEAvnkr1cKw9b1nHsVAJw5ddIOf3X8SDvJdCxoce6Q3bpQtHtDaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7Ewn73U; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="INM1rm2t"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cfff5f88dbso36119515ad.3
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 04:25:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7Ewn73U"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cc7ef7ec27so35639715ad.1
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 04:25:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785756328; x=1786361128; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8dOUiIc5xBl3gDxpPfriL1PfyJELAWmVwdEdmJehScM=;
-        b=INM1rm2tHsiSvOhRvPukmnphcfwrCyzfqA4UaQ4/DXUuybDN9SrgGLcJ0NqABOhb+7
-         1OBlanKbcXErC+LiwYF3QrdAHGhLFHT7hboXVZhk3+yWeitzEFaS3IbsjuRiwUsD2Edz
-         d3be3QCnVDqWbTlyAVFS78iRymGM/d7GydcNkaF5Y51wVJ9idPPXrSaffDwCqkKGpdYt
-         +ej7ROUH83Mf2+h2h+mysgHo5jAADZKKawvoO/+s+ySBIvUJDFpqOKovZmVIiMqEgVKZ
-         22CVx9pb6AJ9wFaFpzovl/Qa6C02hsS6FHGD36e+36Oq+9JLELaP2HGA3rrdzN6E4/sg
-         dH+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785756328; x=1786361128;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1785756332; x=1786361132; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8dOUiIc5xBl3gDxpPfriL1PfyJELAWmVwdEdmJehScM=;
-        b=B9b7e5cz/jo76Zfj/vnA+Tepm/xtUCIGzUzT5u6fyDUqx1KWd5zcyizBSy81h/x2Ps
-         +tKWiuPMPhpxGdfvIH0sIixBcALhR3i1F3ciSzIyoL9fcupsNP1VyEvmuptzEBYvBePy
-         1lXl0wyjVN9s9ERPhlbqDzSEp5OJEqSAhBhJLxWuiuFRGIhRok+haSCOAwnUFbn/TojZ
-         zNosojuGk+EtjJmKMzVlQwy+f5ekXYznCYDNIGxiam6wwa71D7JfvY6PjRszO44f4pGa
-         D4apLoRyZ7UD8KByBPoqAqV+8Hp7vGjYBrxcEOD+MHRpbHLpv9a8uRsJIyPT1WUzXWGT
-         k9nw==
-X-Gm-Message-State: AOJu0YwSt/w5Y2zyMh5w0hPlsUXVQj3X8kH1HeBI/oYnaVDJfkIgpski
-	h+gTHXp6JMWVbxURBMpAIqzFy205LA6zsL07Sjn2gaSIw+GHU8XzYk+7buBuWw==
-X-Gm-Gg: AR+sD11V2l3V4L9vMzwBUHtL9itJkX3EDYGuJjqPMWmlHneMJVhljBdCKz3TCM+qcaI
-	uxsVEP8fVVztvWQ12lj8Zn1wDYU/MRZ33jeu46aOGopTxiwRppcuoB25LuSPp62N81LG7JEs9gW
-	6fCcowBZWfr6spR2M0wcWe9/ksJUkxBxTCokqYIo0BXUeoBu8wHaDcuvCQnP8ex6J1r3H2eGq3S
-	Fd4zkN9GAQwl/WGN0HZEWprNLsQG0oTvGRdMz5+nupdsLYlJuIMqJsrJ1deH+7+0EmRZnMsY1Fp
-	NXzs1pAa6KnnsWWMJtoNnlnHwskyfINKuBQWsrPPQ8KIyggt20YCa5faKP/OSXOTbb2R8aBMdGQ
-	HMDPvNbnn5EVjdUXE1mvuHxXzNP625ZPwrxvunyn6Edexjd9jBWDeNRO2LefZJypcaEWNBhJFYR
-	JXuPWKsb5mEoeGlETB6w0dfLec0gqnamcbpRoTe1L7fY5VoNkj2WeRNheOCeqw/oeS5G5xiGKvL
-	GQMlJJ3O6p0b9Ir
-X-Received: by 2002:a17:902:cf09:b0:2cc:5f9f:54ed with SMTP id d9443c01a7336-2d0523f9ef0mr95227265ad.27.1785756328163;
-        Mon, 03 Aug 2026 04:25:28 -0700 (PDT)
+        bh=k5tDp607U3XC+GO+sC+Kbg0SxU3/bHhXF0A90r92Gwc=;
+        b=S7Ewn73UrqgDwTQJGK1LAqjznD8pKBeh0BS7XZMFPS474diUB1PCzn8kakXEqN5x9y
+         iEXvYo3mhJJWC/cmHQ4hO5dlg5cZKucC4g7r0SmmzA7od9l4cAmbEP4Yc6lgWyt2rz2x
+         MlbNko9QoRf2vC0BpG56ReCP2wuk6wfx9Bp4WYmP0oQXcyUpCfxZ7d1aehAhU7YpJI7T
+         ipHHOg1MtWxDbILdaVWXCVXLkwXtOFRaE9iyZsu6PMqtBHLmyY3Ki6V3dr9uYnrzMt8c
+         xC7zHwAcoRp9G9tZbSCcYlCfdM50EtckpzS07hA6r3zyYJsFhqfU3mbACKqJTZAE0sU8
+         zQnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785756332; x=1786361132;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=k5tDp607U3XC+GO+sC+Kbg0SxU3/bHhXF0A90r92Gwc=;
+        b=isIhnMuyaP8upDfPay+Lx+3juToPO1jINUWgVnYrWaqoYWBakzdQoQ6rz/3Y0Vle/o
+         tFIMtNzp4LPy4pFchZHSUNuMNXoGUQ6u/5iMzPVclQwJP1BVBZbQ4mJcUFEPz0STNTDU
+         3dXVuUkV+8+TnCWoczLELIzkrMhUnpbJOa+JqAxfNcB5zKrwmNBfoiBO6xIS0GOEkjX6
+         PeFYjA2FBnlMBM3FYlh0o4hpz0BF0MRQ9LSz4wokhu7PW37mxAzlOTsMQklNbP7pVW3P
+         lWKjeFNro+RyaWM5jaaXnGimRsQog4MH9+U9zJB59+FlZ4PWt60HS7bd1rWSfmmnlJ6X
+         s3rg==
+X-Gm-Message-State: AOJu0YwjZNAavcg6ie8FJ22IciSkuNTfaYvAsLTQEhp79A/lE+aRu1OL
+	tEPtFXxom3waAukeyiudJmhEcQCoEf2TDoqCtfp+cgB93AKT+x3/d6ao0oShKU8j
+X-Gm-Gg: AR+sD11f3DFUi+MTjSBgFkGV4zs+dEZq2GCbYHr70HXVJOEE2LTXNhp9xIu63SKfAtP
+	VeT9T3mUSZMh8kpmkZGYNhRT0T5Aj1Uo/TiDT0Id1917CaD32+uhl7rzXA14UKkDaApn72FZ+9s
+	jtaNK7jNIEZ3d+F1/1/txbxy+sc0mxLaExX7Jk/eGdOcB5O6zitAdCfthU7aowbKOlXwM+Ra84r
+	csbrBzmFdV5d80iiWeiEupUzbk3DvjAp/ye9J54Nfhzat2P767R4jCsGtRIyYfEEwD/HBQFClCQ
+	q9tIvt4E3q8tYR6jLCuPbvHqjZ6f+094Ug49uWeD/pjmPW24FCJG/9qpGNN+LeUN+LwJsrYILLw
+	il3eiPu7kkr39W0y/Nv3xJKGYNtVIL/i6r38ejafeXu0eq8mVKJb1R3N6IRQWmV5s9RPDlrLMRB
+	vcNSNJ1nydFDRvJrtA09AGanqFsxrjpnrj2w1jeEV9FwIUtEFdZldwR95jKrYDI4VYm4tJLLuxh
+	PGSqcjOGJaW48uo
+X-Received: by 2002:a17:903:1a06:b0:2ca:d172:7228 with SMTP id d9443c01a7336-2d0521b6908mr100228275ad.11.1785756331838;
+        Mon, 03 Aug 2026 04:25:31 -0700 (PDT)
 Received: from patterson.cs.ubc.ca (patterson.cs.ubc.ca. [198.162.52.65])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04ae5a91asm36190685ad.21.2026.08.03.04.25.27
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04ae5a91asm36190685ad.21.2026.08.03.04.25.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 04:25:27 -0700 (PDT)
+        Mon, 03 Aug 2026 04:25:31 -0700 (PDT)
 From: Ning Ding <dingning04@gmail.com>
 To: bpf@vger.kernel.org
 Cc: memxor@gmail.com,
 	greg@kroah.com,
-	Ning Ding <dingning04@gmail.com>
-Subject: [PATCH bpf v3 0/4] bpf: Fix refcount_acquire handling for borrowed kptrs
-Date: Mon,  3 Aug 2026 04:22:07 -0700
-Message-ID: <20260803112218.3361213-1-dingning04@gmail.com>
+	Ning Ding <dingning04@gmail.com>,
+	stable@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v3 1/4] bpf: Keep refcount_acquire nullable for borrowed RCU kptrs
+Date: Mon,  3 Aug 2026 04:22:08 -0700
+Message-ID: <20260803112218.3361213-2-dingning04@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260803112218.3361213-1-dingning04@gmail.com>
+References: <20260803112218.3361213-1-dingning04@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -73,60 +90,38 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix two verifier bugs involving bpf_refcount_acquire() and map kptrs.
+The verifier can mistake an RCU-loaded map kptr for an owned reference and
+assume bpf_refcount_acquire() cannot return NULL. The kfunc uses
+refcount_inc_not_zero(), so it can return NULL after the last reference is
+dropped. Passing that unchecked result to bpf_obj_drop() can crash the
+kernel.
 
-First, the verifier can mistake an RCU-loaded map kptr for an owned
-reference and assume bpf_refcount_acquire() cannot return NULL. The kfunc
-can return NULL after the last reference is dropped, so passing an
-unchecked result to bpf_obj_drop() can crash the kernel.
+Only treat the argument as owned when the verifier tracks an acquired
+reference for it. Borrowed pointers remain nullable, while owned pointers
+keep the existing behavior.
 
-Second, type_is_ptr_alloc_obj() accepts PTR_UNTRUSTED pointers. This lets a
-pointer that is no longer protected by RCU reach bpf_refcount_acquire(). If
-the object was freed and its address reused, the verifier may acquire a
-reference through stale memory.
-
-Patches 1 and 2 fix and test the return-value nullability. Patches 3 and 4
-reject untrusted allocated-object pointers while keeping safe
-BPF_PROBE_MEM reads accepted.
-
-The series is based on bpf commit e5fd3f514e27
-("bpf: tcp: Fix use-after-free in bpf_iter_tcp_established_batch()").
-
-Testing used fresh virtme-ng KVM boots with KASAN enabled:
-
-  pre-fix graph write:       accepted, as expected
-  post-fix focused cases:    8/8 passed
-  full refcount groups:      47/47 passed
-  related list/rbtree groups: 167/167 passed
-  skipped or failed cases:   none
-  KASAN/Oops/panic markers:  none
-
+Fixes: 1b12171533a9 ("bpf: Mark direct ld of stashed bpf_{rb,list}_node as non-owning ref")
+Cc: stable@vger.kernel.org
+Assisted-by: Codex:gpt-5.5
+Assisted-by: ChatGPT:GPT-5.6-Thinking
+Signed-off-by: Ning Ding <dingning04@gmail.com>
 ---
-v3:
-  - Make type_is_ptr_alloc_obj() reject PTR_UNTRUSTED, as suggested by
-    Kumar Kartikeya Dwivedi.
-  - Add a separate helper for the BPF_PROBE_MEM read path.
-  - Add read, refcount-acquire, and direct-write verifier tests.
-  - Add Cc: stable@vger.kernel.org to both fixes, as requested by Greg
-    Kroah-Hartman.
-  - Split each fix from its selftests.
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v2: https://lore.kernel.org/r/20260726235030.1152542-1-dingning04@gmail.com
-v1: https://lore.kernel.org/r/20260726015330.705259-1-dingning04@gmail.com
-
-Ning Ding (4):
-  bpf: Keep refcount_acquire nullable for borrowed RCU kptrs
-  selftests/bpf: Test refcount_acquire return nullability
-  bpf: Reject untrusted allocated-object pointers
-  selftests/bpf: Test untrusted allocated-object pointers
-
- include/linux/bpf_verifier.h                  |  11 +-
- kernel/bpf/verifier.c                         |  10 +-
- .../selftests/bpf/progs/refcounted_kptr.c     | 161 ++++++++++++++++++
- .../bpf/progs/refcounted_kptr_fail.c          |  74 ++++++++
- 4 files changed, 253 insertions(+), 3 deletions(-)
-
-
-base-commit: e5fd3f514e27db1f05fbd72ba615d74941e23c51
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fdc5fbb1f78ca..c47328be2505e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12419,7 +12419,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 					reg_arg_name(env, argno));
+ 				return -EINVAL;
+ 			}
+-			if (!type_is_non_owning_ref(reg->type))
++			if (!type_is_non_owning_ref(reg->type) && reg_is_referenced(env, reg))
+ 				meta->arg_owning_ref = true;
+ 
+ 			rec = reg_btf_record(reg);
 -- 
 2.43.0
+
