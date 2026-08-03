@@ -1,127 +1,132 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5446F3A9861
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 19:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659733A5452
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 19:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785786537; cv=none; b=lPXZspO3Ww6I16Ta284F1lqTZRxEf3d1H4tQD9PCcABxeft7AxDvogA0UwQZsVGqKymTif6xxlneBczdl5i6KZhLBvjdrSoWkmpha3STILweCV+DRNY9z2lQl8BAPZ8zMKcJ+suS2s+6MVKzl7BZ8XabLEWsM+xnUXEYfgiDebY=
+	t=1785786792; cv=none; b=FEeRny0Exp+2xYTYGfU6gfT9WulNxcWoe9QCib+eFnxYtw46AmRKEJGJwZ+0T56802AZnUyJDtp1uIabs+Ly7+POs2/riwWjh8ihaoWJK77BPfJfItizrxoBYusl7b2fU7GRbCuDRXu7bMswnVB/gqOGv8w72y5S68WoyEmhLzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785786537; c=relaxed/simple;
-	bh=OoOCXYnmsHcXFceRPA+Lk0L4+MHLwRINzS1Fo7C+b3c=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oAnfLAFl9fZ6TLcq+0dINU4I6r5H2Pcyi+cvBjyVZwYCd8VzIi0RjGFnEAgceVvom8+/LQvjdXZ33raHaVF4y1KWlWORyoWwd4eAIZk2rUC5WzZJjmP1/Mo4V2TX1EZ80UbsxTT00LgmKV7m+NVHuC/bj7ThEONMIkbK/dof6iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Up2JHHuI; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785786792; c=relaxed/simple;
+	bh=VB/7YO/wvH7apKS7GgLwE0kRBZiD4TH53uTfwAAdU3Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mwwlOX8ltkuOS6JhOAVLTOspWGk8FJIrG7dwk5lZslEZ1LC2qWDaxvCmKMeuskzN6YpD7WsqelwNUq14UCDWX5DX8aYSp9N7IAIQ03AihAQleML8rJppvXFbugYyKC34IB51o/1iR/W9VRxJorya/ypt8Qar+Mur4aeZW0EE3t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Pp8BKPxx; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Up2JHHuI"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-495757ccbc1so23599375e9.2
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 12:48:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785786535; x=1786391335; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bWuva+yS1TaIijzyC+2mlVwhJ1Wvxg7k7qqP6DARP2A=;
-        b=Up2JHHuIaKtgPgA3fKs0PHPXLDKw+OUWzQrKZGmLbZ5SbP5jF7pSrG7LHe89hums7T
-         Amy3weE6odeL+B8bzsyXX0JyNwgIfnuZbJlzrzJwxRP/iOoJj2uLRWB+IQQ5QP80NRkc
-         2WTp1PaZHmeVeNF8up/a/6XiwOsda3RygS1Po9Q1xTcsdImmhvh0wxIxhVSlerUq+WQL
-         QmBsWh/CNa9/jckJ+5fbQfxuuaUUwWvIGseTxRSdqgsCD4bTAddazF2Rrrxoh8iWo8Ye
-         bI9A8ibJKBmknW02ybU0A50LykRhAH3iJFpRdkUGJCGzSynAunhtiXux7wGWAfTErRcH
-         wJDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785786535; x=1786391335;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bWuva+yS1TaIijzyC+2mlVwhJ1Wvxg7k7qqP6DARP2A=;
-        b=j1slbj7TKXCCFjdWB5ZdVekb3SjaWvbroc1GLHsM53/rxlItma3iqHmbgYd2GiVwWN
-         Ydz4lT8Ieien+oNR4chuZzIhb+sqr2yxBOMr47sK5LL5JUG2P1mssWtxcc6OY/KkhrV3
-         6a72/mUkJshvGGOYfhDyzoq7LfbrkJu8OvUvA2ki6VZSWS7o2587izEtXb46n27Hd3X8
-         ns1Uv5zhiE7ZBIpLo7O16R5uP35HG0/M+JZ1Z+31yUraqSf8f/TpAvXprlUVlIUKr1Q/
-         5yaVAb07b0RdDsXAuQ5r6FT3p0FJYVoAwD+RbKWLWC9rUuhxCoAAMT63Nmonj28ebysK
-         6GYA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqr0Rf+F76jLwve1bstelC4hK6jciEw4KRgzvxl1/iaD11U74Xxrj3dAkJ40NAddPTAtQU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz36qihKLMe45psCwNKrpdLYzsb0rfvCXLbe/Tagude4pD2U2ho
-	7emTxJjIB8TzCNnjxZPn9yjS1m6atBiiNVgsVXSzYwMfD/ykPQabczVj
-X-Gm-Gg: AR+sD11EHk4HU5SUjfqr9lsBtTZslo8/lwermCPndnGeifYWOD/6NkunEEtpJatw922
-	cvAr7I9HtCAMhtKmD7jMj0au4+E//DPyzKV6v9z4ANnJ4ypO6cWDdCX38UYeHMawbQFU7Hz3q/S
-	D8SFgkTZSeB2P7OeLlhaLwBhKHyTLPN65V7WEBmzOyICNCXvZ5+/B+djyHWWpxi2bNCvXr8+Y2U
-	kgdMa7vIg1eRx3sCB3bt09ThrqngfOfRwV9eq+SFsJFmZ4xqu5GBuNYRoznVACIYy0F4le14iML
-	bu3QwVKNgaUKAHVgDRFSvfTTYO9UUHKmCjdmJcQVM9wdwQbwEkoga1HlLE6boudppFFMmHE0qek
-	7Qzoz+HMEOOQrim+QKbKzj6UgAB7gtjkSjLuVqE7NZnbBxCduWlhRa/7S2kHiUsYAbeYBHCnydE
-	C6x6Evf6SsD6IucDjwwYELKly2jG9QesQPeF/VpNeT0nhD3xc+
-X-Received: by 2002:a05:600c:840f:b0:497:ff73:68d5 with SMTP id 5b1f17b1804b1-4980c6071c5mr221995145e9.0.1785786534376;
-        Mon, 03 Aug 2026 12:48:54 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd41cfde0sm33538389f8f.3.2026.08.03.12.48.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 12:48:53 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 3 Aug 2026 21:48:51 +0200
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct
- calls
-Message-ID: <anDwo-qXH6_W0_3n@krava>
-References: <20260727142844.21212-1-leon.hwang@linux.dev>
- <20260727142844.21212-2-leon.hwang@linux.dev>
- <amnqXeC6D4mjcAe_@krava>
- <d745ca80-6516-4c61-8107-88c6a2d9cea4@linux.dev>
- <amsuU7eXuoziObdh@krava>
- <3f8e64b4-e60a-4eba-afb6-5af668ac1f85@linux.dev>
- <am-sK_buCVI3khJv@krava>
- <6af761df-9abc-4854-971d-ca6e4ed7a2b7@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Pp8BKPxx"
+Message-ID: <959ebb50-910b-4ca4-8134-855cebe4521e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785786788;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WwsVnWaNi3zo//bU7GG6JuXDE9Qayk2OrSVDlvD5uY4=;
+	b=Pp8BKPxxU7UK248yIEN0i5pztwmj3RNwLcrBFgouQ6AaviW+eew08Eug3h3uCv2zVq7oGd
+	FMClCLKbBuG/t0e1yHG57noke3xeSai8g5u9H9q3LO6mlLc1HB03m1B/PG5zMZvCMj9MIC
+	UAMxhXvFDlhmGL7NBlZ/2upD1efu+HM=
+Date: Mon, 3 Aug 2026 12:52:35 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6af761df-9abc-4854-971d-ca6e4ed7a2b7@linux.dev>
+Subject: Re: [bpf-next 4/4] selftests/bpf: vmtest.sh: preserve command quoting
+ when running in the VM
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ eddyz87@gmail.com, andrii@kernel.org, ihor.solodrai@linux.dev
+Cc: linux-kernel@vger.kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com
+References: <20260803170251.1898102-5-vineet.gupta@linux.dev>
+ <6d96174316041032ba75e8b9901245772bd4aad2873b795fd71df038bf909763@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <6d96174316041032ba75e8b9901245772bd4aad2873b795fd71df038bf909763@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Aug 03, 2026 at 09:32:14AM +0800, Leon Hwang wrote:
-> On 3/8/26 04:44, Jiri Olsa wrote:
-> > On Fri, Jul 31, 2026 at 10:30:37AM +0800, Leon Hwang wrote:
-> >> On 30/7/26 18:58, Jiri Olsa wrote:
-> 
-> [...]
-> 
-> >>
-> >> Right.
-> >>
-> >> Pls see the sibling thread with Ihor. With in-range BPF trampoline
-> >> allocation, the slow-path regression should mostly disappear.
-> >>
-> >> Let's continue the discussion in that thread.
-> > 
-> > please paste the link/subject for that thread
-> > 
-> 
-> The link is
-> https://lore.kernel.org/all/77edc25d-a521-4f65-84ed-dbb016593902@linux.dev/.
 
-ugh I see, somehow I did not receive Ihor's email.. :\
 
-thanks,
-jirka
+On 8/3/26 11:31 AM, bot+bpf-ci@kernel.org wrote:
+>>      Note this makes the trailing command strictly an argv rather than a shell
+>>      snippet: passing it pre-quoted as one word, e.g.
+>>
+>>              vmtest.sh -- "./test_progs -t foo"
+>>
+>>      no longer works, and neither does embedding guest-side shell syntax such
+>>      as ';' or a redirection. Neither form is documented - usage() and
+>>      README.rst both show the command unquoted - and 'sh -c ...' still works.
+> Is the claim about README.rst accurate?
+
+You are right, it is not.
+
+>   Looking at
+> tools/testing/selftests/bpf/README.rst lines 106-115, there is a
+> documented vmtest.sh invocation whose trailing command is explicitly
+> quoted:
+>
+>    $ PLATFORM=riscv64 CROSS_COMPILE=riscv64-linux-gnu- \
+>      tools/testing/selftests/bpf/vmtest.sh \
+>      -l <path of local rootfs image> -- \
+>      ./test_progs -d \
+>          \"$(cat tools/testing/selftests/bpf/DENYLIST.riscv64 | ... | tr -s '\n' ',' )\"
+>
+> The `\"` are escaped in the user's host shell, so vmtest.sh's main()
+> receives argv[3] as the literal 10-character string `",exceptions,"`
+> including the double quotes.
+>
+> Under the old `command="$@"`, the guest bash's second parse of the init
+> script performed quote removal on those literal quotes, so test_progs
+> received `-d ,exceptions,`. That is exactly what the `\"` in the recipe
+> are for: they survive the host and are consumed by the guest.
+>
+> With `command=$(printf '%q ' "$@")` the quotes are escaped
+> (`\",exceptions,\"`) and reach the binary verbatim, so test_progs now
+> receives `-d ",exceptions,"`.
+>
+> Downstream that argument goes to parse_arg() ARG_TEST_NAME_GLOB_DENYLIST
+> -> parse_test_list() (tools/testing/selftests/bpf/testing_helpers.c),
+> which strtok_r()s on ',' and hands each field to insert_test() with
+> is_glob_pattern=true. So the filter list becomes three globs instead of
+> one: ["] [exceptions] ["], two of which can never match a test name in
+> glob_match() (test_progs.c).
+>
+> For DENYLIST.riscv64 as it stands today the damage is confined to those
+> two junk filters, because the file's first line is a comment and
+> therefore reduces to an empty leading field.
+>
+> The same recipe applied to a denylist file whose first line is a real
+> entry silently drops that entry. With DENYLIST.asan-shaped input:
+>
+>    OLD guest -> test_progs -d [*arena*,task_local_data,uprobe_multi_test,]
+>      filters: [*arena*] [task_local_data] [uprobe_multi_test]
+>    NEW guest -> test_progs -d ["*arena*,task_local_data,uprobe_multi_test,"]
+>      filters: ["*arena*] [task_local_data] [uprobe_multi_test] ["]
+>
+> `"*arena*` matches nothing, so the *arena* tests are no longer denied
+> and run anyway, a silent loss of denylist coverage rather than an error.
+
+This is a really good catch. Indeed arena never matches.
+
+> Should the commit message be corrected to acknowledge that README.rst
+> does document a quoted invocation that breaks with this change, and
+> should README.rst lines 109-115 be updated in the same patch to remove
+> the now-harmful `\"`?
+
+v2 drops the backslash, fixes README.rst and also updates the changelog 
+accordingly.
+
+Thx,
+-Vineet
+
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30836252778
+
