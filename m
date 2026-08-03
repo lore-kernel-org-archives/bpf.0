@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE1117A2FB
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 13:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DF184039
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 13:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785764134; cv=none; b=QXRvCJTv2zB5//c6i74ZK8o1J9KnLLo3BMUu4cWuw0Xieny8y7fzZaa3K/BpvxYMjq3eG/4y0irXlZA4kp2GXQfHpG8b0KJ3sq5rSPFmOghKnvOAz45pgkDP7QyEyDX6x4HiamnZFBX6NI1giIBicdnzX+dxS4aTRJ646qNLGTU=
+	t=1785764347; cv=none; b=JA2n55gF5ilH//K65TQPqpsYRFffL4Ywi34aCJDgqyDu7mtbXp0LYoGEmwfxSLDBI3oGcmJRVn7MaO64xPf2vILn5wQJujqFlYPHafmbQ6IXV6+fhEX93BjJrUxqv3rDs+z3GaeGEMHQN32R4bQEOok9i03tHhSCmgLfMZkOyJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785764134; c=relaxed/simple;
-	bh=jDcWkYATquljf8kqSzc0Z2GUfra2TKrTR67BEh/TX74=;
+	s=arc-20240116; t=1785764347; c=relaxed/simple;
+	bh=49o4YhqrynzGbq1PLGh06pB0hmBXs96K7jwyflR0z/I=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eq7rggRnEOPMuBi363fx/5DSDC0t8wE3LDxICcJWm/wR++VZHyWRz9jKt58pJOywZrKruUcxt5NruqzX16HF9casjStppD3/z6Hq8OOHZTAZzPI1h17yp0jp9d71tLgatJeakAH9ZsccWFsngaTcnkQSf/xG6iaeAy9frAaudAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EbcnJrKE; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=GJsoNjyvYasoM8h+JnQ672RpS+Loo9E78pu3NCBDWIC6Fr1RHu7GEjCl9cPBX6vTT4+WslUXZvMNhKgJ9LctmS9S1ultANfT6ppqSzhkZfLXNvkrXH8mPpoBDAyc4VTwTDogMH8JSDEPNgUU4EXX36uEqsVI7DHzeWmnDuhl+9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WqgrqeZV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EbcnJrKE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3051F000E9;
-	Mon,  3 Aug 2026 13:35:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WqgrqeZV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EBD81F000E9;
+	Mon,  3 Aug 2026 13:39:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785764132;
-	bh=xMPzUUnaXWdj8lVbmr/iwpiGLvbEz5nwDipNZtE91hg=;
+	s=k20260515; t=1785764345;
+	bh=nMHaN2gYuUKYjoQ1Lc8hNYg45foHfAtcwAgSOB0MDVo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EbcnJrKE1J5T2cUWwUXQOO564uj84SQYTH3b6sVDQPl3i08mrPj6CKwpivusSxPIB
-	 2hZzug6kxlDTw0edhyh1BZy1fUUQNtCspelzRQ6XjuDt9if77agkknY3rpa6/3rSjM
-	 LBBP4+sRNJLZ7Yzk945HN2MjADT0YrsvT/IeJikLFYB0q6ulwJ6umPwMS4lxYNtSXA
-	 IDSsS3r5dVTmZEHoz14Duioumd7tUPxFK2Z1jQncP8By+Is8AxqPbHydgYTbVuvnmP
-	 DucRLOt8PutLe0VfeyvvmMWqEg+xmv0RqLGfSzmW07dK+jZxlAYVuhkcGtaCE6z1Ef
-	 xeac3btrQHfJw==
+	b=WqgrqeZVF8CZCs92iMCjlG5kjtZV9txw8EwiNTri/FJJtAyIJ8Iul4NmeKrLvH+qy
+	 RP4Lxd3l1GLYkLuNOi6cjkrUObN9gMNggYXJDlveSlAhyLm9BR99Be8elH3l414+5H
+	 ORUKmveWPA3VzcZhYa5L+zQBOTDOvfd0WfgKimJ0WaV/mrSW/pNkp+3ESzyOr4lSdu
+	 MrwpvNO/apF1fgwY3btf6UZ2BYUXxjLT0YjRMpYTrmuEf1EWPLWmJWcKAY2d4XgHvw
+	 OSu6h9jXmoMnbRNhVqjB/q64MtjEi72H01btcWQ2OragSU7CzJRE1aqIO/wbL+6fS2
+	 SgDxGVjL4jMuw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 5/9] selftests/bpf: Add kfunc __arena and
- __arena_nullable argument tests
+Subject: Re: [PATCH bpf-next v3 7/9] selftests/bpf: Add struct_ops __arena
+ and __arena_nullable argument tests
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260803125115.2264733-6-memxor@gmail.com>
+In-Reply-To: <20260803125115.2264733-8-memxor@gmail.com>
 References: <20260803125115.2264733-1-memxor@gmail.com>
- <20260803125115.2264733-6-memxor@gmail.com>
+ <20260803125115.2264733-8-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 03 Aug 2026 13:35:32 +0000
-Message-Id: <20260803133532.BC3051F000E9@smtp.kernel.org>
+Date: Mon, 03 Aug 2026 13:39:04 +0000
+Message-Id: <20260803133905.8EBD81F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,57 +47,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The `arena_arg_stack` test incorrectly wraps its failure-inducin=
-g logic in an `#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)` block, which cau=
-ses the test to falsely fail on compilers without this feature.
+- [Medium] Unconditional dereference of global pointer st_ops3 in new kfunc=
+s can lead to kernel panic if called before struct_ops attachment.
 --
 
---- Patch [5]: [PATCH bpf-next v3 5/9] selftests/bpf: Add kfunc __arena and=
- __arena_nullable argument tests ---
-commit b62ba0a2046a4e44e0da5d972133d046f475c161
+--- Patch [7]: [PATCH bpf-next v3 7/9] selftests/bpf: Add struct_ops __aren=
+a and __arena_nullable argument tests ---
+commit f599951dcb563bef61136071f8ea610da5c68910
 Author: Tejun Heo <tj@kernel.org>
 
-selftests/bpf: Add kfunc __arena and __arena_nullable argument tests
+selftests/bpf: Add struct_ops __arena and __arena_nullable argument tests
 
-This commit adds arena-argument kfuncs to bpf_testmod and a corresponding
-suite of BPF programs to test various argument forms and rebase semantics.
-The tests are intended to run on x86-64 where JIT support exists.
+This commit adds test_arena and test_arena_nullable members to the
+bpf_testmod_ops3 struct to test arena-tagged arguments and kfuncs that forw=
+ard
+caller-provided pointers. It ensures that the kfuncs correctly receive a ke=
+rnel
+arena address and the trampoline converts it back to an arena pointer.=20
 
-> diff --git a/tools/testing/selftests/bpf/progs/arena_kfunc.c b/tools/test=
-ing/selftests/bpf/progs/arena_kfunc.c
-> new file mode 100644
-> index 0000000000000..e7250c5197ab4
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/arena_kfunc.c
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> index f4cd1ad254a5a..396e5b467855b 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
 [ ... ]
-> +SEC("syscall")
-> +__arch_x86_64
-> +__failure __msg("arena pointer cannot be a stack argument")
-> +int arena_arg_stack(void *ctx)
+> @@ -418,6 +430,16 @@ __bpf_kfunc void bpf_testmod_ops3_call_test_2(void)
+>  	st_ops3->test_2();
+>  }
+> =20
+> +__bpf_kfunc int bpf_testmod_ops3_call_test_arena(u64 *ptr__arena)
 > +{
-> +#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-> +	bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-> +	bpf_kfunc_arena_stack_arg_test(1, 2, 3, 4, 5, (u64 *)1);
-> +#endif
+> +	return st_ops3->test_arena(ptr__arena);
 
 [Severity: Medium]
-Will this test incorrectly fail on toolchains without
-__BPF_FEATURE_ADDR_SPACE_CAST?
+Can this unconditionally dereference st_ops3 without synchronization?
 
-When the feature is missing, the #if block evaluates to false, leaving an
-empty program that simply returns 0. The BPF verifier will accept this empty
-program, but because the test is annotated with __failure __msg(...), the
-test harness expects the verifier to reject it.
+If a BPF program calls bpf_testmod_ops3_call_test_arena() before the
+bpf_testmod_ops3 struct_ops map is attached, or after it has been detached,
+st_ops3 would be NULL. Could this lead to a kernel panic?
 
-Since verification succeeds in this case, does this cause the test harness =
-to
-flag it as a spurious test failure during CI or user builds?
-
-> +	return 0;
 > +}
 > +
-> +char _license[] SEC("license") =3D "GPL";
+> +__bpf_kfunc int bpf_testmod_ops3_call_test_arena_nullable(u64 *ptr__aren=
+a_nullable)
+> +{
+> +	return st_ops3->test_arena_nullable(ptr__arena_nullable);
+
+[Severity: Medium]
+Similarly, does this have the same risk of a NULL pointer dereference if
+st_ops3 is NULL when bpf_testmod_ops3_call_test_arena_nullable() is called?
+
+> +}
+> +
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803125115.2264=
-733-1-memxor@gmail.com?part=3D5
+733-1-memxor@gmail.com?part=3D7
