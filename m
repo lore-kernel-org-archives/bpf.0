@@ -1,145 +1,181 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2303AEF57
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 08:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605F5330644;
+	Mon,  3 Aug 2026 08:35:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785744713; cv=none; b=lu4fxtx3hecVi9Vr8wXYAPvRT89BspmO6/uY+LJP2RWWpNk7R1JrH7hsYhQcCnNAayU3wy5oqhAsyjyf1yTONuI1kwbX/3imJixgHHMFdhFSnT/KZdJKDmHMCdlwlx0DPKFqXNH2GUuAlcfjjs23tOJNpGcV2C+w46bCplFA1Gc=
+	t=1785746128; cv=none; b=gV51hG3TRzXyxvw6HH+YertZVIHpjZGgg1GtRivEaEml6JuBEBVFaTMRPlIUuPRvAE2BawhXuwtwZjDJ5AwuyRQsuEVrSa9ELBpQnK2EOD6WQfA+N3bdGkSdZjLzPGZeLBmruOXzX6X7Rcz12qfo7hLNbNF69G7XIMIJdCSxZPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785744713; c=relaxed/simple;
-	bh=N7FygS29/3VstB/A7XrbBQlSrnxV9DK7YyqPPHtKOy4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XEFdJZNL1k4n9ChwTyQT96Z47PAf22Y+dgWcujxkur78eXEXGxohLMFc9nUpQAFXuPgEU0Gu0+hZRvqPwqsCthOqWI3dUqYsq+DeZt2LSCbhBA9IsPyuoaLbVmzoc9KBJhndX2FJc44qkgyFljTx/1BdHfCQ5eXCHKmzjP17gu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E3jksBZ+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785746128; c=relaxed/simple;
+	bh=ZdQmvYy5PM0kMYZcuSGO1iZEZqW6uMelzNt4ZpPc4kk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=f/wAd4EavIQ5MX5hAzcq8BVcTqLToPMz1WSaqthwbqadDP5ZzgrvrfNIJvA48/m1OdH4VcYCvs26fX6NNGykcvVC6CRmoNfAD3s+fTU9J50zbNYvlY5CCYxkEhbxlSFiLKWPxUwK5eOHjOnK6qydbPFv8e+kMm6o5Yg7Nw+f43s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVo0nCqV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E3jksBZ+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D1281F000E9;
-	Mon,  3 Aug 2026 08:11:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVo0nCqV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89B71F000E9;
+	Mon,  3 Aug 2026 08:35:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785744711;
-	bh=bOS3oRiHXqi2uWLqTbOYcIgCnGdxmuXpkAwigujwKgg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=E3jksBZ+ewB9jr31zguNWU0iUMEPZeRhe1sGwoykoehN3Ff3XT0f8g4pvcbbAPwOu
-	 Vy39NbgpONtKfc/ZQcQgLPmK9+VCH4yelRdfdfWKI4ueti3GieDAsDPBQKdV+79SM4
-	 MrLkHi/rWn2Zn2RZF/5tOR1X1RF2Gl9yMwWZR+9QahkQ/6uh9QIaay2bcxKQZLnrjz
-	 WF9ksc8OKTM4sgJT5S8W+CV6x3kjnPROQBaiMsY9e/ihqEzscMy5ywMKzVn91kQ6Cz
-	 d3olkEhYPUP2TeaBCd4IiLNHn8B7zf/g56qBSbHvYMIJ1xL1Beog+rLinEHXP9X0Y5
-	 WmFrbP13bEoMA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] btf: Remove the dependency on BPF_SYSCALL
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <thomas.weissschuh@linutronix.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260803-btf-dep-bpf-syscall-v1-1-a03291e27888@linutronix.de>
-References: <20260803-btf-dep-bpf-syscall-v1-1-a03291e27888@linutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 03 Aug 2026 08:11:50 +0000
-Message-Id: <20260803081151.0D1281F000E9@smtp.kernel.org>
+	s=k20260515; t=1785746127;
+	bh=9+rTU04TRiQfur2pbyp+bMw4+ReZ07fn07OIkmJ3u5s=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=WVo0nCqVWLi+lqudJVpGvg+sZywD70GKTHaxKxt4w7jAyzx/Ylz4kJqUd7wYoa4s2
+	 ptyBCRP6RFYPlENCatB/AOEX71Eb7hZ7g6ql7g8NptuFmaiAReWnqO3e6uOkpynjjj
+	 kbRSeApfaqtqfvT7/sVAoyRQpwyNfNigDm69uGxQROwJU1Px9xwk3SOVmY2YovJG0g
+	 MWpy7T15eTi9fTUX8lNHOzyi1aYUNKdZZNoPC8/zhrQSR8vEjjHvFjgG+hBSpXG9j3
+	 j6STSvNy31RxgBT2A5O0GSTsvu3j6GH1A/bmzecZBzR/G4mfBEJR4Pejo0lkVCKFFT
+	 P25I1BFJsC2bw==
+Content-Type: multipart/mixed; boundary="===============4298303249341813352=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <eac3adb0094cfdbbd998c459ddecd92179c0fa252a44878ea5c69eb991c1a11a@mail.kernel.org>
+In-Reply-To: <20260803-tc_tunnel_flaky-v2-1-657b287dfa75@bootlin.com>
+References: <20260803-tc_tunnel_flaky-v2-1-657b287dfa75@bootlin.com>
+Subject: Re: [PATCH bpf v2] selftests/bpf: keep polling connection that is still in progress
+From: bot+bpf-ci@kernel.org
+To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  3 Aug 2026 08:35:25 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [High] Enabling CONFIG_DEBUG_INFO_BTF without CONFIG_BPF causes a build f=
-ailure because resolve_btfids is not built.
-- [High] Removing `depends on BPF_SYSCALL` from `CONFIG_DEBUG_INFO_BTF` cau=
-ses a build failure (undefined reference to bpf_log) when `CONFIG_BPF_SYSCA=
-LL=3Dn`.
-- [Medium] The BTF sysfs interface (/sys/kernel/btf/vmlinux) is silently om=
-itted if CONFIG_BPF is disabled, breaking runtime introspection tools.
-- [Low] Unintended dead code compilation in BPF network/netfilter helpers w=
-hen `CONFIG_BPF_SYSCALL=3Dn`.
---
+--===============4298303249341813352==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---- Patch [1]: [PATCH bpf-next] btf: Remove the dependency on BPF_SYSCALL -=
---
-commit 03ceb2b61ee22ba44c522bd10633e606cb023951
-Author: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+> index b82f572641b7..2f2719a28f02 100644
+> --- a/tools/testing/selftests/bpf/network_helpers.c
+> +++ b/tools/testing/selftests/bpf/network_helpers.c
 
-btf: Remove the dependency on BPF_SYSCALL
-   =20
-BTF has become useful without the BPF syscall being present.
-It is used by debuggers and introspection tools like pahole.
-The dependency prevents the usage of BTF without pulling in the
-rest of the BPF subsystem.
-   =20
-Remove the dependency.
+[ ... ]
 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 1244dcac2294a..f9dc5b60d8345 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -399,7 +399,6 @@ config DEBUG_INFO_BTF
->  	bool "Generate BTF type information"
->  	depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
->  	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
-> -	depends on BPF_SYSCALL
+> @@ -40,6 +41,8 @@
+>  #define IPPROTO_MPTCP 262
+>  #endif
+>
+> +#define CONNECTION_IN_PROGRESS_TIMEOUT_MS	3000
+> +
+>  #define clean_errno() (errno == 0 ? "None" : strerror(errno))
+>  #define log_err(MSG, ...) ({						\
+>  			int __save = errno;				\
 
-[Severity: High]
-Does removing this dependency break the build when CONFIG_BPF is disabled?
+[ ... ]
 
-In the top-level Makefile, the target to prepare tools/bpf/resolve_btfids
-is guarded by ifdef CONFIG_BPF. However, scripts/Makefile.vmlinux
-unconditionally depends on $(RESOLVE_BTFIDS) when CONFIG_DEBUG_INFO_BTF
-is set.
+> @@ -294,7 +297,8 @@ int client_socket(int family, int type,
+>  int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
+>  		    const struct network_helper_opts *opts)
+>  {
+> -	int fd;
+> +	socklen_t errlen;
+> +	int fd, err;
+>
+>  	if (!opts)
+>  		opts = &default_opts;
+> @@ -305,13 +309,42 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
+>  		return -1;
+>  	}
+>
+> -	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+> +	err = connect(fd, (const struct sockaddr *)addr, addrlen);
+> +	if (err && errno == EINPROGRESS) {
+> +		struct pollfd pfd = { .fd = fd, .events = POLLOUT };
+> +
+> +		err = poll(&pfd, 1, CONNECTION_IN_PROGRESS_TIMEOUT_MS);
 
-When compiled with CONFIG_DEBUG_INFO_BTF=3Dy and CONFIG_BPF=3Dn, Kbuild fal=
-ls
-back to the tools/% rule, trying to run:
-make -C tools/ bpf/resolve_btfids/resolve_btfids
+Does the fixed 3000 ms timeout override opts->timeout_ms correctly?
 
-This causes mkdir to create a directory in its place, and make subsequently
-fails due to the missing Makefile.
+client_socket() in this file passes opts->timeout_ms to settimeo(), which
+converts it into SO_RCVTIMEO and SO_SNDTIMEO:
 
-[Severity: Medium]
-If CONFIG_BPF is disabled, does this prevent the BTF sysfs interface
-from being created?
+tools/testing/selftests/bpf/network_helpers.c:settimeo() {
+	...
+	if (timeout_ms > 0) {
+		timeout.tv_sec = timeout_ms / 1000;
+		timeout.tv_usec = (timeout_ms % 1000) * 1000;
+	} else {
+		timeout.tv_sec = 3;
+		timeout.tv_usec = 0;
+	}
+	...
+}
 
-The commit message mentions that BTF is useful for introspection tools
-without the BPF syscall. However, kernel/bpf/sysfs_btf.c provides the
-/sys/kernel/btf/vmlinux interface used by these tools.
+tools/testing/selftests/bpf/network_helpers.c:client_socket() {
+	...
+	if (settimeo(fd, opts->timeout_ms))
+		goto error_close;
+	...
+}
 
-In kernel/Makefile:
-    obj-$(CONFIG_BPF) +=3D bpf/
+That opts->timeout_ms is the caller's requested timeout contract. But the
+new poll() discards it and uses CONNECTION_IN_PROGRESS_TIMEOUT_MS instead,
+which is always 3000.
 
-Since Kbuild only descends into kernel/bpf/ if CONFIG_BPF is enabled,
-sysfs_btf.c is silently skipped when CONFIG_BPF=3Dn, hiding the BTF data
-from userspace tools.
+This changes observable timing for callers in both directions:
 
-[Severity: High]
-Can this cause a link-time error for bpf_log()?
+Callers that request a SHORT timeout now wait longer than they asked for.
+prog_tests/assign_reuse.c calls connect_to_fd(fd_sv, 100) at lines 42 and
+66, requesting a 100 ms budget. A stalled connect now blocks for 100 ms
+(SO_SNDTIMEO) plus 3000 ms in poll() - a 30x overrun.
+prog_tests/test_tc_tunnel.c sets .timeout_ms = 1000 at line 171.
 
-In net/netfilter/Makefile:
-    nf_conntrack-$(CONFIG_DEBUG_INFO_BTF) +=3D nf_conntrack_bpf.o
+The commit message explicitly argues against lengthening timeouts:
+"increasing the timeout value would increase overall test execution
+duration again", yet the patch lengthens these callers' timeouts from
+their requested values.
 
-If CONFIG_DEBUG_INFO_BTF=3Dy and CONFIG_BPF_SYSCALL=3Dn, nf_conntrack_bpf.c
-is still compiled. It calls bpf_log() in _nf_conntrack_btf_struct_access().
+Callers that request a LONG timeout get a shorter window than they asked
+for. prog_tests/tc_redirect.c uses TIMEOUT_MILLIS (10000) at lines 428,
+561, and 658. prog_tests/xdp_synproxy.c uses 10000 at line 135. On a
+loaded runner the connect is now abandoned at SO_SNDTIMEO + 3 s rather
+than the requested 10 s.
 
-However, bpf_log() is defined in kernel/bpf/log.c, which is only built if
-CONFIG_BPF_SYSCALL=3Dy. Since there is no inline stub for bpf_log() when the
-syscall is disabled, this results in an undefined reference to bpf_log
-linker error.
+Would deriving the poll timeout from opts->timeout_ms preserve the single
+timeout contract that callers already use?
 
-[Severity: Low]
-Does this result in dead code being compiled in network/netfilter helpers?
+>
+> +		if (err <= 0) {
+> +			if (err == 0) {
+> +				log_err("Connection timeout");
+> +				errno = ETIMEDOUT;
+> +			} else {
+> +				log_err("Failed to poll connection status");
+> +			}
+> +			goto close;
+> +		}
+> +
+> +		errlen = sizeof(err);
+> +		if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &err, &errlen) < 0) {
+> +			log_err("Failed to getsockopt");
+> +			goto close;
+> +		}
+> +
+> +		if (err) {
+> +			log_err("Eventually failed to connect to server");
+> +			errno = err;
+> +			goto close;
+> +		}
+> +	} else if (err) {
+>  		log_err("Failed to connect to server");
+> -		save_errno_close(fd);
+> -		return -1;
+> +		goto close;
+>  	}
+>
+>  	return fd;
+> +close:
+> +	save_errno_close(fd);
+> +	return -1;
+>  }
 
-Similar to the issue above, files like nf_nat_bpf.c and nf_flow_table_bpf.c
-are built conditionally on CONFIG_DEBUG_INFO_BTF in net/netfilter/Makefile.
 
-Without the BPF syscall, register_btf_kfunc_id_set() falls back to an
-empty stub, meaning these files compile successfully but provide no
-functional value, only increasing kernel size and compilation time.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
->  	depends on PAHOLE_VERSION >=3D 122
->  	# pahole uses elfutils, which does not have support for Hexagon relocat=
-ions
->  	depends on !HEXAGON
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803-btf-dep-bp=
-f-syscall-v1-1-a03291e27888@linutronix.de?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30795380743
+--===============4298303249341813352==--
