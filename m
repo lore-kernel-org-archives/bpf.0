@@ -1,113 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5707441D207;
-	Mon,  3 Aug 2026 14:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD542433035
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 14:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785766697; cv=none; b=L+wlIj3jglal8WNUg6kAhUcetxkYR1Bm9bNJAmewdhOECS8IQW77sNUmaCtBX2Vfo7c6eWV8V6LgLIjFFbuc7LLARLLKuJP2vZ9Vv7muhikQKIbu9Gjq0sR7wbEZ5UriOtksugGY5pJAipbfq2G9ue1IMR1Zueqq7cT5Wg7Oyg8=
+	t=1785766788; cv=none; b=JPm2a5bDZRGW/9g9tmJi0TK0nEZEe6EfvLz4j0n10zKvhPSvRdYNKPEPKE9uaSX2ncH+J4j+R+upDHQ8HcRYtz21GdA+EFrm5ly8ljP2OXxnDCHdWxcDzm++JQrAcNwZzjatjkFbx5PfhOSHZzuFhcPxvxCg4D6W18wOXCkpMW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785766697; c=relaxed/simple;
-	bh=T8sRHTMTe5QlgkoWNjw44IaSUfMYsUEsNHjHOApIevg=;
+	s=arc-20240116; t=1785766788; c=relaxed/simple;
+	bh=3mjQ9i+tTjH2YAGZB4t5u7Z/4MOspw8X0qO/YdFJc8g=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=C9fQv/fT9myI/yJ4WvpHLLkaHhUkE6jMRb8RRtUekvKWekj4GV1v0Rqk2JofA2a9xUFyALjEFLH8Z3Ds0VX/vmhmJ7pWvDAJZWtr9M9IjFpINDYAhl4Bjjzw//cUwn/l2AsZUIj1vCI5d3t6PbUXmnSSR/pjmhMfNc17vmt+xoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eEvhVfIc; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=jyaDk+Xff7Pq7R+lmQryzDXX7S+sEnJCcNGCjwttSfwEBLWzUAoElM287dE/KlH0L2azVfzyX1Vo8sclY8gE7M55GVIhihb0Wlz+2Oo7cY4IbBgEjvuGYtnaY7AgvKw6Hf1hr1Knw0+2BSV1p53jtgqZGKlyd5DQZZ1Lh8fCsI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EGNXa7UJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eEvhVfIc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A765F1F000E9;
-	Mon,  3 Aug 2026 14:18:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EGNXa7UJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DB561F000E9;
+	Mon,  3 Aug 2026 14:19:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785766695;
-	bh=Idr4OkEplk4HQ/PYnRhr8cIGroCI9uguCmarq8UsQ8Y=;
+	s=k20260515; t=1785766786;
+	bh=3mjQ9i+tTjH2YAGZB4t5u7Z/4MOspw8X0qO/YdFJc8g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eEvhVfIcWdO0TsrpqFir72+ydc4xuKbZh5quM+LvU9qh84yeI7htTkhY18FcoLgVR
-	 t2DCD+LNIh2P8XLg5kjkd24zJEjQEN5EFXiGS1djv3u6Uta3JjeB8I8B0/uto4te/E
-	 5+dtIGSgQLJJZlZBd+mjUnpHbxfHDJjaDORiTT1jRsOmmSh+U3KvvIy4U/UnZSb2cM
-	 Ro6K/e4b1ioOLhZj1SR6/V9capzJ8DB7ETje2PfrMk8mEgH2IcnpgU9Rz8w8PKolGX
-	 7nxE58lglwV4wTrCK2NH8k9nmOpnowoufY0SrUn7oIUrudvqSKEjGsPuGqY/JJ+uWj
-	 YdR8K0Q6M/xJQ==
+	b=EGNXa7UJ4Wd/loHmsocJRXXs0JPIoTQVKTi0qzOQ0cud5XO0ZUqpBbZM844kJb+3E
+	 79IT85GAGQapq/8Ud/DtAqRZ1nXPZ/uX1+lEsiHSNv0/E3ddccuULF8Br7wsmwt4L0
+	 wW1FAOEKKlC7ETsbEJYQ5kinbxAGKhfa7MEIjjsymIV7TZZkQknPcqfSV1AMw+hWWR
+	 OtUci5C5H6d+CzxtTi4TvUrL5/w1+0nhLckROV8gVzNiLZfvEvmiFL1NYfkrxx9pUN
+	 zlc968S2f4diyl7UAX49RgCwqFUcAmoKVgRlGvH+ZnHJix7hkLF4TYGWH2KzskbbSd
+	 Jjl+RQ2MV+yCA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/6] rcu: Make call_rcu() safe to call from any
- context
+Subject: Re: [PATCH bpf-next v3 2/9] bpf: Support __arena and
+ __arena_nullable on struct_ops arguments
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Puranjay Mohan" <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
-In-Reply-To: <20260803135329.2327280-1-puranjay@kernel.org>
-References: <20260803134839.2103051-1-puranjay@kernel.org>
- <20260803135329.2327280-1-puranjay@kernel.org>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260803125115.2264733-3-memxor@gmail.com>
+References: <20260803125115.2264733-1-memxor@gmail.com>
+ <20260803125115.2264733-3-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 03 Aug 2026 14:18:14 +0000
-Message-Id: <20260803141815.A765F1F000E9@smtp.kernel.org>
+Date: Mon, 03 Aug 2026 14:19:45 +0000
+Message-Id: <20260803141946.5DB561F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] Concurrent `rcu_barrier()` calls can cause missed wakeups and syst=
-em hangs in `irq_work_sync()` on architectures without IPI-based `irq_work`.
+- [High] The `__arena_nullable` BTF parameter suffix is erroneously process=
+ed as `__nullable` due to substring matching, breaking `PTR_TO_ARENA` seman=
+tics.
+- [High] Attaching tracing programs (fentry/fexit) to struct_ops programs w=
+ith arena arguments causes them to receive 32-bit user-space offsets typed =
+as valid kernel pointers, leading to SMAP violations and kernel panics.
+- [Low] Modified multi-line comments do not conform to the required BPF sub=
+system comment style.
 --
 
---- Patch [1]: [PATCH v2 1/6] rcu: Make call_rcu() safe to call from any co=
-ntext ---
-commit f033f4bd0a671eccd668878bff133f083ff63d97
-Author: Puranjay Mohan <puranjay@kernel.org>
+--- Patch [2]: [PATCH bpf-next v3 2/9] bpf: Support __arena and __arena_nul=
+lable on struct_ops arguments ---
+Note: The format of this review has been altered due to system restrictions=
+ on
+reciting original code. Instead of inline diff quotes, this report provides=
+ a
+free-form summary of the findings.
 
-rcu: Make call_rcu() safe to call from any context
+commit 0582d11e29a7b343a06709e7d3f0cdcc15655dcc
+Author: Tejun Heo <tj@kernel.org>
+Subject: bpf: Support __arena and __arena_nullable on struct_ops arguments
 
-This commit makes call_rcu() safe to call from any context by deferring
-the callback on a per-CPU llist when interrupts are disabled, and raising
-an irq_work to re-issue it once interrupts are enabled. It introduces
-rcu_defer_flush() to flush these deferred callbacks during rcu_barrier().
-
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 96848fc1f02b8..31e2d2207ac03 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-
-[ ... ]
-
-> @@ -3896,8 +3990,12 @@ void rcu_barrier(void)
->  	unsigned long flags;
->  	unsigned long gseq;
->  	struct rcu_data *rdp;
-> -	unsigned long s =3D rcu_seq_snap(&rcu_state.barrier_sequence);
-> +	unsigned long s;
-> =20
-> +	/* Register any deferred callbacks before snapshotting the sequence. */
-> +	rcu_defer_flush();
-> +
+This patch adds support for the __arena and __arena_nullable suffixes on
+struct_ops arguments. This allows callbacks to declare parameters as arena
+pointers, while the kernel caller passes the kernel arena address and the
+trampoline handles the conversion.
 
 [Severity: High]
-Because rcu_defer_flush() is called before taking the rcu_state.barrier_mut=
-ex,
-can multiple threads execute it concurrently?
+In kernel/bpf/bpf_struct_ops.c within prepare_arg_info(), does the if/else
+chain incorrectly prioritize the shorter suffix? Because
+btf_param_match_suffix() matches the end of the parameter name, a parameter
+ending in __arena_nullable also matches the shorter __nullable suffix.
 
-If multiple threads call rcu_defer_flush() concurrently, they will both
-call irq_work_sync(&rdp->defer_work) on the same per-CPU irq_work:
+Since the code checks for the nullable condition first, will this cause
+__arena_nullable parameters to be incorrectly typed as PTR_MAYBE_NULL and
+PTR_TO_BTF_ID rather than PTR_TO_ARENA? This seems like it could cause the
+trampoline to skip the arena pointer conversion, passing a raw kernel
+pointer instead, and potentially leading to verifier errors if used with a
+non-struct pointer.
 
-kernel/rcu/tree.c:rcu_defer_flush() {
-...
-    if (cpu_online(cpu))
-        irq_work_sync(&rdp->defer_work);
-...
-}
+[Severity: Low]
+This isn't a bug, but in kernel/bpf/bpf_struct_ops.c within
+prepare_arg_info(), the modified multi-line comments appear to retain the
+older kernel comment style where text follows the opening delimiter on the
+same line.
 
-On architectures where arch_irq_work_has_interrupt() is false,
-irq_work_sync() waits using rcuwait_wait_event(). Since rcuwait only
-supports a single waiter, won't concurrent callers overwrite the internal
-task pointer, causing one of the threads to miss the wakeup and hang
-indefinitely?
+Does the BPF subsystem require multi-line comments to have the opening
+delimiter on its own line, even when modifying existing comments in a file
+that previously used the old style?
 
-> +	s =3D rcu_seq_snap(&rcu_state.barrier_sequence);
->  	rcu_barrier_trace(TPS("Begin"), -1, s);
-> =20
->  	/* Take mutex to serialize concurrent rcu_barrier() requests. */
->  	mutex_lock(&rcu_state.barrier_mutex);
+[Severity: High]
+In kernel/bpf/trampoline.c within bpf_trampoline_update(), does the
+defensive check evaluate the wrong program's context arguments? The code
+appears to check the attached tracing program (fentry/fexit) for arena
+arguments rather than the target struct_ops program.
+
+Since tracing programs do not have their ctx_arg_info initialized, could
+this allow them to successfully attach to struct_ops programs that have
+arena arguments?
+
+If so, during verification in kernel/bpf/btf.c at btf_ctx_access(), the
+tracing program's context argument would be typed as a standard
+PTR_TO_BTF_ID because its ctx_arg_info_size is zero. At runtime, the
+struct_ops trampoline would convert the kernel pointer to a 32-bit arena
+offset, which the tracing program would receive and potentially dereference
+as a standard kernel pointer. Could this sequence lead to SMAP violations
+and kernel panics?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803134839.2103=
-051-1-puranjay@kernel.org?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803125115.2264=
+733-1-memxor@gmail.com?part=3D2
