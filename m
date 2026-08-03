@@ -1,132 +1,398 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D08379974
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 10:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263A93E3DAB
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 11:07:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785754253; cv=none; b=KXvZ4/KH9zdWXsd9ybCY0WUpK5to0f/xHCXn9Zd77ZekIOIap+/cVpn2as35DD2fkjFD+wfK3SzoNdby7tzqh6RDjEIzHWOs72Tdpdby0uY9DLfLr3sGoea+y/5zJAKpDNJo52UBARcSwbB44g5alP/LtXF+aFyxJ2ddZ9gxF94=
+	t=1785755229; cv=none; b=UsqGsKSYR8JdIhDQ+j3GsjYKdKWrXfwup3N081KI+c/KSsCdNQK9L9jspfDGGYgZMNzBOsnfWIzWcplJ+gtRy5boSCdiOFfvrTaeZMl/z+XL3bkoxrIP/N4gaThtMTCgSBa31Elz+wrU9oN1cTTZjHExLj9/w0w9yVG+DOansMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785754253; c=relaxed/simple;
-	bh=ijhPBqMJjgnaI51qrF53bMM6qhVWtCoq7+D0ObZEL7g=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hd3DKE0X0Cr6xLzYZaz8yEgu93hcndTnyZdpx3j4BNx6n0gN6VKvuJcNaW4hffWM6n16jV0i3ixV+eSr1x6Dqz0TSWZg7nUQt2oq9YO/040lgkLM1pOdNYo1XZMNgkbs0EM3QDxO85wqemp5TkudQGW/3U156y9/qMrJWhAtiDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kLxXenI3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785755229; c=relaxed/simple;
+	bh=VBR60XG9y2Uk6RCxjNGiPAYXZH8PpzPBAAF3gDrOcTg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U8Op9c4YAj5DSxOKm9XEQrxRLut19Lcd+y5ZT29XC+4M+6y/op5LSMIUZBCrhpH6m/44ygB4nn/v52MZnkPYPdVxvwjqD8PWs7SD4y4VY4XvEFDIFNr5ZHS/K30i3pLGAKI+upDxzJWGNvyBUe2VlNATxf6jYl2uPqM44XCObSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yC2Z7kv7; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLxXenI3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C7B1F00A3D;
-	Mon,  3 Aug 2026 10:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785754251;
-	bh=J2gJRVTn3n6G/S0hNnOUd18cfwePRymQtUpfiN4lKMY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kLxXenI31IpLYBvDovtHZmGGHKfF1OEKr51uRFyi+PDAKG3v/ZC0szQNtCINtZfon
-	 14K1wXRjy3u/6l6H27fAYsGnWjcy5Ho5QTWIfgBptPpuKHQS/bde9i29Cw7uzUevcQ
-	 HolIHEK3GyZdzdOQfTXkfMqZwqdpGDmf8NKaN/3fBDpfQY2jY9hNw/aNgzRlGQHzH2
-	 5xATrLeFT7mxxK48o37vi2glAVJseZQHrXN19yOOuyefdujT4/ubGRxd1DE0Z8xpDR
-	 WBgxNXa0ZYoH9JRvb8bGxG/93HhdX7eQObLTTfCpViA0M/k/rodu9WU2l8v1Axpg8k
-	 DXbaBzuekm9gw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpf: disable lockdep while running BPF on lock_release
-Reply-To: sashiko-reviews@lists.linux.dev
-To: quanyeyang <quanyemostima@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260803-fix-lock-tracepoint-bpf-lockdep-v1-1-91fb7afb526a@gmail.com>
-References: <20260803-fix-lock-tracepoint-bpf-lockdep-v1-1-91fb7afb526a@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 03 Aug 2026 10:50:51 +0000
-Message-Id: <20260803105051.92C7B1F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yC2Z7kv7"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4980fe6b3beso8872075e9.0
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 04:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1785755225; x=1786360025; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uSQmwTgmqqEI3Rld3bh1K2CmFtffeneeKX7l2+wWsvo=;
+        b=yC2Z7kv76wwImAZjnRBOfwMNxmXiH1AoJioPafFIjVUqPIWoMWvQEwvbOvtBgf+COc
+         hPRVg1eQiNA0EaNX5KKEFNloORTOQuxqy8+ql46WljgcKwdLbmWpkxp/7zgAxXnLxOH6
+         IBcLiq9sCVBnszjZ4JpF2wO6epou6/DvgNNWX4GsLsL74kUVqNfSyqHB5BVRskqysmWb
+         VT/+L/9RnxQCAPOhxA3IPDqfas6ghdqsoByvp2x8K0nQa+hqfiUSOvPQB1E9xP4QZUak
+         fb9jySgDlUItQjT2XEBMIvb83fZ7hCQBSr9gkaMYLQ0uFfJsRqx5QwzsPmTqXsGEWemi
+         vFNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785755225; x=1786360025;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=uSQmwTgmqqEI3Rld3bh1K2CmFtffeneeKX7l2+wWsvo=;
+        b=Zm399HGbYzCiKrTV2d3+x7OeITkwqrAQ+GrrXyYjLFAzDnlyND663FwNT/OEwZ0pXe
+         lG7YTDEVbjEpxX6lb+KJFXq0dl5Fj6F9mkjRfpB1i7bE7KwJ19kpCas1OWCnE73/+XW+
+         P4clQa/NgPPPcehoLkVwd2XIyAS/rP+d6nKAQkB9baU/hT628moo+vCwBNvMHNqppmLz
+         udRYnG7yiHVAvhujwB7T18JGYp+E654v/vy3iHoVffgGgNlUaWZ5M/1o9JWm87BWO4oV
+         49GIRgl1UqQPylCmEcBwBfEemXaLD8J14QOYFSE/uylDaj+lEP9+WdiSC/bYZcVSZf0+
+         xulA==
+X-Forwarded-Encrypted: i=1; AHgh+RqdDiw1HpIUlOQ2er3J2J5jJXTKcfEnpUxqCXBpkW2cDchsbtO51vzA09TdGmgZCLMvRaQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyN+WRzjnH2nrc86rDsRFTm+qgnUz2ARJXWYPe3JeaGXh5ZlIlk
+	YQhWlcW2PJGJETD2FNNuO9TnI8iqrLQVXh9JehUI+vG8tzbyyBGzA18VpvrL/L3GTWY=
+X-Gm-Gg: AR+sD120Ber4kLPBLs56Gk2bLfv++lY/A/OXMBQ2aQrpqzEjzbfg24zr7naacpsLFE0
+	5IWKiaD1UkrEMupy6Mo/SjIGcbt3N9uAOBLBGsp2c93rayKydQ7frnkGneICOeYnMFTVIBSG3ge
+	W3uwusm4ieAl1fsmh4Ew0maHM4s3lQYMHwGjjKZVK2GMJxZjTTrQPbmEnl7IdKe0anmxPz1G+AB
+	HW2q5pYMqlTO44ehfUC6St46dW49czZ+/bk8wgoWZgZT0kAClEDNvNa+jzBgc9IW9fo0ejnj1cV
+	M5p/d/qEFuWVII2foVRe7JuRhBYqQg4nojlHcjziPHwhGdUJUL+uIeFHNCv61mI14giA7TfbvqL
+	xelnKpkmFN3v4KwB4TkO8TbVh/iYbWd8bAcwLCrNgyP/q35xD7mAaUuk/nu+T7qe9BIMoetMPqV
+	c7SIfgK/dFklzb5tv9bQZYhdLevt/zlp/l6CJ3VQq4uQ1cjMIzRIIqJG1/gSOHUTK9120=
+X-Received: by 2002:a05:600c:5249:b0:495:3a52:71b1 with SMTP id 5b1f17b1804b1-4980eb9b2eemr139526335e9.5.1785755224975;
+        Mon, 03 Aug 2026 04:07:04 -0700 (PDT)
+Received: from [192.168.1.183] ([37.18.141.193])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4980878dbaesm375587785e9.12.2026.08.03.04.07.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Aug 2026 04:07:04 -0700 (PDT)
+Message-ID: <8a24abbc-10bc-42bb-8fee-0a174d8f1751@linaro.org>
+Date: Mon, 3 Aug 2026 12:07:02 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/4] perf/arm64: Add BRBE support for
+ bpf_get_branch_snapshot()
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Leo Yan <leo.yan@arm.com>,
+ Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>,
+ Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
+ Stephane Eranian <eranian@google.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif
+ <usama.arif@linux.dev>, linux-arm-kernel@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260616155716.2631508-1-puranjay@kernel.org>
+ <20260616155716.2631508-4-puranjay@kernel.org>
+Content-Language: en-US
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <20260616155716.2631508-4-puranjay@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
 
-New issues:
-- [High] Disabling lockdep during `trace_call_bpf` for `lock_release` hides=
- valid lock inversions and allows silent physical deadlocks.
-- [High] Temporarily disabling lockdep globally via `lockdep_off()` in `tra=
-ce_call_bpf()` unintentionally blinds lockdep to any hardware interrupts an=
-d softirqs that preempt the BPF program.
 
-Pre-existing issues:
-- [High] The patch fails to disable lockdep for BPF programs attached to `l=
-ock_release` via raw tracepoints.
---
+On 16/06/2026 16:57, Puranjay Mohan wrote:
+> Enable bpf_get_branch_snapshot() on ARM64 by implementing the
+> perf_snapshot_branch_stack static call for BRBE.
+> 
+> BRBE is paused before masking exceptions to avoid branch buffer
+> pollution from trace_hardirqs_off(). Exceptions are then masked with
+> local_daif_save() to prevent PMU overflow pseudo-NMIs from interfering.
+> If an overflow between pause and DAIF save re-enables BRBE, the snapshot
+> detects this via BRBFCR_EL1.PAUSED and bails out.
+> 
+> Branch records are read using perf_entry_from_brbe_regset() with a NULL
+> event pointer to bypass event-specific filtering. The buffer is
+> invalidated after reading.
+> 
+> Introduce a for_each_brbe_entry() iterator to deduplicate bank
+> iteration between brbe_read_filtered_entries() and the snapshot.
+> 
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+>   drivers/perf/arm_brbe.c  | 128 ++++++++++++++++++++++++++++++++-------
+>   drivers/perf/arm_brbe.h  |   9 +++
+>   drivers/perf/arm_pmuv3.c |   5 +-
+>   3 files changed, 120 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
+> index effbdeacfcbb..a141ad7abcf2 100644
+> --- a/drivers/perf/arm_brbe.c
+> +++ b/drivers/perf/arm_brbe.c
+> @@ -9,6 +9,7 @@
+>   #include <linux/types.h>
+>   #include <linux/bitmap.h>
+>   #include <linux/perf/arm_pmu.h>
+> +#include <asm/daifflags.h>
+>   #include "arm_brbe.h"
+>   
+>   #define BRBFCR_EL1_BRANCH_FILTERS (BRBFCR_EL1_DIRECT   | \
+> @@ -256,6 +257,14 @@ static bool valid_brbe_version(int brbe_version)
+>   	       brbe_version == ID_AA64DFR0_EL1_BRBE_BRBE_V1P1;
+>   }
+>   
+> +static __always_inline bool cpu_has_brbe(void)
 
---- Patch [1]: [PATCH] bpf: disable lockdep while running BPF on lock_relea=
-se ---
-commit 4871557897dd6c7f2fd05dc2170475d6e2824a6e
-Author: quanyeyang <quanyemostima@gmail.com>
+This should be more like cpu_valid_brbe_version(). has_brbe() only 
+implies that the CPU has BRBE, not that it's a version that the driver 
+supports. And it's actually just a wrapper around valid_brbe_version() 
+that accesses the ID reg on that CPU, not a functionally different check.
 
-bpf: disable lockdep while running BPF on lock_release
+But it also looks like valid_brbe_version() isn't called from anywhere 
+else, so why not delete that function and use its name for the new one?
 
-trace_lock_release() runs before __lock_release(), so the lock is
-still on the held stack when attached BPF programs execute. This patch marks
-lock_release with TRACE_EVENT_FL_BPF_NO_LOCKDEP and temporarily disables
-lockdep around bpf_prog_run_array() for that event to avoid false recursive
-locking warnings.
+> +{
+> +	u64 aa64dfr0 = read_sysreg_s(SYS_ID_AA64DFR0_EL1);
+> +	int brbe = cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA64DFR0_EL1_BRBE_SHIFT);
+> +
+> +	return valid_brbe_version(brbe);
+> +}
+> +
+>   static void select_brbe_bank(int bank)
+>   {
+>   	u64 brbfcr;
+> @@ -271,6 +280,20 @@ static void select_brbe_bank(int bank)
+>   	isb();
+>   }
+>   
+> +static inline void __brbe_advance(int *bank, int *idx, int nr_hw)
+> +{
+> +	if (++(*idx) >= BRBE_BANK_MAX_ENTRIES &&
+> +	    *bank * BRBE_BANK_MAX_ENTRIES + *idx < nr_hw) {
+> +		*idx = 0;
+> +		select_brbe_bank(++(*bank));
+> +	}
+> +}
+> +
+> +#define for_each_brbe_entry(idx, nr_hw)					\
+> +	for (int __bank = (select_brbe_bank(0), 0), idx = 0;		\
+> +	     __bank * BRBE_BANK_MAX_ENTRIES + idx < (nr_hw);		\
+> +	     __brbe_advance(&__bank, &idx, (nr_hw)))
+> +
+>   static bool __read_brbe_regset(struct brbe_regset *entry, int idx)
+>   {
+>   	entry->brbinf = get_brbinf_reg(idx);
+> @@ -474,11 +497,9 @@ unsigned int brbe_num_branch_records(const struct arm_pmu *armpmu)
+>   
+>   void brbe_probe(struct arm_pmu *armpmu)
+>   {
+> -	u64 brbidr, aa64dfr0 = read_sysreg_s(SYS_ID_AA64DFR0_EL1);
+> -	u32 brbe;
+> +	u64 brbidr;
+>   
+> -	brbe = cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA64DFR0_EL1_BRBE_SHIFT);
+> -	if (!valid_brbe_version(brbe))
+> +	if (!cpu_has_brbe())
+>   		return;
+>   
+>   	brbidr = read_sysreg_s(SYS_BRBIDR0_EL1);
+> @@ -618,10 +639,10 @@ static bool perf_entry_from_brbe_regset(int index, struct perf_branch_entry *ent
+>   
+>   	brbe_set_perf_entry_type(entry, brbinf);
+>   
+> -	if (!branch_sample_no_cycles(event))
+> +	if (!event || !branch_sample_no_cycles(event))
+>   		entry->cycles = brbinf_get_cycles(brbinf);
+>   
+> -	if (!branch_sample_no_flags(event)) {
+> +	if (!event || !branch_sample_no_flags(event)) {
+>   		/* Mispredict info is available for source only and complete branch records. */
+>   		if (!brbe_record_is_target_only(brbinf)) {
+>   			entry->mispred = brbinf_get_mispredict(brbinf);
+> @@ -774,32 +795,97 @@ void brbe_read_filtered_entries(struct perf_branch_stack *branch_stack,
+>   {
+>   	struct arm_pmu *cpu_pmu = to_arm_pmu(event->pmu);
+>   	int nr_hw = brbe_num_branch_records(cpu_pmu);
+> -	int nr_banks = DIV_ROUND_UP(nr_hw, BRBE_BANK_MAX_ENTRIES);
+>   	int nr_filtered = 0;
+>   	u64 branch_sample_type = event->attr.branch_sample_type;
+>   	DECLARE_BITMAP(event_type_mask, PERF_BR_ARM64_MAX);
+>   
+>   	prepare_event_branch_type_mask(branch_sample_type, event_type_mask);
+>   
+> -	for (int bank = 0; bank < nr_banks; bank++) {
+> -		int nr_remaining = nr_hw - (bank * BRBE_BANK_MAX_ENTRIES);
+> -		int nr_this_bank = min(nr_remaining, BRBE_BANK_MAX_ENTRIES);
+> +	for_each_brbe_entry(i, nr_hw) {
+> +		struct perf_branch_entry *pbe = &branch_stack->entries[nr_filtered];
+>   
+> -		select_brbe_bank(bank);
+> +		if (!perf_entry_from_brbe_regset(i, pbe, event))
+> +			break;
+>   
+> -		for (int i = 0; i < nr_this_bank; i++) {
+> -			struct perf_branch_entry *pbe = &branch_stack->entries[nr_filtered];
+> +		if (!filter_branch_record(pbe, branch_sample_type, event_type_mask))
+> +			continue;
+>   
+> -			if (!perf_entry_from_brbe_regset(i, pbe, event))
+> -				goto done;
+> +		nr_filtered++;
+> +	}
+>   
+> -			if (!filter_branch_record(pbe, branch_sample_type, event_type_mask))
+> -				continue;
+> +	branch_stack->nr = nr_filtered;
+> +}
+>   
+> -			nr_filtered++;
+> -		}
+> +/*
+> + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
+> + * self-recording and return 0 if the snapshot state appears disturbed.
+> + */
+> +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
+> +{
+> +	unsigned long flags;
+> +	int nr_hw, nr_copied = 0;
+> +	u64 brbfcr, brbcr;
+> +
+> +	if (!cnt)
+> +		return 0;
 
-Closes: https://syzkaller.appspot.com/bug?extid=3Def8d17bae14efb960935
+If you're trying to avoid branches before pausing BRBE, can't you check 
+this after the pause?
 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 75495a5c35079..f2460f3c860e0 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
+> +
+> +	/* Guard against running on a CPU without BRBE (e.g. big.LITTLE). */
+> +	if (!cpu_has_brbe())
+> +		return 0;
+> +
+> +	/*
+> +	 * Pause BRBE first to avoid recording our own branches. The
+> +	 * sysreg read/write and ISB are branchless, so pausing before
+> +	 * checking BRBCR avoids polluting the buffer with our own
+> +	 * conditional branches.
+> +	 */
+> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
 
-[ ... ]
+Can this work without first disabling interrupts? Sashiko pointed it 
+out, but I think it's correct. If you read an active state into brbfcr, 
+then the PMU event fires and disables BRBE, then you disable interrupts, 
+then you would restore an active state when it should be inactive. 
+Surely the only way to do it properly is to disable interrupts before 
+touching anything at all, if the PMU handler is also touching the same 
+registers?
 
-> @@ -144,8 +146,12 @@ unsigned int trace_call_bpf(struct trace_event_call =
-*call, void *ctx)
->  	 * rcu_dereference() which is accepted risk.
->  	 */
->  	rcu_read_lock();
-> +	if (no_lockdep)
-> +		lockdep_off();
+If you want to avoid trace_hardirqs_off() can you make a new 
+raw_local_daif_save() that disables interrupts and then call 
+trace_hardirqs_off() yourself after pausing BRBE? Or not call 
+trace_hardirqs_off() at all? There is a comment mentioning something 
+like that in arch/arm64/kernel/suspend.c.
 
-[Severity: High]
-Could this introduce a regression by suppressing valid warnings about real
-physical lock deadlocks caused by BPF programs?
+Also, disabling interrupts doesn't stop the PMU event from overflowing 
+and changing the state of PAUSED either. I think this is another path 
+that leads to you restoring the wrong state, so don't you also need to 
+disable the PMU?
 
-If a BPF program attached to lock_release acquires a kernel lock, the CPU
-physically holds the original lock while executing the BPF program. If the
-BPF lock ordering violates the kernel's lock graph, wouldn't this cause a
-silent deadlock without any lockdep warning?
+> +	isb();
+> +
+> +	/* Bail out if BRBE is not enabled (BRBCR_EL1 == 0). */
+> +	if (!brbcr) {
+> +		write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
+> +		isb();
+> +		return 0;
+>   	}
+>   
+> -done:
+> -	branch_stack->nr = nr_filtered;
+> +	/* Block local exception delivery while reading the buffer. */
+> +	flags = local_daif_save();
+> +
+> +	/*
+> +	 * A PMU overflow before local_daif_save() could have re-enabled
+> +	 * BRBE, clearing the PAUSED bit. The overflow handler already
+> +	 * restored BRBE to its correct state, so just bail out.
+> +	 */
+> +	if (!(read_sysreg_s(SYS_BRBFCR_EL1) & BRBFCR_EL1_PAUSED)) {
+> +		local_daif_restore(flags);
+> +		return 0;
+> +	}
+> +
+> +	nr_hw = FIELD_GET(BRBIDR0_EL1_NUMREC_MASK,
+> +			  read_sysreg_s(SYS_BRBIDR0_EL1));
+> +
+> +	for_each_brbe_entry(i, nr_hw) {
+> +		if (nr_copied >= cnt)
+> +			break;
+> +
+> +		if (!perf_entry_from_brbe_regset(i, &entries[nr_copied], NULL))
+> +			break;
+> +
+> +		nr_copied++;
+> +	}
+> +
+> +	brbe_invalidate();
+> +
+> +	/* Restore BRBCR before unpausing via BRBFCR, matching brbe_enable(). */
+> +	write_sysreg_s(brbcr, SYS_BRBCR_EL1);
+> +	isb();
+> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
+> +	/* Ensure BRBE is unpaused before returning to the caller. */
+> +	isb();
+> +	local_daif_restore(flags);
+> +
+> +	return nr_copied;
+>   }
+> diff --git a/drivers/perf/arm_brbe.h b/drivers/perf/arm_brbe.h
+> index b7c7d8796c86..c2a1824437fb 100644
+> --- a/drivers/perf/arm_brbe.h
+> +++ b/drivers/perf/arm_brbe.h
+> @@ -10,6 +10,7 @@
+>   struct arm_pmu;
+>   struct perf_branch_stack;
+>   struct perf_event;
+> +struct perf_branch_entry;
+>   
+>   #ifdef CONFIG_ARM64_BRBE
+>   void brbe_probe(struct arm_pmu *arm_pmu);
+> @@ -22,6 +23,8 @@ void brbe_disable(void);
+>   bool brbe_branch_attr_valid(struct perf_event *event);
+>   void brbe_read_filtered_entries(struct perf_branch_stack *branch_stack,
+>   				const struct perf_event *event);
+> +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries,
+> +				   unsigned int cnt);
+>   #else
+>   static inline void brbe_probe(struct arm_pmu *arm_pmu) { }
+>   static inline unsigned int brbe_num_branch_records(const struct arm_pmu *armpmu)
+> @@ -44,4 +47,10 @@ static void brbe_read_filtered_entries(struct perf_branch_stack *branch_stack,
+>   				       const struct perf_event *event)
+>   {
+>   }
+> +
+> +static inline int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries,
+> +						 unsigned int cnt)
+> +{
+> +	return 0;
+> +}
+>   #endif
+> diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
+> index 8014ff766cff..1a9f129a0f94 100644
+> --- a/drivers/perf/arm_pmuv3.c
+> +++ b/drivers/perf/arm_pmuv3.c
+> @@ -1449,8 +1449,11 @@ static int armv8_pmu_init(struct arm_pmu *cpu_pmu, char *name,
+>   	cpu_pmu->set_event_filter	= armv8pmu_set_event_filter;
+>   
+>   	cpu_pmu->pmu.event_idx		= armv8pmu_user_event_idx;
+> -	if (brbe_num_branch_records(cpu_pmu))
+> +	if (brbe_num_branch_records(cpu_pmu)) {
+>   		cpu_pmu->pmu.sched_task		= armv8pmu_sched_task;
+> +		static_call_update(perf_snapshot_branch_stack,
+> +				   arm_brbe_snapshot_branch_stack);
+> +	}
+>   
+>   	cpu_pmu->name			= name;
+>   	cpu_pmu->map_event		= map_event;
 
-[Severity: High]
-Could this also introduce a regression by unintentionally blinding lockdep =
-to
-hardware interrupts and softirqs?
-
-trace_call_bpf() for lock_release can execute with hardware interrupts
-enabled. The lockdep_off() macro increments current->lockdep_recursion.
-If a hardware interrupt fires while the BPF program is executing, it runs
-in a context where current->lockdep_recursion > 0.
-
-Does this mean all lock acquisitions in the interrupt handler and
-subsequent softirqs will completely bypass lockdep tracking?
-
-[Severity: High]
-This is a pre-existing issue, but does this approach fail to disable lockdep
-for BPF programs attached to lock_release via raw tracepoints?
-
-If a user attaches a BPF program using the raw tracepoint interface
-(raw_tracepoint/lock_release), the kernel dispatches this through
-__bpf_trace_run() which bypasses trace_call_bpf() completely.
-
-Will the false positive lockdep warning still trigger for raw tracepoints
-since they lack this lockdep suppression logic?
-
->  	ret =3D bpf_prog_run_array(rcu_dereference(call->prog_array),
->  				 ctx, bpf_prog_run);
-> +	if (no_lockdep)
-> +		lockdep_on();
->  	rcu_read_unlock();
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803-fix-lock-t=
-racepoint-bpf-lockdep-v1-1-91fb7afb526a@gmail.com?part=3D1
