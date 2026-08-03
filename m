@@ -1,32 +1,32 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4956241A4FC
-	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 17:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEBA415F3E
+	for <bpf@vger.kernel.org>; Mon,  3 Aug 2026 17:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785776597; cv=none; b=hRTA4zfvnfKsucQfjKFDDeOk47FTY9aKjyAf7pjAfwyX+je9WrB/5S5VtTDa7si4W2q8v4KuegRQwipGNM0JueZnZv9MHzqcvXRp6fZ2giNvJqf688vayiYxswRalGg4NgrKVp8jy9hp2vfpj1gCkX/6YRfpIjhFBNocpPp1trI=
+	t=1785776599; cv=none; b=Xbk2EWNv94ZNqcDxpE1/sSiS30VCLMJOnAbDtqJH0CXMLEvp0ghwkVFzr7Jb8aaUHYyI5Jxwqsh4FKObYLV7hUfBm4TeB8h+nfK43ftHXmYns1dNkZBtcyjPLYzh1W3nfw4K8hfF1U0l55MIp1TOUowpiO48/QROATqYooGyfLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785776597; c=relaxed/simple;
-	bh=ZRg+ZYHrpKdKwv0IAMlmZLgdkJd2nb5sieMoGxIA6bk=;
+	s=arc-20240116; t=1785776599; c=relaxed/simple;
+	bh=PntVbVoJ3cP5UK/Pf1vcwbAos9ji3QPpXIrkcKvezDc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QHBBImMLIoZD9dbu+b4DKOgD0wjG0aATXAy7vWysB1jlVzZOMKxDbd342dyQRXfAWbt5Ja5McayIMUVKhYDzSEDK3RIU5BwNtlw3ltdDJ1MwfhjY7fFkqwnb0t6kPvPSxpenN/vFIgda/uantg/9TmTVz8QACAxDyALjOSv5rf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vpeHqQQH; arc=none smtp.client-ip=95.215.58.174
+	 MIME-Version; b=QVBV8lXurs5zPP9dHtITSPQjeXu6SwJ5EKNhxo5AFt0MIhKmyFt5fTmqKJLCTtbYQENmRHAfrqXT9PD5KFfRld1tDnsCkqVElGUu8JzTsVu/SEKDd4JZA97SuyUpY0xxwNvAZrSE9WfgPNWBQxoASAr8nH7NlECwhR0e5WDCSbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UF6oUA2Z; arc=none smtp.client-ip=95.215.58.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vpeHqQQH"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UF6oUA2Z"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785776584;
+	t=1785776586;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=eBlLxE+fYfxpXqzS45PMr1YuPhCVWYb35QGSfAmvVkQ=;
-	b=vpeHqQQH+zpOrZAIKRwBDkswUhtMf4mVB8yuYMVpeCB9iofTGt/P7VHo+v2rI6m8FMXAlU
-	cB32/nCAQTXW/KPEwmF5p8jX519wWTqLNr2R5XxwBEuwmVdOePtKD/e8DiQCw5VFatLJfO
-	aTmjIAmA9tX6SLH1ZC4hCMGoEMOK3FY=
+	bh=G6aMs96tVFxUGKFV9Stb3Pdz8RGhtrcoFiiFq+FcCd4=;
+	b=UF6oUA2Z4LOrfOoeKtrJ5pKILoHVnms1z3EF/+DSFSp/6COTluhB143eKXwL79iEYmoMlY
+	/dq2uC201bz9yHrt00ae1YeAHUwHX1eh/+OPalHMob1Ty5c0M+25cJE2bX1f1hJq5OXsOd
+	1c3jRvLq68AD5ofAKvuLY92iFib4fS4=
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -35,9 +35,9 @@ To: bpf@vger.kernel.org,
 	Ihor Solodrai <ihor.solodrai@linux.dev>
 Cc: linux-kernel@vger.kernel.org,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [bpf-next 1/4] selftests/bpf: map_kptr: force BPF_STX for the scalar store to kptr
-Date: Mon,  3 Aug 2026 10:02:48 -0700
-Message-ID: <20260803170251.1898102-2-vineet.gupta@linux.dev>
+Subject: [bpf-next 2/4] selftests/bpf: add --no-error-summary to skip end-of-run error log dump
+Date: Mon,  3 Aug 2026 10:02:49 -0700
+Message-ID: <20260803170251.1898102-3-vineet.gupta@linux.dev>
 In-Reply-To: <20260803170251.1898102-1-vineet.gupta@linux.dev>
 References: <20260803170251.1898102-1-vineet.gupta@linux.dev>
 Precedence: bulk
@@ -49,78 +49,186 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-reject_scalar_store_to_kptr stores a scalar constant to a kptr field:
+By default test_progs re-prints the aggregated error logs of all failed
+tests at the end of the run (when not in verbose mode), starting with
+"All error logs:".
 
-        *(volatile u64 *)&v->unref_ptr = 0xBADC0DE;
+With bpf-gcc the current failures and a couple runaway 1M fails cause a
+huge print overhead/delay at the end.
 
-Compilers generate one of two encodings for that:
+Add a subtractive --no-error-summary flag, gated on a new
+env.error_summary field which defaults to true, so the default behavior
+is unchanged. Passing --no-error-summary suppresses the final
+"All error logs:" dump.
 
- 1. Materialize the constant into a register and emit BPF_STX:
-
-        r1 = 0xbadc0de
-        *(u64 *)(r0 + 0x8) = r1
-
- 2. Or fold it into a single BPF_ST (store immediate):
-
-        *(u64 *)(r0 + 0x8) = 0xbadc0de
-
-check_map_kptr_access() rejects both, but through very different checks.
-BPF_STX goes through map_kptr_match_type(), whose first test is
-base_type(reg->type) != PTR_TO_BTF_ID - the scalar rejection this test is
-named for - and which prints "invalid kptr access, R...". BPF_ST only gets
-the trivial "BPF_ST imm must be 0 when storing to kptr" immediate check and
-never reaches map_kptr_match_type() at all.
-
-So on a compiler that folds the constant - bpf-gcc, and clang from
--mcpu=v4, which enabled BPF_ST around v4 support due to historical
-verifier limitations - the test fails against its expected message.
-
-Widening the __msg to accept either message would make it pass again, but
-on those toolchains it would then only re-test the imm != 0 path, which
-verifier/map_kptr.c ("map_kptr: BPF_ST imm != 0") already covers, and the
-scalar-vs-PTR_TO_BTF_ID check would lose its only test in the tree.
-
-Route the value through barrier_var() instead, so the store stays a
-BPF_STX everywhere and the test keeps asserting what it was written to
-assert. clang -mcpu=v1..v4 and bpf-gcc 16.1 all emit the register form
-afterwards.
-
-  bpf-gcc, before: #229/20 map_kptr/reject_scalar_store_to_kptr:FAIL
-  bpf-gcc, after : #229/20 map_kptr/reject_scalar_store_to_kptr:OK
+Only the human readable output is elided. dump_test_log() also emits the
+per-test and per-subtest entries of the --json-summary "results" array,
+so it keeps being called (via a new @quiet argument) and the JSON report
+is bit for bit what it was before.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- tools/testing/selftests/bpf/progs/map_kptr_fail.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.c | 41 ++++++++++++++++--------
+ tools/testing/selftests/bpf/test_progs.h |  1 +
+ 2 files changed, 29 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-index f11848dfa78f..cb84e23b83c0 100644
---- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-@@ -390,13 +390,22 @@ __failure __msg("invalid kptr access, R")
- int reject_scalar_store_to_kptr(struct __sk_buff *ctx)
- {
- 	struct map_value *v;
-+	u64 val = 0xBADC0DE;
- 	int key = 0;
- 
- 	v = bpf_map_lookup_elem(&array_map, &key);
- 	if (!v)
- 		return 0;
- 
--	*(volatile u64 *)&v->unref_ptr = 0xBADC0DE;
-+	/*
-+	 * Keep the value in a register so this stays a BPF_STX and keeps
-+	 * exercising map_kptr_match_type(). Compilers that fold the constant
-+	 * into a BPF_ST (store immediate) instead - bpf-gcc, and clang from
-+	 * -mcpu=v4 - would be rejected by the far weaker "BPF_ST imm must be
-+	 * 0" check, which verifier/map_kptr.c already covers.
-+	 */
-+	barrier_var(val);
-+	*(volatile u64 *)&v->unref_ptr = val;
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index aa06bab30966..8ee46745e2e8 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -424,10 +424,12 @@ static void jsonw_write_log_message(json_writer_t *w, char *log_buf, size_t log_
+ 	}
  }
  
++/* @quiet elides the human readable output, the JSON report is unaffected */
+ static void dump_test_log(const struct prog_test_def *test,
+ 			  const struct test_state *test_state,
+ 			  bool skip_ok_subtests,
+ 			  bool par_exec_result,
++			  bool quiet,
+ 			  json_writer_t *w)
+ {
+ 	bool test_failed = test_state->error_cnt > 0;
+@@ -449,7 +451,7 @@ static void dump_test_log(const struct prog_test_def *test,
+ 	if (verbose() && !par_exec_result)
+ 		return;
+ 
+-	if (test_state->log_cnt && print_test)
++	if (test_state->log_cnt && print_test && !quiet)
+ 		print_test_log(test_state->log_buf, test_state->log_cnt);
+ 
+ 	if (w && print_test) {
+@@ -471,15 +473,16 @@ static void dump_test_log(const struct prog_test_def *test,
+ 		if ((skip_ok_subtests && !subtest_failed) || subtest_filtered)
+ 			continue;
+ 
+-		if (subtest_state->log_cnt && print_subtest) {
++		if (subtest_state->log_cnt && print_subtest && !quiet) {
+ 			print_test_log(subtest_state->log_buf,
+ 				       subtest_state->log_cnt);
+ 		}
+ 
+-		print_subtest_name(test->test_num, i + 1,
+-				   test->test_name, subtest_state->name,
+-				   test_result(subtest_state->error_cnt,
+-					       subtest_state->skipped));
++		if (!quiet)
++			print_subtest_name(test->test_num, i + 1,
++					   test->test_name, subtest_state->name,
++					   test_result(subtest_state->error_cnt,
++						       subtest_state->skipped));
+ 
+ 		if (w && print_subtest) {
+ 			jsonw_start_object(w);
+@@ -496,7 +499,8 @@ static void dump_test_log(const struct prog_test_def *test,
+ 		jsonw_end_object(w);
+ 	}
+ 
+-	print_test_result(test, test_state);
++	if (!quiet)
++		print_test_result(test, test_state);
+ }
+ 
+ /* A bunch of tests set custom affinity per-thread and/or per-process. Reset
+@@ -899,6 +903,7 @@ enum ARG_KEYS {
+ 	ARG_JSON_SUMMARY = 'J',
+ 	ARG_TRAFFIC_MONITOR = 'm',
+ 	ARG_WATCHDOG_TIMEOUT = 'w',
++	ARG_NO_ERROR_SUMMARY = -2,
+ };
+ 
+ static const struct argp_option opts[] = {
+@@ -931,6 +936,8 @@ static const struct argp_option opts[] = {
+ #endif
+ 	{ "watchdog-timeout", ARG_WATCHDOG_TIMEOUT, "SECONDS", 0,
+ 	  "Kill the process if tests are not making progress for specified number of seconds." },
++	{ "no-error-summary", ARG_NO_ERROR_SUMMARY, NULL, 0,
++	  "Do not re-print the aggregated error logs of failed tests at the end of the run." },
+ 	{},
+ };
+ 
+@@ -1132,6 +1139,9 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 	case ARG_DEBUG:
+ 		env->debug = true;
+ 		break;
++	case ARG_NO_ERROR_SUMMARY:
++		env->error_summary = false;
++		break;
+ 	case ARG_JSON_SUMMARY:
+ 		env->json = fopen(arg, "w");
+ 		if (env->json == NULL) {
+@@ -1304,7 +1314,7 @@ static void dump_crash_log(void)
+ 
+ 	if (env.test) {
+ 		env.test_state->error_cnt++;
+-		dump_test_log(env.test, env.test_state, true, false, NULL);
++		dump_test_log(env.test, env.test_state, true, false, false, NULL);
+ 	}
+ }
+ 
+@@ -1462,7 +1472,7 @@ static void run_one_test(int test_num)
+ 
+ 	free(stop_libbpf_log_capture());
+ 
+-	dump_test_log(test, state, false, false, NULL);
++	dump_test_log(test, state, false, false, false, NULL);
+ }
+ 
+ struct dispatch_data {
+@@ -1623,7 +1633,7 @@ static void *dispatch_thread(void *ctx)
+ 		} while (false);
+ 
+ 		pthread_mutex_lock(&stdout_output_lock);
+-		dump_test_log(test, state, false, true, NULL);
++		dump_test_log(test, state, false, true, false, NULL);
+ 		pthread_mutex_unlock(&stdout_output_lock);
+ 	} /* while (true) */
+ error:
+@@ -1686,9 +1696,12 @@ static void calculate_summary_and_print_errors(struct test_env *env)
+ 	 * We only print error logs summary when there are failed tests and
+ 	 * verbose mode is not enabled. Otherwise, results may be inconsistent.
+ 	 *
++	 * --no-error-summary only elides the human readable dump: the walk
++	 * still happens so the JSON report keeps its per-test results.
+ 	 */
+-	if (!verbose() && fail_cnt) {
+-		printf("\nAll error logs:\n");
++	if (!verbose() && fail_cnt && (env->error_summary || w)) {
++		if (env->error_summary)
++			printf("\nAll error logs:\n");
+ 
+ 		/* print error logs again */
+ 		for (i = 0; i < prog_test_cnt; i++) {
+@@ -1698,7 +1711,8 @@ static void calculate_summary_and_print_errors(struct test_env *env)
+ 			if (!state->tested || !state->error_cnt)
+ 				continue;
+ 
+-			dump_test_log(test, state, true, true, w);
++			dump_test_log(test, state, true, true,
++				      !env->error_summary, w);
+ 		}
+ 	}
+ 
+@@ -2028,6 +2042,7 @@ int main(int argc, char **argv)
+ 
+ 	env.secs_till_notify = 10;
+ 	env.secs_till_kill = 120;
++	env.error_summary = true;
+ 	err = argp_parse(&argp, argc, argv, 0, NULL, &env);
+ 	if (err)
+ 		return err;
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 2cf950afcd85..e66d5c457901 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -105,6 +105,7 @@ struct test_env {
+ 	struct test_selector tmon_selector;
+ 	bool verifier_stats;
+ 	bool debug;
++	bool error_summary;
+ 	enum verbosity verbosity;
+ 
+ 	bool jit_enabled;
 -- 
 2.55.0
 
