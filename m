@@ -1,148 +1,169 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994E830C37C
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 15:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43823F5BF3
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 15:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785855709; cv=pass; b=RaI7YOgjSdc2l45r5bNfl9FM/mQFM31OkI52V+8bi3yvKHe9S/x7XlrMKC5nSEvAAMwJ6Kla++4q27AX9L5lSbWxL5QSIFztNzMyxiuNTqDmSVjLWVjw2ZFd3zKC8K3f0+7e3nketmFCEDVJWblZ3HUwXsVLVLTRjdL4V7xh8WI=
+	t=1785855894; cv=pass; b=ZqeSjF6KQB2omK8yyZZo/v/N+hZzY+FLZlg/4NpR2PUGv2l1wPFyrgMClIX1t4+mN3snM0YzW2OznZu+7DbM4l4jBAxncmDKY5S0FGmxDZtla8bCUP2fvv4meBNm3V2b8VU+POt0/EQq9noYN4XIusYJwGHOLkJ+wanZnSG7RMs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785855709; c=relaxed/simple;
-	bh=Gm1Bg0Q4DelxFOLvPjQd5M/mGETysFMssmFfnQE9aUs=;
+	s=arc-20240116; t=1785855894; c=relaxed/simple;
+	bh=DIK9byJoKUSn8x1QzNuAeFJl0xfITa1H/6MjxmO4zl0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jyoAnCIkgHnAcrPLDgyUIPY+Vnnml2JAcCExSSMdTGOqXxyvluuuMH0u/3W+UQe+2frHBfIc3ck8UezAkptZXSPveXHSFiDEwJNKYkgrH/x299C/lBt3xmbWE3K11eZQ+ocoY9LvpZn0JsFoojVgyQnutpjjD9rciOAzypm01vA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uU/qFRsJ; arc=pass smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=tnukq0KkXjlGFq2TV8ff45NQhb9J6+fwZMynIIqQgrXraZjB2CCeV/Sd99dZwtnyGSaXJm8ue8NXXksxG/1X3Kb1tDaFeHYLnkwveUfbaIA9i1upm4bZJCsCyu7n464IBFWBDRrZaxOFLFw6vSDw+dIXH5FlllWPE688au07ekg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tnc1tEKY; arc=pass smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uU/qFRsJ"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-517dc520840so32212351cf.3
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 08:01:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785855706; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tnc1tEKY"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c1712a04ddaso757146066b.2
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 08:04:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785855889; cv=none;
         d=google.com; s=arc-20260327;
-        b=MNxvGJOqe11dJkvajc+eH7wek/xT3yjDGQTI1r7RlyOarJHeffa/AKxMZMILhXQPQc
-         jAjwrlKMbq+n1bl51bUBDPVk6nGOixx9St4bI47jv4Q5LXVtGTaB/PhZsvxJc+P1PKYf
-         YKndaYsbAGzsZILV3xCNjuhCo0jmm8FXZo75R1JeGV848hN8AxFLazO5WDr20cN7yYe1
-         J04Amio8x4ACzpisoavEvlLR0h/bfxU0+id6U64C7M4y+k/uoZMjLiSp18nUaLU/He0H
-         3364F0jrIETUcf+jm3waGTIIxSHaYmnRWwaPF8hZ4toPUVbaSVzJxTIwNGAP7082XJUx
-         vmvg==
+        b=g3TbbcbdhAQthUKYFqdd098hZfogT+7vbuE7tthPLMZMM8GCOfB4RAbPFbL8cH0J5t
+         U8bEl3KQblTrVbjromZ1TqNw8HhKEnnDN2VyswxDijf3dw345uqYtLV3BD+CyvzReODI
+         6xRyA1Cu4qbPwJAsIJesHfxAePeSDG/vqCUxmMPwcOmOuZsbrBbdoifw4AGfccHle6U6
+         4kLVFD/9dm+HWFP8SfOuS2Wh1a+L89JzYCW4QgAbbeZKscztLlrZ4K/fD1iN/AVLTnyx
+         qkMeqCgo9WLu/G3gBhCL2xCnIbxan5b3K7WPc0Mx3e4QdOlIUJtnhxGcAC1uXvBiuykZ
+         oWdQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Gm1Bg0Q4DelxFOLvPjQd5M/mGETysFMssmFfnQE9aUs=;
-        fh=Vi6H2mT+EsMsG07LkQKPFIaHzN2Q6CZ6E2dI7KrsM8w=;
-        b=GnCh2Cw4RNJo+SQ9W6d3tAoafATC+lS7BH0+tpLVY/6JVsolLORUOYC4JxCnvZbXqI
-         k5fBZ9WfETyJbgoaIsxB1Eqjz7aLuNA6bHdMHit+SurktHCTDKfw5RBtQIWmHXXNoZvk
-         ibNHw2Ff5pVNpi7/wqoTSqJyLv2DWrnclZDPta3RlvoDMhr25vPbYM3WI/7CaPSOojrN
-         2yf9OsLamS8UlLQIdYW7eFXjREd2LmcHltQ77OI9H/RYS7eiXGIeFk4gsrsKQLSZDr4t
-         4F6Wize1bXlRj69DSt8fstQoml4o2/hRMwisx6QhaG2ZqnNZ6bFLqy+peSo2QwVS5NVc
-         +I5w==;
+        bh=UMfYGwm+h7erjn/kf3mtUFJd+xnuOStNHUghIRTCk1g=;
+        fh=t0zB/eO4npZSEulEd9pyiEHEEYvMuEqkZALaJN07k3M=;
+        b=gTwPPMVweWsDwCbcjnjai5xJ2Ryi7r4oSFCtO90/1o/5Qtmee5NMek4VNZNrMIBJf/
+         V6qp1xgNttPAjn4EXZJisbJbQTEIjg6PKxqYsk4HoOxkzZdcqMyBGs7A0q/tXdqbtE56
+         xIBTA9O1lEF1f1Et3gcHQJD8Ty3LnPjsocHQYRIaHtSvyVAIEA1PTWsNt0iCBDTjc6UG
+         VL3eQiwK3JRcgN8rbMuf0c0w1xfioLotzzE0qvPAaHV7+HruT4PcSqIeic1yOyObpX65
+         Im85EBNX9v9q4ILnWVYY1MjsBaFw1dwDaRIN1KW9v19DhbSrTC8cnWq8B4yBQsK7+vve
+         FKUw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785855706; x=1786460506; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785855889; x=1786460689; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Gm1Bg0Q4DelxFOLvPjQd5M/mGETysFMssmFfnQE9aUs=;
-        b=uU/qFRsJRsyz2D+U0sh47u5KIJ0ZhmJBZOF9Ex+pwc1syF0qCT+iXeLlGVHJnuAl6a
-         Q/EchurVRhkASrHTVFB6NY9iAuE04EPwS922kmyv/ZU2pu06Dk2BfdccimIVPisR7TMw
-         FQvhDsxUXlRxmHzUzRP6dI4KvHTu1PHokLjtqkyIw8PmoYWYnqRQyQ0Jn8GFD0D1i6A5
-         jyGn9pluOKuE97jwpozcLOapvKTjVz+ZM5LQx1E0W6WYODwfd+Dju+/CY172xHJynZMz
-         F8hg80Azv+D3CteevmBjDO6zaPu2j6A26ZToAgHWU1E9zgiuuwPr2htyXbHej8NGO2kl
-         42Ag==
+        bh=UMfYGwm+h7erjn/kf3mtUFJd+xnuOStNHUghIRTCk1g=;
+        b=Tnc1tEKYbSxys6WFbO1mgxH+NOYoWQZXcEKWQtkeMSkNLYuhdqzts7tj1EIRv4qgTa
+         zU3L/k4lnW7nbUevUQrX0+dnRnQ0v1mqzozLSZm4YdBT3lQD39MaGSCTZCio+VKRZe5V
+         gHJH9J14aU1wRX8L/uGhPEJXYB3Pmc+GAtyLhSRsKXyrAEYl+sgx6uFsH6/w5EB7tHA1
+         DGRdRZqMb+hUi9UdiXMVjb7zzDhVr8g7HXmAVd96Pga1enDc+mr2M6UeyK/+p9QnSQmd
+         qCeBu9J3MoSAuYiKkxGsNLGc4glAXG7tsIt/JZ85N+i4xE70tnwGZ+PmPBldhwEB71ov
+         8vUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785855706; x=1786460506;
+        d=1e100.net; s=20251104; t=1785855889; x=1786460689;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Gm1Bg0Q4DelxFOLvPjQd5M/mGETysFMssmFfnQE9aUs=;
-        b=rm1v4qtQMdsldnSa4f66v+yV3KXrgNYR11D0dTiZ8dee+vKuTBbqxAOiqa8/MzLFOH
-         n/HBBU3VzhRNX1o6Ggt0R/mCmRAe9d/SU0BF4P3g5mhrCu50byeqsoRIcR09kApyE9k+
-         +x9Aq5nZifefH9zXzIlpJhBuad+o9EsKIexi3C4vpGvLX5qM2roDCkAdgkZfjdyUjnET
-         UnNVccW9Onrc1LVvJe6+Y7gE1rLhBwmkPZhmxSWRd9E0i0s9RTM21SfXc8PQMCWS/HHQ
-         p7xMG2DwHGHsgc1NPam6hmjberLbK30FJyitrv47ssQ/F3pfuyd534RSWDRJBpNVSQ6K
-         16KA==
-X-Forwarded-Encrypted: i=1; AHgh+RpdZshUKwHH/2DcfX0KxwT84V56l08GqVoA5ok276Lq20nA4QRucCFT17HhzTjHnBC2bwU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFkAR5sXWqm2jUmXarjYKjStYkrHhGSlbjQfsKdFvyk5GFKrpe
-	f4eXOYhKWNJ34FfHqJvWiq+4+cT55YhcPRB87zWDQnUkYhdxxLzdUw/tIS5H96z4DkA8yhJxOOE
-	MixtotFhhUYqB+IIKi9n09w1Fhnyc84NgJ3H0V4MeZvvmPiHKw5z81FNC
-X-Gm-Gg: AR+sD124GTYwp4iFmLibz/yE7jz857rsYg9Ouaby7qfXqXqh8FfbdLPC8HKjlwfPQCk
-	h0vVi75McE40bxKxPxLu6VUkX2UFwg6z6O+6TdQw8O50dPkum0J/X1Fll1X8aCY6AbJrNcXxoSX
-	mmT8B3YxBAGPWe3rY8ny0FqUfE2j+pLP7/bXXUL28oNaUjEFLlcYCDPt7SJlyfLu7Y2g197wNPm
-	4ccOBikika0DFvw8u7HTHkNBZIdAfU5XzYlKGAr7/f4FOpQfCBn9hlCtWP/+uVsUbFsPnZtYFKn
-	kEsL6Mq7vNKY4LU2btOsUI/d7Qr+o0nQJB1Frwr1UVAYPAvDRh/ulc+WhqlkMcjRBYAoyX236uS
-	wcMzjiV2y4QdRAeUUQOmA7rwIaz0ZK/395WMFuN7OtxV5gyOtxwmTJn4=
-X-Received: by 2002:a05:622a:5c1a:b0:519:b5ef:7fdd with SMTP id
- d75a77b69052e-52b5666c4aamr282275791cf.6.1785855705379; Tue, 04 Aug 2026
- 08:01:45 -0700 (PDT)
+        bh=UMfYGwm+h7erjn/kf3mtUFJd+xnuOStNHUghIRTCk1g=;
+        b=GS7QyUOzSCGxyF4muROoAVn6volKW+HDyjfI2k7cjmLL/eoZHll+2XRczJ9ErWUdUi
+         Qc+ksPSVgumdrcJXCJ92+0GTH2zWyyOj73bjbTEDnLEcyEihJTSmIxZJyNNLNs+7tVLQ
+         rtO3866lOideq+Fubb+eJJ1CKYRG72wUg7W6plmcFpTP+Y+M5t1Zbbd468NWYG2c6oUp
+         Ft5BbQbONala5wl7/xxnk4vPybBfEZNYmqomTh8DNBvnMWiD84LCSToCyD6nZUGQpyDp
+         FBu4ifWOoKbv4TSC6402Ud4V+yqcmKVgpNYCvitsp79ujxh/2r5qC6aOWmK/rtQJp2F4
+         UUmw==
+X-Gm-Message-State: AOJu0Yy0vD4B6jr3v7/v+bduTMhW+kz/UVDywtjOTw5C+Aebc6xA7veg
+	z4gcDCKlInYVtouufAvnzEtBbqMM/aR2Of4XD8B0FGgkjm8xsXI1l8sp31knrSGZIyERednpbRZ
+	yyFoDXD8Pc0GcNnDrte3gNzt/J8+RRIA=
+X-Gm-Gg: AR+sD10eDnx3b4FrGbGhN9mV81a1rS67GmmY6vTaVncNVqpXhOhq2xm3goIP66CrXEY
+	SwGTOMZQczTuyXVOAJjt9d7wxiUpZTLA8Kjd5TH8lNxhHtcUk3BF0Pg1YZC83tk5SRe6f0p13mv
+	9DQb+oPWvxt6ZMOO/hdT8EutGqRsIGOzvy933AUmhirYgleTRMTPquj1PnP5uQjJVytfqmlL2X4
+	N0ZjRJ4Xy2zx+ySYc8nrIm3azbny5yutPDFf0OZCIgPCN7JQ7cPHEw6BeHstKYm4BxE/gCcsiF4
+	9vKS7anFUZr2g+mu/cL13MyUsqtx1NjqbYAMpZQtIC94hFhShH2jlX5DJLTW
+X-Received: by 2002:a17:907:7b9e:b0:c20:768:af62 with SMTP id
+ a640c23a62f3a-c200768b973mr964186866b.22.1785855888297; Tue, 04 Aug 2026
+ 08:04:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1785823138.git.rakukuip@gmail.com> <6218aa3534d0d2d3f448fde70a8dc2769d7a8201.1785823138.git.rakukuip@gmail.com>
-In-Reply-To: <6218aa3534d0d2d3f448fde70a8dc2769d7a8201.1785823138.git.rakukuip@gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Tue, 4 Aug 2026 17:01:33 +0200
-X-Gm-Features: AUfX_myRYK5h5EqLM3l3dY-aqNjZceMzS2Yr38y86_EP7ctdV6zLk4B5bfLoFh8
-Message-ID: <CANn89i+8EawQn7o2uCosBXDy3VR-uTdxYwjvt3NzyTPsBySfCw@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/1] bpf: Check sk_state before sk_protocol in bpf_tcp_*_syncookie
-To: Ren Wei <enjou1224z@gmail.com>
-Cc: kuniyu@google.com, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me, 
-	martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, lmb@cloudflare.com, ppenkov@google.com, vega@nebusec.ai, 
-	rakukuip@gmail.com
+References: <20260804134601.2305303-2-puranjay@kernel.org> <8203f8266fa504ec5dc4719a590280be46d11dea934146476db1307829dc71fb@mail.kernel.org>
+In-Reply-To: <8203f8266fa504ec5dc4719a590280be46d11dea934146476db1307829dc71fb@mail.kernel.org>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Tue, 4 Aug 2026 16:04:33 +0100
+X-Gm-Features: AUfX_mzjyuw23fm5YAX6-cr26FtMJBKHl3esFCF-uOhkFuVSeglK68ssOYLz3Rg
+Message-ID: <CANk7y0gS9fFe5-SYmnjtdTCZYaG=CXqpq4WOrxrn29BUeWkFAQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/6] bpf: Correct the overflow check comment
+ in bpf_iter_num_next()
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	song@kernel.org, yonghong.song@linux.dev, martin.lau@kernel.org, clm@meta.com, 
+	ihor.solodrai@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 4, 2026 at 4:29=E2=80=AFPM Ren Wei <enjou1224z@gmail.com> wrote=
-:
+On Tue, Aug 4, 2026 at 3:47=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
-> From: Luxiao Xu <rakukuip@gmail.com>
+> > diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+> > index f5eaeb2493d4a..b235e117e206a 100644
+> > --- a/kernel/bpf/bpf_iter.c
+> > +++ b/kernel/bpf/bpf_iter.c
+> > @@ -802,12 +802,11 @@ __bpf_kfunc int *bpf_iter_num_next(struct bpf_ite=
+r_num* it)
+> >  {
+> >       struct bpf_iter_num_kern *s =3D (void *)it;
+> >
+> > -     /* check failed initialization or if we are done (same behavior);
+> > -      * need to be careful about overflow, so convert to s64 for check=
+s,
+> > -      * e.g., if s->cur =3D=3D s->end =3D=3D INT_MAX, we can't just do
+> > -      * s->cur + 1 >=3D s->end
+> > +     /*
+> > +      * s->cur < s->end while iterating, else s->cur =3D=3D s->end =3D=
+=3D 0; the signed
+> > +      * s->cur + 1 >=3D s->end holds even when s->cur + 1 wraps (start=
+ =3D=3D INT_MIN).
+>                                   ^^^^^
+> >        */
+> > -     if ((s64)(s->cur + 1) >=3D s->end) {
+> > +     if (s->cur + 1 >=3D s->end) {
+> >               s->cur =3D s->end =3D 0;
+> >               return NULL;
+> >       }
 >
-> bpf_tcp_gen_syncookie and bpf_tcp_check_syncookie accept a socket pointer
-> 'sk' with argument type ARG_PTR_TO_BTF_ID_SOCK_COMMON. However, they acce=
-ss
-> sk->sk_protocol without validating whether 'sk' represents a full socket.
+> The replacement comment says "s->cur + 1 >=3D s->end holds even when
+> s->cur + 1 wraps (start =3D=3D INT_MIN)". Doesn't the inequality evaluate=
+ to
+> false in the wrap case, not true?
 >
-> When a BPF program passes a mini-socket (such as struct request_sock or
-> struct inet_timewait_sock obtained via bpf_skc_lookup_tcp), sk_protocol
-> is located beyond the memory boundary allocated for mini-sockets.
-> Directly dereferencing sk->sk_protocol leads to a slab-out-of-bounds
-> kernel read.
+> Looking at the code: bpf_iter_num_new() sets s->cur =3D start - 1, so whe=
+n
+> start =3D=3D INT_MIN, s->cur wraps to INT_MAX. On the first call to
+> bpf_iter_num_next(), s->cur + 1 wraps back to INT_MIN. For a non-empty
+> range like the selftest bpf_for(i, INT_MIN, INT_MIN + 2) at
+> tools/testing/selftests/bpf/progs/iters_num.c:101, the test becomes
+> INT_MIN >=3D INT_MIN + 2, which is false, so the function returns the fir=
+st
+> element.
 >
-> Fix this issue by checking sk->sk_state !=3D TCP_LISTEN before inspecting
-> sk->sk_protocol in both bpf_tcp_gen_syncookie and bpf_tcp_check_syncookie=
-.
-> Since mini-sockets are never in the TCP_LISTEN state, the condition
-> short-circuits and prevents dereferencing fullsock-specific fields.
+> The commit message describes this correctly ("the wrapping s->cur + 1
+> brings it back to start"), but "X >=3D Y holds" reads as "the inequality =
+is
+> true," when what seems to be meant is that the comparison mechanism remai=
+ns
+> correct under wraparound.
 >
-> Fixes: 399040847084 ("bpf: add helper to check for a valid SYN cookie")
-> Fixes: 70d66244317e ("bpf: add bpf_tcp_gen_syncookie helper")
-> Cc: stable@vger.kernel.org
-> Reported-by: Vega <vega@nebusec.ai>
-> Assisted-by: Codex:gpt-5.4
-> Signed-off-by: Luxiao Xu <rakukuip@gmail.com>
-> Signed-off-by: Ren Wei <enjou1224z@gmail.com>
-> ---
+> Also, the first clause says "s->cur < s->end while iterating, else
+> s->cur =3D=3D s->end =3D=3D 0". This doesn't cover the post-bpf_iter_num_=
+new(),
+> pre-first-next() state for start =3D=3D INT_MIN, where s->cur =3D=3D INT_=
+MAX and
+> s->end =3D=3D INT_MIN + 2 (neither s->cur < s->end nor s->cur =3D=3D s->e=
+nd =3D=3D 0).
 >
-> changes in v2:
-> v1 Link: https://lore.kernel.org/all/ca8d8c570509b02355bb4bd4e56859f3e256=
-4c9c.1785576172.git.rakukuip@gmail.com/
-> - Check sk_state before sk_protocol instead of adding sk_fullsock() check=
- (Kuniyuki Iwashima)
-> - Correct Fixes tags to point to 399040847084 and 70d66244317e (CI bot)
+> Since the sole purpose of this patch is to make the comment accurate, cou=
+ld
+> the wording be adjusted to avoid asserting a condition that is false in t=
+he
+> cited case?
 
-OK but I do not think this needs a series, a huge cover letter, or a
-bloated git log.
+Andrii do you have a preference for the comment here? I will copy
+whatever you say verbatim to the next version.
 
-AI will be able to rebuild a cover letter (of arbitrary length) and a
-full repro just by looking at the fix.
-
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Thanks,
+Puranjay
