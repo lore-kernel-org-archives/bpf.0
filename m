@@ -1,42 +1,42 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C65047044E;
-	Tue,  4 Aug 2026 17:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD9B47125F;
+	Tue,  4 Aug 2026 17:46:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785865580; cv=none; b=ot5eQkmM/xgeUeiu36LAZEjxivO6nEFbZH5e4Zo2QJ2lo20eyWuBZG4FDKC/lH9N2fBFhxVynubtB1iTc/HJ2ex7oho9++ZiC6+modzgqWX0osv3hmLqHoNEpRoRGTmtK3NW+3w/RG07YxADf3/Aw9n3QRCXFZeVSHlTcC1Q/2o=
+	t=1785865578; cv=none; b=EUwHYGo3FMIIXqJcCu6I6eCLlAWlOrWpuQcm4OaD0FjKZg1j0ZFlWkIPNNjPS4vIBoLjXylKs/yF/w//l5EbxS4hGg+qdxQecsb7RVeVRRPN0jYnMOeq/yjOrzPOjNamB3txthoLSnJHw3D8Kb/yuTScR0iCvkF/nNEEkBACrwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785865580; c=relaxed/simple;
-	bh=T/8VPbw0+RdN1NiADAUuRcSfpb9HaCNOmtXN2iip1SM=;
+	s=arc-20240116; t=1785865578; c=relaxed/simple;
+	bh=UirKyiXLzyCsUKT9cm3HTYz1t7MKHUMep1FY5qYjkx4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QNImdH67cwcXVQDsg7VAzvFR4AccHDmcHpI/DWNGXsaGmbPK8zC+GjhwHm74rozEf2vHLtj8Wb+uGCbMC4P0M+LXpADIVtwWphu3sqMENjx1DweQ9fL51fiyyIbFMYKcg3rPonZ3ZRaJMp7a1xJjTZILjsY4u+L2AfB3jJZbL9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ciiN0TAU; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=WLQ8ioGhs5rK5anF6CPGJDZoZWoegmfJKCWVIrL+gLNh+yTimmbtlNPtXrSxLyH1/sN3YoRNYmLSw6gtfzeaaJKByUYhy5IZyW6Uff3Po5tt/SYV3LtCcEN1885BRpiNv0cFmRiBXYSuhexGoTgLtgRAizEqWe2tJcgx0SMYetg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GFTpKaI7; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ciiN0TAU"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GFTpKaI7"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id C65AA1A140B;
-	Tue,  4 Aug 2026 17:46:11 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 3D2A24E410ED;
+	Tue,  4 Aug 2026 17:46:09 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 90C786029E;
-	Tue,  4 Aug 2026 17:46:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1913B11C33456;
-	Tue,  4 Aug 2026 19:46:08 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 0D2566029E;
+	Tue,  4 Aug 2026 17:46:09 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5B18F11C33450;
+	Tue,  4 Aug 2026 19:46:05 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1785865570; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1785865567; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=JU3L+df83l9QR9Jyin43E3VGRjhMOIOuUHGxEgFQzpM=;
-	b=ciiN0TAU3HC+wYecjfrE2ogxdpDr1nIoln9eLk4gK6N0rTdI6VV/lt3d2Fh4tlWZiX5jRP
-	K1cVbO78NeZXVoaKiLs5rXrF2Brtw22MDhgDzzKHW5S2Yz0/j9mIqwA0gMbuW4JAABZjIj
-	4J4e6xcbbK+/UTxIGNS+C9ARNDGZvPiFCoUywetaZrv6ZRBfx/ixnTlCxlmAdJiOnczWhp
-	/j3bswvY77vBAcvAhf+fWcuXLBK95s7WVwvogIJL8cRaf3/1b0KZGMQnEqQ1d3a39r2N+q
-	u9BxBiRgFwrKlb9p1Y5wt7118wu1LCdiBbG3FmsXa5NSN++kwMF0qlEM2gA8KA==
+	bh=TLGetkOMjTqN/SGQEQrmZkSD5SWQr9KxLQAjM0WYKgM=;
+	b=GFTpKaI7tg7e42fci69QaNs5/83z7mbgNRkIjLjG2Ib1IgUoeHLXEmAh9rKm1QKEc7sp5X
+	YPwXTDKo04ZAw3inZ8zvHNavYUOe52Jx3tjA2bWYKOrh8nhJmqD18bAXHH2Obax4Q47jMl
+	+eeoqI2P3usXsIW+iesG41MI2dnhxooNO0ZPPPEFDCjY7x6oVxYwHhR/E98tSDHRhbyc15
+	S27jOH9ELvtN3JQsPqTNXBFxt4N6OJoL2Raakb0SE+J+k9bNJn18eyFDGeImkg3+U++of5
+	GWCMFgraKn16QRDT1Abr9Dx8wUo0XCK7sr5zA0tALALwHz47lUDAy8BlcAFJHQ==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Tue, 04 Aug 2026 19:45:37 +0200
-Subject: [PATCH bpf-next v6 6/9] selftests/bpf: make cmdline_contains
- stricter
+Date: Tue, 04 Aug 2026 19:45:36 +0200
+Subject: [PATCH bpf-next v6 5/9] bpf, x86: enable KASAN for JITed programs
+ on x86
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260804-kasan-v6-6-549ef845f491@bootlin.com>
+Message-Id: <20260804-kasan-v6-5-549ef845f491@bootlin.com>
 References: <20260804-kasan-v6-0-549ef845f491@bootlin.com>
 In-Reply-To: <20260804-kasan-v6-0-549ef845f491@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -64,62 +64,33 @@ Cc: ebpf@linuxfoundation.org,
  Bastien Curutchet <bastien.curutchet@bootlin.com>, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
  =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-cmdline_contains is used by BPF selftests to check the presence of
-specific kernel commandline parameters, but it currently suffers from
-two issues:
-- the read commandline isn't NULL terminated right after the read data
-  but only at the end of the buffer, leaving uninitialized bytes that
-  are then possibly tokenized
-- the comparison of found tokens is done based on the size of found
-  token. This could lead to too-short-but-matching tokens to wrongly
-  match the search pattern.
+Mark x86 as supporting KASAN checks in JITed programs so that the
+corresponding JIT compiler inserts checks on the translated
+instructions.
 
-Enforce stricter checks in cmdline_contains to avoid accidental matches.
-
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
- tools/testing/selftests/bpf/unpriv_helpers.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ arch/x86/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/unpriv_helpers.c b/tools/testing/selftests/bpf/unpriv_helpers.c
-index f997d7ec8fd0..c99d81df2aa2 100644
---- a/tools/testing/selftests/bpf/unpriv_helpers.c
-+++ b/tools/testing/selftests/bpf/unpriv_helpers.c
-@@ -72,8 +72,9 @@ static int config_contains(const char *pat)
- 
- static bool cmdline_contains(const char *pat)
- {
-+	int fd, cnt, ret = false;
- 	char cmdline[4096], *c;
--	int fd, ret = false;
-+	size_t pat_len;
- 
- 	fd = open("/proc/cmdline", O_RDONLY);
- 	if (fd < 0) {
-@@ -81,14 +82,16 @@ static bool cmdline_contains(const char *pat)
- 		return false;
- 	}
- 
--	if (read(fd, cmdline, sizeof(cmdline) - 1) < 0) {
-+	cnt = read(fd, cmdline, sizeof(cmdline) - 1);
-+	if (cnt < 0) {
- 		perror("read /proc/cmdline");
- 		goto out;
- 	}
- 
--	cmdline[sizeof(cmdline) - 1] = '\0';
-+	cmdline[cnt] = '\0';
-+	pat_len = strlen(pat);
- 	for (c = strtok(cmdline, " \n"); c; c = strtok(NULL, " \n")) {
--		if (strncmp(c, pat, strlen(c)))
-+		if (strlen(c) != pat_len || strcmp(c, pat))
- 			continue;
- 		ret = true;
- 		break;
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index bdad90f210e4..705a9ab85f3a 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -233,6 +233,7 @@ config X86
+ 	select HAVE_SAMPLE_FTRACE_DIRECT	if X86_64
+ 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if X86_64
+ 	select HAVE_EBPF_JIT
++	select HAVE_EBPF_JIT_KASAN		if X86_64
+ 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
+ 	select HAVE_EISA			if X86_32
+ 	select HAVE_EXIT_THREAD
 
 -- 
 2.55.0
