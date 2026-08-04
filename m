@@ -1,63 +1,63 @@
 Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F19747A0BA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038B8463B6B
 	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 17:02:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785862968; cv=none; b=KmW6DbjncPjS6iFyvhr1Dd9Pg9aqF+z5owH8SIAKcpwmhnN3Dx7FIggtWd1ck6Wmo9d6r9dzj+27nz+vipD8cIwFHZHBmUBIBNw+F4i12R3jl9ssUOYpxycEac+QBD4jvOA1ENfkOCnJwpUdYLj4whsB80b+rTkI7LyYNJTTQCY=
+	t=1785862968; cv=none; b=La16pdo5FhrbZHM02YeQKTiBRKLNUjjSjSHnfa2N3XP4BHhOiVbOFHsAjXTAnRPOznKVDF6cniTvjfH38EMJJTH5JkW110HEPbOrg3JSOy6v1wkiNdBxIcmjVvgspDV9Xbvt1dtAznnFUHcNKq0QUL+DuIRxeIOvQeKtg/uNSRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785862968; c=relaxed/simple;
-	bh=u9BAuDn+fCBGHoifYl9xBLOynLXU4OVQqLNUx5lzpEg=;
+	bh=bJwVYtX6VMG5jg33yA/JnMiVpTntK2ujHbvf8E5yeiw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I9ZJWFJTJ7rCaSgITN7bXZ/bJ3uRnEY3z3GZm5WQMlD9lntS3VGFGRVtG7/mFREJ6zPe81evAhtnfRKrKu2qolD5LFC09qkZnJzEVtbr0F4eVlIeNi9gD++CSRn05IfnowgWd78WIJaK37Ujvhanh/c8bnyRby3KV3B4PvY7A1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sEnawRUr; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version; b=ZbAgTEUpt1P82f/DHtVYg/Iu1fwRXk4So0EhSB1guUVvGKOgEnm0h9xL9OnlghfcqbaAwxumVadoN67XnBs1JouGUrzK/Rg9RrS0kut/O7l6W0n29JEdDfhbB7gVCCQOr1t/H1hn2GJEmfxTYdiRYLHPOMGl/zYkry4iRO7QqEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Brwh9kkg; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sEnawRUr"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84e04df8c46so43971b3a.2
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 10:02:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Brwh9kkg"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8453427d3f4so62746b3a.3
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 10:02:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785862952; x=1786467752; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785862949; x=1786467749; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=N3iaHl28vcuH673OrNEDIdxgQwmSMzDjZW2KtmuBGoA=;
-        b=sEnawRUrB8oZ0F1dV80+4VBIIsXtN0vzv/mhtxKWNKCALPwn296BVDVpYyZO5aklB0
-         gIGO/FWc9pCglsCijdIlDnkoVnnQZMqPyE6f5jYEUHS0g4ip0S0wbSiD9jbx2aMlHnnK
-         GMidYbJbFWv+JEkteWSGZ8iaZzMk7IcvmPnzKPW+S7bLWoY/ORuvwo4bPe25l5AHLVYb
-         VgtPfahTUTmEUIdWogXGZJ5XXtYxH/YfE8aOEcSsUS4aYYKXcpQGMXAFkPypI30uJlfS
-         YvqczRUFtTLIdZ8COR8N8wmkJ6VTlNBKmGExybuBU8yNuVxTjQ85/T1kpANusl2dsNNA
-         dGIA==
+        bh=PjXhQ++KYuF73VSHk2EwcfysiBNZpJoA29BX6fP0fQE=;
+        b=Brwh9kkg9hnuSpDWmudDLeMzYtMLFv6WQx9IqONL3JX0wjmMNzWbDRc1ayhd+5BPHd
+         lKVi6EIT3ZHnUBDAckFzNt/m6rpTra5fm73uDAqFuUtMlT3QHHOg/6U0b4MrXoqd41wi
+         pOnTU96IWz3qoOH7QziXZOg7iBSL68OldVs9XcS/fDzAC61m4O9xwWER5m49J3RuQIXB
+         eskpxXCImlFML0LFlN4nTNLhJv9SVWMRxr+F2I/YWEyjxUmdYC2LQuDxYSsZ9Ytsh4R4
+         CmO343gvlDGFfet6IHvVqJGlTQnQ5xQvr/exJoVzBAhdG3hetkHLGYOp9NjrRG0Ip+2+
+         VjVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785862952; x=1786467752;
+        d=1e100.net; s=20251104; t=1785862949; x=1786467749;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=N3iaHl28vcuH673OrNEDIdxgQwmSMzDjZW2KtmuBGoA=;
-        b=EVLdOTaG6gPbiKug5i0g3B9wzpeCUht8vvlA0GpAnwiTWKdyRQYy9J7ZNaY3HLQkwM
-         lbiLv7vcMcJ2UnsmOnz/NGiPbzbaeChd0dvooFgNhmhBv2yykofHHn97hpgxtzHdzDjO
-         e+/dLGFPDaX7dJeBo2aXO6R5cdcXrRvxSIOvmZYigBEHfA7dOWI3Tw2B5DD0mlWt4EvL
-         wD3FyVinbfdvIkehksFQGTyBV8DUWKpbO1DqkrfluabtCCCwnItBNBfxFwYFv6Sc04ZE
-         cTpG9Gvd4tQf/LNKy56kqfzOQptTiIZzRAr0B4K+21sjE1ii1z9q5qSUHwUVRDVQkeeW
-         T1rw==
-X-Gm-Message-State: AOJu0YxeRqZBtOmYKKKmfISeKSKcvYAOxo22ddrdrWZms6qrYaO/ck48
-	36mS5+z/YlyrlPZlGvZCfrsLEk+xb88kklrfFFh/6Gef3kCvLf8VlmB1n1xUllG/Tbs=
-X-Gm-Gg: AR+sD10rP0NjocAlE9MH8TV4tdtRPSBOjsuOr8d5oygdhxS0IDdKtml6e+uW0rPRAZ0
-	lCvhmjKLeUJ/eXPYUUUiQA02VAtG+MUHD8AIkOr+dejuexTL++VvhVYY5aqs1kDnn5g94kkWeNM
-	HKiu6WPM9EhVSb7fXUWwFHb2EyE36WiVtH/TEpc5kLDNcvW8kIMd5wr6oYLAg1BdBPPsLfZfCgC
-	cq6rlhSB4AgPLjs86IVTYear43hgYAI9GFP7qajK1dSfv6n1n7cg1Mxee7NECL6io4oit0fCUvn
-	YQ/nZ6/aR7ZM5lip8N7PFZbpY0+rjwRlNEvUY/guABT98SGtX+wwDyE0eZVoS8E0lZ/P5KCucrw
-	z0CP+eyhjDSnIqBqFNML+05qU98p2ZGo3ZCbQbPUHhCpZ/oaHOpYWkpSQnPomlOvi4kYBJpXUKu
-	XFt/+JrWKWWLNOxset/Epg1XSPQgeLWps73NeYtSBYyU01Sr/e7Xj3M1+X9nTRg0TBF12+VklJx
-	6F8XfYVOpA=
-X-Received: by 2002:a05:6a00:3687:b0:848:467d:293b with SMTP id d2e1a72fcca58-84f2dfb4e5bmr320699b3a.11.1785862951994;
-        Tue, 04 Aug 2026 10:02:31 -0700 (PDT)
+        bh=PjXhQ++KYuF73VSHk2EwcfysiBNZpJoA29BX6fP0fQE=;
+        b=bzAkkx7/qfPUX4/ubP78ckwK1dRVSzK/zYBzmM9z5vCoNToC8hC7I1ixSajqWn8qtQ
+         WvcVwisvw5XKFNSJy9hx6zqrnzWrVDaUrQKq0FiRIuIPn6VkitVah/1mp4o5GAwyKaJs
+         heJm8btNPFsM5/t/e8qVfFqvG7LV2z2YxGwk59TSYnV9Nmwd5hSC38AaQsIzju+1Z8by
+         9swtsZe50tzD7bDxnES/mzbDkJzEF/MXiytnHk2605ArcgtpoCaZ/x2yYL1pWv+qDXSg
+         rMSnyAKGFIjn8pNcBhQXUNdi8bE9hcLp9imyOjqIQVw2l2YYpZ+eeDPQgeSvaiCD7DJl
+         cN/Q==
+X-Gm-Message-State: AOJu0YzGg86RXs9YWXZbKp2fZWRTHFywzNFtfukWBDC8Obxt1ANtVUt/
+	b9F8Az3O0lV6ysp3uxcXq2FEQw0WD49dXhMNJLIneBzRKYaRBHrX6NE2GDOBOcQ/Mws=
+X-Gm-Gg: AR+sD11vEjWUU0HjfuNtcwM7i3tUHedu+54OsRsW1u1LkwiiiYc0X6k22A5zaCc8V5L
+	kTZauDN1AEW/6ZVQ0hGStfHoyfPK5cspMt7JhPRt4AdEao3//Jeq/kbWMrBHQosohM9Ybc6Zpgc
+	3DEbVx/KrQ/Qy0VXkm35+1eixvwebjH9atzkCbSkaAEtUAcJ5Dp3ZUDTsPYhNLiFLid1ujzdKOh
+	sHU0Zu3fuTz17k+70O815qLYquJu1q1eCPvL2dYTJ5S9rJSZaemWEsXhLiN3Zw8j+fJlhB1hADA
+	KqQVuQhiC++RUXBC6N6fxrAuzJ16ahEJqYN+xcospvL2E4zJ3CZk7nE3ieFLGnkPyC+JaNLk1R6
+	YyOzK+cWVcScixytzKLaiouJhYAg9s8ZAL3JYtNEARxPlGhM73AxBEG/cuIeKPGswGFFNOKbCmD
+	USHNQtxBlu1ZZDmG6/rZPbzuis0ufd7Cqwe06Z141vVSnGtj3leYNy+XY74O94EK+/8rNxeFnWX
+	THThlR8jU8=
+X-Received: by 2002:a05:6a00:4488:b0:848:56ff:6ce4 with SMTP id d2e1a72fcca58-84f2dfc533fmr369240b3a.5.1785862949252;
+        Tue, 04 Aug 2026 10:02:29 -0700 (PDT)
 Received: from powertower.localdomain ([64.180.35.234])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f2e4d3926sm55508b3a.28.2026.08.04.10.02.31
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f2e4d3926sm55508b3a.28.2026.08.04.10.02.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 10:02:31 -0700 (PDT)
+        Tue, 04 Aug 2026 10:02:28 -0700 (PDT)
 From: Mykola Lysenko <nickolay.lysenko@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -70,9 +70,9 @@ Cc: ast@kernel.org,
 	jolsa@kernel.org,
 	memxor@gmail.com,
 	nickolay.lysenko@gmail.com
-Subject: [RFC PATCH bpf-next v5 7/8] selftests/bpf: move shared build definitions into Makefile.buildvars
-Date: Tue,  4 Aug 2026 10:01:55 -0700
-Message-ID: <20260804170156.1709916-8-nickolay.lysenko@gmail.com>
+Subject: [RFC PATCH bpf-next v5 6/8] selftests/bpf: extract BPF skeleton generation into a helper script
+Date: Tue,  4 Aug 2026 10:01:54 -0700
+Message-ID: <20260804170156.1709916-7-nickolay.lysenko@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
 References: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
@@ -84,448 +84,243 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move the definitions that are not rules into Makefile.buildvars:
-output-tree layout, libbpf/bpftool binary locations,
-BPF_CFLAGS/COMMON_CFLAGS assembly, libelf/libpcap probes, endianness
-and clang feature detection, signing key paths, the permissive-mode
-knob with its skip_on_fail helper, and the libarena skeleton names.
-This is preparation for building each test runner instance in its own
-sub-make: the definitions become includable by more than one
-makefile. No rules or recipes are changed; definitions keep their
-order.
+The four skeleton generation recipes (regular, light, signed light and
+linked) are near-identical five-step pipelines - link via "bpftool gen
+object" three times, compare the second and third results as a
+regression test for bpftool's determinism, generate the skeleton (and
+possibly subskeleton), remove intermediates - duplicated with small
+variations inside DEFINE_TEST_RUNNER_RULES, where every line pays the
+double-expansion escaping tax.
 
-Two evaluation-time changes are called out in comments: the include
-sits after ../lib.mk, so CFLAGS is assembled by *prepending*
-COMMON_CFLAGS (keeping the include-search order identical to before,
-when the definitions preceded lib.mk's additions), and
-CLANG_SYS_INCLUDES becomes an immediate assignment (expanding
-get_sys_includes forks several shells; CLANG and CLANG_TARGET_ARCH
-are final by this point).
-
-BPF_GCC, TEST_KMODS, the VMLINUX_BTF block and the knobs the runner
-never reads (SKIP_*, submake_extras, TEST_KMOD_TARGETS) stay in the
-Makefile at their current positions - the first two are needed before
-lib.mk is included, where Makefile.buildvars cannot yet be, and reach
-the runners through the environment (a later patch exports them). The
-srctree fallback and PKG_CONFIG also stay:
-../../../build/Makefile.feature captures both at parse time and is
-parsed before Makefile.buildvars is included - with srctree still
-empty, the LLVM feature probe would fail silently and disable the
-jit-disassembler helpers. Makefile.buildvars keeps guarded copies of
-both for the runner sub-makes, which never parse Makefile.feature.
+Move the pipeline into gen_bpf_skel.sh; the differences between the
+four variants become the --lskel, --sign and --subskel flags. Signing
+takes the key and certificate from $PRIVATE_KEY and $VERIFICATION_CERT
+in the environment, like the bpftool binary comes from $BPFTOOL. The
+distinct linked/llinked intermediate infixes are kept but derived
+inside the script: tests listed in LSKELS_EXTRA generate both a
+.skel.h and a .lskel.h from the same .bpf.o, and distinct intermediate
+names are what keeps parallel builds from racing. Build-log messages
+stay in the recipes with the usual $(call msg,...) helpers; behavior
+is unchanged.
 
 Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Assisted-by: Claude:claude-fable-5 shellcheck
 Signed-off-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
 ---
- tools/testing/selftests/bpf/Makefile          | 143 +--------------
- .../testing/selftests/bpf/Makefile.buildvars  | 171 ++++++++++++++++++
- 2 files changed, 173 insertions(+), 141 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/Makefile.buildvars
+ tools/testing/selftests/bpf/Makefile        | 87 ++++++-------------
+ tools/testing/selftests/bpf/gen_bpf_skel.sh | 93 +++++++++++++++++++++
+ 2 files changed, 119 insertions(+), 61 deletions(-)
+ create mode 100755 tools/testing/selftests/bpf/gen_bpf_skel.sh
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index dbde2f6bd..58c567a22 100644
+index 0ee02eeac..dbde2f6bd 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -3,60 +3,15 @@ include ../../../build/Build.include
- include ../../../scripts/Makefile.arch
- include ../../../scripts/Makefile.include
- 
--CXX ?= $(CROSS_COMPILE)g++
--OBJCOPY ?= $(CROSS_COMPILE)objcopy
+@@ -576,8 +576,6 @@ HEADERS_FOR_BPF_OBJS := $(wildcard $(BPFDIR)/*.bpf.h)		\
+ # $1 - test runner base binary name (e.g., test_progs)
+ # $2 - test runner extra "flavor" (e.g., no_alu32, cpuv4, bpf_gcc, etc)
+ define DEFINE_TEST_RUNNER
 -
--TOOLSDIR := $(abspath ../../..)
--LIBDIR := $(TOOLSDIR)/lib
--BPFDIR := $(LIBDIR)/bpf
--TOOLSINCDIR := $(TOOLSDIR)/include
--TOOLSARCHINCDIR := $(TOOLSDIR)/arch/$(SRCARCH)/include
--BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
--APIDIR := $(TOOLSINCDIR)/uapi
--ifneq ($(O),)
--GENDIR := $(O)/include/generated
--else
--GENDIR := $(abspath ../../../../include/generated)
--endif
--GENHDR := $(GENDIR)/autoconf.h
- PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
+-LSKEL_SIGN := -S -k $(PRIVATE_KEY) -i $(VERIFICATION_CERT)
+ TRUNNER_OUTPUT := $(OUTPUT)$(if $2,/)$2
+ TRUNNER_BINARY := $1$(if $2,-)$2
+ TRUNNER_TEST_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.test.o,	\
+@@ -637,70 +635,37 @@ $(TRUNNER_BPF_OBJS): $(TRUNNER_OUTPUT)/%.bpf.o:				\
+ 					  $$($$<-CFLAGS)		\
+ 					  $$($$<-$2-CFLAGS),$(TRUNNER_BINARY))
  
--ifneq ($(wildcard $(GENHDR)),)
--  GENFLAGS := -DHAVE_GENHDR
--endif
+-$(TRUNNER_BPF_SKELS): %.skel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$(Q)$(if $(PERMISSIVE),if [ ! -f $$< ]; then			\
+-		$$(RM) $$@ $$(@:.skel.h=.subskel.h);			\
+-		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-		exit 0;							\
+-	fi;)								\
+-	printf '  %-12s %s\n' 'GEN-SKEL' '[$(TRUNNER_BINARY)] $$(notdir $$@)' 1>&2; \
+-	$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$< &&		\
+-	$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o) && \
+-	$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o) && \
+-	diff $$(<:.o=.linked2.o) $$(<:.o=.linked3.o) &&		\
+-	$$(BPFTOOL) gen skeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.bpf.o=)) > $$@ && \
+-	$$(BPFTOOL) gen subskeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.bpf.o=)) > $$(@:.skel.h=.subskel.h) $$(call skip_on_fail,SKEL,$$(@:.skel.h=.subskel.h)) && \
+-	rm -f $$(<:.o=.linked1.o) $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
 -
- BPF_GCC		?= $(shell command -v bpf-gcc;)
--ifdef ASAN
--SAN_CFLAGS 	?= -fsanitize=address -fno-omit-frame-pointer
--else
--SAN_CFLAGS	?=
--endif
--SAN_LDFLAGS	?= $(SAN_CFLAGS)
--RELEASE		?=
--OPT_FLAGS	?= $(if $(RELEASE),-O2,-O0)
+-$(TRUNNER_BPF_LSKELS): %.lskel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$(Q)$(if $(PERMISSIVE),if [ ! -f $$< ]; then			\
+-		$$(RM) $$@;						\
+-		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-		exit 0;							\
+-	fi;)								\
+-	printf '  %-12s %s\n' 'GEN-SKEL' '[$(TRUNNER_BINARY)] $$(notdir $$@)' 1>&2; \
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked1.o) $$< &&		\
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked2.o) $$(<:.o=.llinked1.o) && \
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked3.o) $$(<:.o=.llinked2.o) && \
+-	diff $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o) &&		\
+-	$$(BPFTOOL) gen skeleton -L $$(<:.o=.llinked3.o) name $$(notdir $$(<:.bpf.o=_lskel)) > $$@ $$(call skip_on_fail,SKEL) && \
+-	rm -f $$(<:.o=.llinked1.o) $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o)
 -
--LIBELF_CFLAGS	:= $(shell $(PKG_CONFIG) libelf --cflags 2>/dev/null)
--LIBELF_LIBS	:= $(shell $(PKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
- 
- SKIP_DOCS	?=
- SKIP_LLVM	?=
- SKIP_LIBBFD	?=
- SKIP_CRYPTO	?=
- 
--# When BPF_STRICT_BUILD is 1, any BPF object, skeleton, test object, or
--# benchmark compilation failure is fatal. Set to 0 to tolerate failures
--# and continue building the remaining tests.
--BPF_STRICT_BUILD ?= 1
--PERMISSIVE := $(filter 0,$(BPF_STRICT_BUILD))
--
--# Permissive-mode recipe suffix: on failure, remove the target, emit a
--# SKIP marker and report success so the rest of the build continues.
--# $(1) - SKIP tag (BPF, TEST, BENCH, SKEL, LINK, ...)
--# $(2) - optional extra files to remove alongside the target
--# $(3) - optional note appended to the SKIP message
--skip_on_fail = $(if $(PERMISSIVE),|| { $(RM) $@ $(2); \
--	printf '  %-12s %s\n' 'SKIP-$(1)' '$(notdir $@)$(if $(3), $(3))' 1>&2; })
--
- ifeq ($(srctree),)
- srctree := $(patsubst %/,%,$(dir $(CURDIR)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
-@@ -64,39 +19,15 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
- 
--COMMON_CFLAGS = -g $(OPT_FLAGS) -rdynamic -std=gnu11				\
--	  -Wall -Werror -fno-omit-frame-pointer				\
--	  -Wno-unused-but-set-variable					\
--	  $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)			\
--	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
--	  -I$(TOOLSINCDIR) -I$(TOOLSARCHINCDIR) -I$(APIDIR) -I$(OUTPUT)	\
--	  -I$(CURDIR)/libarena/include
--LDFLAGS += $(SAN_LDFLAGS)
--LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
--
--PCAP_CFLAGS	:= $(shell $(PKG_CONFIG) --cflags libpcap 2>/dev/null && echo "-DTRAFFIC_MONITOR=1")
--PCAP_LIBS	:= $(shell $(PKG_CONFIG) --libs libpcap 2>/dev/null)
--LDLIBS += $(PCAP_LIBS)
--CFLAGS += $(COMMON_CFLAGS) $(PCAP_CFLAGS)
--
- # Some utility functions use LLVM libraries
- jit_disasm_helpers.c-CFLAGS = $(LLVM_CFLAGS)
- 
--ifneq ($(LLVM),)
--# Silence some warnings when compiled with clang
--CFLAGS += -Wno-unused-command-line-argument
--endif
- 
- # Check whether bpf cpu=v4 is supported or not by clang
- ifneq ($(shell $(CLANG) --target=bpf -mcpu=help 2>&1 | grep 'v4'),)
- CLANG_CPUV4 := 1
- endif
- 
--# Check whether clang supports BPF address sanitizer (requires LLVM 22+)
--CLANG_HAS_ARENA_ASAN := $(shell echo 'int x;' | \
--	$(CLANG) --target=bpf -fsanitize=kernel-address \
--	-mllvm -asan-shadow-addr-space=1 \
--	-x c -c - -o /dev/null 2>/dev/null && echo 1)
- 
- # Order correspond to 'make run_tests' order
- TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_progs \
-@@ -220,21 +151,8 @@ ifeq ($(feature-llvm),1)
- endif
- endif
- 
--SCRATCH_DIR := $(OUTPUT)/tools
--BUILD_DIR := $(SCRATCH_DIR)/build
--INCLUDE_DIR := $(SCRATCH_DIR)/include
--BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
--ifneq ($(CROSS_COMPILE),)
--HOST_BUILD_DIR		:= $(BUILD_DIR)/host
--HOST_SCRATCH_DIR	:= $(OUTPUT)/host-tools
--HOST_INCLUDE_DIR	:= $(HOST_SCRATCH_DIR)/include
--else
--HOST_BUILD_DIR		:= $(BUILD_DIR)
--HOST_SCRATCH_DIR	:= $(SCRATCH_DIR)
--HOST_INCLUDE_DIR	:= $(INCLUDE_DIR)
--endif
--HOST_BPFOBJ := $(HOST_BUILD_DIR)/libbpf/libbpf.a
--RESOLVE_BTFIDS := $(HOST_BUILD_DIR)/resolve_btfids/resolve_btfids
-+include Makefile.buildvars
+-$(TRUNNER_BPF_LSKELS_SIGNED): %.lskel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$(Q)$(if $(PERMISSIVE),if [ ! -f $$< ]; then			\
+-		$$(RM) $$@;						\
+-		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-		exit 0;							\
+-	fi;)								\
+-	printf '  %-12s %s\n' 'GEN-SKEL' '[$(TRUNNER_BINARY) (signed)] $$(notdir $$@)' 1>&2; \
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked1.o) $$< &&		\
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked2.o) $$(<:.o=.llinked1.o) && \
+-	$$(BPFTOOL) gen object $$(<:.o=.llinked3.o) $$(<:.o=.llinked2.o) && \
+-	diff $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o) &&		\
+-	$$(BPFTOOL) gen skeleton $(LSKEL_SIGN) $$(<:.o=.llinked3.o) name $$(notdir $$(<:.bpf.o=_lskel)) > $$@ $$(call skip_on_fail,SKEL) && \
+-	rm -f $$(<:.o=.llinked1.o) $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o)
++$(TRUNNER_BPF_SKELS): %.skel.h: %.bpf.o $(BPFTOOL) gen_bpf_skel.sh | $(TRUNNER_OUTPUT)
++	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
++	$(Q)BPFTOOL=$$(BPFTOOL) ./gen_bpf_skel.sh				\
++		--name $$(notdir $$(<:.bpf.o=))					\
++		--skel $$@ --subskel $$(@:.skel.h=.subskel.h) $$< $$(call skip_on_fail,SKEL,$$(@:.skel.h=.subskel.h))
 +
- VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)				\
- 		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
- 		     ../../../../vmlinux				\
-@@ -324,16 +242,6 @@ $(TEST_KMOD_TARGETS): $(addprefix test_kmods/,$(TEST_KMODS))
- 	$(Q)$(if $(PERMISSIVE),if [ -f test_kmods/$(@F) ]; then )cp test_kmods/$(@F) $@$(if $(PERMISSIVE),; fi)
++$(TRUNNER_BPF_LSKELS): %.lskel.h: %.bpf.o $(BPFTOOL) gen_bpf_skel.sh | $(TRUNNER_OUTPUT)
++	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
++	$(Q)BPFTOOL=$$(BPFTOOL) ./gen_bpf_skel.sh				\
++		--name $$(notdir $$(<:.bpf.o=_lskel)) --lskel			\
++		--skel $$@ $$< $$(call skip_on_fail,SKEL)
++
++$(TRUNNER_BPF_LSKELS_SIGNED): %.lskel.h: %.bpf.o $(BPFTOOL) gen_bpf_skel.sh | $(TRUNNER_OUTPUT)
++	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY) (signed),$$@)
++	$(Q)BPFTOOL=$$(BPFTOOL) PRIVATE_KEY=$(PRIVATE_KEY)			\
++		VERIFICATION_CERT=$(VERIFICATION_CERT)				\
++		./gen_bpf_skel.sh --sign					\
++		--name $$(notdir $$(<:.bpf.o=_lskel))				\
++		--skel $$@ $$< $$(call skip_on_fail,SKEL)
  
+ $(LINKED_BPF_OBJS): %: $(TRUNNER_OUTPUT)/%
  
--DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
--ifneq ($(CROSS_COMPILE),)
--CROSS_BPFTOOL := $(SCRATCH_DIR)/sbin/bpftool
--TRUNNER_BPFTOOL := $(CROSS_BPFTOOL)
--USE_BOOTSTRAP := ""
--else
--TRUNNER_BPFTOOL := $(DEFAULT_BPFTOOL)
--USE_BOOTSTRAP := "bootstrap/"
--endif
--
- $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOBJ)
+ # .SECONDEXPANSION here allows to correctly expand %-deps variables as prerequisites
+ .SECONDEXPANSION:
+-$(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_OUTPUT)/%: $$$$(%-deps) $(BPFTOOL) | $(TRUNNER_OUTPUT)
+-	$(Q)$(if $(PERMISSIVE),for f in $$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps)); do \
+-		if [ ! -f $$$$f ]; then						\
+-			$$(RM) $$@ $$(@:.skel.h=.subskel.h);		\
+-			printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
+-			exit 0;							\
+-		fi;								\
+-	done;)									\
+-	printf '  %-12s %s\n' 'LINK-BPF' '[$(TRUNNER_BINARY)] $$(notdir $$(@:.skel.h=.bpf.o))' 1>&2; \
+-	$$(BPFTOOL) gen object $$(@:.skel.h=.linked1.o) $$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps)) && \
+-	$$(BPFTOOL) gen object $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked1.o) && \
+-	$$(BPFTOOL) gen object $$(@:.skel.h=.linked3.o) $$(@:.skel.h=.linked2.o) && \
+-	diff $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked3.o) &&	\
+-	printf '  %-12s %s\n' 'GEN-SKEL' '[$(TRUNNER_BINARY)] $$(notdir $$@)' 1>&2 && \
+-	$$(BPFTOOL) gen skeleton $$(@:.skel.h=.linked3.o) name $$(notdir $$(@:.skel.h=)) > $$@ && \
+-	$$(BPFTOOL) gen subskeleton $$(@:.skel.h=.linked3.o) name $$(notdir $$(@:.skel.h=)) > $$(@:.skel.h=.subskel.h) $$(call skip_on_fail,SKEL,$$(@:.skel.h=.subskel.h)) &&									\
+-	rm -f $$(@:.skel.h=.linked1.o) $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked3.o)
++$(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_OUTPUT)/%: $$$$(%-deps) $(BPFTOOL) gen_bpf_skel.sh | $(TRUNNER_OUTPUT)
++	$$(call msg,LINK-BPF,$(TRUNNER_BINARY),$$(@:.skel.h=.bpf.o))
++	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
++	$(Q)BPFTOOL=$$(BPFTOOL) ./gen_bpf_skel.sh				\
++		--name $$(notdir $$(@:.skel.h=))				\
++		--skel $$@ --subskel $$(@:.skel.h=.subskel.h)			\
++		$$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps)) $$(call skip_on_fail,SKEL,$$(@:.skel.h=.subskel.h))
  
- TESTING_HELPERS	:= $(OUTPUT)/testing_helpers.o
-@@ -354,7 +262,6 @@ $(OUTPUT)/test_maps: $(TESTING_HELPERS)
- $(OUTPUT)/test_verifier: $(TESTING_HELPERS) $(CAP_HELPERS) $(UNPRIV_HELPERS)
- $(OUTPUT)/xsk.o: $(BPFOBJ)
- 
--BPFTOOL ?= $(DEFAULT_BPFTOOL)
- $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
- 		    $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
- 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)			       \
-@@ -447,45 +354,6 @@ $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/resolve_btfids	\
- 		HOSTPKG_CONFIG='$(PKG_CONFIG)' \
- 		OUTPUT=$(HOST_BUILD_DIR)/resolve_btfids/ BPFOBJ=$(HOST_BPFOBJ)
- 
--# Get Clang's default includes on this system, as opposed to those seen by
--# '--target=bpf'. This fixes "missing" files on some architectures/distros,
--# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
--#
--# Use '-idirafter': Don't interfere with include mechanics except where the
--# build would have failed anyways.
--define get_sys_includes
--$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
--	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
--$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}') \
--$(shell $(1) $(2) -dM -E - </dev/null | grep '__loongarch_grlen ' | awk '{printf("-D__BITS_PER_LONG=%d", $$3)}') \
--$(shell $(1) $(2) -dM -E - </dev/null | grep -E 'MIPS(EL|EB)|_MIPS_SZ(PTR|LONG) |_MIPS_SIM |_ABI(O32|N32|64) ' | awk '{printf("-D%s=%s ", $$2, $$3)}')
--endef
--
--# Determine target endianness.
--IS_LITTLE_ENDIAN := $(shell $(CC) -dM -E - </dev/null | \
--			grep 'define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__')
--MENDIAN:=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
--BPF_TARGET_ENDIAN:=$(if $(IS_LITTLE_ENDIAN),--target=bpfel,--target=bpfeb)
--
--ifneq ($(CROSS_COMPILE),)
--CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
--endif
--
--CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
--BPF_CFLAGS = -g -Wall -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)	\
--	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
--	     -I$(CURDIR)/libarena/include				\
--	     -I$(abspath $(OUTPUT)/../usr/include)			\
--	     -std=gnu11		 					\
--	     -fno-strict-aliasing 					\
--	     -Wno-microsoft-anon-tag					\
--	     -fms-extensions						\
--	     -Wno-compare-distinct-pointer-types			\
--	     -Wno-initializer-overrides					\
--	     #
--# TODO: enable me -Wsign-compare
--
--CLANG_CFLAGS = $(CLANG_SYS_INCLUDES)
- 
- $(OUTPUT)/flow_dissector_load: flow_dissector_load.h
- 
-@@ -760,10 +628,6 @@ $(OUTPUT)/$(TRUNNER_BINARY): $(if $(filter test_progs%,$1),$(if $(PERMISSIVE),$$
- 
- endef
- 
--VERIFY_SIG_SETUP := $(CURDIR)/verify_sig_setup.sh
--VERIFY_SIG_HDR := verification_cert.h
--VERIFICATION_CERT   := $(BUILD_DIR)/signing_key.der
--PRIVATE_KEY := $(BUILD_DIR)/signing_key.pem
- 
- # One genkey run produces both files. A plain two-target rule is not
- # grouped - under -j make would run genkey twice concurrently and the
-@@ -798,14 +662,11 @@ LIBARENA_BPF_DEPS := $(wildcard libarena/Makefile		\
- 				 libarena/selftests/*		\
- 				 libarena/*.bpf.o)
- 
--LIBARENA_SKEL := libarena/libarena.skel.h
- 
- $(LIBARENA_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
- 	+$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS)
- 
- ifneq ($(CLANG_HAS_ARENA_ASAN),)
--LIBARENA_ASAN_SKEL := libarena/libarena_asan.skel.h
--CFLAGS += -DHAS_BPF_ARENA_ASAN
- 
- $(LIBARENA_ASAN_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
- 	+$(MAKE) -C libarena libarena_asan.skel.h $(LIBARENA_MAKE_ARGS)
-diff --git a/tools/testing/selftests/bpf/Makefile.buildvars b/tools/testing/selftests/bpf/Makefile.buildvars
-new file mode 100644
-index 000000000..044e0d73b
+ # When the compiler generates a %.d file, only skel basenames (not
+ # full paths) are specified as prerequisites for corresponding %.o
+diff --git a/tools/testing/selftests/bpf/gen_bpf_skel.sh b/tools/testing/selftests/bpf/gen_bpf_skel.sh
+new file mode 100755
+index 000000000..e234f3a57
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/Makefile.buildvars
-@@ -0,0 +1,171 @@
++++ b/tools/testing/selftests/bpf/gen_bpf_skel.sh
+@@ -0,0 +1,93 @@
++#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Shared toolchain, path and flag definitions for the BPF selftests
-+# build, included by both Makefile and Makefile.runner. Definitions
-+# follow the order they had in the Makefile before the split.
-+
-+CXX ?= $(CROSS_COMPILE)g++
-+OBJCOPY ?= $(CROSS_COMPILE)objcopy
-+
-+TOOLSDIR := $(abspath ../../..)
-+LIBDIR := $(TOOLSDIR)/lib
-+BPFDIR := $(LIBDIR)/bpf
-+TOOLSINCDIR := $(TOOLSDIR)/include
-+TOOLSARCHINCDIR := $(TOOLSDIR)/arch/$(SRCARCH)/include
-+BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
-+APIDIR := $(TOOLSINCDIR)/uapi
-+ifneq ($(O),)
-+GENDIR := $(O)/include/generated
-+else
-+GENDIR := $(abspath ../../../../include/generated)
-+endif
-+GENHDR := $(GENDIR)/autoconf.h
-+PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
-+
-+ifneq ($(wildcard $(GENHDR)),)
-+  GENFLAGS := -DHAVE_GENHDR
-+endif
-+
-+ifdef ASAN
-+SAN_CFLAGS 	?= -fsanitize=address -fno-omit-frame-pointer
-+else
-+SAN_CFLAGS	?=
-+endif
-+SAN_LDFLAGS	?= $(SAN_CFLAGS)
-+RELEASE		?=
-+OPT_FLAGS	?= $(if $(RELEASE),-O2,-O0)
-+
-+LIBELF_CFLAGS	:= $(shell $(PKG_CONFIG) libelf --cflags 2>/dev/null)
-+LIBELF_LIBS	:= $(shell $(PKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
-+
-+# When BPF_STRICT_BUILD is 1, any BPF object, skeleton, test object, or
-+# benchmark compilation failure is fatal. Set to 0 to tolerate failures
-+# and continue building the remaining tests.
-+BPF_STRICT_BUILD ?= 1
-+PERMISSIVE := $(filter 0,$(BPF_STRICT_BUILD))
-+
-+# Permissive-mode recipe suffix: on failure, remove the target, emit a
-+# SKIP marker and report success so the rest of the build continues.
-+# $(1) - SKIP tag (BPF, TEST, BENCH, SKEL, LINK, ...)
-+# $(2) - optional extra files to remove alongside the target
-+# $(3) - optional note appended to the SKIP message
-+skip_on_fail = $(if $(PERMISSIVE),|| { $(RM) $@ $(2); \
-+	printf '  %-12s %s\n' 'SKIP-$(1)' '$(notdir $@)$(if $(3), $(3))' 1>&2; })
-+
-+ifeq ($(srctree),)
-+srctree := $(patsubst %/,%,$(dir $(CURDIR)))
-+srctree := $(patsubst %/,%,$(dir $(srctree)))
-+srctree := $(patsubst %/,%,$(dir $(srctree)))
-+srctree := $(patsubst %/,%,$(dir $(srctree)))
-+endif
-+
-+COMMON_CFLAGS = -g $(OPT_FLAGS) -rdynamic -std=gnu11				\
-+	  -Wall -Werror -fno-omit-frame-pointer				\
-+	  -Wno-unused-but-set-variable					\
-+	  $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)			\
-+	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
-+	  -I$(TOOLSINCDIR) -I$(TOOLSARCHINCDIR) -I$(APIDIR) -I$(OUTPUT)	\
-+	  -I$(CURDIR)/libarena/include
-+LDFLAGS += $(SAN_LDFLAGS)
-+LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
-+
-+PCAP_CFLAGS	:= $(shell $(PKG_CONFIG) --cflags libpcap 2>/dev/null && echo "-DTRAFFIC_MONITOR=1")
-+PCAP_LIBS	:= $(shell $(PKG_CONFIG) --libs libpcap 2>/dev/null)
-+LDLIBS += $(PCAP_LIBS)
-+# Unlike the pre-split Makefile, this file is included after ../lib.mk
-+# (top level) or without it (runner), so COMMON_CFLAGS is prepended to
-+# preserve the original include-search order.
-+LIB_MK_CFLAGS := $(CFLAGS)
-+CFLAGS = $(COMMON_CFLAGS) $(PCAP_CFLAGS) $(LIB_MK_CFLAGS)
-+
-+ifneq ($(LLVM),)
-+# Silence some warnings when compiled with clang
-+CFLAGS += -Wno-unused-command-line-argument
-+endif
-+
-+# Check whether clang supports BPF address sanitizer (requires LLVM 22+)
-+CLANG_HAS_ARENA_ASAN := $(shell echo 'int x;' | \
-+	$(CLANG) --target=bpf -fsanitize=kernel-address \
-+	-mllvm -asan-shadow-addr-space=1 \
-+	-x c -c - -o /dev/null 2>/dev/null && echo 1)
-+
-+SCRATCH_DIR := $(OUTPUT)/tools
-+BUILD_DIR := $(SCRATCH_DIR)/build
-+INCLUDE_DIR := $(SCRATCH_DIR)/include
-+BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
-+ifneq ($(CROSS_COMPILE),)
-+HOST_BUILD_DIR		:= $(BUILD_DIR)/host
-+HOST_SCRATCH_DIR	:= $(OUTPUT)/host-tools
-+HOST_INCLUDE_DIR	:= $(HOST_SCRATCH_DIR)/include
-+else
-+HOST_BUILD_DIR		:= $(BUILD_DIR)
-+HOST_SCRATCH_DIR	:= $(SCRATCH_DIR)
-+HOST_INCLUDE_DIR	:= $(INCLUDE_DIR)
-+endif
-+HOST_BPFOBJ := $(HOST_BUILD_DIR)/libbpf/libbpf.a
-+RESOLVE_BTFIDS := $(HOST_BUILD_DIR)/resolve_btfids/resolve_btfids
-+
-+DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
-+ifneq ($(CROSS_COMPILE),)
-+CROSS_BPFTOOL := $(SCRATCH_DIR)/sbin/bpftool
-+TRUNNER_BPFTOOL := $(CROSS_BPFTOOL)
-+USE_BOOTSTRAP := ""
-+else
-+TRUNNER_BPFTOOL := $(DEFAULT_BPFTOOL)
-+USE_BOOTSTRAP := "bootstrap/"
-+endif
-+
-+BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+
-+# Get Clang's default includes on this system, as opposed to those seen by
-+# '--target=bpf'. This fixes "missing" files on some architectures/distros,
-+# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
++# Link BPF object file(s) with "bpftool gen object" and generate a
++# skeleton (or light skeleton) header from the result.
 +#
-+# Use '-idirafter': Don't interfere with include mechanics except where the
-+# build would have failed anyways.
-+define get_sys_includes
-+$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
-+	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
-+$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}') \
-+$(shell $(1) $(2) -dM -E - </dev/null | grep '__loongarch_grlen ' | awk '{printf("-D__BITS_PER_LONG=%d", $$3)}') \
-+$(shell $(1) $(2) -dM -E - </dev/null | grep -E 'MIPS(EL|EB)|_MIPS_SZ(PTR|LONG) |_MIPS_SIM |_ABI(O32|N32|64) ' | awk '{printf("-D%s=%s ", $$2, $$3)}')
-+endef
++# Usage:
++#   BPFTOOL=<bpftool> gen_bpf_skel.sh --name NAME --skel OUT [options] OBJ...
++#
++#   --name NAME       skeleton object name ("name NAME" for bpftool)
++#   --skel OUT        output header ("foo.skel.h" or "foo.lskel.h")
++#   --subskel OUT     also generate a subskeleton header into OUT
++#   --lskel           generate a light skeleton (bpftool gen skeleton -L)
++#   --sign            sign the (light) skeleton, with the key and
++#                     certificate taken from $PRIVATE_KEY and
++#                     $VERIFICATION_CERT
++#
++# The inputs are linked three times and the 2nd and 3rd results
++# compared, as a regression test for the determinism of "bpftool gen
++# object".
++#
++# Intermediate files carry a "linked" infix - "llinked" for light or
++# signed skeletons, so generating a .skel.h and a .lskel.h from the
++# same .bpf.o in parallel never races on the intermediates.
++#
++# The bpftool binary is taken from $BPFTOOL (default: bpftool from PATH).
++# On failure all outputs and intermediates are removed and the script
++# exits non-zero; permissive-mode skipping is the caller's business
++# (see skip_on_fail in Makefile.buildvars).
 +
-+# Determine target endianness.
-+IS_LITTLE_ENDIAN := $(shell $(CC) -dM -E - </dev/null | \
-+			grep 'define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__')
-+MENDIAN:=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
-+BPF_TARGET_ENDIAN:=$(if $(IS_LITTLE_ENDIAN),--target=bpfel,--target=bpfeb)
++set -u
 +
-+ifneq ($(CROSS_COMPILE),)
-+CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
-+endif
++bpftool=${BPFTOOL:-bpftool}
++name='' skel='' subskel=''
++lskel=0 sign=0
 +
-+# Immediate on purpose: expanding get_sys_includes forks several shells.
-+CLANG_SYS_INCLUDES := $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
-+BPF_CFLAGS = -g -Wall -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)	\
-+	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
-+	     -I$(CURDIR)/libarena/include				\
-+	     -I$(abspath $(OUTPUT)/../usr/include)			\
-+	     -std=gnu11		 					\
-+	     -fno-strict-aliasing 					\
-+	     -Wno-microsoft-anon-tag					\
-+	     -fms-extensions						\
-+	     -Wno-compare-distinct-pointer-types			\
-+	     -Wno-initializer-overrides					\
-+	     #
-+# TODO: enable me -Wsign-compare
++while [ $# -gt 0 ]; do
++	case "$1" in
++	--name)		name=$2; shift 2 ;;
++	--skel)		skel=$2; shift 2 ;;
++	--subskel)	subskel=$2; shift 2 ;;
++	--lskel)	lskel=1; shift ;;
++	--sign)		sign=1; shift ;;
++	--)		shift; break ;;
++	-*)		echo "$0: unknown option: $1" >&2; exit 1 ;;
++	*)		break ;;
++	esac
++done
 +
-+CLANG_CFLAGS = $(CLANG_SYS_INCLUDES)
++if [ -z "$name" ] || [ -z "$skel" ] || [ $# -eq 0 ]; then
++	echo "usage: $0 --name NAME --skel OUT [options] OBJ..." >&2
++	exit 1
++fi
 +
-+VERIFY_SIG_SETUP := $(CURDIR)/verify_sig_setup.sh
-+VERIFY_SIG_HDR := verification_cert.h
-+VERIFICATION_CERT   := $(BUILD_DIR)/signing_key.der
-+PRIVATE_KEY := $(BUILD_DIR)/signing_key.pem
++infix=linked
++if [ "$lskel" -eq 1 ] || [ "$sign" -eq 1 ]; then
++	infix=llinked
++fi
 +
-+LIBARENA_SKEL := libarena/libarena.skel.h
++base=${skel%.skel.h}
++base=${base%.lskel.h}
++t1=$base.${infix}1.o
++t2=$base.${infix}2.o
++t3=$base.${infix}3.o
 +
-+ifneq ($(CLANG_HAS_ARENA_ASAN),)
-+LIBARENA_ASAN_SKEL := libarena/libarena_asan.skel.h
-+CFLAGS += -DHAS_BPF_ARENA_ASAN
-+endif
++fail() {
++	rm -f "$skel" ${subskel:+"$subskel"} "$t1" "$t2" "$t3"
++	exit 1
++}
++
++"$bpftool" gen object "$t1" "$@" || fail
++"$bpftool" gen object "$t2" "$t1" || fail
++"$bpftool" gen object "$t3" "$t2" || fail
++if ! cmp -s "$t2" "$t3"; then
++	echo "$0: bpftool gen object is not deterministic for $skel" >&2
++	fail
++fi
++
++args=()
++if [ "$sign" -eq 1 ]; then
++	args+=(-S -k "${PRIVATE_KEY:?}" -i "${VERIFICATION_CERT:?}")
++fi
++if [ "$lskel" -eq 1 ]; then
++	args+=(-L)
++fi
++"$bpftool" gen skeleton ${args[@]+"${args[@]}"} "$t3" name "$name" > "$skel" || fail
++
++if [ -n "$subskel" ]; then
++	"$bpftool" gen subskeleton "$t3" name "$name" > "$subskel" || fail
++fi
++
++rm -f "$t1" "$t2" "$t3"
++exit 0
 -- 
 2.43.0
 
