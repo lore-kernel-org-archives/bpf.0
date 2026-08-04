@@ -1,314 +1,167 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA1E42A170
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2230F481252
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785876157; cv=pass; b=Sy4kiYp/O8LpTheuS2uv0HhMETOsPlVhHrlmTSeZ9GNvJFQuJowxgyCOehy+ytPVma5prlN2MF+svvmoH3ztU+ba0URs3Y+7lOWM+6llAWTKZvzX8J72kW1PypmzqWH4vd/CoL3QycUddaIhqBZ+qQmqa+UP/uaEuNo9hPPqetg=
+	t=1785876209; cv=pass; b=W24G+8r6m0hGPN4ic0hpevycAAslgTIKO3nLZVpvRmbQfnjr9K4fONGTJI59KBLfrdAG/nkZlJmsLCd3+YElzgphIVhtNARG6OX9WdPM/8cZZSBSxE4E85pzQ6zy1kfbmAESyTVdOC92iHdYm2Zp00K0zy1wIBwp55ETCyphHmU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785876157; c=relaxed/simple;
-	bh=M8JSdwFyeJLLhtl/v2KQpFuVSgRMre7S8ava1XsB94s=;
+	s=arc-20240116; t=1785876209; c=relaxed/simple;
+	bh=BRgrRn1zPowjhwOLiaZSOQPLt15cU3xIhb+EGJfhcQU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Al6RafRoM6gdlaTZaNxH+UDIBi/Jx4PU6seBMnKdu9JtfnMbX6U0fmJmRzOV+Mfr2iMxw7lpci1Pp59b8calwNHb/9PsX7rL8e5QCt2895iKvBBsL7/AoEmUVrj6ErkyM+ljrz03M4zfW3aEEo3wvqzXaCqcrB/n+HRMcFciZCY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iA8F0gBv; arc=pass smtp.client-ip=209.85.218.52
+	 To:Cc:Content-Type; b=ebGDup4BV5Hf/gItsQP0OlINtmvRq2OA9peQ0P/P9VR35AG3ikAwlK0c1fkxLK/4rms7NDAT4gaSEUg5mdfy2WMCkw+pujMEt56mIzzpZX0Bzbg2LZ7fMHSKrbC48s31PCVNLAXgkLPnYiJ80kMHWk3/i6kRVyWqihkpap6pGG4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e03dwv1l; arc=pass smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iA8F0gBv"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c1f7666a90bso48638066b.3
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 13:42:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785876153; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e03dwv1l"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c1f7666a90bso48750366b.3
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 13:43:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785876205; cv=none;
         d=google.com; s=arc-20260327;
-        b=V0x9JAWvTsrqWY9fXGPMZ2J+dCAtoyVKmQIeu5f2EKm4MV1BfLEb0I4nqxjY4fVhOq
-         MbgKfEoR18NmnEhYlb3vi70iRu4CK4yO3xxtE+1AxaABppz+6ciNluLKO/OokfCF7vsB
-         7vyP4SBdKdbXaKNpprYbkeMbKuyWgp1TdXu0JEJIsA0VWfl0Iv5PR8RLRsEVTlzx0A8i
-         M8qQm5zk3ihHADYechzqMzbSnUHFFhAaa55PM+9hcG7yeAcldtFl4ApaDmjjH9QnSqm1
-         Wn/snEzgmrmsCnQC4CqtXTO5J3AXN+GqbQGu2ob+TMVMrVz7zmsos53skkhBnQ9MxyJv
-         Uj4w==
+        b=BNZJeq/QrbttHuKhhu16KZIfVkq+P25gos0XqNjENNVJMp+UT0yRQjaXsmRzWHKpQU
+         cBaBEr1rCw/uZzpI5+9yTAZvAKB8bDTY6X3kohKtJ3R2v6tY/fh3qm2zFUPJ/c2OQ4mb
+         xFHvVzqYXHZgeCnIMWuiy3Vb6vJjOZ1U29VxnjJqAG9fO2Bk4N7sTzBPjRfS9ZYWxRal
+         x0CFR21iIkWkqHtE0zVJ82QjWkm+IvRb5xrhBXdANDAAK9E5iC0zGMkTsy0XwSDPcCTM
+         JxvVyr8okFXqYq893wvkjQq6Br374HWb9ck8DsN77Nys+1yqo7t9f5T5shk6OvbiPsLc
+         grHg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=QrkVrJzcta5RWUoKQyxrWJV7uC2Mp2UIFQinS79ZjUI=;
-        fh=MfdxnbopznZxnCxWc4D4ptEL7Fpnl7hCH1/NSg1SbZw=;
-        b=GUQFkhGHt5LDSOpqCaRBCGl7L9uLZ2U/3j0xKavqGlT7uQWKGrz6+fIbxJjXulhkOp
-         D6yXhSg0zJ2Hn7PjXGtpGNvfaOzSXTL7vNPRlpjTiSLgjOth/AKAwqq73QV/9x53SUtJ
-         oMvxqk6JDRG15vMEDHdV9VHY7AKIVz6OC3AZQKSDZpp9yajN85zg7D5oy9flo9pKr1rO
-         QBLy20FrWj5SEBeo7N9WH6TsdzKAlF3Fwc5JPAaxLY4ypFtU7oN/kQ3Y5vUsaizbzXbb
-         lVoMr/oR7ff4K2in8DsWw8f7rnWMn6kB8Pn9PGHeT+q3BUFJrsb63ynAVQv4A0fE+H6m
-         DnJA==;
+        bh=cxavE2HhwRG9KnyTUo+TV6fM8Yj2zo1+iL7/LTIuN3k=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=ZdrvWz3vlmKAGEQ2DFqzVrfPho3K1anQ4oJKmCqDv6JHJYL10dmly/u+4nYK/zg+QM
+         kQ+AXOfI7qBR1WVDd+z5e7VwMcibZyAKw0PxbLiZsBHOobdseJQ4ingKkshR3McPdQwT
+         qisxnJLHgmQLGNpVZVJid2Rdwhqxlv4gx3r1upw/fyvYJ+rIoXH4KoYpp70FKniDZ/Y9
+         WvMnKoV4w2SDp6ry3cS5WVTQbRnG9HpXAaJfqGp6DfJUwUMGw2I1iDickkLSzaTwPZdB
+         A7mckiKtemt9Dg9jJYNEK/TeUe4J1xHXgHwRLasFZCKS+2at9YeWhbgTDkBDS31sXSW9
+         rSmg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785876153; x=1786480953; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785876205; x=1786481005; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=QrkVrJzcta5RWUoKQyxrWJV7uC2Mp2UIFQinS79ZjUI=;
-        b=iA8F0gBvytw7uJrdcYUYXBXgsaZCd2i6+XpEssheubDt0H+MIfCNpZgsCcJKGvxEXY
-         xhioVjuBMgMluhZl6agIZFP83qxsB7FUPpvMkSTJkAf1zvNqr1fKmp7+BRRi1pzpcjyH
-         3KJf6RkdZ7wG27C35TpBxXbFLCgMseII/o6SfB5K+uU+I+KcVRKqxHaguq6fqhNJ5X4S
-         g8HpYmUPgG/UdtUY14K3hBeiynIu8iJh7UbwxjxJ+SGEvQBez+OzzeiWo+nvHGlHs0D+
-         24hBIsSBnOdPz/FiZegVLtPeHdWGSgqu0E4QNE/IHx91hHE21RKzKT9B3Tyn061PqFe9
-         qt2Q==
+        bh=cxavE2HhwRG9KnyTUo+TV6fM8Yj2zo1+iL7/LTIuN3k=;
+        b=e03dwv1ltKZIxN1GmhbejG1qeFBKFSlgrwyiSdepLDXt89j07mulLFVFP7At1y5eXO
+         HLhmiA3r8hzwKAGMuGsWgO3sB7+caYZNzhydbTRYYaI6+p454MZcltwihtNFm5PSp/hu
+         HSeISZg2aoBUbwbv+bdEndNlLXqBTFl19w4/IkU8jM7gkFF66Zc5KT+vwLB0xiLOLvCb
+         Zyu09q1G6j+IQzCnkeJBZPjwjj6wJ5y7EmlWf+8S6GOFOLHvxeU98+1VWNaOQCWNSp1s
+         ZNyUCyQ5msBLN+3rqpI6u0U5vuIu5onCt7YdLPIT7Clt1PndWtsjuJtCWDniqd+lpu6e
+         Mqcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785876153; x=1786480953;
+        d=1e100.net; s=20251104; t=1785876205; x=1786481005;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=QrkVrJzcta5RWUoKQyxrWJV7uC2Mp2UIFQinS79ZjUI=;
-        b=o3LtDzm8SgNP6mIJ8JZFzsuiBysIjIdTee1j+HxkJsCTAs/vpGl1sAJYk0qWiBMITW
-         kz6BMN+8FtaWqKeXUXKpVj+11bm4KIMuaGgsj0x8YSXPpnP5ldRoYRHEsFj6rIZKhjbC
-         QFRh+qczLj1w7Gmc4SX8WDb/wWGeN2qsyyjZK80WdjK6ocR23EWBXDMjtbAtlporhsVu
-         fvxtvkcpWkGcI2Ob1/848zFcQdj8ivpUd/OS0HHNiMVzKPQjWmGG17at25ciWpwGXPJZ
-         6JbRjHbfz+v9OrIhQU/41duEiPCUw2jaq1UG8UkwjWpwoZM1oX19lT2UoKxiKFeSTmGt
-         s6gw==
-X-Gm-Message-State: AOJu0YwDWOsWztEhIjtmDgGB+mmSCIg/r655e4IWwg6jd3c2u7nI9FWp
-	kpJ+lFMXdwDNvZUioXYf3vLggmmLF4RjADZW75gwU8usLd6KxGNKBu4aTzU2IlqcSQ0hO9kpgHp
-	BNWggUX/h2148l4qbW3hHaev16oRxXNA=
-X-Gm-Gg: AR+sD1229/srJXJBku37YVRt7vUtaQ7VCG1SYRvKYAKrtHHv/8Erp46PonTnEa+STkr
-	ZkYwQC6kWDe1HNKesR/oX73yWbGQYpo5FQRXdFmQE5tBxohcOwTg8JryDD2zKstpunBlCmHFJ2H
-	55p0H80h9EBkVQ1zCA0BvM76A3jBW/n3degH21ThllpUjIMM8dWUx3Yj0H9RD2M2y7BeuRsB8pB
-	bJOYWfm/1XhhQPYD7ba66Y/CyZ3G7Ch7Fq2lf64T+g6FeRh7IBS9ubjnente4qotDQPjJ0wwkur
-	OUAfVAN740C+P5pj8ymsbvcWtwEUcX+gNiy9hCs0GU119UXAghxR9A8X4eSlU41lzXB08HnFzcP
-	6kA==
-X-Received: by 2002:a17:907:1c86:b0:c16:b05c:b9cf with SMTP id
- a640c23a62f3a-c2039cdc721mr72062866b.26.1785876152918; Tue, 04 Aug 2026
- 13:42:32 -0700 (PDT)
+        bh=cxavE2HhwRG9KnyTUo+TV6fM8Yj2zo1+iL7/LTIuN3k=;
+        b=oBkHICSGrtGHebHzXIKgYNT4Imep5twDHtKXG06A1Ou8bnGvDUQ5PU/qRLLgf1+nVU
+         f5BRw9v8RAhUtai1yXjwxT1RYcDQQ4sGKk3ddaoAPp+P4CGJ9kiOyQ1FKN74P4VGFF3I
+         paceplimQ8JwvnlyeW2njuYHeestXHKjhv5ZzOiff31sCGb+Gt7Fx62Ufjwwi1ykJg1R
+         7ZHw88okLFB+v4Qiiw2aiutOPoZ4Op/MCSr/KqFBU/fXcMK5xdRCTvXatl0F1zJoqcds
+         bKJQSPrzglUVpjtT0xI4Ffsxo7AWL/Pk2xZrwLu2nXv4sC6sFBqIeTmN0lpOwNSVylIA
+         +Rqw==
+X-Gm-Message-State: AOJu0YxPWyw5r2T7+oSP8zwd4D/2rRXHEgD2/QMyqPVEw1FSZi81iUL7
+	1Z61P9mXiBmbGx5CD+6yvZBnCw1296XtICWWnFZrEBOg7i1EBH+bP4yDvKWi7TAWRxoBah0Ju29
+	U1SQ4mh30q5WJXqjjWu9l3AxMNACukzy5QCc7J4DQnQ==
+X-Gm-Gg: AR+sD10zKkY36P7T3BRV/NbMLIXXmo+1DXlBynEdh8h2ssyIBTasGM7r6gefffSdOpP
+	Wz3kLJn7+JFChxxJjHUv93Mh5zHLi+DIvER0vXhPsRxNS0HL0tYj6aB70wE4art7ITOc/2UD1p8
+	OEOgRdfjmIqZiw4A2+H91HJXEQs4WEakpKbalTpQNmFSJQUnC0ch76i68xPeugFPme6f6b1KVYt
+	O3PZ0f0H1+rZBJ4/GoTfA1aGNxTVh6M8Z4U8zn5drdKW++ZBOKCoFZa9JltiOHGLRD0C7XY8Fcc
+	1rZzFakZldKrDVymXCqNXaPQKQxddiUXY1hOmO/srq/XvS1xfkHD3d7a2KHcdR2vaCY1ycPSn4A
+	Svo04ceT2Ng5htw==
+X-Received: by 2002:a17:907:c14:b0:c16:831c:427d with SMTP id
+ a640c23a62f3a-c2039c4af80mr75671666b.21.1785876205109; Tue, 04 Aug 2026
+ 13:43:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260724042600.175440-3-nickolay.lysenko@gmail.com> <26de96afd813486d7e90ef7dea4c4d7e3e98b8400fb372cddac4a2f568502189@mail.kernel.org>
-In-Reply-To: <26de96afd813486d7e90ef7dea4c4d7e3e98b8400fb372cddac4a2f568502189@mail.kernel.org>
+References: <20260724042600.175440-1-nickolay.lysenko@gmail.com>
+ <20260724042600.175440-4-nickolay.lysenko@gmail.com> <20260724043556.BEB5A1F000E9@smtp.kernel.org>
+In-Reply-To: <20260724043556.BEB5A1F000E9@smtp.kernel.org>
 From: Mykola Lysenko <nickolay.lysenko@gmail.com>
-Date: Tue, 4 Aug 2026 13:42:20 -0700
-X-Gm-Features: AUfX_mygwxtuPcNPlNQy2ON65S3msR5YWZwM9on8Y369Bzdz5TLgEFF18iuqHUY
-Message-ID: <CAMtxOX3ZWX_rA57XMihyVFqpQLHoG7d5o5jxrFuUdvYhF_eK0w@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v4 2/3] selftests/bpf: move shared build
- definitions into Makefile.buildvars
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, memxor@gmail.com, 
-	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+Date: Tue, 4 Aug 2026 13:43:13 -0700
+X-Gm-Features: AUfX_mzjJZj_ihZ8k57XSsgXGRn0MQWZhAkomNBddo_NaicC8B0PWbUw5MsZ3e0
+Message-ID: <CAMtxOX1rW=piosQaHrbv_fTLGHf3QSgMEWnsSE0hO8FJFDf1_w@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v4 3/3] selftests/bpf: build each test runner
+ instance in its own sub-make
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Both findings were real - the first a genuine regression (confirmed in
-the v4 CI logs: "llvm: [ OFF ]", __jited tests silently skipping).
-
-Addressed in v5, which leaves srctree and PKG_CONFIG untouched at
-their original positions; details in the v5 changelog:
+Correct - the message was stale (the derivation was dropped in v4 per
+review); wording fixed in v5, no code change needed:
 https://lore.kernel.org/bpf/20260804170156.1709916-1-nickolay.lysenko@gmail=
 .com/
 
-On Fri, Jul 31, 2026 at 3:27=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+On Thu, Jul 23, 2026 at 9:35=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
-ests/bpf/Makefile
-> > index 2ed953b84409..1843679fc0e2 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Medium] The commit message claims that light-skeleton demand lists are=
+ derived dynamically, but the implementation retains hardcoded lists.
+> --
 >
-> [ ... ]
+> --- Patch [3]: [RFC PATCH bpf-next v4 3/3] selftests/bpf: build each test=
+ runner instance in its own sub-make ---
+> commit a1ebeec9064cd1ef457a1d6c67e818e26521e31b
+> Author: Mykola Lysenko <nickolay.lysenko@gmail.com>
 >
-> > @@ -213,21 +149,8 @@ ifeq ($(feature-llvm),1)
-> >  endif
-> >  endif
-> >
-> > -SCRATCH_DIR :=3D $(OUTPUT)/tools
-> > -BUILD_DIR :=3D $(SCRATCH_DIR)/build
-> > -INCLUDE_DIR :=3D $(SCRATCH_DIR)/include
-> > -BPFOBJ :=3D $(BUILD_DIR)/libbpf/libbpf.a
-> > -ifneq ($(CROSS_COMPILE),)
-> > -HOST_BUILD_DIR               :=3D $(BUILD_DIR)/host
-> > -HOST_SCRATCH_DIR     :=3D $(OUTPUT)/host-tools
-> > -HOST_INCLUDE_DIR     :=3D $(HOST_SCRATCH_DIR)/include
-> > -else
-> > -HOST_BUILD_DIR               :=3D $(BUILD_DIR)
-> > -HOST_SCRATCH_DIR     :=3D $(SCRATCH_DIR)
-> > -HOST_INCLUDE_DIR     :=3D $(INCLUDE_DIR)
-> > -endif
-> > -HOST_BPFOBJ :=3D $(HOST_BUILD_DIR)/libbpf/libbpf.a
-> > -RESOLVE_BTFIDS :=3D $(HOST_BUILD_DIR)/resolve_btfids/resolve_btfids
-> > +include Makefile.buildvars
-> > +
-> >  VMLINUX_BTF_PATHS ?=3D $(if $(O),$(O)/vmlinux)                        =
- \
-> >                    $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)    \
-> >                    ../../../../vmlinux                                \
+> selftests/bpf: build each test runner instance in its own sub-make
 >
-> The srctree fallback block moved into Makefile.buildvars, but that file i=
-s
-> included after ../../../build/Makefile.feature has already been parsed. D=
-oes
-> this break the feature-llvm probe for standalone builds?
+> This commit replaces the double-expansion test runner logic with a
+> Makefile.runner script invoked per test runner instance. It aims to simpl=
+ify
+> the build system and fixes a latent parallel-build race condition.
 >
-> In the pre-image, the ordering was:
->
->   include ../../../scripts/Makefile.include
->   <srctree fallback at old line 53-58>
->   include ../lib.mk
->   $(eval include ../../../build/Makefile.feature)  # old line 183/186
->
-> After the patch:
->
->   include ../../../scripts/Makefile.include
->   include ../lib.mk
->   $(eval include ../../../build/Makefile.feature)  # new line 119/122
->   include Makefile.buildvars                        # srctree defined her=
-e
->
-> Makefile.feature line 2 does:
->
->   feature_dir :=3D $(srctree)/tools/build/feature
->
-> This is an immediate assignment, so it captures srctree when
-> Makefile.feature is parsed. In a standalone 'cd tools/testing/selftests/b=
-pf
-> && make' build, srctree is not in the environment and nothing in the earl=
-ier
-> include chain defines it - none of tools/build/Build.include,
-> tools/scripts/Makefile.arch, tools/scripts/Makefile.include or
-> tools/testing/selftests/lib.mk contain a srctree assignment.
->
-> Consequently feature_dir becomes '/tools/build/feature' instead of
-> '<tree>/tools/build/feature', and the probe at Makefile.feature:11 runs:
->
->   $(MAKE) ... -C /tools/build/feature ...
->
-> The '-C /tools/build/feature' fails because the directory does not exist,
-> stderr is discarded, and the probe silently yields feature-llvm=3D0.
->
-> This flips the conditional at Makefile:127-150 off, so LLVM_CFLAGS never
-> gains -DHAVE_LLVM_SUPPORT and LLVM_LDLIBS/LLVM_LDFLAGS stay empty.
-> jit_disasm_helpers.c then compiles its '#else' stub whose get_jited_progr=
-am_text()
-> returns -EOPNOTSUPP, and test_loader.c:1442-1449 turns every __jited expe=
-ctation
-> into test__skip() with "tests are built w/o LLVM development libs". The s=
-ix
-> progs/ files that use __jited stop running, and test_progs loses
-> -DHAVE_LLVM_SUPPORT and the LLVM libraries it previously linked.
->
-> This contradicts the commit message's "Build artifacts are byte-identical
-> before and after this change" claim for the standard build invocation
-> documented in Documentation/bpf/bpf_devel_QA.rst:459.
->
-> The srctree fallback belongs with BPF_GCC in the "needed before lib.mk"
-> group that the commit message already identifies, for the same reason -
-> it is consumed before Makefile.buildvars is included. The same applies to
-> PKG_CONFIG, which is used in Makefile.feature at lines 178/183 but is now
-> only defined in Makefile.buildvars.
->
-> > diff --git a/tools/testing/selftests/bpf/Makefile.buildvars b/tools/tes=
-ting/selftests/bpf/Makefile.buildvars
-> > new file mode 100644
-> > index 000000000000..ef12018fa254
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/Makefile.buildvars
-> > @@ -0,0 +1,165 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#
-> > +# Shared toolchain, path and flag definitions for the BPF selftests
-> > +# build, included by both Makefile and Makefile.runner. Definitions
-> > +# follow the order they had in the Makefile before the split.
-> > +
-> > +CXX ?=3D $(CROSS_COMPILE)g++
-> > +OBJCOPY ?=3D $(CROSS_COMPILE)objcopy
-> > +
-> > +CURDIR :=3D $(abspath .)
-> > +
-> > +TOOLSDIR :=3D $(abspath ../../..)
-> > +LIBDIR :=3D $(TOOLSDIR)/lib
-> > +BPFDIR :=3D $(LIBDIR)/bpf
-> > +TOOLSINCDIR :=3D $(TOOLSDIR)/include
-> > +TOOLSARCHINCDIR :=3D $(TOOLSDIR)/arch/$(SRCARCH)/include
-> > +BPFTOOLDIR :=3D $(TOOLSDIR)/bpf/bpftool
-> > +APIDIR :=3D $(TOOLSINCDIR)/uapi
-> > +ifneq ($(O),)
-> > +GENDIR :=3D $(O)/include/generated
-> > +else
-> > +GENDIR :=3D $(abspath ../../../../include/generated)
-> > +endif
-> > +GENHDR :=3D $(GENDIR)/autoconf.h
-> > +PKG_CONFIG ?=3D $(CROSS_COMPILE)pkg-config
->
-> Same ordering issue: PKG_CONFIG was defined before ../lib.mk in the
-> pre-image, but now it is only defined here in Makefile.buildvars, which i=
-s
-> reached after Makefile.feature has already been parsed.
->
-> Makefile.feature uses PKG_CONFIG at parse time:
->
->   ifneq ($(PKG_CONFIG),)
->     $(foreach package,$(FEATURE_PKG_CONFIG),$(call feature_pkg_config,$(p=
-ackage)))
->
-> with immediate assignments at lines 178-179:
->
->   FEATURE_CHECK_CFLAGS-$(1)  :=3D $(shell $(PKG_CONFIG) --cflags $(1) 2>/=
-dev/null)
->   FEATURE_CHECK_LDFLAGS-$(1) :=3D $(shell $(PKG_CONFIG) --libs $(1) 2>/de=
-v/null)
->
-> Nothing parsed before Makefile.buildvars defines PKG_CONFIG, so the ifneq
-> guard becomes false and the pkg-config-derived FEATURE_CHECK_*FLAGS block=
- is
-> skipped.
->
-> > +ifeq ($(srctree),)
-> > +srctree :=3D $(patsubst %/,%,$(dir $(CURDIR)))
-> > +srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
-> > +srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
-> > +srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
-> > +endif
->
-> [ ... ]
->
-> > +ifneq ($(CROSS_COMPILE),)
-> > +CLANG_TARGET_ARCH =3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
-> > +endif
-> > +
-> > +# Immediate on purpose: expanding get_sys_includes forks several shell=
-s.
-> > +CLANG_SYS_INCLUDES :=3D $(call get_sys_includes,$(CLANG),$(CLANG_TARGE=
-T_ARCH))
->
-> The commit message states "Definitions keep the order they had in the
-> Makefile; the only exception is called out in a comment (CFLAGS is prepen=
-ded
-> rather than appended, as this file is included after lib.mk)."
->
-> However, CLANG_SYS_INCLUDES also changed from recursive assignment ('=3D'=
-) to
-> immediate assignment (':=3D'):
->
->   pre  (Makefile:463): CLANG_SYS_INCLUDES =3D $(call get_sys_includes,$(C=
-LANG),$(CLANG_TARGET_ARCH))
->   post (buildvars:139): CLANG_SYS_INCLUDES :=3D $(call get_sys_includes,$=
-(CLANG),$(CLANG_TARGET_ARCH))
->
-> The inline comment explains the fork-count motivation, but this is a seco=
+> >     standalone binaries and the kselftest lib.mk contract - and delegat=
+es to
+> >     the runner through explicit per-instance rules. Light-skeleton dema=
 nd
-> evaluation-time change beyond the CFLAGS exception documented in the
-> changelog. It happens to be benign at this commit since CLANG and
-> CLANG_TARGET_ARCH are already final, but any later target-specific or
-> conditional override of CLANG would silently stop affecting CLANG_SYS_INC=
-LUDES.
+> >     lists are derived from the tests' own '#include "*.lskel.h"' lines;=
+ the
+> >     bench object list is derived from $(wildcard benchs/bench_*.c).
 >
-> Would it be worth mentioning this change in the commit message too?
+> [Severity: Medium]
+> The commit message mentions that the light-skeleton demand lists are deri=
+ved
+> dynamically, but the implementation in Makefile.runner retains the hardco=
+ded
+> lists.
 >
+> Was the dynamic derivation logic dropped from this patch, or does the com=
+mit
+> message need to be updated to match the code?
 >
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
+> For reference, Makefile.runner still hardcodes the lists here:
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/305824=
-11360
+> > diff --git a/tools/testing/selftests/bpf/Makefile.runner b/tools/testin=
+g/selftests/bpf/Makefile.runner
+> > new file mode 100644
+> > index 0000000000000..ced44aad7eded
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/Makefile.runner
+> [ ... ]
+> > +LSKELS :=3D fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.=
+c        \
+> > +     core_kern.c core_kern_overflow.c test_ringbuf.c                 \
+> > +     test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c    \
+> > +     test_ringbuf_overwrite.c
+> > +
+> > +LSKELS_SIGNED :=3D fentry_test.c fexit_test.c atomics.c
+> > +
+> > +# Generate both light skeleton and libbpf skeleton for these
+> > +LSKELS_EXTRA :=3D test_ksyms_module.c test_ksyms_weak.c kfunc_call_tes=
+t.c \
+> > +     kfunc_call_test_subprog.c
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260724042600.17=
+5440-1-nickolay.lysenko@gmail.com?part=3D3
