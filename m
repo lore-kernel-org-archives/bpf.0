@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F9146AF08
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 18:47:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783B546DFE7
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 18:47:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785869224; cv=none; b=A0j6AsGnQ9Nqj+pV7fSrFrSs/4w3twq54BOf3SeQ4kfH0u7v+4crUcrZtb8ZkDM0eleoh48Qp5SlCL16O4wI3/lMy0ELwSajeARNd78kpLgKdv57fNxylPJNfl539YA1SBzXgltu8AVxEkrGbbw2KPWK28lJH7MSpfUp9O4DQw4=
+	t=1785869225; cv=none; b=r9zdUYzcfAdj0GGK94PL66VLa/FRIYie1eW/1vTEd1yXoBkL/xZagfgSiB+nGjTGVVORUIxJO0rlyq8nbzl3P+VmJcNiDB8cjZLptUK9qkMY4L/+9LVEo/GU4GHW/RlvaZnojPP17GIll/+eiCFwOBpzrYaLUotKHZlblqwV8/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785869224; c=relaxed/simple;
-	bh=6JIdO+Ix/M44VruAAM8qj8uGaHRKm6U6XqfajnF+jt4=;
+	s=arc-20240116; t=1785869225; c=relaxed/simple;
+	bh=4TzE55tyn0av401NZCGB6IIERLmTE/RlIn5+r3dQH9U=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gyd9rN+WODFP4eZFdMYCreJVTYakQI1USBtuxcKW0MqRYuBKX3bjic4amdia5ZeyTRo3alznTjzZO59mK2m4eUp1snuzu0oILciC4Or8Zt0O5Z6YvN0ropSad+WMaOoEQ9Cprpao8aGCSLCmc82E/LE7XnO1dDt/53h5hiEhSx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c6t3icUg; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=JF4A0h+MWZc713Hmo2oUlUxGt8c5O29a+sKeHNS9rjncCDRWvN3whCE7VM34Y1TUdU6vIWELoZZt06NlFbSUoib1dp59W0brNClxXbij19ujNBQkG7EMuroDEUPYkK4up9o4XPZbQAzigB45wPvuhgAZBWJHWzv9Iyf/TcCVEIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N27f3Iq2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c6t3icUg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A76B1F000E9;
-	Tue,  4 Aug 2026 18:47:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N27f3Iq2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 385851F00A3A;
+	Tue,  4 Aug 2026 18:47:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785869223;
-	bh=EIx1jkHl05rAp0PU0L+8jDF54D/ATGhitT+a6BGstnI=;
+	s=k20260515; t=1785869224;
+	bh=P0eL9HhfbmgunNNCnN0BwT92dRgM6vm9iw/KxIhkGvU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=c6t3icUgsTkKYn5eUSsHacmv7HlkXKZD66yPC15bUAhE1VysfE+HxLY4qEi8u/dJ+
-	 y+K4ttusNm8UXlMolKZ8etRsxNWXA+DnLx6dMT5B3pEu5xVK8JNMPXag9ll0LTmvrE
-	 zgI3bMgs7T1CoPgAk23w2VotIHAReN/H9sN0BMY7vN46KId1A/xt8CII+hTkJ8+0fT
-	 71eJ+qWsF+2kOu0owcm2gu1MkQD2ostzXmTaf1zvvG+rgMYCNnbmWK1n5egCerAiMi
-	 Fangse0/bbveb0ap7jhk1RThX+6LOZelzWqSXpmz/5TxD4YyHw0Jtl/SdcyOP6tclR
-	 7OMO1U+8iV3PA==
+	b=N27f3Iq2MuOgv8seqL0r5QNVraGCq5A7ysVVPOHD1CCcprtwd0B7XIBT6wUDL2e97
+	 hcCWS4Bwh0RPpep1qGzVfyWggMITZPDB4aNQ6VQxSIjwIdsD2Ut1bFbY08dJNbvLDn
+	 imEQPMz2hfe2ar+kSV1daGgeT+S9jeuK3xMtMLo6TjJTwYVyeYmUiUgtKufStA7SlT
+	 jI/JJZ7zF3d6zrUqcZ5RLOdBp6tIPEK0sxv4Lu9pgNKIBfAumE8yjrfFBp8uIZdVHk
+	 32eDWxRS49hXwfdVLdwDv94xjiTgfFqiKhIjJuUKpPsvkZkUIUgmkrEaex7Y2c4wMK
+	 6dHh/7WiBFNKg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 10/15] gve: add gve_ctrl_ops for gve
- initialization/teardown sequences
+Subject: Re: [PATCH net-next v3 12/15] gve: introduce new methods to handle
+ IRQ doorbells
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Harshitha Ramamurthy" <hramamurthy@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260803184630.3813311-11-hramamurthy@google.com>
+In-Reply-To: <20260803184630.3813311-13-hramamurthy@google.com>
 References: <20260803184630.3813311-1-hramamurthy@google.com>
- <20260803184630.3813311-11-hramamurthy@google.com>
+ <20260803184630.3813311-13-hramamurthy@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 04 Aug 2026 18:47:02 +0000
-Message-Id: <20260804184703.3A76B1F000E9@smtp.kernel.org>
+Date: Tue, 04 Aug 2026 18:47:03 +0000
+Message-Id: <20260804184704.385851F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,71 +47,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Incomplete abstraction of `configure_rss` leaves a direct depend=
-ency on AdminQ in the ethtool path.
+- [Medium] Mismatch between commit message, code comments, and actual imple=
+mentation for `free_db_resources`.
 --
 
---- Patch [10]: [PATCH net-next v3 10/15] gve: add gve_ctrl_ops for gve ini=
-tialization/teardown sequences ---
-commit fa76396ec69ce2dfc47469d3f87210437b9df3b5
+--- Patch [12]: [PATCH net-next v3 12/15] gve: introduce new methods to han=
+dle IRQ doorbells ---
+commit d17b52783c19c7cb12a008b8dab81756b1b45ee7
 Author: Joshua Washington <joshwash@google.com>
 
-gve: add gve_ctrl_ops for gve initialization/teardown sequences
+gve: introduce new methods to handle IRQ doorbells
 
-Driver initialization and teardown involve a number of control plane
-operations that need to be defined for gve_probe to operate in both
-mailbox and adminq modes.
+This commit introduces new methods to struct gve_ctrl_ops for configuring
+device resources like counter arrays and IRQ doorbell indices. It shifts
+doorbell management and GQ ring counter setup from notify_block methods
+into these new callbacks.
 
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
-ernet/google/gve/gve_main.c
-> index 578520e107930..c347661faac00 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
+>   - Similar to above, move free logic out of
+>     gve_adminq_free_db_resources() and rename all introduced methods
+>     from *free_db_resources to *release_db_resources to reflect the
+>     behavioral change.
+
+[Severity: Medium]
+This isn't a bug, but the changelog states the methods were renamed to
+*release_db_resources. The code still uses the name *free_db_resources.
+
+> diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet=
+/google/gve/gve.h
+> index 8766ea62baf17..f3cfc9d0cdec6 100644
+> --- a/drivers/net/ethernet/google/gve/gve.h
+> +++ b/drivers/net/ethernet/google/gve/gve.h
+> @@ -836,6 +836,8 @@ struct gve_device_info {
+>   *                  structures stored in @priv to be used during initial=
+ization.
+>   * @set_num_ntfy_blks: Sets no. of vectors into @priv to be used during
+>   *                     initialization.
+> + * @request_db_info: Request and store doorbell information into @priv
+> + * @free_db_resources: Free DMA memory holding doorbell info (AdminQ onl=
+y)
+
+[Severity: Medium]
+Is this comment still accurate? Since the logic to free DMA memory was moved
+out of gve_adminq_free_db_resources(), it appears this method only
+deconfigures device resources now, and the DMA memory is freed separately
+by gve_free_irq_db_indices().
+
+>   * @get_ptype_map: Learn packet type map from device and store it in @pr=
+iv
+>   * @configure_rss: Set up default RSS configuration
 
 [ ... ]
 
-> @@ -1809,6 +1814,7 @@ static int gve_xdp(struct net_device *dev, struct n=
-etdev_bpf *xdp)
-> =20
->  int gve_init_rss_config(struct gve_priv *priv, u16 num_queues)
->  {
-> +	const struct gve_ctrl_ops *ops =3D priv->ctrl_ops;
->  	struct gve_rss_config *rss_config =3D &priv->rss_config;
->  	struct ethtool_rxfh_param rxfh =3D {0};
->  	u16 i;
-> @@ -1824,15 +1830,17 @@ int gve_init_rss_config(struct gve_priv *priv, u1=
-6 num_queues)
-> =20
->  	rxfh.hfunc =3D ETH_RSS_HASH_TOP;
-> =20
-> -	return gve_adminq_configure_rss(priv, &rxfh);
-> +	return ops->configure_rss(priv, &rxfh);
->  }
+> diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/e=
+thernet/google/gve/gve_adminq.c
+> index cb0e7005dd3ca..f1ac55cc5b10f 100644
+> --- a/drivers/net/ethernet/google/gve/gve_adminq.c
+> +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+
+[ ... ]
+
+> +void gve_adminq_free_db_resources(struct gve_priv *priv)
+> +{
+> +	int err;
+> +
+> +	/* Log error in deconfigure device, but don't fail. This is only ever
+> +	 * called as a reset is about to be triggered, so it would be redundant
+> +	 * to trigger a reset.
+> +	 */
+> +	err =3D gve_adminq_deconfigure_device_resources(priv);
+> +	if (err)
+> +		dev_err(&priv->pdev->dev,
+> +			"Could not deconfigure device resources: err=3D%d\n",
+> +			err);
+> +}
 
 [Severity: Medium]
-Since this abstracts the RSS configuration for non-adminq modes, does the
-ethtool configuration path also need to be updated to use this new abstract=
-ion?
-
-Currently, gve_set_rxfh() in drivers/net/ethernet/google/gve/gve_ethtool.c
-still calls the adminq-specific function directly:
-
-drivers/net/ethernet/google/gve/gve_ethtool.c:gve_set_rxfh() {
-	...
-	if (!priv->rss_key_size || !priv->rss_lut_size)
-		return -EOPNOTSUPP;
-
-	err =3D gve_adminq_configure_rss(priv, rxfh);
-	if (err) {
-		NL_SET_ERR_MSG_MOD(extack, "Fail to configure RSS config");
-		return err;
-	}
-	...
-}
-
-Could this cause issues when configuring RSS via ethtool on a device using
-a different backend, since it bypasses ops->configure_rss()?
+Should this function be named gve_adminq_release_db_resources() instead, to
+match the intention stated in the changelog?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803184630.3813=
-311-1-hramamurthy@google.com?part=3D10
+311-1-hramamurthy@google.com?part=3D12
