@@ -1,218 +1,91 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3CB38550C
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 21:51:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D89123BD05
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 21:54:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785880315; cv=none; b=NlZZoU8xIEtd69rbdPwGkbkcO5pkh1z5DIq7ElwvYM+P/ZJ/qvoD/mzifKTAt+GdWtNYNrZndrglFJL5e7GpqFDri8dLOHauVRHtj1FSX7RF8FD3OQc91cgweUQoeA3KaSEuEnNw3Dhz8wjyHoHX+bojjgylb4kJ6HEsFtPeoiw=
+	t=1785880499; cv=none; b=Zn7Ogkb7IjuJor7WRmkBfYH512r1HHyauIIo37hZKo77+r4DY8aEkqj98JjXCe6MpbXCRvQlpXJLtvuE1ootojrq4Tqs6WE833NLHXJiav9L4++Z+/vMJlhT7I+YIStfhVZYrBGEMxgm8tZ0bl8Cq2VSUVQ6rlMJ/0v2BPEMwUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785880315; c=relaxed/simple;
-	bh=eEz0p+0rDpZate0GNVf+mjAlx42CeMUtDSYkur5UQdI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nZQriBh9EwNTGKoPyMiwI0sEZStMS5tmV2b0iclpZd6Fw9NXuF99fxGaRCG5wxXK5EPXzJjYWA/cZKY2et/gBC8pOomnxC0DB+PZ533e9r83qhp5LEVLRIrplPO1BDRgAHXHQtQnb0UIW9YjJ8q9n4KYcbPS9Aoez+UPgY/9UJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LwpQIYTL; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785880499; c=relaxed/simple;
+	bh=qNZbW1xOfCRGkDflsnpX5w+R7tnUqaVrUAYUApFo8f0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pgeyDG9huslsMuG1E/QiC/YGSmbTJ6Cq0w51lfHsAC4cG4WLRc42Q1v4b7DVjug4DsCKL+cIFeWCCDX9YATFltbpblh/ae47kGisz66dyUCJ9a6TFeie1o/EF8m+wdMR/T9SUnxiq7we/RSoZ41elLK6Uj2oOrgPgX5JTmss7tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AiZNTp85; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LwpQIYTL"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-381b831d535so366745a91.0
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 14:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785880313; x=1786485113; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=eEz0p+0rDpZate0GNVf+mjAlx42CeMUtDSYkur5UQdI=;
-        b=LwpQIYTLKmETteRef2C4aLRNDYs33WwzxD8GkmjcMFZmHU4wq7DQSlZB6pCZ4cw8Z6
-         tkjUYO3G/HjFfrYDeS8oorRvyaIZBYQQU0c01Hn8UjxBHTsgEfY1WAVykjgLWb7PFFce
-         tNzRtUElXwvbn9+6lOf8SPQdiZHJ+HZoxIn2PXytqiRU9ncwwzPEsvNaPG04YGKzbITw
-         H2bE+M9p9Oyldjj2A30noV8fY5oXSqwjy0C5/jmM9MVHiXDrtrG+VWnOZaqrK9tZbJp9
-         oiX0An5LyLULNIrmDCyUAEVXN/VWhExJD19n2df45vC2ofbulMr4q3aMfdoKpXLyo3ub
-         7RQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785880313; x=1786485113;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eEz0p+0rDpZate0GNVf+mjAlx42CeMUtDSYkur5UQdI=;
-        b=KtCjoNKTsf0FOUtML2pqS8RSxwAy6a6/GeL6QPyKu7LfvmBJZoCrt4pe38i59mIxlv
-         zFu1BgJSpv/dQY46zD8U9jZ4eD1rJZrFuAhlsWU4jVHi28aN8EHu5FM8+QjiCs1/2uUg
-         iux4sSKRcq+xvQlQWsAQAOGzQR5fOF5x7/BhaRQxuv+aVhzj2c421b8/SCSPVyycGpfG
-         f5FraQ45VpnVb2KS5JwXmmxnyaLeWcqSsjHRs9QpU3ifT5ZxarlG6zYNpyJtQlZiXnFb
-         xJDrhG/4nJC5J+LXtSEkMToPt8QmE4eNIYkt08H5KLb+bpiL+78aQMGZOM90iIOl2Xsh
-         dHkw==
-X-Gm-Message-State: AOJu0Yzu+xVzq+izXszn1LHvBgPHj+FIe4iaehwC94oya89GgaBXY9Ng
-	Vh0M2+/9jr7jCT45xvLmLkwup8dmfL28AvGZc/gMO1+r3KqlE9kogf73
-X-Gm-Gg: AR+sD11l2EfU6YbCMMa6QTpoWcJhW/A6rFM2dZx0VQQPFIRl6KXxSsWE28TwXGHzL/D
-	+blAlg1ndIFl7kytMS/qtu0adRbxrRJw62qtPcEFeJr68V2g3Tlvp06RqJPmFD+09tPfJSWwGHK
-	H1+GFYPPJxSGTYOhwnt4jKau/cMb8fnUJB6VsinquOJ+fvhRAOarvFyD+lr0SByCxZsNji0/Yp4
-	vKTBAdsOfAqDfA2IN3KXiaJmC2RSYQx/DKHQCFjbqfA7P3YuzJlIXLZdGyToyZEoGV8w6cekp1q
-	Urk8zVg8wfeQYgVH2m3QxSuZhyWg990t+Yg20Q7PkpvnLehYYIXZI/vO6Tovlr6ie+ZSxiqYGZW
-	QYwKpsufE1ERaK71vaDyRORCbFELRAQdFd2MLZn0oQELoOmQwD5fHwfTiDBYAtIO3xvf9ahlPGW
-	lY/yE4bD6eytOcVpuTgCqiH6/y+sSCUzor05s6O6Jsfv+ZS7pMFYsbwA7Y9sC8Dzbo6J0yfUTMg
-	I0bVHKrDddHlohQE7+Vxpkh5Lg=
-X-Received: by 2002:a17:90a:c107:b0:38e:6f90:eabd with SMTP id 98e67ed59e1d1-3903c53783cmr1921679a91.5.1785880313341;
-        Tue, 04 Aug 2026 14:51:53 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39039179b07sm592007a91.5.2026.08.04.14.51.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 14:51:52 -0700 (PDT)
-Message-ID: <56590122d4901653aa2827088b9a83447ee745e0.camel@gmail.com>
-Subject: Re: [PATCH dwarves] btf_encoder: Infer arena kfunc arguments from
- suffixes
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Ihor Solodrai
-	 <ihor.solodrai@linux.dev>, Alan Maguire <alan.maguire@oracle.com>, Arnaldo
- Carvalho de Melo
-	 <acme@kernel.org>, dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Tejun Heo <tj@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>
-Date: Tue, 04 Aug 2026 14:51:50 -0700
-In-Reply-To: <DKGHMNV38DFI.1RZJ281XECD14@gmail.com>
-References: <20260803125518.2279340-1-memxor@gmail.com>
-	 <4cb8bb30-1f01-4b78-a6b1-4ade3b965039@linux.dev>
-	 <DKGENYO9FITK.1M51V4BULBSYT@gmail.com>
-	 <8dc173dc3d051d338916c72cae070238718fd196.camel@gmail.com>
-	 <6c9500d4-7401-44f0-93a6-88a827026ae0@linux.dev>
-	 <4d20aecf677f4aec3e8e70106d4bdbcb01902e69.camel@gmail.com>
-	 <DKGHMNV38DFI.1RZJ281XECD14@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AiZNTp85"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08FD41F000E9;
+	Tue,  4 Aug 2026 21:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785880497;
+	bh=xiNZAtRBau2v69ns9w0o9g9UbqyvzLIFKuQRvnYLLFY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=AiZNTp851FK6ZA3PfljcN4ZY1mxYuTLbkQG57M/oBYuaoB3iRxM61o0MbVy3U3JV0
+	 Spy94i7hRMCr52b0tw7DSxB8S3Z5AztWswSzJX22H49vdUFkttkAW+6KaBJKFfp5zV
+	 jKkU/TqWLgFHRbuwpc5Oh6hn9OQv9h6yaGex0LufRK3oEYEj3IRsDgFoazjzowGC2A
+	 wZL9vkMcm2ksKLtz3iSjjRbPx0OETBFnRvqH9Ef47NjTU7TbMpKcKk+nb7jNW0D0CV
+	 c9Xyb5Nk2+UQLgpGgdsmRaSIoDzSYilh/uV9dXkL5rN7FZ9MX0L+kvlIsHgajyHCSG
+	 rHkJT/GbOtxnA==
+Content-Type: multipart/mixed; boundary="===============1172562801375698429=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <2745ebef0f1c5b970d76736ab5828d4aea78433b2d3800b877f7e1a0555f4a4d@mail.kernel.org>
+In-Reply-To: <20260804203553.1873415-1-yonghong.song@linux.dev>
+References: <20260804203553.1873415-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v2 06/13] bpf: Reject callbacks returning more than 8 bytes
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  4 Aug 2026 21:54:56 +0000 (UTC)
 
-On Tue, 2026-08-04 at 23:46 +0200, Kumar Kartikeya Dwivedi wrote:
-> On Tue Aug 4, 2026 at 11:34 PM CEST, Eduard Zingerman wrote:
-> > On Tue, 2026-08-04 at 14:19 -0700, Ihor Solodrai wrote:
-> > > On 8/4/26 1:22 PM, Eduard Zingerman wrote:
-> > > > On Tue, 2026-08-04 at 21:27 +0200, Kumar Kartikeya Dwivedi wrote:
-> > > > > On Tue Aug 4, 2026 at 8:43 PM CEST, Ihor Solodrai wrote:
-> > > > > > On 8/3/26 5:55 AM, Kumar Kartikeya Dwivedi wrote:
-> > > > > > > [...]
-> > > > >=20
-> > > > > >=20
-> > > > > > So while I understand the reluctance to add KF_ARENA_ARG3..N, I=
- don't
-> > > > > > think we want to introduce and support yet another mechanism fo=
-r arena
-> > > > > > argument annotations. If we do, we'll be stuck with a mess of
-> > > > > > supporting two/three ways of doing the same thing for the fores=
-eeable future.
-> > > > >=20
-> > > > > I think one major difference is that KF_ARENA_ARG* things were mo=
-stly for
-> > > > > annotating the vmlinux.h with the right address space label befor=
-e, but didn't
-> > > > > carry any semantic meaning for the kfunc's type checks.
-> > > > >=20
-> > > > > That changes with these suffixes though. The pointer will be tran=
-slated when
-> > > > > passed into the kfunc. IMO it would be odd to diverge for this pa=
-rticular case,
-> > > > > since we use suffixes for every other case where we constrain the=
- input type of
-> > > > > the kfunc argument or give it special meaning.
-> > > > >=20
-> > > > > We also want to have similar annotation on struct_ops callbacks, =
-where we also
-> > > > > use suffixes, so it seemed better to keep it consistent.
-> > > >=20
-> > > > I agree that we should follow the principle of least surprise here =
-and
-> > > > use suffixes, as everything else uses suffixes as well.
-> > >=20
-> > > Ok, I understand the motivation. Let's say we use the suffixes.
-> > >=20
-> > > Should this enable getting rid of KF_ARENA* flags then? For the
-> > > purposes of generating address_space(1), we can also just check the
-> > > name suffix, no?
-> >=20
-> > That would be ideal, yes.
-> >=20
-> > > >=20
-> > > > And yes, the __arena and KF_ARENA_ARG* annotations have different
-> > > > semantics:
-> > > > - __arena means that user space arena address is passed as is
-> > > > - KF_ARENA_ARG* means that a user space address is converted
-> > > > =C2=A0 to a kernel space address before passing.
-> > >=20
-> > > Also I am a little confused about whether we *need* to be able to
-> > > express two distinct meanings of "arena pointer" or not?
-> > >=20
-> > > My understanding is that "arena pointer" is a feature of an arg type
-> > > that has a single meaning: the pointer has one base in BPF world, and
-> > > a different base when executed in the kernel.
-> > >=20
-> > > The things that are missing is auto-conversion (Tejun's RFC [1]) and =
-more
-> > > comprehensive support of PTR_TO_ARENA in the verifier.
-> > >=20
-> > > This is still only one "arena" annotation per arg. Do we actually nee=
-d
-> > > the proliferation of __arena, __arena__nullable and/or __arena_kern,
-> > > __arena_user? Can't we have a single defined semantics of how arena
-> > > pointers are supposed to work?
-> > >=20
-> > > I can imagine something like follows:
-> > > =C2=A0 * arena pointers can not be null, check for nulls
-> > > =C2=A0=C2=A0=C2=A0 before passing from BPF prog to the kernel
-> >=20
-> > We are deliberately lax when handling arena and don't do any kind of
-> > value tracking there. So e.g. the following won't work:
-> >=20
-> > =C2=A0 if (foo->ptr) {
-> > =C2=A0=C2=A0=C2=A0 ...
-> > =C2=A0=C2=A0=C2=A0 kfunc(foo->ptr);
-> > =C2=A0 }
-> >=20
-> > Unless compiler decides to keep foo->ptr in a register. I'm not sure
-> > whether enforcing non-null here from the verifier side is the right
-> > call.
-> >=20
-> > > =C2=A0 * arena pointers are converted to the kernel space for
-> > > =C2=A0=C2=A0=C2=A0 kfunc/struct_ops callback by the verifier
-> > >=20
-> > > With the documented and enforced semantics like this one way of
-> > > annotating and one annotation should be enough.
-> > >=20
-> > > What am I missing?
-> >=20
-> > At the moment we have two consumers:
-> > - Planned sched_ext related kfuncs that need kernel space pointers.
-> > - Existing kfuncs with KF_ARENA_ARG:
-> > =C2=A0 - bpf_arena_alloc_pages
-> > =C2=A0 - bpf_arena_free_pages
-> > =C2=A0 - bpf_arena_reserve_pages
-> > =C2=A0 They, take a user space address. Looking at the code is appears =
-that
-> > =C2=A0 all three can be changed to handle kernel space address.
-> > =C2=A0 On the other hand, neither of these *needs* the passed pointer t=
-o be
-> > =C2=A0 converted to a kernel side arena pointer. So that would be just =
-some
-> > =C2=A0 useless work.
->=20
-> I don't think it's useless work, they translate manually because the actu=
-al page
-> table operations happen using the kernel address anyway. IMO they probabl=
-y need
-> access to both, and having one gives other, but kaddr is more important f=
-or them
-> to actually carry out the page table manipulation.
+--===============1172562801375698429==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-From what I see these function compute the page number by subtracting
-user vm start from the pointer. So, if switched to a kernel pointer
-that would uaddr -> kaddr -> (kaddr - start) / page_size.
-Compared to current (uaddr - ustart) / page_size.
-But we can live with that.
+> commit 9c43eef7a91393c06822d44c361ee806f383cf97
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+>     bpf: Reject callbacks returning more than 8 bytes
+>
+>     A callback handed to a helper or a kfunc (bpf_loop(),
+>     bpf_timer_set_callback(), bpf_for_each_map_elem(), ...) is invoked
+>     through bpf_callback_t, and an exception callback is invoked by
+>     bpf_throw() through
+>
+>       u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64, u64);
+>
+>     Both prototypes yield a single u64 in R0, and neither caller has any
+>     notion of a second return register, so a callback returning a value in
+>     the R0:R2 pair would have the upper half of its return value silently
+>     dropped.
+>
+>     Reject both at load time:
+>
+>      - check_ld_imm(): a callback is materialized as PTR_TO_FUNC by an
+>        ld_imm64 pointing at its subprogram, so the subprogram's return
+>        convention can be checked where the callback pointer is created,
+>        before it ever reaches a helper or kfunc argument.
+>
+>      - do_check_common(): an exception callback is not referenced by a
+>        PTR_TO_FUNC, it is named by a BTF decl_tag and verified on its own,
+>        so check it as its frame is set up, next to the existing "cannot
+>        return void" and single-argument checks.
+>
+>     Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 
-What's an overall conclusion? A single __arena suffix and modified
-existing consumers? What would be the semantics for __nullable?
+This looks like a bug fix. Should this include:
+
+  Fixes: 63b5669f8a0d ("bpf: Add helpers to describe the R0:R2 return register pair")
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30949310795
+--===============1172562801375698429==--
