@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B93E3002A9
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 13:46:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B98D469841
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 13:46:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785851180; cv=none; b=CiNDBiMEyogrDuOkStwukLrR5HYWDqFi1Z8YACSkP2jRy0EriWZ0uZ7SM60BGmvaMZioyJ6rrd/i1fD6UaAh0siWtWYY7zxHFILLsPKYqpuexp1kNIO3krT6PR3VOPCFDIGMTS7yj7hiQH0ebuMUEs3HJNfdF4i22a3hGzWiiPA=
+	t=1785851190; cv=none; b=TysSnubYBV8chx54BP/INKehOm+Woa4DicsqAEFYLrBgzvnfEMeYc6k0wR9OqtE28llIYJZaf61S8Ij4aWeq2Lo2fPDbW/bsR1JSjDF/KtEP2BmgufnOvc+xwFSlH1YckBC/CohICSgVMdRq3/TPvRAf1fZoMnMlbSra+g9XPdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785851180; c=relaxed/simple;
-	bh=zTje3iRfCIkqaaWodKfNkDeaOdzIBf4NAD3PBzYsSHA=;
+	s=arc-20240116; t=1785851190; c=relaxed/simple;
+	bh=lugBDNE0XXppJPtOqHsLoMonT4l5I6NZ5dQ4qVYiEbM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Bc36LakUedKAtljkXZ0ncrQlEGcYZhrlvtOz+BMWgibL9TVZv3DcLFdStQQ2rUfXEeQVi6OIVRttGBcY2J4zteFBvMK9zU7+nSpk5i5Y0MQYXqMvBgY1+OxWPMephMPFce+Xo/TrueSKq6xipcXA0KZ4V13ZOi8+5+I4QL8k1Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NtZqtueM; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=f7uZbEO7OUNmJdTACKdPxtd/bQ/YUM6oP2Rfuk4vfRy3Iuy2FD4EVMPUzNAJapSpNmFniu8vNOBlMr6f2ZEIx1WnlWTglUpjpBDYzVJCItsM3crGGHwzjZdeXYRjar4mvNqMBuG8srfpL6d2VMO4QiA5O/frJBX9SaN2oGxYGW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g/ubS8OF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NtZqtueM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 909831F000E9;
-	Tue,  4 Aug 2026 13:46:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g/ubS8OF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ACA41F00A3A;
+	Tue,  4 Aug 2026 13:46:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785851178;
-	bh=GwRyF0L57u2ava0AJTHGsIYtgb+eQrabTle7UU36ED0=;
+	s=k20260515; t=1785851188;
+	bh=6zEJQzOgD2qfQ+NXZsdeCZJt+wbhfCOL7o5nJMek3hM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=NtZqtueM/SnG8SLSPgNoTJVgZCVLfYaubOSu1J66+mOcJ/UYWaVOufw/HiAecAD7s
-	 YHeTj4xXgNsf2V+n4kRAONxiSWUf0jIYF9DjqzUNhCwdwcyvL4IsOgMNA21kImFM50
-	 ZAUtIl9sA1zoZZdcSytp/sq42q/iV6S/GQaOxQN7dmGIsloziPkkevuZ6tcczuIDK6
-	 yjkBbt/OUjDtvCyc5YApfyJh9kDVxZfq+Ac6NCDZfMwYk2lh0BQrt0+4rJEADYJpYU
-	 WtmxmuhvWQlfF2aCqTb550SCd3szG1n8x03HWszTSYIlOyLSwjkKIVFUWwd+NnhYYm
-	 zWPduepr321TQ==
+	b=g/ubS8OFBoMzqG573ymGE/eh8vYlnllHGRPkyP3gZvPNU9y/PAWEqfkqKQCftrxAq
+	 D6gD4jGNGCvJx6/Bmw3SYbkr8g/SfrLl39LXgXnhX+wW4ShUFQHNNECATrnPHwjh90
+	 UWAhOLMfu7RGI+W3j5ot5fyI/VShdEdhyQtoXQk16KkVSoMCfKzzr3jWaPL9zHEc+/
+	 gVEJdUK3MAPX3hPeOh1Q6z6NOerexghOJ2sOprCA6gTcnyXxoTNhWhwR4IQch/FyPx
+	 gbc/tSfDzZ6JerDl+r6JP0GH3NoH0hA77TYEhjch61nklx/c4k7Twe+hcei45SooUP
+	 ekO4S2akmhu0g==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -37,9 +37,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
 	"Song Liu" <song@kernel.org>,
 	"Yonghong Song" <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v5 1/6] bpf: Correct the overflow check comment in bpf_iter_num_next()
-Date: Tue,  4 Aug 2026 06:45:53 -0700
-Message-ID: <20260804134601.2305303-2-puranjay@kernel.org>
+Subject: [PATCH bpf-next v5 2/6] bpf: Inline bpf_iter_num_new() kfunc
+Date: Tue,  4 Aug 2026 06:45:54 -0700
+Message-ID: <20260804134601.2305303-3-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260804134601.2305303-1-puranjay@kernel.org>
 References: <20260804134601.2305303-1-puranjay@kernel.org>
@@ -51,45 +51,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The comment on the s->cur + 1 >= s->end check claims the (s64) cast is
-needed to avoid overflow when s->cur == s->end == INT_MAX. It isn't:
-s->cur + 1 is computed in int and wraps before the cast, so the cast
-changes nothing (INT_MAX + 1 compares the same either way).
+bpf_for() expands to the bpf_iter_num_{new,next,destroy}() kfuncs, which
+the verifier emits as regular calls. They are tiny and only touch the
+8-byte on-stack iterator state, so open-code them in bpf_fixup_kfunc_call()
+like the other special kfuncs there.
 
-The wraparound is the point. bpf_iter_num_new() sets s->cur = start - 1,
-which wraps to INT_MAX for start == INT_MIN, and the wrapping s->cur + 1
-brings it back to start. (s64)s->cur + 1 would instead break iterators
-starting at INT_MIN.
+Start with bpf_iter_num_new(): R1 points to the iterator, R2/R3 hold
+start/end. The inlined sequence mirrors the kfunc and returns the same
+-EINVAL / -E2BIG / 0.
 
-Drop the cast and reword the comment. No functional change; the wrap is
-well-defined under -fno-strict-overflow.
+start > end is rejected first, so end - start fits in a u32; range-check
+it as u32 on both sides ((u32)(end - start) in the kfunc). A movsx-based
+check would emit a cpuv4 instruction that some JITs (x86-32, mips32,
+sparc64) decode as a plain move and get wrong.
+
+The emitted instructions are plain BPF, so the interpreter path stays
+correct and no jit_required marking is needed.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- kernel/bpf/bpf_iter.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ kernel/bpf/bpf_iter.c |  4 ++--
+ kernel/bpf/verifier.c | 24 ++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index f5eaeb2493d4a..b235e117e206a 100644
+index b235e117e206a..d19f1b2861d22 100644
 --- a/kernel/bpf/bpf_iter.c
 +++ b/kernel/bpf/bpf_iter.c
-@@ -802,12 +802,11 @@ __bpf_kfunc int *bpf_iter_num_next(struct bpf_iter_num* it)
- {
- 	struct bpf_iter_num_kern *s = (void *)it;
- 
--	/* check failed initialization or if we are done (same behavior);
--	 * need to be careful about overflow, so convert to s64 for checks,
--	 * e.g., if s->cur == s->end == INT_MAX, we can't just do
--	 * s->cur + 1 >= s->end
-+	/*
-+	 * s->cur < s->end while iterating, else s->cur == s->end == 0; the signed
-+	 * s->cur + 1 >= s->end holds even when s->cur + 1 wraps (start == INT_MIN).
- 	 */
--	if ((s64)(s->cur + 1) >= s->end) {
-+	if (s->cur + 1 >= s->end) {
- 		s->cur = s->end = 0;
- 		return NULL;
+@@ -782,8 +782,8 @@ __bpf_kfunc int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end)
+ 		return -EINVAL;
  	}
+ 
+-	/* avoid overflows, e.g., if start == INT_MIN and end == INT_MAX */
+-	if ((s64)end - (s64)start > BPF_MAX_LOOPS) {
++	/* start <= end here, so end - start fits in a u32 without overflow */
++	if ((u32)(end - start) > BPF_MAX_LOOPS) {
+ 		s->cur = s->end = 0;
+ 		return -E2BIG;
+ 	}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7439afdc851a7..e0c91f6412228 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20006,6 +20006,30 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		insn_buf[4] = BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_1);
+ 		insn_buf[5] = BPF_ALU64_IMM(BPF_NEG, BPF_REG_0, 0);
+ 		*cnt = 6;
++	} else if (desc->func_id == special_kfunc_list[KF_bpf_iter_num_new]) {
++		/* inline bpf_iter_num_new(&it, start, end); R1=&it, R2=start, R3=end */
++		int i = 0;
++
++		/* if (start > end) goto einval; */
++		insn_buf[i++] = BPF_JMP32_REG(BPF_JSGT, BPF_REG_2, BPF_REG_3, 8);
++		/* r0 = (u32)end - (u32)start; if (r0 > BPF_MAX_LOOPS) goto e2big; */
++		insn_buf[i++] = BPF_MOV32_REG(BPF_REG_0, BPF_REG_3);
++		insn_buf[i++] = BPF_ALU32_REG(BPF_SUB, BPF_REG_0, BPF_REG_2);
++		insn_buf[i++] = BPF_JMP_IMM(BPF_JGT, BPF_REG_0, BPF_MAX_LOOPS, 8);
++		/* s->cur = start - 1; s->end = end; return 0; */
++		insn_buf[i++] = BPF_ALU32_IMM(BPF_ADD, BPF_REG_2, -1);
++		insn_buf[i++] = BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_2, 0);
++		insn_buf[i++] = BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_3, 4);
++		insn_buf[i++] = BPF_MOV64_IMM(BPF_REG_0, 0);
++		insn_buf[i++] = BPF_JMP_A(5);
++		/* einval: s->cur = s->end = 0; return -EINVAL; */
++		insn_buf[i++] = BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0);
++		insn_buf[i++] = BPF_MOV64_IMM(BPF_REG_0, -EINVAL);
++		insn_buf[i++] = BPF_JMP_A(2);
++		/* e2big: s->cur = s->end = 0; return -E2BIG; */
++		insn_buf[i++] = BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0);
++		insn_buf[i++] = BPF_MOV64_IMM(BPF_REG_0, -E2BIG);
++		*cnt = i;
+ 	}
+ 
+ 	if (env->insn_aux_data[insn_idx].arg_prog) {
 -- 
 2.53.0-Meta
 
