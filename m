@@ -1,114 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D9A46D2A9
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 15:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D21746EF79
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 15:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785858206; cv=none; b=XfReHRDtcwBdTRhfjH0MMaawFzaujBT5t+231SXYSriBtE+J3lK7HwHnxEwGY2j2N2ScpNX+ccqO2sFQXBQ7ZgiqucctOZ/Rsk+6zpH31m26sVfUJv7hpsrJ5T3BNkZNHkc+gLy8T80thS10F0Zedlt16PaKYx7NmwM45YWZzBI=
+	t=1785858380; cv=none; b=eNCzIKYQ0A+N9otnrZEjZzerTBzr0nAeNiwGf4tMARcddFFHypVa2HIqhBWF3D1q/RccDKmtijy+OeZpBPQM6mL7siaIV051hlIN0Xi3VnDV2VP5Y40Dx1epjuurFZlzYnNj8dNtSPuu+pmrLG8fZ/9jwEHN+ZqwtwqUQh6yQEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785858206; c=relaxed/simple;
-	bh=Xu/1A7B1Qv4WZuUnM8rfeXNjGdCJvYDmZVGfEddxZbc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Y3oHjRROYRZezDHUw37JHP5sNdF+TC3FfJoN6eWWMUndvhKNcpq0nTfwmUlKcfMsc1VMpWTeM+jw40TcAA5opR7H9qNP6exSalgYB3JZUVz4W6VIGKwjXr1L3L+kJChj+uABzIHC+3GlGPY+Xr3A2FRDDl++b83NEl7gAfLN094=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxUct5sk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785858380; c=relaxed/simple;
+	bh=nJFzd+F+G5tRxVPylPz5UKp4EjTg+zGE87rtMnRS9iU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=il/eo6n78RVNBBeD3hkOZzzqwrzJU/gsaic/kSLPkJVNY7Rovi0vUeKZ9gd61eAXrWcrcgdGRF9Nty4YSfRhQJyCxU+H/akaqOSW1KcNC+KWOiTJg5oravTI7CGkjyX/reIOe/oQGpaOysgUnHNUxdaGM78u3MyidGvB02Zzxa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WdWLom7I; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxUct5sk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3478C1F000E9;
-	Tue,  4 Aug 2026 15:43:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785858203;
-	bh=vF3Xp8CypQngnOBtN23/bb9TreRgaj/HHuXpCU0pRLc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YxUct5sk+THM6Q5+llMveY48YUsMa2fXKFw86CPgv36mb7k4blnWcqnYp8mteIqvL
-	 b7qxNvBzsQZAH9XlzOr+gxhlL1rADlzCSNNJIPThKAuExGymT0YHLjRrkzhumrhC3o
-	 tdMTBIE7AHuWNH8M+JblJBIO7XsDlpcXr1f2i0un6WvkKSjWQSciPcKIHnHP+7lJp7
-	 LkRwaZ6ltgGRNiXjdyE+23dZOAcJxJ457GFUAUGjjRNHkKwGFzrHcUgee0OQD5LfOO
-	 pQPB7qdsH+xuYwyiINISMZFnT6VngL+MlmkO2mLd3m+fLKG4OwULo2zTOwd2VYT3Dj
-	 CMMLzHT0kxLfA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Fix sleepable check for tracing
- prog
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260804145710.43062-2-leon.hwang@linux.dev>
-References: <20260804145710.43062-1-leon.hwang@linux.dev>
- <20260804145710.43062-2-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 04 Aug 2026 15:43:22 +0000
-Message-Id: <20260804154323.3478C1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WdWLom7I"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785858376;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xKg7CzqahB1AxtniHPBuBrCNyBYROeJyzCI1lIiHen8=;
+	b=WdWLom7Id0Mnu2dx8qclhVH16B/uElwCXpdRoQazKZsDBOD+1dkGKJt0PLqItCF6seIu0i
+	rerpLvJwfPI3tEJaTX0ohrzFEZI+Bt/SpbOBoj+PeSSmWyb3FX3IUTJNbg5SnNmV5Nsvj3
+	OlZeafv/o0mtyqpHXRjsulGSgvcMEoY=
+From: George Guo <dongtai.guo@linux.dev>
+To: chenhuacai@kernel.org,
+	yangtiezhu@loongson.cn,
+	hengqi.chen@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: kernel@xen0n.name,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	guodongtai@kylinos.cn,
+	bpf@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] LoongArch: BPF: per-CPU address resolution and timed may_goto
+Date: Tue,  4 Aug 2026 23:39:36 +0800
+Message-ID: <20260804153938.16129-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+These are the first two patches of the LoongArch BPF JIT feature work,
+sent on their own to make review easier. The remaining pieces
+(per-program private stacks, exceptions/bpf_throw, sign-extending loads
+and atomics on arena pointers, and the matching selftests) will follow in
+a later series.
 
-Pre-existing issues:
-- [High] Bypass of `bpf_d_path_allowed` allowlist using forged BTF IDs allo=
-ws non-sleepable tracing programs to call `bpf_d_path`, leading to kernel d=
-eadlocks.
---
+Both patches are independent of each other. They apply on top of Chenguang
+Zhao's "LoongArch bpf kptr xchg inline support" v4 series:
 
---- Patch [1]: [PATCH bpf-next v3 1/2] bpf: Fix sleepable check for tracing=
- prog ---
-commit bd029887d83c0773bad79aca8216a06849cdbd32
-Author: Leon Hwang <leon.hwang@linux.dev>
+  https://lore.kernel.org/all/20260729022837.355549-1-chenguang.zhao@linux.dev/
 
-bpf: Fix sleepable check for tracing prog
+Patch 1 adds the internal-only BPF MOV that resolves a per-CPU offset to
+the current CPU's address, advertised through
+bpf_jit_supports_percpu_insn(). LoongArch keeps the current CPU's per-CPU
+base in $r21 (__my_cpu_offset), so the resolution is a single add.
+Exercised by the cpumask and percpu_alloc selftests.
 
-When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing prog
-is allowed to attach to '__x64_'-alike prefix symbols.
+Patch 2 implements arch_bpf_timed_may_goto() and advertises it, so the
+verifier lowers may_goto to its timed variant, which bounds the loop by a
+wall-clock timeout kept in a per-loop stack slot. It uses a custom calling
+convention: the count/timestamp stack offset is passed in BPF_REG_AX and
+returned there, so the JIT call path skips the usual "BPF_REG_0 = return
+value" move for this helper. Exercised by the iters selftests.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7439afdc851a7..d4541cca7180e 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19024,6 +19024,9 @@ static int btf_id_allow_sleepable(u32 btf_id, uns=
-igned long addr, const struct b
-> =20
->  	switch (prog->type) {
->  	case BPF_PROG_TYPE_TRACING:
-> +		if (!btf_is_kernel(btf))
-> +			return -EINVAL;
-> +
+Selftest results (all PASS):
 
-[Severity: High]
-This is a pre-existing issue, but does the same bypass exist for
-non-sleepable tracing programs calling bpf_d_path()?
+  Feature                          Test(s)
+  --------------------------------------------------------------
+  1  internal-only MOV (percpu)     cpumask, percpu_alloc
+  2  timed may_goto                 iters
 
-Looking at bpf_d_path_allowed() in kernel/trace/bpf_trace.c:
+$ sudo ./test_progs -t cpumask
+...
+Summary: 1/35 PASSED, 0 SKIPPED, 0 FAILED
 
-kernel/trace/bpf_trace.c:bpf_d_path_allowed() {
-	...
-	return btf_id_set_contains(&btf_allowlist_d_path,
-				   prog->aux->attach_btf_id);
-}
+$ sudo ./test_progs -t percpu_alloc
+...
+Summary: 1/18 PASSED, 0 SKIPPED, 0 FAILED
 
-This check relies entirely on the integer attach_btf_id and fails to verify
-if attach_btf is the kernel's vmlinux BTF.
+$ sudo ./test_progs -t iters
+...
+Summary: 1/93 PASSED, 0 SKIPPED, 0 FAILED
 
-Can a user load a dummy BPF program with a crafted BTF where a function's
-BTF ID exactly matches an ID in btf_allowlist_d_path, and then attach a
-non-sleepable tracing program to it?
+Based on loongarch-next:
+  https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/log/?h=loongarch-next
 
-If this dummy program is triggered in softirq context by network traffic,
-and the tracing program extracts a valid path and calls bpf_d_path(),
-this would invoke d_path() which attempts to acquire rename_lock (a seqlock=
-).
+These two patches are split from the full v2 series (11 patches):
+  https://lore.kernel.org/all/20260702022322.51033-1-dongtai.guo@linux.dev/
 
-If the softirq interrupts a process holding the seqlock writer spinlock,
-wouldn't read_seqbegin_or_lock() retry and fall back to taking the spinlock,
-causing a deadlock on the same CPU?
+George Guo (2):
+  LoongArch: BPF: Support internal-only MOV to resolve per-CPU addrs
+  LoongArch: BPF: Add timed may_goto support
 
->  		t =3D btf_type_by_id(btf, btf_id);
->  		if (!t)
->  			return -EINVAL;
+ arch/loongarch/include/asm/inst.h       |  1 +
+ arch/loongarch/net/Makefile             |  2 +-
+ arch/loongarch/net/bpf_jit.c            | 27 +++++++++++++-
+ arch/loongarch/net/bpf_timed_may_goto.S | 47 +++++++++++++++++++++++++
+ 4 files changed, 75 insertions(+), 2 deletions(-)
+ create mode 100644 arch/loongarch/net/bpf_timed_may_goto.S
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260804145710.4306=
-2-1-leon.hwang@linux.dev?part=3D1
+-- 
+2.53.0
+
