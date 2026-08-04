@@ -1,65 +1,65 @@
 Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBCB441041
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 08:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645F02F1FDE
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 08:43:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785832840; cv=none; b=p/zPttuhXUf8xQMrpgKk/TwePP7SpIBYBLTuQw66nbKw7JVOa3JGovksgq0ZoIp3ZPf4zsQcXePA69dZUNU34hN1roHk/6pE9JBtjToFyFPNly22jjDy1vXS/ieQpgxTN8Eecfi94yj6zI30CD81Ry/PcACsIWf/w4334DCmt8U=
+	t=1785833013; cv=none; b=qJwoutBc6JoNs9EiNA95fs4cHUvYttopAE0peNRmEzirklPNlbjqMYN5Tx+BbxrMcDjobWxivpjGDW0ngbtCBbVpYKvK2twVFC9QdZmNtxElk6nKoApBT7rhBxtaUUW/YzYwdS/qXTg2ic7TQEq4M5Q/crmV5tcSo3j+gK8Bre0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785832840; c=relaxed/simple;
-	bh=lUmRcKbwiL68tST9eIRY4IRwFDYQz0zVb7Gebl7IbsQ=;
+	s=arc-20240116; t=1785833013; c=relaxed/simple;
+	bh=hPFf1ypLPsXSxk5jJ/tdXLRHlGtS/pCEQCDRTah8aic=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=b3d7ym0KcHteUN+bHdsIZ6AJx3RiAwsloPQDAXi8wQRjZg9K1cfdgl//qxQjG9qSZQRUtCdK9mBxJyWVL+vydCaZYYWQMfKZdqYUd7rt9T/zrZWBOFL0Je9P3V4ckqlaDXTAcvujYzXy6KXQcly6mBrJB+BZAn1m0Gr/XlPDCHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sFHMhA+t; arc=none smtp.client-ip=74.125.225.64
+	 References:In-Reply-To; b=BISdP8K1UEiRAzG6QR+icCB1nLGyOl/QC9e4MhHV6PdkecGDtkNuUdkQzmSq+fTUmclfl3NyKbGc/6CJyyAEUttPs37DOtGgYRoKwddcSFb+Wbypdg9OtX45TMCBojd8rEb07hm+xxX2hHTgATZ2Q7S6WW9mlITcajYr6JrxyHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FcwbohFl; arc=none smtp.client-ip=74.125.225.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sFHMhA+t"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4744516a312so387911f8f.1
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 01:40:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FcwbohFl"
+Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-46cbf263216so1995816f8f.1
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 01:43:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785832837; x=1786437637; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785833010; x=1786437810; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=4y0dIqSdwJVySpRGuatuWHSEv+RXGkSanEMCC/wozOE=;
-        b=sFHMhA+taoT0wJDr2RqHUdUQRfc9jAGHp97WBPeKEyjBFgh36RCdG2a8wFI6AXmxeD
-         MSce/MqV3LRGT/HuWlokRmTUfa43A/XrQmY5NfnOIqJt9LFjwIq4BsMvI9yuktdVaUQq
-         GRFjEmRaI2fRnTmaNYaCCAkMiGDDazGuukAxjKIZ3mU3PbS24gGJGQekVrfxJBCO8mKI
-         4dv7OHu+TdaNWnbm8ZYA+pQCJXQWz6g78qrY574GIzDFeaj8GZT5A/ZJGHvHyFGPTnyA
-         HbV6t3d7ujnDVxPNBUqAvFkbTSIC4Hpr9gUqmLLUpBqZO308B0GHsd4hjLUbeXpjVbqV
-         UrpA==
+        bh=CPBdcxqneLJaWRE3D0wohrfsaMJhDjseJnAc+v/1Cjs=;
+        b=FcwbohFluF66cQhY5wqtvfWDUlyna3+GBn6FRG6MtuGufcc2k/RB1TBtJwfvHZKAln
+         VV59hmWTsGuih8nGTZE2siHiGKMqVGqJGIJSs+D9pQmK5fe4YzEq7l2OiSbdPBnEm2BC
+         AZ4mP95mFxI4Wxc0AhzA4PndH+B5kP4CFNko1MvtcTFmzMGH1tJXOxrFlVDeoIFYNyxF
+         MsqrArDbXB+4YjDi4mX3Il8a9VaawIEnQ9oGE8UHp3rXSZBKziCPSI3juJ4RxaatekXH
+         gtSYsn6BxhX12kFO2u/4JLwUOP+Xt4G3VE8Et7bl/Hg8g185reCTe4xjeafvJeYzj3FG
+         rMpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785832837; x=1786437637;
+        d=1e100.net; s=20251104; t=1785833010; x=1786437810;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=4y0dIqSdwJVySpRGuatuWHSEv+RXGkSanEMCC/wozOE=;
-        b=MLdWAGPQm6ildzrxhbj+BjuMO81wymiasf0yCq2cXZNNr08QQROLKtwNNg9I6UEhV1
-         1mhnBwaljkHUL4icD5aGHAkjpPgsMkVAMd0uTBATWmA4vR/qyGNXKHZJr3H8jGEfiD37
-         TB0O64BMjrjqjF9gTJ80A/sDhLvmwnUjzFSQX9P7gyN4/QCKcGWtpbfJdeUOJ2DSH+8W
-         FmSxzxKpsbL+Xp++Txg5py1+GkBzLdiNBKUgWsD07cjRjIqCJI8QaRZ59I+FFwg9svzH
-         Y/bnWEq6nIMMOmE4YSthMXk5HyAgwIaLKq4AjktV+iwBympQSj1RmQJuF7bM4zOXzuuO
-         Ei2g==
-X-Gm-Message-State: AOJu0YxX6ZAP8hOeDwG61u/LWSkl5qs6CyhqpnKkcRQEk3i2oevgvWfK
-	nCqfJodl9S5D5fTB769CZg0035fdfS5rql1sV/XmHQt0WkcHejfQ75iZDgr29fHM
-X-Gm-Gg: AR+sD12dzoxAZzKAeHFkJ4ozf94+5MX9Km+HvlQzNI673T031LnJSUqtLKk7cR25zJ0
-	DictHngMSw1KXBQ8agy0+jriHWBx7+pbY6AkmVGhLkFZ2Y2vCYrXQ1MizdrOQnXIcw6Ue2Vw0DR
-	Ahp/LEFYYbENN/uo43YXD6HcQ4CNXj4Z2vygCJtwG1Fb3IOgczHgKIOHvvSpT9J7q+koqMDYzYi
-	tkqHwE6y0ywgZPTJ6oC0z98NA4wEh7eYZ5A0bKlYb20LEsiDXHS8XLowmqq1K9B0BfkCi2mV8Ne
-	QhVKBZpu9X88vUKEmUU6LulyeHJAPaP0coz3yHpfLLwpiugG2jRKJqpTkCJ7ovsqoibHDm6U+iD
-	OFWjcRKFPReB0uwEATGromBA+XdV89vu+h/aFYfrlLcJLq4SCbi73W1j6t3DR93fhBdvUel17sB
-	hhmVgi/wPmvC0eAa1b5PnT8xdJNyY+uN3zvaImW44PL+qdGhMngjCaCb9pBBZSOHvxQgo8N2de0
-	U8QFyoIKEP57vHDgxdUwr53IiVS9S6i6AAcM3vxfJ2zVwlAKrqUdeBmtWUyCGn0RxcMqOdZZll8
-	ccRQgkoHM9WXQv5ihWQAdmVhvwc=
-X-Received: by 2002:a05:600c:4f86:b0:493:f783:c46a with SMTP id 5b1f17b1804b1-4994a0fc5f1mr51199905e9.6.1785832836912;
-        Tue, 04 Aug 2026 01:40:36 -0700 (PDT)
+        bh=CPBdcxqneLJaWRE3D0wohrfsaMJhDjseJnAc+v/1Cjs=;
+        b=Pva7EjoDBdvgz8kgvGY4vFkkBvEvkhvf4qN57ljC09KcOzeQ5lUygdxnqc6bCkC2N2
+         7MS/EAgE9vDji7eqYck2H8eO05Uc2nmvOCgS3ogFMRJklOrSxGL8K9P1L8ZMpimkEDti
+         CtkEa9Foil3e3Kea3461N9toUscHzunYqKvFf4hPLbZola6KVbQcod947mAiNeJs4PE1
+         /tpSwIjPn/roX15nR4gumadLHx8D/24Pev0l0sYK99ZQ11WDb4iy6dOp5KrByj8IXkLs
+         Vosv2sOjq0jXC+kZAuXJuunsykEcZ/CHwFonTW2WPyxmZKl+0BBc+ikCR4Hvm6sdE7AV
+         gEsw==
+X-Gm-Message-State: AOJu0YzCj6+ejgv3PU7hG3f8MaNCnCfNRD17YTOGY13sKHAmGxrcMG37
+	e16DphLB4MgTDdXX/+7DG98AAjXylVxxiOb0G+ekqdQwIfRwOrcPNFiN
+X-Gm-Gg: AR+sD11lbN5dlJtadKwqlFnnn0HAQME1RScVFoaN07r5iJHIL249gF5eupKE4Oa68La
+	DCvx7Fbho3M6aGkxfrF8cP+lEQrdQ1DF3lhySqzgWjUQXwP4ht1pS3wwFs+9duWv88Ruj467pgy
+	oQHABgkxaLYluIAnXAwK5wRrO2TohLVzf5UayL7HLSmbOEL14S8xqxhQAXPozEhr2RXSCxgDyX8
+	ZfdpmYeNgjf6B2jIjU5QIkFBvd0p0z25md4tYqSOc1gCoBHmIpmXxhX6Ezo6BiOpS1EMCQT/YrN
+	lvhNUnjwC9WVkGfThwjWsX/G8ZZcFr8rinUyIGbHvj3CKTYpRLrBtM6oWwk+XASGvDOr2gcqq5l
+	rTWFXWEsPFxyd7oUh6+szgP36/gP1gpDtIZYZfKEWlEUpsrxU9cjDer+2S/TkL9EYObBwrLv0Cq
+	dtC9ZoIyojzAZ3xywaLaVeop1jqDKKTssNYf/o64EoL/nFEtLv2A5XPRdN5CkAIFb24vC1NFKzS
+	rM6qasGI6EYd/8ZuZXN7rx/QLhqzh0c5vhQhTkiZYo3Y7EN6TgHcvDA+u0OLqVQSXuQ20syQ77q
+	KzT5ut3pBqVE1yNe8rfK7XPIEgY=
+X-Received: by 2002:a05:600c:4e52:b0:496:bbce:fc with SMTP id 5b1f17b1804b1-4980c658ff3mr345856595e9.12.1785833009276;
+        Tue, 04 Aug 2026 01:43:29 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49949fc6d82sm70065755e9.1.2026.08.04.01.40.36
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994a0fca55sm72931465e9.13.2026.08.04.01.43.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 01:40:36 -0700 (PDT)
+        Tue, 04 Aug 2026 01:43:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,119 +68,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 04 Aug 2026 10:40:36 +0200
-Message-Id: <DKG0WN6Q1SLC.7TTOWOG4C59J@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Show more useful info in stack
- depth stats
+Date: Tue, 04 Aug 2026 10:43:28 +0200
+Message-Id: <DKG0YUDSTBUY.1X220287HT9V3@gmail.com>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Kaitao Cheng"
+ <chengkaitao@kylinos.cn>
+Subject: Re: [PATCH] bpf: add KF_SPIN_LOCK flag for kfuncs under
+ bpf_spin_lock
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, "Andrii Nakryiko" <andrii@kernel.org>
+To: "Kaitao Cheng" <kaitao.cheng@linux.dev>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>
 X-Mailer: aerc 0.21.0
-References: <20260804081114.3871564-1-memxor@gmail.com>
- <20260804081114.3871564-2-memxor@gmail.com>
- <20260804082241.8951C1F000E9@smtp.kernel.org>
-In-Reply-To: <20260804082241.8951C1F000E9@smtp.kernel.org>
+References: <20260804083212.79271-1-kaitao.cheng@linux.dev>
+In-Reply-To: <20260804083212.79271-1-kaitao.cheng@linux.dev>
 
-On Tue Aug 4, 2026 at 10:22 AM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [Medium] Unconditionally printing the instruction count for all subprog=
-rams outputs `insns 0` for all static (non-global) subprograms, defeating t=
-he stated goal of showing "where verifier work is spent".
-> - [Medium] The new verifier stack depth log format silently breaks the `v=
-eristat` tool, causing it to fail to parse both `MAX_STACK` and `STACK` sta=
-tistics.
-> --
+On Tue Aug 4, 2026 at 10:32 AM CEST, Kaitao Cheng wrote:
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
 >
-> --- Patch [1]: [PATCH bpf-next v5 1/3] bpf: Show more useful info in stac=
-k depth stats ---
-> commit a5f11407b8ca52d1698171e4ae37a0d5f859eb2f
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Introduce the KF_SPIN_LOCK kfunc metadata flag in BTF so kfuncs may be
+> explicitly marked as safe to call while holding bpf_spin_lock.
 >
-> bpf: Show more useful info in stack depth stats
+> Allow kfuncs defined in kernel modules to be marked with KF_SPIN_LOCK.
 >
-> This commit updates the verifier log to print stack depth statistics
-> in a new format, listing the main program and each subprogram on
-> separate lines with their name, instruction count, and stack depth.
-> It also updates the BPF selftests to match the new output format.
+> Example: BTF_ID_FLAGS(func, $kfunc_name, KF_SPIN_LOCK)
 >
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -18777,15 +18777,21 @@ static void print_verification_stats(struct bp=
-f_verifier_env *env)
->>  	if (env->log.level & BPF_LOG_STATS) {
->>  		verbose(env, "verification time %lld usec\n",
->>  			div_u64(env->verification_time, 1000));
->> -		verbose(env, "stack depth %d", env->subprog_info[0].stack_depth);
->> -		for (i =3D 1; i < subprog_cnt; i++)
->> -			verbose(env, "+%d", env->subprog_info[i].stack_depth);
->> -		verbose(env, " max %d\n", env->max_stack_depth);
->> -		verbose(env, "insns processed %d", env->subprog_info[0].insn_processe=
-d);
->> -		for (i =3D 1; i < subprog_cnt; i++)
->> -			if (bpf_subprog_is_global(env, i))
->> -				verbose(env, "+%d", env->subprog_info[i].insn_processed);
->> -		verbose(env, "\n");
->> +		verbose(env, "stack depth max %d\n", env->max_stack_depth);
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> ---
+>  include/linux/btf.h   |  1 +
+>  kernel/bpf/verifier.c | 20 +++++++++++++++-----
+>  2 files changed, 16 insertions(+), 5 deletions(-)
 >
-> [Severity: Medium]
-> Does this new output format break the veristat tool?
+> diff --git a/include/linux/btf.h b/include/linux/btf.h
+> index c09b7994de4e..380dc10b6750 100644
+> --- a/include/linux/btf.h
+> +++ b/include/linux/btf.h
+> @@ -79,6 +79,7 @@
+>  #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its=
+ first argument */
+>  #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its=
+ second argument */
+>  #define KF_IMPLICIT_ARGS (1 << 16) /* kfunc has implicit arguments suppl=
+ied by the verifier */
+> +#define KF_SPIN_LOCK    (1 << 17) /* kfunc is allowed inside bpf_spin_lo=
+ck-ed region */
 >
-> In tools/testing/selftests/bpf/veristat.c:parse_verif_log(), the tool use=
-s
-> sscanf to parse the legacy format:
+>  /*
+>   * Tag marking a kernel function as a kfunc. This is meant to minimize t=
+he
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7aa47342dc65..9f3feba3c2fe 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11657,11 +11657,21 @@ static bool is_bpf_stream_kfunc(u32 btf_id)
+>  	       btf_id =3D=3D special_kfunc_list[KF_bpf_stream_print_stack];
+>  }
 >
->     if (2 =3D=3D sscanf(cur, "stack depth %511s max %ld", stack,
->                     &s->stats[MAX_STACK]))
+> -static bool kfunc_spin_allowed(u32 btf_id)
+> +static bool kfunc_spin_allowed(struct bpf_verifier_env *env, s32 func_id=
+, s16 offset)
+>  {
+> -	return is_bpf_graph_api_kfunc(btf_id) || is_bpf_iter_num_api_kfunc(btf_=
+id) ||
+> -	       is_bpf_res_spin_lock_kfunc(btf_id) || is_bpf_arena_kfunc(btf_id)=
+ ||
+> -	       is_bpf_stream_kfunc(btf_id);
+> +	struct bpf_kfunc_meta kfunc;
+> +	int err;
+> +
+> +	if (is_bpf_graph_api_kfunc(func_id) || is_bpf_iter_num_api_kfunc(func_i=
+d) ||
+> +	    is_bpf_res_spin_lock_kfunc(func_id) || is_bpf_arena_kfunc(func_id) =
+||
+> +	    is_bpf_stream_kfunc(func_id))
+> +		return true;
+> +
+> +	err =3D fetch_kfunc_meta(env, func_id, offset, &kfunc);
+> +	if (err || !kfunc.flags)
+> +		return false;
+> +
+> +	return *kfunc.flags & KF_SPIN_LOCK;
+>  }
 >
-> When presented with the new format "stack depth max %d", the %511s token
-> greedily matches the string "max", causing the literal " max " check to f=
-ail.
-> This would cause sscanf to return 1, silently leaving the MAX_STACK and S=
-TACK
-> counters unpopulated (reporting 0) for all analyzed programs.
->
->> +		for (i =3D 0; i < subprog_cnt; i++) {
->> +			const char *name =3D env->subprog_info[i].name;
->> +
->> +			if (!name || !name[0])
->> +				name =3D "<unknown>";
->> +			if (i =3D=3D 0)
->> +				verbose(env, "prog (%s) insns %d stack %d\n", name,
->> +					env->subprog_info[i].insn_processed,
->> +					env->subprog_info[i].stack_depth);
->> +			else
->> +				verbose(env, "subprog %d (%s) insns %d stack %d\n", i, name,
->> +					env->subprog_info[i].insn_processed,
->> +					env->subprog_info[i].stack_depth);
->
-> [Severity: Medium]
-> Since the bpf_subprog_is_global(env, i) check was removed here, does this
-> print misleading instruction counts for static subprograms?
->
-> The verifier only calculates insn_processed for global subprograms and th=
-e
-> main program, as static subprograms are verified inline and their cost is
-> attributed to their callers. By removing the bpf_subprog_is_global() chec=
-k,
-> are we now unconditionally outputting "insns 0" for all static (non-globa=
-l)
-> subprograms?
->
+>  static bool is_sync_callback_calling_kfunc(u32 btf_id)
+> @@ -17289,7 +17299,7 @@ static int do_check_insn(struct bpf_verifier_env =
+*env, bool *do_print_state)
+>  				     insn->imm !=3D BPF_FUNC_spin_unlock &&
+>  				     insn->imm !=3D BPF_FUNC_kptr_xchg) ||
+>  				    (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL &&
+> -				     (insn->off !=3D 0 || !kfunc_spin_allowed(insn->imm)))) {
+> +				     !kfunc_spin_allowed(env, insn->imm, insn->off))) {
+>  					verbose(env,
+>  						"function calls are not allowed while holding a lock\n");
+>  					return -EINVAL;
 
-This is legit, but it is based on how we account insns processed. It is don=
-e for
-main subprogs and global subprogs. It might not even make sense to do per s=
-tatic
-subprog accounting, given it can be called in various ways that affect the =
-insns
-processed of the CFG rooted at it throughout the program.
+Why not apply it to all of the existing kfuncs? Also, use [PATCH bpf-next] =
+subject.
 
-So we can leave it as insns 0, or do something different, but I don't have
-better ideas on what that would be.
-
->> +		}
->>  	}
->>  	verbose(env, "processed %d insns (limit %d) max_states_per_insn %d "
-
+pw-bot: cr
