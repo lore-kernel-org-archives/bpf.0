@@ -1,139 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-168.mta1.migadu.com (out-168.mta1.migadu.com [95.215.58.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0BDC43CE5A
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 21:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B313FB7E5
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 21:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785878095; cv=none; b=D9WqxLKvDLczpkiFj5st0tm5ahzdKg2skRHbtKic7J17KYLZHqj9ZjDM1B6Mqrwr0bbkP2/uMGLl4tQ0S4ndh+HDjYgL1JmxcHjaS27JzuQqChPodpx2VuHzQK1U27CBOx/vCUHQtcr6ZdV3SjWZhFPWxnkwI2nVM4Z5dNfnZbM=
+	t=1785878380; cv=none; b=EdMapcPk/dphWUmeOnYjBvL6d79JJgYPWYzXKPWUzj15DmmyGH7pLliSQv4i3tbNHpeBWw/N0/3QpScQNS11qED7kG9l22s0lS5MtpBWqKjE/EO52wjNLz98eHKyEg+6QqzYGib6Zy+F4nCrAYl4lGsCixjTgVhr/yRT/+587nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785878095; c=relaxed/simple;
-	bh=DDx+6mjPPXClZSy3WJw5fsm9s3+F6LkejdvEvMlkllI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ql9T7I/Ax829SKmPeNHA8TNXwXtg6dnVHgLKJ8NaFJG/YIXUyEvO42eqg81foWPvoYusqygklVjJeIhk3xH6iUjIbs1nU+ULbmCdmzOxh1Y+2ZXh1QJwWSHiGRYgaymNOGQuTVtBF2oY53W2zQEUqKZ33koyg7iXpb13H8zYnq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jtmUDmqt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785878380; c=relaxed/simple;
+	bh=AkgyGrX3XEqgQGFPpmTNH3hOyuYKh1UX/MQKCu3sQzQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K3WaNai1X0q6/F+TBR7lCL0pIbPImFODvLWSEb7t0Hd1dRzT1qwtWXUO9oaYKBjLe8DsMazyRcQ3pDSQZDx5AFDacCCkYKtcqBGZM+CHh4+W9l+JWYYMlQGKIq7crOZbcdjP9oXnQWoedtBxudOxwrmrB8TGFkzdFnBhuInh6cI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Hkp64Rm8; arc=none smtp.client-ip=95.215.58.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtmUDmqt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7F621F000E9;
-	Tue,  4 Aug 2026 21:14:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785878091;
-	bh=7wxJvTrskCXuOS+ksRnX2EPl4gCBV5IxkiJdhjslZrw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jtmUDmqtoK7OVTLbQczMYP8vTty2k9+qTT8U0qyd2oSAWHd4zL9Tc8/1AxGQimG4K
-	 wFtyN0LGO+dlQ2xnqQ0Q+d/QVSGL2Dyi2agIb/MDAYdXPBg3+3/pmgYTU/rh8hHNTS
-	 qF/LNVRX+ZJrm4woavN5KMe3lT+dgy4qLXNvadlE8JkBDQqmN1YiAFj9NK0e/KqWR2
-	 PdUJAFnp5jYnrAKL5cSPXDHTTW3N9UBgVMaI2JEgj0hL/50TW8sj89Ey4zs7ydFGYE
-	 Z+cLau95vjMzrruu3q9WQuiYQxscUngLIleP8c9IaR+q0Rcj2DTRE+BYO424DYeT7c
-	 achsuMlLh5oSw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 05/13] bpf: Account R2 of register-pair
- returns in live register analysis
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260804203548.1872337-1-yonghong.song@linux.dev>
-References: <20260804203522.1869244-1-yonghong.song@linux.dev>
- <20260804203548.1872337-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 04 Aug 2026 21:14:51 +0000
-Message-Id: <20260804211451.A7F621F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Hkp64Rm8"
+Message-ID: <6c9500d4-7401-44f0-93a6-88a827026ae0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785878376;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Vz5KvMKHl+IVx7jZXATmIkaoAJEIKPeHkqmEstCHKt4=;
+	b=Hkp64Rm8ms+6MSOx2XwkNqecZh/UCYquFzp0nVdGjhriNJnJaN49sVdri91A6NgKJwvZJy
+	rJ6ulEBveblhyXgZhTvFDpcZ96qHl+aTp/sJ/XhNGFJneGGEwN1Fc0oFuVI7SoqYoMZlB6
+	RKaSY5mTH049u4CGQlinQR9M2e+4iS8=
+Date: Tue, 4 Aug 2026 14:19:05 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH dwarves] btf_encoder: Infer arena kfunc arguments from
+ suffixes
+To: Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, dwarves@vger.kernel.org
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+References: <20260803125518.2279340-1-memxor@gmail.com>
+ <4cb8bb30-1f01-4b78-a6b1-4ade3b965039@linux.dev>
+ <DKGENYO9FITK.1M51V4BULBSYT@gmail.com>
+ <8dc173dc3d051d338916c72cae070238718fd196.camel@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <8dc173dc3d051d338916c72cae070238718fd196.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] The verifier fails to check if BPF_REG_2 is initialized at BPF_EXI=
-T for global subprograms returning > 8 bytes, which can lead to leaking uni=
-nitialized memory.
-- [High] The verifier fails to copy the callee's R2 to the caller's R2 in p=
-repare_func_exit() for static subprograms returning > 8 bytes.
---
+On 8/4/26 1:22 PM, Eduard Zingerman wrote:
+> On Tue, 2026-08-04 at 21:27 +0200, Kumar Kartikeya Dwivedi wrote:
+>> On Tue Aug 4, 2026 at 8:43 PM CEST, Ihor Solodrai wrote:
+>>> On 8/3/26 5:55 AM, Kumar Kartikeya Dwivedi wrote:
+>>>> [...]
+>>
+>>>
+>>> So while I understand the reluctance to add KF_ARENA_ARG3..N, I don't
+>>> think we want to introduce and support yet another mechanism for arena
+>>> argument annotations. If we do, we'll be stuck with a mess of
+>>> supporting two/three ways of doing the same thing for the foreseeable future.
+>>
+>> I think one major difference is that KF_ARENA_ARG* things were mostly for
+>> annotating the vmlinux.h with the right address space label before, but didn't
+>> carry any semantic meaning for the kfunc's type checks.
+>>
+>> That changes with these suffixes though. The pointer will be translated when
+>> passed into the kfunc. IMO it would be odd to diverge for this particular case,
+>> since we use suffixes for every other case where we constrain the input type of
+>> the kfunc argument or give it special meaning.
+>>
+>> We also want to have similar annotation on struct_ops callbacks, where we also
+>> use suffixes, so it seemed better to keep it consistent.
+> 
+> I agree that we should follow the principle of least surprise here and
+> use suffixes, as everything else uses suffixes as well.
 
---- Patch [5]: [PATCH bpf-next v2 05/13] bpf: Account R2 of register-pair r=
-eturns in live register analysis ---
-commit 149c9afee6775ff575a63e08693b340337d96491
-Author: Yonghong Song <yonghong.song@linux.dev>
+Ok, I understand the motivation. Let's say we use the suffixes.
 
-bpf: Account R2 of register-pair returns in live register analysis
+Should this enable getting rid of KF_ARENA* flags then? For the
+purposes of generating address_space(1), we can also just check the
+name suffix, no?
 
-This commit updates the live register analysis in the BPF verifier to mark =
-R2
-as read at BPF_EXIT for subprograms returning a value larger than 8 bytes. =
-It
-uses bpf_ret_reg_pair() to determine if a subprogram returns its value in t=
-he
-R0:R2 register pair.
+> 
+> And yes, the __arena and KF_ARENA_ARG* annotations have different
+> semantics:
+> - __arena means that user space arena address is passed as is
+> - KF_ARENA_ARG* means that a user space address is converted
+>   to a kernel space address before passing.
 
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index 0aadfbae0acc5..68df6d8db4bda 100644
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-[ ... ]
-> @@ -2174,7 +2179,7 @@ static void compute_insn_live_regs(struct bpf_verif=
-ier_env *env,
->  			break;
->  		case BPF_EXIT:
->  			def =3D 0;
-> -			use =3D r0;
-> +			use =3D ret_reg_pair ? (r0 | BIT(BPF_REG_2)) : r0;
+Also I am a little confused about whether we *need* to be able to
+express two distinct meanings of "arena pointer" or not?
 
-[Severity: High]
-Does check_global_subprog_return_code() also need to check BPF_REG_2 when t=
-he
-subprogram returns a register pair?
+My understanding is that "arena pointer" is a feature of an arg type
+that has a single meaning: the pointer has one base in BPF world, and
+a different base when executed in the kernel.
 
-If a global BPF subprogram returns a 16-byte value (e.g., an __int128 or
-struct) but does not write to R2 before exiting, the verifier only validates
-that BPF_REG_0 is initialized:
+The things that are missing is auto-conversion (Tejun's RFC [1]) and more
+comprehensive support of PTR_TO_ARENA in the verifier.
 
-kernel/bpf/verifier.c:check_global_subprog_return_code() {
-    ...
-	return check_global_ret_scalar_reg(env, BPF_REG_0);
-}
+This is still only one "arena" annotation per arg. Do we actually need
+the proliferation of __arena, __arena__nullable and/or __arena_kern,
+__arena_user? Can't we have a single defined semantics of how arena
+pointers are supposed to work?
 
-Although check_global_ret_scalar_reg() was refactored earlier in this series
-so that it can be reused for R2, there appears to be no call added to check=
- R2
-in check_global_subprog_return_code().
+I can imagine something like follows:
+  * arena pointers can not be null, check for nulls
+    before passing from BPF prog to the kernel
+  * arena pointers are converted to the kernel space for
+    kfunc/struct_ops callback by the verifier
 
-Can this allow a global subprogram to leak uninitialized kernel memory or
-pointers in the CPU register corresponding to R2 back to the kernel caller?
+With the documented and enforced semantics like this one way of
+annotating and one annotation should be enough.
 
-[Severity: High]
-Additionally, should prepare_func_exit() copy the callee's R2 to the caller=
-'s
-R2 for static subprograms returning > 8 bytes?
+What am I missing?
 
-Currently, prepare_func_exit() only copies R0:
+[1] https://lore.kernel.org/bpf/20260713024414.3759854-1-tj@kernel.org/
 
-kernel/bpf/verifier.c:prepare_func_exit() {
-    ...
-	} else {
-		/* return to the caller whatever r0 had in the callee */
-		caller->regs[BPF_REG_0] =3D *r0;
-	}
-    ...
-}
+> 
+> It appears, though, that from the BPF program side having an address
+> space annotation on the kfunc parameter would be helpful, as it avoids
+> an additional cast.
+> > Tbh, it sounds like we want __arena_user and __arena_kern suffixes.
+> 
+>> I agree that all of these should be using type tags, but we're not there yet.
+> 
+> Let's put aside the type tags discussion for the time being.
+> 
+> ...
 
-If a BPF program calls a static subprogram that returns a 16-byte value, and
-the caller attempts to use the upper 8 bytes returned in R2, won't the veri=
-fier
-reject the valid program with a read of uninitialized register error?=20
-
-This happens because the caller's R2 was marked NOT_INIT prior to the call =
-by
-clear_caller_saved_regs(), but prepare_func_exit() does not propagate the
-callee's R2 value back to the caller.
-
->  			break;
->  		case BPF_CALL:
->  			def =3D ALL_CALLER_SAVED_REGS;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260804203522.1869=
-244-1-yonghong.song@linux.dev?part=3D5
