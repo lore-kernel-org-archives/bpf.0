@@ -1,89 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C633F9F5C;
-	Tue,  4 Aug 2026 02:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE894418A55
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 03:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785811250; cv=none; b=WQGGROFEzvJ8IkXSamke8sGSCk030rdngjgBpCQH4oIuVFUQuWgQSMLK7tIdssBZ4Q7A1ZfJjMLh781agWc744sdD/HRUmp0X6WknyfkIdMUaxOL4J7AMf8oOBBmdHgtUxYaxbrDTEMFl+JPFL7jMikeMAnvhUDlovREuDtI7pg=
+	t=1785812555; cv=none; b=c4CarFmlcWrGvxziRYVPWWuBq0NdGHXjEwxDdoQv2E1hSszwYMZQH+o9A4HTwm9xdwGEEpCSsv+aBsxIGXB6tf/+EZKa2CAaVy1aqWXZ7fi/slWeh7xO3b5T+/nID5zciUYjxP3O0oBm24bjnmiqTNFMFkmeqwUyHsfHT7O0lk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785811250; c=relaxed/simple;
-	bh=nVyF0PlbsxSqR2QIno5VTkX07Iqlqh64cJ0ksmoZk5g=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=u4qMX0BaKcckdDW7VlRjDV/fmzkJP+KDUiuVII3eJ8kmjLZTGEjDrthwqDGYqwVI2Homr1Vwr0i0YvO7GPPsWvuQKei7uorp1xG+ecee16rgKj4W8kh2cjIJ3Bd9U05G31GVs1wVbtNsx+piuGLQlCeMCAbh5FyGFFeGmc8g4xU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T13tUpv2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785812555; c=relaxed/simple;
+	bh=eaoJ1IskrnVOGhuAIWVS+HVh0D4Ynb6oZ8yTdWa7+z8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=UgIBHWtFb/U0HQ8uzsmqWHi2gtMZyk+DLKu3vOrz30HR6uQbhE99Bosswy5ttfnX5X989zAOzF9LgHg1xbsBbaFU2+tJoq8ijCnYO1sbnvIdqvw3zWfpnbsraBnjGYgjngR3OejuPqXcdQEB2jJof3Jt+JI6a4AH0aCgwyhFidY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UPXQgwOH; arc=none smtp.client-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T13tUpv2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E611F000E9;
-	Tue,  4 Aug 2026 02:40:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785811248;
-	bh=15lzLCqHAnV9ZJD5zJGXMNc+UlZaHfgR/lxWXia8vPs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=T13tUpv2yXK6Yzj1j2/zKH4ixGDvrASWmFkzu+BEFxYXlXqxxCC5NsXM1jxT+ItkI
-	 /0Z7Oltsnn6YDz2vLyNVtsYEMkvA2m9cg1CDjREs5YyO0bbDgKJpOHo5syKz9TtTST
-	 v5GAyqmeM+ERPgFXrENFrsuRkyZAWeHQi5qfC1lQWWSdBXVaQiyq7bM47k4YOdjbYb
-	 qxzJl5aNGiPTD0pNSPzwKqo+zQQnnGtmGthUdrp/E223IGEpnOa2V30iLkytrjtrwP
-	 ++RvUqg/xbW/kf+xGtvzpF2FdyfWD4ACjkr+ZrFJ8MCiBYndrdWOTRogtaOV7NC019
-	 Z8poserjtcerw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A95392446B;
-	Tue,  4 Aug 2026 02:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UPXQgwOH"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2d04908139bso66716355ad.2
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2026 20:02:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785812553; x=1786417353; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LY2ip7132St3jJZsR4G7SPhj6q5d2AehkyJW/gkz2yM=;
+        b=UPXQgwOHk682AP91VLoVl+3FM+SfWj1eFgt0/JFQAmaMrsMZOAMcfIJOiMyg6uMVX1
+         WkP+RUMZRFX6Kgm7ek5gq1fNvLhIH+8mdx6VZsJ/c6CxOYcTDe4ZsVRkIk+MJAnwMLt2
+         UP/9ReykPVyNEqPcjkj/38B1Vu8OpHhYbAcwxYgVxtQjoV5pIy+RM7in9/G8dfIjP1VW
+         v355Sxxar0PDzWB/9XVnFzBXpePJHAXvt4xiefJAfcEdkbo06izEdcAr9p2HpTPyRQDx
+         tAcjCYpwtbgQUOSmq5Wh2WycBdNcmJEFsd17tJb3Cno58V296Z9DPEvOdHh/RjM0U/qp
+         DesQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785812553; x=1786417353;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LY2ip7132St3jJZsR4G7SPhj6q5d2AehkyJW/gkz2yM=;
+        b=ocEWVm8b7+eUwpGF6hlNEKXUF6p2zZMTPPCDa3l6eCzBbspaiqxJoXJyb83KsbMBi2
+         saDs/YJ1AHkaNeSfzdHjCGiFD4WX0mHZjHanNwdc1RB1megOSJ+nbpPy1uLMXK7QL9e+
+         RIoo+mwPOogAPZ5yD8rElhZlc/F28pfSKuNZQwNL9W8AH23wqY5pYCSTGXvNoK5Z0JxG
+         CE/KWsQX9JK7rmu7rpSggPQOWazFS/0fguMlOWRRM7yX6kEl39OdOVPqWJ0ktfefc/O2
+         KEugYsePgLRav23WFwkkzvJfIB0lmj20wIsF/u1TAt8YhnTz7jjrdd2q4mvOvECXCfpn
+         C9cg==
+X-Forwarded-Encrypted: i=1; AHgh+RqpSWGaSdhornJlpmJ48WE/4Gzw/xJlLicoHv0owhdlJNqUQ1cFO43ZdCId3fuyduyD36E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDy3NcG4WSncmehEzqNqrt7wiZ7j+wFdHNv23noIhML6H2vyiX
+	ucN/5UYtp/2grTE7RiiTp7NQ1v357NGl92QJsgBbX8EaSDrEUsOEPiMsusDG46iNt+VuqbxDqMR
+	mWtbETg==
+X-Received: from pjbms3.prod.google.com ([2002:a17:90b:2343:b0:380:66e1:bdd5])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:39c5:b0:37f:e326:6557
+ with SMTP id 98e67ed59e1d1-38fbc408b1cmr13754374a91.4.1785812552636; Mon, 03
+ Aug 2026 20:02:32 -0700 (PDT)
+Date: Tue,  4 Aug 2026 03:00:49 +0000
+In-Reply-To: <ca8d8c570509b02355bb4bd4e56859f3e2564c9c.1785576172.git.rakukuip@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v13 0/2] net: mana: add ethtool private flag for
- full-page RX buffers
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178581120914.2928327.8546409528500669691.git-patchwork-notify@kernel.org>
-Date: Tue, 04 Aug 2026 02:40:09 +0000
-References: <20260729063347.3388035-1-dipayanroy@linux.microsoft.com>
-In-Reply-To: <20260729063347.3388035-1-dipayanroy@linux.microsoft.com>
-To: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
- decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, leon@kernel.org,
- longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
- shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
- ernis@linux.microsoft.com, linux-hyperv@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rdma@vger.kernel.org, stephen@networkplumber.org,
- jacob.e.keller@intel.com, dipayanroy@microsoft.com, leitao@debian.org,
- kees@kernel.org, john.fastabend@gmail.com, hawk@kernel.org,
- bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
- yury.norov@gmail.com, pavan.chebbi@broadcom.com,
- schakrabarti@linux.microsoft.com, gargaditya@linux.microsoft.com
+Mime-Version: 1.0
+References: <ca8d8c570509b02355bb4bd4e56859f3e2564c9c.1785576172.git.rakukuip@gmail.com>
+X-Mailer: git-send-email 2.55.0.571.g244d577d93-goog
+Message-ID: <20260804030232.2430103-1-kuniyu@google.com>
+Subject: Re: [PATCH 1/1] bpf: Check sk_fullsock() in bpf_tcp_*_syncookie
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: enjou1224z@gmail.com
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
+	edumazet@google.com, emil@etsalapatis.com, horms@kernel.org, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kuba@kernel.org, 
+	lmb@cloudflare.com, martin.lau@linux.dev, memxor@gmail.com, 
+	netdev@vger.kernel.org, pabeni@redhat.com, rakukuip@gmail.com, 
+	sdf@fomichev.me, song@kernel.org, vega@nebusec.ai, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 28 Jul 2026 23:21:27 -0700 you wrote:
-> On some ARM64 platforms with 4K PAGE_SIZE, utilizing page_pool
-> fragments for allocation in the RX refill path (~2kB buffer per
-> fragment) causes 15-20% throughput regression under high connection
-> counts (>16 TCP streams at 180+ Gbps). Using full-page buffers on
-> these platforms shows no regression and restores line-rate
-> performance.
+From: Ren Wei <enjou1224z@gmail.com>
+Date: Sat,  1 Aug 2026 21:59:39 +0800
+> From: Luxiao Xu <rakukuip@gmail.com>
 > 
-> [...]
+> bpf_tcp_gen_syncookie and bpf_tcp_check_syncookie accept a socket pointer
+> 'sk' with argument type ARG_PTR_TO_BTF_ID_SOCK_COMMON. However, they access
+> sk->sk_protocol without validating whether 'sk' represents a full socket.
+> 
+> When a BPF program passes a mini-socket (such as struct request_sock or
+> struct inet_timewait_sock obtained via bpf_skc_lookup_tcp), sk_protocol
+> is located beyond the memory boundary allocated for mini-sockets.
+> Directly dereferencing sk->sk_protocol leads to a slab-out-of-bounds
+> kernel read.
+> 
+> Fix this issue by adding a sk_fullsock(sk) check at the start of both
+> bpf_tcp_gen_syncookie and bpf_tcp_check_syncookie before inspecting
+> fullsock-specific fields.
+> 
+> Fixes: c0df236e1394 ("bpf: Change bpf_tcp_*_syncookie to accept ARG_PTR_TO_BTF_ID_SOCK_COMMON")
+> Cc: stable@vger.kernel.org
+> Reported-by: Vega <vega@nebusec.ai>
+> Assisted-by: Codex:gpt-5.4
+> Signed-off-by: Luxiao Xu <rakukuip@gmail.com>
+> Signed-off-by: Ren Wei <enjou1224z@gmail.com>
+> ---
+>  net/core/filter.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index b446aa8be5c3..afdcfdf41489 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -7678,6 +7678,9 @@ BPF_CALL_5(bpf_tcp_check_syncookie, struct sock *, sk, void *, iph, u32, iph_len
+>  	if (unlikely(!sk || th_len < sizeof(*th)))
+>  		return -EINVAL;
+>  
+> +	if (!sk_fullsock(sk))
+> +		return -EINVAL;
+> +
+>  	/* sk_listener() allows TCP_NEW_SYN_RECV, which makes no sense here. */
+>  	if (sk->sk_protocol != IPPROTO_TCP || sk->sk_state != TCP_LISTEN)
 
-Here is the summary with links:
-  - [net-next,v13,1/2] net: mana: refactor mana_get_strings() and mana_get_sset_count() to use switch
-    https://git.kernel.org/netdev/net-next/c/d52f80731055
-  - [net-next,v13,2/2] net: mana: force full-page RX buffers via ethtool private flag
-    https://git.kernel.org/netdev/net-next/c/5b5cb75fb86a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Simply swap the order of these, TCP_LISTEN implies full sock.
 
 
+>  		return -EINVAL;
+> @@ -7752,6 +7755,9 @@ BPF_CALL_5(bpf_tcp_gen_syncookie, struct sock *, sk, void *, iph, u32, iph_len,
+>  	if (unlikely(!sk || th_len < sizeof(*th) || th_len != th->doff * 4))
+>  		return -EINVAL;
+>  
+> +	if (!sk_fullsock(sk))
+> +		return -EINVAL;
+> +
+>  	if (sk->sk_protocol != IPPROTO_TCP || sk->sk_state != TCP_LISTEN)
+>  		return -EINVAL;
+>  
+> -- 
+> 2.43.0
