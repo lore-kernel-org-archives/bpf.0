@@ -1,142 +1,208 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763FA3655CA
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509B03F8EC9
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785875627; cv=none; b=HaUk5NdGLQ8xNrjRwbQSaoXSBQ86ELTue213fetDYVkifZYK96hdOdF+9nitmIl6D0unBzZ5IObyG3eBAmKpTEDnJTTuxNmrILXz/GfAghG0GscQUiz+jzRCCcV6PEs2W4abbndNHCADaLDuf6QYnOIvcY3SeE3G1K7LySWlRlY=
+	t=1785875740; cv=none; b=k+OqBgtBgVDSfyFMvWVZTXFNFf6QF860TAisXci9t4c30gEtGKbZu/fCJf7NbaeVBheKbSgn4XBbXolRIY873M/XX2Rx+YwezG8/Epi+xT0yxnYpfhPHAIjhKAIf90dE6f2c+42dfwoyDG6xeG89ZN9PtmSjkPqftksCSpn6prY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785875627; c=relaxed/simple;
-	bh=fXgx4ED8nG+8c2bGMEqmx8SOXW+rC0YTfnhe+gBeJb4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gZyxlBEjLTG1WBhZnzrywpVkaAOQsidK8V9FBdXQdI7oSOCfqaYRf7I3qDytfzW8Mw2Iq/abuPJ/uRBczVUv3m0rKu6ECSTzSlYzMye4eG644/xa+n4wWi9dDXbCoMDEkdWw5NySiDNi1CfWEMqDGgOOUhyiD4/d+QAe0RZkFbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UHB+4xA3; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UHB+4xA3"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-38e041ea211so297104a91.0
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 13:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785875626; x=1786480426; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=fXgx4ED8nG+8c2bGMEqmx8SOXW+rC0YTfnhe+gBeJb4=;
-        b=UHB+4xA3xTL8pUjNM1C6zaiqLv8KpA7QQ8BbJg6/lj3S9rAdAAfes2FBJA5l8wV2Wz
-         FwsLFd/PQsJCjz5pvLS/SHr4gJtlA6dXmj+khd6aHGA//UHsySUqQ/G1tpYOGyNaxW1e
-         qDZ1Q67zYkIch58RGqWQyzjVlQKev7cabeoOuLRMOhsIGdWaYmhUUHUpxG5T07wjECS4
-         aM+ywaKszai7DahPvWGpBkKei6PvdknPGMI8cUJlCakRanX5uLAPn0/5PpGou3sUqlTw
-         AYskhAMNhEev0mzv6WnfI7erq3/V0VLVUinEPT2jd9hpM+BlwShpG8581gRfJvCjNPsh
-         XDWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785875626; x=1786480426;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fXgx4ED8nG+8c2bGMEqmx8SOXW+rC0YTfnhe+gBeJb4=;
-        b=Y7E6Ygv9+Mj98FS3VaCQau9/QAmufeg8iM8D1OEQrqB4fHfHYQJIT/uZDJ8Llc1S06
-         bRRcgJYnx2qNL/UNnzLNR69KxU4whr1kdN08pghYQwN0PYLVu65hoDAFPKUptmdpP++6
-         n6fEGQFfFrqIZ7FHv5eHV9hICsjaDGUHBTODxtURgKkg7GSzqavNQDFiFAp7Q6HrLn85
-         03tYkg6eoNMOs+gAVf6jECuNHWqlkgVeTIeOZwzIvHO6mA22gdE/JbDcliOrAeotnTU4
-         9fil49M2ekoWw1z+AujwHrH2AdglA2/Md4MwaGDc/fqyD41kLKZBTDXhuOax+eJtN71t
-         1Oew==
-X-Forwarded-Encrypted: i=1; AHgh+Rruf2x9dKJkXraF9fy0p0JOlcXgDNMDr7u5VKjLu3SiWHLakoJiSVH4/tDfLc/lQh7pFMs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzuc3CSeUDx0QAJ6AY4a5xw2ntEgkD4Nl9Hvr6qwsH2AbLIeARk
-	TfuotaajpVFEfXNkr6J//aQaaG7chw452WXh8zoeuQwBp/j2vA3tSwmk
-X-Gm-Gg: AR+sD11hAOWteA8iqG08nkStb9WYf684yCtq3uNy+M0SyjeKjQZnYh/MPy8MtOJ8WLI
-	qB0aYK8IkYEQIoCmocHeGuI5pbPUpbsf1qC2z8eN5sWrgjXY6+9sUR8B/WX7F3YTlhL/Ftu6HCN
-	ecDi4NUJ7CuqBT8emqJLzGdaM3BKWmhCpuyEToOMDj1Ro4dv44Bw5hNSzMbawRAC3kBs/KgJmOp
-	IcpEN9BTVEJ6XrwXA3hfOjreq/3vJVtitW52NuUiTsBqo1ieaPz45rGNpsb/7obTpoaGRibNZct
-	WYQSCeVLi++hiYobeb/ntRJitZDG4VM43sB/QRpg7irA3xSvvSrK4aSJJBEI73asbORPjBCrjzj
-	FXjPMHU2brKZtrL/JS7ikC+z8r3taskSSnw9j+cAaZVWkXh5xFTHEZ6F5ek7SqpMi/jQkX6XpdO
-	zEONyf3wBPEIIcQt2SSx5IX+42fomcfSMrmxOAZAWqvDXja68LUYlT2qkBPHaZ88t1BdgeNgECc
-	1ZvR3HcdqTQxFwA
-X-Received: by 2002:a17:90b:3985:b0:380:873:49cb with SMTP id 98e67ed59e1d1-3903c6996abmr1046954a91.21.1785875625595;
-        Tue, 04 Aug 2026 13:33:45 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3903927dddbsm420984a91.9.2026.08.04.13.33.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 13:33:45 -0700 (PDT)
-Message-ID: <6022cc53a26ea291178b648a6b07c0e8d6874c70.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 5/9] selftests/bpf: Add kfunc __arena and
- __arena_nullable argument tests
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis	 <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Tue, 04 Aug 2026 13:33:42 -0700
-In-Reply-To: <DKGFY9Q5M8NG.1OR49ZSZI3VCZ@gmail.com>
-References: <20260803125115.2264733-1-memxor@gmail.com>
-	 <20260803125115.2264733-6-memxor@gmail.com>
-	 <7f0d996cbfb2703450b9974d18c9f60ac2a3a959.camel@gmail.com>
-	 <DKGFO6NR1WR4.JUGJA7Q941BU@gmail.com>
-	 <4d3b9137362fd9151ecdaf29d863a6cc0b0799d1.camel@gmail.com>
-	 <9552fc68c2d06c5dd88bb7494b4934e779bc45c6.camel@gmail.com>
-	 <DKGFY9Q5M8NG.1OR49ZSZI3VCZ@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	s=arc-20240116; t=1785875740; c=relaxed/simple;
+	bh=lxfN5M5zIcuYrH9Sj+h7oKo+kh/92U1IVX+e3FdRfFc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rhxxPWm5LBIHOx4rvyZrXxcvR48TxqUtbv1KeGdM8rNULkIm0CCavqYHO2SJvCEppgPPTvz05Knu7odIHg0Bdvk+J5FzTPDciCpJ83b72iosMa1ipP4f1OMvLouN/F/KAGqCMm934g0tRPZsXsbGp7XBmQhyruXPgM0RWd9CeVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id AD68721FBFEA5C; Tue,  4 Aug 2026 13:35:22 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH v2 00/13] bpf: Support aggregate return values up to 16 bytes
+Date: Tue,  4 Aug 2026 13:35:22 -0700
+Message-ID: <20260804203522.1869244-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-08-04 at 22:28 +0200, Kumar Kartikeya Dwivedi wrote:
-> On Tue Aug 4, 2026 at 10:26 PM CEST, Eduard Zingerman wrote:
-> > On Tue, 2026-08-04 at 13:24 -0700, Eduard Zingerman wrote:
-> > > On Tue, 2026-08-04 at 22:14 +0200, Kumar Kartikeya Dwivedi wrote:
-> > >=20
-> > > ...
-> > >=20
-> > > > > Which leads to several conclusions:
-> > > > > - We should reach a consensus regarding KF_ARENA* usage, as these
-> > > > > =C2=A0 kfuncs would clearly benefit from having __arena annotatio=
-ns on
-> > > > > =C2=A0 parameters (on the BPF side, on the host side these should=
- be
-> > > > > =C2=A0 declared as plain pointers).
-> > > >=20
-> > > > Yes, but even if we do, for the time begin, we won't have support f=
-or
-> > > > automatically emitting it until resolve_btfids changes are done. Th=
-at said, I
-> > > > can manually add the annotation for now.
-> > >=20
-> > > We can fast-track resolve_btfids.
-> > >=20
-> > > > > - In patch #1, it appears that there is no need to allow PTR_TO_A=
-RENA
-> > > > > =C2=A0 for parameters passed to such a function. At-least I don't=
- see a C
-> > > > > =C2=A0 code not involving manual casts that would require such su=
-pport.
-> > > >=20
-> > > > This one I don't understand. Why wouldn't we get PTR_TO_ARENA typed=
- paramters as
-> > > > arguments?
-> > >=20
-> > > `(u64 *)val` is translated as an address space cast instruction.
-> > > This instruction yields PTR_TO_ARENA. Except for explicit casts,
-> > > how else can you pass PTR_TO_ARENA to such a function?
-> >=20
-> > For example, `foo->ptr` yields a scalar from the verifier point of view=
-.
-> >=20
->=20
-> Sure, but I don't think we should reject the case where someone does expl=
-icit
-> cast. See e.g. the global function __arena tag, which also accepts both c=
-ases.
+LLVM 23 can return an __int128, or a struct/union larger than 8 bytes and
+no larger than 16 bytes, in the BPF R0:R2 register pair [1][2]. Before
+that the BPF backend could not return such values at all: a by-value
+aggregate return was rejected at compile time with "aggregate returns are
+not supported", and an __int128 return failed in the backend with "unable
+to allocate function return #1".
 
-PTR_TO_ARENA is already a valid kernel space pointer, it does not need
-additional conversion.
+This series teaches the kernel the same convention, so that BPF programs
+and kfuncs can return these values. The first 8 bytes of the value come
+back in R0 and the second 8 bytes in R2. It applies to kfunc returns and
+to BPF-to-BPF subprogram returns, both global and static. The main progra=
+m
+is unchanged: its return value is the program's exit code, so a return
+larger than 8 bytes is still rejected at BPF_EXIT.
 
->=20
-> > >=20
-> > > ...
+Patches 1-2 are preparation: patch 1 factors out the per-register check
+used by the global return path, and patch 2 adds the shared helpers that
+answer "does this subprogram return a register pair", so that the patches
+which follow can be ordered independently. Patch 3 wires up the JIT side.
+Patches 4-5 teach precision backtracking and live register analysis about
+R2 as a second return register, ahead of the patch that starts modeling i=
+t.
+Patch 6 rejects callbacks returning more than 8 bytes, since neither
+bpf_callback_t nor bpf_exception_cb has a second return register. Patch 7
+adds the verifier support proper, patch 8 rejects a pair return once the
+subprogram's BTF has been marked unreliable, and patch 9 relaxes
+btf_distill_func_proto() and btf_validate_return_type(), which is what
+makes the whole thing reachable. Patches 10-12 add selftests and patch 13
+documents the convention.
+
+Constraints worth calling out:
+
+ - A by-value struct or union returned by a kfunc or by a global subprogr=
+am
+   must be composed only of scalars. The verifier models the returned
+   register bits as an unknown scalar, so a pointer member would be
+   laundered into one and escape provenance and reference tracking. A
+   static subprogram is verified inline and is not restricted this way.
+
+ - Returning the pair from a kfunc needs the JIT to place the second half
+   into R2, which is architecture-specific work. Architectures opt in
+   through bpf_jit_supports_kfunc_ret_reg_pair(); x86_64, arm64 and riscv=
+64
+   do so here, and elsewhere bpf_add_kfunc_call() rejects such a kfunc wi=
+th
+   -EOPNOTSUPP. A register-pair return from a BPF subprogram needs no suc=
+h
+   capability.
+
+ - The interpreter propagates R0 alone out of a subprogram, so the JIT is
+   forced wherever a caller can observe the pair.
+
+ - The compiler side requires LLVM 23 or newer. The selftests written in =
+C
+   record which compiler built them in a read-only flag and report a skip
+   rather than a pass when built by anything older; the inline-asm tests =
+do
+   not depend on the compiler and run everywhere.
+
+  [1] https://github.com/llvm/llvm-project/pull/190894
+  [2] https://github.com/llvm/llvm-project/pull/206876
+
+Changelog:
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20260708200939.2153664-1-yonghong.s=
+ong@linux.dev/
+    - Split the R0:R2 helpers out of the verifier patch into their own
+      preparation patch, and reordered the series so the core verifier pa=
+tch
+      comes after the infrastructure it depends on.
+    - New patch rejecting callbacks that return more than 8 bytes, both
+      helper/kfunc callbacks and exception callbacks, with selftests.
+    - New patch rejecting a register-pair return once btf_check_subprog_c=
+all()
+      has marked the subprogram's BTF unreliable, rather than silently
+      mistracking R2.
+    - Folded "bpf: Force JIT for programs using the R0:R2 register pair" =
+into
+      the verifier patch.
+    - Dropped "bpf: Reject >8 byte return values on return-reading trampo=
+line
+      paths" and its selftests; that went in separately as commit
+      c48796aa6c39.
+    - Described the register mapping as the first and second 8 bytes rath=
+er
+      than the low and high 64 bits, which is only correct on little-endi=
+an,
+      and reworded "16-byte" to "up to 16 bytes" where the range 9..16 wa=
+s
+      meant.
+
+Yonghong Song (13):
+  bpf: Factor check_global_ret_scalar_reg() out of the global return
+    check
+  bpf: Add helpers to describe the R0:R2 return register pair
+  bpf: Wire up JIT support for 16-byte kfunc returns
+  bpf: Track R2 of register-pair returns in precision backtracking
+  bpf: Account R2 of register-pair returns in live register analysis
+  bpf: Reject callbacks returning more than 8 bytes
+  bpf: Add verifier support for 16-byte returns in R0:R2
+  bpf: Reject register-pair returns when the subprog BTF is unreliable
+  bpf: Enable aggregate return types up to 16 bytes
+  selftests/bpf: Add C tests for 16-byte returns in R0:R2
+  selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
+  selftests/bpf: Add tests for callbacks returning more than 8 bytes
+  Documentation/bpf: Document up to 16-byte kfunc return values in R0:R2
+
+ Documentation/bpf/kfuncs.rst                  |  62 +++
+ arch/arm64/net/bpf_jit_comp.c                 |   5 +
+ arch/riscv/net/bpf_jit_comp64.c               |   5 +
+ arch/x86/net/bpf_jit_comp.c                   |  21 +
+ include/linux/bpf_verifier.h                  |  16 +
+ include/linux/filter.h                        |   1 +
+ kernel/bpf/backtrack.c                        |  59 ++-
+ kernel/bpf/btf.c                              |  44 +-
+ kernel/bpf/core.c                             |   5 +
+ kernel/bpf/liveness.c                         |  25 +-
+ kernel/bpf/verifier.c                         | 287 ++++++++++--
+ .../selftests/bpf/prog_tests/aggregate_ret.c  | 176 ++++++++
+ .../selftests/bpf/prog_tests/exceptions.c     |   2 +
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |  15 +
+ .../testing/selftests/bpf/prog_tests/timer.c  |   2 +
+ .../selftests/bpf/progs/aggregate_ret_func.c  | 420 ++++++++++++++++++
+ .../bpf/progs/aggregate_ret_int128_c.c        |  48 ++
+ .../selftests/bpf/progs/aggregate_ret_kfunc.c | 127 ++++++
+ .../bpf/progs/aggregate_ret_kfunc_c.c         |  66 +++
+ .../selftests/bpf/progs/aggregate_ret_run.c   | 168 +++++++
+ .../bpf/progs/aggregate_ret_struct_c.c        |  82 ++++
+ .../bpf/progs/aggregate_ret_target.c          |  29 ++
+ .../bpf/progs/aggregate_ret_union_c.c         |  58 +++
+ .../bpf/progs/btf__exceptions_ret_pair_fail.c |  10 +
+ .../bpf/progs/btf__timer_ret_pair_fail.c      |  10 +
+ .../selftests/bpf/progs/exceptions_fail.c     |   2 +-
+ .../bpf/progs/exceptions_ret_pair_fail.c      |  30 ++
+ .../selftests/bpf/progs/freplace_ret_pair.c   |  20 +
+ .../selftests/bpf/progs/timer_ret_pair_fail.c |  49 ++
+ .../selftests/bpf/progs/verifier_arena.c      |  38 ++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  64 +++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  46 ++
+ 32 files changed, 1930 insertions(+), 62 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/aggregate_ret.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_func.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_int12=
+8_c.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_kfunc=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_kfunc=
+_c.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_run.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_struc=
+t_c.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_targe=
+t.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_union=
+_c.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__exceptions_ret=
+_pair_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__timer_ret_pair=
+_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_ret_pair=
+_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/freplace_ret_pair.c
+ create mode 100644 tools/testing/selftests/bpf/progs/timer_ret_pair_fail=
+.c
+
+
+base-commit: 457d4ecb47aaf7a2cb46aaadd76e8c812e4f3c9e
+--=20
+2.53.0-Meta
+
