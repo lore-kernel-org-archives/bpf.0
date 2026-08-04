@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E9134F46D
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 18:47:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F6546AA81
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 18:47:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785869222; cv=none; b=jlN6pVWfgjq43Om/1B7ng+T3Lht0qANaXnfe+ZQMVDVbGFm5eZet67dfsuKiaEsBBQbFOsV5Yr/IxQKncL2j8pXr5jak5EMVlUEErCuAbFliNP1m2QBya4Q3BvYFLxlo2qynI9O5XNkVh63QaspuZG1oQ0r1gOzJAO+M1dfYUCA=
+	t=1785869223; cv=none; b=rLNuUyT/lFYD5laYC8prhptXutHpOuArbASlhisK1Iy+5qJPAgj/3j4YzWy+DXqDFAJ6eDYvp/r7sDjqwAxX4fkgGRew09GCatreSyD1VQG3q5VY/9MFtDM9yWtnI9BMHgTeHnCxnLxgHMFbK8NNS5Grog6+vKRm7EQwcLAZH7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785869222; c=relaxed/simple;
-	bh=QLzVzKWKFiDd4T0/gB8IE0iAWVELhGn5cOriOd8poZ4=;
+	s=arc-20240116; t=1785869223; c=relaxed/simple;
+	bh=p8zVV+kKesqNHt0+Nl98/9wjVlmfOEW/1aDqsrm3nkM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QbT7tcL5zfMA2Oaf2BSTmroEi5fNo5MWFfY8rVZp2lAegVSAwNz3aibcw5QN3pux5fpSJQPBRbckEb5pbw+F4bXr8jMJuaqdoXOCHo1k6LE2DjtgBdyqscx6r4Gq7qnZYo1A29sZy0UmuyI2OPsMgbkEV16qipOhRwFvSz6wJxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mEEWjYEi; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=GEZdBNvGTn01xt6ROyDG9aRHmwggkoECBYb9vXQc3zw6or+7j7ajOflWr65ggcJs4R5dWzEvhrLcu337QLtedfGJenCs+TE29Q/WCNEX2/Jq/6f60QkfTgAe92AkcP7rh8BEH3uKxzd5jYXHqkL5In+n2SDUV9DhnvvZsokvUU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YgtDqlzC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mEEWjYEi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43FAE1F000E9;
-	Tue,  4 Aug 2026 18:47:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YgtDqlzC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B8811F00A3D;
+	Tue,  4 Aug 2026 18:47:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785869221;
-	bh=VJHkQy6ZJHniVJ5MuMDYlr2YsdSYwE4XXd4a0Htb2vQ=;
+	s=k20260515; t=1785869222;
+	bh=sQs3TVyyJg4dPp5jpSIY4J19KgCRmuQyXk7NbjmU95g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mEEWjYEi3AOdH9kKBm23yx4EoBNUSEdnVNG86Bt+yygQe1voFvQ1jAT9h348Si866
-	 v9Mp/4YuqXnwo5c9V/uY2OPGn+goGar5GOcORsmsOpyoLC3hG9/S0X+qyu+2hM5D7S
-	 XKlChcEywrzmuHWdIUxV2Itye+iRuKJTZ1LrWGYNXcpruJMV2vpFSRZDpASm4t80tc
-	 vFxCUb3NWb10PwRb5V8fOfM2xuHjYtQUiTM+1RtExy1BxhW8FX6OMR8o/v1dnjvePa
-	 KXvHRG6GUKfe/fTA9MKxbL3tRhHN/ap5S2nLYhozY6dhw4j/+XJ8hoU3hf/trW3cDZ
-	 yd/VGN4frjJpA==
+	b=YgtDqlzC+Jmlj81CgEGpj3boOgF7iDHiIlMEYybzGngW5av52NNWdPh1jHsLSbntG
+	 Z0QT4PY+1vcVh0hH7l9X9IMEC7/oH/14jyz7rt3VZUJTopJpCquwlxwx/avNoFBaJs
+	 29BlZR7EDAsccqchYzK0AKx/5/bolsvXxrFYEU8p55jUH59jFtyJ6OOE2FpS49x31y
+	 gCVm3uFp9krQW85p8oYwaVOC/DYNUqYVU5xAIt3fGpj4FuqBDdOnr/XVPvNjy05f29
+	 um4HnXl8tseiFG4/rr07hXvT02NUKEzwDL19HdFy26Iv8cbtutPEEwaffXPfIyFmHY
+	 27cEG2gn2RnRw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 08/15] gve: refactor gve_init_priv for reset
- path
+Subject: Re: [PATCH net-next v3 09/15] gve: simplify reset logic
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Harshitha Ramamurthy" <hramamurthy@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260803184630.3813311-9-hramamurthy@google.com>
+In-Reply-To: <20260803184630.3813311-10-hramamurthy@google.com>
 References: <20260803184630.3813311-1-hramamurthy@google.com>
- <20260803184630.3813311-9-hramamurthy@google.com>
+ <20260803184630.3813311-10-hramamurthy@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 04 Aug 2026 18:47:00 +0000
-Message-Id: <20260804184701.43FAE1F000E9@smtp.kernel.org>
+Date: Tue, 04 Aug 2026 18:47:01 +0000
+Message-Id: <20260804184702.3B8811F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,93 +47,125 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
+New issues:
+- [High] The `while (!service_task_enabled)` loop in `gve_recover` forceful=
+ly enables `service_task`, overriding concurrent `disable_work_sync` calls =
+from PM suspend, allowing the task to run while the device is suspended.
+
 Pre-existing issues:
-- [High] AF_XDP zero-copy socket pool bindings are broken and their DMA map=
-pings are leaked across device resets.
-- [High] Concurrent use-after-free and NULL pointer dereference of `priv->s=
-tats_report` during `gve_stats_report_task`.
+- [High] `gve_xsk_pool_enable` and `gve_xsk_pool_disable` unconditionally d=
+ereference `priv->xsk_pools`, which is NULL if the device failed to recover=
+ from a reset.
 --
 
---- Patch [8]: [PATCH net-next v3 08/15] gve: refactor gve_init_priv for re=
-set path ---
-commit 02971463a0e35f7deed56d888e3c49b020365965
-Author: Harshitha Ramamurthy <hramamurthy@google.com>
-gve: refactor gve_init_priv for reset path
+--- Patch [9]: [PATCH net-next v3 09/15] gve: simplify reset logic ---
+commit e14381443089f802adbf14cabd9d5e8b89337630
+Author: Joshua Washington <joshwash@google.com>
+Subject: gve: simplify reset logic
 
-This patch refactors device initialization into distinct steps by introduci=
-ng
-gve_setup_device() and gve_adminq_init(). It reorganizes device properties
-configuration to ensure gve_init_priv() is only called once, preparing the
-driver for upcoming mailbox mode additions.
+This commit simplifies the GVE reset logic by removing recursive resets,
+avoiding resets during teardown, and separating control plane resource
+allocation from device setup. Shared resources are now retained until the
+hardware reset completes to prevent premature release.
 
 > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
 ernet/google/gve/gve_main.c
+> index 6f04eefd04166..578520e107930 100644
 > --- a/drivers/net/ethernet/google/gve/gve_main.c
 > +++ b/drivers/net/ethernet/google/gve/gve_main.c
-[ ... ]
-> @@ -2414,6 +2414,35 @@ static void gve_set_buf_sizes(struct gve_priv *pri=
-v)
->  		priv->header_buf_size =3D device_info->header_buf_size;
+> @@ -591,7 +591,22 @@ static void gve_free_notify_blocks(struct gve_priv *=
+priv)
+>  	priv->msix_vectors =3D NULL;
 >  }
 > =20
-> +static int gve_setup_device(struct gve_priv *priv)
+> -static int gve_setup_device_resources(struct gve_priv *priv)
+> +static void gve_free_control_plane_resources(struct gve_priv *priv)
 > +{
-> +	int err;
-> +
-> +	priv->num_registered_pages =3D 0;
-> +
-> +	priv->xsk_pools =3D bitmap_zalloc(priv->rx_cfg.max_queues, GFP_KERNEL);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does this unconditionally
-overwrite the existing AF_XDP zero-copy socket pool bindings across a reset?
-
-When a reset occurs (e.g., via MTU change or watchdog timeout),
-gve_setup_device() re-allocates priv->xsk_pools as a new, zeroed bitmap. The
-old bitmap is freed during teardown, but the previously bound XSK pools do
-not appear to be restored.
-
-Consequently, when queues are restarted, wouldn't gve_get_xsk_pool() return
-NULL, causing XDP zero-copy registration to be skipped and fall back to
-standard memory models (PAGE_SHARED/PAGE_POOL)?
-
-> +	if (!priv->xsk_pools) {
-> +		err =3D -ENOMEM;
-> +		goto err;
-> +	}
-> +
-> +	gve_set_netdev_xdp_features(priv);
-> +	if (!gve_is_gqi(priv))
-> +		priv->dev->xdp_metadata_ops =3D &gve_xdp_metadata_ops;
-> +
-> +	err =3D gve_setup_device_resources(priv);
-> +	if (err)
-> +		goto err_free_xsk_bitmap;
-> +
-> +	return 0;
-> +
-> +err_free_xsk_bitmap:
 > +	bitmap_free(priv->xsk_pools);
 > +	priv->xsk_pools =3D NULL;
-> +err:
-> +	return err;
-> +}
 
 [Severity: High]
-This is a pre-existing issue, but since this patch refactors the device set=
-up
-and reset recovery paths, could there be a race condition when tearing down
-the stats report?
+This is a pre-existing issue, but does the driver safely handle a NULL
+xsk_pools bitmap if recovery fails?
 
-In gve_free_stats_report(), the stats timer is deleted and the stats_report
-DMA memory is freed. However, it does not call
-cancel_work_sync(&priv->stats_report_task).
+If gve_recover() fails during a reset (for example, if gve_setup_device()
+fails), priv->xsk_pools is left as NULL because it is freed here during
+teardown.
 
-If the gve_stats_report_task executes asynchronously on priv->gve_wq during
-or immediately after the memory is freed, could it lead to a use-after-free
-or NULL pointer dereference when accessing priv->stats_report->stats in
-gve_handle_report_stats()?
+Since the netdev remains registered, a subsequent AF_XDP socket bind from
+userspace could call gve_xsk_pool_enable() or gve_xsk_pool_disable().
+These functions unconditionally dereference the bitmap:
+
+drivers/net/ethernet/google/gve/gve_main.c:gve_xsk_pool_enable() {
+    ...
+    set_bit(qid, priv->xsk_pools);
+    ...
+}
+
+Could this lead to an immediate NULL pointer dereference if a user with
+sufficient privileges configures AF_XDP on the failed device?
+
+[ ... ]
+
+> -static int gve_reset_recovery(struct gve_priv *priv, bool was_up)
+> +static int gve_recover(struct gve_priv *priv, bool setup_queues)
+>  {
+> +	bool service_task_enabled =3D false;
+>  	int err;
+> =20
+>  	err =3D gve_adminq_init(priv);
+>  	if (err) {
+>  		dev_err(&priv->pdev->dev,
+>  			"Failed to alloc admin queue: err=3D%d\n", err);
+> -		goto err;
+> +		goto teardown_device;
+>  	}
+> =20
+>  	err =3D gve_adminq_verify_driver_compatibility(priv);
+>  	if (err) {
+>  		dev_err(&priv->pdev->dev,
+>  			"Could not verify driver compatibility: err=3D%d\n", err);
+> -		goto err_free_adminq;
+> +		goto teardown_device;
+>  	}
+> =20
+>  	err =3D gve_setup_device(priv);
+>  	if (err)
+> -		goto err_free_adminq;
+> -	if (was_up) {
+> +		goto teardown_device;
+> +
+> +	/* In the case of cascading failures, the disable count could be greater
+> +	 * than 1. The service task must be enabled before starting queues.
+> +	 */
+> +	while (!service_task_enabled)
+> +		service_task_enabled =3D enable_work(&priv->service_task);
+
+[Severity: High]
+Could this loop override a concurrent suspend operation?
+
+If a device reset (gve_reset) runs concurrently with power management
+suspend (gve_suspend), gve_suspend increments the service task's disable
+count via disable_work_sync() and waits for the rtnl_lock.
+
+If gve_reset holds the rtnl_lock and executes gve_recover(), it drops the
+disable count to 0 in this loop. Once gve_reset finishes, gve_suspend
+acquires the lock, completes teardown, and suspends the device to D3.
+
+Since the service_task is now enabled, couldn't it be scheduled to run while
+the device is suspended? This might result in an MMIO read on a D3 state
+device, causing a kernel panic or PCIe AER fatal error.
+
+[ ... ]
+
+> @@ -3017,16 +3025,14 @@ static int gve_suspend(struct device *dev)
+>  	struct gve_priv *priv =3D netdev_priv(netdev);
+>  	bool was_up =3D netif_running(priv->dev);
+> =20
+> +	disable_work_sync(&priv->service_task);
+> +
+>  	priv->suspend_cnt++;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260803184630.3813=
-311-1-hramamurthy@google.com?part=3D8
+311-1-hramamurthy@google.com?part=3D9
