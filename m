@@ -1,105 +1,158 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF35146C849
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 10:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7956844AB68
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 10:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785838047; cv=none; b=Ajv61yh4u+rpsZFWBDKN4ulN4foOWkcO+grEccKdJlbEz+mQk3wrJuM6i0KJxENF5I+HUgZJssRueJ+55FRXOVUshFHRylEqrNfO4P7cL5de/7WKFoj0tRTLKTTQFSzbaUinP1nRQ7EC/t9VCakXq/GLcPLgSrGe7iBXC4ulWGM=
+	t=1785838256; cv=none; b=rGaSv/xdw31k5to+cgWNCVU0onFtK3zZTPj8Moxr7m70OJVaxnE5J+nrHZfGU6scUiVQDk018XMcuh79jqKe/xIrEKFYe/DDMUnvXne8jVrrmhHKYMyjvQe0Td928IPDcAbpXBvL9TsO6eU3l2vz77bP+jCCxY2QUt8QW28RLCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785838047; c=relaxed/simple;
-	bh=jepb+VUTDpbcYOcoiP3c8KCXVj2f5l9bEEJUCWbsoek=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KaGEPTuDvXhdaj+pUuPC6smDRS04c8mYJNRAUvq+wBwjaKTEcNgOnGcjcKQK7kbK9fJk2ipCf8nwe7k4vru7zxCGuNMCTzWHYl1K1oxuC9xiHY6bj+CbauGw1PSQ0P2yfDeu/Invhjw/80SKfsC91lh2GRAIBzlZZz6awBdjzKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=NgUpmUg7; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1785838256; c=relaxed/simple;
+	bh=3LS7SmQMPn4ZNyRcndgHfU64Fewo90PTywg0Ik5GaOE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jVEl2ADoyhFcV3h9XosmWbby/jYPWTjMcfnd9sXeHzFPtCq6s6CQBAEHhpRnylE9UhIu8AJIiZ93fAg7VDc7kdjkBljiHkUNnyk64qHrhlS/IxCXNmMTNYB1G6mnOGWyDfK2slDVw3Szj4JNjrttR1ptjYquUfIJF5v+csKgBAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U4/3lqSu; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="NgUpmUg7"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6a0a4a28cbdso5704511a12.3
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 03:07:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1785838044; x=1786442844; darn=vger.kernel.org;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=jepb+VUTDpbcYOcoiP3c8KCXVj2f5l9bEEJUCWbsoek=;
-        b=NgUpmUg7cQii/IkFbGxBuBK00C8eBks2U+xWy0LE9cz//yNS9Zz/F280DcPWxnm/ds
-         75ubtCxGsi8bohJvB/I+V4vYGsOI/qNd29uEiNj0G5vsWXFTYhcyZb8zSepxNGxGLTwS
-         k1L18HbNKW72YJeOu5FPXDyn0f3M6K5rgdq5QnxPJrHBdt82WgNi+xxUZUQa2cLWxzC0
-         zVg+psjfgLhJFCVnefQF7Px6r/JxnxQ+z9x7R7Aht0Wg6aeMsnX1X8ZBnWtRHgDnZ9yy
-         NDkCqFysjUJzedLAYsFn24GKqPnwc+auWtmMsQ+2r6LCH/aHiRVw92CGEB5URnD9brhG
-         jgAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785838044; x=1786442844;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=jepb+VUTDpbcYOcoiP3c8KCXVj2f5l9bEEJUCWbsoek=;
-        b=lYPM9bcs8wf1AWyzViiU8hGsS4iYIuTHDFYin33I/a8T1sufs2LJYBHVNxDnz2PFDN
-         L9TaYaLPsKkZG2zb3AjPRTU2Q86Si/50CMUuS/MFoeWTDU++9stSib9o7ZGbVV4Rf/bp
-         C9MQBo0WUPrtNxfN19UcunHA89Ri7tF0NZ2q+g0LDzhRsb7FQugbIkWck43LNUiMihZS
-         GpNwAqNUgAOHw4EzEVHjMzwnbbIV/YVW/S8Vi/tjPxM442Ae0ea0Fq4WouGdV+zFuowH
-         DKWKj1QsRLVKsioy9U2bxl0GwKLAe8lCEP08Gb8p5ibjreHVHcD6QYzjzshlgAlszMa0
-         yv3w==
-X-Forwarded-Encrypted: i=1; AHgh+RqKhJCdPlQ+khrmg4u6Vz2rIjD/8llze5RI5GotgVrdBc3+y6J9sKjDShfrSM4zjxPxZdk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxI+yNor0fcz+zYipVXZa3zbGrQFMRHhZZtf3GGQIPAlu4tyEAL
-	n86UXodRS+9C5LnUQe/Dp6yM91CMdvA4wcfwA1ZtWGxSsOV9oLC8mp5Z6IXLWVKTu20=
-X-Gm-Gg: AR+sD10LrRehnYm+cZEnYmSbsjWkmkduCRfJTbqD94lxutvCYZn7UbfeKmsMSFbOJV8
-	8DynPD3frH0pVWco1Ei5hTEt1tKv9cFyKlQN66HSgH9pm8ryy6/5e6tfqIDMPNfFcsjL7L3DcYh
-	Ego36j0Ed34x+UajkYLM4mRbJcfnVfD2M1bQm+c5+8406jdlpRLwhY9Z6ZHWwXvwaTl89C255Ca
-	Tb6MQ47MfGixfLWIOPSzL8yVekEcm6aMfD8CFUmvG/X77b5FyhYolzFQ8jDjbExq+TCEs1SakCE
-	uTVx70awgSKI+WJ3lo7Xyt3OGBT86cy0BXK2M5sQoaZcPkfRmEEJ5fEJY8sXPdEW/SOjLT/WDoo
-	ySE+iQdXeLBV+GUzvwHlPAV8mg2IbUll+G6xJug0WD+qp8IGh/+lwiKQmhnkYIM/TBBL9ouKt7R
-	J6ZgLBp/g69L494iSv44EibcRC8VHXRBovRlUhAMc4yA9G7wABLtbQWWFcqzeY14M=
-X-Received: by 2002:a05:6402:24c7:b0:698:428e:9177 with SMTP id 4fb4d7f45d1cf-6a0a7c899c3mr9512823a12.11.1785838044186;
-        Tue, 04 Aug 2026 03:07:24 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a09c5a09acsm6317456a12.4.2026.08.04.03.07.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 03:07:22 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Eduard
- Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi
- <memxor@gmail.com>,  Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
- <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  Jiri Olsa
- <jolsa@kernel.org>,  Emil Tsalapatis <emil@etsalapatis.com>,  John
- Fastabend <john.fastabend@gmail.com>,  Stanislav Fomichev
- <sdf@fomichev.me>,  "David S. Miller" <davem@davemloft.net>,  Eric Dumazet
- <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
- <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Kuniyuki Iwashima
- <kuniyu@google.com>,  Willem de Bruijn <willemb@google.com>,  Jiayuan Chen
- <jiayuan.chen@linux.dev>,  Joe Stringer <joe@wand.net.nz>,
-  bpf@vger.kernel.org,  netdev@vger.kernel.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf v2 1/2] bpf: Extract shared reqsk-to-listener upgrade
-In-Reply-To: <20260803-sockmap-lookup-tcp-leak-v2-1-306e025bfe66@rbox.co>
-	(Michal Luczaj's message of "Mon, 03 Aug 2026 11:00:42 +0200")
-References: <20260803-sockmap-lookup-tcp-leak-v2-0-306e025bfe66@rbox.co>
-	<20260803-sockmap-lookup-tcp-leak-v2-1-306e025bfe66@rbox.co>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Tue, 04 Aug 2026 12:07:21 +0200
-Message-ID: <87bjbiyzae.fsf@cloudflare.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U4/3lqSu"
+Message-ID: <dd8e114a-7aa0-4657-ba28-2929ebca0973@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785838251;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GqmXyZ+ydu7k847fTb4+bNha4IF2MJ31SeOi++fTq9E=;
+	b=U4/3lqSufnDD0WS5sbifzBSyaHsEbf5BNCXi/uyqz6hi+Xna/FK0CQnOcM3ZhkLu83pTr3
+	R3Hw8XFVfgc4di7forFSx9gLSZcWAXTpa/uTd1w8jWWaEbHDv6GkHSxQydN3qcwir9Ml9+
+	o08Az9uXAV9mqbmBmG42P/TBbx0veh0=
+Date: Tue, 4 Aug 2026 18:09:58 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Subject: Re: [PATCH] bpf: add KF_SPIN_LOCK flag for kfuncs under bpf_spin_lock
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Kaitao Cheng <chengkaitao@kylinos.cn>
+References: <20260804083212.79271-1-kaitao.cheng@linux.dev>
+ <DKG0YUDSTBUY.1X220287HT9V3@gmail.com>
+ <4aa061ed-6640-42b4-9f12-e33edb8ba1b2@linux.dev>
+ <DKG27RH0P7OV.36PQRQ6C74UR0@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <DKG27RH0P7OV.36PQRQ6C74UR0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Aug 03, 2026 at 11:00 AM +02, Michal Luczaj wrote:
-> __bpf_sk_lookup() and bpf_sk_lookup() duplicate the same sk_to_full_sk()
-> reqsk-to-listener upgrade. Extract it into a helper.
->
-> Leave the currently unreachable WARN_ONCE as a defensive assert.
->
-> No functional change.
->
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
+在 2026/8/4 17:42, Kumar Kartikeya Dwivedi 写道:
+> On Tue Aug 4, 2026 at 11:37 AM CEST, Kaitao Cheng wrote:
+>> 在 2026/8/4 16:43, Kumar Kartikeya Dwivedi 写道:
+>>> On Tue Aug 4, 2026 at 10:32 AM CEST, Kaitao Cheng wrote:
+>>>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>>>
+>>>> Introduce the KF_SPIN_LOCK kfunc metadata flag in BTF so kfuncs may be
+>>>> explicitly marked as safe to call while holding bpf_spin_lock.
+>>>>
+>>>> Allow kfuncs defined in kernel modules to be marked with KF_SPIN_LOCK.
+>>>>
+>>>> Example: BTF_ID_FLAGS(func, $kfunc_name, KF_SPIN_LOCK)
+>>>>
+>>>> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>>> ---
+>>>>  include/linux/btf.h   |  1 +
+>>>>  kernel/bpf/verifier.c | 20 +++++++++++++++-----
+>>>>  2 files changed, 16 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/include/linux/btf.h b/include/linux/btf.h
+>>>> index c09b7994de4e..380dc10b6750 100644
+>>>> --- a/include/linux/btf.h
+>>>> +++ b/include/linux/btf.h
+>>>> @@ -79,6 +79,7 @@
+>>>>  #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its first argument */
+>>>>  #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
+>>>>  #define KF_IMPLICIT_ARGS (1 << 16) /* kfunc has implicit arguments supplied by the verifier */
+>>>> +#define KF_SPIN_LOCK    (1 << 17) /* kfunc is allowed inside bpf_spin_lock-ed region */
+>>>>
+>>>>  /*
+>>>>   * Tag marking a kernel function as a kfunc. This is meant to minimize the
+>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>>> index 7aa47342dc65..9f3feba3c2fe 100644
+>>>> --- a/kernel/bpf/verifier.c
+>>>> +++ b/kernel/bpf/verifier.c
+>>>> @@ -11657,11 +11657,21 @@ static bool is_bpf_stream_kfunc(u32 btf_id)
+>>>>  	       btf_id == special_kfunc_list[KF_bpf_stream_print_stack];
+>>>>  }
+>>>>
+>>>> -static bool kfunc_spin_allowed(u32 btf_id)
+>>>> +static bool kfunc_spin_allowed(struct bpf_verifier_env *env, s32 func_id, s16 offset)
+>>>>  {
+>>>> -	return is_bpf_graph_api_kfunc(btf_id) || is_bpf_iter_num_api_kfunc(btf_id) ||
+>>>> -	       is_bpf_res_spin_lock_kfunc(btf_id) || is_bpf_arena_kfunc(btf_id) ||
+>>>> -	       is_bpf_stream_kfunc(btf_id);
+>>>> +	struct bpf_kfunc_meta kfunc;
+>>>> +	int err;
+>>>> +
+>>>> +	if (is_bpf_graph_api_kfunc(func_id) || is_bpf_iter_num_api_kfunc(func_id) ||
+>>>> +	    is_bpf_res_spin_lock_kfunc(func_id) || is_bpf_arena_kfunc(func_id) ||
+>>>> +	    is_bpf_stream_kfunc(func_id))
+>>>> +		return true;
+>>>> +
+>>>> +	err = fetch_kfunc_meta(env, func_id, offset, &kfunc);
+>>>> +	if (err || !kfunc.flags)
+>>>> +		return false;
+>>>> +
+>>>> +	return *kfunc.flags & KF_SPIN_LOCK;
+>>>>  }
+>>>>
+>>>>  static bool is_sync_callback_calling_kfunc(u32 btf_id)
+>>>> @@ -17289,7 +17299,7 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+>>>>  				     insn->imm != BPF_FUNC_spin_unlock &&
+>>>>  				     insn->imm != BPF_FUNC_kptr_xchg) ||
+>>>>  				    (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
+>>>> -				     (insn->off != 0 || !kfunc_spin_allowed(insn->imm)))) {
+>>>> +				     !kfunc_spin_allowed(env, insn->imm, insn->off))) {
+>>>>  					verbose(env,
+>>>>  						"function calls are not allowed while holding a lock\n");
+>>>>  					return -EINVAL;
+>>>
+>>> Why not apply it to all of the existing kfuncs? Also, use [PATCH bpf-next] subject.
+>>
+>> I do not think all kfuncs are suitable for the KF_SPIN_LOCK context.
+>> Kfuncs marked with KF_SLEEPABLE are an obvious example. Developers
+>> should add KF_SPIN_LOCK with great care and ensure that the kfunc
+>> does not sleep and is safe to call in atomic context; otherwise, it
+>> could easily introduce deadlocks.
+>>
+>> However, the kfuncs explicitly allowed by kfunc_spin_allowed(), such
+>> as those covered by is_bpf_graph_api_kfunc, is_bpf_iter_num_api_kfunc,
+>> is_bpf_res_spin_lock_kfunc, is_bpf_arena_kfunc and is_bpf_stream_kfunc,
+>> can be marked with KF_SPIN_LOCK. We can then simplify kfunc_spin_allowed()
+>> to rely solely on the flag.
+> 
+> Yes, of course. I meant those that we maintain as a list in the verifier.
+> KF_SPIN_LOCK is not a very optimal name. Should we do KF_ALLOWED_IN_LOCK_CS?
+> A bit verbose but better captures the intended meaning.
 
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+The existing KF_* flag names are generally concise, so a much longer name
+feels somewhat out of place. I would also prefer the name to preserve the
+full spin_lock semantics, since "lock" can refer to many different lock
+types, such as mutex.
+
+Alternatively, following the naming of GFP_ATOMIC, could we call it KF_ATOMIC?
+
+-- 
+Thanks
+Kaitao Cheng
+
