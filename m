@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE543ABD8D
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1302375F96
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785876741; cv=none; b=mz/lBfsmroSLmAEKyXQyO54S8JG83MbM4OFNRc23nUaAxkBYRqzkJxgpDX6O/BUuOhDV56xPZgYK8AKSbpHMnQqKxYuN34IZ9lGCDCzX67CiOoO9cLka3ULFIRfR+tJqhGtJ/QDTYfIA7OnMeUg5O+IdxBiRGL6B3XoQAy1MrL4=
+	t=1785876765; cv=none; b=EwSJYCqsxz8Y3GgZWIGrGRkoEKfPYgPf9/DGBabK1Bv2xMmcQZ+rORB14Di2sfvO7pi1WomVXY1UOur5PxYLO72HACV/fcjlEKbFPK268HCzj8+jRjtFfDDIZHmvduBy63/epdsr0LpT1wX0vsMqLxM2MMEI1QKV94/Q5QUAwuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785876741; c=relaxed/simple;
-	bh=pB/2wR4iFMHFYu+7zqBTWCPOMOdzrvzbuAiHJzGCiZQ=;
+	s=arc-20240116; t=1785876765; c=relaxed/simple;
+	bh=Xf0Y6bKfXK0AcsDX0M1jfFgZiDfjAD4LqDrOH9wFsMs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ItvydhaSpunmLXwQOJST/dqb3kPAkCLhz6OaXhf6oigtN3Bms09hKevIrno+pZmJGZf42V42VvJ2oGxNeb+H1e5HgrFoDSNIJbF8okBujv10prOVKo+1Cs7A4wf2p69NmR/7G1yx0jFiCJW7snvGxs8PtBHn0UcsNdNsRIhfjF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SQx3nmg9; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=dPxioMcO4IwegLyutW2i1vbbO6oyL6cPWInt2EsipV8kAOx2PQdakVsElFz3Dx2dlPbrToqhqbLyjA6EtI/b+zGX78i/fHB84voXdrlnAp7EReiea/mQzR9Yd3GeX2sUGmtFFYoO0vOwZCTasm2K2UuyjxoF7vpm/L3LioTJFKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ft4wtysB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SQx3nmg9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44AC1F000E9;
-	Tue,  4 Aug 2026 20:52:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ft4wtysB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F7E71F000E9;
+	Tue,  4 Aug 2026 20:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785876740;
-	bh=WGAx2kA/aCQtyZMj5MmrKk3OTyyUPwTvjPrzmYNjCo0=;
+	s=k20260515; t=1785876763;
+	bh=bNFnJtXGSz0xCkR6jXfvoAcY1tj0YLrChhOO2ddJcKM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SQx3nmg9nzKrY04eaghGTfrBSSZ9KnLTnHnp5or3E1u6HCI6qLaaWthJ7tWM/2JNk
-	 1RbrLE6tpitQDywKog12DHRsgMXb5wh46Td2oRwTolsE5oLooVkTcaRDMXbjGzoBLq
-	 h+uqXOa2OoSvmOOXPgonS/ezLe1zq0EaAjQW3H9I2BD1jm9V8bIgoxPpWWW6jy3peM
-	 gBPWjzwnYXz2cY9qo+1vSbngOf01p0O8MI9vBJM6a+wMzDqNLc1hn5VKOwpLKyWzN/
-	 YbnCyJ4HLb8bxOjn7aLIVCcBUNNSfVDcBXVQ8mB2WfqFwqju+jZTUXWewrOVnZEeVq
-	 858l0y9O1oFdw==
+	b=ft4wtysBDl1wRnNZosn4w/iz7KAwHIze4h6bD3YcSmyQZ04ZDY3v8ciivQ3D+Ryoc
+	 pbSHvsjUVkZO63DzuwPIyk6mvxXZWdsPeKYI/7flexXEI469z5I334BKENC7lViMBT
+	 tNcvhXzJBq4xsqDF626QwMlEEvRbjno698aA6IerEnilJNCim+9wR3zYDrmB5XIoVw
+	 JE5JjoOmLKRhugElwrWnngiLWc84Vm0Qg3s38wEwvGmmEYlolbwQoF7jt9hcMudfBZ
+	 2np0Yy6m4f3gSvT+N980qMtFxbDBv/beeJaH58bt3W/SvFOpuOG5ekjdwQ9FhkrUOS
+	 q7wA7dgckfeDQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 07/13] bpf: Add verifier support for 16-byte
- returns in R0:R2
+Subject: Re: [PATCH bpf-next v2 11/13] selftests/bpf: Add inline-asm and
+ subprog tests for R0:R2 returns
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260804203558.1873903-1-yonghong.song@linux.dev>
+In-Reply-To: <20260804203618.1878749-1-yonghong.song@linux.dev>
 References: <20260804203522.1869244-1-yonghong.song@linux.dev>
- <20260804203558.1873903-1-yonghong.song@linux.dev>
+ <20260804203618.1878749-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 04 Aug 2026 20:52:19 +0000
-Message-Id: <20260804205219.D44AC1F000E9@smtp.kernel.org>
+Date: Tue, 04 Aug 2026 20:52:42 +0000
+Message-Id: <20260804205243.5F7E71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,73 +47,136 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Kfuncs returning 9-15 byte structs leak uninitialized kernel mem=
-ory via R2 because the verifier bypasses zero-extension.
+- [Medium] The inline assembly tests verifying kfunc struct returns and __i=
+nt128 values incorrectly assume little-endian register packing, which will =
+cause deterministic test failures on big-endian architectures.
 --
 
---- Patch [7]: [PATCH bpf-next v2 07/13] bpf: Add verifier support for 16-b=
-yte returns in R0:R2 ---
-commit 5c235db7cbd600a1b91b24fbad96652d702b6b3a
+--- Patch [11]: [PATCH bpf-next v2 11/13] selftests/bpf: Add inline-asm and=
+ subprog tests for R0:R2 returns ---
+commit 43d5815a2f48399212b5d17d74ef9350c219fc0e
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-bpf: Add verifier support for 16-byte returns in R0:R2
+selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
 
-This commit adds verifier support for returning values in two registers
-(R0 and R2) for structures between 9 and 16 bytes or __int128. It adds
-handling for subprogram and kfunc returns to map the second return
-register to BPF_REG_2.
+Add inline-asm tests, which do not depend on the compiler lowering a
+register-pair return and so run regardless of the LLVM version, covering
+what the C tests cannot reach.
+
+> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_run.c b/tool=
+s/testing/selftests/bpf/progs/aggregate_ret_run.c
+> new file mode 100644
+> index 0000000000000..fac813531b4fe
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_run.c
 
 [ ... ]
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5584178a0e1c7..60b9e587e0947 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -10859,6 +10901,22 @@ static void mark_btf_func_reg_size(struct bpf_ve=
-rifier_env *env, u32 regno,
->  	return __mark_btf_func_reg_size(env, cur_regs(env), regno, reg_size);
->  }
-> =20
-> +/* Mark the register(s) holding a @size byte kfunc return value as unkno=
-wn
-> + * scalars. All of them are processed the same way, only the size differ=
-s:
-> + * a single register may hold a sub-register sized value, while both hal=
-ves
-> + * of a register pair are treated as 64-bit wide.
-> + */
-> +static void mark_kfunc_ret_regs(struct bpf_verifier_env *env,
-> +				struct bpf_reg_state *regs, u32 size)
+> +SEC("tc")
+> +int aggregate_ret_asm_kfunc_test(struct __sk_buff *skb)
 > +{
-> +	u32 i, nregs =3D ret_regs_cnt(size);
+> +	__u64 a =3D skb->len;
+> +	__u64 b =3D skb->len ^ 0xdeadbeefULL;
+> +	__u64 lo, hi;
 > +
-> +	for (i =3D 0; i < nregs; i++) {
-> +		mark_reg_unknown(env, regs, ret_regs[i]);
-> +		mark_ret_reg_size(env, regs, ret_regs[i], nregs =3D=3D 1 ? size : size=
-of(u64));
+> +	asm volatile (
+> +	"r1 =3D %[a];"
+> +	"r2 =3D %[b];"
+> +	"call %[kfunc];"
+> +	"%[lo] =3D r0;"
+> +	"%[hi] =3D r2;"
+> +	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
+> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_i128)
+> +	: "r0", "r1", "r2", "r3", "r4", "r5"
+> +	);
+> +	if (hi !=3D a + b)
+> +		return 1;
+> +	if (lo !=3D a - b)
+> +		return 2;
 
 [Severity: Medium]
-For kfuncs returning a struct between 9 and 15 bytes in size, does
-forcing sizeof(u64) for both return registers bypass zero-extension for R2?
+Does this assume little-endian register packing for the __int128 return val=
+ue?
 
-If the native compiler only populates the lower bytes of the second return
-register (e.g. RDX on x86_64) for a <16 byte struct, the upper bits will be
-left uninitialized. However, setting the size to sizeof(u64) here sets
-subreg_def to DEF_NOT_SUBREG for R2, which treats R2 as a fully initialized
-64-bit scalar.
-
-Since the verifier's zero-extension logic only supports zero-extending the
-destination register (R0 for calls), couldn't a BPF program performing a
-64-bit read of R2 leak up to 7 bytes of uninitialized kernel register state?
-
-> +	}
-> +}
+On big-endian architectures, the high bits typically occupy the first regis=
+ter
+(R0) and the low bits occupy R2, which would cause this check to fail when
+testing kfunc __int128 returns.
 
 [ ... ]
+
+> +SEC("tc")
+> +int aggregate_ret_struct_test(struct __sk_buff *skb)
+> +{
+> +	__u64 a =3D skb->len;
+> +	__u64 b =3D skb->len ^ 0xdeadbeefULL;
+> +	__u64 lo, hi;
+> +
+> +	/* struct { u64 hi; u64 lo; }: R0 =3D hi, R2 =3D lo. */
+> +	asm volatile (
+> +	"r1 =3D %[a];"
+> +	"r2 =3D %[b];"
+> +	"call %[kfunc];"
+> +	"%[lo] =3D r0;"
+> +	"%[hi] =3D r2;"
+> +	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
+> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_pair)
+> +	: "r0", "r1", "r2", "r3", "r4", "r5"
+> +	);
+> +	if (lo !=3D a + b)
+> +		return 1;
+> +	if (hi !=3D a - b)
+> +		return 2;
+> +
+> +	/* struct { u64 a; int b; }: R0 =3D a, low 32 bits of R2 =3D b. */
+> +	asm volatile (
+> +	"r1 =3D %[a];"
+> +	"r2 =3D %[b];"
+> +	"call %[kfunc];"
+> +	"%[lo] =3D r0;"
+> +	"%[hi] =3D r2;"
+> +	: [lo]"=3Dr"(lo), [hi]"=3Dr"(hi)
+> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_li)
+> +	: "r0", "r1", "r2", "r3", "r4", "r5"
+> +	);
+> +	if (lo !=3D a)
+> +		return 3;
+> +	if ((int)hi !=3D ~(int)b)
+> +		return 4;
+
+[Severity: Medium]
+Will this check fail deterministically on big-endian systems?
+
+The test expects the 32-bit integer b to be in the lower 32 bits of R2. On
+big-endian platforms, b would occupy the upper 32 bits of R2, leaving the
+lower 32 bits as padding.
+
+> +	/* struct { int a; int b; }: 8 bytes, packed into R0; R2 is not used. */
+> +	asm volatile (
+> +	"r1 =3D %[a];"
+> +	"r2 =3D %[b];"
+> +	"call %[kfunc];"
+> +	"%[lo] =3D r0;"
+> +	: [lo]"=3Dr"(lo)
+> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_ii)
+> +	: "r0", "r1", "r2", "r3", "r4", "r5"
+> +	);
+> +	if ((int)lo !=3D (int)a)
+> +		return 5;
+> +	if ((int)(lo >> 32) !=3D (int)b)
+> +		return 6;
+> +
+> +	return 0;
+> +}
+
+[Severity: Medium]
+Could the layout of this 8-byte struct in R0 differ depending on endianness?
+
+The hardcoded cast to (int)lo reads the lower 32 bits of R0. On big-endian
+architectures, the first member of the struct (a) is located in the upper 32
+bits, so reading the lower 32 bits will yield b instead, causing a spurious
+test failure.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260804203522.1869=
-244-1-yonghong.song@linux.dev?part=3D7
+244-1-yonghong.song@linux.dev?part=3D11
