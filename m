@@ -1,85 +1,81 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA90531813A
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 16:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A20440A07
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 17:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785862056; cv=none; b=dQXrR5oLoq2/QVCK9v5hlvnJsW71G/9bGawUN6dyQwlv1jRdnn54gENiVHtUPoVbXiNDejTUP10tSKUJjzH6qyMHa8k/KUuK3YfrJpecPQnk+jze4/ZZXnPGekxsqU/vHnFRIFHeUgSP7Ioqy242w/IRb1aoUFnLfX1/PaWdfMk=
+	t=1785862954; cv=none; b=n0sK2SZFYda85QG8Kp6TYUIJiJWrsFq58fCsnbDH+mGiHu7LcFXY83RWyeWEt/ELhw3EyYgvawOBii4mmt2SogDYgzDhZq0tPRGxKvqYEUlbg0lJDBcc89FjPeFi3i05oqeLZpBt0/Izc/6BhL2KpJzH68SN54pssFspPTwX7/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785862056; c=relaxed/simple;
-	bh=eek9IG+Bai7GTcqw2chitHR1uDwx5tASOpnUG0Wl0ek=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DlP/Z0rFoCQZkhaHn+Lb4/nW0RmDfRmdzIOm9Q3KKakv2vfKd4Cp10KTcFzist1kxFoAFhpwRT6aKKLCDylWYs+Cff2lrAGSzybngRQ/B8qD9RGi8t98VYVwj2sYZRyW7454QRu7kz9KpW33D2ZiGaCDzmjaPPe3/jTanxkBoXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JznapSvR; arc=none smtp.client-ip=209.85.128.52
+	s=arc-20240116; t=1785862954; c=relaxed/simple;
+	bh=EasNQqFhoWwgh34dd7JDJdAM8sYZxoBaW/XlyCRQm70=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=p1ip0veIRkommyBPgfSYejo7ZHQevIBFv7WE33wkDNVJmb/0Ncx8BzeZOpPpSZ4isdu1g1A+IAVGibDSqRN5u20kpB7z7ifLx3xWpX7BvID60ZapZm9KQl0GV6KFnS7IXHpewE+HRV/7gaPS2xbX7opFvzdG8fmOHNu6+/y++f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EJ9uIH+c; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JznapSvR"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-495437bb891so1062025e9.1
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 09:47:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EJ9uIH+c"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-84e04df8c46so43684b3a.2
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 10:02:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785862026; x=1786466826; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gObdtMIk+etzcDrMNS37rCpHYdRlnIlpC3JIoWVru4g=;
-        b=JznapSvR6VlsShWcuUOoFj9LbJcz8aS9uA5UUyPRklWJXRUdorkuAQCrAfbbekxKcs
-         J8PGtWpd4LWu2R8BBw47CVPqhZEgVe3XgZs0iqFpv3cjF+aEQtkf8QOW6OgCPdrik/y/
-         OAOEH5GUWKSspCB4/P4hipgRlzMn4OO5Pc+03wKW9VRmqXfwCbhg+xF/0OrfTK6bAddJ
-         cKTXc4jx003YLx09wpmPKTs29leimyU4Gqc5HiCsMoptQHq+MmHoEEa3a5Gt4StM3piP
-         +IftAV1BWBOomiKg3qboVvbSl5+hf+3/JEaK4ZqroDtL9eZkM7mPkapKEYYd1SBC/gR5
-         HY5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785862026; x=1786466826;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1785862940; x=1786467740; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gObdtMIk+etzcDrMNS37rCpHYdRlnIlpC3JIoWVru4g=;
-        b=WUF+OelZM0s+3snHQa1BU81rRNMc96Jo2h5qy280dZrA4OwSZvM6ioo+RKSnMI9FTT
-         q15O5QZuxllpilvvs6RxWwEMOyVqWEwbhzuUPo8KFor06NqGzGE8QgVN74ifz+uQZexE
-         McXb1EyhdpvMYocsHN0UbHPBYEvmE7FCDvWHVsav3dCl2W5+czneFHFB+bGfaGQ67CMG
-         dTZRMUV8toH+Mm3H2Q/1KTgkvd4G1rjdiNrLe52R0Zzy0eRMddVBnHh8e+2b3LprnMIN
-         xSN4sDRVPrbjFd1IhegOFeJKD3P1CQFEt+bbeinXhOfR2oQjPAKe9Se5yR5xNvI40Sk9
-         raEA==
-X-Gm-Message-State: AOJu0YzMwVxmlWe3Z14U8Py1AXXXVi1EFcj2O3W03VuVbR7aYuLUG1qV
-	v1xi4NKobSf9n2oQz0N9UIsP6dMGhHSsSz5qiBOnYVc7I1sN2kOSe84A8ln5cktfHUI=
-X-Gm-Gg: AR+sD10dAxPgZraxAgXXwF3POBKMyJ2qxVluod7S2KrMKm9FcFX0XusRoWflXrpzHeM
-	AU2k/+QANn8cczEsuqVV+2s2ejk6FS4cC1iK0d1R5RzqgmHZsyl2Tc4xwv+85Obwfn9bU5+a0VW
-	FCD5DSRSuEo2pozFOL8GpshIZZi0d1Vwx/cYYYnyfEwiVIZYKeuIyu9vN8vttsOU/iv/fCouYBg
-	o20YM0FsvQb4v8bjuJBxpPTHjvuNICbPa0aL5SOX2UQ43PHtURDdeTywWujOxJymiOJOJpjDZ/y
-	5ePq9sdOfxkx+Y9F31uYkvhaLj5A4XpIR3v/vrWnBAX2gWtuPKMyC2jmyoMh6FXaPb121YWVi9S
-	mBM9mM5HmXlLozDKB83F2t0Ty2cmBAKY5xy/1LMbW1bVAZ9U74tIKCmIuggEDhYsnXNdlkUbRdO
-	RZMTG0tV7bMg8xz+kbYQULW70j0ndyKSEkw4K5cBPTNn6yk0/kanptnl0wYfEbSnYKv8CpIGoWM
-	y8x/bi+Ym47uclPoim40KX0d3TcpEz6LQ==
-X-Received: by 2002:a05:600c:1649:b0:495:3c6f:7c18 with SMTP id 5b1f17b1804b1-4994e349da1mr6494525e9.3.1785862025473;
-        Tue, 04 Aug 2026 09:47:05 -0700 (PDT)
-Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4994e04db3asm14229485e9.15.2026.08.04.09.47.04
+        bh=5c7FV/SYJaoQ6sXxC9mgd+gsIFKTyq6EQR4HjtVgA78=;
+        b=EJ9uIH+cjmYOvgZ+r3r+2fGNDenub1zHssXc1Wl8tVR2MCFNTTZeIe/oaKPDcvh2Xr
+         wnZdiemcSsnVvpq23+3g07BiJXXe0tR8IVJfVQY5JdeEnuDdzmFw5q9eZ+NDs0zKWRSv
+         N/fWZa/0XUDnjVNfH4CUdNPsbrBhkXG+jkDP5CUNVZPtpnUOVQ51z64HlaWtIbJO+shz
+         wgN4Oj4Z0RBCs1owxF3P8F4MpRDOuXsRuVv5H1yx3vQmoYxx+xtE61a32s7Iz9b7vnnU
+         5xEId+NL7ozCyiAOHn6HfHv7XmHG+YV/VKZJOv1ehYTOwEsAl/sawe7o7XiSY8sEUL1F
+         asTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785862940; x=1786467740;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5c7FV/SYJaoQ6sXxC9mgd+gsIFKTyq6EQR4HjtVgA78=;
+        b=K1Id5VkiHupxNtRWb+cBuveW5WoiKhrSDa+JcN8Yi0zpGq6bznl1hkTeooiTCgyR6f
+         dDxkJm5WZuYu+3/yGAnZ4kAycZuot+K9RcAacdV2M5V1PpYz0vciexY4ELKf+E8e+yLi
+         +RrUyAOKgoNgWsE9r1no4vb7OcmI25rpDnFYBLSsQvftKuevYOyFfZaBc9XZ2fJBtXFY
+         KoPVKDuTNYVOTUJAXXscJVfHzYO2F9sX3lActN825nu1tnv4CrSIoQCz1JF4n+XO98Ig
+         k8if0O3XigPubAGyyyPA0PTpalqxJAftu4+hmV0tVyqBFZTCdAYjp/apgQ2cYhT69uZR
+         z1Ng==
+X-Gm-Message-State: AOJu0YyNk26GUeqXTOmHPEskyiLkx3gHbTJqVSm6wRDbajoXdt4ViNXp
+	rhv65Vd9unG2MaZ7gYGw73uYhrQzPO4BZkT2IKAITNwyY5/AN/Y33yuEggGB466rRY4=
+X-Gm-Gg: AR+sD11Gj7vrDN6B3m4/Ywe8SNi5UcFN1nvRrNaGZccrrbUmeqCi99HAeI+CLeiDPbv
+	ON/1hoE6rF8rJYObm6E8QH5ZXsbkedLxGRq0jCcEuz/uHUZfddQsRPOKHNFu492ZRLitRb4ZB+e
+	9QrDczOpqOJJGiEu8Nh0fPPrKOp8+mJxe9ykPz1ngWdxPQw0qexWc6Z3My6cNnaid/U9uni8wbY
+	qLee+kM7tZ6gyeiPOYOOKs3MYkuDdITo7E93FA+40Fst74SU4m54eRAFiUDIK0AMyYgUmnm4LyB
+	5bteaLiymYktR157wQ4oJfnd48sIJYwdB/TCy3e/GlLJDV10oosGFDevBvkg3nXN+P559J0y3/h
+	KF2vJpiJ7U59I8BKPAfFSBmc+w4tOnUM1ECA47kCeTB4lhZAIEEIdzGKzPuekuBuZ/bV6c3u+wN
+	5zCmFjuRrxcUs6hjeLLBzxvb13e3oY/YWR45YoKwpo6MobCoydt4FG8hOmEmGLWAdF0OZlC0fa/
+	wlii+MEQsGB/QxxJdtzGA==
+X-Received: by 2002:a05:6a00:2d0b:b0:848:5c00:fa91 with SMTP id d2e1a72fcca58-84f2e0ed967mr322068b3a.38.1785862939579;
+        Tue, 04 Aug 2026 10:02:19 -0700 (PDT)
+Received: from powertower.localdomain ([64.180.35.234])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f2e4d3926sm55508b3a.28.2026.08.04.10.02.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 09:47:05 -0700 (PDT)
-From: Mahe Tardy <mahe.tardy@gmail.com>
+        Tue, 04 Aug 2026 10:02:18 -0700 (PDT)
+From: Mykola Lysenko <nickolay.lysenko@gmail.com>
 To: bpf@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	andrii@kernel.org,
-	ast@kernel.org,
+Cc: ast@kernel.org,
 	daniel@iogearbox.net,
-	davem@davemloft.net,
+	andrii@kernel.org,
 	eddyz87@gmail.com,
-	edumazet@google.com,
-	john.fastabend@gmail.com,
-	kuba@kernel.org,
-	liamwisehart@meta.com,
 	martin.lau@linux.dev,
-	pabeni@redhat.com,
 	song@kernel.org,
-	netdev@vger.kernel.org,
-	sdf.kernel@gmail.com,
-	ameryhung@gmail.com,
-	kuniyu@google.com,
-	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf-next v3 0/5] Introduce bpf_ksock
-Date: Tue,  4 Aug 2026 16:46:47 +0000
-Message-Id: <20260804164652.296919-1-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	nickolay.lysenko@gmail.com
+Subject: [RFC PATCH bpf-next v5 1/8] selftests/bpf: keep headers off the generic link command line
+Date: Tue,  4 Aug 2026 10:01:49 -0700
+Message-ID: <20260804170156.1709916-2-nickolay.lysenko@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
+References: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -88,124 +84,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series introduces bpf_ksock, a set of BPF kfuncs to allow BPF
-programs to create UDP sockets and send data. This provides a mechanism
-for BPF LSM progs to emit telemetry over UDP independently of userspace.
+The generic '$(OUTPUT)/%:%.c' rule links with '$(LINK.c) $^', so
+every prerequisite of such a binary lands on the compiler driver's
+command line. That only works while none of them is a header: gcc
+tolerates a stray .h argument on a link line, but clang treats it as
+a request to precompile the header and fails with "cannot specify -o
+when generating multiple output files".
 
-The main use case is to be able to completely dispense with
-agents/daemons for BPF programs after startup. In the case of
-Isovalent's Tetragon, the idea would be to be able to emit security
-alerts or export data from BPF even when the agent is down. For meta,
-according to Liam presentation[^2], this could replace logging via
-ringbuffers which created cross-binary versioning issues.
+Filter headers out of the recipe, with a comment: header
+prerequisites on these targets are useful for dependency tracking -
+the next patch declares one - and the constraint is easy to
+rediscover the hard way.
 
-The implementation follows the established kfunc lifecycle pattern
-(create/acquire/release with refcounting, kptr map storage, dtor
-registration), for example used by the network bpf_crypto kfuncs.
+Signed-off-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
+---
+ tools/testing/selftests/bpf/Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-For reference, this was discussed at LSF/MM/BPF 2025[^1] in Montreal,
-again at Plumbers 2025 in Tokyo. Liam Wisehart mentioned this work
-during his presentation of BpfJailer[^2]. Then it was also discussed
-during LSF/MM/BPF 2026 in Zagreb.
-
-A first version of it, called bpf_netpoll was submitted to the mailing
-list but eventually NACKED by Jakub Kicinski[^3]. The discussion
-eventually reached an agreement that we should use regular kernel
-sockets if we want to do network from BPF programs[^4]. This was
-fundamentally more complex to implement but here is a first proposition
-of how it could look like after several automated reviews using sashiko.
-
-For more details, here are some of the main adjustements I had to make
-during the preparation of these patches:
-
-Initially, the goal was to register the ksock_kfunc_set with
-BPF_PROG_TYPE_UNSPEC to allow send to be called from any programs. This
-introduces significant challenges (but might be doable). The limitation
-is still that the programs should be able to sleep but combining this
-with bpf workqueue allows to send from virtually anywhere. However, not
-by-passing LSM socket hooks make it impossible to be called from the
-workqueue context as the credential of the initial caller would not be
-preserved. Also, it would be easy for users to shoot themselves in the
-foot and attach a program that sends asynchronously over the network on
-a network hook. So the idea for now is to restrict the ksock_kfunc_set
-(which is acquire, release and send) to SYSCALL and LSM to make it
-simpler. Also to make the patch set easier to start with, the sockets
-are restricted to UDP.
-
-v3 updates:
-Simplifies bpf_ksock_connect arg by using a union (union bpf_ksock_addr)
-containing struct sockaddr_in and struct sockaddr_in6 to remove most of
-bpf_ksock_parse_addr() code (Stanislav).
-
-Note that I initially tried to put the union inside of struct
-bpf_ksock_addr_opts but we ended up with too much struct nesting depth
-from bpf, for example when trying to write the ipv4 address:
-
-	addr_opts.addr.sin.sin_addr.s_addr = ipv4_remote;
-
-It resulted in:
-
-	max struct nesting depth exceeded
-	R2 pointer type STRUCT bpf_ksock_addr_opts must point to void,
-	scalar, or struct with scalar
-
-v2 updates:
-This second version simplifies the patch set by removing bind, keeping
-connect + send for now (could be replaced per sendto if needed). It also
-removes the sysctl limit and the whole hashtable ksock_send guard with a
-single bit in task_struct.
-
-- remove bind from the API (Stanislav, Amery, Kuniyuki)
-- remove the bpf_ksock_max sysctl limit (Stanislav, Kuniyuki)
-- replace ksock_send_guard with a bit in task_struct (Kuniyuki)
-- remove unnecessary init struct sockaddr_storage addr = {}; (Kuniyuki)
-- remove redundant ASSERT_OK_FD (sashiko)
-- fix typos in ksock test patch commit log (bot+bpf-ci)
-- fix return statement in kfunc registration (bot+bpf-ci)
-
-v1 updates (from local sashiko iterations):
-- do not bypass the LSM and thus add send re-enter protection;
-- limit the number of socket creation through the kfunc per ns;
-- copy the arg values to avoid TOCTOU race since kfunc can sleep;
-- prevent calling bpf_ksock_create from workqueue with improper creds.
-
-[^1]: https://lwn.net/Articles/1022034/
-[^2]: https://lpc.events/event/19/contributions/2159/
-[^3]: https://lore.kernel.org/bpf/20260511182019.69ebc7c6@kernel.org/
-[^4]: https://lore.kernel.org/bpf/CAPhsuW71P58XqsXrLbqsShgnozg66TA=T_c=fYrqSSzvL1tTWA@mail.gmail.com/
-
-Link to v2: https://lore.kernel.org/bpf/20260722104454.165911-1-mahe.tardy@gmail.com/
-
-Mahe Tardy (5):
-  net: Add __sys_connect_socket() helper
-  bpf: Add ksock kfuncs
-  selftests/bpf: Add ksock kfunc test
-  selftests/bpf: Add ksock LSM recursion test
-  selftests/bpf: Add ksock test for async callback guard
-
- include/linux/bpf_ksock.h                     |  36 ++
- include/linux/sched.h                         |   4 +
- include/linux/socket.h                        |   2 +
- kernel/bpf/verifier.c                         |   3 +
- net/core/Makefile                             |   3 +
- net/core/bpf_ksock.c                          | 329 ++++++++++++++++++
- net/socket.c                                  |  32 +-
- .../testing/selftests/bpf/prog_tests/ksock.c  | 231 ++++++++++++
- .../selftests/bpf/prog_tests/ksock_wq.c       |  34 ++
- .../testing/selftests/bpf/progs/ksock_basic.c |  37 ++
- .../selftests/bpf/progs/ksock_common.h        |  99 ++++++
- .../selftests/bpf/progs/ksock_recursion.c     |  69 ++++
- tools/testing/selftests/bpf/progs/ksock_wq.c  |  62 ++++
- 13 files changed, 927 insertions(+), 14 deletions(-)
- create mode 100644 include/linux/bpf_ksock.h
- create mode 100644 net/core/bpf_ksock.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ksock.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ksock_wq.c
- create mode 100644 tools/testing/selftests/bpf/progs/ksock_basic.c
- create mode 100644 tools/testing/selftests/bpf/progs/ksock_common.h
- create mode 100644 tools/testing/selftests/bpf/progs/ksock_recursion.c
- create mode 100644 tools/testing/selftests/bpf/progs/ksock_wq.c
-
---
-2.34.1
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 55d394438..65c702613 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -258,9 +258,12 @@ $(OUTPUT)/%.o: %.c
+ 	$(call msg,CC,,$@)
+ 	$(Q)$(CC) $(CFLAGS) -c $(filter %.c,$^) $(LDLIBS) -o $@
+ 
++# Headers may appear among the prerequisites for dependency tracking;
++# they must not reach the clang/gcc command line (clang treats a bare .h
++# argument as a precompiled-header job and refuses -o).
+ $(OUTPUT)/%:%.c
+ 	$(call msg,BINARY,,$@)
+-	$(Q)$(LINK.c) $^ $(LDLIBS) -o $@
++	$(Q)$(LINK.c) $(filter-out %.h,$^) $(LDLIBS) -o $@
+ 
+ # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
+ ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
+-- 
+2.43.0
 
