@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57F8391E59
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 17:59:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D68346AE1
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 18:10:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785866389; cv=none; b=tkymZbnbUuKzmn2PJ9iFVae4nHfkpLk6qOwJNrh801vnflkz6kGvmCobP1PnbnY6rMiEaaBv9gXfqxFHCb6UVw4tj+CC3XW6DcLzt17IGllW896QjPRW/7HQ5YHMUOCSlnBQXPzYzzJfI+g9asL3q5Nq4KzlIoj9m8vkb5Kqy4U=
+	t=1785867040; cv=none; b=l6uUZvxcDreJZvjuUgYWVlQOKLFlYsTjV9SLt3vW6JnhIg8HIXcqZgN+bjkzcAXwMGyQDmklHCWlO4rYHbWyJS6uF2ikiAdTrhal1xUE3AJlpTZ2GUyasc+MrMg4R22h07GtbqDQif01+WGaRHig2YrYeJ50+nkkMz14ndff40k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785866389; c=relaxed/simple;
-	bh=4F6IzxP26RgMNdWgvB0R7Wb1hzSuMYwULKE2wF+ENeI=;
+	s=arc-20240116; t=1785867040; c=relaxed/simple;
+	bh=xOKouAays0j0FbMORAOOBqRX0ZUwKYo+SRMvtfWEaoI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dzWtXRC55ytZ0tqkGyldNtL9pVtDq1anAWE0tB0mMUi/u2cEWUv5AKDTKIuknunLlozhUBbnunmA7qoPKSkB7Ef6QTtS5l9hdLBDguKPzD8XOMQcyfWV7MkF4mR7f7sCX//Etwn+86e5Il9LpSta8ICAYbspKU/tznUfp7UOZJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=evASAbg/; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=uVjkgOcvfoglzu53hobPcMQ6LxjIuep6dSi7RqSEglgn6W/NIDEfpBpb4fbEApkHRMuEZIg/kmAIQmgObSthTeUlPQqqj/WqHDxOWMKScKGVOP9tSQutoAT3rr7UubZ2sRFp6fWVk7TJaMKGVUHx4NXBLANPEQbyU2CEOLp126k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZrAlhWXY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="evASAbg/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AFF11F000E9;
-	Tue,  4 Aug 2026 17:59:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZrAlhWXY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A636A1F000E9;
+	Tue,  4 Aug 2026 18:10:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785866388;
-	bh=Mx+uqurkkwxwS+yYl+F5wqUvaiohErAiAOoKwI80jjc=;
+	s=k20260515; t=1785867038;
+	bh=Eta84+SHzfq+Jfl38F2ojsCo/wyZKwoB++2pI4w/yo4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=evASAbg/8y/XsIJqgbgr5fXyoRaihcoi0fuOGY/W0/lu3oI0SLnqcYobLNbFV52rX
-	 uSv9q4C3DymSTBHSMJTWB9tV3FhHIXLIdRYCcBCMbHNex8kl0xQw8b4JdtB3Vm2ul9
-	 yoXpdmxmDPif56cnqpyj2ld3SQ5yCo5uqKcS8CapVKOZNZJXFc5WnUAbuOFo4ILKac
-	 BvxNvZrQVYIjtl2IWocCIDFwzL/YegHDBn32SQydxLrbsAAO6VFsXLjZwB1m71Gu6p
-	 gHShWJAP0eOsmi7EKlXeC6yhYqT67pEFVXcWC/53IZvKXnMCU5PQgKSFiUw7P0snV9
-	 NPSKaSIoYHjLA==
+	b=ZrAlhWXYJcdK/f1PdM/ASTrEHaFtNNM/s4jATgBAPzSAGW8lX4QuK+g02bIhhP0wM
+	 VpoTbqrOEXG9V/h5g/V44eHTBLaeW6c8xEq3obVC0tpMnJVy97Eqc2wmA2TF2XQQz5
+	 VfZ5kvoKsXyM75khBt073/VwhYdcqXsRdufwFnKuYZTLIZJsGu4rEJpz5hNv8yiyTY
+	 5PdfgQVKtFx+l/d8blwW0Ye+FLUD5bMur39TQn0K5oTW9y6aFz0KW58iAsN+uPUXTw
+	 EE/cDvqVMkam//rJMde+8m6cW8XVQ4R4GFdSyKnDJGHidbvZiJyhJypqIeH0Rq1CN7
+	 brpoFE0acl/ZA==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v5 6/8] selftests/bpf: extract BPF skeleton
- generation into a helper script
+Subject: Re: [PATCH bpf-next v6 5/9] bpf, x86: enable KASAN for JITed
+ programs on x86
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mykola Lysenko" <nickolay.lysenko@gmail.com>
+To: =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?= <alexis.lothore@bootlin.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260804170156.1709916-7-nickolay.lysenko@gmail.com>
-References: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
- <20260804170156.1709916-7-nickolay.lysenko@gmail.com>
+In-Reply-To: <20260804-kasan-v6-5-549ef845f491@bootlin.com>
+References: <20260804-kasan-v6-0-549ef845f491@bootlin.com>
+ <20260804-kasan-v6-5-549ef845f491@bootlin.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 04 Aug 2026 17:59:47 +0000
-Message-Id: <20260804175948.3AFF11F000E9@smtp.kernel.org>
+Date: Tue, 04 Aug 2026 18:10:38 +0000
+Message-Id: <20260804181038.A636A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,94 +47,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The patch introduces a behavior change in permissive mode that r=
-esults in noisy build logs and redundant error messages, contradicting the =
-commit message claim that 'behavior is unchanged'. Additionally, a script c=
-omment references a non-existent file.
+
+Pre-existing issues:
+- [High] The x86 BPF JIT KASAN instrumentation fails to save R10 and R11 ac=
+ross calls to KASAN helpers, leading to arbitrary memory corruption when BP=
+F_REG_AX is used as an address or value register.
 --
 
---- Patch [6]: [RFC PATCH bpf-next v5 6/8] selftests/bpf: extract BPF skele=
-ton generation into a helper script ---
-commit e4a593d3d0bfe3675d723364cb65f81a2812b866
-Author: Mykola Lysenko <nickolay.lysenko@gmail.com>
+--- Patch [5]: [PATCH bpf-next v6 5/9] bpf, x86: enable KASAN for JITed pro=
+grams on x86 ---
+commit d7d5cc9dc7fbffd1005cd390c1a9b1a31a2025be
+Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-selftests/bpf: extract BPF skeleton generation into a helper script
+bpf, x86: enable KASAN for JITed programs on x86
 
-This commit extracts the BPF skeleton generation steps into a dedicated she=
-ll
-script (gen_bpf_skel.sh) to reduce Makefile complexity and escaping issues.=
- It
-handles regular, light, signed light, and linked skeletons through script
-flags.
+Mark x86 as supporting KASAN checks in JITed programs so that the
+corresponding JIT compiler inserts checks on the translated
+instructions.
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index 0ee02eeac6bca..dbde2f6bd044d 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index bdad90f210e4b..705a9ab85f3a9 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -233,6 +233,7 @@ config X86
+>  	select HAVE_SAMPLE_FTRACE_DIRECT	if X86_64
+>  	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if X86_64
+>  	select HAVE_EBPF_JIT
+> +	select HAVE_EBPF_JIT_KASAN		if X86_64
 
-[ ... ]
+[Severity: High]
+This isn't a bug introduced by this patch, but enabling this config exposes
+a pre-existing ABI violation in the x86 BPF JIT.
 
-> -$(TRUNNER_BPF_SKELS): %.skel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
-> -	$(Q)$(if $(PERMISSIVE),if [ ! -f $$< ]; then			\
-> -		$$(RM) $$@ $$(@:.skel.h=3D.subskel.h);			\
-> -		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
-> -		exit 0;							\
-> -	fi;)								\
-> -	printf '  %-12s %s\n' 'GEN-SKEL' '[$(TRUNNER_BINARY)] $$(notdir $$@)' 1=
->&2; \
-> -	$$(BPFTOOL) gen object $$(<:.o=3D.linked1.o) $$< &&		\
+When a BPF program uses BPF_REG_0 as an address for an operation, the JIT
+moves BPF_REG_0 to BPF_REG_AX (which maps to x86 register R10). It then
+calls a C KASAN helper like __asan_store8 via emit_kasan_check().
 
-[ ... ]
+In arch/x86/net/bpf_jit_comp.c:do_jit():
 
-> +$(TRUNNER_BPF_SKELS): %.skel.h: %.bpf.o $(BPFTOOL) gen_bpf_skel.sh | $(T=
-RUNNER_OUTPUT)
-> +	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
-> +	$(Q)BPFTOOL=3D$$(BPFTOOL) ./gen_bpf_skel.sh				\
-> +		--name $$(notdir $$(<:.bpf.o=3D))					\
-> +		--skel $$@ --subskel $$(@:.skel.h=3D.subskel.h) $$< $$(call skip_on_fa=
-il,SKEL,$$(@:.skel.h=3D.subskel.h))
+                emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
+                if (src_reg =3D=3D BPF_REG_0)
+                    real_src_reg =3D BPF_REG_AX;
+                ...
+                err =3D emit_kasan_check(env, &prog, real_dst_reg,
+                                       insn, ip, true);
 
-[Severity: Medium]
-Does this change in permissive mode behavior contradict the commit message
-which states "behavior is unchanged"?
+However, emit_kasan_check() explicitly skips saving R10 and R11:
 
-Previously, if a .bpf.o file failed to compile in permissive mode, the
-skeleton generation recipe would quietly check for the missing file, print
-SKIP-SKEL, and exit early without executing bpftool.
+arch/x86/net/bpf_jit_comp.c:emit_kasan_check() {
+    /*
+     * SystemV ABI states that we should also save r10/r11, but in
+     * practice those registers are _not_ used by the limited set of
+     * kasan helpers we are calling here, so that's fine not to save those.
+     */
+}
 
-With the missing-file guard removed, the recipe now unconditionally prints
-GEN-SKEL and calls gen_bpf_skel.sh. This invokes bpftool on a missing file,
-causing it to fail loudly to stderr before the skip_on_fail suffix catches
-the exit code. This results in noisy build logs and redundant error message=
-s.
+Since R10 and R11 are caller-saved scratch registers in the System V AMD64
+ABI, can the C compiler clobber R10 during the KASAN helper execution
+(depending on the compiler version or optimization)?
 
-> diff --git a/tools/testing/selftests/bpf/gen_bpf_skel.sh b/tools/testing/=
-selftests/bpf/gen_bpf_skel.sh
-> new file mode 100755
-> index 0000000000000..e234f3a57d46b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/gen_bpf_skel.sh
-> @@ -0,0 +1,93 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
+If R10 is clobbered, won't the JITed code subsequently use the corrupted
+register as a memory address, leading to arbitrary memory corruption?
 
-[ ... ]
-
-> +# The bpftool binary is taken from $BPFTOOL (default: bpftool from PATH).
-> +# On failure all outputs and intermediates are removed and the script
-> +# exits non-zero; permissive-mode skipping is the caller's business
-> +# (see skip_on_fail in Makefile.buildvars).
-
-[Severity: Medium]
-Is the reference to Makefile.buildvars correct here?
-
-The file Makefile.buildvars does not exist. It looks like skip_on_fail is
-actually defined directly in tools/testing/selftests/bpf/Makefile.
-
-> +
-> +set -u
+>  	select HAVE_EFFICIENT_UNALIGNED_ACCESS
+>  	select HAVE_EISA			if X86_32
+>  	select HAVE_EXIT_THREAD
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260804170156.1709=
-916-1-nickolay.lysenko@gmail.com?part=3D6
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260804-kasan-v6-0=
+-549ef845f491@bootlin.com?part=3D5
