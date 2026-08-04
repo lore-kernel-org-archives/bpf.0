@@ -1,81 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D35427F8A;
-	Tue,  4 Aug 2026 07:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E86A421250
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 08:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785828651; cv=none; b=bECcZVLn4/Su475Sv04ta4qBlr6aSsNy3mQTFF5xz2hmGYNUFf7X6Q7Na7k4HrwfOXHmOweLIP0UAHl6YzZaVwzk/IE7A7OH0SLQDGSGd6EuIDBfbdq7zAiD3li0Ue1ug3sRY0dbpMfxZX2S89SGPzpNSnTl4zQxvdlennvOUf4=
+	t=1785831078; cv=none; b=Ic51tRsFIKLAzRj0V6AK2dl6SbG0DXP4kuS8pWlH31hwUt17fOyco+bAQrAxtrEsCvjAaM0surVoatbXTstDhOv/b6UJMS2A0oD5QqijurrQrSUvWF/EegK337IQOMFR1GeOjI/usCOvLHDPTS3/XfZKbRY89QBjcZfmzvO7+PM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785828651; c=relaxed/simple;
-	bh=SOLTJEJEXzwaRmRUywBLmqrxVfDxNPkNMw1db+bkp5A=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=bm3ypJofMffot8zUqZQAdEnJ3N2aiwXT5xkz5TIoo2oUOjmHX9omLBHQRzRj1zIxj9Cl4HKUbEkAq5T/eGLDyUVbnAKhPd1b9YWDx5ARoEmNVY+U2y7Z6jpYFFPiqbTowkGqHxSuFCL9j6iGmzFvesmkJdrywM/Z5PxahjE74U4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZLLtvy6V; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785831078; c=relaxed/simple;
+	bh=/lU4HMhT3FLCBzktT7VqVQwIX7G5Cd+VSjYK8XMHhvU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eye1mrB2XdqGN4HuNedMR1utxVz2a9Jha+rCBznfmXAho72GOALklZW42dVYv9pmgh9nbXflvHJo7uTFIYS0+IBRWy6hbkKgFFcbQM4oQtjubY4VmddEvS5HwrHKJrTkGMNXFsxBBVmkup823/K2JUVJhZLjI5xkDPBSefIthhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jb1DUXun; arc=none smtp.client-ip=74.125.225.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZLLtvy6V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E061F00A3A;
-	Tue,  4 Aug 2026 07:30:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785828650;
-	bh=oYV5O3eWZLdXdoL+FVkjAr1wH1gOiwtwjBSgUcld4qM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ZLLtvy6V64IS29HeSFNsiy1L54s0YnzkP9fhy4b84TZle3bqd8BgzVIBHrvvL3161
-	 3eOFRheE7Y66k02D2I2WdJHidsgMjAo6ljQcru9l3Oo4JhKMf1Vv1dyvXbT6XONBBz
-	 CKRQ+KfZJc7dQfF/iETPQYPdKauhgS3b0a23PgTG8+SeFW4C5hn7NuxmsrJX+kODKv
-	 VzzASV1hizn8h5k9C7Sl643XmV2eC7PgUQptWNAsLBTL4s13hDsZ6AhB1Y3MXvO8N3
-	 9YW/x0Dtqf2xfXZFZCUHXWGfi73vno9WggK8q25dTUD7jDC2gsThmYf5i8iz8epEhp
-	 e/EJNxRQwFUUg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197AF3924A65;
-	Tue,  4 Aug 2026 07:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jb1DUXun"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495501e57beso8884025e9.1
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 01:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785831075; x=1786435875; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5P4cgYktXXA+ISQ2i8dFfS1V2EScAem0D4JbJ4AIyNQ=;
+        b=jb1DUXun7PwqDQElioF6yGXAlGQfD/1uH/CCTWXHumlyCEvWbTcoQo2i7ZLvQLNaex
+         UOGtDGCkYMrzUW5i8k6BhS5d/ZSMLqGJtOgi0vrQ1bYnNqzezYfqMUXk3rerKdK4n0oZ
+         vlMqsL/GcaQchy/CqSfz8yLepY8J2jjidPmEI0DvDcoxKNGetzDVaYDm5+1sg6s4/jox
+         WSH6/dxo2vDcQfo1oLaabBsThntIA9oqyXmBGG1o0R/vbfxWTZAH8as8mCMp4lcMucws
+         CZDpOT4DIFQgHc0dmGmRwo9lNTGaqYdph7JelcaC4/wWZ4NPQPLGIK8PIGtXUnVHZR8k
+         ND+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785831075; x=1786435875;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5P4cgYktXXA+ISQ2i8dFfS1V2EScAem0D4JbJ4AIyNQ=;
+        b=D4VwKDCkRxfyrxK2YpHqf2wZ2F1g2XsaKkyRxf73kyG2121PuDjOaS2eGNYONf8Iu2
+         EYfKLVTXgfgtHo5M67uQBKJOIIpEUVbR6aJJM39q0Q8zgyi/gYEO8yF/NvGRgVUSIK7d
+         EScgYUUs5KhsZWBoR1fuppevM6F7Ja8VfVo31zC9gAplXrGh9i13UhiVQRKIJhF9Blww
+         ntw0fVUeAXpwcizhYZuOwwaf5IIS7OPIAJCj8TRNoHiQwlzq2KALWg9odNli0KRnT1cc
+         HQm1go8Krn6kTN13xRLUEdf+/QV4iEErUSAsJQKxw60ABh7w8ziWWrPdUnaVHTRQKinJ
+         8uKQ==
+X-Gm-Message-State: AOJu0YwBvFcniN2/4g3pv3ehCO3KRVtOYyHvcZkdDhPbAlFbG+YuPcyB
+	l6VO/eAMXFzo5Oytw07ncym7jlyb5bZMP4M+QmacaA0GaRpLkdDUIv/eupq+xyiI
+X-Gm-Gg: AR+sD12Gdiyn1zp6yt+EHI+Z531zL9OACaPDe/uYFT//K9aURpyUWUdiIGUxcpMdu4t
+	/zy+ULtAdDAa9POYqPCSigG6vlNolYAmXFEV1Lbl2McAzzQ25U4j9WElfIK0NMlsZfFZYathe59
+	Wmq+Jw0dWqlLezfeuh6mDK67B0Y1cBqy+x9lPqSjDFboNAa+qg/s3CpOhOkU7TTjVj0zoJxvJ8c
+	mD5EtiYeq79LtlOQli3ZV4smvAsSHKPIcynGbHAYQ8tbGnGYO8/l/Ibzb3vx5HWjSABYKmvABen
+	p5BzmFrAtZX3jyUbAePNsTmLv0AA3jvCJAei6gEDZ7+2fvur86p+WrN6PmsaMI6AROjpbzsjgXZ
+	PdPkwaWu8smcOLevMKDEGh1mHHvYA8mi2eGKjqPTkeP7cS4vKBEchYI4X3K4NiBAnxJKmQFwdPu
+	N1kZVmNZMg4DjpyZGKWV9P+Hxjv1xD8amSEI0pup1jx6jMkR5A1JLAqm95TDSCFFurtvZsvCjxe
+	QfdFJ96kvA7+1D6CRoayibwd09WU+0DaJxvEj1go6WNUzVdwrt8SsA47zW7a6ltiE9r0QZTGfq4
+	PeidAENDdfKORioppkXTdCjvaQA=
+X-Received: by 2002:a05:600c:3507:b0:496:cb48:5eb8 with SMTP id 5b1f17b1804b1-4980c6747fdmr198167725e9.15.1785831075420;
+        Tue, 04 Aug 2026 01:11:15 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd4562a38sm39931335f8f.21.2026.08.04.01.11.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Aug 2026 01:11:14 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v5 0/3] Improve stack depth verification stats output
+Date: Tue,  4 Aug 2026 10:11:09 +0200
+Message-ID: <20260804081114.3871564-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2007; i=memxor@gmail.com; h=from:subject; bh=/lU4HMhT3FLCBzktT7VqVQwIX7G5Cd+VSjYK8XMHhvU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIatwnm9i94x7FVqSe87ulTpn2Piv4fq75TY6+RNz3906H xd5pP5+RykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACay/zQjw77JtRc3MiREbsli mpwguJm34aNTlkD/XN2Hlg3ra6+mPGH472f3evEbxl+hBa0zZ69Wmnrry8kX0+w5PhlXu23Yf+T hIWYA
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/2] Fixes for bpf_get_fsverity_digest()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178582861063.3014158.3566038608254697461.git-patchwork-notify@kernel.org>
-Date: Tue, 04 Aug 2026 07:30:10 +0000
-References: <20260803181232.14743-1-ebiggers@kernel.org>
-In-Reply-To: <20260803181232.14743-1-ebiggers@kernel.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: bpf@vger.kernel.org, fsverity@lists.linux.dev,
- linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, emil@etsalapatis.com,
- jolsa@kernel.org, stable@vger.kernel.org
 
-Hello:
+Some improvements for more clarity in the stack depth verification
+statistics output. See commit logs for details.
 
-This series was applied to bpf/bpf.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+Changelog:
+----------
+v4 -> v5
+v4: https://lore.kernel.org/bpf/20260803072733.191502-1-memxor@gmail.com
 
-On Mon,  3 Aug 2026 11:12:30 -0700 you wrote:
-> Two fixes for bpf_get_fsverity_digest().
-> 
-> Changed in v2:
->     - Added patch to fix silent truncation.
->     - Updated commit message to clarify that the size > INT_MAX case
->       seems to be unreachable currently.
->     - Added Acked-bys
-> 
-> [...]
+ * Change the format to combine instruction counts and stack depths into
+   per-program records. (Andrii)
+ * Adjust veristat for the new format while retaining support for the legacy format.
+ * Explain why the legacy stack parsing buffer is zero-initialized. (BPF CI Bot)
 
-Here is the summary with links:
-  - [bpf,v2,1/2] fsverity: Fix bpf_get_fsverity_digest() dynptr assumptions
-    https://git.kernel.org/bpf/bpf/c/3e8ec7c03872
-  - [bpf,v2,2/2] fsverity: Fix silent truncation in bpf_get_fsverity_digest()
-    https://git.kernel.org/bpf/bpf/c/7c68ed5c5ad4
+v3 -> v4
+v3: https://lore.kernel.org/bpf/20260803031457.3115812-1-memxor@gmail.com
 
-You are awesome, thank you!
+ * Read names from subprog_info directly to avoid an out-of-bounds access
+   when func_info validation fails. (BPF CI Bot)
+
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260802225209.2511758-1-memxor@gmail.com
+
+ * Reuse subprog_name() to fetch subprogram names. (BPF CI Bot)
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260801230400.850271-1-memxor@gmail.com
+
+ * Use multi-line format. (Eduard)
+ * Adjust veristat to work with old and new format.
+ * Adjust selftest log_level without new option. (Eduard)
+
+Kumar Kartikeya Dwivedi (3):
+  bpf: Show more useful info in stack depth stats
+  selftests/bpf: Adjust veristat stack depth parsing
+  selftests/bpf: Test stack depth stats without BTF subprog names
+
+ kernel/bpf/verifier.c                         | 24 ++++++++++++-------
+ .../bpf/progs/verifier_basic_stack.c          |  4 ++--
+ .../bpf/progs/verifier_bpf_fastcall.c         | 23 +++++++++++-------
+ .../bpf/progs/verifier_global_subprogs.c      |  2 +-
+ .../bpf/progs/verifier_private_stack.c        | 15 +++++++++---
+ .../selftests/bpf/progs/verifier_var_off.c    |  4 ++--
+ tools/testing/selftests/bpf/test_verifier.c   |  2 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |  9 ++++++-
+ tools/testing/selftests/bpf/veristat.c        | 17 +++++++++----
+ 9 files changed, 69 insertions(+), 31 deletions(-)
+
+
+base-commit: 457d4ecb47aaf7a2cb46aaadd76e8c812e4f3c9e
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.53.0
 
