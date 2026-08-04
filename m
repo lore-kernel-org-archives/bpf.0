@@ -1,353 +1,560 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CCF83A254D
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 22:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F173FB048
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 22:40:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785883154; cv=pass; b=IEfFekU5xQovOCncXz6juLem+Zsaiw7QRiVnyMkUffFEpGnHzTIIoZ5R2rZNsdb378lvzxbKdCibaIm+i8POh//9RcQFvzWY+AOVZ/PmahvQpwVwzv+AywDxkxg84DgUI384oUTj0fXbPtFcWJbD4uGzPTQna4P8kPmJUzg00TU=
+	t=1785883247; cv=pass; b=OKXBhhiAd7u5j39sKdTymX/cHpmbNKZMuQ510gjLfRob5I1Mf4ARIbVJipcT+gAuLFz/xFrgSr+3wtAwrRyvFciCONz/7e9tY/gaasGJDIi+aFLuYxSWvWgSkgC2oW2P/adbvViYStldPqZqNu3c/P95u7givlZrW8i/jhO5fIc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785883154; c=relaxed/simple;
-	bh=JlZEjqsfLVq1gnw4VpMnsuKskwu6dlc+rhxlhpUB8ug=;
+	s=arc-20240116; t=1785883247; c=relaxed/simple;
+	bh=8YO/c8nqXR/z3cbdTOZHDnL9LRiWh05yxnX47oK1Jpg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lydUMdV7/5XosB1QNb9EhGUSaNKfatv366aDgcWbHl97NXvScLFDBRinqrrfGvq3xfOsfLPTbAsilu1l6dvEX1/hHizYylzXPm3fjcNnY67ayG2w/sUpiQAh+mZyqvvG+AXEyl6sBIeAsv4aayjym54UdLkkE7h1rOT3DuNlZPE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AHDqvn/T; arc=pass smtp.client-ip=209.85.210.176
+	 To:Cc:Content-Type; b=taM4bL1sxo+gw8Io6YGMSMlUskqR8k9RZvoYPyQpWOaGZGJXg59zy/1lvba/NNzp3bF6AHEr3qM1BHmTHRXql9Ynz6aSJA9w9FCde6MBaIdAFR2M3tl7N2qrYFWKRfFEZauKyADrsnAOzJSl69zAuPJI2TW+TWdWhWcd6KED+8M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cy17d6iP; arc=pass smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AHDqvn/T"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-84867f07d63so378011b3a.2
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 15:39:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785883152; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cy17d6iP"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84e84a6c4bfso513570b3a.1
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 15:40:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785883245; cv=none;
         d=google.com; s=arc-20260327;
-        b=BhU6mOa6+TJKvEY3fpLVCoUBh+s7xvrWrzrQ/WDbec0kyqcSC8xRO7MCfNS0DUxjnI
-         d+6JRim4sXK4vVsqSLyY1u9wCRZMbGn6pveq3JvPZzU9ybjLfMYFfxNWWozS3PCdcqAP
-         U6InXZh6AvrUbWeJQGBcqNhur91CDCx9M3EArPuZCpN6rVk1lvVj+0GRxIZ6Ljo49YMk
-         gOFBnBRe/lf0miUW2a+YnjTOHKBXK9y0w4rHS0yquUgsY5nCVwaMHZt8B6jGiyxPSeGM
-         kuP5CjI6W6hwFi+DnuuUKvWlOuG85cPewnIeydz+6hsWo1o52tgEDkhhjAejE9p9u9M4
-         Sdyw==
+        b=dkmC30E9RqcxHH/g7M5b7tNe6Fk0nBETiKuGil9zV/FZmDVplad8FOdlK5t061byjh
+         JAGdBLiYjMM7WhsbMuSrHViVuPSddsKpuWGzVAVDJ+9DUNVX8qKWMk6mje2Bh0wlw9Uo
+         Q9SY6urelOwBg8o3pkaLycM4Xmx9dnWYrRJpLRVOnj02Ys2Co6HNpRtMjATcglLxzU4q
+         qDXTEchwipUPVgP0HGKoxoyt3IBdJQkm5h/d4poOltyOuCCcLHoIcm7tN++eZUG6OePT
+         3tHIsi6IB/CzQQ2oT8bP/7E4u6Ej0gMRQiJSEIA1jAr84uYgaP0cwdNQTM0iohR/lwVa
+         rgZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=LUdbwLBXMVcF6uR607tn8gFkqF+y7kOdZBcVEgFeZ1g=;
-        fh=yzqaIh6w6QHZGm7NH7kiIWoSpnlp6P3ng4jzt4Pb8l4=;
-        b=Z7oqR0IT4X+eIVAxx9kNcvps5wfwfRTVEOPrJHt4frF1jRfMxYCtDBddE98bXUmBWv
-         3JcfyDXavTz9UcchVG0cNSpp7MvcpFOi9WIHbC/5b6Kmt/5T7QD39LBKydIrUU5d1AcL
-         nv6LYP9Y3P0dqq0LvliMVnstOJsYJYbeaWZCy4QhH869wjcRXzbzZULEgkEDZRGZM8V5
-         b4o3s3/U+Soi7xttMeuKhh4RXiDpp2iaNLnjeT5Ua4rOGWpdufePWbt8hzboKNXzg2PE
-         fL/TI0FQ0FoIWgVG2rWpLfLhDq5sWJ29vBb77wezPa6tKG9VcyHYJluRiZgQKQYYqnHi
-         qxTw==;
+        bh=e9rV8hoxYvRNAquc1eeEYTZTw7acz/uGtS0MUeE+pO0=;
+        fh=WI2bs0s7wffm5h5jB1JdWpEdVAmZPQfDpeQVC2lyV+U=;
+        b=NRKgdvJcT4BEOfxpKwidjWW4eMww61+IWPefiXN2/B0oL+gq31BSwUpSP8sTy0qZry
+         vKLT16CGL1US0rt8uLO5ZJrMi2faquS0AppOGdrpvGj20k5oziClxHl2yTaIileN2UcL
+         XjWidQAjwTvFb/n7V8icglmmyrDzC/IBtcllAdh4jDAtOOR+tk6vs7MH0qIwivSVPIaw
+         /azSxy0MP6E0svQlu0Qm+SNbhoak2Xlr8Nx0N5JHOL0RJITjpDKNs8ArA2rABksfHhER
+         NkcR8p3dZtc/Kz+GUn2VWcBIwb+/eMFE9/N28OIYoB5fVm3C4CSNNbH98tD8bTNaii9Z
+         ZC1w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785883152; x=1786487952; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785883245; x=1786488045; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=LUdbwLBXMVcF6uR607tn8gFkqF+y7kOdZBcVEgFeZ1g=;
-        b=AHDqvn/Tdazy2DR3RpUJFudyjapWH+wXRxWH6Ft7J6UXCr4R95IKiSLJ70dl+Lnd5A
-         ExbSDznt/tj7jcrk4QZ0eNiaJLV1wC9N7C/tANHoTKDonpbsC1emehO0qLQvf3Q7dWcR
-         EVUoKWJEhiZG8msQ6uhdrQeEvM9NW03q4o7P7+SUDusWiZ7DV+ELRKQ8Gk6mz/mYv4H4
-         BTdHia7fhzCThE8awTL77ng3RuxpThLSHdOxP0wSPH7FLPX252+6jRr3JuBRg06cdvDy
-         0KbxW6AI9dKXwUVHkX+zfv78IibRZozMtqxdBLCW+4J+I6fGxz6y2aWHZ/JgATnn3V0C
-         c2rQ==
+        bh=e9rV8hoxYvRNAquc1eeEYTZTw7acz/uGtS0MUeE+pO0=;
+        b=Cy17d6iPeBjbteWIvjIQS1a/jnVwfnRYmUA1Ai/YLf4+kLvSuRZrAwiLAD6oN9OtO6
+         2Xb3LxtzhTKiD5EycO2C00BMLpvG22TACQ4lmvn/kv/QkAEHGgsug7MZwE41nlGlFF/Z
+         dSeMjeGC5ECJcsXdsULaOJK8wbIaEWstf1obi93IpJOM5YzwvItj8fCn8wKzdMr/YCVT
+         3EtAAIf81sMkuEMdo4xUYrHrUOPKqWLzaUeqHAY6lReVpeFARV60FU9J88QbKOOgWCri
+         7/dVdf9MB4SnKnAUGesOtXp3rnH6AbABVCgqno3u1T0mOEsTPMYBhMr4MJXmOtknzXeG
+         eRyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785883152; x=1786487952;
+        d=1e100.net; s=20251104; t=1785883245; x=1786488045;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=LUdbwLBXMVcF6uR607tn8gFkqF+y7kOdZBcVEgFeZ1g=;
-        b=ml4KDF0WhAQ/7Qc9gj/5XJ7uJAIuHGSHTRi51f/B+hvLNHvm8qK3Gk1SH3jDfW8q9T
-         UDiZET/gXN+lJ7/nilYZqZq/GdEI1HG8MPsd45tTgcVEj2b4peYVtBDJeLzws13RrwBF
-         dOIHMLo07LbeCoc2ukaEKLqckie7Yh8GVdHKzF8hw1V1BsQHKowvU5rAOnbV6f79IbSP
-         SpvtjJtlcdA3bxkMWEZ9bm2RqdtObw0kitIlkESAdk4KdqUjy6WI+PFuDUpfepPs4p/y
-         AnoVlWMEG3QFwl2c6ldoghU18TGQGJ0vJ+Iz4x6B6pynI+W6JdmkwUjTsXcyhcTypWx5
-         alFw==
-X-Forwarded-Encrypted: i=1; AHgh+RoWKcMJgRIfAWCkQcgUpcaAC8D6jEQo+e/6FyJT/4SzBKsQLoQ82sJoiJ3Ri3fX2RgnRFE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9QLoOUaBG6KFGW7f9U0iIYH4sc0+pO9/GuXC6IeaRo5rPJxZq
-	1Lgs6flVI7C4Xs/wtggBNvgDti2nG7HZ1QQwm5d9T17/7NcdrzDRF24kft/SFa5l3DlhLPHPHeq
-	iEM/rRj4qetvzuTjFUIUadd3QpmAd2gS5QA==
-X-Gm-Gg: AR+sD11l4Lh/r8zuLEhLkmjEQnTDiUYFku2fr3Osx4GI/1m9nf3AqsmPxz73Zrxzu/J
-	7Dkighl8VxrofhljrOmSMFSH+kV+GBYF5r98fsvkaHurxNp+iSi3vBvOZy6PyCBoRHlBzs3MDaz
-	m2MD12OgRmk+gReb4yneJ/51/lxUzep7Aan1qTRG5TDchXEp8B2y4+9RFy4a2i2gaametfgWyGs
-	hLIk7jbn6MDGZeiTOJBhWqIkjYNXE8GrwxkH2eTebSuywoDIeYVFOOZkFqBy2CjEZF40Pz6eqpT
-	LSPZsuXMnIAC+qM9YBpdI1JuY2O3dye8RPJk1zq0aThQc68O/fZqmikk1U8ZyDD4FG/9N3bPL1y
-	bAw0qQhTWWUBZ9o5DgaA/MgFZPiUfa130256V0nyubg==
-X-Received: by 2002:a05:6a00:12ca:b0:845:e8b9:347 with SMTP id
- d2e1a72fcca58-84f2dfc5b61mr1942283b3a.13.1785883151828; Tue, 04 Aug 2026
- 15:39:11 -0700 (PDT)
+        bh=e9rV8hoxYvRNAquc1eeEYTZTw7acz/uGtS0MUeE+pO0=;
+        b=J/fWmZ7YrsCpj8sVeEWT6Z/WCI/BigW4+53F4zOsEhD6Q8I01F1RLd9MaM6c8UzxDj
+         yUWkwYbpMs1EElSotFJtv73S9rih1amzKOO/tqOSOdjUXGYSDPgtcaQzeGJp5tPuavNd
+         7TFbBuPJX1LQndczVBq0BrEeBWrYEYehZhaR9YhpzIFNw58R+/bJcMMKuSf9/MmnQlUO
+         x4CtvrvyV2SOmox7mMXvNoM5H2jTHWrd4WGSSvcYjhY1K1F1SK5NI9FEfrNk68ZfkbU4
+         OS2gh/vgdtDGEK/SMM2YnaGbZJT07xkQ3xy64onuTBYE3Esf2QzO+z5xtmLRu28V/Jsq
+         YvaQ==
+X-Gm-Message-State: AOJu0Yx6ZRvyHpntmYv4sY4qTUDnrvHzIhOEP2G2NG6oX5RPosQpTXhG
+	ajCD0kq+SwbGMJHMZn4QuATf574PV7ddHkaVoGG9lWNcY2vH5JKy/fqbxtsqvY3PNsEBslDVyZh
+	brDyKRJWysSyg3AuMNjOTt3b7htLUh+g=
+X-Gm-Gg: AR+sD10hSSE3eJo20B5WTfkTPfFdUdiHHoGOGFuwlSSN7IDv0jwQhr6ylkwWPz+auSs
+	jFIIiS50oJQGILbbuBrfEpoIag86p5LkeQaAo3p00lGP/lC4p8RFBmv/pboYyfvh3jGseEJF7FZ
+	VXisPcdj0PpsyQEdB21C9eprSXDug+O84Lr3n6LyliVhf8aW3ZqZoTn5GD/22ALnPRTp+puKdtd
+	qMobhVQZCxrSKr0cdoXRMFed1IU1w9X1r08a6IpNUf+Q0UELhUzf4IOr8iRpkIgEixG/76G7N8Z
+	rBthBIhJqBMWsi8TMxFud4379JKrgldMISQG+QqyA9aifmQY3UK0ncesMKxsLoU3QjJ6JKEYj6s
+	zd3AKh+n59P2tEWW2EQnjCEMG4juRNUcepuorPNkYfg==
+X-Received: by 2002:a05:6a00:1c8d:b0:847:888f:9b0f with SMTP id
+ d2e1a72fcca58-84f2dc220c9mr2131689b3a.15.1785883244971; Tue, 04 Aug 2026
+ 15:40:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260715153254.92010-1-leon.hwang@linux.dev> <20260715153254.92010-5-leon.hwang@linux.dev>
- <DK167GCPUAJE.3GGIPEE5MIX3G@etsalapatis.com> <39e09b62-53b4-4f3a-928a-1fdeac8c7dc4@linux.dev>
-In-Reply-To: <39e09b62-53b4-4f3a-928a-1fdeac8c7dc4@linux.dev>
+References: <20260804154813.90795-1-leon.hwang@linux.dev>
+In-Reply-To: <20260804154813.90795-1-leon.hwang@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 4 Aug 2026 15:38:57 -0700
-X-Gm-Features: AUfX_mwjaukr5y4EtOpVncveiSyKWnlvIRQQJrJCqYL5tHOXcu-Pz67lPbswVBk
-Message-ID: <CAEf4BzaNo4y4ZhLT9ZAcOGx3UOtiTRZkHXy0-TGJjvAV39w82g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v10 4/9] libbpf: Add support for global percpu data
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-patches-bot@fb.com
+Date: Tue, 4 Aug 2026 15:40:30 -0700
+X-Gm-Features: AUfX_myhoVq4YO88LDoYkSacczsNK0Irx0ywz4qGkQ7SfLeNMDImRJOqOMO5lKk
+Message-ID: <CAEf4BzbJCB0KUZMkeRPfYSjMQ3Q3eoFKUZS3px1mBBhxtEqYdQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Move tracing_multi_bench_attach
+ to bench
+To: Leon Hwang <leon.hwang@linux.dev>, Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jul 19, 2026 at 10:00=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
-wrote:
+On Tue, Aug 4, 2026 at 8:48=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
+ote:
 >
-> On 18/7/26 05:39, Emil Tsalapatis wrote:
-> > On Wed Jul 15, 2026 at 11:32 AM EDT, Leon Hwang wrote:
+> In CI, the tracing_multi_bench_attach test could cost >10s, which should
+> be avoided in daily CI running.
 >
-> [...]
+>  ./test_progs -t tracing_multi_bench_attach -v
+>  WATCHDOG: test case tracing_multi_bench_attach executes for 10 seconds..=
+.
+>  serial_test_tracing_multi_bench_attach: found 40163 functions
+>  serial_test_tracing_multi_bench_attach: attached in   9.367s
+>  serial_test_tracing_multi_bench_attach: detached in   1.798s
+>  #546     tracing_multi_bench_attach:OK
 >
-> >>
-> >>  struct elf_sec_desc {
-> >> @@ -1839,6 +1842,8 @@ static size_t bpf_map_mmap_sz(const struct bpf_m=
-ap *map)
-> >>      switch (map->def.type) {
-> >>      case BPF_MAP_TYPE_ARRAY:
-> >>              return array_map_mmap_sz(map->def.value_size, map->def.ma=
-x_entries);
-> >> +    case BPF_MAP_TYPE_PERCPU_ARRAY:
-> >> +            return map->def.value_size;
-> >>      case BPF_MAP_TYPE_ARENA:
-> >>              return page_sz * map->def.max_entries;
-> >>      default:
-> >> @@ -1866,7 +1871,8 @@ static int bpf_map_mmap_resize(struct bpf_map *m=
-ap, size_t old_sz, size_t new_sz
-> >>      return 0;
-> >>  }
-> >>
-> >> -static char *internal_map_name(struct bpf_object *obj, const char *re=
-al_name)
-> >> +static char *internal_map_name(struct bpf_object *obj, const char *re=
-al_name,
-> >> +                           enum libbpf_map_type type)
-> >
-> > We can avoid passing the type here by testing against ".percpu" since
-> > that's how we are deriving the map type in the first place. But more
-> > importantly:
-> >
+> Since it is for benchmark attachment of tracing_multi link, move it to
+> the generic bench framework.
+>
+>  ./bench tracing-multi-attach
+>  Setting up benchmark 'tracing-multi-attach'...
+>  tracing-multi-attach: found 40166 functions
+>  tracing-multi-attach: attached in   9.278s
+>  tracing-multi-attach: detached in   1.836s
+>
+> Assisted-by: Codex:gpt-5.6-sol
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  tools/testing/selftests/bpf/Makefile          |   2 +
+>  tools/testing/selftests/bpf/bench.c           |   2 +
+>  .../bpf/benchs/bench_tracing_multi_attach.c   | 177 ++++++++++++++++++
+>  .../selftests/bpf/prog_tests/tracing_multi.c  | 125 -------------
+>  4 files changed, 181 insertions(+), 125 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/benchs/bench_tracing_mult=
+i_attach.c
+>
 
-I think type is cleaner, because it's not just .percpu, but also
-.percpu.whateveryouwant, so having type is cleaner, IMO.
+Jiri, are you ok with not exercising this logic regularly?
 
-> >>  {
-> >>      char map_name[BPF_OBJ_NAME_LEN], *p;
-> >>      int pfx_len, sfx_len =3D max((size_t)7, strlen(real_name));
-> >> @@ -1907,8 +1913,11 @@ static char *internal_map_name(struct bpf_objec=
-t *obj, const char *real_name)
-> >>      if (sfx_len >=3D BPF_OBJ_NAME_LEN)
-> >>              sfx_len =3D BPF_OBJ_NAME_LEN - 1;
-> >>
-> >> -    /* if there are two or more dots in map name, it's a custom dot m=
-ap */
-> >> -    if (strchr(real_name + 1, '.') !=3D NULL)
-> >> +    /*
-> >> +     * Don't prefix the bpf_object name if this is a custom dot map
-> >> +     * (containing two or more dots) or a percpu data map.
-> >> +     */
-> >> +    if (strchr(real_name + 1, '.') !=3D NULL || type =3D=3D LIBBPF_MA=
-P_PERCPU)
-> >
-> > Is there a reason we don't use the exact same logic as the other
-> > internal maps here? I understand that a lot of the conventions around
-> > the naming are there for legacy reasons, but it seems like we're
-> > singling out the .percpu section for highly nonbvious reasons. Imo we
-> > should consider doing the same prefixing for a bare ".percpu" section
-> > that we do for the other internal ones. At the very least, there needs
-> > to be some explanation as to why .percpu gets special treatment.
->
->
-> I prefer passing 'type'. Excluding _PERCPU here is to avoid the legacy
-> naming convention for new internal maps.
+but also hm, is 10 seconds expected?
 
 
-+1
-
-and it's not that .percpu gets special treatment, it's all the legacy
-maps that have special treatment
-
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+> index 55d394438705..e4d8cbd51d71 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -966,6 +966,7 @@ $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.s=
+kel.h \
+>  $(OUTPUT)/bench_bloom_filter_map.o: $(OUTPUT)/bloom_filter_bench.skel.h
+>  $(OUTPUT)/bench_bpf_loop.o: $(OUTPUT)/bpf_loop_bench.skel.h
+>  $(OUTPUT)/bench_strncmp.o: $(OUTPUT)/strncmp_bench.skel.h
+> +$(OUTPUT)/bench_tracing_multi_attach.o: $(OUTPUT)/tracing_multi_bench.sk=
+el.h
+>  $(OUTPUT)/bench_bpf_hashmap_full_update.o: $(OUTPUT)/bpf_hashmap_full_up=
+date_bench.skel.h
+>  $(OUTPUT)/bench_local_storage.o: $(OUTPUT)/local_storage_bench.skel.h
+>  $(OUTPUT)/bench_local_storage_rcu_tasks_trace.o: $(OUTPUT)/local_storage=
+_rcu_tasks_trace_bench.skel.h
+> @@ -991,6 +992,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+>                  $(OUTPUT)/bench_bloom_filter_map.o \
+>                  $(OUTPUT)/bench_bpf_loop.o \
+>                  $(OUTPUT)/bench_strncmp.o \
+> +                $(OUTPUT)/bench_tracing_multi_attach.o \
+>                  $(OUTPUT)/bench_bpf_hashmap_full_update.o \
+>                  $(OUTPUT)/bench_local_storage.o \
+>                  $(OUTPUT)/bench_local_storage_rcu_tasks_trace.o \
+> diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftest=
+s/bpf/bench.c
+> index 3d9d2cd7764b..5ce31459835c 100644
+> --- a/tools/testing/selftests/bpf/bench.c
+> +++ b/tools/testing/selftests/bpf/bench.c
+> @@ -545,6 +545,7 @@ extern const struct bench bench_trig_uprobe_multi_nop=
+5;
+>  extern const struct bench bench_trig_uretprobe_multi_nop5;
+>  extern const struct bench bench_trig_usdt_nop;
+>  extern const struct bench bench_trig_usdt_nop5;
+> +extern const struct bench bench_tracing_multi_attach;
+>  #endif
 >
-> >
-> > @Andrii Wdyt?
-> >
-> >>              pfx_len =3D 0;
-> >>      else
-> >>              pfx_len =3D min((size_t)BPF_OBJ_NAME_LEN - sfx_len - 1, s=
-trlen(obj->name));
-> >> @@ -1938,7 +1947,7 @@ static bool map_is_mmapable(struct bpf_object *o=
-bj, struct bpf_map *map)
-> >>      struct btf_var_secinfo *vsi;
-> >>      int i, n;
-> >>
-> >> -    if (!map->btf_value_type_id)
-> >> +    if (!map->btf_value_type_id || map->libbpf_type =3D=3D LIBBPF_MAP=
-_PERCPU)
-> >>              return false;
-> >
-> > Nit: These are two separate checks rolled into one, and each one checks
-> > a different thing. THe type check against MAP_PERCPU merits a comment a=
-s
-> > well: It's the only internal section that is not really mappable becaus=
-e
-> > there's no way to represent it as userspace state.
->
->
-> Ack.
->
-> Will add a new iff for libbpf_type check with a comment.
-
-yep, but don't overdo comments, it's not that hard to understand why
-per-cpu map is not mmapable
-
->
-> >
-> >>
-> >>      t =3D btf__type_by_id(obj->btf, map->btf_value_type_id);
-> >> @@ -1962,6 +1971,7 @@ static int
-> >>  bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map=
-_type type,
-> >>                            const char *real_name, int sec_idx, void *d=
-ata, size_t data_sz)
-> >>  {
-> >> +    bool is_percpu =3D type =3D=3D LIBBPF_MAP_PERCPU;
-> >>      struct bpf_map_def *def;
-> >>      struct bpf_map *map;
-> >>      size_t mmap_sz;
-> [...]
->
-> >> @@ -4944,7 +4970,7 @@ static int map_fill_btf_type_info(struct bpf_obj=
-ect *obj, struct bpf_map *map)
-> >>
-> >>      /*
-> >>       * LLVM annotates global data differently in BTF, that is,
-> >> -     * only as '.data', '.bss' or '.rodata'.
-> >> +     * only as '.data', '.bss', '.percpu' or '.rodata'.
-> >>       */
-> >>      if (!bpf_map__is_internal(map))
-> >>              return -ENOENT;
-> >> @@ -5293,18 +5319,30 @@ static int
-> >>  bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_=
-map *map)
-> >>  {
-> >>      enum libbpf_map_type map_type =3D map->libbpf_type;
-> >> +    bool is_percpu =3D map_type =3D=3D LIBBPF_MAP_PERCPU;
-> >
-> > Nit: If we do
-> >       __u64 update_flags =3D is_percpu ? BPF_F_ALL_CPUS : 0;
-> >
-> > we can declare the variable as const and ...
-> >
-> >> +    __u64 update_flags =3D 0;
-> >>      int err, zero =3D 0;
-> >>      size_t mmap_sz;
-> >>
-> >> +    if (is_percpu) {
-> >> +            if (!obj->gen_loader && !kernel_supports(obj, FEAT_PERCPU=
-_DATA)) {
-> >> +                    pr_warn("map '%s': kernel does not support percpu=
- data.\n",
-> >> +                            bpf_map__name(map));
-> >> +                    return -EOPNOTSUPP;
-> >> +            }
-> >> +
-> >> +            update_flags =3D BPF_F_ALL_CPUS;
-> >> +    }
-> >
-> > ... we can collapse the above into a single nested level:
-> >
-> >       if (is_percpu && !obj->gen_loader && !kernel_supports(obj, FEAT_P=
-ERCPU_DATA)) {
-> >               ...
-> >       }
->
-> Good point.
->
-> >
-> >> +
-> >>      if (obj->gen_loader) {
-> >>              bpf_gen__map_update_elem(obj->gen_loader, map - obj->maps=
-,
-> >> -                                     map->mmaped, map->def.value_size=
-);
-> >> +                                     map->mmaped, map->def.value_size=
-, update_flags);
-> >>              if (map_type =3D=3D LIBBPF_MAP_RODATA || map_type =3D=3D =
-LIBBPF_MAP_KCONFIG)
-> >>                      bpf_gen__map_freeze(obj->gen_loader, map - obj->m=
-aps);
-> >>              return 0;
-> >>      }
-> >>
-> >> -    err =3D bpf_map_update_elem(map->fd, &zero, map->mmaped, 0);
-> >> +    err =3D bpf_map_update_elem(map->fd, &zero, map->mmaped, update_f=
-lags);
-> >>      if (err) {
-> >>              err =3D -errno;
-> >>              pr_warn("map '%s': failed to set initial contents: %s\n",
-> >> @@ -5349,6 +5387,13 @@ bpf_object__populate_internal_map(struct bpf_ob=
-ject *obj, struct bpf_map *map)
-> >>                      return err;
-> >>              }
-> >>              map->mmaped =3D mmaped;
-> >> +    } else if (is_percpu) {
-> >> +            if (mprotect(map->mmaped, mmap_sz, PROT_READ)) {
-> >> +                    err =3D -errno;
-> >> +                    pr_warn("map '%s': failed to mprotect() contents:=
+>  extern const struct bench bench_rb_libbpf;
+> @@ -628,6 +629,7 @@ static const struct bench *benchs[] =3D {
+>         &bench_trig_uretprobe_multi_nop5,
+>         &bench_trig_usdt_nop,
+>         &bench_trig_usdt_nop5,
+> +       &bench_tracing_multi_attach,
+>  #endif
+>         /* ringbuf/perfbuf benchmarks */
+>         &bench_rb_libbpf,
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_tracing_multi_attac=
+h.c b/tools/testing/selftests/bpf/benchs/bench_tracing_multi_attach.c
+> new file mode 100644
+> index 000000000000..7389d1742ddc
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/benchs/bench_tracing_multi_attach.c
+> @@ -0,0 +1,177 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE
+> +#include <search.h>
+> +#include <stdio.h>
+> +#include <string.h>
+> +#include <bpf/btf.h>
+> +#include "bench.h"
+> +#include "testing_helpers.h"
+> +#include "trace_helpers.h"
+> +#include "tracing_multi_bench.skel.h"
+> +#include "bpf/libbpf_internal.h"
+> +
+> +static int compare(const void *ppa, const void *ppb)
+> +{
+> +       const char *pa =3D *(const char **)ppa;
+> +       const char *pb =3D *(const char **)ppb;
+> +
+> +       return strcmp(pa, pb);
+> +}
+> +
+> +static void tdestroy_free_nop(void *ptr)
+> +{
+> +}
+> +
+> +static void tracing_multi_attach_setup(void)
+> +{
+> +       LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
+> +       struct tracing_multi_bench *skel =3D NULL;
+> +       long attach_start_ns, attach_end_ns;
+> +       long detach_start_ns, detach_end_ns;
+> +       double attach_delta, detach_delta;
+> +       struct bpf_link *link =3D NULL;
+> +       size_t i, cap =3D 0, cnt =3D 0;
+> +       struct ksyms *ksyms =3D NULL;
+> +       void *root =3D NULL;
+> +       void *dups =3D NULL;
+> +       __u32 *ids =3D NULL;
+> +       __u32 nr, type_id;
+> +       struct btf *btf;
+> +       int err;
+> +
+> +       setup_libbpf();
+> +
+> +       btf =3D btf__load_vmlinux_btf();
+> +       err =3D libbpf_get_error(btf);
+> +       if (err) {
+> +               btf =3D NULL;
+> +               fprintf(stderr, "failed to load vmlinux BTF: %s\n", strer=
+ror(-err));
+> +               goto cleanup;
+> +       }
+> +
+> +       skel =3D tracing_multi_bench__open_and_load();
+> +       err =3D libbpf_get_error(skel);
+> +       if (!skel) {
+> +               fprintf(stderr, "failed to open and load skeleton: %s\n",=
+ strerror(-err));
+> +               goto cleanup;
+> +       }
+> +
+> +       err =3D bpf_get_ksyms(&ksyms, true);
+> +       if (err) {
+> +               fprintf(stderr, "failed to get kernel symbols: %s\n", str=
+error(-err));
+> +               goto cleanup;
+> +       }
+> +
+> +       /* Get all ftrace 'safe' symbols.. */
+> +       for (i =3D 0; i < ksyms->filtered_cnt; i++) {
+> +               if (!tsearch(&ksyms->filtered_syms[i], &root, compare)) {
+> +                       err =3D -ENOMEM;
+> +                       fprintf(stderr, "failed to index ftrace symbols\n=
+");
+> +                       goto cleanup;
+> +               }
+> +       }
+> +
+> +       /*
+> +        * Collect names that are not unique in kallsyms. The kernel reso=
+lves a
+> +        * tracing-multi BTF id to an address with kallsyms_lookup_name()=
+, which
+> +        * returns the first symbol of that name. For a duplicate name th=
+at may
+> +        * be a different (non-ftrace-able) instance than the ftrace-able=
+ one in
+> +        * available_filter_functions, so attaching to it by BTF id fails=
+ with
+> +        * -ENOENT (e.g. t_start/t_next/t_stop). ksyms->syms is sorted by=
+ name,
+> +        * so equal names are adjacent.
+> +        */
+> +       for (i =3D 1; i < ksyms->sym_cnt; i++) {
+> +               if (strcmp(ksyms->syms[i].name, ksyms->syms[i - 1].name))
+> +                       continue;
+> +               if (!tsearch(&ksyms->syms[i].name, &dups, compare)) {
+> +                       err =3D -ENOMEM;
+> +                       fprintf(stderr, "failed to index duplicate kernel=
+ symbols\n");
+> +                       goto cleanup;
+> +               }
+> +       }
+> +
+> +       /* ..and filter them through BTF and btf_type_is_traceable_func. =
+*/
+> +       nr =3D btf__type_cnt(btf);
+> +       for (type_id =3D 1; type_id < nr; type_id++) {
+> +               const struct btf_type *type;
+> +               const char *str;
+> +
+> +               type =3D btf__type_by_id(btf, type_id);
+> +               if (!type)
+> +                       break;
+> +
+> +               if (BTF_INFO_KIND(type->info) !=3D BTF_KIND_FUNC)
+> +                       continue;
+> +
+> +               str =3D btf__name_by_offset(btf, type->name_off);
+> +               if (!str)
+> +                       break;
+> +
+> +               if (!tfind(&str, &root, compare))
+> +                       continue;
+> +
+> +               /* Skip names that are not unique in kallsyms, see above.=
+ */
+> +               if (tfind(&str, &dups, compare))
+> +                       continue;
+> +
+> +               if (!btf_type_is_traceable_func(btf, type))
+> +                       continue;
+> +
+> +               err =3D libbpf_ensure_mem((void **)&ids, &cap, sizeof(*id=
+s), cnt + 1);
+> +               if (err) {
+> +                       fprintf(stderr, "failed to allocate BTF ID array:=
  %s\n",
-> >> +                            bpf_map__name(map), errstr(err));
-> >> +                    return err;
-> >> +            }
-> >>      } else if (map->mmaped) {
-> >>              munmap(map->mmaped, mmap_sz);
-> >>              map->mmaped =3D NULL;
-> >> @@ -10807,11 +10852,16 @@ static bool map_uses_real_name(const struct =
-bpf_map *map)
-> >>       * such map's corresponding ELF section name as a map name.
-> >>       * This check distinguishes .data/.rodata from .data.* and .rodat=
-a.*
-> >>       * maps to know which name has to be returned to the user.
-> >> +     * Map name of the custom .percpu.* maps might be truncated to
-> >> +     * BPF_OBJ_NAME_LEN-1 chars in internal_map_name(). Hence, percpu=
- data
-> >> +     * maps must use real name for their user-visible name.
-> >>       */
-> >>      if (map->libbpf_type =3D=3D LIBBPF_MAP_DATA && strcmp(map->real_n=
-ame, DATA_SEC) !=3D 0)
-> >>              return true;
-> >>      if (map->libbpf_type =3D=3D LIBBPF_MAP_RODATA && strcmp(map->real=
-_name, RODATA_SEC) !=3D 0)
-> >>              return true;
-> >> +    if (map->libbpf_type =3D=3D LIBBPF_MAP_PERCPU)
-> >> +            return true;
-> >
-> > Same comment as above here wrt uniformity. This is the part that
-> > requires us to check agianst the map type in __init_internal_map().
+> +                               strerror(-err));
+> +                       goto cleanup;
+> +               }
+> +
+> +               ids[cnt++] =3D type_id;
+> +       }
+> +
+> +       opts.ids =3D ids;
+> +       opts.cnt =3D cnt;
+> +
+> +       attach_start_ns =3D get_time_ns();
+> +       link =3D bpf_program__attach_tracing_multi(skel->progs.bench, NUL=
+L, &opts);
+> +       attach_end_ns =3D get_time_ns();
+> +
+> +       err =3D libbpf_get_error(link);
+> +       if (err) {
+> +               link =3D NULL;
+> +               fprintf(stderr, "failed to attach tracing multi link: %s\=
+n",
+> +                       strerror(-err));
+> +               goto cleanup;
+> +       }
+> +
+> +       detach_start_ns =3D get_time_ns();
+> +       err =3D bpf_link__destroy(link);
+> +       detach_end_ns =3D get_time_ns();
+> +       link =3D NULL;
+> +       if (err) {
+> +               fprintf(stderr, "failed to detach tracing multi link: %s\=
+n",
+> +                       strerror(-err));
+> +               goto cleanup;
+> +       }
+> +
+> +       attach_delta =3D (attach_end_ns - attach_start_ns) / 1000000000.0=
+;
+> +       detach_delta =3D (detach_end_ns - detach_start_ns) / 1000000000.0=
+;
+> +
+> +       printf("%s: found %zu functions\n", bench->name, cnt);
+> +       printf("%s: attached in %7.3lfs\n", bench->name, attach_delta);
+> +       printf("%s: detached in %7.3lfs\n", bench->name, detach_delta);
+> +
+> +cleanup:
+> +       bpf_link__destroy(link);
+> +       tracing_multi_bench__destroy(skel);
+> +       tdestroy(root, tdestroy_free_nop);
+> +       tdestroy(dups, tdestroy_free_nop);
+> +       free_kallsyms_local(ksyms);
+> +       free(ids);
+> +       btf__free(btf);
+> +
+> +       exit(err ? 1 : 0);
+> +}
+> +
+> +const struct bench bench_tracing_multi_attach =3D {
+> +       .name =3D "tracing-multi-attach",
+> +       .setup =3D tracing_multi_attach_setup,
+> +};
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/too=
+ls/testing/selftests/bpf/prog_tests/tracing_multi.c
+> index 0aa9532a05cf..fd4f256d2e0a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> @@ -3,14 +3,12 @@
+>  #include <test_progs.h>
+>  #include <bpf/btf.h>
+>  #include <search.h>
+> -#include "bpf/libbpf_internal.h"
+>  #include "tracing_multi.skel.h"
+>  #include "tracing_multi_module.skel.h"
+>  #include "tracing_multi_intersect.skel.h"
+>  #include "tracing_multi_session.skel.h"
+>  #include "tracing_multi_fail.skel.h"
+>  #include "tracing_multi_verifier.skel.h"
+> -#include "tracing_multi_bench.skel.h"
+>  #include "tracing_multi_rollback.skel.h"
+>  #include "trace_helpers.h"
 >
+> @@ -662,129 +660,6 @@ static void test_attach_api_fails(void)
+>         free(ids2);
+>  }
 >
-> Let us wait for Andrii's comment.
->
-
-I think it's fine and basically inevitable
-
-> Thanks,
-> Leon
->
-> >
-> >>      return false;
-> >>  }
-> >>
-> >
+> -void serial_test_tracing_multi_bench_attach(void)
+> -{
+> -       LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
+> -       struct tracing_multi_bench *skel =3D NULL;
+> -       long attach_start_ns, attach_end_ns;
+> -       long detach_start_ns, detach_end_ns;
+> -       double attach_delta, detach_delta;
+> -       struct bpf_link *link =3D NULL;
+> -       size_t i, cap =3D 0, cnt =3D 0;
+> -       struct ksyms *ksyms =3D NULL;
+> -       void *root =3D NULL;
+> -       void *dups =3D NULL;
+> -       __u32 *ids =3D NULL;
+> -       __u32 nr, type_id;
+> -       struct btf *btf;
+> -       int err;
+> -
+> -#ifndef __x86_64__
+> -       test__skip();
+> -       return;
+> -#endif
+> -
+> -       btf =3D btf__load_vmlinux_btf();
+> -       if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
+> -               return;
+> -
+> -       skel =3D tracing_multi_bench__open_and_load();
+> -       if (!ASSERT_OK_PTR(skel, "tracing_multi_bench__open_and_load"))
+> -               goto cleanup;
+> -
+> -       if (!ASSERT_OK(bpf_get_ksyms(&ksyms, true), "get_syms"))
+> -               goto cleanup;
+> -
+> -       /* Get all ftrace 'safe' symbols.. */
+> -       for (i =3D 0; i < ksyms->filtered_cnt; i++) {
+> -               if (!tsearch(&ksyms->filtered_syms[i], &root, compare)) {
+> -                       ASSERT_FAIL("tsearch failed");
+> -                       goto cleanup;
+> -               }
+> -       }
+> -
+> -       /*
+> -        * Collect names that are not unique in kallsyms. The kernel reso=
+lves a
+> -        * tracing-multi BTF id to an address with kallsyms_lookup_name()=
+, which
+> -        * returns the first symbol of that name. For a duplicate name th=
+at may
+> -        * be a different (non-ftrace-able) instance than the ftrace-able=
+ one in
+> -        * available_filter_functions, so attaching to it by BTF id fails=
+ with
+> -        * -ENOENT (e.g. t_start/t_next/t_stop). ksyms->syms is sorted by=
+ name,
+> -        * so equal names are adjacent.
+> -        */
+> -       for (i =3D 1; i < ksyms->sym_cnt; i++) {
+> -               if (strcmp(ksyms->syms[i].name, ksyms->syms[i - 1].name))
+> -                       continue;
+> -               if (!tsearch(&ksyms->syms[i].name, &dups, compare)) {
+> -                       ASSERT_FAIL("tsearch failed");
+> -                       goto cleanup;
+> -               }
+> -       }
+> -
+> -       /* ..and filter them through BTF and btf_type_is_traceable_func. =
+*/
+> -       nr =3D btf__type_cnt(btf);
+> -       for (type_id =3D 1; type_id < nr; type_id++) {
+> -               const struct btf_type *type;
+> -               const char *str;
+> -
+> -               type =3D btf__type_by_id(btf, type_id);
+> -               if (!type)
+> -                       break;
+> -
+> -               if (BTF_INFO_KIND(type->info) !=3D BTF_KIND_FUNC)
+> -                       continue;
+> -
+> -               str =3D btf__name_by_offset(btf, type->name_off);
+> -               if (!str)
+> -                       break;
+> -
+> -               if (!tfind(&str, &root, compare))
+> -                       continue;
+> -
+> -               /* Skip names that are not unique in kallsyms, see above.=
+ */
+> -               if (tfind(&str, &dups, compare))
+> -                       continue;
+> -
+> -               if (!btf_type_is_traceable_func(btf, type))
+> -                       continue;
+> -
+> -               err =3D libbpf_ensure_mem((void **) &ids, &cap, sizeof(*i=
+ds), cnt + 1);
+> -               if (err)
+> -                       goto cleanup;
+> -
+> -               ids[cnt++] =3D type_id;
+> -       }
+> -
+> -       opts.ids =3D ids;
+> -       opts.cnt =3D cnt;
+> -
+> -       attach_start_ns =3D get_time_ns();
+> -       link =3D bpf_program__attach_tracing_multi(skel->progs.bench, NUL=
+L, &opts);
+> -       attach_end_ns =3D get_time_ns();
+> -
+> -       if (!ASSERT_OK_PTR(link, "bpf_program__attach_tracing_multi"))
+> -               goto cleanup;
+> -
+> -       detach_start_ns =3D get_time_ns();
+> -       bpf_link__destroy(link);
+> -       detach_end_ns =3D get_time_ns();
+> -
+> -       attach_delta =3D (attach_end_ns - attach_start_ns) / 1000000000.0=
+;
+> -       detach_delta =3D (detach_end_ns - detach_start_ns) / 1000000000.0=
+;
+> -
+> -       printf("%s: found %lu functions\n", __func__, cnt);
+> -       printf("%s: attached in %7.3lfs\n", __func__, attach_delta);
+> -       printf("%s: detached in %7.3lfs\n", __func__, detach_delta);
+> -
+> -cleanup:
+> -       tracing_multi_bench__destroy(skel);
+> -       tdestroy(root, tdestroy_free_nop);
+> -       tdestroy(dups, tdestroy_free_nop);
+> -       free_kallsyms_local(ksyms);
+> -       free(ids);
+> -       btf__free(btf);
+> -}
+> -
+>  static void tracing_multi_rollback_run(struct tracing_multi_rollback *sk=
+el)
+>  {
+>         LIBBPF_OPTS(bpf_test_run_opts, topts);
+> --
+> 2.55.0
 >
