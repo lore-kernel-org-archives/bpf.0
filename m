@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF443F8EC9
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF41F4334B2
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:35:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785875747; cv=none; b=KvVR5tlAaOgPzrPjMEHTSy2Nsv8EmrdTOwFciVd0dorJvxdIrKFiedUCfbNHYv1zLqxOQR1ycr/wFLZNv/D/zoRSAjxT2IjAW8jeIsUk9BT1OA0lyHt3rsUiIDPBKxY0G5d6dcqR5GaExeuwOxJkPUq4gcGGxzL5XAg8ka6e4DY=
+	t=1785875752; cv=none; b=q+MzrESG1tMOrChaa9lTIj47WtuNvVDEyZ6/NeaiONGL2ywcAQOhePK5lCFqOFdnq/eV8ceTjrTDNkkj8JK07JGtaW/NujUFe4TJLFJuqmLiuBliQze0Pf/4seFA+G1HtHsrNSwwKv3qC6MdCH0c6o3CT/5SiYR9inqOthc+ffo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785875747; c=relaxed/simple;
-	bh=TO40ttR9N+bNqJrfZvL5YRz29bYWs+elKUkrugAcpJo=;
+	s=arc-20240116; t=1785875752; c=relaxed/simple;
+	bh=IyDtAytBXCU5uOZe8Ek8DmlIsXIZNEi8MCardrpQegg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qtRj1XwtZNhYo6mjIsa4GfNs/RiXIxI4A9zlFalD4bgzgdLbPsAleA57Ks/TB7e74tur+xoABJvsCqJ+xJ0eIceKesUR+I1ynTINqfG5OMd+rUOKVB3WsJAuo1ZmT1HTosUUSqZJfkup+36O0GuXp/yW8Gs6ZZKEDEM3D/ekfuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=LlBNjKXi6p6m+2dtntX2vOklH2rAkeKpCO7sdUGolxnZXSHjuyqd/tnSbhhHJDRRDe1Z/82bWT0TLXBWLhrDkxFTsYRZhvcRkX1iZbKirrQhPjKnCezEq0pP8XMxK9NJVlXt/XrzUtZP5W7WIuHOLIQBlxbWljTXLoe0uc0dSN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id E51A321FBFEAD7; Tue,  4 Aug 2026 13:35:32 -0700 (PDT)
+	id 0D07721FBFED05; Tue,  4 Aug 2026 13:35:38 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 02/13] bpf: Add helpers to describe the R0:R2 return register pair
-Date: Tue,  4 Aug 2026 13:35:32 -0700
-Message-ID: <20260804203532.1870625-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 03/13] bpf: Wire up JIT support for 16-byte kfunc returns
+Date: Tue,  4 Aug 2026 13:35:38 -0700
+Message-ID: <20260804203538.1871060-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260804203522.1869244-1-yonghong.song@linux.dev>
 References: <20260804203522.1869244-1-yonghong.song@linux.dev>
@@ -37,186 +37,184 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-LLVM 23 added support for returning a value in two registers for an
-__int128, or a struct/union whose size is greater than 8 but not more tha=
-n
-16 bytes: such a value comes back in the R0:R2 register pair, with R2
-holding the upper half. See LLVM patches [1] and [2].
+LLVM 23 returns an __int128, or a struct/union larger than 8 bytes and no
+larger than 16 bytes, in the BPF R0:R2 register pair. The previous patch
+taught the verifier about that convention; wire up the JIT side so that t=
+he
+second half of the return value actually lands in R2.
 
-Later patches teach the JIT, precision backtracking, live register analys=
-is
-and the verifier itself about that convention. All of them need to answer
-the same question: does this subprogram return its value in a register
-pair? Add the shared helpers up front so that those patches can be ordere=
-d
-independently of each other:
+A kfunc returning more than 8 bytes hands the second half of the result
+back in RDX, the native x86-64 ABI's second return register. BPF R0 maps =
+to
+RAX so it needs no move, but BPF R2 maps to RSI, so emit a RDX->RSI move
+after a BPF_PSEUDO_KFUNC_CALL whose function model reports ret_size > 8.
 
- - subprog_ret_type() resolves a subprogram's BTF return type. It is
-   factored out of subprog_returns_void(). The verifier_bug_if(!func) and
-   !func_proto checks it replaces are redundant, since
-   check_btf_func_early() already rejects a func_info record whose type_i=
-d
-   is not a BTF_KIND_FUNC pointing at a BTF_KIND_FUNC_PROTO. A check on
-   prog->aux->{btf,func_info} is added instead: unlike
-   subprog_returns_void(), which is only used for global subprograms, lat=
-er
-   callers ask about static subprograms too, and those may belong to a
-   program loaded without BTF.
+Placing the second return half into R2 is possible on any JIT, but it nee=
+ds
+architecture-specific JIT work. Rather than requiring every JIT to
+implement it at once, add a bpf_jit_supports_kfunc_ret_reg_pair()
+capability, defaulting to false in the generic core; an architecture opts
+in once its JIT handles the R0:R2 pair, and the remaining ones are left f=
+or
+future work. The verifier enforces it in bpf_add_kfunc_call(), rejecting =
+a
+kfunc whose return is larger than 8 bytes with -EOPNOTSUPP when the JIT
+lacks the capability. Only x86, arm64 and riscv are supported so far.
 
- - ret_regs_cnt() maps the size of a return value to the number of
-   registers holding it.
+On arm64 and riscv the native second return register is already BPF R2 (x=
+1
+in bpf2a64[] and a1 in regmap[] respectively), so the value is in the R0:=
+R2
+register pair on return with no extra move, unlike x86 (RDX->RSI). This h=
+as
+been tested on x86 and arm64. The riscv path is expected to work by the
+same register-mapping reasoning as arm64 but has not been tested.
 
- - bpf_ret_reg_pair() answers the question above. Its users query it at
-   every subprogram call and at every subprogram exit, that is once per
-   verifier state rather than once per subprogram, so the answer is
-   precomputed into bpf_subprog_info->ret_reg_pair by
-   bpf_compute_subprog_ret_regs() and the helper itself is a flag test.
-   It lives in bpf_verifier.h because kernel/bpf/backtrack.c and
-   kernel/bpf/liveness.c need it as well.
-
-bpf_compute_subprog_ret_regs() runs in bpf_check() right before
-bpf_compute_live_registers(), which is the first of those users: by then
-BTF func_info has been validated and the subprogram list is final.
-
-No functional change, bpf_ret_reg_pair() has no callers yet.
-
-  [1] https://github.com/llvm/llvm-project/pull/190894
-  [2] https://github.com/llvm/llvm-project/pull/206876
+bpf_add_kfunc_call() also rejects a kfunc that is marked KF_FASTCALL and
+returns more than 8 bytes. The bpf_fastcall contract implemented by
+mark_fastcall_pattern_for_call() assumes a call clobbers R0 plus the
+registers holding its arguments, so a return in the R0:R2 pair would
+clobber an R2 the caller expects the fastcall pattern to preserve. Such
+a kfunc is rejected with -EOPNOTSUPP as well.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf_verifier.h | 12 ++++++++
- kernel/bpf/verifier.c        | 55 ++++++++++++++++++++++++++++--------
- 2 files changed, 56 insertions(+), 11 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c   |  5 +++++
+ arch/riscv/net/bpf_jit_comp64.c |  5 +++++
+ arch/x86/net/bpf_jit_comp.c     | 21 +++++++++++++++++++++
+ include/linux/filter.h          |  1 +
+ kernel/bpf/core.c               |  5 +++++
+ kernel/bpf/verifier.c           | 13 +++++++++++++
+ 6 files changed, 50 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index a2a40caca0a0..18a6ecff39c5 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -816,6 +816,8 @@ struct bpf_subprog_info {
- 	bool is_async_cb: 1;
- 	bool is_exception_cb: 1;
- 	bool args_cached: 1;
-+	/* true if the return value is passed in the R0:R2 register pair */
-+	bool ret_reg_pair: 1;
- 	/* true if bpf_fastcall stack region is used by functions that can't be=
- inlined */
- 	bool keep_fastcall_stack: 1;
- 	bool changes_pkt_data: 1;
-@@ -1049,6 +1051,16 @@ static inline struct bpf_subprog_info *subprog_inf=
-o(struct bpf_verifier_env *env
- 	return &env->subprog_info[subprog];
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
+c
+index 4cdc7dfb05ba..2e9640975f55 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -2325,6 +2325,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return true;
  }
 =20
-+/*
-+ * True if @subprog returns its value in the R0:R2 register pair. Cached=
- by
-+ * bpf_compute_subprog_ret_regs(), since this is queried on hot paths: a=
-t
-+ * every subprogram call and at every subprogram exit.
-+ */
-+static inline bool bpf_ret_reg_pair(struct bpf_verifier_env *env, int su=
-bprog)
++bool bpf_jit_supports_kfunc_ret_reg_pair(void)
 +{
-+	return subprog_info(env, subprog)->ret_reg_pair;
++	return true;
 +}
 +
- struct bpf_call_summary {
- 	u8 num_params;
- 	bool is_void;
+ bool bpf_jit_supports_stack_args(void)
+ {
+ 	return true;
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
+p64.c
+index 8fe8969fb8a0..b234d4f54b65 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -2111,6 +2111,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return true;
+ }
+=20
++bool bpf_jit_supports_kfunc_ret_reg_pair(void)
++{
++	return true;
++}
++
+ bool bpf_jit_supports_ptr_xchg(void)
+ {
+ 	return true;
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 01e7ce569c1e..f7c15f7d61d3 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -2592,6 +2592,22 @@ st:			insn_off =3D insn->off;
+ 				return -EINVAL;
+ 			if (priv_frame_ptr)
+ 				pop_r9(&prog);
++			if (src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
++				const struct btf_func_model *fm;
++
++				/*
++				 * A kfunc returning a >8 byte aggregate hands the
++				 * second half back in RDX (the native ABI's second
++				 * return reg), but BPF expects it in R0:R2. BPF R0
++				 * is RAX (no move needed), while BPF R2 is RSI, so
++				 * copy RDX into RSI.
++				 */
++				fm =3D bpf_jit_find_kfunc_model(bpf_prog, insn);
++				if (!fm)
++					return -EFAULT;
++				if (fm->ret_size > 8)
++					emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_3);
++			}
+ 			break;
+ 		}
+=20
+@@ -4041,6 +4057,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return true;
+ }
+=20
++bool bpf_jit_supports_kfunc_ret_reg_pair(void)
++{
++	return true;
++}
++
+ bool bpf_jit_supports_stack_args(void)
+ {
+ 	return true;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 32d5297c557e..b8f70422c207 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1182,6 +1182,7 @@ bool bpf_jit_inlines_helper_call(s32 imm);
+ bool bpf_jit_supports_subprog_tailcalls(void);
+ bool bpf_jit_supports_percpu_insn(void);
+ bool bpf_jit_supports_kfunc_call(void);
++bool bpf_jit_supports_kfunc_ret_reg_pair(void);
+ bool bpf_jit_supports_stack_args(void);
+ bool bpf_jit_supports_far_kfunc_call(void);
+ bool bpf_jit_supports_exceptions(void);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index e2076667b245..1afc21663c49 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3303,6 +3303,11 @@ bool __weak bpf_jit_supports_kfunc_call(void)
+ 	return false;
+ }
+=20
++bool __weak bpf_jit_supports_kfunc_ret_reg_pair(void)
++{
++	return false;
++}
++
+ bool __weak bpf_jit_supports_stack_args(void)
+ {
+ 	return false;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 05a8f9907c3f..681dbb4f9e29 100644
+index 681dbb4f9e29..4010575d6715 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -381,27 +381,57 @@ bool bpf_subprog_is_global(const struct bpf_verifie=
-r_env *env, int subprog)
- 	return aux && aux[subprog].linkage =3D=3D BTF_FUNC_GLOBAL;
- }
-=20
--static bool subprog_returns_void(struct bpf_verifier_env *env, int subpr=
-og)
-+/* Return type of a subprogram, NULL if it cannot be resolved */
-+static const struct btf_type *subprog_ret_type(struct bpf_verifier_env *=
-env, int subprog)
- {
--	const struct btf_type *type, *func, *func_proto;
-+	const struct btf_type *func, *func_proto;
- 	const struct btf *btf =3D env->prog->aux->btf;
- 	u32 btf_id;
-=20
-+	if (!btf || !env->prog->aux->func_info)
-+		return NULL;
-+
- 	btf_id =3D env->prog->aux->func_info[subprog].type_id;
-=20
-+	/* Both already validated by check_btf_func_early() at prog load. */
- 	func =3D btf_type_by_id(btf, btf_id);
--	if (verifier_bug_if(!func, env, "btf_id %u not found", btf_id))
--		return false;
--
- 	func_proto =3D btf_type_by_id(btf, func->type);
--	if (!func_proto)
--		return false;
-=20
--	type =3D btf_type_skip_modifiers(btf, func_proto->type, NULL);
--	if (!type)
--		return false;
-+	return btf_type_skip_modifiers(btf, func_proto->type, NULL);
-+}
-+
-+static bool subprog_returns_void(struct bpf_verifier_env *env, int subpr=
-og)
-+{
-+	const struct btf_type *type =3D subprog_ret_type(env, subprog);
-=20
--	return btf_type_is_void(type);
-+	return type && btf_type_is_void(type);
-+}
-+
-+/*
-+ * Number of registers holding a function return value: a value of up to=
- 8
-+ * bytes is returned in R0, a value of more than 8 bytes and no more tha=
-n 16
-+ * bytes (an __int128 or a struct/union of such size) is returned in the=
- R0:R2
-+ * register pair, with R2 holding the upper half.
-+ */
-+static u32 ret_regs_cnt(u32 size)
-+{
-+	return size > 8 && size <=3D 16 ? 2 : 1;
-+}
-+
-+/*
-+ * Resolve the return convention of every subprogram once, so that
-+ * bpf_ret_reg_pair() is a plain flag test on the hot paths that use it.
-+ */
-+static void bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
-+{
-+	const struct btf_type *type;
-+	int subprog;
-+
-+	for (subprog =3D 0; subprog < env->subprog_cnt; subprog++) {
-+		type =3D subprog_ret_type(env, subprog);
-+		if (type && (btf_type_is_struct(type) || btf_type_is_scalar(type)))
-+			subprog_info(env, subprog)->ret_reg_pair =3D ret_regs_cnt(type->size)=
- > 1;
+@@ -2841,6 +2841,19 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *en=
+v, u32 func_id, u16 offset)
+ 	err =3D btf_distill_func_proto(&env->log, kfunc.btf, kfunc.proto, kfunc=
+.name, &func_model);
+ 	if (err)
+ 		return err;
++	if (func_model.ret_size > 8) {
++		if (kfunc.flags && (*kfunc.flags & KF_FASTCALL)) {
++			verbose(env,
++				"kfunc %s with >8-byte return is not supported with KF_FASTCALL\n",
++				kfunc.name);
++			return -EOPNOTSUPP;
++		}
++		if (!bpf_jit_supports_kfunc_ret_reg_pair()) {
++			verbose(env, "kfunc %s with >8-byte return is not supported by JIT\n"=
+,
++				kfunc.name);
++			return -EOPNOTSUPP;
++		}
 +	}
- }
 =20
- static const char *subprog_name(const struct bpf_verifier_env *env, int =
-subprog)
-@@ -20330,6 +20360,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_a=
-ttr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
-=20
-+	/* must precede the first bpf_ret_reg_pair() user below */
-+	bpf_compute_subprog_ret_regs(env);
-+
- 	ret =3D bpf_compute_live_registers(env);
- 	if (ret < 0)
- 		goto skip_full_check;
+ 	memset(&meta, 0, sizeof(meta));
+ 	meta.btf =3D kfunc.btf;
 --=20
 2.53.0-Meta
 
