@@ -1,406 +1,248 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C327E45FFD1
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 17:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785865339; cv=pass; b=rWf4bK759cw/LfK4MC6GJlcFDhAhwL42uetEniol9Lm2heJGyPXpTYvb0xxGAHwDnyEPwHJRt01/gSzjJkVXXPfWs3aLZO3p4pFkWVJqk26NN9qJDJ8CQZH5BRSnOcm9jp4YquD1kvHSXg2LdwHFC9u67lJh1CJ/21cEgYjBtps=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785865339; c=relaxed/simple;
-	bh=1UbDvVnHrjweP/ajF6ocl6OhLoZyMNOLDKIJLKHoJf8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BlcElDkaKOX6LwItyughqhVdzMWJTHa4rDY20Dj/wji2CEoawh+/E1qo+jL/0LgIyt1pkd517jUnsIWVIgZ3TV+AMihWW44WQz2mmkeuTu/RV9fBhW7DDmtGTqXv0D5wQKGkXnEfqllIerYV/K/hltiN/EJ7ur7Vr29zORY7Alo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KwQXq00v; arc=pass smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179543783C1;
+	Tue,  4 Aug 2026 17:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785865551; cv=none; b=rms9kIkzoIM/v11IIWmcszd8OXRLdBWhtl21x/rMKXdC5/84zkwLhz5IzU1D8mRBUE6LmiHyEeKTevyYwzQxwEPvZSPagh4Xc8+Q0nAaJ6i8lj0q6UVVF+lbhSH9VhiYhyRFi69RdLN5ZeslpP5mtetIcIEqOUqjBTepYXeXeIA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785865551; c=relaxed/simple;
+	bh=TQMcsOCloSAd5xFahG0H7HtjQDcXNjVSroQlYGm19r0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=caRFQ9W1ae2nAjn7MBeRtYEidbHsqzfmpog8oWsD5r4YwdBqoEiS5vDADaiA3KRpQo/VDEL8YGcxST9bbobrggZAXUEBN0/dL9aWj6YhnkIiwA2vMuibaRnY08sATFQ6Nazb0Td/Y0YPaRPVAOGAR0VtlDaHP/HSweM4R80Fx/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=1BbidVjd; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KwQXq00v"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-82011c59e66so2794187b3.0
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 10:42:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785865336; cv=none;
-        d=google.com; s=arc-20260327;
-        b=WAcol26uEbM6GpCbrrCiiLQ9v0toQTRH7fgDf0FSRAGzzBmsghKo/2blcYDhzcwwgf
-         gbAw0ZPtLbntyk6qVA7Fx0e2UuIOlGdZ3M+WB7rieSC3ch7GSYXcic8Lw/lI+i1ZJimJ
-         rkLC9uzMeLD3HXsqJzCHNa0eYwIj/5Nxx50Imc0UtHF+fDh4GkslpOVUAA6cdtP2ScvJ
-         kDcHu3D01FPgMgbqGTO61ZVb2BLONNQ9rPgg8U/xGgK86/wRWWYDnsohDX19ZYQJVEVA
-         Dlup/NCv/1BgFkuCw8FVL82aw6ovWMUrjo2yyRsSPMhnBurU6+Dav2Mk+zqrgQzNNh5E
-         J8bA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9+xQjxgsi6m5xbG/b8676mNsYGAKIDvgB8j5VSi85dg=;
-        fh=7K2qWJ3mUiPSelnihIFryY3l1DriTibHaNVcRL5iMOk=;
-        b=mzjRqSTFh9g5wG+AqQ+RFxBUR14fHQUNNSrgd9yXeXTsxH0Yp6WPvibHJ8CjSFVg5o
-         ImmJnjJaW67Mvli7eAurbBG/yC2zIhbu3LFgS0EBMztVacQl8MCJd2lXOC7U2JTPwoJI
-         RzObA386YIPdzSU5lQgCKjGtpVs8rMzcPV+zkC91Vzg0tMs7IEK0Un8b3J4fafTaiggY
-         V0P3mes8R+jKcRLiZeoGSQgaJy3eYELKOOJyu+p3q4cq0p47pwWhxWzFBJiiYGu61X9D
-         1plrQLzzIHTIJPLlG/D0yqzH98HW4HyK6HWnuhyseP1KmYPahP7MVbxFbLOyPFiAFsme
-         T5og==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785865336; x=1786470136; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9+xQjxgsi6m5xbG/b8676mNsYGAKIDvgB8j5VSi85dg=;
-        b=KwQXq00vE8p+EX4bBL4BFGdI6oNJ4Srm2a8sB12iAU4qcqpyJB7hwwpzH2PKp710Cz
-         Nn4dwLLxT4s9sAQWTTb34kmOpr1Ew8RUJxYqKtAC8j0Zn8tan4fEQWewhA/MoxQb6VR0
-         kfRWcGIbDZe2Zob0yYSFhWNBz8QKNYH6Q+NQ3nNowgNo7ny/Kab0rJMuOZsOUyMYRiUd
-         rOkbiizA7dN7HzNHydUBRx9uzH87KzeidY8Thw+IYIYStkAYd41y62I+TX7ORMpqQeEu
-         6N6Um+bDGUsFKSJHPuqzUKOMhyTSjZlFzQIqKX12yDm9Zv6BEWLHG1DnegxP/f2RDxlm
-         L90g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785865336; x=1786470136;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9+xQjxgsi6m5xbG/b8676mNsYGAKIDvgB8j5VSi85dg=;
-        b=aMwnxS7feBDPTn4tAletBQOO0iKa9khV59ni6uKMv9Dn379lHcu3a+RZ05j5apjR6d
-         AwM21I7PDM4Ymj/shDugVORcOKpuM6zjYlODLFdOM2x4ktjU5vLv2KQzijkqYaElgYJq
-         Ib288yWCFCS3/3KzN6CPKDNBrtqcff+b5qVpEaWVnuPc8eaF/40WRB/zkqAckBbryaxh
-         m8m7Ue2H4CDsq0iecSpFPR3jYXH90IOlYPDqgqYgpkDw95Ll84VyX9WzU3dDPEsNMpPj
-         3m8Gzx7sG9jsIY1xcaz4foDdMtfD9GV64f2IkqlkJvjkaUw6kESUgspGj3ul9BGTTg0e
-         XdFA==
-X-Gm-Message-State: AOJu0YxlRNrSsnffSdYqI0/HT/6N65NxahBO0o29F9sgi/UTy57QIEcr
-	NQVpzSnroWUFHHTOeP4Zq1zcLb+rCOn3GbdV6K96hmFztikBhBAnfKD2aJfyQOEe3Ds1xz4J0/N
-	nRIjKyN/cFL5GTADw1SfIT2FqvvJZX/U=
-X-Gm-Gg: AR+sD120tuG0NZqqb0BpNbyIpQtBfCcGT1qpndicA4RVEQ64DtPNjgz2YjCbgCfaBo9
-	7bhqH1uXuKJLTgUOr3JsfoV6oNkbY8AJUtc45OHb+VA8Qs5nTJXLB6WVe2qdf1X0O2aFZ8avtVy
-	QwY/2++EBTxxTLIuRpDRfPhbV4MUwgXKqIsFRQLh6lQzmuiNvS2XhXI7avQ0CexwKejGrVB/xwX
-	pSbwM2qIddT67lbtTJr9QDY8j8ehjSUiIWBsVgXoG1l4gAaDV0L4GyaaE4wn/B/C5VwvUeAHZn+
-	kzv2NkZI88PyGYynA4eSS+Pjv49tNFlInRDOFz6/HzyJ
-X-Received: by 2002:a05:690c:4886:b0:80b:9114:3b7b with SMTP id
- 00721157ae682-82022323ae6mr1017847b3.17.1785865336403; Tue, 04 Aug 2026
- 10:42:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="1BbidVjd"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 5FE871A13EE;
+	Tue,  4 Aug 2026 17:45:43 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 24E496029E;
+	Tue,  4 Aug 2026 17:45:43 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0E56C11C33447;
+	Tue,  4 Aug 2026 19:45:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1785865541; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=FC7RLm/BkIpau9DjmjsOAD4rPdrWRZHkY3bsZYPi5tw=;
+	b=1BbidVjd4y4t3o7SkLJEU8jWX8juavfHM3pviMwAhQS/JKdj5frDTGh42LB7FKV6cfWX4e
+	2gM8h7jETcC/b4Og7waghUNYBVQzSNM9jwGnEs61/JkxtqxvTw1903M3pt9Rzebtj/mIHs
+	LWOchBARzleRSiaTG/AwsBkhJnrz/ehqOJ1YLpc3MP7SNqiEbyEVPSo/VE8sA90gSpBor/
+	U16MBPt0mNT700bZPA2ZpHhXExA+fiKJMDOxYKgcEVsgH2AagcGbLjVukC7k+tC4FW5eGE
+	a2VeNZnQnajrSUJVt3+WO2u6tGVP3L5xeVnEhhaBmzXTr7oFG+QAZGQ+BspjAg==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf-next v6 0/9] bpf: add support for KASAN checks in JITed
+ programs
+Date: Tue, 04 Aug 2026 19:45:31 +0200
+Message-Id: <20260804-kasan-v6-0-549ef845f491@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260803125115.2264733-1-memxor@gmail.com> <20260803125115.2264733-2-memxor@gmail.com>
-In-Reply-To: <20260803125115.2264733-2-memxor@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 4 Aug 2026 10:42:05 -0700
-X-Gm-Features: AUfX_mzLoEqXKZ-1bhKqE2Ppy3rXRKjLXJBMpWSD-hZweax2m6NIzO6Nc8nwK7c
-Message-ID: <CAMB2axPCF12OGokrt3R5d9f8Y9JxvGfF7LaNRHW_7bOp6aLnuA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/9] bpf: Support __arena and __arena_nullable
- kfunc argument suffixes
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2XPTW7DIBAF4KtErEvFDBhwVr1HlQW/DWoLkbGsR
+ JHvXopqJZWXozffG82d1DClUMnxcCdTWFJNJbdBvhyIO5v8EWjybSbIUDJAST9NNZlG56WOUji
+ vLGm7lynEdO0978ReIs3hOpNTS86pzmW69QML9Lx3CeB/XQtQRsEMmgNyphHebCnzV8qvrnz3j
+ gUfrsnNYXOOSRkkquiN3jv+cIrB5nhz1rPR2lGg13LvxLPTmxPN+cGBUsZqRLV3w7MbNzf8/ue
+ kMFEHESD8d+u6/gA7iZmhhgEAAA==
+X-Change-ID: 20260126-kasan-fcd68f64cd7b
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Andrey Konovalov <andreyknvl@gmail.com>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
+
+Hello,
+this is v6 of the series aiming to bring basic support for KASAN checks
+to BPF JITed programs. This new revision takes a step back on stack
+accessing insn tracking, as the previous attempt was fragile and
+error-prone, it brings back a simpler tracking, at the cost of some
+unecessary checks being inserted. While at it, I took this time a look
+at how many accesses are being instrumented, and how many of those
+are "wrongly" instrumented (because they access stack), and I got
+those rough numbers on the whole selftests set:
+- total: 451997 checks inserted
+- checks added on stack access (checking reg == BPF_REG_FP, not precise,
+  but gives a rough idea): 21786
+
+So that makes ~5% of "over-instrumented" accesses
+
+Original cover letter:
+
+"Traditional" KASAN allows to spot memory management mistakes by
+reserving a fraction of memory as "shadow memory" that will map to the
+rest of the memory and allow its monitoring. Each memory-accessing
+instruction is then instrumented at build time to call some ASAN check
+function, that will analyze the corresponding bits in shadow memory, and
+if it detects the access as invalid, trigger a detailed report. The goal
+of this series is to replicate this mechanism for BPF programs when they
+are being JITed into native instructions: that's then the JIT compiler
+that is in charge of inserting calls to the corresponding kasan checks,
+when a program is being loaded into the kernel. This task involves:
+- identifying at program load time the instructions performing memory
+  accesses
+- identifying those accesses properties (size ? read or write ?) to
+  define the relevant kasan check function to call
+- just before the identified instructions:
+  - perform the basic context saving (ie: saving registers)
+  - inserting a call to the relevant kasan check function
+  - restore context
+- whenever the instrumented program executes, if it performs an invalid
+  access, it triggers a kasan report identical to those instrumented on
+  kernel side at build time.
+
+The series comes with new selftests programs that generate a wide
+variety of kasan reports: those need the kernel to be running with
+kasan_multi_shot enabled.
+
+As discussed in [1], this series is based on some choices and
+assumptions:
+- it focuses on x86_64 for now, and so only on KASAN_GENERIC
+- not all memory accessing BPF instructions are being instrumented:
+  - it discards instructions accessing BPF program stack (already
+    monitored by page guards)
+  - it discards possibly faulting instructions, like BPF_PROBE_MEM or
+    BPF_PROBE_ATOMIC insns
+
+---
+Changes in v6:
+- dropped instruction original offset tracking
+- when patching instructions, track former non_stack_access flag by
+  passing original insn to adjust_insn_aux_data
+- drop unecessary dep on CONFIG_KASAN in Kconfig
+- fold patch adding the emit_kasan_helper into the patch actually
+  calling it, to avoid an unused static function warning
+- move stack access check out of emit_kasan_check
+- replace hardcoded ip value by a computed value
+- add OoB testing
+- add fix commit to make cmdline_contains stricter
+
+- Link to v5: https://patch.msgid.link/20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com
+
+Changes in v5:
+- fixed a few instruction offset for generated fixups
+- fix insn marking for single insn patches
+- enforce more checks in tests
+- skip tests if kasan_multi_shot isn't enabled
+- Link to v4: https://patch.msgid.link/20260708-kasan-v4-0-d5c177ab8227@bootlin.com
+
+Changes in v4:
+- fix insn_offs_in_patch leakage in bpf_convert_ctx_access
+- handle BPF_ATOMIC in is_mem_insn
+- correctly mark fixup instructions if a single insn is generated
+- clarify new kconfig (Andrey) and drop VMAP_STACK dep
+- refactor BPF_FETCH atomic handling in JIT loop
+- make kernel log reading resilient to unrelated, interleaved logs in
+  the selftests
+- make new test kfuncs depend on BPF_JIT_KASAN rather than KASAN_GENERIC
+- Link to v3: https://patch.msgid.link/20260701-kasan-v3-0-bd09bb942d86@bootlin.com
+
+Changes in v3:
+- Do not insert KASAN instrumentation when dealing with cBPF
+- Fix stack-accessing insn tracking for verifier patches, as original
+  instruction location in the generated patch may vary
+- drop cBPF support for stack-accessing insn marking
+- make sure to flag correctly memory access if different verifier states
+  involve different memory types (eg: stack in one path, non-stack in
+  another path)
+- refactor BPF_ST handling in x86 JIT compiler
+- improve tests coverage (cover instrumentation for a few patches
+  emitted by the verifier)
+- Link to v2: https://patch.msgid.link/20260604-kasan-v2-0-c066e627fda8@bootlin.com
+
+Changes in v2:
+- declare asan functions as extern in JIT compiler rather than exposing
+  them in kasan header
+- invert stack-accessing instructions marking to make sure not to skip
+  instructions that could end up accessing to-be-checked memory
+- fix stack accesses marking when verifier patches instructions
+- add best effort marking for cBPF
+- add missing call depth accounting in jited instrumentation
+- skip unused registers in kasan instrumentation save/restore
+- remove faulty stack align in kasan instrumentation
+- drop commit skipping some jit-related tests
+- cover missing instructions: BPF_ST and atomics
+- completely rework tests: directly tune shadow memory, increase
+  coverage, do not consume kernel logs
+- Link to v1: https://patch.msgid.link/20260413-kasan-v1-0-1a5831230821@bootlin.com
+
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Thomas Gleixner <tglx@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+To: x86@kernel.org
+To: "H. Peter Anvin" <hpa@zytor.com>
+To: Shuah Khan <shuah@kernel.org>
+To: Ingo Molnar <mingo@redhat.com>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: ebpf@linuxfoundation.org
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 3, 2026 at 6:12=E2=80=AFAM Kumar Kartikeya Dwivedi <memxor@gmai=
-l.com> wrote:
->
-> From: Tejun Heo <tj@kernel.org>
->
-> Passing an arena pointer to a kfunc takes two steps today. There is no
-> arena pointer argument type, so the pointer crosses the boundary as a
-> bare scalar, and the kfunc then offsets it by the arena base and casts
-> it before it can touch the memory. Every such kfunc open-codes the same
-> translation.
->
-> Add the __arena and __arena_nullable argument suffixes to make this more
-> convenient. The kfunc declares the parameter by its real pointer type
-> and dereferences it directly, with the JIT rebasing the value at the
-> call site, rN =3D kern_vm_start + (u32)rN. No bounds check is needed: the
-> u32 offset stays within the guard-padded arena kernel mapping, and a
-> fault on an unpopulated page recovers through the per-arena scratch
-> page. A suffixed argument accepts a PTR_TO_ARENA or scalar register,
-> matching global subprog arena arguments.
->
-> __arena rebases unconditionally, so the kfunc never sees NULL and a
-> value with zero in the low 32 bits arrives as the arena base.
-> __arena_nullable preserves NULL for optional arguments by skipping the
-> rebase when the truncated value, arena offset 0, is zero. Keeping the
-> plain form NULL-free saves the NULL test on every call.
->
-> This patch adds the verifier side: the suffixes are recognized in
-> check_kfunc_args() and distilled into argument flags in the function
-> model stored in the kfunc descriptor. JITs retrieve the model while
-> emitting the call, avoiding per-call state in insn_aux_data.
->
-> JITs declare support with bpf_jit_supports_arena_args() and verification
-> fails with -ENOTSUPP elsewhere.
->
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Co-developed-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  Documentation/bpf/kfuncs.rst | 29 ++++++++++++++++++++++++++
->  include/linux/bpf.h          |  6 ++++++
->  include/linux/filter.h       |  1 +
->  kernel/bpf/btf.c             | 18 +++++++++++++++-
->  kernel/bpf/core.c            |  5 +++++
->  kernel/bpf/verifier.c        | 40 +++++++++++++++++++++++++++++++++++-
->  6 files changed, 97 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index cbde86d082cc..8e84484636c5 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -278,6 +278,33 @@ An example is given below::
->                  ...
->          }
->
-> +2.3.8 __arena and __arena_nullable Annotations
-> +----------------------------------------------
-> +
-> +Both annotations indicate that the pointer argument points into the
-> +calling program's arena. The JIT rebases the value at the call site so
-> +the kfunc receives a directly dereferenceable kernel address, subject to
-> +the access rules described in :ref:`BPF_kfunc_arena_access` (at most
-> +``GUARD_SZ / 2``, 32 KiB, past the pointer in a single unchecked access)=
-.
-> +
-> +With ``__arena`` the rebase is unconditional and the argument is never
-> +NULL: a value whose lower 32 bits are zero arrives as the arena base
-> +address (arena offset 0). The kfunc must not check the argument for NULL=
-.
-> +With ``__arena_nullable`` such a value arrives as NULL instead and the
-> +kfunc must check before dereferencing.
-> +
-> +An example is given below::
-> +
-> +        __bpf_kfunc int bpf_process_item(struct item *item__arena)
-> +        {
-> +        ...
-> +        }
-> +
-> +Calling such a kfunc requires the program to use an arena map and a JIT =
-with
-> +arena argument support (currently x86-64); verification fails otherwise.=
- The
-> +program can pass any value without compromising the kernel. A value that=
- does
-> +not point into the arena is a program bug.
-> +
->  .. _BPF_kfunc_nodef:
->
->  2.4 Using an existing kernel function
-> @@ -515,6 +542,8 @@ In order to accommodate such requirements, the verifi=
-er will enforce strict
->  PTR_TO_BTF_ID type matching if two types have the exact same name, with =
-one
->  being suffixed with ``___init``.
->
-> +.. _BPF_kfunc_arena_access:
-> +
->  2.8 Accessing arena memory through kfunc arguments
->  --------------------------------------------------
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 356884587ae1..6da8a6be930c 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1213,6 +1213,12 @@ struct bpf_prog_offload {
->  /* The argument is signed. */
->  #define BTF_FMODEL_SIGNED_ARG          BIT(1)
->
-> +/* The argument is an arena pointer. */
-> +#define BTF_FMODEL_ARENA_ARG           BIT(2)
-> +
-> +/* The argument is nullable. */
-> +#define BTF_FMODEL_NULLABLE_ARG                BIT(3)
-> +
->  struct btf_func_model {
->         u8 ret_size;
->         u8 ret_flags;
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index 32d5297c557e..36ce3403fe59 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -1183,6 +1183,7 @@ bool bpf_jit_supports_subprog_tailcalls(void);
->  bool bpf_jit_supports_percpu_insn(void);
->  bool bpf_jit_supports_kfunc_call(void);
->  bool bpf_jit_supports_stack_args(void);
-> +bool bpf_jit_supports_arena_args(void);
->  bool bpf_jit_supports_far_kfunc_call(void);
->  bool bpf_jit_supports_exceptions(void);
->  bool bpf_jit_supports_ptr_xchg(void);
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 5e8ac45ce56a..bf86df91a70b 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -7541,6 +7541,22 @@ static u8 __get_type_fmodel_flags(const struct btf=
-_type *t)
->         return flags;
->  }
->
-> +static u8 __get_arg_fmodel_flags(const struct btf *btf,
-> +                                const struct btf_param *arg,
-> +                                const struct btf_type *t)
-> +{
-> +       u8 flags =3D __get_type_fmodel_flags(t);
-> +
-> +       if (btf_param_match_suffix(btf, arg, "__arena") ||
-> +           btf_param_match_suffix(btf, arg, "__arena_nullable"))
-> +               flags |=3D BTF_FMODEL_ARENA_ARG;
-> +       if (btf_param_match_suffix(btf, arg, "__nullable") ||
-> +           btf_param_match_suffix(btf, arg, "__arena_nullable"))
-> +               flags |=3D BTF_FMODEL_NULLABLE_ARG;
-> +
-> +       return flags;
-> +}
-> +
->  int btf_distill_func_proto(struct bpf_verifier_log *log,
->                            struct btf *btf,
->                            const struct btf_type *func,
-> @@ -7606,7 +7622,7 @@ int btf_distill_func_proto(struct bpf_verifier_log =
-*log,
->                         return -EINVAL;
->                 }
->                 m->arg_size[i] =3D ret;
-> -               m->arg_flags[i] =3D __get_type_fmodel_flags(t);
-> +               m->arg_flags[i] =3D __get_arg_fmodel_flags(btf, &args[i],=
- t);
->         }
->         m->nr_args =3D nargs;
->         return 0;
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index e2076667b245..a3e1fae32eac 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -3308,6 +3308,11 @@ bool __weak bpf_jit_supports_stack_args(void)
->         return false;
->  }
->
-> +bool __weak bpf_jit_supports_arena_args(void)
-> +{
-> +       return false;
-> +}
-> +
->  bool __weak bpf_jit_supports_far_kfunc_call(void)
->  {
->         return false;
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b274004fccfd..4c50237f49f1 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -10907,6 +10907,16 @@ static bool is_kfunc_arg_irq_flag(const struct b=
-tf *btf, const struct btf_param
->         return btf_param_match_suffix(btf, arg, "__irq_flag");
->  }
->
-> +static bool is_kfunc_arg_arena(const struct btf *btf, const struct btf_p=
-aram *arg)
-> +{
-> +       return btf_param_match_suffix(btf, arg, "__arena");
-> +}
-> +
-> +static bool is_kfunc_arg_arena_nullable(const struct btf *btf, const str=
-uct btf_param *arg)
-> +{
-> +       return btf_param_match_suffix(btf, arg, "__arena_nullable");
-> +}
-> +
+---
+Alexis Lothoré (eBPF Foundation) (9):
+      bpf: mark instructions accessing program stack
+      bpf: add BPF_JIT_KASAN for KASAN instrumentation of JITed programs
+      bpf, x86: refactor BPF_ST management in do_jit
+      bpf, x86: emit KASAN checks in x86 JITed programs
+      bpf, x86: enable KASAN for JITed programs on x86
+      selftests/bpf: make cmdline_contains stricter
+      selftests/bpf: add helpers for KASAN in JIT testing
+      selftests/bpf: move bpf_jit_harden helper into testing_helpers
+      selftests/bpf: add tests to validate KASAN on JIT programs
 
-From the verifier's point of view, __arena and __arena_nullable all
-maps to KF_ARG_PTR_TO_ARENA and require the same check so maybe
-is_kfunc_arg_arena() alone with two suffix matching is good enough,
-but it also doesn't hurt to have two separated functions.
+ arch/x86/Kconfig                                   |   1 +
+ arch/x86/net/bpf_jit_comp.c                        | 283 ++++++++++---
+ include/linux/bpf_verifier.h                       |   2 +
+ kernel/bpf/Kconfig                                 |  17 +
+ kernel/bpf/fixups.c                                |  45 +-
+ kernel/bpf/verifier.c                              |   9 +
+ .../selftests/bpf/prog_tests/bpf_insn_array.c      |  44 +-
+ tools/testing/selftests/bpf/prog_tests/kasan.c     | 454 ++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kasan.c          | 462 +++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kasan_harden.c   |  41 ++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  55 +++
+ tools/testing/selftests/bpf/testing_helpers.c      |  32 ++
+ tools/testing/selftests/bpf/testing_helpers.h      |   1 +
+ tools/testing/selftests/bpf/unpriv_helpers.c       |  21 +-
+ tools/testing/selftests/bpf/unpriv_helpers.h       |   2 +
+ 15 files changed, 1369 insertions(+), 100 deletions(-)
+---
+base-commit: 5fb2b9636c7043f415a12e3336f2bf6983c9e93a
+change-id: 20260126-kasan-fcd68f64cd7b
 
->  static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
->                                           const struct btf_param *arg,
->                                           const char *name)
-> @@ -11127,6 +11137,7 @@ enum kfunc_ptr_arg_type {
->         KF_ARG_PTR_TO_IRQ_FLAG,
->         KF_ARG_PTR_TO_RES_SPIN_LOCK,
->         KF_ARG_PTR_TO_TASK_WORK,
-> +       KF_ARG_PTR_TO_ARENA,
->  };
->
->  enum special_kfunc_type {
-> @@ -11412,7 +11423,6 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
-struct bpf_call_arg_meta *meta,
->                         reg_arg_name(env, argno), btf_type_str(t));
->                 return -EINVAL;
->         }
-> -
->         ref_t =3D btf_type_skip_modifiers(meta->btf, t->type, NULL);
->         ref_tname =3D btf_name_by_offset(meta->btf, ref_t->name_off);
->
-> @@ -11461,6 +11471,9 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
-struct bpf_call_arg_meta *meta,
->                 arg_type =3D KF_ARG_PTR_TO_RES_SPIN_LOCK;
->         else if (is_kfunc_arg_callback(env, meta->btf, &args[arg]))
->                 arg_type =3D KF_ARG_PTR_TO_CALLBACK;
-> +       else if (is_kfunc_arg_arena(meta->btf, &args[arg]) ||
-> +                is_kfunc_arg_arena_nullable(meta->btf, &args[arg]))
-> +               arg_type =3D KF_ARG_PTR_TO_ARENA;
->         else if (arg + 1 < nargs &&
->                  (is_kfunc_arg_mem_size(meta->btf, &args[arg + 1]) ||
->                   is_kfunc_arg_const_mem_size(meta->btf, &args[arg + 1]))=
-) {
-> @@ -12154,6 +12167,31 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_call_arg_me
->
->                 t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
->
-> +               if (base_type(kf_arg_type) =3D=3D KF_ARG_PTR_TO_ARENA) {
-> +                       if (!bpf_jit_supports_arena_args()) {
-> +                               verbose(env, "JIT does not support kfunc =
-%s() with arena pointer arguments\n",
-> +                                       func_name);
-> +                               return -ENOTSUPP;
-> +                       }
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-nit: JIT and register-based arg check can be done earlier in
-get_kfunc_arg_type(). We probably will want a consolidated pass
-validating bpf_func_proto.
-
-> +                       if (!env->prog->aux->arena) {
-> +                               verbose(env,
-> +                                       "%s arena pointer requires a prog=
-ram with an associated arena\n",
-> +                                       reg_arg_name(env, argno));
-> +                               return -EINVAL;
-> +                       }
-> +                       if (regno < 0) {
-> +                               verbose(env, "%s arena pointer cannot be =
-a stack argument\n",
-> +                                       reg_arg_name(env, argno));
-> +                               return -EINVAL;
-> +                       }
-> +                       if (reg->type !=3D PTR_TO_ARENA && reg->type !=3D=
- SCALAR_VALUE) {
-> +                               verbose(env, "%s is not a pointer to aren=
-a or scalar\n",
-> +                                       reg_arg_name(env, argno));
-> +                               return -EINVAL;
-> +                       }
-> +                       continue;
-> +               }
-> +
-
-Can we move arena argument checking to the second switch case below?
-It only takes adding one condition below.
-
-This help reduce churn in the future when check_kfunc_args() also
-receieve check_reg_type().
-
->                 if (btf_type_is_ptr(t) && (bpf_register_is_null(reg) || t=
-ype_may_be_null(reg->type)) &&
->                     !is_kfunc_arg_nullable(meta->btf, &args[i])) {
->                         verbose(env, "Possibly NULL pointer passed to tru=
-sted %s\n",
-
-  if (btf_type_is_ptr(t) && base_type(kf_arg_type) !=3D KF_ARG_PTR_TO_ARENA=
- &&
-      (bpf_register_is_null(reg) || type_may_be_null(reg->type)) &&
-      !type_may_be_null(kf_arg_type)) {
-          verbose(env, "Possibly NULL pointer passed to trusted %s\n",
-
-
-> --
-> 2.53.0
->
->
