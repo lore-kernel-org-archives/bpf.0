@@ -1,254 +1,314 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A5A47B403
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785875797; cv=none; b=cbrNMXwEisFJRkhgDZzW7qupPDrfRLMzPZ20VJKZbpOhFjrhxw5anVU04fo7/vyY5wD9UsUa9uLbwsLWJDg+CPdj8FwNkbVFhha1SKHE0jATVKehrqmqIsTeIanm5G/2/c7MSqWG0pzbBrbpX96cZeN5N89GeRHfoCMy2jEfMwI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785875797; c=relaxed/simple;
-	bh=i0N2LNGC1bIMUA+NnsRdTx7QxT/ex1Bt3IrWtkf5OTg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OCrAvIbkjQqu/1f2WSUAQS8N8TbMwAdHDZiAFGG0su+FrPa8Xd9HPE9XdTlpmrmz8bAsQs4xRYCQzMSYC7HOBHk6Bh9C+l6AQXmrz3mEpp9hN2RZfs//C8XCdnSDHwD3YCs9X6jRZpRQ4Qj6NsAoTiolmvz1lLginxGJdA6CtH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 1877921FBFF1E6; Tue,  4 Aug 2026 13:36:24 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 12/13] selftests/bpf: Add tests for callbacks returning more than 8 bytes
-Date: Tue,  4 Aug 2026 13:36:24 -0700
-Message-ID: <20260804203624.1879305-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260804203522.1869244-1-yonghong.song@linux.dev>
-References: <20260804203522.1869244-1-yonghong.song@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA1E42A170
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785876157; cv=pass; b=Sy4kiYp/O8LpTheuS2uv0HhMETOsPlVhHrlmTSeZ9GNvJFQuJowxgyCOehy+ytPVma5prlN2MF+svvmoH3ztU+ba0URs3Y+7lOWM+6llAWTKZvzX8J72kW1PypmzqWH4vd/CoL3QycUddaIhqBZ+qQmqa+UP/uaEuNo9hPPqetg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785876157; c=relaxed/simple;
+	bh=M8JSdwFyeJLLhtl/v2KQpFuVSgRMre7S8ava1XsB94s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Al6RafRoM6gdlaTZaNxH+UDIBi/Jx4PU6seBMnKdu9JtfnMbX6U0fmJmRzOV+Mfr2iMxw7lpci1Pp59b8calwNHb/9PsX7rL8e5QCt2895iKvBBsL7/AoEmUVrj6ErkyM+ljrz03M4zfW3aEEo3wvqzXaCqcrB/n+HRMcFciZCY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iA8F0gBv; arc=pass smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iA8F0gBv"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c1f7666a90bso48638066b.3
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 13:42:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785876153; cv=none;
+        d=google.com; s=arc-20260327;
+        b=V0x9JAWvTsrqWY9fXGPMZ2J+dCAtoyVKmQIeu5f2EKm4MV1BfLEb0I4nqxjY4fVhOq
+         MbgKfEoR18NmnEhYlb3vi70iRu4CK4yO3xxtE+1AxaABppz+6ciNluLKO/OokfCF7vsB
+         7vyP4SBdKdbXaKNpprYbkeMbKuyWgp1TdXu0JEJIsA0VWfl0Iv5PR8RLRsEVTlzx0A8i
+         M8qQm5zk3ihHADYechzqMzbSnUHFFhAaa55PM+9hcG7yeAcldtFl4ApaDmjjH9QnSqm1
+         Wn/snEzgmrmsCnQC4CqtXTO5J3AXN+GqbQGu2ob+TMVMrVz7zmsos53skkhBnQ9MxyJv
+         Uj4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QrkVrJzcta5RWUoKQyxrWJV7uC2Mp2UIFQinS79ZjUI=;
+        fh=MfdxnbopznZxnCxWc4D4ptEL7Fpnl7hCH1/NSg1SbZw=;
+        b=GUQFkhGHt5LDSOpqCaRBCGl7L9uLZ2U/3j0xKavqGlT7uQWKGrz6+fIbxJjXulhkOp
+         D6yXhSg0zJ2Hn7PjXGtpGNvfaOzSXTL7vNPRlpjTiSLgjOth/AKAwqq73QV/9x53SUtJ
+         oMvxqk6JDRG15vMEDHdV9VHY7AKIVz6OC3AZQKSDZpp9yajN85zg7D5oy9flo9pKr1rO
+         QBLy20FrWj5SEBeo7N9WH6TsdzKAlF3Fwc5JPAaxLY4ypFtU7oN/kQ3Y5vUsaizbzXbb
+         lVoMr/oR7ff4K2in8DsWw8f7rnWMn6kB8Pn9PGHeT+q3BUFJrsb63ynAVQv4A0fE+H6m
+         DnJA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785876153; x=1786480953; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=QrkVrJzcta5RWUoKQyxrWJV7uC2Mp2UIFQinS79ZjUI=;
+        b=iA8F0gBvytw7uJrdcYUYXBXgsaZCd2i6+XpEssheubDt0H+MIfCNpZgsCcJKGvxEXY
+         xhioVjuBMgMluhZl6agIZFP83qxsB7FUPpvMkSTJkAf1zvNqr1fKmp7+BRRi1pzpcjyH
+         3KJf6RkdZ7wG27C35TpBxXbFLCgMseII/o6SfB5K+uU+I+KcVRKqxHaguq6fqhNJ5X4S
+         g8HpYmUPgG/UdtUY14K3hBeiynIu8iJh7UbwxjxJ+SGEvQBez+OzzeiWo+nvHGlHs0D+
+         24hBIsSBnOdPz/FiZegVLtPeHdWGSgqu0E4QNE/IHx91hHE21RKzKT9B3Tyn061PqFe9
+         qt2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785876153; x=1786480953;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QrkVrJzcta5RWUoKQyxrWJV7uC2Mp2UIFQinS79ZjUI=;
+        b=o3LtDzm8SgNP6mIJ8JZFzsuiBysIjIdTee1j+HxkJsCTAs/vpGl1sAJYk0qWiBMITW
+         kz6BMN+8FtaWqKeXUXKpVj+11bm4KIMuaGgsj0x8YSXPpnP5ldRoYRHEsFj6rIZKhjbC
+         QFRh+qczLj1w7Gmc4SX8WDb/wWGeN2qsyyjZK80WdjK6ocR23EWBXDMjtbAtlporhsVu
+         fvxtvkcpWkGcI2Ob1/848zFcQdj8ivpUd/OS0HHNiMVzKPQjWmGG17at25ciWpwGXPJZ
+         6JbRjHbfz+v9OrIhQU/41duEiPCUw2jaq1UG8UkwjWpwoZM1oX19lT2UoKxiKFeSTmGt
+         s6gw==
+X-Gm-Message-State: AOJu0YwDWOsWztEhIjtmDgGB+mmSCIg/r655e4IWwg6jd3c2u7nI9FWp
+	kpJ+lFMXdwDNvZUioXYf3vLggmmLF4RjADZW75gwU8usLd6KxGNKBu4aTzU2IlqcSQ0hO9kpgHp
+	BNWggUX/h2148l4qbW3hHaev16oRxXNA=
+X-Gm-Gg: AR+sD1229/srJXJBku37YVRt7vUtaQ7VCG1SYRvKYAKrtHHv/8Erp46PonTnEa+STkr
+	ZkYwQC6kWDe1HNKesR/oX73yWbGQYpo5FQRXdFmQE5tBxohcOwTg8JryDD2zKstpunBlCmHFJ2H
+	55p0H80h9EBkVQ1zCA0BvM76A3jBW/n3degH21ThllpUjIMM8dWUx3Yj0H9RD2M2y7BeuRsB8pB
+	bJOYWfm/1XhhQPYD7ba66Y/CyZ3G7Ch7Fq2lf64T+g6FeRh7IBS9ubjnente4qotDQPjJ0wwkur
+	OUAfVAN740C+P5pj8ymsbvcWtwEUcX+gNiy9hCs0GU119UXAghxR9A8X4eSlU41lzXB08HnFzcP
+	6kA==
+X-Received: by 2002:a17:907:1c86:b0:c16:b05c:b9cf with SMTP id
+ a640c23a62f3a-c2039cdc721mr72062866b.26.1785876152918; Tue, 04 Aug 2026
+ 13:42:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260724042600.175440-3-nickolay.lysenko@gmail.com> <26de96afd813486d7e90ef7dea4c4d7e3e98b8400fb372cddac4a2f568502189@mail.kernel.org>
+In-Reply-To: <26de96afd813486d7e90ef7dea4c4d7e3e98b8400fb372cddac4a2f568502189@mail.kernel.org>
+From: Mykola Lysenko <nickolay.lysenko@gmail.com>
+Date: Tue, 4 Aug 2026 13:42:20 -0700
+X-Gm-Features: AUfX_mygwxtuPcNPlNQy2ON65S3msR5YWZwM9on8Y369Bzdz5TLgEFF18iuqHUY
+Message-ID: <CAMtxOX3ZWX_rA57XMihyVFqpQLHoG7d5o5jxrFuUdvYhF_eK0w@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v4 2/3] selftests/bpf: move shared build
+ definitions into Makefile.buildvars
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, memxor@gmail.com, 
+	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Add two __failure tests covering the callback return-size checks:
+Both findings were real - the first a genuine regression (confirmed in
+the v4 CI logs: "llvm: [ OFF ]", __jited tests silently skipping).
 
- - timer_ret_pair_fail: a bpf_timer callback declared to return more than
-   8 bytes, rejected by check_ld_imm() where the callback's PTR_TO_FUNC i=
+Addressed in v5, which leaves srctree and PKG_CONFIG untouched at
+their original positions; details in the v5 changelog:
+https://lore.kernel.org/bpf/20260804170156.1709916-1-nickolay.lysenko@gmail=
+.com/
+
+On Fri, Jul 31, 2026 at 3:27=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+>
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
+ests/bpf/Makefile
+> > index 2ed953b84409..1843679fc0e2 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+>
+> [ ... ]
+>
+> > @@ -213,21 +149,8 @@ ifeq ($(feature-llvm),1)
+> >  endif
+> >  endif
+> >
+> > -SCRATCH_DIR :=3D $(OUTPUT)/tools
+> > -BUILD_DIR :=3D $(SCRATCH_DIR)/build
+> > -INCLUDE_DIR :=3D $(SCRATCH_DIR)/include
+> > -BPFOBJ :=3D $(BUILD_DIR)/libbpf/libbpf.a
+> > -ifneq ($(CROSS_COMPILE),)
+> > -HOST_BUILD_DIR               :=3D $(BUILD_DIR)/host
+> > -HOST_SCRATCH_DIR     :=3D $(OUTPUT)/host-tools
+> > -HOST_INCLUDE_DIR     :=3D $(HOST_SCRATCH_DIR)/include
+> > -else
+> > -HOST_BUILD_DIR               :=3D $(BUILD_DIR)
+> > -HOST_SCRATCH_DIR     :=3D $(SCRATCH_DIR)
+> > -HOST_INCLUDE_DIR     :=3D $(INCLUDE_DIR)
+> > -endif
+> > -HOST_BPFOBJ :=3D $(HOST_BUILD_DIR)/libbpf/libbpf.a
+> > -RESOLVE_BTFIDS :=3D $(HOST_BUILD_DIR)/resolve_btfids/resolve_btfids
+> > +include Makefile.buildvars
+> > +
+> >  VMLINUX_BTF_PATHS ?=3D $(if $(O),$(O)/vmlinux)                        =
+ \
+> >                    $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)    \
+> >                    ../../../../vmlinux                                \
+>
+> The srctree fallback block moved into Makefile.buildvars, but that file i=
 s
-   created, with "callback function with >8-byte return value is not
-   supported".
-
- - exceptions_ret_pair_fail: an exception callback declared to return mor=
+> included after ../../../build/Makefile.feature has already been parsed. D=
+oes
+> this break the feature-llvm probe for standalone builds?
+>
+> In the pre-image, the ordering was:
+>
+>   include ../../../scripts/Makefile.include
+>   <srctree fallback at old line 53-58>
+>   include ../lib.mk
+>   $(eval include ../../../build/Makefile.feature)  # old line 183/186
+>
+> After the patch:
+>
+>   include ../../../scripts/Makefile.include
+>   include ../lib.mk
+>   $(eval include ../../../build/Makefile.feature)  # new line 119/122
+>   include Makefile.buildvars                        # srctree defined her=
 e
-   than 8 bytes, rejected by do_check_common() when the callback
-   subprogram is verified, with "exception cb cannot return value larger
-   than 8 bytes".
-
-Both callback bodies are written in inline asm so that the tests do not
-depend on LLVM 23 R0:R2 codegen and run on any compiler. The verifier rea=
-ds
-the return type from BTF rather than from the instructions, so the >8 byt=
-e
-return prototype is supplied through __btf_func_path(), pointing at a
-companion btf__*.c program that exists only to carry that BTF.
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/exceptions.c     |  2 +
- .../testing/selftests/bpf/prog_tests/timer.c  |  2 +
- .../bpf/progs/btf__exceptions_ret_pair_fail.c | 10 ++++
- .../bpf/progs/btf__timer_ret_pair_fail.c      | 10 ++++
- .../bpf/progs/exceptions_ret_pair_fail.c      | 30 ++++++++++++
- .../selftests/bpf/progs/timer_ret_pair_fail.c | 49 +++++++++++++++++++
- 6 files changed, 103 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/btf__exceptions_ret=
-_pair_fail.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__timer_ret_pair=
-_fail.c
- create mode 100644 tools/testing/selftests/bpf/progs/exceptions_ret_pair=
-_fail.c
- create mode 100644 tools/testing/selftests/bpf/progs/timer_ret_pair_fail=
-.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/=
-testing/selftests/bpf/prog_tests/exceptions.c
-index 3588d6f97fd4..71d00c568d80 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -5,6 +5,7 @@
- #include "exceptions.skel.h"
- #include "exceptions_ext.skel.h"
- #include "exceptions_fail.skel.h"
-+#include "exceptions_ret_pair_fail.skel.h"
- #include "exceptions_assert.skel.h"
-=20
- static char log_buf[1024 * 1024];
-@@ -12,6 +13,7 @@ static char log_buf[1024 * 1024];
- static void test_exceptions_failure(void)
- {
- 	RUN_TESTS(exceptions_fail);
-+	RUN_TESTS(exceptions_ret_pair_fail);
- }
-=20
- static void test_exceptions_success(void)
-diff --git a/tools/testing/selftests/bpf/prog_tests/timer.c b/tools/testi=
-ng/selftests/bpf/prog_tests/timer.c
-index 09ff21e1ad2f..593e56d8964e 100644
---- a/tools/testing/selftests/bpf/prog_tests/timer.c
-+++ b/tools/testing/selftests/bpf/prog_tests/timer.c
-@@ -6,6 +6,7 @@
- #include <sys/syscall.h>
- #include "timer.skel.h"
- #include "timer_failure.skel.h"
-+#include "timer_ret_pair_fail.skel.h"
- #include "timer_interrupt.skel.h"
-=20
- #define NUM_THR 8
-@@ -285,6 +286,7 @@ void serial_test_timer(void)
- 	test_timer(timer);
-=20
- 	RUN_TESTS(timer_failure);
-+	RUN_TESTS(timer_ret_pair_fail);
- }
-=20
- void serial_test_timer_stress(void)
-diff --git a/tools/testing/selftests/bpf/progs/btf__exceptions_ret_pair_f=
-ail.c b/tools/testing/selftests/bpf/progs/btf__exceptions_ret_pair_fail.c
-new file mode 100644
-index 000000000000..a45db5d9c1d4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__exceptions_ret_pair_fail.c
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+unsigned __int128 exception_cb_bad_ret_type3(u64 cookie)
-+{
-+	for (;;)
-+		;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/btf__timer_ret_pair_fail.c=
- b/tools/testing/selftests/bpf/progs/btf__timer_ret_pair_fail.c
-new file mode 100644
-index 000000000000..35506c7c5a91
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__timer_ret_pair_fail.c
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+unsigned __int128 timer_cb_ret_pair(void *map, int *key, struct bpf_time=
-r *timer)
-+{
-+	for (;;)
-+		;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_ret_pair_fail.c=
- b/tools/testing/selftests/bpf/progs/exceptions_ret_pair_fail.c
-new file mode 100644
-index 000000000000..842f86ad8659
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/exceptions_ret_pair_fail.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
-+
-+__naked __noinline __used
-+unsigned __int128 exception_cb_bad_ret_type3(u64 cookie)
-+{
-+	asm volatile (
-+	"r0 =3D r1;"
-+	"r2 =3D 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("?tc")
-+__exception_cb(exception_cb_bad_ret_type3)
-+__failure __msg("exception cb cannot return value larger than 8 bytes")
-+__btf_func_path("btf__exceptions_ret_pair_fail.bpf.o")
-+int reject_exception_cb_ret_pair(void *ctx)
-+{
-+	bpf_throw(0);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/timer_ret_pair_fail.c b/to=
-ols/testing/selftests/bpf/progs/timer_ret_pair_fail.c
-new file mode 100644
-index 000000000000..29fd294dfd49
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/timer_ret_pair_fail.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/bpf.h>
-+#include <time.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+struct elem {
-+	struct bpf_timer t;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct elem);
-+} timer_map SEC(".maps");
-+
-+__naked __noinline __used
-+static unsigned __int128 timer_cb_ret_pair(void *map, int *key, struct b=
-pf_timer *timer)
-+{
-+	asm volatile (
-+		"r0 =3D 0;"
-+		"r2 =3D 0;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+__failure __msg("callback function with >8-byte return value is not supp=
-orted")
-+__btf_func_path("btf__timer_ret_pair_fail.bpf.o")
-+long BPF_PROG2(test_bad_ret_pair, int, a)
-+{
-+	int key =3D 0;
-+	struct bpf_timer *timer;
-+
-+	timer =3D bpf_map_lookup_elem(&timer_map, &key);
-+	if (timer) {
-+		bpf_timer_init(timer, &timer_map, CLOCK_BOOTTIME);
-+		bpf_timer_set_callback(timer, timer_cb_ret_pair);
-+	}
-+
-+	return 0;
-+}
---=20
-2.53.0-Meta
-
+>
+> Makefile.feature line 2 does:
+>
+>   feature_dir :=3D $(srctree)/tools/build/feature
+>
+> This is an immediate assignment, so it captures srctree when
+> Makefile.feature is parsed. In a standalone 'cd tools/testing/selftests/b=
+pf
+> && make' build, srctree is not in the environment and nothing in the earl=
+ier
+> include chain defines it - none of tools/build/Build.include,
+> tools/scripts/Makefile.arch, tools/scripts/Makefile.include or
+> tools/testing/selftests/lib.mk contain a srctree assignment.
+>
+> Consequently feature_dir becomes '/tools/build/feature' instead of
+> '<tree>/tools/build/feature', and the probe at Makefile.feature:11 runs:
+>
+>   $(MAKE) ... -C /tools/build/feature ...
+>
+> The '-C /tools/build/feature' fails because the directory does not exist,
+> stderr is discarded, and the probe silently yields feature-llvm=3D0.
+>
+> This flips the conditional at Makefile:127-150 off, so LLVM_CFLAGS never
+> gains -DHAVE_LLVM_SUPPORT and LLVM_LDLIBS/LLVM_LDFLAGS stay empty.
+> jit_disasm_helpers.c then compiles its '#else' stub whose get_jited_progr=
+am_text()
+> returns -EOPNOTSUPP, and test_loader.c:1442-1449 turns every __jited expe=
+ctation
+> into test__skip() with "tests are built w/o LLVM development libs". The s=
+ix
+> progs/ files that use __jited stop running, and test_progs loses
+> -DHAVE_LLVM_SUPPORT and the LLVM libraries it previously linked.
+>
+> This contradicts the commit message's "Build artifacts are byte-identical
+> before and after this change" claim for the standard build invocation
+> documented in Documentation/bpf/bpf_devel_QA.rst:459.
+>
+> The srctree fallback belongs with BPF_GCC in the "needed before lib.mk"
+> group that the commit message already identifies, for the same reason -
+> it is consumed before Makefile.buildvars is included. The same applies to
+> PKG_CONFIG, which is used in Makefile.feature at lines 178/183 but is now
+> only defined in Makefile.buildvars.
+>
+> > diff --git a/tools/testing/selftests/bpf/Makefile.buildvars b/tools/tes=
+ting/selftests/bpf/Makefile.buildvars
+> > new file mode 100644
+> > index 000000000000..ef12018fa254
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/Makefile.buildvars
+> > @@ -0,0 +1,165 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +#
+> > +# Shared toolchain, path and flag definitions for the BPF selftests
+> > +# build, included by both Makefile and Makefile.runner. Definitions
+> > +# follow the order they had in the Makefile before the split.
+> > +
+> > +CXX ?=3D $(CROSS_COMPILE)g++
+> > +OBJCOPY ?=3D $(CROSS_COMPILE)objcopy
+> > +
+> > +CURDIR :=3D $(abspath .)
+> > +
+> > +TOOLSDIR :=3D $(abspath ../../..)
+> > +LIBDIR :=3D $(TOOLSDIR)/lib
+> > +BPFDIR :=3D $(LIBDIR)/bpf
+> > +TOOLSINCDIR :=3D $(TOOLSDIR)/include
+> > +TOOLSARCHINCDIR :=3D $(TOOLSDIR)/arch/$(SRCARCH)/include
+> > +BPFTOOLDIR :=3D $(TOOLSDIR)/bpf/bpftool
+> > +APIDIR :=3D $(TOOLSINCDIR)/uapi
+> > +ifneq ($(O),)
+> > +GENDIR :=3D $(O)/include/generated
+> > +else
+> > +GENDIR :=3D $(abspath ../../../../include/generated)
+> > +endif
+> > +GENHDR :=3D $(GENDIR)/autoconf.h
+> > +PKG_CONFIG ?=3D $(CROSS_COMPILE)pkg-config
+>
+> Same ordering issue: PKG_CONFIG was defined before ../lib.mk in the
+> pre-image, but now it is only defined here in Makefile.buildvars, which i=
+s
+> reached after Makefile.feature has already been parsed.
+>
+> Makefile.feature uses PKG_CONFIG at parse time:
+>
+>   ifneq ($(PKG_CONFIG),)
+>     $(foreach package,$(FEATURE_PKG_CONFIG),$(call feature_pkg_config,$(p=
+ackage)))
+>
+> with immediate assignments at lines 178-179:
+>
+>   FEATURE_CHECK_CFLAGS-$(1)  :=3D $(shell $(PKG_CONFIG) --cflags $(1) 2>/=
+dev/null)
+>   FEATURE_CHECK_LDFLAGS-$(1) :=3D $(shell $(PKG_CONFIG) --libs $(1) 2>/de=
+v/null)
+>
+> Nothing parsed before Makefile.buildvars defines PKG_CONFIG, so the ifneq
+> guard becomes false and the pkg-config-derived FEATURE_CHECK_*FLAGS block=
+ is
+> skipped.
+>
+> > +ifeq ($(srctree),)
+> > +srctree :=3D $(patsubst %/,%,$(dir $(CURDIR)))
+> > +srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
+> > +srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
+> > +srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
+> > +endif
+>
+> [ ... ]
+>
+> > +ifneq ($(CROSS_COMPILE),)
+> > +CLANG_TARGET_ARCH =3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
+> > +endif
+> > +
+> > +# Immediate on purpose: expanding get_sys_includes forks several shell=
+s.
+> > +CLANG_SYS_INCLUDES :=3D $(call get_sys_includes,$(CLANG),$(CLANG_TARGE=
+T_ARCH))
+>
+> The commit message states "Definitions keep the order they had in the
+> Makefile; the only exception is called out in a comment (CFLAGS is prepen=
+ded
+> rather than appended, as this file is included after lib.mk)."
+>
+> However, CLANG_SYS_INCLUDES also changed from recursive assignment ('=3D'=
+) to
+> immediate assignment (':=3D'):
+>
+>   pre  (Makefile:463): CLANG_SYS_INCLUDES =3D $(call get_sys_includes,$(C=
+LANG),$(CLANG_TARGET_ARCH))
+>   post (buildvars:139): CLANG_SYS_INCLUDES :=3D $(call get_sys_includes,$=
+(CLANG),$(CLANG_TARGET_ARCH))
+>
+> The inline comment explains the fork-count motivation, but this is a seco=
+nd
+> evaluation-time change beyond the CFLAGS exception documented in the
+> changelog. It happens to be benign at this commit since CLANG and
+> CLANG_TARGET_ARCH are already final, but any later target-specific or
+> conditional override of CLANG would silently stop affecting CLANG_SYS_INC=
+LUDES.
+>
+> Would it be worth mentioning this change in the commit message too?
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/305824=
+11360
