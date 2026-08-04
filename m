@@ -1,63 +1,63 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C347C4562B1
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 16:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535C447DD7B
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 16:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785862045; cv=none; b=iMnTGMA/CFVfi+B02pEgfsvkZV76geHHvyF4mVY3hyhufFm6++LGRCXvKQiOplchQv0tpVqX5rFeSleJ7kvkt3Kp/IrqeIiJ1D5d9O+yuhoPKISxvWQOAlx7ZueM3n83SIvEoF16qKwaK73L219/CzT5vMHc7LJHcbWMTGxyB5A=
+	t=1785862045; cv=none; b=RoFqda+a7i1Ytt8Q1iZz+VgxWzCTCbI0vEFgcTFzHr0gBRZT5XZTU1cQZwRiwDojhZlBgsRg8unlPtGhzTrUC9iNe7WoDMlcV8bN+0nnzF3N082iOiRaptfd5LhMDdb0IvWjYkKrV74zuU03/c12jJk1Tgmfq9B2oLXw7SlRRuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785862045; c=relaxed/simple;
-	bh=ojY6Dh7yMl9GCMp2bZnbWPy2aSUPq0NSJIxL3y9bqZ0=;
+	bh=XV0B/JhCsG40H9ag/PHxTNYCI0x+JONwkI59bxqGKMM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mm0WDxJA5L2nyjkdaTb6Q2A+QWEx2vi2irHny/z3rK8aVbUNlS/fuSdauWWzheoIkdws2t6aICBfkf7+CgxBsBoae5pC2/Rl83Dh9ZZIyM7FWZJl+xjj1WMAESPEZpB8ww6jdztvy/LPLyXxOuQai44GHM2NOZ1PmoYy+Munbnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A55P6NS8; arc=none smtp.client-ip=209.85.128.49
+	 MIME-Version; b=l31trYPErtDJyq6pXuYKj0RoEt+FPlTHc+AwOPn3LHyfHLPJfhU8B1e8KMexRA6xoOd072D4Cpp1XOdQE1ctiw5gqOo0SIXizt+uqp0DqzQkQyKeTLQ1Cd5SuV0JqYJoe/QlsNl9fzOCRo++QL52lIvE+LgTX3FiShsMbLlqMV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FAT5shlp; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A55P6NS8"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4954f5e8020so57545e9.2
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 09:47:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FAT5shlp"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4956869750eso129945e9.2
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 09:47:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785862028; x=1786466828; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785862026; x=1786466826; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=YhA+OOHPkGBSEYFG6bn6igO7JPukJH9I40t3scHtbE4=;
-        b=A55P6NS8vHwN2xWiXnU+drBjTICS/hcNS007OMSLLUziuS0QTm72bT27vlx9mh0LFL
-         GPSBfP1cwJHuGUjYS27NrpJhRKnRvKylCuyYUkLxQOQ1ekNuIYd72HO068QZemv0zHUZ
-         HBMx389Cm26VrpO3B7t4xYM80tz5H3/rpW+XdrBV+3DqeOjnFLcIDe1E2N6pEJo1poQF
-         nXanVX55y690g5fB+nT63aU+gTKFRC67VoH2fXMipHNH55rusE1DjC8M7PoycXfknWYJ
-         P1bfKMG3scBz6ndXuNwMrJQ7T3EUc52ENBCuirjtp+jpsOFoG5Y6rg/RdBI+TdEfTE0g
-         ve1A==
+        bh=1rwrdJxGLamDKuaEmMI5UrE7st//n0E96F1Xn4wpyT0=;
+        b=FAT5shlpzlKMdMyn68N0l2a8Xtqxu1ZS0eYBJ4NyrLfkd6PFvObcpXzHZepI4YudT3
+         K0G39a3nFqrhnrq8KHttO9o18HOXHzYY9Ep0qguYZ091J9R2Z/ozbXASlvYLp1TIV1is
+         9pq9SgGs6cdjyigWagzFNW/YjoRrbl3fTo21bARl/PSRVNPEpH89Nqfoq3yLpHl6O1rY
+         6B9MDc98xc3QBHvwMfgDHPvlL/8B8Agt+TekLEBCWHbLQRad8SxKoN9dHhmgLyAOYsEe
+         rPkczLw43Ltm3EFORizcwn/L+ZIR4a0r9w16V0XFxj9LoQXmQ/RK7WRqsET5WCjGijWQ
+         1zxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785862028; x=1786466828;
+        d=1e100.net; s=20251104; t=1785862026; x=1786466826;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YhA+OOHPkGBSEYFG6bn6igO7JPukJH9I40t3scHtbE4=;
-        b=P1wNKGOBF7My9RMpgCKtuWyZt65lx+Ad47ngCk2mx1hhr8a3LcrEy7pSk4ZdP3HECf
-         NvWMUaYzE26m+WkChOT4KvjTciZFnZZv2ucChq/pLSiIzBYBoxRorSb0m6mX3j/UiVzo
-         o/czZU1kLqGxTCCfFRlt8cpgAPWVAEbLNxeIGnGkhnLQnqhuARPOjy5ZWmJ5q9wfcuuD
-         RPTkTwlak7S1UL0qmQpZ4sKyViub3eITvHdEtGIRbJr7ToodMOhz1rJXmQda1whjXpmN
-         P0Wsecmz6kSUN9+ofMTkpi9VJl2fUlAQvuuunSWt9mKPPF6v/sBiwwoKET8kS1rjKWJY
-         o0vw==
-X-Gm-Message-State: AOJu0YwqVs2MzA5bCdtgE3mUBSHn+6jnNWU97Ja446EJ+3GvNJsO0mK8
-	ITlEyIMFoNDCekB/2XrSfYR+dx/4murnmuBFm+/N31m6zMGoSnJv14Zq6xD1y6u+jhq4Aw==
-X-Gm-Gg: AR+sD13JpwomNAC3D/aSL2G3AjgVL1lrnxpWVG2DtxG41RjVc+BvNPsQDV5PKx6FAfa
-	R9IW5Z52Ht2SqhplO5Gwv8LyKezTv/zsq1ChiGyDVXFctj7jVzQlex9OlnNQ9AUGL0icfSYXszb
-	xVPqCjkby3URsuxt2ndpQpg7zz/lwDTP90wsnzv1fMpVxHXapsStlRD9OschDlFmeV8k2OKwy8A
-	mCnTMd4Iz3HA7GXPwh+/et8vNBeDSlqLumZdMq5VAgXZM/CHBnS5JJT03D9nITQb/3DL2gLWp2c
-	42stypD0yXeWA3ofg/O0VVMImlC1GFcXaMypdWrbo3bic/XQPefZB4UyVV5Of10LJjoik9/F9Df
-	TgAdNplrOZyQlSb1teiPVY0tUN87+NhU7md9zHkU35p1F7b8OxcwtssowY3iuAOV+hTfwZwYJcy
-	KNxEuV5D+0SpbG3ALYrhDAuFxjMVFzwROqmUY2GXk00kWGmcMgthPG6AlIoG0ZNZdoL5QHGTzWi
-	J4fElxicsjykLrFh3jnAC3KbxH/v2vedY2lDdLo1DpF4g==
-X-Received: by 2002:a05:600d:8492:b0:496:c2fd:1731 with SMTP id 5b1f17b1804b1-4980c64b96dmr272525725e9.1.1785862027655;
-        Tue, 04 Aug 2026 09:47:07 -0700 (PDT)
+        bh=1rwrdJxGLamDKuaEmMI5UrE7st//n0E96F1Xn4wpyT0=;
+        b=ez/i/ox2IoQT5BARNKoMblEtQOnWpnMqkoLZtdaZOS2+mfHqYJRih0cSHdI/OkjBbG
+         dnMbQJAPATI9l23rGZFfr2Z+mu/od5AY2REyyTBX46wAV/LzT7djN10XYLZKyfots/QW
+         orWMa9nZSMt8RUjrkNzQRjQ3jumAl6ojUw+rGctq8W5/8VErP5ztZB1+uDRKMoPSeH89
+         J8aEhwvpvrEu5QBkIhdxFniOnlt34O9upGnkGwR5GpwdZfly+7VZRIbXw+D49WMClqbf
+         DmkFlhK0iU4JJfmJJJqhKKiOUEgY9UcgwEmP/yAvGH1rWDi1xSSsxZKdGUWaDyp8qzHy
+         wUUw==
+X-Gm-Message-State: AOJu0Yw5OgnJiBRgZWs6FP7yPM1aaNdNmf61f6NHIFg1dnb41ajgk367
+	N6fsUjSfFJVqVttuqmER/GsQYpKfFr9JFUKZmsAFfPkAUr4BrgenH0zLQSg5uJ7mIl8=
+X-Gm-Gg: AR+sD10FtvCCnVPDddZ1Poq8wuu2SEegNgH+Ah7XinoX0dCLbJEx4a5Ypz7ss3wwLxZ
+	1eX3dWlzQKCQWSrPIsvI3CyZqxiiwFk6niehPrJ4QvJveuWNRSgh1YR1KRXFsqG42qzGIMbRQH+
+	5kItb2lch+pRb1Jz8y1jL7j/+45rAG7nJrADv7etdc1xsBuvm1MaYBhnZINs9sxS5IyvSvtKuLL
+	buneg2N95E7vJwDgIp6L8y5nDthTWOsUhjGJwqw7FasVlE4ZX8TGznGmj2UZaDKQJBKUK8sJUfZ
+	oZunH1XndhgkxyNbNqRGVUsCWX9OYyYp6Zlk7gymyu6a2g7OVOmeqDO30EhapZE7HOez8OJC1/x
+	kroP9jK6cVh08RxeB/APle2reJo9smZtlwaEjco+yURxY24RxHjkIgaIXYe91y51OTwUSS3EMTO
+	Sr8TTmTxJSD/FRb/Hnyj5gNQjs8y0ZC+IwE7gDdccbDQy6iXL4qk+xLvnQWMrETAhdzz3UT/TWn
+	uf21GS7r+djtN6z9R3nK9aYw5pp0hjJag==
+X-Received: by 2002:a05:600c:840f:b0:493:aa0a:45ad with SMTP id 5b1f17b1804b1-4980c64520fmr314174835e9.2.1785862025962;
+        Tue, 04 Aug 2026 09:47:05 -0700 (PDT)
 Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4994e04db3asm14229485e9.15.2026.08.04.09.47.07
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4994e04db3asm14229485e9.15.2026.08.04.09.47.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 09:47:07 -0700 (PDT)
+        Tue, 04 Aug 2026 09:47:05 -0700 (PDT)
 From: Mahe Tardy <mahe.tardy@gmail.com>
 To: bpf@vger.kernel.org
 Cc: andrew+netdev@lunn.ch,
@@ -78,9 +78,9 @@ Cc: andrew+netdev@lunn.ch,
 	ameryhung@gmail.com,
 	kuniyu@google.com,
 	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf-next v3 4/5] selftests/bpf: Add ksock LSM recursion test
-Date: Tue,  4 Aug 2026 16:46:51 +0000
-Message-Id: <20260804164652.296919-5-mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next v3 1/5] net: Add __sys_connect_socket() helper
+Date: Tue,  4 Aug 2026 16:46:48 +0000
+Message-Id: <20260804164652.296919-2-mahe.tardy@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260804164652.296919-1-mahe.tardy@gmail.com>
 References: <20260804164652.296919-1-mahe.tardy@gmail.com>
@@ -92,314 +92,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The bpf_ksock_send() kfunc triggers the security_socket_sendmsg() LSM
-hook via kernel_sendmsg(), thus attaching an LSM program triggering that
-kfunc on the same hook would provoke recursion. This test exercises that
-path and make sure that recursion is guarded and prevented.
+Add a helper that connects an existing socket while invoking the LSM
+hook. Reuse it in __sys_connect_file() to avoid duplicating the connect
+logic. Other socket operations have equivalent helpers that trigger the
+appropriate LSM hooks that can be reused, this one was the only one
+missing.
 
 Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
- .../testing/selftests/bpf/prog_tests/ksock.c  | 82 +++++++++++++++++--
- .../testing/selftests/bpf/progs/ksock_basic.c | 33 +-------
- .../selftests/bpf/progs/ksock_common.h        | 38 +++++++++
- .../selftests/bpf/progs/ksock_recursion.c     | 69 ++++++++++++++++
- 4 files changed, 185 insertions(+), 37 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/ksock_recursion.c
+ include/linux/socket.h |  2 ++
+ net/socket.c           | 32 ++++++++++++++++++--------------
+ 2 files changed, 20 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ksock.c b/tools/testing/selftests/bpf/prog_tests/ksock.c
-index fb88eac9eeba..2db89e9c0186 100644
---- a/tools/testing/selftests/bpf/prog_tests/ksock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ksock.c
-@@ -6,8 +6,10 @@
- #include "test_progs.h"
- #include "network_helpers.h"
- #include "ksock_basic.skel.h"
-+#include "ksock_recursion.skel.h"
+diff --git a/include/linux/socket.h b/include/linux/socket.h
+index 2a8d7b14f1d1..48f1eb8193de 100644
+--- a/include/linux/socket.h
++++ b/include/linux/socket.h
+@@ -461,6 +461,8 @@ extern struct file *__sys_socket_file(int family, int type, int protocol);
+ extern int __sys_bind(int fd, struct sockaddr __user *umyaddr, int addrlen);
+ extern int __sys_bind_socket(struct socket *sock, struct sockaddr_storage *address,
+ 			     int addrlen);
++extern int __sys_connect_socket(struct socket *sock, struct sockaddr_storage *addr,
++				int addrlen, int flags);
+ extern int __sys_connect_file(struct file *file, struct sockaddr_storage *addr,
+ 			      int addrlen, int file_flags);
+ extern int __sys_connect(int fd, struct sockaddr __user *uservaddr,
+diff --git a/net/socket.c b/net/socket.c
+index 63c69a0fa74e..c7427dd4dd52 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -2115,27 +2115,31 @@ SYSCALL_DEFINE3(accept, int, fd, struct sockaddr __user *, upeer_sockaddr,
+  *	include the -EINPROGRESS status for such sockets.
+  */
 
- #define NS_TEST "ksock_basic_ns"
-+#define NS_LSM_RECURSION_TEST "ksock_lsm_recursion_ns"
- #define LOOPBACK_IP "127.0.0.1"
- #define RECV_PORT 7777
- #define RECV_TIMEOUT_SEC 5
-@@ -98,15 +100,16 @@ static void ksock_assert_recv(struct ksock_test_env *env, const char *data,
- 	ASSERT_MEMEQ(env->buf, data, data_sz, "payload match");
- }
-
--static bool ksock_setup_ctx(struct ksock_basic *skel)
-+static bool ksock_setup_ctx(struct bpf_program *prog, __be32 *ipv4_remote,
-+			    __u16 *remote_port)
- {
- 	LIBBPF_OPTS(bpf_test_run_opts, opts);
- 	int err, pfd;
-
--	skel->bss->ipv4_remote = inet_addr(LOOPBACK_IP);
--	skel->bss->remote_port = RECV_PORT;
-+	*ipv4_remote = inet_addr(LOOPBACK_IP);
-+	*remote_port = RECV_PORT;
-
--	pfd = bpf_program__fd(skel->progs.ksock_setup);
-+	pfd = bpf_program__fd(prog);
- 	err = bpf_prog_test_run_opts(pfd, &opts);
- 	if (!ASSERT_OK(err, "ksock_setup run"))
- 		return false;
-@@ -137,7 +140,8 @@ void test_ksock_basic(void)
- 		goto fail;
-
- 	/* Step 1: Run the setup SYSCALL prog to create ksock */
--	if (!ksock_setup_ctx(skel))
-+	if (!ksock_setup_ctx(skel->progs.ksock_setup, &skel->bss->ipv4_remote,
-+			     &skel->bss->remote_port))
- 		goto fail;
-
- 	/* Step 2: Run the send SYSCALL prog */
-@@ -157,3 +161,71 @@ void test_ksock_basic(void)
- 	ksock_test_env_cleanup(&env);
- 	ksock_basic__destroy(skel);
- }
-+
-+void test_ksock_lsm_recursion(void)
++int __sys_connect_socket(struct socket *sock, struct sockaddr_storage *address,
++			 int addrlen, int flags)
 +{
-+	struct ksock_test_env env;
-+	struct ksock_recursion *skel;
-+	char trigger = 'x';
-+	int tfd = -1;
 +	int err;
-+	ssize_t n;
 +
-+	skel = ksock_recursion__open();
-+	if (!ASSERT_OK_PTR(skel, "skel open"))
-+		return;
++	err = security_socket_connect(sock, (struct sockaddr *)address, addrlen);
++	if (err)
++		return err;
 +
-+	err = ksock_recursion__load(skel);
-+	if (!ASSERT_OK(err, "skel load")) {
-+		ksock_recursion__destroy(skel);
-+		return;
-+	}
-+
-+	if (!ksock_test_env_setup(&env, NS_LSM_RECURSION_TEST))
-+		goto fail;
-+
-+	/* Step 1: Run the setup SYSCALL prog to create the ksock */
-+	if (!ksock_setup_ctx(skel->progs.ksock_setup, &skel->bss->ipv4_remote,
-+			     &skel->bss->remote_port))
-+		goto fail;
-+
-+	/* Step 2: Attach LSM prog and trigger socket_sendmsg from userspace */
-+	skel->links.ksock_socket_sendmsg =
-+		bpf_program__attach_lsm(skel->progs.ksock_socket_sendmsg);
-+	if (!ASSERT_OK_PTR(skel->links.ksock_socket_sendmsg,
-+			   "attach socket_sendmsg lsm"))
-+		goto fail;
-+
-+	tfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-+	if (!ASSERT_OK_FD(tfd, "trigger socket"))
-+		goto fail;
-+
-+	skel->bss->target_pid = getpid();
-+	skel->bss->trigger_send = 1;
-+	n = sendto(tfd, &trigger, sizeof(trigger), 0,
-+		   (struct sockaddr *)&env.addr, sizeof(env.addr));
-+	skel->bss->target_pid = 0;
-+	skel->bss->trigger_send = 0;
-+	if (!ASSERT_EQ(n, sizeof(trigger), "trigger sendto"))
-+		goto fail;
-+
-+	/* Step 3: The nested bpf_ksock_send() must hit the recursion guard */
-+	if (!ASSERT_EQ(skel->bss->rec_count, 2,
-+		       "socket_sendmsg recursion count"))
-+		goto fail;
-+	if (!ASSERT_EQ(skel->data->rec_kfunc_rets[0], -EBUSY,
-+		       "recursive send status"))
-+		goto fail;
-+	if (!ASSERT_EQ(skel->data->rec_kfunc_rets[1],
-+		       sizeof(skel->data->send_data), "outer send bytes"))
-+		goto fail;
-+
-+	ksock_assert_recv(&env, skel->data->send_data,
-+			  sizeof(skel->data->send_data));
-+
-+fail:
-+	if (tfd >= 0)
-+		close(tfd);
-+	ksock_test_env_cleanup(&env);
-+	ksock_recursion__destroy(skel);
++	return READ_ONCE(sock->ops)->connect(sock,
++				    (struct sockaddr_unsized *)address,
++				    addrlen, flags);
 +}
-diff --git a/tools/testing/selftests/bpf/progs/ksock_basic.c b/tools/testing/selftests/bpf/progs/ksock_basic.c
-index c18dcc2ea37b..189b0fc15770 100644
---- a/tools/testing/selftests/bpf/progs/ksock_basic.c
-+++ b/tools/testing/selftests/bpf/progs/ksock_basic.c
-@@ -8,41 +8,10 @@
- #include "bpf_tracing_net.h"
- #include "ksock_common.h"
-
--__be32 ipv4_remote;
--__u16 remote_port;
--
--char send_data[32] = "hello from bpf ksock";
--
- SEC("syscall")
- int ksock_setup(void *ctx)
++
+ int __sys_connect_file(struct file *file, struct sockaddr_storage *address,
+ 		       int addrlen, int file_flags)
  {
--	struct bpf_ksock_create_opts create_opts = {};
--	union bpf_ksock_addr addr = {};
--	struct bpf_ksock *ks;
--	int err = 0;
--
--	create_opts.family = AF_INET;
--	create_opts.type = SOCK_DGRAM;
--	create_opts.protocol = IPPROTO_UDP;
--
--	ks = bpf_ksock_create(&create_opts, sizeof(create_opts), &err);
--	if (!ks)
--		return err;
--
--	addr.sin.sin_family = AF_INET;
--	addr.sin.sin_port = bpf_htons(remote_port);
--	addr.sin.sin_addr.s_addr = ipv4_remote;
--
--	err = bpf_ksock_connect(ks, &addr, sizeof(addr));
--	if (err) {
--		bpf_ksock_release(ks);
--		return err;
+ 	struct socket *sock;
+-	int err;
+
+ 	sock = sock_from_file(file);
+-	if (!sock) {
+-		err = -ENOTSOCK;
+-		goto out;
 -	}
 -
--	err = ksock_ctx_insert(ks);
--	if (err && err != -EEXIST)
--		return err;
--	return 0;
-+	return do_ksock_setup();
+-	err =
+-	    security_socket_connect(sock, (struct sockaddr *)address, addrlen);
+-	if (err)
+-		goto out;
++	if (!sock)
++		return -ENOTSOCK;
+
+-	err = READ_ONCE(sock->ops)->connect(sock, (struct sockaddr_unsized *)address,
+-					    addrlen, sock->file->f_flags | file_flags);
+-out:
+-	return err;
++	return __sys_connect_socket(sock, address, addrlen,
++				    sock->file->f_flags | file_flags);
  }
 
- SEC("syscall")
-diff --git a/tools/testing/selftests/bpf/progs/ksock_common.h b/tools/testing/selftests/bpf/progs/ksock_common.h
-index 6e5b5b089124..c3203220a2d0 100644
---- a/tools/testing/selftests/bpf/progs/ksock_common.h
-+++ b/tools/testing/selftests/bpf/progs/ksock_common.h
-@@ -5,6 +5,7 @@
- #define _KSOCK_COMMON_H
-
- #include "errno.h"
-+#include <bpf/bpf_endian.h>
- #include <stdbool.h>
-
- #define SOCK_STREAM	1
-@@ -58,4 +59,41 @@ static inline int ksock_ctx_insert(struct bpf_ksock *ctx)
- 	return 0;
- }
-
-+/* Globals for passing config from userspace */
-+__be32 ipv4_remote;
-+__u16 remote_port;
-+
-+char send_data[32] = "hello from bpf ksock";
-+
-+static inline int do_ksock_setup(void)
-+{
-+	struct bpf_ksock_create_opts create_opts = {};
-+	union bpf_ksock_addr addr = {};
-+	struct bpf_ksock *ks;
-+	int err = 0;
-+
-+	create_opts.family = AF_INET;
-+	create_opts.type = SOCK_DGRAM;
-+	create_opts.protocol = IPPROTO_UDP;
-+
-+	ks = bpf_ksock_create(&create_opts, sizeof(create_opts), &err);
-+	if (!ks)
-+		return err;
-+
-+	addr.sin.sin_family = AF_INET;
-+	addr.sin.sin_port = bpf_htons(remote_port);
-+	addr.sin.sin_addr.s_addr = ipv4_remote;
-+
-+	err = bpf_ksock_connect(ks, &addr, sizeof(addr));
-+	if (err) {
-+		bpf_ksock_release(ks);
-+		return err;
-+	}
-+
-+	err = ksock_ctx_insert(ks);
-+	if (err && err != -EEXIST)
-+		return err;
-+	return 0;
-+}
-+
- #endif /* _KSOCK_COMMON_H */
-diff --git a/tools/testing/selftests/bpf/progs/ksock_recursion.c b/tools/testing/selftests/bpf/progs/ksock_recursion.c
-new file mode 100644
-index 000000000000..52f5200943e3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/ksock_recursion.c
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Isovalent */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_endian.h>
-+#include "bpf_tracing_net.h"
-+#include "ksock_common.h"
-+
-+void bpf_rcu_read_lock(void) __ksym;
-+void bpf_rcu_read_unlock(void) __ksym;
-+
-+int target_pid;
-+int trigger_send;
-+
-+unsigned int rec_count;
-+int rec_kfunc_rets[] = { -1, -1 };
-+
-+SEC("syscall")
-+int ksock_setup(void *ctx)
-+{
-+	return do_ksock_setup();
-+}
-+
-+SEC("lsm.s/socket_sendmsg")
-+int BPF_PROG(ksock_socket_sendmsg, struct socket *sock, struct msghdr *msg,
-+	     int size, int ret)
-+{
-+	struct __ksock_ctx_value *v;
-+	struct bpf_ksock *ks, *tmp;
-+	u32 pid = bpf_get_current_pid_tgid() >> 32;
-+	int kfunc_ret;
-+
-+	if (ret || !trigger_send || pid != target_pid)
-+		return ret;
-+
-+	v = ksock_ctx_value_lookup();
-+	if (!v) {
-+		kfunc_ret = -ENOENT;
-+		goto out;
-+	}
-+
-+	ks = NULL;
-+	bpf_rcu_read_lock();
-+	tmp = v->ctx;
-+	if (tmp)
-+		ks = bpf_ksock_acquire(tmp);
-+	bpf_rcu_read_unlock();
-+
-+	if (!ks) {
-+		kfunc_ret = -ENOENT;
-+		goto out;
-+	}
-+
-+	kfunc_ret = bpf_ksock_send(ks, send_data, sizeof(send_data));
-+	bpf_ksock_release(ks);
-+
-+out:
-+	rec_kfunc_rets[rec_count & 1] = kfunc_ret;
-+	__sync_fetch_and_add(&rec_count, 1);
-+
-+	if (kfunc_ret != -EBUSY)
-+		trigger_send = 0;
-+
-+	return ret;
-+}
-+
-+char __license[] SEC("license") = "GPL";
+ int __sys_connect(int fd, struct sockaddr __user *uservaddr, int addrlen)
 --
 2.34.1
 
