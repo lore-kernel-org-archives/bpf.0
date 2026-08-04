@@ -1,67 +1,67 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76C6480335
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCA348A8A7
+	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 20:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785873930; cv=none; b=IrXDHw9QlULEvyieftUkDn7udqzWs21WbHZjN/hImOTcpFFKM3obPnArP2dGu6SG64pTeqSXvBMYw3RSaoOURfN9Y3faCdB6pdDzW/HZOm7Dz41cSCS+hRDIuNEkH0cuom0RTLmGqR59ax1oY7z9g7TEpPKKLobWN1Eyx3jul9U=
+	t=1785873939; cv=none; b=Gf424p9XPHWBb24WgBF1RCe7Pt8AsetozhIpVtMyGz2KdtU3/3n2rIJue1wY6oicV8URG7Ei5s4dT1AEhVVCVdTlNGKoinnQRedlihGL/xM6xR5SU72iLL/nBVklv+JptRl/rL6WYE6va3Gz5oZxxItye4LN21Lc0IVXwhtSz8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785873930; c=relaxed/simple;
-	bh=GdwcaSnOAIozmOYiKiwMg91J8UbmPOytKa7VQcon7Iw=;
+	s=arc-20240116; t=1785873939; c=relaxed/simple;
+	bh=1M7ug/sxKhOtsQJmyJtUxR9ektFotu+w13JBmovkxCQ=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gmw7k2L3uLNDEBs5pyTWuznX8QZfEJwoR9p3ZHD7otsz75qwC8RjHbbRq3aVhiLgFX4abtfENaPiz366w6pu9SrZWN68UK19KrPIh+ZZU1zDwmVtvDWtuPJoQTtZ8LVNqRNUSj17bCVX+I863Zm4aC+pxsMIjBGXWZQ9sSogd+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=neubdtl0; arc=none smtp.client-ip=209.85.221.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=pIYrsET9z3uxNLzbd64o/Fuu/nAjYZGR3jFH22WnnJIpzFLaheNjw6C9xMqLA5Zm4dsTFC5VCwatoi0TSp8yjM1tnvobXtiH5M5ZDG5UMT1Z4auA3bMt/lik6A5OLr7ZZX54aeZg32UvGKknJ/7DlXxdkJoAq3cDwX7poVESF8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nyewmlN1; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="neubdtl0"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-47c2b362ee2so138051f8f.1
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 13:05:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nyewmlN1"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-49800c6a846so1699825e9.3
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 13:05:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785873926; x=1786478726; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785873936; x=1786478736; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:date:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=7YidgDdxzChz7kJDHI/X0ctrGJGdxKGI1valsQ4qlGM=;
-        b=neubdtl0E32tiuC8COUfzoFeuTvkWjDHPh2sMLgX4NQQhR3t235rcd7Vd1SyemTBWv
-         03qOjUkDuy/5DbhQ5hM+7iXa2nqGj8UPUsPipaDjIrMIOHi2UxronDA8x64g8P2twK7N
-         iReVxfXwwlKSE+n26sCldnpaK1XfYS9Xj3MwSluEgZPuaYZyEnVFkrEM+Vvery59iMZ6
-         54M2r8H26zCgVOEYEBcc/cu5JPb+Yh46yyScOevwXeeDjn2QUZmra0J4mpURBNDyHN7+
-         sbnsLP5wM6IvspVcrBc8stT0mUAk5ZdznqV8U0vKvRFwgLYhhMHokIWeXtWDvP4//n74
-         tL3g==
+        bh=iJy0GdGhRxEzrVsVSP9irAxMBATEUI2j9kdPpxJjlgQ=;
+        b=nyewmlN1G+cf5bKOij6G5Nuai5XbRDTDsHtRZn+okPqGiBSO2MLBMd/vPZOU+h6YF5
+         38xWXeE7MNrxuOYGpRzBq8Z3j0B4YGiFpvu/ICy0Il9UUE2pNaFefxxj8bbEQxIc4OqU
+         p+a3/ZrHZPurvA3k5JyEA1JyIg8QpjNG/GDB5sc/Xsnkm6FlIDN4Cw1NgH4+OKEvYCh1
+         4GyLctAvkhxHjDLednG+qFLIsJ8bB2whcfZhWNbRI+94n6e7MWSeMmj0xrxfzFhNxSg9
+         f4LR4dkT+qyjBj2vnOiKTlfAlLMlRwfvocVOgiOZs1nf464nXe6niOf/qo+4kMk8M1NW
+         2GYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785873926; x=1786478726;
+        d=1e100.net; s=20251104; t=1785873936; x=1786478736;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=7YidgDdxzChz7kJDHI/X0ctrGJGdxKGI1valsQ4qlGM=;
-        b=CuEVAT1UkLOkgY+7PZjP3x2UUXOJtGXPvjniH53pNSHXNvytU3zYs+U7j6pjKW4SUG
-         Kw/5hPvV+dBuzrrLevIQvW5LEbiztSgFpGmrh5Y9+U4m7IhovGgztQF2Z6tm19b6lAyK
-         d2XgyPgGWbkFo85zQ68/KjfnK7qjm0vu5xuOMuqL04H9RSUQr6vACSldeoH+8vNfyvD0
-         aH8OtcVgB11D9mnhNZATvC7vnGuqIwmLicW5KRQ1uXOkB5KBpuVYKqn0y4SxGLvSvEzp
-         X22wfMV/c/wGgP7TcjMivCeVALmSfQbQPWVeLIgdSlqWWkp8QrCTPjb9saYAz7mekRMg
-         fy3g==
-X-Forwarded-Encrypted: i=1; AHgh+RqTxjMSD06jakZhh1hAXyDHr9vhRFIliGNAIAR/2eVCM4SmBdtjDU1IJ0/hio+Vq9Qj7jQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5761DMvaljJJ9/tGFKFhjAX39zfC4RfOyu9U8fhuFOo2cpUWa
-	UfKtwS4iP8sEwy/AbxVIhd0OHOCQBTApD+YxZrXx9SZ1wnSH0DA4kKSG
-X-Gm-Gg: AR+sD10SXZBJICPslIux5ecW7C0Gs+nomUxFk/CVMISWtmp1b7yry3PTZ9lPYHtjTNp
-	WaOG6LnBwb8UmnU0+GhIZXLT9U3XzhnDXYR2/oKniYxLiXHMK8CqgvxkZOkfToXswuqqbsB8o9z
-	3MIs99TTGhS2IQeA0hl0Eo2iOuc1rdAv0813VWMuTdzX72LLxja11mEy5eXg8eselh7MpEDJx6y
-	IzS5m9x24mGIXm2JLMiaB+gFr2DdviVxc7StfLwEKmoNTr2zSx+FkswZ2piL9vTQdnv2ooI8I9w
-	Mr5GrRnD6riKne+GEUl36GPwBp3dyO3yfy9rURDA+xt0NiA73Qo/kZTXRlUESeTWePq71XzHyiO
-	a09H/pKiU3i1b6xahAwgEzx5kd8OMhuBs11ub7nmD9GDfrmGiLuy83jhJFTi/qchf3UZiJ8+jUF
-	3rtyEKVhPEl+cO1Xtl+EYZOrSK2tHeIIrz3v/b0efObVOm42p7
-X-Received: by 2002:a05:6000:46d7:b0:46a:8fab:eb44 with SMTP id ffacd0b85a97d-47fec501abcmr2014403f8f.1.1785873926243;
-        Tue, 04 Aug 2026 13:05:26 -0700 (PDT)
+        bh=iJy0GdGhRxEzrVsVSP9irAxMBATEUI2j9kdPpxJjlgQ=;
+        b=E6vlDP6M1h0TvznP7Eb7UOy68e67P2h7fHX9J3PFU3JAP4u/FgSPDXm9B/OX5EOm3b
+         Yifw60q+18cV37XmofBPNoc5JBiYYwpmkXiMFeRb0latO2T7+ukAt+76JvnePVUjs3eG
+         wwDCVoHXjdLJKSkKcqx3p7NqFt57jFR5MbRtNWT10GnBmf9qLjkPwqUann28u4gREhWb
+         Upc9DZKjlnY+uSgqU3lI9Ig9CNQQyMYbr40xeQaZwlfz39XtdQEBED6OxrxVNZfPeB7M
+         naMUXP2MbLIWxUrrkzVT9jCNrce5csisp3mcBXwy+ScpKmt4kqL2k2pmlGAnOT3Npt7+
+         SRyQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrPAxPuIrhZZf10Uz5KOjjWLhHt1b5HI/rV54P0Qad1r3VFU1jv2XWLh0vOJroEHwL6fpU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3aPd95ezzVO+O/a4VvZ9rGJRRK9ezqRcIkaErGDnKwwYo51Nl
+	c2LKjyspCOEaE9pOjjs2HTvYHKpccimJy04qrlAK8wBKAhuk+bIml6TQ
+X-Gm-Gg: AR+sD11xZ7KztsblP0LFL7M2mUyk1pH877mETMaLr4InUvPsK0xUspnxilP9lgJPbCW
+	gWQauMZY08ISbaBep/Dwoq4j0TcJevwPuguUBxvMyEu79ho641qENoSieIT/rUY0V1ExrlX5hZs
+	06iS+1K+8VU6+QhqbrgAhCGop8psjC5JVt9rOKGZgONg/eMekMvIgPytDNgY3AurgnClPxPcSjd
+	w0nzKsjdpbYUCdghJloSrPmQEymv9LZGn4ZQwDRnoNdM4NOknwL3BbSnnLfbVnZJPA4wteRA3J7
+	5kz7ImruLIgtHDPonl6CiusB9voLTqSOamLMK39ue1JzCVG6038VFpiwHidd5VYOudat+4CsAWw
+	aLGQ8LAUVRnP/lNqiG1rxa5570qQoSDyNKywFW7uFUCGreDw+FCZ78f8bRdncbMFWrDyjTnQn4q
+	xwdZEwC4Ur19KosJMAC9L6UgRluKX8XwgInMh8HqIphc52a+ic
+X-Received: by 2002:a05:600c:a47:b0:495:779a:ed33 with SMTP id 5b1f17b1804b1-4994e7ad575mr9017585e9.7.1785873935628;
+        Tue, 04 Aug 2026 13:05:35 -0700 (PDT)
 Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47febfda6afsm2553778f8f.3.2026.08.04.13.05.25
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994e98adc4sm3887605e9.2.2026.08.04.13.05.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 13:05:25 -0700 (PDT)
+        Tue, 04 Aug 2026 13:05:35 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 4 Aug 2026 22:05:23 +0200
+Date: Tue, 4 Aug 2026 22:05:33 +0200
 To: bot+bpf-ci@kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	bpf@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
@@ -69,11 +69,11 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	chen.dylane@linux.dev, info@starlabs.sg, contact@arnaud-lcm.com,
 	martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com,
 	ihor.solodrai@linux.dev
-Subject: Re: [PATCHv3 bpf-next 12/12] bpf: Avoid changing callchain in
- bpf_get_stackid_pe
-Message-ID: <anJGA8BeXZN74o_J@krava>
-References: <20260803210149.296496-13-jolsa@kernel.org>
- <55dbe83f00c89646b6abd5b3fa35783a8601cbc6b380fb856bf53490e35faf49@mail.kernel.org>
+Subject: Re: [PATCHv3 bpf-next 08/12] bpf: Remove trace_in argument from
+ __bpf_get_stack
+Message-ID: <anJGDYo4M_GV8Om8@krava>
+References: <20260803210149.296496-9-jolsa@kernel.org>
+ <fa27c03a75e22229f58d1ccdce161e05fb274645e3072cdd591201f14b4f1cc3@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,28 +82,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <55dbe83f00c89646b6abd5b3fa35783a8601cbc6b380fb856bf53490e35faf49@mail.kernel.org>
+In-Reply-To: <fa27c03a75e22229f58d1ccdce161e05fb274645e3072cdd591201f14b4f1cc3@mail.kernel.org>
 
-On Mon, Aug 03, 2026 at 10:06:21PM +0000, bot+bpf-ci@kernel.org wrote:
-> >     bpf: Avoid changing callchain in bpf_get_stackid_pe
-> >
-> >     There's no need to modify the trace object bpf_get_stackid_pe, we just
-> >     need to pass the needed callchain length in separate argument.
+On Mon, Aug 03, 2026 at 10:21:34PM +0000, bot+bpf-ci@kernel.org wrote:
+
+SNIP
+
+> > +	if (kernel && user_build_id)
+> > +		return -EINVAL;
+> > +
+> > +	elem_size = user_build_id ? sizeof(struct bpf_stack_build_id) : sizeof(u64);
+> > +	if (unlikely(size % elem_size))
+> > +		return -EINVAL;
+> > +
+> > +	max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
+> > +	trace->nr = min_t(u32, trace->nr, max_depth);
+> > +
+> > +	if (trace->nr < skip)
+> > +		return -EFAULT;
+> > +
+> > +	nr_trace = callchain_store(trace, buf, elem_size, flags);
+> > +	return callchain_finalize(buf, size, nr_trace, elem_size, flags, false /* !may_fault */);
+> > +}
 > 
-> This isn't a bug, but should the first sentence read "modify the trace
-> object in bpf_get_stackid_pe"? As written, "the trace object
-> bpf_get_stackid_pe" parses as if the function name is the name of the
-> trace object itself.
+> This isn't a bug, but would naming this variable trace_nr match
+> __bpf_get_stack() and the callchain_*() parameters it feeds?
+> 
+> Looking at __bpf_get_stack():
+> 
+> kernel/bpf/stackmap.c:__bpf_get_stack() {
+> 	u32 trace_nr, elem_size, max_depth;
+> 	...
+> 	trace_nr = callchain_store(trace, buf, elem_size, flags);
+> 	return callchain_finalize(buf, size, trace_nr, elem_size, flags, may_fault);
+> }
+> 
+> And the shared helpers both expect trace_nr:
+> 
+> kernel/bpf/stackmap.c:callchain_store(struct perf_callchain_entry *trace, ...) {
+> 	for (i = skip; i < trace_nr; i++) {
+> 		...
+> 	}
+> 	return trace_nr - skip;
+> }
+> 
+> kernel/bpf/stackmap.c:callchain_finalize(void *buf, u32 size, u32 trace_nr, ...) {
+> 	u32 copy_len = trace_nr * elem_size;
+> 	...
+> }
+> 
+> The new helper uses nr_trace for the same role, making the two otherwise
+> parallel functions read differently.
 
-yep, will fix
+that rename actualy uncovered that later __bpf_get_stack_pe used both
+trace_nr and nr_trace.. we're fine with just one trace_nr, will change
 
 jirka
-
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30854471987
-
