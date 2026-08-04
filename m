@@ -1,194 +1,163 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011028.outbound.protection.outlook.com [40.107.130.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8523385A1
-	for <bpf@vger.kernel.org>; Tue,  4 Aug 2026 21:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785879299; cv=none; b=KGwqTvwmk5XmGYC3j+MpsOaSuRimGBgjuiCQ0v3UPHIzyFLn61PRIP3l/3oIzSTyVwZnbhggB6tRmj5d+9F/i3oMq47wbTApQrshqzdmV1Lr6k9AdnTRqOm0pnQhPThoMM5rO+PfLPcI6JiJKhN1JxaHi6n0R/NgQX+zxyoCYu4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785879299; c=relaxed/simple;
-	bh=CbKiR5Exv8rPxEahQ4Ci8R3R3USsie4he3WFHYZ/7fM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=C2VQpoUN2qRMQ41nFP6yetLvCxe+UYqAVqBN3z7DxuV3b2Mq0Dgun3VO5npbWalxp54b56uqrZa474Bv7cPqm19+BjajfVRtcrSYH+1snmK+JsXytoQLJpgJ7mZarRlNk07ZOsZwg1fv+aDZFzkyxc/0AXH/ZJFiPDQdmOgyp2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MqygBXNw; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401C438550C;
+	Tue,  4 Aug 2026 21:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.28
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785879321; cv=fail; b=MCjiUgIKgjn+08IczzdYuF1MwavslFP3lLhAQmXTtf8IjHg4SiHTB2xjGrCxpIWp5da9xs0QeuXbjD/hnRFOoCid74R6atFH3yxyuG/YoLDLW+s9Mao7PFsTN6Kt0OxAuFps6Tf+WcTEcR6BRgC8zJy5xJisJymTQbqXLYbvgGw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785879321; c=relaxed/simple;
+	bh=N69ZPGO8zfvE9pD44jQpo6I38dfiiN6xFro/S7q04l8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=mP/jMmOHoIND/7hSSU90oNWq0wH8fKttx7RZSDtTIocvqoe+RDj4y/X7G0hty+QL71/5DtvEX2uoILIJvyG/FQ5vTBETElpNRvlfzl7hROCi6adVbj17FvD6ScPUe9OD1EiR3lyBv50X8iMzGLOxp4dgfWmr+FuTQOJUjBJX2iI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=CnZVLKq8; arc=fail smtp.client-ip=40.107.130.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MqygBXNw"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38e69bdb0fcso280739a91.1
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 14:34:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785879297; x=1786484097; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=S8o9b0WV+H7dmuJeUNEMwsxpTlG0+LSVH6bZanLEqNg=;
-        b=MqygBXNwIa8/X7smeMOLBvsHN+nocMu2+gxxKkvAhDU0tZhRzYVEa2XCEyaooe5kwR
-         JH3tfyvphka1g5yWjsSe0TBn/0MmhlbA69pNs7Dynf+jAd8R9R0Fcg78GmdICt6F/P52
-         3IgY7m4PZ7D5M4Wn8vv11F2xPhaGjhKLT6pBJFh58IX3kv2l6D7VSN3Exm+55gBIWt04
-         p1Pfd/GFgPPoEigr4cZ1v8RIyAXUMlvO8BWd3RMNZd0Ex7kf2V4PZM9aeaeZhEP7skuC
-         QVTCV03yP2MzfbsnMEtyWH3ZYHO/i4ou+9vuexJ0ymsrvdH3d8dPoPLxxa28KTKfiE71
-         yf0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785879297; x=1786484097;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=S8o9b0WV+H7dmuJeUNEMwsxpTlG0+LSVH6bZanLEqNg=;
-        b=Z3BBJ5TLiq7WgH7mpICNXy/CLwyLihNq30MyMR/axHwcf5BLP0wJ88tzPUfQ9dHjIh
-         rrE3+GichSyp+pL3PI2ymo3Y7irsbh/nfZfVx4kTKnlqGKnZnsxbK/ySKx8QahftcJm3
-         sQvLwEWQm+srYX3FfGj/QVB1SMoYFdjXJY3CVfcgZFhlai2lbvzJNvkmqteEgPAV3nLO
-         qRvDKJhNlMWaRdlr5gcV4m5OYSdFtF8ZpFGw9QM1WDRIbpJXO7bUkot7VTa6SQ8Kqxv3
-         isOYl3YTlzsTNjFBohMx+cH+CSTDwHQN7JKrAFfvjOvHwU49S6V0GgcOiVQ6GdgC2OJ5
-         uZFQ==
-X-Gm-Message-State: AOJu0Yw6RmZR3EXS8Zxy1lMJ4zp0rcDIXy4mCwAkhUaftL53Ymi48CHx
-	fvuiA/9uLNGEqRM7B4BbM+AkqyGfztXy6W81/2XbQgDmsA6ZmydxwoMO
-X-Gm-Gg: AR+sD11EPuYBWt+lzs1CJy4QFUKYkf78db6DjD3DQ7cQhTvBj7M3QXWsiAvrLvgMiN9
-	l8lrXBLm2rhbyuRQkZwlYnBy+kZN3HI5LWq1e4CqJDtFayaL5lW3obcPjVXReEoHNR6FhpEEF/Z
-	qlEiN61qL/jG5Ow2sXgPmU85gdOXIOHuIonZW+agUCSVufIOejrZELgVHCZ0huAbHTZDJP87rzF
-	7RCyp1XfIeI5NHz9q0dELuXKZ4Jz/BBe+DdrFMrO1h7T3PNjgy9cI9hneIR5GXHld3JIOjJz628
-	fsRYg0dmLe6elr+dvgmxjAocdeD9nSdCuwhEkTra82qfj0XcZfZJWJyHgmr8Kivl66iu+AfDtz4
-	U7fNOhRnW5EKGe9QVvG4ksXzZVKI8vdWGt5d7I5hd8iScQUysxSSAwad2x+pIKuASghKTfbt2VC
-	Ps1qO+pma0yxLHxOcDccia9OYSDnYlriqAmImESulfBS4HTeWevr+lYxivmO5b5r/M5FFpMhjCw
-	q8GNpMOWP1YEMNE
-X-Received: by 2002:a17:90b:5251:b0:385:393e:7124 with SMTP id 98e67ed59e1d1-3903c5920a9mr1735427a91.14.1785879297460;
-        Tue, 04 Aug 2026 14:34:57 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3903927dddbsm558542a91.9.2026.08.04.14.34.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 14:34:56 -0700 (PDT)
-Message-ID: <4d20aecf677f4aec3e8e70106d4bdbcb01902e69.camel@gmail.com>
-Subject: Re: [PATCH dwarves] btf_encoder: Infer arena kfunc arguments from
- suffixes
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Kumar Kartikeya Dwivedi	
- <memxor@gmail.com>, Alan Maguire <alan.maguire@oracle.com>, Arnaldo
- Carvalho de Melo <acme@kernel.org>, dwarves@vger.kernel.org
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Tejun Heo <tj@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>
-Date: Tue, 04 Aug 2026 14:34:54 -0700
-In-Reply-To: <6c9500d4-7401-44f0-93a6-88a827026ae0@linux.dev>
-References: <20260803125518.2279340-1-memxor@gmail.com>
-	 <4cb8bb30-1f01-4b78-a6b1-4ade3b965039@linux.dev>
-	 <DKGENYO9FITK.1M51V4BULBSYT@gmail.com>
-	 <8dc173dc3d051d338916c72cae070238718fd196.camel@gmail.com>
-	 <6c9500d4-7401-44f0-93a6-88a827026ae0@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="CnZVLKq8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iM4KuodSS+LVOe24CxBO2RpdDFcwdHCy1NhwIjgW1GSmVMCQ2dVQwbYQDxZ29493sslcnQ+cxUVFI4HZ4+F0igPwH6m17EgsTOFqnPMLSMLjQDKPFtHHpSLNev/R9jtfxtGmKP0AOLRLl1G6tSIE8al5D1tgJgNilHQHFF4sqBOEcXd9a5A+YXsNHCiRYayaexKOMyFwYxvzJW78/UEAc2X3fvMpD/1NA4U/w0jcniUN/Ji+ol72qktzfshlpUmxe69dLYKn3s4KDHnB6X1iRMkWrloMVjkQi8mlEW7vh1V5YFM+O6rYoVVu6A+DU9BpNzMnJmVMcA/Hz70l7X07ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n8YH4t+4AfXFrSNsVMG+mlZy6fyuz8X+z0QqWnS76xM=;
+ b=AqJu2BKEwp72z5g4KgWLLXYy5DUeDncrhTbiVevO5AZKKTQWdT2pd4eT7OFGUazkA1TDf1FSS9vqc6NFRnNHR+ZzQCJv2xgO6TRruox80YzhRklI6qq/WFySEo9nshjY8OFyLmg0dU015jbk2r0tvRc37BDuE6pKlR9SDoiZHNWaMooWYK36imZPapqEwXEdLuZAft/wo1zbc/AujzuAAT9zLtUpTQqbRKQJt+jTCRriWhoFFJtcspq0DFDmaRYMyMTyXd+XCuPj1fLb6LJE+LOReLqIGb0wxwcLqsen+rrd/M4fNUhBcXdz5Pdq83ZPXroudFNLifyGvshLw2ERLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.6.101) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n8YH4t+4AfXFrSNsVMG+mlZy6fyuz8X+z0QqWnS76xM=;
+ b=CnZVLKq82K4jtpt0w63A6WcYX2JxbI5J8l2zFkgLnCXS2WqaypN+XRdkPXqdQlp+LO6D+NgHwKJCUe80PPdyqpvZJnUlBzUOeUpQgDa9Vvn1wQXn83VBOWUrwSPUy7L46GZ0NDKCgtxQ6FoREutWhDfCwzjQYVVjxc6r6js7TfoQE1PYJKArUU3OYg4wRrDr/rSyYH6hgyV1GrH1W9VPs2Xf86xNzGqaD6C78HiaaooO7Wb1o0oduGwQvmbDwu0IGiuUj9Mb6W0tEUb/DzzczvMlPFP5vt0pbyRzhoHhsHUfKiCwBjwRQQafTpOZCK6jltAKJPHDnxwFmoN3xYxm6A==
+Received: from PAZP264CA0138.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1f8::11)
+ by AS8PR07MB9330.eurprd07.prod.outlook.com (2603:10a6:20b:61a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.15; Tue, 4 Aug
+ 2026 21:35:14 +0000
+Received: from AM4PEPF00025F96.EURPRD83.prod.outlook.com
+ (2603:10a6:102:1f8:cafe::92) by PAZP264CA0138.outlook.office365.com
+ (2603:10a6:102:1f8::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.17 via Frontend Transport; Tue, 4
+ Aug 2026 21:35:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.101)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.6.101 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.6.101;
+ helo=fr712usmtp1.zeu.alcatel-lucent.com; pr=C
+Received: from fr712usmtp1.zeu.alcatel-lucent.com (131.228.6.101) by
+ AM4PEPF00025F96.mail.protection.outlook.com (10.167.16.5) with Microsoft SMTP
+ Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.292.1 via
+ Frontend Transport; Tue, 4 Aug 2026 21:35:14 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fr712usmtp1.zeu.alcatel-lucent.com (Postfix) with ESMTP id 617711C0033;
+	Wed,  5 Aug 2026 00:35:12 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: shaojijie@huawei.com,
+	shenjian15@huawei.com,
+	linux-rdma@vger.kernel.org,
+	eperezma@redhat.com,
+	jasowang@redhat.com,
+	virtualization@lists.linux.dev,
+	mst@redhat.com,
+	xuanzhuo@linux.alibaba.com,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	kuniyu@google.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v5 net-next 0/2] ECN offload handling series
+Date: Tue,  4 Aug 2026 23:35:08 +0200
+Message-Id: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM4PEPF00025F96:EE_|AS8PR07MB9330:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7676262c-6796-4b52-d8a8-08def2704518
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|7416014|36860700016|23010399003|1800799024|10067099003|11063799006|56012099006|18002099003|921020;
+X-Microsoft-Antispam-Message-Info:
+	V29OPR7S5XJ4Ne667ynXzjj7eUgpx2Is/YnRDif6kEI2moAY9TFH/Dq7+MTKDKBorPbdma9apYLqU5lgDrBVVBTpwdeRfjvRGLjia2hAU4H1LL9rsUSuMyCVRDkbuVe1rsrFxo9GxUZpL/FdG2dXhMFxyrlF2EJ/ikp9x5FV8smWU0RjXqfTdFUKxKl0MWbz9mxXx++svhDZ4wgeT+jCVsEIx84muBcF+zmCJqtUvj3Gxwu/fi3+uRARQ4skhbTRu3KLVhQHQw0wcO5/GGgBnX2rGbKfUrrd2ZeISEUv/8GeJ72mHzaflWyiauWDz1LyEU+AALpqfebKpfefeF/I5EmcoMsw7yWnhGlsXMpDmSrBOq/FJ58/VwmU/w5O4j1e5jFi/mQAExVcQfYNMgJMvjF6fJrVe5uYGcZRJjfIaxhL8irrJqjyxu1zglaDXWrZvTypYdnsUBowKeuXiu31QtP3jezPt1bJoO1nNcIR5o2XevrsRqDQNkC7WIWU7eMDAuaD1ZsUCE2LDDdcN2ygKCQd/gU6oVlAwD2Jmx2wRpY4u6k43bn6Lzakg/eB84GJE2eZV0Cs2q126av0gix116itDM+hKDyPjRo/X+Gc1W4uIdWI8CRhWXvj2ISV74Z1RvVeGJlOM4g80tQD99vKOxYNC2glEbZ3R4k//oUanrHpnB0qRAaN0xGsQETed0adFycpdPm74PqG3pcCcOcEP8iC3RpcsZ9PtFqjuTat+cjYfGHIZ5Dsg+2c7Y200gUS
+X-Forefront-Antispam-Report:
+	CIP:131.228.6.101;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr712usmtp1.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(36860700016)(23010399003)(1800799024)(10067099003)(11063799006)(56012099006)(18002099003)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Yw+nJKSTOms+wJ6nzYhjC5rPwNJ3HozVgJXLpzuwP7qB6+qWJY9ddqX3JjA4kGBuP+/mP4k8nFkoogk+TiH8UvfMQcxUpwaFiuWoQXPmKMXZaze08yXBxQ95DHfPwv6y4bn9omJN4QHAR+P3UgzGxw0N1dTrEGIVKpg7ynPmRU4oYPlbhwqhuNvOAI8aQt7ZaHh1C4NVgZ/hM8eCWcZYUnQKyoila6al0+amFNrlqZPtXKdfNFtkTebPI5wvMvd2MGUMmcyDl9jKyJhQLhK0gNgHLOlMh6FIUiFaxB91Sw3LZ2MIEmwLmfgOUWUqrzb0wpBvOrVRyF7F55U3BIKj3sGrKUMQSJF580FfFy/iOxSi5J3pevJbc9QzDO7+4Mtg1UaLJcPF0w6o1kv61wwUs88v1P9qDpcPJW0W7pM5/F9zPSUX7bxF9uhJ4CBw6yvL
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2026 21:35:14.2019
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7676262c-6796-4b52-d8a8-08def2704518
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.101];Helo=[fr712usmtp1.zeu.alcatel-lucent.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM4PEPF00025F96.EURPRD83.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB9330
 
-On Tue, 2026-08-04 at 14:19 -0700, Ihor Solodrai wrote:
-> On 8/4/26 1:22 PM, Eduard Zingerman wrote:
-> > On Tue, 2026-08-04 at 21:27 +0200, Kumar Kartikeya Dwivedi wrote:
-> > > On Tue Aug 4, 2026 at 8:43 PM CEST, Ihor Solodrai wrote:
-> > > > On 8/3/26 5:55 AM, Kumar Kartikeya Dwivedi wrote:
-> > > > > [...]
-> > >=20
-> > > >=20
-> > > > So while I understand the reluctance to add KF_ARENA_ARG3..N, I don=
-'t
-> > > > think we want to introduce and support yet another mechanism for ar=
-ena
-> > > > argument annotations. If we do, we'll be stuck with a mess of
-> > > > supporting two/three ways of doing the same thing for the foreseeab=
-le future.
-> > >=20
-> > > I think one major difference is that KF_ARENA_ARG* things were mostly=
- for
-> > > annotating the vmlinux.h with the right address space label before, b=
-ut didn't
-> > > carry any semantic meaning for the kfunc's type checks.
-> > >=20
-> > > That changes with these suffixes though. The pointer will be translat=
-ed when
-> > > passed into the kfunc. IMO it would be odd to diverge for this partic=
-ular case,
-> > > since we use suffixes for every other case where we constrain the inp=
-ut type of
-> > > the kfunc argument or give it special meaning.
-> > >=20
-> > > We also want to have similar annotation on struct_ops callbacks, wher=
-e we also
-> > > use suffixes, so it seemed better to keep it consistent.
-> >=20
-> > I agree that we should follow the principle of least surprise here and
-> > use suffixes, as everything else uses suffixes as well.
->=20
-> Ok, I understand the motivation. Let's say we use the suffixes.
->=20
-> Should this enable getting rid of KF_ARENA* flags then? For the
-> purposes of generating address_space(1), we can also just check the
-> name suffix, no?
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-That would be ideal, yes.
+Hello,
 
-> >=20
-> > And yes, the __arena and KF_ARENA_ARG* annotations have different
-> > semantics:
-> > - __arena means that user space arena address is passed as is
-> > - KF_ARENA_ARG* means that a user space address is converted
-> > =C2=A0 to a kernel space address before passing.
->=20
-> Also I am a little confused about whether we *need* to be able to
-> express two distinct meanings of "arena pointer" or not?
->=20
-> My understanding is that "arena pointer" is a feature of an arg type
-> that has a single meaning: the pointer has one base in BPF world, and
-> a different base when executed in the kernel.
->=20
-> The things that are missing is auto-conversion (Tejun's RFC [1]) and more
-> comprehensive support of PTR_TO_ARENA in the verifier.
->=20
-> This is still only one "arena" annotation per arg. Do we actually need
-> the proliferation of __arena, __arena__nullable and/or __arena_kern,
-> __arena_user? Can't we have a single defined semantics of how arena
-> pointers are supposed to work?
->=20
-> I can imagine something like follows:
-> =C2=A0 * arena pointers can not be null, check for nulls
-> =C2=A0=C2=A0=C2=A0 before passing from BPF prog to the kernel
+Please find the v5 ECN offload handling series.
+It clarifies the flags of SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN and fixs
+the usage of SKB_GSO_TCP_ECN of hns3 in the RX path.
 
-We are deliberately lax when handling arena and don't do any kind of
-value tracking there. So e.g. the following won't work:
+This corresponds to discussions in virtio mailing list:
+https://lore.kernel.org/all/20250814120118.81787-1-chia-yu.chang@nokia-bell-labs.com/
 
-  if (foo->ptr) {
-    ...
-    kfunc(foo->ptr);
-  }
+Best regards,
+Chia-Yu
 
-Unless compiler decides to keep foo->ptr in a register. I'm not sure
-whether enforcing non-null here from the verifier side is the right
-call.
+---
+Chia-Yu Chang (2):
+  net: update comments for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN
+  net: hns3: fix GSO_ECN flag setting in the RX path
 
-> =C2=A0 * arena pointers are converted to the kernel space for
-> =C2=A0=C2=A0=C2=A0 kfunc/struct_ops callback by the verifier
->=20
-> With the documented and enforced semantics like this one way of
-> annotating and one annotation should be enough.
->=20
-> What am I missing?
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c |  2 --
+ include/linux/skbuff.h                          | 15 ++++++++++++++-
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-At the moment we have two consumers:
-- Planned sched_ext related kfuncs that need kernel space pointers.
-- Existing kfuncs with KF_ARENA_ARG:
-  - bpf_arena_alloc_pages
-  - bpf_arena_free_pages
-  - bpf_arena_reserve_pages
-  They, take a user space address. Looking at the code is appears that
-  all three can be changed to handle kernel space address.
-  On the other hand, neither of these *needs* the passed pointer to be
-  converted to a kernel side arena pointer. So that would be just some
-  useless work.
+-- 
+2.34.1
 
-So there are two valid use cases.
-
-...
