@@ -1,209 +1,237 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0721039061C
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 18:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785955491; cv=none; b=Ld7jV6UcyRl56DrGLMxxNXUHTO8NztOaiA0avNoPWlRspVD1r26yYpcPvjAoRJnHsdzyrnfRYhZw3zy45g/Zewa7UunYz1scA4e/AsFgEDqmlgTWCKKVzeDLqwok/MqEfsu1nyUJdNSgEIfwv151nkIiPgz+DM1Ryyxs/YXjosM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785955491; c=relaxed/simple;
-	bh=Sjj5Y2RfhOlcM/mgqWSQxO89Ssrl6aOmUGcTlzCBjgc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KefyHmSKKJWM3asSlSNcEtZeHEr+72sreBv+C6CzYrSiRkAGRN+9UX1xheE5H+oIjGqMAZWrpiB1LyTXc+gWKdJ/MfE1HIS2leq8WjWkQe+aJaA7AIPkPd9nYRqXlpUUgquv5VStyKQiG43kQoCAaD/H6jwsnp1cSDo+qMaRUok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=eyAxNSmD; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F613A8737
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 18:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785955581; cv=pass; b=Tei7RvfY1un2IATkz4/Ls2FdHBAhTuiXlfTQjc5eHZ4WWK1oy8MlSxqc02eKA2KBbGDMeS+/+E0F1ilANILHwJYCtrcqlvnGXb8cLn5x/GEW96ux/i6SRhO+lku79rgS4wArGxfsEULTk56O3GSVYvPVJFLaqzySFZifFn4Tn9o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785955581; c=relaxed/simple;
+	bh=VHC/9TwijeBDOOisSoYmB168anR09Wauva2iRFh5CKU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XwQjx5HOuSFiq+gz35Jxuk9lF+8PFr32s4RNPCuhc2S/mHZfGDXs5GwQjd8234ZDrrRj68dYYV3Hu1ktJ39K2BE1/+2OfEYrr6LEx+tU76Mb2JZ4JQ7PhytO4TPKWV7QCq9OfzKxKDK2n9mCMVuYu8FyiYJbNInOlc42Kq6mXgo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QhMnK9JM; arc=pass smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="eyAxNSmD"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=cBDapzXQB2n+U8KpnFmdYyScWpKnIH3WMJlae9ipdBs=; b=eyAxNSmDehz+XRtMhqY0KPm1FJ
-	/uK1Pv7KO8tUAs9nuJAbeihJgnGU8WiI8o94V9Hu8M9tR3vJzwcHUwI/N0+HE0+Oxev1o6jzcOVXK
-	DDZqfdfwHU3VUgxd4HeavWABElAAnkmK1uRkEjZWX0gcYPkW+qxcZPY/Jeth50uyyraUysyTHqZV8
-	P9caJmq+znyy2tDAFM3j65Vpm4fIRiBivt6dowbvWTNxf329mke4wPbB8/xfTdlRHDIm5jeAnAeV+
-	wl0k0LHe5Dwx4sEGaYMMi5JJ9+8YUi8viCk6M0UP4g2qEKp1FEkWgeQjJv7iQGXW/uNhRUUXO5QYl
-	xYtZ9mWA==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wrgbd-000JYU-0S;
-	Wed, 05 Aug 2026 20:44:45 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: memxor@gmail.com
-Cc: eddyz87@gmail.com,
-	puranjay@kernel.org,
-	info@starlabs.sg,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next 1/4] bpf: Mark pending sub-register zero extension before pruning a state
-Date: Wed,  5 Aug 2026 20:44:41 +0200
-Message-ID: <20260805184444.292828-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QhMnK9JM"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c966b9ee9cbso907960a12.1
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 11:46:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785955579; cv=none;
+        d=google.com; s=arc-20260327;
+        b=h924GMdM0oVkOENuQYJNuM9mPVRE1t7t5qigWrI9+9A2I9QVF4vKEJO0xYr7SAc/8x
+         85sMPyUWx+fcIUGXyHlCdVrdFWyLlkMbQkb48Ax/WnXpmGbbzcbe7wozqtOuvTeTl59G
+         gcb9a8AA+aeNa4ImhdAPKG3TqPQDgSpxTeXIo1GqUEjk4l8WAzfTDzraKTEaDAsF4XPt
+         yTgtGvjEn74wF+E9DtyXJ4OZN5+eFQV9VCtZEh4RA81y3ypYDHr1jqXDwL3GqrqQ5rcI
+         vlI2i4VCXLwGe2TtjMKPo1U3vcR2H1bdmFc6FngTzUU5aB0wYouWkRFmWRVaRY4L631k
+         p7/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=oraTB2zvKCroH6GNMJ43qFqh2yfzAvZ70RBsZUY2AEc=;
+        fh=We1BCyllFeLBuWIii9hq3iV8CktxjbXeV8bBVyjbOi0=;
+        b=YaMMy7bL9cytyt3Pb0H/X9lUgtGgNOKa6hDwEKzltmEMNZk9knCKYViBRvtZwE0CvX
+         7du5CVWOAScaecPYMdZo4oeL/Cje5GmfWBBXeDGDEMQT+9AI6yiMZhL/X0ITncOZeCin
+         XJQBDBu53QHfx8Ln1Oz7O0pkJOffIum3cTwtHMXfbhpngTfe6yJNHG3jJhC0cExP9d0k
+         AcRrPamULqb/jMQjVYBqrjmlmSvDKMi97kky329K4pLVceLTY2c3ALm/qw7hiihI5dKq
+         2IING+JMpwJQ9a9A8mOJPEE44PIMM1bQkmVO8DMRJWT5RN+8/NYye/O702/0ajWSgn8i
+         400w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785955579; x=1786560379; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=oraTB2zvKCroH6GNMJ43qFqh2yfzAvZ70RBsZUY2AEc=;
+        b=QhMnK9JMBm1Rj7sLNd56LORdJFkHPuNOeST/AnwwQpvMNaA7SUKENrd7kJ3AGscUSg
+         To16P3g6vZoWXkPyhtMdyrTDsc3E/85AVOhrStiaLL0QkJxQWi1s42ZFV7E0B/dGR4F0
+         02QUgqCUDxuMVqFUmcP6KCkycGp6GZWLZ330zDoB4KTNrSgd7e6tXHMIkgEjZzFGif3a
+         9P/uJxndsj2D+2Aa+3sngV7kJ9XgKZs8FoOOZDtqlDB1U+AdecRmLDzWpvuBFXe+ZhWM
+         2zu5Ny4ZaZwbSUelpARiQ6QGsWeBfQxB2khjm7WdYsakuEQrpHFNhsMbciuWnqpNDdyI
+         DDdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785955579; x=1786560379;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=oraTB2zvKCroH6GNMJ43qFqh2yfzAvZ70RBsZUY2AEc=;
+        b=EPeE91Bz7YEFetgjkEtEJ/HIKyQn+8E1Ctah6bTqaXht22YQrHl5ow+YsuLxMj+79s
+         cys06SdcCtXerIyzHTFCx4maHQ4GV++rkqvUrOZqlCkYFLd33hC9XgthYGMqK8zbjBoA
+         BwpSSFAi2tc7UNruFxD9Jdz5J3xMS5cloyGWRXtyme1OBW9ndcJtbHnsntr/tEf06Hil
+         Ivlwnn7lozCy0XCbsW7fs1ZeursQ93VVyfd8EOCQZr3QtMfAdl9hY70qQI/j4cri+pH1
+         6AWiLUiwYEZeC5SjGPthMC9qcZIrbqDMfgkoQ5I3r7zgNa7eG6mxD3MJ2IcvFdS1OXQ5
+         sm7Q==
+X-Gm-Message-State: AOJu0YycSbVQwfBhzMzJZX596T52pUcGScpQBF9et4YmVvYZ5s3KLWwP
+	1wLuhHbTmvXpGk+PszeU47RtQTIoi8uXMeq7tbzJOjewPBnibaskaHrJ+H9yAZIlsD+QweJk/lX
+	ZRWztjl//3NV7UXab4MA77a12Kv5uKII=
+X-Gm-Gg: AR+sD10sx/eoiUBjsx57NcNsB6njx3m6p+WpcOIIl6aMGJKz//UPnGxlMvG0TzHQGe6
+	Rx6GjUVtsqmMJfyKS64cnHDix1hIf7v8A63LByzVb1JFFujJ+WyVvBDh3tskINJlddcc2hqy6wv
+	8rY6NFNqB7tnsQKA7xpapQXYjYd1cFsk/tzFKj2PMsIG/mTqYNRWhjBzVLbSvQ7tiSU4pKre7TQ
+	uG0XHlIyLiWIwFmj8fbc/SPbWUVX6ZU+XH5zV96rg6Oc2c5bC1YutGVCbpOJUfNjfr0ZW7Cqx6u
+	qNJI1kU4FgD1FI8+f2Xml8P7In8BI0/xPP524rzbnyIntH3raECRFgyECgOep7EO/zR6N6cHSck
+	BR5HqSXprnWvLLV5WhhhiKnQwkg==
+X-Received: by 2002:a05:6a00:9517:b0:84e:e809:dd49 with SMTP id
+ d2e1a72fcca58-84f2e12d02bmr9403279b3a.36.1785955579296; Wed, 05 Aug 2026
+ 11:46:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28083/Wed Aug  5 08:24:50 2026)
+References: <20260805060228.2703051-1-Jeremy.Jean@oss.cyber.gouv.fr>
+In-Reply-To: <20260805060228.2703051-1-Jeremy.Jean@oss.cyber.gouv.fr>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 5 Aug 2026 11:46:06 -0700
+X-Gm-Features: AUfX_mz14l4BoLCHjdW3KnF8TblLUAl2yEU1dQ_INvK4a0wgPeZvuMP7ST-djpU
+Message-ID: <CAEf4BzbQ3qURHOpFL4feXqOpggJJupp7NzPMU1jeH_p4CuvLWg@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf] bpf: harden bloom filter sizing and indexing on
+ 32-bit kernels
+To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>
+Cc: bpf@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A 32-bit write records the writing instruction in reg->subreg_def, and a
-later 64-bit read of that register calls mark_insn_zext() to record that
-the definition has to be zero extended. Architectures whose JIT sets
-bpf_jit_needs_zext() rely on that mark to emit the extension.
+On Tue, Aug 4, 2026 at 11:03=E2=80=AFPM J=C3=A9r=C3=A9my Jean
+<Jeremy.Jean@oss.cyber.gouv.fr> wrote:
+>
+> bloom_map_alloc() has two 32-bit-specific problems when the computed
+> bitmap reaches the U32_MAX fallback case.
+>
+> First, BITS_TO_BYTES(U32_MAX) is evaluated with 32-bit arithmetic. The
+> addition performed by DIV_ROUND_UP wraps, so the map allocates only the
+> fixed-size bloom filter object while keeping bitset_mask =3D=3D U32_MAX.
+> Subsequent updates can then write past the allocated object.
+>
+> Second, fixing only the allocation size is not sufficient. The bloom hash
+> is a u32, but set_bit() takes a signed long bit number and x86 test_bit()
+> eventually feeds the index to variable_test_bit(long, ...). On 32-bit
+> kernels, hashes in [0x80000000, U32_MAX] therefore become negative bit
+> offsets. x86 bt/bts with a memory operand interpret those offsets relativ=
+e
+> to the supplied base, so a map with bitset_mask =3D=3D U32_MAX can read o=
+r
+> write before bloom->bitset even after allocating the full 512 MiB bitmap.
+>
+> Keep the U32_MAX fallback, but split each hash into a word pointer and an
+> in-word bit number before calling test_bit() or set_bit(). The bitops
+> argument is then always in [0, BITS_PER_LONG - 1], while BIT_WORD(h) stil=
+l
+> selects the intended word in the full bitmap.
+>
+> Compute the bitset size from (u64)bitset_mask + 1 before passing the fina=
+l
+> size to bpf_map_area_alloc(). This fixes the original under-allocation an=
+d
+> keeps the allocated storage consistent with the addressable bitset.
+>
+> Exploitation note: local privilege escalation is possible on a 32-bit x86
+> kernel using the under-allocation bug from a binary with CAP_BPF.
+>
+> Fixes: 9330986c0300 ("bpf: Add bloom filter map implementation")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: J=C3=A9r=C3=A9my Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+> Assisted-by: Codex:gpt-5
+> ---
+> v1: https://lore.kernel.org/bpf/20260731204917.3845309-1-Jeremy.Jean@oss.=
+cyber.gouv.fr/
+> v2: https://lore.kernel.org/bpf/20260801083436.4014218-1-Jeremy.Jean@oss.=
+cyber.gouv.fr/
+>
+> Changes in v3:
+> - Address change request simplification from Andrii
+>
+> Changes in v2:
+> - Address AI reviews.
+> - Split full-width hashes into a word pointer and an in-word bit number
+>   before calling bitops, so upper-half u32 hashes cannot become negative
+>   offsets on 32-bit kernels.
+> - Drop the redundant final u64 add-overflow check; bitset_bytes is bounde=
+d
+>   at 512 MiB once it is computed from bitset_mask.
+>
+>  kernel/bpf/bloom_filter.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/kernel/bpf/bloom_filter.c b/kernel/bpf/bloom_filter.c
+> index b73336c..b63839d 100644
+> --- a/kernel/bpf/bloom_filter.c
+> +++ b/kernel/bpf/bloom_filter.c
+> @@ -41,7 +41,8 @@ static long bloom_map_peek_elem(struct bpf_map *map, vo=
+id *value)
+>
+>         for (i =3D 0; i < bloom->nr_hash_funcs; i++) {
+>                 h =3D hash(bloom, value, map->value_size, i);
+> -               if (!test_bit(h, bloom->bitset))
+> +               if (!test_bit(h % BITS_PER_LONG,
+> +                             bloom->bitset + BIT_WORD(h)))
 
-The mark is produced by walking the path from the definition to the read.
-If the walk stops at a state equivalent to an already explored one, the
-reads the explored path performs from there on are not repeated for this
-path's registers, so a definition whose only 64-bit read lies beyond the
-pruning point never gets marked and keeps a garbage upper half.
+this fits on single line, fixed while applying, pushed to bpf-next, thanks
 
-Example with BPF_F_TEST_STATE_FREQ making every instruction a checkpoint:
-
-      r7 = *(u32 *)(r1 + offsetof(struct __sk_buff, len))
-      r6 = 0        /* 64-bit define */
-      if r7 != 0 goto l1
-      goto l0                              path A, explored first
-  l1: w6 = 0        /* 32-bit define */    path B, explored second
-  l0: r0 = r6       /* 64-bit read   */
-      r0 >>= 32
-      exit
-
-Now, path A is the fall-through of the conditional and is explored first.
-It reaches l0 with r6 defined by the 64-bit r6 = 0, so reg->subreg_def is
-DEF_NOT_SUBREG and the read marks nothing. The walk runs on to exit and
-leaves a checkpoint at every instruction along the way. Path B is explored
-second. w6 = 0 sets r6->subreg_def to that instruction, so a zero extension
-is pending and only the 64-bit read at l0 can resolve it. B then arrives
-at l0, where bpf_is_state_visited() finds the checkpoint A left behind:
-r6 is the scalar 0 in both states, so they are equivalent and B is pruned
-before r0 = r6 is verified.
-
-Without the fix nothing happens at that point, so the one read that would
-have called mark_insn_zext() for w6 is never walked and the definition
-stays unmarked:
-
-  l1: w6 = 0        /* subreg_def = w6, pending */
-  l0: r0 = r6     <--- B pruned, read never walked, w6 stays unmarked
-
-The JIT of an architecture that needs explicit zero extension then emits
-none, and the upper half of w6's definition is left undefined (under
-BPF_F_TEST_RND_HI32 it holds the randomized half, which r0 >>= 32 returns).
-This used to be handled by the registers chain based liveness: the
-propagate_liveness() called mark_insn_zext() for every parent register
-whose read mark was REG_LIVE_READ64, which carried the requirement across
-a pruned state. Commit 107e16979905 ("bpf: disable and remove registers
-chain based liveness") removed that machinery and with it the propagation,
-leaving the mark dependent on the path actually being walked.
-
-Mark the pending definitions where the walk stops instead, i.e. on the way
-into the prune rather than at the read that is no longer reached:
-
-  l1: w6 = 0        /* subreg_def = w6, pending */
-  l0: r0 = r6     <--- mark w6, r6 is live here
-
-The set of registers to mark is the one the pruning decision was made on:
-func_states_equal() compares the registers live at the instruction, per
-insn_aux_data[].live_regs_before, and those are exactly the registers that
-can still be read. A register that is not live there is never read again
-and needs nothing. This is conservative in one direction: a live register
-whose remaining reads are all 32-bit also gets its definition marked,
-which costs a zero extension that is not needed. However, it never marks
-too little, and it does not weaken pruning. On x86-64 the effect is only
-observable with BPF_F_TEST_RND_HI32.
-
-The one live scalar whose subreg_def can point at a call insn is r0 of a
-kfunc returning a 32-bit value. Marking that one is harmless, the fixup pass
-skips kfunc calls since their zero extension is done by the caller.
-
-Fixes: 107e16979905 ("bpf: disable and remove registers chain based liveness")
-Reported-by: STAR Labs SG <info@starlabs.sg>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/states.c          |  2 ++
- kernel/bpf/verifier.c        | 38 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+)
-
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index a2a40caca0a0..0952fa5649db 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1212,6 +1212,8 @@ void bpf_clear_singular_ids(struct bpf_verifier_env *env, struct bpf_verifier_st
- int bpf_mark_chain_precision(struct bpf_verifier_env *env,
- 			     struct bpf_verifier_state *starting_state,
- 			     int regno, bool *changed);
-+void bpf_mark_live_subregs_zext(struct bpf_verifier_env *env,
-+				struct bpf_verifier_state *vstate);
- 
- static inline int bpf_get_spi(s32 off)
- {
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index ea2153cf28d0..24009a606249 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -1405,6 +1405,8 @@ int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
- hit:
- 			sl->hit_cnt++;
- 
-+			bpf_mark_live_subregs_zext(env, cur);
-+
- 			/* if previous state reached the exit with precision and
- 			 * current state is equivalent to it (except precision marks)
- 			 * the precision needs to be propagated back in
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 09588b7b08b0..e62b350b37af 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3161,6 +3161,44 @@ static void mark_insn_zext(struct bpf_verifier_env *env,
- 	reg->subreg_def = DEF_NOT_SUBREG;
- }
- 
-+/*
-+ * Reaching a state equivalent to an already explored one stops the walk, so a
-+ * register that still carries a subreg_def may have its only 64-bit read on
-+ * the path that is no longer walked, and without the mark the JIT of an
-+ * architecture that needs explicit zero extension leaves the upper half of the
-+ * definition undefined. Mark the definitions of the registers live at this
-+ * instruction, i.e. the ones the equivalence was decided on and thus the only
-+ * ones that can still be read. This is conservative in that a live register
-+ * which is only ever read as a sub-register also gets its definition marked,
-+ * at the cost of a zero extension that is not needed.
-+ *
-+ * Only scalars are considered since a live_regs_before bit does not imply that
-+ * the register holds a readable value: the caller saved regs of a frame below
-+ * the current one are clobbered to NOT_INIT at the call while keeping the
-+ * subreg_def of the call insn. Such a definition must not be marked, the call
-+ * insn has no destination register to zero extend.
-+ */
-+void bpf_mark_live_subregs_zext(struct bpf_verifier_env *env,
-+				struct bpf_verifier_state *vstate)
-+{
-+	struct bpf_insn_aux_data *aux = env->insn_aux_data;
-+	struct bpf_func_state *func;
-+	u16 live_regs;
-+	int i, j;
-+
-+	for (i = vstate->curframe; i >= 0; i--) {
-+		live_regs = aux[bpf_frame_insn_idx(vstate, i)].live_regs_before;
-+		func = vstate->frame[i];
-+		for (j = 0; j < BPF_REG_FP; j++) {
-+			if (!(live_regs & BIT(j)))
-+				continue;
-+			if (func->regs[j].type != SCALAR_VALUE)
-+				continue;
-+			mark_insn_zext(env, &func->regs[j]);
-+		}
-+	}
-+}
-+
- static int __check_reg_arg(struct bpf_verifier_env *env, struct bpf_reg_state *regs, u32 regno,
- 			   enum bpf_reg_arg_type t)
- {
--- 
-2.43.0
-
+>                         return -ENOENT;
+>         }
+>
+> @@ -57,9 +58,13 @@ static long bloom_map_push_elem(struct bpf_map *map, v=
+oid *value, u64 flags)
+>         if (flags !=3D BPF_ANY)
+>                 return -EINVAL;
+>
+> +       /*
+> +        * On 32-bit architectures, hashes larger than INT_MAX would be
+> +        * treated as negative by set_bit().
+> +        */
+>         for (i =3D 0; i < bloom->nr_hash_funcs; i++) {
+>                 h =3D hash(bloom, value, map->value_size, i);
+> -               set_bit(h, bloom->bitset);
+> +               set_bit(h % BITS_PER_LONG, bloom->bitset + BIT_WORD(h));
+>         }
+>
+>         return 0;
+> @@ -94,9 +99,10 @@ static int bloom_map_alloc_check(union bpf_attr *attr)
+>
+>  static struct bpf_map *bloom_map_alloc(union bpf_attr *attr)
+>  {
+> -       u32 bitset_bytes, bitset_mask, nr_hash_funcs, nr_bits;
+> +       u32 bitset_mask, nr_hash_funcs, nr_bits;
+>         int numa_node =3D bpf_map_attr_numa_node(attr);
+>         struct bpf_bloom_filter *bloom;
+> +       u64 bitset_bytes;
+>
+>         if (attr->key_size !=3D 0 || attr->value_size =3D=3D 0 ||
+>             attr->max_entries =3D=3D 0 ||
+> @@ -127,22 +133,16 @@ static struct bpf_map *bloom_map_alloc(union bpf_at=
+tr *attr)
+>         if (check_mul_overflow(attr->max_entries, nr_hash_funcs, &nr_bits=
+) ||
+>             check_mul_overflow(nr_bits / 5, (u32)7, &nr_bits) ||
+>             nr_bits > (1UL << 31)) {
+> -               /* The bit array size is 2^32 bits but to avoid overflowi=
+ng the
+> -                * u32, we use U32_MAX, which will round up to the equiva=
+lent
+> -                * number of bytes
+> -                */
+> -               bitset_bytes =3D BITS_TO_BYTES(U32_MAX);
+>                 bitset_mask =3D U32_MAX;
+>         } else {
+>                 if (nr_bits <=3D BITS_PER_LONG)
+>                         nr_bits =3D BITS_PER_LONG;
+>                 else
+>                         nr_bits =3D roundup_pow_of_two(nr_bits);
+> -               bitset_bytes =3D BITS_TO_BYTES(nr_bits);
+>                 bitset_mask =3D nr_bits - 1;
+>         }
+>
+> -       bitset_bytes =3D roundup(bitset_bytes, sizeof(unsigned long));
+> +       bitset_bytes =3D BITS_TO_LONGS((u64)bitset_mask + 1) * sizeof(uns=
+igned long);
+>         bloom =3D bpf_map_area_alloc(sizeof(*bloom) + bitset_bytes, numa_=
+node);
+>
+>         if (!bloom)
+> --
+> 2.47.3
+>
