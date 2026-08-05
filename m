@@ -1,207 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A4037B02D
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 04:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6260330D40F;
+	Wed,  5 Aug 2026 04:19:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785903458; cv=none; b=hm1YLQRdbTKmJMtIGeerX9KvhkeA11sSqzRNIIe5osO2VzzZ1OGaT0DgPgEA7TGOSwGkeG00Tp82W876BWiJRn1pzKi3wMJOlZ3KnCgZ20L9yEK9TzEHR77gWAN3LTFKuwIkyWr4/uFB6r4OZsDp8gmjN1lZuoyBWCbORawik1I=
+	t=1785903548; cv=none; b=qKCCZY90iqCfxHTKl/oQY7b6k0/kdIHVZDUE7+QAH/5XDwm73Dl62yemiAtaL/9ajqT9JTIlyYEhpxbL0ilEo6xBciGW7/GorXQkS36gFI2h+MXVvet5++SM43DPfbZmjKwh9AQ8I8nnY/6MvsB/eiGuNX6zRIThJb5Tc5Xx/cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785903458; c=relaxed/simple;
-	bh=RYAby9zss7E4DwvdxRfXtI1/miRQku9AFq/DuXtjRPs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UZ+6hlJQl4F/dzFRsktx6yJ+9V5sx4y1wdTd2POq4WshbypDupvUzhCRzVyBCyX7pyirpC62PbI/UWLVOIEDXbRU8w9PDLkaFzrDp4YGDrvY/S4/MurMfSTAPzQ+klZ+VzMg3m9iZquwqUcpT9T+cBOxtf7rjB7YIwrduuVwkik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GKsSEkRU; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GKsSEkRU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957931F000E9;
-	Wed,  5 Aug 2026 04:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785903456;
-	bh=OtWxir51DSbFNgqiOwVXwB58exlGlvd6l14UWSjj0wo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GKsSEkRUylonB0vm2kkhPabrV3vLp3sHbSMJf5hv0XhG016oDjcfIT5bqCBfolEYv
-	 ih2O18EHV/vtBnqNNRHQqpaiGbIfwXc03oJYz9LgDY+iYT4BhvQrbQCMjSfl1hlDTF
-	 O0whtzEax49w886fk5Vk9UJEwmFW5ci5ViY0q1+wHpQYNZogclSp7ZL5b9AJeMizO/
-	 W6yEgBMreoeIwunuU1JHbv5H/n4bsFcASe7+USHpsFg4KyOd1KN9qKU9uBIMu88MYu
-	 KQxxkwI7eXKSYEAfveRq+v9/cpDdiiPIOnjinAdIqsxjn9krJcwmMZJy5wlwbLTrxp
-	 ZLZN0KI9N/LYw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Fix UAF in
- bpf_trampoline_multi_detach on update failure
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hui Zhu" <hui.zhu@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <0276810360a8c0e57aab95a292ff6453242b969c.1785902527.git.zhuhui@kylinos.cn>
-References: <cover.1785902527.git.zhuhui@kylinos.cn>
- <0276810360a8c0e57aab95a292ff6453242b969c.1785902527.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 05 Aug 2026 04:17:35 +0000
-Message-Id: <20260805041736.957931F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1785903548; c=relaxed/simple;
+	bh=oZJZraMK13FyH+wy77uTJ6GK383KIsW0v9B1IgSt8tk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QN5Nzy5a4I7pQnGAWzLtB/Us5GL7/gtXorPv+YcMlev6TuZWcX5nfppOuQO1LGlOdL/Zvl3PYB5AypVHJUeHb8VAIEFkQ+6MjsbIoMZEP6pEevAjb2Ep7ESRKBmzyPWz/RgRkxwvJD5FjGpGavOd7YMXaI/9zL4c5jKCOGbr2oI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hFHFq1k0GzYQtwG;
+	Wed,  5 Aug 2026 12:18:07 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id ACAA24056E;
+	Wed,  5 Aug 2026 12:18:59 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAnY8+zuXJqh8mqBA--.10709S2;
+	Wed, 05 Aug 2026 12:18:59 +0800 (CST)
+Message-ID: <5e5c449a-7453-486d-ac42-b2e3f70330ca@huaweicloud.com>
+Date: Wed, 5 Aug 2026 12:18:58 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v4] bpf: Fix UAF when reading prog type in
+ bpf_mprog_link
+Content-Language: en-US
+To: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Pu Lehui <pulehui@huawei.com>
+References: <20260728074223.2831773-1-pulehui@huaweicloud.com>
+ <da7357fe-9d64-4e9c-a0f6-573a9761c8b2@iogearbox.net>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <da7357fe-9d64-4e9c-a0f6-573a9761c8b2@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgAnY8+zuXJqh8mqBA--.10709S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3XFWfGrykKrWUJFWrZw47urg_yoW7KF47pF
+	s5JryUGryUWr18Xr1Utr1UAryUXr1UJ3WUJr1UXF1UAr17Xr1jqr4UWr1Ygr15Jr4kGr48
+	Jr1jqrnrZryUXr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUb
+	mii3UUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
 
-New issues:
-- [Low] Multi-line comment opening `/*` is not on its own line.
+On 2026/8/4 3:00, Daniel Borkmann wrote:
+> On 7/28/26 9:42 AM, Pu Lehui wrote:
+>> From: Pu Lehui <pulehui@huawei.com>
+>>
+>> In bpf_mprog_link, the code currently allows a user to pass an abnormal
+>> non-netkit or non-tcx link via relative_fd. If a concurrent
+>> BPF_LINK_UPDATE is performed on this abnormal link before dereferencing
+>> link->prog->type in bpf_mprog_link(), it can trigger a UAF issue.
+>>
+>> CPU0                                      CPU1
+>> netkit_link_prog_attach
+>> bpf_mprog_attach
+>> bpf_mprog_tuple_relative
+>> bpf_mprog_link
+>>    /* non-netkit or non-tcx link */
+>>    link = bpf_link_get_from_fd(id_or_fd);
+>>                                            BPF_LINK_UPDATE on relative 
+>> link
+>>                                            ...
+>>                                            old_prog = 
+>> xchg(&link->link.prog, new_prog);
+>>                                            bpf_prog_put(old_prog);
+>>    if (type && link->prog->type != type) <-- trigger UAF
+>>
+>> The reason for the UAF is that each subsystem provides its own
+>> protection for link->prog. Since there is no cross subsystem protection
+>> (if not considering the RCU of prog tear down), dereferencing the prog
+>> of an anchor link that does not belong to the current subsystem is not
+>> safe: it may have been freed.
+>>
+>> To resolve this, we access link->prog under RCU protection to safely
+>> fetch the pointer and guarantee its lifetime during the type check.
+>> Meanwhile, add a comment explaining that when ptype == UNSPEC in
+>> bpf_mprog_detach, it acts as a wildcard.
+>>
+>> Fixes: 053c8e1f235d ("bpf: Add generic attach/detach/query API for 
+>> multi-progs")
+>> Reported-by: Sashiko <sashiko-bot@kernel.org>
+>> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>> ---
+>> v4:
+>> - Access prog->type under rcu protection to simplify the repair logic,
+>>    and let unconditional detachment make sense when the bare prog or
+>>    link->prog being detached is NULL.
+>> - Add Reviewed-by tag by Emil.
+>> - Separate from patchset [0]. (Andrii)
+>>
+>> Link: 
+>> https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@huaweicloud.com [0]
+>>
+>> v3: 
+>> https://lore.kernel.org/bpf/20260722072326.1545677-3-pulehui@huaweicloud.com
+>> - BPF_F_LINK flag set means the relative id_or_fd is a link, not the 
+>> object being
+>>    attached. We can not get the link while attach a bare prog with 
+>> relative link.
+>>    So passing expected link type from callers of 
+>> bpf_mprog_attach/detach. (Sashiko)
+>> - Add comment to explain that why ptype == UNSPEC. (Emil)
+>>
+>> v2: 
+>> https://lore.kernel.org/bpf/20260721041048.1394085-3-pulehui@huaweicloud.com
+>> - Improve commit msg for patch 2. (Amery)
+>>
+>> v1: 
+>> https://lore.kernel.org/bpf/20260720134547.1289964-3-pulehui@huaweicloud.com
+>>
+>>   kernel/bpf/mprog.c | 17 +++++++++++++----
+>>   1 file changed, 13 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
+>> index 1394168062e8..af3e6c1c6a1f 100644
+>> --- a/kernel/bpf/mprog.c
+>> +++ b/kernel/bpf/mprog.c
+>> @@ -10,6 +10,8 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
+>>   {
+>>       struct bpf_link *link = ERR_PTR(-EINVAL);
+>>       bool id = flags & BPF_F_ID;
+>> +    bool type_mismatch = false;
+>> +    struct bpf_prog *prog;
+>>       if (id)
+>>           link = bpf_link_by_id(id_or_fd);
+>> @@ -17,13 +19,20 @@ static int bpf_mprog_link(struct bpf_tuple *tuple,
+>>           link = bpf_link_get_from_fd(id_or_fd);
+>>       if (IS_ERR(link))
+>>           return PTR_ERR(link);
+>> -    if (type && link->prog->type != type) {
+>> +
+>> +    rcu_read_lock();
+>> +    prog = READ_ONCE(link->prog);
+>> +    if (!prog || (type && prog->type != type))
+>> +        type_mismatch = true;
+>> +    rcu_read_unlock();
+> 
+> Hm, what about progs under rcu_read_lock_trace cases, wouldn't the UAF
+> still be there?
+> 
+> Even though the diff is smaller, I'd kind of lean towards link->type
+> testing since this addresses the underlying issue and avoids touching
+> the prog completely.. do you want me to look into it and also add a
+> BPF selftest to it as patch 2/2?
 
-Pre-existing issues:
-- [High] Incomplete fix: Use-After-Free of `bpf_prog` when `__bpf_trampolin=
-e_unlink_prog()` fails.
-- [High] Use-After-Free of trampoline image in `bpf_trampoline_multi_attach=
-` error path.
---
+Hi Daniel, that would be awesome! I'd be very happy for you to look into 
+it and add the selftest.
 
---- Patch [1]: [PATCH bpf-next v2 1/3] bpf: Fix UAF in bpf_trampoline_multi=
-_detach on update failure ---
-commit 26ad7c4ab94aa890dec18cbc899359aabf65c015
-Author: Hui Zhu <zhuhui@kylinos.cn>
+FWIW, I actually tried the link->type check earlier [0], but it seemed 
+to remove the wildcard semantics during detach and might break the 
+interface. Thanks a lot!
 
-    bpf: Fix UAF in bpf_trampoline_multi_detach on update failure
-   =20
-    The commit attempts to fix Use-After-Free issues in the error paths of
-    bpf_trampoline_multi_detach() by changing when old_image is freed and
-    introducing a rollback mechanism when ftrace updates fail. It pins the
-    bpf_prog onto the image to avoid freeing it while ftrace might still
-    direct calls to it.
+[0] 
+https://lore.kernel.org/bpf/20260722072326.1545677-3-pulehui@huaweicloud.com
 
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index ed7999ad6c66c..c08d1a09e6381 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-[ ... ]
-> @@ -1719,11 +1760,11 @@ int bpf_trampoline_multi_attach(struct bpf_prog *=
-prog, u32 *ids,
->  	return err;
->  }
-> =20
-> -int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracin=
-g_multi_link *link)
-> +void bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_traci=
-ng_multi_link *link)
->  {
->  	struct bpf_tracing_multi_data *data =3D &link->data;
->  	struct bpf_tracing_multi_node *mnode;
-> -	int i, err;
-> +	int i, err, err_unreg =3D 0, err_mod =3D 0;
-> =20
->  	trampoline_lock_all();
-> =20
-> @@ -1735,13 +1776,65 @@ int bpf_trampoline_multi_detach(struct bpf_prog *=
-prog, struct bpf_tracing_multi_
->  		WARN_ONCE(err, "__bpf_trampoline_unlink_prog failed: %d\n", err);
->  	}
-> =20
-> -	if (ftrace_hash_count(data->unreg))
-> -		WARN_ON_ONCE(update_ftrace_direct_del(&direct_ops, data->unreg));
-> -	if (ftrace_hash_count(data->modify))
-> -		WARN_ON_ONCE(update_ftrace_direct_mod(&direct_ops, data->modify, true)=
-);
-> +	if (ftrace_hash_count(data->unreg)) {
-> +		err_unreg =3D update_ftrace_direct_del(&direct_ops, data->unreg);
-> +		WARN_ON_ONCE(err_unreg);
-> +	}
-> +	if (ftrace_hash_count(data->modify)) {
-> +		err_mod =3D update_ftrace_direct_mod(&direct_ops, data->modify, true);
-> +		WARN_ON_ONCE(err_mod);
-> +	}
-> =20
-> -	for_each_mnode(mnode, link)
-> -		bpf_trampoline_multi_attach_free(mnode->trampoline);
-> +	for_each_mnode(mnode, link) {
-> +		struct bpf_trampoline *tr =3D mnode->trampoline;
-> +
-> +		/* If the batch ftrace update failed for this mnode's path,
-> +		 * ftrace still points to old_image. Use rollback to restore
+> 
+>> +    if (type_mismatch) {
+>>           bpf_link_put(link);
+>>           return -EINVAL;
+>>       }
+>>       tuple->link = link;
+>> -    tuple->prog = link->prog;
+>> +    tuple->prog = prog;
+>>       return 0;
+>>   }
+>> @@ -343,8 +352,8 @@ int bpf_mprog_detach(struct bpf_mprog_entry *entry,
+>>       if (!bpf_mprog_total(entry))
+>>           return -ENOENT;
+>>       ret = bpf_mprog_tuple_relative(&rtuple, id_or_fd, flags,
+>> -                       prog ? prog->type :
+>> -                       BPF_PROG_TYPE_UNSPEC);
+>> +                       /* Use UNSPEC as wildcard when prog is NULL */
+>> +                       prog ? prog->type : BPF_PROG_TYPE_UNSPEC);
+>>       if (ret)
+>>           return ret;
+>>       if (dtuple.prog) {
 
-[Severity: Low]
-Does this multi-line comment violate the BPF subsystem guidelines? The
-opening /* of a multi-line comment must be on its own line.
-
-> +		 * cur_image to old_image (putting the new cur_image if any)
-> +		 * so the trampoline keeps the image ftrace is calling.
-[ ... ]
-> +		 * image if the trampoline is torn down first instead (see
-> +		 * bpf_trampoline_put()).
-> +		 */
-> +		if (tr->multi_attach.old_image &&
-> +		    tr->multi_attach.old_image !=3D tr->cur_image &&
-> +		    ((err_unreg && !tr->cur_image) ||
-> +		     (err_mod && tr->cur_image))) {
-
-[Severity: High]
-This is a pre-existing issue, but does this incomplete fix lead to a
-Use-After-Free of the bpf_prog structure if __bpf_trampoline_unlink_prog()
-fails?
-
-When __bpf_trampoline_unlink_prog() fails, old_image equals cur_image,
-so this condition evaluates to false, bypassing the logic to pin the
-bpf_prog onto the retained image. This allows the caller to release its
-reference to the bpf_prog and free it, even though the active ftrace
-trampoline image still contains a direct machine-code call to the freed
-prog.
-
-A similar missing pinning logic exists in the non-multi caller of
-__bpf_trampoline_unlink_prog() where it directly returns the failure of
-bpf_trampoline_update() without pinning the prog:
-
-kernel/bpf/trampoline.c:__bpf_trampoline_unlink_prog() {
-    ...
-	bpf_trampoline_remove_prog(tr, node);
-	return bpf_trampoline_update(tr, true /* lock_direct_mutex */, ops, data);
-}
-
-> +			WARN_ON_ONCE(tr->multi_attach.old_image->pinned_prog);
-> +			bpf_prog_inc(prog);
-> +			tr->multi_attach.old_image->pinned_prog =3D prog;
-> +			bpf_trampoline_multi_attach_rollback(tr);
-> +		} else {
-> +			bpf_trampoline_multi_attach_free(tr);
-> +		}
-> +	}
-> =20
->  	trampoline_unlock_all();
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does the error path in
-bpf_trampoline_multi_attach() cause a Use-After-Free of the trampoline
-image?
-
-If update_ftrace_direct_del() fails during rollback:
-
-kernel/bpf/trampoline.c:bpf_trampoline_multi_attach() {
-    ...
-	if (ftrace_hash_count(data->modify)) {
-		err =3D update_ftrace_direct_mod(&direct_ops, data->modify, true);
-		if (err) {
-			if (ftrace_hash_count(data->reg))
-				WARN_ON_ONCE(update_ftrace_direct_del(&direct_ops, data->reg));
-			goto rollback_unlink;
-		}
-	}
-    ...
-}
-
-It proceeds blindly to rollback_unlink, which calls
-bpf_trampoline_multi_attach_rollback():
-
-kernel/bpf/trampoline.c:bpf_trampoline_multi_attach_rollback() {
-    ...
-	if (tr->cur_image)
-		bpf_tramp_image_put(tr->cur_image);
-    ...
-}
-
-Does this unconditionally free the newly allocated trampoline images even
-when update_ftrace_direct_del() fails, leading to a UAF since ftrace
-is still actively pointing to them?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1785902527.gi=
-t.zhuhui@kylinos.cn?part=3D1
