@@ -1,109 +1,111 @@
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA533D5C38;
-	Wed,  5 Aug 2026 07:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9506D3E558A
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 08:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785916685; cv=none; b=ciXquILyzHOV6XZTBSnmWel1b+ZaFRPF65iTjD2EIB73LuaGhalXunra199pci6/Dr5UzwQqh2W2TUgnYssxXyPLufg9yZ0MkTNnSUQ6532c+hMwl9o10dD/vP5TRkiQr5fuVdHVWQkC8lGE5qWi6DaMmRtmM0Fn3If2qew4Z+8=
+	t=1785916823; cv=none; b=VmiGZuHeLqDEpUdjXwNe7q/P+RObf2EwCHdBmxlAnh4IqdRrUwlarladBFYBy7xH77/RvqNNnwjGh2A9G2M1vD41nNj8qoSJrORSCEXnJ+pjDAyH1uamJFPhnHTIJGurdua+q3Dw9/N56FqZWtXX2oSTc/4l0vC80jhj8XLWi8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785916685; c=relaxed/simple;
-	bh=IlIpVVDCu2/pBkVBAV+9IjOtvtLRfuxo5io91gQRtsQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WEaEwbI8MQWHwi6PmAG4/t73LZgqaVjlpAtcdU7sNbzZDtFulYKqinUdX2m3x6MwvdeuEMcELVgQSIPBnIrVjyUl8TIJ2PNvGq1KQ6HBwWY0DUr5GEbuZCtMycXg29kdcAjBIKz+sXVPxd78RcxkYWCsskGC/KQAphpTFw74xck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=XOcvAYqF; arc=none smtp.client-ip=54.206.34.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1785916823; c=relaxed/simple;
+	bh=5rKMMPjZfyBh34XncWy6OpAC8bc8/u1GLvwXUhf45j4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZX/poeumnuVaPFLDkJLuChIv5A4qL367JxqLfBEIbfFHi9CEvpjtzKO6nZ+Ntg2Op7Tpci3rUQyH1QeE10Jytw4KSAvLg3rmFxizyNJ5hhEAuc7s40sBHrxpHyX1QI+y6p7cphQsbsvumnjjar8FEIGUMvLk9nPeMfri9NzE/lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pwul3Ajd; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="XOcvAYqF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1785916637;
-	bh=uXnfGp795oGSOt+y84mHcpLytElAWA60JD/wU/dd3cs=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=XOcvAYqFIQ2oRxQlWlCSsJEvHWMsP2FHSoizeFmQeEa2WC6yUjpGyuXzAT7//HK94
-	 UhsNqmHWfUVfRp5cZcnMYfA8X6tUzjat46kR1PM0s1LnwmFK6l9fzZ9hJIdCR/PzLu
-	 Y7BzS0OUxkyzjdLC1bvJvQxGZXGGyPEt8a8Gxzs0=
-X-QQ-mid: esmtpsz18t1785916619t352635b2
-X-QQ-Originating-IP: yiRvrg58MR+0yse8xrb2gtoz9/DcdT37SkPfgcFx0X0=
-Received: from uniontech.com ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 05 Aug 2026 15:56:57 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 10778487376398331387
-EX-QQ-RecipientCnt: 8
-From: Yichong Chen <chenyichong@uniontech.com>
-To: ebiggers@kernel.org,
-	tytso@mit.edu
-Cc: ast@kernel.org,
-	song@kernel.org,
-	fsverity@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yichong Chen <chenyichong@uniontech.com>
-Subject: [PATCH] fsverity: reject short BPF digest buffers
-Date: Wed,  5 Aug 2026 15:56:55 +0800
-Message-Id: <20260805075655.950308-1-chenyichong@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pwul3Ajd"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-ca00f126b7eso457603a12.2
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 01:00:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785916820; x=1786521620; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=5rKMMPjZfyBh34XncWy6OpAC8bc8/u1GLvwXUhf45j4=;
+        b=pwul3AjdNS0BfNDaZMTrsPqNGn28qKHKslotybrMoOkOjtdSbXFPKeDy8Tf0bvC0fs
+         mkcSPqfIU+5UhL8N76i9AEuft8NX/kH50xGH1OtappQ61y+ZFYZW3oOGZ4lytEpdkxWv
+         t72+QwLu3E2SeVEkI+WirjhFSQK/kiRG1dXwxQzKsAtNkcOq3kTDpva7K32TfL+XIEjj
+         +Er5p5+j7Hbd7T+FW/Q/CVEhQxtq1s8lKclBNXi/wN/+JprpwVcwU9ADvH/JPv59kh33
+         psQi9GJbF3hf03ei3Bjw88JNGb6uaES+rXDlnIQf/mlCko2CAMAE28d8KsxIj/KNXRrj
+         S+zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785916820; x=1786521620;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5rKMMPjZfyBh34XncWy6OpAC8bc8/u1GLvwXUhf45j4=;
+        b=R3uprRFSGYMqt8iOhK2a5FqFcwauqwb615/KxvZXUf0rbeibs7cuh07C9rQtbPMzZo
+         w7ba2kofmL5MVCoXE0MLQnd8UUeAx2ydt23xvqYcefvq3gqwal7hKviRNucasbY7CfYs
+         h7AgnM4w6Bx4X+bXc/mji6dJSWXiPIioi3mkgTqxkJHhrZx4MaBFIG8FVOYXJwvETOZu
+         dCxmBhEl4uaVJH8jolWKMlGVzz3c7ljUKmrkqnxfmLKIC/su3p+K+/06d3SwDJEA83EQ
+         SWqDeENnfWS+WH6ZdkHPCMS6XhVokmw1CMFnsT0lHAvWqn5v4u3vs168USVJpzA2iLu2
+         iVMA==
+X-Forwarded-Encrypted: i=1; AHgh+RqWP3i89KvPYbIB7JYE1zqVMbZrzQiMZFFYyOjtGygDE9kUdtL/VLnDeQvCQSL26uekTkM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXTnwlaaqNAa87IBOO0MuNuwDdTfZFF2/GG3Wp5dg3ph+FQBrW
+	XPV6tHJy9CCy6a2qtS3KOvJTwFcSpLb3t+vrPRLNWxntlz0cIbkno2hR
+X-Gm-Gg: AR+sD12yi6FOpN7O3OAjqiaoFOMCKCTxTFJAdVJq/0bHw/p73A3y6YcTvpPx49EmI9a
+	55qhafiiPxJeih6UY6onjbGCIxJpaqlbkH/pXos9yWgbEBYcJGRktmCf83ZmHVbxrGkP73utzZo
+	ylg/pXLchZe0ea8IE77xW8pny1mpzoVH8AEftPpT1gafUF+BpMkarRpFqIE5UxzFUtKYjPKvtKE
+	uXA07hu5GHSlQXC7tj9pdfvZkMHsnfvoesnxJyMK6dTL3vcZa4tiVgKEnADMgJtqvF3lP+cbebO
+	n467M7+HU+He5rgjM3o8sTofSrPS3+sTop97xuNe52BVvIpYkGBMdrX9IY7ksrAHOzADUuFFe+/
+	ejfFI4+XFEECa4KxS7xpBGaVWszeVjdd1yvmRA6w5x80O5+mlDM6ia6pDrwxDzQZBM8GzPdgmpo
+	gQLu/zcIdlw70WhrkRyK7BVbuqlxQT4a2oX42EtF8ealhPgUMmC8ctX5b8TspRz6GEn3frvOdal
+	hp4utK7x8V6GNpe
+X-Received: by 2002:a05:6a00:22cc:b0:848:2c6c:dfc0 with SMTP id d2e1a72fcca58-84f2e04ea1amr4864948b3a.24.1785916819838;
+        Wed, 05 Aug 2026 01:00:19 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f2e4d3f58sm551570b3a.39.2026.08.05.01.00.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Aug 2026 01:00:19 -0700 (PDT)
+Message-ID: <f65591b1944cad791a6f952f62e958b4b689a7a7.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 8/9] bpf, x86: Fix stack-passed arguments
+ for indirect trampolines
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Jiri Olsa <jolsa@kernel.org>, Tejun Heo <tj@kernel.org>, Alexei
+ Starovoitov	 <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Daniel
+ Borkmann	 <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>,
+ kkd@meta.com, 	kernel-team@meta.com
+Date: Wed, 05 Aug 2026 01:00:16 -0700
+In-Reply-To: <20260803125115.2264733-9-memxor@gmail.com>
+References: <20260803125115.2264733-1-memxor@gmail.com>
+	 <20260803125115.2264733-9-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: OXWhkXa0b/rwAtuWqU4FmVlXXEbmGCbDS2w1xII/8C0Pp5S/6stsOJsO
-	Wk9dHrcu+n/JUYkJwpZxmZnBTD4xg2sKNZKGxi6h3MCagqjs+sshNAO6oInh/xM9OsjUHT/
-	IvL1E62hvHooj9l4khLD6KFmI6cYlFq7PXpfSdcP+N7Z/8yyDsDWVriUoUKI+lELxPy8gIM
-	5x51XV5/KDmKh+xS8ZYBktRBJi7JB1ynjwEGeMW7y4gSIX5PGvF5cfv8LtF4ojaqvp3V2Jq
-	QD7EBavj9Cr9wb1jPnntOb4nHHvcf+6sVEIx7CQYcvu/GFmGaawNwSAY5oXUeJxyN/XqHWX
-	DMwlBMxHBPK+O/7XZjTW6Had87k7Dnu/QVq0dJ2yk58Zul+aspmDnBnVB2xmNezszqutA72
-	O7cr+ceeUD64f8C2cisGrq/4/OHCbSgliHgHtg/zki+G93KVV6YpWwE7tGIxopIB+V9xwLP
-	r/6z6TbJymKYWHmL5SDh0uqtAJP77n4+KjgVOoRn+53m82v9e5lSnuLivGXtlRPhi1ky0d6
-	LCBMJms2qz0rTsiQHZJuGHO7hkvVb8u5lDlCHdlfONfwIpPsWdYdTiT/fK6cr6WwDkPepsV
-	ZeJYvqkmD40IkNDOK1bB/gaCy1P9c8o9OXrcQlF9yYqjm2JoATBSCV/TnKY+e1z15RTLrFT
-	9k+zI+0Y+A/NUWDPrGLTq92dRNFV6O+lNQVZO10uKPzCQQAyA5Ngf9ddu/MW5YjYosJy6xF
-	Yuq0FSGDQfAtr39iMgcTe6pdcrVilDa64I8qXIcCDhRaDEMNhdd4NZ8jH2U3zpFrVYjkPbj
-	nBs8NL7FgdFVUxX+iob16DlNv4Bhr0gnJYjdJ/FmK45K/gGebJpRshB+avgvuOhTROgLRav
-	q/Fk+qpyw4ivYo3M4+DPiejS/IipsLHIkM3g18WpdnBos5d/Gf/RNo51Bqjig8XTCRTwsDH
-	iL3Xw+YFSrhVF0snIEqIbgfV1oaq+PwgN8+Nb8WLq/pEbchEWn/X4X9EYRYGY0iUBtBkpOQ
-	3cSyNNEdekNSPcAiMXDczdNSPt8xx1Vo7DB3Q7/FiZSberQjdS
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
-X-QQ-RECHKSPAM: 0
 
-bpf_get_fsverity_digest() reports the digest size as the full hash digest
-size.  However, when the provided dynptr only has room for part of the
-digest, the helper currently copies the truncated digest and still returns
-success.
+On Mon, 2026-08-03 at 14:51 +0200, Kumar Kartikeya Dwivedi wrote:
+> From: Tejun Heo <tj@kernel.org>
+>=20
+> save_args() reads stack-passed arguments relative to rbp assuming two
+> return addresses sit between the saved rbp and the arguments, which
+> holds when the trampoline is entered through the fentry call from a
+> traced function. An indirect trampoline is called through a function
+> pointer, so only the caller's return address is on the stack and the
+> arguments start at rbp + 16, not rbp + 24. Every stack-passed argument
+> of a struct_ops callback with more than six argument slots is read one
+> slot off.
+>=20
+> This has gone unnoticed because no in-tree struct_ops member passes
+> arguments on the stack. The jmp-entry form already accounts for having
+> a single return address; treat BPF_TRAMP_F_INDIRECT the same way.
+>=20
+> Fixes: 473e3150e30a ("bpf, x86: allow function arguments up to 12 for TRA=
+CING")
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-Returning success with a digest_size that is larger than the actual copied
-digest is misleading for integrity policy code.  Match the ioctl
-measurement path and reject too-small output buffers with -EOVERFLOW.
+Tested-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Fixes: 67814c00de31 ("bpf, fsverity: Add kfunc bpf_get_fsverity_digest")
-Signed-off-by: Yichong Chen <chenyichong@uniontech.com>
----
- fs/verity/measure.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/fs/verity/measure.c b/fs/verity/measure.c
-index cfe2d5e535f9..4cfadba95488 100644
---- a/fs/verity/measure.c
-+++ b/fs/verity/measure.c
-@@ -148,9 +148,11 @@ __bpf_kfunc int bpf_get_fsverity_digest(struct file *file, const struct bpf_dynp
- 	arg->digest_size = hash_alg->digest_size;
- 
- 	out_digest_sz = dynptr_sz - sizeof(struct fsverity_digest);
-+	if (out_digest_sz < hash_alg->digest_size)
-+		return -EOVERFLOW;
- 
- 	/* copy digest */
--	memcpy(arg->digest, vi->file_digest,  min_t(int, hash_alg->digest_size, out_digest_sz));
-+	memcpy(arg->digest, vi->file_digest, hash_alg->digest_size);
- 
- 	/* fill the extra buffer with zeros */
- 	if (out_digest_sz > hash_alg->digest_size)
--- 
-2.51.0
-
+...
