@@ -1,103 +1,109 @@
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
+Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202E73C5826;
-	Wed,  5 Aug 2026 07:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA533D5C38;
+	Wed,  5 Aug 2026 07:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785916121; cv=none; b=Kf77PjcEHCDidA6UTGO19aSMEqK52DWILmIiyB3EqPa9HnOIrN6rO3cSu2fzaZ+Jb0zc+Oseu3r7pNVjCp7R8ZyD4O7xQObIGCwoRLSXhB8JBaTy2uYfDmydD1haXuXAvknXuDO86m3C4abiudDkPF89L5cqlBWwoGLAY7Dg2hI=
+	t=1785916685; cv=none; b=ciXquILyzHOV6XZTBSnmWel1b+ZaFRPF65iTjD2EIB73LuaGhalXunra199pci6/Dr5UzwQqh2W2TUgnYssxXyPLufg9yZ0MkTNnSUQ6532c+hMwl9o10dD/vP5TRkiQr5fuVdHVWQkC8lGE5qWi6DaMmRtmM0Fn3If2qew4Z+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785916121; c=relaxed/simple;
-	bh=iz7e3u8wAD/d3qjzHr/RNRIZAcf5M9o9o+thk6Ka3m0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=apbG/m275O8kCd5rbD31DIa6PohphXo9OlRSdlfzYWpjCSu4169v9idoQc1aAbF3kpVi0ITbSeK9CQ3E5BFLbTaHCE2SOxgQHcKwjlYZ19cVMYcMmhJaS0+BjpO65P2RAGo7IBKIM/fa1KfSWP3HEp40ds1MG+MtqYiJq7pqzlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=gYKIKHEL; arc=none smtp.client-ip=113.46.200.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1785916685; c=relaxed/simple;
+	bh=IlIpVVDCu2/pBkVBAV+9IjOtvtLRfuxo5io91gQRtsQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WEaEwbI8MQWHwi6PmAG4/t73LZgqaVjlpAtcdU7sNbzZDtFulYKqinUdX2m3x6MwvdeuEMcELVgQSIPBnIrVjyUl8TIJ2PNvGq1KQ6HBwWY0DUr5GEbuZCtMycXg29kdcAjBIKz+sXVPxd78RcxkYWCsskGC/KQAphpTFw74xck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=XOcvAYqF; arc=none smtp.client-ip=54.206.34.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="gYKIKHEL"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=RtbCKHsVAhTVASlgSZ0wsmn6MVIeHZzF36EEypzJi2g=;
-	b=gYKIKHELE8d9p4PS3nHt57D/Da2QruvqOZ1IAZX7yN/98cHkkBjYBRXId2oXkVd5GwyWXEw54
-	Jzlsvp1YDfg+R3iEIRXSzJVbTY6iLKuVGaOHPyBpiT0l73k8s/0g2vasUmK26zUinBW22eQeeh+
-	n92F9S/IVV5BvdvsiIi1Y/0=
-Received: from mail.maildlp.com (unknown [172.19.162.140])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4hFMjh0cFXzRhQt;
-	Wed,  5 Aug 2026 15:39:04 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0AC622025F;
-	Wed,  5 Aug 2026 15:48:34 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Wed, 5 Aug
- 2026 15:48:33 +0800
-Message-ID: <916b5920-a2f4-4b05-b86e-6a29e599ffad@huawei.com>
-Date: Wed, 5 Aug 2026 15:48:33 +0800
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="XOcvAYqF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1785916637;
+	bh=uXnfGp795oGSOt+y84mHcpLytElAWA60JD/wU/dd3cs=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=XOcvAYqFIQ2oRxQlWlCSsJEvHWMsP2FHSoizeFmQeEa2WC6yUjpGyuXzAT7//HK94
+	 UhsNqmHWfUVfRp5cZcnMYfA8X6tUzjat46kR1PM0s1LnwmFK6l9fzZ9hJIdCR/PzLu
+	 Y7BzS0OUxkyzjdLC1bvJvQxGZXGGyPEt8a8Gxzs0=
+X-QQ-mid: esmtpsz18t1785916619t352635b2
+X-QQ-Originating-IP: yiRvrg58MR+0yse8xrb2gtoz9/DcdT37SkPfgcFx0X0=
+Received: from uniontech.com ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 05 Aug 2026 15:56:57 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 10778487376398331387
+EX-QQ-RecipientCnt: 8
+From: Yichong Chen <chenyichong@uniontech.com>
+To: ebiggers@kernel.org,
+	tytso@mit.edu
+Cc: ast@kernel.org,
+	song@kernel.org,
+	fsverity@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yichong Chen <chenyichong@uniontech.com>
+Subject: [PATCH] fsverity: reject short BPF digest buffers
+Date: Wed,  5 Aug 2026 15:56:55 +0800
+Message-Id: <20260805075655.950308-1-chenyichong@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpf: Fix stack out-of-bounds write in cgroup
- link update
-Content-Language: en-US
-To: Sanghyun Park <sanghyun.park.cnu@gmail.com>, <bpf@vger.kernel.org>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
-	<eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai
- Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
-	<emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
-	<linux-kernel@vger.kernel.org>
-References: <20260805052858.2390918-3-sanghyun.park.cnu@gmail.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260805052858.2390918-3-sanghyun.park.cnu@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: OXWhkXa0b/rwAtuWqU4FmVlXXEbmGCbDS2w1xII/8C0Pp5S/6stsOJsO
+	Wk9dHrcu+n/JUYkJwpZxmZnBTD4xg2sKNZKGxi6h3MCagqjs+sshNAO6oInh/xM9OsjUHT/
+	IvL1E62hvHooj9l4khLD6KFmI6cYlFq7PXpfSdcP+N7Z/8yyDsDWVriUoUKI+lELxPy8gIM
+	5x51XV5/KDmKh+xS8ZYBktRBJi7JB1ynjwEGeMW7y4gSIX5PGvF5cfv8LtF4ojaqvp3V2Jq
+	QD7EBavj9Cr9wb1jPnntOb4nHHvcf+6sVEIx7CQYcvu/GFmGaawNwSAY5oXUeJxyN/XqHWX
+	DMwlBMxHBPK+O/7XZjTW6Had87k7Dnu/QVq0dJ2yk58Zul+aspmDnBnVB2xmNezszqutA72
+	O7cr+ceeUD64f8C2cisGrq/4/OHCbSgliHgHtg/zki+G93KVV6YpWwE7tGIxopIB+V9xwLP
+	r/6z6TbJymKYWHmL5SDh0uqtAJP77n4+KjgVOoRn+53m82v9e5lSnuLivGXtlRPhi1ky0d6
+	LCBMJms2qz0rTsiQHZJuGHO7hkvVb8u5lDlCHdlfONfwIpPsWdYdTiT/fK6cr6WwDkPepsV
+	ZeJYvqkmD40IkNDOK1bB/gaCy1P9c8o9OXrcQlF9yYqjm2JoATBSCV/TnKY+e1z15RTLrFT
+	9k+zI+0Y+A/NUWDPrGLTq92dRNFV6O+lNQVZO10uKPzCQQAyA5Ngf9ddu/MW5YjYosJy6xF
+	Yuq0FSGDQfAtr39iMgcTe6pdcrVilDa64I8qXIcCDhRaDEMNhdd4NZ8jH2U3zpFrVYjkPbj
+	nBs8NL7FgdFVUxX+iob16DlNv4Bhr0gnJYjdJ/FmK45K/gGebJpRshB+avgvuOhTROgLRav
+	q/Fk+qpyw4ivYo3M4+DPiejS/IipsLHIkM3g18WpdnBos5d/Gf/RNo51Bqjig8XTCRTwsDH
+	iL3Xw+YFSrhVF0snIEqIbgfV1oaq+PwgN8+Nb8WLq/pEbchEWn/X4X9EYRYGY0iUBtBkpOQ
+	3cSyNNEdekNSPcAiMXDczdNSPt8xx1Vo7DB3Q7/FiZSberQjdS
+X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
+X-QQ-RECHKSPAM: 0
 
+bpf_get_fsverity_digest() reports the digest size as the full hash digest
+size.  However, when the provided dynptr only has room for part of the
+digest, the helper currently copies the truncated digest and still returns
+success.
 
-On 2026/8/5 13:28, Sanghyun Park wrote:
-> The cgroup link update path checks only the program type, allowing a UDP6
-> sock_addr program to replace the program on a UDP4 link. Running the
-> replacement writes past the smaller IPv4 context into ipcm_cookie::opt on the
-> stack.
-> 
-> Require a replacement sock_addr program to have the same expected attach type
-> as the link before changing link state. Limit the check to sock_addr programs
-> so update policy for other cgroup program types remains unchanged.
-> 
-> Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
-> Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-> ---
->   kernel/bpf/cgroup.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index d2da5063d8f8..65bf25deac4f 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1055,6 +1055,10 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
->   	if (link->link.prog->type != new_prog->type)
->   		return -EINVAL;
->   
-> +	if (new_prog->type == BPF_PROG_TYPE_CGROUP_SOCK_ADDR &&
+Returning success with a digest_size that is larger than the actual copied
+digest is misleading for integrity policy code.  Match the ioctl
+measurement path and reject too-small output buffers with -EOVERFLOW.
 
-not only BPF_PROG_TYPE_CGROUP_SOCK_ADDR, but also 
-BPF_PROG_TYPE_CGROUP_SKB, BPF_PROG_TYPE_CGROUP_SOCK, etc. I think we can 
-make it general.
+Fixes: 67814c00de31 ("bpf, fsverity: Add kfunc bpf_get_fsverity_digest")
+Signed-off-by: Yichong Chen <chenyichong@uniontech.com>
+---
+ fs/verity/measure.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> +	    link->link.attach_type != new_prog->expected_attach_type)
+diff --git a/fs/verity/measure.c b/fs/verity/measure.c
+index cfe2d5e535f9..4cfadba95488 100644
+--- a/fs/verity/measure.c
++++ b/fs/verity/measure.c
+@@ -148,9 +148,11 @@ __bpf_kfunc int bpf_get_fsverity_digest(struct file *file, const struct bpf_dynp
+ 	arg->digest_size = hash_alg->digest_size;
+ 
+ 	out_digest_sz = dynptr_sz - sizeof(struct fsverity_digest);
++	if (out_digest_sz < hash_alg->digest_size)
++		return -EOVERFLOW;
+ 
+ 	/* copy digest */
+-	memcpy(arg->digest, vi->file_digest,  min_t(int, hash_alg->digest_size, out_digest_sz));
++	memcpy(arg->digest, vi->file_digest, hash_alg->digest_size);
+ 
+ 	/* fill the extra buffer with zeros */
+ 	if (out_digest_sz > hash_alg->digest_size)
+-- 
+2.51.0
 
-use link->link.prog->expected_attach_type
-
-> +		return -EINVAL;
-> +
->   	hlist_for_each_entry(pl, progs, node) {
->   		if (pl->link == link) {
->   			found = true;
