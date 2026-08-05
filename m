@@ -1,117 +1,105 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F9A3C7E1D;
-	Wed,  5 Aug 2026 04:05:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928EA36B92A
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 04:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785902718; cv=none; b=PR42H/K++qnLqcsHpyBMfxLt588eAddSVNgumlsld+rFxhDw5DDxDOTKTYTeqS99gmQVnVRzEsno9ClrvpB2mJgJnU1HxSt1CRWXQNRQlJu+jMOzepqHwyZ6Cut0f6mxKbrerQGvEGOVzVAbIbtck5t1fZNydUaeELgHnQpRYvg=
+	t=1785902742; cv=none; b=na17LV+e9Ts1R2pgNHw9zDi2hZ89esQJgfN0zVkNeQ5R2mIbEaPTG2HMZw0gHZDowMqOSBGZBtWkB6jmmtITxtlgiBMnE31BbVrgCeBXCkn/xWgZ8zUf+Ywl6w8P6Hv/HKtDfsUGuXw7RPin1BOovg2t9tIVO6+nlrnL29anQak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785902718; c=relaxed/simple;
-	bh=VJshfN0f2GhM35uVuDa+UMCpOWB/U95MkVkRlcMCKdM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RV3TIca99kacD8VXnbwPpzoP1QWPtEWDotjGqQATSkhQbDtT7Fn9clHtFDgq3IVuIC1y/xIQJqIciNBFXIqPzyZ6TV6sjtDIy1MLJwrB+UBYNIyG6Zff64MbHpLyTugsJ4gaDj/BpGdDpWFKg0MVeVUiLcKvN9K7I9Y2byYyuww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BcP0BIMd; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785902742; c=relaxed/simple;
+	bh=hSYPFxlYD1ip8K/v0cZqh0CiKk9SQUgVeVj9dCo/n3k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NiPucqM3X6/ytwtexz2RD4VvLDbHS1qi31KpU2gSo700CFiiu4HapQUOHUgx9bRrw8vYhpesGUX9AAwqjr4CMsr+LhoqF9mPV7UEkl7LT2ziBTwjJvoWYtvm+CZz6mleGn9nh2gm7JsIC8NMK+dvGMtnRcl3aP8eavw+6YgKsxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zex5Ss6U; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BcP0BIMd"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785902715;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=p1MDUL8pgO9d7aOgyIh4zK7UhpDcJDYhUJ+F2MSyPzw=;
-	b=BcP0BIMd0TKBmOW3AXk0SGsudPQxP8LX73ngCbLJK6HVRgVaUGiravhIGlrD06yU0uhlBV
-	hZbGRrGFw36/fRj3Uns+OK9RniyDnZ5pq9eejUc+ls9sKkxju5E4LgAIT+Zfe1yLqtzMzF
-	q+6RUIUZxkoJLG2QW1yFUk5Bh9/JOLQ=
-From: "Hui Zhu" <hui.zhu@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <matt@bobrowski.net>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next v2 3/3] bpf: Fix prog UAF in __bpf_trampoline_unlink_prog() on update failure
-Date: Wed,  5 Aug 2026 12:04:08 +0800
-Message-ID: <0e91fde8222bcfc0b318cfa2dcc3e06cc476c1a2.1785902527.git.zhuhui@kylinos.cn>
-In-Reply-To: <cover.1785902527.git.zhuhui@kylinos.cn>
-References: <cover.1785902527.git.zhuhui@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zex5Ss6U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D25C1F000E9
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 04:05:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785902741;
+	bh=/4aS5tqBbyEYg2JYic080MeS97BSf/0fWSkJxsY05xs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=Zex5Ss6UMDChoqIIVmR0WFd+57R8aStO4uStxU1XWDa+XCoSIhUikt5fXLbBk0aZs
+	 0XoTeTsqahVO9sdTE3q/FH5BguykLt4zJUBXTvyxlBtE0QT40sIA6K0A6F8ybUcWyU
+	 DjHAVRU1n+QZKVy7rSXr+xA2JgCsZ+m6XeHAyCMOMzKXZaaKy24VO31hPW8sZfJXKB
+	 QvBgwuN3v4b8oDuhaA8algqJHibEFSxA3Yki/Ub3/cGiM67suIdL6AaYoXpReI9can
+	 tziHiUnVf1YyD+LhxW5l/EIjhQeFFXKfibMNZt4sFYD9HdH0vIeNOg6yaIDJi35ed2
+	 ZlacRigG8aA4w==
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-92ed3993c1eso31311685a.1
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 21:05:41 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yzrq5vx2rGwnAomqbk9PVlNpKdwZHADVSpLnV/cH4EKiGaoxFR3
+	JhtFYjm9aRb5Dd+nq7u336/izKcLgHJNxAGvgX6nE4AnbxWXXCLFcbM4F1hN1LIDKmp/qLn14L6
+	3B4tSqzoa0yA72+2QCD8qdyx4IxfoYIo=
+X-Received: by 2002:a05:620a:6891:b0:933:4b51:d348 with SMTP id
+ af79cd13be357-936492adf2emr349872485a.39.1785902740266; Tue, 04 Aug 2026
+ 21:05:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260804164652.296919-1-mahe.tardy@gmail.com> <20260804164652.296919-2-mahe.tardy@gmail.com>
+In-Reply-To: <20260804164652.296919-2-mahe.tardy@gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Tue, 4 Aug 2026 21:05:28 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5ZTqfzpxNf=S6JbmGxWf2m9qPZGberdzRdLuvv2-Xwgw@mail.gmail.com>
+X-Gm-Features: AUfX_mxVs_Mx-cddxwm6dK4qyFylkKDXY2mg3bGhGfKvvkKx3GxMUnPGS72pHIM
+Message-ID: <CAPhsuW5ZTqfzpxNf=S6JbmGxWf2m9qPZGberdzRdLuvv2-Xwgw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/5] net: Add __sys_connect_socket() helper
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
+	edumazet@google.com, john.fastabend@gmail.com, kuba@kernel.org, 
+	liamwisehart@meta.com, martin.lau@linux.dev, pabeni@redhat.com, 
+	netdev@vger.kernel.org, sdf.kernel@gmail.com, ameryhung@gmail.com, 
+	kuniyu@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Hui Zhu <zhuhui@kylinos.cn>
+On Tue, Aug 4, 2026 at 9:47=E2=80=AFAM Mahe Tardy <mahe.tardy@gmail.com> wr=
+ote:
+>
+> Add a helper that connects an existing socket while invoking the LSM
+> hook. Reuse it in __sys_connect_file() to avoid duplicating the connect
+> logic. Other socket operations have equivalent helpers that trigger the
+> appropriate LSM hooks that can be reused, this one was the only one
+> missing.
+>
+> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+> ---
+>  include/linux/socket.h |  2 ++
+>  net/socket.c           | 32 ++++++++++++++++++--------------
+>  2 files changed, 20 insertions(+), 14 deletions(-)
+>
+> diff --git a/include/linux/socket.h b/include/linux/socket.h
+> index 2a8d7b14f1d1..48f1eb8193de 100644
+> --- a/include/linux/socket.h
+> +++ b/include/linux/socket.h
+> @@ -461,6 +461,8 @@ extern struct file *__sys_socket_file(int family, int=
+ type, int protocol);
+>  extern int __sys_bind(int fd, struct sockaddr __user *umyaddr, int addrl=
+en);
+>  extern int __sys_bind_socket(struct socket *sock, struct sockaddr_storag=
+e *address,
+>                              int addrlen);
+> +extern int __sys_connect_socket(struct socket *sock, struct sockaddr_sto=
+rage *addr,
+> +                               int addrlen, int flags);
 
-If bpf_trampoline_update() fails in __bpf_trampoline_unlink_prog(),
-cur_image is unchanged and still has node->link->prog's call baked
-into it. All callers only WARN_ON_ONCE() the failure and then
-unconditionally free the prog -- a UAF.
+IIUC, __sys_ prefix is for functions behind syscalls. Do we really want thi=
+s
+prefix here?
 
-Fix: on failure, pin node->link->prog onto tr->cur_image via the
-pinned_prog mechanism, so it outlives the link. This covers both the
-multi (bpf_trampoline_multi_detach) and non-multi
-(bpf_tracing_link_release, bpf_shim_tramp_link_release) paths.
+Thanks,
+Song
 
-Fixes: aef4dfa790b2 ("bpf: Add bpf_trampoline_multi_attach/detach functions")
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
----
- kernel/bpf/trampoline.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 7fac27374ece..6071261fd66b 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -991,7 +991,25 @@ static int __bpf_trampoline_unlink_prog(struct bpf_tramp_node *node,
- 		return err;
- 	}
- 	bpf_trampoline_remove_prog(tr, node);
--	return bpf_trampoline_update(tr, true /* lock_direct_mutex */, ops, data);
-+	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */, ops, data);
-+	/*
-+	 * If the update above failed, tr->cur_image is unchanged, i.e. ftrace
-+	 * (or the direct jump, for the standard ops) is still actually
-+	 * calling into an image with node->link->prog's call baked into its
-+	 * machine code, even though this unlink is being reported as failed.
-+	 * Every caller of this function only WARN_ON_ONCE()'s a failure here
-+	 * and then unconditionally frees the underlying bpf_prog, which
-+	 * would be a use-after-free the next time that image is executed.
-+	 * Pin an extra reference on the prog onto tr->cur_image so it
-+	 * outlives this link, mirroring the fix applied to
-+	 * bpf_trampoline_multi_attach()/bpf_trampoline_multi_detach().
-+	 */
-+	if (err && tr->cur_image) {
-+		WARN_ON_ONCE(tr->cur_image->pinned_prog);
-+		bpf_prog_inc(node->link->prog);
-+		tr->cur_image->pinned_prog = node->link->prog;
-+	}
-+	return err;
- }
- 
- /* bpf_trampoline_unlink_prog() should never fail. */
--- 
-2.53.0
-
+>  extern int __sys_connect_file(struct file *file, struct sockaddr_storage=
+ *addr,
+>                               int addrlen, int file_flags);
+>  extern int __sys_connect(int fd, struct sockaddr __user *uservaddr,
+> diff --git a/net/socket.c b/net/socket.c
+> index 63c69a0fa74e..c7427dd4dd52 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
