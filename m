@@ -1,173 +1,148 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47E5363C77
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 19:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A673F482E
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 19:25:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785957078; cv=none; b=i7MTPcKDPJLtVkIyaJxYRVElb/4aTVLgUoKEg9rrG0c5ORYOD0HLxjO4y6l7yVbYCnWn5tCdqARkBy2Hzc48hjkh1eZcTv7eUw7/U7tFck+7sxX7cmjtziArymHiimaBN1Tvdy21Zkpsz6pSGA4qxEKEWkChiV/Ylu9d7QAVNyo=
+	t=1785957958; cv=none; b=RffUVaXCXkbroLvEwqnhRUJr/uzhjYT7elzQyGiLGhcMng7BInGp+KyvQWNPr4fCjdIMoGIc88JFlGX8e59crcHjuBeUcb0AImSJ9VVF6yG1C11F5JJ9j74rvc2KYmZtOSAa2nGnwQbWLnQYy6+qTSIRK2IQzkb+bhEuy70TOnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785957078; c=relaxed/simple;
-	bh=ABibOQhRKEkJ5Z7RlOGWN/W6GHglQEeBkb06ShZCBxQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NdgAReIzwbFaa+e8eIa1fJsd57f1mrz/roWo4dCZiJ0mfl1xXbrRw8ejpO1etBqOdYcbCM7KPwbFsHYC1yopElNZoX5ZsSGcxB+P1H3L1Jye6RDrefz1obwCOfIY/A2G7DOOSJel7KqJ+dT2IAAyNFM12ihWFuEamSiRwBuktXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kDw2i4SI; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785957958; c=relaxed/simple;
+	bh=OpF20Har8RMO2prIXkdvhaJDmaTlkBoO/pB/CclzjSI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bs82ikQms9Pv9BGqRTextpSQFHGvcWZCiztwPdqSPgEZbwLGpwHYibPJBQTZM518oWz7VGL3x3bvmogJ8cEZZhwRQgfrYZX5RWt8tL20NhYu2ebe0HuLMiShcaPjpj5ohudTGUB7wJ7Dfl70T52PjLguOcBf/hzTgy8ERclI/FI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vXrQzT6G; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kDw2i4SI"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-381c51fde6bso1647032a91.2
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 12:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785957076; x=1786561876; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=I7hjVAHGdf1AofJ8dQPpNKe6ZkD0DreBSwgYMDrzLu4=;
-        b=kDw2i4SIvrArPfDtqr+oHqIon2NDYmUGXHlSPiBGNy5FiMz8SIjRdL5go1Rzt49EMK
-         xywousn5oGaAjQy5svF/69y4xBWN2t2ZeivGG4QiVVzHQIpw4hAR0ell6FGlTyz6GZaA
-         pBjQvo7ySdulXKo5Ov96yODgXGL2Vp7BXYn1lt1ZD7rx3/ie9xq1t2FGhPqa200DnhCs
-         sMcvnu2Ym03Ew+Hu6SVsQgpMaGz+VCvE77V2Wj+vx6enhENJ+cUss+Kw3UdRVhsHcL0M
-         u83wcM3f8lIwIcwAQh2c8TIrq8r5nOFn4kjSRu0AomD8vRruSPlcOwGHzlIiwZoXPkXG
-         8Fmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785957076; x=1786561876;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=I7hjVAHGdf1AofJ8dQPpNKe6ZkD0DreBSwgYMDrzLu4=;
-        b=NncBVz32VdYZRS3Lg4BcCOK1yYrSSuOkY3u9E9v0qKTlRRKYJYbBvQokvmIyKu4d0Y
-         Hce7DpGzvZ7YROF1K6nQs3z2x6fLtX2+ZljHQc7MzRgvOMWqv3/S3lefztER6SnzDFKN
-         98aYk5zodoxMXQ+4dgEGh9NwBwCJpe/n9J0Mh8ZRX0Nkfr6WPSGt1Oy+BNNXFCDIuH14
-         EOgjyLq5lPyN3dkzbk9TPU9oYoHZ7MdBwDpQvRXM2G4oDocXYDGQrt76r6p1q2OOTJt6
-         txfA/u3EccDUVI3HxydvKXBVxTod0bKUGcjx5GDs7dOUNJY3vPTFjfZbU9xJrE7MdQ1Q
-         9IxQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ro7pNaJhIlcs+81iy2rYstzZtsRAb+PktmUu1nPnAWj9ixZp2E75pYdwua/i2965pqCfRw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQAcFZtIp68y8K0SE/otueBTIhVUWNu3CZ3dKYBgbc87va7e3z
-	hWFH/NfcnfVOkw5f2tc30cMTQEF36v0imj3GeGcgV+9hwRrf+zRi6MaAihJNlY0A
-X-Gm-Gg: AR+sD11U6UVFpIZvf7bsy6nkJflZrHpKOB8iSciFEOU03XpuwFjenPcaQqQN8lgfWSb
-	ycn+lJ4K3gwaa7FQ0Z7xXeXKRrS26w5n7jjXHA2u19IzhRu4q5+SknaB2wK6xVOHE/ZEeguVHdV
-	yQ7qEDQDchdLk7zWkLLyRRnDcgLD++Hr6AbUiBId2TxuBCH8wbYuySJEbE7rBjoyNtY2lXqhZqZ
-	7/VZELHLEQ/0tJdsz+9T/TzvW/urwTY7Q0f3zmQQBPHs1bSxbOXV2XF2kCRfj4B+6bqU11RQfPU
-	IoFtmwhMlwN+Xv+sioHQW0D4C/97HOoq+2xphxtpg79OYbJTEoANTZbMZ8GE9w6iV0FqIHMhbL3
-	cosi3ZZ8C6qHOGd3jCVuUo5minS9wh6mrSCQzkRcFqaB9DKSuGO3fRwTzU/KtMw2BOTUI9eNXBS
-	n9sl64lnusG+C75AERD7CNE+IrY8q4QhV6/NOidawl0KOkqO6oX0shct1knkzlR0kxZAvUm/E6A
-	gmQlk9gH4/Q5ata8EGioieM+VKKs2FKXcszDDirisu9pQ==
-X-Received: by 2002:a05:6a20:d529:b0:3b1:cce5:9140 with SMTP id adf61e73a8af0-3cb85f4a5b8mr11485747637.33.1785957076060;
-        Wed, 05 Aug 2026 12:11:16 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:9442:4c04:9302:a907? ([2620:10d:c090:500::5:6ebe])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fca8df89asm30878776c88.9.2026.08.05.12.11.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 12:11:15 -0700 (PDT)
-Message-ID: <d8c2a4de77327f4c3cde8aed4d95aacc915ffa18.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/4] bpf: Mark pending sub-register zero
- extension before pruning a state
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Daniel Borkmann <daniel@iogearbox.net>, memxor@gmail.com
-Cc: puranjay@kernel.org, info@starlabs.sg, bpf@vger.kernel.org
-Date: Wed, 05 Aug 2026 12:11:14 -0700
-In-Reply-To: <20260805184444.292828-1-daniel@iogearbox.net>
-References: <20260805184444.292828-1-daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vXrQzT6G"
+Message-ID: <5a47b073-e1d5-499c-89bd-44500a88bf27@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785957949;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GMNFF23M2mDpZsFVIBmMK7jwW4BARwxeY3eW7N4r6k4=;
+	b=vXrQzT6G1ZN9r8MXV0XNMEf3UNCOXkTw9Jd8lUHGX6WHqbiOPgqv23Oh0vJ8iS3KFlgjL4
+	i6Nm9icPClPtBgjkM0fu8ZsfeCm/5th1HloCakQ+15qOkwz6egTRf8yA9CSMLvHtPYWUJI
+	nFZ5npCkWAce08YaAQd5AKNlXnN9fGA=
+Date: Wed, 5 Aug 2026 12:25:36 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [bpf-next 1/4] selftests/bpf: map_kptr: force BPF_STX for the
+ scalar store to kptr
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
+ ast@kernel.org, Eduard Zingerman <eddyz87@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: linux-kernel@vger.kernel.org
+References: <20260803170251.1898102-1-vineet.gupta@linux.dev>
+ <20260803170251.1898102-2-vineet.gupta@linux.dev>
+ <c17688ad-7940-4697-abd7-dc5cf9f1e7ec@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <c17688ad-7940-4697-abd7-dc5cf9f1e7ec@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 2026-08-05 at 20:44 +0200, Daniel Borkmann wrote:
-> A 32-bit write records the writing instruction in reg->subreg_def, and a
-> later 64-bit read of that register calls mark_insn_zext() to record that
-> the definition has to be zero extended. Architectures whose JIT sets
-> bpf_jit_needs_zext() rely on that mark to emit the extension.
->=20
-> The mark is produced by walking the path from the definition to the read.
-> If the walk stops at a state equivalent to an already explored one, the
-> reads the explored path performs from there on are not repeated for this
-> path's registers, so a definition whose only 64-bit read lies beyond the
-> pruning point never gets marked and keeps a garbage upper half.
->=20
-> Example with BPF_F_TEST_STATE_FREQ making every instruction a checkpoint:
->=20
->       r7 =3D *(u32 *)(r1 + offsetof(struct __sk_buff, len))
->       r6 =3D 0        /* 64-bit define */
->       if r7 !=3D 0 goto l1
->       goto l0                              path A, explored first
->   l1: w6 =3D 0        /* 32-bit define */    path B, explored second
->   l0: r0 =3D r6       /* 64-bit read   */
->       r0 >>=3D 32
->       exit
->=20
-> Now, path A is the fall-through of the conditional and is explored first.
-> It reaches l0 with r6 defined by the 64-bit r6 =3D 0, so reg->subreg_def =
-is
-> DEF_NOT_SUBREG and the read marks nothing. The walk runs on to exit and
-> leaves a checkpoint at every instruction along the way. Path B is explore=
-d
-> second. w6 =3D 0 sets r6->subreg_def to that instruction, so a zero exten=
-sion
-> is pending and only the 64-bit read at l0 can resolve it. B then arrives
-> at l0, where bpf_is_state_visited() finds the checkpoint A left behind:
-> r6 is the scalar 0 in both states, so they are equivalent and B is pruned
-> before r0 =3D r6 is verified.
->=20
-> Without the fix nothing happens at that point, so the one read that would
-> have called mark_insn_zext() for w6 is never walked and the definition
-> stays unmarked:
->=20
->   l1: w6 =3D 0        /* subreg_def =3D w6, pending */
->   l0: r0 =3D r6     <--- B pruned, read never walked, w6 stays unmarked
->=20
-> The JIT of an architecture that needs explicit zero extension then emits
-> none, and the upper half of w6's definition is left undefined (under
-> BPF_F_TEST_RND_HI32 it holds the randomized half, which r0 >>=3D 32 retur=
-ns).
-> This used to be handled by the registers chain based liveness: the
-> propagate_liveness() called mark_insn_zext() for every parent register
-> whose read mark was REG_LIVE_READ64, which carried the requirement across
-> a pruned state. Commit 107e16979905 ("bpf: disable and remove registers
-> chain based liveness") removed that machinery and with it the propagation=
-,
-> leaving the mark dependent on the path actually being walked.
->=20
-> Mark the pending definitions where the walk stops instead, i.e. on the wa=
-y
-> into the prune rather than at the read that is no longer reached:
->=20
->   l1: w6 =3D 0        /* subreg_def =3D w6, pending */
->   l0: r0 =3D r6     <--- mark w6, r6 is live here
->=20
-> The set of registers to mark is the one the pruning decision was made on:
-> func_states_equal() compares the registers live at the instruction, per
-> insn_aux_data[].live_regs_before, and those are exactly the registers tha=
-t
-> can still be read. A register that is not live there is never read again
-> and needs nothing. This is conservative in one direction: a live register
-> whose remaining reads are all 32-bit also gets its definition marked,
-> which costs a zero extension that is not needed. However, it never marks
-> too little, and it does not weaken pruning. On x86-64 the effect is only
-> observable with BPF_F_TEST_RND_HI32.
->=20
-> The one live scalar whose subreg_def can point at a call insn is r0 of a
-> kfunc returning a 32-bit value. Marking that one is harmless, the fixup p=
-ass
-> skips kfunc calls since their zero extension is done by the caller.
->=20
-> Fixes: 107e16979905 ("bpf: disable and remove registers chain based liven=
-ess")
-> Reported-by: STAR Labs SG <info@starlabs.sg>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> ---
+On 8/5/26 10:47 AM, Yonghong Song wrote:
+>
+> On 8/3/26 10:02 AM, Vineet Gupta wrote:
+>> reject_scalar_store_to_kptr stores a scalar constant to a kptr field:
+>>
+>>           *(volatile u64 *)&v->unref_ptr = 0xBADC0DE;
+>>
+>> Compilers generate one of two encodings for that:
+>>
+>>    1. Materialize the constant into a register and emit BPF_STX:
+>>
+>>           r1 = 0xbadc0de
+>>           *(u64 *)(r0 + 0x8) = r1
+>>
+>>    2. Or fold it into a single BPF_ST (store immediate):
+>>
+>>           *(u64 *)(r0 + 0x8) = 0xbadc0de
+>>
+>> check_map_kptr_access() rejects both, but through very different checks.
+>> BPF_STX goes through map_kptr_match_type(), whose first test is
+>> base_type(reg->type) != PTR_TO_BTF_ID - the scalar rejection this test is
+>> named for - and which prints "invalid kptr access, R...". BPF_ST only gets
+>> the trivial "BPF_ST imm must be 0 when storing to kptr" immediate check and
+>> never reaches map_kptr_match_type() at all.
+>>
+>> So on a compiler that folds the constant - bpf-gcc, and clang from
+>> -mcpu=v4, which enabled BPF_ST around v4 support due to historical
+>> verifier limitations - the test fails against its expected message.
+>>
+>> Widening the __msg to accept either message would make it pass again, but
+>> on those toolchains it would then only re-test the imm != 0 path, which
+>> verifier/map_kptr.c ("map_kptr: BPF_ST imm != 0") already covers, and the
+>> scalar-vs-PTR_TO_BTF_ID check would lose its only test in the tree.
+>>
+>> Route the value through barrier_var() instead, so the store stays a
+>> BPF_STX everywhere and the test keeps asserting what it was written to
+>> assert. clang -mcpu=v1..v4 and bpf-gcc 16.1 all emit the register form
+>> afterwards.
+>>
+>>     bpf-gcc, before: #229/20 map_kptr/reject_scalar_store_to_kptr:FAIL
+>>     bpf-gcc, after : #229/20 map_kptr/reject_scalar_store_to_kptr:OK
+>>
+>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+>> ---
+>>    tools/testing/selftests/bpf/progs/map_kptr_fail.c | 11 ++++++++++-
+>>    1 file changed, 10 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>> index f11848dfa78f..cb84e23b83c0 100644
+>> --- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>> +++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>> @@ -390,13 +390,22 @@ __failure __msg("invalid kptr access, R")
+>>    int reject_scalar_store_to_kptr(struct __sk_buff *ctx)
+>>    {
+>>    	struct map_value *v;
+>> +	u64 val = 0xBADC0DE;
+>>    	int key = 0;
+>>    
+>>    	v = bpf_map_lookup_elem(&array_map, &key);
+>>    	if (!v)
+>>    		return 0;
+>>    
+>> -	*(volatile u64 *)&v->unref_ptr = 0xBADC0DE;
+>> +	/*
+>> +	 * Keep the value in a register so this stays a BPF_STX and keeps
+>> +	 * exercising map_kptr_match_type(). Compilers that fold the constant
+>> +	 * into a BPF_ST (store immediate) instead - bpf-gcc, and clang from
+>> +	 * -mcpu=v4 - would be rejected by the far weaker "BPF_ST imm must be
+>> +	 * 0" check, which verifier/map_kptr.c already covers.
+>> +	 */
+>> +	barrier_var(val);
+>> +	*(volatile u64 *)&v->unref_ptr = val;
+> Could you explain in details why gcc16 (with cpuv4) won't work with BPF_ST?
+> What code gcc16 (with cpuv4) generates?
 
-Hi Daniel,
+GCC generates BPF_ST (and clang -mcpu=v4 does as well)
 
-I have this series in progress:
-https://lore.kernel.org/bpf/20260802-static-zext-v3-0-3456b2604574@gmail.co=
-m/
-Fixing that exact issue. It needs one more iteration.
+    7: (7a) *(u64 *)(r0 +8) = 195936478
+    BPF_ST imm must be 0 when storing to kptr at off=8
+    processed 7 insns (limit 1000000) max_states_per_insn 0 total_states
+    0 peak_states 0 mark_read 0
+    =============
+    EXPECTED   SUBSTR: 'invalid kptr access, R'
 
-...
+
+The issue is not codegen or BPF_ST vs. BPF_STX, its a deliberate bad 
+write to a pointer.
+The current __msg in test only matches v3 (STX) form. v4's 
+store-immediate hits a different verifier check with a different message.
+My first approach was to support both in the __msg, but then Claude 
+suggested to not do it that way because it would reduce coverage as 
+mentioned in the changelog above.
+
+Thx
+-Vineet
