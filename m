@@ -1,152 +1,153 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8BC237AA92;
-	Wed,  5 Aug 2026 03:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785901748; cv=none; b=EIDruHqV6ACe4WcdnAfuGoCrtt/LLQjLKVaaKUyEMU/zuvPMA5eMRfENcyG69RLj7DZ4hrgMYS6+VyjJpLeFNcUoN1wcBo+miMBHkww1WMiDXyc2LKpvAMlJROHNRbG/GgMsztTmW6H8nc085C2xsExMjLtzpLAhyUxLeHkCm1g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785901748; c=relaxed/simple;
-	bh=QS/0Apnh0Jwyvpj+YffDwNJ8k267ZzE2B/vruGP/qR4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bzgZsLt5uAayD0lghgnGrBSs2FAWKmtKNiBF3dfwp7jZJqBIELAEM9Oa4wyHT+WMjPstwD74SEC9FD6A2gqiz9UxBzPlX7y5YMexbzZEFY20wPSrvbmHk5MR9gnFdp8M9uKVbqO0Ucc12y3EnDTxC8S+2YNAPNKO1VzOaXKyAjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hFGbD4tJbzYQtvw;
-	Wed,  5 Aug 2026 11:48:08 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 1A7BD4056F;
-	Wed,  5 Aug 2026 11:49:01 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgB3Z0arsnJqHl2pBA--.31224S2;
-	Wed, 05 Aug 2026 11:49:00 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf v5] bpf, cgroup: Fix storage null-ptr-deref after replacing prog
-Date: Wed,  5 Aug 2026 03:53:42 +0000
-Message-Id: <20260805035342.349421-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0DB4A0C
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 04:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785902517; cv=pass; b=jOyJ6FAEE91sGqHymZQUnXdAj+exkNs5XG67aSNgT8IeAX4+x5zhTGMliB+YtL99lUxrd22PheRG89M2NIg/3el39z8/v7o5biteKvtYe84vcf3lZ5F1PmxxES7U8jaknNnSnkdPAABJdht1EB/V7PZoGLdiZjew5D3QQej3c2s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785902517; c=relaxed/simple;
+	bh=SZ/BMOGRTk9QQFylaTjhIsATjR7rezwaeF9sIcbZ48M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FpQ/8C9mYtgmvC7vP4TPWoPf2VfXu/D7hTDyfcP+fRmaU6mCN1FLytSkMmF4pip3MjqrqQT21WBZMgkfRSHGsvj66yS8R+A2LMNzZwzlyxp1UKQjFGlhXu0dakoOEMuckTIUGuknz2hebEVrreTTUXchkFdwMz+fm/aHpjrpT7M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NIoffTVd; arc=pass smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NIoffTVd"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cbb973e6749so572480a12.1
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 21:01:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785902516; cv=none;
+        d=google.com; s=arc-20260327;
+        b=P5r/+Td8ZUy08BoY6MRaibH5i2b2EXZQ5yUYKRbM2gSnorOblgrZTyrcqTC3e7lTMG
+         DanY06vsFYUAxsaCMZEc/fsVZIGNZjWlpod/A0Nu//igDfCOadIthCnogn2iV0/ltrwO
+         9EAau9FSt1Tb/EKFJ6Q0R57z0XJPIEu1RfBVnypkHClTAW0dovIj4a9t3rI7rg6FaqnH
+         u5iAos+Fh+QtckEm7xW/tdhUSCPciCl6RzEMZDZp4dRXxwazSmJh4oqPYt2JBvzJmLSV
+         b81yakSLxq32o7eHEVe5Pow18GpqtdK+HzNOQcOP/aqdX+E93Tz40iUjbuq/pFqOGuIG
+         os3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=SZ/BMOGRTk9QQFylaTjhIsATjR7rezwaeF9sIcbZ48M=;
+        fh=pVap5fbzIVmulK4ahuMZ15gYTXTxQRsjZPPUKZxeU50=;
+        b=ZGUC8CC7WCYkh1qixAVnviD1m7d+WcO2alCAQL74pbrSgcORJlxmNAVN5ocuqKEmmu
+         ysiGB4GtndVNHmMAF79k36XUfHxHU0GNLaxVLNsmxVvuPZ054P0rqSCMelnaz4/5R0gL
+         69TtYkZX/cW8LXawLlU/yWrIG8/W8bMHcY3SkG5Em9ZESEb5MBLNwHvfb++mIuyhUXzs
+         +J8T/7NyopqY/SUJAYAaB9uXGILqo3l7WSHYn3z38kq+hF5Mf5rFx7fYQ0bP/O9louLu
+         P3JNdQwi2PApdlgRe2fJKCwkjqkx7TsbK9f3TaNzsERUewsoKhKraf2BA6H+CGUK+vhe
+         v4ug==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785902516; x=1786507316; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=SZ/BMOGRTk9QQFylaTjhIsATjR7rezwaeF9sIcbZ48M=;
+        b=NIoffTVdFMhJ77pNMWsTYmPZbn6mA/sbFneZKlsEbxpKkVT8nZd3Fu2hu5V7MbR1zg
+         fHAaeHP6jkOTVjmxDDYwdTgqcRDa/JuwvJRuaLEpGXoH5WV4NfRraR73rhcnVuba+D3B
+         xUwcqk+Sq52s8o1D8w/izuyH6RN9Igi/UIDkYpmyce5JFjwohKtBUol2/Nsn8qrJHAD9
+         PFj5OzGNAcCIiMwvLCat/TL0alkLkMQhcfNMzGRr/47DFjilbI7pcKRoywpAtgVf03qS
+         qpvQvupbvWJyn53HCABHOxcda99RPGDCnRLUyAacbV+BZhxHpVI2Z8v5ngksHWp2fUon
+         cb3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785902516; x=1786507316;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SZ/BMOGRTk9QQFylaTjhIsATjR7rezwaeF9sIcbZ48M=;
+        b=repZtU9Pv0KhX1JeCXF4N90LxZySDf8211lkuyzHGDfyJA+OzfgwlPr9ir5LCgmJv+
+         vW60l/tzjJytyLQCFabDIRFjtns9R/xwhe1n2kCYDw6rhb3D2Qk+2/FF3wh1pvhr3HRB
+         0ZquFR0P8DcLXWhWeOiFBHLsM8vfHc6xqA+oeeeOmhlYN78w/3NQr+Cws6hGMVQCVu/n
+         eEQiWLguBkvCtVMqWFaSeG0Zx9FYClkuUJ6i/YVb4IhZl6HxSWRYuM781DsB/s1pF2tC
+         cS0uzHqjk4v2XZDnUWI/Hq/P8yUo2iW81GZXeYl5UTNvjsBi49TMt1mPfY5W2aIbbeND
+         PFmQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqfFVy2b9DXqOwbWGwOW9kXsC3zcX7e8bpQ/aF6CLgtNESAk2AgHxsEXb2A8OJqBeqitu0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+mvqcYhhVEKTnhB1a6B/iF+IZ1DlByuYfVQO4bgtGvtF6x6qs
+	0FfSgF6RtjnvmNKzRy6jKEYtNU1jnadpE9F4pZa1/imwf/Q5ZGHlK8u3mxEOg5lVddLVuc4AGJB
+	Uo7GkSmxr35Rgln7m1E/i60Zb29+PzmzPX/nAIP8P
+X-Gm-Gg: AR+sD121kv31qQy2J8MbUx+HhJf9ddBq7bt4zT0XeSKmoyH5WvLlpmIhwPjIVeXlaDy
+	JN6fjnoaypA54YTq4BpLyx8qUZhxGSuBh5lcKGnWrFFNwTNwP5XP1etmtvQ5xqXpaiYHeIC+Yg9
+	PSBAwwE807ux8QXaBNsq4OgRcTvnluvrGrJCUQPxDxj9/ihnHy8gyvq9Vl8xcrAW9+Mu7UYnGIC
+	s25DQbaKXgqZclD7i3rhlYbWxxMCeZCQzTOyuGkHdUb77862GBrJy2xihW90k8hnKA4k2ejZIfW
+	yr7xlyBVbRrJ6bY4bLUwBV0YxpBQI2E5FlctjKRp8VX4FqkpJUn7FsRDuLp3zqglC0lJw98dYpu
+	M87OtHXqYkm19zWmNTVNCE+AM5Zyc79K2atjrgsuxLLg5/MBdSFZVUacPZ/lpeqKLz5uw0V3T7r
+	5bdGROaeMupXY=
+X-Received: by 2002:a05:6a20:7f87:b0:3c8:e10b:7a9b with SMTP id
+ adf61e73a8af0-3cb85e2a09amr4105411637.16.1785902514882; Tue, 04 Aug 2026
+ 21:01:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgB3Z0arsnJqHl2pBA--.31224S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF13ArW3Zw17Aw1DAF4rGrg_yoW5CF17pF
-	4DAr15Ww1Ygr4vvrs7J34IvrWavan5tr1UKrZxXw1rAF42kFW09ryxurWYvFy3ZF9Fgryf
-	tw1aqFWDKa42v37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
-	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-	zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
-	CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-	nIWIevJa73UjIFyTuYvjfUonmRUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+References: <20260803-sockmap-lookup-tcp-leak-v2-0-306e025bfe66@rbox.co>
+ <20260803-sockmap-lookup-tcp-leak-v2-2-306e025bfe66@rbox.co> <875x1qyyyx.fsf@cloudflare.com>
+In-Reply-To: <875x1qyyyx.fsf@cloudflare.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Tue, 4 Aug 2026 21:01:43 -0700
+X-Gm-Features: AUfX_myy2ETSSWZCV9CW9muE20y4c1Knov8NIRZlDgbnW6vDiP6t6ClWB_tNSjc
+Message-ID: <CAAVpQUBcDGX42Dyzo24U3iMKVyNajgOa5ZD7uX=DhSWf4Nb-qw@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 2/2] bpf: Unconditionally take socket references in
+ lookup helpers
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Michal Luczaj <mhal@rbox.co>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Willem de Bruijn <willemb@google.com>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, Joe Stringer <joe@wand.net.nz>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Sashiko <sashiko-bot@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Pu Lehui <pulehui@huawei.com>
+On Tue, Aug 4, 2026 at 3:14=E2=80=AFAM Jakub Sitnicki <jakub@cloudflare.com=
+> wrote:
+>
+> On Mon, Aug 03, 2026 at 11:00 AM +02, Michal Luczaj wrote:
+> > Lookup helpers gate whether to acquire a socket reference on
+> > sk_is_refcounted(), a check re-evaluated at release. An established soc=
+ket
+> > refcounted at acquire time can gain SOCK_RCU_FREE via
+> > connect(AF_UNSPEC)+listen() before release runs; the release-side re-ch=
+eck
+> > then reads sk_is_refcounted() =3D=3D false and skips the put. The refer=
+ence
+> > leaks.
+> >
+> > Make acquire and release unconditional and symmetric: always take a
+> > reference, always put it. Adapt sk_select_reuseport().
+> >
+> > Fixes: 6acc9b432e67 ("bpf: Add helper to retrieve socket in BPF")
+> > Fixes: 64d85290d79c ("bpf: Allow bpf_map_lookup_elem for SOCKMAP and SO=
+CKHASH")
+> > Reported-by: Sashiko <sashiko-bot@kernel.org>
+> > Closes: https://lore.kernel.org/bpf/20260701235552.2B0AA1F00A3F@smtp.ke=
+rnel.org/
+> > Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> > Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> > ---
+> > TC bpf_sk_assign() has the same issue; it takes a reference only when
+> > sk_is_refcounted() is true at assign time, but sock_pfree() (the skb
+> > destructor it installs) re-checks sk_is_refcounted() independently at
+> > release time. The same connect(AF_UNSPEC)+listen() transition leaks the
+> > socket here too. I'd welcome suggestions on the right way to handle thi=
+s.
+>
+> Can we make this scenario unsupported?
+>
+> listen() could return EBUSY if called on a socket that is refcounted.
+>
+> WDYT?
 
-Syzkaller reported a storage null-ptr-deref issue after replacing prog.
-This occurs in the following scenario:
-1. prog A, an empty prog, is attached to a cgrp.
-2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
-   bpf_get_local_storage helper.
-3. link_update is called to replace prog A with prog B.
+I discussed this kind of buggy rehash with Eric today.
 
-The reason is that __cgroup_bpf_replace fails to alloc and assign the
-required cgrp storage for the incoming replacement prog. Consequently,
-the new prog inherits an uninit storage, leading to null-ptr-deref panic
-when kick the new prog.
-
-Fix this by rejecting link update with -EPERM if new_prog's cgroup
-storage is incompatible with link->prog.
-
-Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
-v5:
-- Reject link update if new_prog's storage is incompatible with link->prog. (Andrii)
-
-v4: https://lore.kernel.org/bpf/20260728133058.2858367-1-pulehui@huaweicloud.com
-- Extract the fix for __cgroup_bpf_attach() into a standalone patch [0].
-- Add Reviewed-by tag by Amery.
-- Separate from patchset [1]. (Andrii)
-
-Link: https://lore.kernel.org/bpf/20260728132336.2857800-1-pulehui@huaweicloud.com [0]
-Link: https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@huaweicloud.com [1]
-
-v3: https://lore.kernel.org/bpf/20260720134547.1289964-5-pulehui@huaweicloud.com
-- Include the storage and flags rollbacks to patch4 for sake of code rigor,
-  as it's hard to make update_effective_progs fail in __cgroup_bpf_attach.
-
-v2: https://lore.kernel.org/bpf/20260717073343.958862-1-pulehui@huaweicloud.com
-- Fix invalid access for in-place update when storage changed. (Sashiko)
-
-v1: https://lore.kernel.org/bpf/20260714014659.401063-1-pulehui@huaweicloud.com
-
- kernel/bpf/cgroup.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 57fd1d784e44..31c63ff276fa 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1026,6 +1026,20 @@ static void replace_effective_prog(struct cgroup *cgrp,
- 	}
- }
- 
-+static bool cgroup_bpf_storages_compatible(struct bpf_prog *old_prog,
-+					   struct bpf_prog *new_prog)
-+{
-+	enum bpf_cgroup_storage_type stype;
-+
-+	for_each_cgroup_storage_type(stype) {
-+		if (old_prog->aux->cgroup_storage[stype] !=
-+		    new_prog->aux->cgroup_storage[stype])
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- /**
-  * __cgroup_bpf_replace() - Replace link's program and propagate the change
-  *                          to descendants
-@@ -1064,6 +1078,9 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
- 	if (!found)
- 		return -ENOENT;
- 
-+	if (!cgroup_bpf_storages_compatible(link->link.prog, new_prog))
-+		return -EINVAL;
-+
- 	cgrp->bpf.revisions[atype] += 1;
- 	old_prog = xchg(&link->link.prog, new_prog);
- 	replace_effective_prog(cgrp, atype, pl);
--- 
-2.34.1
-
+We can't make it unsupported although it's super unlikely
+that this is used by a real application.
