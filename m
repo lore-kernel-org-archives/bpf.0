@@ -1,100 +1,108 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC03519539F
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 08:01:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6270A3ED5C9
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 08:07:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785916864; cv=none; b=oaT2aKlRwmd/ZRHVsMN79IOyOUKvd+NpOwkhyxKWVs0eyBDuVY+yklYQYLDyGc404WizHftYNOMgAmn+/h+yztLj30ker/Vs5DzQZZSZ10DWltjtvUl+C6O3Ln1kUDsv21ty28C9L+qILhlWPUwTqgatrRX95LFXorutA5ErANo=
+	t=1785917259; cv=none; b=mMPAo6omyLJQH8WrzT/fOmG2+Yh6MOuZ0EC7rcdIi0APlar/ZmtluC2/Te/LyS0JlpUV6jyKJTBMfRck6r7GGiCUnnQg1sf/Jda9SfdgH+3bQ7caDSO6segy02iZJCDNgJBiZIfuS5nHO9k/pt0mfz12rDFv1wRtyonoI4WUUHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785916864; c=relaxed/simple;
-	bh=KpBrkuz0+y+GOm6SJSD67Psul4m1i6VFTUZAmNIfZOU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CVS+zRfMYlcKY41xEju4RRt2f5eqsWDdYUKXLZypCKiqQ+37oQx8xLyAHFsyCEbJLzxVcmtHbMzO+1eB3V/fTXb595rsxYxfL5NydRWyVwWxMZ8ld/HGZDIH6+/WobBq+MnfN0lq1TUCvynEwFZ2h8yCFT4VUTAMgYDdl12FW44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RY0tVBxm; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785917259; c=relaxed/simple;
+	bh=a7sRoi3nHvuFhLoQ4Y+8dFA5DNggoyzANuvxIuAeOSE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=bUDWltb4/YKRaq8pRI067mVTn8gYS2Si6K+0B3UejCKyugymxjPKcC2IWQiqf9J1p4DVJ5kdrhHX5u0bFXeRkQbrKK3LhXTNiQ7s++6zH6uokHU+yIMuRJ+e90X7Ex8DP2mtjYAp4jLScWP8HZcbHBfDoquu6VuPzUVWJ42wdV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E0PnPmIE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RY0tVBxm"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38e88b60121so555900a91.3
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 01:01:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785916863; x=1786521663; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=KpBrkuz0+y+GOm6SJSD67Psul4m1i6VFTUZAmNIfZOU=;
-        b=RY0tVBxmI2pryVKBvtwm+Ml9W21HWAe+IX1qqjiPLc3NYo4EMjJeYHMZT/6B2iO8F3
-         13NJgtqlxbKByRixSHU4HgbJj9QXW80PpAONQfrHMFzCr8oEfuO98voIJBQ18jA8yd4H
-         YNiX3Juan5yUNHDJsqV6C9HZ0pJjufMUpDtvvziaN9rNWWzuX+0L6Su8+EGLNyTs6/vD
-         nOA6OLcxfgt5SRa/1x2q4Qav5INX1qXnQ9Qe9ke6Xg3cm9+uvEf+ptPkGrHoYm+Hj2GJ
-         FSa5mQUi0UlHNlY8SArIPRjUFnlTMxgacLAwj0FWRBiB5o+OxUY1cWFam8Mn/BbdHjFP
-         5Vvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785916863; x=1786521663;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KpBrkuz0+y+GOm6SJSD67Psul4m1i6VFTUZAmNIfZOU=;
-        b=SMKRAjDzO+wcSZ0O90yTJTPL8GoxxZCL4wfRCW29Lz9r/B+TfnM0ULaS4rHYvGh0pS
-         gFH2H3aMblylPrK7uRie4bopeG/XJWpvTk9lcQ7Um0qH/BH943itQq5fVcj5FbOakVRK
-         Mn0DF4VUszJeAYjMWqN24RhPISqOEfifWpRR3nyNQoUyRLFNqc479tQO9ixjzda6Pnca
-         lyuBcn/1tfMFpfMXrvREUD5+H74AfHC3MQWO+iSyoGb2sitwReKzxZ3uOhtCApNsmYK8
-         5AXm0d5KkSEr8iQHPW+wimqPDRllxx3cQeZ2Cu8yNzHio/CJbFSlngNilDa2k+NytsUr
-         aDCQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqNE1/pLD78IqsVofTke9ezLD0gkcOngGclL5L6hH+aPql7j9mW5IZlD74QsdSqU31Ives=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkQhWTBNPJNxnCtBNZnR+sPomBfsyvLg/XV/YglrfKwV0wusw6
-	ZEBHlR3JjOoWmw7XyksMThAlbews63ig3fw/Kj3ATJ92TpCUZ0IcaWPEtRLjOg==
-X-Gm-Gg: AR+sD10EfXiFKJjgdvkSFBf4cswne/u3JKISMiO9CGoGLJIcPYZWiLxud6X02W8IDRA
-	U+0prIP7ki7nhOMRPntToSiJh6GSpuzpxMf5sAKSJ8ZMHxEXk4nF8IyiI3vcWoRZS2jXzvfF5h9
-	CWO8l5jTKBkfQOqFseUqFyZ4KdW6Tpx4I9sEu1rKYpXAYYu28+BiK7pV7C8X9DuTnJMRTIy99/p
-	wXGDUL49YRDmMOAQ+Fmez7Ldzyom7ITiPWc9tPnPBc/RmIJNfcYpQxzcKJgn5QVC+5bjoQwrySr
-	RCSfLkgeBW/J/N7TlgLenXKypjSeuq8ofaQP99h9TDPoiWWD2kysGstZacz9YCg48Mie/sHkb4d
-	JAelFgSHam0+98WsZtp+hZQT+HuERDQLzYZ+Bdna+w0Up0BMAiUxgVmm4zleS/w5wYClbkOqgE1
-	pPWvuerwUcz8KST1Lw5InGJq6Mxiu9/lskuaFt1gTvcGMXhEDG5moHOtuVAa8XVcLwy+xgFNDT1
-	yHmJWzP3ZLpwijMhReZmPm+HXM=
-X-Received: by 2002:a17:90b:57c3:b0:38e:bfe:81e9 with SMTP id 98e67ed59e1d1-3903c5589e0mr5191966a91.1.1785916862933;
-        Wed, 05 Aug 2026 01:01:02 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3903917a5d0sm2441915a91.6.2026.08.05.01.01.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 01:01:02 -0700 (PDT)
-Message-ID: <b94080a4d2804778a2bf6c4d588a5d2fa7860a6d.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 9/9] selftests/bpf: Test stack-passed
- struct_ops arena arguments
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis	 <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Wed, 05 Aug 2026 01:00:59 -0700
-In-Reply-To: <20260803125115.2264733-10-memxor@gmail.com>
-References: <20260803125115.2264733-1-memxor@gmail.com>
-	 <20260803125115.2264733-10-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E0PnPmIE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E4411F00A3A;
+	Wed,  5 Aug 2026 08:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785917245;
+	bh=iIa7R6dcd2lgXlVhwCygpSGBiodGDSkd8vt57sSw9X8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=E0PnPmIEI1EuzQPaBUT7x9RSkuatsc93M/9xyAe/LiL4kzMUzAIucNTraBAIALIX/
+	 Ztz9fnYnshzzsEkshK1gRTuDycEWTRZyPgq4p0GcOPRJDUjSrm5UdWXmKJOJOAbshb
+	 JU/wXfZze9PacmKxe7sLYb4o4+LUU6t07v44KQ+ZCvDhDUXOY6akjNfFH5I3LUoQpd
+	 fWJmWbg6xlZafMqMNFkLr59z35h9oFVnGQXzWpyUOHDDJjP2pQf4lOLTtNE157CvFP
+	 F2V1p1qWNIzdnWsqBCDhH3An5DQOHwsKqIuAJDwAYqicatJFGC/IuTN/RAq9y1K4WQ
+	 C2V6ek7cQo2Ig==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] fsverity: reject short BPF digest buffers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yichong Chen" <chenyichong@uniontech.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260805075655.950308-1-chenyichong@uniontech.com>
+References: <20260805075655.950308-1-chenyichong@uniontech.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+Date: Wed, 05 Aug 2026 08:07:24 +0000
+Message-Id: <20260805080725.0E4411F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Mon, 2026-08-03 at 14:51 +0200, Kumar Kartikeya Dwivedi wrote:
-> From: Tejun Heo <tj@kernel.org>
->=20
-> Add a test_arena_stack member with eight leading scalar arguments so the
-> arena pointer is passed on the stack.
->=20
-> The callback validates the first and last scalar ctx slots before
-> dereferencing the pointer in ctx[8]. This exercises the indirect
-> trampoline stack layout and arena conversion together, and prevents a
-> regression where stack arguments are read one slot late.
->=20
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Tested-by: Eduard Zingerman <eddyz87@gmail.com>
+Pre-existing issues:
+- [High] Out-of-bounds write (TOCTOU) due to use of shared memory in pointe=
+r arithmetic.
+--
+
+--- Patch [1]: [PATCH] fsverity: reject short BPF digest buffers ---
+commit f40b6203fcacca3140ba489474dd88b289d0ffc4
+Author: Yichong Chen <chenyichong@uniontech.com>
+
+fsverity: reject short BPF digest buffers
+
+bpf_get_fsverity_digest() reports the digest size as the full hash digest
+size. However, when the provided dynptr only has room for part of the
+digest, the helper currently copies the truncated digest and still returns
+success. This changes it to return -EOVERFLOW instead to match the ioctl
+measurement path.
+
+> diff --git a/fs/verity/measure.c b/fs/verity/measure.c
+> index cfe2d5e535f96..4cfadba95488b 100644
+> --- a/fs/verity/measure.c
+> +++ b/fs/verity/measure.c
+> @@ -148,9 +148,11 @@ __bpf_kfunc int bpf_get_fsverity_digest(struct file =
+*file, const struct bpf_dynp
+>  	arg->digest_size =3D hash_alg->digest_size;
+> =20
+>  	out_digest_sz =3D dynptr_sz - sizeof(struct fsverity_digest);
+> +	if (out_digest_sz < hash_alg->digest_size)
+> +		return -EOVERFLOW;
+> =20
+>  	/* copy digest */
+> -	memcpy(arg->digest, vi->file_digest,  min_t(int, hash_alg->digest_size,=
+ out_digest_sz));
+> +	memcpy(arg->digest, vi->file_digest, hash_alg->digest_size);
+> =20
+>  	/* fill the extra buffer with zeros */
+>  	if (out_digest_sz > hash_alg->digest_size)
+
+[Severity: High]
+This is a pre-existing issue, but can the arg->digest_size field be modified
+concurrently after it is initialized?
+
+Looking at bpf_get_fsverity_digest(), the memset() operation directly follo=
+wing
+this hunk uses arg->digest_size to compute the destination pointer:
+
+    if (out_digest_sz > hash_alg->digest_size)
+        memset(arg->digest + arg->digest_size, 0,
+               out_digest_sz - hash_alg->digest_size);
+
+Since arg is a pointer into a dynptr that might be backed by shared memory,
+if an attacker overwrites arg->digest_size with a large value before the
+memset() executes, could this cause an out-of-bounds write of zeros into
+kernel memory?
+
+Would it be safer to use hash_alg->digest_size instead of re-reading
+arg->digest_size when calculating the pointer offset for the memset?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805075655.9503=
+08-1-chenyichong@uniontech.com?part=3D1
