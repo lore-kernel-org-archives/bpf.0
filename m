@@ -1,111 +1,111 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEEEC3BADAA;
-	Wed,  5 Aug 2026 15:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483DA355055;
+	Wed,  5 Aug 2026 15:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785942052; cv=none; b=P61sraqgNDPxcSpMhFpzA+e0TBpQ3pOfHZRCzr2A/GSN22EbU0ovX+g/0G2KDuYw48hdqZQ0BiJ8LHgZM9zjTaSLeBGPxvCoQx1WEAaz2dRyezQmwTMXF+b4osOBopeoR0mEHRbuYa5ic3K5W7rJ2E6/siWlo006VWjQA7PEmtI=
+	t=1785942527; cv=none; b=NcNm8de4AnHh0/9rJwdgFbPPDVbEkWqZlIUC4q2olXvFydneel4harseUs9uxL8Avibqm/qcpIhi6EAZDdo/oIRcp48THf8xlDEBLDEVN+2AnYCvxA/T70Mh2/oE7qfz6+5r2Aq5I2KAVdlHB3OWhCoUk0mnl0A7qZKWBXMiS6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785942052; c=relaxed/simple;
-	bh=BpM6LcH6JMBUFl9Yn0UsTvy1li+uJZz7INVMq56n7x8=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=n90s1/WOCg+Hls6PZin5PIQMzeJjDKVJlmpUEzInw71ugTlTLhKIczj40gZf2o5opgVRkpYhTwshVWADyF2IeGlLycrNnIeUNO7IQ0gDOXHKxRlUp6SCEPHBOxI5w/OyRQWwF88IWeaSsSEDhzGsozJ7ZFTlyw9uSsQ880pl2i0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=StozFnBs; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1785942527; c=relaxed/simple;
+	bh=Xi1OgDbyB/Evc8ioBE8gFyoHFsNQEXX7oTxNLufPR/M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HLl+qyL9iW63Mx1LxJxd7puCuruDzXsQejOshfk1AnyHiu3ngTdALQfJNrJ47CSFl7EL2x70Zl2WsYO0k+z/eC2B9Qhyy3y2J/WrrIl0JrQGzxQrLEa9nzQRq+nVWiVuQ5hkLQtCwBPshCaGabmXjEiy/MQUQ94idybTNXyoVUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uYZ+1Xyy; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="StozFnBs"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1wrd6Y-008Cww-0f; Wed, 05 Aug 2026 17:00:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=4wWm0XSavEASEIUg8MVDlPFq0X7NdXbC6ZWOPd2Q2Y0=; b=StozFnBsw3pZqF47PbT4ojCfCq
-	GO9RfHCf21r9bREXDYgmWnZudtY/ynSMj/pY6xHp9kHMuNfBEryGfiEarnSAMpWWlKUHF+Kx4NSO0
-	HpESNtzLYyVJyUkgQ6R3y93bVlzA+9sMnNjPTgD/rMik3xQpNuHZxvcWl5FgL/yF23K+A8RaRBs2f
-	QVaaHF46FUeuEWeODafLa5wmdwfhDqDJv9+xFqo1gA0OTMZVyrjZqfVyGeaVIuIZDrY8V2Nf6aNC9
-	Q7lioKiAJo5/6wHWDypWgvuGFDAyfHCcaeArSXStpMJxxJEn3immo+jnh6zhx3EauPt+1Vdkm2Su2
-	FwePau9Q==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1wrd6X-0004mA-1w; Wed, 05 Aug 2026 17:00:25 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	id 1wrd6N-004B1a-Eh;
-	Wed, 05 Aug 2026 17:00:15 +0200
-Message-ID: <f131ac25-24c2-40b7-ad3a-f5a283b39e7f@rbox.co>
-Date: Wed, 5 Aug 2026 17:00:14 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uYZ+1Xyy"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785942519;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AmGOoR5eHblWxTntREzpR+YPiusEuFcyx+N/a238v3o=;
+	b=uYZ+1Xyymr+o0EfKUZB5tmSXYpHZIIxHrJaZ3FrgivNJuq085PdyzSxR2EFTHcPUJ+jLW7
+	ISCjUovSqjDz/KX1t5+mR/5PlcDbBspgwXhjETKb8qUY2lIx5OUDKC/QQMvY4f7wQMvLwE
+	7pZKlVSQlBCQ9QAFz5uYmcCU/3sR7rA=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Varun R Mallya <varunrmallya@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Viktor Malik <vmalik@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v4 1/2] bpf: Fix sleepable check for tracing/lsm prog
+Date: Wed,  5 Aug 2026 23:08:09 +0800
+Message-ID: <20260805150810.34907-2-leon.hwang@linux.dev>
+In-Reply-To: <20260805150810.34907-1-leon.hwang@linux.dev>
+References: <20260805150810.34907-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf v2 2/2] bpf: Unconditionally take socket references in
- lookup helpers
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- Willem de Bruijn <willemb@google.com>, Jiayuan Chen
- <jiayuan.chen@linux.dev>, Joe Stringer <joe@wand.net.nz>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- Sashiko <sashiko-bot@kernel.org>
-References: <20260803-sockmap-lookup-tcp-leak-v2-0-306e025bfe66@rbox.co>
- <20260803-sockmap-lookup-tcp-leak-v2-2-306e025bfe66@rbox.co>
- <875x1qyyyx.fsf@cloudflare.com>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <875x1qyyyx.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 8/4/26 12:14, Jakub Sitnicki wrote:
-> On Mon, Aug 03, 2026 at 11:00 AM +02, Michal Luczaj wrote:
->> Lookup helpers gate whether to acquire a socket reference on
->> sk_is_refcounted(), a check re-evaluated at release. An established socket
->> refcounted at acquire time can gain SOCK_RCU_FREE via
->> connect(AF_UNSPEC)+listen() before release runs; the release-side re-check
->> then reads sk_is_refcounted() == false and skips the put. The reference
->> leaks.
->>
->> Make acquire and release unconditional and symmetric: always take a
->> reference, always put it. Adapt sk_select_reuseport().
->>
->> Fixes: 6acc9b432e67 ("bpf: Add helper to retrieve socket in BPF")
->> Fixes: 64d85290d79c ("bpf: Allow bpf_map_lookup_elem for SOCKMAP and SOCKHASH")
->> Reported-by: Sashiko <sashiko-bot@kernel.org>
->> Closes: https://lore.kernel.org/bpf/20260701235552.2B0AA1F00A3F@smtp.kernel.org/
->> Signed-off-by: Michal Luczaj <mhal@rbox.co>
->> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
->> ---
->> TC bpf_sk_assign() has the same issue; it takes a reference only when
->> sk_is_refcounted() is true at assign time, but sock_pfree() (the skb
->> destructor it installs) re-checks sk_is_refcounted() independently at
->> release time. The same connect(AF_UNSPEC)+listen() transition leaks the
->> socket here too. I'd welcome suggestions on the right way to handle this.
-> 
-> Can we make this scenario unsupported?
-> 
-> listen() could return EBUSY if called on a socket that is refcounted.
-> 
-> WDYT?
+When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing prog
+is allowed to attach to '__x64_'-alike prefix symbols.
 
-I'm not sure I understand. Isn't a freshly created socket already
-refcounted?
+It is because the verifier does not verify whether the symbol is a kernel
+function or a bpf prog. That said, a sleepable tracing prog is allowed to
+attach to a bpf prog target whose name has '__x64_'-alike prefix.
+
+For example, a sleepable fentry prog attaches to a '__x64_sys_nop' XDP
+prog, and copies buffer from a user pointer with bpf_copy_from_user()
+helper. After attaching the XDP prog to lo interface, the kernel BUG
+could be triggered by 'ping -c 1 -W 1 127.0.0.1':
+
+[    3.460756] BUG: sleeping function called from invalid context at kernel/bpf/trampoline.c:1324
+
+Similar issue could be applied to lsm prog, when the
+prog->aux->attach_btf_id is in the LSM allowing list but the attach_btf is
+a malicious bpf prog's btf.
+
+Fix it by disallowing sleepable tracing/lsm prog always when its target
+btf is not kernel's btf.
+
+Fixes: 16d9c5660692 ("bpf: Always allow sleepable programs on syscalls")
+Fixes: 1e6c62a88215 ("bpf: Introduce sleepable BPF programs")
+Acked-by: Viktor Malik <vmalik@redhat.com>
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/verifier.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7439afdc851a..f364453a2ecb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19022,6 +19022,9 @@ static int btf_id_allow_sleepable(u32 btf_id, unsigned long addr, const struct b
+ 	const struct btf_type *t;
+ 	const char *tname;
+ 
++	if (!btf_is_kernel(btf))
++		return -EINVAL;
++
+ 	switch (prog->type) {
+ 	case BPF_PROG_TYPE_TRACING:
+ 		t = btf_type_by_id(btf, btf_id);
+-- 
+2.55.0
 
