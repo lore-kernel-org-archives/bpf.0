@@ -1,32 +1,30 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0D93C4172
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 04:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C051A3C13E3
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 04:05:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785902715; cv=none; b=qeQo1GsFaPH5E0n1f1chpIN1Q58XWPTb+zDM+FLZW1Heevg/ZLDLl/gIyM1TZJq0SDZmUmC1TlOpLZUEkqkXFGGnb28RnMfsGEM4fOvcF236z/bIVqSrMZbIy+sQ/FqipVufueG50XE5TaGsPvfa9CrlffrWngdxmJK9vSGwr2o=
+	t=1785902717; cv=none; b=DMO4mrkTB6E8Z7Hm244moNuqMtUmClnbQkbfDzkk4XvKHPRhrEVodmKT+sdXuCW3jcPSzzBwk3R6G5eC3XGh9Jx5abLuFXkkIjh4qTNvq5p14Nw925T2nkgadE9aqBAvATOJyuiLVeWz12VYmaNhIdSnKYMc151ir2VjEmlIj2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785902715; c=relaxed/simple;
-	bh=hp3BxxjQXqMUl4xCXaHkuCNKHzH71oiL+uOouF/16Sg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dZAWfYkc5itOYXwm7LQb8zjEH1OBxISqRejxewY3wijuDMHahM9JKm/N13mtzbrxvEV4HnDNSWr2o8OkD9iY/NUxMVBCwPsSxEyl/WSf1yY1suYilSXVxsXBtbxSX6cEmT7JRCLXIPinKe/vMnMNpjf8wLSqk9t33OsLtpzRs7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rreJZX/w; arc=none smtp.client-ip=91.218.175.185
+	s=arc-20240116; t=1785902717; c=relaxed/simple;
+	bh=C4RSpaljxgz9ck9DLpKyKQn84ey1xXzE5fy+mwxZT30=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MQnLLg/fdPuFUGEQbsau9SmPCtb1YpV/i/yViLBihVo7khvxF+bG/x5LtmJpNMh/FLWNEbsiPOa5VGPyunTR5pWnmgEVMw/X4Z7xZaeReManXmZgx1DTSG51jHQ1vw21JgCPVCthO88nTnW+fWqacPZz6bUE0J41qdgGKwEbDw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iCBwrPOz; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rreJZX/w"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iCBwrPOz"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785902711;
+	t=1785902703;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cf+NSdykdJD4K4q6YC2i5+/xG5MrJMnjBSYsMFeGNQk=;
-	b=rreJZX/wn9AqowKmJpMhI/vw1qNff5JAKHiIJqSBVDLqtwcOkBBlWRMG6bFl5rnrjfpK9V
-	6esH6Kf12l787ETLs8Hk9nZrfcEJwt723GbXrsr0hpdTJALRPXO+iM9XWUWYCkJIMZSWjx
-	U4znrYxsh8ewVhLFf0ogk7fr6qRjbk0=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0tlFxTrd/+tW4EBqbHQI+10YL1gDs4/3VHY2K0901z4=;
+	b=iCBwrPOzfiQVdDl8SZdNAEmJzMXVis/m7VsjNVxUpw16S0SOZ1QGzz6sm3U4e0VuGIhzrC
+	410U8/PyN1uDw91wDpaDPb3W3DdgNsfXmG2BpKQxdoYOTjWhXHS6O2rShePC8FVfsatYNs
+	J1v8gFD/Ev/RiN50cBlcHxsPil7Gyg0=
 From: "Hui Zhu" <hui.zhu@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -49,11 +47,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
 Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next v2 2/3] bpf: Fix prog UAF in bpf_trampoline_multi_attach() register-path rollback
-Date: Wed,  5 Aug 2026 12:04:07 +0800
-Message-ID: <6edcc3d19ab91511372a9c3f00d90fdc66a31d83.1785902527.git.zhuhui@kylinos.cn>
-In-Reply-To: <cover.1785902527.git.zhuhui@kylinos.cn>
-References: <cover.1785902527.git.zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v2 0/3] bpf: Fix UAF in bpf_trampoline_multi_attach/detach on update failure
+Date: Wed,  5 Aug 2026 12:04:05 +0800
+Message-ID: <cover.1785902527.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,98 +61,50 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Hui Zhu <zhuhui@kylinos.cn>
 
-In bpf_trampoline_multi_attach(), if update_ftrace_direct_mod() fails,
-the rollback tries to undo update_ftrace_direct_add() for register-path
-mnodes via update_ftrace_direct_del(). If that undo also fails, ftrace
-still calls into rtr->cur_image, but the unconditional rollback frees
-it -- a UAF of both the image and the prog baked into it.
+This series fixes several use-after-free issues in the BPF trampoline
+multi-attach/detach error paths, where ftrace direct-call updates can
+fail and leave ftrace pointing at freed memory.
 
-Fix: for register-path mnodes (old_image == NULL) whose undo failed
-while cur_image is set, pin the prog on cur_image instead of rolling
-back, reusing the pinned_prog mechanism from the detach path.
+Patch 1 addresses two UAF scenarios in bpf_trampoline_multi_detach():
+the single-point unlink failure path (old_image == cur_image) and the
+batch ftrace update failure path. A new pinned_prog field in struct
+bpf_tramp_image keeps the bpf_prog alive while ftrace may still
+reference its image. bpf_trampoline_multi_detach() is made to return
+void, since callers cannot usefully react to failures, and
+bpf_trampoline_put() is taught to leak the trampoline when cur_image
+was left behind by a rollback, so ftrace keeps a valid target.
 
-Fixes: aef4dfa790b2 ("bpf: Add bpf_trampoline_multi_attach/detach functions")
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
----
- kernel/bpf/trampoline.c | 51 +++++++++++++++++++++++++++++++++++++----
- 1 file changed, 46 insertions(+), 5 deletions(-)
+Patch 2 fixes a similar UAF in bpf_trampoline_multi_attach() rollback:
+when the register-path undo fails, ftrace still calls into cur_image,
+so the prog is pinned on cur_image instead of being rolled back.
 
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index c08d1a09e638..7fac27374ece 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -1668,7 +1668,7 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
- 	struct btf *btf = prog->aux->attach_btf;
- 	struct bpf_tracing_multi_node *mnode;
- 	struct bpf_trampoline *tr;
--	int i, err, rollback_cnt;
-+	int i, err, rollback_cnt, err_undo_reg = 0;
- 	u64 key;
- 
- 	for_each_mnode(mnode, link) {
-@@ -1728,8 +1728,10 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
- 	if (ftrace_hash_count(data->modify)) {
- 		err = update_ftrace_direct_mod(&direct_ops, data->modify, true);
- 		if (err) {
--			if (ftrace_hash_count(data->reg))
--				WARN_ON_ONCE(update_ftrace_direct_del(&direct_ops, data->reg));
-+			if (ftrace_hash_count(data->reg)) {
-+				err_undo_reg = update_ftrace_direct_del(&direct_ops, data->reg);
-+				WARN_ON_ONCE(err_undo_reg);
-+			}
- 			goto rollback_unlink;
- 		}
- 	}
-@@ -1744,8 +1746,47 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
- 
- rollback_unlink:
- 	for_each_mnode_cnt(mnode, link, rollback_cnt) {
--		bpf_trampoline_remove_prog(mnode->trampoline, &mnode->node);
--		bpf_trampoline_multi_attach_rollback(mnode->trampoline);
-+		struct bpf_trampoline *rtr = mnode->trampoline;
-+		/*
-+		 * register_fentry_multi()/modify_fentry_multi() set
-+		 * rtr->cur_image before any ftrace call is made, and
-+		 * bpf_trampoline_multi_attach_init() captured whatever was
-+		 * live before that into rtr->multi_attach.old_image. A NULL
-+		 * old_image means this ip had no prior direct caller, i.e.
-+		 * this mnode went through the "register" (data->reg) path
-+		 * rather than "modify" (data->modify).
-+		 */
-+		bool via_register = !rtr->multi_attach.old_image;
-+
-+		bpf_trampoline_remove_prog(rtr, &mnode->node);
-+
-+		/*
-+		 * If this mnode used the register path and the
-+		 * update_ftrace_direct_del() above meant to undo its
-+		 * earlier, successful update_ftrace_direct_add() failed,
-+		 * ftrace is still actually calling into rtr->cur_image
-+		 * (which has @prog's call baked into its machine code) even
-+		 * though this attach is being reported as failed. Freeing
-+		 * rtr->cur_image via the normal rollback (which would also
-+		 * let the caller free @prog once this function returns its
-+		 * error) would be a use-after-free, so instead pin @prog on
-+		 * it and leave rtr->cur_image untouched: rtr->multi_attach
-+		 * is a scratch area only meaningful between _init() and
-+		 * _free()/_rollback(), so skipping _rollback() here does
-+		 * not leave it in an inconsistent state (old_image is NULL
-+		 * on the register path anyway). This image (and the pinned
-+		 * prog reference) is subsequently either properly retired by
-+		 * a later, successful update on the same trampoline, or
-+		 * safely leaked when the trampoline is torn down - see
-+		 * bpf_trampoline_multi_attach_free() and bpf_trampoline_put().
-+		 */
-+		if (via_register && err_undo_reg && rtr->cur_image) {
-+			WARN_ON_ONCE(rtr->cur_image->pinned_prog);
-+			bpf_prog_inc(prog);
-+			rtr->cur_image->pinned_prog = prog;
-+		} else {
-+			bpf_trampoline_multi_attach_rollback(rtr);
-+		}
- 	}
- 
- 	trampoline_unlock_all();
+Patch 3 fixes the common __bpf_trampoline_unlink_prog() path, covering
+both multi (bpf_trampoline_multi_detach) and non-multi
+(bpf_tracing_link_release, bpf_shim_tramp_link_release) callers.
+
+Hui Zhu (3):
+  bpf: Fix UAF in bpf_trampoline_multi_detach on update failure
+  bpf: Fix prog UAF in bpf_trampoline_multi_attach() register-path
+    rollback
+  bpf: Fix prog UAF in __bpf_trampoline_unlink_prog() on update failure
+
+ include/linux/bpf.h      |  20 +++--
+ kernel/bpf/trampoline.c  | 183 +++++++++++++++++++++++++++++++++++----
+ kernel/trace/bpf_trace.c |   2 +-
+ 3 files changed, 183 insertions(+), 22 deletions(-)
+
+Changelog:
+v2:
+Folded v1's two detach patches into patch 1.
+According to the comments of Jiri Olsa, Pin the prog (pinned_prog) on
+cur_image so it stays alive while ftrace may still call into it.
+Make bpf_trampoline_multi_detach() return void.
+Fix the same UAF in standard (non-multi) trampolines.
+According to the comments of sashiko, Fix the prog UAF in
+bpf_trampoline_multi_attach() rollback.
+Leak the trampoline in bpf_trampoline_put() when cur_image is left
+by a rollback.
+
 -- 
 2.53.0
 
