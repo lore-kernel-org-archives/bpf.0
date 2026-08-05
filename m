@@ -1,260 +1,182 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70BC84657FD;
-	Wed,  5 Aug 2026 12:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B964766BD;
+	Wed,  5 Aug 2026 12:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785932662; cv=none; b=BcFOrVJb+BEJDRrI3Zz6WFCXvSoSBDMn4D1kNlH2+fQTlVjPQBItfErZhfB5NzcUMnKFVNgEnEE263pBHAJldYPgG1rHKCkfLwMTog2RBiQW8naYjj3pxLSak9sSjHPo2vYH/t0QFPf53PIHVRABp780EZ3R5BcnTJWKCVZaHwg=
+	t=1785933345; cv=none; b=Mn/8rVFCWZRfES9+YEgLuDBUM4jtaul80MQI1Y8hZpxepa3z2+6j5YAz02wGjP8CR0MeYHUbPL2+dL84S9ZLhmw8IiwbYKh3g6431G00TFNRHI4c9zHQC8mHWE1HqZKGLmkcxhdaTTjqqvmJLkNjbFPwGF4AEKj8VcAmq0yDq9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785932662; c=relaxed/simple;
-	bh=u43ECnkxfmdGYW8Bf4pwUp69IBSkp9X0YymN34IHNp4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nrr1/zAkbOlB67ao68y7x8wYWtPvRULfsdrVkGMgrjKxp3FdFcxWheRrbm/xIbe6oseC/uNjy1Ronuse8CspQQ2hCGa5FhaXSvWAV/yWJM7d1QqlZM74keDfIvtQ2QziQuQ/PFT/Lo/vAG7GJKHqa+pALAWmwAy7M/skdXUAfek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dSSC+WFQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785933345; c=relaxed/simple;
+	bh=e1gegNThzMuh+33P96hFm4RkJpbJa7EkhPIID3hb6Sw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=cuYbrFlcV9sY+XHflzEv8c97Jja7oZdgYumgQIUBWFhyuwV94BqrkL58i4dmiCmnkuNiYoKYIwQIyBN344OTyGo+0jR0jXR8bQSzUYVD0UjMkK+O86Cqk5IgQSSbswQMp5DF/9fPAorDWswNCC6kGZ6Qs6ArCnX5J6uPi0N9Hoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OY6iI1+f; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dSSC+WFQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EFAD1F000E9;
-	Wed,  5 Aug 2026 12:24:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OY6iI1+f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166401F000E9;
+	Wed,  5 Aug 2026 12:35:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785932661;
-	bh=wZC1Z+3adPrHkC8Qv8oyMha0PitI7krXLmp3Adhm/jI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dSSC+WFQ00umcfx+tqieACzSJnSWVkJCWdn9wqPvWedAh/OxhGwB+Manb2VPnhQsz
-	 WCmuPJtBVldoxTSbpDiXLrYwhRZcqI/C4I/WABG2yIsGxBSEfa6fBP7TuiSCCKUdf9
-	 2TEmjqFSlQs7G8SH9HiM+unVa6sqciokFlbYml7Z16f4ToVSHv/oR84Zuq+m0/Qk2x
-	 TLxMZOzxvAA4CH6h+g/3jAyYyaascOhSdMHjw7C6nLjlWwUY3zJ11pg8FgikNTLhB8
-	 2si6lGIhhsAMwvcQvfWYs84TCvzVj3NHhQAiqyiJY8JTtgTqf3KkG8kgUx9ux9okgd
-	 HdTQ4mmwsUERg==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: "Lai Jiangshan" <jiangshanlai@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	"Josh Triplett" <josh@joshtriplett.org>,
-	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
-	"Frederic Weisbecker" <frederic@kernel.org>,
-	"Neeraj Upadhyay" <neeraj.upadhyay@kernel.org>,
-	"Joel Fernandes" <joelagnelf@nvidia.com>,
-	"Boqun Feng" <boqun@kernel.org>,
-	"Uladzislau Rezki" <urezki@gmail.com>,
-	"Davidlohr Bueso" <dave@stgolabs.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Matt Fleming <mfleming@cloudflare.com>,
-	"Harry Yoo (Oracle)" <harry@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	rcu@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: [PATCH v3 6/6] selftests/bpf: Add a call_srcu() re-entry reproducer
-Date: Wed,  5 Aug 2026 05:23:43 -0700
-Message-ID: <20260805122346.269445-7-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260805122346.269445-1-puranjay@kernel.org>
+	s=k20260515; t=1785933343;
+	bh=KDAAxE67AkA4VWS6hTKD9Qmq2J0HyWRc7mVnAlucdnQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=OY6iI1+fQdGt7rd4Why2AO6cLyzK7FNgP9mQVYvB5bGxifr/4Vk9RNlaXJYEA4qsy
+	 zPIUt45kTbDRkhOyu82qs1GXqNiSymPEWQgmle8+/vQJ8oD8ZpWtVOWKsQQCqk+rIc
+	 7rICIgnsQnU/sGRKYcLLg3/xvu8NAddnZuJ4BnC+Q4k1+jVpjlSOzhgOD5AESSc/Sj
+	 AJRyEoSsB5rSYcPkHrESGEPAh/AwklV1yWX7qUAvlc8bWGPWopHxN+voO3FcpxWMSs
+	 l0j1T5DMi8Xv0XnsxOKMDbduTpS8OJhb665MGzN4tV34yskxjrEo/iwOjbEKn4Hkyo
+	 43EBp6YUyAYYA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 3/6] srcu: Make call_srcu() safe to call from any
+ context
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20260805122346.269445-4-puranjay@kernel.org>
 References: <20260805122346.269445-1-puranjay@kernel.org>
+ <20260805122346.269445-4-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 05 Aug 2026 12:35:42 +0000
+Message-Id: <20260805123543.166401F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Re-enter call_srcu() from a BPF program to exercise its any-context
-safety (and thus call_rcu_tasks_trace(), which is call_srcu() on
-rcu_tasks_trace_srcu_struct).
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Critical] A TOCTOU race in `srcu_defer_flush()` locklessly checking `lli=
+st_empty()` can cause `srcu_barrier()` to return prematurely, leading to a =
+Use-After-Free.
+- [Medium] Expedited SRCU callbacks can be silently downgraded to normal ca=
+llbacks due to a non-atomic update race on `sdp->defer_exp` between `__call=
+_srcu()` and `__srcu_defer_drain()`.
+--
 
-An fentry program on rcu_segcblist_enqueue() fires mid-enqueue: that
-function is reached from srcu_gp_start_if_needed() with the srcu_data
-->lock held.  The program does a task-storage delete, whose only deferred
-work is call_rcu_tasks_trace(), re-entering the enqueue on the same CPU.
-The triggering thread is pinned to one CPU and matched by TID, so the
-program fires only for the test's own delete.
+--- Patch [3]: [PATCH v3 3/6] srcu: Make call_srcu() safe to call from any =
+context ---
+commit 137e7f3c08249a4bd260b0c0d6f275423685df28
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-Without the fix the nested call re-takes the same sdp lock and
-self-deadlocks; with it the nested __call_srcu() sees interrupts disabled
-and defers via irq_work, so the delete returns and the test passes.  Since
-it can hang an unfixed kernel, run it only against a kernel carrying the
-fix.
+srcu: Make call_srcu() safe to call from any context
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../selftests/bpf/prog_tests/rcu_reentry.c    | 95 +++++++++++++++++++
- .../testing/selftests/bpf/progs/rcu_reentry.c | 51 ++++++++++
- 2 files changed, 146 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
- create mode 100644 tools/testing/selftests/bpf/progs/rcu_reentry.c
+call_srcu() has the same constraint as call_rcu(): its callback list and
+locks are only touched with interrupts disabled. Defer as call_rcu()
+does: stage the callback on the srcu_data's ->defer_cbs, chain that
+srcu_data onto a per-CPU list, and raise a per-CPU irq_work that
+re-issues it straight to the enqueue helper, never back through
+__call_srcu().
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/rcu_reentry.c b/tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
-new file mode 100644
-index 0000000000000..fa813d1d492b6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Exercise re-entry into call_srcu() from BPF; see progs/rcu_reentry.c.
-+ *
-+ * On a kernel without the call_srcu() any-context fix the nested call
-+ * self-deadlocks on the srcu_data lock, so this hangs rather than fails.
-+ */
-+#define _GNU_SOURCE
-+#include <sched.h>
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+#include "rcu_reentry.skel.h"
-+
-+static int sys_pidfd_open(pid_t pid, unsigned int flags)
-+{
-+	return syscall(__NR_pidfd_open, pid, flags);
-+}
-+
-+/* Tiny RCU builds have no rcu_segcblist_enqueue() to attach to. */
-+static bool have_attach_target(void)
-+{
-+	char buf[256];
-+	bool found = false;
-+	FILE *f;
-+
-+	f = fopen("/proc/kallsyms", "r");
-+	if (!f)
-+		return true;	/* cannot tell; let the attach decide */
-+	while (fgets(buf, sizeof(buf), f)) {
-+		if (strstr(buf, " rcu_segcblist_enqueue\n")) {
-+			found = true;
-+			break;
-+		}
-+	}
-+	fclose(f);
-+	return found;
-+}
-+
-+void test_rcu_reentry(void)
-+{
-+	struct rcu_reentry *skel;
-+	int err, pidfd = -1, map_fd;
-+	cpu_set_t set, old_set;
-+	bool affinity_saved;
-+	__u64 val = 1;
-+
-+	if (!have_attach_target()) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = rcu_reentry__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
-+
-+	err = rcu_reentry__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto out;
-+
-+	/* Keep the re-entry on a single CPU. */
-+	affinity_saved = !sched_getaffinity(0, sizeof(old_set), &old_set);
-+	CPU_ZERO(&set);
-+	CPU_SET(0, &set);
-+	if (!ASSERT_OK(sched_setaffinity(0, sizeof(set), &set), "setaffinity"))
-+		goto out;
-+
-+	pidfd = sys_pidfd_open(getpid(), 0);
-+	if (!ASSERT_GE(pidfd, 0, "pidfd_open"))
-+		goto restore;
-+	map_fd = bpf_map__fd(skel->maps.task_stg);
-+	err = bpf_map_update_elem(map_fd, &pidfd, &val, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "boot_create"))
-+		goto restore;
-+
-+	/* Arm the handler for this thread, then trigger call_rcu_tasks_trace(). */
-+	skel->bss->target_pid = syscall(__NR_gettid);
-+	err = bpf_map_delete_elem(map_fd, &pidfd);
-+	if (!ASSERT_OK(err, "boot_delete"))
-+		goto restore;
-+
-+	/* Only Tree SRCU enqueues via rcu_segcblist_enqueue(); skip elsewhere. */
-+	if (!skel->bss->hits) {
-+		test__skip();
-+		goto restore;
-+	}
-+	ASSERT_EQ(skel->bss->get_errs, 0, "nested_storage_get");
-+	ASSERT_EQ(skel->bss->del_errs, 0, "nested_storage_delete");
-+restore:
-+	if (affinity_saved)
-+		sched_setaffinity(0, sizeof(old_set), &old_set);
-+out:
-+	if (pidfd >= 0)
-+		close(pidfd);
-+	rcu_reentry__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/rcu_reentry.c b/tools/testing/selftests/bpf/progs/rcu_reentry.c
-new file mode 100644
-index 0000000000000..47a36f704cf3e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/rcu_reentry.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Re-enter call_srcu() from a BPF program.  fentry on rcu_segcblist_enqueue()
-+ * fires inside call_srcu()'s enqueue (reached from srcu_gp_start_if_needed()
-+ * with the srcu_data ->lock held); the handler then calls call_rcu_tasks_trace()
-+ * -- itself call_srcu() on rcu_tasks_trace_srcu_struct -- re-entering the same
-+ * srcu_data on the same CPU.
-+ */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, __u64);
-+} task_stg SEC(".maps");
-+
-+int target_pid;
-+int hits;
-+int get_errs;
-+int del_errs;
-+int done;
-+
-+SEC("fentry/rcu_segcblist_enqueue")
-+int BPF_PROG(reenter)
-+{
-+	struct task_struct *cur;
-+
-+	if (done || !target_pid)
-+		return 0;
-+
-+	cur = bpf_get_current_task_btf();
-+	if (cur->pid != target_pid)
-+		return 0;
-+
-+	/* Issue the nested call exactly once, so the test is deterministic. */
-+	done = 1;
-+	__sync_fetch_and_add(&hits, 1);
-+
-+	/* Re-enter via a task-storage delete, which calls call_rcu_tasks_trace(). */
-+	if (!bpf_task_storage_get(&task_stg, cur, 0, BPF_LOCAL_STORAGE_GET_F_CREATE))
-+		__sync_fetch_and_add(&get_errs, 1);
-+	else if (bpf_task_storage_delete(&task_stg, cur))
-+		__sync_fetch_and_add(&del_errs, 1);
-+
-+	return 0;
-+}
--- 
-2.53.0-Meta
+> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> index 304112674e8a2..35fface51d50b 100644
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+[ ... ]
+> @@ -79,6 +80,45 @@ static void process_srcu(struct work_struct *work);
+>  static void srcu_irq_work(struct irq_work *work);
+>  static void srcu_delay_timer(struct timer_list *t);
+> =20
+> +struct srcu_defer;
+> +static void srcu_defer_drain(struct irq_work *iw);
+> +static void __srcu_defer_drain(struct srcu_defer *sndp, bool guard);
+> +
+[ ... ]
+> +/*
+> + * Flush pending deferred callbacks so a following srcu_barrier() waits =
+for them.
+> + */
+> +static void srcu_defer_flush(void)
+> +{
+> +	int cpu;
+> +
+> +	if (!IS_ENABLED(CONFIG_RCU_DEFER))
+> +		return;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		struct srcu_defer *sndp =3D &per_cpu(srcu_defer, cpu);
+> +
+> +		if (!llist_empty(&sndp->list))
+> +			__srcu_defer_drain(sndp, false);
 
+[Severity: Critical]
+Can this lockless list check lead to a use-after-free during cleanup?
+
+If an asynchronous irq_work is concurrently executing
+__srcu_defer_drain() and has already detached the list:
+
+CPU1 (irq_work)
+__srcu_defer_drain()
+    raw_spin_lock_irqsave(&sndp->lock, flags);
+    llist_del_all(&sndp->list);  // list is now empty
+
+CPU2 (cleanup_srcu_struct or srcu_barrier)
+srcu_defer_flush()
+    llist_empty(&sndp->list) // returns true, returns immediately
+
+Then CPU2 could return prematurely from srcu_defer_flush(), and
+cleanup_srcu_struct() might free the srcu_struct while CPU1 is still
+iterating through the detached callbacks and accessing sdp->ssp.
+
+> +	}
+> +}
+[ ... ]
+> @@ -1423,6 +1473,111 @@ static void __call_srcu(struct srcu_struct *ssp, =
+struct rcu_head *rhp,
+[ ... ]
+> +static void __call_srcu(struct srcu_struct *ssp, struct rcu_head *rhp,
+> +			rcu_callback_t func, bool do_norm)
+> +{
+> +	if (should_rcu_defer()) {
+> +		struct srcu_defer *sndp =3D this_cpu_ptr(&srcu_defer);
+> +		struct srcu_data *sdp;
+[ ... ]
+> +		sdp =3D this_cpu_ptr(ssp->sda);
+> +		rhp->func =3D func;
+> +		if (!do_norm)
+> +			WRITE_ONCE(sdp->defer_exp, true);
+> +		if (llist_add((struct llist_node *)rhp, &sdp->defer_cbs)) {
+
+[Severity: Medium]
+Could this flag be overwritten by a concurrent __srcu_defer_drain()?
+
+If __call_srcu() sets sdp->defer_exp to true just as another CPU is
+draining the list (e.g., from srcu_defer_flush()), can the drainer's
+delayed write to sdp->defer_exp clear the flag we just set here?
+
+CPU1
+__srcu_defer_drain()
+    cnode =3D llist_del_all(&sdp->defer_cbs);
+
+CPU2
+__call_srcu()
+    if (!do_norm)
+        WRITE_ONCE(sdp->defer_exp, true);
+    llist_add(rhp, &sdp->defer_cbs);
+
+CPU1
+__srcu_defer_drain()
+    do_norm =3D !READ_ONCE(sdp->defer_exp);
+    if (!do_norm)
+        WRITE_ONCE(sdp->defer_exp, false); // Overwrites CPU2's write
+
+This would cause CPU2's newly enqueued expedited callback to lose its
+expedited status.
+
+> +			/*
+> +			 * Chain this srcu_data for the drain.  ->ssp must be
+> +			 * published here: deferral skips check_init_srcu_struct(),
+> +			 * so on a never-initialized static srcu_struct the
+> +			 * statically zeroed ->sda still has a NULL ->ssp.
+> +			 */
+> +			sdp->ssp =3D ssp;
+> +			if (llist_add(&sdp->defer_link, &sndp->list))
+> +				irq_work_queue(&sndp->iw);
+> +		}
+> +		return;
+> +	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805122346.2694=
+45-1-puranjay@kernel.org?part=3D3
