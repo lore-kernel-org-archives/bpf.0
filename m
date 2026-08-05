@@ -1,135 +1,141 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-06.mail-europe.com (mail-06.mail-europe.com [85.9.210.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A1B2F1FD7
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 07:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785913244; cv=pass; b=Hm+gD5xeScZ1I8FSKQRcRkYjg1WqI3FI3JZ3YBN7+Qmrd6ARnemeqqvPu/tKveWtowN8/9w+fmTtmZX/82G9F3lyGAq5ZfCKYjKntUx6DqaceW6SgbEwYUrh8HH5cCo0c4HmjdguqU+5CiZivdem++EyDCdKfwpYhMfhxvkhx1w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785913244; c=relaxed/simple;
-	bh=Ce0YZZcMVvFdnB2y3Y8k1D3uBS3XXJPKrq1FjeKjQVQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gWrafmtg03PrsIN53hVhvmpPcx/cdQrI7iKMmkKuu8fXbHnUKjwLrtVv1Hj45Ky8UhCKKVaIxMQ3aNxzRfBCJqrRgr+OgJxp4mAwFqOwuEqCd0EiPulC5SdveUscdt6/nI6nHpvM33/TNvg7Hy2EVFgs5HC3qAzXDYZ1mxcmx7U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VE7TBAO6; arc=pass smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F83B3E1200;
+	Wed,  5 Aug 2026 07:07:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.9.210.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785913664; cv=none; b=VsebJEY1VPx3G63FpFIRqThe+HvcKe9raR3pm0ssqUoTSE8Nh5BIoIyZb4f2/HMvU7bgsB9G7HosEi9h5ON6FcC55ig1TsnwCKV9P1AJBZOSmB8mBwIWldXJXFY4G25QROyJRrZ0iYWt1JIKnwtCA8tMJrYlvS1zbvn5EkO4eF0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785913664; c=relaxed/simple;
+	bh=Myax3ICaCfHvuuA+MdnM9g68vUSuJvAwLLyjkMpToyU=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=U4UUadpOPTxMsSlniaRSMR3L/PgMHpSUYu6bPOxD5C70s7/cf14hh40RO6r33mz1V+PBhzNZbTDNLl+zBDMcYGexfLjqKa/eLjutt2G8Ckdob6Js/jC6XEAV2HyLE1Ibs9jAv3Jp0VBjHWar64txlYtUd0z1vdNrilJF6gGPD+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=M6OyBtSJ; arc=none smtp.client-ip=85.9.210.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VE7TBAO6"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5b011edaf7dso670820e87.2
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 00:00:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785913241; cv=none;
-        d=google.com; s=arc-20260327;
-        b=XyvQH0JF1AfNSW1dK30NM+vbIbBxNgDivRMYiwMxupjix8l9uET6Fr4FnA1OsgYhxU
-         OWLnVddhK1IoSsszHAFEjEYqi/v/avMPyIYDeLQ3j+xbHfZWF3UW2bdOgj0tuuJQzwkk
-         NgfIAmFhSmlNoEfEbPbmOEYJdURSl9cdzbKNYDO5sybMUlbLyhljwvL3/mS2v2vDxFg9
-         RbTlE4aJOuoWEKQfDb5i3TSawbSf+S7d3kn5/vdlexMaLoecYszdFm3veOz+NPeSk3MR
-         ycb8AE8lpyFhl8/94sTYFPmVV82qIYCc10LIQ05tkazv57jjQdpab1Wc0bthDN9RGspW
-         htqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=eSC4CGLgztqlLOT556YFobeiFl6UC5hhb3ugyCp8cKg=;
-        fh=MDEUoWdNFOaYs9P8SDKvubhlpq2V7f7WWYzybv3BFPY=;
-        b=nRiLxgG9mKJg299QIa62zYPK3C1ZgQFAyJI9cms0rrJrqe7yl0pSuADR63mD72fkms
-         mvwfN8JQ+Ofir804GUNT04pZSMWQZv1+1x0bMgKQYnmgVynjX2rIrAehwXqaQps+TG3E
-         pdQ7ce/Un/n5A5rWHYkb96jbcnfXnjjuX+VI2N8uxgnHWD3Mfw2iaNGRqk2gy5FJfvSx
-         4EatuMNDafudMO4S/Nx+5NlgaDp4thDVWoA0ZUlRqIDhnN7EZ47PkUW0Vj7Ir8n2tQ2M
-         LDYEl7FkAxF5M+qJqux9+zwxehQTbwdcF5NdamVKb5ytvyUr24ZZcYWN15V7POkk7/8J
-         9Phw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785913241; x=1786518041; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eSC4CGLgztqlLOT556YFobeiFl6UC5hhb3ugyCp8cKg=;
-        b=VE7TBAO6LXTRZZsKpRftN2bG/NRc81nOUE54X8yMjEjocJ7q8AObYD8YVd/u+1zc4u
-         cVNbI8eVzeuTpTzEwDt+TfieGPjE2hp6fK/Vjy6ft42MUSLhbUFzNM/2wKIu2pV1HYOy
-         X0lOtFdwEZWCX5hGs+nkwzZ9n75o+V6H2mb4mYmrpXyf11pTn8A+ubNXIabD/owkH8wa
-         TTPqtxq7LcE6+S1ZfB/StZPy5UD0TlnSn5RdVgYl2Y/mBoILIqxs9enSeiEXzbEaNP25
-         HjwPKIFcBLFsIL8uJcJYxcshGxhCyyUZDcgmQlT75EkYplkhQGApeK3pGbkkZ4bHbU9r
-         hYOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785913241; x=1786518041;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=eSC4CGLgztqlLOT556YFobeiFl6UC5hhb3ugyCp8cKg=;
-        b=qxivue2JI8M3Pg4FB0iJL2g1gfR2OR1tH/Uzpe7Xhm0fwNpZvMskmjVJGJzhGM9qC7
-         4UuBlaJps9/PRVqej3go/jc7wMik1un9iwUuHiBnwwHTJmq46tsEaH+8PcSw72bDYNlR
-         1AQPj4wGFmAPI4+K/KTvEem3VrV2W21Gsan1M0WduGbwm0a64PCe8lGnvzo8um4HU0Ux
-         m6lT9qEfDBXkQv3oWrxTiPHj/Ro8SysJcNvWvv0NaM4B5e1SBoM57ExKTkrO1QtKm402
-         CWO9GiD3b4upRZViSnxNgXdx/jDXI1/faWUETAuCp8QbYdljpzX34uuuO9xhcEeWWqZ5
-         MGSA==
-X-Forwarded-Encrypted: i=1; AHgh+Ro92OJ9YmsQKi+KUZLtQLRzpOGLmHTsDto7tADqcitrQByR5M/8PTbu5zNWBN3JLGTEL0Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAIbTt1TN0K+naWP3kNNIU9JiRuw+VJMH8X1ERAdrbpl7oNC0y
-	QqFMeFDS4SRCzGpkq6fFfBMbFvC4x064++VJC/2eLC4INe/uVWjtyjC0uw8FdbAroX0OFWrwc1N
-	dQvxnO4STXIcfOBBlX+ha66JZ1oHC3FU=
-X-Gm-Gg: AR+sD10yUCiwZplRJUy3CsErX1CSVL1TMRDldKf+SwGtH7r78gW2/jkZoTmKhLXc61h
-	vOkq4HVwuugaG+4JUWa7RL6JFEYj8b30z+31vBhWbsmAkONeywRFCyVS5uzddPwNmQ+Mls0MIKe
-	/2S5WTVzLrjkTMllAAfZbJZ/sH1YoWoMIS0d039BTK5uaheShKCN3gMX0DDvVs4tW0fzBwVXw+I
-	O3I4RU3Zlgg0fT8GEEz03itmBDuTTatUAQiQphNVl54BJDBqYICYPTEBfavtBDiQb7y5RMjWCQ2
-	ic2Wlrna0qyTFgReBD357dHf8frHivHm8j/b5o1rBCkyefo=
-X-Received: by 2002:a05:6512:304f:b0:5b1:5a31:86b2 with SMTP id
- 2adb3069b0e04-5b2f4b91d77mr556901e87.16.1785913240806; Wed, 05 Aug 2026
- 00:00:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="M6OyBtSJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=giwccgl4kvfivgirqz4zgmgqbq.protonmail; t=1785913638; x=1786172838;
+	bh=76T7YXpCcnUccWZ6WjLKZL7MNTS7wtBYlfMP+CvX2BI=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=M6OyBtSJ7I/2abgXUM5LZyVacijpx2qBGt7y4Ri8wVXRUtV4K8k0YZ3I+DosRBf+H
+	 wl+BmQnN3j9YxV42Y1pzGc53n8htSD+HDcykxAOFq4ZlXHEmEIS34kY07u/Ro0/ro7
+	 YdfWisgTzSZ1V2+HFxoyrOmB385TTiJBJ+ybGjQcirOi/QBM/6fJcp4J3JGYE02Yi4
+	 +IuPZ86Ui+vIxg+rZL6StCmHJv8J2emoG0iQsemd4cMdThnIoqm+XKshA7VaZVmOUh
+	 EZuGMfROFy3CuOCO1Y4+55zQi+hd8CWRgdwsoU6eue7j+3SJiL0r6QbEd3bT+0FYaF
+	 nea8D5iUi5NsA==
+Date: Wed, 05 Aug 2026 07:07:10 +0000
+To: NeilBrown <neil@brown.name>
+From: quanyeyang <quanyeyang@proton.me>
+Cc: Quanye Yang <quanyemostima@gmail.com>, Justin Suess <utilityemal77@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, "David S. Miller" <davem@davemloft.net>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, syzbot+ef8d17bae14efb960935@syzkaller.appspotmail.com
+Subject: =?utf-8?Q?=E5=9B=9E=E5=A4=8D=EF=BC=9A_Re:_[PATCH]_bpf:_disable_lockdep_while_running_BPF_on_lock=5Frelease?=
+Message-ID: <46Fu_iB0xOxZXb0l5G6pslLArj7TrP_AOICffhfZKoviSn7zVUVVVSMfWaVBYNqt9RiCWWHhSAvlMc3RaJvRFSnvbV2EcBz9VUBQzb2wSkw=@proton.me>
+In-Reply-To: <178588373680.3252194.4414470901360919775@noble.neil.brown.name>
+References: <20260803-fix-lock-tracepoint-bpf-lockdep-v1-1-91fb7afb526a@gmail.com> <anEuaSqiCVsQ6I4P@zenbox> <178583246611.3252194.4318729338489544399@noble.neil.brown.name> <CABcBDJuznu=BgDhevsD6PybX8+6fcaO1xyTcuGuv8F_+MfeZoQ@mail.gmail.com> <178588373680.3252194.4414470901360919775@noble.neil.brown.name>
+Feedback-ID: 206494642:user:proton
+X-Pm-Message-ID: 5b0be336a668bf17b65cbba6ee7490592d97faa7
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260803112615.3362122-1-dingning04@gmail.com>
- <m2zez2i2hp.fsf@kernel.org> <aba45a18-fb2f-4993-868e-976723b2e017@paulmck-laptop>
-In-Reply-To: <aba45a18-fb2f-4993-868e-976723b2e017@paulmck-laptop>
-From: Ning Ding <dingning04@gmail.com>
-Date: Wed, 5 Aug 2026 00:00:29 -0700
-X-Gm-Features: AUfX_mzRPiFlIYJdpzTeSJbhR64WqVcl1JLijxBtIRxMXfJwT7cxJWo2VNG9Q_I
-Message-ID: <CAJP4iuthyUKs5wYMpjGLyQKW8syiHm6pub+9rMMo7wsw-w6G+Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Invalidate RCU pointers after final
- spin unlock
-To: paulmck@kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org, 
-	Puranjay Mohan <puranjay12@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-> > 1. Disabling preemption
-> > 2. Disabling bottom halves
-> > 3. Disabling interrupts
-> > 4. Acquiring a spin lock
-> >
-> > As you are doing it for 4, can you also do it for 1 and 3? I don't think
-> > BPF can disable bottom halves right now.
+On Wed, Aug 5, 2026 at 6:49=E2=80=AFAM NeilBrown <neilb@ownmail.net> wrote:
+> I don't think that detecting recursive acquisition is a scalable
+> solution.  You'll keep finding new locks that you need to enhance.
 
-Hi, I have written the follow-up patch to account for
-preemption-disabled and irq-disabled regions. But still working on the
-selftests.
-While checking rcu gaps, I also found what looks like a separate issue
-for state pruning also regarding the MEM_RCU and PTR_UNTRUSTED. A
-sample example is:
+Yes, it makes sense.
 
-  bpf_rcu_read_lock();
-  bpf_iter_task_new(&it, NULL, BPF_TASK_ITER_ALL_PROCS);
+>
+> If I step back a bit, it looks like TP-BPF (BPF attached to tracepoints)
+> introduces a new execution context, similar to SOFTIRQ and HARDIRQ.
+> i.e.  it is something that can start running at almost any point and
+> blocks the currently running code until it completes.
+> I suspect it would be good to handle it in a similar way.
 
-  if (condition) {
-  /* Safe: the outer RCU lock remains active. */
-  bpf_rcu_read_lock();
-  bpf_rcu_read_unlock();
-  } else {
-  /* Unsafe: protection reaches zero, creating an unguarded gap. */
-  bpf_rcu_read_unlock();
-  bpf_rcu_read_lock();
-  }
+Thanks for the detailed explanation.
 
-  /* Both branches have one active RCU lock here. */
-  bpf_iter_task_next(&it);
-  bpf_rcu_read_unlock();
+>
+> So I suggest adding a new
+>   LOCKDEP_STATE(TP_BPF)
+> to kernel/locking/lockdep_states.h, and teaching lockdep to understand
+> it.  Then it could help avoid all these problems.
+>
+> An important part of this would be the ability to temporarily disable
+> TP_BPF much as we can disable interrupts.  What happens at present if
+> there is tracepoint that happens in BPF code, and a BPF handler is attach=
+ed
+> to that.  Does it get called recursively?
+> Would there be a problem with disabling new TP_BPF handlers while TP_BPF
+> code is running?  Maybe this is already done?
 
-But STACK_ITER comparison in stacksafe() does not compare
-spilled_ptr.type. So the verifier considers the trusted and untrusted
-iterator states are equivalent. It can possibly prune the unsafe path
-before is_iter_reg_valid_init() rejects it.
+It's already partly done, but it differs by attach type.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/kernel/bpf/states.c?id=6655c409707ec8ce9ce0850ffe4fe02331fd4d9c#n806
+The perf-event tracepoint path -- trace_call_bpf(), and the perf-overflow
+(PMI) path bpf_overflow_handler() -- share a global per-CPU counter,
+bpf_prog_active: while a BPF program is running on a CPU, any further
+BPF on that CPU is skipped (the prog_array is re-entered only to bump
+the miss counter). So a tracepoint firing inside BPF code does not
+recurse there; the handler is dropped. That is already the "disable
+TP_BPF while TP_BPF runs" behaviour, analogous to disabling interrupts.
+
+The raw_tracepoint path is different: __bpf_trace_run() uses
+bpf_prog_get_recursion_context(), which is per-program -- only the *same*
+program is prevented from recursing; *different* programs can nest. So a
+raw_tp handler can run nested inside another raw_tp handler on the same
+CPU.
+
+So the recursion/disabling mechanism exists, but it isn't uniform: the
+perf path is already "disable-like", raw_tp is not. That asymmetry is
+itself part of what makes the lockdep picture messy.
+
+>
+> Circling back the original patch to rhashtables that was proposed - had
+> you said that you needed to use rhashtables in a different context
+> similar to HARDIRQ or SOFTIRQ, then I think I would have had a different
+> response.  That is a well-specified problem with well-understood
+> solutions.
+>
+> I would likely be OK with making is possible for lockdep to see locks
+> from different tables as different locks, because they need to be taken
+> in different lockdep contexts.
+>
+> I would then see if the new lock_class_key could be declared in the
+> rhashtable_params struct.  This is already passed around everywhere, so
+> this would be much less intrusive.  We would have to use some cast to
+> get rid of the 'const' attribute when passing the lock_class_key to
+> lockdep, but I think that is justifiable.
+
+On the per-table lock_class_key in rhashtable_params: that sounds right
+to me. I'll rework the rhashtable patch so each table can declare its own
+key in params -- framed as "different tables live in different lockdep
+contexts" (not per-init-site, as in my first attempt) -- and resend.
+
+Two small notes:
+ - if the field is a `struct lock_class_key *` pointer, the params struct
+   can stay const: lockdep writes to the pointed-to key, not the struct,
+   so no cast-away-const is needed;
+ - callers that don't set it would fall back to the shared class (current
+   behaviour), so it's opt-in and doesn't churn existing users.
+
+On LOCKDEP_STATE(TP_BPF): it reads as the more general fix, but it's a
+larger change in the locking core and would need the recursion gate made
+uniform across attach types first (raw_tp currently runs despite the
+global gate). I'd lean toward starting with the per-table-key change for
+the reported false positive and treating the TP_BPF-context modelling as
+the longer-term direction -- happy to take guidance from you and the
+locking folks on scope.
+
+>
+> NeilBrown
+Note: Sending from an alternate address because Gmail is
+temporarily rejecting my mailing-list replies.
+Thanks,
+quanyeyang
