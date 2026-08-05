@@ -1,190 +1,154 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F54A3CE0B0
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 09:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845183FDBFE;
+	Wed,  5 Aug 2026 09:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785922247; cv=none; b=SsWzHkSgxRupsduISfdsnNcaczHjOfXqgbSPGo5VQOkaHm+zlgenYn1wTd7MCh17E4FDiVmHBGOmclkCInQA2BYIU/sdOP88F52DhqeA5zhW6y+kcXGRIfXQvYz6SEA2zATvLQYx35LdF3sQ4aZ9PucumcetTyi2L1PJKhhaGOs=
+	t=1785922376; cv=none; b=XRij57lTWMoFAFMKj4RNFsrV9B+X6LwC4kjxvVItqb8iU58jw6Czz4N8Fyus96RJ4BN4hiZtOYEQ3MsENHkiPFJQRznlHpetsCjshUqSo16Gn1kWd48LIHjWmn+3MraJINPCUJj7fD7IgR9+DzmHhlsmpIYnUfRhwMNJXJXTYBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785922247; c=relaxed/simple;
-	bh=LiFfq5EwWhYXTRWNOQwbYll8tos+2d//X840pEITUUA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oOl0CIl010Lag2c67MSP2FYxWbNU3Q1szYc4vQrcjnDaFJUf0YeOhpDcV5CQk4XnXY1e7dm8vawKRAXIVwhVWi+61J5kA/vBfsqDEYh0KNV/CHfNF9lItLq2PTrczkmkKCLAZhODUGy4o0V17a5p5yXoGVStKIfZHbDQhZOc24Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dQtpOskh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785922376; c=relaxed/simple;
+	bh=mjwNKfmguINfE8famuXuBmFGkPMhvK3rwl3FIheRUU8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=lwoaihpNctoegdMLshkpJEgVrmjNaiDdMTb0y85mpKPkcN2TOzdYi6P74WJDudcWQ/2p7/DmH+RhgFWLaL2pFJ2eelsPL2r+BGpyOz1uUIwiNECTiL0BLzhQ4wh1PEw+Qg0b+0TH3cvpH/3Jja5IP/LoX7spNmwlLBFuQgW/yzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOzp8wEE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dQtpOskh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9CD41F000E9;
-	Wed,  5 Aug 2026 09:30:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOzp8wEE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 636CC1F00A3A;
+	Wed,  5 Aug 2026 09:32:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785922246;
-	bh=5PQDIG0NJ/+hLhYORcLYdt6Jmi4oavCD17he4KwFaII=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dQtpOskhPX7pEphouNf3/i8GMvE0Hminrumg5E81cpEGt9QwVAyWbtAq8TJLIw0W6
-	 LCGXT6AIpO0dorBi56hCMCZUA9CjNyXb4qKRJVg+vUiQGu+tF6s9BgGq7IysexAsiu
-	 JepMg05Tv71rE5hPHpeiEjKocu5IQVMjuxfyukjtdNMK8fK2zrLYP6XHaRq2HWR1e2
-	 wuGf8MP5IOSRZ39wnoMF3A7VMj+NbuXqot4xZxT6rJB387bJ+MpPWs1nwVxzp0MmNK
-	 IWRKm4Fmhy2xhqiqeA0hdwY927eq8dg+zQb+zDXdZfUGaLzouQHYnLXQeSV6dRy9xb
-	 jvRvTwP9tNj8A==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Tao Chen <chen.dylane@linux.dev>,
-	STAR Labs SG <info@starlabs.sg>,
-	Arnaud Lecomte <contact@arnaud-lcm.com>
-Subject: [PATCHv4 bpf-next 12/12] bpf: Avoid changing callchain in bpf_get_stackid_pe
-Date: Wed,  5 Aug 2026 11:28:43 +0200
-Message-ID: <20260805092843.516315-13-jolsa@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260805092843.516315-1-jolsa@kernel.org>
-References: <20260805092843.516315-1-jolsa@kernel.org>
+	s=k20260515; t=1785922371;
+	bh=zw9qYlpt5uINRefD5tX3v7mfMJjvMEr6Upn3njNK8XE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kOzp8wEEz+uH7ZI91iH9ig/4CTKrveW4XhBHRIVynmmzHCP/d3nI6Tu2QKu6+wB6x
+	 12rOGxLkXpGv7Kdef3KavnJO+2CD4xhESYZgW2SXv+XB4tBw/Pa3lPxRVWjXc5AIv8
+	 DHBaHiCiamXNPlMkgex0Qf+POoazaE57BQ/6Uy+5mDNkLBXrMbpHeho9TH7dWbV1cO
+	 ioqtLIEuHGGkzGmzTGe3ewVswAQtzmETm8h/YxxfHZc7FB6g0pfEgyx9D1GbV02rax
+	 3ZbnGvWZnLz7Ibaw9La/GDg2l+ussdEwt0i6dot/hVIRAzSadzJ/DrGVHBz5UPeE5m
+	 OouOlieyE+fEw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 1/4] bpf: Add a sleepable page allocator for
+ map memory
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org
+In-Reply-To: <20260805091720.139924-2-jiayuan.chen@linux.dev>
+References: <20260805091720.139924-1-jiayuan.chen@linux.dev>
+ <20260805091720.139924-2-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 05 Aug 2026 09:32:50 +0000
+Message-Id: <20260805093251.636CC1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-There's no need to modify the trace object in bpf_get_stackid_pe,
-we just need to pass the needed callchain length in separate argument.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-This way we can have callchain pointers const and remove the trace->nr
-modification and restoration.
+New issues:
+- [High] Using __GFP_ZERO to zero pages intended for user-space mapping ski=
+ps required dcache flushes on cache-aliasing architectures.
+- [Medium] bpf_map_alloc_page_sleepable() and __bpf_alloc_page() silently b=
+ypass task/VMA NUMA mempolicy when the requested node is NUMA_NO_NODE.
 
-Assisted-by: Codex:GPT-5.5
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- kernel/bpf/stackmap.c | 39 +++++++++++++++++----------------------
- 1 file changed, 17 insertions(+), 22 deletions(-)
+Pre-existing issues:
+- [High] The fallback allocation path in __bpf_alloc_page() omits __GFP_ZER=
+O, returning uninitialized kernel memory that can be exposed to user space.
+--
 
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 531c043d1aaa..65c25fee394a 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -506,7 +506,7 @@ get_callchain_entry_for_task(struct task_struct *task, u32 max_depth)
- 
- struct stackid {
- 	struct stack_map_bucket *bucket;
--	u64 *ips;
-+	const u64 *ips;
- 	u32  nr;
- 	u32  len;
- 	u32  hash;
-@@ -515,21 +515,21 @@ struct stackid {
- };
- 
- static int stackid_init(struct stackid *stackid, struct bpf_map *map,
--			struct perf_callchain_entry *trace, u64 flags)
-+			const struct perf_callchain_entry *trace, u32 trace_nr, u64 flags)
- {
- 	struct bpf_stack_map *smap = container_of(map, struct bpf_stack_map, map);
- 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
- 	u32 max_depth;
- 
--	if (trace->nr <= skip)
-+	if (trace_nr <= skip)
- 		/* skipping more than usable stack trace */
- 		return -EFAULT;
- 
- 	max_depth = stack_map_calculate_max_depth(map->value_size, stack_map_data_size(map), flags);
--	stackid->nr = min_t(u32, trace->nr - skip, max_depth - skip);
-+	stackid->nr = min_t(u32, trace_nr - skip, max_depth - skip);
- 	stackid->len = stackid->nr * sizeof(u64);
- 	stackid->ips = trace->ip + skip;
--	stackid->hash = jhash2((u32 *)stackid->ips, stackid->len / sizeof(u32), 0);
-+	stackid->hash = jhash2((const u32 *)stackid->ips, stackid->len / sizeof(u32), 0);
- 	stackid->id = stackid->hash & (smap->n_buckets - 1);
- 	stackid->bucket = READ_ONCE(smap->buckets[stackid->id]);
- 	stackid->hash_matches = stackid->bucket && stackid->bucket->hash == stackid->hash;
-@@ -537,11 +537,12 @@ static int stackid_init(struct stackid *stackid, struct bpf_map *map,
- }
- 
- static int stackid_fastpath(struct stackid *stackid, struct bpf_map *map,
--			    struct perf_callchain_entry *trace, u64 flags)
-+			    const struct perf_callchain_entry *trace, u32 trace_nr,
-+			    u64 flags)
- {
- 	int err;
- 
--	err = stackid_init(stackid, map, trace, flags);
-+	err = stackid_init(stackid, map, trace, trace_nr, flags);
- 	if (err)
- 		return err;
- 
-@@ -640,7 +641,7 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
- 			/* couldn't fetch the stack trace */
- 			return -EFAULT;
- 
--		err = stackid_fastpath(&stackid, map, trace, flags);
-+		err = stackid_fastpath(&stackid, map, trace, trace->nr, flags);
- 		if (err != -ENOENT)
- 			return err;
- 
-@@ -676,12 +677,13 @@ static __u64 count_kernel_ip(const struct perf_callchain_entry *trace)
- BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
- 	   struct bpf_map *, map, u64, flags)
- {
-+	const struct perf_callchain_entry *trace;
- 	struct perf_event *event = ctx->event;
- 	struct stack_map_bucket *new_bucket;
--	struct perf_callchain_entry *trace;
- 	struct stackid stackid;
- 	bool kernel, user;
- 	__u64 nr_kernel;
-+	u32 trace_nr;
- 	int ret;
- 
- 	/* perf_sample_data doesn't have callchain, use bpf_get_stackid */
-@@ -701,13 +703,13 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
- 		return -EFAULT;
- 
- 	nr_kernel = count_kernel_ip(trace);
--	__u64 nr = trace->nr; /* save original */
- 
- 	if (kernel) {
--		trace->nr = nr_kernel;
-+		trace_nr = nr_kernel;
- 	} else { /* user */
- 		u64 skip = flags & BPF_F_SKIP_FIELD_MASK;
- 
-+		trace_nr = trace->nr;
- 		skip += nr_kernel;
- 		if (skip > BPF_F_SKIP_FIELD_MASK)
- 			return -EFAULT;
-@@ -715,21 +717,14 @@ BPF_CALL_3(bpf_get_stackid_pe, struct bpf_perf_event_data_kern *, ctx,
- 		flags = (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
- 	}
- 
--	ret = stackid_fastpath(&stackid, map, trace, flags);
-+	ret = stackid_fastpath(&stackid, map, trace, trace_nr, flags);
- 	if (ret != -ENOENT)
--		goto out;
-+		return ret;
- 
- 	new_bucket = stackid_new_bucket(&stackid, map);
--	if (new_bucket) {
--		trace->nr = nr;
-+	if (new_bucket)
- 		return stackid_install(&stackid, map, new_bucket, flags);
--	}
--	ret = -ENOMEM;
--
--out:
--	/* restore nr */
--	trace->nr = nr;
--	return ret;
-+	return -ENOMEM;
- }
- 
- const struct bpf_func_proto bpf_get_stackid_proto_pe = {
--- 
-2.54.0
+--- Patch [1]: [PATCH bpf-next v2 1/4] bpf: Add a sleepable page allocator =
+for map memory ---
+commit 2a4210c942ca919834ce20218ab8bedc6cbb40a8
+Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
+bpf: Add a sleepable page allocator for map memory
+
+This patch adds bpf_map_alloc_page_sleepable() to provide a blocking page
+allocator for sleepable contexts. This avoids using the non-blocking
+allocator, which never reclaims or engages the OOM machinery, for contexts
+that can actually sleep.
+
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 8d111da886553..67d8157c6623e 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -602,15 +602,14 @@ static bool can_alloc_pages(void)
+>  		!IS_ENABLED(CONFIG_PREEMPT_RT);
+>  }
+> =20
+> +#define BPF_PAGE_GFP (GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT | __GFP_NO=
+WARN)
+> +
+>  static struct page *__bpf_alloc_page(int nid)
+>  {
+>  	if (!can_alloc_pages())
+>  		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
+
+[Severity: High]
+This is a pre-existing issue, but does this fallback path leak uninitialized
+kernel memory?=20
+
+The call to alloc_pages_nolock() passes only __GFP_ACCOUNT and completely
+omits __GFP_ZERO. If a BPF map is allocated on PREEMPT_RT where
+can_alloc_pages() returns false, this could expose uninitialized pages to
+user space.
+
+> =20
+> -	return alloc_pages_node(nid,
+> -				GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT
+> -				| __GFP_NOWARN,
+> -				0);
+> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
+
+[Severity: Medium]
+When nid is NUMA_NO_NODE, does alloc_pages_node() bypass the task's NUMA
+mempolicy?
+
+Since alloc_pages_node() automatically resolves NUMA_NO_NODE to the local
+CPU node rather than defaulting to the task's mempolicy, this could cause
+pages to land on the wrong nodes for user applications.
+
+>  }
+> =20
+[ ... ]
+> @@ -636,6 +635,20 @@ int bpf_map_alloc_pages(const struct bpf_map *map, i=
+nt nid,
+>  	return ret;
+>  }
+> =20
+> +/*
+> + * For callers that know they run in a sleepable context, e.g. a user pa=
+ge
+> + * fault handler. can_alloc_pages() is a conservative guess made for BPF
+> + * program context - notably it is always false on PREEMPT_RT - so going
+> + * through bpf_map_alloc_pages() there would needlessly pick the
+> + * non-blocking allocator, which never reclaims and never engages the OOM
+> + * machinery.
+> + */
+> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map)
+> +{
+> +	might_sleep();
+> +	return alloc_pages_node(map->numa_node, BPF_PAGE_GFP, 0);
+
+[Severity: High]
+Does using __GFP_ZERO (via BPF_PAGE_GFP) skip required dcache flushes on
+cache-aliasing architectures?=20
+
+When allocating pages destined for user-space mapping (like the arena page
+fault handler), __GFP_ZERO uses clear_page() which leaves zeros in the
+kernel's dcache. Could user processes reading from these pages see stale,
+uninitialized physical memory instead of zeros?
+
+[Severity: Medium]
+Similar to the issue in __bpf_alloc_page(), does using alloc_pages_node()
+here bypass the task mempolicy when map->numa_node is NUMA_NO_NODE?
+
+> +}
+> +
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805091720.1399=
+24-1-jiayuan.chen@linux.dev?part=3D1
