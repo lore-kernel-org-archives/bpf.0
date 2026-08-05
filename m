@@ -1,154 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845183FDBFE;
-	Wed,  5 Aug 2026 09:32:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5D63FD12D
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 09:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785922376; cv=none; b=XRij57lTWMoFAFMKj4RNFsrV9B+X6LwC4kjxvVItqb8iU58jw6Czz4N8Fyus96RJ4BN4hiZtOYEQ3MsENHkiPFJQRznlHpetsCjshUqSo16Gn1kWd48LIHjWmn+3MraJINPCUJj7fD7IgR9+DzmHhlsmpIYnUfRhwMNJXJXTYBE=
+	t=1785922839; cv=none; b=n8LijVZAw/A51cRoTZlvFfe3aSsAj1FiXde0yO8cxcZmwNSUiwFK7YzmICFzu8fKAXc7ZJb0SuqetA26fBObmzV9Zl5pP/fG6iVbleCzfRC21GCvLi+vGmDSUUstIKwfxnTnoKvRz1ly4YVJ50mQgjaj0NRcSrKAOPh+WivaqBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785922376; c=relaxed/simple;
-	bh=mjwNKfmguINfE8famuXuBmFGkPMhvK3rwl3FIheRUU8=;
+	s=arc-20240116; t=1785922839; c=relaxed/simple;
+	bh=0b5Al9Z10dkeqHgU5oQfqKnmr0Mo3Nhb12defrrYj2E=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=lwoaihpNctoegdMLshkpJEgVrmjNaiDdMTb0y85mpKPkcN2TOzdYi6P74WJDudcWQ/2p7/DmH+RhgFWLaL2pFJ2eelsPL2r+BGpyOz1uUIwiNECTiL0BLzhQ4wh1PEw+Qg0b+0TH3cvpH/3Jja5IP/LoX7spNmwlLBFuQgW/yzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOzp8wEE; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ocle5ix7ju63xgrINLiCClatu44Ol5vkb1HbQMwPEaNUQsKEJjBL2sJPB8JyG+A+I7sN8+CDPZ441nSTxoWWovWnhX8cf+n1WyeYExDR0+jZe1JdkgtA+s36TvuyLPHvHlZP/OVcZgD+n1vWI1z2FxKERhKVu/3gs5G8U5nxmQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SOv3AXoW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOzp8wEE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 636CC1F00A3A;
-	Wed,  5 Aug 2026 09:32:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SOv3AXoW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F0C1F000E9;
+	Wed,  5 Aug 2026 09:40:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785922371;
-	bh=zw9qYlpt5uINRefD5tX3v7mfMJjvMEr6Upn3njNK8XE=;
+	s=k20260515; t=1785922838;
+	bh=Dir+iJSxqwVr3O/g3/GfC7V3+VkejD073x+TZW/w28A=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kOzp8wEEz+uH7ZI91iH9ig/4CTKrveW4XhBHRIVynmmzHCP/d3nI6Tu2QKu6+wB6x
-	 12rOGxLkXpGv7Kdef3KavnJO+2CD4xhESYZgW2SXv+XB4tBw/Pa3lPxRVWjXc5AIv8
-	 DHBaHiCiamXNPlMkgex0Qf+POoazaE57BQ/6Uy+5mDNkLBXrMbpHeho9TH7dWbV1cO
-	 ioqtLIEuHGGkzGmzTGe3ewVswAQtzmETm8h/YxxfHZc7FB6g0pfEgyx9D1GbV02rax
-	 3ZbnGvWZnLz7Ibaw9La/GDg2l+ussdEwt0i6dot/hVIRAzSadzJ/DrGVHBz5UPeE5m
-	 OouOlieyE+fEw==
+	b=SOv3AXoWU7En1zXE6CD8NfJdssfK3HsWuMf7OxGTwdgOOwbxcN1G91Jz0gFYbnmEp
+	 bGRuvcqDQ5I1XMy0gL2wSxsBmO9xmHccR6BiiPcesqtmhoisLn/uXBIQXKxOiNEscH
+	 sY+SgHlEkEUMDTuvTq9XmAemfRG2bFST4QxqjfICnQfqXVewClER7dp8wzKpPSwBb3
+	 kWzNzBektcPJ9CV8f3cudDPcZy8CqRpYbbVR9ZzbUZODOWpu8T6i+vUDIduPPHfF5I
+	 Q2cIKmhp4rgOFYzcaLWTxX6lTdQ9G9vEwvY7VxKiThyNCSf/0BD7WW2H4xKc0Vvvv5
+	 BSRZtm99/ZAyg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/4] bpf: Add a sleepable page allocator for
- map memory
+Subject: Re: [PATCHv4 bpf-next 01/12] bpf: Factor stackid_init function from
+ __bpf_get_stackid
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org
-In-Reply-To: <20260805091720.139924-2-jiayuan.chen@linux.dev>
-References: <20260805091720.139924-1-jiayuan.chen@linux.dev>
- <20260805091720.139924-2-jiayuan.chen@linux.dev>
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260805092843.516315-2-jolsa@kernel.org>
+References: <20260805092843.516315-1-jolsa@kernel.org>
+ <20260805092843.516315-2-jolsa@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 05 Aug 2026 09:32:50 +0000
-Message-Id: <20260805093251.636CC1F00A3A@smtp.kernel.org>
+Date: Wed, 05 Aug 2026 09:40:37 +0000
+Message-Id: <20260805094038.50F0C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
-New issues:
-- [High] Using __GFP_ZERO to zero pages intended for user-space mapping ski=
-ps required dcache flushes on cache-aliasing architectures.
-- [Medium] bpf_map_alloc_page_sleepable() and __bpf_alloc_page() silently b=
-ypass task/VMA NUMA mempolicy when the requested node is NUMA_NO_NODE.
-
 Pre-existing issues:
-- [High] The fallback allocation path in __bpf_alloc_page() omits __GFP_ZER=
-O, returning uninitialized kernel memory that can be exposed to user space.
+- [High] Integer underflow in stack_map_calculate_max_depth causes a heap b=
+uffer overflow when sysctl_perf_event_max_stack is concurrently modified.
 --
 
---- Patch [1]: [PATCH bpf-next v2 1/4] bpf: Add a sleepable page allocator =
-for map memory ---
-commit 2a4210c942ca919834ce20218ab8bedc6cbb40a8
-Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+--- Patch [1]: [PATCHv4 bpf-next 01/12] bpf: Factor stackid_init function f=
+rom __bpf_get_stackid ---
+commit 036b334d8e7b51a2339ee19596a116e90ed56c01
+Author: Jiri Olsa <jolsa@kernel.org>
 
-bpf: Add a sleepable page allocator for map memory
+bpf: Factor stackid_init function from __bpf_get_stackid
 
-This patch adds bpf_map_alloc_page_sleepable() to provide a blocking page
-allocator for sleepable contexts. This avoids using the non-blocking
-allocator, which never reclaims or engages the OOM machinery, for contexts
-that can actually sleep.
+The new stackid_init function stores all the necessary bits for stackid
+trace and it will be used by other functions in following changes.
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 8d111da886553..67d8157c6623e 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -602,15 +602,14 @@ static bool can_alloc_pages(void)
->  		!IS_ENABLED(CONFIG_PREEMPT_RT);
->  }
-> =20
-> +#define BPF_PAGE_GFP (GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT | __GFP_NO=
-WARN)
-> +
->  static struct page *__bpf_alloc_page(int nid)
->  {
->  	if (!can_alloc_pages())
->  		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
 
-[Severity: High]
-This is a pre-existing issue, but does this fallback path leak uninitialized
-kernel memory?=20
-
-The call to alloc_pages_nolock() passes only __GFP_ACCOUNT and completely
-omits __GFP_ZERO. If a BPF map is allocated on PREEMPT_RT where
-can_alloc_pages() returns false, this could expose uninitialized pages to
-user space.
-
-> =20
-> -	return alloc_pages_node(nid,
-> -				GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT
-> -				| __GFP_NOWARN,
-> -				0);
-> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
-
-[Severity: Medium]
-When nid is NUMA_NO_NODE, does alloc_pages_node() bypass the task's NUMA
-mempolicy?
-
-Since alloc_pages_node() automatically resolves NUMA_NO_NODE to the local
-CPU node rather than defaulting to the task's mempolicy, this could cause
-pages to land on the wrong nodes for user applications.
-
->  }
-> =20
 [ ... ]
-> @@ -636,6 +635,20 @@ int bpf_map_alloc_pages(const struct bpf_map *map, i=
-nt nid,
->  	return ret;
->  }
+
+> +static int stackid_init(struct stackid *stackid, struct bpf_map *map,
+> +			struct perf_callchain_entry *trace, u64 flags)
+>  {
+>  	struct bpf_stack_map *smap =3D container_of(map, struct bpf_stack_map, =
+map);
+>  	u32 skip =3D flags & BPF_F_SKIP_FIELD_MASK;
+> +	u32 max_depth;
 > =20
-> +/*
-> + * For callers that know they run in a sleepable context, e.g. a user pa=
-ge
-> + * fault handler. can_alloc_pages() is a conservative guess made for BPF
-> + * program context - notably it is always false on PREEMPT_RT - so going
-> + * through bpf_map_alloc_pages() there would needlessly pick the
-> + * non-blocking allocator, which never reclaims and never engages the OOM
-> + * machinery.
-> + */
-> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map)
-> +{
-> +	might_sleep();
-> +	return alloc_pages_node(map->numa_node, BPF_PAGE_GFP, 0);
+>  	if (trace->nr <=3D skip)
+>  		/* skipping more than usable stack trace */
+>  		return -EFAULT;
+> =20
+>  	max_depth =3D stack_map_calculate_max_depth(map->value_size, stack_map_=
+data_size(map), flags);
+> +	stackid->nr =3D min_t(u32, trace->nr - skip, max_depth - skip);
 
 [Severity: High]
-Does using __GFP_ZERO (via BPF_PAGE_GFP) skip required dcache flushes on
-cache-aliasing architectures?=20
+This is a pre-existing issue, but can this max_depth - skip calculation
+underflow?
 
-When allocating pages destined for user-space mapping (like the arena page
-fault handler), __GFP_ZERO uses clear_page() which leaves zeros in the
-kernel's dcache. Could user processes reading from these pages see stale,
-uninitialized physical memory instead of zeros?
+If sysctl_perf_event_max_stack is decreased concurrently,
+stack_map_calculate_max_depth() can return a max_depth smaller than skip:
 
-[Severity: Medium]
-Similar to the issue in __bpf_alloc_page(), does using alloc_pages_node()
-here bypass the task mempolicy when map->numa_node is NUMA_NO_NODE?
+kernel/bpf/stackmap.c:stack_map_calculate_max_depth() {
+	...
+	max_depth +=3D skip;
+	if (max_depth > curr_sysctl_max_stack)
+		return curr_sysctl_max_stack;
+	...
+}
 
-> +}
-> +
+This would cause max_depth - skip to underflow to a large integer. If
+trace->nr (which may have been captured with the older, larger sysctl) is
+greater than skip, it passes the early return check.
+
+The min_t() call would then select trace->nr - skip, which can exceed the
+stack map's element capacity and lead to a heap buffer overflow later when
+copying entries into the bucket buffer in __bpf_get_stackid():
+
+kernel/bpf/stackmap.c:__bpf_get_stackid() {
+	...
+		memcpy(new_bucket->data, stackid->ips, stackid->len);
+	...
+}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805091720.1399=
-24-1-jiayuan.chen@linux.dev?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805092843.5163=
+15-2-jolsa@kernel.org?part=3D1
