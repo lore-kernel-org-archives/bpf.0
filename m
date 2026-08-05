@@ -1,712 +1,158 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D7D3955CB
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 14:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785941012; cv=pass; b=A6QBuLPXa5jUW/H8mWWZPnixO0aGn3fpMBgHgREcvVlyUhoRY9iH0pUThKN8xkUz9SegNdes/q2BfhpBYYaScFXl7llapAWZrFA7qj3+luFpgA1AarGMS4U98KUS/HsUQm9EJsR5d5tEGyOM+dezPnJcX8Cm2eIbih8ErKINWEg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785941012; c=relaxed/simple;
-	bh=dzzK90fQSZZ+uuT3r5+zxVTevURjvYwCiVzZ2TVtDzk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=awZ/ItKULM/ndiqo+d2JvqUPsqNegdTAH0tOWhT459tldQ6Hd+hd+o3RDgm2JH9NWfoBgvODEFkePGcq57tmFTCjaYUUcMPU3M2DsfYREpE+z+0Ma0+v+xvKA27P4MMJljyYobBvThd59VxZHRJa+pWUffVqhVzS1HPrV9hWZeM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lGG3BJpu; arc=pass smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F32388E59
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 14:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785941788; cv=none; b=ri6iNfA5+X7E3M1t0fsRC5TzBWogMenuVW+RQjtDhhzeS0iPi/xQvJyaSwR8HTV68aWAb4t/5qD6ZdSGqV4ZNdwBEIctBRrzUu118JBXn0fjzhP7yjaMUJsdn+I0vQb/OPLNBgQTwM3FwBPQuYsWA4Pq5s+LCAysGUCgXZWdN1Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785941788; c=relaxed/simple;
+	bh=cQni9s3yOzuEp9q6GhuwuSOtDUtduzqUlTtBJG+VcAM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=RJWpOUvnlMasqQro9CE7SJLu43I1F7Je0h7QRnKJ6P4d8JY5Jfuwd/d2OXgvJFw6FVYD5Rm3yY+dKWo30IIhgSPnuhx43R1cS7EU+LFV79WrBaLEtI6kXnUAmnpbiiVDb60d9K8ovuusLiP3GdGvHGx845yHsc1RzSaFCIkga7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=JsHX+92i; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lGG3BJpu"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c15e592da74so137786066b.1
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 07:43:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785940999; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ki7nTZd3nV6Ybpra5JpqXxZpVk/OHyMElla12Km0dzhSXbD/WdYN/uGJBLc0uw6k3J
-         Wy7SbvGDMzTiOIvW1Mw7L85z7irhZaY1jTOhYuNFR4CBjm5H6OjOJF1BOqIeWtuvUxig
-         uQEOBbVOvUmDWud5AMj8ylQssDZUver4S3ZkhuEHe7EJVlFUVduM8DPlv7fkbmxRFKZJ
-         YyLU3t3QCyRApkAN4Wyr8htldQttSLv5EfIPz1lBHJ/9kZCVvy+5VIDTqTYTdwGkI5Nm
-         XJqS6U2y0Nhdgmeh2uhZeS4gQR0740OXQAAwCKJpY6mnCIjbNUROwXUHVnMYRsuOrAI5
-         Xw8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GmKuYnc86DNlMiU9IPUM6hRlMNPMsSVV3yRLUh7Zy/w=;
-        fh=/brKxvpalpog8EBiE3aQAdYaFNCXMRNw8xSOSEkFukU=;
-        b=d1FPgs4x+HshBJbispmzPjM/9Xcr/ZN4yRgnKUJipwy3hYIGeMH4sg8l097sIaYK3S
-         pLapJXCeOBCF7hVorioxKEQBgj/OtL8EB274/TdTPf8iRMLH9Dd/cWPENeDWjCATYKGl
-         sTJ9nNgmvCFdAnumCU5SDZNwZUYu6KyVOLO09x/jDuahC4eWGkoaMTt4YQsqzKPsg6aJ
-         yKLDdgGs2n8l2HBiiXhj878AgDJCFER1lKjLlutax6Ad7zyWm0C4afaK5rUxUBnn8np4
-         KjUJ/9MdNOXHfKol/aalMBFkgItPXQ3SDLojYlmAZOddUHWzGhucMbeQSRpZBRZWbTZt
-         XfTg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="JsHX+92i"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6a051b737d8so1140128a12.1
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 07:56:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785940999; x=1786545799; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GmKuYnc86DNlMiU9IPUM6hRlMNPMsSVV3yRLUh7Zy/w=;
-        b=lGG3BJpu2mRk5PLS4w+It8aueK2vj29YFlAhotZPhvpbelT/wwTOhoaB5GgASi4nva
-         E7lHa4V4UMTrWBoDnaFdR7FiaYPPfPrLsZwSG06eczhk1+QDEaiCPGxXN5qRh89TuQap
-         lU/AYLE5ruGiUaE70RQbxLdjLTJo6+xE47qpW1n6GMa+pqse1uscwVuI8d2uOA2Es8C9
-         k0YwhSDMbn6KTpKoNOqMe10zu/aY95ylLfllCFV0eERdhJAD6phhN4GHLt5Ef7o0cEEM
-         IfurzdvAZYt/hpCGOJUiuJBpmjxXloTwUHxyXCBmLANz8jQ9T6W1DE4IeXQpabtY6Qom
-         zCug==
+        d=cloudflare.com; s=google09082023; t=1785941785; x=1786546585; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :user-agent:references:in-reply-to:subject:cc:to:from:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=cQni9s3yOzuEp9q6GhuwuSOtDUtduzqUlTtBJG+VcAM=;
+        b=JsHX+92i4CS+xexC2+BhYyEHSgfdUt60YSzPT7QZCAxWYzH3I6uLQ9I/kaHOZj5OR0
+         REbSGq7gNmsLaekCdTZeGZ25JKPrEXd+QMi2/uLVfyxs/DotCWlCm8zyTnkNyuKb1s6C
+         jrU2K9SCdQPLS5GTXpI+WzecSgbCiWqUbGJU8u+gfgnZUB2fJhzj57BoIsF7bFMxty8G
+         iDHVKzQejYzMDvCiEUD4doN5E56Fins9btm433NgEj6CZ336Z/aJn3+WgSGkVA6zgeSW
+         tMTwqE+qXZixpo6qPTn2sZMBIZAFKvcJuxpplcsjFNaBo9tc02ufkiOYtcelJdsEmbIz
+         Q+gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785940999; x=1786545799;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785941785; x=1786546585;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :user-agent:references:in-reply-to:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GmKuYnc86DNlMiU9IPUM6hRlMNPMsSVV3yRLUh7Zy/w=;
-        b=Cq+2a5GzmwJa2UBwdU/nkgCuxe58XMBWeAEA/qD70do/eLoi0O7Nbm2+Pl4AhkUwil
-         ncPdigDpKkqqMl3+7Xfd7inyQ2wa3NVM6G/gFZ6w6imwngzzjIGoUnb5cH74wWz2Lzhr
-         Gqt5k0TLzoPHjOAf2RkhYCAArxxuqqLjypHSBjewNrDfaKuVOK2kbohKh0rXEAJG4AN4
-         ye43PoZ/pJLChByoAg9evM/BvB2AVadUG/V4oCi3WaxL8MIw+iI+TR+bR+vEcDzYrUPH
-         W1PbXbckI9X7RANML6gj9yZzcyx1N29qWlAc0ndvhqAi3o/KxVqVCJ7xd7X4s9ute+Wo
-         AsHw==
-X-Gm-Message-State: AOJu0YxR8F/Oxv/JJVTkXq8lS1zJBSDeGxDIOhcVqnKX0pes0fVA+2bq
-	+qJWs5jS9ij3MyBBvDFhe2gP1xHbDmbVrlFdl+3IDyJj0ET273XbcHCMn6w591zeEWNtsW19hg5
-	1zCn1Mmnv6omSJLsjl1dGPxzE796ab30=
-X-Gm-Gg: AR+sD117lj1qknYRSBNIvP1eREdo0FNSgaVk+XgdmhdTLke/CsrkooNt5xaPr4PATGv
-	kmCyOgdOo8rT/NR9HlbELZN0KxxG9+Suc+MVi3hT41rYWhEhWzbyCVUd44ItdJjEl9jpPzsEjh8
-	ifKgn2j785H/DtNGzjtoQDAD9ATiDrtsvUmppYKs0+t9qHMYOL6lRf8zmlergcdbOeaip5amrai
-	oyl1ARa+3geDVgEvwcR6V/uRi6YW/x41qaW+oWeTMolI/5D7ipSqfBShR3bvuetZ2T8tzVBjgmQ
-	av0Y7Ls3Y5fPJ4SbEFS1+ljQuGt2QL3tgQcsMm69G+4851wYXw0lCH9im12T
-X-Received: by 2002:a17:907:97d3:b0:c1f:e09d:12 with SMTP id
- a640c23a62f3a-c2039ed30e4mr347405066b.25.1785940998077; Wed, 05 Aug 2026
- 07:43:18 -0700 (PDT)
+        bh=cQni9s3yOzuEp9q6GhuwuSOtDUtduzqUlTtBJG+VcAM=;
+        b=d3Uar6GCtIPhj5bLv3ZSINVtVmoem7zBzs8+93T3y2UfhwfUHByk8dcstohPCDAgLR
+         f38HOQHr62/x4ovG7zBvdGpqB/8sA4taHiDRGfKCA3K2mXqThCVL0FMvzXmAaZFQQ4nT
+         2b0HrESOKKSKTHLjyFVqChQeCc36af/TN7WN78qffRwjDRRW/OrDd6qMArSSyhuAzinD
+         WZxdHo3+Z1rzrlonrvRclcRSq+1rfxeHZBnJvIpyK9ZiHzisgQST447PWp0ERX5pkgO+
+         u89Bheiv2+hUPhOIvo9f6DJAAFUBqpqBa/Na+zFeG4GYpry3pCvNYCkePjo33BeJmxDD
+         jATQ==
+X-Forwarded-Encrypted: i=1; AHgh+Ro0t/LrWAD5ktaPa3wVkBeLx83rXM3vVGDm85AHOwJLTZaaxsQudAgDcP9YN8fuADHhYgo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6p6tlDlxdoZPkUZvKh8U/9R4UWAPfsQqelB5J/76JmuSmMI5C
+	iQyArqzi9YvoxO9cqHZX7r2W3A/xdiA27LgZrwBVpqcGLhC38TA0u7MorOluohU2pWQ=
+X-Gm-Gg: AR+sD120UCO2jKBqk/lg4E0jhqv0dnpV4Zpm6ldyXXjIE8itZv79TJnjOJ1qgsCIgpM
+	2AGyLo1O2c3e4fBM3PtsqW54Tdw+tfprUXeqJ9NjL747JYBfocbUQKFO4t6dbeCA+sQ86h6hLHc
+	4ESEfz1828i+JA/lT/hIA5VuxoXFd8xMZNyvR6N727z/7IltwrGeJopfgFkKjjfsVJ3iB4jDmFi
+	Bd7kt8yC1RZO1L/uVk4C5g+5N5E9YytDgUkaFZo0WbbzWcWGPaQWqK9XJPwk2x7skh6iW8LC27n
+	7UnzFtPRzHXE8PfULTaxhuiOrxnp/s05Sl5Rdmmb53TsmLX79qAp4RHvevn047HUFg7NTyFYEeV
+	QilWnHXrnnsMLwJA8ZdH/1RKfDblIyToUJAgt7R+jo9Af2c6NjVY1oOuJr9xIWn1z+JEy7sSube
+	4Ax/vYrOFAng8IsFWvFQ+RN69DNQzviFWBFClZrSiWUmgTukS+5OI9t2Wt1qUTsaw=
+X-Received: by 2002:a05:6938:a087:10b0:c20:53c7:48a8 with SMTP id a640c23a62f3a-c2053c74c67mr98894466b.17.1785941785127;
+        Wed, 05 Aug 2026 07:56:25 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c205047ceefsm52082866b.35.2026.08.05.07.56.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Aug 2026 07:56:24 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Michal Luczaj <mhal@rbox.co>,  Alexei Starovoitov <ast@kernel.org>,
+  Daniel Borkmann <daniel@iogearbox.net>,  Andrii Nakryiko
+ <andrii@kernel.org>,  Eduard Zingerman <eddyz87@gmail.com>,  Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>,  Martin KaFai Lau
+ <martin.lau@linux.dev>,  Song Liu <song@kernel.org>,  Yonghong Song
+ <yonghong.song@linux.dev>,  Jiri Olsa <jolsa@kernel.org>,  Emil Tsalapatis
+ <emil@etsalapatis.com>,  John Fastabend <john.fastabend@gmail.com>,
+  Stanislav Fomichev <sdf@fomichev.me>,  "David S. Miller"
+ <davem@davemloft.net>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
+ <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Willem de Bruijn
+ <willemb@google.com>,  Jiayuan Chen <jiayuan.chen@linux.dev>,  Joe
+ Stringer <joe@wand.net.nz>,  bpf@vger.kernel.org,  netdev@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  Sashiko <sashiko-bot@kernel.org>
+Subject: Re: [PATCH bpf v2 2/2] bpf: Unconditionally take socket references
+ in lookup helpers
+In-Reply-To: <CAAVpQUBcDGX42Dyzo24U3iMKVyNajgOa5ZD7uX=DhSWf4Nb-qw@mail.gmail.com>
+	(Kuniyuki Iwashima's message of "Tue, 4 Aug 2026 21:01:43 -0700")
+References: <20260803-sockmap-lookup-tcp-leak-v2-0-306e025bfe66@rbox.co>
+	<20260803-sockmap-lookup-tcp-leak-v2-2-306e025bfe66@rbox.co>
+	<875x1qyyyx.fsf@cloudflare.com>
+	<CAAVpQUBcDGX42Dyzo24U3iMKVyNajgOa5ZD7uX=DhSWf4Nb-qw@mail.gmail.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Wed, 05 Aug 2026 16:56:23 +0200
+Message-ID: <87tsp88vl4.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260616155716.2631508-1-puranjay@kernel.org> <20260616155716.2631508-4-puranjay@kernel.org>
- <8a24abbc-10bc-42bb-8fee-0a174d8f1751@linaro.org> <CANk7y0inRXCUKtuio3Cb03DvuNPq6yp1o+tsE8PZitrY0LaOPQ@mail.gmail.com>
- <6ee32efc-01be-4532-aa59-3948f59156c0@linaro.org> <CANk7y0hU_m6gJ9FpGfGUJg-Ok8PoXhKruny_0OkeOgLbCo6ZLA@mail.gmail.com>
- <9fa68534-2b12-420a-93b7-a6ada21c180e@linaro.org>
-In-Reply-To: <9fa68534-2b12-420a-93b7-a6ada21c180e@linaro.org>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Wed, 5 Aug 2026 15:43:03 +0100
-X-Gm-Features: AUfX_myFuMQkGotW7dGfaw08yRHYvZWV8Y5fv9LrxJXxEZA7_XIfztesEAbA_3s
-Message-ID: <CANk7y0is-SB+hPhriwQ24v-UUTUfk9p01y1CQm=q_Y-=GXO04A@mail.gmail.com>
-Subject: Re: [PATCH v5 3/4] perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
-To: James Clark <james.clark@linaro.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Shuah Khan <shuah@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Stephane Eranian <eranian@google.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif <usama.arif@linux.dev>, 
-	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 5, 2026 at 2:58=E2=80=AFPM James Clark <james.clark@linaro.org>=
- wrote:
+On Tue, Aug 04, 2026 at 09:01 PM -07, Kuniyuki Iwashima wrote:
+> On Tue, Aug 4, 2026 at 3:14=E2=80=AFAM Jakub Sitnicki <jakub@cloudflare.c=
+om> wrote:
+>>
+>> On Mon, Aug 03, 2026 at 11:00 AM +02, Michal Luczaj wrote:
+>> > Lookup helpers gate whether to acquire a socket reference on
+>> > sk_is_refcounted(), a check re-evaluated at release. An established so=
+cket
+>> > refcounted at acquire time can gain SOCK_RCU_FREE via
+>> > connect(AF_UNSPEC)+listen() before release runs; the release-side re-c=
+heck
+>> > then reads sk_is_refcounted() =3D=3D false and skips the put. The refe=
+rence
+>> > leaks.
+>> >
+>> > Make acquire and release unconditional and symmetric: always take a
+>> > reference, always put it. Adapt sk_select_reuseport().
+>> >
+>> > Fixes: 6acc9b432e67 ("bpf: Add helper to retrieve socket in BPF")
+>> > Fixes: 64d85290d79c ("bpf: Allow bpf_map_lookup_elem for SOCKMAP and S=
+OCKHASH")
+>> > Reported-by: Sashiko <sashiko-bot@kernel.org>
+>> > Closes: https://lore.kernel.org/bpf/20260701235552.2B0AA1F00A3F@smtp.k=
+ernel.org/
+>> > Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>> > Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> > ---
+>> > TC bpf_sk_assign() has the same issue; it takes a reference only when
+>> > sk_is_refcounted() is true at assign time, but sock_pfree() (the skb
+>> > destructor it installs) re-checks sk_is_refcounted() independently at
+>> > release time. The same connect(AF_UNSPEC)+listen() transition leaks the
+>> > socket here too. I'd welcome suggestions on the right way to handle th=
+is.
+>>
+>> Can we make this scenario unsupported?
+>>
+>> listen() could return EBUSY if called on a socket that is refcounted.
+>>
+>> WDYT?
 >
+> I discussed this kind of buggy rehash with Eric today.
 >
->
-> On 05/08/2026 12:47, Puranjay Mohan wrote:
-> > On Wed, Aug 5, 2026 at 11:07=E2=80=AFAM James Clark <james.clark@linaro=
-.org> wrote:
-> >>
-> >>
-> >>
-> >> On 03/08/2026 7:54 pm, Puranjay Mohan wrote:
-> >>> On Mon, Aug 3, 2026 at 12:07=E2=80=AFPM James Clark <james.clark@lina=
-ro.org> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>> On 16/06/2026 16:57, Puranjay Mohan wrote:
-> >>>>> Enable bpf_get_branch_snapshot() on ARM64 by implementing the
-> >>>>> perf_snapshot_branch_stack static call for BRBE.
-> >>>>>
-> >>>>> BRBE is paused before masking exceptions to avoid branch buffer
-> >>>>> pollution from trace_hardirqs_off(). Exceptions are then masked wit=
-h
-> >>>>> local_daif_save() to prevent PMU overflow pseudo-NMIs from interfer=
-ing.
-> >>>>> If an overflow between pause and DAIF save re-enables BRBE, the sna=
-pshot
-> >>>>> detects this via BRBFCR_EL1.PAUSED and bails out.
-> >>>>>
-> >>>>> Branch records are read using perf_entry_from_brbe_regset() with a =
-NULL
-> >>>>> event pointer to bypass event-specific filtering. The buffer is
-> >>>>> invalidated after reading.
-> >>>>>
-> >>>>> Introduce a for_each_brbe_entry() iterator to deduplicate bank
-> >>>>> iteration between brbe_read_filtered_entries() and the snapshot.
-> >>>>>
-> >>>>> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> >>>>> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> >>>>> ---
-> >>>>>     drivers/perf/arm_brbe.c  | 128 ++++++++++++++++++++++++++++++++=
--------
-> >>>>>     drivers/perf/arm_brbe.h  |   9 +++
-> >>>>>     drivers/perf/arm_pmuv3.c |   5 +-
-> >>>>>     3 files changed, 120 insertions(+), 22 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-> >>>>> index effbdeacfcbb..a141ad7abcf2 100644
-> >>>>> --- a/drivers/perf/arm_brbe.c
-> >>>>> +++ b/drivers/perf/arm_brbe.c
-> >>>>> @@ -9,6 +9,7 @@
-> >>>>>     #include <linux/types.h>
-> >>>>>     #include <linux/bitmap.h>
-> >>>>>     #include <linux/perf/arm_pmu.h>
-> >>>>> +#include <asm/daifflags.h>
-> >>>>>     #include "arm_brbe.h"
-> >>>>>
-> >>>>>     #define BRBFCR_EL1_BRANCH_FILTERS (BRBFCR_EL1_DIRECT   | \
-> >>>>> @@ -256,6 +257,14 @@ static bool valid_brbe_version(int brbe_versio=
-n)
-> >>>>>                brbe_version =3D=3D ID_AA64DFR0_EL1_BRBE_BRBE_V1P1;
-> >>>>>     }
-> >>>>>
-> >>>>> +static __always_inline bool cpu_has_brbe(void)
-> >>>>
-> >>>> This should be more like cpu_valid_brbe_version(). has_brbe() only
-> >>>> implies that the CPU has BRBE, not that it's a version that the driv=
-er
-> >>>> supports. And it's actually just a wrapper around valid_brbe_version=
-()
-> >>>> that accesses the ID reg on that CPU, not a functionally different c=
-heck.
-> >>>>
-> >>>> But it also looks like valid_brbe_version() isn't called from anywhe=
-re
-> >>>> else, so why not delete that function and use its name for the new o=
-ne?
-> >>>
-> >>> I will do that in next version
-> >>>
-> >>>>
-> >>>>> +{
-> >>>>> +     u64 aa64dfr0 =3D read_sysreg_s(SYS_ID_AA64DFR0_EL1);
-> >>>>> +     int brbe =3D cpuid_feature_extract_unsigned_field(aa64dfr0, I=
-D_AA64DFR0_EL1_BRBE_SHIFT);
-> >>>>> +
-> >>>>> +     return valid_brbe_version(brbe);
-> >>>>> +}
-> >>>>> +
-> >>>>>     static void select_brbe_bank(int bank)
-> >>>>>     {
-> >>>>>         u64 brbfcr;
-> >>>>> @@ -271,6 +280,20 @@ static void select_brbe_bank(int bank)
-> >>>>>         isb();
-> >>>>>     }
-> >>>>>
-> >>>>> +static inline void __brbe_advance(int *bank, int *idx, int nr_hw)
-> >>>>> +{
-> >>>>> +     if (++(*idx) >=3D BRBE_BANK_MAX_ENTRIES &&
-> >>>>> +         *bank * BRBE_BANK_MAX_ENTRIES + *idx < nr_hw) {
-> >>>>> +             *idx =3D 0;
-> >>>>> +             select_brbe_bank(++(*bank));
-> >>>>> +     }
-> >>>>> +}
-> >>>>> +
-> >>>>> +#define for_each_brbe_entry(idx, nr_hw)                           =
-           \
-> >>>>> +     for (int __bank =3D (select_brbe_bank(0), 0), idx =3D 0;     =
-       \
-> >>>>> +          __bank * BRBE_BANK_MAX_ENTRIES + idx < (nr_hw);         =
-   \
-> >>>>> +          __brbe_advance(&__bank, &idx, (nr_hw)))
-> >>>>> +
-> >>>>>     static bool __read_brbe_regset(struct brbe_regset *entry, int i=
-dx)
-> >>>>>     {
-> >>>>>         entry->brbinf =3D get_brbinf_reg(idx);
-> >>>>> @@ -474,11 +497,9 @@ unsigned int brbe_num_branch_records(const str=
-uct arm_pmu *armpmu)
-> >>>>>
-> >>>>>     void brbe_probe(struct arm_pmu *armpmu)
-> >>>>>     {
-> >>>>> -     u64 brbidr, aa64dfr0 =3D read_sysreg_s(SYS_ID_AA64DFR0_EL1);
-> >>>>> -     u32 brbe;
-> >>>>> +     u64 brbidr;
-> >>>>>
-> >>>>> -     brbe =3D cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA=
-64DFR0_EL1_BRBE_SHIFT);
-> >>>>> -     if (!valid_brbe_version(brbe))
-> >>>>> +     if (!cpu_has_brbe())
-> >>>>>                 return;
-> >>>>>
-> >>>>>         brbidr =3D read_sysreg_s(SYS_BRBIDR0_EL1);
-> >>>>> @@ -618,10 +639,10 @@ static bool perf_entry_from_brbe_regset(int i=
-ndex, struct perf_branch_entry *ent
-> >>>>>
-> >>>>>         brbe_set_perf_entry_type(entry, brbinf);
-> >>>>>
-> >>>>> -     if (!branch_sample_no_cycles(event))
-> >>>>> +     if (!event || !branch_sample_no_cycles(event))
-> >>>>>                 entry->cycles =3D brbinf_get_cycles(brbinf);
-> >>>>>
-> >>>>> -     if (!branch_sample_no_flags(event)) {
-> >>>>> +     if (!event || !branch_sample_no_flags(event)) {
-> >>>>>                 /* Mispredict info is available for source only and=
- complete branch records. */
-> >>>>>                 if (!brbe_record_is_target_only(brbinf)) {
-> >>>>>                         entry->mispred =3D brbinf_get_mispredict(br=
-binf);
-> >>>>> @@ -774,32 +795,97 @@ void brbe_read_filtered_entries(struct perf_b=
-ranch_stack *branch_stack,
-> >>>>>     {
-> >>>>>         struct arm_pmu *cpu_pmu =3D to_arm_pmu(event->pmu);
-> >>>>>         int nr_hw =3D brbe_num_branch_records(cpu_pmu);
-> >>>>> -     int nr_banks =3D DIV_ROUND_UP(nr_hw, BRBE_BANK_MAX_ENTRIES);
-> >>>>>         int nr_filtered =3D 0;
-> >>>>>         u64 branch_sample_type =3D event->attr.branch_sample_type;
-> >>>>>         DECLARE_BITMAP(event_type_mask, PERF_BR_ARM64_MAX);
-> >>>>>
-> >>>>>         prepare_event_branch_type_mask(branch_sample_type, event_ty=
-pe_mask);
-> >>>>>
-> >>>>> -     for (int bank =3D 0; bank < nr_banks; bank++) {
-> >>>>> -             int nr_remaining =3D nr_hw - (bank * BRBE_BANK_MAX_EN=
-TRIES);
-> >>>>> -             int nr_this_bank =3D min(nr_remaining, BRBE_BANK_MAX_=
-ENTRIES);
-> >>>>> +     for_each_brbe_entry(i, nr_hw) {
-> >>>>> +             struct perf_branch_entry *pbe =3D &branch_stack->entr=
-ies[nr_filtered];
-> >>>>>
-> >>>>> -             select_brbe_bank(bank);
-> >>>>> +             if (!perf_entry_from_brbe_regset(i, pbe, event))
-> >>>>> +                     break;
-> >>>>>
-> >>>>> -             for (int i =3D 0; i < nr_this_bank; i++) {
-> >>>>> -                     struct perf_branch_entry *pbe =3D &branch_sta=
-ck->entries[nr_filtered];
-> >>>>> +             if (!filter_branch_record(pbe, branch_sample_type, ev=
-ent_type_mask))
-> >>>>> +                     continue;
-> >>>>>
-> >>>>> -                     if (!perf_entry_from_brbe_regset(i, pbe, even=
-t))
-> >>>>> -                             goto done;
-> >>>>> +             nr_filtered++;
-> >>>>> +     }
-> >>>>>
-> >>>>> -                     if (!filter_branch_record(pbe, branch_sample_=
-type, event_type_mask))
-> >>>>> -                             continue;
-> >>>>> +     branch_stack->nr =3D nr_filtered;
-> >>>>> +}
-> >>>>>
-> >>>>> -                     nr_filtered++;
-> >>>>> -             }
-> >>>>> +/*
-> >>>>> + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
-> >>>>> + * self-recording and return 0 if the snapshot state appears distu=
-rbed.
-> >>>>> + */
-> >>>>> +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entri=
-es, unsigned int cnt)
-> >>>>> +{
-> >>>>> +     unsigned long flags;
-> >>>>> +     int nr_hw, nr_copied =3D 0;
-> >>>>> +     u64 brbfcr, brbcr;
-> >>>>> +
-> >>>>> +     if (!cnt)
-> >>>>> +             return 0;
-> >>>>
-> >>>> If you're trying to avoid branches before pausing BRBE, can't you ch=
-eck
-> >>>> this after the pause?
-> >>>
-> >>> will drop this in the next version and this is just an optimization.
-> >>>
-> >>>>
-> >>>>> +
-> >>>>> +     /* Guard against running on a CPU without BRBE (e.g. big.LITT=
-LE). */
-> >>>>> +     if (!cpu_has_brbe())
-> >>>>> +             return 0;
-> >>>>> +
-> >>>>> +     /*
-> >>>>> +      * Pause BRBE first to avoid recording our own branches. The
-> >>>>> +      * sysreg read/write and ISB are branchless, so pausing befor=
-e
-> >>>>> +      * checking BRBCR avoids polluting the buffer with our own
-> >>>>> +      * conditional branches.
-> >>>>> +      */
-> >>>>> +     brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
-> >>>>> +     brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
-> >>>>> +     write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> >>>>
-> >>>> Can this work without first disabling interrupts? Sashiko pointed it
-> >>>> out, but I think it's correct. If you read an active state into brbf=
-cr,
-> >>>> then the PMU event fires and disables BRBE, then you disable interru=
-pts,
-> >>>> then you would restore an active state when it should be inactive.
-> >>>> Surely the only way to do it properly is to disable interrupts befor=
-e
-> >>>> touching anything at all, if the PMU handler is also touching the sa=
-me
-> >>>> registers?
-> >>>>
-> >>>> If you want to avoid trace_hardirqs_off() can you make a new
-> >>>> raw_local_daif_save() that disables interrupts and then call
-> >>>> trace_hardirqs_off() yourself after pausing BRBE? Or not call
-> >>>> trace_hardirqs_off() at all? There is a comment mentioning something
-> >>>> like that in arch/arm64/kernel/suspend.c.
-> >>>
-> >>> Yes. I'll add raw_local_daif_save()/raw_local_daif_restore() and mask=
- before
-> >>> touching any BRBE register, which fixes the stale restore. trace_hard=
-irqs_off()
-> >>> then moves below the pause so lockdep still sees a balanced off/on pa=
-ir while
-> >>> its branches land in an already paused buffer.
-> >>>
-> >>>>
-> >>>> Also, disabling interrupts doesn't stop the PMU event from overflowi=
-ng
-> >>>> and changing the state of PAUSED either. I think this is another pat=
-h
-> >>>> that leads to you restoring the wrong state, so don't you also need =
-to
-> >>>> disable the PMU?
-> >>>
-> >>> Hardware only sets PAUSED on a BRBE freeze event (RBHYTD), and a free=
-ze needs
-> >>> BRBE to not already be paused (RNXCWF). So once we have paused, nothi=
-ng changes
-> >>> underneath us and the PMU does not need disabling. It would not help =
-anyway:
-> >>> armv8pmu_stop() calls brbe_disable(), which zeroes BRBCR_EL1 and disc=
-ards the
-> >>> records we came to read.
-> >>
-> >> That does mean you throw away real freeze events while paused though, =
-in
-> >> addition to the brbe_invalidate() you need to avoid non contiguous
-> >> buffers. So it takes branches away from PMU events.
-> >
-> > RBHYTD gives a freeze two effects: PAUSED is set, and BRBTS_EL1 capture=
-s a
-> > timestamp. Recording has already stopped because we paused, and the dri=
-ver never
-> > reads BRBTS_EL1. On the way out we check PMOVSCLR_EL0 and leave PAUSED =
-set if a
-> > counter overflowed, so a pending overflow handler still finds a frozen =
-buffer.
-> >
-> >> So it takes branches away from PMU events.
-> >
-> > Yes, but that is brbe_invalidate(), not the pause. Interrupts are maske=
-d and
-> > nothing else runs on the CPU, so the only branches the pause suppresses=
- are the
-> > snapshot's own.
-> >
-> >>>
-> >>> You are right that a freeze can still land in the window between read=
-ing BRBFCR
-> >>> and setting PAUSED, and restoring the value we read would then clear =
-a PAUSED
-> >>> bit the hardware set. So v6 checks PMOVSCLR_EL0 and leaves BRBE pause=
-d if a
-> >>> counter has overflowed. Reads of PMOVSCLR are non-destructive and it =
-stays set
-> >>> until the overflow handler clears it, so it is still visible after we=
- have set
-> >>> PAUSED ourselves:
-> >>>
-> >>>           if (!valid_brbe_version())
-> >>>                   return 0;
-> >>>
-> >>>           flags =3D raw_local_daif_save();
-> >>>
-> >>>           brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
-> >>>           brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
-> >>>
-> >>>           write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> >>>           isb();
-> >>>
-> >>>           trace_hardirqs_off();
-> >>>
-> >>>           /* BRBCR_EL1 is zero while the driver has BRBE disabled. */
-> >>>           if (!brbcr)
-> >>>                   goto restore;
-> >>>
-> >>>           ... read the records ...
-> >>>
-> >>
-> >> Up to the point where you read the records you technically don't need
-> >> any branches (if you don't do trace_hardirqs_off()) so you could do th=
-e
-> >> whole thing without pausing. Just disable interrupts, read every branc=
-h
-> >> entry unconditionally, re-enable interrupts and then find the last val=
-id
-> >> entry and do the branchy stuff after reading.
-> >>
-> >> I'm thinking out loud, but doesn't that make it a lot easier? And it
-> >> avoids the brbe_invalidate() which takes the branches away from the PM=
-U
-> >> event. It also avoids having to think too hard about racing with PMU
-> >> events causing a freeze even after interrupts are disabled and after
-> >> reading the freeze value:
-> >>
-> >>     raw_local_daif_save();
-> >>     brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
-> >>     brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
-> >>     select_bank(0);
-> >>     read_record(0);
-> >>     read_record(1);
-> >>     ...
-> >>     select_bank(0);
-> >>     read_record(0);
-> >>     read_record(1);
-> >>     ...
-> >>     write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-> >>     isb();
-> >>     local_daif_restore();
-> >>
-> >>     /* Now do post processing, find last valid record, check if it was
-> >> enabled by looking at brbcr etc. */
-> >
-> > MRS is not a branch, so that works, but three things would have to chan=
-ge:
-> >
-> > 1. perf_entry_from_brbe_regset() goes through BRBE_REGN_SWITCH, a 32 ca=
-se
-> >     switch, because the register number has to be an immediate. gcc emi=
-ts a jump
-> >     table and the function has 52 branches in the object file. The read=
- would
-> >     need full unrolling.
-> >
->
-> Yes you would have to manually unroll it. I doubt the compiler would
-> emit a branch for BRBE_REGN_SWITCH() because your indexes are static if
-> it's unrolled. But if it does you can change it to a sequence of
-> read_sysreg_s()s.
->
-> If you really want to be sure there are no branches, write it in a
-> single asm block.
+> We can't make it unsupported although it's super unlikely
+> that this is used by a real application.
 
-I will try that approach in the next version.
+I'm just wondering why not?
 
-> > 2. RPGDLX needs an ISB before the reads, and Table D19-10 makes it
-> >     IMPLEMENTATION DEFINED whether ISB itself generates a record. When =
-we pause,
-> >     IZCHRF means the pausing ISB cannot pollute the buffer it is about =
-to read.
-> >
->
-> I assume one potential extra record from the isb() is acceptible seeing
-> as you already have two or more conditions plus a function call before
-> the pause? Is the problem that you don't know whether to filter it out
-> later because it's IMPDEF and isn't always there? You already don't know
-> exactly how many branches there will be before the pause beause it's
-> written in C. So I'm not sure what the exact issue here is.
->
-> > 3. 64 record parts still need a bank switch, so BRBFCR_EL1 still has to=
- be
-> >     written and restored.
-> >
->
-> Yes that was included in my pseudo code example but it's still
-> branchless. I did miss that you might need an isb() after disabling
-> interrupts, but you added one for RPGDLX anyway.
->
-> > Correctness would then depend on the read staying branchless, which is =
-not
-> > checkable at build time and fails silently: a branch mid read shifts th=
-e buffer,
->
-> Why would the compiler insert a branch between two read_sysreg_s()s,
-> which are asm volatile? Is that allowed?
+First I thought is was due to POSIX compatibility but POSIX seems to
+define connect(AF_UNSPEC) only for connection-less sockets [1]:
 
-You are right, I just over complicated it!
+"""
+If he initiating socket is not connection-mode, then connect() shall set
+the socket's peer address [...] If the sa_family member of address is
+AF_UNSPEC, the socket's peer address shall be reset.
+"""
 
-> > giving a duplicate and a gap. 64 * 24 bytes of records also wants a per=
--CPU
-> > scratch buffer rather than the stack.
-> >
->
-> A per-CPU scratch buffer doesn't sound too bad. But aren't you in
-> control of how many entries are available to write to? You can reject
-> any calls that have fewer than 64 and always write directly to *entries.
->
-> You could also compare with 'cnt' after reading each record and exit the
-> read section. Like you say below, branches not taken don't generate
-> records, and once the branch is taken you stop reading so after that
-> point generating records doesn't matter.
->
-> > Happy to prototype it. What I would not do is pause without invalidatin=
-g:
-> > records are from/to pairs, so a consumer walking across the hole recons=
-tructs a
-> > call path that never happened. The invalidate was Mark's request after =
-the RFC,
-> > "to maintain record contiguity for other consumers", so dropping the pa=
-use drops
-> > that too.
->
-> Well the point was to not have to pause at all, so there's no need to
-> invalidate either. Even if you did add a pause, as long as there are no
-> branches between the pause and resume you don't need an invalidate
-> because you didn't miss any branches.
->
-> >
-> > I was thinking of this for v6:
-> >
-> >          flags =3D raw_local_daif_save();
-> >
-> >          /* The BRBE sysregs below are UNDEFINED without this. */
-> >          if (!valid_brbe_version()) {
->
-> You don't need to disable interrupts to call this, it's a constant. Or
-> is it to stop migration?
+So if this is Linux-specific behavior (?) and we don't exect any users
+to rely on it, why not change it and see if anyone complains?
 
-It was to stop migration.
+Seems like wasted effort to try to make it work properly.
 
->
-> V5 reads sysregs before disabling interrupts so I assume migration isn't
-> an issue here.
->
-> >                  raw_local_daif_restore(flags);
-> >                  return 0;
-> >          }
-> >
-> >          brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
-> >          brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
-> >
-> >          write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> >          isb();
-> >
-> >          /* BRBCR_EL1 is zero while the driver has BRBE disabled. */
-> >          if (!brbcr) {
-> >                  write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-> >                  isb();
-> >                  raw_local_daif_restore(flags);
-> >                  return 0;
-> >          }
-> >
-> >          trace_hardirqs_off();
-> >
-> >          ... read the records ...
-> >
-> >          if (!(brbfcr & BRBFCR_EL1_PAUSED) &&
-> >              !(read_pmovsclr() & (ARMV8_PMU_OVSR_P | ARMV8_PMU_OVSR_F))=
-)
-> >                  brbe_invalidate();
-> >          else
-> >                  brbfcr |=3D BRBFCR_EL1_PAUSED;
-> >
-> >          write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-> >          isb();
-> >          local_daif_restore(flags);
-> >
-> > Exceptions are masked before anything is sampled, BRBCR_EL1 is only rea=
-d and
-> > never written, and BRBFCR_EL1 is written back from the value saved unde=
-r the
-> > mask. cpu_has_brbe() is now valid_brbe_version().
-> >
-> > Neither conditional costs a record: valid_brbe_version() falls through =
-when BRBE
-> > is present (RBBNSZ, only taken branches are recorded), and the BRBCR_EL=
-1 test is
->
-> Isn't the compiler free to invert it and make the happy path a taken
-> branch. I don't think any of that can be assumed without writing in
-> assembly.
->
-> > after the pause. It cannot move later because BRBFCR_EL1 is UNDEFINED w=
-ithout
-> > FEAT_BRBE.
-> >
-> > PMOVSCLR_EL0 is masked because PMCCNTR_EL0 is bit 31 and PMCR_EL0.N is =
-at most
-> > 31, so the cycle counter is outside every range RNXCWF, RGXGWY, RPKTXQ =
-and
-> > RLDMVK name. Unmasked, a cycle counter overflow looked like a freeze.
->
-> Sorry I didn't understand this bit. Can you elaborate?
->
-> >
-> > Do you think this version works?
-> >
-> > Thanks,
-> > Puranjay
->
->
->  From your previous reply:
->
->    "Hardware only sets PAUSED on a BRBE freeze event (RBHYTD), and a
->     freeze needs BRBE to not already be paused (RNXCWF). So once we have
->     paused, nothing changes underneath us and the PMU does not need
->     disabling."
->
-> I'm still not 100% convinced this is correct. You read BRBFCR_EL1 and
-> write PAUSED to it in separate instructions. The PMU can overflow and
-> change the PAUSED state between those two instructions leading to
-> restoration of the wrong value.
-
-I was checking if the overflow happened and leaving it paused in that case.
-
-> Isn't this non pausing version way simpler to understand, and also has
-> the benefit of not invalidating someone elses BRBE buffers. The only
-> downside seems to be that it might have some assembly to make sure the
-> if statements are always not taken branches rather than inverted, but
-> personally I don't think that makes it any harder to understand than the
-> branchy pausing version in V5:
->
->    #define read_record(i)
->      if (i >=3D cnt)                                       \
->         goto out;                                        \
->      isb(); /* Ensure our own exit branch isn't read? */ \
->      entries[i].inf =3D read_brbe_inf(i)                   \
->      if (!inf)                                           \
->         goto out;                                        \
->      entries[i].src =3D read_brb_src(i)                    \
->      entries[i].dst =3D read_brb_dst(i)                    \
->
->    raw_local_daif_save();
->
->    /* disable counters to stop BRBFCR_EL1.PAUSE state changing */
->    pmcr =3D armv8pmu_pmcr_read();
->    armv8pmu_pmcr_write(pmcr & ~ARMV8_PMU_PMCR_E);
->    isb();
->
->    brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
->    brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
->
->    select_bank(0);
->    read_record(0);
->    read_record(1);
->    ...
->    select_bank(1);
->    read_record(32);
->    read_record(33);
->    ...
->
-> out:
->    write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
->    isb();
->    armv8pmu_pmcr_write(pmcr);
->    raw_local_daif_restore();
->
->    /* Post process entries[n].inf etc into correct format */
-
-I will try out this approach and get back.
-
-Thanks,
-Puranjay
+[1] https://man.archlinux.org/man/connect.3p
