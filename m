@@ -1,190 +1,312 @@
-Received: from out-166.mta1.migadu.com (out-166.mta1.migadu.com [95.215.58.166])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6833C10B9
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 02:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155AE3C3F7B
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 03:15:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785896842; cv=none; b=EmmxHRvZlBu1mdgPsSz+vHK+IxL2jYSFag18p2y6RlnE2YZ0Ve8VjnC3nEhsy2mVsxCuD59HE+yomFbBgyLMLk2gEuZk9oWhbQihAdVQRRsuNcNnd3JFHQGiJbq8GaYiRl1cNmWGij/tNuAh6DVHqBlbA7KhXm4nhWBSvVT1J4Y=
+	t=1785899759; cv=none; b=VCdd152bNQJEFEBiAnGVnxfaUJ1F8uJYXkydQWinsNpaG7m+9oLwcqXpEC2DtRUS7slU5t3EX9asgTYNVcesBTz00Fy6SJ07gfHBW9v5T0fxCTcJgHn8aHEdhT6tCUtBSYSEGJF/aHi9ujBuo0SOF5MSyGFdiEHyZpi5nrM0Uw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785896842; c=relaxed/simple;
-	bh=uo4jE7jjJ6KUdc8w9tPdlbGHosV8raeOQDY1uhbLILQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D5GMsKcZbyrG9xzGB+RjGVoRdtyfCqVspLIq/btDZI0czRZgRgjoDQ7YyLUs9PnJBH10nbSr5rBGHq46AccQggl+Mx5c958Wq8RuYChAcmJuNDV4Xh6aCwq7aa/krRow3kuG6XgzSFxfJzRNyFN3951fE/dRA+GQZHH7/RrlMRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LuXYEGv0; arc=none smtp.client-ip=95.215.58.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785899759; c=relaxed/simple;
+	bh=E9fmzVPEhc0FHQUnTqsdKOMryIMDqrwX5DamxWU2EYk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mUf1QEE8r5Y0IRLbD8To/3gaMWm1Ek5i/BRJ/TmtMwsMVn9QFdLrhO6W2/NsBiU8yXGXZI4gfYLxSHAASJvFSr6u2Nf/BJKgm1vTofKGlKbKaFIHc5QIkQrttQfZyDl/Wh6peX0VovEywHh0wGQPY8sFVVlRHbEtIOgSCodrPNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M1cOd41a; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LuXYEGv0"
-Message-ID: <8c5f0b71-cf81-43f9-b437-e16132d0f02a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785896838;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iQ2dtYKtv5P4Mz2awqe1Ey7y6uXb3O4MS8BAHmRjtTs=;
-	b=LuXYEGv0XLQliolW/z0KzBraEu0P6Ad6zupWa4WLrmFE/fH6x94FDu91sLzOYhlOp+FqN3
-	NrQ2/ogvcbiVkkdGR1hRjEeDGKngJ9w593wdmJEWmADa2oHlsthI4OdUTHhU69hoxr46+8
-	jf/DTzlhC3VpyXCA3ZrPyeOxNu9U558=
-Date: Wed, 5 Aug 2026 10:26:33 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M1cOd41a"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84867f07d63so559729b3a.2
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 20:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785899757; x=1786504557; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1JWpXQSVlmsFGWTkJETCzoI7IiXAWiXm3VeZqV6jTpY=;
+        b=M1cOd41aLL0Kj62y+W14k2wBlFkulWDBEFevxX6VAxTtSTdbQYs0xSv6L6hWEf8JvB
+         EkTxoeK2mJHeCa1OSRiIU+/hXEIdCXOydAcfHj6K7lmJtxbhFBqfUltyvj9fHJfdvK8U
+         FlGveLKH8gAC32wFJP0SOwvh/1tWHXCKARtbf4wsLRxyb8aA6mDqSP4YtkQXQ2128J3w
+         VMqdrMaiQQV4EJsSlwH9XhB59K+oOIWvKewyg3qucnxAkCd3LR2p1TfEqixot/yfywWz
+         guPPMRZ9kYIpPYeCEIg5DzFwisnDbYYRFSYSn2hWYnj0XK+ncZmyF4Dj1uiwzzZwOrpN
+         sC0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785899757; x=1786504557;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1JWpXQSVlmsFGWTkJETCzoI7IiXAWiXm3VeZqV6jTpY=;
+        b=LP8vxjCiN9H8dsMfAY7jAEYRZTi65oT4VKuC46UIV7Z4pgajfwoVRvB8bYTqB+gbuE
+         QOlJYu54mtPYG1G8cO62+n/f5S61+r+Iuyt5/COUEidKcKtOBpzBTbJHfGhX1jB41eYM
+         GHxrHBzoV7JcdO/CjgTMv/3eWXEGHnqdzupTXvgEnSpdzeGkepsTiMFr0shTD1YVUpQV
+         yiKUkb23yOFhzZbTZ6I2IfgaSSSR+Bz2cDInstkpYkM61WKpDRpUo9gL61iUjBGN5CEl
+         YPzOQGnsL1Ij3blsgJ9zugJrISYKVp7SMHY5EgVB0+9Szjz4VQ2Yiy06larJ0gdLUWMk
+         NiUg==
+X-Forwarded-Encrypted: i=1; AHgh+RpMwYWumnW6YS8eQEZ3svYmcbfG2Ni4IFiiF+UO2lrYxer9yRYiPx21NELUHyDRMZE4urE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1+fvwxuryOziOzS17GDM5Oy3GSPdHW4V7CO3fGhQnodl32PCU
+	LWXGFp6uqz5uqqyfDElnkdJ3B6CQTYk7ehgtydOo7OXBWS9dxCmCiV0H
+X-Gm-Gg: AR+sD12hlm9KNs5TbMccPwsu98//Kh9tx9jI9XQRuSOkBhej2JDzNWaYto0RyjSYYcN
+	6OAUiaUw4NpN8pfK9z4S4yR+qvnILFaEo9JVPQIO2A/i5UEFM8qjrZxxi42XaOzAq4Y8tE3mFeJ
+	v2jl64jjsijShwQkOjx0b2v8vHpGvT7bm1ctYpHv6Ej1KGRNtQHqlBp6vfNxv4zcBWaZmMOqu3/
+	zuSJhtLWORS+MGY2S/9HG1BjA3ccdU4+hsv8cN0eF3VOLJp879dU/5ih4lOvVJR2cD1jcNE6LJB
+	+UEyFjzoto4ydrRPIGOi3rlTKIanZi+X2ZcmP5t7hcq0x/zzoFmPLgQWe3wQLFXYdhbRbBisUNr
+	tw/WNIOpkVqIsJYbF5zh6bifAH/iPTCmp1bDcOdK+zpIUXPJuLU5Yp4nxFTOmF+UaAJZDjcJaz7
+	QQTEJGsVDsFeQ0GO5L1RbvZ9py7IlFRrzU7HLZ/5/eu/JC8sinTwIXhShuoJ33wJH6oz62wiChJ
+	c2VK5qnh3WWbARbaC9+2v2AEvdGOhPC5UpQ1feIXjPzQv+C8EcpL+Dgw6bLSRU=
+X-Received: by 2002:a05:6a00:4488:b0:848:56ff:6ce4 with SMTP id d2e1a72fcca58-84f2dfc533fmr4208442b3a.5.1785899757288;
+        Tue, 04 Aug 2026 20:15:57 -0700 (PDT)
+Received: from secrnd-cstp.tailb7f510.ts.net ([125.131.91.97])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbe706e1c03sm536727a12.0.2026.08.04.20.15.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Aug 2026 20:15:56 -0700 (PDT)
+From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
+	Sun Jian <sun.jian.kdev@gmail.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev,
+	syzbot+cdd6c0925e12b0af60cc@syzkaller.appspotmail.com,
+	sashiko-bot@kernel.org
+Subject: [PATCH bpf-next v3] bpf: Fix mmap_lock leak in irq_work path
+Date: Wed,  5 Aug 2026 12:14:25 +0900
+Message-ID: <20260805031425.2157475-2-sanghyun.park.cnu@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [BUG?] bpf/tcx: bpf_clone_redirect() can sustain self-cloning
- transmit loops
-To: Junseo Lim <zirajs7@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Martin KaFai Lau
- <martin.lau@linux.dev>, bpf@vger.kernel.org, netdev@vger.kernel.org,
- Sechang Lim <rhkrqnwk98@gmail.com>
-References: <20260804145747.354896-1-zirajs7@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260804145747.354896-1-zirajs7@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+stack_map_get_build_id_offset() introduced a per-CPU irq_work to defer
+mmap_read_unlock() from NMI context, and bpf_find_vma() later reused the
+same mmap_unlock_work. Both callers only check whether the work is busy
+before taking mmap_lock, so a nested caller can reuse the slot before the
+first caller queues it. Two read locks may then be acquired while only one
+deferred unlock runs, leaking a read lock and blocking exit_mmap().
 
-On 8/4/26 10:57 PM, Junseo Lim wrote:
-> Hi,
->
-> We found that a TCX sched_cls BPF program using bpf_clone_redirect() can
-> repeatedly re-enter a virtual-device transmit path and trigger RCU stall
-> reports under sustained traffic.
->
-> bpf_clone_redirect() clones and redirects the skb from inside the helper,
-> before the current BPF program invocation returns. If the cloned skb
-> reaches a TCX hook that runs the same or another bpf_clone_redirect()
-> program, the datapath can re-enter itself repeatedly.
->
-> The BPF program can still return TCX_PASS. The recursion is caused by the
-> helper's immediate transmit side effect, not a TCX_REDIRECT return action.
->
-> We have separate reduced cases with ingress-only and ingress+egress TCX
-> attachments, but the common part is the helper-driven loopback transmit.
->
-> ---
-> bpf_clone_redirect(skb, lo_ifindex, 0);
-> return TCX_PASS;
-> ---
->
-> With flags == 0, bpf_clone_redirect() redirects the cloned skb to the
-> egress transmit path:
->
-> ---
-> bpf_clone_redirect()
->    skb_clone()
->    bpf_try_make_head_writable(original skb)
->    __bpf_redirect(clone, lo, 0)
->      __bpf_tx_skb()
->        dev_queue_xmit(clone)
->          __dev_queue_xmit()
->            rcu_read_lock_bh()
->            sch_handle_egress()
->              tcx_run()
->                BPF program on lo
->                  bpf_clone_redirect(...)
->            rcu_read_unlock_bh()
-> ---
->
-> The included C reproducer is a standalone stress case for the same
-> loopback TCX/BPF shape. The exact reduced syzkaller cases use different
-> TCX attachment combinations; those can be provided separately if useful.
->
-> After sustained traffic, the system reported RCU stalls:
->
-> ---
-> [  110.598444] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> [  110.598935] rcu: 	Tasks blocked on level-0 rcu_node (CPUs 0-0): P68/1:b..l
-> [  110.599529] rcu: 	(detected by 0, t=6502 jiffies, g=32705, q=438535 ncpus=1)
-> [  110.599977] task:kmemleak        state:R  running task     stack:0     pid:68    tgid:68    ppid:2      task_flags:0x208040 flags:0x00080000
-> [  110.600914] Call Trace:
-> [  110.601087]  <TASK>
-> [  110.601239]  __schedule+0xe19/0x3940
-> [  110.603902]  preempt_schedule_common+0x44/0xd0
-> [  110.604530]  preempt_schedule_thunk+0x16/0x40
-> [  110.604820]  _raw_spin_unlock_irq+0x44/0x50
-> [  110.605096]  kmemleak_scan+0x141/0x1070
-> [  110.605684]  kmemleak_scan_thread+0x6e/0xb9
-> [  110.606063]  kthread+0x384/0x4a0
-> [  110.606776]  ret_from_fork+0x3e0/0x870
-> [  110.608342]  ret_from_fork_asm+0x1a/0x30
-> [  110.608702]  </TASK>
-> [  110.609109] rcu: rcu_preempt kthread starved for 1984 jiffies! g32705 f0x2 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
-> [  110.609980] rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-> [  110.610545] rcu: RCU grace-period kthread stack dump:
-> [  110.610864] task:rcu_preempt     state:R  running task     stack:0     pid:15    tgid:15    ppid:2      task_flags:0x208040 flags:0x00080000
-> [  110.612020] Call Trace:
-> [  110.612195]  <TASK>
-> [  110.612405]  __schedule+0xe19/0x3940
-> ...
-> [  110.626961]  </TASK>
-> [  110.627112] rcu: Stack dump where RCU GP kthread last ran:
-> ...
-> [  110.634555]  <IRQ>
-> [  110.635866]  bpf_has_frame_pointer+0x42/0x290
-> [  110.637076]  unwind_next_frame+0x2a0/0x1ed0
-> [  110.642242]  arch_stack_walk+0xba/0x120
-> [  110.643071]  stack_trace_save+0x8e/0xc0
-> [  110.645003]  kasan_save_stack+0x2f/0x50
-> [  110.656111]  kasan_record_aux_stack+0x9b/0xd0
-> [  110.656714]  __call_rcu_common.constprop.0+0xb7/0xe80
-> [  110.658475]  kmem_cache_free+0x3b4/0x6a0
-> [  110.658735]  kfree_skbmem+0x182/0x210
-> [  110.659290]  sk_skb_reason_drop+0x15f/0x570
-> [  110.660129]  packet_rcv+0x174/0x1640
-> [  110.660673]  dev_queue_xmit_nit+0x673/0x9c0
-> [  110.660956]  dev_hard_start_xmit+0x9f/0x790
-> [  110.661854]  __dev_queue_xmit+0x140e/0x3d70
-> [  110.666568]  __bpf_redirect+0x880/0xde0
-> [  110.667420]  bpf_clone_redirect+0x350/0x5c0
-> [  110.668011]  bpf_prog_05a7bf74a04af34c+0x27/0x30
-> [  110.668325]  __dev_queue_xmit+0x2bb2/0x3d70
-> [  110.673046]  __bpf_redirect+0x880/0xde0
-> [  110.674202]  bpf_clone_redirect+0x350/0x5c0
-> ...(repeated bpf_clone_redirect)
-> [  110.704300]  bpf_prog_05a7bf74a04af34c+0x27/0x30
-> [  110.704611]  __dev_queue_xmit+0x2bb2/0x3d70
-> [  110.710549]  __bpf_redirect+0x880/0xde0
-> [  110.711839]  bpf_clone_redirect+0x350/0x5c0
-> [  110.713199]  bpf_prog_05a7bf74a04af34c+0x27/0x30
-> [  110.713638]  __netif_receive_skb_core.constprop.0+0x26d3/0x3440
-> [  110.718047]  __netif_receive_skb_one_core+0xca/0x260
-> [  110.719889]  __netif_receive_skb+0x54/0x1a0
-> [  110.720750]  process_backlog+0x34f/0x1380
-> [  110.721306]  __napi_poll+0xba/0x620
-> [  110.722173]  net_rx_action+0x550/0xe70
-> [  110.723891]  handle_softirqs+0x1dc/0x940
-> [  110.725670]  do_softirq+0xac/0xe0
-> [  110.725899]  </IRQ>
-> ---
+Reserve the per-CPU slot before mmap_read_trylock(). Use the same wrapper
+in stackmap and bpf_find_vma() so both callers release the reservation on
+trylock failure. Keep rejecting the slot while the irq_work remains busy.
+Release it after the irq_work callback unlocks the mm.
 
+Fixes: eac9153f2b58 ("bpf/stackmap: Fix deadlock with rq_lock in bpf_get_stack()")
+Reported-by: syzbot+cdd6c0925e12b0af60cc@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=cdd6c0925e12b0af60cc
+Reported-by: sashiko-bot@kernel.org
+Closes: https://lore.kernel.org/r/20260630033745.B80201F000E9@smtp.kernel.org
+Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
+---
+v3:
+ - Return the reserved work item directly and use ERR_PTR(-EBUSY), as suggested
+   by Andrii.
+ - Keep irq_work_is_busy() alongside the active reservation.
+ - Update the Fixes tag.
 
+Sun, Puranjay, Ihor,
 
-I think what you have here is just a CPU DoS, where one packet gets 
-amplified into several.
+I dropped the Tested-by, Reviewed-by, and Acked-by tags because v3 changes
+the helper interface and restores the irq_work busy check. If you have a
+chance, could you please review or retest this version?
 
-You also have kmemleak, KASAN and friends enabled, which makes the CPU 
-and memory pressure much worse.
+v2: https://lore.kernel.org/bpf/20260730054858.209807-2-sanghyun.park.cnu@gmail.com/
+ - Drop irq_work_is_busy() and rely exclusively on active, as suggested by
+   Ihor.
 
-I don't see any more catastrophic consequence than that.
+v1: https://lore.kernel.org/bpf/20260722023004.1497923-2-sanghyun.park.cnu@gmail.com/
 
-Think about it, a single looping packet can cause a network storm and 
-pin a machine at 100% CPU too, but that's simply unavoidable.
+ kernel/bpf/mmap_unlock_work.h | 51 ++++++++++++++++++++---------------
+ kernel/bpf/stackmap.c         | 28 +++++++++++--------
+ kernel/bpf/task_iter.c        | 14 +++++++---
+ 3 files changed, 56 insertions(+), 37 deletions(-)
 
+diff --git a/kernel/bpf/mmap_unlock_work.h b/kernel/bpf/mmap_unlock_work.h
+index 5d18d7d85bef..1834db20b861 100644
+--- a/kernel/bpf/mmap_unlock_work.h
++++ b/kernel/bpf/mmap_unlock_work.h
+@@ -4,12 +4,15 @@
+ 
+ #ifndef __MMAP_UNLOCK_WORK_H__
+ #define __MMAP_UNLOCK_WORK_H__
++#include <linux/atomic.h>
++#include <linux/err.h>
+ #include <linux/irq_work.h>
+ 
+ /* irq_work to run mmap_read_unlock() in irq_work */
+ struct mmap_unlock_irq_work {
+ 	struct irq_work irq_work;
+ 	struct mm_struct *mm;
++	atomic_t active;
+ };
+ 
+ DECLARE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
+@@ -18,32 +21,36 @@ DECLARE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
+  * We cannot do mmap_read_unlock() when the irq is disabled, because of
+  * risk to deadlock with rq_lock. To look up vma when the irqs are
+  * disabled, we need to run mmap_read_unlock() in irq_work. We use a
+- * percpu variable to do the irq_work. If the irq_work is already used
+- * by another lookup, we fall over.
++ * percpu variable to do the irq_work. The active flag reserves the slot
++ * before mmap_read_trylock() and until the irq_work callback consumes mm.
+  */
+-static inline bool bpf_mmap_unlock_get_irq_work(struct mmap_unlock_irq_work **work_ptr)
++static inline struct mmap_unlock_irq_work *bpf_mmap_unlock_guard_get(void)
+ {
+-	struct mmap_unlock_irq_work *work = NULL;
+-	bool irq_work_busy = false;
++	struct mmap_unlock_irq_work *work;
+ 
+-	if (irqs_disabled()) {
+-		if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
+-			work = this_cpu_ptr(&mmap_unlock_work);
+-			if (irq_work_is_busy(&work->irq_work)) {
+-				/* cannot queue more up_read, fallback */
+-				irq_work_busy = true;
+-			}
+-		} else {
+-			/*
+-			 * PREEMPT_RT does not allow to trylock mmap sem in
+-			 * interrupt disabled context. Force the fallback code.
+-			 */
+-			irq_work_busy = true;
+-		}
+-	}
++	if (!irqs_disabled())
++		return NULL;
++
++	/*
++	 * PREEMPT_RT does not allow to trylock mmap sem in interrupt
++	 * disabled context. Force the fallback code.
++	 */
++	if (IS_ENABLED(CONFIG_PREEMPT_RT))
++		return ERR_PTR(-EBUSY);
++
++	work = this_cpu_ptr(&mmap_unlock_work);
++	if (irq_work_is_busy(&work->irq_work) ||
++	    atomic_cmpxchg_acquire(&work->active, 0, 1))
++		return ERR_PTR(-EBUSY);
+ 
+-	*work_ptr = work;
+-	return irq_work_busy;
++	return work;
++}
++
++static inline void
++bpf_mmap_unlock_guard_put(struct mmap_unlock_irq_work *work)
++{
++	if (work)
++		atomic_set_release(&work->active, 0);
+ }
+ 
+ static inline void bpf_mmap_unlock_mm(struct mmap_unlock_irq_work *work, struct mm_struct *mm)
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 463f94ba1cc4..0384b32d88b5 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -414,8 +414,7 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
+ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 					  u32 trace_nr, bool user, bool may_fault)
+ {
+-	struct mmap_unlock_irq_work *work = NULL;
+-	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
++	struct mmap_unlock_irq_work *work;
+ 	bool has_user_ctx = user && current && current->mm;
+ 	struct stack_map_build_id_cache cache = {};
+ 	struct vm_area_struct *vma;
+@@ -426,15 +425,16 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 		return;
+ 	}
+ 
+-	/* If the irq_work is in use, fall back to report ips. Same
+-	 * fallback is used for kernel stack (!user) on a stackmap with
+-	 * build_id.
+-	 */
+-	if (!has_user_ctx || irq_work_busy || !mmap_read_trylock(current->mm)) {
+-		/* cannot access current->mm, fall back to ips */
+-		for (i = 0; i < trace_nr; i++)
+-			stack_map_build_id_set_ip(&id_offs[i]);
+-		return;
++	if (!has_user_ctx)
++		goto fallback;
++
++	work = bpf_mmap_unlock_guard_get();
++	if (IS_ERR(work))
++		goto fallback;
++
++	if (!mmap_read_trylock(current->mm)) {
++		bpf_mmap_unlock_guard_put(work);
++		goto fallback;
+ 	}
+ 
+ 	for (i = 0; i < trace_nr; i++) {
+@@ -465,6 +465,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 						      vma->vm_pgoff);
+ 	}
+ 	bpf_mmap_unlock_mm(work, current->mm);
++	return;
++
++fallback:
++	/* cannot access current->mm, fall back to ips */
++	for (i = 0; i < trace_nr; i++)
++		stack_map_build_id_set_ip(&id_offs[i]);
+ }
+ 
+ static struct perf_callchain_entry *
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index b256fb9c1214..13e1aabe6f88 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -753,9 +753,8 @@ static struct bpf_iter_reg task_vma_reg_info = {
+ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
+ 	   bpf_callback_t, callback_fn, void *, callback_ctx, u64, flags)
+ {
+-	struct mmap_unlock_irq_work *work = NULL;
++	struct mmap_unlock_irq_work *work;
+ 	struct vm_area_struct *vma;
+-	bool irq_work_busy = false;
+ 	bool __maybe_unused mmput_needed = false;
+ 	struct mm_struct *mm;
+ 	int ret = -ENOENT;
+@@ -792,9 +791,14 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
+ 	if (!mm)
+ 		return -ENOENT;
+ 
+-	irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
++	work = bpf_mmap_unlock_guard_get();
++	if (IS_ERR(work)) {
++		ret = PTR_ERR(work);
++		goto out;
++	}
+ 
+-	if (irq_work_busy || !mmap_read_trylock(mm)) {
++	if (!mmap_read_trylock(mm)) {
++		bpf_mmap_unlock_guard_put(work);
+ 		ret = -EBUSY;
+ 		goto out;
+ 	}
+@@ -1191,6 +1195,8 @@ static void do_mmap_read_unlock(struct irq_work *entry)
+ 
+ 	work = container_of(entry, struct mmap_unlock_irq_work, irq_work);
+ 	mmap_read_unlock_non_owner(work->mm);
++	work->mm = NULL;
++	bpf_mmap_unlock_guard_put(work);
+ }
+ 
+ static int __init task_iter_init(void)
 
-Since we have already printed such message and machine can be 
-recoverable, I think it is benign.
-
-    bpf: recursion limit reached on datapath, buggy bpf program?
-    Dead loop on virtual device lo (net 7), fix it urgently!
-
-
+-- 
+2.48.1
