@@ -1,133 +1,113 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3233F65EA;
-	Wed,  5 Aug 2026 21:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9DF1DC198
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 21:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785965765; cv=none; b=H1ulHbU5L2PsInNgJr83cAfeP8ZXauVHb+z7mtQEBmPh12Ae7W1TMzUNV/fEmkXz/m5xTbl53s7YgzKkRTL2mUZcn27yU1gbykAsRY20c2c78ZHqyuip+FqOJ1vrC6xxcDxNx1KpTvrRA1edwD8DVoxR6znlBqHN7XkPxryBUrg=
+	t=1785965831; cv=none; b=DrphAAHYSRaaghX20WENyIWMughil8K4sikAnAxpPUOwYl6gdUmlKD4FNnVQzC3PRrHhI0tBWz9D2d+qcNACLKSL5T6N8y2tFnDQGVt8BsR6w7FH8y+20hbEYyJXP3itGm823fCVxcZ4q2+us5aj5qXW9R0T4RFrBQXHC4t82jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785965765; c=relaxed/simple;
-	bh=l53vH96oBxDrKf3F+DaJU5jUopwYKXsTsTUvDa/ClKc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NTgfeN1K9xi3QD9RV3GvM9MQ1NnJCK/XaswpgPQawfWs0vvi2DVWodd+QngJKMWcp5dPSxL/wTvoh/JYLKc8jrkPSsghWiSJnNm9X1kau6DjQZnfgCoc/+B3uRQmaSk8ntDteX13Gp+zRrygwTxSk/X5Zn/2Bkprp2irA01Buy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IEsLtvS/; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1785965831; c=relaxed/simple;
+	bh=ybn3edS75210yGXHR8plER5wB6+bwq7DsJxlu+7rHU4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CQbnB9rGbKvxVtoNlXkyl5+BvMHgZeViBBgkrFDv9K4EpGrmAPAHdmraiFJWdCikDrDVdSliqMGrR7tyiLL4C/ANMuNaiKwaKHG8my9rhFTztaL6zaAqBe1N21QLmdwwn8Rf84HaAdQ5zSfa7I4EmYE+/hj9pgQShx5PRG10/Yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q3QAhSxu; arc=none smtp.client-ip=74.125.224.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IEsLtvS/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785965762; x=1817501762;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=l53vH96oBxDrKf3F+DaJU5jUopwYKXsTsTUvDa/ClKc=;
-  b=IEsLtvS/D35ik6Um3QjNH4YOlcT/k5nsDb5/o37hw50o8Km/610HpQ39
-   lwgyvTm9xhTcCZLqQEX0/YdUyVmkolS3xcufZiM+u4Riz4ZK5zR66umzf
-   1hN6ZBsTUuf8PluehLbRsPD2XS4RESt1EHA2/eC3bTRju0GQjaWGYTFCR
-   Lr8u8uSFuJ6ip999z1yhVHTmiqJU/DkejFFomkEj0yQJSAoDNOR/SU3OL
-   3FA7OKwF9jWnAiil/eEdhsCPFRqcduZeyF2E2J0iJEHUwmSN4sXRvCF/Y
-   QH5ynDRvOecjDLoBCBsYYRZmVK0OQZBilrWY/bzrKmH5wF/QdvTB+R3M+
-   A==;
-X-CSE-ConnectionGUID: CRXDElLDRACcS7BRwl9NQw==
-X-CSE-MsgGUID: lSjATBweQ2WziJ5cXDpw3w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="109343626"
-X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
-   d="scan'208";a="109343626"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 14:35:53 -0700
-X-CSE-ConnectionGUID: zfVGIdnWSaSanj4rku0dDQ==
-X-CSE-MsgGUID: QXDV75CcS+Wv5DCZWTKTvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
-   d="scan'208";a="286576159"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Aug 2026 14:35:52 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: Kohei Enju <kohei@enjuk.jp>,
-	anthony.l.nguyen@intel.com,
-	kohei.enju@gmail.com,
-	przemyslaw.kitszel@intel.com,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Patryk Holda <patryk.holda@intel.com>
-Subject: [PATCH net-next 12/15] i40e: add support for bpf_xdp_metadata_rx_vlan_tag()
-Date: Wed,  5 Aug 2026 14:35:37 -0700
-Message-ID: <20260805213541.2281287-13-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20260805213541.2281287-1-anthony.l.nguyen@intel.com>
-References: <20260805213541.2281287-1-anthony.l.nguyen@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q3QAhSxu"
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-66899c7b57bso2024777d50.1
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 14:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785965829; x=1786570629; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=eJ/f/QQNT6OWCbAu3IB8DxQ9ZnyppnwIAD+QIRJse9g=;
+        b=Q3QAhSxuHwF7ThIMUDCku95Bjrooo3TnufEF2rcHFZ+wuvrYOiHwkbqZ1HoEY+coXz
+         t14yH0GezNHRgvxBa+xE7pt3tmn/QamWFuad4SvsRCMsa8/PtKI5r9t3GkNGLSBdaOlg
+         UTgA8AdytrBwtXeUWNueYCuez+ZP0YUzeRxpweA5dRcGQWGfXkBHxr9h/51vRw0V7f1w
+         v52TUIBu7GWrdPpjU3tEEsjG0+2tm3Rk9yJoZKifXM50F5/IyH7hIfuBHPhPpsfPUDlT
+         Qk8/SdPe3eb3Eg+J5i/e6wYyyNkqOtGCn1SgZfk7L8+ZbkdfxgLxzvwqPMjx2B3SqOp8
+         YW6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785965829; x=1786570629;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=eJ/f/QQNT6OWCbAu3IB8DxQ9ZnyppnwIAD+QIRJse9g=;
+        b=k/zVcU5+zwnqUSqqz2B800PBJ874dqkP9AIE+zxRw2nGf98epqc9GFKgUSHY7fmmHf
+         e9daq8uBQfpu754F1l1hO7++mL83hBhzUUt5nZuyujmWiYf8ALNvPLYjXpa91QecQhWz
+         8xhSoNfwBQ/b80uchUNcp/Cc8/3d/MMnlPddJOElSImSK5IFOO/dPb/7TR3OF7vMBz6J
+         GPFaWt3ZmxYKGifUtOA/zkcelUdWCgfmQLq/Lk3p3Xbn3Yo3dryTktEP4iYnoHQqL/nF
+         tvLuwu41SWZB+DUjzH6yYZIPN4qTmWES4osi5HdnEvHLYPOJDn0orsdvGV229wl3fmZg
+         hMlg==
+X-Forwarded-Encrypted: i=1; AHgh+RpLNtln187fXXwl5JYIIuW4lIK2B3ixBEUko3xaSkg9zhjH701T66j6+D3IsbJ2DAz8vzM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwASlFgQVGr/y4yCxbMCacDTLRx2yPIoUVD4WALNqoW9U0lab6J
+	qi/eYLWaekVfR7xmDnOrPgU/x+m4EPwDdbc+4kCCz7oE9LWyNXq/5gCT
+X-Gm-Gg: AR+sD11+s6aM+tWWndahj+q/48qnFWOVlBMlqBny9U9Gs9XYuMY76OTcfXjD7btSvky
+	uRxJNXMz/sNFy6O4U/36kbiLdi4qFP4r0m5+xpbeE7AqrSOJID9u5Lnn+6xJFPF/KfqCpUWISeu
+	JnMgHnXaWcYecOqu5y58K8EnVcUPkU75UBAqeM1A6NzrN5kd0WmxxiymeS/deT20W5FUZ1zmrnB
+	2KfQG1jJXhfkrfy5mR0Dpo365iRoB4ZJX4siTIi90i54QfCTI7Lp5ssLV9g3DuW34p2qKy04VJn
+	+n0rfwHp73vMylQBzJ9s/xXCOspLaSD7TwTP/zsVz+0VmeuKjemOVEMgE80nRIGyxuFgrCaD891
+	a7Pp2DKdpiec9rqs1sZ0nr8VNhDPjWBMbF5j3KQqB9cmH3K34iMsrkg9cmKAbT+Pkhlto6LQ7NV
+	aClw4o+7GhJAlJSirFimNt2tMuT9/IgkIFnwYY/rRvSsrl/AlmJpXEsmVLjpPxI0WYh18jdYqoB
+	quFWBEnKi07MEi5n/iRIrmdQTA41QMm+g==
+X-Received: by 2002:a53:b427:0:b0:667:9d0c:5b80 with SMTP id 956f58d0204a3-6699ac4ef5amr4215598d50.28.1785965828960;
+        Wed, 05 Aug 2026 14:37:08 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:7d5b:ac23:cde9:3664])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-669915f5a75sm3862542d50.11.2026.08.05.14.37.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Aug 2026 14:37:08 -0700 (PDT)
+Date: Wed, 5 Aug 2026 17:37:07 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	kpsingh@kernel.org, mic@digikod.net, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	kees@kernel.org, gnoack@google.com, jack@suse.cz, song@kernel.org, 
+	yonghong.song@linux.dev, martin.lau@linux.dev, m@maowtm.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 00/13] BPF interface for applying Landlock
+ rulesets
+Message-ID: <anOnaGmBTlBW9xwj@zenbox>
+References: <20260731022047.189137-1-utilityemal77@gmail.com>
+ <CAHC9VhSSzNBCSvy4cQHh6OOM4-EvHF+bmrB9=V1y=Lj53RvxQQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhSSzNBCSvy4cQHh6OOM4-EvHF+bmrB9=V1y=Lj53RvxQQ@mail.gmail.com>
 
-From: Kohei Enju <kohei@enjuk.jp>
+On Fri, Jul 31, 2026 at 04:30:39PM -0400, Paul Moore wrote:
+> On Thu, Jul 30, 2026 at 10:21 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> [...]
+> As you may, or may not have seen, there is currently an ongoing debate
+> regarding the location of LSM kfuncs that will impact this patchset.
+> Sadly, we don't appear to be approaching an agreement on this issue
+> which introduces some additional risk to this patchset.  We'll have to
+> see how that ends up, but I just wanted you to be aware of the
+> situation.
 
-Introduce i40e_xdp_rx_vlan_tag() which takes the same approach as
-i40e_process_skb_fields() to extract the VLAN tag from the RX
-descriptor.
+Quick aside question: Would security/bpf/ be a better place for these
+type of kfuncs?
 
-Tested with X710 adapter using xdp_hw_metadata, and confirmed that VLAN
-tags match between bpf_xdp_metadata_rx_vlan_tag() and
-skb->vlan_proto/vlan_tci.
+security/bpf/bpf_lsm_kfuncs.c could be for LSM framework kfuncs,
+and each LSM could maintain their own security/bpf/<lsm>_kfuncs.c
+for kfuncs dealing with lsm-specific types.
 
-Signed-off-by: Kohei Enju <kohei@enjuk.jp>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Tested-by: Patryk Holda <patryk.holda@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/i40e/i40e_main.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+One issue with just security/ is it's not CONFIG_SECURITY_BPF. But
+security/bpf is. Right now security/bpf only has hooks.c so it's free
+real estate.
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index e487d697a634..719f45b5cb40 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -13607,8 +13607,27 @@ static int i40e_xdp_rx_hash(const struct xdp_md *_ctx, u32 *hash,
- 	return 0;
- }
- 
-+static int i40e_xdp_rx_vlan_tag(const struct xdp_md *_ctx, __be16 *vlan_proto,
-+				u16 *vlan_tci)
-+{
-+	const struct i40e_xdp_buff *ctx = (const void *)_ctx;
-+	const union i40e_rx_desc *desc = ctx->desc;
-+	u64 status;
-+
-+	status = le64_to_cpu(desc->wb.qword1.status_error_len);
-+
-+	if (!(status & BIT(I40E_RX_DESC_STATUS_L2TAG1P_SHIFT)))
-+		return -ENODATA;
-+
-+	*vlan_proto = cpu_to_be16(ETH_P_8021Q);
-+	*vlan_tci = le16_to_cpu(desc->wb.qword0.lo_dword.l2tag1);
-+
-+	return 0;
-+}
-+
- static const struct xdp_metadata_ops i40e_xdp_metadata_ops = {
- 	.xmo_rx_hash		= i40e_xdp_rx_hash,
-+	.xmo_rx_vlan_tag	= i40e_xdp_rx_vlan_tag,
- };
- 
- static const struct net_device_ops i40e_netdev_ops = {
--- 
-2.47.1
+That way things are more greppable... (important!) and we can have
+proper MAINTAINERS entries per file so emails get routed properly.
 
+(linux-security-module, bpf, and whatever lsm list)
+
+Justin
