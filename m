@@ -1,147 +1,180 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E68330644
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 05:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E17326D4C3;
+	Wed,  5 Aug 2026 06:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785908586; cv=none; b=tN4g5KAfxoeuoJ7ImO4J/OhDtzeLF2izReiwyP9x+iwNIiduVctpLByxyz+PH5aL9LRubqjJq7ee8uzrOgNr2/bqGB1aOlFL81z9Ncr4+M7avn/GVR7OdvssPIn5dAwNBT8XN7RKboqnStvQTriSIlNp+rkHK8K/CekemMSdqOg=
+	t=1785909781; cv=none; b=OS5JRzpH7agugy25s8Kfif2Ostrex0wtL6VJmrzIpW9YiiHlrZDy5S3N+pqLK5Tmf23ad9f2oQH5MOzIp5hil4XTecWw6cl3mdFP4ZQBpo4G4+tB0yFeRjBtyUcBvq5bMcILIXIJiLqfGO+6pQ/kv2EqVAE07R1DVKrS10aR25g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785908586; c=relaxed/simple;
-	bh=SIHctkUs9lHO8yn6cE/oe//bJ/B/RXckthLcroKvRWU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FXOtzP0jLg3S6uCZIcfSxgHzsjfphD3fb8Kv10InsrlJRPwbYP9gHpfVuZOw4o4MSzgmwLZOiqCnbVz0zyUxHQXxanhslI2xHdvNKlw8Aq8JBb01bjQAP7oAtLl7/mX2MOhtxYtgu0mQpWsfpPPzuVLwBDkMSnHlS7lIuuMdmKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H/mz+BIN; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785909781; c=relaxed/simple;
+	bh=bqDx6vb2FXNsrrRRxni+b2maFJZgt6iCLkQbug5HZdc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fDiFNBBVWhHAkgz2hcs6AYdnysyXefflZEAAo86JhQ1tD7Z4nezpUgx84gQwvkqmqJebn1KoDh2Dd3/qS7t0vsv6PK4dkW5lfgwNRqoAVYzpic+c/fAiSJtAy7ukqkmwYSZ9ukrLt1UT461i7NAVlfcF5dCrN2QWPevqQ4VvGVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=ePaADWnz; arc=none smtp.client-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H/mz+BIN"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cacb8416a1so6758885ad.1
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 22:43:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785908585; x=1786513385; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=FfEer89cAo7Is+IW4nJHvY4G2ApEuGef+4eiu3kuxnc=;
-        b=H/mz+BINnihgoiwtQy4vyboIShOS56E1k753gYok5DuiMpmThBI+Y7XsPzjYAy6pbw
-         QuvOnS86goZcm+PDT/C77/oKNBp/1/5hqWdOZ4rA+hb+O4IRRF3MmLYpuJ1y9DMy3tyw
-         YlaED3NqVJT3HOeIaLskIVEFe4kx1PJHRb1pk3w9m+XlUeRwfl6kvDdRhCW5oS7HpUIm
-         K9sJlRkpYB+2S7he4Q2AEphqoBR5xLfFAEhgzW39T/GUny0TUfx30nnDEgcxzMti6n5w
-         MQVYbsRJXWZy/Y1AraKobAha0Lx1pXsAMafcgHtlpfOx/JHZzHS/HAOR0xseL99DsZrm
-         NRrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785908585; x=1786513385;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FfEer89cAo7Is+IW4nJHvY4G2ApEuGef+4eiu3kuxnc=;
-        b=qLRtjdSl86pA0ryFxJHQTITukPOEGYJJNcvcm0WdklE/4xagIU5yv9IyGDHrdBkKRC
-         cLRJRTFImHIq4Qu4CgBA5wlQlSH/beKbzFKdH0zEFaN/PKsewYTlgbsNkJsFOEo05k/q
-         PnFzQJMwBIEOQ6ZL7uyyrFznSMnYEhH5Ulrc8XuQZfwWRi48ZZFF1s+muYVt5GoX1qr+
-         qWOI3fg7VvpWQYPqkKjAokClMa6PHgpSsQbTkEaJmPBsqcpUDqPuduTQEUeE/My8f+7c
-         jFZyVnPHhHL7nc8p42Yc/UivN7nghmT09a5qLT6FgJKJopBFvOCCPSey8XPZr/ku4tyV
-         tTpw==
-X-Forwarded-Encrypted: i=1; AHgh+RoWHqKhL+eb1z7YGHE+FE4Wqxx0u8PDi//Nc8fKjOTFy00BPY4kLPkykgGxgncJ4hjY1k4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZXecm8Hk9WVlwLdAhUhbPFyMy3GPPK7cWkEOmhNSoZjkxixBr
-	nezbJeo35dHkjyx1eZvV1ilixZcnWTEfs1OU/jXwIcjUqG4DKG/e8e/NCPMmhw==
-X-Gm-Gg: AR+sD10t+qmdb5MNRuMRDU83WmkdSYuvRSModL7FL7NnJuSvyk+Lfe8raiYu3XuIkan
-	tlAW1KdASaDfcsD9FmGACv/jZ+4ZYwCtpDlg/cVVCoIf+HWY/Phk7DbbrQujspU2AfO35W56/bN
-	mn7kj+h+nigZoY5w9enNsvm24K9qBUqLIluV3M3dWNtYOmdJriz4nNZJ07jzV/UBYCH26gXoASu
-	FGku/eUOQq+TxVFkl2mirwwcQXxUJK6NN6HptUFLjRqgQcP4smK2e5oXa7tpjZ7V3FZVgkh9+2Z
-	8775/ipaoHzkvlYuqyRllftmUJMyp9dWOzZ++Ofu2ZqHgNAjj/EvdAPhbbw6CGXeju4pt0fJgiy
-	4xCWbJ/mrimKZdNW95YNc4tOq9gCmmMBU4F7n9Iseg29gxuKHehugVwENOQ11hu4uw9tOl75o14
-	wGOMiB7PNcfV5Z1DOwTBF4nspKMuGvEmspTGE433mpEKrLBAhuwnkbIdhTEWpUx5/j+c21qAne5
-	bR0FGRz9hIoQhzS
-X-Received: by 2002:a17:90b:1b07:b0:36b:77b9:5c8c with SMTP id 98e67ed59e1d1-3903c5cfe5dmr3899932a91.17.1785908584529;
-        Tue, 04 Aug 2026 22:43:04 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38febffb349sm3326643a91.6.2026.08.04.22.43.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 22:43:03 -0700 (PDT)
-Message-ID: <fd056d7be63d69f0787ee04d550793c42cbcbb9a.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 6/9] selftests/bpf: Add JIT-sequence tests
- for __arena kfunc arguments
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis	 <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Tue, 04 Aug 2026 22:43:01 -0700
-In-Reply-To: <20260803125115.2264733-7-memxor@gmail.com>
-References: <20260803125115.2264733-1-memxor@gmail.com>
-	 <20260803125115.2264733-7-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="ePaADWnz"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=s5W4gQo3cQPXmeaei8VzoJ+1QXcSNANQYpgANPza/WM=; b=ePaADWnzBKMvo8O9pm45qFsJh7
+	0xIBbonvzCDHguIdg2fpd6jg/g1dlXcnT+89b+PRJ9MyDJhw+P3u7fT5oIruQ2YRusjZac6wipg3/
+	0PMm18pK3KFgbdXWZJYtUc9OnLcfwoQsZbcfIjQUaAJhdP/UgjRY9Br1Km30AExiyWJxHKac7/N7c
+	uLlXXHm9LEqPdgQlt+nlSLvu/FCZxtyKk4ez63WWxymIQsNp2Y7gLccn3u/gClNv1LYCCP/oLcGae
+	zvFfC2BSdAv3+AIoQC1lv68yvZh0/k6VUyQjMEz8faPC4IH/ope7iWLlUxDpbReXL0+sLV1qCEf0g
+	TLCx98pg==;
+Received: from [151.115.150.205] (port=52256 helo=gepetto..)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.5)
+	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
+	id 1wrUiR-0000000FZIP-0OFa;
+	Wed, 05 Aug 2026 08:02:57 +0200
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+To: bpf@vger.kernel.org
+Cc: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>,
+	stable@vger.kernel.org
+Subject: [PATCH v3 bpf] bpf: harden bloom filter sizing and indexing on 32-bit kernels
+Date: Wed,  5 Aug 2026 06:02:28 +0000
+Message-ID: <20260805060228.2703051-1-Jeremy.Jean@oss.cyber.gouv.fr>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-scw-domain: oss.cyber.gouv.fr
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-On Mon, 2026-08-03 at 14:51 +0200, Kumar Kartikeya Dwivedi wrote:
+bloom_map_alloc() has two 32-bit-specific problems when the computed
+bitmap reaches the U32_MAX fallback case.
 
-...
+First, BITS_TO_BYTES(U32_MAX) is evaluated with 32-bit arithmetic. The
+addition performed by DIV_ROUND_UP wraps, so the map allocates only the
+fixed-size bloom filter object while keeping bitset_mask == U32_MAX.
+Subsequent updates can then write past the allocated object.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_kfunc_jit.c b/t=
-ools/testing/selftests/bpf/prog_tests/arena_kfunc_jit.c
-> new file mode 100644
-> index 000000000000..2359cde24c45
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_kfunc_jit.c
-> @@ -0,0 +1,13 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +#include <test_progs.h>
-> +#include "arena_kfunc_jit.skel.h"
-> +
-> +/*
-> + * Runs with full capabilities: resolving module kfunc ksyms requires
-> + * CAP_SYS_ADMIN, which rules out the capability-restricted runner.
-> + */
-> +void test_arena_kfunc_jit(void)
-> +{
-> +	RUN_TESTS(arena_kfunc_jit);
-> +}
+Second, fixing only the allocation size is not sufficient. The bloom hash
+is a u32, but set_bit() takes a signed long bit number and x86 test_bit()
+eventually feeds the index to variable_test_bit(long, ...). On 32-bit
+kernels, hashes in [0x80000000, U32_MAX] therefore become negative bit
+offsets. x86 bt/bts with a memory operand interpret those offsets relative
+to the supplied base, so a map with bitset_mask == U32_MAX can read or
+write before bloom->bitset even after allocating the full 512 MiB bitmap.
 
-Nit: please avoid adding this file, and instead put this
-     function under prog_tests/verifier.c.
-     There are multiple tests there that invoke RUN_TESTS
-     instead of RUN for same exact reason.
-     Same applies to the previous patch.
+Keep the U32_MAX fallback, but split each hash into a word pointer and an
+in-word bit number before calling test_bit() or set_bit(). The bitops
+argument is then always in [0, BITS_PER_LONG - 1], while BIT_WORD(h) still
+selects the intended word in the full bitmap.
 
-> diff --git a/tools/testing/selftests/bpf/progs/arena_kfunc_jit.c b/tools/=
-testing/selftests/bpf/progs/arena_kfunc_jit.c
+Compute the bitset size from (u64)bitset_mask + 1 before passing the final
+size to bpf_map_area_alloc(). This fixes the original under-allocation and
+keeps the allocated storage consistent with the addressable bitset.
 
-...
+Exploitation note: local privilege escalation is possible on a 32-bit x86
+kernel using the under-allocation bug from a binary with CAP_BPF.
 
-> +SEC("syscall")
-> +__arch_x86_64
-> +__jited("...")
-> +__jited("	movl	%edi, %edi")
-> +__jited("	testl	%edi, %edi")
-> +__jited("	je	{{.*}}")
-> +__jited("	addq	%r12, %rdi")
-> +__success
+Fixes: 9330986c0300 ("bpf: Add bloom filter map implementation")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+Assisted-by: Codex:gpt-5
+---
+v1: https://lore.kernel.org/bpf/20260731204917.3845309-1-Jeremy.Jean@oss.cyber.gouv.fr/
+v2: https://lore.kernel.org/bpf/20260801083436.4014218-1-Jeremy.Jean@oss.cyber.gouv.fr/
 
-Note that __jited output generates labels like this:
+Changes in v3:
+- Address change request simplification from Andrii
 
-  50:     89 ff                                   movl    %edi, %edi
-  52:     85 ff                                   testl   %edi, %edi
-  54:     74 03                                   je      L0
-  56:     4c 01 e7                                addq    %r12, %rdi
-  59:     e8 42 5f 40 00                      L0: callq   0x405fa0
+Changes in v2:
+- Address AI reviews.
+- Split full-width hashes into a word pointer and an in-word bit number
+  before calling bitops, so upper-half u32 hashes cannot become negative
+  offsets on 32-bit kernels.
+- Drop the redundant final u64 add-overflow check; bitset_bytes is bounded
+  at 512 MiB once it is computed from bitset_mask.
 
-I think it would make sense to match L0 in this test.
+ kernel/bpf/bloom_filter.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-> +int arena_arg_jit_nullable(void *ctx)
-> +{
-> +	stash =3D (u64)bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-> +	bpf_kfunc_arena_cap_nullable_test((u64 *)stash);
-> +	return 0;
-> +}
-
-...
+diff --git a/kernel/bpf/bloom_filter.c b/kernel/bpf/bloom_filter.c
+index b73336c..b63839d 100644
+--- a/kernel/bpf/bloom_filter.c
++++ b/kernel/bpf/bloom_filter.c
+@@ -41,7 +41,8 @@ static long bloom_map_peek_elem(struct bpf_map *map, void *value)
+ 
+ 	for (i = 0; i < bloom->nr_hash_funcs; i++) {
+ 		h = hash(bloom, value, map->value_size, i);
+-		if (!test_bit(h, bloom->bitset))
++		if (!test_bit(h % BITS_PER_LONG,
++			      bloom->bitset + BIT_WORD(h)))
+ 			return -ENOENT;
+ 	}
+ 
+@@ -57,9 +58,13 @@ static long bloom_map_push_elem(struct bpf_map *map, void *value, u64 flags)
+ 	if (flags != BPF_ANY)
+ 		return -EINVAL;
+ 
++	/*
++	 * On 32-bit architectures, hashes larger than INT_MAX would be
++	 * treated as negative by set_bit().
++	 */
+ 	for (i = 0; i < bloom->nr_hash_funcs; i++) {
+ 		h = hash(bloom, value, map->value_size, i);
+-		set_bit(h, bloom->bitset);
++		set_bit(h % BITS_PER_LONG, bloom->bitset + BIT_WORD(h));
+ 	}
+ 
+ 	return 0;
+@@ -94,9 +99,10 @@ static int bloom_map_alloc_check(union bpf_attr *attr)
+ 
+ static struct bpf_map *bloom_map_alloc(union bpf_attr *attr)
+ {
+-	u32 bitset_bytes, bitset_mask, nr_hash_funcs, nr_bits;
++	u32 bitset_mask, nr_hash_funcs, nr_bits;
+ 	int numa_node = bpf_map_attr_numa_node(attr);
+ 	struct bpf_bloom_filter *bloom;
++	u64 bitset_bytes;
+ 
+ 	if (attr->key_size != 0 || attr->value_size == 0 ||
+ 	    attr->max_entries == 0 ||
+@@ -127,22 +133,16 @@ static struct bpf_map *bloom_map_alloc(union bpf_attr *attr)
+ 	if (check_mul_overflow(attr->max_entries, nr_hash_funcs, &nr_bits) ||
+ 	    check_mul_overflow(nr_bits / 5, (u32)7, &nr_bits) ||
+ 	    nr_bits > (1UL << 31)) {
+-		/* The bit array size is 2^32 bits but to avoid overflowing the
+-		 * u32, we use U32_MAX, which will round up to the equivalent
+-		 * number of bytes
+-		 */
+-		bitset_bytes = BITS_TO_BYTES(U32_MAX);
+ 		bitset_mask = U32_MAX;
+ 	} else {
+ 		if (nr_bits <= BITS_PER_LONG)
+ 			nr_bits = BITS_PER_LONG;
+ 		else
+ 			nr_bits = roundup_pow_of_two(nr_bits);
+-		bitset_bytes = BITS_TO_BYTES(nr_bits);
+ 		bitset_mask = nr_bits - 1;
+ 	}
+ 
+-	bitset_bytes = roundup(bitset_bytes, sizeof(unsigned long));
++	bitset_bytes = BITS_TO_LONGS((u64)bitset_mask + 1) * sizeof(unsigned long);
+ 	bloom = bpf_map_area_alloc(sizeof(*bloom) + bitset_bytes, numa_node);
+ 
+ 	if (!bloom)
+-- 
+2.47.3
