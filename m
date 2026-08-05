@@ -1,191 +1,174 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2012E36F8EA
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 18:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6945F39061C
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 18:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785954913; cv=pass; b=C26KAVPAwUVR2u7jrIqjLNB7YpVCZUBEdSSb36TA2A3B3usM8pYes8C3tmuBxbYh8PFg4oR34FVSq9EXvvAzYcN/q24MsQIsNnL8NpJ7j4h3f4AjDP9fWi8DKSJefxmk2mTrTqyfO8BRxGNworacY0qYrKM804mZgHfFHJFlFDU=
+	t=1785955003; cv=pass; b=t2furxhGgFob3d0xLcLehPFBw1ZYMYvUXqDFs5y6ftfXoP5hK2YUQJQsEAAGN42GwCimcWxgxxQe4v2CJbj800aL4HlXCGWkM2XNwIs1qdEPnR4hm8YiNe7DHgVvdIh/tSs23PIIRcFaM9b04lgn3J1z5sPOyX6ENkKgacDN/Mo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785954913; c=relaxed/simple;
-	bh=y7iDB2T1ItqNgNVxSxCRzMPlJGQiP3oIzeC9CjpbaeE=;
+	s=arc-20240116; t=1785955003; c=relaxed/simple;
+	bh=ijz0w/QKzOW1jTiQEYZJLdPV5oAMBIZLEi9qkxfTm24=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r/ghOh6splmMdnkMIDt8gASJD5mo0z08dsIfUtutj6PEm0019hS9/xncX7Ab9j1dblQGwXjIjxMn+zW0ZBHW3z5IcmKkJ4/34Ls0+t9jdRkhNLZ+GY7kWJnTeXoj8KXRS4xivhZVjSkVWBtakSV/qdwgW7qTuJCZzuGJBaBqOjE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rMomXlQ2; arc=pass smtp.client-ip=209.85.210.170
+	 To:Cc:Content-Type; b=S69jQ96TnhelRhG6b7pvJb5NlsRD4ypzyYb3p9KcGAaIsk6NumFQsDx9PnvQbEodO6dJXiudo5fUEK4AlecMwWQsRZnT036Hnk5fMCm8VKADoDxWtg4Bf1QAJKUvzg27XYfKtjt0ZfoVZYWZwlHRza65cFWQLVms4hlepJPrks8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MKO6av57; arc=pass smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rMomXlQ2"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8485b358552so1146518b3a.2
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 11:35:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785954912; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MKO6av57"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-84862b0d5aeso1642102b3a.2
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 11:36:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785955002; cv=none;
         d=google.com; s=arc-20260327;
-        b=MO4h+LoiKdA+f4jDKLxPIp3ewd+LFdt83bgoYT+dSa5C3HP9xoHIHiCMUxp4OaeMY7
-         YLp/28HMEB1ZkplxLT8dkVhXGptiQ29LjSuIGks/m2eRljQXPb8mflJj6DGfqqw9wvdJ
-         N3XiHndA/uxJ9M1T3hni3M+PhCW2/j4eT4+7RA9UBHsxoft4bqy9299tth+JuhvbYwLc
-         dS8tD8PD0W3rbv43gvhakiCn2J1B3BTL3oanPqN1weVy2Ts3omDsYZI1a9JTMnJiVs5Y
-         jQZTkda8LaHLUHeGbGnc1ixwWOT35wOehxpnnvoWdjxepqdaztsjdkQBmxqwlqI0KGqZ
-         iNmg==
+        b=HLsKChQzN5DLBrKOTudW0j/P5HHJarO2g7GIgyMrbcysKKSBULT3l81jmjiNPFKOhe
+         5vVfAdj9uDF4rMix98iJa/8TV+VSl+aRQUQjySMgOae56Ntm0tqbBbx15bovYRdfq4+n
+         LLV7VDARzC/6rogfp+DXDJvar/K0sris+9GgkmRcha2PX6mGVB9wccDfelkZZUqDq6jL
+         dfpE5+C6fVlqlBOBiaERgxf+uiylzwtDdToyUc4e7Y3Uyrv2w+EH8j3/fObVU3S9GBfs
+         HMnt79zLXfa9qJFjI3XYovEO3HjgnT4+lTQAHDVjquYLQw8558W+YA27XbIGPKyLNHza
+         wT4A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=41qka+EIjjsEce/PTgUDMj48v0yLdWjZXwp+NSobgCM=;
-        fh=p7IOGXIGcND0vK8vo/pbjKD0LdvYlMFA2c4QAnqtgIg=;
-        b=q/ExGmbeifwOW0v+NlPToXUXDoAHOj1SMh8N6UTJlRfsE+ao4DIvKKcaYwlKczKpDH
-         ve1WONXZnONcAvrFihBEqX+DD69bUAkKOFs0hFSSvizXu33pEikTQtVefuxAXV8bCs2k
-         b/xWF/RbH5sDoZPrwxqcMnWtzRbOS7+rzs+1GyuqyeRfLvPJ3bJqrWqbDK+GpyAd0eMQ
-         J3D7yzgCtHQRJutZzL3ARja8ZYK4+iue+knXxy02yAFalgaH4UpWB0GcDAbsb82aNrxc
-         D/+Z7Isa+5jj/zys8nTU8CeTKduCjYG7VmnvkrqIAgr2Cnk7IZzKF1uuve0Mqs//tYTd
-         Dgqw==;
+        bh=zvPtfFlmYMWeI+NCmXYpyRdlPjnza5bEWaz7WF8LG9g=;
+        fh=120TVk3ZQqc+flx4xNds2n6tHWp/MkgKR0bfHskO04I=;
+        b=mQ5qguh9A/y0Q5Pf/xBWSkqI/v+udSLIk2tyROviuYU09NqOPIUZB8AVgqMjKVgPjz
+         gUIjeAi78fRmPiCOagU62gQxX0rXijtUlanTRZ94dAu41iJpawP5Q1mGfMCuXzsqTQ0X
+         YLS9CPbMYnakWwJ6A25KlTktzW6mogfcca8eDLMWodKX/Znjd5TUwHJZyjxuLoy1lDrZ
+         vDQZYxlGHn+mEjPvqo94B37bzT6c8HhtKRcFuN4QVVhJJChsF5p1ftgfOx6WOkPfJT/u
+         s9+8lF+26m7PvLqpUkpenuSayhMQgus/2bbZgOLCDe5jVL1HekPuNdrzRCtiL1ZtQ6hx
+         FLXw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785954911; x=1786559711; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785955002; x=1786559802; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=41qka+EIjjsEce/PTgUDMj48v0yLdWjZXwp+NSobgCM=;
-        b=rMomXlQ2hmX8MLnHl3cTIFLEmn8Rg3DVbHfF7+rIQSx7Q2jZzp174tEEW1a/BWO3NE
-         rBNYjv1VqrVZUgz+XPvO6dHweoOLPNOHNunn5hWcrJ4BGY4fg7EpCWav11BKnj2x1JoL
-         +AumRFEETL4a+cRwKsxtcU1k2XvPOFSdHmtYhrNtP5pgGedYo4aIezJZOgbRcedPc2lO
-         BXkzC71snfZkXo44kuNfJGA1DnLrivdHXl7GUDEiyhIh3a2OwcGru2E6r/tzH9pSzlkT
-         38wArcB0nLA71lDZpzNzqomhFN+01C73jenENwslTF02KHvQ86jpZgGNqPGVvDC6cl1p
-         XX7g==
+        bh=zvPtfFlmYMWeI+NCmXYpyRdlPjnza5bEWaz7WF8LG9g=;
+        b=MKO6av57K7XR2iy3+uw54un0tfnki5yPqwAUG28GpdigCiKH4fMRXMBMZKMk92FZoO
+         Bs4zgSSv4pi4yFOJivybMevGJdtneFZYxCStQPA8fvSmIxxEBe3gNHDjsb5bKX53IMC9
+         OG3J90C6Vq2k4ZudjynXuacFTUbTi3xv1sINi89Z6vjVkmUOrKGEHUzmuysZ8MADWY+Y
+         0D/ta+r9U60/NnzDqxh562ySd+twrEJzlav+uQ9JN+1A2LB7jMUn2BH5iJbxvjchAr/5
+         2a/UXNlrOQT21OnjeHbtWPQx10YAwSe951kSZTe5bRRlxJ2GMRmbNDCg6miA1GTWte+n
+         ovpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785954911; x=1786559711;
+        d=1e100.net; s=20251104; t=1785955002; x=1786559802;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=41qka+EIjjsEce/PTgUDMj48v0yLdWjZXwp+NSobgCM=;
-        b=gpqlxTzFyCpVwp8Fj1F4IvOCdUxdHqjxVd32Pv6qZLoEiXZC0MTeba4OZwDV70COBk
-         NG73K5AuvkwAYiFEf4ET6BwV6M70Q+RZQnijIea051fyc3O40I4uJQiuecZb7Tx/rhgR
-         Z089lOwHeiTgadp/0hlvMxYcGVrjxKPX2hOT/UY5vGe9z6oZ1fjzgMoFRsTgMKaqnwyj
-         uJNiJbZmcNAPmF6tfTe1AJl9pTdZXGBr61FGzsk6JrWWx7wcKFzcKD2r0B0v56KMuKj8
-         gIVYYeR1KGKwfzVEcQXMdrO4iU+MYx9Y5H5e8ABvbXnt21lS69SczYIvKa3Kk5kqbeVe
-         V12w==
-X-Forwarded-Encrypted: i=1; AHgh+RpDn89iZpOjYj8FhtF1nA9HTwo8D0yZCVMKo/TgUv/QS1DDCf60gpQknRziEsq3QcUuL8c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/Rz864t0ccbUpRv9GtQfj6J497NmjrBsl4tqS/lDSccKsvXhk
-	WB7MA+xYZDbtD+reQ0BFBT9Ja5ZCHtOm+sX9Cxztu6JjHreKrQ1GxHdJ5eNllO2Rha0J1IFQzyg
-	4RUKWNF4wLkWPWy7WsItekWmiAhz6fXM=
-X-Gm-Gg: AR+sD12wJG4HfGcL9Qpi+HTBBdQO1Of1nRFnGos8f+wMhdbdJbbsRUCZuBk0F2Yo7ib
-	rSl5rYdUnjH75eKs4Kfbi2TqHL876fZr8MF7NeojDFKeKXiVbfIC79t5g+YgfxP6kM0cal50dZO
-	3m72D6aculkBehpVj8okjQXKx0xEYvJW0N+NBmonA4n3ALiVhCJNd3tEU3qMbwNewtt3CDinsaB
-	cYCLObYXUNpsRjvE8DyS/bZRQrfkUu+B1g6GsaNzmObTfdMF5xcMEGhzz8rQVl/HW2ynElLml+p
-	6hmCcboLd88lggHZViv1yCvwK1Ye3nWRmION5CfY903Z4PZXnUZEkowZVYlBYCbbkWSITdbIgE1
-	37OEb18SrRn936B2KsW92RBSdKh2QZy/tbFFZ
-X-Received: by 2002:a05:6a00:32c4:b0:84e:2f2e:8c4f with SMTP id
- d2e1a72fcca58-84f2dfcf800mr10473335b3a.10.1785954911439; Wed, 05 Aug 2026
- 11:35:11 -0700 (PDT)
+        bh=zvPtfFlmYMWeI+NCmXYpyRdlPjnza5bEWaz7WF8LG9g=;
+        b=gAgowR6wR48+Ttah+Rh5t5N/w4aslUJEvXDUIi+W7Cx1K1NMis5mA3xVCjSFpPNfk/
+         4CK/pzzYf1Mft047+Exyna+/3jUF4Fx/aBQ51uXPWHOJZDQ7o1BEWTqt7LtulqhBPrsU
+         5QxfOe3f14KT7hAvMNx6YBBMUrQDFtLbDc3flgmViPpERX+tGD+SNwvWYPEUu557RX8u
+         F+C0SddkybLB+m06Gc6XItERkrEeOLQkmutWH5G5m43H2zi40Y0hiJpQIxsaSEp2jSHK
+         3lFnjtNzTV3cbmN8DWKhmd//30uRW101WefJ/JLQ66A/AZxwP86Iq8Uk9klgJV5ikWkp
+         rN8g==
+X-Forwarded-Encrypted: i=1; AHgh+RqLddmfHR/eE/3HT1E2kVhhjTAnqE9XagaiQduqT65BBRvYODnDqTZ6eIKpf68lIWdaoSI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7++DL9kcCsH0LgE0TrcZ7zexFvpuf3S6otzol1JYfrwqNg4da
+	KOOhZroTGmoRFKlMurVNwan3XTrhNHpn3LIJjlPaD39h4nh7QSb9XY0o88ULGdEi053cf1PMEC3
+	w5MEFhGMDyFTWRt0C0U1R8VYu4RTISdQ=
+X-Gm-Gg: AR+sD13nqRro9Nr6E3gr49+kiAyDpHFv4fIaTNoRc2iWUaVcoVOUrFFWsK+svy7wQV+
+	k9sabyTV8AamOAWcvwlji1qXp6LnTukfQm4W6Ht0vffJvgQ9++ffI8iexLR5OX0vlQIE8b89HbH
+	iBk7hMjtrN1AYdhqHtxzxvw0v3Im7wL2lqqKiRWynjKUb/PPcxL65ehNczY3VzgeeZtCHSxiTBn
+	4Rqgh0Y2kFsRJaR9KuGA0V8QIQKddd4qX8q2zsZNu20vrC40Ua+PUt6eE0ocXMJAPAcwKloRRJj
+	oRoP7ZjKPCbTh6lj7K0IRyAZArrVH7iQUp/sXBpiUHlz0BNHISLbkzlyWtJArstJdo4AyfGe0E0
+	SakbVeQrgzcUnHEct16DpQEAy5w==
+X-Received: by 2002:a05:6a00:e8b:b0:845:363e:12d9 with SMTP id
+ d2e1a72fcca58-84f2dfc8f0dmr10566020b3a.3.1785955001543; Wed, 05 Aug 2026
+ 11:36:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260805092843.516315-1-jolsa@kernel.org> <20260805092843.516315-11-jolsa@kernel.org>
-In-Reply-To: <20260805092843.516315-11-jolsa@kernel.org>
+References: <20260805092843.516315-1-jolsa@kernel.org>
+In-Reply-To: <20260805092843.516315-1-jolsa@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 5 Aug 2026 11:34:58 -0700
-X-Gm-Features: AUfX_mwhD9_EnU4ed-9Qb7MSedhAwmUo5Ty62RDX4R8OXzlkjkFpkJucYw2PP34
-Message-ID: <CAEf4BzZQXq5CNSkD4-gMOhs5+GU9Sf9Q7sHvLu1BkpqDTQHa5g@mail.gmail.com>
-Subject: Re: [PATCHv4 bpf-next 10/12] bpf: Disable preemption in __bpf_get_stack
+Date: Wed, 5 Aug 2026 11:36:29 -0700
+X-Gm-Features: AUfX_mwM-DMjyw6Lxo3YlY2SHsK8FSC8ylG1JulJn0FFqIx5RmPK9Am0OoFVG7k
+Message-ID: <CAEf4BzZaB2+zZ64j54Gvb3tcZmG1fbNXyRsVefNwB_vbtQun3g@mail.gmail.com>
+Subject: Re: [PATCHv4 bpf-next 00/12] bpf: Disable preemption in stack map code
 To: Jiri Olsa <jolsa@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, stable@vger.kernel.org, 
-	Tao Chen <chen.dylane@linux.dev>, STAR Labs SG <info@starlabs.sg>, bpf@vger.kernel.org, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
 	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
 	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, Quentin Monnet <qmo@kernel.org>, 
+	Tao Chen <chen.dylane@linux.dev>, STAR Labs SG <info@starlabs.sg>, 
 	Arnaud Lecomte <contact@arnaud-lcm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 5, 2026 at 2:30=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+On Wed, Aug 5, 2026 at 2:28=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> From: Daniel Borkmann <daniel@iogearbox.net>
+> hi,
+> we need to disable preemption for get_perf_callchain and keep it disabled
+> as long as we are accessing its returned trace entries buffer.
 >
-> get_perf_callchain() returns a per-CPU perf_callchain_entry buffer and
-> releases its recursion slot via put_callchain_entry() before returning,
-> so nothing keeps the entry reserved while __bpf_get_stack() consumes
-> it below.
+> This patchset refactors both bpf_get_stack and bpf_get_stackid helpers as
+> suggested by Andrii [1] before applying the actual preemption fix.
 >
-> A preemptible BPF program (e.g. a non-sleepable raw tracepoint program
-> on a PREEMPT kernel, which runs under migrate_disable() but not
-> preempt_disable()) can be scheduled out between obtaining the entry
-> and the copy. Another task scheduled on the same CPU then reuses the
-> same per-CPU buffer and overwrites trace->nr with a larger value.
-> copy_len is then computed from the inflated trace->nr and can exceed
-> the caller's buffer, causing an out-of-bounds write in the memcpy()
-> and in the build_id path.
+> Note the initial fix was sent by Tao Chen [2], but there was no follow up
+> on this since February, hence this post.
 >
-> The rcu_read_lock() taken here alone does not prevent this. It is
-> only taken on the may_fault path, and under CONFIG_PREEMPT_RCU it does
-> not disable preemption; it merely keeps perf's callchain buffer array
-> alive (freed via call_rcu()) and does nothing to stop another task
-> from reusing the entry.
+> thanks,
+> jirka
 >
-> Disable preemption around obtaining the callchain entry and copying
-> it into the caller's buffer, so the entry cannot be reused underneath
-> us and trace->nr stays bounded by max_depth. Build ID resolution may
-> fault and is therefore deferred until after preemption is re-enabled;
-> by then the instruction pointers have already been copied into buf,
-> so it operates only on that private copy. Note, preempt_disable() also
-> subsumes the buffer-lifetime guarantee the rcu_read_lock() provided,
-> since a preempt-disabled section is an RCU read-side critical section
-> for the callchain buffers' call_rcu() reclaim.
 >
-> Cc: stable@vger.kernel.org
-> Fixes: c195651e565a ("bpf: add bpf_get_stack helper")
-> Reported-by: Tao Chen <chen.dylane@linux.dev>
-> Closes: https://lore.kernel.org/bpf/20260206090653.1336687-1-chen.dylane@=
-linux.dev/
-> Reported-by: STAR Labs SG <info@starlabs.sg>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> [ changed Fixes: commit ]
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  kernel/bpf/stackmap.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index eabeaef31b63..789fe35b893a 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -817,6 +817,7 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
-uct task_struct *task,
->
->         if (may_fault)
->                 rcu_read_lock(); /* need RCU for perf's callchain below *=
+> v1: https://lore.kernel.org/bpf/20260720085351.655075-1-jolsa@kernel.org/
+> v2: https://lore.kernel.org/bpf/20260729083807.1588544-1-jolsa@kernel.org=
 /
-> +       preempt_disable();
+> v3: https://lore.kernel.org/bpf/20260803210149.296496-1-jolsa@kernel.org/
+>
+> v4 changes:
+> - fixed changelogs [sashiko]
+> - nr_trace variable rename [sashiko]
+> - fixed Daniel's email
+>
+> v3 changes:
+> - pass flags rgument to callchain_finalize [sashiko]
+> - renamed err label to out in bpf_get_stackid_pe [sashiko]
+> - used scoped_guard in bpf_get_stackid [Leon]
+> - replaced trace->nr modification from *_pe helpers with length
+>   argument (new patches 11,12) [Andrii]
+>
+> v2 changes:
+> - removed several unused functions arguments [sashiko]
+> - restore trace-nr value fix in bpf_get_stack_pe [sashiko]
+> - kept rcu locking together with preemption disable in __bpf_get_stack [s=
+ashiko]
+> - clear buf on error paths in __bpf_get_task_stack [sashiko]
+>
+>
+> [1] https://lore.kernel.org/bpf/CAEf4BzZwvAUgLwz-M0Y_NJLTmedyY9U6s7LrSmn7=
+51hQdTP4Uw@mail.gmail.com/
+> [2] https://lore.kernel.org/bpf/20260206090653.1336687-1-chen.dylane@linu=
+x.dev/
+> ---
+> Daniel Borkmann (1):
+>       bpf: Disable preemption in __bpf_get_stack
+>
+> Jiri Olsa (11):
+>       bpf: Factor stackid_init function from __bpf_get_stackid
+>       bpf: Factor stackid_fastpath function from __bpf_get_stackid
+>       bpf: Factor stackid_new_bucket from __bpf_get_stackid
+>       bpf: Use stack id functions instead of __bpf_get_stackid
+>       bpf: Disable preemption in bpf_get_stackid
+>       bpf: Factor callchain_store function from __bpf_get_stack
+>       bpf: Factor callchain_finalize function from __bpf_get_stack
+>       bpf: Remove trace_in argument from __bpf_get_stack
+>       bpf: Clear buf on error in __bpf_get_task_stack
+>       bpf: Avoid changing callchain in bpf_get_stack_pe
+>       bpf: Avoid changing callchain in bpf_get_stackid_pe
+>
 
-nit: asymmetrical to preempt_enable, I'll move it to before
-rcu_read_lock, so we can have proper nesting
+The amount of repetitive but subtly different code for all the
+different program types to capture stack trace is a bit mind-numbing,
+it all looks good to me (except that preempt_enable ordering which I
+fixed up), I hope we didn't introduce any new subtle bugs, but oh
+well. Applied to bpf-next.
 
-
-
->
->         if (kernel && task) {
->                 trace =3D get_callchain_entry_for_task(task, max_depth);
-> @@ -828,6 +829,7 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
-uct task_struct *task,
->         if (unlikely(!trace) || trace->nr < skip) {
->                 if (may_fault)
->                         rcu_read_unlock();
-> +               preempt_enable();
->                 goto err_fault;
->         }
->
-> @@ -836,6 +838,7 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
-uct task_struct *task,
->         /* trace should not be dereferenced after this point */
->         if (may_fault)
->                 rcu_read_unlock();
-> +       preempt_enable();
->
->         return callchain_finalize(buf, size, trace_nr, elem_size, flags, =
-may_fault);
->
-> --
-> 2.54.0
->
+>  kernel/bpf/stackmap.c | 314 ++++++++++++++++++++++++++++++++++++++++++++=
++++++++++++++++++++++++++-------------------------------------
+>  1 file changed, 205 insertions(+), 109 deletions(-)
