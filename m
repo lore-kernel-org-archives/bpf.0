@@ -1,231 +1,194 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346463DCD95;
-	Wed,  5 Aug 2026 07:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B883E49DB;
+	Wed,  5 Aug 2026 07:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785915001; cv=none; b=MuhbG02/KTRvDByPsam+zFM0Lf8y/pjNkONj+R+QBkmpkaD9wZx8+9jOTWNbbG2STJUAD17W+r5o39MkSE2AkvYnStsV78ZYJGEB1v7HY/HGfR1ScB0Hmbgzp8h7anNw7a6d1qsJGxsc8rTlt5GP4c2nmMUTqY0zQgCldw+YngQ=
+	t=1785915455; cv=none; b=DDa/rqZGyjmYu2mBSw0+0V+WAEcEjCmOQ/k5Ds5bKewlUKkJDzkrObeJehCLG4s4uMNgiqJymBiMYmLNgqy6DojUung6ff67dRyyYlMWub9PiDe5eYjn0eksAjQ0UBali25kP6b7ddIF7ekTxi7cu8O6Dhw82/lIg84A76Sfvns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785915001; c=relaxed/simple;
-	bh=mLpr+qO4dl8whi3UQYmaGUkANNrHvfLh0/2dU0t5k3w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=eIMzEPjciHM7XXNLpgEdviPhZ61iuD3SlFOfUyyXyMRCHEnX+7CmAu+QWGyT2uoQXMiqVn0+/znIN64s/zVHPEcVT7tck02Q9MG0Xlyc6da1RfRudYKQUkQfE5oTMILJ05njjS04J9an8aimFEjOPL4ehdtI/xMoKvbaO4EsInw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fir13Pya; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1785915455; c=relaxed/simple;
+	bh=Zmxr78xdBA130PUcbv3deCSZZhkCEXY80LMQCZV+1nY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pd1LYnQ6zy2YelXaJpSlM2bwjJzys1Mk7enGRDzvUpMgk0zAgoDsuDYqEcMPupxwmn16QGnaTS6D7P9p9+grP02BzOloymKBWeOTz5Q0YywiJQZvGguRtE5tYhehP7t+z9KTHC2Bb6KQfCc8Ks2GU3YTVn7N8cmeBcBbMYzJZb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B/SYKN/S; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fir13Pya"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9269AC19425;
-	Wed,  5 Aug 2026 07:30:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1785915000;
-	bh=mLpr+qO4dl8whi3UQYmaGUkANNrHvfLh0/2dU0t5k3w=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=fir13PyajHVlc2Rc9nIwgQOJnP2tCfkGTahgmdGHeOhgXiMGbQtp34bEUEZROrxv5
-	 djzJNGr7nlFYR8Yqp8p9Jup6Y3XMHuQDUaYVl2s1ZeSemY897Xwsj54uXp9s8FH5/q
-	 2Csx/FFEd5qwIkyjYxyWIAZz+7ymvOoqMZMzfsXis4YxEBQWJr+Y2VyIvk9tio3gyX
-	 16/tXmYMBaqwGWeOXs0BzANG60iLdASjlki9bMnGFo/hwuRNtcuwr5IDyeLMrpTTjg
-	 ahgfzBS3OUUcWw3lcuW7/rJfH9a5hG1rGXVuR6W7pLuINfVG4qY7fP3Lb83235JyvM
-	 +iZe/D7RHS8AQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B75FC55182;
-	Wed,  5 Aug 2026 07:30:00 +0000 (UTC)
-From: Bochao Cao via B4 Relay <devnull+bochaolucky.gmail.com@kernel.org>
-Date: Wed, 05 Aug 2026 15:29:42 +0800
-Subject: [PATCH bpf-next] selftests/bpf: Track test_xdp_features DUT
- processes
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B/SYKN/S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EFC51F000E9;
+	Wed,  5 Aug 2026 07:37:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785915454;
+	bh=QCYYzFAXd/HHDMG7wDvaDepVmzvK1kP9KPdvFyneu38=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=B/SYKN/SgQpBsMcAEjIrmvurqUHxCtPn0WFU5yCxYq+lyFi/P4ProO4bE1A8AMCXB
+	 gw/WkRXxGtDep1gG2KBamKdCnzLtsfiJIy7LH9YwxRHDwuuFf+Dr6V0OqOKOCLQAQg
+	 BkFZFsBc1VbQjj8enzuLJLv4ccKmyMmw52rzqlU6bb12JhFKPHr1hhTFfViMolJ3Qh
+	 gEvj0Y4f6KnciC+AZ1QLysWA3etxEt6wze9jfKU1zYP7/dH7UpREnIz17UzVVkqhHD
+	 TnNwvkhCjDC1G2yKYgFE00RrjouDviw/irjwcTGVUjxpeNVptdr1+9bEvFymggffTD
+	 Lokky6UdfhPTg==
+Content-Type: multipart/mixed; boundary="===============6287462164471471335=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <c5ba5b501929ae0da789f24d30b07fc3345822dcdab291694bb4a205f5ba96d4@mail.kernel.org>
+In-Reply-To: <8b7bde664004feb383741b8807a561dba601285c.1785906979.git.skb99@linux.ibm.com>
+References: <8b7bde664004feb383741b8807a561dba601285c.1785906979.git.skb99@linux.ibm.com>
+Subject: Re: [PATCH v10 3/8] selftest/bpf: Fixing powerpc JIT disassembly failure
+From: bot+bpf-ci@kernel.org
+To: skb99@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,venkat88@linux.ibm.com,yeswanth@linux.ibm.com,skb99@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  5 Aug 2026 07:37:33 +0000 (UTC)
+
+--===============6287462164471471335==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260805-xdp-dut-process-lifecycle-gmail-v1-1-45984df8d295@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWNQQrCMBAAv1L27EJaMBS/Ih7a3U1diWlIUomU/
- t2ox2FgZocsSSXDpdshyUuzrqFBf+qA7lNYBJUbw2AGa0ZzxsoReSsY00qSM3p1Qm/ygstzUo+
- WrZndyMSuh1aJSZzW3+EKc3QYpBa4/U3e5odQ+Q7gOD6htoNVjQAAAA==
-X-Change-ID: 20260805-xdp-dut-process-lifecycle-gmail-6d60bf8dcdf1
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org, 
- netdev@vger.kernel.org, Bochao Cao <bochaolucky@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785914999; l=4986;
- i=bochaolucky@gmail.com; s=20260805; h=from:subject:message-id;
- bh=2PX0a8BnWsRv3IzbYZsE6aRgPFWWou64hmODJGIhqFk=;
- b=G+ama6iOK6PZpitgtc3PszYOiC+EWiymrju6cQy/uyhX0yJ87JwgGGwizfCUE/hjAD0Rq9mIm
- jEaicJZFRvKBya927CRm6Cs4PF7/TdUYZFjFwIU6lETjqkGK0H7pPiU
-X-Developer-Key: i=bochaolucky@gmail.com; a=ed25519;
- pk=ZYp7O2eXSIrJ9YmKrl0iHDoulPYSG+1lzICsicAvld0=
-X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/20260805 with
- auth_id=920
-X-Original-From: Bochao Cao <bochaolucky@gmail.com>
-Reply-To: bochaolucky@gmail.com
 
-From: Bochao Cao <bochaolucky@gmail.com>
+> selftest/bpf: Fixing powerpc JIT disassembly failure
+>
+> Ensure that the trampoline stubs JITed at the tail of the
+> epilogue do not expose the dummy trampoline address stored
+> in the last 8 bytes(64-bit) and last 4 bytes(32-bit)
+> to the disassembly flow. Prevent the disassembler from
+> ingesting this memory address, as it may occasionally decode
+> into a seemingly valid but incorrect instruction. Fix this
+> issue by truncating the last 8/4 bytes from JITed buffers
+> before supplying them for disassembly.
+>
+> Fixes: b991fc520700 ("selftests/bpf: utility function to get program disassembly after jit")
 
-test_xdp_features.sh waits for any xdp_features listener to appear and
-uses pidof during cleanup. A concurrent test can therefore make another
-test proceed before its own DUT is ready, and cleanup kills every
-xdp_features process on the host. The readiness loop also has no timeout,
-so a DUT that exits before listening leaves the test hung indefinitely.
+The Fixes: tag names b991fc520700 ("selftests/bpf: utility function to get
+program disassembly after jit", 2024-08-21), which is the commit that
+introduced get_jited_program_text() itself. That helper was not wrong when
+written: at that time no powerpc JIT emitted a raw data word inside a
+program, and the helper is documented (jit_disasm_helpers.c:13) as serving
+small assembly test programs.
 
-Record each DUT PID when it is spawned, wait for ss to report that exact
-PID with a bounded retry loop, and only terminate and reap recorded
-children. Install an EXIT trap and signal handlers so failure paths also
-remove child processes and network setup.
+The undisassemblable trailing bytes come from d243b62b7bd3 ("powerpc64/bpf:
+Add support for bpf trampolines", 2024-10-31) - the same commit both
+sibling patches in this series cite - and only become observable once
+powerpc jited selftests are enabled, which happens later in this series in
+d3841599dc7ca ("selftest/bpf: Enable verifier selftest for powerpc64").
 
-This also removes the runtime dependency on pidof.
+More importantly, the fix as written is only correct on top of its
+immediate parent. Truncating the last trunc_len bytes assumes
+dummy_tramp_addr is the final thing in the JITed image. That layout is
+established by the immediate parent c6ba4edfe6e46 ("powerpc/bpf: Move out
+dummy_tramp_addr after Long branch stub"), which moved the data word from
+the top of the long branch stub to its bottom:
 
-Fixes: 4dba3e7852b7 ("selftests/bpf: introduce XDP compliance test tool")
-Closes: https://bugs.debian.org/1136522
-Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
----
-Tests:
-- bash -n tools/testing/selftests/bpf/test_xdp_features.sh
-- make -C tools/testing/selftests/bpf xdp_features
-- sudo tools/testing/selftests/bpf/test_xdp_features.sh
-- verified cleanup leaves an unrelated xdp_features process running
----
- tools/testing/selftests/bpf/test_xdp_features.sh | 60 ++++++++++++++++--------
- 1 file changed, 40 insertions(+), 20 deletions(-)
+arch/powerpc/net/bpf_jit_comp.c:bpf_jit_build_fentry_stubs() {
+    ...
+    long_branch_stub_idx = ctx->idx;
+    EMIT(PPC_RAW_MFLR(_R11));
+    ...
+    EMIT(PPC_RAW_BCTR());
 
-diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
-index 0aa71c4..f3aa4d1 100755
---- a/tools/testing/selftests/bpf/test_xdp_features.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_features.sh
-@@ -8,6 +8,7 @@ readonly V0_IP6=2001:db8::11
- readonly V1_IP6=2001:db8::1
- 
- ret=1
-+dut_pids=()
- 
- setup() {
- 	{
-@@ -31,32 +32,53 @@ setup() {
- }
- 
- cleanup() {
--	ip link del v1 2> /dev/null
--	ip netns del ${NS} 2> /dev/null
--	[ "$(pidof xdp_features)" = "" ] || kill $(pidof xdp_features) 2> /dev/null
-+	for pid in "${dut_pids[@]}"; do
-+		kill "$pid" 2> /dev/null || true
-+		wait "$pid" 2> /dev/null || true
-+	done
-+	ip link del v1 2> /dev/null || true
-+	ip netns del "${NS}" 2> /dev/null || true
- }
- 
- wait_for_dut_server() {
--	while sleep 1; do
--		ss -tlp | grep -q xdp_features
--		[ $? -eq 0 ] && break
-+	local pid=$1
-+	local i
-+
-+	for ((i = 0; i < 10; i++)); do
-+		if ! kill -0 "$pid" 2> /dev/null; then
-+			echo "xdp_features server $pid exited before accepting connections" >&2
-+			return 1
-+		fi
-+
-+		if ss -tlp 2> /dev/null | grep -q "pid=$pid,"; then
-+			return 0
-+		fi
-+
-+		sleep 1
- 	done
-+
-+	echo "Timed out waiting for xdp_features server $pid" >&2
-+	return 1
-+}
-+
-+start_dut_server() {
-+	./xdp_features "$@" &
-+	dut_pids+=("$!")
-+	wait_for_dut_server "$!"
- }
- 
- test_xdp_features() {
- 	setup
- 
- 	## XDP_PASS
--	./xdp_features -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_PASS \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
- 
- 	## XDP_DROP
--	./xdp_features -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_DROP \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
-@@ -64,16 +86,14 @@ test_xdp_features() {
- 	[ $? -ne 0 ] && exit
- 
- 	## XDP_ABORTED
--	./xdp_features -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_ABORTED \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
- 
- 	## XDP_TX
--	./xdp_features -f XDP_TX -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_TX -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_TX \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
-@@ -81,26 +101,26 @@ test_xdp_features() {
- 	[ $? -ne 0 ] && exit
- 
- 	## XDP_REDIRECT
--	./xdp_features -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_REDIRECT \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
- 
- 	## XDP_NDO_XMIT
--	./xdp_features -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_NDO_XMIT \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
- 					   -T ::ffff:$V0_IP4 v0
- 	ret=$?
--	cleanup
- }
- 
- set -e
--trap cleanup 2 3 6 9
-+trap cleanup EXIT
-+trap 'exit 129' HUP
-+trap 'exit 130' INT
-+trap 'exit 143' TERM
- 
- test_xdp_features
- 
+    if (image)
+            *((unsigned long *)&image[ctx->idx]) = (unsigned long)dummy_tramp;
+
+    ctx->idx += SZL / 4;
+}
+
+On any tree that has b991fc520700 but not c6ba4edfe6e46, dummy_tramp_addr
+sits before the seven long-branch instructions, so trimming the tail
+removes two real instructions (bctr and mtlr r11 on 64-bit) while leaving
+the data word in the middle of the disassembled range - the disassembly
+failure this patch targets is not fixed, and expected __jited() output is
+silently altered.
+
+A backport driven by the stated Fixes: tag alone would therefore land a
+change that does not work. Should the tag point at the commit that
+introduced the byte pattern (d243b62b7bd3), or should the dependency on
+c6ba4edfe6e46 be stated explicitly in the changelog?
+
+> diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> index 3558fe10e28cf..c4aa1d69d3bbf 100644
+> --- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> +++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+
+[ ... ]
+
+> @@ -225,9 +227,30 @@ int get_jited_program_text(int fd, char *text, size_t text_sz)
+>  	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd #2"))
+>  		goto out;
+>
+> +	/*
+> +	 * last 8 bytes contains dummy_trampoline address in JIT
+> +	 * output on 64-bit and last 4 bytes on 32-bit powerpc,
+> +	 * which can't disassemble to a valid instruction.
+> +	 */
+
+This isn't a bug, but the comment says the trailing bytes "can't
+disassemble to a valid instruction", while the changelog for the same
+change says the opposite - "it may occasionally decode into a seemingly
+valid but incorrect instruction" - which is the case that actually
+motivates unconditional truncation rather than tolerating a disasm
+failure.
+
+The comment also names the field "dummy_trampoline", whereas the arch code
+calls the symbol "dummy_tramp" and the field "dummy_tramp_addr"
+(arch/powerpc/net/bpf_jit_comp.c:118), so grepping from the comment does
+not lead to the code.
+
+Separately, the second added comment, "Disabled JIT have zero func_lens,
+hence underflow", is a sentence fragment that leaves the reader to infer
+that the ternary exists to avoid a __u32 wrap when func_lens[i] is 0.
+
+Could this comment use the "dummy_tramp_addr" name from the arch code and
+describe the failure the same way the changelog does, so the two do not
+read as contradictory?
+
+> +	triple = LLVMGetDefaultTargetTriple();
+> +	if (triple) {
+> +		if (strstr(triple, "powerpc64") || strstr(triple, "ppc64"))
+> +			trunc_len = 8;
+> +		else if (strstr(triple, "powerpc") || strstr(triple, "ppc"))
+> +			trunc_len = 4;
+> +		LLVMDisposeMessage(triple);
+> +	}
+> +
+>  	for (pc = 0, i = 0; i < jited_funcs; ++i) {
+> +
+>  		fprintf(text_out, "func #%d:\n", i);
+
+[ ... ]
+
+> +
+>  		fprintf(text_out, "\n");
+>  		pc += func_lens[i];
+>  	}
+
+This isn't a bug, but two blank lines are added inside the loop body that
+are unrelated to the fix: one immediately after the "for (...) {" opening
+brace, and one between the disasm_one_func() call and the following
+fprintf(). Neither separates logical blocks - the loop body is six lines -
+and no other loop in this file opens with a blank line (compare the two
+"while (pc < len)" loops in disasm_one_func(), which start directly with
+their first statement).
+
+Are the two new blank lines inside this loop intentional, or could the
+hunk stay limited to the truncation change?
+
+> selftest/bpf: Fixing powerpc JIT disassembly failure
+
+This isn't a bug, but the subject uses the prefix "selftest/bpf:"
+(singular) where the tree's overwhelmingly dominant prefix for this
+directory is "selftests/bpf:" - 1272 commits versus 10 in recent history.
+The subject also uses the gerund "Fixing" rather than the imperative mood
+the submitting-patches guidance asks for ("Fix ..." / "Skip ...").
+
+Would "selftests/bpf: Skip trailing trampoline address bytes when
+disassembling" fit the usual prefix and imperative style for this
+directory better?
+
 
 ---
-base-commit: 6655c409707ec8ce9ce0850ffe4fe02331fd4d9c
-change-id: 20260805-xdp-dut-process-lifecycle-gmail-6d60bf8dcdf1
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Best regards,
---  
-Bochao Cao <bochaolucky@gmail.com>
-
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/30981212698
+--===============6287462164471471335==--
