@@ -1,243 +1,141 @@
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5BF3FB7E7;
-	Wed,  5 Aug 2026 22:44:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE3C3CFF73
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 22:48:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785969844; cv=none; b=iw6pbd57PcfYv0S2dfHRGQOUimk7Swf5pxdEE+9PtpJxhB/Ucf/LPkP7Vc9+ZJuPskXQmN/qpXetoXjPfuoyoQmj1CFORvZ1B1VGE4N392/lH54TJEuk+HZvnGFmXVzcsB5uR+W2KdSXVRtHg/+r8woX0Y8QseNb6WvZIF43p3I=
+	t=1785970084; cv=none; b=oWIrQNjhRAnh5FwSwRAIe6fRMaPc5dkZ2HokF72MDVpFwfb5dQmY5eG5H9GbehADjpDEyiHu2n/fGuAm0eOz0P+vMI/VDHIJ+Dzyb+6wBebO7e7W2gjY+RzF4ep6UWjpS6rrLHeWA+PvVXCS+/r+nBetY1hPEB/troqgBRUZMQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785969844; c=relaxed/simple;
-	bh=XUz+4hcoQweAZNbF3WW/NSHXXddh7fWVTahBj/PryEQ=;
-	h=Content-Type:MIME-Version:From:To:Cc:Subject:In-reply-to:
-	 References:Date:Message-id; b=aYmnELLCQXlmAn9ycDtObw3cvUrdQOQQ5Wp3cwO//aDw4BY/NB0Z3PMnK85yOPKF44tIn28hIRXiVIdLqo2yEoozanEy68IUv5vvmg+TDwovScPXckTXJCnvDWHnpGpWZ9CHI1+SM6SbSaAolgXWVJJW975VycLlUL2WUP1Yqok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net; spf=pass smtp.mailfrom=ownmail.net; dkim=pass (2048-bit key) header.d=ownmail.net header.i=@ownmail.net header.b=TS3Ec8sY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CzzugxKy; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ownmail.net
+	s=arc-20240116; t=1785970084; c=relaxed/simple;
+	bh=RvanfiCL3sK86RRp5fIwHpQhd39NRiBKq/MUdAEzoXM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=AbllSgOytPTFWE6kI6duuixeDfaoRnB4cA6Syjr3YqHxStWeOcIf9xzqoHKLo+JGrqZ4vG1+QrohEeHeB4VTLMMFOXV5M7MO7cF/1+tiUCJaqyQy85RkdbtzxWGLUjTpYstlMWgC34rdEmZ/ILmhifNXzfrfo4OdFHr+f704kdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GUC0TZ96; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ownmail.net header.i=@ownmail.net header.b="TS3Ec8sY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CzzugxKy"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id B92DF14000EE;
-	Wed,  5 Aug 2026 18:44:01 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Wed, 05 Aug 2026 18:44:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ownmail.net; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to; s=fm3; t=
-	1785969841; x=1786056241; bh=ncQvJEDewSxGoUTyHvavnRM3eimONEWeNOy
-	5Mz+Rhc8=; b=TS3Ec8sYR7w7+JW4738NzDJxalzloU10Av61LtG2MFF0gktqzti
-	jWCm7iV5GM7ujy50lYUmxNXchmhBK+CfgPhW84v/1ba8ZrSpsiF3voFeMendTqSR
-	BXMFEoqx3GpevfP62IcsrqOCSu3pTtk8+XxsXSbpgJo/8fgqMRnQm+tSGUuu/TPK
-	VHbWNERKxz5t7Y0UQoyN+g8bRjX6TpWEJviZzy//vcD0r0LH/O7i7pj12N/o+BoJ
-	Ptrh5DK+bo4hVH6FIhlByHUJ0LURsED9DFjfcCNCOHEl3KXdT3qHwxr1em0klqR+
-	bPDJJxXYSN84h+GXwJ9azT+kEPyJPavcEHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1785969841; x=
-	1786056241; bh=ncQvJEDewSxGoUTyHvavnRM3eimONEWeNOy5Mz+Rhc8=; b=C
-	zzugxKyLMo7F9va4lUDiI/rz7EU9hdlgq2xvjrfMQ6xgS2uN5BK/m63htV5DaYKo
-	y6z1Hl98zzWgkTP0kwhMwOamFOk7HVB2errtbEWRMhMiisAs+pKbOUMjweaUa6VV
-	QM0eRH+QlZ4Gwnb3LyBnF1BdOM/uM4EFtyAmBSB6PKzAtNiYVW+nHCXTn3oBa9Wa
-	mvvgZ/oYj3YONu+JQi0Na/rW7QFs9B6YjZreNT01+Y90dzRcZImudVFhKGv102x5
-	787cA39CzOrLXZl5P8nrN0FvI/1gZxIqucnCLhfywqZLR3/WUDFsAYD9FbNUbYUt
-	LBwrrtxrT5c1+z5CYsPKw==
-X-ME-Sender: <xms:sLxzas28_ntKKfOrPRx0dAJo9IQJuRKB1BIRcWX-JDoP9SPrFRF9pg>
-    <xme:sLxzanhYf5dzVToKd6sA3Huqzv_sPd70NRo1rV4MoIPG9DwJQtXi3Ql-xwyum06If
-    MftjGTTDN7HTpCM3VAU5eo8pqFy9ejRZpctvAfik4KmDbUojQ>
-X-ME-Received: <xmr:sLxzaqW-El7oqASMExh0nW4lHrVTbJKtbqEHFbGdcPVBA_ktPBlsrx_p5KwMU0XXu3pZMNNgX28XTA5lQy1BWAMQGx40IKs>
-X-ME-Proxy-Cause: dmFkZTGMIger68+t0INX8N6IauvbQ+y0Hc01K2KE+G8ksam4Q3FUoPmP0pc4+YOujk8nQ7
-    b1rP732xrvY83AoQCFcob/EEPHkZKqeKJfKxriE+K0abCWYZGxOzBk4b0byQuYj/GXb3Mw
-    rsft3QZOFDQXdMl5gc6c5DI/7PKQcc2ixMHpEpBtidwilDGqJ2IYibD9EuS5eZPTlBwvVY
-    g+GMCTWbfcZL6QaJjQX/7W65f3e8xtCfNcSXWedVVKy8+5gAQywJ82fcBXWiyqJ2DGzMvN
-    CnS1S9oQoQ6rKlbfwIcLHvIiBfxZ3JdoVI9HwhV633wvd65wz/Fj8sEM2rEp2x8wYfO9Zy
-    glNo+nKwmeYNL1UkA5DfwaPO6FPTHUlSn/MXa3o2xMg1Il4ddMy/RxFWGF8AczbtA4L9Nf
-    RX1k+Vh1ILgDMMItSDH0fiPAZQ23FFsfvZjzzJssPIxbnPv6iGvVNOQJcEIVPOpDSZBtn5
-    FCi8N72L4ksXzvXfQPVbEDWaRybnqQIabHXxp4i7zV4rco8I6oX8/+not3gXjpUB6BwuSG
-    ZKC0KPdWhG1KMG7+owCTJuGcI7CVnLBrbSm30JDaaV563BLL8+6/QZRNn22ko/0c93IRR2
-    VuXVCfR7DVrmNVMvOl5TZ1KaoCt1H2P8fqCB2z9ywkHRvNmlwdvmSb/JsUmQ
-X-ME-Proxy: <xmx:sLxzajzBl9HU-J4NG-FZNRqadLSGersBFPGzrUtjbe88iMZRsjx05A>
-    <xmx:sLxzai6nQLi2NvPon-V9F8a3VPNjK0dQNuJm5IICRawXUfExXIn1uw>
-    <xmx:sLxzatiJ66Hf8ATtbQCJXKeuYkKgbJK1D4vXNU0Tp8gjSRPkS2P6vA>
-    <xmx:sLxzalimA1lUm6C7fOeiHhBrXTXmuVYOeqgDbUMGmBvvQ9q5nH8o3A>
-    <xmx:sbxzarIqZG8fxMXPPF89vUbEnEntJMT3dlo6g2-d76HbJghEDmPXB1Hf>
-Feedback-ID: i9d664b8f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Aug 2026 18:43:54 -0400 (EDT)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GUC0TZ96"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F9711F000E9;
+	Wed,  5 Aug 2026 22:48:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785970082;
+	bh=GevyTLC74v+V6EDtyCMQ9LlRuX+R2CNSWCClVwGMulA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=GUC0TZ96OpDZ71Z9IlDSoGi/R2puyZ3apg6dCXuNrI83wlvlbQncbcmn9iaQbJOqM
+	 O7oA+RTQmsYHWAh1cIeJy+4iTfW+FY7RlUM8UN5W9YruZvPbuQmjZppIyFR6EyKBtg
+	 2+0WcJcx5OyRWgUISsKYAdEUtQ4oFb7MgLCqbgYRji0fRGnJsCDOoN3R2mQWynbSAV
+	 5NcBSGsar1H6s+EjQRUZW9rDm4legEPIxmuK6Lm3tEII4dOuyhe2qKeiK5S7xs2u1k
+	 AB4evcKWl1SygKhZSvvM+qONrPqoYVaGNM0mLTGmqGILInLQgig9HF3vhAsHa4MZ7W
+	 QVQaeWYhDSxmQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 2/2] bpf: htab: Reduce elem_size by 8 bytes
+ for small key sizes
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260805223516.1495988-3-tjmercier@google.com>
+References: <20260805223516.1495988-1-tjmercier@google.com>
+ <20260805223516.1495988-3-tjmercier@google.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+Date: Wed, 05 Aug 2026 22:48:01 +0000
+Message-Id: <20260805224802.5F9711F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-From: NeilBrown <neilb@ownmail.net>
-To: "quanyeyang" <quanyeyang@proton.me>
-Cc: "Quanye Yang" <quanyemostima@gmail.com>,
- "Justin Suess" <utilityemal77@gmail.com>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Song Liu" <song@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>,
- "KP Singh" <kpsingh@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
- "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Yonghong Song" <yonghong.song@linux.dev>,
- "Emil Tsalapatis" <emil@etsalapatis.com>,
- "David S. Miller" <davem@davemloft.net>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
- syzbot+ef8d17bae14efb960935@syzkaller.appspotmail.com
-Subject: Re: =?utf-8?b?5Zue5aSN77ya?= Re: [PATCH] bpf: disable lockdep while
- running BPF on lock_release
-In-reply-to: <178592062568.3252194.6464683099845305898@noble.neil.brown.name>
-References:
- <20260803-fix-lock-tracepoint-bpf-lockdep-v1-1-91fb7afb526a@gmail.com>
-  <anEuaSqiCVsQ6I4P@zenbox>
-  <178583246611.3252194.4318729338489544399@noble.neil.brown.name>
-  <CABcBDJuznu=BgDhevsD6PybX8+6fcaO1xyTcuGuv8F_+MfeZoQ@mail.gmail.com>
-  <178588373680.3252194.4414470901360919775@noble.neil.brown.name>  <46Fu_iB0xOxZXb0l5G6pslLArj7TrP_AOICffhfZKoviSn7zVUVVVSMfWaVBYNqt9RiCWWHhSAvlMc3RaJvRFSnvbV2EcBz9VUBQzb2wSkw=@proton.me>
-  <178592062568.3252194.6464683099845305898@noble.neil.brown.name>
-Date: Thu, 06 Aug 2026 08:43:50 +1000
-Message-id: <178596983056.3252194.16986843925963956795@noble.neil.brown.name>
-Reply-To: NeilBrown <neil@brown.name>
 
-On Wed, 05 Aug 2026, NeilBrown wrote:
->=20
-> One thing I didn't like about the original patch is that it seemed to add
-> a lot of noise to the code, passing keys around in multiple places.
-> Maybe the cleanest approach would be to embed the keys in the "struct
-> rhashtable" so each table gets its own key.
-> Then use lockdep_register_key() in rhashtable_init and use it as needed.
->=20
-> You could even have just one key and use the different subclasses for
-> the different locks.
->  0 for rhashtable.mutex
->  1 for rhashtable.lock
->  2 for the bit locks
->=20
-> but maybe that is needless complexity.
->=20
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comments in the BPF subsystem must have the opening `/*`=
+ on its own line.
+--
 
-So I thought about this some more and came up with this approach which
-might be a good compromise.  I builds but I haven't tested it.
-What do you thing?
+--- Patch [2]: [PATCH bpf-next v3 2/2] bpf: htab: Reduce elem_size by 8 byt=
+es for small key sizes ---
+commit 9160b7ed8c4c16e32cb4fa06437bbe88f7eb2eea
+Author: T.J. Mercier <tjmercier@google.com>
 
-NeilBrown
+bpf: htab: Reduce elem_size by 8 bytes for small key sizes
 
-diff --git a/include/linux/rhashtable-types.h b/include/linux/rhashtable-type=
-s.h
-index 57c11ec9dc64..2029fba216a8 100644
---- a/include/linux/rhashtable-types.h
-+++ b/include/linux/rhashtable-types.h
-@@ -97,6 +97,9 @@ struct rhashtable {
- #ifdef CONFIG_MEM_ALLOC_PROFILING
- 	struct alloc_tag		*alloc_tag;
- #endif
-+#ifdef CONFIG_LOCKDEP
-+o	struct lock_class_key		*lockdep_key;
-+#endif
- };
-=20
- /**
-diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
-index 79f83b6eec27..f8358d43691b 100644
---- a/include/linux/rhashtable.h
-+++ b/include/linux/rhashtable.h
-@@ -320,18 +320,6 @@ static inline struct rhash_lock_head __rcu **rht_bucket_=
-insert(
-  * When we write to a bucket without unlocking, we use rht_assign_locked().
-  */
-=20
--static inline unsigned long rht_lock(struct bucket_table *tbl,
--				     struct rhash_lock_head __rcu **bkt)
--	__acquires(__bitlock(0, bkt))
--{
--	unsigned long flags;
--
--	local_irq_save(flags);
--	bit_spin_lock(0, (unsigned long *)bkt);
--	lock_map_acquire(&tbl->dep_map);
--	return flags;
--}
--
- static inline unsigned long rht_lock_nested(struct bucket_table *tbl,
- 					struct rhash_lock_head __rcu **bucket,
- 					unsigned int subclass)
-@@ -341,10 +329,18 @@ static inline unsigned long rht_lock_nested(struct buck=
-et_table *tbl,
-=20
- 	local_irq_save(flags);
- 	bit_spin_lock(0, (unsigned long *)bucket);
--	lock_acquire_exclusive(&tbl->dep_map, subclass, 0, NULL, _THIS_IP_);
-+	/* subclass 0 is used for ->lock and 1 for ->mutex. 2+ for bitlocks */
-+	lock_acquire_exclusive(&tbl->dep_map, subclass+2, 0, NULL, _THIS_IP_);
- 	return flags;
- }
-=20
-+static inline unsigned long rht_lock(struct bucket_table *tbl,
-+				     struct rhash_lock_head __rcu **bkt)
-+	__acquires(__bitlock(0, bkt))
-+{
-+	return rht_lock_nested(tbl, bkt, 0);
-+}
-+
- static inline void rht_unlock(struct bucket_table *tbl,
- 			      struct rhash_lock_head __rcu **bkt,
- 			      unsigned long flags)
-diff --git a/lib/rhashtable.c b/lib/rhashtable.c
-index d459bef245f4..17340433d983 100644
---- a/lib/rhashtable.c
-+++ b/lib/rhashtable.c
-@@ -189,7 +189,6 @@ static struct bucket_table *bucket_table_alloc(struct rha=
-shtable *ht,
- 	struct bucket_table *tbl =3D NULL;
- 	size_t size;
- 	int i;
--	static struct lock_class_key __key;
-=20
- 	tbl =3D alloc_hooks_tag(ht->alloc_tag,
- 			kvmalloc_node_align_noprof(struct_size(tbl, buckets, nbuckets),
-@@ -205,7 +204,10 @@ static struct bucket_table *bucket_table_alloc(struct rh=
-ashtable *ht,
- 	if (tbl =3D=3D NULL)
- 		return NULL;
-=20
--	lockdep_init_map(&tbl->dep_map, "rhashtable_bucket", &__key, 0);
-+#ifdef CONFIG_LOCKDEP
-+	/* bitlocks must use nesting level 2 or more */
-+	lockdep_init_map(&tbl->dep_map, "rhashtable_bucket", ht->lockdep_key, 0);
-+#endif
-=20
- 	tbl->size =3D size;
-=20
-@@ -428,7 +430,7 @@ static void rht_deferred_worker(struct work_struct *work)
- 	int err =3D 0;
-=20
- 	ht =3D container_of(work, struct rhashtable, run_work);
--	mutex_lock(&ht->mutex);
-+	mutex_lock_nested(&ht->mutex, 1);
-=20
- 	tbl =3D rht_dereference(ht->tbl, ht);
- 	tbl =3D rhashtable_last_table(ht, tbl);
-@@ -1172,8 +1174,14 @@ int __rhashtable_init_noprof(struct rhashtable *ht,
- 		return -EINVAL;
-=20
- 	memset(ht, 0, sizeof(*ht));
-+	/* mutex_lock must use nesting level 1 */
- 	mutex_init_with_key(&ht->mutex, key);
- 	spin_lock_init(&ht->lock);
-+	/* spin_lock can use nesting level 0 */
-+	lockdep_set_class(&ht->lock, key);
-+#ifdef CONFIG_LOCKDEP
-+	ht->lockdep_key =3D key;
-+#endif
- 	memcpy(&ht->p, params, sizeof(*params));
-=20
- 	alloc_tag_record(ht->alloc_tag);
+This commit optimizes BPF hash tables by eliminating the cached hash value
+for maps with small keys. This reduces the element size and key offset for
+standard and PCPU maps by up to 8 bytes.
+
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index f54366da459f5..9967268d453d0 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+
+[ ... ]
+
+> @@ -618,6 +625,13 @@ static struct bpf_map *htab_map_alloc(union bpf_attr=
+ *attr)
+> =20
+>  	bpf_map_init_from_attr(&htab->map, attr);
+> =20
+> +	/* Avoid hash memory use and comparisons where unnecessary.
+> +	 * u32 hash reads are always atomic. If we elide them, key comparisons =
+must also be atomic
+> +	 * to avoid false positive key matches due to torn key reads / writes. =
+This is only possible
+> +	 * when the key fits within a word, so check key_size.
+> +	 */
+
+[Severity: Low]
+This isn't a bug, but should this multi-line comment have the opening /* on
+its own line to match the BPF subsystem comment style?
+
+> +	htab->has_hash =3D htab_is_lru(htab) || htab->map.key_size > sizeof(uns=
+igned long);
+> +
+>  	if (percpu_lru) {
+
+[ ... ]
+
+> @@ -761,10 +777,22 @@ static struct htab_elem *lookup_elem_raw(struct bpf=
+_htab *htab,
+
+[ ... ]
+
+> +	} else {
+> +		/* When hash is omitted, key comparisons must be atomic. Zero extend
+> +		 * the caller's key to the word size to support an atomic compare.
+> +		 */
+
+[Severity: Low]
+This isn't a bug, but does this comment format match the preferred multi-li=
+ne
+style for the BPF subsystem? It typically expects the opening /* to be on a
+separate line.
+
+> +		unsigned long k =3D 0;
+> +
+> +		memcpy(&k, key, key_size);
+
+[ ... ]
+
+> @@ -1188,7 +1226,17 @@ static struct htab_elem *alloc_htab_elem(struct bp=
+f_htab *htab, void *key,
+
+[ ... ]
+
+> +	} else {
+> +		/* Zero-extend key into k for an atomic write to support
+> +		 * lockless RCU readers.
+> +		 */
+
+[Severity: Low]
+This isn't a bug, but should the opening /* be placed on its own line here =
+as
+well?
+
+> +		unsigned long k =3D 0;
+> +
+> +		memcpy(&k, key, key_size);
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805223516.1495=
+988-1-tjmercier@google.com?part=3D2
