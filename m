@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2582030D402
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 01:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E5930D402
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 01:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785893177; cv=none; b=dpWiGnvRHeVKVsHK2dsM8HzD+oWNVqea52rJ/26vXMRLNX7oUNEpXHsf4gccRZevEkDqEvcYZOmgM/pkuObPWS0nChkwD5K7mm/sbg2gx+PeElB9Ohs7M+jWUjzolghN6sWZxAOiTQ0ahBE4/PGm6kwXkucOd8rkpysE19AA0T4=
+	t=1785893315; cv=none; b=FxO1vgBx+FlQfU3tcvbS5uE0vsucar1UNM7tUKi3W+k+ON2nQgBwf5QbkKS5JgQqumr0rhn96VlooNFBqXZDW9Z3py0wh+zH2h4V9gGqczVsvl+kJpBwHIlSLusuq5hmNdZizpxka4uT5OFFueQCj571iHSUmli68S7yhb6es2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785893177; c=relaxed/simple;
-	bh=6U5QQD9aZRV8PO4nL8YfKTEn/IGYVKiD7uknPrFYSIQ=;
+	s=arc-20240116; t=1785893315; c=relaxed/simple;
+	bh=daWObvfhs+luM1kdHIDTWClbVOGClrYyP5C8r2SjzpA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IpKhAtZpa4svIdRbbNvbPWTGbQEue3az28IXnCoqjp0LniYDAqDdZ2f0xlt+DErL9xLehfx5mR8z16L6IglZcKrEeFs6E7+tmZQ0DlWeNo6Qqll4STtiX50/sbVrX3J1JLYG3hT84eIDSoUbE0tJ9GP5r+CVVhdnyaa9O9prBlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FU8fPJ76; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=LycxO0o7agOjvG7fEznTpvZHKdX0JM0s2F5XQB1hSslR2bo94HFPai1N9DflmDBO3XQ5OTGDu+Aaw9xYK3H7nWZJm4Ge9lL6DpUTGLustgwqZ303R4I2JxP4eOv/u0i6r1HzAtOhH4QLEgsPcBKTOZKKsE9E7CXL2Cdqs1SQpxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VEMH8qoD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FU8fPJ76"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F99C1F00A3A;
-	Wed,  5 Aug 2026 01:26:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VEMH8qoD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F691F000E9;
+	Wed,  5 Aug 2026 01:28:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785893175;
-	bh=Vg8KIFbb9nSJi2wiosqopZruWGGm/mwfhVI5tCqTsas=;
+	s=k20260515; t=1785893313;
+	bh=u6FApqjuYRUfCQIG8pZKUzV7gSIq9tMtKuDrfmb80Hg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FU8fPJ76woKIKDO9WcGdGyhSy0yjI0/cq8ArXsmRVqM8/GjM29wjjakMspfjpwgNE
-	 HhzrysBWJuqah9Z3yEM/WnJ3eJbWnlftPMBgNpbnFoXqzzzBX18Ed6ZRLTk17n3H2T
-	 5HMcmMCFMlcAByfLyy2jcADiDv9FS8Otd0cCNS1RUa1jQV5INFm2dzVI67X3T1hwNV
-	 u8BmovfCGsE1G6kT68E+/J7/X4lH6KEwQ19k1L4IWJZPjsLJ6XzjSqEEE6GkqrQGpF
-	 DldLvdho3E/rLWJS1psUp8EL6kBNlMzsROHnwiGEZMZOPzwU6aPwS/M4WNrET4lgNe
-	 M6f5rJS0JTwLQ==
+	b=VEMH8qoDQE4dMuQBBWS9xNbm/EN0Zmn0vnaByBponvW1FGyMvke+fgJKg2ycKBgH/
+	 4+DpD7HAg4JJl/NigvmKXu0i9zLNPrdOEfVkDgH00Nv8+W3TKNnQXSUNBnaUfpWNF9
+	 0EN0q/ah2FaY+1/SSXSkuNpLX4PDwgFv5OgR8VP26Wr0mgtC+Btt5M+4zyu5PXkJ1j
+	 y7Ncwo38HSPHi3uQu2ce8V87PPRe4udq8P+TrEJSSrn/3ehtgmh7buh7B+VtMDN4Ro
+	 xDeNp0inOPkhkXlPD4LGETvORzPV7FY2L1+fpTo5Fw/chSl2x8/Pj29RKeY4hI8mU3
+	 G7hiMj7bivR2g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 1/6] bpf: Track verifier instruction stats
- for each subprogram
+Subject: Re: [PATCH bpf-next v6 3/6] bpf: Show more useful info in stack
+ depth stats
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260805011517.1717238-2-memxor@gmail.com>
+In-Reply-To: <20260805011517.1717238-4-memxor@gmail.com>
 References: <20260805011517.1717238-1-memxor@gmail.com>
- <20260805011517.1717238-2-memxor@gmail.com>
+ <20260805011517.1717238-4-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 05 Aug 2026 01:26:15 +0000
-Message-Id: <20260805012615.8F99C1F00A3A@smtp.kernel.org>
+Date: Wed, 05 Aug 2026 01:28:32 +0000
+Message-Id: <20260805012833.78F691F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,97 +47,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] A NULL pointer dereference occurs in `account_current_path()` when=
- handling an allocation failure during `pop_stack()`.
+- [Medium] The verifier log format change for stack depth breaks `veristat`=
+'s parsing of stack depth statistics.
 --
 
---- Patch [1]: [PATCH bpf-next v6 1/6] bpf: Track verifier instruction stat=
-s for each subprogram ---
-commit 026daf56a558e1775b6ccd02d21953d3b59b6a28
+--- Patch [3]: [PATCH bpf-next v6 3/6] bpf: Show more useful info in stack =
+depth stats ---
+commit 48703e00e6b412bacd50ea22b6dd5fcca0a7acb6
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Track verifier instruction stats for each subprogram
-   =20
-This patch tracks verifier instruction counts for each subprogram
-independently. It records both own and inclusive instruction counts,
-updating the subtotals during function returns and when a path terminates
-or is pruned.
+bpf: Show more useful info in stack depth stats
+
+This commit changes the verifier stack depth statistics format to keep
+the combined maximum stack depth on its own line and print one uniform
+record for each subprogram. This helps associate the statistics with
+subprogram names and clarifies where verifier work is spent.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7439afdc851a7..88e7ea6fbe73a 100644
+> index 47f3791530ded..a4ab7ee334c6b 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
+> @@ -18833,15 +18833,20 @@ static void print_verification_stats(struct bpf=
+_verifier_env *env)
+>  	if (env->log.level & BPF_LOG_STATS) {
+>  		verbose(env, "verification time %lld usec\n",
+>  			div_u64(env->verification_time, 1000));
+> -		verbose(env, "stack depth %d", env->subprog_info[0].stack_depth);
+> -		for (i =3D 1; i < subprog_cnt; i++)
+> -			verbose(env, "+%d", env->subprog_info[i].stack_depth);
+> -		verbose(env, " max %d\n", env->max_stack_depth);
+> -		verbose(env, "insns processed %d", env->subprog_info[0].insns_total);
+> -		for (i =3D 1; i < subprog_cnt; i++)
+> -			if (bpf_subprog_is_global(env, i))
+> -				verbose(env, "+%d", env->subprog_info[i].insns_total);
+> -		verbose(env, "\n");
+> +		verbose(env, "stack depth max %d\n", env->max_stack_depth);
+
+[Severity: Medium]
+Does this format change break veristat's log parsing?
+
+Looking at parse_verif_log() in tools/testing/selftests/bpf/veristat.c,
+the tool relies on the older format to parse these stats:
+
+    if (2 =3D=3D sscanf(cur, "stack depth %511s max %ld", stack, &s->stats[=
+MAX_STACK]))
+        continue;
+
+Because the new format is "stack depth max %d\n", the sscanf parser will
+consume "max" into the %511s string buffer and fail to match the rest of
+the string.
+
+This causes the sscanf to return 1 instead of 2, and the subsequent
+fallback tokenization loop fails as well. Will this cause veristat to
+silently report 0 for both STACK and MAX_STACK metrics for all processed
+BPF programs?
 
 [ ... ]
-
-> @@ -9807,6 +9809,37 @@ static int set_task_work_schedule_callback_state(s=
-truct bpf_verifier_env *env,
-> =20
->  static bool is_rbtree_lock_required_kfunc(u32 btf_id);
-> =20
-> +static void account_processed_insn(struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_func_state *frame =3D cur_func(env);
-> +
-> +	env->insn_processed++;
-> +	frame->insns_subtotal++;
-> +	env->subprog_info[frame->subprogno].insns_own++;
-> +}
-> +
-> +static void account_processed_insns(struct bpf_verifier_env *env,
-> +				    struct bpf_func_state *callee,
-> +				    struct bpf_func_state *caller)
-> +{
-> +	u32 insns =3D callee->insns_subtotal;
-                    ^^^^^^^^^^^^^^^^^^^^^^
-
-[Severity: High]
-Could `callee` be NULL here on error paths?
-
-If a memory allocation failure happens during `pop_stack()` (for example, if
-`kzalloc_obj()` fails while allocating a new frame during the verifier state
-copy), the state can be partially copied, leaving `state->frame[i]` as NULL
-for some `i <=3D state->curframe`.
-
-When `do_check_common()` handles this error, it unconditionally calls
-`account_current_path()`. The loop in `account_current_path()` iterates up =
-to
-`state->curframe` and passes `state->frame[frame]` to
-`account_processed_insns()`, which would then unconditionally dereference t=
-he
-NULL pointer.
-
-Should we check `if (!callee)` before attempting to read its subtotal?
-
-> +
-> +	env->subprog_info[callee->subprogno].insns_total +=3D insns;
-> +	if (caller)
-> +		caller->insns_subtotal +=3D insns;
-> +	callee->insns_subtotal =3D 0;
-> +}
-> +
-> +static void account_current_path(struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_verifier_state *state =3D env->cur_state;
-> +	int frame;
-> +
-> +	for (frame =3D state->curframe; frame >=3D 0; frame--)
-> +		account_processed_insns(env, state->frame[frame],
-> +					frame ? state->frame[frame - 1] : NULL);
-> +}
-
-[ ... ]
-
-> @@ -18680,6 +18717,7 @@ static int do_check_common(struct bpf_verifier_en=
-v *env, int subprog)
-> =20
->  	ret =3D do_check(env);
->  out:
-> +	account_current_path(env);
->  	if (!ret && pop_log)
->  		bpf_vlog_reset(&env->log, 0);
->  	free_states(env);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805011517.1717=
-238-1-memxor@gmail.com?part=3D1
+238-1-memxor@gmail.com?part=3D3
