@@ -1,77 +1,77 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E042C16A395
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 22:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3E616A395
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 22:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785967386; cv=none; b=ZTw2+5qNpaa/M56E3z57tWwQPXVagO3O7+Y2Nhu3+YFDLnqED84ofqn0cEB+x6zjCWTgPl3fAX3QiPr8pkJXcT6R05FtnAzXQuC3FI7z2JP+JcUdniKHFkf3fQmsWBknAIbposHwRAlVXIXBoKZ01bB3j9BB/1q8ArVnG27q6Ls=
+	t=1785967879; cv=none; b=YBRAOpt+LundrGv973vboxCuLV3YPpuk2Wm6mgbTWG2/mtrLx0rRGD6jKYx1dyatAiS0w9IuZDiTpuvlYKWZDTHdTWvwovc0OhWjHrI0z+BICUFQEkkPC7bvJdDuN2EbWVVecIFLlp3gIsET80LAuzV2rMWlWNqjPwyJOfxWOQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785967386; c=relaxed/simple;
-	bh=yT8al07KbRr0CNKka+4pocar0G4DOwh/90do6bA5eco=;
+	s=arc-20240116; t=1785967879; c=relaxed/simple;
+	bh=vxnjsqcVejSQbfii7CM514fBgG1xwC+NBmetSd+iVfk=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jX8pfGnhSffqK3daoSQ7OGmf/97sUr9twYdn65Qhhf+XQvRDwMRgdxt6lCGLiDgkEk7vTM4VsKIdbLbV8daKeYSWPXVtUM5x8iPmsdC725uOAoKYRwMrHdmjp24SroRnvOVZRC+aPd1c1RtvJFO/pPQiP4sY2xASMWNeKdgDzqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PEJUsr5d; arc=none smtp.client-ip=209.85.215.179
+	 Content-Type:MIME-Version; b=N2cZQ7jGmywJy+mGQAyreDX7g/EhP/Obc9KvKljJhiNPkAnejXYv5OfoHC9FYBLBgug+3lRxACiOCR4DCk+lVbEJ0NIX/VbfGrjUNjeeI75/TSVmkcSzMGAiQvIqQN9oGy4p8GIPuobY2650/Z6ZFKx/Dj9LGtH025RbAnn/B50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XASztxrs; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PEJUsr5d"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-ca88130e09aso1193002a12.3
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 15:03:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XASztxrs"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38dc69c74b8so1631877a91.0
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 15:11:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785967384; x=1786572184; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785967878; x=1786572678; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=yT8al07KbRr0CNKka+4pocar0G4DOwh/90do6bA5eco=;
-        b=PEJUsr5d4utvlYqva8vxWXfEzveMeRRorrFd6G4H3fjD7fJ9mCAxys57ogLlGmCYGT
-         c9kkqngt/0r381rqvitPWzvcn3bGCCTzlOebsR7RVERlEjNxIEzNwFooNk73hoFBIizW
-         etGdLFSt9vPkT1o8vMhuKAUPIz7TuHmYCobgQcE3wPHRTvWpywtJevxSHdgtV6M4n1eN
-         0ZUbinXje+MPH/AqhJ9E7zgjCJ+ROqX+3NR3Y7nowdS4yhYzvZhjrSVY7NxQWDD7FaOJ
-         CLS7TbDlharmugIcuNjdMSZ/72zW1HI4Fu0TanlaaHAg+qocahQU0Vz3+ejQRpJAkuUJ
-         GEJQ==
+        bh=vxnjsqcVejSQbfii7CM514fBgG1xwC+NBmetSd+iVfk=;
+        b=XASztxrssYBx5NBawnc9ykAeHoIvMCqsSyGUi4aUYotSzCjC/pyqy65OIho08IjLth
+         5z++/q+jJ9fdLn3Ss8rgVHKwsT16DO/2jpWZg0dTgKROO/rhFtjRrSERE1qzn2nmfZq4
+         Zv4akwndbWCraQDNG961ENgGbxGvp+VxivH0w0q3W4P51oJtAtA4lsL9+CHNdvmZn1Rf
+         jQ1EzHZOrd0WupYUSxNP+3vVDNSQapfEi21PIBwh0GlSgw2wUF1+Ir7HudSLoCkVSg4s
+         nNFJ3aWYsudbEhEH9WrV9t8meVFBg48uMf4Ru6wU8xjrqdBAFp7+OF78zAofJ8JZUS6C
+         +QbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785967384; x=1786572184;
+        d=1e100.net; s=20251104; t=1785967878; x=1786572678;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=yT8al07KbRr0CNKka+4pocar0G4DOwh/90do6bA5eco=;
-        b=d1WXlABKceKe2EucujjRw2LTH5Qz/roUtGHrzSUk3ZsRGlmp2edw6a1tw/8VosRFGD
-         vYokQNVGpZjJxtrmeAYGT29BYwij71PfdR+NTpRJr6HKNu1h+S1nYD2X2RMc+SENG/l8
-         FaPYY66B+78zpfW85D8n4eeYMMDMbthxo1R+t51SXJKBHxP7ZUrRsrLWJ2aytTQHuTbj
-         L9VY3USSw/CHzh/YZogpo+A2tnzBjCoF593IXg7V7B9CNlylYPRKgrStsFo43CMEajXb
-         XktKW0F+fM5V8w8i+2wWmAqvNiFO+ILBeP4EYWrLumAuV/C93KVkdz2mSQXohguuNnY5
-         m1wQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrYEz8BdNfPkf9jh2yhAUfRD/XilLAs3dOarklsMF/ftgdVPMU799i7mehhmr0E7uKdEwU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziTrm+wGOVzojrJ7VsETV+UNILWrmtKHg0751xRU4uM0l7KlYf
-	Rzj+NusV2ABII0/0fu0tUpihtaOO8+lIsKb08kfJTOsCR6d2U0c8jJkn
-X-Gm-Gg: AR+sD11y8ZHpcKyLGNoYf9qZljb+vxwEBNGGY1UJchBvodVlMOEyxzK3hQV8/1KqY4o
-	rF6jzOLcQm+v0X39uSH7KbkiQB9i/TgIASZ+n0GlRYDreqK8fMOvk5OqBV87+CoOycC2OzFbJx+
-	isBe5hkMEjXXZFaIwlP6hx+NiIJg4JBK+hOuNd4wOYZ3GvZZ74dFC1mCXTTpHJU+E09oFHQr/VV
-	Ruakr+JwXOKhdKKpvmmCqYIJnpVGSqWUmyzeu2zpuhosdrq0Eg+WFH3TVwyWGQ0mz+2zVK0w+A/
-	5HGtnprjiZjTiNhh+Sh3xacDPhyTwQesw3LTVyOaifRYIvE9xwH3pRBJukEeRSybreQ4jQftwcH
-	379PZg1g2VfIN26nylT3gFNy5J2GrpbjK4Pjtu51kCOePXLm5tBh9SSXCqvF44YW7BGQGUoBDIR
-	LHYOdBWCjENjLRMgOVZ7Y5dVYP9Q2wlENUf0rYgNxTnnMEVNKuEqeJjMZeHp+OGi9LHyhHRTIkq
-	m6Q9qvCjSIKJvObsRYujuZQkavhpFlritAFjK9CaDPT
-X-Received: by 2002:a05:6a21:697:b0:3c3:c3fb:2473 with SMTP id adf61e73a8af0-3cb85e736ecmr13214348637.20.1785967383861;
-        Wed, 05 Aug 2026 15:03:03 -0700 (PDT)
+        bh=vxnjsqcVejSQbfii7CM514fBgG1xwC+NBmetSd+iVfk=;
+        b=l3/J5lat2PZWQgADyBQlw+5bnZMpfHjCF4jc+iBzWtVMtoLlD2PNQvTM5P3Fpta0I2
+         IaSem3wprOqzh3t9iZvE0K+d/tpSaDh1mJsjC7xQfo8H3Hi+SAvbz9ef2wv3SRkNh2Uw
+         2m8uX3bEGF3pOFPmhw+6UK7xWMmhDhMMl5CRY8lADYcX5swthWC1HfYxGu3FOCfF8QF0
+         zR0PckjwQrskSoy8+X/GW+luZMgwpGtm9hQdmVlCTROEPhiQmcTbOtJus4bRp68U8wmI
+         qxw4fBAQBEwTnGUT4O1uX27XeF9LmHuMRWBFeiVv8ypW/F0Wce8hG8pYsRCzLRzrCEwc
+         unCg==
+X-Forwarded-Encrypted: i=1; AHgh+RrO8s6jwJXLZGgXBV/Xnm74hpuVF//pIPJfmnzt1J5gY8eQeJ+rNWHBhcjTJd/NLjKd0vg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJitQms6a4bNFJGE2CMxegQxVKnVLArRvbVVKWmta3vL6HBdND
+	WiNMhr3HB10t+1ERpcAcMqJlZks4FnTLiHy4rua8bgMC0ctIp9X7QGLI9ivFZ6nk
+X-Gm-Gg: AR+sD12OFhdv++SeQAn2xFinvxaInfsBjrAyLQ3pFvIPfKHC93F68wg9lUSH/RIfPIg
+	tvDJJrg7KDcRHvc55NY0rS1xNADLdZ1g1HDWTZ3MlDMK7UGED7dEwd5zNfC5tFUTkdILDzMNCye
+	nElgxpAs5lY3XAEdio8MvakVSsMPCzoC2gnmczRQRxY2Uaq0YPpxzySgwmN6L0+gl1TpQM8+ekY
+	s2EMwKGcs6J9LojlbI2oR0qicSJeE/MjRF2OwAmrbEBULyT0X1OXseUW1o7TGPNjbm/j4niC5Ar
+	Mq2SwkGaTJJptPRJfeAVVpmdLLfvyEj1N6twpHJvPSfbxfG/y7bpme34htKERhJx1/M0YApDOsp
+	nRmHR+eEuixRP7aKGGQndMxylt/g3hRcFlnzkNg/iryMhsB4K8jlZGQW3QpR8eK9euwLdLEXMMb
+	ZFXpRvH5as16OBfD0BZc5Q+xHvOl1ouPWvXHz95+1z/6gtTxVTzyHduLYwFH2n3r1/lMsriNFJg
+	bWqsxvMFBC+RtgGjV6gpcQpadYC5O/EfBmFPEivHNsQ
+X-Received: by 2002:a17:90a:ec8c:b0:38d:c74d:29c5 with SMTP id 98e67ed59e1d1-3903c5c0c92mr10663769a91.19.1785967877814;
+        Wed, 05 Aug 2026 15:11:17 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:969b:c0a:ff6f:454e? ([2620:10d:c090:500::5:b61b])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fca52d329sm17217964c88.4.2026.08.05.15.03.02
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fca508a48sm16029828c88.1.2026.08.05.15.11.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 15:03:03 -0700 (PDT)
-Message-ID: <f6aa637ffe297ce0ba24f42565a5f9921195b909.camel@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v5 4/8] selftests/bpf: generate the signing
- key and certificate once
+        Wed, 05 Aug 2026 15:11:17 -0700 (PDT)
+Message-ID: <4c9b44c253abe75d9fcbc8581e7a4071f2a5c4d6.camel@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v5 5/8] selftests/bpf: generate
+ verifier/tests.h in a regular recipe
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Mykola Lysenko <nickolay.lysenko@gmail.com>, bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
  martin.lau@linux.dev, 	song@kernel.org, yonghong.song@linux.dev,
  jolsa@kernel.org, memxor@gmail.com
-Date: Wed, 05 Aug 2026 15:03:01 -0700
-In-Reply-To: <20260804170156.1709916-5-nickolay.lysenko@gmail.com>
+Date: Wed, 05 Aug 2026 15:11:16 -0700
+In-Reply-To: <20260804170156.1709916-6-nickolay.lysenko@gmail.com>
 References: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
-	 <20260804170156.1709916-5-nickolay.lysenko@gmail.com>
+	 <20260804170156.1709916-6-nickolay.lysenko@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
@@ -83,15 +83,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Tue, 2026-08-04 at 10:01 -0700, Mykola Lysenko wrote:
-> $(VERIFICATION_CERT) and $(PRIVATE_KEY) come from a single genkey
-> invocation, but a rule with two normal targets runs its recipe once
-> per stale target - under -j both runs execute concurrently and the
-> openssl invocations race on the same output files. Rewrite it as a
-> pattern rule: pattern rules with multiple targets are implicitly
-> grouped even before make 4.3 introduced grouped (&:) targets - the
-> same workaround the test_kmods rule already uses.
+> The verifier/tests.h recipe is a $(shell ...) expansion: the command
+> runs while make expands the recipe line - including under make -n -
+> its exit status is discarded, and the resulting (empty) expansion is
+> what make actually executes. Turn it into a plain recipe.
 >=20
 > Signed-off-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
 > ---
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+...
