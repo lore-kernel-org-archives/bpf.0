@@ -1,30 +1,32 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F0F376A10
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 15:33:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772EB47FAF2;
+	Wed,  5 Aug 2026 15:34:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785944047; cv=none; b=DILKfkw94nHxzU2DdA7xZ8rgy1RDChnv6jOjiyLVFhifBdNm/kPn5PrwXJgvlj6c0uyuZFyOgJ5Z+gIvEBLPcY7OTwyddxEqsjYOG9WtubFYB8cdrkh8PzZ/If6R3JbwsVq9riiKd3TIINDTYSc0iopQibhBML5MbCBGhVxolYc=
+	t=1785944052; cv=none; b=aAPBIKx+J8cR109AK3xf0kdWBF2lNbQpdfsEY/WDEKATp/1pCHYyw3TE03sNRJ8KZH1e5h7epVum4Jo6t48lhvw8nYjpWHFp5tuGyxBYQyGWPzfQt6fsqW2NgnXTcer5S9PF7+4h46qB9PGazTuKU1wQr1HW/owWWWTkpC4y2gQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785944047; c=relaxed/simple;
-	bh=Q867QdylhrILIZl7uwIyJN/YV4LNHOtgP0zdTrLDEZE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MBjvM1KVoVCQNvU+Lsmw8ex6meXfsJcJgo8J7AJnP+JRFHGDKNzD+B3QAyQceFZtimuKlOW9RZApJbURi++WXyQvdKEKTAkATeAiSlP9dgCYbQLgUVjqxZK8aqFWPSJvpQiYn3Z5hOTNaxy8/6Ik69rPMqc0aGQKGktZkEh7TVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aIkdqtfl; arc=none smtp.client-ip=91.218.175.183
+	s=arc-20240116; t=1785944052; c=relaxed/simple;
+	bh=5QGg8UA6TP6BiR80nmMNPD+9XP0RRFAEKZsYNq+PShI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=u3M2WJ5o0Ynu0+EMTo8XyeCU5797uLnDOEJ272ku68U6IlfgH/nKQ8UDmRXYzkKIBlh5hMpQTTehD3P3MPbam4quzCaF1vpFIsoDjL8zwyP9VxT0+9Ah3r2OqBIppsVEBFSwVdPPTvZSvefawGYgVkw8Ei5jBsU1c2EzNCEfc3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=slDBi+5+; arc=none smtp.client-ip=91.218.175.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aIkdqtfl"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="slDBi+5+"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785944033;
+	t=1785944039;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=NMfeASp4Msjw1vMvRPi7MNiVqL+aI2n/OIGsp1byVBc=;
-	b=aIkdqtflaUhpE2A00Mt0bPIcWwHMNiGqurNxvmppE3mbM/ArVuM0pKeME7m8dLcTMW7aLh
-	W0hY9u4Yx2ARYHwn3ncpeOdcFrhqfmjD2rh5ufWb/8+3mACvJc/81/tfCn5ybbCvDJnK2p
-	ZhaIxJYE/U8apn923Hh0AlGI65Mkx/E=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=htN/R7/vpvjJoj57m1JcFVCCQB3lZ4Dh9rkDr6cbV4k=;
+	b=slDBi+5+gotQFoyTbh6AFITlB5cTmV9fuhq7RoT6Fpqi3I0AymEJxofg4tke/BeUYogbSZ
+	w3r+PNeAJ/ulwtRneVutsoRd7FY8LML8XLlV8k/RkNvnWbn83aJ0YD/81IIn7eLxhAMbsU
+	zzI+yo/btDFe7qoxmjoOe7rNv1PdkoY=
 From: Kaitao Cheng <kaitao.cheng@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -43,10 +45,12 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Kaitao Cheng <kaitao.cheng@linux.dev>
-Subject: [PATCH bpf-next v2 0/3] bpf: Allow selected kfuncs under bpf_spin_lock
-Date: Wed,  5 Aug 2026 23:33:37 +0800
-Message-ID: <20260805153340.34776-1-kaitao.cheng@linux.dev>
+	Kaitao Cheng <chengkaitao@kylinos.cn>
+Subject: [PATCH bpf-next v2 1/3] bpf: Add KF_SPINLOCK_SAFE flag for kfuncs under bpf_spin_lock
+Date: Wed,  5 Aug 2026 23:33:38 +0800
+Message-ID: <20260805153340.34776-2-kaitao.cheng@linux.dev>
+In-Reply-To: <20260805153340.34776-1-kaitao.cheng@linux.dev>
+References: <20260805153340.34776-1-kaitao.cheng@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,53 +60,72 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The verifier currently has a hard-coded allowlist of kfuncs that may be
-called while a BPF program holds a bpf_spin_lock. This works for the
-small set of built-in kfuncs known to the verifier, but it does not give
-kfunc providers a registration-time way to declare that a kfunc is safe
-in such a region. In particular, module kfuncs cannot be added to that
-allowlist without changing verifier code.
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-This series adds a new KF_SPINLOCK_SAFE kfunc flag and teaches the
-verifier to use kfunc registration metadata when deciding whether a
-kfunc call is allowed while a bpf_spin_lock is held.
+Introduce the KF_SPINLOCK_SAFE kfunc metadata flag in BTF so kfuncs may
+be explicitly marked as safe to call while holding bpf_spin_lock.
 
-The built-in kfuncs that are currently accepted by the verifier's
-lock-held allowlist are annotated with the new flag. This preserves the
-existing behavior while removing the verifier-side category checks and
-uses the same mechanism for built-in and module kfuncs.
+Allow kfuncs defined in kernel modules to be marked with KF_SPINLOCK_SAFE.
 
-The selftest coverage marks one bpf_testmod kfunc as KF_SPINLOCK_SAFE
-and verifies that it can be called under a bpf_spin_lock. It also calls
-another registered but unmarked bpf_testmod kfunc under the lock and
-checks that the verifier rejects it.
+Example: BTF_ID_FLAGS(func, $kfunc_name, KF_SPINLOCK_SAFE)
 
-Changes in v2:
-- Rename KF_SPIN_LOCK to KF_SPINLOCK_SAFE. (Kumar Kartikeya Dwivedi,
-  Leon Hwang)
-- Deprecate the verifier's lock-held allowlist mechanism and annotate the
-  relevant kfuncs uniformly with KF_SPINLOCK_SAFE (Kumar Kartikeya Dwivedi)
-- Add selftests. (Leon Hwang)
+Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+---
+ include/linux/btf.h   |  1 +
+ kernel/bpf/verifier.c | 20 +++++++++++++++-----
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
-Link to v1:
-https://lore.kernel.org/bpf/DKG0YUDSTBUY.1X220287HT9V3@gmail.com/
-
-Kaitao Cheng (3):
-  bpf: Add KF_SPINLOCK_SAFE flag for kfuncs under bpf_spin_lock
-  bpf: Mark existing lock-safe kfuncs with KF_SPINLOCK_SAFE
-  selftests/bpf: Test module kfunc calls under spin lock
-
- include/linux/btf.h                           |  1 +
- kernel/bpf/arena.c                            |  6 +-
- kernel/bpf/helpers.c                          | 56 ++++++++++---------
- kernel/bpf/rqspinlock.c                       |  8 +--
- kernel/bpf/verifier.c                         | 38 +++----------
- .../selftests/bpf/prog_tests/kfunc_call.c     |  2 +
- .../selftests/bpf/progs/kfunc_call_fail.c     | 12 ++++
- .../selftests/bpf/progs/kfunc_call_test.c     | 12 ++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  2 +-
- 9 files changed, 72 insertions(+), 65 deletions(-)
-
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index c09b7994de4e..3f5255d095a2 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -79,6 +79,7 @@
+ #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its first argument */
+ #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
+ #define KF_IMPLICIT_ARGS (1 << 16) /* kfunc has implicit arguments supplied by the verifier */
++#define KF_SPINLOCK_SAFE (1 << 17) /* kfunc is allowed inside bpf_spin_lock-ed region */
+ 
+ /*
+  * Tag marking a kernel function as a kfunc. This is meant to minimize the
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b274004fccfd..9c1f8d552655 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11832,11 +11832,21 @@ static bool is_bpf_stream_kfunc(u32 btf_id)
+ 	       btf_id == special_kfunc_list[KF_bpf_stream_print_stack];
+ }
+ 
+-static bool kfunc_spin_allowed(u32 btf_id)
++static bool kfunc_spin_allowed(struct bpf_verifier_env *env, s32 func_id, s16 offset)
+ {
+-	return is_bpf_graph_api_kfunc(btf_id) || is_bpf_iter_num_api_kfunc(btf_id) ||
+-	       is_bpf_res_spin_lock_kfunc(btf_id) || is_bpf_arena_kfunc(btf_id) ||
+-	       is_bpf_stream_kfunc(btf_id);
++	struct bpf_kfunc_meta kfunc;
++	int err;
++
++	if (is_bpf_graph_api_kfunc(func_id) || is_bpf_iter_num_api_kfunc(func_id) ||
++	    is_bpf_res_spin_lock_kfunc(func_id) || is_bpf_arena_kfunc(func_id) ||
++	    is_bpf_stream_kfunc(func_id))
++		return true;
++
++	err = fetch_kfunc_meta(env, func_id, offset, &kfunc);
++	if (err || !kfunc.flags)
++		return false;
++
++	return *kfunc.flags & KF_SPINLOCK_SAFE;
+ }
+ 
+ static bool is_sync_callback_calling_kfunc(u32 btf_id)
+@@ -17415,7 +17425,7 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 				     insn->imm != BPF_FUNC_spin_unlock &&
+ 				     insn->imm != BPF_FUNC_kptr_xchg) ||
+ 				    (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
+-				     (insn->off != 0 || !kfunc_spin_allowed(insn->imm)))) {
++				     !kfunc_spin_allowed(env, insn->imm, insn->off))) {
+ 					verbose(env,
+ 						"function calls are not allowed while holding a lock\n");
+ 					return -EINVAL;
 -- 
 2.50.1 (Apple Git-155)
 
