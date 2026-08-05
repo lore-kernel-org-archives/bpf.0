@@ -1,129 +1,117 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479653CB548
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 16:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD6A37AA92
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 16:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785948636; cv=none; b=cVxshuIMEQ/PxUzlx1IcpoWekmj882txbL/fWRS58IOABCF4nHqAgpNpPc+tluvjy5/99kMdTtqnYC1SijhqnZcp54NCCdRKqbK+OzBnjJNVO5hDp4tAJcuutW5P+9xR8X/11xXPQy3b3WtncC7ZWu6fFSvFGYWFD4iSDmEvBHE=
+	t=1785948695; cv=none; b=FWdhRu/7PGnqqOI3+X5yKWdt7y31F0SOByE28BU6PZ7JftvysA5aGOLl1kpA0pn2+HMec5saRsH3uyfKwwmJ8uvRWE7sKPaT3IOcOSMjDop93fR7thSEK8+o1SEUZzZrQnwhnkPLEtTsWgFEI/hpcxPXMShFouKJ2uS6dIzUw1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785948636; c=relaxed/simple;
-	bh=BszZ6KBeKZ6Qg3CtgvJEAnRrVNmYR4/7gcB+znjO7EI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RZpXd/NU1Rq5sAAcjhfdCQ3G9LDjl1ukEbZdw2+/fEQ1X8PRVjdWwaZAThNIMLp03AYdT/VHT25v8XQS2d50YnJsv3MLH7Hvk/zhEmWcchv+pN87mre7FJcMLdO3NEq2JEr7B+fYZqV4nLusnsuvlvGKaAC6OzWb3Z+2oA+v/qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZHVUv/NU; arc=none smtp.client-ip=74.125.225.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1785948695; c=relaxed/simple;
+	bh=273XCrzmAdbCT89p9Ch08I6IsbJHTHk266OvP2ce1h8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h8QAFSPfICZlr9NxuLneYrM08jq1CEHPUu0SyXwyttxMxv7PWqW/eaELu30bjkc4ptyguhysTsK05SNW78VH6R1srF7jGFIdQR8ZyvIf1k9yBuB+2Dq3yUyf6vbiww65BJBlApIrEd0N3swFMLJtYxmThX2/6N16xe6ZXwU0R9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pCitqSgA; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZHVUv/NU"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-47f4c92d1b3so255172f8f.0
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 09:50:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1785948632; x=1786553432; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=d+VuNurPstAmXmltuo2GrH5As/aKoCfWEX/g2T2jGFE=;
-        b=ZHVUv/NUYJ33hELhK5Hk0kFOaOTBBPuQSkD29UmYqwP/PK8SDly698gOYsvBZlbWDU
-         fYisgUfxVg4bXXYMHKHtVpSHTYwtAXEV/TZ7WPAmiH1CpCGhVDfCxx+eDGpdW65MhH0s
-         z9tjGEQwkOtnIW1f0GyVIJwDn8xfdeGu6gIvnw/QZuvw6KX5Q/ZEGWm2qecMri4yomyd
-         hENIKhRIT0tQMFohErC2B8eqqDy62QIUrtytuy5sjCME+gShmummldnvQsGYX6JnRhSY
-         KrRFZLdlTyP8bCOi3SFMszApBpE8oZxLH4l+ZLC16t/eXVznNlrQ7VwKQg7i++7lWDaI
-         T0zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785948632; x=1786553432;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=d+VuNurPstAmXmltuo2GrH5As/aKoCfWEX/g2T2jGFE=;
-        b=AMOwqUsHVxT+xQxXEmIdcoIPF/SJCXmo9Ytt2nL+gy54eegHvx5o8BYG5UaOSEg9yo
-         ejF+2x0rgfrqIaDaC2t5BU5JgCzMFYPaYCZfNnz53T2srnN7QJmXCMTBZoGGDOyH2sKl
-         IjCCug0LIBinnhCcGhzSDvnOiLjkPzK0ZB8xG/TyrczC5I3wo3PW84b7i5iUlW/6AjcW
-         d1RGM3WAh5M5Sg++aCQ2Q8fw9V6Phg83bkpfYzL9UlB8Jvh6p+I9LjJnF6j+k5bbG8MV
-         f+GgK8OgJ+/vLBVO0sHJAfRiVrOtFetFBUzqDAM5gfsjz7BZ4i34QyEwKmI8MBuvwllV
-         Bv0A==
-X-Forwarded-Encrypted: i=1; AHgh+RrymertrX10Hd0N0EpZnc5pqP7HkyQVRoO+ua7Va+xtafsD1t86yEaI5sbhiqvEEXalgHE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwqkSFaONw11IQP/cUsjypVW6h56CMNFs4aWL2zza9mnTiHxTM
-	Qbt9h1IFvYEppSZySup/VBgG39ZzX0V/Pi2j6Q2C6ejZ6KsoRLWDKHdzUoaPxK1dhxI=
-X-Gm-Gg: AR+sD13lfVw3Zw+3dm88t99qdVr23umCzaQMTqEqjYmZMoVeYscjtVfMWBMGh0y8cDW
-	/B6arScScMvP/aos36TIEEDphZdKYg6ffUu1KLyqoBAFpXbmvpEHMtkmrpGHDIPcM2Eh7iwcWXV
-	b4Yg4iFy1c2NUhyoSbzgpsXapQpF4aX/NVVu47m8Y3L7mRcRPlBgDx8QHv8a1LSCi0hqg+9xC18
-	jSoag0yje+GUM6uFCSo9TvO3EvRxaqkgvwA97clylf4S1FkCCz+/uSNTlvirxZyLMwgdCLaC9ZX
-	+5K16KFPM1sX5mjSOMqRkeGAKXR/RK3iaVCNna2SmGWgM7vlL9DM17OCZRCKzpzPxK+VZRFEfOh
-	y+vsUu0xO/Nd0LmRy5rxpA+pOAQxz9S50Ll1/Ob+jLn+2227zT+Rf+mDB+p40ITTq1f38heu15c
-	WvGNMsKQH4YFw/SCU121f93Zh2zdLxQMZHTS9yUXDZs9zJ3DNsnudOTTCWIPAwDf0b
-X-Received: by 2002:a05:6000:d4f:b0:47f:9d0e:f8f with SMTP id ffacd0b85a97d-47fec627a65mr12452020f8f.26.1785948632621;
-        Wed, 05 Aug 2026 09:50:32 -0700 (PDT)
-Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47febf7e5bdsm9821153f8f.0.2026.08.05.09.50.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 09:50:31 -0700 (PDT)
-Date: Wed, 5 Aug 2026 18:50:30 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: cgroups@vger.kernel.org, containers@lists.linux.dev, 
-	criu@lists.linux.dev
-Cc: Kamalesh Babulal <kamalesh.babulal@gmail.com>, bpf@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	lxc-devel@lists.linuxcontainers.org, fuse-devel@lists.linux.dev, 
-	=?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@stgraber.org>, Mike Rapoport <mike.rapoport@gmail.com>, 
-	Christian Brauner <christian@brauner.io>, Adrian Reber <adrian@lisas.de>, 
-	Kamalesh Babulal <kamalesh.babulal@oracle.com>
-Subject: Re: [ANNOUNCE/CFP] Linux Plumbers 2026 Containers and
- Checkpoint/Restore Microconference
-Message-ID: <anNn1INJrRef2ViZ@localhost.localdomain>
-References: <7959ba0b-c39d-4cb3-8269-482d1d593257@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pCitqSgA"
+Message-ID: <b1825aab-b1d2-40c4-a74c-bb05ce50327d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785948690;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zpcBlsFzi4+7YT+H0jx3YNPc4qypxBr5/eqR94FR2YE=;
+	b=pCitqSgA9Xtw97JhC3Y/0oWPfkxXS2AQgmtk0CGcym3yQ6YC78edeAkHjUh7Rc9KW5mS0a
+	cpb8g9zIkVGN2/h+a5IMSSGHBXbSalu3if1sbcWdEcaGv3R10/5qMZaSoCP30chJd5BB5F
+	fybZDNA9SbshMMiRngLiZIyn8VrjNHQ=
+Date: Thu, 6 Aug 2026 00:51:08 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7ozpukrxhw32oga7"
-Content-Disposition: inline
-In-Reply-To: <7959ba0b-c39d-4cb3-8269-482d1d593257@gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/3] bpf: Allow selected kfuncs under
+ bpf_spin_lock
+To: Kaitao Cheng <kaitao.cheng@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260805153340.34776-1-kaitao.cheng@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260805153340.34776-1-kaitao.cheng@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+
+On 2026/8/5 23:33, Kaitao Cheng wrote:
+> The verifier currently has a hard-coded allowlist of kfuncs that may be
+> called while a BPF program holds a bpf_spin_lock. This works for the
+> small set of built-in kfuncs known to the verifier, but it does not give
+> kfunc providers a registration-time way to declare that a kfunc is safe
+> in such a region. In particular, module kfuncs cannot be added to that
+> allowlist without changing verifier code.
+> 
+> This series adds a new KF_SPINLOCK_SAFE kfunc flag and teaches the
+> verifier to use kfunc registration metadata when deciding whether a
+> kfunc call is allowed while a bpf_spin_lock is held.
+> 
+> The built-in kfuncs that are currently accepted by the verifier's
+> lock-held allowlist are annotated with the new flag. This preserves the
+> existing behavior while removing the verifier-side category checks and
+> uses the same mechanism for built-in and module kfuncs.
+> 
+> The selftest coverage marks one bpf_testmod kfunc as KF_SPINLOCK_SAFE
+> and verifies that it can be called under a bpf_spin_lock. It also calls
+> another registered but unmarked bpf_testmod kfunc under the lock and
+> checks that the verifier rejects it.
+> 
+> Changes in v2:
+> - Rename KF_SPIN_LOCK to KF_SPINLOCK_SAFE. (Kumar Kartikeya Dwivedi,
+>   Leon Hwang)
+> - Deprecate the verifier's lock-held allowlist mechanism and annotate the
+>   relevant kfuncs uniformly with KF_SPINLOCK_SAFE (Kumar Kartikeya Dwivedi)
+> - Add selftests. (Leon Hwang)
+> 
+> Link to v1:
+> https://lore.kernel.org/bpf/DKG0YUDSTBUY.1X220287HT9V3@gmail.com/
+> 
+> Kaitao Cheng (3):
+>   bpf: Add KF_SPINLOCK_SAFE flag for kfuncs under bpf_spin_lock
+>   bpf: Mark existing lock-safe kfuncs with KF_SPINLOCK_SAFE
+>   selftests/bpf: Test module kfunc calls under spin lock
+> 
+>  include/linux/btf.h                           |  1 +
+>  kernel/bpf/arena.c                            |  6 +-
+>  kernel/bpf/helpers.c                          | 56 ++++++++++---------
+>  kernel/bpf/rqspinlock.c                       |  8 +--
+>  kernel/bpf/verifier.c                         | 38 +++----------
+>  .../selftests/bpf/prog_tests/kfunc_call.c     |  2 +
+>  .../selftests/bpf/progs/kfunc_call_fail.c     | 12 ++++
+>  .../selftests/bpf/progs/kfunc_call_test.c     | 12 ++++
+>  .../selftests/bpf/test_kmods/bpf_testmod.c    |  2 +-
+>  9 files changed, 72 insertions(+), 65 deletions(-)
+> 
 
 
---7ozpukrxhw32oga7
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [ANNOUNCE/CFP] Linux Plumbers 2026 Containers and
- Checkpoint/Restore Microconference
-MIME-Version: 1.0
+Nice to drop those 'is_*_kfunc()' helpers in verifier.
 
-Hello.
+BTW, some of those kfuncs can be dropped from the special_kfunc_list.
+That would be better.
 
-On Thu, Jun 25, 2026 at 09:25:58AM +0530, Kamalesh Babulal <kamalesh.babula=
-l@gmail.com> wrote:
-> We are pleased to announce the Call for Proposals for the Containers and
-> Checkpoint/Restore Microconference[0] at Linux Plumbers Conference 2026,
-> taking place in Prague, Czechia, from October 5 to 7, 2026.
-=2E..
-> Please submit proposals through the LPC 2026 abstracts page by August 7:
->=20
->         https://lpc.events/event/20/abstracts/
+Any way, this series looks good to me.
 
-Just a quick reminder that the CfP for the MC [1] topics is just around
-the corner. There is a chance to bring up topics of _your_ liking.
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
 
-Regards,
-Michal
-
-
-[1] https://lpc.events/event/20/sessions/267/
-
---7ozpukrxhw32oga7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCanNp0RsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+Ajh6gEA+JVKvBO47pbrAwGAdZKn
-odfo4fAHSl0NLd8LTjOZA9ABAPg+Z9QFz4yhF4juz/IqW3AL7DcP/4GylW4G2PcG
-K90I
-=KTnA
------END PGP SIGNATURE-----
-
---7ozpukrxhw32oga7--
