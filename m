@@ -1,230 +1,132 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63BB3CF212
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 17:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA802DECC2
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 17:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785951387; cv=none; b=Wj16u3Z71uri/A1u8g0mqx/nT5Zi22SjHQdwuyDEkDXu6UlnruiRPU0P5HI/KHQU9vzxfG17xwtIseuyjscwsyDXewBNb8NImf36lb+3xl1c7b3g0Xjt2KsrI2mlUMWns75DtDj+sL1Gcv3qpfb5Fs7xpUkY4zfbgGN72Y/BGzU=
+	t=1785952099; cv=none; b=meROZ0YiUENeBj5pbVVbS46Xtc95GIrW4oCxPyWVxFPb/ymbOdSdhxz59lNGTn5QmPsJCC+2GlRiocWZMFUvFjTB2Z8GfHK6Vo+5n1ecePhXuhBZj4BYxBUP3qVxVlh/gI9yR+guxuNJE8gCJPWsVffHzKkluwlcRQNODi/lpNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785951387; c=relaxed/simple;
-	bh=aY5qyNW9M8sNrebMR+A/BizQKEa6ouo2vxI23yPsPD0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=t7onV9igCawtNedgqbvei8wJPYMJfbkm8AxA8iIaIarPvuX2MwT+n3CO0beS0EH7ZPRa0aIPM7w9/+UFDQbTFYdgBqbGv4HdHQy+tis2mYIVuHP56VCwRTCVde72qWVg1Gym9xZnyCM5smXxXMb8XzBUqazChcN2bY4Q6qe9Nik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W/Y+EdUb; arc=none smtp.client-ip=74.125.225.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785952099; c=relaxed/simple;
+	bh=wFePT5+Yd7Tp3foLToQuH9d38IUyxkn5QQmpAY2+fEo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NXM+Bx3d4YN3woBNQH+kPrpOI+mvxKW18zl4ts32e85+VmgNMmlEpL+2J+Fl7FzG5+WAuxCgqAWEnZj34aIXZHcRqZXWZQqrx34sMHeAN5pbHw6B+kzre4N+MFonlk3tOvMCta+v7rBptNkBm2e5kgI487EhOxvT8iOFHIYrZEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DviHr3Tg; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W/Y+EdUb"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4744516a312so194070f8f.1
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 10:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785951384; x=1786556184; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=CoIjjQsARMKthvTabporXON3lPYUDV1wv3+gRt/J6FU=;
-        b=W/Y+EdUb0K0yw70QeYmy4PLH865NjHLVxZgPgoiIq1n8TFse8Eveb7ZcvsZEJXPaFy
-         +sHmw7L7FisjveWitETDgXS5k+jhdBlv+TiAQ4ZITOndr65RqN5KpcgVz/dcMNS7+k6W
-         7Alyn7qLu5bIvcibsSB+UngBFMiHpR8bcOK9EN0IkOHcd/z+8Yhdk0TjSqvOFyrog5ue
-         LPyZK4RbK2hDIbcgfyWCXzuRJ1PVtSl4xS8G+pqryq/h1EKDSY1SexNMsTr/dFOLY0DT
-         STw7rk9X6hDfAoSmcPrFDeG8Jxskh+URpyZeOj0DRYWovRLMkiF2ckAzSDrM/rDibbit
-         pxSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785951384; x=1786556184;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CoIjjQsARMKthvTabporXON3lPYUDV1wv3+gRt/J6FU=;
-        b=TtY611LTdy95FDLSVNlQD6jZKdks4XAnl2VzIGAycxL4diG460c9cSZZVp/VLqUGfh
-         UyNmmzPsAqOoo2HkFQ4tAsx2t8mrGlzop8oO0hVZ2tHNbQ5lyuddO5kJsfDi0kwL+Usw
-         EXb0nddLDoWWis8eHBzrOKwqXaRyoyQeHKrcdw7o9PLw/+4nFqueKtgYDkeqBDwa8KxT
-         RJNEygN+L6nna76XOWN4e31qsjLEF4+7/i6O4+90u85tmUIvqNeUtueHC/8Vzevz8nYE
-         U+0m6reCMZu/Ocyt/dzpfCv1d7SV++Skb42kxqggG2xN8aYaAccFmCU5KJec+775//HV
-         R1/g==
-X-Gm-Message-State: AOJu0YzPQn0pzhG9R6pCF3Z4fE3OwwE0CAjZ3m41GjIuOqS6/LhDstbg
-	9TQYXxEN6b27ykMmyGZ9nODtJgaIpbOFLsXNQdkiVosKTsYpUDfIDmFHFweIwET8
-X-Gm-Gg: AR+sD13F2p21LgHG139/JJpvZJBVEoQdqJ8czZI+wEavU+V/KMpdW/HAaBUuwcvsOb5
-	PDK908Jf0tzS1/5dW+fUP9bGXvaQ3xmCUCGz6JD5J34T+5FtuBppz1VUlPcqkc+htS46f9gZHPY
-	9coTO76as5wZAdUqUczWBKqxpyZkhoXv3TweiJEdCtZs6ouMexqyPi/uLFowt+pcolfqZ34vSKq
-	7666JW5qTO5jrM6iPhjbutTWdGVkBq1ybYA+1hBQrHmAaaPodE5k7uAsqbzmCX6CWb5knuXrrTI
-	0o0hLzYIoQ6BGLJwwW2esMomqVvgmh3K0wEKYFW+kBbg451SBIdR2QD/gmXAF4kSsRk/HLOrrJP
-	xQVrpjWpsB9beJlhFPr2fxF81/6L/mf4ehZmKRVMBuEKv4d2qXJmdB0lfCSZ0ZDdLddMZmt5dPa
-	Q/ZeOyVj1qjDmwNpj10a//1dIx1JYmPJfO61o5m9h+qKphu9VPirm2JaGZ2Q3f2sRqjZX4bnYf3
-	wQnDCnBZQPCx9PAPoWd8GIdpn9OjVd+8i+b8XrCKLSyrqvJ2diestl/w2ViguapwVQO4tHIPn/W
-	Hzf8pQpkccw1ArkvzUMcPR/UPgc=
-X-Received: by 2002:a05:600c:1906:b0:495:5d6d:9cc1 with SMTP id 5b1f17b1804b1-49952d052e7mr11254315e9.0.1785951383759;
-        Wed, 05 Aug 2026 10:36:23 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994dfcc84dsm99597735e9.2.2026.08.05.10.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 10:36:23 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DviHr3Tg"
+Message-ID: <c17688ad-7940-4697-abd7-dc5cf9f1e7ec@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785952095;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=My2Outn5Pkhz5i5qO6fw/vJqKE6oWiD3uq/q9fPYqqw=;
+	b=DviHr3TgZ6EzbwCCc0xzaWFKEzzRU0KpOI1fgVtnVEb8Mvu1TFaVOlOBxaxPGBr/xK0k/J
+	pJWSsbmyXNSdSwE7jVgAKWzEjcm1KrcVgsKZSL+pyjq9ol92bMdfwncWPyvLRSCriFRG5c
+	Or46taz2Dey9X9CXGpQl8arrWPHFMDE=
+Date: Wed, 5 Aug 2026 10:47:47 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 05 Aug 2026 19:36:22 +0200
-Message-Id: <DKH6XESU7740.UUEKH0WNCM29@gmail.com>
-Cc: <bpf@vger.kernel.org>, "Tejun Heo" <tj@kernel.org>, "Alexei Starovoitov"
- <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v3 2/9] bpf: Support __arena and
- __arena_nullable on struct_ops arguments
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Amery Hung" <ameryhung@gmail.com>, "Eduard Zingerman"
- <eddyz87@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260803125115.2264733-1-memxor@gmail.com>
- <20260803125115.2264733-3-memxor@gmail.com>
- <018d033499f61651ec8761fe0f7ac9662ef3c096.camel@gmail.com>
- <0a7bc56a3753c9122ab421aa14d2daae08b08e30.camel@gmail.com>
- <CAMB2axP4Wjmm45r4ku=D3ZRRy1JiEBfkLr5R7NJRD0Ca3w8UpQ@mail.gmail.com>
-In-Reply-To: <CAMB2axP4Wjmm45r4ku=D3ZRRy1JiEBfkLr5R7NJRD0Ca3w8UpQ@mail.gmail.com>
+MIME-Version: 1.0
+Subject: Re: [bpf-next 1/4] selftests/bpf: map_kptr: force BPF_STX for the
+ scalar store to kptr
+Content-Language: en-GB
+To: Vineet Gupta <vineet.gupta@linux.dev>, bpf@vger.kernel.org,
+ ast@kernel.org, Eduard Zingerman <eddyz87@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: linux-kernel@vger.kernel.org
+References: <20260803170251.1898102-1-vineet.gupta@linux.dev>
+ <20260803170251.1898102-2-vineet.gupta@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260803170251.1898102-2-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed Aug 5, 2026 at 7:31 PM CEST, Amery Hung wrote:
-> On Tue, Aug 4, 2026 at 10:14=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
->>
->> On Tue, 2026-08-04 at 16:55 -0700, Eduard Zingerman wrote:
->> > On Mon, 2026-08-03 at 14:51 +0200, Kumar Kartikeya Dwivedi wrote:
->> >
->> > Lgtm except for several nits below.
->> >
->> > ...
->> >
->> > > diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops=
-.c
->> >
->> > ...
->> >
->> > > @@ -226,26 +229,30 @@ static int prepare_arg_info(struct btf *btf,
->> > >     info =3D info_buf;
->> > >     for (arg_no =3D 0; arg_no < nargs; arg_no++) {
->> > >             /* Skip arguments that is not suffixed with
->> > > -            * "__nullable or __ref".
->> > > +            * "__nullable", "__ref", "__arena" or "__arena_nullable=
-".
->> > >              */
->> > >             is_nullable =3D btf_param_match_suffix(btf, &stub_args[a=
-rg_no],
->> > >                                                  MAYBE_NULL_SUFFIX);
->> > >             is_refcounted =3D btf_param_match_suffix(btf, &stub_args=
-[arg_no],
->> > >                                                    REFCOUNTED_SUFFIX=
-);
->> > > +           is_arena_nullable =3D btf_param_match_suffix(btf, &stub_=
-args[arg_no],
->> > > +                                                      ARENA_MAYBE_N=
-ULL_SUFFIX);
->> > > +           is_arena =3D btf_param_match_suffix(btf, &stub_args[arg_=
-no], ARENA_SUFFIX);
->> > >
->> > >             if (is_nullable)
->> > >                     suffix =3D MAYBE_NULL_SUFFIX;
->> > >             else if (is_refcounted)
->> > >                     suffix =3D REFCOUNTED_SUFFIX;
->> > > +           else if (is_arena_nullable)
->> > > +                   suffix =3D ARENA_MAYBE_NULL_SUFFIX;
->> > > +           else if (is_arena)
->> > > +                   suffix =3D ARENA_SUFFIX;
->> >
->> > As discussed already, that's unfortunate that p__arena and p__nullable
->> > are valid, but p__arena__nullable is not, substituted by
->> > p__arena_nullable. Same goes for global subprogs.
->> >
->> > >             else
->> > >                     continue;
->> > >
->> > > -           /* Should be a pointer to struct */
->> > > -           pointed_type =3D btf_type_resolve_ptr(btf,
->> > > -                                               args[arg_no].type,
->> > > -                                               &arg_btf_id);
->> > > -           if (!pointed_type ||
->> > > -               !btf_type_is_struct(pointed_type)) {
->> > > +           /* Should be a pointer to struct, or any pointer for __a=
-rena/__arena_nullable */
->> > > +           pointed_type =3D btf_type_resolve_ptr(btf, args[arg_no].=
-type, &arg_btf_id);
->> > > +           if (!pointed_type || (!is_arena && !is_arena_nullable &&=
- !btf_type_is_struct(pointed_type))) {
->> > >                     pr_warn("stub function %s has %s tagging to an u=
-nsupported type\n",
->> > >                             stub_fname, suffix);
->> > >                     goto err_out;
->> >
->> > ...
->> >
->> > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
->> > > index ed7999ad6c66..d2d7a2904345 100644
->> > > --- a/kernel/bpf/trampoline.c
->> > > +++ b/kernel/bpf/trampoline.c
->> >
->> > ...
->> >
->> > > @@ -695,6 +743,22 @@ static int bpf_trampoline_update(struct bpf_tra=
-mpoline *tr, bool lock_direct_mut
->> > >             goto out;
->> > >     }
->> > >
->> > > +   /*
->> > > +    * Arena ctx args are converted only by the struct_ops indirect
->> > > +    * trampoline, which dispatches to a single known prog. Generic
->> > > +    * trampolines can mix progs with different arenas, so no conver=
-sion
->> > > +    * is possible here. Not reachable today: only struct_ops progs =
-get
->> > > +    * arena ctx args and they never ride generic trampolines.
->> > > +    */
->> > > +   for (kind =3D 0; kind < BPF_TRAMP_MAX; kind++) {
->> > > +           for (i =3D 0; i < tnodes[kind].nr_nodes; i++) {
->> > > +                   if (bpf_prog_has_arena_ctx_arg(tnodes[kind].node=
-s[i]->link->prog)) {
->> > > +                           err =3D -ENOTSUPP;
->> > > +                           goto out;
->> > > +                   }
->> > > +           }
->> > > +   }
->> >
->> > Nit: should this be done in __bpf_trampoline_link_prog() or
->> >      bpf_trampoline_add_prog()? To avoid doing the same check on unlin=
-k.
->> >      Since this is an invariant violation, do we want to add WARN_ONCE=
-?
->> >
->> > > +
->> > >     /* clear all bits except SHARE_IPMODIFY and TAIL_CALL_CTX */
->> > >     tr->flags &=3D (BPF_TRAMP_F_SHARE_IPMODIFY | BPF_TRAMP_F_TAIL_CA=
-LL_CTX);
->> > >
->> >
->> > ...
->>
->> Thinking a bit more about this. Since kfuncs already use flags in
->> btf_func_model, I think it would be nice to use them for struct_ops as
->> well. E.g. as in the patch attached (applied on top of this series).
->> Wdyt?
->
-> I like that it relies on existing annotations instead of yet another
-> auxiliary field.
->
-> The mapping for arena args to different function models can be confusing =
-though.
->
-> For the verfication purpose: both __arena and __arena_nullable maps to
-> KF_ARG_PTR_TO_ARENA | PTR_MAYBE_NULL.
-> For the JIT purpose: __arena maps to BTF_FMODEL_ARENA_ARG;
-> __arena_nullable maps to BTF_FMODEL_ARENA_ARG |
-> BTF_FMODEL_NULLABLE_ARG.
->
-> It might deserve a brief inline comment in get_kfunc_arg_type() saying
-> why both tags map to KF_ARG_PTR_TO_ARENA | PTR_MAYBE_NULL.
 
-Yeah I will add comments for this. I adopted Eduard's diff (w/ his SoB) on =
-top
-of the stack.
+
+On 8/3/26 10:02 AM, Vineet Gupta wrote:
+> reject_scalar_store_to_kptr stores a scalar constant to a kptr field:
+>
+>          *(volatile u64 *)&v->unref_ptr = 0xBADC0DE;
+>
+> Compilers generate one of two encodings for that:
+>
+>   1. Materialize the constant into a register and emit BPF_STX:
+>
+>          r1 = 0xbadc0de
+>          *(u64 *)(r0 + 0x8) = r1
+>
+>   2. Or fold it into a single BPF_ST (store immediate):
+>
+>          *(u64 *)(r0 + 0x8) = 0xbadc0de
+>
+> check_map_kptr_access() rejects both, but through very different checks.
+> BPF_STX goes through map_kptr_match_type(), whose first test is
+> base_type(reg->type) != PTR_TO_BTF_ID - the scalar rejection this test is
+> named for - and which prints "invalid kptr access, R...". BPF_ST only gets
+> the trivial "BPF_ST imm must be 0 when storing to kptr" immediate check and
+> never reaches map_kptr_match_type() at all.
+>
+> So on a compiler that folds the constant - bpf-gcc, and clang from
+> -mcpu=v4, which enabled BPF_ST around v4 support due to historical
+> verifier limitations - the test fails against its expected message.
+>
+> Widening the __msg to accept either message would make it pass again, but
+> on those toolchains it would then only re-test the imm != 0 path, which
+> verifier/map_kptr.c ("map_kptr: BPF_ST imm != 0") already covers, and the
+> scalar-vs-PTR_TO_BTF_ID check would lose its only test in the tree.
+>
+> Route the value through barrier_var() instead, so the store stays a
+> BPF_STX everywhere and the test keeps asserting what it was written to
+> assert. clang -mcpu=v1..v4 and bpf-gcc 16.1 all emit the register form
+> afterwards.
+>
+>    bpf-gcc, before: #229/20 map_kptr/reject_scalar_store_to_kptr:FAIL
+>    bpf-gcc, after : #229/20 map_kptr/reject_scalar_store_to_kptr:OK
+>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> ---
+>   tools/testing/selftests/bpf/progs/map_kptr_fail.c | 11 ++++++++++-
+>   1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> index f11848dfa78f..cb84e23b83c0 100644
+> --- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> @@ -390,13 +390,22 @@ __failure __msg("invalid kptr access, R")
+>   int reject_scalar_store_to_kptr(struct __sk_buff *ctx)
+>   {
+>   	struct map_value *v;
+> +	u64 val = 0xBADC0DE;
+>   	int key = 0;
+>   
+>   	v = bpf_map_lookup_elem(&array_map, &key);
+>   	if (!v)
+>   		return 0;
+>   
+> -	*(volatile u64 *)&v->unref_ptr = 0xBADC0DE;
+> +	/*
+> +	 * Keep the value in a register so this stays a BPF_STX and keeps
+> +	 * exercising map_kptr_match_type(). Compilers that fold the constant
+> +	 * into a BPF_ST (store immediate) instead - bpf-gcc, and clang from
+> +	 * -mcpu=v4 - would be rejected by the far weaker "BPF_ST imm must be
+> +	 * 0" check, which verifier/map_kptr.c already covers.
+> +	 */
+> +	barrier_var(val);
+> +	*(volatile u64 *)&v->unref_ptr = val;
+
+Could you explain in details why gcc16 (with cpuv4) won't work with BPF_ST?
+What code gcc16 (with cpuv4) generates?
+
+>   	return 0;
+>   }
+>   
+
