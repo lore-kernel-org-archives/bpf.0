@@ -1,312 +1,202 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155AE3C3F7B
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 03:15:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E873C5DCD;
+	Wed,  5 Aug 2026 03:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785899759; cv=none; b=VCdd152bNQJEFEBiAnGVnxfaUJ1F8uJYXkydQWinsNpaG7m+9oLwcqXpEC2DtRUS7slU5t3EX9asgTYNVcesBTz00Fy6SJ07gfHBW9v5T0fxCTcJgHn8aHEdhT6tCUtBSYSEGJF/aHi9ujBuo0SOF5MSyGFdiEHyZpi5nrM0Uw8=
+	t=1785900588; cv=none; b=f5x4qcTy87Hs7wHMye5bG6+co31iBxQzgS7/vCnPIt2TM5F1kemvXUqkRlrAvOIZ2E96BBFbm3QRhpgATSG6+JK5rWupkE0UU9y3BUKT7YRvTQZP4O/DgZxUeFZRL+ej45mkHslHxAYR/BaU5PLLGqAHymhBUZ4TJydAbknAnlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785899759; c=relaxed/simple;
-	bh=E9fmzVPEhc0FHQUnTqsdKOMryIMDqrwX5DamxWU2EYk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mUf1QEE8r5Y0IRLbD8To/3gaMWm1Ek5i/BRJ/TmtMwsMVn9QFdLrhO6W2/NsBiU8yXGXZI4gfYLxSHAASJvFSr6u2Nf/BJKgm1vTofKGlKbKaFIHc5QIkQrttQfZyDl/Wh6peX0VovEywHh0wGQPY8sFVVlRHbEtIOgSCodrPNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M1cOd41a; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M1cOd41a"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84867f07d63so559729b3a.2
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2026 20:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785899757; x=1786504557; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1JWpXQSVlmsFGWTkJETCzoI7IiXAWiXm3VeZqV6jTpY=;
-        b=M1cOd41aLL0Kj62y+W14k2wBlFkulWDBEFevxX6VAxTtSTdbQYs0xSv6L6hWEf8JvB
-         EkTxoeK2mJHeCa1OSRiIU+/hXEIdCXOydAcfHj6K7lmJtxbhFBqfUltyvj9fHJfdvK8U
-         FlGveLKH8gAC32wFJP0SOwvh/1tWHXCKARtbf4wsLRxyb8aA6mDqSP4YtkQXQ2128J3w
-         VMqdrMaiQQV4EJsSlwH9XhB59K+oOIWvKewyg3qucnxAkCd3LR2p1TfEqixot/yfywWz
-         guPPMRZ9kYIpPYeCEIg5DzFwisnDbYYRFSYSn2hWYnj0XK+ncZmyF4Dj1uiwzzZwOrpN
-         sC0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785899757; x=1786504557;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=1JWpXQSVlmsFGWTkJETCzoI7IiXAWiXm3VeZqV6jTpY=;
-        b=LP8vxjCiN9H8dsMfAY7jAEYRZTi65oT4VKuC46UIV7Z4pgajfwoVRvB8bYTqB+gbuE
-         QOlJYu54mtPYG1G8cO62+n/f5S61+r+Iuyt5/COUEidKcKtOBpzBTbJHfGhX1jB41eYM
-         GHxrHBzoV7JcdO/CjgTMv/3eWXEGHnqdzupTXvgEnSpdzeGkepsTiMFr0shTD1YVUpQV
-         yiKUkb23yOFhzZbTZ6I2IfgaSSSR+Bz2cDInstkpYkM61WKpDRpUo9gL61iUjBGN5CEl
-         YPzOQGnsL1Ij3blsgJ9zugJrISYKVp7SMHY5EgVB0+9Szjz4VQ2Yiy06larJ0gdLUWMk
-         NiUg==
-X-Forwarded-Encrypted: i=1; AHgh+RpMwYWumnW6YS8eQEZ3svYmcbfG2Ni4IFiiF+UO2lrYxer9yRYiPx21NELUHyDRMZE4urE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1+fvwxuryOziOzS17GDM5Oy3GSPdHW4V7CO3fGhQnodl32PCU
-	LWXGFp6uqz5uqqyfDElnkdJ3B6CQTYk7ehgtydOo7OXBWS9dxCmCiV0H
-X-Gm-Gg: AR+sD12hlm9KNs5TbMccPwsu98//Kh9tx9jI9XQRuSOkBhej2JDzNWaYto0RyjSYYcN
-	6OAUiaUw4NpN8pfK9z4S4yR+qvnILFaEo9JVPQIO2A/i5UEFM8qjrZxxi42XaOzAq4Y8tE3mFeJ
-	v2jl64jjsijShwQkOjx0b2v8vHpGvT7bm1ctYpHv6Ej1KGRNtQHqlBp6vfNxv4zcBWaZmMOqu3/
-	zuSJhtLWORS+MGY2S/9HG1BjA3ccdU4+hsv8cN0eF3VOLJp879dU/5ih4lOvVJR2cD1jcNE6LJB
-	+UEyFjzoto4ydrRPIGOi3rlTKIanZi+X2ZcmP5t7hcq0x/zzoFmPLgQWe3wQLFXYdhbRbBisUNr
-	tw/WNIOpkVqIsJYbF5zh6bifAH/iPTCmp1bDcOdK+zpIUXPJuLU5Yp4nxFTOmF+UaAJZDjcJaz7
-	QQTEJGsVDsFeQ0GO5L1RbvZ9py7IlFRrzU7HLZ/5/eu/JC8sinTwIXhShuoJ33wJH6oz62wiChJ
-	c2VK5qnh3WWbARbaC9+2v2AEvdGOhPC5UpQ1feIXjPzQv+C8EcpL+Dgw6bLSRU=
-X-Received: by 2002:a05:6a00:4488:b0:848:56ff:6ce4 with SMTP id d2e1a72fcca58-84f2dfc533fmr4208442b3a.5.1785899757288;
-        Tue, 04 Aug 2026 20:15:57 -0700 (PDT)
-Received: from secrnd-cstp.tailb7f510.ts.net ([125.131.91.97])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbe706e1c03sm536727a12.0.2026.08.04.20.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 20:15:56 -0700 (PDT)
-From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
-	Sun Jian <sun.jian.kdev@gmail.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev,
-	syzbot+cdd6c0925e12b0af60cc@syzkaller.appspotmail.com,
-	sashiko-bot@kernel.org
-Subject: [PATCH bpf-next v3] bpf: Fix mmap_lock leak in irq_work path
-Date: Wed,  5 Aug 2026 12:14:25 +0900
-Message-ID: <20260805031425.2157475-2-sanghyun.park.cnu@gmail.com>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1785900588; c=relaxed/simple;
+	bh=rRXWDY7VygmgMC2YEi1GtsoTQkVpHedRnp/pbvBdmAQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lZ3KmhjXT1Oz/dbvD1AqJv7uBSHQkTP6cecDK9+78VdPFoYMZAqGT5zSeAVx2xO33M0solT2vDz29ndeccENjsOWPBhMOv7gr6DRG16yJWEEMEhTSzknaEHAjZmpremS1Oi+HJ9q9l1wmSE7TH/H2SFzK5rXFU5UFVv8Iu1xe5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hFG9n2RkBzKHMTv;
+	Wed,  5 Aug 2026 11:29:33 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id EE5AA4056B;
+	Wed,  5 Aug 2026 11:29:38 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgAnYs4hrnJq+5SmBA--.1144S2;
+	Wed, 05 Aug 2026 11:29:38 +0800 (CST)
+Message-ID: <4701db80-7985-4a5a-8939-e4bd22ae4a18@huaweicloud.com>
+Date: Wed, 5 Aug 2026 11:29:37 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v4] bpf, cgroup: Fix storage null-ptr-deref after
+ replacing prog
+Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Pu Lehui <pulehui@huawei.com>
+References: <20260728133058.2858367-1-pulehui@huaweicloud.com>
+ <CAEf4BzbbWsETCtOdsi-sCo2TVFFGi97Z-x1zcNgTANoBkop1rg@mail.gmail.com>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <CAEf4BzbbWsETCtOdsi-sCo2TVFFGi97Z-x1zcNgTANoBkop1rg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgAnYs4hrnJq+5SmBA--.1144S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFy8tFWrCF1DKryUWr17ZFb_yoW7JFWkpF
+	1kZ3ZxGw1jq3ySvrn7tw42vF1Fqa10qr1jkrZxJw1rCF42yFyFgry7CryY9FyfZFnrWr1I
+	yw1YqF4q9w1jva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-stack_map_get_build_id_offset() introduced a per-CPU irq_work to defer
-mmap_read_unlock() from NMI context, and bpf_find_vma() later reused the
-same mmap_unlock_work. Both callers only check whether the work is busy
-before taking mmap_lock, so a nested caller can reuse the slot before the
-first caller queues it. Two read locks may then be acquired while only one
-deferred unlock runs, leaking a read lock and blocking exit_mmap().
 
-Reserve the per-CPU slot before mmap_read_trylock(). Use the same wrapper
-in stackmap and bpf_find_vma() so both callers release the reservation on
-trylock failure. Keep rejecting the slot while the irq_work remains busy.
-Release it after the irq_work callback unlocks the mm.
 
-Fixes: eac9153f2b58 ("bpf/stackmap: Fix deadlock with rq_lock in bpf_get_stack()")
-Reported-by: syzbot+cdd6c0925e12b0af60cc@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=cdd6c0925e12b0af60cc
-Reported-by: sashiko-bot@kernel.org
-Closes: https://lore.kernel.org/r/20260630033745.B80201F000E9@smtp.kernel.org
-Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
----
-v3:
- - Return the reserved work item directly and use ERR_PTR(-EBUSY), as suggested
-   by Andrii.
- - Keep irq_work_is_busy() alongside the active reservation.
- - Update the Fixes tag.
+On 2026/8/5 6:56, Andrii Nakryiko wrote:
+> On Tue, Jul 28, 2026 at 6:26 AM Pu Lehui <pulehui@huaweicloud.com> wrote:
+>>
+>> From: Pu Lehui <pulehui@huawei.com>
+>>
+>> Syzkaller reported a storage null-ptr-deref issue after replacing prog.
+>> This occurs in the following scenario:
+>> 1. prog A, an empty prog, is attached to a cgrp.
+>> 2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
+>>     bpf_get_local_storage helper.
+>> 3. link_update is called to replace prog A with prog B.
+>>
+>> The reason is that __cgroup_bpf_replace fails to alloc and assign the
+>> required cgrp storage for the incoming replacement prog. Consequently,
+>> the new prog inherits an uninit storage, leading to null-ptr-deref panic
+>> when kick the new prog.
+>>
+>> Fix this by properly allocating the storage and comparing the old and
+>> new storage pointers. If the storage changed, fallback to
+>> update_effective_progs which performs a RCU-safe update of the entire
+>> array. If the storage remains unchanged, we can safely retain the
+>> fast-path in-place update.
+>>
+>> Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+>> Reviewed-by: Amery Hung <ameryhung@gmail.com>
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>> ---
+>> v4:
+>> - Extract the fix for __cgroup_bpf_attach() into a standalone patch [0].
+>> - Add Reviewed-by tag by Amery.
+>> - Separate from patchset [1]. (Andrii)
+>>
+>> Link: https://lore.kernel.org/bpf/20260728132336.2857800-1-pulehui@huaweicloud.com [0]
+>> Link: https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@huaweicloud.com [1]
+>>
+>> v3: https://lore.kernel.org/bpf/20260720134547.1289964-5-pulehui@huaweicloud.com
+>> - Include the storage and flags rollbacks to patch4 for sake of code rigor,
+>>    as it's hard to make update_effective_progs fail in __cgroup_bpf_attach.
+>>
+>> v2: https://lore.kernel.org/bpf/20260717073343.958862-1-pulehui@huaweicloud.com
+>> - Fix invalid access for in-place update when storage changed. (Sashiko)
+>>
+>> v1: https://lore.kernel.org/bpf/20260714014659.401063-1-pulehui@huaweicloud.com
+>>
+>>   kernel/bpf/cgroup.c | 37 ++++++++++++++++++++++++++++++++++++-
+>>   1 file changed, 36 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+>> index 4355ccb78a9c..e2fa0ebeed83 100644
+>> --- a/kernel/bpf/cgroup.c
+>> +++ b/kernel/bpf/cgroup.c
+>> @@ -1032,11 +1032,17 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+>>                                  struct bpf_cgroup_link *link,
+>>                                  struct bpf_prog *new_prog)
+>>   {
+>> +       struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+>> +       struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+>> +       struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
+>> +       enum bpf_cgroup_storage_type stype;
+>>          enum cgroup_bpf_attach_type atype;
+>> +       bool storage_changed = false;
+>>          struct bpf_prog *old_prog;
+>>          struct bpf_prog_list *pl;
+>>          struct hlist_head *progs;
+>>          bool found = false;
+>> +       int err;
+>>
+>>          atype = bpf_cgroup_atype_find(link->link.attach_type, new_prog->aux->attach_btf_id);
+>>          if (atype < 0)
+>> @@ -1056,10 +1062,39 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+>>          if (!found)
+>>                  return -ENOENT;
+>>
+>> +       if (bpf_cgroup_storages_alloc(storage, new_storage, link->link.attach_type,
+>> +                                     new_prog, cgrp))
+>> +               return -ENOMEM;
+>> +
+>> +       for_each_cgroup_storage_type(stype) {
+>> +               if (storage[stype] != pl->storage[stype]) {
+>> +                       storage_changed = true;
+>> +                       break;
+>> +               }
+>> +       }
+>> +
+>>          cgrp->bpf.revisions[atype] += 1;
+>>          old_prog = xchg(&link->link.prog, new_prog);
+>> -       replace_effective_prog(cgrp, atype, pl);
+>> +
+>> +       if (!storage_changed) {
+>> +               replace_effective_prog(cgrp, atype, pl);
+>> +               bpf_prog_put(old_prog);
+>> +               return 0;
+>> +       }
+>> +
+>> +       bpf_cgroup_storages_assign(old_storage, pl->storage);
+>> +       bpf_cgroup_storages_assign(pl->storage, storage);
+>> +       err = update_effective_progs(cgrp, atype);
+>> +       if (err) {
+>> +               xchg(&link->link.prog, old_prog);
+> 
+> I'm not a fan of having this transient link.prog transition from old
+> to new and back to old prog if something goes wrong.
+> 
+> Given this is syzbot (only) reported issue, how about we just check
+> that cgroup storage (legacy one at that) of old and new program is
+> compatible, and if not, just reject link update? that would be less
+> risky change
 
-Sun, Puranjay, Ihor,
+Ah, I didn't think of that! It seems to be much simpler.
 
-I dropped the Tested-by, Reviewed-by, and Acked-by tags because v3 changes
-the helper interface and restores the irq_work busy check. If you have a
-chance, could you please review or retest this version?
+> 
+> pw-bot: cr
+> 
+> 
+>> +               bpf_cgroup_storages_assign(pl->storage, old_storage);
+>> +               bpf_cgroup_storages_free(new_storage);
+>> +               cgrp->bpf.revisions[atype] -= 1;
+>> +               return err;
+>> +       }
+>> +
+>>          bpf_prog_put(old_prog);
+>> +       bpf_cgroup_storages_link(new_storage, cgrp, link->link.attach_type);
+>>          return 0;
+>>   }
+>>
+>> --
+>> 2.34.1
+>>
 
-v2: https://lore.kernel.org/bpf/20260730054858.209807-2-sanghyun.park.cnu@gmail.com/
- - Drop irq_work_is_busy() and rely exclusively on active, as suggested by
-   Ihor.
-
-v1: https://lore.kernel.org/bpf/20260722023004.1497923-2-sanghyun.park.cnu@gmail.com/
-
- kernel/bpf/mmap_unlock_work.h | 51 ++++++++++++++++++++---------------
- kernel/bpf/stackmap.c         | 28 +++++++++++--------
- kernel/bpf/task_iter.c        | 14 +++++++---
- 3 files changed, 56 insertions(+), 37 deletions(-)
-
-diff --git a/kernel/bpf/mmap_unlock_work.h b/kernel/bpf/mmap_unlock_work.h
-index 5d18d7d85bef..1834db20b861 100644
---- a/kernel/bpf/mmap_unlock_work.h
-+++ b/kernel/bpf/mmap_unlock_work.h
-@@ -4,12 +4,15 @@
- 
- #ifndef __MMAP_UNLOCK_WORK_H__
- #define __MMAP_UNLOCK_WORK_H__
-+#include <linux/atomic.h>
-+#include <linux/err.h>
- #include <linux/irq_work.h>
- 
- /* irq_work to run mmap_read_unlock() in irq_work */
- struct mmap_unlock_irq_work {
- 	struct irq_work irq_work;
- 	struct mm_struct *mm;
-+	atomic_t active;
- };
- 
- DECLARE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
-@@ -18,32 +21,36 @@ DECLARE_PER_CPU(struct mmap_unlock_irq_work, mmap_unlock_work);
-  * We cannot do mmap_read_unlock() when the irq is disabled, because of
-  * risk to deadlock with rq_lock. To look up vma when the irqs are
-  * disabled, we need to run mmap_read_unlock() in irq_work. We use a
-- * percpu variable to do the irq_work. If the irq_work is already used
-- * by another lookup, we fall over.
-+ * percpu variable to do the irq_work. The active flag reserves the slot
-+ * before mmap_read_trylock() and until the irq_work callback consumes mm.
-  */
--static inline bool bpf_mmap_unlock_get_irq_work(struct mmap_unlock_irq_work **work_ptr)
-+static inline struct mmap_unlock_irq_work *bpf_mmap_unlock_guard_get(void)
- {
--	struct mmap_unlock_irq_work *work = NULL;
--	bool irq_work_busy = false;
-+	struct mmap_unlock_irq_work *work;
- 
--	if (irqs_disabled()) {
--		if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
--			work = this_cpu_ptr(&mmap_unlock_work);
--			if (irq_work_is_busy(&work->irq_work)) {
--				/* cannot queue more up_read, fallback */
--				irq_work_busy = true;
--			}
--		} else {
--			/*
--			 * PREEMPT_RT does not allow to trylock mmap sem in
--			 * interrupt disabled context. Force the fallback code.
--			 */
--			irq_work_busy = true;
--		}
--	}
-+	if (!irqs_disabled())
-+		return NULL;
-+
-+	/*
-+	 * PREEMPT_RT does not allow to trylock mmap sem in interrupt
-+	 * disabled context. Force the fallback code.
-+	 */
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		return ERR_PTR(-EBUSY);
-+
-+	work = this_cpu_ptr(&mmap_unlock_work);
-+	if (irq_work_is_busy(&work->irq_work) ||
-+	    atomic_cmpxchg_acquire(&work->active, 0, 1))
-+		return ERR_PTR(-EBUSY);
- 
--	*work_ptr = work;
--	return irq_work_busy;
-+	return work;
-+}
-+
-+static inline void
-+bpf_mmap_unlock_guard_put(struct mmap_unlock_irq_work *work)
-+{
-+	if (work)
-+		atomic_set_release(&work->active, 0);
- }
- 
- static inline void bpf_mmap_unlock_mm(struct mmap_unlock_irq_work *work, struct mm_struct *mm)
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 463f94ba1cc4..0384b32d88b5 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -414,8 +414,7 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
- static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 					  u32 trace_nr, bool user, bool may_fault)
- {
--	struct mmap_unlock_irq_work *work = NULL;
--	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
-+	struct mmap_unlock_irq_work *work;
- 	bool has_user_ctx = user && current && current->mm;
- 	struct stack_map_build_id_cache cache = {};
- 	struct vm_area_struct *vma;
-@@ -426,15 +425,16 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 		return;
- 	}
- 
--	/* If the irq_work is in use, fall back to report ips. Same
--	 * fallback is used for kernel stack (!user) on a stackmap with
--	 * build_id.
--	 */
--	if (!has_user_ctx || irq_work_busy || !mmap_read_trylock(current->mm)) {
--		/* cannot access current->mm, fall back to ips */
--		for (i = 0; i < trace_nr; i++)
--			stack_map_build_id_set_ip(&id_offs[i]);
--		return;
-+	if (!has_user_ctx)
-+		goto fallback;
-+
-+	work = bpf_mmap_unlock_guard_get();
-+	if (IS_ERR(work))
-+		goto fallback;
-+
-+	if (!mmap_read_trylock(current->mm)) {
-+		bpf_mmap_unlock_guard_put(work);
-+		goto fallback;
- 	}
- 
- 	for (i = 0; i < trace_nr; i++) {
-@@ -465,6 +465,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 						      vma->vm_pgoff);
- 	}
- 	bpf_mmap_unlock_mm(work, current->mm);
-+	return;
-+
-+fallback:
-+	/* cannot access current->mm, fall back to ips */
-+	for (i = 0; i < trace_nr; i++)
-+		stack_map_build_id_set_ip(&id_offs[i]);
- }
- 
- static struct perf_callchain_entry *
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index b256fb9c1214..13e1aabe6f88 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -753,9 +753,8 @@ static struct bpf_iter_reg task_vma_reg_info = {
- BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
- 	   bpf_callback_t, callback_fn, void *, callback_ctx, u64, flags)
- {
--	struct mmap_unlock_irq_work *work = NULL;
-+	struct mmap_unlock_irq_work *work;
- 	struct vm_area_struct *vma;
--	bool irq_work_busy = false;
- 	bool __maybe_unused mmput_needed = false;
- 	struct mm_struct *mm;
- 	int ret = -ENOENT;
-@@ -792,9 +791,14 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
- 	if (!mm)
- 		return -ENOENT;
- 
--	irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
-+	work = bpf_mmap_unlock_guard_get();
-+	if (IS_ERR(work)) {
-+		ret = PTR_ERR(work);
-+		goto out;
-+	}
- 
--	if (irq_work_busy || !mmap_read_trylock(mm)) {
-+	if (!mmap_read_trylock(mm)) {
-+		bpf_mmap_unlock_guard_put(work);
- 		ret = -EBUSY;
- 		goto out;
- 	}
-@@ -1191,6 +1195,8 @@ static void do_mmap_read_unlock(struct irq_work *entry)
- 
- 	work = container_of(entry, struct mmap_unlock_irq_work, irq_work);
- 	mmap_read_unlock_non_owner(work->mm);
-+	work->mm = NULL;
-+	bpf_mmap_unlock_guard_put(work);
- }
- 
- static int __init task_iter_init(void)
-
--- 
-2.48.1
