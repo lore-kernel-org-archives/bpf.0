@@ -1,82 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378301A3029;
-	Wed,  5 Aug 2026 20:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2843D3CEB
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 20:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785961847; cv=none; b=hmasnf+5PhnH756dOwsS/s8GNIhbftpkalHIcEmlI0imKJDk/nrwMWwTtMWmYFR8hVJ2c/cRQj3SPZ5wW7K/JvcR69fUTl6GRo2oSN4HJWtCmGeHK2PWJQKIZ6uxkPkrsTueTIB6dD5OMtOqGFKq6VZ0EnH7v52IPxKC/t6Lkxw=
+	t=1785962178; cv=none; b=VFMmu25/SouGSw3Bl6uJNrLYbdiB1IWa+x//8Dh4emqJaX4Rk6T1nE0NqhUaK1jxewP+y2FhyhDZqqN+/YDt8564yVMm6REMuHWhNHgiNjqLCSKvxZfkQd0D2zRQO1yAQPLQ0AKIIU/cSfgAy52S3WQrQkpfG37eetVFz7mhKHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785961847; c=relaxed/simple;
-	bh=V9eEKCOZVfDmogE+8kP5gTtOeTIiAf0oa9nZ5jL6V5U=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=PhWXLmGjO/b+GG6LfPMYubWFQg4eG1KLcwrruDaTz1vLIBGPJHl5LqpY8QqXlQtH6IC+BSjiYunqMmMGAF1n7TXUjaDoXtLTXFPVCiX90sTop+r/C8AVZhRbiTm5+PA+gEbb+zCeQFncVxMa4bkXhGEgLQfhHZFjWHrOgQRMPJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H11NBHbJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785962178; c=relaxed/simple;
+	bh=jQfY0SeixHuKD6B8uP1iAzMGi2goZGDAiPIc999xIkk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JWDAqVU8C9hmWsr5VX+M51RQOoKcEkwlZjcS2tpXOeFLgQVRwBrs+aBmskGnpJRqFicc5/K/igUYOzfLMl8brQ5PQK6e3y7jrJBAbKXQyvBaP6yVpcQOPvUxwQMCDvUcGAb7divoLxxuNDio1lXr6oXSeNxcS1Ng8n4bVQG7s78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DfdXbTzR; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H11NBHbJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C87AC1F000E9;
-	Wed,  5 Aug 2026 20:30:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785961845;
-	bh=5AcqBOC/xjW3FonssKOl/rujYxKC5zL5C94NWMspmk8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=H11NBHbJkdeNXvwj3od/9Rx1MtN/E40ObzEe07wmaPA1N2W6wA7kDIxMETD6aiIEq
-	 oyQAJbeFTs//G6H3NTul98axDP/ZdWOB6GlQud6rb/Rx+QQWRLDzJKAKNplezGCiis
-	 BKuh4pkbULh9EQNpVnnfm+5gdZ9KWxuNJzd7LBeHQPF4Ew3DedjVDsjMMGwF8MFlVO
-	 ssdgGm0gcsYpQod/Yb0mSdh6ztXaWfItQoxPiwuEwcPSTr1/vQ4wnrM+9ch70ie5tJ
-	 kij6YCRYPxbri7vavez1A4hGrC7e3PzMIHfJrFJMZKYmltQmAEDqF8+uy/l3WPuamb
-	 JXGZhILKHykhw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D09DA392FFCA;
-	Wed,  5 Aug 2026 20:30:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfdXbTzR"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38f620399a0so1315976a91.2
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 13:36:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785962177; x=1786566977; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=jQfY0SeixHuKD6B8uP1iAzMGi2goZGDAiPIc999xIkk=;
+        b=DfdXbTzRGbWuIsgONiOUcnVEOq9mYIhINE+2aZC7cKPaB/PraoYADEOs2uJV3kNgXT
+         Mf3+lIoxM0/WEARI7PshYarkP761E2zKWNkizysZNoExW7TgZJM/N5GOTQVXAZ8SCRJU
+         JFAVpuHplG7p7jo/AvxtoHoEoCytXTbo2i11BvUSPaGWIYUDhE+YarGTpMJr9pHxc8Ks
+         JqF3dzO4MkzzDejTk/fPAQ5LsSa3+iyG66smJYFLjsHD4ZtEp1QyIFfuaLfQm3YL1Pf4
+         T6waRON1TjI9J3Aca4vdR5lcFX4fOzCy/10esE2bIHH1EonqNUGtnQPocedqHaJl1DU2
+         oxlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785962177; x=1786566977;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jQfY0SeixHuKD6B8uP1iAzMGi2goZGDAiPIc999xIkk=;
+        b=q8BzCVK805ddXJs9O9NQYiNx5TGYZa5aq8GNjqcfssV/sWFVECNmmBYHeuRLIL9Z7C
+         wenlxdZUNr7vXgmgAM7trh81FubmoNaNkeNjCBTu4JqL5Ti+sbQVZ3PQq0Ia+siYkR4U
+         OKYS7iO30eCMPtKbhXFwEV+D1DMkLrjsIHdl1f6/SqVzG3OFDJmMX8YNOYoeX/ZXFEZW
+         BBn8fn3T7D9bl1Jl766G0vzX40gcRKOI135m3YIuvZgfuV9iiOa1UHRriQh6pO9ueGD7
+         Uo8urTOWTDOCW/gNjdaRqT1LMw1ppqU4x2fgCflKBdqSVAAV6PYs8tM+5PpFlbzTkCXx
+         V9Tw==
+X-Forwarded-Encrypted: i=1; AHgh+Rq7zr9SN5+ir4H/2wmAVDi/BcARH0P3V0NR29sOidHZOpneDSwl2VZ2blZ2upxlRwUkQM8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbRZIGEi9SA6kdU0Mb+spp4s4LfixbW6uYBN3v9yEU/bRG0xj7
+	qDpYvLqPRlIAFgBshOm6jZkiraqujH2/coxj9UdB+XgbYFIi/UV/jOHT
+X-Gm-Gg: AR+sD13yUsszgwQW+Pfygoc1i3ha6dlJHhBbQot/P4d6PKnj+iazKaRCVHCUBYhnChX
+	K1vD7VbEp6M4jc5pMZrHO3bEpKnOyiM8+4fAYNvxTtQtyoCjr5Pkom0XqaDcCOZKvCYkJP/HDT+
+	eDLyWy4+FtbuOzykJW3fdlRpUhQhOcc4H39tmnhdheRRA64YZGYNtGxT7Zx3ZBoB1M2HF8Eot0k
+	ntkJBtp7BfqKJOxm+EolGFZNGAJGpZFDFTREwVDRI9S7D+o2I+O1npLSr8ayS/ooQD+AodgU7dB
+	us5/fDNihpuAIge4l6rWZe3ZAoil1tiaFiS7Uy/9cZ2sewke5g3BMBHIZxTYxpwe+mwU/Yxo5C3
+	oJKDlvKBVFnlMfpRE5T+H3o5lCVN2Uza0sBD4dDOmp6VdRwJfGlSsufhD8Zv7YcAjUHSXw+20CZ
+	7myl/m3xRCnGmztFP8ugVvbqT6IR1k4g0xUyIsFVhrsF1lY/wCDW1ScRCwm1IMJN84Eh6CV562h
+	OGahudTc1gKBbna13VhGt6xtZSKXxBIhMXL4QoZD6LC
+X-Received: by 2002:a17:90a:d2c3:b0:390:8361:a532 with SMTP id 98e67ed59e1d1-3908361a861mr1407710a91.7.1785962176684;
+        Wed, 05 Aug 2026 13:36:16 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:969b:c0a:ff6f:454e? ([2620:10d:c090:500::5:b61b])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fca63ce12sm20726577c88.5.2026.08.05.13.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Aug 2026 13:36:16 -0700 (PDT)
+Message-ID: <bfe416825f7a03f599835a41d6c5d261c7b4432d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/4] bpf: Mark pending sub-register zero
+ extension before pruning a state
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>, memxor@gmail.com
+Cc: puranjay@kernel.org, info@starlabs.sg, bpf@vger.kernel.org
+Date: Wed, 05 Aug 2026 13:36:15 -0700
+In-Reply-To: <785c9fa1-c238-47a5-b57f-23742cfaa728@iogearbox.net>
+References: <20260805184444.292828-1-daniel@iogearbox.net>
+	 <d8c2a4de77327f4c3cde8aed4d95aacc915ffa18.camel@gmail.com>
+	 <785c9fa1-c238-47a5-b57f-23742cfaa728@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/1] bpf: Check sk_state before sk_protocol in
- bpf_tcp_*_syncookie
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178596180539.512924.16475522048304513684.git-patchwork-notify@kernel.org>
-Date: Wed, 05 Aug 2026 20:30:05 +0000
-References: <cover.1785823138.git.rakukuip@gmail.com>
-In-Reply-To: <cover.1785823138.git.rakukuip@gmail.com>
-To: Ren Wei <enjou1224z@gmail.com>
-Cc: kuniyu@google.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
- martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, lmb@cloudflare.com,
- ppenkov@google.com, vega@nebusec.ai, rakukuip@gmail.com
 
-Hello:
-
-This patch was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Tue,  4 Aug 2026 22:29:00 +0800 you wrote:
-> From: Luxiao Xu <rakukuip@gmail.com>
-> 
-> Hi Linux kernel maintainers,
-> 
-> We found and validated an issue in net/core/filter.c. The bug is reachable
-> by an unprivileged user via user and net namespaces.
-> We've tested it, and it should not affect any other functionality.
-> 
+On Wed, 2026-08-05 at 21:54 +0200, Daniel Borkmann wrote:
+> On 8/5/26 9:11 PM, Eduard Zingerman wrote:
+> > On Wed, 2026-08-05 at 20:44 +0200, Daniel Borkmann wrote:
 > [...]
+> >=20
+> > Hi Daniel,
+> >=20
+> > I have this series in progress:
+> > https://lore.kernel.org/bpf/20260802-static-zext-v3-0-3456b2604574@gmai=
+l.com/
+> > Fixing that exact issue. It needs one more iteration.
+> Dang, missed it, integrating into liveness looks better, lets go with
+> that. If the selftests from here are of any use, please feel free to
+> pick and integrate into your respin.
 
-Here is the summary with links:
-  - [bpf,v2,1/1] bpf: Check sk_state before sk_protocol in bpf_tcp_*_syncookie
-    https://git.kernel.org/bpf/bpf/c/31a420a822ff
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Ack, will do!
