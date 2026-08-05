@@ -1,74 +1,75 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B91935C1B2
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 09:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4603E0088
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 09:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785921770; cv=none; b=fWPmkhvH28IwnrDXhjmTszOlP0HRiUjkEViYT7xmo7cCr6PjIlOEKZUqwngmvxqRWWtb5e71OnSxrvOCqpasH6jLPc/H4PTwN9/03xMBaI+sEqk4v9v/T5AjXU+AZ8cUoj5Jt1eSuqgzDFB2nbO5yqlC93IAdPThgOr+tUsZw4g=
+	t=1785921803; cv=none; b=ll2ka85Ocb5E4Ak6qlUzysTTl1t1W5j2tfo3wUouNNstrhj2e5K3X/5fGW7PUQmMxsyonP0MHNjPk0DabYzxS7aDfqBb3ylx+7lVGazZSyVT5iG4g1WOBo3Jwdzc8IN7wgID7vwjiFR9qMutgtxhlq/VKLKqUVVo1Ot0bIxba/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785921770; c=relaxed/simple;
-	bh=avoC8K08j2pP/keGcjKdaeHNHLfSEzCe37F4cx3EnLc=;
+	s=arc-20240116; t=1785921803; c=relaxed/simple;
+	bh=CD99I44k1GGeXTmJLBIEMb8WvA3Q6H/njKMEavvkURw=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hstzrPnGtd+MVjF9SccFixS21BvYn8jANLaoqR5MD/5X0+UR2kPEsBzsso3GUMNhkvz4dKqeQjetNsQd9907yjAvyCFYxJZ4h66HPrM0j/NvVSkGJrjPFytVYjv4Ae4KiWpyZZgclLUC0CXy7exatnrYbGyl4nlu7ZiJ7ki3eDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZVHY1cSp; arc=none smtp.client-ip=209.85.216.46
+	 Content-Type:MIME-Version; b=Vb+64It5S0qo1irHIIydXlcEQ/UYegODtloefXy2VDGWU2ye9aEZNDJssWKoZD+OpeXmgbwA8sQM+UrzflqStX5XHqX8FDfg7aKrbr9H0yCDapAzIShMx3CUhuMLqIb7fS+qhc+rSUL4Ay5C2h/ZYwLsWHCMXdFgsZtE05UyoX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i30xM6Ol; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZVHY1cSp"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-38dfe910e9dso734208a91.3
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 02:22:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i30xM6Ol"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38e58034d05so676753a91.2
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 02:23:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785921767; x=1786526567; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785921801; x=1786526601; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=avoC8K08j2pP/keGcjKdaeHNHLfSEzCe37F4cx3EnLc=;
-        b=ZVHY1cSpv6zB8Myy2ZOZcOH/CJxX98zheBsZui2DHDVYXSGOSaSj9b6gvHeRJx8bSH
-         TeFRWkDbUe8/KL0aJeRkX9IedMuwq9v4yDingNebIVGoN+9K867H3TTy7TGGe8af0ykA
-         ewrFwQEfZhhgA25ZvASPwYqpuhUSrSRCsP+LcO7yfHkVlCCzk8yl6+5Smj836woOdioH
-         jv3IXP6qxZOJO9UUnGUfo2fJqREXK904DWkG4HHDMUhcNbXI4ShbtELk+xrhXOY3KrO2
-         su9iPfECYpvpO+mW4grB9uIaBudROBnUxqdlNmm4WoFc0Qzu+9xhjsg1MYeLCbpv0Tit
-         olwg==
+        bh=CD99I44k1GGeXTmJLBIEMb8WvA3Q6H/njKMEavvkURw=;
+        b=i30xM6OlGsMLp2wOhS6tUJMacHWnSrlfOp9qLAUZeUBPtFZxQmsNfczZaYX0xFsQny
+         KBgq6Jd3xWaPTJ3iDufFIZWFWdChhKj8rs3aNRASDnRqaap9uxPoSaxnn0Wl16i2UaoU
+         mnhPDjOxBuSng7ObZZw2lBjHJp/FiZMgCPIH7P3yn22U6XYcLkNMiPuhbNRYOmOPFBTZ
+         0qQORIO68TYvAvLEYgo4sKZ/HA60QUu4SaVTVWJe/nVVwCeFP73J2Nmw40jB4pfszRou
+         Fr0ExgVkMeTn6NPoWGCKbtj+1r0qxphfk+Tx0YOq4J346ngY5PySsSqBwRZ5M8HJtbBD
+         mmrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785921767; x=1786526567;
+        d=1e100.net; s=20251104; t=1785921801; x=1786526601;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=avoC8K08j2pP/keGcjKdaeHNHLfSEzCe37F4cx3EnLc=;
-        b=cXbqIBbkpyMUoEuTj6rvW5svcfuiWxlcAamz/8pWmuyvzZ9iipizC4dr6/UdSQtnjF
-         kyADX+IZO3PDrpjwlyktWZjRSiaCPR5Yr+BlDPOsvhnBx7+hRJpuaQr3wPZtsIqoI+Sp
-         2qtTlT0NAcwZJv42AY1L6VTogaT6NlcQNaPVTTaMG0OLxBCVkO5dkoThYDz4DCByr0cK
-         mCuNGKdyEZeG7bBh5OYNwfDIkHycLedd4kp4j3gMgXPA26r9BBjse1gtilMglcq7+RCr
-         apygvluAzM9vW62PKpeXlhY9vwKyLpq0yyNpfKTuYLz2GI3K/2z11nBKRC0BMGAb07U4
-         3DCQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoMENBGEP0sya2+akSQiuFwTWr0oZnCYK0FMxNeY611DXFy22owXB7ciJ3A4N6RTNbdENo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZoGDTxf/pirdQ1ri771g2GKDBx0PMtxIl6/UMAiHWK8isyp3W
-	ykiXkbb3XYmHsrgkvkUGwumxlePePmm7zn2oipoeBzbaY0UZiMnJ92au
-X-Gm-Gg: AR+sD131ACXxrv6r6OFUX/wlrLDkfjJijsVo7n9802JZmFDkS0CCqFVrZc3dL/J/kxZ
-	xgybGPh+Wv0kE6NAXaDg+bMCwcOXJl2Ed909bz/dLz2pP2XPz0htGUo6fRV1Eqb/X224eif0gDm
-	dms05+3G4TGDchTnFMGMVW8SZZpCAth99Bl9BIYE1A+7AmzUxPVqdrJsk7KVvdcj499KGPOwdV3
-	7k6PJ7nINlS+3nYoVB4stXKp5y+yGgBa3dVSEKPgRy4XY3Jt8kyGpxd7kTUWZVXnrJDdkANSheA
-	QViiPb06Eq4KaOzW6V4/RWlVzFabWd4c2jX6FhvSFGUZJR1pNe8PJjPk57cuEu/4Uj6gdvfz2CL
-	cSjxSDmy76E3FItCyNnNSV9y+vKLIRCX0a2Q5/hpThv2F0XKS60b0ST9LAi9bTkYyrMc5eCGW2b
-	PB36BNDAIRO9meIhvfME+UzA+6vXhfGyRu9n0jVpbCR/9SkQYcgl9RRl1J5nYROxmC12bzf65yP
-	hIxtamZ3YCdO0V/
-X-Received: by 2002:a17:90b:5112:b0:38e:542:6485 with SMTP id 98e67ed59e1d1-3903c5919c4mr5491602a91.12.1785921767505;
-        Wed, 05 Aug 2026 02:22:47 -0700 (PDT)
+        bh=CD99I44k1GGeXTmJLBIEMb8WvA3Q6H/njKMEavvkURw=;
+        b=LTdc8v568GoZR68IHPnihdvLkR9LHSTXAUW2jAG+rFBpxOQm1MtCnlZsC7wQSUZ/Jy
+         3Rgyj0RZy74aAyhsJuUSTPI8AWCID/AiniHqg9yr7h6M5W8ncS9egM2tqAFnWjEhq2oI
+         Y5l5RgEFX465pMGLrkx5RHq0UPxb54heT0/GYw217F8xxEuX7PyAWCJdbaPI/XfdJDQK
+         Ran3lv5pDMTucERJtcAY3g/awsvpSX6hwIHi0ZznccMMum0uZLil/emvv2RfmM0etLz4
+         4aFLOElZhCdf5CtDXmC2B9Q5415jmS/YhOLAFYNeV6iHunqXCO04ZOS1XO3QjVl5C+6p
+         psgQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqbHADSwl7BmFROrJt9Gqb05YhLpAVc7R5DuAdfd9vWCFJpZMwvI5NHb2M1LlxNY+tm79M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkvlO5lzh1znRm9/Eeriwx0PhQsmR11L19ja6cIRDsTr0qPdYz
+	wmj8qEJ2HtDhefHuDgl2GEnjtm4qlNS50m9ZHxdcrMbZL+3L2OQdpqUM
+X-Gm-Gg: AR+sD13ppxoRB61YPLgVJLC4M8FeIZf2ihaYIya4+CeXct8igt19ZhUHtubLMU+ZSWr
+	QjO1A0eEo4mjDWLYjIwDRXjiu8yUS7rlKYuAIZshCa3xorly8kg+ax2SuP839ou/1/wA3RGAf0e
+	Pcv7jxbM2jxCtMfSSrfvW476k6ysJ3gYYpFqQl++gqsFZxdHplF+i53Rz3QjofAsUg2PcDJXpUe
+	Buz9zzv/+5wT0Y72FcQUk4kzSLJw0ZcMwb+qK32P6yXP4pFnjrHpwcCZuho01mXzHjzDK9vqKP2
+	cD3ubG1h8UAHlEw9YZiVhOzF6d6I+0o3mbQ18JlU9ZLILPRX99INRzwJkv7npcLC8pM6neejHBf
+	mY9yaiG84xxVh8HFPtDappUSzsY1HEHG0fUBhypWpFlB3oVzmGHpVAng40QLRiMbQs/E/o8mrO1
+	79kghWEl+BL2hbfIEdRy/PpH8Z/4vn1NeZ6rO9CwMJoNY64CPnl3RrvlAoZ13MLolakNffKaGKe
+	k0IwLPj5T94Nl3q
+X-Received: by 2002:a17:90b:264c:b0:36d:9e0b:3801 with SMTP id 98e67ed59e1d1-3903c59936cmr5655140a91.8.1785921796057;
+        Wed, 05 Aug 2026 02:23:16 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38febffb349sm4087963a91.6.2026.08.05.02.22.46
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38feda51060sm4085337a91.10.2026.08.05.02.23.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 02:22:47 -0700 (PDT)
-Message-ID: <98a4faff20470fbfec71cb15336608d11d1a3cc2.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Check load-acquire src ptr type
- before the load
+        Wed, 05 Aug 2026 02:23:15 -0700 (PDT)
+Message-ID: <428d1069d408ec5ea597fd3ad610c4530f883953.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add load-acquire test for
+ dst_reg == src_reg from ctx
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Daniel Borkmann <daniel@iogearbox.net>, memxor@gmail.com
 Cc: puranjay@kernel.org, info@starlabs.sg, bpf@vger.kernel.org
-Date: Wed, 05 Aug 2026 02:22:44 -0700
-In-Reply-To: <20260804201917.253491-1-daniel@iogearbox.net>
+Date: Wed, 05 Aug 2026 02:23:13 -0700
+In-Reply-To: <20260804201917.253491-2-daniel@iogearbox.net>
 References: <20260804201917.253491-1-daniel@iogearbox.net>
+	 <20260804201917.253491-2-daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -80,37 +81,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Tue, 2026-08-04 at 22:19 +0200, Daniel Borkmann wrote:
-> check_atomic_load() calls check_load_mem() before atomic_ptr_type_ok().
-> For a load-acquire that fetches into its own source register (dst_reg =3D=
-=3D
-> src_reg), check_load_mem() overwrites src_reg's type with the type of the
-> loaded value, so the subsequent atomic_ptr_type_ok() no longer sees the
-> source pointer and fails to reject the disallowed types (ctx, pkt,
-> flow_keys, sock).
+> Add a verifier test that a load-acquire fetching into its own source
+> register (dst_reg =3D=3D src_reg) from a ctx pointer is rejected.
 >=20
-> Since bpf_convert_ctx_accesses() does not rewrite atomic loads, the raw
-> access to the underlying kernel object is left in place. The destination
-> type is taken from the ctx access itself, so a load-acquire of the sk
-> field of struct __sk_buff for example leaves the register typed as
-> PTR_TO_SOCK_COMMON_OR_NULL, which type_is_sk_pointer() does not match
-> either, while it actually holds unconverted struct sk_buff bytes. Once
-> the NULL check has passed this is a type confusion, not just a leak of
-> kernel data.
+> =C2=A0 # LDLIBS=3D-static PKG_CONFIG=3D'pkg-config --static' ./vmtest.sh =
+-- ./test_progs -t verifier_load_acquire
+> =C2=A0 [...]
+> =C2=A0 #614/1=C2=A0=C2=A0 verifier_load_acquire/load-acquire, 8-bit:OK
+> =C2=A0 #614/2=C2=A0=C2=A0 verifier_load_acquire/load-acquire, 8-bit @unpr=
+iv:OK
+> =C2=A0 #614/3=C2=A0=C2=A0 verifier_load_acquire/load-acquire, 16-bit:OK
+> =C2=A0 #614/4=C2=A0=C2=A0 verifier_load_acquire/load-acquire, 16-bit @unp=
+riv:OK
+> =C2=A0 #614/5=C2=A0=C2=A0 verifier_load_acquire/load-acquire, 32-bit:OK
+> =C2=A0 #614/6=C2=A0=C2=A0 verifier_load_acquire/load-acquire, 32-bit @unp=
+riv:OK
+> =C2=A0 #614/7=C2=A0=C2=A0 verifier_load_acquire/load-acquire, 64-bit:OK
+> =C2=A0 #614/8=C2=A0=C2=A0 verifier_load_acquire/load-acquire, 64-bit @unp=
+riv:OK
+> =C2=A0 #614/9=C2=A0=C2=A0 verifier_load_acquire/load-acquire with uniniti=
+alized src_reg:OK
+> =C2=A0 #614/10=C2=A0 verifier_load_acquire/load-acquire with uninitialize=
+d src_reg @unpriv:OK
+> =C2=A0 #614/11=C2=A0 verifier_load_acquire/load-acquire with non-pointer =
+src_reg:OK
+> =C2=A0 #614/12=C2=A0 verifier_load_acquire/load-acquire with non-pointer =
+src_reg @unpriv:OK
+> =C2=A0 #614/13=C2=A0 verifier_load_acquire/misaligned load-acquire:OK
+> =C2=A0 #614/14=C2=A0 verifier_load_acquire/misaligned load-acquire @unpri=
+v:OK
+> =C2=A0 #614/15=C2=A0 verifier_load_acquire/load-acquire from ctx pointer:=
+OK
+> =C2=A0 #614/16=C2=A0 verifier_load_acquire/load-acquire from ctx pointer =
+@unpriv:OK
+> =C2=A0 #614/17=C2=A0 verifier_load_acquire/load-acquire from ctx pointer,=
+ same dst and src register:OK
+> =C2=A0 #614/18=C2=A0 verifier_load_acquire/load-acquire from ctx pointer,=
+ same dst and src register @unpriv:OK
+> =C2=A0 #614/19=C2=A0 verifier_load_acquire/load-acquire with invalid regi=
+ster R15:OK
+> =C2=A0 #614/20=C2=A0 verifier_load_acquire/load-acquire with invalid regi=
+ster R15 @unpriv:OK
+> =C2=A0 #614/21=C2=A0 verifier_load_acquire/load-acquire from pkt pointer:=
+OK
+> =C2=A0 #614/22=C2=A0 verifier_load_acquire/load-acquire from flow_keys po=
+inter:OK
+> =C2=A0 #614/23=C2=A0 verifier_load_acquire/load-acquire from sock pointer=
+:OK
+> =C2=A0 #614=C2=A0=C2=A0=C2=A0=C2=A0 verifier_load_acquire:OK
+> =C2=A0 Summary: 1/23 PASSED, 0 SKIPPED, 0 FAILED
 >=20
-> Validate src_reg with check_reg_arg() and check the source pointer type
-> with atomic_ptr_type_ok() before the load again, mirroring
-> check_atomic_rmw(). Out-of-range register numbers are already rejected
-> earlier by check_and_resolve_insns() (commit 503d21ef8eac ("bpf: Do
-> register range validation early")), and the only exemption there,
-> is_stack_arg_ldx(), requires BPF_LDX | BPF_MEM | BPF_DW and thus never
-> matches a BPF_ATOMIC insn. atomic_ptr_type_ok() can therefore not
-> dereference register state out of bounds, that is, the out-of-bounds
-> read addressed by the Fixes commit below does not reappear (as proven
-> also via selftest).
->=20
-> Fixes: c03bb2fa327e ("bpf: Fix out-of-bounds read in check_atomic_load/st=
-ore()")
-> Reported-by: STAR Labs SG <info@starlabs.sg>
 > Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 > ---
 
