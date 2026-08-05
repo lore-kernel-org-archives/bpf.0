@@ -1,103 +1,204 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCB83EFFC5
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 21:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15D83F2116;
+	Wed,  5 Aug 2026 21:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785965600; cv=none; b=odHpEDh8NDiQY0gBkNqGNcrapsOZ/FLVhMHYEwR/4PwoFE+tl7qvxm+4/kGA/67GVuabcX6XAGdfIYvEgp66wKaJFGGEiK5fAp0hnwrL0XmipHzOsz6i2/4+ewRBsD1TwfrnAZYaCR/6thTUPS9eJjqCKPkcrXpLY6nGgqzyKbo=
+	t=1785965763; cv=none; b=WwMgvtfpEpZmhgKDxnEHO+fspvIt0CaX1uljv4pubJKUKS/FHeUpTC6ZihhuAQs1lDFCOuFxkUITTu8yv+iyFIt7YoqFG2bLGMPiJBgsfv3s8ySA7t5KQOY4uB/YgRUZn6Ye5ULnsqd1yLffahR7AKiTjI8S0g2PzUE343BWb8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785965600; c=relaxed/simple;
-	bh=9McM4D53xdwGjY7hY3DU/5iPDJq5djZF76yWFfGlIo4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IAB17he2UUMF/ERuWjEhkQntZtt9m24Qpap6I531h62/hKw1jON3DYuAwLa8/KxnpjRhfINkcGvYomUj71o/5n91v1ncAlOyk0IkF8Dc7CXIWeo3Y4UcBB0dBUr0WJWSVDtb1qIzj1IP27vyC2CnGPzMkJABv58ZOcz/iCNSZoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HqralLH+; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785965763; c=relaxed/simple;
+	bh=FylQuS3QpNE4by8TIFglcIyDmir/5h/bLrrGFX18dsw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WNGujWdrmnFJHURrfskrPdWNOeNm10NHdIxwMGZXHWIoYDaLFGti5EBMf6Izx+cYp/SATtmtdH3B4j2P9QkkN2v5j2Y8Mw6Ppn0Pj1Qsjz/nrPExgq7RZwvWr1fbInwjyk3W1zMGZ/YZHLr2KrFwW+aB4C2qZptcdTu8r7Dx/qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZpiGlJdp; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HqralLH+"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ceaf8a1265so23373035ad.2
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 14:33:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785965599; x=1786570399; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=9McM4D53xdwGjY7hY3DU/5iPDJq5djZF76yWFfGlIo4=;
-        b=HqralLH+J5M6aGtupHPXVQYE4iR70XPdgoQs8lBHV7E7IFVrtTwmP7K6BGlHXF9YF2
-         vnRhqZo3SS0KFOths87Cwxi6H0u7S7ZFcSTLRkKgP0fvufRqGSPwkk9vOyYzCtUhNejq
-         S/nBZkesNEpu1XQWELdRiJX7Lj4tBDQZO/l5UrY9DXfjqsvzUZ9BOFEGYdSljp2DX6VD
-         qyigS0UDg1ONeKrUW8AhCQ/RljECefmMbEmAO+FWNB1fM0+CvPuS0RVH/1nyj+03iJFR
-         YCKzJpX5SpvzPsK0rPpEPUH4OHe/3aiPpjaxDpT0QpveST7k166fPfg7Bk1f9bv8GR3Z
-         v3pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785965599; x=1786570399;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9McM4D53xdwGjY7hY3DU/5iPDJq5djZF76yWFfGlIo4=;
-        b=AYhtarKflfH2yU9LMDp/MQwlInjpladVaSa7/XSz8mGDQomYhTLaRRE7/0V+UgoPLB
-         QOSP452rMnViKThbhuO5bxkKinJQiMMpDeELe1DPuhAXdBvR4qjnq6BlB4wazdvLhnlD
-         O++rDtf/TPZbT66CMyDwssM+2RsCNe3jWX2UKvxcjMPeBLFIRTH1I9jGG6yFg5NZijLl
-         z60/pHe2HanSDDLxq3zyvXOj9D/jZeiiYQn+DiPB288mTvP5uDcQZ3YKe+ELo8yPSQa2
-         SW4teKlgkzyg46p/ulzS2D3ceLnA0WtJIsfBB7ypcJSL+yCo3PzsHGF6BC7uxcZtEnbS
-         HVFg==
-X-Forwarded-Encrypted: i=1; AHgh+RrMwttY+DYu+to4oJbYbdvdEa3J89l//oGErOtEk2KdpLcUOJFg+ubFaM19PrprEzEGrck=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytZSDmjb9Fn9G18sEy8QcI9+YKQ7va3jDdnQttOEE1OHIgmoV7
-	glos2bPqDq53r1m21SVb3dImysL8fbeURJmbWDhgd0mAWbP3TbZBze6a
-X-Gm-Gg: AR+sD10mVQ6frCgpHIFolW/jHBuwFO4jvkbVFvTgyC/H5E1C+qnJOC5C1eOJyOKfM6b
-	6+WchRl4Nh+3VnHQWHLE6HvnBETVkQTQp/f+hA4GyBq5pmjkWXAi3AhKQvcbcs2U/GrB70N/0WR
-	UbPOcVJt7yCMNsXHqeRwZFa0OB85DKb30X5J27LwE4ui9hPMiGsDE+assrhsclgH8uqSMDts4AK
-	C3w14sAogSMIAgJVajnmxESB/ijhmF7kGxLFd3SZjPKNKriG9UNzfVwUwahijEV7vIjZkyn8R2M
-	imst/m9yAgiZwX9KQiHWOH9hElfYlEBVIq1v56CgyV1o6j/W8tabX8zF63DolHp3EikMTsO2Bdh
-	2kNe0rmYBPNhfUl5cXvU+lF7rsZG1BS/rh2MFYZZ9OM+afT3Fn+4Y5ZshRgCAOSaRJCfVg5hpr+
-	I3+BHPzNpRqQkV/b5v9SH7RTOiX7pZ5plf2eXFQkorOr4mo5tmacU1fQGpEG/b7RU1LifQMZfCD
-	ztcnfg4OCgnh1wJtgHXCzK+fOGsWLBllXXGPSTBnHJmVH1cV/APnsQ=
-X-Received: by 2002:a05:6a20:428b:b0:3c3:64cc:311a with SMTP id adf61e73a8af0-3cb85ef9229mr12398617637.22.1785965598694;
-        Wed, 05 Aug 2026 14:33:18 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:969b:c0a:ff6f:454e? ([2620:10d:c090:500::5:b61b])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31586777bdasm20276463eec.22.2026.08.05.14.33.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 14:33:18 -0700 (PDT)
-Message-ID: <3eb28c78058907606ea4493bd59dfe29d5d53b6a.camel@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v5 3/8] selftests/bpf: factor the
- permissive-mode skip suffix into a helper
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Mykola Lysenko <nickolay.lysenko@gmail.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, 	song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, memxor@gmail.com
-Date: Wed, 05 Aug 2026 14:33:16 -0700
-In-Reply-To: <20260804170156.1709916-4-nickolay.lysenko@gmail.com>
-References: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
-	 <20260804170156.1709916-4-nickolay.lysenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZpiGlJdp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785965761; x=1817501761;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FylQuS3QpNE4by8TIFglcIyDmir/5h/bLrrGFX18dsw=;
+  b=ZpiGlJdpNGIXn9UuFUsPm+Jad5cBViZbR+xSwPCUl52D+GP9WkEuTyPw
+   tYLrCUiIQBYRgljhP5yQ3onvd0Sblp4zUz7vlJfAy91cto2oyptUvVVTd
+   12ajUxhnJ4q643bL3W9QGgFZtZwOHhCmY5f1KtvNQ8lQkQE/3JWTNlxjI
+   VzVCasAp1Y3dOuSjGXZ9HQqNNyKamd28YQFSC/T6BpRTIcBLt57mvYOMx
+   FwENCVG6pwhui69llReTIorF+J4Gr1xDNhmdwp6zpaHvL7lrKZJGXuL7w
+   zO3xO57sNTPxN5Gszx7+G94YGrwGgdR8Dw5yRELaOD5EdBZHVokyZ3N93
+   A==;
+X-CSE-ConnectionGUID: wMqF1rorQYi+YNo1PDcNXQ==
+X-CSE-MsgGUID: JoH7zKd8QZy4FWe1cn2FjA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="109343601"
+X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
+   d="scan'208";a="109343601"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 14:35:52 -0700
+X-CSE-ConnectionGUID: JnVgx/BsSd2wuhrCfEMhxA==
+X-CSE-MsgGUID: pekXSlYTRrK/u1XQ1GXOdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
+   d="scan'208";a="286576148"
+Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
+  by fmviesa001.fm.intel.com with ESMTP; 05 Aug 2026 14:35:51 -0700
+From: Tony Nguyen <anthony.l.nguyen@intel.com>
+To: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	netdev@vger.kernel.org
+Cc: Kohei Enju <kohei@enjuk.jp>,
+	anthony.l.nguyen@intel.com,
+	kohei.enju@gmail.com,
+	przemyslaw.kitszel@intel.com,
+	maciej.fijalkowski@intel.com,
+	magnus.karlsson@intel.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	bpf@vger.kernel.org,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Patryk Holda <patryk.holda@intel.com>
+Subject: [PATCH net-next 10/15] i40e: prepare for XDP metadata ops support
+Date: Wed,  5 Aug 2026 14:35:35 -0700
+Message-ID: <20260805213541.2281287-11-anthony.l.nguyen@intel.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20260805213541.2281287-1-anthony.l.nguyen@intel.com>
+References: <20260805213541.2281287-1-anthony.l.nguyen@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2026-08-04 at 10:01 -0700, Mykola Lysenko wrote:
-> With BPF_STRICT_BUILD=3D0, eleven recipes append the same "|| { remove
-> the target, print a SKIP marker, report success }" tail, each spelled
-> out inline. Factor the tail into skip_on_fail, parameterized by the
-> SKIP tag, optional extra files to remove alongside the target and an
-> optional note appended to the message - every call site keeps its
-> exact message and behavior.
->=20
-> The permissive fragments of other shapes are not suffixes and keep
-> their current form: the rsync --ignore-missing-args flags, the
-> missing-input guards in the skeleton recipes, the link rule's
-> wildcard handling and the test_kmods copy wrapper.
->=20
-> Signed-off-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
-> ---
+From: Kohei Enju <kohei@enjuk.jp>
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Prepare 'struct i40e_xdp_buff' that contains an xdp_buff and a pointer
+to i40e_rx_desc in order to pass the RX descriptor to the XDP kfuncs.
+Also in ZC path, use XSK_CHECK_PRIV_TYPE() to ensure i40e_xdp_buff
+doesn't exceed the offset of cb in xdp_buff_xsk.
 
-...
+No functional changes.
+
+Signed-off-by: Kohei Enju <kohei@enjuk.jp>
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Tested-by: Patryk Holda <patryk.holda@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+---
+ drivers/net/ethernet/intel/i40e/i40e_main.c |  2 +-
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c |  5 ++++-
+ drivers/net/ethernet/intel/i40e/i40e_txrx.h |  7 ++++++-
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c  | 12 ++++++++++++
+ 4 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+index 0cd0e5597c90..4b11ae9ed8d5 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_main.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+@@ -3622,7 +3622,7 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+ 	}
+ 
+ skip:
+-	xdp_init_buff(&ring->xdp, xdp_frame_sz, &ring->xdp_rxq);
++	xdp_init_buff(&ring->xdp_ctx.xdp, xdp_frame_sz, &ring->xdp_rxq);
+ 
+ 	rx_ctx.dbuff = DIV_ROUND_UP(ring->rx_buf_len,
+ 				    BIT_ULL(I40E_RXQ_CTX_DBUFF_SHIFT));
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+index ef5e657816f0..7f68adb5109b 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+@@ -2438,10 +2438,11 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget,
+ 			     unsigned int *rx_cleaned)
+ {
+ 	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
++	struct i40e_xdp_buff *xdp_ctx = &rx_ring->xdp_ctx;
+ 	u16 cleaned_count = I40E_DESC_UNUSED(rx_ring);
+ 	u16 clean_threshold = rx_ring->count / 2;
+ 	unsigned int offset = rx_ring->rx_offset;
+-	struct xdp_buff *xdp = &rx_ring->xdp;
++	struct xdp_buff *xdp = &xdp_ctx->xdp;
+ 	unsigned int xdp_xmit = 0;
+ 	struct bpf_prog *xdp_prog;
+ 	bool failure = false;
+@@ -2530,6 +2531,8 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget,
+ 		if (neop)
+ 			continue;
+ 
++		xdp_ctx->desc = rx_desc;
++
+ 		xdp_res = i40e_run_xdp(rx_ring, xdp, xdp_prog);
+ 
+ 		if (xdp_res) {
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.h b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
+index 1e5fd63d47f4..bb741ff3e5f2 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.h
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
+@@ -283,6 +283,11 @@ struct i40e_rx_buffer {
+ 	__u32 page_count;
+ };
+ 
++struct i40e_xdp_buff {
++	struct xdp_buff xdp;
++	const union i40e_rx_desc *desc;
++};
++
+ struct i40e_queue_stats {
+ 	u64 packets;
+ 	u64 bytes;
+@@ -345,7 +350,7 @@ struct i40e_ring {
+ 	 * and to resume packet building for this ring in the next call to
+ 	 * i40e_clean_rx_ring_irq().
+ 	 */
+-	struct xdp_buff xdp;
++	struct i40e_xdp_buff xdp_ctx;
+ 
+ 	/* Next descriptor to be processed; next_to_clean is updated only on
+ 	 * processing EOP descriptor
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index 9f47388eaba5..51a05ce4c7ce 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -246,6 +246,8 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
+ 	u32 nb_buffs, i;
+ 	dma_addr_t dma;
+ 
++	XSK_CHECK_PRIV_TYPE(struct i40e_xdp_buff);
++
+ 	rx_desc = I40E_RX_DESC(rx_ring, ntu);
+ 	xdp = i40e_rx_bi(rx_ring, ntu);
+ 
+@@ -396,6 +398,14 @@ static void i40e_handle_xdp_result_zc(struct i40e_ring *rx_ring,
+ 	WARN_ON_ONCE(1);
+ }
+ 
++static struct i40e_xdp_buff *xsk_buff_to_i40e_ctx(struct xdp_buff *xdp)
++{
++	/* xdp_buff pointer used by ZC code path is allocated as xdp_buff_xsk.
++	 * i40e_xdp_buff private fields overlap with xdp_buff_xsk->cb.
++	 */
++	return (struct i40e_xdp_buff *)xdp;
++}
++
+ /**
+  * i40e_clean_rx_irq_zc - Consumes Rx packets from the hardware ring
+  * @rx_ring: Rx ring
+@@ -472,6 +482,8 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
+ 		if (i40e_is_non_eop(rx_ring, rx_desc))
+ 			continue;
+ 
++		xsk_buff_to_i40e_ctx(first)->desc = rx_desc;
++
+ 		xdp_res = i40e_run_xdp_zc(rx_ring, first, xdp_prog);
+ 		i40e_handle_xdp_result_zc(rx_ring, first, rx_desc, &rx_packets,
+ 					  &rx_bytes, xdp_res, &failure);
+-- 
+2.47.1
+
