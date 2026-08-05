@@ -1,78 +1,77 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9506D3E558A
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 08:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC03519539F
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 08:01:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785916823; cv=none; b=VmiGZuHeLqDEpUdjXwNe7q/P+RObf2EwCHdBmxlAnh4IqdRrUwlarladBFYBy7xH77/RvqNNnwjGh2A9G2M1vD41nNj8qoSJrORSCEXnJ+pjDAyH1uamJFPhnHTIJGurdua+q3Dw9/N56FqZWtXX2oSTc/4l0vC80jhj8XLWi8M=
+	t=1785916864; cv=none; b=oaT2aKlRwmd/ZRHVsMN79IOyOUKvd+NpOwkhyxKWVs0eyBDuVY+yklYQYLDyGc404WizHftYNOMgAmn+/h+yztLj30ker/Vs5DzQZZSZ10DWltjtvUl+C6O3Ln1kUDsv21ty28C9L+qILhlWPUwTqgatrRX95LFXorutA5ErANo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785916823; c=relaxed/simple;
-	bh=5rKMMPjZfyBh34XncWy6OpAC8bc8/u1GLvwXUhf45j4=;
+	s=arc-20240116; t=1785916864; c=relaxed/simple;
+	bh=KpBrkuz0+y+GOm6SJSD67Psul4m1i6VFTUZAmNIfZOU=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZX/poeumnuVaPFLDkJLuChIv5A4qL367JxqLfBEIbfFHi9CEvpjtzKO6nZ+Ntg2Op7Tpci3rUQyH1QeE10Jytw4KSAvLg3rmFxizyNJ5hhEAuc7s40sBHrxpHyX1QI+y6p7cphQsbsvumnjjar8FEIGUMvLk9nPeMfri9NzE/lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pwul3Ajd; arc=none smtp.client-ip=209.85.215.170
+	 Content-Type:MIME-Version; b=CVS+zRfMYlcKY41xEju4RRt2f5eqsWDdYUKXLZypCKiqQ+37oQx8xLyAHFsyCEbJLzxVcmtHbMzO+1eB3V/fTXb595rsxYxfL5NydRWyVwWxMZ8ld/HGZDIH6+/WobBq+MnfN0lq1TUCvynEwFZ2h8yCFT4VUTAMgYDdl12FW44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RY0tVBxm; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pwul3Ajd"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-ca00f126b7eso457603a12.2
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 01:00:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RY0tVBxm"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38e88b60121so555900a91.3
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 01:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785916820; x=1786521620; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785916863; x=1786521663; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=5rKMMPjZfyBh34XncWy6OpAC8bc8/u1GLvwXUhf45j4=;
-        b=pwul3AjdNS0BfNDaZMTrsPqNGn28qKHKslotybrMoOkOjtdSbXFPKeDy8Tf0bvC0fs
-         mkcSPqfIU+5UhL8N76i9AEuft8NX/kH50xGH1OtappQ61y+ZFYZW3oOGZ4lytEpdkxWv
-         t72+QwLu3E2SeVEkI+WirjhFSQK/kiRG1dXwxQzKsAtNkcOq3kTDpva7K32TfL+XIEjj
-         +Er5p5+j7Hbd7T+FW/Q/CVEhQxtq1s8lKclBNXi/wN/+JprpwVcwU9ADvH/JPv59kh33
-         psQi9GJbF3hf03ei3Bjw88JNGb6uaES+rXDlnIQf/mlCko2CAMAE28d8KsxIj/KNXRrj
-         S+zA==
+        bh=KpBrkuz0+y+GOm6SJSD67Psul4m1i6VFTUZAmNIfZOU=;
+        b=RY0tVBxmI2pryVKBvtwm+Ml9W21HWAe+IX1qqjiPLc3NYo4EMjJeYHMZT/6B2iO8F3
+         13NJgtqlxbKByRixSHU4HgbJj9QXW80PpAONQfrHMFzCr8oEfuO98voIJBQ18jA8yd4H
+         YNiX3Juan5yUNHDJsqV6C9HZ0pJjufMUpDtvvziaN9rNWWzuX+0L6Su8+EGLNyTs6/vD
+         nOA6OLcxfgt5SRa/1x2q4Qav5INX1qXnQ9Qe9ke6Xg3cm9+uvEf+ptPkGrHoYm+Hj2GJ
+         FSa5mQUi0UlHNlY8SArIPRjUFnlTMxgacLAwj0FWRBiB5o+OxUY1cWFam8Mn/BbdHjFP
+         5Vvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785916820; x=1786521620;
+        d=1e100.net; s=20251104; t=1785916863; x=1786521663;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5rKMMPjZfyBh34XncWy6OpAC8bc8/u1GLvwXUhf45j4=;
-        b=R3uprRFSGYMqt8iOhK2a5FqFcwauqwb615/KxvZXUf0rbeibs7cuh07C9rQtbPMzZo
-         w7ba2kofmL5MVCoXE0MLQnd8UUeAx2ydt23xvqYcefvq3gqwal7hKviRNucasbY7CfYs
-         h7AgnM4w6Bx4X+bXc/mji6dJSWXiPIioi3mkgTqxkJHhrZx4MaBFIG8FVOYXJwvETOZu
-         dCxmBhEl4uaVJH8jolWKMlGVzz3c7ljUKmrkqnxfmLKIC/su3p+K+/06d3SwDJEA83EQ
-         SWqDeENnfWS+WH6ZdkHPCMS6XhVokmw1CMFnsT0lHAvWqn5v4u3vs168USVJpzA2iLu2
-         iVMA==
-X-Forwarded-Encrypted: i=1; AHgh+RqWP3i89KvPYbIB7JYE1zqVMbZrzQiMZFFYyOjtGygDE9kUdtL/VLnDeQvCQSL26uekTkM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXTnwlaaqNAa87IBOO0MuNuwDdTfZFF2/GG3Wp5dg3ph+FQBrW
-	XPV6tHJy9CCy6a2qtS3KOvJTwFcSpLb3t+vrPRLNWxntlz0cIbkno2hR
-X-Gm-Gg: AR+sD12yi6FOpN7O3OAjqiaoFOMCKCTxTFJAdVJq/0bHw/p73A3y6YcTvpPx49EmI9a
-	55qhafiiPxJeih6UY6onjbGCIxJpaqlbkH/pXos9yWgbEBYcJGRktmCf83ZmHVbxrGkP73utzZo
-	ylg/pXLchZe0ea8IE77xW8pny1mpzoVH8AEftPpT1gafUF+BpMkarRpFqIE5UxzFUtKYjPKvtKE
-	uXA07hu5GHSlQXC7tj9pdfvZkMHsnfvoesnxJyMK6dTL3vcZa4tiVgKEnADMgJtqvF3lP+cbebO
-	n467M7+HU+He5rgjM3o8sTofSrPS3+sTop97xuNe52BVvIpYkGBMdrX9IY7ksrAHOzADUuFFe+/
-	ejfFI4+XFEECa4KxS7xpBGaVWszeVjdd1yvmRA6w5x80O5+mlDM6ia6pDrwxDzQZBM8GzPdgmpo
-	gQLu/zcIdlw70WhrkRyK7BVbuqlxQT4a2oX42EtF8ealhPgUMmC8ctX5b8TspRz6GEn3frvOdal
-	hp4utK7x8V6GNpe
-X-Received: by 2002:a05:6a00:22cc:b0:848:2c6c:dfc0 with SMTP id d2e1a72fcca58-84f2e04ea1amr4864948b3a.24.1785916819838;
-        Wed, 05 Aug 2026 01:00:19 -0700 (PDT)
+        bh=KpBrkuz0+y+GOm6SJSD67Psul4m1i6VFTUZAmNIfZOU=;
+        b=SMKRAjDzO+wcSZ0O90yTJTPL8GoxxZCL4wfRCW29Lz9r/B+TfnM0ULaS4rHYvGh0pS
+         gFH2H3aMblylPrK7uRie4bopeG/XJWpvTk9lcQ7Um0qH/BH943itQq5fVcj5FbOakVRK
+         Mn0DF4VUszJeAYjMWqN24RhPISqOEfifWpRR3nyNQoUyRLFNqc479tQO9ixjzda6Pnca
+         lyuBcn/1tfMFpfMXrvREUD5+H74AfHC3MQWO+iSyoGb2sitwReKzxZ3uOhtCApNsmYK8
+         5AXm0d5KkSEr8iQHPW+wimqPDRllxx3cQeZ2Cu8yNzHio/CJbFSlngNilDa2k+NytsUr
+         aDCQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqNE1/pLD78IqsVofTke9ezLD0gkcOngGclL5L6hH+aPql7j9mW5IZlD74QsdSqU31Ives=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkQhWTBNPJNxnCtBNZnR+sPomBfsyvLg/XV/YglrfKwV0wusw6
+	ZEBHlR3JjOoWmw7XyksMThAlbews63ig3fw/Kj3ATJ92TpCUZ0IcaWPEtRLjOg==
+X-Gm-Gg: AR+sD10EfXiFKJjgdvkSFBf4cswne/u3JKISMiO9CGoGLJIcPYZWiLxud6X02W8IDRA
+	U+0prIP7ki7nhOMRPntToSiJh6GSpuzpxMf5sAKSJ8ZMHxEXk4nF8IyiI3vcWoRZS2jXzvfF5h9
+	CWO8l5jTKBkfQOqFseUqFyZ4KdW6Tpx4I9sEu1rKYpXAYYu28+BiK7pV7C8X9DuTnJMRTIy99/p
+	wXGDUL49YRDmMOAQ+Fmez7Ldzyom7ITiPWc9tPnPBc/RmIJNfcYpQxzcKJgn5QVC+5bjoQwrySr
+	RCSfLkgeBW/J/N7TlgLenXKypjSeuq8ofaQP99h9TDPoiWWD2kysGstZacz9YCg48Mie/sHkb4d
+	JAelFgSHam0+98WsZtp+hZQT+HuERDQLzYZ+Bdna+w0Up0BMAiUxgVmm4zleS/w5wYClbkOqgE1
+	pPWvuerwUcz8KST1Lw5InGJq6Mxiu9/lskuaFt1gTvcGMXhEDG5moHOtuVAa8XVcLwy+xgFNDT1
+	yHmJWzP3ZLpwijMhReZmPm+HXM=
+X-Received: by 2002:a17:90b:57c3:b0:38e:bfe:81e9 with SMTP id 98e67ed59e1d1-3903c5589e0mr5191966a91.1.1785916862933;
+        Wed, 05 Aug 2026 01:01:02 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f2e4d3f58sm551570b3a.39.2026.08.05.01.00.19
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3903917a5d0sm2441915a91.6.2026.08.05.01.01.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 01:00:19 -0700 (PDT)
-Message-ID: <f65591b1944cad791a6f952f62e958b4b689a7a7.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 8/9] bpf, x86: Fix stack-passed arguments
- for indirect trampolines
+        Wed, 05 Aug 2026 01:01:02 -0700 (PDT)
+Message-ID: <b94080a4d2804778a2bf6c4d588a5d2fa7860a6d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 9/9] selftests/bpf: Test stack-passed
+ struct_ops arena arguments
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Jiri Olsa <jolsa@kernel.org>, Tejun Heo <tj@kernel.org>, Alexei
- Starovoitov	 <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Daniel
- Borkmann	 <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>,
- kkd@meta.com, 	kernel-team@meta.com
-Date: Wed, 05 Aug 2026 01:00:16 -0700
-In-Reply-To: <20260803125115.2264733-9-memxor@gmail.com>
+Cc: Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
+ Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis	 <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Wed, 05 Aug 2026 01:00:59 -0700
+In-Reply-To: <20260803125115.2264733-10-memxor@gmail.com>
 References: <20260803125115.2264733-1-memxor@gmail.com>
-	 <20260803125115.2264733-9-memxor@gmail.com>
+	 <20260803125115.2264733-10-memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -86,26 +85,16 @@ MIME-Version: 1.0
 On Mon, 2026-08-03 at 14:51 +0200, Kumar Kartikeya Dwivedi wrote:
 > From: Tejun Heo <tj@kernel.org>
 >=20
-> save_args() reads stack-passed arguments relative to rbp assuming two
-> return addresses sit between the saved rbp and the arguments, which
-> holds when the trampoline is entered through the fentry call from a
-> traced function. An indirect trampoline is called through a function
-> pointer, so only the caller's return address is on the stack and the
-> arguments start at rbp + 16, not rbp + 24. Every stack-passed argument
-> of a struct_ops callback with more than six argument slots is read one
-> slot off.
+> Add a test_arena_stack member with eight leading scalar arguments so the
+> arena pointer is passed on the stack.
 >=20
-> This has gone unnoticed because no in-tree struct_ops member passes
-> arguments on the stack. The jmp-entry form already accounts for having
-> a single return address; treat BPF_TRAMP_F_INDIRECT the same way.
+> The callback validates the first and last scalar ctx slots before
+> dereferencing the pointer in ctx[8]. This exercises the indirect
+> trampoline stack layout and arena conversion together, and prevents a
+> regression where stack arguments are read one slot late.
 >=20
-> Fixes: 473e3150e30a ("bpf, x86: allow function arguments up to 12 for TRA=
-CING")
-> Cc: Jiri Olsa <jolsa@kernel.org>
 > Signed-off-by: Tejun Heo <tj@kernel.org>
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
 
 Tested-by: Eduard Zingerman <eddyz87@gmail.com>
-
-...
