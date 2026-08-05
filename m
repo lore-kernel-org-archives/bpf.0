@@ -1,111 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A8C3D34A8
-	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 23:17:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2413290B9
+	for <bpf@vger.kernel.org>; Wed,  5 Aug 2026 23:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785971877; cv=none; b=VnWQX6ZWnkXr1aIeWHbjM+Res5ujzAk3ziTvElTgzzoihPrWEtIK/oO707ZsMdYZ18y7M9RJoNVvO9YUwJsvZk6ilyPYrB4QMJZ/AzLri5hVXSY9s4/yzxXmgjhGDLH10+pscmSIQe94c/lXYldWn9iqn2dKNWSIl57xnH8NbJs=
+	t=1785972875; cv=none; b=Sb9KArE/uRIrgz0kdNleMYPPIHNPO+Jg/iuSBbpjdBe9zSo/TmG60Ym/5IGx5CkHeZ6f4s8Svr0lziJ1bLhJ3ek0KSNpbDXR576c0hZHer5V4arOUoUynU61Fi8Uop049Qzec+TBaP40Q9rG67NZVrEmuLLqYH8rQ+5DfzP6L6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785971877; c=relaxed/simple;
-	bh=khgWph/1JeBxN4asChdbrT28nuRTtxMW1KJZTZ7iRgs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZhRQ0x3dSwvyH8JHe0hj3Kghcvz7N+uEhbN6ELXVldA0PMiUf0L7Thp0ElBieQ0PCr7ltKtL62Z3aYuddYmTKmJxJL3lGS6hE2dBo7gDrWKCa/byfcCHkGBQBl7RMjE6/7g71hOQXeLpk3W3Lt+seSt+EHVo63hpCY1gRH9mzk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HND+aB0+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785972875; c=relaxed/simple;
+	bh=zg/Fp3SPxz4DzWGL60edzGc8OVh33zlEF8lnFAL72ps=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=G1jVF1WOAl+cHmoj09+MpwTvDkvcgsvYn42FBDceVvHPZVkYEwQXnEYWr3YFVaBict2m0x0G8oFDs+yrYJ/s0s9nwAXCqktWCarv6uklwSCYlCYtbQV2ZU/gezzR40sqUUxEalLN0bXZ0l8GzdPblHnDV0ffHGcfcFl/2OoQORw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YrLGt3zC; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HND+aB0+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 966CC1F000E9;
-	Wed,  5 Aug 2026 23:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785971875;
-	bh=tNGITSmdENBgeHPs62/33+Oe5XmNVUIPR7Rc2q80C8E=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HND+aB0+N/i4vq7RylSxOFgnRqL0i/ltW3A/f8LVhlj16x5fPtKgIgWs5oU2ZEcqx
-	 MrdbqDZ6tPFko45UDs5R5J8Kgu3Yin+xVdOFL0sTtSedt3QO1UCVIHrkbE/uTM2Lak
-	 lYSQ8i8imIutAPzUUDoukmmlY54KOAIKKnUf+wSsQagEeei5/w/493cS9q8Lsslf9+
-	 54nIzlobGKbd1D1VjPdJOWMaJ7xW61bIpw74RoEcXFdRr25nVwtLDySiI9tR6WQTe+
-	 MmCZlOXCXHkUQeuc8bv3Iw11zgDM33qXNOgA7QhVjJLydLaHkRTYFwDjA1xvuFnjSa
-	 Iu2H4wKMt8zRQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 3/6] selftests/bpf: Verify arena type tags
- in resolve_btfids test
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260805230648.2354989-4-ihor.solodrai@linux.dev>
-References: <20260805230648.2354989-1-ihor.solodrai@linux.dev>
- <20260805230648.2354989-4-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YrLGt3zC"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-ca97d139d8dso1047812a12.2
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 16:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785972873; x=1786577673; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=qP5k8qaakhLWBbqj31MCAmlz6b82Li5+rLYZu4vQO8M=;
+        b=YrLGt3zCho9kQQ68B7gVL2diV2qqDUDyczb6UyiZZnOzYikxiPa9DRMHgGi4ZQarFI
+         bdJwlM2JSAXspQyg2bH9P/iPzkenSRiCjpPstf7+Zz9OhTLcuaOdiuVlwfEZK0BoWZkV
+         vPmixrtBViXys9yu3w8E/qEQLCslj609YKJRDO9bWWkVsxtpE/LzKi5FEsHqx9zoqUJc
+         swhjEMTdULlkK5IAzhwRzSECzlagy0glgOp3OWWPBJwluIFhCWMkgtY1KcVbx1amWxcL
+         sOQfQQ/CE1c6R/5NibJfvRrAxovYRstaikBWpW1iy30EVldGot8VIQNCSPYzWRpxxc+0
+         KLqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785972873; x=1786577673;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qP5k8qaakhLWBbqj31MCAmlz6b82Li5+rLYZu4vQO8M=;
+        b=MwOIVZOOqtFio5I2U6yE567PyU5xw2CQ867B+Jh2yfZ86krfzSXaTw5qOBU7d9ce/2
+         BPW7OLgb2aMofSMvBG4IyDsU6+rNPq+LzTIMOzcRvQM+mXe8BmaHLHEZq5E7p3DsFUUc
+         otS8Gx2m0dBlMQFK9O1s8LZEDsTU3csG/9WziF0bt815Eig2jYPUZqkqlCWiwKg0dNzo
+         i9LI9VzEbw7HaWPLszRw1GkiabsxPmQIYn9Mw4CSsdtGuVdbifOL1p0FmLARKTkw6b1e
+         1jJPXr93YVV6BAtLPjQpCdBrsizXPyNjACsx+iYd2fdTcL/ctPKd81f/hit+IRGNvTwf
+         RrsA==
+X-Forwarded-Encrypted: i=1; AHgh+RqirW2h+n1FnOwfXPNRoYToeBL7sL+ArNuLntVUQmRcgyxMho7NeB7YUwp2yiDEnLMxEdY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyaIRYylMs1SBzUhaN87dc1uJvuSwW3YQwM8M/s+bLhgXxfytq
+	5p69DXFTbQI6IwZ88AQnjQewLsFZrFiS9Ome8NfG1IW+5W7/Euo4poU+
+X-Gm-Gg: AR+sD10yv/Mz0LxlZuHYC4eBYcPO3gOH3BaluQSBIv2SchJpqKndd3DXGQHblOmzN0o
+	2x/7zM0sP7PgampMFXpR9WaZVsU3C4aZ9kxF/h9z7CLWpB++DBRUKvLCvPCSuKCddAyu7yQsaVw
+	oLHE6zWlbqhWONuSrSEV/z1HZFdqrFPBrtGM/tKiEF1JKL+IN614cmloMesM/Q67zqVra0hfEqW
+	ZDPBB8wOXp6Z8LsKC6weJUhrE2nb/7pvQIgLkbvGvsSR6+FddCBYnwkDI/UKqyWWPj8MkQs7awt
+	7Vgjx1Nl0y9YjPeQM76gA/xZYwOGkEWdN18viMikbJQHk7qoGlaJTdCImlo4rJJIofxIXrqJcbF
+	4G0sRduaYkDVHJgozFqTiSkpXgb/TEAUAWevSonDCA9FSnkZQyniWzMwuSq94bWwuKNi+GlYP5v
+	U7Z2pBydlu2NwIc/LGQo5bDHriCFmYctavsoBS8b3xP2Q5EzSMMvlHJbT15J3y/1SXwPmV3SM66
+	Lp27fLMtMA7hqe2slkmGfIBsXqToT/qjn/JylT6Mw5e
+X-Received: by 2002:a05:6a21:6e43:b0:3c3:7762:5d5f with SMTP id adf61e73a8af0-3cb85e6afe9mr12595608637.19.1785972872863;
+        Wed, 05 Aug 2026 16:34:32 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:969b:c0a:ff6f:454e? ([2620:10d:c090:500::5:b61b])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31586162e80sm22693200eec.0.2026.08.05.16.34.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Aug 2026 16:34:32 -0700 (PDT)
+Message-ID: <9a2504bb38bd0760448fe483829c14e697a9b650.camel@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v5 7/8] selftests/bpf: move shared build
+ definitions into Makefile.buildvars
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Mykola Lysenko <nickolay.lysenko@gmail.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, 	song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, memxor@gmail.com
+Date: Wed, 05 Aug 2026 16:34:30 -0700
+In-Reply-To: <20260804170156.1709916-8-nickolay.lysenko@gmail.com>
+References: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
+	 <20260804170156.1709916-8-nickolay.lysenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 05 Aug 2026 23:17:55 +0000
-Message-Id: <20260805231755.966CC1F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Missing NULL pointer check on the result of `btf__type_by_id()` =
-causes a segmentation fault when a kfunc symbol is missing.
---
+On Tue, 2026-08-04 at 10:01 -0700, Mykola Lysenko wrote:
 
---- Patch [3]: [PATCH bpf-next v2 3/6] selftests/bpf: Verify arena type tag=
-s in resolve_btfids test ---
-commit 833ac8bbb8ac1055e25790da1396864987e31541
-Author: Ihor Solodrai <ihor.solodrai@linux.dev>
+...
 
-selftests/bpf: Verify arena type tags in resolve_btfids test
+Thank you for taking time to reshuffle the diff, such that the
+Makefile.buildvars preserves the original relative order.
+Much easier to review.
 
-This commit extends test_resolve_btfids() to assert that resolve_btfids
-emits the address_space(1) type attribute on the return type and arguments
-of kfuncs marked with KF_ARENA_RET, KF_ARENA_ARG1 or KF_ARENA_ARG2.
+...
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/to=
-ols/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> index ac51fd4548214..8482f00046d4c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-[ ... ]
-> @@ -227,6 +260,39 @@ void test_resolve_btfids(void)
->  	check_kfunc_set(&test_kfunc_set);
->  	check_kfunc_set(&test_kfunc_set_rev);
-> =20
-> +	/*
-> +	 * Check resolve_btfids wrapped exactly the arena-flagged return/args
-> +	 * with the address_space(1) type attribute, and left other
-> +	 * pointers/returns untouched.
-> +	 */
-> +	for (i =3D 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
-> +		const struct btf_type *fn, *proto;
-> +		const struct btf_param *params;
-> +		const char *name =3D kfunc_symbols[i].name;
-> +		u32 fl =3D kfunc_symbols[i].flags;
-> +		__u32 nr;
-> +
-> +		fn =3D btf__type_by_id(btf, kfunc_symbols[i].id);
-> +		if (!ASSERT_TRUE(btf_is_func(fn), name))
-> +			continue;
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -3,60 +3,15 @@ include ../../../build/Build.include
 
-[Severity: Medium]
-Could this cause a segmentation fault if a kfunc symbol is missing?
+...
 
-If resolve_symbols() fails to find a kfunc in the parsed BTF file, the
-symbol's id remains -1. When -1 is passed to btf__type_by_id(), it
-returns NULL.
+> -GENHDR :=3D $(GENDIR)/autoconf.h
+>  PKG_CONFIG ?=3D $(CROSS_COMPILE)pkg-config
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+It seems this can be removed as well, all uses are after
+Makefile.buildvars is included. Or is it needed for one of the other
+includes?
 
-Since btf_is_func() unconditionally accesses the info member, passing a
-NULL pointer to it would crash the test program before the ASSERT_TRUE
-evaluates.
+...
 
-Should we check if fn is NULL before passing it to btf_is_func()?
+> @@ -220,21 +151,8 @@ ifeq ($(feature-llvm),1)
 
-> +		proto =3D btf__type_by_id(btf, fn->type);
-> +		if (!ASSERT_TRUE(btf_is_func_proto(proto), name))
-> +			continue;
-[ ... ]
+...
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805230648.2354=
-989-1-ihor.solodrai@linux.dev?part=3D3
+> -HOST_BPFOBJ :=3D $(HOST_BUILD_DIR)/libbpf/libbpf.a
+> -RESOLVE_BTFIDS :=3D $(HOST_BUILD_DIR)/resolve_btfids/resolve_btfids
+> +include Makefile.buildvars
+
+It appears that this include can be moved up, to the lib.mk include.
+In this case the duplicate definitions for `srctree` and `PKG_CONFIG`
+can be removed (and both can reside in Makefile.buildvars).
+Wdyt?
+
+...
+
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/Makefile.buildvars
+
+...
+
+> +PKG_CONFIG ?=3D $(CROSS_COMPILE)pkg-config
+
+...
+
+> +ifeq ($(srctree),)
+> +srctree :=3D $(patsubst %/,%,$(dir $(CURDIR)))
+> +srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
+> +srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
+> +srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
+> +endif
+
+In case if shuffling includes around does not work, can we export
+`srctree` in the main makefile and not copy it here?
+
+...
