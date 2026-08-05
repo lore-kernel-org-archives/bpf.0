@@ -1,93 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B964766BD;
-	Wed,  5 Aug 2026 12:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A472E4519A3;
+	Wed,  5 Aug 2026 12:36:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785933345; cv=none; b=Mn/8rVFCWZRfES9+YEgLuDBUM4jtaul80MQI1Y8hZpxepa3z2+6j5YAz02wGjP8CR0MeYHUbPL2+dL84S9ZLhmw8IiwbYKh3g6431G00TFNRHI4c9zHQC8mHWE1HqZKGLmkcxhdaTTjqqvmJLkNjbFPwGF4AEKj8VcAmq0yDq9M=
+	t=1785933413; cv=none; b=dAmy55MaXHVShgRNXea89G4TKNkxMCjar2nLZf7od4egMPhmPc1yZ5zwQGxHK9gv2RLF0T6n6JtAkfSlMdEOlJoKAiaR15pVU38pIpVsTwE5ZO3L/wCtciXyr6k/X80XRck6gBKe/IWxMOdhTfCyZ45mb31vfNg4NWsqmYUh1/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785933345; c=relaxed/simple;
-	bh=e1gegNThzMuh+33P96hFm4RkJpbJa7EkhPIID3hb6Sw=;
+	s=arc-20240116; t=1785933413; c=relaxed/simple;
+	bh=u/QSMQYvK3iV/UzNy9hvY2R60BnUEZffif2r23mh6e4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cuYbrFlcV9sY+XHflzEv8c97Jja7oZdgYumgQIUBWFhyuwV94BqrkL58i4dmiCmnkuNiYoKYIwQIyBN344OTyGo+0jR0jXR8bQSzUYVD0UjMkK+O86Cqk5IgQSSbswQMp5DF/9fPAorDWswNCC6kGZ6Qs6ArCnX5J6uPi0N9Hoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OY6iI1+f; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=rqyY0PJjqbjDdW9BNGRbBGi9PuNkWZtFNOmZeOMMIX2qqKKRJ8H2na7GHzndnqJPwCTxowI2UZE0PDxcIoCWqsXvOWfqoAjh/XxYZF1HemU+9+XwEXRxN2ZJIFvEQE0YBeGdA742qqhDUM8wIExMIT8mEFVeadC4NtfqiGmb0Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PYL+97++; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OY6iI1+f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166401F000E9;
-	Wed,  5 Aug 2026 12:35:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PYL+97++"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E48571F000E9;
+	Wed,  5 Aug 2026 12:36:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785933343;
-	bh=KDAAxE67AkA4VWS6hTKD9Qmq2J0HyWRc7mVnAlucdnQ=;
+	s=k20260515; t=1785933411;
+	bh=WpYGhy71GQYMEhx6/E9ep6qlSdxmN2HrvHU4YQK/7EE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OY6iI1+fQdGt7rd4Why2AO6cLyzK7FNgP9mQVYvB5bGxifr/4Vk9RNlaXJYEA4qsy
-	 zPIUt45kTbDRkhOyu82qs1GXqNiSymPEWQgmle8+/vQJ8oD8ZpWtVOWKsQQCqk+rIc
-	 7rICIgnsQnU/sGRKYcLLg3/xvu8NAddnZuJ4BnC+Q4k1+jVpjlSOzhgOD5AESSc/Sj
-	 AJRyEoSsB5rSYcPkHrESGEPAh/AwklV1yWX7qUAvlc8bWGPWopHxN+voO3FcpxWMSs
-	 l0j1T5DMi8Xv0XnsxOKMDbduTpS8OJhb665MGzN4tV34yskxjrEo/iwOjbEKn4Hkyo
-	 43EBp6YUyAYYA==
+	b=PYL+97++58QkILjCKbG3ivZFRqxdlHKWu9h6ifgzaXgT8Kut61fVB3BXng2dG71nm
+	 SsDD2ZZ3nz98hZu+pyNKnAwguzMLJtTJTWtHsYdUu/+0njSsQKVUlqbs7ge86BPD4v
+	 lSI8JQjk3S8IzhEoH4RdRvu3PPiXmr1QIjyB1zmnCvXs09BrLlBNDSzon0mGHeh/sd
+	 4hpKX8DOlkOl72oAmQ7LOa8PyjeqR1135liWBfvWA4/ZS1mBZlHZzw/cMDMVVpCM4j
+	 QfGVtLFS+mCq6SshI03eZLVAkMDrQZ6xi46gy745Nce15WZSkjnz/mhsNKPcF3TRD0
+	 JoSzU4Uev1Dww==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 3/6] srcu: Make call_srcu() safe to call from any
+Subject: Re: [PATCH v3 1/6] rcu: Make call_rcu() safe to call from any
  context
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Puranjay Mohan" <puranjay@kernel.org>
 Cc: linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20260805122346.269445-4-puranjay@kernel.org>
+In-Reply-To: <20260805122346.269445-2-puranjay@kernel.org>
 References: <20260805122346.269445-1-puranjay@kernel.org>
- <20260805122346.269445-4-puranjay@kernel.org>
+ <20260805122346.269445-2-puranjay@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 05 Aug 2026 12:35:42 +0000
-Message-Id: <20260805123543.166401F000E9@smtp.kernel.org>
+Date: Wed, 05 Aug 2026 12:36:49 +0000
+Message-Id: <20260805123650.E48571F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Critical] A TOCTOU race in `srcu_defer_flush()` locklessly checking `lli=
-st_empty()` can cause `srcu_barrier()` to return prematurely, leading to a =
-Use-After-Free.
-- [Medium] Expedited SRCU callbacks can be silently downgraded to normal ca=
-llbacks due to a non-atomic update race on `sdp->defer_exp` between `__call=
-_srcu()` and `__srcu_defer_drain()`.
+- [Critical] A lockless check in rcu_defer_flush() causes rcu_barrier() to =
+miss in-flight deferred callbacks, violating the core rcu_barrier() guarant=
+ee.
+- [High] __rcu_defer_drain() creates an unbounded non-interruptible critica=
+l section, breaking PREEMPT_RT constraints and risking hard lockups.
+- [Medium] KASAN stack trace recording for deferred callbacks records the a=
+synchronous irq_work context instead of the actual call_rcu() caller.
 --
 
---- Patch [3]: [PATCH v3 3/6] srcu: Make call_srcu() safe to call from any =
-context ---
-commit 137e7f3c08249a4bd260b0c0d6f275423685df28
+--- Patch [1]: [PATCH v3 1/6] rcu: Make call_rcu() safe to call from any co=
+ntext ---
+commit 2b52f34260090add38843ff0920806c5e56bf18c
 Author: Puranjay Mohan <puranjay@kernel.org>
+Subject: rcu: Make call_rcu() safe to call from any context
 
-srcu: Make call_srcu() safe to call from any context
+This commit makes call_rcu() safe to call from any context by deferring
+callbacks to a per-CPU llist when interrupts are disabled. An irq_work
+then re-issues these callbacks once interrupts are re-enabled, preventing
+deadlocks or list corruption.
 
-call_srcu() has the same constraint as call_rcu(): its callback list and
-locks are only touched with interrupts disabled. Defer as call_rcu()
-does: stage the callback on the srcu_data's ->defer_cbs, chain that
-srcu_data onto a per-CPU list, and raise a per-CPU irq_work that
-re-issues it straight to the enqueue helper, never back through
-__call_srcu().
-
-> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> index 304112674e8a2..35fface51d50b 100644
-> --- a/kernel/rcu/srcutree.c
-> +++ b/kernel/rcu/srcutree.c
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 96848fc1f02b8..6fd7331aebc58 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
 [ ... ]
-> @@ -79,6 +80,45 @@ static void process_srcu(struct work_struct *work);
->  static void srcu_irq_work(struct irq_work *work);
->  static void srcu_delay_timer(struct timer_list *t);
+> @@ -3206,6 +3211,104 @@ __call_rcu_common(struct rcu_head *head, rcu_call=
+back_t func, bool lazy_in)
+>  	local_irq_restore(flags);
+>  }
 > =20
-> +struct srcu_defer;
-> +static void srcu_defer_drain(struct irq_work *iw);
-> +static void __srcu_defer_drain(struct srcu_defer *sndp, bool guard);
-> +
-[ ... ]
 > +/*
-> + * Flush pending deferred callbacks so a following srcu_barrier() waits =
-for them.
+> + * Re-issue deferred callbacks straight to the enqueue so they cannot de=
+fer
+> + * again.  ->defer_lock serializes the drainers: this CPU's irq_work,
+> + * rcu_defer_flush() and rcutree_migrate_callbacks().
 > + */
-> +static void srcu_defer_flush(void)
+> +static void __rcu_defer_drain(struct rcu_data *rdp, bool guard)
+> +{
+> +	struct llist_node *node, *next;
+> +	unsigned long flags;
+> +
+> +	if (!IS_ENABLED(CONFIG_RCU_DEFER))
+> +		return;
+> +
+> +	raw_spin_lock_irqsave(&rdp->defer_lock, flags);
+> +	if (guard)
+> +		WRITE_ONCE(rdp->defer_draining, true);
+> +	llist_for_each_safe(node, next, llist_del_all(&rdp->defer_head)) {
+> +		struct rcu_head *head =3D (struct rcu_head *)node;
+> +
+> +		head->next =3D NULL;
+> +		rcu_do_enqueue(head, head->func, false);
+> +	}
+
+[Severity: High]
+Could holding this raw spinlock across an unbounded number of enqueues cause
+latency spikes or hard lockups, especially on PREEMPT_RT?
+
+If a bulk teardown path calls call_rcu() in a loop with interrupts disabled,
+thousands of callbacks could be staged. When __rcu_defer_drain() runs, it
+loops over all of them in a single uninterrupted pass. If another CPU
+executes rcu_barrier() and calls __rcu_defer_drain(), it would also spin on
+this raw lock with interrupts disabled for the entire duration of the drain.
+
+> +	if (guard)
+> +		WRITE_ONCE(rdp->defer_draining, false);
+> +	raw_spin_unlock_irqrestore(&rdp->defer_lock, flags);
+> +}
+[ ... ]
+> +/* Stage @head for this CPU's irq_work when call_rcu() cannot enqueue no=
+w. */
+> +static void call_rcu_defer(struct rcu_head *head, rcu_callback_t func)
+> +{
+> +	struct rcu_data *rdp =3D this_cpu_ptr(&rcu_data);
+[ ... ]
+> +	head->func =3D func;
+> +	if (llist_add((struct llist_node *)head, &rdp->defer_head))
+> +		irq_work_queue(&rdp->defer_work);
+> +}
+
+[Severity: Medium]
+Will this delay KASAN stack trace recording to the irq_work context?
+
+Because call_rcu_defer() stages the callback without recording the stack tr=
+ace,
+the trace gets recorded later by kasan_record_aux_stack(head) inside
+rcu_do_enqueue(). This means any use-after-free reports might point to
+the irq_work instead of the original call_rcu() caller, making debugging
+more difficult.
+
+> +/*
+> + * Register pending deferred callbacks into the callback lists so a foll=
+owing
+> + * rcu_barrier() waits for them.  This runs before rcu_barrier() scans t=
+he
+> + * lists.
+> + */
+> +static void rcu_defer_flush(void)
 > +{
 > +	int cpu;
 > +
@@ -95,88 +152,26 @@ for them.
 > +		return;
 > +
 > +	for_each_possible_cpu(cpu) {
-> +		struct srcu_defer *sndp =3D &per_cpu(srcu_defer, cpu);
+> +		struct rcu_data *rdp =3D per_cpu_ptr(&rcu_data, cpu);
 > +
-> +		if (!llist_empty(&sndp->list))
-> +			__srcu_defer_drain(sndp, false);
-
-[Severity: Critical]
-Can this lockless list check lead to a use-after-free during cleanup?
-
-If an asynchronous irq_work is concurrently executing
-__srcu_defer_drain() and has already detached the list:
-
-CPU1 (irq_work)
-__srcu_defer_drain()
-    raw_spin_lock_irqsave(&sndp->lock, flags);
-    llist_del_all(&sndp->list);  // list is now empty
-
-CPU2 (cleanup_srcu_struct or srcu_barrier)
-srcu_defer_flush()
-    llist_empty(&sndp->list) // returns true, returns immediately
-
-Then CPU2 could return prematurely from srcu_defer_flush(), and
-cleanup_srcu_struct() might free the srcu_struct while CPU1 is still
-iterating through the detached callbacks and accessing sdp->ssp.
-
+> +		if (!llist_empty(&rdp->defer_head))
+> +			__rcu_defer_drain(rdp, false);
 > +	}
 > +}
-[ ... ]
-> @@ -1423,6 +1473,111 @@ static void __call_srcu(struct srcu_struct *ssp, =
-struct rcu_head *rhp,
-[ ... ]
-> +static void __call_srcu(struct srcu_struct *ssp, struct rcu_head *rhp,
-> +			rcu_callback_t func, bool do_norm)
-> +{
-> +	if (should_rcu_defer()) {
-> +		struct srcu_defer *sndp =3D this_cpu_ptr(&srcu_defer);
-> +		struct srcu_data *sdp;
-[ ... ]
-> +		sdp =3D this_cpu_ptr(ssp->sda);
-> +		rhp->func =3D func;
-> +		if (!do_norm)
-> +			WRITE_ONCE(sdp->defer_exp, true);
-> +		if (llist_add((struct llist_node *)rhp, &sdp->defer_cbs)) {
 
-[Severity: Medium]
-Could this flag be overwritten by a concurrent __srcu_defer_drain()?
+[Severity: Critical]
+Can this lockless check cause rcu_barrier() to miss in-flight callbacks?
 
-If __call_srcu() sets sdp->defer_exp to true just as another CPU is
-draining the list (e.g., from srcu_defer_flush()), can the drainer's
-delayed write to sdp->defer_exp clear the flag we just set here?
+If CPU A's irq_work detaches the list via llist_del_all() in
+__rcu_defer_drain(), defer_head becomes empty immediately. If CPU B
+executes rcu_defer_flush() concurrently, the lockless llist_empty()
+check will return true and bypass acquiring defer_lock.
 
-CPU1
-__srcu_defer_drain()
-    cnode =3D llist_del_all(&sdp->defer_cbs);
-
-CPU2
-__call_srcu()
-    if (!do_norm)
-        WRITE_ONCE(sdp->defer_exp, true);
-    llist_add(rhp, &sdp->defer_cbs);
-
-CPU1
-__srcu_defer_drain()
-    do_norm =3D !READ_ONCE(sdp->defer_exp);
-    if (!do_norm)
-        WRITE_ONCE(sdp->defer_exp, false); // Overwrites CPU2's write
-
-This would cause CPU2's newly enqueued expedited callback to lose its
-expedited status.
-
-> +			/*
-> +			 * Chain this srcu_data for the drain.  ->ssp must be
-> +			 * published here: deferral skips check_init_srcu_struct(),
-> +			 * so on a never-initialized static srcu_struct the
-> +			 * statically zeroed ->sda still has a NULL ->ssp.
-> +			 */
-> +			sdp->ssp =3D ssp;
-> +			if (llist_add(&sdp->defer_link, &sndp->list))
-> +				irq_work_queue(&sndp->iw);
-> +		}
-> +		return;
-> +	}
+Since CPU A has detached the callbacks but hasn't yet enqueued them
+into cblist, CPU B might skip __rcu_defer_drain(), check a cblist that
+does not yet contain the detached callbacks, and allow rcu_barrier()
+to return prematurely while objects are still in use.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805122346.2694=
-45-1-puranjay@kernel.org?part=3D3
+45-1-puranjay@kernel.org?part=3D1
