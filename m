@@ -1,134 +1,170 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B010034A3D6
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 09:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3D542CB1A
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 09:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786007610; cv=none; b=B+8W5c1KRX5NnYDAaJM/KzUVjXUrj7tWYGX9Z5icIUWzC7+XAs8vH/b0wT+zI8rG4ZssWnBtc2YqMxb9Qllzp3tbitP8U2jdfhwY3FFmQUCKCxIe9avzklxbol0/MOOv4z7hXph5B7wyUekVmYrnzXNNl4hkL4acXaMPN46VS1E=
+	t=1786007716; cv=none; b=OCpZiyjvCE/M4o3LPrP0YWD2wO2FfJC4iVeSDJK3/M7Kj+Vfq7/RD7RxzQhZgArP/ztFaucoY+FvZE+Ztfd+QIvFzieCw6QhqtrA3B8j/kpYUEOHDAf77Cp99/qHB3k2xA6fUA2+qmplKCHCNLF1yzdiPwL/rAfYry8eQ/Tg6bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786007610; c=relaxed/simple;
-	bh=tp6tnXfYUVTvunUJGA6IJObbm0nZmp2n9QJVkDiFKu0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=aaGX/EsloSYub4futZK8Q8O4/S/t+S3uvUqCFzkUJbF5FToTcVjjAaxmtFJQ9kPK5SJgmNRRfnJRYfAN5ZPT+3TO55vBB8b+q9+Tfn+hH8EBxUzSGsq/Gw00gcTFx1+2zKL+BdZDuge+Sqc847CZEgGZkVovVKUOLZ5J4mGyyrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QGJ5w9NB; arc=none smtp.client-ip=74.125.225.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786007716; c=relaxed/simple;
+	bh=qzNuBPozfFIkdZOuS/fLxMETJ0Kd83A2UR9sybGyKyo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wq7Exr5M+tOqh2gMPO3RP8N9GMitvi0pVkvOf6Xd5FiSHFGtyh8t9i4038Q7dsaFl3Dj9T3XeEe8TrNKHW5w7avSH94D3EIayPtaNtImLGshKWPvtv7fYFTZB8gpaO/ds58ZUrK//iTuty2H6XRWR9M8pyJy2FiB+Cdi1nxl2Xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HIgIczcV; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=POUHX7sE; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QGJ5w9NB"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47f9c6bc99eso433542f8f.0
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 02:13:28 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HIgIczcV";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="POUHX7sE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786007713;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w1p/WqP5zNmyTteiVasVWjR72E6WFiVRU2GjHHBSa5c=;
+	b=HIgIczcVznM/PvVO3WSanKAnsj07yqxutA+c0qD6W7KLAX8sbER67wo9jFQsXuofoJp0/B
+	HSBivg8cl1+otxci0Ww/V/gbi+/7g4SukEv3JNqh5UMv90cICz6R9+Bvj6/5P+xXsCnIPy
+	CE6BpTG9rTiqqWxmwEluDWBUS6gIoZM=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-308-563qicg6MVeruNDT8ivqZA-1; Thu, 06 Aug 2026 05:15:12 -0400
+X-MC-Unique: 563qicg6MVeruNDT8ivqZA-1
+X-Mimecast-MFC-AGG-ID: 563qicg6MVeruNDT8ivqZA_1786007711
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-47f2de3ba47so1097754f8f.1
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 02:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786007607; x=1786612407; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Vagwhw/cfVUYGAfwpyHVvoObwXu5LqHMy17a3izSB5U=;
-        b=QGJ5w9NBGSQiRqtO7gs+svm64HNd2ez3sS3hAXd/lsXKOjfs1OPRha5Fzqoh/kVECC
-         z236B3yffQU177n1GUuWsRSBvNy7tSlS6tXY2ULZq+qoerhCOw3xR5UHjWlf3BUvp1iQ
-         RdCOfQHxEjQshKXCacXsbvnqujznkGbXwSPk2KYLVcD+nXH7pLKQf6klfua/Imu6A7jM
-         UYcIYTi4w+Z5z/StwIvGaIhwfr4cdA6NqeKOL7P/hYAaLLoiLxY7EMvQgucgzk18/8u6
-         f6rqmFQmzk4CEr1jUz4T0ZsSwOiOPIQIZqOgqQ0fgowv4Ia4EYOUIc39rrZ/Rs7GMHSK
-         ln9w==
+        d=redhat.com; s=google; t=1786007711; x=1786612511; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=w1p/WqP5zNmyTteiVasVWjR72E6WFiVRU2GjHHBSa5c=;
+        b=POUHX7sEuNbTNG8im8YwWh7euPC20Hq7L+HtA5b9iqeez7oWztB9t3fOq8svtzfsyl
+         frcIdw3D15BamK1Iy09v4fdRkzcztICglAqIb8kz+h9oH0zGX/tmVHVJtiM5o4teejqW
+         wX7xCxWigFQdvvJ+cxZDb8WKifd2fp/Z4u7rfuqNWor/Rx9vFB+PXwkjYMd/WNDzwEc3
+         0BLODXpha1A2mtbx++dvWCcd4qx0ine7Ax1js3XyVwFO/N2CXA4gWRbDHz+KrtpTxw37
+         sjzlG8uajyJ76YS1QZXyCALvvKBXINbW8jr7qdHrJZNRxhZrF3QCGos5IKtx+Avd+P2s
+         Txpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786007607; x=1786612407;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Vagwhw/cfVUYGAfwpyHVvoObwXu5LqHMy17a3izSB5U=;
-        b=Msg/5ANQKJiEeHaIVvm/pfj6xSbJP+BkAKsXXF+Io6ZxzsS4XBo5NFSopd0DGJbS5d
-         zgVvIi0p6F7Ff34h/Uu/lvRW5ilvAhQ14XDg/K7KySfbLGltYLy1xBo4bqU38ZvTHXqu
-         CFL30C+qMMG3+l8hqnpSSFIh+Gg+OMbCY6eq0DPCxTkzcrhmbSP/uiPL5J1DcNQq4BY4
-         3wm1CAf002Vvfx+vmcnmjATvN+JItouiwTNaiGEjyv+d8dB+vTQ27qJWIILuTGphxDjD
-         tWFPZChonkxbd3vL2qh5JC4V7CN/vhX9ERWVFCxJGxxJSF8SRn8zvcVp7gKblD4MaHxt
-         eQaw==
-X-Forwarded-Encrypted: i=1; AHgh+RogXUQcVhSA7eHOslneExZAxTIlv4rnI6YOe6iXPH/Vf6/K1SZiJNRZT+HjfFTLBMrjoh8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxPOulhBdQNkm/+hPFCER9xvq7GepxU6x0KLR4Zrn5rWdyrEEp
-	ftpPoBigg5INyruhL1J3JSjf7guhpIf0cT2Woh7aTVUa0sToVcUcWPxI
-X-Gm-Gg: AR+sD11K3Zh8/qDq5tOreqaVJcQZWv5ydsL0oqss4/FWJqAIDq7FQ/veAL4esZecXCh
-	H3Co55yaJ3EN5Lvc4vQnMH7u/HgNqxI/G+eDi7NiA7h+Ieh+2uuQxH9uT6R0+FqkrIYPe01MEeJ
-	XNNAdzkCdoPhHdrchZumYTInWypZGBRCUNVlk6+EWcep8d4rcC3ucJ22MX3kIL+Z5U3FKdHkuTc
-	8tI6rQ+FCHZKgJpK4Th9RrNMc67LTx9aGEcal3H7OOvwRTy4iv26SIb1RM1lLG2gkRQUgUjh5Aq
-	/SJqViX3qJDcCQePBEvfEu7np941LzeHTo4ETsdx+pkIvlx8xlqNzaGR7xrnNNBA5zuoatqSpoQ
-	2WKddbbSS0ZnraK3khs0uVPX05SccSPxogMIBBKisKyX5aiMmEdM7EcktKtB00upsPsfj7Yz3L1
-	yaA2TOPqotM+tbg7RzVVqlrJK2r6usGqasvOUxyYR92J3Uc6J1IFlbONrdYpAMj8fIHUF7YMKX1
-	JCs7dNr4r4sxK5ZDI/9jS1uE4B4ia7WytayL2GuPd5uCRrb9s25r/u4niEDlDB5AOPSNf37yDJX
-	Q0GJhIZU+ae5HUWSE1L5GRC2P0A=
-X-Received: by 2002:a05:6000:25c4:b0:47f:d072:87d8 with SMTP id ffacd0b85a97d-47fec48243fmr21702652f8f.0.1786007606831;
-        Thu, 06 Aug 2026 02:13:26 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff7b183b2sm5200200f8f.24.2026.08.06.02.13.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 02:13:26 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1786007711; x=1786612511;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=w1p/WqP5zNmyTteiVasVWjR72E6WFiVRU2GjHHBSa5c=;
+        b=gqanVd1DaFd4qbVGk9FjSc2P4JLCEIxr69sPgz4XLDfjc+KS5Vao0sKe7irM7audJn
+         HC99Ku+Sy7ojf9FFN3yJGAYg4yxFgcj0npnCW7VWKDykVEeHwmXy+5WSwcYBDZ5SgZHC
+         rkOv93HhqCU+Fks4j6JZ6sMy9Xq0LCogIp5lNDSrTZY5VJ1UySAMz+7K/Nv5lDeSzcIJ
+         J9FEz1LvSKdpyUzHMRZ3WEnxXC8ldiGF1fAgxLstzIpPSOdBTS/UV6ymqK8Ww3cCQlYC
+         OfaFLRQrMMictW0Htun2QyujrQZgRjFGMyIoXwg5Ykfa5DfEoQpDc2wu/5c2Amc9gkgT
+         bbWg==
+X-Gm-Message-State: AOJu0YwKGDKNze/hnX8XPsSyJvsm+k0kh/NFgaf0UB12yaL4H1hMsRyk
+	tlMPqYz8rGeSNi5h/ZKbdYwo5LedNDmbdBoYun2bFMQYk2qpF+vtoa1flqyoBVcdC+Lx0FqmOlh
+	olUE6QkyOJeIMNNvZtZLJruGIfaOK50sX0uWd2Tlv4lzPSNwRM5oB9sAXT+HeNg==
+X-Gm-Gg: AR+sD10QLiNVKSqHBb0+LNk0f81sHgMAqt+UdT6YhMoGkXbV/yxMBBmaYCR62UVjOPZ
+	lzzpIgIAXOFs01rMjjNhJaQeb3gZH2GKw01uzeNHK96Jt/OJKObVFUsv2ovwWStLAml9YD+sMMT
+	e9iqY9MpFYUFlkvhL6NMoMHfYWk8X8teGhYCq6kjIg3QDdvN4hXPZRBC0q1jyozb6dh7GmB2f68
+	Tqi7FoZyql+h3Jqeepb4oqbx4SU4fnGWJobiCTynvW8xYKEJd7oDyvejGZwWZyKTkC+Z5VSyg3h
+	4Tm1eCAXSfQQfsXu8E7UYU5Vkf3kYcKKmUm1jkJ0Eq9fh6mX0oVmRrJdeAdtuOhdDHE0K0rhlGK
+	N2nP0PExdYZ8xa8mwNYjWUJkij6mOmNUlk+V7eFBBoxbS7CtA67nOEJetRTs7e4tG+fPfcSRYst
+	g=
+X-Received: by 2002:a05:6000:29d5:b0:47f:90df:4ec6 with SMTP id ffacd0b85a97d-47fec4e761bmr17445726f8f.6.1786007710473;
+        Thu, 06 Aug 2026 02:15:10 -0700 (PDT)
+X-Received: by 2002:a05:6000:29d5:b0:47f:90df:4ec6 with SMTP id ffacd0b85a97d-47fec4e761bmr17445663f8f.6.1786007710038;
+        Thu, 06 Aug 2026 02:15:10 -0700 (PDT)
+Received: from [192.168.188.103] (ip239-44-231-195.pool-bba.aruba.it. [195.231.44.239])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff7b26879sm4650653f8f.30.2026.08.06.02.15.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Aug 2026 02:15:09 -0700 (PDT)
+Message-ID: <1f36d5be-906a-4ba5-8679-24cbcf899254@redhat.com>
+Date: Thu, 6 Aug 2026 11:15:08 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3] tcp: honor BPF_SOCK_OPS_RWND_INIT on the
+ active connect path
+To: Tejas Birajdar <tejasbirajdar@meta.com>,
+ Eric Dumazet <edumazet@google.com>
+Cc: bpf@vger.kernel.org, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ sashiko-reviews@lists.linux.dev
+References: <20260730220055.2946171-1-tejasbirajdar@meta.com>
+ <20260731220124.B0C621F00AC4@smtp.kernel.org>
+From: Paolo Abeni <pabeni@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20260731220124.B0C621F00AC4@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 06 Aug 2026 11:13:25 +0200
-Message-Id: <DKHQUVB5TV0R.1OLK7GG1APAOR@gmail.com>
-Cc: <puranjay@kernel.org>, <paulmck@kernel.org>
-Subject: Re: [PATCH bpf-next 0/2] bpf: Track overlapping RCU protection
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Ning Ding" <dingning04@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260805233940.3966981-1-dingning04@gmail.com>
-In-Reply-To: <20260805233940.3966981-1-dingning04@gmail.com>
+Content-Transfer-Encoding: 7bit
 
-On Thu Aug 6, 2026 at 1:39 AM CEST, Ning Ding wrote:
-> Preemption-disabled and IRQ-disabled regions provide RCU protection, but
-> the verifier does not account for them. Current implementation can invali=
-date
-> a task kptr while another RCU source remains active, or keep it valid
-> after the final source ends.
->
-> Track these regions and invalidate RCU-protected pointers only after the
-> last protection ends. Add task kptr tests for overlapping protection and
-> final-exit rejection.
->
-> This follows review of the applied spin-unlock fix series [1].
->
-> Tested in QEMU/KVM:
->   ./test_progs -t task_kfunc
->   ./test_progs -t preempt_lock
->   ./test_progs -t irq
->
+On 8/1/26 12:01 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> 
+> Pre-existing issues:
+> - [Medium] The `SOCK_RCVBUF_LOCK` check executes before the BPF program runs and before `full_space` is inflated, silently defeating BPF-requested windows and bypassing dynamic `SO_RCVBUF` adjustments.
+> --
+> 
+> --- Patch [1]: [PATCH net-next v3] tcp: honor BPF_SOCK_OPS_RWND_INIT on the active connect path ---
+> commit 2cf5d1d17ae1c7488533ecaa0fcbb83ae4591ec8
+> Author: Tejas Birajdar <tejasbirajdar@meta.com>
+> 
+> tcp: honor BPF_SOCK_OPS_RWND_INIT on the active connect path
+> 
+> This commit updates tcp_connect_init() to honor the initial TCP receive
+> window requested by a BPF_SOCK_OPS_RWND_INIT program on the active connect
+> path. It inflates full_space if the program returns a non-zero window,
+> matching the listener path's behavior, and uses u64 arithmetic to prevent
+> overflows.
+> 
+> Link: https://lore.kernel.org/netdev/20260723214208.3655474-1-tejasbirajdar@meta.com/
+> Link: https://lore.kernel.org/netdev/20260722170033.2763794-1-tejasbirajdar@meta.com/
+> 
+>> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+>> index d7c1444b5e304..fcaa04e65189b 100644
+>> --- a/net/ipv4/tcp_output.c
+>> +++ b/net/ipv4/tcp_output.c
+> 
+> [ ... ]
+> 
+>> @@ -4137,10 +4138,13 @@ static void tcp_connect_init(struct sock *sk)
+>>  		WRITE_ONCE(tp->window_clamp, tcp_full_space(sk));
+>>  
+>>  	rcv_wnd = tcp_rwnd_init_bpf(sk);
+>> +	full_space = tcp_full_space(sk);
+>>  	if (rcv_wnd == 0)
+>>  		rcv_wnd = dst_metric(dst, RTAX_INITRWND);
+>> +	else if (full_space < (u64)rcv_wnd * tp->advmss)
+>> +		full_space = min_t(u64, (u64)rcv_wnd * tp->advmss, INT_MAX);
+> 
+> [Severity: Medium]
+> This is a pre-existing issue, but does the SOCK_RCVBUF_LOCK check happening
+> before the BPF program runs defeat the purpose of allowing BPF to adjust
+> the receive window?
+> 
+> If an application sets SO_RCVBUF prior to connect(), SOCK_RCVBUF_LOCK is
+> set. In tcp_connect_init(), this caps tp->window_clamp to the old
+> tcp_full_space() before tcp_rwnd_init_bpf() is invoked.
+> 
+> When the BPF program returns a large requested window and full_space is
+> inflated, tcp_select_initial_window() bounds space by
+> min(window_clamp, space).
+> 
+> This caps it right back to the pre-BPF full_space and discards the BPF
+> request.
+> 
+> Conversely, if the application did not set SO_RCVBUF but the BPF program
+> adjusts it dynamically (which sets SOCK_RCVBUF_LOCK), 
 
-Overall, looks good. There are various failures in CI, so you might need to
-update or adjust existing selftests.
+I read the above alike: 'a badly written bpf program could be
+ineffective'; not much relevant.
 
-Make sure to include selftest changes for _existing_ tests within the kerne=
-l
-commit making changes, so as to preserve bisection. Your extra tests should
-still go in a separate commit.
+This version LGTM; Eric do you have some comments?
 
-Also, do we need that was_in_rcu_cs logic for bpf_spin_lock(). Would it be
-possible to drop it and do it the same way you've done it for other cases?
-If that makes sense, I would fold that cleanup in the first patch as well.
+Thanks,
 
-https://patchwork.kernel.org/project/netdevbpf/patch/20260805233940.3966981=
--2-dingning04@gmail.com
-
-pw-bot: cr
-
-> [1] https://lore.kernel.org/r/20260803112615.3362122-1-dingning04@gmail.c=
-om
->
-> Ning Ding (2):
->   bpf: Account for preempt and IRQ state in RCU protection
->   selftests/bpf: Test overlapping RCU protection
->
->  kernel/bpf/verifier.c                         |  13 +-
->  .../selftests/bpf/prog_tests/task_kfunc.c     |   6 +
->  .../selftests/bpf/progs/task_kfunc_common.h   |   2 +
->  .../selftests/bpf/progs/task_kfunc_failure.c  |  49 ++++++
->  .../selftests/bpf/progs/task_kfunc_success.c  | 147 ++++++++++++++++++
->  5 files changed, 214 insertions(+), 3 deletions(-)
->
->
-> base-commit: 11c1e836710dcba03e50454a4eedfdbaf8d3050e
+Paolo
 
