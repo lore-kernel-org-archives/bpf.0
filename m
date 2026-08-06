@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501F8384243
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 16:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7077448A2C7
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 17:05:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786035478; cv=none; b=OP1tUBIs9K584zBugTBET/l4HB4BOybkydviqX6aUFAyKZTq70wKE42uYVz9LaIKO/G9ZyvHwVdf+qjWijx/T3+eFMm+Teg6i/62yWQy6UR0gxCsvWOlS3/Wv1XY01Na7HDtEEPeDbPM9gz9SO7X2TkFuA4KI33tv0dRe8onM9c=
+	t=1786035945; cv=none; b=WVToOt0gtYt75bXffVt8r4nBw2BQqchcqjLWe5pH762Af1n+GvzmBtV2Kr5+9EZXJCYEhz6oSK3YBbC42OJ2ATddTmaRkczskdfLquSHdW3ZDLiQ1BWhU6loUEr9YLar7t6IN3BwCWRY1TuTTATp6/4PryfQJ9y0ORXjEK+L5dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786035478; c=relaxed/simple;
-	bh=X0OZ5+UsgnylP5Z/eMROihWOGnfqKm5fyWRP0SeSvm8=;
+	s=arc-20240116; t=1786035945; c=relaxed/simple;
+	bh=mDQICqf/qjK9CxNtPCAaFX4TujTI+hbPy/U0sLlR2xw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jRRANsbIfLhhC4/saxjRKBbcbyEhu50Z13+xkEJJ3W7RVH3VZrAnjxpJKA/hGIjCoVzlJU2kyKCHT0ZOpDXPwybkN8YoezXzvnxVtgaHsWqagZv5EAPEu7cK5TLNtbGnVfppAGKe+wu76eO+kRO0I4n6Jb+1qPRpKu+RKtwPqmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cHK40B1i; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=mUyLHS4jnaEoXa6rjhf175s2g984vCQ7fNkjzSj0chWcHhZQE0FaYzABTMkvJBmKJTcjZeMZdvGs/W1f1L0R65g82MymMefnRN1N7dsxM0jKbdZpoMtbinLl2LJl7JxbGVteLVSHVef/e7n82E5tmhfu8G+p9QKVpLmxkpotnW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Assv4qYk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cHK40B1i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77971F000E9;
-	Thu,  6 Aug 2026 16:57:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Assv4qYk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC13F1F00A3A;
+	Thu,  6 Aug 2026 17:05:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786035474;
-	bh=PrNv3OcZbYlwHVJ9IZec1C0bilosJO9UCIFni5CpJPM=;
+	s=k20260515; t=1786035944;
+	bh=mr+nqRyutdKmKZo9iA96h0d/LSohI3pHaq9hWm2AGr8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cHK40B1iNsxDnncT4IFABtQFOWlDf0MDWrrFDcNWQmrVcgUdG136P0/MEwaNqP4lv
-	 4QFJQ9fupQrx6wH4tiGRYJfNzX78mXxC6VGd02lFSrPdyyrPY8nbu2qiTEglQJtACd
-	 c1YrCdByvL9FhTirbaVTEBaeYJTx/P8RVN8p4KzvIx0w3GpTrSZwOanpetXzoKYiQu
-	 wtDcVKEv2uHf6SMli6c5XoKQsOOvDH7PTeI+qtATMR8KqtyEIXyBqkAkWnvwEgE3/w
-	 SzAs8He1Fv3XkG7Nr3lvJYYxiJC5v/MyIRagYwz9Jb5THufBDUStDwKdjLUSjAEGC1
-	 t/uJ2IOaLZxcA==
+	b=Assv4qYktWVy+jMYKLpAI7oveDsIUSZy/ASn8o1Nc3SNA3J0Jpuc+WXp6H2VmaetN
+	 sGh2Yej+n/mcj7dUrLYKyMRe2+z/v3jYFktt8Fq506ChWblTRpz06TIE25CPZz07WV
+	 k82taLH4ORJRblTyXjZdVKDGPhAlTEWP3mXWvVWrjMVV/fhpZJnT4YU+2VD/zJMbMm
+	 0KQE9/0asHx+hg0ML8B/otHZY7P4uoUryeRIvuKzBo4MVaKCmsJ6sJWrMyPkIQM+du
+	 iJnjX2z2VDYRUqwsgBnj+pA73mQXVF9oMITEWjEhmwInR6LFXK7CZdVC1uwVKLYYwE
+	 Ie+P8F2GYaGIw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v11 05/10] libbpf: Add support for global
- percpu data
+Subject: Re: [PATCH bpf-next v11 04/10] libbpf: Probe percpu data feature
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Leon Hwang" <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260806163125.11172-6-leon.hwang@linux.dev>
+In-Reply-To: <20260806163125.11172-5-leon.hwang@linux.dev>
 References: <20260806163125.11172-1-leon.hwang@linux.dev>
- <20260806163125.11172-6-leon.hwang@linux.dev>
+ <20260806163125.11172-5-leon.hwang@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 16:57:54 +0000
-Message-Id: <20260806165754.B77971F000E9@smtp.kernel.org>
+Date: Thu, 06 Aug 2026 17:05:43 +0000
+Message-Id: <20260806170543.EC13F1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,89 +46,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Dead code in percpu global data feature check
+- [Medium] The newly added feature probe `FEAT_PERCPU_DATA` is never used t=
+o make capability decisions.
 --
 
---- Patch [5]: [PATCH bpf-next v11 05/10] libbpf: Add support for global pe=
-rcpu data ---
-commit ee97f8a8e25b5e9337024df3dd6f3a1aae4f6cdc
+--- Patch [4]: [PATCH bpf-next v11 04/10] libbpf: Probe percpu data feature=
+ ---
+commit 925264284b89c241360ff401bd914f9c19997613
 Author: Leon Hwang <leon.hwang@linux.dev>
 
-libbpf: Add support for global percpu data
+libbpf: Probe percpu data feature
 
-This commit adds support for global percpu data in libbpf by introducing a=
-=20
-new ".percpu" section. It updates the lightweight skeleton loader to use=20
-BPF_F_ALL_CPUS when updating the percpu_array map and marks the mmaped data=
-=20
-as read-only after population.
+This commit adds a feature probe to detect if the kernel supports global
+percpu data. It aims to allow libbpf to fail predictably when this feature
+is unavailable on older kernels.
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 514e4e9daa825..9f79a8e850fdb 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index b7e388f99d0bb..ef9581c113035 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
 [ ... ]
+> @@ -707,6 +739,9 @@ static struct kern_feature_desc {
+>  	[FEAT_BPF_SYSCALL_COMMON_ATTRS] =3D {
+>  		"BPF syscall common attributes support", probe_bpf_syscall_common_attr=
+s,
+>  	},
+> +	[FEAT_PERCPU_DATA] =3D {
+> +		"kernel supports percpu data", probe_kern_percpu_data,
+> +	},
+>  };
 
-> @@ -5293,18 +5326,26 @@ static int
->  bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map=
- *map)
->  {
->  	enum libbpf_map_type map_type =3D map->libbpf_type;
-> +	bool is_percpu =3D map_type =3D=3D LIBBPF_MAP_PERCPU;
-> +	const __u64 update_flags =3D is_percpu ? BPF_F_ALL_CPUS : 0;
->  	int err, zero =3D 0;
->  	size_t mmap_sz;
-> =20
-> +	if (is_percpu && !obj->gen_loader && !kernel_supports(obj, FEAT_PERCPU_=
-DATA)) {
-> +		pr_warn("map '%s': kernel does not support percpu data.\n",
-> +			bpf_map__name(map));
-> +		return -EOPNOTSUPP;
-> +	}
-> +
+[Severity: Medium]
+Are there any callers that actually query this new feature probe?
 
-[Severity: Low]
-Is this check reachable?=20
+The commit message notes that libbpf can make capability decisions early
+and fail predictably when global percpu data is unavailable. However,
+FEAT_PERCPU_DATA appears to only be defined and registered, without being
+queried in the loader code.
 
-Looking at bpf_object__create_maps(), if the kernel does not support
-FEAT_PERCPU_DATA, map->autocreate is set to false and the map processing
-loop continues early:
-
-bpf_object__create_maps() {
-    ...
-    if (bpf_map__is_internal(map) && bpf_map__type(map) =3D=3D BPF_MAP_TYPE=
-_PERCPU_ARRAY &&
-        !kernel_supports(obj, FEAT_PERCPU_DATA))
-        map->autocreate =3D false;
-
-    if (!map->autocreate) {
-        pr_debug("map '%s': skipped auto-creating...\n", map->name);
-        continue;
-    }
-    ...
-}
-
-Since bpf_object__populate_internal_map() is called later in this same
-loop (after the continue), wouldn't the !kernel_supports() condition
-already be filtered out, making this warning dead code?
-
->  	if (obj->gen_loader) {
->  		bpf_gen__map_update_elem(obj->gen_loader, map - obj->maps,
-> -					 map->mmaped, map->def.value_size);
-> +					 map->mmaped, map->def.value_size, update_flags);
->  		if (map_type =3D=3D LIBBPF_MAP_RODATA || map_type =3D=3D LIBBPF_MAP_KC=
-ONFIG)
->  			bpf_gen__map_freeze(obj->gen_loader, map - obj->maps);
->  		return 0;
->  	}
-> =20
-> -	err =3D bpf_map_update_elem(map->fd, &zero, map->mmaped, 0);
-> +	err =3D bpf_map_update_elem(map->fd, &zero, map->mmaped, update_flags);
->  	if (err) {
->  		err =3D -errno;
->  		pr_warn("map '%s': failed to set initial contents: %s\n",
+Is there a missing update to the loader, perhaps using kernel_supports(),
+that checks this flag before attempting to load percpu global data?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806163125.1117=
-2-1-leon.hwang@linux.dev?part=3D5
+2-1-leon.hwang@linux.dev?part=3D4
