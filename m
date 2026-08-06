@@ -1,231 +1,131 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E673371D1E
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 13:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82AC83806AF;
+	Thu,  6 Aug 2026 13:45:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786022532; cv=none; b=p2vVK1QRJQUC/Mvmo7W7EvmiHW9eWflqSeVtAKxcZurThwJr+XaLv4bCG6b8x8S4PgSo61Gs/PeAnk8qQKl8KSJQaz3kaP5CeZMi9zft//Y0QISh/CQFHRnNv5UWZbnJI8sdPz8nHPCauG8v0M5DbUvXBTD8Zzam2AHcxoDJ8hs=
+	t=1786023911; cv=none; b=DrfFg4cpuiv7i2TxPq6+SUJ5DgW4L94IJUgNsa8UvZghEhnsZUE2YDqSdQsHG54b/Ywc3N1g2FUGGqo6sJK//g2X22F/eDtfjiDC5/+8kXBEPLfEpE/H7wMkBzJ/mE+g8MTff7P5RgvB9nmIBePTzYIlOZ+7lvks1TkAwwTfBP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786022532; c=relaxed/simple;
-	bh=dud2YNBYvUom0KH/Y60Uh9zFQp26TWYO0xIVlKi8Sv4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HdlbIh5ybqUjTiHv/vcfhMqM+uZ0bKTdxX/kZPFFmkHE0YAaP7zxB6ImWuQTfclEMUNPo9DVQHIAqIpMPO8U/kP+Jy0QmdxN+2gfIeDRzsm8JKElP+7qXezvMINZ14IP6mTJYPTkdFQGgtM/h4xRunQeIATIZL+ENQPIuwKa6jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai; spf=pass smtp.mailfrom=nebusec.ai; dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b=HtqNbHXD; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
+	s=arc-20240116; t=1786023911; c=relaxed/simple;
+	bh=IALA1uDNbf5o/p/rf8md9qS+0knKGXzgdb9SABzpomg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lD9qdP3XEDnS2M2V7/nliMSodaASKBwdvxQzZ1ap93+RNx+YgGgaB8oe5OvZPEeYYDHhgXedD1nmTqNGCyNAJ/DaieEcdgi7lfC+8IzvzJzls08ft8P2l5OCXfiQRZIiQVfszWi8n234poIGKzktt4sOnXzzVQBnXjClLYsbNBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jhP7WZW8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b="HtqNbHXD"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38d489b6b71so2165599a91.0
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 06:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nebusec.ai; s=google; t=1786022529; x=1786627329; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Q3b+EkF9QMrR80LpGhytFeACOBOjNmUOozsMI5C98ss=;
-        b=HtqNbHXDMJIw3jCgj+ZxL8Jio0kzwU49ixSjX3zw8v/jlyhYuwyEpLROW/dlSAtgEb
-         w2s4Uf21OgNOlTaj8J+9Fc24LPYqRcx/qVJ/MEidWs0NaRgBEazXf/q/rND5uDH076yl
-         qvy1F+xS9hN4pzNvyPfGJGnJuoeGyxdwO8ugnoQNoafstKx68fSk+MBJJSVz6u6ftlFg
-         +GSkC2ikH0yzr3G+uioSemvXMGMnbD3lwuoWhpgDKKA4+YcrVjaxuM/sL5DAd9/h6yI0
-         jk1A7rj87Jf0lg5vj/nRLdLu7T6CdCURb8h8KcF0txzTq9ZXOMMvM98eS2pk3FxC0Km8
-         AIEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786022529; x=1786627329;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Q3b+EkF9QMrR80LpGhytFeACOBOjNmUOozsMI5C98ss=;
-        b=KMd7S9ErM1a1mHruRWDIzVOr6JqdKnHJpB6lUlJDd6R5rEPgskcOoGJefZFvu99nSQ
-         v+VMeiQH9MT9UOh8IVgGBJ5MSQkcYXIJbPwEpENFKLUvYOLeqWEh9W02FFsV9/rUVsCy
-         nkiVF2aiP9W44AvIElr8hJ/W67ktgvY/ls596+l8fwSauFJcds4rjQ04w90Nt1dsx4N4
-         4VBYMczYSh+pNZ/PNsERv3NprrvPQLJlbfVXlE4uMnULPPTmrLi20F8CWcYyR809t2nr
-         dtyponqTZ7uO5lQcW+ojlnYf8bwdHubLVqPZIDLZhfxI2hfv5/gpizkvP28WdO6I+KHh
-         nFuA==
-X-Forwarded-Encrypted: i=1; AHgh+RqYabzdk4h3k5EsGwneBoQUhDqrCGlPkgtDieB6TmyjBnT92E7abgbJmWeKhfsULKD/xxc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw26gzFt/GtfnVNXBDN+m/G/IQzitELdAJIztmqztxQZjq4PRS5
-	vwILgQUAtvl/bCsOcfDng8l2Ys1BSqVq5CakcdHyA8B7/uBGqjtPGrSJZC6ZG+sQ4MzP
-X-Gm-Gg: AR+sD13hJ9m0dnjawjV7Gks6rNbSdookUS9plBVOn+EBczePtv/vHQc2supj39NU+Hw
-	dy9kcbSgWrEqlUWxTB6Zypl2gv0MwAKqXOz1LAQaqAcIFO/pa+KhTbyqCq2P3H5arhGczFQB0W0
-	F+qjinRIuw00Y7X82G9c18X5xiykKfbyKcELHnH+lZxyUU8uEI/9BvTZoSa/6AOTYkR1Db7v+I8
-	oK2WGdIl1M0jIwCEZF97bEeSmPn1Y4mTbni7DeqM/tHJCKlFYAC9P3VtC8Mp2P37oZ1huMznFvc
-	isVn/RPQMoRkX/wgEirWWjLLc6sYHpDqXjpyTWngyKNvTl7RPI8Ls1at8YLpHrnb1TYs0CboU28
-	fNdb7LxTfOdNWTS5JU5eEDb+oJb13zwRbZZAPpW6omGZg/4INvPZOQdT2sHzlUkUHx6fJb//Y/e
-	GWwdGdxtZE+ym5NaXxiS/DzEKQ61ivYgDfRWs8tiF37LBP+cOM2wm379WvzZ7k2iGzASgWWhV70
-	rESgKk5aHgJJ6I=
-X-Received: by 2002:a17:90b:4e8d:b0:38d:ec31:4840 with SMTP id 98e67ed59e1d1-3903c5932femr15718603a91.13.1786022528938;
-        Thu, 06 Aug 2026 06:22:08 -0700 (PDT)
-Received: from Roxy.localdomain ([203.175.14.58])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39085e4b01esm1542955a91.16.2026.08.06.06.22.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 06:22:07 -0700 (PDT)
-From: Zhiling Zou <zhilinz@nebusec.ai>
-To: idosch@nvidia.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	razor@blackwall.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	dsahern@kernel.org,
-	horms@kernel.org,
-	yuehaibing@huawei.com,
-	kuniyu@google.com,
-	aleksander.lobakin@intel.com,
-	maoyixie.tju@gmail.com,
-	thorsten.blum@linux.dev,
-	kees@kernel.org,
-	kylebot@openai.com,
-	vega@nebusec.ai,
-	zhilinz@nebusec.ai
-Subject: [PATCH net v3 1/1] net: cap advertised IP tunnel headroom
-Date: Thu,  6 Aug 2026 21:21:52 +0800
-Message-ID: <0ac01576f92412e8fa35cc3eb44336797a9d11d0.1786021595.git.zhilinz@nebusec.ai>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jhP7WZW8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D91411F000E9;
+	Thu,  6 Aug 2026 13:45:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786023910;
+	bh=6+yrdkh0LONfegXmNoa1TtrTQpU550Mmd4StmWllggA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=jhP7WZW8tV/xyfh3ZIQJGLkciveI9miLHarkXfQi2p3REHg3umQXD46QHw2V1+319
+	 yEtC0YdDyK/8mx/Ug4WeGvlMx1NllTEXh/sFj+rovSVO9qLIsNj4iUc0EVHzLlMYqh
+	 dzz73b5CIGikrO1uOweLdFlGGFQMb/YX9hQK/w1k7XnnugbkzVWlh8ADbb0sfeAe4v
+	 RN0Ad6EQBRpQAAIR1p9oWw3ziVNcmteaLpHXNi60UZ8uiXuSBB76KdlGJiOjlxZ59g
+	 XVPSQoeK11eHlvVmol4Z5/2/DN59udivLLGn+RY2+y06Tb0Uk8rJrvQ2RRtnarX24n
+	 +pPGGM994ebmA==
+Message-ID: <17f81247-ebe2-42ce-ac34-02f4779ccaef@kernel.org>
+Date: Thu, 6 Aug 2026 15:45:05 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] veth: fix queue index used to wake the peer txq in
+ veth_poll
+To: =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>,
+ Toshiaki Makita <toshiaki.makita1@gmail.com>,
+ Simon Schippers <simon.schippers@tu-dortmund.de>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
+References: <20260806-veth-fix-poll-queue-idx-v1-1-c5357fb7573d@tu-berlin.de>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260806-veth-fix-poll-queue-idx-v1-1-c5357fb7573d@tu-berlin.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-IP tunnel devices derive their advertised needed_headroom and, for IP6GRE
-devices with header_ops, hard_header_len from lower output devices. A stack
-of user-created devices can make the derived value larger than the 16-bit
-skb header offsets can represent. Once IP output reserves it, skb head
-expansion can wrap those offsets.
 
-The runtime transmit path already caps a growing needed_headroom at 512.
-Apply the cap when configuration publishes headroom or header lengths
-derived from a lower output device.
 
-Capping the advertised value is safe: IP tunnel transmit still expands the
-skb when the packet needs more headroom. A nonsensical stacked configuration
-can therefore incur an extra reallocation, but it cannot publish an unbounded
-reservation to upper layers.
+On 06/08/2026 13.43, Jonas Köppeler wrote:
+> veth_poll() derives the index of the peer TX queue to wake from
+> rq->xdp_rxq.queue_index. That field is only initialized by
+> xdp_rxq_info_reg() in veth_enable_xdp_range(), which runs only when an
+> XDP program is attached. On the plain GRO/NAPI path
+> (veth_napi_enable_range()) xdp_rxq_info_reg() is never called, so
+> queue_index stays 0 for every queue, as priv->rq is zero-allocated. The
+> same happens once an XDP program is detached while GRO stays enabled,
+> since xdp_rxq_info_unreg() clears the struct again.
+> 
+> So in a multi-queue setup with GRO enabled and no XDP program attached,
+> every NAPI instance looks at the peer's TX queue 0. If veth_xmit() stops
+> peer TX queue 1 because the ptr_ring is full (NETDEV_TX_BUSY), nothing
+> ever wakes it again: the poller draining queue 1 wakes queue 0 instead.
+> veth implements no ndo_tx_timeout, so the netdev watchdog does not kick
+> in either, and the queue stays stopped indefinitely.
+> 
+> Derive the index from the position of the rq within priv->rq instead,
+> which is correct regardless of whether XDP was ever enabled.
+> 
+> Scripts to reproduce the stall are available at
+> https://github.com/netoptimizer/veth-backpressure-performance-testing
 
-Fixes: 1a37e412a022 ("net: Use 16bits for *_headers fields of struct skbuff")
-Cc: stable@vger.kernel.org
-Reported-by: Vega <vega@nebusec.ai>
-Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
----
-changes in v3:
-- Split netkit handling into a separate follow-up.
-- Explain why capping advertised headroom is safe.
-- Use local variables for derived headroom.
-- v2 Link: https://lore.kernel.org/all/0ae4aa29223b89049727aec4d36f144bad41537e.1785476387.git.zhilinz@nebusec.ai/
+I've modified both the reproducer[12] and selftests[13] to detect this.
+Previously reproducer only had a 50% chance to catch this, and we didn't 
+notice, code have been changed to catch this 100% of the time.  The 
+selftests script never hit the bug as it always used one queue, this 
+have been changed to always use two queues, but force/steer traffic to 
+always hit queue index 1 via XPS config (as we want to see the queue 
+build up and ptr_ring HoL queuing effects in the latency measurements).
 
-changes in v2:
-- Move the fix from IP send paths to tunnel and netkit device control paths.
-- Cap advertised IP tunnel headroom at 512 and reject netkit headroom
-  values above that limit at device creation.
-- v1 Link: https://lore.kernel.org/all/0c6c64e9bbd71a0decc8504a384061e0e631be13.1785054561.git.zhilinz@nebusec.ai/
 
- include/net/ip_tunnels.h | 11 +++++++++--
- net/ipv4/ip_tunnel.c     |  2 +-
- net/ipv6/ip6_gre.c       | 10 ++++++----
- net/ipv6/ip6_tunnel.c    |  7 +++++--
- net/ipv6/sit.c           |  2 +-
- 5 files changed, 22 insertions(+), 10 deletions(-)
+- [12] 
+https://github.com/netoptimizer/veth-backpressure-performance-testing/pull/12
+- [13] 
+https://github.com/netoptimizer/veth-backpressure-performance-testing/pull/13
 
-diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
-index d708b66e55cda..85e3455cea259 100644
---- a/include/net/ip_tunnels.h
-+++ b/include/net/ip_tunnels.h
-@@ -629,8 +629,7 @@ struct metadata_dst *iptunnel_metadata_reply(struct metadata_dst *md,
- int skb_tunnel_check_pmtu(struct sk_buff *skb, struct dst_entry *encap_dst,
- 			  int headroom, bool reply);
- 
--static inline void ip_tunnel_adj_headroom(struct net_device *dev,
--					  unsigned int headroom)
-+static inline unsigned int ip_tunnel_limit_headroom(unsigned int headroom)
- {
- 	/* we must cap headroom to some upperlimit, else pskb_expand_head
- 	 * will overflow header offsets in skb_headers_offset_update().
-@@ -640,6 +639,14 @@ static inline void ip_tunnel_adj_headroom(struct net_device *dev,
- 	if (headroom > max_allowed)
- 		headroom = max_allowed;
- 
-+	return headroom;
-+}
-+
-+static inline void ip_tunnel_adj_headroom(struct net_device *dev,
-+					  unsigned int headroom)
-+{
-+	headroom = ip_tunnel_limit_headroom(headroom);
-+
- 	if (headroom > READ_ONCE(dev->needed_headroom))
- 		WRITE_ONCE(dev->needed_headroom, headroom);
- }
-diff --git a/net/ipv4/ip_tunnel.c b/net/ipv4/ip_tunnel.c
-index 9d114bd575f92..5b1f180485d42 100644
---- a/net/ipv4/ip_tunnel.c
-+++ b/net/ipv4/ip_tunnel.c
-@@ -317,7 +317,7 @@ static int ip_tunnel_bind_dev(struct net_device *dev)
- 		mtu = min(tdev->mtu, IP_MAX_MTU);
- 	}
- 
--	dev->needed_headroom = t_hlen + hlen;
-+	dev->needed_headroom = ip_tunnel_limit_headroom(t_hlen + hlen);
- 	mtu -= t_hlen + (dev->type == ARPHRD_ETHER ? dev->hard_header_len : 0);
- 
- 	if (mtu < IPV4_MIN_MTU)
-diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-index b843116e9b703..cc757586be90a 100644
---- a/net/ipv6/ip6_gre.c
-+++ b/net/ipv6/ip6_gre.c
-@@ -1137,13 +1137,15 @@ static void ip6gre_tnl_link_config_route(struct ip6_tnl *t, int set_mtu,
- 			return;
- 
- 		if (rt->dst.dev) {
--			unsigned short dst_len = rt->dst.dev->hard_header_len +
--						 t_hlen;
-+			unsigned int headroom;
-+
-+			headroom = rt->dst.dev->hard_header_len + t_hlen;
-+			headroom = ip_tunnel_limit_headroom(headroom);
- 
- 			if (t->dev->header_ops)
--				dev->hard_header_len = dst_len;
-+				dev->hard_header_len = headroom;
- 			else
--				dev->needed_headroom = dst_len;
-+				dev->needed_headroom = headroom;
- 
- 			if (set_mtu) {
- 				int mtu = rt->dst.dev->mtu - t_hlen;
-diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
-index bf8e40af60b08..2c941acb081fa 100644
---- a/net/ipv6/ip6_tunnel.c
-+++ b/net/ipv6/ip6_tunnel.c
-@@ -1522,8 +1522,11 @@ static void ip6_tnl_link_config(struct ip6_tnl *t)
- 			tdev = __dev_get_by_index(t->net, p->link);
- 
- 		if (tdev) {
--			dev->needed_headroom = tdev->hard_header_len +
--				tdev->needed_headroom + t_hlen;
-+			unsigned int headroom;
-+
-+			headroom = tdev->hard_header_len + tdev->needed_headroom;
-+			headroom += t_hlen;
-+			dev->needed_headroom = ip_tunnel_limit_headroom(headroom);
- 			mtu = min_t(unsigned int, tdev->mtu, IP6_MAX_MTU);
- 
- 			mtu = mtu - t_hlen;
-diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-index a38b24fb83842..19b7fa8d1a2a0 100644
---- a/net/ipv6/sit.c
-+++ b/net/ipv6/sit.c
-@@ -1131,7 +1131,7 @@ static void ipip6_tunnel_bind_dev(struct net_device *dev)
- 		WRITE_ONCE(dev->mtu, mtu);
- 		hlen = tdev->hard_header_len + tdev->needed_headroom;
- 	}
--	dev->needed_headroom = t_hlen + hlen;
-+	dev->needed_headroom = ip_tunnel_limit_headroom(t_hlen + hlen);
- }
- 
- static void ipip6_tunnel_update(struct ip_tunnel *t,
--- 
-2.43.0
+> Fixes: dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to reduce TX drops")
+> Signed-off-by: Jonas Köppeler <j.koeppeler@tu-berlin.de>
+> Tested-by: Jesper Dangaard Brouer <hawk@kernel.org>
+
+Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
+
+> ---
+>   drivers/net/veth.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 00e34afd858e..e927ef3f47b3 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -961,7 +961,7 @@ static int veth_poll(struct napi_struct *napi, int budget)
+>   	struct veth_rq *rq =
+>   		container_of(napi, struct veth_rq, xdp_napi);
+>   	struct veth_priv *priv = netdev_priv(rq->dev);
+> -	int queue_idx = rq->xdp_rxq.queue_index;
+> +	int queue_idx = rq - priv->rq;
+
+It took me a while to convince myself that this is correct via checking
+the data-structures and how they get allocated.
+
+This is a stable fix so it is good to keep this change as small as possible.
+
+I do feel like we should add a queue_idx to struct veth_rq, and init
+this in function veth_alloc_queues(). This could be a followup to net-
+next IMHO.
+
+
+>   	struct netdev_queue *peer_txq;
+>   	struct veth_stats stats = {};
+>   	struct net_device *peer_dev;
+
