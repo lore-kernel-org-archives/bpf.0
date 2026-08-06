@@ -1,149 +1,205 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-189.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770B6485CD2
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 17:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C1D3D75CE
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 17:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786038765; cv=none; b=aqZ63vbWxB1zGyMu6DIDTcgpkhqUZauMYQCBjBxkwCE/MOhW9nZqjZisbIBwxaowMjQ0C+jjuukR2DDFeEXYKYk670y2yOjjk45NK4nwPF+Z2Pkw49Z5QRKKdjL98Vgk1NlthewtFGJZB1koEoSO/YYc6WNpVkWUYZtzRDSSffk=
+	t=1786038919; cv=none; b=G210w/4lsUiWDoF6H4Ig36H7lNy7BYvBYcNwpzlGwLkP8pPoYBPtR/t3p5itvcfBW59VvAwf3gDGOXGV/gWGzfWsJAiAb3qScC7iZoxWpMJ9Y79bFPaQGZkOO5jZ6VepCUNqdPI25To9L8wrV4M2NLzfeIAJMSV3rX6tobDtqpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786038765; c=relaxed/simple;
-	bh=a7wOn0pjXHD0na2aGU6TVSGIFgOYkbQuqX9Lcqop1WU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UefElE9orwp3dcC16N5eW1TZJOWlFkJwkaSAJJ33CGT/b86HR3npRBkp2uTN1BWd/H5nSFKgKiNcvZugH2leXsKdZ/7AYgNfLiOqi00cg4gClJXZBLTyjsY0gFGNtljM9c3pwTCaJ1/I77jPBoocDPXLW6k9l7ho/2GXkajpr0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ns7vi7+8; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786038919; c=relaxed/simple;
+	bh=+oJU+9AilF9OwWhaGc8VhKjOOAPF5sMEW83sZRSv0pU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iTEjMk3fi1dHjRScmodtBIQQiukDEXO758EDYdB3oz8ktMkvEy4uKJTltKYfLz5NBv+qIt6+NPJJwXwUkmhsEngxrU5gQJvIkoRvz+H2e35JSzZ8ETDBVqivcMUeMUxd2tUe1DSuIAE5PsIsuyUSMIh5jz9n8wrCZaMJIzP2/P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Tua/rNdy; arc=none smtp.client-ip=37.59.57.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ns7vi7+8"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ce7d2adef4so37920795ad.3
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 10:52:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786038762; x=1786643562; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=0oeQGuaaIr4hCEO8GZ9uSCtwbawrrV19zd+n/INCc84=;
-        b=Ns7vi7+8cj018//pTKry8ngVSGN7xivwuu5jwss+c8m1Nvn/mWAd/vkjrTKVCTXzUl
-         rVY8mlejNqYwoeDQ1djKbNSVCOEZR8O/u+TOMccb81HkR/K9rTksDvaKWWR/C3ov+1H2
-         u0wzNdgW67GcAj4cNTSFrBgQiwR3bFpauXDrVJNGl13hI8LsY4Uo1lB8sOEt9gbMlk7t
-         eRXGQb9GnWoczzvldyYZGYlhaLfopDEV6otBkdPHfEM/q25b/0nBB/dITfYQRaaN1Wtj
-         HBXG/sEBMwejavTxYmC4z56JbY1dHH5xejrFQ59gmdwCeseiUlC0h6sLz9hD6sum5ZN8
-         nPjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786038762; x=1786643562;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0oeQGuaaIr4hCEO8GZ9uSCtwbawrrV19zd+n/INCc84=;
-        b=QC3dyCw5Zbo3sPYTjtu61fPUHDfbA3hrMz3WrGnNlaymmphyQKgVRFxLfnJN5NJ4Iu
-         nDjScvXKLlHtEJQGNbpYQbfyatQXBLpruY3FE0p9K3+DIpBhRvcaA28s++Lx/k9B2v0S
-         q9GPwSd3eY0kVdhVihp44xGZjtCgRa4sChs7vg9H254OPF30LsKS6dGNxtGTXCbUALds
-         bGY3cFjiegSqwa/aPYDn4qnSgebBmRjtawl1Bx7Zm/SvU3M6SJmJxDWuIKPZEPfYLDR3
-         IXbUrzUVH81zWQsF25QStVJjYaOzQ0kmsQnZIbEPhU6bC1JWAB2NXAU6G7a23X1AWvwf
-         sgGw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro5wfVUOnTfpevxqwaCnb//Xn7L9yfnPhpaTHvgYSUA4htGU/1y8b8cZcYz54A55YH72GY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxvj1g9ABpoD+hsOfGeg+GaE0l6fnOCDbiAjgKOc4Afd/8lFAzK
-	s6W20s02bx7G/JF6WPhKc7jvh+52RBTT0V6JldtKAOIAILhVQAmCDfVA
-X-Gm-Gg: AR+sD11q5lLpHmo77eP9RGG4LjNkbLUGF55Dq/rteNrppP/IYqifv+K5TQB99H6vuhj
-	q5cDxgcaq3Y7MMtD1a7hvuQb48vXA9aH8eZLQW2CFnDARnEAnFL/0J1xNsAXoIlSOOf4Yxvtgul
-	Ir94IBOoYFjukDOJ1QlgQRNukmX6SPCS8N4QrcOivfpDNAZOphzycBzqIhdcUoYq/OMq+yB50DP
-	hwA68Tfh+es5ZrN/G1FvGxfyLWwOi1Pdp+OWibz4AGzy2wi9jHrpUmoA0srw8me6TdCTIFKqdQ5
-	Hzxx9lWux7UNn9ajd4ymcejdcU0GTviWrhyy0AfJ61DyWIk6v5b42u7IHfA2ww9NzNF7jxFONw2
-	mfu8fIxAI/F81bEGvMpEpcU9RVfCVuAMsfz012PcKx39xU1ZV88eOB8L/KPY3qtsnwMDk6gFaen
-	Eg9IX1i6FI5cVpelMaOdwLzMG3iYNHRJSBug0ZUH6kCW3H5keIDLCWQk0GYzipDb1fZB3qwnAGS
-	acd01F8OODmR1Ax3NZv8Mj5akGq
-X-Received: by 2002:a17:902:d2c8:b0:2cf:84bb:1ebc with SMTP id d9443c01a7336-2d0ca77eceemr184374955ad.15.1786038762243;
-        Thu, 06 Aug 2026 10:52:42 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d120706518sm266455ad.5.2026.08.06.10.52.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 10:52:41 -0700 (PDT)
-Message-ID: <9bcb8e2b7d4fa998f4811e77fb6920edd3dced18.camel@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Fix sanitize_err() register selection for BPF_K
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bot+bpf-ci@kernel.org, chenyy23@mails.tsinghua.edu.cn, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Cc: john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, sashiko-bot@kernel.org, 
-	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-Date: Thu, 06 Aug 2026 10:52:38 -0700
-In-Reply-To: <18e8ba9303a6041520433c7bad9187e29a756908385e6b2607de1ae82db67beb@mail.kernel.org>
-References: 
-	<20260803-c3-035-sanitize-err-v1-v1-1-93e5ff61731f@mails.tsinghua.edu.cn>
-	 <18e8ba9303a6041520433c7bad9187e29a756908385e6b2607de1ae82db67beb@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Tua/rNdy"
+Message-ID: <e6933505-662f-426b-a781-1243d8dba7f6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786038904;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hJfTs/B2ZG6YrzBHuM4e8ojTbDLH5/huCiJp2InAQ+g=;
+	b=Tua/rNdyXSWsXxLTv5eIQ53cs1fLszQ+mtoeYHuaYfgXBgTwgL14uHUFjGg54ScS7D6OUu
+	Xg8gPRf/KcRXDsug4667EEzG9DI1VYTK/k8dVylKgGlbNRNkKbNkoCrrbX5AK8RpWqQsg4
+	goeg2kShHfLfZA5lIIISPinOn5ie37Q=
+Date: Thu, 6 Aug 2026 10:54:43 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [bpf-next 1/4] selftests/bpf: map_kptr: force BPF_STX for the
+ scalar store to kptr
+Content-Language: en-GB
+To: Vineet Gupta <vineet.gupta@linux.dev>, bpf@vger.kernel.org,
+ ast@kernel.org, Eduard Zingerman <eddyz87@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: linux-kernel@vger.kernel.org
+References: <20260803170251.1898102-1-vineet.gupta@linux.dev>
+ <20260803170251.1898102-2-vineet.gupta@linux.dev>
+ <c17688ad-7940-4697-abd7-dc5cf9f1e7ec@linux.dev>
+ <5a47b073-e1d5-499c-89bd-44500a88bf27@linux.dev>
+ <66f7ffe9-b8f3-4369-996a-967636b60401@linux.dev>
+ <cfa8641e-2a4d-42f1-8a91-28cbf1478227@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <cfa8641e-2a4d-42f1-8a91-28cbf1478227@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 2026-08-03 at 15:25 +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index fdc5fbb1f78c..e5a8547ad723 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -13562,6 +13562,7 @@ static int sanitize_err(struct bpf_verifier_env=
- *env, const struct bpf_insn *ins
-> > =C2=A0	static const char *err =3D "pointer arithmetic with it prohibite=
-d for !root";
-> > =C2=A0	const char *op =3D BPF_OP(insn->code) =3D=3D BPF_ADD ? "add" : "=
-sub";
-> > =C2=A0	u32 dst =3D insn->dst_reg, src =3D insn->src_reg;
-> > +	bool src_is_imm =3D BPF_SRC(insn->code) =3D=3D BPF_K;
-> > =C2=A0	struct bpf_reg_state *regs =3D cur_regs(env);
-> >=20
-> > =C2=A0	switch (reason) {
-> > @@ -13571,7 +13572,7 @@ static int sanitize_err(struct bpf_verifier_env=
- *env, const struct bpf_insn *ins
-> > =C2=A0		break;
-> > =C2=A0	case REASON_TYPE:
-> > =C2=A0		verbose(env, "R%d has pointer with unsupported alu operation, %=
-s\n",
-> > -			regs[src].type =3D=3D SCALAR_VALUE ? dst : src, err);
-> > +			src_is_imm || regs[src].type =3D=3D SCALAR_VALUE ? dst : src, err);
-> > =C2=A0		break;
-> > =C2=A0	case REASON_PATHS:
-> > =C2=A0		verbose(env, "R%d tried to %s from different maps, paths or sca=
-lars, %s\n",
->=20
-> Can this code path be reached for BPF_K instructions? The new src_is_imm
-> check appears to be unreachable.
+
+
+On 8/6/26 9:50 AM, Vineet Gupta wrote:
+> On 8/6/26 9:37 AM, Yonghong Song wrote:
+>> On 8/5/26 12:25 PM, Vineet Gupta wrote:
+>>> On 8/5/26 10:47 AM, Yonghong Song wrote:
+>>>> On 8/3/26 10:02 AM, Vineet Gupta wrote:
+>>>>> reject_scalar_store_to_kptr stores a scalar constant to a kptr field:
+>>>>>
+>>>>>            *(volatile u64 *)&v->unref_ptr = 0xBADC0DE;
+>>>>>
+>>>>> Compilers generate one of two encodings for that:
+>>>>>
+>>>>>     1. Materialize the constant into a register and emit BPF_STX:
+>>>>>
+>>>>>            r1 = 0xbadc0de
+>>>>>            *(u64 *)(r0 + 0x8) = r1
+>>>>>
+>>>>>     2. Or fold it into a single BPF_ST (store immediate):
+>>>>>
+>>>>>            *(u64 *)(r0 + 0x8) = 0xbadc0de
+>>>>>
+>>>>> check_map_kptr_access() rejects both, but through very different
+>>>>> checks.
+>>>>> BPF_STX goes through map_kptr_match_type(), whose first test is
+>>>>> base_type(reg->type) != PTR_TO_BTF_ID - the scalar rejection this
+>>>>> test is
+>>>>> named for - and which prints "invalid kptr access, R...". BPF_ST
+>>>>> only gets
+>>>>> the trivial "BPF_ST imm must be 0 when storing to kptr" immediate
+>>>>> check and
+>>>>> never reaches map_kptr_match_type() at all.
+>>>>>
+>>>>> So on a compiler that folds the constant - bpf-gcc, and clang from
+>>>>> -mcpu=v4, which enabled BPF_ST around v4 support due to historical
+>>>>> verifier limitations - the test fails against its expected message.
+>>>>>
+>>>>> Widening the __msg to accept either message would make it pass
+>>>>> again, but
+>>>>> on those toolchains it would then only re-test the imm != 0 path, 
+>>>>> which
+>>>>> verifier/map_kptr.c ("map_kptr: BPF_ST imm != 0") already covers,
+>>>>> and the
+>>>>> scalar-vs-PTR_TO_BTF_ID check would lose its only test in the tree.
+>>>>>
+>>>>> Route the value through barrier_var() instead, so the store stays a
+>>>>> BPF_STX everywhere and the test keeps asserting what it was 
+>>>>> written to
+>>>>> assert. clang -mcpu=v1..v4 and bpf-gcc 16.1 all emit the register 
+>>>>> form
+>>>>> afterwards.
+>>>>>
+>>>>>      bpf-gcc, before: #229/20 
+>>>>> map_kptr/reject_scalar_store_to_kptr:FAIL
+>>>>>      bpf-gcc, after : #229/20 map_kptr/reject_scalar_store_to_kptr:OK
+>>>>>
+>>>>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+>>>>> ---
+>>>>>     tools/testing/selftests/bpf/progs/map_kptr_fail.c | 11 
+>>>>> ++++++++++-
+>>>>>     1 file changed, 10 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>>>>> b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>>>>> index f11848dfa78f..cb84e23b83c0 100644
+>>>>> --- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>>>>> +++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>>>>> @@ -390,13 +390,22 @@ __failure __msg("invalid kptr access, R")
+>>>>>     int reject_scalar_store_to_kptr(struct __sk_buff *ctx)
+>>>>>     {
+>>>>>         struct map_value *v;
+>>>>> +    u64 val = 0xBADC0DE;
+>>>>>         int key = 0;
+>>>>>            v = bpf_map_lookup_elem(&array_map, &key);
+>>>>>         if (!v)
+>>>>>             return 0;
+>>>>>     -    *(volatile u64 *)&v->unref_ptr = 0xBADC0DE;
+>>>>> +    /*
+>>>>> +     * Keep the value in a register so this stays a BPF_STX and 
+>>>>> keeps
+>>>>> +     * exercising map_kptr_match_type(). Compilers that fold the
+>>>>> constant
+>>>>> +     * into a BPF_ST (store immediate) instead - bpf-gcc, and clang
+>>>>> from
+>>>>> +     * -mcpu=v4 - would be rejected by the far weaker "BPF_ST imm
+>>>>> must be
+>>>>> +     * 0" check, which verifier/map_kptr.c already covers.
+>>>>> +     */
+>>>>> +    barrier_var(val);
+>>>>> +    *(volatile u64 *)&v->unref_ptr = val;
+>>>> Could you explain in details why gcc16 (with cpuv4) won't work with
+>>>> BPF_ST?
+>>>> What code gcc16 (with cpuv4) generates?
+>>> GCC generates BPF_ST (and clang -mcpu=v4 does as well)
+>>>
+>>>     7: (7a) *(u64 *)(r0 +8) = 195936478
+>>>     BPF_ST imm must be 0 when storing to kptr at off=8
+>>>     processed 7 insns (limit 1000000) max_states_per_insn 0 
+>>> total_states
+>>>     0 peak_states 0 mark_read 0
+>>>     =============
+>>>     EXPECTED   SUBSTR: 'invalid kptr access, R'
+>>>
+>>>
+>>> The issue is not codegen or BPF_ST vs. BPF_STX, its a deliberate bad
+>>> write to a pointer.
+>>> The current __msg in test only matches v3 (STX) form. v4's
+>>> store-immediate hits a different verifier check with a different 
+>>> message.
+>>> My first approach was to support both in the __msg, but then Claude
+>>> suggested to not do it that way because it would reduce coverage as
+>>> mentioned in the changelog above.
+>> For clang side, we can do:
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c 
+>> b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>> index f11848dfa78f..b9f6d6764431 100644
+>> --- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>> +++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>> @@ -386,7 +386,11 @@ int kptr_xchg_possibly_null(struct __sk_buff *ctx)
+>>    }
+>>       SEC("?tc")
+>> +#ifdef __BPF_FEATURE_ST
+>> +__failure __msg("BPF_ST imm must be 0 when storing to kptr at off=8")
+>> +#else
+>>    __failure __msg("invalid kptr access, R")
+>> +#endif
+>>    int reject_scalar_store_to_kptr(struct __sk_buff *ctx)
+>>    {
+>>           struct map_value *v;
+>> ...
+>>
+>> Note that __BPF_FEATURE_ST is only enabled for cpuv4 in clang.
+>> Does gcc has similar macro like above __BPF_FEATURE_ST?
 >
-> All three call sites of sanitize_err() (at verifier.c:13765, :13858 and
-> :14610) fire only when sanitize_ptr_alu() or sanitize_val_alu() return a
-> negative REASON_* code. Both of those functions begin with:
->=20
-> static bool can_skip_alu_sanitation(const struct bpf_verifier_env *env,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struc=
-t bpf_insn *insn)
-> {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return env->bypass_spec_v1 ||
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 BPF_SRC(insn->code) =3D=3D BPF_K ||
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 cur_aux(env)->nospec;
-> }
->=20
-> and check this at their entry:
->=20
-> =C2=A0 sanitize_val_alu()=C2=A0 verifier.c:13415:=C2=A0 if (can_skip_alu_=
-sanitation(env, insn)) return 0;
-> =C2=A0 sanitize_ptr_alu()=C2=A0 verifier.c:13469:=C2=A0 if (can_skip_alu_=
-sanitation(env, insn)) return 0;
+> Yes it does and also similarly enabled for cpu=v4.
+> The suggestion does look cleaner, but feels fragile.
+> Both forms of codegen are valid from selftest passing perspective.
+> BPF_FEATURE_ST implies compiler supports the feature but the actual 
+> generation is subject to optimization level etc.
+>
+> Your call.
 
-Hi Yiyang,
+This is just for selftests. Let us have the above change to accommodate both cpuv2/cpuv3 and cpuv4.
 
-Thank you for the follow-up. I double-checked what bot is saying,
-and it correct. The original report from Sashiko was a false positive.
-Given this, let's keep the code as-is for now.
+>
+> Thx,
+> -Vineet
 
-...
