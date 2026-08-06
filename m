@@ -1,646 +1,481 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D793C34E766
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 22:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9241B4138;
+	Thu,  6 Aug 2026 23:35:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786054730; cv=none; b=rABCdFQuLQK4kVF+EECvEKVKq8lkRGSuyaItQKh5v5thF1ol+tFnonBny7uOsedpxvtm6B2RoYnyDmfBNfO2XSN2so4ZI71y8HAddiSrYVTHbilelvfJTPxoSA0H0+ERz/gj0Y7zYKBpR/ERwOm0c4XvcdbD8m0ZeUHope2fNhY=
+	t=1786059302; cv=none; b=AU4O1hIWv7DoOYzMCkYdRw0nimXd+BT87E1RyXjOjq3l0Z8O84h27tz3ygfcugXgwcQadqtg2Ym02L7Ec9+RnqLWsmmZ/3I9/ciIeVmkB2TywLDMDaJzA7OrRTlIhXp7hQMwjBnVrtyVqazq2brp7zghl5CB9mbuOHaylajkNR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786054730; c=relaxed/simple;
-	bh=Q6UiM+NSh59x28X4+l0krHjo7gLiDykvSP65z6Gt3io=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n57MkGwnlZNSW8BRI2iFN0Kqdu+ickIxVoRhYfGAeY7cEqzbPHEsRYUpK9xDQiQV+v/YgLxPFBGXjEn5UhxT9YWxeO/1QGarj0k8EVHlb7vZDaOpHWjnoAvPZEMbAy5oFC430nk0zBbkiJBZDAnUuwusS9Q4MW1956Wkt2bbbms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KTnDRIPS; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KTnDRIPS"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cea3004256so34760855ad.0
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 15:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786054727; x=1786659527; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Ymry1hvBnXf9k9HJyCKIW/LGlgOgsWSR1QFJjFRqgWs=;
-        b=KTnDRIPSetR3lD+qmR6r6fD9Ur9GztH3QlGlHHKylVsKz0rOgfe9NSg0AURcbvIWfe
-         NgRcAO7osI68NhKj+TTJdMJXyWWvzIP9KN6jZ0ddjlWLd98vUdgkD0UnEtccECEGFFzy
-         Y1Yq5uenSlqyeFuvAFZCZeWXN20dbzSzdyflE0XmREoS8U4sAR3gfD9wPhtr2lnntaIs
-         lNsR/oratIg+2AtZAWixp4mWifXTaiCCnai0ajUDvstKFV6ReXHBMDXaKFeQ/xA9IUXM
-         IbE7i+rJmhlEQgwJnfXcgKvtUBXnEJScVyfsF2CPVsc0mrUHHw0YpWAj5rtaodKIxdbO
-         elsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786054727; x=1786659527;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Ymry1hvBnXf9k9HJyCKIW/LGlgOgsWSR1QFJjFRqgWs=;
-        b=fW2v4bTL2aN8i5Ug953/dODiu69ql3yDXeY6ZmfhWse6PtBePobiW65N14Eq3rsJcg
-         MKGksrR4dAWtMZ68YeH1c7/zHZu8yIhevPpLXzabtjXD3kkenjAmBR+2BNdHM+g459A1
-         fCaXsgypFwE0q17NnS/6TRM+0o5mRQUsxhlMu4gjzi2VibOwabPrzATMnwwnLyOEruZG
-         9DDBhNzdA52AxdJZ1JOOHcmhg6Z8sfaWG2UyKVSacfSLMGkq5xTZo3PRl0oEBuImqaz0
-         yWU/DZx2hcZBR4EJcsDzze01SPituxBPjaSmgqpiZeK1RRkJ9Ple90NQ+3dqpLNOYeMK
-         bHPg==
-X-Forwarded-Encrypted: i=1; AHgh+Rom54J0noEoAc1J3F0qCpEW0KBYuOJFKKuisFWOp9x9tzgkTuRt2nALl3MWcMuYh5Hhu5M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzpEHJP1IB96APJTgvwXcdSPmmjOdCQLZ9EK7Y19hgTynzJG0g
-	zzXpUP+ys9OKrdqmoHeYTrqMVLrEbE+aZzvkECGoaer1utwOpbhdB1Jj
-X-Gm-Gg: AR+sD13pks6eD7I/SRrVHpU7eH03yVFAh/3bw1l/LjCySJLT3N3jmC2f8LCaMK+rq5V
-	zG2RvCMzPbOg5NH/SeTRpaFrDDV8yWK57tZKyqhncwF+93kMWDFQ3vawE0PjxJdSgTc0RFwid78
-	aD+tX1Ud8I3RtCHNE6Bcor2Bt1kqF3YFZZ9/jmy1eYaYBmqXiRJsusXEYv1pO+I1eJgiGqRdjun
-	jx7Iigi9Y3D9BxZbFid7M6YndJ8/ZTEEcppJLY2YNSnBodzxtVH6Qvdl39FPVLt5w2Pvx+uPwxJ
-	CDWHkqGfXgcgNThgOduLUBQTCBrO0NqHr6R4zf9r0eY7BBVuTikbolFAhYSXkFALbAa2S2v3Yfi
-	JGUBRdBjpZpHCTxeCdMR2fU5WRR7WFGOxDTn7OTTpTOzczK2XxqzECyTCWVBpFvYfXI4H3mHHKS
-	LDUmPqMIqHesLCpk+EejW2tcITWPqZ6ZuHlcyq6+8hz1Ri75f2Oe7WJmebE7ms5GEe726408wze
-	MOXcFni
-X-Received: by 2002:a17:903:18d:b0:2cc:9179:32e with SMTP id d9443c01a7336-2d0ca759b87mr189529035ad.10.1786054726985;
-        Thu, 06 Aug 2026 15:18:46 -0700 (PDT)
-Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:42::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315bcadc59dsm585515eec.25.2026.08.06.15.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 15:18:46 -0700 (PDT)
-Date: Thu, 6 Aug 2026 15:18:43 -0700
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
-	linux-mm@kvack.org, kernel-team@meta.com, bpf@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] selftests/cgroup: add memcg_stat_cross_cpu
- correctness test for flush
-Message-ID: <anUIQ1oWjUSQhZ4C@devvm16600.scu0.facebook.com>
-References: <20260721174833.1232771-1-ziyang.meme@gmail.com>
- <20260721174833.1232771-3-ziyang.meme@gmail.com>
- <amCBeD8sGVdi1Nm4@localhost.localdomain>
+	s=arc-20240116; t=1786059302; c=relaxed/simple;
+	bh=rwZxX2aYuTq0KbG//m4mDXbX8BaAfzEbDwU9fj6JrXo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YZpC0Gac2pUeFH7S9zfBvxRMQxAvQM+qTUaw0Sj7XE/j51NHLww+t8fgl54NmX47dkAGKAW4IayOuEjxfJfWiDmRGO6aj1Mmn7B3Ym5k/GNrxa8YdNfZV3/qSlkYbfZ2nYtxvJ4OUILXRXCn1dd+yWb7pNHFlpyElymOYrEP7ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF4821F000E9;
+	Thu,  6 Aug 2026 23:34:55 +0000 (UTC)
+Message-ID: <3b1d571f-c44e-4131-b684-8a2311040bce@linux-m68k.org>
+Date: Fri, 7 Aug 2026 09:34:52 +1000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <amCBeD8sGVdi1Nm4@localhost.localdomain>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 RESEND] m68k, bpf: Add initial BPF JIT
+ compiler support (resend)
+To: Kuan-Wei Chiu <visitorckw@gmail.com>, geert@linux-m68k.org,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com,
+ marscheng@google.com, linux-kernel@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, bpf@vger.kernel.org,
+ Daniel Palmer <daniel@thingy.jp>
+References: <20260729002737.1008358-1-visitorckw@gmail.com>
+Content-Language: en-US
+From: Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <20260729002737.1008358-1-visitorckw@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 22, 2026 at 11:43:49AM +0200, Michal Koutný wrote:
->Hello Ziyang.
->
->On Tue, Jul 21, 2026 at 10:48:31AM -0700, Ziyang Men <ziyang.meme@gmail.com> wrote:
->> Add a test_progs selftest that verifies the memory-cgroup BPF kfuncs
->> return values that agree with what userspace reads from cgroupfs, across
->> a whole cgroup subtree that has been charged on many CPUs.
->>
->> It complements the existing cgroup_iter_memcg test.  cgroup_iter_memcg
->> calls the memcg kfuncs on a single cgroup (BPF_CGROUP_ITER_SELF_ONLY) and
->> only asserts each value is greater than zero, so it never checks that a
->> value is actually correct.  This test compares the kfunc values against
->> what userspace reads from memory.stat, and checks every node in the
->> cgroup tree.
->>
->> Moreover, cgroup_iter_memcg does not exercise the rstat flush
->> (mem_cgroup_flush_stats()).  This test does: it launches a process on
->> each leaf that charges and holds memory across multiple CPUs (so the
->> leaf's rstat is dirty on K per-cpu trees), then confirms the flush works
->> for both the BPF and the file path by checking two properties:
->>
->>   1. after the flush, each leaf's anon is at least what the process
->>      charged there;
->>
->>   2. after the flush, the sum of the leaves' charged memory equals the
->>      amount at the root.
->>
->> The BPF reader and the file reader run in two separate rounds.  Each
->> round builds the same cgroup tree from scratch and charges the same
->> amount of memory, so both rounds start from the same state and the
->> numbers are comparable.  In detail:
->>
->>   - round 1 (BPF) builds the subtree, forks one child per leaf that
->>     charges the leaf across K CPUs and then blocks holding the charge,
->>     walks the tree with a SEC("iter.s/cgroup") program that flushes the
->>     subtree at the root and reads each cgroup via the memcg kfuncs
->>     (bpf_get_mem_cgroup, bpf_mem_cgroup_flush_stats,
->>     bpf_mem_cgroup_page_state, bpf_mem_cgroup_vm_events,
->>     bpf_put_mem_cgroup) into a hash map;
->>
->>   - round 2 (cgroupfs) builds and charges an identical tree the same way,
->>     then reads every cgroup's memory.stat / memory.current from
->>     userspace.
->>
->> The subtests differ in how many CPUs each leaf is charged on (a single
->> CPU or across K CPUs), and run on two cgroup tree sizes.  The charging
->> children pin CPUs and there is one per leaf, so the test is registered
->> serial.
->>
->> The traditional path reads memory.stat / memory.current through a new
->> read_cgroup_file() helper added to cgroup_helpers (the read counterpart
->> of write_cgroup_file).  When the memcg kfuncs are unavailable
->> (CONFIG_MEMCG=n) the test skips cleanly; the base selftest config now
->> selects CONFIG_MEMCG=y.
->>
->> Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
->> Assisted-by: Claude:claude-opus-4-8
->> Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
+(Resend, sorry, this will be easier to digest and comment on with the patch inline)
 
-Hi Michal,
 
-Thanks for your detailed review! We appreciated for your time.
->
->On one hand, this migth be useful to ensure somewhat stable behavior of
->the reported stats, OTOH, it's exposing quite some implementation
->details (flushing, per-cpu charging).
->I'd say that flushing for BPF progs should work (which is what
->cgroup_iter_memcg() should test IIUC) and yield some precision effect,
-Yes the test in cgroup_iter_memcg involves using the flushing. Our concern is
-how it ensures the state after the flush is correct. Existing approach in
-cgroup_iter_memcg only checks whether the read value is non-zero, rather than
-compare it with the actualy ones, e.g.,
+Hi Kuan-Wei,
 
-	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
-	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
-	
-This ensures the flush does happen and take effect, but it does not check the
-flush take effect as expected. And this is why we want to compare with the file
-reading: it is a stronger evidance for the correctness of the flush function.
+On 29/7/26 10:27, Kuan-Wei Chiu wrote:
+> Add a BPF JIT compiler for the m68k architecture.
+> 
+> The JIT generates m68k machine code targeting m68020+ processors. It
+> currently excludes 68000/68010 and coldfire processors, as it relies on
+> 32 bit branch displacements (b<cc>.l) to handle large bpf programs.
 
-Besides, another check missed from the cgroup_iter_memcg is that it contains no
-accumulation tests for a cgroup subtree. Currently it only creates one children
-cgroup and puts the reading task in it. The flush never have a chance to
-merge-up the deltas in the leaves.
+I was interested to see how difficult this would be to get working on
+a ColdFire target. There is a little more to it than just the 32bit
+branch displacements. If you limit the target space to ColdFire parts
+that have an MMU (so parts that have the ISA_B or ISA_C instruction
+set) then 32bit branch displacements are supported. So that is no longer
+a problem.
 
-Another missing parts for the cgroup_iter_memcg is that it charges the memory
-and then reads the stats on the same cpu, which means a (possible broken) flush
-that processed only that CPU would pass the weak non-zero test. The new tests
-strengthen the check by pin each child to multiple CPUs. This increase the code
-length but greatly improves the test coverage.
+The following are issues I hit:
 
-We understand that kernel perfers short, dedicated codes and this is our
-target as well. Please do let us know if you have any suggestions for test
-design. Thanks!
+1. lack of movem with pre-decrement and post-increment modes
+   used in quite a few places
 
->however, the comparison with memory.stat may be source of false
->positives due to noise.
->Also, this is supposed to measure convergence in some "static" situation
->but in reality the things are moving (memcg charges/uncharges) in
->various pace so some differences would still occur (IMO such deviations
->are OK, perhaps the test should spell out its preconditions and limitations).
-Yes. In the v1 serials of this patch, we actually design another selftests which
-simulates the real-world dynamic workloads, by making the leaf process keep
-churn memory, and measure the results correspondingly. However this approach
-incurs three problems:
+2. lack of register exchange instruction ("exg")
+   used in emit_atomic()
+   used in emit_call()
+   used in 64bit bpf shitf operations in emit_alu64_shift()
 
-	1) We have to manually wait the state become "steady", but it is hard to
-	   quantilize the steady state for processes keep churning, so as for
-	   real-world workloads.
-	2) The error margin would be further increased in the highly dynamic worklaods,
-	   and the confidence area for compare number narrows more;
-	3) The code would be more complicated than this one.
+3. lack of rotate instructions ("ror" and "rox")
+   used for bpf shift operations in emit_alu64_shift()
+   used for endian transformation in emit_bpf_end()
 
-So the current design is a compromise of the dynamic workloads and fault tolerance.
+Issue (1) is easy to work around, manually manipulating %sp as required
+with an extra instruction.
 
->As for the implementation in general -- it'd need some tighter
->connection with existing cgroup selftests (e.g. use integer types like
->cgroup selftest, utilization/adaptation of existing helpers to reduce
->copies of same/similar code).
-Keep the same style as other selftests in important for long-term maintaince. 
-We totally agree with it and will cross check it in the next version.
->
->
->> --- a/tools/testing/selftests/cgroup/Makefile
->> +++ b/tools/testing/selftests/cgroup/Makefile
->> @@ -14,14 +14,29 @@ TEST_GEN_PROGS += test_freezer
->>  TEST_GEN_PROGS += test_hugetlb_memcg
->>  TEST_GEN_PROGS += test_kill
->>  TEST_GEN_PROGS += test_kmem
->> +TEST_GEN_PROGS += test_memcg_stat_cross_cpu
->>  TEST_GEN_PROGS += test_memcontrol
->
->Yeah, this is perhaps so much different from test_memcontrol that it
->deserves a separate prog, OTOH it'd be good to share some common
->cg/memcg functions across the two (some notes below).
-Good suggestion, we will take more common cgroup functions functions in
-the next version.
+Issue (2) also is easy enough, needing temporary storage. I just used the
+stack here, but I am not familiar enough with the internals here to see
+if there is any "d" processor registers that can be used for temporarily.
 
->
->
->> +unsigned long long cg_get_id(const char *cgroup)
->
->This duplicates get_cgroup_id_from_path() from
->tools/testing/selftests/bpf/cgroup_helpers.c
-I see. Will replace it.
+Issue (3) is annoying and means a bunch more instructions to carry
+out the equivalent operations. None the less it is not too difficult to
+modify for. ISA_C does have a "byterev" instruction that would make this
+really easy - but only the very most modern ColdFire silicon use that
+(like the 5441x family).
 
->
->> +/* ---- allowed CPU set --------------------------------------------------- */
->> +
->> +static int *cpu_list; /* ids of the CPUs this process may run on */
->
->I think it'd be simpler to just use cpu_set_t and the standard helper
->macros/functions for this.
-Make sense. I will do it. 
+The attached patch is my first pass at it. It works and passes the
+test_bpf.ko module with no failures(*). Surely could be optimized a little
+more, but good enough to get it working. Tested and running on an
+M5475 ColdFire target.
 
->
->> +/* Recursively create children of @path. @path must already exist and be recorded. */
->> +static int build_children(const char *path, int fanout, int depth)
->> +{
->> +	char child[PATH_MAX];
->> +	int i;
->> +
->> +	if (depth == 0)
->> +		return 0;
->> +
->> +	/* Enable memory on this interior node so its children get a memcg. */
->> +	if (cg_write(path, "cgroup.subtree_control", "+memory"))
->> +		return -1;
->> +
->> +	for (i = 0; i < fanout; i++) {
->> +		snprintf(child, sizeof(child), "%s/c%d", path, i);
->> +		if (add_node(child, depth == 1, NULL))
->> +			return -1;
->
->is_leaf := depth == 1
->doesn't look correct (I see below the test builds hierarchies with
->depth > 1)
->Ah, it's non-conventional meaning of "leaf", I'd suggest a subtree or
->partition or similar (IIUC the purpose).
-Yes this misunderstanding mostly comes from the variable naming, we will fix it
-in the next version.
->
->
->> +		if (build_children(child, fanout, depth - 1))
->> +			return -1;
->> +	}
->> +	return 0;
->> +}
->> +
->> +static size_t tree_capacity(int fanout, int depth)
->> +{
->> +	size_t total = 1, level = 1;
->> +	int d;
->> +
->> +	for (d = 0; d < depth; d++) {
->> +		level *= fanout;
->> +		total += level;
->> +	}
->> +	return total;
->> +}
->> +
->> +/* The tree is arranged in the DFS order within an array */
->> +static int build_tree(int fanout, int depth, int *root_fd)
->> +{
->> +	n_nodes = 0;
->> +	n_leaves = 0;
->> +	nodes = calloc(tree_capacity(fanout, depth), sizeof(*nodes));
->> +	if (!nodes)
->> +		return -1;
->> +
->> +	if (add_node(subtree_root, depth == 0, root_fd))
->> +		return -1;
->> +	return build_children(subtree_root, fanout, depth);
->> +}
->> +
->> +/* ---- cross-CPU charge (one pinning child per leaf) --------------------- */
->> +
->> +static pid_t *charger_pids;
->> +static int n_chargers;
->> +/* parent pid, for the children's PR_SET_PDEATHSIG race check */
->> +static pid_t test_pid;
->> +static int charge_ready[2] = { -1, -1 };	/* child -> parent "ready" barrier */
->> +static int charge_ctrl[2] = { -1, -1 };	/* parent -> child "exit" (close to signal) */
->> +
->> +/*
->> + * One charging child, dedicated to a single leaf and spread over K CPUs.  It
->> + * joins its leaf, maps a resident anon region, then faults the region in K
->> + * slices, each on a different CPU, so this leaf's rstat ends up dirty on K
->> + * per-cpu trees.  The region stays mapped, so the charge persists while the
->> + * parent reads.  After signalling readiness the child blocks (holding the
->> + * charge) until the parent closes the control pipe.  Never returns.
->> + *
->> + * @base is this child's starting index into cpu_list; its K CPUs are
->> + * (base + 0..K-1) mod n_cpu.
->> + */
->> +static void charger_child(const struct cg_node *leaf, int base, int k,
->> +			  size_t resident_bytes)
->> +{
->
->It'd be nicer if this shared alloc_* functions from test_memcontrol.c
->(module adjustoment to cater both users).
-Will do. Thanks.
->
->> +static int file_read_node(const char *path, struct file_snap *o)
->> +{
->> +	char buf[8192];
->> +
->> +	memset(o, 0, sizeof(*o));
->> +
->> +	if (cg_read(path, "memory.stat", buf, sizeof(buf)))
->> +		return -1;
->> +	parse_stat(buf, o);
->
->We have cg_read_key_long() for such extractions.
-Great. Will use.
->
->> +
->> +/* ---- correctness comparison -------------------------------------------- */
->> +
->> +static bool close_enough(__u64 a, __u64 b, __u64 tol)
->> +{
->> +	return (a > b ? a - b : b - a) <= tol;
->> +}
->
->See
->tools/testing/selftests/cgroup/lib/include/cgroup_util.h:values_close()
-Oh I see, thanks!
->
->
->> +
->> +/* Dump one node's bpf-vs-file stats; called when a mismatch is detected. */
->> +static void dump_node(int i, const struct memcg_stat_snapshot *b,
->> +		      const struct file_snap *f)
->> +{
->> +	ksft_print_msg("node %d bpf : anon=%llu file=%llu shmem=%llu fmapped=%llu pgfault=%llu\n",
->> +		       i, b->anon, b->file, b->shmem, b->file_mapped, b->pgfault);
->> +	ksft_print_msg("node %d file: anon=%llu file=%llu shmem=%llu fmapped=%llu pgfault=%llu\n",
->> +		       i, f->anon, f->file, f->shmem, f->file_mapped, f->pgfault);
->> +}
->> +
->> +/*
->> + * Compare the BPF kfunc snapshots (round 1) against the memory.stat values
->> + * (round 2), node by node.  The two rounds are independent, equivalently
->> + * charged trees, so the flushed stats are compared within a small tolerance
->> + * that absorbs per-round overhead (i.e., a charging child's own stack pages).
->> + * A wrong unit, enum or field in the kfunc path would miss by far more.
->> + *
->> + * Two per-round checks verify the flush itself: each leaf was charged
->> + * resident_bytes of anon spread over K CPUs, so its flushed anon must be at
->> + * least that; and the root's recursive anon must equal the sum of the leaves'
->> + * anon (rstat propagated the charge up the tree).
->> + *
->> + * Returns 0 if every check passes, -1 otherwise.
->> + */
->> +static int check_correctness(const struct memcg_stat_snapshot *bpf,
->> +			     const struct file_snap *file, const bool *is_leaf,
->> +			     int n, size_t resident_bytes)
->> +{
->> +	__u64 stat_tol = 64 * page_size;
->> +	__u64 pgf_tol = 1024;
->
->These are central values of the test.  It's necessary to explain the
->choice of them.
-I think it would be good set per_leaf tolerance rather than a total tolerance
-since the errors merges up at root, may be we can try:
+    test_bpf: Summary: 1061 PASSED, 0 FAILED, [1049/1049 JIT'ed]
+    test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
 
-	stat_tol = leaves_below(node) * CHARGER_SLACK_PAGES * page_size;
-	pgf_tol  = leaves_below(node) * CHARGER_SLACK_FAULTS;
 
->
->
->> +	__u64 broot = 0, bsum = 0, froot = 0, fsum = 0;
->> +	int i, mism = 0, flush_bad = 0;
->> +
->> +	for (i = 0; i < n; i++) {
->> +		const struct memcg_stat_snapshot *b = &bpf[i];
->> +		const struct file_snap *f = &file[i];
->> +		__u64 bcur = b->usage_pages * page_size;
->> +
->> +		/* kfunc path (round 1) compared with memory.stat path (round 2) */
->> +		if (!close_enough(b->anon, f->anon, stat_tol) ||
->> +		    !close_enough(b->file, f->file, stat_tol) ||
->> +		    !close_enough(b->shmem, f->shmem, stat_tol) ||
->> +		    !close_enough(b->file_mapped, f->file_mapped, stat_tol) ||
->> +		    !close_enough(b->pgfault, f->pgfault, pgf_tol)) {
->> +			mism++;
->> +			dump_node(i, b, f);
->> +		}
->> +
->> +		/* memory.current is live (no flush) and must bound the flushed anon */
->> +		if (b->anon == 0 || b->anon > bcur) {
->> +			flush_bad++;
->> +			ksft_print_msg("node %d: anon=%llu exceeds current=%llu\n",
->> +				       i, b->anon, bcur);
->> +		}
->> +
->> +		/* each leaf's flush must have gathered the full cross-CPU charge */
->> +		if (is_leaf[i]) {
->> +			if (b->anon < resident_bytes || f->anon < resident_bytes) {
->> +				flush_bad++;
->> +				ksft_print_msg("node %d: short flush bpf=%llu file=%llu\n",
->> +					       i, b->anon, f->anon);
->> +			}
->> +			bsum += b->anon;
->> +			fsum += f->anon;
->> +		}
->> +		if (i == 0) { /* nodes[0] == subtree_root */
->> +			broot = b->anon;
->> +			froot = f->anon;
->> +		}
->> +	}
->> +
->> +	if (mism) {
->> +		ksft_print_msg("bpf (round 1) disagrees with memory.stat (round 2)\n");
->> +		return -1;
->> +	}
->> +	if (flush_bad) {
->> +		ksft_print_msg("flush did not aggregate the cross-cpu charge\n");
->> +		return -1;
->> +	}
->> +	if (broot != bsum || froot != fsum) {
->> +		ksft_print_msg("root anon != sum of leaf anon: bpf %llu/%llu file %llu/%llu\n",
->> +			       broot, bsum, froot, fsum);
->> +		return -1;
->> +	}
->> +	if (bsum == 0) {
->> +		ksft_print_msg("tree carries no anon\n");
->> +		return -1;
->> +	}
->> +	return 0;
->> +}
->> +
->> +/* ---- one case ---------------------------------------------------------- */
->> +
->> +struct testcase {
->> +	const char *name;
->> +	int fanout;
->> +	int depth;
->> +	int cpus_per_leaf; /* K: CPUs each leaf is charged on; 0 = all CPUs */
->> +	size_t resident_bytes; /* anon charged per leaf */
->> +};
->> +
->> +/*
->> + * Remove the subtree in reverse creation order.  Nodes are recorded in DFS
->> + * order (a parent precedes all its descendants), so iterating backwards
->> + * removes every child before its parent.
->> + */
->> +static void destroy_tree(void)
->> +{
->> +	int i;
->> +
->> +	if (!nodes)
->> +		return;
->> +	for (i = n_nodes - 1; i >= 0; i--)
->> +		cg_destroy(nodes[i].path);
->> +	free(nodes);
->> +	nodes = NULL;
->> +}
->> +
->> +/*
->> + * Round 1: build and charge a fresh tree, walk it with the BPF iterator (which
->> + * flushes and reads each cgroup via the memcg kfuncs), and capture one snapshot
->> + * per node into @snap.  @is_leaf records the tree shape so the later comparison
->> + * can run after the tree is gone.  Returns the node count, or -1 on failure.
->> + * The tree is always torn down before returning.
->> + */
->> +static int capture_bpf_round(const struct testcase *tc,
->> +			     struct memcg_stat_snapshot *snap, bool *is_leaf)
->> +{
->> +	struct memcg_stat_cross_cpu *skel = NULL;
->> +	struct bpf_link *link = NULL;
->> +	int root_fd = -1, ret = -1, i, mfd;
->> +
->> +	if (build_tree(tc->fanout, tc->depth, &root_fd)) {
->> +		ksft_print_msg("build tree (bpf) failed\n");
->> +		goto out;
->> +	}
->> +	if (start_chargers(tc->cpus_per_leaf, tc->resident_bytes))
->> +		goto out;
->> +
->> +	skel = memcg_stat_cross_cpu__open();
->> +	if (!skel) {
->> +		ksft_print_msg("skel open failed\n");
->> +		goto out;
->> +	}
->> +	if (bpf_map__set_max_entries(skel->maps.results, n_nodes + 8)) {
->> +		ksft_print_msg("set max_entries failed\n");
->> +		goto out;
->> +	}
->> +	if (memcg_stat_cross_cpu__load(skel)) {
->> +		ksft_print_msg("skel load failed\n");
->> +		goto out;
->> +	}
->> +
->> +	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
->> +	union bpf_iter_link_info linfo = {};
->> +
->> +	linfo.cgroup.cgroup_fd = root_fd;
->> +	linfo.cgroup.order = BPF_CGROUP_ITER_DESCENDANTS_PRE;
->> +	opts.link_info = &linfo;
->> +	opts.link_info_len = sizeof(linfo);
->> +
->> +	link = bpf_program__attach_iter(skel->progs.cgroup_memcg_stat_cross_cpu,
->> +					&opts);
->> +	if (!link) {
->> +		ksft_print_msg("attach iter failed\n");
->> +		goto out;
->> +	}
->> +
->> +	/* bpf walk through the cgroup tree and fetch result */
->> +	if (bpf_walk_once(link)) {
->> +		ksft_print_msg("bpf walk failed\n");
->> +		goto out;
->> +	}
->> +
->> +	mfd = bpf_map__fd(skel->maps.results);
->> +	for (i = 0; i < n_nodes; i++) {
->> +		/* Save the position for the leaf, used for later correctness check */
->> +		is_leaf[i] = nodes[i].is_leaf;
->> +		if (bpf_map_lookup_elem(mfd, &nodes[i].id, &snap[i])) {
->> +			ksft_print_msg("map lookup failed for node %d\n", i);
->> +			goto out;
->> +		}
->> +	}
->> +	ret = n_nodes;
->> +out:
->> +	bpf_link__destroy(link);
->> +	memcg_stat_cross_cpu__destroy(skel);
->> +	if (root_fd >= 0)
->> +		close(root_fd);
->> +	stop_chargers();
->> +	destroy_tree();
->> +	return ret;
->> +}
->> +
->> +/*
->> + * Round 2: build and charge an identical fresh tree, then read every cgroup via
->> + * memory.stat / memory.current.  The tree is reset after bpf read, so each
->> + * read does a real rstat flush.  Returns the node count, or -1 on failure.
->> + * The tree is always clear before returning.
->> + */
->> +static int capture_file_round(const struct testcase *tc, struct file_snap *snap)
->> +{
->> +	int root_fd = -1, ret = -1, i;
->> +
->> +	if (build_tree(tc->fanout, tc->depth, &root_fd)) {
->> +		ksft_print_msg("build tree (file) failed\n");
->> +		goto out;
->> +	}
->> +	if (start_chargers(tc->cpus_per_leaf, tc->resident_bytes))
->> +		goto out;
->> +
->> +	for (i = 0; i < n_nodes; i++)
->> +		if (file_read_node(nodes[i].path, &snap[i])) {
->> +			ksft_print_msg("file read failed for node %d\n", i);
->> +			goto out;
->> +		}
->> +	ret = n_nodes;
->> +out:
->> +	if (root_fd >= 0)
->> +		close(root_fd);
->> +	stop_chargers();
->> +	destroy_tree();
->> +	return ret;
->> +}
->> +
->> +static int run_case(const struct testcase *tc)
->> +{
->> +	struct memcg_stat_snapshot *bpf = NULL;
->> +	struct file_snap *file = NULL;
->> +	bool *is_leaf = NULL;
->> +	size_t cap = tree_capacity(tc->fanout, tc->depth);
->> +	int nb, nf, ret = KSFT_FAIL;
->> +
->> +	bpf = calloc(cap, sizeof(*bpf));
->> +	file = calloc(cap, sizeof(*file));
->> +	is_leaf = calloc(cap, sizeof(*is_leaf));
->
->(This caught my eye, it looks like those could be better members of
->struct cg_node. But I'm not 100% leaned to it.)
-Good catch, I will move them to the cg_node in next.
->
->> +	/* round 2: file reader flushes and reads a fresh, equivalent tree */
->
->Hm, I think that's quite a strong assumption that the 2nd tree would be
->equivalent (wrt memcg state). Could you back it up with some arguments
->if you want to rely on it?
-Yes. I just measure it and it seems the anon is identical but the pg_fault is
-not. So maybe the two tree design is not necessary. I think maybe we can remove
-two trees in the next version, but just perform one time flush and read from
-both bpf and file. This can remove the noise and provide more accurate results.
-What do you think?
+(*) I did come across a cache flush issue specific to ColdFire - but it
+is not related to this code and can be worked around.
 
->
->
->
->Thanks for an interesting comparer,
->Michal
+Regards
+Greg
 
-Thanks for your review agian and detailed feedback!
 
-Best,
-Ziyang
+
+
+--- a/arch/m68k/net/bpf_jit_comp.c
++++ b/arch/m68k/net/bpf_jit_comp.c
+@@ -518,6 +518,47 @@
+ 	bpf_put_reg32(dst[0], d_hi, ctx);
+ }
+ 
++static inline void emit_lsh64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0xd080 | (d_lo << 9) | d_lo);		/* add.l d_lo, d_lo */
++		emit_16(ctx, 0xd180 | (d_hi << 9) | d_hi);		/* addx.l d_hi, d_hi */
++	} else {
++		emit_16(ctx, 0xe388 | d_lo);				/* lsll #1, d_lo */
++		emit_16(ctx, 0xe390 | d_hi);				/* roxl.l #1, d_hi */
++	}
++}
++
++static inline void emit_rsh64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0xe288 | d_lo);				/* lsr.l #1, d_lo */
++		emit_16(ctx, 0xe288 | d_hi);				/* lsr.l #1, d_hi */
++		emit_16(ctx, 0x6400);					/* bcc 1f */
++		emit_16(ctx, 0x0006);
++		emit_16(ctx, 0x08c0 | d_lo);				/* bset #31, d_lo */
++		emit_16(ctx, 0x001f);
++	} else {
++		emit_16(ctx, 0xe288 | d_hi);				/* lsrl #1, d_hi */
++		emit_16(ctx, 0xe290 | d_lo);				/* roxr.l #1, d_lo */
++	}
++}
++
++static inline void emit_arsh64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0xe288 | d_lo);				/* lsr.l #1, d_lo */
++		emit_16(ctx, 0xe280 | d_hi);				/* asr.l #1, d_hi */
++		emit_16(ctx, 0x6400);					/* bcc 1f */
++		emit_16(ctx, 0x0006);
++		emit_16(ctx, 0x08c0 | d_lo);				/* bset #31, d_lo */
++		emit_16(ctx, 0x001f);
++	} else {
++		emit_16(ctx, 0xe280 | d_hi);				/* asrl #1, d_hi */
++		emit_16(ctx, 0xe290 | d_lo);				/* roxr.l #1, d_lo */
++	}
++}
++
+ static void emit_alu64_shift(const struct bpf_insn *insn, struct jit_ctx *ctx, bool is_imm)
+ {
+ 	const s8 *dst = bpf2m68k[insn->dst_reg];
+@@ -551,16 +592,12 @@
+ 
+ 	loop_start = ctx->idx;
+ 
+-	if (BPF_OP(insn->code) == BPF_LSH) {
+-		emit_16(ctx, 0xe388 | d_lo);				/* lsll #1, d_lo */
+-		emit_16(ctx, 0xe390 | d_hi);				/* roxl.l #1, d_hi */
+-	} else if (BPF_OP(insn->code) == BPF_RSH) {
+-		emit_16(ctx, 0xe288 | d_hi);				/* lsrl #1, d_hi */
+-		emit_16(ctx, 0xe290 | d_lo);				/* roxr.l #1, d_lo */
+-	} else if (BPF_OP(insn->code) == BPF_ARSH) {
+-		emit_16(ctx, 0xe280 | d_hi);				/* asrl #1, d_hi */
+-		emit_16(ctx, 0xe290 | d_lo);				/* roxr.l #1, d_lo */
+-	}
++	if (BPF_OP(insn->code) == BPF_LSH)
++		emit_lsh64(ctx, d_lo, d_hi);
++	else if (BPF_OP(insn->code) == BPF_RSH)
++		emit_rsh64(ctx, d_lo, d_hi);
++	else if (BPF_OP(insn->code) == BPF_ARSH)
++		emit_arsh64(ctx, d_lo, d_hi);
+ 
+ 	emit_16(ctx, 0x5380 | count_reg);				/* subq.l #1, count_reg */
+ 	emit_16(ctx, 0x6600);						/* bne.w loop_start */
+@@ -573,6 +610,107 @@
+ 	bpf_put_reg32(dst[0], d_hi, ctx);
+ }
+ 
++static inline void emit_to_le16(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
++		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
++		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
++		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
++		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
++	} else {
++		emit_16(ctx, 0x0280 | d_lo);				/* andi.l #0xffff, d_lo */
++		emit_32(ctx, 0xffff);
++		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
++	}
++
++	emit_16(ctx, 0x7000 | (d_hi << 9));				/* moveq #0, d_hi */
++}
++
++static inline void emit_to_le32(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
++		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
++		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
++		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
++		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
++		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
++		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
++		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
++		emit_16(ctx, 0x2e80 | d_hi);				/* move.l d_hi, (%sp) */
++		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
++		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
++		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
++		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
++		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
++		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
++		emit_16(ctx, 0x809f | (d_lo << 9));			/* or.l (%sp)+, d_lo */
++	} else {
++		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
++		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
++		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
++	}
++
++	emit_16(ctx, 0x7000 | (d_hi << 9));				/* moveq #0, d_hi */
++}
++
++static inline void emit_to_le64(struct jit_ctx *ctx, s8 d_lo, s8 d_hi)
++{
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | d_hi);				/* move.l d_hi, -(%sp) */
++
++		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
++		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
++		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
++		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
++		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
++		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
++		emit_16(ctx, 0x202f | (d_lo << 9));			/* move.l 4(%sp), d_lo */
++		emit_16(ctx, 0x0004);
++		emit_16(ctx, 0x2f40 | d_hi);				/* move.l d_hi, 4(%sp) */
++		emit_16(ctx, 0x0004);
++		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
++		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
++		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
++		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
++		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
++		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
++		emit_16(ctx, 0x81af | (d_lo << 9));			/* or.l d_lo, 4(%sp) */
++		emit_16(ctx, 0x0004);
++
++		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
++		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
++		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
++		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
++		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
++		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
++		emit_16(ctx, 0x8080 | (d_hi << 9) | d_lo);		/* or.l d_lo, d_hi */
++		emit_16(ctx, 0x2017 | (d_lo << 9));			/* move.l (%sp), d_lo */
++		emit_16(ctx, 0x2e80 | d_hi);				/* move.l d_hi, (%sp) */
++		emit_16(ctx, 0x71c0 | (d_lo << 9) | d_lo);		/* mvz.w d_lo, d_lo */
++		emit_16(ctx, 0x7180 | (d_hi << 9) | d_lo);		/* mvz.b d_lo, d_hi */
++		emit_16(ctx, 0xe088 | d_lo);				/* lsr.l #8, d_lo */
++		emit_16(ctx, 0xe188 | d_hi);				/* lsl.l #8, d_hi */
++		emit_16(ctx, 0x8080 | (d_lo << 9) | d_hi);		/* or.l d_hi, d_lo */
++		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
++		emit_16(ctx, 0x809f | (d_lo << 9));			/* or.l (%sp)+, d_lo */
++
++		emit_16(ctx, 0x201f | (d_hi << 9));			/* move.l (%sp)+, d_hi */
++	} else {
++		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
++		emit_16(ctx, 0x4840 | d_lo);				/* swap d_lo */
++		emit_16(ctx, 0xe058 | d_lo);				/* ror.w #8, d_lo */
++
++		emit_16(ctx, 0xe058 | d_hi);				/* ror.w #8, d_hi */
++		emit_16(ctx, 0x4840 | d_hi);				/* swap d_hi */
++		emit_16(ctx, 0xe058 | d_hi);				/* ror.w #8, d_hi */
++
++		emit_16(ctx, 0xc140 | (d_hi << 9) | d_lo);		/* exg d_lo, d_hi */
++	}
++}
++
+ static void emit_bpf_end(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ {
+ 	const s8 *dst = bpf2m68k[insn->dst_reg];
+@@ -587,27 +725,13 @@
+ 	if (to_le) {
+ 		switch (imm) {
+ 		case 16:
+-			emit_16(ctx, 0x0280 | d_lo);			/* andi.l #0xffff, d_lo */
+-			emit_32(ctx, 0xffff);
+-			emit_16(ctx, 0xe058 | d_lo);			/* ror.w #8, d_lo */
+-			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
++			emit_to_le16(ctx, d_lo, d_hi);
+ 			break;
+ 		case 32:
+-			emit_16(ctx, 0xe058 | d_lo);			/* ror.w #8, d_lo */
+-			emit_16(ctx, 0x4840 | d_lo);			/* swap d_lo */
+-			emit_16(ctx, 0xe058 | d_lo);			/* ror.w #8, d_lo */
+-			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
++			emit_to_le32(ctx, d_lo, d_hi);
+ 			break;
+ 		case 64:
+-			emit_16(ctx, 0xe058 | d_lo);			/* ror.w #8, d_lo */
+-			emit_16(ctx, 0x4840 | d_lo);			/* swap d_lo */
+-			emit_16(ctx, 0xe058 | d_lo);			/* ror.w #8, d_lo */
+-
+-			emit_16(ctx, 0xe058 | d_hi);			/* ror.w #8, d_hi */
+-			emit_16(ctx, 0x4840 | d_hi);			/* swap d_hi */
+-			emit_16(ctx, 0xe058 | d_hi);			/* ror.w #8, d_hi */
+-
+-			emit_16(ctx, 0xc140 | (d_hi << 9) | d_lo);	/* exg d_lo, d_hi */
++			emit_to_le64(ctx, d_lo, d_hi);
+ 			break;
+ 		}
+ 	} else {
+@@ -692,8 +816,8 @@
+ 	}
+ 
+ 	if (is_64) {
+-		emit_16(ctx, 0x48e7);					/* movem.l d0-d1, -(%sp) */
+-		emit_16(ctx, 0xc000);
++		emit_16(ctx, 0x2f01);					/* move.l d1, -(%sp) */
++		emit_16(ctx, 0x2f00);					/* move.l d0, -(%sp) */
+ 
+ 		emit_16(ctx, 0x2f00 | s_lo);				/* move.l s_lo, -(%sp) */
+ 		emit_16(ctx, 0x2f00 | s_hi);				/* move.l s_hi, -(%sp) */
+@@ -710,11 +834,11 @@
+ 		emit_16(ctx, 0x2601);					/* move.l %d1, %d3 */
+ 		emit_16(ctx, 0x2400);					/* move.l %d0, %d2 */
+ 
+-		emit_16(ctx, 0x4cdf);					/* movem.l (%sp)+, d0-d1 */
+-		emit_16(ctx, 0x0003);
++		emit_16(ctx, 0x201f);					/* move.l (%sp)+, d0 */
++		emit_16(ctx, 0x221f);					/* move.l (%sp)+, d1 */
+ 	} else {
+-		emit_16(ctx, 0x48e7);					/* movem.l d0-d1, -(%sp) */
+-		emit_16(ctx, 0xc000);
++		emit_16(ctx, 0x2f01);					/* move.l d1, -(%sp) */
++		emit_16(ctx, 0x2f00);					/* move.l d0, -(%sp) */
+ 
+ 		emit_16(ctx, 0x2f00 | s_lo);				/* move.l s_lo, -(%sp) */
+ 		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
+@@ -729,8 +853,8 @@
+ 		emit_16(ctx, 0x2600);					/* move.l %d0, %d3 */
+ 		emit_16(ctx, 0x7400);					/* moveq #0, %d2 */
+ 
+-		emit_16(ctx, 0x4cdf);					/* movem.l (%sp)+, d0-d1 */
+-		emit_16(ctx, 0x0003);
++		emit_16(ctx, 0x201f);					/* move.l (%sp)+, d0 */
++		emit_16(ctx, 0x221f);					/* move.l (%sp)+, d1 */
+ 	}
+ 
+ 	bpf_put_reg32(dst[1], M68K_D3, ctx);
+@@ -905,8 +1029,8 @@
+ 		s8 s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
+ 
+ 		if (insn->imm != BPF_CMPXCHG) {
+-			emit_16(ctx, 0x48e7);			/* movem.l d0-d1, -(%sp) */
+-			emit_16(ctx, 0xc000);
++			emit_16(ctx, 0x2f01);			/* move.l d1, -(%sp) */
++			emit_16(ctx, 0x2f00);			/* move.l d0, -(%sp) */
+ 		}
+ 
+ 		emit_16(ctx, 0x2f00 | M68K_D0);			/* move.l %d0, -(%sp) */
+@@ -930,8 +1054,8 @@
+ 			if (is_fetch)
+ 				emit_16(ctx, 0x2600);		/* move.l %d0, %d3 */
+ 
+-			emit_16(ctx, 0x4cdf);			/* movem.l (%sp)+, d0-d1 */
+-			emit_16(ctx, 0x0003);
++			emit_16(ctx, 0x201f);			/* move.l (%sp)+, d0 */
++			emit_16(ctx, 0x221f);			/* move.l (%sp)+, d1 */
+ 
+ 			if (is_fetch) {
+ 				bpf_put_reg32(src[1], M68K_D3, ctx);
+@@ -945,8 +1069,8 @@
+ 		s8 s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
+ 
+ 		if (insn->imm != BPF_CMPXCHG) {
+-			emit_16(ctx, 0x48e7);			/* movem.l d0-d1, -(%sp) */
+-			emit_16(ctx, 0xc000);
++			emit_16(ctx, 0x2f01);			/* move.l d1, -(%sp) */
++			emit_16(ctx, 0x2f00);			/* move.l d0, -(%sp) */
+ 		}
+ 
+ 		emit_16(ctx, 0x2f00 | M68K_D0);			/* move.l %d0, -(%sp) */
+@@ -965,7 +1089,13 @@
+ 		emit_16(ctx, 24);
+ 
+ 		if (insn->imm == BPF_CMPXCHG) {
+-			emit_16(ctx, 0xc141);			/* exg %d0, %d1 */
++			if (CPU_IS_COLDFIRE) {
++				emit_16(ctx, 0x2f00);		/* move.l %d0, -(%sp) */
++				emit_16(ctx, 0x2001);		/* move.l %d1, %d0 */
++				emit_16(ctx, 0x221f);		/* move.l (%sp)+, %d1 */
++			} else {
++				emit_16(ctx, 0xc141);		/* exg %d0, %d1 */
++			}
+ 		} else {
+ 			bool is_fetch = (insn->imm & BPF_FETCH) || insn->imm == BPF_XCHG;
+ 
+@@ -974,8 +1104,8 @@
+ 				emit_16(ctx, 0x2401);		/* move.l %d1, %d2 */
+ 			}
+ 
+-			emit_16(ctx, 0x4cdf);			/* movem.l (%sp)+, d0-d1 */
+-			emit_16(ctx, 0x0003);
++			emit_16(ctx, 0x201f);			/* move.l (%sp)+, d0 */
++			emit_16(ctx, 0x221f);			/* move.l (%sp)+, d1 */
+ 
+ 			if (is_fetch) {
+ 				bpf_put_reg32(src[1], M68K_D2, ctx);
+@@ -1244,8 +1374,15 @@
+ 	emit_16(ctx, 0x4fef);					/* lea 40(%sp), %sp */
+ 	emit_16(ctx, 40);
+ 
+-	if (insn->src_reg != BPF_PSEUDO_CALL)
+-		emit_16(ctx, 0xc340);					/* exg %d0, %d1 */
++	if (insn->src_reg != BPF_PSEUDO_CALL) {
++		if (CPU_IS_COLDFIRE) {
++			emit_16(ctx, 0x2f00);			/* move.l %d0, -(%sp) */
++			emit_16(ctx, 0x2001);			/* move.l %d1, %d0 */
++			emit_16(ctx, 0x221f);			/* move.l (%sp)+, %d1 */
++		} else {
++			emit_16(ctx, 0xc340);			/* exg %d0, %d1 */
++		}
++	}
+ 
+ 	return 0;
+ }
+@@ -1261,8 +1398,15 @@
+ 	emit_16(ctx, 0x4e56);					/* link %a6, #-total_stack */
+ 	emit_16(ctx, -total_stack);
+ 
+-	emit_16(ctx, 0x48e7);					/* movem.l d2-d5, -(%sp) */
+-	emit_16(ctx, 0x3c00);
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0x4fef);				/* lea -16(%sp), %sp */
++		emit_16(ctx, 0xfff0);
++		emit_16(ctx, 0x48d7);				/* movem.l d2-d5, (%sp) */
++		emit_16(ctx, 0x003c);
++	} else {
++		emit_16(ctx, 0x48e7);				/* movem.l d2-d5, -(%sp) */
++		emit_16(ctx, 0x3c00);
++	}
+ 
+ 	emit_16(ctx, 0x2d40);					/* move.l %d0, off(%fp) */
+ 	emit_16(ctx, (u16)STACK_OFFSET(BPF_TC_LO));
+@@ -1302,8 +1446,15 @@
+ 
+ static void build_epilogue(struct jit_ctx *ctx)
+ {
+-	emit_16(ctx, 0x4cdf);					/* movem.l (%sp)+, d2-d5 */
+-	emit_16(ctx, 0x003c);
++	if (CPU_IS_COLDFIRE) {
++		emit_16(ctx, 0x4cd7);				/* movem.l (%sp), d2-d5 */
++		emit_16(ctx, 0x003c);
++		emit_16(ctx, 0x4fef);				/* lea 16(%sp), %sp */
++		emit_16(ctx, 0x0010);
++	} else {
++		emit_16(ctx, 0x4cdf);				/* movem.l (%sp)+, d2-d5 */
++		emit_16(ctx, 0x003c);
++	}
+ 
+ 	emit_16(ctx, 0x4e5e);					/* unlk %fp */
+ 	emit_16(ctx, 0x4e75);					/* rts */
+--- a/arch/m68k/Kconfig
++++ b/arch/m68k/Kconfig
+@@ -8,7 +8,7 @@
+ 	select ARCH_HAS_CPU_FINALIZE_INIT if MMU
+ 	select ARCH_HAS_CURRENT_STACK_POINTER
+ 	select ARCH_HAS_DMA_PREP_COHERENT if M68K_NONCOHERENT_DMA && !COLDFIRE
+-	select HAVE_EBPF_JIT if (!COLDFIRE && !M68000)
++	select HAVE_EBPF_JIT if MMU
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if M68K_NONCOHERENT_DMA
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if RMW_INSNS
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT if ISA
 
