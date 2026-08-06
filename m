@@ -1,84 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C9D2F30
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0293FA5EC
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786051318; cv=none; b=ZZMKtw6Sm1/7QZiqmfVcDnlwrsB/V7utngOVgHm0mPsH623fVZtDvvrJ/VB4DbF8ofEWcEH66+iZaNr7XpRKBFb772obhv30TQfk6N8tvJnbWZygD6kt9Wps4sEoNDf/on9t7vwYSQCL/BruynMnU+BgeK1he13oSNzAYeRdRL4=
+	t=1786051339; cv=none; b=DFeuZeixhEb400Aj8OUSFIsKQIkNqTLXbyMdyRkf99E0bx1vowkSJ5U5SnZGm7GeZhLpiik/1nJTZM34GlXGQTZHeabTZOxiRspHDwH41e7sPIp4s+/aWu/PTb6GchAqoJsd5/1vnEW3S40qfikS85HW1prydjCVtuC/G9+lxKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786051318; c=relaxed/simple;
-	bh=aGXLZvyQelkPQT3cxfLKxCKRSHoaeyboW4i8S8SEvIE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eHJ4o/srSMxlpDh62zsk66qoiMQ4cNoZhD/C7Uvz4pVtfozQnC+Q41lHpH48k9A11+LUssWGR5gn/vG2o6LcsOKHIAVYd/aest6oobOyZWaOWaD75lDqUxaqypEdNfdYvaEgz2U0azygFSKa9vilCrLSKMyxx7us+3usbrC0evE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m379iGcy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786051339; c=relaxed/simple;
+	bh=F0KQaD2SJ96PoPWAFtbuk4FQ+zq/X9hurv3U7WhL/ME=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=RCCagHY/EjQdGWRCrVURtBL1HT6XR6+uMWmOHcEv5QL2TdQr0WLtXF+XHg3o27kxuOPmTKxVtZhJqgSl3P4A3mWxe+Vds0oPIzl3hb8Jm3pY4J65IkeaN59XOFo8xqNTJ3djN5rA1CbT1mn2MDS5k7ARFAkUbhEcoRex6Dd6yeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PrFAF/WI; arc=none smtp.client-ip=74.125.225.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m379iGcy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 389071F00ADF
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:21:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786051317;
-	bh=I2TwJ5gWdspTnscejso/2PwdAtoi7VMpYmdyEkn6CtQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=m379iGcyCXIRcdKY1yEAzDFRuSv/TTX9kPUPFaX/8dTcd2FCugXDRhJsvXeueSbr5
-	 NE6lIQwSzSF5IVZxBiQcBZO40zE6MbeRl9j0ZW7LLzVTApyJXq4NdodTAafUdIv7Mx
-	 ClLJ9B1IM6obBZzePW7U5k65NHwQVBa4MV9kYmop7whGUsGFryNoGmGpmmNSIcfZYC
-	 v9kKKkSzclYnJd9lfqTPYQfOoPqzLIPCHFHZV9oN2KDZuF824gl/eMq/dSoIrauD+K
-	 5D5AnFz+4uuadosxYdB96Qv9k9ITZPQZUNQEfHv4C/Iz4ZtAmQcKMSNb20b9ShcFQi
-	 mQnx0cbQEFlIw==
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-92e512a9a6bso132419785a.2
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 14:21:57 -0700 (PDT)
-X-Gm-Message-State: AOJu0Ywz7rExAA86/tI9jtY1bCe0d+GYke1rlpURt/o8g9LaM17rWBdC
-	cYvZSgeaObWMq73NkigKD8H+EqnqR2vj1i0EQHftjhOIZHQwauR7xgXk5JJn04fYQ9m2xw3XAkL
-	VKnAyfQTF3RxHxgZw8/tncDoKAf+O0Hw=
-X-Received: by 2002:a05:620a:1b92:b0:92e:da7b:561b with SMTP id
- af79cd13be357-93649165185mr1988040185a.19.1786051316432; Thu, 06 Aug 2026
- 14:21:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PrFAF/WI"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495482c36b8so8453715e9.0
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 14:22:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786051336; x=1786656136; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=G2AZfBGPYu4bSWsh6BLzCvcj+Dtyu07Us149BV13TVI=;
+        b=PrFAF/WI/8yx/S/dpBGjAcm9xeFnl1NINdU8iuKtSrp5zWMFX5TLpl13rVXp0qxI7o
+         U6ALIOz9c76GZ4FN450ek6SJscA0kFoUIRPPK3kwyp/hLbEBJFlbfOYwdhTa4cC4f1nt
+         AJ9gjlMg+jRDG2Wiw3CDwm09VQYgFkk4LKh9QDp5dUp2R/mBKwarCcAOrDngFuQNekXi
+         yL3nf2UFwBXKpsWY4pE1IAUatjndhxDrVE1wnktAm1UBW7zEAiCMb/PLdA5/d8qADkFK
+         7lUpJ7aWw/dmE5thiIrBXdzhs6e30/NTnqCV647jonG56wH7RK4eezvJuwjqGmIBeO+I
+         E8uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786051336; x=1786656136;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=G2AZfBGPYu4bSWsh6BLzCvcj+Dtyu07Us149BV13TVI=;
+        b=leiSLq3/TTK7kHDtJgd1PMmlqjZ3xhPI3HDGJ+dZFy00JL4myAGGxqBaUxS7h2rJIU
+         SJiGzVUZKWpGd2NB3QkYUW7Prxh7etgptWI3UcRIq8XHuhtornvEuuRAHOb1/OSduzt3
+         laVPUTPXgl9PQqCPMg9OP67s7MPVBspMlp+zcqD3NkfjfPYZumPwiHUc0+fMi1BOYegL
+         NwuY1GF49vK8PMNyUME0lvlspbmhLv6jl4a8LnPnU6cVHed3mIi4hg0huB30vHptTdHs
+         Yy/SK/DKX+wHVDJLgr2yMeihlOYmKmbXSL/PlinZiJE12YNPBB296sRYfc04x2f+U9Qk
+         kF4g==
+X-Forwarded-Encrypted: i=1; AHgh+RrCnejCB/6U/0KZF1iY3yG5vN/WhrqyeADFknQEFg52LLs5ehFgY03fMwSnMLxN2yRJNTU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhQNBQWEGaEnc0nuGxfcmrPr5hZFR6w6cUjBW+n8m60r49Pw3o
+	JdeX0dLubxCfkcweBtDgZO3JtXJCUQOcyL26PODF/wP4BetgXzySHos1
+X-Gm-Gg: AR+sD12On+AmK83fxs9ZdpRAgKYa8V+XGlb1A3IAckAmvawq+RmImRJ7FAXWDnw6YcK
+	O0UUY/3l9s1RdT6p5X0LjErNBUA4ZdDSrWWuaoQo6sTcn0k4APxGiqCvNr0E0yLEY1YFx11L3wA
+	j694oCkvWV+ukTCcNsr2igklxFJPZiAlki6sbWew+bU9bEkX/ZE9zTFDBI7aA0dp+kbp1jTIk3t
+	6fc/SpRMakJsxgtJf6hOM+WxKZCOZdV6aVG6QSyJvDzqfglxUyLkctiYkfFuhAsa3cIOoQy0/mu
+	DkYzmv3uTHJyV4J5v2zrYdAdksRk2fYspGXI++aUl9b/fkfGgDIEVd4Y+sOTv2Uqj7UTuWrrUOn
+	3iXFzzoKcmK32WJ4MLe1mpu9KrfJGwKLhgHHfChwiwObKiue8VQkJFH/Tn1CIsaeduT5lcowWqv
+	4X3USeSYqHzFBqRP/Z1PtNXl7ECauVgS/xlL5576f1FWKyuSNxkJL32ws+phaGV6QY8Hl/MmqeI
+	Zw4mWZfbJ+GhLABN9buqzDDpw1B06HW3khSE2aElSbNbkU5nz0qKIdgWbnggFPLDGnxASegGx/5
+	91BNFYWfDWSMlrxwB0YzGmw4Rfo=
+X-Received: by 2002:a05:600c:a21b:b0:495:4e89:3f30 with SMTP id 5b1f17b1804b1-4994e7c5e49mr185058325e9.15.1786051335890;
+        Thu, 06 Aug 2026 14:22:15 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff7b26809sm8987277f8f.25.2026.08.06.14.22.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 14:22:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260806153000.4184871-1-andrey.grodzovsky@crowdstrike.com> <20260806153000.4184871-2-andrey.grodzovsky@crowdstrike.com>
-In-Reply-To: <20260806153000.4184871-2-andrey.grodzovsky@crowdstrike.com>
-From: Song Liu <song@kernel.org>
-Date: Thu, 6 Aug 2026 14:21:44 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW53yRgFMkNuAPCrCm9fhNNb4EpN7vbcSEGkNCZXHjk7AA@mail.gmail.com>
-X-Gm-Features: AUfX_mzFjwnQcUwC3lCRH_Ph_LR2tCAIsoyHf1ype-ho9x4_lwjyfQEXdHzODNQ
-Message-ID: <CAPhsuW53yRgFMkNuAPCrCm9fhNNb4EpN7vbcSEGkNCZXHjk7AA@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v3 1/2] ftrace: deprecate disabling via
- ftrace_enabled sysctl
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	live-patching@vger.kernel.org, rostedt@goodmis.org, mbenes@suse.cz, 
-	jolsa@kernel.org, mhiramat@kernel.org, jpoimboe@kernel.org, 
-	joe.lawrence@redhat.com, mark.rutland@arm.com, corbet@lwn.net, 
-	stable@vger.kernel.org, linux-open-source@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 06 Aug 2026 23:22:15 +0200
+Message-Id: <DKI6CW88BSBH.10NB8NCS4Z92U@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, <kkd@meta.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Fix sleepable context checks and
+ remove in_sleepable helper
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260806164049.3158887-1-memxor@gmail.com>
+ <20260806164049.3158887-2-memxor@gmail.com>
+ <fef13656df34d6ccf0e820d99e8f5e87b9fa8d56.camel@gmail.com>
+In-Reply-To: <fef13656df34d6ccf0e820d99e8f5e87b9fa8d56.camel@gmail.com>
 
-On Thu, Aug 6, 2026 at 8:30=E2=80=AFAM Andrey Grodzovsky
-<andrey.grodzovsky@crowdstrike.com> wrote:
+On Thu Aug 6, 2026 at 10:31 PM CEST, Eduard Zingerman wrote:
+> On Thu, 2026-08-06 at 18:40 +0200, Kumar Kartikeya Dwivedi wrote:
 >
-> Writing 0 to kernel.ftrace_enabled has not reliably disabled ftrace
-> for years (FTRACE_OPS_FL_PERMANENT users already block it, and more
-> callers rely on ftrace always being on). Refuse the write instead of
-> leaving it in an inconsistent "disables some, not all" state: return
-> -EOPNOTSUPP and log a message. Reads and enabling (writing 1) are
-> unaffected.
+> ...
 >
-> Update the docs to note the deprecation up front.
+>> @@ -10258,7 +10253,7 @@ static inline bool in_sleepable_context(struct b=
+pf_verifier_env *env)
+>> =C2=A0	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !env->cur_state->active_pree=
+mpt_locks &&
+>> =C2=A0	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !env->cur_state->active_lock=
+s &&
+>> =C2=A0	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !env->cur_state->active_irq_=
+id &&
+>> -	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 in_sleepable(env);
+>> +	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 env->cur_state->in_sleepable;
+>> =C2=A0}
 >
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> The in_rcu_cs() and in_sleepable_context() are complementary:
+>
+>   env->cur_state->active_rcu_locks ||       !env->cur_state->active_rcu_l=
+ocks &&
+>   env->cur_state->active_preempt_locks ||   !env->cur_state->active_preem=
+pt_locks &&
+>   env->cur_state->active_locks ||           !env->cur_state->active_locks=
+ &&
+>   env->cur_state->active_irq_id ||          !env->cur_state->active_irq_i=
+d &&
+>   !env->cur_state->in_sleepable;            env->cur_state->in_sleepable;
+>
+> Should the one be expressed through the other?
+>
 
-Sashiko's comments make sense. Other than those:
+I thought about this, and I really can't decide, so I'll let others shape t=
+he
+decision. On one hand, it is true, but I am just worried we have some other=
+ way
+of disabling sleepable context in the future, for which we modify
+in_sleepable_context(), but that thing does not imply RCU CS. I don't know
+whether we will have such a case though.
 
-Acked-by: Song Liu <song@kernel.org>
+We can also add a comment to revisit in_rcu_cs() and keep it in sync everyt=
+ime
+in_sleepable_context() is changed though, and hopefully reviewers (human an=
+d AI)
+will be reminded to not break the relationship between both.
 
-> ---
->  Documentation/trace/ftrace.rst |  5 ++++
->  kernel/trace/ftrace.c          | 43 +++++-----------------------------
->  2 files changed, 11 insertions(+), 37 deletions(-)
->
+> ...
+
