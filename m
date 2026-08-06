@@ -1,179 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3473F185B48
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 04:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785990787; cv=none; b=HSYwX4d2cBrkEZU+ZDevX6RTqKdjE29IrbBwiy9SN9FIV0E86iYQIBcNBbTo0m4kxq716XPjHCqgPmQz5k1cM0IW/TLctK6+nLVp/75T6/J4KkRFmTr+0K4avxq+gURrNbYWsCc8hagkKlS3uhNbTWNk1zREIwaF438U3ev6jNI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785990787; c=relaxed/simple;
-	bh=EBRBCj+jx/8xsk2Agc6aCHGqXOLDS5pEJ9I9/nTgo8I=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Aa4D6MT5j6mVCftz9HvP4jF9lF67PQCv9+FJ2H3257M8ExodymwRH67ZS40aDs85vRUmEkc/51yncWw6NqrEjlPyqkxgKNDFSTHftqhYQE39O0zdIYiEutvhzCTpv4PQRRBKvAdBQM6gNC1J4/OaH5BtGKnu5RsLo4FoZ+PJNnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M1eCCUTi; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808D42777F3
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 04:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785991451; cv=pass; b=HFslX4iQdM3iUyTRdYYOCQm97X+iJlb3TeaM7v+9uVyBthX4zukU7u1qdw+pJrzsddK7KeP/oDRSheUobOygGSGX3U4EzrtqPofsBe4VTtS1fsdHWlKRi735rIbzECV8vozJYKqZTF3VlLaFdb0QfUumYa9eL0PRi3rhQrYRxag=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785991451; c=relaxed/simple;
+	bh=UGBK6pHkR9Fws1o5ffzJGj07ypfppVcq9g4h3f/XeNo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qn91WY5Z/a+3RfTweQhCdaXmcPCKVGP0NCA3c3LXJ7ox/gZydh1z4Mm/gVozaFSs54ZGpOmoWF8K/33KP1MfUAQrWfk3ZSv5iIhgdqGvPxdroKJEbSQ2CzYUvcu8ImEy+Qf/YLOYa1Q6hdouf73uz7xtR3FMQ/nJBxZbZoq5RBM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SN+HfDeg; arc=pass smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M1eCCUTi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D488B1F000E9;
-	Thu,  6 Aug 2026 04:33:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785990786;
-	bh=iIqO3+jPcqINpZ6idOWp9OUbjLFA4tw6I+4RshVxvvw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=M1eCCUTiBl3bxrPTzhHHYx57zxESpphvsP1PtZHtc32aCgwCQu7rH3KitxhKIV2Qo
-	 f7L1wQXUq38QbpW4jg6w90iLvoBJrWHwah5HAaT8TEc756OeXoE8GvByYlM4p79DPR
-	 rs00O344otiG543ORII2L6qZG5VOao2Ba3x74sj2CSMsk7k4rnfNiVhwwTdUs/ot++
-	 JF0jhhLztKYMFMtOJ5lDVIaraM0o2hhe/h1WUdIP6GZoWMsAs57pcMyCka4F0F6mqi
-	 zcMV/7w3Co5PsfiYtskW9+DRlaujrMvkDg5eQp9gtNvzx8kNmTuXgT7zqbSa/Hk1s/
-	 +Gn9FIXe/etLA==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next 1/2] libbpf: support selective kernel
- module BTF loading via .kmod_btfs section
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Fuyu Zhao" <zhaofuyu@vivo.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260806042042.3239428-2-zhaofuyu@vivo.com>
-References: <20260806042042.3239428-1-zhaofuyu@vivo.com>
- <20260806042042.3239428-2-zhaofuyu@vivo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 04:33:05 +0000
-Message-Id: <20260806043305.D488B1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SN+HfDeg"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c2020421077so285753966b.3
+        for <bpf@vger.kernel.org>; Wed, 05 Aug 2026 21:44:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785991449; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ICefv9HA5umWrPTQFXurs06Zx0vMa8FgX36Cp42QYuAp44uJRw0ljo55nIO5EkKloZ
+         ragH8fI1k5tPM7PI1IFNHGCLSjcMYFl4ptzUEM71AWJx792eu4ELGdLinLZM+a2r2ATu
+         RmwKb/DyGTvAIv1dLn4t+1YLjD8rhNMOLpz2eHcuWkPlAYJ/rNnabQ5ien2nrnK6kElf
+         UIthG/ju6IXqJ9HgBQj0+5NGUJijYa+X5CDLHnmkxYV9ha8w01sk8HwX6GLHUbB9tAlS
+         /TZBeP9cQYNlkjUpsVYifIGTZlnrBYkiJJyL5fFxX/aTS5CHL4f3wfnx49atk/+qtpom
+         krwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=DzndrXqK7dugyzD+dEx8n3HKXIXDFoLh63SKmFVn2/E=;
+        fh=FthGvuR3K9/4OOpgmQJp7FB64mSmSiZB6V3xeZ/77Q8=;
+        b=IEJHioFljJEe/SzDkXROhpkjquX8IrcPLkTxnYr/JWFkIwJzfAp3i6fbwP4Lq6jyrv
+         midWVMTVQKiCxB5gd1uUg1xkJgWTTMUcUjmzybj7CFOi5Sk2jgyWj0rfXeNmUgC0QW/f
+         XF0AVFmyfbk+bJim2NAkveAWuz6a6sSmA6L59DzM/l29VY/RY5iLd6gW79buydaJOQ4o
+         D6TAtN3tj0b1HVUWCw1uJrpqn3JgJ5KtsDBzhLyjnWc+lMfQXT7zNrlkizIySNzyEAxQ
+         YEGzS7fFGbaLWX1bLfZFVOLDxsTfNi2+4oAv7CfI5g7RhbVpl9h+oa1vMlV4bPsb0PC5
+         d1mg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785991449; x=1786596249; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=DzndrXqK7dugyzD+dEx8n3HKXIXDFoLh63SKmFVn2/E=;
+        b=SN+HfDegByAbNVsd6U+f3pF3uQsCDjTwpw/Eso3xyLywkl3Ju6BiCQpHotKGX2Ntrs
+         pi9Vdjg9nC/IoUfDTVOyYEoHvSn+aQ0Mb7Bm6H5RQka7oaSFLgs93iuYHkOhgfRtvbmz
+         4aOvbi0NiE7pKv10NFOM9oNbRBwa9EudLV9jjD+Luf6nesw3F9/1apIUYIuz7yz3xll+
+         0z6TBYJjBRqXON0vedpuewNiJ2CV0OB9g0QUNlcbF3ruAvvJsqYF28MezP8NZk7J0Y7U
+         Feq8Vv99vM0T0rS/LK9PLWd+CPo7KqIyIswMY1IuWjttXNdTBBtTKzbN/TS7MmYkoqgY
+         6azw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785991449; x=1786596249;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=DzndrXqK7dugyzD+dEx8n3HKXIXDFoLh63SKmFVn2/E=;
+        b=fiSpBjt7axA7XSVy01Y3Xg5WUcmeQrMvkHnfB8En+JYU7pITeTH59z2t/Gl6s9uYp0
+         DmzF5EHGtpix/7dj42ulLaNm/NoUOekd+GSRs+eCnWcOk8Bnk+qbxmU6t6tn6TbqzgRG
+         Kba9AMJM2++3kiyvAmxm2LAKu4NTIKLuUiSdI0eKpVEgy7xF6epm3LMHteM1pu7e4j1B
+         wLx7GlLZbld0DCsGIkDeR1ScFE9AE5l78EZIlz9ZIWbagL1ecpVvpT8EYwhwJ2xv74a1
+         6k6QGrITbBLJIstHdwZHjnHMBqG24BFzJSAwR0qH9Y6TsNKh7TjewofXSt0vWMZY3orL
+         NEgg==
+X-Gm-Message-State: AOJu0YwGyxDpjgY3wsWsk13pKRy89C7CkxYqtZXLT1xVqzs3tFbMGHM9
+	cRYb9V8A3h/foh0MNJT+cmYEXTf86lwbxtH7qggqxSYTlzmZs4wlzOVPaMD7iGKze6JdnefxrLo
+	q64DblEPVUiWDzoeIWUTBE8kg1gy0uAIM+H5y6mv6fQ==
+X-Gm-Gg: AR+sD11hdbZQ9wLMOGOHuYKE38dxSjiEkJVirL9Y3k7j3QxlOXCNBsSkLDekzbd0bFy
+	INHBlNKcjxwPVAQ3OCLWLHWFvCEO3IP8ivVb2wcCXYgeuMl/jSURBwFEoQYu0w26f5AoBlyHvhF
+	mPEYSfa44Z41o1/onIcBGOnCvi6VUUz1bFxKjKgTYLbqXoCVsbNKYbaOZYm3MBsiwwUT9mfD/hX
+	b7LbDYj0+R1aYdpY68J6qQzzHCt0w3dm47uZ7ccieWHHLlMnEyQcCGTG2zySv01I2ggZHQg3gLD
+	p7aS/xug/1xaFGf6LmEoleldlXAfzlgwpPOw3BzkfNEb7wjRBa7Dg4ZqE6dzaLroDee4fyrEo5t
+	MVg==
+X-Received: by 2002:a17:906:100f:20b0:c20:69e0:2ea1 with SMTP id
+ a640c23a62f3a-c2069e031f7mr16826666b.30.1785991448446; Wed, 05 Aug 2026
+ 21:44:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
+ <20260804170156.1709916-3-nickolay.lysenko@gmail.com> <16bd5e96eaa2376e1e235b280141ade8486af206.camel@gmail.com>
+In-Reply-To: <16bd5e96eaa2376e1e235b280141ade8486af206.camel@gmail.com>
+From: Mykola Lysenko <nickolay.lysenko@gmail.com>
+Date: Wed, 5 Aug 2026 21:43:56 -0700
+X-Gm-Features: AUfX_mx93e9JOQ0Bc00PZkxzPPh2j3WculQRzq2p3ZUo1MdRwvNLVH7scEptSPY
+Message-ID: <CAMtxOX1Sfi4ispM9suGXKPaRss3bZ_rxAYCfvc+vv-J-d6-dmg@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v5 2/8] selftests/bpf: drop stale and no-op lines
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, memxor@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] Transient stack pointer overwrites persistent hashmap key in is_=
-kmod_btf_needed(), breaking hashmap integrity on bucket collisions.
-- [Medium] Memory allocation failure for `obj->kmod_btfs->data` silently re=
-turns success (0), masking the error and corrupting intended behavior.
-- [Medium] Processing multiple `.kmod_btfs` sections overwrites previous al=
-locations without freeing them.
---
+On Wed, Aug 5, 2026 at 2:28=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
+>
+> On Tue, 2026-08-04 at 10:01 -0700, Mykola Lysenko wrote:
+>
+> ...
+>
+> > @@ -480,11 +479,14 @@ BPF_CFLAGS =3D -g -Wall -Werror -D__TARGET_ARCH_$=
+(SRCARCH) $(MENDIAN)     \
+> >
+> >  CLANG_CFLAGS =3D $(CLANG_SYS_INCLUDES)
+> >
+> > -$(OUTPUT)/test_l4lb_noinline.o: BPF_CFLAGS +=3D -fno-inline
+> > -$(OUTPUT)/test_xdp_noinline.o: BPF_CFLAGS +=3D -fno-inline
+> > +$(OUTPUT)/flow_dissector_load: flow_dissector_load.h
+> >
+> > -$(OUTPUT)/flow_dissector_load.o: flow_dissector_load.h
+> > -$(OUTPUT)/cgroup_getset_retval_hooks.o: cgroup_getset_retval_hooks.h
+> > +# progs/cgroup_getset_retval_hooks.c includes this top-directory heade=
+r,
+> > +# which the progs/*.h prerequisite of the BPF object rules does not
+> > +# cover.
+> > +$(addprefix $(OUTPUT)/,cgroup_getset_retval_hooks.bpf.o \
+> > +     $(addsuffix /cgroup_getset_retval_hooks.bpf.o,$(TEST_INST_SUBDIRS=
+))): \
+> > +     cgroup_getset_retval_hooks.h
+>
+> Would it be easier to just move cgroup_getset_retval_hooks.h under progs/=
+?
 
---- Patch [1]: [RFC PATCH bpf-next 1/2] libbpf: support selective kernel mo=
-dule BTF loading via .kmod_btfs section ---
-commit 5306ac18160e3a8c2a0f3dd2eda202169f998df6
-Author: Fuyu Zhao <zhaofuyu@vivo.com>
-
-libbpf: support selective kernel module BTF loading via .kmod_btfs section
-
-Add support for a new ELF section ".kmod_btfs" that allows BPF programs
-to declare which kernel modules need BTF loading. This avoids loading
-all module BTFs and speeds up program load when only a subset of modules
-is needed.
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 514e4e9daa825..5cefe82e4a679 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -901,6 +916,68 @@ bpf_object__init_prog(struct bpf_object *obj, struct=
- bpf_program *prog,
->  	return -ENOMEM;
->  }
-> =20
-> +static size_t mod_name_hash_fn(long key, void *ctx)
-> +{
-> +	return str_hash((char *)key);
-> +}
-> +
-> +static bool mod_name_equal_fn(long key1, long key2, void *ctx)
-> +{
-> +	return strcmp((char *)key1, (char *)key2) =3D=3D 0;
-> +}
-> +
-> +static int
-> +bpf_object__collect_kmod_btf_names(struct bpf_object *obj, Elf_Data *sec=
-_data,
-> +				   const char *sec_name)
-> +{
-> +	int module_cnt, i, err =3D 0;
-> +
-> +	if (sec_data->d_size % KMOD_NAME_LEN !=3D 0) {
-> +		pr_warn("sec '%s': size %zu should be multiple of %d\n",
-> +			sec_name, sec_data->d_size, KMOD_NAME_LEN);
-> +		return -EINVAL;
-> +	}
-> +
-> +	module_cnt =3D sec_data->d_size / KMOD_NAME_LEN;
-> +	obj->kmod_btfs =3D calloc(1, sizeof(*obj->kmod_btfs));
-
-[Severity: Medium]
-If a crafted ELF file contains multiple .kmod_btfs sections, could this cal=
-loc
-overwrite a previously allocated obj->kmod_btfs and cause a memory leak of
-the hashmap and data arrays?
-
-> +	if (!obj->kmod_btfs)
-> +		return -ENOMEM;
-> +
-> +	obj->kmod_btfs->data =3D calloc(module_cnt, KMOD_NAME_LEN);
-> +	if (!obj->kmod_btfs->data)
-> +		goto err_out;
-
-[Severity: Medium]
-Does this error path silently return success?
-
-Because err is initialized to 0, this goto err_out will return 0 instead of
--ENOMEM. This causes obj->kmod_btfs to be freed in the cleanup path while
-the function signals success, making load_module_btfs() fall back to loading
-all module BTFs.
-
-> +	memcpy(obj->kmod_btfs->data, sec_data->d_buf, sec_data->d_size);
-
-[ ... ]
-
-> @@ -5803,6 +5884,21 @@ int bpf_core_add_cands(struct bpf_core_cand *local=
-_cand,
->  	return 0;
->  }
-> =20
-> +static bool is_kmod_btf_needed(struct bpf_object *obj, const char *name)
-> +{
-> +	uintptr_t val;
-> +
-> +	if (!hashmap__find(obj->kmod_btfs->hashmap, name, &val))
-> +		return false;
-> +
-> +	if (val =3D=3D KMODS_BTF_LOADED)
-> +		return false;
-> +
-> +	hashmap__set(obj->kmod_btfs->hashmap, name, KMODS_BTF_LOADED, NULL, NUL=
-L);
-
-[Severity: Medium]
-Can this hashmap__set() corrupt the hashmap by storing a transient stack
-pointer as the key?
-
-Looking at load_module_btfs(), name is a local stack array passed to
-is_kmod_btf_needed() on every iteration:
-
-load_module_btfs() {
-    char name[64];
-    ...
-        if (obj->kmod_btfs && obj->kmod_btfs->hashmap &&
-            !is_kmod_btf_needed(obj, name)) {
-    ...
-}
-
-Since hashmap__set() only stores the pointer address, all entries will
-share the same pointer to the local name array. If a bucket collision
-occurs, strcmp(key1, key2) will evaluate to 0 since both point to the
-same stack address, falsely matching existing entries and skipping the
-requested module.
-
-> +	obj->kmod_btfs->nr_loaded++;
-> +	return true;
-> +}
-> +
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806042042.3239=
-428-1-zhaofuyu@vivo.com?part=3D1
+Yes, that is simpler, thanks - will do in v6.
