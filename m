@@ -1,182 +1,127 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C037D38F935
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 13:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786023938; cv=pass; b=ljuuw+1mB8EfoyY1zzUCnohE/lH49guLwMXUPnCxAQMFi2xQnRVplquuvBxoLS4Uhee1Goqrw8pKTWL8Kmz6OEm4kC5gIEbZIjpIeeQoTrlNECWoK6KPodVOZYOcl08nowXvLTmkZxOSvpY3ZdL8EwffJkiXXizAN/3tuBjwEVE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786023938; c=relaxed/simple;
-	bh=BKWJTReTdw+LMAVvVwFW5qLVtx7m6cVom+p9AYVg2D4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ItrcfwASvDo15fGq+6DYmf0uokrHo47KNno1ztHRK3sSI5Uijvm58HVrYNrBfE1dtE7MYuIUxX7qtmWlOwx831stejAZPANxnMi6xiPr93QKmXBxGILyt10w/1iipiwoOheTOqfvQd+mH0CuVjsRrWKYuCnV5/kKI2bhcp32kPI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sJQCLgba; arc=pass smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B2D388E7C;
+	Thu,  6 Aug 2026 13:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786024389; cv=none; b=PJ2hZHZoATYs8pyp719AKzMZy2pVnWy6x2XBh94WncNDn4xApg3ZCUEpmi7SP78itob6WDMaZkLPob5UvPHVdwtRi2FfmdvokmfewFfnBxVDAQpr6WI9vFApYaxNI701bgVQb0NH/o0pe4Ug5lRGE3WdAKO14ut3x1OuKzQMm3U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786024389; c=relaxed/simple;
+	bh=q2cciPE6r9aBzCBRCLxeFxoFZfPY8m4wAIombo350LE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HZ5mcsfAX6fvWed/K2UWPQLlp+EqfuF+GxAR0gy/m7zRKuvrr5O4hb7r0DD1mmH3oLLufDt0eW8Llui1PwzxvKpQZI/1+cuD+EHBb0OafJU1dgwxtH3VcOaNV1nlozPi1jkOtiZmQHN/SvDSEz+iz1S4ihQiXDLtVUUgdAKLMQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ltDRo8L2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sJQCLgba"
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-92e57a753f9so178008185a.2
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 06:45:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786023935; cv=none;
-        d=google.com; s=arc-20260327;
-        b=H8EcYEFtLONco+SeS1PascViw60qBoOWdHoEUwUk9klOlpLluuDfXqjKH7mD1GAHWz
-         x6uuBU3usAL4dLYun7Mq8EwyEIyWRfOi1yX9uBpkLzD7iak+8e+vwE0B/n3pnDm0Bguk
-         UvzJ1Yu5y6nalDpFaTBz3MWOIVMZrdESVGIeywmto5jjP/00Tt4p/RivwfRVLqL0Oh9v
-         3boHgtp4o7+dA84ciLhVd/vJYLD3IbS0KoVHJ+h6LPNJ9X/1q/v+887E7GaErztQUCIM
-         Ht9yETAj804w/O0MEfMN93ohxiAKssqpolICUUlWMbd7veJVGlxSawniQxkDzAoC7wRy
-         o9NA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=BSeHeIOsrbYVt/cFGZ3Mudq1FYtZux95e0DZcHfkyoA=;
-        fh=yd0Rco7ICpNXJSn4DoQuGZ7fgxI2CogEl7vkrWGrHW0=;
-        b=SOOmJI6Az8rwY+lu+0fcd/wchYY84D5eo4lhWTxloHNPDh1VDQXTZMt316pTQ0cpUg
-         DBNXL8a5SDMKZ3XTszmzPiILAsbmftDUbhQkHXCXDeOWP5SskTcbdJDolePkDJncj+5i
-         exjjxBnb1o3RAtmIveI5qkDgItPOJJL1j8XJshOXrdjcUkR7UU4KQDP3zsYS7Zp38gUy
-         obllnZpMN+xfDFeNwAm6VsL4XAlDcagQ9ZBLa68He0l0JYocS1FRwMPxtTRHW7n/gihL
-         QJu8cd47PAoAFpgFUY0wYlh3eL5SI3Nr/F0yB7Ri8KwrXGLvipXMETmM1Pu368AIPwVs
-         851w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786023935; x=1786628735; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BSeHeIOsrbYVt/cFGZ3Mudq1FYtZux95e0DZcHfkyoA=;
-        b=sJQCLgbaC/McfgMuD8v8IvAPx0ogptrKbO8CKL7OO7jt3QRkqLS05HNZ5upR9Wjhp4
-         iWLdbbHASrc5NjUIqAlgHt3/w5KE/fyvd+HrYO9xxThIc+Nzc+TjwPcM8jXD9zRdERa2
-         EtHaNy6Sahe2Vym9yRyn8xcy00IjwtglyB8Tli6Yo2kUo8/nmB2L/iRabFhlTd7o1Zn0
-         4t3KAPEybwjoDf2rhbpsuKhNcilx+/8Q+BNTo9EaMHdZk6ios5zAVsmZV7AFBNnMfeyO
-         qhjO/3326ifnhjBhzuL2bLBiwVkEiXaIYuqedyidv40qNUAbTMbZIcNqg1wCUAcvpP6r
-         mUIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786023935; x=1786628735;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BSeHeIOsrbYVt/cFGZ3Mudq1FYtZux95e0DZcHfkyoA=;
-        b=CK49PTbvEYVeduLTFC2QaeDPBIL0ImmLy1cXT8pJSjj+GPhHKelnQ5bnB5gu805B54
-         ubJbQkTOIiTkX6WTf3ohVL4ChId688chApkpbrVouJuh0V81Pr0gknzIEndV4iQyXR3c
-         iGaZEZvQQiApyq76TB15OLQhvEWlbPVrQCft0TEAS5iwP3nfqYHInVnn7YEH4p5KgFsb
-         xuq49XxQa4+BAuH0z+mIiUzwTyfIN2LDfjUGS3AtTiqSmUDyIt6Eemytu5dBim9obImY
-         bwqp7UtssnWB4a4j+Jllv7hRYnfHE37fY/6nMez0T66Q/WACsCR8w57OslKHKe6GaatP
-         Q/Aw==
-X-Forwarded-Encrypted: i=1; AHgh+Rqn/K2HTvG8sZF8HL3obNX2wDVt//HDlXeKXmpKWcGJ1uhDQk7VuC4kli9knzdunabw06U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeJQ01FWalDdb6M3d45PMqxtc723ZboAQbFTPcok76ZE25pg/X
-	YqxqCgzEz5d7Wxh3tMXFbPFvdaBQ7Ha4up/3sRbXr6nvU/jOhdSvn3DRG57VzSD2wycUcZ37HTf
-	bJGl7OrqmWjAa/veB05hoMrZpUgsw1SU6GKmtRWHR
-X-Gm-Gg: AR+sD13SD1vo/FwY+kTBlrgM6SrU6LWkRvcJdn1jl+6WNKXkd6tNO4W17MBqGluR/ry
-	zkLKBL0WmijPMeBWgChCdXkYSn7kRnRQuKsTZHwQt8+WAnvC6VT/BeCL/4Cp2KVox9bO3WQMR+W
-	ivYDQQoCs1Bnvm/kw+NL3SjEmzzeWkk5dh20u7V81R7R0XVUz4Gl39x9djjuHCHHlDDWJkxTqDC
-	oQPJLn+X3kRHe94dHdVB99Xtlnees9RMD+1a1gz+XRT+chStvB77AsPvoJXueiklYSvLaK4RMGY
-	88MoWcLwL8rWo/MiA+4dErXW1RvPEEkTZeEX+vSfUXqRl6mCZInJiKG3bQKVORNKyqnK2RpCh69
-	qPb+bz7uEO6kikDVPFlnBj9Z8Kx/deaV0tRPcGU21vR0Hojn4XaaWFYk=
-X-Received: by 2002:a05:620a:8c89:b0:92e:541e:632b with SMTP id
- af79cd13be357-93649056dc5mr1186003185a.2.1786023933857; Thu, 06 Aug 2026
- 06:45:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ltDRo8L2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B221F000E9;
+	Thu,  6 Aug 2026 13:53:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786024388;
+	bh=IKqPFsGUTE/iktLHlZyo0CuSNyCusETSu5tRfe5rZ0I=;
+	h=From:To:Cc:Subject:Date;
+	b=ltDRo8L2l+ReTf9LHJZ1lbVO+HFjWO0EkdBg/v1r8yVCrfkqDWQPbxKpu7+/m85UW
+	 EWsa7X+ULsG35QAAOGjWetSPRoWgy9hCyCIUGgxOeVnX7M6kLVvTgwKcN/3YTCKYdm
+	 Q9FxcVWow/UIypSymxwQH7WVcMDoH5E0ca4/xWWiMNFyJuYPkQEj8lDOTR87HQ3YSm
+	 ruoQsweYdo1x4c00BfM5mXDvvlIY4Jxf95mJX44Lib5cg53LvIL97Re1uhln/LF3cN
+	 mC09R+aBNeG5aEH1m0C3IdaLbVju5VMi8QV/2DWCONtOzXWV2w8H8r0XbhmwA4iu0p
+	 4apY1ZPUVJnuQ==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Usama Arif <usama.arif@linux.dev>,
+	Will Deacon <will@kernel.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	x86@kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/3] perf/core: sched_task() dispatch and branch entry fixes
+Date: Thu,  6 Aug 2026 06:52:20 -0700
+Message-ID: <20260806135224.3267890-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260730220055.2946171-1-tejasbirajdar@meta.com>
- <20260731220124.B0C621F00AC4@smtp.kernel.org> <1f36d5be-906a-4ba5-8679-24cbcf899254@redhat.com>
-In-Reply-To: <1f36d5be-906a-4ba5-8679-24cbcf899254@redhat.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 6 Aug 2026 15:45:22 +0200
-X-Gm-Features: AUfX_mwdvTEom7e3WZw1jtKlW4Jx4hI_DGQwZjfU5OQKTgLw-QKbrPG4mz7zWVg
-Message-ID: <CANn89i+P6Y+uBSKa4S7CAqJWrZNqHOTKY2A2jaVs2iFG4_wRhA@mail.gmail.com>
-Subject: Re: [PATCH net-next v3] tcp: honor BPF_SOCK_OPS_RWND_INIT on the
- active connect path
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Tejas Birajdar <tejasbirajdar@meta.com>, bpf@vger.kernel.org, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, sashiko-reviews@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 6, 2026 at 11:15=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> On 8/1/26 12:01 AM, sashiko-bot@kernel.org wrote:
-> > Thank you for your contribution! Sashiko AI review found 1 potential is=
-sue(s) to consider:
-> >
-> > Pre-existing issues:
-> > - [Medium] The `SOCK_RCVBUF_LOCK` check executes before the BPF program=
- runs and before `full_space` is inflated, silently defeating BPF-requested=
- windows and bypassing dynamic `SO_RCVBUF` adjustments.
-> > --
-> >
-> > --- Patch [1]: [PATCH net-next v3] tcp: honor BPF_SOCK_OPS_RWND_INIT on=
- the active connect path ---
-> > commit 2cf5d1d17ae1c7488533ecaa0fcbb83ae4591ec8
-> > Author: Tejas Birajdar <tejasbirajdar@meta.com>
-> >
-> > tcp: honor BPF_SOCK_OPS_RWND_INIT on the active connect path
-> >
-> > This commit updates tcp_connect_init() to honor the initial TCP receive
-> > window requested by a BPF_SOCK_OPS_RWND_INIT program on the active conn=
-ect
-> > path. It inflates full_space if the program returns a non-zero window,
-> > matching the listener path's behavior, and uses u64 arithmetic to preve=
-nt
-> > overflows.
-> >
-> > Link: https://lore.kernel.org/netdev/20260723214208.3655474-1-tejasbira=
-jdar@meta.com/
-> > Link: https://lore.kernel.org/netdev/20260722170033.2763794-1-tejasbira=
-jdar@meta.com/
-> >
-> >> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> >> index d7c1444b5e304..fcaa04e65189b 100644
-> >> --- a/net/ipv4/tcp_output.c
-> >> +++ b/net/ipv4/tcp_output.c
-> >
-> > [ ... ]
-> >
-> >> @@ -4137,10 +4138,13 @@ static void tcp_connect_init(struct sock *sk)
-> >>              WRITE_ONCE(tp->window_clamp, tcp_full_space(sk));
-> >>
-> >>      rcv_wnd =3D tcp_rwnd_init_bpf(sk);
-> >> +    full_space =3D tcp_full_space(sk);
-> >>      if (rcv_wnd =3D=3D 0)
-> >>              rcv_wnd =3D dst_metric(dst, RTAX_INITRWND);
-> >> +    else if (full_space < (u64)rcv_wnd * tp->advmss)
-> >> +            full_space =3D min_t(u64, (u64)rcv_wnd * tp->advmss, INT_=
-MAX);
-> >
-> > [Severity: Medium]
-> > This is a pre-existing issue, but does the SOCK_RCVBUF_LOCK check happe=
-ning
-> > before the BPF program runs defeat the purpose of allowing BPF to adjus=
-t
-> > the receive window?
-> >
-> > If an application sets SO_RCVBUF prior to connect(), SOCK_RCVBUF_LOCK i=
-s
-> > set. In tcp_connect_init(), this caps tp->window_clamp to the old
-> > tcp_full_space() before tcp_rwnd_init_bpf() is invoked.
-> >
-> > When the BPF program returns a large requested window and full_space is
-> > inflated, tcp_select_initial_window() bounds space by
-> > min(window_clamp, space).
-> >
-> > This caps it right back to the pre-BPF full_space and discards the BPF
-> > request.
-> >
-> > Conversely, if the application did not set SO_RCVBUF but the BPF progra=
-m
-> > adjusts it dynamically (which sets SOCK_RCVBUF_LOCK),
->
-> I read the above alike: 'a badly written bpf program could be
-> ineffective'; not much relevant.
->
-> This version LGTM; Eric do you have some comments?
+These three fixes were found while adding BRBE support for
+bpf_get_branch_snapshot() on arm64 and have been carried in that series
+since v1 [1]. They do not depend on it, so they go on their own from
+here; the version number continues from that series to avoid two
+numbering schemes for the same patches.
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Patch 1 stops __perf_pmu_sched_task() passing a NULL pmu_ctx to
+pmu->sched_task(). armv8pmu_sched_task() is the only implementation that
+dereferences the argument, so the oops needs BRBE.
 
-Thanks.
+Patch 2 makes perf_pmu_sched_task() visit PMUs whose events are all
+CPU-wide. They are skipped today whenever the scheduled task has a perf
+event of its own, so branch records leak across task boundaries with
+perf record -b -a. intel_pmu_lbr_add() calls perf_sched_cb_inc()
+unconditionally, so x86 LBR is affected the same way.
+
+Dropping the early return alone leaves both dispatch paths running for
+one case, so perf_ctx_sched_task_cb() gains a matching gate. The two
+could instead be collapsed into perf_pmu_sched_task() alone, since
+__perf_pmu_sched_task() already passes the same epc, but that would move
+the callback out of the perf_ctx_disable() window for every PMU rather
+than just that one case, which seemed like too much for a fix tagged for
+stable.
+
+Patch 3 clears struct perf_branch_entry with a single struct assignment.
+perf_clear_branch_entry_bitfields() had drifted from the struct: new_type
+and priv were never cleared, and arm_pmuv3.c allocates the per-CPU branch
+stack with kmalloc().
+
+Tested on a 128 CPU arm64 machine with BRBE. A WARN_ON_ONCE() at the gate
+patch 2 adds to perf_ctx_sched_task_cb() fires within seconds of running
+perf record -b -a alongside a task-bound event pinned to a different CPU.
+
+Changes in v6:
+- Split the sched_task() fix into patches 1 and 2; the NULL dereference
+  and the missed dispatch are separate bugs with different reachability.
+- Gate perf_ctx_sched_task_cb() on cpc->task_epc. v5 removed the early
+  return in perf_pmu_sched_task() without it, so both paths ran for a
+  task whose event for that PMU is pinned to another CPU. Caught by the
+  WARN_ON_ONCE() described above.
+- Tag patches 1 and 2 for stable.
+- Send separately from the BRBE series, rebased onto tip perf/core.
+
+[1] https://lore.kernel.org/all/20260616155716.2631508-1-puranjay@kernel.org/
+
+Based on tip perf/core (f4dfab174244).
+
+Puranjay Mohan (3):
+  perf/core: Fix NULL pmu_ctx passed to pmu->sched_task()
+  perf/core: Run sched_task() for PMUs with only CPU-wide events
+  perf/core: Clear the whole branch entry in perf_clear_branch_entry()
+
+ arch/x86/events/amd/brs.c   |  2 +-
+ arch/x86/events/amd/lbr.c   |  2 +-
+ arch/x86/events/intel/lbr.c |  6 +++---
+ drivers/perf/arm_brbe.c     |  2 +-
+ include/linux/perf_event.h  | 16 ++--------------
+ kernel/events/core.c        | 15 +++++++++++----
+ 6 files changed, 19 insertions(+), 24 deletions(-)
+
+-- 
+2.53.0-Meta
+
