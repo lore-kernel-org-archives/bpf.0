@@ -1,113 +1,160 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFD7335BDB;
-	Thu,  6 Aug 2026 15:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6663479889
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 15:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786028475; cv=none; b=BQUEvnUwrMvTCVM7yPCOgrSC/Gb0acX0nyMnpn6SUMluAihptw97QJB3EwPmSudczyinOaiFaGFj/FnUT3+3E8wIoLKB0iN+/kS0o2wnZlT5dBhwIaBn/8jgNW9m50bYjtFaBEDosJbSI6PzhgOoe/QZsNCXh6axEwzS5ja/YP0=
+	t=1786028483; cv=none; b=sZaoFt6w4jgiE2jax1L7Ya22Gr/0FEC3/1NhEZdPK73aXws5BZsGSUK+Q0dVYOgZ4awsuRxes57sxz7UGTFTdIqsa9hrOqXos+QMiRsgT1eZDGv9WVn3N7/oK0M5MjFGt1WirPC8pnrRFFnaM6olKiXtdqKO+43dLZ/KhTK3JBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786028475; c=relaxed/simple;
-	bh=o6oT+3UiMYqOpJp+MHiENAxakjusL7dSjo23L1mv4Xc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nVbafKbfwp54OK154ynXn1JqTquKdlMay7PbkdCaQRLPakyzjDvlkn61AMt2Xg96pRUNTtP0U7jWlHuXVQwUqrENlNL4dZ4l1pzpt9CsDaj2t1cueOAZkNYJEJzfbGmaCGlWBVPu9/ljuGTZIpQKEUFfjnQupEqwJF9IQkitQnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=R2Bt6EQZ; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1786028483; c=relaxed/simple;
+	bh=Y99ilbLrRENRwJW/P4xjAwZSFPBHEC9V6LB/IkSVoe8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=kOTBgflnxcFlIB6FKD1RW6hHaNgCBGvQG4kr1YLDeof7LA+6/ijz7gSw42hcDRIgCcjNt5H/pvebdBUPXfpqoWVXyGDRNL+KN/h5L2NVfTUPi8NeSXXKU+WeTF14M1xiKI+nl/S9dIo7DgyuRUwnkbJcvUf49nv9CA/90tdeeWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P+oBtx4j; arc=none smtp.client-ip=74.125.225.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="R2Bt6EQZ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ZMf7nDGBjU06wZ2wVFSb3gpbNtn5Qo53vTeg62ypMQ8=; b=R2Bt6EQZ4uz1MZWOSs+miXDh7J
-	zYsQfmJN4vTYoIVOO9w4pKOK+BPmGt6Gocf2d2rpAEZC/NOwrm/rnq45US/X/wKPQZp8KzkWw7uzM
-	xKQ/FYagXm7DD+3s2x+JgO6raNHIpQn6sOgVNsECStbR8ObhEfjfznlBNlBtG8AJtD6LwyUkycdMK
-	iKqNrrFtTTG6spnm9eAjpjlpZWEOkAs9So9yYP74HftpfDRZp+jXFQxM6HH0Mu5P55q/tTjN9UT+8
-	pSMgcoIVx0yx0K8uS2o/QGH0XuzMWRHhXfucr/wevFqIgOHMry7Xn9+NdR1kx0uTpvt0XJ6vLwrMt
-	tXUVmW1g==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wrzaq-0008Td-0t;
-	Thu, 06 Aug 2026 17:01:12 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wrzap-000DMz-2K;
-	Thu, 06 Aug 2026 17:01:12 +0200
-Message-ID: <d9504a71-f158-476d-b35e-0f6afb2a9cf7@iogearbox.net>
-Date: Thu, 6 Aug 2026 17:01:11 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P+oBtx4j"
+Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-473ba029526so321378f8f.0
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 08:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786028480; x=1786633280; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=dioGFzjSs7KaCLGjqP+oJJAaenl4kyHQ52JQwiLek4Y=;
+        b=P+oBtx4jbjDsnp764e/9NP0YE7aPqkGqrINCFmGDwQf1tKB2guJqb1etCjsWADYoMz
+         Jitx7iSr9hFEX1/Ns5Vovq8cnOBMFM5PYqCPtY8SYTDRmP5/Fhn5oRWCxI+KgknvQcL4
+         p+bNmEbzVIY6h+PW3qedOqrctG/FAzveTSRElwj+qzRSCDr9EcyYh39BVFYY6/yU6H0I
+         cJCdo9TB0jZZ2uP+i2RuQ7VGG2up/o8HQlt3Oe2mCCiF1U3QbqH3FGpbgJQu5HVFEs2s
+         NsBoB7p5YeLpViQAfDbmLXPnQxGzgaliKhwVLDa3G4xDaSdjhG4+KRD7VwUah7FQwce8
+         ltZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786028480; x=1786633280;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dioGFzjSs7KaCLGjqP+oJJAaenl4kyHQ52JQwiLek4Y=;
+        b=KlPRWQYcNbLGDc28JFD3e3h/z1lvT9p/8twoYpbGnlAkVfAJ2De5BqzvXbFoDjrYVP
+         ugcRlXef2ZLpuu41L+wxfMzaPG8zJ0kqmQmmeY1H80pOtSYFCCOEGp9EvU3/hj8ctV1B
+         SXplXinhyWyNTAz7C5FvHvcmgw4Np+AygCYR7gYfiKPozRlPAe6AVyKietZDjl3FWec7
+         V4t9x3zdGeZinsgBpgAxxKwCLeSnCYBNM8s4a7i/Dg6jvPq+EooaIZK4gBEeZ5u2NYwx
+         qR8S6YmAA8nDCBLZ6n4QiLMrXDLbzlHh4HGiCNETjrcd8PAR8Z3gO8i42z0w5XR1mxKy
+         Tdwg==
+X-Forwarded-Encrypted: i=1; AHgh+RoG1ekcQslislblsCXvdGjhoczKcBhM//bDplmmHYVkc4WoOTsV5++fK3iZGFETj6cmxeo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrjUBFD84HtzUagxY3fou4G6e0RlfP1NL9BRgdbC2UPwt1hoJN
+	CP8BUoXBooMMMgf43cXakWPTXZBm5mh874tAZqgMzoWo/A8QXf659/5O
+X-Gm-Gg: AR+sD12YA+0RELJHiZDfPEsmkF7lpwAp/xpEwfrKKtGvdXDaQR3Iy3F2nJH/n4dCECC
+	Znke2dmv5mkcu8kJdJLRmMQxfB0juUfpcqFeca/DtBvQLMNmzWFUisOchdw0RhsvLPDzx1Hcg1i
+	KH6UQBmhwzN8AwBBakGjFf4vMIpl4UrgMWG+XytgAoFQuo8ykx/L8wD3Lwx/SoezGhJzLP0zYT8
+	ePcX/RviGy9mMU74dV3tLWYyYpy4/ueCRLhYiDQLboKhH+0bUcdUYkgxv6qaZ9vzEI1mCyB+qsw
+	DpPs5pVvg997ZXw5d8diOm9d0FuG12iYf6iAtPHA4A3nXw6KMTfzMG+dZVmqbL0EGpYcVuEGSHL
+	4mgE6VgbgcMceTpOpolA1V/x0Z2qMX+H1PIRA0EPfbRW23ZG4aZhg0OsTGPsTzkXxz46/iFlJ/Q
+	RPqAdLC8P3ttDO+RnR1o8TWoLs5BCiyWCIfHd1DnzqqBJXDU34UXK0rbAv+4uW5/JJbgvD0iTg5
+	/a8HHX/Yop7HBmarnR4/opqnVmjhrR+sptDI+JwwpnGfnOBdGqFnrft4cfnxna97yqtBvK+MCvi
+	LkHctInvIKSCt+60kQsXPgkPVtI=
+X-Received: by 2002:a5d:5d89:0:b0:47f:ece1:1eca with SMTP id ffacd0b85a97d-47ff8584853mr6549157f8f.1.1786028479664;
+        Thu, 06 Aug 2026 08:01:19 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff79b819dsm7067045f8f.16.2026.08.06.08.01.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 08:01:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 3/6] bpf, x86: Fix exception table metadata for
- arena load-acquire
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260806143924.319238-1-daniel@iogearbox.net>
- <20260806143924.319238-3-daniel@iogearbox.net>
- <20260806145853.570CC1F00A3A@smtp.kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260806145853.570CC1F00A3A@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28084/Thu Aug  6 08:24:46 2026)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 06 Aug 2026 17:01:18 +0200
+Message-Id: <DKHY982BEJN7.2ZUBJJEXR8X7B@gmail.com>
+Cc: <puranjay@kernel.org>, <paulmck@kernel.org>
+Subject: Re: [PATCH bpf-next 0/2] bpf: Track overlapping RCU protection
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Ning Ding" <dingning04@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260805233940.3966981-1-dingning04@gmail.com>
+ <DKHQUVB5TV0R.1OLK7GG1APAOR@gmail.com>
+ <DKHR95T6P1ZC.G09YF6M1QEL2@gmail.com>
+In-Reply-To: <DKHR95T6P1ZC.G09YF6M1QEL2@gmail.com>
 
-On 8/6/26 4:58 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [High] Incomplete fix: ARM64 load-acquire and all architectures' RMW atomics fail to clear the return register on fault
-yeap, I have this as follow-up locally
+On Thu Aug 6, 2026 at 11:32 AM CEST, Kumar Kartikeya Dwivedi wrote:
+> On Thu Aug 6, 2026 at 11:13 AM CEST, Kumar Kartikeya Dwivedi wrote:
+>> On Thu Aug 6, 2026 at 1:39 AM CEST, Ning Ding wrote:
+>>> Preemption-disabled and IRQ-disabled regions provide RCU protection, bu=
+t
+>>> the verifier does not account for them. Current implementation can inva=
+lidate
+>>> a task kptr while another RCU source remains active, or keep it valid
+>>> after the final source ends.
+>>>
+>>> Track these regions and invalidate RCU-protected pointers only after th=
+e
+>>> last protection ends. Add task kptr tests for overlapping protection an=
+d
+>>> final-exit rejection.
+>>>
+>>> This follows review of the applied spin-unlock fix series [1].
+>>>
+>>> Tested in QEMU/KVM:
+>>>   ./test_progs -t task_kfunc
+>>>   ./test_progs -t preempt_lock
+>>>   ./test_progs -t irq
+>>>
+>>
+>> Overall, looks good. There are various failures in CI, so you might need=
+ to
+>> update or adjust existing selftests.
+>>
+>> Make sure to include selftest changes for _existing_ tests within the ke=
+rnel
+>> commit making changes, so as to preserve bisection. Your extra tests sho=
+uld
+>> still go in a separate commit.
+>>
+>> Also, do we need that was_in_rcu_cs logic for bpf_spin_lock(). Would it =
+be
+>> possible to drop it and do it the same way you've done it for other case=
+s?
+>> If that makes sense, I would fold that cleanup in the first patch as wel=
+l.
+>>
+>> https://patchwork.kernel.org/project/netdevbpf/patch/20260805233940.3966=
+981-2-dingning04@gmail.com
+>>
+>> pw-bot: cr
+>>
+>
+> I think from cursory look, the reason is that we forced any MEM_RCU point=
+er to
+> be invalidated before, even when program wasn't sleepable, which does not=
+ happen
+> now. The failing test used a non-sleepable program. So making it sleepabl=
+e should
+> preserve the failure case. In some ways, this is probably an improvement =
+over
+> current behavior.
+>
+
+I fixed this up since it was minor and applied the series. Thanks.
+
+>>> [1] https://lore.kernel.org/r/20260803112615.3362122-1-dingning04@gmail=
+.com
+>>>
+>>> Ning Ding (2):
+>>>   bpf: Account for preempt and IRQ state in RCU protection
+>>>   selftests/bpf: Test overlapping RCU protection
+>>>
+>>>  kernel/bpf/verifier.c                         |  13 +-
+>>>  .../selftests/bpf/prog_tests/task_kfunc.c     |   6 +
+>>>  .../selftests/bpf/progs/task_kfunc_common.h   |   2 +
+>>>  .../selftests/bpf/progs/task_kfunc_failure.c  |  49 ++++++
+>>>  .../selftests/bpf/progs/task_kfunc_success.c  | 147 ++++++++++++++++++
+>>>  5 files changed, 214 insertions(+), 3 deletions(-)
+>>>
+>>>
+>>> base-commit: 11c1e836710dcba03e50454a4eedfdbaf8d3050e
+
