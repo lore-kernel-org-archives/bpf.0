@@ -1,140 +1,113 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4A547F765
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0292A41D203
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:10:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786050404; cv=none; b=BdO67cDGJ40QXPpu1JUNTDtK2RkkojOpby1np6NSJAzkh64+9bekIykmfaNCgtVmnKdwYnZEMpO09H0OhdTUNKvsVfzkcTbkxgo7PCLP++Qiw3Dr1rPlcyhiqZ1cJGMQoa2TafVxJL5E6lLWlcnpjmIMmbZOaD3lWNy0rAvN0X0=
+	t=1786050611; cv=none; b=BJC8ilZU6XarW/LI7Yx9OBWgAttaYoU4XaSNckFpb+CMDvfvbb3imrhnXMAfKCprl7zc+Y5+Y+gplFO/ffaffP+xfS+RIegkT+qIAjFZn8JDr4jwnAe9cLXFTZUqrxOUcLS/afYg9WtdsENb9E565v6OqBxjhGO6D8h5i9uR3Y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786050404; c=relaxed/simple;
-	bh=Kp41RHfNDkstCjrQQeuShbUQmUEHHc6AKhcyizONNDo=;
+	s=arc-20240116; t=1786050611; c=relaxed/simple;
+	bh=3uC53TGj24ENV4GVRI1QRghP3hLrt3xbg6mDjIwNy/U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ipyuhZAuXr/xZ8uNq6NnD8sCf4zxp0uZSRAkaOWDj2bWT/O3JuxqhLrUtMzEaj+5aze7B0y278JPCa42e73ciNOXPeIZmG9SDyciCT5jGvxY+AxGgb66eiAURIrXMk5m9I2YQP+NaX6VRlK1lnNyItODSoPLWlSg22/VX7vXVMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HvisrRb4; arc=none smtp.client-ip=95.215.58.183
+	 In-Reply-To:Content-Type; b=d/joK6fmRkL18Ei8Fjd7dPUjT2Vw4wmANiJt+q/TlscBXWsj9g/+nbCiWy1MucavGfa0JMQbt3Wa6a0FHKNG6nASjCqIMZw70ceKano39nVXx/0yt4p5gkxJIbGzSQwUA7Uic0RivaPJ6vSLSkm/0f5KuURi681QQKFHJdHZIp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Mqi6agzl; arc=none smtp.client-ip=95.215.58.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HvisrRb4"
-Message-ID: <f9b8c8b1-906e-458b-b779-faacb2dee66c@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Mqi6agzl"
+Message-ID: <39401518-a0af-49f9-a247-1e3793bb0648@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786050400;
+	t=1786050607;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xdNNYmL0/yfvQZrBDQe4pGwcwmTLv9LsarZ3QOI/cwU=;
-	b=HvisrRb4XY+FJq11vAOEoj5VPDdEYh5qiTimelFjQj4nf/fXrfWtWgyE4+VJrfyCl6NIPb
-	U6reipjaTGKqDRInfP47QZNPD9d5VdoHe1J6By9UmgbVIrzKhr+Q4fzJHaF0rKOmT6qsdY
-	LYwszvber5kcaWvqwvaXB4frysYK97Q=
-Date: Thu, 6 Aug 2026 14:06:21 -0700
+	bh=e39FPgvRuNUsT5Tht2Tl3jSVxrlqWgMlgFYM5FLFaBI=;
+	b=Mqi6agzldykWo28uj3U0dfCETkgEkjMSAZ+pRnq4ugaCq+yPIuABxPVK/xp/LVce1C4GxC
+	U6s1ISu5lXC9OD8CRdJgk8tSdOA5Uwywf3OJSr0XM6gTUC/o/+GKOAQkSWuuPfEuJcr347
+	1wNb0qs28VaMBCiDSQpLoZu37KgCdMQ=
+Date: Thu, 6 Aug 2026 14:09:46 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 6/6] docs, resolve_btfids: Document kfunc BTF
- annotation emission
-To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 3/6] selftests/bpf: Verify arena type tags in
+ resolve_btfids test
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
 References: <20260805230648.2354989-1-ihor.solodrai@linux.dev>
- <20260805230648.2354989-7-ihor.solodrai@linux.dev>
- <b695bed46f03b4cc1a819bcd0d63272923ba5ca3.camel@gmail.com>
+ <20260805230648.2354989-4-ihor.solodrai@linux.dev>
+ <20260805231755.966CC1F000E9@smtp.kernel.org>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <b695bed46f03b4cc1a819bcd0d63272923ba5ca3.camel@gmail.com>
+In-Reply-To: <20260805231755.966CC1F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 8/6/26 12:47 PM, Eduard Zingerman wrote:
-> On Wed, 2026-08-05 at 16:06 -0700, Ihor Solodrai wrote:
+On 8/5/26 4:17 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Missing NULL pointer check on the result of `btf__type_by_id()` causes a segmentation fault when a kfunc symbol is missing.
+> --
 > 
-> ...
+> --- Patch [3]: [PATCH bpf-next v2 3/6] selftests/bpf: Verify arena type tags in resolve_btfids test ---
+> commit 833ac8bbb8ac1055e25790da1396864987e31541
+> Author: Ihor Solodrai <ihor.solodrai@linux.dev>
 > 
->> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
->> index cbde86d082cc..c60fc574e8b0 100644
->> --- a/Documentation/bpf/kfuncs.rst
->> +++ b/Documentation/bpf/kfuncs.rst
->> @@ -472,6 +472,14 @@ type. An example is shown below::
->>          }
->>          late_initcall(init_subsystem);
->>  
->> +At kernel build time the ``resolve_btfids`` tool discovers all kfuncs from the
->> +registered ``BTF_SET8_KFUNCS`` sets and emits their BTF annotations into the
+> selftests/bpf: Verify arena type tags in resolve_btfids test
 > 
-> Note that this is a single occurrence of the word BTF_SET8_KFUNCS in
-> this .rst file. Also The wording "registered" is confusing as the
-> above code snippet shows the usage of register_btf_kfunc_id_set()
-> function, which is completely unrelated.
+> This commit extends test_resolve_btfids() to assert that resolve_btfids
+> emits the address_space(1) type attribute on the return type and arguments
+> of kfuncs marked with KF_ARENA_RET, KF_ARENA_ARG1 or KF_ARENA_ARG2.
 > 
->> +kernel's BTF; these annotations were historically produced by pahole. For each
-> 
-> I'd skip a note about pahole, it does not convey usable information.
-
-ack
-
-> 
->> +discovered kfunc ``resolve_btfids`` emits a ``bpf_kfunc`` BTF decl tag, a
->> +``bpf_fastcall`` decl tag when the kfunc is flagged ``KF_FASTCALL``, and the
->> +``address_space(1)`` type attribute on the return value and/or arguments flagged
->> +``KF_ARENA_RET``, ``KF_ARENA_ARG1`` or ``KF_ARENA_ARG2`` (see section 2.8).
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+>> index ac51fd4548214..8482f00046d4c 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> [ ... ]
+>> @@ -227,6 +260,39 @@ void test_resolve_btfids(void)
+>>  	check_kfunc_set(&test_kfunc_set);
+>>  	check_kfunc_set(&test_kfunc_set_rev);
+>>  
+>> +	/*
+>> +	 * Check resolve_btfids wrapped exactly the arena-flagged return/args
+>> +	 * with the address_space(1) type attribute, and left other
+>> +	 * pointers/returns untouched.
+>> +	 */
+>> +	for (i = 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
+>> +		const struct btf_type *fn, *proto;
+>> +		const struct btf_param *params;
+>> +		const char *name = kfunc_symbols[i].name;
+>> +		u32 fl = kfunc_symbols[i].flags;
+>> +		__u32 nr;
 >> +
->>  2.7  Specifying no-cast aliases with ___init
->>  --------------------------------------------
->>  
->> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
->> index 1ca8c5f73ad0..6d1dbe4abf0f 100644
->> --- a/Documentation/process/changes.rst
->> +++ b/Documentation/process/changes.rst
->> @@ -147,10 +147,9 @@ Since Linux 5.2, if CONFIG_DEBUG_INFO_BTF is selected, the build system
->>  generates BTF (BPF Type Format) from DWARF in vmlinux, a bit later from kernel
->>  modules as well.  This requires pahole v1.22 or later.
->>  
->> -Since Linux 7.0, kfuncs annotated with KF_IMPLICIT_ARGS require pahole v1.26
->> -or later.  Without it, such kfuncs will have incorrect BTF prototypes in
->> -vmlinux, causing BPF programs to fail to load with a "func_proto incompatible
->> -with vmlinux" error.  Many sched_ext kfuncs are affected.
->> +Kfunc BTF annotations (the bpf_kfunc and bpf_fastcall decl tags and the arena
->> +address_space(1) type attribute) are emitted in-tree by resolve_btfids from the
->> +BTF_KFUNCS sets, so they no longer depend on a specific pahole version.
+>> +		fn = btf__type_by_id(btf, kfunc_symbols[i].id);
+>> +		if (!ASSERT_TRUE(btf_is_func(fn), name))
+>> +			continue;
 > 
-> Just drop the whole paragraph?
+> [Severity: Medium]
+> Could this cause a segmentation fault if a kfunc symbol is missing?
+> 
+> If resolve_symbols() fails to find a kfunc in the parsed BTF file, the
+> symbol's id remains -1. When -1 is passed to btf__type_by_id(), it
+> returns NULL.
+> 
+> Since btf_is_func() unconditionally accesses the info member, passing a
+> NULL pointer to it would crash the test program before the ASSERT_TRUE
+> evaluates.
+> 
+> Should we check if fn is NULL before passing it to btf_is_func()?
 
-hmm... yeah you're right
+We are fine with the test program crashing here. Wontfix.
 
 > 
->>  
->>  It is found in the 'dwarves' or 'pahole' distro packages or from
->>  https://fedorapeople.org/~acme/dwarves/.
->> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
->> index a1812985a61a..717e76ce96a7 100644
->> --- a/scripts/Makefile.btf
->> +++ b/scripts/Makefile.btf
->> @@ -14,6 +14,9 @@ pahole-flags-$(call test-ge, $(pahole-ver), 125)	+= --skip_encoding_btf_inconsis
->>  else
->>  
->>  # Switch to using --btf_features for v1.26 and later.
->> +#
->> +# kfunc BTF annotations (bpf_kfunc/bpf_fastcall decl tags and the arena
->> +# address_space(1) type attribute) are emitted by resolve_btfids, not pahole.
+>> +		proto = btf__type_by_id(btf, fn->type);
+>> +		if (!ASSERT_TRUE(btf_is_func_proto(proto), name))
+>> +			continue;
+> [ ... ]
 > 
-> What's the point of this comment?
-
-The point is to inform the reader "where did decl_tag_kfuncs go?".
-Question is whether the git log will be enough, or is a comment
-also appropriate?
-
-> 
->>  pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func
->>  
->>  pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=layout
-> 
-> ...
 
