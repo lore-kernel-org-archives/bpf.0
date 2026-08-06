@@ -1,47 +1,48 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FBD48F829
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 20:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663F544A3FE
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 20:10:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786047052; cv=none; b=O9KAHIZJZL42Tzmb4YcnUwQ3C4+HEdUgbXYwokmY6uuvNe4vJ3SnwQWb5u73AqFJXk47HbTS/j8WjhHbdg6xPIJMQk4r9+1yzmmHzuAhvjNcgxdq6wsW+9I7W/Y3XMXL+L/O2TrTm+kDsfcWSuFBGa84L25wbSQhLi/kf9RUbkc=
+	t=1786047053; cv=none; b=oD0gErC5AaR50WOralnNsMixJkhwe2DDL/aNiiz/fZcpCuZxqBGGD5/GMLTaua9FqJnGkHvDVSU5imp07t0EOQ/HertfRwGmfE4nrGghw/49rCLHYPnh2wPDk1VwSwtcfdgKNq7TuC14CytagDGg9RYJM3gMPAwNajIBTUcgT9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786047052; c=relaxed/simple;
-	bh=Ic0nyxXjSlJNa92spvUW2/djsB/elLo3iB5HrJrDzO0=;
+	s=arc-20240116; t=1786047053; c=relaxed/simple;
+	bh=dvbrQInNqBS/imrNKmi2eLWPDz1JOewHi5vgz2up9Ck=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bsdiV5/qyOw6zdLMSjJZoCrR3OMe/+t82hVoe1MEqQLw2tXgFm7ggxIB5BWboSer8aPx1KTrYcaEt7CgpxtrWnBIz/FJjh4xsolX0eDJjzMeQ2z9tW1NXEGkZSarFApXFvOiB9D1M5ChwDGsUvudi3v8/DHsdLmAbCPnOtrRoLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ps8g71tC; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=jbnJ287KPpzRpjPB+NB9R03iRVp5DMgijKPnHRtv3WMMPr1H3fk09A0cZACaEJPqxQIwOPtqTQ1reG6yPHELMVrjtn+MsgS3EOWQ44r9Z6E+A18nZQyfc/OyC57Be0sSwOwP3ewShIXcaoDz1q3SY921UuaR4H9ZvJK6yMKVz/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=E5OG2z+9; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ps8g71tC"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="E5OG2z+9"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=YlBbhBS3O0d7JtaRtMa5svic3lkFt40wqLpn7grnf7g=; b=ps8g71tCU8KCwMlgSzcPp8yOmG
-	tcrmxtUsyZjop0gcchplHu3qrk138lveOJAeDJoGbBC0zejpODR7bJeMzk63Xrk5TlsF2cv72N66L
-	Awwl4w8/MBwf/VmzqMz26MULHrUPDkxXlP61LqFHcO6DN3vZN7MZcDysQLwQvCINf8/e1o2VDNuxJ
-	uoClxgEHBIDlUxfp/MNoz3LaLRvAFh1t8CDrEbQWrSkxAjzzxIiTh8fwhiUZ4r+A/GldNoXf3kZhh
-	A5jYHTTiO06gp7utzhGxg2SSs6VDUKjSkSwZdkj3jzGaPYN0q+ZUptlCCvIoTzB2tTydx3TIRcep+
-	S151I+iA==;
+	bh=pjWyAPd1p4aKq6KVX4etstagqRKOkUnuYUUPVQDADmc=; b=E5OG2z+9f3Z5jhYjav0xfqp8vH
+	ePMlvYA3ibDm3s4WBFCjicQ5xStpC4foFBK9R9XKMSvuK2o8YHv1BBuyh41BEaMicF56vtrk5Wvxn
+	vTgv56D22YFGAA6uRTyNaiMHgahh7zbc2Jl84qk+JyODalP/Otfg8ggMN4wrUl9Im9Z0C3rB2sQby
+	xab+6UD88FWgjCN2LbMFi7BhW7KPt3Ua66Anc6EczLpjjfHzmrYdRAc3UekAF9c32h/MIXbYsZayn
+	eX7PmVrfICFnRYOkr4r+tc+JrU5Hy1LotlfqV3DbBZIbLFUsYsZpLPsQa1UJPZ/eZDcfhIcSyWVwl
+	KIZc78LQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1ws4QS-000DH1-2z;
-	Thu, 06 Aug 2026 22:10:48 +0200
+	id 1ws4QT-000DHC-1h;
+	Thu, 06 Aug 2026 22:10:49 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: memxor@gmail.com
 Cc: eddyz87@gmail.com,
 	puranjay@kernel.org,
 	info@starlabs.sg,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/6] bpf, riscv: Add and use bpf_atomic_is_load_acq() helper
-Date: Thu,  6 Aug 2026 22:10:43 +0200
-Message-ID: <20260806201047.333389-2-daniel@iogearbox.net>
+	bpf@vger.kernel.org,
+	Peilin Ye <yepeilin@google.com>
+Subject: [PATCH bpf-next v2 3/6] bpf, x86: Fix exception table metadata for arena load-acquire
+Date: Thu,  6 Aug 2026 22:10:44 +0200
+Message-ID: <20260806201047.333389-3-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260806201047.333389-1-daniel@iogearbox.net>
 References: <20260806201047.333389-1-daniel@iogearbox.net>
@@ -54,112 +55,62 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28084/Thu Aug  6 08:24:46 2026)
 
-A load-acquire is the only BPF_STX class instruction that reads from
-src_reg into dst_reg, that is, it has the operand roles of a BPF_LDX.
-JIT code which tells loads from stores apart by instruction class alone
-has to special case it, for example when deciding which register holds
-the faulting address and which one to clear from an exception handler.
+A load-acquire from an arena pointer is converted to BPF_PROBE_ATOMIC and
+gets an exception table entry, but the entry is filled in as if it were a
+store, since populate_extable() decides based on instruction class alone
+and a load-acquire is of BPF_STX class:
 
-riscv64 already does so, open coded as a bare insn->imm test. Add a
-bpf_atomic_is_load_acq() helper and convert riscv64 over to it, so that
-the x86-64 and arm64 JITs can use the same helper in subsequent patches.
+  if (BPF_CLASS(insn->code) == BPF_LDX) {
+      arena_reg = reg2pt_regs[src_reg];
+      fixup_reg = reg2pt_regs[dst_reg];
+  } else {
+      arena_reg = reg2pt_regs[dst_reg];
+      fixup_reg = DONT_CLEAR;
+  }
 
-Unlike bpf_atomic_is_load_store(), which presumes that its argument is
-already known to be a BPF_ATOMIC instruction, the new helper is called
-from code which still sees all instruction classes, so it checks class
-and mode itself.
+For a load-acquire dst_reg holds the loaded value and src_reg holds the
+address, so both assignments in the else branch are wrong. On a fault
+over an unmapped arena page ex_handler_bpf() then:
 
-Also, move bpf_atomic_is_load_store() to filter.h next to BPF_ATOMIC_OP,
-so that both helpers stay together. No functional change intended.
+  - computes the reported address from the value register instead
+    of the address register
+  - reports the access as a WRITE, since it derives the direction
+    from fixup_reg == DONT_CLEAR
+  - leaves dst_reg untouched, so the program continues with a stale
+    value instead of the 0 that BPF_PROBE_* loads deliver
 
+The access itself is emitted correctly, emit_atomic_ld_st_index() uses
+src_reg as the address, so this is a broken probe contract and a wrong
+diagnostic rather than a memory safety issue.
+
+Use bpf_atomic_is_load_acq() helper so a load-acquire takes the load path.
+
+Fixes: 5341c9a4d833 ("bpf, x86: Support load-acquire and store-release instructions")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Peilin Ye <yepeilin@google.com>
 ---
- arch/riscv/net/bpf_jit_comp64.c |  2 +-
- include/linux/bpf.h             | 15 ---------------
- include/linux/filter.h          | 31 +++++++++++++++++++++++++++++++
- 3 files changed, 32 insertions(+), 16 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 8fe8969fb8a0..6b9972b07c1b 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1994,7 +1994,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		/* ret can be 1 (skip-zext); extable entry still needs to be added */
- 		if (ret >= 0)
- 			ret = add_exception_handler(insn,
--				insn->imm == BPF_LOAD_ACQ ? rd : REG_DONT_CLEAR_MARKER,
-+				bpf_atomic_is_load_acq(insn) ? rd : REG_DONT_CLEAR_MARKER,
- 				ctx) ?: ret;
- 
- 		if (ret)
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 73bacfc6444d..d79bf7557ef6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1132,21 +1132,6 @@ static inline bool bpf_pseudo_func(const struct bpf_insn *insn)
- 	return bpf_is_ldimm64(insn) && insn->src_reg == BPF_PSEUDO_FUNC;
- }
- 
--/* Given a BPF_ATOMIC instruction @atomic_insn, return true if it is an
-- * atomic load or store, and false if it is a read-modify-write instruction.
-- */
--static inline bool
--bpf_atomic_is_load_store(const struct bpf_insn *atomic_insn)
--{
--	switch (atomic_insn->imm) {
--	case BPF_LOAD_ACQ:
--	case BPF_STORE_REL:
--		return true;
--	default:
--		return false;
--	}
--}
--
- struct bpf_prog_ops {
- 	int (*test_run)(struct bpf_prog *prog, const union bpf_attr *kattr,
- 			union bpf_attr __user *uattr);
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 32d5297c557e..41b02d53e222 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -383,6 +383,37 @@ static inline bool insn_is_cast_user(const struct bpf_insn *insn)
- /* Legacy alias */
- #define BPF_STX_XADD(SIZE, DST, SRC, OFF) BPF_ATOMIC_OP(SIZE, BPF_ADD, DST, SRC, OFF)
- 
-+/*
-+ * Given a BPF_ATOMIC instruction @atomic_insn, return true if it is an
-+ * atomic load or store, and false if it is a read-modify-write instruction.
-+ */
-+static inline bool
-+bpf_atomic_is_load_store(const struct bpf_insn *atomic_insn)
-+{
-+	switch (atomic_insn->imm) {
-+	case BPF_LOAD_ACQ:
-+	case BPF_STORE_REL:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+/*
-+ * A load-acquire is the only BPF_STX class instruction that reads into
-+ * dst_reg from src_reg + off16, i.e. it has the operand roles of a BPF_LDX.
-+ * Unlike bpf_atomic_is_load_store(), @insn is not assumed to be a BPF_ATOMIC
-+ * instruction here, so that callers which walk all instruction classes can
-+ * use this directly.
-+ */
-+static inline bool bpf_atomic_is_load_acq(const struct bpf_insn *insn)
-+{
-+	return BPF_CLASS(insn->code) == BPF_STX &&
-+	       (BPF_MODE(insn->code) == BPF_ATOMIC ||
-+		BPF_MODE(insn->code) == BPF_PROBE_ATOMIC) &&
-+	       insn->imm == BPF_LOAD_ACQ;
-+}
-+
- /* Memory store, *(uint *) (dst_reg + off16) = imm32 */
- 
- #define BPF_ST_MEM(SIZE, DST, OFF, IMM)				\
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 01e7ce569c1e..88ed95b2eaa7 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -2331,8 +2331,13 @@ st:			insn_off = insn->off;
+ 				 * BPF_PROBE_ATOMIC) before being used for the memory access. Pass
+ 				 * the reg holding the unmodified 32-bit address to
+ 				 * ex_handler_bpf().
++				 *
++				 * A load-acquire is of BPF_STX class, but reads from src_reg
++				 * into dst_reg like a BPF_LDX does, hence it must not be
++				 * treated as a store here.
+ 				 */
+-				if (BPF_CLASS(insn->code) == BPF_LDX) {
++				if (BPF_CLASS(insn->code) == BPF_LDX ||
++				    bpf_atomic_is_load_acq(insn)) {
+ 					arena_reg = reg2pt_regs[src_reg];
+ 					fixup_reg = reg2pt_regs[dst_reg];
+ 				} else {
 -- 
 2.43.0
 
