@@ -1,48 +1,47 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96814472557
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 14:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99F44746BC
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 14:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786027176; cv=none; b=ZIaYaNyH/oHMmayRmuxew3kFRDEqLiRgClZBuey/q6KaZPGuEg0zRd6syqcz49dQp43nLn+2Y59Dfg11oY21gnEpj1ZZky5yCbbTzwxgTgLqd3kHRuGT/86BcXW8WtK06wkhC6MDqXDOZGH3C9rO3t2O6A9RRYVgJsabqEk6T8I=
+	t=1786027176; cv=none; b=NcS1gVnCDVXsOD1BfBTAvqgUNUD65+sIIGE3RxcOdLQW5A1W5c+wzaNm4vEJinRS9V40o/xtkX0J80EH1In7gyq3htJjrQDYyZzHZzxrI3QzmQxivFkOkNb7jwqA+5QiPSH+Shd38kzIIrrvvebjbb9fzRuCNp5IRlrNzawFSpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786027176; c=relaxed/simple;
-	bh=dvbrQInNqBS/imrNKmi2eLWPDz1JOewHi5vgz2up9Ck=;
+	bh=wEi/A42RF1FvHA2QIx1814HQ9nZ8UaomTyArA0hQkL0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xgagu5SXnGonI/xZ6sI0sNX9HWiV21EdQfUvXNUS0vdphPjq8WzS7OjjEebtMzm2f6E6GA8v0VLoyVE4scoave7rHxHKWXTXUwFasy3eMjB+Q0E+AkG0ATnF/V1khWK3wJEJC4eNHKn76E6FzxUg4matWZ3emrcNMNoPV9e4zso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ODmv+eTg; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=b8HhtLfnLCmb3VUWac1F5hfjKLGWNXHqxHQz25ITYuAYxGDzkdHQnkm/r1iuaOsiwyO3KcFDBhbaGpNyU6I0M12Biqxxpfu4euNY3r871PX7sTAhN+ya+zsQ5xZG+dy5+24Lq/wxLpNY7RXraEeq4R4+D5MENtOg9kfewuR8sdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Gdv+zG0q; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ODmv+eTg"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Gdv+zG0q"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=pjWyAPd1p4aKq6KVX4etstagqRKOkUnuYUUPVQDADmc=; b=ODmv+eTgbodJPT3gsgeO9pQyjY
-	WAJCyMwg5Vt3OFJYJHL/Mm+BQcJ4H3zsTgQVnAS0hM5Wm4lGF/mgCvNGOXp/rJSQ9SBWDEqfwarS8
-	sKI+Yn7HbxtzPPcves1/qyfP9y6bZVyF5X+DQGyiMiZ0Zy0i7ZaQ50EHLfY7pCh0Y4qLZDHYPs5ec
-	Q3rGmzk8prcXuQ99xrldd9N+5KkEyhrF6TvbK9dO8j6E61n/4oIk1XtXq595qHTtnCY0WK4ddEOGi
-	KT28jsGapnod4fOqitOIJfXHMM6vE9HJKDMrLGrxXJYowG/HeZIMBfuDnLL7HSOHuPYGzts4hQvJZ
-	9txSa4Yg==;
+	bh=2A8vqGWChjL9TmsqWR7UHyf2ZC1QxTCt3ASz+87lvwU=; b=Gdv+zG0q4WUosCgWWN6ZUYaP+8
+	zvBHjiaTW9BNqJia4h0nmsPPp6DEb+0DDuPPROBoZ5EtjT7L5Ae6iCCDzRcfzhgERy4kw93/3kEmh
+	q1cAIbbROS9EsT9v1N0r0ReayU/2ay0qdCkjk8X64HnFEprf125n2T9fSSLB7uP3OfP60JrPPMaz2
+	fARnR6ZSUiqICOyG3b5mC+Y8NFkb/OklYq6qxzRFORTTO2J+hOpRO3M5sgHiKidAwWsweUgqVBK2A
+	DnY17SkGrwxly5WO95wILDbwM7nAGC1Qqyt2VuxvJYJBOtel4oCVtNmkdoXDdTu/cKVIJQyow36xq
+	fl07FYWQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wrzFl-0004sb-3C;
-	Thu, 06 Aug 2026 16:39:26 +0200
+	id 1wrzFn-0004sz-15;
+	Thu, 06 Aug 2026 16:39:27 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: memxor@gmail.com
 Cc: eddyz87@gmail.com,
 	puranjay@kernel.org,
 	info@starlabs.sg,
-	bpf@vger.kernel.org,
-	Peilin Ye <yepeilin@google.com>
-Subject: [PATCH bpf-next 3/6] bpf, x86: Fix exception table metadata for arena load-acquire
-Date: Thu,  6 Aug 2026 16:39:21 +0200
-Message-ID: <20260806143924.319238-3-daniel@iogearbox.net>
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next 5/6] selftests/bpf: Add arena fault test for load-acquire
+Date: Thu,  6 Aug 2026 16:39:23 +0200
+Message-ID: <20260806143924.319238-5-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260806143924.319238-1-daniel@iogearbox.net>
 References: <20260806143924.319238-1-daniel@iogearbox.net>
@@ -55,62 +54,102 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28084/Thu Aug  6 08:24:46 2026)
 
-A load-acquire from an arena pointer is converted to BPF_PROBE_ATOMIC and
-gets an exception table entry, but the entry is filled in as if it were a
-store, since populate_extable() decides based on instruction class alone
-and a load-acquire is of BPF_STX class:
+Add stream_arena_load_acquire_fault, which performs a load-acquire from an
+unmapped arena address, next to the existing read and write fault tests.
 
-  if (BPF_CLASS(insn->code) == BPF_LDX) {
-      arena_reg = reg2pt_regs[src_reg];
-      fixup_reg = reg2pt_regs[dst_reg];
-  } else {
-      arena_reg = reg2pt_regs[dst_reg];
-      fixup_reg = DONT_CLEAR;
-  }
+The test covers both halves of the JIT bug that treated a load-acquire as
+a store when populating its exception table entry:
 
-For a load-acquire dst_reg holds the loaded value and src_reg holds the
-address, so both assignments in the else branch are wrong. On a fault
-over an unmapped arena page ex_handler_bpf() then:
+  - the fault has to be reported as a READ, and at the address held by
+    the source register, which __stderr() and test_address() check, and
+  - the destination register has to be cleared by the fault handler,
+    which the program checks by poisoning it before the load-acquire
+    and returning it, so __retval(0) fails if it is left untouched
 
-  - computes the reported address from the value register instead
-    of the address register
-  - reports the access as a WRITE, since it derives the direction
-    from fixup_reg == DONT_CLEAR
-  - leaves dst_reg untouched, so the program continues with a stale
-    value instead of the 0 that BPF_PROBE_* loads deliver
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t stream_arena_fault_address
+  [...]
+  #462/1   stream_arena_fault_address/read_fault:OK
+  #462/2   stream_arena_fault_address/write_fault:OK
+  #462/3   stream_arena_fault_address/load_acquire_fault:OK
+  #462     stream_arena_fault_address:OK
+  Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
 
-The access itself is emitted correctly, emit_atomic_ld_st_index() uses
-src_reg as the address, so this is a broken probe contract and a wrong
-diagnostic rather than a memory safety issue.
-
-Use bpf_atomic_is_load_acq() helper so a load-acquire takes the load path.
-
-Fixes: 5341c9a4d833 ("bpf, x86: Support load-acquire and store-release instructions")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Peilin Ye <yepeilin@google.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ .../testing/selftests/bpf/prog_tests/stream.c |  2 +
+ tools/testing/selftests/bpf/progs/stream.c    | 46 +++++++++++++++++++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 01e7ce569c1e..88ed95b2eaa7 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2331,8 +2331,13 @@ st:			insn_off = insn->off;
- 				 * BPF_PROBE_ATOMIC) before being used for the memory access. Pass
- 				 * the reg holding the unmodified 32-bit address to
- 				 * ex_handler_bpf().
-+				 *
-+				 * A load-acquire is of BPF_STX class, but reads from src_reg
-+				 * into dst_reg like a BPF_LDX does, hence it must not be
-+				 * treated as a store here.
- 				 */
--				if (BPF_CLASS(insn->code) == BPF_LDX) {
-+				if (BPF_CLASS(insn->code) == BPF_LDX ||
-+				    bpf_atomic_is_load_acq(insn)) {
- 					arena_reg = reg2pt_regs[src_reg];
- 					fixup_reg = reg2pt_regs[dst_reg];
- 				} else {
+diff --git a/tools/testing/selftests/bpf/prog_tests/stream.c b/tools/testing/selftests/bpf/prog_tests/stream.c
+index c3cce5c292bd..15dd3ae2a84b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stream.c
++++ b/tools/testing/selftests/bpf/prog_tests/stream.c
+@@ -103,6 +103,8 @@ void test_stream_arena_fault_address(void)
+ 		test_address(skel->progs.stream_arena_read_fault, &skel->bss->fault_addr);
+ 	if (test__start_subtest("write_fault"))
+ 		test_address(skel->progs.stream_arena_write_fault, &skel->bss->fault_addr);
++	if (test__start_subtest("load_acquire_fault"))
++		test_address(skel->progs.stream_arena_load_acquire_fault, &skel->bss->fault_addr);
+ 
+ 	stream__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
+index 8d8e53d37266..82c855889180 100644
+--- a/tools/testing/selftests/bpf/progs/stream.c
++++ b/tools/testing/selftests/bpf/progs/stream.c
+@@ -185,6 +185,52 @@ int stream_arena_read_fault(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("syscall")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++__stderr("ERROR: Arena READ access at unmapped address 0x{{.*}}")
++__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
++__stderr("Call trace:\n"
++"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
++"|[ \t]+[^\n]+\n)*}}")
++int stream_arena_load_acquire_fault(void *ctx)
++{
++	struct bpf_arena *ptr = (void *)&arena;
++	u64 user_vm_start, val;
++
++	/*
++	 * Prevent GCC bounds warning: casting &arena to struct bpf_arena *
++	 * triggers bounds checking since the map definition is smaller than
++	 * struct bpf_arena. barrier_var() makes the pointer opaque to GCC,
++	 * preventing the bounds analysis.
++	 */
++	barrier_var(ptr);
++	user_vm_start = ptr->user_vm_start;
++	fault_addr = user_vm_start + 0x7fff;
++	bpf_addr_space_cast(user_vm_start, 0, 1);
++	/*
++	 * A load-acquire is of BPF_STX class, but reads from src_reg into
++	 * dst_reg. Poison dst_reg up front: the fault has to be reported
++	 * as a READ from the src_reg address, and the exception handler has
++	 * to clear dst_reg, so the returned value must be 0.
++	 *
++	 * The load-acquire is open coded as BPF_ATOMIC_OP(BPF_W, BPF_LOAD_ACQ,
++	 * BPF_REG_0, BPF_REG_1, 0x7fff) since <linux/filter.h> cannot be
++	 * included alongside vmlinux.h.
++	 */
++	asm volatile (
++		"r1 = %[user_vm_start];"
++		"r0 = 1;"
++		".8byte 0x000001007fff10c3;" /* r0 = load_acquire((u32 *)(r1 + 0x7fff)) */
++		"%[val] = r0;"
++		: [val] "=r" (val)
++		: [user_vm_start] "r" (user_vm_start)
++		: "r0", "r1"
++	);
++	return val;
++}
++
+ static __noinline void subprog(void)
+ {
+ 	int __arena *addr = (int __arena *)0xdeadbeef;
 -- 
 2.43.0
 
