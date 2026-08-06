@@ -1,273 +1,189 @@
-Received: from mail-oi2-f10.google.com (mail-oi2-f10.google.com [74.125.231.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3762E2F7EF1
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 16:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121F137F006
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 16:51:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786034457; cv=none; b=B2Bndb6bvUZXpUe5W1IIwpreeT/Q74cq1HrHsYF8Ibz4PsNc1LCr7mGBDUTBs9v7gSn9A5tzUzWHAWpSXSxFa7pCBr2AKq/Dd04lNQXI4uFFJ9B+wwyafTfx863Tuftgs+92e32Pe0NsSbdWHqFoCzuRKXCjj3VsIPfCuzPXcLA=
+	t=1786035100; cv=none; b=LTaTujCI7vJhuqcdFGdtxrHfT9m4r+dcbrO22JfvDin9fuyVPFaiRjE1uLDoyVkZnVb79ZTRjEPrFWk2fdJ1d9+8/CP+Cr9oPTw0HC4u4SM16vvTUvHYwaZnH2pLzESWBL67wOdlfwhq/XSrJe7UxorOa9haY92928p7tPXKLs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786034457; c=relaxed/simple;
-	bh=fVUdm/HbJKrVhtPJPLwXu35mrGgllKeSfR/jt7Em2tg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uIUeLm+rEoNr3iZIXmewdnfBnms6dnETN35925BoPFaiWUaHDLtXldKjrj1wJoWlSOaOtj6UIJbpt14djzLU4oF6qopw/1x5GYlh1UYZdeyHpHj0tcKpYqDRKbqGbTqbyMdCFFWwgu6r3hwSMWs9hF/77UIzKcpF4jJjCIWi3KM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ooZEVlQb; arc=none smtp.client-ip=74.125.231.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786035100; c=relaxed/simple;
+	bh=KThKQta56dMpvBu0TEFOgMfwqr0+qOm6N1vzNkcAPLc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a0O/B7IiTW51onSTwyPD/FelUZzcP2nxA14BiWlCClRCCI5xu1sfUXMw0qpJqBV7f1S7jTPTxmKCZDLL2xwz2fFh+bhWsZHYqSFU7Dfu2tRc/tdi3SGiK4Dlu7BoXmSUdKYGCLEFAiaWWo1yQk6pdKzbVGPW9D95Wc04jjCMKV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=giIUdzs4; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ooZEVlQb"
-Received: by mail-oi2-f10.google.com with SMTP id 46e09a7af769-7e9f9a3167aso754752a34.1
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 09:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786034455; x=1786639255; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=vtQaWOWHpz8AaE1yp8UqZGPgOYumV/u98AeybF5C/Tg=;
-        b=ooZEVlQb/+dwJZj956TCyduIu0sAnDDqJERNLLjDAZnUPevIrVGpBM8pGFAKkFjqks
-         FrYwfIo6XQDytqc7lVg3AhWGtmjvjm7KtpoC5QW+H/8NR1V9lUWbxd2C8+Cz1vT/0Ndy
-         c5oV8JCiTqi5fzHLitN3/N3cLt7a0Iu1kgS58oXnYh6p+eLz/nFaDChBWxuu/s13RLrJ
-         sY2PTnqEhyXmgu4QWuf9qhmp3X6/vAvZv0sWMduuRdNzeEt2B4Hz64anHNd9tJMhgJno
-         g1QgM8kcE8FF7JWspaKUFdMj2d/1xOxQFHd7DYkcSUBaZhe2YLFmnzLolmDn01qklYDE
-         VFAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786034455; x=1786639255;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vtQaWOWHpz8AaE1yp8UqZGPgOYumV/u98AeybF5C/Tg=;
-        b=LvKySrrv8H/xAJ59XqlKwWPkIcTCak5qlsJapJpp2G4kJ7urDmbWv7/hc6fsYqDwa4
-         JFddQ6e2Nm/Gs2dfKjQ+aC/N+YXQjv5o0u2aoaH6S+avmeGlwDkB2vXGyf6NXdx+hL0O
-         r8S24MczfdQG5wfoAiYwjFEDR/eOgCuIsTzXnBfPa1u7Ul7BFKnvify6rVtESmUmD9fg
-         HwkQTervOFfY8ZwcmGVWvMtuDeC+ziquDdi3Z4vekRkVT947C4o+IiePYtsEVaWS2G9O
-         l5pWMntZCtFe0B61BQ3Y+zy7GVxTZda4WVk79KZyf4QBc1McNJWhPk8kOSCun2ydTrd1
-         CXuA==
-X-Gm-Message-State: AOJu0YzMjIyxkGQrEAx5o2pPfQyEaOoEfcualuSfmbMcz7Rr0FAzmh/U
-	pQa3zbL7YCAQgM/Je5/ck7YZLLSPrjKQYatSgZLWMpSMOinvRPtj2XpuEhdlexvgeqc=
-X-Gm-Gg: AR+sD12m4j38wBo0jHsOJgC2nWn/NR48IG4qK0KwUklwjGd8EU4mcKcmLxIHkN+0bQL
-	FHhcal9bSIDRnohMZNTuc9R99rkQbfXp3TQRHVu+z0hmHpm1T0YC80gTR7gugW+RbPFA0b9wxFl
-	K4pA2d3Tt4RbboWe+SG9CMIi/KspgZq0IcjmBc9ceiPfk5WGpDasQtvYkI/jHoyp44gUsBBxghV
-	2mD69twGrNMSWes5B+Jxhyv56Kk7Jk9uwA/k6EsJlZzc+37vG5m35jpnGSS1xlJIXV6w3FHTlzm
-	/mhgTm1gnkFnry0OYJEPSy+tgqPITvmiEj5UJxAzDVTLNRnuaES8YNmIOLG+Vp9ZuL57I31kROV
-	ciphAhhY9aslsm8dQb1pQNnz/HC4rzLnaVdj/Iel27ks1nMh8fa8RotaNE4Job4oNb+TZD0hvs1
-	ra/uJ0MisN2nUhhg4kn2l8tvDbaHMxC9cxBhKq13k/TlwINB4pggJWYco7jiuQZ9Dl4WvlpMBK1
-	XK930G4YPdIhtJXnmRJRgimPq6musJMKnbgn0s9P4hdrIjM5MAk6JlS1GR+CBkyiXlFvPw=
-X-Received: by 2002:a05:6830:6605:b0:7e9:d634:77b8 with SMTP id 46e09a7af769-7f34dcf165fmr1829562a34.2.1786034454877;
-        Thu, 06 Aug 2026 09:40:54 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4b::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f1df346a8bsm4718579a34.11.2026.08.06.09.40.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 09:40:53 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Test sleepable context distinctions
-Date: Thu,  6 Aug 2026 18:40:49 +0200
-Message-ID: <20260806164049.3158887-3-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260806164049.3158887-1-memxor@gmail.com>
-References: <20260806164049.3158887-1-memxor@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="giIUdzs4"
+Message-ID: <cfa8641e-2a4d-42f1-8a91-28cbf1478227@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786035082;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TryxzgWqZQI2DT9mmhsWxctZDISmjHPgtJQJ++MzMOk=;
+	b=giIUdzs4m7dIlg6x1lIVqFRLAdwaVaOkJZ9NWp+DDwNbUy6Mf/vkkHz29cJPC7H8wcJLzG
+	5ikDMWfYoWCTDqkD/dBEZpnHWpp5XeN4zPPoB7W33g+DOBwdgCOANZF30O5V7ZvlCLRsgX
+	BIBp/nRd7VP2YrU8id3BiVKYZEPyU0A=
+Date: Thu, 6 Aug 2026 09:50:59 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5705; h=from:subject; bh=fVUdm/HbJKrVhtPJPLwXu35mrGgllKeSfR/jt7Em2tg=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIatkx0+319LT7jZy696T3jhtWt+lKUkFXbOeR3JVtB9zCw4S WMzbUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIl82cfI8C3gdce/Wcvzm9mPRmp/sD 1kuHNj5fRpPDI1ouZzeGvnb2P4HzldK3B7XUa7hefeZzPfh/3tatOaODXgTQRbT45u0/Y5vAA=
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Subject: Re: [bpf-next 1/4] selftests/bpf: map_kptr: force BPF_STX for the
+ scalar store to kptr
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
+ ast@kernel.org, Eduard Zingerman <eddyz87@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: linux-kernel@vger.kernel.org
+References: <20260803170251.1898102-1-vineet.gupta@linux.dev>
+ <20260803170251.1898102-2-vineet.gupta@linux.dev>
+ <c17688ad-7940-4697-abd7-dc5cf9f1e7ec@linux.dev>
+ <5a47b073-e1d5-499c-89bd-44500a88bf27@linux.dev>
+ <66f7ffe9-b8f3-4369-996a-967636b60401@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <66f7ffe9-b8f3-4369-996a-967636b60401@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Exercise verifier decisions which depend on the complete sleepable context
-rather than only the current state's in_sleepable bit.
+On 8/6/26 9:37 AM, Yonghong Song wrote:
+> On 8/5/26 12:25 PM, Vineet Gupta wrote:
+>> On 8/5/26 10:47 AM, Yonghong Song wrote:
+>>> On 8/3/26 10:02 AM, Vineet Gupta wrote:
+>>>> reject_scalar_store_to_kptr stores a scalar constant to a kptr field:
+>>>>
+>>>>            *(volatile u64 *)&v->unref_ptr = 0xBADC0DE;
+>>>>
+>>>> Compilers generate one of two encodings for that:
+>>>>
+>>>>     1. Materialize the constant into a register and emit BPF_STX:
+>>>>
+>>>>            r1 = 0xbadc0de
+>>>>            *(u64 *)(r0 + 0x8) = r1
+>>>>
+>>>>     2. Or fold it into a single BPF_ST (store immediate):
+>>>>
+>>>>            *(u64 *)(r0 + 0x8) = 0xbadc0de
+>>>>
+>>>> check_map_kptr_access() rejects both, but through very different
+>>>> checks.
+>>>> BPF_STX goes through map_kptr_match_type(), whose first test is
+>>>> base_type(reg->type) != PTR_TO_BTF_ID - the scalar rejection this
+>>>> test is
+>>>> named for - and which prints "invalid kptr access, R...". BPF_ST
+>>>> only gets
+>>>> the trivial "BPF_ST imm must be 0 when storing to kptr" immediate
+>>>> check and
+>>>> never reaches map_kptr_match_type() at all.
+>>>>
+>>>> So on a compiler that folds the constant - bpf-gcc, and clang from
+>>>> -mcpu=v4, which enabled BPF_ST around v4 support due to historical
+>>>> verifier limitations - the test fails against its expected message.
+>>>>
+>>>> Widening the __msg to accept either message would make it pass
+>>>> again, but
+>>>> on those toolchains it would then only re-test the imm != 0 path, which
+>>>> verifier/map_kptr.c ("map_kptr: BPF_ST imm != 0") already covers,
+>>>> and the
+>>>> scalar-vs-PTR_TO_BTF_ID check would lose its only test in the tree.
+>>>>
+>>>> Route the value through barrier_var() instead, so the store stays a
+>>>> BPF_STX everywhere and the test keeps asserting what it was written to
+>>>> assert. clang -mcpu=v1..v4 and bpf-gcc 16.1 all emit the register form
+>>>> afterwards.
+>>>>
+>>>>      bpf-gcc, before: #229/20 map_kptr/reject_scalar_store_to_kptr:FAIL
+>>>>      bpf-gcc, after : #229/20 map_kptr/reject_scalar_store_to_kptr:OK
+>>>>
+>>>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+>>>> ---
+>>>>     tools/testing/selftests/bpf/progs/map_kptr_fail.c | 11 ++++++++++-
+>>>>     1 file changed, 10 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>>>> b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>>>> index f11848dfa78f..cb84e23b83c0 100644
+>>>> --- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>>>> +++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+>>>> @@ -390,13 +390,22 @@ __failure __msg("invalid kptr access, R")
+>>>>     int reject_scalar_store_to_kptr(struct __sk_buff *ctx)
+>>>>     {
+>>>>         struct map_value *v;
+>>>> +    u64 val = 0xBADC0DE;
+>>>>         int key = 0;
+>>>>            v = bpf_map_lookup_elem(&array_map, &key);
+>>>>         if (!v)
+>>>>             return 0;
+>>>>     -    *(volatile u64 *)&v->unref_ptr = 0xBADC0DE;
+>>>> +    /*
+>>>> +     * Keep the value in a register so this stays a BPF_STX and keeps
+>>>> +     * exercising map_kptr_match_type(). Compilers that fold the
+>>>> constant
+>>>> +     * into a BPF_ST (store immediate) instead - bpf-gcc, and clang
+>>>> from
+>>>> +     * -mcpu=v4 - would be rejected by the far weaker "BPF_ST imm
+>>>> must be
+>>>> +     * 0" check, which verifier/map_kptr.c already covers.
+>>>> +     */
+>>>> +    barrier_var(val);
+>>>> +    *(volatile u64 *)&v->unref_ptr = val;
+>>> Could you explain in details why gcc16 (with cpuv4) won't work with
+>>> BPF_ST?
+>>> What code gcc16 (with cpuv4) generates?
+>> GCC generates BPF_ST (and clang -mcpu=v4 does as well)
+>>
+>>     7: (7a) *(u64 *)(r0 +8) = 195936478
+>>     BPF_ST imm must be 0 when storing to kptr at off=8
+>>     processed 7 insns (limit 1000000) max_states_per_insn 0 total_states
+>>     0 peak_states 0 mark_read 0
+>>     =============
+>>     EXPECTED   SUBSTR: 'invalid kptr access, R'
+>>
+>>
+>> The issue is not codegen or BPF_ST vs. BPF_STX, its a deliberate bad
+>> write to a pointer.
+>> The current __msg in test only matches v3 (STX) form. v4's
+>> store-immediate hits a different verifier check with a different message.
+>> My first approach was to support both in the __msg, but then Claude
+>> suggested to not do it that way because it would reduce coverage as
+>> mentioned in the changelog above.
+> For clang side, we can do:
+>
+> diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> index f11848dfa78f..b9f6d6764431 100644
+> --- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> @@ -386,7 +386,11 @@ int kptr_xchg_possibly_null(struct __sk_buff *ctx)
+>    }
+>    
+>    SEC("?tc")
+> +#ifdef __BPF_FEATURE_ST
+> +__failure __msg("BPF_ST imm must be 0 when storing to kptr at off=8")
+> +#else
+>    __failure __msg("invalid kptr access, R")
+> +#endif
+>    int reject_scalar_store_to_kptr(struct __sk_buff *ctx)
+>    {
+>           struct map_value *v;
+> ...
+>
+> Note that __BPF_FEATURE_ST is only enabled for cpuv4 in clang.
+> Does gcc has similar macro like above __BPF_FEATURE_ST?
 
-Verify that preemption-disabled and IRQ-disabled regions provide implicit RCU
-protection to KF_RCU_PROTECTED css iterators.  Also verify that iterator
-pointers become untrusted after the final preemption enable or IRQ restore,
-and that css_task iterators are rejected in explicit RCU, preemption-disabled,
-and IRQ-disabled regions of sleepable programs.
+Yes it does and also similarly enabled for cpu=v4.
+The suggestion does look cleaner, but feels fragile.
+Both forms of codegen are valid from selftest passing perspective.
+BPF_FEATURE_ST implies compiler supports the feature but the actual 
+generation is subject to optimization level etc.
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../selftests/bpf/progs/iters_task_failure.c  | 153 ++++++++++++++++++
- 1 file changed, 153 insertions(+)
+Your call.
 
-diff --git a/tools/testing/selftests/bpf/progs/iters_task_failure.c b/tools/testing/selftests/bpf/progs/iters_task_failure.c
-index fe3663dedbe1..0a2ea8b6adda 100644
---- a/tools/testing/selftests/bpf/progs/iters_task_failure.c
-+++ b/tools/testing/selftests/bpf/progs/iters_task_failure.c
-@@ -13,6 +13,8 @@ struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
- void bpf_cgroup_release(struct cgroup *p) __ksym;
- void bpf_rcu_read_lock(void) __ksym;
- void bpf_rcu_read_unlock(void) __ksym;
-+void bpf_local_irq_save(unsigned long *flags) __weak __ksym;
-+void bpf_local_irq_restore(unsigned long *flags) __weak __ksym;
- 
- SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
- __failure __msg("kernel func bpf_iter_task_new requires RCU critical section protection")
-@@ -84,6 +86,157 @@ int BPF_PROG(iter_css_lock_and_unlock)
- 	return 0;
- }
- 
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__success
-+int BPF_PROG(iter_css_preempt)
-+{
-+	u64 cg_id = bpf_get_current_cgroup_id();
-+	struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
-+	struct cgroup_subsys_state *root_css, *pos;
-+
-+	if (!cgrp)
-+		return 0;
-+	root_css = &cgrp->self;
-+
-+	bpf_preempt_disable();
-+	bpf_for_each(css, pos, root_css, BPF_CGROUP_ITER_DESCENDANTS_POST) {}
-+	bpf_preempt_enable();
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__success
-+int BPF_PROG(iter_css_irq)
-+{
-+	u64 cg_id = bpf_get_current_cgroup_id();
-+	struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
-+	struct cgroup_subsys_state *root_css, *pos;
-+	unsigned long flags;
-+
-+	if (!cgrp)
-+		return 0;
-+	root_css = &cgrp->self;
-+
-+	bpf_local_irq_save(&flags);
-+	bpf_for_each(css, pos, root_css, BPF_CGROUP_ITER_DESCENDANTS_POST) {}
-+	bpf_local_irq_restore(&flags);
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("R2 must be referenced or trusted")
-+int BPF_PROG(iter_css_preempt_escape)
-+{
-+	u64 cg_id = bpf_get_current_cgroup_id();
-+	struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
-+	struct cgroup_subsys_state *root_css, *pos;
-+	struct task_struct *task;
-+
-+	if (!cgrp)
-+		return 0;
-+	root_css = &cgrp->self;
-+
-+	bpf_preempt_disable();
-+	bpf_for_each(css, pos, root_css, BPF_CGROUP_ITER_DESCENDANTS_POST) {
-+		break;
-+	}
-+	bpf_preempt_enable();
-+	if (pos) {
-+		bpf_for_each(css_task, task, pos, CSS_TASK_ITER_PROCS) {}
-+	}
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("R2 must be referenced or trusted")
-+int BPF_PROG(iter_css_irq_escape)
-+{
-+	u64 cg_id = bpf_get_current_cgroup_id();
-+	struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
-+	struct cgroup_subsys_state *root_css, *pos;
-+	struct task_struct *task;
-+	unsigned long flags;
-+
-+	if (!cgrp)
-+		return 0;
-+	root_css = &cgrp->self;
-+
-+	bpf_local_irq_save(&flags);
-+	bpf_for_each(css, pos, root_css, BPF_CGROUP_ITER_DESCENDANTS_POST) {
-+		break;
-+	}
-+	bpf_local_irq_restore(&flags);
-+	if (pos) {
-+		bpf_for_each(css_task, task, pos, CSS_TASK_ITER_PROCS) {}
-+	}
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("css_task_iter is only allowed in bpf_lsm, bpf_iter and sleepable progs")
-+int BPF_PROG(iter_css_task_rcu)
-+{
-+	u64 cg_id = bpf_get_current_cgroup_id();
-+	struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
-+	struct cgroup_subsys_state *css;
-+	struct task_struct *task;
-+
-+	if (!cgrp)
-+		return 0;
-+	css = &cgrp->self;
-+
-+	bpf_rcu_read_lock();
-+	bpf_for_each(css_task, task, css, CSS_TASK_ITER_PROCS) {}
-+	bpf_rcu_read_unlock();
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("css_task_iter is only allowed in bpf_lsm, bpf_iter and sleepable progs")
-+int BPF_PROG(iter_css_task_preempt)
-+{
-+	u64 cg_id = bpf_get_current_cgroup_id();
-+	struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
-+	struct cgroup_subsys_state *css;
-+	struct task_struct *task;
-+
-+	if (!cgrp)
-+		return 0;
-+	css = &cgrp->self;
-+
-+	bpf_preempt_disable();
-+	bpf_for_each(css_task, task, css, CSS_TASK_ITER_PROCS) {}
-+	bpf_preempt_enable();
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+__failure __msg("css_task_iter is only allowed in bpf_lsm, bpf_iter and sleepable progs")
-+int BPF_PROG(iter_css_task_irq)
-+{
-+	u64 cg_id = bpf_get_current_cgroup_id();
-+	struct cgroup *cgrp = bpf_cgroup_from_id(cg_id);
-+	struct cgroup_subsys_state *css;
-+	struct task_struct *task;
-+	unsigned long flags;
-+
-+	if (!cgrp)
-+		return 0;
-+	css = &cgrp->self;
-+
-+	bpf_local_irq_save(&flags);
-+	bpf_for_each(css_task, task, css, CSS_TASK_ITER_PROCS) {}
-+	bpf_local_irq_restore(&flags);
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
- SEC("?fentry/" SYS_PREFIX "sys_getpgid")
- __failure __msg("css_task_iter is only allowed in bpf_lsm, bpf_iter and sleepable progs")
- int BPF_PROG(iter_css_task_for_each)
--- 
-2.53.0-Meta
-
+Thx,
+-Vineet
