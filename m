@@ -1,218 +1,524 @@
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013042.outbound.protection.outlook.com [40.107.44.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE68413D9C
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 08:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786005589; cv=fail; b=qDmci1M82+1lQZgrdLuK/TuP0IDGKopt+ryoWOk0nkAbfPbUGzurLkzuW0dagXjAMnnbcrhvM+Z6hLkUKktBWotQVgWAdJKb7KRmQlKlsmDzMcxF96fI4E9/WMZ/pVkxzb9BemGddH6aQ8t/4+qsl9twfdZiZDF5tmAi0iOSAAo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786005589; c=relaxed/simple;
-	bh=AWIa3JAxGBWP6I1Q16Ue34HJAyjiqT6q5aLUOjNJBKQ=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=kD+AIacThtk7wLXn1zIz2RqgTxfTxBrwNBdgtkOhvvn2SFOgccUvN1j8EutjK2I6AsYVyZiTw4V46RIWAQn94PtfMpBcgondSzl9PWoCwrKBvE0Dmt4CGA1RMNWww3S41PL+eflGJXJM3raSQa8Qd/Dvb+mFkwKWL5oVPm5fkrU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=hxZi3L4W; arc=fail smtp.client-ip=40.107.44.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4480A413793;
+	Thu,  6 Aug 2026 08:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786005605; cv=none; b=AYGQZclkLLdpBypIQqi48vUtbSxZUQdnBTg7KQBUa6oKD4YQd4TOnL44cYtAUEx9ZuB+OmdNSUyCLTD2htXNEQBzUCY4m8lyOOM0nErkjebd/p9tXN2RZjJJxeZc8eVgorC8NUll0GAoV1N/gZarOOv4XN193gAN+oUXCAeYPic=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786005605; c=relaxed/simple;
+	bh=1/GXhzlocZP3RO99ssHRo2N31fXX+evtIf1AglwmeYk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U2CdNy/FwqPod/cOFrGz/BpLtG5azFbAIdsCElxB3QdjJCD/WI6uSDpk/IjVwHZ7mgw8suok5vHBHc8b2Ume5oc20pwqpdyAzAVb/Mybns9lAP6xT6aZZdDmGq3Z3Po7rMZTLVOunKTzinWf0St+UlDVvflryyGDxk6+U7Jx9nU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=XAD0GC3B; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="hxZi3L4W"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CmgD8y5pqxTyDEachBQPNWDNZB/NvhGnrK4BKLSROJHnUq2zxJwA06NFSF8F7D8IyfNAtTRK3jqXLu33ObtMckRVD0O4hrG7w7RrKUyEe9BqNSdRUAno1aAW6TYqPYGGvd3shyLFH34Wd7m8jm7p93Gwu2ed2+AFjO/HYTi/xwq0522LHK9f+k8hFPhc6whddsFhkVZG0zfJEeL5wfBQW0c7tQ6fEBGPYNGSKStu9om55Fs9lI5w7V3xFcAqbnwFuu++71LoMI1mCm8AeU97EdALCeB50j3KgzpaTDMWrDg24uzMHQ11PeHfwYT0nG1EPGTzIj5DhSE5yXFDag6ffg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W7G0/a3Lt3djwhQnX43NsxMFBYMXg2b7jHHYAeb0MOo=;
- b=wN2l322baGyDdFUAMj5cgZTNHqU0M1Md1MtfuWppsL1T30draLTYJBoOyFTdTrYpzRpABlLEwxQAVY0Ai1PuimfRAXsLCHrcmMaTCOJHKfa+WTOyoalIjDmvYXJ9sBU33XvHYLP3zAIJ7RK8SbvlaZASBeM9jm69ni2jMph0LTjuq4i7df0HqGdi30jDJBELUXfubt82GohVJk5ka4HJUL3KAAIiYJ52eZAalMjuy/Q5IeBBPrq0xOcZAWp8JgRJSaNYuttFjwvcJzGY43UFMZVVZO8NdWufZECiDrtO7gylYLcNY1bY8T6Eu7Qq+1AbCWIbH8FvvfaY86zaec4aDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W7G0/a3Lt3djwhQnX43NsxMFBYMXg2b7jHHYAeb0MOo=;
- b=hxZi3L4W3XijO0qw0/dbfXENQEVrMjYk0jYy/MUExHAxuMZNLUkCa7tfYjxyb5L2jLueN0E/9HkmxQ3ctTR4/JSsaF4IKpV+foCL/oVgi1Plh1Ev0mHKaBM6Ju75NA/lUbYC8Cq5djeGe1Pd125kdJP9FLEKEQxiZ+b83Iw9HgyWzmg/9q5UKdNDuZthbu21e6/KmtX/ooOOdVjhStk0jY2zKiUMJYpzNgErnUcStWHoO/32lGob+jTGy23Z30d7WVeLhE4RNcQLZnzhwqFIYfU/VETgzXdesJcOymq/HhBkOtVUW3rwrG2FimEtkP5w2mB+4GJDQtvkY9jP4qoQ1w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
- by PUZPR06MB5497.apcprd06.prod.outlook.com (2603:1096:301:102::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.20; Thu, 6 Aug
- 2026 08:39:35 +0000
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0292.019; Thu, 6 Aug 2026
- 08:39:35 +0000
-Message-ID: <3f3284ef-5f9b-43ca-83df-a4097f8d976d@vivo.com>
-Date: Thu, 6 Aug 2026 16:39:31 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next 2/2] selftests/bpf: add tests for selective
- kmod BTF loading
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260806042042.3239428-1-zhaofuyu@vivo.com>
- <20260806042042.3239428-3-zhaofuyu@vivo.com>
- <20260806042938.3B3A81F000E9@smtp.kernel.org>
-From: Fuyu Zhao <zhaofuyu@vivo.com>
-In-Reply-To: <20260806042938.3B3A81F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR02CA0017.apcprd02.prod.outlook.com
- (2603:1096:4:194::17) To PUZPR06MB4742.apcprd06.prod.outlook.com
- (2603:1096:301:b5::13)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="XAD0GC3B"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 862AC16F2;
+	Thu,  6 Aug 2026 01:39:49 -0700 (PDT)
+Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C4F063F632;
+	Thu,  6 Aug 2026 01:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1786005593; bh=1/GXhzlocZP3RO99ssHRo2N31fXX+evtIf1AglwmeYk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XAD0GC3BFV+aOtURbErU8rEzfMbSmdJMzfNwzK/FHv0gx1gos8TDz/dRjKI0JzDR0
+	 AQ4BuCvKLoJi+XVzKw+vUT1ULkUCtkTdaFTQUlv601HAIs75njL9FmO8WmoPB+Psrr
+	 TDc5b83VZ6vnRuzuzlPGu/pmjS3BAMBtce5CKFQo=
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+To: Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Nick Piggin <npiggin@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	David Hildenbrand <david@kernel.org>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Chris Li <chrisl@kernel.org>,
+	Kairui Song <kasong@tencent.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	SJ Park <sj@kernel.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Jan Kara <jack@suse.cz>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	ziy@nvidia.com,
+	pfalcato@suse.de,
+	agordeev@linux.ibm.com,
+	ryan.roberts@arm.com
+Cc: Muhammad Usama Anjum <usama.anjum@arm.com>,
+	linux-kernel@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-parisc@vger.kernel.org,
+	xen-devel@lists.xenproject.org,
+	linux-mm@kvack.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	damon@lists.linux.dev
+Subject: [PATCH 0/9] mm: distinguish PTE table storage from PTE values
+Date: Thu,  6 Aug 2026 09:38:38 +0100
+Message-ID: <20260806083926.1807279-1-usama.anjum@arm.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|PUZPR06MB5497:EE_
-X-MS-Office365-Filtering-Correlation-Id: 763e811c-4709-41ee-81e4-08def3963e67
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|23010399003|22082099003|18002099003|5023799004|56012099006|4143699003|11063799006|6133799003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	UiQ46vj4P9nvalaGE0GiAX6sJoWiXw4u9YdGc1QlTWQwUiN/n2MnjI/0H1rVG52AxW/ioN3/qQTPz6ePq2FPmmlijL3Ck+SXJdnDpMGpSkB6mqvN2O7z9n97G+x5BwaFOwr5NIt3Z5ZxHfD2hFx9GRhFSCAWEZ9hJjh1DcOJAZnk3eVQBwuWRdLtU2qJy558gCUCzkHlj7idAw78+gkhbUYRR/OCu6KZaN68wsJRbB/6xDaRYJFXeFPihkVbSsKnO7IY/8vTLnJ1mDyAbaCYLnlWn8MUFYwZzTAShcoU/x7c6s4TQk5YPmU+4Z1XKjl8NYR848gyRBv9Hum6icYRFDjzr09hu7qATXAbX2Q3YlfAYc6j3yeANcLECMMaU3TDA/XZ7GkTvUL1r+aWURVFYnbUe4xQ9Unh+xALoChhPfCjsKdlPHWY1jejU9YL0jYUw2DLWacBQKwgt6QRxh3i91eMER9yn1GgkvpZgWbVNTFfAUTwi1RYdroFAw7U63rHnB24iYt81sDLAaesd3IYlTNQFjLGJCV12VwIcMVTY83Q5KGBcG4oEmeGSN0f+5u8jxrEzIJ4cA0bdyLGFzXn8zLlGFGWVEowQf11KiFe48wBXPIYtDyxaDQpPrLTkJkGUUvv1Lml1XzGwY0W/3ONjHh7Zrcedg6mb5pETLfn/BA=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(23010399003)(22082099003)(18002099003)(5023799004)(56012099006)(4143699003)(11063799006)(6133799003)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?L1owcEFBMTRjTFpMTkhNb2ZvVjNiU2U1ZXYxNGxvVUowTmRHdFFIdWJhTmVD?=
- =?utf-8?B?N1Y2dENPcVlZbHRaUko1ZTZEZm9ONi94VHBmQWViSm4rcEdRNHdCZXBYRm9X?=
- =?utf-8?B?UGJ3R2hHREVadEVpV0VpakRTcjhVS0wyZk05RjF4Zms0SFR6V0lPVXFUN0Vj?=
- =?utf-8?B?TmU3U2R1aXJpQzk5RXkva2JmV3VXRGtlOXJERkVJeFhJcFVwUXdFMFNoczNv?=
- =?utf-8?B?eUEwOTlSOWVHb2ZiQ1dGYWlvMktjdkoyYXRveGhaa0M5d2ttNGl5aGljenZL?=
- =?utf-8?B?NktDQS9mcDBaM1l6RkQveXlnQnoxZTRMaWViRU1Nek1wYXd5d0pxZkpPaXBM?=
- =?utf-8?B?MEczNWFURWhUYTh2Mk5sMzJEZWtKM2tpQnpFVTlIZUtrb2F2amM4SlROK04r?=
- =?utf-8?B?cjhGbHR2T1ErVDczTFlhb084V1FCbkJIMlkwa3NjV0htL25vYzRTbmd3eHdX?=
- =?utf-8?B?MjB1cXc5UXVwUUtTSXIyOStEVGdQWTZ3QUFPdkV4Y0huWjdveFRzUE1UMGdm?=
- =?utf-8?B?SFg1SnZQcytsNGFQTFJXOVR6YW5DM1Byd2xaMDJ2NVh6cHF3UUltN0N5TzdH?=
- =?utf-8?B?Q2RHeEVxdnBhMzNObm9YbmU0MC9ab1dhb282YXJUanRmV0FaV2k4OEhNTDBz?=
- =?utf-8?B?VzRZZGpGeWF3Zms2VGdaTXpZMEJjRmVFU3d0S2RlUDg5am1OOVQ2a3d6Lys3?=
- =?utf-8?B?VUtpRjU2Q0RMQUdsRWl0aXZIMHJzWjUvUk1jNFZ3VzJRbEMrSElxTDRvM0Jj?=
- =?utf-8?B?VHBPNnRSb0lxL2R2NndHNGlvYUJBMTlLdmtMWGpERDdiR3pwSy85U3VvSmd1?=
- =?utf-8?B?MzE2aHF1SmRRc3JjVkc1dmEreFJuclZjeGhHcnRKL1hBTkhqWmRjdkZPMjQ2?=
- =?utf-8?B?TmJXOUdUUlA2cDQraUd5V0gvbngyMnpNL2hEdjhyYkd2d1lZc1o3RXFSRUs3?=
- =?utf-8?B?clRqRGs3ZktiOXdTTVlUNStBamJUazhHdlhQSHY3TVZ2T0Q2elpnbGhiandi?=
- =?utf-8?B?Q1R6YXE0Z2VQQVR1eXNVbEJZd3MzOGxZbFE2bUQwMXJkT0UzMU1JVUpYc3Ju?=
- =?utf-8?B?MkJsdGc3dUJzOXh6SkRjVjlBeExjK3RLWnBkbnR3YkF3cllRRThFeTlhZGhE?=
- =?utf-8?B?bG5pMEpHdWZST3Z4dzk5QlZSNUtubTZQYmc4NnNUcHoxc01uYjlxSmdQNXp4?=
- =?utf-8?B?SXZSVDNkbEdUSzBEMEFCRktnaVc0RGY1Q2Jpb0ptTmNNVmJkbkRwcW1keXlY?=
- =?utf-8?B?clUzQ2pXTDUzcDhuaFQxeW9aeW9oYnM1Ry9xc2tBUGpBeHY5d3U1WHZvN2hM?=
- =?utf-8?B?SU5PL3Q2bGRRV3cxSGRCaGkxQjNQb0tuMjJEbzc3dmdTZ0RycmdoSVpneW1T?=
- =?utf-8?B?bUJ2N3VUbmxuaFIvRjRBQ1c2dUhCWjNESjltdDY3Q29wcG5hSTUvLzVVOFM3?=
- =?utf-8?B?eVJ4L0xYbGNqTlhFZTllOXZkZjRUSVVxRXJVSlRKRk5ienZpcENmZ0ZaYURW?=
- =?utf-8?B?ckExeVRoeW5Yc1h6Y1NJN0pzM1BvL2pNYkRIT3VWYmoyODZEY1dtQi9FbVpV?=
- =?utf-8?B?cm1RbElGbGlFdU80dzl3THRlSytJMDV3d0VnbXJtM2YyVSswUFgwUmc4SEtF?=
- =?utf-8?B?SXUrMW80R0gyeVdvRkxuaEpCY3Z4dndlbjZCb3B2WThSbUNSeU9wcGI5c1BP?=
- =?utf-8?B?VnlkakpKNXlkaUxycUovYlZnclZBMVlKS2N0S2VtZXppZ2lXcUhVLzZJSmRq?=
- =?utf-8?B?azN1Tm1ka0tYbWs0TTh5eGI5SGhMUTdyMzdoYW5uRVZpcDNQOW1WeEN4S2M0?=
- =?utf-8?B?cGdkRmdXdXhscVhoSHh6dWxoMkVpOFFRdyt3TnBLb3FwSWdBQUtkdkl2amdU?=
- =?utf-8?B?WmVxVmRjbW9CbS9sU3FOSUMyVGVMRlljdUZ2TVAvbVlIZ1BSN0ljZDhCNjJv?=
- =?utf-8?B?Y2twdzR1NDBDOHRkR0tSbGt3WUZjcDAvZFVOZVh4YzVmY3BQRmFkenpBZ0NO?=
- =?utf-8?B?WWZiMnFFRE50QXc5cEZBRWZyVUNrdVFyeGVXVjlkRmR5WEpFQmc5M3ZNQ01E?=
- =?utf-8?B?bTFUYWprVDdleUtIS0JpOVJJUENTK0Rpc3JLOU9ISndmaUYzazRzVytvQU5t?=
- =?utf-8?B?YmNwRFFTdThtMGVNMlVWSFpzTzdtZzU3anVISWtrTnBMSmFQWUU5ZGlyUXB3?=
- =?utf-8?B?azAwaTByZUlDSmRmWG9IWmU4a3RuSnlBc0tkeGtScmFEMTQxMFRYcW1JQ2I3?=
- =?utf-8?B?ZC8xOXlMREVIQmZLYTkvSzRJZHRCVUVUM1lGNXpudGR5b2FmUStQNy9hSVZ1?=
- =?utf-8?B?MkNMT3c3cVl1RlNMR2pad2JGLzB6dW5ZMUxBdlpHU2VOOE45UTZtZz09?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 763e811c-4709-41ee-81e4-08def3963e67
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2026 08:39:35.2260
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m6OOCimcQAK7nO/7hmeOBpDATfNbWYm0PCD7gt5ITTCj9369djQhNpgJl7twiuV+KsxrQOLm/xw4ac0pgRPtGg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR06MB5497
+Content-Transfer-Encoding: 8bit
 
+Hi,
 
+pte_t currently describes both a logical PTE value and an element stored
+in a PTE table. Consequently, pte_t * can point either to a standalone
+value, often a stack copy, or to a PTE-table slot. The compiler cannot
+distinguish these cases. A value pointer can therefore be passed to an
+interface that expects table storage, while table storage can be read by
+direct dereference instead of the architecture accessor.
 
-On 8/6/2026 12:29 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Medium] The test `test_kmod_btfs` depends on the `bpf_testmod` kernel module being available, but does not check `env.has_testmod` before running.
-> - [Low] Multi-line comment does not follow BPF subsystem style guidelines.
-> --
-> 
-> --- Patch [2]: [RFC PATCH bpf-next 2/2] selftests/bpf: add tests for selective kmod BTF loading ---
-> commit 35262af12350c47550b117d06e881e0de422cb5d
-> Author: Fuyu Zhao <zhaofuyu@vivo.com>
-> 
-> selftests/bpf: add tests for selective kmod BTF loading
-> 
-> This commit adds test cases to verify the new .kmod_btfs section logic in
-> libbpf. It covers scenarios with valid, non-existent, and duplicated module
-> BTF targets to ensure robust loading and parsing.
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
-> [ ... ]
->> +static void kmod_btfs_mix(void)
->> +{
->> +	struct kmod_btfs_mix *kmod_btfs_mix_skel;
->> +
->> +	kmod_btfs_mix_skel = kmod_btfs_mix__open_and_load();
->> +	if (!ASSERT_OK_PTR(kmod_btfs_mix_skel, "kmod_btfs_mix__open_and_load"))
->> +		return;
->> +
->> +	kmod_btfs_mix__destroy(kmod_btfs_mix_skel);
->> +}
->> +
->> +void test_kmod_btfs(void)
->> +{
->> +	if (test__start_subtest("kmod_btfs_pass"))
-> 
-> [Severity: Medium]
-> Since this test depends on bpf_testmod being available, should we check
-> env.has_testmod at the start of the test and skip it if not found?
-> 
-> Without it, running the selftests on a system where the test module is not
-> built or fails to load might cause erroneous test failures instead of being
-> gracefully skipped.
-> 
+This series begins a staged conversion at the PTE level. It introduces
+hw_pte_t as the element type for PTE-table storage and converts generic
+MM to use hw_pte_t *. Logical PTE values remain pte_t. Interfaces that
+intentionally return a value through pte_t *, such as install_pte,
+remain value interfaces; the relevant parameters are named ptentp to
+make that distinction explicit.
 
-Good point. I will add an `if (!env.has_testmod)` check in v2 to gracefully
-skip the test when `bpf_testmod` is unavailable.
+The generic definition aliases hw_pte_t to pte_t unless an architecture
+selects ARCH_HAS_HW_PTE_T, which enables a distinct generic wrapper. No
+architecture selects it in this series, so the representation and
+behaviour of every architecture are preserved. ptep_get() keeps its
+existing READ_ONCE() semantics and converts the stored element through
+__pte_from_hw(). An architecture can later select the option and convert
+its PTE interfaces to make the distinction compiler-enforced.
+Architecture PTE implementations and most architecture code are
+deliberately left for those later opt-in conversions.
 
-Thanks for the feedback.
+Here, hw_pte_t identifies PTE-table storage rather than table lifetime:
+complete PTE tables use hw_pte_t whether or not they are currently
+linked into a page-table hierarchy, while standalone copied values use
+pte_t. The distinction between complete but unlinked tables and
+hardware-reachable tables was raised during discussion and remains an
+important point for review.
 
->> +		kmod_btfs_pass();
->> +
->> +	if (test__start_subtest("kmod_btfs_nonexist"))
->> +		kmod_btfs_nonexist();
->> +
->> +	if (test__start_subtest("kmod_btfs_mix"))
->> +		kmod_btfs_mix();
->> +}
-> 
->> diff --git a/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c b/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
-> [ ... ]
->> +SEC("fexit/bpf_testmod_loop_test")
->> +int test_kmod_btfs_nonexist(void *ctx)
->> +{
->> +	return 0;
->> +}
->> +
->> +/* This should fail to load, because .kmod_btfs does not contain
->> + * the needed module 'bpf_testmod'.
->> + */
-> 
-> [Severity: Low]
-> This isn't a bug, but does this multi-line comment follow the BPF
-> subsystem style guidelines?
-> 
-> The BPF guidelines usually require the opening /* to be on its own line.
-> 
+PMD, PUD, P4D and PGD storage are deliberately out of scope. They can be
+converted in later series after the PTE boundary is agreed, avoiding the
+PMD-specific cases that made an all-level conversion difficult to
+review.
 
-Thanks for the feedback. I will update the comment style in v2.
+Most mechanical pointer conversions were generated with the Coccinelle
+script included below, then audited and fixed by hand.
 
->> +DEFINE_KMOD_BTFS(_needed_kmods) = { "module_nonexist" };
->> +
->> +char _license[] SEC("license") = "GPL";
-> 
+This series does not add a second ptep_get_once() accessor and does not
+remove or replace STRICT_MM_TYPECHECKS.
+
+The design discussion is available at [1]; while the original idea came
+from [2].
+
+I've the patches here [3] for arm64 conversion which I used to find
+usages in generic code which I missed during development. These would be
+sent separately.
+
+[1] https://lore.kernel.org/all/6110202c-057b-4701-8c04-1a76ee7bb9ab@arm.com/
+[2] https://lore.kernel.org/all/a063f6c5-2785-4a9f-8079-25edb3e54cef@arm.com
+[3] https://github.com/musamaanjum/linux/commits/pte0_arm/
+
+Thanks,
+Usama
+---
+Changes since RFC v1:
+- Add ARCH_HAS_HW_PTE_T so architectures can opt in to a distinct
+  PTE-table storage type.
+- Define the distinct hw_pte_t wrapper and its conversion helpers in
+  generic code instead of requiring each architecture to define them.
+- Read hw_pte_t through READ_ONCE() before converting it to pte_t.
+- Drop the previous mremap patch in favour of [a]. Apply [a] first if
+  it is not already present.
+- Drop the previous two dead-code conversion patches; the affected
+  code was cleaned up separately in [b] and [c].
+
+[a] https://lore.kernel.org/linux-mm/20260720141633.501799-1-agordeev@linux.ibm.com/
+[b] https://lore.kernel.org/all/20260730111316.3672672-1-usama.anjum@arm.com
+[c] https://lore.kernel.org/all/20260730094501.3002718-1-usama.anjum@arm.com
+
+---
+// SPDX-License-Identifier: GPL-2.0-only
+///
+/// Rename raw PTE pointer types to hardware PTE pointer types.
+///
+/// This is a mechanical type rename. It converts common declarations,
+/// function parameters, prototypes, return types and casts from "pte_t *"
+/// to "hw_pte_t *". Plain "pte_t" objects are intentionally left unchanged.
+/// Pointers named "ptentp" refer to temporary logical PTE values and are
+/// intentionally ignored in all modes.
+/// Re-run in context mode afterwards to audit remaining raw pte_t pointers
+/// and cases that need hand conversion, such as trace macros and mixed
+/// declarations.
+///
+/// Confidence: Moderate
+// Options: --no-includes --include-headers
+
+virtual patch
+virtual report
+virtual context
+
+@local_decl depends on patch@
+identifier x != ptentp;
+@@
+- pte_t *x;
++ hw_pte_t *x;
+
+@local_decl_init depends on patch@
+identifier x != ptentp;
+expression e;
+@@
+- pte_t *x = e;
++ hw_pte_t *x = e;
+
+@param_proto depends on patch@
+identifier f;
+identifier x != ptentp;
+type R;
+@@
+R f(...,
+- pte_t *x
++ hw_pte_t *x
+,...);
+
+@param_proto_unnamed depends on patch@
+identifier f;
+type R;
+@@
+R f(...,
+- pte_t *
++ hw_pte_t *
+,...);
+
+@param_def depends on patch@
+identifier f;
+identifier x != ptentp;
+type R;
+@@
+R f(...,
+- pte_t *x
++ hw_pte_t *x
+,...)
+{ ... }
+
+@ret_proto depends on patch@
+identifier f;
+parameter list ps;
+@@
+- pte_t *
++ hw_pte_t *
+  f(ps);
+
+@ret_def depends on patch@
+identifier f;
+parameter list ps;
+@@
+- pte_t *
++ hw_pte_t *
+  f(ps)
+{ ... }
+
+@struct_member depends on patch@
+identifier S;
+identifier x != ptentp;
+@@
+struct S {
+...
+- pte_t *x;
++ hw_pte_t *x;
+...
+};
+
+@union_member depends on patch@
+identifier x != ptentp;
+@@
+union {
+...
+- pte_t *x;
++ hw_pte_t *x;
+...
+};
+
+@union_member_in_struct depends on patch@
+identifier S;
+identifier x != ptentp;
+@@
+struct S {
+...
+union {
+...
+- pte_t *x;
++ hw_pte_t *x;
+...
+};
+...
+};
+
+@fnptr_struct_member depends on patch@
+identifier S,f;
+identifier x != ptentp;
+type R;
+@@
+struct S {
+...
+R (*f)(...,
+- pte_t *x
++ hw_pte_t *x
+,...);
+...
+};
+
+@fnptr_typedef_pte_fn_t depends on patch@
+identifier x != ptentp;
+@@
+typedef int (*pte_fn_t)(...,
+- pte_t *x
++ hw_pte_t *x
+,...);
+
+@cast depends on patch@
+expression e;
+@@
+- (pte_t *)e
++ (hw_pte_t *)e
+
+@remaining_decl depends on context || report@
+identifier x != ptentp;
+position p;
+@@
+* pte_t *x@p;
+
+@remaining_decl_init depends on context || report@
+identifier x != ptentp;
+expression e;
+position p;
+@@
+* pte_t *x@p = e;
+
+@remaining_param_proto depends on context || report@
+identifier f;
+identifier x != ptentp;
+type R;
+position p;
+@@
+R f(...,
+* pte_t *x@p
+,...);
+
+@remaining_param_proto_unnamed depends on context || report@
+identifier f;
+type R;
+position p;
+@@
+R f(...,
+* pte_t *@p
+,...);
+
+@remaining_param_def depends on context || report@
+identifier f;
+identifier x != ptentp;
+type R;
+position p;
+@@
+R f(...,
+* pte_t *x@p
+,...)
+{ ... }
+
+@remaining_ret_proto depends on context || report@
+identifier f;
+parameter list ps;
+position p;
+@@
+* pte_t *f@p(ps);
+
+@remaining_ret_def depends on context || report@
+identifier f;
+parameter list ps;
+position p;
+@@
+* pte_t *f@p(ps)
+{ ... }
+
+@remaining_struct_member depends on context || report@
+identifier S;
+identifier x != ptentp;
+position p;
+@@
+struct S {
+...
+* pte_t *x@p;
+...
+};
+
+@remaining_union_member depends on context || report@
+identifier x != ptentp;
+position p;
+@@
+union {
+...
+* pte_t *x@p;
+...
+};
+
+@remaining_union_member_in_struct depends on context || report@
+identifier S;
+identifier x != ptentp;
+position p;
+@@
+struct S {
+...
+union {
+...
+* pte_t *x@p;
+...
+};
+...
+};
+
+@remaining_fnptr_struct_member depends on context || report@
+identifier S,f;
+identifier x != ptentp;
+type R;
+position p;
+@@
+struct S {
+...
+R (*f)(...,
+* pte_t *x@p
+,...);
+...
+};
+
+@remaining_fnptr_typedef_pte_fn_t depends on context || report@
+identifier x != ptentp;
+position p;
+@@
+typedef int (*pte_fn_t)(...,
+* pte_t *x@p
+,...);
+
+Muhammad Usama Anjum (9):
+  mm: introduce hw_pte_t for PTE table storage
+  mm: make hw_pte_t visible to generic PTE interfaces
+  mm: name pointers to copied PTE values ptentp
+  mm: use hw_pte_t for generic PTE table storage
+  mm: convert PTE table entries in ptep_get()
+  mm: convert PTE table entry to pte
+  mm/kasan: use hw_pte_t for the early shadow PTE table
+  drm/i915: use hw_pte_t for PTE range callbacks
+  xen: use hw_pte_t for PTE range callbacks
+
+ MAINTAINERS                                   |  1 +
+ .../drm/i915/gem/selftests/i915_gem_mman.c    |  4 +-
+ drivers/gpu/drm/i915/i915_mm.c                |  4 +-
+ drivers/xen/gntdev.c                          |  2 +-
+ drivers/xen/privcmd.c                         |  2 +-
+ drivers/xen/xenbus/xenbus_client.c            |  2 +-
+ drivers/xen/xlate_mmu.c                       |  4 +-
+ fs/hugetlbfs/inode.c                          |  3 +-
+ fs/proc/task_mmu.c                            | 33 ++++----
+ include/asm-generic/hugetlb.h                 | 15 ++--
+ include/asm-generic/pgalloc.h                 |  6 +-
+ include/asm-generic/tlb.h                     |  5 +-
+ include/linux/hugetlb.h                       | 52 ++++++------
+ include/linux/kasan.h                         |  2 +-
+ include/linux/mm.h                            | 26 +++---
+ include/linux/page_table_check.h              | 10 ++-
+ include/linux/pagewalk.h                      | 10 +--
+ include/linux/pgtable.h                       | 81 ++++++++++---------
+ include/linux/pgtable_types.h                 | 19 +++++
+ include/linux/rmap.h                          |  2 +-
+ include/linux/swapops.h                       |  6 +-
+ include/linux/vmalloc.h                       |  4 +-
+ include/trace/events/xen.h                    | 10 +--
+ kernel/bpf/arena.c                            |  9 ++-
+ kernel/events/core.c                          |  3 +-
+ mm/Kconfig                                    |  3 +
+ mm/damon/ops-common.c                         |  2 +-
+ mm/damon/ops-common.h                         |  2 +-
+ mm/damon/vaddr.c                              | 20 ++---
+ mm/debug_vm_pgtable.c                         |  2 +-
+ mm/filemap.c                                  |  4 +-
+ mm/gup.c                                      |  9 ++-
+ mm/highmem.c                                  | 15 ++--
+ mm/hmm.c                                      |  6 +-
+ mm/huge_memory.c                              |  4 +-
+ mm/hugetlb.c                                  | 60 +++++++-------
+ mm/hugetlb_vmemmap.c                          | 13 +--
+ mm/internal.h                                 | 16 ++--
+ mm/kasan/init.c                               | 14 ++--
+ mm/kasan/shadow.c                             |  6 +-
+ mm/khugepaged.c                               | 24 +++---
+ mm/ksm.c                                      | 11 +--
+ mm/madvise.c                                  | 18 +++--
+ mm/mapping_dirty_helpers.c                    |  4 +-
+ mm/memory-failure.c                           |  6 +-
+ mm/memory.c                                   | 78 +++++++++---------
+ mm/mempolicy.c                                |  4 +-
+ mm/migrate.c                                  |  4 +-
+ mm/migrate_device.c                           |  4 +-
+ mm/mincore.c                                  |  4 +-
+ mm/mlock.c                                    |  4 +-
+ mm/mprotect.c                                 | 19 ++---
+ mm/mremap.c                                   |  4 +-
+ mm/page_table_check.c                         |  4 +-
+ mm/pagewalk.c                                 |  9 ++-
+ mm/percpu.c                                   |  2 +-
+ mm/pgtable-generic.c                          | 20 ++---
+ mm/ptdump.c                                   |  4 +-
+ mm/rmap.c                                     |  6 +-
+ mm/sparse-vmemmap.c                           | 24 +++---
+ mm/swap_state.c                               |  3 +-
+ mm/swapfile.c                                 |  5 +-
+ mm/userfaultfd.c                              | 32 ++++----
+ mm/util.c                                     |  2 +-
+ mm/vmalloc.c                                  | 13 +--
+ mm/vmscan.c                                   |  6 +-
+ 66 files changed, 437 insertions(+), 368 deletions(-)
+ create mode 100644 include/linux/pgtable_types.h
+
+-- 
+2.47.3
 
