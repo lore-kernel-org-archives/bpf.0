@@ -1,122 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B943E49F4;
-	Thu,  6 Aug 2026 09:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CB03E49F4
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 09:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786006883; cv=none; b=cfNgF+gwy9avQxYjgLGDwUWO3YpEUHkpAk9mP1ftzNK5NiUBgZyZYOh7iEo9x+5hi8/NJMNhfPmlwGibx8x9JXnPiEATwFZ21lv5j1MKonHlmab1WSh2/Ky4qoxIe1dwBxPZ5hV4sxTEOTg0qpCM4ELwT50+RgFiJsBYtP25zZI=
+	t=1786006977; cv=none; b=GrKZl/NTaAHpvoUdITEFezxQ3NFQ56h/Rtyho9zyVNmmhNiXTlnQ3g/NwJL0Jyl1dyl8Q0yPr8GEVq4uXW/3U77cN4jWbAiIJlNoN4Birz0ArLG4U5PkGXuMX7GUaaeUY8TXPg8VATV5KDvAow4NlNsXbsi/0MO+cOfeyQf1T0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786006883; c=relaxed/simple;
-	bh=gN64CbbVMioCnULy/XAxWfPJLYEo011W1ngSIOkw56g=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=CXKMDl9/Qz48zr6hNjrnIyX8vIdf5hcU9wNobSzREUcSbtRbopFMbOpmqWtwN++1yyfC7ddob0C6y+/cTaH9jUyDpbySqapggcLA0iXI8eR5w3WNoWWWKYpYguaOn9WuN+MCpk4iEty+piST97MRQTRkK6nKihN4pYHQWyZ+a4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KBASob7v; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786006977; c=relaxed/simple;
+	bh=3s7nZgauonP90y3XHlMSi//fsrT+8vGp9ui+7AsfmNo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=AToK+SadR+id2v5cWn6GQkftwEBVVJO4x7q28zJwvc66GCbdln6DkUQGxxlZTLWcG5PzuqURFhIGmp15sK2Axiw5Otp8lGknh/1G/3CUDo5g93XNaTAmSBZrPY+uBoAyMEj6/bYjgZ8Sq77N4TXDBNU9tO615y6Q8diSlV9UGcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hWXR62Yc; arc=none smtp.client-ip=74.125.225.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KBASob7v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C013F1F000E9;
-	Thu,  6 Aug 2026 09:01:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786006882;
-	bh=gtt+zplP1NQteJybU0xLiv3wJ4KT/lOlzhGGTNIRcm4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KBASob7vFaOgGODbTeQS5Tc3BJ4ei5vr6UYD/v90sbOI6u7NpgGPN9mH4bjsetee0
-	 ZwgsDwJSHOk8QKJIfkj2bQVa3kmh8DsSl8hpR4IKOZeqpk5SvYpzrcvhN4eeoyhLXY
-	 RUnxBhvbG7m+EU5FF6wMBG5TEDtHY2oDfQ7dcWXsHFcLjwCkKR/KEp/2TCBNSoU7LF
-	 SLnC8uER56a7KHo58rq6AmQrJjLnH7c/9IT62pe11m1luTQBF5exzbXG6UN0NaFDJ3
-	 v3WTWjYZO342LT55cAOIa01OzOU7nrZPLR5Gq1Is7OdUjROr7rkj6NMY5ttqJjeifw
-	 xEFuNdqNCscAw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 7/9] mm/kasan: use hw_pte_t for the early shadow PTE
- table
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Muhammad Usama Anjum" <usama.anjum@arm.com>
-Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, damon@lists.linux.dev, dri-devel@lists.freedesktop.org
-In-Reply-To: <20260806083926.1807279-8-usama.anjum@arm.com>
-References: <20260806083926.1807279-1-usama.anjum@arm.com>
- <20260806083926.1807279-8-usama.anjum@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 09:01:21 +0000
-Message-Id: <20260806090121.C013F1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hWXR62Yc"
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47f9c6bc99eso431223f8f.0
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 02:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786006974; x=1786611774; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=jx5sb/EpGz46xxvuSXGfSNWXkbsZBvc4m4kHk10LMUw=;
+        b=hWXR62YcbyXFrsG8cN6kCUug/CnwdH8Daf1heqXOGPpDwI4r8pZBW6CYXonmjDgp7v
+         YMmLdtjWGHHrBAcLwAM2oY3QfgUSYdzMlPEBfGj5AUyDYmAj1LK85FOy02ZF5VUTJugm
+         o97ifH6C+T+esrRFQMSLwEnGzsq0Bf9pOTMOds6AS7MZT+77/vGXFZAAbQ/nBWfTjsMy
+         Ez01hMFARHSYBAZkRgjJ9sH2+60OMlsA3WvmCZtc3xZeEjpNMmQm3XCPMW9y3r9o8a2U
+         qeDul3/q2nJqtOQ/C2ik9XLe0nubqQggR9dAiudnamMGD5bEzPyaSL73SqnaCdVODvf3
+         TyWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786006974; x=1786611774;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jx5sb/EpGz46xxvuSXGfSNWXkbsZBvc4m4kHk10LMUw=;
+        b=XZg+KEQprFGTB9tCBRK9tnSKIo1BtbKz/z4xm3evv5+Z8jMGzSJjo6ndrKa/JtlRPf
+         Q16jQl7zsY3tSX0Xrkw1QKbjDctojEkuMeP1ZO1CWAmLwKkOE2YmX+xMFLpFYXSuSCd5
+         UMQXiMiUrc+dQPuejVcECGN2JnOCFHeAZt6YKFo9HMQPhEU/K3sYe/nu9uJOjG/qlTGn
+         du4UeZxQy7UHHbrm08c6KikVao44Z2/o28s+F+MOalidsC3pijtaoggQsXfqp8GnnvGJ
+         ZOilwGEDrYrzhRY8tB9gmE6poFJ833S+DZr28EjmfB00sV4GiWeEg6/RLXHmN3CB/Fnb
+         u1rQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqkIZ2yfahbsr0+X/5lSXrUvNeLys598sZha92P4d77SBX+BGTd1ZEAYxJirjLu/gzgKVw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7rUFTZ0K7rKyGJw85KeoeA5UI2P9eKrW9yishCcrUKI4DXKaW
+	fOuf/ZqjEHVmq1kfphUyElqHrOfaoLc5RKUQkMLN28QfP37lSI7OvyAY
+X-Gm-Gg: AR+sD13jFydc2nlwzjPD9MF5UY59FCHMHCCqgplrl9fzBWvmmxoj3A3bv6jMkyxiV4k
+	Vpi3A+odGL8GbxWLlIgvaMoDlSUMGN5blNt6LkRUoEv8XnAdktmzqqDFQN1ive5xCCz7nDVwTPw
+	+WcIWVsxyhFZ/zRpY7KMUOr9r/jRMYhj7/2yJKrdq+SFC+hYPFuvwvcjoYlnbIjUwqgarA9+xuM
+	4kjlzjn189GwXK75UXTwij7C4ZRXWY3RU3eQIuYAvZ6sbtZmG7J9Viqkh6VutPDgtNCIMk+H8TM
+	ACzhUuRGYGotrmo5GfgmlYP46gOwo97La/gjyRunT7bHTySGQgGtjEbDJbxtwKw4e3b+otri8HP
+	jSdEoqdmGegOeyw9pF8stjw8l3pqbGE1gr+mE1J7ACQF7KLdLCfASQG1/0BrV0lQj3XcEUWIZmi
+	A6yv+fXv3/c7yUmNGxoy1bPbBK81ETLiK1hgSQhngF9aT53AA+7FrZAkQFinyucUTDb1gQzJpmw
+	HZ0A9GOMoUlLUrEnVslUfjQuIOQT3Z2y+MqTgfwdpq3Rk6ggXsXZh4YUOuQ4KQp/efuXdZ1UjiS
+	zxRJXMBUmRgUo4cHeAxalgjzVRCrOFhsBIyq6A==
+X-Received: by 2002:a5d:67cc:0:b0:47f:6dcb:3737 with SMTP id ffacd0b85a97d-47fec64be03mr15368560f8f.29.1786006974116;
+        Thu, 06 Aug 2026 02:02:54 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff7b250e5sm4676930f8f.27.2026.08.06.02.02.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 02:02:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 06 Aug 2026 11:02:52 +0200
+Message-Id: <DKHQMSFIMQHR.1JSO9S9ZSZ5PY@gmail.com>
+Cc: "Puranjay Mohan" <puranjay@kernel.org>, <bpf@vger.kernel.org>, "Puranjay
+ Mohan" <puranjay12@gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/2] bpf: Invalidate RCU pointers after
+ final spin unlock
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Ning Ding" <dingning04@gmail.com>, <paulmck@kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260803112615.3362122-1-dingning04@gmail.com>
+ <m2zez2i2hp.fsf@kernel.org>
+ <aba45a18-fb2f-4993-868e-976723b2e017@paulmck-laptop>
+ <CAJP4iuthyUKs5wYMpjGLyQKW8syiHm6pub+9rMMo7wsw-w6G+Q@mail.gmail.com>
+In-Reply-To: <CAJP4iuthyUKs5wYMpjGLyQKW8syiHm6pub+9rMMo7wsw-w6G+Q@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-
-Pre-existing issues:
-- [High] Invalid non-present page table entry conversion in ptdump callback=
-s.
---
-
---- Patch [7]: [PATCH 7/9] mm/kasan: use hw_pte_t for the early shadow PTE =
-table ---
-commit 3ee38376d3d7f9e85666863e4080641fcf9b048b
-Author: Muhammad Usama Anjum <usama.anjum@arm.com>
-
-mm/kasan: use hw_pte_t for the early shadow PTE table
-
-kasan_early_shadow_pte is a complete PTE table rather than a standalone
-PTE value. Declare and define its elements as hw_pte_t so the object uses
-the PTE table storage type.
-
-[ ... ]
-
-> diff --git a/mm/ptdump.c b/mm/ptdump.c
-> index 376880071ca2a..8f19f20be3c44 100644
-> --- a/mm/ptdump.c
-> +++ b/mm/ptdump.c
-> @@ -19,7 +19,7 @@ static inline int note_kasan_page_table(struct mm_walk =
-*walk,
->  {
->  	struct ptdump_state *st =3D walk->private;
-> =20
-> -	st->note_page_pte(st, addr, kasan_early_shadow_pte[0]);
-> +	st->note_page_pte(st, addr, ptep_get(kasan_early_shadow_pte));
-
-[Severity: High]
-This isn't a bug introduced by this patch, but since we are modifying the K=
-ASAN
-shadow table handling in ptdump, are the page extraction checks that lead h=
-ere
-safe for non-present entries?
-
-In mm/ptdump.c, callbacks like ptdump_pmd_entry() and ptdump_pud_entry()
-unconditionally call pmd_page() and pud_page() before checking if the entry
-is present:
-
-mm/ptdump.c:ptdump_pmd_entry() {
-    ...
-	pmd_t val =3D pmdp_get(pmd);
-
-#if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
-	if (pmd_page(val) =3D=3D virt_to_page(lm_alias(kasan_early_shadow_pte)))
-		return note_kasan_page_table(walk, addr);
-#endif
-    ...
-}
-
-User page tables can contain non-present swap or migration entries at the P=
-MD
-level. If pmd_page() (and equivalents like pud_page(), p4d_page(), pgd_page=
-())
-extracts a bogus PFN from a non-present entry, could this lead to an
-out-of-bounds array access and a NULL pointer dereference in the sparsemem
-arrays when pfn_to_page() is evaluated?
-
-Since ptdump can be invoked on user page tables via debugfs by users with r=
-ead
-access, could this trigger a kernel panic? Should these callbacks verify the
-entry is present before calling the page conversion functions?
-
-> =20
->  	walk->action =3D ACTION_CONTINUE;
+On Wed Aug 5, 2026 at 9:00 AM CEST, Ning Ding wrote:
+>> > 1. Disabling preemption
+>> > 2. Disabling bottom halves
+>> > 3. Disabling interrupts
+>> > 4. Acquiring a spin lock
+>> >
+>> > As you are doing it for 4, can you also do it for 1 and 3? I don't thi=
+nk
+>> > BPF can disable bottom halves right now.
+>
+> Hi, I have written the follow-up patch to account for
+> preemption-disabled and irq-disabled regions. But still working on the
+> selftests.
+> While checking rcu gaps, I also found what looks like a separate issue
+> for state pruning also regarding the MEM_RCU and PTR_UNTRUSTED. A
+> sample example is:
+>
+>   bpf_rcu_read_lock();
+>   bpf_iter_task_new(&it, NULL, BPF_TASK_ITER_ALL_PROCS);
+>
+>   if (condition) {
+>   /* Safe: the outer RCU lock remains active. */
+>   bpf_rcu_read_lock();
+>   bpf_rcu_read_unlock();
+>   } else {
+>   /* Unsafe: protection reaches zero, creating an unguarded gap. */
+>   bpf_rcu_read_unlock();
+>   bpf_rcu_read_lock();
+>   }
+>
+>   /* Both branches have one active RCU lock here. */
+>   bpf_iter_task_next(&it);
+>   bpf_rcu_read_unlock();
+>
+> But STACK_ITER comparison in stacksafe() does not compare
+> spilled_ptr.type. So the verifier considers the trusted and untrusted
+> iterator states are equivalent. It can possibly prune the unsafe path
+> before is_iter_reg_valid_init() rejects it.
 >
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806083926.1807=
-279-1-usama.anjum@arm.com?part=3D7
+Sounds plausible. Once you have a fix and test that triggers bad pruning
+behavior reliably, please send it as a patch set.
+
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/ker=
+nel/bpf/states.c?id=3D6655c409707ec8ce9ce0850ffe4fe02331fd4d9c#n806
+
