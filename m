@@ -1,172 +1,184 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D37363096
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 17:22:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786036954; cv=none; b=RY5KsdIDlFJLkNPxYJZsLdaN52kWPSJoAU6umskJ+IEoYVPcP0zB1+Mbn7TDXztF28zHuBP1wfgnmQOLUF3JFkorUMXVixBO9dTDTtljcy7K66wJk+qknivskqJRgqXJYn2pdt3+UDR+x9hPJCcRduzz8E/k15lkM6qUDJhcbOY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786036954; c=relaxed/simple;
-	bh=BnpdqNEUC/D9iCxeB45j6sHjT70Y9PrfHsmHsEPugcc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=Vmwu2/vIsUqvNHaMQkLSZg+knvlHvbAK+tKxLg6RgdMowyEGgqZqwTc7v5yZB91AWcosBDjPI3+9hcygHtCaYegDtcN+VwQelnZP2SHBt2Hzn916TXjEbW6KJDlKlxO4UaBG7/Tq1jv6f+f6u/wibOB7YVbxg1ECJN0SXDo2v0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qRJ/AyOD; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4785485CF7
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 17:22:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786036967; cv=pass; b=ukFV9oiSmaO2ZvHVWpPQKz5VXiG1HKpDbcrKTxPJQtxrbebUfmgWE9ewbH4gxgMggd/9+KjCmkB8NdhFkKBCbHqiXuU36G82/oFgwFflF1pRuxzsNdV9lwmaduJmru4JZncJcnB+2VkQZBoZdJYsliu5NNqFUfW7slpOA2q2Kf0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786036967; c=relaxed/simple;
+	bh=6pPO7myojBmd3GsKjsQOGiu/Sh3uZD/65xy3n1yReF0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ozml3LeIFzthJKvODryKGUzt/eD9s6oIw20dmmNCKkxJOO9WpSq+EAik7dOLBwOmdNKQHJ8AQsdrCbF7zjVM9jJ6uXOXJ/vkapNUrz0/5gr4kihU1Yg1ecTHCZu+lkK+pUXQ4wDipVm2/Mww4GTbwpyP22garH9o1QpdjPrcq/c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R7fPckSq; arc=pass smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qRJ/AyOD"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47fe3f552f0so774649f8f.0
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 10:22:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R7fPckSq"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-81ed073fed0so32449077b3.0
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 10:22:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786036962; cv=none;
+        d=google.com; s=arc-20260327;
+        b=r28dTa7FKnhkzpF8RLthuoJ1kajO0lPHLmJaZRaCxLlahAJNYjOuaFkhNEYSH9xeWk
+         5msKWV2DBBRpgGjaMPjVMj+j6CrFLku3EfEjh9hjgoRihjw6RUGVUUKoxiYv1mHXt51a
+         w4TsmyiVLbAwyk9JaKNoLRGJIGRXleWkwf6K2TJ8AvfLQ3bbAkhccG1/a6Srs8PNcqDM
+         m4V7QyWOYt4sEO7/IcdpoJN5IokVXUTA8wDBl/KKWWTXW3Br4jLTbOFVYQ42ME0thwkx
+         y5XpEhMM37izU8pJ3Lt8nJqILqAcWWCpwunae6Bm55SerqyABUpi2s1EjU8nR9oSY+qM
+         eT1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=GaI2dMJHsaw/bCZftRtrPlc1TmafDjQhrqSofXLJlAE=;
+        fh=7K2qWJ3mUiPSelnihIFryY3l1DriTibHaNVcRL5iMOk=;
+        b=crtkF7jTsPy9AJmrEiZps3LWcG2788Ek8cwcU63uG929zpRIfxlWr1PfuH5Z8INXY5
+         fdagllizZs+nC9yaIxcXr1Dkd4AWypN60JyIoiRKUdZbraBK2Xer8J0EphGwJYoK73Bs
+         SZ/jXQBNWw33vZuaJzP4m11yNOKkwF4LCA6AUOHAoYd/nIMege/+H1B7ee3pnJSKIGpE
+         cUkZgeBuZzQx9uUP0pEMe4p+JIOaIoIAvNtigtRH/H3dEKfXxYJIFPnqpFXsOX7LgQhS
+         scXdMhu6oSeeT7JiAg72pylBrKOPAsARgY/M8MgGikZuuWCAFGhToWiPEJSHoh4zhDbg
+         h8Rw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786036951; x=1786641751; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Xibh2USspb2uQVdp3Y2UuRURhPWg8PcBBoTV8f9Gm0I=;
-        b=qRJ/AyOD3M6nD8ZvpGUC0Uf4jlBK5xqsIV0X37SPlQKLkWG3AeAY5rrl/cKvdHAevU
-         JHZVo/SMnSZi0HJIsK0uK8SXEZEjUmwX5brIAohj/V2LwwwZLiMuopRhlMMfqlfOT8zZ
-         R9E66ZR/t/6o2u58ff5ZHa7FE2R/tfQg6A36uNy0isyFJndWRB4rPpKh4g2URdpSqNNI
-         UvmVPKpC+VCNIKvlUaM6/SvTaEKugOdk0INftMZp1weEsP/65wMkEHEWqVZofp7V2bba
-         1DMcJB9k+//qvCa/sXF5opNoNpS6mNcYyZZ3ekES+p5lyZjeV/bqY213fgGc8q0v/3Ii
-         ej4w==
+        d=gmail.com; s=20251104; t=1786036962; x=1786641762; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GaI2dMJHsaw/bCZftRtrPlc1TmafDjQhrqSofXLJlAE=;
+        b=R7fPckSqSzs0H24JeAOdszMF5BfMCM9vaYYjvUXeXKG2qZMToD4JUbGgOpLIUbpAc9
+         +QlybN50G14/BZGFjZcRwALZBHTGGoz7BGrX0IeIYGrLjsj2ZWxKb/b9Lk3WoqfOEIZ2
+         00VK2+ucuo1KHIxG0QPs2UBi3GBCCWh9HVDRbDT9YrTGhK80on4AZ0G+aKYVv9SmWBiF
+         wgvlgurEGUeIsYABLFRsx5e3iF1LVJCA1byi4OdXFM+hxB1kxqmNZg4fb2GOzydhyYM8
+         9ZTUD3b/0NwYvpLEAnmpmiWOpCp4/7JHnlwJvBXv5/VE9cjroh4jGPvR8lFpNiQnpwbW
+         2i2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786036951; x=1786641751;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1786036962; x=1786641762;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Xibh2USspb2uQVdp3Y2UuRURhPWg8PcBBoTV8f9Gm0I=;
-        b=bZ9pcldwNJxLpt/Kh8riEvL80e/jbIBlpQohFJWbJk29fDKNr4jcMa8AKlDvgaO0Ss
-         i1+2UyNet+/hWDxchPMclC1Sds/yWSDQ4qsECPMBmT314OBYOF3Fyb75MlZX6QogInHc
-         4Yg7+q6DyQ8AmwCCUpt6EHW1HjjCX3xZiQbMtuy1ZbZVBVT7Abz+AgUZfB02lvgWNiia
-         SEhkz+mMZ89O2XtXmcmSF3hRQyyvRv3HHAmHMKPyEGaT9HaDYWa9yq1elxZ8yFQ6vYbH
-         rch2eQXH0+96wxdrZrpOnF20Y5xt428LJ3NZNmzOVPdzsIeN86r/6qFs0JYTZqahJATm
-         Oenw==
-X-Gm-Message-State: AOJu0YzaTb/77SSOlZeHNgOwupY701m88c86BQNmsaxAisBMj+LGQXqW
-	UFGhjlpaggCTxBbSdb21w+XDYgEqkUO9TEcvfqJiu3zb1IcQq6/eC6wC
-X-Gm-Gg: AR+sD10uK65JAG1SzoijSQEmBZrB6fhikJnpHv5a84pmpC+Ss9/mUaWi/lA36CkQbzc
-	WOIQIS7adnMdn4tBUdE6vWNeQI6/ONeIJ6AZwABr4M58VZzRI91pXdnJPlvNIvVvFVOWT3PjmiS
-	5AVDDn6rJQTDIxpYtWi2PkFCfWJ1FrwE4Lt7OJY8GDXdknhQnAba45qZrz2vqPJoY1M5fGC5NWz
-	ad17gnUFMmCWfrPoA0CSJe75k96PZgYepOOKvzipwE+WjpqTdJdFewWYjyxFfnusEXRvJxzdGnZ
-	zAjYBkd8hGB2K/Rios2+T4/kMR4WM58O/LD/3nnFv/WJqHxXYKB5ZCG8eD+cIpu4KDI+oy5g8wT
-	8OxnJ/MH7Q3nbYWzW+tKRbL0fT7mgIV1BZF4Zzd9qxKZHzNWmLdZPMwWBCrUeIMhcx58SR2CkLf
-	rdtlik3uzfTks8pSAoKK/3wxWqSH0jDrJKL2aIv22d7C1gCzYz9+WL/hAlDg46hxstnzsKIipEo
-	OVcRyhihm4/lR8ebdzWcxU1Lcdsxhs9jlEYS5jjyK5bBAjaIayYHz4qkXfjxBqgN3Ljly9lxDaQ
-	EE8AudYeDhOei607iRpt6uR0uzAbtEsRliQhTw==
-X-Received: by 2002:a05:6000:290a:b0:47f:9283:1fb3 with SMTP id ffacd0b85a97d-47fec478c10mr26653297f8f.0.1786036950638;
-        Thu, 06 Aug 2026 10:22:30 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff7b32487sm7353025f8f.34.2026.08.06.10.22.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 10:22:30 -0700 (PDT)
+        bh=GaI2dMJHsaw/bCZftRtrPlc1TmafDjQhrqSofXLJlAE=;
+        b=rSyemC99kaaBSF4WGEZcQPemwhazAAjCnyODti6kkpjGFj0Nnurvb/F31qP1lG7k8s
+         QbbKBOflwwTJ4qwbKWH9usC4WMLoVPNr6RYHW45IQTH3nRx9IwrgqR/Q6H7o918WYFp3
+         Bn2DLeosE5dpJ4aZ54OwIsvBTbPaQb84oroHiGew+c+Nd8anW/MwivR9utFlMlQpLpAv
+         7i5pEJ8uJRr8YmV9bMsEj743sNTGWgoAD6/yowpN1FvpIg+nvQT8GRP4im9gAXnEcymw
+         nezEasrlgBKY9wZrK9iFaCQWcc8NBOsyYnH6qxHoOZmWYBSkHPN4IE/iZ+6jadI+yt5H
+         Rkdw==
+X-Gm-Message-State: AOJu0YwYqSfXSo4bBuLtCBxKa90qgVXB4SOURnvUVC8KeGO2lYd9x4eR
+	jZW29cnx6l2sVOANvoeebXBe0AExxmH3h7YEdUCBVQo/zm/oVZ7sEfopyHwwf+GngiFUbp6D0HL
+	QSrPVxmfF6C/hVta7m4xsMbhEwNm+oj8=
+X-Gm-Gg: AR+sD13pf1rqPOQRl1xNDc7xvP6hERglpMiuO6N/sSFdXvqJNKKN4dwapOlOqE8VSpA
+	XRDY0tbxwosTjcMXHbkhodjn5wbzbb7xjz7OzvkifWE0/klfQfkW8nfkeypD6INSWfDVRWdC7zv
+	14HBDwVRhVM92EjaA8Ww3e5Vovb9wusw8i+ptn2gXjMM5QetKLITExuxlaqjXz75OfNmpvcw+CU
+	ymfia9Zo+2AADF1FNdS1OnmhWx1crn8LvNtUmn3lFl51OIcoSyb9J092yOfLmqi1pxGP+CoQLYE
+	uUStV82ar67L4uOr2sLLYXjg8op4pqcO9VOgPWel3dAMuhoUXAXTZXQ=
+X-Received: by 2002:a05:690c:c504:b0:81e:8577:d044 with SMTP id
+ 00721157ae682-820228819cdmr95903857b3.35.1786036962354; Thu, 06 Aug 2026
+ 10:22:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260805210427.3218326-1-memxor@gmail.com> <20260805210427.3218326-5-memxor@gmail.com>
+In-Reply-To: <20260805210427.3218326-5-memxor@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 6 Aug 2026 10:22:31 -0700
+X-Gm-Features: AUfX_mx925P_wPZ0lD92bDpFSss3O_fXaCtyDui3LQrwzdrzz8oTp5TRpcM3Uz4
+Message-ID: <CAMB2axOdf7jXcF2+esZqwUVXY407yu7XnkioJXnSU3b0ZsPzUg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 04/13] bpf: Support __arena and
+ __arena__nullable kfunc argument suffixes
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 06 Aug 2026 19:22:29 +0200
-Message-Id: <DKI19BJDCMA0.2MURYUXG6LTXD@gmail.com>
-To: "Mahe Tardy" <mahe.tardy@gmail.com>, "Song Liu" <song@kernel.org>
-Cc: <bpf@vger.kernel.org>, <andrew+netdev@lunn.ch>, <andrii@kernel.org>,
- <ast@kernel.org>, <daniel@iogearbox.net>, <davem@davemloft.net>,
- <eddyz87@gmail.com>, <edumazet@google.com>, <john.fastabend@gmail.com>,
- <kuba@kernel.org>, <liamwisehart@meta.com>, <martin.lau@linux.dev>,
- <pabeni@redhat.com>, <netdev@vger.kernel.org>, <sdf.kernel@gmail.com>,
- <ameryhung@gmail.com>, <kuniyu@google.com>
-Subject: Re: [PATCH bpf-next v3 2/5] bpf: Add ksock kfuncs
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260804164652.296919-1-mahe.tardy@gmail.com>
- <20260804164652.296919-3-mahe.tardy@gmail.com>
- <CAPhsuW7=6Wy31ZKqUiwOOPJA7-39y_DtJXBO8BFj+OUfgnzRWg@mail.gmail.com>
- <anTCmv1esr3CWfSf@gmail.com>
-In-Reply-To: <anTCmv1esr3CWfSf@gmail.com>
 
-On Thu Aug 6, 2026 at 7:21 PM CEST, Mahe Tardy wrote:
-> On Tue, Aug 04, 2026 at 09:55:44PM -0700, Song Liu wrote:
->> On Tue, Aug 4, 2026 at 9:47=E2=80=AFAM Mahe Tardy <mahe.tardy@gmail.com>=
- wrote:
->> [...]
->> > +__bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data=
-,
->> > +                              u32 data__sz)
->> > +{
->> > +       struct msghdr msg =3D {
->> > +               .msg_flags =3D MSG_DONTWAIT,
->> > +       };
->> > +       struct kvec iov =3D {
->> > +               .iov_base =3D (void *)data,
->> > +               .iov_len =3D data__sz,
->> > +       };
->> > +       int ret;
->> > +
->> > +       if (!bpf_ksock_has_user_task_context())
->> > +               return -EOPNOTSUPP;
->> > +
->> > +       /* Early check for UDP. Exact limits enforced by kernel_sendms=
-g(). */
->> > +       if (data__sz > IP_MAX_MTU)
->> > +               return -EMSGSIZE;
->> > +
->> > +       if (current->in_bpf_ksock_send)
->> > +               return -EBUSY;
->>
->> Returning EBUSY is not ideal. Can we avoid recursion by disallowing
->> calling bpf_ksock_send from certain hooks? You can find examples
->> check_kfunc_call() or check_special_kfunc(). This probably means
->> we need to grow special_kfunc_list, which is not ideal.
+On Wed, Aug 5, 2026 at 2:05=E2=80=AFPM Kumar Kartikeya Dwivedi <memxor@gmai=
+l.com> wrote:
 >
-> This is actually a really nice feedback. I didn't know we could add a
-> filter per attach BTF ID. This resolves the issue that the send kfunc
-> calls security_socket_sendmsg so we can remove all the recursion
-> protection and struggles, it's rejected at verifier time.
+> From: Tejun Heo <tj@kernel.org>
 >
-> The filter now looks like this, I'd send this in the next version:
+> Passing an arena pointer to a kfunc takes two steps today. There is no
+> arena pointer argument type, so the pointer crosses the boundary as a
+> bare scalar, and the kfunc then offsets it by the arena base and casts
+> it before it can touch the memory. Every such kfunc open-codes the same
+> translation.
 >
-> BTF_ID_LIST_SINGLE(bpf_lsm_socket_sendmsg_id, func, bpf_lsm_socket_sendms=
-g)
+> Add the __arena and __arena__nullable argument suffixes to make this more
+> convenient. The kfunc declares the parameter by its real pointer type
+> and dereferences it directly, with the JIT rebasing the value at the
+> call site, rN =3D kern_vm_start + (u32)rN. No bounds check is needed: the
+> u32 offset stays within the guard-padded arena kernel mapping, and a
+> fault on an unpopulated page recovers through the per-arena scratch
+> page. A suffixed argument accepts a PTR_TO_ARENA or scalar register,
+> matching global subprog arena arguments.
 >
-> static int bpf_ksock_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_=
-id)
-> {
-> 	if (!btf_id_set8_contains(&ksock_kfunc_btf_ids, kfunc_id))
-> 		return 0;
+> __arena rebases unconditionally, so the kfunc never sees NULL and a
+> value with zero in the low 32 bits arrives as the arena base.
+> __arena__nullable preserves NULL for optional arguments by skipping the
+> rebase when the truncated value, arena offset 0, is zero. Keeping the
+> plain form NULL-free saves the NULL test on every call.
 >
-> 	if (prog->type =3D=3D BPF_PROG_TYPE_SYSCALL)
-> 		return 0;
->
-> 	if (prog->type =3D=3D BPF_PROG_TYPE_LSM &&
-> 	    prog->aux->attach_btf_id !=3D bpf_lsm_socket_sendmsg_id[0])
-> 		return 0;
->
-> 	return -EACCES;
-> }
->
-> I don't think I need to touch anything else. I'll adjust the tests
-> according to this. Thanks Song.
->
+> The double separator makes the annotations composable:
+> __arena__nullable also ends in __nullable. Match the composite suffix
+> first when classifying kfunc arguments and function-model flags so it
+> retains arena semantics while carrying the nullable flag.
 
-Yep, using a kfunc filter should be enough.
+Since __arena__nullable will match is_kfunc_arg_arena() case and go
+through JIT + regno check, and get its PTR_MAYBE_NULL anyway. How
+about just keep it as __arena_nullable to simplify the patch?
 
->>
->> @Kumar, do you have strong objection that we grow special_kfunc_list
->> for this use case?
->>
->> Thanks,
->> Song
->>
->>
->> > +
->> > +       current->in_bpf_ksock_send =3D true;
->> > +       ret =3D kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
->> > +       current->in_bpf_ksock_send =3D false;
->> > +
->> > +       return ret;
->> > +}
->> > +
->> > +__bpf_kfunc_end_defs();
+1. No need to introudce is_kfunc_arg_arena_nullable() and changes in
+is_kfunc_arg_nullable()
+2. is_kfunc_arg_arena() returns btf_param_match_suffix(btf, arg,
+"__arena_nullable") || btf_param_match_suffix(btf, arg, "__arena");
 
+[...]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b62e77949542..2b7f6f6bbe76 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -10909,9 +10909,16 @@ static bool is_kfunc_arg_refcounted_kptr(const s=
+truct btf *btf, const struct btf
+>         return btf_param_match_suffix(btf, arg, "__refcounted_kptr");
+>  }
+>
+> +static bool is_kfunc_arg_arena_nullable(const struct btf *btf,
+> +                                       const struct btf_param *arg)
+> +{
+> +       return btf_param_match_suffix(btf, arg, "__arena__nullable");
+> +}
+> +
+>  static bool is_kfunc_arg_nullable(const struct btf *btf, const struct bt=
+f_param *arg)
+>  {
+> -       return btf_param_match_suffix(btf, arg, "__nullable");
+> +       return !is_kfunc_arg_arena_nullable(btf, arg) &&
+> +              btf_param_match_suffix(btf, arg, "__nullable");
+>  }
+
+No need for the changes above.
+
+>
+>  static bool is_kfunc_arg_nonown_allowed(const struct btf *btf, const str=
+uct btf_param *arg)
+> @@ -10929,6 +10936,12 @@ static bool is_kfunc_arg_irq_flag(const struct b=
+tf *btf, const struct btf_param
+>         return btf_param_match_suffix(btf, arg, "__irq_flag");
+>  }
+>
+> +static bool is_kfunc_arg_arena(const struct btf *btf, const struct btf_p=
+aram *arg)
+> +{
+> +       return is_kfunc_arg_arena_nullable(btf, arg) ||
+> +              btf_param_match_suffix(btf, arg, "__arena");
+
+return btf_param_match_suffix(btf, arg, "__arena_nullable") ||
+        btf_param_match_suffix(btf, arg, "__arena");
+
+[...]
