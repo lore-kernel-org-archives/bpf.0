@@ -1,160 +1,146 @@
-Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6663479889
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 15:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9A746DFF2
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 15:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786028483; cv=none; b=sZaoFt6w4jgiE2jax1L7Ya22Gr/0FEC3/1NhEZdPK73aXws5BZsGSUK+Q0dVYOgZ4awsuRxes57sxz7UGTFTdIqsa9hrOqXos+QMiRsgT1eZDGv9WVn3N7/oK0M5MjFGt1WirPC8pnrRFFnaM6olKiXtdqKO+43dLZ/KhTK3JBk=
+	t=1786028503; cv=none; b=WVCSIU5xMjHCCdnY2yu/BshcEZ2++wWnAm6+YkvcUx/7jAEeuPkXLrKk6GAPUkneR/mRCeIZ9sMKdJ4wL+9FTqy0ZeNuRgf/ZG6gZ9nVoQOrUf9j0mzv7E+pavxPnpzoTzkZe2QKMlzGm+HP8Y69XtqURZibXLN/7h9iYJvM5P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786028483; c=relaxed/simple;
-	bh=Y99ilbLrRENRwJW/P4xjAwZSFPBHEC9V6LB/IkSVoe8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=kOTBgflnxcFlIB6FKD1RW6hHaNgCBGvQG4kr1YLDeof7LA+6/ijz7gSw42hcDRIgCcjNt5H/pvebdBUPXfpqoWVXyGDRNL+KN/h5L2NVfTUPi8NeSXXKU+WeTF14M1xiKI+nl/S9dIo7DgyuRUwnkbJcvUf49nv9CA/90tdeeWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P+oBtx4j; arc=none smtp.client-ip=74.125.225.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786028503; c=relaxed/simple;
+	bh=0iugY0XpCy1T76NJBDJj3Bb/5qtMaUupLY+llj0jkmA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mp788pPKvkRyURXJZkWI+40h69Du8zusHIztS5veFe6ldsDfHf8Y//sh6F7lw35xi6PfuGeX7KYXA1JpoA0eSuTrVa4abSWquqtfLHNNu+SW5VjKzaQGofZI/oCiT9hazv2NeA96sQkXaxIGpVVZxG0a0xja7f6YdhGQtc/c/Jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyPUyQlZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P+oBtx4j"
-Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-473ba029526so321378f8f.0
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 08:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786028480; x=1786633280; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=dioGFzjSs7KaCLGjqP+oJJAaenl4kyHQ52JQwiLek4Y=;
-        b=P+oBtx4jbjDsnp764e/9NP0YE7aPqkGqrINCFmGDwQf1tKB2guJqb1etCjsWADYoMz
-         Jitx7iSr9hFEX1/Ns5Vovq8cnOBMFM5PYqCPtY8SYTDRmP5/Fhn5oRWCxI+KgknvQcL4
-         p+bNmEbzVIY6h+PW3qedOqrctG/FAzveTSRElwj+qzRSCDr9EcyYh39BVFYY6/yU6H0I
-         cJCdo9TB0jZZ2uP+i2RuQ7VGG2up/o8HQlt3Oe2mCCiF1U3QbqH3FGpbgJQu5HVFEs2s
-         NsBoB7p5YeLpViQAfDbmLXPnQxGzgaliKhwVLDa3G4xDaSdjhG4+KRD7VwUah7FQwce8
-         ltZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786028480; x=1786633280;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dioGFzjSs7KaCLGjqP+oJJAaenl4kyHQ52JQwiLek4Y=;
-        b=KlPRWQYcNbLGDc28JFD3e3h/z1lvT9p/8twoYpbGnlAkVfAJ2De5BqzvXbFoDjrYVP
-         ugcRlXef2ZLpuu41L+wxfMzaPG8zJ0kqmQmmeY1H80pOtSYFCCOEGp9EvU3/hj8ctV1B
-         SXplXinhyWyNTAz7C5FvHvcmgw4Np+AygCYR7gYfiKPozRlPAe6AVyKietZDjl3FWec7
-         V4t9x3zdGeZinsgBpgAxxKwCLeSnCYBNM8s4a7i/Dg6jvPq+EooaIZK4gBEeZ5u2NYwx
-         qR8S6YmAA8nDCBLZ6n4QiLMrXDLbzlHh4HGiCNETjrcd8PAR8Z3gO8i42z0w5XR1mxKy
-         Tdwg==
-X-Forwarded-Encrypted: i=1; AHgh+RoG1ekcQslislblsCXvdGjhoczKcBhM//bDplmmHYVkc4WoOTsV5++fK3iZGFETj6cmxeo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrjUBFD84HtzUagxY3fou4G6e0RlfP1NL9BRgdbC2UPwt1hoJN
-	CP8BUoXBooMMMgf43cXakWPTXZBm5mh874tAZqgMzoWo/A8QXf659/5O
-X-Gm-Gg: AR+sD12YA+0RELJHiZDfPEsmkF7lpwAp/xpEwfrKKtGvdXDaQR3Iy3F2nJH/n4dCECC
-	Znke2dmv5mkcu8kJdJLRmMQxfB0juUfpcqFeca/DtBvQLMNmzWFUisOchdw0RhsvLPDzx1Hcg1i
-	KH6UQBmhwzN8AwBBakGjFf4vMIpl4UrgMWG+XytgAoFQuo8ykx/L8wD3Lwx/SoezGhJzLP0zYT8
-	ePcX/RviGy9mMU74dV3tLWYyYpy4/ueCRLhYiDQLboKhH+0bUcdUYkgxv6qaZ9vzEI1mCyB+qsw
-	DpPs5pVvg997ZXw5d8diOm9d0FuG12iYf6iAtPHA4A3nXw6KMTfzMG+dZVmqbL0EGpYcVuEGSHL
-	4mgE6VgbgcMceTpOpolA1V/x0Z2qMX+H1PIRA0EPfbRW23ZG4aZhg0OsTGPsTzkXxz46/iFlJ/Q
-	RPqAdLC8P3ttDO+RnR1o8TWoLs5BCiyWCIfHd1DnzqqBJXDU34UXK0rbAv+4uW5/JJbgvD0iTg5
-	/a8HHX/Yop7HBmarnR4/opqnVmjhrR+sptDI+JwwpnGfnOBdGqFnrft4cfnxna97yqtBvK+MCvi
-	LkHctInvIKSCt+60kQsXPgkPVtI=
-X-Received: by 2002:a5d:5d89:0:b0:47f:ece1:1eca with SMTP id ffacd0b85a97d-47ff8584853mr6549157f8f.1.1786028479664;
-        Thu, 06 Aug 2026 08:01:19 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff79b819dsm7067045f8f.16.2026.08.06.08.01.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 08:01:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iyPUyQlZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B834E1F000E9;
+	Thu,  6 Aug 2026 15:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786028501;
+	bh=e0jkZ3Gf6GhiYldqqZjpJHT9UzjLICgOhSpjoXm2/g8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=iyPUyQlZrX//0gawY8RvBYSKfzMuGjDX+Fw2lic38Yh4qrb+lkkTnAjDNpOKzJnTm
+	 IyULJDbX7yiB2HDqZtiRD1pazsVdNvMg9lmHnxmx0eFoJpUEdxzNhHpdCY9Cq2aDpL
+	 G1pfAPJat9TaamgmrbXzrNniSJijVneTrJ41Mi8sMJKiSzVBkTSfpjSIagrRWJg/vj
+	 3LLpqsc865crBGjj2CioDYjIpzrR3VG84slItAi/t/20EBHpmocBjyUQxCGOBLaulj
+	 /RAXJP46GfjLIaHPd/9a78/uCEqBmG1XcX1XyqHPWBA2FRZUbe8Xib+zPzls0hzGOS
+	 tOLX0PX82xR9g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/6] bpf: Reject load-acquire from pointers
+ requiring fault protection
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260806143924.319238-1-daniel@iogearbox.net>
+References: <20260806143924.319238-1-daniel@iogearbox.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 06 Aug 2026 15:01:41 +0000
+Message-Id: <20260806150141.B834E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 06 Aug 2026 17:01:18 +0200
-Message-Id: <DKHY982BEJN7.2ZUBJJEXR8X7B@gmail.com>
-Cc: <puranjay@kernel.org>, <paulmck@kernel.org>
-Subject: Re: [PATCH bpf-next 0/2] bpf: Track overlapping RCU protection
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Ning Ding" <dingning04@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260805233940.3966981-1-dingning04@gmail.com>
- <DKHQUVB5TV0R.1OLK7GG1APAOR@gmail.com>
- <DKHR95T6P1ZC.G09YF6M1QEL2@gmail.com>
-In-Reply-To: <DKHR95T6P1ZC.G09YF6M1QEL2@gmail.com>
 
-On Thu Aug 6, 2026 at 11:32 AM CEST, Kumar Kartikeya Dwivedi wrote:
-> On Thu Aug 6, 2026 at 11:13 AM CEST, Kumar Kartikeya Dwivedi wrote:
->> On Thu Aug 6, 2026 at 1:39 AM CEST, Ning Ding wrote:
->>> Preemption-disabled and IRQ-disabled regions provide RCU protection, bu=
-t
->>> the verifier does not account for them. Current implementation can inva=
-lidate
->>> a task kptr while another RCU source remains active, or keep it valid
->>> after the final source ends.
->>>
->>> Track these regions and invalidate RCU-protected pointers only after th=
-e
->>> last protection ends. Add task kptr tests for overlapping protection an=
-d
->>> final-exit rejection.
->>>
->>> This follows review of the applied spin-unlock fix series [1].
->>>
->>> Tested in QEMU/KVM:
->>>   ./test_progs -t task_kfunc
->>>   ./test_progs -t preempt_lock
->>>   ./test_progs -t irq
->>>
->>
->> Overall, looks good. There are various failures in CI, so you might need=
- to
->> update or adjust existing selftests.
->>
->> Make sure to include selftest changes for _existing_ tests within the ke=
-rnel
->> commit making changes, so as to preserve bisection. Your extra tests sho=
-uld
->> still go in a separate commit.
->>
->> Also, do we need that was_in_rcu_cs logic for bpf_spin_lock(). Would it =
-be
->> possible to drop it and do it the same way you've done it for other case=
-s?
->> If that makes sense, I would fold that cleanup in the first patch as wel=
-l.
->>
->> https://patchwork.kernel.org/project/netdevbpf/patch/20260805233940.3966=
-981-2-dingning04@gmail.com
->>
->> pw-bot: cr
->>
->
-> I think from cursory look, the reason is that we forced any MEM_RCU point=
-er to
-> be invalidated before, even when program wasn't sleepable, which does not=
- happen
-> now. The failing test used a non-sleepable program. So making it sleepabl=
-e should
-> preserve the failure case. In some ways, this is probably an improvement =
-over
-> current behavior.
->
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-I fixed this up since it was minor and applied the series. Thanks.
+Pre-existing issues:
+- [High] The verifier fails to convert BPF_LDX instructions to BPF_PROBE_ME=
+M when paths with PTR_TO_MEM and PTR_TO_BTF_ID | PTR_UNTRUSTED merge, allow=
+ing unhandled page faults.
+--
 
->>> [1] https://lore.kernel.org/r/20260803112615.3362122-1-dingning04@gmail=
-.com
->>>
->>> Ning Ding (2):
->>>   bpf: Account for preempt and IRQ state in RCU protection
->>>   selftests/bpf: Test overlapping RCU protection
->>>
->>>  kernel/bpf/verifier.c                         |  13 +-
->>>  .../selftests/bpf/prog_tests/task_kfunc.c     |   6 +
->>>  .../selftests/bpf/progs/task_kfunc_common.h   |   2 +
->>>  .../selftests/bpf/progs/task_kfunc_failure.c  |  49 ++++++
->>>  .../selftests/bpf/progs/task_kfunc_success.c  | 147 ++++++++++++++++++
->>>  5 files changed, 214 insertions(+), 3 deletions(-)
->>>
->>>
->>> base-commit: 11c1e836710dcba03e50454a4eedfdbaf8d3050e
+--- Patch [1]: [PATCH bpf-next 1/6] bpf: Reject load-acquire from pointers =
+requiring fault protection ---
+commit 7bfb4a68d477eb7f566fc7d106ee4703a225c192
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
+bpf: Reject load-acquire from pointers requiring fault protection
+
+This patch prevents BPF_LOAD_ACQ instructions from being used with
+pointer types that require exception table entries for fault protection.
+It rejects untrusted pointers and bare PTR_TO_BTF_ID pointers since the
+JIT does not emit exception tables for load-acquires, which could result
+in a kernel panic on a page fault.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index d952bd95cbb7b..78637faf13508 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -4921,6 +4921,30 @@ static bool is_arena_reg(struct bpf_verifier_env *=
+env, int regno)
+>  	return reg->type =3D=3D PTR_TO_ARENA;
+>  }
+> =20
+> +static bool is_load_acq_unsafe(struct bpf_verifier_env *env, int regno,
+> +			       struct bpf_insn *insn)
+> +{
+> +	const struct bpf_reg_state *reg =3D reg_state(env, regno);
+> +
+> +	/*
+> +	 * A BPF_LOAD_ACQ is not rewritten to a BPF_PROBE_MEM load by the
+> +	 * verifier, unlike a regular BPF_LDX. The JIT would emit a plain load
+> +	 * with no exception table entry, so a fault (e.g. NULL deref) crashes
+> +	 * the kernel instead of being handled.
+> +	 *
+> +	 * Reject the source pointer types that a BPF_LDX would have had that
+> +	 * fault protection applied to, i.e. the ones bpf_convert_ctx_accesses()
+> +	 * turns into BPF_PROBE_MEM: a bare PTR_TO_BTF_ID and any PTR_UNTRUSTED
+> +	 * pointer (untrusted btf ids, untrusted MEM_ALLOC, rdonly untrusted
+> +	 * memory). A PTR_TRUSTED pointer is not among them, is not converted,
+> +	 * and stays allowed. Same for the other flagged PTR_TO_BTF_ID variants
+> +	 * (MEM_ALLOC, MEM_RCU, ...), hence the exact match on the base type.
+> +	 */
+> +	return insn->imm =3D=3D BPF_LOAD_ACQ &&
+> +	       (reg->type =3D=3D PTR_TO_BTF_ID ||
+> +		(type_flag(reg->type) & PTR_UNTRUSTED));
+
+[Severity: High]
+This is a pre-existing issue, but since the comment mentions pointer types
+that bpf_convert_ctx_accesses() turns into BPF_PROBE_MEM, does it currently
+miss handling PTR_TO_MEM | PTR_UNTRUSTED?
+
+When paths with PTR_TO_MEM and PTR_TO_BTF_ID | PTR_UNTRUSTED merge,
+save_aux_ptr_type() produces PTR_TO_MEM | PTR_UNTRUSTED without MEM_RDONLY:
+
+kernel/bpf/verifier.c:save_aux_ptr_type() {
+    ...
+			if (is_ptr_to_mem(type) || is_ptr_to_mem(*prev_type))
+				merged_type =3D PTR_TO_MEM;
+			else
+				merged_type =3D PTR_TO_BTF_ID;
+			if ((type & PTR_UNTRUSTED) || (*prev_type & PTR_UNTRUSTED))
+				merged_type |=3D PTR_UNTRUSTED;
+			if ((type & MEM_RDONLY) || (*prev_type & MEM_RDONLY))
+				merged_type |=3D MEM_RDONLY;
+    ...
+}
+
+However, in kernel/bpf/fixups.c:bpf_convert_ctx_accesses(), it seems this
+exact type combination is not converted to BPF_PROBE_MEM because the switch
+only handles the MEM_RDONLY case:
+
+kernel/bpf/fixups.c:bpf_convert_ctx_accesses() {
+    ...
+		case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
+		case PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED:
+			if (type =3D=3D BPF_READ) {
+    ...
+}
+
+Could this lead to an unhandled page fault and kernel panic if an untrusted
+pointer and a valid writable memory pointer (like from a dynptr) reach the
+same BPF_LDX instruction, bypassing the fault protection?
+
+> +}
+> +
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806143924.3192=
+38-1-daniel@iogearbox.net?part=3D1
