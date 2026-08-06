@@ -1,92 +1,160 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7077448A2C7
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 17:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3489537AA78
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 17:14:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786035945; cv=none; b=WVToOt0gtYt75bXffVt8r4nBw2BQqchcqjLWe5pH762Af1n+GvzmBtV2Kr5+9EZXJCYEhz6oSK3YBbC42OJ2ATddTmaRkczskdfLquSHdW3ZDLiQ1BWhU6loUEr9YLar7t6IN3BwCWRY1TuTTATp6/4PryfQJ9y0ORXjEK+L5dQ=
+	t=1786036450; cv=none; b=uFwph/onWMCQLIZjJnfPcjY+2J4xGzkkd00Bgt4rW51aoa4X6CoQ8sc0kQdgZFX1vk90GF1GW0JP0WpntnoCnQoqipejP9wDeCI0cBisBgUVURBEgqU/JO5L8aAi6kUCZf3sfyIi683QGhwOtDmHl6emijDeh5ffjcfBwegdAZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786035945; c=relaxed/simple;
-	bh=mDQICqf/qjK9CxNtPCAaFX4TujTI+hbPy/U0sLlR2xw=;
+	s=arc-20240116; t=1786036450; c=relaxed/simple;
+	bh=0wAtpdvWXEG21Xa/Ub+S+luMyQM6s7O66ygfOuPCmn0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mUyLHS4jnaEoXa6rjhf175s2g984vCQ7fNkjzSj0chWcHhZQE0FaYzABTMkvJBmKJTcjZeMZdvGs/W1f1L0R65g82MymMefnRN1N7dsxM0jKbdZpoMtbinLl2LJl7JxbGVteLVSHVef/e7n82E5tmhfu8G+p9QKVpLmxkpotnW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Assv4qYk; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=MWgJzm2tjIzTMW5kUSnt3Bl3xztO6WGlB+JwwCqiPzkhSNdHK5+j2qbb1B7yz5AG9xi0bWeTH7jt3sXlXE0QoG6dec12Zr0LeHiBOiDe0q7asn4ywemSTShXgy8+XW6XKE5H5G7DTKo2Q4DtsW7ypAjAR8c+B5PoSsyjWYkVpnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CW7JmFhH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Assv4qYk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC13F1F00A3A;
-	Thu,  6 Aug 2026 17:05:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CW7JmFhH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF14E1F000E9;
+	Thu,  6 Aug 2026 17:14:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786035944;
-	bh=mr+nqRyutdKmKZo9iA96h0d/LSohI3pHaq9hWm2AGr8=;
+	s=k20260515; t=1786036449;
+	bh=RJFVwqWzwRkJBU9Fz7dFyX44JWzadu+1tDP7+H5B2Go=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Assv4qYktWVy+jMYKLpAI7oveDsIUSZy/ASn8o1Nc3SNA3J0Jpuc+WXp6H2VmaetN
-	 sGh2Yej+n/mcj7dUrLYKyMRe2+z/v3jYFktt8Fq506ChWblTRpz06TIE25CPZz07WV
-	 k82taLH4ORJRblTyXjZdVKDGPhAlTEWP3mXWvVWrjMVV/fhpZJnT4YU+2VD/zJMbMm
-	 0KQE9/0asHx+hg0ML8B/otHZY7P4uoUryeRIvuKzBo4MVaKCmsJ6sJWrMyPkIQM+du
-	 iJnjX2z2VDYRUqwsgBnj+pA73mQXVF9oMITEWjEhmwInR6LFXK7CZdVC1uwVKLYYwE
-	 Ie+P8F2GYaGIw==
+	b=CW7JmFhH/FOB/XXMylKVLp/w406gyGwMyUX9k+ttDRUL3wDZdvULYv8FsBgLkHhIj
+	 bn7SCmH1PjLog30IOGc7cxEVWvegnhvWNhpwxZsbWJxs1235nO7gSDX0vFWu17niqB
+	 nGzhU0e35fO/l+sNwJ8RhuRekeV/SBGHDUClPwhG82NxNpLSa511R2arUglVV4i82p
+	 CllNqK7mM7Ia+sAaqxAkFXdl8Y4XxFPAi9gwaEF3sijjrpadWGGaB/lAIDX6mc8s9n
+	 KB273iVWXT1hdq8j+gPjM1r5BSCnHLzlaOskRvPO6y+qd5T77RFHIwD73MX8diTXqg
+	 P2UOjGnB9tvDQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v11 04/10] libbpf: Probe percpu data feature
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Fix sleepable context checks and
+ remove in_sleepable helper
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260806163125.11172-5-leon.hwang@linux.dev>
-References: <20260806163125.11172-1-leon.hwang@linux.dev>
- <20260806163125.11172-5-leon.hwang@linux.dev>
+In-Reply-To: <20260806164049.3158887-2-memxor@gmail.com>
+References: <20260806164049.3158887-1-memxor@gmail.com>
+ <20260806164049.3158887-2-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 17:05:43 +0000
-Message-Id: <20260806170543.EC13F1F00A3A@smtp.kernel.org>
+Date: Thu, 06 Aug 2026 17:14:08 +0000
+Message-Id: <20260806171408.EF14E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] The newly added feature probe `FEAT_PERCPU_DATA` is never used t=
-o make capability decisions.
+
+New issues:
+- [Medium] Replacing `in_sleepable()` with `in_sleepable_context()` in the =
+first sleepable check renders the second check dead code and degrades the v=
+erifier error message.
+
+Pre-existing issues:
+- [High] Incomplete fix: Bypassed sleepable context restrictions on the `cs=
+s_task` iterator for LSM and TRACE_ITER BPF programs allow 'sleeping in ato=
+mic context' bugs on PREEMPT_RT.
 --
 
---- Patch [4]: [PATCH bpf-next v11 04/10] libbpf: Probe percpu data feature=
- ---
-commit 925264284b89c241360ff401bd914f9c19997613
-Author: Leon Hwang <leon.hwang@linux.dev>
+--- Patch [1]: [PATCH bpf-next v1 1/2] bpf: Fix sleepable context checks an=
+d remove in_sleepable helper ---
+commit fe09e0b3c58d1fc2d9c5ba46b9ee32ba789423ae
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-libbpf: Probe percpu data feature
+bpf: Fix sleepable context checks and remove in_sleepable helper
 
-This commit adds a feature probe to detect if the kernel supports global
-percpu data. It aims to allow libbpf to fail predictably when this feature
-is unavailable on older kernels.
+This patch updates several call sites to use in_sleepable_context() instead
+of in_sleepable() to ensure that sleepable kfuncs and iterators are rejected
+when called from non-sleepable contexts, such as inside RCU read-side
+critical sections. It also removes the in_sleepable helper entirely to
+prevent future misuse.
 
-> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-> index b7e388f99d0bb..ef9581c113035 100644
-> --- a/tools/lib/bpf/features.c
-> +++ b/tools/lib/bpf/features.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e6233c0081d10..3dadf2b33a367 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
 [ ... ]
-> @@ -707,6 +739,9 @@ static struct kern_feature_desc {
->  	[FEAT_BPF_SYSCALL_COMMON_ATTRS] =3D {
->  		"BPF syscall common attributes support", probe_bpf_syscall_common_attr=
-s,
->  	},
-> +	[FEAT_PERCPU_DATA] =3D {
-> +		"kernel supports percpu data", probe_kern_percpu_data,
-> +	},
->  };
+
+> @@ -12083,7 +12078,7 @@ static bool check_css_task_iter_allowlist(struct =
+bpf_verifier_env *env)
+>  			return true;
+>  		fallthrough;
+>  	default:
+> -		return in_sleepable(env);
+> +		return in_sleepable_context(env);
+>  	}
+>  }
+
+[Severity: High]
+This is a pre-existing issue, but does this bypass the newly applied sleepa=
+ble
+context check for LSM and TRACE_ITER programs?
+
+Looking at the full function:
+
+static bool check_css_task_iter_allowlist(struct bpf_verifier_env *env)
+{
+	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
+
+	switch (prog_type) {
+	case BPF_PROG_TYPE_LSM:
+		return true;
+	case BPF_PROG_TYPE_TRACING:
+		if (env->prog->expected_attach_type =3D=3D BPF_TRACE_ITER)
+			return true;
+...
+
+If an LSM or BPF_TRACE_ITER program explicitly enters a non-sleepable
+context (e.g., via bpf_preempt_disable()) and then initializes a css_task
+iterator via bpf_iter_css_task_new(), they return true unconditionally.
+
+Because the css_task iterator acquires css_set_lock (which maps to a sleepa=
+ble
+rt_mutex on PREEMPT_RT), could this cause a fatal lockdep splat or "sleeping
+in atomic context" kernel panic on PREEMPT_RT kernels?
+
+[ ... ]
+
+> @@ -13090,7 +13085,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+>  	}
+> =20
+>  	sleepable =3D bpf_is_kfunc_sleepable(&meta);
+> -	if (sleepable && !in_sleepable(env)) {
+> +	if (sleepable && !in_sleepable_context(env)) {
+>  		verbose(env, "program must be sleepable to call sleepable kfunc %s\n",=
+ func_name);
+>  		return -EACCES;
+>  	}
 
 [Severity: Medium]
-Are there any callers that actually query this new feature probe?
+Does replacing this check render the second sleepable check in this function
+unreachable?
 
-The commit message notes that libbpf can make capability decisions early
-and fail predictably when global percpu data is unavailable. However,
-FEAT_PERCPU_DATA appears to only be defined and registered, without being
-queried in the loader code.
+Because sleepable kfuncs are not lock-manipulation kfuncs themselves, the
+context state cannot change between this first check and the second check
+further down in check_kfunc_call():
 
-Is there a missing update to the loader, perhaps using kernel_supports(),
-that checks this flag before attempting to load percpu global data?
+	if (sleepable && !in_sleepable_context(env)) {
+		verbose(env, "kernel func %s is sleepable within %s\n",
+			func_name, non_sleepable_context_description(env));
+		return -EACCES;
+	}
+
+If a user writes a sleepable BPF program, enters a non-sleepable context,
+and then calls a sleepable kfunc, the verifier will exit at the first check
+with the generic "program must be sleepable..." error.
+
+This is factually misleading since the program is sleepable but just inside
+a non-sleepable context.
+
+Is it possible to remove the first check entirely or consolidate them so we
+keep the more accurate context-aware error message?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806163125.1117=
-2-1-leon.hwang@linux.dev?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806164049.3158=
+887-1-memxor@gmail.com?part=3D1
