@@ -1,184 +1,174 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4785485CF7
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 17:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786036967; cv=pass; b=ukFV9oiSmaO2ZvHVWpPQKz5VXiG1HKpDbcrKTxPJQtxrbebUfmgWE9ewbH4gxgMggd/9+KjCmkB8NdhFkKBCbHqiXuU36G82/oFgwFflF1pRuxzsNdV9lwmaduJmru4JZncJcnB+2VkQZBoZdJYsliu5NNqFUfW7slpOA2q2Kf0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786036967; c=relaxed/simple;
-	bh=6pPO7myojBmd3GsKjsQOGiu/Sh3uZD/65xy3n1yReF0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ozml3LeIFzthJKvODryKGUzt/eD9s6oIw20dmmNCKkxJOO9WpSq+EAik7dOLBwOmdNKQHJ8AQsdrCbF7zjVM9jJ6uXOXJ/vkapNUrz0/5gr4kihU1Yg1ecTHCZu+lkK+pUXQ4wDipVm2/Mww4GTbwpyP22garH9o1QpdjPrcq/c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R7fPckSq; arc=pass smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE89485CC3;
+	Thu,  6 Aug 2026 17:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786036987; cv=none; b=qWvkSrENTldrTYchcC/5PNSWPHn+kL+9a3VugaHmOGKvEpfJqMLW078ZIDzwcQDtKsbn9PFEwGLe+gS34jQjuBZ970KtxC2ASbb1NGXXFAaac+Ee3/GB0SlfV6kf1hMLDS9GnzGANSMc5wGhXtkEEWub4BAfq9MvPho7HsFly3Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786036987; c=relaxed/simple;
+	bh=5npuHgxLxsnuULOkhbeN5XPhH+R769QvTRjxXlf3Rgc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PWi5RlvZ9MKShzaHos4AzzF/fU4T44krJ27y45caljb/aEYOA7SKJR5WFlkpJzabJf0bZ4QwbUmLlXcKRTqdYhZ9PooN3gDHSCCW/5EWN/Ld1J8G4OPYx9qb5fc7Iy3e/zWf5KJEBFl5idD5jm8lwZbOFbaJz7AAX1Yj/Zg3g3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bIGz+3eO; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R7fPckSq"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-81ed073fed0so32449077b3.0
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 10:22:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786036962; cv=none;
-        d=google.com; s=arc-20260327;
-        b=r28dTa7FKnhkzpF8RLthuoJ1kajO0lPHLmJaZRaCxLlahAJNYjOuaFkhNEYSH9xeWk
-         5msKWV2DBBRpgGjaMPjVMj+j6CrFLku3EfEjh9hjgoRihjw6RUGVUUKoxiYv1mHXt51a
-         w4TsmyiVLbAwyk9JaKNoLRGJIGRXleWkwf6K2TJ8AvfLQ3bbAkhccG1/a6Srs8PNcqDM
-         m4V7QyWOYt4sEO7/IcdpoJN5IokVXUTA8wDBl/KKWWTXW3Br4jLTbOFVYQ42ME0thwkx
-         y5XpEhMM37izU8pJ3Lt8nJqILqAcWWCpwunae6Bm55SerqyABUpi2s1EjU8nR9oSY+qM
-         eT1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GaI2dMJHsaw/bCZftRtrPlc1TmafDjQhrqSofXLJlAE=;
-        fh=7K2qWJ3mUiPSelnihIFryY3l1DriTibHaNVcRL5iMOk=;
-        b=crtkF7jTsPy9AJmrEiZps3LWcG2788Ek8cwcU63uG929zpRIfxlWr1PfuH5Z8INXY5
-         fdagllizZs+nC9yaIxcXr1Dkd4AWypN60JyIoiRKUdZbraBK2Xer8J0EphGwJYoK73Bs
-         SZ/jXQBNWw33vZuaJzP4m11yNOKkwF4LCA6AUOHAoYd/nIMege/+H1B7ee3pnJSKIGpE
-         cUkZgeBuZzQx9uUP0pEMe4p+JIOaIoIAvNtigtRH/H3dEKfXxYJIFPnqpFXsOX7LgQhS
-         scXdMhu6oSeeT7JiAg72pylBrKOPAsARgY/M8MgGikZuuWCAFGhToWiPEJSHoh4zhDbg
-         h8Rw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786036962; x=1786641762; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GaI2dMJHsaw/bCZftRtrPlc1TmafDjQhrqSofXLJlAE=;
-        b=R7fPckSqSzs0H24JeAOdszMF5BfMCM9vaYYjvUXeXKG2qZMToD4JUbGgOpLIUbpAc9
-         +QlybN50G14/BZGFjZcRwALZBHTGGoz7BGrX0IeIYGrLjsj2ZWxKb/b9Lk3WoqfOEIZ2
-         00VK2+ucuo1KHIxG0QPs2UBi3GBCCWh9HVDRbDT9YrTGhK80on4AZ0G+aKYVv9SmWBiF
-         wgvlgurEGUeIsYABLFRsx5e3iF1LVJCA1byi4OdXFM+hxB1kxqmNZg4fb2GOzydhyYM8
-         9ZTUD3b/0NwYvpLEAnmpmiWOpCp4/7JHnlwJvBXv5/VE9cjroh4jGPvR8lFpNiQnpwbW
-         2i2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786036962; x=1786641762;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GaI2dMJHsaw/bCZftRtrPlc1TmafDjQhrqSofXLJlAE=;
-        b=rSyemC99kaaBSF4WGEZcQPemwhazAAjCnyODti6kkpjGFj0Nnurvb/F31qP1lG7k8s
-         QbbKBOflwwTJ4qwbKWH9usC4WMLoVPNr6RYHW45IQTH3nRx9IwrgqR/Q6H7o918WYFp3
-         Bn2DLeosE5dpJ4aZ54OwIsvBTbPaQb84oroHiGew+c+Nd8anW/MwivR9utFlMlQpLpAv
-         7i5pEJ8uJRr8YmV9bMsEj743sNTGWgoAD6/yowpN1FvpIg+nvQT8GRP4im9gAXnEcymw
-         nezEasrlgBKY9wZrK9iFaCQWcc8NBOsyYnH6qxHoOZmWYBSkHPN4IE/iZ+6jadI+yt5H
-         Rkdw==
-X-Gm-Message-State: AOJu0YwYqSfXSo4bBuLtCBxKa90qgVXB4SOURnvUVC8KeGO2lYd9x4eR
-	jZW29cnx6l2sVOANvoeebXBe0AExxmH3h7YEdUCBVQo/zm/oVZ7sEfopyHwwf+GngiFUbp6D0HL
-	QSrPVxmfF6C/hVta7m4xsMbhEwNm+oj8=
-X-Gm-Gg: AR+sD13pf1rqPOQRl1xNDc7xvP6hERglpMiuO6N/sSFdXvqJNKKN4dwapOlOqE8VSpA
-	XRDY0tbxwosTjcMXHbkhodjn5wbzbb7xjz7OzvkifWE0/klfQfkW8nfkeypD6INSWfDVRWdC7zv
-	14HBDwVRhVM92EjaA8Ww3e5Vovb9wusw8i+ptn2gXjMM5QetKLITExuxlaqjXz75OfNmpvcw+CU
-	ymfia9Zo+2AADF1FNdS1OnmhWx1crn8LvNtUmn3lFl51OIcoSyb9J092yOfLmqi1pxGP+CoQLYE
-	uUStV82ar67L4uOr2sLLYXjg8op4pqcO9VOgPWel3dAMuhoUXAXTZXQ=
-X-Received: by 2002:a05:690c:c504:b0:81e:8577:d044 with SMTP id
- 00721157ae682-820228819cdmr95903857b3.35.1786036962354; Thu, 06 Aug 2026
- 10:22:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bIGz+3eO"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 676HIISf3199729;
+	Thu, 6 Aug 2026 17:22:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ZkzLN6
+	jNGwNCKRoBpMoMWfXE9BChgGKfAUaNh02PydU=; b=bIGz+3eOwCKi+U92ykVS4O
+	xsANTDqq7deKJ3AIGbmAhGf7yH2iCjUZKDP8muTY9La7kwXlIxldSlqbCfGYxiEV
+	uxvb4A0TwOHG2MSfi+aS6Eeu9OIOGSHVpQd6SXFg7mmduHaK5uCZ21Z4TLzTSPT7
+	h7Q2GkE71DlPw4a4txn5Yhl54LRqsfB5w7UKN+zCQlLbA9WB0UKWOrmHK9lirsXt
+	DX3xSYjP8QA8Y3KjGfX0exiHreecokqD3zfpcesRS1Zrk2i4WeVuyu6IowdAsk2j
+	cmkBYeBRjW30fUvYE1HmgMIFTzNCmL/M6dxaOKMD/gV6wa5vD5mD4uGdOJkO+nbw
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fs67j167a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 06 Aug 2026 17:22:42 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 676HBFg3021547;
+	Thu, 6 Aug 2026 17:22:42 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fsv4kc6b5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 06 Aug 2026 17:22:42 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 676HMc3x38863150
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 6 Aug 2026 17:22:38 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6AA1420040;
+	Thu,  6 Aug 2026 17:22:38 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C25A52004D;
+	Thu,  6 Aug 2026 17:22:35 +0000 (GMT)
+Received: from [9.124.215.184] (unknown [9.124.215.184])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  6 Aug 2026 17:22:35 +0000 (GMT)
+Message-ID: <d93b4265-3ece-466d-b2a6-83f4bca43bed@linux.ibm.com>
+Date: Thu, 6 Aug 2026 22:52:34 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260805210427.3218326-1-memxor@gmail.com> <20260805210427.3218326-5-memxor@gmail.com>
-In-Reply-To: <20260805210427.3218326-5-memxor@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 6 Aug 2026 10:22:31 -0700
-X-Gm-Features: AUfX_mx925P_wPZ0lD92bDpFSss3O_fXaCtyDui3LQrwzdrzz8oTp5TRpcM3Uz4
-Message-ID: <CAMB2axOdf7jXcF2+esZqwUVXY407yu7XnkioJXnSU3b0ZsPzUg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 04/13] bpf: Support __arena and
- __arena__nullable kfunc argument suffixes
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 4/8] selftest/bpf: Enable verifier selftest for
+ powerpc64
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc: maddy@linux.ibm.com, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        venkat88@linux.ibm.com, yeswanth@linux.ibm.com
+References: <cover.1785906979.git.skb99@linux.ibm.com>
+ <84353363810b8d63e7933391f5c6a2ea46f348e3.1785906979.git.skb99@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <84353363810b8d63e7933391f5c6a2ea46f348e3.1785906979.git.skb99@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODA2MDEzNSBTYWx0ZWRfXxqlDoSW6ODnE
+ mRdJwMpW/FBMgFOsbs3e/A4daUsB15vrSty7BIlIHl3w18mPpPchntLeFyrXGNzhncGXmnGgA1v
+ xlhUPqcnUwSiDlEz0RnfTwEGYswgqPo=
+X-Authority-Analysis: v=2.4 cv=I7VVgtgg c=1 sm=1 tr=0 ts=6a74c2e3 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8
+ a=PSicGNts6pCSyoP5NokA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA2MDEzNSBTYWx0ZWRfX2w+4JDfLxwhK
+ YkbucFPmt/AkYsVYn23f/s5bgatRjh1Oj6yxSmANgVCEXsp9S8ugQ1sQWJkm29rXo3QdwFnd6Rz
+ mGXkjzc0qdyu5v9k1B84w7V+9fegpVo5ztiuS6Ro/ZEuZkJCegzkkFiOyKm5zwQQn4nnQqje8PK
+ aLYvwyojFnJhGBGaNwDPig5G7MN98yYvgj9Ql9XNKou5SPUIGBb6ZU25yeU3I6aWAIQNNwOUgDg
+ oc4i9kTLofEeGqK/4re4oMW0oozMnxM9WJTwCFVG1aZnkSeHxEVSMSAV9ZTv019KJTfMmV4PzZ9
+ T92E4GO911S3YB+JnzXENU926BytDAWdDlOAn8G5UD6DRT1FimakNGdrYI7/Fi3rdH4V1okX+rK
+ BHfEQP6utXcp0nFlXhG2+WDlCXOjVj3nQzt/mYGkfEOUIuSfcZOVPGoIw/EU+Sz12zEyr3LjwAX
+ oGxNKklQDbW8WzWfzcQ==
+X-Proofpoint-ORIG-GUID: LlHsD5TrwVl-MlZGffNHoQW5w4w5urou
+X-Proofpoint-GUID: LlHsD5TrwVl-MlZGffNHoQW5w4w5urou
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-06_01,2026-08-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 impostorscore=0 clxscore=1015 priorityscore=1501 suspectscore=0
+ malwarescore=0 adultscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608060135
 
-On Wed, Aug 5, 2026 at 2:05=E2=80=AFPM Kumar Kartikeya Dwivedi <memxor@gmai=
-l.com> wrote:
->
-> From: Tejun Heo <tj@kernel.org>
->
-> Passing an arena pointer to a kfunc takes two steps today. There is no
-> arena pointer argument type, so the pointer crosses the boundary as a
-> bare scalar, and the kfunc then offsets it by the arena base and casts
-> it before it can touch the memory. Every such kfunc open-codes the same
-> translation.
->
-> Add the __arena and __arena__nullable argument suffixes to make this more
-> convenient. The kfunc declares the parameter by its real pointer type
-> and dereferences it directly, with the JIT rebasing the value at the
-> call site, rN =3D kern_vm_start + (u32)rN. No bounds check is needed: the
-> u32 offset stays within the guard-padded arena kernel mapping, and a
-> fault on an unpopulated page recovers through the per-arena scratch
-> page. A suffixed argument accepts a PTR_TO_ARENA or scalar register,
-> matching global subprog arena arguments.
->
-> __arena rebases unconditionally, so the kfunc never sees NULL and a
-> value with zero in the low 32 bits arrives as the arena base.
-> __arena__nullable preserves NULL for optional arguments by skipping the
-> rebase when the truncated value, arena offset 0, is zero. Keeping the
-> plain form NULL-free saves the NULL test on every call.
->
-> The double separator makes the annotations composable:
-> __arena__nullable also ends in __nullable. Match the composite suffix
-> first when classifying kfunc arguments and function-model flags so it
-> retains arena semantics while carrying the nullable flag.
 
-Since __arena__nullable will match is_kfunc_arg_arena() case and go
-through JIT + regno check, and get its PTR_MAYBE_NULL anyway. How
-about just keep it as __arena_nullable to simplify the patch?
 
-1. No need to introudce is_kfunc_arg_arena_nullable() and changes in
-is_kfunc_arg_nullable()
-2. is_kfunc_arg_arena() returns btf_param_match_suffix(btf, arg,
-"__arena_nullable") || btf_param_match_suffix(btf, arg, "__arena");
+On 05/08/26 11:37 am, Saket Kumar Bhaskar wrote:
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+> 
 
-[...]
+> This patch enables arch specifier "__powerpc64" in verifier
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b62e77949542..2b7f6f6bbe76 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -10909,9 +10909,16 @@ static bool is_kfunc_arg_refcounted_kptr(const s=
-truct btf *btf, const struct btf
->         return btf_param_match_suffix(btf, arg, "__refcounted_kptr");
->  }
->
-> +static bool is_kfunc_arg_arena_nullable(const struct btf *btf,
-> +                                       const struct btf_param *arg)
-> +{
-> +       return btf_param_match_suffix(btf, arg, "__arena__nullable");
-> +}
-> +
->  static bool is_kfunc_arg_nullable(const struct btf *btf, const struct bt=
-f_param *arg)
->  {
-> -       return btf_param_match_suffix(btf, arg, "__nullable");
-> +       return !is_kfunc_arg_arena_nullable(btf, arg) &&
-> +              btf_param_match_suffix(btf, arg, "__nullable");
->  }
+s/This patch enables arch specifier "__powerpc64" in/Enable 
+"__arch_powerpc64" specifier in/
 
-No need for the changes above.
 
->
->  static bool is_kfunc_arg_nonown_allowed(const struct btf *btf, const str=
-uct btf_param *arg)
-> @@ -10929,6 +10936,12 @@ static bool is_kfunc_arg_irq_flag(const struct b=
-tf *btf, const struct btf_param
->         return btf_param_match_suffix(btf, arg, "__irq_flag");
->  }
->
-> +static bool is_kfunc_arg_arena(const struct btf *btf, const struct btf_p=
-aram *arg)
-> +{
-> +       return is_kfunc_arg_arena_nullable(btf, arg) ||
-> +              btf_param_match_suffix(btf, arg, "__arena");
+> selftest for ppc64. Power 32-bit would require separate
+> handling. Changes tested for 64-bit only.
+> 
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+> Reviewed-by: Hari Bathini <hbathini@linux.ibm.com>
+> Tested-by: Yeswanth Krishna Tellakula <yeswanth@linux.ibm.com>
+> ---
+>   tools/testing/selftests/bpf/progs/bpf_misc.h | 1 +
+>   tools/testing/selftests/bpf/test_loader.c    | 5 +++++
+>   2 files changed, 6 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+> index b0c441384f20..365008d1ed40 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
+> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+> @@ -159,6 +159,7 @@
+>   #define __arch_riscv64		__arch("RISCV64")
+>   #define __arch_s390x		__arch("s390x")
+>   #define __arch_loongarch	__arch("LOONGARCH")
+> +#define __arch_powerpc64	__arch("POWERPC64")
+>   #define __caps_unpriv(caps)	__test_tag("test_caps_unpriv=" EXPAND_QUOTE(caps))
+>   #define __load_if_JITed()	__test_tag("load_mode=jited")
+>   #define __load_if_no_JITed()	__test_tag("load_mode=no_jited")
+> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+> index 3ce32d134e2c..01b1420097d2 100644
+> --- a/tools/testing/selftests/bpf/test_loader.c
+> +++ b/tools/testing/selftests/bpf/test_loader.c
+> @@ -378,6 +378,7 @@ enum arch {
+>   	ARCH_RISCV64	= 0x8,
+>   	ARCH_S390X	= 0x10,
+>   	ARCH_LOONGARCH	= 0x20,
+> +	ARCH_POWERPC64	= 0x40,
+>   };
+>   
+>   static int get_current_arch(void)
+> @@ -392,6 +393,8 @@ static int get_current_arch(void)
+>   	return ARCH_S390X;
+>   #elif defined(__loongarch__)
+>   	return ARCH_LOONGARCH;
+> +#elif defined(__powerpc64__)
+> +	return ARCH_POWERPC64;
+>   #endif
+>   	return ARCH_UNKNOWN;
+>   }
+> @@ -585,6 +588,8 @@ static int parse_test_spec(struct test_loader *tester,
+>   				arch = ARCH_S390X;
+>   			} else if (strcmp(val, "LOONGARCH") == 0) {
+>   				arch = ARCH_LOONGARCH;
+> +			} else if (strcmp(val, "POWERPC64") == 0) {
+> +				arch = ARCH_POWERPC64;
+>   			} else {
+>   				PRINT_FAIL("bad arch spec: '%s'\n", val);
+>   				err = -EINVAL;
 
-return btf_param_match_suffix(btf, arg, "__arena_nullable") ||
-        btf_param_match_suffix(btf, arg, "__arena");
-
-[...]
