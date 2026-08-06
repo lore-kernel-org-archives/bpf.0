@@ -1,134 +1,140 @@
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0906541A4EC
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4A547F765
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786050253; cv=none; b=INJzv2gY3dBWHvq7W04elzDLKGrP9vhbEH+DGlsfypoMTuKTBGgLW/6SX3Nkd8cu4nngjLder6psWHT/EEEdVtrP1aVV75CMo6u2MWBrK/0DvSiyqeb+6wAQrvUG56VdKPnPw6J0l5qgU69zorlN6pYyhudJcDr3y6FeetPULYc=
+	t=1786050404; cv=none; b=BdO67cDGJ40QXPpu1JUNTDtK2RkkojOpby1np6NSJAzkh64+9bekIykmfaNCgtVmnKdwYnZEMpO09H0OhdTUNKvsVfzkcTbkxgo7PCLP++Qiw3Dr1rPlcyhiqZ1cJGMQoa2TafVxJL5E6lLWlcnpjmIMmbZOaD3lWNy0rAvN0X0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786050253; c=relaxed/simple;
-	bh=CB+1xLwkkPoMj/WAzAO07A4vIbrEbMrz7Buj6Ol1Qug=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=Kq+wPaf0/XvKaCCeenDqPLKHvw9Z9fM+5SDeU8kMoTk6lygiSTHxRfTryAh73xrJ8cq1oyvaUU9KYxROOxL34LDc2KxUZf24TJIHEayiMkt8aoyvOV2zcF85FpnmjIpNHTPhvk4Rk3/70YpT/H7iB0zVmljlvzXG7h50lMxYF1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=tRVDdd6m; arc=none smtp.client-ip=209.85.160.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786050404; c=relaxed/simple;
+	bh=Kp41RHfNDkstCjrQQeuShbUQmUEHHc6AKhcyizONNDo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ipyuhZAuXr/xZ8uNq6NnD8sCf4zxp0uZSRAkaOWDj2bWT/O3JuxqhLrUtMzEaj+5aze7B0y278JPCa42e73ciNOXPeIZmG9SDyciCT5jGvxY+AxGgb66eiAURIrXMk5m9I2YQP+NaX6VRlK1lnNyItODSoPLWlSg22/VX7vXVMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HvisrRb4; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="tRVDdd6m"
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-44ae14b4fd6so1003515fac.2
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 14:04:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786050251; x=1786655051;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:dkim-signature
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=329wR/WnuEQZ6JzXMvX+Qs//qFHiPpx3GlVTxWmXXsc=;
-        b=FR630231Jm+WpuLvdJJ2bm78cbB/yUCgvQN8UBhqHswGy0qz1Hre5GHwmJlUTu3qFn
-         CONLHQqpHGeChjCbQBqDB8B4/RWeKOeuslgDQMBmenhHhr8Q+5rteUoEPbMbf0j1uYCw
-         3p1VrQhAyOcV0YD0r0C1fsx8ZRAp+e4ONK2NwGHdOAanYEmAMobYbMytNaqlSbOQrl+g
-         HyuB0pvozBhC5gYLrii7S5WTCZih2LIqNyfmgPkfD+9J/oR8QkEzVRio2jmZOD3mzXZf
-         s1NSYAsyiVwG05dmHKVl1zgAQiLd72PH23t0AmPgm8/Gv1o+HQJeMTHryKOFjVJuEPmK
-         LdSA==
-X-Forwarded-Encrypted: i=1; AHgh+RqbZbqZ1CzV13oOj3lO4FMFM3tPF3RRokuijhm3+ObUelCEck6GsXgYezmjzkNHJEBHFWA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFQFiQ1OwvLI1351blkXkwNrXjeWqM2cb0p/dm1ZBj/o3714kC
-	xYmCtppdR7n2+gcNUlCh4K/KNznx9qJFdKEm8nNshN+DPpkNc4T1RPX7
-X-Gm-Gg: AR+sD12TOdd27oZHIfxEtZLZQxfJ6q7GBOG7R/86DZw8LOoFU/O+Ri7tk9luwTII0Jm
-	rF3PYbFva03yyv1W+3CwQAbxCuCZTnzX4sd+kdB665JnR2Z4Q7yLE50S8BQnh2BdOSlSOCONy3Q
-	A/o4/+UZpLW1zIAGr4J9M75Ewb9m4Uo2lCOXWkiuntYkjws3hNMZdDXUO7LE5SUf3UclriPWLoT
-	TVg7WuUZhZoUzR6GkvjhtMUzMM3lWiIe6wkv5UcAp74bRz25Ay1I4Zte/tvGtS2dZMrHgF2WHcF
-	M7KYMB8zH0An1BxVBLdLs8WcEgQpGcsDZJpFKzLD66AKpycPixlZ3UuP/UpIi6Pa2LzwUSYJu1m
-	vb8TPAvDN0waGfeHd8f0pC/FPb9AuzuvadHVDfBU6r83z1S1Vab2ySgMON2kPL94eFNLeeaS5T/
-	bHoesGkeshDetcZ4sonJXFsEWvsBL3Dp+IUP3Rum184GpjSr/vXJQwFeIl9Zx7ljpLLD8USCBaG
-	r2C2P5o1hDmXboxk1W6JK4qFIcwsOxwwLvxOR5xMYUSCjRYrgP/l52SWkzxpRlnwQ==
-X-Received: by 2002:a05:6820:1c8f:b0:6a3:8303:bca4 with SMTP id 006d021491bc7-6ae96c84e79mr8983155eaf.8.1786050250906;
-        Thu, 06 Aug 2026 14:04:10 -0700 (PDT)
-Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b02bc2631esm548489eaf.4.2026.08.06.14.04.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 14:04:10 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C6CAE60A0A;
-	Thu,  6 Aug 2026 21:04:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1786050248;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=329wR/WnuEQZ6JzXMvX+Qs//qFHiPpx3GlVTxWmXXsc=;
-	b=tRVDdd6m6RJq221WTJ6WGp9p4qxm7aq4vKjwbkG2m6YR0+H9y6KY9KG8qiC8x0gTUeACIO
-	1y88wtFA8xAgjwem3NW29Mm4+WH1WrncZW5g7K3l1OMBeA9Qa9lPNrkHPAXMKHeYVYGHla
-	rSK71AQMg1JJNf27/VBQJ5WlRjjiiOziYQuFN9T2rRNZ6pDU3npL95H/mDpH8iAtUnd8Dw
-	59O4HS06Q584PiSWK6X51Qi6dFIX3A/0zBhPOx1GsbhWSQQ/saVwYC+d1t4+gI3vo6YZMZ
-	v7vr1t9JdE5IbpAy3YtlvD75m7IQYtU21/S+YUEGkHS1psQzV9BL3ZjcqvqQww==
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HvisrRb4"
+Message-ID: <f9b8c8b1-906e-458b-b779-faacb2dee66c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786050400;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xdNNYmL0/yfvQZrBDQe4pGwcwmTLv9LsarZ3QOI/cwU=;
+	b=HvisrRb4XY+FJq11vAOEoj5VPDdEYh5qiTimelFjQj4nf/fXrfWtWgyE4+VJrfyCl6NIPb
+	U6reipjaTGKqDRInfP47QZNPD9d5VdoHe1J6By9UmgbVIrzKhr+Q4fzJHaF0rKOmT6qsdY
+	LYwszvber5kcaWvqwvaXB4frysYK97Q=
+Date: Thu, 6 Aug 2026 14:06:21 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2 6/6] docs, resolve_btfids: Document kfunc BTF
+ annotation emission
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+References: <20260805230648.2354989-1-ihor.solodrai@linux.dev>
+ <20260805230648.2354989-7-ihor.solodrai@linux.dev>
+ <b695bed46f03b4cc1a819bcd0d63272923ba5ca3.camel@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <b695bed46f03b4cc1a819bcd0d63272923ba5ca3.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 06 Aug 2026 18:04:04 -0300
-Message-Id: <DKI5YZDA23OB.3DREMYJCCQ5F8@marliere.net>
-Subject: Re: [PATCH 7.1.y] selftests/bpf: Add tests for sleepable tracepoint
- programs
-Cc: <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>, "Mykyta
- Yatsenko" <yatsenko@meta.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?=
- <ricardo@marliere.net>
-To: "Sasha Levin" <sashal@kernel.org>, <gregkh@linuxfoundation.org>, "Alexei
- Starovoitov" <ast@kernel.org>, "Shuah Khan" <shuah@kernel.org>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?=
- <ricardo@marliere.net>
-X-Mailer: aerc 0.21.0-146-g87073a0460e3-dirty
-References: <20260805-selftests-bpf-sleepable-v1-1-e29fa5af4119@marliere.net> <20260806131002.stable-0003@kernel.org>
-In-Reply-To: <20260806131002.stable-0003@kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu Aug 6, 2026 at 2:49 PM -03, Sasha Levin wrote:
-> On Wed, Aug 05, 2026 at 02:54:34PM -0300, Ricardo B. Marli=C3=A8re (SUSE)=
- wrote:
->> Hi, backporting commit 23b933c6223f ("bpf: Verifier support for sleepabl=
-e
->> tracepoint programs") without backporting this commit breaks the selftes=
-t,
->> as seen in openSUSE CI:
->
-> Agreed on the diagnosis: 23b933c6223f went into 7.1.y as a Stable-dep-of
-> and changed the verifier error string without updating the expectation,
-> so the verifier/sleepable.c hunk is both correct and needed there.
->
-> The rest of the commit is the problem:
->
->>  .../bpf/prog_tests/sleepable_tracepoints.c         | 142 ++++++++++++++=
-+++++++
->>  .../bpf/progs/test_sleepable_tracepoints.c         | 112 ++++++++++++++=
-++
->>  .../bpf/progs/test_sleepable_tracepoints_fail.c    |  18 +++
->>  tools/testing/selftests/bpf/verifier/sleepable.c   |  17 ++-
->
-> The three new files use SEC("tp_btf.s/..."), SEC("raw_tp.s/...") and
-> SEC("tp.s/..."). 7.1.y does not carry 0cd420a6f40c7 ("libbpf: Add section
-> handlers for sleepable tracepoints"), so its libbpf has no SEC_DEF entry
-> for any ".s" tracepoint variant, and sec_def_matches() will not match a
-> ".s" suffix against the plain "tp_btf+"/"raw_tp+"/"tp+" entries. Every
-> program in the two new progs/ files then fails to load and
-> test_sleepable_tracepoints__open_and_load() fails outright - so as posted
-> this trades a test_verifier failure for a permanently failing test_progs
-> test.
->
-> The runtime pieces are missing from 7.1.y as well - 439ebd5b5708 ("bpf:
-> Add sleepable support for raw tracepoint programs"), 12628ffaf98b ("bpf:
-> Add bpf_prog_run_array_sleepable()") and 57918341dd19 ("bpf: Add
-> sleepable support for classic tracepoint programs") - so even with the
-> libbpf section handlers the functional subtests would still fail.
->
-> Could you send a v2 carrying only the
-> tools/testing/selftests/bpf/verifier/sleepable.c hunk, with a note in the
-> commit message explaining why the new prog_tests/ and progs/ files are
-> omitted?
+On 8/6/26 12:47 PM, Eduard Zingerman wrote:
+> On Wed, 2026-08-05 at 16:06 -0700, Ihor Solodrai wrote:
+> 
+> ...
+> 
+>> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+>> index cbde86d082cc..c60fc574e8b0 100644
+>> --- a/Documentation/bpf/kfuncs.rst
+>> +++ b/Documentation/bpf/kfuncs.rst
+>> @@ -472,6 +472,14 @@ type. An example is shown below::
+>>          }
+>>          late_initcall(init_subsystem);
+>>  
+>> +At kernel build time the ``resolve_btfids`` tool discovers all kfuncs from the
+>> +registered ``BTF_SET8_KFUNCS`` sets and emits their BTF annotations into the
+> 
+> Note that this is a single occurrence of the word BTF_SET8_KFUNCS in
+> this .rst file. Also The wording "registered" is confusing as the
+> above code snippet shows the usage of register_btf_kfunc_id_set()
+> function, which is completely unrelated.
+> 
+>> +kernel's BTF; these annotations were historically produced by pahole. For each
+> 
+> I'd skip a note about pahole, it does not convey usable information.
 
-Will do, thanks for the analysis and review.
+ack
 
+> 
+>> +discovered kfunc ``resolve_btfids`` emits a ``bpf_kfunc`` BTF decl tag, a
+>> +``bpf_fastcall`` decl tag when the kfunc is flagged ``KF_FASTCALL``, and the
+>> +``address_space(1)`` type attribute on the return value and/or arguments flagged
+>> +``KF_ARENA_RET``, ``KF_ARENA_ARG1`` or ``KF_ARENA_ARG2`` (see section 2.8).
+>> +
+>>  2.7  Specifying no-cast aliases with ___init
+>>  --------------------------------------------
+>>  
+>> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+>> index 1ca8c5f73ad0..6d1dbe4abf0f 100644
+>> --- a/Documentation/process/changes.rst
+>> +++ b/Documentation/process/changes.rst
+>> @@ -147,10 +147,9 @@ Since Linux 5.2, if CONFIG_DEBUG_INFO_BTF is selected, the build system
+>>  generates BTF (BPF Type Format) from DWARF in vmlinux, a bit later from kernel
+>>  modules as well.  This requires pahole v1.22 or later.
+>>  
+>> -Since Linux 7.0, kfuncs annotated with KF_IMPLICIT_ARGS require pahole v1.26
+>> -or later.  Without it, such kfuncs will have incorrect BTF prototypes in
+>> -vmlinux, causing BPF programs to fail to load with a "func_proto incompatible
+>> -with vmlinux" error.  Many sched_ext kfuncs are affected.
+>> +Kfunc BTF annotations (the bpf_kfunc and bpf_fastcall decl tags and the arena
+>> +address_space(1) type attribute) are emitted in-tree by resolve_btfids from the
+>> +BTF_KFUNCS sets, so they no longer depend on a specific pahole version.
+> 
+> Just drop the whole paragraph?
+
+hmm... yeah you're right
+
+> 
+>>  
+>>  It is found in the 'dwarves' or 'pahole' distro packages or from
+>>  https://fedorapeople.org/~acme/dwarves/.
+>> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+>> index a1812985a61a..717e76ce96a7 100644
+>> --- a/scripts/Makefile.btf
+>> +++ b/scripts/Makefile.btf
+>> @@ -14,6 +14,9 @@ pahole-flags-$(call test-ge, $(pahole-ver), 125)	+= --skip_encoding_btf_inconsis
+>>  else
+>>  
+>>  # Switch to using --btf_features for v1.26 and later.
+>> +#
+>> +# kfunc BTF annotations (bpf_kfunc/bpf_fastcall decl tags and the arena
+>> +# address_space(1) type attribute) are emitted by resolve_btfids, not pahole.
+> 
+> What's the point of this comment?
+
+The point is to inform the reader "where did decl_tag_kfuncs go?".
+Question is whether the git log will be enough, or is a comment
+also appropriate?
+
+> 
+>>  pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func
+>>  
+>>  pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=layout
+> 
+> ...
 
