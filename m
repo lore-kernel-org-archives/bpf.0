@@ -1,36 +1,37 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A95355055
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 20:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FBD48F829
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 20:10:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786047052; cv=none; b=uzwxtryMoRP6kLcY+yI5cD2spAVjLSnVxUHuEsMD2oMoaCyaSXHJK+leh0I/2UDqkzLDSLLj4ertPforOh+81eHVQEiQk1FjbaaZpDLwdzkEq2VGrfTMvr7bOy9auG49uG/GD80PjxbEayJEIiFXa4d9vJynUSwCh0zTFmMif68=
+	t=1786047052; cv=none; b=O9KAHIZJZL42Tzmb4YcnUwQ3C4+HEdUgbXYwokmY6uuvNe4vJ3SnwQWb5u73AqFJXk47HbTS/j8WjhHbdg6xPIJMQk4r9+1yzmmHzuAhvjNcgxdq6wsW+9I7W/Y3XMXL+L/O2TrTm+kDsfcWSuFBGa84L25wbSQhLi/kf9RUbkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786047052; c=relaxed/simple;
-	bh=CuUmjoeeFOw0SjIF4afyhrmOQxbFzw+xGTuWPo96m9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fySGnRH1lEm7aXLVM3sucDMLw3ap75eYGJW33H3UMtkYJOEUexPUmXQmE0qW/GIPv1hM3nWbLOPMXbORIVYMLf1HNnvFcIkIQopqIoJJ7/ZfnhmZL9AIJIEcTJ2PDeIJmS9kjX0SleQ9LP1HOuLb1y2nJy4p23e6qzxPGnjINhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=DiLEM1Kv; arc=none smtp.client-ip=213.133.104.62
+	bh=Ic0nyxXjSlJNa92spvUW2/djsB/elLo3iB5HrJrDzO0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bsdiV5/qyOw6zdLMSjJZoCrR3OMe/+t82hVoe1MEqQLw2tXgFm7ggxIB5BWboSer8aPx1KTrYcaEt7CgpxtrWnBIz/FJjh4xsolX0eDJjzMeQ2z9tW1NXEGkZSarFApXFvOiB9D1M5ChwDGsUvudi3v8/DHsdLmAbCPnOtrRoLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ps8g71tC; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="DiLEM1Kv"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ps8g71tC"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=Dt8PrXbHLhMajmZoI0XlMZBmEnw7KzZmZoZRQN70BAI=; b=DiLEM1Kv+ZkxlsXe2zCpcEmGBm
-	gltHKta7aNrt9Y8CH5o3mXOkyKc3eSmZa+7+quZKXqavpCUWRunQK7wTTZg3xnKRh8+72VI/xQfaQ
-	bf9dwgpzIFDX6T2htPKt03+aOB/uSpT3xtbSeejzXB6oajGswe6qZy4RJmKmDCeWJgQPuS0yg3Hkr
-	sAc0FPo152AKYN1p/r/FBYGe5Ju4utTufU8SUgIZToxiLOEPB5eotwdl1Z5YIOq9C9+WGf2IJZGbs
-	mZGcu1bRfgGoUsbyn/Pp0Uk3nZhJp8+My42c2QVWYiNNyaGOCmuUEV9H7LhDrVu/A4dQgT1Bm96qH
-	KYHv5aSQ==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=YlBbhBS3O0d7JtaRtMa5svic3lkFt40wqLpn7grnf7g=; b=ps8g71tCU8KCwMlgSzcPp8yOmG
+	tcrmxtUsyZjop0gcchplHu3qrk138lveOJAeDJoGbBC0zejpODR7bJeMzk63Xrk5TlsF2cv72N66L
+	Awwl4w8/MBwf/VmzqMz26MULHrUPDkxXlP61LqFHcO6DN3vZN7MZcDysQLwQvCINf8/e1o2VDNuxJ
+	uoClxgEHBIDlUxfp/MNoz3LaLRvAFh1t8CDrEbQWrSkxAjzzxIiTh8fwhiUZ4r+A/GldNoXf3kZhh
+	A5jYHTTiO06gp7utzhGxg2SSs6VDUKjSkSwZdkj3jzGaPYN0q+ZUptlCCvIoTzB2tTydx3TIRcep+
+	S151I+iA==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1ws4QS-000DGm-0L;
+	id 1ws4QS-000DH1-2z;
 	Thu, 06 Aug 2026 22:10:48 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: memxor@gmail.com
@@ -38,10 +39,12 @@ Cc: eddyz87@gmail.com,
 	puranjay@kernel.org,
 	info@starlabs.sg,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/6] bpf: Reject load-acquire from pointers requiring fault protection
-Date: Thu,  6 Aug 2026 22:10:42 +0200
-Message-ID: <20260806201047.333389-1-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 2/6] bpf, riscv: Add and use bpf_atomic_is_load_acq() helper
+Date: Thu,  6 Aug 2026 22:10:43 +0200
+Message-ID: <20260806201047.333389-2-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260806201047.333389-1-daniel@iogearbox.net>
+References: <20260806201047.333389-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,117 +54,112 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28084/Thu Aug  6 08:24:46 2026)
 
-A BPF_LOAD_ACQ is not rewritten to a BPF_PROBE_MEM load by the verifier,
-unlike a regular BPF_LDX, so the JIT emits a plain load with no exception
-table entry and a fault panics the kernel instead of being handled.
+A load-acquire is the only BPF_STX class instruction that reads from
+src_reg into dst_reg, that is, it has the operand roles of a BPF_LDX.
+JIT code which tells loads from stores apart by instruction class alone
+has to special case it, for example when deciding which register holds
+the faulting address and which one to clear from an exception handler.
 
-Reject the source pointer types that a BPF_LDX would have had that fault
-protection applied to, i.e. the ones bpf_convert_ctx_accesses() turns
-into BPF_PROBE_MEM: a bare PTR_TO_BTF_ID, PTR_TO_BTF_ID | PTR_UNTRUSTED,
-PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED and PTR_TO_MEM | MEM_RDONLY |
-PTR_UNTRUSTED.
+riscv64 already does so, open coded as a bare insn->imm test. Add a
+bpf_atomic_is_load_acq() helper and convert riscv64 over to it, so that
+the x86-64 and arm64 JITs can use the same helper in subsequent patches.
 
-This is reachable e.g. by loading ->mm out of a trusted task_struct
-yields an untrusted pointer to mm_struct, and it is NULL for a kernel
-thread:
+Unlike bpf_atomic_is_load_store(), which presumes that its argument is
+already known to be a BPF_ATOMIC instruction, the new helper is called
+from code which still sees all instruction classes, so it checks class
+and mode itself.
 
-  [...]
-  SEC("tp_btf/sched_switch")
-  int BPF_PROG(demo, bool preempt, struct task_struct *prev,
-               struct task_struct *next)
-  {
-      struct mm_struct *mm = next->mm;  /* untrusted */
+Also, move bpf_atomic_is_load_store() to filter.h next to BPF_ATOMIC_OP,
+so that both helpers stay together. No functional change intended.
 
-      out_ldx = (__u64)mm->pgd;         /* BPF_LDX      */
-      out_acq = load_acquire(&mm->pgd); /* BPF_LOAD_ACQ */
-      return 0;
-  }
-  [...]
-
-Both dereference the same pointer, but only the BPF_LDX is protected
-(x86-64 JIT, jump targets shown prog-relative):
-
-  [...]
-  ; out_ldx = (__u64)mm->pgd;
-  17:   movq    $-10485760, %r10
-  1e:   movq    %rsi, %r11
-  21:   addq    $184, %r11
-  28:   subq    %r10, %r11
-  2b:   movabsq $140737498841088, %r10
-  35:   cmpq    %r10, %r11
-  38:   ja      0x3e                 <-- kernel addr?
-  3a:   xorl    %edi, %edi           <-- no: dst = 0, skip the load
-  3c:   jmp     0x45
-  3e:   movq    184(%rsi), %rdi      <-- yes: load + extable entry
-  [...]
-  ; load_acquire(&mm->pgd)
-  53:	movq    %rsi, %rdi
-  56:	movq    184(%rdi), %rax       <-- no check, no extable entry
-  [...]
-
-Note that BPF_PROBE_MEM is not visible in a bpftool xlated dump, as
-bpf_insn_prepare_dump() rewrites it back to BPF_MEM.
-
-A PTR_TRUSTED pointer is deliberately not on the list. Such a load is
-not converted either, but it does not need to be, since the pointer is
-guaranteed live, so load-acquire from it stays allowed.
-
-The check is gated on BPF_LOAD_ACQ so that atomic RMW and store-release
-error messages are unchanged; writes (RMW / store-release) to such
-pointers are already rejected elsewhere, so only load-acquire needs this.
-
-Fixes: 880442305a39 ("bpf: Introduce load-acquire and store-release instructions")
-Reported-by: STAR Labs SG <info@starlabs.sg>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- kernel/bpf/verifier.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ arch/riscv/net/bpf_jit_comp64.c |  2 +-
+ include/linux/bpf.h             | 15 ---------------
+ include/linux/filter.h          | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 32 insertions(+), 16 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e6233c0081d1..648c5784178e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4923,6 +4923,30 @@ static bool is_arena_reg(struct bpf_verifier_env *env, int regno)
- 	return reg->type == PTR_TO_ARENA;
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 8fe8969fb8a0..6b9972b07c1b 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -1994,7 +1994,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 		/* ret can be 1 (skip-zext); extable entry still needs to be added */
+ 		if (ret >= 0)
+ 			ret = add_exception_handler(insn,
+-				insn->imm == BPF_LOAD_ACQ ? rd : REG_DONT_CLEAR_MARKER,
++				bpf_atomic_is_load_acq(insn) ? rd : REG_DONT_CLEAR_MARKER,
+ 				ctx) ?: ret;
+ 
+ 		if (ret)
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 73bacfc6444d..d79bf7557ef6 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1132,21 +1132,6 @@ static inline bool bpf_pseudo_func(const struct bpf_insn *insn)
+ 	return bpf_is_ldimm64(insn) && insn->src_reg == BPF_PSEUDO_FUNC;
  }
  
-+static bool is_load_acq_unsafe(struct bpf_verifier_env *env, int regno,
-+			       struct bpf_insn *insn)
+-/* Given a BPF_ATOMIC instruction @atomic_insn, return true if it is an
+- * atomic load or store, and false if it is a read-modify-write instruction.
+- */
+-static inline bool
+-bpf_atomic_is_load_store(const struct bpf_insn *atomic_insn)
+-{
+-	switch (atomic_insn->imm) {
+-	case BPF_LOAD_ACQ:
+-	case BPF_STORE_REL:
+-		return true;
+-	default:
+-		return false;
+-	}
+-}
+-
+ struct bpf_prog_ops {
+ 	int (*test_run)(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 			union bpf_attr __user *uattr);
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 32d5297c557e..41b02d53e222 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -383,6 +383,37 @@ static inline bool insn_is_cast_user(const struct bpf_insn *insn)
+ /* Legacy alias */
+ #define BPF_STX_XADD(SIZE, DST, SRC, OFF) BPF_ATOMIC_OP(SIZE, BPF_ADD, DST, SRC, OFF)
+ 
++/*
++ * Given a BPF_ATOMIC instruction @atomic_insn, return true if it is an
++ * atomic load or store, and false if it is a read-modify-write instruction.
++ */
++static inline bool
++bpf_atomic_is_load_store(const struct bpf_insn *atomic_insn)
 +{
-+	const struct bpf_reg_state *reg = reg_state(env, regno);
-+
-+	/*
-+	 * A BPF_LOAD_ACQ is not rewritten to a BPF_PROBE_MEM load by the
-+	 * verifier, unlike a regular BPF_LDX. The JIT would emit a plain load
-+	 * with no exception table entry, so a fault (e.g. NULL deref) crashes
-+	 * the kernel instead of being handled.
-+	 *
-+	 * Reject the source pointer types that a BPF_LDX would have had that
-+	 * fault protection applied to, i.e. the ones bpf_convert_ctx_accesses()
-+	 * turns into BPF_PROBE_MEM: a bare PTR_TO_BTF_ID and any PTR_UNTRUSTED
-+	 * pointer (untrusted btf ids, untrusted MEM_ALLOC, rdonly untrusted
-+	 * memory). A PTR_TRUSTED pointer is not among them, is not converted,
-+	 * and stays allowed. Same for the other flagged PTR_TO_BTF_ID variants
-+	 * (MEM_ALLOC, MEM_RCU, ...), hence the exact match on the base type.
-+	 */
-+	return insn->imm == BPF_LOAD_ACQ &&
-+	       (reg->type == PTR_TO_BTF_ID ||
-+		(type_flag(reg->type) & PTR_UNTRUSTED));
++	switch (atomic_insn->imm) {
++	case BPF_LOAD_ACQ:
++	case BPF_STORE_REL:
++		return true;
++	default:
++		return false;
++	}
 +}
 +
- /* Return false if @regno contains a pointer whose type isn't supported for
-  * atomic instruction @insn.
-  */
-@@ -4939,7 +4963,8 @@ static bool atomic_ptr_type_ok(struct bpf_verifier_env *env, int regno,
- 		return false;
- 	if (is_arena_reg(env, regno))
- 		return bpf_jit_supports_insn(insn, true);
--
-+	if (is_load_acq_unsafe(env, regno, insn))
-+		return false;
- 	return true;
- }
++/*
++ * A load-acquire is the only BPF_STX class instruction that reads into
++ * dst_reg from src_reg + off16, i.e. it has the operand roles of a BPF_LDX.
++ * Unlike bpf_atomic_is_load_store(), @insn is not assumed to be a BPF_ATOMIC
++ * instruction here, so that callers which walk all instruction classes can
++ * use this directly.
++ */
++static inline bool bpf_atomic_is_load_acq(const struct bpf_insn *insn)
++{
++	return BPF_CLASS(insn->code) == BPF_STX &&
++	       (BPF_MODE(insn->code) == BPF_ATOMIC ||
++		BPF_MODE(insn->code) == BPF_PROBE_ATOMIC) &&
++	       insn->imm == BPF_LOAD_ACQ;
++}
++
+ /* Memory store, *(uint *) (dst_reg + off16) = imm32 */
  
+ #define BPF_ST_MEM(SIZE, DST, OFF, IMM)				\
 -- 
 2.43.0
 
