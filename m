@@ -1,146 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FB21D63F3
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 03:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1878137F012;
+	Thu,  6 Aug 2026 04:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785986371; cv=none; b=BQPY5mP5pr/TK54tnOEF2hSgZSVyu6GarxutZ4EJ1H6Y0CPPpddh3kV7Y9mqiRYmrCbE7zLZRSeo1BGX5cnXZRGeSU3DnmO6xMabokDgkv1HcYnMCOL5tpTCaB5CrCxdnGhqkmx/5z+Gcu0fWonh8tA5qZortrundofXXft+HZ4=
+	t=1785989827; cv=none; b=SGEBlCKjyXtrfSGWmvtGToRsylxMNDuUWii60w1fkoLP1j1dI7CE/1g+Q90YEwrGmtNi8nLC4Nrbkn9RvK1qYYl70HDRHs8AlMxtLY9W1ViD7OvzASiXoyFjAzcmIm4XeS6U2tto6cEGwjVNYMUedswVmf0w1Te5CQmmxdOu3GY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785986371; c=relaxed/simple;
-	bh=rLbI7aQwbg52CainhrPhzRCE4lkh0/bFO5vST/9SPCc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ROgJU5ABCtm8YUOfiSXvYctexsJtTipcT9ETtvKOWANDTSGEI6CMsbY4DUzcRgntvBDXVpbW6gxOCpuPLzwjpdIBM08blrOCUiSjLgG0HgTHAO+V4nCtP1G2XIOIngqyTvOk8dYxs0k7QvGdBy1tPevbgdi/2g/ibsmIRVEOR2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Typavha8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785989827; c=relaxed/simple;
+	bh=PMUpXsRamu19zkSa8s/kLPqrUXOnQwWX2+P5JFaGNFg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iHzdHEGKdry/yFTZjAtBFAHVZSaFnAmAsY1Mog79tUkG5JGN+AhPVaAGbHYKUo/UNtcm7lIYjyWHRZembLT+HhzeOAnYsripJKTItcO3Pjjom7k6eztpwEgUKWBD8k2w+vHTJAadauUnOQD3p9HQv0RAsuJVMSZO41meA2+cTUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=nKB+4Pjm; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Typavha8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C701F00A3A;
-	Thu,  6 Aug 2026 03:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785986369;
-	bh=eC9+bNXkrJ08g77uocUcJjkXO54GpboY5OMzlz6+a30=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Typavha8muXkqMX7R2bVKF1Jbk95eVdYhW5pB4QC5g3uNeFWZoSHtwFL7DTQKUvzw
-	 xRzyii7ysgNbBmSz+nubSRWRoobki1Ui6jRj6Njb+Ysi7xM/3t4vYxYk8lB/wdQXjP
-	 5DhGhAQriqiidXLx+BeFrHC2qROKrA5X1JDYlbKSPNmTB9pxxS6Cv91L/w78efys79
-	 JvGNoJNM2esdCqviTMp/dRfHC/xDupz/tEgyDFnfWGo0fhb86rYmH00EXGGEeMWQgC
-	 YEsbDNJ0dL3eh9C/ctrhZHJc+IHGN/QWYm0OnmCQDGqRc01OkV0VMJLysX5s21QUOB
-	 R1cl1WIZphlow==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 3/3] bpf, arena: check range_tree_set return
- in arena_free_pages and arena_free_worker
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260806030359.299480-4-chenyuan_fl@163.com>
-References: <20260806030359.299480-1-chenyuan_fl@163.com>
- <20260806030359.299480-4-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 03:19:28 +0000
-Message-Id: <20260806031929.61C701F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="nKB+4Pjm"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 675NllpB993261;
+	Thu, 6 Aug 2026 04:16:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=x0VVkL
+	MR/hGrHcgCpSJQ0PqiF+s4nKSVP0fVvBdJUqg=; b=nKB+4Pjmu5zGhuJnYZHd4o
+	oNkg/xADXWOR0nXJKFxTtUjKdV0tvGVtUNr+Yb+KoUzUa74S3rCPnViOOYvXikZW
+	YtRaqIYqXS/sXmzuzAWKxUV8hK/hXw4qFPWwS+A4ZYHU4XnMuVOrJ3MtdlfpMSHv
+	hPeSqHKgqKl4WZvmnh1OczZ4sMNPrgpX8pUGw83vP0wyE61x+0zDXM/TxqNO5tA0
+	S+ocClVfKEUVv5wVDhWiF42bhcUT2nivSutzC/z9EaRgfTUXnQOocBuQwdGQtk5s
+	T+gWyQhRi38CCeydREXWvfW9irdjp6+N32FwfimpT1ys/Tn5t0I0/ossChlxgK9w
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fs77gdv19-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 06 Aug 2026 04:16:39 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6763uIjH026698;
+	Thu, 6 Aug 2026 04:16:39 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fsv4k9kep-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 06 Aug 2026 04:16:39 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6764GZIp45613420
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 6 Aug 2026 04:16:35 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id F233320040;
+	Thu,  6 Aug 2026 04:16:34 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 050F120043;
+	Thu,  6 Aug 2026 04:16:32 +0000 (GMT)
+Received: from Linuxdev.j9d-in.ibm.com (unknown [9.123.86.85])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  6 Aug 2026 04:16:31 +0000 (GMT)
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        Saket Kumar Bhaskar <skb99@linux.ibm.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+        memxor@gmail.com, hbathini@linux.ibm.com, chleroy@kernel.org,
+        mpe@ellerman.id.au, npiggin@gmail.com
+Subject: Re: [PATCH v2 1/2] powerpc64/bpf: Fix build break in bpf_jit_emit_func_call_rel()
+Date: Thu,  6 Aug 2026 09:46:30 +0530
+Message-ID: <178598971877.942627.13081813570192663692.b4-ty@linux.ibm.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <e8e582fb425db165a72f00e3337cdf4c6ae383ad.1785387718.git.skb99@linux.ibm.com>
+References: <cover.1785387718.git.skb99@linux.ibm.com> <e8e582fb425db165a72f00e3337cdf4c6ae383ad.1785387718.git.skb99@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA2MDAyNSBTYWx0ZWRfXwnNV+zBGLAsu
+ pH5Vs7FdP0fwcKGmOaj0nddk6OQDZv9UFvP6lHwtJSnJbZgcS665Byr62Mqqth55tfENOuxLcYF
+ LvvzzjtpuJ2m9J4yS3ARrnVVzaPUnzffuVSaFExAUnmnB9af6YfKzkvD0xckYBw5eRkiuuDrxIF
+ LP/Ls3JgdMukxIR5mBqQDbuA3h1mTwEkHSSsqrcDxIwdaD86WDYXf65/Ik1l2ETpAjmxjXfcN5a
+ 4DEj7eNo7c4Q7mk19Fm/qEYnNJvxIxyPOVGB83wOvKOZZyxFdv2lo62bKhtrXiK4e4QmnAW6FT5
+ dLW0lABQFD23TEbR6Rj64BEQ0Po6gz+BJESAOojrhAwvBDbXZkgTV0SZuQw1M271BIzuNVhUQec
+ LDngrbe7dNpziroHW5mn6PeeE3yFfaKyPsQk2ptCLJF0ZqNrB4bsFDJpDfph+b3bPsfkW+ikVzw
+ PnXDWWD3rHjU0e5mMUA==
+X-Authority-Analysis: v=2.4 cv=WIFPmHsR c=1 sm=1 tr=0 ts=6a740aa8 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8
+ a=PYhWMvAcGiom0epyy1YA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: mK-F5A29MI63cB6GShHH3wAVyVJ1jBWa
+X-Proofpoint-ORIG-GUID: _Vla3WCVPhYqydr0C6CEKJaHrdYNXqp-
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODA2MDAyNSBTYWx0ZWRfXyn5QL39qkWcg
+ 4Yj7rymqdWQCuQyJYKQwlsssbaG3jR+EjqngahzToIxf0DKuuPqCmnk/7pY+9gs8kYi0Jh14T2Z
+ V8eIe59VU6PcOcDdhvZELK0DlVXEQ20=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-05_06,2026-08-05_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0 malwarescore=0
+ suspectscore=0 clxscore=1015 impostorscore=0 bulkscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608060025
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Thu, 30 Jul 2026 11:16:02 +0530, Saket Kumar Bhaskar wrote:
+> With CONFIG_PPC_KERNEL_PCREL enabled, build breaks with below error:
+> 
+>   CC      mm/dmapool.o
+>   CC      fs/readdir.o
+> arch/powerpc/net/bpf_jit_comp64.c: In function 'bpf_jit_emit_func_call_rel':
+> arch/powerpc/net/bpf_jit_comp64.c:475:13: error: unused variable 'ret' [-Werror=unused-variable]
+>   475 |         int ret;
+>       |             ^~~
+> 
+> [...]
 
-New issues:
-- [Low] The newly introduced multi-line comment in `arena_free_worker` does=
- not follow the required BPF subsystem comment style (the opening `/*` is n=
-ot on its own line).
+Applied to powerpc/next.
 
-Pre-existing issues:
-- [High] TLB flush race in BPF arena free path allows BPF data corruption a=
-nd leaking data to the page allocator.
---
+[1/2] powerpc64/bpf: Fix build break in bpf_jit_emit_func_call_rel()
+      https://git.kernel.org/powerpc/c/e8ee988c0087248324dbd3da486d22045e4a4079
+[2/2] powerpc64/bpf: Fix build break for arch_bpf_timed_may_goto
+      https://git.kernel.org/powerpc/c/e1e5e682511eda648aa91372542cc8f665ad0bff
 
---- Patch [3]: [PATCH bpf-next v1 3/3] bpf, arena: check range_tree_set ret=
-urn in arena_free_pages and arena_free_worker ---
-commit e8687a8aed3ed0a8e5127b69fdd0e533b6129491
-Author: Yuan Chen <chenyuan@kylinos.cn>
-
-bpf, arena: check range_tree_set return in arena_free_pages and arena_free_=
-worker
-
-This commit updates arena_free_pages() and arena_free_worker() to handle
-range_tree_set() errors. In arena_free_pages(), it aborts the free on
-error, and in arena_free_worker(), it moves range_tree_set() before PTE
-clearing.
-
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 555ee2531ef98..30745da9277b0 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-> @@ -881,7 +881,12 @@ static void arena_free_pages(struct bpf_arena *arena=
-, long uaddr, long page_cnt,
->  	if (ret)
->  		goto defer;
-> =20
-> -	range_tree_set(&arena->rt, pgoff, page_cnt);
-> +	ret =3D range_tree_set(&arena->rt, pgoff, page_cnt);
-> +	if (ret) {
-> +		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-> +		bpf_map_memcg_exit(old_memcg, new_memcg);
-> +		return;
-> +	}
-
-[Severity: High]
-This is a pre-existing issue, but does updating the free range tree under
-arena->spinlock and then dropping the lock before flushing the TLB create a
-race condition?
-
-In both arena_free_pages() and arena_free_worker(), the spinlock is dropped
-before flush_tlb_kernel_range() is called.=20
-
-If another thread concurrently allocates this same virtual address, maps new
-physical pages into the PTE, and returns to the BPF program, could the new
-program write to the old physical page due to stale TLB entries on that CPU?
-
-When the first thread resumes, it would execute the TLB flush and free the
-old physical page to the buddy allocator, which might cause data corruption
-or leak data to the page allocator.
-
->  	init_llist_head(&free_pages);
->  	cdata.arena =3D arena;
-
-[ ... ]
-
-> @@ -1004,11 +1009,17 @@ static void arena_free_worker(struct work_struct =
-*work)
->  		kaddr =3D arena_vm_start + s->uaddr;
->  		pgoff =3D compute_pgoff(arena, s->uaddr);
-> =20
-> +		/* Mark the range as free before clearing PTEs so that
-> +		 * if the range tree update fails we leave the PTEs
-> +		 * intact, avoiding an unrecoverable state where pages
-> +		 * are freed but the arena free tree does not track them.
-> +		 */
-
-[Severity: Low]
-Does this multi-line comment follow the BPF subsystem style?=20
-
-The BPF subsystem guidelines require the opening /* to be on its own line:
-
-/*
- * Mark the range as free before clearing PTEs so that
- ...
-
-> +		if (range_tree_set(&arena->rt, pgoff, page_cnt))
-> +			continue;
-> +
->  		/* clear ptes and collect pages in free_pages llist */
->  		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
->  					     apply_range_clear_cb, &cdata);
-> -
-> -		range_tree_set(&arena->rt, pgoff, page_cnt);
->  	}
->  	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806030359.2994=
-80-1-chenyuan_fl@163.com?part=3D3
+cheers
