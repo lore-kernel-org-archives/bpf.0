@@ -1,96 +1,158 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0715B41DDE0
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:14:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786050854; cv=pass; b=NBak5LG1v6Sr7on3lWV+VwIVajBpV9x+7A2nYsf0k+zwQVCOD6DwQg4d2wSWhNFcoU72Ul0zKso5kHvDJdFAUEmEW4/q+ZIMX66dyWGq7cAmMDqf0cyI5ai+S++wCZth9++3kZDL8di3kLK2tsebGEk7QE+aZLge7AIJaVaKRSU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786050854; c=relaxed/simple;
-	bh=2Ul71xOb4CR3H33B4d0sA2boSbkG+i5cMyJ/5cZrvtk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AhPo93Gt8vC/VhRuBZ+FiWRvhh3fGm81WGKUQnseg0RijJq3f6ifJpJGx0mK352kg2sjbu+DdqHtHQTkxSDGDFLT7TQkmH5DHjTkzclRXz8o4EzcAKJve2CpNb+hQMra+1OroFg1vEHgbX/HNuQdUw0mWCUViTfFALS9TUjGyHs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YKfWDKYH; arc=pass smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF6A4248DC
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786050997; cv=none; b=dOO4+OKLkEDQtAqjQI9j69Tumy/LdjC+ykd0TvbzNyNG5S0GECvNg3BssTDh7v69XvLozU2lVz2LJz2ORzE08ER+WVA031I0WCe1bZVmbAWJhBoo4plHo0RVQg1SgCyrGh78hGJD7nwa+i8y6+xPaKsaWpZ23qRxqI/kPivbFrY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786050997; c=relaxed/simple;
+	bh=pSBIKlCMa13VCkbQW8AIUPptuaVFEQmIqlc+QQG/ES4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N0ZxX5XvY6X/VwB+z2VXUIymiuPdYpvz70+AgP+Otp7BzMnZXa2glpSczKyLjJl03zeIO19252wKgrrUM14OYcaS+g1+9royRvN1S0eiFaGDt3ejcYu6KGrUNdFesrdRLgFD2lLEtszvgbroZrsjsETJz4avq1nk8ZKFBsTyx9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=C1nfjmeY; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YKfWDKYH"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-39c7fd21b63so22277931fa.0
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 14:14:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786050851; cv=none;
-        d=google.com; s=arc-20260327;
-        b=l/3hbNauS4kNIbKKSetEZ9lWlDRwtvdOJRW3oNfl5o57VhF6dQERfvf/Iz5Urpmno6
-         Gk/TTsAaBA/iM7UvFtpEEbHtG8O//Mngv6ePd3OPHErEmD5Rlf5es2Tj6HIFUWtm1hQ7
-         EBD3DPioJ7DFE5FBswqGqqYyf+PkzoNcLHkGn20SJFHy8JxXG8QwuxzfuxIzagvYFesW
-         JjPby/fSRmyqWWIOAwE3v3TSEHwHfnVB3zK1UUcKebC/5q7ggvLW1YqfMMbgCiEo41Qw
-         5c2MH0jQ+1x6+SlLjMemWD2gEC0VtwmoMqx3CrhLtpL2Wm957AX5JAGM6TblN0ju0ENk
-         QUDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=2Ul71xOb4CR3H33B4d0sA2boSbkG+i5cMyJ/5cZrvtk=;
-        fh=5b5dLJ9kTJfvQoWGFwThFDZmVhP7lAb2WX2IX41yKn4=;
-        b=T0kZfrUx7pm2BcmMvys/KMsEl3rMCmM2jWZg36mGRZr61sirbhkdUeft08mgIsDVCm
-         2zG6SF4irOL1x43qFt46ClChmseBV39aOkYAsoGsV0+y3W6uDW6iP8phDCbV6q75//FB
-         nkRCSoG3oqi+zoMKi36e0CKRtZiPKhxHAxW2OzXifbazoXEZxWvUu6udykTumO656vpE
-         aGcidEiQ3FsqrBY8wJ6CZ43THa2NPkeDloIrp5QJo/AW6snIHwIHwnjZce4mrY3S1lBr
-         VL3dX2Uv60spJim8KjdcJBnoFIOg5zW7CkcWEJnDeSUabYFexAV5p1vn4rLXP3JpyPYE
-         X6Qw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786050851; x=1786655651; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2Ul71xOb4CR3H33B4d0sA2boSbkG+i5cMyJ/5cZrvtk=;
-        b=YKfWDKYHMBI3EM0/BQnf5xm7YpN8/VaCh8cjMLOGrb1d19h1cdaEpUhFG9ypWZfsN1
-         BtAQiqcL+ZPFLqUTBypE1Wx8CsuqEwVA6bSCwWrfhjgwm1ZE71PRtZL4nHXCn7xexcdV
-         lgmj9YXFcFUI1Y9H3YQweO+hj45yjrJAmxDUgZ+tYivF7KgcCSjpw5y/tGoBrZQzrBhw
-         EacrHiZpY/H3SLi8V94LxDD8RtVzXo2uBw4MOXhmxig1FFY/F8ci64WS1yrx+qiDcetY
-         fzOoqUlezVM+sVJx4f4FNG3RXCwTHkTbq0IXUqvditV63cpjKbKJ4li1gbByrjV7LRE2
-         WX+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786050851; x=1786655651;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=2Ul71xOb4CR3H33B4d0sA2boSbkG+i5cMyJ/5cZrvtk=;
-        b=ieerNyXkp4NaBaT7weDH6i55UuLnFvUhVQuYBjqRNBXYUzZT0BYgm787TjxxvT8+D3
-         kB5e/woHcRmuA8sVnIJiRYo7TnuEktKwRSqbJQSZQulRVzUNWYduUW5D4VEoJYJDFrfx
-         SwoL4l8lbhmrMRZ+f5MX6N5f4rVHLs0fg7++59cb6XJAajWViTAg8oC9OEo8NvB5V4RO
-         dmK25v8WQv6u3EpWjLNikT4qqKIAxnS7zsJK4ZzClSakK82nJtjzicUPo4pIGRBGf2sV
-         HxXUiVVrG7036f11DFvykh+97bF9t9gefGTP/ZX1eMow6v8++Cu9kNVdODVWtkPDyBXJ
-         SaWg==
-X-Gm-Message-State: AOJu0YxOIMoAoeYetBerCL7KpETT7tLTGX2Bhsug/lh3geqGGfKE9/0B
-	KQGoN6V6TgSiL/yXyE5xChPveOI4/wHrTp1yk7FoxNYD2uNXaxVc4ZnEm6yEYzyF2TK/DIFpVeU
-	rZpTabRaPwAfow+7coBk7+kzW2nqtp3o=
-X-Gm-Gg: AR+sD12uF/SvGYGgbmT0RAxD+9Nt6i0Fdc7Kk4MUbnIC3teyGJdAWFwqAsuOyChlaHG
-	7ktd2e1GEOaY4n3sn4n6lQBDlstTwUKsjQkPYKSVEjI110wwIHXwhPn11Rvs7Hghvr78QO3REZW
-	PiJNluqwnmcc2AAbVNtWihFpdG1EO3AamHHvurk8wu0S674xrY4ifQQAeyTAMBJSG4S9r+6sf4g
-	frfI5fjP+5gd50FVlkt3cDZ3+4QqWq+/w3U9HCOLB4FztZskP/uQsThDjjtNuNs9Fl6fbVyQsiL
-	AzUSpmeVMfaho3lJXNgGg34mGsMr7zZgl2ov0+JUIgCeCWodD+xwTasqAQ==
-X-Received: by 2002:a05:651c:1993:b0:39b:2757:c1d3 with SMTP id
- 38308e7fff4ca-39fbae29cffmr20604271fa.9.1786050850676; Thu, 06 Aug 2026
- 14:14:10 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="C1nfjmeY"
+Message-ID: <64e8767b-e3b3-4794-a8b1-b4c1d8248353@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786050993;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GHA/YRsIb/3fPVEiFS+Ogztk3CMSnLdHrQv8EXgoMZA=;
+	b=C1nfjmeYqfp5KpBouN+nIyan/O7E9SdjQRsnNy5FgjYCQd9gLtzdamPHlQFDSmyXpENFrw
+	DxU9jr9ob1wqEA/tDM459YBRs+/mj+GofE4Ttx/41ieYmLanPX5+KBbm18typ0pG/4DhaZ
+	sj+R5CdaLKqu2VVx6Pk73LRtv06dPEw=
+Date: Thu, 6 Aug 2026 14:16:04 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260805233940.3966981-1-dingning04@gmail.com>
- <DKHQUVB5TV0R.1OLK7GG1APAOR@gmail.com> <DKHR95T6P1ZC.G09YF6M1QEL2@gmail.com> <DKHY982BEJN7.2ZUBJJEXR8X7B@gmail.com>
-In-Reply-To: <DKHY982BEJN7.2ZUBJJEXR8X7B@gmail.com>
-From: Ning Ding <dingning04@gmail.com>
-Date: Thu, 6 Aug 2026 14:13:59 -0700
-X-Gm-Features: AUfX_mx1ga46zrbsPio-BaoBvBGYjHe9_71Kt_FkjtOcL0VD5rCVzb5iPff8W3w
-Message-ID: <CAJP4iuvBhxjmxKjVKK2YFWyx=5qJc3ANLOxFdYfXeg-S5QXegQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/2] bpf: Track overlapping RCU protection
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, puranjay@kernel.org, paulmck@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH bpf-next v2 2/6] resolve_btfids: Process KF_ARENA_* flags
+ in resolve_btfids
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+References: <20260805230648.2354989-1-ihor.solodrai@linux.dev>
+ <20260805230648.2354989-3-ihor.solodrai@linux.dev>
+ <b18f90989ea2632b36c41eef646541881c9bb767.camel@gmail.com>
+ <d3b34173-d3fa-489b-958d-f56bd541b838@linux.dev>
+ <afb7cff918f93e754a873344d9794446e4ac4f9f.camel@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <afb7cff918f93e754a873344d9794446e4ac4f9f.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-> I fixed this up since it was minor and applied the series. Thanks.
-Sounds good, thanks!
+On 8/6/26 2:12 PM, Eduard Zingerman wrote:
+> On Thu, 2026-08-06 at 14:02 -0700, Ihor Solodrai wrote:
+> 
+> ...
+> 
+>>>> +		if (nr_params < 1) {
+>>>> +			pr_err("ERROR: resolve_btfids: kfunc %s: KF_ARENA_ARG1 but it has no argument 1\n",
+>>>> +			       kfunc->name);
+>>>> +			return -EINVAL;
+>>>> +		}
+>>>> +		id = arena_tag_ptr(btf, arg0_type_id);
+>>>> +		if (id < 0) {
+>>>> +			pr_err("ERROR: resolve_btfids: kfunc %s: KF_ARENA_ARG1 but argument 1 is not a pointer\n",
+>>>> +			       kfunc->name);
+>>>
+>>> Nit: not a pointer is not the only error condition, btf__add_*()
+>>>      functions might fail as well, maybe just push pr_err() down
+>>>      to the arena_tag_ptr()?
+>>
+>> I guess the question is how much details do we want from the error
+>> messages here. Since this is a part of kernel build pipeline that can
+>> block it, I'd err on the side of more details.
+>>
+>> I'll see if I can simplify this though.
+> 
+> Well, we don't want the errors to lie either :)
+
+Why not? We can create many beautiful debugging evenings for the people,
+and now for AIs too!
+
+:bilbo_why_shouldnt_I_meme:
+
+> 
+>>>
+>>>> +			return id;
+>>>> +		}
+>>>> +		arg0_type_id = id;
+>>>> +	}
+>>>> +
+>>>> +	if (kfunc->flags & KF_ARENA_ARG2) {
+>>>> +		if (nr_params < 2) {
+>>>> +			pr_err("ERROR: resolve_btfids: kfunc %s: KF_ARENA_ARG2 but it has no argument 2\n",
+>>>> +			       kfunc->name);
+>>>> +			return -EINVAL;
+>>>> +		}
+>>>> +		id = arena_tag_ptr(btf, arg1_type_id);
+>>>> +		if (id < 0) {
+>>>> +			pr_err("ERROR: resolve_btfids: kfunc %s: KF_ARENA_ARG2 but argument 2 is not a pointer\n",
+>>>> +			       kfunc->name);
+>>>> +			return id;
+>>>> +		}
+>>>> +		arg1_type_id = id;
+>>>> +	}
+>>>> +
+>>>> +	new_proto_id = btf__add_func_proto(btf, ret_type_id);
+>>>> +	if (new_proto_id < 0) {
+>>>> +		pr_err("ERROR: resolve_btfids: kfunc %s: failed to add a func proto to BTF\n",
+>>>> +		       kfunc->name);
+>>>> +		return new_proto_id;
+>>>> +	}
+>>>> +
+>>>> +	for (u32 i = 0; i < nr_params; i++) {
+>>>> +		proto = btf__type_by_id(btf, proto_id);
+>>>> +		params = btf_params(proto);
+>>>
+>>> Nit: these two do not need to be in the loop body.
+>>
+>> They do, because btf__add_func_param() below may move the proto
+>> pointer, no?
+> 
+> Huh, indeed.
+> 
+>>>> +		name = btf__name_by_offset(btf, params[i].name_off);
+>>>> +
+>>>> +		switch (i) {
+>>>> +		case 0:
+>>>> +			param_type_id = arg0_type_id;
+>>>> +			break;
+>>>> +		case 1:
+>>>> +			param_type_id = arg1_type_id;
+>>>> +			break;
+>>>> +		default:
+>>>> +			param_type_id = params[i].type;
+>>>> +			break;
+>>>> +		}
+>>>> +
+>>>> +		err = btf__add_func_param(btf, name ?: "", param_type_id);
+>>>> +		if (err < 0) {
+>>>> +			pr_err("ERROR: resolve_btfids: kfunc %s: failed to add a proto param to BTF\n",
+>>>> +			       kfunc->name);
+>>>> +			return err;
+>>>> +		}
+>>>> +	}
+>>>> +
+>>>> +	pr_debug("added arena-tagged proto for kfunc %s: %d\n", kfunc->name, new_proto_id);
+>>>> +
+>>>> +	return new_proto_id;
+>>>> +}
+>>>
+>>> ...
+
