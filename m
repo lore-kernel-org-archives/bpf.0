@@ -1,146 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9A746DFF2
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 15:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93AA3A383C
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 15:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786028503; cv=none; b=WVCSIU5xMjHCCdnY2yu/BshcEZ2++wWnAm6+YkvcUx/7jAEeuPkXLrKk6GAPUkneR/mRCeIZ9sMKdJ4wL+9FTqy0ZeNuRgf/ZG6gZ9nVoQOrUf9j0mzv7E+pavxPnpzoTzkZe2QKMlzGm+HP8Y69XtqURZibXLN/7h9iYJvM5P4=
+	t=1786029555; cv=none; b=qcHFSDx/IpgvCapoLTGy1V1jUGJbQeZfKCvH/7zL23AYDB+S0V52ImrhwZM+FKn1qeTpPEeRYiJeKGhRAxHfMripIoqBstjAEjRFtbgiziUKxgnm44oTQpJNo9eeA4djJSpK7BwmROgW/CK9eZPUs02u+bSQveuYOQGO3FbFEVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786028503; c=relaxed/simple;
-	bh=0iugY0XpCy1T76NJBDJj3Bb/5qtMaUupLY+llj0jkmA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mp788pPKvkRyURXJZkWI+40h69Du8zusHIztS5veFe6ldsDfHf8Y//sh6F7lw35xi6PfuGeX7KYXA1JpoA0eSuTrVa4abSWquqtfLHNNu+SW5VjKzaQGofZI/oCiT9hazv2NeA96sQkXaxIGpVVZxG0a0xja7f6YdhGQtc/c/Jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyPUyQlZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786029555; c=relaxed/simple;
+	bh=lMFtTDGTCvVhvql6dY4AgQZ41cktbOHo6Cm5jpHgpeE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GPIZ7LkUnfiBtjdGAFl9YJRRvKNLcdtx4lH7jtGfxj27oFoQbhQuz83oBwJ9GBjsf9QXTPii37uo4GEvTEC5t950ccbpDU8r0LnZ72FfnprfMzwJpP2uZt4W1IxXlG5A2FCFlwiOr83k9p8PsnorNxwMVUrnVFwl6MFuVKVMHHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai; spf=pass smtp.mailfrom=nebusec.ai; dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b=sHuKzStH; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iyPUyQlZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B834E1F000E9;
-	Thu,  6 Aug 2026 15:01:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786028501;
-	bh=e0jkZ3Gf6GhiYldqqZjpJHT9UzjLICgOhSpjoXm2/g8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iyPUyQlZrX//0gawY8RvBYSKfzMuGjDX+Fw2lic38Yh4qrb+lkkTnAjDNpOKzJnTm
-	 IyULJDbX7yiB2HDqZtiRD1pazsVdNvMg9lmHnxmx0eFoJpUEdxzNhHpdCY9Cq2aDpL
-	 G1pfAPJat9TaamgmrbXzrNniSJijVneTrJ41Mi8sMJKiSzVBkTSfpjSIagrRWJg/vj
-	 3LLpqsc865crBGjj2CioDYjIpzrR3VG84slItAi/t/20EBHpmocBjyUQxCGOBLaulj
-	 /RAXJP46GfjLIaHPd/9a78/uCEqBmG1XcX1XyqHPWBA2FRZUbe8Xib+zPzls0hzGOS
-	 tOLX0PX82xR9g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/6] bpf: Reject load-acquire from pointers
- requiring fault protection
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Borkmann" <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260806143924.319238-1-daniel@iogearbox.net>
-References: <20260806143924.319238-1-daniel@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 15:01:41 +0000
-Message-Id: <20260806150141.B834E1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b="sHuKzStH"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ceb096e675so29867935ad.0
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 08:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nebusec.ai; s=google; t=1786029552; x=1786634352; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=HZHAiU7n90MzvUYuXvR9xtuxpe05p3NVzrsRdq55ods=;
+        b=sHuKzStHCy2L3I+QuGj0JFwHAxrdROXcme49jsRWOlEb673MzOogFW3Vqd43/mXpxa
+         FHKFaw0l+G2T95nHy90M9Go8dQge429VrRs6Apf4WBGYCCsULPxsmnwtiRFQGy/X8z8q
+         mQ7PvKBCCTtNTuEki4WShZzKi2u7HlZQTtV6XQX1RSupRtoK+dZmvRW1QJ3jSx2hfon/
+         y5oDOcmmIBYLbOpfshPpD3HEkbIpWifmJk2gMgOS51apMh09ncVcr0anrEDt6SqLxIbR
+         el4xgpiw+bnrrhq6yn1UBwfD/dflWaT1eFiopb/D+bIYT8C+vAysuDzbGpEq90YOmqfM
+         a4hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786029552; x=1786634352;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=HZHAiU7n90MzvUYuXvR9xtuxpe05p3NVzrsRdq55ods=;
+        b=MR97vvfwycA1T7NgxoJ/RMENVvccjEczt+heEa1EqZ2RjhfuUp217B0Bi8onSBPSU7
+         x/CDpJmy5Hk5/18RLX4wrZQS1jVV6m7rBP7/unvYEvEaaG7Xm4KJZu4T2+Xkh1QNlzlI
+         FijnOqrchFxFEd/wdOrd6TJZqjhRGXB9kgUmA9Pu7bmBFOihqXwYqBjZU31M1amx77eP
+         Spfd8BtC2qQxi0dCZQPnliTg8aru/LKv1+XcRpHAYUO20ydFrDIRjww8co9EXwmkdi65
+         zhUEOSSr9khBz3pze8dq06y50ib1SmGQrw34h1PD4whYpjrJh2DBwO9rXS6hqc6u1Jc0
+         qoug==
+X-Forwarded-Encrypted: i=1; AHgh+RqmEt2fSreVGxRKbzrF2FLZP4qsaoqq+WwoUxFsMr6eRkrs12AZe6uQ9mkoxw1PpX9DSNA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YztMkICNDlN7XQzUR9kHGfiqaqoCKybClsVZ7kVghwXuNU55LAI
+	xNU5KI3t30slwVVj8YrjSlR1R7PQtTJ3AxJbTbAq81brJi5YddZTvNnpIHM3DY/7VF+S
+X-Gm-Gg: AR+sD12P3G7eZhlBmzV1q3O5ql0WQWBZjZKG1n+P0JamuzxcLfk/F7rvcRyUUJXIQQw
+	wB3dXo7Qan/Zl8ZnuyBb+KcQOW18NX+aOYp779cr/w5sJwpt9ZzMZab1fOwbWmVdibvXGWsP4aH
+	dSQ0KiS5hcoRwPSz+L6YJtm6l2U7XSx1tbhrW+BH4aI6pTdi7nktmFNymuZeBl1SW+/E/Tskheg
+	KLoDrKLePPxRHMSTHMDmReM2bqJiuxQMq3yaB4A3N20dZspLjQ2Vcr0Xs3f6i/SSiqdanGXaO9Q
+	BOFh24OJigF37CAMTu7gZEJc1H4ErjvLvL/SR5MIDPzXT9XdJLblM5LqrihJw8H8juO17Tj1eMC
+	VPaIIZFYAz8zmO+rZ58AS703J4Trl3+bY47aFVdsintW2vEsYlHHq/MNEoe1xDEFZ8M0LLnvGYz
+	HnoiQx7CO+Z1f9Ox83CUsJtfx3/4J2s1MMX1zGZNyObF2dEAkocvnf1vPDX35j3iqnKQyG0SfPD
+	1gURzcv+IqEqt4=
+X-Received: by 2002:a17:903:46cc:b0:2ca:d172:7228 with SMTP id d9443c01a7336-2d0ca7fad2bmr204351875ad.11.1786029552042;
+        Thu, 06 Aug 2026 08:19:12 -0700 (PDT)
+Received: from Roxy.localdomain ([203.175.14.54])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d0aa493118sm33680785ad.46.2026.08.06.08.19.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 08:19:10 -0700 (PDT)
+From: Zhiling Zou <zhilinz@nebusec.ai>
+To: idosch@nvidia.com,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: dsahern@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	ast@kernel.org,
+	kafai@fb.com,
+	joe@wand.net.nz,
+	vega@nebusec.ai,
+	zhilinz@nebusec.ai
+Subject: [PATCH net v2 1/1] ip: orphan prefetched skbs before multicast forwarding
+Date: Thu,  6 Aug 2026 23:18:56 +0800
+Message-ID: <f968f497251dedbd1263c322a7c4e3e1a727161d.1786023177.git.zhilinz@nebusec.ai>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+IPv4 and IPv6 input preserve an skb->sk association installed by
+bpf_sk_assign() so that local delivery can use the selected socket under
+RCU. IPv6 can also get such an association from udp_v6_early_demux(),
+which runs in ip6_rcv_finish_core(), after ip6_rcv_core().
 
-Pre-existing issues:
-- [High] The verifier fails to convert BPF_LDX instructions to BPF_PROBE_ME=
-M when paths with PTR_TO_MEM and PTR_TO_BTF_ID | PTR_UNTRUSTED merge, allow=
-ing unhandled page faults.
---
+The reproduced UDPv6 packet has a multicast IP destination but a unicast
+destination MAC address. It is therefore classified as PACKET_HOST and
+passes the UDP early-demux check.
 
---- Patch [1]: [PATCH bpf-next 1/6] bpf: Reject load-acquire from pointers =
-requiring fault protection ---
-commit 7bfb4a68d477eb7f566fc7d106ee4703a225c192
-Author: Daniel Borkmann <daniel@iogearbox.net>
+When the multicast packet is not locally deliverable, IPv6 hands the
+original skb to ip6_mr_input(). IPv4's ip_mr_input() similarly keeps the
+original skb when local delivery is not needed. Either path can put the
+skb on an unresolved multicast route queue or forward it after the
+receive-side RCU section ends.
 
-bpf: Reject load-acquire from pointers requiring fault protection
+After the prefetched socket is destroyed, a later skb free invokes
+sock_pfree() and dereferences the stale skb->sk. Orphan the skb before
+each non-local multicast forwarding path. Local delivery retains the
+original skb; the existing skb_clone() calls provide multicast forwarding
+with a socket-free clone.
 
-This patch prevents BPF_LOAD_ACQ instructions from being used with
-pointer types that require exception table entries for fault protection.
-It rejects untrusted pointers and bare PTR_TO_BTF_ID pointers since the
-JIT does not emit exception tables for load-acquires, which could result
-in a kernel panic on a page fault.
+Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
+Fixes: 08842c43d016 ("udp: no longer touch sk->sk_refcnt in early demux")
+Cc: stable@vger.kernel.org
+Reported-by: Vega <vega@nebusec.ai>
+Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
+---
+changes in v2:
+- Cover the IPv4 multicast forwarding path.
+- Correct the IPv6 early-demux ordering and document the unicast-MAC
+  PACKET_HOST condition used by the reproducer.
+- Add the BPF socket-assignment and UDP early-demux Fixes tags.
+- v1 Link: https://lore.kernel.org/all/02db4590d0161e31a789dcdfa8d1be1a3212ec2e.1785724784.git.zhilinz@nebusec.ai/
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index d952bd95cbb7b..78637faf13508 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+ net/ipv4/ipmr.c      | 3 +++
+ net/ipv6/ip6_input.c | 1 +
+ 2 files changed, 4 insertions(+)
 
-[ ... ]
-
-> @@ -4921,6 +4921,30 @@ static bool is_arena_reg(struct bpf_verifier_env *=
-env, int regno)
->  	return reg->type =3D=3D PTR_TO_ARENA;
->  }
-> =20
-> +static bool is_load_acq_unsafe(struct bpf_verifier_env *env, int regno,
-> +			       struct bpf_insn *insn)
-> +{
-> +	const struct bpf_reg_state *reg =3D reg_state(env, regno);
-> +
-> +	/*
-> +	 * A BPF_LOAD_ACQ is not rewritten to a BPF_PROBE_MEM load by the
-> +	 * verifier, unlike a regular BPF_LDX. The JIT would emit a plain load
-> +	 * with no exception table entry, so a fault (e.g. NULL deref) crashes
-> +	 * the kernel instead of being handled.
-> +	 *
-> +	 * Reject the source pointer types that a BPF_LDX would have had that
-> +	 * fault protection applied to, i.e. the ones bpf_convert_ctx_accesses()
-> +	 * turns into BPF_PROBE_MEM: a bare PTR_TO_BTF_ID and any PTR_UNTRUSTED
-> +	 * pointer (untrusted btf ids, untrusted MEM_ALLOC, rdonly untrusted
-> +	 * memory). A PTR_TRUSTED pointer is not among them, is not converted,
-> +	 * and stays allowed. Same for the other flagged PTR_TO_BTF_ID variants
-> +	 * (MEM_ALLOC, MEM_RCU, ...), hence the exact match on the base type.
-> +	 */
-> +	return insn->imm =3D=3D BPF_LOAD_ACQ &&
-> +	       (reg->type =3D=3D PTR_TO_BTF_ID ||
-> +		(type_flag(reg->type) & PTR_UNTRUSTED));
-
-[Severity: High]
-This is a pre-existing issue, but since the comment mentions pointer types
-that bpf_convert_ctx_accesses() turns into BPF_PROBE_MEM, does it currently
-miss handling PTR_TO_MEM | PTR_UNTRUSTED?
-
-When paths with PTR_TO_MEM and PTR_TO_BTF_ID | PTR_UNTRUSTED merge,
-save_aux_ptr_type() produces PTR_TO_MEM | PTR_UNTRUSTED without MEM_RDONLY:
-
-kernel/bpf/verifier.c:save_aux_ptr_type() {
-    ...
-			if (is_ptr_to_mem(type) || is_ptr_to_mem(*prev_type))
-				merged_type =3D PTR_TO_MEM;
-			else
-				merged_type =3D PTR_TO_BTF_ID;
-			if ((type & PTR_UNTRUSTED) || (*prev_type & PTR_UNTRUSTED))
-				merged_type |=3D PTR_UNTRUSTED;
-			if ((type & MEM_RDONLY) || (*prev_type & MEM_RDONLY))
-				merged_type |=3D MEM_RDONLY;
-    ...
-}
-
-However, in kernel/bpf/fixups.c:bpf_convert_ctx_accesses(), it seems this
-exact type combination is not converted to BPF_PROBE_MEM because the switch
-only handles the MEM_RDONLY case:
-
-kernel/bpf/fixups.c:bpf_convert_ctx_accesses() {
-    ...
-		case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
-		case PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED:
-			if (type =3D=3D BPF_READ) {
-    ...
-}
-
-Could this lead to an unhandled page fault and kernel panic if an untrusted
-pointer and a valid writable memory pointer (like from a dynptr) reach the
-same BPF_LDX instruction, bypassing the fault protection?
-
-> +}
-> +
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806143924.3192=
-38-1-daniel@iogearbox.net?part=3D1
+diff --git a/net/ipv4/ipmr.c b/net/ipv4/ipmr.c
+index 1d9a4ac14fcef..e5f2b1c6150d2 100644
+--- a/net/ipv4/ipmr.c
++++ b/net/ipv4/ipmr.c
+@@ -2213,6 +2213,9 @@ int ip_mr_input(struct sk_buff *skb)
+ 	if (IPCB(skb)->flags & IPSKB_FORWARDED)
+ 		goto dont_forward;
+ 
++	if (!local)
++		skb_orphan(skb);
++
+ 	mrt = ipmr_rt_fib_lookup(net, skb);
+ 	if (IS_ERR(mrt)) {
+ 		kfree_skb(skb);
+diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
+index 8972863c93ee5..d332ec60f9150 100644
+--- a/net/ipv6/ip6_input.c
++++ b/net/ipv6/ip6_input.c
+@@ -622,6 +622,7 @@ int ip6_mc_input(struct sk_buff *skb)
+ 		if (deliver) {
+ 			skb2 = skb_clone(skb, GFP_ATOMIC);
+ 		} else {
++			skb_orphan(skb);
+ 			skb2 = skb;
+ 			skb = NULL;
+ 		}
+-- 
+2.43.0
