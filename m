@@ -1,136 +1,90 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from out-173.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3619B49480B
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 20:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133863D903E
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 20:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786047055; cv=none; b=HgI8XBpSzjl6VcfjIlBZm6HIXZK1tXCzOwysFZWpCORaSXGSmnZXmZXDV1AVjdxBp6lzR3XugBNj2mY2ls1mp3uDGT3mUFwxdCCfx29yQGAhFb2vDuLzcb5a0dG0lCy0nNna7C4kr4HAl9TsbX4J6TTqaOocTHQX6Crdq2AUJxQ=
+	t=1786048217; cv=none; b=Yjy1hz6ZjZsFA9r29TNhzW/XPbUUdwPgAH2NDyNqsr9KJhT2LanLZe6fcTPTTydoZH6tk9W0bUwPzyfeUGm2Hkl9rfB+9EMSLdz6b/9/1g5LKj8hHlfitsLudtS4sTyqKQWqW667fKRFBx5bo3nvfi7UHxT3tLSfd36jfS7A+PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786047055; c=relaxed/simple;
-	bh=xMYMCsOzkScWOPX9Q+ZaRLlk7kPBK39DR/fO/I4SWQo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iyosMbQGHzb6QpWAb4Vu3glhcQzQOuvxyjjSfogmMj0pwwRAzMk5AKa5d7czeoDXwvt1iR+d7v0iSK75/QZWPFf2nQwKMDSznCBSbd8ltjegSZ0sO4yltd1og9jreKtwzsCGV3ZuirbuCdbPJdsu1Z0C76Pv8NtHHuXKo/1GRNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=njGttoZc; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1786048217; c=relaxed/simple;
+	bh=p6LZX1eSh7OiICqAmn3/p2e/P7OsJa9OIknN76EyCis=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aepNI2pvXdInncK+bZUTHuv/eTe47veoK9v+CLWL9OZPQGQ7G0smsUMYJr30g65KqUWFlNB29gOjc0YQ0zChoISGXPDL2G3n9V7nIUIl+CjkxVaS5X5ZUoOkQcpoL2iDoGLAwdKKCORiiNpTvfTTxTMP6r3CeJF3DA7doVnjmzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mBQJb8gT; arc=none smtp.client-ip=37.59.57.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="njGttoZc"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=cws97ArbMD5eomdnyOIWkONXr3UWpV3ckp/ubJScFts=; b=njGttoZcrJ6r3gQu11950TjN6y
-	Wj4J6an+BGTke2YGw63gu5RkO4SysD1XbcWX13ZoNTdRUKHlPApYtfrOY5P+HpdNqlSXka/CkbWSI
-	c03WrWGtyG0dwgVgnM9uOK/yYDK0W65MzVOMKpqVVInFW2YRNKJxneIkeM4sFk50F79pSN0fiCqSP
-	f48xi9hlQnO8s2TRk+oSCs3dH1eRiC3JfrpuUJySbA9bi1uAGIRfUBIEAzjLInUlpM5Sw5zsRqc7H
-	3uEUTgsk+6Jq3ms7lTP1CiDI0Q4FAXUtAjL/uXR4SWQ81kDbpS5rQsejXa7kL2dtXretaZ0tANjqm
-	zBxT22wA==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1ws4QV-000DHZ-14;
-	Thu, 06 Aug 2026 22:10:51 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: memxor@gmail.com
-Cc: eddyz87@gmail.com,
-	puranjay@kernel.org,
-	info@starlabs.sg,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Add load-acquire test for probe-memory pointer types
-Date: Thu,  6 Aug 2026 22:10:47 +0200
-Message-ID: <20260806201047.333389-6-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260806201047.333389-1-daniel@iogearbox.net>
-References: <20260806201047.333389-1-daniel@iogearbox.net>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mBQJb8gT"
+Message-ID: <455a0c97-9507-4035-ba12-82afc30ae51a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786048213;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HHBNxU8iQ9bhuCdbWfe0js0K+5MqccYz2yBcRa2afJk=;
+	b=mBQJb8gTVmEyaIq7YZKUh31T4UMYQHN2xNWQjH7Y1jO52xSf4pqrwbKiKcl4rqiZPPPuy7
+	ihajCDiXFJITdsporXo+C0LcuqXs/MBumUjg2wv/U5ZsKVVPJ0XQe2kIxM6LScfS9TGvvQ
+	9rQEA96ifDbOU8uFMB9fsSs73VaFLJw=
+Date: Thu, 6 Aug 2026 13:29:51 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH 0/3] selftests/bpf: Fixes for out-of-tree builds
+To: =?UTF-8?B?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28084/Thu Aug  6 08:24:46 2026)
+X-Migadu-Flow: FLOW_OUT
 
-Add a verifier test that a BPF_LOAD_ACQ from a rdonly_untrusted_mem pointer
-(PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED, obtained via bpf_rdonly_cast())
-is rejected. Such a source requires BPF_PROBE_MEM fault protection which
-is not applied to atomic loads; without the verifier fix the load is accepted
-and would crash the kernel on a fault.
+On 7/28/26 5:06 PM, Ricardo B. MarliÃ¨re (SUSE) wrote:
+> Hello,
+> 
+> When doing a simple out-of-tree build, e.g.:
+> 
+> $ git clean -fdx
+> $ mkdir ../build
+> $ make defconfig O=../build
+> $ scripts/kconfig/merge_config.sh -O ../build ../build/.config tools/testing/selftests/bpf/{config,config.x86_64}
+> $ make O=../build
+> $ make -C tools/testing/selftests install O=$PWD/../build SKIP_TARGETS= TARGETS=bpf
+> 
+> Will leave behind several build artifacts:
+> 
+> [...]
+> 
+> This series fixes this.
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t verifier_load_acquire
-  [...]
-  #621/1   verifier_load_acquire/load-acquire, 8-bit:OK
-  #621/2   verifier_load_acquire/load-acquire, 8-bit @unpriv:OK
-  #621/3   verifier_load_acquire/load-acquire, 16-bit:OK
-  #621/4   verifier_load_acquire/load-acquire, 16-bit @unpriv:OK
-  #621/5   verifier_load_acquire/load-acquire, 32-bit:OK
-  #621/6   verifier_load_acquire/load-acquire, 32-bit @unpriv:OK
-  #621/7   verifier_load_acquire/load-acquire, 64-bit:OK
-  #621/8   verifier_load_acquire/load-acquire, 64-bit @unpriv:OK
-  [...]
-  #621/19  verifier_load_acquire/load-acquire from rdonly_untrusted_mem pointer:OK
-  #621/20  verifier_load_acquire/load-acquire with invalid register R15:OK
-  #621/21  verifier_load_acquire/load-acquire with invalid register R15 @unpriv:OK
-  #621/22  verifier_load_acquire/load-acquire from pkt pointer:OK
-  #621/23  verifier_load_acquire/load-acquire from flow_keys pointer:OK
-  #621/24  verifier_load_acquire/load-acquire from sock pointer:OK
-  #621     verifier_load_acquire:OK
-  Summary: 1/24 PASSED, 0 SKIPPED, 0 FAILED
+Hi Ricardo,
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- .../bpf/progs/verifier_load_acquire.c         | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
+I think we should wait for the selftests makefile refactoring series [1]
+to land first, and then address the issues you've found.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_load_acquire.c b/tools/testing/selftests/bpf/progs/verifier_load_acquire.c
-index ae1dab1b0cbb..d17026d7480d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_load_acquire.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_load_acquire.c
-@@ -3,6 +3,7 @@
- 
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
- #include "../../../include/linux/filter.h"
- #include "bpf_misc.h"
- 
-@@ -221,6 +222,33 @@ __naked void load_acquire_from_sock_pointer(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("load-acquire from rdonly_untrusted_mem pointer")
-+__failure __msg("BPF_ATOMIC loads from R{{[0-9]+}} rdonly_untrusted_mem is not allowed")
-+int load_acquire_from_rdonly_untrusted_mem(void *ctx)
-+{
-+	__u64 val = 0;
-+	void *p;
-+
-+	/*
-+	 * bpf_rdonly_cast(x, 0) yields PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED.
-+	 * A regular BPF_LDX from it is rewritten to BPF_PROBE_MEM, but a
-+	 * load-acquire is not, so it must be rejected, otherwise the JIT emits
-+	 * a plain load with no exception table entry and a fault would crash
-+	 * the kernel.
-+	 */
-+	p = bpf_rdonly_cast(&val, 0);
-+	asm volatile (
-+	"r1 = %[p];"
-+	".8byte %[load_acquire_insn];" // r0 = load_acquire((u64 *)(r1 + 0));
-+	:
-+	: [p] "r" (p),
-+	  __imm_insn(load_acquire_insn,
-+		     BPF_ATOMIC_OP(BPF_DW, BPF_LOAD_ACQ, BPF_REG_0, BPF_REG_1, 0))
-+	: "r0", "r1");
-+	return 0;
-+}
-+
- SEC("socket")
- __description("load-acquire with invalid register R15")
- __failure __failure_unpriv __msg("R15 is invalid")
--- 
-2.43.0
+When you do the respin, please test both build and clean with an
+in-tree kernel build and with O=
+
+Sending a few comments in a bit.
+
+[1] https://lore.kernel.org/bpf/20260804170156.1709916-1-nickolay.lysenko@gmail.com/
+
+
+> 
+> [...]
+> 
 
