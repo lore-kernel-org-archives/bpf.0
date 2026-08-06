@@ -1,80 +1,130 @@
-Received: from mail-24429.protonmail.ch (mail-24429.protonmail.ch [109.224.244.29])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883B6346FB5
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 04:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD031381AE4
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 04:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785990431; cv=none; b=IMz7vK52SnTw5ma1yspxYNW3atLf53pbxx3VeupJYV8Aj+bH65gOQmDhg6gRwskZ8imJKqiV8HZmleg+d6iUrfAm+5YniJDEgiX1vWN4VyYh0n53JuQ189P1rdMS1/QIZMz8htCYqwDvjU+7IAij+8bKAHU5R/MPilzYU7yzLQM=
+	t=1785990579; cv=none; b=AzfwuIEu8e3LiqRuhs+ZaTKJKIaGRF+3+odXFuaYLVKvf6TOVXW0xqW4q1cZQ33T0Ggjl4B6uEplfkC4qj/EdSnyP4+yoHXAFNHnBQ20p+udGrqcoTivj3i/KTz31Loo1GJTdjToec+o6b3bzSLzdxnv7W9wc2bBMGJxuMrruHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785990431; c=relaxed/simple;
-	bh=jFRvPBEEffqKE8w6gOIwRIA20uqFF3wOpNsGpGlAE4w=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cuHGm7GABfLhuSKrKWha+L9Ow0l5kD/G8Tzym7/DvkFjXYd40gUamcrKeCqbRRKiIbXLSTzybuUOijY9kkuttZ8SFiYu22rGtbH+gbcl/MTbDpWKwlkxdLRhtF1ucgzvBmFhNVbSG/hA10Qd3EH7IxQ6xAdHWOmBt0ksLihyFdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=YE5KLZT/; arc=none smtp.client-ip=109.224.244.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1785990579; c=relaxed/simple;
+	bh=M9JbnndcKOn4XfWQ6BUUZvNsRvl2NDNOBqtcwoeTM+4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=sQtdypKreNAJBbvt5oDEm8GGCnogGPsxaHjD8NWjTcIie8Ij/P6fcPwnBRaYrbDstbrmh6SPo432bevAgCMPJDGhynxGW/d4mctxB/p4JGDed8lpTSe/1LW9TtTiv6tVdqpnn2MLbS6nwV1BEou5VM4HeZhSFXrDZZX2Yw+Qgvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NV0TRUys; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="YE5KLZT/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1785990423; x=1786249623;
-	bh=ohwSW8qsPRtbPjZwvKouZx5YOEapTwS/HTecdhR8dFE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=YE5KLZT/Ujh/wCVs2578hyIePWtq1WhS2Y/TMfZUFkqSTLUzIuuIfl156XjGuPh8d
-	 tAREIXs8ClwTEne/VAsFApveZVY2ITDh2LXIA4nHaln7Ho0wfINSV8QSFyJVV67vKy
-	 ckV0cuiobt0Ew/x3frlpqh8roflB9jqIf8WHl9sILJKa/85KTm3DyDyU9+z7YnAIdh
-	 8CA21h/J35fOcDwP21cWCL/dDPCNdz0C49CMrXcA8ifX1tLv2BztYrWIFXFUSKKQSO
-	 kjvltzrMBS/xaz99EEKc92p7m1qsFn6Swl+q7ZW1Ub52caiEp7lxeoLytG8pblzJeh
-	 fNslVFXTlBf5g==
-Date: Thu, 06 Aug 2026 04:26:55 +0000
-To: NeilBrown <neil@brown.name>
-From: quanyeyang <quanyeyang@proton.me>
-Cc: Quanye Yang <quanyemostima@gmail.com>, Justin Suess <utilityemal77@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, "David S. Miller" <davem@davemloft.net>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, syzbot+ef8d17bae14efb960935@syzkaller.appspotmail.com
-Subject: =?utf-8?Q?Re:_=E5=9B=9E=E5=A4=8D=EF=BC=9A_Re:_[PATCH]_bpf:_disable_lockdep_while_running_BPF_on_lock=5Frelease?=
-Message-ID: <EIbqlFfOtIoQjwWMjF_wfOLoXINOeoNtFxL8C-kwq2ynyLK1gqMXt-4qEaZr2mcNIyK6xkxNJOyn0BXgmZvlNmd01Y-om7FfnP85flTwFBk=@proton.me>
-In-Reply-To: <178596983056.3252194.16986843925963956795@noble.neil.brown.name>
-References: <20260803-fix-lock-tracepoint-bpf-lockdep-v1-1-91fb7afb526a@gmail.com> <anEuaSqiCVsQ6I4P@zenbox> <178583246611.3252194.4318729338489544399@noble.neil.brown.name> <CABcBDJuznu=BgDhevsD6PybX8+6fcaO1xyTcuGuv8F_+MfeZoQ@mail.gmail.com> <178588373680.3252194.4414470901360919775@noble.neil.brown.name> <46Fu_iB0xOxZXb0l5G6pslLArj7TrP_AOICffhfZKoviSn7zVUVVVSMfWaVBYNqt9RiCWWHhSAvlMc3RaJvRFSnvbV2EcBz9VUBQzb2wSkw=@proton.me> <178592062568.3252194.6464683099845305898@noble.neil.brown.name> <178596983056.3252194.16986843925963956795@noble.neil.brown.name>
-Feedback-ID: 206494642:user:proton
-X-Pm-Message-ID: 8597740ae3517b5f6005a6544ef05cbdc5ada27b
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NV0TRUys"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3A81F000E9;
+	Thu,  6 Aug 2026 04:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785990578;
+	bh=GinDxxKmafwtD22U6OCdgIf+pD4aqcRP+TlicVwAvhQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=NV0TRUyssjzX1rhO3qa5bg4bOzAN5eLvKrKQ7yq2PEza0JB11YRgXARhSo2NBrM5Q
+	 7CJo5zkiXQ3PXBqN0bKHDQyhWlC3KzVSTSB3PmZIsb2+/t+UFmwFISNHDAJE4z6fHf
+	 CBST5fTk4jsf6X6VJgVOE1Ev3Y3sbRG+4DlDjs8UMyNJw1p9E3iZ/KmfiKu0Qlxiti
+	 UJF2LXR3skVH1ozWiYVmQQ5ZrevoSiBa2auceh3SqlbANdAGGRZRkPkjXNiNuxs5CM
+	 d8vccQyvuXuK7EKJ6Yz9jvQRXbVQ/SmtLVyoi7TewX7dT3rtpFe8VT3n7bQNp6pk9v
+	 8t+PW+pE4EPZQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH bpf-next 2/2] selftests/bpf: add tests for selective
+ kmod BTF loading
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Fuyu Zhao" <zhaofuyu@vivo.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260806042042.3239428-3-zhaofuyu@vivo.com>
+References: <20260806042042.3239428-1-zhaofuyu@vivo.com>
+ <20260806042042.3239428-3-zhaofuyu@vivo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 06 Aug 2026 04:29:37 +0000
+Message-Id: <20260806042938.3B3A81F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Thursday, August 6th, 2026 at AM 6:44, NeilBrown <neilb@ownmail.net> wro=
-te:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] The test `test_kmod_btfs` depends on the `bpf_testmod` kernel mo=
+dule being available, but does not check `env.has_testmod` before running.
+- [Low] Multi-line comment does not follow BPF subsystem style guidelines.
+--
 
-> So I thought about this some more and came up with this approach which
-> might be a good compromise.  I builds but I haven't tested it.
-> What do you thing?
->=20
-> NeilBrown
+--- Patch [2]: [RFC PATCH bpf-next 2/2] selftests/bpf: add tests for select=
+ive kmod BTF loading ---
+commit 35262af12350c47550b117d06e881e0de422cb5d
+Author: Fuyu Zhao <zhaofuyu@vivo.com>
 
-Tested it now (PROVE_LOCKING + the syzbot reproducer at the Closes:
-link). It fixes the false positive cleanly:
+selftests/bpf: add tests for selective kmod BTF loading
 
-  before: "WARNING: possible recursive locking" on rhashtable_bucket,
-          5 instances during the reproducer's run;
-  after:  no warning; new lockdep complaints.
+This commit adds test cases to verify the new .kmod_btfs section logic in
+libbpf. It covers scenarios with valid, non-existent, and duplicated module
+BTF targets to ensure robust loading and parsing.
 
-The subclass layout reads right, and rhashtable.c has the single
-mutex_lock(&ht->mutex) (rht_deferred_worker, which you moved to
-_nested(1)), so nothing else is left at the old subclass.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c b/tools/t=
+esting/selftests/bpf/prog_tests/kmod_btfs.c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
+[ ... ]
+> +static void kmod_btfs_mix(void)
+> +{
+> +	struct kmod_btfs_mix *kmod_btfs_mix_skel;
+> +
+> +	kmod_btfs_mix_skel =3D kmod_btfs_mix__open_and_load();
+> +	if (!ASSERT_OK_PTR(kmod_btfs_mix_skel, "kmod_btfs_mix__open_and_load"))
+> +		return;
+> +
+> +	kmod_btfs_mix__destroy(kmod_btfs_mix_skel);
+> +}
+> +
+> +void test_kmod_btfs(void)
+> +{
+> +	if (test__start_subtest("kmod_btfs_pass"))
 
-One nit: the new field line in your mail shows a stray leading "o"
+[Severity: Medium]
+Since this test depends on bpf_testmod being available, should we check
+env.has_testmod at the start of the test and skip it if not found?
 
-  o      struct lock_class_key           *lockdep_key;
+Without it, running the selftests on a system where the test module is not
+built or fails to load might cause erroneous test failures instead of being
+gracefully skipped.
 
-probably a paste artifact; the actual field is fine.
+> +		kmod_btfs_pass();
+> +
+> +	if (test__start_subtest("kmod_btfs_nonexist"))
+> +		kmod_btfs_nonexist();
+> +
+> +	if (test__start_subtest("kmod_btfs_mix"))
+> +		kmod_btfs_mix();
+> +}
 
-Thanks for working this through -- reusing the existing per-init-site
-key with subclasses is much cleaner than my params suggestion.
+> diff --git a/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c b/too=
+ls/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
+[ ... ]
+> +SEC("fexit/bpf_testmod_loop_test")
+> +int test_kmod_btfs_nonexist(void *ctx)
+> +{
+> +	return 0;
+> +}
+> +
+> +/* This should fail to load, because .kmod_btfs does not contain
+> + * the needed module 'bpf_testmod'.
+> + */
 
-quanyeyang
+[Severity: Low]
+This isn't a bug, but does this multi-line comment follow the BPF
+subsystem style guidelines?
 
+The BPF guidelines usually require the opening /* to be on its own line.
+
+> +DEFINE_KMOD_BTFS(_needed_kmods) =3D { "module_nonexist" };
+> +
+> +char _license[] SEC("license") =3D "GPL";
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806042042.3239=
+428-1-zhaofuyu@vivo.com?part=3D2
