@@ -1,218 +1,132 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A2048C8AE
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 18:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA81485CD6
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 18:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786040571; cv=none; b=N4IBm3GX4or0+bkn5ywhjLkha4lzbQtJWrRrL/ZX4PGNMPe2PZrX2h97YA/bbQiCvf2gD5wlvbmvwRvahcsqkw9W+sRgeufGvj1nlniem4Axo2ctopHNYd1IsfNh/yUtBo/VljtUvuM3Ev0TZ90rma7LP5tFWOfMcIHVxKeSDMw=
+	t=1786040710; cv=none; b=rScQNDIAfK86MuuKjcmunNL0jR82UUJR3TAffBG8r7jtTUxF7uUvrUMvkHV4pG/7Tadystv5sVOmhXzA6K9Py0m1NI/YW4CNgGc8dXIjeuTr9eyiWpPc7AUGQFchn/GXzNNpCnXQymIo1RK0dOKn2ZjHBtYCOAX+vLjpFcYvhVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786040571; c=relaxed/simple;
-	bh=Tbb25sGeZrNe8qfMPaAkIA3bkftbTcqapPEA5L4Nj5M=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ohu9JbSv6GYAe1XnsdxaUGCJWnK7bcpAc+iplbkG4ThzSILE9GoW/7+q+VAePRGjUIgqUlK3Da3PBAwCMkuoIhWCnGtKgJ7l4x0YelfzqqJooPPi/xWwB+5nwcwUYh2G/mnNHJ2llxeX8wcSo3bbpcD1S5ToB+p1TNtNM28Y1No=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BSDCYDiL; arc=none smtp.client-ip=209.85.128.51
+	s=arc-20240116; t=1786040710; c=relaxed/simple;
+	bh=OAnGXhoMWN0VX4aRXp3qSN6EwUoruIJ70j69kxghWfM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GreeK/jo8q5119S9SnG68FUldJ02FnQ0wBGw7bVS+n4zn3oSCVjxFQstCZK3X42pULMdjaTLwqwhctElVknGIoF9ARq0aWy7kftMoPpA2r18apnL0fQxitk0Q/OrqnvBUVwWK2bWi1WgMcxUCWOno7PhT1sHB5cKB/zsc3wTP38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rNN3IMG1; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BSDCYDiL"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4957eefd361so18874205e9.1
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 11:22:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rNN3IMG1"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38e7109321dso1701558a91.3
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 11:25:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786040567; x=1786645367; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=eEXE5xEEQpc13Rsa6o31+ciZXy4TocWR50mP3ni+aMQ=;
-        b=BSDCYDiLF8bgEmX8yBmLem71D4k4eJSjefO/H1wWsr9VzVvkCCN13mxCadrz7dm9rx
-         FpvTQ4VMp7HVS6nCY2oEO7BXYkMV49o5t6pFF08b0tGcPYmq0Ke+QvECS50wuMeKQr4I
-         DA+qTXCyR3Mthr8198e48novJr2QIGqCVj7hva/vvuq3jrtfbrC10NCOfnHBpEYTA41Y
-         fEH+e7eEY/0/jC7Hao0d/9YjdQV+4rdfj7Jin4PSRCQARHJI+NI9bha7Zln4kE1+/5UL
-         fSHrhLkENqGXWzprFhUOXTPxhYC3qWEIGtXPMFrNegWRGpCyoFb1xputjl64dYtzdZHr
-         xaNQ==
+        d=gmail.com; s=20251104; t=1786040708; x=1786645508; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=eRxIpMxQf2eH73MswyccHSNChNNfT/J5n/NCnkKxEHE=;
+        b=rNN3IMG1BNlGchnOjZlFZrkh2BI0nTwD6or5ACQrLo2bfQYsxI4LX8sKNjYEiew29w
+         d7NlyengXoAoaRY6LL8O8zFGtGG8r1dXVYGAr4hzEGxxYD8AH+Ojh00kISYTcYrQvwST
+         Pb3jXyPVZMU8MusBD+A0pIPluCWmxCH4Y9gfY3nLdG2RPWH9mzPXo1lxSeVFyTRasuV3
+         jI+iII9LvtQHQLRX5lilQEw2PrhRsj62shYDOvIGX+lIJCKoODd5h12wLoalfAw+qBEd
+         MsrtW4hsc0krY8hWLd88cS/kL0J1Iuj7Cnh2ngid9CB2RirbLRXCBopExXv2KwP/nOLp
+         h7GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786040567; x=1786645367;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=eEXE5xEEQpc13Rsa6o31+ciZXy4TocWR50mP3ni+aMQ=;
-        b=kXO98zCEIG/P+06ykQz8yIyGhuuCCZLjIgDLebh8AstlBEkkAOwjA3iHtYykwQDbVS
-         mbhwbmNBKrx9nuIAabVx6fSrvqHElQTlfY8WbLzTFMxXmAnQWI+t3pIk6WYdhPQ4Sr1B
-         5xbd7X67wmzUuSoN7wztmjPtULNoU5I4uaNRqpilfr7RL1Sk086gFPJoCpYO/Ft2Jb4C
-         rlsTiEbqUw0roR2kAyOvkh6n+ieUOeo+rWHneg2YgrDXibL+x+ZXA8UcPrEzMlNrn2Td
-         w1pBDaZNmsA44/y+Xyx0yIKhuqjxC5sq9LwsFVra8QGEFnvyGjxACOJX1lxxYOOQmokn
-         LzKg==
-X-Gm-Message-State: AOJu0YwfFCVKxyyAKSjO2tXyGdMPwpdsks8slcn6mGz0UvL/s0SRkEew
-	QUSXKw4Pb0JTwEI6sXfV30KiNLq2+4ySjAGN/NymPgpTHVwnD1TTc1/SGt6t2EANxuqmBw==
-X-Gm-Gg: AR+sD11d0uQw2SWEIBi1rJX0n79mHegZx0Ynu/XUxwcs/IrNzNaVF0gQbaoNFBm4D/Q
-	yDVzEnS1fsh8IFXUgJMffi2L5ya0nG0NzUtriSN9EwNeoOlOUZg5v9xpYsC3eafhTLUnQf6kAVj
-	9oQAmvj5Q1VetyEMDi9U6gVn0pH0SMNMNYcstYNJzXFus0MMzwjHMTvy1mkI1tDfhym45ZJhkyK
-	ailCg331aEWqM5Nqli/Y3afS/6ehc/JfLW1+fKXd81hV6I5G3ohi2/TN0X8qX46wriGMCRJLdY/
-	NZaPaxvd0tUYb36aXIeRe0wYVAOwqA/XWHzGOi/w0tpy8oxd501jT2EKibnZdpphtB+3iaHDcf5
-	oMSHfOCvyeRB5GHoXMbyDoxAAdC/Ns5ob5/8L/2o2p+wuGA7kvHLip5As32EXv1+VToiDaTyVrR
-	MOoqgYzweBaDaY91QOn7aJiyzWi8elLqE5KpwF3KDzLiVJN6NpNfQl6+UNrxVt8B56Za1V8q0Gl
-	1Jq1Fk6O4WB8KHIk+2A+HdgApMGd9SfTQ==
-X-Received: by 2002:a05:600c:354a:b0:495:3e08:ad19 with SMTP id 5b1f17b1804b1-4994e7b72dcmr230219655e9.9.1786040566829;
-        Thu, 06 Aug 2026 11:22:46 -0700 (PDT)
-Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4995420bd1csm82214425e9.3.2026.08.06.11.22.46
+        d=1e100.net; s=20251104; t=1786040708; x=1786645508;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eRxIpMxQf2eH73MswyccHSNChNNfT/J5n/NCnkKxEHE=;
+        b=SSZuHQqVNsIeCsojF4B5FJ8We8OuIQDas5Z4d6rZcjZCp1owy3XPuEZveVmX6sdaRe
+         pyxfYFX9TwT4ii+uJ7x9Bpzvi3YunWzw7dMd0++/8z/2A5V/YCU4ns8eFnmEuoGTTBP9
+         v3qDsDqA6jOkkgcmoYKGXUf++YZ6BfK4pNCXzaw75KLTLzgZTB0Okp/Ny2Y+EYxIoSSg
+         SHDdqG/qUwf+wyvlRfjd6hn5/ghlx84eKZAbh/FGiyRD/6snNjH8PTftLXAmJxkt0wyF
+         yHAvB42I6SpdZE/V9uFuLhcU5RFuCiMn5QQlivLYB7PwQiVAYsb322rHf3XSUCmVHhmV
+         HARQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrIWzHgSwYtaIHeEdKDtiCs3QdvSJHrZ+owJ7z70G70Dzv+RVYKOwmz7U9+pOlD09/wFJM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyotuK7moO++v3B//opoN8edX957WnpxIZ7yFaoNx+P+aps23iT
+	K8sBzMmFLPY16U5gM3V+Es2iDCLHSQWDq3QRC7o0SulRYVTh+GYsZl+M
+X-Gm-Gg: AR+sD12cmqfmuXOmB0LRyf5KzGrM9OxzFogJhaS6AE3IRbuVHIkj68GI0xj21dxRYOz
+	ednpvqPM7qxWEDniekLlJ/RE4rlvtlmCXHjs4sGibOapD7syg3/m58eLuwmfQQd0PZXbeBflhLK
+	37LNLz9la/JUb0FRleR4QFzborWVvXhL0zHb+EheUuNHkG5tqeralSnlBkPSj55BTx8oM0VAcyM
+	e277rL/GJRlLa/xmpdEt4jcHSiq4bkFjIEMHvsvbOItBROIXn3Qsh9ha7mPcMrtA0b9Fyzpnmrr
+	2VYf2uXSI3T6aJ0ogkN5yB384eUFdquofsTu190SMP3DeASGT+DKsM4gB05sXCRzouUCwdKzESL
+	btQ8UHnYw8pC4/XkZJu1Tb0nTvvqkwCTQdDIP2DNpeCDmVWLI9pFdCwVUQy1NRFThicvx+w3PLm
+	jpKRBv6eWBS1JdMquy9N4PObHqbs94HQqORAFt8DnnYZZBHW0R1UIdbRurdD8DFivrtx3tWQwlr
+	so3xvuo
+X-Received: by 2002:a17:90b:3889:b0:381:973e:fa08 with SMTP id 98e67ed59e1d1-3903c5cfba2mr14353244a91.18.1786040708017;
+        Thu, 06 Aug 2026 11:25:08 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:6e::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315867bc261sm29668669eec.28.2026.08.06.11.25.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 11:22:46 -0700 (PDT)
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	eddyz87@gmail.com,
-	edumazet@google.com,
-	john.fastabend@gmail.com,
-	kuba@kernel.org,
-	liamwisehart@meta.com,
-	martin.lau@linux.dev,
-	pabeni@redhat.com,
-	song@kernel.org,
-	netdev@vger.kernel.org,
-	sdf.kernel@gmail.com,
-	ameryhung@gmail.com,
-	kuniyu@google.com,
-	memxor@gmail.com,
-	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf-next v4 5/5] selftests/bpf: Add ksock test for async callback guard
-Date: Thu,  6 Aug 2026 18:22:34 +0000
-Message-Id: <20260806182234.380833-6-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260806182234.380833-1-mahe.tardy@gmail.com>
-References: <20260806182234.380833-1-mahe.tardy@gmail.com>
+        Thu, 06 Aug 2026 11:25:07 -0700 (PDT)
+Date: Thu, 6 Aug 2026 11:25:04 -0700
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: JP Kobryn <jp.kobryn@linux.dev>
+Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mykola Lysenko <mykolal@meta.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
+	linux-mm@kvack.org, kernel-team@meta.com, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] selftests/cgroup: add memcg_stat_cross_cpu
+ correctness test for flush
+Message-ID: <anTRgIZe5wgAsdCU@devvm16600.scu0.facebook.com>
+References: <20260721174833.1232771-1-ziyang.meme@gmail.com>
+ <20260721174833.1232771-3-ziyang.meme@gmail.com>
+ <f83b6c93-b32e-434a-94b7-68628a2e8527@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <f83b6c93-b32e-434a-94b7-68628a2e8527@linux.dev>
 
-Because the kfuncs are going through LSM hooks, allowing their use via
-workqueue callbacks would expose the wrong credentials. This test
-ensures the kfunc are preventing any use from these contexts.
+On Wed, Jul 22, 2026 at 11:42:58AM -0700, JP Kobryn wrote:
+>On 7/21/26 10:48 AM, Ziyang Men wrote:
+>>Add a test_progs selftest that verifies the memory-cgroup BPF kfuncs
+>>return values that agree with what userspace reads from cgroupfs, across
+>>a whole cgroup subtree that has been charged on many CPUs.
+>>
+>>It complements the existing cgroup_iter_memcg test.  cgroup_iter_memcg
+>>calls the memcg kfuncs on a single cgroup (BPF_CGROUP_ITER_SELF_ONLY) and
+>>only asserts each value is greater than zero, so it never checks that a
+>>value is actually correct.  This test compares the kfunc values against
+>>what userspace reads from memory.stat, and checks every node in the
+>>cgroup tree.
+>>
+>Can you extend the existing test instead of adding a new one?
 
-Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
----
- .../selftests/bpf/prog_tests/ksock_wq.c       | 34 ++++++++++
- tools/testing/selftests/bpf/progs/ksock_wq.c  | 62 +++++++++++++++++++
- 2 files changed, 96 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ksock_wq.c
- create mode 100644 tools/testing/selftests/bpf/progs/ksock_wq.c
+Hi JP,
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ksock_wq.c b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
-new file mode 100644
-index 000000000000..5b9c6cc30392
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Isovalent */
-+
-+#include <unistd.h>
-+
-+#include "test_progs.h"
-+#include "ksock_wq.skel.h"
-+
-+void test_ksock_wq(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct ksock_wq *skel;
-+	int err;
-+
-+	skel = ksock_wq__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "ksock_wq open and load"))
-+		return;
-+
-+	err = bpf_prog_test_run_opts(
-+		bpf_program__fd(skel->progs.ksock_wq_start), &opts);
-+	if (!ASSERT_OK(err, "run ksock_wq_start"))
-+		goto out;
-+	if (!ASSERT_OK(opts.retval, "ksock_wq_start retval"))
-+		goto out;
-+
-+	while (!__atomic_load_n(&skel->bss->callback_done, __ATOMIC_ACQUIRE))
-+		usleep(1000);
-+
-+	ASSERT_EQ(skel->bss->create_err, -EOPNOTSUPP,
-+		  "workqueue create rejected");
-+
-+out:
-+	ksock_wq__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/ksock_wq.c b/tools/testing/selftests/bpf/progs/ksock_wq.c
-new file mode 100644
-index 000000000000..16a1873d132e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/ksock_wq.c
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Isovalent */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_experimental.h"
-+#include "bpf_tracing_net.h"
-+#include "errno.h"
-+#include "ksock_common.h"
-+
-+struct ksock_wq_value {
-+	struct bpf_wq work;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, u32);
-+	__type(value, struct ksock_wq_value);
-+} work_map SEC(".maps");
-+
-+int create_err;
-+u32 callback_done;
-+
-+static int ksock_wq_callback(void *map, int *key, void *value)
-+{
-+	struct bpf_ksock_create_opts opts = {
-+		.family = AF_INET,
-+		.type = SOCK_DGRAM,
-+		.protocol = IPPROTO_UDP,
-+	};
-+	struct bpf_ksock *ks;
-+	int err = 0;
-+
-+	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
-+	if (ks)
-+		bpf_ksock_release(ks);
-+	create_err = err;
-+	__sync_fetch_and_add(&callback_done, 1);
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int ksock_wq_start(void *ctx)
-+{
-+	struct ksock_wq_value *value;
-+	u32 key = 0;
-+	int err;
-+
-+	value = bpf_map_lookup_elem(&work_map, &key);
-+	if (!value)
-+		return -ENOENT;
-+	err = bpf_wq_init(&value->work, &work_map, 0);
-+	if (err)
-+		return err;
-+	err = bpf_wq_set_callback(&value->work, ksock_wq_callback, 0);
-+	if (err)
-+		return err;
-+	return bpf_wq_start(&value->work, 0);
-+}
-+
-+char __license[] SEC("license") = "GPL";
---
-2.34.1
+Good suggestion. Actually extending the exisiting one was the plan in the v1.
+However, existing selftests with similar purpose is the cgroup_iter_memcg, which
+is in the bpf/. After discussed with the bpf reviewer in v1, we think this
+selftest may suit better in the cgroup/ rather than the bpf/, since 1) it tests
+the cgroup functionalities (bpf is a tool), and 2) together with the selftest,
+this patch serials also ships a common Makefile lib.bpf.mk for easily compiling
+selftests for other subsystems using bpf. Currently there is no other selftests
+in cgroup/ relies on BPF and we think it is good to put this selftest here as
+the first consumer.
 
+We appreciate any possible suggestions. Thanks very much!
+
+Best,
+Ziyang
