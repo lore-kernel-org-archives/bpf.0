@@ -1,123 +1,103 @@
-Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE674734E4;
-	Thu,  6 Aug 2026 11:45:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.149.7.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D547A3F825A;
+	Thu,  6 Aug 2026 11:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786016724; cv=none; b=F5Sp05I9RVGOnk3DqfAxZqvs/ErHldp7+v6Xto6kpvzIC42XUzRpFe4U9LEU9htVGnHPnvEDW5GKzFPe0LfCTglrR9BwtdgXPQrIao5QXIPFzUvCCH+9Uag6mhTQVDPeDAsAbBrwgdOac4Ngux88KXbSPyTOMuhG3g4Wh80P53M=
+	t=1786016835; cv=none; b=ioPxrIoY6jlSi7ugyjobBJssbGPLQex2stj+qRqQ5Ry5VTvZ7dsjVyj5byqxrTMHuHI5QPqVcL57FW6YJs3uyRWwhfQTStOVg2+e5odHjK7TmsyNmCpY8NWd/NIyyz2wLVRjnJKpUI3vxELh+vSXnKHwZ+in+4ksQodXL7W3gNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786016724; c=relaxed/simple;
-	bh=d24O6RnN4KLijxSodbjGK56n0gVrZlTvumdFgTIzCJc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=dklmauvyqME7EXECXzESQ9EAMrkgeCHHUWyLtpdfYOIn8XLbcs2TkZwzA6tGEC4yKk5/es3xQV7YA8GO6dUb2MifVsCKMdNpEes7Xg3SQ35zqlDCarBeidYpn2WloY2YTuJhanijQT0SuvbB13w1b8F2Aowhjqcv/opI6Ji27Xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de; spf=pass smtp.mailfrom=tu-berlin.de; dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b=KluoRtLU; arc=none smtp.client-ip=130.149.7.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-berlin.de
+	s=arc-20240116; t=1786016835; c=relaxed/simple;
+	bh=fdc5I/dA1nqBQdw+Khjbswi+ogkkUJq35gfyiNviWk0=;
+	h=Message-ID:Date:MIME-Version:CC:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=eXuHAvMJ/67g6G8QJ/9GHoYZulRpAhIZwJhNfrwESS4YR+w9GTquUgRxDPIFmAiBpTvlVH5SIse/7Mk/t/8JfDouOlzo7Lk80IiKpihEqIz1t2BSTvOftqMstw22AgO7kENe/ZRLWGS+aC7Dmg/JKy0zAhh4VNGQ2dHPNKYKJsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=lljNPPOj; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tu-berlin.de header.i=@tu-berlin.de header.b="KluoRtLU"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
-  d=tu-berlin.de; s=dkim-tub26; t=1786016720;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=EZn5BJEOXSSnGu90KCR+f2o/FUTLoUzl1UtfV8fc91I=;
-  b=KluoRtLUKSGeIegv7X2dReErRKGtdZtMbhvLVoLfglYkMQxcN2ixZGt0
-   LNDG3PmaZMOwnfCqcFAIptxxgnBMTs+1a1Z+wQkpjg5HuKlZcEJh1ax7H
-   QD9I85QrSQ00KTK7tam0kunQfBi0RxDi/jxeMtzmz7FVwD2WM553G60Ma
-   aQ/D3P5IIdRw0L5jpaQkeGOtyjRioAHMqR/t9x+Jh4TU+2gFBloZfxrVR
-   qCvFg5ac0TwwCmdLFpBNgrQRT9U0f0JnS/+CAXoqQ5bxKsJ3c7T5r/g/x
-   JTD5R9MhoNe8EdsKblu5SjDtyrl6jVdlmaqA8rKKO0wcCiygXuEw0vRzZ
-   g==;
-X-CSE-ConnectionGUID: ma1iL/cPQIufewYdPHAIIQ==
-X-CSE-MsgGUID: yHfK270bTticHguczZHYdg==
-X-IronPort-AV: E=Sophos;i="6.25,208,1779141600"; 
-   d="scan'208";a="50834379"
-Received: from bulkmail.tu-berlin.de (HELO mail.tu-berlin.de) ([141.23.12.143])
-  by mailrelay.tu-berlin.de with ESMTP; 06 Aug 2026 13:44:06 +0200
-From: =?utf-8?q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
-Date: Thu, 6 Aug 2026 13:43:49 +0200
-Subject: [PATCH net] veth: fix queue index used to wake the peer txq in
- veth_poll
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="lljNPPOj"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=fdc5I/dA1nqBQdw+Khjbswi+ogkkUJq35gfyiNviWk0=;
+	b=lljNPPOjwihvLNXNkomfvwIJ2aT3JrR9zX4iO8JmLfCfs0AeVhfIggM5EeYG8gkCXpB95R1el
+	OsDybiQqwDZkG2zcdM8/ashc+PW1MY24PXpCpj1HY7ceD0yXtZJR/vB22qDeVkzbBGWCCiDwvon
+	Kloe7IEbytFWhvXDfL6Ns1A=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4hG4yL5yJSzLlTg;
+	Thu,  6 Aug 2026 19:37:30 +0800 (CST)
+Received: from kwepemo500018.china.huawei.com (unknown [7.202.195.199])
+	by mail.maildlp.com (Postfix) with ESMTPS id D2D2A4055B;
+	Thu,  6 Aug 2026 19:47:02 +0800 (CST)
+Received: from [10.67.120.192] (10.67.120.192) by
+ kwepemo500018.china.huawei.com (7.202.195.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Thu, 6 Aug 2026 19:47:01 +0800
+Message-ID: <169d0d62-2296-476f-95f9-5916d777090e@huawei.com>
+Date: Thu, 6 Aug 2026 19:47:00 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20260806-veth-fix-poll-queue-idx-v1-1-c5357fb7573d@tu-berlin.de>
-X-B4-Tracking: v=1; b=H4sIAHRzdGoC/4WNTQ6CMBSEr0Le2mdaEARX3sOwgPYhNaTF/gVDu
- LsFD+Dym3wzs4Ijq8jBLVvBUlROGZ2AnzIQY6efhEomhpzlFatZiZH8iINacDbThO9AYVcWbOT
- l2rCmZ0UhIbVnS8k6lh+gyUP7C13oXyT8vrlro3Le2M/xH/kh/72KHDkWVTnUZZcPXIi7D9iTn
- ZQ+S4J227YvgYqCQdgAAAA=
-X-Change-ID: 20260805-veth-fix-poll-queue-idx-9d47909b033d
-To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Toshiaki Makita
-	<toshiaki.makita1@gmail.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>, =?utf-8?q?Jonas_K=C3=B6ppeler?=
-	<j.koeppeler@tu-berlin.de>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786016645; l=2196;
- i=j.koeppeler@tu-berlin.de; s=20260716; h=from:subject:message-id;
- bh=d24O6RnN4KLijxSodbjGK56n0gVrZlTvumdFgTIzCJc=;
- b=OzIcPDkN7Gd3mVbcgjTRzQjMeu+oAhbLi42mLOeydKlGG3gLEpG4ayFiuvXDS5dYFAOgeKU5p
- BLloL0OAQW6CkTrJqqhaJXVWpmYYxMMtHzNB62+T0aAn8ca225TuA3R
-X-Developer-Key: i=j.koeppeler@tu-berlin.de; a=ed25519;
- pk=gCux0rX5l27ZRzRDqTc0LtoO66uPAXTt/SX1DzcQoBk=
+User-Agent: Mozilla Thunderbird
+CC: <shaojijie@huawei.com>
+Subject: Re: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in
+ the RX path
+To: <chia-yu.chang@nokia-bell-labs.com>, <shenjian15@huawei.com>,
+	<linux-rdma@vger.kernel.org>, <eperezma@redhat.com>, <jasowang@redhat.com>,
+	<virtualization@lists.linux.dev>, <mst@redhat.com>,
+	<xuanzhuo@linux.alibaba.com>, <pabeni@redhat.com>, <edumazet@google.com>,
+	<linux-doc@vger.kernel.org>, <corbet@lwn.net>, <horms@kernel.org>,
+	<dsahern@kernel.org>, <kuniyu@google.com>, <bpf@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <dave.taht@gmail.com>, <jhs@mojatatu.com>,
+	<kuba@kernel.org>, <stephen@networkplumber.org>, <xiyou.wangcong@gmail.com>,
+	<jiri@resnulli.us>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
+	<donald.hunter@gmail.com>, <ast@fiberby.net>, <liuhangbin@gmail.com>,
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ij@kernel.org>,
+	<ncardwell@google.com>, <koen.de_schepper@nokia-bell-labs.com>,
+	<g.white@cablelabs.com>, <ingemar.s.johansson@ericsson.com>,
+	<mirja.kuehlewind@ericsson.com>, <cheshire@apple.com>, <rs.ietf@gmx.at>,
+	<Jason_Livingood@comcast.com>, <vidhi_goel@apple.com>
+References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
+From: Jijie Shao <shaojijie@huawei.com>
+In-Reply-To: <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemo500018.china.huawei.com (7.202.195.199)
 
-veth_poll() derives the index of the peer TX queue to wake from
-rq->xdp_rxq.queue_index. That field is only initialized by
-xdp_rxq_info_reg() in veth_enable_xdp_range(), which runs only when an
-XDP program is attached. On the plain GRO/NAPI path
-(veth_napi_enable_range()) xdp_rxq_info_reg() is never called, so
-queue_index stays 0 for every queue, as priv->rq is zero-allocated. The
-same happens once an XDP program is detached while GRO stays enabled,
-since xdp_rxq_info_unreg() clears the struct again.
 
-So in a multi-queue setup with GRO enabled and no XDP program attached,
-every NAPI instance looks at the peer's TX queue 0. If veth_xmit() stops
-peer TX queue 1 because the ptr_ring is full (NETDEV_TX_BUSY), nothing
-ever wakes it again: the poller draining queue 1 wakes queue 0 instead.
-veth implements no ndo_tx_timeout, so the netdev watchdog does not kick
-in either, and the queue stays stopped indefinitely.
+on 2026/8/5 5:35, chia-yu.chang@nokia-bell-labs.com wrote:
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+>
+> Currently, the hns3 Rx path sets the SKB_GSO_TCP_ECN flag when a TCP
+> segment with the CWR flag set is received. This is incorrect because
+> the hns3 hardware GRO resets the IP ToS byte to 0 during packet
+> aggregation. Consequently, no valid ECN signals are carreid, meaning
+> that it cannot support RFC3168 ECN or Accurate ECN protocols. Setting
+> SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCECN under these conditions misleads
+> the upper network stack.
+>
+> Fix this by removing the incorrect SKB_GSO_TCP_ECN flag assignment
+> in hns3_gro_complete().
+>
+> Fixes: d474d88f88261 ("net: hns3: add hns3_gro_complete for HW GRO process")
 
-Derive the index from the position of the rq within priv->rq instead,
-which is correct regardless of whether XDP was ever enabled.
+One note:
+since this patch fixes a bug (incorrect SKB_GSO_TCP_ECN flag set in hns3_gro_complete),
+it should target net instead of net-next.
 
-Scripts to reproduce the stall are available at
-https://github.com/netoptimizer/veth-backpressure-performance-testing
+I'm running HW tests on hns3 to verify the fix. Will share results
+based on what I observe.
 
-Fixes: dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to reduce TX drops")
-Signed-off-by: Jonas Köppeler <j.koeppeler@tu-berlin.de>
-Tested-by: Jesper Dangaard Brouer <hawk@kernel.org>
----
- drivers/net/veth.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Jijie Shao
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 00e34afd858e..e927ef3f47b3 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -961,7 +961,7 @@ static int veth_poll(struct napi_struct *napi, int budget)
- 	struct veth_rq *rq =
- 		container_of(napi, struct veth_rq, xdp_napi);
- 	struct veth_priv *priv = netdev_priv(rq->dev);
--	int queue_idx = rq->xdp_rxq.queue_index;
-+	int queue_idx = rq - priv->rq;
- 	struct netdev_queue *peer_txq;
- 	struct veth_stats stats = {};
- 	struct net_device *peer_dev;
 
----
-base-commit: 44871eadd07a7f004aa00cb87399461eea08c630
-change-id: 20260805-veth-fix-poll-queue-idx-9d47909b033d
 
-Best regards,
---  
-Jonas Köppeler <j.koeppeler@tu-berlin.de>
+
+
 
