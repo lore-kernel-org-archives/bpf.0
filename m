@@ -1,96 +1,107 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839C641D23F
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D18F53E44F9
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:12:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786050695; cv=none; b=gCJfvR/yBbfuISt2LmhgX+k0+HB/Avqe93m2H59UAj6r7+Q5vxplwLZkceZ8vv4sgR4clQ0B6OHtx0tTO6ZZ7MUkLwtZlTDIsGBI7/ZxS537K7naIuxActU9F183LTuFhyw0WCrG1AbynA0j9mD3eXZpT6T2768hdT/pe8TcZ/4=
+	t=1786050752; cv=none; b=FyUll3YI2GbGIy45YAp1OnW2/dFf5pIyK6UZ/qym4sab50xOrJg82lw2/P8ux52f491UWSLa2wwDBN+yadpbSyF0WlyDt3scINBp+xy9lOYA+PzVGkY4cQpr9J29wH9Omup3Zm5AWTpdf7FAMJzLPgZ8ByaRG7/lyz06t05vT4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786050695; c=relaxed/simple;
-	bh=KLgnLshjNI9VcrY29EQL1ZXYEYozQCdQuXvrSRjhX1A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UWB8cJINlBZwkrF+8GzO5fY9IS8/lk82Q2utRVTNgKfkguaecTWZ8HHNvg38E7WmVvVqMQTkJuBCNAShqO0SweAGkg13FO/fDzIVLtJr/Nu+l+OuAmY9J5GYEDsTpQvSe7Y5jwhuz5SKunXPtu1NTt2q1aYXXpgikBH3oiYdkhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Qc/w2+o5; arc=none smtp.client-ip=95.215.58.187
+	s=arc-20240116; t=1786050752; c=relaxed/simple;
+	bh=EVqqjgxitk7nA8Yt0CJqgu1UG0GrI/g9AGl76DLy0Os=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uMOkMD4ZtmBc/zAwd24ZjTK+Pq8DkOo3Fc8NBzg9bGY2j0Fdln2XKvOdnD5EPY6EE5nQwPGwqe1K4O3alP9XcRDyZndbdGcLIZQkxTpwGq39dA4RT2GzuRtUXAF5JV37dzKPoTWfQjeHhZNh9n7XKRIVmf43L+FCItmW50q9RUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sHdG6Kq9; arc=none smtp.client-ip=91.218.175.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Qc/w2+o5"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sHdG6Kq9"
+Message-ID: <daee8e4f-c8e2-4187-9167-85d3be20fc47@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786050691;
+	t=1786050739;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=W3TW40QrzhbAh9lILrXSw9Kq2EMliej+rT1aztAAw98=;
-	b=Qc/w2+o5LkEZYSuveWEiWtkg048QzzpImS3iUsZxByQES3+qKdQAuUUxgAwQJnBYL0K2nU
-	jqfoL//4tQmKBeFVSGg/Zz5lOigSwGsb48I4ebKa4OkcZQo0ygoR5d45zXvRf5sKsdgrGK
-	xfRVHdhNsQAO/AWBzJzTa6GMbBBZjwI=
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: bpf@vger.kernel.org,
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next] selftests/bpf: Sanitize traffic monitor log file names
-Date: Thu,  6 Aug 2026 14:11:05 -0700
-Message-ID: <20260806211105.3307932-1-vineet.gupta@linux.dev>
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eGP0fJxkFCWgp7PTBweMOXOEbYCb357C9EXHOe/Ercw=;
+	b=sHdG6Kq9qkqSXExjSxwCIn6gRoJ1A/lQxKr/DjF0q0yPYL5Zi5/PPEm4NEnI9rKwvuQL5a
+	8fb858YpXfrraX/Kthrlq9ppDTKDwuTLzBd/O92Z5NfmLj2O5H0EsZW7MdWXuzAFGf+uGW
+	9hEIMxMscTWMxS0uU8fjohcp7mMyA9c=
+Date: Thu, 6 Aug 2026 14:12:08 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 6/6] docs, resolve_btfids: Document kfunc BTF
+ annotation emission
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260805230648.2354989-1-ihor.solodrai@linux.dev>
+ <20260805230648.2354989-7-ihor.solodrai@linux.dev>
+ <20260805231628.D5F391F000E9@smtp.kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260805231628.D5F391F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-The traffic monitor names its capture logs after the test and subtest
-being run, replacing '/' and ' ' so the result is usable as a file name.
-Test names are free form though, and other characters make it through.
-A subtest called "INET4: bpf timestamping" produces
+On 8/5/26 4:16 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] The minimum required pahole version in the changes.rst table was not reverted to 1.22 after its dependency on 1.26 was removed.
+> --
+> 
+> --- Patch [6]: [PATCH bpf-next v2 6/6] docs, resolve_btfids: Document kfunc BTF annotation emission ---
+> commit b5222d5ea4c3ea695d12ac70fc23f3fbadabd591
+> Author: Ihor Solodrai <ihor.solodrai@linux.dev>
+> 
+> docs, resolve_btfids: Document kfunc BTF annotation emission
+> 
+> This commit updates documentation and comments to clarify that resolve_btfids
+> now emits BTF annotations for kfuncs instead of pahole. It modifies
+> changes.rst to reflect that a specific pahole version is no longer required
+> for these annotations.
+> 
+>> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+>> index 1ca8c5f73ad00..6d1dbe4abf0f0 100644
+>> --- a/Documentation/process/changes.rst
+>> +++ b/Documentation/process/changes.rst
+> [ ... ]
+>> @@ -147,10 +147,9 @@ Since Linux 5.2, if CONFIG_DEBUG_INFO_BTF is selected, the build system
+>>  generates BTF (BPF Type Format) from DWARF in vmlinux, a bit later from kernel
+>>  modules as well.  This requires pahole v1.22 or later.
+>>  
+>> -Since Linux 7.0, kfuncs annotated with KF_IMPLICIT_ARGS require pahole v1.26
+>> -or later.  Without it, such kfuncs will have incorrect BTF prototypes in
+>> -vmlinux, causing BPF programs to fail to load with a "func_proto incompatible
+>> -with vmlinux" error.  Many sched_ext kfuncs are affected.
+>> +Kfunc BTF annotations (the bpf_kfunc and bpf_fastcall decl tags and the arena
+>> +address_space(1) type attribute) are emitted in-tree by resolve_btfids from the
+>> +BTF_KFUNCS sets, so they no longer depend on a specific pahole version.
+>>  
+>>  It is found in the 'dwarves' or 'pahole' distro packages or from
+>>  https://fedorapeople.org/~acme/dwarves/.
+> 
+> [Severity: Medium]
+> Since this removes the dependency on pahole 1.26, should the minimum
+> required version in the "Current Minimal Requirements" table earlier in
+> this file be reverted to 1.22?
 
-  /tmp/tmon_pcap/packets-125-15-net_timestamping__INET4:_bpf_timestamping-net_timestamping_ns.log
+That's a good question. I'd like to check what pahole version is
+actually minimal with this series.
 
-CI systems that collect these logs as artifacts reject such names.
-GitHub Actions' upload-artifact fails the upload with
+But this is not a blocker for the series.
 
-  Error: The path for one of the files in artifact is not valid:
-  ... Contains the following character:  Colon :
 
-Replace the whole set of awkward characters in one pass rather than
-adding another strchr() loop per character. Note the loop tests *p
-before calling strchr(), so the terminating NUL is never passed to it.
-
-This came up as a side error/annoyance when trying to re-enable BPF-GCC
-CI runs [1]. The CI side already has path name normalization and needs
-some tweaking as well, however fixing it at the source also makes sense.
-
-Fixes: f52403b6bfea ("selftests/bpf: Add traffic monitor functions.")
-Link: https://github.com/kernel-patches/vmtest/actions/runs/30710914503/job/91399011388 [1]
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
- tools/testing/selftests/bpf/network_helpers.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index db935a9d9fc1..3818cec354a0 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -1142,10 +1142,13 @@ static void encode_test_name(char *buf, size_t len, const char *test_name, const
- 		snprintf(buf, len, "%s__%s", test_name, subtest_name);
- 	else
- 		snprintf(buf, len, "%s", test_name);
--	while ((p = strchr(buf, '/')))
--		*p = '_';
--	while ((p = strchr(buf, ' ')))
--		*p = '_';
-+	/* Test names are free form, so replace anything that is awkward in a
-+	 * file name. Besides the path separator, this covers the characters
-+	 * rejected by CI systems collecting these logs as artifacts.
-+	 */
-+	for (p = buf; *p; p++)
-+		if (strchr("/ \":<>|*?\r\n", *p))
-+			*p = '_';
- }
- 
- #define PCAP_DIR "/tmp/tmon_pcap"
--- 
-2.55.0
+> 
+> The table currently still lists 1.26:
+> 
+> Documentation/process/changes.rst:
+>     openssl & libcrypto    1.0.0            openssl version
+>     pahole                 1.26             pahole --version
+>     pcmciautils            004              pccardctl -V
+> 
 
