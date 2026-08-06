@@ -1,147 +1,96 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD1741D637
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:14:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786050852; cv=none; b=GC+g641wV36SnCpo+g5Rb2BzgHWZzCed7ZWmtiyDucP06kTrmRO7qrA1jJ7KgDdeya+qfi1PYGOQMgXa/pBkmwhDH1v06szrmp4kUhyBjmUzK/CeBKwovYvJ0AGT73Kl8Keyt1uf+WpPAqje/q+y4kYBO+Es+BidQfykS2F33Y0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786050852; c=relaxed/simple;
-	bh=Y7j+vHz5ifg+awfBMpMmqyogGa/aB+LwlKJSG3YrdLE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cpbA6wHvC25Cqva1mLvViwgQ3pQjvk/8JCR3aYAn9YbjeI8fYq1bHJW5YUQpfFgyTS/NzgVuASmra531/tiuoYKD4LZMkKTm7MZA+Qjax1YQMB9j2SDozzrT/L+XP1iq+EI/o99kHyCVdlUssBmLL1dA0bMd03k7/Q+mLGVibRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RTzMxtY/; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0715B41DDE0
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786050854; cv=pass; b=NBak5LG1v6Sr7on3lWV+VwIVajBpV9x+7A2nYsf0k+zwQVCOD6DwQg4d2wSWhNFcoU72Ul0zKso5kHvDJdFAUEmEW4/q+ZIMX66dyWGq7cAmMDqf0cyI5ai+S++wCZth9++3kZDL8di3kLK2tsebGEk7QE+aZLge7AIJaVaKRSU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786050854; c=relaxed/simple;
+	bh=2Ul71xOb4CR3H33B4d0sA2boSbkG+i5cMyJ/5cZrvtk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AhPo93Gt8vC/VhRuBZ+FiWRvhh3fGm81WGKUQnseg0RijJq3f6ifJpJGx0mK352kg2sjbu+DdqHtHQTkxSDGDFLT7TQkmH5DHjTkzclRXz8o4EzcAKJve2CpNb+hQMra+1OroFg1vEHgbX/HNuQdUw0mWCUViTfFALS9TUjGyHs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YKfWDKYH; arc=pass smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RTzMxtY/"
-Message-ID: <33b6923a-51ed-4e6f-b41a-8780992fa262@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786050844;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6/6Jrn204tkhstHg8N9Afe3wZPFehkOUPkVqH18ofNo=;
-	b=RTzMxtY/6D5I1qeAi55XFme58Bznp71UU7T1Rje/4Ts/SA0Ra/Cf+ckYFDFTVD2ixl/158
-	fK405RVaJgNVcDfvLDV+uFMQp9MJ3IUnRuLx7E7f9RAWYo0Ztg8MIWO1MVYzlZAaqh09wz
-	mMzAcSg6DF0fk7iqsVEMAG6NaGpX2rs=
-Date: Thu, 6 Aug 2026 14:13:59 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YKfWDKYH"
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-39c7fd21b63so22277931fa.0
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 14:14:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786050851; cv=none;
+        d=google.com; s=arc-20260327;
+        b=l/3hbNauS4kNIbKKSetEZ9lWlDRwtvdOJRW3oNfl5o57VhF6dQERfvf/Iz5Urpmno6
+         Gk/TTsAaBA/iM7UvFtpEEbHtG8O//Mngv6ePd3OPHErEmD5Rlf5es2Tj6HIFUWtm1hQ7
+         EBD3DPioJ7DFE5FBswqGqqYyf+PkzoNcLHkGn20SJFHy8JxXG8QwuxzfuxIzagvYFesW
+         JjPby/fSRmyqWWIOAwE3v3TSEHwHfnVB3zK1UUcKebC/5q7ggvLW1YqfMMbgCiEo41Qw
+         5c2MH0jQ+1x6+SlLjMemWD2gEC0VtwmoMqx3CrhLtpL2Wm957AX5JAGM6TblN0ju0ENk
+         QUDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=2Ul71xOb4CR3H33B4d0sA2boSbkG+i5cMyJ/5cZrvtk=;
+        fh=5b5dLJ9kTJfvQoWGFwThFDZmVhP7lAb2WX2IX41yKn4=;
+        b=T0kZfrUx7pm2BcmMvys/KMsEl3rMCmM2jWZg36mGRZr61sirbhkdUeft08mgIsDVCm
+         2zG6SF4irOL1x43qFt46ClChmseBV39aOkYAsoGsV0+y3W6uDW6iP8phDCbV6q75//FB
+         nkRCSoG3oqi+zoMKi36e0CKRtZiPKhxHAxW2OzXifbazoXEZxWvUu6udykTumO656vpE
+         aGcidEiQ3FsqrBY8wJ6CZ43THa2NPkeDloIrp5QJo/AW6snIHwIHwnjZce4mrY3S1lBr
+         VL3dX2Uv60spJim8KjdcJBnoFIOg5zW7CkcWEJnDeSUabYFexAV5p1vn4rLXP3JpyPYE
+         X6Qw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786050851; x=1786655651; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2Ul71xOb4CR3H33B4d0sA2boSbkG+i5cMyJ/5cZrvtk=;
+        b=YKfWDKYHMBI3EM0/BQnf5xm7YpN8/VaCh8cjMLOGrb1d19h1cdaEpUhFG9ypWZfsN1
+         BtAQiqcL+ZPFLqUTBypE1Wx8CsuqEwVA6bSCwWrfhjgwm1ZE71PRtZL4nHXCn7xexcdV
+         lgmj9YXFcFUI1Y9H3YQweO+hj45yjrJAmxDUgZ+tYivF7KgcCSjpw5y/tGoBrZQzrBhw
+         EacrHiZpY/H3SLi8V94LxDD8RtVzXo2uBw4MOXhmxig1FFY/F8ci64WS1yrx+qiDcetY
+         fzOoqUlezVM+sVJx4f4FNG3RXCwTHkTbq0IXUqvditV63cpjKbKJ4li1gbByrjV7LRE2
+         WX+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786050851; x=1786655651;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=2Ul71xOb4CR3H33B4d0sA2boSbkG+i5cMyJ/5cZrvtk=;
+        b=ieerNyXkp4NaBaT7weDH6i55UuLnFvUhVQuYBjqRNBXYUzZT0BYgm787TjxxvT8+D3
+         kB5e/woHcRmuA8sVnIJiRYo7TnuEktKwRSqbJQSZQulRVzUNWYduUW5D4VEoJYJDFrfx
+         SwoL4l8lbhmrMRZ+f5MX6N5f4rVHLs0fg7++59cb6XJAajWViTAg8oC9OEo8NvB5V4RO
+         dmK25v8WQv6u3EpWjLNikT4qqKIAxnS7zsJK4ZzClSakK82nJtjzicUPo4pIGRBGf2sV
+         HxXUiVVrG7036f11DFvykh+97bF9t9gefGTP/ZX1eMow6v8++Cu9kNVdODVWtkPDyBXJ
+         SaWg==
+X-Gm-Message-State: AOJu0YxOIMoAoeYetBerCL7KpETT7tLTGX2Bhsug/lh3geqGGfKE9/0B
+	KQGoN6V6TgSiL/yXyE5xChPveOI4/wHrTp1yk7FoxNYD2uNXaxVc4ZnEm6yEYzyF2TK/DIFpVeU
+	rZpTabRaPwAfow+7coBk7+kzW2nqtp3o=
+X-Gm-Gg: AR+sD12uF/SvGYGgbmT0RAxD+9Nt6i0Fdc7Kk4MUbnIC3teyGJdAWFwqAsuOyChlaHG
+	7ktd2e1GEOaY4n3sn4n6lQBDlstTwUKsjQkPYKSVEjI110wwIHXwhPn11Rvs7Hghvr78QO3REZW
+	PiJNluqwnmcc2AAbVNtWihFpdG1EO3AamHHvurk8wu0S674xrY4ifQQAeyTAMBJSG4S9r+6sf4g
+	frfI5fjP+5gd50FVlkt3cDZ3+4QqWq+/w3U9HCOLB4FztZskP/uQsThDjjtNuNs9Fl6fbVyQsiL
+	AzUSpmeVMfaho3lJXNgGg34mGsMr7zZgl2ov0+JUIgCeCWodD+xwTasqAQ==
+X-Received: by 2002:a05:651c:1993:b0:39b:2757:c1d3 with SMTP id
+ 38308e7fff4ca-39fbae29cffmr20604271fa.9.1786050850676; Thu, 06 Aug 2026
+ 14:14:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 6/6] docs, resolve_btfids: Document kfunc BTF
- annotation emission
-To: bot+bpf-ci@kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com
-Cc: alan.maguire@oracle.com, jolsa@kernel.org, emil@etsalapatis.com,
- bpf@vger.kernel.org, martin.lau@kernel.org, yonghong.song@linux.dev,
- clm@meta.com
-References: <20260805230648.2354989-7-ihor.solodrai@linux.dev>
- <a55ccb52e205bc8a32d3ae6c179de333746ef912a9a259f18425b33935509653@mail.kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <a55ccb52e205bc8a32d3ae6c179de333746ef912a9a259f18425b33935509653@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260805233940.3966981-1-dingning04@gmail.com>
+ <DKHQUVB5TV0R.1OLK7GG1APAOR@gmail.com> <DKHR95T6P1ZC.G09YF6M1QEL2@gmail.com> <DKHY982BEJN7.2ZUBJJEXR8X7B@gmail.com>
+In-Reply-To: <DKHY982BEJN7.2ZUBJJEXR8X7B@gmail.com>
+From: Ning Ding <dingning04@gmail.com>
+Date: Thu, 6 Aug 2026 14:13:59 -0700
+X-Gm-Features: AUfX_mx1ga46zrbsPio-BaoBvBGYjHe9_71Kt_FkjtOcL0VD5rCVzb5iPff8W3w
+Message-ID: <CAJP4iuvBhxjmxKjVKK2YFWyx=5qJc3ANLOxFdYfXeg-S5QXegQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/2] bpf: Track overlapping RCU protection
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, puranjay@kernel.org, paulmck@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 8/5/26 5:01 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
->> index cbde86d082cce..c60fc574e8b06 100644
->> --- a/Documentation/bpf/kfuncs.rst
->> +++ b/Documentation/bpf/kfuncs.rst
->> @@ -472,6 +472,14 @@ type. An example is shown below::
->>          }
->>          late_initcall(init_subsystem);
->>
->> +At kernel build time the ``resolve_btfids`` tool discovers all kfuncs from the
->> +registered ``BTF_SET8_KFUNCS`` sets and emits their BTF annotations into the
->> +kernel's BTF; these annotations were historically produced by pahole. For each
->> +discovered kfunc ``resolve_btfids`` emits a ``bpf_kfunc`` BTF decl tag, a
->> +``bpf_fastcall`` decl tag when the kfunc is flagged ``KF_FASTCALL``, and the
->> +``address_space(1)`` type attribute on the return value and/or arguments flagged
->> +``KF_ARENA_RET``, ``KF_ARENA_ARG1`` or ``KF_ARENA_ARG2`` (see section 2.8).
-> 
-> Emil Tsalapatis suggested in v1 replacing "address_space(1)" with "arena"
-> throughout the documentation for better readability. This nit was not
-> addressed in v2.
-> 
-> The term "address_space(1)" appears in four locations across this commit
-> (kfuncs.rst, changes.rst, Makefile.btf, and main.c). Would using "arena"
-> be clearer, especially since the code already defines TYPE_ATTR_ARENA?
-
-Nonsense feedback from the bot. Ignoring.
-
-> 
->> +
->>  2.7  Specifying no-cast aliases with ___init
->>  --------------------------------------------
->>
->> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
->> index 1ca8c5f73ad00..6d1dbe4abf0f0 100644
->> --- a/Documentation/process/changes.rst
->> +++ b/Documentation/process/changes.rst
->> @@ -147,10 +147,9 @@ Since Linux 5.2, if CONFIG_DEBUG_INFO_BTF is selected, the build system
->>  generates BTF (BPF Type Format) from DWARF in vmlinux, a bit later from kernel
->>  modules as well.  This requires pahole v1.22 or later.
->>
->> -Since Linux 7.0, kfuncs annotated with KF_IMPLICIT_ARGS require pahole v1.26
->> -or later.  Without it, such kfuncs will have incorrect BTF prototypes in
->> -vmlinux, causing BPF programs to fail to load with a "func_proto incompatible
->> -with vmlinux" error.  Many sched_ext kfuncs are affected.
->> +Kfunc BTF annotations (the bpf_kfunc and bpf_fastcall decl tags and the arena
->> +address_space(1) type attribute) are emitted in-tree by resolve_btfids from the
->> +BTF_KFUNCS sets, so they no longer depend on a specific pahole version.
->>
->>  It is found in the 'dwarves' or 'pahole' distro packages or from
->>  https://fedorapeople.org/~acme/dwarves/.
->> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
->> index a1812985a61aa..717e76ce96a71 100644
->> --- a/scripts/Makefile.btf
->> +++ b/scripts/Makefile.btf
->> @@ -14,6 +14,9 @@ pahole-flags-$(call test-ge, $(pahole-ver), 125)	+= --skip_encoding_btf_inconsis
->>  else
->>
->>  # Switch to using --btf_features for v1.26 and later.
->> +#
->> +# kfunc BTF annotations (bpf_kfunc/bpf_fastcall decl tags and the arena
->> +# address_space(1) type attribute) are emitted by resolve_btfids, not pahole.
->>  pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func
->>
->>  pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=layout
->> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
->> index ea25ca34aa006..66f4014e6aa17 100644
->> --- a/tools/bpf/resolve_btfids/main.c
->> +++ b/tools/bpf/resolve_btfids/main.c
->> @@ -58,6 +58,17 @@
->>   *             __BTF_ID__func__vfs_fallocate__5:
->>   *             .zero 4
->>   *	       .word (1 << 3) | (1 << 1) | (1 << 2)
->> + *
->> + * In addition to resolving BTF IDs, resolve_btfids performs kernel-specific
->> + * BTF-to-BTF transformations for kfuncs found in BTF_SET8_KFUNCS sets. For
->> + * each such kfunc it:
->> + *
->> + *   - emits a "bpf_kfunc" decl tag, and "bpf_fastcall" when KF_FASTCALL is set;
->> + *   - wraps the return value and/or arguments flagged KF_ARENA_RET,
->> + *     KF_ARENA_ARG1 or KF_ARENA_ARG2 with the "address_space(1)" type attribute;
->> + *   - rewrites the prototype of KF_IMPLICIT_ARGS kfuncs.
->> + *
->> + * These kfunc annotations were historically produced by pahole.
->>   */
->>
->>  #define  _GNU_SOURCE
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31056256483
-
+> I fixed this up since it was minor and applied the series. Thanks.
+Sounds good, thanks!
