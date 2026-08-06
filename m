@@ -1,30 +1,29 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A603016FB;
-	Thu,  6 Aug 2026 03:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FFD32C92A;
+	Thu,  6 Aug 2026 03:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785985509; cv=none; b=lSWbjW7OWhd+oPC/dxFAgiBHDNiuNfTGpiAiul8xZhc1SWvQ9I6Z5MDEu3jv5hrxc3ObrMxOxEczaAzRT0MSqfWnllTDpd/bhlm1bOtBfJMcUko2bR4Xy/EdJ69jaozod1YH1xJAoBYwROaW5W2FibCsIQKnZ5KvLAG015jYevU=
+	t=1785985515; cv=none; b=pU22FiAORwvfg2IsCZttwRhzRwjUr4W6WLztQCLs/7JPp1Ndr51e+Yr/Cu5lMxQmXnDxlxAggbIBNsQpsyhlgOOfu7OwtQ9Jjvgni/frNfdFCQWUxO9P+OoGiv3iNwUMEaLG77XW0IUknEF+LjYgX6n5LtDFtEk8APjc4i5HA/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785985509; c=relaxed/simple;
-	bh=59Jw3zRm9TCTH/ukrmOHqZ57qnnUVNuotPA4gPymJ5g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ielrdpDgny+kqc3QKkSM4yeWDmSjPqQsVfAOFxueBbrEco+5p5uzovkrZBQs9bmTVIC6Xnj7AnFC43qhK801HQUf0PMVLQCVb7LNFODymULs8dM4YpUWwlz99NqgfEqNjtXvv+EI9pQ7remLsdf55lFpmW7z7cdiTj8V8cH1A44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=IYv6XsyP; arc=none smtp.client-ip=220.197.31.2
+	s=arc-20240116; t=1785985515; c=relaxed/simple;
+	bh=fN8FlrRp5eTZAKTNIZ6P9U5Yd2BlqIsfFU4Q+zruhp8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gfYmWF4X5qbwsjq4+S4mE9isXOc2qwaxLbYuacem7Zdcc5k7eTzGPQ1z9jHDggs1lUBuc2LHVcR6fWVt3vU6vH+43pSDmeD/j5advveOFtXDcUH+iR7UePDKjr6tcbSvcqOnz6gtPLoZSQB5ADgjakJI/9cKRGKDWjoIFzdHFY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Eeprh3xA; arc=none smtp.client-ip=220.197.31.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="IYv6XsyP"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Eeprh3xA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=v8
-	WBXXWmoYVKo7s1GdOHkU5Kf+aDiIZqc1bD6CJmRFA=; b=IYv6XsyPRk2wyKE2ro
-	N7HcmKT2nvxtD/NAQrxq99Hw5GE83Z0aGunzI89Z+i1zBEvAY16Yj6AUUYlTn5CA
-	BiUO4nEsZWbj3zXq5lrJRcLaHu+j6AhxUv8xTq5CbBUdtEDXCqr3gHHa/bzdkzeI
-	7CEppsXvGT1FhCGLvRvpWc57Y=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=jN
+	xEL3gTmDBWhLcvDpKPShEaFxtZaErUT6xqj+al3SE=; b=Eeprh3xAonoScSONm5
+	35yOk1dSRMXQPgvtvie3RMH/IEWx8kbYVLX9C0OTxYTA2Qlv9Q7Dcq7lr6a4KQf1
+	f5b4jwStzMk1adwb0syF10acedvojstoyR0df5zCLujF2xhvggjVC4EcL911YH1Q
+	AoYNerUP/lNRw8ecJSNFKzunM=
 Received: from nec8-i7 (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgD3Xy2m+XNqWvt+Kw--.33251S5;
-	Thu, 06 Aug 2026 11:04:16 +0800 (CST)
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgD3Xy2m+XNqWvt+Kw--.33251S2;
+	Thu, 06 Aug 2026 11:04:07 +0800 (CST)
 From: chenyuan_fl@163.com
 To: bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -40,12 +39,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH bpf-next v1 3/3] bpf, arena: check range_tree_set return in arena_free_pages and arena_free_worker
-Date: Thu,  6 Aug 2026 11:03:59 +0800
-Message-ID: <20260806030359.299480-4-chenyuan_fl@163.com>
+Subject: [PATCH bpf-next v1 0/3] bpf, arena: keep range tree consistent on kmalloc_nolock failure
+Date: Thu,  6 Aug 2026 11:03:56 +0800
+Message-ID: <20260806030359.299480-1-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260806030359.299480-1-chenyuan_fl@163.com>
-References: <20260806030359.299480-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,68 +50,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgD3Xy2m+XNqWvt+Kw--.33251S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr48ZF1fGrW5Wry8Cr4UArb_yoW8Zw1DpF
-	4UGa90yr4kX3y7ZrZxJrWkWr15Cwsaqw48GFy8G3Z5Z34avr9IyF48AF1UuFyUGFW8Xr1Y
-	kF4Yqw1jkrWDZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j9ku7UUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5RAi32pz+bBJXQAA3M
+X-CM-TRANSID:QCgvCgD3Xy2m+XNqWvt+Kw--.33251S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AFWxuw48ury5Jw1fJw1DZFb_yoW8Wr1kpr
+	W5GFW5JrWDK34fCrsIvw4rZF15Gw4Fqw4UJrWxKwn5Zry3Crs7tr4FkF1UW34UCFWfXw1Y
+	gF4Yv3yIkw1DZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnb18UUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQgg3Wpz+ajmkwAA3J
 
 From: Yuan Chen <chenyuan@kylinos.cn>
 
-arena_free_pages() and arena_free_worker() ignore range_tree_set()
-errors and proceed to clear PTEs and free pages, even though the range
-tree still considers the range allocated.  The range then becomes
-permanently unavailable.
+The arena range tree tracks free arena ranges.  range_tree_clear() and
+range_tree_set() can fail when kmalloc_nolock() cannot allocate a node,
+but both functions modified the tree before that allocation.  On
+failure they returned -ENOMEM with part of the affected range already
+removed from the tree, permanently losing those arena slots: they could
+neither be allocated nor freed again.
 
-Check the return value: in arena_free_pages() abort the free on error;
-in arena_free_worker() move range_tree_set() before PTE clearing and
-skip the span on error.
+Patch 1 pre-allocates the split node in range_tree_clear() so a failure
+leaves the tree unmodified.  Patch 2 does the same for range_tree_set(),
+allocating the new node only when the range has no adjacent free range
+on either side.  Patch 3 makes arena_free_pages() and
+arena_free_worker() check the range_tree_set() return value and skip
+the free when the tree update fails, instead of unmapping and freeing
+pages the tree still considers allocated.
 
-Fixes: b795379757eb ("bpf: Introduce range_tree data structure and use it in bpf arena")
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- kernel/bpf/arena.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+The failure path requires kmalloc_nolock() to fail under memory
+pressure, which is not feasible to trigger deterministically in a
+selftest, so no regression test is included.
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 555ee2531ef9..30745da9277b 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -881,7 +881,12 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 	if (ret)
- 		goto defer;
- 
--	range_tree_set(&arena->rt, pgoff, page_cnt);
-+	ret = range_tree_set(&arena->rt, pgoff, page_cnt);
-+	if (ret) {
-+		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+		bpf_map_memcg_exit(old_memcg, new_memcg);
-+		return;
-+	}
- 
- 	init_llist_head(&free_pages);
- 	cdata.arena = arena;
-@@ -1004,11 +1009,17 @@ static void arena_free_worker(struct work_struct *work)
- 		kaddr = arena_vm_start + s->uaddr;
- 		pgoff = compute_pgoff(arena, s->uaddr);
- 
-+		/* Mark the range as free before clearing PTEs so that
-+		 * if the range tree update fails we leave the PTEs
-+		 * intact, avoiding an unrecoverable state where pages
-+		 * are freed but the arena free tree does not track them.
-+		 */
-+		if (range_tree_set(&arena->rt, pgoff, page_cnt))
-+			continue;
-+
- 		/* clear ptes and collect pages in free_pages llist */
- 		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
- 					     apply_range_clear_cb, &cdata);
--
--		range_tree_set(&arena->rt, pgoff, page_cnt);
- 	}
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
+Yuan Chen (3):
+  bpf, arena: fix range_tree_clear inconsistency on kmalloc_nolock
+    failure
+  bpf, arena: fix range_tree_set inconsistency on kmalloc_nolock failure
+  bpf, arena: check range_tree_set return in arena_free_pages and
+    arena_free_worker
+
+ kernel/bpf/arena.c      | 17 +++++++++---
+ kernel/bpf/range_tree.c | 60 ++++++++++++++++++++++++++++++-----------
+ 2 files changed, 58 insertions(+), 19 deletions(-)
+
+
+base-commit: 11c1e836710dcba03e50454a4eedfdbaf8d3050e
 -- 
 2.54.0
 
