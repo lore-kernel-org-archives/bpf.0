@@ -1,220 +1,145 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB841F427C
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786052716; cv=pass; b=WkwQcaxKUtMCO8yImsMemFc2wkv0m57Zx/XyYKhEJp/pntIcy4ssYdBjbxgExzgju0z/qgNK/CVQZvC0uI8mtnMr+OABdoNzZu75zqv4lJxQJW4MGk/VZFuEOpm/DjbUDqMEN8yxSzo23MwU5YcZlTLyBcGpgk1K7T6fWPZCNzA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786052716; c=relaxed/simple;
-	bh=PK328fsXxrnSfxwWxbhaOTBsxDsbWAQZmZRHgDGiP+Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AV7Oku3Uxp6FhO+H593a07stxYtVncunPDNYcRmCW0YaigA0nmZ7GaS12fHwhOoPq1NjnBXdfyMu4Mgvq6QvPdop5hfZej6Wcm/QsEvS4EtNuQ0YQW/hh9Ewz83u962A4+H/gc3e/ReP/8oZ6Hfm9/HHN0ptnKzYRAqSiJDV0W4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=OUEVn1af; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=alxYbj9m; arc=pass smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7B3415F13
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:46:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786052804; cv=none; b=AX8hFwXsJ6SOSV9iYCk65BJhT1ZQiZA77bDtvW7jNRtnmW0Ah6B8M+8ilSKZFVpUAm49Q00sjkWbaoyC2v4PxpIEE4IvySyfJE2AgI2DoD6KarVtgbe39cjBux01KH+AoU/QcqW//h48f2OXixfOzgIMgf07xq+mZuJ7a35dk5k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786052804; c=relaxed/simple;
+	bh=T0hD2DXJ/q3FwPikHjI4gkljbtqDDJPlUsmgogm6D/U=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=RTrX+VN23jMDQnP+mMcjTJVx1Pku0dSfUiYRshl59ntAUasSM1zngkR4PIuqqu0lHRDyI2QjS/k+6QacYWpY5wgzxBPquvNF6KF42QCta8A5Lf3jOWFhp6xmzwh9CCsYxk3D2KKK80Jo1u9dZGWEAHukV/czEtBl14b4nxe6Smc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c16MvOKW; arc=none smtp.client-ip=74.125.225.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="OUEVn1af";
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="alxYbj9m"
-Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 676LF36u4162547
-	for <bpf@vger.kernel.org>; Thu, 6 Aug 2026 21:45:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=P1kfv7quz9mKk+6GOaC33tWyYDCJTvIO1hmWivTvWbE=; b=OUEV
-	n1afqfcYalp/dvkYGJtHNlajXOIIRfYZLt5YedM1CA6PJ1yxajN8vAxR9p9++GqR
-	QOkueM3WMr6/5NUJuk7BCpttIkMW3qrzMWFgvQQygnBixEshBrGxw35kUN/ZUXaY
-	Suieuioj7Rv4mZrQUn0Zg5+EB456OxQtxrAr/lGzxg77qpo3IG9TpLIa+/xZKH98
-	ZnDbA/eLx2bHZ3TBVAkYiOEQtiWMvGHuFiHUhErdbIeLszHPYuefaQc+U7Jos09i
-	0EBxPD+xQk9GZwpI75tnme4N4WVD4X1ed3Fr8kjqEXEF8VrQvnqXJBqaH9lwyxJw
-	0a3TvZ0w+8IGNShi7w==
-Received: from mail-yx1-f72.google.com (mail-yx1-f72.google.com [74.125.224.72])
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4fvq5kbsx4-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 21:45:14 +0000 (GMT)
-Received: by mail-yx1-f72.google.com with SMTP id 956f58d0204a3-668910ff32bso5060226d50.1
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 14:45:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786052713; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ZEINaT49MvIyzem0GNjf4Yrfmuat7TeBmW4VRG1E7BVYJQAJFMiTHFwfeI6IHNNeL9
-         VNy7UJyQZp0N4S+rdlwRABOhSSqUJTTAxaXf0wnypaVTM5yzKC+w8YdQ328Y/yKTpitR
-         LZpAPh+XAkRDdu8uwZpicCLo5G5zXlrI1izzcUrPx6PIOkpS6/bcnig/XGkJ4RwXprrD
-         e4sdqCeLOOwPxIUOZCCY2cRScRSgvdsvyVZMJRLhzpznAcJ9r274mLJF8shUSpDCNQiM
-         RRkEsFxeSTW1p5aDXImhOy5lDryzj2s+r4AtAwEe7dDJDbdV4aaF5CfqfDbvmNS8ll6x
-         DFjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=P1kfv7quz9mKk+6GOaC33tWyYDCJTvIO1hmWivTvWbE=;
-        fh=qzJF9JYLg1VmRR/RNVZv0MwArlSiVOQnK5CJDttAAlE=;
-        b=kG62RjnapYr1GsaVugr7L+sr7VLbKwFH2JZv3GUemU1ZDoQ4dnJcdEV/8ZXY7ogZMS
-         qDGWnQAbqBWsiaR4JSirVvEE+loROjIpUFEhSTEo1PrFgonl3o7kZBH8042ZisZDLLny
-         KXmtHnSvXG5/i1GECsUoyk1b/mweAG4kQZlMcsaR8puqPqYdLn38Jt2FMCJRCR77h1pO
-         xG3Xxj/VVB3RY5aO4qObBx1YyFoACvSQd4EQIOecQf5Sj70RFtc0ZhLpXiSdHKjIvPMJ
-         tClSP8KAQYeP+uQ/lMz+7kh6XBHMTLf4B18DaIPxaXOMzAyWMbKIw6m4nRyItTwwdMk2
-         5rxA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c16MvOKW"
+Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-472365266f5so986348f8f.1
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 14:46:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1786052713; x=1786657513; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=P1kfv7quz9mKk+6GOaC33tWyYDCJTvIO1hmWivTvWbE=;
-        b=alxYbj9mK+s/YyRrr/7GTyGfvDNkPGzAGKItaVc6sel7LSOdSEUmUSaYICAdDKm0YP
-         PF1AI1Fn9vzJSgkwzzdEyTNvrFQ7SrYvsIZR2d4utplAeKKUy4Qc8Kwwwvn/HJU2MeqJ
-         L1bR+b93ikkaYCQj/JaYEWmZaJWxC05Xe9tu/InspoVwGlectf4z3QEnxvynmAGblwQ/
-         Qvti2AeY/6Q5F7IEA70XNrNMfKxFXE/GG7ClrMy9pkGx+IpVpxgOC9/yxucj9b1iyp+e
-         267L5PGPlNuz0gLy7xr9/k+x+uEvGveKDZWjRhbHaym1ITdzFl0+58KhW5BDKP7zpxtP
-         uDKw==
+        d=gmail.com; s=20251104; t=1786052800; x=1786657600; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=sc5+0+P+kBPOJJ2JZITgu16eEoXiCOQvb0agpV+FkBM=;
+        b=c16MvOKWZED4dLGuS+OzHxfmJZGe5AJeCQOSpazFks6idP1hUstJktRKRGXMVkNJXN
+         yCfNO3a6yZW3a8rYkFFx60fCy7HxqSGSniFBznmdjlrA7v/fczWkOAT9ZqjljjxjeV7Y
+         6M2rhCtRjhSz7CgLWxvpk7aOH2879CfXeDN1exB9SNigZKaLRHAZ/V9/ObwFsp3iCflq
+         u0RbX4IJm2oM8fcWwERwE0AJYqJBKxjJiDxAzJB+KQuHRvjqqpLzPBkDLeihFFWr1mvI
+         4/8aph53WMwyBGgu8MUnNvjexn2+8aSlQP+pa4TApJdUIeRzsHIqYRRJMTUJ6ZIpdU7w
+         Kn7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786052713; x=1786657513;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1786052800; x=1786657600;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=P1kfv7quz9mKk+6GOaC33tWyYDCJTvIO1hmWivTvWbE=;
-        b=esoqgK7d/htQXVvcS6IR/rTH/5NsuKKH+k6p24sSFrQ002c4UE7CiXryNfH1JF+axy
-         RkdVyCHLGgGP96ZDzTIsg2gUxlJabw1ICbmCsqoj4NLBqVN7MvDozIEk+kX5tGg7G6Q2
-         9ophwJI5far74KPm5sufUZZdyWnlQ1FRf47Dm+m8T9ustoJXaC/yWexaD1PKbhINUK/q
-         Vv4cZW/rUfa/OAQR6NHJhovNseHCEpdOahPuclIiXo0n0fqk3OId5TnbMY8+oaoRvoBE
-         9Vm+f6SJuAMPy6fKBWEct5lwiFZwRfxrIHfxH3h0x5O4kuMrrUrzgNQWKvHMMR7m/qXu
-         cPAw==
-X-Gm-Message-State: AOJu0YydeNK15aDQcMlFsQKp9yybLJGMer/Jg+IyBLIVZmqi9Cb3A3dF
-	8XyKF1Q4i5e6XC+8rnjI89KBNqqvutMdf6WmEbceurKw45Txmx+ErmN6Wyi3P7n81kmluGt2jGN
-	2bm89XKrxHdNJCtFWwszqYZ0jgJPjroJQAQlYVT4Z1vERVyXULsl3e2bQ27PtK6dTEI7b1EkLwv
-	0OcQy76/wc0IUc9xbTXIcDO4cFHG58
-X-Gm-Gg: AR+sD13l8sJ60D5L7bdNwmMf9gAuyJoJSYOZhpmt/qyD6p1a1wAoBUnyS9QKuiQSrl9
-	mjO7XT6fCZlr7uWcUj5ukyMJKIdJsd230faHCw20TGdHlc7XeWpgvH8X0v2GKGHGNY8KfSc7rX5
-	VDTAVwA0Ifz1KgFJSW5IkymSpqGKNSfXOxkbr/VwrbPJmPrfuqoz+Vy4JsrQ==
-X-Received: by 2002:a05:690e:b87:b0:66a:c376:6f86 with SMTP id 956f58d0204a3-66ac37673bfmr2597588d50.8.1786052713178;
-        Thu, 06 Aug 2026 14:45:13 -0700 (PDT)
-X-Received: by 2002:a05:690e:b87:b0:66a:c376:6f86 with SMTP id
- 956f58d0204a3-66ac37673bfmr2597553d50.8.1786052712556; Thu, 06 Aug 2026
- 14:45:12 -0700 (PDT)
+        bh=sc5+0+P+kBPOJJ2JZITgu16eEoXiCOQvb0agpV+FkBM=;
+        b=GbauhyxMBkmrpvntEwbH7t6wgvEkI0kUj09WeIWIo/ISTRuks7eoQJ3bwqY+FLD/0G
+         EQiSwjra35yT2r/mrusAo3C2EB+7OuI7mt2oJR7+oNKfUuWLXGRYXIab/zJslcoM9Jfv
+         O3S0Rh/9ZqKe5xIbgy3fKVtpiaL5z/sE/RnSyGBt6Db5LL4ioESHAwhDe385ns7DPAyI
+         rSnkha52O6BqUZEUv5K5rbUGRF0ibl6q+T8Mt8wONWDteGy12Is/vRuC8fqtXhSbEQgw
+         GvPRSozvyWDFDUGi/nyEZ+GuIF7Is1EhohIeEBMSEnk+GghEpLUA0SGDzjWTXWmJFGn5
+         rsdA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr1NG0dLRSlRkOYMHOgw/wiYSP1s8mbSfWMrA6u4U2I4SOYrmQu1+I5PC9cm3ADLpnBf2c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzo3+/WTagr7Hdi71S5D2nanwvuoDiPjRcXSOe0sLAdg30Cdovh
+	4XRj+bkPXvB1MHND87hOZws2EwQejzK7IiLYrNwiMBWHwhVi8NnKJVi1
+X-Gm-Gg: AR+sD13cwwoyYXsNozVYiGEWz+AF9KEpFdRMWfDFJ4xhPSiZklK77creOENt1dbg0ZD
+	wfP5GGZW2XDspJ+PlY5s33EN/cjRfQG10KmOnP+f0UzB1VTvkJjqcjoxZo2n/EKKbWyUMVePT62
+	lK1jPd/5jVr+MMzAAhRUeyUcvjUNuPpX9nsJpyQKm3skZ1AXQfdXPqSBvjSDp8RC42xGfy81I8j
+	lnAarQEbANXWe6k80M1OXJ51/UoRmNTitILbk7AsujC/+CkfkVP6Jg8Wf192DZvWV6dQQg42S2L
+	bPtk61BmbGP7P1gdJ+CaAtcFK0PNuLTmeZYy78IwN0FqiLj7THmjtHZxr3WCa5vsVIWpFvS9A7h
+	6IqNc6nWzVyUPJP5+qGFrbMEyjBcpmFIHkwHsRwDjqABdSXX1MjpSZa2AX+VsXubPAUdEVOWyGc
+	pHRpNH6mDuRNXy8h37MRVqHNGlXCLvd4ZUPCEgrlP9p/WOCPcjzxamsr+pdzsFdk6nr9D0G05F0
+	vKeNE1xuhm1sR6HeJp5tu8NbmSCcFPas1lk7MfLKiHIBByCIqrdjNT1MwLbvuLWq9ihbW8hlr72
+	EgWTvXkmRmR62Ip8koH8bEoNBWk=
+X-Received: by 2002:a05:6000:29cc:b0:474:5a38:f650 with SMTP id ffacd0b85a97d-47fec502189mr21244855f8f.3.1786052800301;
+        Thu, 06 Aug 2026 14:46:40 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff79a7258sm8863915f8f.3.2026.08.06.14.46.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 14:46:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260806153000.4184871-1-andrey.grodzovsky@crowdstrike.com>
- <20260806153000.4184871-3-andrey.grodzovsky@crowdstrike.com> <CAPhsuW7gOs2Opo5DRm+YKxBxwU+ncBmEAKHYO5jPjzxM9S8i5w@mail.gmail.com>
-In-Reply-To: <CAPhsuW7gOs2Opo5DRm+YKxBxwU+ncBmEAKHYO5jPjzxM9S8i5w@mail.gmail.com>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Thu, 6 Aug 2026 17:45:00 -0400
-X-Gm-Features: AUfX_mycxuhE9bBXZ11D4K5vINcCDSJcPpDp_7gksuopKRHXb_3yuGXJfDBYFSA
-Message-ID: <CAOu3gNi8i9m7nEuKF28G8cYqJULvE4W6CuDeYVFk58z1xSbBoQ@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v3 2/2] selftests/livepatch: update
- test-ftrace.sh for deprecated ftrace_enabled
-To: Song Liu <song@kernel.org>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, rostedt@goodmis.org, mbenes@suse.cz,
-        jolsa@kernel.org, mhiramat@kernel.org, jpoimboe@kernel.org,
-        joe.lawrence@redhat.com, mark.rutland@arm.com, corbet@lwn.net,
-        stable@vger.kernel.org, linux-open-source@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODA2MDE3MCBTYWx0ZWRfX9lIoxL2zyRUs
- AkZiEp0uIjJ5IIU03UZgFPb8mbnh3cniPmh0mJx53NXEux3VfpRu6jdFBn5ZANiRA9XSeB6UcEq
- /CSYnyTvzO3zuLRMqBipFDFlIqlvf7NWxCZ9FPVg4JORCAdQ2ajw
-X-Proofpoint-ORIG-GUID: aPe3lg0cwJYE8Duslnrm1zRhApu-6Yce
-X-Authority-Analysis: v=2.4 cv=QfJWeMbv c=1 sm=1 tr=0 ts=6a75006a cx=c_pps
- a=VEzVgl358Dq0xwHDEbsOzA==:117 a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=b3B37AjAgz0HnGB3MuNd:22 a=ngmC-yC5AAAA:8 a=e25ExAebAAAA:8 a=VwQbUJbxAAAA:8
- a=pl6vuDidAAAA:8 a=meVymXHHAAAA:8 a=20KFwNOVAAAA:8 a=dDW-ktzWsA5qhXuJ1JwA:9
- a=QEXdDO2ut3YA:10 a=uujmmnXaIg8lM0-o0HFK:22 a=P5XVh-r7Nk77isVNjX_M:22
- a=Fx-rEtueDibNKiZPBj-h:22 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA2MDE3MCBTYWx0ZWRfX5UDHr4GYiNFI
- T3rGOFqqfuZWI+GuLhn53h2ZJD4bOoZ8tubMr/bOUYW1Q9sQVyeZLTDMXVFQ5qynnwIJ7ppl0SH
- NDhtkP6VHXyPIytfFpo+j1hKkrTXFSIrBp06GRJVlZjjJrZOaSrI5CWteXaEg4b1nO2j2NkB+pQ
- M7pcj0RODy2u/LV+0XEZ+FdXAqtvbVM9FpyWlyJ/Ix+5uEG9tYKYO1ZXuMqRJ8yiumN851Agx9a
- glKL+U9UITf4nPo0N81nnBf9y5y224zhX/csXN/HUguwAF6TySyMaBT5KZHXyruAE+S9LKbaDjE
- 1SEem38JbzcJ+THmL+01RkUFVX0Y006Uw4kK+J6kzbz6eBNPWGL/MEaQsd8OgFUlMT4JVwPUqLk
- OTfCldUYMhjDmQ+QYo2eqNEuXwZYr27iAuxYSR0RYDpBfaI4fSGX4pd+kSItVAPj8ZKyc9qQVJz
- b3/9tX3PXWNphVly91A==
-X-Proofpoint-GUID: aPe3lg0cwJYE8Duslnrm1zRhApu-6Yce
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11867
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 adultscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
- impostorscore=0 suspectscore=0 bulkscore=0 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608060170
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 06 Aug 2026 23:46:39 +0200
+Message-Id: <DKI6VKZN6IQ6.3473IFAEODGGT@gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Fix sleepable context checks and
+ remove in_sleepable helper
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, <kkd@meta.com>, <kernel-team@meta.com>
+X-Mailer: aerc 0.21.0
+References: <20260806164049.3158887-1-memxor@gmail.com>
+ <20260806164049.3158887-2-memxor@gmail.com>
+ <8818323417f335355e02d7e10d220ef2ff370c0e.camel@gmail.com>
+ <DKI6BEY44SYI.1SASQ9TSOCCG9@gmail.com>
+In-Reply-To: <DKI6BEY44SYI.1SASQ9TSOCCG9@gmail.com>
 
-On Thu, Aug 6, 2026 at 5:18=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+On Thu Aug 6, 2026 at 11:20 PM CEST, Kumar Kartikeya Dwivedi wrote:
+> On Thu Aug 6, 2026 at 11:10 PM CEST, Eduard Zingerman wrote:
+>> On Thu, 2026-08-06 at 18:40 +0200, Kumar Kartikeya Dwivedi wrote:
+>>
+>> ...
+>>
+>>> Several call sites incorrectly used in_sleepable() where
+>>> in_sleepable_context() is required. This allowed sleepable programs
+>>> in non-sleepable contexts (e.g., inside bpf_rcu_read_lock()) to
+>>> incorrectly use sleepable iterators and kfuncs:
+>>>
+>>> =C2=A0 - check_css_task_iter_allowlist() returned in_sleepable() and
+>>> =C2=A0=C2=A0=C2=A0 therefore allowed css_task iterator in any sleepable=
+ program,
+>>> =C2=A0=C2=A0=C2=A0 even inside RCU/preempt/lock/IRQ-disabled regions. F=
+ix it to
+>>> =C2=A0=C2=A0=C2=A0 use in_sleepable_context().
+>>
+>> ...
+>>
+>>> @@ -12083,7 +12078,7 @@ static bool check_css_task_iter_allowlist(struc=
+t bpf_verifier_env *env)
+>>> =C2=A0			return true;
+>>> =C2=A0		fallthrough;
+>>> =C2=A0	default:
+>>> -		return in_sleepable(env);
+>>> +		return in_sleepable_context(env);
+>>> =C2=A0	}
+>>> =C2=A0}
+>>
+>> I don't understand this change. The comment on top of the
+>> check_css_task_iter_allowlist() says that it is about
+>> cgroup.c:css_set_lock, not the current context per se.
 >
-> On Thu, Aug 6, 2026 at 8:30=E2=80=AFAM Andrey Grodzovsky
-> <andrey.grodzovsky@crowdstrike.com> wrote:
-> >
-> > kernel.ftrace_enabled=3D0 is now refused on kernels that deprecate the
-> > knob, so the old disable/reload flow no longer applies there. Probe
-> > for this with ftrace_disable_supported() and keep the full original
-> > scenario (disable, fail to load a livepatch, re-enable, load, confirm
-> > disable is refused while loaded) on kernels where it still works;
-> > otherwise just confirm the write is refused.
-> >
-> > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> > Suggested-by: Joe Lawrence <joe.lawrence@redhat.com>
-> > Assisted-by: Claude:claude-sonnet-5
-> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-> > ---
-> >  .../testing/selftests/livepatch/https://urldefense.com/v3/__http://fun=
-ctions.sh__;!!BmdzS3_lV9HdKG8!0iHqKyQrLfspbt4sQvekjrQjWLuiSTtsCXR9obFozOCSU=
-hPg1KCQGTvfgZ9oTwgBkdB3nKZA1RCYtwwYj2qtEXgW$   | 14 ++++++
-> >  .../selftests/livepatch/https://urldefense.com/v3/__http://test-ftrace=
-.sh__;!!BmdzS3_lV9HdKG8!0iHqKyQrLfspbt4sQvekjrQjWLuiSTtsCXR9obFozOCSUhPg1KC=
-QGTvfgZ9oTwgBkdB3nKZA1RCYtwwYj6oTNhr1$         | 45 ++++++++++++-------
-> >  2 files changed, 42 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/livepatch/https://urldefense.com/v=
-3/__http://functions.sh__;!!BmdzS3_lV9HdKG8!0iHqKyQrLfspbt4sQvekjrQjWLuiSTt=
-sCXR9obFozOCSUhPg1KCQGTvfgZ9oTwgBkdB3nKZA1RCYtwwYj2qtEXgW$  b/tools/testing=
-/selftests/livepatch/https://urldefense.com/v3/__http://functions.sh__;!!Bm=
-dzS3_lV9HdKG8!0iHqKyQrLfspbt4sQvekjrQjWLuiSTtsCXR9obFozOCSUhPg1KCQGTvfgZ9oT=
-wgBkdB3nKZA1RCYtwwYj2qtEXgW$
-> > index 30dc677b2f45..a65b7b1ac8ad 100644
-> > --- a/tools/testing/selftests/livepatch/https://urldefense.com/v3/__htt=
-p://functions.sh__;!!BmdzS3_lV9HdKG8!0iHqKyQrLfspbt4sQvekjrQjWLuiSTtsCXR9ob=
-FozOCSUhPg1KCQGTvfgZ9oTwgBkdB3nKZA1RCYtwwYj2qtEXgW$
-> > +++ b/tools/testing/selftests/livepatch/https://urldefense.com/v3/__htt=
-p://functions.sh__;!!BmdzS3_lV9HdKG8!0iHqKyQrLfspbt4sQvekjrQjWLuiSTtsCXR9ob=
-FozOCSUhPg1KCQGTvfgZ9oTwgBkdB3nKZA1RCYtwwYj2qtEXgW$
-> > @@ -126,6 +126,20 @@ function set_ftrace_enabled() {
-> >         echo "livepatch: kernel.ftrace_enabled =3D $result" > /dev/kmsg
-> >  }
-> >
-> > +# ftrace_disable_supported() - probe whether kernel.ftrace_enabled=3D0
-> > +#      can still disable ftrace on this kernel. Newer kernels deprecat=
-e
-> > +#      the knob and always refuse the write with -EOPNOTSUPP.
-> > +function ftrace_disable_supported() {
-> > +       local orig result
-> > +
-> > +       orig=3D$(sysctl --values kernel.ftrace_enabled)
-> > +       sysctl -q kernel.ftrace_enabled=3D0 &> /dev/null
-> > +       result=3D$(sysctl --values kernel.ftrace_enabled)
-> > +       sysctl -q "kernel.ftrace_enabled=3D$orig" &> /dev/null
-> > +
-> > +       [[ "$result" =3D=3D "0" ]]
-> > +}
+> I haven't looked deeply into this on whether this should change, that sai=
+d the
+> usage of in_sleepable() is obviously wrong here, in that it is not enough=
+.
 >
-> Since the selftests are shipped with the kernel code, I think
-> we don't need to handle backward compatibility here. Instead,
-> we can just assume disabling ftrace is no longer supported.
->
-> Thanks,
-> Song
 
-I tend to agree but I think here[1] Steve and Miroslav asked for
-backward compatability. V1 was actually the way you prefer.
+Ok, I looked at it.
 
-Andrey
+I guess I see what you mean, sleepable programs won't run inside css_set_lo=
+ck
+critical section, hence it should be ok to not check in_sleepable_context()=
+. So
+we probably only care about the program being sleepable, and not the contex=
+t.
 
-[1] - https://lore.kernel.org/bpf/alpine.LSU.2.21.2607311104390.25165@pobox=
-.suse.cz/
->
+So the current thing should be ok except on PREEMPT_RT, when spin lock on
+css_set_lock becomes a rt_mutex. It depends on whether we care enough to ma=
+ke it
+context dependent on PREEMPT_RT and leave it open otherwise, or just let it=
+ be.
+
+I can still move it to a filter outside the verifier though.
+
 > [...]
