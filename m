@@ -1,123 +1,146 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E952DC357
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 03:14:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FB21D63F3
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 03:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785986097; cv=none; b=sYJ4iYv2LGI7o8QveXF5kW2BI5kn7lizlwHHgCHc6v3n+DEIjh/BthGwOG3/AUjl5cITrcC1O2mtVBPUxqAnnqif6+2lKlzOiI7HY4k0qxBo8WlmlcGpfk+70OHTF9FS8skxJNjQe7MXeauqZztfnsszg0oy3X7EwZGGUExGe7s=
+	t=1785986371; cv=none; b=BQPY5mP5pr/TK54tnOEF2hSgZSVyu6GarxutZ4EJ1H6Y0CPPpddh3kV7Y9mqiRYmrCbE7zLZRSeo1BGX5cnXZRGeSU3DnmO6xMabokDgkv1HcYnMCOL5tpTCaB5CrCxdnGhqkmx/5z+Gcu0fWonh8tA5qZortrundofXXft+HZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785986097; c=relaxed/simple;
-	bh=wePU6JOYwiDsJGzp6LtFPVpLZra4WfRocq96r/FGyRw=;
+	s=arc-20240116; t=1785986371; c=relaxed/simple;
+	bh=rLbI7aQwbg52CainhrPhzRCE4lkh0/bFO5vST/9SPCc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bfO/VqAz9qlaS+gmAhywNJBOYlymVWSdgwmxVn09ntz0dwistWad1d2woaBu9J+Fru+8H1b17j7oKQGreIHqQBhaHe7Q9WEcLM6OyRSmE3EpKeAIgMpwAcdWOKjrqdiVqf64sETbkfCz4O6kmBs582u7opBIPZ4Xhbt56QlgImo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZVGOTcUg; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ROgJU5ABCtm8YUOfiSXvYctexsJtTipcT9ETtvKOWANDTSGEI6CMsbY4DUzcRgntvBDXVpbW6gxOCpuPLzwjpdIBM08blrOCUiSjLgG0HgTHAO+V4nCtP1G2XIOIngqyTvOk8dYxs0k7QvGdBy1tPevbgdi/2g/ibsmIRVEOR2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Typavha8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZVGOTcUg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E06D31F000E9;
-	Thu,  6 Aug 2026 03:14:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Typavha8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C701F00A3A;
+	Thu,  6 Aug 2026 03:19:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785986096;
-	bh=PYi/PuirB0XSqxCwDjdffpllUk5p07G7HL+UK78Nmfk=;
+	s=k20260515; t=1785986369;
+	bh=eC9+bNXkrJ08g77uocUcJjkXO54GpboY5OMzlz6+a30=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZVGOTcUgUPrieIGOZyKCaHTiIK9tcFOlAWQ6+2ppqRQE7coyMrmla2IIOSSxgNIBi
-	 dx9Mlguxx+Zaml/FAUi5mVtVaDaLHOn0cMSCvnzoZLF642UIlp+s3wTqflzrX95ygr
-	 OCfQ1hBjYn03wwdsVoeoXvL0W9NJtsS/ym8FGeh7lA/db0+uTtgan+mTufYUcMI5AE
-	 G4/Qnj6yE06w+aze8KZxcBrB6xrja0FwDEzxmH5t02mApWXg/lap++DbjpX1NQqb4W
-	 bBUnVabLRbbGzoCLc9w46HkvoqChBUd5D2iIhVsP4JKqTiUtvrn6J0VrxcmDp9Yxl9
-	 fnV2vsl+BYlQA==
+	b=Typavha8muXkqMX7R2bVKF1Jbk95eVdYhW5pB4QC5g3uNeFWZoSHtwFL7DTQKUvzw
+	 xRzyii7ysgNbBmSz+nubSRWRoobki1Ui6jRj6Njb+Ysi7xM/3t4vYxYk8lB/wdQXjP
+	 5DhGhAQriqiidXLx+BeFrHC2qROKrA5X1JDYlbKSPNmTB9pxxS6Cv91L/w78efys79
+	 JvGNoJNM2esdCqviTMp/dRfHC/xDupz/tEgyDFnfWGo0fhb86rYmH00EXGGEeMWQgC
+	 YEsbDNJ0dL3eh9C/ctrhZHJc+IHGN/QWYm0OnmCQDGqRc01OkV0VMJLysX5s21QUOB
+	 R1cl1WIZphlow==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 1/3] bpf, arena: fix range_tree_clear
- inconsistency on kmalloc_nolock failure
+Subject: Re: [PATCH bpf-next v1 3/3] bpf, arena: check range_tree_set return
+ in arena_free_pages and arena_free_worker
 Reply-To: sashiko-reviews@lists.linux.dev
 To: chenyuan_fl@163.com
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260806030359.299480-2-chenyuan_fl@163.com>
+In-Reply-To: <20260806030359.299480-4-chenyuan_fl@163.com>
 References: <20260806030359.299480-1-chenyuan_fl@163.com>
- <20260806030359.299480-2-chenyuan_fl@163.com>
+ <20260806030359.299480-4-chenyuan_fl@163.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 03:14:55 +0000
-Message-Id: <20260806031455.E06D31F000E9@smtp.kernel.org>
+Date: Thu, 06 Aug 2026 03:19:28 +0000
+Message-Id: <20260806031929.61C701F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
+New issues:
+- [Low] The newly introduced multi-line comment in `arena_free_worker` does=
+ not follow the required BPF subsystem comment style (the opening `/*` is n=
+ot on its own line).
+
 Pre-existing issues:
-- [High] `range_tree_set()` suffers from the exact same partial-modificatio=
-n flaw that the patch fixes in `range_tree_clear()`, leading to permanent a=
-rena slot leaks.
+- [High] TLB flush race in BPF arena free path allows BPF data corruption a=
+nd leaking data to the page allocator.
 --
 
---- Patch [1]: [PATCH bpf-next v1 1/3] bpf, arena: fix range_tree_clear inc=
-onsistency on kmalloc_nolock failure ---
-commit 8092890527e00050d54d5c7b5deedf81e64396d7
+--- Patch [3]: [PATCH bpf-next v1 3/3] bpf, arena: check range_tree_set ret=
+urn in arena_free_pages and arena_free_worker ---
+commit e8687a8aed3ed0a8e5127b69fdd0e533b6129491
 Author: Yuan Chen <chenyuan@kylinos.cn>
 
-bpf, arena: fix range_tree_clear inconsistency on kmalloc_nolock failure
+bpf, arena: check range_tree_set return in arena_free_pages and arena_free_=
+worker
 
-This patch addresses an inconsistency in range_tree_clear() where memory
-allocation failures could leave the range tree partially modified. It fixes
-this by pre-allocating the required node before altering the tree structure.
+This commit updates arena_free_pages() and arena_free_worker() to handle
+range_tree_set() errors. In arena_free_pages(), it aborts the free on
+error, and in arena_free_worker(), it moves range_tree_set() before PTE
+clearing.
 
-> diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
-> index 2f28886f3ff75..24fa32d4356bb 100644
-> --- a/kernel/bpf/range_tree.c
-> +++ b/kernel/bpf/range_tree.c
-> @@ -143,16 +143,21 @@ int range_tree_clear(struct range_tree *rt, u32 sta=
-rt, u32 len)
->  		if (rn->rn_start < start && rn->rn_last > last) {
->  			u32 old_last =3D rn->rn_last;
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 555ee2531ef98..30745da9277b0 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -881,7 +881,12 @@ static void arena_free_pages(struct bpf_arena *arena=
+, long uaddr, long page_cnt,
+>  	if (ret)
+>  		goto defer;
 > =20
-> +			/* Pre-allocate the right-half node before modifying
-> +			 * the tree. If allocation fails we return -ENOMEM
-> +			 * without altering the range tree.
-> +			 */
-> +			new_rn =3D kmalloc_nolock(sizeof(struct range_node),
-> +						__GFP_ACCOUNT, NUMA_NO_NODE);
-> +			if (!new_rn)
-> +				return -ENOMEM;
-> +
->  			/* Overlaps with the entire clearing range */
->  			range_it_remove(rn, rt);
+> -	range_tree_set(&arena->rt, pgoff, page_cnt);
+> +	ret =3D range_tree_set(&arena->rt, pgoff, page_cnt);
+> +	if (ret) {
+> +		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+> +		bpf_map_memcg_exit(old_memcg, new_memcg);
+> +		return;
+> +	}
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does range_tree_set()
-suffer from the exact same partial-modification flaw?
+This is a pre-existing issue, but does updating the free range tree under
+arena->spinlock and then dropping the lock before flushing the TLB create a
+race condition?
 
-Looking at range_tree_set() in kernel/bpf/range_tree.c, it also modifies the
-tree before attempting an allocation:
+In both arena_free_pages() and arena_free_worker(), the spinlock is dropped
+before flush_tlb_kernel_range() is called.=20
 
-	/* Clear out everything in the range we want to set. */
-	err =3D range_tree_clear(rt, start, len);
-	if (err)
-		return err;
-...
-	} else {
-		left =3D kmalloc_nolock(sizeof(struct range_node), __GFP_ACCOUNT, NUMA_NO=
-_NODE);
-		if (!left)
-			return -ENOMEM;
+If another thread concurrently allocates this same virtual address, maps new
+physical pages into the PTE, and returns to the BPF program, could the new
+program write to the old physical page due to stale TLB entries on that CPU?
 
-If kmalloc_nolock() fails here, the function returns -ENOMEM but leaves the
-tree with the overlapping nodes already deleted by range_tree_clear(). Any
-previously free sub-ranges that were cleared could be permanently lost.
+When the first thread resumes, it would execute the TLB flush and free the
+old physical page to the buddy allocator, which might cause data corruption
+or leak data to the page allocator.
 
-Furthermore, in kernel/bpf/arena.c, arena_free_pages() appears to ignore the
-return value entirely:
-
-	range_tree_set(&arena->rt, pgoff, page_cnt);
-
-Could an allocation failure here result in a silent, permanent leak of arena
-virtual address space?
+>  	init_llist_head(&free_pages);
+>  	cdata.arena =3D arena;
 
 [ ... ]
 
+> @@ -1004,11 +1009,17 @@ static void arena_free_worker(struct work_struct =
+*work)
+>  		kaddr =3D arena_vm_start + s->uaddr;
+>  		pgoff =3D compute_pgoff(arena, s->uaddr);
+> =20
+> +		/* Mark the range as free before clearing PTEs so that
+> +		 * if the range tree update fails we leave the PTEs
+> +		 * intact, avoiding an unrecoverable state where pages
+> +		 * are freed but the arena free tree does not track them.
+> +		 */
+
+[Severity: Low]
+Does this multi-line comment follow the BPF subsystem style?=20
+
+The BPF subsystem guidelines require the opening /* to be on its own line:
+
+/*
+ * Mark the range as free before clearing PTEs so that
+ ...
+
+> +		if (range_tree_set(&arena->rt, pgoff, page_cnt))
+> +			continue;
+> +
+>  		/* clear ptes and collect pages in free_pages llist */
+>  		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
+>  					     apply_range_clear_cb, &cdata);
+> -
+> -		range_tree_set(&arena->rt, pgoff, page_cnt);
+>  	}
+>  	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+>
+
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806030359.2994=
-80-1-chenyuan_fl@163.com?part=3D1
+80-1-chenyuan_fl@163.com?part=3D3
