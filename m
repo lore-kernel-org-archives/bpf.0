@@ -1,113 +1,132 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0292A41D203
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC6639AD5E
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786050611; cv=none; b=BJC8ilZU6XarW/LI7Yx9OBWgAttaYoU4XaSNckFpb+CMDvfvbb3imrhnXMAfKCprl7zc+Y5+Y+gplFO/ffaffP+xfS+RIegkT+qIAjFZn8JDr4jwnAe9cLXFTZUqrxOUcLS/afYg9WtdsENb9E565v6OqBxjhGO6D8h5i9uR3Y4=
+	t=1786050628; cv=none; b=e+8lHwGTKF+lnCUouY2gGYR48InHWqx8R8H4L+U7AHyyDbwNhFDaqWdFoXkn0htxNRNCH5A/1ySDad7ZnCEcRSr2qaBTeF4HaXvuire5WSxf6exnTO3MeAeX6mKW/IMVHy4rsT/jgF+MnCE+8dov5SNLcTOneMflqxVBT2JObcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786050611; c=relaxed/simple;
-	bh=3uC53TGj24ENV4GVRI1QRghP3hLrt3xbg6mDjIwNy/U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d/joK6fmRkL18Ei8Fjd7dPUjT2Vw4wmANiJt+q/TlscBXWsj9g/+nbCiWy1MucavGfa0JMQbt3Wa6a0FHKNG6nASjCqIMZw70ceKano39nVXx/0yt4p5gkxJIbGzSQwUA7Uic0RivaPJ6vSLSkm/0f5KuURi681QQKFHJdHZIp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Mqi6agzl; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786050628; c=relaxed/simple;
+	bh=X/1/nh17iAaHSSedkWuIlxe89TWYv+7E/dLNS0ZMXnU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OxZby8gFl7eFk0S/j/H4Jm/jHI6jYfOEj4fD4lryX5NFKzn2Qw/ETRuOvMSw9AcJKuoXs6vNTkv8bo5JZVxW1jYELo/j/MH7cVUIkvHVAdw0/kEi1seFviZKZR21e0MzUlaZuCnZcmzcM/H/YVa2BA8o71JesAsjN+eOi+f2Mss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=saiYDMm1; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Mqi6agzl"
-Message-ID: <39401518-a0af-49f9-a247-1e3793bb0648@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786050607;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e39FPgvRuNUsT5Tht2Tl3jSVxrlqWgMlgFYM5FLFaBI=;
-	b=Mqi6agzldykWo28uj3U0dfCETkgEkjMSAZ+pRnq4ugaCq+yPIuABxPVK/xp/LVce1C4GxC
-	U6s1ISu5lXC9OD8CRdJgk8tSdOA5Uwywf3OJSr0XM6gTUC/o/+GKOAQkSWuuPfEuJcr347
-	1wNb0qs28VaMBCiDSQpLoZu37KgCdMQ=
-Date: Thu, 6 Aug 2026 14:09:46 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="saiYDMm1"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84a652535dcso1830371b3a.3
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 14:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786050627; x=1786655427; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=br8sc75nCicYG1aNbpfZEi7CdGIV5zpF/CKA38+JJPg=;
+        b=saiYDMm1PZWYfCDdsGilcBSUJYgidovfphvtOipUnPmcmUnZ1baAygqR/RWm7U7fTh
+         SSbUVgzc/lWojDD8BsSTuNYXPvmR/Ip2mFdb0OFQKoVmm00Z6OlPDuRRdPkc+KBZHN5Z
+         n5wYqjalxtdNQqfAPKp3uxzgfHAa967yLriPihnN6HxAp/R9ehD8vSM36UQ1EHSCrw3/
+         RnE+m2sBH1T0U4z9JAWimaYKDBWttedroNFKVpN23b/JVitfhj43VAkWl3UdAKDA9uEV
+         75YNnuY6fD2ib/J/5wvv0bbQ78yXccm16lBRncxtCcI3hMqsC9dw54iwArL7CYk/uCek
+         zNfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786050627; x=1786655427;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=br8sc75nCicYG1aNbpfZEi7CdGIV5zpF/CKA38+JJPg=;
+        b=P5jM2GAZo6Q5ks8IzIKPd8t9m2kILUZmHvkx0T/A0hq819jDrnoEsTSF+ZZ8Ktg8r/
+         cDCRGZXW3AhEipzIAEAaRW+Kye7Epu1W8nlcRZoBEwgz6JGlxXRTi8cDKzaeUjRrMkU4
+         V17g2Tu17vbeULhRSqtxH+kA6Lt58K4E9miLxSWqHgwO7dlIz4r2IiZYpIPd5aqEls3W
+         D9tY17cEuNbynJR3tN+iNw9OE4W6k95d0p5lgUoKblkMdc8AG5HfwdOR78k713M52sT5
+         nO1UQmSym5RRfh5gCvQzrjp+YG5s76tW+ZRrd+MwGWtm7rFB8V4d5wm1kGG+YzKpiypE
+         KBTw==
+X-Forwarded-Encrypted: i=1; AHgh+Rqgc+tP38byKS71aiY4EqF8GM9xWaZ7ERRiImpUtRUS1NgBixrQHYMfNUdj1hGDKpo9StQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqHalhBLsPZDi3gVcfiPsXBPHUJoJxzC8C1QrGVRH5f4wKPGq4
+	DuBItgwivRRug6wlBjtGqyP45N/thr81hiqddad1CibUCybXPV/Cz7Zh
+X-Gm-Gg: AR+sD12V6M5rEaqHKOI4dMyngEFshrBv4OWar7scuTMVsIcPnhwc+1peH3ZlxWzlqw3
+	UUrj6rIjkg0FfiZ//tblVE1Nqo0/zkZmtt/T4GL+VOZ0FnWSG5ABKG8nOsQmE/qbNZi+e5rKIk5
+	78awsrL7fCz2i5qOXS4eJ2nZwUJQQxYFvncwtjYKDzgUhGCHTweyoJuAkdPWhkip0brS2Gs8aVA
+	1aI6gvGujSxwBlChoZV0bwveSjN1UWuKH5amYEGQAJR45zrmo3yQpn+jyK30a2AGTDm+CGYOU6d
+	ANebf4gdGa/iJk2elH+XcTpPuGj6zESzsujslm67Lbe1ZEAdWYXpm4IcDL7bG1ffsh5P6ZGs5y3
+	oTg03ZCQ9qmhEITh2Y4CywipUTad6h9VxIXf3DJWteQIGAUCm8It/zp0ma0efyFwv7VZqiAUIAx
+	BILJIYAOwy3uI4rvcs1g28DO+IkG85uypEQsrZmsA7uEwNLZPqzQ7tMCank+bCUn9mCyI3+Eiq4
+	uaCU/7HMxZmF8dX
+X-Received: by 2002:a05:6a00:32c3:b0:848:47d3:47ec with SMTP id d2e1a72fcca58-84f2e0826afmr22167939b3a.31.1786050626677;
+        Thu, 06 Aug 2026 14:10:26 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f456ba8b7sm2077640b3a.29.2026.08.06.14.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 14:10:25 -0700 (PDT)
+Message-ID: <8818323417f335355e02d7e10d220ef2ff370c0e.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: Fix sleepable context checks and
+ remove in_sleepable helper
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Thu, 06 Aug 2026 14:10:23 -0700
+In-Reply-To: <20260806164049.3158887-2-memxor@gmail.com>
+References: <20260806164049.3158887-1-memxor@gmail.com>
+	 <20260806164049.3158887-2-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 3/6] selftests/bpf: Verify arena type tags in
- resolve_btfids test
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260805230648.2354989-1-ihor.solodrai@linux.dev>
- <20260805230648.2354989-4-ihor.solodrai@linux.dev>
- <20260805231755.966CC1F000E9@smtp.kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260805231755.966CC1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 8/5/26 4:17 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Missing NULL pointer check on the result of `btf__type_by_id()` causes a segmentation fault when a kfunc symbol is missing.
-> --
-> 
-> --- Patch [3]: [PATCH bpf-next v2 3/6] selftests/bpf: Verify arena type tags in resolve_btfids test ---
-> commit 833ac8bbb8ac1055e25790da1396864987e31541
-> Author: Ihor Solodrai <ihor.solodrai@linux.dev>
-> 
-> selftests/bpf: Verify arena type tags in resolve_btfids test
-> 
-> This commit extends test_resolve_btfids() to assert that resolve_btfids
-> emits the address_space(1) type attribute on the return type and arguments
-> of kfuncs marked with KF_ARENA_RET, KF_ARENA_ARG1 or KF_ARENA_ARG2.
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
->> index ac51fd4548214..8482f00046d4c 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-> [ ... ]
->> @@ -227,6 +260,39 @@ void test_resolve_btfids(void)
->>  	check_kfunc_set(&test_kfunc_set);
->>  	check_kfunc_set(&test_kfunc_set_rev);
->>  
->> +	/*
->> +	 * Check resolve_btfids wrapped exactly the arena-flagged return/args
->> +	 * with the address_space(1) type attribute, and left other
->> +	 * pointers/returns untouched.
->> +	 */
->> +	for (i = 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
->> +		const struct btf_type *fn, *proto;
->> +		const struct btf_param *params;
->> +		const char *name = kfunc_symbols[i].name;
->> +		u32 fl = kfunc_symbols[i].flags;
->> +		__u32 nr;
->> +
->> +		fn = btf__type_by_id(btf, kfunc_symbols[i].id);
->> +		if (!ASSERT_TRUE(btf_is_func(fn), name))
->> +			continue;
-> 
-> [Severity: Medium]
-> Could this cause a segmentation fault if a kfunc symbol is missing?
-> 
-> If resolve_symbols() fails to find a kfunc in the parsed BTF file, the
-> symbol's id remains -1. When -1 is passed to btf__type_by_id(), it
-> returns NULL.
-> 
-> Since btf_is_func() unconditionally accesses the info member, passing a
-> NULL pointer to it would crash the test program before the ASSERT_TRUE
-> evaluates.
-> 
-> Should we check if fn is NULL before passing it to btf_is_func()?
+On Thu, 2026-08-06 at 18:40 +0200, Kumar Kartikeya Dwivedi wrote:
 
-We are fine with the test program crashing here. Wontfix.
+...
 
-> 
->> +		proto = btf__type_by_id(btf, fn->type);
->> +		if (!ASSERT_TRUE(btf_is_func_proto(proto), name))
->> +			continue;
-> [ ... ]
-> 
+> Several call sites incorrectly used in_sleepable() where
+> in_sleepable_context() is required. This allowed sleepable programs
+> in non-sleepable contexts (e.g., inside bpf_rcu_read_lock()) to
+> incorrectly use sleepable iterators and kfuncs:
+>=20
+> =C2=A0 - check_css_task_iter_allowlist() returned in_sleepable() and
+> =C2=A0=C2=A0=C2=A0 therefore allowed css_task iterator in any sleepable p=
+rogram,
+> =C2=A0=C2=A0=C2=A0 even inside RCU/preempt/lock/IRQ-disabled regions. Fix=
+ it to
+> =C2=A0=C2=A0=C2=A0 use in_sleepable_context().
 
+...
+
+> @@ -12083,7 +12078,7 @@ static bool check_css_task_iter_allowlist(struct =
+bpf_verifier_env *env)
+> =C2=A0			return true;
+> =C2=A0		fallthrough;
+> =C2=A0	default:
+> -		return in_sleepable(env);
+> +		return in_sleepable_context(env);
+> =C2=A0	}
+> =C2=A0}
+
+I don't understand this change. The comment on top of the
+check_css_task_iter_allowlist() says that it is about
+cgroup.c:css_set_lock, not the current context per se.
+
+The flags on bpf_iter_css_task_new() and bpf_iter_css_task_next()
+is what should govern the decision regarding whether the function is
+allowed within some kind of a critical section.
+
+  BTF_ID_FLAGS(func, bpf_iter_css_task_new, KF_ITER_NEW)
+  BTF_ID_FLAGS(func, bpf_iter_css_task_next, KF_ITER_NEXT | KF_RET_NULL)
+
+Should these wield a KF_SLEEPABLE?
+
+Looking at the bpf_iter_css_task_new() body, it uses bpf_mem_alloc()
+which does not sleep and css_task_iter_start() which takes and
+releases a spin lock.
+
+Please elaborate.
+
+...
