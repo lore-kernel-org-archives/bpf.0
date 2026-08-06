@@ -1,99 +1,202 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB144329E5D
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 19:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1030A4C9557
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 19:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786044034; cv=none; b=d36Me8pJ7Gv6OJhwB/1T3eJQ1cZjlHz2Tw6+yJEcXS5uf1nHdxO4pr/a4ny8woZ/fh4UX5GaDfj+A5Tzd0C3FR98GJtpy1fO0XeMK+iSD4hjc99lq6bDN0yjGKSz3JrE6PQfO/Uujv0XBL/OfUKEARCFJ9Qq+GfjJePQNn0YCmw=
+	t=1786044051; cv=none; b=uhS+A9/tFizu+F/0SW++IdfdqbKBI4WTT0Bn9tex+w7w1pfmfMPAOV3VZsbYXga9kCq35LWPnqrJITBDK7y9mAb3jenhYSZC9FyHddk9JWbTnEbzNrLoLAwq+mZD2vIZ7ulLgliTBOMXoanzGJcbTPwx+dzn5T5xUwaxR/Em4ZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786044034; c=relaxed/simple;
-	bh=4rwlssvdyxclDVyU4O9eod759u1ZWu47LbXTY8c2lyE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pJZDyDMhxGdJvaPVALFiWDztj2UH5i2zFO9uKpv5S0asKthLj712fytBXkKLHbITLkKG42RQdkBDdTON3tF9QHxHU4mmVU/6tCxmTB9wrcmbnjop91dobRbQ/LTwY6C3ZTzo0wcyeIbVr0Pav4Lsqp+C5nat1PzyOOGckN3mhng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=prKY/7Z/; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1786044051; c=relaxed/simple;
+	bh=wOCHam3rtEIsL5rfIhh+WEJeyi5VmbVUcHF8KA1qjPM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=u6JHshrPmfFMNwL8PudFyUe8Z2WwEl97t3SgRnS2T7HNXKueZ1aErXzTgXbjN0bGc9iXEGrVJxaAzipvhQ8N8BC3z7iXB5Bu5URtj0xxf08U2KmCTwVGNhKBl+ioMf81WM2r5PkCEqhSg/jQV2gB9zIbgMVS8edLpwqOBs6KOGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rnd4kZBX; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="prKY/7Z/"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84a2dcede83so3683156b3a.3
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 12:20:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rnd4kZBX"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49553da76dcso8128485e9.1
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 12:20:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786044033; x=1786648833; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=4rwlssvdyxclDVyU4O9eod759u1ZWu47LbXTY8c2lyE=;
-        b=prKY/7Z/sSWWPthG4LEoWCz0xqz0BG8LPG/diMw8Qs88ybqEDyTkHU01ML0XJa2b0o
-         niMoA26Ll+auo0EIfz0E3sTUCxVeLCVUDTsS5+2kAonw5ozIrpdH3X8rhHD/D9DJHTzn
-         u0sF7Q6NIS0/kcdDngiIX5bq7n4R0+IRW5J8nid8oVxr5qGZmwVrw6V1L3dFTiNSMoF0
-         mAxSD7W1uAxa/QdJQDQKhGS/Pl/NmFYMU7/FODeClWOvvJokzvnNU+8vXgVMBRoQojRD
-         sVmYjrl2HG5K+8lL3Ccyg46EjVEzPbdzJFktaHYyadnxc46ZL7dSRMXUtwLaUSKA7pke
-         S1gA==
+        d=gmail.com; s=20251104; t=1786044048; x=1786648848; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=XoJCEfi8XISWAQ6hwJnwYXwaLqoXrMC87be8k98S4uA=;
+        b=Rnd4kZBXmD8JwFEuZMd2Ibnp5XaObbMb4w5kkJ+fMPZDrhcOZ4oB7/4C6jErFjQ4c0
+         T2H741TD8k4QvZoU9lChak9B1FONXP50JXcKuTDyFZVcH9ApGMcnD8EmOuWMFTRCZI+c
+         Za7Da+hiMrAgvamskgEwzANm0TfDkxYBbrV3Hf3c6lZylQI155+x0/H25Gi7TIGywXXr
+         EohBnoQ6tPYifHoPTYYeLnlRLBxP1TvA+ytzWiJ9peUCTxKDkSevYU4jJ+LWRV/4o32I
+         mw50L0Tm1/qd+5SvMS29NzjZYTMmVhRxNHe88FFenxyDe1tAJdwwqcwmgVbkGX8WWHyz
+         M2og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786044033; x=1786648833;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1786044048; x=1786648848;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=4rwlssvdyxclDVyU4O9eod759u1ZWu47LbXTY8c2lyE=;
-        b=qbR9cnj2oviOpnus9RkNWZFlm5zx1KsIU8rcKUv/wJ7EEJiHsCKuTTcHQf8e1sCqD9
-         VdoSWk0FUGV/O7Dr6tJp/kYH2EPXUzQQrHOB73l3Lwr7ai8Z/q5IakPvmI6dgVUpLds4
-         u0YLAJu4YNHJlyERy4OOJFTWIiZmgD+IBhgMYVBEKMPwceGNoasNpELq37t+jyXUf6f6
-         0DszQeZVio4ZEw7i8wb9FuayDQY4FwrvMX+2TMfSE2PRmiwiMjU8R24HTmECy8E09sRd
-         yr1cB2ZpvJTIFCUuRK55IZKjfgEujoluig/1B21DbzalEaTzrqP0glG9jo+zwOhLivbX
-         pHAQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqGrk72Atc9RwAs25ajzY40JydEJzSJ9H9xDLPKRKzYnHCYxVOmZIYXoDPvLhTHE4hDHBo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBtYx0nWUQeCHm+nldEsD7w75qwUR1nEltMrJsDOvuZAhhAuD5
-	MzSZsDahTBG7HdsOW9E1X7DfkDfboX7DJ5tttIQDGJELLstuM2OIzbnM
-X-Gm-Gg: AR+sD13CcyEoxISMTmeAHRxPw1xAeaWnCEmSxDVBXzj+aQWeFlsaAsjNbc6Xfzgka3m
-	V+9cgACeXYQHbsQ2FuMpl6cEGEVTtv1++1kw4RZax1WMeCRKx/SIRdwZxxhSNCB8gANst5HjwVm
-	nBmWeB4GMvCk6NCa+7JZobe3nNAAYy8kGbkskNN4gNWBbdQ7RgYRuHM2Km/0q1GoCOlkfOmA8Ch
-	vMklBETnFpgoRMb7AK9jx5EGp1+sFzKwXbum6YJJi0KmKt6iKsbG7eBnsg5lpOEKdvxIiX73SDP
-	YhYMKIReEOu9ssApAEQ+BdLek5fA6+IVz1OKkSpST21qhkDA8W+iZOEi7GHa/cBrwnQF0JwJP5a
-	roQQp8JnI7pgS5dQ1+iH69LjJy4cU+6UpN4BhfkCVllEHNoPqVDxVI3/tkaUTgk6UxaBOGnq6Mh
-	hs+jQ5mXAnCjgBy+tHZAG3jI1t085RDpocSfT+X2RUR/vj3uATScnqSR/1PndlLVtD3DlC2kGsB
-	vPsF9O55Vclf+L0
-X-Received: by 2002:a05:6a00:430b:b0:847:893f:2d0c with SMTP id d2e1a72fcca58-84f2dfb5113mr21619405b3a.5.1786044032903;
-        Thu, 06 Aug 2026 12:20:32 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbe708e32casm2991877a12.23.2026.08.06.12.20.32
+        bh=XoJCEfi8XISWAQ6hwJnwYXwaLqoXrMC87be8k98S4uA=;
+        b=MpgsahJwV914npJW0azy2YzBdRxMIrXBT/ZUiIWXDgMEvUd8G/UW4ilTxYwKoadTOw
+         pMlmJvo45hqOrcw60um8iDXMumBMhXSI7tw4rz1gFw7KRBDG7zpXmlT5LYDNBTQfs3MZ
+         ZbYls+Cli2uQ12IaOxNbsTycEwMEFBWSRLW5aH+g6cPc5VXLa2dWb6uEyAns1NRJW8db
+         /bjFFSocLnGbrLlA1pTSjd0A6MXpkmuO17QrKT7tLhxWJamJ4ChiApVtGS4rhGANRjJP
+         DkY93jn9u6BbG/NAuZ+TZjrsKb9FXcnew0HczZSS2I12OWLoLDxQWj7OOW92gQPCPgK8
+         FBXw==
+X-Gm-Message-State: AOJu0YzrqRUb339jRkdQpVynWdFtDvXZHzeYzNfyFAJLhd6U49v1LUAf
+	M+PSZetoHMEEOrrEg+7/aHcio1gvggzD+MnLolIZqRjS4craIs6T8CUL
+X-Gm-Gg: AR+sD13UZl2As6kHl1HD3CL8Q1Gk8gAGPVTCYRMXYF3zAURvzvc5feTEXEwT3k+iGhC
+	3fLPKwEKP7NSrbythhZu44kNGyZkqpMH1UBeudIwIoiGuvbmWUXrWp/9nG7riOk9JKMjJZK5T1t
+	qWrLYukfhaW5jyq7cssOGDn+/FMXPELjSAREUMzO4cuFzG8d34PBF7okRBvj4OABpkMlQOTGxQf
+	wyw1bpiWKUSMpgZL/3bF1aIBp/o2JTy7b9BYu7DWRCvS/Z8DkBmiqEaEepU4JCeMdjnHuxibstQ
+	Z/z5dhMGTwWb5bYXDFm4PeNpVcAxbl5WqWYPXltwe7LsS+a+O8HuP2eD49qkFrqYD3gBA621Pf0
+	0j30YySN0y33GKPtNXta54cr2eicfIECb0RchEeGFk9NdkQo71uPO6oTyZuYSVGQGXcNlg74HXD
+	iTyCWiWt80kdFtgNv9LAW6F3BElcPtcRFf5qwwGURWdY6ke0INEX91W43oFFoFcoWP17Pxcf9+6
+	5J/0AX2sFKE3ESL03pu5u5qHcVauwuLnlx6Cn6BxOqLxVIqLQbsG5qDQzpeX7CUi2+YBV/oDXka
+	uoRLwfRDEhcv704L9eI7oeLl2wA=
+X-Received: by 2002:a05:600c:4e87:b0:495:573e:1c54 with SMTP id 5b1f17b1804b1-4994e7c1122mr205364825e9.9.1786044047831;
+        Thu, 06 Aug 2026 12:20:47 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995421b1e2sm105953285e9.8.2026.08.06.12.20.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 12:20:32 -0700 (PDT)
-Message-ID: <6976811166d665aab176fd40ec56c24c76f64bd9.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 5/6] selftests/bpf: Verify decl tags
- emission in resolve_btfids test
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Date: Thu, 06 Aug 2026 12:20:29 -0700
-In-Reply-To: <20260805230648.2354989-6-ihor.solodrai@linux.dev>
-References: <20260805230648.2354989-1-ihor.solodrai@linux.dev>
-	 <20260805230648.2354989-6-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+        Thu, 06 Aug 2026 12:20:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 06 Aug 2026 21:20:47 +0200
+Message-Id: <DKI3RW4DNSJZ.3LPBJ6YJHOTHY@gmail.com>
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: <bpf@vger.kernel.org>, "Tejun Heo" <tj@kernel.org>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, <kkd@meta.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v4 04/13] bpf: Support __arena and
+ __arena__nullable kfunc argument suffixes
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260805210427.3218326-1-memxor@gmail.com>
+ <20260805210427.3218326-5-memxor@gmail.com>
+ <CAMB2axOdf7jXcF2+esZqwUVXY407yu7XnkioJXnSU3b0ZsPzUg@mail.gmail.com>
+In-Reply-To: <CAMB2axOdf7jXcF2+esZqwUVXY407yu7XnkioJXnSU3b0ZsPzUg@mail.gmail.com>
 
-On Wed, 2026-08-05 at 16:06 -0700, Ihor Solodrai wrote:
-> Extend test_resolve_btfids() to assert that resolve_btfids emits a
-> BTF_KIND_DECL_TAG named "bpf_kfunc" for every kfunc, and
-> "bpf_fastcall" for kfuncs marked KF_FASTCALL.
->=20
-> Add a btf_has_decl_tag() helper that scans the output BTF for a decl
-> tag matching name and target.
->=20
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
+On Thu Aug 6, 2026 at 7:22 PM CEST, Amery Hung wrote:
+> On Wed, Aug 5, 2026 at 2:05=E2=80=AFPM Kumar Kartikeya Dwivedi <memxor@gm=
+ail.com> wrote:
+>>
+>> From: Tejun Heo <tj@kernel.org>
+>>
+>> Passing an arena pointer to a kfunc takes two steps today. There is no
+>> arena pointer argument type, so the pointer crosses the boundary as a
+>> bare scalar, and the kfunc then offsets it by the arena base and casts
+>> it before it can touch the memory. Every such kfunc open-codes the same
+>> translation.
+>>
+>> Add the __arena and __arena__nullable argument suffixes to make this mor=
+e
+>> convenient. The kfunc declares the parameter by its real pointer type
+>> and dereferences it directly, with the JIT rebasing the value at the
+>> call site, rN =3D kern_vm_start + (u32)rN. No bounds check is needed: th=
+e
+>> u32 offset stays within the guard-padded arena kernel mapping, and a
+>> fault on an unpopulated page recovers through the per-arena scratch
+>> page. A suffixed argument accepts a PTR_TO_ARENA or scalar register,
+>> matching global subprog arena arguments.
+>>
+>> __arena rebases unconditionally, so the kfunc never sees NULL and a
+>> value with zero in the low 32 bits arrives as the arena base.
+>> __arena__nullable preserves NULL for optional arguments by skipping the
+>> rebase when the truncated value, arena offset 0, is zero. Keeping the
+>> plain form NULL-free saves the NULL test on every call.
+>>
+>> The double separator makes the annotations composable:
+>> __arena__nullable also ends in __nullable. Match the composite suffix
+>> first when classifying kfunc arguments and function-model flags so it
+>> retains arena semantics while carrying the nullable flag.
+>
+> Since __arena__nullable will match is_kfunc_arg_arena() case and go
+> through JIT + regno check, and get its PTR_MAYBE_NULL anyway. How
+> about just keep it as __arena_nullable to simplify the patch?
+>
+> 1. No need to introudce is_kfunc_arg_arena_nullable() and changes in
+> is_kfunc_arg_nullable()
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+For consistency, would you prefer that I don't manually set | PTR_MAYBE_NUL=
+L and
+let is_kfunc_arg_nullable() handle that? That would be another way to addre=
+ss
+this.
 
-...
+In some sense, __arena includes __nullable for the purposes of type checkin=
+g, so
+it might make sense to add it to the predicate that determines NULL-ness, t=
+hen
+it will acquire PTR_MAYBE_NULL automatically.
+
+We will still drop is_kfunc_arg_arena_nullable() though.
+
+Anyhow, I don't have any strong preference one way or the other, but though=
+t I'd
+float this as an alternative since it appears to fit better, and details ar=
+e
+hidden the predicates.
+
+> 2. is_kfunc_arg_arena() returns btf_param_match_suffix(btf, arg,
+> "__arena_nullable") || btf_param_match_suffix(btf, arg, "__arena");
+>
+
+Yeah, makes sense.
+
+> [...]
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index b62e77949542..2b7f6f6bbe76 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -10909,9 +10909,16 @@ static bool is_kfunc_arg_refcounted_kptr(const =
+struct btf *btf, const struct btf
+>>         return btf_param_match_suffix(btf, arg, "__refcounted_kptr");
+>>  }
+>>
+>> +static bool is_kfunc_arg_arena_nullable(const struct btf *btf,
+>> +                                       const struct btf_param *arg)
+>> +{
+>> +       return btf_param_match_suffix(btf, arg, "__arena__nullable");
+>> +}
+>> +
+>>  static bool is_kfunc_arg_nullable(const struct btf *btf, const struct b=
+tf_param *arg)
+>>  {
+>> -       return btf_param_match_suffix(btf, arg, "__nullable");
+>> +       return !is_kfunc_arg_arena_nullable(btf, arg) &&
+>> +              btf_param_match_suffix(btf, arg, "__nullable");
+>>  }
+>
+> No need for the changes above.
+>
+>>
+>>  static bool is_kfunc_arg_nonown_allowed(const struct btf *btf, const st=
+ruct btf_param *arg)
+>> @@ -10929,6 +10936,12 @@ static bool is_kfunc_arg_irq_flag(const struct =
+btf *btf, const struct btf_param
+>>         return btf_param_match_suffix(btf, arg, "__irq_flag");
+>>  }
+>>
+>> +static bool is_kfunc_arg_arena(const struct btf *btf, const struct btf_=
+param *arg)
+>> +{
+>> +       return is_kfunc_arg_arena_nullable(btf, arg) ||
+>> +              btf_param_match_suffix(btf, arg, "__arena");
+>
+> return btf_param_match_suffix(btf, arg, "__arena_nullable") ||
+>         btf_param_match_suffix(btf, arg, "__arena");
+>
+
+Ack, I'll adjust this bit.
+
+> [...]
+
