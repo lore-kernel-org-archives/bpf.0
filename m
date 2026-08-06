@@ -1,103 +1,83 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D547A3F825A;
-	Thu,  6 Aug 2026 11:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C05D742901C;
+	Thu,  6 Aug 2026 12:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786016835; cv=none; b=ioPxrIoY6jlSi7ugyjobBJssbGPLQex2stj+qRqQ5Ry5VTvZ7dsjVyj5byqxrTMHuHI5QPqVcL57FW6YJs3uyRWwhfQTStOVg2+e5odHjK7TmsyNmCpY8NWd/NIyyz2wLVRjnJKpUI3vxELh+vSXnKHwZ+in+4ksQodXL7W3gNQ=
+	t=1786018915; cv=none; b=KeDuPJTOymStgiGfGyHB2LXHpDzsawixSWCEMEXyaQLv67lFluSYGAemMRCedLIqukSnEo1pjhcfBidxsMvPXOajwsONOZGq8I4CLN6rhuY9KfcCxW1peHXRsd/Z2C6PDiI/zmXfF06BeHnI6fphYurPEDYGMCTP48xDGklyxGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786016835; c=relaxed/simple;
-	bh=fdc5I/dA1nqBQdw+Khjbswi+ogkkUJq35gfyiNviWk0=;
-	h=Message-ID:Date:MIME-Version:CC:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=eXuHAvMJ/67g6G8QJ/9GHoYZulRpAhIZwJhNfrwESS4YR+w9GTquUgRxDPIFmAiBpTvlVH5SIse/7Mk/t/8JfDouOlzo7Lk80IiKpihEqIz1t2BSTvOftqMstw22AgO7kENe/ZRLWGS+aC7Dmg/JKy0zAhh4VNGQ2dHPNKYKJsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=lljNPPOj; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="lljNPPOj"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=fdc5I/dA1nqBQdw+Khjbswi+ogkkUJq35gfyiNviWk0=;
-	b=lljNPPOjwihvLNXNkomfvwIJ2aT3JrR9zX4iO8JmLfCfs0AeVhfIggM5EeYG8gkCXpB95R1el
-	OsDybiQqwDZkG2zcdM8/ashc+PW1MY24PXpCpj1HY7ceD0yXtZJR/vB22qDeVkzbBGWCCiDwvon
-	Kloe7IEbytFWhvXDfL6Ns1A=
-Received: from mail.maildlp.com (unknown [172.19.163.200])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4hG4yL5yJSzLlTg;
-	Thu,  6 Aug 2026 19:37:30 +0800 (CST)
-Received: from kwepemo500018.china.huawei.com (unknown [7.202.195.199])
-	by mail.maildlp.com (Postfix) with ESMTPS id D2D2A4055B;
-	Thu,  6 Aug 2026 19:47:02 +0800 (CST)
-Received: from [10.67.120.192] (10.67.120.192) by
- kwepemo500018.china.huawei.com (7.202.195.199) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Thu, 6 Aug 2026 19:47:01 +0800
-Message-ID: <169d0d62-2296-476f-95f9-5916d777090e@huawei.com>
-Date: Thu, 6 Aug 2026 19:47:00 +0800
+	s=arc-20240116; t=1786018915; c=relaxed/simple;
+	bh=4DNuvtRJ/KRqzWG3Phg0vgIRZQXpDIPkScITOHaKLtE=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=ihQWvA84FzmkBbldT+6DCuaglNoI/QsRjWsBj+8MiBlk+RCwV+V2bR301N33ObJI8dyfLNoU0LiGwX1LPTwdbhBY48yBSbAr575O4zQbdLYc/xCUHh6uI5LKQ1CagWA8kffcE/wjMtCH3MWn6jntTKXZhPT2FYTQRk/1kefLpRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8Axw+lcfHRqnfsKAA--.12249S3;
+	Thu, 06 Aug 2026 20:21:48 +0800 (CST)
+Received: from [10.130.40.83] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAxSsRafHRq08UlAA--.21220S2;
+	Thu, 06 Aug 2026 20:21:47 +0800 (CST)
+Subject: Re: [PATCH v4 0/4] LoongArch bpf kptr xchg inline support
+To: Chenguang Zhao <chenguang.zhao@linux.dev>, chenhuacai@kernel.org,
+ kernel@xen0n.name, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com
+Cc: hengqi.chen@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, shuah@kernel.org, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Chenguang Zhao <zhaochenguang@kylinos.cn>
+References: <20260729022837.355549-1-chenguang.zhao@linux.dev>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <b11c0259-87fe-8132-f028-13fd6ec969cc@loongson.cn>
+Date: Thu, 6 Aug 2026 20:21:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-CC: <shaojijie@huawei.com>
-Subject: Re: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in
- the RX path
-To: <chia-yu.chang@nokia-bell-labs.com>, <shenjian15@huawei.com>,
-	<linux-rdma@vger.kernel.org>, <eperezma@redhat.com>, <jasowang@redhat.com>,
-	<virtualization@lists.linux.dev>, <mst@redhat.com>,
-	<xuanzhuo@linux.alibaba.com>, <pabeni@redhat.com>, <edumazet@google.com>,
-	<linux-doc@vger.kernel.org>, <corbet@lwn.net>, <horms@kernel.org>,
-	<dsahern@kernel.org>, <kuniyu@google.com>, <bpf@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <dave.taht@gmail.com>, <jhs@mojatatu.com>,
-	<kuba@kernel.org>, <stephen@networkplumber.org>, <xiyou.wangcong@gmail.com>,
-	<jiri@resnulli.us>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
-	<donald.hunter@gmail.com>, <ast@fiberby.net>, <liuhangbin@gmail.com>,
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ij@kernel.org>,
-	<ncardwell@google.com>, <koen.de_schepper@nokia-bell-labs.com>,
-	<g.white@cablelabs.com>, <ingemar.s.johansson@ericsson.com>,
-	<mirja.kuehlewind@ericsson.com>, <cheshire@apple.com>, <rs.ietf@gmx.at>,
-	<Jason_Livingood@comcast.com>, <vidhi_goel@apple.com>
-References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
- <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
-From: Jijie Shao <shaojijie@huawei.com>
-In-Reply-To: <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemo500018.china.huawei.com (7.202.195.199)
+In-Reply-To: <20260729022837.355549-1-chenguang.zhao@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxSsRafHRq08UlAA--.21220S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUmYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
+	67AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+	ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+	87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+	AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF54CYxVAaw2AFwI0_JF0_Jw1l4c8EcI0E
+	c7CjxVAaw2AFwI0_Jw0_GFyl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF
+	0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+	17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+	C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+	6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+	73UjIFyTuYvjxU7MmhUUUUU
 
+On 2026/7/29 上午10:28, Chenguang Zhao wrote:
+> From: Chenguang Zhao <zhaochenguang@kylinos.cn>
+> 
+> This series enables the BPF verifier to inline bpf_kptr_xchg()
+> into BPF_XCHG on LoongArch64, and fixes the underlying JIT
+> atomic ordering that makes such inlining safe.
 
-on 2026/8/5 5:35, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
->
-> Currently, the hns3 Rx path sets the SKB_GSO_TCP_ECN flag when a TCP
-> segment with the CWR flag set is received. This is incorrect because
-> the hns3 hardware GRO resets the IP ToS byte to 0 during packet
-> aggregation. Consequently, no valid ECN signals are carreid, meaning
-> that it cannot support RFC3168 ECN or Accurate ECN protocols. Setting
-> SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCECN under these conditions misleads
-> the upper network stack.
->
-> Fix this by removing the incorrect SKB_GSO_TCP_ECN flag assignment
-> in hns3_gro_complete().
->
-> Fixes: d474d88f88261 ("net: hns3: add hns3_gro_complete for HW GRO process")
+The first three patches apply cleanly on top of the loongarch-next
+branch of linux-loongson.git.
 
-One note:
-since this patch fixes a bug (incorrect SKB_GSO_TCP_ECN flag set in hns3_gro_complete),
-it should target net instead of net-next.
+The following selftest passed on LoongArch:
 
-I'm running HW tests on hns3 to verify the fix. Will share results
-based on what I observe.
+   # ./test_progs -t kptr_xchg_inline
+
+Acked-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 
 Thanks,
-Jijie Shao
-
-
-
-
-
+Tiezhu
 
