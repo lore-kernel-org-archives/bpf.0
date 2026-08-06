@@ -1,52 +1,67 @@
 Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013049.outbound.protection.outlook.com [52.101.127.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7917737F8C2
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 04:21:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B9937F8A4;
+	Thu,  6 Aug 2026 04:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785990063; cv=fail; b=HY+VzlxueFpNB/CpRhgpUxSLTF8v63KFxSwqkrkADAiw3OY7OI3sJdUkDL+So+wel2jz5e7bU98S2eSjtNj2E4Fmhi+6HLYAqCDtoi5WxSepZwvdJNhOHLGqvdKi9OGHG1er4s7VZtiPRZ96/ifVKI14/aB8RDZDIR3DsCrpz/4=
+	t=1785990066; cv=fail; b=MSwkbHaa38u3B4KNEri2miJibCp/QJNW7ZKz13tRxjQYb2CcsGg+hEB6sI2p9PNWPi96sZwgrgvbEkvhnZHW4q+e8cysPEfdt5+fo8FERwmQlyXgByG4R0CC7vc7nEGN+PkgYGTXzXAGX62kjsGSM5O0CKWrJs7RAdLi98nx4nI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785990063; c=relaxed/simple;
-	bh=XDA+bJCniy21ZKt+Q86CNrzx5X1lRqXixFXlJtb/n4E=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=pjXzLSU++yOyokA3fxg85Gfpj9cAFDYLy+ZaGKJAbVyOzF6VQQHgp8SqFH/VQ3DNI2l3qL/eHJ1j/vuhTw6KyXpzcLDEONqeknBYu0IIP3sF+XZqpO3M45tWrY01IVlkYwsS9ITeGsw5E7nzRYHmV7CAjw1p6USvPL6goI7aGdM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=Mtun87zZ; arc=fail smtp.client-ip=52.101.127.49
+	s=arc-20240116; t=1785990066; c=relaxed/simple;
+	bh=pDEZcHahKnVlpdOK7xzkM3xpdhSfgLb9wE0qvBlRwkg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=V6KN02l0ZCaR/vBFwuJbARmw4w7EfvICDw/wdbLZNVjcSz8Mst+kooh6PVKv/HWTNDT6tjcojWO523ovkv5lOYdd5hEP+2kxZJnas3e97L7wAcyfZsFluAEK2XQ6KdgQaF3OEUtCJ1d47uImpzSvgA8HOaztDPKqfWBWTuImHdA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=cxATdiNQ; arc=fail smtp.client-ip=52.101.127.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="Mtun87zZ"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="cxATdiNQ"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=akxxPHS8gf5uotErSdwoYTIy+fRRyRVooJDKoa3ud+fgpuWLB+ydbh0T/RkNCx/Tr+B89A17wxWUedwqjM3tiCwbkEdJn2bKLEricPMW/TaPSE2HJ2BXgnIM6M7WoCn3umXbIt2fH/LQloBi/58ahKNY1X2gVkF8wGcLMViGoIsyzesREDOEHlkpqFwqI4o5AjjEXEcsr1L04GkH+6ZARtE4FJTA19pkYhk8Sr0HEjzV7t4HqKu6wJJalgX9DMe6+/JBwzHl0KKuG0C/q1d6iNw8GQNetC5bu0+g8SCa95mXmqtCR9udPAuM5nVZyG9AhPXC30CYG4EuWAySilnPTA==
+ b=LF0NLWGhdywa3WSBq5q6JOlauTkM80EuOKL3qiQIdaG+LBM4k7u0Q9uMsRjjvJyxUhw5s17YzMUOJfgt+D7sF4013O8SX0/Cut1TX1msL0gMnKTrY1intsFJ+K5pV81kL/IYt9CIoyhuizfR+7ovslX2QQ1jvHoAPP9zEPJOb/IpU8vkWbSqrmRmsdNCsa5whGQagEtAd7uYQAF6w8gII9qtKuuJmIyZwFHyF2Bm8elps7Iy1UD/EFMGXBfnM2AmlhfFmChFk2lDBmB5tZPkYJZPML0YWvJigpCblCPNokkuTF/cQKEjy+ryz20yDyJYipb+i8sAEnOoZoi50crxWw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fxMmwyqzCYhft4mbSbxs/IHFY2NUUd0Rf9s1oo7qjak=;
- b=n7ociFKWil12smxbSE2Or7dpQ1pgx28hM2kkWOsgK4o42g7Rz2sE6LZeyglqlG/bqUgm/bc4Bg8PfHMqa37l4TqqUUug7vbOK/oY41of2GgyPJpu5XZk1TGsvNubfXIRizC6Bt9pQBGcigNvn2XjNBlkZWZVPhZghRyZOSdRGPAqhVK8sFNzYwNiERZBD/8nCIIVIrq9CDPJgiwEj3giyvqCaowP4W873cdmpzEqIDNxCqc3rNLuB1XtRa33EF0LpU2n9nv5g8RaWcrSP8mRcMfWIhVq5WSbSpDSWGYCAbPIO1CV8XYSRHOrGylSfAvs0x2PQpcbUeEIPy6wv6aVAg==
+ bh=DYjLuwz6vC1tbdrIZZcLM71L0K6mM4dK8twibsbMcEY=;
+ b=P/9g6Ar8d5XGJ4Hx8/fvueJHcbb9Vg4PpWrNTSb0PR4ICLlJ+ml/cRjWUXvYSjCbJtva8s0L6xPodeE8daoiEEvEnPKgub7Na7BKc+N2sH+8ACrOYjUSD6eyKOTdQNyATrE7HX6rj/jOcYh1ZjkP1jKOQqxTd0ex+1XOq2d+dWrQanno3T62ovtd1cvmntVf6reSjePOf8EyERVnUT4lzaEkiytBoOazsfkfmNzPl9hkL5GU1y4Cg5UvlTglJpRx0SJ8A6y0jREIRcR8eXAd9N8sUplQroaSQUOnPDXxUQN+f7nkPpAnFxCLidGELaflPWcl50iZcLQxxfICrcONBQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fxMmwyqzCYhft4mbSbxs/IHFY2NUUd0Rf9s1oo7qjak=;
- b=Mtun87zZx5uDe8SwDmlGQWSZyVHVbpyAXsXMfqASyVL+CN4RmOuXjYzSYHjoTL0CHDNFfuNA6nfNTyrzvy6se/X+n+4QQWqM3zw13ZcxmEXJSGT3yqLUPfD7lCZgIHO83djGjfmv/ieqjDUb0/GglV2H9Rgu0PW8kJYT7btY8MF8ssKKxV/udOfKS2l5wJE/s/8PCniSjTQdiW112vO4d+rkeuirdAlGJhNljJnomYPC2lRM6iQc65Lr2n3xc5WAqo8EAjwlXhyPxLaJ+9E2v1O45B1w3XahGBAOiHUIZzaXEQvZTUwVFMsvkhK3XAG/6b5VcYtvqU8c45dUNsTJIQ==
+ bh=DYjLuwz6vC1tbdrIZZcLM71L0K6mM4dK8twibsbMcEY=;
+ b=cxATdiNQjbDxqWwhAuO8ULcwIeNqv3MtbaYvUQRIav5s/iRCCbckYTwCFLM945rYL5mp+5ijyiJ4tGPGFC6Y+JhLG0+gF4HcUtmTji1FTXNkNX+WRXdZxUyyDjnuHjNAQJElCIqzcEvcANemFN2LyxFDiIQ/kY7XYQXZwAHfxvau/K8kBCUhFNk1VQ+RFQDGXpNl543oKdll80IW0uCNJHFwcsPI0/GV6aKMbnuacMou7jMW/UqO+0YoEbGFnEClCTPmaFRlyh1IDJDCLALfoKou9Xxk6YdEhfp4SBGAQOuNgCHViEePFd0HZJf8iCfzg6wW+vp3UvdkXRkWlNCwVw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
  by TY1PPFF38CE2865.apcprd06.prod.outlook.com (2603:1096:408::930) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Thu, 6 Aug
- 2026 04:20:57 +0000
+ 2026 04:20:59 +0000
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0292.019; Thu, 6 Aug 2026
- 04:20:56 +0000
+ 04:20:59 +0000
 From: Fuyu Zhao <zhaofuyu@vivo.com>
 To: bpf@vger.kernel.org
-Cc: Fuyu Zhao <zhaofuyu@vivo.com>
-Subject: [RFC PATCH bpf-next 0/2] libbpf: Improve BPF load performance by selectively loading kmod BTFs
-Date: Thu,  6 Aug 2026 12:20:25 +0800
-Message-ID: <20260806042042.3239428-1-zhaofuyu@vivo.com>
+Cc: Fuyu Zhao <zhaofuyu@vivo.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [RFC PATCH bpf-next 1/2] libbpf: support selective kernel module BTF loading via .kmod_btfs section
+Date: Thu,  6 Aug 2026 12:20:26 +0800
+Message-ID: <20260806042042.3239428-2-zhaofuyu@vivo.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260806042042.3239428-1-zhaofuyu@vivo.com>
+References: <20260806042042.3239428-1-zhaofuyu@vivo.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: TPYP295CA0035.TWNP295.PROD.OUTLOOK.COM (2603:1096:7d0:7::7)
@@ -59,101 +74,280 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|TY1PPFF38CE2865:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5444032f-7d34-42ce-e39e-08def3721c29
+X-MS-Office365-Filtering-Correlation-Id: 26ad812a-e391-40b9-825a-08def3721e25
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|52116014|366016|1800799024|38350700014|6133799003|10067099003|56012099006|11063799006|18002099003;
+	BCL:0;ARA:13230040|23010399003|376014|7416014|52116014|366016|1800799024|38350700014|6133799003|10067099003|56012099006|11063799006|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	5YzIzQnjF5uJlJTcRF84OLT1hEP3oN3C2sf4ZxkdMOtPHJ4VJZKmIafX8Vz9l8iueOOkOpdSY7hLkl1A+1SLu9mAXXOjmnn2S8XeoVI6gMbYyGed2FxewDcbwXQBD8TJsnwJpqNPMnVTLxnGp7lSlLMEPPT8BmvqGgGBJQ1s9zd0RLdWzGTPYEiYB6hibGY2fOSWcdECvsN+WvZVBCQupggn3tnH94hOR64t62O3zuFRQ3+NAyd8w9zHNKWs5L5hhwjGuV+2yDrCVn46EatMCsAe4s4kTG3kJZ1HP+hWaf3T4pB+uOTF038o7doYKjKV/JKIFDuzG2N/DzBcr+USYeGaJ4tHZ0KWDMzsfZDthKGlHALew8ySmjhcGrKD9KAaBOYOxr4D5INil+ZxcsIfzC6xDEKOUu6Mj08SJHa/p3xvSN9gcOzWwBrcxtxgpdazvgmibUEeRAGpNlRGXOMFeero0RBhBh5lzFkz3OsMH0kluRyEF9KMYhybqoMZB38o0C1cUDiuspY9Dt9IkP6h80nFPhrVxb22D2D5xp5At4T+6sBTA0zGkTKeXYLzGSoSJ1/iCD5Kp7k7Y0XfSCOR3ZTovmO7vQiZidj95ztKWojlqdzhNHvFtL+KSE2/P/IE9qCkX223jbHOONpKd30ij3urYpk94b3bLKiRC8JbRLCnPtKpyq51gIu3e/nrq8gqgcpNQ+1c6WAEKq3bb4J2HZK5JGJRMcO2bCoB77QMHEg=
+	aC9YijhHuwHfClC3fi2bCBqwpBD4YDRtHjgP8H8urXdK0Nc1ZQ8kHaCqjmvnrDyg0tUzfutWy7j1HCZlC8IRg7hzoqwfnCq/AuruQ72lWOa09dGvshUdIOfRqRn7AhbKWMXfOolX5zqXAsRirPQx1ZCp10pAaX0aUdal+0znd1uEbSuwA+jwiDdmf6GOh1ECA4DX0RuV2y4PV7lf0+u4G5lxiMagWIN1ikXMUO4drPyJyabjqv/CWvc6ffaE6HCXnkCeDBBBseUMbkV+UXNSJxA4nZlS8JZE53vS6Gr46QMc0/O5P+VV4HaZXhHFowzZbQJPHGO/NVwW81q1OShlkLbiMt7vKWOySrcofWD9SnFhZsLEujp45n7lJuR828pdmPi84oUwQUk7JFrte3t2ZsYD2jdWystybfVgvPiEtbrp9yQjYKryiFFlvvfhxYrHKfUseyxWeBOpIDGxsMcc+oP+SBhqeYMIzJB1sZAi3ySa7u5A+tM2mhThRaqtVuuBiMUwxE8/M51x+/rONmN1s2mZjaaCiiXGEZj4VuCKOIASeZquytEnsq0oFDyFQGXMjW0Eji6U/IpX/YGozWTpGeMHSQTe10dlXrt3RXMULyQFMb3dqD/myjO0AW5XIVdJbSV67tk8DIMM/ZDrhqqHxOTosrb8Ty3lLncwiUOLcQHMkFu/3wpNkpjtDhlpBrsYmxLh+61T2UVwodksRmCIy1gmQQnYXrAOTkT25PIOJuA=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(52116014)(366016)(1800799024)(38350700014)(6133799003)(10067099003)(56012099006)(11063799006)(18002099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(52116014)(366016)(1800799024)(38350700014)(6133799003)(10067099003)(56012099006)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?aIwzcLW+y02VLKNa1MEbBUjTYLV3R9mwql7FzHxy0MHJmPXOPEhP19uWtv5w?=
- =?us-ascii?Q?uH0UKY9AdiBf1mV9E68lPTo9P//LeYlgUfcaITxoANGHzvSAClznBiR5vEiE?=
- =?us-ascii?Q?xQSbZML0p4WAakKrigvic2glGJHuwnMxmFplvU5es1aEhVdSPe/qP63Hj9dz?=
- =?us-ascii?Q?+FIR+9+HsrQXqZgv9PEZEs+HW70LpfkM1Z1OtBUutIm51Py/GXtEGWBbbehr?=
- =?us-ascii?Q?i2lC37Zide7KSUEwwITfqQv7x6QEnnRMMG4YVdqmyBdW4efv7fUawCLqtjZ3?=
- =?us-ascii?Q?xsUyX7v252RPMvzwkAp5EVQ4SGSGDv4qJRftyTs5AJhVnjeYgSsb4KAX8y+2?=
- =?us-ascii?Q?pXXbPloEaqoGWxMgp12gA6YGSucwQOCQ4234Q4MVorvRpMd29yY3+WH9EnyE?=
- =?us-ascii?Q?+Udtshq9k2+pPpt+Go56PaOAt+MKYYy6ZBpUkGH0V1zC8+5+ozI+hnn+PFAk?=
- =?us-ascii?Q?aHa4YJkdhd2MdrYXxRPJSe5WKPGF7YGWfZ5cn5pobjSr0vd2FecRpWgPDbTD?=
- =?us-ascii?Q?RK6BT6CPnemtRbl76iyM+VRgrly1WHB3+kKwAEOu71uaJvUZ8abjgt3Z+h8P?=
- =?us-ascii?Q?/LjJmwy8me0VtJL5mNrAOcD8bzT4ZLHvYhXZqK982Pukonxm5nhRnr2icTlU?=
- =?us-ascii?Q?aNjGGk/wKG71jKpiKd28QCZcWXOjEkRD86k29TVtpt3yCmMbM8v2uYJZHpKZ?=
- =?us-ascii?Q?PsJfwuHpi7LHDXah0v3afblKEaQuVbf9vK3F6aX3tKwu4WtVvg4clBo4x+HP?=
- =?us-ascii?Q?b+pVOyBp2OkWpkQjp5pDrxMIGQo63zUfR/AMgKo7SNseG6FlU2wQoMSmhpLg?=
- =?us-ascii?Q?KEKYVMVTUKwnBUaM1yE6FGZ+zORlRr8NUxsouTL/MKwtJ+BNfoxWeV3OBmC+?=
- =?us-ascii?Q?RehltJpZwAtRcVRxICTwcB4oD1Fjx39WAOMxUxNVtcdJjWnmSVfBXbQn38T9?=
- =?us-ascii?Q?Ijja3hwqUVNQRXKOEVxtfXiMD/kqKowZ55ln9P2l9QYQixxnVPWTfOR+uwrp?=
- =?us-ascii?Q?zaZnxmLd4VnirUPoKL77nD4cuIOkax28Xl0wwdc5lHB3dLskGzW+iNb2v+c0?=
- =?us-ascii?Q?6aeucfftl480VNlTvFP2muMK4qs9Dbz/Lc9jBajlipUyr7yowrv3FsLk25j9?=
- =?us-ascii?Q?4x7+Y30DtW52KrAW3kTm8dvtTNtV2nGX1lUcl7qL0WlLShqZc98C14A/7jSH?=
- =?us-ascii?Q?V/YAVZDvRmsV2anIzh/Mz1NqN2zfoSo7y4oQTJ1diwh5PHczpLWlUYX8gbki?=
- =?us-ascii?Q?NXWg+lRQWycl2qR0AqdZZ2QWWvbp7EAMZnLxG4Rkah2ncGLLfmy8vENkwtM5?=
- =?us-ascii?Q?NMjAMROt0kQl1/7l5nbKlrmAMZ91G1+WlfFHtG2fOYVTk9BgEnwyr1/kw50+?=
- =?us-ascii?Q?kjbjtubrzzt7xBAXfmCaUtIidvg8x9Rr8rFf2UlgGVO/ZjEcL76pehORSUrC?=
- =?us-ascii?Q?WyN8b+3vQ40ejOu0cll6eS2jXZGrsfVhBNNC6z0LzMxbZyMOxmV+SF9U2SaC?=
- =?us-ascii?Q?vqiE3WuHXy0daE82gK19U6cBKw7t4ubKqsBcVGST5vansyh61PvY7MEderHr?=
- =?us-ascii?Q?MFgQf/A3uOqKxGnlrFsr7aGVs2LXutmqnD2iD1OiIUq8eqkKuuFWjOT85wl3?=
- =?us-ascii?Q?Wrq20jYDtrAU7T5JwQO9m5ufT5ziLIXsY9+1uTshsypw2VKIJN8hrxfr69RO?=
- =?us-ascii?Q?RaiROOjXDIJLPrgXp51P2jqFNwdYv/FDajRcVoySKFXAoNfMI5f7RfhuLaSt?=
- =?us-ascii?Q?nHa1FQJ1aA=3D=3D?=
+	=?us-ascii?Q?shjhJdXaxFMosJSJC9c4v9t0/y6SUj6w4soitsXrpsw9eZyCCm5jE8w4Zggj?=
+ =?us-ascii?Q?w2H4QayPbccRxh7Z2XJ6zuvxPPDf4dp+Rwbbi2hH1bPbCBrA0nmzqGHDK1gi?=
+ =?us-ascii?Q?mEx+1nqv32XBpBcXNtViCzZfDiki0foAuOzIlHrGxeOtUDxzZVMWrX6ImuPD?=
+ =?us-ascii?Q?fi6sd1O3A6eCosG3WA44L7PcxHRHweLXrZJHnUc5iyG5dTTSKqD4CFsbWDTQ?=
+ =?us-ascii?Q?0ulPZ2WH2qM7tE514rQX458XsvSCFkG1JJ5FUApV7mbl9KPjD9ccBHnUiYAS?=
+ =?us-ascii?Q?jmJT4VtPb8FzkBv7tt07GXFOJmuVcNV+d6u1/eIDws8IuogxKJKv+aEcbNwW?=
+ =?us-ascii?Q?m9Z8kYTpHUyMIVBgNGmhbsTMbbHdsxMA52gO4+78kPbDqQBhfPEj5k9GluNt?=
+ =?us-ascii?Q?JmyiwIB3Yv5/IuY1X5YIYIOiK3YYNTP4OaO8UBt70W+rbLJIUIeCeWSSQCmN?=
+ =?us-ascii?Q?swUqV39EJC94olNKSGYN0fGQ2wlV650GrMMwN10ZXAwXunjyq0a3FZhJ6Y1c?=
+ =?us-ascii?Q?sExQFwepSBfD6Q1LdAqkZkFmvnmgq4F9lt0yWFa2TRdNxWyu3MRCvVFeH8aU?=
+ =?us-ascii?Q?xXPtIrDZjG7yweoX9SkhupgJH+45zKB0XCcka6KMEdhTm2ELTkKh8LPlemKa?=
+ =?us-ascii?Q?Huha43LkadxwUWV+u6vcGJXnjHd8itazBPV/7D+edpWP0cr9zQ2zFZNYjuIx?=
+ =?us-ascii?Q?uFLcIywGME6imHQEXNj5DKO/p8XGGwfMBIl2II9iRdT43yPpRvlWGLwBai65?=
+ =?us-ascii?Q?VpLfiRsRLMgSTYdX/9PrAA24olY9YHx/78zBux8ELeK7seVwwsPlDFck4H0s?=
+ =?us-ascii?Q?SGnF9wxSPOU6voHelbK/eqQ9hF/22fwIuiti28mmCQRExdkSirYy7ygtaIJi?=
+ =?us-ascii?Q?QL8z+YgsScm8WuExxGirwqXgzDz69eVpBP1pr3tBkdF3o/K5GIHPtDp8BxQ8?=
+ =?us-ascii?Q?1ivblnqr2isOw3D1RQqKCnjG4J3yjTltUHpvWOMXdBeyjnPY/A2VTB2d+eIt?=
+ =?us-ascii?Q?D+GGQVs9OiCyscF8UiazTG2TDi9JC5XnsuTcu4WBlWX9PjTNRiwWbchpSt19?=
+ =?us-ascii?Q?O/bQ2CKBLcDAKXM7PFarkEHDqQsLCUxBt8Rr3rQhA8EJcyZMyAPi0GLnqaJO?=
+ =?us-ascii?Q?UInxlYhj6zo34+tYdbWPz77rUX1qFjVyKGr74a4rcjROUIqfzfJV6mJYI9BG?=
+ =?us-ascii?Q?xKo7FdIERHc7QhHU4KbN4ZRccB2U7hXDn0Cklmsgg1h2/9tdnVu5BVb7fUqv?=
+ =?us-ascii?Q?fdTHT2Usjomflkln1WRi2ONM0rXrEF9S1x/xTerThfnxsc6Ulouv2Q+ZglQC?=
+ =?us-ascii?Q?V/UXevFNLtOtopT3n0wEQ6pwvKGqiDC82CrebqVMY+tst30W5DlmQtiYq7XJ?=
+ =?us-ascii?Q?xaKnj23ef9oKnZoZZB6Pw7SmsnsZIb/oIABTAPDwvWjf1GCnyR86ZwLAfO5R?=
+ =?us-ascii?Q?z+laUUigJSASHF6SHSZWOOunwzKdnvMU4RcrITrFmb1rSP5OizP0QXaVEY0I?=
+ =?us-ascii?Q?/dUrmAW5Fq4hrc09LiRMMNkPd3tECvIUSjjtddA2A3/H7lG7YPBbYlEBEwz9?=
+ =?us-ascii?Q?mw7m8rHkQB0IpztVfnqT4yRP5UXBVMWMCY/sUpWSjgutE0ONJt4CV+GruaUW?=
+ =?us-ascii?Q?7VAKC8wFquTfX627ENP8n82t5VLGaVknZS1Txpz3L9zj2LJE/JGI0CTcsyGq?=
+ =?us-ascii?Q?ZFgYDsUownr0F8jPPJeTYqHRFcCqgPhrrPViQs0cGdal7yLPKyKf1+JZ5mx4?=
+ =?us-ascii?Q?T9YLYFXv0Q=3D=3D?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5444032f-7d34-42ce-e39e-08def3721c29
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26ad812a-e391-40b9-825a-08def3721e25
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2026 04:20:56.2382
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2026 04:20:59.2805
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9dzamFkhOvafpsrPdSmXaJFkiGBm0UuJMrlrKG65sWmbNtRIEf349vADl+gTfL08eHXcN6v5qbeJMBo0rDtOhw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: smtLR0IN14BYdthfyye605rXFVXorxeHX/UtEJtRj6IkDtNzdhi/0jiGwk8KuWoD9rNPp9Ve1Mleb4iEvGUZxg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PPFF38CE2865
 
-Currently, during BPF object loading, load_module_btfs() unconditionally
-iterates over all loaded kernel modules and loads their BTFs. This
-introduces unnecessary overhead when a BPF program only needs a specific,
-small subset of modules. In environments with hundreds of modules,
-loading all module measurably increases the loading time.
+Add support for a new ELF section ".kmod_btfs" that allows BPF programs
+to declare which kernel modules need BTF loading. This avoids loading
+all module BTFs and speeds up program load when only a subset of modules
+is needed.
 
-This series introduces a ".kmod_btfs" ELF section, allowing BPF programs
-to declare the modules that need BTF loading. libbpf parses this
-section, collects the module names, and skips loading BTFs for any
-module not in the list, thereby reducing overhead. It also stops the
-iteration early once all declared modules are found.
+Specifically, this patch introduces two internal functions:
+  - bpf_object__collect_kmod_btf_names(): parses the ".kmod_btfs"
+    section and collects the declared module names.
+  - is_kmod_btf_needed(): determines whether a given module's BTF
+    should be loaded, allowing libbpf to skip unneeded modules.
 
-Usage example:
+Signed-off-by: Fuyu Zhao <zhaofuyu@vivo.com>
+---
+ tools/lib/bpf/bpf_helpers.h |  14 +++++
+ tools/lib/bpf/libbpf.c      | 112 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 126 insertions(+)
 
-  DEFINE_KMOD_BTFS(_needed_kmods) = { "bpf_testmod" };
-
-Performance impact (<skel>__open_and_load() time):
-
-  Modules loaded | Without .kmod_btfs | With .kmod_btfs | Speedup
-  ---------------|--------------------|-----------------|--------
-  1              | 35.0 ms            | 35.0 ms         | Baseline
-  10             | 36.5 ms            | 35.1 ms         | +3.8%
-  100            | 46.2 ms            | 35.9 ms         | +22.3%
-  300            | 65.2 ms            | 38.0 ms         | +41.7%
-
-Fuyu Zhao (2):
-  libbpf: support selective kernel module BTF loading via .kmod_btfs
-    section
-  selftests/bpf: add tests for selective kmod BTF loading
-
- tools/lib/bpf/bpf_helpers.h                   |  14 +++
- tools/lib/bpf/libbpf.c                        | 112 ++++++++++++++++++
- .../selftests/bpf/prog_tests/kmod_btfs.c      |  47 ++++++++
- tools/testing/selftests/bpf/progs/kmod_btfs.c |  14 +++
- .../selftests/bpf/progs/kmod_btfs_mix.c       |  15 +++
- .../selftests/bpf/progs/kmod_btfs_nonexist.c  |  17 +++
- 6 files changed, 219 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
- create mode 100644 tools/testing/selftests/bpf/progs/kmod_btfs.c
- create mode 100644 tools/testing/selftests/bpf/progs/kmod_btfs_mix.c
- create mode 100644 tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
-
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 9d160b5b9c0e..171ea055cd32 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -188,6 +188,20 @@ enum libbpf_tristate {
+ 	TRI_MODULE = 2,
+ };
+ 
++/* Helper typedef for declaring kernel module names that need BTF loading.
++ *
++ * Usage: define an array in the ".kmod_btfs" ELF section to specify
++ * which modules need BTF loading:
++ *
++ *   DEFINE_KMOD_BTFS(_needed_kmods)= { "module1", "module2", ... };
++ *
++ * This avoids unnecessary BTF loading and speeds up the BPF program
++ * load process.
++ */
++#define KMOD_NAME_LEN 64
++#define DEFINE_KMOD_BTFS(name) \
++	SEC(".kmod_btfs") char name[][KMOD_NAME_LEN]
++
+ #define __kconfig __attribute__((section(".kconfig")))
+ #define __ksym __attribute__((section(".ksyms")))
+ #define __kptr_untrusted __attribute__((btf_type_tag("kptr_untrusted")))
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 514e4e9daa82..5cefe82e4a67 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -548,6 +548,7 @@ struct bpf_struct_ops {
+ #define STRUCT_OPS_SEC ".struct_ops"
+ #define STRUCT_OPS_LINK_SEC ".struct_ops.link"
+ #define ARENA_SEC ".addr_space.1"
++#define KMODS_BTFS_SEC ".kmod_btfs"
+ 
+ enum libbpf_map_type {
+ 	LIBBPF_MAP_UNSPEC,
+@@ -703,6 +704,12 @@ enum bpf_object_state {
+ 	OBJ_LOADED,
+ };
+ 
++/* Should match typedef in bpf_helpers.h */
++#define KMOD_NAME_LEN 64
++
++#define KMODS_BTF_UNLOADED 0UL
++#define KMODS_BTF_LOADED   1UL
++
+ struct bpf_object {
+ 	char name[BPF_OBJ_NAME_LEN];
+ 	char license[64];
+@@ -779,6 +786,14 @@ struct bpf_object {
+ 	char *token_path;
+ 	int token_fd;
+ 
++	/* kernel module BTFs to load, declared in ".kmod_btfs" ELF section */
++	struct {
++		char (*data)[KMOD_NAME_LEN];
++		size_t nr_names;
++		size_t nr_loaded;
++		struct hashmap *hashmap;
++	} *kmod_btfs;
++
+ 	char path[];
+ };
+ 
+@@ -901,6 +916,68 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
+ 	return -ENOMEM;
+ }
+ 
++static size_t mod_name_hash_fn(long key, void *ctx)
++{
++	return str_hash((char *)key);
++}
++
++static bool mod_name_equal_fn(long key1, long key2, void *ctx)
++{
++	return strcmp((char *)key1, (char *)key2) == 0;
++}
++
++static int
++bpf_object__collect_kmod_btf_names(struct bpf_object *obj, Elf_Data *sec_data,
++				   const char *sec_name)
++{
++	int module_cnt, i, err = 0;
++
++	if (sec_data->d_size % KMOD_NAME_LEN != 0) {
++		pr_warn("sec '%s': size %zu should be multiple of %d\n",
++			sec_name, sec_data->d_size, KMOD_NAME_LEN);
++		return -EINVAL;
++	}
++
++	module_cnt = sec_data->d_size / KMOD_NAME_LEN;
++	obj->kmod_btfs = calloc(1, sizeof(*obj->kmod_btfs));
++	if (!obj->kmod_btfs)
++		return -ENOMEM;
++
++	obj->kmod_btfs->data = calloc(module_cnt, KMOD_NAME_LEN);
++	if (!obj->kmod_btfs->data)
++		goto err_out;
++	memcpy(obj->kmod_btfs->data, sec_data->d_buf, sec_data->d_size);
++
++	obj->kmod_btfs->hashmap = hashmap__new(mod_name_hash_fn,
++					       mod_name_equal_fn, NULL);
++	if (IS_ERR(obj->kmod_btfs->hashmap)) {
++		err = PTR_ERR(obj->kmod_btfs->hashmap);
++		goto err_out;
++	}
++
++	for (i = 0; i < module_cnt; i++) {
++		obj->kmod_btfs->data[i][KMOD_NAME_LEN - 1] = '\0';
++		if (hashmap__find(obj->kmod_btfs->hashmap,
++				  obj->kmod_btfs->data[i], NULL)) {
++			pr_warn("sec '%s': ignored duplicate module '%s'\n",
++				sec_name, obj->kmod_btfs->data[i]);
++			continue;
++		}
++		err = hashmap__set(obj->kmod_btfs->hashmap, obj->kmod_btfs->data[i],
++				   KMODS_BTF_UNLOADED, NULL, NULL);
++		if (err)
++			goto err_out;
++		obj->kmod_btfs->nr_names++;
++	}
++	return 0;
++
++err_out:
++	hashmap__free(obj->kmod_btfs->hashmap);
++	zfree(&obj->kmod_btfs->data);
++	zfree(&obj->kmod_btfs);
++	return err;
++}
++
+ static int
+ bpf_object__add_programs(struct bpf_object *obj, Elf_Data *sec_data,
+ 			 const char *sec_name, int sec_idx)
+@@ -4034,6 +4111,10 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 				memcpy(obj->jumptables_data, data->d_buf, data->d_size);
+ 				obj->jumptables_data_sz = data->d_size;
+ 				obj->efile.jumptables_data_shndx = idx;
++			} else if (strcmp(name, KMODS_BTFS_SEC) == 0) {
++				err = bpf_object__collect_kmod_btf_names(obj, data, name);
++				if (err)
++					return err;
+ 			} else {
+ 				pr_info("elf: skipping unrecognized data section(%d) %s\n",
+ 					idx, name);
+@@ -5803,6 +5884,21 @@ int bpf_core_add_cands(struct bpf_core_cand *local_cand,
+ 	return 0;
+ }
+ 
++static bool is_kmod_btf_needed(struct bpf_object *obj, const char *name)
++{
++	uintptr_t val;
++
++	if (!hashmap__find(obj->kmod_btfs->hashmap, name, &val))
++		return false;
++
++	if (val == KMODS_BTF_LOADED)
++		return false;
++
++	hashmap__set(obj->kmod_btfs->hashmap, name, KMODS_BTF_LOADED, NULL, NULL);
++	obj->kmod_btfs->nr_loaded++;
++	return true;
++}
++
+ static int load_module_btfs(struct bpf_object *obj)
+ {
+ 	struct bpf_btf_info info;
+@@ -5867,6 +5963,12 @@ static int load_module_btfs(struct bpf_object *obj)
+ 			continue;
+ 		}
+ 
++		if (obj->kmod_btfs && obj->kmod_btfs->hashmap &&
++		    !is_kmod_btf_needed(obj, name)) {
++			close(fd);
++			continue;
++		}
++
+ 		btf = btf_get_from_fd(fd, obj->btf_vmlinux);
+ 		err = libbpf_get_error(btf);
+ 		if (err) {
+@@ -5891,6 +5993,10 @@ static int load_module_btfs(struct bpf_object *obj)
+ 			break;
+ 		}
+ 		obj->btf_module_cnt++;
++
++		if (obj->kmod_btfs &&
++		    obj->kmod_btfs->nr_names == obj->kmod_btfs->nr_loaded)
++			break;
+ 	}
+ 
+ 	if (err) {
+@@ -9030,6 +9136,12 @@ static void bpf_object_cleanup_btf(struct bpf_object *obj)
+ 	/* clean up vmlinux BTF */
+ 	btf__free(obj->btf_vmlinux);
+ 	obj->btf_vmlinux = NULL;
++
++	if (obj->kmod_btfs) {
++		hashmap__free(obj->kmod_btfs->hashmap);
++		zfree(&obj->kmod_btfs->data);
++		zfree(&obj->kmod_btfs);
++	}
+ }
+ 
+ static void bpf_object_post_load_cleanup(struct bpf_object *obj)
 -- 
 2.34.1
 
