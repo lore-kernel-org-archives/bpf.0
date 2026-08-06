@@ -1,197 +1,231 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA3B38645E
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 13:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E673371D1E
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 13:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786022438; cv=none; b=rbozkLbP5UT23j4rImasAUBPlreLhGgkhzcBIykcFsaFHrq2RrXwy4RNtwf39e4xlWQtP9D6vewzGo+sny5KKCtQB9LEq8QegBDTmOc1JL0xAraXvpaQ1WiIXkSjJCES/RpnY5aqDCT3YjmYwg9XENOOy6fASZtL1orkdUYK3L4=
+	t=1786022532; cv=none; b=p2vVK1QRJQUC/Mvmo7W7EvmiHW9eWflqSeVtAKxcZurThwJr+XaLv4bCG6b8x8S4PgSo61Gs/PeAnk8qQKl8KSJQaz3kaP5CeZMi9zft//Y0QISh/CQFHRnNv5UWZbnJI8sdPz8nHPCauG8v0M5DbUvXBTD8Zzam2AHcxoDJ8hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786022438; c=relaxed/simple;
-	bh=NjX9g7Xv4i49SIVxWyWyXkT0cPc65HwD2Huu0GFL6mI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jPI1SXAthFkCxRf5vtafHs/Dyl7O5w3t09CW9QwRA4BadRVOueDY5H2zIsMsJ6JHQH3Ya1kbyt1wXjvzgoFpmoHZXwOX7/+yiKCGQRUdbBAnOZHihAVUk/AtJU4cmuKI4IWbhKHsVYod7k699bSlzM45WkCYuJf2fkKAGm5zeL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4wFjxTg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786022532; c=relaxed/simple;
+	bh=dud2YNBYvUom0KH/Y60Uh9zFQp26TWYO0xIVlKi8Sv4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HdlbIh5ybqUjTiHv/vcfhMqM+uZ0bKTdxX/kZPFFmkHE0YAaP7zxB6ImWuQTfclEMUNPo9DVQHIAqIpMPO8U/kP+Jy0QmdxN+2gfIeDRzsm8JKElP+7qXezvMINZ14IP6mTJYPTkdFQGgtM/h4xRunQeIATIZL+ENQPIuwKa6jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai; spf=pass smtp.mailfrom=nebusec.ai; dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b=HtqNbHXD; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4wFjxTg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8A671F000E9;
-	Thu,  6 Aug 2026 13:20:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786022432;
-	bh=UEQlP+hqSlACXK9mtTw7rFFyEhqtECpeIzAnb6415Ic=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=G4wFjxTgy35rF+kNkRVXLisClEYziUqPfyaFqA423vfAGQxoA3nAiizV2w2yiXWht
-	 l3GvAlX4YSvZBNBMVF/HwOAfMU+Qd6gcQSP2qSIRFIPVJi8kqednqCkZ/xYMitMb0D
-	 5a11uRLE+z5bHe2yAkAOnC1Ov5ea/91LOxnK8kB2er+JbiKmqYsC6R9Y5CIhdt0wuO
-	 NcXjfpV1JWqoI9ZO74SHk1p+SepPwHdt9vFjcdXLbd5AZ9aY8EYSNvmDnk0mVw9n7y
-	 uZJhdgZAwUViyKtdTzfHyqBudO7HOEi2pyT1lYgUL0bQlUFXI6RtLHJKLVU0YoZF1B
-	 m5iZZvNZjaGCQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf: Fix pending_pos walk on 32-bit ring position
- wrap
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?SXNyYWVsIFTDqWxsZXogR2FyY8OtYQ==?= <i.tellez@btesa.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260806130214.66028-1-i.tellez@btesa.com>
-References: <20260806130214.66028-1-i.tellez@btesa.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 13:20:30 +0000
-Message-Id: <20260806132032.B8A671F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b="HtqNbHXD"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38d489b6b71so2165599a91.0
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 06:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nebusec.ai; s=google; t=1786022529; x=1786627329; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Q3b+EkF9QMrR80LpGhytFeACOBOjNmUOozsMI5C98ss=;
+        b=HtqNbHXDMJIw3jCgj+ZxL8Jio0kzwU49ixSjX3zw8v/jlyhYuwyEpLROW/dlSAtgEb
+         w2s4Uf21OgNOlTaj8J+9Fc24LPYqRcx/qVJ/MEidWs0NaRgBEazXf/q/rND5uDH076yl
+         qvy1F+xS9hN4pzNvyPfGJGnJuoeGyxdwO8ugnoQNoafstKx68fSk+MBJJSVz6u6ftlFg
+         +GSkC2ikH0yzr3G+uioSemvXMGMnbD3lwuoWhpgDKKA4+YcrVjaxuM/sL5DAd9/h6yI0
+         jk1A7rj87Jf0lg5vj/nRLdLu7T6CdCURb8h8KcF0txzTq9ZXOMMvM98eS2pk3FxC0Km8
+         AIEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786022529; x=1786627329;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Q3b+EkF9QMrR80LpGhytFeACOBOjNmUOozsMI5C98ss=;
+        b=KMd7S9ErM1a1mHruRWDIzVOr6JqdKnHJpB6lUlJDd6R5rEPgskcOoGJefZFvu99nSQ
+         v+VMeiQH9MT9UOh8IVgGBJ5MSQkcYXIJbPwEpENFKLUvYOLeqWEh9W02FFsV9/rUVsCy
+         nkiVF2aiP9W44AvIElr8hJ/W67ktgvY/ls596+l8fwSauFJcds4rjQ04w90Nt1dsx4N4
+         4VBYMczYSh+pNZ/PNsERv3NprrvPQLJlbfVXlE4uMnULPPTmrLi20F8CWcYyR809t2nr
+         dtyponqTZ7uO5lQcW+ojlnYf8bwdHubLVqPZIDLZhfxI2hfv5/gpizkvP28WdO6I+KHh
+         nFuA==
+X-Forwarded-Encrypted: i=1; AHgh+RqYabzdk4h3k5EsGwneBoQUhDqrCGlPkgtDieB6TmyjBnT92E7abgbJmWeKhfsULKD/xxc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw26gzFt/GtfnVNXBDN+m/G/IQzitELdAJIztmqztxQZjq4PRS5
+	vwILgQUAtvl/bCsOcfDng8l2Ys1BSqVq5CakcdHyA8B7/uBGqjtPGrSJZC6ZG+sQ4MzP
+X-Gm-Gg: AR+sD13hJ9m0dnjawjV7Gks6rNbSdookUS9plBVOn+EBczePtv/vHQc2supj39NU+Hw
+	dy9kcbSgWrEqlUWxTB6Zypl2gv0MwAKqXOz1LAQaqAcIFO/pa+KhTbyqCq2P3H5arhGczFQB0W0
+	F+qjinRIuw00Y7X82G9c18X5xiykKfbyKcELHnH+lZxyUU8uEI/9BvTZoSa/6AOTYkR1Db7v+I8
+	oK2WGdIl1M0jIwCEZF97bEeSmPn1Y4mTbni7DeqM/tHJCKlFYAC9P3VtC8Mp2P37oZ1huMznFvc
+	isVn/RPQMoRkX/wgEirWWjLLc6sYHpDqXjpyTWngyKNvTl7RPI8Ls1at8YLpHrnb1TYs0CboU28
+	fNdb7LxTfOdNWTS5JU5eEDb+oJb13zwRbZZAPpW6omGZg/4INvPZOQdT2sHzlUkUHx6fJb//Y/e
+	GWwdGdxtZE+ym5NaXxiS/DzEKQ61ivYgDfRWs8tiF37LBP+cOM2wm379WvzZ7k2iGzASgWWhV70
+	rESgKk5aHgJJ6I=
+X-Received: by 2002:a17:90b:4e8d:b0:38d:ec31:4840 with SMTP id 98e67ed59e1d1-3903c5932femr15718603a91.13.1786022528938;
+        Thu, 06 Aug 2026 06:22:08 -0700 (PDT)
+Received: from Roxy.localdomain ([203.175.14.58])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39085e4b01esm1542955a91.16.2026.08.06.06.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 06:22:07 -0700 (PDT)
+From: Zhiling Zou <zhilinz@nebusec.ai>
+To: idosch@nvidia.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	razor@blackwall.org,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	dsahern@kernel.org,
+	horms@kernel.org,
+	yuehaibing@huawei.com,
+	kuniyu@google.com,
+	aleksander.lobakin@intel.com,
+	maoyixie.tju@gmail.com,
+	thorsten.blum@linux.dev,
+	kees@kernel.org,
+	kylebot@openai.com,
+	vega@nebusec.ai,
+	zhilinz@nebusec.ai
+Subject: [PATCH net v3 1/1] net: cap advertised IP tunnel headroom
+Date: Thu,  6 Aug 2026 21:21:52 +0800
+Message-ID: <0ac01576f92412e8fa35cc3eb44336797a9d11d0.1786021595.git.zhilinz@nebusec.ai>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+IP tunnel devices derive their advertised needed_headroom and, for IP6GRE
+devices with header_ops, hard_header_len from lower output devices. A stack
+of user-created devices can make the derived value larger than the 16-bit
+skb header offsets can represent. Once IP output reserves it, skb head
+expansion can wrap those offsets.
 
-Pre-existing issues:
-- [High] `ringbuf_avail_data_sz` incorrectly handles `overwrite_mode` on 32=
--bit architectures because `max(cons_pos, over_pos)` fails on wrapped seque=
-nce numbers.
-- [High] `__bpf_user_ringbuf_peek` permanently stalls on 32-bit architectur=
-es (and for 32-bit userspace on 64-bit kernels) when the ringbuffer hits 4G=
-B of traffic.
-- [High] The user-space ringbuffer consumer loop in `libbpf` uses `cons_pos=
- < prod_pos`, which permanently hangs processing after 4GB of data on 32-bi=
-t architectures.
-- [Medium] `ringbuf_avail_data_sz()` loads `overwrite_pos` before `producer=
-_pos`, violating the explicit memory barrier contract and risking reads of =
-stale state.
---
+The runtime transmit path already caps a growing needed_headroom at 512.
+Apply the cap when configuration publishes headroom or header lengths
+derived from a lower output device.
 
---- Patch [1]: [PATCH bpf] bpf: Fix pending_pos walk on 32-bit ring positio=
-n wrap ---
-commit 617dac82211278dfe2a6441e138c7025d95f169b
-Author: Israel T=C3=A9llez Garc=C3=ADa <i.tellez@btesa.com>
+Capping the advertised value is safe: IP tunnel transmit still expands the
+skb when the packet needs more headroom. A nonsensical stacked configuration
+can therefore incur an extra reallocation, but it cannot publish an unbounded
+reservation to upper layers.
 
-bpf: Fix pending_pos walk on 32-bit ring position wrap
+Fixes: 1a37e412a022 ("net: Use 16bits for *_headers fields of struct skbuff")
+Cc: stable@vger.kernel.org
+Reported-by: Vega <vega@nebusec.ai>
+Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
+---
+changes in v3:
+- Split netkit handling into a separate follow-up.
+- Explain why capping advertised headroom is safe.
+- Use local variables for derived headroom.
+- v2 Link: https://lore.kernel.org/all/0ae4aa29223b89049727aec4d36f144bad41537e.1785476387.git.zhilinz@nebusec.ai/
 
-This patch fixes a 32-bit wrap-around bug in __bpf_ringbuf_reserve() by
-changing an absolute ordering comparison to a signed difference. This ensur=
-es
-the pending position is correctly advanced even when the counters wrap past=
- 4GB.
+changes in v2:
+- Move the fix from IP send paths to tunnel and netkit device control paths.
+- Cap advertised IP tunnel headroom at 512 and reject netkit headroom
+  values above that limit at device creation.
+- v1 Link: https://lore.kernel.org/all/0c6c64e9bbd71a0decc8504a384061e0e631be13.1785054561.git.zhilinz@nebusec.ai/
 
-> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-> index 35ae64ade36b8..2c08a98370d5e 100644
-> --- a/kernel/bpf/ringbuf.c
-> +++ b/kernel/bpf/ringbuf.c
-> @@ -482,7 +482,7 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf=
- *rb, u64 size)
->  	prod_pos =3D rb->producer_pos;
->  	new_prod_pos =3D prod_pos + len;
-> =20
-> -	while (pend_pos < prod_pos) {
-> +	while ((long)(prod_pos - pend_pos) > 0) {
->  		hdr =3D (void *)rb->data + (pend_pos & rb->mask);
->  		hdr_len =3D READ_ONCE(hdr->len);
->  		if (hdr_len & BPF_RINGBUF_BUSY_BIT)
+ include/net/ip_tunnels.h | 11 +++++++++--
+ net/ipv4/ip_tunnel.c     |  2 +-
+ net/ipv6/ip6_gre.c       | 10 ++++++----
+ net/ipv6/ip6_tunnel.c    |  7 +++++--
+ net/ipv6/sit.c           |  2 +-
+ 5 files changed, 22 insertions(+), 10 deletions(-)
 
-While reviewing this fix for the 32-bit wrap-around in __bpf_ringbuf_reserv=
-e(),
-I noticed a few other similar pre-existing 32-bit wrap-around and concurren=
-cy
-issues in the ringbuf code.
-
-This is a pre-existing issue, but there's a similar wrap issue in
-ringbuf_avail_data_sz():
-
-kernel/bpf/ringbuf.c:ringbuf_avail_data_sz() {
-    ...
-	if (unlikely(rb->overwrite_mode)) {
-		over_pos =3D smp_load_acquire(&rb->overwrite_pos);
-		prod_pos =3D smp_load_acquire(&rb->producer_pos);
-		return prod_pos - max(cons_pos, over_pos);
-    ...
-}
-
-[Severity: High]
-Will this code incorrectly handle overwrite_mode on 32-bit architectures?
-
-The max() macro performs an absolute comparison. If over_pos wraps while
-cons_pos has not, max() will incorrectly select cons_pos.
-
-This calculation then evaluates modularly to a value larger than the ring s=
-ize,
-returning an artificially inflated available data size that permanently sta=
-rves
-pollers.
-
-[Severity: Medium]
-Also in ringbuf_avail_data_sz(), could this load order violate the producer=
-'s
-barrier semantics?
-
-The producer updates overwrite_pos and then executes
-smp_store_release(&rb->producer_pos, ...). The consumer must read producer_=
-pos
-with smp_load_acquire() first to guarantee it observes the new overwrite_po=
-s.
-
-By reading overwrite_pos first, a race window allows observing a stale, sma=
-ller
-overwrite_pos alongside the new producer_pos, throwing off the size calcula=
-tion.
-
-This isn't a bug introduced by this patch, but __bpf_user_ringbuf_peek() al=
-so
-permanently stalls on 32-bit architectures:
-
-kernel/bpf/ringbuf.c:__bpf_user_ringbuf_peek() {
-    ...
-	u64 cons_pos, prod_pos;
-
-	/* Synchronizes with smp_store_release() in user-space producer. */
-	prod_pos =3D smp_load_acquire(&rb->producer_pos);
-	if (prod_pos % 8)
-		return -EINVAL;
-
-	/* Synchronizes with smp_store_release() in __bpf_user_ringbuf_sample_rele=
-ase() */
-	cons_pos =3D smp_load_acquire(&rb->consumer_pos);
-	if (cons_pos >=3D prod_pos)
-		return -ENODATA;
-    ...
-}
-
-[Severity: High]
-Can the zero-extension of 32-bit wrapping counters to 64-bit variables break
-modular arithmetic here?
-
-When producer_pos wraps past 4GB to a small value while consumer_pos is lar=
-ge,
-the condition evaluates as true (e.g., 4294967200ULL >=3D 10ULL).
-
-The consumer stops, preventing consumer_pos from ever wrapping to recover,
-which causes a permanent stall.
-
-This is a pre-existing issue, but I found a similar wrap issue in the libbpf
-user-space consumer:
-
-tools/lib/bpf/ringbuf.c:ringbuf_process_ring() {
-    ...
-	unsigned long cons_pos, prod_pos;
-    ...
-		prod_pos =3D smp_load_acquire(r->producer_pos);
-		while (cons_pos < prod_pos) {
-			len_ptr =3D r->data + (cons_pos & r->mask);
-    ...
-}
-
-[Severity: High]
-Would this absolute comparison permanently hang event consumption after 4GB=
- of
-data on 32-bit architectures?
-
-When prod_pos wraps past 4GB, it becomes smaller than the non-wrapped cons_=
-pos.
-
-The absolute comparison fails, the loop terminates prematurely, and since no
-data is consumed, cons_pos never wraps to recover.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806130214.6602=
-8-1-i.tellez@btesa.com?part=3D1
+diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
+index d708b66e55cda..85e3455cea259 100644
+--- a/include/net/ip_tunnels.h
++++ b/include/net/ip_tunnels.h
+@@ -629,8 +629,7 @@ struct metadata_dst *iptunnel_metadata_reply(struct metadata_dst *md,
+ int skb_tunnel_check_pmtu(struct sk_buff *skb, struct dst_entry *encap_dst,
+ 			  int headroom, bool reply);
+ 
+-static inline void ip_tunnel_adj_headroom(struct net_device *dev,
+-					  unsigned int headroom)
++static inline unsigned int ip_tunnel_limit_headroom(unsigned int headroom)
+ {
+ 	/* we must cap headroom to some upperlimit, else pskb_expand_head
+ 	 * will overflow header offsets in skb_headers_offset_update().
+@@ -640,6 +639,14 @@ static inline void ip_tunnel_adj_headroom(struct net_device *dev,
+ 	if (headroom > max_allowed)
+ 		headroom = max_allowed;
+ 
++	return headroom;
++}
++
++static inline void ip_tunnel_adj_headroom(struct net_device *dev,
++					  unsigned int headroom)
++{
++	headroom = ip_tunnel_limit_headroom(headroom);
++
+ 	if (headroom > READ_ONCE(dev->needed_headroom))
+ 		WRITE_ONCE(dev->needed_headroom, headroom);
+ }
+diff --git a/net/ipv4/ip_tunnel.c b/net/ipv4/ip_tunnel.c
+index 9d114bd575f92..5b1f180485d42 100644
+--- a/net/ipv4/ip_tunnel.c
++++ b/net/ipv4/ip_tunnel.c
+@@ -317,7 +317,7 @@ static int ip_tunnel_bind_dev(struct net_device *dev)
+ 		mtu = min(tdev->mtu, IP_MAX_MTU);
+ 	}
+ 
+-	dev->needed_headroom = t_hlen + hlen;
++	dev->needed_headroom = ip_tunnel_limit_headroom(t_hlen + hlen);
+ 	mtu -= t_hlen + (dev->type == ARPHRD_ETHER ? dev->hard_header_len : 0);
+ 
+ 	if (mtu < IPV4_MIN_MTU)
+diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
+index b843116e9b703..cc757586be90a 100644
+--- a/net/ipv6/ip6_gre.c
++++ b/net/ipv6/ip6_gre.c
+@@ -1137,13 +1137,15 @@ static void ip6gre_tnl_link_config_route(struct ip6_tnl *t, int set_mtu,
+ 			return;
+ 
+ 		if (rt->dst.dev) {
+-			unsigned short dst_len = rt->dst.dev->hard_header_len +
+-						 t_hlen;
++			unsigned int headroom;
++
++			headroom = rt->dst.dev->hard_header_len + t_hlen;
++			headroom = ip_tunnel_limit_headroom(headroom);
+ 
+ 			if (t->dev->header_ops)
+-				dev->hard_header_len = dst_len;
++				dev->hard_header_len = headroom;
+ 			else
+-				dev->needed_headroom = dst_len;
++				dev->needed_headroom = headroom;
+ 
+ 			if (set_mtu) {
+ 				int mtu = rt->dst.dev->mtu - t_hlen;
+diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
+index bf8e40af60b08..2c941acb081fa 100644
+--- a/net/ipv6/ip6_tunnel.c
++++ b/net/ipv6/ip6_tunnel.c
+@@ -1522,8 +1522,11 @@ static void ip6_tnl_link_config(struct ip6_tnl *t)
+ 			tdev = __dev_get_by_index(t->net, p->link);
+ 
+ 		if (tdev) {
+-			dev->needed_headroom = tdev->hard_header_len +
+-				tdev->needed_headroom + t_hlen;
++			unsigned int headroom;
++
++			headroom = tdev->hard_header_len + tdev->needed_headroom;
++			headroom += t_hlen;
++			dev->needed_headroom = ip_tunnel_limit_headroom(headroom);
+ 			mtu = min_t(unsigned int, tdev->mtu, IP6_MAX_MTU);
+ 
+ 			mtu = mtu - t_hlen;
+diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
+index a38b24fb83842..19b7fa8d1a2a0 100644
+--- a/net/ipv6/sit.c
++++ b/net/ipv6/sit.c
+@@ -1131,7 +1131,7 @@ static void ipip6_tunnel_bind_dev(struct net_device *dev)
+ 		WRITE_ONCE(dev->mtu, mtu);
+ 		hlen = tdev->hard_header_len + tdev->needed_headroom;
+ 	}
+-	dev->needed_headroom = t_hlen + hlen;
++	dev->needed_headroom = ip_tunnel_limit_headroom(t_hlen + hlen);
+ }
+ 
+ static void ipip6_tunnel_update(struct ip_tunnel *t,
+-- 
+2.43.0
