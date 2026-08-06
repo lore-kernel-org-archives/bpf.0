@@ -1,114 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3CC3D9DC0
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3B13D9DC0
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786052178; cv=none; b=Gdp0bBOsVFxNiWtZ9yp5e+3O/ppieSNo+IMZkxRKKuCGjo0FD5W01IAzYTWBBGlN0r3+aMh4aa00exBl791j61+6cfpcK3EpOS+AemKvx+gNE34ujo6sS0h2jDti4CstcJPHCu25NFpKrQQyXpethoA7ZSvY5MggkqxDHhjKdRY=
+	t=1786052256; cv=none; b=j2yj1gYLDn2Ef+0UFqaamRJFAHuRzqkfVuQTi95VLDHuB+BO6fw2JD7KMi0u9dpbWjicnelNeTLLk+YgjHFpIlcUUkSxUfrfJHktyOwMXx/g/no5I1eox/kgXBPqcsqWb7RmeYWjfUfFXQossA+yHdOh/KeXfYSGH2sVPVgaqHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786052178; c=relaxed/simple;
-	bh=0//h7A+2g2GeDq5XSlBNPKdMBQZUIIXa4ia/PLcFues=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=on9zm5cOycc5wHSekxEIand1lhwciHg97uu8g6mEid1VwVL4U1A63abNv9O/54IXFCcoh4HIWDIdEG9N0MH7V3GEbIzE2U0NEeszrCPiG9dSJOQ/l36nL29+8nFfA+CVunW9+7cUCfhIcnR/EECpIGlglInF5Mi7iThxGESnM7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cE8NFqiv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786052256; c=relaxed/simple;
+	bh=g+MYuyE+Q8vw2ImqEfUjXtSZ9+46HJWkhb+ZnDSCGVA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BrjJvQSjeKasTRKpWUhAflyZvhtxf5X5iqUSy8kSSX4HIy8Nk8NbcwxWgc62oyq4VEs2tYyyyTbn032p2no1ul0bhL6WQnDvFb7hbgl5lMPH+CgYAFy8B7vhlxkfDtdHdm6O9CQ7Tlq9ybJm8Q0e4yeyXj0pwUyCOFRNpI137L8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V9ndoVJY; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cE8NFqiv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56A711F000E9;
-	Thu,  6 Aug 2026 21:36:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786052177;
-	bh=L4ZOhEFErme37d77xlWfmaXESCtQYI1jjt5ZlgM8EmI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cE8NFqivXHt5qYZtUJmHmVFG9i3G6jNXcYn9RkSY3c7bcXU68IH/O8Lxw7dEZldsS
-	 mdiq8N2d9axKcfjvddUftLzhMQXm7v11EJ1WG0YxqlHYIW1GTFeP0wUeVi0JBgZ2Jb
-	 HNya4acTf3w/q/tZ5PTNIHro7XDLOVCaaHGP8AH8Ftp0RjDVqvoueewkcK9HMzKtMt
-	 8rjCLBIqpbuDB4P4vvdziVauqi61HxGRuTzKjUKHHqA4GpgyX+lO6ckWQT9v8gkv3y
-	 rN22Txei0mE6ZNc6wFF809GPqXvI0S7uYS4UgJy0mD32vYxDcCrrvzlmILWSV5HTaR
-	 7zkYtcO2cAorQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 10/15] i40e: prepare for XDP metadata ops
- support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tony Nguyen" <anthony.l.nguyen@intel.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260805213541.2281287-11-anthony.l.nguyen@intel.com>
-References: <20260805213541.2281287-1-anthony.l.nguyen@intel.com>
- <20260805213541.2281287-11-anthony.l.nguyen@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Aug 2026 21:36:16 +0000
-Message-Id: <20260806213617.56A711F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V9ndoVJY"
+Message-ID: <fcfe4ed2-5c04-45df-a4b0-27d1bfddf986@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786052242;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pMuEKaIIwPAxmrDYZKFD/slOpZQYCRZFJuabogJ5e2E=;
+	b=V9ndoVJYvYO1Qrb/aQbq1dOnn2VYNTS2eiWFThHmlejqb9LZ6M+UYn2188V24O5h+KcfAc
+	Tjywl2OYmZgob+kTbj69jgSpW4pN13JfnfR7dKxqYg/Nxc1WeUnOUN/YUUIrnxPS62i6Wc
+	wZvK1wa/Fv14m9aqoq425cF6zSYATJw=
+Date: Thu, 6 Aug 2026 14:37:18 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next] selftests/bpf: Sanitize traffic monitor log file
+ names
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260806211105.3307932-1-vineet.gupta@linux.dev>
+ <20260806211740.E9F851F000E9@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20260806211740.E9F851F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On 8/6/26 2:17 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Medium] The backslash character `\` is missing from the sanitization string, leaving artifact names vulnerable to rejection by GitHub Actions.
+> - [Low] The newly introduced multi-line comment violates the BPF subsystem's strict comment style guidelines.
+> --
+>
+> --- Patch [1]: [PATCH bpf-next] selftests/bpf: Sanitize traffic monitor log file names ---
+> commit 4eb40c6024aab5f28e7a52af3fba116cbdeff427
+> Author: Vineet Gupta <vineet.gupta@linux.dev>
+>
+> selftests/bpf: Sanitize traffic monitor log file names
+>
+> The traffic monitor names its capture logs after the test and subtest
+> being run, replacing '/' and ' ' so the result is usable as a file name.
+> This patch replaces the whole set of awkward characters in one pass to
+> fix artifact upload failures in CI systems like GitHub Actions.
+>
+> Link: https://github.com/kernel-patches/vmtest/actions/runs/30710914503/job/91399011388 [1]
+>
+>> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+>> index db935a9d9fc1a..3818cec354a0d 100644
+>> --- a/tools/testing/selftests/bpf/network_helpers.c
+>> +++ b/tools/testing/selftests/bpf/network_helpers.c
+>> @@ -1142,10 +1142,13 @@ static void encode_test_name(char *buf, size_t len, const char *test_name, const
+>>   		snprintf(buf, len, "%s__%s", test_name, subtest_name);
+>>   	else
+>>   		snprintf(buf, len, "%s", test_name);
+>> -	while ((p = strchr(buf, '/')))
+>> -		*p = '_';
+>> -	while ((p = strchr(buf, ' ')))
+>> -		*p = '_';
+>> +	/* Test names are free form, so replace anything that is awkward in a
+>> +	 * file name. Besides the path separator, this covers the characters
+>> +	 * rejected by CI systems collecting these logs as artifacts.
+>> +	 */
+> [Severity: Low]
+> This isn't a bug, but does this multi-line comment in encode_test_name()
+> conflict with the BPF subsystem's comment style guidelines? The opening /*
+> is typically expected to be placed on its own line.
 
-Pre-existing issues:
-- [Critical] Use-After-Free in the AF_XDP Zero-Copy receive path due to sta=
-gnant index variable on error.
---
+It follows the pre-existing convention in this file and for netdev in 
+general.
+I can fix if maintainers prefer that.
 
---- Patch [10]: [PATCH net-next 10/15] i40e: prepare for XDP metadata ops s=
-upport ---
-commit cf380b8d06da010c94723db1eb6af6df8fb0fdc8
-Author: Kohei Enju <kohei@enjuk.jp>
+>> +	for (p = buf; *p; p++)
+>> +		if (strchr("/ \":<>|*?\r\n", *p))
+> [Severity: Medium]
+> Since this is meant to cover characters rejected by CI systems like GitHub
+> Actions, should the backslash character '\\' also be included in this
+> sanitization string?
+>
+> If a test or subtest name contains a backslash, it appears the artifact
+> upload could still fail.
 
-i40e: prepare for XDP metadata ops support
+The original intention was parity with libbpf-ci: 
+run-vmtest/normalize-paths-for-github.sh but agree adding the backslash 
+makes it more robust.
 
-This commit introduces struct i40e_xdp_buff to wrap an xdp_buff alongside
-a pointer to an i40e_rx_desc. It passes the RX descriptor to XDP kfuncs
-and adds bounds checking in the AF_XDP Zero-Copy path using
-XSK_CHECK_PRIV_TYPE.
-
-> diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/eth=
-ernet/intel/i40e/i40e_xsk.c
-> index 9f47388eaba53..51a05ce4c7ce8 100644
-> --- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> +++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-
-[ ... ]
-
-> @@ -472,6 +482,8 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, i=
-nt budget)
->  		if (i40e_is_non_eop(rx_ring, rx_desc))
->  			continue;
-> =20
-> +		xsk_buff_to_i40e_ctx(first)->desc =3D rx_desc;
-> +
-
-[Severity: Critical]
-This is a pre-existing issue, but does this function have a use-after-free
-in its error handling path?
-
-If xsk_buff_add_frag() fails earlier in the loop, it calls
-xsk_buff_free(first) and breaks out of the loop without advancing
-next_to_clean:
-
-    if (!first)
-        first =3D bi;
-    else if (!xsk_buff_add_frag(first, bi)) {
-        xsk_buff_free(first);
-        break;
-    }
-
-On the subsequent NAPI poll, because next_to_process !=3D next_to_clean,
-the code loads the freed buffer pointer from the stale next_to_clean
-index:
-
-    if (next_to_process !=3D next_to_clean)
-        first =3D *i40e_rx_bi(rx_ring, next_to_clean);
-
-Could this cause the next packet to be built using a freed buffer?
-
->  		xdp_res =3D i40e_run_xdp_zc(rx_ring, first, xdp_prog);
->  		i40e_handle_xdp_result_zc(rx_ring, first, rx_desc, &rx_packets,
->  					  &rx_bytes, xdp_res, &failure);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260805213541.2281=
-287-1-anthony.l.nguyen@intel.com?part=3D10
+Thx,
+-Vineet
