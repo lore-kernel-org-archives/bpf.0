@@ -1,188 +1,147 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8416241B8F4
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:12:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD1741D637
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786050778; cv=none; b=HGrczBY4HRkE3T0/4YbNgkFf4WSVAo7RH8g5jzrXQI6BZtCYpX3AwzhIXsgldSdNPx0ilMYAmjnjKnfbZHtm84naYRE3Fcoo9fOcsSrElKZEd4RHl40YpxUudTgTH/+9MTAHrWloIK3OIS8JJrSHeCzCXBUKIPpKBGJFO2t/elE=
+	t=1786050852; cv=none; b=GC+g641wV36SnCpo+g5Rb2BzgHWZzCed7ZWmtiyDucP06kTrmRO7qrA1jJ7KgDdeya+qfi1PYGOQMgXa/pBkmwhDH1v06szrmp4kUhyBjmUzK/CeBKwovYvJ0AGT73Kl8Keyt1uf+WpPAqje/q+y4kYBO+Es+BidQfykS2F33Y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786050778; c=relaxed/simple;
-	bh=jF9sM2KGUPrViboMEuXywEQzYJ0EJG+JXLKzMoq4gpg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YdJ0rJ4reul2ZiXLcdkSr476QmuBiuxC1vnUdYpmdh+Gxz2K8nA3KHmT7eVzjr/smAiXPCw09E02JWn6VV1ibjRF2oCpTM+ffZx5LmYHO7G+kc+8QvusoWFhMr6oA5JIg9S/sKXWRW9lS8t2ZUMCdquRTvW8WW9BGhjkqJ7SR4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fBUtJ/uU; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786050852; c=relaxed/simple;
+	bh=Y7j+vHz5ifg+awfBMpMmqyogGa/aB+LwlKJSG3YrdLE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cpbA6wHvC25Cqva1mLvViwgQ3pQjvk/8JCR3aYAn9YbjeI8fYq1bHJW5YUQpfFgyTS/NzgVuASmra531/tiuoYKD4LZMkKTm7MZA+Qjax1YQMB9j2SDozzrT/L+XP1iq+EI/o99kHyCVdlUssBmLL1dA0bMd03k7/Q+mLGVibRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RTzMxtY/; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fBUtJ/uU"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84f3ab8750cso2403791b3a.0
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 14:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786050777; x=1786655577; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=FnfCtSdD2a2D+StGQOVSC/uz3IZgq+8deCehP+D0G5I=;
-        b=fBUtJ/uUIioO/IR9MJtEImJlriUKAiSYYlCuq3/euhuJbyU8l6KoG0jyuzqrlbxhdw
-         PBYVX8BXs3TrgfbAO4rX5LDzM5brr7Ima344SJts8/RnYbedajyiMdi4GFY90d63F2tP
-         ghINVj5nmQjNjzT+uBt4MNZ83+pLjpkN6JoOYx2kPOTdcssKsVU9J3aFZgh9NsgZMFdK
-         SxaI7t5hJSNI6UCJIfi/G8r4XsTfJh343vsFCop9uH1/f/fxwecXUYVLmWMseY5N5YGS
-         nqFB30tIMspnCRJRTPQdVuxKG7GQbgzW1dpp9mNZsrElNNBu5Z43zNzWdpbFYflmpfc5
-         yNeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786050777; x=1786655577;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FnfCtSdD2a2D+StGQOVSC/uz3IZgq+8deCehP+D0G5I=;
-        b=j+Wm2TPC5CPjV+WxiX9YAFyufTNNtgvAVNdIVY8c7VvWnBURpPF/PVB5CmwDctS3Oe
-         cKzAahoY7i3bSPWf4UIZNqP+40sjc2R9GzQolcSxHIsHF0IF+tBnVsgf2Dh5RbV0pcMK
-         hQkfzWqH5FwyhiSjmSelayVm5v0Ov2BO+j3p5wceBgTzzNbqThcJ8ABFLom0pSmvrw6G
-         o8wFL7ZG6vB2dYjqp1MTRbggDdTMcmKecj0sFGmsK6/dxpKHYuK+0eZX+HyjfKxyXW/l
-         Nq7d4GK+duCVPr+ob5jOumQ6Xzcf++gPMhSEngnm0UbbqwSJY85JYJGAbORg+OxEvJlL
-         G1Zw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr3Ivq8M5VDosbD4wQWnb0P97kBvqFtemBa/tGTfXrY3UUUz4orl0IAPC8QTHOpTQAfIwQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxB4qs8ztuvlly4dwHYS9mRKx5Q8XyXBFbnOsyrlBDmiYaeyZpA
-	Nb3FMsf+uFky32teniwYuI5OJydN3eZqBIe20xkAovIopIva89MXTT8G
-X-Gm-Gg: AR+sD10zo6oU7Sr3l5rd+w79ftRYqzAZg9+l9oSVf/CBZhfY823VlOGlwUpG4Q2rMOZ
-	nUELl6EVNmy9eRkQI02ebuJVUtvPeFlZskvUdlOc7pfRZv7FCxQYpFCtAnRINyTtHkIpoIqhqKP
-	6cIBIKUBiTFA3DEl7fe6Yr4BFSj9SaAKKT9AgavLmn5Odauw744b/BMrw7YE1/AFamIOyviiG52
-	NOk1R5K5WJuM8lxewY+dqJEuIdI4bQVL78MQ8Vs8LJhFAARMnH769OTT9aXVRX/9N4dLEzIidUE
-	MN8Nd7hAdtBoXfd66hEnRBMj0k/NHXDOlKRHNXE1WDZT+IM8Wjs7GyHe0Ia0CgXhfQZHulHbCAA
-	z/u0G+V/K8xJV0+nER2ilqGWd3tqLJGYloIjK0HpihVxUiPT+DbgB/AMBOYrpbzDHs/2wyr6mzx
-	To6kbyqkF5BEkM0VtHMtVvTC1bJ1zdqFby7RsUQ1ApLkH9nxE/FVSCfmLwQYQX0KU6HfRk1Vymt
-	1ZQtAb5ktMxWD4DoYeBuuJWnIo=
-X-Received: by 2002:a05:6a00:2e19:b0:845:4928:8655 with SMTP id d2e1a72fcca58-84f2e0edaddmr17108349b3a.39.1786050776759;
-        Thu, 06 Aug 2026 14:12:56 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f459ba2b9sm2049156b3a.48.2026.08.06.14.12.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 14:12:56 -0700 (PDT)
-Message-ID: <afb7cff918f93e754a873344d9794446e4ac4f9f.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/6] resolve_btfids: Process KF_ARENA_*
- flags in resolve_btfids
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Date: Thu, 06 Aug 2026 14:12:53 -0700
-In-Reply-To: <d3b34173-d3fa-489b-958d-f56bd541b838@linux.dev>
-References: <20260805230648.2354989-1-ihor.solodrai@linux.dev>
-	 <20260805230648.2354989-3-ihor.solodrai@linux.dev>
-	 <b18f90989ea2632b36c41eef646541881c9bb767.camel@gmail.com>
-	 <d3b34173-d3fa-489b-958d-f56bd541b838@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RTzMxtY/"
+Message-ID: <33b6923a-51ed-4e6f-b41a-8780992fa262@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786050844;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6/6Jrn204tkhstHg8N9Afe3wZPFehkOUPkVqH18ofNo=;
+	b=RTzMxtY/6D5I1qeAi55XFme58Bznp71UU7T1Rje/4Ts/SA0Ra/Cf+ckYFDFTVD2ixl/158
+	fK405RVaJgNVcDfvLDV+uFMQp9MJ3IUnRuLx7E7f9RAWYo0Ztg8MIWO1MVYzlZAaqh09wz
+	mMzAcSg6DF0fk7iqsVEMAG6NaGpX2rs=
+Date: Thu, 6 Aug 2026 14:13:59 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2 6/6] docs, resolve_btfids: Document kfunc BTF
+ annotation emission
+To: bot+bpf-ci@kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com
+Cc: alan.maguire@oracle.com, jolsa@kernel.org, emil@etsalapatis.com,
+ bpf@vger.kernel.org, martin.lau@kernel.org, yonghong.song@linux.dev,
+ clm@meta.com
+References: <20260805230648.2354989-7-ihor.solodrai@linux.dev>
+ <a55ccb52e205bc8a32d3ae6c179de333746ef912a9a259f18425b33935509653@mail.kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <a55ccb52e205bc8a32d3ae6c179de333746ef912a9a259f18425b33935509653@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 2026-08-06 at 14:02 -0700, Ihor Solodrai wrote:
+On 8/5/26 5:01 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+>> index cbde86d082cce..c60fc574e8b06 100644
+>> --- a/Documentation/bpf/kfuncs.rst
+>> +++ b/Documentation/bpf/kfuncs.rst
+>> @@ -472,6 +472,14 @@ type. An example is shown below::
+>>          }
+>>          late_initcall(init_subsystem);
+>>
+>> +At kernel build time the ``resolve_btfids`` tool discovers all kfuncs from the
+>> +registered ``BTF_SET8_KFUNCS`` sets and emits their BTF annotations into the
+>> +kernel's BTF; these annotations were historically produced by pahole. For each
+>> +discovered kfunc ``resolve_btfids`` emits a ``bpf_kfunc`` BTF decl tag, a
+>> +``bpf_fastcall`` decl tag when the kfunc is flagged ``KF_FASTCALL``, and the
+>> +``address_space(1)`` type attribute on the return value and/or arguments flagged
+>> +``KF_ARENA_RET``, ``KF_ARENA_ARG1`` or ``KF_ARENA_ARG2`` (see section 2.8).
+> 
+> Emil Tsalapatis suggested in v1 replacing "address_space(1)" with "arena"
+> throughout the documentation for better readability. This nit was not
+> addressed in v2.
+> 
+> The term "address_space(1)" appears in four locations across this commit
+> (kfuncs.rst, changes.rst, Makefile.btf, and main.c). Would using "arena"
+> be clearer, especially since the code already defines TYPE_ATTR_ARENA?
 
-...
+Nonsense feedback from the bot. Ignoring.
 
-> > > +		if (nr_params < 1) {
-> > > +			pr_err("ERROR: resolve_btfids: kfunc %s: KF_ARENA_ARG1 but it has=
- no argument 1\n",
-> > > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfunc->name);
-> > > +			return -EINVAL;
-> > > +		}
-> > > +		id =3D arena_tag_ptr(btf, arg0_type_id);
-> > > +		if (id < 0) {
-> > > +			pr_err("ERROR: resolve_btfids: kfunc %s: KF_ARENA_ARG1 but argume=
-nt 1 is not a pointer\n",
-> > > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfunc->name);
-> >=20
-> > Nit: not a pointer is not the only error condition, btf__add_*()
-> > =C2=A0=C2=A0=C2=A0=C2=A0 functions might fail as well, maybe just push =
-pr_err() down
-> > =C2=A0=C2=A0=C2=A0=C2=A0 to the arena_tag_ptr()?
->=20
-> I guess the question is how much details do we want from the error
-> messages here. Since this is a part of kernel build pipeline that can
-> block it, I'd err on the side of more details.
->=20
-> I'll see if I can simplify this though.
+> 
+>> +
+>>  2.7  Specifying no-cast aliases with ___init
+>>  --------------------------------------------
+>>
+>> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+>> index 1ca8c5f73ad00..6d1dbe4abf0f0 100644
+>> --- a/Documentation/process/changes.rst
+>> +++ b/Documentation/process/changes.rst
+>> @@ -147,10 +147,9 @@ Since Linux 5.2, if CONFIG_DEBUG_INFO_BTF is selected, the build system
+>>  generates BTF (BPF Type Format) from DWARF in vmlinux, a bit later from kernel
+>>  modules as well.  This requires pahole v1.22 or later.
+>>
+>> -Since Linux 7.0, kfuncs annotated with KF_IMPLICIT_ARGS require pahole v1.26
+>> -or later.  Without it, such kfuncs will have incorrect BTF prototypes in
+>> -vmlinux, causing BPF programs to fail to load with a "func_proto incompatible
+>> -with vmlinux" error.  Many sched_ext kfuncs are affected.
+>> +Kfunc BTF annotations (the bpf_kfunc and bpf_fastcall decl tags and the arena
+>> +address_space(1) type attribute) are emitted in-tree by resolve_btfids from the
+>> +BTF_KFUNCS sets, so they no longer depend on a specific pahole version.
+>>
+>>  It is found in the 'dwarves' or 'pahole' distro packages or from
+>>  https://fedorapeople.org/~acme/dwarves/.
+>> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+>> index a1812985a61aa..717e76ce96a71 100644
+>> --- a/scripts/Makefile.btf
+>> +++ b/scripts/Makefile.btf
+>> @@ -14,6 +14,9 @@ pahole-flags-$(call test-ge, $(pahole-ver), 125)	+= --skip_encoding_btf_inconsis
+>>  else
+>>
+>>  # Switch to using --btf_features for v1.26 and later.
+>> +#
+>> +# kfunc BTF annotations (bpf_kfunc/bpf_fastcall decl tags and the arena
+>> +# address_space(1) type attribute) are emitted by resolve_btfids, not pahole.
+>>  pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func
+>>
+>>  pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=layout
+>> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+>> index ea25ca34aa006..66f4014e6aa17 100644
+>> --- a/tools/bpf/resolve_btfids/main.c
+>> +++ b/tools/bpf/resolve_btfids/main.c
+>> @@ -58,6 +58,17 @@
+>>   *             __BTF_ID__func__vfs_fallocate__5:
+>>   *             .zero 4
+>>   *	       .word (1 << 3) | (1 << 1) | (1 << 2)
+>> + *
+>> + * In addition to resolving BTF IDs, resolve_btfids performs kernel-specific
+>> + * BTF-to-BTF transformations for kfuncs found in BTF_SET8_KFUNCS sets. For
+>> + * each such kfunc it:
+>> + *
+>> + *   - emits a "bpf_kfunc" decl tag, and "bpf_fastcall" when KF_FASTCALL is set;
+>> + *   - wraps the return value and/or arguments flagged KF_ARENA_RET,
+>> + *     KF_ARENA_ARG1 or KF_ARENA_ARG2 with the "address_space(1)" type attribute;
+>> + *   - rewrites the prototype of KF_IMPLICIT_ARGS kfuncs.
+>> + *
+>> + * These kfunc annotations were historically produced by pahole.
+>>   */
+>>
+>>  #define  _GNU_SOURCE
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31056256483
 
-Well, we don't want the errors to lie either :)
-
-> >=20
-> > > +			return id;
-> > > +		}
-> > > +		arg0_type_id =3D id;
-> > > +	}
-> > > +
-> > > +	if (kfunc->flags & KF_ARENA_ARG2) {
-> > > +		if (nr_params < 2) {
-> > > +			pr_err("ERROR: resolve_btfids: kfunc %s: KF_ARENA_ARG2 but it has=
- no argument 2\n",
-> > > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfunc->name);
-> > > +			return -EINVAL;
-> > > +		}
-> > > +		id =3D arena_tag_ptr(btf, arg1_type_id);
-> > > +		if (id < 0) {
-> > > +			pr_err("ERROR: resolve_btfids: kfunc %s: KF_ARENA_ARG2 but argume=
-nt 2 is not a pointer\n",
-> > > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfunc->name);
-> > > +			return id;
-> > > +		}
-> > > +		arg1_type_id =3D id;
-> > > +	}
-> > > +
-> > > +	new_proto_id =3D btf__add_func_proto(btf, ret_type_id);
-> > > +	if (new_proto_id < 0) {
-> > > +		pr_err("ERROR: resolve_btfids: kfunc %s: failed to add a func prot=
-o to BTF\n",
-> > > +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfunc->name);
-> > > +		return new_proto_id;
-> > > +	}
-> > > +
-> > > +	for (u32 i =3D 0; i < nr_params; i++) {
-> > > +		proto =3D btf__type_by_id(btf, proto_id);
-> > > +		params =3D btf_params(proto);
-> >=20
-> > Nit: these two do not need to be in the loop body.
->=20
-> They do, because btf__add_func_param() below may move the proto
-> pointer, no?
-
-Huh, indeed.
-
-> > > +		name =3D btf__name_by_offset(btf, params[i].name_off);
-> > > +
-> > > +		switch (i) {
-> > > +		case 0:
-> > > +			param_type_id =3D arg0_type_id;
-> > > +			break;
-> > > +		case 1:
-> > > +			param_type_id =3D arg1_type_id;
-> > > +			break;
-> > > +		default:
-> > > +			param_type_id =3D params[i].type;
-> > > +			break;
-> > > +		}
-> > > +
-> > > +		err =3D btf__add_func_param(btf, name ?: "", param_type_id);
-> > > +		if (err < 0) {
-> > > +			pr_err("ERROR: resolve_btfids: kfunc %s: failed to add a proto pa=
-ram to BTF\n",
-> > > +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfunc->name);
-> > > +			return err;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	pr_debug("added arena-tagged proto for kfunc %s: %d\n", kfunc->name=
-, new_proto_id);
-> > > +
-> > > +	return new_proto_id;
-> > > +}
-> >=20
-> > ...
