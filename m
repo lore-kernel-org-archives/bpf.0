@@ -1,72 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE17744A404
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 20:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A95355055
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 20:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786046987; cv=none; b=DJdtR1ACpkswrYH3bZoBRHX7g6FyYB6+Umbiet42Btx6hlGwu2CZSU2mvIdX9unxxZOYZTSNjxd7wGYX8bUPmIYFNAYBDXeHfDTwVfQSRw7eJBBi0+3g24mTJNSkEVZhmUfCdP79RLkzffkcoctPbFom+lyJv88QwYSPAQ/BFDs=
+	t=1786047052; cv=none; b=uzwxtryMoRP6kLcY+yI5cD2spAVjLSnVxUHuEsMD2oMoaCyaSXHJK+leh0I/2UDqkzLDSLLj4ertPforOh+81eHVQEiQk1FjbaaZpDLwdzkEq2VGrfTMvr7bOy9auG49uG/GD80PjxbEayJEIiFXa4d9vJynUSwCh0zTFmMif68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786046987; c=relaxed/simple;
-	bh=fX04Qk4mczN0NAo4PWx1t+SWUSsxPl6jPtW9IM7b3Vw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Rn5TdnVxeTUMvfdyIfs9o0v7WJDTQvRnKkirQ9u/ZYmD+nGYq8nX+Lwk1/uk/YGajOel5EWY8y5tGPpumOIcN2PKymQg9hnTSNHY4bMrN/L0uQEIEVwlCUg39ArDumPkqLiY1Ucd/oWzCLbFfC+VcPF1H4fWLOLSJV+3mztyKyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TATlyjuJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786047052; c=relaxed/simple;
+	bh=CuUmjoeeFOw0SjIF4afyhrmOQxbFzw+xGTuWPo96m9g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fySGnRH1lEm7aXLVM3sucDMLw3ap75eYGJW33H3UMtkYJOEUexPUmXQmE0qW/GIPv1hM3nWbLOPMXbORIVYMLf1HNnvFcIkIQopqIoJJ7/ZfnhmZL9AIJIEcTJ2PDeIJmS9kjX0SleQ9LP1HOuLb1y2nJy4p23e6qzxPGnjINhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=DiLEM1Kv; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TATlyjuJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9172A1F00A3F
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 20:09:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786046985;
-	bh=fX04Qk4mczN0NAo4PWx1t+SWUSsxPl6jPtW9IM7b3Vw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=TATlyjuJnOd2qC+FB2P6DESpckSOJmO5T0iy1QYoPrd3FGq794/KD9c+1cE0ZBv6d
-	 JIo+s97v2wlVd7t01R8/BGaU58CvQ9zDT0LTa31udX/LzfGBEn0UYCxRpnBktQlCME
-	 zFm+5yEO8g+W8mgyQ1Z7EVIv2DmcE5r8cuZPBjBsUV2/PxhsYcvgoJHbRxjKUngXDV
-	 cLYKXmAvNQQAhBpE1TYccQrMRmxPi15IdrcGLXosrGSxVJL2yeNIMNdMeh2z8IZSy5
-	 a9C0+qvDqZQzD4UyWnTz255vwSK8lGp9wFsL+iT4UlndhmNZHdVmZVgFoHm4+gR3z6
-	 VnHBOzBhw8p+Q==
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-92e6391b114so207168485a.3
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 13:09:45 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzjmYn8FQly1nnnRYLzCj7sWxLHQwxJJl3YTIyuZuni3nl5Tmrb
-	hO4tvX1gdA5JCoBVpIrGGLgfQABL1VHwVusyf5Q5S9MxCRtJvGci3anW9GZu4lRAHD4S3NllQHP
-	vsdV1giblVo2SzqT9MeV1nmI8UABXA+8=
-X-Received: by 2002:a05:620a:2888:b0:932:d9c4:3bec with SMTP id
- af79cd13be357-936665d4fe9mr488591485a.38.1786046984866; Thu, 06 Aug 2026
- 13:09:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="DiLEM1Kv"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=Dt8PrXbHLhMajmZoI0XlMZBmEnw7KzZmZoZRQN70BAI=; b=DiLEM1Kv+ZkxlsXe2zCpcEmGBm
+	gltHKta7aNrt9Y8CH5o3mXOkyKc3eSmZa+7+quZKXqavpCUWRunQK7wTTZg3xnKRh8+72VI/xQfaQ
+	bf9dwgpzIFDX6T2htPKt03+aOB/uSpT3xtbSeejzXB6oajGswe6qZy4RJmKmDCeWJgQPuS0yg3Hkr
+	sAc0FPo152AKYN1p/r/FBYGe5Ju4utTufU8SUgIZToxiLOEPB5eotwdl1Z5YIOq9C9+WGf2IJZGbs
+	mZGcu1bRfgGoUsbyn/Pp0Uk3nZhJp8+My42c2QVWYiNNyaGOCmuUEV9H7LhDrVu/A4dQgT1Bm96qH
+	KYHv5aSQ==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1ws4QS-000DGm-0L;
+	Thu, 06 Aug 2026 22:10:48 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: memxor@gmail.com
+Cc: eddyz87@gmail.com,
+	puranjay@kernel.org,
+	info@starlabs.sg,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next v2 1/6] bpf: Reject load-acquire from pointers requiring fault protection
+Date: Thu,  6 Aug 2026 22:10:42 +0200
+Message-ID: <20260806201047.333389-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260806182234.380833-1-mahe.tardy@gmail.com> <20260806182234.380833-2-mahe.tardy@gmail.com>
-In-Reply-To: <20260806182234.380833-2-mahe.tardy@gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Thu, 6 Aug 2026 13:09:30 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7-srT-U+WQJN_b_SY=2wbkNQhs+JF=5aCPXGmLg1-1Xw@mail.gmail.com>
-X-Gm-Features: AUfX_mzwR8FtIRMHRwWg9kVoVVb_Qr1PyfqtKFvHPk_meoj5_xh05VsCRPk5AGo
-Message-ID: <CAPhsuW7-srT-U+WQJN_b_SY=2wbkNQhs+JF=5aCPXGmLg1-1Xw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/5] net: Add connect_socket() helper
-To: Mahe Tardy <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
-	edumazet@google.com, john.fastabend@gmail.com, kuba@kernel.org, 
-	liamwisehart@meta.com, martin.lau@linux.dev, pabeni@redhat.com, 
-	netdev@vger.kernel.org, sdf.kernel@gmail.com, ameryhung@gmail.com, 
-	kuniyu@google.com, memxor@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28084/Thu Aug  6 08:24:46 2026)
 
-On Thu, Aug 6, 2026 at 11:22=E2=80=AFAM Mahe Tardy <mahe.tardy@gmail.com> w=
-rote:
->
-> Add a helper that connects an existing socket while invoking the LSM
-> hook. Reuse it in __sys_connect_file() to avoid duplicating the connect
-> logic. Other socket operations have equivalent helpers that trigger the
-> appropriate LSM hooks that can be reused, this one was the only one
-> missing.
->
-> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+A BPF_LOAD_ACQ is not rewritten to a BPF_PROBE_MEM load by the verifier,
+unlike a regular BPF_LDX, so the JIT emits a plain load with no exception
+table entry and a fault panics the kernel instead of being handled.
 
-Acked-by: Song Liu <song@kernel.org>
+Reject the source pointer types that a BPF_LDX would have had that fault
+protection applied to, i.e. the ones bpf_convert_ctx_accesses() turns
+into BPF_PROBE_MEM: a bare PTR_TO_BTF_ID, PTR_TO_BTF_ID | PTR_UNTRUSTED,
+PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED and PTR_TO_MEM | MEM_RDONLY |
+PTR_UNTRUSTED.
+
+This is reachable e.g. by loading ->mm out of a trusted task_struct
+yields an untrusted pointer to mm_struct, and it is NULL for a kernel
+thread:
+
+  [...]
+  SEC("tp_btf/sched_switch")
+  int BPF_PROG(demo, bool preempt, struct task_struct *prev,
+               struct task_struct *next)
+  {
+      struct mm_struct *mm = next->mm;  /* untrusted */
+
+      out_ldx = (__u64)mm->pgd;         /* BPF_LDX      */
+      out_acq = load_acquire(&mm->pgd); /* BPF_LOAD_ACQ */
+      return 0;
+  }
+  [...]
+
+Both dereference the same pointer, but only the BPF_LDX is protected
+(x86-64 JIT, jump targets shown prog-relative):
+
+  [...]
+  ; out_ldx = (__u64)mm->pgd;
+  17:   movq    $-10485760, %r10
+  1e:   movq    %rsi, %r11
+  21:   addq    $184, %r11
+  28:   subq    %r10, %r11
+  2b:   movabsq $140737498841088, %r10
+  35:   cmpq    %r10, %r11
+  38:   ja      0x3e                 <-- kernel addr?
+  3a:   xorl    %edi, %edi           <-- no: dst = 0, skip the load
+  3c:   jmp     0x45
+  3e:   movq    184(%rsi), %rdi      <-- yes: load + extable entry
+  [...]
+  ; load_acquire(&mm->pgd)
+  53:	movq    %rsi, %rdi
+  56:	movq    184(%rdi), %rax       <-- no check, no extable entry
+  [...]
+
+Note that BPF_PROBE_MEM is not visible in a bpftool xlated dump, as
+bpf_insn_prepare_dump() rewrites it back to BPF_MEM.
+
+A PTR_TRUSTED pointer is deliberately not on the list. Such a load is
+not converted either, but it does not need to be, since the pointer is
+guaranteed live, so load-acquire from it stays allowed.
+
+The check is gated on BPF_LOAD_ACQ so that atomic RMW and store-release
+error messages are unchanged; writes (RMW / store-release) to such
+pointers are already rejected elsewhere, so only load-acquire needs this.
+
+Fixes: 880442305a39 ("bpf: Introduce load-acquire and store-release instructions")
+Reported-by: STAR Labs SG <info@starlabs.sg>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ kernel/bpf/verifier.c | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e6233c0081d1..648c5784178e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4923,6 +4923,30 @@ static bool is_arena_reg(struct bpf_verifier_env *env, int regno)
+ 	return reg->type == PTR_TO_ARENA;
+ }
+ 
++static bool is_load_acq_unsafe(struct bpf_verifier_env *env, int regno,
++			       struct bpf_insn *insn)
++{
++	const struct bpf_reg_state *reg = reg_state(env, regno);
++
++	/*
++	 * A BPF_LOAD_ACQ is not rewritten to a BPF_PROBE_MEM load by the
++	 * verifier, unlike a regular BPF_LDX. The JIT would emit a plain load
++	 * with no exception table entry, so a fault (e.g. NULL deref) crashes
++	 * the kernel instead of being handled.
++	 *
++	 * Reject the source pointer types that a BPF_LDX would have had that
++	 * fault protection applied to, i.e. the ones bpf_convert_ctx_accesses()
++	 * turns into BPF_PROBE_MEM: a bare PTR_TO_BTF_ID and any PTR_UNTRUSTED
++	 * pointer (untrusted btf ids, untrusted MEM_ALLOC, rdonly untrusted
++	 * memory). A PTR_TRUSTED pointer is not among them, is not converted,
++	 * and stays allowed. Same for the other flagged PTR_TO_BTF_ID variants
++	 * (MEM_ALLOC, MEM_RCU, ...), hence the exact match on the base type.
++	 */
++	return insn->imm == BPF_LOAD_ACQ &&
++	       (reg->type == PTR_TO_BTF_ID ||
++		(type_flag(reg->type) & PTR_UNTRUSTED));
++}
++
+ /* Return false if @regno contains a pointer whose type isn't supported for
+  * atomic instruction @insn.
+  */
+@@ -4939,7 +4963,8 @@ static bool atomic_ptr_type_ok(struct bpf_verifier_env *env, int regno,
+ 		return false;
+ 	if (is_arena_reg(env, regno))
+ 		return bpf_jit_supports_insn(insn, true);
+-
++	if (is_load_acq_unsafe(env, regno, insn))
++		return false;
+ 	return true;
+ }
+ 
+-- 
+2.43.0
+
