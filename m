@@ -1,121 +1,110 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F882D2486
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95820230BE9
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 21:17:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786051046; cv=none; b=J5kq7XXDZEjtmV3DJEyfZzwTfDUDSgXA+hkBmEXy46SO5zeQen+yEXlO3GXIxjs3IsX24W4/qzzcay3HUy3kD+hEcZp84XZukpD4ZpOnc4Gps/2hvPnxWZwfgPewlE1P7JgFLvSuwvMEUlLSyNtEghlC4qwIWE4hn1RKXcka3mI=
+	t=1786051062; cv=none; b=CERh56g4E6dsCwrmv6ZNTPyCS8RSSp2hzfMGLThT9WSW/1X4W9HB6aI5OQIwXHO6LIe6pWzLNqiZyOfUQZRnW0gZ8EnEXMSuhLS9CYZEm5GXVk6p607TbXcccAiH8JR6SFF0tyGVjOm+YM5aZjjPEKM4LVofwDl756RYilu6uio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786051046; c=relaxed/simple;
-	bh=i0xsFfuGkhJNhTq2EADzDgVshYOuIm2X/WcPJ0Xrx/k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iG1+tJnIlyEaESycXvB4PGcLHk/W5SuZr2tNjnTybsjQ8rAv3zZDG5fgGWwTWpGjMR6tjgOTcCu7judZYBATc36CEyqaPTMWhAxPLqpuFWwRdQYpI9+Nj/3ubw2ygZnMhyAJE5FC0yI65sp+MVXbIjmu+z/4Cp19oZAErHaGYck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BWy6JEyX; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786051062; c=relaxed/simple;
+	bh=g2E/BAxnf8LFO9ic8f4vgfoqIXmjGEabkfpOBLIS0EU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Auc/8N056VTFhntE/T+l1WQTBVHq/rhLmzKAWFQVW/lwOiAmJMNHy+CZ2Dr/nnDglqXJxMy8rrn9cmhRLaz207XRZ6/ccjsAGsjnFj/SDxS3Noe8gDtMO1kRJqGOlyqbl8m/r0BRjlROMwTHik2qAEsjiATEWUwDQFnY1fvz6R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gS87q6i2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BWy6JEyX"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2cab973140bso37489665ad.3
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 14:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786051045; x=1786655845; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=vV1K/PxtFGbxxnxBOl9VvC5Z06I9t5mIXQGFPO9TbQ8=;
-        b=BWy6JEyXbRBjpe5garlFErHQmiborXwEC5xuGYtTN2S4/ed4G/2GCby8pCUuoDCAa1
-         kwx7yTMUQVsdIcGVaHK9/8U9g4QH/4A8MalfLoK0ih54AEVDl5Hb+axqmiYk4JSwUkMZ
-         kyazbMF5visKX+fR8PPdK2Sb+flbi0udWKp4DYGwSdV007lL4XCwHu2L4t7j+rwIYI5h
-         eLsuy/XPJIXyVoagdwgu/Fd/oeK/lH85M3iwKKh2Y7yUpSkFYgHYzm6W6A63xUPxb2VK
-         UFFuEY77sulWvLMEP4UGOVyNEDXH9jn84r06aMNv5m1aWRwkhZ6ZhBYs3bN2cxnyGIFq
-         wUpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786051045; x=1786655845;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vV1K/PxtFGbxxnxBOl9VvC5Z06I9t5mIXQGFPO9TbQ8=;
-        b=m87damFXJdX01W+M6XTdVzkA5emNoXcBipa/JYmZqa0efo3uF93xofKpkpqL/c2HcI
-         47/6Z6lIDWHPZOKg5yGh28Jg1Wo/Q9Y7N6Gpc+i6KP4by4hAgQy2OPfNvO4suMW36iYc
-         hlW0M88EGMboXYvD1/FX9h31GbI78xJknXmVKPz34A/RNVRVdZAd4sbl672mKo+AotQ/
-         CP1JAYTmvbnXQ4FFNtmOybExnX67WQ78Bhz68H4EpNediTPf2B0J82uk775A5zA2NadA
-         2M9vOb+x9wVFUAMwYOzW2xfQU6RX34seynVDt2SWZMgs6hmYT5M0b9yEdo2bRO0cE6I7
-         5HjA==
-X-Forwarded-Encrypted: i=1; AHgh+RpFM9qY1j2NYk8dbgnqvuCLMWgW7HYgJ5p4T6Kx6A0la6T4ELoOiauIqGl5YNX7bIspEzQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywbs5Xrz9DVT2VB3OlQVWwTHOkyiNdfQK1Zqi+AG10tsQxNY4bm
-	u6tkpUH7l4cNLIED4WnNTx7e5uFjEevOCMXFO3i+q6mq6Veb4cuyKz0x
-X-Gm-Gg: AR+sD10CJHy9WB8ARAYWZ2uFTdHS/7h8pkrrH4jLAuNiPCSwXDu//clVDMftNSGArKk
-	+JRu/MAzFGRS1S5s1KkUhyB5/82JsEY963mr2Vzv0fXVTM3ckRkEGmo0kdFReSdSt0Hte63xOnt
-	AdGBvZfsLtnCf5lwASJvTs0tMamAGXnIWH/vUbqME5n2DIw25T1/ljYtNX0NKg0i1mXvPhBvURd
-	bAkoHgHeAIR2F+iEIvyLSqRMvE2NHEu/KPfXJ16/d+6F0PjRvoDumDleGucLCr6JH+ZVnANytf0
-	y4/u7jzofBSKXtWM0xQztr2Ufk6Qxpuz0kbAnYJqk8diUtXE9vY0blyGCwLuotSE79Fz8qktmKK
-	haE8WRQ5emhj+9o3kclKv5mMjIWzh/7VxVnzsqKiHhg8D68j/wMe2Rlj+v6DZRkcoabyWYjza1y
-	wfyizPyYf082xvraSrikjAMyk/h9E/Zk46KiTaZb8ha6yWm+m0OHyWOSx/4LSpdSMzreUXFDNY9
-	hhs6NYz2jRxAOGX
-X-Received: by 2002:a17:902:da87:b0:2cc:a977:4260 with SMTP id d9443c01a7336-2d0ca9fe0d7mr180356565ad.21.1786051045162;
-        Thu, 06 Aug 2026 14:17:25 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d16c4e9cf6sm114655ad.76.2026.08.06.14.17.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 14:17:24 -0700 (PDT)
-Message-ID: <7190f11283c2b3727b0e1242c9bcd7db6db4e7a6.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 6/6] docs, resolve_btfids: Document kfunc
- BTF annotation emission
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Date: Thu, 06 Aug 2026 14:17:21 -0700
-In-Reply-To: <f9b8c8b1-906e-458b-b779-faacb2dee66c@linux.dev>
-References: <20260805230648.2354989-1-ihor.solodrai@linux.dev>
-	 <20260805230648.2354989-7-ihor.solodrai@linux.dev>
-	 <b695bed46f03b4cc1a819bcd0d63272923ba5ca3.camel@gmail.com>
-	 <f9b8c8b1-906e-458b-b779-faacb2dee66c@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gS87q6i2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F851F000E9;
+	Thu,  6 Aug 2026 21:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786051061;
+	bh=owOUUdqYqvF5CS6VxHRA7pv4T5gHE5lovLvhYY7rd58=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=gS87q6i2DHxLk8f0jHfbxEUw1PCn1abPS1lXUw0MzziShbPQB9NzFU5Df76Yi7VNW
+	 gCfj+aYfXySgoGWrkJDM+qWAPC85wFbwqUEcyNiynfrqNP9BvuMV255qlVYJ8sn+/6
+	 4prMrMQDe7zGPeELSqWtRj4MjJHHdytmS88PkXVAGIEzvUkUyk4HDzJCoPbNpReilk
+	 rkpzsIjoYsC/hMeVKcjkgPVRCmyUOvRKjn0ljP1PIEXs+/P6jXCH0zqhDOL2mlG4Em
+	 qJfwr4GPNdgOPTC7Zb++uFhhWSsKXwkyDPEHDcLChh9M1u44StH5ILhJrTpKEJQJ8s
+	 1/691e8W9TUiw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: Sanitize traffic monitor log
+ file names
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vineet Gupta" <vineet.gupta@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260806211105.3307932-1-vineet.gupta@linux.dev>
+References: <20260806211105.3307932-1-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+Date: Thu, 06 Aug 2026 21:17:40 +0000
+Message-Id: <20260806211740.E9F851F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Thu, 2026-08-06 at 14:06 -0700, Ihor Solodrai wrote:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] The backslash character `\` is missing from the sanitization str=
+ing, leaving artifact names vulnerable to rejection by GitHub Actions.
+- [Low] The newly introduced multi-line comment violates the BPF subsystem'=
+s strict comment style guidelines.
+--
 
-...
+--- Patch [1]: [PATCH bpf-next] selftests/bpf: Sanitize traffic monitor log=
+ file names ---
+commit 4eb40c6024aab5f28e7a52af3fba116cbdeff427
+Author: Vineet Gupta <vineet.gupta@linux.dev>
 
-> > > @@ -14,6 +14,9 @@ pahole-flags-$(call test-ge, $(pahole-ver), 125)	+=
-=3D --skip_encoding_btf_inconsis
-> > > =C2=A0else
-> > > =C2=A0
-> > > =C2=A0# Switch to using --btf_features for v1.26 and later.
-> > > +#
-> > > +# kfunc BTF annotations (bpf_kfunc/bpf_fastcall decl tags and the ar=
-ena
-> > > +# address_space(1) type attribute) are emitted by resolve_btfids, no=
-t pahole.
-> >=20
-> > What's the point of this comment?
->=20
-> The point is to inform the reader "where did decl_tag_kfuncs go?".
-> Question is whether the git log will be enough, or is a comment
-> also appropriate?
+selftests/bpf: Sanitize traffic monitor log file names
 
-I don't think we don't do this usually. E.g. it would be a first such
-comment in this makefile. Also, the comment looks suspiciously like
-something Claude inserts :)
+The traffic monitor names its capture logs after the test and subtest
+being run, replacing '/' and ' ' so the result is usable as a file name.
+This patch replaces the whole set of awkward characters in one pass to
+fix artifact upload failures in CI systems like GitHub Actions.
 
-> >=20
-> > > =C2=A0pahole-flags-$(call test-ge, $(pahole-ver), 126)=C2=A0 =3D -j$(=
-JOBS) --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,opti=
-mized_func,consistent_func
-> > > =C2=A0
-> > > =C2=A0pahole-flags-$(call test-ge, $(pahole-ver), 131) +=3D --btf_fea=
-tures=3Dlayout
-> >=20
-> > ...
+Link: https://github.com/kernel-patches/vmtest/actions/runs/30710914503/job=
+/91399011388 [1]
+
+> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testin=
+g/selftests/bpf/network_helpers.c
+> index db935a9d9fc1a..3818cec354a0d 100644
+> --- a/tools/testing/selftests/bpf/network_helpers.c
+> +++ b/tools/testing/selftests/bpf/network_helpers.c
+> @@ -1142,10 +1142,13 @@ static void encode_test_name(char *buf, size_t le=
+n, const char *test_name, const
+>  		snprintf(buf, len, "%s__%s", test_name, subtest_name);
+>  	else
+>  		snprintf(buf, len, "%s", test_name);
+> -	while ((p =3D strchr(buf, '/')))
+> -		*p =3D '_';
+> -	while ((p =3D strchr(buf, ' ')))
+> -		*p =3D '_';
+> +	/* Test names are free form, so replace anything that is awkward in a
+> +	 * file name. Besides the path separator, this covers the characters
+> +	 * rejected by CI systems collecting these logs as artifacts.
+> +	 */
+
+[Severity: Low]
+This isn't a bug, but does this multi-line comment in encode_test_name()
+conflict with the BPF subsystem's comment style guidelines? The opening /*
+is typically expected to be placed on its own line.
+
+> +	for (p =3D buf; *p; p++)
+> +		if (strchr("/ \":<>|*?\r\n", *p))
+
+[Severity: Medium]
+Since this is meant to cover characters rejected by CI systems like GitHub
+Actions, should the backslash character '\\' also be included in this
+sanitization string?
+
+If a test or subtest name contains a backslash, it appears the artifact
+upload could still fail.
+
+> +			*p =3D '_';
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260806211105.3307=
+932-1-vineet.gupta@linux.dev?part=3D1
