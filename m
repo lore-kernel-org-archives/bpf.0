@@ -1,177 +1,174 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE39A3624CF;
-	Thu,  6 Aug 2026 16:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786034006; cv=none; b=WLTZ9KZj7vpez+kZabS2uupBNXQaq4RZQ3riOR+fPonEr3hAFCPS4muXjMisBx7HMload2OXGSPuA+Enx/15iB7jcPKZ9KSsOLnjMpm0enP02ut07n3R7/q4Msivv/XR+O9ebZaG3uGPHzpr/A3kXc0OZbJqBuu/eTuXcKj64cs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786034006; c=relaxed/simple;
-	bh=i3uyX6cbzovaPp4w1Qii84/2UaXmZJk5Df4imXwwFfI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q8zyKvjfZO5Y+yoQpXFu/HDhICihY6cO9uIjKA2pv2wkWIt5h1xcsbb9ac/RZomlhe4aQyh0JU+FrNiTIUcaARTY6AxvGcbssft/Mln/eWQgajq5+pr7yu8RtNeBlmEmRlaRAEUjjG3zJQBJZ4CoNbSKBXGh+UupXLMPXJCqt8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wjRVuh0d; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4793115AF
+	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 16:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786034263; cv=pass; b=hyperel9IaetUERLiL5dDH2hkJrr8X0DFoGLtxgyM8fV/TFtmZRwDpmp2N67jnR+NTwEMxw9D57sWyx2fwzIhOc3Df9VpCYkUgGPWITpL4QqgCHrY5FTbuPOpZ7J/X/kgoFNOltLr+d1AuM6vHhN6v2FgQZWfj/9d8JEbcdMnPQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786034263; c=relaxed/simple;
+	bh=wdWMLiYPgfptHm+cvwHI/DzZ3cBDYJECWExqOs4SPCI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YVXiJvZ1b17Mx0vrjXNFPLiPg/SPBPTaGafL9ZIKTqBpuvsixwXlk2B1asYoEvXcHvg3t8CFJdj5qzLxbZs4bVOXO2Bl2ceMpl/24/S5A37mVO48RriBXAj1JI8e6nZe+Y+CZRJaNmX7IfeeNZ5+ofng+XKH6Qm9YnJeed1oOn0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iMPHLtgr; arc=pass smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wjRVuh0d"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786034002;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=01/KKGQN1pRCjT8ifmm+BwGyoJjIbb2a0e5ACArQx18=;
-	b=wjRVuh0dNNFe9EHN9BZaHH1VkIXC3mpNW/GFD0SNyM2VsOzHStpZ81InBG8Xk0vCxYIHFy
-	wgeRMRw1xlKA+AEK3+shYkEVo4kOZ7y3TEejL+zTsib0RTrLeaoEDRUDvQEX2r+Xog0QPO
-	uQUws5w0AfVYAhwKwbUDSSBizMRAgR0=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v11 10/10] selftests/bpf: Verify bpf_iter for global percpu data
-Date: Fri,  7 Aug 2026 00:31:25 +0800
-Message-ID: <20260806163125.11172-11-leon.hwang@linux.dev>
-In-Reply-To: <20260806163125.11172-1-leon.hwang@linux.dev>
-References: <20260806163125.11172-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iMPHLtgr"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-8114a4542b2so35236947b3.1
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 09:37:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786034261; cv=none;
+        d=google.com; s=arc-20260327;
+        b=o2kZDR6qlPJwvXtEbTDAbUdP3+I+mkvfb5mrdCH8ixK9lglM96CB4l3XZeAPdKyl6+
+         7WP1/sbN114iiKDqGddB0d12CYQ9VPFLdACspq0eUpabfEeYsaUncJ62epzQjx7gNTZd
+         RbC/33VDKLf/2d+mqOE2Yp571AC20oCgtQKQEh/+yST3srBapqf/IELhe2ou6kqT95vi
+         HMeg+OyoEEkUTlruMHrAhkRDNsdXhLNVjBIgzSy3Ylj+sQcBr0TitUmLp03fYDiDyyYF
+         k/ETScz3b27uy72ilgYI70xy6RKK4syAcds83ZJ4CklGValzjk7bVutiYsouM1EYKkgB
+         PmTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gvzVMVnmOSeWHJNvMQp0ohnwPh1G5vxzMj2f2mVKW2M=;
+        fh=B5cyw1yRIFuY1K+xO+VoEqAhNWQz2KjO7/ov3WrCuBU=;
+        b=rIBG1b+yxsXemTbIUH40mA9bAm/NQEbLJ4fDGHcC+s7AJgE0ySeM0mrFS4PWMC0aP/
+         WA2eZawsCOBl+cmkScAAxYzNJa3qCGl2RINEAr5DWaeor45BNDyOCKnZP3BJA8aSQg/m
+         JEo+40/CVUULbs31K7AtuAenHMyNYnm4GRMsSBr6GCzS1K9VXssaTxuFLUC/UKPXUuQS
+         EIgPC+ZTNl3oWn4xrM0dkPzlR6SYnS5cDR+evUGJJ4j/HUTroukX6CBzoWwF6uO4tNRY
+         kk5DjbjAZHGBmCvF/ePqQNLUcnPfilrbrJga3a92kZc/QD2zFE+uKl7b8Kdz8hNS/0DB
+         fuYQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786034261; x=1786639061; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gvzVMVnmOSeWHJNvMQp0ohnwPh1G5vxzMj2f2mVKW2M=;
+        b=iMPHLtgruz2LBMc7hlRR4cvZ50/thsB143XrU/hnf3fGARCRMSFI6Snhcqbmxnd7VN
+         VHlnXu+XGG3NkdyrzmlFIsI2zOzfY0rv8RblTuuHs0HRhAdH+83jHw8TrohADXVLGRK/
+         3VdeOZKYmoTThYwaqHCxh+zMscdZ9g87OXA8/upDgm1bBUTjIbyyqcaClzNrj7bA9hUO
+         69iFGiTHDVw/Y1JdiaElFdLgPGnsRsgMKIs6l2U+2H6Gj67JDDOFyncuiP1j7vOSesXY
+         XraYXKRoELsQRmNl9w7rgZghdcwyBezgebVT62BvoSbix2JSRhW8NDbHFeMjSZuy2t06
+         2Isw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786034261; x=1786639061;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gvzVMVnmOSeWHJNvMQp0ohnwPh1G5vxzMj2f2mVKW2M=;
+        b=qkPL9WlZSLjBra0fj4FKpFgVYi7QPvWbi7n0w986q6lVjITXjQTHG5KGYN7jPM00gB
+         sJp0+PWKQrmqR4L41xmzae2pYXCqs8ST1i7CxeIllGDcRyMpryQXQG5I/qCpSnwCVr2G
+         Czld77YozkUoXC7hYZcrVFXTp7/bY2q8zy268n7BUoj0EqBtFfMPyPVqzGSU0PuYWj6q
+         OE41TxHU3o8cVAlmN1ZgTM38e85XSZdNQ23QZ8i2CfyL+mVxgN5Y1byYU75R66V9KN9E
+         JBWTqtCRAdoGllkqATgafQXb/hSHrI+02MzznTMICK4XM6OIZ9RCPw2lSzjLvatqF1pL
+         8D/g==
+X-Gm-Message-State: AOJu0Yz80SKJXr9Y6Rjby409jxZVxZ3ebA2IprqZWO2ilZZfBiKWxZoI
+	8NC/bPNNfS1T9YbnuxzbCxrCNIEBZJTtXeQy+CYZsJWM5KTpGobW2qe34dxJTX93Qvm+UP+LnCf
+	J3Ia44z9gdsoib8bn77NOwzNy0YL5JN4=
+X-Gm-Gg: AR+sD11KkMh/61DbgDgt47rKx0OuizH5IEpMY47uWCC4gE2dgDBCf613zGgKLxcgDHo
+	SB+6dEXfnoD4MVa9knfNhlPmlj62aSbt08CqLIgcyUBi+ETadB8iIRWZ39cB/WFwjiDMJbMNOVe
+	Wv8Gw5MHt56oSqcztsCa/M7bfOQRUrW3Kgy7u8idfZWug701bS01SmZk8Ryhbc9uUgX3JxTcjF/
+	7OX0zffYqaaJcwnJtmwYvollF4bwBfaUI1la/6HA9s2ZSOJ1q7Q20sr6OC6m4vcoQmLdxKE/Esu
+	fioe+IuwTODDYOdLz7XXRS1sYXUKrIaA7SAE+tC2kPDx
+X-Received: by 2002:a05:690c:6d86:b0:81f:238a:1709 with SMTP id
+ 00721157ae682-82024f1a9c1mr99304967b3.34.1786034261417; Thu, 06 Aug 2026
+ 09:37:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260805210427.3218326-1-memxor@gmail.com> <20260805210427.3218326-4-memxor@gmail.com>
+In-Reply-To: <20260805210427.3218326-4-memxor@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 6 Aug 2026 09:37:29 -0700
+X-Gm-Features: AUfX_mzzT9WnmVJY0eRFPTwfRK-C7b2CzXjfkLMf4W9G1GIS7UouN0oCriyRk8o
+Message-ID: <CAMB2axMu8LVx=vFZWQ8tc3sY5FTegu3kqF2BhFnRMiZKfYm_Ew@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 03/13] bpf: Collect kfuncs after resolving
+ program resources
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, Tejun Heo <tj@kernel.org>, kkd@meta.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a test to verify that it is OK to iter the percpu_array map used for
-global percpu data.
+On Wed, Aug 5, 2026 at 2:05=E2=80=AFPM Kumar Kartikeya Dwivedi <memxor@gmai=
+l.com> wrote:
+>
+> The kfunc descriptors include argument prototypes generated while calls a=
+re
+> collected. Some argument classifications need program auxiliary state der=
+ived
+> from referenced maps, such as the arena associated with the program.
+>
+> This avoids a footgun in get_kfunc_arg_type() checks where we do
+> validation on whether program has prog->aux->arena and it hasn't been
+> resolved yet.
+>
+> check_and_resolve_insns() records used maps and populates that state. It =
+must
+> remain after bpf_check_btf_info(), which applies kernel-side CO-RE reloca=
+tions,
+> so that instruction validation and the program tag observe the relocated
+> instruction stream.
+>
+> Move only add_kfuncs() after instruction and resource resolution. Subprog=
+ram
+> discovery and validation remain before the full BTF phase because that ph=
+ase
+> needs the complete subprogram layout. Add a short comment describing the
+> resource resolution phase at the call site.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../bpf/prog_tests/global_data_init.c         | 52 +++++++++++++++++++
- .../bpf/progs/test_global_percpu_data.c       | 25 +++++++++
- 2 files changed, 77 insertions(+)
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index 91f6ec07ba85..2625651b34c7 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -301,6 +301,56 @@ static void test_global_percpu_data_verifier_log(void)
- 	RUN_TESTS(test_global_percpu_data);
- }
- 
-+static void test_global_percpu_data_iter(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_global_percpu_data *skel;
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link = NULL;
-+	int fd, num_cpus, len, err;
-+	char buf[16];
-+
-+	num_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	skel->rodata->num_cpus = num_cpus;
-+	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
-+	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
-+	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
-+	skel->percpu->struct_data.nums[6] = 0xc0de;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto out;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
-+		goto out;
-+
-+	while ((len = read(fd, buf, sizeof(buf))) > 0)
-+		do { } while (0);
-+	ASSERT_EQ(len, 0, "read iter");
-+	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
-+	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+
-+	close(fd);
-+out:
-+	bpf_link__destroy(link);
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- void test_global_percpu_data(void)
- {
- 	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -317,4 +367,6 @@ void test_global_percpu_data(void)
- 	if (test__start_subtest("rdonly_direct_write"))
- 		test_global_percpu_data_rdonly_direct_write();
- 	test_global_percpu_data_verifier_log();
-+	if (test__start_subtest("iter"))
-+		test_global_percpu_data_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index 202cb9e8375b..a9443fb2050e 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -60,4 +60,29 @@ int verifier_snprintf(void *ctx)
- 	return 0;
- }
- 
-+volatile const __u32 num_cpus = 0;
-+volatile const int offsetof_num;
-+volatile const int elem_sz;
-+__u32 percpu_data_sum = 0;
-+bool run_iter = false;
-+
-+SEC("iter/bpf_map_elem")
-+__auxiliary
-+int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	void *pptr = ctx->value;
-+	int i;
-+
-+	if (!pptr)
-+		return 0;
-+
-+	run_iter = true;
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		percpu_data_sum += *(int *) (pptr + offsetof_num);
-+		pptr += elem_sz;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.55.0
-
+> ---
+>  kernel/bpf/verifier.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 24b163c2bd63..b62e77949542 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -20344,11 +20344,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
+attr *attr, bpfptr_t uattr,
+>         if (ret < 0)
+>                 goto skip_full_check;
+>
+> -       /* Collect the kfunc descriptors used during verification. */
+> -       ret =3D add_kfuncs(env);
+> -       if (ret < 0)
+> -               goto skip_full_check;
+> -
+>         ret =3D check_subprogs(env);
+>         if (ret < 0)
+>                 goto skip_full_check;
+> @@ -20358,10 +20353,16 @@ int bpf_check(struct bpf_prog **prog, union bpf=
+_attr *attr, bpfptr_t uattr,
+>         if (ret < 0)
+>                 goto skip_full_check;
+>
+> +       /* Validate instructions and resolve the program's referenced res=
+ources. */
+>         ret =3D check_and_resolve_insns(env);
+>         if (ret < 0)
+>                 goto skip_full_check;
+>
+> +       /* Build kfunc prototypes after resolving program resources. */
+> +       ret =3D add_kfuncs(env);
+> +       if (ret < 0)
+> +               goto skip_full_check;
+> +
+>         if (bpf_prog_is_offloaded(env->prog->aux)) {
+>                 ret =3D bpf_prog_offload_verifier_prep(env->prog);
+>                 if (ret)
+> --
+> 2.53.0
+>
+>
