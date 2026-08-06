@@ -1,85 +1,30 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3D542CB1A
-	for <bpf@vger.kernel.org>; Thu,  6 Aug 2026 09:15:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970023D667D;
+	Thu,  6 Aug 2026 09:19:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786007716; cv=none; b=OCpZiyjvCE/M4o3LPrP0YWD2wO2FfJC4iVeSDJK3/M7Kj+Vfq7/RD7RxzQhZgArP/ztFaucoY+FvZE+Ztfd+QIvFzieCw6QhqtrA3B8j/kpYUEOHDAf77Cp99/qHB3k2xA6fUA2+qmplKCHCNLF1yzdiPwL/rAfYry8eQ/Tg6bw=
+	t=1786007989; cv=none; b=iX2W9LPc1w0lyNfaZYpq+PXA78UH8s3BwyfHyMoxxH96+1ZHcX9qDg1UVMt9dg+RxK7sMyFuPBoEXP0mQDflSES66ivn9pqob8R8j7a7/k3mu62Zi/fE7GVQ2mVkPpfm0II0Ur6oPKAC7uUyzGFVhlRWm+Sy6LRx+CPB3zk4aqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786007716; c=relaxed/simple;
-	bh=qzNuBPozfFIkdZOuS/fLxMETJ0Kd83A2UR9sybGyKyo=;
+	s=arc-20240116; t=1786007989; c=relaxed/simple;
+	bh=ZOy8ye1izp4wIxal0miIC9qErBHaINStsTmwt4ncyR8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wq7Exr5M+tOqh2gMPO3RP8N9GMitvi0pVkvOf6Xd5FiSHFGtyh8t9i4038Q7dsaFl3Dj9T3XeEe8TrNKHW5w7avSH94D3EIayPtaNtImLGshKWPvtv7fYFTZB8gpaO/ds58ZUrK//iTuty2H6XRWR9M8pyJy2FiB+Cdi1nxl2Xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HIgIczcV; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=POUHX7sE; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HIgIczcV";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="POUHX7sE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786007713;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w1p/WqP5zNmyTteiVasVWjR72E6WFiVRU2GjHHBSa5c=;
-	b=HIgIczcVznM/PvVO3WSanKAnsj07yqxutA+c0qD6W7KLAX8sbER67wo9jFQsXuofoJp0/B
-	HSBivg8cl1+otxci0Ww/V/gbi+/7g4SukEv3JNqh5UMv90cICz6R9+Bvj6/5P+xXsCnIPy
-	CE6BpTG9rTiqqWxmwEluDWBUS6gIoZM=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-308-563qicg6MVeruNDT8ivqZA-1; Thu, 06 Aug 2026 05:15:12 -0400
-X-MC-Unique: 563qicg6MVeruNDT8ivqZA-1
-X-Mimecast-MFC-AGG-ID: 563qicg6MVeruNDT8ivqZA_1786007711
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-47f2de3ba47so1097754f8f.1
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 02:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1786007711; x=1786612511; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=w1p/WqP5zNmyTteiVasVWjR72E6WFiVRU2GjHHBSa5c=;
-        b=POUHX7sEuNbTNG8im8YwWh7euPC20Hq7L+HtA5b9iqeez7oWztB9t3fOq8svtzfsyl
-         frcIdw3D15BamK1Iy09v4fdRkzcztICglAqIb8kz+h9oH0zGX/tmVHVJtiM5o4teejqW
-         wX7xCxWigFQdvvJ+cxZDb8WKifd2fp/Z4u7rfuqNWor/Rx9vFB+PXwkjYMd/WNDzwEc3
-         0BLODXpha1A2mtbx++dvWCcd4qx0ine7Ax1js3XyVwFO/N2CXA4gWRbDHz+KrtpTxw37
-         sjzlG8uajyJ76YS1QZXyCALvvKBXINbW8jr7qdHrJZNRxhZrF3QCGos5IKtx+Avd+P2s
-         Txpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786007711; x=1786612511;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=w1p/WqP5zNmyTteiVasVWjR72E6WFiVRU2GjHHBSa5c=;
-        b=gqanVd1DaFd4qbVGk9FjSc2P4JLCEIxr69sPgz4XLDfjc+KS5Vao0sKe7irM7audJn
-         HC99Ku+Sy7ojf9FFN3yJGAYg4yxFgcj0npnCW7VWKDykVEeHwmXy+5WSwcYBDZ5SgZHC
-         rkOv93HhqCU+Fks4j6JZ6sMy9Xq0LCogIp5lNDSrTZY5VJ1UySAMz+7K/Nv5lDeSzcIJ
-         J9FEz1LvSKdpyUzHMRZ3WEnxXC8ldiGF1fAgxLstzIpPSOdBTS/UV6ymqK8Ww3cCQlYC
-         OfaFLRQrMMictW0Htun2QyujrQZgRjFGMyIoXwg5Ykfa5DfEoQpDc2wu/5c2Amc9gkgT
-         bbWg==
-X-Gm-Message-State: AOJu0YwKGDKNze/hnX8XPsSyJvsm+k0kh/NFgaf0UB12yaL4H1hMsRyk
-	tlMPqYz8rGeSNi5h/ZKbdYwo5LedNDmbdBoYun2bFMQYk2qpF+vtoa1flqyoBVcdC+Lx0FqmOlh
-	olUE6QkyOJeIMNNvZtZLJruGIfaOK50sX0uWd2Tlv4lzPSNwRM5oB9sAXT+HeNg==
-X-Gm-Gg: AR+sD10QLiNVKSqHBb0+LNk0f81sHgMAqt+UdT6YhMoGkXbV/yxMBBmaYCR62UVjOPZ
-	lzzpIgIAXOFs01rMjjNhJaQeb3gZH2GKw01uzeNHK96Jt/OJKObVFUsv2ovwWStLAml9YD+sMMT
-	e9iqY9MpFYUFlkvhL6NMoMHfYWk8X8teGhYCq6kjIg3QDdvN4hXPZRBC0q1jyozb6dh7GmB2f68
-	Tqi7FoZyql+h3Jqeepb4oqbx4SU4fnGWJobiCTynvW8xYKEJd7oDyvejGZwWZyKTkC+Z5VSyg3h
-	4Tm1eCAXSfQQfsXu8E7UYU5Vkf3kYcKKmUm1jkJ0Eq9fh6mX0oVmRrJdeAdtuOhdDHE0K0rhlGK
-	N2nP0PExdYZ8xa8mwNYjWUJkij6mOmNUlk+V7eFBBoxbS7CtA67nOEJetRTs7e4tG+fPfcSRYst
-	g=
-X-Received: by 2002:a05:6000:29d5:b0:47f:90df:4ec6 with SMTP id ffacd0b85a97d-47fec4e761bmr17445726f8f.6.1786007710473;
-        Thu, 06 Aug 2026 02:15:10 -0700 (PDT)
-X-Received: by 2002:a05:6000:29d5:b0:47f:90df:4ec6 with SMTP id ffacd0b85a97d-47fec4e761bmr17445663f8f.6.1786007710038;
-        Thu, 06 Aug 2026 02:15:10 -0700 (PDT)
-Received: from [192.168.188.103] (ip239-44-231-195.pool-bba.aruba.it. [195.231.44.239])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff7b26879sm4650653f8f.30.2026.08.06.02.15.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Aug 2026 02:15:09 -0700 (PDT)
-Message-ID: <1f36d5be-906a-4ba5-8679-24cbcf899254@redhat.com>
-Date: Thu, 6 Aug 2026 11:15:08 +0200
+	 In-Reply-To:Content-Type; b=sEL+Evkr+MQQSWAxtPUVhSnMXhY1h2ldIGld0qVlPr2/s/moY+ZVEkXj6UDgeIIoi3jOhDyG/S7Mr9qVDL216wAdVHQPB0UlLscOCvzoJDrVQl+V6fB6RnOMiuQS7IOlBgTzY9ibKXMXwlJoXezMvB99RzcqiHQmfjDtNNJRW5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hG1tF6QMPzYQtyt;
+	Thu,  6 Aug 2026 17:18:45 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 67D4240593;
+	Thu,  6 Aug 2026 17:19:40 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgBHgs6qUXRqRqc+BQ--.50682S2;
+	Thu, 06 Aug 2026 17:19:40 +0800 (CST)
+Message-ID: <fbef490c-d57f-4a0c-b96d-75a846fe5c98@huaweicloud.com>
+Date: Thu, 6 Aug 2026 17:19:38 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,84 +32,145 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3] tcp: honor BPF_SOCK_OPS_RWND_INIT on the
- active connect path
-To: Tejas Birajdar <tejasbirajdar@meta.com>,
- Eric Dumazet <edumazet@google.com>
-Cc: bpf@vger.kernel.org, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- sashiko-reviews@lists.linux.dev
-References: <20260730220055.2946171-1-tejasbirajdar@meta.com>
- <20260731220124.B0C621F00AC4@smtp.kernel.org>
-From: Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH bpf-next v3 0/9] Fixes for bpf_jit_free
 Content-Language: en-US
-In-Reply-To: <20260731220124.B0C621F00AC4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>,
+ Huacai Chen <chenhuacai@kernel.org>, Ilya Leoshkevich <iii@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Helge Deller <deller@gmx.de>, "David S. Miller" <davem@davemloft.net>,
+ Shahab Vahedi <list+bpf@vahedi.org>, Hari Bathini <hbathini@linux.ibm.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Naveen N Rao <naveen@kernel.org>, Pu Lehui <pulehui@huawei.com>
+References: <20260725154915.2488611-1-pulehui@huaweicloud.com>
+ <dc180ce3-e222-4c67-b44b-f792930afd8f@iogearbox.net>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <dc180ce3-e222-4c67-b44b-f792930afd8f@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgBHgs6qUXRqRqc+BQ--.50682S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFyrCr43Zr13ZFyUAF47Arb_yoW5uw1UpF
+	Wvqr13Cryqgr97trsxJw48XFyYyw4rJ3W7WF13Way8Z3WYgryjgFy29w4F9FWjyrW8Gw4Y
+	qF1Ygr98uFyDX3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+	0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+	v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+	1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+	AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
+	42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+	evJa73UjIFyTuYvjTRM6wCDUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On 8/1/26 12:01 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [Medium] The `SOCK_RCVBUF_LOCK` check executes before the BPF program runs and before `full_space` is inflated, silently defeating BPF-requested windows and bypassing dynamic `SO_RCVBUF` adjustments.
-> --
-> 
-> --- Patch [1]: [PATCH net-next v3] tcp: honor BPF_SOCK_OPS_RWND_INIT on the active connect path ---
-> commit 2cf5d1d17ae1c7488533ecaa0fcbb83ae4591ec8
-> Author: Tejas Birajdar <tejasbirajdar@meta.com>
-> 
-> tcp: honor BPF_SOCK_OPS_RWND_INIT on the active connect path
-> 
-> This commit updates tcp_connect_init() to honor the initial TCP receive
-> window requested by a BPF_SOCK_OPS_RWND_INIT program on the active connect
-> path. It inflates full_space if the program returns a non-zero window,
-> matching the listener path's behavior, and uses u64 arithmetic to prevent
-> overflows.
-> 
-> Link: https://lore.kernel.org/netdev/20260723214208.3655474-1-tejasbirajdar@meta.com/
-> Link: https://lore.kernel.org/netdev/20260722170033.2763794-1-tejasbirajdar@meta.com/
-> 
->> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
->> index d7c1444b5e304..fcaa04e65189b 100644
->> --- a/net/ipv4/tcp_output.c
->> +++ b/net/ipv4/tcp_output.c
-> 
-> [ ... ]
-> 
->> @@ -4137,10 +4138,13 @@ static void tcp_connect_init(struct sock *sk)
->>  		WRITE_ONCE(tp->window_clamp, tcp_full_space(sk));
->>  
->>  	rcv_wnd = tcp_rwnd_init_bpf(sk);
->> +	full_space = tcp_full_space(sk);
->>  	if (rcv_wnd == 0)
->>  		rcv_wnd = dst_metric(dst, RTAX_INITRWND);
->> +	else if (full_space < (u64)rcv_wnd * tp->advmss)
->> +		full_space = min_t(u64, (u64)rcv_wnd * tp->advmss, INT_MAX);
-> 
-> [Severity: Medium]
-> This is a pre-existing issue, but does the SOCK_RCVBUF_LOCK check happening
-> before the BPF program runs defeat the purpose of allowing BPF to adjust
-> the receive window?
-> 
-> If an application sets SO_RCVBUF prior to connect(), SOCK_RCVBUF_LOCK is
-> set. In tcp_connect_init(), this caps tp->window_clamp to the old
-> tcp_full_space() before tcp_rwnd_init_bpf() is invoked.
-> 
-> When the BPF program returns a large requested window and full_space is
-> inflated, tcp_select_initial_window() bounds space by
-> min(window_clamp, space).
-> 
-> This caps it right back to the pre-BPF full_space and discards the BPF
-> request.
-> 
-> Conversely, if the application did not set SO_RCVBUF but the BPF program
-> adjusts it dynamically (which sets SOCK_RCVBUF_LOCK), 
+Hi Daniel,
 
-I read the above alike: 'a badly written bpf program could be
-ineffective'; not much relevant.
+Sorry for late reply.
 
-This version LGTM; Eric do you have some comments?
+On 2026/8/3 21:05, Daniel Borkmann wrote:
+> Hi Pu,
+> 
+> On 7/25/26 5:49 PM, Pu Lehui wrote:
+>> From: Pu Lehui <pulehui@huawei.com>
+>>
+>> Fixes for bpf_jit_free identified by Sashiko, as previously noted in [0].
+>>
+>> Link: 
+>> https://lore.kernel.org/bpf/28ba19a4-b487-49fd-bbba-04410acdb113@iogearbox.net/ [0]
+> 
+> Given you need to introduce a bpf_jit_free multiple times in the various
+> JITs, could you rather look into moving this code into the core so core BPF
+> code can handle this? Then it would also be easier to test in CI if we can
+> consolidate the subprogram failure handling.
+
+
+Before preparing the next, I'd like to clarify two points:
+
+1. Only target non-pack archs (s390, parisc...),or touch binary-pack 
+archs like x86/arm64 as well?
+
+2. For handling jit priv data without callbacks, I have two options:
+- Option A: Append jit priv data directly after jit_data in one 
+allocation. Then a single kvfree(aux->jit_data) in core frees both.
+```
+// alloc
+jit_data = kvzalloc(sizeof(*jit_data) + addrs_size, GFP_KERNEL);
+jit_data->ctx.addrs = (void *)(jit_data + 1);
+
+// free
+kvfree(aux->jit_data)
+```
+- Option B: Add jit_priv_data to bpf_prog->aux and point to the jit priv 
+data, and free both of them.
+```
+// alloc
+jit_data = kvzalloc(sizeof(*jit_data), GFP_KERNEL);
+jit_data->ctx.addrs = kvzalloc(addrs_size, GFP_KERNEL);
+fp->aux->jit_priv_data = jit_data->ctx.addrs;
+
+// free
+kvfree(aux->jit_priv_data)
+kvfree(aux->jit_data)
+```
+
+Which approach prefer, or do you have other recommendations?
 
 Thanks,
+Lehui
 
-Paolo
+> 
+> Thanks,
+> Daniel
+> 
+>> v3:
+>> - Add fix for private stack leak on arm64. (Sashiko)
+>> - Some minor fixes.
+>>
+>> v2: 
+>> https://lore.kernel.org/bpf/20260725102020.2287770-1-pulehui@huaweicloud.com
+>> - Fix JITs not freeing leftover jit_data when jit_subprogs() aborts. 
+>> (Sashiko)
+>> - Drop fix for loongarch as it's applied.
+>>
+>> v1: 
+>> https://lore.kernel.org/bpf/20260722112754.1615201-1-pulehui@huaweicloud.com
+>>
+>>
+>> Pu Lehui (9):
+>>    bpf: Extract the bpf_jit_binary_hdr helper
+>>    s390/bpf: Fix memory leak in bpf_jit_free
+>>    parisc: Fix memory leak in bpf_jit_free
+>>    bpf, sparc64: Fix memory leak in bpf_jit_free
+>>    ARC, bpf: Fix memory leak in bpf_jit_free
+>>    bpf, arm64: Fix memory leak in bpf_jit_free
+>>    bpf, arm64: Fix private stack leak when JIT failed
+>>    riscv, bpf: Adjust bpf_func to account for CFI offset in bpf_jit_free
+>>    bpf: Fix double-free RO header in bpf_jit_free
+>>
+>>   arch/arc/net/bpf_jit_core.c      | 19 +++++++++++++++++++
+>>   arch/arm64/net/bpf_jit_comp.c    |  6 +++---
+>>   arch/loongarch/net/bpf_jit.c     |  6 ++----
+>>   arch/parisc/net/bpf_jit_core.c   | 19 +++++++++++++++++++
+>>   arch/powerpc/net/bpf_jit_comp.c  |  5 +++--
+>>   arch/riscv/net/bpf_jit_core.c    |  8 +++-----
+>>   arch/s390/net/bpf_jit_comp.c     | 19 +++++++++++++++++++
+>>   arch/sparc/net/bpf_jit_comp_64.c | 19 +++++++++++++++++++
+>>   arch/x86/net/bpf_jit_comp.c      |  7 ++-----
+>>   include/linux/filter.h           |  2 ++
+>>   kernel/bpf/core.c                | 19 ++++++++++---------
+>>   11 files changed, 101 insertions(+), 28 deletions(-)
+>>
 
