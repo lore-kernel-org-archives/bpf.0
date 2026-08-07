@@ -1,131 +1,99 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039EA18B0F
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 04:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A75233943
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 04:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786075801; cv=none; b=js9KjUysShWwuJEi6WzPbHPmCCmohqse4CswGXgGXEANv7FPnc6fEa+lyoN8hP6c818TfkZPAXwy+tjHuQ35Wwo3R3aUt/mgpSyz/59MLRYm+FEy9KgO/i/tpyoKLBFCXkgM/QwUji1+belgba6oq0SZKmqVC2/bD3FygssinV8=
+	t=1786077540; cv=none; b=rD56BouAcatw9yALfW4H9ppji3L4kMd9sZlxSx47wr91Q4nDOzty+o2akhnboyIvZWA91CTd/8RZ1DM/BfQnf3zoHaP8CWwhcRIamHkJRamg49myYPmZyAHMHoHOt5p8a9lcTs3wfH3Ds4e5VaGCCjGFDM8OUiQTlH2yxoG8OKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786075801; c=relaxed/simple;
-	bh=yENHJ+8tN2wzgnvqBRUCsG31UdpOJyeHHd6xMnU4sGs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=O59TtUvjuyJGzLKbzfhI3zMrOotgunEe2hmG8dp3+vnun/yEcLF8H9wXPsIFIuu7w/tAkvZKoIr/h919Gv2F2/ECYddWyjcP0eecpclZzRFpJNbsAGkXZMsq13XcZ9f9wAfIUwUk3Pb735LyFPxBtysU8dkS7LJsVQ2BCvusnno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tC20MPkC; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786077540; c=relaxed/simple;
+	bh=DLdu/5Sh/+2vhc5WLf2oJ6t8a9P9N5xUSUsJ0s2Kr5k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=nwmdBcEtoEmwjnPt90UCDO7m3o4h0SCJQPonrGLSNnl0ZPMT7aYQSl9EDRvKhdCKMB290tdl9nqiqRyPzosC5LIw29v+pKyi8vLo2yJR92D4FeXl4Hf8FYNrwCRUY12VK6xI0XZ1ts6Bu4KKZjdAuwjx+2ZQw8ZDNMM04Tu7xWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4vvdhcb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tC20MPkC"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so3184105a91.0
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 21:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786075799; x=1786680599; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=yENHJ+8tN2wzgnvqBRUCsG31UdpOJyeHHd6xMnU4sGs=;
-        b=tC20MPkC9l9VNACT/pNvnD/OwIsBsW+yj73B1QDTn4LAuH7yUK0afMqb97OpUN/kgj
-         SA9DfTZlAjUnTUqObhKKl5whotJ1XPY17y6YgjpJgrmJs5PnDleHkjEeBrNbO+0dRn4l
-         9/lPgtd+g3l/tCdSP4Ws4kCjacrVniV644zdjfm7LtBYWNUbEsRwrIwk7gdJj2JCx6JP
-         8lIcBVe1jQvnQzI9IAhIlOF9QEIcqksc7qMwjY0T5AvJsImvwzVrgzs4ly4fh4d6HLHN
-         AkB7CYOgiwzIORH15KDGwKtOaQ6IJHuVZx9XVB0iJpzwTiaxgRQfnXO49afE0IKg129o
-         y4Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786075799; x=1786680599;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yENHJ+8tN2wzgnvqBRUCsG31UdpOJyeHHd6xMnU4sGs=;
-        b=H9ZB01ABDCGdiWziE1BQSyVX61X1hBHbS9w+cTvHM/WMbbmNcYc54gTdjU2/13Zefk
-         Ze87tDqvp1f1xIerD1vN12QgMt0Hko9pMYTM2R9an4j1B0fPgqOhadV//SaQRviLIHUV
-         sxk/A74eVZXK+y1JTvTZ9sHSX1jRqDtlKtnTkb6IcgenHRHNuGpDaelbLsw8l2HLMnqS
-         g9iiqEfRzxLuAtkDhN/1S9Vf9VbZ+7mBpPJf3XV8NmhRRTgCPXlb+97USZpEL0JM8iZ8
-         Ly4kVzWnfkJcmSIyHycsv/5xH9P2riZqU6KsC/kvlbWgQci2JU1haMeSbO01yt8Ojyjx
-         T5vg==
-X-Forwarded-Encrypted: i=1; AHgh+RoVF/qPIvuLsR+sf9TE+avyGWG6i1PzII3T/ZEIucmVNEP+vPYULjPpDq3Z707gUAjnCw4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywco4Vug2GQLQM1gTgIl3hj3TtdCF3do6JML0V5+yOQX7WTBuk/
-	5Rz+MkKiAM/gKKYyD1wEGiVJSwdD+Pfybyoro6iVkE23+eUEcKv5P0Yj
-X-Gm-Gg: AR+sD13JU27dEoM8IFwBchLKZmDhWwJ1L1LBcJxgykJuy0yTeXujzNoq/AxEq43qfMj
-	0Xq3Hp+EvN9kZbaGtzDZCDg0VDq4DsmM9KBq+1+tpS8dn5FKOX4ej1ea31fCgm2WXA8xuN43Xtb
-	piiRzmU7EK4X49qablDL6p8EKJx0XSMXLhaHhVHM22XbuGFWdIVItxqS36rnW2qw8HzAAoQ1kx2
-	9I7gy20wCspRpFbTcjNPXDIaKQYnVwLtjXNA+H+uM6fzUHs4GHSG3WaSYhTXaFJwFd/u/G+YNl4
-	AkbrrA+HWAxwluG/J2BDQP2MneyVoa2kWbWEnyslnmRg19McLZDcvVOW0/aI57ut8AN516z9Lul
-	P7pODybtLckDllyle5NNX/RNKzecHsVWaaEXBshq9WkG5PdwCZPyi2TbENzfMYcm6mQNT8EDH2F
-	tkiBafjGx/I9aF9+5y4AvQ2/0qYv6rsHNoQJ+xJDuOhznhGjxVgKCSLwLAIJ0bvo4d8YnsUpFUc
-	pg6iSj3OHa895Bg
-X-Received: by 2002:a17:90b:520a:b0:38f:5828:a40c with SMTP id 98e67ed59e1d1-3903c59a6eemr20650424a91.10.1786075799298;
-        Thu, 06 Aug 2026 21:09:59 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3925fc6dfcdsm596651a91.4.2026.08.06.21.09.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 21:09:58 -0700 (PDT)
-Message-ID: <26a3964d3d6a6a0e725b19eb81e03743b9c2acf9.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 07/13] bpf, x86: Convert struct_ops arena
- arguments in the trampoline
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis	 <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Thu, 06 Aug 2026 21:09:55 -0700
-In-Reply-To: <20260805210427.3218326-8-memxor@gmail.com>
-References: <20260805210427.3218326-1-memxor@gmail.com>
-	 <20260805210427.3218326-8-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4vvdhcb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B45D1F000E9;
+	Fri,  7 Aug 2026 04:38:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786077537;
+	bh=pmiID+1+jd0vknmwxmwSPCqSvOHEDEdBEfhS9BGhvaM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=F4vvdhcbidX8M5v/hU4STdeMVU8gC9YUOxDuCsHFRpH3OV/TtYNADdd6aAKxK5TJn
+	 +xJgWEdSMz17+sR1qskwwMlWtOSb/edGFYHzoZtx0iGF3cHWzrl5U7sHUt5RISvxfT
+	 Fdt7ZxG0FBogLGHFpm3Ho94Y3Cl2qNvVYDbUe6rC5XP6lz+GUFk7rV2hDM0WG9D55f
+	 bQeZH46jNioALQ/JRa2j9zKaAUQnQ6PCbLFM8KWGV/T0zzp+i9Z3MnVQfv2EqQ9ULU
+	 BPfCJEMsfv8iUR6M/NluVOcvb7EpNKQVih1ceHsBaZBwOCJlgf3AecPWTrl3BACtrZ
+	 1cq8LIabtlTag==
+Content-Type: multipart/mixed; boundary="===============1179773625317747549=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <b394c5635c62edc015cff3a4e75521d190684aca56257f8a55b822bac4f4b704@mail.kernel.org>
+In-Reply-To: <20260807032029.78092-6-ihor.solodrai@linux.dev>
+References: <20260807032029.78092-6-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v3 5/6] selftests/bpf: Verify decl tags emission in resolve_btfids test
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com
+Cc: alan.maguire@oracle.com,jolsa@kernel.org,emil@etsalapatis.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  7 Aug 2026 04:38:57 +0000 (UTC)
 
-On Wed, 2026-08-05 at 23:04 +0200, Kumar Kartikeya Dwivedi wrote:
-> From: Tejun Heo <tj@kernel.org>
->=20
-> Implement the struct_ops arena argument conversion on x86. save_args()
-> receives the arena base from bpf_tramp_arena_base() and consults the
-> btf_func_model argument flags as it copies each native argument into the
-> BPF ctx, routing a marked argument through RAX:
->=20
-> =C2=A0 movl %esrc, %eax=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* truncate and cle=
-ar the upper 32 bits */
-> =C2=A0 subl $base_lo, %eax
-> =C2=A0 movq %rax, ctx_slot
->=20
-> A nullable argument tests the full 64-bit kernel pointer first:
->=20
-> =C2=A0 movq=C2=A0 %rsrc, %rax
-> =C2=A0 testq %rax, %rax
-> =C2=A0 jz=C2=A0=C2=A0=C2=A0 1f
-> =C2=A0 subl=C2=A0 $base_lo, %eax
-> 1:
-> =C2=A0 movq=C2=A0 %rax, ctx_slot
->=20
-> The 32-bit subtraction is sufficient since (u32)(kaddr - base) =3D=3D
-> (u32)kaddr - (u32)base, and it clears the upper half as the JITs require
-> of arena pointer registers. Stack-passed arguments already reload
-> through RAX, so only the subtraction (and the NULL test) is inserted
-> there.
->=20
-> Keeping arena and nullable classification in btf_func_model avoids a
-> parallel trampoline slot bitmap. bpf_tramp_arena_base() returns a base
-> only for a single-program struct_ops indirect trampoline; other
-> trampolines pass zero and perform no conversion. The size probe reruns
-> the same emission with the same model and nodes, so the image size
-> matches by construction.
->=20
-> With both the kfunc and struct_ops directions implemented, flip
-> bpf_jit_supports_arena_args() on for x86.
->=20
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+--===============1179773625317747549==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-[But please fix the botched squash discussed earlier]
+> diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> index 8482f00046d4c..732cfed35e1c5 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+[ ... ]
 
-...
+> @@ -260,6 +284,22 @@ void test_resolve_btfids(void)
+>  	check_kfunc_set(&test_kfunc_set);
+>  	check_kfunc_set(&test_kfunc_set_rev);
+>
+> +	/* Check resolve_btfids emitted a bpf_kfunc decl_tag for each kfunc */
+> +	for (i = 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
+> +		ASSERT_TRUE(btf_has_decl_tag(btf, DECL_TAG_KFUNC,
+> +					     kfunc_symbols[i].id),
+> +			    kfunc_symbols[i].name);
+> +	}
+> +
+> +	/* Check resolve_btfids emitted bpf_fastcall for KF_FASTCALL kfuncs */
+> +	for (i = 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
+> +		if (kfunc_symbols[i].flags & KF_FASTCALL) {
+> +			ASSERT_TRUE(btf_has_decl_tag(btf, DECL_TAG_FASTCALL,
+> +						     kfunc_symbols[i].id),
+> +				    kfunc_symbols[i].name);
+> +		}
+> +	}
+
+This isn't a bug, but could the bpf_fastcall check use an ASSERT_EQ form
+instead of the conditional ASSERT_TRUE?
+
+The arena block below this code uses:
+
+	ASSERT_EQ(is_arena_tagged_ptr(btf, proto->type),
+		  !!(fl & KF_ARENA_RET), name);
+
+which checks both directions: flagged functions have the tag, and unflagged
+functions don't. As written here, the second loop only verifies that
+flagged kfuncs get bpf_fastcall; it doesn't check that kfunc_a, kfunc_c,
+and kfunc_d (which lack KF_FASTCALL) are correctly left untagged.
+
+Using the same form as the arena check would fold the two loops into one
+and cover the negative case as well.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31144437704
+--===============1179773625317747549==--
