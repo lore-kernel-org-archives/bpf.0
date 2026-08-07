@@ -1,375 +1,136 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C06F33C19E
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 17:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786124022; cv=none; b=TrltyVMO0Z6HVs8Sttk/P6zU47EivW498iT1FJFO5OVr5sBmtXl1DslqSzPEN0d770MJ85LCy5AG3zZuZ68i2qcd/ntizd47vUS+95/w+hG4WH2Cd3viuwjfXErqWUTkviMciKLoO83zo6hnvWkxgXv9TW4gmQRLJdsn9uRAPvk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786124022; c=relaxed/simple;
-	bh=36xJJx+rSpHrlu2ubi1CyhFmFGmq5DFdkwIdFl9v1Is=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UYSPzf2+ejYBsbd/RDBaPV+w1cfuawTi5bt9EY1WZDzS5t6lh17xTDk6COxUvmRZafSdyZ8whTGJf2D139IDRcnVAh7enm2QE5sp7o0AdUGbiqsvVEGEaOJOhJhUemrSkYnzFVM83tkiRJxyPpWrhJ1hFSnRaZLv61URxTi0NpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P6khcOTb; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CC8274641
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 17:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786124065; cv=pass; b=bPMt3FWJ7e/GgISMvMpz2y/DS9KB9Lafcir7K8BgEALwWi1k97jA2M+4UvQfsLdyJngHI4uRYTM6PrlEF1jDQ0M+SDRTaCskDE/jc1zIg++CzctY9XgZsQycc8aQ2cOXRb9sKa0MPfslLR/RLv7k5VJBm0mxKfGrpz5INF1DfJw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786124065; c=relaxed/simple;
+	bh=Xj42kzvtY7hVZXpL84O/HcqpcwKY6/OAxbNIO5KfMOQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K7v3SM6YgQjqsG8yo5hJjyl75UCqE+eH9MSrQ1WwpgmXkW2sAeTxADy1C51b16Hom4GBF1gm3rmtiP3sw1j7/DwVt1C/+5X+t/rBeCrXUrZXANE+IgJp6H4ILSlmc2hmM/fxZaXMvZYqsOvuYbgBGtOGPQIYab4katRpSgINpJ4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Try16zb0; arc=pass smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P6khcOTb"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-4798bea72f9so2270277f8f.1
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 10:33:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Try16zb0"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cecdc24b1cso4471765ad.1
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 10:34:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786124063; cv=none;
+        d=google.com; s=arc-20260327;
+        b=EjhK5tuhNTt0hc6NzYFo0hIId01RTJDxNAjBAkQkOJIs7qWFGlVe8IJMh0KO4LAzfT
+         cgiRor8y3gnd8lcAi+tdWpYjc0PFJKbeAitftFIXwEez5rxGXyStVxxGX9KNRi97FRrw
+         WY0aEP9exO546vM8g2Nu7MwQmC79U+bPG5BEr4vDWks2Dc1cUUhoIk1BxxIUO2F8+HxJ
+         tcdKBud4ogpiwU89+CGBnoy91S22x1DPKderyWaiTcvu7Cg0+t6xoktLqRwyIeYmZTlo
+         Q3OK2zfFbGkI6Wwn+fnr3hWfd5cBST8MeddllFUf+nWmWVeuOOUsSU+owk40C54lfgrn
+         APww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=6kvT16JAmy75WGpIzBN7wM7HnztOWxyNPMwrylGyhI0=;
+        fh=iK240bwQiB1gfieYCTMFqnY6uaZAEZ07SxsZ7Lvovvo=;
+        b=lHv9TggIexJbGOvSgKszSkOmTYaIvSnGSKE+1x19HT3MPkaMnK5YiVCBN5iMFkJERy
+         eVH0p3c3+ej7HBNuKbk2BwuQkOkOg7aiZtmoAdZmQL2yLWrgkVZoqzZpr4IX3Y4e1YTC
+         yRLZGriLxP96yi7Ht3AwBPw/VUIAkftGakey1NSCsq/1qCb/VbQHY88IJykLMt7SLacU
+         GamPO52EvrjiQvCmUzxeACxqKRMTq0VZqo9pFQxEn3Y9i8fgfjkChenPi8Z95tYy4IGf
+         SoRe7ABbJcmmJ3gwvTpwNSfqKMW3jEkbS2pmKfVMrUFdEubIaPmnOPGSMfbGaqoDODZ7
+         S2Hg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786124016; x=1786728816; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3WeEcnWNRin83bx8B/hDqgB2G8eYV9Ff1QenpcTFLNA=;
-        b=P6khcOTbJg2QXGAKwvagoOFrdO8LfyjNo2iX23g4+7LXnX8zUeQonuwlIKbQjuh9Nd
-         J78o8ZwA+Jd9ptoDGkkevg5uEWttX+bvGWq7jLGsynPptcI8aPQGrGxyffS+1wk+oo0T
-         kSPWgB+ahHNGDPbfH9TziLInRVF1q7fpFmWkhcEpxiup1P7RAnHRdcHMxmmRfLqhvpEx
-         IuUjm9MQ/iSxT4uPk+UjadRfjL7FEUfL9XclUBHwEbqYS4Ia/mY4AmffYRPdokrfzGOV
-         m98cfawTY8bnvMPs5+RcjHUMk7QYXvH8dpBywUAOpnY+ET7TPrebaUzXw6tNMmnpgek+
-         9Ltw==
+        d=gmail.com; s=20251104; t=1786124063; x=1786728863; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=6kvT16JAmy75WGpIzBN7wM7HnztOWxyNPMwrylGyhI0=;
+        b=Try16zb0Y+SEXPUVlMMTVAFb3+FjmEJlwOdQKXRsjpsRu4/0vx0PwfQYg3WVJbqVi2
+         Bj1ycxJV0mTuL121CGOQ1E3VJybp8UVqFnfTqQYvNmhsnJNenZFMfd0jkBL2KDDBLsJD
+         01qUFoyI5p2Pc5zd2DwKCXTsyNe0YymhJKuBoqb+H9ZRBfx47ARGd+Ru2mtRx9bH2avX
+         bbSh9s56rDVCT62yGURt2enRg1g5Df0pcFgcIJaLkSVvblaO4yshlh86PfIAROt2MsQw
+         r4HryHQkqc9utLSgfHZVn10OrZEFIMqx6AUaOxqweRL9dlfkosTgyxInIxWImbHvB+fo
+         OQlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786124016; x=1786728816;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3WeEcnWNRin83bx8B/hDqgB2G8eYV9Ff1QenpcTFLNA=;
-        b=VoSFA1USGWZbQbt+YsvKdqO3qm4QPmzr1H5O4c2wT6v8R3mnJ1/8lA70wX0BU2ZFX2
-         v4VJNa27Ah1rtmYKteQbie7FLxkv98l+6dOew4s1y3KX4ahnbH294tPYy2dOsZPBUQHq
-         B3S8xWBqK6zbglXEh+uARdBfI2E7BmK9Y8oVS1jyGEX5D4kY7tcHO1D1OrohjjxLbcFS
-         pPqFHIydCOFoLFQsbjvVfgHOgX8MSs+K+9p4r8isjz4k+bdH24EKOK/prjFya+g4wMpo
-         EJDMtgUegj3NTrWMZnuW2f+7OIebuaFEYmkbGWIeZ7Sy0xEwp7GH6jfMYREVVCcGb6OE
-         RFPw==
-X-Gm-Message-State: AOJu0YydkdKIfJjZjZhd7mIoe4xmNGk7hOPRHXBakQ/z3Lx4x44yUuLg
-	nKeSffH76O+CkWQLqM3dYfOztJRRoILgkutl3wMIEghNfIOu8cs3uGE8
-X-Gm-Gg: AR+sD10Tpvl7S3YaBnawL16Hba8LpEWwyLE6tky2QjB79ii/qrnc0jp5Nykz12uxTvz
-	2u5HYW6FmXB7SdMf2gq5nG2XaXIYwzD8EjzU7Hq5hnZoDApG1wyFivpXIhBQ839LPnpVC+15FP0
-	lBmv1MPpX3EOUoowrUdl10g50ZunaY+uG/25BIlU3UUATludBvyWxWeE+vZ39uJATuy0JhGIcEl
-	LoY6UiwXphi7RFS9tYEnsZlxLTMJqtQT4b0B9xvfwQtlRgo27MkAAfCyuFaSowGywzzaERxm8zb
-	PyDiK7MgMlLnq9YtVckXjzXRUD2iL/zeHOsJCjNLqCuqc7wxALb926s3QJipDI3NQSJ5EM0+y5p
-	h2LTtE5EG8lNMcQcw1yFoktD5uMDtVfS3fLkuut3yXiNRX6kVmkkp3oq3LBX56ulIfeM+sLd5hW
-	HurwWstI23yrfR2uH3BQITOK5Z6NQFsjfco9Scni8SjsYISuVgV+AYyAl4u6vJEOfgiEg1lYY90
-	QkFgyPUUuISDaXxrzwyivpslLLTDuSANUIzmwxySv67UHHr4afDHmyirRn/
-X-Received: by 2002:adf:d006:0:b0:47f:9171:bca2 with SMTP id ffacd0b85a97d-47fec62a14amr30940114f8f.27.1786124015714;
-        Fri, 07 Aug 2026 10:33:35 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-480021457ebsm7382587f8f.6.2026.08.07.10.33.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Aug 2026 10:33:34 -0700 (PDT)
-Message-ID: <7ce1d67b-ae88-445c-b4f8-ffa0eea9befc@gmail.com>
-Date: Fri, 7 Aug 2026 18:33:34 +0100
+        d=1e100.net; s=20251104; t=1786124063; x=1786728863;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=6kvT16JAmy75WGpIzBN7wM7HnztOWxyNPMwrylGyhI0=;
+        b=qtcNFw0BDs6by1uZVtC24TWUA3J8wcsoEgDAsO8ZSIjjREbaWDufxr1v35G9ouo4PS
+         L0Yya2Vp7iVL0ieueHd7Aj6cBCDIe4PDdLRitWuiwJxm2CBkEPnSjVxZtnZAbWaP3Kvk
+         /BFXskT3NIl9k8g4TbBtlBOs2rEmBQkGlkowv67utg121RF28Y5v8BoYPGxvbJGxuZXk
+         JXFU8HEZdV/HwB8P+blFpYdfRMSpFua5iKibfcI1gYsQtOkZFo6baDFE/JiKabaJi1jf
+         2UiH00adin0NWiBfHW6ZtLd7G+xYZFtYMnG2e2bDn8N8mzOJrT9SxSpR92Re/WOV3dbK
+         7tBA==
+X-Forwarded-Encrypted: i=1; AHgh+RqduKM7h+ZQ7jj1iIbJyv5I06PVK09R4doaYihS5ogA9iX2darBRDwsynBxkzQvzgXHV3k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1E8TCkQYHcwbtM3YaqJrbfvyArvqJnAR4ovTbOx9rIQe/J/ug
+	eOKhu8WQarCDvyQtR8htY8iJbH3D/Uxm4C1zRzuPRsZOALCb4wAzEXbdFonD/jU5pk+hHpF7tCt
+	DHK4tYGzZCk6wy2mVjXmBfH+rGWB86jM=
+X-Gm-Gg: AR+sD1346xjin19Yu4l2yDHV5J7CsmLyrnOFSqxmEtog/oQAHVOjqYBgvnAKiwOSVHW
+	ve0R4ZgCABxdtVgoyZnw/5jA1yYNujJe7jQntR15kAynsCGqshjNVG59InelMWy+gaoyT9MzXRL
+	pbbW98teujaod/ohStdcK+dvbLRClvGRBKoFry47lbr7iohDcq4Jwz6vlLQDwSlxoBv2FqAtRpn
+	X/0p94WjErsxDcsUVPc5BMGGsXGq7iTKlu3w4MlSBq8Ym8sr6dl891nnJVQop0y6B4h8kaHIVsw
+	J8f/gAqv/Hi1a5x54p8e877hjLoHAwpKf8Ul7dVLSQUu3hAGCZmCJhYW7TYOBCc8e9BbsQyTS4s
+	k4G2sVb2WwiSP3azZJiC5eSZhyEa6NYhfZmQxgSHtx+RGcduom7KdntVcZQdt
+X-Received: by 2002:a17:903:2c0c:b0:2cc:d6de:d58e with SMTP id
+ d9443c01a7336-2d0cab4cf8bmr196602745ad.4.1786124063116; Fri, 07 Aug 2026
+ 10:34:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/2] bpf: htab: Reduce elem_size by 8 bytes
- for small key sizes
-To: "T.J. Mercier" <tjmercier@google.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260805223516.1495988-1-tjmercier@google.com>
- <20260805223516.1495988-3-tjmercier@google.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260805223516.1495988-3-tjmercier@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260731193102.110693-1-acme@kernel.org> <18b557a8-e1ca-46cf-b03f-5e68490c9229@oracle.com>
+ <anXTAComw6XAvnXU@x1>
+In-Reply-To: <anXTAComw6XAvnXU@x1>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 7 Aug 2026 19:34:10 +0200
+X-Gm-Features: AUfX_mzzvBqFiv6OKNhMJZDHG6Wjkrtx0DJ0DXR2V4K4yDYcAFM1opjoNTiHmlY
+Message-ID: <CANiq72nHWY638h4mxJCfh_HFtzhwFEPyo6a-7k_3CxZsRV+Jiw@mail.gmail.com>
+Subject: Re: [PATCHES 00/12] pahole: Support more rust tags and references to
+ dwz alternate debug files
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Clark Williams <williams@redhat.com>, dwarves@vger.kernel.org, bpf@vger.kernel.org, 
+	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Mark Wieelard <mjw@redhat.com>, rust-for-linux <rust-for-linux@vger.kernel.org>, 
+	Gary Guo <gary@garyguo.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/5/26 11:35 PM, T.J. Mercier wrote:
-> For standard and PCPU (non-LRU) hash maps with small key sizes (less
-> than or equal to the word size), comparing keys requires only a single
-> instruction. Storing a cached 32-bit hash value to shortcut full key
-> comparisons provides no performance advantage for small keys, and
-> consumes memory for every element.
-> 
-> This memory can be saved by eliminating hash along with its associated
-> 4 byte padding before the key, reducing the elem_size (and key_offset)
-> by 8 bytes for standard and PCPU maps.
-> 
-> Introduce htab_has_hash() to check whether a map requires a cached hash
-> field. Update htab_elem_set_hash(), lookup_elem_raw(), and
-> lookup_nulls_elem_raw() to conditionally bypass hash checking and
-> storage when htab_has_hash() is false.
-> 
-> Together with the previous patch, this reduces the minimum standard and
-> preallocated hash map element size from 64 bytes down to 32 bytes, and
-> non-preallocated per-CPU element size from 64 bytes down to 40 bytes.
-> 
-> Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> ---
->  kernel/bpf/hashtab.c                          | 108 +++++++++++++-----
->  .../selftests/bpf/progs/map_ptr_kern.c        |   2 +-
->  2 files changed, 79 insertions(+), 31 deletions(-)
-> 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index f54366da459f..9967268d453d 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -100,6 +100,7 @@ struct bpf_htab {
->  	struct percpu_counter pcount;
->  	atomic_t count;
->  	bool use_percpu_counter;
-> +	bool has_hash;
->  	u32 n_buckets;	/* number of hash buckets */
->  	u32 elem_size;	/* size of each element in bytes */
->  	u32 key_offset;	/* offset of key in bytes */
-> @@ -123,15 +124,13 @@ struct htab_node {
->  
->  struct htab_elem {
->  	struct htab_node node;
-> -	u32 hash;
-> -	char key[] __aligned(8);
-> +	u8 data[] __aligned(8);
->  };
->  
->  struct htab_elem_lru {
->  	struct htab_node node;
->  	struct bpf_lru_node lru_node;
-> -	u32 hash;
-> -	char key[] __aligned(8);
-> +	u8 data[] __aligned(8);
->  };
->  
->  /* Only for non-preallocated PCPU maps. Preallocated PCPU maps don't need
-> @@ -140,13 +139,13 @@ struct htab_elem_lru {
->  struct htab_elem_pcpu {
->  	struct htab_node node;
->  	void *ptr_to_pptr;
-> -	u32 hash;
-> -	char key[] __aligned(8);
-> +	u8 data[] __aligned(8);
->  };
->  
->  struct htab_btf_record {
->  	struct btf_record *record;
->  	u32 key_size;
-> +	u32 key_offset;
->  };
->  
->  static inline bool htab_is_prealloc(const struct bpf_htab *htab)
-> @@ -247,24 +246,31 @@ static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)
->  	return (struct htab_elem *) (htab->elems + i * (u64)htab->elem_size);
->  }
->  
-> +static inline bool htab_has_hash(const struct bpf_htab *htab)
-> +{
-> +	return htab->has_hash;
-> +}
-> +
->  static inline u32 htab_elem_hash(struct bpf_htab *htab, struct htab_elem *l)
->  {
->  	if (htab_is_lru(htab))
-> -		return ((struct htab_elem_lru *)l)->hash;
-> +		return *(u32 *)((struct htab_elem_lru *)l)->data;
->  	else if (htab_is_percpu(htab) && !htab_is_prealloc(htab))
-> -		return ((struct htab_elem_pcpu *)l)->hash;
-> +		return *(u32 *)((struct htab_elem_pcpu *)l)->data;
->  	else
-> -		return l->hash;
-> +		return *(u32 *)l->data;
->  }
->  
->  static inline void htab_elem_set_hash(struct bpf_htab *htab, struct htab_elem *l, u32 hash)
->  {
-> +	if (!htab_has_hash(htab))
-> +		return;
->  	if (htab_is_lru(htab))
-> -		((struct htab_elem_lru *)l)->hash = hash;
-> +		*(u32 *)((struct htab_elem_lru *)l)->data = hash;
->  	else if (htab_is_percpu(htab) && !htab_is_prealloc(htab))
-> -		((struct htab_elem_pcpu *)l)->hash = hash;
-> +		*(u32 *)((struct htab_elem_pcpu *)l)->data = hash;
->  	else
-> -		l->hash = hash;
-> +		*(u32 *)l->data = hash;
->  }
->  
->  /* Both percpu and fd htab support in-place update, so no need for
-> @@ -405,7 +411,7 @@ static int prealloc_init(struct bpf_htab *htab)
->  	if (htab_is_lru(htab))
->  		err = bpf_lru_init(&htab->lru,
->  				   htab->map.map_flags & BPF_F_NO_COMMON_LRU,
-> -				   offsetof(struct htab_elem_lru, hash) -
-> +				   offsetof(struct htab_elem_lru, data) -
->  				   offsetof(struct htab_elem_lru, lru_node),
->  				   htab_lru_map_delete_node,
->  				   htab);
-> @@ -532,7 +538,7 @@ static void htab_mem_dtor(void *obj, void *ctx)
->  	if (IS_ERR_OR_NULL(hrec->record))
->  		return;
->  
-> -	map_value = (void *)elem + sizeof(struct htab_elem) + round_up(hrec->key_size, 8);
-> +	map_value = (void *)elem + hrec->key_offset + round_up(hrec->key_size, 8);
->  	bpf_obj_free_fields(hrec->record, map_value);
->  }
->  
-> @@ -558,7 +564,7 @@ static void htab_dtor_ctx_free(void *ctx)
->  }
->  
->  static int bpf_ma_set_dtor(struct bpf_map *map, struct bpf_mem_alloc *ma,
-> -			   void (*dtor)(void *, void *))
-> +			   void (*dtor)(void *, void *), u32 key_offset)
+On Fri, Aug 7, 2026 at 2:43=E2=80=AFPM Arnaldo Carvalho de Melo <acme@kerne=
+l.org> wrote:
+>
+> Adding Miguel to the CC list, Miguel we're trying to improve BTF support
+> for Rust, this series handles multiple enabling fixes/improvements that
+> gets us to the next level, i.e. we can load everything from DWARF, now
 
-do we need to add key_offset param? What if we read key_offset from map->htab->key_offset?
+Thanks for the Cc! Cc'ing rust-for-linux and Gary.
 
->  {
->  	struct htab_btf_record *hrec;
->  	int err;
-> @@ -571,6 +577,7 @@ static int bpf_ma_set_dtor(struct bpf_map *map, struct bpf_mem_alloc *ma,
->  	if (!hrec)
->  		return -ENOMEM;
->  	hrec->key_size = map->key_size;
-> +	hrec->key_offset = key_offset;
->  	hrec->record = btf_record_dup(map->record);
->  	if (IS_ERR(hrec->record)) {
->  		err = PTR_ERR(hrec->record);
-> @@ -593,9 +600,9 @@ static int htab_map_check_btf(struct bpf_map *map, const struct btf *btf,
->  	 * populated in htab_map_alloc(), so it will always appear as NULL.
->  	 */
->  	if (htab_is_percpu(htab))
-> -		return bpf_ma_set_dtor(map, &htab->pcpu_ma, htab_pcpu_mem_dtor);
-> +		return bpf_ma_set_dtor(map, &htab->pcpu_ma, htab_pcpu_mem_dtor, htab->key_offset);
->  	else
-> -		return bpf_ma_set_dtor(map, &htab->ma, htab_mem_dtor);
-> +		return bpf_ma_set_dtor(map, &htab->ma, htab_mem_dtor, htab->key_offset);
->  }
->  
->  static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
-> @@ -618,6 +625,13 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
->  
->  	bpf_map_init_from_attr(&htab->map, attr);
->  
-> +	/* Avoid hash memory use and comparisons where unnecessary.
-> +	 * u32 hash reads are always atomic. If we elide them, key comparisons must also be atomic
-> +	 * to avoid false positive key matches due to torn key reads / writes. This is only possible
-> +	 * when the key fits within a word, so check key_size.
-> +	 */
-> +	htab->has_hash = htab_is_lru(htab) || htab->map.key_size > sizeof(unsigned long);
-> +
->  	if (percpu_lru) {
->  		/* ensure each CPU's lru list has >=1 elements.
->  		 * since we are at it, make each lru list has the same
-> @@ -640,11 +654,13 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
->  	htab->n_buckets = roundup_pow_of_two(htab->map.max_entries);
->  
->  	if (htab_is_lru(htab))
-> -		htab->key_offset = sizeof(struct htab_elem_lru);
-> +		htab->key_offset = offsetof(struct htab_elem_lru, data) + 8;
->  	else if (percpu && !prealloc)
-> -		htab->key_offset = sizeof(struct htab_elem_pcpu);
-> +		htab->key_offset = offsetof(struct htab_elem_pcpu, data) +
-> +				   (htab_has_hash(htab) ? 8 : 0);
->  	else
-> -		htab->key_offset = sizeof(struct htab_elem);
-> +		htab->key_offset = offsetof(struct htab_elem, data) +
-> +				   (htab_has_hash(htab) ? 8 : 0);
->  
->  	htab->elem_size = htab->key_offset + round_up(htab->map.key_size, 8);
->  	if (percpu)
-> @@ -761,10 +777,22 @@ static struct htab_elem *lookup_elem_raw(struct bpf_htab *htab,
->  	struct hlist_nulls_node *n;
->  	struct htab_elem *l;
->  
-> -	hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
-> -		if (htab_elem_hash(htab, l) == hash &&
-> -		    !memcmp(htab_elem_key(htab, l), key, key_size))
-> -			return l;
-> +	if (htab_has_hash(htab)) {
-> +		hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
-> +			if (htab_elem_hash(htab, l) == hash &&
-> +			    !memcmp(htab_elem_key(htab, l), key, key_size))
-> +				return l;
-> +	} else {
-> +		/* When hash is omitted, key comparisons must be atomic. Zero extend
-> +		 * the caller's key to the word size to support an atomic compare.
-> +		 */
-> +		unsigned long k = 0;
-> +
-> +		memcpy(&k, key, key_size);
-> +		hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
-> +			if (READ_ONCE(*(unsigned long *)htab_elem_key(htab, l)) == k)
-> +				return l;
-> +	}
->  
->  	return NULL;
->  }
-> @@ -782,10 +810,20 @@ static struct htab_elem *lookup_nulls_elem_raw(struct bpf_htab *htab,
->  	struct htab_elem *l;
->  
->  again:
-> -	hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
-> -		if (htab_elem_hash(htab, l) == hash &&
-> -		    !memcmp(htab_elem_key(htab, l), key, key_size))
-> -			return l;
-> +	if (htab_has_hash(htab)) {
-> +		hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
-> +			if (htab_elem_hash(htab, l) == hash &&
-> +			    !memcmp(htab_elem_key(htab, l), key, key_size))
-> +				return l;
-> +	} else {
-> +		/* See lookup_elem_raw() comment above. */
-> +		unsigned long k = 0;
-> +
-> +		memcpy(&k, key, key_size);
-> +		hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
-> +			if (READ_ONCE(*(unsigned long *)htab_elem_key(htab, l)) == k)
-> +				return l;
-> +	}
+> its time to try to map it to existing BTF kinds and propose BTF
+> extensions when we can't use existing encodings.
 
-This hunk is quite big, maybe move it to a separate function to reuse in
-lookup_elem_raw() and lookup_nulls_elem_raw().
+Sounds cool :)
 
->  
->  	if (unlikely(get_nulls_value(n) != (hash & (n_buckets - 1))))
->  		goto again;
-> @@ -1188,7 +1226,17 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
->  		}
->  	}
->  
-> -	memcpy(htab_elem_key(htab, l_new), key, key_size);
-> +	if (htab_has_hash(htab)) {
-> +		memcpy(htab_elem_key(htab, l_new), key, key_size);
-> +	} else {
-> +		/* Zero-extend key into k for an atomic write to support
-> +		 * lockless RCU readers.
-> +		 */
-> +		unsigned long k = 0;
-> +
-> +		memcpy(&k, key, key_size);
-> +		WRITE_ONCE(*(unsigned long *)htab_elem_key(htab, l_new), k);
-> +	}
->  	if (percpu) {
->  		if (prealloc) {
->  			pptr = htab_elem_get_ptr(htab, l_new);
-> @@ -3191,7 +3239,7 @@ static int rhtab_map_check_btf(struct bpf_map *map, const struct btf *btf,
->  {
->  	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
->  
-> -	return bpf_ma_set_dtor(map, &rhtab->ma, rhtab_mem_dtor);
-> +	return bpf_ma_set_dtor(map, &rhtab->ma, rhtab_mem_dtor, offsetof(struct rhtab_elem, data));
->  }
->  
->  static void rhtab_map_free_internal_structs(struct bpf_map *map)
-> diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> index 373c8d17ea55..6bd4cb68c20c 100644
-> --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> @@ -114,7 +114,7 @@ static inline int check_hash(void)
->  	VERIFY(check_default_noinline(&hash->map, map));
->  
->  	VERIFY(hash->n_buckets == MAX_ENTRIES);
-> -	VERIFY(hash->elem_size == 64);
-> +	VERIFY(hash->elem_size == 32);
->  
->  	VERIFY(hash->count.counter == 0);
->  	VERIFY(bpf_map_sum_elem_count(map) == 0);
+> Inferring from "does any member have a niche layout" means
+> reverse-engineering rustc's layout algorithm, which is explicitly
+> unstable and unspecified. It'd break silently on a compiler bump, with
+> no way to tell from the DWARF that you got it wrong.
 
+Yeah, the LLM is correct here: the Rust compiler gives very few
+guarantees for the default `repr`, i.e. in common cases it has the
+freedom to use whatever layout it wants (i.e. even for essentially
+equivalent types in the same compilation unit) -- the official docs
+are at:
+
+  https://doc.rust-lang.org/reference/type-layout.html
+
+>     u8                  __discriminant;      /*  0  1 */
+
+For the niche cases like `Option<NonZero<u32>>`, what would be printed?
+
+Cheers,
+Miguel
