@@ -1,195 +1,163 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C05473C85
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 12:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A6747126E;
+	Fri,  7 Aug 2026 12:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786104056; cv=none; b=YFJr43ghkSfseWnaLD2MwvL70PcUbtbOZxWa9kgKYvletyMfGJw0qvoP+DgfbG4D79vMPtttA2FMNW3s+J9OCEvKOIEJu5f9cRz6o/LeRGO5gt5WHSNDKZ+nApPs2L1m5QiT3K8tzaG/bW6Koe3VUzMLGO7xHhNgTmhTx2wu+IU=
+	t=1786104318; cv=none; b=Xkz84JL7Rp7HmPB8cOI2yIK4VIEq40c+xyJbE2oozmmjEiIFgaLAwk041sueiUGrA5vKn3pNeULDw4HrLfPJovcuCmzClGboUo7VxF07ksRqDo7HoycG/DedGL3SQwBvaqBau/j/O8icfk6tP1NO/P54aroScngnn8ywq7CrQcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786104056; c=relaxed/simple;
-	bh=ftdTyPsscqtIlYr5PbB2P0WbPIgGWRqFgJUfiZq4qJ8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NSxvxmY3QUH9KteSGPdOiZTc7SkW9dSR7MPxcoejtA8SlwPE+6j5WdOk/YZTyKES4QWKXX3Zj8sBMQcsAcv4A9boWjHP121x+ZIHAJNc6xTMo93o7ZwqaNrqPP6bPmDuW+qjUkP/+gW8VMhysk6OKwv5ddMWfAbSpas14hT5p6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R03/FVOZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786104318; c=relaxed/simple;
+	bh=HK6bB4RkZza2taxtADNDumCDoarmnE8s+VqYqci2C58=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Tnikz+MKQ9FvWBF2GCInAgv6sl6iqNUj6QGRX3aTWx6q4LzdUbAd07B1ndN6RMvFgLgnTLM7SIAPszEmLX0i86zEAy6Si54talE22bqY4e2E+oxId4+J5KkgWqBgxUA25+QcUn/q3xkl45mOwBKabvug0y8YIJQEjfJTXB/HmOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OYRf1KHI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R03/FVOZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F01D1F00A3A;
-	Fri,  7 Aug 2026 12:00:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OYRf1KHI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B06AB1F000E9;
+	Fri,  7 Aug 2026 12:05:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786104039;
-	bh=ATYaES3H7LJPj+NFBnX29IOVLT8bKz5zqlPTk47oRCw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=R03/FVOZzMzD6eQRYbXCqxsp5YkJn/W9qMQuu7q5qf13NSSpSnF+YFUfZQhqzHa/x
-	 kA+WYNgF4gEwcJOzeYZ3XGKpDRQxvOBe2IUWdoWBtB28ypO5liKP2vbnGM01vyw1Q1
-	 9I4QsNuQvoLSlJUO4w5Jt8I/LKAO6nKz0JzrtTUJk6ABiKtfpOuLhKyXpxR5WQeBeB
-	 sF++11yklN7q1WSvXAz66uHopSJVjJBUx/gDMfTgKxlpn+HYkr/LCRmX/6AGTnwu83
-	 zmv+7Yb/DYjPLTslEgaz1VP7jx55Mrbromki0XX2A2h55j/Q1KOfvyX+uHLpy9Kud+
-	 xrA+hZ18Bq6rQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v11 1/8] powerpc/bpf: fix alignment of long branch
- trampoline address
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Saket Kumar Bhaskar" <skb99@linux.ibm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <27ec08c30f6c37b3f25ba735f9cd7f81ff9e98d5.1786099877.git.skb99@linux.ibm.com>
-References: <cover.1786099877.git.skb99@linux.ibm.com>
- <27ec08c30f6c37b3f25ba735f9cd7f81ff9e98d5.1786099877.git.skb99@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 12:00:38 +0000
-Message-Id: <20260807120039.6F01D1F00A3A@smtp.kernel.org>
+	s=k20260515; t=1786104302;
+	bh=F0O/vwyOjW5BLxgWiK5+3RNrPEmfvU3SX8V2SAxQeOQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=OYRf1KHI4u5lJ6+DZBVlBCjL8CjI+4UavWzL7Dt6dU9Y2Cj55oiua+Y8w3PwAL59V
+	 7qKTYzi5TGIkrniSuTLJL8gVkq0q1E2ww3Lq5DMUSRogHmWZYkp3CY6Tg3rVp1WS2g
+	 RjNBszkfq19YZiP2pUluL7DeuEne5r/qF6U2NYs6JfUnjuMFE+B9rHCE9smS14WnSp
+	 MtnxUBAP765WkOipKfAJI/mPepfSUqobechd6FLWs9O7u/x/Ez7Oxe3jSePUdw7vug
+	 rUdS8oILKczyyPoJNxruK35Mhy2nRJ8LZpo6ozTjumLpA+Y+qN9ULmNK8DDTMxbxqz
+	 RCBw2Dv5yKCeg==
+Content-Type: multipart/mixed; boundary="===============6802785607849162190=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <5eb10995ebf94dd2c526d65efb472e748e8edf47ab7a7c660b3128011739b151@mail.kernel.org>
+In-Reply-To: <20260807104403.1013064-1-pulehui@huaweicloud.com>
+References: <20260807104403.1013064-1-pulehui@huaweicloud.com>
+Subject: Re: [PATCH bpf v6] bpf, cgroup: Fix storage null-ptr-deref after replacing prog
+From: bot+bpf-ci@kernel.org
+To: pulehui@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,andrii@kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,song@kernel.org,jolsa@kernel.org,emil@etsalapatis.com,ameryhung@gmail.com,pulehui@huawei.com,pulehui@huaweicloud.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  7 Aug 2026 12:05:01 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+--===============6802785607849162190==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-New issues:
-- [High] Dynamic epilogue sizing breaks JIT pass convergence, causing BPF_E=
-XIT branches to skip the first instruction of the epilogue.
-- [Low] The patch introduces a compilation error in `arch/powerpc/net/bpf_j=
-it_comp32.c` by failing to remove the old 4-argument call to `bpf_jit_emit_=
-exit_insn()`.
+> Syzkaller reported a storage null-ptr-deref issue after replacing prog.
+> This occurs in the following scenario:
+> 1. prog A, an empty prog, is attached to a cgrp.
+> 2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
+>    bpf_get_local_storage helper.
+> 3. link_update is called to replace prog A with prog B.
+>
+> The reason is that __cgroup_bpf_replace fails to alloc and assign the
+> required cgrp storage for the incoming replacement prog. Consequently,
+> the new prog inherits an uninit storage, leading to null-ptr-deref panic
+> when kick the new prog.
 
-Pre-existing issues:
-- [Critical] Out-of-bounds write in BPF JIT due to under-calculated allocat=
-ion size for large programs.
---
+Is the description "inherits an uninit storage" precise?
 
---- Patch [1]: [PATCH v11 1/8] powerpc/bpf: fix alignment of long branch tr=
-ampoline address ---
-commit a15c5c8b15ef787442dd6c60c0e42163a958cb5a
-Author: Abhishek Dubey <adubey@linux.ibm.com>
+Looking at the code, the storage array is not uninitialized in the C
+sense. When prog A (which uses no cgroup storage) is attached, both
+pl->storage[] and item->cgroup_storage[] are explicitly initialized to
+NULL. When compute_effective_progs() copies pl->storage into
+item->cgroup_storage via bpf_cgroup_storages_assign(), it copies the
+all-NULL array.
 
-powerpc/bpf: fix alignment of long branch trampoline address
+So prog B inherits the previous prog's storage array, which is NULL for
+the map prog B needs. The distinction also explains the broader case:
+if prog A used a different storage map, the inherited pointer would be
+non-NULL but belong to the wrong map, leading to a cross-map
+out-of-bounds read rather than just a NULL dereference.
 
-This patch ensures the dummy trampoline address field between the out-of-li=
-ne
-stub and the long branch stub is 8-byte aligned. It modifies the epilogue a=
-nd
-fentry stub building functions to accept the final image pointer and emit a
-conditional NOP if needed.
+Would "the new prog inherits the previous prog's storage array (NULL for
+the map the new prog needs)" be more accurate?
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_c=
-omp.c
-> index 7b07b43575f11..f2e0f9755e653 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-[ ... ]
-> @@ -49,11 +49,39 @@ asm (
->  "	.popsection				;"
->  );
-> =20
-> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
-> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_=
-context *ctx)
->  {
->  	int ool_stub_idx, long_branch_stub_idx;
-> +	int ool_stub_sz;
-> =20
->  	/*
-> +	 * In the final pass, align the mis-aligned dummy_tramp_addr field
-> +	 * in the fimage. The alignment NOP must appear before OOL stub,
-> +	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
-> +	 *
-> +	 * dummy_tramp_addr must be 8-byte aligned for load-register
-> +	 * compatibility. The fimage can be non 8-byte aligned, so final
-> +	 * alignment depends on start of fimage and the stub's instruction
-> +	 * count offset. The OOL stub size is 4 instructions (with
-> +	 * CONFIG_PPC_FTRACE_OUT_OF_LINE) or 3 instructions (without)
-> +	 * before dummy_tramp_addr.
-> +	 *
-> +	 * Emit a NOP here if (ctx->idx + ool_stub_sz) is odd, so that
-> +	 * dummy_tramp_addr lands at an even instruction offset (=3D=3D 8-byte
-> +	 * aligned from an 8-byte aligned base).
-> +	 *
-> +	 * In pass=3D0 when image=3D=3DNULL, conservatively account for space
-> +	 * required to accommodate alignment NOP. In case final pass skips
-> +	 * emitting alignment NOP, the image buffer have 4 spare bytes and
-> +	 * jited_len signifies correct program size.
-> +	 */
-> +
-> +	ool_stub_sz =3D IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 16 : 12;
-> +	if (!image || !IS_ALIGNED((unsigned long)fimage + ctx->idx*4 + ool_stub=
-_sz, SZL))
-> +		EMIT(PPC_RAW_NOP());
-> +
 
-[Severity: High]
-Does this conditional NOP break the JIT convergence loop in
-bpf_int_jit_compile()?
+> Fix this by rejecting a link update if new_prog's cgroup storage is
+> incompatible with link->prog.
 
-If the body size shrinks by an odd number of instructions in the final JIT
-pass, this could flip the alignment and cause an extra padding NOP to be
-emitted.
+Does the commit message capture the full scope of what this fixes?
 
-This would increase the epilogue size by 4 bytes while the total proglen
-remains constant. Could this cause the JIT loop to terminate prematurely wh=
-ile
-exit_addr still points to the old epilogue start, skipping the first
-instruction of the epilogue and potentially leading to register corruption?
+The message describes only the NULL case from the syzkaller reproducer.
+However, cgroup_bpf_storages_compatible() compares map pointers per
+stype, so it also rejects the case where prog A uses map M1 and prog B
+uses map M2 for the same storage type.
 
->  	/*
-> -	 *      nop     // optional, for alignment of dummy_tramp_addr
-[ ... ]
-> @@ -97,7 +126,8 @@ void bpf_jit_build_fentry_stubs(u32 *image, struct cod=
-egen_context *ctx)
+In that case, item->cgroup_storage[stype] would point to M1's live
+storage, but prog B's bpf_get_local_storage() would return M1's buffer
+while the verifier sized accesses against M2->value_size. Since
+bpf_cgroup_storage_calculate_size() sizes the buffer from the owning
+map, this would be a cross-map data disclosure or out-of-bounds read,
+not just a NULL dereference.
+
+Would it be clearer to mention that the fix also blocks the wrong-map
+case to prevent cross-map access?
+
+
+The commit message opens with "Syzkaller reported" but includes no
+Reported-by or Closes tags. Two public syzbot reports match this issue:
+
+  syzbot+e6e8f6618a2d4b35e4e0@syzkaller.appspotmail.com
+  syzbot+4fe468a3f7fac86ea2c9@syzkaller.appspotmail.com
+
+Both are titled "general protection fault in bpf_get_local_storage" with
+KASAN null-ptr-deref at the same location. The reproducers match the
+3-step scenario call-for-call.
+
+Should these include the standard syzbot attribution tags so the reports
+get auto-closed?
+
+Also, BPF_LINK_UPDATE calls that previously returned 0 now return
+-EINVAL. This is an intentional trade-off for a less risky fix, but the
+commit message does not mention the uAPI behaviour change. Might that be
+worth noting?
+
+
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 4355ccb78a9c..5cc9b2d92fd5 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -1018,6 +1018,20 @@ static void replace_effective_prog(struct cgroup *cgrp,
 >  	}
 >  }
-> =20
-> -int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int =
-tmp_reg, long exit_addr)
-> +int bpf_jit_emit_exit_insn(u32 *image, u32 *fimage, struct codegen_conte=
-xt *ctx,
-> +							int tmp_reg, long exit_addr)
->  {
->  	if (!exit_addr || is_offset_in_branch_range(exit_addr - (ctx->idx * 4))=
-) {
+>
+> +static bool cgroup_bpf_storages_compatible(struct bpf_prog *old_prog,
+> +					   struct bpf_prog *new_prog)
+> +{
+> +	enum bpf_cgroup_storage_type stype;
+> +
+> +	for_each_cgroup_storage_type(stype) {
+> +		if (old_prog->aux->cgroup_storage[stype] !=
+> +		    new_prog->aux->cgroup_storage[stype])
+> +			return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+>  /**
+>   * __cgroup_bpf_replace() - Replace link's program and propagate the change
+>   *                          to descendants
+> @@ -1056,6 +1070,9 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+>  	if (!found)
+>  		return -ENOENT;
+>
+> +	if (!cgroup_bpf_storages_compatible(link->link.prog, new_prog))
+> +		return -EINVAL;
+> +
+>  	cgrp->bpf.revisions[atype] += 1;
+>  	old_prog = xchg(&link->link.prog, new_prog);
+>  	replace_effective_prog(cgrp, atype, pl);
 
-[Severity: Critical]
-This is a pre-existing issue, but does the !exit_addr condition falsely
-report large branches as in-range during Pass 0?
 
-In bpf_int_jit_compile(), the true epilogue offset is populated after the
-second Pass 0 loop, meaning during all Pass 0 execution, exit_addr is
-evaluated as 0. This bypasses the branch range evaluation and falsely
-predicts only 4 bytes per BPF_EXIT.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-When exit_addr is resolved in Pass 1 for large programs (>32MB) that exceed
-the branch range, could this cause an under-calculated allocation size,
-leading to an out-of-bounds write when the inline epilogue is emitted?
-
->  		PPC_JMP(exit_addr);
-[ ... ]
-> diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit=
-_comp32.c
-> index bfdc50740da8e..1cf12edf0343f 100644
-> --- a/arch/powerpc/net/bpf_jit_comp32.c
-> +++ b/arch/powerpc/net/bpf_jit_comp32.c
-[ ... ]
-> @@ -1150,6 +1150,8 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *im=
-age, u32 *fimage, struct code
->  			 */
->  			if (i !=3D flen - 1) {
->  				ret =3D bpf_jit_emit_exit_insn(image, ctx, _R0, exit_addr);
-> +				ret =3D bpf_jit_emit_exit_insn(image, fimage,
-> +								ctx, _R0, exit_addr);
->  				if (ret)
->  					return ret;
->  			}
-
-[Severity: Low]
-Is the old 4-argument call to bpf_jit_emit_exit_insn() accidentally left he=
-re?
-
-Leaving this intact right above the newly added 5-argument call appears to
-directly break the build on 32-bit PowerPC architectures due to too few
-arguments.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786099877.gi=
-t.skb99@linux.ibm.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31172497940
+--===============6802785607849162190==--
