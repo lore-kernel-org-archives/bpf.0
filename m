@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A67B38330E
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:42:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993BF38330E;
+	Fri,  7 Aug 2026 07:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786088532; cv=none; b=OGwh8FHQwHu2dLS+toZKJZkBs6ryj62dxAHurd10VMQoisQFJZcKS//BHuFWHVnKiS8XujWcR6EJuuPu7SHOv/sYN39HHIEqU6P4bazxS/ltnNJsUIVp50pBekCP/TsSPCC/Vtyuw/s/ScJyC4thQKbgmEB036ixHl+n3wfCHSg=
+	t=1786088578; cv=none; b=oW/jbCs8jY/lBU4YTgjCeT1kDoiUMVRPEb4qbAhRGx1Gz737VEcq/ouz12GTxYudDvMvop2mJ/NV9fQGXYoaHQpLniUllbRCNbXer2OTmTdSfgC7YbSZjUEfz1RY73qlQ3qydIcOqYFaSRDE7ru/Xy8FhvRpJmjN515sNDpo1Rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786088532; c=relaxed/simple;
-	bh=FtokXmfdkztz0xbosmaFjROXLJa1sTBxuBqsiXBvCIY=;
+	s=arc-20240116; t=1786088578; c=relaxed/simple;
+	bh=kQiyEbz25opNFa9xnKfM8afvDpL3nlbYuUWDxOK4Bf0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=axHXApd/0gDCjxns5tqEg89KP7kjLFf3tkjT6C/6dx1uOSk4gLh3BxZYtN9kcq4jNNSyZdLpBysBxKBaIfbD4Bc47AauGJUbwBcGLuk5YIL5IJkrGLkL6+akLrkCgOTPjOdqxTLwrIr7nJJAfZ83pS2ALCi34Kl+PjMrqlr14gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UmnjodIO; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=nL//Eymidkn8zuaHe7kqdLJZhZfFCv8/o+2cPgpHIx7WayArkkdyooXtuj7+m16tms+nMaxowU41VUqeKZrV3Is1HvxLobIcwncbt+HsUGWWAPCBMDUczzyeROl0Ofk6achUyh0UypHoExL7lV+kMraolFhxAV4VNvp8PY1pz34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=USecdGiI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UmnjodIO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D534C1F000E9;
-	Fri,  7 Aug 2026 07:42:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USecdGiI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0305E1F000E9;
+	Fri,  7 Aug 2026 07:42:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786088531;
-	bh=RQArX7PGhQ+LViffrtkmmGUW/K9LMkxws/TFDd4tUq4=;
+	s=k20260515; t=1786088577;
+	bh=3noUCEdt0fMbRMdVz1vqYmD9qSvLKWilfSiqXDPE/Mw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UmnjodIOguanflQxdsOD9hjjXQ2H2WxHe7hVKX+14ziba0+8TVqkdxTdUaqH2h7gh
-	 NNYOaWhsq5YeMRS9SiHT8YInHBBqvHMOgFcAsuk+fK5pk8cZE0Fjw1oF9tfVHZLCip
-	 v7vTG+j5BMB3h9eWPRYd3w2+aOK7vE5vCkdE+2+dzRSgCl88RSbm8tu94I6yMQUK3v
-	 uc30LNpQFozz9lSQwQ3ejJmV1xfl42hKHs5ozL5o67iqTpDDe89l2thgUEHs/YRZGh
-	 oCqW/SljGQI5eQFeNdxLxOVZR/BYr4T2RKg29Pex0zZyOvHisSfuIrYOVhmaDi0pjY
-	 SeZb5F174z7vg==
+	b=USecdGiIgxTt4XpziDyYY6m1H4pLBVO/8Y506AHav+qxQC9VZ/d3F16wRbpu8dyQu
+	 QwKqtZlC+JyWk9h0obTfx0iR9BeSht5d93ynGljoOVxrQAA/5OLEH7CKNzoZeAol6O
+	 gg1rMsj187vKMClhRHXbgz+2FwqmjtWEMN0QCgm2oM0wErn4cS+QaielSYgQbJ7NKH
+	 PwKP3aaVB1XNwKGJnoFPPHZlNCf3VvstXQRjLB91b6YAF5+qEeQH5WW4aAsBZarAZg
+	 78MQ943eM4SFLhJOIvgSUAFod8BN4JtP1Uy0g0N2gYej8NmtWaVma9fQOJdhDbdeR/
+	 AOSA9uuMVI/GQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/4] bpf: add bpf_thread_wq kthread-backed
- workqueue with cgroup placement
+Subject: Re: [RFC PATCH v1 2/8] perf/core: Add BUILD_ID_OFFSET to UAPI
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hui Zhu" <hui.zhu@linux.dev>
-Cc: bpf@vger.kernel.org, hannes@cmpxchg.org, tj@kernel.org, mkoutny@suse.com
-In-Reply-To: <cfb06f2626062fa60efbbd9d34089819b1a34522.1786086076.git.zhuhui@kylinos.cn>
-References: <cover.1786086076.git.zhuhui@kylinos.cn>
- <cfb06f2626062fa60efbbd9d34089819b1a34522.1786086076.git.zhuhui@kylinos.cn>
+To: "Ian Rogers" <irogers@google.com>
+Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+In-Reply-To: <20260807071818.718751-3-irogers@google.com>
+References: <20260807071818.718751-1-irogers@google.com>
+ <20260807071818.718751-3-irogers@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 07:42:10 +0000
-Message-Id: <20260807074210.D534C1F000E9@smtp.kernel.org>
+Date: Fri, 07 Aug 2026 07:42:56 +0000
+Message-Id: <20260807074257.0305E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,117 +46,110 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Critical] The verifier fails to validate KF_ARG_PTR_TO_THREAD_WQ pointer=
-s for type correctness and exact struct offset.
-- [High] bpf_thread_wq_cancel_and_free() calls sleepable functions but is i=
-nvoked synchronously from atomic contexts during map element updates.
-- [High] bpf_thread_wq_start() acquires a raw spinlock but is exposed to NM=
-I context tracing programs, leading to hard deadlocks.
+- [High] The commit introduces `PERF_SAMPLE_BUILD_ID_OFFSET` and `PERF_SAMP=
+LE_CALLCHAIN_BUILD_ID_OFFSET` to the UAPI and bumps `PERF_SAMPLE_MAX`, but =
+fails to implement the corresponding sample generation logic in the core ke=
+rnel.
+- [Medium] The UAPI header update is applied inconsistently between `includ=
+e/` and `tools/include/`, causing divergence and leaving the canonical kern=
+el header undocumented.
+- [Medium] The ABI documentation comment references `struct build_id`, an u=
+ndeclared structure in the canonical UAPI headers, resulting in an opaque a=
+nd confusing binary layout.
 --
 
---- Patch [2]: [PATCH bpf-next 2/4] bpf: add bpf_thread_wq kthread-backed w=
-orkqueue with cgroup placement ---
-commit 287b8c7d2c6aff4fceb91479e0723ac87382505d
-Author: Hui Zhu <zhuhui@kylinos.cn>
+--- Patch [2]: [RFC PATCH v1 2/8] perf/core: Add BUILD_ID_OFFSET to UAPI ---
+commit 16454ab98fa038eb527938712933e7e488db3d27
+Author: Ian Rogers <irogers@google.com>
 
-bpf: add bpf_thread_wq kthread-backed workqueue with cgroup placement
+perf/core: Add BUILD_ID_OFFSET to UAPI
+   =20
+This commit introduces PERF_SAMPLE_BUILD_ID_OFFSET and
+PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET to the UAPI and bumps the internal
+validation limit.
 
-Introduce bpf_thread_wq, a new BPF embedded map field similar to
-bpf_wq but backed by a dedicated kthread_worker instead of a system
-workqueue. The worker kthread can be attached to a specific cgroup at
-init time so BPF-deferred callbacks run under the resource limits of
-the target cgroup.
-
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-[ ... ]
-> @@ -502,6 +511,7 @@ static inline bool btf_field_is_nmi_safe(enum btf_fie=
-ld_type type)
->  	case BPF_TASK_WORK:
->  	case BPF_KPTR_UNREF:
->  	case BPF_REFCOUNT:
-> +	case BPF_THREAD_WQ:
->  		return true;
->  	default:
->  		return false;
-
-[Severity: High]
-Will this allow NMI tracing programs to deadlock the system?
-
-By returning true here, the verifier permits bpf_thread_wq in NMI contexts.
-However, bpf_thread_wq_start() invokes kthread_queue_work(), which acquires=
- a
-raw spinlock. If an NMI interrupts a CPU that already holds this lock, the
-NMI handler will spin forever waiting for it.
-
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-[ ... ]
-> @@ -839,6 +848,9 @@ void bpf_obj_free_fields(const struct btf_record *rec=
-, void *obj)
->  		case BPF_TASK_WORK:
->  			bpf_task_work_cancel_and_free(field_ptr);
->  			break;
-> +		case BPF_THREAD_WQ:
-> +			bpf_thread_wq_cancel_and_free(field_ptr);
-> +			break;
->  		case BPF_KPTR_UNREF:
->  			WRITE_ONCE(*(u64 *)field_ptr, 0);
->  			break;
+> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_ev=
+ent.h
+> index fd10aa8d697f2..f0712c1471d3d 100644
+> --- a/include/uapi/linux/perf_event.h
+> +++ b/include/uapi/linux/perf_event.h
+> @@ -165,8 +165,10 @@ enum perf_event_sample_format {
+>  	PERF_SAMPLE_DATA_PAGE_SIZE		=3D 1U << 22,
+>  	PERF_SAMPLE_CODE_PAGE_SIZE		=3D 1U << 23,
+>  	PERF_SAMPLE_WEIGHT_STRUCT		=3D 1U << 24,
+> +	PERF_SAMPLE_BUILD_ID_OFFSET		=3D 1U << 25,
+> +	PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET	=3D 1U << 26,
+> =20
+> -	PERF_SAMPLE_MAX =3D 1U << 25,		/* non-ABI */
+> +	PERF_SAMPLE_MAX =3D 1U << 27,		/* non-ABI */
+>  };
 
 [Severity: High]
-Can this trigger a scheduling while atomic regression?
+Since PERF_SAMPLE_MAX is increased, perf_copy_attr() will now accept these
+new sample types from userspace. However, is there missing core kernel logic
+to actually process these bits?
 
-When a BPF program updates an existing map element, the BPF subsystem invok=
-es
-bpf_obj_free_fields() to tear down old special fields in-place. This update
-path can run in atomic contexts, such as under rcu_read_lock() or with
-preemption disabled.
+Looking at the core kernel code, perf_output_sample() and
+__perf_event_header_size() appear to lack handlers for the new bits. If a
+userspace application requests these fields, it seems the kernel will not
+allocate space for them or write them to the ring buffer.
 
-Since bpf_thread_wq_cancel_and_free() explicitly calls might_sleep() and the
-blocking kthread_cancel_work_sync(), calling it from this atomic context se=
-ems
-like it would result in a scheduling bug or deadlock.
+When the userspace parser subsequently decodes the stream based on the
+attr.sample_type bitmask, won't it read past the end of the truncated sample
+and misinterpret the next event header as data?
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/l=
+inux/perf_event.h
+> index 2479a38883d00..d5660e2d6b603 100644
+> --- a/tools/include/uapi/linux/perf_event.h
+> +++ b/tools/include/uapi/linux/perf_event.h
+
 [ ... ]
-> @@ -12192,6 +12219,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
-nv *env, struct bpf_call_arg_me
->  		case KF_ARG_PTR_TO_WORKQUEUE:
->  		case KF_ARG_PTR_TO_TIMER:
->  		case KF_ARG_PTR_TO_TASK_WORK:
-> +		case KF_ARG_PTR_TO_THREAD_WQ:
->  		case KF_ARG_PTR_TO_IRQ_FLAG:
->  		case KF_ARG_PTR_TO_RES_SPIN_LOCK:
->  			break;
 
-[Severity: Critical]
-Does this code leave the thread workqueue pointer unvalidated?
+> @@ -1054,6 +1056,13 @@ enum perf_event_type {
+>  	 *	{ u64			code_page_size;} && PERF_SAMPLE_CODE_PAGE_SIZE
+>  	 *	{ u64			size;
+>  	 *	  char			data[size]; } && PERF_SAMPLE_AUX
+> +	 *	{ struct build_id	bid;
+> +	 *	  u64			offset; } && PERF_SAMPLE_BUILD_ID_OFFSET
 
-This adds the argument type to the initial bypass switch statement in
-check_kfunc_args(), but there does not appear to be a corresponding addition
-in the subsequent switch statement that validates the pointer's map origin
-and offset.
+[Severity: Medium]
+It looks like this payload documentation block was only added to the tools
+side header (tools/include/uapi/linux/perf_event.h). Was it intended to be
+added to the canonical include/uapi/linux/perf_event.h as well?
 
-For example, KF_ARG_PTR_TO_TASK_WORK handles this via:
+Missing the canonical header causes divergence between the kernel and tools
+headers, which might trigger check-headers.sh warnings and leave users rely=
+ing
+on the kernel headers without documentation for the new ABI.
 
-check_kfunc_args() {
-    ...
-    case KF_ARG_PTR_TO_TASK_WORK:
-        if (reg->type !=3D PTR_TO_MAP_VALUE) { ... }
-        ret =3D check_map_field_pointer(env, reg, argno, BPF_TASK_WORK, ...=
-);
-    ...
-}
+[Severity: Medium]
+Also, regarding the struct build_id payload documentation here, this struct=
+ure
+appears to be undeclared in the canonical kernel UAPI header.
 
-Without a similar check for KF_ARG_PTR_TO_THREAD_WQ, it looks like a crafted
-pointer could bypass offset validation, allowing the kfuncs to cast and
-dereference invalid memory.
+Does the use of struct build_id here collide with the internal tools struct=
+ure
+of the same name? The internal tools/perf/util/build-id.h structure has a
+layout of:
+
+  u8 data[20];
+  u8 size;
+
+Whereas the ABI typically uses a different layout (e.g., u8 size; u8 res1;
+u16 res2; u8 data[20];). Could this cause layout confusion for tool develop=
+ers
+attempting to parse the ABI?
+
+> +	 *	{ u64			nr;
+> +	 *	  struct {
+> +	 *		struct build_id	bid;
+> +	 *		u64 offset;
+> +	 *	  }[nr]; } && PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET
+>  	 * };
+>  	 */
+>  	PERF_RECORD_SAMPLE			=3D 9,
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786086076.gi=
-t.zhuhui@kylinos.cn?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807071818.7187=
+51-1-irogers@google.com?part=3D2
