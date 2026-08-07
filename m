@@ -1,56 +1,56 @@
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283DB3A7F48
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:18:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 230D03BB104
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786087111; cv=none; b=b1yhRRhmNLRnFF75ikujGRAEAFkdripsEr1y6GmuVkWwoy0NLpG6jpWRLnQS6CxCrfb6nCmcZSlpNlg2UCJpbl6B8iFFlY376Desg7BqBZkoCEzAXODKlapyDRj7cx3wkGwAB2+hRSXxNMUqZRESA5f627NqBSRlPI7mdJBzgv0=
+	t=1786087114; cv=none; b=Fwm/Tfgso3HR5u0ufaX3KRsTXMSgWIemkcJPkYdJqGwGFPIb7q2dDX8kBTFZ3y45sir9eG2ko5kY5th+9NENGbn7f0IotlX2QLYDHvcxintwEbEuKALYHD2EWP/E3iUzvrYBWN+BX+8AJe6NNklaulyL+qUycD3Ea71NFfns8sM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786087111; c=relaxed/simple;
-	bh=6iGRZQU5iqk18vK28n1WtlfO4rJ+lBelMHpOKQwJLXQ=;
+	s=arc-20240116; t=1786087114; c=relaxed/simple;
+	bh=cpzuJlngGAm43tFscMlXRZnMARJWPTr0CBcPuQjRuwk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=d1R19aBkZrGM8b4ixEyKrFRWYAV0ImxmTcbmj5WZyAk640EZ4yqEjuptjuHiOnIZgVzgZ6oOaLApxgxlx2a8FM8VyfrXYxIv9cxzREYVVlsv4h356xMEQ1sDiLxZMZr6fZr5CO82Ayl2KzAfF74+oK8czGpp1+opDcWNzSmhj3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qwYmsc9U; arc=none smtp.client-ip=209.85.216.72
+	 To:Content-Type; b=OkSMPcGIyTpHK4whzjvYtuUs/TEgyjv0O/9clWXal1QCjmd0CpqB1iIpGQWdoT1UjhvA/sXRaXR4RAHRfjAS9iUfHhhORrFu5aikY0LbH5P59f6/NAnyki2tDZDNocswHtjNd5IagZ9FG9zahgu19EO5oklK6B238AITNINrduk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tmz1Nh3U; arc=none smtp.client-ip=209.85.216.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qwYmsc9U"
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-38e475f83a2so4869877a91.1
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 00:18:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tmz1Nh3U"
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-38f5ac7416eso3791324a91.3
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 00:18:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786087109; x=1786691909; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1786087111; x=1786691911; darn=vger.kernel.org;
         h=content-type:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+/LzAIB86djFW/dc+XDdigV1b7wOoI55acdChTs0xt0=;
-        b=qwYmsc9UmV9EIf+RxELrLKKTgYvimST1xCeb5eUSAJYMJDX+brOrIVcVLeLswx7fmh
-         q+DNyRJevZPSFB2cD7Pk04OyBSGT5onmJ+x+ZhJEvca0ZdF33feAb1t/9Ij7/M/q7g8Y
-         /UYU1mnXO5V2k8Be9pVMp21vIQL7uUIfERfDwFl5dYGl7L803PcBiIbAlapg9TCPNKDb
-         gQWWQxTolNAslHc75Wi3iErTgTQyr0iu1A0b58B3KjdizP6oqCrTE23q3GSpfdjXTjbQ
-         Z+/YrSkjlRPxm0b5x/E/88vzhP3o6yqjPht6M0uyPpRmI0PQkO9rLY8m3eCatBeIrZhE
-         Uopw==
+        bh=Bcl1RSiBLZ6miVSqvsuamblwEoHgWcooZQBMrgJQ6Do=;
+        b=tmz1Nh3UxVxDDDGNhoshXuYXF3gKWvhFUBSf5Z0hK8J7224n2DQQNB8CN2LWP5nu9S
+         WfcD45hBaOWS3wxFtyZr/zJVSBcicvWGbPZnN+kZfuQlg8uRaTDxXDXIkKwMOGiRvLMr
+         SAwFnnqaYeEm3PSi3dCNleIQczulVaZsauFWymsE/9Qec4Vre5nrlFGkElH4F/q+QSj2
+         1zN3vDOy9Ip9OFnx0qsDkBjiG0+qWjJYLwin+7D1WrZfyF2e6XqS9YxnyRM6UYGJdejT
+         nnchRa6BI6F7sytMV2+4pj+KWn7ybS82BZw6+P23upCBcdT8VYNu6PJe8vt/5q+L4Ajh
+         Q5Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786087109; x=1786691909;
+        d=1e100.net; s=20251104; t=1786087111; x=1786691911;
         h=content-type:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+/LzAIB86djFW/dc+XDdigV1b7wOoI55acdChTs0xt0=;
-        b=GXbiB8tzPurODV82nCoPprepmUwQS5x8uj0cYn4gj5kTmG9L4X8Ge8m8WbyVZMvNv9
-         XjS89FPmkUPyiuh9gNx44ie9IM1Us8vCFNtP4OJFYRULd0nINoj7IX4FUg8uiREwEQ1S
-         Ka9f2g/ZB8Jik0AxjgQTmGFAQ+l2z0heoS1sXflPwG19A1IHoSE4ncRrjnsa6wzojn73
-         xglNz6bQ8L108yJNI/WdjDra4ps7XdAZX3w5KX01epGU6wxPfSekaxXYRH/9LCpfwMe4
-         +6Ar863tiZuMz04DZgmPLq1dVEJZMcURAA9RxOVXA1RYMjvTmr3m14F8dXLrc9wjX64p
-         Ameg==
-X-Forwarded-Encrypted: i=1; AHgh+RqEjihlOuWoEFJ2yiWsHRyGCvMW11ZhcUa90Qu8jtFDoSs4k30NGbmqPHJ6XtZ5W9f8VaY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzginpYAG6dp1Iq93jOMWG5H6WkhFUdBgv5EDi9CGY6zn0/ZVvF
-	0M07FmqXHVTCjlyvzBbZ05FnddPZE327+iWAJMZ3nG+J2HeRO0mJaf6UbsknK+1uGZNQI0Lc4dv
-	78RwLUOoNbw==
-X-Received: from dlj3.prod.google.com ([2002:a05:7022:503:b0:13b:962e:3bc8])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:578e:b0:383:5a16:bd70
- with SMTP id 98e67ed59e1d1-3903c5ebc8cmr21858591a91.16.1786087109050; Fri, 07
- Aug 2026 00:18:29 -0700 (PDT)
-Date: Fri,  7 Aug 2026 00:18:12 -0700
+        bh=Bcl1RSiBLZ6miVSqvsuamblwEoHgWcooZQBMrgJQ6Do=;
+        b=Jubu2UsIB78/A8S7hJglcZlVuOArVrDJRSOJL86XebAH2sEvxYerVNV7zw+yH7JPDQ
+         LXboPYwJVJjw2mQFIVwEkMXoC3D7o+y5YZAQcwwUBHzcjS3x+MtN20np5UnlABYmTyKD
+         WWmx24ll4PKv+vmcV86q+2eXPOexkwyeEBYTEITAR90YBBdUz+WoVkO++1VyqDt7X5KE
+         gEUjd/mF9QoGXikBkWAblQHBffGuYg8M6DLwbL1N6psEKh41TT2et+xMHl5JMTMb/qgl
+         Argk5qzRLe44gejcxCER8OuXyDao+2tWQS32S2aNPRQCwhog3yOqtfUkqCEDteKYZQ8I
+         PJNQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrNIhdTkXjpR8zw0OuZshgLWNIJid+5FFKEj8tv4bHjkEWo2aNfhhD6NRRiTL9i1fPBTmo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGRjOqns5FYUxvW/E3FLTiBDv9R9OpDHvUb2SvwafWCiEB9ujL
+	DbyRTBmumV/wr6JiMIHQCap4TLWYo2FaS+in3OcULlBVUsRRmZw/1zfDM/g99v+mjvy8PE+rX0o
+	NIVwpfYIoCQ==
+X-Received: from dled12-n2.prod.google.com ([2002:a05:701b:42cc:20b0:13b:9ad0:582f])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1e53:b0:381:1f51:1ff0
+ with SMTP id 98e67ed59e1d1-3903c54b3a1mr18644417a91.2.1786087110681; Fri, 07
+ Aug 2026 00:18:30 -0700 (PDT)
+Date: Fri,  7 Aug 2026 00:18:13 -0700
 In-Reply-To: <20260807071818.718751-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -60,8 +60,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260807071818.718751-1-irogers@google.com>
 X-Mailer: git-send-email 2.55.0.679.g6767b8d81c-goog
-Message-ID: <20260807071818.718751-3-irogers@google.com>
-Subject: [RFC PATCH v1 2/8] perf/core: Add BUILD_ID_OFFSET to UAPI
+Message-ID: <20260807071818.718751-4-irogers@google.com>
+Subject: [RFC PATCH v1 3/8] perf/core: Implement BUILD_ID_OFFSET sample type
 From: Ian Rogers <irogers@google.com>
 To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -90,61 +90,175 @@ To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>
 	linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-Introduce PERF_SAMPLE_BUILD_ID_OFFSET and
-PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET
+Expose stack_map_get_build_id_offset for perf_events to use when generating
+these samples, and implement the payload writing in the perf event core.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- include/uapi/linux/perf_event.h       |  4 +++-
- tools/include/uapi/linux/perf_event.h | 11 ++++++++++-
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ include/linux/bpf.h   | 13 +++++++
+ kernel/bpf/stackmap.c |  2 +-
+ kernel/events/core.c  | 85 ++++++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 98 insertions(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index fd10aa8d697f..f0712c1471d3 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -165,8 +165,10 @@ enum perf_event_sample_format {
- 	PERF_SAMPLE_DATA_PAGE_SIZE		= 1U << 22,
- 	PERF_SAMPLE_CODE_PAGE_SIZE		= 1U << 23,
- 	PERF_SAMPLE_WEIGHT_STRUCT		= 1U << 24,
-+	PERF_SAMPLE_BUILD_ID_OFFSET		= 1U << 25,
-+	PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET	= 1U << 26,
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7719f6528445..fd76900a8e47 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -4209,4 +4209,17 @@ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 all
+ 	return 0;
+ }
  
--	PERF_SAMPLE_MAX = 1U << 25,		/* non-ABI */
-+	PERF_SAMPLE_MAX = 1U << 27,		/* non-ABI */
- };
++struct bpf_stack_build_id;
++#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PERF_EVENTS)
++void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
++				    u32 trace_nr, bool user, bool may_fault);
++#else
++static inline void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
++						  u32 trace_nr, bool user, bool may_fault)
++{
++	if (id_offs)
++		id_offs->status = 1; /* BPF_STACK_BUILD_ID_EMPTY */
++}
++#endif
++
+ #endif /* _LINUX_BPF_H */
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 41fe87d7302f..889ceb7cf29b 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -411,7 +411,7 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
+  *     id_offs[i].build_id is zeroed out and id_offs[i].status is set to
+  *     BPF_STACK_BUILD_ID_IP.
+  */
+-static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
++void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 					  u32 trace_nr, bool user, bool may_fault)
+ {
+ 	struct mmap_unlock_irq_work *work = NULL;
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index ba5bd6a78fe7..97ac70441602 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -2048,6 +2048,15 @@ static int __perf_event_read_size(u64 read_format, int nr_siblings)
+ 	return size + nr * entry;
+ }
  
- #define PERF_SAMPLE_WEIGHT_TYPE	(PERF_SAMPLE_WEIGHT | PERF_SAMPLE_WEIGHT_STRUCT)
-diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-index 2479a38883d0..d5660e2d6b60 100644
---- a/tools/include/uapi/linux/perf_event.h
-+++ b/tools/include/uapi/linux/perf_event.h
-@@ -165,8 +165,10 @@ enum perf_event_sample_format {
- 	PERF_SAMPLE_DATA_PAGE_SIZE		= 1U << 22,
- 	PERF_SAMPLE_CODE_PAGE_SIZE		= 1U << 23,
- 	PERF_SAMPLE_WEIGHT_STRUCT		= 1U << 24,
-+	PERF_SAMPLE_BUILD_ID_OFFSET		= 1U << 25,
-+	PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET	= 1U << 26,
++
++struct perf_sample_build_id_offset {
++	u8	size;
++	u8	res1;
++	u16	res2;
++	u8	build_id[BPF_BUILD_ID_SIZE];
++	u64	offset;
++};
++
+ static void __perf_event_header_size(struct perf_event *event, u64 sample_type)
+ {
+ 	struct perf_sample_data *data;
+@@ -2086,6 +2095,11 @@ static void __perf_event_header_size(struct perf_event *event, u64 sample_type)
+ 	if (sample_type & PERF_SAMPLE_CODE_PAGE_SIZE)
+ 		size += sizeof(data->code_page_size);
  
--	PERF_SAMPLE_MAX = 1U << 25,		/* non-ABI */
-+	PERF_SAMPLE_MAX = 1U << 27,		/* non-ABI */
- };
++	if (sample_type & PERF_SAMPLE_BUILD_ID_OFFSET)
++		size += sizeof(struct perf_sample_build_id_offset);
++
++
++
+ 	event->header_size = size;
+ }
  
- #define PERF_SAMPLE_WEIGHT_TYPE	(PERF_SAMPLE_WEIGHT | PERF_SAMPLE_WEIGHT_STRUCT)
-@@ -1054,6 +1056,13 @@ enum perf_event_type {
- 	 *	{ u64			code_page_size;} && PERF_SAMPLE_CODE_PAGE_SIZE
- 	 *	{ u64			size;
- 	 *	  char			data[size]; } && PERF_SAMPLE_AUX
-+	 *	{ struct build_id	bid;
-+	 *	  u64			offset; } && PERF_SAMPLE_BUILD_ID_OFFSET
-+	 *	{ u64			nr;
-+	 *	  struct {
-+	 *		struct build_id	bid;
-+	 *		u64 offset;
-+	 *	  }[nr]; } && PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET
- 	 * };
- 	 */
- 	PERF_RECORD_SAMPLE			= 9,
+@@ -8287,6 +8301,62 @@ void perf_output_sample(struct perf_output_handle *handle,
+ 	if (sample_type & PERF_SAMPLE_READ)
+ 		perf_output_read(handle, event);
+ 
++	if (sample_type & PERF_SAMPLE_BUILD_ID_OFFSET) {
++		struct bpf_stack_build_id bpf_bid = { .ip = data->ip };
++		struct perf_sample_build_id_offset bid_offset = { 0 };
++
++		bool is_user = (header->misc & PERF_RECORD_MISC_CPUMODE_MASK) ==
++			       PERF_RECORD_MISC_USER;
++
++		stack_map_get_build_id_offset(
++			&bpf_bid, /*trace_nr=*/1,
++			is_user, /*may_fault=*/false);
++		if (bpf_bid.status == BPF_STACK_BUILD_ID_VALID) {
++			bid_offset.size = BPF_BUILD_ID_SIZE;
++			memcpy(bid_offset.build_id, bpf_bid.build_id,
++				       BPF_BUILD_ID_SIZE);
++			bid_offset.offset = bpf_bid.offset;
++		} else {
++			bid_offset.offset = bpf_bid.ip;
++		}
++		perf_output_put(handle, bid_offset);
++	}
++
++	if (sample_type & PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET) {
++		u64 nr = data->callchain ? data->callchain->nr : 0;
++		struct perf_sample_build_id_offset bid_offset;
++		struct bpf_stack_build_id bpf_bid;
++		u64 i;
++
++		perf_output_put(handle, nr);
++
++		for (i = 0; i < nr; i++) {
++			memset(&bid_offset, /*c=*/0, sizeof(bid_offset));
++			memset(&bpf_bid, /*c=*/0, sizeof(bpf_bid));
++			bpf_bid.ip = data->callchain->ip[i];
++
++			if (data->callchain->ip[i] == PERF_CONTEXT_USER) {
++				bpf_bid.status = BPF_STACK_BUILD_ID_EMPTY;
++			} else {
++				bool is_user = data->callchain->ip[i] < PERF_CONTEXT_MAX;
++
++				stack_map_get_build_id_offset(&bpf_bid, /*trace_nr=*/1,
++					      is_user, /*may_fault=*/false);
++			}
++
++			if (bpf_bid.status == BPF_STACK_BUILD_ID_VALID) {
++				bid_offset.size = BPF_BUILD_ID_SIZE;
++				memcpy(bid_offset.build_id, bpf_bid.build_id,
++			       BPF_BUILD_ID_SIZE);
++				bid_offset.offset = bpf_bid.offset;
++			} else {
++				bid_offset.offset = bpf_bid.ip;
++			}
++			perf_output_put(handle, bid_offset);
++		}
++	}
++
++
+ 	if (sample_type & PERF_SAMPLE_CALLCHAIN) {
+ 		int size = 1;
+ 
+@@ -8632,7 +8702,7 @@ void perf_prepare_sample(struct perf_sample_data *data,
+ 
+ 	__perf_event_header__init_id(data, event, filtered_sample_type);
+ 
+-	if (filtered_sample_type & PERF_SAMPLE_IP) {
++	if (filtered_sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_BUILD_ID_OFFSET)) {
+ 		data->ip = perf_instruction_pointer(event, regs);
+ 		data->sample_flags |= PERF_SAMPLE_IP;
+ 	}
+@@ -8640,6 +8710,19 @@ void perf_prepare_sample(struct perf_sample_data *data,
+ 	if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN)
+ 		perf_sample_save_callchain(data, event, regs);
+ 
++	if (filtered_sample_type & PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET) {
++		int size = 1;
++
++		if (!data->callchain)
++			data->callchain = perf_callchain(event, regs);
++
++		size += data->callchain->nr *
++			(sizeof(struct perf_sample_build_id_offset) / sizeof(u64));
++		data->dyn_size += size * sizeof(u64);
++		data->sample_flags |= PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET;
++	}
++
++
+ 	if (filtered_sample_type & PERF_SAMPLE_RAW) {
+ 		data->raw = NULL;
+ 		data->dyn_size += sizeof(u64);
 -- 
 2.55.0.679.g6767b8d81c-goog
 
