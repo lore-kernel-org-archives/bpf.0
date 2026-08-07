@@ -1,146 +1,131 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81933134CF;
-	Fri,  7 Aug 2026 03:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039EA18B0F
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 04:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786074105; cv=none; b=UnHbW49AtvDw5FkOQYWjfSqC5ycRuAaqyzL9itPEvwGQlklGC+qRhexmiRIJKzOViudkKil4czWiDINFeE5INeziTTH2nKhI5oUdxT4K+8BMBEieP0sNLNSeUl0mSBBld5bWOv/t4bhH+1akJxWrGp/ftiixCEr9XLkyPZwLDMU=
+	t=1786075801; cv=none; b=js9KjUysShWwuJEi6WzPbHPmCCmohqse4CswGXgGXEANv7FPnc6fEa+lyoN8hP6c818TfkZPAXwy+tjHuQ35Wwo3R3aUt/mgpSyz/59MLRYm+FEy9KgO/i/tpyoKLBFCXkgM/QwUji1+belgba6oq0SZKmqVC2/bD3FygssinV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786074105; c=relaxed/simple;
-	bh=pwiUG79GIkEsYmtn3GH8uv3dTK71ctq2AghdGKdrFpk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VGtZzW8loOsWogtegIxndINDSA56oS3biQKoz4mA6mIW6QZs8w6YpE+DsV9VaeS4YfiMtgnadwYCH0HgVkqzZu0RhI/cP8T1lMlZ5cwzDbjcBdZY5OjxnfWFcPU84w5tNLaYKJ5LaDNbhesI7RXYkM92GMyBJ32dC3Td9SPEcNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hGVLc4LCRzKHMVb;
-	Fri,  7 Aug 2026 11:41:28 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 7B1934057D;
-	Fri,  7 Aug 2026 11:41:37 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgB3s0LwU3VqnLadBQ--.6311S2;
-	Fri, 07 Aug 2026 11:41:37 +0800 (CST)
-Message-ID: <f8359409-4450-4bad-934e-b7f880d2101b@huaweicloud.com>
-Date: Fri, 7 Aug 2026 11:41:35 +0800
+	s=arc-20240116; t=1786075801; c=relaxed/simple;
+	bh=yENHJ+8tN2wzgnvqBRUCsG31UdpOJyeHHd6xMnU4sGs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=O59TtUvjuyJGzLKbzfhI3zMrOotgunEe2hmG8dp3+vnun/yEcLF8H9wXPsIFIuu7w/tAkvZKoIr/h919Gv2F2/ECYddWyjcP0eecpclZzRFpJNbsAGkXZMsq13XcZ9f9wAfIUwUk3Pb735LyFPxBtysU8dkS7LJsVQ2BCvusnno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tC20MPkC; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tC20MPkC"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so3184105a91.0
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 21:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786075799; x=1786680599; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=yENHJ+8tN2wzgnvqBRUCsG31UdpOJyeHHd6xMnU4sGs=;
+        b=tC20MPkC9l9VNACT/pNvnD/OwIsBsW+yj73B1QDTn4LAuH7yUK0afMqb97OpUN/kgj
+         SA9DfTZlAjUnTUqObhKKl5whotJ1XPY17y6YgjpJgrmJs5PnDleHkjEeBrNbO+0dRn4l
+         9/lPgtd+g3l/tCdSP4Ws4kCjacrVniV644zdjfm7LtBYWNUbEsRwrIwk7gdJj2JCx6JP
+         8lIcBVe1jQvnQzI9IAhIlOF9QEIcqksc7qMwjY0T5AvJsImvwzVrgzs4ly4fh4d6HLHN
+         AkB7CYOgiwzIORH15KDGwKtOaQ6IJHuVZx9XVB0iJpzwTiaxgRQfnXO49afE0IKg129o
+         y4Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786075799; x=1786680599;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yENHJ+8tN2wzgnvqBRUCsG31UdpOJyeHHd6xMnU4sGs=;
+        b=H9ZB01ABDCGdiWziE1BQSyVX61X1hBHbS9w+cTvHM/WMbbmNcYc54gTdjU2/13Zefk
+         Ze87tDqvp1f1xIerD1vN12QgMt0Hko9pMYTM2R9an4j1B0fPgqOhadV//SaQRviLIHUV
+         sxk/A74eVZXK+y1JTvTZ9sHSX1jRqDtlKtnTkb6IcgenHRHNuGpDaelbLsw8l2HLMnqS
+         g9iiqEfRzxLuAtkDhN/1S9Vf9VbZ+7mBpPJf3XV8NmhRRTgCPXlb+97USZpEL0JM8iZ8
+         Ly4kVzWnfkJcmSIyHycsv/5xH9P2riZqU6KsC/kvlbWgQci2JU1haMeSbO01yt8Ojyjx
+         T5vg==
+X-Forwarded-Encrypted: i=1; AHgh+RoVF/qPIvuLsR+sf9TE+avyGWG6i1PzII3T/ZEIucmVNEP+vPYULjPpDq3Z707gUAjnCw4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywco4Vug2GQLQM1gTgIl3hj3TtdCF3do6JML0V5+yOQX7WTBuk/
+	5Rz+MkKiAM/gKKYyD1wEGiVJSwdD+Pfybyoro6iVkE23+eUEcKv5P0Yj
+X-Gm-Gg: AR+sD13JU27dEoM8IFwBchLKZmDhWwJ1L1LBcJxgykJuy0yTeXujzNoq/AxEq43qfMj
+	0Xq3Hp+EvN9kZbaGtzDZCDg0VDq4DsmM9KBq+1+tpS8dn5FKOX4ej1ea31fCgm2WXA8xuN43Xtb
+	piiRzmU7EK4X49qablDL6p8EKJx0XSMXLhaHhVHM22XbuGFWdIVItxqS36rnW2qw8HzAAoQ1kx2
+	9I7gy20wCspRpFbTcjNPXDIaKQYnVwLtjXNA+H+uM6fzUHs4GHSG3WaSYhTXaFJwFd/u/G+YNl4
+	AkbrrA+HWAxwluG/J2BDQP2MneyVoa2kWbWEnyslnmRg19McLZDcvVOW0/aI57ut8AN516z9Lul
+	P7pODybtLckDllyle5NNX/RNKzecHsVWaaEXBshq9WkG5PdwCZPyi2TbENzfMYcm6mQNT8EDH2F
+	tkiBafjGx/I9aF9+5y4AvQ2/0qYv6rsHNoQJ+xJDuOhznhGjxVgKCSLwLAIJ0bvo4d8YnsUpFUc
+	pg6iSj3OHa895Bg
+X-Received: by 2002:a17:90b:520a:b0:38f:5828:a40c with SMTP id 98e67ed59e1d1-3903c59a6eemr20650424a91.10.1786075799298;
+        Thu, 06 Aug 2026 21:09:59 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3925fc6dfcdsm596651a91.4.2026.08.06.21.09.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 21:09:58 -0700 (PDT)
+Message-ID: <26a3964d3d6a6a0e725b19eb81e03743b9c2acf9.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 07/13] bpf, x86: Convert struct_ops arena
+ arguments in the trampoline
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
+ Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis	 <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Thu, 06 Aug 2026 21:09:55 -0700
+In-Reply-To: <20260805210427.3218326-8-memxor@gmail.com>
+References: <20260805210427.3218326-1-memxor@gmail.com>
+	 <20260805210427.3218326-8-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] riscv: ftrace: Fix ftrace_modify_call failure on kprobed
- functions
-Content-Language: en-US
-To: Paul Walmsley <pjw@kernel.org>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>,
- Andy Chiu <andybnac@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
- Pu Lehui <pulehui@huawei.com>
-References: <20260802094929.3978390-1-pulehui@huaweicloud.com>
- <4a7ed7d1-9eda-3082-81cb-5375b7839f29@kernel.org>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <4a7ed7d1-9eda-3082-81cb-5375b7839f29@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_Ch0CgB3s0LwU3VqnLadBQ--.6311S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFyUtryUurW5Xw45Ww15urg_yoW5WF1Dpr
-	yfKanI9F4FyanFqay2gr15Cr18tayDAa4UAr1xGw1fAa4qkr18tw1xtr48J3s8JrZ8Aryf
-	Z3Wqyr4DWryUAr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
+On Wed, 2026-08-05 at 23:04 +0200, Kumar Kartikeya Dwivedi wrote:
+> From: Tejun Heo <tj@kernel.org>
+>=20
+> Implement the struct_ops arena argument conversion on x86. save_args()
+> receives the arena base from bpf_tramp_arena_base() and consults the
+> btf_func_model argument flags as it copies each native argument into the
+> BPF ctx, routing a marked argument through RAX:
+>=20
+> =C2=A0 movl %esrc, %eax=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* truncate and cle=
+ar the upper 32 bits */
+> =C2=A0 subl $base_lo, %eax
+> =C2=A0 movq %rax, ctx_slot
+>=20
+> A nullable argument tests the full 64-bit kernel pointer first:
+>=20
+> =C2=A0 movq=C2=A0 %rsrc, %rax
+> =C2=A0 testq %rax, %rax
+> =C2=A0 jz=C2=A0=C2=A0=C2=A0 1f
+> =C2=A0 subl=C2=A0 $base_lo, %eax
+> 1:
+> =C2=A0 movq=C2=A0 %rax, ctx_slot
+>=20
+> The 32-bit subtraction is sufficient since (u32)(kaddr - base) =3D=3D
+> (u32)kaddr - (u32)base, and it clears the upper half as the JITs require
+> of arena pointer registers. Stack-passed arguments already reload
+> through RAX, so only the subtraction (and the NULL test) is inserted
+> there.
+>=20
+> Keeping arena and nullable classification in btf_func_model avoids a
+> parallel trampoline slot bitmap. bpf_tramp_arena_base() returns a base
+> only for a single-program struct_ops indirect trampoline; other
+> trampolines pass zero and perform no conversion. The size probe reruns
+> the same emission with the same model and nodes, so the image size
+> matches by construction.
+>=20
+> With both the kfunc and struct_ops directions implemented, flip
+> bpf_jit_supports_arena_args() on for x86.
+>=20
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-On 2026/8/7 11:12, Paul Walmsley wrote:
-> Hi,
-> 
-> On Sun, 2 Aug 2026, Pu Lehui wrote:
-> 
->> From: Pu Lehui <pulehui@huawei.com>
->>
->> We are frequently hitting the following splat during the riscv bpf
->> selftests:
->>
->> 00000000026dc75a: expected (7c3ff297) but got (00100073)
->> ------------[ ftrace bug ]------------
->> ftrace failed to modify
->> [<ffffffff03c44c1c>] bpf_kfunc_common_test+0x4/0x20 [bpf_testmod]
->>   actual:   e7:82:c2:ce
->> Updating ftrace call site to call a different ftrace function
->> ftrace record flags: 80100002
->>   (2)
->>   expected tramp: ffffffff80043904
->> ------------[ cut here ]------------
->> WARNING: kernel/trace/ftrace.c:2278 at ftrace_bug+0x46e/0x4b0, CPU#1: test_progs/98
->> ...
->> [<ffffffff80008f4e>] ftrace_bug+0x46e/0x4b0
->> [<ffffffff803d3e86>] ftrace_replace_code+0x16e/0x170
->> [<ffffffff803d42b6>] ftrace_modify_all_code+0x12e/0x1b8
->> [<ffffffff800430f4>] arch_ftrace_update_code+0x14/0x28
->> [<ffffffff803e0324>] ftrace_startup+0x14c/0x2a0
->> [<ffffffff803e133c>] ftrace_startup_subops+0x584/0x1050
->> [<ffffffff804500e6>] register_ftrace_graph+0x4e6/0x1018
->> [<ffffffff804cf9f6>] register_fprobe_ips+0xc66/0x12f8
->> [<ffffffff8049abe8>] bpf_kprobe_multi_link_attach+0x5d8/0xe68
->> [<ffffffff8050fcaa>] __sys_bpf+0x3d5a/0x47f0
->> [<ffffffff805107ee>] __riscv_sys_bpf+0xae/0x168
->> [<ffffffff80034d78>] syscall_handler+0x60/0x100
->> [<ffffffff8228b4f4>] do_trap_ecall_u+0x174/0x208
->> [<ffffffff822b69c4>] handle_exception+0x16c/0x178
->>
->> After debugging, it can be triggered by similar commands below:
->> ```
->> echo do_nanosleep > set_ftrace_filter
->> echo function > current_tracer
->> echo 'p do_nanosleep' > kprobe_events
->> echo 1 > events/kprobes/enable
->> echo 'f do_nanosleep' > dynamic_events
-> 
-> I guess you meant
-> 
-> echo 'f do_nanosleep' >> dynamic_events
-> 
-> instead?
-> 
->> echo 1 > events/fprobes/enable
->> ```
->>
->> The reason is that attaching a kprobe to an ftrace-traced function entry
->> replaces its initial auipc insn with ebreak. When ftrace_modify_call
->> later runs, it expects auipc insn, so verification fails and triggers
->> ftrace_bug.
->>
->> The expected auipc logic remains conceptually unchanged, and kprobe
->> single-stepping ensures normal execution. Therefore, if the first insn
->> is ebreak, bypassing the check to continue patching the jalr insn is
->> safe and avoids ftrace failures.
->>
->> Fixes: b2137c3b6d7a ("riscv: ftrace: prepare ftrace for atomic code patching")
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> 
-> I queued the patch with the reproduction sequence updated as mentioned
-> above for v7.2-rc.  Please let me know ASAP if you don't agree -
+[But please fix the botched squash discussed earlier]
 
-Thanks Paul, total agree to update.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-> 
-> 
-> - Paul
-
+...
