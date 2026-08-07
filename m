@@ -1,104 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDFD372EFF;
-	Fri,  7 Aug 2026 18:41:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E5A2DECA8;
+	Fri,  7 Aug 2026 18:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786128103; cv=none; b=b45kU/merjzMjp9HMImwd2jCOQK/HTiIj+sBMEA+q1KKgFShtBIlEm9xgqDjGXg4bx3MfOI0Lh2RmYn5GNj/6raDrsoS+5Zp+H49Oa5jT78EZ8lk46RLnQWkEDnzvSyl6BHq2KWwl2/HXjoVfPGM3U/uptrIadLogiux3CEevLw=
+	t=1786128839; cv=none; b=M1hpSwwHrzi1Kqo1TyDtPXLfBok8SSNV+DmA7MLyNZLqu6fNp7U/R58JpbbHvVnBrROPkxLUU9/gamg+ZeF/pEg5dlQzD6fd2abbLbTultvRX9V/j4d8dVSkQlbYpGUK74VbIaVsXpZWP3d+8lO5CRnom9pN/V8qkoTDw1AyaL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786128103; c=relaxed/simple;
-	bh=XVV7hOgWnCFpL7U6Ae7wQrOvW1wHNIWKqGFVEsR5j5s=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ByD/TIiB/kp/vmtqZM2sURq0Mza+lrWCU9jVUzV6rvykCVayOXGna3X2hatTViSpQpEBZU4wxFq9MPj+dZ1eNs2QvvJmesLl20MgLQHQhuv5ghDhdF/lOy4pKLzvSNORjxRspdoGhcG65xZ3kNLu4KFMLB4aOfHewOjvLrdF2ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eJbKhU3v; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786128839; c=relaxed/simple;
+	bh=O8d7jt4yP9kBXBvI/7UYBC5IiRI2rghk2eb6zsu2W28=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AqVqp9J0VomgAFRT9MUvKf5GHoMhnI3maLsCoMrrx1VYepi8e7eraeys1M+qu6FmS9JTmA4X8rna9J5NWU1PtsMMSXIU3RuJxhq0wa8wCW8RqX80k8cRab80yZx23C6DPFdUP/bMw656n17NSgybjnTT2iiKR81MFQxq4cvHLls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U4HCH4wp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eJbKhU3v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530401F000E9;
-	Fri,  7 Aug 2026 18:41:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4HCH4wp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358381F000E9;
+	Fri,  7 Aug 2026 18:53:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786128101;
-	bh=1fvthPLXP6I2226nh/VOQy7w9V6Y86YRryAUsNAJq3w=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eJbKhU3vqSQWAY2GWHI5EpXYesykkTX3A1JtFTg3+uy+R/XN1QjTEUmtmWSgo5ens
-	 QcZaZ58NadmHiQUYAP6VtqVmHtNpn5HUZnprFxK4YqJ/HM4QYJp5tvufxQh3Ra2MeN
-	 dW8OiTzMqwdkQdeo3yCWZpNbXhDSUqbsa3msFoKjMN7hPF0xO07RE3eiG7udt3Z2jd
-	 42JVzswbT5ZB6UWZ9D8Bexe9IRf2IDlCaiGYKck8khh4kL/Ew/aCnTwm6PYXJgxMn9
-	 DzHrfhj0sbi0PNhKs9ye5Jdc4ZrTt7jW6VPbmk0z33EPjdBvgR3g2SirbjIjmUsCmM
-	 QfItMTgfAo+mg==
-Content-Type: multipart/mixed; boundary="===============4596101357538191178=="
+	s=k20260515; t=1786128838;
+	bh=W7EbF3+ZkY+19N/2IhITCR4hIT9Xgx1TaKze5MM03QU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=U4HCH4wp6FcnFdF2DESfPF4UaqEY9ryRjM6w/e/UzKTggNHKDiI5T9qRVaNQCiSWL
+	 yYKalbXLLVT4XaroOMwef/YsBU5Mjp49VkRhp8RLvJHwBOIzY9Nl6TVM/nFMAlfvcP
+	 qhwOD7dbN5FdjN2tId72gjf6rhUokhMcOX1VlHTnXsrVz+hbPFaWS2SCTaGl3L6pq7
+	 js0u/of/wu4+3RkWwcmS27u3pq3Q8osUhI7Xw9Bl08dOSo40badyN8cHP5ujI20QXn
+	 ujDQtO09P8zd2BjfKubsIHQ+MqUcLKovGBt6I2dZl7h5/BTDB4bnBqsrdnE9CAPwSK
+	 1Su4qM+4FTduw==
+Date: Fri, 7 Aug 2026 15:53:53 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
+	Clark Williams <williams@redhat.com>, dwarves@vger.kernel.org,
+	bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Mark Wieelard <mjw@redhat.com>,
+	rust-for-linux <rust-for-linux@vger.kernel.org>,
+	Gary Guo <gary@garyguo.net>
+Subject: Re: [PATCHES 00/12] pahole: Support more rust tags and references to
+ dwz alternate debug files
+Message-ID: <anYpwcDBtkzE3WIt@x1>
+References: <20260731193102.110693-1-acme@kernel.org>
+ <18b557a8-e1ca-46cf-b03f-5e68490c9229@oracle.com>
+ <anXTAComw6XAvnXU@x1>
+ <CANiq72nHWY638h4mxJCfh_HFtzhwFEPyo6a-7k_3CxZsRV+Jiw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b86b0f951182de8fd972fc8f1a7d138e98a95b1e3804335cfab89ba24b1dacca@mail.kernel.org>
-In-Reply-To: <20260807171532.125149-5-mahe.tardy@gmail.com>
-References: <20260807171532.125149-5-mahe.tardy@gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/5] selftests/bpf: Test forbidden bpf_ksock_send() LSM attach
-From: bot+bpf-ci@kernel.org
-To: mahe.tardy@gmail.com,bpf@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,eddyz87@gmail.com,edumazet@google.com,john.fastabend@gmail.com,kuba@kernel.org,liamwisehart@meta.com,martin.lau@linux.dev,pabeni@redhat.com,song@kernel.org,netdev@vger.kernel.org,sdf.kernel@gmail.com,ameryhung@gmail.com,kuniyu@google.com,memxor@gmail.com,jiayuan.chen@linux.dev,mahe.tardy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  7 Aug 2026 18:41:40 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72nHWY638h4mxJCfh_HFtzhwFEPyo6a-7k_3CxZsRV+Jiw@mail.gmail.com>
 
---===============4596101357538191178==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Fri, Aug 07, 2026 at 07:34:10PM +0200, Miguel Ojeda wrote:
+> On Fri, Aug 7, 2026 at 2:43 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> >
+> > Adding Miguel to the CC list, Miguel we're trying to improve BTF support
+> > for Rust, this series handles multiple enabling fixes/improvements that
+> > gets us to the next level, i.e. we can load everything from DWARF, now
+> 
+> Thanks for the Cc! Cc'ing rust-for-linux and Gary.
+> 
+> > its time to try to map it to existing BTF kinds and propose BTF
+> > extensions when we can't use existing encodings.
+> 
+> Sounds cool :)
+> 
+> > Inferring from "does any member have a niche layout" means
+> > reverse-engineering rustc's layout algorithm, which is explicitly
+> > unstable and unspecified. It'd break silently on a compiler bump, with
+> > no way to tell from the DWARF that you got it wrong.
+> 
+> Yeah, the LLM is correct here: the Rust compiler gives very few
+> guarantees for the default `repr`, i.e. in common cases it has the
+> freedom to use whatever layout it wants (i.e. even for essentially
+> equivalent types in the same compilation unit) -- the official docs
+> are at:
+> 
+>   https://doc.rust-lang.org/reference/type-layout.html
+> 
+> >     u8                  __discriminant;      /*  0  1 */
+> 
+> For the niche cases like `Option<NonZero<u32>>`, what would be printed?
 
-> diff --git a/tools/testing/selftests/bpf/progs/ksock_lsm_verifier.c b/tools/testing/selftests/bpf/progs/ksock_lsm_verifier.c
-> new file mode 100644
-> index 000000000000..5b969e03b6d6
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/ksock_lsm_verifier.c
-> @@ -0,0 +1,36 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Isovalent */
-> +
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include "bpf_misc.h"
-> +#include "bpf_tracing_net.h"
+Can you think about one such niche case that is present in the kernel
+rust .o files right now? I tried finding the `Option<NonZero<u32>>` to
+look at its DWARF but couldn't find one.
 
-This isn't a bug, but does ksock_lsm_verifier.c still need bpf_tracing_net.h?
-The AF_INET/SOCK_DGRAM constants it provides look like they're only used by
-ksock_lsm.c, so the include could probably be dropped here.
-
-> +#include "ksock_common.h"
-> +
-> +char send_data[11] = "dummy data";
-> +
-> +SEC("lsm.s/socket_sendmsg")
-> +__description("bpf_ksock_send is rejected from socket_sendmsg LSM hook")
-> +__failure __msg("calling kernel function bpf_ksock_send is not allowed")
-> +int BPF_PROG(ksock_socket_sendmsg, struct socket *sock, struct msghdr *msg,
-> +	     int size, int ret)
-> +{
-> +	struct __ksock_ctx_value *v;
-> +	struct bpf_ksock *ks;
-> +
-> +	v = ksock_ctx_value_lookup();
-> +	if (!v)
-> +		return ret;
-> +
-> +	ks = bpf_kptr_xchg(&v->ctx, NULL);
-> +	if (!ks)
-> +		return ret;
-> +
-> +	bpf_ksock_send(ks, send_data, sizeof(send_data));
-> +	bpf_ksock_release(ks);
-> +
-> +	return ret;
-> +}
-> +
-> +char __license[] SEC("license") = "GPL";
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31202489240
---===============4596101357538191178==--
+- Arnaldo
