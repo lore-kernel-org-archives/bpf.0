@@ -1,138 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5C742D74B
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 11:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5E641DDE0
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 11:19:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786100833; cv=none; b=KAqVjSZHOZb8sTkvglEum9XMChBF3iSkq0J+Ib+yim0Z+HkgLRWoWqMEAt+kymTkVEqx+2iz9ejcLBdTB2s7CWxW18PSzLyQTRO7Qa8OvxtBxzXfxtexdoFWpHdphVC1Z4gwDIBTmTW7fs8cBgodcQa/eq78a1ZBSf/qwyMswLo=
+	t=1786101575; cv=none; b=mvkmc1LymgyTu0DkNY9qfbjX+12SS35HtFcB+NaYNqUOAyPevP3qoEuJrstQqRJ6ml3NHyO40LlBXgav0hsVmFZVdhmO+AFBvbRlCM1c3hn6zy400HPLk+osbas8TzikKPMur3vMBzA+cAY84D2y19e4SuRdJBVNsXHydmeHCJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786100833; c=relaxed/simple;
-	bh=Gyb0UcEQZfKem5H/Om/UYEld8rlCaO1rBksPTYhUDo8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=m2R99zV0XSUVcxYUsJbNXbnbOc7LQ5v11VwZCbvdJ2R3gtA8vT9LMvkykHK8kzVqhPsTwR242giTf/ZON6QA/+gc8qnI1u26SNI6gIYBF4mbWh5OUTGrTJtDql2EXYSPF7ghFHfZvb49RuJud5cWbA41FrD1hki5njNm9LS2kX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bAT6WrXs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786101575; c=relaxed/simple;
+	bh=UyGvst7gzz8aMp7NaIlca5Hlj4nQIZzAQEyNUPlvs9U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JfNhNUm/07y8a3jxihRnvtEBTuUcjpORo5eTsyM60cpufgdkxlICYeD09Mg+NGIb4P+OLo19sQUTnUglIEoFne6Y3E+C9nZc6jmBLyrlteX84Up+aWarc5dthYMbc+E1Yq7Yj/fDtghYCgEcHtXdIx0We4vl7geLrC5g7q2V9es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=GLLHEh9B; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bAT6WrXs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4E7A1F000E9;
-	Fri,  7 Aug 2026 11:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786100832;
-	bh=nOL+fzjpROp1ss1rsvn5yJJDnRq81F80W6ZgDeDRZsk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bAT6WrXsSSUovBbixg8aMPkzUVcj59mEpN51ZSYZIZm0ZmEpMZsauxpoTaIiJZta3
-	 Ic3G+cgyye2QkyZXFD7M80DBQbcjrh9RyK3eWJhWlyo5A7eKVD+ntM6Nql2+U1+uRf
-	 /uQEnuOuaJ3KK74q36W+UGf6Aoqo7yNcgf0ahEm/Cx5Qtop8xOHWA993jFAHmRQHbc
-	 0rQBhSCCH8GC0cc/dBJZKCDoSW1FARz3Q57SzdlB/wYjEyAa/eqG9SdKZXWSi4FFP0
-	 5NW3Vqx9dJpl6sAz4fw7sImbLg9SKhsMkIFQq7L91dtmxH3Q0Adqndv7FLmowmn4/w
-	 qdiAqx68/Gqng==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v6] bpf, cgroup: Fix storage null-ptr-deref after
- replacing prog
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pu Lehui" <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260807104403.1013064-1-pulehui@huaweicloud.com>
-References: <20260807104403.1013064-1-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 11:07:11 +0000
-Message-Id: <20260807110711.C4E7A1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GLLHEh9B"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=XugU5f9n5F8bRW8RWLCJjZoXjblijUIJs+6+P1YYKYA=; b=GLLHEh9Bkt7kMsvaMs+LNTXL8U
+	XUsVeW6lHX6X0JMNAvX3Q3xl8q98g0uw8b5wRpr5lRxdPIqqdKmxsQ5YVjbvOeZAMtFuPxBQB7wQO
+	jqZgKBMyL57jFqmYxPDMZutbb34vqFmISHbfTP6mUqITv9DdUt9R0/pGVHIJtQsm1YS3oWrj42WyI
+	bVg2aWhQ57L5pL6UXGZF2Yo2dxO3WP+ikx0WAF0TOVjLhDwgulMd8QJbnJgsT7/Uang/6o2reW7w5
+	xloKKV3/r3nBKEslZ1JwaxtJsjuPCQ+rs5hSNo6KKGdPGMRmtsOm3Prio+iynqnZbCDoH0H7Fi1ki
+	ZsqYB5mQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wsIal-00000008tUv-3KmU;
+	Fri, 07 Aug 2026 11:18:24 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4464A30045A; Fri, 07 Aug 2026 13:18:18 +0200 (CEST)
+Date: Fri, 7 Aug 2026 13:18:18 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@arm.com>, Leo Yan <leo.yan@arm.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Swapnil Sapkal <swapnil.sapkal@amd.com>,
+	Thomas Falcon <thomas.falcon@intel.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	Dmitrii Dolgov <9erthalion6@gmail.com>,
+	Eric Biggers <ebiggers@kernel.org>, Zecheng Li <zli94@ncsu.edu>,
+	Gabriel Marin <gmx@google.com>,
+	Tengda Wu <wutengda@huaweicloud.com>,
+	Derek Foreman <derek.foreman@collabora.com>,
+	Tanushree Shah <tshah@linux.ibm.com>,
+	Ankur Arora <ankur.a.arora@oracle.com>,
+	Aaron Tomlin <atomlin@atomlin.com>, tanze <tanze@kylinos.cn>,
+	Rui Qi <qirui.001@bytedance.com>,
+	Howard Chu <howardchu95@gmail.com>, Chuck Lever <cel@kernel.org>,
+	Shimin Guo <shimin.guo@skydio.com>,
+	Alessio Podda <aleph.pi.gh@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH v1 0/8] perf/core, perf/tools: Add
+ PERF_SAMPLE_BUILD_ID_OFFSET support
+Message-ID: <20260807111818.GN687043@noisy.programming.kicks-ass.net>
+References: <20260807071818.718751-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260807071818.718751-1-irogers@google.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Fri, Aug 07, 2026 at 12:18:10AM -0700, Ian Rogers wrote:
+> This patch series introduces PERF_SAMPLE_BUILD_ID_OFFSET to the
+> perf_event UAPI and implements full support across both the kernel
+> and perf tools.
+> 
+> Background & Motivation:
+> 
+> In order for perf to translate virtual addresses of samples into
+> symbols a file and offset within the file are needed. During event
+> synthesis perf will create mmap events to facilitate the translation
+> of a virtual address to a file and offset by modelling the address
+> space of a process. By directly recording in a sample the Build ID of
+> a file and the offset within it, no synthesis is necessary. The Build
+> ID and offset as a pair are much larger than a virtual address, so
+> there is a trade-off between synthesis cost and extra size for
+> samples. These changes just facilitate Build ID and offset as a choice
+> for perf samples and the user can have the choice to use it when they
+> believe it is advantageous.
+> 
+> In practice perf still needs to map a build ID to a file, so by
+> default this change keeps synthesis to allow this. It is expected a
+> user that knows their build IDs, say through debuginfod, will disable
+> this option with say --synth=no.
+> 
+> The kernel support uses the existing build ID and offset support used
+> by BPF stack traces.
 
-Pre-existing issues:
-- [High] Missing expected_attach_type validation in __cgroup_bpf_replace al=
-lows attaching incompatible programs to cgroup hooks via BPF_LINK_UPDATE.
-- [High] Lockless reads of link->prog race with concurrent link updates, le=
-ading to a Use-After-Free of the BPF program.
---
-
---- Patch [1]: [PATCH bpf v6] bpf, cgroup: Fix storage null-ptr-deref after=
- replacing prog ---
-commit 8ecaeff0e405145eaf841d2d2d05043d5e1a974d
-Author: Pu Lehui <pulehui@huawei.com>
-
-bpf, cgroup: Fix storage null-ptr-deref after replacing prog
-
-This commit fixes a null pointer dereference issue during bpf_prog
-replacement for an active cgroup link. It prevents the panic by rejecting
-link updates if the new program's cgroup storage is incompatible with the
-existing program.
-
-Link: https://lore.kernel.org/bpf/20260728132336.2857800-1-pulehui@huaweicl=
-oud.com
-Link: https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@huaw=
-eicloud.com
-
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 4355ccb78a9c6..5cc9b2d92fd58 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-
-[ ... ]
-
-> @@ -1056,6 +1070,9 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
->  	if (!found)
->  		return -ENOENT;
-> =20
-> +	if (!cgroup_bpf_storages_compatible(link->link.prog, new_prog))
-> +		return -EINVAL;
-> +
-
-[Severity: High]
-This is a pre-existing issue, but does this function also need to validate
-expected_attach_type before allowing the replacement?
-
-In __cgroup_bpf_replace(), the code currently checks:
-
-    if (link->link.prog->type !=3D new_prog->type)
-        return -EINVAL;
-
-However, it does not check expected_attach_type. Could an attacker with
-CAP_BPF use BPF_LINK_UPDATE to swap a program with a different
-expected_attach_type (for example, swapping BPF_CGROUP_UDP4_SENDMSG onto a
-BPF_CGROUP_INET4_CONNECT link)?
-
-If the verifier validations are bypassed at runtime, the incorrect context
-structures could lead to out-of-bounds accesses and guaranteed NULL pointer
-dereferences when the program executes on the hook.
-
->  	cgrp->bpf.revisions[atype] +=3D 1;
->  	old_prog =3D xchg(&link->link.prog, new_prog);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but can this xchg() lead to a
-use-after-free of the BPF program when racing with lockless readers?
-
-Following this swap, bpf_prog_put() releases the old program, which is freed
-after an RCU grace period. However, generic reader functions access
-link->prog locklessly and in preemptible context.
-
-For example, in kernel/bpf/syscall.c:bpf_link_get_info_by_fd():
-
-    if (link->prog)
-        info.prog_id =3D link->prog->aux->id;
-
-And in kernel/bpf/syscall.c:bpf_link_show_fdinfo():
-
-    const struct bpf_prog *prog =3D link->prog;
-    ...
-    if (prog) {
-        bin2hex(prog_tag, prog->tag, sizeof(prog->tag));
-
-Since these readers can sleep on copy_to_user() or seq_printf() and do not
-hold rcu_read_lock() or take a reference count, could preemption cause the
-RCU grace period to expire before prog->aux or prog->tag is dereferenced?
-
->  	replace_effective_prog(cgrp, atype, pl);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807104403.1013=
-064-1-pulehui@huaweicloud.com?part=3D1
+That is still a giant stinking mess that needs to cleaned up.
