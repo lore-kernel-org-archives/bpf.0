@@ -1,299 +1,659 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C8F363096;
-	Fri,  7 Aug 2026 08:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899D4137923;
+	Fri,  7 Aug 2026 08:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786092104; cv=none; b=PTeY0b1c0Uu34mSZuvFq8wJ6r4L3DY3j91D1wvTaaIeTyExeG2b0OvEjyddM4nfo9Pg11IFOVdC0VuPLbhzmP2wOHl2XvtHxvFHWYIyTQRV17sGNZUzB01NfCrXuRFo8SSc9WzJnwkBWuJ7660Tj8L/fK44gGGnAuu0YRoL0gzQ=
+	t=1786093004; cv=none; b=YF7WXIiUuGYbj21KvD2CMI5Rf7pnJnmygMzpfDvIL3uecuUO0UtTKqXYhm/MwTVAqeRDYODeaG6YvAjjbG8ldf2zkuvjlxLaVPdBfMtjrPz4ZE13FcT7/JtDMryZvbFRb02x/J09knQpIcdUvIT256rabeiQFhDCreBEX1f9Co0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786092104; c=relaxed/simple;
-	bh=WZmABFRX8SqD4swuIr4Q6Eup6HimZVX6eYqNXiYo3OQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pqVkVNiPA36I3ln46+3HL+F9j9MEZgt9xxYMzkZNUetkRJDZvZzPM346mezxKPSGauZJ6FMpVeDtsHEhsE3/YitmKXaK2mLKdCTzrlkjSBnaGsWJ3oNhWZNXd2z8lRUWIEezTe3xfLhVlWa+L9AYsubV37polLeO2LMyBMm6sSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FWXS77Ik; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786093004; c=relaxed/simple;
+	bh=bAlOQQWuRKPiwwC4SBiCdbEKOBL+oBD7kx6cWNZMMbs=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=g4ChCf4WZP8O7zu1cX0FDTkKLJmlVtqLTNbiCpwZdA/ha+fNwaJB83/OaGOvYEHmo+E1fRQKWcrNoROSQrDFiYNSh7mwyTQ2XK7Vw6VT5OU5O/W8r/qDBLR3/kvvglTccyNmfOfBKIRYANFd6XlKG011DidjGIf/zBeX4b/Fg3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=pass smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=vOjGgRoM; arc=none smtp.client-ip=162.62.57.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyyself.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FWXS77Ik"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE6B1F000E9;
-	Fri,  7 Aug 2026 08:41:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786092103;
-	bh=bX0GZKwxVAysxgoEHnJMUji0cVP9kGDu6MBONJnEOy4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FWXS77IkcFSSEdGgAw6XDmw8m/FGZ0TkI4YeLP8AyFOH9M8DuGmMrVi8OlF/FHJge
-	 uCl/qINBHlrAsg95GlMtk3gzZlVFH5/Uog3nhTsrLHx/XrJp34/o15wFlwGP4VKx61
-	 XMtU/PjhuD//5732KjK4BKuMAAMp/JHh0H6RKF9Qf7f72vYrsV6QPYMTAv4aAVbWuY
-	 Dut8CETWHYfjcjNmrJvwOn2/p+oUxx9KRqyUJVBM5ZKbBk2HCceSAAcq/SsTkmxAg0
-	 iiS5XHoQ5MbZCj/ML4qe862gWEemLRlONSy6Ax5Uh9MPQWFveHTdZ97hMZk7Gd+ajd
-	 R8rMDT93ITiqQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v1 5/8] perf tools: Internal support for
- BUILD_ID_OFFSET
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ian Rogers" <irogers@google.com>
-Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260807071818.718751-6-irogers@google.com>
-References: <20260807071818.718751-1-irogers@google.com>
- <20260807071818.718751-6-irogers@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 08:41:42 +0000
-Message-Id: <20260807084143.0FE6B1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="vOjGgRoM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1786092989; bh=dvRZgNuehZEvlzQWMiFKWhJGXz1phNRqTZyCDew0fgg=;
+	h=From:To:Cc:Subject:Date;
+	b=vOjGgRoMLwCO11sJfzEn/bQDJEN20OF2EN/HDuMd/p4EJEsmj1jEm6kYh/NkRRxa/
+	 o4xhfVEqHAa5ZnQBggITzvEPkk3ok1jATnkMepw8B+LrIaTuRvP1QlymVZlNdr6Mv5
+	 xHM/kcVKY84Yv6Yt+uT6il8X6cOQtF/76asQhDdQ=
+Received: from halo.lan ([240e:379:220c:dc00:8d2f:7479:ac61:5053])
+	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
+	id E1920841; Fri, 07 Aug 2026 16:56:25 +0800
+X-QQ-mid: xmsmtpt1786092985tye7qdjny
+Message-ID: <tencent_F771B81731B921458D6F7CBF82ECDA888E08@qq.com>
+X-QQ-XMAILINFO: MyzM/wvJS/650tdk8qprsJORclmH+w0WhjG3g0mVuWVmK+4I9pZv7xq9iiE5vo
+	 8IuMxzeHKmYrKaIBnGNJ3ouu1G4T9LpdVjOCZwu6aaeQm77Eev0M1NPhBVBHJ4qLSONGDCTF5NI2
+	 st2e4VRT8Ppv0soP7SEEBaXnZhS3xV3VP1zh7DkbH0pLLbhwibM776zM1Dsn6+rnrGT0vlxm4D97
+	 nWWNi8iVtooG5Ul6Au79JN8ui34R2UpxkGkxzMJY4RV0NNjQmNWfz/i9i49l3pDbS3G2kfJTlNZm
+	 XuleMSOzq6niKg/tcbKSol9ISdxLVtnfZ46iAnAXvQhvlGQTbQKdFh/GCT4V5kvFvCDloQBDbSPN
+	 FUQtrHKkJgTWDnpj+VjPCxYBBFkkTZe3qP8hC2YE7qiS6ksKmsAJCfwv2d3ba2dZ7d/gVGIgpFoq
+	 8Rj+fHHv1XLBPNUqzxLJ6vJIz5DWMom95foMsNgjDUYsMZEy7mR63MEsRsvG2mAmoo+T21eqbypC
+	 N/qsBE7HqnzpXTWKZ4AgNIgh5zmdwJwkg1wBN9y4G+Esd17arKaDTcvU5l7VV3n5iV3DTT/xA2TU
+	 OrTM57qM6sWtytRMjRm7YzlpCTwIuXnG2fkvzb2PJH2TFafyFqbdm8YoiG4yURW5QvsX/ILD88Sp
+	 I+RhF+tzRHAeV09iH/jeRBMTybpHS97ecYuBM7tWEUT9V+6m05rmFjd/UnMPzEl3i/25DkNeCWtz
+	 qLOmZJsSnqlvtzqPNomEYGDHvjj6aa7XlOX44VBOyr0txXww10xLqtJXSE981K4Ia2AHGA5cHYlS
+	 0ySqOUdjz85pR+OhZBUcaV9iX57j+nxHWP8AnGOc7+10E7AGus5N+zwjhj6HL5NjGehahcFiOm0p
+	 SN4TPK01dlPS7TD4Df7o5H6/DBe3FRJ3Xdvs2aXFJg3vvqLkBxZk8uwCMf6N4bJ9LhTy+Vc59Zu/
+	 wWQyw25rr3F3L5+XyK91OlaapuJUDkq12vBKQFSrGftiFbpE0cIdOokOBv74sZElrcbeYxfX2zIA
+	 RRo4u6LKqnEoqPVi81rwd8xKoS3icm6PHkA+3URgaWAm6wGYuu17mulKH6yCYeqxd8EivlsxPXMO
+	 b3ugbA4cOEJ/3ybsY=
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
+From: Yangyu Chen <cyy@cyyself.name>
+To: Sukhdeep Singh <sukhdeeps@marvell.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Mina Almasry <almasrymina@google.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Richard Cochran <richardcochran@gmail.com>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yangyu Chen <cyy@cyyself.name>
+Subject: [PATCH net-next v3] net: atlantic: convert RX path to page_pool
+Date: Fri,  7 Aug 2026 16:56:09 +0800
+X-OQ-MSGID: <20260807085609.222279-1-cyy@cyyself.name>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 9 potential issue(=
-s) to consider:
-- [High] Synthesizing an event with PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET b=
-ut without PERF_SAMPLE_CALLCHAIN causes a NULL pointer dereference.
-- [High] Copying `callchain_bids` during event synthesis uses the potential=
-ly unrelated length `sample->callchain->nr`, leading to a heap buffer over-=
-read.
-- [High] Array access on `sample->callchain_bids` uses the unverified index=
- `j` derived from `chain->nr`, leading to a heap buffer over-read.
-- [High] `add_callchain_ip` ignores the `bid` and `offset` arguments when `=
-cpumode` is set, breaking callchain resolution for `PERF_SAMPLE_CALLCHAIN_B=
-UILD_ID_OFFSET`.
-- [High] Missing `OVERFLOW_CHECK` when parsing `PERF_SAMPLE_BUILD_ID_OFFSET=
-` allows out-of-bounds reads on malformed events.
-- [Medium] `__evsel__parse_sample` fails to unswap the byte layout of `stru=
-ct perf_build_id` when `swapped` is true, corrupting cross-endian perf.data=
- analysis.
-- [Medium] The test suite in `sample-parsing.c` is not updated for the new =
-flags, causing immediate failure.
-- [Medium] `thread__find_map` fails to resolve build IDs because `sample->i=
-p` takes precedence over `sample->bid.bid`, misinterpreting the offset as a=
- virtual address.
-- [Medium] `leaf_frame_caller` incorrectly inherits the build ID and offset=
- of its callee in `thread__resolve_callchain_sample`.
---
+The driver currently allocates RX buffers with dev_alloc_pages(), maps
+them with dma_map_page(), and uses a hand-rolled page-flip scheme to
+subdivide high-order pages. Behind an IOMMU, the map/unmap churn is a
+major RX cost: on a Thunderbolt-attached QNAP QNA-T310G1S, iperf3 -R
+over IPv6 tops out at about 2.2 Gbit/s over MTU 1500.
 
---- Patch [5]: [RFC PATCH v1 5/8] perf tools: Internal support for BUILD_ID=
-_OFFSET ---
-commit fbd06af754237e67a7a1661b582808d4407ddb3e
-Author: Ian Rogers <irogers@google.com>
-Subject: perf tools: Internal support for BUILD_ID_OFFSET
+Convert RX buffers to page_pool fragments. Pages are DMA-mapped once
+when entering the pool and recycled through the stack or XDP via the
+MEM_TYPE_PAGE_POOL memory model. This removes the custom page-flip
+accounting, lets page_pool handle fragment reuse, and ensures every RX
+path either keeps the ring's fragment reference for reposting or hands
+it to the skb/xdp_buff for later recycling.
 
-This patch implements user-space parsing for the new sample types in evsel.
-It updates perf_event_attr_fprintf to display the new bits in 'perf report =
--D'
-and updates synthetic event parameter names.
+Register the PTP RX ring's xdp_rxq as well, since it shares the RX
+clean paths. Drop the ethtool PageFlips/PageReuses/PageFrees counters
+which only described the old scheme.
 
-[Severity: Medium]
-There appears to be an omission outside of the files modified by this patch:
-Has test__sample_parsing() in tools/perf/tests/sample-parsing.c been
-updated for the new flags? If PERF_SAMPLE_MAX was updated, the hardcoded
-safety check:
+On the QNA-T310G1S, MTU 1500, TCP over IPv6, iperf3 -R improves from
+2.24 Gbit/s to 9.14 Gbit/s. The module was also smoke-tested with native
+XDP PASS, DROP, and ABORTED actions; carrier recovered after each
+attach/detach cycle and dmesg showed no page_pool/DMA warnings.
 
-    if (PERF_SAMPLE_MAX > PERF_SAMPLE_WEIGHT_STRUCT << 1)
+Reviewed-by: Sukhdeep Singh <sukhdeeps@marvell.com>
+Assisted-by: Claude:claude-fable-5
+Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+---
 
-might cause the test suite to unconditionally abort.
+Notes:
+    v2 -> v3:
+     - rebase on net-next; patches 1 and 2 of v2 (the ring teardown leak
+       fixes) went in via net, so only the conversion is left
+    
+    v2: https://lore.kernel.org/lkml/tencent_1F173E0FC1606D2AC704DC9C98AF10984607@qq.com/
+    v1: https://lore.kernel.org/lkml/tencent_7DB01BE7F8FA056BB5F11D3570CF636C4309@qq.com/
 
-> diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
-> --- a/tools/perf/util/event.c
-> +++ b/tools/perf/util/event.c
-> @@ -740,15 +734,33 @@ struct map *thread__find_map(struct thread *thread,=
- struct perf_sample *sample,
-> =20
->  		return NULL;
->  	}
-> -	al->map =3D maps__find(maps, al->addr);
-> -	if (al->map !=3D NULL) {
-> -		/*
-> -		 * Kernel maps might be changed when loading symbols so loading
-> -		 * must be done prior to using kernel maps.
-> -		 */
-> -		if (load_map)
-> -			map__load(al->map);
-> -		al->addr =3D map__map_ip(al->map, al->addr);
-> +
-> +	if (sample->ip) {
-> +		al->addr =3D sample->ip;
-> +		al->map =3D maps__find(maps, al->addr);
+ drivers/net/ethernet/aquantia/Kconfig         |   1 +
+ .../ethernet/aquantia/atlantic/aq_ethtool.c   |   3 -
+ .../net/ethernet/aquantia/atlantic/aq_ptp.c   |  18 +-
+ .../net/ethernet/aquantia/atlantic/aq_ring.c  | 210 +++++++-----------
+ .../net/ethernet/aquantia/atlantic/aq_ring.h  |   6 +-
+ .../net/ethernet/aquantia/atlantic/aq_vec.c   |  21 +-
+ 6 files changed, 120 insertions(+), 139 deletions(-)
 
-[Severity: Medium]
-When resolving callchains, sample->ip is typically populated with the file
-offset. Because sample->ip takes precedence in this if/else chain, will the
-offset be incorrectly evaluated as a virtual address via maps__find(),
-causing the resolution to skip maps__find_by_build_id() entirely?
+diff --git a/drivers/net/ethernet/aquantia/Kconfig b/drivers/net/ethernet/aquantia/Kconfig
+index cec2018c84a9..c8fb7b33e5b7 100644
+--- a/drivers/net/ethernet/aquantia/Kconfig
++++ b/drivers/net/ethernet/aquantia/Kconfig
+@@ -20,6 +20,7 @@ config AQTION
+ 	tristate "aQuantia AQtion(tm) Support"
+ 	depends on PCI
+ 	depends on MACSEC || MACSEC=n
++	select PAGE_POOL
+ 	help
+ 	  This enables the support for the aQuantia AQtion(tm) Ethernet card.
+ 
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ethtool.c b/drivers/net/ethernet/aquantia/atlantic/aq_ethtool.c
+index 420af958d486..0f5125bd2315 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_ethtool.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_ethtool.c
+@@ -100,9 +100,6 @@ static const char * const aq_ethtool_queue_rx_stat_names[] = {
+ 	"%sQueue[%d] AllocFails",
+ 	"%sQueue[%d] SkbAllocFails",
+ 	"%sQueue[%d] Polls",
+-	"%sQueue[%d] PageFlips",
+-	"%sQueue[%d] PageReuses",
+-	"%sQueue[%d] PageFrees",
+ 	"%sQueue[%d] XdpAbort",
+ 	"%sQueue[%d] XdpDrop",
+ 	"%sQueue[%d] XdpPass",
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ptp.c b/drivers/net/ethernet/aquantia/atlantic/aq_ptp.c
+index 558ac9237f75..3a40d986cd67 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_ptp.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_ptp.c
+@@ -13,6 +13,7 @@
+ #include <linux/ptp_classify.h>
+ #include <linux/interrupt.h>
+ #include <linux/clocksource.h>
++#include <net/xdp.h>
+ 
+ #include "aq_nic.h"
+ #include "aq_ptp.h"
+@@ -1192,12 +1193,23 @@ int aq_ptp_ring_alloc(struct aq_nic_s *aq_nic)
+ 	if (err)
+ 		goto err_exit_ptp_tx;
+ 
++	err = xdp_rxq_info_reg(&aq_ptp->ptp_rx.xdp_rxq, aq_nic->ndev,
++			       rx_ring_idx, aq_ptp->napi.napi_id);
++	if (err < 0)
++		goto err_exit_ptp_rx;
++
++	err = xdp_rxq_info_reg_mem_model(&aq_ptp->ptp_rx.xdp_rxq,
++					 MEM_TYPE_PAGE_POOL,
++					 aq_ptp->ptp_rx.pg_pool);
++	if (err < 0)
++		goto err_exit_xdp_rxq;
++
+ 	if (aq_ptp->a1_ptp) {
+ 		err = aq_ring_hwts_rx_alloc(&aq_ptp->hwts_rx, aq_nic, PTP_HWST_RING_IDX,
+ 					    aq_nic->aq_nic_cfg.rxds,
+ 					    aq_nic->aq_nic_cfg.aq_hw_caps->rxd_size);
+ 		if (err)
+-			goto err_exit_ptp_rx;
++			goto err_exit_xdp_rxq;
+ 	}
+ 
+ 	err = aq_ptp_skb_ring_init(&aq_ptp->skb_ring, aq_nic->aq_nic_cfg.rxds);
+@@ -1217,6 +1229,8 @@ int aq_ptp_ring_alloc(struct aq_nic_s *aq_nic)
+ err_exit_hwts_rx:
+ 	if (aq_ptp->a1_ptp)
+ 		aq_ring_hwts_rx_free(&aq_ptp->hwts_rx);
++err_exit_xdp_rxq:
++	xdp_rxq_info_unreg(&aq_ptp->ptp_rx.xdp_rxq);
+ err_exit_ptp_rx:
+ 	aq_ring_free(&aq_ptp->ptp_rx);
+ err_exit_ptp_tx:
+@@ -1233,6 +1247,8 @@ void aq_ptp_ring_free(struct aq_nic_s *aq_nic)
+ 		return;
+ 
+ 	aq_ring_free(&aq_ptp->ptp_tx);
++	if (xdp_rxq_info_is_reg(&aq_ptp->ptp_rx.xdp_rxq))
++		xdp_rxq_info_unreg(&aq_ptp->ptp_rx.xdp_rxq);
+ 	aq_ring_free(&aq_ptp->ptp_rx);
+ 	if (aq_ptp->a1_ptp)
+ 		aq_ring_hwts_rx_free(&aq_ptp->hwts_rx);
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+index e1193c6719d9..9dd881710594 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
+@@ -14,120 +14,37 @@
+ #include "aq_vec.h"
+ #include "aq_main.h"
+ 
++#include <net/page_pool/helpers.h>
+ #include <net/xdp.h>
+ #include <linux/filter.h>
+ #include <linux/bpf_trace.h>
+ #include <linux/netdevice.h>
+ #include <linux/etherdevice.h>
+ 
+-static void aq_get_rxpages_xdp(struct aq_ring_buff_s *buff,
+-			       struct xdp_buff *xdp)
+-{
+-	struct skb_shared_info *sinfo;
+-	int i;
+-
+-	if (xdp_buff_has_frags(xdp)) {
+-		sinfo = xdp_get_shared_info_from_buff(xdp);
+-
+-		for (i = 0; i < sinfo->nr_frags; i++) {
+-			skb_frag_t *frag = &sinfo->frags[i];
+-
+-			page_ref_inc(skb_frag_page(frag));
+-		}
+-	}
+-	page_ref_inc(buff->rxdata.page);
+-}
+-
+-static inline void aq_free_rxpage(struct aq_rxpage *rxpage, struct device *dev)
+-{
+-	unsigned int len = PAGE_SIZE << rxpage->order;
+-
+-	dma_unmap_page(dev, rxpage->daddr, len, DMA_FROM_DEVICE);
+-
+-	/* Drop the ref for being in the ring. */
+-	__free_pages(rxpage->page, rxpage->order);
+-	rxpage->page = NULL;
+-}
+-
+-static int aq_alloc_rxpages(struct aq_rxpage *rxpage, struct aq_ring_s *rx_ring)
+-{
+-	struct device *dev = aq_nic_get_dev(rx_ring->aq_nic);
+-	unsigned int order = rx_ring->page_order;
+-	struct page *page;
+-	int ret = -ENOMEM;
+-	dma_addr_t daddr;
+-
+-	page = dev_alloc_pages(order);
+-	if (unlikely(!page))
+-		goto err_exit;
+-
+-	daddr = dma_map_page(dev, page, 0, PAGE_SIZE << order,
+-			     DMA_FROM_DEVICE);
+-
+-	if (unlikely(dma_mapping_error(dev, daddr)))
+-		goto free_page;
+-
+-	rxpage->page = page;
+-	rxpage->daddr = daddr;
+-	rxpage->order = order;
+-	rxpage->pg_off = rx_ring->page_offset;
+-
+-	return 0;
+-
+-free_page:
+-	__free_pages(page, order);
+-
+-err_exit:
+-	return ret;
+-}
+-
+ static int aq_get_rxpages(struct aq_ring_s *self, struct aq_ring_buff_s *rxbuf)
+ {
+-	unsigned int order = self->page_order;
+-	u16 page_offset = self->page_offset;
+-	u16 frame_max = self->frame_max;
+-	u16 tail_size = self->tail_size;
+-	int ret;
++	unsigned int size = self->page_offset + self->frame_max +
++			    self->tail_size;
++	unsigned int pg_off;
++	struct page *page;
+ 
+-	if (rxbuf->rxdata.page) {
+-		/* One means ring is the only user and can reuse */
+-		if (page_ref_count(rxbuf->rxdata.page) > 1) {
+-			/* Try reuse buffer */
+-			rxbuf->rxdata.pg_off += frame_max + page_offset +
+-						tail_size;
+-			if (rxbuf->rxdata.pg_off + frame_max + tail_size <=
+-			    (PAGE_SIZE << order)) {
+-				u64_stats_update_begin(&self->stats.rx.syncp);
+-				self->stats.rx.pg_flips++;
+-				u64_stats_update_end(&self->stats.rx.syncp);
++	/* Buffers whose page was not passed up the stack are reposted
++	 * with the data they already carry discarded.
++	 */
++	if (rxbuf->rxdata.page)
++		return 0;
+ 
+-			} else {
+-				/* Buffer exhausted. We have other users and
+-				 * should release this page and realloc
+-				 */
+-				aq_free_rxpage(&rxbuf->rxdata,
+-					       aq_nic_get_dev(self->aq_nic));
+-				u64_stats_update_begin(&self->stats.rx.syncp);
+-				self->stats.rx.pg_losts++;
+-				u64_stats_update_end(&self->stats.rx.syncp);
+-			}
+-		} else {
+-			rxbuf->rxdata.pg_off = page_offset;
+-			u64_stats_update_begin(&self->stats.rx.syncp);
+-			self->stats.rx.pg_reuses++;
+-			u64_stats_update_end(&self->stats.rx.syncp);
+-		}
++	page = page_pool_dev_alloc_frag(self->pg_pool, &pg_off, size);
++	if (unlikely(!page)) {
++		u64_stats_update_begin(&self->stats.rx.syncp);
++		self->stats.rx.alloc_fails++;
++		u64_stats_update_end(&self->stats.rx.syncp);
++		return -ENOMEM;
+ 	}
+ 
+-	if (!rxbuf->rxdata.page) {
+-		ret = aq_alloc_rxpages(&rxbuf->rxdata, self);
+-		if (ret) {
+-			u64_stats_update_begin(&self->stats.rx.syncp);
+-			self->stats.rx.alloc_fails++;
+-			u64_stats_update_end(&self->stats.rx.syncp);
+-		}
+-		return ret;
+-	}
++	rxbuf->rxdata.page = page;
++	rxbuf->rxdata.daddr = page_pool_get_dma_addr(page);
++	rxbuf->rxdata.pg_off = pg_off + self->page_offset;
+ 
+ 	return 0;
+ }
+@@ -179,6 +96,15 @@ int aq_ring_rx_alloc(struct aq_ring_s *self,
+ 		     unsigned int idx,
+ 		     struct aq_nic_cfg_s *aq_nic_cfg)
+ {
++	struct page_pool_params pp_params = {
++		.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV,
++		.pool_size = aq_nic_cfg->rxds,
++		.nid = NUMA_NO_NODE,
++		.dev = aq_nic_get_dev(aq_nic),
++		.dma_dir = DMA_FROM_DEVICE,
++	};
++	struct page_pool *pool;
++
+ 	self->aq_nic = aq_nic;
+ 	self->idx = idx;
+ 	self->size = aq_nic_cfg->rxds;
+@@ -200,6 +126,18 @@ int aq_ring_rx_alloc(struct aq_ring_s *self,
+ 		self->tail_size = 0;
+ 	}
+ 
++	pp_params.order = self->page_order;
++	pp_params.max_len = PAGE_SIZE << self->page_order;
++
++	pool = page_pool_create(&pp_params);
++	if (IS_ERR(pool))
++		return PTR_ERR(pool);
++
++	self->pg_pool = pool;
++
++	/* On failure aq_ring_alloc() calls aq_ring_free(), which also
++	 * destroys the page pool.
++	 */
+ 	return aq_ring_alloc(self, aq_nic);
+ }
+ 
+@@ -346,7 +284,11 @@ bool aq_ring_tx_clean(struct aq_ring_s *self)
+ 			++self->stats.tx.packets;
+ 			self->stats.tx.bytes += xdp_get_frame_len(buff->xdpf);
+ 			u64_stats_update_end(&self->stats.tx.syncp);
+-			xdp_return_frame_rx_napi(buff->xdpf);
++			/* Frames queued via ndo_xdp_xmit() may come from a
++			 * page pool owned by another NAPI context: no direct
++			 * recycling.
++			 */
++			xdp_return_frame(buff->xdpf);
+ 		}
+ 
+ out:
+@@ -437,22 +379,15 @@ int aq_xdp_xmit(struct net_device *dev, int num_frames,
+ }
+ 
+ static struct sk_buff *aq_xdp_build_skb(struct xdp_buff *xdp,
+-					struct net_device *dev,
+-					struct aq_ring_buff_s *buff)
++					struct net_device *dev)
+ {
+ 	struct xdp_frame *xdpf;
+-	struct sk_buff *skb;
+ 
+ 	xdpf = xdp_convert_buff_to_frame(xdp);
+ 	if (unlikely(!xdpf))
+ 		return NULL;
+ 
+-	skb = xdp_build_skb_from_frame(xdpf, dev);
+-	if (!skb)
+-		return NULL;
+-
+-	aq_get_rxpages_xdp(buff, xdp);
+-	return skb;
++	return xdp_build_skb_from_frame(xdpf, dev);
+ }
+ 
+ static struct sk_buff *aq_xdp_run_prog(struct aq_nic_s *aq_nic,
+@@ -473,8 +408,16 @@ static struct sk_buff *aq_xdp_run_prog(struct aq_nic_s *aq_nic,
+ 	u64_stats_update_end(&rx_ring->stats.rx.syncp);
+ 
+ 	prog = READ_ONCE(rx_ring->xdp_prog);
+-	if (!prog)
+-		return aq_xdp_build_skb(xdp, aq_nic->ndev, buff);
++	if (!prog) {
++		skb = aq_xdp_build_skb(xdp, aq_nic->ndev);
++		/* The ring has already handed its page pool reference to the
++		 * xdp_buff, so if the skb could not be built the buffer must
++		 * be returned to the pool here or its fragments would leak.
++		 */
++		if (!skb)
++			xdp_return_buff(xdp);
++		return skb;
++	}
+ 
+ 	prefetchw(xdp->data_hard_start); /* xdp_frame write */
+ 
+@@ -485,7 +428,7 @@ static struct sk_buff *aq_xdp_run_prog(struct aq_nic_s *aq_nic,
+ 	act = bpf_prog_run_xdp(prog, xdp);
+ 	switch (act) {
+ 	case XDP_PASS:
+-		skb = aq_xdp_build_skb(xdp, aq_nic->ndev, buff);
++		skb = aq_xdp_build_skb(xdp, aq_nic->ndev);
+ 		if (!skb)
+ 			goto out_aborted;
+ 		u64_stats_update_begin(&rx_ring->stats.rx.syncp);
+@@ -503,7 +446,6 @@ static struct sk_buff *aq_xdp_run_prog(struct aq_nic_s *aq_nic,
+ 		u64_stats_update_begin(&rx_ring->stats.rx.syncp);
+ 		++rx_ring->stats.rx.xdp_tx;
+ 		u64_stats_update_end(&rx_ring->stats.rx.syncp);
+-		aq_get_rxpages_xdp(buff, xdp);
+ 		break;
+ 	case XDP_REDIRECT:
+ 		if (xdp_do_redirect(aq_nic->ndev, xdp, prog) < 0)
+@@ -512,7 +454,6 @@ static struct sk_buff *aq_xdp_run_prog(struct aq_nic_s *aq_nic,
+ 		u64_stats_update_begin(&rx_ring->stats.rx.syncp);
+ 		++rx_ring->stats.rx.xdp_redirect;
+ 		u64_stats_update_end(&rx_ring->stats.rx.syncp);
+-		aq_get_rxpages_xdp(buff, xdp);
+ 		break;
+ 	default:
+ 		fallthrough;
+@@ -523,11 +464,13 @@ static struct sk_buff *aq_xdp_run_prog(struct aq_nic_s *aq_nic,
+ 		u64_stats_update_end(&rx_ring->stats.rx.syncp);
+ 		trace_xdp_exception(aq_nic->ndev, prog, act);
+ 		bpf_warn_invalid_xdp_action(aq_nic->ndev, prog, act);
++		xdp_return_buff(xdp);
+ 		break;
+ 	case XDP_DROP:
+ 		u64_stats_update_begin(&rx_ring->stats.rx.syncp);
+ 		++rx_ring->stats.rx.xdp_drop;
+ 		u64_stats_update_end(&rx_ring->stats.rx.syncp);
++		xdp_return_buff(xdp);
+ 		break;
+ 	}
+ 
+@@ -546,8 +489,11 @@ static bool aq_add_rx_fragment(struct device *dev,
+ 	do {
+ 		skb_frag_t *frag;
+ 
+-		if (unlikely(sinfo->nr_frags >= MAX_SKB_FRAGS))
++		if (unlikely(sinfo->nr_frags >= MAX_SKB_FRAGS)) {
++			/* Attached frags must reach xdp_return_buff() */
++			xdp_buff_set_frags_flag(xdp);
+ 			return true;
++		}
+ 
+ 		frag = &sinfo->frags[sinfo->nr_frags++];
+ 		buff_ = &ring->buff_ring[buff_->next];
+@@ -571,6 +517,11 @@ static bool aq_add_rx_fragment(struct device *dev,
+ 		if (page_is_pfmemalloc(buff_->rxdata.page))
+ 			xdp_buff_set_frag_pfmemalloc(xdp);
+ 
++		/* The frag's page pool reference is owned by the xdp_buff
++		 * from now on.
++		 */
++		buff_->rxdata.page = NULL;
++
+ 	} while (!buff_->is_eop);
+ 
+ 	xdp_buff_set_frags_flag(xdp);
+@@ -674,6 +625,7 @@ static int __aq_ring_rx_clean(struct aq_ring_s *self, struct napi_struct *napi,
+ 			err = -ENOMEM;
+ 			goto err_exit;
+ 		}
++		skb_mark_for_recycle(skb);
+ 		if (is_ptp_ring)
+ 			buff->len -=
+ 				aq_ptp_extract_ts(self->aq_nic, skb_hwtstamps(skb),
+@@ -694,7 +646,7 @@ static int __aq_ring_rx_clean(struct aq_ring_s *self, struct napi_struct *napi,
+ 					buff->rxdata.pg_off + hdr_len,
+ 					buff->len - hdr_len,
+ 					self->frame_max);
+-			page_ref_inc(buff->rxdata.page);
++			buff->rxdata.page = NULL;
+ 		}
+ 
+ 		if (!buff->is_eop) {
+@@ -713,7 +665,7 @@ static int __aq_ring_rx_clean(struct aq_ring_s *self, struct napi_struct *napi,
+ 						buff_->rxdata.pg_off,
+ 						buff_->len,
+ 						self->frame_max);
+-				page_ref_inc(buff_->rxdata.page);
++				buff_->rxdata.page = NULL;
+ 				buff_->is_cleaned = 1;
+ 
+ 				buff->is_ip_cso &= buff_->is_ip_cso;
+@@ -851,6 +803,11 @@ static int __aq_ring_xdp_clean(struct aq_ring_s *rx_ring,
+ 		xdp_init_buff(&xdp, frame_sz, &rx_ring->xdp_rxq);
+ 		xdp_prepare_buff(&xdp, hard_start, rx_ring->page_offset,
+ 				 buff->len, false);
++		/* The xdp_buff owns the buffer's page pool reference from
++		 * here on; it comes back through the MEM_TYPE_PAGE_POOL
++		 * memory model on every XDP verdict.
++		 */
++		buff->rxdata.page = NULL;
+ 		if (!buff->is_eop) {
+ 			if (aq_add_rx_fragment(dev, rx_ring, buff, &xdp)) {
+ 				u64_stats_update_begin(&rx_ring->stats.rx.syncp);
+@@ -858,6 +815,7 @@ static int __aq_ring_xdp_clean(struct aq_ring_s *rx_ring,
+ 				rx_ring->stats.rx.bytes += xdp_get_buff_len(&xdp);
+ 				++rx_ring->stats.rx.xdp_aborted;
+ 				u64_stats_update_end(&rx_ring->stats.rx.syncp);
++				xdp_return_buff(&xdp);
+ 				continue;
+ 			}
+ 		}
+@@ -969,7 +927,9 @@ void aq_ring_rx_deinit(struct aq_ring_s *self)
+ 		if (!buff->rxdata.page)
+ 			continue;
+ 
+-		aq_free_rxpage(&buff->rxdata, aq_nic_get_dev(self->aq_nic));
++		page_pool_put_full_page(self->pg_pool, buff->rxdata.page,
++					false);
++		buff->rxdata.page = NULL;
+ 	}
+ 
+ 	self->sw_head = self->sw_tail;
+@@ -983,6 +943,11 @@ void aq_ring_free(struct aq_ring_s *self)
+ 	kfree(self->buff_ring);
+ 	self->buff_ring = NULL;
+ 
++	if (self->pg_pool) {
++		page_pool_destroy(self->pg_pool);
++		self->pg_pool = NULL;
++	}
++
+ 	if (self->dx_ring) {
+ 		dma_free_coherent(aq_nic_get_dev(self->aq_nic),
+ 				  self->size * self->dx_size, self->dx_ring,
+@@ -1021,9 +986,6 @@ unsigned int aq_ring_fill_stats_data(struct aq_ring_s *self, u64 *data)
+ 			data[++count] = self->stats.rx.alloc_fails;
+ 			data[++count] = self->stats.rx.skb_alloc_fails;
+ 			data[++count] = self->stats.rx.polls;
+-			data[++count] = self->stats.rx.pg_flips;
+-			data[++count] = self->stats.rx.pg_reuses;
+-			data[++count] = self->stats.rx.pg_losts;
+ 			data[++count] = self->stats.rx.xdp_aborted;
+ 			data[++count] = self->stats.rx.xdp_drop;
+ 			data[++count] = self->stats.rx.xdp_pass;
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
+index 6431cc62962f..58bcadb3e3cc 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
+@@ -17,12 +17,12 @@
+ #define AQ_XDP_TAILROOM		SKB_DATA_ALIGN(sizeof(struct skb_shared_info))
+ 
+ struct page;
++struct page_pool;
+ struct aq_nic_cfg_s;
+ 
+ struct aq_rxpage {
+ 	struct page *page;
+ 	dma_addr_t daddr;
+-	unsigned int order;
+ 	unsigned int pg_off;
+ };
+ 
+@@ -105,9 +105,6 @@ struct aq_ring_stats_rx_s {
+ 	u64 alloc_fails;
+ 	u64 skb_alloc_fails;
+ 	u64 polls;
+-	u64 pg_losts;
+-	u64 pg_flips;
+-	u64 pg_reuses;
+ 	u64 xdp_aborted;
+ 	u64 xdp_drop;
+ 	u64 xdp_pass;
+@@ -151,6 +148,7 @@ struct aq_ring_s {
+ 	u16 tail_size;
+ 	union aq_ring_stats_s stats;
+ 	dma_addr_t dx_ring_pa;
++	struct page_pool *pg_pool;
+ 	struct bpf_prog *xdp_prog;
+ 	enum atl_ring_type ring_type;
+ 	struct xdp_rxq_info xdp_rxq;
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_vec.c b/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
+index 05814fea0f5f..8e15405d4941 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_vec.c
+@@ -146,25 +146,32 @@ int aq_vec_ring_alloc(struct aq_vec_s *self, struct aq_nic_s *aq_nic,
+ 		aq_nic_set_tx_ring(aq_nic, idx_ring, ring);
+ 
+ 		ring = &self->ring[i][AQ_VEC_RX_ID];
++		/* Registering the MEM_TYPE_PAGE_POOL memory model below needs
++		 * the page pool created by aq_ring_rx_alloc(), so the ring is
++		 * allocated first. If a registration fails, the ring has to be
++		 * freed explicitly: rx_rings is not incremented yet, so the
++		 * unwind through aq_vec_ring_free() would not cover it.
++		 */
++		err = aq_ring_rx_alloc(ring, aq_nic, idx_ring, aq_nic_cfg);
++		if (err)
++			goto err_exit;
++
+ 		if (xdp_rxq_info_reg(&ring->xdp_rxq,
+ 				     aq_nic->ndev, idx,
+ 				     self->napi.napi_id) < 0) {
++			aq_ring_free(ring);
+ 			err = -ENOMEM;
+ 			goto err_exit;
+ 		}
+ 		if (xdp_rxq_info_reg_mem_model(&ring->xdp_rxq,
+-					       MEM_TYPE_PAGE_SHARED, NULL) < 0) {
++					       MEM_TYPE_PAGE_POOL,
++					       ring->pg_pool) < 0) {
+ 			xdp_rxq_info_unreg(&ring->xdp_rxq);
++			aq_ring_free(ring);
+ 			err = -ENOMEM;
+ 			goto err_exit;
+ 		}
+ 
+-		err = aq_ring_rx_alloc(ring, aq_nic, idx_ring, aq_nic_cfg);
+-		if (err) {
+-			xdp_rxq_info_unreg(&ring->xdp_rxq);
+-			goto err_exit;
+-		}
+-
+ 		++self->rx_rings;
+ 	}
+ 
 
-> +		if (al->map !=3D NULL) {
+base-commit: 4fa4977a0d900f936bcae5cd2c510be5554e8dd6
+-- 
+2.47.3
 
-[ ... ]
-
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -3778,6 +3778,30 @@ int __evsel__parse_sample(struct evsel *evsel, uni=
-on perf_event *event,
->  		array =3D (void *)array + sz;
->  	}
-> =20
-> +	if (type & PERF_SAMPLE_BUILD_ID_OFFSET) {
-> +		data->bid.bid =3D (struct perf_build_id *) array;
-
-[Severity: Medium]
-During cross-platform analysis of perf.data files from a different
-endianness, the event array is 64-bit byte-swapped prior to parsing. Since
-struct perf_build_id contains mixed-size fields (8-bit, 16-bit, 32-bit,
-and a byte array), does this code need to unswap the layout similar to how
-PERF_SAMPLE_AUX uses mem_bswap_64() to prevent data corruption?
-
-> +		array +=3D sizeof(struct perf_build_id) / sizeof(u64);
-> +		data->bid.offset =3D *array;
-> +		array++;
-
-[Severity: High]
-Should there be an OVERFLOW_CHECK_u64(array) before dereferencing array
-for the offset? Since PERF_SAMPLE_BUILD_ID_OFFSET is not part of
-PERF_SAMPLE_MASK, its size isn't included in evsel->sample_size,
-which could allow an out-of-bounds read on truncated events.
-
-> +	} else {
-> +		data->bid.bid =3D NULL;
-> +		data->bid.offset =3D 0;
-> +	}
-
-[ ... ]
-
-> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> --- a/tools/perf/util/machine.c
-> +++ b/tools/perf/util/machine.c
-> @@ -2216,7 +2216,9 @@ static int add_callchain_ip(struct thread *thread,
->  			    struct branch_flags *flags,
->  			    struct iterations *iter,
->  			    u64 branch_from,
-> -			    bool symbols)
-> +			    bool symbols,
-> +			      struct perf_build_id *bid,
-> +			      u64 offset)
->  {
->  	struct map_symbol ms =3D {};
->  	struct addr_location al;
-> @@ -2230,7 +2232,9 @@ static int add_callchain_ip(struct thread *thread,
->  	al.srcline =3D NULL;
->  	if (!cpumode) {
->  		thread__find_cpumode_addr_location(thread,
-> -					   &(struct perf_sample){.ip =3D ip},
-> +					   &(struct perf_sample){.ip =3D ip,
-> +								 .bid =3D { .bid =3D bid,
-> +									  .offset =3D offset }},
->  					   symbols, &al);
->  	} else {
-
-[Severity: High]
-In thread__resolve_callchain_sample(), cpumode is initialized locally and
-its address (&cpumode) is passed to add_callchain_ip(), meaning cpumode is
-never NULL. Doesn't this force execution into the else branch here?
-
-The else branch constructs a temporary struct perf_sample that omits the
-new bid and offset parameters, which silently drops the data before
-map/symbol resolution.
-
-[ ... ]
-
-> @@ -2979,13 +3003,19 @@ static int thread__resolve_callchain_sample(struc=
-t thread *thread,
->  			continue;
->  #endif
->  		ip =3D chain->ips[j];
-> +		if (sample->callchain_bids) {
-> +			bid =3D (struct perf_build_id *)&((u64 *)sample->callchain_bids)[j * =
-4];
-> +			offset =3D ((u64 *)sample->callchain_bids)[j * 4 + 3];
-> +		}
-
-[Severity: High]
-Since the loop index j is bounded by chain->nr rather than
-sample->callchain_bids_nr, could a malformed event where chain->nr exceeds
-the actual length of callchain_bids cause a heap buffer over-read here?
-
->  		if (ip < PERF_CONTEXT_MAX)
->                         ++nr_entries;
-
-[ ... ]
-
-> @@ -3011,21 +3041,28 @@ static int thread__resolve_callchain_sample(struc=
-t thread *thread,
-> =20
->  				err =3D add_callchain_ip(thread, cursor, parent,
->  						root_al, &cpumode, leaf_frame_caller,
-> -						false, NULL, NULL, 0, symbols);
-> -				if (err)
-> -					return (err < 0) ? err : 0;
-> +						false, NULL, NULL, 0, symbols, bid, offset);
-
-[Severity: Medium]
-When synthesizing a missing caller frame (leaf_frame_caller), this passes
-the bid and offset variables belonging to the current frame (j, the callee)
-into add_callchain_ip(). Does this incorrectly associate the synthesized
-caller's IP with the callee's build ID?
-
-> +				if (err) {
-> +					err =3D (err < 0) ? err : 0;
-> +					goto out;
-> +				}
-
-[ ... ]
-
-> diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthet=
-ic-events.c
-> --- a/tools/perf/util/synthetic-events.c
-> +++ b/tools/perf/util/synthetic-events.c
-> @@ -1701,6 +1701,13 @@ size_t perf_event__sample_event_size(const struct =
-perf_sample *sample, u64 type,
->  		result +=3D sample->aux_sample.size;
->  	}
-> =20
-> +	if (type & PERF_SAMPLE_BUILD_ID_OFFSET)
-> +		result +=3D sizeof(struct perf_build_id) + sizeof(u64);
-> +
-> +	if (type & PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET)
-> +		result +=3D sizeof(u64) + sample->callchain->nr *
-> +			  (sizeof(struct perf_build_id) + sizeof(u64));
-> +
->  	return result;
->  }
-
-[Severity: High]
-If an event contains PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET but not
-PERF_SAMPLE_CALLCHAIN, sample->callchain will be NULL. Does this sequence
-unconditionally dereference sample->callchain->nr and cause a crash?
-
-[ ... ]
-
-> @@ -1933,6 +1940,19 @@ int perf_event__synthesize_sample(union perf_event=
- *event, u64 type, u64 read_fo
->  		array =3D (void *)array + sz;
->  	}
-> =20
-> +	if (type & PERF_SAMPLE_BUILD_ID_OFFSET) {
-> +		memcpy(array, sample->bid.bid, sizeof(struct perf_build_id));
-> +		array +=3D sizeof(struct perf_build_id) / sizeof(u64);
-> +		*array++ =3D sample->bid.offset;
-> +	}
-> +
-> +	if (type & PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET) {
-> +		*array++ =3D sample->callchain->nr;
-> +		sz =3D sample->callchain->nr * (sizeof(struct perf_build_id) + sizeof(=
-u64));
-> +		memcpy(array, sample->callchain_bids, sz);
-
-[Severity: High]
-Should this use sample->callchain_bids_nr instead of sample->callchain->nr
-for the copy size calculation? If a malformed event provides a chain->nr
-that is larger than the true bounds of callchain_bids, could this
-copy out-of-bounds heap memory into the synthesized event stream?
-
-> +		array +=3D sz / sizeof(u64);
-> +	}
-> +
->  	return 0;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807071818.7187=
-51-1-irogers@google.com?part=3D5
