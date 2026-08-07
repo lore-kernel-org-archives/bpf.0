@@ -1,32 +1,32 @@
-Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
+Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61090443E2A
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 20:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E57374A04
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 20:45:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786135523; cv=none; b=Aoqi6Pky/HaHOiDGlNO6YYIvHTTFkvVqGoeULwVpdoJCVNmUC3iusk3A8bMRqxjcmeMOkLeJLldooaXvw8zFrGuQ4hAge/f+B8UCAjBQ2QRED8y+372SOSouAjqmM32yn9EvXgB3FsXbOFeh0Yo/llf9MSZIR+I7+prypfIeXBY=
+	t=1786135525; cv=none; b=hccABUMhiugCiys1SmFmjICyuqOYApurSTAq8mQZ+/WhpVZPuECujL+uro871I7QFn6VvLyu1r5LFtDjQCeS3RBbOxgnF11O3V/0uon/ypm5OiK5kBR7GedHZmj3FOdeep9wn90G4lItKb5wLvT1rQDgpN35VhXijZq/53AQtYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786135523; c=relaxed/simple;
-	bh=D78Mx4+pOs7TfrQP4jrUPQQSEO9nXqaSzYo2HHDnLmM=;
+	s=arc-20240116; t=1786135525; c=relaxed/simple;
+	bh=Q4RHAPdjvAUroJEAowcOvOdKnx9h9nY6Yn+jXr+v6wU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NyDJkz9p7szIpK6SawWb5I8QH1DlH5DL+kh6uGItyfFPxCC4Es2mG6gSBcVVxzMcboZQ3eppoCdL8mCxXUf/UaBGZd9VggQavluy/jlW8VW1ZyRvy1yVvwf9q0Q+yzD7TphtCYjY4de+HGLqJGpC9Q+AhahwaG8eUjSzpWRLzhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xSc2boY7; arc=none smtp.client-ip=95.215.58.184
+	 MIME-Version; b=lXB6WY3G4HMO5Tkf6cac0uW2ya2VRto8rRmfQLdXlBIsoWvyg00nGnENzXy9x/ok6SOE28OaxJXuz3IhNV9VlFXeTiq4/H/Wgaqp/A25hMRFWMrP392EyCrxwHhmCCnAYCN0d4AVH8SAkDWyr9J6ff2/s6LFxoPXy8t/pEQsfcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mjK9iPLV; arc=none smtp.client-ip=95.215.58.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xSc2boY7"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mjK9iPLV"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786135519;
+	t=1786135521;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QZs5zqX+hd1LHL2kRM320k0sAaIq2YLmvFL7nUT8s/M=;
-	b=xSc2boY74/hPWqlQjwWGR1WXSp2gniKpuL9Yd4ASH0RkH9lGQ95xQFLLpt/sWKkA6Ee5kt
-	LIA121KR2UQ0PDHdae+zqc//9pTxRsEMv7uFv6+HNWNzTfWf4rv1QfdbCKVPcuBgYdczTR
-	YYFB6/9I8faWPk5iB3zqtiFVfrtC/cw=
+	bh=x+aKGXBL2tMvuQmrqU+86b/PjqkYaMHr/2ScOGESSKE=;
+	b=mjK9iPLVNoISOhJoa7L1V1Ou6HrIcruls21r8soEC/N/vwlh5b/+VkmS9TlQsGOe6gsvAA
+	U7Jns/AZOfx1ys/ba5ei1J/WkXX2djakMqCPZZnofLhP4YnxhjSqTkSXd6YuTVjYcbyy55
+	0BEheeKx2fPcSMwjm/w4syPnU46glBU=
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -34,9 +34,9 @@ Cc: ast@kernel.org,
 	andrii@kernel.org,
 	yonghong.song@linux.dev,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v2 3/4] selftests/bpf: report failed subtest count in test_progs summary
-Date: Fri,  7 Aug 2026 13:44:33 -0700
-Message-ID: <20260807204434.1036279-4-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v2 4/4] selftests/bpf: vmtest.sh: preserve command quoting when running in the VM
+Date: Fri,  7 Aug 2026 13:44:34 -0700
+Message-ID: <20260807204434.1036279-5-vineet.gupta@linux.dev>
 In-Reply-To: <20260807204434.1036279-1-vineet.gupta@linux.dev>
 References: <20260807204434.1036279-1-vineet.gupta@linux.dev>
 Precedence: bulk
@@ -48,111 +48,109 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The final summary line is asymmetric: the PASSED field reports both the
-number of top-level tests and the number of subtests within them, while
-the FAILED field reports only top-level tests:
+vmtest.sh captures the trailing command with command="$@", which flattens
+the arguments into a single space-separated string, and then pastes it
+into the generated guest init script:
 
-  Summary: 640/5750 PASSED, 7760 SKIPPED, 100 FAILED
+        cd /root/bpf
+        echo ${command}
+        stdbuf -oL -eL ${command}
 
-There is no way to tell whether those 100 failing tests amount to 100
-broken subtests or 1000. So count subtests with a non-zero error_cnt
-into a new sub_fail_cnt and print it alongside fail_cnt:
+That here-doc is unquoted, so the host expands ${command} and the
+flattened text lands in the script verbatim. The guest bash then parses
+those lines as shell source, re-splitting the text on whitespace and
+glob-expanding it against /root/bpf. As a result any command with a glob
+or an argument containing spaces is corrupted before it reaches the test
+binary. For example:
 
-  Summary: 640/5750 PASSED, 7760 SKIPPED, 100/342 FAILED
-                                             ^^^^^
+        vmtest.sh -- ./test_progs -a 'verifier_*'
 
-This is correct for -j runs, as subtest_states[] is populated both in
-sequential and parallel modes.
+has 'verifier_*' expanded in the guest into the matching object/skeleton
+files (verifier_align.bpf.o verifier_align.skel.h ...), so test_progs is
+handed a list of filenames instead of the intended name filter and runs no
+matching tests.
 
-A test that fails without declaring any subtests contributes 0 to
-sub_fail_cnt. That mirrors the existing behaviour of sub_succ_cnt for
-tests that pass without subtests, keeping the two numerators
-comparable.
+Quote each argument with printf '%q ' so the command is reproduced
+verbatim inside the VM: the escaped text goes through exactly one round
+of quote removal when the guest parses the init script, yielding the
+original argv with globs and special characters intact. The common case
+(e.g. -t <name>) is unaffected.
 
-Also emit the new count as a "failed_subtest" field in the JSON output,
-for parity with the existing "success_subtest".
+Only do this when there is a command to quote. printf '%q ' with no
+arguments still applies the format once and emits '', which the -s
+(debug shell) path would take for a real command and try to run.
 
-Note that this changes the trailing field of the summary line from a bare
-integer to "A/B", so anything scraping "N FAILED" out of it needs updating.
-While here, fix the fail_cnt comment in struct test_env, which claims it
-counts "total failed tests + sub-tests".
+Note this makes the trailing command strictly an argv rather than a shell
+snippet: passing it pre-quoted as one word, e.g.
 
+        vmtest.sh -- "./test_progs -t foo"
+
+no longer works, and neither does embedding guest-side shell syntax such
+as ';' or a redirection. 'sh -c ...' still works.
+
+The RV64 recipe in README.rst does depend on the old double parse: it
+wraps the denylist in \" so the literal quotes reach the guest, whose
+second parse of the init script removes them. Under %q those quotes now
+survive into argv, and parse_test_list() strtok_r()s on ',' turns them
+into junk filters:
+
+        -d ",exceptions,"  ->  ["] [exceptions] ["]
+
+That is harmless for DENYLIST.riscv64 only because its first line is a
+comment, so the leading field is empty. A denylist starting with a real
+entry would silently lose it - ["*arena*] never matches - so drop the
+backslashes and let the host consume the quotes instead.
+
+Fixes: c9709f52386d ("bpf: Helper script for running BPF presubmit tests")
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- tools/testing/selftests/bpf/test_progs.c | 21 +++++++++++++--------
- tools/testing/selftests/bpf/test_progs.h |  2 +-
- 2 files changed, 14 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/README.rst |  4 ++--
+ tools/testing/selftests/bpf/vmtest.sh  | 13 +++++++++++--
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index b274d98faac4..46eb201b96a3 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -1656,8 +1656,8 @@ static void *dispatch_thread(void *ctx)
+diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
+index 37164322a102..07c834433b38 100644
+--- a/tools/testing/selftests/bpf/README.rst
++++ b/tools/testing/selftests/bpf/README.rst
+@@ -107,12 +107,12 @@ Docker container and local rootfs image. The overall steps are as follows:
+     tools/testing/selftests/bpf/vmtest.sh \
+     -l <path of local rootfs image> -- \
+     ./test_progs -d \
+-        \"$(cat tools/testing/selftests/bpf/DENYLIST.riscv64 \
++        "$(cat tools/testing/selftests/bpf/DENYLIST.riscv64 \
+             | cut -d'#' -f1 \
+             | sed -e 's/^[[:space:]]*//' \
+                   -e 's/[[:space:]]*$//' \
+             | tr -s '\n' ',' \
+-        )\"
++        )"
  
- static void calculate_summary_and_print_errors(struct test_env *env)
- {
--	int i;
--	int succ_cnt = 0, fail_cnt = 0, sub_succ_cnt = 0, skip_cnt = 0;
-+	int i, j;
-+	int succ_cnt = 0, fail_cnt = 0, sub_succ_cnt = 0, sub_fail_cnt = 0, skip_cnt = 0;
- 	json_writer_t *w = NULL;
+ Link: https://github.com/pulehui/riscv-bpf-vmtest.git [0]
+ Link: https://github.com/libbpf/ci/blob/main/rootfs/mkrootfs_debian.sh [1]
+diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+index 9ca802285393..6a3d026d76bd 100755
+--- a/tools/testing/selftests/bpf/vmtest.sh
++++ b/tools/testing/selftests/bpf/vmtest.sh
+@@ -428,8 +428,17 @@ main()
  
- 	for (i = 0; i < prog_test_cnt; i++) {
-@@ -1670,10 +1670,14 @@ static void calculate_summary_and_print_errors(struct test_env *env)
- 		sub_succ_cnt += state->sub_succ_cnt;
- 		skip_cnt += state->skip_cnt;
+ 	if [[ $# -eq 0  && "${debug_shell}" == "no" ]]; then
+ 		echo "No command specified, will run ${DEFAULT_COMMAND} in the vm"
+-	else
+-		command="$@"
++	elif [[ $# -gt 0 ]]; then
++		# Quote each argument so the command survives into the guest: the
++		# host expands ${command} into the generated init script, which
++		# the guest bash then parses as shell source. Without the %q
++		# escapes an argument with a space or a glob (e.g. -a 'verifier_*')
++		# is re-split and expanded against /root/bpf there.
++		#
++		# Skip this when there is no command: printf '%q ' would still
++		# apply the format once and emit '', which is not the empty
++		# command that -s (debug shell) expects.
++		command=$(printf '%q ' "$@")
+ 	fi
  
--		if (state->error_cnt)
-+		if (state->error_cnt) {
- 			fail_cnt++;
--		else if (!test->not_built)
-+			for (j = 0; j < state->subtest_num; j++)
-+				if (state->subtest_states[j].error_cnt)
-+					sub_fail_cnt++;
-+		} else if (!test->not_built) {
- 			succ_cnt++;
-+		}
- 	}
- 
- 	if (env->json) {
-@@ -1688,6 +1692,7 @@ static void calculate_summary_and_print_errors(struct test_env *env)
- 		jsonw_uint_field(w, "success_subtest", sub_succ_cnt);
- 		jsonw_uint_field(w, "skipped", skip_cnt);
- 		jsonw_uint_field(w, "failed", fail_cnt);
-+		jsonw_uint_field(w, "failed_subtest", sub_fail_cnt);
- 		jsonw_name(w, "results");
- 		jsonw_start_array(w);
- 	}
-@@ -1728,12 +1733,12 @@ static void calculate_summary_and_print_errors(struct test_env *env)
- 		fclose(env->json);
- 
- 	if (env->not_built_cnt)
--		printf("Summary: %d/%d PASSED, %d SKIPPED (%d not built), %d FAILED\n",
-+		printf("Summary: %d/%d PASSED, %d SKIPPED (%d not built), %d/%d FAILED\n",
- 		       succ_cnt, sub_succ_cnt, skip_cnt, env->not_built_cnt,
--		       fail_cnt);
-+		       fail_cnt, sub_fail_cnt);
- 	else
--		printf("Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
--		       succ_cnt, sub_succ_cnt, skip_cnt, fail_cnt);
-+		printf("Summary: %d/%d PASSED, %d SKIPPED, %d/%d FAILED\n",
-+		       succ_cnt, sub_succ_cnt, skip_cnt, fail_cnt, sub_fail_cnt);
- 
- 	env->succ_cnt = succ_cnt;
- 	env->sub_succ_cnt = sub_succ_cnt;
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index e66d5c457901..ea493c477fbd 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -124,7 +124,7 @@ struct test_env {
- 
- 	int succ_cnt; /* successful tests */
- 	int sub_succ_cnt; /* successful sub-tests */
--	int fail_cnt; /* total failed tests + sub-tests */
-+	int fail_cnt; /* failed tests */
- 	int skip_cnt; /* skipped tests */
- 	int not_built_cnt; /* tests not built */
- 
+ 	local kconfig_file="${OUTPUT_DIR}/latest.config"
 -- 
 2.53.0-Meta
 
