@@ -1,94 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A2A3BB693
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 12:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C127637DAB1
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 12:33:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786105982; cv=none; b=QRpuKAIRjs/Ur2Ro0WtT99kZHd6gT3RbBiI+RQZsYZAtqVONq4cYs8env9B3zauH0LKK6gUZ3ehpyt+La4hkZZyijjc/deTSWTjidglv0tRbI1Dbcbtqh4MgGTGZIk1/zsIQtT4TGrcr4XCKIO+MTQx+yFWhE/HwBpB4xh2mGPc=
+	t=1786105992; cv=none; b=XaUsbX3SC0i1+HviadfeC+9UsCryzjjQnaLf9AL2ilgGFSYfamslQcCgzlbp71yCYwV/udURINRhj31Gjqmqd8NdakExJ/ts4ocJa1MlaksnyhIFVxpi5lUArxNCytmUwYj0tS3ZZlrOOnha+yprZrBzLRM2YdbXfm7Qg5fZwWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786105982; c=relaxed/simple;
-	bh=OJsdYb95cHmwJtEl4oQv6N3k43WLEK6obrGHxo8zA1I=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ofqO5LZXH8NMPbTJccWVo+SzItUxvnwbXxebGwsWZ7RsM2bbSh3hvysgtjBLHJ9zqoI8lhq7dPBe8dQC5HjOBKNwLT489HQazgTSAZxXrz7i6U33ypDm5G57PaGzriNXjo9d13rcUDzJuUD6yQajWtPtSZpciuPofOyO+B9pbeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+yAGmf2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786105992; c=relaxed/simple;
+	bh=PDu+3BXTyXpwPgVrtJxUe/m0n6DzpTg9MQ5tOKffmxE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=soD9556o3v7SkRK03irBM5WVLQFU9jKfxmiKNol+cpvXwAnbzULf/7GM/eZ8WlDWYlZo/LyN2+SpjYcCjlxydZXZ94ypV2kc6dyArm/nP1cMA8qnOv0LyZjQogL3MMX6G+rG9IlKC0TEdtani0M8g/4FuKvBYxu1kAFrrPysFqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=Db1Is0pI; arc=none smtp.client-ip=209.85.210.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+yAGmf2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A942A1F000E9;
-	Fri,  7 Aug 2026 12:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786105966;
-	bh=VGYjk/GU3yZns5VM52mHXkxN3Y/OLzV0b1QFnhJiH4g=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=f+yAGmf2kTjjVLSA7csHnMISt+wmM50uTkX5TNhdV+FUyhoTw4I9Ae8tq6gp66W7W
-	 /4fSjCpKcYv6bVdJn+ILugU/ghmsZ/y63hUf0+TS1byR/cSkkeSuCU70IW8OaZMp02
-	 zqxALtf8+szmTTuFTKrjYSB3exPftfDaHG2UQvlS/4uWnwGNWUGHwO5sfSno8zMigR
-	 IuaCokRmiGc19pm8Z250vnFnRb8JqvjOWqWToXMwJ40+q/0lzo1oc52Y+AcNYMRxVq
-	 GEhlm1d4n97wb5J/US/SItCKyKuT3y5eEr7Rfb47oKiNjHz9l+Ljj3Re0e0d+o9gbo
-	 X8gb2bq3m/t7g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v11 6/8] selftests/bpf: Add tailcall verifier selftest
- for powerpc64
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Saket Kumar Bhaskar" <skb99@linux.ibm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <8fe0b35438a04876bee2dbcdc94e28bd919dfc40.1786099877.git.skb99@linux.ibm.com>
-References: <cover.1786099877.git.skb99@linux.ibm.com>
- <8fe0b35438a04876bee2dbcdc94e28bd919dfc40.1786099877.git.skb99@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 12:32:46 +0000
-Message-Id: <20260807123246.A942A1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="Db1Is0pI"
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7e6b5737bb2so2922653a34.1
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 05:33:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786105980; x=1786710780;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:dkim-signature:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=aBpSBcnVEC7d3b8VCypHKN8KFVfSMJhdR2dxrFOJYmQ=;
+        b=qHLEWyQUYaBHnjqMeUU5rKYbxgBwWrvk45esXvXDlIlFb+TZ+8UskOoDN5pSEnMeft
+         XotoKY0Z83A95K3JSTKaME4wNiJ9kPiIXW4uAXcHcScwlViD5oJXP5ix6wVlKrPRoTJd
+         XY9heUznPrRNxF2ekEjs8vGYtrtKG3ZFpOBe4pSTk6+yR0BgIfb5eXi8H//5XNUuMS0S
+         ZW9cslqElbSkqTlWBu2kOZXqNmz6k5q1rpiradbX3tB02YF8lRdGm/hXxOAlP2PS2mf1
+         vV8z7MLokbHWcrtXXfE4/tDDv1z1D2nn0U+NoIAyQFKl9bpS1OCbzaJgpvxb+yZ10aYo
+         aTqA==
+X-Gm-Message-State: AOJu0YwbFQ2neEA9TK34l73KfX/EI0vpS6Ypw2k08qnUW74ceDoqRNpa
+	nAj8hhyGaHJhKq796N0qJ32qnoCU3ACt7iblxjuWB31cqwjwvGT5lRpK
+X-Gm-Gg: AR+sD11R+MzEr5MnW5gk+aMFggUNaIq/DZvncQnVRF6a7Zc336aaeJCF3Za952r94W4
+	I9CrNQblvI4dvBCzWwapjRNNYMnDh5yoxQSF3WgIOOoXYhWYlqirxb02W1J5Ea9Sn2wrURjjGL7
+	9KyFWIUVXpGmMvbuDT15ePjQn78NO39S8hXFy1WI9w/69dEZJ7HVVba+qQrWIjrVIitLj6/rudZ
+	AuoGSTvL1hrN+lP634r601+cPYnPvvOc3z+GMkWl07QakIIwhfDG49+/dMxZ/r9hG+ZFnfVnYom
+	jB7nxVdAa3yg8im6TbkuwTRfh+LUU9KyjPcT2zi4+mpA21P9HALd1qOaAmx57IIu6EBpWt9r8DL
+	9K2NgoYyQAt8vatwwyzHLQKmTYb/rUcjwrQp/wgcs7ZhHZHR3yAyL3OzQN+cYu9eJtljDRvCXwy
+	13hZgJuuf26yI8O+hf/EnBXMDSDRjX3F7Cr/CibYWUSk4a6UkRH0yuuyUYxrQGsSyS813cGodcz
+	9lPqVpVW21E6YYGSUaaNwovDtwPrsnJKoSFjaFUSKzhS24BDGVQ7txFxdjoMmbvqvASbzIxGHVu
+X-Received: by 2002:a05:6830:67f6:b0:7e9:d3aa:e391 with SMTP id 46e09a7af769-7f1e5d182fbmr12781875a34.6.1786105980389;
+        Fri, 07 Aug 2026 05:33:00 -0700 (PDT)
+Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f35b807227sm1141532a34.27.2026.08.07.05.32.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Aug 2026 05:32:58 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 802C760895;
+	Fri,  7 Aug 2026 12:32:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=dkim; t=1786105976;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=aBpSBcnVEC7d3b8VCypHKN8KFVfSMJhdR2dxrFOJYmQ=;
+	b=Db1Is0pIQ3dOMju6mbp/5O1REnHMBoPTWAqsfE0Qv0lrG5Q1cHjx3P2j+N9N9osDfB/WQ2
+	TQU5aE36pTpS96xn6y7I7WthValEuCGlBp3F5PUFSBCJzCa/51x7MLnRb7Qn3yB1VqjGNh
+	LMyM1Z5WQZzKUH7QHUXg+QSreZmP+zBXgdWiFRP2GB1pIJrWRHoSyFdvYZqW8HKnTWVRDZ
+	fs/ofJ3nkYvNbRTU6ltnuoxxwaiLzsjsJvaQAKD37938LN5G2pLLsX9bVMe+mpQ9pnk5oX
+	/l5ANzKpXlYNhRNSoaCKqh1OaVpf4dM1rXgze7cxz3+F33pVA73ZEzHzgqaIRQ==
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+Date: Fri, 07 Aug 2026 09:32:43 -0300
+Subject: [PATCH 7.1.y v2] selftests/bpf: Add tests for sleepable tracepoint
+ programs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260807-selftests-bpf-sleepable-v2-1-f7e6566f36a1@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAGrQdWoC/4XOQQ6CMBAF0KuYri2hFRRceQ/Doi2/UoNAOpVoC
+ HeXoisXupw/My9/YgTvQOy4mZjH6Mj13TLI7YaZRnUXcFcvM5Op3KdFuuOE1gZQIK4Hy6kFBqV
+ bcEBbWZd7KVPBlu/Bw7rHKp/ZIRHJk1XvmO76ChOiGg+1InDtVWeaGFGIXFw0jkLvn2u1UazO3
+ xaj4ILXJjO6KHaHDOXppnzr4JF0CFH9EPlvArK0Klc2E+KLqOZ5fgEA4JSwNgEAAA==
+X-Change-ID: 20260803-selftests-bpf-sleepable-eebf2d962201
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, sashal@kernel.org, 
+ gregkh@linuxfoundation.org
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+ Mykyta Yatsenko <yatsenko@meta.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openssh-sha256; t=1786105970; l=2967;
+ i=ricardo@marliere.net; h=from:subject:message-id;
+ bh=QLheeulIJ7HGlvz8iFzvKmtgtUgQwyFXfWaZE6pfNsQ=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QI1sbqPaaYnCoqAVjS7/0CJAD6XeShanEL7075pmHQDoR8FTDMKYyPWGpnevcLGwjyZ+7e077gy
+ AWSb2I+9WMAQ=
+X-Developer-Key: i=ricardo@marliere.net; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Multi-line comment in the BPF subsystem does not follow the require=
-d style.
---
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
---- Patch [6]: [PATCH v11 6/8] selftests/bpf: Add tailcall verifier selftes=
-t for powerpc64 ---
-commit db11673742dde393ab8f7429a8221e1b2ec5a904
-Author: Abhishek Dubey <adubey@linux.ibm.com>
+[ Upstream commit 8a20655749c625dcc4debdfdeeaa0cf8bb85c203 ]
 
-selftests/bpf: Add tailcall verifier selftest for powerpc64
+Cover all three sleepable tracepoint types (tp_btf.s, raw_tp.s, tp.s)
+and sys_exit (via bpf_task_pt_regs) with functional tests using
+bpf_copy_from_user() on getcwd. Verify alias and bare SEC variants,
+bpf_prog_test_run_raw_tp() with BPF_F_TEST_RUN_ON_CPU rejection,
+attach-time rejection on non-faultable tracepoints, and load-time
+rejection for sleepable tp_btf on non-faultable tracepoints.
 
-This commit adds a BPF verifier tailcall JIT testcase for powerpc64 to
-the selftests suite. It introduces the expected JIT instruction sequences
-for tail calls on the architecture.
+[ rbm: Removed hunks from (new) files:
+        tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
+        tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
+        tools/testing/selftests/bpf/progs/test_sleepable_tracepoints_fail.c
+       These rely on libbpf's ".s" tracepoint section handlers
+       (0cd420a6f40c7) and on kernel-side sleepable tracepoint runtime
+       support (439ebd5b5708, 12628ffaf98b, 57918341dd19), none of which
+       are backported here; kept only the verifier/sleepable.c hunk, which
+       is correct and needed on its own. ]
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c b/=
-tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-> index 48fa34d2959f4..182302ff1db07 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-> @@ -91,6 +91,81 @@ __jited("	popq	%rax")
-[ ... ]
-> +__jited("	std 9, -8(1)")
-> +__jited("	mflr 0")
-> +__jited("	std 0, 16(1)")
-> +__jited("	stdu 1, {{.*}}(1)")
-> +/* load address and call sub() via count register
-> + *
-> + * Address materialization differs between PCREL and non-PCREL kernels.
-> + * Skip the address generation sequence and verify only that the call
-> + * target is loaded into CTR before branching.
-> + */
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Link: https://lore.kernel.org/bpf/20260422-sleepable_tracepoints-v13-6-99005dff21ef@meta.com
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+Changes in v2:
+- Dropped hunks which miss dependencies
+- Added a small note about it in the commit
+- Link to v1: https://patch.msgid.link/20260805-selftests-bpf-sleepable-v1-1-e29fa5af4119@marliere.net
+---
+ tools/testing/selftests/bpf/verifier/sleepable.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-[Severity: Low]
-Does this multi-line comment follow the modern BPF subsystem style rules?
+diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/testing/selftests/bpf/verifier/sleepable.c
+index c2b7f5ebf168..6dabc5522945 100644
+--- a/tools/testing/selftests/bpf/verifier/sleepable.c
++++ b/tools/testing/selftests/bpf/verifier/sleepable.c
+@@ -76,7 +76,20 @@
+ 	.runs = -1,
+ },
+ {
+-	"sleepable raw tracepoint reject",
++	"sleepable raw tracepoint accept",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_TRACING,
++	.expected_attach_type = BPF_TRACE_RAW_TP,
++	.kfunc = "sys_enter",
++	.result = ACCEPT,
++	.flags = BPF_F_SLEEPABLE,
++	.runs = -1,
++},
++{
++	"sleepable raw tracepoint reject non-faultable",
+ 	.insns = {
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_EXIT_INSN(),
+@@ -85,7 +98,7 @@
+ 	.expected_attach_type = BPF_TRACE_RAW_TP,
+ 	.kfunc = "sched_switch",
+ 	.result = REJECT,
+-	.errstr = "Only fentry/fexit/fsession/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
++	.errstr = "Sleepable program cannot attach to non-faultable tracepoint",
+ 	.flags = BPF_F_SLEEPABLE,
+ 	.runs = -1,
+ },
 
-The BPF subsystem style requires the opening /* of a multi-line comment
-to be on its own line, rather than having text on the same line. Should
-the comment start with a standalone /* to match the expected format?
+---
+base-commit: 74b69060ba6e44e20c2e4dc1847eca21db6e4a7c
+change-id: 20260803-selftests-bpf-sleepable-eebf2d962201
 
-[ ... ]
+Best regards,
+--  
+Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786099877.gi=
-t.skb99@linux.ibm.com?part=3D6
