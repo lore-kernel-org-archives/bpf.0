@@ -1,155 +1,268 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8667E3D668F
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 10:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3015D3F4827;
+	Fri,  7 Aug 2026 10:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786097476; cv=none; b=L/7mhGdFA5CWMKt16bzQwVcID7xgkDqflwqsJ4v/3RDgy9k6+rj8JxDwVKUj3p7q9fgd+S1QY7We7tYtuko39lLr3+OYUe/c1Xm7allLRzggOWuF7OnIOwU3x76JyLi0B/7BacPMs1QwDlkcWUJr5BNXyo7cVXFgK2eLdGHPmqQ=
+	t=1786098597; cv=none; b=KQnj4oDhjATr/muT9xxofn9mIWxnPfjrZ+8bW3EbINrjSFEYqAaXJCRc1w4bXarxOzmT9LWDRjpIXKGiIoqz/r4JeADNRqQF6zc7Glf4YklpjCoei7GDeiS3klJ2tF2br43a260tinpsCWiFfjAHd+MYBoaec2fIAOW8gme55kY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786097476; c=relaxed/simple;
-	bh=PzJAzmMlMAwzz07m1rStOfmSbMehiPpj8jWRb5DmwqU=;
+	s=arc-20240116; t=1786098597; c=relaxed/simple;
+	bh=oCYr1Z6scAsEMdC1FW1GwaB7B/b2lTDGnqxBtUg6hh8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nq6qPtvr7PuEDMLwIM+d0cNW/nAbaHCBsXGQrv2Sf2O1O/0La6fuBiCpUdwbzvsYxgNpMUAKa4f2A0E26Jc10qH5QwLJ/JcSzcrlcawWHOG2gIrmzfdF9fqy0UHctcILai9uXnL640+h9rVaQG36ba0navZoO1hKFHae04Upm9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UD83MMOz; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=MqZBrSPsHHffzUOPkfTi6fC/LxQ/jghZ4DiZ7GJH/CqzYE4wJbSeo/bxHsWm1WEu01puO9c7C8yGC7Eh37FvHWQHjaKxKssNV0M8jtgz4YX0RSaGmoA8OZHjbDzf0spwzM/XFxqveYOakEhUZ1KZNQ8M+4EmoC2kqyyKO1IwujE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=L7Lyf3TU; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UD83MMOz"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4980fe6b3beso14192705e9.0
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 03:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786097469; x=1786702269; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sfkgU7jZpdRNXbaepKxMlnZZSP7VZ5dxP7EkmOF/3y0=;
-        b=UD83MMOzcyTD7X+V2QlIB9xnMgUmONeRCkdDp41xPEqcQzNmtxI8xqhNprxKHtz5Bv
-         kSVTLrG/F7cLh17LbFg7D9lydmiv9MrpZaqX0IMuYJpQBGDUB+Ka2e/FO2k6S/r6vAHv
-         k4bGnuHiRe8AvnJ/ag/qycJz9QCAcdRVntLlOrp+5pc396NKxaePv8eYy9GtJ7sgMoQ8
-         f2faXryON032p9UraTthfJNrhCmzGmFr6snT9DbEdGI8E/JegqnmXJOLPULWKCt3MnZI
-         HKhrNNe8a5PGX4toEkcMofvmZHSmq6IFPTwMr0iMMddUD8EyZhQa/qxyPK9PEhMdR77e
-         kQWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786097469; x=1786702269;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=sfkgU7jZpdRNXbaepKxMlnZZSP7VZ5dxP7EkmOF/3y0=;
-        b=ECGS6ZsWPCcfGmIEJGSSRSqi4SRyEx/vhdPhuaJfIkD1TESa5htgkLhPNEY5HKmhW9
-         WJAZ5jhUtwWqJclXmoaH/VG05d2BbdH8YkLeDeVLIbmoZI6z0N5uAHJ6OzxzwcWzb6Ms
-         3f8KVHyE3ys+87uCiQn9tqJ1MgIU+TLnkZttyHSiNW89bn3ceb8Zlekt+jtVk45W2n2V
-         5JtrAEekOfr1GPgC4VcvOypEIBqT/FlW4Z6A/kMXjEdSLLDc6QqfprKL1SyFxcSjfgcd
-         UtQLkCnGUGrlGNIjefuyPC9G49atPkPzl5Xa5LxNrpR0NdOdtoVvHncCKftgP1JqYXds
-         jrlA==
-X-Gm-Message-State: AOJu0YxZHoeZ4dJzv5sKqaODGWK0gSysWdEqDWCg+a0B0rihsWR+pymj
-	S95KUxK6lMKSoG73DkLut+aSTsBBNIJM0nGTZiLShuA1KR2YiTZRksKr
-X-Gm-Gg: AR+sD10hm4NmGzuZu4v7NLENuquMrthVALyNT8GXVWuYQTMxXax/XS0UfydSB5iebbf
-	AaVLFIJ72+tUD7m/inJxjrdyIn2Mjy4F6VG8HaTp0DwQ1c8Rd5tExWc9mmbAaTMt7X0OQjDe9eJ
-	EiBTFVhOi86bmdhyWIrQgJY5hWqQV90RzBEL/kTsIq7YICnXFqe5ZgoH+G6CJFx9NQ89SXqY1Kc
-	N/5xOXJkVQNIKavPSlQ2ySfkGJHdtpBFFYTBHoGKaGYyeEDL7q0SJylLl2vA4gDumytwnXFGawu
-	eFlMoLZjfWPlotJhXkmdJkOxKo1kw8SRZU/lkaBRi1D/vRoO2ZQMAFOELGtGPG+f5n2HwawQQB6
-	mrzekiVCKYba35Wn47u0L0JNxNa176QYuhG8RiXw2w4lwv60vAuI4dwnoUKs2jUZVsPrqne1ZiL
-	NCyFKSX0d+5GOx9CzoLl1Iu6z5Sn+vKcaTkOBO+w/uKn42UrrWIQ+Ds8us/YbaBAU4pCuBMIVts
-	nUMZ+H88kVEmcyNMURgkuz0DHFW91SX
-X-Received: by 2002:a05:600c:1546:b0:495:3bc6:d381 with SMTP id 5b1f17b1804b1-499553bcbc8mr121186275e9.2.1786097469384;
-        Fri, 07 Aug 2026 03:11:09 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995919df87sm90789365e9.6.2026.08.07.03.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 03:11:08 -0700 (PDT)
-Date: Fri, 7 Aug 2026 12:11:07 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
-	kuba@kernel.org, liamwisehart@meta.com, martin.lau@linux.dev,
-	pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org,
-	sdf.kernel@gmail.com, ameryhung@gmail.com, kuniyu@google.com,
-	memxor@gmail.com
-Subject: Re: [PATCH bpf-next v4 3/5] selftests/bpf: Add ksock kfunc test
-Message-ID: <anWvO7ZQh1eEHZie@gmail.com>
-References: <20260806182234.380833-1-mahe.tardy@gmail.com>
- <20260806182234.380833-4-mahe.tardy@gmail.com>
- <c51bef73-17b0-430d-b473-7744141d6dab@linux.dev>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="L7Lyf3TU"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=NDy+h31L8H5YXIik8yzC/aAEhJyoZTq0JWluwM7qX3w=; b=L7Lyf3TUsL8AV+RqTgzwx2pGgb
+	A2ShCMQqHk51lDNtN2hmTxdAdXRxuOH62IN28x5gnGLGl2gSfeFCYcji94dcIgTLZX9734vZkULyv
+	aI6ZrlI58+HytfI5kyQWPPx0Jzgp+mo6bhIpavmUnk9Bylaz2JT00MavmKib4Otl+afHbRKgCZZDx
+	Aq/Lq8vJY+lMi0hTO4rS1VVlBig5hmvV6WSzaEZc8xQLojQPiXa1vzNF42Ccxc9abat0FFXS+Wv6P
+	5FFqI28lVR3eXPwZ1YmmgWbrn3Mc3Zp46Ox4b8SunkX3Le7wzx7O+G0PDV48dKpohkgE2PQk0Sp3y
+	0p7f7AiQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1wsHpW-0000000CHpr-0ecL;
+	Fri, 07 Aug 2026 10:29:34 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id E0E143004C9; Fri, 07 Aug 2026 12:29:32 +0200 (CEST)
+Date: Fri, 7 Aug 2026 12:29:32 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Usama Arif <usama.arif@linux.dev>, Will Deacon <will@kernel.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 3/3] perf/core: Clear the whole branch entry in
+ perf_clear_branch_entry()
+Message-ID: <20260807102932.GU776954@noisy.programming.kicks-ass.net>
+References: <20260806135224.3267890-1-puranjay@kernel.org>
+ <20260806135224.3267890-4-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c51bef73-17b0-430d-b473-7744141d6dab@linux.dev>
+In-Reply-To: <20260806135224.3267890-4-puranjay@kernel.org>
 
-On Fri, Aug 07, 2026 at 05:12:21PM +0800, Jiayuan Chen wrote:
+On Thu, Aug 06, 2026 at 06:52:23AM -0700, Puranjay Mohan wrote:
+> perf_clear_branch_entry_bitfields() clears the bitfields of struct
+> perf_branch_entry one by one and leaves from/to alone, since callers
+> overwrite those straight away. The list has to be kept in sync with the
+> struct by hand and has already fallen behind: new_type and priv were
+> added to perf_branch_entry and never added here.
 > 
-> On 8/7/26 2:22 AM, Mahe Tardy wrote:
-> > Add
-> [...]
-> > +
-> > +SEC("lsm.s/socket_bind")
-> > +int BPF_PROG(ksock_socket_bind, struct socket *sock, struct sockaddr *address,
-> > +	     int addrlen, int ret)
-> > +{
-> > +	struct __ksock_ctx_value *v;
-> > +	struct bpf_ksock *ks, *tmp;
-> > +	u32 pid = bpf_get_current_pid_tgid() >> 32;
-> > +
-> > +	if (ret || pid != target_pid)
-> > +		return ret;
-> > +
-> > +	v = ksock_ctx_value_lookup();
-> > +	if (!v) {
-> > +		send_ret = -ENOENT;
-> > +		return ret;
-> > +	}
-> > +
-> > +	ks = NULL;
-> > +	bpf_rcu_read_lock();
-> > +	tmp = v->ctx;
-> > +	if (tmp)
-> > +		ks = bpf_ksock_acquire(tmp);
-> > +	bpf_rcu_read_unlock();
-> > +
-> > +	if (!ks) {
-> > +		send_ret = -ENOENT;
-> > +		return ret;
-> > +	}
-> > +
+> Only BRBE writes those two, and neither is written for every record.
+> brbe_set_perf_entry_type() leaves new_type alone for a branch type it
+> does not recognise, and priv is not set for source-only records.
+> arm_pmuv3.c allocates the per-CPU branch stack with kmalloc(), so such a
+> record carries whatever the slot held: uninitialised kmalloc() data on
+> the first pass over the buffer, the previous record's values after that.
+> Both reach userspace through the branch stack. Nothing under
+> arch/x86/events/ writes either field, so x86 is unaffected.
 > 
+> Clear the entry with a single struct assignment instead:
 > 
-> Since bpf_ksock_send() is sleepable, every consumer of the kptr is
-> necessarily a sleepable program and thus has to open-code the same
-> bpf_rcu_read_lock()/acquire/unlock sequence before each send.
+> 	*br = (struct perf_branch_entry){ };
 > 
-> Given ksock_common.h already wraps the insert side, how about also
-> providing the get side, e.g.:
+> The bitfields add up to exactly 64 bits, so there is no padding, and
+> every caller assigns from/to immediately afterwards, so zeroing those as
+> well changes nothing. PERF_BR_SPEC_NA is 0, so dropping the explicit
+> spec assignment leaves the behaviour unchanged. Nothing needs keeping in
+> sync when a field is added.
 > 
-> static inline struct bpf_ksock *ksock_ctx_get(void)
-> {
->     struct __ksock_ctx_value *v = ksock_ctx_value_lookup();
->     struct bpf_ksock *ks = NULL, *tmp;
-> 
->     if (!v)
->             return NULL;
->     bpf_rcu_read_lock();
->     tmp = v->ctx;
->     if (tmp)
->             ks = bpf_ksock_acquire(tmp);
->     bpf_rcu_read_unlock();
->     return ks;
-> }
-> 
-> These selftests will be the reference everyone copies from, so
-> encapsulating the RCU dance here also documents the correct usage.
-> 
+> The helper no longer touches only bitfields, so rename it to
+> perf_clear_branch_entry().
 
-Yeah good idea, I'll just keep a slightly difference dance using
-bpf_kptr_xchg() in the ksock_lsm_verifier.c program because I want the
-verifier to bump against bpf_ksock_send() restriction explicitely and
-not bpf_ksock_acquire().
+Fair enough I suppose, but then why not write it like so?
 
+---
+--- a/arch/x86/events/amd/brs.c
++++ b/arch/x86/events/amd/brs.c
+@@ -343,11 +343,7 @@ void amd_brs_drain(void)
+ 		if (!amd_brs_match_plm(event, from, to))
+ 			continue;
+ 
+-		perf_clear_branch_entry_bitfields(br+nr);
+-
+-		br[nr].from = from;
+-		br[nr].to   = to;
+-
++		br[nr] = (struct perf_branch_entry){ from, to };
+ 		nr++;
+ 	}
+ empty:
+--- a/arch/x86/events/amd/lbr.c
++++ b/arch/x86/events/amd/lbr.c
+@@ -184,12 +184,6 @@ void amd_pmu_lbr_read(void)
+ 		    entry.to.split.reserved)
+ 			continue;
+ 
+-		perf_clear_branch_entry_bitfields(br + out);
+-
+-		br[out].from	= sign_ext_branch_ip(entry.from.split.ip);
+-		br[out].to	= sign_ext_branch_ip(entry.to.split.ip);
+-		br[out].mispred	= entry.from.split.mispredict;
+-		br[out].predicted = !br[out].mispred;
+ 
+ 		/*
+ 		 * Set branch speculation information using the status of
+@@ -208,7 +202,13 @@ void amd_pmu_lbr_read(void)
+ 		 * speculative and took the correct path
+ 		 */
+ 		idx = (entry.to.split.valid << 1) | entry.to.split.spec;
+-		br[out].spec = lbr_spec_map[idx];
++		br[out] = (struct perf_branch_entry) {
++			.from      = sign_ext_branch_ip(entry.from.split.ip),
++			.to        = sign_ext_branch_ip(entry.to.split.ip),
++			.mispred   = entry.from.split.mispredict,
++			.predicted = !entry.from.split.mispredict,
++			.spec      = lbr_spec_map[idx],
++		};
+ 		out++;
+ 	}
+ 
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -756,10 +756,10 @@ void intel_pmu_lbr_read_32(struct cpu_hw
+ 
+ 		rdmsrq(x86_pmu.lbr_from + lbr_idx, msr_lastbranch.lbr);
+ 
+-		perf_clear_branch_entry_bitfields(br);
+-
+-		br->from	= msr_lastbranch.from;
+-		br->to		= msr_lastbranch.to;
++		*br = (struct perf_branch_entry){
++			.from = msr_lastbranch.from,
++			.to   = msr_lastbranch.to,
++		};
+ 		br++;
+ 	}
+ 	cpuc->lbr_stack.nr = i;
+@@ -847,14 +847,15 @@ void intel_pmu_lbr_read_64(struct cpu_hw
+ 		if (abort && x86_pmu.lbr_double_abort && out > 0)
+ 			out--;
+ 
+-		perf_clear_branch_entry_bitfields(br+out);
+-		br[out].from	 = from;
+-		br[out].to	 = to;
+-		br[out].mispred	 = mis;
+-		br[out].predicted = pred;
+-		br[out].in_tx	 = in_tx;
+-		br[out].abort	 = abort;
+-		br[out].cycles	 = cycles;
++		br[out] = (struct perf_branch_entry) {
++			.from      = from,
++			.to        = to,
++			.mispred   = mis,
++			.predicted = pred,
++			.in_tx     = in_tx,
++			.abort     = abort,
++			.cycles    = cycles,
++		};
+ 		out++;
+ 	}
+ 	cpuc->lbr_stack.nr = out;
+@@ -921,24 +922,25 @@ static void intel_pmu_store_lbr(struct c
+ 		to = rdlbr_to(i, lbr);
+ 		info = rdlbr_info(i, lbr);
+ 
+-		perf_clear_branch_entry_bitfields(e);
+-
+-		e->from		= from;
+-		e->to		= to;
+-		e->mispred	= get_lbr_mispred(info);
+-		e->predicted	= !e->mispred;
+-		e->in_tx	= !!(info & LBR_INFO_IN_TX);
+-		e->abort	= !!(info & LBR_INFO_ABORT);
+-		e->cycles	= get_lbr_cycles(info);
+-		e->type		= get_lbr_br_type(info);
+-
+-		/*
+-		 * Leverage the reserved field of cpuc->lbr_entries[i] to
+-		 * temporarily store the branch counters information.
+-		 * The later code will decide what content can be disclosed
+-		 * to the perf tool. Pleae see intel_pmu_lbr_counters_reorder().
+-		 */
+-		e->reserved	= (info >> LBR_INFO_BR_CNTR_OFFSET) & LBR_INFO_BR_CNTR_FULL_MASK;
++		*e = (struct perf_branch_entry){
++			.from      = from,
++			.to        = to,
++			.mispred   = get_lbr_mispred(info),
++			.predicted = !get_lbr_mispred(info),
++			.in_tx     = !!(info & LBR_INFO_IN_TX),
++			.abort     = !!(info & LBR_INFO_ABORT),
++			.cycles    = get_lbr_cycles(info),
++			.type      = get_lbr_br_type(info),
++
++			/*
++			 * Leverage the reserved field of cpuc->lbr_entries[i]
++			 * to temporarily store the branch counters
++			 * information. The later code will decide what
++			 * content can be disclosed to the perf tool. Pleae
++			 * see intel_pmu_lbr_counters_reorder().
++			 */
++			.reserved  = (info >> LBR_INFO_BR_CNTR_OFFSET) & LBR_INFO_BR_CNTR_FULL_MASK,
++		};
+ 	}
+ 
+ 	cpuc->lbr_stack.nr = i;
+--- a/drivers/perf/arm_brbe.c
++++ b/drivers/perf/arm_brbe.c
+@@ -604,7 +604,7 @@ static bool perf_entry_from_brbe_regset(
+ 		return false;
+ 
+ 	brbinf = bregs.brbinf;
+-	perf_clear_branch_entry_bitfields(entry);
++	*entry = (struct perf_branch_entry) { };
+ 	if (brbe_record_is_complete(brbinf)) {
+ 		entry->from = bregs.brbsrc;
+ 		entry->to = bregs.brbtgt;
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1467,23 +1467,6 @@ static inline u32 perf_sample_data_size(
+ 	return size;
+ }
+ 
+-/*
+- * Clear all bitfields in the perf_branch_entry.
+- * The to and from fields are not cleared because they are
+- * systematically modified by caller.
+- */
+-static inline void perf_clear_branch_entry_bitfields(struct perf_branch_entry *br)
+-{
+-	br->mispred	= 0;
+-	br->predicted	= 0;
+-	br->in_tx	= 0;
+-	br->abort	= 0;
+-	br->cycles	= 0;
+-	br->type	= 0;
+-	br->spec	= PERF_BR_SPEC_NA;
+-	br->reserved	= 0;
+-}
+-
+ extern void perf_output_sample(struct perf_output_handle *handle,
+ 			       struct perf_event_header *header,
+ 			       struct perf_sample_data *data,
