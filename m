@@ -1,288 +1,336 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013058.outbound.protection.outlook.com [52.101.72.58])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF28473C88;
-	Fri,  7 Aug 2026 15:24:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.58
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786116294; cv=fail; b=LEpUgUBmI9Slc2tv2iDq2Ib12o+CLQDJJvF5S3nXb+JFd+JywWIb2EvZskivogOkdPy3l5UQk1x/0W2BTTHhuzvpc8DQYBzhIiXh2x4rWHYMAWyNS48DC7FFxtqKTY/8buoo5czAqPxOmkWbhFBSEKXUVXVVN9jaHycDzYqaDM4=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786116294; c=relaxed/simple;
-	bh=XKrRklP/dWKdI/wyDtKdqGb7bhciH7J88gGmFLB3n9I=;
-	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=pnVZct4JVjpV5oVZMMNNmZxAh6AcgzUkgOo9PnfizVLNI1hoCYco6ylHt1AP1LYRSelsCKvA0fv6+dXPe3EhQ9DWeh2YCGBNjstjdt0GITqze0k4dtP4JnBX/4lLlwxqzrga/9hPIB/QmbO38/mAu7i2LM8MYFIYaabDWmnkDVY=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=enPJXwJa; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=enPJXwJa; arc=fail smtp.client-ip=52.101.72.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FD6473C73
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 15:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786116358; cv=none; b=Bi+ciKc5ac/UzXlA8X6DAldtVJSMQ+V5X9m0TPY1EGZRUbvs+/YcgP+oFMW58DtEpEZNvBQeTflrym0xjNPjIqzWG1Ksxi384dqvxt/+6Ps2peua9+ajdXfh0eWfzOZwKK4yBYaz994K+wha5Hbqy3KMTywqJadKt3iDmLbS3AE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786116358; c=relaxed/simple;
+	bh=wWfxLe/vtJPc2kBiE+PC0wSrSrI3sI/HFSVA1zDsFEI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WBL+Qei6uFkk1pmwKxryHGStL5+ZtAKYwt3M2T7ImatmP2gvBa6bVhYE/v9s4J8JtsyTSqjVdb0PruierubJQjCbmhjnVp3O63QINTX2+o4HtjCaQnMt+dgGsvZ5DY8sYVFQDKLORNmukLDSkvSl8fSc4z7V8rRxuUk+gt5ZgsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OPsY5VdV; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="enPJXwJa";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="enPJXwJa"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=YgYEf8/SAqc2pFNvqaD4dDMa/gsJUU+5MZOxScmIqgUj/Tx7t4IlrtLsb91lNcg69MR7dVZoeSppBCkkBgQGOqwkJ6OWWJ+MTzZdA5kBb1VsrAvpI2lcKR4S8ceD0HjUcj+ESfu4Zd+1mIbJMlJ0ibLEGcuwKGy8JlCK2FsT3toHWjiGadnfZeBoOXcXciv/bmssMN5WrVhJFvGs2j8vQzPbqaxRjQSaxJiLt+8aMVo0WuXLmER0/KfgBnTJb7H6E9NhxpSG9VS6y01FqG904amkoWg43Gzd4regFez2fl/jNZpv5RUfsY46/OvfjqvHaibmSbVVst2yCnM5oUxUZg==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=214jEOHDvbqO65kJp7R9WvTe7aHGn+ywbFPey8CpPng=;
- b=y+TPSW3BkJ1wUWEQ2sdPKNn62KbZXzdE/RRRrao+EOsUTJgTZtUkfUNwGiKVCpF39Swbmbd5wxX4F7TgHkMR/eHuxNXfS60q5y3z2KCSD9V/rFsOQDDkPkOxMtAaMC1vEvORGD77NqqZuZ2t6zVYfxHh0tSrPjjxPy9iwHrAy4mekd47nKe08vlEsLMc2/53MckeG+WHt9Rd9/5SqaDvyL1zYObh9cIOBQysoAOscfpwXLhOEJffH1pZiNbV5UxBhASGtAXqrZpIylWQ3A2qq07ZT5YNmb3jKWs8dOpSPNEgnZPRyVJAFWTYhgQlasMIEbdxCVJtRCfD4iGbYwH77Q==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=214jEOHDvbqO65kJp7R9WvTe7aHGn+ywbFPey8CpPng=;
- b=enPJXwJauFv1oQ+Zsu+QSANwW3vkwSHO6idG1f9lavXYCMDiQj7zALU9r7ZrSNwB83ddazzAia7berLLBPNVREmY+i8jUOiFiAzFgVdPhUoiSCQgYnEuLgSz9qoiTNaXORSa7/hhnbz2uAkAxi6hltZwGxaaMH2YsrtnaxNGBH4=
-Received: from DU2PR04CA0029.eurprd04.prod.outlook.com (2603:10a6:10:3b::34)
- by VI0PR08MB10800.eurprd08.prod.outlook.com (2603:10a6:800:205::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.23; Fri, 7 Aug
- 2026 15:24:43 +0000
-Received: from DU2PEPF00028D12.eurprd03.prod.outlook.com
- (2603:10a6:10:3b:cafe::3a) by DU2PR04CA0029.outlook.office365.com
- (2603:10a6:10:3b::34) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.292.21 via Frontend Transport; Fri, 7
- Aug 2026 15:24:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DU2PEPF00028D12.mail.protection.outlook.com (10.167.242.26) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.6
- via Frontend Transport; Fri, 7 Aug 2026 15:24:42 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nyb2Zb/LWU68b4QGwWAhlcQocb72STHW3uhfNyJ/g64lELJLAmSW96qAz/OMx/oWcaZqLK49ey50C0zOyinM7uz2f7t/rswIfJA3on937Xr6rhZb33gq8yhF4bo6zdBOVTLTTmBkHDZqbrhB1LfT98VZ4UuY+vRsvJGn47rpYM2oVFn7z917NcM2U9kmEetzF9c++WTMl6VCBZgLdoLH5eaGhWUVZSpGlwrGUhQRbJUXUyod4ZZbXfyj0kyvcfN7N4KwVdsxEpfT0a5ugq9b0gRmqdJdpiXUKBiRnGKrU20+fpbtbBQlvm3ws17MFXcdqwsLv/8+HoZLqlMT5UlyGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=214jEOHDvbqO65kJp7R9WvTe7aHGn+ywbFPey8CpPng=;
- b=Iq5uLCPRY95NgPG05ec3/v2umI3pqGev6OJlMs7JnoSZa/9RU2leY3JSX/bYvrQkD0I7P1+cm78rMIHmjbqvjBW7B9mXVoMfVYbF+opAu4V+XE2BHctMeSKfr2XeJY44FM3zl1dqPfSUlfEMG+B6CiPQfIIlotdibkE9UBosH1EJPtygjT0yjeDg+eI5L/m71FQd9x8g57J2U6XhfKwPEIWMwIrh1riSh2LF+rAZ7E22DOaKucwUf1CTatrBeX0rJ5Q5DU7hX6WqB6NmLRg7PAqNEZZ6AHGC1dUBwtSis4KZ/YYk69flyBa7kLy0fsZiiWBcyjtBZR0lPz6uPGvmLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=214jEOHDvbqO65kJp7R9WvTe7aHGn+ywbFPey8CpPng=;
- b=enPJXwJauFv1oQ+Zsu+QSANwW3vkwSHO6idG1f9lavXYCMDiQj7zALU9r7ZrSNwB83ddazzAia7berLLBPNVREmY+i8jUOiFiAzFgVdPhUoiSCQgYnEuLgSz9qoiTNaXORSa7/hhnbz2uAkAxi6hltZwGxaaMH2YsrtnaxNGBH4=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
- by DU0PR08MB10360.eurprd08.prod.outlook.com (2603:10a6:10:417::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.23; Fri, 7 Aug
- 2026 15:24:04 +0000
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.21.0292.018; Fri, 7 Aug 2026
- 15:24:03 +0000
-Message-ID: <eef14e97-20cd-4b08-ae22-7636af049b09@arm.com>
-Date: Fri, 7 Aug 2026 16:24:00 +0100
-User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com, Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Dimitri Sivanich
- <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Juergen Gross <jgross@suse.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- David Hildenbrand <david@kernel.org>,
- Pasha Tatashin <pasha.tatashin@soleen.com>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Uladzislau Rezki <urezki@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, SJ Park <sj@kernel.org>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Miaohe Lin <linmiaohe@huawei.com>, Dennis Zhou <dennis@kernel.org>,
- Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
- Mike Rapoport <rppt@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- ziy@nvidia.com, pfalcato@suse.de, ryan.roberts@arm.com,
- linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-parisc@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, damon@lists.linux.dev
-Subject: Re: [PATCH 1/9] mm: introduce hw_pte_t for PTE table storage
-To: Alexander Gordeev <agordeev@linux.ibm.com>
-References: <20260806083926.1807279-1-usama.anjum@arm.com>
- <20260806083926.1807279-2-usama.anjum@arm.com>
- <3db8233c-3785-444e-b2eb-3e5fc5cb2f17-agordeev@linux.ibm.com>
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-Content-Language: en-US
-In-Reply-To: <3db8233c-3785-444e-b2eb-3e5fc5cb2f17-agordeev@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0612.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:314::6) To VI1PR08MB3421.eurprd08.prod.outlook.com
- (2603:10a6:803:80::16)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OPsY5VdV"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-47fde295992so1870247f8f.0
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 08:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786116354; x=1786721154; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=b19DBZrgqRtvgTA2UY4+qWG30o1EZ1ThmVcmO3JKVo4=;
+        b=OPsY5VdVSLbiKyE9MTHvgxKQ6MD4xqlVtk7zt17GWc9NA7xOdRoOPManTaMJSp6d4T
+         eLBHGFfX5de+ppza+QlKDMj5scVzPxlEVKUOomohxI1gPYagrSGrM4E78BT7jGCMfT5/
+         ldDEDV6QC2RInTRp4uSxfQRiY8KcIYx39k8sgGLtUvkmin9olzKdvG2JLONBzqEwhKxm
+         wHTZHXB5Pr8A1DNTwzM7Icbft/q/0jqlY6iaWA/I1tK6/f4iWgmm+B3T9ATRgBjBpQso
+         7yMW0Z8cAtioke6HTRKmxH/v/DPts3glH5j92xlgyjMkR7a2uaY2oQyCg9JwkeD4efN8
+         BMJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786116354; x=1786721154;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=b19DBZrgqRtvgTA2UY4+qWG30o1EZ1ThmVcmO3JKVo4=;
+        b=TNp5IqUTtcnJv7EEWNyx4F5zI/zeub/QoMz/IWbEkKxMxb0wcOro2Y0QGaNgrHLBJr
+         NxzhnM4m/gI/qOXgUJ35cJrHqcaAhRxoxVxb+hASzx/jYLzZ/sasbhhgU+5h9803ujnO
+         2cxtdFQby84SsZPCttrVciCVQHop/XCExAc78br0nJ/SehNGkx+RsraX12+uN0KSEJcN
+         rjdSAl16y1Ng3DYzAhDz1ZjPsJehUtK0Z0rMluwPxSJY8geZoFT8bLMfoEHEYbzMJCFN
+         pRLqW4q8kbGT/kddgyMSjif2NVk/h6Xi37cBeR3GfgzY2VdBNyggoJSw66YpExP3wutL
+         +2XA==
+X-Gm-Message-State: AOJu0YyC6NU3JTd+E95cgFfajEedjEpL737iRFT+te/Jw2O0IWdmdmpT
+	/qKL9mqoYK5lIVbCsQxfD5G0w7eGVYDonBz6u37Q9CiffdZsQXVwMfAS
+X-Gm-Gg: AR+sD1377ShPUpUYIt7v8MYo46/dE7w5SxGATvOWGFVpeCLxAbv00z3/9lajzSO9JII
+	rTA+aXihTgO2zR25fjLi4fcKgcdEOeMgS20vPjWqYtHKdI6WGe+a6L3KaFfXHEmY1KBtETyCtGk
+	rDJt2HceWF0uX+EZqaVw1sWACIs1WElJT3fJG1qLvcCuXJNXKRZcJa/RMDrLkHzTdD8eSu+6WqH
+	Uz95NxnQ4JT5Q/perZMU9CB5UmCCIygg+/eC/lPkYDvHOv0Ahm0i2vIk0r3Q5eDbHogBYZkiRNP
+	WTxhpQPiJCrzTIN+3QySeGGOECdHYmflPD71VFeQ2VDrxOaCqXbRvTVPgJhjgrTzGjguX/y9oue
+	YnUV+UqKxb4DOtXxHB8LvrzuRT7rzgFMW116ytRwBpCjEJO3uoYGxVPkm/U8dy8Pye9aiMfOnVK
+	BwEu3DqaZCwGJZkefZ6Y76/22e2wOc5h7XnfjwRjJN3zqTx6b77gd3uwis8FaEBMgRAp6ghviHV
+	lsSoPveykmhy5hRW+XaJ8fa
+X-Received: by 2002:a05:6000:2d86:b0:47d:f508:3364 with SMTP id ffacd0b85a97d-47ff4ee359dmr17550094f8f.15.1786116353942;
+        Fri, 07 Aug 2026 08:25:53 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:2b1f:92f:33a4:a386? ([2620:10d:c092:500::5:f21f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4800220ab11sm7074445f8f.35.2026.08.07.08.25.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Aug 2026 08:25:53 -0700 (PDT)
+Message-ID: <e417cb09-8466-4d9e-9d33-7330d84df12a@gmail.com>
+Date: Fri, 7 Aug 2026 16:25:52 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	VI1PR08MB3421:EE_|DU0PR08MB10360:EE_|DU2PEPF00028D12:EE_|VI0PR08MB10800:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b1f1875-57fb-491d-136b-08def4980165
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|7416014|22082099003|18002099003|56012099006|4143699003|11063799006|10067099003|6133799003;
-X-Microsoft-Antispam-Message-Info-Original:
- 2t3nqJ+jv2XLoMl6etGaV134C/dZQIRkfbXAbpMvG3W60rxh9JNS7vnG7JumwZOuXshH8/Khuk3XFmNjAOvraHt1FiMxY6SDqUc2bwJ7gjYZ8RtOPYKcClF0QM+zYRhnM2CHCrpr7hoXmeUcNK1NloD1WpyVejEgA1J4jgFzdItq9u6OyZXdImufdWj+LEBGS6IBmv+6/BB4ye4g2SKWQIknvPuEDBuj1QJcOVK16BBecyhY/ujuWGSnNHP185oWRvXeO9VonLi2CbWPODWWJ6+GNA1EHlmq0Q4ZqO2p+w3c5VO7/ibcU56cA9Zm1BPAr5gV3dSiIY5gBrrO0GhJM/Nz6RG84n0RW8uE6xU5lIhiU0aD67U5Nv3EgUz3WjaosLO/zSgKYoBUWVByOz+9Priy7ZB1ksCjLvXt3lJinMQPrFeYsVK6CNwe9nME7chQkisUZPHEKJn9+l8p6tsQWo4cFJaBq/z/0EYkPFoVR0A8yv0iaX3Wc+ux7aTJ/42G09Rj3Dead4InmbspUi+Ht3U8qdwytMOXQUE/LL9p10Moqf0AmvqZoPncIsUwaQ4XpIbvzZ39tWHKbpiuDcdyBJ5WqoGT7NG2PDYTvLuVLzk29GuoAKjCGC+s6nyChN0n+dYaspSn0T4UGPXwMasE55ULyoI/4NgyGnNil4b9eEY=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(7416014)(22082099003)(18002099003)(56012099006)(4143699003)(11063799006)(10067099003)(6133799003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- dlDyhQkPRofMsLRSwwlNt05buGPmBxT0qhTwS66CFq8RqMH9JnrYeuRl/dIwLMTa3S0/tZc6rtzklCAqGaMnZaEqdUOy9ty+kky5eI4h+1Wf1WKIT0YHlFeHr0vRqQZTfCnso0G6QzigOOedxx6gMxysMT0bK0ziCJd0J1RyfKzdTW8odKVbcKEuWC5tBK5BP8pSTpUvb9bqjJt22KWmnNAWz2ZwHUnOCAJKWRrFwk8vXvlbNdJcHpB5C7uykx7jnsyv/KXKYdJZ+mj0wHCvlqXKkXG1OQs27M0t8YC/n8p+GVaGFyr5QH2Su5t2Nu/Vrv2mfXu8Eux58avYedux6w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB10360
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DU2PEPF00028D12.eurprd03.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	78010af5-117a-4010-9bc3-08def497e9d7
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|82310400026|35042699022|14060799003|376014|7416014|1800799024|36860700016|4143699003|10067099003|11063799006|56012099006|6133799003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	x2l+m/+TZiN5WDcR3BKopXymxFpy1n/w8zewuFb2y9Ds335w4O4Ipg3KOXg2n4Xh8Z6ZlmT7QUcRkLaff92m3Ne0kmAudKqF1i7KCM0DsFpx3DuUqfjaP7aF7OmXLIxPwJDeNR1W4aFtqQsMzj6mGeLYmKeqqcSPNPzag2ub2GOj2/bK/1pDOYTo1K/k4bk0vhAynOwzYNa1Nx7/1WC7PI3jL/TJiYXFCp8dpLng+J/aNdOXoAm/RLQNmFW4ljg84owYqlCIOCcbCANBBRVgveRdJU0JPGD82Od0h/a0+Oq0aW9pFkmA0o2dCO+bzsekY0s+7XFX1ZHLlI1HQN6ViBp6bPK1ybVXLSu1PwTi4Vv4eNXkBTJx5fk3hzwhU3PHuJhxB8mxgL9ZTTpSgQzsxo0vJKN+HlDTJEuEoUX6pfOPCHlhyvD80zyfKVHQsdUVjHubTkpPRxB7j+LSyo5f9JriQn5T2mpl7uwyUXioFUweqjQAZskVMuoQcyTxNU0O/sqBdp2Ce9+PHxvT6pLO2MVwmDJigEVSUruzu7+RQG81CMOio5AB+p4ZhsqB7FVhLbsM5WPYVMbMbGTGhrHYk4RU/s8FcW61yPwCV/Jr+M0S2432PHauUfoUr4fKduq/SZoY6dd/CSw7MzOR563j+j2GQhVfmsDKgWE1s4d62IKk5MiyhpQkdB08qiAYJIzxAsYqQudlQv3BkGSoxsFW4w==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(82310400026)(35042699022)(14060799003)(376014)(7416014)(1800799024)(36860700016)(4143699003)(10067099003)(11063799006)(56012099006)(6133799003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	g6sLusA9X41u1ejA18zr5/0Hh+oxjNblxuqvfooYrhKJWuytwsqkYM4RBDsVD6JUPG5ejrRcqnr5/e7tppZJbWyjdo7t0o+y6z68tsoif+F1MBaBmgNHyyctH3CIoA/SkECaXcG16VOwlN9BPUQ0jemKU5fquWEAgHzOiZRFYVgG6EPWjni/TQvwedDSSGb8Razw3w014ZbBUH6R3/c0wWm24LvnYzQv+O7tSwf+LD8ovZuboPDpk0K2qUMKcAzXRFN5Agl8K8bfESJXk4tJL+oyf7av+q6WK2Br07wYwX8iCuY6olsVmayuluAaae4jxdx6l7Rfd0Sxs1FZSgFIEBdpvTlmClNis1jG6i1BiVLn1AWIPxbDqedfdPJx2hH9vhU5ko2RaVILr1JHK4cc51ZlbJ7gAPev9zfv7mGajHlpjSLdLi8QeNSS211id+sa
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2026 15:24:42.8031
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b1f1875-57fb-491d-136b-08def4980165
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU2PEPF00028D12.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR08MB10800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: htab: Split htab_elem_lru and
+ htab_elem_pcpu off of htab_elem
+To: "T.J. Mercier" <tjmercier@google.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260805223516.1495988-1-tjmercier@google.com>
+ <20260805223516.1495988-2-tjmercier@google.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260805223516.1495988-2-tjmercier@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 07/08/2026 8:09 am, Alexander Gordeev wrote:
-> On Thu, Aug 06, 2026 at 09:38:39AM +0100, Muhammad Usama Anjum wrote:
->> pte_t is used both for logical PTE values and for entries stored in a PTE
->> table, so pte_t * does not distinguish a pointer to a copied value from a
->> pointer to table storage.
->>
->> Introduce hw_pte_t as the generic name for a PTE table element. Define it
->> as a macro alias of pte_t by default. When an architecture selects
->> ARCH_HAS_HW_PTE_T, define it as a structure containing a pte_t instead.
->> This preserves the representation while allowing converted architectures
->> to enforce the distinction at compile time.
->>
->> Keep the C type definitions behind an __ASSEMBLY__ check because
->> architecture assembly sources can include this header indirectly. Include
->> asm/page.h so consumers such as linux/vmalloc.h retain the page definitions
->> they previously obtained from that header.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->> ---
->> Changes since RFC v1:
->> - Add the ARCH_HAS_HW_PTE_T opt-in and generic wrapper definition.
->> - Exclude the C type definitions from assembly sources.
->> - Update the description for the new opt-in model.
->> ---
->>  MAINTAINERS                   |  1 +
->>  include/linux/pgtable_types.h | 17 +++++++++++++++++
->>  mm/Kconfig                    |  3 +++
->>  3 files changed, 21 insertions(+)
->>  create mode 100644 include/linux/pgtable_types.h
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index e9c8567308a75..7169bea968cf5 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -16982,6 +16982,7 @@ F:	include/linux/mmu_notifier.h
->>  F:	include/linux/pagewalk.h
->>  F:	include/linux/pgalloc.h
->>  F:	include/linux/pgtable.h
->> +F:	include/linux/pgtable_types.h
->>  F:	include/linux/ptdump.h
->>  F:	include/linux/vmpressure.h
->>  F:	include/linux/vmstat.h
->> diff --git a/include/linux/pgtable_types.h b/include/linux/pgtable_types.h
->> new file mode 100644
->> index 0000000000000..70c3edd00a01b
->> --- /dev/null
->> +++ b/include/linux/pgtable_types.h
->> @@ -0,0 +1,17 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#ifndef _LINUX_PGTABLE_TYPES_H
->> +#define _LINUX_PGTABLE_TYPES_H
->> +
->> +#include <asm/page.h>
->> +
->> +#ifndef __ASSEMBLY__
->> +
->> +#ifdef CONFIG_ARCH_HAS_HW_PTE_T
->> +typedef struct { pte_t __pte; } hw_pte_t;
+On 8/5/26 11:35 PM, T.J. Mercier wrote:
+> The htab_elem struct is used as the per-element type for all BPF hash
+> map types and includes bpf_lru_node in a union with a ptr_to_pptr
+> pointer. For standard (non-LRU, non-PCPU) hash maps, the 24 byte union
+> allocated for every element is entirely unused. For non-preallocated
+> PCPU maps, ptr_to_pptr only requires 8 bytes, leaving 16 bytes of unused
+> overhead in the union. For preallocated PCPU maps ptr_to_pptr is unused
+> since elements are freed to the PCPU freelist.
 > 
-> On s390 it fails to compile once we do typedef hw_pte_t *pgtable_t
-> in asm/page.h. m68k, powerpc and sparc may also have such problem.
+> Eliminate this per-element memory overhead by splitting htab_elem into
+> dedicated structures for each map type:
+>    - struct htab_elem: Minimal structure for standard hash maps and
+>      preallocated PCPU maps (saves 24 bytes per element).
+>    - struct htab_elem_pcpu: Structure for non-preallocated PCPU maps
+>      containing ptr_to_pptr (saves 16 bytes per element).
+>    - struct htab_elem_lru: Retains struct bpf_lru_node for LRU maps.
 > 
-> The below declaration helps to resolve it using forward declaration
-> and without meddling with headers, though I do not like it much:
+> Because element sizes now vary by map type, add key_offset to struct
+> bpf_htab to track the dynamic key offset. Update helper accessors and
+> lookups to compute key and value offsets using htab->key_offset.
 > 
-> typedef struct __hw_pte_t { pte_t __pte; } hw_pte_t;
-Thank you for testing it out on s390.
-
-As __hw_pte_t isn't being used yet in this series, would s390 enablement
-patches add __hw_pte_t to this definition?
-
-This could have been avoided if each architecture defined its own hw_pte_t.
-But for now we are keeping the generic definition of hw_pte_t.
-
+> Pointers to struct htab_elem in the existing code (e.g. htab_elem_hash)
+> serve as generic base element pointers. This is possible because
+> htab_elem, htab_elem_pcpu, and htab_elem_lru share a common initial
+> sequence, making pointer casts safe.
 > 
->> +#else
->> +#define hw_pte_t pte_t
->> +#endif
->> +
->> +#endif /* !__ASSEMBLY__ */
->> +
->> +#endif /* _LINUX_PGTABLE_TYPES_H */
->> diff --git a/mm/Kconfig b/mm/Kconfig
->> index 331daf7fcfab5..31ba9ebf4aafd 100644
->> --- a/mm/Kconfig
->> +++ b/mm/Kconfig
->> @@ -1316,6 +1316,9 @@ comment "GUP_TEST needs to have DEBUG_FS enabled"
->>  config GUP_GET_PXX_LOW_HIGH
->>  	bool
->>  
->> +config ARCH_HAS_HW_PTE_T
->> +	bool
->> +
->>  config DMAPOOL_TEST
->>  	tristate "Enable a module to run time tests on dma_pool"
->>  	depends on HAS_DMA
->> -- 
->> 2.47.3
->>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> ---
+>  kernel/bpf/hashtab.c    | 362 +++++++++++++++++++++++++---------------
+>  kernel/bpf/map_in_map.c |  13 ++
+>  kernel/bpf/map_in_map.h |   2 +
+>  3 files changed, 242 insertions(+), 135 deletions(-)
+> 
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 9f394e1aa2e8..f54366da459f 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -102,11 +102,13 @@ struct bpf_htab {
+>  	bool use_percpu_counter;
+>  	u32 n_buckets;	/* number of hash buckets */
+>  	u32 elem_size;	/* size of each element in bytes */
+> +	u32 key_offset;	/* offset of key in bytes */
+>  	u32 hashrnd;
+>  };
+>  
+>  /* each htab element is struct htab_elem + key + value */
+> -struct htab_elem {
+> +struct htab_elem;
+> +struct htab_node {
+>  	union {
+>  		struct hlist_nulls_node hash_node;
+>  		struct {
+> @@ -117,11 +119,27 @@ struct htab_elem {
+>  			};
+>  		};
+>  	};
+> -	union {
+> -		/* pointer to per-cpu pointer */
+> -		void *ptr_to_pptr;
+> -		struct bpf_lru_node lru_node;
+> -	};
+> +};
+> +
+> +struct htab_elem {
+> +	struct htab_node node;
+> +	u32 hash;
+> +	char key[] __aligned(8);
+> +};
+> +
+> +struct htab_elem_lru {
+> +	struct htab_node node;
+> +	struct bpf_lru_node lru_node;
+> +	u32 hash;
+> +	char key[] __aligned(8);
+> +};
+> +
+> +/* Only for non-preallocated PCPU maps. Preallocated PCPU maps don't need
+> + * ptr_to_pptr, and use htab_elem.
+> + */
+> +struct htab_elem_pcpu {
+> +	struct htab_node node;
+> +	void *ptr_to_pptr;
+>  	u32 hash;
+>  	char key[] __aligned(8);
+>  };
+> @@ -136,6 +154,21 @@ static inline bool htab_is_prealloc(const struct bpf_htab *htab)
+>  	return !(htab->map.map_flags & BPF_F_NO_PREALLOC);
+>  }
+>  
+> +static inline struct bpf_lru_node *htab_elem_lru_node(struct htab_elem *l)
+> +{
+> +	return &((struct htab_elem_lru *)l)->lru_node;
+> +}
+> +
+> +static inline void *htab_elem_get_ptr_to_pptr(struct htab_elem *l)
+> +{
+> +	return ((struct htab_elem_pcpu *)l)->ptr_to_pptr;
+> +}
+> +
+> +static inline void htab_elem_set_ptr_to_pptr(struct htab_elem *l, void *ptr)
+> +{
+> +	((struct htab_elem_pcpu *)l)->ptr_to_pptr = ptr;
+> +}
+> +
+>  static void htab_init_buckets(struct bpf_htab *htab)
+>  {
+>  	unsigned int i;
+> @@ -183,25 +216,30 @@ static inline bool is_fd_htab(const struct bpf_htab *htab)
+>  	return htab->map.map_type == BPF_MAP_TYPE_HASH_OF_MAPS;
+>  }
+>  
+> -static inline void *htab_elem_value(struct htab_elem *l, u32 key_size)
+> +static inline void *htab_elem_key(struct bpf_htab *htab, struct htab_elem *l)
+> +{
+> +	return (void *)l + htab->key_offset;
+> +}
+> +
+> +static inline void *htab_elem_value(struct bpf_htab *htab, struct htab_elem *l)
+>  {
+> -	return l->key + round_up(key_size, 8);
+> +	return htab_elem_key(htab, l) + round_up(htab->map.key_size, 8);
+>  }
+>  
+> -static inline void htab_elem_set_ptr(struct htab_elem *l, u32 key_size,
+> +static inline void htab_elem_set_ptr(struct bpf_htab *htab, struct htab_elem *l,
+>  				     void __percpu *pptr)
+>  {
+> -	*(void __percpu **)htab_elem_value(l, key_size) = pptr;
+> +	*(void __percpu **)htab_elem_value(htab, l) = pptr;
+>  }
+>  
+> -static inline void __percpu *htab_elem_get_ptr(struct htab_elem *l, u32 key_size)
+> +static inline void __percpu *htab_elem_get_ptr(struct bpf_htab *htab, struct htab_elem *l)
+>  {
+> -	return *(void __percpu **)htab_elem_value(l, key_size);
+> +	return *(void __percpu **)htab_elem_value(htab, l);
+>  }
+>  
+> -static void *fd_htab_map_get_ptr(const struct bpf_map *map, struct htab_elem *l)
+> +static void *fd_htab_map_get_ptr(struct bpf_htab *htab, struct htab_elem *l)
+>  {
+> -	return *(void **)htab_elem_value(l, map->key_size);
+> +	return *(void **)htab_elem_value(htab, l);
+>  }
+>  
+>  static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)
+> @@ -209,6 +247,26 @@ static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)
+>  	return (struct htab_elem *) (htab->elems + i * (u64)htab->elem_size);
+>  }
+>  
+> +static inline u32 htab_elem_hash(struct bpf_htab *htab, struct htab_elem *l)
+> +{
+> +	if (htab_is_lru(htab))
+> +		return ((struct htab_elem_lru *)l)->hash;
+> +	else if (htab_is_percpu(htab) && !htab_is_prealloc(htab))
+> +		return ((struct htab_elem_pcpu *)l)->hash;
 
--- 
-Thanks,
-Usama
+These casts in getter/setter are a bit annoying, not sure if there is a way to
+get rid of them.
 
+> +	else
+> +		return l->hash;
+> +}
+> +
+> +static inline void htab_elem_set_hash(struct bpf_htab *htab, struct htab_elem *l, u32 hash)
+> +{
+> +	if (htab_is_lru(htab))
+> +		((struct htab_elem_lru *)l)->hash = hash;
+> +	else if (htab_is_percpu(htab) && !htab_is_prealloc(htab))
+> +		((struct htab_elem_pcpu *)l)->hash = hash;
+> +	else
+> +		l->hash = hash;
+> +}
+> +
+...
+>  	htab->extra_elems = pptr;
+> @@ -425,8 +481,8 @@ static int htab_map_alloc_check(union bpf_attr *attr)
+>  	bool zero_seed = (attr->map_flags & BPF_F_ZERO_SEED);
+>  	int numa_node = bpf_map_attr_numa_node(attr);
+>  
+> -	BUILD_BUG_ON(offsetof(struct htab_elem, fnode.next) !=
+> -		     offsetof(struct htab_elem, hash_node.pprev));
+> +	BUILD_BUG_ON(offsetof(struct htab_node, fnode.next) !=
+> +		     offsetof(struct htab_node, hash_node.pprev));
+>  
+>  	if (zero_seed && !capable(CAP_SYS_ADMIN))
+>  		/* Guard against local DoS, and discourage production use. */
+> @@ -476,7 +532,7 @@ static void htab_mem_dtor(void *obj, void *ctx)
+>  	if (IS_ERR_OR_NULL(hrec->record))
+>  		return;
+>  
+> -	map_value = htab_elem_value(elem, hrec->key_size);
+> +	map_value = (void *)elem + sizeof(struct htab_elem) + round_up(hrec->key_size, 8);
+
+Why this can't be htab_elem_value()?
+
+>  	bpf_obj_free_fields(hrec->record, map_value);
+>  }
+>  
+> @@ -583,8 +639,14 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+>  
+>  	htab->n_buckets = roundup_pow_of_two(htab->map.max_entries);
+>  
+> -	htab->elem_size = sizeof(struct htab_elem) +
+> -			  round_up(htab->map.key_size, 8);
+> +	if (htab_is_lru(htab))
+> +		htab->key_offset = sizeof(struct htab_elem_lru);
+
+nit: I think it'll be nicer to use explicit offsetof().
+
+> +	else if (percpu && !prealloc)
+> +		htab->key_offset = sizeof(struct htab_elem_pcpu);
+> +	else
+> +		htab->key_offset = sizeof(struct htab_elem);
+> +
+> +	htab->elem_size = htab->key_offset + round_up(htab->map.key_size, 8);
+>  	if (percpu)
+>  		htab->elem_size += sizeof(void *);
+>  	else
+> @@ -692,14 +754,16 @@ static inline struct hlist_nulls_head *select_bucket(struct bpf_htab *htab, u32
+>  }
+>  
+...
+> @@ -912,18 +982,19 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+>  	head = select_bucket(htab, hash);
+>  
+>  	/* lookup the key */
+> -	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab->n_buckets);
+> +	l = lookup_nulls_elem_raw(htab, head, hash, key, key_size, htab->n_buckets);
+>  
+>  	if (!l)
+>  		goto find_first_elem;
+>  
+>  	/* key was found, get next key in the same bucket */
+> -	next_l = hlist_nulls_entry_safe(rcu_dereference_raw(hlist_nulls_next_rcu(&l->hash_node)),
+> -				  struct htab_elem, hash_node);
+> +	next_l = hlist_nulls_entry_safe(
+> +			rcu_dereference_raw(hlist_nulls_next_rcu(&l->node.hash_node)),
+
+nit: I think this line has not changed.
+
+> +			struct htab_elem, node.hash_node);
+>  
+>  	if (next_l) {
+>  		/* if next elem in this hash list is non-zero, just return it */
+> -		memcpy(next_key, next_l->key, key_size);
+> +		memcpy(next_key, htab_elem_key(htab, next_l), key_size);
+>  		return 0;
+>  	}
+>  ...
