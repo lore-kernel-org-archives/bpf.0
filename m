@@ -1,594 +1,155 @@
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073EE3C4552
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A447D3B47D9
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786087125; cv=none; b=qlPzSlfxHI4F+lz0zMYai8O8A9WlvLIcCLwrirc0jNPW0qZO2jXZO3cihKGu0pgm5qzIRtpDBS2XDOApuTHowV8yarxtHCMfQDNRJKmKHpTVDKU4TfjW9JfeIqb3pEtLMiaVvlkPbRQTGv09LGWdAj4eG/ZfMyFttVubfgjWzOk=
+	t=1786087194; cv=none; b=Oihk4FDpWJjtqCJ6+uept8eHWXL9PyLsTP67DTIitXZ1bOrAuHJABdaViTN+hJV5EXxRyjgknDG7AK8WYEohw8Vzw5MvxAk3yxbDJb7Yl+tZos+puUq1BjTpGAAziEWCQg3iJIR7JMPhW9hBOP/J8sfnUQ47SG08bAZ5vcKADV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786087125; c=relaxed/simple;
-	bh=LXygP1WyK73KB6sA2epD5GuUK5f4Z9RkXx5rDK/h2YE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=UlZSyHvXJGx6V17fzv2RbHpiwnC5E7wzSosP4E3jzo9NCmP3I7e9eLlj3niNSEfCAsFNwe/CsjMWYEkvj4Skd6/bCCnsjEIVERAu/FpPharSQvO3SUazIoA8mNx5976mXbySB+Ihoj1n8dMiN55BKCKd7wgtd0uiEE0BajXo/Oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ez2rKt4M; arc=none smtp.client-ip=209.85.216.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1786087194; c=relaxed/simple;
+	bh=oFVjrQR90MYdWE9Vjlxagwau8seNNwpG5fs4HKwaAus=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=fAQo5/DpACPwx7C9NgikYvdfYNJM/bKV/xYCNJJ35pvFL1QUjrSfHMankDZw1GZ61EH4aFq33if0+Ca9KtS3DI0fJ8iMiyp05/5LpmeZOAxMFGzdfoRkdyH4vOtRTgpaYxKUaXqG2l0uuLrmc3+wt71YZQI88F3o7dKHv+1r7D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O3MOVzZ1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ez2rKt4M"
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-381250979d5so3216322a91.0
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 00:18:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786087122; x=1786691922; darn=vger.kernel.org;
-        h=content-type:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=D49SGCmwUv9DYtsvbQQXcm3d16lOMTvO3Tc7LhywDzU=;
-        b=ez2rKt4MmwLFXA38N2A+VKKvVw1AVsAnK2aHq2unK7utoxTIo43y+Yxnh2lRcNIM8O
-         su1w4TYoOpRTmkNPlEwLhX+WCpbpEhNHS34WPOehDhd4TFqEP+PvRwglzlXqYAqJ6eGw
-         uCogzQsZ98z+hSvII7BGRRMpKK5ruXiLbU5wP4h7sVzAYJLLbZUXmj61HYcHyIbFV+fp
-         mMjREMF0xxtrWUm2E0D4ddPJIbtc0x9BWOTLOhoqzdCX9BkfYp9McNi/952y8OgyZJDk
-         u0aAgltZNhMkS4xZ/x8Ig33548MI9N2OTqAHvF+K3RXENV9kSFisOKUtb0vYV8aK8RlV
-         H/cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786087122; x=1786691922;
-        h=content-type:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=D49SGCmwUv9DYtsvbQQXcm3d16lOMTvO3Tc7LhywDzU=;
-        b=QXblGb6ozr0geothUxWmwwulUENVmpBX9qdY3ywDFBWJbS/xPF5YmXnquuXHzB3RRr
-         Ewj9QiTh5mZ7zedN+5wo/v42QzvmMHgjM4W4s/Lm7iD03ijXzPugDaiTD4t7FxE4AfbK
-         T6b9jVnbvr5ilDP4S2kARSYBPQp830J+rHSG661nIqPLX7K922nmPSEpt2A/MmgBBpmN
-         DSxJ5jrYMKBnAHB9+2Vl/Bvqf/ZoLukcRBOEqvwPJfbFGoKAbPckZXcakQHCpPvufp8c
-         Rhq+DtDeO8cvr6T61RmcOQYbVr4LK54uZY7IGFmgREtufMKP7PFkTmVvcpC/Y7OzDupK
-         jDTQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rqq5uELREWx4lH/TAPk9vDGvGtY82AGEF7d0iIrewGLqbVsY+ApiKACTwqJpl+XEMU5q2U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPKdcsaqAEv6C2nr6pdZaQBkkTsIsDOiPoZ9ER/3A8Ahbow0E2
-	uM0MS4IBU3rr4bXWMwbpXmnchUexLGJAEtgsh8GYN6Bvz9bw8wWi4UDDgvb20div5C773bu1gs3
-	9tBxogzOj5g==
-X-Received: from dlah26.prod.google.com ([2002:a05:701b:261a:b0:13d:2928:7996])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:53cf:b0:37f:b0a9:1a68
- with SMTP id 98e67ed59e1d1-3903c54b340mr21304002a91.7.1786087121801; Fri, 07
- Aug 2026 00:18:41 -0700 (PDT)
-Date: Fri,  7 Aug 2026 00:18:18 -0700
-In-Reply-To: <20260807071818.718751-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O3MOVzZ1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EE2E1F000E9;
+	Fri,  7 Aug 2026 07:19:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786087192;
+	bh=rHs7hZ5BW3sxVfe1PDKjzoxwybTSbppP+A9xaJ/EdZY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=O3MOVzZ1BzlRN7JFYmhTqm1/WVqm1Gv5p5yC3HjUbdn9bgCmo1EU2Uvx8nNEZWSxU
+	 7WwK1NkFXT5Jyeqm2337p6w/Za2d4PjEDp23IWChrDjOqKnzRH0hCEr7g23n0j6fVd
+	 h5RkJbkb4RxjgtTwNL+EN+o9FZspXVDIaT/0nEwWAef1woann/EHYuwilCM/AcKC7C
+	 a2sy+ys04dNm2c/0od0LwmWqPRRy8reVq/bC/qsjbHmwCXhWPIF8a4oj/y81gK6KMv
+	 BLp6LasR068vpzPk4wSagKMeP3CErVOw/xDJi8A4zc+nRw3pFe4AW233TI/Yj1URSO
+	 lTNnl5ijkP9qg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 3/4] selftests/bpf: add thread_wq cgroup test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hui Zhu" <hui.zhu@linux.dev>
+Cc: tj@kernel.org, mkoutny@suse.com, hannes@cmpxchg.org, bpf@vger.kernel.org
+In-Reply-To: <dbc676924bb41d1e943df252460e5068a4cf71ad.1786086076.git.zhuhui@kylinos.cn>
+References: <cover.1786086076.git.zhuhui@kylinos.cn>
+ <dbc676924bb41d1e943df252460e5068a4cf71ad.1786086076.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 07 Aug 2026 07:19:51 +0000
+Message-Id: <20260807071952.0EE2E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260807071818.718751-1-irogers@google.com>
-X-Mailer: git-send-email 2.55.0.679.g6767b8d81c-goog
-Message-ID: <20260807071818.718751-9-irogers@google.com>
-Subject: [RFC PATCH v1 8/8] perf tests: Add build_id_offset test coverage
-From: Ian Rogers <irogers@google.com>
-To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Mike Leach <mike.leach@arm.com>, Leo Yan <leo.yan@arm.com>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Swapnil Sapkal <swapnil.sapkal@amd.com>, 
-	Thomas Falcon <thomas.falcon@intel.com>, Thomas Richter <tmricht@linux.ibm.com>, 
-	Dmitrii Dolgov <9erthalion6@gmail.com>, Eric Biggers <ebiggers@kernel.org>, Zecheng Li <zli94@ncsu.edu>, 
-	Gabriel Marin <gmx@google.com>, Tengda Wu <wutengda@huaweicloud.com>, 
-	Derek Foreman <derek.foreman@collabora.com>, Tanushree Shah <tshah@linux.ibm.com>, 
-	Ankur Arora <ankur.a.arora@oracle.com>, Aaron Tomlin <atomlin@atomlin.com>, tanze <tanze@kylinos.cn>, 
-	Rui Qi <qirui.001@bytedance.com>, Howard Chu <howardchu95@gmail.com>, 
-	Chuck Lever <cel@kernel.org>, Shimin Guo <shimin.guo@skydio.com>, 
-	Alessio Podda <aleph.pi.gh@gmail.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, coresight@lists.linaro.org, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
 
-Test the kernel interface using sys_perf_event_open, test perf inject
---sample-buildids with pipe mode and callchains, and test perf record
---buildid-offset across multiple sampling modes.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] Missing memory barriers between the worker kthread and userspace=
+ polling can cause test flakiness on weakly-ordered architectures.
+- [Medium] The test uses an arbitrary `sleep(2)` to wait for asynchronous m=
+ap destruction, creating a race condition that can leak the cgroup.
+--
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/Build                      |   1 +
- tools/perf/tests/bid-offset.c               |  60 +++++++
- tools/perf/tests/builtin-test.c             |   1 +
- tools/perf/tests/mmap-thread-lookup.c       |  36 +++++
- tools/perf/tests/sample-parsing.c           |  37 ++++-
- tools/perf/tests/shell/inject_bid_offset.sh | 170 ++++++++++++++++++++
- tools/perf/tests/shell/record.sh            |  69 ++++++++
- tools/perf/tests/tests.h                    |   1 +
- 8 files changed, 374 insertions(+), 1 deletion(-)
- create mode 100644 tools/perf/tests/bid-offset.c
- create mode 100755 tools/perf/tests/shell/inject_bid_offset.sh
+--- Patch [3]: [PATCH bpf-next 3/4] selftests/bpf: add thread_wq cgroup tes=
+t ---
+commit 0a433d40343251b2dbfb625551f8882c1faf6d99
+Author: Hui Zhu <zhuhui@kylinos.cn>
 
-diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
-index 66944a4f4968..f7f8c4deba30 100644
---- a/tools/perf/tests/Build
-+++ b/tools/perf/tests/Build
-@@ -64,6 +64,7 @@ perf-test-y += expand-cgroup.o
- perf-test-y += perf-time-to-tsc.o
- perf-test-y += dlfilter-test.o
- perf-test-y += sigtrap.o
-+perf-test-y += bid-offset.o
- perf-test-y += event_groups.o
- perf-test-y += symbols.o
- perf-test-y += util.o
-diff --git a/tools/perf/tests/bid-offset.c b/tools/perf/tests/bid-offset.c
-new file mode 100644
-index 000000000000..f7d85491832f
---- /dev/null
-+++ b/tools/perf/tests/bid-offset.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "tests.h"
-+#include "debug.h"
-+#include "evlist.h"
-+#include "evsel.h"
-+#include <linux/hw_breakpoint.h>
-+#include <linux/perf_event.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include "../perf-sys.h"
-+
-+static int test__bid_offset(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
-+{
-+	struct perf_event_attr attr = {
-+		.type		= PERF_TYPE_SOFTWARE,
-+		.config		= PERF_COUNT_SW_DUMMY,
-+		.size		= sizeof(attr),
-+		.sample_type	= PERF_SAMPLE_BUILD_ID_OFFSET,
-+		.exclude_kernel = 1,
-+		.exclude_hv     = 1,
-+	};
-+	int fd;
-+
-+	fd = sys_perf_event_open(&attr, /*pid=*/0, /*cpu=*/-1, /*group_fd=*/-1, /*flags=*/0);
-+	if (fd < 0) {
-+		pr_debug("sys_perf_event_open failed with %d\n", errno);
-+		if (errno == EINVAL) {
-+			pr_debug("Kernel does not support PERF_SAMPLE_BUILD_ID_OFFSET\n");
-+			return TEST_SKIP;
-+		}
-+		return TEST_FAIL;
-+	}
-+	close(fd);
-+
-+	attr.sample_type = PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET;
-+	fd = sys_perf_event_open(&attr, /*pid=*/0, /*cpu=*/-1, /*group_fd=*/-1, /*flags=*/0);
-+	if (fd < 0) {
-+		pr_debug("sys_perf_event_open with callchain failed with %d\n", errno);
-+		if (errno == EINVAL) {
-+			pr_debug("Kernel does not support PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET\n");
-+			return TEST_SKIP;
-+		}
-+		return TEST_FAIL;
-+	}
-+	close(fd);
-+
-+	return TEST_OK;
-+}
-+
-+static struct test_case bid_offset_tests[] = {
-+	TEST_CASE_REASON("Test PERF_SAMPLE_BUILD_ID_OFFSET", bid_offset,
-+			 "not supported by kernel"),
-+	{ .name = NULL, }
-+};
-+
-+struct test_suite suite__bid_offset = {
-+	.desc = "Test PERF_SAMPLE_BUILD_ID_OFFSET",
-+	.test_cases = bid_offset_tests,
-+};
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index 41dcfbf874f0..afc9c7efe009 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -148,6 +148,7 @@ static struct test_suite *generic_tests[] = {
- 	&suite__perf_time_to_tsc,
- 	&suite__dlfilter,
- 	&suite__sigtrap,
-+	&suite__bid_offset,
- 	&suite__event_groups,
- 	&suite__symbols,
- 	&suite__util,
-diff --git a/tools/perf/tests/mmap-thread-lookup.c b/tools/perf/tests/mmap-thread-lookup.c
-index dca8bbfe780a..65c72ed896ac 100644
---- a/tools/perf/tests/mmap-thread-lookup.c
-+++ b/tools/perf/tests/mmap-thread-lookup.c
-@@ -17,6 +17,8 @@
- #include "symbol.h"
- #include "util/synthetic-events.h"
- #include "thread.h"
-+#include "dso.h"
-+#include "build-id.h"
- #include <internal/lib.h> // page_size
- 
- #define THREADS 4
-@@ -211,6 +213,40 @@ static int mmap_events(synth_cb synth)
- 
- 		pr_debug("map %p, addr %" PRIx64 "\n", al.map, map__start(al.map));
- 
-+		/* Verify lookup by build ID and offset */
-+		{
-+			struct dso *dso = dso__get(map__dso(al.map));
-+
-+			if (dso) {
-+				const struct build_id *bid = dso__bid(dso);
-+
-+				if (bid && bid->size > 0) {
-+					struct addr_location al2;
-+					struct perf_build_id pbid = { .size = bid->size };
-+					u64 offset = map__dso_map_ip(al.map,
-+								     (unsigned long)(td->map + 1));
-+
-+					memcpy(pbid.data, bid->data, bid->size);
-+					addr_location__init(&al2);
-+					thread__find_map(thread, &(struct perf_sample){
-+								.cpumode = PERF_RECORD_MISC_USER,
-+								.ip = 0,
-+								.bid = {
-+									.bid = &pbid,
-+									.offset = offset,
-+								},
-+							 }, &al2);
-+
-+					if (al2.map != al.map) {
-+						pr_debug("failed, couldn't find map by build id and offset\n");
-+						err = -1;
-+					}
-+					addr_location__exit(&al2);
-+				}
-+				dso__put(dso);
-+			}
-+		}
-+
- 		addr_location__exit(&al);
- 		if (err)
- 			break;
-diff --git a/tools/perf/tests/sample-parsing.c b/tools/perf/tests/sample-parsing.c
-index 20cab91ceaeb..b49b6dcf10cd 100644
---- a/tools/perf/tests/sample-parsing.c
-+++ b/tools/perf/tests/sample-parsing.c
-@@ -229,6 +229,36 @@ static int do_test(u64 sample_type, u64 sample_regs, u64 read_format)
- 	const u32 raw_data[] = {0x12345678, 0x0a0b0c0d, 0x11020304, 0x05060708, 0 };
- 	const u64 data[] = {0x2211443366558877ULL, 0, 0xaabbccddeeff4321ULL};
- 	const u64 aux_data[] = {0xa55a, 0, 0xeeddee, 0x0282028202820282};
-+	const struct perf_build_id bid = {
-+		.size = 20,
-+		.data = {
-+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-+		}
-+	};
-+	const struct perf_build_id callchain_bids[] = {
-+		{
-+			.size = 20,
-+			.data = {
-+				'9', '8', '7', '6', '5', '4', '3', '2', '1', '0',
-+				'9', '8', '7', '6', '5', '4', '3', '2', '1', '0',
-+			}
-+		},
-+		{
-+			.size = 20,
-+			.data = {
-+				'a', 'b', 'c', 'd', 'e', 'f', 'a', 'b', 'c', 'd',
-+				'e', 'f', 'a', 'b', 'c', 'd', 'e', 'f', 'a', 'b',
-+			}
-+		},
-+		{
-+			.size = 20,
-+			.data = {
-+				'f', 'e', 'd', 'c', 'b', 'a', 'f', 'e', 'd', 'c',
-+				'b', 'a', 'f', 'e', 'd', 'c', 'b', 'a', 'f', 'e',
-+			}
-+		},
-+	};
- 	struct regs_dump user_regs = {
- 		.abi	= PERF_SAMPLE_REGS_ABI_64,
- 		.mask	= sample_regs,
-@@ -277,6 +307,11 @@ static int do_test(u64 sample_type, u64 sample_regs, u64 read_format)
- 			.size	= sizeof(aux_data),
- 			.data	= (void *)aux_data,
- 		},
-+		.bid		= {
-+			.bid = (struct perf_build_id *)&bid,
-+			.offset = 0,
-+		},
-+		.callchain_bids = (struct perf_build_id *)callchain_bids,
- 	};
- 	struct sample_read_value values[] = {{1, 5, 0}, {9, 3, 0}, {2, 7, 0}, {6, 4, 1},};
- 	struct perf_sample sample_out, sample_out_endian;
-@@ -409,7 +444,7 @@ static int test__sample_parsing(struct test_suite *test __maybe_unused, int subt
- 	 * were added.  Please actually update the test rather than just change
- 	 * the condition below.
- 	 */
--	if (PERF_SAMPLE_MAX > PERF_SAMPLE_WEIGHT_STRUCT << 1) {
-+	if (PERF_SAMPLE_WEIGHT_STRUCT << 3 < PERF_SAMPLE_MAX) {
- 		pr_debug("sample format has changed, some new PERF_SAMPLE_ bit was introduced - test needs updating\n");
- 		return -1;
- 	}
-diff --git a/tools/perf/tests/shell/inject_bid_offset.sh b/tools/perf/tests/shell/inject_bid_offset.sh
-new file mode 100755
-index 000000000000..eac0a19f24e1
---- /dev/null
-+++ b/tools/perf/tests/shell/inject_bid_offset.sh
-@@ -0,0 +1,170 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# perf inject --sample-buildids test
-+
-+set -e
-+set -o pipefail
-+
-+shelldir=$(dirname "$0")
-+# shellcheck source=lib/perf_has_symbol.sh
-+. "${shelldir}"/lib/perf_has_symbol.sh
-+
-+sym="noploop"
-+
-+skip_test_missing_symbol ${sym}
-+
-+temp_dir=$(mktemp -d /tmp/perf-test-bid-offset.XXXXXXXXXX)
-+
-+prog="perf test -w noploop"
-+[ "$(uname -m)" = "s390x" ] && prog="$prog 3"
-+err=0
-+
-+cleanup() {
-+	local exit_code=${1:-$?}
-+	trap - EXIT TERM INT
-+	if [ "${exit_code}" -ne 0 ] || [ "${err}" -ne 0 ]; then
-+		echo "Test failed! Preserving temp directory: ${temp_dir}"
-+		exit 1
-+	fi
-+	if [[ "${temp_dir}" =~ ^/tmp/perf-test-bid-offset\. ]]; then
-+		rm -rf "${temp_dir}"
-+	fi
-+	exit 0
-+}
-+
-+trap_cleanup() {
-+	local exit_code=$?
-+	echo "Unexpected signal in ${FUNCNAME[1]}"
-+	cleanup ${exit_code}
-+}
-+trap trap_cleanup EXIT TERM INT
-+
-+compare_script() {
-+	local orig=$1
-+	local bid=$2
-+	local msg=$3
-+
-+	perf script -F -ip -i "${orig}" > "${temp_dir}/script_orig.txt"
-+	perf script -F -ip -i "${bid}" > "${temp_dir}/script_bid.txt"
-+
-+	if ! diff -q "${temp_dir}/script_orig.txt" "${temp_dir}/script_bid.txt"; then
-+		echo "${msg} [Failed - perf script output differs]"
-+		err=1
-+	else
-+		echo "${msg} [Success]"
-+	fi
-+}
-+
-+compare_report() {
-+	local orig=$1
-+	local bid=$2
-+	local msg=$3
-+
-+	perf report -i "${orig}" --stdio | grep -v '^#' > "${temp_dir}/report_orig.txt"
-+	perf report -i "${bid}" --stdio | grep -v '^#' > "${temp_dir}/report_bid.txt"
-+
-+	if ! diff -q "${temp_dir}/report_orig.txt" "${temp_dir}/report_bid.txt"; then
-+		echo "${msg} [Failed - perf report output differs]"
-+		err=1
-+	else
-+		echo "${msg} [Success]"
-+	fi
-+}
-+
-+test_basic() {
-+	echo "Test basic build id offset injection"
-+	local data="${temp_dir}/perf.data.basic"
-+	local data2="${temp_dir}/perf.data2.basic"
-+
-+	perf record -e task-clock:u -o "${data}" ${prog} >/dev/null 2>&1
-+	perf inject --sample-buildids -i "${data}" -o "${data2}" >/dev/null 2>&1
-+
-+	compare_script "${data}" "${data2}" "Basic injection"
-+}
-+
-+test_callchain() {
-+	echo "Test Callchain build id offset injection"
-+	local data="${temp_dir}/perf.data.callchain"
-+	local data2="${temp_dir}/perf.data2.callchain"
-+
-+	perf record -g -e task-clock:u -o "${data}" ${prog} >/dev/null 2>&1
-+	perf inject --sample-buildids -i "${data}" -o "${data2}" >/dev/null 2>&1
-+
-+	compare_script "${data}" "${data2}" "Callchain injection"
-+}
-+
-+test_pipe() {
-+	echo "Test pipe mode build id offset injection"
-+	local data="${temp_dir}/perf.data.pipe"
-+	local data2="${temp_dir}/perf.data2.pipe"
-+
-+	perf record -e task-clock:u -o - ${prog} 2>/dev/null | tee "${data}" | \
-+		perf inject --sample-buildids -o "${data2}" >/dev/null 2>&1
-+
-+	compare_script "${data}" "${data2}" "Pipe mode injection"
-+}
-+
-+test_report() {
-+	echo "Test perf report consistency"
-+	local data="${temp_dir}/perf.data.report"
-+	local data2="${temp_dir}/perf.data2.report"
-+
-+	perf record -e task-clock:u -o "${data}" ${prog} >/dev/null 2>&1
-+	perf inject --sample-buildids -i "${data}" -o "${data2}" >/dev/null 2>&1
-+
-+	compare_report "${data}" "${data2}" "Report consistency"
-+}
-+
-+test_pipe_report() {
-+	echo "Test pipe mode perf report consistency"
-+	local data="${temp_dir}/perf.data.pipe_report"
-+	local data2="${temp_dir}/perf.data2.pipe_report"
-+
-+	perf record -e task-clock:u -o - ${prog} 2>/dev/null | tee "${data}" | \
-+		perf inject --sample-buildids -o "${data2}" >/dev/null 2>&1
-+
-+	compare_report "${data}" "${data2}" "Pipe Report consistency"
-+}
-+
-+test_kernel() {
-+	echo "Test kernel build id offset injection"
-+	local data="${temp_dir}/perf.data.kernel"
-+	local data2="${temp_dir}/perf.data2.kernel"
-+
-+	# Not all systems allow kernel profiling, so we check if it succeeds first
-+	if ! perf record -e task-clock:k -o "${data}" ${prog} >/dev/null 2>&1; then
-+		echo "Kernel injection [Skipped - permissions or support missing]"
-+		return
-+	fi
-+	perf inject --sample-buildids -i "${data}" -o "${data2}" >/dev/null 2>&1
-+
-+	compare_script "${data}" "${data2}" "Kernel injection"
-+}
-+
-+test_record_buildid_offset() {
-+	echo "Test perf record --buildid-offset consistency"
-+	local data="${temp_dir}/perf.data.record_orig"
-+	local data2="${temp_dir}/perf.data2.record_bid"
-+
-+	perf record -e task-clock:u -o "${data}" ${prog} >/dev/null 2>&1
-+	# We must have the binaries in .build-id cache, which the first record does natively.
-+	# Now record with --buildid-offset.
-+	if ! perf record --buildid-offset -e task-clock:u -o "${data2}" \
-+	    ${prog} >/dev/null 2>&1; then
-+		echo "Record --buildid-offset consistency [Skipped - not supported by kernel]"
-+		return
-+	fi
-+
-+	# Compare symbolization
-+	compare_report "${data}" "${data2}" "Record --buildid-offset consistency"
-+}
-+
-+test_basic
-+test_callchain
-+test_pipe
-+test_report
-+test_pipe_report
-+test_kernel
-+test_record_buildid_offset
-+
-+cleanup ${err}
-diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
-index 625240809fce..9346741b19c9 100755
---- a/tools/perf/tests/shell/record.sh
-+++ b/tools/perf/tests/shell/record.sh
-@@ -484,6 +484,74 @@ test_ratio_to_prev() {
-   echo "Basic ratio-to-prev record test [Success]"
- }
- 
-+check_buildid_offset() {
-+  perf report -D -i "${perfdata}" -q 2>/dev/null | grep -q "BUILD_ID_OFFSET"
-+}
-+
-+test_buildid_offset() {
-+  echo "buildid-offset test"
-+  local ret=0
-+  perf_record_with_retry "${perfdata}" "check_buildid_offset" "perf test -w thloop" \
-+    --buildid-offset || ret=$?
-+  if [ $ret -eq 2 ]; then
-+    echo "buildid-offset test [Skipped not supported]"
-+    return
-+  elif [ $ret -eq 1 ]; then
-+    echo "buildid-offset test [Failed missing output]"
-+    err=1
-+    return
-+  fi
-+
-+  # Expand test coverage
-+  perf_record_with_retry "${perfdata}" "check_per_thread" "perf test -w thloop" \
-+    --buildid-offset --per-thread || ret=$?
-+  if [ $ret -ne 0 ]; then
-+    echo "buildid-offset test [Failed per-thread]"
-+    err=1
-+    return
-+  fi
-+
-+  perf_record_with_retry "${perfdata}" "check_system_wide" "perf test -w thloop" \
-+    --buildid-offset -aB --synth=no || ret=$?
-+  if [ $ret -ne 0 ]; then
-+    echo "buildid-offset test [Failed system-wide]"
-+    err=1
-+    return
-+  fi
-+
-+  perf_record_with_retry "${perfdata}" "check_workload" "perf test -w thloop" \
-+    --buildid-offset || ret=$?
-+  if [ $ret -ne 0 ]; then
-+    echo "buildid-offset test [Failed workload]"
-+    err=1
-+    return
-+  fi
-+
-+  case $(uname -m)
-+  in s390x)
-+       cmd_flags="--call-graph dwarf -e cpu-clock";;
-+     *)
-+       cmd_flags="-g";;
-+  esac
-+
-+  if ! perf record --buildid-offset -o "${perfdata}" $cmd_flags \
-+    perf test -w brstack > /dev/null 2>&1
-+  then
-+    echo "buildid-offset test [Failed callgraph record]"
-+    err=1
-+    return
-+  fi
-+
-+  if ! perf report -i "${perfdata}" 2>&1 | grep -q "${testsym2}"
-+  then
-+    echo "buildid-offset test [Failed callgraph missing symbol]"
-+    err=1
-+    return
-+  fi
-+
-+  echo "buildid-offset test [Success]"
-+}
-+
- # raise the limit of file descriptors to minimum
- if [[ $default_fd_limit -lt $min_fd_limit ]]; then
-        ulimit -Sn $min_fd_limit
-@@ -502,6 +570,7 @@ test_precise_max
- test_callgraph
- test_acr_sampling
- test_ratio_to_prev
-+test_buildid_offset
- 
- # restore the default value
- ulimit -Sn $default_fd_limit
-diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-index cee9e6b62dcc..b718ae148245 100644
---- a/tools/perf/tests/tests.h
-+++ b/tools/perf/tests/tests.h
-@@ -176,6 +176,7 @@ DECLARE_SUITE(expand_cgroup_events);
- DECLARE_SUITE(perf_time_to_tsc);
- DECLARE_SUITE(dlfilter);
- DECLARE_SUITE(sigtrap);
-+DECLARE_SUITE(bid_offset);
- DECLARE_SUITE(event_groups);
- DECLARE_SUITE(symbols);
- DECLARE_SUITE(util);
--- 
-2.55.0.679.g6767b8d81c-goog
+selftests/bpf: add thread_wq cgroup test
 
+This commit adds test cases for bpf_thread_wq with cgroup attachment.
+It tests execution both within a specified cgroup and without cgroup
+attachment, verifying that callbacks run in the appropriate context.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/thread_wq_cgroup.c b/=
+tools/testing/selftests/bpf/prog_tests/thread_wq_cgroup.c
+> new file mode 100644
+> index 0000000000000..7537b03f17e2a
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/thread_wq_cgroup.c
+> @@ -0,0 +1,87 @@
+[ ... ]
+> +	for (waited_secs =3D 0; waited_secs < WAIT_TIMEOUT_SECS; waited_secs++)=
+ {
+> +		if (skel->bss->twq_done)
+> +			break;
+> +		sleep(1);
+> +	}
+> +	if (!ASSERT_TRUE(skel->bss->twq_done, "twq_done in cgroup"))
+> +		goto cleanup;
+> +	if (!ASSERT_EQ(skel->bss->callback_cgroup_id, cg_id,
+> +		       "callback_cgroup_id in cgroup"))
+
+[Severity: Medium]
+Could this result in spurious test failures on architectures with weak memo=
+ry
+ordering?
+
+Since the userspace reader loops and polls the twq_done flag without an
+acquire memory barrier, might it observe twq_done =3D=3D 1 but read a stale
+callback_cgroup_id of 0, thus failing the check in test_thread_wq_cgroup()?
+
+> +		goto cleanup;
+> +
+> +	/* Run bpf_thread_wq without cgroup attachment (cgroup_id =3D 0). */
+[ ... ]
+> +cleanup:
+> +	if (skel) {
+> +		thread_wq_cgroup__destroy(skel);
+> +		/* Wait thread_wq kthread quit. */
+> +		sleep(2);
+> +	}
+> +	if (cg_fd >=3D 0)
+> +		close(cg_fd);
+> +	cleanup_cgroup_environment();
+> +}
+
+[Severity: Medium]
+Is it possible for the test cgroup to leak if the map destruction takes
+longer than 2 seconds?
+
+The cleanup path relies on an arbitrary sleep(2) to wait for asynchronous m=
+ap
+destruction. When thread_wq_cgroup__destroy() closes the map file descripto=
+r,
+it triggers deferred map destruction via a system workqueue.
+
+If the system is under heavy load and this takes longer than 2 seconds,
+could cleanup_cgroup_environment() attempt to remove the test cgroup while
+the kthread is still attached, causing the removal to fail with -EBUSY?
+
+> diff --git a/tools/testing/selftests/bpf/progs/thread_wq_cgroup.c b/tools=
+/testing/selftests/bpf/progs/thread_wq_cgroup.c
+> new file mode 100644
+> index 0000000000000..c70a37f55397d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/thread_wq_cgroup.c
+> @@ -0,0 +1,56 @@
+[ ... ]
+> +__u64 target_cgroup_id;
+> +__u64 callback_cgroup_id;
+> +int twq_done;
+> +int test_key;
+> +
+> +static int twq_callback(void *map, int *key, void *value)
+> +{
+> +	callback_cgroup_id =3D bpf_get_current_cgroup_id();
+> +	twq_done =3D 1;
+> +	return 0;
+> +}
+
+[Severity: Medium]
+Can this write ordering lead to stale payload reads in userspace on weakly
+ordered architectures?
+
+The BPF worker kthread stores callback_cgroup_id and then sets twq_done =3D=
+ 1
+without a release memory barrier. Can the CPU or compiler reorder these
+operations in twq_callback(), allowing userspace to see twq_done =3D=3D 1
+before the payload is visible?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786086076.gi=
+t.zhuhui@kylinos.cn?part=3D3
