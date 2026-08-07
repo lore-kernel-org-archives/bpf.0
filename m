@@ -1,191 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60674345751;
-	Fri,  7 Aug 2026 09:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9A7153BE9
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 09:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786096032; cv=none; b=Oyo7QvigEGwttyauWegjd/W37qGVgNSnKiIUmFJ9vjfDq4eEo3VY78DuSGZHGdQXcgkVAMO8pngDzwmI+kJw5wSZXKrwYYea7yoSQ+LJHfmmT+w+ttAwOigKAQESJ4FIc+U5Nr1LOe+lw8oOmsTHfneRDv6izu03wMmn3iJjvDY=
+	t=1786096271; cv=none; b=aOWCf1G7zMh/MIxjK1bnkx5DtdsQcz9pczf4B3URIWvmjYcXNKtDfiJOzzh1vb+aT97W8KRZOYZAGnZ5tBdGYNXcW9UVeHl07IcRJzWieciXocSdhimB57gSh0ea65xwhfvGPovt4ivyk/I7dVsgBpI1jLbGz25yYlqxNP7eZBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786096032; c=relaxed/simple;
-	bh=r0gfbbtfnyZuEoXOLi2GQPZfWDPfOEIKOH7nglf6Ns4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Oy0ZyJcdPb1ZSKnEeLVeF1ZsdxRoYuTG99gBS+VciXTUcEl2ufS8BE9/ZU57lgi/rEo/AOs3TC5wbWo9TfAlfCUe+1SqMOfK1GQCzuJkTjFfi0Sz0F8aTqo7RL8Dk2V9fgRQ3goXLc6GAS88hbo+IWO51rmBmZpzeeRBjHJqKPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M5aTnC2u; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786096271; c=relaxed/simple;
+	bh=kLIJ7ESzSbgSa7C7U7LBT9Ad+YF0VtcMzSfWUdwBSsg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fcvIETMfta7VqUP05J/bbisjEFM33gdHoBJPFG+WSPC+0HwbJpqwhbk6aTjhktGeOYvVpFXzWGnZzK45N24TZO/WuyJyt0OsOJLAKsLZ5tU2GSslCWeZSjuL1EsmWsf/WXirKm3S5M0CLo8DAxL1ut+TAek/IES15Vyz4pb5/2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r79zyM5J; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M5aTnC2u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA0491F000E9;
-	Fri,  7 Aug 2026 09:47:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786096031;
-	bh=p32wqI4JRG6kPCRm6TN/wJMnTvOEVt3jQJYsXtZ8jVM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=M5aTnC2ubXB7NGkaHC6CS++PJnn7a6VTOLjNkUkjNiGaq7isrX3GhMytc0fDM4KUJ
-	 K22FaTz5uC7bGegrUUKxUmUK9GTDsGujo/6VDCLOasRiEsyGGygHGhOukbuyiVnaNE
-	 iFHjuM7gfbvRX+UITzB4imx5UePPed/T2VzgSv4k8lpP0j3ggIIM9qyCEkaic/O5Gn
-	 dU/xBz5q95UYuHz5xsFh42H+p5aAjrn291cEJ023JUsOADtoD5zkts9I2BG5WTUx5K
-	 YM1slbsUA0SeRBTvubZmfcyLgLQmmPha4vvXLM3L0wmNSbvWkkYZp8j4bPqQpkdTTO
-	 v9DoEIEuecjqg==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v1 7/8] perf record: Add --buildid-offset option
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ian Rogers" <irogers@google.com>
-Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260807071818.718751-8-irogers@google.com>
-References: <20260807071818.718751-1-irogers@google.com>
- <20260807071818.718751-8-irogers@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 09:47:10 +0000
-Message-Id: <20260807094710.CA0491F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r79zyM5J"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4954dff6536so23156535e9.0
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 02:51:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786096268; x=1786701068; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=CK5aAlE2gXWUQMLhZXJtBxJFs/yXRK0ivXNCpOMa24I=;
+        b=r79zyM5JQ2IYlFzg++2oapCcw694JrZSBpghxHSyd70xbL5LmQHxtvfAC+1bOUi3FJ
+         9bNGYpvH1ViQiR4zYULRKXlSgtTwnpZTBtnaf5AkOLdyMDI6dCoKFE0MZHhssjt/n5ir
+         Ja9AGChwbDtTYGxXNLtM/gxCdmatW17pejVM5EWqk6DaANuFLyTlfQBPqi+efs7+YzLv
+         /3hnwz+CRK9ERucw3b23Uq+VsYXDuRAqL0Qub68eXSm8GDaYzkdmPEIF27XlyGw/sv7v
+         JFThhCDX/ixs2Hapk6Rftk4/m1JdxBwEzN6CggyIRnRvwQqu7Pl2FMF+ufPVrfkXjyzT
+         11pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786096268; x=1786701068;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=CK5aAlE2gXWUQMLhZXJtBxJFs/yXRK0ivXNCpOMa24I=;
+        b=AVav9hif5vSIoO0gpOrUu746HKtdti0lKRezIzFXm7STaQ69dbXd0k64HErGxCxQph
+         Yqa1m6OmI+l4wtyXqTOO5qo1h9wbFjfL8ElvK/mTEuXzVC+YYzl7TDh6Pd8WRHVv1+al
+         8xAZWKwI/i05vAkskmqEGfJnKbESA2X7xb0k2bPUmEZbn+Vry5xVnIadp2QI5aWUHGDF
+         bweY2KNPVun6pP0Ab0ZNOC3y6okBsvoEP5118rWQGqvDTYBBY9r1BHArBl31r13npsO2
+         VodhzyqyLLfU04Ny2nJ2EdKBWfbIWfKw2hX3F1n1FrQ4MqYL66t9V1jmvzf9/7zZDjcP
+         4/XQ==
+X-Gm-Message-State: AOJu0YyoAvOK7MVU/pT3wT+F4MzLwxuq13feTnnMSlBI9kCMjjuKecwR
+	kMCPYwk+kF/WLt2kE1Zhdb0kDJbJ7Hc2GhFUdEDHfD9x2qOYhU05oyGI
+X-Gm-Gg: AR+sD121bXsyWMjd9Xlx4IO++sUGycC7oHjA5N6Qy6owEGq3F6khWS3pf8VSLL5pJeJ
+	y8jd2SFTgXEjSuCBn2fisktzX+M/VIrRP58BUEVNLORNX5MjSMr+uvrUWBPlTBvnEQHhrh4KR5Z
+	P6zsr6QjL4RcsXmGhw0IUzZDeHE0tg3WN3cjEbXzYFyHOPoQ5qkaRQNM2s6gL642W2p8AFzvtBh
+	3iFa0X2FEn8bmIhAUEMhwGj56HSkl1Ix7KbfLC/8j4BTxZBf2afgJUAqzx/OMisTd04NBrQ/PGJ
+	IYe6mrpCGm302G3fcr8uxfiaQuxMBmE72YQSNmKNoTaDNTgquVgMkqkrCVaG4II/KDVbqQy9AoR
+	eR1zyimS8YzGXQsm2WjuLxIBbijL2Qojhittn80nakoVXAFm0XTT283zOEDtXecLzPygfjQ92Y7
+	EAdV4QwNoDyDwpoJH7095Q0HnqRf+S9IDPWUUYgxhw4XwffTcF1KdfOhZJKPc/UB6Czi3mD7aEQ
+	cneUHs35Zky9o65khDI
+X-Received: by 2002:a05:600c:a47:b0:499:484a:7644 with SMTP id 5b1f17b1804b1-49959e2eb00mr98245435e9.9.1786096268249;
+        Fri, 07 Aug 2026 02:51:08 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995ea27b29sm31138585e9.11.2026.08.07.02.51.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Aug 2026 02:51:07 -0700 (PDT)
+Date: Fri, 7 Aug 2026 11:51:05 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
+	kuba@kernel.org, liamwisehart@meta.com, martin.lau@linux.dev,
+	pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org,
+	sdf.kernel@gmail.com, ameryhung@gmail.com, kuniyu@google.com,
+	memxor@gmail.com
+Subject: Re: [PATCH bpf-next v4 1/5] net: Add connect_socket() helper
+Message-ID: <anWqiWgSNWARKBRi@gmail.com>
+References: <20260806182234.380833-1-mahe.tardy@gmail.com>
+ <20260806182234.380833-2-mahe.tardy@gmail.com>
+ <05084a53-a1a4-4e60-bdd7-6fd16ef6a029@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <05084a53-a1a4-4e60-bdd7-6fd16ef6a029@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
-- [High] evsel__parse_sample() is vulnerable to an out-of-bounds read when =
-parsing PERF_SAMPLE_BUILD_ID_OFFSET due to missing bounds checks and under-=
-counted sample_size.
-- [High] --buildid-offset silently produces unusable recordings if --buildi=
-d-mmap is disabled or unsupported.
-- [High] Integer overflow in OVERFLOW_CHECK calculation for PERF_SAMPLE_CAL=
-LCHAIN_BUILD_ID_OFFSET bypasses bounds verification on 32-bit hosts.
-- [Medium] perf report natively handles callchain build ID offsets but its =
-front-end argument validation incorrectly rejects them.
-- [Low] An empty if block with commented-out code was added to cmd_record.
---
+On Fri, Aug 07, 2026 at 09:53:51AM +0800, Jiayuan Chen wrote:
+> 
+> On 8/7/26 2:22 AM, Mahe Tardy wrote:
+> > Add a helper that connects an existing socket while invoking the LSM
+> > hook. Reuse it in __sys_connect_file() to avoid duplicating the connect
+> > logic. Other socket operations have equivalent helpers that trigger the
+> > appropriate LSM hooks that can be reused, this one was the only one
+> > missing.
+> > 
+> > Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+> > ---
+> >   include/linux/socket.h |  2 ++
+> >   net/socket.c           | 32 ++++++++++++++++++--------------
+> >   2 files changed, 20 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/include/linux/socket.h b/include/linux/socket.h
+> > index 2a8d7b14f1d1..8964528e3823 100644
+> > --- a/include/linux/socket.h
+> > +++ b/include/linux/socket.h
+> > @@ -461,6 +461,8 @@ extern struct file *__sys_socket_file(int family, int type, int protocol);
+> >   extern int __sys_bind(int fd, struct sockaddr __user *umyaddr, int addrlen);
+> >   extern int __sys_bind_socket(struct socket *sock, struct sockaddr_storage *address,
+> >   			     int addrlen);
+> > +extern int connect_socket(struct socket *sock, struct sockaddr_storage *addr,
+> > +				int addrlen, int flags);
+> >   extern int __sys_connect_file(struct file *file, struct sockaddr_storage *addr,
+> >   			      int addrlen, int file_flags);
+> >   extern int __sys_connect(int fd, struct sockaddr __user *uservaddr,
+> > diff --git a/net/socket.c b/net/socket.c
+> > index 63c69a0fa74e..126a674f534d 100644
+> > --- a/net/socket.c
+> > +++ b/net/socket.c
+> > @@ -2103,6 +2103,20 @@ SYSCALL_DEFINE3(accept, int, fd, struct sockaddr __user *, upeer_sockaddr,
+> >   	return __sys_accept4(fd, upeer_sockaddr, upeer_addrlen, 0);
+> >   }
+> > 
+> > +int connect_socket(struct socket *sock, struct sockaddr_storage *address,
+> > +			 int addrlen, int flags)
+> > +{
+> 
+> 
+> Please fix the checkpatch warning if revise
+> 
+> CHECK: extern prototypes should be avoided in .h files
+> #27: FILE: include/linux/socket.h:464:
+> +extern int connect_socket(struct socket *sock, struct sockaddr_storage
+> *addr,
+> 
+> CHECK: Alignment should match open parenthesis
+> #28: FILE: include/linux/socket.h:465:
+> +extern int connect_socket(struct socket *sock, struct sockaddr_storage
+> *addr,
+> +                int addrlen, int flags);
+> 
+> CHECK: Alignment should match open parenthesis
+> #41: FILE: net/socket.c:2107:
+> +int connect_socket(struct socket *sock, struct sockaddr_storage *address,
+> +             int addrlen, int flags)
+> 
 
---- Patch [7]: [RFC PATCH v1 7/8] perf record: Add --buildid-offset option =
----
-commit 1f8464ef5aa5b3d651d1ae57de1909d39b5f085c
-Author: Ian Rogers <irogers@google.com>
-Date:   Fri Aug 7 07:18:17 2026 +0000
-
-perf record: Add --buildid-offset option
-   =20
-Add the --buildid-offset flag to perf record to natively request
-PERF_SAMPLE_BUILD_ID_OFFSET and PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET
-from the kernel. This configures the evsel attributes by replacing
-the standard IP and CALLCHAIN bits with the build ID offset equivalents.
-
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index f58d7e3c7879e..9ff9cfc062788 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-
-[ ... ]
-
-> @@ -4166,6 +4168,11 @@ int cmd_record(int argc, const char **argv)
->  		rec->no_buildid_cache =3D true;
->  	}
-> =20
-> +	if (rec->opts.buildid_offset) {
-> +		/* Do not drop mmap events here so we can generate build ids later */
-> +		/* rec->opts.synth &=3D ~PERF_SYNTH_MMAP; */
-> +	}
-> +
-
-[Severity: Low]
-Is this commented-out code still needed, or can this empty block be removed?
-
-[Severity: High]
-Can sample resolution silently fail if --buildid-mmap is unsupported or
-disabled?
-
-If a user explicitly requests --buildid-offset but disables --buildid-mmap,
-or the kernel does not support MMAP build IDs (which causes perf to forcefu=
-lly
-disable --buildid-mmap), the MMAP events will lack build IDs.
-
-This causes thread__find_map() and maps__find_by_build_id() to silently fai=
-l,
-resulting in broken profiles with unknown symbols and bypassing the final
-post-processing step to read build IDs from disk.
-
-Should we enforce the dependency on rec->buildid_mmap here?
-
->  	if (rec->opts.record_cgroup && !perf_can_record_cgroup()) {
-
-[ ... ]
-
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index d9a07f5825e82..587f0fa41cce8 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-
-[ ... ]
-
-> @@ -1744,6 +1744,17 @@ void evsel__config(struct evsel *evsel, const stru=
-ct record_opts *opts,
->  	if (opts->sample_transaction)
->  		evsel__set_sample_bit(evsel, TRANSACTION);
-> =20
-> +	if (opts->buildid_offset) {
-> +		if (evsel->core.attr.sample_type & PERF_SAMPLE_IP) {
-> +			evsel__reset_sample_bit(evsel, IP);
-> +			evsel__set_sample_bit(evsel, BUILD_ID_OFFSET);
-
-[Severity: High]
-Does this allow an out-of-bounds read in evsel__parse_sample()?
-
-When evsel__set_sample_bit() is called, __evsel__set_sample_bit() blindly a=
-dds
-sizeof(u64) (8 bytes) to evsel->sample_size. However, the actual payload for
-PERF_SAMPLE_BUILD_ID_OFFSET is 32 bytes (24 bytes for build_id + 8 for offs=
-et).
-
-Because of this under-counting, a crafted or truncated perf.data file can
-pass the initial perf_event__check_size() validation. Then, in
-evsel__parse_sample(), PERF_SAMPLE_BUILD_ID_OFFSET is parsed without any
-explicit OVERFLOW_CHECK, allowing the pointer to read out-of-bounds.
-
-> +		}
-> +		if (evsel->core.attr.sample_type & PERF_SAMPLE_CALLCHAIN) {
-> +			evsel__reset_sample_bit(evsel, CALLCHAIN);
-> +			evsel__set_sample_bit(evsel, CALLCHAIN_BUILD_ID_OFFSET);
-
-[Severity: High]
-Does this cause an integer overflow on 32-bit hosts?
-
-When parsing PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET in evsel__parse_sample(),
-a maliciously crafted file could provide a massive size (e.g., 0x08000001).
-
-The macro OVERFLOW_CHECK performs sz * (sizeof(struct perf_build_id) +
-sizeof(u64)), which is sz * 32. This results in 0x100000020 in 64-bit
-arithmetic, but on 32-bit hosts, the pointer arithmetic inside OVERFLOW_CHE=
-CK
-truncates the 64-bit size to 32 bits (0x20).
-
-This trick effectively bypasses the bounds verification, while the raw
-size is assigned to callchain_bids_nr, causing an out-of-bounds read during
-iteration.
-
-[Severity: Medium]
-Will this replacement break perf report when users run it with -g?
-
-If a file is natively recorded with --buildid-offset, the CALLCHAIN bit is
-dynamically replaced by PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET.
-
-However, in builtin-report.c:cmd_report():
-
-    if (!is_pipe && !(sample_type & PERF_SAMPLE_CALLCHAIN)) {
-        if (perf_hpp_list.parent) {
-            ui__error("Selected --sort parent, but no "
-                      "callchain data. Did you call "
-                      "'perf record' without -g?\n");
-
-This strict check seems to completely ignore that the bit was replaced by
-CALLCHAIN_BUILD_ID_OFFSET, causing perf report to incorrectly reject these
-files.
-
-> +		}
-> +	}
-> +
->  	if (opts->running_time) {
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807071818.7187=
-51-1-irogers@google.com?part=3D7
+Yep fixed for next revision, thanks.
