@@ -1,127 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E4E312807;
-	Fri,  7 Aug 2026 13:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD41F37C110;
+	Fri,  7 Aug 2026 13:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786110679; cv=none; b=uCHXvSXeF3FJa3SSYIeQKReY64SfMFYI/23csSa29Lp1SN51KTFdl1mhw4rF/pRJUDzGf5azj2x2ZdZSsI5cQWijCKDUBhpFMWmSAtGm3zZNjGikQdZvvMvyoqRewpce81z74hVXqgh+2Fk9JV+Wi0Oy6+wzzcYS/5VY/C9cME8=
+	t=1786110732; cv=none; b=AkDLsolNf1hJpC/GV7dAVH9PaNy0ekGW26N8a9/25Iwy/Jb24NaUqoBUMp+xZf87dAiifMbJ8Jm3X2aV+0IXRKSuMKn6E9uVsuzOcVrzAtiuoK0zTS7hMo75mzQ4+3ohXr5FStkBgNrwSRdLt0TIXtUiMQruPxDW7JLJg9vvyEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786110679; c=relaxed/simple;
-	bh=ULv5EHNv0omDKMBobosi5APF+equtZsKapOv2iw4VQs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jbrx+yOS6XC6ospOIVQV6vXASUfDO8Chw/xQ52TNUSX9cjPeaIPON66mJhFZnY8H15XJrDWXYy1XpHOCMXLxc4LS5LM6lnsKD8ln2T0x9hN8lKQ7rBLzCuL5ikMwukC884iyWTnWgOrfT9UkWiAxcr2tRJfntFXCs1hQsdO6QRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PXYh6M2K; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786110732; c=relaxed/simple;
+	bh=SL2k8YxvomE33GBzz3FB/yPubW0bPUL9LFUE0dko+PU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lUlPV/2uX2k+56+wwqhmyuA/UptA8bJtuUOFARi9p4e0s7mdwF2fvrSZIzhcNabjqVyxtRIDmqko1XC7rFwFS5KKd7sYAleLtVS4uHbJWyAH7YiplID6c6fSlXvKkjOEBA+LlitKib5p/hGawI7pQqi1ilspklofS1hY9hHh4wQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NKX0iT2w; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PXYh6M2K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D01C1F00A3D;
-	Fri,  7 Aug 2026 13:51:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786110671;
-	bh=JsBlNoLXapzvhaOZfFVgJmB3wffwQ8ZUd0cI3plKWLk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=PXYh6M2KkgQHGOcPs4VHfkvwxJyfSKuED6zAeHwMz8mmUUgtOHTbSiQM5BJieAoLO
-	 H/WV7XvvSbkldcw2ezKoX6DKUZtAcjDvgjCWVLh1TbnJnQlGY+u4pRC+AIJ1cr/4s+
-	 JByHYpe+ebHxFnreqVNPxaZ5n/PFOCKp9FCVEt1gVdNWAjj4teAKaCf/xFOIYta2uQ
-	 234zl/9rw3uirz1ArxlCvIIddHjOso0Sf2s3/7xSRv4/CUeZyw0WEXcN1ojHc4WL4H
-	 w3jDfaKIq5AcnXo1qggs2ROLMdMYAzKmTRqpoIncaxXUWYTKO89frDEQNSedcwHZs4
-	 lxnBzFqghs4Ig==
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Date: Fri, 07 Aug 2026 15:50:31 +0200
-Subject: [PATCH RFC 5/5] sched: use kfree_nolock() instead of kfree_rcu()
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NKX0iT2w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46BAD1F000E9;
+	Fri,  7 Aug 2026 13:52:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1786110725;
+	bh=TU7qxTsLx64c82lDudoUVSZZgDy2qYm1Q8ZxRi20R5M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=NKX0iT2wtBQ9qMxDUjCCN9GzO/fBqXmB4CnOT4/52Sw41uRkK7T0Su1ymk9cleiFp
+	 FmRgwVtytfQZdB0ZdXdMyC8zI4pNXLiHfghteyq4q4lAvKLNBYqsi0UZw2nrRBpRwA
+	 UfYxeEECPRNTlWQa2SmRmlv0Krx1KDNsY9rm/f8U=
+Date: Fri, 7 Aug 2026 15:50:53 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Ricardo =?iso-8859-1?B?Qi4gTWFybGnocmUgKFNVU0Up?= <ricardo@marliere.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	sashal@kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, Mykyta Yatsenko <yatsenko@meta.com>
+Subject: Re: [PATCH 7.1.y v2] selftests/bpf: Add tests for sleepable
+ tracepoint programs
+Message-ID: <2026080743-savage-qualify-1913@gregkh>
+References: <20260807-selftests-bpf-sleepable-v2-1-f7e6566f36a1@marliere.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260807-kfree_nolock_kmalloc-v1-5-ba993cbf7a60@kernel.org>
-References: <20260807-kfree_nolock_kmalloc-v1-0-ba993cbf7a60@kernel.org>
-In-Reply-To: <20260807-kfree_nolock_kmalloc-v1-0-ba993cbf7a60@kernel.org>
-To: Harry Yoo <harry@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>, 
- Sumit Semwal <sumit.semwal@linaro.org>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Ingo Molnar <mingo@redhat.com>, 
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Hao Li <hao.li@linux.dev>, 
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
- Roman Gushchin <roman.gushchin@linux.dev>, bpf@vger.kernel.org, 
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- Dmitry Vyukov <dvyukov@google.com>, linux-media@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
- kasan-dev@googlegroups.com, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
- Valentin Schneider <vschneid@redhat.com>, 
- K Prateek Nayak <kprateek.nayak@amd.com>, linux-rt-devel@lists.linux.dev, 
- "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-X-Mailer: b4 0.15.2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260807-selftests-bpf-sleepable-v2-1-f7e6566f36a1@marliere.net>
 
-In set_cpus_allowed_force() we use kfree_rcu() because kfree() is unsafe
-under p->pi_lock.
+On Fri, Aug 07, 2026 at 09:32:43AM -0300, Ricardo B. Marlière (SUSE) wrote:
+> From: Mykyta Yatsenko <yatsenko@meta.com>
+> 
+> [ Upstream commit 8a20655749c625dcc4debdfdeeaa0cf8bb85c203 ]
+> 
+> Cover all three sleepable tracepoint types (tp_btf.s, raw_tp.s, tp.s)
+> and sys_exit (via bpf_task_pt_regs) with functional tests using
+> bpf_copy_from_user() on getcwd. Verify alias and bare SEC variants,
+> bpf_prog_test_run_raw_tp() with BPF_F_TEST_RUN_ON_CPU rejection,
+> attach-time rejection on non-faultable tracepoints, and load-time
+> rejection for sleepable tp_btf on non-faultable tracepoints.
+> 
+> [ rbm: Removed hunks from (new) files:
+>         tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
+>         tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
+>         tools/testing/selftests/bpf/progs/test_sleepable_tracepoints_fail.c
+>        These rely on libbpf's ".s" tracepoint section handlers
+>        (0cd420a6f40c7) and on kernel-side sleepable tracepoint runtime
+>        support (439ebd5b5708, 12628ffaf98b, 57918341dd19), none of which
+>        are backported here; kept only the verifier/sleepable.c hunk, which
+>        is correct and needed on its own. ]
+> 
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Link: https://lore.kernel.org/bpf/20260422-sleepable_tracepoints-v13-6-99005dff21ef@meta.com
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-With kfree_nolock() now being able to free arbitrary kmalloc() objects,
-we can switch to kfree_nolock() and avoid the unnecessary rcu grace
-period delay. Only in some cases the freeing might be deferred to
-irq_work().
-
-Signed-off-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
----
- kernel/sched/core.c  | 9 ++-------
- kernel/sched/sched.h | 7 +------
- 2 files changed, 3 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 96226707c2f6..d2929e4e23f1 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2807,20 +2807,15 @@ void set_cpus_allowed_force(struct task_struct *p, const struct cpumask *new_mas
- 		.user_mask = NULL,
- 		.flags     = SCA_USER,	/* clear the user requested mask */
- 	};
--	union cpumask_rcuhead {
--		cpumask_t cpumask;
--		struct rcu_head rcu;
--	};
- 
- 	scoped_guard (__task_rq_lock, p)
- 		do_set_cpus_allowed(p, &ac);
- 
- 	/*
- 	 * Because this is called with p->pi_lock held, it is not possible
--	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
--	 * kfree_rcu().
-+	 * to use kfree() here (when PREEMPT_RT=y), thus use kfree_nolock()
- 	 */
--	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
-+	kfree_nolock(ac.user_mask);
- }
- 
- int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 56acf502ba26..6a8d0578e963 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2886,12 +2886,7 @@ static inline bool task_allowed_on_cpu(struct task_struct *p, int cpu)
- 
- static inline cpumask_t *alloc_user_cpus_ptr(int node)
- {
--	/*
--	 * See set_cpus_allowed_force() above for the rcu_head usage.
--	 */
--	int size = max_t(int, cpumask_size(), sizeof(struct rcu_head));
--
--	return kmalloc_node(size, GFP_KERNEL, node);
-+	return kmalloc_node(cpumask_size(), GFP_KERNEL, node);
- }
- 
- static inline struct task_struct *get_push_task(struct rq *rq)
-
--- 
-2.55.0
-
+You did not sign off on this :(
