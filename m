@@ -1,1184 +1,341 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0924F46D093
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 08:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786090154; cv=none; b=HixoPIsQowUXfzSh1oqZAHj414ALK2ymPQ4d0kVgzjPgWxJHRBh6iU64i7MYiovVS3+SVNCDnPWT2A2j6uPMdDryXDRpSbb6886yx4wtuyJMbFHWZaccKDlVtRv3m9Og7gXw0F2yqg2+d4ZJAdWqwNKs0n58H0IHSbLMAHxXhV8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786090154; c=relaxed/simple;
-	bh=EYoHiPTKUAUEeHThSWDubzwR0Nw5/bXhCFY4N3x1vHQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FLgRT9oIctOf/GBs2MA6wGYmcmijhX3ZAHpPOLFM0XobytALr8fY1CU5ZyOOeU1kh6S3OI5GqZzwT0+98XpYecRE6mwuEZ4qY/vrfqDY6n+YViXPI5HbZgm3aoiVp3jqJ/16m4PdKM7Oce1qQxStlHKUsThpTfWUmrElMNr6YA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr; spf=pass smtp.mailfrom=snu.ac.kr; dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b=k19nLA6U; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=snu.ac.kr
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A31C46D093;
+	Fri,  7 Aug 2026 08:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786090182; cv=fail; b=QS1a2cAnktvmHmhvRWkXPcmt+s4MvwP6i9+Tr1GHLzghnz1LoRs4CijhKDSQZovxgdzuY/KYBwZBAnpcoaXOPQZz4lZpaEcl9kQs8jZvGC35a86CBlc3e9R/kcWUiYs6SYhAk8ctxhzSK4U00A0klMmBUwY8Xwk8mSYelDYguOY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786090182; c=relaxed/simple;
+	bh=m93VZIfEPE5GAAdpfWsxAt6CfPi7p6GzFnJlMLDImtQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=abvgCMHtwIfMifrQwYRap2O715O4pbpRiPD2IYtRfNXRhHR9NetVg20qlnBxiXII4VJKn1tkDqWdUi2NpmgRM9nk9JVqHHkzVDWN3LXa+Q2bNHgAGaVod1MhVI3mpzqxJe7/uYwy+0usW0l64e7YUPZk2qWZe+7u0VqDg+FuLXM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dIlYXta2; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ImF4rXz/; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b="k19nLA6U"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2caced6038eso22169915ad.0
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 01:09:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dIlYXta2";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ImF4rXz/"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6776kkTn3081949;
+	Fri, 7 Aug 2026 08:09:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=Z/HxpMu37/J2Als9jBQCxt+k34EmZwObLQC0NfRNiNs=; b=
+	dIlYXta2/vofnpiC5+mWcLMjljOm0m39Twdn7T69tQAqHbfl1LU0HN1B87izPeio
+	6tJCEU8vlV7c/J4Q8Z7iS6ht7WxgkCPgpKJA3JDMTFSD6CXkbD64VU9tjG+i9GVy
+	00HUvVEIu0DEbfY5PDwmM0f+aDnyFTLWMmHlTVEX4rq6+SvMQIZTEH4kq5vkp8er
+	KbQql8wO/SiEc1oIRm3x2aMBRx00a8EDRhpsZa3g8tsswJ9n/wFKy5qDGHgrBwFz
+	fRBBnCjrrnyAQYea4JR/iPxsQYrfP6lxZe48tL269s/hsMwey9rEfVgss2iD4pfC
+	33iq/jf+Vr/eSWwFtBYpRg==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4fs7cyfjbt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 07 Aug 2026 08:09:26 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 67780jEX000567;
+	Fri, 7 Aug 2026 08:09:25 GMT
+Received: from dm1pr04cu001.outbound.protection.outlook.com (mail-centralusazon11010007.outbound.protection.outlook.com [52.101.61.7])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4fs78wnw6x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 07 Aug 2026 08:09:25 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=V6dnRrk5A3ziBdkEVnJuUshfWVQJR70oWuRMFWNITMFHkty/1q3peIVJF3AQ6NWTDKSjR6WJKXSi7ntbw4HjW0oJ1l2hk6bJYI4SPXiX8IweAAnDi/aYQxT2QMmO6/lb7Br//HgDeb9XVOy+I2ffPwB3mQpaUjtjBM/Y6Kvj9eN2Vdqpl++87Znw42HJKWmuG8d1yXKDqRjA/CLD0TbaMBM7pmlWSo4sceGFC9hzo96Gmr4GjhLNrYJRV9NlOcMVRzTyulsJvpHtUxL+fIZih4Cu++aVQ6XpJTqbkPc1r6RM9T2IR348QkxbpuWUIogJV48hjH/ErkLVDrvUtidJbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z/HxpMu37/J2Als9jBQCxt+k34EmZwObLQC0NfRNiNs=;
+ b=oqvhGWhzwj/LTpPdeVRfj7uaoICNERvwa0xrmh5MO3JL2HyrxbB8oOUydxNIFlVltk9vnpqZPjDgulhPjxI9nQAxyjiiy3z3g0VDQ/kCOuMbB6XUELlcEV1qj2xMsvkFGZA/Qgai1+AwW+Za79gwbZ9DfmsxpW66urGC08sx7BfiuhM3hNB11z8ebGvE3s6MbeV8upgdVlVd+T8TBXhFOlKjCBwJQx0QhL73gMzKzFN3V6aRAsXrXGumba+/R+4M6ztI2TK0wvDzULc/AIsQvMBy139Kug2ROek8YCNPz9U1JGFeZS9GL9iCuTjZuPEk4a8WX08yyt96CSMN2nkJPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=snu.ac.kr; s=google; t=1786090140; x=1786694940; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mQ0hgonxmbXz9vgjiMXNf6rrIQjSJ3VZW00mopKs7hk=;
-        b=k19nLA6UnKPaknqo3ujpjSsB2/uDLAS+nxZrMHZBti37EYplQVqinGOMxG+cu49Gth
-         qTNKTXkJ2r/YwPZSSaAXqm4MYrcgtY55rUCRCZyW5o+Ml/BWY+GxC1nEWPGsdXJFD5sP
-         6bY/jIopHe8UHXz18QKwxaUEa3b3tbwjnxoNA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786090140; x=1786694940;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=mQ0hgonxmbXz9vgjiMXNf6rrIQjSJ3VZW00mopKs7hk=;
-        b=HzZ7lq92nt/G+8d1/6qjHCR2HGsYi5kJZv/SjjbzW3MLcse6i8ZTzTeJmlxFabp+il
-         G+833i0iaAEftYD88weuyJBOOq9CbpX1+CCeY4U9h8a0RBq5f/Dy8hvKP7bKT4Qjz5SJ
-         9hx+FYouUehg6GONtVAqejfuxmmLQYUQcwgn4PEBdqS4TbF3PPYawjf5Acnw5kTZ1SMJ
-         NgJBryaVMibkYmUtuj9d1ExqFuDqYeTIuA2RK2GoHuAEZLDLNkcZQkzFqM+7b8jj1KM1
-         JDBuo1OKT77uOjOoVWdFvF6BF/CfcSqQ89sFptIVxy9hLotTCfbyoOQ9D0SayZr3XPwZ
-         S4zA==
-X-Gm-Message-State: AOJu0YyYVzpyHWtVN7CLz8okBb79ECyobd92jFzzJmsZxBKIAUfr6GPa
-	F2ReSG9aS8faSBiCM5Rncg9fQPWVvbKpPUoY16tYBPA1CjNIeJ4tM+avRFJxG8Na2/T+7frDwtq
-	1e/6FpYc/Bw==
-X-Gm-Gg: AR+sD13AVmQJBYXDm1/ZPpDiKsRGmrhNaL0K3onIGEIyEHIbXYWymhyG8LAxAT+Y+b8
-	MUNTDF6+ymnJqSw7ampX/+K0uLZZuw+yqzh0qTtz04B8A2KFxaZoYrJci55hO7MWI4242SGrQ3D
-	3l3HtgFgX3LfodCp4svdfQRfQZ+x+x16dQpeFy19CcbO1HOTcs/5LU3Eg75tkhrsEUjUL2RmngO
-	GBUKQXa9pjJUERWOekvxZoTRgcN1xBeNBaZob/Ia9nLskf3TQ1+2406qqtxVtk2b7XeczwBAj0O
-	itpEK669P93ezV7jvI0COOlzpOxh0i/h2J2xpcGOnsGOf+ICpzravqPArr6/Kt83JGKhDhK6unG
-	ZNzHPSz3EklZ6d7K/L2+th3n7NGCQFaOZIvQ/QW5ONq+auQhu8Wf681GlwlYuVBdE7hdfr82X6w
-	tcBw/lgUW2IKKpbHo5TQyYYqcyhl48CMTOOyly3cjhv8mae5bIkslssG4eRHg=
-X-Received: by 2002:a17:902:e846:b0:2ca:53f7:3c69 with SMTP id d9443c01a7336-2d0f1c0df16mr147644425ad.9.1786090139420;
-        Fri, 07 Aug 2026 01:08:59 -0700 (PDT)
-Received: from desktop ([147.46.174.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d14ccb0b2dsm5291425ad.3.2026.08.07.01.08.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 01:08:58 -0700 (PDT)
-From: Kenneth Lee <kennethbwlee@snu.ac.kr>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	martin.lau@linux.dev,
-	netdev@vger.kernel.org,
-	rhkrqnwk98@gmail.com
-Subject: BUG: GSO segmentation BUG_ON caused by inconsistent skb fragment metadata
-Date: Fri,  7 Aug 2026 17:08:23 +0900
-Message-ID: <20260807080823.416802-1-kennethbwlee@snu.ac.kr>
-X-Mailer: git-send-email 2.53.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z/HxpMu37/J2Als9jBQCxt+k34EmZwObLQC0NfRNiNs=;
+ b=ImF4rXz/pZyjFw4SgRTSI5kPVkARYkX7aK79q+4cKAKEtY6JdWXPfY7YHFe8nagAiVNbNsSr3GdYb7dxcunxPy3gNF5osBXeG7vQ3MBNk16aBe7hvEUIBA+GW8RA1FYRT77AJK4Z5yfhFRtEC+mDIo+gd66OgUe5l/4aQzE5SNw=
+Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
+ by PH0PR10MB997568.namprd10.prod.outlook.com (2603:10b6:510:37e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Fri, 7 Aug
+ 2026 08:09:23 +0000
+Received: from BN0PR10MB4901.namprd10.prod.outlook.com
+ ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
+ ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0270.016; Fri, 7 Aug 2026
+ 08:09:22 +0000
+Message-ID: <18b557a8-e1ca-46cf-b03f-5e68490c9229@oracle.com>
+Date: Fri, 7 Aug 2026 09:09:16 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHES 00/12] pahole: Support more rust tags and references to
+ dwz alternate debug files
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
+        dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song
+ <yonghong.song@linux.dev>,
+        Mark Wieelard <mjw@redhat.com>
+References: <20260731193102.110693-1-acme@kernel.org>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <20260731193102.110693-1-acme@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0047.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:48::18) To BN0PR10MB4901.namprd10.prod.outlook.com
+ (2603:10b6:408:126::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|PH0PR10MB997568:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4405f875-a855-4120-0550-08def45b3084
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|366016|1800799024|23010399003|56012099006|10067099003|6133799003|22082099003|3023799007|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	uHqVfeuK/3wq5Bz/ExcBSyWoVKPW8wN1SX5nJU/K1qFIL7UGfW4Bks+EGJpe6SHHaUtDpZsOrWh1aGw9iK058rQ2gl9SqZB2Un69JYjOFffo/ftkch2Rk/CqyeCqUjg1DltOGb6J8xd70Lu+1MkNI4VUtbff44mRtfShvfzpHmWctMEzEZWJt+N659XTaxblNNN5wE1Zy4OYqp8Gml/ljsyg/IGv1etuiJV+FnlRAQ/JORELFWB1IHFp6LdfuC/bIHn79PWO8SJarut23UXkjN/GopkQz3Zjy/IFt8+TIsevoYnnTJYyMhFT3P0URmlW5RGAgWnIrqdIWkQzVfJsr1X8GUSmx/tsm9NjCJPqDICmYLrPxtvcoF8KSVKTFtqLpvmMALDTjnkMYEyIS6qOS+EC0plD7T7WJFyyB10DrQ9TEeslUimqCCDJOW81UUFK5o9AuDl1G/VIR4PlN4QbC0FNFZzaTUersETueBp2Muq/UO+fBJNiZHkkt8xWsloTHnV/bjlnKAq3IIGWbdi+vvMynA/SoaQJDO3nRfs3Yp5qtsZGH3G8OIgJxBLmJy196yBgWSm1u3UUBRERKHaKWEYXa5VsenQu/UmEd6Rop5JPj/1/zSIcrlwS7olQJCQf+/OsUWzzs01oeRjCozXx0c2b4ltONk5CGMw1A6mfwCE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(23010399003)(56012099006)(10067099003)(6133799003)(22082099003)(3023799007)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZFRVWVJaWkFGaGJQbHk1U0dIc2k5UHF5VjhGZXpBLy9rNXhESncycW56czMv?=
+ =?utf-8?B?T3dhWHJLT2UzNnVDd2krMC8vUHRBb1dxK3hya0NvR3dsRkR6RTcxSkdKMEh3?=
+ =?utf-8?B?RU53NVVVWW80ZGh3Yjl3Y3htKzAxUzMxWHF1c2RoTDBIcmRkcnJJdmhvUU1T?=
+ =?utf-8?B?eG9nQ0NVaHNnYjBPNk4xU0EvNmRub0pVWFUzSWw1NTh2bjBYbVdiNjdqc01D?=
+ =?utf-8?B?SUZBaUdTd3pVRXBZT3RCSENLUjZLRVlUNXJ5OGlMZ1lYdStUTk00NnFGQzQ0?=
+ =?utf-8?B?UU90ak5sM2NkaFp2NkN4VytCQy9sL1NXaGl6VXlDL2Z2aVN1WExuUlJyMU5u?=
+ =?utf-8?B?WUdlek9FZHFQYlZjeUx1Z1dqZkx1U2ZWdDhxMHlQd1hNaUxEWTgvV3pSalZR?=
+ =?utf-8?B?Mys3bjlmYitBMlZCZFlBM1FSclhXUmF1QTNXMWxRSEhId0UxS1ZSWGIzcU1P?=
+ =?utf-8?B?aE1iazdLc3YvYWFnZ3NPd3lyRXFMcVpzbldsWGtXbzVvNUxsNEljMTFZOTE5?=
+ =?utf-8?B?Q3RmT2JVK1BmMmh1Rjdua05SQUU2N1JKSHhKSUZNMEhhclNGVzlDTGJ5NGVK?=
+ =?utf-8?B?VW9JYnRlQXBhbXlxV2g2bjN2ZmlMQ1V0WStUTmg2TXhwRUZIVkVvQjFaWTBI?=
+ =?utf-8?B?UU1RanZ3Z3FLUWlMNmpuaEVzdGtURlVzQ0I4Q3lFT0VkbVlRWVJ4U1RNZW9F?=
+ =?utf-8?B?c1ptemMrUkR2djZ4bHA5WjR2SVFvd1ZxVWE2L3duWllwMnBSSGhzNkx2ejlp?=
+ =?utf-8?B?cWdxZWUrMGNuMnJucEhhUGE5bU03eG9aTUFnVUt2TnZDOEhMZkNCeFM2ZmVI?=
+ =?utf-8?B?MzJ1Y05OSkdsS2dCSFRkMURhRHc0K2FYSmEycUNyMnY4QURkVXZyTUZFSnRa?=
+ =?utf-8?B?Q29nalBYenhLNGppblA0YmJmZW04QmtPQ1hucU9td2lKRHdFcjU4QXI0TzRQ?=
+ =?utf-8?B?SDE1OXBtMEF1d1Q4eTZuMWZtd3dLZWRoRllwY2xwcWVwZHpGM2l6SkYxQnR6?=
+ =?utf-8?B?eVB1VkZTcGZHeVdWM1NzcTBqVnNUOEwxanlhdDlDdFp4WEdadVREckZmQUxk?=
+ =?utf-8?B?SDc1ZGdaUlBmVjh3eFB4UmZ6Q0RoZkpoQmx0WjFrV3F0a3gyaDE0YVp6V2pp?=
+ =?utf-8?B?OW9Mb0RUTHM2UHpwejRLM2hyVjFabm05S3V1ZmFkYUsycEVxOU1jbDU5aWFB?=
+ =?utf-8?B?eTdpMmNMbk9xQzFaUnRlVUhrUkw4NXNzdFJ5Y1FxRWJwamNIaGxGdFJaZmhL?=
+ =?utf-8?B?YkNTeUtuWkcvSFpYZFRnNEFNdllVdllQbjJ3VlE3RjNEVXlGSzNNVERQSzk2?=
+ =?utf-8?B?TkRNWGFlNTZGODEzLzcxYVNYbklRZExEN29vdnFkWnMrWnoyRk44K2x1cXRL?=
+ =?utf-8?B?ai9OQVRkYWdTcmlzdzJ6TzRnZDFKdDI2dUtLSzQ0Z1ZtYTVKU0NIcklCbkFz?=
+ =?utf-8?B?SEQvb0JHQmROSlFvakJwWlJtak0zcUhNRW5LRENJdHVvMHpaOXIvdEZrYkhj?=
+ =?utf-8?B?V1RyQnZrRHRySitwV0JJLzcrU3FVWENYZ2gvekFZUUZoem9XYTBKdkozaFhX?=
+ =?utf-8?B?b243cklkWkorakIxQVZXSktuVUdjdGthYTg2Q21TNFpJUDBTcXNKL1JZRXZv?=
+ =?utf-8?B?OXBHNTlnTzcreDdRQWRIY0Y0d2FuNEVqZGhtWncvUUNVUS8waTVMOXp2TnBn?=
+ =?utf-8?B?OGhhNS9mZHZBbXJ3TTN1c2dtMEh3OGk4TlBYS1ZqNkx5cmhTVUNiQXFFQlRS?=
+ =?utf-8?B?Q3ZUb3Zpck5iQzdxRUl2SDZyK0RrQ09pN2Z2Z0FQWnRRUjVRNnVFbFE2NU5m?=
+ =?utf-8?B?WXgycU9FZC9EWXMremdYazNQSVpaeFJncFUrenVDVStkZGh2dWptL3V0VXpr?=
+ =?utf-8?B?UXdEeVZ3OGRYM2VxVnJWckR5Q2d6ZFU2dE9TanAyaWV2a2xoQ3BVMGpLSk4z?=
+ =?utf-8?B?d1B6YjV4amRVS20wMFJhQTVnR2tqTFRFdVp3MUorM3pOMDJSVEZoNXRXZ282?=
+ =?utf-8?B?ZCt1dWxKNXBaWVVkQ2drVEd2ZW14TXZHd1BLZFVmSWtKZFdtcmVwbFArb2VB?=
+ =?utf-8?B?blRzYlBnZzJDZlE5Tzk0cmxwMEVIK2t4eFhtZ29mMjcvQ25zeWlkT2NhU1hm?=
+ =?utf-8?B?aVQrVzgxK2RPc0lKcmg0Tk1DbFh2WlJOZVRZbnFPVzRjTXU4ZnRNTE00UzJ2?=
+ =?utf-8?B?dWxORzByWnlkSmlQSWlod05Pd2Q0cTBoVUFUOXhWVW9FVUQ3eGwzWDZCUFF1?=
+ =?utf-8?B?YjlLR3JxNHR6d01WNUEwd1VIdDRjOEk3ZWtacFZrUzE5LzZaUDdRQzMrWlBs?=
+ =?utf-8?B?OHQvRVBlSzljNDMxTU5aQmsyK3I4TnZld3ZsbENWdit0YTNNWXhxUT09?=
+X-Exchange-RoutingPolicyChecked:
+	Xdleb4ld47c36u0ZyX63CsTRWaJqzrtrW2K/pfJo5y3B4GpVcJxnSsQ25+SsT0Wh+cXRLTz624ZfJGMDcb4tvyhPy4c3XDZe8cFFf4jsDKhdSt2LkYs/cuBaKhnUUq3hHlr5W0e+uTa6CERWbtAbOsoqxhsge3OHengEhPLIoEhmY7V9VlW0v9rpGkU6XVEzfy8XO51YaGfDkCf8a1yNPWPydxtNOMhWgzqVIJkftA8nKtuS6GDHkDXbLAjcy6YfIJLDlDNKJ7Eh7+Fv2tbkG3FHQx7bs3cmeEI9RkAmbwnX2+mGZhp5o5+VYDHSSy+gK+e2/wlCF2R1Q5dFeOYf9A==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	/TpqW2nje75iWDfyawuEyGZlDpeGLEjT6M7OxlsdfSU3ldnz/7GCPXnygFiY7hHBmUBpGXphTMiTIEHoayvwyMKTjUTT5agPt3Hi69NsEBPNuWcJyk2DiK68Dn5NLJ/Rb8Br9Xy9Fteue/GPVRtDIOYiIHNau2/kxJGrFxkbbSMEpf01YHAWDTRZbBKKTGzg5dlvtVCG0IFSUB2Kd9nqJOa+K8CJkaTSUTWQm39tvm9LFMWeFAEe5l9JBQm+OY9OW0489NVq7OX8ZQiv+/wXRlRbjGWn9PX3Tru4tL5nZF+QqwHPeCEFh2cVGz/zMJpnhYGUE9hXMGkAIj5FQx7vGVG4kSJyI9A92U3s6S1aslRCl19d7XnOAQ24OQmPvdd89Pl+j+9cJDS9fhKb3aMfxmIcyxSZx2UfDRaZLNEiNPKxN4vXhw7EVwutkVMHGBX9rkHGazVtVdt0QLVUc49RLRLe6v8096Z1+4VPE6McP7ITRK/S0Lu5g7aj/KLiHH6xznFZVBwf7iYOiUqoabJsxjUZqZmE5/84mRNKCdbVr0xNCxHHyuJFZlwcKI7FGHyZVfShbIeAlsc/f6lLxyS2YepohEpgrEXMGOLyDTAJrds=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4405f875-a855-4120-0550-08def45b3084
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2026 08:09:22.8490
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xgGkioSi9bjV7pgUz4w88VZ8HFR2QSKsBJNjVuK2yPUbFqASLBpcAMIAl8Wg+h0jutbtHNkJ4xvTSZ6Z9kKZ1w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB997568
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-07_01,2026-08-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ mlxscore=0 phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2606160000 definitions=main-2608070059
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODA3MDA2MCBTYWx0ZWRfXzW7U9iMKO7T5
+ v2fLW7oqmgdlRJNiwD4hLqZhbWpjXYcRCcxRfmejgMvU7i92BUS3hGZzzpeTVCFUEgvPuCz83fQ
+ axf0OEGwFARA2t1sFRg+qWvZP3WdDEhhr/crF1ftDcZXUEodxu0O
+X-Proofpoint-ORIG-GUID: HIxTe5J8SMRbePTzV-w4J7roztwr8Gls
+X-Proofpoint-GUID: HIxTe5J8SMRbePTzV-w4J7roztwr8Gls
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA3MDA2MCBTYWx0ZWRfX/Bp6WaUNIl+3
+ Twa0rX5yht4CvpToR4KioAXLZ5nuhqP1M6eePzVL11UJlZ/U5sRB6P9vCjGj9Ctpo2axK0jbhjw
+ Wh+6rwh+mVeeBmAeZc50j31m7JKXO4ucIKIdmPJ0QzCVEWSlEj4oqzWUxHwsW2fQWkYcVocT4D/
+ PhWtgtNl1EwFxqs8JayTC+FkbhdzGVgSoC/njJJD+cGI85W3HxQ/bB9uM8ztaeVqF4Zyr+X2LCY
+ VLTczvF8pjkGWHFHqDKXuy45TDP9Zuq7Mxxi+v2Jt86w42OJkmkHpC++EYGeDo6edclbiHd+lPo
+ MP8tRGuIXhWKbn3/H/jzVE9BxPV3TAAnP9hZ5wigdCsNYA5S1Ky2/RuUTAXWPxg/9DVO+Nk0gjP
+ 5Qy8tV+cwscavx+E7Ve/0g7qFuFZ9fyB5zy1vMkM6t2C865T/A5bubReV2wHI7DDSjfuqbgMP6E
+ 5emrlMGD5DrHKQ0SGEnWL/ysFWEa162iChP/+/1I=
+X-Authority-Analysis: v=2.4 cv=TsPWQjXh c=1 sm=1 tr=0 ts=6a7592b6 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Sv0fKeRqtYgA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=BiLkx8lxpuncJLzAAUwA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=5yU3S35YU4bGjq-dph-N:22
+ a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12101
+
+On 31/07/2026 20:30, Arnaldo Carvalho de Melo wrote:
+> Hi,
+> 
+> Add support for Rust discriminated unions (enums with explicit
+> discriminants).
+> 
+> Rust enums like Option<u32> and Result<i32,u8> are represented in DWARF
+> as DW_TAG_variant_part containing DW_TAG_variant children with
+> discriminant values. These patches:
+> 
+>   - Load DW_TAG_variant_part containers with discriminant tracking
+>   - Populate DW_TAG_variant children with discriminant values
+>   - Handle DW_FORM_block encoding for discriminant values
+>   - Handle DW_TAG_subprogram inside DW_TAG_enumeration (Rust methods)
+>   - Encode variant parts as BTF_KIND_UNION members
+> 
+> Before: Rust Option<u32> showed as empty struct (0 members)
+> 
+> After:  Shows None and Some variants with correct layout
+> 
+>   === pahole --expand_types output ===
+>   struct Option<u32> {
+>       struct None {
+>       } __attribute__((__aligned__(4)));
+>       struct Some {
+>           /* XXX 4 bytes hole, try to pack */
+>           u32  __0 __attribute__((__aligned__(4)));  /*  4  4 */
+>       } __attribute__((__aligned__(4)));
+>   } __attribute__((__aligned__(4)));
+> 
+> BTF has no discriminated-union kind, so variant parts are tentatively
+> encoded as BTF_KIND_UNION with overlapping members at offset 0. Further
+> discussion is needed to see if we can keep that.
+> 
+
+It seems like these variants mostly have a leading discriminating
+value (telling us which variant is selected), and it looks like it is
+possible to infer its presence by determining by its members if it has 
+that discriminant (do any members have niche layout? if not it is there)
+and its size (depends on the number of variants). Given that, would
+it make sense to have a discriminant too? It seems that the above
+example Option<u32> has one, so we'd have
+
+struct Option<u32> {
+    uint8_t tag;          // 1 byte: Explicit discriminant
+    uint8_t pad[3];
+    struct Some {
+...
+
+This would give us a better match for the in-memory representation.
+What do you think, is it doable?
+ 
+> DW_FORM_block byte order fix: uses CU-recorded endianness instead of
+> assuming little-endian when decoding DW_AT_const_value and
+> DW_AT_default_value. Fixes cross-endian DWARF processing (e.g.  reading
+> big-endian s390x debug info on x86).
+> 
+> Also add support for cross-CU type references and dwz alternate debug
+> files.
+> 
+> This is needed to improve the support for, among other things, Rust, as
+> noticed in the pretty printing or a perf binary that has rust objects
+> linked, built by clang/llvm that use cross-CU references.
+> 
+> DW_TAG_imported_unit support:
+> 
+>   Handle same-file partial units where types are shared across CUs
+>   via DW_TAG_imported_unit. Force-merge CUs that contain inter-CU
+>   references (DW_FORM_ref_addr) so type lookups resolve correctly.
+> 
+>   Fix cus__merging_cu failing to detect DW_FORM_ref_addr when
+>   DW_FORM_implicit_const causes dwarf_getabbrevattr() to fail.
+> 
+> dwz alternate debug file support:
+> 
+>   Handle DW_FORM_GNU_ref_alt references to dwz-compressed alternate
+>   debug files (.dwz). Pre-processes all alternate partial units with
+>   separate hash tables and dedup tracking.
+> 
+>   Before (Firefox): 1774 "has no entry in cu" errors
+>   After:  processes cleanly with 0 errors
+> 
+>   Firefox uses dwz compression which moves common types into a
+>   separate .dwz file and replaces duplicates with DW_FORM_GNU_ref_alt
+>   references. pahole now pre-loads the alternate file's partial units,
+>   resolves all cross-file references, and processes Firefox DWARF
+>   cleanly.
+> 
+> Includes inter-CU type reference comparison test and
+> vmlinux_comparison.py for DWARF/BTF analysis across kernel configs.
+> 
+> Known limitations:
+>   - Pruning of unreferenced alt PUs is conservatively over-approximated
+>   - Merged-CU path is single-threaded by design
+> 
+> This makes pahole to be able to support more of the CONFIG_DEBUG_ DWARF
+> options, including DWARF5 and compression, see the latest patch in the
+> series for more details about how this table is produced:
+> 
+>   ┌───────────────────────────┬─────────┬─────┬───────────────────────────────────┬─────────┬───────┬──────────┬────────┬──────────┬─────────┐
+>   │ File                      │  Size   │ Ver │ Producer                          │  DWARF  │  BTF  │ DW-Hash  │ DW-Out │ BTF-Hash │ BTF-Out │
+>   ├───────────────────────────┼─────────┼─────┼───────────────────────────────────┼─────────┼───────┼──────────┼────────┼──────────┼─────────┤
+>   │ vmlinux.dwarf4            │ 835.7MB │   4 │ GNU C11 16.1.1 -gdwarf-4          │ 599.2MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+>   │ vmlinux.dwarf5            │ 736.3MB │   5 │ GNU C11 16.1.1 -gdwarf-5          │ 499.7MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+>   │ vmlinux.dwarf5.zlib       │ 497.8MB │   5 │ GNU C11 16.1.1 -gdwarf-5 -gz=zlib │ 261.2MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+>   │ vmlinux.dwarf5.zstd       │ 454.7MB │   5 │ GNU C11 16.1.1 -gdwarf-5 -gz=zstd │ 218.1MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+>   │ vmlinux.toolchain_default │ 736.3MB │   5 │ GNU C11 16.1.1                    │ 499.7MB │ 7.3MB │ 86e1b611 │  7.6MB │ 52123c24 │   7.4MB │
+>   └───────────────────────────┴─────────┴─────┴───────────────────────────────────┴─────────┴───────┴──────────┴────────┴──────────┴─────────┘
+> 
+> Split DWARF support (skeleton CUs) will be supported in upcoming work,
+> so as to cover all the possibilities the kernel build system offers
+> for generating DWARF.
+> 
+> - Arnaldo
+> 
+> Arnaldo Carvalho de Melo (12):
+>   dwarf_loader: Initial support for DW_TAG_variant_part
+>   dwarf_loader: Initial support for DW_TAG_subprogram in DW_TAG_enumeration
+>   dwarf_loader: Populate DW_TAG_variant children in DW_TAG_variant_part
+>   btf_encoder: Encode variant parts as union members in BTF
+>   dwarf_loader: Handle DW_FORM_block in attr_numeric for Rust discriminant values
+>   dwarf_loader: Allow forcing the merge of CUs for solving inter CU tag references
+>   dwarf_loader: Support DW_TAG_imported_unit for same-file partial units
+>   dwarf_loader: Fix cus__merging_cu failing to detect DW_FORM_ref_addr
+>   dwarf_loader: Add cu parameter to tag__set_spec() and dwarf_tag__set_attr_type()
+>   dwarf_loader: Support DW_FORM_GNU_ref_alt references to dwz alternate debug files
+>   tests: Add inter-CU type reference comparison test
+>   scripts: Add vmlinux_comparison.py for DWARF/BTF analysis
+> 
+>  btf_encoder.c                 |  66 ++-
+>  ctf_encoder.c                 |  34 +-
+>  dwarf_loader.c                | 873 ++++++++++++++++++++++++++++++----
+>  dwarves.c                     |  77 ++-
+>  dwarves.h                     |  63 ++-
+>  dwarves_emit.c                |  10 +-
+>  dwarves_fprintf.c             |  54 ++-
+>  man-pages/pahole.1            |  18 +-
+>  pahole.c                      |  20 +-
+>  scripts/vmlinux_comparison.py | 367 ++++++++++++++
+>  tests/block_endian.sh         | 146 ++++++
+>  tests/dwz_alt_file.sh         | 204 ++++++++
+>  tests/inter_cu_refs.sh        |  50 ++
+>  tests/prettify_perf.data.sh   |   4 +-
+>  14 files changed, 1854 insertions(+), 132 deletions(-)
+>  create mode 100755 scripts/vmlinux_comparison.py
+>  create mode 100755 tests/block_endian.sh
+>  create mode 100755 tests/dwz_alt_file.sh
+>  create mode 100755 tests/inter_cu_refs.sh
+> 
 
-The BUG_ON(len) assertion in skb_copy_and_csum_bits() was triggered
-during GSO segmentation, resulting in an invalid-opcode oops at
-net/core/skbuff.c:3688. This bug was reproduced in the following environment:
-
-- Kernel source: Linux 7.2-rc4-102-g4539944e5151
-- Commit: 4539944e515183668109bdf4d0c3d7d228383d88
-- Architecture: x86_64
-- Configuration: SMP, PREEMPT, HZ=250, TLS, TLS_DEVICE, BPF,
-  BPF_SYSCALL, NET_SCHED, NET_CLS_BPF, NET_CLS_ACT, DEBUG_INFO,
-  KALLSYMS, KASAN, KCOV enabled
-- Runtime: QEMU/KVM, 2 CPUs, 4GB RAM
-
-Diagnostic tracing indicates that a TCP transmit skb and its BPF redirect
-clone can share the skb_shared_info. During GSO processing,
-skb_split_no_header() updates the nr_frags in the shared metadata while
-the cloned skb is being processed in skb_segment(). This causes nr_frags
-to be inconsistent with the clone's data_len which is caught at the
-assertion in skb_copy_and_csum_bits().
-
-Below is the likely interleaving, based on diagnostic tracing:
-
-1. TCP creates a large GSO skb 'A' (nr_frags=17, data_len=65536)
-2. __tcp_transmit_skb() creates transmit clone 'B' from A
-3. bpf_clone_redirect() creates redirect clone 'C' from B
-   A, B, and C initially share skb_shared_info
-4. bpf_clone_redirect() calls bpf_try_make_head_writable() on B
-   B becomes private, while A and C retain the old shared metadata
-5. The BPF program returns TC_ACT_SHOT for B, so B is dropped
-   C remains queued for transmission
-6. A enters tso_fragment() and skb_split_no_header(), updating the shared
-   nr_frags while C remains queued
-7. C is dequeued and reaches skb_segment(), which observes the
-   inconsistent metadata (nr_frags=14, data_len=65536)
-
-The relevant call paths are:
-
-1. TCP transmit and BPF redirect path
-
-   tcp_sendmsg()
-     tcp_write_xmit()
-       __tcp_transmit_skb()
-         skb_clone(A) -> B
-         __dev_queue_xmit(B)
-           TCX egress BPF program
-             bpf_clone_redirect(B)
-               skb_clone(B) -> C
-               bpf_try_make_head_writable(B)
-               __bpf_redirect(C)
-                 __dev_queue_xmit(C)
-                   __qdisc_run()
-                     sch_direct_xmit()
-
-2. Shared skb_shared_info writer/reader paths
-
-   Writer path for A:
-     tcp_write_xmit()
-       tso_fragment(A)
-         skb_split(A, ...)
-           skb_split_no_header(A, ...)
-             skb_shinfo(A)->nr_frags = 0
-             ...
-             skb_shinfo(A)->nr_frags++
-
-   Reader path for C:
-     sch_direct_xmit()
-       validate_xmit_skb()
-         __skb_gso_segment()
-           skb_mac_gso_segment()
-             inet_gso_segment()
-               tcp_gso_segment()
-                 skb_segment(C)
-                   skb_copy_and_csum_bits()
-                     BUG_ON(len)
-
-Found by custom fuzzer developed by Sechang Lim <rhkrqnwk98@gmail.com>
-
-Thanks,
-Kenneth Lee
-
-Log:
-
-[    1.917786] kernel BUG at net/core/skbuff.c:3688!
-[    1.918021] Oops: invalid opcode: 0000 [#1] SMP KASAN NOPTI
-[    1.918293] CPU: 0 UID: 0 PID: 128 Comm: extra-init-bin Not tainted 7.2.0-rc4-00102-g4539944e5151 #3 PREEMPT(full)
-[    1.918804] Hardware name: QEMU Ubuntu 26.04 PC (i440FX + PIIX, 1996), BIOS 1.17.0-debian-1.17.0-1ubuntu1 04/01/2014
-[    1.919331] RIP: 0010:skb_copy_and_csum_bits+0x8e9/0x8f0
-[    1.919614] Code: e8 1c 15 fa fe e9 ea f8 ff ff 44 89 f1 80 e1 07 38 c1 0f 8c fa f8 ff ff 4c 89 f7 e8 a1 14 fa fe e9 ed f8 ff ff e8 07 23 a7 fe <0f> 0b 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
-[    1.920520] RSP: 0018:ffffc900000076a8 EFLAGS: 00010246
-[    1.920789] RAX: ffffffff82c810b9 RBX: 000000000000d242 RCX: ffff888115f93780
-[    1.921152] RDX: 0000000000000100 RSI: 000000000000d242 RDI: ffff888113c31608
-[    1.921509] RBP: 0000000000002e00 R08: ffff88811725c13f R09: 1ffff11022e4b827
-[    1.921849] R10: dffffc0000000000 R11: ffffed1022e4b828 R12: ffff888113c31508
-[    1.922187] R13: ffff88811725c140 R14: 0000000000000000 R15: ffff888113c31502
-[    1.922537] FS:  00007fa448c626c0(0000) GS:ffff88819488c000(0000) knlGS:0000000000000000
-[    1.922921] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    1.923196] CR2: 00007fa459c86000 CR3: 0000000109ee0004 CR4: 0000000000770ef0
-[    1.923568] PKRU: 55555554
-[    1.923703] Call Trace:
-[    1.923828]  <IRQ>
-[    1.923934]  skb_segment+0x2471/0x3b30
-[    1.924121]  tcp_gso_segment+0x324/0x1560
-[    1.924319]  ? check_path+0x21/0x40
-[    1.924500]  inet_gso_segment+0x4f5/0x11a0
-[    1.924705]  ? __pfx_inet_gso_segment+0x10/0x10
-[    1.924925]  skb_mac_gso_segment+0x2b7/0x4d0
-[    1.925135]  ? skb_mac_gso_segment+0x143/0x4d0
-[    1.925354]  ? __pfx_skb_mac_gso_segment+0x10/0x10
-[    1.925594]  ? __pfx_netif_skb_features+0x10/0x10
-[    1.925823]  __skb_gso_segment+0x301/0x490
-[    1.926022]  validate_xmit_skb+0x8dc/0x1090
-[    1.926224]  ? __asan_memset+0x22/0x50
-[    1.926415]  ? netem_dequeue+0x10ad/0x1290
-[    1.926620]  ? sch_direct_xmit+0xba/0x4a0
-[    1.926816]  validate_xmit_skb_list+0x84/0x130
-[    1.927034]  sch_direct_xmit+0xe5/0x4a0
-[    1.927222]  ? __pfx_sch_direct_xmit+0x10/0x10
-[    1.927448]  __qdisc_run+0x993/0x12a0
-[    1.927668]  qdisc_run+0x169/0x2d0
-[    1.927844]  ? net_tx_action+0x3c6/0x6b0
-[    1.928036]  net_tx_action+0x500/0x6b0
-[    1.928220]  handle_softirqs+0x22a/0x7f0
-[    1.928421]  ? __irq_exit_rcu+0x72/0x130
-[    1.928623]  __irq_exit_rcu+0x72/0x130
-[    1.928818]  irq_exit_rcu+0x9/0x30
-[    1.928997]  sysvec_apic_timer_interrupt+0x90/0xb0
-[    1.929246]  </IRQ>
-
-C reproducer;
-
-#define _GNU_SOURCE
-
-#include <arpa/inet.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <linux/if_eql.h>
-#include <linux/if.h>
-#include <linux/netlink.h>
-#include <linux/pkt_sched.h>
-#include <linux/rtnetlink.h>
-#include <netinet/in.h>
-#include <pthread.h>
-#include <sched.h>
-#include <signal.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdatomic.h>
-#include <string.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <sys/resource.h>
-#include <sys/socket.h>
-#include <sys/syscall.h>
-#include <sys/time.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
-#ifndef __NR_bpf
-#if defined(__x86_64__)
-#define __NR_bpf 321
-#else
-#error "__NR_bpf is not defined for this architecture"
-#endif
-#endif
-
-#ifndef SOL_TLS
-#define SOL_TLS 282
-#endif
-
-#ifndef TCP_ULP
-#define TCP_ULP 31
-#endif
-
-#define TLS_TX 1
-#define TLS_1_3_VERSION 0x0304
-#define TLS_CIPHER_AES_GCM_128 51
-
-#define BPF_PROG_LOAD 5
-#define BPF_LINK_CREATE 28
-#define BPF_PROG_TYPE_SCHED_CLS 3
-#define BPF_TCX_EGRESS 47
-#define BPF_FUNC_clone_redirect 13
-#define TC_ACT_SHOT 2
-
-#define BPF_ALU64 0x07
-#define BPF_MOV 0xb0
-#define BPF_K 0x00
-#define BPF_JMP 0x05
-#define BPF_CALL 0x80
-#define BPF_EXIT 0x90
-
-#define BPF_REG_0 0
-#define BPF_REG_2 2
-#define BPF_REG_3 3
-
-#define CLONE_REDIRECT_IFINDEX 4
-#define SYZ_BASE_ADDR 0x7f0000000000ULL
-#define SYZ_MAP_SIZE 0x1000000
-#define SYZ_ULP_OFF 0x0a00
-#define SYZ_TLS_TX_OFF 0x0b00
-#define SYZ_SEND_OFF 0x0e00
-#define GSO_SEND_LEN 65536
-#define SEND_WORKERS 16
-#define DEFAULT_ROUND_USEC 1000000
-#define DEFAULT_ATTACH_DELAY_USEC 1000
-#define DEFAULT_NETEM_USEC 3000000
-#define WG_WORKERS 4
-#define WG_DEFAULT_TARGET "fd00::2"
-#define WG_DEFAULT_PORT 9
-
-static atomic_ulong *tls_iterations;
-static atomic_ulong *wg_iterations;
-static unsigned char *syz_mem;
-
-struct tls_send_ctx {
-	int tx;
-	int rx;
-	atomic_int *start;
-	atomic_int *drain_stop;
-	atomic_int done;
-	long ret;
-	int err;
-	unsigned long drained;
-};
-
-struct wg_send_ctx {
-	atomic_int *stop;
-	const char *target;
-	int port;
-	int verbose;
-};
-
-static void report_result(const char *name, long ret);
-
-struct bpf_insn {
-	unsigned char code;
-	unsigned char dst_reg : 4;
-	unsigned char src_reg : 4;
-	int16_t off;
-	int32_t imm;
-};
-
-union bpf_attr_local {
-	struct {
-		uint32_t prog_type;
-		uint32_t insn_cnt;
-		uint64_t insns;
-		uint64_t license;
-		uint32_t log_level;
-		uint32_t log_size;
-		uint64_t log_buf;
-		uint32_t kern_version;
-		uint32_t prog_flags;
-		char prog_name[16];
-		uint32_t prog_ifindex;
-		uint32_t expected_attach_type;
-	} prog_load;
-
-	struct {
-		uint32_t prog_fd;
-		union {
-			uint32_t target_fd;
-			uint32_t target_ifindex;
-		};
-		uint32_t attach_type;
-		uint32_t flags;
-	} link_create;
-
-	unsigned char pad[256];
-};
-
-struct tls_crypto_info {
-	uint16_t version;
-	uint16_t cipher_type;
-};
-
-struct tls12_crypto_info_aes_gcm_128 {
-	struct tls_crypto_info info;
-	unsigned char iv[8];
-	unsigned char key[16];
-	unsigned char salt[4];
-	unsigned char rec_seq[8];
-};
-
-static uint64_t ptr_to_u64(const void *ptr)
-{
-	return (uint64_t)(uintptr_t)ptr;
-}
-
-static int bpf_syscall(int cmd, union bpf_attr_local *attr, unsigned int size)
-{
-	return syscall(__NR_bpf, cmd, attr, size);
-}
-
-static struct bpf_insn bpf_mov64_imm(int dst, int imm)
-{
-	struct bpf_insn insn = {
-		.code = BPF_ALU64 | BPF_MOV | BPF_K,
-		.dst_reg = dst,
-		.src_reg = 0,
-		.off = 0,
-		.imm = imm,
-	};
-	return insn;
-}
-
-static struct bpf_insn bpf_call(int helper)
-{
-	struct bpf_insn insn = {
-		.code = BPF_JMP | BPF_CALL,
-		.dst_reg = 0,
-		.src_reg = 0,
-		.off = 0,
-		.imm = helper,
-	};
-	return insn;
-}
-
-static struct bpf_insn bpf_exit(void)
-{
-	struct bpf_insn insn = {
-		.code = BPF_JMP | BPF_EXIT,
-		.dst_reg = 0,
-		.src_reg = 0,
-		.off = 0,
-		.imm = 0,
-	};
-	return insn;
-}
-
-static int make_tcp_pair(int family, int fds[2])
-{
-	struct sockaddr_storage ss;
-	socklen_t len;
-	int listener = -1;
-	int client = -1;
-	int server = -1;
-	int one = 1;
-
-	memset(&ss, 0, sizeof(ss));
-
-	listener = socket(family, SOCK_STREAM, 0);
-	if (listener < 0)
-		goto fail;
-
-	setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
-
-	if (family == AF_INET) {
-		struct sockaddr_in *addr = (struct sockaddr_in *)&ss;
-
-		addr->sin_family = AF_INET;
-		addr->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-		addr->sin_port = 0;
-		len = sizeof(*addr);
-	} else {
-		struct sockaddr_in6 *addr6 = (struct sockaddr_in6 *)&ss;
-
-		addr6->sin6_family = AF_INET6;
-		addr6->sin6_addr = in6addr_loopback;
-		addr6->sin6_port = 0;
-		len = sizeof(*addr6);
-	}
-
-	if (bind(listener, (struct sockaddr *)&ss, len) < 0)
-		goto fail;
-	if (listen(listener, 1) < 0)
-		goto fail;
-	if (getsockname(listener, (struct sockaddr *)&ss, &len) < 0)
-		goto fail;
-
-	client = socket(family, SOCK_STREAM, 0);
-	if (client < 0)
-		goto fail;
-	if (connect(client, (struct sockaddr *)&ss, len) < 0)
-		goto fail;
-
-	server = accept(listener, NULL, NULL);
-	if (server < 0)
-		goto fail;
-
-	close(listener);
-	fds[0] = server;
-	fds[1] = client;
-	return 0;
-
-fail:
-	if (listener >= 0)
-		close(listener);
-	if (client >= 0)
-		close(client);
-	if (server >= 0)
-		close(server);
-	return -1;
-}
-
-static int setup_tls_ctx(struct tls_send_ctx *ctx, int verbose)
-{
-	int fds[2] = {-1, -1};
-	struct timeval tv = {
-		.tv_sec = 0,
-		.tv_usec = 20000,
-	};
-	long ret;
-
-	memset(ctx, 0, sizeof(*ctx));
-	ctx->tx = -1;
-	ctx->rx = -1;
-
-	if (make_tcp_pair(AF_INET, fds) < 0) {
-		if (verbose)
-			perror("make_tcp_pair(AF_INET)");
-		return -1;
-	}
-
-	ctx->tx = fds[0];
-	ctx->rx = fds[1];
-	setsockopt(ctx->tx, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
-
-	ret = setsockopt(ctx->tx, IPPROTO_TCP, TCP_ULP, syz_mem + SYZ_ULP_OFF, 3);
-	if (verbose)
-		report_result("setsockopt(TCP_ULP)", ret);
-	ret = setsockopt(ctx->tx, SOL_TLS, TLS_TX, syz_mem + SYZ_TLS_TX_OFF, 0x28);
-	if (verbose)
-		report_result("setsockopt(TLS_TX)", ret);
-
-	return 0;
-}
-
-static void close_tls_ctx(struct tls_send_ctx *ctx)
-{
-	if (ctx->tx >= 0) {
-		shutdown(ctx->tx, SHUT_RDWR);
-		close(ctx->tx);
-		ctx->tx = -1;
-	}
-	if (ctx->rx >= 0) {
-		shutdown(ctx->rx, SHUT_RDWR);
-		close(ctx->rx);
-		ctx->rx = -1;
-	}
-}
-
-static void try_set_if_up(int fd, int ifindex)
-{
-	struct ifreq ifr;
-
-	memset(&ifr, 0, sizeof(ifr));
-	ifr.ifr_ifindex = ifindex;
-	if (ioctl(fd, SIOCGIFNAME, &ifr) < 0) {
-		fprintf(stderr, "SIOCGIFNAME(%d): %s\n", ifindex, strerror(errno));
-		return;
-	}
-
-	if (ioctl(fd, SIOCGIFFLAGS, &ifr) < 0) {
-		fprintf(stderr, "SIOCGIFFLAGS(%s): %s\n", ifr.ifr_name,
-			strerror(errno));
-		return;
-	}
-
-	ifr.ifr_flags |= IFF_UP | IFF_RUNNING;
-	if (ioctl(fd, SIOCSIFFLAGS, &ifr) < 0)
-		fprintf(stderr, "SIOCSIFFLAGS(%s): %s\n", ifr.ifr_name,
-			strerror(errno));
-}
-
-static void try_set_txqlen(int fd, const char *ifname, int qlen)
-{
-	struct ifreq ifr;
-	size_t len;
-
-	memset(&ifr, 0, sizeof(ifr));
-	len = strnlen(ifname, IFNAMSIZ - 1);
-	memcpy(ifr.ifr_name, ifname, len);
-	ifr.ifr_qlen = qlen;
-	if (ioctl(fd, SIOCSIFTXQLEN, &ifr) < 0)
-		fprintf(stderr, "SIOCSIFTXQLEN(%s): %s\n", ifname,
-			strerror(errno));
-}
-
-static int addattr_l(struct nlmsghdr *n, size_t maxlen, int type,
-		     const void *data, size_t alen)
-{
-	size_t len = RTA_LENGTH(alen);
-	struct rtattr *rta;
-
-	if (NLMSG_ALIGN(n->nlmsg_len) + RTA_ALIGN(len) > maxlen)
-		return -1;
-
-	rta = (struct rtattr *)((char *)n + NLMSG_ALIGN(n->nlmsg_len));
-	rta->rta_type = type;
-	rta->rta_len = len;
-	memcpy(RTA_DATA(rta), data, alen);
-	n->nlmsg_len = NLMSG_ALIGN(n->nlmsg_len) + RTA_ALIGN(len);
-	return 0;
-}
-
-static void try_set_root_qdisc(int ifindex, const char *kind)
-{
-	char reqbuf[NLMSG_SPACE(sizeof(struct tcmsg)) + 256];
-	struct sockaddr_nl nladdr = {
-		.nl_family = AF_NETLINK,
-	};
-	struct nlmsghdr *nlh = (struct nlmsghdr *)reqbuf;
-	struct tcmsg *tcm;
-	int fd;
-
-	memset(reqbuf, 0, sizeof(reqbuf));
-	fd = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
-	if (fd < 0) {
-		fprintf(stderr, "netlink route socket: %s\n", strerror(errno));
-		return;
-	}
-
-	nlh->nlmsg_len = NLMSG_LENGTH(sizeof(*tcm));
-	nlh->nlmsg_type = RTM_NEWQDISC;
-	nlh->nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK | NLM_F_CREATE |
-			   NLM_F_REPLACE;
-	tcm = NLMSG_DATA(nlh);
-	tcm->tcm_family = AF_UNSPEC;
-	tcm->tcm_ifindex = ifindex;
-	tcm->tcm_parent = TC_H_ROOT;
-	tcm->tcm_handle = 0;
-
-	addattr_l(nlh, sizeof(reqbuf), TCA_KIND, kind, strlen(kind) + 1);
-
-	if (sendto(fd, nlh, nlh->nlmsg_len, 0, (struct sockaddr *)&nladdr,
-		   sizeof(nladdr)) < 0) {
-		fprintf(stderr, "RTM_NEWQDISC(%s): %s\n", kind, strerror(errno));
-		close(fd);
-		return;
-	}
-
-	ssize_t n = recv(fd, reqbuf, sizeof(reqbuf), 0);
-	if (n < 0)
-		fprintf(stderr, "RTM_NEWQDISC(%s) ack: %s\n", kind,
-			strerror(errno));
-	else {
-		struct nlmsghdr *ack = (struct nlmsghdr *)reqbuf;
-
-		if (ack->nlmsg_type == NLMSG_ERROR) {
-			struct nlmsgerr *err = NLMSG_DATA(ack);
-
-			if (err->error)
-				fprintf(stderr, "RTM_NEWQDISC(%s): %s\n", kind,
-					strerror(-err->error));
-			else
-				fprintf(stderr, "RTM_NEWQDISC(%s on ifindex %d): 0\n",
-					kind, ifindex);
-		}
-	}
-	close(fd);
-}
-
-static void try_set_netem_delay(int ifindex, unsigned int delay_usec)
-{
-	char reqbuf[NLMSG_SPACE(sizeof(struct tcmsg)) + 256];
-	struct sockaddr_nl nladdr = {
-		.nl_family = AF_NETLINK,
-	};
-	struct tc_netem_qopt qopt = {
-		.latency = delay_usec,
-		.limit = 65535,
-	};
-	struct nlmsghdr *nlh = (struct nlmsghdr *)reqbuf;
-	struct tcmsg *tcm;
-	int fd;
-
-	memset(reqbuf, 0, sizeof(reqbuf));
-	fd = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
-	if (fd < 0) {
-		fprintf(stderr, "netlink route socket: %s\n", strerror(errno));
-		return;
-	}
-
-	nlh->nlmsg_len = NLMSG_LENGTH(sizeof(*tcm));
-	nlh->nlmsg_type = RTM_NEWQDISC;
-	nlh->nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK | NLM_F_CREATE |
-			   NLM_F_REPLACE;
-	tcm = NLMSG_DATA(nlh);
-	tcm->tcm_family = AF_UNSPEC;
-	tcm->tcm_ifindex = ifindex;
-	tcm->tcm_parent = TC_H_ROOT;
-	tcm->tcm_handle = 0;
-
-	addattr_l(nlh, sizeof(reqbuf), TCA_KIND, "netem", sizeof("netem"));
-	addattr_l(nlh, sizeof(reqbuf), TCA_OPTIONS, &qopt, sizeof(qopt));
-
-	if (sendto(fd, nlh, nlh->nlmsg_len, 0, (struct sockaddr *)&nladdr,
-		   sizeof(nladdr)) < 0) {
-		fprintf(stderr, "RTM_NEWQDISC(netem delay %uus): %s\n",
-			delay_usec, strerror(errno));
-		close(fd);
-		return;
-	}
-
-	ssize_t n = recv(fd, reqbuf, sizeof(reqbuf), 0);
-	if (n < 0)
-		fprintf(stderr, "RTM_NEWQDISC(netem delay %uus) ack: %s\n",
-			delay_usec, strerror(errno));
-	else {
-		struct nlmsghdr *ack = (struct nlmsghdr *)reqbuf;
-
-		if (ack->nlmsg_type == NLMSG_ERROR) {
-			struct nlmsgerr *err = NLMSG_DATA(ack);
-
-			if (err->error)
-				fprintf(stderr, "RTM_NEWQDISC(netem delay %uus): %s\n",
-					delay_usec, strerror(-err->error));
-			else
-				fprintf(stderr, "RTM_NEWQDISC(netem delay %uus on ifindex %d): 0\n",
-					delay_usec, ifindex);
-		}
-	}
-	close(fd);
-}
-
-static void try_eql_enslave(int fd, const char *master, const char *slave)
-{
-	struct slaving_request req;
-	struct ifreq ifr;
-	size_t len;
-
-	memset(&req, 0, sizeof(req));
-	memset(&ifr, 0, sizeof(ifr));
-
-	len = strnlen(slave, sizeof(req.slave_name) - 1);
-	memcpy(req.slave_name, slave, len);
-	req.priority = EQL_DEFAULT_SLAVE_PRIORITY;
-	len = strnlen(master, IFNAMSIZ - 1);
-	memcpy(ifr.ifr_name, master, len);
-	ifr.ifr_data = (void *)&req;
-
-	if (ioctl(fd, EQL_ENSLAVE, &ifr) < 0)
-		fprintf(stderr, "EQL_ENSLAVE(%s <- %s): %s\n", master, slave,
-			strerror(errno));
-	else
-		fprintf(stderr, "EQL_ENSLAVE(%s <- %s): 0\n", master, slave);
-}
-
-static int load_clone_redirect_prog(int redirect_ifindex, int action)
-{
-	static const char license[] = "GPL";
-	char log_buf[65536];
-	union bpf_attr_local attr;
-	struct bpf_insn insns[5];
-	int insn_cnt = 0;
-
-	insns[insn_cnt++] = bpf_mov64_imm(BPF_REG_2, redirect_ifindex);
-	insns[insn_cnt++] = bpf_mov64_imm(BPF_REG_3, 0);
-	insns[insn_cnt++] = bpf_call(BPF_FUNC_clone_redirect);
-	if (action >= 0)
-		insns[insn_cnt++] = bpf_mov64_imm(BPF_REG_0, action);
-	insns[insn_cnt++] = bpf_exit();
-
-	memset(log_buf, 0, sizeof(log_buf));
-	memset(&attr, 0, sizeof(attr));
-	attr.prog_load.prog_type = BPF_PROG_TYPE_SCHED_CLS;
-	attr.prog_load.insn_cnt = insn_cnt;
-	attr.prog_load.insns = ptr_to_u64(insns);
-	attr.prog_load.license = ptr_to_u64(license);
-	attr.prog_load.log_level = 1;
-	attr.prog_load.log_size = sizeof(log_buf);
-	attr.prog_load.log_buf = ptr_to_u64(log_buf);
-	memcpy(attr.prog_load.prog_name, "clone_redir", sizeof("clone_redir"));
-
-	int fd = bpf_syscall(BPF_PROG_LOAD, &attr, sizeof(attr));
-	if (fd < 0 && log_buf[0])
-		fprintf(stderr, "BPF verifier log:\n%s\n", log_buf);
-	return fd;
-}
-
-static int link_tcx(int prog_fd, int ifindex)
-{
-	union bpf_attr_local attr;
-
-	memset(&attr, 0, sizeof(attr));
-	attr.link_create.prog_fd = prog_fd;
-	attr.link_create.target_ifindex = ifindex;
-	attr.link_create.attach_type = BPF_TCX_EGRESS;
-	attr.link_create.flags = 0;
-
-	return bpf_syscall(BPF_LINK_CREATE, &attr, 16);
-}
-
-static int ifindex_exists(int fd, int ifindex, char *name, size_t name_len)
-{
-	struct ifreq ifr;
-
-	memset(&ifr, 0, sizeof(ifr));
-	ifr.ifr_ifindex = ifindex;
-	if (ioctl(fd, SIOCGIFNAME, &ifr) < 0)
-		return 0;
-
-	if (name && name_len) {
-		size_t len;
-
-		ifr.ifr_name[IFNAMSIZ - 1] = '\0';
-		len = strnlen(ifr.ifr_name, IFNAMSIZ);
-		if (len >= name_len)
-			len = name_len - 1;
-		memcpy(name, ifr.ifr_name, len);
-		name[len] = '\0';
-	}
-	return 1;
-}
-
-static int setup_syz_memory(void)
-{
-	struct tls12_crypto_info_aes_gcm_128 crypto = {
-		.info = {
-			.version = TLS_1_3_VERSION,
-			.cipher_type = TLS_CIPHER_AES_GCM_128,
-		},
-		.iv = {0x72, 0x7e, 0x34, 0x59, 0x9b, 0xe4, 0x9a, 0x9b},
-		.key = {
-			0x03, 0x01, 0xc0, 0xe8, 0xf2, 0x0f, 0xd4, 0x52,
-			0xeb, 0x25, 0xe7, 0x40, 0xaa, 0x32, 0xd8, 0xfc,
-		},
-		.salt = {0x15, 0xaa, 0xcb, 0x34},
-		.rec_seq = {0x14, 0x7d, 0xc4, 0x10, 0x0f, 0x67, 0x77, 0x7f},
-	};
-	void *addr;
-	int flags = MAP_PRIVATE | MAP_ANONYMOUS;
-
-#ifdef MAP_FIXED_NOREPLACE
-	flags |= MAP_FIXED_NOREPLACE;
-#else
-	flags |= MAP_FIXED;
-#endif
-
-	addr = mmap((void *)SYZ_BASE_ADDR, SYZ_MAP_SIZE,
-		    PROT_READ | PROT_WRITE, flags, -1, 0);
-	if (addr == MAP_FAILED) {
-		perror("mmap syz executor region");
-		return -1;
-	}
-
-	syz_mem = addr;
-	memcpy(syz_mem + SYZ_ULP_OFF, "tls", 3);
-	memcpy(syz_mem + SYZ_TLS_TX_OFF, &crypto, sizeof(crypto));
-	memset(syz_mem + SYZ_SEND_OFF, 0x41, SYZ_MAP_SIZE - SYZ_SEND_OFF);
-
-	tls_iterations = mmap(NULL, sizeof(*tls_iterations),
-			      PROT_READ | PROT_WRITE,
-			      MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	if (tls_iterations == MAP_FAILED) {
-		perror("mmap shared stats");
-		return -1;
-	}
-	atomic_init(tls_iterations, 0);
-	wg_iterations = mmap(NULL, sizeof(*wg_iterations),
-			     PROT_READ | PROT_WRITE,
-			     MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	if (wg_iterations == MAP_FAILED) {
-		perror("mmap shared wg stats");
-		return -1;
-	}
-	atomic_init(wg_iterations, 0);
-	return 0;
-}
-
-static void report_result(const char *name, long ret)
-{
-	if (ret < 0)
-		fprintf(stderr, "%s: %s\n", name, strerror(errno));
-	else
-		fprintf(stderr, "%s: %ld\n", name, ret);
-}
-
-static void *huge_send_worker(void *arg)
-{
-	struct tls_send_ctx *ctx = arg;
-
-	while (ctx->start && !atomic_load(ctx->start))
-		sched_yield();
-
-	ctx->ret = sendto(ctx->tx, syz_mem + SYZ_SEND_OFF, (size_t)-307,
-			  MSG_NOSIGNAL, NULL, 0);
-	ctx->err = errno;
-	atomic_store(&ctx->done, 1);
-	atomic_fetch_add(tls_iterations, 1);
-	return NULL;
-}
-
-static void *drain_worker(void *arg)
-{
-	struct tls_send_ctx *ctx = arg;
-	char buf[32768];
-
-	while (ctx->start && !atomic_load(ctx->start))
-		sched_yield();
-
-	while (!atomic_load(ctx->drain_stop)) {
-		ssize_t n = recv(ctx->rx, buf, sizeof(buf), MSG_DONTWAIT);
-
-		if (n > 0) {
-			ctx->drained += n;
-			continue;
-		}
-		if (n < 0 && errno != EAGAIN && errno != EWOULDBLOCK)
-			break;
-		sched_yield();
-	}
-
-	return NULL;
-}
-
-static int get_outq(int fd)
-{
-	int outq = -1;
-
-	if (ioctl(fd, TIOCOUTQ, &outq) < 0)
-		return -1;
-	return outq;
-}
-
-static void *wg_send_worker(void *arg)
-{
-	struct wg_send_ctx *ctx = arg;
-	struct sockaddr_in6 dst;
-	char buf[65536];
-	int fd;
-
-	memset(buf, 0x42, sizeof(buf));
-	memset(&dst, 0, sizeof(dst));
-	dst.sin6_family = AF_INET6;
-	dst.sin6_port = htons(ctx->port);
-	if (inet_pton(AF_INET6, ctx->target, &dst.sin6_addr) != 1)
-		return NULL;
-
-	fd = socket(AF_INET6, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	if (fd < 0)
-		return NULL;
-
-	if (setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, "wg0", 4) < 0) {
-		if (ctx->verbose)
-			fprintf(stderr, "SO_BINDTODEVICE(wg0): %s\n",
-				strerror(errno));
-		close(fd);
-		return NULL;
-	}
-
-	connect(fd, (struct sockaddr *)&dst, sizeof(dst));
-	for (int i = 0; i < 1000 && !atomic_load(ctx->stop); i++) {
-		ssize_t n = send(fd, buf, sizeof(buf), MSG_DONTWAIT | MSG_NOSIGNAL);
-
-		if (n > 0) {
-			atomic_fetch_add(wg_iterations, 1);
-			continue;
-		}
-		if (errno == EINPROGRESS || errno == EALREADY ||
-		    errno == EAGAIN || errno == EWOULDBLOCK) {
-			sched_yield();
-			continue;
-		}
-		if (ctx->verbose)
-			fprintf(stderr, "wg0 send/connect path: %s\n",
-				strerror(errno));
-		break;
-	}
-
-	close(fd);
-	return NULL;
-}
-
-static int run_round(int prog_fd, int ifindex, int verbose, int round_usec,
-		     const char *wg_target, int wg_port)
-{
-	struct tls_send_ctx ctx[SEND_WORKERS];
-	pthread_t threads[SEND_WORKERS];
-	pthread_t drains[SEND_WORKERS];
-	pthread_t wg_threads[WG_WORKERS];
-	struct wg_send_ctx wg_ctx[WG_WORKERS];
-	atomic_int start = 0;
-	atomic_int drain_stop = 0;
-	atomic_int wg_stop = 0;
-	int link_fd;
-	int created = 0;
-	int drain_created = 0;
-	int wg_created = 0;
-
-	for (int i = 0; i < SEND_WORKERS; i++) {
-		if (setup_tls_ctx(&ctx[i], verbose) < 0)
-			break;
-		ctx[i].start = &start;
-		ctx[i].drain_stop = &drain_stop;
-		if (pthread_create(&threads[i], NULL, huge_send_worker, &ctx[i])) {
-			close_tls_ctx(&ctx[i]);
-			break;
-		}
-		created++;
-	}
-
-	if (!created)
-		return -1;
-
-	atomic_store(&start, 1);
-	usleep(DEFAULT_ATTACH_DELAY_USEC);
-
-	link_fd = link_tcx(prog_fd, ifindex);
-	if (link_fd < 0) {
-		perror("bpf(BPF_LINK_CREATE TCX)");
-		for (int i = 0; i < created; i++) {
-			shutdown(ctx[i].tx, SHUT_RDWR);
-			shutdown(ctx[i].rx, SHUT_RDWR);
-			pthread_join(threads[i], NULL);
-			close_tls_ctx(&ctx[i]);
-		}
-		return -1;
-	}
-
-	if (verbose)
-		fprintf(stderr, "attached link fd %d\n", link_fd);
-
-	for (int i = 0; i < WG_WORKERS; i++) {
-		wg_ctx[i].stop = &wg_stop;
-		wg_ctx[i].target = wg_target;
-		wg_ctx[i].port = wg_port;
-		wg_ctx[i].verbose = verbose && i == 0;
-		if (pthread_create(&wg_threads[i], NULL, wg_send_worker, &wg_ctx[i]))
-			break;
-		wg_created++;
-	}
-
-	for (int i = 0; i < created; i++) {
-		if (pthread_create(&drains[i], NULL, drain_worker, &ctx[i]))
-			break;
-		drain_created++;
-	}
-
-	usleep(round_usec);
-	atomic_store(&drain_stop, 1);
-	atomic_store(&wg_stop, 1);
-
-	for (int i = 0; i < created; i++) {
-		if (verbose)
-			fprintf(stderr, "sender outq before shutdown: %d, drained: %lu\n",
-				get_outq(ctx[i].tx), ctx[i].drained);
-		shutdown(ctx[i].tx, SHUT_RDWR);
-		shutdown(ctx[i].rx, SHUT_RDWR);
-	}
-
-	for (int i = 0; i < created; i++) {
-		pthread_join(threads[i], NULL);
-		if (verbose) {
-			errno = ctx[i].err;
-			report_result("sendto(huge length)", ctx[i].ret);
-			fprintf(stderr, "sender outq after send: %d\n",
-				get_outq(ctx[i].tx));
-		}
-	}
-	for (int i = 0; i < drain_created; i++)
-		pthread_join(drains[i], NULL);
-	for (int i = 0; i < wg_created; i++)
-		pthread_join(wg_threads[i], NULL);
-
-	for (int i = 0; i < created; i++)
-		close_tls_ctx(&ctx[i]);
-
-	close(link_fd);
-	return created;
-}
-
-static int run_child_rounds(int prog_fd, int ifindex, int rounds, int round_usec,
-			    int verbose_child, const char *wg_target, int wg_port)
-{
-	for (int i = 0; i < rounds; i++) {
-		if (run_round(prog_fd, ifindex, verbose_child && i == 0,
-			      round_usec, wg_target, wg_port) < 0)
-			return 1;
-	}
-	return 0;
-}
-
-int main(int argc, char **argv)
-{
-	struct rlimit rlim = {
-		.rlim_cur = RLIM_INFINITY,
-		.rlim_max = RLIM_INFINITY,
-	};
-	struct ifreq ifr;
-	int tcp6[2] = {-1, -1};
-	int ifindex = 0;
-	int prog_fd = -1;
-	int rounds = 10;
-	int redirect_ifindex = CLONE_REDIRECT_IFINDEX;
-	int bpf_action = TC_ACT_SHOT;
-	int round_usec = DEFAULT_ROUND_USEC;
-	int children = 1;
-	const char *wg_target = WG_DEFAULT_TARGET;
-	int wg_port = WG_DEFAULT_PORT;
-	char redirect_name[IFNAMSIZ];
-
-	if (argc > 1) {
-		rounds = atoi(argv[1]);
-		if (rounds <= 0)
-			rounds = 10;
-	}
-	if (argc > 2) {
-		redirect_ifindex = atoi(argv[2]);
-		if (redirect_ifindex <= 0)
-			redirect_ifindex = CLONE_REDIRECT_IFINDEX;
-	}
-	if (argc > 3)
-		bpf_action = atoi(argv[3]);
-	if (argc > 4) {
-		round_usec = atoi(argv[4]);
-		if (round_usec <= 0)
-			round_usec = DEFAULT_ROUND_USEC;
-	}
-	if (argc > 5) {
-		children = atoi(argv[5]);
-		if (children <= 0)
-			children = 1;
-	}
-	if (argc > 6)
-		wg_target = argv[6];
-	if (argc > 7) {
-		wg_port = atoi(argv[7]);
-		if (wg_port <= 0)
-			wg_port = WG_DEFAULT_PORT;
-	}
-
-	setrlimit(RLIMIT_MEMLOCK, &rlim);
-	signal(SIGPIPE, SIG_IGN);
-	if (setup_syz_memory() < 0)
-		return 1;
-	fprintf(stderr, "mapped syz executor region at %p\n", syz_mem);
-
-	fprintf(stderr, "creating TCP6 socket pair\n");
-	if (make_tcp_pair(AF_INET6, tcp6) < 0) {
-		perror("make_tcp_pair(AF_INET6)");
-		return 1;
-	}
-
-	memset(&ifr, 0, sizeof(ifr));
-	strncpy(ifr.ifr_name, "lo", IFNAMSIZ - 1);
-	if (ioctl(tcp6[1], SIOCGIFINDEX, &ifr) < 0) {
-		perror("ioctl(SIOCGIFINDEX lo)");
-		return 1;
-	}
-	ifindex = ifr.ifr_ifindex;
-	fprintf(stderr, "lo ifindex for TCX attach: %d\n", ifindex);
-	fprintf(stderr, "clone_redirect target ifindex: %d\n", redirect_ifindex);
-	fprintf(stderr, "BPF post-clone action: %d\n", bpf_action);
-	if (ifindex_exists(tcp6[1], redirect_ifindex, redirect_name,
-			   sizeof(redirect_name)))
-		fprintf(stderr, "clone_redirect target device: %s\n", redirect_name);
-	else
-		fprintf(stderr, "clone_redirect target ifindex is not present\n");
-	try_set_if_up(tcp6[1], ifindex);
-	try_set_if_up(tcp6[1], redirect_ifindex);
-	try_set_txqlen(tcp6[1], "lo", 1000);
-	try_set_root_qdisc(ifindex, "pfifo_fast");
-	if (ifindex_exists(tcp6[1], redirect_ifindex, redirect_name,
-			   sizeof(redirect_name)))
-		try_eql_enslave(tcp6[1], redirect_name, "lo");
-	try_set_netem_delay(redirect_ifindex, DEFAULT_NETEM_USEC);
-
-	fprintf(stderr, "loading sched_cls clone_redirect program\n");
-	prog_fd = load_clone_redirect_prog(redirect_ifindex, bpf_action);
-	if (prog_fd < 0) {
-		perror("bpf(BPF_PROG_LOAD)");
-		return 1;
-	}
-
-	fprintf(stderr, "running %d children, %d rounds each, %d TLS workers, %d WG workers, %dus hold\n",
-		children, rounds, SEND_WORKERS, WG_WORKERS, round_usec);
-	fprintf(stderr, "wg0 target: [%s]:%d\n", wg_target, wg_port);
-	for (int i = 0; i < children; i++) {
-		pid_t pid = fork();
-
-		if (pid < 0) {
-			perror("fork");
-			return 1;
-		}
-		if (pid == 0) {
-			int ret = run_child_rounds(prog_fd, ifindex, rounds,
-						   round_usec, i == 0,
-						   wg_target, wg_port);
-
-			_exit(ret);
-		}
-	}
-
-	for (int i = 0; i < children; i++) {
-		int status;
-
-		if (wait(&status) < 0) {
-			perror("wait");
-			return 1;
-		}
-		if (WIFSIGNALED(status))
-			fprintf(stderr, "child died from signal %d\n",
-				WTERMSIG(status));
-		else if (WEXITSTATUS(status))
-			fprintf(stderr, "child exited with status %d\n",
-				WEXITSTATUS(status));
-	}
-
-	fprintf(stderr, "tls iterations: %lu\n", atomic_load(tls_iterations));
-	fprintf(stderr, "wg iterations: %lu\n", atomic_load(wg_iterations));
-	fprintf(stderr, "done\n");
-	return 0;
-}
