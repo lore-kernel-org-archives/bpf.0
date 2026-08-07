@@ -1,65 +1,65 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9A7153BE9
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 09:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3853F328F
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 09:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786096271; cv=none; b=aOWCf1G7zMh/MIxjK1bnkx5DtdsQcz9pczf4B3URIWvmjYcXNKtDfiJOzzh1vb+aT97W8KRZOYZAGnZ5tBdGYNXcW9UVeHl07IcRJzWieciXocSdhimB57gSh0ea65xwhfvGPovt4ivyk/I7dVsgBpI1jLbGz25yYlqxNP7eZBQ=
+	t=1786096594; cv=none; b=PjsW5kDZX6zIuAjCRp7+e+5KtFHOQHvnjQwpe87hJBC1NLjK+FSfULySGx4a085sU86cq8BZhDGPmnDnggkzJC6IY+7ogtfl7ATeCptZmn79xRpaF6fd1NpNQMMpFSORBUVK567mK32zz9zB10UZvG3V0XY4ZorCDjVR6LPSx7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786096271; c=relaxed/simple;
-	bh=kLIJ7ESzSbgSa7C7U7LBT9Ad+YF0VtcMzSfWUdwBSsg=;
+	s=arc-20240116; t=1786096594; c=relaxed/simple;
+	bh=pHcKBItI/RhnxUOvGh6d9V055g2u12YM9zksCV64/q8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fcvIETMfta7VqUP05J/bbisjEFM33gdHoBJPFG+WSPC+0HwbJpqwhbk6aTjhktGeOYvVpFXzWGnZzK45N24TZO/WuyJyt0OsOJLAKsLZ5tU2GSslCWeZSjuL1EsmWsf/WXirKm3S5M0CLo8DAxL1ut+TAek/IES15Vyz4pb5/2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r79zyM5J; arc=none smtp.client-ip=209.85.128.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vd3NEi+0lFzaL/z+Tvv05i0jXRspe9MYyJiFYMjwqduHdY276sY4ywdTbt19nfvXs5Nfx4/JzLMxjFhSzf7RtE8dfTrJyU6P+cllwGYpckC8DMzcvyn/e8dcZOD3PMK/apHcEdLhcUQPDkrZQclbGLqKlf7XnAL+jArb/tMTMGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F7onI94P; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r79zyM5J"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4954dff6536so23156535e9.0
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 02:51:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F7onI94P"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-476a130c138so2749229f8f.0
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 02:56:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786096268; x=1786701068; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CK5aAlE2gXWUQMLhZXJtBxJFs/yXRK0ivXNCpOMa24I=;
-        b=r79zyM5JQ2IYlFzg++2oapCcw694JrZSBpghxHSyd70xbL5LmQHxtvfAC+1bOUi3FJ
-         9bNGYpvH1ViQiR4zYULRKXlSgtTwnpZTBtnaf5AkOLdyMDI6dCoKFE0MZHhssjt/n5ir
-         Ja9AGChwbDtTYGxXNLtM/gxCdmatW17pejVM5EWqk6DaANuFLyTlfQBPqi+efs7+YzLv
-         /3hnwz+CRK9ERucw3b23Uq+VsYXDuRAqL0Qub68eXSm8GDaYzkdmPEIF27XlyGw/sv7v
-         JFThhCDX/ixs2Hapk6Rftk4/m1JdxBwEzN6CggyIRnRvwQqu7Pl2FMF+ufPVrfkXjyzT
-         11pA==
+        d=gmail.com; s=20251104; t=1786096591; x=1786701391; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=um5pD+hW6W0GLGw7qf+tQa0Ejl1SpwV3n1kaTYglr68=;
+        b=F7onI94P5enQ6gjNY1FV8naKACvU2cLTwSwLlRkYtcz7m0wkt+4910Y2osy6Iybfc2
+         mmJ7/aSuBkKReyhhuEmutUoBuURw7RQjlSLSawrF/0eXyNXllQPVS2lDvpC4QzqEBg2A
+         8abRf6U5I7yc6XR2l9PYVCauifQ8TcTpeC27qHhtdNmkvGmnZ7P3P4V45LnioCyMz/VE
+         UQJyAqod02KPJgu7vnUlOsPZfjdrcuGNbHOy8LZDoelD8M1cfwR59ZQy2PLli386A7DK
+         k/UFBxIM6CEnQlBIlRSgcm0pjYYkJ6yecePVSA+RVtYIkzxSCijUr/lA9QZDH4PumhBb
+         W7/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786096268; x=1786701068;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=CK5aAlE2gXWUQMLhZXJtBxJFs/yXRK0ivXNCpOMa24I=;
-        b=AVav9hif5vSIoO0gpOrUu746HKtdti0lKRezIzFXm7STaQ69dbXd0k64HErGxCxQph
-         Yqa1m6OmI+l4wtyXqTOO5qo1h9wbFjfL8ElvK/mTEuXzVC+YYzl7TDh6Pd8WRHVv1+al
-         8xAZWKwI/i05vAkskmqEGfJnKbESA2X7xb0k2bPUmEZbn+Vry5xVnIadp2QI5aWUHGDF
-         bweY2KNPVun6pP0Ab0ZNOC3y6okBsvoEP5118rWQGqvDTYBBY9r1BHArBl31r13npsO2
-         VodhzyqyLLfU04Ny2nJ2EdKBWfbIWfKw2hX3F1n1FrQ4MqYL66t9V1jmvzf9/7zZDjcP
-         4/XQ==
-X-Gm-Message-State: AOJu0YyoAvOK7MVU/pT3wT+F4MzLwxuq13feTnnMSlBI9kCMjjuKecwR
-	kMCPYwk+kF/WLt2kE1Zhdb0kDJbJ7Hc2GhFUdEDHfD9x2qOYhU05oyGI
-X-Gm-Gg: AR+sD121bXsyWMjd9Xlx4IO++sUGycC7oHjA5N6Qy6owEGq3F6khWS3pf8VSLL5pJeJ
-	y8jd2SFTgXEjSuCBn2fisktzX+M/VIrRP58BUEVNLORNX5MjSMr+uvrUWBPlTBvnEQHhrh4KR5Z
-	P6zsr6QjL4RcsXmGhw0IUzZDeHE0tg3WN3cjEbXzYFyHOPoQ5qkaRQNM2s6gL642W2p8AFzvtBh
-	3iFa0X2FEn8bmIhAUEMhwGj56HSkl1Ix7KbfLC/8j4BTxZBf2afgJUAqzx/OMisTd04NBrQ/PGJ
-	IYe6mrpCGm302G3fcr8uxfiaQuxMBmE72YQSNmKNoTaDNTgquVgMkqkrCVaG4II/KDVbqQy9AoR
-	eR1zyimS8YzGXQsm2WjuLxIBbijL2Qojhittn80nakoVXAFm0XTT283zOEDtXecLzPygfjQ92Y7
-	EAdV4QwNoDyDwpoJH7095Q0HnqRf+S9IDPWUUYgxhw4XwffTcF1KdfOhZJKPc/UB6Czi3mD7aEQ
-	cneUHs35Zky9o65khDI
-X-Received: by 2002:a05:600c:a47:b0:499:484a:7644 with SMTP id 5b1f17b1804b1-49959e2eb00mr98245435e9.9.1786096268249;
-        Fri, 07 Aug 2026 02:51:08 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1786096591; x=1786701391;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=um5pD+hW6W0GLGw7qf+tQa0Ejl1SpwV3n1kaTYglr68=;
+        b=UxHiwaRX0b7MbLfAbOQ14FHOm6meuBz3NGmKoyvBjBcLW/x/QL4VHEdZQGTXQthksp
+         M7yX76tI8ZpP680RnYRuVztA8JRYo2usGPhRn5WQuPsGmg5NrBd7B1m0ACnlVCEeU1s8
+         VamV7AUH6JYXSiLGIIp0K6XMSddxfpgoHS+lSmrHqbCEpe3M8R4nNrqCP03/o+mL1n01
+         2FSy4ga6r1NiplS+qdvSMCd7OlUsL539H+pI/EkFNycN/VzbEISvbOwKyUzz2Xt8/RSs
+         SPyOhYMpDc6pMAsXiMrrjEiaJwV2DXsmaIm5diarvErFTB7hbLIOC8vRJRPNLew48bXY
+         CJfA==
+X-Gm-Message-State: AOJu0YzRATVFMDdFD6es2wtrmcW2ET94IEIQsmCc5e52eZpc8Czt0JSU
+	QRiiOZhEkqoQVTFzncgnAqvwfUiFrnImXp5nR2Vi0KfQMCloySkyfErp
+X-Gm-Gg: AR+sD13JFts8l50+FzEKrXqBEoHkjujYkzrMPDvd+zwsCnJnLA2NJOIws0wjl56sNGD
+	LnoVnOPfiLbVdz7oZd4w50/UbcKeLhDDdMULWrgO14ay7eyRW9UX6sPt9mLb7iexYUdK2PdZhPM
+	whU3eZTrW+gYbtToC1uUGXSrQU2wJq/e5zP85myBfhdR8DlFded+A2bgexObxJHNvdw8uLsygSN
+	fSR6G9XE1IbXrNO1P/6GWAJzymKv25sQDs36wMQ1jrGHXo+qiTv8CQrwMq2EVg0tZhF0yYj50ad
+	jooBRrMMGfKoullBMBJRJ4qe51n8+0R5xxNkYz+EZDpOnewcMqd82eYBhSQnoSnYnJq1fegyRAS
+	SrF97SS/J1ofZD9q557HoP/5K+ZqAwPV4jHuQZnSDRCWmTgexBSohvOM8Ep0HYh9HOd62KS0agK
+	ZDlYwvXsQmQ3c9BQkz/Bo2qV/ETx/KFwy82N2mSukMR9LB5Gh5G4imjwCUoEFOawI6eSXHbJkog
+	fxlnNUuM/ViRjLa4oKy
+X-Received: by 2002:a05:6000:22c9:b0:47f:e7c8:3fe9 with SMTP id ffacd0b85a97d-47ffd15cb0fmr12400790f8f.0.1786096590964;
+        Fri, 07 Aug 2026 02:56:30 -0700 (PDT)
 Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995ea27b29sm31138585e9.11.2026.08.07.02.51.07
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-480021e8c5asm4830224f8f.18.2026.08.07.02.56.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 02:51:07 -0700 (PDT)
-Date: Fri, 7 Aug 2026 11:51:05 +0200
+        Fri, 07 Aug 2026 02:56:30 -0700 (PDT)
+Date: Fri, 7 Aug 2026 11:56:28 +0200
 From: Mahe Tardy <mahe.tardy@gmail.com>
 To: Jiayuan Chen <jiayuan.chen@linux.dev>
 Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
@@ -69,80 +69,57 @@ Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
 	pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org,
 	sdf.kernel@gmail.com, ameryhung@gmail.com, kuniyu@google.com,
 	memxor@gmail.com
-Subject: Re: [PATCH bpf-next v4 1/5] net: Add connect_socket() helper
-Message-ID: <anWqiWgSNWARKBRi@gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/5] bpf: Add ksock kfuncs
+Message-ID: <anWrzACWnpfAwNJo@gmail.com>
 References: <20260806182234.380833-1-mahe.tardy@gmail.com>
- <20260806182234.380833-2-mahe.tardy@gmail.com>
- <05084a53-a1a4-4e60-bdd7-6fd16ef6a029@linux.dev>
+ <20260806182234.380833-3-mahe.tardy@gmail.com>
+ <6a86c972-99af-4e35-9392-8776d57dbc9a@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <05084a53-a1a4-4e60-bdd7-6fd16ef6a029@linux.dev>
+In-Reply-To: <6a86c972-99af-4e35-9392-8776d57dbc9a@linux.dev>
 
-On Fri, Aug 07, 2026 at 09:53:51AM +0800, Jiayuan Chen wrote:
+On Fri, Aug 07, 2026 at 11:08:43AM +0800, Jiayuan Chen wrote:
 > 
 > On 8/7/26 2:22 AM, Mahe Tardy wrote:
-> > Add a helper that connects an existing socket while invoking the LSM
-> > hook. Reuse it in __sys_connect_file() to avoid duplicating the connect
-> > logic. Other socket operations have equivalent helpers that trigger the
-> > appropriate LSM hooks that can be reused, this one was the only one
-> > missing.
-> > 
-> > Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
-> > ---
-> >   include/linux/socket.h |  2 ++
-> >   net/socket.c           | 32 ++++++++++++++++++--------------
-> >   2 files changed, 20 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/include/linux/socket.h b/include/linux/socket.h
-> > index 2a8d7b14f1d1..8964528e3823 100644
-> > --- a/include/linux/socket.h
-> > +++ b/include/linux/socket.h
-> > @@ -461,6 +461,8 @@ extern struct file *__sys_socket_file(int family, int type, int protocol);
-> >   extern int __sys_bind(int fd, struct sockaddr __user *umyaddr, int addrlen);
-> >   extern int __sys_bind_socket(struct socket *sock, struct sockaddr_storage *address,
-> >   			     int addrlen);
-> > +extern int connect_socket(struct socket *sock, struct sockaddr_storage *addr,
-> > +				int addrlen, int flags);
-> >   extern int __sys_connect_file(struct file *file, struct sockaddr_storage *addr,
-> >   			      int addrlen, int file_flags);
-> >   extern int __sys_connect(int fd, struct sockaddr __user *uservaddr,
-> > diff --git a/net/socket.c b/net/socket.c
-> > index 63c69a0fa74e..126a674f534d 100644
-> > --- a/net/socket.c
-> > +++ b/net/socket.c
-> > @@ -2103,6 +2103,20 @@ SYSCALL_DEFINE3(accept, int, fd, struct sockaddr __user *, upeer_sockaddr,
-> >   	return __sys_accept4(fd, upeer_sockaddr, upeer_addrlen, 0);
-> >   }
-> > 
-> > +int connect_socket(struct socket *sock, struct sockaddr_storage *address,
-> > +			 int addrlen, int flags)
-> > +{
 > 
 > 
-> Please fix the checkpatch warning if revise
+> [...]
 > 
-> CHECK: extern prototypes should be avoided in .h files
-> #27: FILE: include/linux/socket.h:464:
-> +extern int connect_socket(struct socket *sock, struct sockaddr_storage
-> *addr,
+> > +	return ret;
+> > +}
+> > +
+> > +__bpf_kfunc_end_defs();
+> > +
+> > +BTF_KFUNCS_START(ksock_init_kfunc_btf_ids)
+> > +BTF_ID_FLAGS(func, bpf_ksock_create, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
+> > +BTF_ID_FLAGS(func, bpf_ksock_connect, KF_SLEEPABLE)
+> > +BTF_KFUNCS_END(ksock_init_kfunc_btf_ids)
+> > +
+> > +static const struct btf_kfunc_id_set ksock_init_kfunc_set = {
+> > +	.owner = THIS_MODULE,
+> > +	.set = &ksock_init_kfunc_btf_ids,
+> > +};
+> > +
+> > +BTF_KFUNCS_START(ksock_kfunc_btf_ids)
+> > +BTF_ID_FLAGS(func, bpf_ksock_release, KF_RELEASE)
+> > +BTF_ID_FLAGS(func, bpf_ksock_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> > +BTF_ID_FLAGS(func, bpf_ksock_send, KF_SLEEPABLE)
+> > +BTF_KFUNCS_END(ksock_kfunc_btf_ids)
+> > +
+> > +BTF_ID_LIST_SINGLE(bpf_lsm_socket_sendmsg_id, func, bpf_lsm_socket_sendmsg)
+> > +
 > 
-> CHECK: Alignment should match open parenthesis
-> #28: FILE: include/linux/socket.h:465:
-> +extern int connect_socket(struct socket *sock, struct sockaddr_storage
-> *addr,
-> +                int addrlen, int flags);
 > 
-> CHECK: Alignment should match open parenthesis
-> #41: FILE: net/socket.c:2107:
-> +int connect_socket(struct socket *sock, struct sockaddr_storage *address,
-> +             int addrlen, int flags)
+> I guess bpf_lsm_socket_sendmsg will not be compiled when CONFIG_BPF_LSM is
+> disabled
 > 
 
-Yep fixed for next revision, thanks.
+Yes indeed we can guard this with CONFIG_BPF_LSM as it might produce a
+warning on building with CONFIG_BPF_LSM disabled. Thanks.
+
