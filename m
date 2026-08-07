@@ -1,164 +1,156 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551CE3264D1
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 14:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786112146; cv=pass; b=CdPd0HMppWBnTtSX6ww0GVMBa9/36jtAh+iroNu+ggQNZeGtcF9x6IhlR5z9wjfySe73v9hzUZlecFr/ksjdongINAgrQNxOYbr1XQ0e/t91v1/xk1ePo6VB9ggd6JOQEQf9Oqp1ZOV6f2GTlqLZB2kBSVbGC81a5QM8BEAcG1E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786112146; c=relaxed/simple;
-	bh=8nIgFryYz2DrargIZD0GNMzp+E0YqW98PtHpUo3w5m4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tEmSi5emdt1WwdwfjM3lLja7qvlO1mJj8Ee7/kPaSnycv9tye5j3RgBko1rgzYLv/PXFcTHltPiXJxJXNN0VrCYI+cj/zT4PSvgLWj6Cmix/OUnUmgGNQaYrrQANhd0Cck4uepprRldersnHZj0DBGhU2xhYl9D5Pu5FEw1UqT0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vxqrp1H3; arc=pass smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD543033E7;
+	Fri,  7 Aug 2026 14:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786112176; cv=none; b=G55n1SvltBvungufhmBW+XoAGu+XAWTC3Sra8iwkVLW3MAfx7K1VtMAWAoUfCYIxZ77zKXNoKaBmK7V7JNDOlnzqzM2NjkCLagXpUMltdGYKJA03B2tNBm+wDPChfNFDUK38M/r9aKV2b71RcPzuPSPGmPcKZAB2Eq0bxSL5f48=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786112176; c=relaxed/simple;
+	bh=vt7CtlvPHiafxvaUEQCQjUS6XQYyYcYgu7lMoh35Ws4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BJ/UaLBXQpphCd5bDK94kFYRoU98Inou1RDJy7pLPU9N/63bez05YfZeuOSpxekIZvx7FMK2/sd/pNpfKqX3SMRoO3B7Ov/iDj09z7mJkxETRlzKIJ+7zm2JTwfCC2RcgLSNu2554X4o4imvEN6yaL9K0tfIoENAfOWtPzK01VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S9XXTeWe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vxqrp1H3"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c15c42a45adso313093266b.0
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 07:15:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786112135; cv=none;
-        d=google.com; s=arc-20260327;
-        b=E8k/G6WNlqk6OkB4p2Vzc/wPNdyalN9FieRaCRGtEXOLNURJ+wS0GViV7WFMzTyrY7
-         Wr5HBRinxZcwMBtpuXVS+BqzBhioXJ/Bw0oj+zTnSK4MSgUhgva01Y7O5u1y8szqmFSd
-         tDLFsIQfJGZt4XzFEooV/+zdu5FxknQHHTZu1rHTW4NuXC+dAVF+3RFpwZDuMhvHJclF
-         rPVCvzIUdtRYCeNGy3UkUmt66RYpetQI3X1RzJNZTpiM/g6bXbTXTjykeSf7eFn9Utmf
-         oNMQIOj32b5F8EbNSfT2t0OdZVxSCZUBoDMydx329VTqQqCm0KH1MOYcKsF7B46+c6rC
-         x/bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=MzS5XFrgTuiPjNnu38gbVxPmnnD5h/HbpvqKJVfoMMI=;
-        fh=J/qLS+48N0gD8/ODjNds/7rrIHM7COTr0B4SrJcA4yI=;
-        b=k0lrI0mp2gTs6aHMWHc9yCJcnjfbWXFEsoATDz8UZoTIwdjkKb1CV7K7lFPVswx1oR
-         nfSr2RAbuA4yrLwEau7Ig9EltLv1u2Dubr2VOYwlhkP6GZ8LUZmQ7f4iJgFSnDVrPq9V
-         sEtkaEODI/ON7FfovYyyructSiQa5TVrhjqwFnFWQgLEq3ml/dUKFzAMDkQVP5ikVw8G
-         PfnkbY8p7UADGFT4fcq0AeOJMLBIIr7/FKYgb0TFdYjK42V1eL0H+SywnHg+jT/NvfOK
-         U/vDUjvH6CTJnIDhZp4JhHjTW8eQJospf8pNQpfKu0zFBEqF8RCHtpRNRQXrXhsJTrID
-         ia0g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786112135; x=1786716935; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=MzS5XFrgTuiPjNnu38gbVxPmnnD5h/HbpvqKJVfoMMI=;
-        b=Vxqrp1H3W7lDss+3/JdOl8YpDjax42CqChmA8tp84UAvP5jrpNRTVzvrdklCi3hlq9
-         aqdkIGC0jMlPRwyEWktr1QlsqhR7bbCnQ3XGjsHSuJ77RKohnyUc9ObKajFp2lfPCsw7
-         YuhAhTDZ8TE6CljHcBlNLz32EgW2YC0Tl1hnYSNy1rN++3RbYydMCWbirw6ljPTyKZJV
-         t8ypbtuzfC9mvLl4fIhCi26bmqcrgfeBVNqhPzLsNDMQ/cO1klvovGlN5OuGenmtJanj
-         Jm32TEx1fxBT5u3Ow7EGRB023C+B//BkstwuClXXIZHCZ/H4RMJJw1dZ7CfPdxRizZIV
-         LAHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786112135; x=1786716935;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MzS5XFrgTuiPjNnu38gbVxPmnnD5h/HbpvqKJVfoMMI=;
-        b=tFgq9jXseZGu1AwrP5mYj9KzV4vb7uXum+M3uzaHWa/0nxixGRcBM2r2OV8jQ6l3eQ
-         lwn2SG6RCUEaj84pMioYAshqXQozesv+HugRbvdufoKNfGCV1+fa9sDY3/5sLwTKs+tt
-         c00S3jTwwPxZcbqjjFSKQPJ/dZ3ldBNmSR51XGBYP9Pz4iJFPiP46wFxVfccPzMkm2sE
-         UumDaAvhc8kn1ptS4GZZLt3sLE24BBSU1ugs5mEgqowvCAxqcZpyFLpPiXsy8aNk9Ey1
-         gjeAFpewPhW5XZYtSvghIVMlAAXYn7C0dNrVLJN6vx0eZxy0RtIqj6U0kKyzibDmUQxB
-         lbmw==
-X-Forwarded-Encrypted: i=1; AHgh+RpkgTlWKV3RnI9hnRyfWDIxPhnQ/7rt5tbbu4HtwbZb+WjiIz1k1uFL5WsP3lgur3aJX+Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywroa+aSJNiRQOmbVT0bdlJOX3gQdBM+V0pJVfHBQpP1NZy0onC
-	ZkadJiG+aKrW8p5CgYsgLUKheyTSN8mUGjq/Py5zb/hFz3Jeu8o1M1dhZ6B2aNYe8qSeAOG57zf
-	8UiGGFwcx3av81NbqDVyBxyUpsfBe4ok=
-X-Gm-Gg: AR+sD10BTOzp9qpX15INWS7fl8eqIdd/hqRtXns8rzLDwwJfMQFsAEMdGX+/KhnYBJR
-	otDFFhX6P4U95LJ6wukhNlGKU0qb+ZvRRxCctwIyl7etE1iXoKzpKi2DqqCrmOmNEAwhhyINKHg
-	rIQjUvjbfI8MYCNGTdgJbtPiOVgYJw45OoVNIfj/PYz+0R8iqKJYxn+VB41FWXXmGSHRdJaC6hq
-	NyuwYQ6Z5w/XZlT/eCUDEbhYPgHJgHe908iozxpXXMyG9lqh9EvLUiQzg3ldP0cQVuM4bj4pxB6
-	Tl7g2b8RPOMxoOdyLLMZsMja3fgH5DfvTkGxeIwZVPrWXBJv3YqttnOyMRQq
-X-Received: by 2002:a17:907:a606:b0:c1f:df40:1d83 with SMTP id
- a640c23a62f3a-c2057e093demr807232966b.5.1786112134646; Fri, 07 Aug 2026
- 07:15:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S9XXTeWe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43E201F000E9;
+	Fri,  7 Aug 2026 14:16:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786112166;
+	bh=hB/l2YvBvxjMIA9JdWCc7k0OtEyzmMSFvJ9NHM4YRdU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=S9XXTeWecSYQ+8o9y1TzyLapKn8ui7yrzLPsJJuMb+VI4OmvXf5FGC0BMf1eyjdWt
+	 ZNWT9FkXHpyuGeVPclWOq+kogd6CeKIIZ0cckRqKzfWD0Xyl+42lbATDysXj2+2BsK
+	 hdJaY9FIAbAWDpOUb4lBf0yHxvQ0mXu3mN/nQ6/Oua+sdFEUZpt6ObQ48v4wBBlP6z
+	 OmEjeDSsa/UN+hOATTlFRHD99FwxZB9r7ZmnwbM+zfCVpdtbRGEs71mLGuB/ATzyP2
+	 yKcLzXJ1SqLsKvNlHn4dNPD5NnqDvKY3wqLnHV7CRu0/5hqE07AQBgXgolJX/kB6Vm
+	 ZkxtCB0gTCOwA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC 2/5] mm/slab, kfence: support kfence objects in
+ kfree_nolock()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?Vmxhc3RpbWlsIEJhYmthIChTVVNFKQ==?= <vbabka@kernel.org>
+Cc: linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, media-ci@linuxtv.org, bpf@vger.kernel.org
+In-Reply-To: <20260807-kfree_nolock_kmalloc-v1-2-ba993cbf7a60@kernel.org>
+References: <20260807-kfree_nolock_kmalloc-v1-0-ba993cbf7a60@kernel.org>
+ <20260807-kfree_nolock_kmalloc-v1-2-ba993cbf7a60@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 07 Aug 2026 14:16:05 +0000
+Message-Id: <20260807141606.43E201F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260806135224.3267890-1-puranjay@kernel.org> <20260806135224.3267890-2-puranjay@kernel.org>
- <20260807093951.GS776954@noisy.programming.kicks-ass.net>
-In-Reply-To: <20260807093951.GS776954@noisy.programming.kicks-ass.net>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Fri, 7 Aug 2026 15:15:21 +0100
-X-Gm-Features: AUfX_mwZEiydqK_HU1_ia3MF27eq51puWHtYC7ZlluNhh2_0hfgI6nV6cPYk91Q
-Message-ID: <CANk7y0hq3w+bRNmuT1PWvhZb=ob=6Y5keN7-25vRSbx5nxakNA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/3] perf/core: Fix NULL pmu_ctx passed to pmu->sched_task()
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Usama Arif <usama.arif@linux.dev>, 
-	Will Deacon <will@kernel.org>, Anshuman Khandual <anshuman.khandual@arm.com>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 7, 2026 at 10:40=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Thu, Aug 06, 2026 at 06:52:21AM -0700, Puranjay Mohan wrote:
-> > perf_pmu_sched_task() returns early when cpuctx->task_ctx is set, and
-> > cpc->task_epc is only non-NULL while a task context is scheduled in on
-> > this CPU. __perf_pmu_sched_task() therefore always passes NULL:
-> >
-> >   Unable to handle kernel NULL pointer dereference at virtual address 0=
-0
-> >   pc : armv8pmu_sched_task+0x14/0x50
-> >   Call trace:
-> >    armv8pmu_sched_task+0x14/0x50 (P)
-> >    perf_pmu_sched_task+0xac/0x108
-> >    __perf_event_task_sched_out+0x6c/0xe0
-> >
-> > Pass &cpc->epc instead. __perf_init_event_pmu_context() sets its ->pmu
-> > when the PMU is registered; ->ctx stays NULL until a CPU-wide event
-> > attaches. That is enough here because armv8pmu_sched_task() is the only
-> > in-tree implementation that dereferences the argument at all, and it
-> > only reads ->pmu. The oops therefore needs BRBE, which arrived in v6.17=
-.
-> >
-> > Fixes: bd2756811766 ("perf: Rewrite core context handling")
-> > Cc: stable@vger.kernel.org
-> > Acked-by: Usama Arif <usama.arif@linux.dev>
-> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> > ---
-> >  kernel/events/core.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > index b282de3e7d7ca..9815894b67e77 100644
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -3907,7 +3907,8 @@ static void __perf_pmu_sched_task(struct perf_cpu=
-_pmu_context *cpc,
-> >       perf_ctx_lock(cpuctx, cpuctx->task_ctx);
-> >       perf_pmu_disable(pmu);
-> >
-> > -     pmu->sched_task(cpc->task_epc, task, sched_in);
-> > +     pmu->sched_task(cpc->task_epc ? cpc->task_epc : &cpc->epc,
-> > +                     task, sched_in);
->
-> This can be written like: cpc->task_epc ?: &cpc->epc.
->
-> However, if cpc-task_epc is always NULL, then this all seems like an
-> overly complicated way of writing: &cpc->epc. What gives?
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Nothing, you're right, it should just be &cpc->epc.
+New issues:
+- [High] Double-freeing a KFENCE object via kfree_nolock() causes critical =
+list corruption (llist cycle or rcu_head overwrite), turning a detectable b=
+ug into an unrecoverable crash.
+- [Medium] kfree_nolock() silently bypasses KFENCE's invalid free detection=
+ for offset pointers, stripping the invalid offsets during deferral.
 
-I wrote the ternary expecting patch 2 to make cpc->task_epc reachable
-here, but it does not.
+Pre-existing issues:
+- [High] KFENCE fails to safely catch double-frees for SLAB_TYPESAFE_BY_RCU=
+ caches, corrupting RCU and freelists.
+--
 
-Will fix it in v7.
+--- Patch [2]: [PATCH RFC 2/5] mm/slab, kfence: support kfence objects in k=
+free_nolock() ---
+commit c37e10ff24a4e2a898c52d16f3e89a13a643b486
+Author: Vlastimil Babka (SUSE) <vbabka@kernel.org>
 
-Thanks,
-Puranjay
+mm/slab, kfence: support kfence objects in kfree_nolock()
+
+This commit adds support for freeing KFENCE objects via kfree_nolock(). It
+defers the freeing to an irq_work context using an llist node, reusing the
+rcu_head space in kfence_metadata.
+
+> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> index 6577bd76954eb..42519d24687ff 100644
+> --- a/mm/kfence/core.c
+> +++ b/mm/kfence/core.c
+> @@ -1271,6 +1271,20 @@ void __kfence_free(void *addr)
+
+[Severity: High]
+This is a pre-existing issue, but does __kfence_free() safely handle double
+frees for SLAB_TYPESAFE_BY_RCU caches?
+
+It appears that if an already-freed object is passed, it blindly calls
+metadata_update_state() and call_rcu(&meta->rcu_head) without checking if
+the object is already freed.
+
+If the object is already in the RCU queue, this executes call_rcu() twice on
+the same rcu_head, corrupting the RCU list. If it was already fully freed,
+the state is forced back to RCU_FREEING, causing the subsequent callback to
+bypass the double-free check and corrupt the freelist.
+
+>  	}
+>  }
+> =20
+> +struct llist_node *kfence_obj_to_llnode(void *addr)
+> +{
+> +	struct kfence_metadata *meta =3D addr_to_metadata((unsigned long)addr);
+> +
+> +	return &meta->llnode;
+> +}
+> +
+> +void *kfence_llnode_to_obj(struct llist_node *llnode)
+> +{
+> +	struct kfence_metadata *meta =3D container_of(llnode, struct kfence_met=
+adata, llnode);
+> +
+> +	return (void *)meta->addr;
+> +}
+
+[Severity: Medium]
+Does this sequence bypass KFENCE's invalid free detection?
+
+When kfree_nolock(obj) receives an invalid KFENCE address, such as an offset
+pointer or redzone address, defer_free_kfence() calls kfence_obj_to_llnode()
+which drops the original invalid offset.
+
+Later, kfence_llnode_to_obj() reconstructs the pointer strictly as meta->ad=
+dr,
+which is the valid base address.
+
+This passes the reconstructed valid address to __kfence_free(), masking the
+original invalid pointer and preventing KFENCE from reporting the bug.
+
+[ ... ]
+
+> diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
+> index 1f618f9b0d12d..0fca1dc2c7941 100644
+> --- a/mm/kfence/kfence.h
+> +++ b/mm/kfence/kfence.h
+> @@ -58,7 +58,10 @@ struct kfence_track {
+>  /* KFENCE metadata per guarded allocation. */
+>  struct kfence_metadata {
+>  	struct list_head list __guarded_by(&kfence_freelist_lock);	/* Freelist =
+node. */
+> -	struct rcu_head rcu_head;	/* For delayed freeing. */
+> +	union {
+> +		struct rcu_head rcu_head;	/* For delayed freeing. */
+> +		struct llist_node llnode;	/* For kfree_nolock(). */
+> +	};
+
+[Severity: High]
+Can aliasing rcu_head and llnode risk list corruption on double frees?
+
+If a KFENCE object is double-freed via kfree_nolock() before the pending
+irq_work runs, llist_add() is called twice on the same llnode. This would
+create a circular linked list and an infinite loop in IRQ context.
+
+Additionally, for SLAB_TYPESAFE_BY_RCU caches, a double free via
+kfree_nolock() during the RCU grace period will locklessly overwrite
+meta->rcu_head.next via llist_add(), corrupting the active RCU callback lis=
+t.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807-kfree_nolo=
+ck_kmalloc-v1-0-ba993cbf7a60@kernel.org?part=3D2
