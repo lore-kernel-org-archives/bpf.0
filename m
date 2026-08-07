@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF5948A8D3
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 13:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C799442363
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 13:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786108048; cv=none; b=F2kuyvJugmMtffb2gdMjCDKo3NAGtz2Y59MGTaqjya4a5d/Z9mX7wSpDcEZ+Fg7sgXN39flM6hrmVw5qVWW+oFzCrCc2y4ufVvCdvlXsN8AG3xJi0PUPGbCebubw2krdG61C0kTH3WVqgWAiw4RD08Hhyd7YfaE3AVv5VTXvxwA=
+	t=1786108935; cv=none; b=OBl6lncZFGex+OVCCoRbzcVIzG4TZJScB3T48oNunqtNms1eV0gUVvlvx7PdJLwPMfifsXB8tfyKQOhZasySS28VQudE1Ta1LatNs8Z4FKU5OBsb4liWkZg36h1uFMDBGkn9FSZOO1oRke2Y2wn99PpwV0n3F5q+7/MGpSm/7Tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786108048; c=relaxed/simple;
-	bh=Bqkmn4aCSE2wRtBr9XJRJWfaJx/nJB68P+OhRW6iSMU=;
+	s=arc-20240116; t=1786108935; c=relaxed/simple;
+	bh=ArICWOVvCyChFSoEN4G98C4WdRthTy7HGWz7868J6es=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hC4UyQhi15b0Men4g77s0JfRgOcmLTuET8YdfpNFK+17tJmpuUrZ2+GUYojggnDn5psVZqVpXgB/yqF0Xu7NSv/9e6XgYztsY1o8RNRMo1ch+lXVoHQKi1O0/JZ/MOOYo8W6gtMTQNQSWs5nsRI5cLvecH3/ZUIawBqwgyN/MoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDusRyik; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=O35KUIql0jcjOWzTuV3+ymoksFTG8/fP7JcKwj7ikGzp+LtbGXXnhMW94jyhAM2qS9L/fCjGZKCUoqRgpBXfi9+qE0JSzZ01j2kZnvUGtDggRKvOiypc2Q5OaR1YU6i2IBu7lpu/Gyza3lW3uc1VMxy8KIuhOBvWl1Fyz3Gc99c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XRgv+NlS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDusRyik"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DFE51F000E9;
-	Fri,  7 Aug 2026 13:07:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XRgv+NlS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5845E1F000E9;
+	Fri,  7 Aug 2026 13:22:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786108041;
-	bh=kdP0Kcs8+qiQu00y+JcByKsd8A1eSUkpqnj9wNIRBTY=;
+	s=k20260515; t=1786108931;
+	bh=8xfXlCbOXeRYlk2+q6Vg+843GukcRUidW0Nl0fCYAhk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nDusRyikyPsaprDLKyTJoUWbt6qOXvURMyR0nbcmwIp0emqHGj3I6vmdTcgkhe5FF
-	 KG71iipaOYRy2gffMNXNKC1DMYUbotKc1UJ/DiTLBAAx5LxgpzIrNxUrbOGvU5n18v
-	 HSCMfGvzciDSixlYOnQqx7F+JVCfHombkcRJ6gkPnsg3Cv6BP8EVaQRa42z/xDxg7Z
-	 f3Q+DXupzGgo11bIbvUQCZjinN7twyIWF4GrlzvZalWp+4NfI3A98WMxTEH8DTguiZ
-	 BKyLbSsT4yFJOcoxbEC0GYizuYGE/xkAyyMCPfVtKatAT/nrtdbJVJnB6Iskyvk74J
-	 jPUo8H2Vw4YmQ==
+	b=XRgv+NlSsUhGAGFPapO7eD2DFl4vhYuOgKdzIK3ZO6gxgNXLdsFN2c7hX5JnJq8U9
+	 vvF+N+v8RcE5KDA7YuYw+RKSCkIETzSR1a/JXZL+vbJkxaIIeYvF8lspYftmzm5C9m
+	 +wCduaidvJbdXeRjaX+SbKFRF/VPxx+Y9RdAUMUXMwfiSiQrAPVF67I/Tu9ZEoreW0
+	 yyQWaQhgDJqaFj6tNY25XEWJGTCTBOC6nDfTh6jtQWp3Mbbx0jfit8VTWqqhHg8ul0
+	 w+phCYBdzzQlmdDQ8wW0Oj3q4Dw89K3c5O7tY14CpmaGp8MTx1Pkly16v7F3vafjV0
+	 5NkiOKJi0tgvw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 7.1.y v2] selftests/bpf: Add tests for sleepable
- tracepoint programs
+Subject: Re: [PATCH net v3 1/1] net: cap advertised IP tunnel headroom
 Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>
+To: "Zhiling Zou" <zhilinz@nebusec.ai>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260807-selftests-bpf-sleepable-v2-1-f7e6566f36a1@marliere.net>
-References: <20260807-selftests-bpf-sleepable-v2-1-f7e6566f36a1@marliere.net>
+In-Reply-To: <0ac01576f92412e8fa35cc3eb44336797a9d11d0.1786021595.git.zhilinz@nebusec.ai>
+References: <0ac01576f92412e8fa35cc3eb44336797a9d11d0.1786021595.git.zhilinz@nebusec.ai>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 13:07:20 +0000
-Message-Id: <20260807130721.8DFE51F000E9@smtp.kernel.org>
+Date: Fri, 07 Aug 2026 13:22:10 +0000
+Message-Id: <20260807132211.5845E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,81 +47,85 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [Critical] Test codifies a critical kernel crash bug due to incomplete ba=
-ckport of sleepable tracepoint support
+- [Critical] The patch introduces a setup-time cap for IP tunnel headroom t=
+o prevent 16-bit SKB header offset wrapping, but relies on `pskb_expand_hea=
+d()` to handle headroom growth at runtime. This fix is incomplete. An attac=
+ker can still wrap the 16-bit offsets at runtime by stacking thousands of t=
+unnels (e.g., using user namespaces) and bypassing the recursion limits via=
+ delayed queueing disciplines (`netem`). Since `pskb_expand_head()` adds pa=
+dded headroom (e.g., 64 bytes) that often exceeds the pushed header size (e=
+.g., 40 bytes for IPv6), the total accumulated headroom wraps the 16-bit of=
+fset (65535) well before `skb->len` reaches the 65535 IP maximum MTU limit =
+that would otherwise trigger fragmentation. When the 16-bit `mac_header` wr=
+aps to a small value, it points into the uninitialized memory of the headro=
+om allocated via `kmalloc_reserve`. Subsystems like `AF_PACKET` will then d=
+eliver this uninitialized kernel memory to userspace.
 --
 
---- Patch [1]: [PATCH 7.1.y v2] selftests/bpf: Add tests for sleepable trac=
-epoint programs ---
-commit d01560ee1bdaeec333977b1890fc06598668aa9f
-Author: Mykyta Yatsenko <yatsenko@meta.com>
+--- Patch [1]: [PATCH net v3 1/1] net: cap advertised IP tunnel headroom ---
+commit 19f57a4a48f9a12f973f74a2e052b267cba3faed
+Author: Zhiling Zou <zhilinz@nebusec.ai>
+Subject: net: cap advertised IP tunnel headroom
 
-selftests/bpf: Add tests for sleepable tracepoint programs
+This commit caps the advertised needed_headroom for IP tunnel devices to
+512 bytes. This is intended to prevent the 16-bit skb header offsets from
+overflowing when large headrooms are derived from a stack of lower devices.
 
-Cover all three sleepable tracepoint types (tp_btf.s, raw_tp.s, tp.s)
-and sys_exit (via bpf_task_pt_regs) with functional tests using
-bpf_copy_from_user() on getcwd.
-
-Link: https://lore.kernel.org/bpf/20260422-sleepable_tracepoints-v13-6-9900=
-5dff21ef@meta.com
-
-> diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/tes=
-ting/selftests/bpf/verifier/sleepable.c
-> index c2b7f5ebf168c..6dabc55229455 100644
-> --- a/tools/testing/selftests/bpf/verifier/sleepable.c
-> +++ b/tools/testing/selftests/bpf/verifier/sleepable.c
-> @@ -76,7 +76,20 @@
->  	.runs =3D -1,
->  },
+> diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
+> index d708b66e55cda..85e3455cea259 100644
+> --- a/include/net/ip_tunnels.h
+> +++ b/include/net/ip_tunnels.h
+> @@ -629,8 +629,7 @@ struct metadata_dst *iptunnel_metadata_reply(struct m=
+etadata_dst *md,
+>  int skb_tunnel_check_pmtu(struct sk_buff *skb, struct dst_entry *encap_d=
+st,
+>  			  int headroom, bool reply);
+> =20
+> -static inline void ip_tunnel_adj_headroom(struct net_device *dev,
+> -					  unsigned int headroom)
+> +static inline unsigned int ip_tunnel_limit_headroom(unsigned int headroo=
+m)
 >  {
-> -	"sleepable raw tracepoint reject",
-> +	"sleepable raw tracepoint accept",
-> +	.insns =3D {
-> +	BPF_MOV64_IMM(BPF_REG_0, 0),
-> +	BPF_EXIT_INSN(),
-> +	},
-> +	.prog_type =3D BPF_PROG_TYPE_TRACING,
-> +	.expected_attach_type =3D BPF_TRACE_RAW_TP,
-> +	.kfunc =3D "sys_enter",
-> +	.result =3D ACCEPT,
-> +	.flags =3D BPF_F_SLEEPABLE,
-> +	.runs =3D -1,
-> +},
+>  	/* we must cap headroom to some upperlimit, else pskb_expand_head
+>  	 * will overflow header offsets in skb_headers_offset_update().
+> @@ -640,6 +639,14 @@ static inline void ip_tunnel_adj_headroom(struct net=
+_device *dev,
+>  	if (headroom > max_allowed)
+>  		headroom =3D max_allowed;
+> =20
+> +	return headroom;
+> +}
 
 [Severity: Critical]
-This is a pre-existing issue, but does this test codify a kernel crash bug
-in the baseline tree?
+This is a pre-existing issue, but does capping the headroom at configuration
+time fully prevent the 16-bit offsets from wrapping at runtime?
 
-The commit message notes that kernel-side sleepable tracepoint runtime supp=
-ort
-was not backported here. Because of an earlier backport, the verifier
-currently accepts sleepable raw tracepoints if tracepoint_is_faultable() is
-true (like sys_enter), which makes this verifier test pass.
+The commit message notes that capping the value is safe because the transmit
+path will still expand the skb if more headroom is needed.
 
-However, without the runtime support, the execution happens unconditionally
-under atomic contexts. For example, in __bpf_trace_run():
+However, couldn't a user stack thousands of tunnels (e.g., in a user
+namespace) and bypass recursion limits using delayed queueing disciplines l=
+ike
+netem?
 
-kernel/trace/bpf_trace.c:__bpf_trace_run() {
+If this happens, pskb_expand_head() would be called repeatedly. Because it
+adds padded headroom that often exceeds the pushed header size, the accumul=
+ated
+headroom offsets could still overflow the 16-bit fields before skb->len
+reaches the 65535 IP maximum MTU limit.
+
+When the offset wraps during the runtime update:
+
+net/core/skbuff.c:skb_headers_offset_update() {
     ...
-    rcu_read_lock_dont_migrate();
+    if (skb_mac_header_was_set(skb))
+        skb->mac_header +=3D off;
     ...
 }
 
-Or via the tracepoint wrapper:
-
-include/trace/bpf_probe.h:__BPF_DECLARE_TRACE_SYSCALL() {
-    ...
-    preempt_disable_notrace();
-    ...
-}
-
-If a sleepable program is attached to this tracepoint and actually sleeps, =
-it
-will trigger a scheduling while atomic panic.
-
-Should this test be removed or adjusted until the runtime support is fully
-backported to prevent asserting this unsafe verifier state?
+Could this cause the mac_header to point into uninitialized kmalloc memory
+that might then be leaked to userspace via subsystems like af_packet?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807-selftests-=
-bpf-sleepable-v2-1-f7e6566f36a1@marliere.net?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/0ac01576f92412e8fa3=
+5cc3eb44336797a9d11d0.1786021595.git.zhilinz@nebusec.ai?part=3D1
