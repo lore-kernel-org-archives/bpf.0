@@ -1,163 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A6747126E;
-	Fri,  7 Aug 2026 12:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A2A3BB693
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 12:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786104318; cv=none; b=Xkz84JL7Rp7HmPB8cOI2yIK4VIEq40c+xyJbE2oozmmjEiIFgaLAwk041sueiUGrA5vKn3pNeULDw4HrLfPJovcuCmzClGboUo7VxF07ksRqDo7HoycG/DedGL3SQwBvaqBau/j/O8icfk6tP1NO/P54aroScngnn8ywq7CrQcc=
+	t=1786105982; cv=none; b=QRpuKAIRjs/Ur2Ro0WtT99kZHd6gT3RbBiI+RQZsYZAtqVONq4cYs8env9B3zauH0LKK6gUZ3ehpyt+La4hkZZyijjc/deTSWTjidglv0tRbI1Dbcbtqh4MgGTGZIk1/zsIQtT4TGrcr4XCKIO+MTQx+yFWhE/HwBpB4xh2mGPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786104318; c=relaxed/simple;
-	bh=HK6bB4RkZza2taxtADNDumCDoarmnE8s+VqYqci2C58=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Tnikz+MKQ9FvWBF2GCInAgv6sl6iqNUj6QGRX3aTWx6q4LzdUbAd07B1ndN6RMvFgLgnTLM7SIAPszEmLX0i86zEAy6Si54talE22bqY4e2E+oxId4+J5KkgWqBgxUA25+QcUn/q3xkl45mOwBKabvug0y8YIJQEjfJTXB/HmOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OYRf1KHI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786105982; c=relaxed/simple;
+	bh=OJsdYb95cHmwJtEl4oQv6N3k43WLEK6obrGHxo8zA1I=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ofqO5LZXH8NMPbTJccWVo+SzItUxvnwbXxebGwsWZ7RsM2bbSh3hvysgtjBLHJ9zqoI8lhq7dPBe8dQC5HjOBKNwLT489HQazgTSAZxXrz7i6U33ypDm5G57PaGzriNXjo9d13rcUDzJuUD6yQajWtPtSZpciuPofOyO+B9pbeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+yAGmf2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OYRf1KHI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B06AB1F000E9;
-	Fri,  7 Aug 2026 12:05:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+yAGmf2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A942A1F000E9;
+	Fri,  7 Aug 2026 12:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786104302;
-	bh=F0O/vwyOjW5BLxgWiK5+3RNrPEmfvU3SX8V2SAxQeOQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=OYRf1KHI4u5lJ6+DZBVlBCjL8CjI+4UavWzL7Dt6dU9Y2Cj55oiua+Y8w3PwAL59V
-	 7qKTYzi5TGIkrniSuTLJL8gVkq0q1E2ww3Lq5DMUSRogHmWZYkp3CY6Tg3rVp1WS2g
-	 RjNBszkfq19YZiP2pUluL7DeuEne5r/qF6U2NYs6JfUnjuMFE+B9rHCE9smS14WnSp
-	 MtnxUBAP765WkOipKfAJI/mPepfSUqobechd6FLWs9O7u/x/Ez7Oxe3jSePUdw7vug
-	 rUdS8oILKczyyPoJNxruK35Mhy2nRJ8LZpo6ozTjumLpA+Y+qN9ULmNK8DDTMxbxqz
-	 RCBw2Dv5yKCeg==
-Content-Type: multipart/mixed; boundary="===============6802785607849162190=="
+	s=k20260515; t=1786105966;
+	bh=VGYjk/GU3yZns5VM52mHXkxN3Y/OLzV0b1QFnhJiH4g=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=f+yAGmf2kTjjVLSA7csHnMISt+wmM50uTkX5TNhdV+FUyhoTw4I9Ae8tq6gp66W7W
+	 /4fSjCpKcYv6bVdJn+ILugU/ghmsZ/y63hUf0+TS1byR/cSkkeSuCU70IW8OaZMp02
+	 zqxALtf8+szmTTuFTKrjYSB3exPftfDaHG2UQvlS/4uWnwGNWUGHwO5sfSno8zMigR
+	 IuaCokRmiGc19pm8Z250vnFnRb8JqvjOWqWToXMwJ40+q/0lzo1oc52Y+AcNYMRxVq
+	 GEhlm1d4n97wb5J/US/SItCKyKuT3y5eEr7Rfb47oKiNjHz9l+Ljj3Re0e0d+o9gbo
+	 X8gb2bq3m/t7g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v11 6/8] selftests/bpf: Add tailcall verifier selftest
+ for powerpc64
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Saket Kumar Bhaskar" <skb99@linux.ibm.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <8fe0b35438a04876bee2dbcdc94e28bd919dfc40.1786099877.git.skb99@linux.ibm.com>
+References: <cover.1786099877.git.skb99@linux.ibm.com>
+ <8fe0b35438a04876bee2dbcdc94e28bd919dfc40.1786099877.git.skb99@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 07 Aug 2026 12:32:46 +0000
+Message-Id: <20260807123246.A942A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <5eb10995ebf94dd2c526d65efb472e748e8edf47ab7a7c660b3128011739b151@mail.kernel.org>
-In-Reply-To: <20260807104403.1013064-1-pulehui@huaweicloud.com>
-References: <20260807104403.1013064-1-pulehui@huaweicloud.com>
-Subject: Re: [PATCH bpf v6] bpf, cgroup: Fix storage null-ptr-deref after replacing prog
-From: bot+bpf-ci@kernel.org
-To: pulehui@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,andrii@kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,song@kernel.org,jolsa@kernel.org,emil@etsalapatis.com,ameryhung@gmail.com,pulehui@huawei.com,pulehui@huaweicloud.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  7 Aug 2026 12:05:01 +0000 (UTC)
 
---===============6802785607849162190==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comment in the BPF subsystem does not follow the require=
+d style.
+--
 
-> Syzkaller reported a storage null-ptr-deref issue after replacing prog.
-> This occurs in the following scenario:
-> 1. prog A, an empty prog, is attached to a cgrp.
-> 2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
->    bpf_get_local_storage helper.
-> 3. link_update is called to replace prog A with prog B.
->
-> The reason is that __cgroup_bpf_replace fails to alloc and assign the
-> required cgrp storage for the incoming replacement prog. Consequently,
-> the new prog inherits an uninit storage, leading to null-ptr-deref panic
-> when kick the new prog.
+--- Patch [6]: [PATCH v11 6/8] selftests/bpf: Add tailcall verifier selftes=
+t for powerpc64 ---
+commit db11673742dde393ab8f7429a8221e1b2ec5a904
+Author: Abhishek Dubey <adubey@linux.ibm.com>
 
-Is the description "inherits an uninit storage" precise?
+selftests/bpf: Add tailcall verifier selftest for powerpc64
 
-Looking at the code, the storage array is not uninitialized in the C
-sense. When prog A (which uses no cgroup storage) is attached, both
-pl->storage[] and item->cgroup_storage[] are explicitly initialized to
-NULL. When compute_effective_progs() copies pl->storage into
-item->cgroup_storage via bpf_cgroup_storages_assign(), it copies the
-all-NULL array.
+This commit adds a BPF verifier tailcall JIT testcase for powerpc64 to
+the selftests suite. It introduces the expected JIT instruction sequences
+for tail calls on the architecture.
 
-So prog B inherits the previous prog's storage array, which is NULL for
-the map prog B needs. The distinction also explains the broader case:
-if prog A used a different storage map, the inherited pointer would be
-non-NULL but belong to the wrong map, leading to a cross-map
-out-of-bounds read rather than just a NULL dereference.
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c b/=
+tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
+> index 48fa34d2959f4..182302ff1db07 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
+> @@ -91,6 +91,81 @@ __jited("	popq	%rax")
+[ ... ]
+> +__jited("	std 9, -8(1)")
+> +__jited("	mflr 0")
+> +__jited("	std 0, 16(1)")
+> +__jited("	stdu 1, {{.*}}(1)")
+> +/* load address and call sub() via count register
+> + *
+> + * Address materialization differs between PCREL and non-PCREL kernels.
+> + * Skip the address generation sequence and verify only that the call
+> + * target is loaded into CTR before branching.
+> + */
 
-Would "the new prog inherits the previous prog's storage array (NULL for
-the map the new prog needs)" be more accurate?
+[Severity: Low]
+Does this multi-line comment follow the modern BPF subsystem style rules?
 
+The BPF subsystem style requires the opening /* of a multi-line comment
+to be on its own line, rather than having text on the same line. Should
+the comment start with a standalone /* to match the expected format?
 
-> Fix this by rejecting a link update if new_prog's cgroup storage is
-> incompatible with link->prog.
+[ ... ]
 
-Does the commit message capture the full scope of what this fixes?
-
-The message describes only the NULL case from the syzkaller reproducer.
-However, cgroup_bpf_storages_compatible() compares map pointers per
-stype, so it also rejects the case where prog A uses map M1 and prog B
-uses map M2 for the same storage type.
-
-In that case, item->cgroup_storage[stype] would point to M1's live
-storage, but prog B's bpf_get_local_storage() would return M1's buffer
-while the verifier sized accesses against M2->value_size. Since
-bpf_cgroup_storage_calculate_size() sizes the buffer from the owning
-map, this would be a cross-map data disclosure or out-of-bounds read,
-not just a NULL dereference.
-
-Would it be clearer to mention that the fix also blocks the wrong-map
-case to prevent cross-map access?
-
-
-The commit message opens with "Syzkaller reported" but includes no
-Reported-by or Closes tags. Two public syzbot reports match this issue:
-
-  syzbot+e6e8f6618a2d4b35e4e0@syzkaller.appspotmail.com
-  syzbot+4fe468a3f7fac86ea2c9@syzkaller.appspotmail.com
-
-Both are titled "general protection fault in bpf_get_local_storage" with
-KASAN null-ptr-deref at the same location. The reproducers match the
-3-step scenario call-for-call.
-
-Should these include the standard syzbot attribution tags so the reports
-get auto-closed?
-
-Also, BPF_LINK_UPDATE calls that previously returned 0 now return
--EINVAL. This is an intentional trade-off for a less risky fix, but the
-commit message does not mention the uAPI behaviour change. Might that be
-worth noting?
-
-
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 4355ccb78a9c..5cc9b2d92fd5 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1018,6 +1018,20 @@ static void replace_effective_prog(struct cgroup *cgrp,
->  	}
->  }
->
-> +static bool cgroup_bpf_storages_compatible(struct bpf_prog *old_prog,
-> +					   struct bpf_prog *new_prog)
-> +{
-> +	enum bpf_cgroup_storage_type stype;
-> +
-> +	for_each_cgroup_storage_type(stype) {
-> +		if (old_prog->aux->cgroup_storage[stype] !=
-> +		    new_prog->aux->cgroup_storage[stype])
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
->  /**
->   * __cgroup_bpf_replace() - Replace link's program and propagate the change
->   *                          to descendants
-> @@ -1056,6 +1070,9 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
->  	if (!found)
->  		return -ENOENT;
->
-> +	if (!cgroup_bpf_storages_compatible(link->link.prog, new_prog))
-> +		return -EINVAL;
-> +
->  	cgrp->bpf.revisions[atype] += 1;
->  	old_prog = xchg(&link->link.prog, new_prog);
->  	replace_effective_prog(cgrp, atype, pl);
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31172497940
---===============6802785607849162190==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786099877.gi=
+t.skb99@linux.ibm.com?part=3D6
