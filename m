@@ -1,280 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B7A395AD4;
-	Fri,  7 Aug 2026 20:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786134660; cv=none; b=ThKMrwxVGrjV81UhqZal93yNf687FSDlMa5nM2Zk26dKjKjgQlPtldtuSYGQzszGSagfOGU1m1vvZj1DCk8NZVu/yB2eNLq5S94Je9WYVhcYphdUWMrSu5Dz7nGWUAzTWREP+5d951hNz2yzEqbHfmQWdkztv3iA6A4UEw1aVwc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786134660; c=relaxed/simple;
-	bh=2RhuFsKN6eClD1RC3T8UCpobkmhVAFvGB9mXP6BU+tc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XwHKRoUpBE/M8sqBoX7MksCmGyF/hEJFtSO+sbC/nNEwbaoYqCkAxI4WBvvILOBpndRkNHJhlGz4aqS+soaYKXNkBLIzenGErEvX913oWa0AcLB0cMuAb99wPVs0JLyO/c98hy0Z6/Iyu6atZybm0oQQF/lnzG/Py2c6/cGzWpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z3bVECdw; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3056395AD4
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 20:36:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786134996; cv=pass; b=LjWdg5vAc8mHoB9/u9yAWrIej+0FnnrbCmA/gCUmX1barBT8wiyTk0QPmEVwXBnePkcQTCcIEB8HxwR7toW6zh2KpREqmPWeNzCNPVU/DGr4FrPp7KtmTuaGzXNw3+O5HP89alzEjMhabubmLdA1jrJarvYO1EVe4+539iHZRbM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786134996; c=relaxed/simple;
+	bh=m/YK82kcESKdILFJlJFUns2fClsu77ujhWQ48l2ndGM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mqyzvN7ECA0SuFy66aTv78vfLhs0+Dyw+ojtSK9OVtp9okXciRdo9jwcw3HfPxyNpKLpKnKIe7hlU3ZsJJs+1Ekxk6pGq0uAHFyP0e/0QWhJLjr5TVaG/eExOfUFnWKc3y+jwtL5NDngcPqtZJf8HIfqlh92HSSdLQq3MjRCB2Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=STSraQJ+; arc=pass smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z3bVECdw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2951F000E9;
-	Fri,  7 Aug 2026 20:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786134657;
-	bh=gpq8pVcKoYWI6ShJ4Tw663ZVtPNrDJrx2olDMJJFU+s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Z3bVECdwExlUJG4FrdRif9eDCRvs1Gue/J2+8PLKNUzWwdLmzSJp7xAXyvF8m1tFw
-	 364rjH51xfiOjfmBnoEGYgM7pCS0rq2BXoTbOIfL8jOIldpBUntPw4qUX51DdHOoZ0
-	 noCPpmnytuIEPDxPY5OotO57hLfGoqqksmuojSUkUtJFn2rj51/N0AZ2mlxxgnuLh4
-	 OLq3ixnA4ruA/UB1NFjFI1BniDX7ivGvInPGrfmxaMaM4mWCcnYfMFW5N3POIBsYuU
-	 N2wSTMIyXvmksU7SPHEv283XIMOOOW2B0dOGmCmYHEenawvOlazuOR4Y936VzW9tYA
-	 WXAdW0MkgZcXw==
-Date: Fri, 7 Aug 2026 17:30:53 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, Jiri Olsa <jolsa@kernel.org>,
-	Clark Williams <williams@redhat.com>, dwarves@vger.kernel.org,
-	bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Mark Wieelard <mjw@redhat.com>,
-	rust-for-linux <rust-for-linux@vger.kernel.org>,
-	Gary Guo <gary@garyguo.net>
-Subject: Re: [PATCHES 00/12] pahole: Support more rust tags and references to
- dwz alternate debug files
-Message-ID: <anZAfc7sikAx8ikS@x1>
-References: <20260731193102.110693-1-acme@kernel.org>
- <18b557a8-e1ca-46cf-b03f-5e68490c9229@oracle.com>
- <anXTAComw6XAvnXU@x1>
- <CANiq72nHWY638h4mxJCfh_HFtzhwFEPyo6a-7k_3CxZsRV+Jiw@mail.gmail.com>
- <anYpwcDBtkzE3WIt@x1>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="STSraQJ+"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3810c5d691bso3500517a91.1
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 13:36:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786134994; cv=none;
+        d=google.com; s=arc-20260327;
+        b=RYDY23FOSyACKCX+C44Ty35SuvYOv5eycPaPxBJaoE6/F9tmQC7VZlbMLo49/6FQb2
+         7dOsNMAmNRWBW0fDs4GBmqfcgWZtSeKKRh9kQriYjxxkD5dt6+hsz2HuAl2nw+WoVjw+
+         z/25BrT5U7h8U5Vx9ygas4juulNHMNZFJr7gOPKkKKcNuy/hGabHT441Uc8HhvGGjoOq
+         WRvxYimHNA/H4WUBpWMfCXDy9Y0g7zQFTSCDUlbL1rIYBBtwqgGqVg5ma/ohsTeT89b1
+         M2pU8R02im1q0IhQ8GNZ25fFbjZHXk+mWHrZWFe36Klp8bmtMP1fk3wwmL4kB60X4qhq
+         2ZGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ochpLTMD032NQhagC0dX/Gh/xAiy43T2kbSx5oTIX+Y=;
+        fh=J+aiMl7Q4ZKIipLEyAZdgI2K1PUH9ySD+fm5H+SBnII=;
+        b=EA00/gCQAh+uf+wKLw5lFouu0fISFzBFZoYyo3bVJOEEdHkIhTSR4GyPm6zZm4H/UI
+         wJ3aWOCDzwhhuuYXp8uzCbXCvzWtoakTbyZkPhZUfRjYUug5yGvYCtvaAj0k6n2Hvq/s
+         VeafTfXCMxvpex754BC4HmuoUfvixGx2JC79z2KncVF0C5GRYF2UHwRKF+4cjsKlu2AZ
+         CkNK3ikZQ6DIdKK7E6zSGLOCamnpPHL4zD8GphPM8a3K/8FMiJr6USS7SEVp1rgU62HT
+         heRFW3tMTzVGrJgXFVPNls5vJp2i6Hm0LxySP6s6jB8VsKkVBWuwudpCZZDYzwPBqnPE
+         flgw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1786134994; x=1786739794; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ochpLTMD032NQhagC0dX/Gh/xAiy43T2kbSx5oTIX+Y=;
+        b=STSraQJ+cxrlPzbmMadUUMwODnrPv17JJ5MX7yRyYzbK6grx/ws3PG7T1yQNPR5wsB
+         RNlSB+uzLssMCHO2Bhf3SW+GeZVBJXMczwM57OCfHt5jefN1SUfudj+8BQi2fK+7GrFB
+         xe2mPTbxcICBp5ZGolckxQ7N+Op0XEb7SA6aiuUdtgTWOsUgDm/DFAVYaTjrElLLKW95
+         fFexYXCh9azSl6bj3fNg/6Em24/mXYzoGamIlqEJ4u/f8tbcwn0Mbp0xcedUrKOn8eWH
+         RvQJPJ/5qlkKa0BJXe4krEi5mClUmOWyj0C1Fyc+jF8FkWy8w8RbfSkQcXmy0ZXsQk1I
+         uzjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786134994; x=1786739794;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ochpLTMD032NQhagC0dX/Gh/xAiy43T2kbSx5oTIX+Y=;
+        b=pa0Mshr9dDNoQMq1Uj4ZriyQXC6N3PZYawhRBnUcf37DpVyGLSNmmrGGGdupVKCpo0
+         sHvCX4kuih2Hubfwj+bRYVng/EzpMKJ+XxGGmevdAcYFEqriceWv505FMoel0OfUkRMv
+         5BpDRczZbTpdhzdechgOJRWtwW9IkXwpbC3pfGjWK7GRZ9/QdkOr0/VlpZFd1S7pkEmV
+         t0Byg4+H/I60La9GKVQFd1QPb3TJc6vKIH6ouPXYmoziAVoMJX8roJ8Yu+waB+8p15YR
+         ZYopZGCeQKFqdPAKQCVg2TRWwRyoLBM1VNNa8v6B7xZmxRtPuC1x1SWSXTBFIghxuyRW
+         kYCQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrveIGTfLhzSInjxjuLeYCe3p/2zBKTpfc3bDDR6mCxGvLIQfrT/jDU9T3E3UP07Be2HYs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUiYt6pIxPhh9rwf2D57ypWjqxuRALSC/0NQoriMUH9sTWkStz
+	A+f73z3Qxya8SPQabN2ty7JO/S/6iYs15V9t107+wD5l5het0snCXnZD46vYVKS25gyts8aFPN+
+	MVkxSvOn9BkJEPHKKZTUS9MUWq8g8mshdsG7KijP8mC+21TSWX3sagQ==
+X-Gm-Gg: AR+sD11DzXp9uCgXZzHO26CwfMFz1iPjswvfbt8EdEtLbZxbfehBTiHYQpqxISmdoVS
+	ZHuj7MNtoSlma0rv5SeHvuGHVOW5ZMAIU8okkw77LsJCGvgiUR/d3uvuLTuDEFfhD8+8zAaOSBb
+	lg4tyzbQ53C8iyBlKTH17CHcFbqkSQ06wTyESGV+lyvKQhOZULbHyUygk4UId3r3TTukp4qY+dL
+	lBvNL/AYk22VFJJsj5Qdgm+DipeYdqRWo2dzpC6JSTsL4qA0E9k904E2GNk9XjyJxWDlEjd4Vev
+	WYZOy4a+v6h6E8gLqvic2g3Srg4CvpLvUBioHURLxcnj
+X-Received: by 2002:a17:90b:28c3:b0:381:bc4c:da56 with SMTP id
+ 98e67ed59e1d1-3903c6128c6mr27246576a91.19.1786134994234; Fri, 07 Aug 2026
+ 13:36:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <anYpwcDBtkzE3WIt@x1>
+References: <20260731022047.189137-1-utilityemal77@gmail.com>
+ <CAHC9VhSSzNBCSvy4cQHh6OOM4-EvHF+bmrB9=V1y=Lj53RvxQQ@mail.gmail.com>
+ <anOnaGmBTlBW9xwj@zenbox> <CAHC9VhRBYMaNBPfnV=TK8g-M7H_qsBu=CsVVOwnAzTPAkpAZaA@mail.gmail.com>
+ <anPAbFzuLOizAhm-@zenbox>
+In-Reply-To: <anPAbFzuLOizAhm-@zenbox>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 7 Aug 2026 16:36:20 -0400
+X-Gm-Features: AUfX_myucQAgH3RinM6gYViFUKcbyHZCYmjwR4UvYwS_lXRmeABclx6STS4J9IY
+Message-ID: <CAHC9VhSJ1q59RUtEEMAmiZLLLi92=XO1tkd9z0fr5T7vuhoy8Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 00/13] BPF interface for applying Landlock rulesets
+To: Justin Suess <utilityemal77@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	kpsingh@kernel.org, mic@digikod.net, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, kees@kernel.org, gnoack@google.com, jack@suse.cz, 
+	song@kernel.org, yonghong.song@linux.dev, martin.lau@linux.dev, m@maowtm.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 07, 2026 at 03:53:53PM -0300, Arnaldo Carvalho de Melo wrote:
-> On Fri, Aug 07, 2026 at 07:34:10PM +0200, Miguel Ojeda wrote:
-> > On Fri, Aug 7, 2026 at 2:43 PM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > Adding Miguel to the CC list, Miguel we're trying to improve BTF support
-> > > for Rust, this series handles multiple enabling fixes/improvements that
-> > > gets us to the next level, i.e. we can load everything from DWARF, now
+On Wed, Aug 5, 2026 at 8:32=E2=80=AFPM Justin Suess <utilityemal77@gmail.co=
+m> wrote:
+> On Wed, Aug 05, 2026 at 06:51:56PM -0400, Paul Moore wrote:
+> > On Wed, Aug 5, 2026 at 5:37=E2=80=AFPM Justin Suess <utilityemal77@gmai=
+l.com> wrote:
+> > > On Fri, Jul 31, 2026 at 04:30:39PM -0400, Paul Moore wrote:
+> > > > On Thu, Jul 30, 2026 at 10:21=E2=80=AFPM Justin Suess <utilityemal7=
+7@gmail.com> wrote:
+> > > > [...]
+> > > > As you may, or may not have seen, there is currently an ongoing deb=
+ate
+> > > > regarding the location of LSM kfuncs that will impact this patchset=
+.
+> > > > Sadly, we don't appear to be approaching an agreement on this issue
+> > > > which introduces some additional risk to this patchset.  We'll have=
+ to
+> > > > see how that ends up, but I just wanted you to be aware of the
+> > > > situation.
+> > >
+> > > Quick aside question: Would security/bpf/ be a better place for these
+> > > type of kfuncs?
+> > >
+> > > security/bpf/bpf_lsm_kfuncs.c could be for LSM framework kfuncs,
+> > > and each LSM could maintain their own security/bpf/<lsm>_kfuncs.c
+> > > for kfuncs dealing with lsm-specific types.
+> >
+> > This gets back to the other issue in the patchset that we've
+> > discussed: general LSM interfaces vs Landlock specific interfaces.
+> > There are plenty of reasons why we don't support the kernel calling
+> > directly into individual LSMs, and from my perspective this is another
+>
+> I'm 100% on board with the no calling directly into individual LSMs part.
+>
+> > instance of that.  Here it just happens to be that the kernel caller
+> > was written in BPF and not C (or Rust for that matter).
+>
+> The intention is the opposite. The point of the separate directory is
+> that the kfuncs can never call into an individual LSM, they only get
+> the LSM framework API in <linux/security.h>.
+>
+> Every kfunc is a thin wrapper over the generic policy kptr hooks:
+>
+>     bpf_landlock_get_ruleset_from_fd()
+>       -> security_policy_kptr_from_fd(LSM_ID_LANDLOCK, ...)
+>         -> Landlock's hook implementation
+>
+> So kfunc -> generic lsm hook -> individual LSM, same as any other
+> caller in the kernel.
 
-> > Thanks for the Cc! Cc'ing rust-for-linux and Gary.
+Not exactly.  That "bpf_*landlock*_XXX" kfuncs are a move away from an
+LSM agnostic API and not something we currently do in the kernel.
+Some will, and have, argued that this is more akin to the Landlock
+syscalls, but I see (at least) two problems with that comparison: the
+kfuncs being presented aren't syscalls, they are cross-subsystem
+kernel function calls; the Landlock syscalls were created in a
+different time, today these would need to be reframed as LSM
+syscalls*.
 
-> > > its time to try to map it to existing BTF kinds and propose BTF
-> > > extensions when we can't use existing encodings.
+(* To be clear, we're not going to remove the Landlock syscalls for
+all the obvious reasons, but we're also not going to support APIs like
+that unless we have throughly exhausted all other options.)
 
-> > Sounds cool :)
-
-> > > Inferring from "does any member have a niche layout" means
-> > > reverse-engineering rustc's layout algorithm, which is explicitly
-> > > unstable and unspecified. It'd break silently on a compiler bump, with
-> > > no way to tell from the DWARF that you got it wrong.
-
-> > Yeah, the LLM is correct here: the Rust compiler gives very few
-> > guarantees for the default `repr`, i.e. in common cases it has the
-> > freedom to use whatever layout it wants (i.e. even for essentially
-> > equivalent types in the same compilation unit) -- the official docs
-> > are at:
-
-> >   https://doc.rust-lang.org/reference/type-layout.html
-
-> > >     u8                  __discriminant;      /*  0  1 */
-
-> > For the niche cases like `Option<NonZero<u32>>`, what would be printed?
- 
-> Can you think about one such niche case that is present in the kernel
-> rust .o files right now? I tried finding the `Option<NonZero<u32>>` to
-> look at its DWARF but couldn't find one.
-
-Good, so I went ahead and built the exact case, together with the
-explicit `Option<u32>` one, so we can compare them.  The source,
-containing the struct I dump below:
-
-  use std::num::NonZeroU32;
-
-  #[no_mangle]
-  pub struct Container {
-  	pub a: Option<NonZeroU32>,  // niche: 4 bytes, tag == payload
-  	pub b: Option<u32>,        // explicit: tag at 0, payload at 4
-  	pub c: Option<i32>,
-  }
-
-  #[no_mangle]
-  pub fn consume(c: Container) -> u32 {
-  	c.a.map(|x| x.get()).unwrap_or(0) + c.b.unwrap_or(0)
-  }
-
-  fn main() {
-  	let c = Container { a: None, b: Some(3), c: Some(-1) };
-  	let _ = consume(c);
-  }
-
-Compile (rustc 1.93.x here, don't link, just get an object file,
-otherwise you'll debug 1M+ lines of std DWARF and the type will be
-there but buried):
-
-  acme@number:~/git/pahole$ rustc --edition 2021 --emit=obj -C debuginfo=2 \
-  				  option_non_zero.rs -o option_non_zero.o
-
-then dump the DWARF, note that the DW_AT_name has the expanded generic,
-i.e. 'Option<core::num::nonzero::NonZero<u32>>', the NonZeroU32 alias
-seems to be expanded at compile time and, thus, doesn't appear in DWARF:
-
-  acme@number:~/git/pahole$ readelf --debug-dump=info option_non_zero.o \
-  				  | grep -n 'nonzero::NonZero<u32>'
-				  acme@number:~$ readelf --debug-dump=info option_non_zero.o | grep -n 'nonzero::NonZero<u32>'
-  295: <2ca>   DW_AT_name  : (indirect string, offset: 0x213): Option<core::num::nonzero::NonZero<u32>>
-  348: <32e>   DW_AT_name  : (indirect string, offset: 0x2ef): map<core::num::nonzero::NonZero<u32>, u32, option_non_zero::consume::{closure_env#0}>
-  acme@number:~$
-
-and you can see the niche case layout, size 4, the discriminant member
-is the payload itself, same offset, same size, and the Some variant
-doesn't even get a DW_AT_discr_value, it is just the default, so the
-answer: nothing separate to print, the tag IS the payload.
-
-Here is the full DIE for the niche case:
-
-acme@number:~$ readelf --debug-dump=info option_non_zero.o | grep -B1 -A25 'Option<core::num::nonzero::NonZero<u32>>'
- <3><2c9>: Abbrev Number: 19 (DW_TAG_structure_type)
-    <2ca>   DW_AT_name        : (indirect string, offset: 0x213): Option<core::num::nonzero::NonZero<u32>>
-    <2ce>   DW_AT_byte_size   : 4
-    <2cf>   DW_AT_accessibility: 1	(public)
-    <2d0>   DW_AT_alignment   : 4
- <4><2d1>: Abbrev Number: 26 (DW_TAG_variant_part)
-    <2d2>   DW_AT_discr       : <0x2d6>
- <5><2d6>: Abbrev Number: 27 (DW_TAG_member)
-    <2d7>   DW_AT_type        : <0x5b2>
-    <2db>   DW_AT_alignment   : 4
-    <2dc>   DW_AT_data_member_location: 0
-    <2dd>   DW_AT_artificial  : 1
- <5><2dd>: Abbrev Number: 28 (DW_TAG_variant)
-    <2de>   DW_AT_discr_value : 0
- <6><2df>: Abbrev Number: 4 (DW_TAG_member)
-    <2e0>   DW_AT_name        : (indirect string, offset: 0x1ce): None
-    <2e4>   DW_AT_type        : <0x2f9>
-    <2e8>   DW_AT_alignment   : 4
-    <2e9>   DW_AT_data_member_location: 0
- <6><2ea>: Abbrev Number: 0
- <5><2eb>: Abbrev Number: 29 (DW_TAG_variant)
- <6><2ec>: Abbrev Number: 4 (DW_TAG_member)
-    <2ed>   DW_AT_name        : (indirect string, offset: 0x20e): Some
-    <2f1>   DW_AT_type        : <0x30b>
-    <2f5>   DW_AT_alignment   : 4
-    <2f6>   DW_AT_data_member_location: 0
- <6><2f7>: Abbrev Number: 0
-acme@number:~$
-
-On the explicit `Option<u32>` case the picture is different, the tag is
-a real member at offset 0 with 4 bytes and Some.__0 moved to offset 4:
-
-acme@number:~$ readelf --debug-dump=info option_non_zero.o | grep -B1 -A25 'Option<u32>'
- <3><360>: Abbrev Number: 19 (DW_TAG_structure_type)
-    <361>   DW_AT_name        : (indirect string, offset: 0x345): Option<u32>
-    <365>   DW_AT_byte_size   : 8
-    <366>   DW_AT_accessibility: 1	(public)
-    <367>   DW_AT_alignment   : 4
- <4><368>: Abbrev Number: 26 (DW_TAG_variant_part)
-    <369>   DW_AT_discr       : <0x36d>
- <5><36d>: Abbrev Number: 27 (DW_TAG_member)
-    <36e>   DW_AT_type        : <0x5b2>
-    <372>   DW_AT_alignment   : 4
-    <373>   DW_AT_data_member_location: 0
-    <374>   DW_AT_artificial  : 1
- <5><374>: Abbrev Number: 28 (DW_TAG_variant)
-    <375>   DW_AT_discr_value : 0
- <6><376>: Abbrev Number: 4 (DW_TAG_member)
-    <377>   DW_AT_name        : (indirect string, offset: 0x1ce): None
-    <37b>   DW_AT_type        : <0x391>
-    <37f>   DW_AT_alignment   : 4
-    <380>   DW_AT_data_member_location: 0
- <6><381>: Abbrev Number: 0
- <5><382>: Abbrev Number: 28 (DW_TAG_variant)
-    <383>   DW_AT_discr_value : 1
- <6><384>: Abbrev Number: 4 (DW_TAG_member)
-    <385>   DW_AT_name        : (indirect string, offset: 0x20e): Some
-    <389>   DW_AT_type        : <0x3a3>
-    <38d>   DW_AT_alignment   : 4
-    <38e>   DW_AT_data_member_location: 0
-acme@number:~$
-
-So this is the one where we want a synthetic __discriminant member.
-
-And what we do today for the niche one, with current pahole (built from
-this series):
-
-acme@number:~$ pahole -C 'Option<core::num::nonzero::NonZero<u32>>' option_non_zero.o
-struct Option<core::num::nonzero::NonZero<u32>> {
-	struct None {
-
-		/* size: 4, cachelines: 1, members: 0 */
-		/* padding: 4 */
-		/* last cacheline: 4 bytes */
-	} __attribute__((__aligned__(4)));
-
-	struct Some {
-	public:
-
-		struct NonZero<u32>        __0 __attribute__((__aligned__(4))); /*     0     4 */
-
-		/* size: 4, cachelines: 1, members: 1 */
-		/* forced alignments: 1 */
-		/* last cacheline: 4 bytes */
-	} __attribute__((__aligned__(4)));
-
-	struct Option<u32> map<core::num::nonzero::NonZero<u32>, u32, option_non_zero::consume::{closure_env#0}>(struct Option<core::num::nonzero::NonZero<u32>>, struct {closure_env#0});
-
-
-	/* size: 4, cachelines: 1, members: 0 */
-	/* padding: 4 */
-	/* last cacheline: 4 bytes */
-} __attribute__((__aligned__(4)));
-
-acme@number:~$
-
-and on the BTF side, also with this series:
-
-acme@number:~$ pahole --btf_encode option_non_zero.o
-acme@number:~$ pahole -F btf -C 'Option<core::num::nonzero::NonZero<u32>>' option_non_zero.o
-union Option<core::num::nonzero::NonZero<u32>> {
-	struct None                None;               /*     0     4 */
-	struct Some                Some;               /*     0     4 */
-};
-
-acme@number:~$ pahole --expand_types -F btf -C 'Option<core::num::nonzero::NonZero<u32>>' option_non_zero.o
-union Option<core::num::nonzero::NonZero<u32>> {
-	struct None {
-	} __attribute__((__aligned__(8))) None;                           /*     0     4 */
-	struct Some {
-		struct NonZero<u32> {
-			struct NonZeroU32Inner {
-				u32 __0;                                                 /*     0     4 */
-			} __0; /*     0     4 */
-		} __0; /*     0     4 */
-	} Some; /*     0     4 */
-};
-
-acme@number:~$
-
-matches the real in-memory layout, size 4, no extra member.
-
-So for the future __discriminant work the rule should be: only emit it
-when its location doesn't overlap with the payload, i.e. on the explicit
-form; on the niche that field is the data itself, adding one would mean
-two members covering the same bytes, and we'd be lying about the layout.
-
-I'll add a test with both forms, pinning this behavior, so we don't
-regress it, and then, when we improve support for the synthetic
-discriminants, we can update it.
-
-And yes, I used OpenCode + DeepSeek to iterate multiple times and
-manually checked everything before hitting send, it helps me a lot and I
-hope that if I missed something, you will correct me so that we can make
-progress.
-
-Regards,
-
-- Arnaldo
+--=20
+paul-moore.com
