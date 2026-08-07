@@ -1,64 +1,68 @@
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFC83B14A4
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F2D3B2FC7
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786087108; cv=none; b=lID2mxKYoqxwAo3u4I6WISEX5tGhvz5OvHph0bHdi/VV3o67Rhzny351oc0Uvj8WC5lOIOm4siP5LRG0xSLbU65/dmcg6cUQeUfdxEzn5c20002D6nT7Y9MbZc1UZ9Zy5XLqm8tFm7ZGW7/Ght9tuyGkqfZWiGJ92WD9cPWtkAg=
+	t=1786087110; cv=none; b=dSu4JSBSylF+ygYluLFQlEtLQJ7OrNl0P45hZ7n6ZTcLsF1ezc5fHJFPXGpt2xU8Jn0TH+fWEZ5NJdkSvEyj/p7HF3NY1+ecpq2cxz8+T5NctqExfqQLsCu2byuzsUKjlAq5nkX+cQfEvgpxAdN3Qia4/VwW5M7/jpk48NtrBeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786087108; c=relaxed/simple;
-	bh=pR4sKjOg6M5FpHXGSlh8e2AK38K+ESFD8AdmYkYBd4M=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=EZMQjb1+rQvhaivHmrOgcpGZn/SF5Tan+fNYn0C3SxfKMly6GoVmsMZnIKNZ6HUpGxZI7DhKFpfSOh6EP/+ipcqWFFOqrM+w35khUG74s+GZ+ICccLGyNoTC55IPHZhzbyaajgTUGayYbsOfvVJXw8gXwDHUhrsI8R7a+/rCPZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wPbwIsAq; arc=none smtp.client-ip=209.85.215.200
+	s=arc-20240116; t=1786087110; c=relaxed/simple;
+	bh=3eeRY5Aa9pvngR2Af34iEV+b3xWsYHturOXlMa/4JjA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Content-Type; b=nV5Pgeoi60DQX5BYa/EWYR2ZSdUde5gxHBG9hnWAbLT4NCYE/Vpb1NBgT2sKRyffHDWn2RWy8skzM6KSNquNwM8JmDyZHUcMduPd1QSDgvsF37JQD+ED7666znNHybEaoG0aK0mp+8/IZPsgmTBcvkCSHDBIguqK9m09LM5Oasc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gGuSy8/2; arc=none smtp.client-ip=209.85.214.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wPbwIsAq"
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cbe62e01567so2637083a12.2
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 00:18:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gGuSy8/2"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2cfa4e4684bso75243515ad.2
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 00:18:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786087106; x=1786691906; darn=vger.kernel.org;
-        h=content-type:to:from:subject:message-id:mime-version:date:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=s0uOfK2vBqt76lOjULU8OLFIMTR7IToQpEOfI/OQz2U=;
-        b=wPbwIsAq1I9i9/EPSCfEogdG+KPMbmFkjjX+Wx/Cf5Y1aiyzR+4933wE9Iso2tqlke
-         rpKK1BKUtzlwDQGJibK29YbRyf6KmNgLIWoR/mNlOJsajAOe0MLh3k54kuYW0XjCmfAx
-         yBAyW5qe7XFM3ja+Go8gRelFJTuGaX21WFH9gjSTlUnTh4dG5kuDtihtq9cOhD7c112u
-         XTbrQnYfjmih4Qqu32A1iVvanrslF8kocJEgPt5FiWlXGWZt198ToO6tNfB88aGdDjRp
-         7Po3wxv0uh8jNOs5Kv2pPNP9bJ76qLxuwp6sBFS3Xh4EpLrFi2DPV5R/oks/1UPKDAbW
-         lmSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786087106; x=1786691906;
-        h=content-type:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1786087108; x=1786691908; darn=vger.kernel.org;
+        h=content-type:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=s0uOfK2vBqt76lOjULU8OLFIMTR7IToQpEOfI/OQz2U=;
-        b=rwNZVXHJF6AEczoWval0eLUURcm3/xyDYgSIg+pRWcMn0WoqTGtcXjmPHBToo2GCvn
-         rPt7qSCml5KbONUj6GI5cxGvDHiHz6V7QXv5jugcskoM23IpMJRSCtdhC4s62oMnYvLu
-         Wa8vnsCK8xdL280KQTZWXKIwIS48rKc0OBQoCOvOVTUKlQf8cRlQrwMTwcz4tjGq3cdT
-         eeSbRzOCOTaGOE28ZjmnV7FUYdtQyqeDYKa3dPzuLJkFqg/upkbVo22ERZBv+pSapkm9
-         XZK7g6sVUJB/vKaJhLBwFEqNvdp9GJ+ep1/+L4LoHANdriRXUiNNJVx8slRRdI5rt59c
-         c0PA==
-X-Forwarded-Encrypted: i=1; AHgh+RrS2brcA6zKWxxVCQFoB1uX5j+gxuf6kLa2SOsThXDPVxfqevvL6e2YgiWcNXxokDCq0q4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8FGA89bazM8MDXIJ0+JeK2Tx/qFOwPtXnW+vGK64YHE/qwaoD
-	LJpAw+p/t1mS3jwgCLOv0FE/OeCbklXOJ9Wjmbnl2f0mwhpLVRH0h8fImw8IIBUJjisvqsi6UTZ
-	RVlgOL8oazA==
-X-Received: from dlbsj11.prod.google.com ([2002:a05:7022:f90b:b0:140:f42f:50e5])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6300:220a:b0:3c4:2cf9:28ad
- with SMTP id adf61e73a8af0-3cb85e9927amr26857052637.12.1786087105691; Fri, 07
- Aug 2026 00:18:25 -0700 (PDT)
-Date: Fri,  7 Aug 2026 00:18:10 -0700
+        bh=mKhluK2oW7axNaXGt2f+mOTb9EIBwlM5B6rGh/lUQwU=;
+        b=gGuSy8/2xrw/REvmTk/DlyPpWB8HjLYsyE8gpXWYGq89lJblmMZhjO3fK5XDGhhuTf
+         6PgddiGiz5UeEOBNHgXGl7aGp4yVc7gCEeR6P4A0sbxe06eB31CXT9lxdfRZCU66hV0A
+         pLUhw3DfNgaYaNbCVAB7BaTjgdFgzfNo+Mc1CZme8wWfzuHbK+Jw4NKi5jz+SMB/I0aq
+         GFf/uhQI5vtF/wF2f/a4Uo6oD48zQLaBf8nD5mcWscZc/5xL6nmLqLBjc10/3JJbwZLY
+         JgNx3yfCagdrUVbQLgbrO3F9G7NpbPqFkXVCLAehlOkksgIvQShWj63tqz/jVUD2swyU
+         CKCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786087108; x=1786691908;
+        h=content-type:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=mKhluK2oW7axNaXGt2f+mOTb9EIBwlM5B6rGh/lUQwU=;
+        b=CSY30rmAUG6HVc9i24ZvHzN3yCZa/Hnh2Xs8LiVTNSrNfj4/38f0pV6cIzj6qyLc8q
+         HDq4HScwwYR2cNxfc9Da7pqEV9ae90ztemzMivqjiZumykimblL1h2URbT3pTNpPd+tj
+         PPGW9ylQAqh7yhg+eGDbO3cM9TOTDJJSF3NmqMi+T0yIxWt8ix4qlzEtibnyEMxov0tW
+         4eh4CMouVtgVxH2IPCG5eN84Nrc5Nnf/vtlC9XWT1d7nXYLCjd8+o4YAjNjRXGFf1pz+
+         PPspH0zFiWBrEyQjJwQ9ERYTQ65m5ROsjrq9QviF4o1rXv9AMZKK0QCOJUzzRJJfrMb+
+         YCNA==
+X-Forwarded-Encrypted: i=1; AHgh+RpCdqIbT52dpdYkpYy+wuxZFOuc4gPa3jlgRYWTvZKsEBBQZQ2MTgyso08P0SSiB1cWF6o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaWFQMpTfHm6QEe7Rlgz6TdAuFlxDevwwobgxijU2V4Vm/H+bm
+	Rj5t6XWGxAg3H7xi9ifpjtOARqeDHXmaQs31omu3JRdBmF9OrTG1ZS4T3j38fUYZd7q/PjWgFZs
+	Ifs1T+ppmyw==
+X-Received: from dlbsi7.prod.google.com ([2002:a05:7022:b887:b0:13d:d48:df85])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:cd95:b0:3c3:89ce:b5bc
+ with SMTP id adf61e73a8af0-3cbc01c89d2mr2588400637.15.1786087107367; Fri, 07
+ Aug 2026 00:18:27 -0700 (PDT)
+Date: Fri,  7 Aug 2026 00:18:11 -0700
+In-Reply-To: <20260807071818.718751-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260807071818.718751-1-irogers@google.com>
 X-Mailer: git-send-email 2.55.0.679.g6767b8d81c-goog
-Message-ID: <20260807071818.718751-1-irogers@google.com>
-Subject: [RFC PATCH v1 0/8] perf/core, perf/tools: Add PERF_SAMPLE_BUILD_ID_OFFSET
- support
+Message-ID: <20260807071818.718751-2-irogers@google.com>
+Subject: [RFC PATCH v1 1/8] perf event: Factor build_id out into its own
+ top-level struct
 From: Ian Rogers <irogers@google.com>
 To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -87,129 +91,257 @@ To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>
 	linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-This patch series introduces PERF_SAMPLE_BUILD_ID_OFFSET to the
-perf_event UAPI and implements full support across both the kernel
-and perf tools.
+Future changes will use build_id in more contexts. For consistency make
+the struct its own type and update usage to be of this type.
 
-Background & Motivation:
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/include/uapi/linux/perf_event.h | 19 +++++++++----
+ tools/lib/perf/include/perf/event.h   | 18 +++++++-----
+ tools/perf/builtin-inject.c           |  3 +-
+ tools/perf/util/event.c               |  4 +--
+ tools/perf/util/machine.c             |  3 +-
+ tools/perf/util/python.c              |  8 +++---
+ tools/perf/util/synthetic-events.c    | 40 +++++++++++++++------------
+ 7 files changed, 57 insertions(+), 38 deletions(-)
 
-In order for perf to translate virtual addresses of samples into
-symbols a file and offset within the file are needed. During event
-synthesis perf will create mmap events to facilitate the translation
-of a virtual address to a file and offset by modelling the address
-space of a process. By directly recording in a sample the Build ID of
-a file and the offset within it, no synthesis is necessary. The Build
-ID and offset as a pair are much larger than a virtual address, so
-there is a trade-off between synthesis cost and extra size for
-samples. These changes just facilitate Build ID and offset as a choice
-for perf samples and the user can have the choice to use it when they
-believe it is advantageous.
-
-In practice perf still needs to map a build ID to a file, so by
-default this change keeps synthesis to allow this. It is expected a
-user that knows their build IDs, say through debuginfod, will disable
-this option with say --synth=no.
-
-The kernel support uses the existing build ID and offset support used
-by BPF stack traces.
-
-The Build ID and offset samples inherently don't leak ASLR
-information. As with the ASLR remapping work in perf inject, support
-is added to migrate virtual addresses to Build ID and offset for the
-purposes of testing without kernel support.
-
-Series Overview:
-
-- Patch 1: Factor struct perf_build_id into top-level header structure.
-- Patch 2: Add PERF_SAMPLE_BUILD_ID_OFFSET to UAPI.
-- Patch 3: Implement kernel-side sampling support in
-           perf_output_sample() using stack_map_get_build_id_offset().
-- Patch 4: Refactor perf tools thread__find_map and symbol lookup APIs
-           to accept struct perf_sample.
-- Patch 5: Add perf tools internal parsing and symbol resolution via
-           Build ID + offset.
-- Patch 6: Extend perf inject with --buildid-offset to convert sample
-           files.
-- Patch 7: Add --buildid-offset option to perf record.
-- Patch 8: Add unit and shell test coverage (bid-offset test and
-           inject_bid_offset.sh).
-
-Testing & Verification:
-
-The series was verified using QEMU hypervisor testing with kernel
-builds and perf test.
-
-Linux Plumbers Tracing Miniconference:
-
-I submitted a proposal/abstract to talk about these changes to the
-Tracing Micro Conference at Linux Plumbers Conference 2026 in Prague.
-
-Ian Rogers (8):
-  perf event: Factor build_id out into its own top-level struct
-  perf/core: Add BUILD_ID_OFFSET to UAPI
-  perf/core: Implement BUILD_ID_OFFSET sample type
-  perf: Refactor thread map and symbol APIs to take perf_sample
-  perf tools: Internal support for BUILD_ID_OFFSET
-  perf inject: Extend perf inject to support bid_offset conversion
-  perf record: Add --buildid-offset option
-  perf tests: Add build_id_offset test coverage
-
- include/linux/bpf.h                           |  13 +
- include/uapi/linux/perf_event.h               |   4 +-
- kernel/bpf/stackmap.c                         |   2 +-
- kernel/events/core.c                          |  85 ++-
- tools/include/uapi/linux/perf_event.h         |  30 +-
- tools/lib/perf/include/perf/event.h           |  18 +-
- .../arch/powerpc/util/skip-callchain-idx.c    |   4 +-
- tools/perf/builtin-inject.c                   |  23 +-
- tools/perf/builtin-record.c                   |   7 +
- tools/perf/builtin-script.c                   |  49 +-
- tools/perf/builtin-timechart.c                |   4 +-
- tools/perf/builtin-trace.c                    |  12 +-
- tools/perf/tests/Build                        |   1 +
- tools/perf/tests/bid-offset.c                 |  60 +++
- tools/perf/tests/builtin-test.c               |   1 +
- tools/perf/tests/code-reading.c               |   4 +-
- tools/perf/tests/mmap-thread-lookup.c         |  45 +-
- tools/perf/tests/sample-parsing.c             |  37 +-
- tools/perf/tests/shell/inject_bid_offset.sh   | 170 ++++++
- tools/perf/tests/shell/record.sh              |  69 +++
- tools/perf/tests/tests.h                      |   1 +
- tools/perf/util/Build                         |   1 +
- tools/perf/util/annotate-data.c               |   5 +-
- tools/perf/util/aslr.c                        |  16 +-
- tools/perf/util/build-id.c                    |   5 +-
- tools/perf/util/capstone.c                    |   4 +-
- tools/perf/util/cs-etm.c                      |   4 +-
- tools/perf/util/data-convert-json.c           |   4 +-
- tools/perf/util/debug.c                       |   4 +-
- tools/perf/util/dlfilter.c                    |   8 +-
- tools/perf/util/event.c                       |  93 ++--
- tools/perf/util/evsel.c                       |  35 ++
- tools/perf/util/evsel.h                       |   3 +-
- tools/perf/util/evsel_fprintf.c               |   2 +-
- tools/perf/util/inject_bid_offset.c           | 504 ++++++++++++++++++
- tools/perf/util/inject_bid_offset.h           |  21 +
- tools/perf/util/intel-pt.c                    |  12 +-
- tools/perf/util/machine.c                     | 106 ++--
- tools/perf/util/maps.c                        |  29 +
- tools/perf/util/maps.h                        |   2 +
- tools/perf/util/perf_event_attr_fprintf.c     |   3 +-
- tools/perf/util/python.c                      |  13 +-
- tools/perf/util/record.h                      |   1 +
- tools/perf/util/sample.h                      |  13 +
- .../scripting-engines/trace-event-python.c    |  20 +-
- tools/perf/util/synthetic-events.c            |  60 ++-
- tools/perf/util/thread.c                      |  11 +-
- tools/perf/util/thread.h                      |  14 +-
- tools/perf/util/unwind-libdw.c                |   7 +-
- tools/perf/util/unwind-libunwind.c            |   8 +-
- 50 files changed, 1473 insertions(+), 174 deletions(-)
- create mode 100644 tools/perf/tests/bid-offset.c
- create mode 100755 tools/perf/tests/shell/inject_bid_offset.sh
- create mode 100644 tools/perf/util/inject_bid_offset.c
- create mode 100644 tools/perf/util/inject_bid_offset.h
-
+diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+index fd10aa8d697f..2479a38883d0 100644
+--- a/tools/include/uapi/linux/perf_event.h
++++ b/tools/include/uapi/linux/perf_event.h
+@@ -1058,6 +1058,18 @@ enum perf_event_type {
+ 	 */
+ 	PERF_RECORD_SAMPLE			= 9,
+ 
++	/*
++	 * Build IDs may be present in a number of events. They have a
++	 * consistent encoding of:
++	 *
++	 * struct build_id {
++	 *	u8		size;
++	 *	u8		__reserved_1;
++	 *	u16		__reserved_2;
++	 *	u8		data[20];
++	 * };
++	 */
++
+ 	/*
+ 	 * The MMAP2 records are an augmented version of MMAP, they add
+ 	 * maj, min, ino numbers to be used to uniquely identify each mapping
+@@ -1076,12 +1088,7 @@ enum perf_event_type {
+ 	 *			u64		ino;
+ 	 *			u64		ino_generation;
+ 	 *		};
+-	 *		struct {
+-	 *			u8		build_id_size;
+-	 *			u8		__reserved_1;
+-	 *			u16		__reserved_2;
+-	 *			u8		build_id[20];
+-	 *		};
++	 *		struct build_id		build_id;
+ 	 *	};
+ 	 *	u32				prot, flags;
+ 	 *	char				filename[];
+diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+index fdced574c889..173eab43c148 100644
+--- a/tools/lib/perf/include/perf/event.h
++++ b/tools/lib/perf/include/perf/event.h
+@@ -26,6 +26,15 @@ struct perf_record_mmap {
+ 	char			 filename[PATH_MAX];
+ };
+ 
++#define PERF_BUILD_ID_SIZE 20
++
++struct perf_build_id {
++	__u8	 size;
++	__u8	 __reserved_1;
++	__u16	 __reserved_2;
++	__u8	 data[PERF_BUILD_ID_SIZE];
++};
++
+ struct perf_record_mmap2 {
+ 	struct perf_event_header header;
+ 	__u32			 pid, tid;
+@@ -39,12 +48,7 @@ struct perf_record_mmap2 {
+ 			__u64	 ino;
+ 			__u64	 ino_generation;
+ 		};
+-		struct {
+-			__u8	 build_id_size;
+-			__u8	 __reserved_1;
+-			__u16	 __reserved_2;
+-			__u8	 build_id[20];
+-		};
++		struct perf_build_id build_id;
+ 	};
+ 	__u32			 prot;
+ 	__u32			 flags;
+@@ -321,7 +325,7 @@ struct perf_record_header_build_id {
+ 	union {
+ 		__u8		 build_id[24];
+ 		struct {
+-			__u8	 data[20];
++			__u8	 data[PERF_BUILD_ID_SIZE];
+ 			__u8	 size;
+ 			__u8	 reserved1__;
+ 			__u16	 reserved2__;
+diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+index 70bbfad5653e..8559c0eab5f1 100644
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -811,7 +811,8 @@ static int perf_event__repipe_mmap2(const struct perf_tool *tool,
+ 	struct dso_id id = dso_id_empty;
+ 
+ 	if (event->header.misc & PERF_RECORD_MISC_MMAP_BUILD_ID) {
+-		build_id__init(&id.build_id, event->mmap2.build_id, event->mmap2.build_id_size);
++		build_id__init(&id.build_id, event->mmap2.build_id.data,
++			       event->mmap2.build_id.size);
+ 	} else {
+ 		id.maj = event->mmap2.maj;
+ 		id.min = event->mmap2.min;
+diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
+index ea75816d126a..c69ae57ce679 100644
+--- a/tools/perf/util/event.c
++++ b/tools/perf/util/event.c
+@@ -335,8 +335,8 @@ size_t perf_event__fprintf_mmap2(union perf_event *event, FILE *fp)
+ 		char sbuild_id[SBUILD_ID_SIZE];
+ 		struct build_id bid;
+ 
+-		build_id__init(&bid, event->mmap2.build_id,
+-			       event->mmap2.build_id_size);
++		build_id__init(&bid, event->mmap2.build_id.data,
++			       event->mmap2.build_id.size);
+ 		build_id__snprintf(&bid, sbuild_id, sizeof(sbuild_id));
+ 
+ 		return fprintf(fp, " %d/%d: [%#" PRI_lx64 "(%#" PRI_lx64 ") @ %#" PRI_lx64
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index f86b3b7df742..21d54ebc866b 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -1797,7 +1797,8 @@ int machine__process_mmap2_event(struct machine *machine,
+ 		perf_event__fprintf_mmap2(event, stdout);
+ 
+ 	if (event->header.misc & PERF_RECORD_MISC_MMAP_BUILD_ID) {
+-		build_id__init(&dso_id.build_id, event->mmap2.build_id, event->mmap2.build_id_size);
++		build_id__init(&dso_id.build_id, event->mmap2.build_id.data,
++			       event->mmap2.build_id.size);
+ 	} else {
+ 		dso_id.maj = event->mmap2.maj;
+ 		dso_id.min = event->mmap2.min;
+diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
+index af85c0771c44..d35190052d97 100644
+--- a/tools/perf/util/python.c
++++ b/tools/perf/util/python.c
+@@ -233,12 +233,12 @@ static PyObject *pyrf_mmap2_event__get_build_id(PyObject *self, void *closure __
+ 	if (!(pevent->event.header.misc & PERF_RECORD_MISC_MMAP_BUILD_ID))
+ 		Py_RETURN_NONE;
+ 
+-	int size = pevent->event.mmap2.build_id_size;
++	size_t size = pevent->event.mmap2.build_id.size;
+ 
+-	if (size > 20)
+-		size = 20;
++	if (size > sizeof(pevent->event.mmap2.build_id.data))
++		size = sizeof(pevent->event.mmap2.build_id.data);
+ 
+-	return PyBytes_FromStringAndSize((const char *)pevent->event.mmap2.build_id, size);
++	return PyBytes_FromStringAndSize((const char *)pevent->event.mmap2.build_id.data, size);
+ }
+ 
+ static PyGetSetDef pyrf_mmap2_event__getset[] = {
+diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
+index 75a32ae8ef62..f7dedfb6bab8 100644
+--- a/tools/perf/util/synthetic-events.c
++++ b/tools/perf/util/synthetic-events.c
+@@ -452,7 +452,7 @@ static void perf_record_mmap2__read_build_id(struct perf_record_mmap2 *event,
+ 	}
+ 
+ 	if (event->header.misc & PERF_RECORD_MISC_MMAP_BUILD_ID) {
+-		build_id__init(&dso_id.build_id, event->build_id, event->build_id_size);
++		build_id__init(&dso_id.build_id, event->build_id.data, event->build_id.size);
+ 	} else {
+ 		dso_id.maj = event->maj;
+ 		dso_id.min = event->min;
+@@ -478,16 +478,20 @@ static void perf_record_mmap2__read_build_id(struct perf_record_mmap2 *event,
+ 	nsinfo__put(nsi);
+ 
+ out:
++	event->build_id.__reserved_1 = 0;
++	event->build_id.__reserved_2 = 0;
+ 	if (rc == 0) {
+-		memcpy(event->build_id, bid.data, sizeof(bid.data));
+-		event->build_id_size = (u8) bid.size;
++		memcpy(event->build_id.data, bid.data, sizeof(bid.data));
++		event->build_id.size = (u8) bid.size;
+ 		event->header.misc |= PERF_RECORD_MISC_MMAP_BUILD_ID;
+-		event->__reserved_1 = 0;
+-		event->__reserved_2 = 0;
+ 
+ 		if (dso && !dso__has_build_id(dso))
+ 			dso__set_build_id(dso, &bid);
+ 	} else {
++		memset(&event->build_id, 0, sizeof(event->build_id));
++		event->build_id.size = 0;
++		event->header.misc &= ~PERF_RECORD_MISC_MMAP_BUILD_ID;
++
+ 		if (event->filename[0] == '/') {
+ 			pr_debug2("Failed to read build ID for %s\n",
+ 				  event->filename);
+@@ -611,8 +615,10 @@ int perf_event__synthesize_mmap_events(const struct perf_tool *tool,
+ 		event->mmap2.prot = prot;
+ 		event->mmap2.flags = flags;
+ 
+-		if (!symbol_conf.no_buildid_mmap2)
+-			perf_record_mmap2__read_build_id(&event->mmap2, machine, false);
++		if (!symbol_conf.no_buildid_mmap2) {
++			perf_record_mmap2__read_build_id(&event->mmap2, machine,
++							 /*is_kernel=*/false);
++		}
+ 
+ 		if (perf_tool__process_synth_event(tool, event, machine, process) != 0) {
+ 			rc = -1;
+@@ -807,12 +813,12 @@ static int perf_event__synthesize_modules_maps_cb(struct map *map, void *data)
+ 
+ 		/* Clear stale build ID and entire union from previous module iteration */
+ 		event->mmap2.header.misc &= ~PERF_RECORD_MISC_MMAP_BUILD_ID;
+-		memset(event->mmap2.build_id, 0, sizeof(event->mmap2.build_id));
+-		event->mmap2.build_id_size = 0;
+-		event->mmap2.__reserved_1 = 0;
+-		event->mmap2.__reserved_2 = 0;
++		memset(event->mmap2.build_id.data, 0, sizeof(event->mmap2.build_id.data));
++		event->mmap2.build_id.size = 0;
++		event->mmap2.build_id.__reserved_1 = 0;
++		event->mmap2.build_id.__reserved_2 = 0;
+ 
+-		perf_record_mmap2__read_build_id(&event->mmap2, args->machine, false);
++		perf_record_mmap2__read_build_id(&event->mmap2, args->machine, /*is_kernel=*/false);
+ 	} else {
+ 		const char *long_name = dso__long_name(dso);
+ 
+@@ -1293,7 +1299,7 @@ static int __perf_event__synthesize_kernel_mmap(const struct perf_tool *tool,
+ 		event->mmap2.len   = map__end(map) - event->mmap.start;
+ 		event->mmap2.pid   = machine->pid;
+ 
+-		perf_record_mmap2__read_build_id(&event->mmap2, machine, true);
++		perf_record_mmap2__read_build_id(&event->mmap2, machine, /*is_kernel=*/true);
+ 	} else {
+ 		size = snprintf(event->mmap.filename, sizeof(event->mmap.filename),
+ 				"%s%s", machine->mmap_name, kmap->ref_reloc_sym->name) + 1;
+@@ -2486,10 +2492,10 @@ int perf_event__synthesize_mmap2_build_id(const struct perf_tool *tool,
+ 	ev.mmap2.len = len;
+ 	ev.mmap2.pgoff = pgoff;
+ 
+-	ev.mmap2.build_id_size = bid->size;
+-	if (ev.mmap2.build_id_size > sizeof(ev.mmap2.build_id))
+-		ev.mmap2.build_id_size = sizeof(ev.mmap2.build_id);
+-	memcpy(ev.mmap2.build_id, bid->data, ev.mmap2.build_id_size);
++	ev.mmap2.build_id.size = bid->size;
++	if (ev.mmap2.build_id.size > sizeof(ev.mmap2.build_id.data))
++		ev.build_id.size = sizeof(ev.mmap2.build_id.data);
++	memcpy(ev.mmap2.build_id.data, bid->data, ev.mmap2.build_id.size);
+ 
+ 	ev.mmap2.prot = prot;
+ 	ev.mmap2.flags = flags;
 -- 
 2.55.0.679.g6767b8d81c-goog
 
