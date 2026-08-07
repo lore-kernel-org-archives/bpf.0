@@ -1,109 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB282DA759
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 21:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64F93812F0;
+	Fri,  7 Aug 2026 21:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786139539; cv=none; b=BolrlTsEo2pZ3BNTtmVwT1BOei7MDEwMYYMcvuNVe2Ak8qn26knP5+j9vdR46fBFR97st/fmThTIQYJH8VAGtJ2Jczkeej7wmRCXNPiH8unJ5heD++OwPnc7ehPkfKKW4grcOleZCBmANrOVKFzMhA7sDymqDyIksnGTOIHZDfQ=
+	t=1786139949; cv=none; b=foBAS3jj7L38HmMBNpj28DE9i0Xy2UY55Mddtoq7tKs6kiJtwwzr+F9ztNzrwS8uv/bRIBn1NVd5PX15NsZgM+EyHo4jLSKPYTLhvwRnHkGdvUWK0Xgw2IlP60vmmu1QxoTZXGXvXk3xVWftMgKWtVhZ72/QB7uOvK2/lvP7Xic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786139539; c=relaxed/simple;
-	bh=DqWYN2eJYfKlUcst68H4ljwxQQx1PELkPVD829imahY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=tLpRn9lyyrB2ldoigwlIGRgTLISYFlrh8eUW8OsUd9Suf0RLYKjIwABi503G3ZPXXMpQYHLNDEedaiuUUcFn9F7lW1zEHpJMh4bvmJX+bR1MK8k8eJoS1nyGufZj0Q68Y0vsanaGJQdVeqqfXLkCSwf08PapEkcgCkB0X9j4SBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NdRoLvof; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786139949; c=relaxed/simple;
+	bh=OMPA9zXQ5zDnWya5oPn/91CDMMEk4mnMb/BLCxXR530=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C5obDny8E550ti7+XtxE19+xnULrYct95JE0IhDReFgBnGoxGsffcaPHyFSB9+olMDwaPedFNfGRZEd0pt3S80waFZo1c9M2P60vAu0tvOXvVwjxQn5Jn7WWHUjTt5rtCXyoal9q9qd3C/FiDlRkWr58QOnk6fOGD+lZ4d0p8mE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C+uWovCZ; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NdRoLvof"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657D51F000E9;
-	Fri,  7 Aug 2026 21:52:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786139538;
-	bh=jM4+6hBocIGYe7ZSU/SN9pNaNYFE2ASo9mcHtAV0zxE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=NdRoLvof9ldwxxZepgk8pdQ91hKedoKE6mQdKQ88GzA88voWw8Yxzy1qTH947oKFO
-	 Fv9IuRCLdicsaWKwLW03NoMoVhqpnfLAYditv/8c1Q1j/XU2Z2zOES3tmPcDAw3IJd
-	 aRr8U71Y3a4fKfCIaN05crVK3FwhaRjrfrBr+nYmReLDPKWHViucdaLLYtXz4mrbJm
-	 pRQeglYhR2k3zw32rr6GtsyoTijHBXGxGeAvPLo7vGxk2UfKwUM/wa8QcdaxxIJVeR
-	 bKiObepz8ue7MWVa/EI7wwktc01R+BBw5jGF+wqzt6IEU9xE9KXInpuW6g6PzvQX8v
-	 6Rt2aX4h+8Rxw==
-Content-Type: multipart/mixed; boundary="===============6906703682029055666=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C+uWovCZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786139948; x=1817675948;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OMPA9zXQ5zDnWya5oPn/91CDMMEk4mnMb/BLCxXR530=;
+  b=C+uWovCZMuzV8TSqCqBH9NfN4V4hR095+j4+xoFPicAfzVRilYuJJWR5
+   6IeP1d8VKhwGSlpJ8gCF/0btASaMyZT5VmFlMiDDMoaxSA3W9+MYl50Xi
+   CjOqqvox/aQJlKJ/gggEAoVEQruv2emnk3WKMQb74i95RofocITQgYKKQ
+   DDj/QPaVZu+KcmY54SVNB4bcM3Ez8Qsdst4lkklp3u8yID1zGxUtl8of0
+   ssLzhIq1tjv72frds4ohlOk9Dm0gdWwi/vwjX/PUSEWgwkkWk9XcYTkre
+   nPyxDqas+INKJwb8dLGBDk+qA34t7b2V6fKkhpXGjJiOEbfbaTtLbeJhP
+   A==;
+X-CSE-ConnectionGUID: ckEJIw4xTTOpmSiuSITDug==
+X-CSE-MsgGUID: h2ez+Jz8SCi1wGG3ujGx+g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11868"; a="112302732"
+X-IronPort-AV: E=Sophos;i="6.25,210,1779174000"; 
+   d="scan'208";a="112302732"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2026 14:59:07 -0700
+X-CSE-ConnectionGUID: dnAzD3ZaTrmIUwx9c7YBcQ==
+X-CSE-MsgGUID: +dRjWKiRRi2D2SXSdRA0vA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,210,1779174000"; 
+   d="scan'208";a="287198450"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 07 Aug 2026 14:59:03 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wsSah-00000000JLw-3pMV;
+	Fri, 07 Aug 2026 21:58:59 +0000
+Date: Sat, 8 Aug 2026 05:58:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rong Tao <rtoax@foxmail.com>, andrii@kernel.org, vmalik@redhat.com,
+	ast@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, rtoax@foxmail.com,
+	Rong Tao <rongtao@cestc.cn>, Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
+	"(open list:BPF \\(Safe Dynamic Programs and Tools\\))" <bpf@vger.kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test
+ bpf_strcat,bpf_strncat kfuncs
+Message-ID: <202608080502.lI7AVjty-lkp@intel.com>
+References: <tencent_DB0510330C3A8574B3C62E6154165FCB4709@qq.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <866402a885d28810f2dde7a7deceb995c88725278d40d2455f2ad97aaa925cf0@mail.kernel.org>
-In-Reply-To: <20260807-static-zext-v4-3-b6c270013c77@gmail.com>
-References: <20260807-static-zext-v4-3-b6c270013c77@gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/7] bpf: move bpf_is_reg64() to fixups.c
-From: bot+bpf-ci@kernel.org
-To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
-Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,iii@linux.ibm.com,gimm78064@gmail.com,info@starlabs.sg,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  7 Aug 2026 21:52:17 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_DB0510330C3A8574B3C62E6154165FCB4709@qq.com>
 
---===============6906703682029055666==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Rong,
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 5f7843648189..d2ff416d7ad6 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -64,6 +64,96 @@ static int insn_def_regno(const struct bpf_insn *insn)
->  	}
->  }
->
-> +/* This function is supposed to be used by the zero extension optimization
-> + * code only. It returns TRUE if the source or destination register operates
-> + * on 64-bit, otherwise return FALSE.
-> + */
+kernel test robot noticed the following build errors:
 
-A subsystem pattern flags this as potentially concerning: the BPF
-subsystem guide requires multi-line comments in kernel/bpf/ to follow
-the modern style with the opening /* on its own line. This comment
-puts text on the same line as the opening delimiter.
+[auto build test ERROR on bpf-next/master]
 
-The guide states this applies even when surrounding code uses the old
-style, and this comment's first line is modified by this patch ('the
-following 32-bit optimization code only' -> 'the zero extension
-optimization code only'), so it is a modified line rather than
-untouched pre-existing text.
+url:    https://github.com/intel-lab-lkp/linux/commits/Rong-Tao/selftests-bpf-Test-bpf_strcat-bpf_strncat-kfuncs/20260807-065842
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/tencent_DB0510330C3A8574B3C62E6154165FCB4709%40qq.com
+patch subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test bpf_strcat,bpf_strncat kfuncs
+config: s390-randconfig-r052-20260807 (https://download.01.org/0day-ci/archive/20260808/202608080502.lI7AVjty-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 12df34b8469b8095359de8c249cb1b2753fadeea)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260808/202608080502.lI7AVjty-lkp@intel.com/reproduce)
 
-I noticed a later commit in the series (87fabf17dd53) rewrites this
-comment into the compliant form, so the deviation is transient within
-the series. Is it worth adjusting now, or acceptable to fix in the
-later patch?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608080502.lI7AVjty-lkp@intel.com/
 
-> +bool bpf_is_reg64(struct bpf_insn *insn,
-> +		  u32 regno, struct bpf_reg_state *reg, enum bpf_reg_arg_type t)
-> +{
+All errors (new ones prefixed by >>):
 
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index be8818b9e640..abb325194168 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3058,96 +3058,6 @@ static void mark_stack_slots_scratched(struct bpf_verifier_env *env,
->  		mark_stack_slot_scratched(env, spi - i);
->  }
->
-> -/* This function is supposed to be used by the following 32-bit optimization
-> - * code only. It returns TRUE if the source or destination register operates
-> - * on 64-bit, otherwise return FALSE.
-> - */
-> -bool bpf_is_reg64(struct bpf_insn *insn,
-> -	      u32 regno, struct bpf_reg_state *reg, enum bpf_reg_arg_type t)
-> -{
-
-[ ... ]
+>> kernel/bpf/helpers.c:4228:3: error: invalid lvalue in asm output
+    4228 |                 __put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/uaccess.h:612:2: note: expanded from macro '__put_kernel_nofault'
+     612 |         arch_put_kernel_nofault(dst, src, type, local_label);   \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/include/asm/uaccess.h:471:33: note: expanded from macro 'arch_put_kernel_nofault'
+     471 | #define arch_put_kernel_nofault __mvc_kernel_nofault
+         |                                 ^
+   arch/s390/include/asm/uaccess.h:424:19: note: expanded from macro '__mvc_kernel_nofault'
+     424 |                         : [_dst] "=Q" (*(type *)dst)                    \
+         |                                        ^~~~~~~~~~~~
+   kernel/bpf/helpers.c:4233:2: error: invalid lvalue in asm output
+    4233 |         __put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/uaccess.h:612:2: note: expanded from macro '__put_kernel_nofault'
+     612 |         arch_put_kernel_nofault(dst, src, type, local_label);   \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/include/asm/uaccess.h:471:33: note: expanded from macro 'arch_put_kernel_nofault'
+     471 | #define arch_put_kernel_nofault __mvc_kernel_nofault
+         |                                 ^
+   arch/s390/include/asm/uaccess.h:424:19: note: expanded from macro '__mvc_kernel_nofault'
+     424 |                         : [_dst] "=Q" (*(type *)dst)                    \
+         |                                        ^~~~~~~~~~~~
+   2 errors generated.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+vim +4228 kernel/bpf/helpers.c
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31219172145
---===============6906703682029055666==--
+  4197	
+  4198	static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
+  4199	{
+  4200		int dlen, slen, space, copied;
+  4201		char cs = '?';
+  4202	
+  4203		if (!copy_from_kernel_nofault_allowed(dst, 1) ||
+  4204		    !copy_from_kernel_nofault_allowed(src, 1)) {
+  4205			return -ERANGE;
+  4206		}
+  4207	
+  4208		dlen = bpf_strnlen(dst, dsz);
+  4209		if (dlen < 0)
+  4210			return dlen;
+  4211		slen = bpf_strnlen(src, sz);
+  4212		if (slen < 0)
+  4213			return slen;
+  4214	
+  4215		if (dlen >= dsz || sz == 0 || dsz == 0)
+  4216			return -EINVAL;
+  4217	
+  4218		space = dsz - dlen;
+  4219		if (space <= 1 || space < min(slen, sz) + 1)
+  4220			return -E2BIG;
+  4221	
+  4222		guard(pagefault)();
+  4223		for (copied = 0; copied < space - 1 && copied < slen; copied++) {
+  4224			__get_kernel_nofault(&cs, src, char, err_out);
+  4225			if (cs == '\0')
+  4226				break;
+  4227	
+> 4228			__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
+  4229	
+  4230			src++;
+  4231		}
+  4232		cs = '\0';
+  4233		__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
+  4234	
+  4235		__get_kernel_nofault(&cs, src, char, err_out);
+  4236		if (cs != '\0' && sz > copied)
+  4237			return -E2BIG;
+  4238	
+  4239		return dlen + copied;
+  4240	err_out:
+  4241		return -EFAULT;
+  4242	}
+  4243	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
