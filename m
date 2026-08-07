@@ -1,243 +1,174 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95A33F23A4
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 22:05:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16DF5367B99
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 22:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786140358; cv=pass; b=s+Vl7Fmv9+6oU/fygmDuF6Pu3xWB7p3qe16JUiK761fZeZFfmIi4EZT6rCiXu1HaLo0nrvilZ837BE7BvrEVWmJVzDAJxwsXRn7s9UtJZjBCBW0ngMM6yEqxJREDLTaKFNNGX6Bqy+VKVJnXdhKYFwa6j8dJTRHOzYfn50hEL0c=
+	t=1786140372; cv=pass; b=IgszStF+SQttXJJCmBsknECsme3fYb4yK3O3ogaHID5Qe4oKL8GjjLGxNToXDqwVS5KzWmiSZxs5CXl8YPP5lDHsyBfmIvdGqcplri0O+U/JOzKsnQsocApjIpRXxLGdfmDCECAoRjSWwzw6RWBx0TP4qWeF21lOvZ8AzGNpgNE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786140358; c=relaxed/simple;
-	bh=5Xb1alAmdBaaDGWYV09Au7bmdJWaXBDIFWpMj8Juass=;
+	s=arc-20240116; t=1786140372; c=relaxed/simple;
+	bh=ayAVOkYDxTLcQ/YuYnkxIC6DyQ/vvq/ddc0m64lXxa0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QZSD1PbVAIyrD9bg0+JRAxt7F0jYW4FvtAcXzxzc2Xh+gPWE9gWQ2S1EjtEVHGC/7qVbMW13FWqgORRO62XNRe/LdKVZFumE7hN6RIyA6TzkwRMimAzDWyZMqfDkJkwKycvbg+ulnm2ggZF1SrJC7vffCgGqj9RqVwuZgu55Bug=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pdntbZRA; arc=pass smtp.client-ip=209.85.214.174
+	 To:Cc:Content-Type; b=FsKngKIQb0gA3FzPH5knqCWy15dKZgjntYAzksX8OJj97QaqoB7C+/Io3AkTyK1dln5Kvp0vNX5E9cxv0xn0HvLawBcD09Fcs1Hq23raoZAz7yGbVeLf1xEOLeqTHMfu+pcyJmNL1HihpNggUjUSQbJj2/goqnxjk+q9gfCeAbk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZF2KC6UA; arc=pass smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pdntbZRA"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cf50c6f235so697975ad.0
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 15:05:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786140356; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZF2KC6UA"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-383cb94f742so30223a91.3
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 15:06:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786140370; cv=none;
         d=google.com; s=arc-20260327;
-        b=XXGsiBQHEE1ZZUPbgKycW9vZ9j5C6otJK9L29wX4aq6nJGNMI41jo/q+MVoROUsbwh
-         U/W22NZU5WwPQmdrtCE71BKSiS6fYMLkOc6i2WvM0S4DyFr6QO02pz6JrxJtKHpZkQcg
-         7lJ9hJy99AtSaStoSF7rp7jMJLxudM2PMescvPHoDlTJ+7IHIBIIw8GRtnMKHONf2iJ4
-         W72OFHQov9AfsX1Z/LbYb5uNTJLU5OXsRbBff+auHb6nZuTIt24JCreqKeouJoQHPnmE
-         vK1xZ2BIK3rOlAAc8Reuo5OgZDoHv3QqU6dbMCuo3gc2fgd6oEuKDqrVq0/06YHr0TKg
-         QArQ==
+        b=HUxtxi19CzL7rU0KeRRsGYlucKaUvsD8oV7UJcITLHPfGJfwWyPSbtiPPiq9Nf8z/j
+         xxFsj6AlyBriFG42UUZzlGcgzACDiEy3sPSWZhQ7g6Ki8TGQU1fUUxClPYlPoSjuvN0/
+         7FJSy58fjcuazDHkCmFLFWuFGol2ixfXOH9EJsjXdZ2kUhGr0GIyfbYPVBxuBMCOCRuf
+         Pqhh8Hmzia3YK7XPAkm/d/K9WjFkPCdN94Z2lABUhZjYbOYh185PuYY6+GlsHo0h5z+N
+         of6PQBygi3AgWqVn74UpMjJtFW74Jlcp7QZHrL+1jxCM4+PtdUndW1jlmFEXL8vmuU2z
+         LC9g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=oBzhlymJq0i9dB4bSmpxHcz5q4k4mmAVB1xGwvA6mww=;
-        fh=iw7+rQzlbDI58pgaP3Ojwlw8x3F/yp+Z3O6odXgNeYk=;
-        b=NChalku6mTqZdzaNvnoH0WntDCrCt145WAQyKOzRqO+tSjUfHtVqNkrwpJiZYQ3dFv
-         4/X5ToimfiWX0TSiC0/cKCAIz+PetX6rm9h7iJgfQ4UTScjCpqSiVQtrelVt5/60U8dC
-         BsnSW97BHiQjQUZcqlnTaF1+fk1T83NvaoTwwGXO8EhGkZNSVwOdciXRk6tPEt69ZFPI
-         A+qYvwuacGzywEqkLWtwm2yqoFY3HwES9pGtKRIrG8QO9NYOi7Zzord8eehFJlHYhJMy
-         8EzlvfNuz9AfeIA2/rxZmTLPOoMKzr0/S93WDrvU67mP47yFJCoXvDwCBiJhu1mMbNIZ
-         BlEQ==;
+        bh=v7W53OKtetAES/Ur15d10M2fBqkK0v+olT1EjWbF8sk=;
+        fh=uNSGatdDK6vSR4cpGHrsjN4pj3dxOq0UjVrq+Hgi9mw=;
+        b=EJTWg0Z2DYcoDZeHBOyUJhxHVh6v4kHFFjmYw9D7MOMOr8YuyyS6gN7yVuSbiQLNsD
+         F9WSRTtrD8gD1UHGhSphDIH4ICRrHYX9v5k5s7+2qm36uR6MQUxXO46h0HCt8O8/Cxhu
+         zjm7YB1jBbi6NRUFoOxcUjCIC2uzj6EsOXw6z8vr7WF+Uhx+wdbEnN6l8gv0QHEJsOF9
+         /wLamPNUZaXDwsPjtX5YeXl3YpiAh86WrNLCUPQTQf3hFFjD60Q32recSSn2BO83jZRk
+         aIDr4Wr6woEBqdo2RNf6v3w5THyC8KIWv1Km7HSGSORuTBQIwc6Vf0oyNcOMWhxQx6iI
+         DfRA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786140356; x=1786745156; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786140370; x=1786745170; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=oBzhlymJq0i9dB4bSmpxHcz5q4k4mmAVB1xGwvA6mww=;
-        b=pdntbZRA0xBCVDlEDZpZPbMU519P/iojA+DvJfIHq2zubXFJRNHZb222GGslorPI54
-         Z7FPbbpHxiy63se3kX9ZXgUhbyh4wtAjcVxkDCM3a+Dts68+NgUuQODU/gAfLAjyMWr/
-         mxDvgWDI5qWwU6luLhYy1OJINXtUJeLjDBjLNWepjbQqEYPRNrQYhIOYG6c16ZY/uCD4
-         IkLk41DG5/RKBiFS+wUyIbSNF7pdiJl1ySS5uOmJgDnY02zOvSHZ2rN9XrxJivDA9Cgs
-         3y/vC5WPyLfhvdkj5bIhbyZN2DFgjI3JcJ2hDn9hQh9ybDeD/1fjgUA5N6+gm+YZ4awY
-         LnuA==
+        bh=v7W53OKtetAES/Ur15d10M2fBqkK0v+olT1EjWbF8sk=;
+        b=ZF2KC6UAbBLF1khTRdknXB+cj+7UYSm2XMXPFHxmzA4ZOX9y0npbd4+DY2y3PiPps3
+         3Wy41S77kx1K+n6+IwAoMk5+4OUVLvI5ctlJGZ1aoSA1Xj2NdQ3t0sjx4QKy9Y46553X
+         tO/zrIuIOdUoEowixLVE+wHfKdNimTagDdC4NSBNIn67DExjV6ZDUwxBGqBxKP0o2ODb
+         vezJXi7ptWamsdjVBMsuYFsZAMI7lKC2lJXRSDvQv+4mE2NFbnxkvD42B8sr4ZdJhICG
+         yWV/P2UCK3+KMaBiMIyaAmiYbf+P5FrpsYK5E5dC0kZhE1Zye6Jz452QQTHFc2cF/Yji
+         NeFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786140356; x=1786745156;
+        d=1e100.net; s=20251104; t=1786140370; x=1786745170;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oBzhlymJq0i9dB4bSmpxHcz5q4k4mmAVB1xGwvA6mww=;
-        b=aCzDUAd0zXMEvFL3V+RvnVPewJ4l1F/3bTBQl2TA1DVrzD9RmiouQTnYcTbPgLzBVm
-         a91tcdZfrT36+S3049WR0+ohlY9wuj/CoCXU6HpwnWCKMKfGrid6cTRM52A+2cbPd17t
-         WNNaN5IFeNG2BAmMohI1Nmdsr+4VCfauo0uJ0OmjGI4OFwVr6JdUA6eD34EYZJZaiTp6
-         Czc59/ZjFapyGT+u8IaZKQH/0IznJNenfA0w/QG907FbXwCndsG8rSI0iX36zWLVAPuJ
-         sraC+oQGTFoBDKLvb1ncwRUsX8d5fVcPJX8wW5kVk54hwnsgDyddbYPQ5tLRz1K6GRVl
-         A4og==
-X-Gm-Message-State: AOJu0Yy8ZCDMSXxMa5dtDUpMCX/bB5VkUWT3Dj8pPXmVApf6VWDltXZ9
-	A0UrTINZjNaseei+PhEBdlullgxucD23C9g7HSS96UMgIktsyuhMS3SFHMTeOp0N1Ag10dY27vp
-	h73Q+QCGcgqR1CtA6Kx3Vqe5m9fzjyzw=
-X-Gm-Gg: AR+sD13wH55H2geiGh8WMXC4kChAypybe7iFu/w7fa8c8nkNUfSy3PEiaax2JJkEFXh
-	yulQqsFBp90Xz/njjGEH9IvcOrq6RW4q6i+EmNASUTqySjKMTsunieNidi9gcXbXfTAIliPmhmr
-	Qf79NiJcgPK1fnqA4RiXJir3J6+jYXjVfJ4KL5tzNY776LfZU09MkE1W9gq4ZpFAI6LmlPFRn/F
-	BVfu55SOdVTmQxT46HLjTJdAwnlr/MahersI+Ry7vQ2IKftH241KfKsjWCpdhM5mqlfO2Z1NJqX
-	KN1kUmPHSCzU3jlN9Y8D/8YiXZiIl4os/Sr6hv+ZKD4Gck3xOm395PAsgVLXAPq1e2WDD5RTG0q
-	lT1rPWJLI2KUEN8Sa5cMWF0P/qzUfTUTD0ma6x2nZXw==
-X-Received: by 2002:a17:90b:4e8d:b0:38d:ec31:4840 with SMTP id
- 98e67ed59e1d1-3903c5932femr27829359a91.13.1786140356051; Fri, 07 Aug 2026
- 15:05:56 -0700 (PDT)
+        bh=v7W53OKtetAES/Ur15d10M2fBqkK0v+olT1EjWbF8sk=;
+        b=aAARB5N7D6Td7nNkOJ5T+HvFuuzypvsEz9tPNALAQum1v8+AKgIqy39jlmA2VqQDwM
+         yYk7MLuwPnIvoAQzJsrnJ3fi3M1S8AeXaboVM6A958w7I+JZwYko/yk39lqAW05Nguz1
+         kRqwfBc4ZQU4GHfHsQVgoktUC9eHS0vkxYFRjB/d/pfvFCgyOx7nMTCExSr46hxwjxyo
+         NdYxs7JdIyiybWamDWq8t1+rDefgW8Ma6oWu4BgeN2gkqd+2Q2h192LzrLQLxgaIi/rR
+         WUcLpeCwRlbV1z+okv3QkVlHH8LV4nSyOQgfgiSQTnQN426Y9WeCeGoNaqgyRh9z15Ot
+         FXQQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpLVwO+CpGp+uHd79q2/Z2ZuP9mMuUogkLHYqN7CetpIaEscAKL+Tg9T1Aj8oxAoG1FYyo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx12V3W6KlwRHBsyPn4JvPSOxc4nz+4VqslCJLQmYij8CjtXyap
+	RUnI7r1TjOY7KZmiISEujGFQJFzPk357auSzKV/4fQlYunoCWF5KBhWdpZriJInJQ6vMY4rYeUe
+	LG16iogY/QmSvfUMc1FT+nDht1Kg4NEs=
+X-Gm-Gg: AR+sD112jts9PJ430CB8i0ngugkxXCNMJmdbhv4/MEI/jEy1bpU8+41DYwpNKP+goDK
+	+j1dXJoMEzmRYt6AZA/i1dkTzaCohE+frGDPZAuVIsE0fLdOERhCVtskbbZIQYSy3I+l1xDnazr
+	dmpCTQYXpTC2n4KG6nf4qaE9FkBVXOCoV0ZqpnAIPZpcZJM4uB3GzfRXYAwzH0sn6kqSl4qCzmW
+	LTfh2HE6t8p45veYoE3DX/A7bYOYWe4CWpdg2tfDiaT38IcHV5kFMcQHMEiTpgkhfsifMizW9/U
+	2MmqFi2r2yRyQQS1LYsmVpYkr8watqHxKkgmGIDZfOHla1wkgKcyhgiTchISuOJb+KAex5RsU+/
+	dK3JzVYub8btH/QVJRTWJJzQDSEJypQ9uuWSFORhV8jf0EWQO2OtD
+X-Received: by 2002:a17:90b:1d4f:b0:38f:7f60:ba35 with SMTP id
+ 98e67ed59e1d1-3903c5381d6mr25486520a91.5.1786140370247; Fri, 07 Aug 2026
+ 15:06:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260805011517.1717238-1-memxor@gmail.com>
-In-Reply-To: <20260805011517.1717238-1-memxor@gmail.com>
+References: <20260805011517.1717238-1-memxor@gmail.com> <20260805011517.1717238-3-memxor@gmail.com>
+ <952a9aa9e0e8d0e8bbcf54dda79b1b88ff48e1ff.camel@gmail.com>
+In-Reply-To: <952a9aa9e0e8d0e8bbcf54dda79b1b88ff48e1ff.camel@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 7 Aug 2026 15:05:42 -0700
-X-Gm-Features: AUfX_myEbKoJT8EKlPR47sJxFg9N0TvSOAcAAZPX1iJbe7_F9c-qTPEM9XPCHY4
-Message-ID: <CAEf4Bza1FG8ZYZyKWpzpjp24uQ+EtS6RuGQp+a6WichJH+3-2A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 0/6] Improve stack depth verification stats output
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, 
+Date: Fri, 7 Aug 2026 15:05:54 -0700
+X-Gm-Features: AUfX_mxYNF1ZEHadXyLXR-b73OrG2vKEdBbijpndVmnb-T7WjHWRNZ3JuT-IdMs
+Message-ID: <CAEf4BzbX+PDV-uM2qLAh_K0e55oDnhbfRiEd0bFvEmyXfF6Dhw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 2/6] bpf: Propagate async callback
+ instructions to scheduling subprograms
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, 
 	kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 4, 2026 at 6:15=E2=80=AFPM Kumar Kartikeya Dwivedi <memxor@gmai=
-l.com> wrote:
+On Wed, Aug 5, 2026 at 11:18=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
 >
-> Some improvements for more clarity in the stack depth verification
-> statistics output. See commit logs for details.
+> On Wed, 2026-08-05 at 03:15 +0200, Kumar Kartikeya Dwivedi wrote:
 >
-> For example, ./test_progs -t subprogs/subprogs_alone loads prog4,
-> which has a main program, two static subprograms, and two independently
-> verified global subprograms. A sample run produces:
+> ...
 >
->   verification time 1765 usec
->   stack depth max 48
->   subprog 0 (prog4) main insns_own 29 insns_total 51 stack 8
+> > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.=
+h
+> > index 9de45ade473b..42fa464c520f 100644
+> > --- a/include/linux/bpf_verifier.h
+> > +++ b/include/linux/bpf_verifier.h
+> > @@ -447,6 +447,8 @@ static_assert(MAX_BPF_STACK / 8 <=3D (1 << 6));
+> >  struct bpf_verifier_state {
+> >       /* call stack tracking */
+> >       struct bpf_func_state *frame[MAX_CALL_FRAMES];
+> > +     u32 async_stats_subprog_ids[MAX_CALL_FRAMES];
+> > +     u32 async_stats_subprog_cnt;
+>
+> One async callback can call another async callback, e.g. see program
+> 'test1' in progs/timer.c. Meaning that this array is not really bound
+> by MAX_CALL_FRAMES and the code below may overflow it.
+>
+> Overall, it seems that having an alternative full call stack solely
+> for the purpose of accounting is an overkill. I'd just show async
 
-even though insn_own was my proposal, reading this I immediately went
-"insns_self"! :) I think self is a better term, sorry
+I agree, it's a bit too much, even though it's useful to be consistent
+with non-async callbacks. How about we simplify this just remembering
+which entry level subprog (main or global) was active when async cb
+was scheduled, and account this async cb to that root program's total?
 
-but other than that, this is great!
+btw, does anyone remember why we "detach" async cb?
 
->   subprog 1 (get_task_tgid) global insns_own 9 insns_total 9 stack 8
->   subprog 2 (sub4) static insns_own 15 insns_total 22 stack 8
->   subprog 3 (sub3) static insns_own 7 insns_total 7 stack 0
->   subprog 4 (sub1) global insns_own 10 insns_total 10 stack 8
->   processed 70 insns (limit 1000000) max_states_per_insn 0 total_states 7=
- peak_states 7 mark_read 0
+pw-bot: cr
+
+
+> subprograms as their own roots, tbh. On the other hand, same
+> subprogram can be called both as an async and as a regular subprogram :)
+> so the idea of a separate spine is not w/o it's merit.
+> If we decide to stick with it, maybe pick a better name?
+> 'verification_call_stack' or something like this?
 >
-> The insns_own counts account for every processed instruction exactly once=
-:
+> If we decide to go with this separate call stack, would it be possible
+> to adapt the code in a way that only this call stack is used for
+> accounting? (e.g. is filled on regular subprogram calls etc).
 >
->   29 + 9 + 15 + 7 + 10 =3D 70
+> Another option is to build an implicit call graph in env while
+> verifying and count only self instructions and counters on edges.
+> Then propagate the data over the graph in post-order traversal
+> (subprog_topo_order is already computed). I think I like this idea
+> the most.
 >
-> The main program and global subprograms are independent exploration roots=
-,
-> so their insns_total counts also account for the full processed budget:
+> ...
 >
->   51 + 9 + 10 =3D 70
+> > @@ -2293,6 +2298,12 @@ static struct bpf_verifier_state *push_async_cb(=
+struct bpf_verifier_env *env,
+> >                       0 /* frameno within this callchain */,
+> >                       subprog /* subprog number within this prog */);
+> >       elem->st.frame[0] =3D frame;
+> > +     cnt =3D env->cur_state->async_stats_subprog_cnt;
+> > +     memcpy(elem->st.async_stats_subprog_ids, env->cur_state->async_st=
+ats_subprog_ids,
+> > +            cnt * sizeof(elem->st.async_stats_subprog_ids[0]));
+> > +     for (i =3D 0; i <=3D env->cur_state->curframe; i++)
+> > +             elem->st.async_stats_subprog_ids[cnt++] =3D env->cur_stat=
+e->frame[i]->subprogno;
+> > +     elem->st.async_stats_subprog_cnt =3D cnt;
+> >       return &elem->st;
+> >  }
 >
-> Static subprogram totals provide a nested, top-down breakdown inside thei=
-r
-> root. In this example:
->
->   sub4: 22 =3D 15 own + 7 in sub3
->   prog4: 51 =3D 29 own + 22 in sub4
->
-> The global subprogram bodies are accounted in their own root totals rathe=
-r
-> than being included in prog4 or the static callees which call them.
->
-> Asynchronous callback work is propagated through every scheduling subprog=
-ram
-> in a nested callback chain. Running:
->
->   ./test_progs -t verifier_subprog_insn_stats/stats_async_nested -v
->
-> produces the following stats:
->
->   stack depth max 0
->   subprog 0 (stats_async_nested) main insns_own 9 insns_total 23 stack 0
->   subprog 1 (stats_async_nested_leaf) static insns_own 2 insns_total 2 st=
-ack 0
->   subprog 2 (stats_async_outer) static insns_own 6 insns_total 8 stack 0
->   subprog 3 (stats_async_nested_schedule) static insns_own 6 insns_total =
-14 stack 0
->   processed 23 insns
->
-> Here, 9 + 2 + 6 + 6 =3D 23. The nested callback work is propagated
-> bottom-up through both scheduling subprograms:
->
->   stats_async_outer: 8 =3D 6 own + 2 in stats_async_nested_leaf
->   stats_async_nested_schedule: 14 =3D 6 own + 8 in stats_async_outer
->   stats_async_nested: 23 =3D 9 own + 14 in stats_async_nested_schedule
->
-> Changelog:
-> ----------
-> v5 -> v6
-> v5: https://lore.kernel.org/bpf/20260804081114.3871564-1-memxor@gmail.com
->
->  * Track own and inclusive instruction counts for main, global, and stati=
-c
->    subprograms. (Andrii, Eduard)
->  * Keep instruction subtotals path-local across verifier state copies.
->  * Propagate async callback budget through nested scheduling chains. (And=
-rii)
->  * Split per-subprogram instruction accounting into a preparatory patch.
->  * Add deterministic selftests with exact own, total, and processed count=
-s.
->
-> v4 -> v5
-> v4: https://lore.kernel.org/bpf/20260803072733.191502-1-memxor@gmail.com
->
->  * Change the format to combine instruction counts and stack depths into
->    per-program records. (Andrii)
->  * Adjust veristat for the new format while retaining support for the leg=
-acy format.
->  * Explain why the legacy stack parsing buffer is zero-initialized. (BPF =
-CI Bot)
->
-> v3 -> v4
-> v3: https://lore.kernel.org/bpf/20260803031457.3115812-1-memxor@gmail.com
->
->  * Read names from subprog_info directly to avoid an out-of-bounds access
->    when func_info validation fails. (BPF CI Bot)
->
-> v2 -> v3
-> v2: https://lore.kernel.org/bpf/20260802225209.2511758-1-memxor@gmail.com
->
->  * Reuse subprog_name() to fetch subprogram names. (BPF CI Bot)
->
-> v1 -> v2
-> v1: https://lore.kernel.org/bpf/20260801230400.850271-1-memxor@gmail.com
->
->  * Use multi-line format. (Eduard)
->  * Adjust veristat to work with old and new format.
->  * Adjust selftest log_level without new option. (Eduard)
->
-> Kumar Kartikeya Dwivedi (6):
->   bpf: Track verifier instruction stats for each subprogram
->   bpf: Propagate async callback instructions to scheduling subprograms
->   bpf: Show more useful info in stack depth stats
->   selftests/bpf: Adjust veristat stack depth parsing
->   selftests/bpf: Test stack depth stats without BTF subprog names
->   selftests/bpf: Test subprogram instruction statistics
->
->  include/linux/bpf_verifier.h                  |   7 +-
->  kernel/bpf/verifier.c                         |  88 +++++--
->  .../selftests/bpf/prog_tests/verifier.c       |   2 +
->  .../bpf/progs/verifier_basic_stack.c          |   8 +-
->  .../bpf/progs/verifier_bpf_fastcall.c         |  38 ++-
->  .../bpf/progs/verifier_global_subprogs.c      |   6 +-
->  .../bpf/progs/verifier_private_stack.c        |  22 +-
->  .../bpf/progs/verifier_subprog_insn_stats.c   | 225 ++++++++++++++++++
->  .../selftests/bpf/progs/verifier_var_off.c    |   8 +-
->  tools/testing/selftests/bpf/test_verifier.c   |   2 +-
->  tools/testing/selftests/bpf/verifier/calls.c  |  12 +-
->  tools/testing/selftests/bpf/veristat.c        |  16 +-
->  12 files changed, 395 insertions(+), 39 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/progs/verifier_subprog_in=
-sn_stats.c
->
->
-> base-commit: 6655c409707ec8ce9ce0850ffe4fe02331fd4d9c
-> --
-> 2.53.0
+> ...
 >
