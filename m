@@ -1,154 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7208473C88
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 13:05:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF5948A8D3
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 13:07:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786107907; cv=none; b=TpwCEpHbC4jMS+gQE8xCQyWl8h1xq6fo7QOnFHVCArw3Wh5ydWGLq8eJwROk8gl4FJPFHoCQiiGMLirjtHuKfipyMae5eSfWx1Y92WhIbMT8fGweISNXMd60V5gE5ISR+9InInR0cbsIdPvQqUW0T4LKQA5nZN6/FCwtrWIFhmc=
+	t=1786108048; cv=none; b=F2kuyvJugmMtffb2gdMjCDKo3NAGtz2Y59MGTaqjya4a5d/Z9mX7wSpDcEZ+Fg7sgXN39flM6hrmVw5qVWW+oFzCrCc2y4ufVvCdvlXsN8AG3xJi0PUPGbCebubw2krdG61C0kTH3WVqgWAiw4RD08Hhyd7YfaE3AVv5VTXvxwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786107907; c=relaxed/simple;
-	bh=O/m2pqCzaYrCW86t1l0OBHOXHBiAmqoY3OYda+XIzmQ=;
+	s=arc-20240116; t=1786108048; c=relaxed/simple;
+	bh=Bqkmn4aCSE2wRtBr9XJRJWfaJx/nJB68P+OhRW6iSMU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IQ7Y1JtAHI+t98Iq4q8pvGbmoMY//NrHRpvWVhoeR1iHqXgosZvXVss0vBXhJZEoeuQQdWylWSGWlkUaKSrCJyZ9Oa59R/EWYwxqhmPtKpcewUHLhqaMcwfL16gRfdvhcCAvUEycmHVJrcS/TIZoItJEhxJmUAIx92Xo1tGawTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mx4F1+uZ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=hC4UyQhi15b0Men4g77s0JfRgOcmLTuET8YdfpNFK+17tJmpuUrZ2+GUYojggnDn5psVZqVpXgB/yqF0Xu7NSv/9e6XgYztsY1o8RNRMo1ch+lXVoHQKi1O0/JZ/MOOYo8W6gtMTQNQSWs5nsRI5cLvecH3/ZUIawBqwgyN/MoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDusRyik; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mx4F1+uZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1804F1F00A3A;
-	Fri,  7 Aug 2026 13:04:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDusRyik"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DFE51F000E9;
+	Fri,  7 Aug 2026 13:07:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786107899;
-	bh=dEkTUXvIXaYA1Pcv1Nf1NJ/a0zJope5+BrgRnG4yGHg=;
+	s=k20260515; t=1786108041;
+	bh=kdP0Kcs8+qiQu00y+JcByKsd8A1eSUkpqnj9wNIRBTY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Mx4F1+uZRxhpTVoQdVqqtjB8baSxva2gPRUjpOiOHfMCWuhb8dmBp41mTOvs/tcOW
-	 qiU55aEi+0KsdgImQNthgWNYQws81R8KSJmAPLq5VhO8K/2iwSOGp2sS6Q7wWoJccK
-	 5m2UB8XMBmlDant+ZXedJJ75xWXeXXIqep6fk5gWg4CsczSLXfUSi5v6FCgY9cZStK
-	 75xd0J6HiwqN+w7Do+jMww10WHSAOkW23DNKvcEvE0Vcnay8yiovQUtJXXQP1gms7/
-	 WO4EznCST38kONCpfdq2UX1qQnwfSJbCBRGj5+HB1CG2izeYh35gK0cwgkJg1lOglu
-	 PiFs9406bGUEA==
+	b=nDusRyikyPsaprDLKyTJoUWbt6qOXvURMyR0nbcmwIp0emqHGj3I6vmdTcgkhe5FF
+	 KG71iipaOYRy2gffMNXNKC1DMYUbotKc1UJ/DiTLBAAx5LxgpzIrNxUrbOGvU5n18v
+	 HSCMfGvzciDSixlYOnQqx7F+JVCfHombkcRJ6gkPnsg3Cv6BP8EVaQRa42z/xDxg7Z
+	 f3Q+DXupzGgo11bIbvUQCZjinN7twyIWF4GrlzvZalWp+4NfI3A98WMxTEH8DTguiZ
+	 BKyLbSsT4yFJOcoxbEC0GYizuYGE/xkAyyMCPfVtKatAT/nrtdbJVJnB6Iskyvk74J
+	 jPUo8H2Vw4YmQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH  v11 8/8] powerpc64/bpf: fix percpu private stack leak
- on JIT failure
+Subject: Re: [PATCH 7.1.y v2] selftests/bpf: Add tests for sleepable
+ tracepoint programs
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Saket Kumar Bhaskar" <skb99@linux.ibm.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <6bbf4249e47dc14ac65d72c304bf9335cf10b206.1786099877.git.skb99@linux.ibm.com>
-References: <cover.1786099877.git.skb99@linux.ibm.com>
- <6bbf4249e47dc14ac65d72c304bf9335cf10b206.1786099877.git.skb99@linux.ibm.com>
+In-Reply-To: <20260807-selftests-bpf-sleepable-v2-1-f7e6566f36a1@marliere.net>
+References: <20260807-selftests-bpf-sleepable-v2-1-f7e6566f36a1@marliere.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 13:04:58 +0000
-Message-Id: <20260807130459.1804F1F00A3A@smtp.kernel.org>
+Date: Fri, 07 Aug 2026 13:07:20 +0000
+Message-Id: <20260807130721.8DFE51F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [Critical] In `bpf_jit_binary_pack_finalize()`, if `bpf_arch_text_copy()`=
- fails, it uses uninitialized `ro_header->size` to free the pack (causing b=
-itmap corruption) and fails to uncharge modmem.
-- [Critical] If `bpf_jit_binary_pack_finalize()` fails during `bpf_jit_free=
-()`, the JIT memory pack is double-freed.
-- [High] The ARM64 BPF JIT compiler has the exact same percpu private stack=
- memory leak on failure paths that this patch fixes for PowerPC.
+- [Critical] Test codifies a critical kernel crash bug due to incomplete ba=
+ckport of sleepable tracepoint support
 --
 
---- Patch [8]: [PATCH  v11 8/8] powerpc64/bpf: fix percpu private stack lea=
-k on JIT failure ---
-commit e1be4be6e638db0714dd1f4ef6a5f98e6f888db6
-Author: Abhishek Dubey <adubey@linux.ibm.com>
+--- Patch [1]: [PATCH 7.1.y v2] selftests/bpf: Add tests for sleepable trac=
+epoint programs ---
+commit d01560ee1bdaeec333977b1890fc06598668aa9f
+Author: Mykyta Yatsenko <yatsenko@meta.com>
 
-powerpc64/bpf: fix percpu private stack leak on JIT failure
+selftests/bpf: Add tests for sleepable tracepoint programs
 
-The existing conditional statement in bpf_int_jit_compile() frees the
-percpu private stack at out_addrs only when the image buffer was never
-allocated.
+Cover all three sleepable tracepoint types (tp_btf.s, raw_tp.s, tp.s)
+and sys_exit (via bpf_task_pt_regs) with functional tests using
+bpf_copy_from_user() on getcwd.
 
-Closes: https://lore.kernel.org/bpf/20260616135426.A06B71F000E9@smtp.kernel=
-.org
+Link: https://lore.kernel.org/bpf/20260422-sleepable_tracepoints-v13-6-9900=
+5dff21ef@meta.com
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_c=
-omp.c
-> index 2cc1124ed5303..395f1458db2e6 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -404,7 +404,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verif=
-ier_env *env, struct bpf_pr
->  				(void *)fimage + FUNCTION_DESCR_SIZE);
-> =20
->  out_addrs:
-> -		if (!image && priv_stack_ptr) {
-> +		if (!fp->jited && priv_stack_ptr) {
->  			fp->aux->priv_stack_ptr =3D NULL;
->  			free_percpu(priv_stack_ptr);
->  		}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but the ARM64 BPF JIT compiler
-has the exact same percpu private stack memory leak on failure paths that
-this patch addresses for PowerPC.
-
-In arch/arm64/net/bpf_jit_comp.c:bpf_int_jit_compile():
-
-    out_off:
-		if (!ro_header && priv_stack_ptr) {
-			free_percpu(priv_stack_ptr);
-			prog->aux->priv_stack_ptr =3D NULL;
-		}
-
-On failure paths jumping from out_free_hdr, ro_header is not NULL, causing
-the percpu stack free to be skipped. Could this also exhaust percpu memory
-on ARM64?
+> diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/tes=
+ting/selftests/bpf/verifier/sleepable.c
+> index c2b7f5ebf168c..6dabc55229455 100644
+> --- a/tools/testing/selftests/bpf/verifier/sleepable.c
+> +++ b/tools/testing/selftests/bpf/verifier/sleepable.c
+> @@ -76,7 +76,20 @@
+>  	.runs =3D -1,
+>  },
+>  {
+> -	"sleepable raw tracepoint reject",
+> +	"sleepable raw tracepoint accept",
+> +	.insns =3D {
+> +	BPF_MOV64_IMM(BPF_REG_0, 0),
+> +	BPF_EXIT_INSN(),
+> +	},
+> +	.prog_type =3D BPF_PROG_TYPE_TRACING,
+> +	.expected_attach_type =3D BPF_TRACE_RAW_TP,
+> +	.kfunc =3D "sys_enter",
+> +	.result =3D ACCEPT,
+> +	.flags =3D BPF_F_SLEEPABLE,
+> +	.runs =3D -1,
+> +},
 
 [Severity: Critical]
-This is a pre-existing issue, but if bpf_jit_binary_pack_finalize() fails
-during bpf_jit_free(), does this double-free the JIT memory pack?
+This is a pre-existing issue, but does this test codify a kernel crash bug
+in the baseline tree?
 
-In arch/powerpc/net/bpf_jit_comp.c:bpf_jit_free():
+The commit message notes that kernel-side sleepable tracepoint runtime supp=
+ort
+was not backported here. Because of an earlier backport, the verifier
+currently accepts sleepable raw tracepoints if tracepoint_is_faultable() is
+true (like sys_enter), which makes this verifier test pass.
 
-		if (jit_data) {
-			bpf_jit_binary_pack_finalize(jit_data->fhdr,
-                                                     jit_data->hdr);
-			kvfree(jit_data->addrs);
-			kfree(jit_data);
-		}
-		hdr =3D bpf_jit_binary_pack_hdr(fp);
-		bpf_jit_binary_pack_free(hdr, NULL);
+However, without the runtime support, the execution happens unconditionally
+under atomic contexts. For example, in __bpf_trace_run():
 
-If jit_subprogs() aborts early and calls bpf_jit_free() on subprograms,
-bpf_jit_binary_pack_finalize() is called. If its internal text copy fails,
-it internally frees ro_header. However, the return value of
-bpf_jit_binary_pack_finalize() is ignored here, and bpf_jit_binary_pack_fre=
-e()
-is called again, which seems to double-free the same pack structure.
+kernel/trace/bpf_trace.c:__bpf_trace_run() {
+    ...
+    rcu_read_lock_dont_migrate();
+    ...
+}
 
-The same pattern appears to exist in arch/x86/net/bpf_jit_comp.c:bpf_jit_fr=
-ee()
-as well.
+Or via the tracepoint wrapper:
 
-[Severity: Critical]
-This is a pre-existing issue, but does bpf_jit_binary_pack_finalize() use
-uninitialized memory if bpf_arch_text_copy() fails?
+include/trace/bpf_probe.h:__BPF_DECLARE_TRACE_SYSCALL() {
+    ...
+    preempt_disable_notrace();
+    ...
+}
 
-In kernel/bpf/core.c:bpf_jit_binary_pack_finalize():
+If a sleepable program is attached to this tracepoint and actually sleeps, =
+it
+will trigger a scheduling while atomic panic.
 
-	if (IS_ERR(ptr)) {
-		bpf_prog_pack_free(ro_header, ro_header->size);
-		return PTR_ERR(ptr);
-	}
-
-If bpf_arch_text_copy() fails, ro_header->size has not been initialized.
-Could this clear arbitrary memory regions in the shared pack allocator bitm=
-ap
-and permanently leak the module memory charge since bpf_jit_uncharge_modmem=
-()
-is missing on this error path?
+Should this test be removed or adjusted until the runtime support is fully
+backported to prevent asserting this unsafe verifier state?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786099877.gi=
-t.skb99@linux.ibm.com?part=3D8
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807-selftests-=
+bpf-sleepable-v2-1-f7e6566f36a1@marliere.net?part=3D1
