@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4BF418372;
-	Fri,  7 Aug 2026 13:44:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC9747CA7E;
+	Fri,  7 Aug 2026 13:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786110259; cv=none; b=ZaeT6EjwK/jJXg7fMW0frbBASjhV7suWR4DFtTD/6HTf0ZonDOkQ6QlE4HvKPxCD6nC1V5CDHZ6ZF5tGIY8z9FUx/1eMwitNTGKmfujuQ3TJRXate+1gk48VuPGWEophUK4FbifW7ymF/oZsHoCfJHTV7zYZYd0edpW3CWhsAQ4=
+	t=1786110269; cv=none; b=u+IuXD5xr8WvcpsB3EoiCndEIkmS+K7yvUU0VE2HdOqjZyTMOIfo9/VP6M/9ZKFJu05NGcdC/T8bb85PRskqu8AuV2Lh3sxtpHIXzxABRCm/Z5l6n1sNYUyD4kGsjn7YiToQ3qX7X0TRY6X3rNt3hC2/eFl6EzBIbhQ24pHHyy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786110259; c=relaxed/simple;
-	bh=h/cZlYYjndmxEK6dGgFw8l2YYcxd1NzgZqljwz6Bcl0=;
+	s=arc-20240116; t=1786110269; c=relaxed/simple;
+	bh=PHWBJJWa2vDogLDwmzdFullfODJdgE64IxAOkJXV5bA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iPbGbT/XDQiFFycICwBdwnoOe8xXBRXfuEPlDawFvhW/qjQ3FanIFmk8iiRekof1nHqmon1a27WTbjDcL25v73vY42PDk9hTsxhO5802fCDIZxNgbp4ylKRSfuUS1O/Tq6wA5wWwXSZucxdZW2m+Aph9zFDev/OY8xHUkwjAa1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yhg3zbd4; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=KF+qtw73grctoFRFUJy3H8PBmW2lfZvZnw5mnu38iEOQ2KVHKi2qriMagwjkfsuqLFSic+uLpx92tk5n1JW4i4UfQl6RH4FDp5Ws7yxBbnNCTBHrGjufcQeWvNJGfR0e90AXqOOpS4FBPv+Dcn7oQK6kt8Z2hvLu2CA3NSicpxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MolFXecr; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yhg3zbd4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MolFXecr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786110256; x=1817646256;
+  t=1786110264; x=1817646264;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=h/cZlYYjndmxEK6dGgFw8l2YYcxd1NzgZqljwz6Bcl0=;
-  b=Yhg3zbd4hJTqgBXoxt8EpJoHsTBGkAqe2/awVtqynAM6AadrfvFsjd21
-   4rMzgHM6YnPLfI6JEAPKAYWn8sdaVgK6XwbFQsOhheGZYAlt4XUL9oawl
-   bOiOsUMMd1O1emEFpbQzpuzoVUzm3BP5kqoSx1/ryQ4qI8VzvybnhIf6N
-   xbHrPbhbApJ1YmymjcCSzsRHKlBmoVmuCkv746o+Vzx+8RQ/Ys7GzD5Ol
-   FNfwdWGManYJpeFDCgjNq4bpuKHDN+C48lt57xvVOplxezJnVEnFZbZ/5
-   D9hjDwwfsiqG/hWTAG1Cop1LK0XKw20FernQ6oh8s7rrI8QthkgjeepXA
-   w==;
-X-CSE-ConnectionGUID: vA5dj10/SaG84ix7+dgbUQ==
-X-CSE-MsgGUID: IWczT8IXQ2CkwnR2o+F8pg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11868"; a="98079947"
+  bh=PHWBJJWa2vDogLDwmzdFullfODJdgE64IxAOkJXV5bA=;
+  b=MolFXecr8cw4MoOHeftfCPXchiI8PMLsoRmM7YolIKFERDXDUSb8/KS4
+   FdsK4nvnp/HPelghxGFJ8AUhZzJ+GTaMK2g36fLwBHmkx9uR9gM7kjINN
+   NvZ+hVlLyOSY2r4WkTF8xsrnX5F2Kh7OGtSLknbcv+5fwnApdll1zEsu9
+   /IzW+bASVlea77JBU6KW1WoZifZt9K4xmyTUs90fmVz/1KOr6cf+MT0Na
+   Jjsja5gtcGArS6VBVvZZ/sa4YtJFeSIM9zIUqcfSJrRGQdL/SVoik4ai7
+   s8umRU2fXP4V08yk7mhdjipbm0ngbOe7Dj8IO5LdmuVGoZzWyYtJgJDj2
+   Q==;
+X-CSE-ConnectionGUID: 9M0KJR0hTLOZQdjcoGF3Sg==
+X-CSE-MsgGUID: L9cea6AyR2iHlLrFx0CHUQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11868"; a="98079965"
 X-IronPort-AV: E=Sophos;i="6.25,210,1779174000"; 
-   d="scan'208";a="98079947"
+   d="scan'208";a="98079965"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2026 06:44:13 -0700
-X-CSE-ConnectionGUID: riB1BGlPSWu+a9ucxehEJA==
-X-CSE-MsgGUID: JRviGcLeQ5KZ6+SWjXo6jQ==
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2026 06:44:21 -0700
+X-CSE-ConnectionGUID: LGBnoXc1TQK91t9IjwZpLQ==
+X-CSE-MsgGUID: uSsUuykjTySjH6dpNArALg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,210,1779174000"; 
-   d="scan'208";a="287080060"
+   d="scan'208";a="287080089"
 Received: from unknown (HELO brc05..) ([10.190.162.60])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2026 06:44:09 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2026 06:44:17 -0700
 From: Tushar Vyavahare <tushar.vyavahare@intel.com>
 To: netdev@vger.kernel.org,
 	magnus.karlsson@intel.com,
@@ -58,9 +58,9 @@ To: netdev@vger.kernel.org,
 	tushar.vyavahare@intel.com,
 	andrii@kernel.org
 Cc: bpf@vger.kernel.org
-Subject: [PATCH net-next 3/5] selftests/xsk: expand XSKMAP capacity and add length-based XDP program
-Date: Fri,  7 Aug 2026 13:42:07 +0000
-Message-ID: <20260807134209.3794735-4-tushar.vyavahare@intel.com>
+Subject: [PATCH net-next 5/5] selftests/xsk: make pkt_stream_even_odd_sequence rollback-safe
+Date: Fri,  7 Aug 2026 13:42:09 +0000
+Message-ID: <20260807134209.3794735-6-tushar.vyavahare@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260807134209.3794735-1-tushar.vyavahare@intel.com>
 References: <20260807134209.3794735-1-tushar.vyavahare@intel.com>
@@ -72,74 +72,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Raise MAX_SOCKETS from 2 to 4 so the XSKMAP and test arrays can
-accommodate the upcoming 4-socket shared-UMEM test. Update the XSKMAP
-max_entries to use MAX_SOCKETS so the BPF and C sides stay in sync.
+If __pkt_stream_generate() fails midway through building per-socket
+streams, the original code overwrites xsk_arr[i].pkt_stream with a
+partial or NULL pointer before all allocations complete.
 
-Add xsk_xdp_shared_umem_length_based() XDP program that routes packets
-by total XDP-visible packet length (data_end - data): socket 0 for
-packets <= SHARED_UMEM_LEN_SPLIT bytes and socket 1 for packets >
-SHARED_UMEM_LEN_SPLIT bytes. Define SHARED_UMEM_LEN_SPLIT as 64 to avoid
-hardcoded length thresholds in the classifier.
+Allocate all TX and RX streams into temporary arrays first and only
+assign them to xsk_arr after every allocation succeeds.  On any failure
+free the already-allocated temporaries and return -ENOMEM with no
+xsk_arr pointers modified.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
 ---
- .../selftests/bpf/progs/xsk_xdp_progs.c       | 19 ++++++++++++++++++-
- tools/testing/selftests/bpf/xsk_xdp_common.h  |  3 ++-
- 2 files changed, 20 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/test_xsk.c       | 35 +++++++++++++------
+ 1 file changed, 25 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c b/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
-index 023d8befd4ca..543b61df3a2b 100644
---- a/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
-+++ b/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
-@@ -10,7 +10,7 @@
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+index 1665339844b5..ccfd9e8436a7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+@@ -597,26 +597,41 @@ static int pkt_stream_receive_half(struct test_spec *test)
  
- struct {
- 	__uint(type, BPF_MAP_TYPE_XSKMAP);
--	__uint(max_entries, 2);
-+	__uint(max_entries, MAX_SOCKETS);
- 	__uint(key_size, sizeof(int));
- 	__uint(value_size, sizeof(int));
- } xsk SEC(".maps");
-@@ -75,6 +75,23 @@ SEC("xdp") int xsk_xdp_shared_umem(struct xdp_md *xdp)
- 	return bpf_redirect_map(&xsk, idx, XDP_DROP);
+ static int pkt_stream_even_odd_sequence(struct test_spec *test)
+ {
++	struct pkt_stream *tx_streams[MAX_SOCKETS] = {};
++	struct pkt_stream *rx_streams[MAX_SOCKETS] = {};
+ 	struct pkt_stream *pkt_stream;
+ 	u32 i;
+ 
+ 	for (i = 0; i < test->nb_sockets; i++) {
+ 		pkt_stream = test->ifobj_tx->xsk_arr[i].pkt_stream;
+-		pkt_stream = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
+-						   pkt_stream->pkts[0].len, i, 2);
+-		if (!pkt_stream)
+-			return -ENOMEM;
+-		test->ifobj_tx->xsk_arr[i].pkt_stream = pkt_stream;
++		tx_streams[i] = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
++						      pkt_stream->pkts[0].len, i, 2);
++		if (!tx_streams[i])
++			goto err;
+ 
+ 		pkt_stream = test->ifobj_rx->xsk_arr[i].pkt_stream;
+-		pkt_stream = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
+-						   pkt_stream->pkts[0].len, i, 2);
+-		if (!pkt_stream)
+-			return -ENOMEM;
+-		test->ifobj_rx->xsk_arr[i].pkt_stream = pkt_stream;
++		rx_streams[i] = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
++						      pkt_stream->pkts[0].len, i, 2);
++		if (!rx_streams[i])
++			goto err;
++	}
++
++	for (i = 0; i < test->nb_sockets; i++) {
++		test->ifobj_tx->xsk_arr[i].pkt_stream = tx_streams[i];
++		test->ifobj_rx->xsk_arr[i].pkt_stream = rx_streams[i];
+ 	}
+ 
+ 	return 0;
++
++err:
++	for (i = 0; i < test->nb_sockets; i++) {
++		if (tx_streams[i])
++			pkt_stream_delete(tx_streams[i]);
++		if (rx_streams[i])
++			pkt_stream_delete(rx_streams[i]);
++	}
++
++	return -ENOMEM;
  }
  
-+SEC("xdp") int xsk_xdp_shared_umem_length_based(struct xdp_md *xdp)
-+{
-+	void *data = (void *)(long)xdp->data;
-+	void *data_end = (void *)(long)xdp->data_end;
-+	__u32 pkt_len = data_end - data;
-+
-+	/* 
-+	 * Route packets by total XDP-visible packet length (data_end - data):
-+	 * - Socket 0: packets <= SHARED_UMEM_LEN_SPLIT bytes
-+	 * - Socket 1: packets > SHARED_UMEM_LEN_SPLIT bytes
-+	 */
-+	if (pkt_len <= SHARED_UMEM_LEN_SPLIT)
-+		return bpf_redirect_map(&xsk, 0, XDP_DROP);
-+	else
-+		return bpf_redirect_map(&xsk, 1, XDP_DROP);
-+}
-+
- SEC("xdp.frags") int xsk_xdp_adjust_tail(struct xdp_md *xdp)
- {
- 	__u32 buff_len, curr_buff_len;
-diff --git a/tools/testing/selftests/bpf/xsk_xdp_common.h b/tools/testing/selftests/bpf/xsk_xdp_common.h
-index 45810ff552da..bd9b5dcf8c8e 100644
---- a/tools/testing/selftests/bpf/xsk_xdp_common.h
-+++ b/tools/testing/selftests/bpf/xsk_xdp_common.h
-@@ -3,7 +3,8 @@
- #ifndef XSK_XDP_COMMON_H_
- #define XSK_XDP_COMMON_H_
- 
--#define MAX_SOCKETS 2
-+#define MAX_SOCKETS 4
-+#define SHARED_UMEM_LEN_SPLIT 64
- #define PKT_HDR_ALIGN (sizeof(struct ethhdr) + 2) /* Just to align the data in the packet */
- 
- struct xdp_info {
+ static int pkt_stream_len_seq(struct test_spec *test, u32 short_len, u32 long_len)
 -- 
 2.43.0
 
