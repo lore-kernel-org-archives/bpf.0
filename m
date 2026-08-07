@@ -1,110 +1,215 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51CD3B27DE
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFC83B14A4
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:18:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786087066; cv=none; b=gn2mvyMsKvA9jitGl2cNGsBSQag+e/plqUFNrB5kgy58YC8eRN4vZ5c7FmE5bhvax4tqVPxP2J4csVYWnpLrtlfWbmKYiUdDUJ58sYR0/v17IFUwstvBxLigzjf3Vvy9GSe2A0dN/RPcyaRqErQQbSWdgEtBVaQEPS74IMu11+k=
+	t=1786087108; cv=none; b=lID2mxKYoqxwAo3u4I6WISEX5tGhvz5OvHph0bHdi/VV3o67Rhzny351oc0Uvj8WC5lOIOm4siP5LRG0xSLbU65/dmcg6cUQeUfdxEzn5c20002D6nT7Y9MbZc1UZ9Zy5XLqm8tFm7ZGW7/Ght9tuyGkqfZWiGJ92WD9cPWtkAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786087066; c=relaxed/simple;
-	bh=0rQKQIltbIAZKIRq8kaIlE+FrtHIwl8xoz/sXhNxEDM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P7bPDzg7p/cjM8fYjKJ4JR+wOC8KM5Dii8ZBqfdclyWFJJNLllGNsnNwOvEMfpn/J0B8+jnMxGkKZg3nUDbqka2V2l2uPTGu4S5k73avuStyCdTvYqPTqJVRp+tnD8nUNDNksnAmKTcqLsgIn8XPl3kHJWQnSjjYNFPRSmyREbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K/cUGoTN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786087108; c=relaxed/simple;
+	bh=pR4sKjOg6M5FpHXGSlh8e2AK38K+ESFD8AdmYkYBd4M=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=EZMQjb1+rQvhaivHmrOgcpGZn/SF5Tan+fNYn0C3SxfKMly6GoVmsMZnIKNZ6HUpGxZI7DhKFpfSOh6EP/+ipcqWFFOqrM+w35khUG74s+GZ+ICccLGyNoTC55IPHZhzbyaajgTUGayYbsOfvVJXw8gXwDHUhrsI8R7a+/rCPZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wPbwIsAq; arc=none smtp.client-ip=209.85.215.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K/cUGoTN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FFF51F00AC4
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:17:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786087060;
-	bh=hpa3u0YmlFumR8mctUr6wUSRc/RYVbzYOgbFmpN/tNE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=K/cUGoTNAkR36KQOWA/Ql+DALRMQupi2mTsELOw0XI99m7460VeDfRnJX8umeqP2c
-	 VXb/VGQMip/Y4dEROX0F7Aqv6l5q0BZdmh6Fm/m/SdvJZ7W0oHN04/d8SseArUxTsr
-	 TbsDM3txG3/WRaYl88xXHvbVRfZt/w8LxhfE/R1O2cE5x3r86JMSVozjT5cm7XD8iD
-	 XOoGlIl97SoiA5JGgGQW5KEvXI5zrVvnyhGnT+PWJwZjiJec745vduEX80fGPBiPvb
-	 hIDFVJSa4HGVfElOPDpUfota+84IXfCnIpsoQzDeMzs1UpD6Vy6BCkdX1DDpTOvsMI
-	 2UNy0Jvv+Kg/Q==
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-92e533aacf2so171292485a.2
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 00:17:40 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RpJABYOnYL3Y9WOupDCNd2+x+/GUUbS/s3axnXaAayezMtHWNPCAH2a3jMSyB4E+8IBUAc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzF5P04/dbaieiOdq/gfQrQBUSmWvVijKVGZJDMFRWvpIAceXt9
-	rHjQrUnDBDyj11ohvWXKdFMP00v9c8jonBbzwXyKZUVvGyBcDZvkk7wxn20VONsEWsZ3VA6VSuZ
-	xUIH3TE14Iw4scHeAh2UKoLbxFhVVUtc=
-X-Received: by 2002:a05:620a:1723:b0:932:dbf6:6f9 with SMTP id
- af79cd13be357-93671b4e94bmr98597785a.9.1786087059837; Fri, 07 Aug 2026
- 00:17:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wPbwIsAq"
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cbe62e01567so2637083a12.2
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 00:18:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786087106; x=1786691906; darn=vger.kernel.org;
+        h=content-type:to:from:subject:message-id:mime-version:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=s0uOfK2vBqt76lOjULU8OLFIMTR7IToQpEOfI/OQz2U=;
+        b=wPbwIsAq1I9i9/EPSCfEogdG+KPMbmFkjjX+Wx/Cf5Y1aiyzR+4933wE9Iso2tqlke
+         rpKK1BKUtzlwDQGJibK29YbRyf6KmNgLIWoR/mNlOJsajAOe0MLh3k54kuYW0XjCmfAx
+         yBAyW5qe7XFM3ja+Go8gRelFJTuGaX21WFH9gjSTlUnTh4dG5kuDtihtq9cOhD7c112u
+         XTbrQnYfjmih4Qqu32A1iVvanrslF8kocJEgPt5FiWlXGWZt198ToO6tNfB88aGdDjRp
+         7Po3wxv0uh8jNOs5Kv2pPNP9bJ76qLxuwp6sBFS3Xh4EpLrFi2DPV5R/oks/1UPKDAbW
+         lmSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786087106; x=1786691906;
+        h=content-type:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=s0uOfK2vBqt76lOjULU8OLFIMTR7IToQpEOfI/OQz2U=;
+        b=rwNZVXHJF6AEczoWval0eLUURcm3/xyDYgSIg+pRWcMn0WoqTGtcXjmPHBToo2GCvn
+         rPt7qSCml5KbONUj6GI5cxGvDHiHz6V7QXv5jugcskoM23IpMJRSCtdhC4s62oMnYvLu
+         Wa8vnsCK8xdL280KQTZWXKIwIS48rKc0OBQoCOvOVTUKlQf8cRlQrwMTwcz4tjGq3cdT
+         eeSbRzOCOTaGOE28ZjmnV7FUYdtQyqeDYKa3dPzuLJkFqg/upkbVo22ERZBv+pSapkm9
+         XZK7g6sVUJB/vKaJhLBwFEqNvdp9GJ+ep1/+L4LoHANdriRXUiNNJVx8slRRdI5rt59c
+         c0PA==
+X-Forwarded-Encrypted: i=1; AHgh+RrS2brcA6zKWxxVCQFoB1uX5j+gxuf6kLa2SOsThXDPVxfqevvL6e2YgiWcNXxokDCq0q4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8FGA89bazM8MDXIJ0+JeK2Tx/qFOwPtXnW+vGK64YHE/qwaoD
+	LJpAw+p/t1mS3jwgCLOv0FE/OeCbklXOJ9Wjmbnl2f0mwhpLVRH0h8fImw8IIBUJjisvqsi6UTZ
+	RVlgOL8oazA==
+X-Received: from dlbsj11.prod.google.com ([2002:a05:7022:f90b:b0:140:f42f:50e5])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6300:220a:b0:3c4:2cf9:28ad
+ with SMTP id adf61e73a8af0-3cb85e9927amr26857052637.12.1786087105691; Fri, 07
+ Aug 2026 00:18:25 -0700 (PDT)
+Date: Fri,  7 Aug 2026 00:18:10 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260806153000.4184871-1-andrey.grodzovsky@crowdstrike.com>
- <20260806153000.4184871-3-andrey.grodzovsky@crowdstrike.com>
- <CAPhsuW7gOs2Opo5DRm+YKxBxwU+ncBmEAKHYO5jPjzxM9S8i5w@mail.gmail.com>
- <CAOu3gNi8i9m7nEuKF28G8cYqJULvE4W6CuDeYVFk58z1xSbBoQ@mail.gmail.com> <20260806205144.743c45e6@gandalf.local.home>
-In-Reply-To: <20260806205144.743c45e6@gandalf.local.home>
-From: Song Liu <song@kernel.org>
-Date: Fri, 7 Aug 2026 00:17:27 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7vPwX-BGWmtMhA8dYwDOQYQLVXOUddZPbTvoazMpaKgA@mail.gmail.com>
-X-Gm-Features: AUfX_myRIr-UWYzu2Qobo6IwbXH7Icimgcg_mdavjanIG0MRPEY15jsJ-xL4Uew
-Message-ID: <CAPhsuW7vPwX-BGWmtMhA8dYwDOQYQLVXOUddZPbTvoazMpaKgA@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v3 2/2] selftests/livepatch: update
- test-ftrace.sh for deprecated ftrace_enabled
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>, bpf@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org, 
-	mbenes@suse.cz, jolsa@kernel.org, mhiramat@kernel.org, jpoimboe@kernel.org, 
-	joe.lawrence@redhat.com, mark.rutland@arm.com, corbet@lwn.net, 
-	stable@vger.kernel.org, linux-open-source@crowdstrike.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.679.g6767b8d81c-goog
+Message-ID: <20260807071818.718751-1-irogers@google.com>
+Subject: [RFC PATCH v1 0/8] perf/core, perf/tools: Add PERF_SAMPLE_BUILD_ID_OFFSET
+ support
+From: Ian Rogers <irogers@google.com>
+To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Mike Leach <mike.leach@arm.com>, Leo Yan <leo.yan@arm.com>, 
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>, Swapnil Sapkal <swapnil.sapkal@amd.com>, 
+	Thomas Falcon <thomas.falcon@intel.com>, Thomas Richter <tmricht@linux.ibm.com>, 
+	Dmitrii Dolgov <9erthalion6@gmail.com>, Eric Biggers <ebiggers@kernel.org>, Zecheng Li <zli94@ncsu.edu>, 
+	Gabriel Marin <gmx@google.com>, Tengda Wu <wutengda@huaweicloud.com>, 
+	Derek Foreman <derek.foreman@collabora.com>, Tanushree Shah <tshah@linux.ibm.com>, 
+	Ankur Arora <ankur.a.arora@oracle.com>, Aaron Tomlin <atomlin@atomlin.com>, tanze <tanze@kylinos.cn>, 
+	Rui Qi <qirui.001@bytedance.com>, Howard Chu <howardchu95@gmail.com>, 
+	Chuck Lever <cel@kernel.org>, Shimin Guo <shimin.guo@skydio.com>, 
+	Alessio Podda <aleph.pi.gh@gmail.com>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, coresight@lists.linaro.org, 
+	linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 6, 2026 at 5:51=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
->
-> On Thu, 6 Aug 2026 17:45:00 -0400
-> Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
->
-> > > Since the selftests are shipped with the kernel code, I think
-> > > we don't need to handle backward compatibility here. Instead,
-> > > we can just assume disabling ftrace is no longer supported.
->
-> Incorrect.
->
-> > >
-> > > Thanks,
-> > > Song
-> >
-> > I tend to agree but I think here[1] Steve and Miroslav asked for
-> > backward compatability. V1 was actually the way you prefer.
->
-> Right. We test older kernels (think LTS) with newer testing environments.
-> We need them to be backward compatible.
+This patch series introduces PERF_SAMPLE_BUILD_ID_OFFSET to the
+perf_event UAPI and implements full support across both the kernel
+and perf tools.
 
-Alternatively, we can test the LTS kernel with the selftests in the LTS tre=
-e.
-I guess this alternative is not preferred because the selftests in the LTS
-tree didn't have as good coverage as the newer selftests.
+Background & Motivation:
 
-However, requiring compatibility in selftests has its own issues:
+In order for perf to translate virtual addresses of samples into
+symbols a file and offset within the file are needed. During event
+synthesis perf will create mmap events to facilitate the translation
+of a virtual address to a file and offset by modelling the address
+space of a process. By directly recording in a sample the Build ID of
+a file and the offset within it, no synthesis is necessary. The Build
+ID and offset as a pair are much larger than a virtual address, so
+there is a trade-off between synthesis cost and extra size for
+samples. These changes just facilitate Build ID and offset as a choice
+for perf samples and the user can have the choice to use it when they
+believe it is advantageous.
 
-1) It makes writing and/or maintaining selftests harder. For example,
-   shall the selftest for a new feature fail or skip on older kernels.
-   Either way, some extra work is required to handle this, e.g.,
-   someone need to remember that this kernel-test combination is
-   expected to fail, and it is OK.
-2) It delays the actual deprecation of a feature. IOW, the feature will
-   somehow stays in the selftests for much longer time.
+In practice perf still needs to map a build ID to a file, so by
+default this change keeps synthesis to allow this. It is expected a
+user that knows their build IDs, say through debuginfod, will disable
+this option with say --synth=no.
 
-Overall, I think requiring backward compatibility appears to be
-attractive when we go from "having very little selftests" to
-"having some selftest coverage". However, not requiring backward
-compatibility will help us achieve better test coverage in the long run.
+The kernel support uses the existing build ID and offset support used
+by BPF stack traces.
 
-I hope this makes sense.
+The Build ID and offset samples inherently don't leak ASLR
+information. As with the ASLR remapping work in perf inject, support
+is added to migrate virtual addresses to Build ID and offset for the
+purposes of testing without kernel support.
 
-Thanks,
-Song
+Series Overview:
+
+- Patch 1: Factor struct perf_build_id into top-level header structure.
+- Patch 2: Add PERF_SAMPLE_BUILD_ID_OFFSET to UAPI.
+- Patch 3: Implement kernel-side sampling support in
+           perf_output_sample() using stack_map_get_build_id_offset().
+- Patch 4: Refactor perf tools thread__find_map and symbol lookup APIs
+           to accept struct perf_sample.
+- Patch 5: Add perf tools internal parsing and symbol resolution via
+           Build ID + offset.
+- Patch 6: Extend perf inject with --buildid-offset to convert sample
+           files.
+- Patch 7: Add --buildid-offset option to perf record.
+- Patch 8: Add unit and shell test coverage (bid-offset test and
+           inject_bid_offset.sh).
+
+Testing & Verification:
+
+The series was verified using QEMU hypervisor testing with kernel
+builds and perf test.
+
+Linux Plumbers Tracing Miniconference:
+
+I submitted a proposal/abstract to talk about these changes to the
+Tracing Micro Conference at Linux Plumbers Conference 2026 in Prague.
+
+Ian Rogers (8):
+  perf event: Factor build_id out into its own top-level struct
+  perf/core: Add BUILD_ID_OFFSET to UAPI
+  perf/core: Implement BUILD_ID_OFFSET sample type
+  perf: Refactor thread map and symbol APIs to take perf_sample
+  perf tools: Internal support for BUILD_ID_OFFSET
+  perf inject: Extend perf inject to support bid_offset conversion
+  perf record: Add --buildid-offset option
+  perf tests: Add build_id_offset test coverage
+
+ include/linux/bpf.h                           |  13 +
+ include/uapi/linux/perf_event.h               |   4 +-
+ kernel/bpf/stackmap.c                         |   2 +-
+ kernel/events/core.c                          |  85 ++-
+ tools/include/uapi/linux/perf_event.h         |  30 +-
+ tools/lib/perf/include/perf/event.h           |  18 +-
+ .../arch/powerpc/util/skip-callchain-idx.c    |   4 +-
+ tools/perf/builtin-inject.c                   |  23 +-
+ tools/perf/builtin-record.c                   |   7 +
+ tools/perf/builtin-script.c                   |  49 +-
+ tools/perf/builtin-timechart.c                |   4 +-
+ tools/perf/builtin-trace.c                    |  12 +-
+ tools/perf/tests/Build                        |   1 +
+ tools/perf/tests/bid-offset.c                 |  60 +++
+ tools/perf/tests/builtin-test.c               |   1 +
+ tools/perf/tests/code-reading.c               |   4 +-
+ tools/perf/tests/mmap-thread-lookup.c         |  45 +-
+ tools/perf/tests/sample-parsing.c             |  37 +-
+ tools/perf/tests/shell/inject_bid_offset.sh   | 170 ++++++
+ tools/perf/tests/shell/record.sh              |  69 +++
+ tools/perf/tests/tests.h                      |   1 +
+ tools/perf/util/Build                         |   1 +
+ tools/perf/util/annotate-data.c               |   5 +-
+ tools/perf/util/aslr.c                        |  16 +-
+ tools/perf/util/build-id.c                    |   5 +-
+ tools/perf/util/capstone.c                    |   4 +-
+ tools/perf/util/cs-etm.c                      |   4 +-
+ tools/perf/util/data-convert-json.c           |   4 +-
+ tools/perf/util/debug.c                       |   4 +-
+ tools/perf/util/dlfilter.c                    |   8 +-
+ tools/perf/util/event.c                       |  93 ++--
+ tools/perf/util/evsel.c                       |  35 ++
+ tools/perf/util/evsel.h                       |   3 +-
+ tools/perf/util/evsel_fprintf.c               |   2 +-
+ tools/perf/util/inject_bid_offset.c           | 504 ++++++++++++++++++
+ tools/perf/util/inject_bid_offset.h           |  21 +
+ tools/perf/util/intel-pt.c                    |  12 +-
+ tools/perf/util/machine.c                     | 106 ++--
+ tools/perf/util/maps.c                        |  29 +
+ tools/perf/util/maps.h                        |   2 +
+ tools/perf/util/perf_event_attr_fprintf.c     |   3 +-
+ tools/perf/util/python.c                      |  13 +-
+ tools/perf/util/record.h                      |   1 +
+ tools/perf/util/sample.h                      |  13 +
+ .../scripting-engines/trace-event-python.c    |  20 +-
+ tools/perf/util/synthetic-events.c            |  60 ++-
+ tools/perf/util/thread.c                      |  11 +-
+ tools/perf/util/thread.h                      |  14 +-
+ tools/perf/util/unwind-libdw.c                |   7 +-
+ tools/perf/util/unwind-libunwind.c            |   8 +-
+ 50 files changed, 1473 insertions(+), 174 deletions(-)
+ create mode 100644 tools/perf/tests/bid-offset.c
+ create mode 100755 tools/perf/tests/shell/inject_bid_offset.sh
+ create mode 100644 tools/perf/util/inject_bid_offset.c
+ create mode 100644 tools/perf/util/inject_bid_offset.h
+
+-- 
+2.55.0.679.g6767b8d81c-goog
+
