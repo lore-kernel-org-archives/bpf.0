@@ -1,132 +1,247 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A9AF3AE19D
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:23:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C3B3DEAF6
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786087433; cv=none; b=iYDZc7dcxhxhc6vCM0jKFr6n+29+z3QfTCF05mbZa4ZVwl4EwS2cB6G5oNhhsUk4y4ZN1ZS+9XaUvyzZnwekPy3+JDfG5Y0v2xiL5y9dTMVO6tSY3ltwb2SFdL9Gx332fUnDV25/ltS034RqOkOHMJYS22EkWJRLzJlGAvjZDOo=
+	t=1786087853; cv=none; b=QQk9fEVEsMWxgyc7Z72jn8WfLpstXKicWYtlVIZJfB2Rk0Rlb8bwTuO+u4ryJWMWTnW1C0Hed7X4eN1R/SW7RS30ESCw672SGUw0//PYuveqfIc4FzGItewGt3Atwq6mBOSNXvIehZc9sAQsB0ZNB9Pm5snqg1yd8Im4lcgqEoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786087433; c=relaxed/simple;
-	bh=Idw1Y4rUNh+0MXK8OITctjw5POdj3yagguibE+c+jOM=;
+	s=arc-20240116; t=1786087853; c=relaxed/simple;
+	bh=t20dwq2mhl9jRkT9bREh4bVd+WsBwtJKdoODe9hXZHY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=n39UQuBAbzpqQQPTBI4fWX8YUmdAfGVn2ciPCXKpvC/cWxDo9H+VLMcjLrjlx7KbLQimtOAf5Pynvab7YAXw8k0AM0Q0DzqFdzvMT6RdF+hjLSzrKDyPZswbxCVGf268S47MNeTYZ+PYiwnO2O1hX0dPG/irYdL6QYSXx3DyRMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DSsBUQ7U; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=sjeO0QbpnaTSxKQKFh0beKuDStSEmjTJPTE+kXyIWgqXQTq/FS7BsjVHtZQ3GMQeD0+oDCiCY/kZSPI/tb+JskjwWbNrwbcWGdbLmVEYBhCHk8WwpHRwvL/eczHU4ZpDuzOpIk6uKlFXcmrl+NpCOfc/opQhAYFt/GoZnevuRKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l75bok64; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DSsBUQ7U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74BF11F000E9;
-	Fri,  7 Aug 2026 07:23:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l75bok64"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8A821F000E9;
+	Fri,  7 Aug 2026 07:30:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786087431;
-	bh=0gHENSt/gv59RFqRi2RVrtdqa/g7TkjLRJ4BkTaXnzs=;
+	s=k20260515; t=1786087840;
+	bh=XsgwPpy6oPTcvuLv1GcIvS6+B91RGDHeNZ4kS6Qu3sg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DSsBUQ7UoaFI8vZGJBGulY1kognEaMs30Rc5dvRlAs3d7Fbf7+f3E7/SIa9mZzMmL
-	 1mS+VfPr/YyoX4a0FpZTuGW1voCa87GzTzHrRaeH1TFOPsDMhsAtidOGALbr7wWXAG
-	 zJz0COx2ZxTHtUEJtBDN8zYy7bngahvXtulLFUE23L8Rse/K0Wr6SlMi83v7EaGZwy
-	 Ww0WgQnYIWHKtlSOXhaDvmGkHDpNPgR8r5VPhyqSute9ks6qI13R104ae6/7+u9j2B
-	 wyoNhP2+XizOpS38M7K51FfX4WjzA1ROn5DR/3xRjJM1GTanxi/k4bdumS5gKaNR6K
-	 LMOrdpEBh4lrQ==
+	b=l75bok64cAO6P1t/L98sIFNyKB/kiOjMNqrKKJAsld2IuOCtAUPQJqcMh3dz+/Dno
+	 /1srH2QCh18JnVfEZz46Xzb8tupOadP1zSSkxJEl6aXQ4eFjdHKlF6tyBbxNj7oO44
+	 BBDbiJG7cji+da7G3uVN0+W+U4F3U8tfZHLZl4BxytVWn0scaEvzbtvNxeBbBqY0Np
+	 YvUwdF5ow6K/u++jptCAre2dt4NG7Co3Is2rY0ju/7mH0N8vXeYqKHGMyur+FZKCyf
+	 g+xi2jg74LXVd/80br/u8dcvrYL0wwIYl3/Fv1v5i4wRv8+gCMXKsQSSryU58wws2/
+	 mbYmn9bZZoKrA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/4] mm/bpf: Add
- bpf_try_to_free_mem_cgroup_pages kfunc
+Subject: Re: [PATCH bpf-next 4/4] selftests/bpf: add memcg async reclaim
+ test for bpf_wq/bpf_thread_wq
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Hui Zhu" <hui.zhu@linux.dev>
-Cc: mkoutny@suse.com, hannes@cmpxchg.org, bpf@vger.kernel.org, tj@kernel.org
-In-Reply-To: <5cd3efa9a4c614ba0b03cf4a3bd459dea67a9f61.1786086076.git.zhuhui@kylinos.cn>
+Cc: tj@kernel.org, mkoutny@suse.com, hannes@cmpxchg.org, bpf@vger.kernel.org
+In-Reply-To: <8c34a7f2ad826054c7e3ae88276614415755e3bc.1786086076.git.zhuhui@kylinos.cn>
 References: <cover.1786086076.git.zhuhui@kylinos.cn>
- <5cd3efa9a4c614ba0b03cf4a3bd459dea67a9f61.1786086076.git.zhuhui@kylinos.cn>
+ <8c34a7f2ad826054c7e3ae88276614415755e3bc.1786086076.git.zhuhui@kylinos.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Aug 2026 07:23:50 +0000
-Message-Id: <20260807072351.74BF11F000E9@smtp.kernel.org>
+Date: Fri, 07 Aug 2026 07:30:39 +0000
+Message-Id: <20260807073039.C8A821F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 6 potential issue(=
 s) to consider:
-- [High] Recursive invocation of try_to_free_mem_cgroup_pages() via bpf_try=
-_to_free_mem_cgroup_pages() clobbers current->reclaim_state, leading to a k=
-ernel crash or corrupted slab reclaim accounting.
+
+New issues:
+- [Medium] Invalid assertion check for `low_cgroup_id`.
+- [Medium] Error paths in run_high_low_workload() return incorrect status a=
+nd leak a child process.
+- [Medium] Hardcoded sleep(1) is used to synchronize with asynchronous BPF =
+teardown, leading to flaky tests.
+- [Low] Unnecessary file descriptor validation on BPF program obtained from=
+ a successfully loaded skeleton.
+
+Pre-existing issues:
+- [High] The kfunc `bpf_mem_cgroup_memory_events` fails to properly bounds =
+check negative enum values.
+- [High] The kfunc `bpf_mem_cgroup_vm_events` fails to properly bounds chec=
+k negative enum values.
 --
 
---- Patch [1]: [PATCH bpf-next 1/4] mm/bpf: Add bpf_try_to_free_mem_cgroup_=
-pages kfunc ---
-commit df416a25d32f502ac37a07ea5346f80fe7a52345
+--- Patch [4]: [PATCH bpf-next 4/4] selftests/bpf: add memcg async reclaim =
+test for bpf_wq/bpf_thread_wq ---
+commit d37a321d7d40c100863512bb9f49b6ebc1834d5e
 Author: Hui Zhu <zhuhui@kylinos.cn>
 
-mm/bpf: Add bpf_try_to_free_mem_cgroup_pages kfunc
+selftests/bpf: add memcg async reclaim test for bpf_wq/bpf_thread_wq
 
-This commit exposes the memory cgroup reclaim interface to BPF programs by
-adding the bpf_try_to_free_mem_cgroup_pages kfunc. The wrapper translates
-the swappiness argument before delegating to the core reclaim path.
+Add memcg_async_reclaim selftest that verifies BPF-driven async
+proactive reclaim can mitigate refault-induced slowdown under memory
+pressure.
 
-> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-> index 716df49d76477..3f7a5c97e1355 100644
-> --- a/mm/bpf_memcontrol.c
-> +++ b/mm/bpf_memcontrol.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c=
+ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
 [ ... ]
-> @@ -159,6 +160,61 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct m=
-em_cgroup *memcg)
->  	mem_cgroup_flush_stats(memcg);
->  }
-> =20
-> +/**
-> + * bpf_try_to_free_mem_cgroup_pages - attempt to reclaim pages from
-[ ... ]
-> + */
-> +__bpf_kfunc unsigned long
-> +bpf_try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
-> +				 unsigned long nr_pages,
-> +				 gfp_t gfp_mask,
-> +				 unsigned int reclaim_options,
-> +				 int swappiness)
+> +static int setup_high_low_cgroups(u64 *high_cgroup_id, u64 *low_cgroup_i=
+d)
 > +{
+[ ... ]
+> +	*high_cgroup_id =3D get_cgroup_id(CG_HIGH_DIR);
+> +	if (!ASSERT_GT(*high_cgroup_id, 0, "get_cgroup_id"))
+> +		goto cleanup;
+> +
+> +	ret =3D create_and_get_cgroup(CG_LOW_DIR);
+> +	if (!ASSERT_GE(ret, 0, "create_and_get_cgroup " CG_LOW_DIR))
+> +		goto cleanup;
+> +	close(ret);
+> +
+> +	*low_cgroup_id =3D get_cgroup_id(CG_LOW_DIR);
+> +	if (!ASSERT_GT(*high_cgroup_id, 0, "get_cgroup_id"))
+> +		goto cleanup;
+
+[Severity: Medium]
+Is it intentional to check *high_cgroup_id here instead of the newly
+assigned *low_cgroup_id?
+
+> +
+> +	return 0;
+> +
+> +cleanup:
+> +	cleanup_cgroup_environment();
+> +	return -1;
+> +}
+[ ... ]
+> +static int
+> +run_high_low_workload(double *high_elapsed, double *low_elapsed, int rea=
+d_times)
+> +{
+[ ... ]
+> +	low_pid =3D fork();
+> +	if (!ASSERT_GE(low_pid, 0, "fork low"))
+> +		goto cleanup_low_time;
+> +	if (low_pid =3D=3D 0)
+> +		exit(real_test_child_work(CG_LOW_DIR, low_data_file,
+> +					  low_time_file, read_times));
+> +
+> +	high_pid =3D fork();
+> +	if (!ASSERT_GE(high_pid, 0, "fork high")) {
+> +		(void)waitpid(low_pid, NULL, 0);
+> +		goto cleanup_low_time;
+> +	}
+> +	if (high_pid =3D=3D 0)
+> +		exit(real_test_child_work(CG_HIGH_DIR, high_data_file,
+> +					  high_time_file, read_times));
+> +
+> +	ret =3D waitpid(low_pid, &status, 0);
+> +	if (!ASSERT_GT(ret, 0, "low waitpid"))
+> +		goto cleanup_low_time;
+
+[Severity: Medium]
+If this assertion or the subsequent status checks fail, we jump to
+cleanup_low_time. Does this leave the concurrently running high_pid as an
+orphaned process?=20
+
+> +	if (!ASSERT_TRUE(WIFEXITED(status), "low exited"))
+> +		goto cleanup_low_time;
+[ ... ]
+> +static int
+> +setup_bpf(u64 high_cgroup_id, u64 low_cgroup_id,
+> +	  struct memcg_async_reclaim **skel_ptr, bool use_thread_wq)
+> +{
+[ ... ]
+> +	skel =3D memcg_async_reclaim__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "memcg_async_reclaim__open_and_load"))
+> +		return -1;
+> +
+> +	if (use_thread_wq)
+> +		prog_init_fd =3D bpf_program__fd(skel->progs.thread_wq_prog_init);
+> +	else
+> +		prog_init_fd =3D bpf_program__fd(skel->progs.wq_prog_init);
+> +	if (!ASSERT_GE(prog_init_fd, 0, "bpf_program__fd"))
+> +		goto error_out;
+
+[Severity: Low]
+Is this file descriptor check necessary? The skeleton API guarantees that a=
+ll
+programs have valid file descriptors after a successful __open_and_load().
+
+> +
+> +	err =3D bpf_prog_test_run_opts(prog_init_fd, &run_opts);
+[ ... ]
+> +void test_memcg_wq_async_reclaim(void)
+> +{
+[ ... ]
+> +out:
+> +	if (skel)
+> +		memcg_async_reclaim__destroy(skel);
+> +	/*
+> +	 * Wait for bpf_wq to release the reference to cgroup
+> +	 * to ensure the successful deletion of cgroup.
+> +	 */
+> +	sleep(1);
+> +	cleanup_cgroup_environment();
+> +}
+
+[Severity: Medium]
+Could this hardcoded sleep(1) lead to test flakiness if the asynchronous BPF
+workqueue takes longer than one second to release its cgroup references
+under load?
+
+> +
+> +void test_memcg_thread_wq_async_reclaim(void)
+> +{
+[ ... ]
+> +out:
+> +	if (skel)
+> +		memcg_async_reclaim__destroy(skel);
+> +	/*
+> +	 * Wait for bpf_thread_wq to release the reference to cgroup
+> +	 * to ensure the successful deletion of cgroup.
+> +	 */
+> +	sleep(1);
+> +	cleanup_cgroup_environment();
+> +}
+
+[Severity: Medium]
+Similarly, could this hardcoded sleep(1) cause intermittent test failures
+if the thread_wq callback is delayed?
+
 
 [Severity: High]
-If this kfunc is called from a sleepable BPF program that was triggered dur=
-ing
-memory reclaim (e.g., via an fentry hook on a function like shrink_slab), c=
-ould
-it corrupt the reclaim state and crash the kernel?
+This isn't a bug introduced by this patch, but does the bounds check in
+bpf_mem_cgroup_memory_events() correctly handle negative values?=20
 
-Looking at the underlying try_to_free_mem_cgroup_pages() in mm/vmscan.c, it
-unconditionally overwrites current->reclaim_state and sets it to NULL upon
-return:
-
-    set_task_reclaim_state(current, &sc.reclaim_state);
+mm/bpf_memcontrol.c:bpf_mem_cgroup_memory_events() {
     ...
-    nr_reclaimed =3D do_try_to_free_pages(zonelist, &sc);
+    if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
+        return (unsigned long)-1;
+
+    return atomic_long_read(&memcg->memory_events[event]);
+}
+
+Since the parameter is signed, a BPF program passing a negative value=20
+(like -1) could bypass the check and cause an out-of-bounds memory read.
+
+
+[Severity: High]
+This is also a pre-existing issue, but does memcg_vm_event_item_valid()
+protect against negative values when called by bpf_mem_cgroup_vm_events()?
+
+mm/bpf_memcontrol.c:bpf_mem_cgroup_vm_events() {
     ...
-    set_task_reclaim_state(current, NULL);
+    if (unlikely(!memcg_vm_event_item_valid(event)))
+        return (unsigned long)-1;
+    ...
+}
 
-If the outer reclaim path resumes and attempts to dereference
-current->reclaim_state (such as in set_mm_walk() or clear_mm_walk() in MGLR=
-U),
-wouldn't it hit a fatal NULL pointer dereference?
+mm/memcontrol.c:memcg_vm_event_item_valid() {
+    if (idx >=3D NR_VM_EVENT_ITEMS)
+        return false;
+    ...
+}
 
-Should there be a mechanism here to prevent nested reclaim calls, or should=
- the
-underlying function save and restore the previous reclaim state?
-
-> +	int *swapiness_ptr;
-> +
-> +	if (swappiness > SWAPPINESS_ANON_ONLY)
-> +		return 0;
-> +	else if (swappiness < MIN_SWAPPINESS)
-> +		swapiness_ptr =3D NULL;
-> +	else
-> +		swapiness_ptr =3D &swappiness;
-> +
-> +	return try_to_free_mem_cgroup_pages(memcg, nr_pages, gfp_mask,
-> +					    reclaim_options, swapiness_ptr);
-> +}
-> +
->  __bpf_kfunc_end_defs();
-[ ... ]
+Similar to the previous issue, a negative enum value bypasses the upper-bou=
+nd
+check due to signed comparison, allowing out-of-bounds memory access.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786086076.gi=
-t.zhuhui@kylinos.cn?part=3D1
+t.zhuhui@kylinos.cn?part=3D4
