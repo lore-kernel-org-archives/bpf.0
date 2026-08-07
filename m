@@ -1,156 +1,123 @@
-Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E57374A04
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 20:45:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D5238331D
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 20:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786135525; cv=none; b=hccABUMhiugCiys1SmFmjICyuqOYApurSTAq8mQZ+/WhpVZPuECujL+uro871I7QFn6VvLyu1r5LFtDjQCeS3RBbOxgnF11O3V/0uon/ypm5OiK5kBR7GedHZmj3FOdeep9wn90G4lItKb5wLvT1rQDgpN35VhXijZq/53AQtYU=
+	t=1786135997; cv=none; b=aXPzSeewYtxFHK5e+jdQwGx0M+529Jb/igo2V2t6j6Qpha55plShYAbQC/ST0YQyjNOZ9DyFLjQFZuGEKyMyVFWfL1wQmT2VSVu31SUAMuysCC3rpzZ+48BfqjoZxf5V3xxcNqagihrDXfbCjwkEveTM039oPO7aH/0a/jg5bSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786135525; c=relaxed/simple;
-	bh=Q4RHAPdjvAUroJEAowcOvOdKnx9h9nY6Yn+jXr+v6wU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lXB6WY3G4HMO5Tkf6cac0uW2ya2VRto8rRmfQLdXlBIsoWvyg00nGnENzXy9x/ok6SOE28OaxJXuz3IhNV9VlFXeTiq4/H/Wgaqp/A25hMRFWMrP392EyCrxwHhmCCnAYCN0d4AVH8SAkDWyr9J6ff2/s6LFxoPXy8t/pEQsfcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mjK9iPLV; arc=none smtp.client-ip=95.215.58.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786135997; c=relaxed/simple;
+	bh=WyKLS/taVLqfZfg2PaZJlY5ReH7lDHDZbxJ3W4Sl5n4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=f8m1gAP6LRiyKcN0HbWrZdeau3X11uodW9f0LH9ZDCoBteTp8PQ8pto/vpn0Kn17uT8isGaX9Xq3UWk2xpF2d20JXY/FwW+YF7WSFotH3j51+NzxMFO67ElhNFIDkzT4rFFqeMqyVeCNkOTwE+NvyBVKM3JHAN6FXwcooaIKFkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MfllHCTO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mjK9iPLV"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786135521;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=x+aKGXBL2tMvuQmrqU+86b/PjqkYaMHr/2ScOGESSKE=;
-	b=mjK9iPLVNoISOhJoa7L1V1Ou6HrIcruls21r8soEC/N/vwlh5b/+VkmS9TlQsGOe6gsvAA
-	U7Jns/AZOfx1ys/ba5ei1J/WkXX2djakMqCPZZnofLhP4YnxhjSqTkSXd6YuTVjYcbyy55
-	0BEheeKx2fPcSMwjm/w4syPnU46glBU=
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v2 4/4] selftests/bpf: vmtest.sh: preserve command quoting when running in the VM
-Date: Fri,  7 Aug 2026 13:44:34 -0700
-Message-ID: <20260807204434.1036279-5-vineet.gupta@linux.dev>
-In-Reply-To: <20260807204434.1036279-1-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MfllHCTO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 949CF1F000E9;
+	Fri,  7 Aug 2026 20:53:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786135995;
+	bh=hsOAJ5qQwG4VFYhkuoKu/UqRM4LuCwEroNf3veDFH0U=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=MfllHCTOpLGUXHnICqG6PwWqNg7DWIG2gOj3akQBEXVcbPHJimdifMVVQIGU2II7i
+	 jyXT5YzGkIbxUQxF7aOuxAWZS9wESGhnzpqK66KPrYk4LvoBn9MCGQc1dysTE2GRqj
+	 2ukj3gD/54w5Itq2KRjW406f+mwqRxmGmXTd3SQd1nSH0AiVtThHCcGRsveLaZxnIq
+	 BoDuOx4hNMSXsE3I1Tp209BMmVuAh9+RBT1FhrTn+L/nF/De5dxsc8Z4vSzE/B7Zyd
+	 5joop44Czhb8GZfejOP/8Cvl1BgYmil42tYngCNgLdwTZGZdkLiQA+IjzjdCx0mir/
+	 FqV/vNyUCRoHw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 1/4] selftests/bpf: map_kptr: expect BPF_ST
+ reject msg on cpuv4 toolchains
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vineet Gupta" <vineet.gupta@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260807204434.1036279-2-vineet.gupta@linux.dev>
 References: <20260807204434.1036279-1-vineet.gupta@linux.dev>
+ <20260807204434.1036279-2-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 07 Aug 2026 20:53:15 +0000
+Message-Id: <20260807205315.949CF1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-vmtest.sh captures the trailing command with command="$@", which flattens
-the arguments into a single space-separated string, and then pastes it
-into the generated guest init script:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The patch conditionally alters the expected verifier error messa=
+ge for BPF_ST toolchains, which eliminates the test's intended coverage (ve=
+rifying that `map_kptr_match_type()` rejects scalar registers) on modern co=
+mpilers and introduces brittleness tied to compiler optimization levels. As=
+ acknowledged in the commit message, the test now bypasses the original val=
+idation path, and changes in optimization (e.g., compiling at -O0) will bre=
+ak the `#ifdef` logic because the compiler may still emit `BPF_STX`. A more=
+ robust approach is to force the compiler to emit `BPF_STX` (e.g., by using=
+ a 64-bit constant that cannot be encoded as a 32-bit immediate, or by usin=
+g `barrier_var()`), which preserves the intended verifier coverage without =
+relying on fragile macro checks.
+--
 
-        cd /root/bpf
-        echo ${command}
-        stdbuf -oL -eL ${command}
+--- Patch [1]: [PATCH bpf-next v2 1/4] selftests/bpf: map_kptr: expect BPF_=
+ST reject msg on cpuv4 toolchains ---
+commit 302e7847f20b43d2cf543bac72a29e4a57633dfa
+Author: Vineet Gupta <vineet.gupta@linux.dev>
 
-That here-doc is unquoted, so the host expands ${command} and the
-flattened text lands in the script verbatim. The guest bash then parses
-those lines as shell source, re-splitting the text on whitespace and
-glob-expanding it against /root/bpf. As a result any command with a glob
-or an argument containing spaces is corrupted before it reaches the test
-binary. For example:
+selftests/bpf: map_kptr: expect BPF_ST reject msg on cpuv4 toolchains
 
-        vmtest.sh -- ./test_progs -a 'verifier_*'
+This commit modifies the reject_scalar_store_to_kptr test to expect a
+different verifier error message on toolchains supporting BPF_ST. This
+avoids a test failure when the compiler folds the constant into a
+BPF_ST store immediate instruction instead of using BPF_STX.
 
-has 'verifier_*' expanded in the guest into the matching object/skeleton
-files (verifier_align.bpf.o verifier_align.skel.h ...), so test_progs is
-handed a list of filenames instead of the intended name filter and runs no
-matching tests.
+> diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/te=
+sting/selftests/bpf/progs/map_kptr_fail.c
+> index f11848dfa78f9..5e25ca806060c 100644
+> --- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+> @@ -386,7 +386,16 @@ int kptr_xchg_possibly_null(struct __sk_buff *ctx)
+>  }
+> =20
+>  SEC("?tc")
+> +/*
+> + * A compiler with BPF_ST folds the constant into a store-immediate, whi=
+ch the
+> + * verifier rejects on a different path (and with a different message) t=
+han the
+> + * BPF_STX form.
+> + */
+> +#ifdef __BPF_FEATURE_ST
+> +__failure __msg("BPF_ST imm must be 0 when storing to kptr at off=3D8")
+> +#else
+>  __failure __msg("invalid kptr access, R")
+> +#endif
 
-Quote each argument with printf '%q ' so the command is reproduced
-verbatim inside the VM: the escaped text goes through exactly one round
-of quote removal when the guest parses the init script, yielding the
-original argv with globs and special characters intact. The common case
-(e.g. -t <name>) is unaffected.
+[Severity: Medium]
+Does this conditionally altered expectation eliminate the test's intended
+coverage on modern toolchains?
 
-Only do this when there is a command to quote. printf '%q ' with no
-arguments still applies the format once and emits '', which the -s
-(debug shell) path would take for a real command and try to run.
+As noted in the commit message, the test now bypasses the original validati=
+on
+path on BPF_ST builds, meaning it no longer verifies that
+map_kptr_match_type() rejects scalar registers.
 
-Note this makes the trailing command strictly an argv rather than a shell
-snippet: passing it pre-quoted as one word, e.g.
+This also appears to introduce brittleness. If the optimization level chang=
+es
+(such as compiling at -O0), the compiler might still emit BPF_STX, which wo=
+uld
+evaluate the wrong macro branch and fail the test.
 
-        vmtest.sh -- "./test_progs -t foo"
+Would it be more robust to force the compiler to emit BPF_STX here, for
+example by using a 64-bit constant that cannot be encoded as a 32-bit
+immediate, or by using barrier_var()? This could preserve the intended
+verifier coverage across different toolchains and optimization levels.
 
-no longer works, and neither does embedding guest-side shell syntax such
-as ';' or a redirection. 'sh -c ...' still works.
+>  int reject_scalar_store_to_kptr(struct __sk_buff *ctx)
+>  {
+>  	struct map_value *v;
 
-The RV64 recipe in README.rst does depend on the old double parse: it
-wraps the denylist in \" so the literal quotes reach the guest, whose
-second parse of the init script removes them. Under %q those quotes now
-survive into argv, and parse_test_list() strtok_r()s on ',' turns them
-into junk filters:
-
-        -d ",exceptions,"  ->  ["] [exceptions] ["]
-
-That is harmless for DENYLIST.riscv64 only because its first line is a
-comment, so the leading field is empty. A denylist starting with a real
-entry would silently lose it - ["*arena*] never matches - so drop the
-backslashes and let the host consume the quotes instead.
-
-Fixes: c9709f52386d ("bpf: Helper script for running BPF presubmit tests")
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
- tools/testing/selftests/bpf/README.rst |  4 ++--
- tools/testing/selftests/bpf/vmtest.sh  | 13 +++++++++++--
- 2 files changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-index 37164322a102..07c834433b38 100644
---- a/tools/testing/selftests/bpf/README.rst
-+++ b/tools/testing/selftests/bpf/README.rst
-@@ -107,12 +107,12 @@ Docker container and local rootfs image. The overall steps are as follows:
-     tools/testing/selftests/bpf/vmtest.sh \
-     -l <path of local rootfs image> -- \
-     ./test_progs -d \
--        \"$(cat tools/testing/selftests/bpf/DENYLIST.riscv64 \
-+        "$(cat tools/testing/selftests/bpf/DENYLIST.riscv64 \
-             | cut -d'#' -f1 \
-             | sed -e 's/^[[:space:]]*//' \
-                   -e 's/[[:space:]]*$//' \
-             | tr -s '\n' ',' \
--        )\"
-+        )"
- 
- Link: https://github.com/pulehui/riscv-bpf-vmtest.git [0]
- Link: https://github.com/libbpf/ci/blob/main/rootfs/mkrootfs_debian.sh [1]
-diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-index 9ca802285393..6a3d026d76bd 100755
---- a/tools/testing/selftests/bpf/vmtest.sh
-+++ b/tools/testing/selftests/bpf/vmtest.sh
-@@ -428,8 +428,17 @@ main()
- 
- 	if [[ $# -eq 0  && "${debug_shell}" == "no" ]]; then
- 		echo "No command specified, will run ${DEFAULT_COMMAND} in the vm"
--	else
--		command="$@"
-+	elif [[ $# -gt 0 ]]; then
-+		# Quote each argument so the command survives into the guest: the
-+		# host expands ${command} into the generated init script, which
-+		# the guest bash then parses as shell source. Without the %q
-+		# escapes an argument with a space or a glob (e.g. -a 'verifier_*')
-+		# is re-split and expanded against /root/bpf there.
-+		#
-+		# Skip this when there is no command: printf '%q ' would still
-+		# apply the format once and emit '', which is not the empty
-+		# command that -s (debug shell) expects.
-+		command=$(printf '%q ' "$@")
- 	fi
- 
- 	local kconfig_file="${OUTPUT_DIR}/latest.config"
--- 
-2.53.0-Meta
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807204434.1036=
+279-1-vineet.gupta@linux.dev?part=3D1
