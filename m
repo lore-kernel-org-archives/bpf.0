@@ -1,146 +1,176 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9454A41F7FD;
-	Fri,  7 Aug 2026 14:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CF946E00D;
+	Fri,  7 Aug 2026 15:06:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786114731; cv=none; b=SyMwNMdk2iK/LaRq7fMUkoC3aDiMckWx24O+mCPMDdW/1XKvnAiMmzdMYhX/ZxvBxIRJjmxQecRJaD8l/O4rVuq/dop/N2oF39OcSSy6vHCkUTHGK9JVoyOwOm+zkN60iMBe66zP/EymAymjSxqdEjaRljRfwLtw7G0wYr82hyE=
+	t=1786115177; cv=none; b=TsK4C6gbDYjuwoc5OXAO5CKR4goMsx/GGP1iKHOguf00IM9ig2lAQalAX9V+jNb2iaNnKq3SuiO3XmgXvo5yCQvgdyLFzq5yD6pIUuHcmn10GVeHVi7jJUumWDkzyrQJ7MQOykyjdztIZcDEHZ3mufF3U6n5Zcoyf1M0p8IvMpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786114731; c=relaxed/simple;
-	bh=GOkL4WVmlpJVZBVSr4EsdT2xUAyeSo3VRCx5HWus2z4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PdQy6Sm8a+nBatC347BfK1kx4myC9XvnQB5qETmHltUGdG9Hpi2vqNOgxjZdyn7R3pf0a5RVMXeP+c1yoKaeQ3K6QaPNv/61SOftR2GBvLT3oXNptQxoP4c8sOU3PWYQd8fgB+odRd0Eu5d+9ddFFbTN1Y9qZuhe8OwYarEi2uQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Jnal31Jt; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1786115177; c=relaxed/simple;
+	bh=yk4LsY4gIh9UJrIyWO9SAoByH68iNr9VG0NYvYTzYic=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=uFFPJviBgOd+8pPjMUqgBPi2xmFHEvwusSQOjhlzV1RS9biMiM/2u+IaX6NizeAl3avLDwjkRP7Ggxu4CXq0d8pFrci91l8uQKacwE7HeSb2MMhCPSxwuLYNjaGUHAxsYQlP7NLULphmmNXZqeek9S6TZdio3UrL65DYPcJW7yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KNCX9Etr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Jnal31Jt"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=vPaFLVPwMZ2tc6ueMFHHrqc2KtEDFinSge5uqs3yEHM=; b=Jnal31JtehGp27yZ/WmdwAmRjW
-	C+2PEuQUfImj83GQ6mHDyopLL+2o5054MBkzZN88qnPDHfJUHqmN9GtxtvR4XPt10zIHdJ1GfVVIg
-	gTRK5z4Z6wQ7FY3ay3PqKvTwvgMzMom6TAhmf9bG1qU4GXpykWMXl1JSAK6UWPW1opHHVHYu4kGVk
-	XPitbuN06bhSM73p2KgNpw6A8GMnAyb1PL3st3R3p40KMDrJ3s4x1c9bSI0u3rVtN6z92tRY3Scdf
-	Q3c1rnme/7wu8TFnI/48KfOBID1SMCWoGpQRk95Wp0q0KhH0UvBD2s8VFuUQJ3AXoFMDw1Vvkvc2f
-	vZEYG+ZQ==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wsM1i-000VXB-2i;
-	Fri, 07 Aug 2026 14:58:27 +0000
-Date: Fri, 7 Aug 2026 07:58:21 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Jinjie Ruan <ruanjinjie@huawei.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, rmikey@meta.com, kernel-team@meta.com, 
-	Vladimir Murzin <vladimir.murzin@arm.com>, Ada Couprie Diaz <ada.coupriediaz@arm.com>
-Subject: Re: [PATCH RFC] arm64: entry: PSTATE_I_SET is leaking on pseudo NMI
- mode
-Message-ID: <anXqMsJ14r3BAbMG@gmail.com>
-References: <20260807-arm64_fix-v1-1-d069ccf9d71b@debian.org>
- <anXkO8YpoadRzm07@J2N7QTR9R3>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KNCX9Etr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDED21F000E9;
+	Fri,  7 Aug 2026 15:06:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786115170;
+	bh=IksxDfdyGRteW5g2TlU26RLrf5nK8spnIwRAVc8SqZE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=KNCX9Etr1SQ+JZt+iDDCUbtz1fHaQOl+iCUjwW4hx5zifpG/t6Zw/Q7lz0fiL80Rs
+	 Dyab2n9L/vRNCnErqyt65GHUkkZMLoCrh1sDUf4IViM1FO3DeNAwM3IlDnrpa9u3Rx
+	 +JXppYV6tKc1ZbhGQebTqkXftvvH7/FlZ6hzBPeuDOlvgBIm3Fqd56a/DpJN26Y9ll
+	 +VsVMvt7Y4Cyh7sFfSnXZZ0vlXrtxA97i/Qy/sAAYNqLyU1WaLsVc24dHa9vEJQFVu
+	 ZpCvIbsaeALJtU0YcC0ZQSS9VMRBFDmTbUC8ic8jK0slyoFLxZ91/7NfufeCfS8WP1
+	 bIWVMZVpcTxOw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC 4/5] mm/slab: handle large_kmalloc objects in
+ kfree_nolock()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?Vmxhc3RpbWlsIEJhYmthIChTVVNFKQ==?= <vbabka@kernel.org>
+Cc: media-ci@linuxtv.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, dri-devel@lists.freedesktop.org
+In-Reply-To: <20260807-kfree_nolock_kmalloc-v1-4-ba993cbf7a60@kernel.org>
+References: <20260807-kfree_nolock_kmalloc-v1-0-ba993cbf7a60@kernel.org>
+ <20260807-kfree_nolock_kmalloc-v1-4-ba993cbf7a60@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 07 Aug 2026 15:06:09 +0000
+Message-Id: <20260807150609.CDED21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <anXkO8YpoadRzm07@J2N7QTR9R3>
-X-Debian-User: leitao
 
-On Fri, Aug 07, 2026 at 02:57:15PM +0100, Mark Rutland wrote:
-> Hi Breno,
-> 
-> On Fri, Aug 07, 2026 at 04:45:31AM -0700, Breno Leitao wrote:
-> > This is my understand of the current situation:
-> > 
-> > A) A task enters the kernel via a syscall.
-> > 	* PSTATE_I_SET becomes set on the live PMR
-> > 	* regs->PMR doesn't have PSR_I_SET set
-> 
-> At this point, regs->pmr will be the value of PMR when we were executing
-> in userspace, which should be the value of regs->pmr the last time we
-> returned to userspace. That should be GIC_PRIO_IRQON, as configured by
-> start_thread_common().
-> 
-> The entry asm will set PMR to 'GIC_PRIO_IRQON | GIC_PRIO_PSR_I_SET', but
-> that should be reset to GIC_PRIO_IRQON when el0_svc() calls
-> local_daif_restore(DAIF_PROCCTX).
-> 
-> Within invoke_syscall(), we should have DAIF==0 and PMR==GIC_PRIO_IRQON.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Synchronous execution of __free_large_kmalloc_page in kfree_nolock=
+() violates NMI wait-context and corrupts vmstat counters
+- [High] Deferred clearing of PageLargeKmalloc bypasses double-free protect=
+ion, causing infinite loops
+--
 
-local_daif_restore() keeps GIC_PRIO_PSR_I_SET on aborts, which is not
-the case here.
+--- Patch [4]: [PATCH RFC 4/5] mm/slab: handle large_kmalloc objects in kfr=
+ee_nolock() ---
+commit 9af1d6506b418b2d9de0922f293e12ee55babdd3
+Author: Vlastimil Babka (SUSE) <vbabka@kernel.org>
 
-so, as you said, GIC_PRIO_PSR_I_SET is set in PMR and then cleared in
-local_daif_restore().
+mm/slab: handle large_kmalloc objects in kfree_nolock()
+   =20
+Large kmalloc objects is the only remaining case that kfree_nolock()
+cannot handle from kmalloc() allocations. Note kmalloc_nolock() does not
+return large kmalloc objects.
 
-> > B) A BRK fires at EL1 and that is what leaves the live PMR
-> >    with PSR_I_SET.
-> > 	* At this stage PSTATE_I_SET is set on both on PMR and regs->PMR
-> 
-> The value in the regs->pmr should be GIC_PRIO_IRQON, without
-> GIC_PRIO_PSR_I_SET.
-> 
-> As we don't unmask anything during BRK handling, the live PMR should
-> contain 'GIC_PRIO_IRQON | GIC_PRIO_PSR_I_SET'.
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 423b5bdb910bd..3be98faa9f0de 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
 
-Right, that was my reading as well.
+[ ... ]
 
-> > C) A nested synchronous exception happens (Not sure why -- BPF related)
-> > 	* Now both the live PMR and regs->pmr have PSR_I_SET.
-> 
-> The presence of 'el1_abort()' in the trace suggests that BPF tried to
-> access memory which faulted. That looks to be a result of
-> bpf_probe_read_kernel() and copy_from_kernel_nofault().
-> 
-> Regardless of BPF, we can probably trigger a synchronous exception with
-> a WARN() or similar, so we will need to handle synchronous exceptions
-> from the same contexts.
+> @@ -6365,6 +6367,21 @@ static void free_to_pcs_bulk(struct kmem_cache *s,=
+ size_t size, void **p)
+>  	}
+>  }
+> =20
+> +static inline void
+> +__free_large_kmalloc_page(struct page *page, unsigned int free_flags)
+> +{
+> +	unsigned int order =3D compound_order(page);
+> +
+> +	mod_lruvec_page_state(page, NR_SLAB_UNRECLAIMABLE_B,
+> +			      -(PAGE_SIZE << order));
+> +	__ClearPageLargeKmalloc(page);
+> +
+> +	if (free_flags & SLAB_FREE_NOLOCK)
+> +		free_frozen_pages_nolock(page, order);
 
-I think I can find a reproducer for us, give me a few hours.
+[Severity: High]
+Is it safe to execute this synchronously in NMI context on PREEMPT_RT kerne=
+ls?
 
-> > I am not certain that we want to have PSTATE_I_SET ever be sent to
-> > regs->pstate. Do we ever need PSTATE_I_SET in regs->pstate?
-> 
-> I'm not sure what you mean here. PSTATE_I_SET doesn't exist, and I'm not
-> sure whether you're asking about the PSTATE.DAIF bits saved in
-> regs->pstate, or the PMR value in regs->pmr.
+When kmemleak is disabled, kmemleak_may_need_free() returns false, which
+causes free_large_kmalloc() to call __free_large_kmalloc_page() synchronous=
+ly
+from kfree_nolock(), even in NMI context.
 
-Sorry, I meant PSTATE_I_SET. 
+This results in free_frozen_pages_nolock() attempting to acquire the zone
+lock, which is an rt_mutex (sleeping lock) on PREEMPT_RT, leading to a panic
+when called from NMI.
 
-> Regardless of pseudo-NMI, is is essential that regs->pstate holds a
-> complete snapshot of SPSR, including the I bit.
-> 
-> With pseudo-NMI, it is essential that the full PMR value (including
-> GIC_PRIO_PSR_I_SET) is saved into regs->pmr.
+Additionally, mod_lruvec_page_state() uses a non-atomic read-modify-write
+protected by local_irq_save() on architectures without
+CONFIG_HAVE_CMPXCHG_LOCAL. This fails to mask NMIs and can silently corrupt
+vmstat counters.
 
-For the live PMR register I follow it now: arch_local_save_flags()
-returns the PMR and nothing there looks at PSTATE, so a context masked
-by PSTATE.I has to advertise that in the PMR or irqs_disabled() lies.
+Would it be better to always defer freeing large kmalloc pages in
+kfree_nolock() to avoid these issues?
 
-What I don't follow is the saved copy. regs_irqs_disabled() already
-consults both halves:
+> +	else
+> +		free_frozen_pages(page, order);
+> +}
+> +
 
-      return (regs->pstate & PSR_I_BIT) || !irqs_priority_unmasked(regs);
+[ ... ]
 
-so GIC_PRIO_PSR_I_SET in regs->pmr looks redundant for anything querying
-the frame.
+> @@ -6712,9 +6756,11 @@ size_t ksize(const void *objp)
+>  }
+>  EXPORT_SYMBOL(ksize);
+> =20
+> -static void free_large_kmalloc(struct page *page, void *object)
+> +static void free_large_kmalloc(struct page *page, void *object,
+> +			       unsigned int free_flags)
+>  {
+>  	unsigned int order =3D compound_order(page);
+> +	bool nolock =3D free_flags & SLAB_FREE_NOLOCK;
+> =20
+>  	if (WARN_ON_ONCE(!PageLargeKmalloc(page))) {
+>  		dump_page(page, "Not a kmalloc allocation");
+> @@ -6724,14 +6770,16 @@ static void free_large_kmalloc(struct page *page,=
+ void *object)
+>  	if (WARN_ON_ONCE(order =3D=3D 0))
+>  		pr_warn_once("object pointer: 0x%p\n", object);
+> =20
+> -	kmemleak_free(object);
+> +	if (!nolock)
+> +		kmemleak_free(object);
+> +
+>  	kasan_kfree_large(object);
+>  	kmsan_kfree_large(object);
+> =20
+> -	mod_lruvec_page_state(page, NR_SLAB_UNRECLAIMABLE_B,
+> -			      -(PAGE_SIZE << order));
+> -	__ClearPageLargeKmalloc(page);
+> -	free_frozen_pages(page, order);
+> +	if (unlikely(nolock && kmemleak_may_need_free(object)))
+> +		defer_free_large_kmalloc(object);
 
-That matters for the warning, because local_daif_inherit() reloading the
-entry-time 'GIC_PRIO_IRQON | GIC_PRIO_PSR_I_SET' is what puts 0xf0 in
-the live PMR before the handler body runs.
+[Severity: High]
+Could moving the __ClearPageLargeKmalloc() call to the asynchronous
+__free_large_kmalloc_page() bypass double-free protection?
 
-Meanwhile, I will try to ftrace the writes to PMR and regs->pmr to get
-a better grasp of the states machine we are in (probably on Monday).
+When a free is deferred via defer_free_large_kmalloc(), the PageLargeKmalloc
+flag remains set until the IRQ work executes. If the caller has a double-fr=
+ee
+bug and kfree_nolock() is called again on the same object during this windo=
+w,
+the WARN_ON_ONCE(!PageLargeKmalloc(page)) check at the start of
+free_large_kmalloc() will pass.
 
-Thanks for the answers so far,
---breno
+This allows the second free to proceed and call defer_free_large_kmalloc()
+again. Since this uses llist_add() with the same llnode, it creates a circu=
+lar
+linked list (llnode->next =3D llnode). When deferred_percpu_work_fn() later
+processes this list with llist_for_each_safe(), it will loop infinitely and
+cause a hard lockup.
+
+> +	else
+> +		__free_large_kmalloc_page(page, free_flags);
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807-kfree_nolo=
+ck_kmalloc-v1-0-ba993cbf7a60@kernel.org?part=3D4
