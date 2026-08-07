@@ -1,194 +1,186 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5594519A3;
-	Fri,  7 Aug 2026 06:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505283C09EF
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 07:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786085994; cv=none; b=L5MrOLgtfmHpuIi7OQ1KsnfElNtOXtvqD/gEHefjJygZ3JcPkTR+JCa8rUUaAyewq1mb8J0d8FDhOVx0GTzJty2/RYnflkPY4+1nsMdbDYsljpTTYIY5ep2OaYDF1Yph2LJfoSB83wryNLRnVKB9d9ioqhpu7Qs2AtNXf4TVHKQ=
+	t=1786086172; cv=none; b=B2C5/CFgXDmrO9IvELw2I7wTRekFi+/C4xFwBaxuUEOdRN84n79ReIWPFmRAXtkqpcOUy/Y+itJP9VfVyMOgkRbZQHF5AGLeLOcLYkwhcs7MdQcTqE4+e1Ueld2tYgoDWgTzoqJJAugNpm500mxyHmwEhGp5s0Wml505DKTnXJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786085994; c=relaxed/simple;
-	bh=wXVfqEMAbawB8MPO0UhUwCJPPfwfB0Bx4TSGkqK+SO0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qLVRh48SJbqxkrCKl6VPxswHdqERtQMU/5D79O5of+D4k3zdifDcjK9Nx97A7BTe0/0pf19RJAMK7+B+mL1y8ESiZo8blKYRQU528yqOLwNWQfvkon42gjqJeNaIdNxRKP/AVPpEmNKWBWn/UxdmYHubzeI3UovAfrbnsmempUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=b6abVgzg; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1786086172; c=relaxed/simple;
+	bh=jj0xXLdHnLuNFtjAp+3mACkjm4GQ1ncXGwUUFMTgays=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fUCEbTLY5aLoMslGLyH5bZUgofXq9iLc7mlYNlsncJ4vfPlZh1Sv4EHpEZIEmwKBexZNABeuoKWMJlIPqT4lOzvQYaZdoeKovLUUybZKN7CPhWnzgAFzW7G8XNoj8f9QWEJp7/J+rAXVQ/fm7oSZSkAPSdbg3SYW8vBB60HBclk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cNegDMuz; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="b6abVgzg"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6770Huoo016275;
-	Fri, 7 Aug 2026 06:58:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=Ra4H8CAbtiN9wPr1aKFBAag6HNf0qB
-	uveAYY5O5upyA=; b=b6abVgzghGiyJP2Wlz0QxQ4Xlm4EEGD9Kpi/bbrlqUSFBE
-	peaClBZE7a6uUDxpMzlqxLdBYmzJ2Zv0Gov1Z/ABs95zQALrNBxETA0/pEucil/j
-	W+YyJwlwpe3OK1MAOCII7fcp3YeD9G589urjh/7H6praJpDu3PDyifCYlbxg55Wq
-	kegIhHrXFaKgEStmSWQn7LYsur2nUZn/xPNaUh2EUQxX/E75LETTqXwjtCkcIvTM
-	6z2V+hipWhFW5E/1SdFcNJm3hHGg12nD12POK8woGUy/Cd3cVuoSGV0jyJiT1nQe
-	XgoPgNhStcc1pjBG2Dfbs0hQJW5cw8oy/wETB5bQ==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fvy00am7a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Aug 2026 06:58:32 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6776uLDe003221;
-	Fri, 7 Aug 2026 06:58:31 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fsu4qxspg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Aug 2026 06:58:31 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6776wSir33882500
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 7 Aug 2026 06:58:29 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D3B0620040;
-	Fri,  7 Aug 2026 06:58:28 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4351E20043;
-	Fri,  7 Aug 2026 06:58:26 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.111.55.180])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri,  7 Aug 2026 06:58:26 +0000 (GMT)
-Date: Fri, 7 Aug 2026 08:58:24 +0200
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: Muhammad Usama Anjum <usama.anjum@arm.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tursulin@ursulin.net>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <liam@infradead.org>,
-        Lorenzo Stoakes <ljs@kernel.org>, Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-        Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        David Hildenbrand <david@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, SJ Park <sj@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>, Miaohe Lin <linmiaohe@huawei.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@gentwo.org>, Mike Rapoport <rppt@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, ziy@nvidia.com, pfalcato@suse.de,
-        ryan.roberts@arm.com, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-parisc@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, damon@lists.linux.dev
-Subject: Re: [PATCH 6/9] mm: convert PTE table entry to pte
-Message-ID: <fab9fc78-1e1d-4d5b-a9ca-92f3ebd04108-agordeev@linux.ibm.com>
-References: <20260806083926.1807279-1-usama.anjum@arm.com>
- <20260806083926.1807279-7-usama.anjum@arm.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cNegDMuz"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786086166;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=smuGmk21K57soIDpX9xRt9BbzTPX01FIBsuhki3qxVU=;
+	b=cNegDMuzfa9tQvyToC72m0ArSkyHVD+RaagQzGD/nqOzWZp9fdoQEvmCuAPDDaArgiUcrS
+	tBri5clUOgq5GZKRHqx5P8jsuV8XS5iJRyciRc5F1Ld9ynhPL11ucRX4HHZFIx/f1kK8CL
+	vMtTZyhZ1z07gaXJo5/qsxGChKcFDM4=
+From: "Hui Zhu" <hui.zhu@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	davem@davemloft.net,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	KP Singh <kpsingh@kernel.org>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Tobias Klauser <tklauser@distanz.ch>,
+	Eyal Birger <eyal.birger@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	Hao Luo <haoluo@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next 0/4] bpf: BPF-driven proactive memcg reclaim
+Date: Fri,  7 Aug 2026 15:01:48 +0800
+Message-ID: <cover.1786086076.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260806083926.1807279-7-usama.anjum@arm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODA3MDA0OSBTYWx0ZWRfX3Npn1dSDlp+R
- fqhR9MpXZOAAKnyVJ8e3VxdJ3uPpsfM7vsZzpddpvCei+hGCUgHlBFVERXxX+W23gcpS04A1TAu
- ZsTRXf6ZMD17BVZmsTCM0lUCa3PumjU=
-X-Authority-Analysis: v=2.4 cv=VPTtWdPX c=1 sm=1 tr=0 ts=6a758218 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=kj9zAlcOel0A:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
- a=7CQSdrXTAAAA:8 a=VnNF1IyMAAAA:8 a=MkxDnzPc83ckttyupOUA:9 a=CjuIK1q_8ugA:10
- a=a-qgeE7W1pNrGK8U0ZQC:22
-X-Proofpoint-ORIG-GUID: 9g22-5Yiq-VIyR9utDe_g8M8U8wsuEOd
-X-Proofpoint-GUID: 9g22-5Yiq-VIyR9utDe_g8M8U8wsuEOd
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA3MDA0OSBTYWx0ZWRfX4qeGdjjX3Iob
- oR2d/W90tNYt47jYoawp2wnB7y1FcZkNxxg7/PT57hDZR5feFluugIlRZ22mBQ/td/U5spNK5Sw
- r8fBBZDJMOMHDyBDHn28hS5vFD1IBzJcw9uh6xxZ9XoecZCsQnhJUSSf9noMzRB2RMvDZxhPIkf
- XMKQ1X4w4JsUHL/vsYXt9nxlaz1I/q7ljQgCtXwMvAVt1kijbs35mMQ7c76oGi39I1XSIpxXjmb
- kIMcLde1EyTpmQmaPbN+E3LbUk4M/lkkgjjjvsZIBgTXWy3e0GMD7NaUrStoYwo4ESb8Z4Wsdqh
- +581CUAUBwBVUa2TokmdsZzGbrL67tdrfft71SfQsy0ZlWFNR+iL1PR2Oez6zshpb+e7rynA9dG
- f8FbSxO38FmGhTq0nvrdQcjHK2fKXR2vKx64CE0UHGLhgbh7cUWWpBSkiNUoiKjHZV0BphvCO4H
- jlupay2/A2mIbK8uZUQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-07_01,2026-08-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 malwarescore=0 bulkscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 phishscore=0 impostorscore=0 adultscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608070049
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Aug 06, 2026 at 09:38:44AM +0100, Muhammad Usama Anjum wrote:
-> The non-MMU stub receives hw_pte_t but returns a logical pte_t
-> value. Convert the stored entry through __pte_from_hw() before
-> returning.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> ---
->  include/linux/hugetlb.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index bc0b9c65aa1d0..9e8b391aa4bc9 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -1283,7 +1283,7 @@ static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
->  #ifdef CONFIG_MMU
->  	return ptep_get(ptep);
->  #else
-> -	return *ptep;
-> +	return __pte_from_hw(*ptep);
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-But this is a direct dereferencing, which breaks the whole point, isn't it?
+This series lets a BPF program decide when to trigger memcg reclaim
+and how aggressively to do it, based on whatever runtime signal it
+chooses to observe -- rather than reclaim only being triggered once a
+cgroup's usage crosses a fixed threshold. The core idea is a new kfunc,
+bpf_try_to_free_mem_cgroup_pages(), which gives BPF direct access to
+the reclaim path so this decision can be made in BPF policy rather than
+hard-coded threshold logic.
 
-What about introducing something like pte_t ptep_get_sw(hw_pte_t *ptep)
-to be used in exactly situations like this? With that the semantics of
-hw_pte_t pointers becomes straightforward and closes the still ongoing
-"storage vs lifetime" discussion:
+This was originally part of a larger series posted here [1].
+That series also adds a memcg BPF struct_ops (memcg_charged,
+memcg_uncharged, below_low, below_min) for synchronous, in-line memory
+protection decisions. That mechanism and this one solve different
+problems -- struct_ops hooks run inline on the charge/reclaim path,
+while the kfunc here is for asynchronous, out-of-band reclaim decided
+independently by a BPF program -- so I think they're better reviewed
+as separate series rather than bundled together. This series carries
+only the async reclaim piece: the bpf_try_to_free_mem_cgroup_pages
+kfunc (patch 1), plus a new bpf_thread_wq mechanism (patch 2) that
+grew out of discussion here [2].
 
-hw_pte_t*     points to HW-formatted page table entries
+Patch 1 adds bpf_try_to_free_mem_cgroup_pages(), a sleepable kfunc
+wrapping try_to_free_mem_cgroup_pages(). With it, a BPF program can
+reclaim from a given cgroup on its own terms -- any condition it can
+observe at runtime -- instead of being limited to "usage hit
+threshold X".
 
-ptep_get()    is used to obtain HW-linked/attached entries, and may wire
-              extra code like [1] or [2]
+Patch 2 adds bpf_thread_wq, a bpf_wq-like map field backed by a
+dedicated kthread_worker rather than the system workqueue, which can
+be attached to a specific cgroup at init time. The motivation is
+accounting: reclaim work triggered from BPF still costs CPU (and can
+itself touch memory), and running it via a plain irq_work/system
+workqueue callback would charge that cost to whatever context happens
+to run it, not to the cgroup the policy cares about. bpf_thread_wq
+lets that cost be attributed to a chosen cgroup instead -- e.g. the
+low-priority cgroup being reclaimed from.
 
-ptep_get_sw() is used to obtain HW-unlinked/unattached entries and in
-              most cases is just a direct dereference
+Patch 3 is a selftest that exercises bpf_thread_wq's cgroup attachment
+in isolation: verifying the callback observes the target cgroup when
+one is given, and does not when it isn't.
 
-The caller should always know whether the entry is attached or not, so
-confusions like [3] are avoided.
+Patch 4 (selftests/bpf: add memcg async reclaim test for
+bpf_wq/bpf_thread_wq) ties patches 1 and 2 together as a worked
+example: it watches the WORKINGSET_REFAULT_FILE counter of a
+high-priority cgroup as a proxy for memory-pressure impact, and once
+it starts climbing, proactively reclaims pages from a low-priority
+cgroup via bpf_try_to_free_mem_cgroup_pages, running that reclaim
+inside a bpf_thread_wq attached to the low-priority cgroup so the
+reclaim cost lands on it rather than leaking into an unrelated
+context. This demonstrates the end-to-end use case: BPF observes
+pressure on the cgroup it wants to protect, and reclaims from the
+cgroup it wants to charge, in one self-contained mechanism.
 
-1. https://lore.kernel.org/linux-mm/20260526-kpkeys-v8-21-eaaacdacc67c@arm.com/
-2. https://lore.kernel.org/linux-s390/650903a4-0dd9-4e6b-9d4b-3c32c5657236-agordeev@linux.ibm.com/
-3. https://lore.kernel.org/linux-s390/b44e071d-7c9d-4e7e-a84d-4af3499a5a05@arm.com/
+[1] https://sashiko.dev/#/message/cover.1779760876.git.zhuhui%40kylinos.cn
+[2] https://sashiko.dev/#/message/1b58d56976202f26818d31dbd0da2ecb2e2460f5%40linux.dev
 
->  #endif
->  }
->  
-> -- 
-> 2.47.3
-> 
+Hui Zhu (4):
+  mm/bpf: Add bpf_try_to_free_mem_cgroup_pages kfunc
+  bpf: add bpf_thread_wq kthread-backed workqueue with cgroup placement
+  selftests/bpf: add thread_wq cgroup test
+  selftests/bpf: add memcg async reclaim test for bpf_wq/bpf_thread_wq
+
+ include/linux/bpf.h                           |  15 +-
+ include/linux/cgroup.h                        |   2 +
+ include/uapi/linux/bpf.h                      |   4 +
+ kernel/bpf/btf.c                              |   7 +
+ kernel/bpf/helpers.c                          | 418 +++++++++++++++
+ kernel/bpf/syscall.c                          |  15 +-
+ kernel/bpf/verifier.c                         |  44 +-
+ kernel/cgroup/cgroup.c                        |  13 +
+ mm/bpf_memcontrol.c                           |  58 +++
+ .../testing/selftests/bpf/bpf_experimental.h  |   7 +
+ .../bpf/prog_tests/memcg_async_reclaim.c      | 479 ++++++++++++++++++
+ .../bpf/prog_tests/thread_wq_cgroup.c         |  87 ++++
+ .../selftests/bpf/progs/memcg_async_reclaim.c | 255 ++++++++++
+ .../selftests/bpf/progs/thread_wq_cgroup.c    |  56 ++
+ 14 files changed, 1455 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/thread_wq_cgroup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/thread_wq_cgroup.c
+
+-- 
+2.53.0
+
