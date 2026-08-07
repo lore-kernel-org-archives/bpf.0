@@ -1,32 +1,32 @@
-Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
+Received: from out-173.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C514B04B7
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 03:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D513859FD
+	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 03:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786072867; cv=none; b=aoZHAKNU6u/ZW+17Wj+11Dai41cFGsX3ltpeA+Ts6vYnK5qicSmFNbbyrU/30Q6GFGgcH8B8IMLjAeH1dRd9f2+Mt+uYssFFEPhWKwtF1WPvDHxNbs4Jd8PBgOUK94i2XFkxiHEvVY1kWhLd7ne6HY487fhga10ghyUoUWE1io8=
+	t=1786072869; cv=none; b=N/cgdJb9rSnPqxCQ3eHGdtVtHYjOmjB7/VfMAZFqgpcGmHssiyJsACRA+/T6ITSp3tZl6vaqTplZ1JhZEn0+/4eueVdHLEZbVmcmfWDGJL1i3zSmokZrN8Pevp/irbMZhVUZIRBqK/8/3i6vDP+lmVGjtYaVvlGv+OsFRu37y+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786072867; c=relaxed/simple;
-	bh=iwDoeF5Azx0L4Srd0zpIJxeM3YWQ74dD+iQnBKOJRT0=;
+	s=arc-20240116; t=1786072869; c=relaxed/simple;
+	bh=HoSpnrpyvWGNn+KSIUKohATWBxOzOifzy0qnyc17aCY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=roIqLA3WwMmrgiO95Jl327x3MhVZU8XGVKRFxBZpL8HuLA+DQDSkOsqdY1iA7ZSl631VNm6GEcjy6Gq0y8nDqSIabuqfSAncW5JS26bp0XvSf47dVO3FldR7i+3rTOssdvZfxD8FAagBbIRWGxkci4ueapP6SeeysxQSePy0aFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fuKjW8YA; arc=none smtp.client-ip=95.215.58.184
+	 MIME-Version; b=gD4Yl4lTFGLMK14+oodzl36N1TrNURP4C3QeUoQLr+V2CC3bD9W8ohxhtIVWGN+OvYiTDxcLVTgprISpX2nta3c/glaCiD7uvyTAhQkh5zbTbRpY5z6R8xWmPnHcMxGfVPix941OH4rqwbKcsbON8YiXK7sUAoIfhHHoOwlUpBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gI26PUnK; arc=none smtp.client-ip=37.59.57.117
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fuKjW8YA"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gI26PUnK"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786072863;
+	t=1786072865;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=udvz/fl20Z1qoF3AkVynH7ekhSzdJq/7p7CQyHGDXbQ=;
-	b=fuKjW8YA93MzgIv3Gf4zCepy9symcxqVkEJnR4FTLC2/5WPaRvq7FDhz41ZXcvklqr7NkG
-	I0Z8UkH3Xtmha0IbEyIaCgr6qKCcZnYuXnKhSTSMSqZpKEL+iRzSVMECH2z3F3cIOhSYyF
-	sn+3L6jx1hOrDrE793Xl7sWiX6G9dxk=
+	bh=R5/tWgHgFEgpSzz2ajUpvgEIm5hebjmAwNu/APD2gfk=;
+	b=gI26PUnKvflOyDb5sR0LyeVG4mciL9u4a0MHLWb8xfB/aq3iPiWiz70rGFfUhw9A25y2A6
+	t7tRjPs/579btueJfV8cPbOxQWWIIdbzx+eK87LLoZUKJewT88SalbfjetQTMyJwq4fIAh
+	3Nlrg5ANDt72D+lWQ46VSKXccNgsG50=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -37,9 +37,9 @@ Cc: Alan Maguire <alan.maguire@oracle.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 5/6] selftests/bpf: Verify decl tags emission in resolve_btfids test
-Date: Thu,  6 Aug 2026 20:20:28 -0700
-Message-ID: <20260807032029.78092-6-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v3 6/6] docs, resolve_btfids: Document kfunc BTF annotation emission
+Date: Thu,  6 Aug 2026 20:20:29 -0700
+Message-ID: <20260807032029.78092-7-ihor.solodrai@linux.dev>
 In-Reply-To: <20260807032029.78092-1-ihor.solodrai@linux.dev>
 References: <20260807032029.78092-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -51,84 +51,76 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Extend test_resolve_btfids() to assert that resolve_btfids emits a
-BTF_KIND_DECL_TAG named "bpf_kfunc" for every kfunc, and
-"bpf_fastcall" for kfuncs marked KF_FASTCALL.
+resolve_btfids now emits the bpf_kfunc and bpf_fastcall BTF decl tags and
+the arena address_space(1) type attribute for kfuncs, which were
+previously produced by pahole.
 
-Add a btf_has_decl_tag() helper that scans the output BTF for a decl
-tag matching name and target.
+Reflect this in the in-tree comments and documentation.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../selftests/bpf/prog_tests/resolve_btfids.c | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ Documentation/bpf/kfuncs.rst      |  7 +++++++
+ Documentation/process/changes.rst |  5 -----
+ tools/bpf/resolve_btfids/main.c   | 11 +++++++++++
+ 3 files changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-index 8482f00046d4..732cfed35e1c 100644
---- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-+++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
-@@ -12,6 +12,8 @@
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index cbde86d082cc..021be6d93dfb 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -472,6 +472,13 @@ type. An example is shown below::
+         }
+         late_initcall(init_subsystem);
  
- #define BTF_DATA_FILE "resolve_btfids.test.o.BTF"
- 
-+#define DECL_TAG_FASTCALL "bpf_fastcall"
-+#define DECL_TAG_KFUNC "bpf_kfunc"
- #define TYPE_ATTR_ARENA "address_space(1)"
- 
- #ifndef KF_FASTCALL
-@@ -176,6 +178,28 @@ static int resolve_symbols(struct btf *btf)
- 	return 0;
- }
- 
-+static bool btf_has_decl_tag(struct btf *btf, const char *tag_name, s32 target_id)
-+{
-+	const struct btf_type *t;
-+	const char *name;
-+	int nr, id;
++At kernel build time the ``resolve_btfids`` tool finds all kfuncs declared with
++``BTF_KFUNCS_START()`` and emits their BTF annotations into the kernel's BTF.
++For each kfunc it emits a ``bpf_kfunc`` BTF decl tag, a ``bpf_fastcall`` decl
++tag when the kfunc is flagged ``KF_FASTCALL``, and the ``address_space(1)`` type
++attribute on the return value and/or arguments flagged ``KF_ARENA_RET``,
++``KF_ARENA_ARG1`` or ``KF_ARENA_ARG2`` (see section 2.8).
 +
-+	nr = btf__type_cnt(btf);
-+	for (id = 1; id < nr; id++) {
-+		t = btf__type_by_id(btf, id);
-+		if (!btf_is_decl_tag(t))
-+			continue;
-+		if (t->type != (__u32)target_id)
-+			continue;
-+		if (btf_decl_tag(t)->component_idx != -1)
-+			continue;
-+		name = btf__name_by_offset(btf, t->name_off);
-+		if (strcmp(name, tag_name) == 0)
-+			return true;
-+	}
-+	return false;
-+}
-+
- static void check_kfunc_set(struct btf_id_set8 *set)
- {
- 	unsigned int i, j;
-@@ -260,6 +284,22 @@ void test_resolve_btfids(void)
- 	check_kfunc_set(&test_kfunc_set);
- 	check_kfunc_set(&test_kfunc_set_rev);
+ 2.7  Specifying no-cast aliases with ___init
+ --------------------------------------------
  
-+	/* Check resolve_btfids emitted a bpf_kfunc decl_tag for each kfunc */
-+	for (i = 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
-+		ASSERT_TRUE(btf_has_decl_tag(btf, DECL_TAG_KFUNC,
-+					     kfunc_symbols[i].id),
-+			    kfunc_symbols[i].name);
-+	}
-+
-+	/* Check resolve_btfids emitted bpf_fastcall for KF_FASTCALL kfuncs */
-+	for (i = 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
-+		if (kfunc_symbols[i].flags & KF_FASTCALL) {
-+			ASSERT_TRUE(btf_has_decl_tag(btf, DECL_TAG_FASTCALL,
-+						     kfunc_symbols[i].id),
-+				    kfunc_symbols[i].name);
-+		}
-+	}
-+
- 	/*
- 	 * Check resolve_btfids wrapped exactly the arena-flagged return/args
- 	 * with the address_space(1) type attribute, and left other
+diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+index 1ca8c5f73ad0..0aa232b117b5 100644
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@ -147,11 +147,6 @@ Since Linux 5.2, if CONFIG_DEBUG_INFO_BTF is selected, the build system
+ generates BTF (BPF Type Format) from DWARF in vmlinux, a bit later from kernel
+ modules as well.  This requires pahole v1.22 or later.
+ 
+-Since Linux 7.0, kfuncs annotated with KF_IMPLICIT_ARGS require pahole v1.26
+-or later.  Without it, such kfuncs will have incorrect BTF prototypes in
+-vmlinux, causing BPF programs to fail to load with a "func_proto incompatible
+-with vmlinux" error.  Many sched_ext kfuncs are affected.
+-
+ It is found in the 'dwarves' or 'pahole' distro packages or from
+ https://fedorapeople.org/~acme/dwarves/.
+ 
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index a1b921e86ef0..d2e4176339da 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -58,6 +58,17 @@
+  *             __BTF_ID__func__vfs_fallocate__5:
+  *             .zero 4
+  *	       .word (1 << 3) | (1 << 1) | (1 << 2)
++ *
++ * In addition to resolving BTF IDs, resolve_btfids performs kernel-specific
++ * BTF-to-BTF transformations for kfuncs found in BTF_SET8_KFUNCS sets. For
++ * each such kfunc it:
++ *
++ *   - emits a "bpf_kfunc" decl tag, and "bpf_fastcall" when KF_FASTCALL is set;
++ *   - wraps the return value and/or arguments flagged KF_ARENA_RET,
++ *     KF_ARENA_ARG1 or KF_ARENA_ARG2 with the "address_space(1)" type attribute;
++ *   - rewrites the prototype of KF_IMPLICIT_ARGS kfuncs.
++ *
++ * These kfunc annotations were historically produced by pahole.
+  */
+ 
+ #define  _GNU_SOURCE
 -- 
 2.55.0
 
