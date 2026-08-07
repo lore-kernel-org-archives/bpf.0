@@ -1,136 +1,132 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37DE21A453
-	for <bpf@vger.kernel.org>; Fri,  7 Aug 2026 00:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786061956; cv=pass; b=NSkwKTz9d5VjNkHV8RCgP69/FWGqmd5Pd7q5c6BoA2vhzzpXsgRM0SA3UjyWLlOHJC0mNn598C3CsgK9NaAkN7yPpn34kLqZphhQpyuER+eY3BEhx6Rkv3QaWnLiliO9aF9E/ZDMHJCQdvjSn3dvak2ClaMWzGI2pRQ6EP6OfRw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786061956; c=relaxed/simple;
-	bh=OLw7F5+O4Ix+dDCWbCivhj5jjpeD5EwA49kGQoV1BwI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FnlDdEh8ANxbvtp3QlD4EVCo5ybgRO9UXrOoj69dSCF2/q3xCZfB8fuMLW+lXpPXBP5DSHBri1im1KnGe91mnsxqjucIyLUg0lPl2OgWWkhYSv9t/mR/4bVIquchflv9l35JMf+IgZvaLJr8gUw+bJfBPoAYCCWr7p+an65jW1s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YMWWXe/U; arc=pass smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9981F63D9;
+	Fri,  7 Aug 2026 00:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.133
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786062291; cv=none; b=ZGK3MsPA4r4O1pVPmruf6KZuVXZzPtc+9XAMf9+KaQq+OMCbaZBFiDpG3Lxu22Q7lE6ywZI6SPZgIafQLXku4IZapM6aIB9xUisNtGDUF6b6x/uOwdCinluRUdWfvLsVhUVETXTxyeq6KMCDOYmmNO7ptoW6z79gQ1vMXhIR3Tg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786062291; c=relaxed/simple;
+	bh=boS94ZSlKZKREDR+sAeqr4EGsykk7ip4fw7bc15aHNw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SShlNY1Twjo2KjMmVChoq+3Wmc5B4mBClkAuj/TR9ZRZ8Hv5XJt/X+MWK168tEGtHVDHsI5Lqs3CCfrf5GHbjl/QVoc3EfVZ8PESXL5McYANw4oNPbW4ZXvCO7CVoXzB672IF9BL41bCmKs3JUw9CImCpVaI2JUF4VoHvwtoJ2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=dRj6MU7z; arc=none smtp.client-ip=115.124.30.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YMWWXe/U"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5b0117d49dcso3036406e87.3
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2026 17:19:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786061953; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Rh/ojoxt5bsM+TENhe5OlMFJ6O/QzyNjpE81B87z2hWi1pRU7VUprDTrnegzv1nTiX
-         EjLNrByJsWagQaTEYaMTQkdB9SLnM2UzNxR6frQta4w3xLP2ACX6M/vBGKHn2UW6XCLt
-         7jvHGt+bZjNlPw91SFAHPibzX7nSJxRssnUZoKXKgbE5PsG3S5AeVd3Fvb51vGHJ4oR9
-         vSeY09vydwivLwnBxnEXQoAYiVfwvINhGniHkixkZFrqY9EmLbdbA/XbP0OhGQZAR/nW
-         N16r4ktHeSZBkylCZsyZDaJ8ktkJ6XexZuF361+0a6UBsqfmPPgBlz/KMy9o/pdfGLbT
-         v8wA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2iQmXi+4UEmQnTAgK3Lk/oOEKoHH/eshJX8JwrI8pjI=;
-        fh=MeZE3C9IgdjbgwIbB+9VkhFSbmflnkxJQtQ8HKlhn84=;
-        b=gEEBZxrSlBaUenDpqI3IYMcU1dfbx1lWvzlEnSzgdyHHaiPvU/3PODqtBFwEPOPV+V
-         tFjA2TR4AG3z76JaViVZu+OEc5UIVs3+gAjpp8zWdYgQHmLQ9xqEKw9Eaa92Y1ZlCE/a
-         hFtAG2xyO/+wRtqLpRQbP+rno3En9tJ1LtGTTz7LTnKgy3B9ypZ3yzcqGilth5ONFU62
-         stRh+dSD+QEFmnd2nERnVislH+ISGjTNUP2ZE1aqfCfQrN+/Hyq7OFlX4H+DK1bKuJM1
-         3i7nrmPelntzWs3HKBY9IxG4B9nfaXPglOOBoKyxTqNyclLNmT90Cbo3p9HGKo5bZOOh
-         WRww==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786061953; x=1786666753; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2iQmXi+4UEmQnTAgK3Lk/oOEKoHH/eshJX8JwrI8pjI=;
-        b=YMWWXe/UmXJCgT5IvO5g7L/+5rW3NsvH8nphFYUMq1/ak6zJf1smTq3k3/u2z9QTvT
-         iKI/bCUMoXzRXAWLH+PO4ydnsKbPEKodefV7iKnShkEXls+16nL85StAl5tokGMUEkcR
-         Utw+uTx5T25NgR2a13w4rko0/pt7R6wCONR5o17mUJcRswb33LRzCTidn7FKi68PsQYH
-         e1cKJIK+zvO3REwSJaWl5tIee5FSR94LDH2QSp4nnK/eILTCNxx3RZI0G5DFULdySo+M
-         CIl1VIBk1ARlhgrsSYg3Twep224RgmqPTvx1QTk6va0IzwEmuVGwQGK27EGbf2manq4j
-         B/xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786061953; x=1786666753;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2iQmXi+4UEmQnTAgK3Lk/oOEKoHH/eshJX8JwrI8pjI=;
-        b=abZB+50PHTWxhDkWylgjsS4caQoXdAGeHEYi2tO1Lc9zdnVS8eYuojm3Fw6Vrd64iN
-         9WEGKEj/KM+YnUYVpkpiD768iYzVN+J4a+juTnLoz1wE526mdwGkejwKvc38KdFCSAb2
-         /QkJLA1OoKAEUNaBjSXsjR8UouM7I/HyZjPCEuDS0K+7fuDcyqL7aRV1EXZt1opXFSRf
-         6rYgeBkTBgwa8kRcvS55q1V6Fard6TqVGVWBb8wQXIzAAKzaA6Qs/efZsPWGzLk8gWrb
-         k1Uley2sSak5YEOUuA1yKn8WMcShu82wKhzvQDSYta0ghI4Y2PNV4KREanavXhJeSJla
-         zK8g==
-X-Forwarded-Encrypted: i=1; AHgh+RpOOzXPxU+L8Xun9WDnm1EQ6e7rseCb5YldGS/JEhzqXqA0WEmiW6wpEz1sT3Ytgg84jKQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywkj9PfBPMHOx2hOEfHRKviG7dizrVd5zHtiMeppBWB68Yo5dXy
-	KogK+sNH1CB9MyFnh+eCXskE6qmg/f/5oj03VfcuvVCrYgpYTKzCeYLuObE1OoUdDwmxbvU789f
-	WgYvyoDmHIKSiWEX+lodDOedkZSoeKzX8P5KyfOEo
-X-Gm-Gg: AR+sD11p1IlUiucAChBW3qyKWFXqm5og3iKkx8Rzh/RgdegGxEWROlKCXQsDFEp1Paa
-	usfkuhqWEFkRPdwcFIo/A3uL2W2dBbf/W0E8EyzMLMld4Jilpm/3hhlbQkUoYwT4CvxCb2G+7c7
-	M69yKVTVE8K5fJlGpcLat/2vNKuj61vMVc6vghJ0Pq0fvkDlcGtLQMCv6TgllqKmQQGSD0+E6PP
-	MPSZcB6Fc9VS1Oo5zLZJIHtGAUjI5MkOPdRHkeiQPY1+lqNqgWXZ8wUA8MEfUHeErCJc1tShuMi
-	7qej6uJEE2xpP2X+I0LJFEQ6M4d7P/KnecrAXzHAB8t8okRxmAuygnZHUtQZ8LML2EDBQAQ/c10
-	=
-X-Received: by 2002:a2e:ad10:0:b0:396:8ac1:53a7 with SMTP id
- 38308e7fff4ca-39fbb1d39a6mr23161831fa.8.1786061952286; Thu, 06 Aug 2026
- 17:19:12 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="dRj6MU7z"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1786062278; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=Ja0xHUy1uLe/iPUk1mrxNeEqzUToXVTj7trH39SP5fg=;
+	b=dRj6MU7zulj8RJR63XzbE3onnozpKcF6Eo7KolIRdbHecK9uswzRbXGern0OZ7RSxVFJkEjOCjAVdnMeFQW6A6NUbfXM6Ar7oqeTP5aTCMtfgkn6YuxsoURX7zOm0wKNEG2ODulkc43sMOlZ4E8wb4EIA3G0yXl4FZWlKzMFlY8=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=feng.tang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0X8V4iI0_1786062277;
+Received: from localhost(mailfrom:feng.tang@linux.alibaba.com fp:SMTPD_---0X8V4iI0_1786062277 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Fri, 07 Aug 2026 08:24:38 +0800
+From: Feng Tang <feng.tang@linux.alibaba.com>
+To: Jakub Kicinski <kuba@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Andi Kleen <ak@linux.intel.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: Feng Tang <feng.tang@linux.alibaba.com>
+Subject: [PATCH net-next v3] selftests: net: reuseport_bpf_numa: consider cpuless numa node
+Date: Fri,  7 Aug 2026 08:24:36 +0800
+Message-Id: <20260807002436.43991-1-feng.tang@linux.alibaba.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260803184630.3813311-1-hramamurthy@google.com>
- <20260803184630.3813311-10-hramamurthy@google.com> <20260805183711.2f31aa2d@kernel.org>
-In-Reply-To: <20260805183711.2f31aa2d@kernel.org>
-From: Joshua Washington <joshwash@google.com>
-Date: Thu, 6 Aug 2026 17:18:59 -0700
-X-Gm-Features: AUfX_mxLEdsv-9T-gvq-o3w3bVO4ym-rfR_8aT9kttq6yWUhMrCBLiJtFct1XnQ
-Message-ID: <CALuQH+W6A8H_YhKsqebtD+kMAs-AYT+U_7ygVfTUx_R0LbniPQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 09/15] gve: simplify reset logic
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Harshitha Ramamurthy <hramamurthy@google.com>, netdev@vger.kernel.org, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	sdf@fomichev.me, jordanrhee@google.com, willemb@google.com, nktgrg@google.com, 
-	maolson@google.com, thostet@google.com, jacob.e.keller@intel.com, 
-	debarghyak@google.com, kees@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 5, 2026 at 6:37=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
-te:
->
-> On Mon,  3 Aug 2026 18:46:24 +0000 Harshitha Ramamurthy wrote:
-> > -static void gve_trigger_reset(struct gve_priv *priv);
-> > -
-> > -static void gve_teardown_device_resources(struct gve_priv *priv)
-> > +/**
-> > + * Request the device to release any allocated shared resources.
-> > + *
-> > + * If any part of the teardown step fails, the failure is documented, =
-but is
-> > + * otherwise ignored. It is expected that a device reset is triggered
-> > + * immediately after tearing down device resources, which would clear =
-any
-> > + * lingering state on the device.
-> > + */
-> > +static void gve_teardown_control_plane_resources(struct gve_priv *priv=
-)
-> >  {
->
-> Triggers a warning on W=3D1 builds:
->
-> Warning: drivers/net/ethernet/google/gve/gve_main.c:705 This comment star=
-ts with '/**', but isn't a kernel-doc comment. Refer to Documentation/doc-g=
-uide/kernel-doc.rst
->  * Request the device to release any allocated shared resources.
+reuseport_bpf_numa case failed when testing on a platform with CXL
+memory:
 
-Thanks for bringing this up. I will fix this in V4, and address any
-actionable review bot feedback.
+    #./reuseport_bpf_numa
+    ---- IPv4 UDP ----
+    send node 0, receive socket 0
+    ./reuseport_bpf_numa: failed to pin to node: Invalid argument
 
--- Josh
+The root cause is that the platform has 2 numa nodes: node 0 has
+both cpu and memory, while node 1 is a CXL node which only has
+memory, and caused numa_run_on_node() to fail.
+
+Add sanity check to skip cpuless numa node for the numa binding test.
+
+Signed-off-by: Feng Tang <feng.tang@linux.alibaba.com>
+---
+Changelog:
+  since v2:
+    * fix spelling issue (Jakub, Sashiko)
+	* remove unnecessary 'inline' for is_cpuless_node() (Jakub)
+
+  since v1:
+    * address comments from Sashiko bot
+      https://lore.kernel.org/all/20260730113738.41C901F000E9@smtp.kernel.org/
+    * lift the cpuless node check out of send_from_node() 
+
+ .../selftests/net/reuseport_bpf_numa.c        | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.c b/tools/testing/selftests/net/reuseport_bpf_numa.c
+index 8ec52fc5ef41..6e4817ef57c5 100644
+--- a/tools/testing/selftests/net/reuseport_bpf_numa.c
++++ b/tools/testing/selftests/net/reuseport_bpf_numa.c
+@@ -104,6 +104,26 @@ static void attach_bpf(int fd)
+ 	close(bpf_fd);
+ }
+ 
++/*
++ * Return true if it is a cpuless node. Return false if it isn't or any
++ * error (very unlikely) happens during the libnuma calls.
++ */
++static bool is_cpuless_node(int node_id)
++{
++	struct bitmask *cpumask;
++	bool ret = false;
++
++	cpumask = numa_allocate_cpumask();
++	if (!cpumask)
++		return ret;
++
++	if (!numa_node_to_cpus(node_id, cpumask) && !numa_bitmask_weight(cpumask))
++		ret = true;
++
++	numa_bitmask_free(cpumask);
++	return ret;
++}
++
+ static void send_from_node(int node_id, int family, int proto)
+ {
+ 	struct sockaddr_storage saddr, daddr;
+@@ -213,6 +233,8 @@ static void test(int *rcv_fd, int len, int family, int proto)
+ 	for (node = 0; node < len; ++node) {
+ 		if (!numa_bitmask_isbitset(numa_nodes_ptr, node))
+ 			continue;
++		if (is_cpuless_node(node))
++			continue;
+ 		send_from_node(node, family, proto);
+ 		receive_on_node(rcv_fd, len, epfd, node, proto);
+ 	}
+@@ -221,6 +243,8 @@ static void test(int *rcv_fd, int len, int family, int proto)
+ 	for (node = len - 1; node >= 0; --node) {
+ 		if (!numa_bitmask_isbitset(numa_nodes_ptr, node))
+ 			continue;
++		if (is_cpuless_node(node))
++			continue;
+ 		send_from_node(node, family, proto);
+ 		receive_on_node(rcv_fd, len, epfd, node, proto);
+ 	}
+-- 
+2.43.5
+
