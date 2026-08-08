@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE73238166
-	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 01:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736CE136351
+	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 01:04:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786151014; cv=none; b=tSpqosHXYPiojIQvxJ28SSGcfDb3Oa/Flz/In4wejfGgi0NahGOJOXZ7BTA5S57TXMjRuoXCpsKS4pDCh6/O9EhDm+hLFHpyJXEoWwBJx8VfOhjtxnEwXHYzd7ew4omyhzq9/YUwU++rs36FtsqqvxiQII1IHFp8cLyygiWYFFM=
+	t=1786151096; cv=none; b=LKoWRd90o89khPRFxwYUqJafhQu0hEEHG5hn+PB1p9fV2s21FoJGP9+nLaYOEv2phgUqgPia6UpjivMAPm7myi5FFM8RcJNGxMfRBI7CMUrS74ItmmLLFKlJMvRWXtF7T/DOgiQVWw+iGnFSNVi4TFEEFVryk6jvIvjDMbNd8nQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786151014; c=relaxed/simple;
-	bh=FBbJm2anrEqzXBTYp1GyxNAXtEy0KveRX0Hn1WE48l8=;
+	s=arc-20240116; t=1786151096; c=relaxed/simple;
+	bh=5t9KiGUgpx1XMBQQ8vLeXgPZ0bM0UqNaHo0yGsMq3Lg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=K9BTLy9Ah0XI2mXcBNhusECmsK04PRW40zT2KnJsOXY3HNcKenkZtW00xFQCQghbn/UfoLXAWiprmEdg8O5jcoazFhr8FOdcdDd1DUrRaFbHiidRlCFqJhUb9KYfXjBrz1Q22ERAHVNgZCyG9As0Lc2iofRmspGnPY7f+99PN/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ayhSnWS6; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=jQSEBuTf7+cWrOTe3T2bgFGpFZpbyXyo98TkequaWmcEidhHXjHpLJcHm8YRuk5VmQdNP9gWLzIHVqyHluB4OdEc0bO8em3d4c8hmwyhdrnsQlZst9yN6/Sxk+MRu1m7dmk8ks7KB/wnVQY4XsCKPxBZksj7R8mgIVMoLiQNcv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VI11PE3f; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ayhSnWS6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C021F000E9;
-	Sat,  8 Aug 2026 01:03:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VI11PE3f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECBB01F000E9;
+	Sat,  8 Aug 2026 01:04:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786151012;
-	bh=vf4JYZapfeElGh38/cawM1dKKm8XB9S89rc/o9OTXo4=;
+	s=k20260515; t=1786151095;
+	bh=7kr+jaPHVvrKHAEGlkqLXP+E0nmnpAIqQ5GKmh3zOUU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ayhSnWS6IBEcIvUQ/uaOqzCGdF+xk4vqk0lZTCTb6OpHICUxGJpn5INsLyXxYmwSR
-	 2H3IvmpGKjHXDrv9dSRxBRXAjYZ1/PMPpjgf6UlMRgFz4v4x5bF+KevkgeHSH0JZ3M
-	 SHRsqixHPny6AONuktLARgsrbiIaNbEvUHVTxmUBjvvWpTVwJz+xXW2nwuMaNV7orc
-	 15mu8oW4mh/HN3cynLtkeSEokBbBkOxMVYkieMLMiPYoPxYuCXKQ+7ri87aMc15Nhf
-	 f8N5fzzNrzRAtvHCK56bJQG2a64nSjs1UPR42J2gJRvKHnGeGGEyZifipcxdi0Wbf2
-	 QtoG2tMg+KH9A==
+	b=VI11PE3foVl0hHSbE/hR372GpyFKf7136PVYpc00U3/swuPY61N1UvyK40cVvT14Q
+	 RRhRYxQhAQReHsB/h3yTUzHAaa5cQarDDrSD64GzRZbX2fNr50yi68TZtSdnLYkKfM
+	 jAZ5vpA1D+4dkMsTptkgln8K9erXQjA2lNLnRlSNcqQB4+RMTfwJsXX+a0t/TxEM+5
+	 qBR0A2EdNa3grZgyI04Nuc7fp609IDqSzei1i2EJis3diRvHmHedBRDqXqwIIfmoqS
+	 hZprEp7jgECRWTo/jbw3vDoMnaGNt7Ko4TTdv5tzOz4VVLKqjcIZ7XMiOePV5X1FWb
+	 Z1OfhGe24Hk3w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 10/14] selftests/bpf: Add struct_ops __arena
- and __arena__nullable argument tests
+Subject: Re: [PATCH bpf-next v5 11/14] bpf, x86: Fix stack-passed arguments
+ for indirect trampolines
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260808003938.3486067-11-memxor@gmail.com>
+In-Reply-To: <20260808003938.3486067-12-memxor@gmail.com>
 References: <20260808003938.3486067-1-memxor@gmail.com>
- <20260808003938.3486067-11-memxor@gmail.com>
+ <20260808003938.3486067-12-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 08 Aug 2026 01:03:31 +0000
-Message-Id: <20260808010332.90C021F000E9@smtp.kernel.org>
+Date: Sat, 08 Aug 2026 01:04:53 +0000
+Message-Id: <20260808010454.ECBB01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,64 +47,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Unsafe unconditional dereference of `st_ops3` and its callbacks in=
- the newly added kfuncs, leading to a kernel panic.
+
+Pre-existing issues:
+- [High] Incomplete fix: The off-by-one-slot stack argument read bug for `B=
+PF_TRAMP_F_INDIRECT` trampolines was fixed for x86 but identical bugs remai=
+n in arm64, riscv, and loongarch JITs.
 --
 
---- Patch [10]: [PATCH bpf-next v5 10/14] selftests/bpf: Add struct_ops __a=
-rena and __arena__nullable argument tests ---
-commit ca58e222e16e38d0927f0dd75956c9489242a175
+--- Patch [11]: [PATCH bpf-next v5 11/14] bpf, x86: Fix stack-passed argume=
+nts for indirect trampolines ---
+commit b424d38504eb2136da7da04d1aa98780ba7432d8
 Author: Tejun Heo <tj@kernel.org>
+bpf, x86: Fix stack-passed arguments for indirect trampolines
 
-selftests/bpf: Add struct_ops __arena and __arena__nullable argument tests
+This commit fixes the stack offset calculation for stack-passed arguments
+in x86 indirect trampolines by accounting for the single return address
+on the stack.
 
-This patch adds test_arena and test_arena_nullable members to bpf_testmod_o=
-ps3
-with arena-tagged arguments. It also introduces kfuncs that forward caller-
-provided pointers to them to test end-to-end conversions of arena pointers.
-
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index 2291bb4665178..1e6d632c6f836 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 162fbd2ba1df8..8dddb5d7af21b 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
 [ ... ]
-> @@ -406,6 +418,16 @@ __bpf_kfunc void bpf_testmod_ops3_call_test_2(void)
->  	st_ops3->test_2();
->  }
-> =20
-> +__bpf_kfunc int bpf_testmod_ops3_call_test_arena(u64 *ptr__arena)
-> +{
-> +	return st_ops3->test_arena(ptr__arena);
+> @@ -3080,6 +3080,7 @@ static void save_args(const struct btf_func_model *=
+m, u8 **prog,
+>  {
+>  	int arg_regs, first_off =3D 0, nr_regs =3D 0, nr_stack_slots =3D 0;
+>  	bool use_jmp =3D bpf_trampoline_use_jmp(flags);
+> +	int stack_args_off =3D (use_jmp || (flags & BPF_TRAMP_F_INDIRECT)) ? 16=
+ : 24;
 
 [Severity: High]
-Does this code risk a NULL pointer dereference if st_ops3 has not been set =
-yet?
+This isn't a bug introduced by this patch, but does this same offset issue
+need to be fixed in the trampolines for other architectures as well?
 
-The global pointer st_ops3 is initialized to NULL and only set when a struc=
-t_ops
-map is explicitly registered. A BPF program could trigger a kernel panic by
-invoking this kfunc via BPF_PROG_RUN before the map is attached, or concurr=
-ently
-during teardown.
+For example, in arm64, save_args() hardcodes an offset of 32:
 
-While this pattern is also used in the pre-existing bpf_testmod_ops3_call_t=
-est_1()
-kfunc, should st_ops3 be checked for NULL, potentially while holding
-st_ops_mutex, before dereferencing it here?
+arch/arm64/net/bpf_jit_comp.c:save_args() {
+    ...
+    soff =3D 32; /* on stack arguments start from FP + 32 */
+    ...
+}
 
-> +}
-> +
-> +__bpf_kfunc int bpf_testmod_ops3_call_test_arena_nullable(u64 *ptr__aren=
-a__nullable)
-> +{
-> +	return st_ops3->test_arena_nullable(ptr__arena__nullable);
+This assumes two 16-byte frames are pushed. Since BPF_TRAMP_F_INDIRECT only
+pushes one frame, reading from FP + 32 reads from the old SP + 16, skipping
+16 bytes of arguments.
 
-[Severity: High]
-Similarly, can this unconditionally dereference st_ops3 when it is NULL?
+Similarly, riscv hardcodes a 16-byte offset relative to FP:
 
-> +}
+arch/riscv/net/bpf_jit_comp64.c:store_args() {
+    ...
+    emit_ld(RV_REG_T1, 16 + (i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
+    ...
+}
+
+Since FP points directly to the old stack pointer for indirect trampolines,
+this skips the first 16 bytes of caller arguments.
+
+Loongarch has the identical pattern:
+
+arch/loongarch/net/bpf_jit.c:store_args() {
+    ...
+    emit_insn(ctx, ldd, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP,
+              16 + (i - LOONGARCH_MAX_REG_ARGS) * 8);
+    ...
+}
+
+If a struct_ops callback were to receive enough arguments to be passed on t=
+he
+stack, would these architectures also pass garbage to the BPF program due to
+reading past the actual start of the stack arguments?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260808003938.3486=
-067-1-memxor@gmail.com?part=3D10
+067-1-memxor@gmail.com?part=3D11
