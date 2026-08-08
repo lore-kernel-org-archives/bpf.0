@@ -1,181 +1,213 @@
-Received: from out-181.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD8E2EB5A6
-	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 16:35:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AB92DECDF
+	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 19:03:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786206929; cv=none; b=bkYEBygemSrbZeF47Jl3pHC7Ez88KrN17GEy85PjZtk2D/71eH70iajzTmDl5iHwAQhfc5nYW4/MKhzRe8iz6rUw8arOn4cuVBEmR/rO04Pa1moMQLhwg50rhk0CzxfDGkvAyG3+sOHnJ7cs9onhgAd9J+BVqRjtePbESX+yLeA=
+	t=1786215817; cv=none; b=Sfo/ylrUr6INifnz3TRjZqPch8A7N8wvUDQir4eGMgq3OoLDlwGYDhPYd7If/WrZF/ULfALN6UtleXUMZ6OKSLs55RS+9rF9hKSe64xtjY9HDGy5rcO7Jt5wtRk3JndnqheUNinbVMCh4KSh2cBO7PpIgVh7SlH3dzw1U0o1rMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786206929; c=relaxed/simple;
-	bh=18DJpk9wXtyyBNNK67us14vlzm1+nFDu9lSHZjc7L8k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lz/6syWAyNfgrlTb2drlbkWjg5c1BtwoXCa5qENy83e3L7cVqxKbF61HE88cm8b8OCI/fIMlaCS38K40te3lsYHOX2yfSUKsjTS8eDTJiZb4dx0vc1p2fyqNVT7F1tJKUcZL/tDJ7uC0DQtbPpezqwGu+CZHQrFa5kDM7o368po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OXTDi25A; arc=none smtp.client-ip=37.59.57.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OXTDi25A"
-Message-ID: <a541a346-17e1-427f-ab06-5019cefe0db0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786206925;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dIugQcjB5OO+H2rP7M3ggR3iV4DyJuRB2BEzkRQcojY=;
-	b=OXTDi25A1XFEls4s30L7Nk2fQ8WcXAJ2GgKn2ukkvTfs0N7dW6EaVcBHTOqvlAfgh1InQO
-	757wFSTdXpPcfcCl3dVZpr+B3v3ac/lOp3asRiJUkj/ZFaVYMwWCwmc8Hbiz5KnL70bhDf
-	jhhyveUZDCcpr8PEQV/H1k5ucoEqXu4=
-Date: Sat, 8 Aug 2026 09:35:16 -0700
+	s=arc-20240116; t=1786215817; c=relaxed/simple;
+	bh=eG8DvJagp/KwBraCOjI8Gbh3cIe6uqkWo7qLqQXztiM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gf3OwZoj3R3AmlEhcNQ+2zCnJYSODvQ0l6eKzMTN9cJfMdsCbQVz4ZWxdB/2jVyOhXJaSezhJcXrvH3abltxrpIlWQLtzMAOwDQ/aql6QJsLa3Zw0RhSsVxw8Swf0/uNtpWBEHHsM0R9MeOJSdTOpIeFSruvqlhjwbSz6vYMnIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 4B70C22CA31A8E; Sat,  8 Aug 2026 12:03:22 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next v3 00/13] bpf: Support aggregate return values up to 16 bytes
+Date: Sat,  8 Aug 2026 12:03:22 -0700
+Message-ID: <20260808190322.1896580-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 11/13] selftests/bpf: Add inline-asm and
- subprog tests for R0:R2 returns
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260804203522.1869244-1-yonghong.song@linux.dev>
- <20260804203618.1878749-1-yonghong.song@linux.dev>
- <20260804205243.5F7E71F000E9@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260804205243.5F7E71F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
 
+LLVM 23 can return an __int128, or a struct/union larger than 8 bytes and
+no larger than 16 bytes, in the BPF R0:R2 register pair [1][2]. Before
+that the BPF backend could not return such values at all: a by-value
+aggregate return was rejected at compile time with "aggregate returns are
+not supported", and an __int128 return failed in the backend with "unable
+to allocate function return #1".
 
+This series teaches the kernel the same convention, so that BPF programs
+and kfuncs can return these values. The first 8 bytes of the value come
+back in R0 and the second 8 bytes in R2. It applies to kfunc returns and
+to BPF-to-BPF subprogram returns, both global and static. The main progra=
+m
+is unchanged: its return value is the program's exit code, so a return
+larger than 8 bytes is still rejected at BPF_EXIT.
 
-On 8/4/26 1:52 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The inline assembly tests verifying kfunc struct returns and __int128 values incorrectly assume little-endian register packing, which will cause deterministic test failures on big-endian architectures.
-> --
->
-> --- Patch [11]: [PATCH bpf-next v2 11/13] selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns ---
-> commit 43d5815a2f48399212b5d17d74ef9350c219fc0e
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
->
-> Add inline-asm tests, which do not depend on the compiler lowering a
-> register-pair return and so run regardless of the LLVM version, covering
-> what the C tests cannot reach.
->
->> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_run.c b/tools/testing/selftests/bpf/progs/aggregate_ret_run.c
->> new file mode 100644
->> index 0000000000000..fac813531b4fe
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_run.c
-> [ ... ]
->
->> +SEC("tc")
->> +int aggregate_ret_asm_kfunc_test(struct __sk_buff *skb)
->> +{
->> +	__u64 a = skb->len;
->> +	__u64 b = skb->len ^ 0xdeadbeefULL;
->> +	__u64 lo, hi;
->> +
->> +	asm volatile (
->> +	"r1 = %[a];"
->> +	"r2 = %[b];"
->> +	"call %[kfunc];"
->> +	"%[lo] = r0;"
->> +	"%[hi] = r2;"
->> +	: [lo]"=r"(lo), [hi]"=r"(hi)
->> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_i128)
->> +	: "r0", "r1", "r2", "r3", "r4", "r5"
->> +	);
->> +	if (hi != a + b)
->> +		return 1;
->> +	if (lo != a - b)
->> +		return 2;
-> [Severity: Medium]
-> Does this assume little-endian register packing for the __int128 return value?
->
-> On big-endian architectures, the high bits typically occupy the first register
-> (R0) and the low bits occupy R2, which would cause this check to fail when
-> testing kfunc __int128 returns.
+Patches 1-2 are preparation: patch 1 factors out the per-register check
+used by the global return path, and patch 2 adds the shared helpers that
+answer "does this subprogram return a register pair", so that the patches
+which follow can be ordered independently. Patch 3 wires up the JIT side.
+Patches 4-5 teach precision backtracking and live register analysis about
+R2 as a second return register, ahead of the patch that starts modeling i=
+t.
+Patch 6 rejects callbacks returning more than 8 bytes, since neither
+bpf_callback_t nor bpf_exception_cb has a second return register. Patch 7
+adds the verifier support proper. Patch 8 rejects a pair return once the
+subprogram's BTF has been marked unreliable, and patch 9 relaxes
+btf_distill_func_proto() and btf_validate_return_type(), which is what
+makes the whole thing reachable. Patches 10-12 add selftests and patch 13
+documents the convention.
 
-For x86_64, arm64 and 64bit riscv, only arm64 supports both little and big
-endian. For simplificty, I will guard the above (and below) for little endian
-so x86_64, arm64 and 64bit riscv all covered properly with selftests.
+Constraints worth calling out:
 
->
-> [ ... ]
->
->> +SEC("tc")
->> +int aggregate_ret_struct_test(struct __sk_buff *skb)
->> +{
->> +	__u64 a = skb->len;
->> +	__u64 b = skb->len ^ 0xdeadbeefULL;
->> +	__u64 lo, hi;
->> +
->> +	/* struct { u64 hi; u64 lo; }: R0 = hi, R2 = lo. */
->> +	asm volatile (
->> +	"r1 = %[a];"
->> +	"r2 = %[b];"
->> +	"call %[kfunc];"
->> +	"%[lo] = r0;"
->> +	"%[hi] = r2;"
->> +	: [lo]"=r"(lo), [hi]"=r"(hi)
->> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_pair)
->> +	: "r0", "r1", "r2", "r3", "r4", "r5"
->> +	);
->> +	if (lo != a + b)
->> +		return 1;
->> +	if (hi != a - b)
->> +		return 2;
->> +
->> +	/* struct { u64 a; int b; }: R0 = a, low 32 bits of R2 = b. */
->> +	asm volatile (
->> +	"r1 = %[a];"
->> +	"r2 = %[b];"
->> +	"call %[kfunc];"
->> +	"%[lo] = r0;"
->> +	"%[hi] = r2;"
->> +	: [lo]"=r"(lo), [hi]"=r"(hi)
->> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_li)
->> +	: "r0", "r1", "r2", "r3", "r4", "r5"
->> +	);
->> +	if (lo != a)
->> +		return 3;
->> +	if ((int)hi != ~(int)b)
->> +		return 4;
-> [Severity: Medium]
-> Will this check fail deterministically on big-endian systems?
->
-> The test expects the 32-bit integer b to be in the lower 32 bits of R2. On
-> big-endian platforms, b would occupy the upper 32 bits of R2, leaving the
-> lower 32 bits as padding.
->
->> +	/* struct { int a; int b; }: 8 bytes, packed into R0; R2 is not used. */
->> +	asm volatile (
->> +	"r1 = %[a];"
->> +	"r2 = %[b];"
->> +	"call %[kfunc];"
->> +	"%[lo] = r0;"
->> +	: [lo]"=r"(lo)
->> +	: [a]"r"(a), [b]"r"(b), [kfunc]"i"(bpf_kfunc_call_test_ret_ii)
->> +	: "r0", "r1", "r2", "r3", "r4", "r5"
->> +	);
->> +	if ((int)lo != (int)a)
->> +		return 5;
->> +	if ((int)(lo >> 32) != (int)b)
->> +		return 6;
->> +
->> +	return 0;
->> +}
-> [Severity: Medium]
-> Could the layout of this 8-byte struct in R0 differ depending on endianness?
->
-> The hardcoded cast to (int)lo reads the lower 32 bits of R0. On big-endian
-> architectures, the first member of the struct (a) is located in the upper 32
-> bits, so reading the lower 32 bits will yield b instead, causing a spurious
-> test failure.
->
+ - A by-value struct or union returned by a kfunc or by a global subprogr=
+am
+   must be composed only of scalars. The verifier models the returned
+   register bits as an unknown scalar, so a pointer member would be
+   laundered into one and escape provenance and reference tracking. A
+   static subprogram is verified inline and is not restricted this way.
+
+ - Returning the pair from a kfunc needs the JIT to place the second half
+   into R2, which is architecture-specific work. Architectures opt in
+   through bpf_jit_supports_kfunc_ret_reg_pair(); x86_64, arm64 and riscv=
+64
+   do so here, and elsewhere bpf_add_kfunc_call() rejects such a kfunc wi=
+th
+   -EOPNOTSUPP. A register-pair return from a BPF subprogram needs no suc=
+h
+   capability.
+
+ - The interpreter propagates R0 alone out of a subprogram, so the JIT is
+   forced wherever a caller can observe the pair.
+
+ - The compiler side requires LLVM 23 or newer. The selftests written in =
+C
+   record which compiler built them in a read-only flag and report a skip
+   rather than a pass when built by anything older; the inline-asm tests =
+do
+   not depend on the compiler and run everywhere.
+
+  [1] https://github.com/llvm/llvm-project/pull/190894
+  [2] https://github.com/llvm/llvm-project/pull/206876
+
+Changelog:
+  v2 -> v3:
+    - v2: https://lore.kernel.org/bpf/20260804203522.1869244-1-yonghong.s=
+ong@linux.dev/
+    - Add additional guard with __SIZEOF_INT128__ for 32bit kernel.
+    - Guard little endian to avoid arm64 big endian for selftests.
+    - Fix test failures for gcc15.
+    - Rebase to avoid conflict with latest master branch.
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20260708200939.2153664-1-yonghong.s=
+ong@linux.dev/
+    - Split the R0:R2 helpers out of the verifier patch into their own
+      preparation patch, and reordered the series so the core verifier pa=
+tch
+      comes after the infrastructure it depends on.
+    - New patch rejecting callbacks that return more than 8 bytes, both
+      helper/kfunc callbacks and exception callbacks, with selftests.
+    - New patch rejecting a register-pair return once btf_check_subprog_c=
+all()
+      has marked the subprogram's BTF unreliable, rather than silently
+      mistracking R2.
+    - Folded "bpf: Force JIT for programs using the R0:R2 register pair" =
+into
+      the verifier patch.
+    - Dropped "bpf: Reject >8 byte return values on return-reading trampo=
+line
+      paths" and its selftests; that went in separately as commit
+      c48796aa6c39.
+    - Described the register mapping as the first and second 8 bytes rath=
+er
+      than the low and high 64 bits, which is only correct on little-endi=
+an,
+      and reworded "16-byte" to "up to 16 bytes" where the range 9..16 wa=
+s
+      meant.
+
+Yonghong Song (13):
+  bpf: Factor check_global_ret_scalar_reg() out of the global return
+    check
+  bpf: Add helpers to describe the R0:R2 return register pair
+  bpf: Wire up JIT support for 16-byte kfunc returns
+  bpf: Track R2 of register-pair returns in precision backtracking
+  bpf: Account R2 of register-pair returns in live register analysis
+  bpf: Reject callbacks returning more than 8 bytes
+  bpf: Add verifier support for 16-byte returns in R0:R2
+  bpf: Reject register-pair returns when the subprog BTF is unreliable
+  bpf: Enable aggregate return types up to 16 bytes
+  selftests/bpf: Add C tests for 16-byte returns in R0:R2
+  selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
+  selftests/bpf: Add tests for callbacks returning more than 8 bytes
+  Documentation/bpf: Document up to 16-byte kfunc return values in R0:R2
+
+ Documentation/bpf/kfuncs.rst                  |  62 +++
+ arch/arm64/net/bpf_jit_comp.c                 |   5 +
+ arch/riscv/net/bpf_jit_comp64.c               |   5 +
+ arch/x86/net/bpf_jit_comp.c                   |  21 +
+ include/linux/bpf_verifier.h                  |  16 +
+ include/linux/filter.h                        |   1 +
+ kernel/bpf/backtrack.c                        |  61 ++-
+ kernel/bpf/btf.c                              |  44 +-
+ kernel/bpf/core.c                             |   5 +
+ kernel/bpf/liveness.c                         |  25 +-
+ kernel/bpf/verifier.c                         | 268 +++++++++--
+ .../selftests/bpf/prog_tests/aggregate_ret.c  | 173 ++++++++
+ .../selftests/bpf/prog_tests/exceptions.c     |   2 +
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |  15 +
+ .../testing/selftests/bpf/prog_tests/timer.c  |   2 +
+ .../selftests/bpf/progs/aggregate_ret_func.c  | 420 ++++++++++++++++++
+ .../bpf/progs/aggregate_ret_int128_c.c        |  48 ++
+ .../selftests/bpf/progs/aggregate_ret_kfunc.c | 126 ++++++
+ .../bpf/progs/aggregate_ret_kfunc_c.c         |  66 +++
+ .../selftests/bpf/progs/aggregate_ret_run.c   | 178 ++++++++
+ .../bpf/progs/aggregate_ret_struct_c.c        |  82 ++++
+ .../bpf/progs/aggregate_ret_target.c          |  29 ++
+ .../bpf/progs/aggregate_ret_union_c.c         |  58 +++
+ .../bpf/progs/btf__exceptions_ret_pair_fail.c |  10 +
+ .../bpf/progs/btf__timer_ret_pair_fail.c      |  10 +
+ .../selftests/bpf/progs/exceptions_fail.c     |   2 +-
+ .../bpf/progs/exceptions_ret_pair_fail.c      |  30 ++
+ .../selftests/bpf/progs/freplace_ret_pair.c   |  20 +
+ .../selftests/bpf/progs/timer_ret_pair_fail.c |  49 ++
+ .../selftests/bpf/progs/verifier_arena.c      |  38 ++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  83 ++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  48 ++
+ 32 files changed, 1944 insertions(+), 58 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/aggregate_ret.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_func.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_int12=
+8_c.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_kfunc=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_kfunc=
+_c.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_run.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_struc=
+t_c.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_targe=
+t.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_union=
+_c.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__exceptions_ret=
+_pair_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__timer_ret_pair=
+_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_ret_pair=
+_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/freplace_ret_pair.c
+ create mode 100644 tools/testing/selftests/bpf/progs/timer_ret_pair_fail=
+.c
+
+--=20
+2.53.0-Meta
 
