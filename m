@@ -1,64 +1,63 @@
-Received: from mail-oo2-f4.google.com (mail-oo2-f4.google.com [74.125.231.132])
+Received: from mail-oo2-f3.google.com (mail-oo2-f3.google.com [74.125.231.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7929D6DCE1
-	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 00:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC50627E07E
+	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 00:39:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786149589; cv=none; b=T98ZL7bVq9iIzShz9Lebx5CgxWY9Q8cTD5mOtq6iL7d6Rs6fHRdy9SO+rpVTRmmMmPYzUGkpoBRHPava4JOVW4A6h0QLJ1+sxRsDMeDm90Dr4lvDw/7Akp5j9o61ZfKbbBdIhBoTrwBdOp0zVfJbyG9B4VUFodwFUg1H/z989ec=
+	t=1786149591; cv=none; b=EsCxT4fZJOlhwGRQVsobRF7P+mi0DqvhAHeRTQN4Tz5czeLxnKIb447orr1d+DJPxmcqBZMcUgbW3TTn5PZcIxpiJszTqGkdXjX9j5KDoePwM6Q8CuDDT0R7W1EMEyIfCZRbyOVAlfGahxp47uKIx6CZ4bwKzzoQGIdo+3TWBYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786149589; c=relaxed/simple;
-	bh=5+A5l+GNqbbV1HVda5gRF1Qxw9gPHU9idojKDOfaYTQ=;
+	s=arc-20240116; t=1786149591; c=relaxed/simple;
+	bh=LzrWIIJyrsGm5O6yniWtzHFmeSDHtMHOirrodKLGbgw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E9UIL95RCae34/iElr6coWgzSx13izsWSva2fY3A8ry3J5SwFduDVFNBYt6EPiac7esgrDdB2GbSZX5UHUu5E1t79hfg/pjfXpyKpN+M6NggYauH6DMhN8lwl7VKlj69AQGWt3A8ADlE+ZNxioazJ4XCXl/OtEeK3OBMr9CilQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nckk7Vg8; arc=none smtp.client-ip=74.125.231.132
+	 MIME-Version; b=uMgo9MDA9G9W1lm2TR7qmcDcrIka7Cy2q0baWKDpZLJHD+FAtS+4H6o+1J/9Ozph8luo7XecFZm8b/iSEa3tqHZM78cSb/zO/JB0cmKRvdIaB6Jd8xZtegZdDO6Gb7WVnx7a0wMPV5jGUmIOUkTJj0Wq+8TubXgzrSfPy+rQbEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E3CJniMl; arc=none smtp.client-ip=74.125.231.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nckk7Vg8"
-Received: by mail-oo2-f4.google.com with SMTP id 46e09a7af769-7e9fe57f70eso57993a34.0
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 17:39:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E3CJniMl"
+Received: by mail-oo2-f3.google.com with SMTP id 46e09a7af769-7e9f9a3167aso58164a34.1
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 17:39:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786149585; x=1786754385; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786149587; x=1786754387; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=y3ixyDgYppbI1ur77JNyXScjw0wR1IOQdlBVuDrZJfE=;
-        b=nckk7Vg8djNurjyqu4H7eOfWsgYCg7kMTd84IVtQjXtVbGOuDj9MC/upDVWwHVSAMs
-         dojaA6hmxxOxV+PEJwSwhkOPETBY6ncQMvVD5CWm4TiiUSYl3Bg9CmC2Nyq/XhghZScx
-         nAG0DTOleiFPSktnNweJOsev6j+CEHvGqtzrRv248ltWMYmS6003Q/ntpBbeYyS/hxBF
-         VtKFyO0YLz6crGD5kmEvFRye4mksHevIU+GJeWnX7Eyev5H/LBW3ZcGfSB/0GSjOHu1i
-         lPHH7u8tP2BUbYvr9whjjWA9gAxmYbq3wS9de2P+aMUJTeEY4waP7BiB9dyXyFREz9EG
-         WDsQ==
+        bh=JEiNMhi+cKBij0ApLObpRBr5B/Y69XYrodxj3+pBvp8=;
+        b=E3CJniMlLGdZITpSaiHzSPqvcC+d2/W+VfHgtxcoPwCa8cBwd0TipME3GRqyNK1L5l
+         CehOwks98TBqwfC2Ju7QiBbIc+zVPRncchNJ/VoVqz+mUdRUOuN13Jk5U25pFKNh8kQS
+         mWtYdrAE4KGz+QBQKzhCMfGiqwtghlr0R1Qek/EtHJotPMSOW5SBLUKuLO6mzRQwl0Bo
+         NXKBfYvzOSEfZja9+pjVlKfN0gVnraJIsmXz6PQCL3JJ78LA4JWmVvuDcXpGBmCYImqW
+         jj6OPz6x2J92DGGiQFUNamAwP7GdBJ21Fpx1j5MPq4UdM1jfcBWpAU89+t08MLXpD0cl
+         FVVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786149585; x=1786754385;
+        d=1e100.net; s=20251104; t=1786149587; x=1786754387;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=y3ixyDgYppbI1ur77JNyXScjw0wR1IOQdlBVuDrZJfE=;
-        b=pmNwiKBcx5/vg8W9S5z4y6WSqOiWdlFzTk/F8crSyq6ikPjn1/FZvjX6AwyW6dmb86
-         0NpMOoQqF2PwyxfhaUqfVzdJjNVU3rMdu/MhSV2Y9f7kZ/aqz0UP/VUDnd1iDUbNen8X
-         woM4gzBsl6FWwHLNBnUFCOXgqAhazPRMnXGQ/wQUw+4/tngkiomL5zEZWy8Sdsjiy9oJ
-         3MVsHMqmNLX2oZJD+XeQ++LsZduZzA80tPcxw894qWgERMYDNpbKt1QLioCu7XDLMGKO
-         mjLBP3MT36h9KCpWE8G962iTpsSNza9NAqv0APC+GoxikOnIymi/DOSd2AfbBHhzmGQB
-         jZSg==
-X-Gm-Message-State: AOJu0YzeS9StvO5WPbkUDX431I7emYmyWqyhC+/wLXsQKGa5sSXd8/j4
-	R1b73zpKcMhtOmPSdAuUrb0DbFi8kHW2hR2Zd/hqUma9aqZ/PUxieTW9NcXqHBoktwg=
-X-Gm-Gg: AR+sD12hi9MrgAjqFN8NF67ZE73sY1AFbWzqy7wYBShASxyVrpIIp6jnlA5lG4EL2Fw
-	oldpT3DirqwI5EFm5oc/kolJeW5Sz/TkeNwtBHrQl/EkJH48wQOjnbqzyr9pPE2GrFTjg7NrUKf
-	PRRzvcX/Kf7KeEEkSf5vn4RuLBg/mpGNLzhJCrRAHu238KmVKvNGuUU0+0YCbIVz9eM2iDi6EUn
-	4uVRyCw5567ZKD69gi9V/bso2efTaq2qqGRqoS4wgq2GSysw6kRxO2qKwSCDwG4WI+04BLFwwI9
-	Yrz+QEOPY6WVCsjuYygQDGP5ffcYtGFjs56uZljxauH6t5X6YLs7xWfntk5SSR45TgnYzMPsdHj
-	odGlQYh5Tu186K2CWVFav2fKQ6izieSd1XcmPALUzzsZJCdBcAj5QrvI82t7k1OKE/iVXteinzX
-	6xhn8ZVWAkXoGUtqmb9/7A1uFYn0/RT16EJuVrpPP8Ry8co5DoNhhlH3M9lisMTzh6WnOCcJvhW
-	XV3IGm9VUS1G/zJ08PCsb5oLLfjTbcSV0VXieN6yGtQN+24vJ4VPxA9SFtqx05X2qTUcuyeOTHE
-	vIfubQ==
-X-Received: by 2002:a05:6820:f011:b0:6ae:8ee6:38f5 with SMTP id 006d021491bc7-6b03505d077mr3821924eaf.7.1786149585237;
-        Fri, 07 Aug 2026 17:39:45 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:47::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-459f1d81fadsm3152125fac.11.2026.08.07.17.39.42
+        bh=JEiNMhi+cKBij0ApLObpRBr5B/Y69XYrodxj3+pBvp8=;
+        b=RLHXl9ndmMYLC+7lDvUmwPsILaV4b/YEvObEN4c89YmGNhsoQjQmz9OvXYaztuXo8U
+         sVrFLfzcGCmpZE2lVl+7ta0zKn4GOfjcA11hGptuAMKxHSCaxPt2k1B1vsePAAC1DTMj
+         kXpJaiyFv4Eih5RpGor7a/UvtltRkh7eHDoUKAidjAmAHxqPZ7FJosViw090CYF/rOpI
+         sI+DW2miCQS7dbDp2y8b7jK3Bahb/sWVcoDcQ8/rK+/kMop9UWFrFUPNCC+8GFHfqUsu
+         0IPbiQbk/8pSD5TMAzEPpslr/JrMv+zdUJ43+VMJDLBh6Tj+wjd76L8MovTaIJUzR1mz
+         21fA==
+X-Gm-Message-State: AOJu0Yy8Dst1bCFpDgQYGkcBkTx2MFjadBA8hPdolhIO2+KcKOQ0i+hn
+	dx/bYnu5EnT/p3SCeHCoh7UtoxRslnVhe9G8ZRPc9Qwez27HpJQXkdbLc6NkzFuSgUg=
+X-Gm-Gg: AR+sD133fUy+F7KYxt6VMw9lZXvjlkEQhg43/dknqcNQwPNkZt4NP1jogrSI28l23al
+	VvpOTpqmBMLj1QQfKNtpYUMBcT7dmxxbwVcKIlMHrGnWqJOBQte0XVsJTzHnR5eZRkv/oqvSDC3
+	dZDk5pQi0uSXUxNJWT/UhCAGwSoF1O/FYwwzlPB9jBr9h69wiWBkddjzSLVkVM5XAGgrN1mytuY
+	OBHkvEvL3YO6RaConLmF3LlG2iwZjEixA8fS9+4v1u3XQmKO7pXW1uEDNbwGQmEmwY2cO0+JXyF
+	bR+PAgY/4elwxuqYHx/Fj3s82mZVWLHoNygK3O7uaHalIRWiUq2qDCEOruWi5f33gLngPIAA2oc
+	NMM0S6l3gwCs0BKzB+eSnjUgi2sGBGyZbLuTDPdBsB7f2V5RmghmMMt8pfDA2P6x4SjqIrBMGf4
+	qlGRxbAB25dgdsJqfJGuw580wl1Sv4fox0sv6vCQVJkfe0YCnGwcREWCZ7zpWK0MBM5slaUxicM
+	jjkyiVmfEgOcFZg9YlM2DSdTeY44qm4O4DdB9ihAmWBKKYxVb/rmb3L28i+AIw3rIdihwk=
+X-Received: by 2002:a05:6830:2a8b:b0:7dc:c749:ade3 with SMTP id 46e09a7af769-7f34dcf1707mr8664169a34.3.1786149587117;
+        Fri, 07 Aug 2026 17:39:47 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:44::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f35b5633f7sm2403016a34.5.2026.08.07.17.39.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 17:39:43 -0700 (PDT)
+        Fri, 07 Aug 2026 17:39:46 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Amery Hung <ameryhung@gmail.com>,
@@ -70,9 +69,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 01/14] bpf: Rename 'early' BTF checking as a preparation phase
-Date: Sat,  8 Aug 2026 02:39:21 +0200
-Message-ID: <20260808003938.3486067-2-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 02/14] bpf: Split subprogram and kfunc collection
+Date: Sat,  8 Aug 2026 02:39:22 +0200
+Message-ID: <20260808003938.3486067-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260808003938.3486067-1-memxor@gmail.com>
 References: <20260808003938.3486067-1-memxor@gmail.com>
@@ -82,109 +81,107 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3844; h=from:subject; bh=5+A5l+GNqbbV1HVda5gRF1Qxw9gPHU9idojKDOfaYTQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIausqqJdfrv4MzG7n5t3OE5IS2Wcp7Yt0eTv9LJ5Xa9Pypms dOHrKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwESW9TH8Uyp897q3jcm4+Yb4gU/qv0 N9pkY7e62tFdjUl9FpoflqLSND76ao9Snhnv1avj8EfV5fz3FT/pxcllP/Jzfd8vU+ny4WAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3291; h=from:subject; bh=LzrWIIJyrsGm5O6yniWtzHFmeSDHtMHOirrodKLGbgw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIausqoKV+UXXyfs/pQ+d565u4P4ktuNCJK/Hhjfs+6KbFdmD WfM6SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMBG3akaGyY8rHvsdVWO//MeLe32H+c L7PFF+Ocfr956e8FmrJjTmDMP/itX+s/QyVWUesE1Q9DgoGjpxc1ptclTHqxMiG/WD9YTYAQ==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-BTF processing is split around subprogram discovery. The first phase gets
-program BTF and imports func_info because a BTF-tagged exception callback
-may not be referenced by any instruction. Subprogram discovery needs this
-metadata to find it.
+add_subprog_and_kfunc() combines two operations with different ordering
+requirements. Subprogram discovery must precede validation of func_info and
+line_info, while kfunc descriptors are only needed by the verifier after its
+initial program setup is complete.
 
-The later phase validates func_info and line_info against the complete
-subprogram table and applies CO-RE relocations. This split breaks a real
-dependency cycle rather than merely running the same checks early.
+Split the helper into add_subprogs() and add_kfuncs() so each operation can be
+placed according to its actual dependencies. Keep both calls adjacent and in
+their existing phase for now, and add short comments describing their roles.
 
-Rename bpf_check_btf_info_early() and check_btf_func_early() to preparation
-names that reflect this role. Add short call-site comments to make the two
-phases and their responsibilities clear.
-
-No functional change is intended.
+No functional change is intended for valid programs.
 
 Reviewed-by: Amery Hung <ameryhung@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h |  4 ++--
- kernel/bpf/check_btf.c       | 14 +++++++-------
- kernel/bpf/verifier.c        |  4 +++-
- 3 files changed, 12 insertions(+), 10 deletions(-)
+ kernel/bpf/verifier.c | 41 ++++++++++++++++++++++++++++++++---------
+ 1 file changed, 32 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index a2a40caca0a0..a9555d17fd8e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1177,8 +1177,8 @@ static inline void bpf_trampoline_unpack_key(u64 key, u32 *obj_id, u32 *btf_id)
- 		*btf_id = key & 0x7FFFFFFF;
- }
- 
--int bpf_check_btf_info_early(struct bpf_verifier_env *env,
--			     const union bpf_attr *attr, bpfptr_t uattr);
-+int bpf_prepare_btf_info(struct bpf_verifier_env *env,
-+			 const union bpf_attr *attr, bpfptr_t uattr);
- int bpf_check_btf_info(struct bpf_verifier_env *env,
- 		       const union bpf_attr *attr, bpfptr_t uattr);
- 
-diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
-index 93bebe6fe12e..0e8b3ccc7a5b 100644
---- a/kernel/bpf/check_btf.c
-+++ b/kernel/bpf/check_btf.c
-@@ -28,9 +28,9 @@ static int check_abnormal_return(struct bpf_verifier_env *env)
- #define MIN_BPF_FUNCINFO_SIZE	8
- #define MAX_FUNCINFO_REC_SIZE	252
- 
--static int check_btf_func_early(struct bpf_verifier_env *env,
--				const union bpf_attr *attr,
--				bpfptr_t uattr)
-+static int prepare_btf_func(struct bpf_verifier_env *env,
-+			    const union bpf_attr *attr,
-+			    bpfptr_t uattr)
- {
- 	u32 krec_size = sizeof(struct bpf_func_info);
- 	const struct btf_type *type, *func_proto;
-@@ -407,9 +407,9 @@ static int check_core_relo(struct bpf_verifier_env *env,
- 	return err;
- }
- 
--int bpf_check_btf_info_early(struct bpf_verifier_env *env,
--			     const union bpf_attr *attr,
--			     bpfptr_t uattr)
-+int bpf_prepare_btf_info(struct bpf_verifier_env *env,
-+			 const union bpf_attr *attr,
-+			 bpfptr_t uattr)
- {
- 	struct btf *btf;
- 	int err;
-@@ -429,7 +429,7 @@ int bpf_check_btf_info_early(struct bpf_verifier_env *env,
- 	}
- 	env->prog->aux->btf = btf;
- 
--	err = check_btf_func_early(env, attr, uattr);
-+	err = prepare_btf_func(env, attr, uattr);
- 	if (err)
- 		return err;
- 	return 0;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c9533ea700ba..92d0cdd95c0f 100644
+index 92d0cdd95c0f..4573df98b1ce 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -20325,7 +20325,8 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 		INIT_LIST_HEAD(&env->explored_states[i]);
- 	INIT_LIST_HEAD(&env->free_list);
+@@ -2842,7 +2842,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, u16 offset)
+ 	return 0;
+ }
  
--	ret = bpf_check_btf_info_early(env, attr, uattr);
-+	/* Prepare BTF and func_info needed to discover all subprograms. */
-+	ret = bpf_prepare_btf_info(env, attr, uattr);
+-static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
++static int add_subprogs(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_subprog_info *subprog = env->subprog_info;
+ 	int i, ret, insn_cnt = env->prog->len, ex_cb_insn;
+@@ -2854,8 +2854,7 @@ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+ 		return ret;
+ 
+ 	for (i = 0; i < insn_cnt; i++, insn++) {
+-		if (!bpf_pseudo_func(insn) && !bpf_pseudo_call(insn) &&
+-		    !bpf_pseudo_kfunc_call(insn))
++		if (!bpf_pseudo_func(insn) && !bpf_pseudo_call(insn))
+ 			continue;
+ 
+ 		if (!env->bpf_capable) {
+@@ -2863,11 +2862,7 @@ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+ 			return -EPERM;
+ 		}
+ 
+-		if (bpf_pseudo_func(insn) || bpf_pseudo_call(insn))
+-			ret = add_subprog(env, i + insn->imm + 1);
+-		else
+-			ret = bpf_add_kfunc_call(env, insn->imm, insn->off);
+-
++		ret = add_subprog(env, i + insn->imm + 1);
+ 		if (ret < 0)
+ 			return ret;
+ 	}
+@@ -2905,6 +2900,28 @@ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
+ 	return 0;
+ }
+ 
++static int add_kfuncs(struct bpf_verifier_env *env)
++{
++	struct bpf_insn *insn = env->prog->insnsi;
++	int i, ret, insn_cnt = env->prog->len;
++
++	for (i = 0; i < insn_cnt; i++, insn++) {
++		if (!bpf_pseudo_kfunc_call(insn))
++			continue;
++
++		if (!env->bpf_capable) {
++			verbose(env, "loading/calling other bpf or kernel functions are allowed for CAP_BPF and CAP_SYS_ADMIN\n");
++			return -EPERM;
++		}
++
++		ret = bpf_add_kfunc_call(env, insn->imm, insn->off);
++		if (ret < 0)
++			return ret;
++	}
++
++	return 0;
++}
++
+ static int check_subprogs(struct bpf_verifier_env *env)
+ {
+ 	int i, subprog_start, subprog_end, off, cur_subprog = 0;
+@@ -20330,7 +20347,13 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
  	if (ret < 0)
  		goto skip_full_check;
  
-@@ -20337,6 +20338,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+-	ret = add_subprog_and_kfunc(env);
++	/* Discover all subprograms before validating their layout and BTF. */
++	ret = add_subprogs(env);
++	if (ret < 0)
++		goto skip_full_check;
++
++	/* Collect the kfunc descriptors used during verification. */
++	ret = add_kfuncs(env);
  	if (ret < 0)
  		goto skip_full_check;
  
-+	/* Validate BTF against the complete subprogram layout and apply CO-RE. */
- 	ret = bpf_check_btf_info(env, attr, uattr);
- 	if (ret < 0)
- 		goto skip_full_check;
 -- 
 2.53.0-Meta
 
