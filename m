@@ -1,62 +1,64 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32383B1B3
-	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 06:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B548919B5B1
+	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 06:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786170366; cv=none; b=L0sQO+nNYSVVv56/7GziUg3PNgphjukqF7Cij66r4s6SjOz3gVfY8beEwhTjMJv4IMM4wmVQS6Z18PlGftv1lS4H76jyzYOnkYhO7Gpmb/QjetV/jHXujQOp8bxQbSOgAZ47TIJZlhLX6lQGPVO3ycy1W5ZOJ7zEHKGSI34Tuf8=
+	t=1786170367; cv=none; b=fEiO6YLWwTYRKiZYOXI90UbGwqbKMyCRksgpzVrynPfgLtCDfDoCnFY4f7CDVltrNBwVheCvczSgsmr4mNIzEgpaJCBBjwH4GNZZ2ij1JmaSiFY9ntHPrOXX/kiL3C7bfSU7org43Zk5lXeilSe72WEClwiZxaMUAPy74fLbzwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786170366; c=relaxed/simple;
-	bh=LGfWfwHd6DIb2nFEmjy52HAAUDE5x9CErbM+WXyZgaA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pYrS4q/VHV4LYiwcKBXUZRiNV6dN1HWNBVIngyCQv+N01MoUZcAEqRFtJqIufmW39vm+gAqwYirOXB+h9xiNtuIzcoEvidwh1k4Mu+4GfHpCertYRTCQuY3nk56htMaEbzHH9BgxDvtOaOmA2tFcx+S3HPWiLoIPSZTFye1+0zM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wdi0tDW5; arc=none smtp.client-ip=74.125.225.138
+	s=arc-20240116; t=1786170367; c=relaxed/simple;
+	bh=yuNBtGSbj8wkJJwHZaaFXYEWU5iAbNbkA02hIKLBiSo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ao7Y+yoUi08Q/3ElVxZzWwYETDHl/6sbJs807mRHd2XRvQkPbMUTTmNamlzBVrCLGUwwasR/MfOJuqZ1Za5TkKq4Y02tMdwyzNJg2UFI8Sz7pHliMw5JVf8JR7FyW55Policl5tS2ireLo9fIfdL0fQ+elMeZxAQuaoKoajrGX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ut+MULzK; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wdi0tDW5"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495473da596so118225e9.1
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 23:26:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ut+MULzK"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49553b57612so719585e9.1
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 23:26:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786170363; x=1786775163; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uZo2kZ+F4kIY9yrQOFHR7B+4bTQU1swkv9i1Cpph8MI=;
-        b=Wdi0tDW5ZukOkV7Jb4qk/6VBGrXlheK5DhBIyvbKG+mWWL3HWTRkLecDXSjTyghuog
-         D4Le0w7bQ40yFbGMaYKf16YPM2en9JKJ8kT2almqy7w0noj92Rl297N0bF7BgUCpU9n/
-         ib9FEzknFyDPTJbRRyz7Yx54b1TGSADw8w8apGglpb/OyJ3yzwMmgRpTZjxNqACNOUoJ
-         oWgII7tb14oTwz2xv2yeVXVOaEax+rVi1lyaC1cvLOw1bCeSxWaGK/RWqKgeGNYRQbrD
-         j4VoHm0mrTJ9rnVhgBvtx3Bz8mGsa8FlHqW8e8kQDiuY+oz6gp1y5xKVw5KtFsHmj8Zb
-         rdyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786170363; x=1786775163;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1786170364; x=1786775164; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=uZo2kZ+F4kIY9yrQOFHR7B+4bTQU1swkv9i1Cpph8MI=;
-        b=MoEiQtLQMqh0UHP7R9Gtol5wh9MXswnNh6vuWIA1Aty12YeieJcn50CnBB5zW60qzU
-         EZwDxs1cAn8Ryo9W3l3Hwax0k031JgmaBFnLywg9hE5bfL+qGQ9UvysKtQuEXw+hXKiz
-         b++ldG029lACV+jtBuDYp2CP8djKSU60gkYGvLTgyGHGjX7+kez5VmFwvw1IeMyh9W+c
-         h7ZbHf2w36QdJHc3bMc/T3daYybvNuVk2SIxn2KmIkzwMLQL2l2bRObuHJxVU+3yn7sW
-         Z3E5E8tyZy3+RbYKjXkq8mJSsfYiguUwKYmuEMpNmAjZtwxa0CEOBfmHO7up2FZ3Sc39
-         M6ew==
-X-Gm-Message-State: AOJu0Yy4hQiKZfwS8it20RWq00MNHyli49HqXZv4Ntx4byiirnRgk8Xk
-	XlSg/NKvWN/THGlifBjzA/ztE/Miq+dCUR1cQoU0ierFED2+tMScmDWZynrvYmRMCgw=
-X-Gm-Gg: AR+sD13IY1KBjjbbtTPmU+GxBK6lGyhsJZVaNNHe0mwOvpYGmja5mDK6WHeZ6YGOJ9B
-	FBRczVnP119x0JqVTs72XI3YIjBUhlBBFxn6Dn8Y8jDLl6a/HAixwKqEjKUo6emHhYHpw8hQXs4
-	S1uMLWB2JkOvh3ULEWWS2m2xHLRXRn/leaLxDkEfV26Yr+dNbtmM1XZmg3UO4SnMtsoDqs6trCe
-	nmHQYn1Y/H0YuGJtq7KlpwgfGvsLmr0iR+0y2QkNXaeUOuXktpvEzqHBuqtqWB/4K21Zeo+y5qi
-	joKnUMfa6CKWjeyf5Ulgxb/v12HHIyn5vY2UgbnoqpYx2zAJgVbSNkaPTwLc9qrzo3MQHi5x4x9
-	v0QiT3rOgkaHqJGcVxW04ZWt+WECXjy99krX3qgIb42QJdFBQdMwFK8j7EmqRK1iWylbxrbFRIm
-	K8gf6fSqalCE7YdJmE4hJMcC12Ny7qls+8FAjHed4rc/Dqw9ExY+240cqSRUoD+UiIoq9G9xMQA
-	/ntX3Sgs2/dReAxlIa3tjoZ4ez9vzQLjabDsomo2NGX8cwZpTTWcL3D7DZtEqCoMW6xTI4xtGuw
-	w17zl6LGSxROThKE5kEL73J2S+g=
-X-Received: by 2002:a05:600c:4e8e:b0:497:ff5a:38b9 with SMTP id 5b1f17b1804b1-4996247e640mr37605635e9.9.1786170362700;
-        Fri, 07 Aug 2026 23:26:02 -0700 (PDT)
+        bh=XgmC+KbYE3gMurZ/WybFzlQ6tsoCqWPjEbKgORLuWAU=;
+        b=Ut+MULzKsEmNhVSLj7CAfGuV667bdlWy+YYKgzcVycqAC/vFkjieL2n4Wlf0EzJtND
+         klrjOaQpah+lLzLO9RRLnyTzamQek2CNkaXGUiKsf7nMTrixoMWEaMcJKPC0/T0ZX2I5
+         aci0faC8VPVmutmjc6slAmf8/jnEPANzA2qY9Xg4HoKoAEWoNey1Ent+jhdu4kUNpszj
+         TkeHbH/1lY3YyBVWxpoBDsanTWF4gl3cSMNPC/UHMOLqdiGUc5G1fUvkO85T+hMf90Me
+         HdSiUm4TrwUpnc9iFfPG5Hr25Ydo1oCbO/Ie7go+ZuVq+ic2XyNtVaTcDgJ3PNJtxhIq
+         4r1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786170364; x=1786775164;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=XgmC+KbYE3gMurZ/WybFzlQ6tsoCqWPjEbKgORLuWAU=;
+        b=pFO7xtOI8wo6lsl2QTLlseEmdms2un43xLlohlq17jjLG+ZFailvok6Po4yyBYwcsL
+         YcXO+dxQUrLy/WclZaMFgUwPhJEav6cBDXqmb/tsfcb9PZpYhWe1yMFPFWCbUWlX1ouR
+         /0gEca6YTPPOR0fDaktKod1wyN0ISPi9XiMsQ9gCOmtRDE4B3+eWZxuS/jWKtTE54kNx
+         OM2lt3XaGzEJgXNVZl1QaWWNIs3aINQFT+tVNWirvQHbtFPaA6GmzG3zV9E8PrQdU0Sy
+         bMTfqtRyVrEryo2kS+/AXJ/2q5Hy9oCLHMJ1gfKMznEcgnd08eGu8/vOxgMXDCbpAxlX
+         9trA==
+X-Gm-Message-State: AOJu0YxOXBHwzoXjA5n7+B7zLolHwJdeoYLojJo+j3WBRQheiTQDabuz
+	VW5urSm6ZSsVwjCHltbkAgzTUTyYamyctPwQS9ENxAcv4PQyFidi3pOW7YPCDk3aZNE=
+X-Gm-Gg: AR+sD12OFZFsl8RCST5/yVgAQ2scy4dJM22dh5FX3FrJlS3TT1NTxfWdnkmRSArxpGR
+	kPYMFVb5foZ7PllWndhl1J4i5sQQuOL0a5Y5jUCuotsqUrxJdYnRUMr2hP8FsA7MA68sTwxPcDK
+	ueNbUim/6W9kPJ+uGiSVGUM8pdOxcaNMJ49kVwZsx3O3cDmVlb+UCOzicEhmNo0360B8Dm38oef
+	xoI1TkOBHfDouY3MO4bqWFeId6B7wkkBxH7yLZFEdLQe7qyiaxwDAV8cuni3r+DvFLbKUrj1gRA
+	km07jYe50i1UdvrG+bVQH90IVwqvhk7Tm8NOSvLroQfwVPPGu3CtxZ7ujfgN2ttcWFLXzhPZJc+
+	YPPOKq5tx7rMY5GFIfInlRQtuoXZVMVsuLABa3biSSCRPti9XzxGjV4kw5NpAYlc0CLH9HECEm1
+	EnTAIOBK2SKRnd4hZGaRVHILMH5z9e4rtYfsX1Ak7fulYWn8OBQditX4vjBDczH3DMRPCbHB0sh
+	8Vxi7EVcpJih0JLKMGF2naOdkQj15bUHDkRoz/KkNdbjaBtTU/i05e8K9XzJihWgsTLqEmM1f+B
+	ewgSvdk0/9WxUHqztL3CwMa2BXjYpMTVMYN9pg==
+X-Received: by 2002:a05:6000:41ed:b0:47f:8d71:210a with SMTP id ffacd0b85a97d-48130ed871emr6773828f8f.15.1786170363910;
+        Fri, 07 Aug 2026 23:26:03 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995c7a3d1dsm84819815e9.3.2026.08.07.23.26.02
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-480021457ebsm12212814f8f.6.2026.08.07.23.26.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 23:26:02 -0700 (PDT)
+        Fri, 07 Aug 2026 23:26:03 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -66,151 +68,219 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v7 0/6] Improve stack depth verification stats output
-Date: Sat,  8 Aug 2026 08:25:52 +0200
-Message-ID: <20260808062601.1070988-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v7 1/6] bpf: Track verifier instruction stats for each subprogram
+Date: Sat,  8 Aug 2026 08:25:53 +0200
+Message-ID: <20260808062601.1070988-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260808062601.1070988-1-memxor@gmail.com>
+References: <20260808062601.1070988-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5749; i=memxor@gmail.com; h=from:subject; bh=LGfWfwHd6DIb2nFEmjy52HAAUDE5x9CErbM+WXyZgaA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavs9M23CxVNzP5wzI8rOKGRpbMjdqVE3RT5pwu3/rH7H qnse25jRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACbydy3DX2mbq3McuIUW7dn7 UViT9xXDtourv70//awiurfPUZ9733OG//55fz4tz9IoPn9JPfJU1zZuz1irua7vPQ3W9y+YsMl 9MiMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7860; i=memxor@gmail.com; h=from:subject; bh=yuNBtGSbj8wkJJwHZaaFXYEWU5iAbNbkA02hIKLBiSo=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavs9M0HD41NirL75l8q+22/W3TV73TWVeJxm7a5LLlq6 x5puONfRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZiJsjwPzvXbO6PyKWqCZmd RQ/sHsevCz63N8JYwULTdIrlj7WOfIwM7wR9ty1NX7H41bGoN+cnPRK9nvrI89JLxiU/3W9rXD3 yhQUA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Some improvements for more clarity in the stack depth verification
-statistics output. See commit logs for details.
+The verifier currently records one instruction count for the main program
+and each global subprogram checked independently. Static subprograms are
+explored within callers, so their verification cost cannot be reported
+separately.
 
-For example, ./test_progs -t subprogs/subprogs_alone loads prog4,
-which has a main program, two static subprograms, and two independently
-verified global subprograms. A sample run produces:
+Track both self and inclusive instruction counts for every subprogram.
+Charge each processed instruction as self work to the current subprogram and
+to a path-local subtotal in its function frame. When a function returns, add
+the callee subtotal to its inclusive count and to its parent subtotal. Fold
+any remaining frames when a path terminates or is pruned.
 
-  verification time 1765 usec
-  stack depth max 48
-  subprog 0 (prog4) main insns_self 29 insns_total 51 stack 8
-  subprog 1 (get_task_tgid) global insns_self 9 insns_total 9 stack 8
-  subprog 2 (sub4) static insns_self 15 insns_total 22 stack 8
-  subprog 3 (sub3) static insns_self 7 insns_total 7 stack 0
-  subprog 4 (sub1) global insns_self 10 insns_total 10 stack 8
-  processed 70 insns (limit 1000000) max_states_per_insn 0 total_states 7 peak_states 7 mark_read 0
+Instruction subtotals are accounting state, not semantic verifier state.
+Clear them when a verifier state is copied so work before a path fork is
+charged once, rather than again when a saved branch is explored. If copying
+a saved state fails before all frames are allocated, skip missing frames
+while folding the current path.
 
-The insns_self counts account for every processed instruction exactly once:
+This generic frame accounting also records self and inclusive totals when an
+asynchronous callback starts as a fresh frame-zero state. It does not yet
+charge that independently explored callback path back to the main or global
+exploration root which scheduled it. That will be done in subsequent
+changes.
 
-  29 + 9 + 15 + 7 + 10 = 70
+This does not change the verification statistics output format. It only
+prepares the counters for per-subprogram reporting.
 
-The main program and global subprograms are independent exploration roots,
-so their insns_total counts also account for the full processed budget:
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/bpf_verifier.h |  5 +++-
+ kernel/bpf/verifier.c        | 55 ++++++++++++++++++++++++++++++------
+ 2 files changed, 50 insertions(+), 10 deletions(-)
 
-  51 + 9 + 10 = 70
-
-Static subprogram totals provide a nested, top-down breakdown inside their
-root. In this example:
-
-  sub4: 22 = 15 self + 7 in sub3
-  prog4: 51 = 29 self + 22 in sub4
-
-The global subprogram bodies are accounted in their own root totals rather
-than being included in prog4 or the static callees which call them.
-
-Asynchronous callbacks start from fresh frame-zero verifier states, but the
-work remains part of the do_check_common() invocation for the main or global
-verification root under which it was scheduled. Running:
-
-  ./test_progs -t verifier_subprog_insn_stats/stats_async_nested -v
-
-produces the following stats:
-
-  stack depth max 0
-  subprog 0 (stats_async_nested) main insns_self 9 insns_total 25 stack 0
-  subprog 1 (stats_async_nested_schedule) static insns_self 7 insns_total 7 stack 0
-  subprog 2 (stats_async_outer) static insns_self 7 insns_total 7 stack 0
-  subprog 3 (stats_async_nested_leaf) static insns_self 2 insns_total 2 stack 0
-  processed 25 insns
-
-Here, 9 + 2 + 7 + 7 = 25. The main root total is the complete verifier
-budget for its do_check_common() invocation, including both directly and
-transitively scheduled asynchronous callbacks. Static subprogram and
-callback totals remain local to their synchronous paths.
-
-Changelog:
-----------
-v6 -> v7
-v6: https://lore.kernel.org/bpf/20260805011517.1717238-1-memxor@gmail.com
-
- * Rename insns_own to insns_self throughout. (Andrii)
- * Drop the async accounting call stack and attribute callback work to the
-   scheduling main or global verification root using its processed-insn
-   delta. (Eduard, Andrii)
- * Skip missing frames when folding instruction totals after a partial
-   verifier state copy. (BPF CI Bot)
- * Use explicit callback argument operands in deterministic instruction-count
-   tests and update tests and examples for root attribution. (BPF CI Bot)
-
-v5 -> v6
-v5: https://lore.kernel.org/bpf/20260804081114.3871564-1-memxor@gmail.com
-
- * Track self and inclusive instruction counts for main, global, and static
-   subprograms. (Andrii, Eduard)
- * Keep instruction subtotals path-local across verifier state copies.
- * Propagate async callback budget through nested scheduling chains. (Andrii)
- * Split per-subprogram instruction accounting into a preparatory patch.
- * Add deterministic selftests with exact self, total, and processed counts.
-
-v4 -> v5
-v4: https://lore.kernel.org/bpf/20260803072733.191502-1-memxor@gmail.com
-
- * Change the format to combine instruction counts and stack depths into
-   per-program records. (Andrii)
- * Adjust veristat for the new format while retaining support for the legacy
-   format.
- * Explain why the legacy stack parsing buffer is zero-initialized. (BPF CI
-   Bot)
-
-v3 -> v4
-v3: https://lore.kernel.org/bpf/20260803031457.3115812-1-memxor@gmail.com
-
- * Read names from subprog_info directly to avoid an out-of-bounds access
-   when func_info validation fails. (BPF CI Bot)
-
-v2 -> v3
-v2: https://lore.kernel.org/bpf/20260802225209.2511758-1-memxor@gmail.com
-
- * Reuse subprog_name() to fetch subprogram names. (BPF CI Bot)
-
-v1 -> v2
-v1: https://lore.kernel.org/bpf/20260801230400.850271-1-memxor@gmail.com
-
- * Use multi-line format. (Eduard)
- * Adjust veristat to work with old and new format.
- * Adjust selftest log_level without new option. (Eduard)
-
-Kumar Kartikeya Dwivedi (6):
-  bpf: Track verifier instruction stats for each subprogram
-  bpf: Attribute async callback instructions to verification roots
-  bpf: Show more useful info in stack depth stats
-  selftests/bpf: Adjust veristat stack depth parsing
-  selftests/bpf: Test stack depth stats without BTF subprog names
-  selftests/bpf: Test subprogram instruction statistics
-
- include/linux/bpf_verifier.h                  |   5 +-
- kernel/bpf/verifier.c                         |  75 ++++--
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../bpf/progs/verifier_basic_stack.c          |   8 +-
- .../bpf/progs/verifier_bpf_fastcall.c         |  38 ++-
- .../bpf/progs/verifier_global_subprogs.c      |   6 +-
- .../bpf/progs/verifier_private_stack.c        |  22 +-
- .../bpf/progs/verifier_subprog_insn_stats.c   | 228 ++++++++++++++++++
- .../selftests/bpf/progs/verifier_var_off.c    |   8 +-
- tools/testing/selftests/bpf/test_verifier.c   |   2 +-
- tools/testing/selftests/bpf/verifier/calls.c  |  12 +-
- tools/testing/selftests/bpf/veristat.c        |  16 +-
- 12 files changed, 385 insertions(+), 37 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_subprog_insn_stats.c
-
-
-base-commit: 51476f6a06ef55cecf785ae1622c638fa8cfb846
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index a2a40caca0a0..f16ee6602179 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -385,6 +385,8 @@ struct bpf_func_state {
+ 	 *                           | number of simulations is tracked in frame N
+ 	 */
+ 	u32 callback_depth;
++	/* Instructions processed in this frame and callees on the current path. */
++	u32 insns_subtotal;
+ 
+ 	/* The following fields should be last. See copy_func_state() */
+ 	/* The state of the stack. Each element of the array describes BPF_REG_SIZE
+@@ -803,7 +805,8 @@ struct bpf_subprog_info {
+ 	u32 exit_idx; /* Index of one of the BPF_EXIT instructions in this subprogram */
+ 	u16 stack_depth; /* max. stack depth used by this function */
+ 	u16 stack_extra;
+-	u32 insn_processed;
++	u32 insns_total;
++	u32 insns_self;
+ 	/* offsets in range [stack_depth .. fastcall_stack_off)
+ 	 * are used for bpf_fastcall spills and fills.
+ 	 */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c9533ea700ba..855f245e7468 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1593,6 +1593,8 @@ static int copy_func_state(struct bpf_func_state *dst,
+ 			   const struct bpf_func_state *src)
+ {
+ 	memcpy(dst, src, offsetof(struct bpf_func_state, stack));
++	/* Instruction accounting is path-local, not part of verifier state. */
++	dst->insns_subtotal = 0;
+ 	return copy_stack_state(dst, src);
+ }
+ 
+@@ -9832,6 +9834,42 @@ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
+ 
+ static bool is_rbtree_lock_required_kfunc(u32 btf_id);
+ 
++static void account_processed_insn(struct bpf_verifier_env *env)
++{
++	struct bpf_func_state *frame = cur_func(env);
++
++	env->insn_processed++;
++	frame->insns_subtotal++;
++	env->subprog_info[frame->subprogno].insns_self++;
++}
++
++static void account_processed_insns(struct bpf_verifier_env *env,
++				    struct bpf_func_state *callee,
++				    struct bpf_func_state *caller)
++{
++	u32 insns;
++
++	if (!callee)
++		return;
++
++	insns = callee->insns_subtotal;
++
++	env->subprog_info[callee->subprogno].insns_total += insns;
++	if (caller)
++		caller->insns_subtotal += insns;
++	callee->insns_subtotal = 0;
++}
++
++static void account_current_path(struct bpf_verifier_env *env)
++{
++	struct bpf_verifier_state *state = env->cur_state;
++	int frame;
++
++	for (frame = state->curframe; frame >= 0; frame--)
++		account_processed_insns(env, state->frame[frame],
++					frame ? state->frame[frame - 1] : NULL);
++}
++
+ /* Are we currently verifying the callback for a rbtree helper that must
+  * be called with lock held? If so, no need to complain about unreleased
+  * lock
+@@ -9928,6 +9966,7 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 		verbose(env, "to caller at %d:\n", *insn_idx);
+ 		print_verifier_state(env, state, caller->frameno, true);
+ 	}
++	account_processed_insns(env, callee, caller);
+ 	/* clear everything in the callee. In case of exceptional exits using
+ 	 * bpf_throw, this will be done by copy_verifier_state for extra frames. */
+ 	free_func_state(callee);
+@@ -17504,7 +17543,9 @@ static int do_check(struct bpf_verifier_env *env)
+ 		insn = &insns[env->insn_idx];
+ 		insn_aux = &env->insn_aux_data[env->insn_idx];
+ 
+-		if (++env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
++		account_processed_insn(env);
++
++		if (env->insn_processed > BPF_COMPLEXITY_LIMIT_INSNS) {
+ 			verbose(env,
+ 				"BPF program is too large. Processed %d insn\n",
+ 				env->insn_processed);
+@@ -17644,6 +17685,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 					    "speculation barrier after jump instruction may not have the desired effect"))
+ 				return -EFAULT;
+ process_bpf_exit:
++			account_current_path(env);
+ 			mark_verifier_state_scratched(env);
+ 			err = bpf_update_branch_counts(env, env->cur_state);
+ 			if (err)
+@@ -18688,6 +18730,7 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
+ 
+ 	ret = do_check(env);
+ out:
++	account_current_path(env);
+ 	if (!ret && pop_log)
+ 		bpf_vlog_reset(&env->log, 0);
+ 	free_states(env);
+@@ -18719,7 +18762,6 @@ static int do_check_subprogs(struct bpf_verifier_env *env)
+ 	struct bpf_prog_aux *aux = env->prog->aux;
+ 	struct bpf_func_info_aux *sub_aux;
+ 	int i, ret, new_cnt;
+-	u32 insn_processed;
+ 
+ 	if (!aux->func_info)
+ 		return 0;
+@@ -18734,8 +18776,6 @@ static int do_check_subprogs(struct bpf_verifier_env *env)
+ 		if (!bpf_subprog_is_global(env, i))
+ 			continue;
+ 
+-		insn_processed = env->insn_processed;
+-
+ 		sub_aux = subprog_aux(env, i);
+ 		if (!sub_aux->called || sub_aux->verified)
+ 			continue;
+@@ -18743,7 +18783,6 @@ static int do_check_subprogs(struct bpf_verifier_env *env)
+ 		env->insn_idx = env->subprog_info[i].start;
+ 		WARN_ON_ONCE(env->insn_idx == 0);
+ 		ret = do_check_common(env, i);
+-		env->subprog_info[i].insn_processed = env->insn_processed - insn_processed;
+ 		if (ret) {
+ 			return ret;
+ 		} else if (env->log.level & BPF_LOG_LEVEL) {
+@@ -18770,12 +18809,10 @@ static int do_check_subprogs(struct bpf_verifier_env *env)
+ 
+ static int do_check_main(struct bpf_verifier_env *env)
+ {
+-	u32 insn_processed = env->insn_processed;
+ 	int ret;
+ 
+ 	env->insn_idx = 0;
+ 	ret = do_check_common(env, 0);
+-	env->subprog_info[0].insn_processed = env->insn_processed - insn_processed;
+ 	if (!ret)
+ 		env->prog->aux->stack_depth = env->subprog_info[0].stack_depth;
+ 	return ret;
+@@ -18794,10 +18831,10 @@ static void print_verification_stats(struct bpf_verifier_env *env)
+ 		for (i = 1; i < subprog_cnt; i++)
+ 			verbose(env, "+%d", env->subprog_info[i].stack_depth);
+ 		verbose(env, " max %d\n", env->max_stack_depth);
+-		verbose(env, "insns processed %d", env->subprog_info[0].insn_processed);
++		verbose(env, "insns processed %d", env->subprog_info[0].insns_total);
+ 		for (i = 1; i < subprog_cnt; i++)
+ 			if (bpf_subprog_is_global(env, i))
+-				verbose(env, "+%d", env->subprog_info[i].insn_processed);
++				verbose(env, "+%d", env->subprog_info[i].insns_total);
+ 		verbose(env, "\n");
+ 	}
+ 	verbose(env, "processed %d insns (limit %d) max_states_per_insn %d "
 -- 
 2.53.0
 
