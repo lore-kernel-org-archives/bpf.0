@@ -1,132 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0998B2F30
-	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 01:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07D23803C7;
+	Sat,  8 Aug 2026 03:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786154400; cv=none; b=tNC+sebnMfWJxt0doxmLZ0uEEWq7jCsFjXu4AXoLTCQrXVFxIT8m6FKaNx86Fg3416iEW0kq5ONfZx+7LHC01uhX7srVOivrkw+naWwT0SW/W0LL7peHIL+9IDswsKzqj0K0k02r22GJZD4MwlJRqpsLjX6fXQcKOoJm4Ma6A3k=
+	t=1786158009; cv=none; b=MISy8MKz/nUVoPb5XE+A2eFV426qk5P+TvePBoGHNhDvjiAHhj/+v53IvetzI52bqr/oSmLnd9rD4KFiS0+MY6POrqQtPIHJusM3gDZzxs4YrHc4+3QuytTTLJ84m6U1WWTw10XYYRIRuEAGi2R38qXy2Xx4gn+r43Oi0POjz0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786154400; c=relaxed/simple;
-	bh=p4+g3Cfw37Y3W733hpSZJIr/frMyHau3M1s20PR98co=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=LzQTmJVFa5zcQl5MjVJOgaB8V/2GVd9UHqtCpHRQVrE/6h4B+1a6CyseER93NzgOHOY95JAo6A2Veh/yPCBH3/GryKxOU3jZkps2dH1912Afq8VG4mmoAjFMbQY8VFV5o+/+zHjBxcYmawp/UE7PqEf5GejrePhma9IT8NfhpOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b7Qyy4Pe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786158009; c=relaxed/simple;
+	bh=HRDBBFzvW2Ykk/EqBGsgeNi+7wPARF7Oe3MAvEkowq4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IFiXO4+sHwZxSC3/prJCZ9/RQbgSxOjbRmmkRuVtGbAHd+25CeDNaURpmrviK/b6GEvXDjOtwGdCeiw9jiGf/MBe6EZ2g68bWQWSmLX9D/nwOlhNdAnYqbLcW0GtOMQbLs+eWOZFK6J92bQKDQonF5E3Wo8LiIcnMNvaIR9mivQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WdYYFu4p; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b7Qyy4Pe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF911F000E9;
-	Sat,  8 Aug 2026 01:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786154398;
-	bh=3424g6N0C2EEec+Ogj+VTFnk25I2vsDRrdmhc8KPxXY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=b7Qyy4Pehtf6d23GR/YcqUTtuiHr/GVm1VJc79mzLapcpXLDhl34u9UobJPkuM9Pc
-	 osk6B8TbInqj8rm8inKLVsDifNhxEX/O0ucPh5Cl08A/17WjFRqUQO0DXr0cwj8C0o
-	 uy2XgZzdw84ZV7zj2TCSdPuGzH3tobeJU311RCrOFGBmKKe8RNdu2/IF6De84WP6DK
-	 kWGepXY9hALKKBFaHGRNGisA1xz6hysWZdwrcFUe23kmeAT+zfrpoghmSnXX8qeWox
-	 fLPaAZ+Rhro3y0Z03UmdW6fWekeIrhKyjK0joZb9pj9cH+flW2R7n3ew6ncrsx0W//
-	 q5R+JoqoICZiw==
-Content-Type: multipart/mixed; boundary="===============8686466321155057618=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WdYYFu4p"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786158007; x=1817694007;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HRDBBFzvW2Ykk/EqBGsgeNi+7wPARF7Oe3MAvEkowq4=;
+  b=WdYYFu4pJQ5jGhTUYmOZsB3fkbQEsFqIcvJy1nTBUFZxNZg0AvWW3ObA
+   NH5pIjaEBH3HJUleNJ090ieXS34rkDw5bg5Ug0wVzgkMyeoPIdVcu51k0
+   vNCnNvzFsXyZSFdqPUIeHMp+7ECrcN59BN40poSTF4dHgTuk1MCeeq72h
+   cblyfocUA8VwPG+xwuufet1uoHR7w8V9hC5KGRZoBp9/KDE4EKOILVp/K
+   uLOj5dkivOs/FmOgYXlliD8MV5TgQnJ7ufHuUum9mnhOzRVtNlVQgBclu
+   HjluVO3Ejc+UEh9Boq46OeSBSGvz4KwJH96zF0+Qyzs3AsjWa4vuulv55
+   g==;
+X-CSE-ConnectionGUID: 69+bRniwT3yNJpLkeESnZg==
+X-CSE-MsgGUID: KPmT2ps8QsyQ9X0U5Q3+ug==
+X-IronPort-AV: E=McAfee;i="6800,10657,11868"; a="86979901"
+X-IronPort-AV: E=Sophos;i="6.25,211,1779174000"; 
+   d="scan'208";a="86979901"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2026 20:00:06 -0700
+X-CSE-ConnectionGUID: Jkvpkn1BRuyLzTO8h1QmCw==
+X-CSE-MsgGUID: N5vga5gDS3S6mfPlHlnuOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,211,1779174000"; 
+   d="scan'208";a="261263923"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 07 Aug 2026 19:59:58 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wsXHu-00000000Jfx-2fuP;
+	Sat, 08 Aug 2026 02:59:54 +0000
+Date: Sat, 8 Aug 2026 10:59:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rong Tao <rtoax@foxmail.com>, andrii@kernel.org, vmalik@redhat.com,
+	ast@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, rtoax@foxmail.com,
+	Rong Tao <rongtao@cestc.cn>, Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
+	"(open list:BPF \\(Safe Dynamic Programs and Tools\\))" <bpf@vger.kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test
+ bpf_strcat,bpf_strncat kfuncs
+Message-ID: <202608081054.Y56a5ufe-lkp@intel.com>
+References: <tencent_DB0510330C3A8574B3C62E6154165FCB4709@qq.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b839cf46146f3960d8da3f0d44c06de033c5e53fcaef2dcd0308565217c8d70d@mail.kernel.org>
-In-Reply-To: <20260808003938.3486067-3-memxor@gmail.com>
-References: <20260808003938.3486067-3-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v5 02/14] bpf: Split subprogram and kfunc collection
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ameryhung@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,tj@kernel.org,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat,  8 Aug 2026 01:59:57 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_DB0510330C3A8574B3C62E6154165FCB4709@qq.com>
 
---===============8686466321155057618==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Rong,
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 92d0cdd95c0f4..4573df98b1ce7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -2842,7 +2842,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, u16 offset)
->  	return 0;
->  }
->
-> -static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
-> +static int add_subprogs(struct bpf_verifier_env *env)
->  {
->  	struct bpf_subprog_info *subprog = env->subprog_info;
->  	int i, ret, insn_cnt = env->prog->len, ex_cb_insn;
-> @@ -2854,8 +2854,7 @@ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
->  		return ret;
->
->  	for (i = 0; i < insn_cnt; i++, insn++) {
-> -		if (!bpf_pseudo_func(insn) && !bpf_pseudo_call(insn) &&
-> -		    !bpf_pseudo_kfunc_call(insn))
-> +		if (!bpf_pseudo_func(insn) && !bpf_pseudo_call(insn))
->  			continue;
->
->  		if (!env->bpf_capable) {
-> @@ -2863,11 +2862,7 @@ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
->  			return -EPERM;
->  		}
->
-> -		if (bpf_pseudo_func(insn) || bpf_pseudo_call(insn))
-> -			ret = add_subprog(env, i + insn->imm + 1);
-> -		else
-> -			ret = bpf_add_kfunc_call(env, insn->imm, insn->off);
-> -
-> +		ret = add_subprog(env, i + insn->imm + 1);
->  		if (ret < 0)
->  			return ret;
->  	}
+kernel test robot noticed the following build errors:
 
-[ ... ]
+[auto build test ERROR on bpf-next/master]
 
-> @@ -2905,6 +2900,28 @@ static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
->  	return 0;
->  }
->
-> +static int add_kfuncs(struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_insn *insn = env->prog->insnsi;
-> +	int i, ret, insn_cnt = env->prog->len;
-> +
-> +	for (i = 0; i < insn_cnt; i++, insn++) {
-> +		if (!bpf_pseudo_kfunc_call(insn))
-> +			continue;
-> +
-> +		if (!env->bpf_capable) {
-> +			verbose(env, "loading/calling other bpf or kernel functions are allowed for CAP_BPF and CAP_SYS_ADMIN\n");
-> +			return -EPERM;
-> +		}
-> +
-> +		ret = bpf_add_kfunc_call(env, insn->imm, insn->off);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
+url:    https://github.com/intel-lab-lkp/linux/commits/Rong-Tao/selftests-bpf-Test-bpf_strcat-bpf_strncat-kfuncs/20260807-065842
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/tencent_DB0510330C3A8574B3C62E6154165FCB4709%40qq.com
+patch subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test bpf_strcat,bpf_strncat kfuncs
+config: riscv-randconfig-r131-20260807 (https://download.01.org/0day-ci/archive/20260808/202608081054.Y56a5ufe-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 8.5.0
+sparse: v0.6.5-rc1
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260808/202608081054.Y56a5ufe-lkp@intel.com/reproduce)
 
-This isn't a bug, but now that the CAP_BPF check runs in two separate
-functions, would it help to say "bpf function calls" in add_subprogs()
-and "kernel function calls" in add_kfuncs() so the rejection reason is
-unambiguous?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608081054.Y56a5ufe-lkp@intel.com/
 
-The message "loading/calling other bpf or kernel functions are allowed
-for CAP_BPF and CAP_SYS_ADMIN" appears verbatim in both add_subprogs()
-and add_kfuncs(). Before the split there was a single site covering
-both cases; with two independent passes the identical string no longer
-tells the loader which kind of call was rejected.
+All errors (new ones prefixed by >>):
+
+   In file included from include/uapi/linux/filter.h:9,
+                    from include/linux/bpf.h:8,
+                    from kernel/bpf/helpers.c:4:
+   kernel/bpf/helpers.c: In function '__bpf_strncat':
+>> include/linux/compiler_types.h:702:38: error: call to '__compiletime_assert_851' declared with attribute error: min(slen, sz) signedness error
+     _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                                         ^
+   include/linux/compiler.h:68:3: note: in definition of macro '__trace_if_value'
+     (cond) ?     \
+      ^~~~
+   include/linux/compiler.h:55:28: note: in expansion of macro '__trace_if_var'
+    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                               ^~~~~~~~~~~~~~
+   kernel/bpf/helpers.c:4219:2: note: in expansion of macro 'if'
+     if (space <= 1 || space < min(slen, sz) + 1)
+     ^~
+   include/linux/compiler_types.h:690:2: note: in expansion of macro '__compiletime_assert'
+     __compiletime_assert(condition, msg, prefix, suffix)
+     ^~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:702:2: note: in expansion of macro '_compiletime_assert'
+     _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+     ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:40:37: note: in expansion of macro 'compiletime_assert'
+    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                        ^~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:93:2: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+     BUILD_BUG_ON_MSG(!__types_ok(ux, uy),  \
+     ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:98:2: note: in expansion of macro '__careful_cmp_once'
+     __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+     ^~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:105:19: note: in expansion of macro '__careful_cmp'
+    #define min(x, y) __careful_cmp(min, x, y)
+                      ^~~~~~~~~~~~~
+   kernel/bpf/helpers.c:4219:28: note: in expansion of macro 'min'
+     if (space <= 1 || space < min(slen, sz) + 1)
+                               ^~~
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+vim +/__compiletime_assert_851 +702 include/linux/compiler_types.h
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31231521120
---===============8686466321155057618==--
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  688  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  689  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  690  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  691  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  692  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  693   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  694   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  695   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  696   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  697   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  698   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  699   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  700   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  701  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @702  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  703  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
