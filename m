@@ -1,114 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7137E367B85
-	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 13:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B0B285CAA
+	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 14:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786196672; cv=none; b=Ve4tancxELN4opQuskSy3gkoBIRnbzzcnDW2xm74ObrRVaj+SNhBcDJ0iP4SekI8ZjgosWddjN/F22FgDx9ekqS/QrGuEG4YkKqEqHkG88DhhhRbYOxYQzveFltow5VCU2qgXkHmyELuDNbhYESIM7dS4D+sbtKLyGLJfVlKd/4=
+	t=1786198086; cv=none; b=YV/+8LosfDZLzsU+3VFCJsTgygiTCO9XtgsVHK2a7SD3jf4BwSNDSGQ8UtbeH9U5OYt0xhq9Nn0ZSNp12bgjE36u9VKTL4ZAkKiJ/eFAkbFC8Oss7EOsESwcZjZMb3fV5lZC486EPk1SwkE6HStiTlw7frGTsAuLlNXGNc5OaxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786196672; c=relaxed/simple;
-	bh=1NLcJ6GRNxlB1+tUNvOCbHhcChkzSgmvbI3BEcjdHPQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PTH60vTBg3Bn5g2BB3tyDhBq0jag7pDY7i1+tWlXLPsEkXYV1gVFORugdmrPRD1i6IUOfZYnPWJsM6qCwH3SUDT6c0rjoBXWTqX9YOjNL1WQa1cBV+JiDtc8ClgzcX/LORHQSQwyRzaER9eYABoUm762gYgIEZzN5kOGyX2VAVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c9zwBuoY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786198086; c=relaxed/simple;
+	bh=TmJrm89N6RG14n33SUAB/EiKXmPzuGvpEn78XOHy650=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TFHqvCwHNKTjxIr6S0z6zm5L+LOk1SwUgAeIvbxg6OS3B5PUaTHe8cuc3tkqWBknc7RUUxx1Ce5rSHorzlr6fptck7x+MPPUAPbL1cERuG0ytcJ3wP8K5lH4CZIAqSFA2JtqUb4gLvJiWSev9ehHv09CpJPCKcNCTGR+pjsyG1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lqwYREcl; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c9zwBuoY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11EC01F00A3A;
-	Sat,  8 Aug 2026 13:44:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786196671;
-	bh=yAV+ORZoO8mL3x/laTKIZKwhnnT0mcXS8/TmoB+e3FY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=c9zwBuoYtxP/oIFVPER2oVFyVTwE4hYnAvGGeS6XUSmlBMhBCVkvEUxa7LNY9cIL6
-	 p9Qs5mIDFYmSe68DUox1gkVvtpfytUGeEWnXWttRxxLWR39pk1gsgeL3NAXOf0HwLX
-	 egWLlNcsrz1MZK8TFbq0jMpxcKZ4f9WS5ALwNn8fccuJclFwVqqizM19L8wvgNiiEn
-	 XS2LcCuILsanx0fhABWnvCy3TtHAaKtBgEUHgE6m6Zt+5YcJkE7LqMEsY5sNz6sgoA
-	 nbHy4dN0s4j44DBMbQb7ICpmFl10vKyidRFJK++0JCH5CaUlleCrqK6ybnSihwvR3H
-	 hj+q2QPjL8ZQw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 2/5] selftests/xsk: roll back partial socket
- setup on configure failures
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tushar Vyavahare" <tushar.vyavahare@intel.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260807134209.3794735-3-tushar.vyavahare@intel.com>
-References: <20260807134209.3794735-1-tushar.vyavahare@intel.com>
- <20260807134209.3794735-3-tushar.vyavahare@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 08 Aug 2026 13:44:30 +0000
-Message-Id: <20260808134431.11EC01F00A3A@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lqwYREcl"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786198071;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jqYn1wblY9FldRcAfyRNPo2Ja5369GK00LFkYGT2PGI=;
+	b=lqwYREclYrwGhxjyzbijgy59jiNCm0KT0p+38kjPZJfrt+pIWq+U7QcIZ46c/Tf0Vpzihj
+	TmjcJT+o4jMv+cfb1KUjCU1PBb7dQOdWd4+7xOgjk+3TGTEaC4Jd+KFbedxI203JXvLfaG
+	n+gqQp+mpp0KpXqk0EmOM5F46BC4+G8=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH bpf-next v3 0/4] bpf: arena: handle memory.max on fault-in with reclaim/OOM
+Date: Sat,  8 Aug 2026 22:05:52 +0800
+Message-ID: <20260808140720.293604-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Eager rollback in xsk_configure() causes a guaranteed NULL point=
-er dereference in the parallel TX thread when the RX thread fails.
---
+Since commit e66fe1bc6d25 ("bpf: arena: Reintroduce memcg accounting"),
+arena pages are charged to the memcg of the process that created the arena.
+That accounting exposes two problems in the arena user page fault path.
 
---- Patch [2]: [PATCH net-next 2/5] selftests/xsk: roll back partial socket=
- setup on configure failures ---
-commit 80baccb88ac5eb975506a8efbd37137e2c6775b1
-Author: Tushar Vyavahare <tushar.vyavahare@intel.com>
+1. The fault-in allocation runs under arena->spinlock, so it can only use the
+   non-blocking allocator, which never reclaims. Once memory.current is at
+   memory.max the allocation simply fails. Reaching memory.max is completely
+   normal for a healthy application - e.g. reading a large file fills
+   memory.current with page cache - so the process ends up killed for no real
+   reason.
 
-selftests/xsk: roll back partial socket setup on configure failures
+2. That failure is turned into VM_FAULT_SIGSEGV, which is misleading: the
+   faulting address is a perfectly valid arena address. When we know it is an
+   out-of-memory condition we can return VM_FAULT_OOM and let the memcg OOM
+   path handle it properly.
 
-This commit introduces an eager rollback mechanism to clean up already
-configured sockets if subsequent setups or busy-poll configurations fail
-during xsk_configure().
+Preallocate the page outside the lock (patch 2), the way do_anonymous_page()
+does, so the allocation can sleep and go through reclaim and the OOM path.
+This needs a sleepable allocator (patch 1), because can_alloc_pages() is a
+conservative guess for BPF program context and always forces the non-blocking
+allocator under PREEMPT_RT. patch 3&4 adds a selftest that faults an arena in
+under a memory.max limit: without the fix the child gets SIGSEGV on a valid
+address, with it the child is killed by the memcg OOM killer.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/te=
-sting/selftests/bpf/prog_tests/test_xsk.c
-> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-[ ... ]
-> @@ -1500,14 +1522,18 @@ static int xsk_configure(struct test_spec *test, =
-struct ifobject *ifobject,
->  				break;
-> =20
->  			/* Retry if it fails as xsk_socket__create() is asynchronous */
-> -			if (ctr >=3D SOCK_RECONF_CTR)
-> +			if (ctr >=3D SOCK_RECONF_CTR) {
-> +				xsk_configure_rollback(ifobject, i);
->  				return ret;
-> +			}
 
-[Severity: Medium]
-Could this new rollback cause a NULL pointer dereference in the parallel TX
-thread when an RX thread setup fails?
+v2 -> v3:
+   - selftest: check the memcg OOM via memory.events "oom_kill" instead of
+     the exit signal; it only aims to pass on the fixed kernel, since the
+     unfixed SIGSEGV is racy.
 
-When xsk_configure_rollback() cleans up the sockets on a failure, it calls
-xsk_delete_socket_batch(), which in turn calls xsk_delete_socket(). That
-function explicitly clears the umem pointer for the RX thread's sockets:
+v1 -> v2:
+   - Rebase on the separate deadlock fix (found by the Sashiko AI review),
+     now applied to bpf-next.
+   - Honor the map's NUMA node on fault-in.
+   - Return VM_FAULT_SIGBUS for the non-recoverable faults (lock, range-tree
+     and page-table failures); a scratch-page hole stays VM_FAULT_SIGSEGV
+     only under BPF_F_SEGV_ON_FAULT. (Kumar Kartikeya Dwivedi)
+   - Add read_cgroup_file() to cgroup_helpers instead of open-coding the
+     /mnt/... path in the test. (Emil Tsalapatis)
+   - Dump the cgroup memory stats on test failure to ease debugging.
 
-xsk_delete_socket() {
-    ...
-    xsk->umem =3D NULL;
-}
+v2:
+https://lore.kernel.org/bpf/20260805091720.139924-1-jiayuan.chen@linux.dev/
+v1:
+https://lore.kernel.org/bpf/20260727062521.376231-1-jiayuan.chen@linux.dev/
 
-If the RX thread fails and exits, the main test thread does not check
-test->fail before spawning the TX thread. The TX thread then executes
-thread_common_ops_tx(), which unconditionally dereferences the now-NULL
-umem pointer:
+Jiayuan Chen (4):
+  bpf: Add a sleepable page allocator for map memory
+  bpf: arena: allocate the fault-in page outside the lock
+  selftests/bpf: Add read_cgroup_file() to cgroup_helpers
+  selftests/bpf: Add a test for arena fault-in under memory.max
 
-thread_common_ops_tx() {
-    ...
-    if (!test->ifobj_rx || !test->ifobj_rx->xsk_arr[0].umem->umem) {
-    ...
-}
+ include/linux/bpf.h                           |   1 +
+ kernel/bpf/arena.c                            |  92 ++++++++---
+ kernel/bpf/syscall.c                          |  21 ++-
+ tools/testing/selftests/bpf/cgroup_helpers.c  |  67 ++++++++
+ tools/testing/selftests/bpf/cgroup_helpers.h  |   4 +
+ .../selftests/bpf/prog_tests/arena_memcg.c    | 156 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_memcg.c |  24 +++
+ 7 files changed, 340 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
 
-Does the main thread need to check for test failures before spawning the TX
-thread, or should thread_common_ops_tx() verify xsk_arr[0].umem is valid
-before dereferencing it?
+-- 
+2.43.0
 
->  			usleep(USLEEP_MAX);
->  		}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260807134209.3794=
-735-1-tushar.vyavahare@intel.com?part=3D2
