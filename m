@@ -1,64 +1,68 @@
-Received: from mail-oa1-f68.google.com (mail-oa1-f68.google.com [209.85.160.68])
+Received: from mail-oo2-f4.google.com (mail-oo2-f4.google.com [74.125.231.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7DFB223DE7
-	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 00:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7929D6DCE1
+	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 00:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786149584; cv=none; b=gdWRZqccdMsmuH3lKt7oZfZ5lmkJKDKy4Q7+t3XBTvFyW3vlKFtIEiqLDDpmJnAIRGU3vdg5eJDA5YIuxAOjyOSi9MSHUWr7kf9oQWClMvfH4DQHU7aEwblekKhgfEMpR7AYIAjSCSH8ZD4J2DylMLNLrAAFYK6cFzvgn/T0qt0=
+	t=1786149589; cv=none; b=T98ZL7bVq9iIzShz9Lebx5CgxWY9Q8cTD5mOtq6iL7d6Rs6fHRdy9SO+rpVTRmmMmPYzUGkpoBRHPava4JOVW4A6h0QLJ1+sxRsDMeDm90Dr4lvDw/7Akp5j9o61ZfKbbBdIhBoTrwBdOp0zVfJbyG9B4VUFodwFUg1H/z989ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786149584; c=relaxed/simple;
-	bh=53bqa2q6JGpwPo7T1yMvAQy2o0uYQYfS/HaRXzJ+rWM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qBuRE2VYvswi6Nfxqw9cx6oTWwshKewAG9ewpxWZKCdRiPNZiYbhJNtKCu2bL2C+q5yp53mQ4LRm49YBEm4j/5DE+P7GXg65NgJsNAP6Rm14kNoN1XziE9bzJxpcgqWL1Ki/oARAOJE+3cjbtmGgaMi8ZfcuQOvGVm/BCq0TSe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ez7ROqCS; arc=none smtp.client-ip=209.85.160.68
+	s=arc-20240116; t=1786149589; c=relaxed/simple;
+	bh=5+A5l+GNqbbV1HVda5gRF1Qxw9gPHU9idojKDOfaYTQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=E9UIL95RCae34/iElr6coWgzSx13izsWSva2fY3A8ry3J5SwFduDVFNBYt6EPiac7esgrDdB2GbSZX5UHUu5E1t79hfg/pjfXpyKpN+M6NggYauH6DMhN8lwl7VKlj69AQGWt3A8ADlE+ZNxioazJ4XCXl/OtEeK3OBMr9CilQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nckk7Vg8; arc=none smtp.client-ip=74.125.231.132
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ez7ROqCS"
-Received: by mail-oa1-f68.google.com with SMTP id 586e51a60fabf-456f7012050so2088141fac.0
-        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 17:39:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nckk7Vg8"
+Received: by mail-oo2-f4.google.com with SMTP id 46e09a7af769-7e9fe57f70eso57993a34.0
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2026 17:39:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786149582; x=1786754382; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Fo4D08QrOnJ4yVtRlJsB8WdrPLGoHVWKF6ZalGmzyjU=;
-        b=Ez7ROqCSfKsgGRZZSNgPZ37Vw/M/LbI683IQ2g2W+7ekilv6JceUMGC33f2okJSbH2
-         vlMEY5AA7QiL+jBueK2r7NUwtDUy9sg9nzyLBywEhofRoGp+JJ+7jybhHq/cpypmjeYC
-         0OxoeeQyvzhKpJLf1AC4GnqQNMhE2190xvjMeXJwW9DFaJQRzlf6Uwp7Nkm+LrnA+7/S
-         zLKwGRs1fR9Yo5aU2mo9zgawwLqF3mnBDjaGPtKOCMnV8BMAbVLPg0EJ77imPYKW3kjL
-         8uBspTkSYoFLggWi+me1sYuWO7N1+FgOiLAbkqHZJqN4uZQI1bVsP06nkMmH8mo/egVX
-         fCLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786149582; x=1786754382;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1786149585; x=1786754385; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Fo4D08QrOnJ4yVtRlJsB8WdrPLGoHVWKF6ZalGmzyjU=;
-        b=fQZVRNMgyZ34Dp57ld1lTZWvhDZYGSFwws/1qBKN7kMhUMeR044uEA8G2Dx9PuLxN5
-         UD597nTaofFhqcVF6nkmkSZpzudElrOLcbeUmQ5xKNrDboxQVBZYwcJsIjZJLhdrPhEn
-         c3sD+kd8p3Cc3Fp6lYNg6qorhXqqPW8WeAPUAv3zPPWwP7xpYE8aLpvwIOyJyYd9+NJ6
-         CPwQdXFz4tsqCa/Mb0b8nfFbanDvWEO+VaSKIOJCseYQ5HftnZTpnsRAmzAh+s9A/pNj
-         a5xuPZViOfLGUkSVpnxjMbG9DtwUNaSSthFV5Ot238S9kb4JAVWsT7xHHX3pjRcf+TTf
-         YOFQ==
-X-Gm-Message-State: AOJu0YwVWE0a5CuPcfZmuoF6C9xYENidsVT6kwmlg41XZjW2YZkBxgXu
-	FtI6oGAo1egyy1lAX57pfyQo8cT6ExYxfq80kL8C6kRQ3XYDYo9E0Mg7bXxAxTI1t10=
-X-Gm-Gg: AR+sD12TISNiQwPiYY6rdmUHNGTfPxtohP56bNQs5wUxbDkCZ1WxEbmcQv4L8oHzKP2
-	SKrEwhabJYE6rTpA9xln50gghO37wiY+0yyDgasWQtxOrw5oYLqfaXNr5giq8oDZb/lBjNU0sKo
-	LYknKoZpsQh0mlgGwKwmHUxxs0Hn5YzNbjutaqEvaIFAxgXEP2tbjoZ/rMjSNmbIA5fZmX+eKaW
-	TjAAK79F7FEVCpD9UVxm+qPgts/QNSr6GHAC9/GyV/peMKDB2x9IivnOrZ4EEr0ujUlcd/1iPQA
-	gEt8ildZF/HL1F62LMTNiCe8kJadz9TrYJoUhmwjBeIRlAGJY4eCTWiAvGKvDOnFODokURc7qFx
-	SMVLbVUroUWfqQAZxwS43emJokt9byCZ2QTdri1ul8D48TpQUi/pmL0G+lhNBlBgPIz2iAQGpVG
-	lR4a/MeRhDRiVPiGIjg4NnBYAV7FODS9jlVun6lf1uluMtBus0cZiTApi9XV0lTdBMDJomstvCn
-	ovkr9tacyzi0ckoxi3RuX1X/wXv0ZoUr6EqIzIKinTqSXuMGqAGMynQSri9AsqEOdqBUqg=
-X-Received: by 2002:a05:6808:4f68:b0:495:ca1b:7865 with SMTP id 5614622812f47-4b1af83fb11mr1422529b6e.11.1786149581633;
-        Fri, 07 Aug 2026 17:39:41 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:5c::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b1af6856f9sm834827b6e.18.2026.08.07.17.39.38
+        bh=y3ixyDgYppbI1ur77JNyXScjw0wR1IOQdlBVuDrZJfE=;
+        b=nckk7Vg8djNurjyqu4H7eOfWsgYCg7kMTd84IVtQjXtVbGOuDj9MC/upDVWwHVSAMs
+         dojaA6hmxxOxV+PEJwSwhkOPETBY6ncQMvVD5CWm4TiiUSYl3Bg9CmC2Nyq/XhghZScx
+         nAG0DTOleiFPSktnNweJOsev6j+CEHvGqtzrRv248ltWMYmS6003Q/ntpBbeYyS/hxBF
+         VtKFyO0YLz6crGD5kmEvFRye4mksHevIU+GJeWnX7Eyev5H/LBW3ZcGfSB/0GSjOHu1i
+         lPHH7u8tP2BUbYvr9whjjWA9gAxmYbq3wS9de2P+aMUJTeEY4waP7BiB9dyXyFREz9EG
+         WDsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786149585; x=1786754385;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=y3ixyDgYppbI1ur77JNyXScjw0wR1IOQdlBVuDrZJfE=;
+        b=pmNwiKBcx5/vg8W9S5z4y6WSqOiWdlFzTk/F8crSyq6ikPjn1/FZvjX6AwyW6dmb86
+         0NpMOoQqF2PwyxfhaUqfVzdJjNVU3rMdu/MhSV2Y9f7kZ/aqz0UP/VUDnd1iDUbNen8X
+         woM4gzBsl6FWwHLNBnUFCOXgqAhazPRMnXGQ/wQUw+4/tngkiomL5zEZWy8Sdsjiy9oJ
+         3MVsHMqmNLX2oZJD+XeQ++LsZduZzA80tPcxw894qWgERMYDNpbKt1QLioCu7XDLMGKO
+         mjLBP3MT36h9KCpWE8G962iTpsSNza9NAqv0APC+GoxikOnIymi/DOSd2AfbBHhzmGQB
+         jZSg==
+X-Gm-Message-State: AOJu0YzeS9StvO5WPbkUDX431I7emYmyWqyhC+/wLXsQKGa5sSXd8/j4
+	R1b73zpKcMhtOmPSdAuUrb0DbFi8kHW2hR2Zd/hqUma9aqZ/PUxieTW9NcXqHBoktwg=
+X-Gm-Gg: AR+sD12hi9MrgAjqFN8NF67ZE73sY1AFbWzqy7wYBShASxyVrpIIp6jnlA5lG4EL2Fw
+	oldpT3DirqwI5EFm5oc/kolJeW5Sz/TkeNwtBHrQl/EkJH48wQOjnbqzyr9pPE2GrFTjg7NrUKf
+	PRRzvcX/Kf7KeEEkSf5vn4RuLBg/mpGNLzhJCrRAHu238KmVKvNGuUU0+0YCbIVz9eM2iDi6EUn
+	4uVRyCw5567ZKD69gi9V/bso2efTaq2qqGRqoS4wgq2GSysw6kRxO2qKwSCDwG4WI+04BLFwwI9
+	Yrz+QEOPY6WVCsjuYygQDGP5ffcYtGFjs56uZljxauH6t5X6YLs7xWfntk5SSR45TgnYzMPsdHj
+	odGlQYh5Tu186K2CWVFav2fKQ6izieSd1XcmPALUzzsZJCdBcAj5QrvI82t7k1OKE/iVXteinzX
+	6xhn8ZVWAkXoGUtqmb9/7A1uFYn0/RT16EJuVrpPP8Ry8co5DoNhhlH3M9lisMTzh6WnOCcJvhW
+	XV3IGm9VUS1G/zJ08PCsb5oLLfjTbcSV0VXieN6yGtQN+24vJ4VPxA9SFtqx05X2qTUcuyeOTHE
+	vIfubQ==
+X-Received: by 2002:a05:6820:f011:b0:6ae:8ee6:38f5 with SMTP id 006d021491bc7-6b03505d077mr3821924eaf.7.1786149585237;
+        Fri, 07 Aug 2026 17:39:45 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:47::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-459f1d81fadsm3152125fac.11.2026.08.07.17.39.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 17:39:39 -0700 (PDT)
+        Fri, 07 Aug 2026 17:39:43 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: Amery Hung <ameryhung@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -66,132 +70,121 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 00/14] Add arena argument support to kfuncs and struct_ops
-Date: Sat,  8 Aug 2026 02:39:20 +0200
-Message-ID: <20260808003938.3486067-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 01/14] bpf: Rename 'early' BTF checking as a preparation phase
+Date: Sat,  8 Aug 2026 02:39:21 +0200
+Message-ID: <20260808003938.3486067-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260808003938.3486067-1-memxor@gmail.com>
+References: <20260808003938.3486067-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5641; h=from:subject; bh=53bqa2q6JGpwPo7T1yMvAQy2o0uYQYfS/HaRXzJ+rWM=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIausqsK2cWb4zZrkO8IqzwuTTJXi+j5s9J8kmndWa5ZnawBf 2cyOUhYGMS4GWTFFlpL/+5iMT1T+DrRdxg0zh5UJZAgDF6cATEQ/kpFhfirXZqZzewPr9es/i7smze M2jOZ6oJ4rv8CkcONO9XJtoAqhjDyNqb4fO+d8nKJUtdbjepaylcFz94eT39ZK5h7ewgYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3844; h=from:subject; bh=5+A5l+GNqbbV1HVda5gRF1Qxw9gPHU9idojKDOfaYTQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIausqqJdfrv4MzG7n5t3OE5IS2Wcp7Yt0eTv9LJ5Xa9Pypms dOHrKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwESW9TH8Uyp897q3jcm4+Yb4gU/qv0 N9pkY7e62tFdjUl9FpoflqLSND76ao9Snhnv1avj8EfV5fz3FT/pxcllP/Jzfd8vU+ny4WAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-This is a continuation of patches in [0], with mostly minor changes and
-reordering. The motivation is covered in that link. A major change is
-moving to two tags (__arena and __arena__nullable) and moving the changes
-to JIT to emit more optimized sequences.
+BTF processing is split around subprogram discovery. The first phase gets
+program BTF and imports func_info because a BTF-tagged exception callback
+may not be referenced by any instruction. Subprogram discovery needs this
+metadata to find it.
 
-Please see commit logs for details.
+The later phase validates func_info and line_info against the complete
+subprogram table and applies CO-RE relocations. This split breaks a real
+dependency cycle rather than merely running the same checks early.
 
-  [0]: https://lore.kernel.org/bpf/20260713024414.3759854-1-tj@kernel.org
+Rename bpf_check_btf_info_early() and check_btf_func_early() to preparation
+names that reflect this role. Add short call-site comments to make the two
+phases and their responsibilities clear.
 
-Changelog:
-----------
-v4 -> v5
-v4: https://lore.kernel.org/bpf/20260805210427.3218326-1-memxor@gmail.com
+No functional change is intended.
 
- * Remove the redundant patch-8 capability comment and duplicate
-   nullable kfunc test coverage. (Eduard)
- * Introduce the final bpf_tramp_arena_base() interface directly with
-   function-model argument flags, avoiding temporary slot bitmaps and
-   arena_nullable state; simplify struct_ops pointer validation. (Eduard)
- * Simplify kfunc arena nullability classification by using the common
-   nullable path for both arena suffixes while leaving the function model
-   to distinguish JIT NULL preservation. (Amery)
- * Keep bpf_prog_has_arena_ctx_arg() in bpf_verifier.h from its
-   introduction so trampoline and verifier users share one inline
-   definition, avoiding BPF_JIT/BPF_SYSCALL link dependencies.
-   (Eduard, BPF CI Bot)
- * Reject both tracing and extension attachments to struct_ops programs
-   with arena context arguments, and add fentry, fexit, and freplace
-   rejection tests. (Eduard, Sashiko)
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/bpf_verifier.h |  4 ++--
+ kernel/bpf/check_btf.c       | 14 +++++++-------
+ kernel/bpf/verifier.c        |  4 +++-
+ 3 files changed, 12 insertions(+), 10 deletions(-)
 
-v3 -> v4
-v3: https://lore.kernel.org/bpf/20260803125115.2264733-1-memxor@gmail.com
-
- * Rename __arena_nullable to __arena__nullable and prioritize the
-   composite suffix over __nullable during argument classification.
-   (Sashiko, Eduard)
- * Resolve instructions before collecting subprograms and kfuncs so kfunc
-   prototype validation can use associated arena state.
- * Move the arena kfunc and JIT-sequence test entry points into
-   prog_tests/verifier.c. (Eduard)
- * Match the generated L0 target and call in nullable JIT assertions.
-   (Eduard)
- * Route arena kfunc validation through the common argument-checking path.
-   (Amery)
- * Reuse btf_func_model argument flags for struct_ops arena arguments
-   instead of maintaining separate trampoline slot metadata. (Eduard)
- * Check the generic-trampoline arena argument invariant at link time and
-   warn once on violations. (Eduard)
- * Reject tracing attachments to struct_ops programs with arena context
-   arguments whose indirect trampolines convert the pointers. (Sashiko)
-
-v2 -> v3
-v2: https://lore.kernel.org/bpf/20260726013105.3689867-1-memxor@gmail.com
-
- * Rebase onto current bpf-next to resolve conflicts.
-
-v1 -> v2
-v1: https://lore.kernel.org/bpf/20260715220052.1590783-1-memxor@gmail.com
-
- * Fix documentation to only mention x86 for now. (Sashiko)
- * Move arg bitmap from insn_aux_data to kfunc descriptor. (Eduard)
-
-Kumar Kartikeya Dwivedi (5):
-  bpf: Rename 'early' BTF checking as a preparation phase
-  bpf: Split subprogram and kfunc collection
-  bpf: Collect kfuncs after resolving program resources
-  bpf: Reject tracing/freplace progs for struct_ops with arena args
-  selftests/bpf: Test attach rejection for struct_ops arena programs
-
-Tejun Heo (9):
-  bpf: Support __arena and __arena__nullable kfunc argument suffixes
-  bpf: Support __arena and __arena__nullable on struct_ops arguments
-  bpf, x86: JIT __arena kfunc argument rebasing
-  bpf, x86: Convert struct_ops arena arguments in the trampoline
-  selftests/bpf: Add kfunc __arena and __arena__nullable argument tests
-  selftests/bpf: Add JIT-sequence tests for __arena kfunc arguments
-  selftests/bpf: Add struct_ops __arena and __arena__nullable argument
-    tests
-  bpf, x86: Fix stack-passed arguments for indirect trampolines
-  selftests/bpf: Test stack-passed struct_ops arena arguments
-
- Documentation/bpf/kfuncs.rst                  |  39 +++
- arch/x86/net/bpf_jit_comp.c                   | 122 ++++++++-
- include/linux/bpf.h                           |  15 ++
- include/linux/bpf_verifier.h                  |  14 +-
- include/linux/filter.h                        |   1 +
- kernel/bpf/bpf_struct_ops.c                   |  56 +++--
- kernel/bpf/btf.c                              |  28 ++-
- kernel/bpf/check_btf.c                        |  14 +-
- kernel/bpf/core.c                             |   5 +
- kernel/bpf/trampoline.c                       |  37 +++
- kernel/bpf/verifier.c                         | 125 ++++++++--
- .../bpf/prog_tests/test_struct_ops_arena.c    | 128 ++++++++++
- .../selftests/bpf/prog_tests/verifier.c       |   6 +
- .../testing/selftests/bpf/progs/arena_kfunc.c | 234 ++++++++++++++++++
- .../selftests/bpf/progs/arena_kfunc_jit.c     |  98 ++++++++
- .../selftests/bpf/progs/struct_ops_arena.c    | 115 +++++++++
- .../bpf/progs/struct_ops_arena_attach.c       |  25 ++
- .../bpf/progs/struct_ops_arena_fail.c         |  20 ++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  82 ++++++
- .../selftests/bpf/test_kmods/bpf_testmod.h    |   6 +
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  12 +
- 21 files changed, 1123 insertions(+), 59 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_kfunc.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_kfunc_jit.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_attach.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_fail.c
-
-
-base-commit: 51476f6a06ef55cecf785ae1622c638fa8cfb846
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index a2a40caca0a0..a9555d17fd8e 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1177,8 +1177,8 @@ static inline void bpf_trampoline_unpack_key(u64 key, u32 *obj_id, u32 *btf_id)
+ 		*btf_id = key & 0x7FFFFFFF;
+ }
+ 
+-int bpf_check_btf_info_early(struct bpf_verifier_env *env,
+-			     const union bpf_attr *attr, bpfptr_t uattr);
++int bpf_prepare_btf_info(struct bpf_verifier_env *env,
++			 const union bpf_attr *attr, bpfptr_t uattr);
+ int bpf_check_btf_info(struct bpf_verifier_env *env,
+ 		       const union bpf_attr *attr, bpfptr_t uattr);
+ 
+diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
+index 93bebe6fe12e..0e8b3ccc7a5b 100644
+--- a/kernel/bpf/check_btf.c
++++ b/kernel/bpf/check_btf.c
+@@ -28,9 +28,9 @@ static int check_abnormal_return(struct bpf_verifier_env *env)
+ #define MIN_BPF_FUNCINFO_SIZE	8
+ #define MAX_FUNCINFO_REC_SIZE	252
+ 
+-static int check_btf_func_early(struct bpf_verifier_env *env,
+-				const union bpf_attr *attr,
+-				bpfptr_t uattr)
++static int prepare_btf_func(struct bpf_verifier_env *env,
++			    const union bpf_attr *attr,
++			    bpfptr_t uattr)
+ {
+ 	u32 krec_size = sizeof(struct bpf_func_info);
+ 	const struct btf_type *type, *func_proto;
+@@ -407,9 +407,9 @@ static int check_core_relo(struct bpf_verifier_env *env,
+ 	return err;
+ }
+ 
+-int bpf_check_btf_info_early(struct bpf_verifier_env *env,
+-			     const union bpf_attr *attr,
+-			     bpfptr_t uattr)
++int bpf_prepare_btf_info(struct bpf_verifier_env *env,
++			 const union bpf_attr *attr,
++			 bpfptr_t uattr)
+ {
+ 	struct btf *btf;
+ 	int err;
+@@ -429,7 +429,7 @@ int bpf_check_btf_info_early(struct bpf_verifier_env *env,
+ 	}
+ 	env->prog->aux->btf = btf;
+ 
+-	err = check_btf_func_early(env, attr, uattr);
++	err = prepare_btf_func(env, attr, uattr);
+ 	if (err)
+ 		return err;
+ 	return 0;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c9533ea700ba..92d0cdd95c0f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20325,7 +20325,8 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 		INIT_LIST_HEAD(&env->explored_states[i]);
+ 	INIT_LIST_HEAD(&env->free_list);
+ 
+-	ret = bpf_check_btf_info_early(env, attr, uattr);
++	/* Prepare BTF and func_info needed to discover all subprograms. */
++	ret = bpf_prepare_btf_info(env, attr, uattr);
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
+@@ -20337,6 +20338,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
++	/* Validate BTF against the complete subprogram layout and apply CO-RE. */
+ 	ret = bpf_check_btf_info(env, attr, uattr);
+ 	if (ret < 0)
+ 		goto skip_full_check;
 -- 
 2.53.0-Meta
 
