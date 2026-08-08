@@ -1,281 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154F91A9FBA
-	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 08:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F76835B64C
+	for <bpf@vger.kernel.org>; Sat,  8 Aug 2026 09:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786179412; cv=none; b=hgl7zPPdniMy2Jc4OBCdu7bsv0EAG+QZYHbZiHLu5caUyfr741gg6gYewGL/sdnMv1bxpQ52i3lkv84cGr88XPNebnwsvIx6unq+88OEUlM+VXPEyDslnzTyAK3YU6oUjLN3IAxoy+cwccit/plxA8461xgJCJJd17SOsOi8Zi4=
+	t=1786182586; cv=none; b=U9EXdCj4257fdr8uPYN5ErBctCxzXF8w/cFJjeq7eMKV7l56LtSHFKxodMTBrqSi5Tj9JfyHSMr8NIOdc9weLp9oS2c8t7TyzrNahbPQDS5zzcM3KJDOotWgz9UCsHeM3Y+Iw+3CK1iDBJONHRHqwAbguaXlzI7JQMPikzSAo9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786179412; c=relaxed/simple;
-	bh=NRtfBuzt+mXeik74mMBt42I7Y4cyhLLfAWAKpQGkBwE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=KXNiGozACAGSX1F1/k0KXoU2Tk2tsvTP5O/J2/tztUZONewCmttZZ11jM5gwzX51wmeBdtPBBjy5RYAZ22DGhttRm3tFD8x2Rc6eNDqzVhW7Mzmoc33fZTfWcmYPPl+ncljLGz9zbHFH5LlgGCGFuGPuodn4T6cO5b+EibFbkOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sn21WY0z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786182586; c=relaxed/simple;
+	bh=PKFb3NysQ3tfRfvdP4tJN7C8hUhMqIoUf49jk8RBpr4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GuOtpr3xLEpdB1S77M5nksR0Gg3MvpoFb7cCqHZxL5Op/pgYwwkaYNAXWkGHzP8m4qawpA3ni7e3+chp7tFrj5cbUpkbLvpAz+znPGYByBsCJ8KTuP3QX4/PwyMdVWZXb52eJ061TTFB7iqyhYc+uj7/6WCi1flAjTa7wa16Mh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ck8LdcbP; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sn21WY0z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 833651F000E9;
-	Sat,  8 Aug 2026 08:56:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786179410;
-	bh=OPYDE4XGFNbDYR03dMO9NJEkP15AmUFNIzRANvwsjkI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Sn21WY0zB8FugK5XNd0HmtUuqequlOk74zcFlTCQ9VWow3Pl4koq398Dh6wjsIQpr
-	 S5c5x4XlyG1ZzTJJBCA79ItU/CGj/XZHk5w39vZdOTXlK3eeGdrBjEXS0qa/7Hy3m2
-	 BRQ3e8P45rdPXK0DT3lmRgEHRqABoloHpHVAjnzRa0wAam38SRLbBqgdEKv+8/pd/n
-	 dSuWdqvTIlcxz45M1OextEdJdS7tTtN/a9oWPyWHH7dptUd6VtNizpvvK1wRrUo+gf
-	 ARgXz9smY4tzG56nb7dbA22ELSVZAr2bAwRAtMYgRwngo1vkSjVyWMupF2T+zRJYJJ
-	 WifT8RJZBLtNQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3] net: atlantic: convert RX path to page_pool
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yangyu Chen" <cyy@cyyself.name>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <tencent_F771B81731B921458D6F7CBF82ECDA888E08@qq.com>
-References: <tencent_F771B81731B921458D6F7CBF82ECDA888E08@qq.com>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ck8LdcbP"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2caced6038eso3198705ad.0
+        for <bpf@vger.kernel.org>; Sat, 08 Aug 2026 02:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786182580; x=1786787380; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=PKFb3NysQ3tfRfvdP4tJN7C8hUhMqIoUf49jk8RBpr4=;
+        b=ck8LdcbP56JzyQDujRL5qnhnt0DbE1s2rFXcP5EK5NMw5mgWgIzuWjF093a9gdaPem
+         ON2y067R1rNrdzFj/sejiAi1pAS2kPxkqq5QQ6/pCuQHlzPKD2waWKlvihJvkg3KA3A7
+         SYKROWEtaSyDMGqB9cLhXGF48+WBgwhvs0lYYigz0qPZ+oF7wWqatA7SzHdvMCYcysln
+         Y73dxIem48IfhMvTELXl0cvjo8FQrHxSR9r8yRLAWlJ2an1tLE7T4Qrqrw7y8+wnjy/s
+         j+m58HchpsfGqkvhiFoM3V8NsiKncNDQ5n1MM0Zx8nQqvk8g4M63fpnhEzbJTjI9JXim
+         gSXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786182580; x=1786787380;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=PKFb3NysQ3tfRfvdP4tJN7C8hUhMqIoUf49jk8RBpr4=;
+        b=EdVhk943P2eHH4dU6HsHSkH0CxTe3rqe6z1ahQ7LzDiGk2fVq153k3Uedbi6tf2vQS
+         diySOLf7/99UYXASU/0o6YDXCII0qEH/wgUhiL0kQOvDL7fIM1F0rMPGlSMjSLZ8HL12
+         ErAp5U85gtZJGfiOzcxvggM+Fu1NqSviHhTxJNafvZZYqBt8z3/5zqvFVPVXGdEA3G3I
+         rPWKtbFQI3TL8apeig3pfVellCZ45bP3vMUUsZF/B1qDWGc6OfpuGT+rW+Rjp3Xg86M8
+         6yQrHTROhzQv5sqNWF2WF6ofTqbPO761+fo4iTt2s88KUzyhVdAs9PmB71XXEW2M1gzV
+         hWwQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rpo+Nv8II/FIxP9z7u5sk3KUShb1qLlPVKDj5FnjPyH8IMrB8C14vCPFdWXr3zMtL7d53k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLBi0YwvxUE8vxm7s0ielAAS2sfFN+WoMetI7SZlcNZzgCjrN7
+	s1qT8H1lxV1Z+7T96CDYrYNKFacETQlp6Osfdcqvk2E3QMhfU9vURs1j
+X-Gm-Gg: AR+sD10cPLz+OfvUfpfrbwxv626i02uzQBgzgZur2ZLh3rzBcM4KnAhcwvDPuVZuRlI
+	yVRli1bnGwcHfBgcAzxncK5Sc1F/UMLYASRjsJPk8nwxvpZHcJbZevbP1KpdzMyJTj2GxjqrysZ
+	CuCSCXz5Vgtys1X3RBZsDLzk3TTdU565OLVlwkseSaYaMAxoSRlyP+6VHO4tmYtOf/6t3RtvNYy
+	lUhYwDnprW89smqQNYyrTu8/uV9R9QDtODRFyjdU+qeDU8v7/XtyN2dGBaprcLfjMmPBHD93TTv
+	DYCKbRJ6qTknxEzeJBTHEsHS8dr7aMJVSwDiG7BWxumLa3dfsJwImlzf3Mov9QvsgeSx9PXIjxp
+	dXQ/a2x0aiHjSHUYi61JPXzlO2wNy8KvkdpLeGbVn5tEj0JQslV6j4NXUyA+nzxBP26Fh1atlrd
+	2mjd5yyZlHgQfJENOMHpq8Ew3LQnvmcHWjfo3jsFh7SDBp+Yawkthm4S65f7Pucgp2Sx73g1kys
+	gyF5bMrOXs6N+xN
+X-Received: by 2002:a17:903:390c:b0:2bc:e299:4b3f with SMTP id d9443c01a7336-2d2b2de9798mr26662415ad.10.1786182580118;
+        Sat, 08 Aug 2026 02:49:40 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d14ccac104sm17701935ad.10.2026.08.08.02.49.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Aug 2026 02:49:39 -0700 (PDT)
+Message-ID: <19fa54535e6e94d3ec447cc413413db756456a9e.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 05/14] bpf: Support __arena and
+ __arena__nullable on struct_ops arguments
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
+ Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis	 <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Sat, 08 Aug 2026 02:49:36 -0700
+In-Reply-To: <20260808003938.3486067-6-memxor@gmail.com>
+References: <20260808003938.3486067-1-memxor@gmail.com>
+	 <20260808003938.3486067-6-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 08 Aug 2026 08:56:49 +0000
-Message-Id: <20260808085650.833651F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 6 potential issue(=
-s) to consider:
+On Sat, 2026-08-08 at 02:39 +0200, Kumar Kartikeya Dwivedi wrote:
+> From: Tejun Heo <tj@kernel.org>
+>=20
+> A struct_ops callback cannot receive an arena pointer directly, so
+> passing one takes two steps. The pointer arrives as a bare u64 that the
+> callback casts, and because the two sides address the arena through
+> different bases it also has to be rebased by hand on the way in.
+>=20
+> Add the __arena and __arena__nullable stub argument suffixes to make this
+> convenient. The callback declares the parameter as an arena pointer,
+> receives it as a PTR_TO_ARENA register, and dereferences it directly,
+> while the kernel caller just passes the natural kernel arena address
+> (kaddr). The trampoline converts the value while saving the arguments
+> into the BPF ctx, ctx[slot] =3D (u32)(kaddr - kern_vm_start), so the
+> program never sees a kernel address and nothing rewrites the ctx after
+> the fact. The converted value keeps the upper 32 bits clear as the JITs
+> require of arena pointer registers and behaves like any cast_kern'ed
+> arena pointer, so cast_user recovers the full user-visible address.
+>=20
+> __arena converts unconditionally and the kernel caller must not pass
+> NULL. __arena__nullable preserves NULL, tested on the full 64-bit kernel
+> pointer, and surfaces to the verifier as PTR_TO_ARENA (but not as a
+> PTR_TO_ARENA | PTR_MAYBE_NULL). The reason is that PTR_TO_ARENA in the
+> program's type state already encompasses NULL-ness, so it is not
+> meaningful to force a NULL check for the program.
+>=20
+> The composite suffix intentionally ends in __nullable. Classify
+> __arena__nullable before the generic suffix so scalar arena pointees do
+> not take the generic nullable BTF pointer path.
+>=20
+> This patch adds the generic side. prepare_arg_info() records arena and
+> nullable argument flags in the struct_ops function model, and
+> bpf_tramp_arena_base() returns the arena base for a single-program
+> struct_ops indirect trampoline. Only that trampoline converts: its
+> program's arena is fixed at generation time. Generic trampolines can mix
+> programs with different arenas and reject arena context arguments
+> defensively, which is unreachable today as only struct_ops programs
+> carry them. Architectures that do not implement the conversion are
+> gated out at verification time with bpf_jit_supports_arena_args().
+>=20
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> Co-developed-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-New issues:
-- [High] Missing `dma_sync_single_for_device` on locally recycled RX buffer=
-s.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Pre-existing issues:
-- [Critical] Kernel crash when `XDP_TX` is returned for a packet on the PTP=
- RX ring due to a missing PTP TX ring mapping.
-- [Critical] Garbage packet injection and state machine desynchronization w=
-hen an XDP packet exceeds the MAX_SKB_FRAGS limit.
-- [High] Infinite NAPI polling loop when receiving an oversized packet.
-- [High] Concurrent execution of `u64_stats_update_begin` on `tx.syncp` cor=
-rupts seqcount.
-- [High] Lockless concurrent access to TX ring descriptors in `aq_xdp_xmit`.
---
-
---- Patch [1]: [PATCH net-next v3] net: atlantic: convert RX path to page_p=
-ool ---
-commit 6897c00e6a396ede4252845d65592374630adc51
-Author: Yangyu Chen <cyy@cyyself.name>
-
-net: atlantic: convert RX path to page_pool
-
-The driver is converted to use page_pool fragments for RX buffers instead of
-dev_alloc_pages() and a hand-rolled page-flip scheme. The PTP RX ring's
-xdp_rxq is also registered to use the MEM_TYPE_PAGE_POOL memory model.
-
-Link: https://lore.kernel.org/lkml/tencent_1F173E0FC1606D2AC704DC9C98AF1098=
-4607@qq.com/
-Link: https://lore.kernel.org/lkml/tencent_7DB01BE7F8FA056BB5F11D3570CF636C=
-4309@qq.com/
-
-> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ptp.c b/drivers/ne=
-t/ethernet/aquantia/atlantic/aq_ptp.c
-> index 558ac9237f759..3a40d986cd678 100644
-> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ptp.c
-> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ptp.c
-> @@ -1192,12 +1193,23 @@ int aq_ptp_ring_alloc(struct aq_nic_s *aq_nic)
->  	if (err)
->  		goto err_exit_ptp_tx;
-> =20
-
-[Severity: Critical]
-This is a pre-existing issue, but could this cause a kernel panic from a
-NULL pointer dereference? In aq_ptp_ring_alloc(), the PTP TX ring is
-allocated but not registered in the global aq_nic->aq_ring_tx array:
-
-aq_ptp_ring_alloc()
-    err =3D aq_ring_tx_alloc(&aq_ptp->ptp_tx, aq_nic, ...);
-
-If an XDP program is attached and returns XDP_TX for a packet received on
-the PTP RX ring, the tx_ring lookup evaluates to NULL:
-
-aq_xdp_run_prog()
-    tx_ring =3D aq_nic->aq_ring_tx[rx_ring->idx];
-    result =3D aq_nic_xmit_xdpf(aq_nic, tx_ring, xdpf);
-
-> +	err =3D xdp_rxq_info_reg(&aq_ptp->ptp_rx.xdp_rxq, aq_nic->ndev,
-> +			       rx_ring_idx, aq_ptp->napi.napi_id);
-[ ... ]
-> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/n=
-et/ethernet/aquantia/atlantic/aq_ring.c
-> index e1193c6719d9d..9dd8817105942 100644
-> --- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-> @@ -14,120 +14,37 @@
-> -static int aq_get_rxpages(struct aq_ring_s *self, struct aq_ring_buff_s =
-*rxbuf)
-> +static int aq_get_rxpages(struct aq_ring_s *self, struct aq_ring_buff_s =
-*rxbuf)
->  {
-> -	unsigned int order =3D self->page_order;
-[ ... ]
-> +	unsigned int size =3D self->page_offset + self->frame_max +
-> +			    self->tail_size;
-> +	unsigned int pg_off;
->  	struct page *page;
-> =20
-> -	if (rxbuf->rxdata.page) {
-[ ... ]
-> +	/* Buffers whose page was not passed up the stack are reposted
-> +	 * with the data they already carry discarded.
-> +	 */
-> +	if (rxbuf->rxdata.page)
-> +		return 0;
-
-[Severity: High]
-Are we missing a dma_sync_single_for_device() call for the locally
-recycled buffer?
-
-When a packet is smaller than the header copy threshold, its payload is
-copied to a newly allocated SKB and its page is recycled directly. The CPU
-reads the data after a dma_sync_single_range_for_cpu() call, but when the
-page is passed back to the hardware, the lack of
-dma_sync_single_for_device() might allow the CPU cache to overwrite DMA
-memory while the NIC writes the next packet.
-
-> +	page =3D page_pool_dev_alloc_frag(self->pg_pool, &pg_off, size);
-[ ... ]
-> @@ -346,7 +284,11 @@ bool aq_ring_tx_clean(struct aq_ring_s *self)
->  			++self->stats.tx.packets;
->  			self->stats.tx.bytes +=3D xdp_get_frame_len(buff->xdpf);
->  			u64_stats_update_end(&self->stats.tx.syncp);
-> -			xdp_return_frame_rx_napi(buff->xdpf);
-> +			/* Frames queued via ndo_xdp_xmit() may come from a
-
-[Severity: High]
-This is a pre-existing issue, but might this lead to a corrupted seqcount
-and infinite loops for readers on 32-bit systems?
-
-Writers to a u64_stats_sync block must be mutually exclusive and disable
-preemption. However, this code updates tx.syncp locklessly from the NAPI
-poll context in aq_ring_tx_clean():
-
-aq_ring_tx_clean()
-    if (buff->skb) {
-        u64_stats_update_begin(&self->stats.tx.syncp);
-
-While aq_ptp_xmit() updates the exact same syncp block holding a spinlock
-in process or softirq context:
-
-aq_ptp_xmit()
-    spin_lock_irqsave(&aq_nic->aq_ptp->ptp_ring_lock, irq_flags);
-    ...
-    u64_stats_update_begin(&ring->stats.tx.syncp);
-
-> +			 * page pool owned by another NAPI context: no direct
-> +			 * recycling.
-> +			 */
-> +			xdp_return_frame(buff->xdpf);
->  		}
-> =20
->  out:
-[ ... ]
-> @@ -437,22 +379,15 @@ int aq_xdp_xmit(struct net_device *dev, int num_fra=
-mes,
->  }
-
-[Severity: High]
-This is a pre-existing issue, but could this cause lockless concurrent
-access to TX ring descriptors?
-
-If the number of online CPUs exceeds the number of hardware queues, multiple
-CPUs will map to the same ring and invoke aq_nic_xmit_xdpf() simultaneously
-without any locks:
-
-aq_xdp_xmit()
-    vec =3D cpu % aq_cfg->vecs;
-    ring =3D aq_nic->aq_ring_tx[AQ_NIC_CFG_TCVEC2RING(aq_cfg, 0, vec)];
-    for (i =3D 0; i < num_frames; i++) {
-        ...
-        if (aq_nic_xmit_xdpf(aq_nic, ring, xdpf) =3D=3D NETDEV_TX_BUSY)
-
-> =20
->  static struct sk_buff *aq_xdp_build_skb(struct xdp_buff *xdp,
-> -					struct net_device *dev,
-> -					struct aq_ring_buff_s *buff)
-[ ... ]
-> @@ -546,8 +489,11 @@ static bool aq_add_rx_fragment(struct device *dev,
->  	do {
->  		skb_frag_t *frag;
-> =20
-> -		if (unlikely(sinfo->nr_frags >=3D MAX_SKB_FRAGS))
-> +		if (unlikely(sinfo->nr_frags >=3D MAX_SKB_FRAGS)) {
-> +			/* Attached frags must reach xdp_return_buff() */
-> +			xdp_buff_set_frags_flag(xdp);
->  			return true;
-> +		}
-> =20
->  		frag =3D &sinfo->frags[sinfo->nr_frags++];
->  		buff_ =3D &ring->buff_ring[buff_->next];
-
-[Severity: Critical]
-This is a pre-existing issue, but does this abandon trailing fragments
-without marking them as cleaned?
-
-When a packet exceeds MAX_SKB_FRAGS, aq_add_rx_fragment() returns true
-early:
-
-aq_add_rx_fragment()
-    if (unlikely(sinfo->nr_frags >=3D MAX_SKB_FRAGS)) {
-        ...
-        return true;
-    }
-
-Then __aq_ring_xdp_clean() skips further processing of those fragments:
-
-__aq_ring_xdp_clean()
-    if (!buff->is_eop) {
-        if (aq_add_rx_fragment(dev, rx_ring, buff, &xdp)) {
-            ...
-            xdp_return_buff(&xdp);
-            continue;
-        }
-    }
-
-The uncleaned hardware descriptors are left behind. On the next loop
-iteration, the driver will treat these uncleaned payload fragments as the
-start of a completely new packet, potentially injecting garbage or bypassing
-header checks.
-
-> @@ -674,6 +625,7 @@ static int __aq_ring_rx_clean(struct aq_ring_s *self,=
- struct napi_struct *napi,
->  			err =3D -ENOMEM;
->  			goto err_exit;
->  		}
-> +		skb_mark_for_recycle(skb);
-
-[Severity: High]
-This is a pre-existing issue, but can this create an infinite NAPI polling
-loop when receiving an oversized packet?
-
-In __aq_ring_rx_clean(), when a packet spanning more than MAX_SKB_FRAGS is
-received:
-
-__aq_ring_rx_clean()
-    if (unlikely(!is_rsc_completed) ||
-        frag_cnt > MAX_SKB_FRAGS) {
-        err =3D 0;
-        goto err_exit;
-    }
-
-The error handler jumps to err_exit without advancing self->sw_head. This
-would trap the driver into processing the exact same failing packet
-continuously on every poll iteration, leading to a denial of service for
-the affected RX queue.
-
->  		if (is_ptp_ring)
->  			buff->len -=3D
->  				aq_ptp_extract_ts(self->aq_nic, skb_hwtstamps(skb),
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/tencent_F771B81731B=
-921458D6F7CBF82ECDA888E08@qq.com?part=3D1
+...
