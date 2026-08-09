@@ -1,123 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F04A257844
-	for <bpf@vger.kernel.org>; Sun,  9 Aug 2026 15:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F0E34F46F
+	for <bpf@vger.kernel.org>; Sun,  9 Aug 2026 15:21:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786288647; cv=none; b=aOMwQ9ptp448io1spxMblUaKrm6S4qiBN2PN00Nm7op1jQWPxX8jOqDd9Lnnb/8lw/C4ocdFNOCdIPkx3XGcmbyGMiq9kpfZt0TRSmZTyq9l+u191BAkBuKpG8xLe4edxfzhRt1ZAq6tV8151sc4qXF1YnckbSxIBkSe1oGVUS8=
+	t=1786288864; cv=none; b=Rbhoo344+weFwdKUew3MkFWgeJ6sG/LF8HSDJRyUDByL+yPOjegQoGj9E+wCfHeFmQRUJvliwiEBtrmj9TpymGUciJQzRjSvVLIc44OqhtEf7sGzCiWafd8YAE7elFgCI0ykLJHGX1q1UIQsKIkSGgiiirC6mO5fL7QkGURGdUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786288647; c=relaxed/simple;
-	bh=6PLDfcgXfDhz6Z4ngCUxII4K0g6uvzvje4A36c3iXi0=;
+	s=arc-20240116; t=1786288864; c=relaxed/simple;
+	bh=nnyxONYwvU99lVd5iv1jHPUgOa+DrF+qfhhEaYdcddI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qsKiyv6EOzK/19X5VkdyvQK8lup0+D9aX1WAmub89ZySlMKXQNUxbN2C59Z3IiCpplcfej92f+GEylGJj9yCcOuOKYxScGdF5pKwL+qVaxPe1zqloVgjF1mYtEDrWdQB/t0MbRtr3SUqlXUMb5BqCQmbHo/sOBddblv8JccBicg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QUMw0Iyn; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=b54/qu+boNVrO14CkJYWTk5SklCq9HMQHPh2N3J4h0kpglE5mUa5RWdHquOl9o7/1pxNmJXDsC5GrAp8bZahxLdLDE7xhjpi3eSLGd1Cnjr1WYmpBFRPgUb7eKTu6yavvInkTDY/o6jvPoIy3eDr7ZjzmEwlHmlWhUMninlXhiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JhJLnGRl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QUMw0Iyn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 269221F000E9;
-	Sun,  9 Aug 2026 15:17:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JhJLnGRl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AB1D1F000E9;
+	Sun,  9 Aug 2026 15:21:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786288646;
-	bh=KKwgkDkGhvNEgVvu0hNpIP8/7H/ZS+eSTaISTOthPLY=;
+	s=k20260515; t=1786288862;
+	bh=sI4LomijXUQgSFoCSgjpKbU6MI1LrLrG3NKqWI2PHCk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QUMw0Iyn3pDdnWiveiq/vh2uNTaz+CxLu021If0jhz/9BaHA5qbFCgwNxFELnbaf2
-	 9BGakRPZRMrJztUxzW7lPJ+jYrKWkj9YgRa89GlXyo4I04Xa83K7wvLZS96Aa35euo
-	 4V7Wd55J650pxoO1TZ4V9p0PaFq5sHASYpXgwKJxppCyEatT9UfGRKV21Umfdy8nHr
-	 /D3iiJME5twRrcCtq36LYPtbbPh2xoNa+Zb+4E5pZwdVVxvp6GW6nluGU1nDOREb8J
-	 nFwpVZPyBtFIcwnkT+BraowPyyfGusq3b6ZysMSBimx6Ly9PS0verlrEr9DsoYvryy
-	 EMjoXODcKcP/A==
+	b=JhJLnGRlq87JDrH1cq2smZd5VTxs7xsFbSK2q/oFtAFmz4h4t6Qdo9CwRT+ZhalkS
+	 +Z0Ea6XjHJdW5VWE6zTT+1rDYyj4+reqvflw5SmPwdnLa+wTgqZVgDbxknLq/YhkF2
+	 MLr8QFD0+Mt8jrk6Ext/KNwa9drymyBLm0LQ+BPda0hpM5JVP08cdFTtSmU1YMEkIo
+	 iq/fDj2CNYKFORZBFNkJKv+5TA070392wrrMQs+GdxCLma1/JTz5DCquU5rQnXqIsr
+	 7SCUOK0derZO6rMG/Z9SL8uXxNX7a3bCc5ZsnKwMkdjZZ8K5s3WzQKDXHAZ3WmqE8D
+	 dQR9epJvDmC6w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 07/13] bpf: Add tracing_multi link info support
- for bpf progs
+Subject: Re: [PATCH bpf-next 11/13] selftests/bpf: Add tracing_multi bpf
+ prog rollback test
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Leon Hwang" <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260809150111.45000-8-leon.hwang@linux.dev>
+In-Reply-To: <20260809150111.45000-12-leon.hwang@linux.dev>
 References: <20260809150111.45000-1-leon.hwang@linux.dev>
- <20260809150111.45000-8-leon.hwang@linux.dev>
+ <20260809150111.45000-12-leon.hwang@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 09 Aug 2026 15:17:25 +0000
-Message-Id: <20260809151726.269221F000E9@smtp.kernel.org>
+Date: Sun, 09 Aug 2026 15:21:01 +0000
+Message-Id: <20260809152102.5AB1D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Out-of-bounds Read / Uninitialized Memory Leak in sym_name_trim_=
-prefix()
-- [Medium] UAPI Anti-Pattern: Usage of C bitfields in UAPI headers
+- [Medium] The `test_rollback_bpf_prog` test hardcodes executing `target_1`=
+ to verify rollback behavior, leading to spurious test failures if `target_=
+2` happens to have a lower file descriptor.
 --
 
---- Patch [7]: [PATCH bpf-next 07/13] bpf: Add tracing_multi link info supp=
-ort for bpf progs ---
-commit 65386c192a0d673092c95f3f31578ae7c4d19498
+--- Patch [11]: [PATCH bpf-next 11/13] selftests/bpf: Add tracing_multi bpf=
+ prog rollback test ---
+commit b065372f3722241a5632ef72df356c018b778825
 Author: Leon Hwang <leon.hwang@linux.dev>
-Subject: bpf: Add tracing_multi link info support for bpf progs
 
-This commit adds tracing_multi link info support for BPF programs. It
-updates the bpf_link_info structure and extends bpftool to show function
-BTF IDs and program IDs.
+selftests/bpf: Add tracing_multi bpf prog rollback test
 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 6fa93a6ff54f2..e0c8ea5ed2c8f 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -6890,10 +6890,12 @@ struct bpf_link_info {
->  			__u32 attach_type;
->  			__u32 count; /* in/out: tracing_multi target count */
->  			__u32 btf_obj_id;
-> -			__u32 :32;
-> +			__u32 tgt_progs:1;
-> +			__u32 :31;
+This commit adds a test to verify that prepared trampolines are correctly
+reverted when a BPF program multi-attach fails and triggers a rollback.
 
-[Severity: Medium]
-Could this cause endianness issues since C bitfield layout is
-implementation-defined?
-
-The established Linux UAPI standard is to use a __u32 flags field with
-bitmask macros instead of C bitfields to ensure portability across
-architectures and cross-platform tools. (This also applies to the mirrored
-header in tools/include/uapi/linux/bpf.h).
-
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/too=
+ls/testing/selftests/bpf/prog_tests/tracing_multi.c
+> index 070266a864d4f..a4d9934ad1dc3 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
 [ ... ]
-
-> diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-> index 088d1d206065f..d5c5ec433350b 100644
-> --- a/tools/bpf/bpftool/link.c
-> +++ b/tools/bpf/bpftool/link.c
+> @@ -377,6 +377,65 @@ static void test_cookies_bpf_prog(void)
 [ ... ]
-> +#define BPF_PROG_PREFIX		"bpf_prog_"
-> +#define BPF_PROG_PREFIX_LEN	(sizeof(BPF_PROG_PREFIX) - 1)
-> +
-> +static const char *
-> +sym_name_trim_prefix(struct kernel_sym *sym, bool is_prog)
+> +static void test_rollback_bpf_prog(void)
 > +{
-> +	int prefix_len;
+> +	int token_fd, prog_fd, fd =3D -1, pre_fd =3D -1;
+[ ... ]
+> +	first =3D target_fds[0] < target_fds[1] ? 0 : 1;
+[ ... ]
+> +	fd =3D bpf_link_create(prog_fd, 0, BPF_TRACE_FENTRY_MULTI, &lopts);
+> +	if (!ASSERT_EQ(fd, -EBUSY, "bpf_link_create"))
+> +		goto cleanup;
 > +
-> +	if (!is_prog)
-> +		return sym->name;
-> +
-> +	/* Ref kernel/bpf/core.c::bpf_prog_ksym_set_name() */
-> +	prefix_len  =3D BPF_PROG_PREFIX_LEN;
-> +	prefix_len +=3D BPF_TAG_SIZE * 2;
-> +	prefix_len +=3D 1;			/* skip the '_' */
-> +	return sym->name + prefix_len;
+> +	if (run_bpf_target(skel->progs.target_1, first + 1, "rollback_target"))
 
 [Severity: Medium]
-Does this code read past the null terminator for unnamed BPF programs?
+Does this test accidentally hardcode the execution of target_1 while expect=
+ing
+a dynamic return value based on file descriptor ordering?
 
-When processing an unnamed BPF program (e.g., exported in kallsyms as
-bpf_prog_9a7f9e3ab6f138ab), the sym->name buffer contains exactly 25
-characters. Here, prefix_len is calculated as 26 (9 + 16 + 1).
+If the file descriptors are assigned such that target_fds[1] < target_fds[0=
+],
+the variable first becomes 1. The test then executes target_1 but expects a
+return value of first + 1 (which is 2).
 
-This offset advances the pointer past the null terminator into
-uninitialized heap memory, which is then passed to the JSON string writer
-when calling jsonw_string_field() later in show_tracing_multi_json().
+Since target_1 always returns 1, will this cause a spurious test failure?
+
+Additionally, if first =3D=3D 1, target_1 would still have a trampoline att=
+ached
+via pre_fd. This would cause test_result_fentry to increment and fail the
+subsequent ASSERT_EQ() check.
+
+> +		goto cleanup;
+> +	ASSERT_EQ(skel->bss->test_result_fentry, 0, "test_result_fentry");
+> +
+> +cleanup:
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260809150111.4500=
-0-1-leon.hwang@linux.dev?part=3D7
+0-1-leon.hwang@linux.dev?part=3D11
