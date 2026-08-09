@@ -1,32 +1,32 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4930F3CB561;
-	Sun,  9 Aug 2026 15:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECEF3CF030
+	for <bpf@vger.kernel.org>; Sun,  9 Aug 2026 15:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786287774; cv=none; b=srticwy6D9kejSIdZKgY/nB5eO7uiZ9HWv77ch5WQYyVV7nqyIx4vFjt9HB36magXNJFIJDeoGC46XhGnWIwny3P77uhzm10cLIzjsE/7sZT4JPkJDnKLxd03jeUFeXoTb4FGKtghnB+ulz9dQmH3U5tTiBWioG1EobdjBzBFgM=
+	t=1786287778; cv=none; b=urzh9mSuP5Bqt/fssU932heOnexD+u2KFN/3VNn3CwT++yIdrdKDRCqYE56JcvhBDOnp3NpJVtC+vQzzU31M90x6pn2Kji80AMcaGKMlMurxqhdAZaCQvB2vyozJAa8dm1m1rsY0DFqZt6+2NkE0BgzsNDsBchZRAllU5Af9dhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786287774; c=relaxed/simple;
-	bh=7Sg0M1Pso7u9S1IroiOYbnUf8qOXAj3UA7JZPPX8w84=;
+	s=arc-20240116; t=1786287778; c=relaxed/simple;
+	bh=Id5pefIyKE/U91Zn8zI+k2Hjyo9tKnshYz+qiSarsd8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V7jxLV4rZRV8Tc17lPrvNnutV+NPGxdKjxU9bPdKcwkr5UsEARbzM9sa1voK+hE7etDjXiUDyQlrBaqtfGXvnrIE4yeOBtbIR5MV056aU7W7yaHDjq2MxSB2xYIqmjHWF4K5q4G1J2fvaxA90hNBqD6TYv4PEfdY4iBGGDGC+WQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GbVj7eXd; arc=none smtp.client-ip=91.218.175.182
+	 MIME-Version; b=e7Si8OnY8+gD+eW+cGGI7dBz9k99HN2re6WLMAjNXYQ5CWSNDOO8NxCqX/rgN0sapWo/MYKmF4ZpcXjPVJUoa/dACvaXkv3wD88Al5Pzt64HEgscd/xOM9goweocDYak8NiFoLBNpmJ52FXMOlksB/IC1lUiB62Cg/FD5eCUNyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HQpv1WvT; arc=none smtp.client-ip=91.218.175.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GbVj7eXd"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HQpv1WvT"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786287770;
+	t=1786287763;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=UNeZp3MPMEvz8aXrCIJri7M6DLgx9QVZUN9FITbE8Ww=;
-	b=GbVj7eXdJHqpWo8+c70h4avQLIYBuWLpFld8RD8AZzGJWcoY5gxZpI0DecQ6vHxTsFNtQk
-	PkHZiYu1aaxa4HiMjmIYGOT2AthLMoZt/e8x3ZbbFKvqWi/jgZY9yt+t43rapqJGXtnVGL
-	mH3uVyymFcfpWNBwnvQXKE64VXvX4ac=
+	bh=0TMqdN/yDSpEh6YcQdZh+gNoQqcZgWyH9Vy4rBrBQRs=;
+	b=HQpv1WvT1UmCIhKrrK/hJSqT5fZtbdawTE1ZrFyjEmAcOWT1K8Vb7JPZ4kOaEKOPypM9IR
+	JoCXc9oro8JJWaZMh9i+8cUJ1YWBDa/B6f3Z+hW/9kdQAEJyowYhdffyJri1AR6TRIk+YZ
+	Yqs0DQeUxDYlaB2Dp+SGMV8bAIuzOSA=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -57,9 +57,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 06/13] bpf: Add tracing_multi link fdinfo support for bpf progs
-Date: Sun,  9 Aug 2026 23:01:04 +0800
-Message-ID: <20260809150111.45000-7-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 05/13] libbpf: Add tracing_multi link support for bpf progs
+Date: Sun,  9 Aug 2026 23:01:03 +0800
+Message-ID: <20260809150111.45000-6-leon.hwang@linux.dev>
 In-Reply-To: <20260809150111.45000-1-leon.hwang@linux.dev>
 References: <20260809150111.45000-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -71,84 +71,146 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Show the target bpf prog info in the fdinfo.
+By design, a tracing_multi link does not support both kernel functions
+and bpf progs at the same time.
 
-$ cat /proc/self/fdinfo/13
-pos:	0
-flags:	02000000
-mnt_id:	18
-ino:	1045
-link_type:	tracing_multi
-link_id:	9
-prog_tag:	9a7f9e3ab6f138ab
-prog_id:	25
-attach_type:	61
-cnt:	2
-prog-id	 btf-id	 cookie	 func
-21	 4	 16706819	 target_1
-22	 5	 16706819	 target_2
+In libbpf, the bpf_tracing_multi_opts options provides two new fields for
+tracing bpf progs:
+
+* 'fds': the fd array of the target bpf progs. One fd must be provided
+         multiple times for multiple targets.
+* 'funcs': the function name array of the target bpf progs.
+
+The 'cnt' field indicates the size of both 'fds' and 'funcs' arrays.
+
+The 'funcs' will be translated to 'ids' by 'libbpf_find_prog_btf_id()'.
+
+At last, 'fds'+'ids' will be passed to kernel.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/trace/bpf_trace.c | 30 +++++++++++++++++++++++++-----
- 1 file changed, 25 insertions(+), 5 deletions(-)
+ tools/lib/bpf/bpf.c    |  1 +
+ tools/lib/bpf/bpf.h    |  2 ++
+ tools/lib/bpf/libbpf.c | 37 +++++++++++++++++++++++++++++++++----
+ tools/lib/bpf/libbpf.h |  4 +++-
+ 4 files changed, 39 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index a805a5b73303..80928401830c 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -3759,26 +3759,46 @@ static int bpf_tracing_multi_link_fill_link_info(const struct bpf_link *link,
- }
- 
- #ifdef CONFIG_PROC_FS
-+static const char *bpf_prog_func_name(struct bpf_prog *prog, u32 btf_id)
-+{
-+	const struct btf *btf = prog->aux->btf;
-+	const struct btf_type *t;
-+
-+	t = btf_type_by_id(btf, btf_id);
-+	if (!t || !btf_type_is_func(t))
-+		return "";
-+
-+	return btf_name_by_offset(btf, t->name_off);
-+}
-+
- static void bpf_tracing_multi_show_fdinfo(const struct bpf_link *link,
- 					  struct seq_file *seq)
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 96819c082c77..a20585174903 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -852,6 +852,7 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 		attr.link_create.tracing_multi.ids = ptr_to_u64(OPTS_GET(opts, tracing_multi.ids, 0));
+ 		attr.link_create.tracing_multi.cookies = ptr_to_u64(OPTS_GET(opts, tracing_multi.cookies, 0));
+ 		attr.link_create.tracing_multi.cnt = OPTS_GET(opts, tracing_multi.cnt, 0);
++		attr.link_create.tracing_multi.fds = ptr_to_u64(OPTS_GET(opts, tracing_multi.fds, 0));
+ 		if (!OPTS_ZEROED(opts, tracing_multi))
+ 			return libbpf_err(-EINVAL);
+ 		break;
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 7534a593edae..63961db29b74 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -474,6 +474,8 @@ struct bpf_link_create_opts {
+ 			const __u32 *ids;
+ 			const __u64 *cookies;
+ 			__u32 cnt;
++			__u32 :32;
++			const int *fds;
+ 		} tracing_multi;
+ 	};
+ 	size_t :0;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 514e4e9daa82..d698a64ff800 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -12687,10 +12687,12 @@ bpf_program__attach_tracing_multi(const struct bpf_program *prog, const char *pa
  {
- 	struct bpf_tracing_multi_link *tr_link =
- 		container_of(link, struct bpf_tracing_multi_link, link);
- 	bool has_cookies = !!tr_link->cookies;
-+	bool has_progs = !!tr_link->progs;
+ 	LIBBPF_OPTS(bpf_link_create_opts, lopts);
+ 	int prog_fd, link_fd, err, cnt;
++	struct bpf_link *link = NULL;
+ 	__u32 *free_ids = NULL;
+-	struct bpf_link *link;
+ 	const __u64 *cookies;
++	const char **funcs;
+ 	const __u32 *ids;
++	const int *fds;
  
- 	seq_printf(seq, "attach_type:\t%u\n", tr_link->link.attach_type);
- 	seq_printf(seq, "cnt:\t%u\n", tr_link->nodes_cnt);
+ 	if (!OPTS_VALID(opts, bpf_tracing_multi_opts))
+ 		return libbpf_err_ptr(-EINVAL);
+@@ -12705,12 +12707,22 @@ bpf_program__attach_tracing_multi(const struct bpf_program *prog, const char *pa
+ 	cnt = OPTS_GET(opts, cnt, 0);
+ 	ids = OPTS_GET(opts, ids, NULL);
+ 	cookies = OPTS_GET(opts, cookies, NULL);
++	fds = OPTS_GET(opts, fds, NULL);
++	funcs = OPTS_GET(opts, funcs, NULL);
  
--	seq_printf(seq, "%s\t %s\t %s\t %s\n", "obj-id", "btf-id", "cookie", "func");
-+	seq_printf(seq, "%s\t %s\t %s\t %s\n", has_progs ? "prog-id" : "obj-id", "btf-id", "cookie",
-+		   "func");
- 	for (int i = 0; i < tr_link->nodes_cnt; i++) {
- 		struct bpf_tracing_multi_node *mnode = &tr_link->nodes[i];
-+		u64 cookie = has_cookies ? tr_link->cookies[i] : 0;
- 		u32 btf_id, obj_id;
+-	if (!!ids != !!cnt)
++	if (ids && fds)
++		return libbpf_err_ptr(-EINVAL);
++	if (!!fds != !!funcs)
++		return libbpf_err_ptr(-EINVAL);
++	if (fds && !cnt)
+ 		return libbpf_err_ptr(-EINVAL);
+-	if (pattern && (ids || cookies))
++	if (ids && !cnt)
+ 		return libbpf_err_ptr(-EINVAL);
+-	if (!pattern && !ids)
++	if (!fds && !ids && cnt)
++		return libbpf_err_ptr(-EINVAL);
++	if (pattern && (fds || ids || cookies))
++		return libbpf_err_ptr(-EINVAL);
++	if (!pattern && !ids && !fds)
+ 		return libbpf_err_ptr(-EINVAL);
  
- 		bpf_trampoline_unpack_key(mnode->trampoline->key, &obj_id, &btf_id);
--		seq_printf(seq, "%u\t %u\t %llu\t %pS\n",
--			   obj_id, btf_id,
--			   has_cookies ? tr_link->cookies[i] : 0,
--			   (void *) mnode->trampoline->ip);
-+		btf_id = has_progs ? (u32) mnode->trampoline->key : btf_id;
-+		if (has_progs)
-+			seq_printf(seq, "%u\t %u\t %llu\t %s\n",
-+				   obj_id, btf_id, cookie,
-+				   bpf_prog_func_name(tr_link->progs[i], btf_id));
-+		else
-+			seq_printf(seq, "%u\t %u\t %llu\t %pS\n",
-+				   obj_id, btf_id, cookie,
-+				   (void *) mnode->trampoline->ip);
- 
- 		cond_resched();
+ 	if (pattern) {
+@@ -12720,11 +12732,28 @@ bpf_program__attach_tracing_multi(const struct bpf_program *prog, const char *pa
+ 		if (cnt == 0)
+ 			return libbpf_err_ptr(-EINVAL);
+ 		ids = (const __u32 *) free_ids;
++	} else if (fds) {
++		size_t cap = 0;
++		int i;
++
++		err = libbpf_ensure_mem((void **) &free_ids, &cap, sizeof(*free_ids), cnt);
++		if (err)
++			return libbpf_err_ptr(err);
++
++		for (i = 0; i < cnt; i++) {
++			err = libbpf_find_prog_btf_id(funcs[i], fds[i], prog->obj->token_fd);
++			if (err < 0)
++				goto error;
++
++			free_ids[i] = err;
++		}
++		ids = (const __u32 *) free_ids;
  	}
+ 
+ 	lopts.tracing_multi.ids = ids;
+ 	lopts.tracing_multi.cookies = cookies;
+ 	lopts.tracing_multi.cnt = cnt;
++	lopts.tracing_multi.fds = fds;
+ 
+ 	link = calloc(1, sizeof(*link));
+ 	if (!link) {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index b965ad571540..7b2cfa1ad572 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -732,10 +732,12 @@ struct bpf_tracing_multi_opts {
+ 	const __u32 *ids;
+ 	const __u64 *cookies;
+ 	size_t cnt;
++	const int *fds;
++	const char **funcs;
+ 	size_t :0;
+ };
+ 
+-#define bpf_tracing_multi_opts__last_field cnt
++#define bpf_tracing_multi_opts__last_field funcs
+ 
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_tracing_multi(const struct bpf_program *prog, const char *pattern,
 -- 
 2.55.0
 
