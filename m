@@ -1,63 +1,63 @@
-Received: from mail-oa2-f0.google.com (mail-oa2-f0.google.com [74.125.231.64])
+Received: from mail-oo2-f5.google.com (mail-oo2-f5.google.com [74.125.231.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0C6396D09
-	for <bpf@vger.kernel.org>; Sun,  9 Aug 2026 08:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A31D3AC0D7
+	for <bpf@vger.kernel.org>; Sun,  9 Aug 2026 08:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786265527; cv=none; b=gA0mHzDDHAJUbRuh5BLHSl0cW+FckUr6Yubk1SpcN7Z+2dE0rYvuJ6U/WqkqJw5/YaKZkSu5/ccDS7dPmHJATjTtaKcabQ61MikBvLItPI9UkIii69sqgzM1YS5gaSXTihwzFMRs8XIDgfNoHJAnaxqzWoYDNjtAuw1Vfxuu3Co=
+	t=1786265530; cv=none; b=Sb/xnNOcRTHC6sJY1dIvbtL3IQZOebymQsxvQygk0sL0KuNXihRhgeMkbGpc5UbgFx13nmtLl7p+h2rT8dJIzwRYDcDpn5AcZbpCrbmseEs6XHiUVoBy2A9uReWcBv9/fTHDLG6MNqhWVIV9frAvkBVXw4fzC7Pzkzr8nSkSVhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786265527; c=relaxed/simple;
-	bh=MLVruUOFZwQaJHIh9Cvxxf3C3T/yRq3ZCjPbzDr2ia0=;
+	s=arc-20240116; t=1786265530; c=relaxed/simple;
+	bh=4MLTtvjvKDC3l2XU/DafWg9VnlzyNh3yS4pphL0VWtg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c5Cv+cv268/vvIxr/G672mLgLlI+NzUCdRPWm4C0lylvlklc3KGuuZJzTrvQ9DlijB+xPPyUSzfAHqgmFSrg6iMnorQsjya249EeGAljTVc3J4uQyNkIa6RC9WLSOpkZnZUZ76q+Rlw+BXxJqQiVqmI6uYwY0EWsXYkXuW4DasE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PEs/HXiB; arc=none smtp.client-ip=74.125.231.64
+	 MIME-Version; b=S7hCojyNGvfl7JJHVGy36CjN8MfKXHsF4OLb7gQSrKnLqDf7n2cZbmW2DLNO27tA0eO9IbcRDflewOYQOinDIuAfH3uGurbd5mOblCgQfkM+K7/Liu7rrTtoZ/YQMCUM9o5RGS8OKklJa0mVpPd0o+0V9X5yC5EbMkFh2NBA474=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=agf88kjh; arc=none smtp.client-ip=74.125.231.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PEs/HXiB"
-Received: by mail-oa2-f0.google.com with SMTP id 586e51a60fabf-4483c9986ceso571211fac.0
-        for <bpf@vger.kernel.org>; Sun, 09 Aug 2026 01:52:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="agf88kjh"
+Received: by mail-oo2-f5.google.com with SMTP id 46e09a7af769-7e9f37a2160so439519a34.0
+        for <bpf@vger.kernel.org>; Sun, 09 Aug 2026 01:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786265522; x=1786870322; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786265525; x=1786870325; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=yr6jWPfArptDksI+VWQUrGurbn19ew+I34PMw8+4Jnw=;
-        b=PEs/HXiBqTxHv+rCJ8xQ6Aoqdg8xyWoEmo7bHE+g9IAFX+JgIf4wWGMwLiN23M5e0e
-         xLNJfEqB1D4EjhTaAbXL/GgR4I/GANsVLGXmari6crewveHMzqxfjgMpxsnzXGnLiUnb
-         dcBiCoKVcGHAa/vOplp57v4rT84KP7oDVEhNslcsmZeTdK51dCtsdrmixhIvn84hFHFE
-         jrn5mrqlPwI5DD3aLZA0LnypKp5Jtfbqq9voTYr+1m3Z3C+1iZcvlLvt3akbbbyfWtoq
-         2lmkVjeWMyYlxKOpVbSEqPobPnC5iI8JS60rqAETVhBK1Vse7jfHIWkV7W8v3wmTS5eG
-         O2ZA==
+        bh=pLe57F29VIukVWwG47prntnnRlvOaqwzUfT0XT874IM=;
+        b=agf88kjh/hH7iDYQVX1e4GHx59oACec5lMTCJeat96Os21Oou6fWOgs9ogMRlDk0VN
+         J88usG6LBsxC87dOxroAVvWJZkKokkPTfId76tVrtgjgWWAP73bT4TS3dEi/5NANXH2Z
+         mR3Lnk5716Czm7kKdzIlEFgtCfvubUYoWMf7wo3FFpUXDW1lVpFTevqgJy0RWwFN3MJj
+         kTDwiDPSYAjKHHC2nBkSXJnRjGztKNXkYKh0D2Kos5R+sFkY6oNrXeZ4xqE6DRITfpqA
+         1DRgYXEJIWuBFNZ2VZFnBfT4cDdTpvPXHc8Jt3Cc9xygV+6GV4zVRs7SAr/glKxdF+5d
+         fhbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786265522; x=1786870322;
+        d=1e100.net; s=20251104; t=1786265525; x=1786870325;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yr6jWPfArptDksI+VWQUrGurbn19ew+I34PMw8+4Jnw=;
-        b=q/1N7cXCwMU0ZqvQgKFMz/jb4jF6oCPKMfBgPS+Wg/cIMbPxffbSA123sLRgUMDiHc
-         xuPTUnT4xswSGG8y/7TU4lRHGIQjDG/nnmlGc98S9HTc4AsAUENdak72L2psA8kuzE5m
-         egEwEFrL95Qq8o2SMy7//BL9vobZl6T9/J2v7421PIOeBfyqNNIb/tFr+cnI8yZST9+X
-         SjdvnL82WZw2fwgMNN4abp7kk5L9U2mh1WjgI5KVaEvSWKtsAUMxHV8+NDku7xSaDhzO
-         AeAvD+YIdiJcEf0aUkxx2Awcf9jEI1B8uIzAF+Udje2bn/c4HX/k1xFBDM7Q7eXysxlT
-         RNhQ==
-X-Gm-Message-State: AOJu0Yxti4RY7SLIEIOetPNwcpd7vNqQMY26yojTNh7rhZxZQUga0kYs
-	q3/EPtetwWH2wR3PMBR91aEESLejBB9g2O8Gg4la5OmUD3mxq6wy88tWrMe6swgq49k=
-X-Gm-Gg: AR+sD11/x1RswUQr1DNyydK+lYwnRY0iSBjNM/RHk9R81UrDxI6jbHb29hM3i+tm65K
-	pJU9drY8AFMne7yASV5MTn5+ZsNHklS7Na6/MT4vuPWCii4E8Km8dXDbRUAmf3Ifup15IwIQAwW
-	/NTkNCXT5xj33Tg3s2VDngUuBKxPtpJRfpVzeUxmFFyF0nZWvNoDkmjwQMY5GdNpAZ0edEoGGsQ
-	I+c2o5U1d1cPtIWnX6UeEkmcAB5+iTnxs1MTHeJ1Fk9FKuIkEahbJqPvw/23mB8ZIxme2XkuISy
-	zvqfFW/QLtxX9uYHVhWSCYhb3J4HpS6PHGOmudTh3SMNho3+KNVwqmrG0UYxt2iDVLOuoRFNpfi
-	Ft3BBhfEz6i0FBKccs6jC7+ALW7r1DWnU9iNuZFaf5cc7HEEbfK17afCCTxPSyGbc4kkDp7xZRn
-	cumIGXuXU+z1ECccY5yNgjm61Rs3htJndIajoDpzLwdU2njkR2+dOp/b5z0B8k1wJPIO6xYG5ih
-	95IP8theus7NJaRgMH7PjOXWtwzyNHek9khDCkfNio5i3cJSDxStlgtDv5wkkXAPExjtOs=
-X-Received: by 2002:a4a:ec46:0:b0:6ae:4403:1c13 with SMTP id 006d021491bc7-6b04511bae6mr5376654eaf.18.1786265521837;
-        Sun, 09 Aug 2026 01:52:01 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:43::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f35b563887sm5056368a34.3.2026.08.09.01.51.59
+        bh=pLe57F29VIukVWwG47prntnnRlvOaqwzUfT0XT874IM=;
+        b=RD9FdVAReaNdM+8MmGd7CtdJ7D4TKSXEgTCOgWVZbaheOKJtuJROOmM6ZkCy8fV3Ib
+         1u8TwsLeGmEJS4QXKt/Y3AT+bn9Hteqv8NDhlfCPRQ8O5s6/NmAXtsEXc9igNKyiyv2H
+         iHu6zg34oD31k1ymvbo90GnXGdsQL2XF4xNoMHh+3VRqguPFht6EN4ppZ1IigELDne2G
+         zCweQiYKx0uckU+Hz7L+nLc4qc8RErjrsLXzfpFPRgjnzeSoiSBgaDWDqe6EakDTnwl+
+         3A9mawXol4HRMdGUuYbGi6DSGri/mZLehDZsOHGpmAc5paCoMtFmxy6NyVu0oRUZJHkV
+         nn8w==
+X-Gm-Message-State: AOJu0YxkQ5bWqzrKGd2Qrt9080aoFHyECULkYuasEDUX6jHo520xTNSH
+	NHG/izpNF+1tdl80cXKAFabx4JKHyHOWPDkBIp/hyNDtZBl2OntgLtS69qRqCQTWxn4=
+X-Gm-Gg: AR+sD13xg6WSQadjXzLm70GHuln43j9DOdU+zTHTjhOidq653At3FoIMYiTGTCMe7Yp
+	8A1zjp8ywjEvnjINUiuDBKZJd/pUR0196g8mxLuXE+5mk4pmnqQfQ3ONnFc3QYzjNq9UMxAmMpP
+	lPpjauAYuUngNhJCulDCPZjHuWvq4kPAPdgHTMilZkBgBMrE9qhZwWnI2Pb6lfjipAnyxzwEnUU
+	yXFuh0gm0v8jVmSNQUpq/dV7dsYCJ/cGNkmsFHHv07W23KO37qMRgxKCFvaWQ6asoC9PfUN+iB7
+	RCunhuA3z/ofq/NgePgy1IfkN8DG0lrcn+09m9knFiUrBy7E+rxN4l4bnnnZxNnLeKS0GkpEb+J
+	rpGsKqZjGaYnnZfqzw3enRd7LnZEwIdPntpWr2czIph2JOoeD1iYQF+6hMq/dOO2J1vjFNvb8gT
+	51Abf2kXKEm3K+m5HZmHLSABxqENkIA1NAG2R3TwHlO6OctDbmGDnzWIttA8ynqesZZ+cifKJlS
+	Xo/vF5cI+sAwLjFMzS7NNJ9WasrzTnaIsi6HFkRPn8GAFBVczkvhUSaPEFvdivN21xkxJ8=
+X-Received: by 2002:a05:6830:4393:b0:7dc:c4ae:a679 with SMTP id 46e09a7af769-7f1e5e4685dmr21324512a34.9.1786265525193;
+        Sun, 09 Aug 2026 01:52:05 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:17::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f35b56391dsm4862780a34.1.2026.08.09.01.52.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Aug 2026 01:52:00 -0700 (PDT)
+        Sun, 09 Aug 2026 01:52:03 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 1/2] resolve_btfids: Emit arena attributes from kfunc parameter suffixes
-Date: Sun,  9 Aug 2026 10:51:53 +0200
-Message-ID: <20260809085155.3305519-2-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Test resolve_btfids arena argument suffixes
+Date: Sun,  9 Aug 2026 10:51:54 +0200
+Message-ID: <20260809085155.3305519-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260809085155.3305519-1-memxor@gmail.com>
 References: <20260809085155.3305519-1-memxor@gmail.com>
@@ -81,150 +81,130 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4921; h=from:subject; bh=MLVruUOFZwQaJHIh9Cvxxf3C3T/yRq3ZCjPbzDr2ia0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavCfrZsqpXxh6UfrlY43nHueTPHWLlP1W2K8v/pvgFJ8vIr f5V2lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCLenxkZVsc3zlj47dujV3wH1I7me6 hfO5U3oYo59zp700uVYpUOeYb/mQvjM2rmdK7R2S2/9GNNcvKh9Isuz0y2L//yPoFFnPEtKwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4456; h=from:subject; bh=4MLTtvjvKDC3l2XU/DafWg9VnlzyNh3yS4pphL0VWtg=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavCfnb8pIqAuvNbTtp4zjwa7tH/4r2bXsZnHcW8tyvfTW4/ ekGjo5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABN5yMLIsGXH4Z28u3/WBx9aNX9N/D H9h8Kr77vIVfhUvUt/f9573XyGv4LpxqtSj1hdmHMjbW1Xutx5ifbOPR907l/JZ800Oi+nwQ8A
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Kfunc declarations can identify arena arguments through parameter name
-suffixes without repeating KF_ARENA_ARG flags in their BTF ID sets.
-resolve_btfids currently misses those arguments when synthesizing the
-address_space(1) attributes used by generated vmlinux.h files.
+Add a suffix-only kfunc declaration with arena annotations on all five
+arguments. Verify that resolve_btfids emits address_space(1) type tags
+for every position without KF_ARENA_ARG flags in the BTF ID sets.
 
-Teach the arena prototype rewrite to recognize __arena and
-__arena__nullable directly on each parameter. Keep KF_ARENA_ARG1 and
-KF_ARENA_ARG2 handling for explicitly flagged kfuncs, while allowing
-suffixes on any argument without synthesizing kfunc flags.
+Represent expected arena arguments as a per-parameter bitmap so the
+test covers suffixes beyond the two positions expressible by flags.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/bpf/resolve_btfids/main.c | 62 ++++++++++++++++++++++++++++-----
- 1 file changed, 54 insertions(+), 8 deletions(-)
+ .../selftests/bpf/prog_tests/resolve_btfids.c | 35 ++++++++++---------
+ tools/testing/selftests/bpf/progs/btf_data.c  |  9 +++++
+ 2 files changed, 28 insertions(+), 16 deletions(-)
 
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index d2e4176339da..3c88ea192f7b 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -65,7 +65,8 @@
-  *
-  *   - emits a "bpf_kfunc" decl tag, and "bpf_fastcall" when KF_FASTCALL is set;
-  *   - wraps the return value and/or arguments flagged KF_ARENA_RET,
-- *     KF_ARENA_ARG1 or KF_ARENA_ARG2 with the "address_space(1)" type attribute;
-+ *     KF_ARENA_ARG1 or KF_ARENA_ARG2, or identified by an arena parameter
-+ *     suffix, with the "address_space(1)" type attribute;
-  *   - rewrites the prototype of KF_IMPLICIT_ARGS kfuncs.
-  *
-  * These kfunc annotations were historically produced by pahole.
-@@ -182,6 +183,8 @@ struct object {
- #define KF_IMPLICIT_ARGS (1 << 16)
- #define KF_IMPL_SUFFIX "_impl"
+diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+index 732cfed35e1c..9bd84fe32b89 100644
+--- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
++++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+@@ -15,6 +15,7 @@
+ #define DECL_TAG_FASTCALL "bpf_fastcall"
+ #define DECL_TAG_KFUNC "bpf_kfunc"
  #define TYPE_ATTR_ARENA "address_space(1)"
-+#define PARAM_SUFFIX_ARENA "__arena"
-+#define PARAM_SUFFIX_ARENA_NULLABLE "__arena__nullable"
++#define ARENA_ARG(n) (1U << (n))
  
- struct kfunc {
- 	struct rb_node rb_node;
-@@ -1067,6 +1070,22 @@ static int collect_decl_tags(struct btf2btf_context *ctx)
- 	return 0;
- }
+ #ifndef KF_FASTCALL
+ #define KF_FASTCALL (1 << 12)
+@@ -49,13 +50,18 @@ struct kfunc_symbol {
+ 	const char	*name;
+ 	s32		 id;
+ 	u32		 flags;
++	u32		 arena_args;
++	bool		 arena_ret;
+ };
  
-+static bool param_name_has_suffix(const char *name, const char *suffix)
-+{
-+	size_t name_len = strlen(name);
-+	size_t suffix_len = strlen(suffix);
-+
-+	return name_len >= suffix_len && !strcmp(name + name_len - suffix_len, suffix);
-+}
-+
-+static bool is_arena_param(const struct btf *btf, const struct btf_param *param)
-+{
-+	const char *name = btf__name_by_offset(btf, param->name_off);
-+
-+	return param_name_has_suffix(name, PARAM_SUFFIX_ARENA) ||
-+	       param_name_has_suffix(name, PARAM_SUFFIX_ARENA_NULLABLE);
-+}
-+
- static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
- {
- 	Elf_Data *idlist = obj->efile.idlist;
-@@ -1299,8 +1318,12 @@ static int process_kfunc_with_implicit_args(struct btf2btf_context *ctx, struct
- 	return 0;
- }
+ static struct kfunc_symbol kfunc_symbols[] = {
+-	{ "kfunc_a", -1, 0 },
+-	{ "kfunc_b", -1, KF_FASTCALL },
+-	{ "kfunc_c", -1, KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2 },
+-	{ "kfunc_d", -1, KF_ARENA_ARG2 },
++	{ "kfunc_a", -1, 0, 0, false },
++	{ "kfunc_b", -1, KF_FASTCALL, 0, false },
++	{ "kfunc_c", -1, KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2,
++	  ARENA_ARG(0) | ARENA_ARG(1), true },
++	{ "kfunc_d", -1, KF_ARENA_ARG2, ARENA_ARG(1), false },
++	{ "kfunc_e", -1, 0, ARENA_ARG(0) | ARENA_ARG(1) | ARENA_ARG(2) |
++	  ARENA_ARG(3) | ARENA_ARG(4), false },
+ };
  
--static bool is_arena_arg(struct kfunc *kfunc, u32 idx)
-+static bool is_arena_arg(const struct btf *btf, const struct kfunc *kfunc,
-+			 const struct btf_param *param, u32 idx)
- {
-+	if (is_arena_param(btf, param))
-+		return true;
-+
- 	switch (idx) {
- 	case 0:
- 		return kfunc->flags & KF_ARENA_ARG1;
-@@ -1311,6 +1334,30 @@ static bool is_arena_arg(struct kfunc *kfunc, u32 idx)
- 	}
- }
+ /* Align the .BTF_ids section to 4 bytes */
+@@ -105,6 +111,7 @@ BTF_ID_FLAGS(func, kfunc_a)
+ BTF_ID_FLAGS(func, kfunc_b, KF_FASTCALL)
+ BTF_ID_FLAGS(func, kfunc_c, KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2)
+ BTF_ID_FLAGS(func, kfunc_d, KF_ARENA_ARG2)
++BTF_ID_FLAGS(func, kfunc_e)
+ BTF_KFUNCS_END(test_kfunc_set)
  
-+static bool kfunc_has_arena_arg(const struct btf *btf, const struct kfunc *kfunc)
-+{
-+	const struct btf_type *func, *proto;
-+	const struct btf_param *params;
-+	u32 nr_params;
-+
-+	func = btf__type_by_id(btf, kfunc->btf_id);
-+	if (!func || !btf_is_func(func))
-+		return false;
-+
-+	proto = btf__type_by_id(btf, func->type);
-+	if (!proto || !btf_is_func_proto(proto))
-+		return false;
-+
-+	params = btf_params(proto);
-+	nr_params = btf_vlen(proto);
-+	for (u32 i = 0; i < nr_params; i++) {
-+		if (is_arena_arg(btf, kfunc, &params[i], i))
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
- static s32 arena_tag_ptr(struct btf *btf, u32 ptr_id, struct kfunc *kfunc)
- {
- 	const struct btf_type *ptr = btf__type_by_id(btf, ptr_id);
-@@ -1383,11 +1430,10 @@ static s32 add_arena_tagged_proto(struct btf *btf, struct kfunc *kfunc)
+ /*
+@@ -112,6 +119,7 @@ BTF_KFUNCS_END(test_kfunc_set)
+  * actually sort at least one of the two sets.
+  */
+ BTF_KFUNCS_START(test_kfunc_set_rev)
++BTF_ID_FLAGS(func, kfunc_e)
+ BTF_ID_FLAGS(func, kfunc_d, KF_ARENA_ARG2)
+ BTF_ID_FLAGS(func, kfunc_c, KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2)
+ BTF_ID_FLAGS(func, kfunc_b, KF_FASTCALL)
+@@ -301,15 +309,15 @@ void test_resolve_btfids(void)
  	}
  
- 	for (i = 0; i < nr_params; i++) {
--		if (!is_arena_arg(kfunc, i))
--			continue;
--
- 		t = btf__type_by_id(btf, new_proto_id);
- 		params = btf_params(t);
-+		if (!is_arena_arg(btf, kfunc, &params[i], i))
-+			continue;
+ 	/*
+-	 * Check resolve_btfids wrapped exactly the arena-flagged return/args
+-	 * with the address_space(1) type attribute, and left other
++	 * Check resolve_btfids wrapped exactly the arena-flagged or suffixed
++	 * return/args with the address_space(1) type attribute, and left other
+ 	 * pointers/returns untouched.
+ 	 */
+ 	for (i = 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
+ 		const struct btf_type *fn, *proto;
+ 		const struct btf_param *params;
+ 		const char *name = kfunc_symbols[i].name;
+-		u32 fl = kfunc_symbols[i].flags;
++		u32 arena_args = kfunc_symbols[i].arena_args;
+ 		__u32 nr;
  
- 		id = arena_tag_ptr(btf, params[i].type, kfunc);
- 		if (id < 0)
-@@ -1403,7 +1449,7 @@ static s32 add_arena_tagged_proto(struct btf *btf, struct kfunc *kfunc)
- 	return new_proto_id;
- }
+ 		fn = btf__type_by_id(btf, kfunc_symbols[i].id);
+@@ -322,15 +330,10 @@ void test_resolve_btfids(void)
+ 		nr = btf_vlen(proto);
  
--static int process_kfunc_with_arena_flags(struct btf2btf_context *ctx,
-+static int process_kfunc_with_arena_attrs(struct btf2btf_context *ctx,
- 					  struct kfunc *kfunc)
+ 		ASSERT_EQ(is_arena_tagged_ptr(btf, proto->type),
+-			  !!(fl & KF_ARENA_RET), name);
+-		if (nr > 0) {
+-			ASSERT_EQ(is_arena_tagged_ptr(btf, params[0].type),
+-				  !!(fl & KF_ARENA_ARG1), name);
+-		}
+-		if (nr > 1) {
+-			ASSERT_EQ(is_arena_tagged_ptr(btf, params[1].type),
+-				  !!(fl & KF_ARENA_ARG2), name);
+-		}
++			  kfunc_symbols[i].arena_ret, name);
++		for (j = 0; j < nr; j++)
++			ASSERT_EQ(is_arena_tagged_ptr(btf, params[j].type),
++				  !!(arena_args & ARENA_ARG(j)), name);
+ 	}
+ 
+ out:
+diff --git a/tools/testing/selftests/bpf/progs/btf_data.c b/tools/testing/selftests/bpf/progs/btf_data.c
+index ec34f7a6e038..ea41c9801432 100644
+--- a/tools/testing/selftests/bpf/progs/btf_data.c
++++ b/tools/testing/selftests/bpf/progs/btf_data.c
+@@ -68,3 +68,12 @@ int kfunc_d(struct root_struct *a, struct root_struct *b)
  {
- 	struct btf_type *t;
-@@ -1463,8 +1509,8 @@ static int btf2btf(struct object *obj)
- 				goto out;
- 		}
- 
--		if (kfunc->flags & (KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2)) {
--			err = process_kfunc_with_arena_flags(&ctx, kfunc);
-+		if ((kfunc->flags & KF_ARENA_RET) || kfunc_has_arena_arg(ctx.btf, kfunc)) {
-+			err = process_kfunc_with_arena_attrs(&ctx, kfunc);
- 			if (err)
- 				goto out;
- 		}
+ 	return 0;
+ }
++
++int kfunc_e(struct root_struct *a__arena,
++	    struct root_struct *b__arena__nullable,
++	    struct root_struct *c__arena,
++	    struct root_struct *d__arena__nullable,
++	    struct root_struct *e__arena)
++{
++	return 0;
++}
 -- 
 2.53.0-Meta
 
