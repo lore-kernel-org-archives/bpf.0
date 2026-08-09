@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826ED248F57
-	for <bpf@vger.kernel.org>; Sun,  9 Aug 2026 15:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB3D23EAAA
+	for <bpf@vger.kernel.org>; Sun,  9 Aug 2026 15:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786289381; cv=none; b=SuIiM6zVsBBFdar/tUB87CxwKiCEO/PcrwKPNLlNAj/14+ApxhQSlSBEkl6Lk9oxO35ynjbT6182C1hEBmdOz7e6o7F0pnMf1uKRro+lBJJuUJ+CpvJW/RiGWpQtCU0dlR74rC/mK0NJDbOiMLTJQaZlctabBcxIkrmWqFdux+8=
+	t=1786289590; cv=none; b=OLgFEP9QK8KwE2nOoiw+BoCIFtbzjMXZLahf2uLu/at9zDMxti+JDCwJ9vPW4ACvGkCPVzimIG+P1PLKjH1HuFGkd/Bw2xW0gWYaIPV++hHyX1sd0HL0nzLvJOkeYA2KG7x3GBZex5L52biyoa6v5RvvJZhr7sSHxa3T4iDK8O0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786289381; c=relaxed/simple;
-	bh=bvbdFADDIltehw2NfV6jmVZISGZvFrNXG8WBby1qjZ8=;
+	s=arc-20240116; t=1786289590; c=relaxed/simple;
+	bh=b7cUC1TG/v5rvKuePm8Di7IUwYpR+SghxE59TPGv57w=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=M+vTqjj+BbAVNraJQicIge52rLnqWxi7DP1C5bAoacMVv5ofsFdBuxGVcJD8AFSuHXuKLu9jxLvFnTUHiYc2bbCf40MfBB88hPQ2loClKjxGWvndvAmamwXMRXUZ3DwYeG+cGuul0XX0UTwlLukmcAQuSLVVMshyH5Ju/UA5/zU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GR3/mtbl; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=vFetM6f5qsiFFKJVgyY3kG2FXTX78cR0h5vUc9DBuCRjnSYYbI1gpDLoQxEnnnHXAoM6rU6K1oLcoOFDEqonL9RHAMexP7xKE2XemBfEk6HF3DN2LZznZ8gMZQ8Ur2UpWy2mIzWAvyakTLHR9gMDAN5yvEuj8mb1sLjuDWK0vbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJD1uKh1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GR3/mtbl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EFDF1F000E9;
-	Sun,  9 Aug 2026 15:29:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJD1uKh1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5331D1F000E9;
+	Sun,  9 Aug 2026 15:33:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786289380;
-	bh=9P6sYD8mlM+YzbGThs/UbNtgYAndTC/8evsC6hhIAuA=;
+	s=k20260515; t=1786289588;
+	bh=Slo4xXfoMWS/up38yfRFEuLrKPXOXw7BTNL7n0HjZx4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GR3/mtbl9waClDAvfXRTxEJwJVPvn38SN3arv9MNXrNPdgcI/G4LbDkA+liOazkOH
-	 O28Y1v7O2UpmpGNfPG5lUCbmf4C4GBtAKmWCY6axmrd0jZFkCdaQeWtJowYlo0XNbY
-	 Em8oFZRhMbfmct/YSEXIFiLmf3Ecb3EpKNcVhjqRZcekdlajiTeA5Sme2kxqP20xoM
-	 5zV4s+iXLIDp/1bWUv8ex3Xg3e6kOaEDsDxh/ISJMqNQjiY6pjt/ufqiIEXa3WKcNN
-	 ZCjSrIe56X85RtcVoDqSwVcmAc8u8Kv2Zx6133gDRwWbjKVY52748R8fx5stqkvVfx
-	 WccQBhEx9bw8A==
+	b=iJD1uKh1MMUiVUTwLjKVkubKcsieSO5lCZyn+QuCgr21lzFKD+z/fUTguxNdnRgre
+	 zZJbpVSBNVd1ml8hh9PT4aX+Mt0wAfWUg9Mqu0LsHg5oskiNcyCMCFEWYb+W95BdoB
+	 /nQyrRANsecxBWiC8RQY7W0gGOrywym1ytCgm3fgU2aQntowK0ymqO5kU1Aqevg2Pk
+	 Janckm//KTLECMS49mjRRFbjbrwDLj0jUVzZfe5sfieXHpb8AXKj7eerSkFlspjX/5
+	 8oypUFOeDPu/6+jwNDvD6yrr7dG8ayQofeL2epigOADDWgx0WdWNo/MBZH8vaMdfMf
+	 9eIF/lxysMFkw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 12/13] selftests/bpf: Add tracing_multi bpf
- prog link info test
+Subject: Re: [PATCH bpf-next 04/13] bpf: Add tracing_multi link support for
+ bpf progs
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Leon Hwang" <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260809150111.45000-13-leon.hwang@linux.dev>
+In-Reply-To: <20260809150111.45000-5-leon.hwang@linux.dev>
 References: <20260809150111.45000-1-leon.hwang@linux.dev>
- <20260809150111.45000-13-leon.hwang@linux.dev>
+ <20260809150111.45000-5-leon.hwang@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 09 Aug 2026 15:29:39 +0000
-Message-Id: <20260809152940.0EFDF1F000E9@smtp.kernel.org>
+Date: Sun, 09 Aug 2026 15:33:07 +0000
+Message-Id: <20260809153308.5331D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,102 +47,97 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Missing array sorting in user-space targets leads to flaky test
-- [Medium] Uninitialized stack variable `fids` passed to kernel
+- [High] A text poke failure during the detachment of a `tracing_multi` lin=
+k from BPF programs causes a Use-After-Free of the trampoline executable im=
+age and a double free.
+- [Medium] Trampoline flags are not rolled back when `__bpf_trampoline_link=
+_prog` fails during `bpf_trampoline_multi_attach`, permanently corrupting t=
+he state of the shared trampoline.
 --
 
---- Patch [12]: [PATCH bpf-next 12/13] selftests/bpf: Add tracing_multi bpf=
- prog link info test ---
-commit 5ee3239754522a052ad0eb2cf3e2485319bff581
+--- Patch [4]: [PATCH bpf-next 04/13] bpf: Add tracing_multi link support f=
+or bpf progs ---
+commit b93dc01dd11e0331789988b67d9503ac3b565c51
 Author: Leon Hwang <leon.hwang@linux.dev>
 
-selftests/bpf: Add tracing_multi bpf prog link info test
+    bpf: Add tracing_multi link support for bpf progs
    =20
-Verify the link info works well for bpf prog targets of tracing_multi link.
+    Similar to the tracing_multi link support for kernel functions, add
+    support for bpf progs by reusing the 'ids' fields as BTF ids, and adding
+    fds array to indicate the target bpf prog. Then, for each pair of fd+id,
+    they will be the attach targets of tracing_multi link.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/to=
-ols/testing/selftests/bpf/prog_tests/fill_link_info.c
-> index 0918321c8e63d..a5f8bfcb1e07a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-[ ... ]
-> @@ -467,13 +489,48 @@ static int setup_tmulti_targets(const struct bpf_pr=
-ogram *prog,
->  	return -1;
->  }
-> =20
-> +static int setup_tmulti_bpf_prog_targets(const struct bpf_program *prog,=
- int token_fd,
-> +					 const __u64 *cookies,
-> +					 const struct bpf_program * const *target_progs,
-> +					 struct tmulti_target *targets,
-> +					 __u32 *btf_obj_id)
-> +{
-[ ... ]
-> +		targets[i].cookie =3D cookies[i];
-> +		targets[i].id =3D prog_info.id;
-> +		targets[i].func_btf_id =3D func_btf_id;
-> +	}
-> +
-> +	return setup_tmulti_btf_obj_id(prog, btf_obj_id);
-> +}
-
-[Severity: Medium]
-Will this lead to flaky tests? The kernel sorts the tracing_multi targets b=
-y a
-computed key during attachment.
-
-When returning link info, the arrays are returned in this sorted order, and
-verify_tracing_multi_link_info() asserts that they perfectly match the targ=
-ets
-array at the exact same indexes.
-
-However, unlike setup_tmulti_targets(), this function does not call qsort()=
- on
-the targets array. If ID allocation wraps around or another process allocat=
-es
-IDs concurrently, this might fail non-deterministically.
-
-> +
->  static int verify_tracing_multi_link_info(int fd, const struct bpf_progr=
-am *prog,
->  					  const struct tmulti_target *targets,
-> -					  __u32 btf_obj_id, bool has_cookies)
-> +					  __u32 btf_obj_id, __u32 count,
-> +					  bool has_cookies, bool tgt_progs)
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index eddd259d37760..fc51ea2428bee 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -1572,12 +1572,23 @@ static int update_fentry_multi(struct bpf_trampol=
+ine *tr, u32 orig_flags,
+>  			       struct bpf_tramp_image *im, struct ftrace_hash *hash,
+>  			       struct bpf_tracing_multi_data *data)
 >  {
-> +#define TMULTI_CNT (TRACING_MULTI_CNT > TRACING_MULTI_BPF_CNT ? \
-> +		    TRACING_MULTI_CNT : TRACING_MULTI_BPF_CNT)
->  	enum bpf_attach_type attach_type =3D bpf_program__expected_attach_type(=
-prog);
-> -	__u64 addrs[TRACING_MULTI_CNT], cookies[TRACING_MULTI_CNT];
-> -	__u32 ids[TRACING_MULTI_CNT];
-> +	__u64 addrs[TMULTI_CNT], cookies[TMULTI_CNT];
-> +	__u32 ids[TMULTI_CNT], fids[TMULTI_CNT];
->  	struct bpf_link_info info;
->  	__u32 len =3D sizeof(info);
->  	int err, i;
-[ ... ]
->  	memset(ids, 0, sizeof(ids));
->  	memset(cookies, 0, sizeof(cookies));
-> @@ -496,7 +555,8 @@ static int verify_tracing_multi_link_info(int fd, con=
-st struct bpf_program *prog
->  	info.tracing_multi.ids =3D ptr_to_u64(ids);
->  	info.tracing_multi.addrs =3D ptr_to_u64(addrs);
->  	info.tracing_multi.cookies =3D has_cookies ? ptr_to_u64(cookies) : 0;
-> -	info.tracing_multi.count =3D TRACING_MULTI_CNT;
-> +	info.tracing_multi.func_btf_ids =3D tgt_progs ? ptr_to_u64(fids) : 0;
-> +	info.tracing_multi.count =3D count;
+> -	unsigned long addr =3D (unsigned long)(im ? im->image : tr->cur_image->=
+image);
+> +	if (tr->func.ftrace_managed) {
+> +		unsigned long addr =3D (unsigned long)(im ? im->image : tr->cur_image-=
+>image);
 > =20
->  	err =3D bpf_link_get_info_by_fd(fd, &info, &len);
+> -	if (bpf_trampoline_use_jmp(tr->flags))
+> -		addr =3D ftrace_jmp_set(addr);
+> +		if (bpf_trampoline_use_jmp(tr->flags))
+> +			addr =3D ftrace_jmp_set(addr);
+> +
+> +		ftrace_hash_add(hash, data->entry, tr->ip, addr);
+> +	} else {
+> +		void *old_addr =3D tr->cur_image ? tr->cur_image->image : NULL;
+> +		void *new_addr =3D im ? im->image : NULL;
+> +		int ret;
+> +
+> +		ret =3D bpf_trampoline_update_fentry(tr, orig_flags, old_addr, new_add=
+r);
+> +		if (ret)
+> +			return ret;
+
+[Severity: High]
+If bpf_trampoline_update_fentry() fails here, we return the error and bypass
+updating tr->cur_image. In bpf_trampoline_multi_detach(), if
+__bpf_trampoline_unlink_prog() fails, it logs a warning but continues and
+unconditionally calls bpf_trampoline_multi_attach_free().=20
+
+Since tr->cur_image wasn't updated, does bpf_trampoline_multi_attach_free()
+end up freeing the currently active executable image, leading to a
+use-after-free and a double free on the next attach/detach?
+
+> +	}
+> =20
+> -	ftrace_hash_add(hash, data->entry, tr->ip, addr);
+>  	tr->cur_image =3D im;
+>  	return 0;
+>  }
+
+[ ... ]
+
+> @@ -1691,6 +1715,9 @@ int bpf_trampoline_multi_attach(struct bpf_prog *pr=
+og, u32 *ids,
+>  	for_each_mnode(mnode, link) {
+>  		bpf_trampoline_multi_attach_init(mnode->trampoline);
+> =20
+> +		if (progs && progs[i]->aux->tail_call_reachable)
+> +			mnode->trampoline->flags |=3D BPF_TRAMP_F_TAIL_CALL_CTX;
+> +
 
 [Severity: Medium]
-Does this code leave the fids array uninitialized?
+If __bpf_trampoline_link_prog() fails below, the error handler sets
+rollback_cnt =3D i and skips rolling back the current node i.
 
-The other stack arrays (ids, cookies, addrs) are explicitly cleared with
-memset() before being passed to the bpf_link_get_info_by_fd() syscall, but
-fids is not. This could potentially cause issues with uninitialized memory.
+Does this leave the BPF_TRAMP_F_TAIL_CALL_CTX flag permanently set on the
+trampoline?
+
+>  		data->entry =3D &mnode->entry;
+>  		err =3D __bpf_trampoline_link_prog(&mnode->node, mnode->trampoline, NU=
+LL,
+>  						 &trampoline_multi_ops, data);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260809150111.4500=
-0-1-leon.hwang@linux.dev?part=3D12
+0-1-leon.hwang@linux.dev?part=3D4
