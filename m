@@ -1,81 +1,81 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B97440A26
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 20:54:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2F543F8B9
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 20:55:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786395245; cv=pass; b=svt9p02jZY3TQ6Klz2fO9/nm1O4HcTTEYtS4IN0CYPKVsEnVI7V7AR19PrEmKJIQgFBzPh46aILKpcYAfF4ReWpCdZK3bHgCgxNBATFtubHWRpAkMOq6oQM8Mu+ySua6FDKnAl6TZOTNa6eUzLes/jMDSEzosEXy6saJ4ijjhL8=
+	t=1786395333; cv=pass; b=H8IWSWI4kS9AtoQOENB0zymoz3Mwmw6Ttaj38tpHBZNuKx8CXSOPD4EBZAo/V6dUE1uR9pZyvwd3Up7t16snSOteyYnIskaiC3zdZIk6+gG9kwF2ez8DzIDKmHiicJnIdQWiADJ4LEXe85FJDLbkFfHa4aqblSds+7Brq7ljWEk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786395245; c=relaxed/simple;
-	bh=wWO1R5iW+3lbBA+UquVqFB5JjV6n/SrFZrrZTw5YfhU=;
+	s=arc-20240116; t=1786395333; c=relaxed/simple;
+	bh=p3F6ymBJO5EBEkvWBMuW9xqLKEqiAZSvz3sJEqKmjTw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VG7rW6OQjnuX0/k7xLqmJBGpQkU8rTs2xgVDc1qS0f1HRvcRrQcTfZgmhpDS3qWMrqpDEjKTootIwlsverEzYdeFbVHxrlwcjbK+8kOcA/ProwaR8mExJoSkKLwsDQSIg79t25b/BLyAYYMYRGAxp0HdrihSKFVRVibpJ0cq3dE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B0octypa; arc=pass smtp.client-ip=209.85.128.44
+	 To:Cc:Content-Type; b=jKfeVMUcxQvfuDPWvj9b9hQYb4sHv+YfV2/s4ydJDbZ3pTpLLoYnXTJNahTJwe+qfs9xaxApAVx3l/bRjHc9ntpJp/O/s2VI1LfOi98cfaplOJTAXVzbaFN9MXNkpTXxdklEwB27CA8CXn5MLTAuFIr7qnfAkOsJZDmCrNIGSeA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nfkv7BEm; arc=pass smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B0octypa"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4994d67d260so6275e9.1
-        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 13:54:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786395242; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nfkv7BEm"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4994d67d260so6475e9.1
+        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 13:55:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786395330; cv=none;
         d=google.com; s=arc-20260327;
-        b=cvmW7pNEZ1msyILSO0vcc2sdOy3rnXXYNR3OnY+y+A8MKTHZzOKI65QaXfSieI5cqU
-         AscVBSItkQVLVzAelltPYZGQLXlLXbHCORxExYkA+C4ZTzZBY3cg4nLjcj83ejmM+Slc
-         gQUUxHkozf2RxW41YC+QQfTOkZs8pFNlea+mn/2B8izQBdSQNpCt3MhA6TF4/2XErGsS
-         U4buYV3y1996wX9Ux8wqgWZy1I0UXkrxFijQ8xKywuVouKVfecynAFWd4d+tDDTHzRgI
-         wsFDW7e7VyP1AD0mHB0v3bRHKX9l3AkJOalh+cvTpjEAyS4hmh9/cjmVF4BcaCAPT9Nx
-         CxTA==
+        b=khiYrnO0zS6mTCv4PAgaUA+sKvBGba7qO7NJqg58zl6Oj189c8K9FAgwPr2zsEz9co
+         PnmmFTiv0seS2dlX0833ye3gUdYrH0aj7qdLgtxd5N6kWPPUqhvqlWRVvwnIOnh+KG7K
+         qpyay2f9VL81xVz7Efg3C4ax7nPhX1lDjFkQlESZrnLqVlkfF85PxBKWUUhRLWyRZsQa
+         wF3EqFk/NNwqzY1b44/O7MY8LIqwX1nnzb7tk0kEkQwDr32O5TzRULiZWCVJGgBIwaND
+         SMcRmih1vRdlBNTyQvcsLIclTwcIEL6ds8oUBrrOCUJ5Zp148Kg90+6QPPutcjZqjAM+
+         z4xw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=pZyDMZlNYEEbu1aLIM8R0k+H7EZsqSyUl/Im6MARLZw=;
-        fh=N+nc9Ekw9/5ldiIz4X5+TpqZ5LsyEz6uQvy2ae4SSUE=;
-        b=Xfy277xf911IIeC/xAPAq8KdDDby4w4qKNLU9TMF0C4CognumplmBNUQQemCBMepIF
-         ewta61plpW+9IxgH/uHyuirI03xRmgA7Pni2gZKmZbkBL5MOwBvPkRk+ppT780aVmjzU
-         re8rWr4sU7RJNzcdAU56vy+jEWQruFPSLqIZDvXcNRFIjzVn0+Tze+m95pUwP+hvTHDk
-         v4AHG5FiW2AQvCjSqfo1PcP/f46CH9uZ4filTLJFOZqTG99Vn4vexPj/rHovmv+YrFc5
-         amVno1eVVzcR3NeM1Bza6QnFfE+kZbaTkJre60JjRYVf4xl0XNlR9Oi+ZjTrkFeP5Itr
-         VG+Q==;
+        bh=1TtlyjazrX283GLO+zBSmn2h3geHMWiMC9TJl3GAFLw=;
+        fh=sheSDnGf0LVeEPFF8wjZ6wEBbL3UQPp+gXSdgGipdWM=;
+        b=TIUx2UqdIBFYL2gQcR3a5VYFQRG46NDjFx0aBHKWfqG1s0ZDne6QauFiArVG/lLJHA
+         cf+qNHZX2AVT9k3t9pTqNPtr9VLgSfnXuPWDxyw6HDjRY5dWsPIMbr5ms52Vj9FdvNzY
+         ti9kmGuqzTSCVH5FfzUZI96ySmLOscTz0yMGdXzklHYSTedD1ioSOSOoIWLoBH0MAiHk
+         HWjNJs0QQyWpKX71eFu+cgrRHhsa+tvf8+CRnd7gIwORlTyhGGVvMFewbXex+9PYOc89
+         qrWSarB3ZEzcT208dQmy1L8LAo8Hv9JbAxoVhP5jDMHkQKSw6nWg3D02y4aKXV4we3ve
+         RFFw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786395242; x=1787000042; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1786395330; x=1787000130; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=pZyDMZlNYEEbu1aLIM8R0k+H7EZsqSyUl/Im6MARLZw=;
-        b=B0octypaWOH/OMyhD80VB0L0XPbcEokzNHVuUPc3K0quhaNucPWSKBC6doYvsLpN9g
-         YBrJGzBhoS0Zlr9rO5GWVxYAenQ7EuIB+EuFB0uMo7RZ9jwR8Y5yx/mO2djony9gb4qd
-         1g9dLj+xK7dqZN/99Kzxvk381v9k8Qc6JDbN47YXpqpUSCHur2878nRuqAcfY0ZK3s//
-         pLI5vW8ghmndDoVSCVx5s7PQRek5eQF8nGNcakNxb3IMLtZ3tqvnqaVLkjoqX0vAdzy1
-         JJ5hJWrLrkOeTUdQ0oT6Q4v6Y8A7SrP9nL7ig02SX0NwQFkft+3QgEhOyB9wb3tdGYj9
-         ZcBg==
+        bh=1TtlyjazrX283GLO+zBSmn2h3geHMWiMC9TJl3GAFLw=;
+        b=nfkv7BEmpyb9pcHpM9W0Xy59/aaw67HjRAaYbhr2KGIHgEVoAYuUKwa1n7Sjxd2NFt
+         LQuqFe2bIn9Z2oLbIlyDiJWTXJ/OTziPnP3zzjwQthtlKULEUMyH0ZmhsFCuStoA2TOC
+         q2F+eMvSFQmNl0zZvePZAlEdEDfqTgUFTeH6yhrwXLi5NEPFfjopgjzCobIH1ttdx1mx
+         bw6j9V67On2S7FGdSE40Zsp7IIvTFN9gCgmKx8leM5icfgvWrEXKIwzAhNz8ipee5XyA
+         w/nULDofsn9codLnhcysShpkeqNmUQxwCZ4i9qqPJeP8zvjkcLnqh+C3qr0nIuBEctMU
+         FntA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786395242; x=1787000042;
+        d=1e100.net; s=20251104; t=1786395330; x=1787000130;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pZyDMZlNYEEbu1aLIM8R0k+H7EZsqSyUl/Im6MARLZw=;
-        b=gRT6B1XXLyH0tm4zicXHg+ZM7vmKstWTa+lf0WJgv8E1kT5hoBNzH5k4odk91ik1fC
-         6X+nIlnf1opSTkdm1BtXT6WKTjby0bL5P5iLod3My+/Dzt3pjftFkCh8FnyBfByvli0s
-         ufM7utEomLUqWxhMsp39s+qBVG09iEmVSYNkKSvs7xUs64SJAQBwtEoZNwca8Iq/7Tui
-         XgPvJoY4P+pWCHaU3O1ama5KI84JhcqZLHqAbXBDVmA3wAjMf34EpAlTAi4yIzlP4zLs
-         S9ITpT4QccGoebrOLaNnHCHBJfB+OHzcwTEauS4dg2ATSwSWxEJVOHYnt7MfmTWnklzW
-         5rsQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqiVBjS8MeRuq4o35k+PBWrmJIGQMN2bInLCTs4djVPw9aU5KIg1RV4FNhNc6Fonsc2auA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdJ8uGkXWJwg0XBPm6Joe5DoegRZ6g2HD5IQ0NjAtc4+4eNriS
-	s8novs3vKgRmiEIZqqyiW7XEWyNLXh+PVllBsQ0cFA4XT33V41nfBSrvnYYEkWYXNwxwAUtS+4H
-	c6CfRkIht7Ai4odrK3enEJ2VUgelCd6DGeFStulTS
-X-Gm-Gg: AR+sD12JOM3c8A+RQkfYnM0hlU6FbBXwEFS2nIov04h9zkHWZin6+apE5JJ9FNpXt9f
-	IGNFZkg3m2WjXrbaVbZl8U0ygm/nse3mKmtXVSYyqWxv1ufjIIHWHnL9tO8X8kN/aH4k+FEFJyi
-	9RE7Ja76G+eLfofWMPtkbOMGFA7H2IdehP+BH1t5E+Sw/fQptvA/hdcakAr5xt3rwKhsDnhf1pE
-	Q0MdJSThu6WJbZ7CDvKdWujPawsYfUrNT7WsCh4G+DzLkd2PfkpXlbqw2us5o+mjk+70r2ok30C
-	7GQC5SwaWF8xwIl0bPjABvTEalkFFAAgeL1jD24ozVmUGo/66bPE0hlQB0KGVsXZEQkrnHJuHF1
-	7yeuYNMWD0b7fz/WGTnjFgd+3ZQHtTVs=
-X-Received: by 2002:a05:600d:108:20b0:495:4593:616c with SMTP id
- 5b1f17b1804b1-49975c21896mr97115e9.1.1786395241437; Mon, 10 Aug 2026 13:54:01
+        bh=1TtlyjazrX283GLO+zBSmn2h3geHMWiMC9TJl3GAFLw=;
+        b=paKP4PdklRo19/EpS1pXD0gJJCS+567PERQV5C3PjaSNF7MuK8ojXZuakAU9ULBXvg
+         /zSGR2VxtYFb6UuYyGvySDBwvqimFglKzYYOU+U1O6baGL8HLHwfKHWmzvtA57hc/PA2
+         NnllX3InDlZn/3Z2mqewksB4VNOf1Puy+E6KdpYOwHOrj7WKnBfhbD4ssV5eSSSpYuGu
+         I3CWCOPuZsPBTiBVz8fSHAr2vtHuP1Kr/COK6w0HCYvVvxPsel53JLOEjlfdqGpUAIJy
+         B69rdw+d2m8sbWeVlPbrT439HghkkuJ+Eq42e+QPCjqD1unJffK4NfPujdr9taFqUKoA
+         NvwQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrU8v77c0w90e/+GnazkmR/K28XGKeEY2DewaHcO6VFvPd248TT1HpaHUSOfM7oQK1F8LM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJNipeWzVRsirt8JE9KaHiIvwCca7VOi/+ArqnvAgSDLBfWXfX
+	H1ceu0zvK1uG73cTmGC32hho1/sxVIiFK6oSfu90SqNuTJusj6Mx2uSNFZF3oeYT/T5bgcZSLuD
+	LmoKOKvQYMlaV4dg4RldZNEtmPF1aKPIJ16pgKv0V
+X-Gm-Gg: AR+sD11UG3Vn4fdrSwL+yznP63LmS5+C/S5pXw8xBZB8kypi+c0CHotIqnZrE/6tDb0
+	UYlFefR2J+vJpUDbds6M7XlZvZ5+9Y9ph+/KFHGehLvMCmyJv7x9H6F2+00kts4xv5x+ez2CYzt
+	VhecUr7iueZYSI1OEacOMZHoKmF1BHcniMQumDbdROKSAnZixO0IDRuiMSggZxdYiK9Q8DKtjez
+	KbeLlFhWR3h1gky13G5lG18/25My2nrO3x4eGFEAIqym7KK0A70YVerwmEukiY17a+egpKIYkRe
+	L6X5DSvotmFkWHaZSTth9F+YLdsSGe5ZMsKlfzUbez7zJuOZrCxYG+i+KplqgblQRGflGJSs5Wd
+	Uf36RtiZTtN8e8qVqkygq8oN5+QiRKN4GLQAhu+sWL1s=
+X-Received: by 2002:a05:600d:844f:10b0:45f:2940:d194 with SMTP id
+ 5b1f17b1804b1-49974469c4emr98135e9.2.1786395329191; Mon, 10 Aug 2026 13:55:29
  -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -84,14 +84,14 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260805223516.1495988-1-tjmercier@google.com>
- <20260805223516.1495988-2-tjmercier@google.com> <e417cb09-8466-4d9e-9d33-7330d84df12a@gmail.com>
-In-Reply-To: <e417cb09-8466-4d9e-9d33-7330d84df12a@gmail.com>
+ <20260805223516.1495988-3-tjmercier@google.com> <7ce1d67b-ae88-445c-b4f8-ffa0eea9befc@gmail.com>
+In-Reply-To: <7ce1d67b-ae88-445c-b4f8-ffa0eea9befc@gmail.com>
 From: "T.J. Mercier" <tjmercier@google.com>
-Date: Mon, 10 Aug 2026 13:53:49 -0700
-X-Gm-Features: AUfX_mwQi093HuxHPQ90nlznKhMNpxLGKwC-JDmHT7GfWtuPg7zXaBbEWiAKPQk
-Message-ID: <CABdmKX1rWLGyJsrtQopybUzuU-bMe55JqYKPMr1NBd_Yd1K+6A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: htab: Split htab_elem_lru and
- htab_elem_pcpu off of htab_elem
+Date: Mon, 10 Aug 2026 13:55:17 -0700
+X-Gm-Features: AUfX_mwnQN5CLZZEPeGzWJm8VhOlCuBqobtU_eydQz55FE8lX7mgE9HeIN9QUpE
+Message-ID: <CABdmKX1w+xfO5NcV-0_W0gOuAkWRai+p3x0oKwF50cJHG4kKaw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/2] bpf: htab: Reduce elem_size by 8 bytes
+ for small key sizes
 To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
 	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
@@ -100,306 +100,349 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 7, 2026 at 8:25=E2=80=AFAM Mykyta Yatsenko
+On Fri, Aug 7, 2026 at 10:33=E2=80=AFAM Mykyta Yatsenko
 <mykyta.yatsenko5@gmail.com> wrote:
 >
 > On 8/5/26 11:35 PM, T.J. Mercier wrote:
-> > The htab_elem struct is used as the per-element type for all BPF hash
-> > map types and includes bpf_lru_node in a union with a ptr_to_pptr
-> > pointer. For standard (non-LRU, non-PCPU) hash maps, the 24 byte union
-> > allocated for every element is entirely unused. For non-preallocated
-> > PCPU maps, ptr_to_pptr only requires 8 bytes, leaving 16 bytes of unuse=
-d
-> > overhead in the union. For preallocated PCPU maps ptr_to_pptr is unused
-> > since elements are freed to the PCPU freelist.
+> > For standard and PCPU (non-LRU) hash maps with small key sizes (less
+> > than or equal to the word size), comparing keys requires only a single
+> > instruction. Storing a cached 32-bit hash value to shortcut full key
+> > comparisons provides no performance advantage for small keys, and
+> > consumes memory for every element.
 > >
-> > Eliminate this per-element memory overhead by splitting htab_elem into
-> > dedicated structures for each map type:
-> >    - struct htab_elem: Minimal structure for standard hash maps and
-> >      preallocated PCPU maps (saves 24 bytes per element).
-> >    - struct htab_elem_pcpu: Structure for non-preallocated PCPU maps
-> >      containing ptr_to_pptr (saves 16 bytes per element).
-> >    - struct htab_elem_lru: Retains struct bpf_lru_node for LRU maps.
+> > This memory can be saved by eliminating hash along with its associated
+> > 4 byte padding before the key, reducing the elem_size (and key_offset)
+> > by 8 bytes for standard and PCPU maps.
 > >
-> > Because element sizes now vary by map type, add key_offset to struct
-> > bpf_htab to track the dynamic key offset. Update helper accessors and
-> > lookups to compute key and value offsets using htab->key_offset.
+> > Introduce htab_has_hash() to check whether a map requires a cached hash
+> > field. Update htab_elem_set_hash(), lookup_elem_raw(), and
+> > lookup_nulls_elem_raw() to conditionally bypass hash checking and
+> > storage when htab_has_hash() is false.
 > >
-> > Pointers to struct htab_elem in the existing code (e.g. htab_elem_hash)
-> > serve as generic base element pointers. This is possible because
-> > htab_elem, htab_elem_pcpu, and htab_elem_lru share a common initial
-> > sequence, making pointer casts safe.
+> > Together with the previous patch, this reduces the minimum standard and
+> > preallocated hash map element size from 64 bytes down to 32 bytes, and
+> > non-preallocated per-CPU element size from 64 bytes down to 40 bytes.
 > >
 > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
 > > ---
-> >  kernel/bpf/hashtab.c    | 362 +++++++++++++++++++++++++---------------
-> >  kernel/bpf/map_in_map.c |  13 ++
-> >  kernel/bpf/map_in_map.h |   2 +
-> >  3 files changed, 242 insertions(+), 135 deletions(-)
+> >  kernel/bpf/hashtab.c                          | 108 +++++++++++++-----
+> >  .../selftests/bpf/progs/map_ptr_kern.c        |   2 +-
+> >  2 files changed, 79 insertions(+), 31 deletions(-)
 > >
 > > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> > index 9f394e1aa2e8..f54366da459f 100644
+> > index f54366da459f..9967268d453d 100644
 > > --- a/kernel/bpf/hashtab.c
 > > +++ b/kernel/bpf/hashtab.c
-> > @@ -102,11 +102,13 @@ struct bpf_htab {
+> > @@ -100,6 +100,7 @@ struct bpf_htab {
+> >       struct percpu_counter pcount;
+> >       atomic_t count;
 > >       bool use_percpu_counter;
+> > +     bool has_hash;
 > >       u32 n_buckets;  /* number of hash buckets */
 > >       u32 elem_size;  /* size of each element in bytes */
-> > +     u32 key_offset; /* offset of key in bytes */
-> >       u32 hashrnd;
+> >       u32 key_offset; /* offset of key in bytes */
+> > @@ -123,15 +124,13 @@ struct htab_node {
+> >
+> >  struct htab_elem {
+> >       struct htab_node node;
+> > -     u32 hash;
+> > -     char key[] __aligned(8);
+> > +     u8 data[] __aligned(8);
 > >  };
 > >
-> >  /* each htab element is struct htab_elem + key + value */
-> > -struct htab_elem {
-> > +struct htab_elem;
-> > +struct htab_node {
-> >       union {
-> >               struct hlist_nulls_node hash_node;
-> >               struct {
-> > @@ -117,11 +119,27 @@ struct htab_elem {
-> >                       };
-> >               };
-> >       };
-> > -     union {
-> > -             /* pointer to per-cpu pointer */
-> > -             void *ptr_to_pptr;
-> > -             struct bpf_lru_node lru_node;
-> > -     };
-> > +};
-> > +
-> > +struct htab_elem {
-> > +     struct htab_node node;
-> > +     u32 hash;
-> > +     char key[] __aligned(8);
-> > +};
-> > +
-> > +struct htab_elem_lru {
-> > +     struct htab_node node;
-> > +     struct bpf_lru_node lru_node;
-> > +     u32 hash;
-> > +     char key[] __aligned(8);
-> > +};
-> > +
-> > +/* Only for non-preallocated PCPU maps. Preallocated PCPU maps don't n=
+> >  struct htab_elem_lru {
+> >       struct htab_node node;
+> >       struct bpf_lru_node lru_node;
+> > -     u32 hash;
+> > -     char key[] __aligned(8);
+> > +     u8 data[] __aligned(8);
+> >  };
+> >
+> >  /* Only for non-preallocated PCPU maps. Preallocated PCPU maps don't n=
 eed
-> > + * ptr_to_pptr, and use htab_elem.
-> > + */
-> > +struct htab_elem_pcpu {
-> > +     struct htab_node node;
-> > +     void *ptr_to_pptr;
-> >       u32 hash;
-> >       char key[] __aligned(8);
+> > @@ -140,13 +139,13 @@ struct htab_elem_lru {
+> >  struct htab_elem_pcpu {
+> >       struct htab_node node;
+> >       void *ptr_to_pptr;
+> > -     u32 hash;
+> > -     char key[] __aligned(8);
+> > +     u8 data[] __aligned(8);
 > >  };
-> > @@ -136,6 +154,21 @@ static inline bool htab_is_prealloc(const struct b=
-pf_htab *htab)
-> >       return !(htab->map.map_flags & BPF_F_NO_PREALLOC);
-> >  }
 > >
-> > +static inline struct bpf_lru_node *htab_elem_lru_node(struct htab_elem=
- *l)
-> > +{
-> > +     return &((struct htab_elem_lru *)l)->lru_node;
-> > +}
-> > +
-> > +static inline void *htab_elem_get_ptr_to_pptr(struct htab_elem *l)
-> > +{
-> > +     return ((struct htab_elem_pcpu *)l)->ptr_to_pptr;
-> > +}
-> > +
-> > +static inline void htab_elem_set_ptr_to_pptr(struct htab_elem *l, void=
- *ptr)
-> > +{
-> > +     ((struct htab_elem_pcpu *)l)->ptr_to_pptr =3D ptr;
-> > +}
-> > +
-> >  static void htab_init_buckets(struct bpf_htab *htab)
-> >  {
-> >       unsigned int i;
-> > @@ -183,25 +216,30 @@ static inline bool is_fd_htab(const struct bpf_ht=
-ab *htab)
-> >       return htab->map.map_type =3D=3D BPF_MAP_TYPE_HASH_OF_MAPS;
-> >  }
+> >  struct htab_btf_record {
+> >       struct btf_record *record;
+> >       u32 key_size;
+> > +     u32 key_offset;
+> >  };
 > >
-> > -static inline void *htab_elem_value(struct htab_elem *l, u32 key_size)
-> > +static inline void *htab_elem_key(struct bpf_htab *htab, struct htab_e=
-lem *l)
-> > +{
-> > +     return (void *)l + htab->key_offset;
-> > +}
-> > +
-> > +static inline void *htab_elem_value(struct bpf_htab *htab, struct htab=
-_elem *l)
-> >  {
-> > -     return l->key + round_up(key_size, 8);
-> > +     return htab_elem_key(htab, l) + round_up(htab->map.key_size, 8);
-> >  }
-> >
-> > -static inline void htab_elem_set_ptr(struct htab_elem *l, u32 key_size=
-,
-> > +static inline void htab_elem_set_ptr(struct bpf_htab *htab, struct hta=
-b_elem *l,
-> >                                    void __percpu *pptr)
-> >  {
-> > -     *(void __percpu **)htab_elem_value(l, key_size) =3D pptr;
-> > +     *(void __percpu **)htab_elem_value(htab, l) =3D pptr;
-> >  }
-> >
-> > -static inline void __percpu *htab_elem_get_ptr(struct htab_elem *l, u3=
-2 key_size)
-> > +static inline void __percpu *htab_elem_get_ptr(struct bpf_htab *htab, =
-struct htab_elem *l)
-> >  {
-> > -     return *(void __percpu **)htab_elem_value(l, key_size);
-> > +     return *(void __percpu **)htab_elem_value(htab, l);
-> >  }
-> >
-> > -static void *fd_htab_map_get_ptr(const struct bpf_map *map, struct hta=
-b_elem *l)
-> > +static void *fd_htab_map_get_ptr(struct bpf_htab *htab, struct htab_el=
-em *l)
-> >  {
-> > -     return *(void **)htab_elem_value(l, map->key_size);
-> > +     return *(void **)htab_elem_value(htab, l);
-> >  }
-> >
-> >  static struct htab_elem *get_htab_elem(struct bpf_htab *htab, int i)
-> > @@ -209,6 +247,26 @@ static struct htab_elem *get_htab_elem(struct bpf_=
-htab *htab, int i)
+> >  static inline bool htab_is_prealloc(const struct bpf_htab *htab)
+> > @@ -247,24 +246,31 @@ static struct htab_elem *get_htab_elem(struct bpf=
+_htab *htab, int i)
 > >       return (struct htab_elem *) (htab->elems + i * (u64)htab->elem_si=
 ze);
 > >  }
 > >
-> > +static inline u32 htab_elem_hash(struct bpf_htab *htab, struct htab_el=
+> > +static inline bool htab_has_hash(const struct bpf_htab *htab)
+> > +{
+> > +     return htab->has_hash;
+> > +}
+> > +
+> >  static inline u32 htab_elem_hash(struct bpf_htab *htab, struct htab_el=
 em *l)
-> > +{
-> > +     if (htab_is_lru(htab))
-> > +             return ((struct htab_elem_lru *)l)->hash;
-> > +     else if (htab_is_percpu(htab) && !htab_is_prealloc(htab))
-> > +             return ((struct htab_elem_pcpu *)l)->hash;
->
-> These casts in getter/setter are a bit annoying, not sure if there is a w=
-ay to
-> get rid of them.
-
-Since this is only called for element types that have hashes, we can
-use the fact that htab_elem_key() is always exactly 8 bytes after the
-the hash.
-
-return *(u32 *)(htab_elem_key(htab, l) - 8);
-
-Gets rid of the branching too! But sorry, there is still some casting.
-And void* arithmetic without even more casting.
-
-> > +     else
-> > +             return l->hash;
-> > +}
-> > +
-> > +static inline void htab_elem_set_hash(struct bpf_htab *htab, struct ht=
+> >  {
+> >       if (htab_is_lru(htab))
+> > -             return ((struct htab_elem_lru *)l)->hash;
+> > +             return *(u32 *)((struct htab_elem_lru *)l)->data;
+> >       else if (htab_is_percpu(htab) && !htab_is_prealloc(htab))
+> > -             return ((struct htab_elem_pcpu *)l)->hash;
+> > +             return *(u32 *)((struct htab_elem_pcpu *)l)->data;
+> >       else
+> > -             return l->hash;
+> > +             return *(u32 *)l->data;
+> >  }
+> >
+> >  static inline void htab_elem_set_hash(struct bpf_htab *htab, struct ht=
 ab_elem *l, u32 hash)
-> > +{
-> > +     if (htab_is_lru(htab))
-> > +             ((struct htab_elem_lru *)l)->hash =3D hash;
-> > +     else if (htab_is_percpu(htab) && !htab_is_prealloc(htab))
-> > +             ((struct htab_elem_pcpu *)l)->hash =3D hash;
-> > +     else
-> > +             l->hash =3D hash;
-> > +}
-> > +
-> ...
-> >       htab->extra_elems =3D pptr;
-> > @@ -425,8 +481,8 @@ static int htab_map_alloc_check(union bpf_attr *att=
-r)
-> >       bool zero_seed =3D (attr->map_flags & BPF_F_ZERO_SEED);
-> >       int numa_node =3D bpf_map_attr_numa_node(attr);
+> >  {
+> > +     if (!htab_has_hash(htab))
+> > +             return;
+> >       if (htab_is_lru(htab))
+> > -             ((struct htab_elem_lru *)l)->hash =3D hash;
+> > +             *(u32 *)((struct htab_elem_lru *)l)->data =3D hash;
+> >       else if (htab_is_percpu(htab) && !htab_is_prealloc(htab))
+> > -             ((struct htab_elem_pcpu *)l)->hash =3D hash;
+> > +             *(u32 *)((struct htab_elem_pcpu *)l)->data =3D hash;
+> >       else
+> > -             l->hash =3D hash;
+> > +             *(u32 *)l->data =3D hash;
+> >  }
 > >
-> > -     BUILD_BUG_ON(offsetof(struct htab_elem, fnode.next) !=3D
-> > -                  offsetof(struct htab_elem, hash_node.pprev));
-> > +     BUILD_BUG_ON(offsetof(struct htab_node, fnode.next) !=3D
-> > +                  offsetof(struct htab_node, hash_node.pprev));
-> >
-> >       if (zero_seed && !capable(CAP_SYS_ADMIN))
-> >               /* Guard against local DoS, and discourage production use=
-. */
-> > @@ -476,7 +532,7 @@ static void htab_mem_dtor(void *obj, void *ctx)
+> >  /* Both percpu and fd htab support in-place update, so no need for
+> > @@ -405,7 +411,7 @@ static int prealloc_init(struct bpf_htab *htab)
+> >       if (htab_is_lru(htab))
+> >               err =3D bpf_lru_init(&htab->lru,
+> >                                  htab->map.map_flags & BPF_F_NO_COMMON_=
+LRU,
+> > -                                offsetof(struct htab_elem_lru, hash) -
+> > +                                offsetof(struct htab_elem_lru, data) -
+> >                                  offsetof(struct htab_elem_lru, lru_nod=
+e),
+> >                                  htab_lru_map_delete_node,
+> >                                  htab);
+> > @@ -532,7 +538,7 @@ static void htab_mem_dtor(void *obj, void *ctx)
 > >       if (IS_ERR_OR_NULL(hrec->record))
 > >               return;
 > >
-> > -     map_value =3D htab_elem_value(elem, hrec->key_size);
-> > +     map_value =3D (void *)elem + sizeof(struct htab_elem) + round_up(=
+> > -     map_value =3D (void *)elem + sizeof(struct htab_elem) + round_up(=
 hrec->key_size, 8);
->
-> Why this can't be htab_elem_value()?
-
-htab_elem_value() requires a struct bpf_htab pointer, but we can't use
-that here because it might have already been freed.
-
+> > +     map_value =3D (void *)elem + hrec->key_offset + round_up(hrec->ke=
+y_size, 8);
 > >       bpf_obj_free_fields(hrec->record, map_value);
 > >  }
 > >
-> > @@ -583,8 +639,14 @@ static struct bpf_map *htab_map_alloc(union bpf_at=
-tr *attr)
-> >
-> >       htab->n_buckets =3D roundup_pow_of_two(htab->map.max_entries);
-> >
-> > -     htab->elem_size =3D sizeof(struct htab_elem) +
-> > -                       round_up(htab->map.key_size, 8);
-> > +     if (htab_is_lru(htab))
-> > +             htab->key_offset =3D sizeof(struct htab_elem_lru);
->
-> nit: I think it'll be nicer to use explicit offsetof().
-
-Yeah it does get changed to offsetof(data) in the second patch, but
-I'll change it to offsetof(key) here in the first patch too.
-
-> > +     else if (percpu && !prealloc)
-> > +             htab->key_offset =3D sizeof(struct htab_elem_pcpu);
-> > +     else
-> > +             htab->key_offset =3D sizeof(struct htab_elem);
-> > +
-> > +     htab->elem_size =3D htab->key_offset + round_up(htab->map.key_siz=
-e, 8);
-> >       if (percpu)
-> >               htab->elem_size +=3D sizeof(void *);
-> >       else
-> > @@ -692,14 +754,16 @@ static inline struct hlist_nulls_head *select_buc=
-ket(struct bpf_htab *htab, u32
+> > @@ -558,7 +564,7 @@ static void htab_dtor_ctx_free(void *ctx)
 > >  }
 > >
-> ...
-> > @@ -912,18 +982,19 @@ static int htab_map_get_next_key(struct bpf_map *=
-map, void *key, void *next_key)
-> >       head =3D select_bucket(htab, hash);
-> >
-> >       /* lookup the key */
-> > -     l =3D lookup_nulls_elem_raw(head, hash, key, key_size, htab->n_bu=
-ckets);
-> > +     l =3D lookup_nulls_elem_raw(htab, head, hash, key, key_size, htab=
-->n_buckets);
-> >
-> >       if (!l)
-> >               goto find_first_elem;
-> >
-> >       /* key was found, get next key in the same bucket */
-> > -     next_l =3D hlist_nulls_entry_safe(rcu_dereference_raw(hlist_nulls=
-_next_rcu(&l->hash_node)),
-> > -                               struct htab_elem, hash_node);
-> > +     next_l =3D hlist_nulls_entry_safe(
-> > +                     rcu_dereference_raw(hlist_nulls_next_rcu(&l->node=
-.hash_node)),
+> >  static int bpf_ma_set_dtor(struct bpf_map *map, struct bpf_mem_alloc *=
+ma,
+> > -                        void (*dtor)(void *, void *))
+> > +                        void (*dtor)(void *, void *), u32 key_offset)
 >
-> nit: I think this line has not changed.
+> do we need to add key_offset param? What if we read key_offset from map->=
+htab->key_offset?
 
-->hash_node got changed to ->node.hash_node putting the line width
-over 100 chars, so I wrapped it.
+Ah, but this is used for both bpf_htab and bpf_rhtab, so container_of
+doesn't quite work. We could depend on the fact that map is the first
+element of both bpf_rhtab and bpf_htab, but bpf_rhtab doesn't have
+key_offset since it's always `offsetof(struct rhtab_elem, data)`. So
+we'd have to add key_offset to bpf_rhtab for that to work, and that
+seems like overkill vs adding the param here.
 
-
-> > +                     struct htab_elem, node.hash_node);
+> >  {
+> >       struct htab_btf_record *hrec;
+> >       int err;
+> > @@ -571,6 +577,7 @@ static int bpf_ma_set_dtor(struct bpf_map *map, str=
+uct bpf_mem_alloc *ma,
+> >       if (!hrec)
+> >               return -ENOMEM;
+> >       hrec->key_size =3D map->key_size;
+> > +     hrec->key_offset =3D key_offset;
+> >       hrec->record =3D btf_record_dup(map->record);
+> >       if (IS_ERR(hrec->record)) {
+> >               err =3D PTR_ERR(hrec->record);
+> > @@ -593,9 +600,9 @@ static int htab_map_check_btf(struct bpf_map *map, =
+const struct btf *btf,
+> >        * populated in htab_map_alloc(), so it will always appear as NUL=
+L.
+> >        */
+> >       if (htab_is_percpu(htab))
+> > -             return bpf_ma_set_dtor(map, &htab->pcpu_ma, htab_pcpu_mem=
+_dtor);
+> > +             return bpf_ma_set_dtor(map, &htab->pcpu_ma, htab_pcpu_mem=
+_dtor, htab->key_offset);
+> >       else
+> > -             return bpf_ma_set_dtor(map, &htab->ma, htab_mem_dtor);
+> > +             return bpf_ma_set_dtor(map, &htab->ma, htab_mem_dtor, hta=
+b->key_offset);
+> >  }
 > >
-> >       if (next_l) {
-> >               /* if next elem in this hash list is non-zero, just retur=
-n it */
-> > -             memcpy(next_key, next_l->key, key_size);
-> > +             memcpy(next_key, htab_elem_key(htab, next_l), key_size);
-> >               return 0;
+> >  static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+> > @@ -618,6 +625,13 @@ static struct bpf_map *htab_map_alloc(union bpf_at=
+tr *attr)
+> >
+> >       bpf_map_init_from_attr(&htab->map, attr);
+> >
+> > +     /* Avoid hash memory use and comparisons where unnecessary.
+> > +      * u32 hash reads are always atomic. If we elide them, key compar=
+isons must also be atomic
+> > +      * to avoid false positive key matches due to torn key reads / wr=
+ites. This is only possible
+> > +      * when the key fits within a word, so check key_size.
+> > +      */
+> > +     htab->has_hash =3D htab_is_lru(htab) || htab->map.key_size > size=
+of(unsigned long);
+> > +
+> >       if (percpu_lru) {
+> >               /* ensure each CPU's lru list has >=3D1 elements.
+> >                * since we are at it, make each lru list has the same
+> > @@ -640,11 +654,13 @@ static struct bpf_map *htab_map_alloc(union bpf_a=
+ttr *attr)
+> >       htab->n_buckets =3D roundup_pow_of_two(htab->map.max_entries);
+> >
+> >       if (htab_is_lru(htab))
+> > -             htab->key_offset =3D sizeof(struct htab_elem_lru);
+> > +             htab->key_offset =3D offsetof(struct htab_elem_lru, data)=
+ + 8;
+> >       else if (percpu && !prealloc)
+> > -             htab->key_offset =3D sizeof(struct htab_elem_pcpu);
+> > +             htab->key_offset =3D offsetof(struct htab_elem_pcpu, data=
+) +
+> > +                                (htab_has_hash(htab) ? 8 : 0);
+> >       else
+> > -             htab->key_offset =3D sizeof(struct htab_elem);
+> > +             htab->key_offset =3D offsetof(struct htab_elem, data) +
+> > +                                (htab_has_hash(htab) ? 8 : 0);
+> >
+> >       htab->elem_size =3D htab->key_offset + round_up(htab->map.key_siz=
+e, 8);
+> >       if (percpu)
+> > @@ -761,10 +777,22 @@ static struct htab_elem *lookup_elem_raw(struct b=
+pf_htab *htab,
+> >       struct hlist_nulls_node *n;
+> >       struct htab_elem *l;
+> >
+> > -     hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
+> > -             if (htab_elem_hash(htab, l) =3D=3D hash &&
+> > -                 !memcmp(htab_elem_key(htab, l), key, key_size))
+> > -                     return l;
+> > +     if (htab_has_hash(htab)) {
+> > +             hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node=
+)
+> > +                     if (htab_elem_hash(htab, l) =3D=3D hash &&
+> > +                         !memcmp(htab_elem_key(htab, l), key, key_size=
+))
+> > +                             return l;
+> > +     } else {
+> > +             /* When hash is omitted, key comparisons must be atomic. =
+Zero extend
+> > +              * the caller's key to the word size to support an atomic=
+ compare.
+> > +              */
+> > +             unsigned long k =3D 0;
+> > +
+> > +             memcpy(&k, key, key_size);
+> > +             hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node=
+)
+> > +                     if (READ_ONCE(*(unsigned long *)htab_elem_key(hta=
+b, l)) =3D=3D k)
+> > +                             return l;
+> > +     }
+> >
+> >       return NULL;
+> >  }
+> > @@ -782,10 +810,20 @@ static struct htab_elem *lookup_nulls_elem_raw(st=
+ruct bpf_htab *htab,
+> >       struct htab_elem *l;
+> >
+> >  again:
+> > -     hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node)
+> > -             if (htab_elem_hash(htab, l) =3D=3D hash &&
+> > -                 !memcmp(htab_elem_key(htab, l), key, key_size))
+> > -                     return l;
+> > +     if (htab_has_hash(htab)) {
+> > +             hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node=
+)
+> > +                     if (htab_elem_hash(htab, l) =3D=3D hash &&
+> > +                         !memcmp(htab_elem_key(htab, l), key, key_size=
+))
+> > +                             return l;
+> > +     } else {
+> > +             /* See lookup_elem_raw() comment above. */
+> > +             unsigned long k =3D 0;
+> > +
+> > +             memcpy(&k, key, key_size);
+> > +             hlist_nulls_for_each_entry_rcu(l, n, head, node.hash_node=
+)
+> > +                     if (READ_ONCE(*(unsigned long *)htab_elem_key(hta=
+b, l)) =3D=3D k)
+> > +                             return l;
+> > +     }
+>
+> This hunk is quite big, maybe move it to a separate function to reuse in
+> lookup_elem_raw() and lookup_nulls_elem_raw().
+
+Thanks, I've prepped that for the next version. I will probably send
+that in another day or two since the merge window is coming soonish.
+
+
+
+> >       if (unlikely(get_nulls_value(n) !=3D (hash & (n_buckets - 1))))
+> >               goto again;
+> > @@ -1188,7 +1226,17 @@ static struct htab_elem *alloc_htab_elem(struct =
+bpf_htab *htab, void *key,
+> >               }
 > >       }
-> >  ...
+> >
+> > -     memcpy(htab_elem_key(htab, l_new), key, key_size);
+> > +     if (htab_has_hash(htab)) {
+> > +             memcpy(htab_elem_key(htab, l_new), key, key_size);
+> > +     } else {
+> > +             /* Zero-extend key into k for an atomic write to support
+> > +              * lockless RCU readers.
+> > +              */
+> > +             unsigned long k =3D 0;
+> > +
+> > +             memcpy(&k, key, key_size);
+> > +             WRITE_ONCE(*(unsigned long *)htab_elem_key(htab, l_new), =
+k);
+> > +     }
+> >       if (percpu) {
+> >               if (prealloc) {
+> >                       pptr =3D htab_elem_get_ptr(htab, l_new);
+> > @@ -3191,7 +3239,7 @@ static int rhtab_map_check_btf(struct bpf_map *ma=
+p, const struct btf *btf,
+> >  {
+> >       struct bpf_rhtab *rhtab =3D container_of(map, struct bpf_rhtab, m=
+ap);
+> >
+> > -     return bpf_ma_set_dtor(map, &rhtab->ma, rhtab_mem_dtor);
+> > +     return bpf_ma_set_dtor(map, &rhtab->ma, rhtab_mem_dtor, offsetof(=
+struct rhtab_elem, data));
+> >  }
+> >
+> >  static void rhtab_map_free_internal_structs(struct bpf_map *map)
+> > diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/t=
+esting/selftests/bpf/progs/map_ptr_kern.c
+> > index 373c8d17ea55..6bd4cb68c20c 100644
+> > --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> > +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+> > @@ -114,7 +114,7 @@ static inline int check_hash(void)
+> >       VERIFY(check_default_noinline(&hash->map, map));
+> >
+> >       VERIFY(hash->n_buckets =3D=3D MAX_ENTRIES);
+> > -     VERIFY(hash->elem_size =3D=3D 64);
+> > +     VERIFY(hash->elem_size =3D=3D 32);
+> >
+> >       VERIFY(hash->count.counter =3D=3D 0);
+> >       VERIFY(bpf_map_sum_elem_count(map) =3D=3D 0);
+>
