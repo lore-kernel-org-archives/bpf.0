@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4021437473
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 19:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFAA43B3F8
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 19:10:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786389019; cv=none; b=RiqEOYxIs0EvwGgCL0fe0Eg7j1PJF5x3W1+JKP9T9psyD7gr1mhGIJ/UEOnoHlMcoWrpUMnybudG7q8QlBvD2/ijFNX2x7+dDgxej0gGhckJpwTEkMqwGlnOW2fw7q26BNkYuf4tdMd/ZvMMkV2MV6tp9R6HYRW0eZMv8bJAu9A=
+	t=1786389023; cv=none; b=FA1CYIq047dgQSzrMZU+06s3XRul0plL5EGiK1NeUguud6dJQZ+CHfqkiTxqzr6a2h+gyG/QSIrvq9ATndCjhFNPiGpPlZusBVRv7WxzslQhqyXJvj6E1wVRP6K2WyBAY1xzoO8rwBsERc6jmStiM5nO9tYwBTV4Uh1hWGVrBWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786389019; c=relaxed/simple;
-	bh=6H0gHlkQ3TU1Zmh++F6NJdT0j6Sx24eI0hbDT5wdizg=;
+	s=arc-20240116; t=1786389023; c=relaxed/simple;
+	bh=5ED6TOqbjN6de3t0ufjU95xk6xSpAKQ9bE82c1IEPSo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qgxKPAs3bXHJeqmGaXxmRdFmLfQJVG02gL4qy5PPnrIKovpse2WERCPiJ+VdvBwJ6+Gj3cUme+0VXoJlGPw4x4XTNyiLItF38N3lKs8Tp9IQqp8Ats2yU+KADL4kYU7sFF/ZTOAOjufyx9qECLbLj6tNmDOgSX083j0uIjYsDhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U2w8mVWy; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=mvn+ZTqpmyDq+bH89DtOsTN8JE4KbV6zBwhyGe1WeSvtgRfAvHaTWOs23jhGiVUv4mf0/cMoK7J31wMSlFE6nKWbPnDPMDz9OUJW8zCBcYKyz0uW77jvTyu8VrtSHl8qRr4wrnUZcTF4afQaSHdMCsLQJVHPvqdoFwC6EtjhEmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fmch5vE5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U2w8mVWy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3721F00A3A;
-	Mon, 10 Aug 2026 19:10:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fmch5vE5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A48341F000E9;
+	Mon, 10 Aug 2026 19:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786389012;
-	bh=46E5G3SUc5WRgybNXsZYt+iz8hcGD+cHFUinzm14K8E=;
+	s=k20260515; t=1786389017;
+	bh=Qif3xrfQ3wjNzMq2aFEVytQdksPiM0gt5foGOkLD7Io=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=U2w8mVWyg9eDKgZWIzXEJSMs3KclihH9XWTAMXgwzBZRQ/aCaogrdlj7XZTrVk2c0
-	 d9Xa1vtTz/zRTVjuSCcVAXAHHN6DMNhAhAAL71nIXDoZMFQrUQPagLiPs9suS5D0cz
-	 IMkiSbLEGvqE8XLOMdIIpr8ALKRYdMRtLj7R3TOILm0vrsBc8cldJoV5M6fVKblz64
-	 euYvfrvi3qEmWOTFOwqt/u/k7/BR2sX3abt+OmWq9HT75P0pHG8yFvfhgC38WNSAf2
-	 Pvf9X9LFH5OaUP9CTsoedN8Vt1rb2cEXoMcOaz5/dcUdmZ2aZPqRQE21pn3u3fsvhp
-	 8E89FskMY+Njw==
+	b=Fmch5vE5eueh3p/ghFGsascuSkAA+gd+BQO6f+CbyZsN5JYp1zhK9W3S6qIWIuJkt
+	 Q8fXU11CKXHKJY+NsbxW0PK6R5R2swBb0N+lhHtOZ5WOg2seBmhDQeTaSLXSozloeU
+	 3qieLa7HlbWKlOLA4BnkxdjwI26yib75HkFR2g5ryKzS6IWafHax7ixUSxpNOqpoBi
+	 hCeVXXN5AK57oKflwmYF4Ypgdy74gOZ4SqA76cIrWr4yW+6uS4OS6JHDt/PiQLUCze
+	 jTUfRX0AERbwNN/ThgJqcTljJyw8Nh6lIUk502EgiHIjmr3BXsoGuNeJ++uHLIaswH
+	 PSFjU+Br8nhHQ==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
 	Will Deacon <will@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH bpf-next 6/7] selftests/bpf: Enable __arena argument tests on arm64
-Date: Mon, 10 Aug 2026 12:09:19 -0700
-Message-ID: <20260810190922.3408757-7-puranjay@kernel.org>
+Subject: [PATCH bpf-next 7/7] selftests/bpf: Test a multi-slot argument before a struct_ops arena argument
+Date: Mon, 10 Aug 2026 12:09:20 -0700
+Message-ID: <20260810190922.3408757-8-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260810190922.3408757-1-puranjay@kernel.org>
 References: <20260810190922.3408757-1-puranjay@kernel.org>
@@ -55,126 +55,158 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The arena kfunc and struct_ops argument tests were restricted to x86-64
-because it was the only JIT that implemented the conversions. arm64 does
-now, so let them run there too: tag every program in arena_kfunc.c with
-__arch_arm64 in addition to __arch_x86_64, and widen the __x86_64__
-guards in the struct_ops arena test.
+The trampoline reads the __arena flag from the btf_func_model per
+argument but stores the ctx one register slot at a time, so the two only
+line up if every preceding argument occupies exactly one slot. Every
+arena-bearing member of bpf_testmod_ops3 takes single-slot arguments, so
+nothing exercises the mapping and a mis-indexed arg_flags lookup would
+go unnoticed on any architecture.
 
-Without this the tests report SKIP on arm64 rather than exercising the
-newly added JIT support.
+Add test_arena_multislot(), whose first argument is a 16-byte struct
+passed by value. It fills ctx[0] and ctx[1], putting the arena pointer
+at argument index one but slot two. The callback checks both halves of
+the struct before dereferencing ctx[2], so a JIT that walks registers
+instead of arguments converts the wrong slot and fails the test.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- .../selftests/bpf/prog_tests/test_struct_ops_arena.c   | 10 +++++-----
- tools/testing/selftests/bpf/progs/arena_kfunc.c        |  9 +++++++++
- 2 files changed, 14 insertions(+), 5 deletions(-)
+ .../selftests/bpf/progs/struct_ops_arena.c    | 24 +++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 15 ++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.h    |  8 +++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  1 +
+ 4 files changed, 48 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-index 940ec2cda0d52..7f9f54ba3fbe5 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-@@ -6,7 +6,7 @@
- #include "struct_ops_arena_attach.skel.h"
- #include "struct_ops_arena_fail.skel.h"
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena.c b/tools/testing/selftests/bpf/progs/struct_ops_arena.c
+index ba04c73d8d967..8aa8639df91f0 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_arena.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_arena.c
+@@ -59,11 +59,28 @@ int test_arena_stack_cb(unsigned long long *ctx)
+ 	return 0;
+ }
  
--#if defined(__x86_64__)
-+#if defined(__x86_64__) || defined(__aarch64__)
- /*
-  * Attach callbacks with __arena and __arena__nullable arguments and drive
-  * them through the bpf_testmod_ops3_call_test_arena*() kfuncs.
-@@ -111,11 +111,11 @@ static void arena_arg_attach(void)
- void serial_test_struct_ops_arena(void)
- {
- 	/*
--	 * Arena struct_ops arguments need JIT support, currently x86-64 only.
--	 * Elsewhere verification fails with "JIT does not support arena
--	 * arguments", so the programs cannot even load.
-+	 * Arena struct_ops arguments need JIT support, currently x86-64 and
-+	 * arm64 only. Elsewhere verification fails with "JIT does not support
-+	 * arena arguments", so the programs cannot even load.
- 	 */
--#if defined(__x86_64__)
-+#if defined(__x86_64__) || defined(__aarch64__)
- 	if (test__start_subtest("arena_arg"))
- 		arena_arg();
- 	if (test__start_subtest("arena_arg_fail"))
-diff --git a/tools/testing/selftests/bpf/progs/arena_kfunc.c b/tools/testing/selftests/bpf/progs/arena_kfunc.c
-index cdcea889da586..bf0d304e0e59c 100644
---- a/tools/testing/selftests/bpf/progs/arena_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/arena_kfunc.c
-@@ -27,6 +27,7 @@ volatile u64 stash;
++SEC("struct_ops/test_arena_multislot")
++int test_arena_multislot_cb(unsigned long long *ctx)
++{
++	u64 __arena *ptr = (u64 __arena *)ctx[2];
++
++	arena_touch++;
++	/*
++	 * The 16-byte struct occupies ctx[0] and ctx[1], so @ptr is argument
++	 * one but slot two. Getting that wrong hands the callback a scalar.
++	 */
++	if (ctx[0] != 11 || ctx[1] != 22)
++		return 0xbad;
++	*ptr += 1;
++	return 0;
++}
++
+ SEC(".struct_ops.link")
+ struct bpf_testmod_ops3 testmod_arena = {
+ 	.test_arena = (void *)test_arena_cb,
+ 	.test_arena_nullable = (void *)test_arena_nullable_cb,
+ 	.test_arena_stack = (void *)test_arena_stack_cb,
++	.test_arena_multislot = (void *)test_arena_multislot_cb,
+ };
  
  SEC("syscall")
- __arch_x86_64
-+__arch_arm64
- __success __retval(0)
- int arena_arg_forms(void *ctx)
- {
-@@ -70,6 +71,7 @@ int arena_arg_forms(void *ctx)
-  */
- SEC("syscall")
- __arch_x86_64
-+__arch_arm64
- __success __retval(0)
- int arena_arg_rebase(void *ctx)
- {
-@@ -111,6 +113,7 @@ int arena_arg_rebase(void *ctx)
+@@ -109,6 +126,13 @@ int trigger(void *ctx)
+ 	if (*val != 44)
+ 		return 9;
  
- SEC("syscall")
- __arch_x86_64
-+__arch_arm64
- __success __retval(0)
- int arena_args5(void *ctx)
- {
-@@ -142,6 +145,7 @@ int arena_args5(void *ctx)
++	/* a multi-slot arg precedes the arena pointer here */
++	ret = bpf_testmod_ops3_call_test_arena_multislot((u64 *)val);
++	if (ret)
++		return 10;
++	if (*val != 45)
++		return 11;
++
+ 	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
+ #endif
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index a6133f7521f34..9366a3c578f13 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -402,12 +402,19 @@ static int bpf_testmod_ops3__test_arena_stack(u64 a, u64 b, u64 c, u64 d,
+ 	return 0;
+ }
  
- SEC("syscall")
- __arch_x86_64
-+__arch_arm64
- __success __retval(0)
- int arena_arg_mixed(void *ctx)
- {
-@@ -169,6 +173,7 @@ int arena_arg_mixed(void *ctx)
- /* kernel-side faults on unpopulated pages recover via the scratch page */
- SEC("syscall")
- __arch_x86_64
-+__arch_arm64
- __success __retval(0)
- int arena_arg_unpopulated(void *ctx)
- {
-@@ -189,6 +194,7 @@ int arena_arg_unpopulated(void *ctx)
++static int bpf_testmod_ops3__test_arena_multislot(struct bpf_testmod_arena_pair p,
++						  u64 *ptr__arena)
++{
++	return 0;
++}
++
+ static struct bpf_testmod_ops3 __bpf_testmod_ops3 = {
+ 	.test_1 = bpf_testmod_test_3,
+ 	.test_2 = bpf_testmod_test_4,
+ 	.test_arena = bpf_testmod_ops3__test_arena,
+ 	.test_arena_nullable = bpf_testmod_ops3__test_arena_nullable,
+ 	.test_arena_stack = bpf_testmod_ops3__test_arena_stack,
++	.test_arena_multislot = bpf_testmod_ops3__test_arena_multislot,
+ };
  
- SEC("syscall")
- __arch_x86_64
-+__arch_arm64
- __failure __msg("arena pointer requires a program with an associated arena")
- int arena_arg_no_arena(void *ctx)
- {
-@@ -198,6 +204,7 @@ int arena_arg_no_arena(void *ctx)
+ static void bpf_testmod_test_struct_ops3(void)
+@@ -441,6 +448,13 @@ __bpf_kfunc int bpf_testmod_ops3_call_test_arena_stack(u64 *ptr__arena)
+ 	return st_ops3->test_arena_stack(1, 2, 3, 4, 5, 6, 7, 8, ptr__arena);
+ }
  
- SEC("syscall")
- __arch_x86_64
-+__arch_arm64
- __failure __msg("is not a pointer to arena or scalar")
- int arena_arg_bad_reg(void *ctx)
- {
-@@ -213,6 +220,7 @@ int arena_arg_bad_reg(void *ctx)
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- SEC("syscall")
- __arch_x86_64
-+__arch_arm64
- __failure __msg("arena pointer cannot be a stack argument")
- int arena_arg_stack(void *ctx)
- {
-@@ -223,6 +231,7 @@ int arena_arg_stack(void *ctx)
- #else
- SEC("syscall")
- __arch_x86_64
-+__arch_arm64
- __description("arena_arg_stack: not supported, dummy test")
- __success
- int arena_arg_stack(void *ctx)
++__bpf_kfunc int bpf_testmod_ops3_call_test_arena_multislot(u64 *ptr__arena)
++{
++	struct bpf_testmod_arena_pair p = { .a = 11, .b = 22 };
++
++	return st_ops3->test_arena_multislot(p, ptr__arena);
++}
++
+ struct bpf_testmod_btf_type_tag_1 {
+ 	int a;
+ };
+@@ -852,6 +866,7 @@ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_2)
+ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena)
+ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_nullable)
+ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_stack)
++BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_multislot)
+ BTF_ID_FLAGS(func, bpf_kfunc_get_default_trusted_ptr_test);
+ BTF_ID_FLAGS(func, bpf_kfunc_put_default_trusted_ptr_test);
+ BTF_KFUNCS_END(bpf_testmod_common_kfunc_ids)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
+index 33f2af5b70857..210b919290cc2 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
+@@ -103,6 +103,12 @@ struct bpf_testmod_ops2 {
+ 	int (*test_1)(void);
+ };
+ 
++/* 16 bytes, so it takes two argument slots when passed by value */
++struct bpf_testmod_arena_pair {
++	u64 a;
++	u64 b;
++};
++
+ struct bpf_testmod_ops3 {
+ 	int (*test_1)(void);
+ 	int (*test_2)(void);
+@@ -112,6 +118,8 @@ struct bpf_testmod_ops3 {
+ 	/* enough leading args to force @ptr onto the stack on x86 and arm64 */
+ 	int (*test_arena_stack)(u64 a, u64 b, u64 c, u64 d, u64 e, u64 f,
+ 				u64 g, u64 h, u64 *ptr);
++	/* a multi-slot leading arg, so @ptr is not at the slot its arg index suggests */
++	int (*test_arena_multislot)(struct bpf_testmod_arena_pair p, u64 *ptr);
+ };
+ 
+ struct st_ops_args {
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index c4383acb53c11..7d81070eefe7f 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -123,6 +123,7 @@ void bpf_testmod_test_mod_kfunc(int i) __ksym;
+ int bpf_testmod_ops3_call_test_arena(__u64 *ptr__arena) __ksym;
+ int bpf_testmod_ops3_call_test_arena_nullable(__u64 *ptr__arena__nullable) __ksym;
+ int bpf_testmod_ops3_call_test_arena_stack(__u64 *ptr__arena) __ksym;
++int bpf_testmod_ops3_call_test_arena_multislot(__u64 *ptr__arena) __ksym;
+ 
+ __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
+ 				__u32 c, __u64 d) __ksym;
 -- 
 2.53.0-Meta
 
