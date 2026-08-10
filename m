@@ -1,157 +1,157 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED46742C517
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 23:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD3D37C10A
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 23:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786404166; cv=none; b=kXDsimobG6vFhO0lJgSLH5w563xtsO93GeDPSJxJUk4N/CViuteEOlfpz+gxtC80P/EVe8I5OCHqEFI5JiXMQRclmenrXM6J8ojqQL+K1KmNycbRMyuwsbFF7a5msPaszHPFso3zCfrUk5eCLPILYQVvV7dRE3rCPyJWjCeAv/k=
+	t=1786405093; cv=none; b=plmEQl52KJi+ocdpEeifbGv/YLtIIwIeYiOuAznc5KxSGQrh+Uc9h7lffkByzAFh6Datk0YOLJCKL6RM915uXAlFD+H76QYEAAQODVhwhZK/iv/RLs2plidZJcuNBe2ml9IJzrF3d4BPOEr/hYn2+DJ744oITTfGDRmXKcMZ2V8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786404166; c=relaxed/simple;
-	bh=M0MjLcWTskDALbCS54CZ4/9+M5FLfIcdbvqgABIt+TA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Q0YrGslOUEwoUuB8kdUeN5tzxHs1J9xIcXK2yHwFgVWtrIK5QN48gza1J413SxTqZ6rTHuPeXksvN2wvRtJcnpy1EyhWmf+YG2ZY3UMlr5qDQC93RGI55N3yS5b10Y4DWDfZeJvbmWINTUThtRJ2Hb32OVORQyQ6ZqQ7kSvt/lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HnvX48gj; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786405093; c=relaxed/simple;
+	bh=xr4LRysHR4iFKDuq9pUL1jIWbfLhfza8c6tQMFMW6YI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=MyIJtNVFhdaJC8AZ/4uAntpAbLVlXK7QIRYVjWx9GqUa73KL3B+I3ye7iudyk4t9+GXdm9hZ4VF1aaa0f7hpSgoDIrBoOj+L4MxrhU/SUucE5wfdui04kIZ12q0qGdPJoH1Bi9Z7Yzze1ToL5TONR5zwiNeMs/lc1URN/J1tXPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QKJFwKa9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HnvX48gj"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cc97653887so26682865ad.1
-        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 16:22:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786404163; x=1787008963; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=3sR0roWS7ay8jw9jkIlC9XLTYMTiMVpzbqbRgtEhFxM=;
-        b=HnvX48gj+gTC5lccl2ewu0YBISb1i2fwxlC3R54THhBzaD4SakFXTiUU938tYQ2zZl
-         cpsCnZanlARXkk2fSmGz3ydyJT5Mfg3jLIaOc6NOefN0+hnsDgTAJyQcXu60rZA4ZqNO
-         4XzFYsB8n4VCw8IdroVlUTsAd09l+0hDUVuyOQrHUE+qJ7ba+jSyFGc4+RpLiNRWCBWP
-         PRJLE1awyrXkCSGJ1THSePufgAoL8mt+7EoaWokTL22M8SJZNgUv/mOPQWidkC2w1KWK
-         zRtmUvNXarhg1qT5RKBL2qLe9J2eizRzAirb2/u3/ck4B7LOVCJhljBJUOr1R8hvN0oA
-         YpHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786404163; x=1787008963;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3sR0roWS7ay8jw9jkIlC9XLTYMTiMVpzbqbRgtEhFxM=;
-        b=KdGfczSL3oFL7UtClhopt4J3+U4RAUT6urkMXZoIlC1T3++RqwrHRiNJUXl2h/93JF
-         dG847CK/e5BNG7JwMYEtCrMCD1D21+NglnlpY6YX01VgAWLnQRigcReZErmKKbMkwxD3
-         cnrMOruJDj/PwtCQGttsCAN8eiDKzrz+TDRxk8vA3eoG98Zwh2ev9Qnjv2Egn1ufyC3f
-         3lrIdvto1TTNpPkGFRkSGt/kvcChkuiqwgLeHQC5u3keZGq10OTqwbaQNolvj75Rur7A
-         u5H3oRs+cjYF0ogN4nIzExUlg7/rZc524sr4giaVPTt4oRMADgKGz/lHQbD1pEvHKuMz
-         hcdQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rrt0gu3ZNVdyei7P7xFZ5HLjQK2d9SgVE5gWuXoCJ/Y3UPBmdj76Ql8SqkH1Xj6zCogSIg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCt8RilMZtYYNBkhoLc43runyaPknTJHmH+mD5DJhs0ICSHdxu
-	dcEWbuvkcRZ09vjX7weDiBLr/r4jA4rl/cbZp9+i3oO22AGuPtBxApFH
-X-Gm-Gg: AR+sD11Mf7roBBpZN1IovHzvPhjgQpyrQHPWDYZFGhGPo70KopRcq+YjIXZcsLAI0Qe
-	sKTimuBGzq0dIalAJLM8VKb+C9V8EVVqdlp1MR6yPf6if48AmZNWZBZZ6oa5pIR0t8v56Gsanr2
-	Sg/1Q8T7sX8QxN2LoggGb6FLxVeuY8y39gZ1Q1w8ilcWpPAVHwiiJJMeX/Tbb2omlpPQFQMNATR
-	unOrcontl0SvthZFLYH5N1+PVE0XLEpM6JvqLiDMavLAkUj0OrJIi6GqKnekmaBNXbYzF/CAA7+
-	l6+yjb+dSGmBblvYVzt/j46Ts+lHY1kbCd3T0dste8P6h9unG0Pp2RfopG7qiHvB/pNS5eWpmFM
-	gByvF4vE5TE3iVKHRQpDYCUUenQay6kH0SCyzTaRZ+QzzkOGTfAQjFn604blZPLAF/vvNG3IQSt
-	DrbHAlOrsin9gQ8q9Zk1JdLjm0HWePZlECdvQCV5P413bzmXFgFlBcqDyZY2IJoOQvBWqDzLag9
-	H/8dpDnDdIoY4o0
-X-Received: by 2002:a17:90b:3b52:b0:381:1c96:829b with SMTP id 98e67ed59e1d1-392cc8d043emr4789411a91.3.1786404163218;
-        Mon, 10 Aug 2026 16:22:43 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d5238e07sm1164685a91.15.2026.08.10.16.22.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2026 16:22:42 -0700 (PDT)
-Message-ID: <8ea2c2ef5a50333c84865d09c860a9617edbda9b.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v11 03/10] bpf: Introduce global percpu data
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song	 <yonghong.song@linux.dev>, Jiri
- Olsa <jolsa@kernel.org>, John Fastabend	 <john.fastabend@gmail.com>,
- Quentin Monnet <qmo@kernel.org>, Shuah Khan	 <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-Date: Mon, 10 Aug 2026 16:22:39 -0700
-In-Reply-To: <20260806163125.11172-4-leon.hwang@linux.dev>
-References: <20260806163125.11172-1-leon.hwang@linux.dev>
-	 <20260806163125.11172-4-leon.hwang@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QKJFwKa9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF0E1F000E9;
+	Mon, 10 Aug 2026 23:38:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786405091;
+	bh=JmDObI7kAJQzue8TxhoOwkR5xu98BxtAgaeTSvHgkCc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=QKJFwKa9lFeOS+8QVzYdMXj3JStr9rlbPrrIRLFq9w4PHa6Htho5owfy3KVIYALgq
+	 4ooLYMCLxwEUI4XmZ7BfRG6Z25lS3wxHsGwZ6xsjiRIYA89rWZ1dlTsneouwCQSojC
+	 /x+jIZrRMgD28DV/uNf8OxY7/7wf9C17ma9XEsMWsO7fWeIGwujyDc62AuDl6U8Ti1
+	 UC3CPDTM/gv6yF0u9VM550NHB53+aIa/iq7C56/wLHWT0AyQ/ng5U1Z2M1aHQJLpw3
+	 NRq8Z+CgXcEowjmPBcDdiopwPsURkNm3HNkwlA7p9SPbIKmR6yRcoxUhPxc7u5bo2H
+	 eISX9u8rV9Ngg==
+Content-Type: multipart/mixed; boundary="===============7647468868833226400=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <7da705ca01f2e33034afa325b543583f7458d8061e64c18584eeb787fe83d15d@mail.kernel.org>
+In-Reply-To: <20260810221811.481040-1-daniel@iogearbox.net>
+References: <20260810221811.481040-1-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v2 1/6] bpf: Derive the atomic load register in one place
+From: bot+bpf-ci@kernel.org
+To: daniel@iogearbox.net,memxor@gmail.com
+Cc: eddyz87@gmail.com,puranjay@kernel.org,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 10 Aug 2026 23:38:10 +0000 (UTC)
 
-On Fri, 2026-08-07 at 00:31 +0800, Leon Hwang wrote:
+--===============7647468868833226400==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-...
-
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index 4edba8182db1b..15d83684c6e94 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -414,6 +414,30 @@ static inline bool bpf_atomic_is_load_acq(const struct bpf_insn *insn)
+>  	       insn->imm == BPF_LOAD_ACQ;
+>  }
+>
+> +/*
+> + * Given an instruction @insn, return the number of the BPF register that a
+> + * BPF_ATOMIC reads the value at its memory operand into, or -1 if there is
+> + * no such register. That is the register a BPF_PROBE_ATOMIC has to clear when
+> + * the access faults. Like bpf_atomic_is_load_acq(), @insn is not assumed to
+> + * be a BPF_ATOMIC here.
+> + */
+> +static inline int bpf_atomic_load_reg(const struct bpf_insn *insn)
+> +{
+> +	if (BPF_CLASS(insn->code) != BPF_STX ||
+> +	    (BPF_MODE(insn->code) != BPF_ATOMIC &&
+> +	     BPF_MODE(insn->code) != BPF_PROBE_ATOMIC))
+> +		return -1;
+> +
+> +	switch (insn->imm) {
+> +	case BPF_LOAD_ACQ:
+> +		return insn->dst_reg;
+> +	case BPF_CMPXCHG:
+> +		return BPF_REG_0;
+> +	default:
+> +		return (insn->imm & BPF_FETCH) ? insn->src_reg : -1;
+> +	}
+> +}
+> +
+>  /* Memory store, *(uint *) (dst_reg + off16) = imm32 */
+>
+>  #define BPF_ST_MEM(SIZE, DST, OFF, IMM)				\
 > diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 440e73e1b11b..f2398749103b 100644
+> index 661e2d13a6042..c4bd70befbb5c 100644
 > --- a/kernel/bpf/fixups.c
 > +++ b/kernel/bpf/fixups.c
-> @@ -1817,6 +1817,43 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *en=
-v)
-> =C2=A0			goto next_insn;
-> =C2=A0		}
-> =C2=A0
-> +		if (bpf_jit_supports_percpu_insn() &&
-> +		=C2=A0=C2=A0=C2=A0 insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW) &&
-> +		=C2=A0=C2=A0=C2=A0 (insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE ||
-> +		=C2=A0=C2=A0=C2=A0=C2=A0 insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX_VALUE=
-)) {
-> +			struct bpf_map *map;
-> +
-> +			aux =3D &env->insn_aux_data[i + delta];
-> +			map =3D env->used_maps[aux->map_index];
-> +			if (map->map_type !=3D BPF_MAP_TYPE_PERCPU_ARRAY)
-> +				goto next_insn;
-> +
-> +			prog->jit_required =3D true;
-> +
-> +			/*
-> +			 * We are *skipping* first half of ld_imm64 insn
-> +			 * with 'i++;', patching over second half of it
-> +			 * with that same half + mov64_percpu_reg insn.
-> +			 * All because bpf_patch_insn_data() can only
-> +			 * replace one 8-byte insn, which does not work
-> +			 * well for ld_imm64 insn.
-> +			 */
-> +
-> +			insn_buf[0] =3D insn[1];
-> +			insn_buf[1] =3D BPF_MOV64_PERCPU_REG(insn->dst_reg, insn->dst_reg);
-> +			cnt =3D 2;
+> @@ -49,16 +49,7 @@ static int insn_def_regno(const struct bpf_insn *insn)
+>  	case BPF_ST:
+>  		return -1;
+>  	case BPF_STX:
+> -		if (BPF_MODE(insn->code) == BPF_ATOMIC ||
+> -		    BPF_MODE(insn->code) == BPF_PROBE_ATOMIC) {
+> -			if (insn->imm == BPF_CMPXCHG)
+> -				return BPF_REG_0;
+> -			else if (insn->imm == BPF_LOAD_ACQ)
+> -				return insn->dst_reg;
+> -			else if (insn->imm & BPF_FETCH)
+> -				return insn->src_reg;
+> -		}
+> -		return -1;
+> +		return bpf_atomic_load_reg(insn);
+>  	default:
+>  		return insn->dst_reg;
+>  	}
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index add3affc57035..73a2e8bb1782a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6485,21 +6485,16 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
+>  		return -EACCES;
+>  	}
+>
+> -	if (insn->imm & BPF_FETCH) {
+> -		if (insn->imm == BPF_CMPXCHG)
+> -			load_reg = BPF_REG_0;
+> -		else
+> -			load_reg = insn->src_reg;
+> -
+> +	/*
+> +	 * A negative load_reg means that this instruction accesses a memory
+> +	 * location but doesn't actually load it into a register.
+> +	 */
+> +	load_reg = bpf_atomic_load_reg(insn);
+> +	if (load_reg >= 0) {
+>  		/* check and record load of old value */
+>  		err = check_reg_arg(env, load_reg, DST_OP);
+>  		if (err)
+>  			return err;
+> -	} else {
+> -		/* This instruction accesses a memory location but doesn't
+> -		 * actually load it into a register.
+> -		 */
+> -		load_reg = -1;
+>  	}
+>
+>  	dst_reg = cur_regs(env) + insn->dst_reg;
 
-Hi Leon,
+This isn't a bug, but since the point of bpf_atomic_load_reg() is to keep
+this derivation in one place, would it be worth converting the remaining
+instances in const_fold.c and liveness.c as well?
 
-Sorry for joining the discussion so late, but Andrii asked me to take
-a look at the verifier part of the changes. Could you please elaborate
-on what exactly does not work with 16-byte instructions and
-bpf_patch_insn_data()? Note that e.g. 'if (insn->imm =3D=3D BPF_FUNC_timer_=
-set_callback) {'
-case in the same bpf_do_misc_fixups() applies a patch containing BPF_LD_IMM=
-64().
+Both files have the same three-way BPF_CMPXCHG/BPF_LOAD_ACQ/BPF_FETCH
+mapping behind a BPF_STX + BPF_MODE == BPF_ATOMIC guard. In const_fold.c
+around line 204-209 it marks the register as unknown, and in liveness.c
+around line 1212-1217 it marks the register as none. Each could read as
+'int r = bpf_atomic_load_reg(insn); if (r >= 0) <clear r>;' instead of
+repeating the switch.
 
-The rest of the patch lgtm.
 
-> +
-> +			i++;
-> +			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-> +			if (!new_prog)
-> +				return -ENOMEM;
-> +
-> +			delta=C2=A0=C2=A0=C2=A0 +=3D cnt - 1;
-> +			env->prog =3D prog =3D new_prog;
-> +			insn=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D new_prog->insnsi + i + delta;
-> +			goto next_insn;
-> +		}
-> +
-> =C2=A0		if (insn->code !=3D (BPF_JMP | BPF_CALL))
-> =C2=A0			goto next_insn;
-> =C2=A0		if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-...
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31438625403
+--===============7647468868833226400==--
