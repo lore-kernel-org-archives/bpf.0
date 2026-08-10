@@ -1,84 +1,150 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81ED53AFB06;
-	Mon, 10 Aug 2026 09:47:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89263AFD00
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 10:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786355256; cv=none; b=RL0t0auLPvutYkAdFFRy3Ee1E9RffGlAVDuyovvh81EYvAgoTS62fCchBNi9xXMFLIZjqY6NsdJXa/Wq55TgyeMSquVue4X+bySgAUaxwisYtM+3mkoats+gG+huzc2gJTlIGR4unJ3bFa2cx3CdLRZwb70ATdLvtGU8brapGYE=
+	t=1786356013; cv=none; b=sHV8fAqQULW3qBbrkjywdB3x6USqCGV0IcPg48y9KebW1pRmQhLndUIJztzUYmOewkt5Hhx07wcCD8rOraTXLFYP1sHi3wV/LMFHEQvznKVj9//WIcvdPWUurB/Zi8GGMqcyJGCbVXVP2Xj/EAd8V6ihN6KC7m5uqSSFI1Zvv10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786355256; c=relaxed/simple;
-	bh=wJ0hQRrXr6ePCulkPRgl2Y5PbgRXg1H5IVq6gBz+g8E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b3UDR4p03K/FefLfQcW/Me+4Bs/KD86K6MgDmiVoKu62zD38qw/tlvpxxQKUWDxy9MULiQ4KfSmwkgUHUgFiuT0eBCBNSROPdCDimcijgj48iMv47shiYXBwoF1AYiP3Om+ikMwrF+mK1PsqRTSw3yTvCc7C0AX410WbiCk2VpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=CV7WbggQ; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1786356013; c=relaxed/simple;
+	bh=xHAzgQxJ4fxfUxYo5LrnadKobetp2UOW8fugVuTi/uU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=YztgsZclNY2ut836mak4EPKZ77Agi+tTiLSl0xunrDb10bW8vY8Tp/vzXNiSI37Zvt4R53K4HdFOdPKfXZY+B+voJPYWkaCDF5z+8aggPB14YlDf0oTw5aPg12yOPQzGGNLxkK8K7MIDI+Na/EHfnWJlK+LLjwZGJzWIagOGZvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QjdoDBCr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="CV7WbggQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=J6
-	uNYGp0tyq9ZzYJXLqvSuztow2BYweYkrqYoraOhM8=; b=CV7WbggQ7hEVZSjVQO
-	VACfQaBrlH2q5zEzqY3qsxVO2YTe33WEDlF7XignKUXNeYZMr0RaPdxjDSgRyVlH
-	f11XS7AKy0zlRNm/9UvJDyuPrXV/1e4gePR9X6pGmXxv+MSFBoPhuvzV1n7I76U2
-	nq6jRg/4tJaclx/C9Qc/AKczQ=
-Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wB3EocEnnlqAlAcOg--.9113S2;
-	Mon, 10 Aug 2026 17:46:45 +0800 (CST)
-From: chenyuan_fl@163.com
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH bpf-next v2 0/3] bpf, arena: fix range_tree consistency on allocation failure
-Date: Mon, 10 Aug 2026 17:46:31 +0800
-Message-ID: <20260810094634.2723213-1-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QjdoDBCr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095541F000E9;
+	Mon, 10 Aug 2026 10:00:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786356011;
+	bh=2hLAHUYblOfIEF+FVMWZsMkH0OCf2WCg1FnZg6GXQvE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=QjdoDBCrUwQVBB0No7hLM+lQ3MvFkIWp2qTQJSu4dhQ//3cUJHIHbDsmoc/V9M9e+
+	 oeGm5A+h2NjmCZ1cxNMO7V19ljZv1GlUcuSXKdQF85KIXH1VTSJ3XKf6smLptXSK2u
+	 20NMlEeEPQY/i2USxqr4jVkl//HIDVaWLp1ComQu1V/Tj+gd2C3jcdhKGPg9he02/a
+	 0hYBcteqYahb34X1zQ8iE8uF+uNrAOcoDfXIUPWX763KiFYNLg0c91BG7QncF1TEor
+	 CBQ2P8JG9wJb8j7CDqEmVIp6vZd6KDKDvH7QBYvMA36iavrZO6ASuxN2dYp3vRFbXR
+	 eXMjYYxdEoBCQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 1/3] bpf, arena: fix range_tree_clear
+ inconsistency on kmalloc_nolock failure
+Reply-To: sashiko-reviews@lists.linux.dev
+To: chenyuan_fl@163.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260810094634.2723213-2-chenyuan_fl@163.com>
+References: <20260810094634.2723213-1-chenyuan_fl@163.com>
+ <20260810094634.2723213-2-chenyuan_fl@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 10 Aug 2026 10:00:10 +0000
+Message-Id: <20260810100011.095541F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wB3EocEnnlqAlAcOg--.9113S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GF4UGF43XFW5Gr1xWF18AFb_yoWfGrX_Ja
-	48K34UW3yjqFWfGFy7CrWrZ348KrW5Kr10qFy0yw43Xry7ta1DGr4xAF1fJr18ZFW5Gryk
-	CrZ0qFs3tr17AjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU83GYJUUUUU==
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQWhX2p5ngWU5gAA3A
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-The arena range tree can be left inconsistent when kmalloc_nolock()
-fails mid-operation. Patch 1 fixes range_tree_clear(), patch 2 fixes
-range_tree_set(), patch 3 makes arena_free_pages() and
-arena_free_worker() handle range_tree_set() failures.
+Pre-existing issues:
+- [High] `range_tree_set()` leaves the interval tree in a corrupted state i=
+f node allocation fails.
+- [Medium] Ignored return value from `range_tree_set()` leads to permanent =
+virtual space leak in the BPF arena on OOM.
+--
 
-Changes in v2:
-  - Fix multi-line comment style in patches 1 and 3 (opening /* on its
-    own line), as pointed out in review.
+--- Patch [1]: [PATCH bpf-next v2 1/3] bpf, arena: fix range_tree_clear inc=
+onsistency on kmalloc_nolock failure ---
+commit d0c75ee613a9a640e30aac20ab84b5820201a99d
+Author: Yuan Chen <chenyuan@kylinos.cn>
 
-Yuan Chen (3):
-  bpf, arena: fix range_tree_clear inconsistency on kmalloc_nolock
-    failure
-  bpf, arena: fix range_tree_set inconsistency on kmalloc_nolock failure
-  bpf, arena: check range_tree_set return in arena_free_pages and
-    arena_free_worker
+bpf, arena: fix range_tree_clear inconsistency on kmalloc_nolock failure
 
- kernel/bpf/arena.c      | 18 ++++++++++--
- kernel/bpf/range_tree.c | 61 ++++++++++++++++++++++++++++++-----------
- 2 files changed, 60 insertions(+), 19 deletions(-)
+This commit modifies range_tree_clear() to pre-allocate the right-half node
+before modifying the tree. This ensures that an allocation failure returns
+-ENOMEM without leaving the range tree in an altered state.
 
--- 
-2.54.0
+> diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
+> index 2f28886f3ff75..15b588377a769 100644
+> --- a/kernel/bpf/range_tree.c
+> +++ b/kernel/bpf/range_tree.c
+> @@ -143,16 +143,22 @@ int range_tree_clear(struct range_tree *rt, u32 sta=
+rt, u32 len)
+>  		if (rn->rn_start < start && rn->rn_last > last) {
+>  			u32 old_last =3D rn->rn_last;
+> =20
+> +			/*
+> +			 * Pre-allocate the right-half node before modifying
+> +			 * the tree. If allocation fails we return -ENOMEM
+> +			 * without altering the range tree.
+> +			 */
+> +			new_rn =3D kmalloc_nolock(sizeof(struct range_node),
+> +						__GFP_ACCOUNT, NUMA_NO_NODE);
+> +			if (!new_rn)
+> +				return -ENOMEM;
+> +
 
+[Severity: High]
+This is a pre-existing issue, but does range_tree_set() suffer from a
+similar state corruption if its node allocation fails?
+
+kernel/bpf/range_tree.c:range_tree_set() {
+    ...
+    /* Clear out everything in the range we want to set. */
+    err =3D range_tree_clear(rt, start, len);
+    if (err)
+        return err;
+    ...
+    } else {
+        left =3D kmalloc_nolock(sizeof(struct range_node), ...);
+        if (!left)
+            return -ENOMEM;
+
+If range_tree_set() fails to allocate 'left' due to OOM, it returns -ENOMEM
+after range_tree_clear() has already destructively removed sub-ranges.
+Should range_tree_set() also pre-allocate its nodes before modifying the
+tree to prevent state corruption?
+
+
+[Severity: Medium]
+This is also a pre-existing issue, but are the return values of
+range_tree_set() intentionally ignored in the arena code?
+
+In kernel/bpf/arena.c:arena_alloc_pages():
+...
+        ret =3D bpf_map_alloc_pages(&arena->map, node_id, this_batch, pages=
+);
+        if (ret)
+            goto out;
+    ...
+    out:
+        range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped);
+
+And similarly in kernel/bpf/arena.c:arena_free_pages():
+    ...
+        range_tree_set(&arena->rt, pgoff, page_cnt);
+
+If range_tree_set() encounters an allocation failure and returns -ENOMEM,
+the failure is silently ignored. Could this cause the freed pages' virtual
+space to be permanently leaked and inaccessible?
+
+>  			/* Overlaps with the entire clearing range */
+>  			range_it_remove(rn, rt);
+>  			rn->rn_last =3D start - 1;
+>  			range_it_insert(rn, rt);
+> =20
+> -			/* Add a range */
+> -			new_rn =3D kmalloc_nolock(sizeof(struct range_node), __GFP_ACCOUNT,
+> -						NUMA_NO_NODE);
+> -			if (!new_rn)
+> -				return -ENOMEM;
+> +			/* Add right-half range */
+>  			new_rn->rn_start =3D last + 1;
+>  			new_rn->rn_last =3D old_last;
+>  			range_it_insert(new_rn, rt);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810094634.2723=
+213-1-chenyuan_fl@163.com?part=3D1
