@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD7339C632
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 22:18:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B322A399D0C
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 22:18:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786400304; cv=none; b=iEic6CF1RGD/WW4lvbXne02P2jdFppTcE2WUDZspssxLg3w8LBsX4rrkwXFyGI9OtZyqsyNyoHpVg3myJHmZZsUWEeGQQi0flCeIZDR1nPwSSoxmoq0jzsNDSGrJ9ufpmlHZeCVgKaXGaHT8/xTGObNlZj+gle9cIRg4OMa6nRg=
+	t=1786400304; cv=none; b=m7sGaVbGTktxdkN5OCE9iYvnYMsq9xDt+rKBibZfcdZ6XbC+WX0IUBp5VND1dxEglSDjIqDVx1cN4bXxjC0VLdwIyBzmN6GD8PVNkiivd5sgTVatXn82mpMC/tpFHxy/8GmROuRtffqxhnfdzs7fjRlSI7B+oxobjLcgKfwyt60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786400304; c=relaxed/simple;
-	bh=a71ZBGwy+TbkqQIIjiAzhU17/PRCXv4yzao17rX9lO8=;
+	bh=wIr5a8hPrPem3nSiecsLY0VbdEaT/h36CgV6uhrVLtU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jZR3zn4PHCQyTm/boAwbFNkKVFHh8Fa66Y47IlVqGj/F2H5Yd9+LUiqTOMddinZE5RkcfUCQcXTDVyfUtmUW/Ug/CqveopbxVvHKJSXZqO8seWngqUJCvDX/T7XCpj82o7bTW/w7kT+cpcfSn+aWfBDKtv6z1RFko6cjVQz6tfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=RFS2vQ0W; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=ngTyjhD1L4jUSdlcz80flkrD8vDFLsSZYNMoPoq7yYWWl3SS+cX7fjBWB4DFHWacCEPEzbONeJIanDX6WgzDPnOk2BVjXqJUBpMDsASahwoafVacruxc5w4ILV/eQ4Qm4dt4H/lVM9BwNBgqGASCVWiDynp5lgwLaviL2wcUdqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=T/KO4atE; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="RFS2vQ0W"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="T/KO4atE"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=zHfOqkdrExCJh3P4y9DJT+M+Z1w9a15kK9Tdbp7Sjg8=; b=RFS2vQ0WfTwqzdWOMQ595x4o1E
-	+UIu0kShox87G92CBFSVYczsQFaSE8kgZ0aRgSoyfhY7eAeSomRpVEUfVa5xL/WG8uxuk8Ezofh+N
-	ujPW0ABwWmFhvO9mVm2TdvTAonH5IzgYKzO6fXB31Q8tD/1IVvchJB+Wc2E0HhOHP9IDWSXv5IAA0
-	+Ca9DgxB8ODek2LfytCpxsYqZ4L8yy3BtOgbvI0Chmiig42irltq3GZ2czUBo1JB3r+bjNKq1Y+OE
-	GAVu7SDKOEVj5KDaPbRwRnR9+CoIBgN/yduoQxEDwE6k63tOHh1z1xvbnbMsTveYi8EvekXfSRKfS
-	IpThiAuQ==;
+	bh=Vuglml2+LapqcT7giL7eldKKtb1tOsWWku0Bnf8aY70=; b=T/KO4atEQ2bJe2YNz3yX+smioc
+	7iRZup4hKFI3voAWiobOGYXnacbuYTD5Oe9uMWo/E8Ffle1DEkUuWrh1g1QClBQHdL9bpRqp0+FCt
+	VXpD0Udz88HIDR2f2TTpN5V4trxhhcRtokMDASV9uBVG3UPOQ8QhEGJODBq0oZ5liut7u+ceEWGxR
+	AEfEYwoZPJvXFmtCBwbPodRq2OuCD9Kq8KoKq3FbgKtJXJCwn6K0dOV35TB4VwpuzfKAMj8heX2bY
+	/ntYMVbAWZ2Y92bOFPlFnvteLflVlnMP6c53IW3Nu1lTi12DUPkdPdxdISqvW5XoBVkvsemgVlJSC
+	khfZIjfw==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wtYJz-00057G-0R;
-	Tue, 11 Aug 2026 00:18:15 +0200
+	id 1wtYJx-00056u-1T;
+	Tue, 11 Aug 2026 00:18:13 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: memxor@gmail.com
 Cc: eddyz87@gmail.com,
 	puranjay@kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Add arena fault tests for atomics with fetch
-Date: Tue, 11 Aug 2026 00:18:11 +0200
-Message-ID: <20260810221811.481040-6-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 3/6] bpf, x86: Clear fetch destination on faulting arena atomic
+Date: Tue, 11 Aug 2026 00:18:08 +0200
+Message-ID: <20260810221811.481040-3-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260810221811.481040-1-daniel@iogearbox.net>
 References: <20260810221811.481040-1-daniel@iogearbox.net>
@@ -53,181 +53,126 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28088/Mon Aug 10 08:24:15 2026)
 
-Add stream_arena_xchg_fault and stream_arena_cmpxchg_fault next to the
-existing read, write and load-acquire fault tests, covering the two
-places a read-modify-write can deposit the old value: src_reg for a
-BPF_XCHG and r0 for a BPF_CMPXCHG. Both cover both halves of the JIT
-bug that left the fetch destination alone when a RMW on an arena pointer
-faulted:
+populate_extable() encodes "there is no destination register to clear" as
+DONT_CLEAR in the DST_REG field of the exception table metadata, and later
+ex_handler_bpf() then reuses that very value to derive the direction it
+reports the fault with is_write = (reg == DONT_CLEAR). The two coincide
+for a plain load or store, but not for a RMW carrying BPF_FETCH. Such an
+atomic writes memory, so it has to be reported as a WRITE, and it also reads
+the old value into a register, src_reg for BPF_ADD | BPF_FETCH and BPF_XCHG,
+r0 for BPF_CMPXCHG, so that register has to be cleared on fault. A single
+DONT_CLEAR cannot say both, and the store branch picks it unconditionally:
 
-  - the fault has to be reported as a WRITE, and at the address held by
-    the destination register, which __stderr() and test_address() check
-  - the register receiving the fetched value has to be cleared by the
-    fault handler, which the programs check by poisoning it before the
-    atomic and returning it, so __retval(0) fails if it is left untouched
-
-The __stderr() annotation can only wildcard the faulting address since
-the arena base is not known until runtime, hence the two test_address()
-subtests on top, which pin it to the address held by dst_reg rather than
-src_reg.
-
-Note, the atomics are open coded since linux/filter.h cannot be included
-alongside vmlinux.h.
-
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t stream
   [...]
-  #464/1   stream_arena_fault_address/read_fault:OK
-  #464/2   stream_arena_fault_address/write_fault:OK
-  #464/3   stream_arena_fault_address/load_acquire_fault:OK
-  #464/4   stream_arena_fault_address/xchg_fault:OK
-  #464/5   stream_arena_fault_address/cmpxchg_fault:OK
-  #464     stream_arena_fault_address:OK
+  } else {
+          arena_reg = reg2pt_regs[dst_reg];
+          fixup_reg = DONT_CLEAR;
+  }
   [...]
-  #466/5   stream_success/stream_arena_write_fault:OK
-  #466/6   stream_success/stream_arena_read_fault:OK
-  #466/7   stream_success/stream_arena_load_acquire_fault:OK
-  #466/8   stream_success/stream_arena_xchg_fault:OK
-  #466/9   stream_success/stream_arena_cmpxchg_fault:OK
-  [...]
-  Summary: 4/22 PASSED, 0 SKIPPED, 0 FAILED
 
+The reported direction is therefore right, but on a fault over an unmapped
+arena page the fetch destination keeps whatever it held before the atomic,
+where every other BPF_PROBE_* access delivers 0. Give the metadata its own
+ARENA_WRITE bit so that the reported direction no longer depends on whether
+there is a register to clear, and fill DST_REG in from bpf_atomic_load_reg().
+BPF_{AND,OR,XOR} | BPF_FETCH need no handling here, bpf_jit_supports_insn()
+already rejects those in the arena.
+
+Fixes: d503a04f8bc0 ("bpf: Add support for certain atomics in bpf_arena to x86 JIT")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- v1 -> v2:
-   - Updated commit msg wrt test_address structuring
+ arch/x86/net/bpf_jit_comp.c | 35 +++++++++++++++++++++++++++--------
+ 1 file changed, 27 insertions(+), 8 deletions(-)
 
- .../testing/selftests/bpf/prog_tests/stream.c |   4 +
- tools/testing/selftests/bpf/progs/stream.c    | 101 ++++++++++++++++++
- 2 files changed, 105 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/stream.c b/tools/testing/selftests/bpf/prog_tests/stream.c
-index 15dd3ae2a84b..e4e9374309e2 100644
---- a/tools/testing/selftests/bpf/prog_tests/stream.c
-+++ b/tools/testing/selftests/bpf/prog_tests/stream.c
-@@ -105,6 +105,10 @@ void test_stream_arena_fault_address(void)
- 		test_address(skel->progs.stream_arena_write_fault, &skel->bss->fault_addr);
- 	if (test__start_subtest("load_acquire_fault"))
- 		test_address(skel->progs.stream_arena_load_acquire_fault, &skel->bss->fault_addr);
-+	if (test__start_subtest("xchg_fault"))
-+		test_address(skel->progs.stream_arena_xchg_fault, &skel->bss->fault_addr);
-+	if (test__start_subtest("cmpxchg_fault"))
-+		test_address(skel->progs.stream_arena_cmpxchg_fault, &skel->bss->fault_addr);
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 8dddb5d7af21..d920772af7d5 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1473,17 +1473,20 @@ static int emit_atomic_ld_st_index(u8 **pprog, u32 atomic_op, u32 size,
+  *
+  * Bit layout of `fixup` (32-bit):
+  *
+- * +-----------+--------+-----------+---------+----------+
+- * | 31        | 30-24  |   23-16   |   15-8  |    7-0   |
+- * |           |        |           |         |          |
+- * | ARENA_ACC | Unused | ARENA_REG | DST_REG | INSN_LEN |
+- * +-----------+--------+-----------+---------+----------+
++ * +-----------+-------------+--------+-----------+---------+----------+
++ * | 31        | 30          | 29-24  |   23-16   |   15-8  |    7-0   |
++ * |           |             |        |           |         |          |
++ * | ARENA_ACC | ARENA_WRITE | Unused | ARENA_REG | DST_REG | INSN_LEN |
++ * +-----------+-------------+--------+-----------+---------+----------+
+  *
+  * - INSN_LEN (8 bits): Length of faulting insn (max x86 insn = 15 bytes (fits in 8 bits)).
+  * - DST_REG  (8 bits): Offset of dst_reg from reg2pt_regs[] (max offset = 112 (fits in 8 bits)).
+- *                      This is set to DONT_CLEAR if the insn is a store.
++ *                      This is set to DONT_CLEAR if the insn does not read into a register.
+  * - ARENA_REG (8 bits): Offset of the register that is used to calculate the
+  *                       address for load/store when accessing the arena region.
++ * - ARENA_WRITE (1 bit): This bit is set when the faulting instruction wrote to the arena region.
++ *                        It is independent of DST_REG, since a read-modify-write both writes to
++ *                        memory and reads the old value into a register.
+  * - ARENA_ACCESS (1 bit): This bit is set when the faulting instruction accessed the arena region.
+  *
+  * Bit layout of `data` (32-bit):
+@@ -1502,6 +1505,7 @@ static int emit_atomic_ld_st_index(u8 **pprog, u32 atomic_op, u32 size,
+ #define FIXUP_INSN_LEN_MASK	GENMASK(7, 0)
+ #define FIXUP_REG_MASK		GENMASK(15, 8)
+ #define FIXUP_ARENA_REG_MASK	GENMASK(23, 16)
++#define FIXUP_ARENA_WRITE	BIT(30)
+ #define FIXUP_ARENA_ACCESS	BIT(31)
+ #define DATA_ARENA_OFFSET_MASK	GENMASK(31, 16)
  
- 	stream__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
-index cf5533e11f39..00a37933e411 100644
---- a/tools/testing/selftests/bpf/progs/stream.c
-+++ b/tools/testing/selftests/bpf/progs/stream.c
-@@ -229,6 +229,107 @@ int stream_arena_load_acquire_fault(void *ctx)
- 	return val;
- }
+@@ -1510,7 +1514,7 @@ bool ex_handler_bpf(const struct exception_table_entry *x, struct pt_regs *regs)
+ 	u32 reg = FIELD_GET(FIXUP_REG_MASK, x->fixup);
+ 	u32 insn_len = FIELD_GET(FIXUP_INSN_LEN_MASK, x->fixup);
+ 	bool is_arena = !!(x->fixup & FIXUP_ARENA_ACCESS);
+-	bool is_write = (reg == DONT_CLEAR);
++	bool is_write = !!(x->fixup & FIXUP_ARENA_WRITE);
+ 	unsigned long addr;
+ 	s16 off;
+ 	u32 arena_reg;
+@@ -2348,6 +2352,7 @@ st:			insn_off = insn->off;
+ 				struct exception_table_entry *ex;
+ 				u8 *_insn = image + proglen + (start_of_ldx - temp);
+ 				u32 arena_reg, fixup_reg;
++				bool is_write;
+ 				s64 delta;
  
-+SEC("syscall")
-+__arch_x86_64
-+__arch_arm64
-+__success __retval(0)
-+__stderr("ERROR: Arena WRITE access at unmapped address 0x{{.*}}")
-+__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
-+__stderr("Call trace:\n"
-+"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
-+"|[ \t]+[^\n]+\n)*}}")
-+int stream_arena_xchg_fault(void *ctx)
-+{
-+	static const struct bpf_insn xchg_insn = {
-+		.code	 = 0xc3,	/* BPF_STX | BPF_ATOMIC | BPF_W */
-+		.dst_reg = 1,		/* BPF_REG_1 */
-+		.src_reg = 2,		/* BPF_REG_2 */
-+		.off	 = 0x7fff,
-+		.imm	 = 0xe1,	/* BPF_XCHG */
-+	};
-+	struct bpf_arena *ptr = (void *)&arena;
-+	u64 user_vm_start, val;
+ 				if (!bpf_prog->aux->extable)
+@@ -2384,15 +2389,29 @@ st:			insn_off = insn->off;
+ 				    bpf_atomic_is_load_acq(insn)) {
+ 					arena_reg = reg2pt_regs[src_reg];
+ 					fixup_reg = reg2pt_regs[dst_reg];
++					is_write = false;
+ 				} else {
++					/*
++					 * A store has no destination register to clear,
++					 * except for a read-modify-write with BPF_FETCH,
++					 * which also reads the old value into src_reg, or
++					 * into r0 for a BPF_CMPXCHG. Either way the access
++					 * is still reported as a write.
++					 */
++					int load_reg = bpf_atomic_load_reg(insn);
 +
-+	/*
-+	 * Prevent GCC bounds warning: casting &arena to struct bpf_arena *
-+	 * triggers bounds checking since the map definition is smaller than
-+	 * struct bpf_arena. barrier_var() makes the pointer opaque to GCC,
-+	 * preventing the bounds analysis.
-+	 */
-+	barrier_var(ptr);
-+	user_vm_start = ptr->user_vm_start;
-+	fault_addr = user_vm_start + 0x7fff;
-+	bpf_addr_space_cast(user_vm_start, 0, 1);
-+	/*
-+	 * A read-modify-write carrying BPF_FETCH writes to memory, so the fault
-+	 * has to be reported as a WRITE from the dst_reg address, but it also
-+	 * reads the old value into src_reg, so the exception handler has to
-+	 * clear src_reg. Poison it up front, the returned value must be 0.
-+	 */
-+	asm volatile (
-+		"r1 = %[user_vm_start];"
-+		"r2 = 1;"
-+		".8byte %[xchg_insn];" /* r2 = xchg((u32 *)(r1 + 0x7fff), r2) */
-+		"%[val] = r2;"
-+		: [val] "=r" (val)
-+		: [user_vm_start] "r" (user_vm_start),
-+		  __imm_insn(xchg_insn, xchg_insn)
-+		: "r1", "r2"
-+	);
-+	return val;
-+}
-+
-+SEC("syscall")
-+__arch_x86_64
-+__arch_arm64
-+__success __retval(0)
-+__stderr("ERROR: Arena WRITE access at unmapped address 0x{{.*}}")
-+__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
-+__stderr("Call trace:\n"
-+"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
-+"|[ \t]+[^\n]+\n)*}}")
-+int stream_arena_cmpxchg_fault(void *ctx)
-+{
-+	static const struct bpf_insn cmpxchg_insn = {
-+		.code	 = 0xc3,	/* BPF_STX | BPF_ATOMIC | BPF_W */
-+		.dst_reg = 1,		/* BPF_REG_1 */
-+		.src_reg = 2,		/* BPF_REG_2 */
-+		.off	 = 0x7fff,
-+		.imm	 = 0xf1,	/* BPF_CMPXCHG */
-+	};
-+	struct bpf_arena *ptr = (void *)&arena;
-+	u64 user_vm_start, val;
-+
-+	/*
-+	 * Prevent GCC bounds warning: casting &arena to struct bpf_arena *
-+	 * triggers bounds checking since the map definition is smaller than
-+	 * struct bpf_arena. barrier_var() makes the pointer opaque to GCC,
-+	 * preventing the bounds analysis.
-+	 */
-+	barrier_var(ptr);
-+	user_vm_start = ptr->user_vm_start;
-+	fault_addr = user_vm_start + 0x7fff;
-+	bpf_addr_space_cast(user_vm_start, 0, 1);
-+	/*
-+	 * Same as the exchange above, except that a BPF_CMPXCHG reads the old
-+	 * value into r0 rather than into src_reg, so r0 is the register the
-+	 * exception handler has to clear. It doubles as the compare value, but
-+	 * the comparison never happens since the access faults first.
-+	 */
-+	asm volatile (
-+		"r1 = %[user_vm_start];"
-+		"r0 = 1;"
-+		"r2 = 2;"
-+		".8byte %[cmpxchg_insn];" /* r0 = cmpxchg((u32 *)(r1 + 0x7fff), r0, r2) */
-+		"%[val] = r0;"
-+		: [val] "=r" (val)
-+		: [user_vm_start] "r" (user_vm_start),
-+		  __imm_insn(cmpxchg_insn, cmpxchg_insn)
-+		: "r0", "r1", "r2"
-+	);
-+	return val;
-+}
-+
- static __noinline void subprog(void)
- {
- 	int __arena *addr = (int __arena *)0xdeadbeef;
+ 					arena_reg = reg2pt_regs[dst_reg];
+-					fixup_reg = DONT_CLEAR;
++					fixup_reg = load_reg < 0 ? DONT_CLEAR :
++						    reg2pt_regs[load_reg];
++					is_write = true;
+ 				}
+ 
+ 				ex->fixup = FIELD_PREP(FIXUP_INSN_LEN_MASK, prog - start_of_ldx) |
+ 					    FIELD_PREP(FIXUP_ARENA_REG_MASK, arena_reg) |
+ 					    FIELD_PREP(FIXUP_REG_MASK, fixup_reg);
+ 				ex->fixup |= FIXUP_ARENA_ACCESS;
++				if (is_write)
++					ex->fixup |= FIXUP_ARENA_WRITE;
+ 
+ 				ex->data |= FIELD_PREP(DATA_ARENA_OFFSET_MASK, insn->off);
+ 			}
 -- 
 2.43.0
 
