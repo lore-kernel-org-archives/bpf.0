@@ -1,149 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1756842BC28;
-	Mon, 10 Aug 2026 16:47:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E2F35E1B2
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 16:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786380426; cv=none; b=L5TUWPZ1pw7eBc3Zu/xtgNNAybPzfyYZcZv7i6eKvFE+fOHx/JgrPFDiVFLlUG512c06qlR0KqWZTA567Qdc0VAOprifTHeBjJ62G2Y1H+/SDOdKb3bVkSV59mp9u57ncVDb9Ua5MQ79viTZZsD4u+vo4AufySycXEI65uyy8pM=
+	t=1786380708; cv=none; b=rmNUQlqSY8w7kovomNj/Bof64ci9YAbc+Y+n05rUWB47yWTJRcu32ZZzKtD7ChfNsnolZ70tg7AVIkBfV/EMsiG66c7LoECxZIhBZx9lE6lD/QUIO2UA1nXEfMeskCwkheu4MQDg46jPp+0W9GWDLGYEvgapX+pybAiIT99KeQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786380426; c=relaxed/simple;
-	bh=XwTPSqp1L7Rwrtp4t0Hcgc8WyyKNr3Em0C4DCNaz59M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tgz9JRFiGUOCkvI7+2OcQhLiIi4C0J0PdlkLvToYWohXm7ejIWkWTe4lbKBTzRLB3ZjZQ7z/gVy1Ru1VJU9OCtn/KUG1Yk89hlhxdoJxUnfkA2B+Df6e/XYOkx7zjEMisCe1hIjFbk8TQU5CpAMKViSZQWmfN8xDhiXgrgR5DI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TniOiPeP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786380708; c=relaxed/simple;
+	bh=8UmLJhHODv+jWbG8zfMrUNGJVmHVQ4LZvVgODHsHICE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bQCjkjgv7T4SySsKO5Lzh0SezsGLypqfFsZDNg1+1gUfl4xh718Z34e+f3I5N/aWF4YN2icAhCfPwOeAm/9ZIXncnkybOEv8CKRuiPTfPP3s2+go5qK7EqPyLSsbbpTdpw6fi3z7Vr3tSTi2BKDYBimRvBf2MY/BzQrTAMhNe/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MPgeTTck; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TniOiPeP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640A41F00A3D;
-	Mon, 10 Aug 2026 16:47:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786380422;
-	bh=sEvl1i/8v8mimTmquA8RacZ4H8SQz2jDVrPg8tx+M6I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=TniOiPePfVaZodNOV9iJWd6S3f3NHKO8b4eIsiodgDfRSxvCE30G4S02fyqCaN1OG
-	 VxJAY7nOSmg2EqVtc6s0ZnxyEOG1bdntN8RmJYQKS0btMkrBbWbN8QbiHr/gDCUAk7
-	 OUjeZNLgB/zuhjJy6YYRGUC4uWdhGEtNo/WDTQJUXSU05gJRzEwQyoRXi7UH8fzmEa
-	 8xmsTT0qlthnpTg8FZGWMsHE4sQuOM1z6WCspx0Z+l1yu4ljc97nAy7NvJXJ4r1MOH
-	 GADo7DAQ30kYCIlH2jWISpwU1TdDlXWIFXpvaQPij4p1gsKQtMnw0OPZCTVOLUbKR+
-	 YRQZfaaNzs5BA==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	bpf@vger.kernel.org,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Leo Yan <leo.yan@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Stephane Eranian <eranian@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Usama Arif <usama.arif@linux.dev>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH v6 3/3] selftests/bpf: Adjust entry thresholds for ARM64 BRBE
-Date: Mon, 10 Aug 2026 09:46:20 -0700
-Message-ID: <20260810164622.1829843-4-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260810164622.1829843-1-puranjay@kernel.org>
-References: <20260810164622.1829843-1-puranjay@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MPgeTTck"
+Message-ID: <a3f40063-9142-4bb3-afc4-046b73f462ef@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786380704;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bkF+nvzdOLAxOh+q6y8bPGgGWXsr3dD/p5QQC6oJDQk=;
+	b=MPgeTTck3/N5e29CxA/CmNTvIvib43Awx6Ekq7boNcKLJw8NDiY56ntnT0FvM0bnmlSMML
+	hThHEQFApY21vLa1v3LVVPrX43KexsruBbXuN0BWRrkJ9rZAKXUPVzqoOtRipWaj9QANoQ
+	/p3hcLNm3nddVefg4zJsMmRJcFj6Hq0=
+Date: Mon, 10 Aug 2026 09:51:27 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v3 10/13] selftests/bpf: Add C tests for 16-byte
+ returns in R0:R2
+Content-Language: en-GB
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260808190322.1896580-1-yonghong.song@linux.dev>
+ <20260808190413.1902293-1-yonghong.song@linux.dev>
+ <20260808192726.EBB0E1F000E9@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260808192726.EBB0E1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-The test bounds how many branch entries are spent reaching the snapshot
-helper. The limit of 10 was calibrated on x86, which spends about 7.
 
-arm64 spends up to 14: eight in the BPF trampoline, which makes
-out-of-line calls and branches more than x86 does, and the rest in
-masking exceptions before the branch buffer can be paused.
 
-Raise the limit to 18 on arm64, leaving room for compiler and
-configuration variation.
+On 8/8/26 12:27 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] The `aggregate_ret_kfunc_c` test will fail to load instead of gracefully skipping on 32-bit kernels when compiled with LLVM >= 23, due to a mismatch in `__SIZEOF_INT128__` definitions causing a ksym resolution failure.
+> --
+>
+> --- Patch [10]: [PATCH bpf-next v3 10/13] selftests/bpf: Add C tests for 16-byte returns in R0:R2 ---
+> commit 34be80f3aa8159c8e9fb57e485947ec4dc335cca
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> selftests/bpf: Add C tests for 16-byte returns in R0:R2
+>
+> This commit adds selftests that exercise a 16-byte return value passed in the
+> R0:R2 register pair. It covers __int128, 16-byte struct, and 16-byte union
+> returns. It also adds tests for __int128 and 16-byte struct returns from a
+> kfunc, with bpf_kfunc_call_test_i128() guarded by __SIZEOF_INT128__.
+>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
+>> new file mode 100644
+>> index 0000000000000..e4317399d711b
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
+> [ ... ]
+>
+>> +static void test_kfunc_c(void)
+>> +{
+>> +	struct aggregate_ret_kfunc_c *skel;
+>> +	bool supported;
+>> +	int err;
+>> +
+>> +	skel = aggregate_ret_kfunc_c__open();
+>> +	if (!ASSERT_OK_PTR(skel, "skel_kfunc_c_open"))
+>> +		return;
+>> +
+>> +	supported = skel->rodata->has_reg_pair_ret;
+>> +
+>> +	/*
+>> +	 * Where the JIT cannot hand the second half of a >8-byte kfunc return
+>> +	 * back in R0:R2, bpf_add_kfunc_call() rejects the call with
+>> +	 * -EOPNOTSUPP. Asking the kernel keeps this test free of a list of the
+>> +	 * JITs that can, which would have to be updated as the rest of them
+>> +	 * learn.
+>> +	 */
+>> +	err = aggregate_ret_kfunc_c__load(skel);
+>> +	if (err == -EOPNOTSUPP)
+>> +		supported = false;
+>> +	else if (!ASSERT_OK(err, "skel_kfunc_c_load"))
+>> +		goto out;
+> [Severity: Medium]
+> Will this load fail with an assertion error instead of gracefully skipping on
+> 32-bit kernels when compiled with LLVM >= 23?
+>
+> If the host kernel is 32-bit, bpf_testmod is built without __SIZEOF_INT128__,
+> omitting bpf_kfunc_call_test_i128 from the module BTF.
+>
+> However, because the BPF program aggregate_ret_kfunc_c.c is compiled for a
+> 64-bit BPF target, __SIZEOF_INT128__ will be defined, and it will
+> unconditionally reference the bpf_kfunc_call_test_i128 kfunc via the
+> bpf_testmod_kfunc.h header.
+>
+> During aggregate_ret_kfunc_c__load(), libbpf will attempt to resolve the
+> kfunc, but since it is missing from the 32-bit kernel's BTF, it will fail and
+> return a relocation error (such as -ENOENT) rather than -EOPNOTSUPP. This
+> would cause the ASSERT_OK(err) check to fail.
 
-The skip threshold has to move with it. BRBE implements 8, 16, 32 or 64
-records, so on a 16 record buffer the existing 'total_entries < 16'
-check does not skip, but 14 wasted entries leave only 2 for the hit test
-and it fails instead. Derive the minimum from the two limits it depends
-on, so the arms cannot drift apart.
-
-This leaves 8 and 16 record implementations skipped, since the required
-hit count is absolute and does not scale with the buffer.
-
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- .../bpf/prog_tests/get_branch_snapshot.c      | 28 ++++++++++++-------
- 1 file changed, 18 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-index 0394a1156d99d..e06ae6798dbec 100644
---- a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-+++ b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-@@ -108,21 +108,29 @@ void serial_test_get_branch_snapshot(void)
- 
- 	trigger_module_test_read(100);
- 
--	if (skel->bss->total_entries < 16) {
-+	/* Reaching the snapshot helper costs a few entries: about 7 on x86_64
-+	 * and about 14 on arm64, whose BPF trampoline branches more. Bound it
-+	 * so that a regression shows up here.
-+	 *
-+	 * Derive the buffer minimum from the two limits it depends on, so the
-+	 * arms cannot drift apart.
-+	 */
-+#if defined(__aarch64__)
-+#define WASTED_ENTRIES_MAX	18
-+#else
-+#define WASTED_ENTRIES_MAX	10
-+#endif
-+#define TEST1_HITS_MIN		7
-+#define TOTAL_ENTRIES_MIN	(WASTED_ENTRIES_MAX - 1 + TEST1_HITS_MIN)
-+
-+	if (skel->bss->total_entries < TOTAL_ENTRIES_MIN) {
- 		/* too few entries for the hit/waste test */
- 		test__skip();
- 		goto cleanup;
- 	}
- 
--	ASSERT_GT(skel->bss->test1_hits, 6, "find_looptest_in_lbr");
--
--	/* Given we stop LBR in software, we will waste a few entries.
--	 * But we should try to waste as few as possible entries. We are at
--	 * about 7 on x86_64 systems.
--	 * Add a check for < 10 so that we get heads-up when something
--	 * changes and wastes too many entries.
--	 */
--	ASSERT_LT(skel->bss->wasted_entries, 10, "check_wasted_entries");
-+	ASSERT_GT(skel->bss->test1_hits, TEST1_HITS_MIN - 1, "find_looptest_in_lbr");
-+	ASSERT_LT(skel->bss->wasted_entries, WASTED_ENTRIES_MAX, "check_wasted_entries");
- 
- cleanup:
- 	get_branch_snapshot__destroy(skel);
--- 
-2.53.0-Meta
+To avoid complexity, the current implementation should be okay. The CI tests
+only for 64bit arch (x86_64, arm64 and s390x). Running selftests with 32bit arch
+may fail (or fail with other tests too).
 
