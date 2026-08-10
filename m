@@ -1,98 +1,139 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7D936B90C
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 07:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AC2285060
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 07:42:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786347294; cv=none; b=AzxwWLONfd3SHBw2nnTUahBrwix6VHHJx6m1pFmNhsmuimWucmRUDgSVY/9387Db8XrEKIzARIbenaCrAZ8lQHdeg+7elL1djNgqDed+olzieE6f1miuRa29PC/ZRlSvuB9hEXJDlmq5lNNAXUdnk2ZhlT0mFeME5yvhzR8NPQU=
+	t=1786347746; cv=none; b=Yazh7gpfiGmvVzjNCBpUJWfN5NtCYIIUtsYRHNEfPf+zXem4n1b/gjNF5PRn/yeg5NB6eaDClL6Ef9cRQY8CmNtZ4T8wy/qDD4fg3VelosKirxOvquMBO5rIG5hbcS9Bu8r5WMx9w8VRXJvY+TSJd+q2vuqXl6iY9nhjS+98/pM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786347294; c=relaxed/simple;
-	bh=cAydsrJxG+jI5SiBsSHMDzDYKdxMUmZstWjlpcXVf7E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SxscuqgSAF4HepkLKN3XwWRkRd3gCTrcceFbxxE4MGzsP03Lqx4R28igxMd6zL04cwykU0nodmd3NZ5zPW/WIVHUyWZ1FsChyiQg2OkZ1xXSShODdO+SINdyqFzQnlQUSWrCs9//cs2k+fxhWhTIXGUdT03ahPRhGaLYkrb1pTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=VTmNvID4; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1786347746; c=relaxed/simple;
+	bh=jU+9fjPiNBui8OCWT8+L0vYb/DPeEoc/qlkBgkrMHQA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=jFMzyqSEsBs1RKYL6f10bDljFOBIjNM5pK4UUTpxe8yHgnzai5y0/d00YufEPiPlaEmN8dzMD7q3TcbLOV82ibbIUxHGFDg7ykwPlYHYcZhOxQ4jIHcEv+BoHeAvAN09iWRrrf87xDkjBAhZNMIANy1qcWWWXM4Vrx8Eewti52k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=STXH3eN3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="VTmNvID4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=5K
-	wgNv4/1IVca+d5VBVq/D8VL1huB2s98B2LdyLJUTs=; b=VTmNvID4P7xqJtz26W
-	jsUv2+BESu2CJJrzlWkZwZToaYsefT6md4P25XifLAAt4Zjw75JMza2RHLkdMHls
-	RI8XEuTMx+rpyjojqEUNxmlr1F5ReGMR7y5PYg6wbJw4cZ6XnTQmoeEPX58A9G/r
-	l/jkuB7KgawdcpwOOHymiMtKw=
-Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDnDk_mfnlqA1WHOw--.8184S5;
-	Mon, 10 Aug 2026 15:34:10 +0800 (CST)
-From: chenyuan_fl@163.com
-To: bpf@vger.kernel.org
-Cc: Quentin Monnet <qmo@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH bpf-next v3 3/3] bpftool: Fix bypass of the batch line length check by comments
-Date: Mon, 10 Aug 2026 15:33:48 +0800
-Message-ID: <20260810073348.2586225-4-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260810073348.2586225-1-chenyuan_fl@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="STXH3eN3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 334EC1F000E9;
+	Mon, 10 Aug 2026 07:42:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786347745;
+	bh=0Idpnhi173e5XVx65TFMD2MaoMlDw+ygamQdJ2rmJMs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=STXH3eN3FVQSzo0ylSlFSzW10Y4YVwzedJ/1RGrQbjdbZypyP9wGcH85YykyOmA/9
+	 ARiyDjZgLQSvUu/0xx8Yig8svrC7xtidlXHfqsXZy0o0oyuSF6IOaEQehXo6EDIv6J
+	 Q1TxqB0skp8twB7BCb2JEDAplJPu7C2ybH/dbPDNgPbDTTsGpEEtn+o9VO4seP3c8K
+	 3FNLecWs9Ltv9bfA5GGshq0dZzL/xftm/VE1/IlHKhyFVwdmbApb2D9tDbLrxLDWso
+	 ioGvISFsImfzCTs8Sg4ZvtumQKbmizVMgsdY4E4+L8RKJW1O/Xpk8Ai2DyRskUPugo
+	 VATGNor9dvUCg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 3/3] bpftool: Fix bypass of the batch line
+ length check by comments
+Reply-To: sashiko-reviews@lists.linux.dev
+To: chenyuan_fl@163.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260810073348.2586225-4-chenyuan_fl@163.com>
 References: <20260810073348.2586225-1-chenyuan_fl@163.com>
+ <20260810073348.2586225-4-chenyuan_fl@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 10 Aug 2026 07:42:24 +0000
+Message-Id: <20260810074225.334EC1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnDk_mfnlqA1WHOw--.8184S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww47CF47KFWUAF4UJr47urg_yoW8GF1fpa
-	98Ka48tFZFgw1YvryxCa1rWFWfWrs3JrZrCr4UG3yYvr1kWrnavry7KF90gw15Xr4Svr4j
-	yryS9FZ3Zr4kuF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jldgJUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDARLUkmp5fvJD7QAA3k
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-do_batch() strips trailing comments by truncating the line at '#'
-before checking whether fgets() filled the buffer. If a batch line
-longer than the buffer contains a '#' within the first
-sizeof(buf) - 1 bytes, the truncation makes strlen(buf) smaller and the
-line-length check is bypassed. The unread remainder of the line then
-stays in the file stream and is parsed and executed as a separate
-command on the next loop iteration.
+Pre-existing issues:
+- [Medium] The patch fixes the batch line length check bypass in the main b=
+uffer but misses the identical vulnerability in continuation lines, allowin=
+g command smuggling.
+- [Medium] The newly introduced `truncated` check relies on `strlen()`, whi=
+ch can be bypassed by injecting a null byte, re-enabling the command smuggl=
+ing vulnerability.
+--
 
-Record whether fgets() truncated the line before stripping the comment,
-and use that for the line-length check, so overlong lines are rejected
-with E2BIG regardless of comments.
+--- Patch [3]: [PATCH bpf-next v3 3/3] bpftool: Fix bypass of the batch lin=
+e length check by comments ---
+commit 9e86e77bd4ad670faad801b29d45cd5587bdf90a
+Author: Yuan Chen <chenyuan@kylinos.cn>
 
-Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- tools/bpf/bpftool/main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+bpftool: Fix bypass of the batch line length check by comments
 
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index c9a86039c400..c77e66bffbc9 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -367,11 +367,13 @@ static int do_batch(int argc, char **argv)
- 	if (json_output)
- 		jsonw_start_array(json_wtr);
- 	while (fgets(buf, sizeof(buf), fp)) {
-+		bool truncated = strlen(buf) == sizeof(buf) - 1;
-+
- 		cp = strchr(buf, '#');
- 		if (cp)
- 			*cp = '\0';
- 
--		if (strlen(buf) == sizeof(buf) - 1) {
-+		if (truncated) {
- 			line_too_long = true;
- 			break;
- 		}
--- 
-2.54.0
+This commit attempts to fix a command smuggling vulnerability where overlong
+lines containing a '#' character bypass the buffer length check. It records
+whether fgets() truncated the line before stripping the comment to ensure
+overlong lines are properly rejected.
 
+> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+> --- a/tools/bpf/bpftool/main.c
+> +++ b/tools/bpf/bpftool/main.c
+> @@ -367,11 +367,13 @@ static int do_batch(int argc, char **argv)
+>  	if (json_output)
+>  		jsonw_start_array(json_wtr);
+>  	while (fgets(buf, sizeof(buf), fp)) {
+> +		bool truncated =3D strlen(buf) =3D=3D sizeof(buf) - 1;
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but rather a pre-existing issue.
+Can the new truncated check be bypassed if the input contains a null byte?
+
+Since fgets() reads up to sizeof(buf) - 1 bytes without stopping at null
+bytes, but strlen() stops at the first null byte, wouldn't an overlong line
+with an injected null byte result in a smaller strlen(buf)?
+
+If that happens, wouldn't the truncated check evaluate to false, bypassing =
+the
+line limit and leaving the remainder of the overlong line in the file stream
+to be parsed as a separate command?
+
+> +
+>  		cp =3D strchr(buf, '#');
+>  		if (cp)
+>  			*cp =3D '\0';
+> =20
+> -		if (strlen(buf) =3D=3D sizeof(buf) - 1) {
+> +		if (truncated) {
+>  			line_too_long =3D true;
+>  			break;
+>  		}
+
+[Severity: Medium]
+This is a pre-existing issue and was not introduced by the patch under revi=
+ew.
+Does the same command smuggling vulnerability still exist for continuation
+lines?
+
+Looking further down in do_batch(), continuation lines are handled similarl=
+y:
+
+tools/bpf/bpftool/main.c:do_batch() {
+    ...
+    while ((cp =3D strstr(buf, "\\\n")) !=3D NULL) {
+        if (!fgets(contline, sizeof(contline), fp) || ...)
+            ...
+        cp =3D strchr(contline, '#');
+        if (cp)
+            *cp =3D '\0';
+
+        if (strlen(buf) + strlen(contline) + 1 > sizeof(buf)) {
+            p_err("command %u is too long", lines);
+    ...
+}
+
+If a continuation line exceeds the buffer size and contains a '#' character
+within the first 4095 bytes, it will be prematurely truncated before the
+length check.
+
+Because this artificially reduces strlen(contline), doesn't this bypass the
+bounds check and leave the unread remainder of the overlong continuation li=
+ne
+in the file stream to be executed as an unintended command?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810073348.2586=
+225-1-chenyuan_fl@163.com?part=3D3
