@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05433374A16
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 19:09:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7873F3090D4
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 19:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786388975; cv=none; b=OJdBNSsdMAULLO4lqWy8yiK+cRWlDcpheMui+jnjic0IyWBFEGga2Vx2vvRcacWOgQxI8t2tjiU4mBfmLhFr1iy6U0Wp0MzxdUon5gdV+4//XmIBDvcrAkDKr1PCCjGXd924nUJ+Kqv4/UN+lXxjWY/gbVLw74758iPzBYpy9w0=
+	t=1786388979; cv=none; b=P7pedBVfq0Bq444YiGhtbe80Mj8xETCzixRnjeV4kXdo1dcvMMfxNXPUmNumkWyX8f8STBnuMBXSQljtUjeO4Kh4xMOR5QKkuHIHMyKJvqGhbD3eYHngY3LQHxy7spk3YrywkQhdF+pIiWbyNQNFcE9lImdQ8ZlI174Ov8/NmpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786388975; c=relaxed/simple;
-	bh=lbKS5JjosIawEpj5j6TdLZDxryQwaEpO2ipF/QHjNe0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PI9wwHGJlkNAMIyerAO7+UwdzXqnvNo57Q32UfNZR6qoYxFmir8jyuM7bF9oEypm2cxlF10I8bi2CRbQ8zGdLQKDqj5BK8WTWY2CkPL27Bjo+Po4FtYFjBncmw3mkhQKraMUc8QJV9K4hT+NtG0JfPbeTSodrRSq6toqqaKfQiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5/NBAZb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786388979; c=relaxed/simple;
+	bh=/ILh9Jua4mFxD/uOItmnjGL5SS9cY6Bq+y6LfSqRz7g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fTfYTcTgbGvWeFiR8v43FpJJgq7K4uPm2z1P5WcZkLnFJYq2WlYZFNWdT9vdy0/1VqSCa3Le3i8RuFWEIhg4xoX7sBWs8yJKmVjTqqwZxzuQoeWVogAjFrY7P0yxST4I5Yz/YLn2/xG0HpgXtXxYkEcqIr9Qhx6MUSVa1TsNfF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O+LSbQNl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5/NBAZb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C80991F000E9;
-	Mon, 10 Aug 2026 19:09:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O+LSbQNl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21A91F000E9;
+	Mon, 10 Aug 2026 19:09:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786388973;
-	bh=h9IbPmDeS0+oRXwB4hAYx4NBT9mU+Njo/f/MNwBbUe4=;
-	h=From:To:Cc:Subject:Date;
-	b=L5/NBAZbcZvhsABE+TcoWvF4rMxQOphxe3s+Xtpzzjk4JxeEPkhReXoHlqJjMg3Qz
-	 0mdpMKmrGbkXFKl1jVqgEHWUJ1qQcvRjUjcWMEbkQt2VC8aT3WcOYyckV1nGVqnRr8
-	 ABhXIga2lbJva0ZYATChhXkvz0SS/KZdwiF2Irx3brYPZUXV00PINu08yUIfz4yiIt
-	 TCTsedIY+A13rwxc1q2J9LXZsSoGtbLcy66mn3eKkky4mJCIIza6K3/y5VKfg5SrZX
-	 CrwsiadE8dIXmCH92gC1kBPtdviwSgujrTYVhEUbRZhLqZ9zaaDVKKLXNPNaxefIqq
-	 ooec+VrnK7R4A==
+	s=k20260515; t=1786388978;
+	bh=Oc+vPC0k/si5rDWVtB3oh2fKD8nr3VrnaodlGJ6USnA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=O+LSbQNl+LKQwXALtSE947uzHN8DAyg+B9BhTEmKGnZd1QyMpMHM+JFyZ9rO3J9Cq
+	 OtMK+clIebo04PLZ7OKNTTipBbtvOQPyCK2e5kghqTjDjIfafrxjoTJpbjBzhJp1LB
+	 P3rNFiGQB/T4RjZhO1gFVxfUvUeudXJQhtYnxoQrAvo0dy8OLmsfcV+xFsXBR83xz1
+	 Tp15HYmjbKFBIIFaj/0+8i/y2dwpmGGHSR1iZLZcjukJ4q1kj5J67ym0lw0q1NAGJ4
+	 e6nO45N2tDBX8IiJkiJ0OTOagp9lvqBg0gXmRc1aByFnTN0K/CaQAMZ8SUx7TXnRjQ
+	 4u372PzA3cSzA==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -40,10 +41,12 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
 	Will Deacon <will@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH bpf-next 0/7] bpf, arm64: __arena kfunc and struct_ops arguments
-Date: Mon, 10 Aug 2026 12:09:13 -0700
-Message-ID: <20260810190922.3408757-1-puranjay@kernel.org>
+Subject: [PATCH bpf-next 1/7] bpf, arm64: Fix stack-passed arguments for indirect trampolines
+Date: Mon, 10 Aug 2026 12:09:14 -0700
+Message-ID: <20260810190922.3408757-2-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260810190922.3408757-1-puranjay@kernel.org>
+References: <20260810190922.3408757-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,79 +55,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The x86-64 JIT recently gained support for the __arena and
-__arena__nullable argument suffixes on kfuncs and struct_ops stubs. This
-adds the arm64 side and flips bpf_jit_supports_arena_args() on, so the
-verifier stops rejecting these programs on arm64.
+save_args() reads stack-passed arguments relative to FP assuming the
+trampoline is entered through the fentry call from a traced function, in
+which case both the parent frame (FP/x9) and the traced function frame
+(FP/LR) are saved before FP is set, so the arguments start at FP + 32.
 
-Patch 1 is an independent fix. save_args() reads stack-passed arguments
-at FP + 32, which only holds when the trampoline is entered through the
-fentry call and two frame records are pushed. A struct_ops trampoline is
-entered via blr and pushes one frame fewer, so its stack arguments start
-at FP + 16 and every one of them was read two slots off. No struct_ops
-member passed arguments on the stack until the test added by commit
-2d4de9a493a0, which is why this went unnoticed. It carries a Fixes tag
-and can be taken separately; note that the test covering it only runs on
-arm64 once the rest of this series lands.
+An indirect trampoline for a struct_ops callback is entered through a
+function pointer (blr), so only the FP/LR frame is pushed and the
+arguments start at FP + 16, not FP + 32. Every stack-passed argument of
+a struct_ops callback with more than eight argument slots is read two
+slots off.
 
-Patch 2 adds an ADD/SUB (extended register) encoder to the insn library,
-so the JIT can zero-extend and add in one instruction.
+This went unnoticed because no struct_ops member passed arguments on the
+stack until bpf_testmod_ops3::test_arena_stack, added by
+commit 2d4de9a493a0 ("selftests/bpf: Test stack-passed struct_ops arena arguments").
+That member covers this on arm64 once the JIT gains arena argument
+support later in this series. Pass is_struct_ops into save_args() and
+pick the offset accordingly, mirroring the x86 fix.
 
-Patches 3 and 4 are the JIT work. A kfunc argument is rebased onto the
-arena base at the call site:
+Fixes: 9014cf56f13d ("bpf, arm64: Support up to 12 function arguments")
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
+ arch/arm64/net/bpf_jit_comp.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-        add     xN, x28, wN, uxtw
-
-and a nullable one skips the add so NULL stays NULL:
-
-        mov     wN, wN
-        cbz     wN, 1f
-        add     xN, x28, wN, uxtw
-1:
-
-A struct_ops callback converts in the other direction, in the trampoline
-while saving arguments into the BPF ctx, with the low half of the arena
-base kept in x11:
-
-        sub     w10, wsrc, w11
-        str     x10, [sp, #slot]
-
-Patches 5 and 6 add arm64 JIT-sequence assertions and drop the x86-64
-gating from the existing arena argument tests. Patch 7 is arch-neutral:
-it adds a struct_ops member whose first argument is a 16-byte struct
-passed by value, so the arena pointer does not land at the ctx slot its
-argument index suggests. Nothing covered that before, and it is the case
-patch 4 has to get right.
-
-Puranjay Mohan (6):
-  bpf, arm64: Fix stack-passed arguments for indirect trampolines
-  bpf, arm64: JIT __arena kfunc argument rebasing
-  bpf, arm64: Convert struct_ops arena arguments in the trampoline
-  selftests/bpf: Add arm64 JIT-sequence tests for __arena kfunc
-    arguments
-  selftests/bpf: Enable __arena argument tests on arm64
-  selftests/bpf: Test a multi-slot argument before a struct_ops arena
-    argument
-
-Tejun Heo (1):
-  arm64: insn: Add encoder for ADD/SUB (extended register)
-
- Documentation/bpf/kfuncs.rst                  |   6 +-
- arch/arm64/include/asm/insn.h                 |  23 +++
- arch/arm64/lib/insn.c                         |  60 ++++++++
- arch/arm64/net/bpf_jit.h                      |  11 ++
- arch/arm64/net/bpf_jit_comp.c                 | 140 +++++++++++++++---
- .../bpf/prog_tests/test_struct_ops_arena.c    |  10 +-
- .../testing/selftests/bpf/progs/arena_kfunc.c |   9 ++
- .../selftests/bpf/progs/arena_kfunc_jit.c     |  20 +++
- .../selftests/bpf/progs/struct_ops_arena.c    |  24 +++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  15 ++
- .../selftests/bpf/test_kmods/bpf_testmod.h    |   8 +
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |   1 +
- 12 files changed, 301 insertions(+), 26 deletions(-)
-
-
-base-commit: d114bb98936770c501c958bf2bc5fb6b7c0bad7b
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index d14d297ebb967..4af5a98b84e19 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -2509,9 +2509,8 @@ static void clear_garbage(struct jit_ctx *ctx, int reg, int effective_bytes)
+ }
+ 
+ static void save_args(struct jit_ctx *ctx, int bargs_off, int oargs_off,
+-		      const struct btf_func_model *m,
+-		      const struct arg_aux *a,
+-		      bool for_call_origin)
++		      const struct btf_func_model *m, const struct arg_aux *a,
++		      bool for_call_origin, bool is_struct_ops)
+ {
+ 	int i;
+ 	int reg;
+@@ -2531,7 +2530,15 @@ static void save_args(struct jit_ctx *ctx, int bargs_off, int oargs_off,
+ 		bargs_off += 8;
+ 	}
+ 
+-	soff = 32; /* on stack arguments start from FP + 32 */
++	/*
++	 * On-stack arguments start above the frame(s) pushed by the trampoline
++	 * prologue. Entered through the fentry call from a traced function, the
++	 * prologue saves both the parent (FP/x9) and the traced function
++	 * (FP/LR) frames, so the arguments start at FP + 32. A struct_ops
++	 * callback is called indirectly and only the FP/LR frame is saved, so
++	 * they start at FP + 16.
++	 */
++	soff = is_struct_ops ? 16 : 32;
+ 	doff = (for_call_origin ? oargs_off : bargs_off);
+ 
+ 	/* save on stack arguments */
+@@ -2721,7 +2728,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	store_func_meta(ctx, func_meta, func_meta_off);
+ 
+ 	/* save args for bpf */
+-	save_args(ctx, bargs_off, oargs_off, m, a, false);
++	save_args(ctx, bargs_off, oargs_off, m, a, false, is_struct_ops);
+ 
+ 	/* save callee saved registers */
+ 	emit(A64_STR64I(A64_R(19), A64_SP, regs_off), ctx);
+@@ -2770,7 +2777,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+ 		/* save args for original func */
+-		save_args(ctx, bargs_off, oargs_off, m, a, true);
++		save_args(ctx, bargs_off, oargs_off, m, a, true, is_struct_ops);
+ 		/* call original func */
+ 		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
+ 		emit(A64_ADR(A64_LR, AARCH64_INSN_SIZE * 2), ctx);
 -- 
 2.53.0-Meta
 
