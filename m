@@ -1,38 +1,38 @@
-Received: from mta1.migadu.com (out-167.mta1.migadu.com [95.215.58.167])
+Received: from mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B0541B8F8
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 16:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E44C4248C5
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 16:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786379408; cv=none; b=nbmsUcZKe51eHS9LRh9EAdWIT+UmRD16engXJv1dTzgpOBw9D2vLrge3rxq/Mq0s25ShTszJWmozxyUzjl5n9SdOhYmi6hIwkcAcBbMFragqk5ujFV5QnUGvkqlhiUaZsOTQRi+C49O/zLDJHBCZe13ERSW5HYrlG3Eb9SA8PI8=
+	t=1786379445; cv=none; b=JWmwecjASzPYnhXVVmD1QatREfonYEGi1ovIyX/dl52h1zS0Gr6nub6DwCNURQl4Glmhvxc6ZEKGDr8qhyVK7fZ9a18HjDaFFLpBdoZw/EA47Qjm3lgdsRLYat03/b6q+Ol+i0bd0M4mmQxFWYoXUyWaTXOJiYstOiFnRUH2y3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786379408; c=relaxed/simple;
-	bh=onMNGAUPGzLJbLSPzwwZ94rQt1DWNH1PEWGM/hMEbiw=;
+	s=arc-20240116; t=1786379445; c=relaxed/simple;
+	bh=TsuFQA3Rj2PI0+TWEANhtZAp4unYhBMhzW7DTmziipI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G6b37QE21biZUfyhnzObL3XLOJTeSYrbRYJamaFLmGug/L0hFNxTmvHgXUuCBb5VUbOdZ8o3YxUKWQYLG7cz4i+w0ZDjrJnoK5+A85BTKcVyGmCyrIcD75rz6ZstxzkkrAJVkmtItYqjSS8YazC3I0dabgq2XQT/D5fekwzh/5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iCYKnuft; arc=none smtp.client-ip=95.215.58.167
+	 In-Reply-To:Content-Type; b=BkNdD4qYEhmVXFox/Q3QtsUzdbPRFBYvgXt335xNanHTOxh61TDcZJ7EMnlhIxZxZ6Yh7ey87O4KC+O7qeq9+ggXWFayx9CvSThUC1xSmlAVhderlNu+NXGZ+tY2Q1044mMQkSxI4DUfaVftvYV05mpm5Q9d8gfHSXtCDpo20nU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fsnGIu4E; arc=none smtp.client-ip=95.215.58.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iCYKnuft"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fsnGIu4E"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=onMNGAUPGzLJbLSPzwwZ94rQt1DWNH1PEWGM/hMEbiw=;
+DKIM-Signature: a=rsa-sha256; bh=TsuFQA3Rj2PI0+TWEANhtZAp4unYhBMhzW7DTmziipI=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786379404; v=1; x=1786984204;
- b=iCYKnuftFEKYbmzrErI7koyD4l4UQF+3Rl/6yqg8r6sb6V9de74oJa2dQinNVyySKV01iWjK
- SnAATgV0svmxw0v0a1z/NOFadRLfGLfSokd+cF8DXzqkUxalDWBQN+v6OeMVt5cOaxthZYdQhe9
- 6tzhiRYyZetoOcMDB+6IoulA=
+ t=1786379440; v=1; x=1786984240;
+ b=fsnGIu4EzawWoH9v0xOOoVtF3tbDoogLh3qRKRBirx0g3hsvJvSIJ7B10FLV4qn3TzOpWrW3
+ M58e9sp9qYjfnXJaaLSUvs3aR6xok6KrqQNvgmMt8Yrs6Hw8B9VcSwD60wlKR4SLfnOwZhhdsFn
+ GgpRM61xBPAZik4dw6u6/QgI=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from [IPV6:2a03:83e0:1151:15:1c5e:37e8:36:dd37] (2620:10d:c090:500::5:2f4a)
-	by mta12.migadu.com with ESMTPS id d4309caf9de555b5;
-	Mon, 10 Aug 2026 16:29:54 +0000
+	by mta12.migadu.com with ESMTPS id 941a77c603204cb0;
+	Mon, 10 Aug 2026 16:30:40 +0000
 X-Migadu-Scanner: mta12.migadu.com
 Authentication-Results: mta12.migadu.com;
 	none
-Message-ID: <e465fed4-7014-4d24-9db9-e8762755bf59@linux.dev>
-Date: Mon, 10 Aug 2026 09:29:44 -0700
+Message-ID: <3ea98b14-849c-451e-bf19-4eeaca0eea59@linux.dev>
+Date: Mon, 10 Aug 2026 09:30:30 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -40,84 +40,81 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 03/13] bpf: Wire up JIT support for 16-byte
- kfunc returns
+Subject: Re: [PATCH bpf-next v3 04/13] bpf: Track R2 of register-pair returns
+ in precision backtracking
 Content-Language: en-GB
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 References: <20260808190322.1896580-1-yonghong.song@linux.dev>
- <20260808190337.1898362-1-yonghong.song@linux.dev>
- <20260808193954.645B91F000E9@smtp.kernel.org>
+ <20260808190342.1898844-1-yonghong.song@linux.dev>
+ <20260808192904.963E81F000E9@smtp.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260808193954.645B91F000E9@smtp.kernel.org>
+In-Reply-To: <20260808192904.963E81F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 8/8/26 12:39 PM, sashiko-bot@kernel.org wrote:
+On 8/8/26 12:29 PM, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] Uninitialized kernel register state can be leaked to BPF programs when a kfunc returns an aggregate (struct/union) between 9 and 15 bytes in size.
+> - [Low] Multi-line comments do not follow the required BPF subsystem comment style.
 > --
 >
-> --- Patch [3]: [PATCH bpf-next v3 03/13] bpf: Wire up JIT support for 16-byte kfunc returns ---
-> commit f2df1b40e2f3eb74688d20cd37742fe85c667da9
+> --- Patch [4]: [PATCH bpf-next v3 04/13] bpf: Track R2 of register-pair returns in precision backtracking ---
+> commit 031a41deb76f72f449ddf5239bbf769a2cbe7e5c
 > Author: Yonghong Song <yonghong.song@linux.dev>
-> Subject: bpf: Wire up JIT support for 16-byte kfunc returns
 >
-> This patch adds JIT support for returning structures up to 16 bytes from
-> kfuncs in the BPF R0:R2 register pair. It implements the necessary RDX to RSI
-> move for x86-64 and adds opt-in capabilities for the x86, arm64, and riscv
-> architectures.
+> bpf: Track R2 of register-pair returns in precision backtracking
 >
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index 8dddb5d7af21b..01c34114c8502 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
+> This commit updates the BPF verifier's precision backtracking to correctly
+> handle R2 for functions returning values larger than 8 bytes. It ensures
+> R2 is cleared from or added to the register mask across function call
+> boundaries to prevent unexpected register mask verification failures.
+>
+>> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+>> index 40bd04421a991..9b112bf427a57 100644
+>> --- a/kernel/bpf/backtrack.c
+>> +++ b/kernel/bpf/backtrack.c
 > [ ... ]
->> @@ -2647,6 +2647,22 @@ st:			insn_off = insn->off;
->>   				return -EINVAL;
->>   			if (priv_frame_ptr)
->>   				pop_r9(&prog);
->> +			if (src_reg == BPF_PSEUDO_KFUNC_CALL) {
->> +				const struct btf_func_model *fm;
->> +
->> +				/*
->> +				 * A kfunc returning a >8 byte aggregate hands the
->> +				 * second half back in RDX (the native ABI's second
->> +				 * return reg), but BPF expects it in R0:R2. BPF R0
->> +				 * is RAX (no move needed), while BPF R2 is RSI, so
->> +				 * copy RDX into RSI.
+>> @@ -425,6 +425,14 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+>>   				 */
+>>   				verifier_bug_if(idx + 1 != subseq_idx, env,
+>>   						"extra insn from subprog");
+>> +				/* a global subprog returning more than 8 bytes
+>> +				 * sets R2 as well. R2 is part of the args mask
+>> +				 * checked just below, so it has to be cleared
+>> +				 * here rather than next to R0.
 >> +				 */
->> +				fm = bpf_jit_find_kfunc_model(bpf_prog, insn);
->> +				if (!fm)
->> +					return -EFAULT;
->> +				if (fm->ret_size > 8)
->> +					emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_3);
-> [Severity: High]
-> In do_jit(), when a kfunc returns an aggregate between 9 and 15 bytes in size,
-> could this 64-bit move leak uninitialized kernel register state?
+> [Severity: Low]
+> This isn't a bug, but does this multi-line comment follow the preferred
+> BPF subsystem style? The guidelines specify that the opening /* should be
+> on its own line rather than sharing a line with the text.
 >
-> According to the native ABI, the upper bytes of the second return register
-> (RDX/BPF_REG_3) might contain padding and be uninitialized.
+>> +				if (bt_is_reg_set(bt, BPF_REG_2) &&
+>> +				    bpf_ret_reg_pair(env, subprog))
+>> +					bt_clear_reg(bt, BPF_REG_2);
+> [ ... ]
+>> @@ -522,7 +543,29 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+>>   					return -EFAULT;
+>>   			}
+>>   		} else if (opcode == BPF_EXIT) {
+>> -			bool r0_precise;
+>> +			bool from_subprog_call, r0_precise, r2_precise = false;
+>> +
+>> +			/* BPF_EXIT in subprog or callback always returns
+>> +			 * right after the call instruction, so by checking
+>> +			 * whether the instruction at subseq_idx-1 is subprog
+>> +			 * call or not we can distinguish actual exit from
+>> +			 * *subprog* from exit from *callback*. In the former
+> [Severity: Low]
+> This is also not a bug, but since this comment is being heavily modified,
+> could it be updated to place the opening /* on a separate line to match
+> the modern BPF comment style?
 >
-> Since the move is a full 64-bit copy to BPF_REG_2, and the BPF verifier allows
-> 64-bit reads of BPF_REG_2 without zero-extending the padded bits, a BPF
-> program might save the full register to a map and leak the uninitialized bytes
-> to userspace.
->
-> Should the JIT mask out the uninitialized upper bytes of BPF_REG_2 when the
-> return size is between 9 and 15 bytes?
->
-> This same question applies to the arm64 and riscv capabilities enabled in this
-> patch, where the native registers (x1 and a1) map directly to BPF_REG_2 and
-> could similarly leave the upper bits unmasked.
+>> +			 * case, we need to propagate the precision of the
+>> +			 * return registers, if necessary. In the latter we
+>> +			 * never do that.
+>> +			 */
 
-We should be okay here. The return value will do proper narrowing. See
-https://reviews.llvm.org/D131598
-
->
->> +			}
->>   			break;
->>   		}
+Comment format issue. Will fix in the next revision.
 
