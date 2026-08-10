@@ -1,108 +1,129 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9763A9D9B
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 09:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9586368D5E
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 09:20:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786353322; cv=none; b=jfNyGf9p3yaV/x83ZiawrCYgtygXiQp4l5gu1ArhSpeOVUZAbdq3Sn3FrEwx0+v//lDg1vGxjLTSH1Lpn7PyPLpnmEHDQuMB0y8axCnX3OUiViYag2SsgMVsip20/9ruXKvUcLhBM3zygIZkyDf9QWB3xtBjphzX+zbe3Vqata4=
+	t=1786353606; cv=none; b=jaYW6ftgi7uZSmpdFNcxm1GPyX71ZLanmAHTzW3OQdBytDjNPeHLVvDJDXwrMnhwjLu9ZeP5h88ZOwOJpZneRi2zNCTIQ87yJx9M4geag9ZqAW9NskoQMLJ7MVTmTWQ4gfsfNv8a/b4cTPjYQYIgWk7+0zYMe9l4fujTPWbFkw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786353322; c=relaxed/simple;
-	bh=IPxvUPolFW2ajYVtF0IPCiExMtTLUed449JhfBEledg=;
+	s=arc-20240116; t=1786353606; c=relaxed/simple;
+	bh=jHJ2/Fs8Fnao8T8pDx13bTvap6/RakRPwx6StnNBqSQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BruYuZYw6C+nmjbik2FGYe3Fu5tQaICUCjnR0MgW3/4wcRtVWpPjT/c8vaT1q3HABoH4f0s/I6DC5zZVIPPb68cCyArMU4KM0ebZQZQJMa4wq73S4nxwSWp5Q48fX+26jI/+ADw/nYQSMKMbzmxaC6T2WXd00T6YdgUgoUwn+RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MzJxHnED; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Ni2PzTgvmTxKwM5PW/eQmu4VBiOYVks0kUuizGqvwRpAy/MKRaMS20srfUryuU+rWkBY0m/ptBDX2XX6AereqjvIu4lP81qvPApE8FkG78TgVmioWiP27Lk0bz5qc4/jnihA1zmByjJ2CTdST4C2nnmpYn1w9L31QmmDRql49jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hGzFPD0F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MzJxHnED"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E5E1F000E9;
-	Mon, 10 Aug 2026 09:15:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hGzFPD0F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36DF01F00A3A;
+	Mon, 10 Aug 2026 09:20:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786353320;
-	bh=p4Rut3OarNfQL5HCgLFflJraWHPlX2qNblmTszM01c4=;
+	s=k20260515; t=1786353604;
+	bh=7fyK8zEMMqIsItMmVFZ2A92EdJW8A8ywenv3TX6XQBY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MzJxHnED5IYyEzIL0dYFBgSjI3ghFNXfPU96IRGR7AKzmDmji/9Pa2n99YP7GDng4
-	 e2KJM2g55Biy+nB0ca6YPJI0vVZrI3dhkBKEZfPxbYVAFtspfzzglUeOePZqUmLoLt
-	 GarGJqM9Elz8Feg4pELwkuf6DG1jwhqxcObEYDWFyH3uy0cqWxF+AZBQ57zNLIoDAA
-	 o810DdW8zct4z0WuLgiggbjS2kwH3eU202QqgVNy4BZ7kNysa7D5UyZihilRlLodEN
-	 unZkHB7QWQcwfMNb3Dsty2qgIgPa71dWoYTnGQmxw7Ha8J5pfWwyA1hlao15hOCBhR
-	 vVgjb/k14iy+A==
+	b=hGzFPD0FabfSeLJDdw9jJ+f4KBjzEwdYzFW6k5F1NzeRP87I7hLdf/7Ybt+xM6Kva
+	 4p/v0q0AVkrn+fs85FVQe7tmDHpzxnNzbvvg7gFI2I9svMeIZbZJbhu0F+awIAwWP9
+	 Cg/n2A+L/ms3hL6YzqrVkxXWGkOAodHnVrAg3XlLT+bVqT3XFiL0D+DQ/x49n/3c6a
+	 FUDjkNSjU3J+W/hQGylAPCVkgqdSSn4VCBMnM3G4441Z4oWROJzdipOyksl86oXIql
+	 DuRXE7JGIMc7JF1cF6vIgAkl1aYtsvdcVM23LLYUMP9RMOd1x5Th4O4VNaMBrUBNFT
+	 IiG9BhhlfFHCA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 2/3] bpftool: fix spurious batch file read
- error
+Subject: Re: [PATCH bpf-next v4 1/3] bpftool: fix double close in map dump
 Reply-To: sashiko-reviews@lists.linux.dev
 To: chenyuan_fl@163.com
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260810090459.2666243-3-chenyuan_fl@163.com>
+In-Reply-To: <20260810090459.2666243-2-chenyuan_fl@163.com>
 References: <20260810090459.2666243-1-chenyuan_fl@163.com>
- <20260810090459.2666243-3-chenyuan_fl@163.com>
+ <20260810090459.2666243-2-chenyuan_fl@163.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 10 Aug 2026 09:15:19 +0000
-Message-Id: <20260810091520.56E5E1F000E9@smtp.kernel.org>
+Date: Mon, 10 Aug 2026 09:20:03 +0000
+Message-Id: <20260810092004.36DF01F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] The batch file line length checking logic in `do_batch` is fundame=
-ntally flawed, leading to three issues: 1) It incorrectly rejects valid lin=
-es that are exactly 4095 bytes (including the newline). 2) It allows oversi=
-zed lines with comments to bypass the length limit because the truncation c=
-heck is performed after comment stripping. 3) It fails to validate continua=
-tion lines properly. These parser flaws can cause the unread remainder of a=
-n oversized line to be executed as a completely new, hidden command.
+- [Medium] Missing error propagation when `bpf_map_get_info_by_fd()` fails =
+on subsequent maps in `do_dump()`.
+- [Medium] Double close of map file descriptors in `do_show_subset()`.
 --
 
---- Patch [2]: [PATCH bpf-next v4 2/3] bpftool: fix spurious batch file rea=
-d error ---
-commit cf1f390638590ec88aac09a2ed99cf49c783fe7f
+--- Patch [1]: [PATCH bpf-next v4 1/3] bpftool: fix double close in map dum=
+p ---
+commit 8a5aea6bcad40d4506c71d6f8f2b151ddbe0ed20
 Author: Yuan Chen <chenyuan@kylinos.cn>
 
-bpftool: fix spurious batch file read error
+bpftool: fix double close in map dump
 
-This commit fixes a spurious batch file read error in bpftool. It replaces
-the use of errno with ferror() to detect read failures and explicitly tracks
-line length truncations.
+This commit fixes a double close in map_dump() where the map file
+descriptor was being closed in the error path, and then closed again
+afterward by do_dump().
 
-> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-> index c91e1a6e1a1ec..0bbb2e1984503 100644
-> --- a/tools/bpf/bpftool/main.c
-> +++ b/tools/bpf/bpftool/main.c
-[ ... ]
-> @@ -371,7 +372,7 @@ static int do_batch(int argc, char **argv)
->  			*cp =3D '\0';
+> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> index 6b9649294ca1a..e9f4dd9458cf1 100644
+> --- a/tools/bpf/bpftool/map.c
+> +++ b/tools/bpf/bpftool/map.c
+> @@ -895,7 +895,6 @@ map_dump(int fd, struct bpf_map_info *info, json_writ=
+er_t *wtr,
+>  exit_free:
+>  	free(key);
+>  	free(value);
+> -	close(fd);
+>  	free_map_kv_btf(btf);
 > =20
->  		if (strlen(buf) =3D=3D sizeof(buf) - 1) {
-> -			errno =3D E2BIG;
-> +			line_too_long =3D true;
+>  	return err;
 
-[Severity: High]
-This is a pre-existing issue, but by checking the string length after
-stripping comments, couldn't an oversized line containing a '#' bypass this
-truncation check?
+[Severity: Medium]
+This is a pre-existing issue, but I noticed another double close pattern=20
+in tools/bpf/bpftool/map.c:do_show_subset():
 
-If a long line is read and contains a '#', strchr() will null-terminate
-it early, making strlen(buf) smaller than sizeof(buf) - 1. The unread
-remainder of that oversized line would then be left in the file stream
-and executed as a new command on the next fgets() iteration.
+tools/bpf/bpftool/map.c:do_show_subset() {
+    ...
+		if (json_output)
+			show_map_close_json(fds[i], &info);
+		else
+			show_map_close_plain(fds[i], &info);
 
-Additionally, does this logic incorrectly reject valid lines that fit
-the buffer exactly?
+		close(fds[i]);
+    ...
+}
 
-This same parser flaw appears to exist for continuation lines where
-lengths are also checked after comment stripping.
+Since the show_map_close_json and show_map_close_plain functions already
+unconditionally close the file descriptor, does the subsequent close(fds[i])
+result in a double close?
 
-Should the truncation check be performed immediately after fgets(), before
-any characters are modified?
+This seems like it would also poison later errno checks exactly like the
+bug this patch addresses.
 
->  			break;
->  		}
+
+[Severity: Medium]
+This is a pre-existing issue, but while looking at do_dump() in the same=20
+file, there appears to be a missing error propagation:
+
+tools/bpf/bpftool/map.c:do_dump() {
+    ...
+	for (i =3D 0; i < nb_fds; i++) {
+		if (bpf_map_get_info_by_fd(fds[i], &info, &len)) {
+			p_err("can't get map info: %s", strerror(errno));
+			break;
+		}
+		err =3D map_dump(fds[i], &info, wtr, nb_fds > 1);
+    ...
+}
+
+If a user executes bpftool with multiple map file descriptors, and
+bpf_map_get_info_by_fd() fails on any iteration after the first, the loop
+breaks without updating err.
+
+Doesn't this incorrectly cause bpftool to exit with a success status if
+the previous iteration succeeded, silently hiding the error from scripts or
+users relying on the exit code?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810090459.2666=
-243-1-chenyuan_fl@163.com?part=3D2
+243-1-chenyuan_fl@163.com?part=3D1
