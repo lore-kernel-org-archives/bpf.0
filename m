@@ -1,158 +1,151 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B150B3E5A2F
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 16:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AB683B0AD8;
+	Mon, 10 Aug 2026 16:39:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786379802; cv=none; b=YnaULqfzaxaEtQXvC2n8CGgRmZA5HsF8gSgOUR5x+SMUUVlQ4YFOW6UsnM7eAYvHujqwGOSGOlT8XIa438UXWWW5kn8wzyDQnfTEV/+n3tf0gKrExgIY4kmGlBu7J2ipZAIFJuwIT5tdOQDejkLzzn/mA9IBr53WC4ciW6u5bVo=
+	t=1786379999; cv=none; b=EMC4RPFnhN6ELm0QdfnSvyG29ssrkxaIyr9sSI3iS6UznbP43RD09Ap/0J6DGjI/mqkKgApkMpx24R2NMSnPDHibUH+tutwMOz89tXUld0L2maVtHnhXMrQWeu/vMkcGGrsjoK/lUplvPa8xE4rsvaGETj8LC/PMTEvPsBqSy2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786379802; c=relaxed/simple;
-	bh=f0hg9Bhx+8d5BYdtUQ4HO2HH5hQAbnaFTrdruOQV1rA=;
+	s=arc-20240116; t=1786379999; c=relaxed/simple;
+	bh=WKCQbGP9SiDhEpOg5eWYTMaL6MWaimf9g6vwuwJjDBU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=luSMOQ6ZglDZiJ25/E6+PXxPVJXWSYb6uOuhEwMt3GtJtHZnOuZAKmuOFozGLnwR827JBzuKzQlePB8aDMsc7oZlDtTBXkJBe1QqO3Pk4W9FDtpO8nNjQ2WVAE0X6ifxkKuMQ6iaimKhdN74/5GCOU7vZro5Mwr9hYDWiC7ztWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZHpIkLkX; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=tLouCvtBzLPaHjXgcfe17ZWqfHkN4blqAbnu3f/G8mFTCO9uiJV5Oc7E6AlDhkkb6b4hybxZDLOV2tliWpo0Os2w2wSopA3AUgmM7oXG0ztI/oHxX6oMDaiBM3EdCYoJS+EepfSjuuUIkSJjjCvvB8RO011etuKwBl8XZjuZ8Zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=HgRN1Gj0; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZHpIkLkX"
-Message-ID: <0e6fd62e-0f69-4ae8-9335-85a139870d81@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786379787;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4bZOTfz5mWPoXkp9RI9KOFVy6F1zIbcdWH3Kj73wQTU=;
-	b=ZHpIkLkX5tO65ScodTOkje33kozXjHjnOUViSj7avTXihcVm5PjFEJYWKFT8dZRvOWt4dZ
-	k4TpGqSMfELR6WzjP6AKz3+DWKbLOMBGef9QCdZKoJ4yek2agr8qJOhr/8tGwwpcFv2qAk
-	m6HloWEfdStN+RhMXu2j0MlDKeSnSz0=
-Date: Mon, 10 Aug 2026 09:36:11 -0700
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="HgRN1Gj0"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D782014BF;
+	Mon, 10 Aug 2026 09:39:52 -0700 (PDT)
+Received: from [10.1.34.163] (e121487-lin.cambridge.arm.com [10.1.34.163])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 491EB3F86F;
+	Mon, 10 Aug 2026 09:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1786379996; bh=WKCQbGP9SiDhEpOg5eWYTMaL6MWaimf9g6vwuwJjDBU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HgRN1Gj0zbXrqcMDqWuW1BiGk+VKjACyu6nvx6ZB4QYbHKUHlOmKiPwfJXmyPuJnx
+	 mHJL2wTum5B7eaergJeyQSTSfD+fVrT2JkvSNP94o7Fx6Bem2t6k7GW7OQmto/Ncw0
+	 +YZHTBHjSzr7OwhyGaJ0vJVwn9ed1XTMZ4Fh+iUY=
+Message-ID: <9b06f274-8db1-48e4-839e-e387c050d328@arm.com>
+Date: Mon, 10 Aug 2026 17:39:52 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 06/13] bpf: Reject callbacks returning more
- than 8 bytes
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC] arm64: entry: PSTATE_I_SET is leaking on pseudo NMI
+ mode
+To: Will Deacon <will@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>, Mark Rutland <mark.rutland@arm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ Jinjie Ruan <ruanjinjie@huawei.com>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, rmikey@meta.com,
+ kernel-team@meta.com, Ada Couprie Diaz <ada.coupriediaz@arm.com>
+References: <20260807-arm64_fix-v1-1-d069ccf9d71b@debian.org>
+ <anXkO8YpoadRzm07@J2N7QTR9R3> <anXqMsJ14r3BAbMG@gmail.com>
+ <anYHjvJ1_4dDjuzw@gmail.com> <anm5T9FazACqOWXF@willie-the-truck>
+ <2a97f777-d33a-4b3d-8c8c-6f6894f04c29@arm.com>
+ <annoxlkkq1NpujsP@willie-the-truck>
 Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260808190322.1896580-1-yonghong.song@linux.dev>
- <20260808190353.1899379-1-yonghong.song@linux.dev>
- <20260808194539.1418B1F000E9@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260808194539.1418B1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+From: Vladimir Murzin <vladimir.murzin@arm.com>
+In-Reply-To: <annoxlkkq1NpujsP@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 8/10/26 16:05, Will Deacon wrote:
+> On Mon, Aug 10, 2026 at 01:42:15PM +0100, Vladimir Murzin wrote:
+>> On 8/10/26 12:43, Will Deacon wrote:
+>>> On Fri, Aug 07, 2026 at 09:29:12AM -0700, Breno Leitao wrote:
+>>>> On Fri, Aug 07, 2026 at 07:58:21AM -0700, Breno Leitao wrote:
+>>>>> Meanwhile, I will try to ftrace the writes to PMR and regs->pmr to get
+>>>>> a better grasp of the states machine we are in (probably on Monday).
+>>>> It seems LLM found a very easy to reproduce this:
+>>>>
+>>>> 	bash-5.1# dmesg
+>>>>
+>>>> 	bash-5.1#  cd /sys/kernel/tracing
+>>>> 	echo 'r:pmr vfs_read bad=+0($retval):u64' >> kprobe_events
+>>>> 	echo 1 > events/kprobes/pmr/enable
+>>> Nice, that triggers straightforwardly in QEMU for me. The diff below
+>>> (which implements my suggestion from [1]) seems to fix the issue, but
+>>> it would be good to hear feedback from one of the Arm folks.
+>>>
+>>> [1] https://lore.kernel.org/all/anXgWRmcjwPKG7N5@willie-the-truck/
+>>>
+>>> --->8
+>>>
+>>> diff --git a/arch/arm64/include/asm/daifflags.h b/arch/arm64/include/asm/daifflags.h
+>>> index 795b35128467..691ee5f86dbe 100644
+>>> --- a/arch/arm64/include/asm/daifflags.h
+>>> +++ b/arch/arm64/include/asm/daifflags.h
+>>> @@ -132,7 +132,7 @@ static __always_inline void local_daif_inherit(struct pt_regs *regs)
+>>>                 trace_hardirqs_on();
+>>>
+>>>         if (system_uses_irq_prio_masking())
+>>> -               gic_write_pmr(regs->pmr);
+>>> +               gic_write_pmr(regs->pmr & ~GIC_PRIO_PSR_I_SET);
+>>>
+>>>         /*
+>>>          * We can't use local_daif_restore(regs->pstate) here as
+>>>
+>> I have no strong opinion on the change, but I struggle to see how it
+>> fits into the big picture.
+>>
+>> Specifically, I have difficulty explaining this change in isolation.
+>> Everywhere else, we try to keep DAIF.I and GIC_PRIO_PSR_I_SET in sync,
+>> so it is not clear why we should allow them to go out of sync when
+>> inheriting the exception state from the previous context.
+> Yeah, I think you're right, and looking at it some more it means we
+> end up with the pmr in the IRQON state which will break
+> arch_irqs_disabled().
+> 
 
+Ahh, nice catch!
 
-On 8/8/26 12:45 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
-> - [High] check_global_subprog_return_code() fails to validate BPF_REG_2 for global subprograms returning > 8 bytes, allowing kernel pointer leaks.
-> - [High] BPF-to-BPF calls returning 16-byte values are broken because prepare_func_exit() only copies R0 to the caller, leaving R2 uninitialized.
-> - [High] BPF programs cannot use 16-byte returns from kfuncs because check_kfunc_call() fails to initialize BPF_REG_2.
-> --
+>> At the same time, IIUC, the only reason we call local_irq_disable()
+>> (which also causes the states to become unsynchronized) in
+>> arm64_exit_to_kernel_mode() is for preemption path. So avoiding
+>> local_irq_disable() (and preemption) when we interrupted a
+>> non-preemptible context seems easier to follow.
+> In the past, we only preempted when returning to EL1 off the back of an
+> IRQ, but that was changed in ae654112eac0 ("arm64: entry: Use split
+> preemption logic") which I think is where this bug was introduced.
 >
-> --- Patch [6]: [PATCH bpf-next v3 06/13] bpf: Reject callbacks returning more than 8 bytes ---
-> commit d03b8255604638dcb72d6dda989b79be64af9fa4
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Reject callbacks returning more than 8 bytes
->
-> This patch prevents BPF callbacks passed to helpers, kfuncs, or as exception
-> callbacks from returning more than 8 bytes. Since the callback prototypes
-> yield a single u64 in R0, returning a 16-byte value would cause the upper
-> half to be silently dropped. The verifier now rejects such callbacks at
-> load time in check_ld_imm() and do_check_common().
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -16306,6 +16306,11 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
->>   			verbose(env, "callback function not static\n");
->>   			return -EINVAL;
->>   		}
->> +		if (bpf_ret_reg_pair(env, subprogno)) {
->> +			verbose(env,
->> +				"callback function with >8-byte return value is not supported\n");
->> +			return -EINVAL;
->> +		}
->>   
->>   		dst_reg->type = PTR_TO_FUNC;
->>   		dst_reg->subprogno = subprogno;
-> [ ... ]
->
->> @@ -18528,6 +18533,12 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
->>   				ret = -EINVAL;
->>   				goto out;
->>   			}
->> +			if (bpf_ret_reg_pair(env, subprog)) {
->> +				verbose(env,
->> +					"exception cb cannot return value larger than 8 bytes\n");
->> +				ret = -EINVAL;
->> +				goto out;
->> +			}
->>   
->>   			/* Also ensure the callback only has a single scalar argument. */
->>   			if (sub->arg_cnt != 1 || sub->args[0].arg_type != ARG_ANYTHING) {
->
-> While reviewing the support for 16-byte return values, I noticed a few other
-> places in kernel/bpf/verifier.c that might need updates:
->
-> In kernel/bpf/verifier.c:check_global_subprog_return_code():
->
->> 	return check_global_ret_scalar_reg(env, BPF_REG_0);
-> [Severity: High]
-> Does check_global_subprog_return_code() fail to validate BPF_REG_2 for global
-> subprograms returning more than 8 bytes?
->
-> A global subprogram returning a 16-byte value (e.g. __int128) could place a
-> kernel pointer in BPF_REG_2 and exit without the verifier rejecting it,
-> bypassing the verifier's pointer leak prevention.
->
-> Although currently unexploitable because callers have R2 marked uninitialized
-> due to another issue, if the caller issue is fixed, or if the kernel reads
-> the return value directly (e.g. via BPF trampoline), can this missing
-> validation become an exploitable KASLR bypass or pointer leak?
->
->
-> In kernel/bpf/verifier.c:prepare_func_exit():
->
->> 	/* return to the caller whatever r0 had in the callee */
->> 	caller->regs[BPF_REG_0] = *r0;
-> [Severity: High]
-> Are BPF-to-BPF calls returning 16-byte values broken here?
->
-> This only copies R0 to the caller, leaving R2 uninitialized in the caller's
-> frame. BPF programs calling static subprograms that return 16-byte values
-> cannot use the upper 64 bits of the return value, as the verifier will reject
-> the program with an uninitialized register error.
->
-> Additionally, precision backtracking logic added for R2 on static subprog exit
-> appears to be rendered unreachable dead code because R2 can never be marked
-> precise by the caller.
->
->
-> In kernel/bpf/verifier.c:check_kfunc_call():
->
->> 	if (btf_type_is_scalar(t)) {
->> 		mark_reg_unknown(env, regs, BPF_REG_0);
-> [Severity: High]
-> Can BPF programs actually use 16-byte returns from kfuncs?
->
-> This handles scalar return types from kfuncs but only initializes R0, leaving
-> R2 uninitialized.
->
-> Since caller-saved registers (including R2) are cleared before the call, any
-> BPF program attempting to use this new feature will be rejected by the
-> verifier when attempting to read R2. Should this also mark R2 as initialized
-> for 16-byte scalar returns?
 
-This patch is a preparation patch, in the next commit, proper verifier support
-(with returning R2) will be implemented.
+I believe we started allowing preemption from EL1 exceptions other
+than IRQ when we moved to the generic IRQ entry code. It turned out
+that, unfortunately, this is not safe in some cases, which is what
+Mark's series addressed.
+
+I agree that the change mentioned above introduced an unconditional
+local_irq_disable(), and if we want to backport it, it should be
+recorded under a Fixes.
+ > So we could probably hack something as you suggest, but maybe the best
+> option is to take patches 8 and 9 from your FEAT_NMI series? WDYT?
+> 
+
+Whatever you prefer, tbh :)
+
+Patch 9 codifies my understanding of how things are expected to
+work. That said, I accept that I could be missing something, hence the
+RFC tag.
+
+In case you decide to take it, we probably need to:
+
+- extend the commit message to cover Breno's report (right now, the
+  commit message makes it look like a refactoring)
+
+- add Fixes tags if we want it to be backported
+
+Alternatively, I can respin the patch separately with the suggestions
+above applied - just let me know ;)
+
+Cheers
+Vladimir
+
+> Will
+> 
 
