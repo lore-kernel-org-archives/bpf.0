@@ -1,115 +1,104 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 459013D9DC7;
-	Mon, 10 Aug 2026 12:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CC93AB496;
+	Mon, 10 Aug 2026 12:43:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786365743; cv=none; b=HXUfXsiU4gHJwsLb9zTF5SPN2tjrG029bPXYDZmLOsZ8JqoAeNQ4ZM7LXPyoKkNMr+epH+GN5JWioH3h6NEvqNMpkdurTpF9pLOBFdfRMmdML97uiwlacxt/t5dOR+OGFTYbx6rNGBFcRm8Ei9D8XXH3aa7gHNs54YtZeJzFwTI=
+	t=1786365782; cv=none; b=GUV6Wkcj1PZErUGFfh9+qV+KpiLYz1mL3WVMMmP6MZKx68c0X/hgTPrbdUoZ9E8Ph/180ytsEV6IhN3FmPr8Vgcm5S0sNS6QkoDBcty+kAKaP58nKaKMknhOeZVLmKGw/I5BBwmNv8vKymEohtz3+7U3Gy/WqWVbsB/SY1W85oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786365743; c=relaxed/simple;
-	bh=LfJqW5tpDOzFHBapUGs2MDgPQl1V/FtAeE1FZNBfIGU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pc8umY6ZxNH8Sgs5VzNNMFZmmnGxwRAY1qN8ctupIdIeWWCQ3lzdCJfy7gR4uEzrVlHRp4dvVeoMoIhDaomrQQft5gCUuSKhtXmuKm6ylMJ0ug6wliuR8kIXeeuGlN9x901PZI/4Ak0lHyKdtLUDX7Dqf4LHezjGk2mXnW7mUzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ISeTa5nr; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1786365782; c=relaxed/simple;
+	bh=+lJmqsqQ7i6Nia+Sra3FhPPVbO4YW6QPpg18KaY7wVY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Qe3Dhz2+PEjnfdeaXUyla7IJ7lz9fNG+i2G0KoRAO+t7PCkhAlrFC3mu7gbaMcNFFMe21OZcqW3fsKksvO1TJ5BtudRM6JFzwDdUjNS2+03uG5rzCGwMrKuDrIVdVJ+aqWVwRtRMUV+8b9hmIbMOTRJET27Zyz+W5rlIBcJbHMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Byph0iM6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ISeTa5nr"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5BC49143D;
-	Mon, 10 Aug 2026 05:42:15 -0700 (PDT)
-Received: from [10.1.34.163] (e121487-lin.cambridge.arm.com [10.1.34.163])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0530A3F86F;
-	Mon, 10 Aug 2026 05:42:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1786365739; bh=LfJqW5tpDOzFHBapUGs2MDgPQl1V/FtAeE1FZNBfIGU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ISeTa5nrufIkRolP9n8jeKaqRxnpZylF8jHYbBhn9QKqpGQyxayN7079KPL3QFBRR
-	 xv1T7sUzVLOIFjhKo6WhKLN2GUa5xsnPf9wUjM3ovXtRgKKuKTLhYgt7jog1pTQ58U
-	 mcH06Navhqr5PvcnAXX0PdEy+2K8oFCODp/aj2Ks=
-Message-ID: <2a97f777-d33a-4b3d-8c8c-6f6894f04c29@arm.com>
-Date: Mon, 10 Aug 2026 13:42:15 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Byph0iM6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6F61F000E9;
+	Mon, 10 Aug 2026 12:43:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786365780;
+	bh=mdlB1HXOoqK2FYTy4nWctbxVB2KgCne0kR9BJEWwrbE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Byph0iM6CZagy7+0Zqk8Cls3yvBjLwirf3+1lcO7AJmpxv6ri4DvBhdTQuck7W7Th
+	 aNzR4NZe1fJRIk0tHaMzD2QptsFLOYj661bStNZ+QJVqNGZ4WonlWMlvoJ6IcpKfVy
+	 P4zkJOksgIBeparNtxb6+ImExCzcVpNimcCIfJQMBsppz7cHwq0NSqEpv1eBBwG4rT
+	 3ZRb152Cxcn6AM0e3JS0qBbBFisEwVC8Gg/QIb7MB1qgxPW6QUK8C+b+0axUixt4Jr
+	 k6+5h8nrxdFCfqG/2NFB6qE7US4c3Hf7xhOZbAvtIu93F8nNLiGghXu8SfcnKnY/gC
+	 ZusOhP+BDGtFQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 2/6] rcu: Make Tiny call_rcu() safe to call from any
+ context
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev
+In-Reply-To: <20260810122758.183765-3-puranjay@kernel.org>
+References: <20260810122758.183765-1-puranjay@kernel.org>
+ <20260810122758.183765-3-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 10 Aug 2026 12:42:59 +0000
+Message-Id: <20260810124300.6F6F61F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC] arm64: entry: PSTATE_I_SET is leaking on pseudo NMI
- mode
-To: Will Deacon <will@kernel.org>, Breno Leitao <leitao@debian.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Jinjie Ruan <ruanjinjie@huawei.com>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, rmikey@meta.com,
- kernel-team@meta.com, Ada Couprie Diaz <ada.coupriediaz@arm.com>
-References: <20260807-arm64_fix-v1-1-d069ccf9d71b@debian.org>
- <anXkO8YpoadRzm07@J2N7QTR9R3> <anXqMsJ14r3BAbMG@gmail.com>
- <anYHjvJ1_4dDjuzw@gmail.com> <anm5T9FazACqOWXF@willie-the-truck>
-Content-Language: en-GB
-From: Vladimir Murzin <vladimir.murzin@arm.com>
-In-Reply-To: <anm5T9FazACqOWXF@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-Hi Will,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Moving `debug_rcu_head_queue()` into `rcu_do_enqueue()` bypasses d=
+ebugobjects tracking for deferred RCU callbacks, masking use-after-free bug=
+s and causing list corruption on double frees.
+--
 
-On 8/10/26 12:43, Will Deacon wrote:
-> On Fri, Aug 07, 2026 at 09:29:12AM -0700, Breno Leitao wrote:
->> On Fri, Aug 07, 2026 at 07:58:21AM -0700, Breno Leitao wrote:
->>> Meanwhile, I will try to ftrace the writes to PMR and regs->pmr to get
->>> a better grasp of the states machine we are in (probably on Monday).
->> It seems LLM found a very easy to reproduce this:
->>
->> 	bash-5.1# dmesg
->>
->> 	bash-5.1#  cd /sys/kernel/tracing
->> 	echo 'r:pmr vfs_read bad=+0($retval):u64' >> kprobe_events
->> 	echo 1 > events/kprobes/pmr/enable
-> Nice, that triggers straightforwardly in QEMU for me. The diff below
-> (which implements my suggestion from [1]) seems to fix the issue, but
-> it would be good to hear feedback from one of the Arm folks.
-> 
-> Will
-> 
-> [1] https://lore.kernel.org/all/anXgWRmcjwPKG7N5@willie-the-truck/
-> 
-> --->8
-> 
-> diff --git a/arch/arm64/include/asm/daifflags.h b/arch/arm64/include/asm/daifflags.h
-> index 795b35128467..691ee5f86dbe 100644
-> --- a/arch/arm64/include/asm/daifflags.h
-> +++ b/arch/arm64/include/asm/daifflags.h
-> @@ -132,7 +132,7 @@ static __always_inline void local_daif_inherit(struct pt_regs *regs)
->                 trace_hardirqs_on();
-> 
->         if (system_uses_irq_prio_masking())
-> -               gic_write_pmr(regs->pmr);
-> +               gic_write_pmr(regs->pmr & ~GIC_PRIO_PSR_I_SET);
-> 
->         /*
->          * We can't use local_daif_restore(regs->pstate) here as
-> 
+--- Patch [2]: [PATCH v4 2/6] rcu: Make Tiny call_rcu() safe to call from a=
+ny context ---
+commit b9d1d9e1aa870c19c3d9b30019cdb1bc509b6703
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-I have no strong opinion on the change, but I struggle to see how it
-fits into the big picture.
+rcu: Make Tiny call_rcu() safe to call from any context
 
-Specifically, I have difficulty explaining this change in isolation.
-Everywhere else, we try to keep DAIF.I and GIC_PRIO_PSR_I_SET in sync,
-so it is not clear why we should allow them to go out of sync when
-inheriting the exception state from the previous context.
+This commit updates Tiny call_rcu() to handle interrupts-disabled contexts
+when the scheduler is active. It defers the callback on a lockless list
+which is re-issued later via an irq_work, similar to Tree RCU.
 
-At the same time, IIUC, the only reason we call local_irq_disable()
-(which also causes the states to become unsynchronized) in
-arm64_exit_to_kernel_mode() is for preemption path. So avoiding
-local_irq_disable() (and preemption) when we interrupted a
-non-preemptible context seems easier to follow.
+> diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+> index dccccd6be9411..656b6a682e31a 100644
+> --- a/kernel/rcu/tiny.c
+> +++ b/kernel/rcu/tiny.c
+[ ... ]
+> @@ -157,29 +251,19 @@ EXPORT_SYMBOL_GPL(synchronize_rcu);
+>   */
+>  void call_rcu(struct rcu_head *head, rcu_callback_t func)
+>  {
+> -	static atomic_t doublefrees;
+> -	unsigned long flags;
+> -
+> -	if (debug_rcu_head_queue(head)) {
+> -		if (atomic_inc_return(&doublefrees) < 4) {
+> -			pr_err("%s(): Double-freed CB %p->%pS()!!!  ", __func__, head, head->=
+func);
+> -			mem_dump_obj(head);
+> -		}
+> +	if (should_rcu_defer()) {
+> +		call_rcu_defer(head, func);
+>  		return;
+>  	}
 
-Alternatively, using local_daif_restore(DAIF_PROCCTX_NOIRQ) directly,
-if we believe it is OK to downgrade the inherited context, would
-achieve the same effect as local_irq_disable() while keeping DAIF and
-PMR in sync.
+[Severity: High]
+Does moving debug_rcu_head_queue() into rcu_do_enqueue() bypass debugobjects
+tracking for deferred RCU callbacks?
 
-Cheers
-Vladimir
+Execution is routed to call_rcu_defer() before debug_rcu_head_queue() can
+activate the object in the debugobjects tracker. Adding to the lockless list
+in call_rcu_defer() overwrites head->next without verifying if the RCU head
+is already enqueued.
+
+If a caller erroneously frees the object or double-queues it during the
+deferral window before the timer tick issues the irq_work drain, could this
+mask use-after-free bugs or create cyclic structures on double frees?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810122758.1837=
+65-1-puranjay@kernel.org?part=3D2
