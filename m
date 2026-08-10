@@ -1,62 +1,50 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FE03E3159;
-	Mon, 10 Aug 2026 13:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E80D31D74B
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 13:43:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786368959; cv=none; b=PJ1NkRecZDorD82h3Pw478zyqIDvUVjY7V8Ngkt4hUn0hAGAyeej9sG9bzcIj27fc36zu6gqj3PjizUdH62m2xv5oy36TPF1XlP45t4vu2bbNJmKDghCXmO+/BPJJwuaBA8LG+Uid5l87PngCfe5izzg00FNYjFjmfbrWjhF/DU=
+	t=1786369432; cv=none; b=gH/zu/eHOoY1AvrnWUR4CfckJ9G5y7yjstYsbrdT7/dFzCEL1PbArcpBdDGVJDPpuRdUgmOnkjC8C+xl6wXS9UgmFgjOg4Kn/PElbduQUg0rcNUtliWIO4w7wIOLonp8XsYbEfwWEPIqcZWfb1qsaUHKGEogZVCqoxS0/Fzju08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786368959; c=relaxed/simple;
-	bh=O8IjTvx7ifftU2TvVuTVQDB1ccGcZuEgUJtDUCq73so=;
+	s=arc-20240116; t=1786369432; c=relaxed/simple;
+	bh=I3HiiSKoItN22cdvH5e098KQFoDdZVQ0dSdAbfAqcwg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g1UDoaHk+oAN1Om4FqgyIJk0rj6fQ3xTlEd+AM4mazoic85XMd/Y4dqC8vzFK6stz7Ji9ujJAUzxgvqOMV4fYqjRI+yAN/BiFnk+PoiWNPNkjjrNmgAbtG3fFXU4Grn8DtcWMto3l+R/takySpAtnsb5LPKHAWAe2e4bMCPp6ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T4vhV/b0; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=Aqd700zzQm+7gVptmpE874YZAjwDsaVDcqvS04UkEUVo3DeF4TY+FvXGf1J0vx0GJCrC8N3VF/SaSAtiusTmPm6D5xo/m8zPERidq+IdvGykrZDEshuhP/eLGm8lSx3e9eokTRgNFbB2+uRUvVLaIzsm0FfXGp1cHoFqyKZS+Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=QfQn8NRM; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T4vhV/b0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B2E1F000E9;
-	Mon, 10 Aug 2026 13:35:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786368957;
-	bh=hFHU+itqilLFa2LW0TtwgKnJ6JyHbm/bvFBqWleVcaQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=T4vhV/b0nCCPFZdxOdMKj8mLQsh5U7ab1MRrcw7L0WVBcQHZnHZz0nN4rFe7Ob8wh
-	 rUfUn7rFK4T/fWbLJynD9pFEnSgUAjO+Cntd/9xkrRjG4UJu7zgI2Qi9flHLTP/Y4M
-	 3mRATErduz+Tat/u/n1GLiphCpEACk89Jn8hmYFaNHcRq0Lo3D8ClL+MUWZG/PUvra
-	 8sJbQVLBPat1wGl0tHbl53NdqYxEfnZQZRNrD0PIQUjcJKPR3XG3gLVXnoPk2SBnt6
-	 98XGgONqvKeSdB2lRlo2rXS6SesDbsblbrblCaB8GFY1fzdH3QlereB3PBCbaSHD19
-	 9qCXnfJekK6pw==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Usama Arif <usama.arif@linux.dev>,
-	Will Deacon <will@kernel.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	x86@kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="QfQn8NRM"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=0ARfxLYfpPIfa175RYRniTWEBGGbz7wwxgJiAd1uGQc=; b=QfQn8NRMiUvk5lUu3oxKEjWoP+
+	HQD9Qhppng1HI8CbUlFd3r3eCKRM5fjHHFYRUc8fSgKD7BwKwlvLM8QStLtNmdKxMsW7bwa0oQN88
+	3IIx7zOICmFbcc/K8Co/DD/+M4ThdY6WmpAFcQKc3twZPzJQO8BgJ5iyzrGmpgGfkZWwYNoBX5yeW
+	ffS5pGe9npMuwF/B9NStnme3/7wiXhfGDqLy7EeiAwdhtTgXpYx+KnUSwxCs3Vvh3bpTRXlp5Ije4
+	h1Kzt6CUGWtSCZzY/fpEiuX8o1/0oyigOLYm4FnCCA4+golK98RkzAhgqJ/ZGJ4h5jeFq9sBU0dAh
+	zdwg+GAA==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wtQI7-00050H-0t;
+	Mon, 10 Aug 2026 15:43:47 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: memxor@gmail.com
+Cc: eddyz87@gmail.com,
+	puranjay@kernel.org,
 	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v7 3/3] perf/core: Fill branch entries with a single assignment
-Date: Mon, 10 Aug 2026 06:35:36 -0700
-Message-ID: <20260810133540.1947118-4-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260810133540.1947118-1-puranjay@kernel.org>
-References: <20260810133540.1947118-1-puranjay@kernel.org>
+	Pu Lehui <pulehui@huawei.com>
+Subject: [PATCH bpf-next 2/6] bpf, riscv: Clear fetch destination on faulting arena atomic
+Date: Mon, 10 Aug 2026 15:43:42 +0200
+Message-ID: <20260810134346.466004-2-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260810134346.466004-1-daniel@iogearbox.net>
+References: <20260810134346.466004-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -64,235 +52,69 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28088/Mon Aug 10 08:24:15 2026)
 
-perf_clear_branch_entry_bitfields() clears the bitfields of struct
-perf_branch_entry one by one and leaves from/to alone, since callers
-overwrite those straight away. The list has to be kept in sync with the
-struct by hand and has already fallen behind: new_type and priv were
-added to perf_branch_entry and never added here.
+A RMW atomic on an arena pointer is converted to BPF_PROBE_ATOMIC and
+gets an exception table entry, but that entry records no destination
+register to clear unless the instruction is a load-acquire today. That
+is right for a plain BPF_{ADD,AND,OR,XOR}, which only writes memory,
+but an RMW carrying BPF_FETCH also reads the old value into a register:
+src_reg for BPF_{ADD,AND,OR,XOR} | BPF_FETCH and BPF_XCHG, and r0 for
+BPF_CMPXCHG. emit_atomic_rmw() emits it that way, e.g.:
 
-Only BRBE writes those two, and neither for every record.
-brbe_set_perf_entry_type() leaves new_type alone for a branch type it
-does not recognise, and priv is not set for source-only records.
-arm_pmuv3.c allocates the per-CPU branch stack with kmalloc(), so such a
-record reaches userspace with whatever the slot held: uninitialised
-kmalloc() data on the first pass over the buffer, the previous record's
-values after that. Nothing under arch/x86/events/ writes either field,
-so only arm64 is affected.
+  [...]
+  case BPF_XCHG:
+          ctx->ex_insn_off = ctx->ninsns;
+          emit(is64 ? rv_amoswap_d(rs, rs, rd, 1, 1) :
+               rv_amoswap_w(rs, rs, rd, 1, 1), ctx);
+  [...]
 
-Assign the whole entry at each site instead. Everything not named is
-then zero, and there is no list to keep in sync. The bitfields add up to
-exactly 64 bits, so the struct has no padding to leave undefined.
+Thus, a fault over an unmapped arena page ex_handler_bpf() jumps over
+the access but leaves rs untouched, and the program resumes with
+whatever it held before the atomic instead of the 0 that every other
+BPF_PROBE_* access delivers. Fill the exception table entry in from
+bpf_atomic_load_reg(), which returns the BPF register an atomic reads
+the memory operand into or -1 when it has none. A load-acquire ends up
+with the same register it gets today, it just goes through the helper.
+Unlike x86-64 and arm64, riscv64 does not report arena violations from
+its exception handler, so there is no access direction to correct here,
+only the missing register clear.
 
-perf_clear_branch_entry_bitfields() has no callers left, so remove it.
-perf_entry_from_brbe_regset() assigns an empty literal instead, since it
-fills from/to conditionally. PERF_BR_SPEC_NA is 0, so dropping the
-explicit spec assignment changes nothing.
-
-Fixes: b190bc4ac9e6 ("perf: Extend branch type classification")
-Fixes: 5402d25aa571 ("perf: Capture branch privilege information")
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+Fixes: fb7cefabae81 ("riscv, bpf: Add support arena atomics for RV64")
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Pu Lehui <pulehui@huawei.com>
 ---
- arch/x86/events/amd/brs.c   |  9 +++--
- arch/x86/events/amd/lbr.c   | 16 ++++-----
- arch/x86/events/intel/lbr.c | 65 ++++++++++++++++++++-----------------
- drivers/perf/arm_brbe.c     |  2 +-
- include/linux/perf_event.h  | 17 ----------
- 5 files changed, 48 insertions(+), 61 deletions(-)
+ arch/riscv/net/bpf_jit_comp64.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
-index dc564688f3d73..54b13faba116c 100644
---- a/arch/x86/events/amd/brs.c
-+++ b/arch/x86/events/amd/brs.c
-@@ -343,11 +343,10 @@ void amd_brs_drain(void)
- 		if (!amd_brs_match_plm(event, from, to))
- 			continue;
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 6b9972b07c1b..2504df1fa111 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -1992,10 +1992,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 			ret = emit_atomic_rmw(rd, rs, insn, ctx);
  
--		perf_clear_branch_entry_bitfields(br+nr);
--
--		br[nr].from = from;
--		br[nr].to   = to;
--
-+		br[nr] = (struct perf_branch_entry){
-+			.from	= from,
-+			.to	= to,
-+		};
- 		nr++;
- 	}
- empty:
-diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-index 9d9c961989d51..a55646fcb8465 100644
---- a/arch/x86/events/amd/lbr.c
-+++ b/arch/x86/events/amd/lbr.c
-@@ -184,13 +184,6 @@ void amd_pmu_lbr_read(void)
- 		    entry.to.split.reserved)
- 			continue;
- 
--		perf_clear_branch_entry_bitfields(br + out);
--
--		br[out].from	= sign_ext_branch_ip(entry.from.split.ip);
--		br[out].to	= sign_ext_branch_ip(entry.to.split.ip);
--		br[out].mispred	= entry.from.split.mispredict;
--		br[out].predicted = !br[out].mispred;
--
- 		/*
- 		 * Set branch speculation information using the status of
- 		 * the valid and spec bits.
-@@ -208,7 +201,14 @@ void amd_pmu_lbr_read(void)
- 		 * speculative and took the correct path
- 		 */
- 		idx = (entry.to.split.valid << 1) | entry.to.split.spec;
--		br[out].spec = lbr_spec_map[idx];
-+
-+		br[out] = (struct perf_branch_entry){
-+			.from		= sign_ext_branch_ip(entry.from.split.ip),
-+			.to		= sign_ext_branch_ip(entry.to.split.ip),
-+			.mispred	= entry.from.split.mispredict,
-+			.predicted	= !entry.from.split.mispredict,
-+			.spec		= lbr_spec_map[idx],
-+		};
- 		out++;
- 	}
- 
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index f8fadb0b16a45..0a9b34261ebe3 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -756,10 +756,10 @@ void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc)
- 
- 		rdmsrq(x86_pmu.lbr_from + lbr_idx, msr_lastbranch.lbr);
- 
--		perf_clear_branch_entry_bitfields(br);
--
--		br->from	= msr_lastbranch.from;
--		br->to		= msr_lastbranch.to;
-+		*br = (struct perf_branch_entry){
-+			.from	= msr_lastbranch.from,
-+			.to	= msr_lastbranch.to,
-+		};
- 		br++;
- 	}
- 	cpuc->lbr_stack.nr = i;
-@@ -847,14 +847,15 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc)
- 		if (abort && x86_pmu.lbr_double_abort && out > 0)
- 			out--;
- 
--		perf_clear_branch_entry_bitfields(br+out);
--		br[out].from	 = from;
--		br[out].to	 = to;
--		br[out].mispred	 = mis;
--		br[out].predicted = pred;
--		br[out].in_tx	 = in_tx;
--		br[out].abort	 = abort;
--		br[out].cycles	 = cycles;
-+		br[out] = (struct perf_branch_entry){
-+			.from		= from,
-+			.to		= to,
-+			.mispred	= mis,
-+			.predicted	= pred,
-+			.in_tx		= in_tx,
-+			.abort		= abort,
-+			.cycles		= cycles,
-+		};
- 		out++;
- 	}
- 	cpuc->lbr_stack.nr = out;
-@@ -905,6 +906,7 @@ static void intel_pmu_store_lbr(struct cpu_hw_events *cpuc,
- 	struct perf_branch_entry *e;
- 	struct lbr_entry *lbr;
- 	u64 from, to, info;
-+	bool mispred;
- 	int i;
- 
- 	for (i = 0; i < x86_pmu.lbr_nr; i++) {
-@@ -921,24 +923,27 @@ static void intel_pmu_store_lbr(struct cpu_hw_events *cpuc,
- 		to = rdlbr_to(i, lbr);
- 		info = rdlbr_info(i, lbr);
- 
--		perf_clear_branch_entry_bitfields(e);
--
--		e->from		= from;
--		e->to		= to;
--		e->mispred	= get_lbr_mispred(info);
--		e->predicted	= !e->mispred;
--		e->in_tx	= !!(info & LBR_INFO_IN_TX);
--		e->abort	= !!(info & LBR_INFO_ABORT);
--		e->cycles	= get_lbr_cycles(info);
--		e->type		= get_lbr_br_type(info);
--
--		/*
--		 * Leverage the reserved field of cpuc->lbr_entries[i] to
--		 * temporarily store the branch counters information.
--		 * The later code will decide what content can be disclosed
--		 * to the perf tool. Pleae see intel_pmu_lbr_counters_reorder().
--		 */
--		e->reserved	= (info >> LBR_INFO_BR_CNTR_OFFSET) & LBR_INFO_BR_CNTR_FULL_MASK;
-+		mispred = get_lbr_mispred(info);
-+
-+		*e = (struct perf_branch_entry){
-+			.from		= from,
-+			.to		= to,
-+			.mispred	= mispred,
-+			.predicted	= !mispred,
-+			.in_tx		= !!(info & LBR_INFO_IN_TX),
-+			.abort		= !!(info & LBR_INFO_ABORT),
-+			.cycles		= get_lbr_cycles(info),
-+			.type		= get_lbr_br_type(info),
+ 		/* ret can be 1 (skip-zext); extable entry still needs to be added */
+-		if (ret >= 0)
+-			ret = add_exception_handler(insn,
+-				bpf_atomic_is_load_acq(insn) ? rd : REG_DONT_CLEAR_MARKER,
+-				ctx) ?: ret;
++		if (ret >= 0) {
 +			/*
-+			 * Leverage the reserved field of
-+			 * cpuc->lbr_entries[i] to temporarily store the
-+			 * branch counters information. The later code will
-+			 * decide what content can be disclosed to the perf
-+			 * tool. Pleae see intel_pmu_lbr_counters_reorder().
++			 * A load-acquire reads into dst_reg, and a read-modify-write
++			 * carrying BPF_FETCH reads the old value into src_reg, or into
++			 * r0 for a BPF_CMPXCHG. Clear that register on fault, the
++			 * remaining atomics have no destination register.
 +			 */
-+			.reserved	= (info >> LBR_INFO_BR_CNTR_OFFSET) &
-+					  LBR_INFO_BR_CNTR_FULL_MASK,
-+		};
- 	}
++			int load_reg = bpf_atomic_load_reg(insn);
++
++			ret = add_exception_handler(insn, load_reg < 0 ?
++					REG_DONT_CLEAR_MARKER : regmap[load_reg],
++					ctx) ?: ret;
++		}
  
- 	cpuc->lbr_stack.nr = i;
-diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-index ba554e0c846c4..254be4da8ae29 100644
---- a/drivers/perf/arm_brbe.c
-+++ b/drivers/perf/arm_brbe.c
-@@ -604,7 +604,7 @@ static bool perf_entry_from_brbe_regset(int index, struct perf_branch_entry *ent
- 		return false;
- 
- 	brbinf = bregs.brbinf;
--	perf_clear_branch_entry_bitfields(entry);
-+	*entry = (struct perf_branch_entry){ };
- 	if (brbe_record_is_complete(brbinf)) {
- 		entry->from = bregs.brbsrc;
- 		entry->to = bregs.brbtgt;
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 48d851fbd8ea5..310681cccb50a 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1467,23 +1467,6 @@ static inline u32 perf_sample_data_size(struct perf_sample_data *data,
- 	return size;
- }
- 
--/*
-- * Clear all bitfields in the perf_branch_entry.
-- * The to and from fields are not cleared because they are
-- * systematically modified by caller.
-- */
--static inline void perf_clear_branch_entry_bitfields(struct perf_branch_entry *br)
--{
--	br->mispred	= 0;
--	br->predicted	= 0;
--	br->in_tx	= 0;
--	br->abort	= 0;
--	br->cycles	= 0;
--	br->type	= 0;
--	br->spec	= PERF_BR_SPEC_NA;
--	br->reserved	= 0;
--}
--
- extern void perf_output_sample(struct perf_output_handle *handle,
- 			       struct perf_event_header *header,
- 			       struct perf_sample_data *data,
+ 		if (ret)
+ 			return ret;
 -- 
-2.53.0-Meta
+2.43.0
 
