@@ -1,100 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B4D3BB9ED;
-	Mon, 10 Aug 2026 10:45:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523693BE635;
+	Mon, 10 Aug 2026 10:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786358712; cv=none; b=P1sfAgL7Nnk7Df6JLPmvoQX8WbIuLi87i0SIIJSQJFzAZOLQ8uDWPdx2W3670sl5zCNXRre7HmXnO0VH2YR9TcLsJ5pj/YfsM9emNulBj4BcddNCDMK53HkAzskVLgHfBvx3gWzU92aFYPVai/y1kP98HRBXGfo3sH5Yh3kXyrs=
+	t=1786359599; cv=none; b=UztvbLg/GXH49VvMVBaIaRyiTHihy136snVx3QaBclr3fSkineNLrFHtyrDbTr5/CSJXyLpSXbg7AVctZXHIEVG6moSc2VwcMrPEc3gNJDkf5YUShTr451JAWOj0vLUbQ9sb+h9Xv9ieMAumZoDwuzuHENhi+xnlYY6R3lnnELo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786358712; c=relaxed/simple;
-	bh=FpT3MACyc0VpHGcCoXoY5F523i77BlJiaCNjQrKc0R4=;
+	s=arc-20240116; t=1786359599; c=relaxed/simple;
+	bh=+Iw+4bBO89J717mHlLJrUBhcauF8tf+xg543RsB5zCM=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=E0O8TRH3R5L4Msg2xXL/a7faoRT/dscy5pzOdcNqJNrRj5k4E3YlB4D4qXWacU8n5R2G+V4KxsvKsPvCRTUIvSU2+A5g7LBQPfNe4qvToP68Wik0/873eB995er4mg7AXnSmzK+4H80UMoUh4STufrXAG0U+pcAYZDTbmmx2xkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SllqX/Fu; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=RUR2qKPIQwhrOWtYpSglc4uvfN0kJg7ueAq3Jijbp6aNQMuI+81oI/FX30mXXRNkf52dJPTlh1gdjgxWJpMJhpS8CPcIecNfHX/ltHgI0wQ4unfHRPmjhMmJT+emEjnqLR5p8n68Vk6jC4cdUqKNOvXnyIpTCR4GqqbBikjWpg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C6F1QME/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SllqX/Fu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9288B1F000E9;
-	Mon, 10 Aug 2026 10:45:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C6F1QME/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539CB1F000E9;
+	Mon, 10 Aug 2026 10:59:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786358711;
-	bh=YiVS01HVwmjHtEcyresmnVZbFtKJ+qrXTT5jRW/oskg=;
+	s=k20260515; t=1786359598;
+	bh=xbM4gbSuwjsjG8vSc+BkwQbh/PMhRDiuJXMRdJz0ihQ=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SllqX/FuEWkZyh2DJs5KwWDwr0cSTo/FXqinWlkUkv7k8oJaLy4qvm08L7Faa2S5I
-	 Cok81wOoAdd261w4eT8S6Li75jcXOItTxt0Jmo4Wh92QPD9gtn7tU9815pFXgwqFCh
-	 p/PhTrj340LpFJjNH5loNP0s9mB8jD/AS/aQQ6mKX2/w7/WQ3rsFA3bCEKi5KkM8Xd
-	 dZtOIq7AAnzIqdmcHUoj835A7OUzLUJgffKK+rHzltVqK1hwLOcDh5vVW3ZesTx8G0
-	 q95C+ckNW8yN9BicZBIkhbhRL1u5PRIN23JCzQGGE6JIIwjD+CoxezWLXYVwCY3hEF
-	 X9clQxrqIrErw==
-Content-Type: multipart/mixed; boundary="===============2040896362550893805=="
+	b=C6F1QME/Y6zr/NrgKC9Bk2ScxXsksvvem5W6rAcxZ2dsJkVuYY2seNs2fiVwn8NyC
+	 pS6Ar4bgew9/KcdoG1kFweoC2yqgRKJGzaO33OLf0/TSX3ZsTBPq0H1i7mJuiEZ3hU
+	 PQxB6NTsD5ji7K2/7oZoU8mrSv5lTynfHo+8blfajfZX/VBMUYK63uKnakJ5CxV8IU
+	 1LoYvHLdhprKlVNNKYRpYUqlUN4GynIV4PyFJmgumG2yE4kp5/J32YsaHQrmrneg4/
+	 dj09HKrlSZcve8P5K4MYbt2IjcsmCG9E8l5NaZwKeeQlp9qFi8wUgi6K5/3kauZNOE
+	 fluXPq0ThgdCg==
+Content-Type: multipart/mixed; boundary="===============1316979623471997190=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <eef3da9def5fc191df9f954558e4ab6c114082534f6d8901a32393b70473db4f@mail.kernel.org>
-In-Reply-To: <20260810094634.2723213-2-chenyuan_fl@163.com>
-References: <20260810094634.2723213-2-chenyuan_fl@163.com>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf, arena: fix range_tree_clear inconsistency on kmalloc_nolock failure
+Message-Id: <8b97ada9d7f542fd0c548520e60a114194879159e5ac8ef0cca2b8c367b2f323@mail.kernel.org>
+In-Reply-To: <20260810094634.2723213-4-chenyuan_fl@163.com>
+References: <20260810094634.2723213-4-chenyuan_fl@163.com>
+Subject: Re: [PATCH bpf-next v2 3/3] bpf, arena: check range_tree_set return in arena_free_pages and arena_free_worker
 From: bot+bpf-ci@kernel.org
 To: chenyuan_fl@163.com,bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 10 Aug 2026 10:45:10 +0000 (UTC)
+Date: Mon, 10 Aug 2026 10:59:57 +0000 (UTC)
 
---===============2040896362550893805==
+--===============1316979623471997190==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
-> index 2f28886f3ff7..15b588377a76 100644
-> --- a/kernel/bpf/range_tree.c
-> +++ b/kernel/bpf/range_tree.c
-> @@ -143,16 +143,22 @@ int range_tree_clear(struct range_tree *rt, u32 start, u32 len)
->  		if (rn->rn_start < start && rn->rn_last > last) {
->  			u32 old_last = rn->rn_last;
+> commit bfa5738a7c316a45ba16a067c92606ef3610c0b9
+> Author: Yuan Chen <chenyuan@kylinos.cn>
+> Date:   Mon Aug 10 17:46:34 2026 +0800
 >
-> +			/*
-> +			 * Pre-allocate the right-half node before modifying
-> +			 * the tree. If allocation fails we return -ENOMEM
-> +			 * without altering the range tree.
-> +			 */
-> +			new_rn = kmalloc_nolock(sizeof(struct range_node),
-> +						__GFP_ACCOUNT, NUMA_NO_NODE);
-> +			if (!new_rn)
-> +				return -ENOMEM;
-> +
->  			/* Overlaps with the entire clearing range */
->  			range_it_remove(rn, rt);
->  			rn->rn_last = start - 1;
->  			range_it_insert(rn, rt);
+>     bpf, arena: check range_tree_set return in arena_free_pages and arena_free_worker
 >
-> -			/* Add a range */
-> -			new_rn = kmalloc_nolock(sizeof(struct range_node), __GFP_ACCOUNT,
-> -						NUMA_NO_NODE);
-> -			if (!new_rn)
-> -				return -ENOMEM;
-> +			/* Add right-half range */
->  			new_rn->rn_start = last + 1;
->  			new_rn->rn_last = old_last;
->  			range_it_insert(new_rn, rt);
+>     arena_free_pages() and arena_free_worker() now handle range_tree_set()
+>     errors. arena_free_pages() aborts the free on error, and
+>     arena_free_worker() moves range_tree_set() before PTE clearing so that a
+>     failed tree update leaves the PTEs intact instead of freeing pages that
+>     the arena free tree does not track.
+>
+>     Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 
-This isn't a bug, but could the changelog also state what went wrong
-with the old ordering? The sibling patch d453da244bfd ("bpf, arena:
-fix range_tree_set inconsistency on kmalloc_nolock failure") spells
-out the consequence ("previously the overlapping nodes were already
-removed by range_tree_clear() before the allocation was attempted,
-permanently losing the cleared sub-ranges"), while this changelog only
-describes the new behavior. Without explaining that the right sub-range
-[last + 1, old_last] was permanently lost from the free tree when
-kmalloc_nolock() failed after the left half had already been shrunk,
-the two changelogs read inconsistently.
+This commit fixes missing error handling for range_tree_set() that can
+lead to memory tracking inconsistencies. Should this include a Fixes: tag
+pointing to the original commit that introduced bpf_arena?
 
-This looks like a bug fix for the original range_tree implementation.
-Should this include:
-
-  Fixes: b795379757eb ("bpf: Introduce range_tree data structure and use it in bpf arena")
+  Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
 
 
 ---
@@ -102,4 +73,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31377360587
---===============2040896362550893805==--
+--===============1316979623471997190==--
