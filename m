@@ -1,56 +1,103 @@
-Received: from mail-10629.protonmail.ch (mail-10629.protonmail.ch [79.135.106.29])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3920C3AB28F
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 14:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633FA3F20E3
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 14:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786371638; cv=none; b=fdKF4JNYO6gnI00czOt/HjRaujHhS/fMsdCduSAZhIH/FfYHPN5VuqOJFwlapnHQvrY2mnGM8JohjVU3sBpfGQ0fYmPJdLVR0RUmG8CpJVipzzfMcfcvXHsmZMvl0eovPS90TdYKIfdIJoDshxHG35pgMv/b/TAJvJI2SQQtzQw=
+	t=1786371799; cv=none; b=BDFePMQ3+mdvyTM49e+lxs7aVKJYacSnUNnE6sFNligPdqasKWpLt0Z0/lRZgselyllxKOrvkcxT7dfEDOEny3nxXS9MqoTfx4itH1mXwbaZL5P+zwCr0DTGGdpBEkt0yWH/kLrdE6ihoh248xlHPY16qecpXTBPlmrPIwcXMUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786371638; c=relaxed/simple;
-	bh=3qtnKdag+7AGprnPTL/qBvvdL+1X3BTxhWb2L6o6UVE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mlzK/MtDHO/Vdvm7Xj12fbC6+R7MwJRaP6QMkO1M4kcKGI7yvyOHo9Jg+HuzoRQ0fC3L3JInKWCWeFLTlg/ccBKaA2WpfPNSYTVyq5+eVjD8IgPHz8DJ+hLZr21srmYKGh5SNTSp7pMBYyvog7clgJHSGvaBMrUalwyyBRUsqBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=o9INK1eO; arc=none smtp.client-ip=79.135.106.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1786371799; c=relaxed/simple;
+	bh=EfMX2pLZel5BpswDcEWxvfUW0iDIu1VEobdaFcmEnVA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AiYw36HoC0aeJAk56aB6xssWnlEBQecr6iQQtJxr6dddddzmSyuDEbBz5hj47iFcRF8R4SXL9SvMGMgB3yk7xdO0/edeJ71PVFX4WKaaNe5ECxcxd6GhcQCjOlo/wbjWfUuPZ3rgw4g6dPSISzho25QWdWW9JJzEd/P/Ew5F2cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=W+jFwUeU; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="o9INK1eO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1786371627; x=1786630827;
-	bh=3qtnKdag+7AGprnPTL/qBvvdL+1X3BTxhWb2L6o6UVE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=o9INK1eOkBDZbtIi7B+miT2RnVFSi1h9jIvPklJaE6A1k6PQfjxNUv18zus/xLARe
-	 B0na3ovm54KPTEIN4jA5Mg7JQcgDn5/y152f30qcum4UTtkyHstVhNER7t46tC0J1P
-	 1fLC4vyjYEmVtJj+0KXMSz06C2alzR4NUeKDksy6q8j0/Jvq00W/oO1TayPYtDzxn5
-	 j36/ZX4icII2lPkrG4xBUETQZn3A9H3NU6i+unqnzH44vMoIUdW/ISEc3pS+MX2ika
-	 ewbwq6x6s4QI+3n/ZgIEP7MH8jc/IeJOnTnLegUq6yeYQ9rAcbuZI9Uqsq7IV+1m5w
-	 2ywp+qdQE6sCQ==
-Date: Mon, 10 Aug 2026 14:20:09 +0000
-To: bot+bpf-ci@kernel.org
-From: Vinicius Sampaio <vldsampaio@pm.me>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, clm@meta.com, daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, ihor.solodrai@linux.dev, john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, martin.lau@kernel.org, martin.lau@linux.dev, sdf@fomichev.me, shenghaoyuan0928@163.com, shung-hsi.yu@suse.com, song@kernel.org, tangyazhou518@outlook.com, vldsampaio@pm.me, yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v4 1/3] bpf: Simplify cnum contains() by removing redundant branches
-Message-ID: <20260810142042.18168-1-vldsampaio@pm.me>
-In-Reply-To: <0f2e2ab963398c775f5eed7438c6c4054d61e3da6e0a7ae731b56813ad016ab1@mail.kernel.org>
-References: <20260730102129.15209-2-vldsampaio@pm.me> <0f2e2ab963398c775f5eed7438c6c4054d61e3da6e0a7ae731b56813ad016ab1@mail.kernel.org>
-Feedback-ID: 138063245:user:proton
-X-Pm-Message-ID: 6fadc3c6a223701b2133b14ac54f019d77450de8
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="W+jFwUeU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=hx
+	92AFS1PJdwQzBWbwyl4GordaF2BMrh5Zedd3x9fkc=; b=W+jFwUeUMUqjhXRYBF
+	KhEzZ7JCo0yXesKhjuXU47mowW33A6wgqLC3halwMG5aiELICZXq381h+vExjoQi
+	T6E5HqxOWTeIRl4J+dUzW/V9/TTAo81HmoaxgrAsYCGW8jgbdllr6uUquIoVPMcE
+	E0jHiIxynB19jciw4hh3Tr6zY=
+Received: from nec8-i7 (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3n9ip3nlq3APzNA--.8292S2;
+	Mon, 10 Aug 2026 22:22:36 +0800 (CST)
+From: chenyuan_fl@163.com
+To: bpf@vger.kernel.org
+Cc: Quentin Monnet <qmo@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Yuan Chen <chenyuan@kylinos.cn>
+Subject: [PATCH bpf-next v5 0/3] bpftool: fix batch file handling issues
+Date: Mon, 10 Aug 2026 22:22:21 +0800
+Message-ID: <20260810142224.2907373-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3n9ip3nlq3APzNA--.8292S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CF1UCw48uF1xXFyUCF43trb_yoW8ur13pF
+	W5Kw1Sqw4DGr9ruFn3uF45XFyfGws3AF1UGr13Kr1kZFn8GFyS9r4xKFyrW345ZryfZw1D
+	tanIvwn5Gw1UCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jF2NtUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAgzbmWp53qwGwQAA3q
 
-> This isn't a bug, but would the changelog be tighter without the
-> benchmark table?
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-I can change it in v5 if there's no other option, but at least it's consist=
-ent
-with the other patches in the series.
+This series fixes three issues in bpftool's batch file handling:
+
+ 1. map dump closes the map fd twice (introduced by the map-by-name
+    dump refactor); do_show_subset() has the same double close.
+ 2. do_batch() reports a spurious read failure because a stale errno
+    from a previously executed command is used instead of checking the
+    FILE stream state.
+ 3. a line longer than the batch buffer that contains a '#' within the
+    buffered prefix bypasses the line length check: the comment
+    stripping truncates the buffer before the length is checked, so the
+    unread remainder of the line is parsed and executed as a separate
+    command on the next loop iteration. Continuation lines are affected
+    the same way, bypassing the "command is too long" check.
+
+Changes in v5:
+  - Patch 1 also fixes the double close in do_show_subset() and
+    propagates the error when bpf_map_get_info_by_fd() fails on a
+    subsequent map in do_dump(), as pointed out in review.
+  - Patch 3 detects the truncated read with memchr() for a newline plus
+    feof() instead of strlen(), which is also fooled by an embedded NUL
+    byte; a line that fills the buffer exactly is no longer rejected,
+    as pointed out in review.
+
+Changes in v4:
+  - Extend patch 3 to also cover continuation lines, whose comment
+    stripping bypasses the "command is too long" check the same way, as
+    pointed out in review.
+  - Drop the USE_LIBCAP errno reset in main(), which existed only to
+    keep errno clean for the batch mode and is no longer needed now
+    that do_batch() detects read failures with ferror(), as pointed out
+    in review.
+
+Changes in v3:
+  - Add patch 3 fixing the pre-existing comment-stripping bypass of the
+    batch line length check, as pointed out in review.
+
+Yuan Chen (3):
+  bpftool: fix double close in map dump
+  bpftool: fix spurious batch file read error
+  bpftool: Fix bypass of the batch line length check by comments
+
+ tools/bpf/bpftool/main.c | 44 +++++++++++++++++++++++++++-------------
+ tools/bpf/bpftool/map.c  |  4 +---
+ 2 files changed, 31 insertions(+), 17 deletions(-)
+
+-- 
+2.54.0
 
