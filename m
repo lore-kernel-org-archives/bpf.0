@@ -1,199 +1,123 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mta1.migadu.com (out-167.mta1.migadu.com [95.215.58.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15B9357D19
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 15:36:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786376172; cv=pass; b=aEOZPw1n4E4mRBFCUxo90ewd8+M/2IvAQTJeSRAEfMCZ6XcCndeVtA9zYU8yWnEAZwLHM3vsnmil3vh+iNLdh4qRNMEhiy+JnnML2eOK0PvG5zr4SCl9y7olPJc1WIIOYKHa3nBMVi3/cGBT7xJXxjaDDA4xSH0lpJleTgPBkrk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786376172; c=relaxed/simple;
-	bh=n8olFxv2/B8lZ96dx6n2x6SHUcA86fdHDqLKScaviFM=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=KMHn9UcUITg5QEQcsoenJ5E2XR5XGEuMKeoHByO0BAEpVODgwnEquT7v0JL5Vz6djR8q9j6x7fIjK1QySiTIKqFB40tWzWHX53DExIimys8xGeOQ2DdD4hG+QtTp2V6VP04EissqrypO1wBVtogBbbK26ZGB+RMQZDd8NyH6CTo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IqzPMldF; arc=pass smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B0541B8F8
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 16:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.167
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786379408; cv=none; b=nbmsUcZKe51eHS9LRh9EAdWIT+UmRD16engXJv1dTzgpOBw9D2vLrge3rxq/Mq0s25ShTszJWmozxyUzjl5n9SdOhYmi6hIwkcAcBbMFragqk5ujFV5QnUGvkqlhiUaZsOTQRi+C49O/zLDJHBCZe13ERSW5HYrlG3Eb9SA8PI8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786379408; c=relaxed/simple;
+	bh=onMNGAUPGzLJbLSPzwwZ94rQt1DWNH1PEWGM/hMEbiw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G6b37QE21biZUfyhnzObL3XLOJTeSYrbRYJamaFLmGug/L0hFNxTmvHgXUuCBb5VUbOdZ8o3YxUKWQYLG7cz4i+w0ZDjrJnoK5+A85BTKcVyGmCyrIcD75rz6ZstxzkkrAJVkmtItYqjSS8YazC3I0dabgq2XQT/D5fekwzh/5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iCYKnuft; arc=none smtp.client-ip=95.215.58.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IqzPMldF"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-39c9a3acd40so13699081fa.3
-        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 08:36:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786376169; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ssApL0jpEAexl4rb6Gi4ldPTPLuzo4nuX14xt+pDFWzLw/7lv1WOSc3aVUb96zkHpr
-         FkvGO291zj1h7e9obfL8ETzOKnOJMXo4aqNOXMax1y9F8zoU4x7/VwupF+dpYSoPAJKI
-         8/VKjniqgqFFeX79L+mGL6jFXYl2zMR+meKjsqMHlXlzODOB2cc2CCpVVm+05XFpfrUX
-         TjoP6waz2xxw6l8tZa1NENYXU20aQEj6BrSSal1slfM39SW+uEf+W+u1rOnV1teV2sVL
-         aitUm7leNC6/75Gca0/JF5XvtLI3JQp/QebUHO3JzhjpbR6pNEHP/0atFDyKna/B8YKf
-         k43w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=YFVCchQzBB9Xntjm9ZDcdgmlYOmjw3/Zstjs0JA74WM=;
-        fh=ja1Wlih1KilCshJWUJc/9+qi9bYTUBu5WWmC6XxNgY4=;
-        b=YbVjy86cvkFBs7rzll0Fb2TdaS7aj/37oKOWOLi8x8qYu0aYJ0i/oRvVjT/T9HNng7
-         GbzBzQwR5/UfgfyiuQw6+5pHrurBs3ciRWvjfX94RddUza6tWURmAVDWybXZw/7v0Jgj
-         K8uU+Zgfwp0uNoKCJQZFMTljTIQn8a2y4fXlXui0ycYdu4eTN4bYeQm/iKVfDqYNEYIV
-         O3jRQRl9Bdmjvn3jdIha6+1Ho3JixWWu0IHZDu/QkTUmwpQf82x3ZpsbueAianR2Ln4u
-         00SZdgFPMunoP1isQSFbugMjg6X86qLaCslN31TisadjNvS95dAewFfDaL95XEuTep/w
-         Ye2w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786376169; x=1786980969; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YFVCchQzBB9Xntjm9ZDcdgmlYOmjw3/Zstjs0JA74WM=;
-        b=IqzPMldFTXkjLCIn34KnAkZHuiXX+JARmXq6SujXBpGUMWHcLwY+X/gzsAkjUKxbeT
-         7qv5ytrgVb1tQefxKYT/UkeiDBHaPKTjrB30i2NAyigtDTRAjW91SQV4KXiuE/5BemBt
-         MGe7Z6O/wetrFZIiK59xfSm37R8T1Qp0EPu6GX+flnanCnLJUhFYcNLQbmLBak18zQip
-         kKzKjadUogSxnn3gcLf0VolM877pStwPUmDiln050XnKm5zC4VB97Pbh0wB8CNXuWxxT
-         07AYcxvXiUxeSphx/+QNQnm6x91oX1pCKUG2h4+qL8qQwH3yXqtt8y4i3Xh6/tVl4naq
-         S+5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786376169; x=1786980969;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=YFVCchQzBB9Xntjm9ZDcdgmlYOmjw3/Zstjs0JA74WM=;
-        b=c61ZCvAAiZ9iDD8L5wCQ9ZjOyLBMSZCcWQ8DDOK85FwXnlCJvU84CJ+JWxTTrbeBoC
-         rZfAeAK8w2elcuF5QivhHxiW5ZTgMpHUr7JZ8q5slFZNTMQ9+mVpPuON79uxjhDP74i6
-         yKtZBN0WFqHDU0k9I6CQfH4gQ2xxTlAoXOa6NdpzzSZp1LPZgY6Rd8GQ205NyBkKUhj4
-         ITTdZpWrZTvY4DaoVA/EcqN1X94pLW9zGhc7cgGcG9F98psmc81vEPeNa4ZjMVA+nB8g
-         MZKWrM+sfWI0uE+HzesxT9WVsqLzos64ryCpkhuxarunRPzAPNOwVKBzLzVaRMU4l8QU
-         CdOQ==
-X-Gm-Message-State: AOJu0YyqCrtqSKV3wHncWgPex3ZNEbN2jfMclDK/F8qHH+gFZuXryFXs
-	4LbhxLGCkz3DUnV85/ddnFnwea5bmVzwKhnqAm8WUwrwYtyicsYZZzZExsW+obs66D6R948P/g8
-	B3A6jcMpA4Mv9d4Fl25AOT/CaeOoLn7Jubd2EAT8=
-X-Gm-Gg: AR+sD13TO1mWdC4tTMzdYguXp9etG2HIsJIv/dy2u1gXKLUl7v5Z3BxSlrYOQ5k9Apo
-	ydsJEZiRHL5RT3UUeUdF9vKDm8p+91X2GbouHISWNf0q4CNBSYJZFzYEQoZ631+AAmVNtjpKGqN
-	4gskKMV0NIJxpdhiKXdksu2wtg4OYmhOo+8XZeQwLHpmkVJoWQaYJc5VQB3E2KSWy+7lIjn2657
-	svylBcjzMtykVjWAC3lU8Eva8d4usNuiS2bVXcm3g+LuiXsYNwebg4FoQSlmTMOSR100ybQg/N0
-	9EZebcqgBLLQpYdy9+CTFGcNSnDDj6DfLC6b6tksojlwryuVe5ASohzN33J3zHvR9s2utNEkg4F
-	VASSvcMsmhORRg7ix0WewUf2zUhZEaqPmSGEoJa1xXBllhrqEusdrnnKbLwcyH96M6F7Pvg==
-X-Received: by 2002:a2e:be28:0:b0:39e:eb8c:351a with SMTP id
- 38308e7fff4ca-39fbb22cd47mr48291721fa.27.1786376168628; Mon, 10 Aug 2026
- 08:36:08 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iCYKnuft"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=onMNGAUPGzLJbLSPzwwZ94rQt1DWNH1PEWGM/hMEbiw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786379404; v=1; x=1786984204;
+ b=iCYKnuftFEKYbmzrErI7koyD4l4UQF+3Rl/6yqg8r6sb6V9de74oJa2dQinNVyySKV01iWjK
+ SnAATgV0svmxw0v0a1z/NOFadRLfGLfSokd+cF8DXzqkUxalDWBQN+v6OeMVt5cOaxthZYdQhe9
+ 6tzhiRYyZetoOcMDB+6IoulA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [IPV6:2a03:83e0:1151:15:1c5e:37e8:36:dd37] (2620:10d:c090:500::5:2f4a)
+	by mta12.migadu.com with ESMTPS id d4309caf9de555b5;
+	Mon, 10 Aug 2026 16:29:54 +0000
+X-Migadu-Scanner: mta12.migadu.com
+Authentication-Results: mta12.migadu.com;
+	none
+Message-ID: <e465fed4-7014-4d24-9db9-e8762755bf59@linux.dev>
+Date: Mon, 10 Aug 2026 09:29:44 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Darren Carreras <carrerasdarren@gmail.com>
-Date: Mon, 10 Aug 2026 11:35:57 -0400
-X-Gm-Features: AUfX_mx21hSlWZJQWB17rjBHQJCz4dKq83gmqxnzz7aX-nPkDhDh0mpCrqF0ZKw
-Message-ID: <CAOZ_KyvV-Ha7XDZHCUcyYKPMSUvMSrZ0NhmtMVy_KqWD0Ar4kg@mail.gmail.com>
-Subject: [PATCH bpf-next] libbpf: avoid overflow in BTF.ext bounds check
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev, 
-	ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 03/13] bpf: Wire up JIT support for 16-byte
+ kfunc returns
+Content-Language: en-GB
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260808190322.1896580-1-yonghong.song@linux.dev>
+ <20260808190337.1898362-1-yonghong.song@linux.dev>
+ <20260808193954.645B91F000E9@smtp.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260808193954.645B91F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From 0ee0da46079d4e9453afe2b28acdaadc0f011042 Mon Sep 17 00:00:00 2001
-From: Darren Carreras <carrerasdarren@gmail.com>
-Date: Mon, 10 Aug 2026 11:20:13 -0400
-Subject: [PATCH] libbpf: avoid overflow in BTF.ext bounds check
 
-An invalid BTF.ext subsection length can wrap the pointer addition used by
-btf_ext_parse_sec_info() on 32-bit builds. The wrapped pointer passes the
-bounds check and parsing then reads beyond the copied BTF.ext data.
 
-Validate the offset and length with subtraction before forming the section
-pointer. Add a selftest using an overflowing func_info_len.
+On 8/8/26 12:39 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] Uninitialized kernel register state can be leaked to BPF programs when a kfunc returns an aggregate (struct/union) between 9 and 15 bytes in size.
+> --
+>
+> --- Patch [3]: [PATCH bpf-next v3 03/13] bpf: Wire up JIT support for 16-byte kfunc returns ---
+> commit f2df1b40e2f3eb74688d20cd37742fe85c667da9
+> Author: Yonghong Song <yonghong.song@linux.dev>
+> Subject: bpf: Wire up JIT support for 16-byte kfunc returns
+>
+> This patch adds JIT support for returning structures up to 16 bytes from
+> kfuncs in the BPF R0:R2 register pair. It implements the necessary RDX to RSI
+> move for x86-64 and adds opt-in capabilities for the x86, arm64, and riscv
+> architectures.
+>
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> index 8dddb5d7af21b..01c34114c8502 100644
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
+> [ ... ]
+>> @@ -2647,6 +2647,22 @@ st:			insn_off = insn->off;
+>>   				return -EINVAL;
+>>   			if (priv_frame_ptr)
+>>   				pop_r9(&prog);
+>> +			if (src_reg == BPF_PSEUDO_KFUNC_CALL) {
+>> +				const struct btf_func_model *fm;
+>> +
+>> +				/*
+>> +				 * A kfunc returning a >8 byte aggregate hands the
+>> +				 * second half back in RDX (the native ABI's second
+>> +				 * return reg), but BPF expects it in R0:R2. BPF R0
+>> +				 * is RAX (no move needed), while BPF R2 is RSI, so
+>> +				 * copy RDX into RSI.
+>> +				 */
+>> +				fm = bpf_jit_find_kfunc_model(bpf_prog, insn);
+>> +				if (!fm)
+>> +					return -EFAULT;
+>> +				if (fm->ret_size > 8)
+>> +					emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_3);
+> [Severity: High]
+> In do_jit(), when a kfunc returns an aggregate between 9 and 15 bytes in size,
+> could this 64-bit move leak uninitialized kernel register state?
+>
+> According to the native ABI, the upper bytes of the second return register
+> (RDX/BPF_REG_3) might contain padding and be uninitialized.
+>
+> Since the move is a full 64-bit copy to BPF_REG_2, and the BPF verifier allows
+> 64-bit reads of BPF_REG_2 without zero-extending the padded bits, a BPF
+> program might save the full register to a map and leak the uninitialized bytes
+> to userspace.
+>
+> Should the JIT mask out the uninitialized upper bytes of BPF_REG_2 when the
+> return size is between 9 and 15 bytes?
+>
+> This same question applies to the arm64 and riscv capabilities enabled in this
+> patch, where the native registers (x1 and a1) map directly to BPF_REG_2 and
+> could similarly leave the upper bits unmasked.
 
-Fixes: cf579164e9ea ("libbpf: Support BTF.ext loading and output in
-either endianness")
-Closes: https://issues.oss-fuzz.com/issues/477315119
-Signed-off-by: Darren Carreras <carrerasdarren@gmail.com>
----
-tools/lib/bpf/btf.c | 13 +++++-----
-.../selftests/bpf/prog_tests/test_btf_ext.c | 24 +++++++++++++++++++
-2 files changed, 31 insertions(+), 6 deletions(-)
+We should be okay here. The return value will do proper narrowing. See
+https://reviews.llvm.org/D131598
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 8417de92d..744f33e2a 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -3364,7 +3364,7 @@ static int btf_ext_parse_sec_info(struct btf_ext *btf_ext,
-{
-const struct btf_ext_info_sec *sinfo;
-struct btf_ext_info *ext_info;
-- __u32 info_left, record_size;
-+ __u32 data_left, info_left, record_size;
-size_t sec_cnt = 0;
-void *info;
+>
+>> +			}
+>>   			break;
+>>   		}
 
-@@ -3377,16 +3377,17 @@ static int btf_ext_parse_sec_info(struct
-btf_ext *btf_ext,
-return -EINVAL;
-}
-
-- /* The start of the info sec (including the __u32 record_size). */
-- info = btf_ext->data + btf_ext->hdr->hdr_len + ext_sec->off;
-- info_left = ext_sec->len;
--
-- if (btf_ext->data + btf_ext->data_size < info + ext_sec->len) {
-+ data_left = btf_ext->data_size - btf_ext->hdr->hdr_len;
-+ if (ext_sec->off > data_left || ext_sec->len > data_left - ext_sec->off) {
-pr_debug("%s section (off:%u len:%u) is beyond the end of the ELF
-section .BTF.ext\n",
-ext_sec->desc, ext_sec->off, ext_sec->len);
-return -EINVAL;
-}
-
-+ /* The start of the info sec (including the __u32 record_size). */
-+ info = btf_ext->data + btf_ext->hdr->hdr_len + ext_sec->off;
-+ info_left = ext_sec->len;
-+
-/* At least a record size */
-if (info_left < sizeof(__u32)) {
-pr_debug(".BTF.ext %s record size not found\n", ext_sec->desc);
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_btf_ext.c
-b/tools/testing/selftests/bpf/prog_tests/test_btf_ext.c
-index 7d1b478c9..77db87dab 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_btf_ext.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_btf_ext.c
-@@ -1,9 +1,31 @@
-// SPDX-License-Identifier: GPL-2.0
-/* Copyright (c) 2025 Meta Platforms Inc. */
-#include <test_progs.h>
-+#include "bpf/libbpf_internal.h"
-#include "test_btf_ext.skel.h"
-#include "btf_helpers.h"
-
-+static void subtest_invalid_info_len(void)
-+{
-+ struct {
-+ struct btf_ext_header hdr;
-+ __u32 record_size;
-+ } raw = {
-+ .hdr = {
-+ .magic = BTF_MAGIC,
-+ .version = BTF_VERSION,
-+ .hdr_len = sizeof(raw.hdr),
-+ .func_info_len = UINT32_MAX - 7,
-+ },
-+ .record_size = sizeof(struct bpf_func_info_min),
-+ };
-+ struct btf_ext *btf_ext;
-+
-+ btf_ext = btf_ext__new((void *)&raw, sizeof(raw));
-+ if (!ASSERT_ERR_PTR(btf_ext, "invalid_info_len"))
-+ btf_ext__free(btf_ext);
-+}
-+
-static void subtest_line_func_info(void)
-{
-struct test_btf_ext *skel;
-@@ -59,6 +81,8 @@ static void subtest_line_func_info(void)
-
-void test_btf_ext(void)
-{
-+ if (test__start_subtest("invalid_info_len"))
-+ subtest_invalid_info_len();
-if (test__start_subtest("line_func_info"))
-subtest_line_func_info();
-}
--- 
-2.50.1 (Apple Git-155)
