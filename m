@@ -1,129 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9586368D5E
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 09:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A28B3AFAEF
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 09:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786353606; cv=none; b=jaYW6ftgi7uZSmpdFNcxm1GPyX71ZLanmAHTzW3OQdBytDjNPeHLVvDJDXwrMnhwjLu9ZeP5h88ZOwOJpZneRi2zNCTIQ87yJx9M4geag9ZqAW9NskoQMLJ7MVTmTWQ4gfsfNv8a/b4cTPjYQYIgWk7+0zYMe9l4fujTPWbFkw8=
+	t=1786354142; cv=none; b=ZVaclS/kF9mSF5py21l/J1SqbWzxtBAWH7IQNarS/inaQQbMQgL4OIioo8JhWqcRS06cLVtfHv3bNSxrv4sZ1a6gShRAXAKvAJ61sh0eD/bNwkrT3kobuokubIN5xsJM23mkpxhOmVcnOFOJNmM9B/OQIMl1Fi7vXGBOnZtqfIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786353606; c=relaxed/simple;
-	bh=jHJ2/Fs8Fnao8T8pDx13bTvap6/RakRPwx6StnNBqSQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ni2PzTgvmTxKwM5PW/eQmu4VBiOYVks0kUuizGqvwRpAy/MKRaMS20srfUryuU+rWkBY0m/ptBDX2XX6AereqjvIu4lP81qvPApE8FkG78TgVmioWiP27Lk0bz5qc4/jnihA1zmByjJ2CTdST4C2nnmpYn1w9L31QmmDRql49jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hGzFPD0F; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786354142; c=relaxed/simple;
+	bh=dxcp0CZRDOp2q5e+rr7UerSnZWd1pSkgU093sXfdMwg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bSIErRI6DYzm3Bd5AEtxO5HY/QsOX765CPjo7LvrDwTh5dE0MDjGMd7CY/x3q4l1pUKU8D8R37O29SXu/aFES0W0A1OG2+pAIpmvMCLrHKh0A0GE7bF8p+6n6aJ9K7IpWchFgE5R7lfW3jKmrHUM+6t1FaCv4H6rlkC5tTU+Xmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Su2IDqEP; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hGzFPD0F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36DF01F00A3A;
-	Mon, 10 Aug 2026 09:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786353604;
-	bh=7fyK8zEMMqIsItMmVFZ2A92EdJW8A8ywenv3TX6XQBY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hGzFPD0FabfSeLJDdw9jJ+f4KBjzEwdYzFW6k5F1NzeRP87I7hLdf/7Ybt+xM6Kva
-	 4p/v0q0AVkrn+fs85FVQe7tmDHpzxnNzbvvg7gFI2I9svMeIZbZJbhu0F+awIAwWP9
-	 Cg/n2A+L/ms3hL6YzqrVkxXWGkOAodHnVrAg3XlLT+bVqT3XFiL0D+DQ/x49n/3c6a
-	 FUDjkNSjU3J+W/hQGylAPCVkgqdSSn4VCBMnM3G4441Z4oWROJzdipOyksl86oXIql
-	 DuRXE7JGIMc7JF1cF6vIgAkl1aYtsvdcVM23LLYUMP9RMOd1x5Th4O4VNaMBrUBNFT
-	 IiG9BhhlfFHCA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 1/3] bpftool: fix double close in map dump
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260810090459.2666243-2-chenyuan_fl@163.com>
-References: <20260810090459.2666243-1-chenyuan_fl@163.com>
- <20260810090459.2666243-2-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 10 Aug 2026 09:20:03 +0000
-Message-Id: <20260810092004.36DF01F00A3A@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Su2IDqEP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=j4
+	4il50bFHgaumqS31YUHCXP+1RbTVVd3EXpBiV/hPk=; b=Su2IDqEPSooi74FDpi
+	CAgxCvCgZs7wjOC0cbxEfGxjRcthIiNNzlm5hKIdNC4pnEhxfFo2FoOgqssHy2Ak
+	K511sHB/xUBQmNRbMeVsGx9Vhn7A3Q1BTHR7dWiECxvvsA2vOjhO9Mxn43A+3b3c
+	LqbZUpK21fMM0uTduWp+KJ5ts=
+Received: from nec8-i7 (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgDXP0C3mXlqOjt9Lg--.4593S4;
+	Mon, 10 Aug 2026 17:28:27 +0800 (CST)
+From: chenyuan_fl@163.com
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Yuan Chen <chenyuan@kylinos.cn>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Add regression test for queue/stack map size limit
+Date: Mon, 10 Aug 2026 17:28:14 +0800
+Message-ID: <20260810092814.2698521-3-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260810092814.2698521-1-chenyuan_fl@163.com>
+References: <20260810092814.2698521-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PygvCgDXP0C3mXlqOjt9Lg--.4593S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCrWDuFy3JF1UWrW5CF17Jrb_yoW5Gw15pa
+	95Jw43tay8Krs7J3y3tw4UXFZ5Kwn5Wry7GFn7KryDJrnIgr1Igr18tF15GFn3GrWkZa1Y
+	vw1YqFZ3Gw47K3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jBLvtUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5RuNS2p5mbuuqQAA3O
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-Pre-existing issues:
-- [Medium] Missing error propagation when `bpf_map_get_info_by_fd()` fails =
-on subsequent maps in `do_dump()`.
-- [Medium] Double close of map file descriptors in `do_show_subset()`.
---
+Verify that queue/stack maps whose element storage would overflow the
+u32 head/tail index multiplication are rejected at creation time, and
+that max_entries == U32_MAX (which would wrap the u32 capacity counter
+to 0) is rejected as well.
 
---- Patch [1]: [PATCH bpf-next v4 1/3] bpftool: fix double close in map dum=
-p ---
-commit 8a5aea6bcad40d4506c71d6f8f2b151ddbe0ed20
-Author: Yuan Chen <chenyuan@kylinos.cn>
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ .../bpf/prog_tests/queue_stack_map.c          | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-bpftool: fix double close in map dump
+diff --git a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
+index 41441325e179..8ab07ea77775 100644
+--- a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
++++ b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
+@@ -101,8 +101,53 @@ static void test_queue_stack_map_by_type(int type)
+ 	bpf_object__close(obj);
+ }
+ 
++static void test_queue_stack_map_alloc_check(void)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts);
++	const __u32 big_value = 1 << 20; /* 1MB */
++	int fd, saved_errno;
++
++	/*
++	 * Regression test for the u32 index overflow in queue/stack maps:
++	 * a map whose element storage (max_entries * value_size) exceeds
++	 * U32_MAX bytes must be rejected at creation time, otherwise the
++	 * u32 head/tail index multiplication wraps and push/peek/pop
++	 * address the wrong element. 8192 * 1MB = 8GB > U32_MAX.
++	 */
++	fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, NULL, 0, big_value, 8192, &opts);
++	saved_errno = errno;
++	ASSERT_LT(fd, 0, "queue_oversize_fd");
++	ASSERT_EQ(saved_errno, E2BIG, "queue_oversize_errno");
++
++	/*
++	 * max_entries == U32_MAX would make the u32 capacity counter
++	 * qs->size (max_entries + 1) wrap to 0, permanently breaking the
++	 * map, so it must be rejected as well.
++	 */
++	fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, NULL, 0, 1, U32_MAX, &opts);
++	saved_errno = errno;
++	ASSERT_LT(fd, 0, "queue_u32max_fd");
++	ASSERT_EQ(saved_errno, E2BIG, "queue_u32max_errno");
++	if (fd >= 0)
++		close(fd);
++
++	fd = bpf_map_create(BPF_MAP_TYPE_STACK, NULL, 0, big_value, 8192, &opts);
++	saved_errno = errno;
++	ASSERT_LT(fd, 0, "stack_oversize_fd");
++	ASSERT_EQ(saved_errno, E2BIG, "stack_oversize_errno");
++	if (fd >= 0)
++		close(fd);
++
++	/* A normal-sized map must still be created successfully. */
++	fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, NULL, 0, 64, 100, &opts);
++	ASSERT_GE(fd, 0, "queue_normal_fd");
++	if (fd >= 0)
++		close(fd);
++}
++
+ void test_queue_stack_map(void)
+ {
+ 	test_queue_stack_map_by_type(QUEUE);
+ 	test_queue_stack_map_by_type(STACK);
++	test_queue_stack_map_alloc_check();
+ }
+-- 
+2.54.0
 
-This commit fixes a double close in map_dump() where the map file
-descriptor was being closed in the error path, and then closed again
-afterward by do_dump().
-
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index 6b9649294ca1a..e9f4dd9458cf1 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
-> @@ -895,7 +895,6 @@ map_dump(int fd, struct bpf_map_info *info, json_writ=
-er_t *wtr,
->  exit_free:
->  	free(key);
->  	free(value);
-> -	close(fd);
->  	free_map_kv_btf(btf);
-> =20
->  	return err;
-
-[Severity: Medium]
-This is a pre-existing issue, but I noticed another double close pattern=20
-in tools/bpf/bpftool/map.c:do_show_subset():
-
-tools/bpf/bpftool/map.c:do_show_subset() {
-    ...
-		if (json_output)
-			show_map_close_json(fds[i], &info);
-		else
-			show_map_close_plain(fds[i], &info);
-
-		close(fds[i]);
-    ...
-}
-
-Since the show_map_close_json and show_map_close_plain functions already
-unconditionally close the file descriptor, does the subsequent close(fds[i])
-result in a double close?
-
-This seems like it would also poison later errno checks exactly like the
-bug this patch addresses.
-
-
-[Severity: Medium]
-This is a pre-existing issue, but while looking at do_dump() in the same=20
-file, there appears to be a missing error propagation:
-
-tools/bpf/bpftool/map.c:do_dump() {
-    ...
-	for (i =3D 0; i < nb_fds; i++) {
-		if (bpf_map_get_info_by_fd(fds[i], &info, &len)) {
-			p_err("can't get map info: %s", strerror(errno));
-			break;
-		}
-		err =3D map_dump(fds[i], &info, wtr, nb_fds > 1);
-    ...
-}
-
-If a user executes bpftool with multiple map file descriptors, and
-bpf_map_get_info_by_fd() fails on any iteration after the first, the loop
-breaks without updating err.
-
-Doesn't this incorrectly cause bpftool to exit with a success status if
-the previous iteration succeeded, silently hiding the error from scripts or
-users relying on the exit code?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810090459.2666=
-243-1-chenyuan_fl@163.com?part=3D1
