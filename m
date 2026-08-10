@@ -1,134 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E021B3CAA57
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 14:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C93B3AF66E;
+	Mon, 10 Aug 2026 14:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786370671; cv=none; b=LQz68NyKWwMFcnf2Udif47u9AiqlmNDj06B8r6PatnCQkuFHUqgN58n8MZcdP2FPY/NCjLTTPxx+XBNc5vsiW4ycmfzVQeEez5BazUKocociWCLH5fSVV1NKLDOB+i/u3PS5GD801brvcR6/8gXw1bRRdQl2eNH83XeX+8ZEYsI=
+	t=1786370686; cv=none; b=ugSzw6XuIBZYgF/ielpLf6R+pbgrgxN42BgSa7NRLqjf1hdTzXNXiH47knNmrOcg/py+bMUZYn1KMXhjRVjZzid66o1TJ7AOvTDzMndGOmp8G6/DESq+ex0aTCVWcV15Ee8u+CgRO6Qwwi5eQBA2H5I3yJpIK00qoTCk22a9dY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786370671; c=relaxed/simple;
-	bh=Of2VxqqmxQzCY66bQl2w3YZZlttCDamr6CM3EQD0eU0=;
+	s=arc-20240116; t=1786370686; c=relaxed/simple;
+	bh=EfA5qC3BXDimF69tKp65Bv6khfCvDWQAzu7iNI81N/k=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gJ7SZtI5L9/je9J2LuhL0itljAwa1lRNWZ5Rz1mxPKxuTBfpjAhcD8qEP1QiJaXjocm5jhJhhbiENTzI+OOel8Trt4n2dDwp2T1B3Ugx26rJtgGG8ZlNMBKOJVUfxDQcT3NWOwi8PLQTjIApWHKQgUdiQ77iuQ9FgtYOiNjrXro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CoOcG1vm; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=lKiyVKke+1hlk6egq0bIjXgzNq9i3tAn1AacavqjwO9Ap1KSvlQJkLIcodaJ0OOxYG80/zNW1ceDCtybS8IPJPCNOV4KTRfsmuAHErOskHnjdiO0gK5AfrNgUA8HsATqEbItBswaQhfhzo/+Oj5Ss2hhHJkUyR4yVJaC7VYKJt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VtCko4s4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CoOcG1vm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 531211F000E9;
-	Mon, 10 Aug 2026 14:04:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VtCko4s4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D2DD1F000E9;
+	Mon, 10 Aug 2026 14:04:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786370669;
-	bh=x9hJC5Ehv1m4OyDSOoNuhYrDEPqhyH7k2wSLyX9emt4=;
+	s=k20260515; t=1786370685;
+	bh=uzR1DoG4lPRIqgJkpj75RSBavLd3zOTESqrzJJ3i2vA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CoOcG1vmG47CGcjqVs8BnemwCavr/91uCZRYn/Z3cobt+kNbJNuSq2QqAvLKF8ukP
-	 ziZMHpVEJ7jAdI/0ETMHzyiICjkE63ZPEThWcRMJEcHAwSodWvVuSiHRanpEC60HJ/
-	 25K+OTkYuYRy/ZXsbSgET5vUbCyrEpVkHjoIF3i5taQhDStYHNceu9JoyKAh0CRG+8
-	 M/SLCtaNrBE+796xejHgfF/H741ojpuRt+gtLA2ks60xDuo3wQ7dtsQMLC1X9KyQEY
-	 qohZGH8YWmuROe+nmSu3kXZb7tQ65eauUdW5U51XaxOC+Ch4Z/L/yJ5QTEkFzkl+Vr
-	 MmD2TM5Skw1/A==
+	b=VtCko4s4iwsGMsCZUyWYh5d9VHfcK+pLnl71Tg9O5zQu/t3cla6WIcBZ+fPy7jrzy
+	 DlUCTo/HBr+g0q3zMyGpcpQqHU4ud9paVXdB+aPvyAut3P7fBCPXr1uMqhYnG+H1YU
+	 9q7pqkwf53LgfMEqr4IxU5hdA2+q+KeGeM5fslpXOm88EnWcn1jg8v/4WbIMqTDN0h
+	 aBUJx07V+PUVGtdeWe3yCaaky82faw1K9XrhzAXou1ittrsNH/gZqF2w9u1hAMXsUa
+	 Wlg+XKcrxS/O8oiOgKwRH87oXiYAq6GEORnqlaS1nT86De1o3sLb2imvjI/dn06AhE
+	 3azBnvWHzE3yg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 1/3] bpf, arena: fix range_tree_clear
- inconsistency on kmalloc_nolock failure
+Subject: Re: [PATCH v7 3/3] perf/core: Fill branch entries with a single
+ assignment
 Reply-To: sashiko-reviews@lists.linux.dev
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260810134800.2875487-2-chenyuan_fl@163.com>
-References: <20260810134800.2875487-1-chenyuan_fl@163.com>
- <20260810134800.2875487-2-chenyuan_fl@163.com>
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+In-Reply-To: <20260810133540.1947118-4-puranjay@kernel.org>
+References: <20260810133540.1947118-1-puranjay@kernel.org>
+ <20260810133540.1947118-4-puranjay@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 10 Aug 2026 14:04:28 +0000
-Message-Id: <20260810140429.531211F000E9@smtp.kernel.org>
+Date: Mon, 10 Aug 2026 14:04:44 +0000
+Message-Id: <20260810140445.0D2DD1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] range_tree_set() modifies the interval tree before attempting a fa=
-llible allocation, leaving the tree in a corrupted state on OOM, similar to=
- the bug fixed in range_tree_clear().
-- [High] Transient NOWAIT allocation failure in range_tree_clear() causes a=
-rena_vm_fault() to trigger a fatal SIGSEGV.
+- [High] The BPF branch snapshot helpers (__intel_pmu_snapshot_branch_stack=
+ and amd_pmu_v2_snapshot_branch_stack) unconditionally copy stale branch re=
+cords (LBRs) to BPF buffers, leading to cross-context information leaks.
 --
 
---- Patch [1]: [PATCH bpf-next v3 1/3] bpf, arena: fix range_tree_clear inc=
-onsistency on kmalloc_nolock failure ---
-commit 944fb15c800d7e3cba4552c75753fe7038ce96ab
-Author: Yuan Chen <chenyuan@kylinos.cn>
+--- Patch [3]: [PATCH v7 3/3] perf/core: Fill branch entries with a single =
+assignment ---
+commit f67f9ecd08216c6081d3d24e81906c232c6917fe
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-bpf, arena: fix range_tree_clear inconsistency on kmalloc_nolock failure
+perf/core: Fill branch entries with a single assignment
 
-range_tree_clear() pre-allocates the right-half node before modifying
-the tree, so an allocation failure returns -ENOMEM without altering the
-range tree.
+This commit replaces the field-by-field initialization of perf_branch_entry
+with a single structure assignment. This automatically zeroes out any unnam=
+ed
+fields, removing the need to manually keep perf_clear_branch_entry_bitfields
+in sync with the structure definition.
 
-> diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
-> index 2f28886f3ff75..15b588377a769 100644
-> --- a/kernel/bpf/range_tree.c
-> +++ b/kernel/bpf/range_tree.c
-> @@ -143,16 +143,22 @@ int range_tree_clear(struct range_tree *rt, u32 sta=
-rt, u32 len)
->  		if (rn->rn_start < start && rn->rn_last > last) {
->  			u32 old_last =3D rn->rn_last;
-> =20
-> +			/*
-> +			 * Pre-allocate the right-half node before modifying
-> +			 * the tree. If allocation fails we return -ENOMEM
-> +			 * without altering the range tree.
-> +			 */
-> +			new_rn =3D kmalloc_nolock(sizeof(struct range_node),
-> +						__GFP_ACCOUNT, NUMA_NO_NODE);
-> +			if (!new_rn)
-> +				return -ENOMEM;
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does range_tree_set() suffer
-from this exact same problem?
-
-Looking at range_tree_set() in kernel/bpf/range_tree.c:
-
-	range_tree_clear(rt, start, len);
-	...
-	left =3D kmalloc_nolock(sizeof(struct range_node),
-			      __GFP_ACCOUNT, NUMA_NO_NODE);
-	if (!left)
-		return -ENOMEM;
-
-It modifies the tree by calling range_tree_clear() first, and then can fail
-its allocation. If arena_free_pages() calls range_tree_set() to return slots
-and it fails here, the slots seem to be silently and permanently leaked sin=
-ce
-the return value is ignored.
-
-Could we apply this same pre-allocation pattern to range_tree_set() as well?
-
-[Severity: High]
-This is another pre-existing issue, but does returning -ENOMEM from here
-cause unexpected crashes in user space?
-
-Looking at arena_vm_fault() in kernel/bpf/arena.c:
-
-	ret =3D range_tree_clear(&arena->rt, vmf->pgoff, 1);
-	if (ret)
-		goto out_sigsegv_memcg;
-
-Since arena_vm_fault() handles page faults under a raw spinlock with IRQs
-disabled, this kmalloc_nolock() acts as a GFP_NOWAIT allocation. If it fails
-under memory pressure, it returns -ENOMEM, which arena_vm_fault() then
-translates into VM_FAULT_SIGSEGV.
-
-This causes the faulting user application to be randomly killed with a
-segmentation fault rather than retrying or returning OOM.
-
-Could this error handling be improved to avoid crashing the task?
-
+> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+> index cae2e02fe6cc4..539e9feffa356 100644
+> --- a/arch/x86/events/intel/lbr.c
+> +++ b/arch/x86/events/intel/lbr.c
 [ ... ]
+> @@ -847,14 +847,15 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cp=
+uc)
+>  		if (abort && x86_pmu.lbr_double_abort && out > 0)
+>  			out--;
+> =20
+> -		perf_clear_branch_entry_bitfields(br+out);
+> -		br[out].from	 =3D from;
+> -		br[out].to	 =3D to;
+> -		br[out].mispred	 =3D mis;
+> -		br[out].predicted =3D pred;
+> -		br[out].in_tx	 =3D in_tx;
+> -		br[out].abort	 =3D abort;
+> -		br[out].cycles	 =3D cycles;
+> +		br[out] =3D (struct perf_branch_entry){
+> +			.from		=3D from,
+> +			.to		=3D to,
+> +			.mispred	=3D mis,
+> +			.predicted	=3D pred,
+> +			.in_tx		=3D in_tx,
+> +			.abort		=3D abort,
+> +			.cycles		=3D cycles,
+> +		};
+>  		out++;
+>  	}
+>  	cpuc->lbr_stack.nr =3D out;
+
+[Severity: High]
+This is a pre-existing issue, but while reviewing how these branch entries
+are populated and tracked by cpuc->lbr_stack.nr, I noticed a potential
+information leak in the BPF branch snapshot helpers.
+
+Does __intel_pmu_snapshot_branch_stack() unconditionally copy stale
+branch records to the BPF buffer?
+
+arch/x86/events/intel/core.c:__intel_pmu_snapshot_branch_stack() {
+    ...
+    cnt =3D min_t(unsigned int, cnt, x86_pmu.lbr_nr);
+    memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * c=
+nt);
+    ...
+}
+
+When the number of valid LBR entries (cpuc->lbr_stack.nr) is less than the
+hardware capacity (x86_pmu.lbr_nr), this memcpy appears to copy the trailing
+unwritten entries from cpuc->lbr_entries. This condition can happen routine=
+ly
+in call-stack mode with shallow stacks, or when Intel's double-abort erratum
+skips an entry (as seen just above in this diff).
+
+The AMD implementation seems to have the exact same logic error:
+
+arch/x86/events/amd/core.c:amd_pmu_v2_snapshot_branch_stack() {
+    ...
+    cnt =3D min(cnt, x86_pmu.lbr_nr);
+    memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * c=
+nt);
+    ...
+}
+
+Could this allow a BPF tracing program to read stale hardware branch records
+left over from previously executed contexts, leaking execution history from
+other tasks or the kernel?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810134800.2875=
-487-1-chenyuan_fl@163.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810133540.1947=
+118-1-puranjay@kernel.org?part=3D3
