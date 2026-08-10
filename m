@@ -1,39 +1,40 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D113D9DB0
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 14:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C553B38BB;
+	Mon, 10 Aug 2026 14:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786370430; cv=none; b=u9qxwBvzL6T8EXgqBli9aJthhajYbNMc0gZEvqz3dfyKAD+qtFlKgpDEgNAUDt4xBvF9A8/LorkD1GM0WaNQgRy2DlDtHQYRq6T1gE8jFyoSXaHDklP1PrNd1dGxbST8jT0tE+lXbV2dktigFkBqBcjEKjo3S4T51EM7MgaM7dk=
+	t=1786370431; cv=none; b=NKCktJKPJ61M/lg4LvODW0xkW/Rf2Fdwv/ocDdsq4QsgCcyoqBbKLblMNfnpOC2P8WBPTOf+VzD4v1pCPDmIB/qMaPVKn/9UF8r6/W9YV7ygvaa6euBjBoDwSH44Q4YO/F28AAhujGfnESuNyUmseW3rVA+XoX8VsiVjYgCkxVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786370430; c=relaxed/simple;
-	bh=vYoywqIid8C39llvGtthw5wM+/Lb+1BHKmBfKGgXsXM=;
+	s=arc-20240116; t=1786370431; c=relaxed/simple;
+	bh=R3zAdHQ9uQNv/F5lj5AEdpSWaxv3b+49l5e+qPlVHrQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aHqEPWN+LXA7ueQ625i7P7vB4WNE1PEkZKREXtEFPJLc13acskuanH82KANSr94N+CYnmwQU8D1XNNKTgk6bBDRfdn9kAUQ7exHVMSFRtAXQUzqPcM2WkggL0Eg2mwciWdXXpT2N+N1MI/yBEujQCXQd+42KYkwtvQbypLjDInE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=aLYsA5f5; arc=none smtp.client-ip=117.135.210.4
+	 MIME-Version; b=jAxx409rJg1ugecKPkzVaCnlbCPPq7WkdynPQLW49QTzp7matFIoJTlFr8DKrePLSSVQ7YIVlU6dNe/R6uOzz/a4b9I5AzJG8N88H7RRTcs3elNrPK0OOYi2dxM6kOI5ekJswKmDR8fyCcXhe1+kalHlXNVVnT68QgPhkx3+U9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MzdKR4NH; arc=none smtp.client-ip=117.135.210.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="aLYsA5f5"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MzdKR4NH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Aq
-	1UB+6s16vYulxHBxK9nU8gXNUvfU5dnA/iitiEB3A=; b=aLYsA5f5AbuHFAyb9q
-	HNAyF9xIVtT6j8ADWAzL92RqahR8n8xZvbCEyG+q7pl10wyEJY5MGXEnM1Zp/BOK
-	NDV3FW+uNFjczc0MCF8zUN14ruJ19HcH4yTXh5STWvLy5YQStwib1CEKwHP4xGvN
-	zvvvnRpwh1kQIA8Z5Eujtv+U8=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Ph
+	ux5AD7slRZPfRkakH7WOy/xNikj9T9GmqZSS5Q8V0=; b=MzdKR4NHEbcgBS/mnL
+	Hw4w2Vi4mpZ1kSue/mY6oHByLnJltMKemHpVCvnw8SHpx4wOIvwhyHO5KEQU77jC
+	aogOhA3OLCgwyAdVyHkCub1fL851nfOqek7jw3jt4YkhySzh5Gq63dXEtUv9gb36
+	JmwEZDJsW6mqhTFXPQGxvf5mg=
 Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wD3X7VQ2XlqRT48Og--.14699S4;
-	Mon, 10 Aug 2026 21:59:47 +0800 (CST)
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wD3X7VQ2XlqRT48Og--.14699S3;
+	Mon, 10 Aug 2026 21:59:46 +0800 (CST)
 From: chenyuan_fl@163.com
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Add regression test for queue/stack map size limit
-Date: Mon, 10 Aug 2026 21:59:34 +0800
-Message-ID: <20260810135934.2887684-3-chenyuan_fl@163.com>
+	Yuan Chen <chenyuan@kylinos.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH bpf v3 1/2] bpf: Fix queue/stack map u32 index overflow
+Date: Mon, 10 Aug 2026 21:59:33 +0800
+Message-ID: <20260810135934.2887684-2-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260810135934.2887684-1-chenyuan_fl@163.com>
 References: <20260810135934.2887684-1-chenyuan_fl@163.com>
@@ -44,94 +45,62 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3X7VQ2XlqRT48Og--.14699S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCrWDuF4kXFWkGw45CFWUtwb_yoW5Wr45pa
-	95Ja13t3y8Grs7J3y5tw1UXFZYgwn5Wr1UGFn7KryDArnIgr1Igry8tF15GFn7GrWkZa1Y
-	vw1jqFZ3Gw47K3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jkGYLUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5hODQWp52VP6OgAA3u
+X-CM-TRANSID:_____wD3X7VQ2XlqRT48Og--.14699S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KFy5XFy5uw1rAw15ZF18Krg_yoW8ZFWDpa
+	n5JF43X348tr47t3ykAw48JFyDWws5WF9xKF97Kry8Arn3Wr1xW348Ka1aqF9ayrn7A3WY
+	qFnFqrZ8C3yjyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jjyIUUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5hKDQWp52VL6GAAA3M
 
 From: Yuan Chen <chenyuan@kylinos.cn>
 
-Verify that queue/stack maps whose element storage would overflow the
-u32 head/tail index multiplication are rejected at creation time, and
-that max_entries == U32_MAX (which would wrap the u32 capacity counter
-to 0) is rejected as well.
+The queue/stack map addresses elements[] with the product of a u32
+head/tail index and value_size, but the storage itself is allocated in
+64-bit arithmetic. When max_entries * value_size exceeds U32_MAX, the
+product wraps and push/peek/pop operate on the wrong element, corrupting
+map data and leaking stale values to user space.
 
+The original bound check was removed by commit a37fb7ef24a4 ("bpf:
+Eliminate rlimit-based memory accounting for queue_stack_maps maps"),
+which deleted the bpf_map_charge_init() call and with it the
+U32_MAX - PAGE_SIZE check that had earlier been moved into
+bpf_map_charge_init() by c85d69135a91. Oversized queue/stack maps can
+therefore be created again.
+
+Restore the bound in queue_stack_map_alloc_check(): reject maps whose
+element storage would exceed U32_MAX bytes, keeping the u32 index
+multiplication overflow-free. Also reject max_entries == U32_MAX, which
+would make the u32 capacity counter qs->size (max_entries + 1) wrap to
+0 and permanently break the map.
+
+Fixes: a37fb7ef24a4 ("bpf: Eliminate rlimit-based memory accounting for queue_stack_maps maps")
+Cc: stable@vger.kernel.org
 Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 ---
- .../bpf/prog_tests/queue_stack_map.c          | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ kernel/bpf/queue_stack_maps.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-index 41441325e179..043cbe92e2ba 100644
---- a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-@@ -2,6 +2,8 @@
- #include <test_progs.h>
- #include <network_helpers.h>
+diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
+index c1c9dee4dcdd..bb2453693b80 100644
+--- a/kernel/bpf/queue_stack_maps.c
++++ b/kernel/bpf/queue_stack_maps.c
+@@ -59,6 +59,16 @@ static int queue_stack_map_alloc_check(union bpf_attr *attr)
+ 		 */
+ 		return -E2BIG;
  
-+#define U32_MAX ((u32)UINT_MAX)
++	/*
++	 * The u32 head/tail index is multiplied by value_size to address
++	 * elements[], and qs->size (max_entries + 1) is stored in a u32.
++	 * Bound the map size so neither the product nor the capacity
++	 * counter can overflow.
++	 */
++	if ((u64)attr->max_entries * attr->value_size > U32_MAX ||
++	    attr->max_entries == U32_MAX)
++		return -E2BIG;
 +
- enum {
- 	QUEUE,
- 	STACK,
-@@ -101,8 +103,55 @@ static void test_queue_stack_map_by_type(int type)
- 	bpf_object__close(obj);
+ 	return 0;
  }
  
-+static void test_queue_stack_map_alloc_check(void)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+	const __u32 big_value = 1 << 20; /* 1MB */
-+	int fd, saved_errno;
-+
-+	/*
-+	 * Regression test for the u32 index overflow in queue/stack maps:
-+	 * a map whose element storage (max_entries * value_size) exceeds
-+	 * U32_MAX bytes must be rejected at creation time, otherwise the
-+	 * u32 head/tail index multiplication wraps and push/peek/pop
-+	 * address the wrong element. 8192 * 1MB = 8GB > U32_MAX.
-+	 */
-+	fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, NULL, 0, big_value, 8192, &opts);
-+	saved_errno = errno;
-+	ASSERT_LT(fd, 0, "queue_oversize_fd");
-+	ASSERT_EQ(saved_errno, E2BIG, "queue_oversize_errno");
-+	if (fd >= 0)
-+		close(fd);
-+
-+	/*
-+	 * max_entries == U32_MAX would make the u32 capacity counter
-+	 * qs->size (max_entries + 1) wrap to 0, permanently breaking the
-+	 * map, so it must be rejected as well.
-+	 */
-+	fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, NULL, 0, 1, U32_MAX, &opts);
-+	saved_errno = errno;
-+	ASSERT_LT(fd, 0, "queue_u32max_fd");
-+	ASSERT_EQ(saved_errno, E2BIG, "queue_u32max_errno");
-+	if (fd >= 0)
-+		close(fd);
-+
-+	fd = bpf_map_create(BPF_MAP_TYPE_STACK, NULL, 0, big_value, 8192, &opts);
-+	saved_errno = errno;
-+	ASSERT_LT(fd, 0, "stack_oversize_fd");
-+	ASSERT_EQ(saved_errno, E2BIG, "stack_oversize_errno");
-+	if (fd >= 0)
-+		close(fd);
-+
-+	/* A normal-sized map must still be created successfully. */
-+	fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, NULL, 0, 64, 100, &opts);
-+	ASSERT_GE(fd, 0, "queue_normal_fd");
-+	if (fd >= 0)
-+		close(fd);
-+}
-+
- void test_queue_stack_map(void)
- {
- 	test_queue_stack_map_by_type(QUEUE);
- 	test_queue_stack_map_by_type(STACK);
-+	test_queue_stack_map_alloc_check();
- }
 -- 
 2.54.0
 
