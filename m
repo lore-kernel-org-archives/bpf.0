@@ -1,74 +1,75 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F163E385D72
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 17:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B8825DB0D
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 17:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786381832; cv=none; b=MqH5T+CsKkc9gyFtXtzPP1oYzzFA/Mbpc2s6wypRsEytxecgYVCJZRK63CNhcBkivUuk/QY8q3DiUUswtCGghYmmV4VOjkmdgMPSN48OjDtofBZx3P/9rY9voox6xNlnMbGZHevnPanO3GKmpMecBSmwiJGkD/PL6B2+7/14J2Q=
+	t=1786382806; cv=none; b=PPokAe960bjyalNUymtm25t7dp6qoHqNw2BIQqCFzuPN4I8bAeppKVlJ+b7pzjIiMKKrlEbIS1R8gcfK3nZZ+arzU1aCnBAew6g62j+h2VOw8kYXqxBrXrNqfePbuKQxdKZjSGm8ZKrHS8GFBUgPwmDBv3oJyPSnC7sne1E7e90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786381832; c=relaxed/simple;
-	bh=WZVCnLY1cE5XYblVwUdunCHHkhznNVXI/0jU1H/hIRg=;
+	s=arc-20240116; t=1786382806; c=relaxed/simple;
+	bh=r94N9irZXM6SFX0j8UioRP5U09wcRQST+dSAwmuNL9g=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LhyjMAcrnT1WGV67uX0T0pelgNNf6opLbHe4fh9SjjlVqRNhpy8lioU/AdueUirKJ1jOrUMxWY4eAjm0/LdTpU43uLDeaGmhDvTbQeMUp7YBTrq8et9h5OfByzH6uRA21n4lWjtmwppiDd7GmyQuXOkvKyasPcUyXUO5Amu1KKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=STXLtwnl; arc=none smtp.client-ip=209.85.216.54
+	 Content-Type:MIME-Version; b=UH4WNuc1yXBO2mZXTpiOe3VShfa9BFZTi9+9l2+A5w84v+dS7YJvUhc61jUMR0PiXCYP4oO6QUeE2wqitWSCJkmu5au1idFfTvlI6sgHe0+UKuvYNHD/xsZBgZM1fmBWx97Xy/Y1To4yynVzDZ1WebR/qch2gcAxhMgdnPUyKdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lpE/Pinn; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="STXLtwnl"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38e347638adso2377591a91.0
-        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 10:10:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lpE/Pinn"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38511175ad3so2037383a91.2
+        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 10:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786381830; x=1786986630; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786382804; x=1786987604; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=wSOG3j5HXgoPseZzXzVE0dJPGLXtK8DifWnFpKi+6pE=;
-        b=STXLtwnlABreMeWSOqbn+4ftv4OOkYWNcXjK7jrdDcadDZGmJsxXdUfcWahuVdtg+O
-         BQMW2MdN8KROWoAKoCq+6IayfuZ6GfMmuWDOaG0hEHnv2l+3czRZreeTltRlc0pn+B9r
-         nTAW8uil06NL1VmUhdkRpH05DOxeEfckpNXTF4gM9u6WLiXMPYr5c2uZ7j3X4BFeved4
-         RviJEY/j65TEB8wNcSK5n1B+YsnVW7zw/PVGzuiOhsjvZHkJ3kduPZn+CYv2qIepjA4N
-         LVri05Bu6utWJ5bsml3MWLc2JArCGM/IVEFO5SfrW00AbQFsVKHmLcVD732mhD5mPIYg
-         CH3g==
+        bh=r94N9irZXM6SFX0j8UioRP5U09wcRQST+dSAwmuNL9g=;
+        b=lpE/PinnLoU4h3d02ZuD1wX21+wdlGCLYmw98k29vMNcnIHFHGVJd+uHAXqShOreVN
+         hwZtBZrtrfhcYroSApblJydAGFePpEWkDiaCR4bejwqZqWn+YxJDgs4SeYTAgptVbN67
+         XKA12Q8AMaqX+0xxCNZ0NtWyEYrFcLdL8TalX8CBardNlH/DfOPzWv2P9lyf2e8GZuqW
+         fnNfzkvkjFlAOJq2/n+OxZm0lTUl4YaN4rfeK9iN4pgfb0uqKwrkruBv2bBpqafUVran
+         ZYzmQBVtAhkcXP2lA6ncTo5SWUCKa/lbnxYSHnX+nEc+t7HcetfyTv8GqlpYinMm3OmM
+         BKCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786381830; x=1786986630;
+        d=1e100.net; s=20251104; t=1786382804; x=1786987604;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=wSOG3j5HXgoPseZzXzVE0dJPGLXtK8DifWnFpKi+6pE=;
-        b=pNH4cI+NDD8W3Q/Nk4iq4WtP9YoymrVS/IwyhuKSzJPIk6EtbN3o0EiAQGon4jNR8m
-         GtD6ZBTTXYoenaEnEO4SnFkHEdvBzdttt3mLYCQas89/mmqDBaN8FkwnOYYeO/0oaykh
-         9Gk9koqMGKgybpIGjxUbZmMj3MwfbwyxhNQz04qOiDrP6g7EOnkCc0sfSYqBIg3Tgu4M
-         0zilIK7hjZPZCM74DiNBNyM1X+bde19LiLFPDxWO/TiHxA0vrj2HXDwXjbyJT7SG7Jkg
-         JBiX9xU1iwh+1MPKw5/dmWHBSvoQbqsUJJheKHdrMO+jWIaJ1XQGZpywFawDKTcgcHUZ
-         RJew==
-X-Forwarded-Encrypted: i=1; AHgh+RoSZuQu/7twwjaQYUKUCEi1T9HVAWKczsVPhr++nK/bEvDUNHdWxbLchZ2dEncJ/vEeEZ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwW/W5mOInLi7YQoPZO8VOHqlH5dUKK8iiiFERctw3HhJ36qkPY
-	dqE4FS/ISQU46NLiuW58uY/CHl+Offb94y0tPsw70DS4HHKCZvQmnki+
-X-Gm-Gg: AR+sD11inPdrq5MO1V6DlgGA+1exEjwvWtWTkYJHjj5FipuwUu0U+eY11TGGk6j3kzK
-	e8SiE3p7is2MA9eNmu6yCW2hG5GuYtVj/4j3FEk8YnNqHgoCYkudGhFwNrElujxZxYFhyym/++b
-	uHNmXvzBtQxHmfR9M4F4W3FEaIp+LLpQHFw+5+NiN5be1Shtz9ECCrjjh+n4ZZPDX0AM7erA5py
-	kAg4yopWibzw2XhuVp8Hr71eUUEREgF+YsVwgyXw3exliVSwaftTsuxQOFMXvaMp9ojqzyCxqzY
-	uVfq8VKIPX/6YxnNKkXreFrVFryn7dPDAyOGf2RdFTPjzFwXfmNEGgqNWAM9KQkEiK49qw/yGje
-	P0HJx3NMUbpxPBW0UixQH+PDYZS2LBps6C+L/+E0VfQgA5X9UUKDpBvlfFmHoEQAjozOwwYpT9B
-	TFeGqrGCN5ka8JrXQoWv9+OaCamQvqjE+0Hveqh1aszEK9xOeHpkXro4kBc7GbYN7NW5eJTkezP
-	q9q5nwUniHHCoF5
-X-Received: by 2002:a17:90b:2507:b0:38f:57f3:4dc6 with SMTP id 98e67ed59e1d1-392c068d70emr5228487a91.21.1786381830130;
-        Mon, 10 Aug 2026 10:10:30 -0700 (PDT)
+        bh=r94N9irZXM6SFX0j8UioRP5U09wcRQST+dSAwmuNL9g=;
+        b=R135hG2wNwiDwoM2Dg1KHJI8Svw/qRVjRoeMZzrmk56W+h4/MIbXx3gUdn+NuOzqAI
+         +Kr1IeE05aGQ7p5/qSbqrQAzkVUiEpNTM1/hRTaaA+Y0ZO2FQBjiL06dNltO8xpD0jXr
+         zDjhegKF6uOpXoax8H4w1EwOza7qgCgbN3YyFUEui5F8nZEdVCXd4XPG6QYzI1v5s1ZM
+         ShYC22+9cNhN8FrCwQQwsf2Kse7NWFyYypu8Cc7GG05fSEn+wxenpYQTiFfyH6w3RdFV
+         6ho4izCQ/S/eJQihwKGN7GZSbD+iTTpPXIz2LpFUwYhEf6BGwJos8ETO/0ZL5Bf/VwLU
+         52wQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqhNok8JmTBupLsLDppl5dF49i5NVAoo05eLqYijCp24okYapxhFd1huzPcmWn0hW7tnyc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwolhxnnqOlopudeUyqWRaE9q5cW6qIRzW1xHfgYVS4s58c6pT8
+	VkrpvdKiUxAIN6K3nnmmhgordqQVPvbWW/7YjMvMhOL96t6TwByW79WaKcDyBA==
+X-Gm-Gg: AR+sD11vy1+fonoonuuT0Ywk0xhwtYOZMy2eiU/q/TnfZdxr13NbdyCkk1RUsEZewFF
+	+7JPgBSf2HmAt39AA1E02wrGuVWCoxV/ScZ2Hjfr554mejeoR5olIo6YcSLQOhz1eIqdwnUOAz+
+	wtGnYEHs3J7Xmhywua7rD0rMmL6JGJIyg+PPHDQQMqXiQzwpnhIO5ePSbwkDkrMrTrDzGg28rqy
+	TXdXR5zRE/yzv/HUULgjQXvsIU84u5fhWmFd+bqOQ5sWoeZqS1LKl2+qqhaGqsdbuTegy/1FDH8
+	QhWgkmiRjvaSVYZvF1ANTg34mmLi/pfdJ8VxD2/9GzKT4TIncCUkuB4MvckAp7gRuRJa7xcz7zv
+	dqkPRqZ2D+/yJVE9tpulLS3u6ZKT7cWZPzODxU4SgKznoKUl77/XfQFrwAvqn3R/Pu7cZLbsySt
+	jxv9rr9/BY85D7f8wBrfJ+MW4jC12nMT7r0atvCy3RvrE6y23Qoala6Z8GVh0MzgQm7UvTK8ISQ
+	qhebyFGkxv3OVQZ
+X-Received: by 2002:a17:90b:58c6:b0:37f:e177:f58 with SMTP id 98e67ed59e1d1-392cc9bbe81mr3503867a91.9.1786382804007;
+        Mon, 10 Aug 2026 10:26:44 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d537d905sm273926a91.14.2026.08.10.10.10.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d51bf886sm379530a91.7.2026.08.10.10.26.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2026 10:10:29 -0700 (PDT)
-Message-ID: <704b266e251c6b7e503ba489bf87a92039369c09.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/6] bpf: Derive the atomic load register in
- one place
+        Mon, 10 Aug 2026 10:26:43 -0700 (PDT)
+Message-ID: <ffed9789081d97a5ce75fdff27c60b1b627a5e86.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 3/6] bpf, x86: Clear fetch destination on
+ faulting arena atomic
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Daniel Borkmann <daniel@iogearbox.net>, memxor@gmail.com
 Cc: puranjay@kernel.org, bpf@vger.kernel.org
-Date: Mon, 10 Aug 2026 10:10:26 -0700
-In-Reply-To: <20260810134346.466004-1-daniel@iogearbox.net>
+Date: Mon, 10 Aug 2026 10:26:39 -0700
+In-Reply-To: <20260810134346.466004-3-daniel@iogearbox.net>
 References: <20260810134346.466004-1-daniel@iogearbox.net>
+	 <20260810134346.466004-3-daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -80,49 +81,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Mon, 2026-08-10 at 15:43 +0200, Daniel Borkmann wrote:
+> populate_extable() encodes "there is no destination register to clear" as
+> DONT_CLEAR in the DST_REG field of the exception table metadata, and late=
+r
+> ex_handler_bpf() then reuses that very value to derive the direction it
+> reports the fault with is_write =3D (reg =3D=3D DONT_CLEAR). The two coin=
+cide
+> for a plain load or store, but not for a RMW carrying BPF_FETCH. Such an
+> atomic writes memory, so it has to be reported as a WRITE, and it also re=
+ads
+> the old value into a register, src_reg for BPF_ADD | BPF_FETCH and BPF_XC=
+HG,
+> r0 for BPF_CMPXCHG, so that register has to be cleared on fault. A single
+> DONT_CLEAR cannot say both, and the store branch picks it unconditionally=
+:
+>=20
+> =C2=A0 [...]
+> =C2=A0 } else {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 arena_reg =3D reg2=
+pt_regs[dst_reg];
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fixup_reg =3D DONT=
+_CLEAR;
+> =C2=A0 }
+> =C2=A0 [...]
+>=20
+> The reported direction is therefore right, but on a fault over an unmappe=
+d
+> arena page the fetch destination keeps whatever it held before the atomic=
+,
+> where every other BPF_PROBE_* access delivers 0. Give the metadata its ow=
+n
+> ARENA_WRITE bit so that the reported direction no longer depends on wheth=
+er
+> there is a register to clear, and fill DST_REG in from bpf_atomic_load_re=
+g().
+> BPF_{AND,OR,XOR} | BPF_FETCH need no handling here, bpf_jit_supports_insn=
+()
+> already rejects those in the arena.
+>=20
+> Fixes: d503a04f8bc0 ("bpf: Add support for certain atomics in bpf_arena t=
+o x86 JIT")
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> ---
 
-...
-
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -414,6 +414,30 @@ static inline bool bpf_atomic_is_load_acq(const stru=
-ct bpf_insn *insn)
-> =C2=A0	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 insn->imm =3D=3D BPF_LOAD_ACQ=
-;
-> =C2=A0}
-> =C2=A0
-> +/*
-> + * Given an instruction @insn, return the number of the BPF register tha=
-t a
-> + * BPF_ATOMIC reads the value at its memory operand into, or -1 if there=
- is
-> + * no such register. That is the register a BPF_PROBE_ATOMIC has to clea=
-r when
-> + * the access faults. Like bpf_atomic_is_load_acq(), @insn is not assume=
-d to
-> + * be a BPF_ATOMIC here.
-> + */
-> +static inline int bpf_atomic_load_reg(const struct bpf_insn *insn)
-> +{
-> +	if (BPF_CLASS(insn->code) !=3D BPF_STX ||
-> +	=C2=A0=C2=A0=C2=A0 (BPF_MODE(insn->code) !=3D BPF_ATOMIC &&
-> +	=C2=A0=C2=A0=C2=A0=C2=A0 BPF_MODE(insn->code) !=3D BPF_PROBE_ATOMIC))
-> +		return -1;
-> +
-> +	switch (insn->imm) {
-> +	case BPF_LOAD_ACQ:
-> +		return insn->dst_reg;
-> +	case BPF_CMPXCHG:
-> +		return BPF_REG_0;
-> +	default:
-> +		return (insn->imm & BPF_FETCH) ? insn->src_reg : -1;
-> +	}
-> +}
-> +
-
-Hi Daniel,
-
-Note that there is already a very similar fixups.c:insn_def_regno().
-Should we try to avoid duplication?
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
 ...
