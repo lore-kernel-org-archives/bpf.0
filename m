@@ -1,106 +1,123 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C553B38BB;
-	Mon, 10 Aug 2026 14:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9753E0C66;
+	Mon, 10 Aug 2026 14:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786370431; cv=none; b=NKCktJKPJ61M/lg4LvODW0xkW/Rf2Fdwv/ocDdsq4QsgCcyoqBbKLblMNfnpOC2P8WBPTOf+VzD4v1pCPDmIB/qMaPVKn/9UF8r6/W9YV7ygvaa6euBjBoDwSH44Q4YO/F28AAhujGfnESuNyUmseW3rVA+XoX8VsiVjYgCkxVs=
+	t=1786370588; cv=none; b=qH9UmvD1puOibPTVx808M7/UwmPoWB1f+kVlM62tDegMuZ+ivuIu6r7LYCpW7TCMbPPS46PHCBiWW/XCsFRZ9wGAoM/qEE/xdQx80tSXAmP4jDdOIOwjUIJfkeAil6NSuRkIj3zBH6uAiOy6SNcfRO9SDLrkpDUXxNpG0VMbYOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786370431; c=relaxed/simple;
-	bh=R3zAdHQ9uQNv/F5lj5AEdpSWaxv3b+49l5e+qPlVHrQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jAxx409rJg1ugecKPkzVaCnlbCPPq7WkdynPQLW49QTzp7matFIoJTlFr8DKrePLSSVQ7YIVlU6dNe/R6uOzz/a4b9I5AzJG8N88H7RRTcs3elNrPK0OOYi2dxM6kOI5ekJswKmDR8fyCcXhe1+kalHlXNVVnT68QgPhkx3+U9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MzdKR4NH; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1786370588; c=relaxed/simple;
+	bh=LfIdTTqg5c/Ob/ZERkYbe5RZBCzNz+U1lGkS43Ss5A8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=U+OpMMET3BblzbK6eIK8DNnoV/2+YrlltGUYKCjVhpN7IrF14kdlTI2U5wkG4uTp1wYQAbYZ9qnLUOd5ObnnmCDvPcRzHn+qDIT+04O65U7oZL77DbVjnRUMDYpJ4DGLLJ+uPoeAJukPtRihDj2VINhhvqDBpkj/HUBiwOUwLu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jdbpnzDS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MzdKR4NH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Ph
-	ux5AD7slRZPfRkakH7WOy/xNikj9T9GmqZSS5Q8V0=; b=MzdKR4NHEbcgBS/mnL
-	Hw4w2Vi4mpZ1kSue/mY6oHByLnJltMKemHpVCvnw8SHpx4wOIvwhyHO5KEQU77jC
-	aogOhA3OLCgwyAdVyHkCub1fL851nfOqek7jw3jt4YkhySzh5Gq63dXEtUv9gb36
-	JmwEZDJsW6mqhTFXPQGxvf5mg=
-Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wD3X7VQ2XlqRT48Og--.14699S3;
-	Mon, 10 Aug 2026 21:59:46 +0800 (CST)
-From: chenyuan_fl@163.com
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Yuan Chen <chenyuan@kylinos.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf v3 1/2] bpf: Fix queue/stack map u32 index overflow
-Date: Mon, 10 Aug 2026 21:59:33 +0800
-Message-ID: <20260810135934.2887684-2-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260810135934.2887684-1-chenyuan_fl@163.com>
-References: <20260810135934.2887684-1-chenyuan_fl@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jdbpnzDS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1D721F000E9;
+	Mon, 10 Aug 2026 14:03:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786370587;
+	bh=C0wCGWqawOoqvyJErYnhEtp8F0veVA1BCLHQW05MDlU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=jdbpnzDSfgpJ2lP5FPLfSg6whNh/Hj65WNKYk+37WA90MChqGg6ZZYzK+2eFjgyvT
+	 675Rqj1Eorwke4zoiGQc2X79ncNS33Ue0CUc5EoBIVfVBIKUPgzo+KAUYEDo8USG1F
+	 4+tISCQADGCraM6oExhmQpONHaHvBjJaPTSwefD2JlP1ct0or/knab+R4594V5zHPC
+	 thcz7CtG/imc3X14m3R0bnC+0KF3NFQD8xfXC5oY05S7bfveLzKEALu4+cRJp/hgtM
+	 x020iAGLtZY+4unFQjevGYDZorXpIhMdvOMiZakCXMTZxGx+p+ANsFO6nGpICva7q+
+	 OVm+vrOaFxA1g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v7 1/3] perf/core: Fix NULL pmu_ctx passed to
+ pmu->sched_task()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260810133540.1947118-2-puranjay@kernel.org>
+References: <20260810133540.1947118-1-puranjay@kernel.org>
+ <20260810133540.1947118-2-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 10 Aug 2026 14:03:05 +0000
+Message-Id: <20260810140306.C1D721F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3X7VQ2XlqRT48Og--.14699S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KFy5XFy5uw1rAw15ZF18Krg_yoW8ZFWDpa
-	n5JF43X348tr47t3ykAw48JFyDWws5WF9xKF97Kry8Arn3Wr1xW348Ka1aqF9ayrn7A3WY
-	qFnFqrZ8C3yjyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jjyIUUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5hKDQWp52VL6GAAA3M
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-The queue/stack map addresses elements[] with the product of a u32
-head/tail index and value_size, but the storage itself is allocated in
-64-bit arithmetic. When max_entries * value_size exceeds U32_MAX, the
-product wraps and push/peek/pop operate on the wrong element, corrupting
-map data and leaking stale values to user space.
+Pre-existing issues:
+- [High] Per-CPU PMUs missing `sched_task` callbacks during context switche=
+s if a task context exists.
+--
 
-The original bound check was removed by commit a37fb7ef24a4 ("bpf:
-Eliminate rlimit-based memory accounting for queue_stack_maps maps"),
-which deleted the bpf_map_charge_init() call and with it the
-U32_MAX - PAGE_SIZE check that had earlier been moved into
-bpf_map_charge_init() by c85d69135a91. Oversized queue/stack maps can
-therefore be created again.
+--- Patch [1]: [PATCH v7 1/3] perf/core: Fix NULL pmu_ctx passed to pmu->sc=
+hed_task() ---
+commit 333df3e02c2d6b54e5bd528f91779820677d118e
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-Restore the bound in queue_stack_map_alloc_check(): reject maps whose
-element storage would exceed U32_MAX bytes, keeping the u32 index
-multiplication overflow-free. Also reject max_entries == U32_MAX, which
-would make the u32 capacity counter qs->size (max_entries + 1) wrap to
-0 and permanently break the map.
+perf/core: Fix NULL pmu_ctx passed to pmu->sched_task()
 
-Fixes: a37fb7ef24a4 ("bpf: Eliminate rlimit-based memory accounting for queue_stack_maps maps")
-Cc: stable@vger.kernel.org
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- kernel/bpf/queue_stack_maps.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+perf_pmu_sched_task() returns early when cpuctx->task_ctx is set, and
+cpc->task_epc is only non-NULL while a task context is scheduled in on
+this CPU. This patch passes &cpc->epc instead, which is the CPU-wide
+context for this PMU, avoiding a NULL pointer dereference.
 
-diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
-index c1c9dee4dcdd..bb2453693b80 100644
---- a/kernel/bpf/queue_stack_maps.c
-+++ b/kernel/bpf/queue_stack_maps.c
-@@ -59,6 +59,16 @@ static int queue_stack_map_alloc_check(union bpf_attr *attr)
- 		 */
- 		return -E2BIG;
- 
-+	/*
-+	 * The u32 head/tail index is multiplied by value_size to address
-+	 * elements[], and qs->size (max_entries + 1) is stored in a u32.
-+	 * Bound the map size so neither the product nor the capacity
-+	 * counter can overflow.
-+	 */
-+	if ((u64)attr->max_entries * attr->value_size > U32_MAX ||
-+	    attr->max_entries == U32_MAX)
-+		return -E2BIG;
-+
- 	return 0;
- }
- 
--- 
-2.54.0
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index ba5bd6a78fe7b..c372213ffc883 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -3907,7 +3907,7 @@ static void __perf_pmu_sched_task(struct perf_cpu_p=
+mu_context *cpc,
+>  	perf_ctx_lock(cpuctx, cpuctx->task_ctx);
+>  	perf_pmu_disable(pmu);
+> =20
+> -	pmu->sched_task(cpc->task_epc, task, sched_in);
+> +	pmu->sched_task(&cpc->epc, task, sched_in);
 
+[Severity: High]
+This isn't a bug introduced by this patch, but does the early return in
+perf_pmu_sched_task() skip callbacks for CPU-wide PMUs?
+
+If a system-wide PMU event is active (sched_cb_usage > 0), and a context
+switch occurs to or from a task with an active perf event (meaning
+cpuctx->task_ctx is set), perf_pmu_sched_task() returns early:
+
+kernel/events/core.c:perf_pmu_sched_task() {
+	...
+	/* cpuctx->task_ctx will be handled in perf_event_context_sched_in/out */
+	if (prev =3D=3D next || cpuctx->task_ctx)
+		return;
+	...
+}
+
+It seems to rely on perf_event_context_sched_out/in() to handle the
+callbacks. However, perf_ctx_sched_task_cb() only iterates over the task's
+pmu_ctx_list:
+
+kernel/events/core.c:perf_ctx_sched_task_cb() {
+	...
+	list_for_each_entry(pmu_ctx, &ctx->pmu_ctx_list, pmu_ctx_entry) {
+		cpc =3D this_cpc(pmu_ctx->pmu);
+
+		if (cpc->sched_cb_usage && pmu_ctx->pmu->sched_task)
+			pmu_ctx->pmu->sched_task(pmu_ctx, task, sched_in);
+	}
+	...
+}
+
+If the task's perf event is for a different PMU (like a software event), the
+CPU-wide PMU won't be in ctx->pmu_ctx_list. Does this mean the CPU-wide
+PMU's sched_task() callback is completely skipped during the context switch,
+potentially corrupting hardware tracing or leaking branch records across ta=
+sks?
+
+> =20
+>  	perf_pmu_enable(pmu);
+>  	perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810133540.1947=
+118-1-puranjay@kernel.org?part=3D1
