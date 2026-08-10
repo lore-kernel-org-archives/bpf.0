@@ -1,82 +1,77 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396FD340403
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 19:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD40340403
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 19:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786390426; cv=none; b=EN3UMW/A3JH4XJYf+vEhbjiO0ds2wpKLf+8b5ODNze7mvI1VEoY7dMGK649W329BNqq41B5b8Nk4by/ZD8F8xuepKkvYI1LGYRkNj4elwVFhMVQdj1Zy8PFEmTuWtiz+xa3nANpygPxEszNgaR0Ykq7GSamH6UqIF36NfCs/RVA=
+	t=1786390507; cv=none; b=ad91k2jNO8iCQi2b2lLKWD/jM6dnDrBKRijZoJ8HiTIJIMX5idl3vSbONus2I7UMSyd43/98D6nK6uYx/3i0cDRBugRsYKDpwa3WDZudVqUOTO39Qnh7Q350uMX2bFaTJDJQb9qii0OdUycPr+GOJDYgMqnAdLwzRkbOp2VVuF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786390426; c=relaxed/simple;
-	bh=NcE21inJC1eLEwtxN+vVJZdzKFgng0QGoxsFyu5O1Dg=;
+	s=arc-20240116; t=1786390507; c=relaxed/simple;
+	bh=WwTpth8MrFVJI0sYO78MEBeGQnL3an5IX2+5ZrTWz9o=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=deIHF06gh+QQ+6i9r88jln6BZQICkMvgWL9UZP5au5HVauERoWsKOtoiTqAJqo2Cut8xWFLC1Plr+uxK6QbKknSPFj/ysfSITtGYQA1TOIeDGNjkNLx9X+e+9gtBnV8TP4Xpvrd4BR8EbmsuvaGicOtN7hdk4ysKntD7J9jzqB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JPvALMmF; arc=none smtp.client-ip=209.85.216.45
+	 Content-Type:MIME-Version; b=pupb3VFI1dg4RelIYl/obzfnus7RFcFXnf2DOTbvPN2yfrkvtDVPDCOdhlN2yRlcToebq13xOQTKge777rjQ1ENUBPJD0nUJP2UOnP8YaDQdH6Z1AcgvNmcCr3zFRp9xq07ZUQK3gq8PLJJeI1LJWe/l75j0grOG9SoeiNeTd84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sZUMbA0s; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JPvALMmF"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38f620399a0so70147a91.2
-        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 12:33:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sZUMbA0s"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38f620399a0so71243a91.2
+        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 12:35:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786390424; x=1786995224; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786390506; x=1786995306; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=NcE21inJC1eLEwtxN+vVJZdzKFgng0QGoxsFyu5O1Dg=;
-        b=JPvALMmF3rH4khoI6AfqnzJmuG6rzgnB7uCqba0iiG85SLWId+z52SsEHolP5qQbr+
-         Qbqn0mLmdcn+W3m5tSoPVyNba2035E/Kz/3FmGjwy70WZBfpXuStsOWOizbGNzpmcS1/
-         wXtkDlsZbxnRt1C2ivUNft3FzIZNyPkoRpvHMLADOKKwj8U1jLSXyM8oHFkJT4cs1ONm
-         YGXPjSSvoWuBNnJQj00fNspMwS53AQShiB2pxgkIWLLiB+A1K41Dk+3D9IhsViZ3CAS/
-         wFJYO+hYFivaboY4ZFbmJE35PC0jxToXcMus4fV8rYCgXHxMXYbQ/QYG/eTO8xIYs95p
-         kl9w==
+        bh=WwTpth8MrFVJI0sYO78MEBeGQnL3an5IX2+5ZrTWz9o=;
+        b=sZUMbA0s26EWbUEmsvpHQ85XEMvlR/Ulytn+PlhN/TjqpCvb0j+KM4GakKKBYqe3mD
+         BqTHniynE0z9pmpVhU9jdOXL44a03aOg+rnbpE6Yb1CJF6DOtQXQh7U5dVpdjPx1S66F
+         TXdcCrIEJtxJZsguYTfjymygC8EwkRMKKsFuNun9TRQO2NwUso/snb1ex3S59RYloONG
+         bfT4MiSZZoZtJnVYgRFbRdPy5+IbWWOHj9wSNruVjWvEvaID02nwLjAchCg7Wj5OaJQ1
+         oGKJLTzLdh7kQp1Io5tWyk0moHR68E/qkt3/ZARy+b5YSwQRuzlJ8OVNZMhGDXqANMbr
+         fPOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786390424; x=1786995224;
+        d=1e100.net; s=20251104; t=1786390506; x=1786995306;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NcE21inJC1eLEwtxN+vVJZdzKFgng0QGoxsFyu5O1Dg=;
-        b=CmyQd+PE61jTl3spGqHA7CDjrZoKXTyLMnzkRjOrlSpgkS1KYrr2lbopSUYSTqKjnX
-         e6obdp3CXJur7iSeWqL9mm3iVfphV+A3URLfnj+X71KOnzL14QRIapfHXNaAzDrTO25o
-         1t5cdSeqv1iPrnw2NgNHSwzkTsrIv3hMEaMyPn8jZDcd0l/mZZrrK8zgUyxGdG1mRDCW
-         gYO1qrE5FvDzxRMpF2mXaGcCKd0bvU/4WD5mNCIJvQvAdmm5P+hzZe+qkr6E55i9lPWg
-         IS+zB8VO2NfpkqnQGdoG0CxXqrz+CIGwnL7diOtxZT33CksK0nsn4jhfyeIfDMBdzVYM
-         jQxQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpzeS7hRI/C8ogqVSFxWsbM9rRsVYikmvzHsrs1NXRWbodCtYWqvmmm7Ods/AO07fu5jMw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOBPrr6S6OBYZUP6b16R7b3PO5bWl9wYlZkbK7w3WPCE09lnZH
-	RLs18x3AbyR1+pgxt8tOocXnD4rtX77axU+rCnHD2teZHAkXJbk/yLPY
-X-Gm-Gg: AR+sD13wg/pe3NHBUv1F8F6jjFmaMknE7hCkElU0qraOYPf9vLzaRIEb16L+Sdu2pKR
-	LRhAoEYXg8c9yjz1Yfz7/0og/fslgCjqLofEoD+1yEJ/MDjcSyTBOq2Rp5LcYfM/dyRVl34xxxH
-	110amLSDwOmtYwwmvqLz2alBp4uJi89PgQtNtoOQxFzsgy/FgJLks9n8ntwZQIcDplaTl5pAuFs
-	xFvDsAY7vKZmzWxmYC67R2ifBglCJ+5Y0qBtlxUzVtE7/JpZCjQoeQkEXC32ulnhsToEqCdzCAZ
-	f2VPhB5iwUdkChHG5MkuRufrImWjhYScB7+LT6RNDom7rncbTF34C49TTaKah++oWi0YEXseh1q
-	pl2EwDu+WXS6FxTt/yPAhGRsterA/16cAr/vTmRm7z6XiYcY7ysPhPmhvFdivW7OrQi0r82SZg0
-	nXIy0ZxEEUWpmyk8Ed1obByOsiNM6ZQeWQht4U/R2AyDgKVr4L4L68KbT2IKaRxCCBdb5iRs+3s
-	w2Wvzcd4eqyIrtQ
-X-Received: by 2002:a17:90b:2590:b0:38f:2168:b9cb with SMTP id 98e67ed59e1d1-3903c572a05mr47972136a91.9.1786390424573;
-        Mon, 10 Aug 2026 12:33:44 -0700 (PDT)
+        bh=WwTpth8MrFVJI0sYO78MEBeGQnL3an5IX2+5ZrTWz9o=;
+        b=hJ4Sjvv98sYXyGvb2BucT5xxNHTB4/2aM8XvBqbpnKQHITKbqpPG6Bhd6tI2OBWHHJ
+         ad9i9yjiAdAL+oJwjQ0buu+hlslJODLSuhDSpNju5rVmZ48bX2ChBduMCSB0B17RBEVH
+         sNs1fMmRGaaA2p8zeycfA033YTT8GA8TIbwykzqXPqibQ6OZByst4GbheFxp4R0ngh99
+         X8FpwWmLvUOh6FGWdrf4z26C1nuPRC8FSRrk0bx2x6a+OLI6qL3f4vmgfr7gWPU82R2P
+         icD1Gp50j0utICvLxotav8ec0pVX+dgZupjQITKDK5y/jVw60X3nnJPu5Ta4gncUD+qg
+         V/MA==
+X-Forwarded-Encrypted: i=1; AHgh+Ro5/7Y7UlbSGeBZ34U1LB2yVkW3gGY2DfbThpK8JmP6Y2bgbH3FzaFinjyRvC3x9bDbHEc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAxph209gYSh5bYzxxkTgsFv+L4in9COKkeqxKiRwSHFqosyFl
+	rcjFJ46e+K6B5NapQw24KabtEvQIhlF7FzklY2I1KL3s8k2egrOQzJAsppgoeQ==
+X-Gm-Gg: AR+sD13Tr8OU6NYCW9OcJjBhbeJBGzfcjJMpd7MkPhAO1wSwURtPusHpXcqOTms0Vvp
+	0RAnTSrEFvFqF7nGVuIoIfvhS02fxUWunCa6KvxxhTN2bdGgfOwsb6j9kQbTrrVMh4anJIK8LOm
+	sTvHWQB0c9eUMasxzmzQzGtZ8wvvNA5B8pgauJ5pVHLhVT3a7PTnLW5hI9w5mBquTFbkktToxc5
+	nI8tMddbnKAEc7U5LLpMmDkYfAyTE0cj1SaL9GtJgs7pmo3DidDuJnoQJ1cQJNPznzPTszXQIz3
+	fR6SmaggGxyVPnePNiu5cbrQbi8UIEBHrO9uUP3QZ9mgjBCx9j12SVceHHzYMtCtfwWQr/fjLtY
+	FRC3I9SDTpDJaTOLjplFBDw7fjQbDLoUbugcfB2GyQDRRuelkqxM+9QGoU57UjQVkRD8XxKkElD
+	rnlMywp0W3prnxl2d0qAPSQZEHd4vc/CyBN+2q17QEroNUaVocEHnXqV7hI58EgM4+yKetFtr4t
+	1ZigHOPfBc15NwndjNk0MIR0/M=
+X-Received: by 2002:a17:90b:1811:b0:38e:c7b0:84ad with SMTP id 98e67ed59e1d1-3903bb0ab77mr41170573a91.0.1786390505796;
+        Mon, 10 Aug 2026 12:35:05 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d53b873asm725701a91.17.2026.08.10.12.33.43
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d5226b40sm747333a91.13.2026.08.10.12.35.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2026 12:33:44 -0700 (PDT)
-Message-ID: <5b9c87a351b0a77e1eb36a7ef63abaf3bd172451.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Account for preempt and IRQ state in
- RCU protection
+        Mon, 10 Aug 2026 12:35:05 -0700 (PDT)
+Message-ID: <d7f9046b1212e0b368bfde10b88549ac9ac8f63c.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Compare iterator types during state
+ pruning
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Ning Ding <dingning04@gmail.com>, bpf@vger.kernel.org
-Cc: memxor@gmail.com, puranjay@kernel.org, paulmck@kernel.org, Alexei
- Starovoitov	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John
- Fastabend	 <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,  Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai	
- <ihor.solodrai@linux.dev>, linux-kernel@vger.kernel.org
-Date: Mon, 10 Aug 2026 12:33:41 -0700
-In-Reply-To: <a3c4305c694a07aa020f4b0f0e4fe7f58672b5cd.camel@gmail.com>
-References: <20260805233940.3966981-1-dingning04@gmail.com>
-		 <20260805233940.3966981-2-dingning04@gmail.com>
-	 <a3c4305c694a07aa020f4b0f0e4fe7f58672b5cd.camel@gmail.com>
+Cc: memxor@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, 	linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org
+Date: Mon, 10 Aug 2026 12:35:02 -0700
+In-Reply-To: <20260807004320.134069-2-dingning04@gmail.com>
+References: <20260807004320.134069-1-dingning04@gmail.com>
+	 <20260807004320.134069-2-dingning04@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -87,28 +82,17 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Mon, 2026-08-10 at 12:30 -0700, Eduard Zingerman wrote:
-> On Wed, 2026-08-05 at 16:39 -0700, Ning Ding wrote:
-> > Disabling preemption or local IRQs keeps the current CPU in an RCU
-> > read-side critical section, but in_rcu_cs() does not account for either
-> > state. The verifier therefore rejects safe kptr accesses and invalidate=
-s
-> > pointers when another RCU source ends.
-> >=20
-> > Include preemption-disabled and IRQ-disabled state in in_rcu_cs().
-> > Invalidate RCU-protected pointers on RCU unlock, preempt enable, or IRQ
-> > restore only after the final protection ends.
-> >=20
-> > Signed-off-by: Ning Ding <dingning04@gmail.com>
-> > ---
+On Thu, 2026-08-06 at 17:43 -0700, Ning Ding wrote:
+> An iterator stack slot can be MEM_RCU or PTR_UNTRUSTED. These states
+> must not be equal, or the verifier can prune an unsafe path.
 >=20
-> Hi Ning,
+> Compare the pointer type for STACK_ITER slots.
 >=20
-> Thank you for identifying and fixing this issue!
->=20
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
->=20
-> ...
+> Fixes: dfab99df147b ("bpf: teach the verifier to enforce css_iter and tas=
+k_iter in RCU CS")
+> Signed-off-by: Ning Ding <dingning04@gmail.com>
+> ---
 
-Please disregard the above email, it was meant for the
-"bpf: Compare iterator types during state pruning" series.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+...
