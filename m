@@ -1,80 +1,82 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C527366045
-	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 21:27:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96C73AAF56
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 21:38:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786397257; cv=none; b=e09nPj9dq2/PtDUH/+Go8eIFuKPZ7Q5gH6fZncTfdXxXcPSFpMCzsAvVl4NcL4yug4QXULn1TT4ru7NDf6YmgEUSPWBcoNO+eYKM4C5qMqdVSvdeuZtIpTsThVd43y7y+wIPUY3SkmH7gylhCPN+mmFT8XdGPrvYaXWZcg01XbA=
+	t=1786397917; cv=none; b=DxXhWjDpAd7RjUQ6RGg1xOAfr4HquUDKWyvlPfR4Vn71EiG4E6UZpDZ9kSC1qmsiu1e3JdXUFiPO4XIy1ySz50ASEX3C0Fht18veNbLRRL+dcz1rSwtr1w0VID88eeA+fiiCivI7oo6gsMPCVN0CWM8mjOxfobDnzScULppHTis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786397257; c=relaxed/simple;
-	bh=NXvb7s3/qRENTSL/evhzAhhPM4Pb93ScFARdHrzmtLc=;
+	s=arc-20240116; t=1786397917; c=relaxed/simple;
+	bh=SzV3R0Wcwyh2FU/lVOgTg5DG+vDRhxhYWHjHJ6y5zQc=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PgzyKNLtC63hBXndLoVSK/HuCykwW4i+CDTJmHIfxymaTxCflkM9QQ6F8VADYg9/+x1S9WoFTI8gpBDdtAorfZ9Hikoq7CN2DlSBKfZHhZK0RVIrkM0/PZ05QXgaWICe0NBhKnStcIz5jtPDYz5tSqJVw27PS/seE27x4Tt73Cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gZkNQJ4T; arc=none smtp.client-ip=209.85.216.52
+	 Content-Type:MIME-Version; b=oe/p31SGsiMsi6rmJB7UrY6CBeOjVRLiVxXlXFCVGxsShDygLv+q4MKW0glNEyXXlSJCthaL+K0Yd7DmMaJ7RlZmZ0mIVD6ef3/C8i9yLroKsvmU+mzUljdXFYrvdZ8eiP9fdbSimSJ0jrfZJng6Va88eiO4mxwrPqo/grFSSKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V/F0ayQo; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gZkNQJ4T"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38e08baf860so2329040a91.2
-        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 14:27:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V/F0ayQo"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38e08baf860so2338167a91.2
+        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 14:38:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786397255; x=1787002055; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786397916; x=1787002716; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=m+y6FrNX46tJRUwIlvcMASBTiGW9nxWqu51j6c41Rms=;
-        b=gZkNQJ4TvInDBm5TC0/4s8TY3i+OnUItUsFQBMUgXy562BF+1URWjww+3Vam3NcqXT
-         mzRemYkieIEy/mFUuE5cwlY+DluRgdDYkOkOl2XEr3T0W1+PLkAA5H1h703eAMVwrrnS
-         r8KwO1cjP/NPmuJ7qh/bPAmFV4svr4i9qxkrMzpTKKaPuwyGXgZjRxW/MTRzgoH5FXJT
-         PXvPxMP3KKEW3DW/vK87jNNwMcf2UgN11sr7fbkhuEspGGdUrNyzWwTBEDy9afMIbjSA
-         8fntRV9FmuX5leRRzYbW3XTMTwgqAUXaq3bRgS69mHwSkUHujRDwRyFPby/T7IGlgNwc
-         /Xkw==
+        bh=SzV3R0Wcwyh2FU/lVOgTg5DG+vDRhxhYWHjHJ6y5zQc=;
+        b=V/F0ayQoYUmPpwXSIG0/f8/seNpdyccp8EUezNQY2l/PxepvqjI2F/XpRnT7VIJkwh
+         WOO3puGTQwg2a8FWoDYJ/s/aJqzd5gs0v8XQ9LBJEAWjhHDvmp2skg00bPnVr+1q7ubm
+         Ku74ZJ7iWwzM+qaFut4UGev7dv5gRVO9KxBgjPRY4wyDwbiFQBPjBMWXfCoFdnJ6dco6
+         On587JOWAcG68u92ItLMA6Ped91ojnDI/5duT3KZ2+WYhpgWDaIb7RhL6sy4BoaBUVOH
+         Eac7x1aw+h6HtujUsWx1i/tsSGtF6mP3uutVKtEr0Ks1/k4IMi9gHdENoP8MKgr3UWC9
+         VykA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786397255; x=1787002055;
+        d=1e100.net; s=20251104; t=1786397916; x=1787002716;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=m+y6FrNX46tJRUwIlvcMASBTiGW9nxWqu51j6c41Rms=;
-        b=fr9xSx2DKEtQN7X3d7PD5oK0BPCU4UMNDPkOXhHNmVTWORQQW1SJLlcELsPo5sRusm
-         JXYm8Sc7NCHJsoSGjdKc2Q7oKRr7ZvlO3HBkqq6iVR8CRtiG3YpLYlXYBfk65E7OGjCu
-         bokgyspya/lowMMUD25Y5coQtoHK292GYxFHttcdRxvam0FJ5KdWHV/LB1hoQwl+AwhJ
-         VZKz8LAMM3bTpC8jeSatPzSrwp4Tvm45PswSod2xBYMEN4tX5qG9rcuJPNBQX8545661
-         qMxRYte/L1p8Eo3mf9UgQaFGya+3888C5Wb8jeN9aHGnIVuvduj+pP+Ny6g6PxnMjpyo
-         i91g==
-X-Forwarded-Encrypted: i=1; AHgh+RpsAp1DCuszCezq49yapWZdjYFpgZYLR1GHB+MOkpk00xVSWm6wZg9twUOxjEztXC3oroU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMsZZU/YsG0eN8bgNy7AByLv68auDWNln0S++XzCaJrS+yQCH6
-	KTBBZrvVe2rzpiA6br+QThAvNAACtsG8L0OOR4xK9wdmXgshRRaB2dx0
-X-Gm-Gg: AR+sD12FS5dOQpK0BfrspCEx1cv7jAQS/yx4XWyz8O+twFUYR77BgoxCydv77YOcFde
-	svZUq8KCuB5aiZiFb6xr6zZ1sV2ZkK37vUYZ0P/kZ3UAUy8YHSvB19GVpQTxUysZEqL+IrD56Fr
-	S1rDoNgZq2t8XNntZR8ps7H+o8+pjdUeiR9qBnqYSLAUgEfkLRMrzttE/ZDDeljL0yzFRzBUjDZ
-	UaLYIY4sFFwiP2d29HvhLis1R2dmunKp1WYN/OxkaahpwgIZUdE9VY7vznoLB8bTitv74hjsu6m
-	Ug5yOl1OsPRqsHOSM1yUqAukKZ5+gh6AVx8apJitaDKe/TfOmFVB/h4KKEJV1OUKEjHBbriO47u
-	HROVhm9E/4gpy2kAJ2JhipM+U8ajz2Op48kqw8FSoHSijM2twOa9qNIvd5+9wA2u5daD404AWas
-	c9rumb5gE70jmzgR4nZxskfX8qKPbbZHrycsnmxAV5fI7hwfIrVGIH20Vb6G822Wm8kCafL0WY6
-	ycANLyEjsVynpar
-X-Received: by 2002:a17:90b:554d:b0:38f:23d6:b4a9 with SMTP id 98e67ed59e1d1-392cca737c4mr4586428a91.21.1786397255334;
-        Mon, 10 Aug 2026 14:27:35 -0700 (PDT)
+        bh=SzV3R0Wcwyh2FU/lVOgTg5DG+vDRhxhYWHjHJ6y5zQc=;
+        b=U5BCRL/VScsQ+3O0av+dbMRZwdmM/f5NZcEbt5Srvih6DaEYek0iGNUtFCd449EamK
+         nnf4w12zBIJx0lpMX2n25qIppT3oDPq4V6hKysiaa4GGqNqy4xXKKZDT2ekj7laV8GFI
+         sm8cLrUzF/zrejFqv9uyFMa0nM8I0GvtTlF4+Py//x2kjCiFhKBJgxpSBfJnSiSsXco5
+         d79O/C+DdoUDVnLtr3stTZNamarRxsEVp0+E99r8iUPekoZA5Ih4o67va4Z/REqpQLwf
+         p50lzeWFfNSzNvzJC5uZ7pGW4pdeM5GI+Mn74EEFmGKY09ksCeqZ+m3H4y/X95JjfjE1
+         4Dhg==
+X-Forwarded-Encrypted: i=1; AHgh+Rq8NMeR0a3zC49I+pXkZVB9MiTqHDvYZefsv5oqB5YCK4/U4P+lhBxXU/ddPdU/uFXLZP0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4HuZSk9ior8uA3RPRfP8qW9ElN8fnKc+gjgEAlk6tbssDvQbv
+	j55XHyIRWsFLOS8W47mC7Eec0tIlo9l8BHEcyP7IWwXoE5Qgau8iqevM
+X-Gm-Gg: AR+sD12Uw0s/YMgdexo6qxj+w36djz1u5I/jkvqIvAqR8izJ90m2tFLkPnIUMwSPcLe
+	S0MvHp9lU8xshMJwsfil+khJa33+eBWmraXD7KDMthFGdyx0V5czkXifUdRvZXlvuwuLDPMFi5D
+	RmmlfDXj5qCFA5WCfVD7VWXcVcJD/vkhwt7OqcMiDcLayqrNUbRzZ/EeYwccVHZMf693stMUoyF
+	+3uyazPdvGuFt8RlILK+RBMkUC31pY1l3IwAiVamljrSucGjWmjXU8FK0Lqa+hddHw2uMIsCQR4
+	bUhB8EgmKmPnFq1khO82Rs/PecgK0VlfDi1wq1QUPNlH021HbToLkM91tjyLXqa99xYxmRClF14
+	9JnrjmGZdde7ndCwVW7kf3KWM0HsTf9qX1tyRxVog1+1lbPr3tfcBRPxt7dl3ojzUxc8djev26K
+	c92mczma4DiLysNTMKuPxGqyO5cMf9TZ9sr6XhMJfR2whHrA5+mtOGs6A7OgGetBXZnTTB1lgbY
+	MzpsZOqQp79Fbl+4g==
+X-Received: by 2002:a17:90b:4c8d:b0:37f:c69d:ce69 with SMTP id 98e67ed59e1d1-392cc9f4517mr4072782a91.10.1786397916001;
+        Mon, 10 Aug 2026 14:38:36 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-390b345b841sm6909984a91.3.2026.08.10.14.27.34
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d53b873asm997472a91.17.2026.08.10.14.38.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2026 14:27:34 -0700 (PDT)
-Message-ID: <855d8ae50086be9d792c5efdaedd01895c7e2f13.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf: Remove unnecessary dup/restore
- subprog_starts and prog clone
+        Mon, 10 Aug 2026 14:38:35 -0700 (PDT)
+Message-ID: <fe4f216b5712bdd3212e049098d574314ff02e27.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v11 02/10] bpf: Factor out check_map_mem_read
+ helper in verifier
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Yonghong Song <yonghong.song@linux.dev>, Anton
- Protopopov <a.s.protopopov@gmail.com>
-Date: Mon, 10 Aug 2026 14:27:32 -0700
-In-Reply-To: <7e27df89f8d4e1c8790cd26b4bd30ffbd2926cf6.1785240296.git.xukuohai@huawei.com>
-References: <cover.1785240296.git.xukuohai@huawei.com>
-	 <7e27df89f8d4e1c8790cd26b4bd30ffbd2926cf6.1785240296.git.xukuohai@huawei.com>
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song	 <yonghong.song@linux.dev>, Jiri
+ Olsa <jolsa@kernel.org>, John Fastabend	 <john.fastabend@gmail.com>,
+ Quentin Monnet <qmo@kernel.org>, Shuah Khan	 <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+Date: Mon, 10 Aug 2026 14:38:31 -0700
+In-Reply-To: <20260806163125.11172-3-leon.hwang@linux.dev>
+References: <20260806163125.11172-1-leon.hwang@linux.dev>
+	 <20260806163125.11172-3-leon.hwang@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -85,29 +87,20 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2026-07-28 at 20:25 +0000, Xu Kuohai wrote:
+On Fri, 2026-08-07 at 00:31 +0800, Leon Hwang wrote:
+> In the next commit, percpu_array map will add map_direct_value_addr
+> support.
+>=20
+> IOW, it will add a map_type check in the iff condition of the
+> bpf_map_direct_read() code block, which will reduce the code block
+> readability.
+>=20
+> Hence, factor out check_map_mem_read helper to improve the readability,
+> and the maintainability for the percpu_array map case.
+>=20
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
 
-...
-
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 505d134cd264..ab5da3ff941a 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1564,27 +1564,34 @@ void bpf_jit_prog_release_other(struct bpf_prog *=
-fp, struct bpf_prog *fp_other)
-> =C2=A0 * Now this function is used only to blind the main prog and must b=
-e invoked only when
-> =C2=A0 * bpf_prog_need_blind() returns true.
-> =C2=A0 */
-> -struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, s=
-truct bpf_prog *prog)
-> +int bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_pro=
-g **pprog,
-> +			=C2=A0=C2=A0=C2=A0 bool clone_needed, bool *cloned)
-
-Imo, the code is harder to understand after this change.
-Maybe it would be simpler if clone_needed/cloned handling would moved
-to the caller. In the current form I'm not convinced the change is warrante=
-d.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
 ...
