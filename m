@@ -1,123 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9753E0C66;
-	Mon, 10 Aug 2026 14:03:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E021B3CAA57
+	for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 14:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786370588; cv=none; b=qH9UmvD1puOibPTVx808M7/UwmPoWB1f+kVlM62tDegMuZ+ivuIu6r7LYCpW7TCMbPPS46PHCBiWW/XCsFRZ9wGAoM/qEE/xdQx80tSXAmP4jDdOIOwjUIJfkeAil6NSuRkIj3zBH6uAiOy6SNcfRO9SDLrkpDUXxNpG0VMbYOI=
+	t=1786370671; cv=none; b=LQz68NyKWwMFcnf2Udif47u9AiqlmNDj06B8r6PatnCQkuFHUqgN58n8MZcdP2FPY/NCjLTTPxx+XBNc5vsiW4ycmfzVQeEez5BazUKocociWCLH5fSVV1NKLDOB+i/u3PS5GD801brvcR6/8gXw1bRRdQl2eNH83XeX+8ZEYsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786370588; c=relaxed/simple;
-	bh=LfIdTTqg5c/Ob/ZERkYbe5RZBCzNz+U1lGkS43Ss5A8=;
+	s=arc-20240116; t=1786370671; c=relaxed/simple;
+	bh=Of2VxqqmxQzCY66bQl2w3YZZlttCDamr6CM3EQD0eU0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=U+OpMMET3BblzbK6eIK8DNnoV/2+YrlltGUYKCjVhpN7IrF14kdlTI2U5wkG4uTp1wYQAbYZ9qnLUOd5ObnnmCDvPcRzHn+qDIT+04O65U7oZL77DbVjnRUMDYpJ4DGLLJ+uPoeAJukPtRihDj2VINhhvqDBpkj/HUBiwOUwLu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jdbpnzDS; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=gJ7SZtI5L9/je9J2LuhL0itljAwa1lRNWZ5Rz1mxPKxuTBfpjAhcD8qEP1QiJaXjocm5jhJhhbiENTzI+OOel8Trt4n2dDwp2T1B3Ugx26rJtgGG8ZlNMBKOJVUfxDQcT3NWOwi8PLQTjIApWHKQgUdiQ77iuQ9FgtYOiNjrXro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CoOcG1vm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jdbpnzDS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1D721F000E9;
-	Mon, 10 Aug 2026 14:03:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CoOcG1vm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 531211F000E9;
+	Mon, 10 Aug 2026 14:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786370587;
-	bh=C0wCGWqawOoqvyJErYnhEtp8F0veVA1BCLHQW05MDlU=;
+	s=k20260515; t=1786370669;
+	bh=x9hJC5Ehv1m4OyDSOoNuhYrDEPqhyH7k2wSLyX9emt4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jdbpnzDSfgpJ2lP5FPLfSg6whNh/Hj65WNKYk+37WA90MChqGg6ZZYzK+2eFjgyvT
-	 675Rqj1Eorwke4zoiGQc2X79ncNS33Ue0CUc5EoBIVfVBIKUPgzo+KAUYEDo8USG1F
-	 4+tISCQADGCraM6oExhmQpONHaHvBjJaPTSwefD2JlP1ct0or/knab+R4594V5zHPC
-	 thcz7CtG/imc3X14m3R0bnC+0KF3NFQD8xfXC5oY05S7bfveLzKEALu4+cRJp/hgtM
-	 x020iAGLtZY+4unFQjevGYDZorXpIhMdvOMiZakCXMTZxGx+p+ANsFO6nGpICva7q+
-	 OVm+vrOaFxA1g==
+	b=CoOcG1vmG47CGcjqVs8BnemwCavr/91uCZRYn/Z3cobt+kNbJNuSq2QqAvLKF8ukP
+	 ziZMHpVEJ7jAdI/0ETMHzyiICjkE63ZPEThWcRMJEcHAwSodWvVuSiHRanpEC60HJ/
+	 25K+OTkYuYRy/ZXsbSgET5vUbCyrEpVkHjoIF3i5taQhDStYHNceu9JoyKAh0CRG+8
+	 M/SLCtaNrBE+796xejHgfF/H741ojpuRt+gtLA2ks60xDuo3wQ7dtsQMLC1X9KyQEY
+	 qohZGH8YWmuROe+nmSu3kXZb7tQ65eauUdW5U51XaxOC+Ch4Z/L/yJ5QTEkFzkl+Vr
+	 MmD2TM5Skw1/A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 1/3] perf/core: Fix NULL pmu_ctx passed to
- pmu->sched_task()
+Subject: Re: [PATCH bpf-next v3 1/3] bpf, arena: fix range_tree_clear
+ inconsistency on kmalloc_nolock failure
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Puranjay Mohan" <puranjay@kernel.org>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260810133540.1947118-2-puranjay@kernel.org>
-References: <20260810133540.1947118-1-puranjay@kernel.org>
- <20260810133540.1947118-2-puranjay@kernel.org>
+To: chenyuan_fl@163.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260810134800.2875487-2-chenyuan_fl@163.com>
+References: <20260810134800.2875487-1-chenyuan_fl@163.com>
+ <20260810134800.2875487-2-chenyuan_fl@163.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 10 Aug 2026 14:03:05 +0000
-Message-Id: <20260810140306.C1D721F000E9@smtp.kernel.org>
+Date: Mon, 10 Aug 2026 14:04:28 +0000
+Message-Id: <20260810140429.531211F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Per-CPU PMUs missing `sched_task` callbacks during context switche=
-s if a task context exists.
+- [High] range_tree_set() modifies the interval tree before attempting a fa=
+llible allocation, leaving the tree in a corrupted state on OOM, similar to=
+ the bug fixed in range_tree_clear().
+- [High] Transient NOWAIT allocation failure in range_tree_clear() causes a=
+rena_vm_fault() to trigger a fatal SIGSEGV.
 --
 
---- Patch [1]: [PATCH v7 1/3] perf/core: Fix NULL pmu_ctx passed to pmu->sc=
-hed_task() ---
-commit 333df3e02c2d6b54e5bd528f91779820677d118e
-Author: Puranjay Mohan <puranjay@kernel.org>
+--- Patch [1]: [PATCH bpf-next v3 1/3] bpf, arena: fix range_tree_clear inc=
+onsistency on kmalloc_nolock failure ---
+commit 944fb15c800d7e3cba4552c75753fe7038ce96ab
+Author: Yuan Chen <chenyuan@kylinos.cn>
 
-perf/core: Fix NULL pmu_ctx passed to pmu->sched_task()
+bpf, arena: fix range_tree_clear inconsistency on kmalloc_nolock failure
 
-perf_pmu_sched_task() returns early when cpuctx->task_ctx is set, and
-cpc->task_epc is only non-NULL while a task context is scheduled in on
-this CPU. This patch passes &cpc->epc instead, which is the CPU-wide
-context for this PMU, avoiding a NULL pointer dereference.
+range_tree_clear() pre-allocates the right-half node before modifying
+the tree, so an allocation failure returns -ENOMEM without altering the
+range tree.
 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index ba5bd6a78fe7b..c372213ffc883 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -3907,7 +3907,7 @@ static void __perf_pmu_sched_task(struct perf_cpu_p=
-mu_context *cpc,
->  	perf_ctx_lock(cpuctx, cpuctx->task_ctx);
->  	perf_pmu_disable(pmu);
+> diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
+> index 2f28886f3ff75..15b588377a769 100644
+> --- a/kernel/bpf/range_tree.c
+> +++ b/kernel/bpf/range_tree.c
+> @@ -143,16 +143,22 @@ int range_tree_clear(struct range_tree *rt, u32 sta=
+rt, u32 len)
+>  		if (rn->rn_start < start && rn->rn_last > last) {
+>  			u32 old_last =3D rn->rn_last;
 > =20
-> -	pmu->sched_task(cpc->task_epc, task, sched_in);
-> +	pmu->sched_task(&cpc->epc, task, sched_in);
+> +			/*
+> +			 * Pre-allocate the right-half node before modifying
+> +			 * the tree. If allocation fails we return -ENOMEM
+> +			 * without altering the range tree.
+> +			 */
+> +			new_rn =3D kmalloc_nolock(sizeof(struct range_node),
+> +						__GFP_ACCOUNT, NUMA_NO_NODE);
+> +			if (!new_rn)
+> +				return -ENOMEM;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does the early return in
-perf_pmu_sched_task() skip callbacks for CPU-wide PMUs?
+This isn't a bug introduced by this patch, but does range_tree_set() suffer
+from this exact same problem?
 
-If a system-wide PMU event is active (sched_cb_usage > 0), and a context
-switch occurs to or from a task with an active perf event (meaning
-cpuctx->task_ctx is set), perf_pmu_sched_task() returns early:
+Looking at range_tree_set() in kernel/bpf/range_tree.c:
 
-kernel/events/core.c:perf_pmu_sched_task() {
+	range_tree_clear(rt, start, len);
 	...
-	/* cpuctx->task_ctx will be handled in perf_event_context_sched_in/out */
-	if (prev =3D=3D next || cpuctx->task_ctx)
-		return;
-	...
-}
+	left =3D kmalloc_nolock(sizeof(struct range_node),
+			      __GFP_ACCOUNT, NUMA_NO_NODE);
+	if (!left)
+		return -ENOMEM;
 
-It seems to rely on perf_event_context_sched_out/in() to handle the
-callbacks. However, perf_ctx_sched_task_cb() only iterates over the task's
-pmu_ctx_list:
+It modifies the tree by calling range_tree_clear() first, and then can fail
+its allocation. If arena_free_pages() calls range_tree_set() to return slots
+and it fails here, the slots seem to be silently and permanently leaked sin=
+ce
+the return value is ignored.
 
-kernel/events/core.c:perf_ctx_sched_task_cb() {
-	...
-	list_for_each_entry(pmu_ctx, &ctx->pmu_ctx_list, pmu_ctx_entry) {
-		cpc =3D this_cpc(pmu_ctx->pmu);
+Could we apply this same pre-allocation pattern to range_tree_set() as well?
 
-		if (cpc->sched_cb_usage && pmu_ctx->pmu->sched_task)
-			pmu_ctx->pmu->sched_task(pmu_ctx, task, sched_in);
-	}
-	...
-}
+[Severity: High]
+This is another pre-existing issue, but does returning -ENOMEM from here
+cause unexpected crashes in user space?
 
-If the task's perf event is for a different PMU (like a software event), the
-CPU-wide PMU won't be in ctx->pmu_ctx_list. Does this mean the CPU-wide
-PMU's sched_task() callback is completely skipped during the context switch,
-potentially corrupting hardware tracing or leaking branch records across ta=
-sks?
+Looking at arena_vm_fault() in kernel/bpf/arena.c:
 
-> =20
->  	perf_pmu_enable(pmu);
->  	perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
+	ret =3D range_tree_clear(&arena->rt, vmf->pgoff, 1);
+	if (ret)
+		goto out_sigsegv_memcg;
+
+Since arena_vm_fault() handles page faults under a raw spinlock with IRQs
+disabled, this kmalloc_nolock() acts as a GFP_NOWAIT allocation. If it fails
+under memory pressure, it returns -ENOMEM, which arena_vm_fault() then
+translates into VM_FAULT_SIGSEGV.
+
+This causes the faulting user application to be randomly killed with a
+segmentation fault rather than retrying or returning OOM.
+
+Could this error handling be improved to avoid crashing the task?
+
+[ ... ]
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810133540.1947=
-118-1-puranjay@kernel.org?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260810134800.2875=
+487-1-chenyuan_fl@163.com?part=3D1
