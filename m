@@ -1,61 +1,63 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318BD2773E4
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 04:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF25E2C3257
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 04:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786420913; cv=none; b=MGG0oLecQ4VxXqlyardD10W5OQ+Eo7NYvPxFelg5Q2zo4/7s8NO38veJui7H3dh/N1QklOg6MOygWo2l3dC04TKbJtCmhCGDJwZrlLLncbbrPk5QzlWC8XqoOHIG79OtIC7hZH1uXnm9XbzQ47x0bupYWEYd1SZESIGWRWaqOF8=
+	t=1786420917; cv=none; b=SWsfew9ncjlTaYeT2rNezXgQHUx3W/F1zwLY153xiUB1xFjAnIKa+cc7ONmBowlcGRLNcFlW10hGgOV9wQJy8ZNUobVVMR8rFtNdnYjcWlunEwBlBHpsC2XbNET+jIICd3gnSjH87/q95RWfwMxJQ322SMkY9HUEi9GNIoTpPnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786420913; c=relaxed/simple;
-	bh=O3YwKg/rxj6wZhace67T0MMqqd551eX+inMitn7ZWLQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bJD+sYneJyAFPlAFF3fCnXmCfuC0LunfTfqvdjtWSPOEwUtLQMhjBADt/4CVcd1ZrBaOPuRt0pRHt0xaUWw1Qnj76Qmwmzn6aqKmBM6FNCIIDFzy8ofGgIF1JGKmKsQ26S871JIXCsQlP9ZgJmIEYy3E5rFAXuJSpprEezONOs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rrvlTdNz; arc=none smtp.client-ip=209.85.215.175
+	s=arc-20240116; t=1786420917; c=relaxed/simple;
+	bh=JKB8c704sCV4XMi2SILB65TPadhP+/dZ+kBPOImvi7o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fYKX6A5Ep75NBMceyDo+2dzbrirTxrblj5sUt9v+D9Zl3Vs2KY7zUivKOchjGp1v7P280ybfF5UbCluNYxWNTb+g/ak5bA/lr5gyRlmHX+qd85SbDXWSPkbCIzb6ObtLE1zb6am5/3Xk26CUlXjaYd/zLgZyZuk2oVQiua3vSZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=haxzS+Td; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rrvlTdNz"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cb5b8572b70so3003219a12.2
-        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 21:01:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="haxzS+Td"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-ca957432c7fso2541439a12.1
+        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 21:01:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786420911; x=1787025711; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=f3XmrdIXg3BjIJIlv2ZSsn/hjP6wPweG13cKQY6BbI0=;
-        b=rrvlTdNzl4b06RNXukrctlmxCjko0bkCvi38MgU69VvE9+SQgxqibNL7LsC2n6qJiZ
-         Ydw4BnGOfN1rjaY/DjZZf79OddG4oWq2ZkGhXQMTix99H9ZOk69BfeTanqC2a9xudHKp
-         XfEbweKsPt0126Ktanz/WrfdbE6eN9Agm2XG2EbeEMM1ZszX0M8cjqhvyIDs8YgMd+EO
-         SZLfxgwCGAzrY4zZiv55D9yfBmNY+0cVeFrkUK3yTDRKks0j73X4D8PpWdHeox85K+WD
-         A6n3jBMINTyYEHUUrh1bTUkYB4JPjpgbHb0TvFYxMzJbnpY01NHTA2GaEoqAqGj1A0Mb
-         Hpjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786420911; x=1787025711;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1786420916; x=1787025716; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=f3XmrdIXg3BjIJIlv2ZSsn/hjP6wPweG13cKQY6BbI0=;
-        b=WTalhGkSGIchpy2z2sY206mDcgoxccgHF8C+kd4wSf68NH95ThYEw0mJBNP0ROay4j
-         67I1boKn7ggw7akQbyxLnMNtsmlVe9hQaWlIaztFeWBkio50cbR49NC5O6awybvdZpYm
-         SQfgnJ4Zsh293syI36s0xllUsHx+/HiDOF388qcYjViXe+BSKDRRBICAS66UIZ+2s2ir
-         DUJ4HOaGFnK9VcGXEBXsPGpnOh8tAINONBIpSA82iMy7T+WcGqo98I7pFaxWsnVwAzJU
-         58mRBGFvVvcb1Qv5Y6O0PhjOqjaS7znYfBvaMG9oSllgh/9KBLMGWe/AsQiDaroL+fT9
-         V/Hw==
-X-Gm-Message-State: AOJu0YyTjhK8s9tR6R4LCvP7t0TIEp/CV+GwZeom2KqpIQrsjfrxVI2N
-	x18G2OGa/rkdYEfs9WYIsMaRQCjyvg4kQ8gTidwLdXuGgReSUDC/gcn06/bOoA==
-X-Gm-Gg: AR+sD10MNRjVGbwZWthtiIUUnhvkviT7HCbZI+YO7n4cLRhGKHWjeGMDJHxQ3AGKawl
-	4mLo0PeBvxLdU8VMKBs8dRHsAc9OZBNGicYbRx/dccflWkNtwDna8uwnxlXfL6gbxQ2iVNbkEFz
-	VNHCpxJRhWi87TI4kgYVW8YZies06519CDwo/Q3W2hOcslE1gUPCOVkxUfLQ79g9t/H1EfWUvzF
-	Hm/+k4P1okl9rABNjppuBeGHXWvYYxOeRFMr9QGReVL8qkd8jmP2ynzQoFLEoEZthaV64NVtXJj
-	nDI9iMGRi+4dw1Hqv2am6oPYkG2tO379f4FAe5Ot+YC4cZ2w4Iwua96xyXxWSnysDTHupGjJXXS
-	DK4OBta2/6Bk3jZarRukROhWNAEjWj+VzgE6miKeC4ZjkjRGgmXLu4/SwptY9cdHul2mSa69clf
-	rotzl/qaSRG4Znf3D5AXp9gmzBs887Wcr5hTic75DWbKjA9b8PaWMCidunp9LE88TyhSoQkgOTv
-	/j+SkHFClARhuhs
-X-Received: by 2002:a05:6a20:cc8e:b0:3c3:b57b:627d with SMTP id adf61e73a8af0-3cc2b84c686mr952019637.12.1786420911447;
-        Mon, 10 Aug 2026 21:01:51 -0700 (PDT)
+        bh=TUF/Ie1CAko6dSXUa4KbdnibBpL2SvEJG3sel4Ep/bY=;
+        b=haxzS+Td+tHg7WO2xu21LqUhUxpvz5k45ukPO14aDo/YNqVY+uZ0Z61+qdwpxb4j+p
+         BTgcAtC2+W5jKivlZTATVvI6IfCnMPSYc3XBqA/SgKUj72sRnDU2UbWlyWQQvc86pdKb
+         iAPBSqK1T75HkIqQNnvZv9WTXlo/dr1O6omyjvP7RvnoKzrriorb8DFwUpOS9BcJfRfr
+         saVGL9D2c96s1plnEOggMV3jFx02Out/uP8g1A+uj57oxHdoEZ0Y5u3fZW4mS4FPF8Ap
+         G7JF7CRe1ckvL5kfEPzinSafwk227yBZfszuTwFu/nBX8bH42YkYN6xsXguYQVo1F5Xz
+         JZZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786420916; x=1787025716;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=TUF/Ie1CAko6dSXUa4KbdnibBpL2SvEJG3sel4Ep/bY=;
+        b=NeDmiDeABBvQFtUjZkTHEG0icx76qFeO+51ig0wzCgJEQwsqV2TBlRU7oMwTTylr3w
+         7Tgz+9919vQN/HupHcqx6ishDOgURVvv22mqdrKwO5mtlKw+J0zd2BvdWEdY0GI5lF7M
+         X9kIAHft0umd3P1t/nETg2x7BydoPDEkccxyirSDGoXmiH21t2htixvkKUM9pdyNNcwE
+         CCmnoeouSuSRFLyErSDEqbPHZ55nGQSeWh65JJnVDLwMwYSniS4vzQbpniu023gP1UDu
+         7ohK/2zf43s2ezBfCzwgdb0T3OCU4CNPzJAGxp2DqHy5xTiBQip/exPxtIHNIV5iaTDs
+         zD2Q==
+X-Gm-Message-State: AOJu0Yytso30wmDRDodtA4n3LJWXMy5hsM7+w4CLtpD0fk0k+HfYyA37
+	nzVydloGBk4rRs0Fnw0X8wl+zdPXWyHwiA1k6EpjhMNqZwU91RKEmlHzGASSFQ==
+X-Gm-Gg: AR+sD11otWQYY5WCx76jcq1h5XZH6Sq0VBm88CcovMa8TjO8SgMbgJ6IfS6KDT3y6Pr
+	k/TU0mPAje7NzCbXSf7t8U6dV5rD4Te3tzeZ0q+olJsdnD5kFwVEd6aU7+8r/PP+ScLFTupf53d
+	+cZ2zTxJoGnu6qexrGs7wh8MhH2DMWWL4BVIKP2KVKYP41KNmKSEx/j6CNZk8j+KH8MAhc82i3l
+	14P942l02EkqOZ4j4Pm8Qd/jLNJxm79Q6qXs0qPmusSuyFxc2pQKW1qfJiRcWotwiSxaqXlKewB
+	jzn31h9NsYLwm3x+fXlQN8VrSbfYuQ08reL0DKu/TxxvCxSaBy5njQGwbCouGnCSDREgO3y1l8i
+	lA678dBL/EThO69VnBO+4I7VV+lQqIYP6qgyJB7v8HlldrxzntbR2QmuQSd67y5VX2AvIJWSmMi
+	+P3bwa1tuGOfj8O+MvDJKybKaX80EAfP5Mr09sQrzMX+ZNdWnx1fYyUPeDQQpN0Fxz7Ui/nODT/
+	80oOObPRjgepN4cppCWnqNmGJg=
+X-Received: by 2002:a05:6a00:4f8f:b0:845:3fea:96c with SMTP id d2e1a72fcca58-84fa873633cmr252213b3a.21.1786420916032;
+        Mon, 10 Aug 2026 21:01:56 -0700 (PDT)
 Received: from patterson.cs.ubc.ca (patterson.cs.ubc.ca. [198.162.52.65])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbed8bb9569sm163683a12.3.2026.08.10.21.01.50
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbed8bb9569sm163683a12.3.2026.08.10.21.01.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2026 21:01:51 -0700 (PDT)
+        Mon, 10 Aug 2026 21:01:55 -0700 (PDT)
 From: Ning Ding <dingning04@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -74,10 +76,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Chuyi Zhou <zhouchuyi@bytedance.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/2] bpf: Compare iterator types during state pruning
-Date: Mon, 10 Aug 2026 20:59:53 -0700
-Message-ID: <20260811035955.132989-1-dingning04@gmail.com>
+Subject: [PATCH bpf-next v2 1/2] bpf: Compare iterator types during state pruning
+Date: Mon, 10 Aug 2026 20:59:54 -0700
+Message-ID: <20260811035955.132989-2-dingning04@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260811035955.132989-1-dingning04@gmail.com>
+References: <20260811035955.132989-1-dingning04@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,27 +90,32 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Iterator stack slots can be marked MEM_RCU or PTR_UNTRUSTED. The
-STACK_ITER check in stacksafe() does not compare this type, so state
-pruning can treat these states as equal and prune an unsafe path.
+An iterator stack slot can be MEM_RCU or PTR_UNTRUSTED. These states
+must not be equal, or the verifier can prune an unsafe path.
 
-Compare the type and add a test where RCU protection has a gap.
+Compare the pointer type for STACK_ITER slots.
 
+Fixes: dfab99df147b ("bpf: teach the verifier to enforce css_iter and task_iter in RCU CS")
+Signed-off-by: Ning Ding <dingning04@gmail.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
-Changes in v2:
-- Convert the regression test to inline assembly so its verifier-sensitive
-  control-flow layout is stable.
-- Add Eduard Zingerman's Acked-by tag to patch 1.
+ kernel/bpf/states.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-v1: https://lore.kernel.org/bpf/20260807004320.134069-1-dingning04@gmail.com/
-
-Ning Ding (2):
-  bpf: Compare iterator types during state pruning
-  selftests/bpf: Test RCU iterator state pruning
-
- kernel/bpf/states.c                           |  3 +-
- .../selftests/bpf/progs/iters_task_failure.c  | 46 +++++++++++++++++++
- 2 files changed, 48 insertions(+), 1 deletion(-)
-
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index ea2153cf28d0a..4e6aafad33bd2 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -812,7 +812,8 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+ 			 * infinite loop check triggering, see
+ 			 * iter_active_depths_differ()
+ 			 */
+-			if (old_reg->iter.btf != cur_reg->iter.btf ||
++			if (old_reg->type != cur_reg->type ||
++			    old_reg->iter.btf != cur_reg->iter.btf ||
+ 			    old_reg->iter.btf_id != cur_reg->iter.btf_id ||
+ 			    old_reg->iter.state != cur_reg->iter.state ||
+ 			    /* ignore {old_reg,cur_reg}->iter.depth, see above */
 -- 
 2.43.0
+
