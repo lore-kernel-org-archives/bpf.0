@@ -1,295 +1,261 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985183815E6
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 01:24:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683FF37F727
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 01:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786411485; cv=none; b=dMW+M/1Ysy70fcKppanAmMTQ1mN8IgbjwOl6oC8mJx03n8gSty8QgG0NojvGLnh9GyaeZeiN6zoQ0yB+eoSeWdDKcwSxsG/FWgl9qrNtf/ZVdt54qIMaiUfbORDOBsbay0eLO57UM8oJxeR4iaSvsCeeCQi6xMNkhc1kfbufFwY=
+	t=1786411486; cv=none; b=odYxxqenlLSCdrsll1IUvg/ijOw4RJgENjXJ5ewlWJ00MJELexWDA9FWGEvZjUqWn0va4srxCnXx++O8oRlCXv/zdI4HS58GT+Rf++KQiIcSIC8B5l3YaDEpTJtWMkj7MdtMrxhM2cBf9F/OWuY3iQD5XkIi6Bqf9laS1E6rdmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786411485; c=relaxed/simple;
-	bh=4RZuKsyAw7f4OL30mIk5rwyF7JRRo+8BgeX2nirrh3E=;
+	s=arc-20240116; t=1786411486; c=relaxed/simple;
+	bh=z0MEFbGJ3e56OBYnIBULetBnO1o7ofvIz/5TqAGmBus=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=bfNq8mMDsY66T1DLakxdG2Pi4fcdFX7cMcq/iJ+Eeia70E/QOUwaXStFoh4q3ggsz50WtW/4R5y236N+5hIw5nJAXlAoQ6bji4Q+CoPHy/thRdjvBta6sm83YtNHOEA450i1Dlx6nAsc7mpV58ZBaf/vORD5Z39zBIPIvXOlveo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhOYSkcn; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=eoqAFZ/7hOG6w84EfOJlzbL/rfRf0USqJ6rwvmtyhWuUVpUFaZ9E5nwijZJuJUFBanD+au0It4yViZ/GpurJs/eHXbKfYbAAgcJxtUp01aHe6ui8z0PZUmypAaCH38mW1HdQaygZODVCK5U6VbisqHT6WuTHPyE537i8fCNW0fM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BdhSqg/2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhOYSkcn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E568C1F000E9;
-	Tue, 11 Aug 2026 01:24:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BdhSqg/2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD3D91F00A3A;
+	Tue, 11 Aug 2026 01:24:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786411483;
-	bh=zUVhGbvuEx4K2e5wQoVEEZZF5OvO7OM9n5tdLHzoKXE=;
+	s=k20260515; t=1786411485;
+	bh=dKeATCyZYz5yDpfsqb+G0bfYZ9dje+aps0mF7NHFAVc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=GhOYSkcn7yA2Yct+njibipkGWMfN93ULYqXKXducaMtb3nhoAmR2A4NE9RiFFXuHK
-	 NvXTu70Qs/mFU7Jhld3zDhpSpGOXVnke6jCqOGI2pnyMFXFLvCleEkSZqPLontNvvd
-	 x3+jeL8MgnFAhrIMsvZ0QT6C2jczoqS0KA3zR5lGHPOVsUiRcPT9cWVf/SuVPjR/hV
-	 rpdPSTm9uCj4jLQBuvID2ka3WxQNPlyFPMKox7OXbpmo3nwnSC6+o8oEfU0biMXLus
-	 Yvson729SxZ59oH7M+YuzDlW0EvoPKyAgpW0YN80JYpHhp7OY7BkVVnspwOIDjf7qY
-	 tHGZZSiTdKIZQ==
-Content-Type: multipart/mixed; boundary="===============3822318507285033672=="
+	b=BdhSqg/2B6ulg6LgcOcCok7PwmpzXvdLKHKOF7a2t00TcLfxvQPJYVN2Uga1F7es7
+	 Ko8g7U4rWVmqSllGxWeoy/u1AMKH31lKftDB0qZy0kJy3C7HkWbLTgD4+yqMHHRaCK
+	 D6L8mbN7GdwyRxL37L3j77mZ5HDp/PTsImCsIWre8eDSVlLYJL7EeGPJ9Ja7ZykIar
+	 ykk1p038XDi/WvSACccCyjFSV4C9IwKcGQY1Mv/hOtiuSOn4e0x3TAEb8bVxRScwSM
+	 r4OGCtKPwkqmnkTYBMUk0/Gq4vka+nhyrSj5kwzOZ9WT0ZlN3mXHWNqSlrHLQlcV68
+	 Pj2Z9HnO25cyg==
+Content-Type: multipart/mixed; boundary="===============5447536458762560471=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1401ba2c0512cfb3069383693bc55e1f977ad9bbf07dd9cca7e266bf517c571f@mail.kernel.org>
-In-Reply-To: <20260811001013.2385213-1-yonghong.song@linux.dev>
-References: <20260811001013.2385213-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v4 12/13] selftests/bpf: Add tests for callbacks returning more than 8 bytes
+Message-Id: <b0796c556995285a17bc51b371fb413f000498e0d78d5a040ef8dba50010726d@mail.kernel.org>
+In-Reply-To: <20260811000952.2382568-1-yonghong.song@linux.dev>
+References: <20260811000952.2382568-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v4 08/13] bpf: Reject register-pair returns when the subprog BTF is unreliable
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 11 Aug 2026 01:24:42 +0000 (UTC)
+Date: Tue, 11 Aug 2026 01:24:44 +0000 (UTC)
 
---===============3822318507285033672==
+--===============5447536458762560471==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Add tests for callbacks returning more than 8 bytes
+> commit cb2551cf6e866ae6692739f7cbb75ff97e2d1a3b
+> Author: Yonghong Song <yonghong.song@linux.dev>
+> Date:   Mon Aug 10 17:09:52 2026 -0700
 >
-> Add two __failure tests covering the callback return-size checks:
+>     bpf: Reject register-pair returns when the subprog BTF is unreliable
 >
->  - timer_ret_pair_fail: a bpf_timer callback declared to return more than
->    8 bytes, rejected by check_ld_imm() where the callback's PTR_TO_FUNC is
->    created, with "callback function with >8-byte return value is not
->    supported".
+>     The R0:R2 return convention is derived from the BTF function prototype:
+>     bpf_compute_subprog_ret_regs() inspects the return type of every
+>     subprogram and records whether its value comes back in a register pair.
 >
->  - exceptions_ret_pair_fail: an exception callback declared to return more
->    than 8 bytes, rejected by do_check_common() when the callback
->    subprogram is verified, with "exception cb cannot return value larger
->    than 8 bytes".
+>     btf_check_subprog_call() can decide, at a call site, that this BTF is
+>     not to be trusted and mark the subprogram unreliable, which happens when
+>     compiler optimizations remove arguments from a static function or when a
+>     mismatched type is passed to a global one. From that point on the
+>     verifier falls back to conservative, R0-only, semantics for the
+>     subprogram, while the compiled code keeps returning a pair and leaves
+>     the upper half in R2 behind the verifier's back.
 >
-> Both callback bodies are written in inline asm so that the tests do not
-> depend on LLVM 23 R0:R2 codegen and run on any compiler. The verifier reads
-> the return type from BTF rather than from the instructions, so the >8 byte
-> return prototype is supplied through __btf_func_path(), pointing at a
-> companion btf__*.c program that exists only to carry that BTF.
-
-Does __btf_func_path() actually supply the return type? Looking at
-fixup_btf_from_path() in tools/testing/selftests/bpf/test_loader.c, it
-appears to keep the prog's return type and parameter types while
-substituting only parameter names:
-
-  ret_type_id = fp->type;                    /* fp is the prog FUNC_PROTO */
-  for (j = 0; j < vlen; j++)
-      prog_param_types[j] = params[j].type;  /* prog param types */
-  new_proto_id = btf__add_func_proto(prog_btf, ret_type_id);
-  ...
-  pname = btf__name_by_offset(custom_btf, custom_params[j].name_off);
-  err = btf__add_func_param(prog_btf, pname ?: "", prog_param_types[j]);
-
-The comment at the call site says "Fix up __naked subprog BTF using a
-separate file with named params", and the >8 byte return type already
-comes from each test object's own BTF: exceptions_ret_pair_fail.c
-declares 'unsigned __int128 exception_cb_bad_ret_type3(u64 cookie)' and
-timer_ret_pair_fail.c declares 'static unsigned __int128
-timer_cb_ret_pair(...)'.
-
-The companion btf__*.c objects supply parameter names, which are needed
-because clang emits anonymous parameters for __naked functions and
-btf_func_check() in kernel/bpf/btf.c rejects a BTF_KIND_FUNC whose
-FUNC_PROTO has a typed-but-unnamed argument, which would make the whole
-object's BTF fail to load.
-
-Could the explanation be more precise about what __btf_func_path()
-actually provides?
-
+>     Rather than silently mistracking R2, reject a return value larger than
+>     8 bytes as soon as the prototype it was derived from becomes unreliable.
+>     Add subprog_ret_pair_unreliable() and test it at the two places that can
+>     observe the flag: check_func_call(), for the call itself, and
+>     prepare_func_exit(), for the return from an inlined static subprogram.
 >
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-> index 3588d6f97fd4e..71d00c568d802 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-> @@ -5,6 +5,7 @@
->  #include "exceptions.skel.h"
->  #include "exceptions_ext.skel.h"
->  #include "exceptions_fail.skel.h"
-> +#include "exceptions_ret_pair_fail.skel.h"
->  #include "exceptions_assert.skel.h"
+>     Note that the main program needs no such check: a >8 byte return from
+>     subprog 0 is rejected at BPF_EXIT regardless of whether its BTF is
+>     reliable. Callbacks need none either: a callback address only becomes a
+>     PTR_TO_FUNC through check_ld_imm(), which already rejects any callback
+>     returning more than 8 bytes.
 >
->  static char log_buf[1024 * 1024];
-> @@ -12,6 +13,7 @@ static char log_buf[1024 * 1024];
->  static void test_exceptions_failure(void)
+>     Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+
+This looks like a bug fix for register-pair return support. Should this
+include:
+
+  Fixes: d280e9c973c5 ("bpf: Add verifier support for 16-byte returns in R0:R2")
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 944f0721086bd..8f0c4aed0781f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -438,6 +438,21 @@ static void bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
+>  	}
+>  }
+>
+> +/*
+> + * A >8 byte BPF return changes the calling convention to R0:R2, so the
+> + * verifier can only allow it while the subprogram's prototype remains
+> + * reliable. Once BTF is marked unreliable, reject the feature instead of
+> + * silently falling back to R0-only semantics.
+> + */
+
+Does the verifier actually fall back to R0-only semantics? The return
+convention is read through bpf_ret_reg_pair():
+
+  include/linux/bpf_verifier.h:
+  static inline bool bpf_ret_reg_pair(struct bpf_verifier_env *env, int subprog)
+  {
+          return subprog_info(env, subprog)->ret_reg_pair;
+  }
+
+and ret_reg_pair is computed once in bpf_compute_subprog_ret_regs() from
+the BTF return type. It is never recomputed or cleared when unreliable
+becomes true.
+
+Grepping every reader of func_info_aux[].unreliable finds exactly three,
+none of which touches the return convention:
+
+  - btf_check_subprog_call(): returns -EINVAL early on a later call site
+  - btf_prepare_func_args(): verifier_bug() + -EFAULT
+  - bpf_check_attach_target(): sets 'conservative' for fentry/fexit
+
+So when unreliable becomes true, prepare_func_exit() still computes
+nregs = 2 and still models R2. For a static subprogram the verifier walks
+the callee, prepare_func_exit() propagates the callee's real R0/R2, and
+clear_caller_saved_regs() marks R0-R5 NOT_INIT at every call, so a caller
+that reads R2 without the callee having written it gets 'R2 !read_ok'.
+
+Worth either citing the concrete path where R2 is mistracked, or dropping
+the claim and stating the real motivation (unreliable BTF means the
+prototype the convention was derived from cannot be trusted at all)?
+
+> +static bool subprog_ret_pair_unreliable(struct bpf_verifier_env *env, int subprog)
+> +{
+> +	struct bpf_prog_aux *aux = env->prog->aux;
+> +
+> +	return bpf_ret_reg_pair(env, subprog) &&
+> +	       aux->func_info_aux &&
+> +	       aux->func_info_aux[subprog].unreliable;
+> +}
+> +
+>  static const char *subprog_name(const struct bpf_verifier_env *env, int subprog)
 >  {
->  	RUN_TESTS(exceptions_fail);
-> +	RUN_TESTS(exceptions_ret_pair_fail);
->  }
->
->  static void test_exceptions_success(void)
-> diff --git a/tools/testing/selftests/bpf/prog_tests/timer.c b/tools/testing/selftests/bpf/prog_tests/timer.c
-> index 09ff21e1ad2f0..593e56d8964ea 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/timer.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/timer.c
-> @@ -6,6 +6,7 @@
->  #include <sys/syscall.h>
->  #include "timer.skel.h"
->  #include "timer_failure.skel.h"
-> +#include "timer_ret_pair_fail.skel.h"
->  #include "timer_interrupt.skel.h"
->
->  #define NUM_THR 8
-> @@ -285,6 +286,7 @@ void serial_test_timer(void)
->  	test_timer(timer);
->
->  	RUN_TESTS(timer_failure);
-> +	RUN_TESTS(timer_ret_pair_fail);
->  }
->
->  void serial_test_timer_stress(void)
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions_ret_pair_fail.c b/tools/testing/selftests/bpf/progs/exceptions_ret_pair_fail.c
-> new file mode 100644
-> index 0000000000000..842f86ad8659e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/exceptions_ret_pair_fail.c
-> @@ -0,0 +1,30 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +#include "bpf_misc.h"
-> +#include "bpf_experimental.h"
-> +
-> +__naked __noinline __used
-> +unsigned __int128 exception_cb_bad_ret_type3(u64 cookie)
-> +{
-> +	asm volatile (
-> +	"r0 = r1;"
-> +	"r2 = 0;"
-> +	"exit;"
-> +	::: __clobber_all);
-> +}
-> +
-> +SEC("?tc")
-> +__exception_cb(exception_cb_bad_ret_type3)
-> +__failure __msg("exception cb cannot return value larger than 8 bytes")
-> +__btf_func_path("btf__exceptions_ret_pair_fail.bpf.o")
-> +int reject_exception_cb_ret_pair(void *ctx)
-> +{
-> +	bpf_throw(0);
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
-
-A subsystem pattern flags this as potentially concerning:
-exceptions_ret_pair_fail.c is a new prog file added for one narrow
-variant of behaviour tools/testing/selftests/bpf/progs/exceptions_fail.c
-already covers: rejected exception-callback return types.
-
-exceptions_fail.c already holds exception_cb_bad_ret_type1(),
-exception_cb_bad_ret_type2() and the corresponding '__failure
-__msg("exception cb cannot return void")' case. The new callback is even
-named exception_cb_bad_ret_type3, continuing that file's numbering while
-living in a different file, so a reader grepping exceptions_fail.c for
-the series will not find it next to its siblings.
-
-There is a concrete technical reason the exceptions case cannot simply
-be appended to exceptions_fail.c: __btf_func_path also sets
-bpf_object_open_opts.btf_custom_path, and libbpf uses that as the CO-RE
-target BTF for the whole object. exceptions_fail.c includes <vmlinux.h>,
-which applies preserve_access_index to all records, and it dereferences
-vmlinux structs (ctx->len, ctx->protocol, ctx->tstamp), so it does have
-CO-RE relocations that would then be resolved against the 10-line
-companion BTF. That makes the split legitimate here; the remaining point
-is only that the shared naming (exception_cb_bad_ret_type3) does not
-reflect the split.
-
-Is the naming pattern worth revisiting given that the test lives in a
-separate file?
-
-> diff --git a/tools/testing/selftests/bpf/progs/timer_ret_pair_fail.c b/tools/testing/selftests/bpf/progs/timer_ret_pair_fail.c
-> new file mode 100644
-> index 0000000000000..29fd294dfd49b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/timer_ret_pair_fail.c
-> @@ -0,0 +1,49 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +
-> +#include <linux/bpf.h>
-> +#include <time.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include "bpf_misc.h"
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-> +struct elem {
-> +	struct bpf_timer t;
-> +};
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__uint(max_entries, 1);
-> +	__type(key, int);
-> +	__type(value, struct elem);
-> +} timer_map SEC(".maps");
-> +
-> +__naked __noinline __used
-> +static unsigned __int128 timer_cb_ret_pair(void *map, int *key, struct bpf_timer *timer)
-> +{
-> +	asm volatile (
-> +		"r0 = 0;"
-> +		"r2 = 0;"
-> +		"exit;"
-> +		::: __clobber_all
-> +	);
-> +}
-> +
-> +SEC("fentry/bpf_fentry_test1")
-> +__failure __msg("callback function with >8-byte return value is not supported")
-> +__btf_func_path("btf__timer_ret_pair_fail.bpf.o")
-> +long BPF_PROG2(test_bad_ret_pair, int, a)
-> +{
-> +	int key = 0;
-> +	struct bpf_timer *timer;
-> +
-> +	timer = bpf_map_lookup_elem(&timer_map, &key);
-> +	if (timer) {
-> +		bpf_timer_init(timer, &timer_map, CLOCK_BOOTTIME);
-> +		bpf_timer_set_callback(timer, timer_cb_ret_pair);
+>  	struct bpf_func_info *info;
+> @@ -9459,6 +9474,11 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  	err = btf_check_subprog_call(env, subprog, caller->regs);
+>  	if (err == -EFAULT)
+>  		return err;
+> +	if (subprog_ret_pair_unreliable(env, subprog)) {
+> +		verbose(env, "Func#%d ('%s') returns >8 bytes, which requires reliable BTF\n",
+> +			subprog, subprog_name(env, subprog));
+> +		return -EINVAL;
 > +	}
-> +
-> +	return 0;
-> +}
 
-A subsystem pattern flags this as potentially concerning:
-timer_ret_pair_fail.c is a new prog file added for one narrow variant (a
-callback whose declared return value is larger than 8 bytes) of
-behaviour that tools/testing/selftests/bpf/progs/timer_failure.c already
-covers more generally: bad bpf_timer callback return values.
+Does this break git bisect? At this commit the new check makes every
+static (local) subprogram that returns a 9..16 byte struct or union
+unloadable, which the parent commit d280e9c973c59 accepted.
 
-The two files are near-identical scaffolding - the same '#include
-<linux/bpf.h> / <time.h> / bpf_helpers.h / bpf_tracing.h / bpf_misc.h'
-set, the same 'struct elem { struct bpf_timer t; }', the same
-BPF_MAP_TYPE_ARRAY 'timer_map' with max_entries 1, the same
-SEC("fentry/bpf_fentry_test1") + BPF_PROG2 entry program, and the same
-'__naked __noinline __used static' callback idiom already used by
-timer_cb_ret_bad().
+The two conditions in subprog_ret_pair_unreliable() are guaranteed to be
+true together for such a subprogram at this point in the series:
 
-The new program adds ~10 lines of actual test content on top of ~35
-lines of copied setup, plus a new skeleton, plus a companion
-btf__timer_ret_pair_fail.c, plus the RUN_TESTS()/#include churn in
-prog_tests/timer.c. Adding it as a third program inside timer_failure.c
-would reuse all of that. Since __btf_func_path is a per-program tag
-consumed per-subtest in run_subtest(), and timer_failure.c has no CO-RE
-relocations (it includes uapi <linux/bpf.h>, not <vmlinux.h>), the
-btf_custom_path side effect of the tag would not affect the existing
-subtests in that object.
+1. bpf_compute_subprog_ret_regs() at verifier.c:429 sets ret_reg_pair
+   from the BTF return type for structs as well as scalars:
 
-A separate file is defensible for symmetry with the exceptions half of
-the patch, where a separate file IS required due to CO-RE relocations.
-Should the new timer case be a new subtest in timer_failure.c, or does
-the symmetry with exceptions_ret_pair_fail.c make the separate file
-structure clearer?
+     if (type && (btf_type_is_struct(type) || btf_type_is_scalar(type)))
+             subprog_info(env, subprog)->ret_reg_pair = ret_regs_cnt(type->size) > 1;
+
+   so a 16-byte struct return gets ret_reg_pair = 1.
+
+2. btf_validate_return_type() in kernel/bpf/btf.c still ends with 'return
+   -EOPNOTSUPP;' for anything that is not void/int/enum (or an arena
+   pointer), i.e. for every struct/union return. That -EOPNOTSUPP
+   propagates through btf_prepare_func_args() and btf_check_func_arg_match()
+   to btf_check_subprog_call(), which sets
+   prog->aux->func_info_aux[subprog].unreliable = true precisely because it
+   deliberately swallows any error other than -EFAULT for static
+   subprograms.
+
+So btf_check_subprog_call() marks the subprogram unreliable, returns
+-EOPNOTSUPP (not -EFAULT, so the early return above does not fire), and
+the new check then rejects the call with 'Func#N (...) returns >8 bytes,
+which requires reliable BTF'. Before this patch the swallowed error was
+harmless: the verifier walked into the static callee and prepare_func_exit()
+copied the real R0 and R2 state back to the caller.
+
+The series' own selftest proves the intended behaviour. The file
+tools/testing/selftests/bpf/progs/aggregate_ret_func.c (added later in the
+series by f40812d018cc3) has:
+
+  static __naked __noinline struct ptr_pair static_ret_ptr_pair(void)  /* 16 bytes */
+  ...
+  SEC("tc") __success __retval(0)
+  __naked int aggregate_ret_static_ptr_pair(void)
+
+tagged __success, with the comment 'A static subprogram is verified inline,
+so prepare_func_exit() hands the caller the callee's actual R0:R2 register
+state ... which is why btf_validate_return_type() does not apply the
+scalar-only restriction to a local function.' Built at this commit that
+program would be rejected.
+
+The later commit b12c58bbc5e59 'bpf: Enable aggregate return types up to
+16 bytes' relaxes btf_validate_return_type() to accept a struct of size
+<= 16 for a local function, and its own comment states the reason: 'What it
+avoids is needlessly marking the subprogram's BTF unreliable.' Only
+__int128 returns are unaffected (int passes btf_validate_return_type()).
+
+Consider reordering so the return-type relaxation lands before this
+rejection, or noting the dependency in this commit's changelog?
+
+> @@ -9832,6 +9852,11 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+>
+>  	callee = state->frame[state->curframe];
+>  	r0 = &callee->regs[BPF_REG_0];
+> +	if (subprog_ret_pair_unreliable(env, callee->subprogno)) {
+> +		verbose(env, "Func#%d ('%s') returns >8 bytes, which requires reliable BTF\n",
+> +			callee->subprogno, subprog_name(env, callee->subprogno));
+> +		return -EINVAL;
+> +	}
+
+Can this check ever fire? The changelog claims it is needed 'for the
+return from an inlined static subprogram', but the check appears to be
+unreachable.
+
+unreliable is monotonic (only ever set to true) and has exactly two
+writers:
+
+  - btf_check_subprog_call() at verifier.c:9357, called from
+    check_func_call() and push_callback_call()
+  - do_check_common() at verifier.c:18591, which sets
+    func_info_aux[0].unreliable for subprog 0 only
+
+For a frame to reach prepare_func_exit() it must have been pushed by
+setup_func_entry() via one of these paths:
+
+  - check_func_call(): the new hunk above runs immediately after
+    btf_check_subprog_call() and before setup_func_entry(), so a subprog
+    that just became unreliable is rejected there and never gets a frame.
+    Since the flag cannot be set later for that subprog without going through
+    check_func_call() again (which would reject again), the exit check can
+    never see it true.
+
+  - push_callback_call(): check_ld_imm() is the only producer of
+    PTR_TO_FUNC and already rejects bpf_ret_reg_pair() callbacks ('callback
+    function with >8-byte return value is not supported'), so a callback
+    frame never has ret_reg_pair set.
+
+  - subprog 0 is frame 0 and is never a callee frame; check_cfg() rejects
+    a call back into subprog 0.
+
+The two other callers of prepare_func_exit() are equally excluded: the
+tail-call path at verifier.c:10797 and the LD_ABS path at verifier.c:16533
+can only run in a subprog whose BTF return type is a small int, because
+check_btf_func() in kernel/bpf/check_btf.c rejects BPF_LD_ABS and tail
+calls in any subprog that fails btf_type_is_small_int() (int of size <= 8),
+which excludes every ret_reg_pair subprog.
+
+If the check is intended as defence in depth for a future caller of
+btf_check_subprog_call(), saying so in the changelog would help; otherwise
+the hunk can be dropped?
 
 
 ---
@@ -297,4 +263,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31446101762
---===============3822318507285033672==--
+--===============5447536458762560471==--
