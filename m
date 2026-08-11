@@ -1,236 +1,189 @@
-Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69AF1D89EF
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 00:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DA2280A5A
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 00:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786407112; cv=none; b=EcU/jaM60YTfKzqNl4bvkLAov30+NcpAFf9IOJAr0i6rG/rMPsJcJVtf2ci0awzvBhkYccCRzGBpq6QDVRjkvDQmFx69PCfZEqWoSQuTQ6sXWPUXkoA3F07NTKuoHj3lEdxw4KOfxDfDKTP6hnjoMJIPk2q47zogWS7iaRs8kAA=
+	t=1786407403; cv=none; b=R6dxL7lYiFQmHML+bp51yDyBqY8ClrlCzJm4f1HqQTBKkppZ+cogdSgXkAUy1bVcqYZsGolkNQMxCYJBk+zdtQ8imDG+Q+m7FiSobqidxvYPrrSaBxSGd2WEVVMY3UXwsobb2WTwemz9rignXQSNIICt32LavJpam09EUASegIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786407112; c=relaxed/simple;
-	bh=CAn+Y8gVLcoShjg16us9Qh/jqS6q4vyzhJ9Le9JFxj8=;
+	s=arc-20240116; t=1786407403; c=relaxed/simple;
+	bh=xNJ4oDmPMlv0RBwpwOWvwOvu+vgNBtYEUPi8WUNfH+U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Di0Qxi/WW2pxsqv2cR3NDfHq+tGaxwSnGFkZk21C5/1aekw2n9wIPSPbUoSDX/7i/7LZlMqW7lhzJPaWc44xi150npImpu0cND2sRj2vOZYw9SDpaIbHMUV6uehrqONpW5/Gr5q3TbyQq9NCr31X7pacgKmuVCceFadyxcsxTG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ojAlxQjz; arc=none smtp.client-ip=95.215.58.175
+	 In-Reply-To:Content-Type; b=sr46Q7l7RaaWhj1UaM9LE8wDFDtaH5yd0iLAQN6cLCG9kQyVojI//c28NJCPDd3LYeV1+AWpYHJIs3wtYhdwW/cdZQrXYlfEiY2dd8pI+7K5esS28ZYZOdY4yo//HbArGV8hrB+Cy/zPTTO1RFW63s1MnEskmtfflP2waOhmrUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WhBqWpvM; arc=none smtp.client-ip=91.218.175.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ojAlxQjz"
-Message-ID: <b6c33651-05d1-485b-9a4b-f0135723c05f@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WhBqWpvM"
+Message-ID: <81194df4-7857-4b1e-929c-d6a60251f032@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786407107;
+	t=1786407387;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+kmeOehw+jdQGziucf3glUsWRl8Bgqs04QqU1H/jjcg=;
-	b=ojAlxQjzd6dPRjCJrYjpvfew4Y5v19YcVm9qA3fSZlZNqg2ce/Zqt1zxYMN1nnrao9rcHm
-	yPNBVUZVMsGVxTVzz2AJjCd0Qs6zTdNz2Qa+Lj78C1buQi/mbMyGg9Nm7JbSkti8Kovawa
-	j63PLwjvdKdALNNF3BmaOz3X6oY/784=
-Date: Mon, 10 Aug 2026 17:11:24 -0700
+	bh=CdnsKEeqoGvjOvi0tYUtpyoiE9Y0K1fJfRm1YYBah+4=;
+	b=WhBqWpvMa33ApcPgrH9yvY371+r8p/63c7g5eJ1W58C+dRviOAqam/uRDOWPHM38wdPKL/
+	Ktpzcvh7qKv0RITqxEXwWoEY6+KpTe2nRs4M1iVvuOdyojuNaLjtoJi6cQQdSbaM1jglrY
+	8Kj7N9Dj06DsqMIPI5wAOdmVTNIU8IY=
+Date: Mon, 10 Aug 2026 17:16:16 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1 1/2] resolve_btfids: Emit arena attributes
- from kfunc parameter suffixes
+Subject: Re: [PATCH bpf-next v1 2/2] selftests/bpf: Test resolve_btfids arena
+ argument suffixes
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
  <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>,
  Tejun Heo <tj@kernel.org>, kkd@meta.com, kernel-team@meta.com
 References: <20260809085155.3305519-1-memxor@gmail.com>
- <20260809085155.3305519-2-memxor@gmail.com>
+ <20260809085155.3305519-3-memxor@gmail.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260809085155.3305519-2-memxor@gmail.com>
+In-Reply-To: <20260809085155.3305519-3-memxor@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 On 2026-08-09 1:51 a.m., Kumar Kartikeya Dwivedi wrote:
-> Kfunc declarations can identify arena arguments through parameter name
-> suffixes without repeating KF_ARENA_ARG flags in their BTF ID sets.
-> resolve_btfids currently misses those arguments when synthesizing the
-> address_space(1) attributes used by generated vmlinux.h files.
-
-Continuing the previous thread [1] (progs/arena_kfunc.c:42):
-
-     ret = bpf_kfunc_arena_arg_test((u64 *)val);
-
-I'm thinking it would be useful to have selftests that generate a
-vmlinux.h-equivalent header for a test kernel module with bpftool, and
-then use it in BPF progs that depend on that module. This would give
-us nice additional coverage for module BTF generation.
-
-With this patch resolve_btfids adds attrs to BTF, but nothing consumes
-them, as we don't have such kfuncs in the kernel yet. So the only test
-is the super-custom resolve_btfids.test.o
-
-This is not a blocker. Just putting it out there, maybe one of the new
-eager contributors will pick this up.
-
-[1] 
-https://lore.kernel.org/bpf/4d3b9137362fd9151ecdaf29d863a6cc0b0799d1.camel@gmail.com/
-
+> Add a suffix-only kfunc declaration with arena annotations on all five
+> arguments. Verify that resolve_btfids emits address_space(1) type tags
+> for every position without KF_ARENA_ARG flags in the BTF ID sets.
 > 
-> Teach the arena prototype rewrite to recognize __arena and
-> __arena__nullable directly on each parameter. Keep KF_ARENA_ARG1 and
-> KF_ARENA_ARG2 handling for explicitly flagged kfuncs, while allowing
-> suffixes on any argument without synthesizing kfunc flags.
+> Represent expected arena arguments as a per-parameter bitmap so the
+> test covers suffixes beyond the two positions expressible by flags.
 > 
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
->   tools/bpf/resolve_btfids/main.c | 62 ++++++++++++++++++++++++++++-----
->   1 file changed, 54 insertions(+), 8 deletions(-)
+>   .../selftests/bpf/prog_tests/resolve_btfids.c | 35 ++++++++++---------
+>   tools/testing/selftests/bpf/progs/btf_data.c  |  9 +++++
+>   2 files changed, 28 insertions(+), 16 deletions(-)
 > 
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> index d2e4176339da..3c88ea192f7b 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
-> @@ -65,7 +65,8 @@
->    *
->    *   - emits a "bpf_kfunc" decl tag, and "bpf_fastcall" when KF_FASTCALL is set;
->    *   - wraps the return value and/or arguments flagged KF_ARENA_RET,
-> - *     KF_ARENA_ARG1 or KF_ARENA_ARG2 with the "address_space(1)" type attribute;
-> + *     KF_ARENA_ARG1 or KF_ARENA_ARG2, or identified by an arena parameter
-> + *     suffix, with the "address_space(1)" type attribute;
-
-nit: Documentation/bpf/kfuncs.rst:512-517 says the same thing and
-still lists only the flags. I don't know if it's useful to enumerate
-all the ways address_space(1) can be emitted. Maybe just say
-"resolve_btfids also handles arena BTF tags" or smth.
-
->    *   - rewrites the prototype of KF_IMPLICIT_ARGS kfuncs.
->    *
->    * These kfunc annotations were historically produced by pahole.
-> @@ -182,6 +183,8 @@ struct object {
->   #define KF_IMPLICIT_ARGS (1 << 16)
->   #define KF_IMPL_SUFFIX "_impl"
+> diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> index 732cfed35e1c..9bd84fe32b89 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> @@ -15,6 +15,7 @@
+>   #define DECL_TAG_FASTCALL "bpf_fastcall"
+>   #define DECL_TAG_KFUNC "bpf_kfunc"
 >   #define TYPE_ATTR_ARENA "address_space(1)"
-> +#define PARAM_SUFFIX_ARENA "__arena"
-> +#define PARAM_SUFFIX_ARENA_NULLABLE "__arena__nullable"
+> +#define ARENA_ARG(n) (1U << (n))
 >   
->   struct kfunc {
->   	struct rb_node rb_node;
-> @@ -1067,6 +1070,22 @@ static int collect_decl_tags(struct btf2btf_context *ctx)
->   	return 0;
->   }
+>   #ifndef KF_FASTCALL
+>   #define KF_FASTCALL (1 << 12)
+> @@ -49,13 +50,18 @@ struct kfunc_symbol {
+>   	const char	*name;
+>   	s32		 id;
+>   	u32		 flags;
+> +	u32		 arena_args;
+> +	bool		 arena_ret;
+>   };
 >   
-> +static bool param_name_has_suffix(const char *name, const char *suffix)
-> +{
-> +	size_t name_len = strlen(name);
-> +	size_t suffix_len = strlen(suffix);
-> +
-> +	return name_len >= suffix_len && !strcmp(name + name_len - suffix_len, suffix);
-> +}
-> +
-> +static bool is_arena_param(const struct btf *btf, const struct btf_param *param)
-> +{
-> +	const char *name = btf__name_by_offset(btf, param->name_off);
-> +
-> +	return param_name_has_suffix(name, PARAM_SUFFIX_ARENA) ||
-> +	       param_name_has_suffix(name, PARAM_SUFFIX_ARENA_NULLABLE);
-> +}
-> +
->   static int collect_kfuncs(struct object *obj, struct btf2btf_context *ctx)
->   {
->   	Elf_Data *idlist = obj->efile.idlist;
-> @@ -1299,8 +1318,12 @@ static int process_kfunc_with_implicit_args(struct btf2btf_context *ctx, struct
->   	return 0;
->   }
+>   static struct kfunc_symbol kfunc_symbols[] = {
+> -	{ "kfunc_a", -1, 0 },
+> -	{ "kfunc_b", -1, KF_FASTCALL },
+> -	{ "kfunc_c", -1, KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2 },
+> -	{ "kfunc_d", -1, KF_ARENA_ARG2 },
+> +	{ "kfunc_a", -1, 0, 0, false },
+> +	{ "kfunc_b", -1, KF_FASTCALL, 0, false },
+> +	{ "kfunc_c", -1, KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2,
+> +	  ARENA_ARG(0) | ARENA_ARG(1), true },
+> +	{ "kfunc_d", -1, KF_ARENA_ARG2, ARENA_ARG(1), false },
+> +	{ "kfunc_e", -1, 0, ARENA_ARG(0) | ARENA_ARG(1) | ARENA_ARG(2) |
+> +	  ARENA_ARG(3) | ARENA_ARG(4), false },
+>   };
 >   
-> -static bool is_arena_arg(struct kfunc *kfunc, u32 idx)
-> +static bool is_arena_arg(const struct btf *btf, const struct kfunc *kfunc,
-> +			 const struct btf_param *param, u32 idx)
->   {
-> +	if (is_arena_param(btf, param))
-> +		return true;
-> +
->   	switch (idx) {
->   	case 0:
->   		return kfunc->flags & KF_ARENA_ARG1;
-> @@ -1311,6 +1334,30 @@ static bool is_arena_arg(struct kfunc *kfunc, u32 idx)
->   	}
->   }
+>   /* Align the .BTF_ids section to 4 bytes */
+> @@ -105,6 +111,7 @@ BTF_ID_FLAGS(func, kfunc_a)
+>   BTF_ID_FLAGS(func, kfunc_b, KF_FASTCALL)
+>   BTF_ID_FLAGS(func, kfunc_c, KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2)
+>   BTF_ID_FLAGS(func, kfunc_d, KF_ARENA_ARG2)
+> +BTF_ID_FLAGS(func, kfunc_e)
+
+It really makes me uneasy that we now can have some kfuncs that are
+flagged with ARENA flags, and others that are not, but still work with
+arena pointers.
+
+But I guess we decided to remove the flags soon(tm), oh well.
+
+>   BTF_KFUNCS_END(test_kfunc_set)
 >   
-> +static bool kfunc_has_arena_arg(const struct btf *btf, const struct kfunc *kfunc)
-> +{
-> +	const struct btf_type *func, *proto;
-> +	const struct btf_param *params;
-> +	u32 nr_params;
-> +
-> +	func = btf__type_by_id(btf, kfunc->btf_id);
-> +	if (!func || !btf_is_func(func))
-> +		return false;
-> +
-> +	proto = btf__type_by_id(btf, func->type);
-> +	if (!proto || !btf_is_func_proto(proto))
-> +		return false;
-
-I don't like this helper: we walk the params only to decide whether to
-walk them again.
-
-What if we change add_arena_tagged_proto() to return original proto if
-nothing was tagged? I think one of my early revisions worked like
-that. Then the helper could be dropped.
-
-And returning false on bad BTF seems to silently skip the tagging,
-and so far we've been failing hard on errors like that.
-
-> +
-> +	params = btf_params(proto);
-> +	nr_params = btf_vlen(proto);
-> +	for (u32 i = 0; i < nr_params; i++) {
-> +		if (is_arena_arg(btf, kfunc, &params[i], i))
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->   static s32 arena_tag_ptr(struct btf *btf, u32 ptr_id, struct kfunc *kfunc)
->   {
->   	const struct btf_type *ptr = btf__type_by_id(btf, ptr_id);
-> @@ -1383,11 +1430,10 @@ static s32 add_arena_tagged_proto(struct btf *btf, struct kfunc *kfunc)
+>   /*
+> @@ -112,6 +119,7 @@ BTF_KFUNCS_END(test_kfunc_set)
+>    * actually sort at least one of the two sets.
+>    */
+>   BTF_KFUNCS_START(test_kfunc_set_rev)
+> +BTF_ID_FLAGS(func, kfunc_e)
+>   BTF_ID_FLAGS(func, kfunc_d, KF_ARENA_ARG2)
+>   BTF_ID_FLAGS(func, kfunc_c, KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2)
+>   BTF_ID_FLAGS(func, kfunc_b, KF_FASTCALL)
+> @@ -301,15 +309,15 @@ void test_resolve_btfids(void)
 >   	}
 >   
->   	for (i = 0; i < nr_params; i++) {
-> -		if (!is_arena_arg(kfunc, i))
-> -			continue;
-> -
->   		t = btf__type_by_id(btf, new_proto_id);
->   		params = btf_params(t);
-> +		if (!is_arena_arg(btf, kfunc, &params[i], i))
-> +			continue;
+>   	/*
+> -	 * Check resolve_btfids wrapped exactly the arena-flagged return/args
+> -	 * with the address_space(1) type attribute, and left other
+> +	 * Check resolve_btfids wrapped exactly the arena-flagged or suffixed
+> +	 * return/args with the address_space(1) type attribute, and left other
+>   	 * pointers/returns untouched.
+>   	 */
+>   	for (i = 0; i < ARRAY_SIZE(kfunc_symbols); i++) {
+>   		const struct btf_type *fn, *proto;
+>   		const struct btf_param *params;
+>   		const char *name = kfunc_symbols[i].name;
+> -		u32 fl = kfunc_symbols[i].flags;
+> +		u32 arena_args = kfunc_symbols[i].arena_args;
+>   		__u32 nr;
 >   
->   		id = arena_tag_ptr(btf, params[i].type, kfunc);
->   		if (id < 0)
-> @@ -1403,7 +1449,7 @@ static s32 add_arena_tagged_proto(struct btf *btf, struct kfunc *kfunc)
->   	return new_proto_id;
->   }
+>   		fn = btf__type_by_id(btf, kfunc_symbols[i].id);
+> @@ -322,15 +330,10 @@ void test_resolve_btfids(void)
+>   		nr = btf_vlen(proto);
 >   
-> -static int process_kfunc_with_arena_flags(struct btf2btf_context *ctx,
-> +static int process_kfunc_with_arena_attrs(struct btf2btf_context *ctx,
->   					  struct kfunc *kfunc)
+>   		ASSERT_EQ(is_arena_tagged_ptr(btf, proto->type),
+> -			  !!(fl & KF_ARENA_RET), name);
+> -		if (nr > 0) {
+> -			ASSERT_EQ(is_arena_tagged_ptr(btf, params[0].type),
+> -				  !!(fl & KF_ARENA_ARG1), name);
+> -		}
+> -		if (nr > 1) {
+> -			ASSERT_EQ(is_arena_tagged_ptr(btf, params[1].type),
+> -				  !!(fl & KF_ARENA_ARG2), name);
+> -		}
+> +			  kfunc_symbols[i].arena_ret, name);
+> +		for (j = 0; j < nr; j++)
+> +			ASSERT_EQ(is_arena_tagged_ptr(btf, params[j].type),
+> +				  !!(arena_args & ARENA_ARG(j)), name);
+>   	}
+>   
+>   out:
+> diff --git a/tools/testing/selftests/bpf/progs/btf_data.c b/tools/testing/selftests/bpf/progs/btf_data.c
+> index ec34f7a6e038..ea41c9801432 100644
+> --- a/tools/testing/selftests/bpf/progs/btf_data.c
+> +++ b/tools/testing/selftests/bpf/progs/btf_data.c
+> @@ -68,3 +68,12 @@ int kfunc_d(struct root_struct *a, struct root_struct *b)
 >   {
->   	struct btf_type *t;
-> @@ -1463,8 +1509,8 @@ static int btf2btf(struct object *obj)
->   				goto out;
->   		}
->   
-> -		if (kfunc->flags & (KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2)) {
-> -			err = process_kfunc_with_arena_flags(&ctx, kfunc);
-> +		if ((kfunc->flags & KF_ARENA_RET) || kfunc_has_arena_arg(ctx.btf, kfunc)) {
+>   	return 0;
+>   }
+> +
+> +int kfunc_e(struct root_struct *a__arena,
+> +	    struct root_struct *b__arena__nullable,
+> +	    struct root_struct *c__arena,
+> +	    struct root_struct *d__arena__nullable,
+> +	    struct root_struct *e__arena)
 
-nit: KF_ARENA_RET case short-circuits the arena_arg check here.
-Seems benign, but made me pause.
+Can we have test cases with mixed args too?
 
-> +			err = process_kfunc_with_arena_attrs(&ctx, kfunc);
->   			if (err)
->   				goto out;
->   		}
+   int kfunc_f(struct foo *a, struct bar *b__arena, int flags)
+
+And also one with both KF_ARENA_RET flag and __arena suffixed args?
+
+> +{
+> +	return 0;
+> +}
 
