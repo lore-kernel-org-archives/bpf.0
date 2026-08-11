@@ -1,99 +1,98 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7B0A23EA84
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 13:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70496382298;
+	Tue, 11 Aug 2026 13:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786454968; cv=none; b=KNqWyScyCvV0n3EklNOFU8BcZFLLa+C1FQXJEB+wT2YHj6egEaNDFLpjgGGIP/XEw+BMvIb15K4ZU4QPObXQw2anK2bOeC61UhAxWhhd3H45UOUwwLtBvgZXWR30EE0NT8kWMsihcc1HRg5Fd2JezmN0V8ZyS7KhgberjC58SKI=
+	t=1786455139; cv=none; b=N2pRAgHqaxYgom6v4OlxtnSFGU1bSC6Jyu3qozJFGn/Ocmcj5kfgQJZB5aOpfBVqDsEYv1g4k2Q0xGXsftbrlKwr53029n7PzZn+UT+K2vxl612GvBP/7XBBQChBZY6XFvKk1nAEgxNCV8QaJLKgVFXoYf/Yns+In6/bIs2MTOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786454968; c=relaxed/simple;
-	bh=J9vBjygmcNS+aVa3FlHNEQWeRjGqbbUmRSnb3iurApo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r20pKCPQBQmMg0lVOhJ8hnYpR/WhzYBV0XugHZSd8OLASGGKFEtD2y5cVy0V33GcVMQy6Lfw/DkhdZyLPCx/aYoO6dO385c1D5gQCTUqQdc6xdXCGOOrOoq7ymWnB9fLHhh+2kEjqB0/GGcFmLYZ7jfEPdejzv0nZkL4GZs/NNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UMMMg0Ci; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786455139; c=relaxed/simple;
+	bh=7oUk7vcZMZh7Kmnjr0sRE4TUfpBeeMTt+zlm+6qAkq8=;
+	h=Message-ID:Date:MIME-Version:CC:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=lf3NUTjbLURSFcNqxw0eAan+jZwuhtCyuaOMLBoaHHvfUjkFIt9KmScO/B+9J7KpjoNzTke6SVuB/1+RKPFsQVmnTFtde4JufOIW3XmdOZqoQMCqbmT2BmN8UK/u/GeUuc1419bta4c0OyyZyQf8txs7Gy9JM4bUZUK8NMTq7c4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=1eWBaKqw; arc=none smtp.client-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UMMMg0Ci"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4954a9e8490so6384995e9.1
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 06:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786454965; x=1787059765; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=J9vBjygmcNS+aVa3FlHNEQWeRjGqbbUmRSnb3iurApo=;
-        b=UMMMg0CikUUo9lzcKQd2gKrGLq6ETHzzxcRKRGNnM7gD7yEeoAfNcRm/I+ZVn9YwIT
-         viWM9svCWdrH9RrO2ddt4X7PfYnlgb0am2YiOZCFaQF7OjKD9fZsOD303CzUJ7kPH28y
-         /p5Z47NdsdoKb8ReZxWUyGudAjyJbOk7PU1zjGUa/0HkjqvnCG+gkAWiPg3RhkwvKD9Z
-         7kQSrXOpVyR7lZKYx1dBJ0aiT91niifFcXAgVzQ9rgMXlOOGuriWfEKuwiWLPFLvVBzy
-         h8whhXuP47LVzLaut71+sy9B1v4TW/LwjArXW8ZXyKVaxQ/sQxT0Yu/tvEyj0rC6vk2s
-         va/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786454965; x=1787059765;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=J9vBjygmcNS+aVa3FlHNEQWeRjGqbbUmRSnb3iurApo=;
-        b=DgqvqscJRYa514x6jxXaD94TJM04KmRXXFyfsTJoPipxgPWnJdrOtCevPoe74E8q9q
-         k+40oYzKHOhg4gkMHzZWqAMSndh2frgLhaIowl4dYW6eQzTduEbwXQRoWS94CoJxzmMe
-         AkyOhvMxsAeaqZMnxUv0kvj6S1ATFk9cMPL5kLmBrs5FxSHMNy2hMtAe+TteCTjjBQiW
-         pJsSFoMfsECaMSVyZQmICGg5KsnoLdNSrw2jp8VTz9txXcDQrBHnzWnsQCbLr03fc8Hf
-         HCrpr8Z9SQ630eMXnLOElgIgAmO/SxkDYeVvJloPMEsDhgwnl53GMkKlWhE2kUbvzeSg
-         RM6A==
-X-Gm-Message-State: AOJu0YxslGB2HzrNShjf4SoQ6vHdSuJE7ALuj+GEnntAjzAZnf58wJvx
-	zJ1FhaLiGLOYaMTAIczsrxJReI2xynbvRtUqntrELQkjxYQs6LYPfzPONruXfcVy
-X-Gm-Gg: AR+sD10vbPcpMJYGmP8oWvRAcffGcGjfmRAMOOhuxbspq7Lrna18AxUbdGplscusPe+
-	L47oUA+DunSR4ufcUVmGsMBpL4R/H8c8tb9PIRbCm1LiwtqZVmzfm9Ggd2FqsoeopexJWv68UqX
-	vAu37tPkSBvxejwGG1aOilxk35GVuyP0C5Mq+I4KVA5D/DqNSTjJC9G+3wlQuAeEAdiHr9yOCw6
-	YX/MKogbP228CO2uDEkOeQesIxsm5rSnT1LunyeN/8zKnh4mQX/qXqz31TCVIXPJ98CcYQVMqI4
-	hgsHR3RpJUvBA8BmBI4FAEVAzpiEq17krvNE2q9XOULyEuCykrA/nOxttxcBp61xziQNroHCoRb
-	/Mzm5vr1nB7mFLIIq0ru2Ga1uwIlvK3uL3ZzXn0DhnvVDHFllHi2STfH+5y1mT3TfE1JrGSfONS
-	c/YTruzXPZ0hlD9Yb3YGZBorrObtlvFASrH78M+R+LJwgZa2F0NSTym+j1OokAgBpD5bwCrFAKE
-	4tg
-X-Received: by 2002:a05:600c:4894:b0:499:60e5:248a with SMTP id 5b1f17b1804b1-4997a63788amr1222975e9.4.1786454964817;
-        Tue, 11 Aug 2026 06:29:24 -0700 (PDT)
-Received: from dell-desktop ([2a02:587:4b5e:1100:7303:647d:7cc4:8552])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4814a6b2ea8sm4285953f8f.16.2026.08.11.06.29.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 06:29:24 -0700 (PDT)
-From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	kpsingh@kernel.org,
-	matt@bobrowski.net,
-	song@kernel.org,
-	tasos.papagiannnis@gmail.com
-Subject: Re: [PATCH bpf-next 0/5] bpf: Add user memory access kfuncs for mm_struct
-Date: Tue, 11 Aug 2026 16:28:49 +0300
-Message-ID: <20260811132849.98483-1-tasos.papagiannnis@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260811112154.94053-1-tasos.papagiannnis@gmail.com>
-References: <20260811112154.94053-1-tasos.papagiannnis@gmail.com>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="1eWBaKqw"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=7oUk7vcZMZh7Kmnjr0sRE4TUfpBeeMTt+zlm+6qAkq8=;
+	b=1eWBaKqwvWQTJuOPnnjp6koX97ircDeqhOomYz9PRZGrQn38a3eLyzDdexfoau1XDMSz5J6Fz
+	pD7EntVYieru84JzuQ+bD0FXZZgNx9weiEXKuBMH4JiZ/jSSxBwoqAIShMwcwpky75vbO8ZWZVW
+	HV6pLlt7Sm86/Cixlkdd+Z8=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4hKC2T5jlGzcb0T;
+	Tue, 11 Aug 2026 21:21:53 +0800 (CST)
+Received: from kwepemo500018.china.huawei.com (unknown [7.202.195.199])
+	by mail.maildlp.com (Postfix) with ESMTPS id 73EB34057D;
+	Tue, 11 Aug 2026 21:31:59 +0800 (CST)
+Received: from [10.67.120.192] (10.67.120.192) by
+ kwepemo500018.china.huawei.com (7.202.195.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 11 Aug 2026 21:31:58 +0800
+Message-ID: <61721708-0d77-4f59-aa08-02562af282bb@huawei.com>
+Date: Tue, 11 Aug 2026 21:31:57 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+CC: <shaojijie@huawei.com>
+Subject: Re: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in
+ the RX path
+To: <chia-yu.chang@nokia-bell-labs.com>, <shenjian15@huawei.com>,
+	<linux-rdma@vger.kernel.org>, <eperezma@redhat.com>, <jasowang@redhat.com>,
+	<virtualization@lists.linux.dev>, <mst@redhat.com>,
+	<xuanzhuo@linux.alibaba.com>, <pabeni@redhat.com>, <edumazet@google.com>,
+	<linux-doc@vger.kernel.org>, <corbet@lwn.net>, <horms@kernel.org>,
+	<dsahern@kernel.org>, <kuniyu@google.com>, <bpf@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <dave.taht@gmail.com>, <jhs@mojatatu.com>,
+	<kuba@kernel.org>, <stephen@networkplumber.org>, <xiyou.wangcong@gmail.com>,
+	<jiri@resnulli.us>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
+	<donald.hunter@gmail.com>, <ast@fiberby.net>, <liuhangbin@gmail.com>,
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ij@kernel.org>,
+	<ncardwell@google.com>, <koen.de_schepper@nokia-bell-labs.com>,
+	<g.white@cablelabs.com>, <ingemar.s.johansson@ericsson.com>,
+	<mirja.kuehlewind@ericsson.com>, <cheshire@apple.com>, <rs.ietf@gmx.at>,
+	<Jason_Livingood@comcast.com>, <vidhi_goel@apple.com>
+References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
+From: Jijie Shao <shaojijie@huawei.com>
+In-Reply-To: <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemo500018.china.huawei.com (7.202.195.199)
 
-After looking at the output from
-https://sashiko.dev/#/patchset/20260811112154.94053-1-tasos.papagiannnis%40gmail.com
-and https://github.com/kernel-patches/bpf/pull/13211 I believe that fixing
-those issues in this series would complicate things.
 
-For this reason, please disregard this series. I will send another version
-separately.
+on 2026/8/5 5:35, chia-yu.chang@nokia-bell-labs.com wrote:
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+>
+> Currently, the hns3 Rx path sets the SKB_GSO_TCP_ECN flag when a TCP
+> segment with the CWR flag set is received. This is incorrect because
+> the hns3 hardware GRO resets the IP ToS byte to 0 during packet
+> aggregation. Consequently, no valid ECN signals are carreid, meaning
+> that it cannot support RFC3168 ECN or Accurate ECN protocols. Setting
+> SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCECN under these conditions misleads
+> the upper network stack.
+>
+> Fix this by removing the incorrect SKB_GSO_TCP_ECN flag assignment
+> in hns3_gro_complete().
 
-Thanks,
-Anastasios
+
+Tested on hns3 HW (2x 100G, direct cable, openEuler 24.03, kernel 7.2.0-rc6).
+
+tcpdump confirms HW GRO zeroes IP ToS: aggregated (>MTU) packets carry
+tos 0x0, while non-aggregated packets keep their ToS/ECN marks — so the
+zeroing is done by HW GRO, not the sender. Before patch, CWR packets had
+SKB_GSO_TCP_ECN set (0x5 = SKB_GSO_TCPV4 | SKB_GSO_TCP_ECN). After patch,
+all GRO events gso_type=0x1 (SKB_GSO_TCPV4 only), no 0x5 observed.
+
+Tested-by: Jijie Shao <shaojijie@huawei.com>
+
+
