@@ -1,78 +1,77 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7C5321F5E
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 19:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98DB3DD521
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 19:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786476545; cv=none; b=aXquIuXoM6VybrJoAzCa0FRXvoXQaYtjvsSt/ZctMCse8VaJAzTa+I8tHaEEf2QDMyNxMjSQNHROMtGupsMn60VcDSnI8PPgi9WYiiZQmZjAgVreotrMXsVf4+7PvX9DtfOpsmFVQmDcyM/QZz+y073NS9dOMKiWw2UCeCa1HTY=
+	t=1786476907; cv=none; b=AQBwUQuCeElK5iaXTr4bmJXou0Icmq31snHZQVsVCj8dSVLwCxvQ3NS7hMh/W7nM2vHEEIEPWr2FaVlg9QTvKN8ZxN2DdhRUeQ11hAD5OPF0s7OEgRaP0jQJ95bXJ2Z1gVVcvpgXVyW4D216eWlhGUi/OgZctnv6we+KWJ3qrUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786476545; c=relaxed/simple;
-	bh=7uQjLzyt1JFa+9FQc3OiPCK6zevg0GeA+kYrZsOZMfE=;
+	s=arc-20240116; t=1786476907; c=relaxed/simple;
+	bh=GyXCZOMZY36czZUTJbxoPimmLReGwOp0Wi43tTz2Q1s=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=knuehCYz6xtJtO7G306X537K/EoukaMKQp1oCSWfTPGEBcfx0WxDe27GIPLASY2Qk7el/0XnIyVg5yDyku8zGSp+fFIO4kpVLfGxw12EsElQ6nJlVEVmZOuZrCb4isedrM+9pJr3KcqXn+QriqtCBSUZoSeIq0dup50NBJGMkZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E7C8MUiR; arc=none smtp.client-ip=209.85.216.47
+	 Content-Type:MIME-Version; b=Z9JHCaWiqG8aMtd65fTU23nCEJ6LAvjmi429hPgTFPHPd1yW+Sgf9ayzRXyUH3kXJAiXNcoQ58NuRCPHzRi+HukFm/di0MhsVAJiPRotjWTAtkQeqK7H5v+S6vrOJbmS2UBEHn09QCPu1HvIlTSQew+nB+VzioHId+RPiCM3Ew0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V9NqJucB; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E7C8MUiR"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3810c5d691bso74000a91.1
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 12:29:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V9NqJucB"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-381c51fde6bso324241a91.2
+        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 12:35:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786476543; x=1787081343; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786476905; x=1787081705; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=ww3neGLRbNdGLG05thKU1/9bQZ/Qlg6r9EY9y0og2QE=;
-        b=E7C8MUiRJ75EjEuDc2J/jjcxHYNw5amvR3YvszomccgNB6Ghr1w3WofId/X1f9krFi
-         LljtXvUcsbXE1bHuA4W3XtrXD3IpmoOYbnPISGeGTZQjiftnmRVmyL8shDjTH1NaKkTR
-         4MnAxcEvu0UPnKln6H0UBkbPmYR7UyMQzi5UN/B82Wv+9HY3NEFD/ahTqvMtuPgWIsWF
-         wym2Kbr2DWcAUsTgfR1p2wpQUfPZCo219NKiY25esvJ2G/ytab/AbzrCGiBnaLMuoI7O
-         eb5nVXuT3SwvE8J9l8KAPT5Z2/Yzne7BIpFPLRT5bdug+i3Np9EApi4obVFyVDAvTx7b
-         ZEfA==
+        bh=ulX7H6DhYLFNmjqa6AwJBS/POo41hZkJfTIC1HYM0Zg=;
+        b=V9NqJucBGdMNumxvZk1Atc/cSK7Ep3Tk9hTiyyvwHQb8vPSGIqf8FH5efLZAkjgW6F
+         Jl6xyfMh4jUHNrdd29bMjeHU5Tm85vN0NtA/XmjXRHwnS5MQPhG+QTlwcjvpjJmd8MxE
+         FC6yWP2xex9Ixhaw5Hxh9MZ1aOdildaX+1sqwzr2BT47bvjw8Kqrhq62GTR9dZ5UCUTJ
+         srWMUsuC0m7qIGiERMGWZmqyyDxNqb9ixFQDKkQw+xptriG0eqz0P+IynES/oTdt8l0T
+         SC8x8BbzcjgPCvdZ1HWAAZnY0COOXNY6TS1Dbd35bnrbjB0NTY+V7EJny6+e4TxJwYDj
+         f1Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786476543; x=1787081343;
+        d=1e100.net; s=20251104; t=1786476905; x=1787081705;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ww3neGLRbNdGLG05thKU1/9bQZ/Qlg6r9EY9y0og2QE=;
-        b=ApLTEZbBw+PA7tiWTHga+/RUOt2P68QUkNeWC2U8ggZDPPTZL9hlx8E/jj+sZK/4Kf
-         exqM0DUXzwHBSQqdVN/wReWmuNzh9+cLd6Rqkm8f5eFUwpNjkQqKVnKbvsTYnVXmIuWN
-         fhYH/3kXBofwaMntPSmjwCtWhiH/PEZezAwED+HV+XontxVIYkMFaTrxT3anazEmNBQ5
-         hbYcKuNEBqxwMoOHAHMsLKbxJZpu94z/3fvp3+omkwhyRjEuxuRwed0iQGtLkRG6oWDD
-         eIZJgP4db7/XwlTYdhZ1+1lPIix3QrXis8RMYIz+ZVn2KgbvspQRTc0GSACQTdz0xEz+
-         mYwQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqA8GaFnIqlkA92LHm3vfkvNVHR4Voa6/13Fz0WxRsSSwwxGDojIR92fgTpESElztjNWxI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxinPI4eR3UMV76wodzkjsM69Uh0YPwBQerx8BenUPtfPNtdJcC
-	y/Y28UxmfUOVH9+g1GQi2yyeJF5HWMUUIM4oZ9Yl/DkGZXroo+lzQRro
-X-Gm-Gg: AR+sD13ZJccqxNNt/XBrzKuQpDInDrO6KZNjkgPdFofJR+ZyAe+GCGzoAtF+7eWGXGS
-	NgQRsTFB+SlO9tgUp6IMe7Nvd1Gx+UqhlceioTA068udSbAmQbsaDWuXaCqqSJ45VlUbR2Xqs5Y
-	QU6S8/K7UhYmpZ/oWspGNKkBU8can0PGTfFHHo706Ei9S/0G32Nx0oRIf3jfBd6GUtPzwzcBrPQ
-	0O8wS1DMKboxFewmH12SY9c7zPcOMz+Rj0vnG2rhiXWYZWlxCPJhaERJECMOowpq9k5DqZ2Gxlm
-	BwIWBKP6h5vdC+576Mipq0xw66bTcOurVBkE3GAycEoAnK9N7a4zv5W04ar1Vi6eTdpcXr0+b73
-	k1vP3kXpotXYZpp5gT9HwZ4WO4xkrKlugEbSRxjLpMlaApU9uDKi94FTSvoxCptHUjxue1Zo2FM
-	0SVoZQUxKhCXa09xG1T2WSAfr09e6DATo+C8Mb8Vb1E7ts+UMKkTnvv9naKImuHz+I1Y5th/rpr
-	R4yUtYt9RtR5jyFh0NaNcj7ue6DhC89kFvQszBr5Vyx2w==
-X-Received: by 2002:a17:90b:5706:b0:38e:bbf1:de3f with SMTP id 98e67ed59e1d1-392f47eef9dmr2648095a91.12.1786476542818;
-        Tue, 11 Aug 2026 12:29:02 -0700 (PDT)
+        bh=ulX7H6DhYLFNmjqa6AwJBS/POo41hZkJfTIC1HYM0Zg=;
+        b=Q8eOJqOzKlOmA/KZPuwFfRJMLWGXehmCkPVE3kvNWYOTi3o77TP0b6l7gN7rEbkiv1
+         eX4E+a2GKHb6xDrqnTI9Z0V71VL4mC1VKI/HPd9m+cljOxyLHTDAt8fw1Liz6XzY5ONC
+         YJRPU51YZ8wCKI8RRfrzsfts+dyqJIIaEDT22Vq0i1ZEmRXUTnLVovDzazrSTRvI2Gpg
+         ixBBCGTnszGDVVDI+kjzQYhK6kmA9bvaGU3ApEwT6Qt31uz5Zg4f34qXVhQUMWpuUxtt
+         +98lWx7iyPFaS2SrG//TloK7eashZjTwC9Vzr+6F3+fmFS23tep+L0wlQQGVvgHZ7iwj
+         rWmw==
+X-Forwarded-Encrypted: i=1; AHgh+Rqv/mhY8FENP4evcqU6OMg/Gg/oSNC0CH+Ko1fNjhiwdAwurqM6IttzfSUEGDAV1I8li8A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZfQS9qhXsJzTLh7gmCR25NQ6Es2e6wSalfdOTlWYG4OvJKqaa
+	47A6NVzAkZHpjLaKGnJY2/lJS1nwNvckkg3CnkdDgVwTZiVPphvyBjgY
+X-Gm-Gg: AR+sD133BYTWTzwGMBx899rMyYOMPbBdZknOSkleM8T1vnshOps1smHJ58xILJEL2KY
+	Tlv/JvaUGU9A37C7CrEBitlafRkMpfAapVv0tF1WLp4OD8cWkUiDRgdkmSRrImRYcew3AUg0DeJ
+	V2YJMNcwT6JWFB1g9OJs8tks0P6px2A8zq/NrzGCgxR9PFWXFWXEXxoT5MPOhORAk4N9dYUyJuB
+	LXIF3AG8o8+K8VbIioM372zwiWgQxte54wAtNQxv9hXTxQp+nb1PDgOgECcBUTBl3T0YsgietAc
+	I2OQ6yIvXkW5mD3xNMCj/cNN7na87dCYoW4K/RFcH0V0U9U+Tg5BdHoxN4jppVoefj/W8wfGmih
+	ssIuBUXhCL7VnMjofrVedzTY/WG1CzZ5ZbQmERFp51EhsuTdzv8Pv9nt5d3mYHv+MesddWs9mLA
+	krBJK6Cb3GPRdJosaA9cOHofr1PRvnUN0e8O2wzk2raSt9387QVpW/fYol44AmE5woAQILdwLF6
+	ITwlqavPr9o60gCrlXtsW8MbyikYOrXOQXvMoVJTH4fgw==
+X-Received: by 2002:a17:90b:5105:b0:38e:b400:a860 with SMTP id 98e67ed59e1d1-392ec60dab4mr7207571a91.13.1786476905022;
+        Tue, 11 Aug 2026 12:35:05 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:cd18:dfe8:e39c:4123? ([2620:10d:c090:500::4:f345])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14124583ad0sm1827116c88.12.2026.08.11.12.29.01
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141245540fesm3116697c88.9.2026.08.11.12.35.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 12:29:02 -0700 (PDT)
-Message-ID: <60b9145e6bfcc75d7da7cfdc4d661a61cdca0df0.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: exercise veristat filtering
- logic in a selftest
+        Tue, 11 Aug 2026 12:35:04 -0700 (PDT)
+Message-ID: <0acc9bbb617d931401fd5a6300513a23cac956d4.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v7 1/6] bpf: Track verifier instruction stats
+ for each subprogram
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, memxor@gmail.com, martin.lau@kernel.org,
- clm@meta.com, 	ihor.solodrai@linux.dev
-Date: Tue, 11 Aug 2026 12:29:00 -0700
-In-Reply-To: <f600f7fa9410958a73e65c5d9ab1c069b404368473adfa99d38f08cca8bf955a@mail.kernel.org>
-References: <20260811-veristat-filter-fix-v1-2-b5b43c431550@gmail.com>
-	 <f600f7fa9410958a73e65c5d9ab1c069b404368473adfa99d38f08cca8bf955a@mail.kernel.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Tue, 11 Aug 2026 12:35:03 -0700
+In-Reply-To: <20260808062601.1070988-2-memxor@gmail.com>
+References: <20260808062601.1070988-1-memxor@gmail.com>
+	 <20260808062601.1070988-2-memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
@@ -83,129 +82,66 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2026-08-11 at 18:56 +0000, bot+bpf-ci@kernel.org wrote:
-> > Test cases for veristat file/prog name filtering logic.
-> > Check various formulations for any (*foo*), file (*foo*/),
-> > prog (/*bar*) and file/prog (*foo*/bar) filters, alongside
-> > errorneous filters and mixed allow/deny filter expressions.
+On Sat, 2026-08-08 at 08:25 +0200, Kumar Kartikeya Dwivedi wrote:
+> The verifier currently records one instruction count for the main program
+> and each global subprogram checked independently. Static subprograms are
+> explored within callers, so their verification cost cannot be reported
+> separately.
 >=20
-> This isn't a bug, but there's a typo: "errorneous" should be "erroneous".
-
-Oops
-
-> Also, is the prog filter form meant to be "/bar" rather than "/*bar*" to
-> match the cases in the table?
-
-Nope, *bar* is fine.
-
->=20
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/test_veristat.c b/t=
-ools/testing/selftests/bpf/prog_tests/test_veristat.c
-> > index 9aff08ac55c0..e1eda4ae755e 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/test_veristat.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/test_veristat.c
-> > @@ -37,6 +37,13 @@ static struct fixture *init_fixture(void)
-> > =C2=A0	return fix;
-> > =C2=A0}
-> >=20
-> > +static void read_output(struct fixture *fix)
-> > +{
-> > +	ssize_t len =3D pread(fix->fd, fix->output, fix->sz - 1, 0);
-> > +
-> > +	fix->output[len < 0 ? 0 : len] =3D 0;
-> > +}
-> > +
->=20
-> This isn't a bug, but since read_output() also terminates the buffer, wou=
+> Track both self and inclusive instruction counts for every subprogram.
+> Charge each processed instruction as self work to the current subprogram =
+and
+> to a path-local subtotal in its function frame. When a function returns, =
+add
+> the callee subtotal to its inclusive count and to its parent subtotal. Fo=
 ld
-> it make sense to switch the existing read()/pread() call sites in this fi=
-le
-> over to it as well? The new helper is safer than the bare reads used in t=
-he
-> other subtests.
-
-Makes sense.
-
-> > +/*
-> > + * Name filter tests below run veristat on veristat_foo.bpf.o and
-> > + * veristat_bar.bpf.o, both defining programs 'foo', 'bar' and 'buz'.
-> > + * Every entry describes a single (filters, file, prog) combination an=
-d
-> > + * tells whether that program is expected in the veristat output:
-> > + * 'true' if it is, 'false' if it is not and -1 if veristat is expecte=
-d
-> > + * to reject the filter.
-> > + */
-> > +#define FILTER_OBJS "veristat_foo.bpf.o veristat_bar.bpf.o"
-> > +
-> > +static const struct name_filter_case {
-> > +	const char *filters;
-> > +	const char *file;
-> > +	const char *prog;
-> > +	int included;
-> > +} name_filter_cases[] =3D {
-> > +	/* no filters, every program is processed */
-> > +	{ "",			"foo", "foo", true  },
-> > +	{ "",			"foo", "bar", true  },
-> > +	{ "",			"foo", "buz", true  },
-> > +	{ "",			"bar", "foo", true  },
-> > +	{ "",			"bar", "bar", true  },
-> > +	{ "",			"bar", "buz", true  },
-> > +	/* deny filters */
-> > +	{ "-f '!*foo*'",	"foo", "bar", false },
-> > +	{ "-f '!*foo*'",	"bar", "foo", false },
+> any remaining frames when a path terminates or is pruned.
 >=20
-> A subsystem pattern flags this as potentially concerning: the table rows =
-for
-> '-f !*foo*' both assert 'false' (row should be absent), but there is no r=
-ow
-> that asserts 'true' (row should be present) for the same filter. Every ot=
-her
-> filter with 'false' rows also has a 'true' row for the same filter string=
-.
-
-Makes sense to add.
-
-> For example:
-> =C2=A0=C2=A0'!*foo*/bar' has (foo,buz)/(bar,bar) true
-> =C2=A0=C2=A0'!*foo*/' has (bar,bar) true
-> =C2=A0=C2=A0'!/bar' has (foo,foo) true
-> =C2=A0=C2=A0'*foo*/bar' has (foo,bar) true
+> Instruction subtotals are accounting state, not semantic verifier state.
+> Clear them when a verifier state is copied so work before a path fork is
+> charged once, rather than again when a saved branch is explored. If copyi=
+ng
+> a saved state fails before all frames are allocated, skip missing frames
+> while folding the current path.
 >=20
-> Adding one positive row for '-f !*foo*', such as { "-f '!*foo*'", "bar",
-> "bar", true }, would make this filter's coverage consistent with the rest
-> of the table. A regression that made the any-glob deny form reject everyt=
-hing
-> would still satisfy both existing rows plus ASSERT_OK(err), because absen=
-ce
-> of a row is all that is checked.
+> This generic frame accounting also records self and inclusive totals when=
+ an
+> asynchronous callback starts as a fresh frame-zero state. It does not yet
+> charge that independently explored callback path back to the main or glob=
+al
+> exploration root which scheduled it. That will be done in subsequent
+> changes.
 >=20
-> The expectations themselves are correct (they match veristat's implementa=
-tion
-> and the changelog table of the preceding fix commit), so this is a
-> test-completeness observation rather than a functional bug.
+> This does not change the verification statistics output format. It only
+> prepares the counters for per-subprogram reporting.
 >=20
-> [ ... ]
->=20
-> > diff --git a/tools/testing/selftests/bpf/progs/veristat_bar.c b/tools/t=
-esting/selftests/bpf/progs/veristat_bar.c
-> > new file mode 100644
-> > index 000000000000..83d2a2a1dfc9
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/veristat_bar.c
-> > @@ -0,0 +1,3 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> > +#include "veristat_foo.c"
->=20
-> [ ... ]
->=20
->=20
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
+
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+>  include/linux/bpf_verifier.h |  5 +++-
+>  kernel/bpf/verifier.c        | 55 ++++++++++++++++++++++++++++++------
+>  2 files changed, 50 insertions(+), 10 deletions(-)
 >=20
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/315217=
-42364
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index a2a40caca0a0..f16ee6602179 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -385,6 +385,8 @@ struct bpf_func_state {
+>  	 *                           | number of simulations is tracked in fram=
+e N
+>  	 */
+>  	u32 callback_depth;
+> +	/* Instructions processed in this frame and callees on the current path=
+. */
+> +	u32 insns_subtotal;
+
+Another possibility is to have the array of counters in the
+bpf_verifier_env itself. But I don't want to push for another respin.
+
+>  	/* The following fields should be last. See copy_func_state() */
+>  	/* The state of the stack. Each element of the array describes BPF_REG_=
+SIZE
+
+...
