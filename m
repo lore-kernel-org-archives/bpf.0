@@ -1,82 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69633546EB;
-	Tue, 11 Aug 2026 22:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B4947D445
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 22:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786485660; cv=none; b=emK9dVp8wlK7ccjxD/hLHylRxSyC3g8KaGKX9uCAGc+5OyhRLU8Loyg60eEDp3HGJs01KBZpdWa4joP8qkS4661tCo1Vvykyw6qIWWMKmXqJShxb6Em5+7m4M7Wdt0hFOl4bQTTT45RomsFJXE3WC1ZYee4BJkk/FDiFhM9DHLw=
+	t=1786486060; cv=none; b=J39YijKwLg2KGit2DwCQBDA06YSVwSzkymDSCP/mz0bi9SIeSG1FXkZAVx0utJZD9xoe4XSUkkGwZTIqwQgfB10RbfT9MvtKlYC687Pz8Hqwo9k3RJEu4TgHRRvVbbnjG3LLnnQiCCt5hmxIkRoGqfZefz1prf+RbAbEF9Yy7OI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786485660; c=relaxed/simple;
-	bh=6iUFqViir8BKsjNj/kf7rPJwnXAgmbZF/h3D5BANJHA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=uXVXF5KSF3AS/HI4j7CLizWxLX6fFKkhgLM+lMpCm3G0l8lB8c8ipjbXjc+qZR/83nSM+Ka5KYMCAHMr8zT5ikIYkB0VR9o7Brr5LtPRQe1SZKVVet16NSyfov/xWi3lA9JxFBrXdlv6F1TTG4WH+RoWcpau7GQp8/siDzPRCbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oCseeTIe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786486060; c=relaxed/simple;
+	bh=/MPy+Srz4kLb0KrGUSenPokqGjfFOgdaoez1wxiGMiM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LUh5d+hHus3p2w8D40cX40oPo/O6OqWBV4sEJyPalY+9SVfMW0jDrMFB0lxpYqg8unYEgziTgOyVeXpWApxb9FQ012dXpSCvt2dd4bwhhMd7PaSiq21Q3yzLzG2f9oKxu25sqHGqrevSTzb8OjbHY6W9e2D8j4dwfoF4lU1FqY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fLrDxxLQ; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oCseeTIe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 710AF1F000E9;
-	Tue, 11 Aug 2026 22:00:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786485659;
-	bh=0vm0yw+vi0wlgF31QzqFAoKqtJv2rCFSfJ23puWRuD4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=oCseeTIeiSLD05sYneQd7wErtQDCkni4Xp1dMAY6Wpl+PlxQDVVZ7RpiM9RZYyQb9
-	 t46AV4EFYMBYBtgq7YrWXvqiub2LmNitflzWig3oMwZ8gsWsiVs1Ds3EBR2tqbceBI
-	 ctgt6gJHgNprfnrdynF+/4JPH8LJWj6ds9fDcyVtccczr/zTbbu9IroOtcVxDqdJtB
-	 gKMxYIiSwQPo9twrGwVx4/UMxzkvu7Et6zUzXopu5BVZ+bO+wyBXHi4V3UKBu4N2sF
-	 mMJwQr5iudyIPyoN1VF6TnuL25PEZaJUOHrltFRRQVSVXUH9sl3NnHaqS+qP7Xleh2
-	 VYot9plFngf/g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 938E63809A22;
-	Tue, 11 Aug 2026 22:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fLrDxxLQ"
+Message-ID: <c9fe7691-d808-4363-a826-14ac8a9bd575@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786486054;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=h7pG7HCOaG8HHKqHFRa2IHy8vYgr6fwvJ/QGXSBnpi8=;
+	b=fLrDxxLQTT/wYhrdN1U2omzqh6wWRL2CstUhQdvhLBtnmaY/wZjzMfHTT8FHsSxjJB3dVI
+	YS1/dVkLn8YcQdjFaLpO+NJVnE7yQdDjSFVHD34l+plJbffX7nhcLZOFAKxp2D8EBkre9u
+	lUnQrHCR6xEsnDh2YUutC6rm0Sil1sI=
+Date: Tue, 11 Aug 2026 15:07:15 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Compare iterator types during state
- pruning
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178648561523.1170542.5254278257474503414.git-patchwork-notify@kernel.org>
-Date: Tue, 11 Aug 2026 22:00:15 +0000
-References: <20260811035955.132989-1-dingning04@gmail.com>
-In-Reply-To: <20260811035955.132989-1-dingning04@gmail.com>
-To: Ning Ding <dingning04@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, shuah@kernel.org,
- zhouchuyi@bytedance.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] block: add BPF kfuncs to read blkcg io.stat
+To: Tejun Heo <tj@kernel.org>
+Cc: Ziyang Men <ziyang.meme@gmail.com>, Jens Axboe <axboe@kernel.dk>,
+ Josef Bacik <josef@toxicpanda.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Mykola Lysenko <mykolal@meta.com>,
+ kernel-team@meta.com, linux-block@vger.kernel.org, bpf@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260807193732.4073299-1-ziyang.meme@gmail.com>
+ <20260807193732.4073299-2-ziyang.meme@gmail.com>
+ <anot9w6mg9538RWm@slm.duckdns.org>
+ <anpU4oV46MDVDixj@devvm16600.scu0.facebook.com>
+ <4306439e-a00f-4b10-b8a0-9be6e046873d@linux.dev>
+ <antT1wtJEZ02CDx1@slm.duckdns.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: JP Kobryn <jp.kobryn@linux.dev>
+In-Reply-To: <antT1wtJEZ02CDx1@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Eduard Zingerman <eddyz87@gmail.com>:
-
-On Mon, 10 Aug 2026 20:59:53 -0700 you wrote:
-> Iterator stack slots can be marked MEM_RCU or PTR_UNTRUSTED. The
-> STACK_ITER check in stacksafe() does not compare this type, so state
-> pruning can treat these states as equal and prune an unsafe path.
+On 8/11/26 9:54 AM, Tejun Heo wrote:
+> Hello,
 > 
-> Compare the type and add a test where RCU protection has a gap.
+> On Mon, Aug 10, 2026 at 05:17:26PM -0700, JP Kobryn wrote:
+> ...
+>> The get/put kfuncs above use KF_ACQUIRE/RELEASE so the verifier can
+>> reject memcg access after the put. Replacing them with a generic API
+>> would call for tracking a new lifetime relationship between the css and
+>> memcg (or other derived) pointer.
 > 
+> So, if you need css -> memcg casting, I think that can just be RCU
+> protected. In fact, even for the iteration and access, RCU protection
+> probably makes more sense then KF_ACQUIRE/RELEASE. It's simpler and less
+> overhead especially given that most bpf progs that people care about are
+> non-sleepable and already in RCU critical section anyway.
 > 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2,1/2] bpf: Compare iterator types during state pruning
-    https://git.kernel.org/bpf/bpf-next/c/83608e303b95
-  - [bpf-next,v2,2/2] selftests/bpf: Test RCU iterator state pruning
-    https://git.kernel.org/bpf/bpf-next/c/81f209d5f743
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+It's just that if flushing is involved, the cond_resched() within
+css_rstat_flush() would preclude RCU.
