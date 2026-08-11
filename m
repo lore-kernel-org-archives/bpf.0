@@ -1,136 +1,227 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A4633F58C
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 21:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D705C3939DA
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 21:28:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.182
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786483405; cv=pass; b=jnSmm3NbFqRVMnlMPhb39cW4tRyI049GmbYw3Z08wdv9PhzUFeo+fuQmBVimj7Enod7qT0d4BH0PaP5kMDnZkDq5Fw3bhhJgdA1SB/Gd/X2dSgqnZLG3kpIA9Gve+QgM0WBxhzT7lkTjFIvnd/CAZuJCl0TJ0Gy/Yrv7Kf4HZLc=
+	t=1786483695; cv=pass; b=kDsKSE9T5Gpenh1ivPez6ut/EHGz0ceF4BODSmEHezsR1QWGo2IFtCZnYREjoa3p8uIpoW+K6nh7jpChkK7IYIfORSQo9KTeVmliYfYHTnSs5axO3aqxEz9EspLNJA054RJk0B13l+y/UIy578Ipeb0t8/AXlRke3pgDv+e3id4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786483405; c=relaxed/simple;
-	bh=+DaFe3acEyvsnXLHTTBlPUbn+poR7NiO4GxbJ/fe2sM=;
+	s=arc-20240116; t=1786483695; c=relaxed/simple;
+	bh=Flykugnpaai0D00LDfVR17NA84zTKRTzhRqWTlmrj54=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S+UXU4AFGfzYNRipcp+rSDctvNGjZFeuoLsGjloQD7lbSv3tTQxS1wMu9aaNXxXJNAV4gBAb3w3lPCsXxZQ/+qQPC3BM/QbNX5G+yZO3X0K6E6y68MMIblS9vmBnvt+Pdre/uJIuAJvDaFwMVV7IwBrRUvNsoxj7nIf63bgOJgo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P0Myvpyf; arc=pass smtp.client-ip=209.85.219.47
+	 To:Cc:Content-Type; b=DdZqin0FWA6WOHD19YhAM+wS4Ucz3ZjDpYpSa1XokoBoWjtvFYLHfhlkX9Q0L/Z4bBRYY6hBOduSsE3cZ9t544JuNG9wyzt+RfmCzOTeY9HDqXhXreEwCSXkIjTYBs3A5Fke2U2/M2Elf/dDyklcQLeKCGBezUbjapukoENnLic=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LxkCRrnf; arc=pass smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P0Myvpyf"
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-908239232adso2290106d6.1
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 14:23:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786483403; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LxkCRrnf"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-80c5cb9a888so2296387b3.3
+        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 14:28:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786483693; cv=none;
         d=google.com; s=arc-20260327;
-        b=q0A0LQULY0yBYM8DSEWrsZdj33oEkuAsOExD24xwFCoxNgBrloz2Kg2EOpV1nBbYyc
-         wtj+STU0vAfNlC3tLcexT4iVEWAzfFARkhsBAjJo71idQ5H4OjQB6cErk0rhqrToXV2W
-         463E3znbUHzR+sGVq+pMP4SuMOBHmo2MDJQC57M9ID87zMbAAygqU1SUZEX1CtFIGBWG
-         8iE9x/qXbWZKEDs9YYtldzFkf7P1JqGDAPBChN1cLsC+NwhR+eOuL2Ul7o+n9IjHxkCI
-         kJtdZZEK31IC05f/pVIGZqW6rRw2Utfi9Jcyg1LdnlnFWoP3PmLk9R18FrYUx8/T66BP
-         W5Tg==
+        b=fcb9/iEAFfxn42zZsbVEvTBk+EmScFc2CBTsF1o9jv9/hQgsp9DUahh6NlW3ZUcD7r
+         IfcXgJa0p+IdXywlOrWpQMyZB69r3D5/abQUhJtX97vDhNGVE4CXxraeJAeyrm3pmXyB
+         /ddk6lqYhyeheVHVRnSPK8Rgj2jGLEZu4WOGaRHuzO8bLUl8QeVEaiEIU+y9JjSYG1XH
+         +gP/CY4rQmMagiw4buQvnDlh+9orJghoKYSImD7rgbLtIwRRaAnugMf7bhlW2cxvOwt5
+         lelZX0heExQVYEfhXVRWrqK+Zs/R5AZchS+ioNhrbRteqMaVK/++D8kfN/2aheP11Wt7
+         cvaQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=G8HxaVmVnNL6LRiIFdcS+0cqqeZC0XRxj429YzrYQOg=;
-        fh=Kc0N8wO8yn34GdMV46WA/wi32ZkWqLa4Nsmcf0P8Uag=;
-        b=dcGCc5LgQzWQgYTVgWAluH/a+d4cx+D0DA5225acqCZRg1YhtV2xwEWY7qa1w7Wzgc
-         ZQxFczzvVh3+8PWcsqAOkjgPgIXynM545SN2H9mJ99qhJo/NwNIq28FjkXTa7+hj4oEN
-         uriKGDCsWBqWRC9viafPSG8f+rUdkYMY9/3qukl27oKbenwk8OntLwlWIEwDwOXgJw0r
-         EO4nHGTLk0g5hs8OFRrLpUph6POB//h/ZBWVEDX9f9mDCkvJU5X3YGaIPNVXXTPDAGTr
-         rJcEbGXKgsU1VqVFxTZ/DZQde9R2c6zl+IgfVU1UyiDco9JwYYNT18CTC7Yziz05pYJ4
-         4zkg==;
+        bh=TJZxiqG9mp1c28pEHfAiKnTXRqUv7NSZbvy6Em86ZyA=;
+        fh=KFuCT+lsuCBthncmPgCKNp8gBFIheQk8cxGC6Wnibas=;
+        b=GmajTZnz0DSksVRqcg5QvMLSCQoYv+izASZCJl+9MWYaFp76XOgYsvLrLa9hmnslgk
+         FvYM0gdxse8sUuuxPeUhLllCpcF4qLQ821+dmVgPJ7M0/HJKJJ4Hoz9CczsUe8o0xEC7
+         baT5IlzzGpfG+gfvXPqdyc/dd9QPO2lCBEGzdANr3WMsh5VTS/L/jPMrG2h+V1JDv5AG
+         mf3kQmRT3IjdLL+I98W6PbBWojvCW3hvZGaQBIRhGBimlFdHIUsNYZTc1VpuhO7axFLx
+         3cViKu5DQPt5fm01ehU74TYOLYMb/P73ZqmipVSBwn4K+hkSp5jXS+0g3lVDtPZgYyUW
+         4R9g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786483403; x=1787088203; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786483693; x=1787088493; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=G8HxaVmVnNL6LRiIFdcS+0cqqeZC0XRxj429YzrYQOg=;
-        b=P0Myvpyf1rvGAD93/eWIm6836mrx6dn7EPfmEPsDAt0ttZaVEYjzswBPxA2qiMXHlW
-         2j4SdkbA2Lz8JPztB0RDheCN/9zVgGBspKxlte4pMJo4RAQTWsoRVDW6VJz1glWFNtv4
-         nlrzV2hDa75DJ6AJbF8sUsyawbZVjC6wsItiHqcUcClVeRCRUDc3E3go2YBkpu2pqN2L
-         uKFHk3laZa5jD6/w5YXx+quDp0qZpTBh2zxARoK30Zo+VEDgzUIGOoFMXNQql093IWxc
-         ksLg38efT21VNzLUGQl+x+biy9tgzMv1sux+X6WWkPMt/yQOzaRbQZPo+6tNrKEsZszF
-         kv3w==
+        bh=TJZxiqG9mp1c28pEHfAiKnTXRqUv7NSZbvy6Em86ZyA=;
+        b=LxkCRrnfadlpgINCaUWuXI6KAXedCOAvRnD3yZiPGepksh1pwXl/6PR9EtTcAuUMQH
+         jhcljUVjUdPZdcEUwMH77VhAshicyMfNYEiJberLQakTKlucKIJmUzLJwXnM77hz71ib
+         Qke2IojfyvZTa/seSs0oDkMzvLdbieJUBMnNrpyUoizdeS575kxTTxikrb1Hw4zIGP1J
+         c9Y1iSgsRvNBkNik4s4HYIhpmMTHmXzzS//TJ5r+c6PQB8cI1CalfbJOn0ANm1NJKy5O
+         2fgfRaizWTSS8Oxp3eqzsARqFLcYdQ4kprKCXyVzjs0ioB4iebyNPOjrHX/09ycSdTRi
+         6gMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786483403; x=1787088203;
+        d=1e100.net; s=20251104; t=1786483693; x=1787088493;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=G8HxaVmVnNL6LRiIFdcS+0cqqeZC0XRxj429YzrYQOg=;
-        b=SZLn5a6SH1GwDMzJA9wJJtRZsatfIOvW9+q0hvfFUL/xJlY3VP5dvIacPDJM9oA5xp
-         ZlHPPf5PHJBpD0YKilQpuxX9qcOacJb1AT+56SzYc9cMg5f3i88CB2ufpLaukFcLBa70
-         KrCT/khVPdGzYAyTzbmcRltNyyqFUbaRuesJophrP3oCguDfBNNlxSmkQMysr/8Lc8km
-         jRejEIR8OZBoJ1qWoScLqXBs0wxRzqwvze9bVr4yUqD6s1PwVXwR4xdnyP+lfK7fGK3z
-         86BOjkbNNRnoMTiIV3qBa5HqAPHDegCCxNI5okwaO6C2nyfCzPGnyWQAt9XtfUo6Niwz
-         F66A==
-X-Forwarded-Encrypted: i=1; AHgh+RrntfbGxPxbxI9K0gh8E/peyEFvdrbiCc+E8PB419b0ofYk1CkMTiKUiugVou8Rj9WrzCo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywf+c8YwvMYTqPv17G+7OGX6ablIWs0G+el5eO0DQ9PkZA4bZvE
-	24w08EnEV2R1PS5d1IjDtpIGZ3qQV5JFRDvAVGsh8OVGWCgnTbZQk5DS4jzvOgq/a4GTx0V2WJA
-	R7EKd5E0/72AyVH4JSPSOBqVpG7zplvE=
-X-Gm-Gg: AR+sD10THKfq4dMm1RbjRXpDpIDKky1YsomHTniO9g2VKevjKrlmv9ms/E3l4tgp75b
-	HMAP1c91AJtFxg+aaUSdAlnSJUQKz5brAYQCek4s3cg2MEEuGv+yySPNi+rKlD8K/ENXBaxBzOd
-	WIZgEKRIr9ewhJ09UYI+LK66NxRED4lXAk2RsSn+5iFCUGHz/5atADM0eqLwH7qsNhoIsCFQ44q
-	fnyFk65H0tGjXCGjG4JkmQ7Z5dUAQdV/k+01nkNsPGiTwu73iyQCkloMgcbp7l5L/FgsvLRY7SV
-	cDRLpbSXUyK15Zn7DuxqocZEmc2u3j0XgyWEOWy8msXXeXVieEOmhYUT0Qpeaj/7UxtIzu5AYTM
-	=
-X-Received: by 2002:ad4:5c42:0:b0:8fd:b96d:195b with SMTP id
- 6a1803df08f44-90a6bcd6e75mr35525906d6.15.1786483402588; Tue, 11 Aug 2026
- 14:23:22 -0700 (PDT)
+        bh=TJZxiqG9mp1c28pEHfAiKnTXRqUv7NSZbvy6Em86ZyA=;
+        b=QULMYoLoMP52SsyzcaYAbqcu+V+rgHmByGi3H0PwabgjDg23RrHNJnb5FZeaB9KMmc
+         PXUu4tRNHm04iSosKHA+779VZUYodECy4zmyPQM4rqD+Az6WvKs8sKeIsCHHGaF3q1Kd
+         dLbzwDmy4FPxJaP88OXeqPemacMvekW/mbICEKBC9VyGz5MOXkp1GHePWLRTO2/IAvTU
+         soFdE9PDZDG5mPaydHbpaq0mHajQ5E2qE+l3ZjUbfXQ3B4SUdtPuFK9GCIdTwR7gLRjt
+         zxgtWjEt+L4jSRogTiVE4r0/oWV7hFQqyYTHqUUkpBAPDYq47/CYKIIqspm2lxNyTxVl
+         sZWA==
+X-Gm-Message-State: AOJu0YxjJkwy3Hjm1OK0xabmIMUbafa38c4241YtboFqzksDysiXcx90
+	b2QmOBTMnIsKaybKy72mZ8Wmhjgnt+oJLMtAFedt0h1zQuhg6wGlr5J8OAWnA+wWrbhUQq3eULc
+	lB7ETSiXe/VjuVKOMjt/PyMAUSlNTUyt7/uj8WYo=
+X-Gm-Gg: AR+sD13aU1S//Uaxpkh9MrBGpIchg92WQECWiwQnVbPRK5KQ+uE3TgIXUlC4tg2wDO0
+	rORoiIRyO9ca0QGl1wAKOFRLlrugk7LyOIt6nRP9NCp9oHe2jERbIlztg6OXAvAU9mJ5xK/2spa
+	F5WjqHvY63NP3YxfcRZ6OfyI6dLuWG1Y8RuJzlGt4ad0+nzN150nwIfvM00HgGHMdFmDS4ipS0F
+	yD852nw7kc/gb73dCFiPGXt3UlzzQ3LXa3TYnCaS5IfB2HwQ3PQ8moMf3OyqM/ZVE9dWt/VwpSS
+	2OtlhRW11OsHkUvdB0cN9RrHOfluwSzyNY8EECh/KtbN
+X-Received: by 2002:a53:ac88:0:b0:667:daee:17ee with SMTP id
+ 956f58d0204a3-66b3435abeemr135648d50.39.1786483692713; Tue, 11 Aug 2026
+ 14:28:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260803021643.2189641-1-dwindsor@gmail.com> <a68933c3-39d6-414e-b869-bb3fd1a6b4ba@linux.dev>
- <CAEXv5_iKZnDvitaURzcAJDdHHB6H-YwP5MApMeCR64KqXQVRSQ@mail.gmail.com> <CAEf4BzbyevsZYb_xH_yRmKGv=MDdEmobc-vWwW2KwPjU2Qp-Xw@mail.gmail.com>
-In-Reply-To: <CAEf4BzbyevsZYb_xH_yRmKGv=MDdEmobc-vWwW2KwPjU2Qp-Xw@mail.gmail.com>
-From: David Windsor <dwindsor@gmail.com>
-Date: Tue, 11 Aug 2026 17:23:10 -0400
-X-Gm-Features: AUfX_mxW4zfW_e5WmkeZ1AVnpWr_1zrtqbi2a6vDfG-5v2bUeclXbrP9o29dgEw
-Message-ID: <CAEXv5_jvj+XsrP4uHCKEQ1GHQHzXmCRF_65Z_577N-iDKQED1g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: add BPF_F_SEALED flag to seal BPF links at creation
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Liam Wisehart <liamwisehart@meta.com>
+References: <20260706171918.317102-1-ameryhung@gmail.com> <20260706171918.317102-7-ameryhung@gmail.com>
+ <DJXS1OUUJXX5.15RH1OEET2EB7@etsalapatis.com>
+In-Reply-To: <DJXS1OUUJXX5.15RH1OEET2EB7@etsalapatis.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 11 Aug 2026 14:28:01 -0700
+X-Gm-Features: AUfX_mzRaUUSRn_6YJ8nKz9ykqvmylgy25gCquj266DPGEzqF69XkMED-VBYFMk
+Message-ID: <CAMB2axMUWU6OigggngT6+hsSefdT0yaZ1C8fgH4peQAeybAqZQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 06/15] bpf: Add prog_list_init_item(),
+ prog_list_replace_item(), and prog_list_id()
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
+	andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
+	martin.lau@kernel.org, shakeel.butt@linux.dev, roman.gushchin@linux.dev, 
+	kuniyu@google.com, kerneljasonxing@gmail.com, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 7, 2026 at 6:30=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Mon, Jul 13, 2026 at 2:56=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.c=
+om> wrote:
 >
-> I had to skim the articles to recall that it was me proposing
-> something like this :)
+> On Mon Jul 6, 2026 at 1:19 PM EDT, Amery Hung wrote:
+> > From: Martin KaFai Lau <martin.lau@kernel.org>
+> >
+> > Add three helpers to abstract operations on a bpf_prog_list entry.
+> >
+> > Right now, bpf_prog_array_item is initialized from prog_list_prog(pl),
+> > which returns either pl->prog or pl->link->link.prog. This will not wor=
+k
+> > when struct_ops is attached to a cgroup because the attachment is backe=
+d
+> > by a struct_ops map instead of a BPF prog.
+> >
+> > The same applies to __cgroup_bpf_query(). Instead of always copying a
+> > prog id to userspace, struct_ops cgroup attachment will need to copy th=
+e
+> > struct_ops map id.
+> >
+> > Refactor bpf_prog_array_item initialization into prog_list_init_item()
+> > and prog_list_replace_item(), and refactor id lookup into prog_list_id(=
+).
+> > These helpers will be extended to support pl->link->map in a later patc=
+h.
+> >
+> > This is a no-op change.
 >
-
-I wasn't actually there, but read about it on lwn. Happy to add your
-Suggested-By if that makes sense here.
-
-> Anyways, as Kumar mentioned, a) link has to be crated as sealed before
-> FD is exposed, it's straightforward, and b) I do think that it would
-> be too easy to have syzbots of the world to accidentally or not create
-> tons of sealed links, so I'd require CAP_SYS_ADMIN for this, which I
-> assume won't be a problem for intended use cases?
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 >
+> Followup on prog_list_prog() since I hadn't realized it was moved to the
+> helpers in this patchset: Maybe we can just make it not return NULL
+> since it's impossible instead of adding error handling to minimize
+> churn.
 
-CAP_SYS_ADMIN makes sense.
+Thanks for reviewing this patchset!
 
-> But also, yeah, I wonder what Christian and other BPF LSM users think
-> about this.
+You are right that this set avoids calling prog_list_prog() on a
+struct_ops entry and so NULL is never reaches the caller.
+
+I'd still rather not drop the NULL return to avoid baking a caller
+precondition into this generic helper. Nothing in prog_list_prog()'s
+name or signature says "non-struct_ops entries only", so I'd rather
+keep it the callers' responsibility to know which entries are backed
+by a prog, prog link, struct_ops link, or being detached.
+
 >
-
-I'll send v2 with the above changes.
-
-The overall intent here is to follow up with another series for map
-sealing.  Currently, we're passing BPF_F_SEALED as a flag for
-BPF_LINK_CREATE, but I wonder if we should decompose BPF_F_SEALED into
-eg BPF_F_LINK_SEALED and BPF_F_MAPS_SEALED?
-
-Link sealing is useful on its own, though, for preserving bpf-lsm
-programs around even after all user fd's have been closed.
+> >
+> > Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> > ---
+> >  kernel/bpf/cgroup.c | 26 +++++++++++++++++++-------
+> >  1 file changed, 19 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> > index b100c04cb9c8..b43f0bff184c 100644
+> > --- a/kernel/bpf/cgroup.c
+> > +++ b/kernel/bpf/cgroup.c
+> > @@ -399,6 +399,22 @@ static struct bpf_prog *prog_list_prog(struct bpf_=
+prog_list *pl)
+> >       return NULL;
+> >  }
+> >
+> > +static void prog_list_init_item(struct bpf_prog_list *pl, struct bpf_p=
+rog_array_item *item)
+> > +{
+> > +     item->prog =3D prog_list_prog(pl);
+> > +     bpf_cgroup_storages_assign(item->cgroup_storage, pl->storage);
+> > +}
+> > +
+> > +static void prog_list_replace_item(struct bpf_prog_list *pl, struct bp=
+f_prog_array_item *item)
+> > +{
+> > +     WRITE_ONCE(item->prog, pl->link->link.prog);
+> > +}
+> > +
+> > +static u32 prog_list_id(struct bpf_prog_list *pl)
+> > +{
+> > +     return prog_list_prog(pl)->aux->id;
+> > +}
+> > +
+> >  /* count number of elements in the list.
+> >   * it's slow but the list cannot be long
+> >   */
+> > @@ -492,9 +508,7 @@ static int compute_effective_progs(struct cgroup *c=
+grp,
+> >                               item =3D &progs->items[fstart];
+> >                               fstart++;
+> >                       }
+> > -                     item->prog =3D prog_list_prog(pl);
+> > -                     bpf_cgroup_storages_assign(item->cgroup_storage,
+> > -                                                pl->storage);
+> > +                     prog_list_init_item(pl, item);
+> >                       cnt++;
+> >               }
+> >
+> > @@ -1015,7 +1029,7 @@ static void replace_effective_prog(struct cgroup =
+*cgrp,
+> >                               desc->bpf.effective[atype],
+> >                               lockdep_is_held(&cgroup_mutex));
+> >               item =3D &progs->items[pos];
+> > -             WRITE_ONCE(item->prog, pl->link->link.prog);
+> > +             prog_list_replace_item(pl, item);
+> >       }
+> >  }
+> >
+> > @@ -1318,15 +1332,13 @@ static int __cgroup_bpf_query(struct cgroup *cg=
+rp, const union bpf_attr *attr,
+> >               } else {
+> >                       struct hlist_head *progs;
+> >                       struct bpf_prog_list *pl;
+> > -                     struct bpf_prog *prog;
+> >                       u32 id;
+> >
+> >                       progs =3D &cgrp->bpf.progs[atype];
+> >                       cnt =3D min_t(int, prog_list_length(progs, NULL),=
+ total_cnt);
+> >                       i =3D 0;
+> >                       hlist_for_each_entry(pl, progs, node) {
+> > -                             prog =3D prog_list_prog(pl);
+> > -                             id =3D prog->aux->id;
+> > +                             id =3D prog_list_id(pl);
+> >                               if (copy_to_user(prog_ids + i, &id, sizeo=
+f(id)))
+> >                                       return -EFAULT;
+> >                               if (++i =3D=3D cnt)
+>
