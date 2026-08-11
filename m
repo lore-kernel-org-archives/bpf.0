@@ -1,138 +1,202 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F631F3BA4
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 11:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3586F30EF9A
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 11:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786446406; cv=none; b=ts4YtS2Iz/oDb6uGeBqMWv/daLc/6h+y67y62WetqhLrGEV1VE+Se/ceZZsF6/va8YCMyVsi5zYMiEAMb47E2kWowx3V4ccaZIjhgcngIPwO1jjBrCksLzXkgmyQwe/sH14eAG9FK2+xHYwHwHgLo3Ew9kj0iKUXXwN3d66n6+g=
+	t=1786446521; cv=none; b=kPZm9gjpIOqUuR+oKM3G8C5jckSslfRK+qnVwlhtlfiNi55Ek5e52uQBGu6dHgpKEoMFuPUm6nQw6qY1g3N4ap/hMSN11DzsjjBrrrfpVBEBODRg9a1VEi7J4zG1XLNJct9MzUYGJryC5wyebFkKuTRs5NApFxZFkzvftoAE51U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786446406; c=relaxed/simple;
-	bh=tukP0gFXkGjbkkO6Sate91Hwdk6oZ5TQM06hGsQvC+U=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m+s3sxUafsSweHtS8Bb7b1pHL1ZFWAKyCWSB4dP9I8lxfr+IsNjiLlnvZr0osbGW0o6RUMB2bROTqPzF+o0eiEPd6J0s/831MDmKmuwx/CmmJt3XPx1hkOgdtL5dRuQx1lMUr7eFupSVOgSTr5YP1fvb13l9Rm7TbNqllZUf1LE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PxtFFuBV; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786446521; c=relaxed/simple;
+	bh=R5ta2hxyyV2VQl4nESE9WGbhdW1Ss11VauxZMcnH/BY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WdpymRL1i3yCNFB9XeygqISPWVwxYbxilMR3+VoR2eqSlwm/57xNoBGE5YIaAqG6CAyl3rYqdVgvpUS7u7CO/XzmoFkImno6s7eboOjqAYevu3JKIhwFHRYXPX9CJJ/NIwLWnwvSEqA61UffW66F5c0GnfX75fquhDfMDaVuOFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q1W2W1OD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PxtFFuBV"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c1600d040e4so132710466b.1
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 04:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786446401; x=1787051201; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ncPBKBVNM6ovNcsCic32cHugMXoIYOhz070STPXc4TY=;
-        b=PxtFFuBVzA94mCJ3JJ759NJiepI34WbXGkeLbqFaW7SIkE0SYvZzAEJdTw33amsc2q
-         LUxSByhQxUvt2EnFnbM4ezb89uRIwnb0fZEwO/N1bY6doD+I8hqRErZnCj4tf9Ipw1gd
-         2jxWYffv+nLchU+5A15QXk4yhnseUNksra+DF7eDGzhywISBNhhjEtQhvkLEWqzgkrgW
-         C8IsJl22qBLJ8TzT0hPsyoyMVjL8j0eBpLzjftMOj/yqTlzUy0b1ofTJYmnJDSwOox6N
-         /TR/C5373pAFSlJ3kW+c9uHzNnVOaDWEeDX2ZBN0ChTTJc957HCZHGcYGldW8IabYuZP
-         uNsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786446401; x=1787051201;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ncPBKBVNM6ovNcsCic32cHugMXoIYOhz070STPXc4TY=;
-        b=NiY/3ZWZZFZsEEdzJlRR2fYpgB+EWWnr/wDBcK/zco5hTixFmpl/zGiKlsN/J7EoRP
-         V1THXcKuXY/C2Koe7SL6n5bNFFBvur6VTUMw3YbT1m/msddSk0diFjOwFRroxiagzJ1J
-         pCcHbSpf90kP4HtZHKo8iQ35DFOsMQmMq+p2Lf6a8spOHZ4cNeAxp22OrAqBwCDC2DcL
-         A5X2VHKfx9s0n12TXCjWT7Lk+lUB9thGQYIQre1J6Hz+xWjpHZCzny7GyByFhO/lPbPB
-         qMe1QzCBFo7qSjTZuO4Rs33Af3vieUjL0YSRl/1D2bz2x/1bsL0IhYyCJpiqCA01/9+K
-         WaSQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rq4vL34aoxCMdbU43eEI9ZJqk+xv3QuKKatrqgv4DzIqA/1nBQF8m9n+DTLDWDeVrTqyvg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyu01mX6c7Pm03M64smxi5DdA/FbJGpjHHt50LRNcu4kxEoxTrk
-	jppLXzbJWLefgLsIGCT26QnPZMJMR+l0M33izxmjLEUzAMG6EzAJqDS8
-X-Gm-Gg: AR+sD13TzA3PQN8iWBetHJguaywoj1DLey699gYQFugF1I4WVx8lePCsyT+H83lgUgj
-	YMQ08pEVy8eIYCC1e3UYhoDDjRN7KKq630fXE5RUAN5KxcAFxQKVbQAxj3s0hmFUtrva7QSl58/
-	K79x8pmdwe2tvF7rwQe1dhNJTVva0OabGfiOO19/Q+4YXbsGa2u4bR8bpZaxGdqeiaankxfYrxz
-	s/TQIqpG42RrbyrZvVzxqel7+E+6XD/dob+2BotY8zgijkf3oVb/dUtIHTwmeaLJgYRgr1HqaTn
-	wB/mPixSrjEDyr0lssSLYZ1cX1qBejgF7LsNRaSoAUQWZecN+7X1yhgVgSsZ87sqiIfLT40ACxq
-	O91+VIp3JYgAf4URLPvzypyTCMJIeKPdSu4mwo4NHlT1N2Td1PZ001cUvhw1kjlgDHGiOTkNwpH
-	ZKP6aCfmhWh+YHKAnLQR8otShY78XAge+GTBiDMyoiTNl9XaH54CWC7smUNw==
-X-Received: by 2002:a17:907:3e0e:b0:c19:5bf1:368e with SMTP id a640c23a62f3a-c20e5ed6832mr106791266b.13.1786446401261;
-        Tue, 11 Aug 2026 04:06:41 -0700 (PDT)
-Received: from krava ([173.38.220.33])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c20e414ddadsm37804266b.27.2026.08.11.04.06.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 04:06:40 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 11 Aug 2026 13:06:39 +0200
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v5 0/2] bpf: Fix trampoline image UAF on multi
- detach failure
-Message-ID: <ansCPw7KqDWQ4s5N@krava>
-References: <cover.1786412280.git.zhuhui@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q1W2W1OD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE2A1F000E9;
+	Tue, 11 Aug 2026 11:08:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786446519;
+	bh=R5ta2hxyyV2VQl4nESE9WGbhdW1Ss11VauxZMcnH/BY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Q1W2W1OD0vo20FWhCaL36yBaTtdxHV8WYIJO5QG23+Ao7+R7O7XMUCAKHaEJYktaB
+	 8DMhM6bJXCPKQAl9cpGtdi/5+tuDzpcOEeVQlVWSHTXMNmNSspgQ5wdFUnWRB59CG3
+	 twK/naQIcSf2qts0NIghvewxJf0OndOFg77SMicbHz/PpgJAqHfxEnLya0C/RjM8nl
+	 nWjW9eipGCoRfDhYwGjWFsxiJZ1EPyyuWqgom+v517IDBAt9F3f7sxq7rJbIGkhdwS
+	 mjPOnizZ09V1uFi6ByhsOaK7lMSzOeQSK+2RG9XMBrm9yX2YEU/YO9jD1YHfjZ8Snl
+	 fB+jmQZSWXFGg==
+Content-Type: multipart/mixed; boundary="===============4738906717863582927=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1786412280.git.zhuhui@kylinos.cn>
+Message-Id: <345a5f924586b6106250e4a051f039402aab3b1b2d8ff44b024325117be15e53@mail.kernel.org>
+In-Reply-To: <20260811095531.3294167-3-chenyuan_fl@163.com>
+References: <20260811095531.3294167-3-chenyuan_fl@163.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test rhtab kptr recycle from NMI context
+From: bot+bpf-ci@kernel.org
+To: chenyuan_fl@163.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 11 Aug 2026 11:08:38 +0000 (UTC)
 
-On Tue, Aug 11, 2026 at 10:46:18AM +0800, Hui Zhu wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
-> 
-> This series fixes a UAF in bpf_trampoline_multi_attach_free() where
-> old_image is freed while ftrace still calls into it, and makes
-> bpf_trampoline_multi_detach() return void as suggested by Jiri Olsa.
-> 
-> Patch 1 fixes the UAF.  Patch 2 is an independent cleanup that
-> changes the return type to void and drops the WARN_ON_ONCE at the
-> call site.
-> 
-> Changelog:
-> v5:
-> According to the comments of bot+bpf-ci, split the single patch into
-> two: the bug fix and the return-type cleanup.
-> v4:
-> According to the comments of bot+bpf-ci, add Fixes: and update comments
-> of bpf_trampoline_multi_attach_free.
-> v3:
-> According to the comments of Jiri Olsa, drop patches 2/3 and the
-> prog-side machinery.
-> keep only the simplified image-side fix in
-> bpf_trampoline_multi_attach_free() and make
-> bpf_trampoline_multi_detach() return void.
-> v2:
-> Folded v1's two detach patches into patch 1.
-> According to the comments of Jiri Olsa, Pin the prog (pinned_prog) on
-> cur_image so it stays alive while ftrace may still call into it.
-> Make bpf_trampoline_multi_detach() return void.
-> Fix the same UAF in standard (non-multi) trampolines.
-> According to the comments of sashiko, Fix the prog UAF in
-> bpf_trampoline_multi_attach() rollback.
-> Leak the trampoline in bpf_trampoline_put() when cur_image is left
-> by a rollback.
-> 
-> Hui Zhu (2):
->   bpf: Fix UAF in bpf_trampoline_multi_attach_free on update failure
->   bpf: Make bpf_trampoline_multi_detach return void
+--===============4738906717863582927==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvcmh0
+YWJfa3B0ci5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvcmh0YWJf
+a3B0ci5jCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwMDAuLjc5YmRj
+ZGE5NTU1NQo+IC0tLSAvZGV2L251bGwKPiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9i
+cGYvcHJvZ190ZXN0cy9yaHRhYl9rcHRyLmMKPiBAQCAtMCwwICsxLDg3IEBACgpbIC4uLiBdCgo+
+ICsJcG11X2ZkID0gc3lzY2FsbChfX05SX3BlcmZfZXZlbnRfb3BlbiwgJmF0dHIsIC0xLCAwLCAt
+MSwgMCk7Cj4gKwlpZiAocG11X2ZkIDwgMCkgewo+ICsJCXRlc3RfX3NraXAoKTsKPiArCQlnb3Rv
+IG91dDsKPiArCX0KClRoaXMgaXNuJ3QgYSBidWcsIGJ1dCBzaG91bGQgdGhlIHRlc3QgZGlzdGlu
+Z3Vpc2ggYmV0d2VlbiB0aGUgZXhwZWN0ZWQKbm8taGFyZHdhcmUtUE1VIHNraXAgY2FzZSAoRU5P
+RU5ULCBFT1BOT1RTVVBQKSBhbmQgdW5leHBlY3RlZCBlcnJvcnMKKEVBQ0NFUywgRU1GSUxFKT8g
+bHJ1X2xvY2tfbm1pLmMgY2hlY2tzIGVycm5vIGJlZm9yZSBza2lwcGluZzoKCiAgICBpZiAocG11
+X2ZkIDwgMCkgewogICAgICAgIGlmIChpID09IDAgJiYgKGVycm5vID09IEVOT0VOVCB8fCBlcnJu
+byA9PSBFT1BOT1RTVVBQKSkgewogICAgICAgICAgICAgICAgdGVzdF9fc2tpcCgpOwogICAgICAg
+ICAgICAgICAgZ290byBjbGVhbnVwOwogICAgICAgIH0KICAgICAgICBjb250aW51ZTsKICAgIH0K
+ClJpZ2h0IG5vdyBhIHJlYWwgc2V0dXAgZmFpbHVyZSBwcm9kdWNlcyB0aGUgc2FtZSBTS0lQIG91
+dGNvbWUgYXMgYQptaXNzaW5nIFBNVSwgbWFraW5nIGl0IGhhcmRlciB0byBkZWJ1Zy4KCj4gKwlz
+a2VsLT5saW5rcy5ubWlfdXBkYXRlID0gYnBmX3Byb2dyYW1fX2F0dGFjaF9wZXJmX2V2ZW50KHNr
+ZWwtPnByb2dzLm5taV91cGRhdGUsCj4gKwkJCQkJCQkJcG11X2ZkKTsKPiArCWlmICghQVNTRVJU
+X09LX1BUUihza2VsLT5saW5rcy5ubWlfdXBkYXRlLCAiYXR0YWNoX3BlcmZfZXZlbnQiKSkgewo+
+ICsJCWNsb3NlKHBtdV9mZCk7Cj4gKwkJZ290byBvdXQ7Cj4gKwl9Cj4gKwo+ICsJLyogTGV0IHRo
+ZSBOTUkgaGFuZGxlciBvdmVyd3JpdGUgdGhlIGVsZW1lbnQuICovCj4gKwl1c2xlZXAoMTAwMDAw
+KTsKPiArCj4gKwlicGZfbGlua19fZGVzdHJveShza2VsLT5saW5rcy5ubWlfdXBkYXRlKTsKPiAr
+CXNrZWwtPmxpbmtzLm5taV91cGRhdGUgPSBOVUxMOwo+ICsJY2xvc2UocG11X2ZkKTsKCkNhbiB0
+aGlzIGNsb3NlIGEgc3RhbGUgZGVzY3JpcHRvcj8KCmJwZl9wcm9ncmFtX19hdHRhY2hfcGVyZl9l
+dmVudCgpIHRha2VzIG93bmVyc2hpcCBvZiBwZmQgb24gc3VjY2VzczogdGhlCnJldHVybmVkIGxp
+bmsgc3RvcmVzIGl0IGluIGJwZl9saW5rX3BlcmYtPnBlcmZfZXZlbnRfZmQsIGFuZApicGZfbGlu
+a19wZXJmX2RldGFjaCgpIGluIGxpYmJwZiBjbG9zZXMgaXQgb24gYm90aCBhdHRhY2ggcGF0aHM6
+CgogICAgaWYgKHBlcmZfbGluay0+cGVyZl9ldmVudF9mZCAhPSBsaW5rLT5mZCkKICAgICAgICAg
+ICAgY2xvc2UocGVyZl9saW5rLT5wZXJmX2V2ZW50X2ZkKTsKICAgIGNsb3NlKGxpbmstPmZkKTsK
+Ck9uIHRoZSBGRUFUX1BFUkZfTElOSyBwYXRoIGxpbmstPmZkIGlzIGEgc2VwYXJhdGUgYnBmX2xp
+bmsgZmQsIHNvIHBmZAppcyBjbG9zZWQgYnkgdGhlIGZpcnN0IGNsb3NlKCk7IG9uIHRoZSBsZWdh
+Y3kgaW9jdGwgcGF0aCBsaW5rLT5mZCA9PQpwZmQsIHNvIGl0IGlzIGNsb3NlZCBieSB0aGUgc2Vj
+b25kLiBFaXRoZXIgd2F5LCBhZnRlcgpicGZfbGlua19fZGVzdHJveSgpIHRoZSBmZCBpbiBwbXVf
+ZmQgaXMgYWxyZWFkeSBjbG9zZWQsIGFuZApjbG9zZShwbXVfZmQpIG9wZXJhdGVzIG9uIGEgc3Rh
+bGUgZGVzY3JpcHRvciBudW1iZXIuIFRvZGF5IGl0IG9ubHkKcmV0dXJucyBFQkFERiwgYnV0IGlm
+IGFueSBjb2RlIGFkZGVkIGluIGJldHdlZW4gKG9yIGFueSBjb25jdXJyZW50CnRocmVhZCBpbiB0
+aGUgc2FtZSB0ZXN0X3Byb2dzIHdvcmtlcikgYWxsb2NhdGVzIGFuIGZkLCB0aGF0IGZkIGNhbiBi
+ZQpjbG9zZWQgb3V0IGZyb20gdW5kZXIgaXQuCgpUaGUgZXJyb3IgcGF0aCBjbG9zZShwbXVfZmQp
+IGFmdGVyIGEgZmFpbGVkIGF0dGFjaCBpcyBjb3JyZWN0IOKAlCB0aGUKYXR0YWNoIG9wdHMgb25s
+eSBjbG9zZSBsaW5rX2ZkLCBuZXZlciBwZmQg4oCUIHNvIG9ubHkgdGhpcyBzdWNjZXNzLXBhdGgK
+Y2xvc2UgaXMgd3JvbmcuCgpFdmVyeSBjb21wYXJhYmxlIHRlc3QgaW4gdGhlIHNhbWUgZGlyZWN0
+b3J5IGNsb3NlcyBwbXVfZmQgb25seSBvbgphdHRhY2ggZmFpbHVyZSBhbmQgbmV2ZXIgYWZ0ZXIg
+c3VjY2VzczogcGVyZl9ldmVudF9zdGFja21hcC5jOjk5LTEwNCwKc3RhY2t0cmFjZV9idWlsZF9p
+ZF9ubWkuYzo0Ny01MiwgYW5kIGxydV9sb2NrX25taS5jICh3aGljaCBzdGF0ZXMKImxpYmJwZiB0
+YWtlcyBvd25lcnNoaXAgb2YgcGZkIG9uIHN1Y2Nlc3MiIGFuZCBvbmx5IGNhbGxzCmJwZl9saW5r
+X19kZXN0cm95KCkpLiBTaG91bGQgdGhlIGNsb3NlKHBtdV9mZCkgYmUgZHJvcHBlZCBoZXJlPwoK
+PiArCS8qCj4gKwkgKiBUaGUgb2xkIGtwdHIgbXVzdCBzdGlsbCBiZSBhdHRhY2hlZCB0byB0aGUg
+ZWxlbWVudDogdGhlIE5NSSB1cGRhdGUKPiArCSAqIHBhdGggb25seSBjYW5jZWxzIE5NSS1zYWZl
+IGZpZWxkcywgbWlycm9yaW5nIGhhc2ggbWFwIHNlbWFudGljcy4KPiArCSAqIEJlZm9yZSB0aGUg
+Zml4IHRoZSBrcHRyIHdhcyByZWxlYXNlZCBmcm9tIHRoZSBOTUkgY29udGV4dCBhbmQgdGhlCj4g
+KwkgKiBwcm9iZSBiZWxvdyB3b3VsZCBzZWUgTlVMTC4KPiArCSAqLwo+ICsJdG9wdHMucmV0dmFs
+ID0gMDsKPiArCWlmICghQVNTRVJUX09LKGJwZl9wcm9nX3Rlc3RfcnVuX29wdHMoYnBmX3Byb2dy
+YW1fX2ZkKHNrZWwtPnByb2dzLnByb2JlX2VsZW0pLAo+ICsJCQkJCSAgICAgICZ0b3B0cyksICJ0
+ZXN0X3J1bl9wcm9iZSIpIHx8Cj4gKwkgICAgIUFTU0VSVF9FUSh0b3B0cy5yZXR2YWwsIDAsICJw
+cm9iZV9yZXQiKSkKPiArCQlnb3RvIG91dDsKPiArCj4gKwlBU1NFUlRfRVEocmVhZF9jb3VudGVy
+KHNrZWwsIDIpLCAxLCAieGNoZ19ub25fbnVsbCIpOwo+ICsJQVNTRVJUX0VRKHJlYWRfY291bnRl
+cihza2VsLCAzKSwgMCwgInhjaGdfbnVsbCIpOwoKRG9lcyB0aGUgdGVzdCBhY3R1YWxseSBkZXRl
+Y3QgdGhlIGJ1ZyBpdCBpcyBtZWFudCB0byBjYXRjaD8KClRoZSBCUEYgc2lkZSBidW1wcyBjb3Vu
+dGVyc1sxXSBvbiBldmVyeSBzdWNjZXNzZnVsIE5NSSB1cGRhdGUsIGJ1dCB0aGUKaGFybmVzcyBu
+ZXZlciByZWFkcyBpbmRleCAxIOKAlCBpdCBvbmx5IGNoZWNrcyBpbmRleGVzIDIgYW5kIDMuIElm
+IHRoZQpwZXJmIGV2ZW50IG5ldmVyIG92ZXJmbG93cyBkdXJpbmcgdGhlIDEwMCBtcyB3aW5kb3cs
+IG5vIHJodGFiIHVwZGF0ZQpoYXBwZW5zIGF0IGFsbCwgdGhlIGtwdHIgc3Rhc2hlZCBieSBpbml0
+X2VsZW0gaXMgdHJpdmlhbGx5IHN0aWxsIHRoZXJlLApwcm9iZV9lbGVtIHRha2VzIHRoZSBub24t
+TlVMTCBicmFuY2gsIGFuZCBib3RoIGFzc2VydGlvbnMKKHhjaGdfbm9uX251bGwgPT0gMSwgeGNo
+Z19udWxsID09IDApIHBhc3Mg4oCUIG9uIGEga2VybmVsIHdpdGggb3Igd2l0aG91dAp0aGUgZml4
+LiBUaGUgIm5vIHVwZGF0ZSBoYXBwZW5lZCIgb3V0Y29tZSBhbmQgdGhlICJ1cGRhdGUgaGFwcGVu
+ZWQgYW5kCmNvcnJlY3RseSBwcmVzZXJ2ZWQgdGhlIGtwdHIiIG91dGNvbWUgYXJlIGluZGlzdGlu
+Z3Vpc2hhYmxlIHRvIHRoaXMKdGVzdC4KClRoYXQgb3V0Y29tZSBpcyBwbGF1c2libGU6IHRoZSB0
+ZXN0IGdlbmVyYXRlcyBubyB3b3JrIG9uIHRoZSBtb25pdG9yZWQKQ1BVLiBUaGUgZXZlbnQgaXMg
+b3BlbmVkIHN5c3RlbS13aWRlIGJ1dCBmb3IgQ1BVIDAgb25seQooc3lzY2FsbChfX05SX3BlcmZf
+ZXZlbnRfb3BlbiwgJmF0dHIsIC0xLCAwLCAtMSwgMCkpLCB0aGUgcHJvY2VzcyBpcwpuZXZlciBw
+aW5uZWQgdG8gQ1BVIDAsIGFuZCB0aGUgb25seSB0aGluZyBpdCBkb2VzIHdoaWxlIGF0dGFjaGVk
+IGlzCnVzbGVlcCgxMDAwMDApIOKAlCBpLmUuIGl0IHNsZWVwcy4gQSBDUFUgMCB0aGF0IGlzIGlk
+bGUgaW4gYSBkZWVwIEMtc3RhdGUKZG9lcyBub3QgYWR2YW5jZSBQRVJGX0NPVU5UX0hXX0NQVV9D
+WUNMRVMsIHNvIG5vIHNhbXBsZSBhbmQgbm8gTk1JLgpXaGV0aGVyIHRoZSB0ZXN0IGV4ZXJjaXNl
+cyBhbnl0aGluZyB0aGVuIGRlcGVuZHMgb24gdW5yZWxhdGVkIGFjdGl2aXR5CmxhbmRpbmcgb24g
+Q1BVIDAuCgpCb3RoIGV4aXN0aW5nIE5NSSBwZXJmX2V2ZW50IHRlc3RzIGluIHRoZSBzYW1lIGRp
+cmVjdG9yeSBkbyB0aGUgdHdvCnRoaW5ncyB0aGlzIG9uZSBvbWl0czoKCiAgLSBscnVfbG9ja19u
+bWkuYzoyMzAgYXNzZXJ0cyB0aGUgcHJvZ3JhbSBhY3R1YWxseSByYW46CiAgICBBU1NFUlRfR1Qo
+c2tlbC0+YnNzLT5oaXRzLCAwLCAibm1pX2JwZl9yYW4iKSwgYW5kIGRyaXZlcyBsb2FkIHdpdGgK
+ICAgIHBlci1DUFUgaGFtbWVyIHRocmVhZHM7CiAgLSBzdGFja3RyYWNlX2J1aWxkX2lkX25taS5j
+OjYxIHBpbnMgaXRzIHdvcmtsb2FkIG9udG8gdGhlIG1vbml0b3JlZAogICAgQ1BVOiBzeXN0ZW0o
+InRhc2tzZXQgMHgxIC4vdXJhbmRvbV9yZWFkIDEwMDAwMCIpLgoKU2hvdWxkIHRoZSB0ZXN0IGFz
+c2VydCByZWFkX2NvdW50ZXIoc2tlbCwgMSkgPiAwIGJlZm9yZSB0aGUga3B0cgphc3NlcnRpb25z
+LCBhbmQgZ2VuZXJhdGUgY3ljbGVzIG9uIHRoZSBtb25pdG9yZWQgQ1BVIHJhdGhlciB0aGFuCnNs
+ZWVwaW5nPwoKWyAuLi4gXQoKPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMv
+YnBmL3Byb2dzL3JodGFiX2twdHIuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9n
+cy9yaHRhYl9rcHRyLmMKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAw
+MC4uMjU4MDBhMmUyNGU2Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzL2JwZi9wcm9ncy9yaHRhYl9rcHRyLmMKPiBAQCAtMCwwICsxLDEwMSBAQAo+ICsvLyBT
+UERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMAo+ICsvKiBDb3B5cmlnaHQgKGMpIDIwMjYg
+S3lsaW5Tb2Z0IENvLiwgTHRkLiAqLwoKVGhlIGNvbW1pdCBhZGRzIGEgbmV3IEJQRi1wcm9ncmFt
+IGZpbGUgcHJvZ3Mvcmh0YWJfa3B0ci5jIHBsdXMgYSBuZXcKcHJvZ190ZXN0cy9yaHRhYl9rcHRy
+LmMgZm9yIGEgc2luZ2xlIG5hcnJvdyByaHRhYiBiZWhhdmlvdXIgKGtwdHIKcmV0ZW50aW9uIGFj
+cm9zcyBhbiBOTUktY29udGV4dCB2YWx1ZSB1cGRhdGUpLiBUaGUgc2FtZSBkaXJlY3RvcnkKYWxy
+ZWFkeSBjb250YWlucyBwcm9ncy9yaGFzaC5jIC8gcHJvZ190ZXN0cy9yaGFzaC5jLCB3aGljaCBp
+cyB0aGUKZ2VuZXJhbCBCUEZfTUFQX1RZUEVfUkhBU0ggdGVzdCBhbmQgYWxyZWFkeSBjYXJyaWVz
+IGEKdGVzdF9fc3RhcnRfc3VidGVzdCgpIHRhYmxlIGZvciByaHRhYiB1cGRhdGUvZGVsZXRlL2V4
+aXN0IHNlbWFudGljcwoodGVzdF9yaGFzaF9sb29rdXBfdXBkYXRlLCB0ZXN0X3JoYXNoX3VwZGF0
+ZV9kZWxldGUsCnRlc3Rfcmhhc2hfdXBkYXRlX2V4aXN0LCB0ZXN0X3JoYXNoX3VwZGF0ZV9hbnks
+IC4uLiksIGFsbCBkcml2ZW4gZnJvbQpTRUMoInN5c2NhbGwiKSBwcm9ncmFtcyBhZ2FpbnN0IGFu
+IFJIQVNIIG1hcC4gV291bGQgYWRkaW5nIG9uZSBtb3JlCnN1YnRlc3QgcGx1cyBvbmUgbW9yZSBw
+cm9ncmFtIHRvIHRoYXQgZXhpc3RpbmcgcGFpciBhdm9pZCBhIHNlY29uZApza2VsZXRvbiwgYSBz
+ZWNvbmQgbWFwIHNldCBhbmQgZHVwbGljYXRlZCBzZXR1cD8KCkNvdW50ZXItYXJndW1lbnQ6IHBy
+b2dzL3JoYXNoLmMgaGFzIG5vIGtwdHIgY292ZXJhZ2UgYXQgYWxsIChubyBfX2twdHIKZmllbGQs
+IG5vIG1hcCByZWNvcmQpIGFuZCBwcm9nX3Rlc3RzL21hcF9rcHRyLmMgaGFzIG5vIFJIQVNIIGNv
+dmVyYWdlLApzbyBuZWl0aGVyIGV4aXN0aW5nIHRlc3QgY292ZXJzIHRoaXMgYmVoYXZpb3VyIHRv
+ZGF5LCBhbmQgdGhlIG5ldyB0ZXN0CmFkZGl0aW9uYWxseSBuZWVkcyBhIFNFQygicGVyZl9ldmVu
+dCIpIHByb2dyYW0gd2hpY2ggdGhlIHJoYXNoLmMKc2tlbGV0b24gZG9lcyBub3QgaGF2ZS4gT24g
+dGhhdCByZWFkaW5nIHRoZSBuZXcgZmlsZSBpcyBhIGdlbnVpbmVseSBuZXcKYmVoYXZpb3VyIHJh
+dGhlciB0aGFuIGEgbmFycm93IHZhcmlhbnQgb2YgZXhpc3RpbmcgY292ZXJhZ2UsIGFuZCBhCnNl
+cGFyYXRlIGZpbGUgaXMgZGVmZW5zaWJsZS4KCj4gKy8qIDA6IGluaXQgb2ssIDE6IG5taSB1cGRh
+dGUgb2ssIDI6IHByb2JlIHhjaGcgbm9uLU5VTEwsIDM6IHByb2JlIHhjaGcgTlVMTCAqLwo+ICtz
+dGF0aWMgX19hbHdheXNfaW5saW5lIHZvaWQgYnVtcCh1MzIgaWR4KQo+ICt7Cj4gKwl1NjQgKnYg
+PSBicGZfbWFwX2xvb2t1cF9lbGVtKCZjb3VudGVycywgJmlkeCk7Cj4gKwo+ICsJaWYgKHYpCj4g
+KwkJKCp2KSsrOwo+ICt9Cj4gKwo+ICtleHRlcm4gc3RydWN0IHRhc2tfc3RydWN0ICpicGZfdGFz
+a19hY3F1aXJlKHN0cnVjdCB0YXNrX3N0cnVjdCAqcCkgX19rc3ltOwo+ICtleHRlcm4gdm9pZCBi
+cGZfdGFza19yZWxlYXNlKHN0cnVjdCB0YXNrX3N0cnVjdCAqcCkgX19rc3ltOwo+ICsKPiArU0VD
+KCJwZXJmX2V2ZW50IikKPiAraW50IG5taV91cGRhdGUoc3RydWN0IGJwZl9wZXJmX2V2ZW50X2Rh
+dGEgKmN0eCkKPiArewo+ICsJc3RydWN0IHZhbF90IHZhbCA9IHt9Owo+ICsJdTMyIGtleSA9IDA7
+Cj4gKwo+ICsJaWYgKGJwZl9tYXBfdXBkYXRlX2VsZW0oJnJodGFiLCAma2V5LCAmdmFsLCBCUEZf
+QU5ZKSA9PSAwKQo+ICsJCWJ1bXAoMSk7Cj4gKwlyZXR1cm4gMDsKPiArfQoKVGhlIGNvdW50ZXJz
+IG1hcCBpcyBkb2N1bWVudGVkIGFzCgogIC8qIDA6IGluaXQgb2ssIDE6IG5taSB1cGRhdGUgb2ss
+IDI6IHByb2JlIHhjaGcgbm9uLU5VTEwsIDM6IHByb2JlIHhjaGcgTlVMTCAqLwoKYnV0IG9ubHkg
+c2xvdHMgMiBhbmQgMyBhcmUgZXZlciBjb25zdW1lZC4gVGhlIHVzZXJzcGFjZSBzaWRlCihwcm9n
+X3Rlc3RzL3JodGFiX2twdHIuYykgcmVhZHMgZXhhY3RseSByZWFkX2NvdW50ZXIoc2tlbCwgMikg
+YW5kCnJlYWRfY291bnRlcihza2VsLCAzKTsgc2xvdHMgMCBhbmQgMSBhcmUgd3JpdHRlbiBhbmQg
+bmV2ZXIgcmVhZC4KClNsb3QgMSBpcyB0aGUgb25seSBldmlkZW5jZSB0aGF0IG5taV91cGRhdGUo
+KSByYW4gYXQgYWxsLCBhbmQgZHJvcHBpbmcKaXQgbWFrZXMgdGhlIHRlc3QgdW5hYmxlIHRvIGRp
+c3Rpbmd1aXNoICJ0aGUgTk1JIHVwZGF0ZSByYW4gYW5kIHRoZQprcHRyIHN1cnZpdmVkIiBmcm9t
+ICJ0aGUgUE1VIG5ldmVyIG92ZXJmbG93ZWQsIHNvIG5vdGhpbmcgaGFwcGVuZWQiLgpUaGUgdXNl
+cnNwYWNlIHNpZGUgb25seSB3YWl0cyB1c2xlZXAoMTAwMDAwKSBvbiBhIHN5c3RlbS13aWRlClBF
+UkZfVFlQRV9IQVJEV0FSRS9QRVJGX0NPVU5UX0hXX0NQVV9DWUNMRVMgZXZlbnQgcGlubmVkIHRv
+IENQVSAwIHdoaWxlCnRoZSB0ZXN0IHRocmVhZCBpcyBhc2xlZXA7IGlmIENQVSAwIHN0YXlzIGlk
+bGUgKG9yIHRoZSBldmVudCBpcwp2aXJ0dWFsaXNlZC90aHJvdHRsZWQpIG5vIHNhbXBsZSBpcyBk
+ZWxpdmVyZWQuIEluIHRoYXQgY2FzZSBwcm9iZV9lbGVtKCkKc3RpbGwgZmluZHMgdGhlIGtwdHIg
+aW5zdGFsbGVkIGJ5IGluaXRfZWxlbSgpLCBidW1wKDIpIGZpcmVzIG9uY2UsIGFuZApib3RoIGFz
+c2VydGlvbnMKCiAgICBBU1NFUlRfRVEocmVhZF9jb3VudGVyKHNrZWwsIDIpLCAxLCAieGNoZ19u
+b25fbnVsbCIpOwogICAgQVNTRVJUX0VRKHJlYWRfY291bnRlcihza2VsLCAzKSwgMCwgInhjaGdf
+bnVsbCIpOwoKcGFzcyBvbiBhIGtlcm5lbCB0aGF0IHN0aWxsIGhhcyB0aGUgZWFnZXIgYnBmX29i
+al9mcmVlX2ZpZWxkcygpIGluCnJodGFiX21hcF91cGRhdGVfZXhpc3RpbmcoKSDigJQgaS5lLiB0
+aGUgdGVzdCBzaWxlbnRseSBwYXNzZXMgb24gdGhlIHZlcnkKa2VybmVsIGl0IGlzIG1lYW50IHRv
+IGNhdGNoLgoKV291bGQgYXNzZXJ0aW5nIHJlYWRfY291bnRlcihza2VsLCAxKSA+IDAgKGFuZCBk
+cm9wcGluZyB0aGUgdW51c2VkIHNsb3QKMCwgd2hvc2UgaW5mb3JtYXRpb24gaXMgYWxyZWFkeSBj
+b3ZlcmVkIGJ5IHRvcHRzLnJldHZhbCkgY2xvc2UgdGhlIGdhcAphbmQgdHVybiBhIG5vbi1maXJp
+bmcgUE1VIGludG8gYW4gZXhwbGljaXQgZmFpbHVyZSBvciBza2lwIGluc3RlYWQgb2YgYQpmYWxz
+ZSBwYXNzPwoKCi0tLQpBSSByZXZpZXdlZCB5b3VyIHBhdGNoLiBQbGVhc2UgZml4IHRoZSBidWcg
+b3IgZW1haWwgcmVwbHkgd2h5IGl0J3Mgbm90IGEgYnVnLgpTZWU6IGh0dHBzOi8vZ2l0aHViLmNv
+bS9rZXJuZWwtcGF0Y2hlcy92bXRlc3QvYmxvYi9tYXN0ZXIvY2kvY2xhdWRlL1JFQURNRS5tZAoK
+Q0kgcnVuIHN1bW1hcnk6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy9icGYvYWN0
+aW9ucy9ydW5zLzMxNDgxODMzNTY5
 
-thanks,
-jirka
+--===============4738906717863582927==--
