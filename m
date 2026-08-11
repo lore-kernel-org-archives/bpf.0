@@ -1,40 +1,40 @@
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B1B305666
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 02:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060CE3AD528;
+	Tue, 11 Aug 2026 02:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786415469; cv=none; b=CQwln4H7552MYq66dfuCBOzdnwMKUl0zSMqp3SIjoklz1XmhFsN0X1/UhL/VurkcPLYn0WNcZDOZQNDNNMYyKVdazVmPrB4hdRLxdn8wxv/Lgt6hodRyj5VOAeHDeMY84juLs1qEgVllsNViUXh1gkcjBLImqq8l4VvqLZlIlT4=
+	t=1786416451; cv=none; b=XfV50DNkJfYMSxKSmi5fxdcmmE9HZiMgP6EihOGAAOlE4gqzxxlrm5Medtar1/ZTmyUsrpxWPIDTESDlzX37A/LPoPXz1sl8FajAHipZZzDAR+dN7daeOO0DA3/4L1ClaU+sWmENPJQhEU3a+/skV6EzWyBV+QBXzzrj98gI7lE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786415469; c=relaxed/simple;
-	bh=FZCAYCmze1OuLP0XPVhYZHWf9sJaZIwAjrMIByxPnck=;
+	s=arc-20240116; t=1786416451; c=relaxed/simple;
+	bh=9SofExLnyCVQ1/35Ld+G/CsqkAZzqTfzyBs05ej/COc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Wo55lOSSWUy3HHtWUA5ycVXfmfYZpo03RCMKpYKvpPcOByy8TGlQsUpuYOs62TckZKNQFq0hQCgBOxKD1QHnCSD3lgfvqOdUCJrKubjqVfhHA98w0diAmqtr4XQ5m9SYADn+NiVWqjfOhpB9A1m81UEt3Af0gOlfaO64Pcu+zSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=4mJYvuBS; arc=none smtp.client-ip=113.46.200.220
+	 In-Reply-To:Content-Type; b=WLoeQKPuGa55AoxBsbWJdCqY0R2ibNb63cuBtvNGGkvj8TzmlwLjbINUsnHeEY3tW+BUil8W+0l3gEfdfx/1QfHYBTB0CVlpIgSuRj7DzZNHwkgLy12Y9OaTAxaUaD4I8E0rE4laVayi/jq3CNA1j1bnJhoZKT9a0sijKuWVfDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=kiavNp3p; arc=none smtp.client-ip=113.46.200.217
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="4mJYvuBS"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="kiavNp3p"
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=ggwZl9hb9gd5EioWN0Esbq0cjjGosqmQzh+r+HMhRd8=;
-	b=4mJYvuBSYXRQD0OA6GgU609PMvRq+U2I2PSwL/mr2SN2lCdaLpE4qILIhAb+XsleNZQAnw2rI
-	Ll9ICcba/b83oQszey/LQ6zngid7g8EN/KvmG+plP+dQRs4kVR+nxWjcWwZFaM8+Ng2TZp3AP2b
-	/bQ6Dx6kYo1Ek1xwOULts1k=
+	bh=vt0BRkV4HbKu6MTzBCKXcr3c2dk0SxLej6WBuqUWFI4=;
+	b=kiavNp3pAAQTTMMwCIEgcQu4bqVDMCGfSc/BEm6IB+XGTh01sLE2PU+FnDB1DYGpJnpUvoXwj
+	pFEJlbs83cAO1hjYcXIOHd5bGCgv49AnO/2I+1AaKx0YP3bMpcIUg1Hq7HgsV3q+HkGqYSC5q25
+	IxIMddeF6DscykUqOtBpr8A=
 Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4hJwMM4JM9z12LGB;
-	Tue, 11 Aug 2026 10:20:31 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 70DFD4058F;
-	Tue, 11 Aug 2026 10:30:57 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 11 Aug
- 2026 10:30:56 +0800
-Message-ID: <fcc0a5a3-7ad4-453d-bcd7-ca97f2dcacfa@huawei.com>
-Date: Tue, 11 Aug 2026 10:30:56 +0800
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4hJwkh6mlhzcb0T;
+	Tue, 11 Aug 2026 10:37:16 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id CB16C4057F;
+	Tue, 11 Aug 2026 10:47:21 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 11 Aug 2026 10:47:20 +0800
+Message-ID: <77080aa8-7df1-43f0-8c82-1096db05f745@huawei.com>
+Date: Tue, 11 Aug 2026 10:47:19 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,90 +42,78 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/6] bpf, riscv: Clear fetch destination on
- faulting arena atomic
-To: Daniel Borkmann <daniel@iogearbox.net>, <memxor@gmail.com>
-CC: <eddyz87@gmail.com>, <puranjay@kernel.org>, <bpf@vger.kernel.org>
-References: <20260810221811.481040-1-daniel@iogearbox.net>
- <20260810221811.481040-2-daniel@iogearbox.net>
-Content-Language: en-US
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260810221811.481040-2-daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Subject: Re: [PATCH RFC] arm64: entry: PSTATE_I_SET is leaking on pseudo NMI
+ mode
+To: Vladimir Murzin <vladimir.murzin@arm.com>, Mark Rutland
+	<mark.rutland@arm.com>, Breno Leitao <leitao@debian.org>
+CC: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <rmikey@meta.com>, <kernel-team@meta.com>, Ada Couprie
+ Diaz <ada.coupriediaz@arm.com>
+References: <20260807-arm64_fix-v1-1-d069ccf9d71b@debian.org>
+ <anXkO8YpoadRzm07@J2N7QTR9R3> <0c47125b-6a5e-41c9-b31c-d78643cbe6bd@arm.com>
+ <7b16d183-86d5-481e-b212-977ad0598ac7@huawei.com>
+ <3e5f1532-ea17-4994-8cd0-5ce1d42e9049@arm.com>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <3e5f1532-ea17-4994-8cd0-5ce1d42e9049@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-Hi Daniel,
 
-On 2026/8/11 6:18, Daniel Borkmann wrote:
-> A RMW atomic on an arena pointer is converted to BPF_PROBE_ATOMIC and
-> gets an exception table entry, but that entry records no destination
-> register to clear unless the instruction is a load-acquire today. That
-> is right for a plain BPF_{ADD,AND,OR,XOR}, which only writes memory,
-> but an RMW carrying BPF_FETCH also reads the old value into a register:
-> src_reg for BPF_{ADD,AND,OR,XOR} | BPF_FETCH and BPF_XCHG, and r0 for
-> BPF_CMPXCHG. emit_atomic_rmw() emits it that way, e.g.:
+
+在 2026/8/10 21:04, Vladimir Murzin 写道:
+> On 8/10/26 13:44, Jinjie Ruan wrote:
+>>> Agreed on the need for a clearer explanation.
+>>>
+>>> Perhaps local_irq_disable() isn't the right API here, and we should
+>>> use local_daif_restore(DAIF_PROCCTX_NOIRQ) instead?
+>> The local_irq_disable() here is pair with the local_irq_enable() in
+>> preempt_schedule_irq(). So I think it is not correct to replace them
+>> separately.
+>>
+>> The pseudo NMI does not consider how to do local_irq_disable() /enable()
+>> when the interrupt is masked by the DAIF.I bit as I reported before.
 > 
->    [...]
->    case BPF_XCHG:
->            ctx->ex_insn_off = ctx->ninsns;
->            emit(is64 ? rv_amoswap_d(rs, rs, rd, 1, 1) :
->                 rv_amoswap_w(rs, rs, rd, 1, 1), ctx);
->    [...]
+> Unless I missed anything local_daif_restore(DAIF_PROCCTX_NOIRQ) would
+> clear DAIF.{IF} and set PMR to GIC_PRIO_IRQOFF which is the state we
+
+Hi, Vladimir,
+
+Yes, local_daif_restore(DAIF_PROCCTX_NOIRQ) does indeed clear the
+DAIF.IF bit and then set the PMR to IRQOFF.
+
+But there is a side effect that will clear the DAIF.{DA} bit. This will
+cause `arch_irqentry_exit_need_resched()` to bypass the DAIF check.
+Originally, it could not be preempted, but after this fix, it becomes
+preemptible.
+
+As the below comment said, If DAIF.{DA} is set, we may be handling an
+NMI or debug context, and preemption should not occur.
+
+30 static inline bool arch_irqentry_exit_need_resched(void)
+ 31 {
+ 32 >-------/*
+ 33 >------- * DAIF.DA are cleared at the start of IRQ/FIQ handling, and
+when GIC
+ 34 >------- * priority masking is used the GIC irqchip driver will
+clear DAIF.IF
+ 35 >------- * using gic_arch_enable_irqs() for normal IRQs. If anything
+is set in
+ 36 >------- * DAIF we must have handled an NMI, so skip preemption.
+ 37 >------- */
+ 38 >-------if (system_uses_irq_prio_masking() && read_sysreg(daif))
+ 39 >------->-------return false;
+
+Best regards,
+Jinjie
+
+> expect from local_irq_disable() so we can do local_irq_{en,dis}able()
+> later on.
 > 
-> Thus, a fault over an unmapped arena page ex_handler_bpf() jumps over
-> the access but leaves rs untouched, and the program resumes with
-> whatever it held before the atomic instead of the 0 that every other
-> BPF_PROBE_* access delivers. Fill the exception table entry in from
-> bpf_atomic_load_reg(), which returns the BPF register an atomic reads
-> the memory operand into or -1 when it has none. A load-acquire ends up
-> with the same register it gets today, it just goes through the helper.
-> Unlike x86-64 and arm64, riscv64 does not report arena violations from
-> its exception handler, so there is no access direction to correct here,
-> only the missing register clear.
+> Cheers
+> Vladimir
 > 
-> Fixes: fb7cefabae81 ("riscv, bpf: Add support arena atomics for RV64")
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Pu Lehui <pulehui@huawei.com>
-> ---
->   arch/riscv/net/bpf_jit_comp64.c | 17 +++++++++++++----
->   1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index 6b9972b07c1b..2504df1fa111 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -1992,10 +1992,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   			ret = emit_atomic_rmw(rd, rs, insn, ctx);
->   
->   		/* ret can be 1 (skip-zext); extable entry still needs to be added */
-> -		if (ret >= 0)
-> -			ret = add_exception_handler(insn,
-> -				bpf_atomic_is_load_acq(insn) ? rd : REG_DONT_CLEAR_MARKER,
-> -				ctx) ?: ret;
-> +		if (ret >= 0) {
-> +			/*
-> +			 * A load-acquire reads into dst_reg, and a read-modify-write
-> +			 * carrying BPF_FETCH reads the old value into src_reg, or into
-> +			 * r0 for a BPF_CMPXCHG. Clear that register on fault, the
-> +			 * remaining atomics have no destination register.
-> +			 */
-> +			int load_reg = bpf_atomic_load_reg(insn);
-> +
-> +			ret = add_exception_handler(insn, load_reg < 0 ?
-> +					REG_DONT_CLEAR_MARKER : regmap[load_reg],
 
-Felt a bit odd using regmap directly here at first, but since 
-insn->dst_reg and insn->src_reg are already marked via bpf_to_rv_reg at 
-the start, it looks fine.
-
-Reviewed-by: Pu Lehui <pulehui@huawei.com>
-
-Thanks.
-
-> +					ctx) ?: ret;
-> +		}
->   
->   		if (ret)
->   			return ret;
