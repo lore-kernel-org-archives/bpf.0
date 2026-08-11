@@ -1,61 +1,63 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5327C448BB6
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 14:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7885544684D
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 14:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786457956; cv=none; b=eX6B6zByM3wiBExZX+yDOGN6RYp8LaF6bZXCNNAR+j5C6HgXinqZOPTDf6K0Q7HMkbnwW45B3dWe2FNSAVUVHVu1/6sOtJYksEVCeourIBsC5F+Qg9ckUNI0eS2Ofm5T3LBTbfrIoovXy8otMO1FK9ixKCL57idIaCTlnGnszTA=
+	t=1786457963; cv=none; b=i0LI8eRLpVuMhpLxCwTqaD0t/IO+ehsVB4XD5kacVmg10jLv4UX8eHPqCjbtTrF65azdurQSqYHSAPmENZvYvRt8Hd7moEmWGbjMQjk92KIl80l9eBNY16lukeMjlwLHnibC6jjzn3KlfQWAQWx1UxQtNIOKF8YqbSEZEkPcz7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786457956; c=relaxed/simple;
-	bh=UK8Gbb4rglh4FaymSjNbOeD1SzoLlYvu+K2etj4vcb0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fcNAggTHSPWWJTkCfEehLWMjmnu3gQYp/E0pahM6stzeXCnne9LcSTVqhSJCpf0+ZzZppgeE0OMhcCbrDexzFA+aBiSHG+yLuTOxn41CMu+w9p74jmXULjtUmhPJ9QXyZx1awhbMjqAToFwGEVDTj/50bJrw47nf0nGspMzTOxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nn65hAzb; arc=none smtp.client-ip=209.85.216.41
+	s=arc-20240116; t=1786457963; c=relaxed/simple;
+	bh=vyxynog3OYF5kBzndeupmeRqkFVd6kt7RTwsz0Fyois=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pn8jqoEOcZBpwJe+nkcAo57wafxs1zFxgW4ZBPoUVaq2RFASSdnW9IR8AA708yChj5XGSXZNvJIxLZCauG3u11npct/u9SKzjPYtmGWGZg6bvfo0JeiCNb6nu6OV5YGpc5RmEtLL3h2R6fYhMbCqZ/S4XX8OqvXDKPM26VvRHNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jaj2xhh6; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nn65hAzb"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38fdeaed181so4103426a91.1
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 07:19:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jaj2xhh6"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38a0c7e841fso4025299a91.2
+        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 07:19:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786457955; x=1787062755; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6kMGAmgL2sHoPiISlJphA2bmnreOOIlXDYBkioBYhB4=;
-        b=nn65hAzbLxWYPtNwXX2BiaPUgFiu8SX9Pg69szjvldzSjKOkJX6eRIXyvR65Lqif6v
-         Gj/x4VNfMBkZCCsUjHaixahrUqOe2w3IoMda5/pJqRsvtzrInmC41KWbju8dJXZ2SfGF
-         umeExrfruLZvz580OXIfDHtGVyvbUeo2d6JBWn4t1TxvHV4NanA3UniYxwPKz31wBozr
-         9y2RXN87VjGOmtMo9DxetDTHKobMSeQqAWLLxh3ljs3gohmboTbarHmbzMcsl82ylHxb
-         HuGOLzJo26MZk1zrCdW/vqRLk6ti4OVF0HuiK4sNBdtout63nS2IR1ZTEHbnmbn1UiRz
-         PK8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786457955; x=1787062755;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1786457960; x=1787062760; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6kMGAmgL2sHoPiISlJphA2bmnreOOIlXDYBkioBYhB4=;
-        b=St7FVqMoQxxDqzDmIC3hePubbp4ykJ4QWiaGmh5Ta6VssX+VOQcOzSW2vcs1oU5c4z
-         PpJ3JJF9BQUgS0sByv8gSBWoTgb0vARb6SiS5f9BFACBFwYVcvzq6YMlCGo1mvYs8/qK
-         AozQnXbt17H1l5tTCJYQMATw0cm3ZzdNH2gISKMPPn5/VyP0yUhhRVUAO23n9eQPnK/Q
-         sUaJyGSvf0jKQzMdExo2Hfcp4mGQopFhtJMuM2K1RX5qFoizqUu393Ly2xZ0UNIqpDZL
-         //Yx9bA3QlWTjgZ6/U87mMrscFibokgEuGvuHH+rNGUidacHJNQmpLit0s/k6JDZGaQ0
-         Xd+g==
-X-Forwarded-Encrypted: i=1; AHgh+RqNMH/b2BhPdoSRWCE6/Mro0nuqXOaF/qntNdLUiw6Ht/fsPzkNG983slhFcNhoghot5bo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzg4fTekfvuGYrWW0BUCcrrDWXRLEWQ7AvbaGQCWr44dMiGbnfX
-	jQnax7AXGWOqxdS52x8OIGeHg45YEKBRiiiwITReiGbXhCLZzJ0Eettg
-X-Gm-Gg: AR+sD13DhM5u+Gxh6glKDc+9X2rdHXxpT/foI5c65UjGQ+qBjsqceLZe99BsildE5Fq
-	szGO2XW9KCiSO3B1q/jAw5InrZ75tDGUsuIkLXqOPwvWGUb7zYQh29q/Vb7F4fSySfsggxw5I7Q
-	pqjdujZ+Zr9Sry1Dz4GhVAUT3bw7SXRyHXNwgbDSO2J7S8V0UxnYcvCWIX0MKGaICVnYDR2s/A7
-	zqcDJiX/rkcGhRG0TS6SW/hvSJHS9LKX5H8l7rqDWaxE5vDFjdF7HJFma6FNc3l0MxxzYh15oTm
-	4wNZZH/fBBa/7F5ZhzyDMaivFb8QTzDVHaO8VY3kxnUZcLixZmEiumgdFVmJ5RaVr99YIKtJUW/
-	Zb1v0XjyhOFznaIEU8CwdVx47K4/tb7rDvPIuBIQqvMHsm7VPzkUjvOr8QjvZA0bmXQyLAEI/kH
-	kkWPBnW5GGMvW9DfKnF/sW6x/+mBIfme81pvFToBT6CGNrdz5bBdVw7QI=
-X-Received: by 2002:a17:90b:4d8f:b0:37f:e1af:df22 with SMTP id 98e67ed59e1d1-392ec5a78b8mr3597233a91.17.1786457954421;
-        Tue, 11 Aug 2026 07:19:14 -0700 (PDT)
+        bh=JsuAZPhP/dzedWK1tVd8R5hV4+SGc71VLUA/CDLtwQ4=;
+        b=jaj2xhh62rJN9kJ8JgujS7Uq9yCu73q/keu+XpbFYz3e+ZzskFRPDuAHLRlAg8S7Hs
+         rxqOuhFMyJovI4BGAjExTTAmhUwyZ65Bw0RvqT2ihJbHg9vwGw/WQ6k4bZzBodHDPzCV
+         YUF+TIrltCpVTlzKE9rVZvBF1+SB38UaJxQRCMgvN8U0vZjKzJbGXfiMHJSbu77WVaLc
+         p+PvBmGO3fW7C70as4CknoXv4sChatxfkIjgHfExUqDMrdSlCh3cLlq/RhmL2zR9TgkW
+         I5bXhlK0N2jzwKrFxOCa5vHQS730dInr0C04Nirg36MAdcRkm1ZLn5sJ93s/FplKKXcM
+         N2CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786457960; x=1787062760;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=JsuAZPhP/dzedWK1tVd8R5hV4+SGc71VLUA/CDLtwQ4=;
+        b=RSfxSPsFTQTfkIbtdYVWKAdw4YLHpU9fEHiCEn5iPYckN80xvBD8sgoWzXnimUhc7a
+         15Kmw5zO7BqsjTGEY1QQfDfQ4LYgbPG8+q/huXfF0yOmLT96vBBiLDfKKd9lRzIjtSus
+         oXF8mHBVs7xMn9Q0AsFCrCdPF3pVQ1L/1oHaFptonjl2LiIm6rOFEa+fE2PzHu7zMyZ+
+         odXJbl8QV1NLzX7SR9WjuCRkj+CSK3XiUL7ehNPvYNb1BX+MNpVLXtpQ5+GC6zM1vZvI
+         95Eo8nwmNZuchQ6KyIESkI3gJtE4w4mlv5WWwzPfqTaAh8hqg6RQEPlSwxVejy4JWmCg
+         EMcw==
+X-Forwarded-Encrypted: i=1; AHgh+RqQirMIOjXHJiVy/Faxnm3SQtL/AMpj55wxs0zXM8UtzUMZ7BUKpUJNOc4UrR3kbn9xUmg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ75uHZxfe4yxBPDKY3/l8tG/i403rqtRhVgyONz51tJrdRXo9
+	idzlYn+ZRUJmDak2mdcMvqGm3fA839p/RXiGxIkiv2ErZ7auZO6ZZ7bu
+X-Gm-Gg: AR+sD13wgTI+J8krceuxqiJgfcdtSUzyyuMAwXXfNYpGQ4vL39RUV/z9jvdHk8d0nKV
+	RVkECKxoqPTG90YuX5yidetlwtjbuEvRszA76uVkCPTD+WUt43EMs/l+EME5pBxujo2FN2sHvTQ
+	tmqoos9ysJGCx5Xj5cZ+gCeBlTZFZgICh8PJlr41HJ55lM3O/3aoRYPIdx+atTNrYJxzinEb7Dw
+	cmebCrYTi+KXi6wMotenmMnf+4eBuPRH9l9lcmUEdirF84OxPK/ZN0Rop8weOyxSxSif28y+CX3
+	jyvUP0LY+0EvQII5/meMtIEx6+Ny9A7E9BpELJpWC7VoxoChARCGBQcV2SbjJAKYeckVQRygMrA
+	V7ZzBj1WM0cZltWrL+f5hbPV0KrgTmEzSFmhkOt2J0MR9C+Q3Cs6X12X02uh7s7RNKegxfu4koT
+	etNJcHBdVwJGzxEH4A0yeH6I0zxPiTvDYj+VsoPZqYuhVbwObry+5H8hU=
+X-Received: by 2002:a17:90b:3fcc:b0:38a:c3f:3b87 with SMTP id 98e67ed59e1d1-392ec570a46mr4077087a91.12.1786457959866;
+        Tue, 11 Aug 2026 07:19:19 -0700 (PDT)
 Received: from omen-arch ([211.58.239.197])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d534bfc9sm4028489a91.10.2026.08.11.07.19.10
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d534bfc9sm4028489a91.10.2026.08.11.07.19.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 07:19:13 -0700 (PDT)
+        Tue, 11 Aug 2026 07:19:19 -0700 (PDT)
 From: Junseo Lim <zirajs7@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -71,10 +73,12 @@ Cc: Stanislav Fomichev <sdf@fomichev.me>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Sechang Lim <rhkrqnwk98@gmail.com>
-Subject: [PATCH bpf v2 0/2] bpf: Reject negative optlen in cgroup getsockopt hook
-Date: Tue, 11 Aug 2026 23:19:06 +0900
-Message-ID: <cover.1786448307.git.zirajs7@gmail.com>
+Subject: [PATCH bpf v2 1/2] bpf: Reject negative optlen in cgroup getsockopt hook
+Date: Tue, 11 Aug 2026 23:19:07 +0900
+Message-ID: <187a4d756275aaaee5d65eecb63c1477b3b66554.1786448307.git.zirajs7@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <cover.1786448307.git.zirajs7@gmail.com>
+References: <cover.1786448307.git.zirajs7@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,37 +87,43 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A cgroup getsockopt BPF program can set a negative optlen after the
-kernel getsockopt handler has run. For TCP_ZEROCOPY_RECEIVE, the
-kernel-buffer hook did not validate the lower bound and the negative
-value could reach copy_to_sockptr() as a size_t.
+A cgroup getsockopt BPF program can shrink ctx->optlen after the
+kernel getsockopt handler has run. The kernel-buffer variant, used by
+TCP_ZEROCOPY_RECEIVE, only rejects values larger than the original
+length.
 
-Patch 1 rejects negative optlen values in the kernel-buffer hook.
-Patch 2 adds a test_progs selftest that reproduces the issue through
-TCP_ZEROCOPY_RECEIVE.
+If BPF writes a negative optlen, that value is accepted and propagated
+back to the TCP getsockopt code. It can then be passed to
+copy_to_sockptr() as a size_t and trigger the hardened usercopy
+bytes > INT_MAX warning.
 
-For patch 2, the userspace-visible errno is EFAULT on both fixed and
-unfixed kernels, so the broken behavior cannot be detected from the
-getsockopt() return value alone. The selftest exercises the problematic
-path and can be used to reproduce the hardened usercopy warning on
-unpatched kernels.
+Reject negative ctx.optlen in __cgroup_bpf_run_filter_getsockopt_kern(),
+matching the lower-bound validation already present in the sockptr-based
+getsockopt hook.
 
-Changelog:
-v1 -> v2:
-- Add the selftest for negative optlen.
-- Add Emil's Reviewed-by tag.
-- Add Reported-by tag.
+Fixes: 9cacf81f8161 ("bpf: Remove extra lock_sock for TCP_ZEROCOPY_RECEIVE")
+Reported-by: Sechang Lim <rhkrqnwk98@gmail.com>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Signed-off-by: Junseo Lim <zirajs7@gmail.com>
+---
+This issue was found by a custom fuzzer developed by
+Sechang Lim <rhkrqnwk98@gmail.com>.
 
-v1: https://lore.kernel.org/bpf/20260726070122.2407344-1-zirajs7@gmail.com/T/
+ kernel/bpf/cgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Junseo Lim (2):
-  bpf: Reject negative optlen in cgroup getsockopt hook
-  selftests/bpf: Exercise negative optlen in cgroup getsockopt hook
-
-
- kernel/bpf/cgroup.c                           |  2 +-
- .../selftests/bpf/prog_tests/sockopt.c        | 22 +++++++++++++++++++
- 2 files changed, 23 insertions(+), 1 deletion(-)
-
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 4355ccb78a9c..c04a244fe2e6 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -2235,7 +2235,7 @@ int __cgroup_bpf_run_filter_getsockopt_kern(struct sock *sk, int level,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (ctx.optlen > *optlen)
++	if (ctx.optlen > *optlen || ctx.optlen < 0)
+ 		return -EFAULT;
+ 
+ 	/* BPF programs can shrink the buffer, export the modifications.
 -- 
 2.55.0
