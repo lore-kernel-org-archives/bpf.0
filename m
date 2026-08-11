@@ -1,144 +1,106 @@
-Received: from out-182.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DD2392821
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 02:55:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C5929D26E
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 03:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786416956; cv=none; b=YMRA1fpxmBYzls8vIZ5QfmGw2Jg1M3BusysNogqbZYn9lxrd0KLcnsaU96DpNj+IeXS+Y81KvfjMYJXK1HThsBbTDvb+kyCzwS7KAS8PKShY1rqtN81OEANFMi9SfXFf6Vyjl6jZtcqEAdz0jmy/9NYUS+LqP0BT05b7QpRtl6w=
+	t=1786417629; cv=none; b=Fm6zVtylpWmNkixT570xmhhBwX6TBcadaM0NVSS5x9Nh6GsWESxNDMPLIRvOhZxCe/4I66DMd0cwHLSA9JgTKjDBwmhJfgeuTyx6+XfgTYTv/EUXbEPsJ7HM+9Gkt/XYGirrj1SR7SE29eEiTUO0f7kkgnsDC3Xc0H8GfT3qzzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786416956; c=relaxed/simple;
-	bh=h9CwLLgWY86IgBTBCFFT7XiOfU2SnvRpv0KtXOkp2b4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hmJjCrSFv1u2qUFOF4QOWQgIKDbfNbj91XztuapqlQ3q4Iz9MWj7iKF+x6QPuS22fsLHNIhxUkzyf1A8eTEK/GEUnxTyS88uxtEPdmL/v4hTkja/4+mHfMHmwFJpKDtm5dRrl9YZmnRDWEHLPedOCw+nRKweA7oBQthXuq15R3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KO5Mnr+s; arc=none smtp.client-ip=37.59.57.117
+	s=arc-20240116; t=1786417629; c=relaxed/simple;
+	bh=peAroulPtJaexc5hKhN2jNo93rCe+JG7nBbh3dZWWwo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mKQqWFcOUO8qKgpq5y1Eeo2FpkMEmYryunEmiCkfZ2TjhF7RvFWlRN+KQBmX3GF0nBVa0JsbDJJTluCT9r5Wcq6hMY1DXLtaweFNpTbUtLiDaEsCdlDE65nWSAiOVk9LHwkzY1BWIxvydLpjJNTqFePDFsenur9ivtdcY8xOG+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Gm0h2MX0; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KO5Mnr+s"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Gm0h2MX0"
+Message-ID: <cf8655ff-4e45-40ab-898e-aff2aa7145c5@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786416952;
+	t=1786417625;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5R/M8+7j69K4UXqpWgelzLhpMrxpij9/yR6sHHNa+oE=;
-	b=KO5Mnr+sIpOt+vYcOec6mScWVCDn/0rUAW4tGAdOXZ/oDtuMOKtaJNOitcMN9CBgo04Gii
-	rvXOLB4AiXl0/g2krIUFohZyc+2qO+LeEA+yqBuyxXo6iizR21p+VWjpPAPrZzqwwp+nMg
-	FerUqRrElCTgyzbfhtl6ael2c/u83lg=
-From: "Hui Zhu" <hui.zhu@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <matt@bobrowski.net>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next v5 2/2] bpf: Make bpf_trampoline_multi_detach return void
-Date: Tue, 11 Aug 2026 10:46:20 +0800
-Message-ID: <12beba657f5c9e86a016a097750209287a2f262a.1786412280.git.zhuhui@kylinos.cn>
-In-Reply-To: <cover.1786412280.git.zhuhui@kylinos.cn>
-References: <cover.1786412280.git.zhuhui@kylinos.cn>
+	bh=ICr7w3qFPm3tjfGQauGXsymoV8+BoD7qeMU/1f4tyuY=;
+	b=Gm0h2MX0bTaQxsyYEeUxNYuxxqoxL4H+dRYlftuFAHXIaAmqpTZzaa+fUXeEJ36kWV1Q8P
+	Kg0G/OFZET27j4WJSJ8Fu4yCYLXhT2u27j6vsRobWuIKYonNkt3iN5S0R0jyvvlGaHdS5I
+	semo5hEG2qDKIuyx3OZT3yT5mvo5VAM=
+Date: Tue, 11 Aug 2026 11:06:34 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v4 2/3] bpf, xdp: move offload check into
+ dev_xdp_install()
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu <liuhangbin@gmail.com>,
+ Krishna Kumar <krikku@gmail.com>, Samiullah Khawaja <skhawaja@google.com>,
+ Martin Karsten <mkarsten@uwaterloo.ca>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260810050621.82035-1-jiayuan.chen@linux.dev>
+ <20260810050621.82035-3-jiayuan.chen@linux.dev>
+ <20260810114958.64e6a83d@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260810114958.64e6a83d@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-From: Hui Zhu <zhuhui@kylinos.cn>
 
-bpf_trampoline_multi_detach() always returns 0 and the sole caller
-ignores the return value.  Change it to return void and drop the
-WARN_ON_ONCE at the call site.
+On 8/11/26 2:49 AM, Jakub Kicinski wrote:
+> On Mon, 10 Aug 2026 13:06:00 +0800 Jiayuan Chen wrote:
+>> bpf_xdp_link_update() calls dev_xdp_install() directly and skips
+>> dev_xdp_attach(), so the checks in dev_xdp_attach() do not run. A user can
+>> make an XDP link with a normal program and then swap in an offloaded or
+>> device-bound program with BPF_LINK_UPDATE, which puts it on the software
+>> path.
+>>
+>> Move the three program checks (offloaded, bound to another device, and
+>> device-bound in generic mode) from dev_xdp_attach() into
+>> dev_xdp_install(), so both the attach path and the link update path are
+>> covered.
+> Shouldn't we move all the checks that are not explicitly about the
+> netlink API (so all but the first?)
 
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
----
- include/linux/bpf.h      | 9 ++++-----
- kernel/bpf/trampoline.c  | 4 ++--
- kernel/trace/bpf_trace.c | 2 +-
- 3 files changed, 7 insertions(+), 8 deletions(-)
+Sounds great, the code would be much cleaner.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 73bacfc6444d..3255c6f5ea6b 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1518,8 +1518,8 @@ int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_func
- 
- int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
- 				struct bpf_tracing_multi_link *link);
--int bpf_trampoline_multi_detach(struct bpf_prog *prog,
--				struct bpf_tracing_multi_link *link);
-+void bpf_trampoline_multi_detach(struct bpf_prog *prog,
-+				 struct bpf_tracing_multi_link *link);
- void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags);
- 
- /*
-@@ -1639,10 +1639,9 @@ static inline int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
- {
- 	return -ENOTSUPP;
- }
--static inline int bpf_trampoline_multi_detach(struct bpf_prog *prog,
--					      struct bpf_tracing_multi_link *link)
-+static inline void bpf_trampoline_multi_detach(struct bpf_prog *prog,
-+					       struct bpf_tracing_multi_link *link)
- {
--	return -ENOTSUPP;
- }
- static inline void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags) {}
- #endif
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index ea4d3c62f289..e30425789487 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -1729,7 +1729,8 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
- 	return err;
- }
- 
--int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracing_multi_link *link)
-+void bpf_trampoline_multi_detach(struct bpf_prog *prog,
-+				 struct bpf_tracing_multi_link *link)
- {
- 	struct bpf_tracing_multi_data *data = &link->data;
- 	struct bpf_tracing_multi_node *mnode;
-@@ -1759,7 +1760,6 @@ int bpf_trampoline_multi_detach(struct bpf_prog *prog, struct bpf_tracing_multi_
- 		bpf_trampoline_put(mnode->trampoline);
- 
- 	clear_tracing_multi_data(data);
--	return 0;
- }
- 
- #undef for_each_mnode_cnt
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 891897f8a1b3..29260951aa87 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -3687,7 +3687,7 @@ static void bpf_tracing_multi_link_release(struct bpf_link *link)
- 	struct bpf_tracing_multi_link *tr_link =
- 		container_of(link, struct bpf_tracing_multi_link, link);
- 
--	WARN_ON_ONCE(bpf_trampoline_multi_detach(link->prog, tr_link));
-+	bpf_trampoline_multi_detach(link->prog, tr_link);
- }
- 
- static void bpf_tracing_multi_link_dealloc(struct bpf_link *link)
--- 
-2.53.0
+
+>
+> It may be better to split the series and send this patch to net,
+> the netdev CI has a netdevsim test for the prog offload, would be
+> good to run that.
+
+
+Though for now bpf_xdp_link_update() already does:
+
+     if (old_prog->type != new_prog->type ||
+         old_prog->expected_attach_type != new_prog->expected_attach_type) {
+         err = -EINVAL;
+         goto out_unlock;
+     }
+
+so the other checks can't be triggered on the update path even without 
+them in dev_xdp_install().
+
+
+So I'm thinking this patch works as a standalone fix (good for 
+backport), and the cleanup goes as a followup (if necessary)?
 
