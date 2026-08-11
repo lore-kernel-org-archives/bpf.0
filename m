@@ -1,148 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90D139F174
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 18:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950F146A61A
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 19:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786474617; cv=none; b=M06V1zef868z5MJV/HN/HedLHeG+EsIlLrACeKTLZOsODc717eG266cR9SJ1xES6+d7hLGMYHeL8JTqT9Te25XdDGydDJZnJZFDUB4ASSfxCTZWocnLZ8d1HqwvB955mA9rj83QKRgrrFenjCvpJsldgnoOvGecA/64qJ88PE2I=
+	t=1786476294; cv=none; b=uPfX0B5q5dWz6CLa/VidO2vfa/r+79U8AEdItAkjgWGryzQHw/g8nh5ON2h0e/4KD1eSnAbc3ig68Bg4dXvIy7IDzdIHCeKmKmhiqpbAEdpSubriblPlyPhiBGjpSr6cLRyipT8MFRvBCXOO27ZEJUsHVuCYOBK05tmYhw2q1PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786474617; c=relaxed/simple;
-	bh=xplcU9pLLcsf9VFzcq8LINeP/Rh7R0/216vKBR4VtCI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=UryzkS9cSxncTOw1VbaGVP2PkrfpUOPTUJMkm6U/zLIoTyO0wMAfTwq1VPNF9tQCiYZZZYnJz9fUMh4Uq7XXeaCkjEvSCdJDfuCXWhAzkwig68WeVeFaYhyxnDRG+UpZXiHeDCIU7WerouN9HmE5DMuyH2dwSHbNCfn1zpglzj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/NveLxL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786476294; c=relaxed/simple;
+	bh=C00IyC7vTIjDZVkpSn5S0y3iZ1J/PYPn0FJUAp2SGhA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mr39lO8CAK9BIfHgJlYKg4dX8jOQC48BXqcacJ6jZT4VTuQaAzqSYrFKETWoiblBenDa0xiDBIEkOikYaEn5KBqJ9n8b12Ko+ELGNDEFmC3bwoZOiCAaH8DIhQu4fvzVDWqDddYCG5s6U/rjFtWVqzJH4VSnqWle1AQABA6QS9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oYm+Hn7X; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/NveLxL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4711F000E9;
-	Tue, 11 Aug 2026 18:56:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786474615;
-	bh=VYTquF4fgLFTmGoKrcZb0NPjywc+hkoGBCtqLOcfQq4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=G/NveLxL2wEQwZmLF9V+URJdiqUEqPGPT0CPLu3P7KSkTg1r7LxQNLPKFVL4BHP/D
-	 3VJ4mWq9/mPHjOveNptinQG065h/ImaFwx3lFhvPux/8Vsj7m9zcC6gr+kE2Erl/6L
-	 g3jo3B8Wyd4Qd9iJ7PaaG7rPf/bzcjWL31ftZ1/iWmtAHWbZ0ClfbYdK1uDU/NBTn9
-	 o3tOZNw2LVlOq/X01gaRegehUk9vd5QvkBVMQDu1u3rE5hXcjMKloou18ricVn78eA
-	 kms/AGBFi//bnNi/rWxt7hzlfGMf8RaUqOtGnpAZsN2Av1Tg9ah+w0+hnQfJVrmBJE
-	 TaBTUAF1M6NGw==
-Content-Type: multipart/mixed; boundary="===============1546216123881772698=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oYm+Hn7X"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c998fd549a8so113468a12.2
+        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 12:24:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786476290; x=1787081090; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=px5wF7h95lt7reW18eclWt5PrhOlRHexv1P1r7EUzr0=;
+        b=oYm+Hn7XLGTycMmJcN+O4spnKX9L3Yaru3HH8ctUvuVrjglmNzJD8mF1r3R58Jq5fN
+         HkCzhtRVtn0rFA72X3epx/CMtWv1/gUnD9G18AywFiHA7PYBq9Y+pdm78BJ405WTFSIg
+         YDaVWIXgch75a/XG0gpFetbW7JELdfhfpHD3RPl3oTooM++NkuS9PwOJfOpEkMo2cU7A
+         gDufGiazL3XHZT/8QpBhoLkcmDZ4zP13/Jx9Vc2PVsSxEYY9V0rAVO/B7eWyJqFXvFnB
+         MsLGpwTko2KGkoXi08IxezQlgD5T4wmXj3dcqYQVekNPFwIJWVi/h4b6l/eN38fzLPlt
+         oZkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786476290; x=1787081090;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=px5wF7h95lt7reW18eclWt5PrhOlRHexv1P1r7EUzr0=;
+        b=YiI2u3wrGaep4kfA2ErkOFWYwFIlZNaFIn8rKiWRm6VbVra/ke1PsQF0h4m3cc+8bx
+         XKM8nt3aC4AY1cmiT9ZEoS5+wpMxJ4Fqfel3o508kSvOqJfbb/c/NSIMgf0QG3skX2gM
+         SO54JHGLUdemYbK3b6XArRM9vx4yAqMiojUAKK44xrEue2N5/EuKtRCeRo+IPgWACXoF
+         507ZIUOeo4RNstxM8/UZZcnrIi6NHPwrMR/62ZFw2VBG06+L4+1zoRJV9XK+78Q1/jEn
+         7Ffsb6Y1N6eIRt9T/gjT43eEg9WBv3zYBVUoGLbBCQ3mzcKL1TxfHJJBYYbnxRsqawA7
+         kr7Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rpd1e0k/tn9gXUDq6VNPvDcbxFa56FYw48aezCrskbcjHjgs/g8jrAUjQYDoB+S9MJ5n28=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQzXbx5yI5fkSOZ7ekLAbTPo5hFWWf1jJK2wg2UtWn/2JY2CCq
+	Ja5K99BnDtBnNWXB8z5Fe0PzHEow57g2q7wVqOd5DFLisPQApY+UYELK
+X-Gm-Gg: AR+sD10t2faqB6UsPgY32b62N1xJFB87oAMyRbP+dOCNF07ZPTe97yhvb+gHZCS65lo
+	WgTO4UltGLqZnPQLXQ+OfcJwRthS3lnDr32T/RABVZVCDB34vIVKZ0ggacn4FDcGdZ7c084GEhr
+	HDy4eegYVr/IixYmdsO21vFe53xaZ3u1f/Ohdt6TPEiIImWPvnYeKZmzTvVNoQdcHxDHI7ZwEZh
+	w85PYpa8C+hAkPJtntldHk9/tahK/pOGVF7Osmeh0v2/WNnL+fMb4MQAH65J2bzRd/Pi0DmMpVe
+	WUKTyV7PwP4CC8F224wJAlL58ReRa0sJTuEttg4W82MfDH3Ek4tY0ihbqXz5LVlFokMWXcjuy51
+	nWp+XVecalU9p59DmsQnpWaDezNkCodP1VEq8ZhHDMcpjtx5KxNi0gjDAbT4/tcFr8nfrkaA7Hv
+	3RC9icJfaQNS7r/gML8tZXjwwa3rdQ/WppC5Vy/1GaEpD7B2oT+3pU0qjIGT1YJ8mh+sbmzmO0a
+	6NTnInFd7Cx4vRrJbJ+Ee+hc3l1TLOGj8G0nAkXbqXhnw==
+X-Received: by 2002:a05:6a21:e0a6:b0:398:837a:7af0 with SMTP id adf61e73a8af0-3cc2baff1a5mr7928425637.30.1786476289392;
+        Tue, 11 Aug 2026 12:24:49 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:cd18:dfe8:e39c:4123? ([2620:10d:c090:500::4:f345])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31cf361d57asm2155916eec.6.2026.08.11.12.24.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2026 12:24:48 -0700 (PDT)
+Message-ID: <5da4529bb3a41a612f05b5d2dfc6b50f76ae03a8.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: fix for veristat file/prog
+ filters processing
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ andrii@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, memxor@gmail.com, martin.lau@kernel.org,
+ clm@meta.com, 	ihor.solodrai@linux.dev
+Date: Tue, 11 Aug 2026 12:24:46 -0700
+In-Reply-To: <1b98af79fa5ac4a50f74eb67b30fecba06a9990d9483fdead77176412536fda0@mail.kernel.org>
+References: <20260811-veristat-filter-fix-v1-1-b5b43c431550@gmail.com>
+	 <1b98af79fa5ac4a50f74eb67b30fecba06a9990d9483fdead77176412536fda0@mail.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f600f7fa9410958a73e65c5d9ab1c069b404368473adfa99d38f08cca8bf955a@mail.kernel.org>
-In-Reply-To: <20260811-veristat-filter-fix-v1-2-b5b43c431550@gmail.com>
-References: <20260811-veristat-filter-fix-v1-2-b5b43c431550@gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: exercise veristat filtering logic in a selftest
-From: bot+bpf-ci@kernel.org
-To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
-Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 11 Aug 2026 18:56:54 +0000 (UTC)
 
---===============1546216123881772698==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, 2026-08-11 at 18:41 +0000, bot+bpf-ci@kernel.org wrote:
+> > =C2=A0=C2=A0=C2=A0=C2=A0selftests/bpf: fix for veristat file/prog filte=
+rs processing
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0At the moment veristat filtering behaves unexpe=
+ctedly for the
+> > =C2=A0=C2=A0=C2=A0=C2=A0following filter expression:
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-f !file/prog
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0The expression rejects all programs with name '=
+prog', and all programs
+> > =C2=A0=C2=A0=C2=A0=C2=A0in a file with name 'file'. This commit fixes t=
+he expression to
+> > =C2=A0=C2=A0=C2=A0=C2=A0exclude only a program 'prog' from a file 'file=
+'. Additionally,
+> > =C2=A0=C2=A0=C2=A0=C2=A0the commit makes empty filters like '-f ""' or =
+'-f "/"' and error.
+> > =C2=A0=C2=A0=C2=A0=C2=A0Here is the filtering behaviour compared old ve=
+rsus new:
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0| filter   | file | prog | old verdict | new ve=
+rdict |
+> > =C2=A0=C2=A0=C2=A0=C2=A0|----------+------+------+-------------+-------=
+------|
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !foo     | foo  | bar  | skipped     | skippe=
+d     |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !foo     | bar  | foo  | skipped     | skippe=
+d     |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !foo/bar | foo  | bar  | skipped     | skippe=
+d     |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !foo/bar | foo  | buz  | skipped     | proces=
+sed   | (!)
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !foo/bar | bar  | bar  | skipped     | proces=
+sed   | (!)
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !foo/    | foo  | bar  | skipped     | skippe=
+d     |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !foo/    | bar  | bar  | processed   | proces=
+sed   |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !/bar    | foo  | bar  | skipped     | skippe=
+d     |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !/bar    | foo  | foo  | processed   | proces=
+sed   |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !/       | foo  | bar  | processed   | error =
+      | (!)
+> > =C2=A0=C2=A0=C2=A0=C2=A0| !        | foo  | bar  | processed   | error =
+      | (!)
+> > =C2=A0=C2=A0=C2=A0=C2=A0|----------+------+------+-------------+-------=
+------|
+> > =C2=A0=C2=A0=C2=A0=C2=A0| foo      | foo  | bar  | processed   | proces=
+sed   |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| foo      | bar  | foo  | processed   | proces=
+sed   |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| foo/bar  | foo  | bar  | processed   | proces=
+sed   |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| foo/bar  | foo  | buz  | skipped     | skippe=
+d     |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| foo/bar  | bar  | bar  | skipped     | skippe=
+d     |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| foo/     | foo  | bar  | processed   | proces=
+sed   |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| foo/     | bar  | bar  | skipped     | skippe=
+d     |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| /bar     | foo  | bar  | processed   | proces=
+sed   |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| /bar     | foo  | foo  | skipped     | skippe=
+d     |
+> > =C2=A0=C2=A0=C2=A0=C2=A0| /        | foo  | bar  | processed   | error =
+      | (!)
+> > =C2=A0=C2=A0=C2=A0=C2=A0|          | foo  | bar  | skipped     | error =
+      | (!)
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0Signed-off-by: Eduard Zingerman <eddyz87@gmail.=
+com>
+>=20
+> This looks like a bug fix for existing tooling. The changelog table marks
+> four behavior rows with '(!)', showing the OR-matching bug being fixed an=
+d
+> empty filters now being rejected. Should this include a Fixes: tag?
+>=20
+> The broken semantics - deny filter matching on file OR prog independently=
+,
+> and empty filters being silently accepted - were introduced when the sepa=
+rate
+> should_process_file() and should_process_prog() helpers were merged into
+> should_process_file_prog():
+>=20
+> =C2=A0=C2=A0Fixes: 10b1b3f3e56a ("selftests/bpf: consolidate and improve =
+file/prog filtering in veristat")
+>=20
 
-> Test cases for veristat file/prog name filtering logic.
-> Check various formulations for any (*foo*), file (*foo*/),
-> prog (/*bar*) and file/prog (*foo*/bar) filters, alongside
-> errorneous filters and mixed allow/deny filter expressions.
-
-This isn't a bug, but there's a typo: "errorneous" should be "erroneous".
-Also, is the prog filter form meant to be "/bar" rather than "/*bar*" to
-match the cases in the table?
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_veristat.c b/tools/testing/selftests/bpf/prog_tests/test_veristat.c
-> index 9aff08ac55c0..e1eda4ae755e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_veristat.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_veristat.c
-> @@ -37,6 +37,13 @@ static struct fixture *init_fixture(void)
->  	return fix;
->  }
->
-> +static void read_output(struct fixture *fix)
-> +{
-> +	ssize_t len = pread(fix->fd, fix->output, fix->sz - 1, 0);
-> +
-> +	fix->output[len < 0 ? 0 : len] = 0;
-> +}
-> +
-
-This isn't a bug, but since read_output() also terminates the buffer, would
-it make sense to switch the existing read()/pread() call sites in this file
-over to it as well? The new helper is safer than the bare reads used in the
-other subtests.
-
-> +/*
-> + * Name filter tests below run veristat on veristat_foo.bpf.o and
-> + * veristat_bar.bpf.o, both defining programs 'foo', 'bar' and 'buz'.
-> + * Every entry describes a single (filters, file, prog) combination and
-> + * tells whether that program is expected in the veristat output:
-> + * 'true' if it is, 'false' if it is not and -1 if veristat is expected
-> + * to reject the filter.
-> + */
-> +#define FILTER_OBJS "veristat_foo.bpf.o veristat_bar.bpf.o"
-> +
-> +static const struct name_filter_case {
-> +	const char *filters;
-> +	const char *file;
-> +	const char *prog;
-> +	int included;
-> +} name_filter_cases[] = {
-> +	/* no filters, every program is processed */
-> +	{ "",			"foo", "foo", true  },
-> +	{ "",			"foo", "bar", true  },
-> +	{ "",			"foo", "buz", true  },
-> +	{ "",			"bar", "foo", true  },
-> +	{ "",			"bar", "bar", true  },
-> +	{ "",			"bar", "buz", true  },
-> +	/* deny filters */
-> +	{ "-f '!*foo*'",	"foo", "bar", false },
-> +	{ "-f '!*foo*'",	"bar", "foo", false },
-
-A subsystem pattern flags this as potentially concerning: the table rows for
-'-f !*foo*' both assert 'false' (row should be absent), but there is no row
-that asserts 'true' (row should be present) for the same filter. Every other
-filter with 'false' rows also has a 'true' row for the same filter string.
-
-For example:
-  '!*foo*/bar' has (foo,buz)/(bar,bar) true
-  '!*foo*/' has (bar,bar) true
-  '!/bar' has (foo,foo) true
-  '*foo*/bar' has (foo,bar) true
-
-Adding one positive row for '-f !*foo*', such as { "-f '!*foo*'", "bar",
-"bar", true }, would make this filter's coverage consistent with the rest
-of the table. A regression that made the any-glob deny form reject everything
-would still satisfy both existing rows plus ASSERT_OK(err), because absence
-of a row is all that is checked.
-
-The expectations themselves are correct (they match veristat's implementation
-and the changelog table of the preceding fix commit), so this is a
-test-completeness observation rather than a functional bug.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/veristat_bar.c b/tools/testing/selftests/bpf/progs/veristat_bar.c
-> new file mode 100644
-> index 000000000000..83d2a2a1dfc9
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/veristat_bar.c
-> @@ -0,0 +1,3 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +#include "veristat_foo.c"
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31521742364
---===============1546216123881772698==--
+Yeah, fixes tag should be added.
