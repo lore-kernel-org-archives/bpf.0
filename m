@@ -1,63 +1,63 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF25E2C3257
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 04:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF2B2F7EE1
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 04:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786420917; cv=none; b=SWsfew9ncjlTaYeT2rNezXgQHUx3W/F1zwLY153xiUB1xFjAnIKa+cc7ONmBowlcGRLNcFlW10hGgOV9wQJy8ZNUobVVMR8rFtNdnYjcWlunEwBlBHpsC2XbNET+jIICd3gnSjH87/q95RWfwMxJQ322SMkY9HUEi9GNIoTpPnc=
+	t=1786420921; cv=none; b=S19SqMBmcEKSRkVYX0LSjk6KadYebb974Hh2uYBNlQRabe4IAgHu7uJbdiu04AGTwvhdHbXl7HyMzHTlFcSFe1h1IpkDDVP9uYvoU4qhUVDalo8ylwCJ0Qh36NlBQ1/jQNf7i8A5jxzuf6HrFW37ALznLB3mCRyZF8snYyMbyAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786420917; c=relaxed/simple;
-	bh=JKB8c704sCV4XMi2SILB65TPadhP+/dZ+kBPOImvi7o=;
+	s=arc-20240116; t=1786420921; c=relaxed/simple;
+	bh=wyrRbzBCRcFfgGyw6L0mkv5rVWa6/BFxWE6D7AqovX0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fYKX6A5Ep75NBMceyDo+2dzbrirTxrblj5sUt9v+D9Zl3Vs2KY7zUivKOchjGp1v7P280ybfF5UbCluNYxWNTb+g/ak5bA/lr5gyRlmHX+qd85SbDXWSPkbCIzb6ObtLE1zb6am5/3Xk26CUlXjaYd/zLgZyZuk2oVQiua3vSZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=haxzS+Td; arc=none smtp.client-ip=209.85.215.179
+	 MIME-Version; b=H7+cpo0pwm+I7FXVifWrOgE2/eZjtO/GzIzgsUdqR8S08SQjvdeFOycbNyExWnB2AtsT42va6en28Ej7Ac4TXMo0rstNPn2xh6gN01G8hfZqTRv8lmQESSxdegBkGTKa5ISyCBvkeBGfx7ugMdGFnq5R2a8XDGIfClDSkRIc2y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j3vFiTOY; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="haxzS+Td"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-ca957432c7fso2541439a12.1
-        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 21:01:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j3vFiTOY"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-84862b0d5aeso2475950b3a.2
+        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 21:01:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786420916; x=1787025716; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786420918; x=1787025718; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=TUF/Ie1CAko6dSXUa4KbdnibBpL2SvEJG3sel4Ep/bY=;
-        b=haxzS+Td+tHg7WO2xu21LqUhUxpvz5k45ukPO14aDo/YNqVY+uZ0Z61+qdwpxb4j+p
-         BTgcAtC2+W5jKivlZTATVvI6IfCnMPSYc3XBqA/SgKUj72sRnDU2UbWlyWQQvc86pdKb
-         iAPBSqK1T75HkIqQNnvZv9WTXlo/dr1O6omyjvP7RvnoKzrriorb8DFwUpOS9BcJfRfr
-         saVGL9D2c96s1plnEOggMV3jFx02Out/uP8g1A+uj57oxHdoEZ0Y5u3fZW4mS4FPF8Ap
-         G7JF7CRe1ckvL5kfEPzinSafwk227yBZfszuTwFu/nBX8bH42YkYN6xsXguYQVo1F5Xz
-         JZZA==
+        bh=ht8yfAM2PTIYfCuXzXj9SbALgiJ1GqBCtjRB+c6/JlU=;
+        b=j3vFiTOYzUJHgn2eJy0FmYQeq5OUcuUSqij7IobVMl0KfAleE+Tm1xsyz5GlV7JhSe
+         tI63QlwSx9kcoUI6JVLw1adTfDf93m0GAnBzHYWwPax9w6jCZZFFAstCjaXzA/nN3mEW
+         s6Xctx0Mb+4c7hRcXnR0AxdBoklzZPmsqzRq5w0BnHS433D+ix0U/55/7cgpheAG0NfS
+         79TFqQZzCSx45hU4jwnfZWsD/5EokPaMjvWANMURuHSnbXueMVJ36hFaPkuufBpiydqy
+         uijvvAX3K3NYW246MrwPwYVdCMrVlyDxVOusU/F8XzAnernOXxgNRcgfMxzsAGIaHfti
+         JqOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786420916; x=1787025716;
+        d=1e100.net; s=20251104; t=1786420918; x=1787025718;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TUF/Ie1CAko6dSXUa4KbdnibBpL2SvEJG3sel4Ep/bY=;
-        b=NeDmiDeABBvQFtUjZkTHEG0icx76qFeO+51ig0wzCgJEQwsqV2TBlRU7oMwTTylr3w
-         7Tgz+9919vQN/HupHcqx6ishDOgURVvv22mqdrKwO5mtlKw+J0zd2BvdWEdY0GI5lF7M
-         X9kIAHft0umd3P1t/nETg2x7BydoPDEkccxyirSDGoXmiH21t2htixvkKUM9pdyNNcwE
-         CCmnoeouSuSRFLyErSDEqbPHZ55nGQSeWh65JJnVDLwMwYSniS4vzQbpniu023gP1UDu
-         7ohK/2zf43s2ezBfCzwgdb0T3OCU4CNPzJAGxp2DqHy5xTiBQip/exPxtIHNIV5iaTDs
-         zD2Q==
-X-Gm-Message-State: AOJu0Yytso30wmDRDodtA4n3LJWXMy5hsM7+w4CLtpD0fk0k+HfYyA37
-	nzVydloGBk4rRs0Fnw0X8wl+zdPXWyHwiA1k6EpjhMNqZwU91RKEmlHzGASSFQ==
-X-Gm-Gg: AR+sD11otWQYY5WCx76jcq1h5XZH6Sq0VBm88CcovMa8TjO8SgMbgJ6IfS6KDT3y6Pr
-	k/TU0mPAje7NzCbXSf7t8U6dV5rD4Te3tzeZ0q+olJsdnD5kFwVEd6aU7+8r/PP+ScLFTupf53d
-	+cZ2zTxJoGnu6qexrGs7wh8MhH2DMWWL4BVIKP2KVKYP41KNmKSEx/j6CNZk8j+KH8MAhc82i3l
-	14P942l02EkqOZ4j4Pm8Qd/jLNJxm79Q6qXs0qPmusSuyFxc2pQKW1qfJiRcWotwiSxaqXlKewB
-	jzn31h9NsYLwm3x+fXlQN8VrSbfYuQ08reL0DKu/TxxvCxSaBy5njQGwbCouGnCSDREgO3y1l8i
-	lA678dBL/EThO69VnBO+4I7VV+lQqIYP6qgyJB7v8HlldrxzntbR2QmuQSd67y5VX2AvIJWSmMi
-	+P3bwa1tuGOfj8O+MvDJKybKaX80EAfP5Mr09sQrzMX+ZNdWnx1fYyUPeDQQpN0Fxz7Ui/nODT/
-	80oOObPRjgepN4cppCWnqNmGJg=
-X-Received: by 2002:a05:6a00:4f8f:b0:845:3fea:96c with SMTP id d2e1a72fcca58-84fa873633cmr252213b3a.21.1786420916032;
-        Mon, 10 Aug 2026 21:01:56 -0700 (PDT)
+        bh=ht8yfAM2PTIYfCuXzXj9SbALgiJ1GqBCtjRB+c6/JlU=;
+        b=JGvqUY+xSJUXb86wOymsHwOXKAoYvbSYy/1YZ7CLtEyM3RVil9riarcjonzpp4krNR
+         NCUhRKMREHbbjgLTPq57khzYK7Kz2ccktecrf/C6lyNr5H/9m6PZsCn3NYh1o2F8hw87
+         s20F6vcv0+vJMHJB3FTfixUuCeelGyUCwNK+hSfKmG1mylwh7hovnPCgkGRhuJt37Igw
+         QH19VyENkoQEyTP1ZyXc+QiNshPZUyQQnWh6CAKiP8r2MDuKjYfG2bgh1pOpBKqk8Wbu
+         sWrGm72SXey1/wdlN7SQiQz/d2vUnrEBeKU2HMnBLngjEGgOyt6z2/qPoyf+/ntrJN7q
+         ecqg==
+X-Gm-Message-State: AOJu0Yyt/QS4zsnmalmK4c5Y5/eygT8NNFeAssgqdZm9jUZli5w0KcxT
+	Pbr/cf5nZ2HSVbw27dj7r6BamE3nhZFc83dTKM/inGAPiWst7BtO56ckWb7QmA==
+X-Gm-Gg: AR+sD13/Q+gBRRmMW0bLRnSqrn/fmpt2HG47BskdDoKI58oMLTQpK2d2Pz+epOtABEY
+	f4GyAsoqK0LL3UbZGl1J3sWkVP1yT0VtSJ0pRs9O7RRKJIw09bGQfNCfO0uoAqfu/pVfHYC8/Om
+	CV1B0JSP/r8TLOZ4flEJTwan5u1FwavqDzFXEw7c+bQ+LwYeMyvMVfolK2jGzDjojg+lMpykc4Y
+	wrQIWRf9wxLBeprV2DGURNq6Y/jTQ0TZKOoQpyioRktAb7iN7laBT88LMNdZzV3w9XgT+tPnA++
+	GdnVTmEeWvpRDHkpUAFcYrNCoBxtVJswat3r/leYvURG8aQ7CLDWZMg0CURo7NxXgfRYlh9wQ7Q
+	//OMCrWVdbw4KshkRuXZzPn85WM0dsJHZu8V9TA6f4lExytT07g1qyH2e1873dB2lsXCGS/i7aj
+	j1mExs2VztXipXZLJZUL/1v8wPYp/E6mtSsr+UYjIG6aKzRVWAV5OGNH7C0Gavx6BvYq1j1NiA9
+	XDEDmuDuxRc8DlAcEmXMEi72yg=
+X-Received: by 2002:a05:6a00:987:b0:847:7f3c:b5f5 with SMTP id d2e1a72fcca58-84fa869923dmr299588b3a.11.1786420918167;
+        Mon, 10 Aug 2026 21:01:58 -0700 (PDT)
 Received: from patterson.cs.ubc.ca (patterson.cs.ubc.ca. [198.162.52.65])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbed8bb9569sm163683a12.3.2026.08.10.21.01.55
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbed8bb9569sm163683a12.3.2026.08.10.21.01.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2026 21:01:55 -0700 (PDT)
+        Mon, 10 Aug 2026 21:01:57 -0700 (PDT)
 From: Ning Ding <dingning04@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -76,9 +76,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Chuyi Zhou <zhouchuyi@bytedance.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/2] bpf: Compare iterator types during state pruning
-Date: Mon, 10 Aug 2026 20:59:54 -0700
-Message-ID: <20260811035955.132989-2-dingning04@gmail.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test RCU iterator state pruning
+Date: Mon, 10 Aug 2026 20:59:55 -0700
+Message-ID: <20260811035955.132989-3-dingning04@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260811035955.132989-1-dingning04@gmail.com>
 References: <20260811035955.132989-1-dingning04@gmail.com>
@@ -90,32 +90,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-An iterator stack slot can be MEM_RCU or PTR_UNTRUSTED. These states
-must not be equal, or the verifier can prune an unsafe path.
+Add a path where RCU protection reaches zero and then starts again.
+The iterator is untrusted after this gap and must be rejected.
 
-Compare the pointer type for STACK_ITER slots.
-
-Fixes: dfab99df147b ("bpf: teach the verifier to enforce css_iter and task_iter in RCU CS")
 Signed-off-by: Ning Ding <dingning04@gmail.com>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/states.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../selftests/bpf/progs/iters_task_failure.c  | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index ea2153cf28d0a..4e6aafad33bd2 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -812,7 +812,8 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 			 * infinite loop check triggering, see
- 			 * iter_active_depths_differ()
- 			 */
--			if (old_reg->iter.btf != cur_reg->iter.btf ||
-+			if (old_reg->type != cur_reg->type ||
-+			    old_reg->iter.btf != cur_reg->iter.btf ||
- 			    old_reg->iter.btf_id != cur_reg->iter.btf_id ||
- 			    old_reg->iter.state != cur_reg->iter.state ||
- 			    /* ignore {old_reg,cur_reg}->iter.depth, see above */
+diff --git a/tools/testing/selftests/bpf/progs/iters_task_failure.c b/tools/testing/selftests/bpf/progs/iters_task_failure.c
+index fe3663dedbe14..566a1d3dffeab 100644
+--- a/tools/testing/selftests/bpf/progs/iters_task_failure.c
++++ b/tools/testing/selftests/bpf/progs/iters_task_failure.c
+@@ -61,6 +61,52 @@ int BPF_PROG(iter_tasks_lock_and_unlock)
+ 	return 0;
+ }
+ 
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__failure __msg("expected an RCU CS when using bpf_iter_task_next")
++__flag(BPF_F_TEST_STATE_FREQ)
++int BPF_PROG(iter_tasks_rcu_state_pruning)
++{
++	struct bpf_iter_task it;
++
++	asm volatile (
++		"call %[bpf_rcu_read_lock];"
++		"r1 = %[it];"
++		"r2 = 0;"
++		"r3 = 0;" /* BPF_TASK_ITER_ALL_PROCS */
++		"call %[bpf_iter_task_new];"
++
++		"call %[bpf_get_prandom_u32];"
++		"if w0 == 0 goto unprotected_%=;"
++
++		/* Keep the outer RCU lock active on the straight-line path. */
++		"call %[bpf_rcu_read_lock];"
++		"call %[bpf_rcu_read_unlock];"
++		"goto merge_%=;"
++
++	"unprotected_%=:"
++		/* Create an unprotected gap on the taken path. */
++		"call %[bpf_rcu_read_unlock];"
++		"call %[bpf_rcu_read_lock];"
++
++	"merge_%=: r1 = %[it];"
++		"call %[bpf_iter_task_next];"
++		"r1 = %[it];"
++		"call %[bpf_iter_task_destroy];"
++		"call %[bpf_rcu_read_unlock];"
++		:
++		: __imm_ptr(it),
++		  __imm(bpf_get_prandom_u32),
++		  __imm(bpf_iter_task_new),
++		  __imm(bpf_iter_task_next),
++		  __imm(bpf_iter_task_destroy),
++		  __imm(bpf_rcu_read_lock),
++		  __imm(bpf_rcu_read_unlock)
++		: __clobber_common
++	);
++
++	return 0;
++}
++
+ SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+ __failure __msg("expected an RCU CS when using bpf_iter_css_next")
+ int BPF_PROG(iter_css_lock_and_unlock)
 -- 
 2.43.0
 
