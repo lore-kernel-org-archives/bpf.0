@@ -1,67 +1,88 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D732F3264F9;
-	Tue, 11 Aug 2026 10:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F631F3BA4
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 11:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786445894; cv=none; b=sVCiqcT3bTvkB9v0o0ir78TJ2u9EZTARSt+CsV+7LC9LkwL5rsRb513l11dhHJsvqwirFd9fi68STvT793lgBxhOlkO971jUc+80qB92xvC2PtNIIeePbuXulvmCFuCXJ8yK5M994XSq8ZEhXcyvOZGXNBxSBydDqqHEV56YCrs=
+	t=1786446406; cv=none; b=ts4YtS2Iz/oDb6uGeBqMWv/daLc/6h+y67y62WetqhLrGEV1VE+Se/ceZZsF6/va8YCMyVsi5zYMiEAMb47E2kWowx3V4ccaZIjhgcngIPwO1jjBrCksLzXkgmyQwe/sH14eAG9FK2+xHYwHwHgLo3Ew9kj0iKUXXwN3d66n6+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786445894; c=relaxed/simple;
-	bh=E2Q5I65meboDct+4hfaKsQDzSd1S1/tsAKEVH3DzJwo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oD/4e6ytZCSAphAmmUHPkFfz5ytN/OqEjuAIM0jmRwttlAKncQfXahDYQciEQawFge8V5PR4LGsNepPUkUZs7DIDiWOaNJFtb/3LlHgJM3orPZxYE8hEhZaaxBY6Z3bGa5ZKPVCy5xXGkW8B/MeEZS/E1aeb3PWFCLf3kZ0D77k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=tKGjJivw; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1786446406; c=relaxed/simple;
+	bh=tukP0gFXkGjbkkO6Sate91Hwdk6oZ5TQM06hGsQvC+U=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m+s3sxUafsSweHtS8Bb7b1pHL1ZFWAKyCWSB4dP9I8lxfr+IsNjiLlnvZr0osbGW0o6RUMB2bROTqPzF+o0eiEPd6J0s/831MDmKmuwx/CmmJt3XPx1hkOgdtL5dRuQx1lMUr7eFupSVOgSTr5YP1fvb13l9Rm7TbNqllZUf1LE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PxtFFuBV; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="tKGjJivw"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 424FA1516;
-	Tue, 11 Aug 2026 03:58:08 -0700 (PDT)
-Received: from localhost (a085714.arm.com [10.164.19.28])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 820043F86F;
-	Tue, 11 Aug 2026 03:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1786445892; bh=E2Q5I65meboDct+4hfaKsQDzSd1S1/tsAKEVH3DzJwo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tKGjJivwGyrqmHqJQhgHkKc1NYH5dpUS0DWnYV/mVHQACS1frf2TRd2UhTyMG8JvA
-	 Bw0BndUTcgOm1QZBl4JI/V5svJA1QNwOZVE/G2oL5rd2q44W5xc5apxl/s1/v2NISQ
-	 JQrQY7r9UAbIHixEwxX6nTsx2ykLpYcEoEZ681SE=
-Date: Tue, 11 Aug 2026 16:28:09 +0530
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-To: Muhammad Usama Anjum <usama.anjum@arm.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Dimitri Sivanich <dimitri.sivanich@hpe.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, Juergen Gross <jgross@suse.com>, 
-	Stefano Stabellini <sstabellini@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	David Hildenbrand <david@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, SJ Park <sj@kernel.org>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, 
-	Mike Rapoport <rppt@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, ziy@nvidia.com, 
-	pfalcato@suse.de, agordeev@linux.ibm.com, ryan.roberts@arm.com, 
-	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-parisc@vger.kernel.org, xen-devel@lists.xenproject.org, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, kasan-dev@googlegroups.com, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	damon@lists.linux.dev
-Subject: Re: [PATCH 3/9] mm: name pointers to copied PTE values ptentp
-Message-ID: <e7osakog3yvdewhdlrk3bsp27pwt2nnhroeb7zihlfxyjotarb@rwxkcb25crh3>
-References: <20260806083926.1807279-1-usama.anjum@arm.com>
- <20260806083926.1807279-4-usama.anjum@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PxtFFuBV"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c1600d040e4so132710466b.1
+        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 04:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786446401; x=1787051201; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ncPBKBVNM6ovNcsCic32cHugMXoIYOhz070STPXc4TY=;
+        b=PxtFFuBVzA94mCJ3JJ759NJiepI34WbXGkeLbqFaW7SIkE0SYvZzAEJdTw33amsc2q
+         LUxSByhQxUvt2EnFnbM4ezb89uRIwnb0fZEwO/N1bY6doD+I8hqRErZnCj4tf9Ipw1gd
+         2jxWYffv+nLchU+5A15QXk4yhnseUNksra+DF7eDGzhywISBNhhjEtQhvkLEWqzgkrgW
+         C8IsJl22qBLJ8TzT0hPsyoyMVjL8j0eBpLzjftMOj/yqTlzUy0b1ofTJYmnJDSwOox6N
+         /TR/C5373pAFSlJ3kW+c9uHzNnVOaDWEeDX2ZBN0ChTTJc957HCZHGcYGldW8IabYuZP
+         uNsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786446401; x=1787051201;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ncPBKBVNM6ovNcsCic32cHugMXoIYOhz070STPXc4TY=;
+        b=NiY/3ZWZZFZsEEdzJlRR2fYpgB+EWWnr/wDBcK/zco5hTixFmpl/zGiKlsN/J7EoRP
+         V1THXcKuXY/C2Koe7SL6n5bNFFBvur6VTUMw3YbT1m/msddSk0diFjOwFRroxiagzJ1J
+         pCcHbSpf90kP4HtZHKo8iQ35DFOsMQmMq+p2Lf6a8spOHZ4cNeAxp22OrAqBwCDC2DcL
+         A5X2VHKfx9s0n12TXCjWT7Lk+lUB9thGQYIQre1J6Hz+xWjpHZCzny7GyByFhO/lPbPB
+         qMe1QzCBFo7qSjTZuO4Rs33Af3vieUjL0YSRl/1D2bz2x/1bsL0IhYyCJpiqCA01/9+K
+         WaSQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq4vL34aoxCMdbU43eEI9ZJqk+xv3QuKKatrqgv4DzIqA/1nBQF8m9n+DTLDWDeVrTqyvg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyu01mX6c7Pm03M64smxi5DdA/FbJGpjHHt50LRNcu4kxEoxTrk
+	jppLXzbJWLefgLsIGCT26QnPZMJMR+l0M33izxmjLEUzAMG6EzAJqDS8
+X-Gm-Gg: AR+sD13TzA3PQN8iWBetHJguaywoj1DLey699gYQFugF1I4WVx8lePCsyT+H83lgUgj
+	YMQ08pEVy8eIYCC1e3UYhoDDjRN7KKq630fXE5RUAN5KxcAFxQKVbQAxj3s0hmFUtrva7QSl58/
+	K79x8pmdwe2tvF7rwQe1dhNJTVva0OabGfiOO19/Q+4YXbsGa2u4bR8bpZaxGdqeiaankxfYrxz
+	s/TQIqpG42RrbyrZvVzxqel7+E+6XD/dob+2BotY8zgijkf3oVb/dUtIHTwmeaLJgYRgr1HqaTn
+	wB/mPixSrjEDyr0lssSLYZ1cX1qBejgF7LsNRaSoAUQWZecN+7X1yhgVgSsZ87sqiIfLT40ACxq
+	O91+VIp3JYgAf4URLPvzypyTCMJIeKPdSu4mwo4NHlT1N2Td1PZ001cUvhw1kjlgDHGiOTkNwpH
+	ZKP6aCfmhWh+YHKAnLQR8otShY78XAge+GTBiDMyoiTNl9XaH54CWC7smUNw==
+X-Received: by 2002:a17:907:3e0e:b0:c19:5bf1:368e with SMTP id a640c23a62f3a-c20e5ed6832mr106791266b.13.1786446401261;
+        Tue, 11 Aug 2026 04:06:41 -0700 (PDT)
+Received: from krava ([173.38.220.33])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c20e414ddadsm37804266b.27.2026.08.11.04.06.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2026 04:06:40 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 11 Aug 2026 13:06:39 +0200
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next v5 0/2] bpf: Fix trampoline image UAF on multi
+ detach failure
+Message-ID: <ansCPw7KqDWQ4s5N@krava>
+References: <cover.1786412280.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,109 +91,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260806083926.1807279-4-usama.anjum@arm.com>
+In-Reply-To: <cover.1786412280.git.zhuhui@kylinos.cn>
 
-Subject line is very confusing. Perhaps something like the following.
-
-mm: Rename pointers to copied PTE values as ptentp
-
-But even 'copied PTE values' is not very clear as well.
-
-On Thu, Aug 06, 2026 at 09:38:41AM +0100, Muhammad Usama Anjum wrote:
-> The hw_pte_t conversion must retain pte_t * for pointers to standalone PTE
-
-We need to explain what is `standalone PTE values` first.
-
-> values. Name the value parameters ptentp in the install_pte callback,
-> write_protect_page(), and guard_install_set_pte() so the later mechanical
-> conversion can distinguish them from pointers to PTE table storage.
+On Tue, Aug 11, 2026 at 10:46:18AM +0800, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
 > 
-> Some functions already use the ptentp name, including:
-> - madvise_folio_pte_batch()
-> - folio_pte_batch_flags()
-> No need to convert them.
+> This series fixes a UAF in bpf_trampoline_multi_attach_free() where
+> old_image is freed while ftrace still calls into it, and makes
+> bpf_trampoline_multi_detach() return void as suggested by Jiri Olsa.
 > 
-> This is a naming-only change.
-
-Small nit - s/naming-only/rename
-
-The commit message needs rewrite clearly explaining the following details
-
-- What are standalone PTE values
-- How these are different from HW pgtable pointers
-- Change is just a rename for pointers into such 'standalone PTE'
-- These renamed 'ptentp' here would be used for skip or replaced during
-  upcoming mechanical change via a script
-- No functional changes intended
-
+> Patch 1 fixes the UAF.  Patch 2 is an independent cleanup that
+> changes the return type to void and drops the WARN_ON_ONCE at the
+> call site.
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> ---
-> Changes since RFC v1:
-> - Update the description for the architecture opt-in conversion.
-> ---
->  include/linux/pagewalk.h | 2 +-
->  mm/ksm.c                 | 4 ++--
->  mm/madvise.c             | 4 ++--
->  3 files changed, 5 insertions(+), 5 deletions(-)
+> Changelog:
+> v5:
+> According to the comments of bot+bpf-ci, split the single patch into
+> two: the bug fix and the return-type cleanup.
+> v4:
+> According to the comments of bot+bpf-ci, add Fixes: and update comments
+> of bpf_trampoline_multi_attach_free.
+> v3:
+> According to the comments of Jiri Olsa, drop patches 2/3 and the
+> prog-side machinery.
+> keep only the simplified image-side fix in
+> bpf_trampoline_multi_attach_free() and make
+> bpf_trampoline_multi_detach() return void.
+> v2:
+> Folded v1's two detach patches into patch 1.
+> According to the comments of Jiri Olsa, Pin the prog (pinned_prog) on
+> cur_image so it stays alive while ftrace may still call into it.
+> Make bpf_trampoline_multi_detach() return void.
+> Fix the same UAF in standard (non-multi) trampolines.
+> According to the comments of sashiko, Fix the prog UAF in
+> bpf_trampoline_multi_attach() rollback.
+> Leak the trampoline in bpf_trampoline_put() when cur_image is left
+> by a rollback.
 > 
-> diff --git a/include/linux/pagewalk.h b/include/linux/pagewalk.h
-> index b41d7265c01bc..c34d826c5e4a2 100644
-> --- a/include/linux/pagewalk.h
-> +++ b/include/linux/pagewalk.h
-> @@ -89,7 +89,7 @@ struct mm_walk_ops {
->  		       struct mm_walk *walk);
->  	void (*post_vma)(struct mm_walk *walk);
->  	int (*install_pte)(unsigned long addr, unsigned long next,
-> -			   pte_t *ptep, struct mm_walk *walk);
-> +			   pte_t *ptentp, struct mm_walk *walk);
->  	enum page_walk_lock walk_lock;
->  };
->  
-> diff --git a/mm/ksm.c b/mm/ksm.c
-> index ad05d7791307e..11d50518d02e9 100644
-> --- a/mm/ksm.c
-> +++ b/mm/ksm.c
-> @@ -1292,7 +1292,7 @@ static u32 calc_checksum(struct page *page)
->  }
->  
->  static int write_protect_page(struct vm_area_struct *vma, struct folio *folio,
-> -			      pte_t *orig_pte)
-> +			      pte_t *ptentp)
->  {
->  	struct mm_struct *mm = vma->vm_mm;
->  	DEFINE_FOLIO_VMA_WALK(pvmw, folio, vma, 0, 0);
-> @@ -1371,7 +1371,7 @@ static int write_protect_page(struct vm_area_struct *vma, struct folio *folio,
->  
->  		set_pte_at(mm, pvmw.address, pvmw.pte, entry);
->  	}
-> -	*orig_pte = entry;
-> +	*ptentp = entry;
->  	err = 0;
->  
->  out_unlock:
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index 07a21ca31bad4..c324cc991f841 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -1101,12 +1101,12 @@ static int guard_install_pte_entry(pte_t *pte, unsigned long addr,
->  }
->  
->  static int guard_install_set_pte(unsigned long addr, unsigned long next,
-> -				 pte_t *ptep, struct mm_walk *walk)
-> +				 pte_t *ptentp, struct mm_walk *walk)
->  {
->  	unsigned long *nr_pages = (unsigned long *)walk->private;
->  
->  	/* Simply install a PTE marker, this causes segfault on access. */
-> -	*ptep = make_pte_marker(PTE_MARKER_GUARD);
-> +	*ptentp = make_pte_marker(PTE_MARKER_GUARD);
->  	(*nr_pages)++;
->  
->  	return 0;
-> -- 
-> 2.47.3
->
+> Hui Zhu (2):
+>   bpf: Fix UAF in bpf_trampoline_multi_attach_free on update failure
+>   bpf: Make bpf_trampoline_multi_detach return void
 
-How did we ensure that the above changes are comprehensive and nothing
-else got left in here ?
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+thanks,
+jirka
