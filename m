@@ -1,148 +1,119 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0BC44683E
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 14:19:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927A836B93F
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 14:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786457967; cv=none; b=YU80dS3AKAVmMqZoEUgnnusVB6BwiuPul0bfVFyk5c3LtievIw0ktfHTG+4MuFdlro6efercTwTT5fONfYWv3WWId15riECfLQXHGtVMuN8ckcEDnnxIQapRqOreVyosd4VTA+pfYA8C5/c8T2IGbBMjZwLzH4Iytzwuk4c3LZU=
+	t=1786458156; cv=none; b=kEsR8asIe1IRySwZYkp7pGxvo1lP+KK1Ohea5oH+0foXZYWi+/G2IsxMrnXrsCgRQIFdTUCAGLQql9XCVZFFcq7/7XVVb/2eGJRtIY4avfpOULnsx1Pq4JKuFvJXnL9QIO6Uhi4n2/mdhZi1qKaENuPOcv+e8F/EkZp/gL4Alis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786457967; c=relaxed/simple;
-	bh=fl6lfBtHnEcKWredUepG6OWnZ8HLbdJ7IuQlu4Oxyb8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aLw7FHq77TyjJSnRZuFSACbQQm7CFCtIu8TfCBaOpt6IY/SZ0o58M03UipMAzGWiPyT0viYVhFCwfLG+pQocQ/8qD+EfT+08qG8RsuDtV226KnXcAF6fyq0AIkgqLWxYbp2BI7WBiPoPA/AIvFG2eveZ063sb3sqPGmjtLLEja8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vm4NGNIU; arc=none smtp.client-ip=209.85.216.45
+	s=arc-20240116; t=1786458156; c=relaxed/simple;
+	bh=nD2ZiDJtQsFCRpD1CX4m5JEumUvjwleLhSwPZM95u28=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=Uvimzpaw0ip2YLSfvL58/uSfd8mc4+vU8o+L04Pu28fjWDVMtvCeqy3eQK6gNrqvL3pXyBmCqvYc3EK1r0NqpGpaFq4FTFexZSK8IK8CtI8vY7Q20X3bzS+u01ELQclPcxfr9x2ke2GwWlvzDLxKB2Us+l0UHIFw0o5kXlbvqlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bHrxhT3g; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vm4NGNIU"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38dfe7eb825so2654650a91.0
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 07:19:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bHrxhT3g"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so11597335e9.0
+        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 07:22:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786457964; x=1787062764; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=F+AoUrsBpUtc9cshP/vnlsCUHVE4oAKvZ8tNF60vxD4=;
-        b=Vm4NGNIUM3qpsXd5V+IDqCW3zS+zncWbzxgctrgS6tfKKECb1Ed082I8aw+s03j9dV
-         M408HlzzV7fdckO2YKL7F3bpDkfuFwLHDeY8bScfwc9CsuzHalwKePq+/2hw9Y3p9zG1
-         F2SWiRi4BUUFq4AT69VSSSuVxTj1c3D/jfhTRC8OzUxNw7/GD/vEFc+ol7GVMHhn08om
-         xUwWrBHKzT1jBsXzvcLHwTOqGNH4nrT/UT6RJVf4tdn5tPPB/obRpf1ETo/cQvQInHPl
-         roOWOMbs986flTQ7551UJuwDIBjUJExuZayG3MLNGqnrO0H5mpXgTW7z/V/HASlJrcPA
-         4E5Q==
+        d=gmail.com; s=20251104; t=1786458153; x=1787062953; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=yP++X0pXYzpQN6HJ157j1zYNVbC+m82XWMtDMMQ31/s=;
+        b=bHrxhT3grp/nreL+gf/2+IoLc8RirYCt9SnYnIgx/Ka0EkgGlXzshWOXtDfdE70YMr
+         72iveKrXhYTqzK41+BIcvIWX+zL+SWeUgQGGtZ9VMv1/IiaycJTMdSdgpL8L/hX92ugm
+         21ymzXy0i5ITDHBOkaHqjZPff4uoswAYb2Z+X5SLM/5MvNIBQfEsyorKWTN90GgFD0p0
+         S/hrR2uVANCLSIGLvEvhDUq1PIz0/hGxfP6S6hKE0jmra2UXdiaTPtp94rcgarp1SA5K
+         2sKHa0u3V23QfAnsn33eH0wHmJixidMvFZvDk8blI+zkHlhPJMjcCByNym82GcojDkAJ
+         d9nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786457964; x=1787062764;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=F+AoUrsBpUtc9cshP/vnlsCUHVE4oAKvZ8tNF60vxD4=;
-        b=eTFQPWBJbnwRMyI0DLhXgFJLBYMe6fyer5HV0NiNGCJuVAdLbOVqVazKuVx7+tmOSE
-         DXXqH6jibYRspBeLRAYokzW7Et+FlT9wP6feqQLl6FMOUQNaSILEKgE6/I9m9KQ9ohIM
-         mQqxOYl5sqEnup4O+WHZ2YZovLm9HHalyagtGqUMXeWOADk0ln71ZJlxFizIQzEvnSVm
-         SrsHGA+Yyx+eDjGPnaFa/6MnrWiY1QQ7Drv5H4KXZINIEPmN4NaQ4+xEGqkS+p30Rrn/
-         nsGoJWswKCQK/w704lFMqnzuu3gMJcJySdTmlzi/O2v7EN6OuFJRjUcW7raG39vf5xgz
-         o7vA==
-X-Forwarded-Encrypted: i=1; AHgh+Ropy+iF88hpZ5ywJDtgCHKKAZfyt6L4IGk74OybLxK8A4sj+CeTKXk+mIcLkdKZLX+1+L4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0FpPHPY7vHcs4lqWJImpWNVnHDLkUTCl2vWD8WG78HjvKtRDk
-	FNOxSgKchLBNYfWVxyB80J5BT9++n4jDhE4E0NAetg+evQetzE53pl0n
-X-Gm-Gg: AR+sD12YkYEgI5a87QPQThEuoaE6ttKw+VYMizC1qg0g96uFcY4rnSNAXB0bXUdlY+c
-	Y+Bau1Xk5fOxXGerEX2h6VAWa3eJL/b68ji8UwZ7iDtinv3tgojNhcI1BeBFNGwa/T5p3zgZ1+v
-	BqQeXNRbcZSq0IA0rrrhQGAxVhGipH5bNEyNyiuxaO5tMfJPZt2zBoRLKKNAnpI/F//Iof5koPt
-	9GO7yVb2/E85SmUuhZNG/htc4zJxXabrS+NiLDt5vd+YBsRPg0JZ3MGIutgu39h+5KnJDz4j69P
-	garMDUa059V9iVQefRxRALuhxa3KtSeMCHfEhOAHG+ObzG6+n1L2v2fwxbPa46+GEfkw8J3ltzV
-	QLAlvG//uo87df16+jNYV922/m5cjL6uDwO7iSD30GdDU7+JEGyvVldvq3GANPEFPs+5joirJ4Y
-	WMKr3/4NZERTVMGSz5VClb2E1GHnRlG9sqVtuKlYtpXfzUkP7XZ+sZiTA=
-X-Received: by 2002:a17:90b:58c3:b0:38e:250b:122f with SMTP id 98e67ed59e1d1-392ec622163mr4066567a91.16.1786457964178;
-        Tue, 11 Aug 2026 07:19:24 -0700 (PDT)
-Received: from omen-arch ([211.58.239.197])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d534bfc9sm4028489a91.10.2026.08.11.07.19.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 07:19:23 -0700 (PDT)
-From: Junseo Lim <zirajs7@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Stanislav Fomichev <sdf@fomichev.me>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sechang Lim <rhkrqnwk98@gmail.com>
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Exercise negative optlen in cgroup getsockopt hook
-Date: Tue, 11 Aug 2026 23:19:08 +0900
-Message-ID: <4dbdcda23b2f2be06c5659f8102cd6bd036825b3.1786448307.git.zirajs7@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1786448307.git.zirajs7@gmail.com>
-References: <cover.1786448307.git.zirajs7@gmail.com>
+        d=1e100.net; s=20251104; t=1786458153; x=1787062953;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yP++X0pXYzpQN6HJ157j1zYNVbC+m82XWMtDMMQ31/s=;
+        b=qQ1QvUvQNHtMcl3fzKcpt/yFfYbhXwJly8hXaA0hrJTrbe7bR2z0Nri/ol6+6eusBQ
+         v9i4GB7nUnsAso1OYB/KZkWmMeryvpgulqnViKZTlzpK4PBOjPObQZSYgOHyfsIxeHuD
+         7Gd1PpE2S5IV/gC7TzNTjNhy80e7FoDDr9NK6t+tFwTXIMKnAZ3nwK6+vkUy+SED3cha
+         SRBc0Wy1QFPa25WiFWN/RDCNdT3MjH5n1rbcavhrPv2gk5jVcOmKrVocn/fhJpZqsq3X
+         Dvl/jePK4clvPp3kxTP00Q9tqaKhzVvkMiqdelqYm3eNZhmAG9K+NZBGFzJgA8Xj2LZ6
+         YCGw==
+X-Forwarded-Encrypted: i=1; AHgh+RqGxX1zqc9YjJSmsprJTcpe7VP808bzqDVU/zC0qKU+gBQUHd+cXgZMmoWEfB6/+OdXTEQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6yTB2w06phc5keWa1n4/2x8hVHgYv4WPl/7d/47TEQHxN2SQz
+	3OArMdkTNjuep7KLVzqMAypzpnT4AuKk1X4Sxe7y04T23PmYKoW8gEM1
+X-Gm-Gg: AR+sD13vXYygE0uQZ95tc/d6S1vQ5RZ85/hK2gmiSHLBSdchi58ecN5yu3oq8UZDQMg
+	pxtQD81fJ0GbyKLEuWGzFpuGQZnnjNWYROAmelUaSs3L4YDmJePa15D7hd7587s4C+kr61Ejs/P
+	icdIUK9ZFqm2bpShnjMn+YIVbDGiXpRHoqULl3ff8mITJHTcbV5JOtXmywvI9PluViEv7sleUny
+	WryCyu+tAEVXqxh+L80sOI+uewHDMhUVE31mya+O+xNMFlhfP5pkgBm0KLEvOZED1JqoTzkW3ZW
+	Wk0Bs6b42KvU+3yVCpo4avrg0mogG5wVPyHtEWa2e/oIYme1y05tAJOm1vin+EPsTZaRLLau1We
+	Ef0OckZZblA0UzFxqR1vcBcmRRmybPP58zibh4ArMxzPeO8K50Ni74nJeOctPzX7Vy39s5u+006
+	C/kQg3dYu4yRmmOsxnXnSqphMv4vOSKpuo34sVd8inFCnLop2RknfHvoGiHrQjEJzqyjQ9e2Xrg
+	re/yVDRNSJwFqJuG9QOwmsKNLlUoptBnpQU2cUbU9HC9jthO0ihxJ870b9sPVkgNvyeY/Pjph8H
+	pRYPfNt/h7d+oAoeg6cPNOCnyikBsWM11gyQ8Q==
+X-Received: by 2002:a05:600c:138b:b0:499:5c3c:41a5 with SMTP id 5b1f17b1804b1-499783b0a4bmr57469525e9.0.1786458152621;
+        Tue, 11 Aug 2026 07:22:32 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499788f13cbsm59767885e9.9.2026.08.11.07.22.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Aug 2026 07:22:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 11 Aug 2026 16:22:31 +0200
+Message-Id: <DKM6K95EN9OF.3O9XNYWVLYHDE@gmail.com>
+To: <chenyuan_fl@163.com>, <bpf@vger.kernel.org>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Yuan Chen" <chenyuan@kylinos.cn>
+Subject: Re: [PATCH bpf-next 0/2] bpf: Cancel special fields in resizable
+ hashtab on recycle
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260811095531.3294167-1-chenyuan_fl@163.com>
+In-Reply-To: <20260811095531.3294167-1-chenyuan_fl@163.com>
 
-Add a cgroup getsockopt selftest that sets ctx->optlen to -1. Use
-TCP_ZEROCOPY_RECEIVE to exercise the kernel-buffer getsockopt hook.
+On Tue Aug 11, 2026 at 11:55 AM CEST, chenyuan_fl wrote:
+> From: Yuan Chen <chenyuan@kylinos.cn>
+>
+> The resizable hashtab (BPF_MAP_TYPE_RHASH) still eagerly calls
+> bpf_obj_free_fields() when an element is deleted or its value is
+> replaced, which runs kptr destructors in the caller's execution context.
+> This is unsafe for BPF programs running in NMI context (e.g. perf_event
+> programs attached to hardware PMU overflows), where referenced kptr
+> destructors may take locks or otherwise cannot run.
+>
+> Commit a3a81d247651 ("bpf: Cancel special fields on map value recycle")
+> switched the hash map and array recycle paths to bpf_obj_cancel_fields(),
+> which only cancels NMI-safe fields (timer, workqueue, task_work), but it
+> missed the resizable hashtab. Patch 1 applies the same semantics to
+> rhtab; patch 2 adds a regression test.
+>
+> Yuan Chen (2):
+>   bpf: Cancel special fields in resizable hashtab on recycle
+>   selftests/bpf: Test rhtab kptr recycle from NMI context
+>
 
-The userspace-visible result is -EFAULT on both patched and unpatched
-kernels, so the return value alone cannot distinguish the bug. The test
-still exercises the kernel-buffer getsockopt path with a negative
-ctx->optlen, which reproduces the hardened usercopy warning on unpatched
-kernels.
+At least go through the mailing list before sending patches.
 
-Signed-off-by: Junseo Lim <zirajs7@gmail.com>
----
-Adding the selftest to sockopt_test triggered the problematic path, but
-detecting the broken behavior was not trivial because getsockopt()
-returned -EFAULT on both patched and unpatched kernels. The selftest
-mainly serves as a reproducer for the hardened usercopy warning.
+https://lore.kernel.org/bpf/DKEVG8ZVJDDQ.2G40FTOIZKU57@gmail.com
 
- .../selftests/bpf/prog_tests/sockopt.c        | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+pw-bot: cr
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt.c b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-index eaac83a7f388..3834dcf0f9dd 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <linux/tcp.h>
- #include <test_progs.h>
- #include <io_uring/mini_liburing.h>
- #include "cgroup_helpers.h"
-@@ -283,6 +284,27 @@ static struct sockopt_test {
- 		.error = EFAULT_GETSOCKOPT,
- 		.io_uring_support = true,
- 	},
-+	{
-+		.descr = "getsockopt: deny negative ctx->optlen in TCP_ZEROCOPY_RECEIVE",
-+		.insns = {
-+			/* ctx->optlen = -1 */
-+			BPF_MOV64_IMM(BPF_REG_0, -1),
-+			BPF_STX_MEM(BPF_W, BPF_REG_1, BPF_REG_0,
-+				    offsetof(struct bpf_sockopt, optlen)),
-+
-+			/* return 1 */
-+			BPF_MOV64_IMM(BPF_REG_0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		.attach_type = BPF_CGROUP_GETSOCKOPT,
-+		.expected_attach_type = BPF_CGROUP_GETSOCKOPT,
-+
-+		.get_level = IPPROTO_TCP,
-+		.get_optname = TCP_ZEROCOPY_RECEIVE,
-+		.get_optlen = sizeof(struct tcp_zerocopy_receive),
-+
-+		.error = EFAULT_GETSOCKOPT,
-+	},
- 	{
- 		.descr = "getsockopt: ignore >PAGE_SIZE optlen",
- 		.insns = {
--- 
-2.55.0
+>  kernel/bpf/hashtab.c                          |  28 +++--
+>  .../selftests/bpf/prog_tests/rhtab_kptr.c     |  87 +++++++++++++++
+>  .../testing/selftests/bpf/progs/rhtab_kptr.c  | 101 ++++++++++++++++++
+>  3 files changed, 207 insertions(+), 9 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/rhtab_kptr.c
+
