@@ -1,277 +1,140 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16613FB7EB
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 09:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A044A43803C;
+	Tue, 11 Aug 2026 10:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786442192; cv=none; b=BMm/RCJ0w8H4riPYt9NZOQHQwt0zUBDaiAy8aOE2XwfgmGK59F0sJjR6mbqf/nqNHevBVK6Pb804klF9Ib0MPUFiAumEmJ9FDfNldA6qkLXi6Lib1axpxhQ9vd8G8EqHQvkFIcqubY4Z1OFZSj7ZNrp0S2FsYfZSYK//Q1jVb74=
+	t=1786443313; cv=none; b=Bqxlp6sg9e2WEnsR2jecXlrekMEspJ7n11p/gGSVxaHljG7ER51L2l8E3n6md4mrO26K69txvTjBU8tBvokoUl54R6iGi5InNsdqnxubKnPEeTFy36LSxV9mALowtRQF3rP2kTv/UY9+x7L1lOq561axFZIrsD333Qir+Hq5L+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786442192; c=relaxed/simple;
-	bh=VhQGVHiCYkwcAgEmBgN5ByGoexsZPAG8N1y7T7Rx3aM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ademktnO6j6XH+rmOMhxe01isTOt81crjOm2Gg7sabLTrYs0c21dHzyMnvThOkpN+qhrGIr+cOxSJUAL59+0ccqxuN0WnnRKNH5jmGbTfHkuq+TJsYgmqdBNUREsjBcOwWOxgkBZhmjirB30TaS0zDzX5CCXTGEbfin2FFJoIH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=VUfiS4NR; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1786443313; c=relaxed/simple;
+	bh=+szcqBCq9eZ2ua7vWX4x/+s1q8ODJlqcpxLyiJuSiwc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kArIUtkpR5g7acR3onkZlUjOwsnz/K91BhFqFBGAJ4cmOHV13eurrlnEwJwgRepSvUAwYIVC3KD5vcP6V+U5dmdM3vgOzPz/EuUNmyr1cmNax+5f0DRu4yXeXEbal2H1xRjmThQoJUSsVsHnlRDrxPPA2pAm7tG7RvijQ0foUH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=V+Vm46x3; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="VUfiS4NR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=ZU
-	j3P58d4QoAudqhWb0eV7Hh2K4y0lwH2appAjh9vGw=; b=VUfiS4NR54AjLQuax7
-	/3a/a96j6sVfp1y+G/BDajtpsKaO+UCLcRHv8jskxKGMoExqCONCHVYG3REIf1Z/
-	lvsX/SbOo/iceaw9Y3QyVnsk/y2wAc8z/6H1vRnB8IZBzh4th+d2fME42R6t47Zc
-	AwxovXB0iKOsWakkroiwlH3lw=
-Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wAnnhic8XpqSKdbPA--.38984S4;
-	Tue, 11 Aug 2026 17:55:46 +0800 (CST)
-From: chenyuan_fl@163.com
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test rhtab kptr recycle from NMI context
-Date: Tue, 11 Aug 2026 17:55:31 +0800
-Message-ID: <20260811095531.3294167-3-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260811095531.3294167-1-chenyuan_fl@163.com>
-References: <20260811095531.3294167-1-chenyuan_fl@163.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="V+Vm46x3"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B96AD14BF;
+	Tue, 11 Aug 2026 03:15:05 -0700 (PDT)
+Received: from localhost (a085714.arm.com [10.164.19.28])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0350C3F86F;
+	Tue, 11 Aug 2026 03:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1786443309; bh=+szcqBCq9eZ2ua7vWX4x/+s1q8ODJlqcpxLyiJuSiwc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V+Vm46x3ghCefqeO2I1n6DA88n8dnPA9fKF0KOYZamwYwLaVm1b44z72dYIEIsYC0
+	 p/UxibT9bkIS6vm2g/03/53REk/x6Bjd7ZTy6XlUazb0cSaz7+p0GyYbiNAyjJgZGx
+	 FyXK8Yk5Rfauuo195Y0NDG5YghHuk7t+gElvU4PU=
+Date: Tue, 11 Aug 2026 15:45:06 +0530
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+To: Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Dimitri Sivanich <dimitri.sivanich@hpe.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, Juergen Gross <jgross@suse.com>, 
+	Stefano Stabellini <sstabellini@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	David Hildenbrand <david@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, SJ Park <sj@kernel.org>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Miaohe Lin <linmiaohe@huawei.com>, 
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, 
+	Mike Rapoport <rppt@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, ziy@nvidia.com, 
+	pfalcato@suse.de, agordeev@linux.ibm.com, ryan.roberts@arm.com, 
+	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-parisc@vger.kernel.org, xen-devel@lists.xenproject.org, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, kasan-dev@googlegroups.com, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	damon@lists.linux.dev
+Subject: Re: [PATCH 2/9] mm: make hw_pte_t visible to generic PTE interfaces
+Message-ID: <7xbai2nyu6nuyr6otqv556dnphpgwaqsmvwkqwoqwbh5nvj3ns@ddy5ezgvb7w3>
+References: <20260806083926.1807279-1-usama.anjum@arm.com>
+ <20260806083926.1807279-3-usama.anjum@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAnnhic8XpqSKdbPA--.38984S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxtF48ZF13GF15Ar15CFW5trb_yoWxWr4Upa
-	yF9Fy3tr4Fqw1DXw1fGw4UXw4FgwsYqF15CrZ2g34Yvr4vgF97XFyxKF4YyFn3tFZ8XFyf
-	ZwsxKrW3GrWUAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jfAwxUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQPdm2p68aPouAAA3W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260806083926.1807279-3-usama.anjum@arm.com>
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+On Thu, Aug 06, 2026 at 09:38:40AM +0100, Muhammad Usama Anjum wrote:
+> Later conversions use hw_pte_t in page-table checking, generic page-table
+> helpers, and vmalloc interfaces. Include linux/pgtable_types.h from the
+> headers that declare those interfaces before changing their types.
+> 
+> For vmalloc.h, replace the direct asm/page.h include with
+> linux/pgtable_types.h. The latter includes asm/page.h, so pgprot_t remains
+> available. It also provides either the default alias or the opted-in
+> hw_pte_t wrapper.
 
-A perf_event program running in NMI context overwrites a rhtab element
-whose value holds a referenced task kptr. The old kptr must stay attached
-to the element (cancel semantics, matching hash maps); before the rhtab
-recycle fix the NMI update eagerly released it and the probe observed
-NULL.
+Stand-alone header file updates are not ideal. Why cannot these changes be
+folded in, where hw_pte_t gets used first time ever in the above mentioned
+places.
 
-The test skips when no hardware PMU is available.
-
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- .../selftests/bpf/prog_tests/rhtab_kptr.c     |  87 +++++++++++++++
- .../testing/selftests/bpf/progs/rhtab_kptr.c  | 101 ++++++++++++++++++
- 2 files changed, 188 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
- create mode 100644 tools/testing/selftests/bpf/progs/rhtab_kptr.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c b/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
-new file mode 100644
-index 000000000000..79bdcda95555
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
-@@ -0,0 +1,87 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 KylinSoft Co., Ltd. */
-+
-+#include <linux/perf_event.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <test_progs.h>
-+#include "rhtab_kptr.skel.h"
-+
-+static __u64 read_counter(struct rhtab_kptr *skel, u32 idx)
-+{
-+	__u64 vals[libbpf_num_possible_cpus()];
-+	__u64 sum = 0;
-+	int i, err;
-+
-+	err = bpf_map_lookup_elem(bpf_map__fd(skel->maps.counters), &idx, vals);
-+	if (!ASSERT_OK(err, "lookup_counter"))
-+		return 0;
-+	for (i = 0; i < libbpf_num_possible_cpus(); i++)
-+		sum += vals[i];
-+	return sum;
-+}
-+
-+void test_rhtab_kptr(void)
-+{
-+	struct perf_event_attr attr = {
-+		.type = PERF_TYPE_HARDWARE,
-+		.config = PERF_COUNT_HW_CPU_CYCLES,
-+		.freq = 1,
-+		.sample_freq = read_perf_max_sample_freq(),
-+		.size = sizeof(struct perf_event_attr),
-+	};
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	struct rhtab_kptr *skel;
-+	__u32 key = 0;
-+	__u64 zero = 0;
-+	int pmu_fd;
-+
-+	skel = rhtab_kptr__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	/* Create the element and stash a referenced task kptr in it. */
-+	if (!ASSERT_OK(bpf_map_update_elem(bpf_map__fd(skel->maps.rhtab),
-+					   &key, &zero, BPF_ANY), "create_elem"))
-+		goto out;
-+	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.init_elem),
-+					      &topts), "test_run_init") ||
-+	    !ASSERT_EQ(topts.retval, 0, "init_ret"))
-+		goto out;
-+
-+	pmu_fd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, 0);
-+	if (pmu_fd < 0) {
-+		test__skip();
-+		goto out;
-+	}
-+	skel->links.nmi_update = bpf_program__attach_perf_event(skel->progs.nmi_update,
-+								pmu_fd);
-+	if (!ASSERT_OK_PTR(skel->links.nmi_update, "attach_perf_event")) {
-+		close(pmu_fd);
-+		goto out;
-+	}
-+
-+	/* Let the NMI handler overwrite the element. */
-+	usleep(100000);
-+
-+	bpf_link__destroy(skel->links.nmi_update);
-+	skel->links.nmi_update = NULL;
-+	close(pmu_fd);
-+
-+	/*
-+	 * The old kptr must still be attached to the element: the NMI update
-+	 * path only cancels NMI-safe fields, mirroring hash map semantics.
-+	 * Before the fix the kptr was released from the NMI context and the
-+	 * probe below would see NULL.
-+	 */
-+	topts.retval = 0;
-+	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.probe_elem),
-+					      &topts), "test_run_probe") ||
-+	    !ASSERT_EQ(topts.retval, 0, "probe_ret"))
-+		goto out;
-+
-+	ASSERT_EQ(read_counter(skel, 2), 1, "xchg_non_null");
-+	ASSERT_EQ(read_counter(skel, 3), 0, "xchg_null");
-+out:
-+	rhtab_kptr__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/rhtab_kptr.c b/tools/testing/selftests/bpf/progs/rhtab_kptr.c
-new file mode 100644
-index 000000000000..25800a2e24e6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/rhtab_kptr.c
-@@ -0,0 +1,101 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 KylinSoft Co., Ltd. */
-+
-+/*
-+ * Verify that a rhtab value update issued from a perf_event (NMI) program
-+ * does not eagerly destroy referenced kptrs. rhtab must match the hash map
-+ * semantics introduced by commit a3a81d247651 ("bpf: Cancel special fields
-+ * on map value recycle"): only NMI-safe fields (timer, workqueue, task_work)
-+ * are cancelled on update/delete, while kptrs stay attached to the recycled
-+ * element until it is eventually freed.
-+ *
-+ * Without the fix, the NMI update releases the old kptr and probe_elem()
-+ * observes NULL in the slot; with the fix the old kptr is inherited and
-+ * probe_elem() observes a non-NULL pointer.
-+ */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char LICENSE[] SEC("license") = "GPL";
-+
-+struct val_t {
-+	struct task_struct __kptr *tsk;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RHASH);
-+	__uint(max_entries, 16);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, __u32);
-+	__type(value, struct val_t);
-+} rhtab SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 4);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} counters SEC(".maps");
-+
-+/* 0: init ok, 1: nmi update ok, 2: probe xchg non-NULL, 3: probe xchg NULL */
-+static __always_inline void bump(u32 idx)
-+{
-+	u64 *v = bpf_map_lookup_elem(&counters, &idx);
-+
-+	if (v)
-+		(*v)++;
-+}
-+
-+extern struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-+extern void bpf_task_release(struct task_struct *p) __ksym;
-+
-+SEC("perf_event")
-+int nmi_update(struct bpf_perf_event_data *ctx)
-+{
-+	struct val_t val = {};
-+	u32 key = 0;
-+
-+	if (bpf_map_update_elem(&rhtab, &key, &val, BPF_ANY) == 0)
-+		bump(1);
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int init_elem(void *ctx)
-+{
-+	struct val_t *val;
-+	struct task_struct *task, *old;
-+	u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&rhtab, &key);
-+	if (!val)
-+		return 1;
-+	task = bpf_task_acquire(bpf_get_current_task_btf());
-+	if (!task)
-+		return 2;
-+	old = bpf_kptr_xchg(&val->tsk, task);
-+	if (old)
-+		bpf_task_release(old);
-+	bump(0);
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int probe_elem(void *ctx)
-+{
-+	struct val_t *val;
-+	struct task_struct *old;
-+	u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&rhtab, &key);
-+	if (!val)
-+		return 1;
-+	old = bpf_kptr_xchg(&val->tsk, NULL);
-+	if (old) {
-+		bpf_task_release(old);
-+		bump(2);
-+	} else {
-+		bump(3);
-+	}
-+	return 0;
-+}
--- 
-2.54.0
-
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> ---
+> Changes since RFC v1:
+> - Clarify that the header provides both generic hw_pte_t definitions.
+> ---
+>  include/linux/page_table_check.h | 2 ++
+>  include/linux/pgtable.h          | 1 +
+>  include/linux/vmalloc.h          | 2 +-
+>  3 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/page_table_check.h b/include/linux/page_table_check.h
+> index 12268a32e8be1..12ee6d16ad339 100644
+> --- a/include/linux/page_table_check.h
+> +++ b/include/linux/page_table_check.h
+> @@ -7,6 +7,8 @@
+>  #ifndef __LINUX_PAGE_TABLE_CHECK_H
+>  #define __LINUX_PAGE_TABLE_CHECK_H
+>  
+> +#include <linux/pgtable_types.h>
+> +
+>  #ifdef CONFIG_PAGE_TABLE_CHECK
+>  #include <linux/jump_label.h>
+>  
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index 8c093c119e5a8..cf595608cc4c4 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -4,6 +4,7 @@
+>  
+>  #include <linux/pfn.h>
+>  #include <asm/pgtable.h>
+> +#include <linux/pgtable_types.h>
+>  
+>  #define PMD_ORDER	(PMD_SHIFT - PAGE_SHIFT)
+>  #define PUD_ORDER	(PUD_SHIFT - PAGE_SHIFT)
+> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> index aed121d729b01..b068e6ade4207 100644
+> --- a/include/linux/vmalloc.h
+> +++ b/include/linux/vmalloc.h
+> @@ -8,7 +8,7 @@
+>  #include <linux/init.h>
+>  #include <linux/list.h>
+>  #include <linux/llist.h>
+> -#include <asm/page.h>		/* pgprot_t */
+> +#include <linux/pgtable_types.h>	/* pgprot_t, hw_pte_t */
+>  #include <linux/rbtree.h>
+>  #include <linux/overflow.h>
+>  
+> -- 
+> 2.47.3
+> 
