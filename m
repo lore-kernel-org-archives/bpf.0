@@ -1,172 +1,202 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C96230CD95
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 04:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FA03BF665
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 06:13:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786423321; cv=none; b=lsSN2pwHgF0tu72edCNUi0FQtGCJoJdR/mBXh/vX7pUqf/yLEH6dvm2XjYPsaBEOzMQrqpp225aIKtO6GuXgSEs+efN29k3m8wWkGqHNQ0cWaYhA5U9sjUDpzM8AuiJ61zA5a5aSIpbOVZsZZySCkNEfhntB5CqqkimvygSuZvw=
+	t=1786428782; cv=none; b=Uq8YCRj8jbWQDZJ1pWkDV3iGGxJJmlq75evFvl2j6MgnZrhNQQymxB5pE+WK7khWKYzFstzh2Uaw78MRON2fHPrE6LzgUl+zHzG9Bw7uAm/CE9AQn8Umy91f0fbe1ikVPr74jlb9fJ+2btwys5xfy5iShwgvZmdMazGIrIHk9C8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786423321; c=relaxed/simple;
-	bh=TYI3Ir+BDCYQue/6lV2LLRIUm7csBMdcONzm9C74S5I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qKxo02T/d1tTc53Wz5+CSMgCxbDbGoWW7dMvALwWdytQCGZT2wUoNoVqd2LIMpup+ijNmNfdlu12sGe/1pLWaLsvhnkECH2i2YHgRGgSK5OjBHdVdSs7IMCb+E3wWCuJwzdEByW6NiuVXD21milqL7UWf+5/DsXnMrCXabkFLvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M9cRgdUU; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786428782; c=relaxed/simple;
+	bh=lkiMx7uA/A5/aSn1bsWFGNt11TcSrA6IVEQGhDwO9+s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KdAsVaTZNdpHvQv20awBdPt0VHu2tnABGl8ZkwIjFU1m6adsYdbpj0M2t5AoUunXaAoz7cAhYY+Y79r0EGjm8Fbnj5iiWF4nlzGbmNU9flD8OIzHCya5tJ+gwIUqYJtGeHf7ku888FuhW0YQ6KCUclHl3wUMLqxPqooH4Ch3eZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gh5bmr7a; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M9cRgdUU"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2cf452def93so4857355ad.1
-        for <bpf@vger.kernel.org>; Mon, 10 Aug 2026 21:42:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786423319; x=1787028119; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=X0Vsk37rDICdvEWMiRd9zBNv8uzJbopsS53qS1DBua0=;
-        b=M9cRgdUUtFZW/pLfW8vxdjUGiLHvzAqKdTAyvn10/mTb0JRD+KFFpiKwUf/NJ8aSWU
-         OU6rVOIwaMYRocvGChZ43DO2nqxr58XEF7DCC5QbZTKjfeXIvPGvwgvbxSrNiAkNldgm
-         jGtxfbnZZraEdLIrSH/GHWpmn7H/9Nel0PZ4taV57T1XssX9vwuId4ga5J5s9GuM2fCU
-         WwqejTtJ72JnV0OZkJrb4Id99PeEch8YUV23oaPP3zeM9X0u9aezy9jhlkbFP34huFJS
-         7CGgt+UJ1m55YUw3BvgqH0y/ThUKypsh5DhmTtupMESmsllxaaji8bb2v+DE4pIiTokF
-         a1FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786423319; x=1787028119;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=X0Vsk37rDICdvEWMiRd9zBNv8uzJbopsS53qS1DBua0=;
-        b=AlEA5LoF+FnkTXO5PD+jww+if2UrfLEAupv5JMjt+rzzVTgrYRSYEGX6AoyFAu9XDz
-         Xv2VY0AmqoZN5AHq+fqWif+PRqP1M9Da0Pz0Gg7U9Es/XxFEPQkJ3moFfF0D3Oq/IFh6
-         0BNy2NdScaG+2n415uQPWQaB9pgQQHo5mL3gfjxN8VbIQEq0P7MB8m2NFb/uRIVgyHsp
-         OyTQ3Mf75SIBxCko8IU0QqOXvV/d288hUxQSSpgVbyiLrUa0z2yErBAMBex7hYi1X/79
-         iW/+yw54YZvPBoFfsCQrtF447G2uCwxgPrRbd7230X9GXqoWvY8jZ46QYj9nsj5kP9+2
-         LNHw==
-X-Forwarded-Encrypted: i=1; AHgh+RqyeLQ2jdinaXma3DMGggNDSWTbKO3UXlq0INFwIusFjPHk+Q1onucdmaoPvq4JTMEoYfg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZBvZDbZiFRU6eFXnbsn8lrrbKQkSlp/Jx6Va0DxerIqBJRt50
-	U0MBdsoeZrEIiTmfAt15P0IgpxoMtpDn6JZP9QBZiOWt/N7BxTztlXGT
-X-Gm-Gg: AR+sD10DlXVhsIFtmS9GhiGo1fpIDOCqQ4Zw9xcqlIUduPxJ2krGFmLPK1MXGGiAWSX
-	UR4CY48YGtA6S3yOlBIvsY4nubHhJsRGtBppaRbzhRO/YpE72rcjimZVSuPZ1k+t1z5L6GNPTjg
-	xiQtGGozBpMV/dEj8L4VHyRDxQPI6MErf5va1xN3BJLuPTftEVC1Heq+n73ySbR+n6x+JPhysIK
-	XZzXamb1VNVGtMdWV/ePtgDQ1UlSbRAqe4Ncnaj5VR0EIS67fC89BspZe91OAZSeswJlxZWiWEb
-	90v7F6Ty4VlY6B2psyBusMBKBSDu+kQujH25IgPPplAhaqlM///PWhVn4pqTETQl/0+Kj00HHrq
-	qKJJmFz2Q/Q+ZNDrNNwj93a3KBPMe15IZLQZEvjlgK1Otb3qfp+fix42eNQkqYmPRdFQ8PHpYV3
-	h05dpHHDw7Y5F4oPiWW1KG8flKKkKS8oF0HLOZU8XP8ZgJWcnvryPwpFU=
-X-Received: by 2002:a17:903:1ce:b0:2cf:8aa7:7810 with SMTP id d9443c01a7336-2d318ed4f2fmr1383635ad.2.1786423319153;
-        Mon, 10 Aug 2026 21:41:59 -0700 (PDT)
-Received: from omen-arch ([147.46.124.101])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d3160ce71csm1253695ad.52.2026.08.10.21.41.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2026 21:41:58 -0700 (PDT)
-From: Junseo Lim <zirajs7@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Guillaume Nault <gnault@redhat.com>,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Thomas Graf <tgraf@suug.ch>,
-	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf v2] lwt_bpf: restore reserved headroom after xmit program
-Date: Tue, 11 Aug 2026 13:41:49 +0900
-Message-ID: <20260811044149.118235-1-zirajs7@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gh5bmr7a"
+Message-ID: <0a2fc4c0-db9e-4b53-8232-aeb0dda112b2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786428767;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ogf+73rRak/6Js/7MzR2OgNYsxkzJu6wOHRliPqhoyU=;
+	b=gh5bmr7aHa3c+DIMKyoVCuJ/lCW6Gomgq7WERSM2AdMXYoKnziX2JRdRGRwYTHP7Gt1gJ3
+	/8mvD0SUFuI0QkU6Vv6j6rLjIcsBzUfzhaM4W6wSt6T2SqQqMkvlCxqiqfFk3KImDN+rNs
+	bS+igK7ntBtS1upZv8vmma7ZSM6WuOA=
+Date: Tue, 11 Aug 2026 14:12:31 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 04/13] bpf: Add tracing_multi link support for
+ bpf progs
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
+ Avinash Duduskar <avinash.duduskar@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
+ Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
+ Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
+ Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260809150111.45000-1-leon.hwang@linux.dev>
+ <20260809150111.45000-5-leon.hwang@linux.dev> <annOhedRtHBce3px@krava>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <annOhedRtHBce3px@krava>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-ip_finish_output2() expands an skb to LL_RESERVED_SPACE(dev) before LWT
-xmit. An LWT_XMIT BPF program can then modify the skb head and still
-return BPF_OK, so bpf_xmit() rechecks the remaining headroom before the
-skb continues to neighbour output.
+On 10/8/26 21:13, Jiri Olsa wrote:
+> On Sun, Aug 09, 2026 at 11:01:02PM +0800, Leon Hwang wrote:
+> 
+> SNIP
+> 
+>> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+>> index eddd259d3776..fc51ea2428be 100644
+>> --- a/kernel/bpf/trampoline.c
+>> +++ b/kernel/bpf/trampoline.c
+>> @@ -1572,12 +1572,23 @@ static int update_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags,
+>>  			       struct bpf_tramp_image *im, struct ftrace_hash *hash,
+>>  			       struct bpf_tracing_multi_data *data)
+>>  {
+>> -	unsigned long addr = (unsigned long)(im ? im->image : tr->cur_image->image);
+>> +	if (tr->func.ftrace_managed) {
+>> +		unsigned long addr = (unsigned long)(im ? im->image : tr->cur_image->image);
+>>  
+>> -	if (bpf_trampoline_use_jmp(tr->flags))
+>> -		addr = ftrace_jmp_set(addr);
+>> +		if (bpf_trampoline_use_jmp(tr->flags))
+>> +			addr = ftrace_jmp_set(addr);
+>> +
+>> +		ftrace_hash_add(hash, data->entry, tr->ip, addr);
+>> +	} else {
+>> +		void *old_addr = tr->cur_image ? tr->cur_image->image : NULL;
+>> +		void *new_addr = im ? im->image : NULL;
+>> +		int ret;
+>> +
+>> +		ret = bpf_trampoline_update_fentry(tr, orig_flags, old_addr, new_addr);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+> 
+> hum, so IIUC this sequentially attaches to target bpf program as it
+> would with current API, so there's no attachent speedup, right?
 
-That recheck uses dst->dev->hard_header_len. This is not enough for the
-neighbour cached-header path: neigh_hh_output() copies the cached hardware
-header using the aligned hh_cache size, HH_DATA_MOD for short headers or
-HH_DATA_ALIGN(hh_len) otherwise.
 
-On Ethernet, hard_header_len is 14 but the cached copy needs 16 bytes. If
-an LWT_XMIT BPF program calls bpf_skb_change_head(skb, 1, 0), the skb can
-still have 15 bytes of headroom after the program. The existing check
-accepts that, after which neigh_hh_output() hits its headroom warning and
-drops the skb.
+Correct.
 
-Use LL_RESERVED_SPACE(dst->dev) in the post-BPF headroom check to match
-the reservation made before LWT xmit.
+> 
+>>  
+>> -	ftrace_hash_add(hash, data->entry, tr->ip, addr);
+>>  	tr->cur_image = im;
+>>  	return 0;
+>>  }
+>> @@ -1627,6 +1638,18 @@ static void bpf_trampoline_multi_attach_free(struct bpf_trampoline *tr)
+>>  
+>>  static void bpf_trampoline_multi_attach_rollback(struct bpf_trampoline *tr)
+>>  {
+>> +	if (!tr->func.ftrace_managed) {
+>> +		void *failed_addr = tr->cur_image ? tr->cur_image->image : NULL;
+>> +		void *old_addr = tr->multi_attach.old_image ?
+>> +				 tr->multi_attach.old_image->image : NULL;
+>> +		u32 orig_flags = tr->flags;
+>> +		int ret;
+>> +
+>> +		tr->flags = tr->multi_attach.old_flags;
+>> +		ret = bpf_trampoline_update_fentry(tr, orig_flags, failed_addr, old_addr);
+>> +		WARN_ONCE(ret, "bpf_trampoline_update_fentry failed: %d\n", ret);
+>> +	}
+>> +
+>>  	if (tr->cur_image)
+>>  		bpf_tramp_image_put(tr->cur_image);
+>>  	tr->cur_image = tr->multi_attach.old_image;
+>> @@ -1643,6 +1666,7 @@ static void bpf_trampoline_multi_attach_rollback(struct bpf_trampoline *tr)
+>>  	for_each_mnode_cnt(mnode, link, link->nodes_cnt)
+>>  
+>>  int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+>> +				u64 *keys, struct bpf_prog **progs,
+>>  				struct bpf_tracing_multi_link *link)
+>>  {
+>>  	struct bpf_tracing_multi_data *data = &link->data;
+>> @@ -1651,18 +1675,18 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+>>  	struct bpf_tracing_multi_node *mnode;
+>>  	struct bpf_trampoline *tr;
+>>  	int i, err, rollback_cnt;
+>> -	u64 key;
+>>  
+>>  	for_each_mnode(mnode, link) {
+>>  		rollback_cnt = i;
+>>  
+>> -		err = bpf_check_attach_btf_id_multi(btf, prog, ids[i], &tgt_info);
+>> +		if (progs)
+>> +			err = bpf_check_attach_target(NULL, prog, progs[i], ids[i], &tgt_info);
+>> +		else
+>> +			err = bpf_check_attach_btf_id_multi(btf, prog, ids[i], &tgt_info);
+>>  		if (err)
+>>  			goto rollback_put;
+>>  
+>> -		key = bpf_trampoline_compute_key(NULL, btf, ids[i]);
+>> -
+>> -		tr = bpf_trampoline_get(key, &tgt_info);
+>> +		tr = bpf_trampoline_get(keys[i], &tgt_info);
+>>  		if (!tr) {
+>>  			err = -ENOMEM;
+>>  			goto rollback_put;
+>> @@ -1691,6 +1715,9 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+>>  	for_each_mnode(mnode, link) {
+>>  		bpf_trampoline_multi_attach_init(mnode->trampoline);
+>>  
+>> +		if (progs && progs[i]->aux->tail_call_reachable)
+>> +			mnode->trampoline->flags |= BPF_TRAMP_F_TAIL_CALL_CTX;
+>> +
+>>  		data->entry = &mnode->entry;
+>>  		err = __bpf_trampoline_link_prog(&mnode->node, mnode->trampoline, NULL,
+>>  						 &trampoline_multi_ops, data);
+> 
+> IIUC for bpf_program targets the actuall attachment is happening in
+> here, right?
 
-Fixes: 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel infrastructure")
-Reported-by: Sechang Lim <rhkrqnwk98@gmail.com>
-Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Junseo Lim <zirajs7@gmail.com>
----
-This issue was found by a custom fuzzer developed by
-Sechang Lim <rhkrqnwk98@gmail.com>.
 
-Changelog:
-v1 -> v2:
-- Use LL_RESERVED_SPACE() instead of HH_DATA_ALIGN() to match the
-  reservation made before LWT xmit.
-  (Daniel Borkmann)
-- Add a Reported-by tag.
+Right.
 
-v1: https://lore.kernel.org/all/20260727103005.897983-1-zirajs7@gmail.com/T/
+> 
+> the rest of the function logic won't execute, because there won't
+> be any data in the reg/noreg/mod hashes..?
+> 
+> you seem to use the tracing_multi API to ease up attachment to multiple
+> bpf programs and end up with just single link fd for all attachments
+> 
+> I think it'd be cleaner to have separate api or code paths for that
+> 
 
- net/core/lwt_bpf.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index 652952d416f2..da49364ec63d 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -167,10 +167,10 @@ static int bpf_output(struct net *net, struct sock *sk, struct sk_buff *skb)
- 	return dst->lwtstate->orig_output(net, sk, skb);
- }
- 
--static int xmit_check_hhlen(struct sk_buff *skb, int hh_len)
-+static int xmit_check_headroom(struct sk_buff *skb, int hroom)
- {
--	if (skb_headroom(skb) < hh_len) {
--		int nhead = HH_DATA_ALIGN(hh_len - skb_headroom(skb));
-+	if (skb_headroom(skb) < hroom) {
-+		int nhead = hroom - skb_headroom(skb);
- 
- 		if (pskb_expand_head(skb, nhead, 0, GFP_ATOMIC))
- 			return -ENOMEM;
-@@ -282,7 +282,7 @@ static int bpf_xmit(struct sk_buff *skb)
- 
- 	bpf = bpf_lwt_lwtunnel(dst->lwtstate);
- 	if (bpf->xmit.prog) {
--		int hh_len = dst->dev->hard_header_len;
-+		int hroom = LL_RESERVED_SPACE(dst->dev);
- 		__be16 proto = skb->protocol;
- 		int ret;
- 
-@@ -298,9 +298,12 @@ static int bpf_xmit(struct sk_buff *skb)
- 				return -EINVAL;
- 			}
- 			/* If the header was expanded, headroom might be too
--			 * small for L2 header to come, expand as needed.
-+			 * small for the L2 header to come, expand as needed.
-+			 * neigh_hh_output() copies the cached header in
-+			 * HH_DATA_MOD aligned chunks, so match the reservation
-+			 * made before LWT xmit.
- 			 */
--			ret = xmit_check_hhlen(skb, hh_len);
-+			ret = xmit_check_headroom(skb, hroom);
- 			if (unlikely(ret))
- 				return ret;
- 
--- 
-2.55.0
+Makes sense.
+
+I'd like to use the same UAPI, and re-implement it with another code
+path, mainly in trampoline.c. And, the re-implementation will get rid of
+HAVE_SINGLE_FTRACE_DIRECT_OPS for targeting bpf progs at the same time.
+
+Then, I think I can speed up the attachment using text-poke in batch on
+x86_64.
+
+Thanks,
+Leon
+
