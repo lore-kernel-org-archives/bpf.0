@@ -1,160 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DAE3815E6
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 01:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B1B305666
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 02:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786411494; cv=none; b=hWT73LXgzIl79J5oaxtDfpYMPapDVRrpGApv7/H2GIaDEBoQxcx1zOn1jjwYgCbIijyg9mDmrI6CDq3K0MW5GafSgQqs4/3niH91QIWdIS6MYT1mW9Puvtmf7iAdD0wUAQYEs09qhHkHClZ4QRWS48zEl+C2z0jVMEMAx49fqYU=
+	t=1786415469; cv=none; b=CQwln4H7552MYq66dfuCBOzdnwMKUl0zSMqp3SIjoklz1XmhFsN0X1/UhL/VurkcPLYn0WNcZDOZQNDNNMYyKVdazVmPrB4hdRLxdn8wxv/Lgt6hodRyj5VOAeHDeMY84juLs1qEgVllsNViUXh1gkcjBLImqq8l4VvqLZlIlT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786411494; c=relaxed/simple;
-	bh=1f5ftdSj8FA+bLjM+VG8qBqCm9pKFYN2qrKV+7qhlyM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Dn8cv+hQ7YkPoAWsT+3fwSQWdkcW6j4dayXDEFWhW6XCjZ65UJmDSxsdz712upY6xufkip3OIEmmLy/qFBe4SCiyntaRCuS/0AI7YYBNHdEcf6uyQqjJAFFDQlTsXsAEvWC8/1rU2ljZD3Q8SBEgegaUY+1H0tigLt4Kek0SVmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MgHFZ3L3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786415469; c=relaxed/simple;
+	bh=FZCAYCmze1OuLP0XPVhYZHWf9sJaZIwAjrMIByxPnck=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Wo55lOSSWUy3HHtWUA5ycVXfmfYZpo03RCMKpYKvpPcOByy8TGlQsUpuYOs62TckZKNQFq0hQCgBOxKD1QHnCSD3lgfvqOdUCJrKubjqVfhHA98w0diAmqtr4XQ5m9SYADn+NiVWqjfOhpB9A1m81UEt3Af0gOlfaO64Pcu+zSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=4mJYvuBS; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MgHFZ3L3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF621F00A3A;
-	Tue, 11 Aug 2026 01:24:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786411492;
-	bh=7yZGXTC9XcHCrV+8YLJlk78Jb4KIF/Sh9XhVawmIh4o=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=MgHFZ3L3iZHikjCOpc8BgYTWPdh1lzUe99Co4Zl7Xj8gM4+ff5xaTsx/x8gpgHozf
-	 cvx8TjwuWP78RiBsE70o/h2odyb2Gf80Hh2DUGBdjicsb7bTehcSVRUsX0KFXq1KCH
-	 m/csOOsdh8pnULdQKKfZf2Cf6j+zoXaFm3ydaOEhGvlinRFJ3461mcaK271GzDbmGG
-	 AvmOpse69jm5FKV4VSPEfOYuvSKLFrLmPFtvA4BX4Rx8lxkxaWYX7zMqjsepsInfoa
-	 Ml/+kOV5y2afd6HIaYJodz5NI88xVDpFoInNll+kYTFMPy/jSUOyrDUEOcJ05u5jxo
-	 G5GNKpSs4DUdw==
-Content-Type: multipart/mixed; boundary="===============3004884587713306637=="
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="4mJYvuBS"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=ggwZl9hb9gd5EioWN0Esbq0cjjGosqmQzh+r+HMhRd8=;
+	b=4mJYvuBSYXRQD0OA6GgU609PMvRq+U2I2PSwL/mr2SN2lCdaLpE4qILIhAb+XsleNZQAnw2rI
+	Ll9ICcba/b83oQszey/LQ6zngid7g8EN/KvmG+plP+dQRs4kVR+nxWjcWwZFaM8+Ng2TZp3AP2b
+	/bQ6Dx6kYo1Ek1xwOULts1k=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4hJwMM4JM9z12LGB;
+	Tue, 11 Aug 2026 10:20:31 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 70DFD4058F;
+	Tue, 11 Aug 2026 10:30:57 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 11 Aug
+ 2026 10:30:56 +0800
+Message-ID: <fcc0a5a3-7ad4-453d-bcd7-ca97f2dcacfa@huawei.com>
+Date: Tue, 11 Aug 2026 10:30:56 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e9d300a2448796c238e4f3b84d45e7abdbb5fcda4f4912fd3361437836bcd27d@mail.kernel.org>
-In-Reply-To: <20260811000957.2382783-1-yonghong.song@linux.dev>
-References: <20260811000957.2382783-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v4 09/13] bpf: Enable aggregate return types up to 16 bytes
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 11 Aug 2026 01:24:51 +0000 (UTC)
-
---===============3004884587713306637==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/6] bpf, riscv: Clear fetch destination on
+ faulting arena atomic
+To: Daniel Borkmann <daniel@iogearbox.net>, <memxor@gmail.com>
+CC: <eddyz87@gmail.com>, <puranjay@kernel.org>, <bpf@vger.kernel.org>
+References: <20260810221811.481040-1-daniel@iogearbox.net>
+ <20260810221811.481040-2-daniel@iogearbox.net>
+Content-Language: en-US
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260810221811.481040-2-daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
->8 bytes, R0 alone for <=8 bytes), enabling the R0:R2 register-pair return
-convention end-to-end.
+Hi Daniel,
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 6606187ed4f43..5551abcea1d39 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-
-[ ... ]
-
-> @@ -7965,7 +7970,7 @@ static int btf_scan_type_tags(struct bpf_verifier_env *env,
->
->  /* Check whether the type is a valid return type. */
->  static int btf_validate_return_type(struct bpf_verifier_env *env, struct btf *btf,
-> -		const struct btf_type *t, int subprog)
-> +		const struct btf_type *t, int subprog, bool is_global)
->  {
->  	u32 tags = 0;
->  	int err;
-> @@ -7988,6 +7993,35 @@ static int btf_validate_return_type(struct bpf_verifier_env *env, struct btf *bt
->  	if (btf_type_is_void(t) || btf_type_is_int(t) || btf_is_any_enum(t))
->  		return 0;
->
-> +	if (btf_type_is_struct(t) && t->size <= 16) {
-> +		/*
-> +		 * A >8 byte struct/union is returned in the R0:R2 register pair.
-> +		 * A global function is verified in isolation, so its caller models
-> +		 * the return as an opaque R0:R2 scalar pair; it must therefore
-> +		 * contain only scalars, otherwise a pointer field would be
-> +		 * laundered into a scalar and escape provenance and reference
-> +		 * tracking. That requirement is enforced here: do_check_common()
-> +		 * propagates the error for global functions and for the main
-> +		 * program.
-> +		 *
-> +		 * A local (static) function is verified inline and its R0:R2 are
-> +		 * copied as precise register state (with the JIT forced on when
-> +		 * the pair is consumed), so a pointer field stays tracked and needs
-> +		 * no such restriction. Accepting it here is not by itself what
-> +		 * makes it legal: btf_check_subprog_call() drops any error other
-> +		 * than -EFAULT. What it avoids is needlessly marking the
-> +		 * subprogram's BTF unreliable.
-> +		 *
-> +		 * The main program (subprog 0) takes the scalar-only path as well,
-> +		 * but its return value is the program's exit code, so a >8 byte
-> +		 * return is rejected separately at BPF_EXIT.
-> +		 */
-> +		bool local_func = subprog && !is_global;
+On 2026/8/11 6:18, Daniel Borkmann wrote:
+> A RMW atomic on an arena pointer is converted to BPF_PROBE_ATOMIC and
+> gets an exception table entry, but that entry records no destination
+> register to clear unless the instruction is a load-acquire today. That
+> is right for a plain BPF_{ADD,AND,OR,XOR}, which only writes memory,
+> but an RMW carrying BPF_FETCH also reads the old value into a register:
+> src_reg for BPF_{ADD,AND,OR,XOR} | BPF_FETCH and BPF_XCHG, and r0 for
+> BPF_CMPXCHG. emit_atomic_rmw() emits it that way, e.g.:
+> 
+>    [...]
+>    case BPF_XCHG:
+>            ctx->ex_insn_off = ctx->ninsns;
+>            emit(is64 ? rv_amoswap_d(rs, rs, rd, 1, 1) :
+>                 rv_amoswap_w(rs, rs, rd, 1, 1), ctx);
+>    [...]
+> 
+> Thus, a fault over an unmapped arena page ex_handler_bpf() jumps over
+> the access but leaves rs untouched, and the program resumes with
+> whatever it held before the atomic instead of the 0 that every other
+> BPF_PROBE_* access delivers. Fill the exception table entry in from
+> bpf_atomic_load_reg(), which returns the BPF register an atomic reads
+> the memory operand into or -1 when it has none. A load-acquire ends up
+> with the same register it gets today, it just goes through the helper.
+> Unlike x86-64 and arm64, riscv64 does not report arena violations from
+> its exception handler, so there is no access direction to correct here,
+> only the missing register clear.
+> 
+> Fixes: fb7cefabae81 ("riscv, bpf: Add support arena atomics for RV64")
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Pu Lehui <pulehui@huawei.com>
+> ---
+>   arch/riscv/net/bpf_jit_comp64.c | 17 +++++++++++++----
+>   1 file changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index 6b9972b07c1b..2504df1fa111 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -1992,10 +1992,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   			ret = emit_atomic_rmw(rd, rs, insn, ctx);
+>   
+>   		/* ret can be 1 (skip-zext); extable entry still needs to be added */
+> -		if (ret >= 0)
+> -			ret = add_exception_handler(insn,
+> -				bpf_atomic_is_load_acq(insn) ? rd : REG_DONT_CLEAR_MARKER,
+> -				ctx) ?: ret;
+> +		if (ret >= 0) {
+> +			/*
+> +			 * A load-acquire reads into dst_reg, and a read-modify-write
+> +			 * carrying BPF_FETCH reads the old value into src_reg, or into
+> +			 * r0 for a BPF_CMPXCHG. Clear that register on fault, the
+> +			 * remaining atomics have no destination register.
+> +			 */
+> +			int load_reg = bpf_atomic_load_reg(insn);
 > +
-> +		if (local_func || __btf_type_is_scalar_struct(env, btf, t, 0))
-> +			return 0;
-> +	}
-> +
->  	return -EOPNOTSUPP;
->  }
+> +			ret = add_exception_handler(insn, load_reg < 0 ?
+> +					REG_DONT_CLEAR_MARKER : regmap[load_reg],
 
-Does the comment accurately describe the enforcement mechanism?
+Felt a bit odd using regmap directly here at first, but since 
+insn->dst_reg and insn->src_reg are already marked via bpf_to_rv_reg at 
+the start, it looks fine.
 
-The comment states "do_check_common() propagates the error for global
-functions and for the main program." That's true for global functions but
-appears incorrect for the main program. Looking at do_check_common() in
-kernel/bpf/verifier.c:18624:
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
 
-  if (subprog || env->prog->type == BPF_PROG_TYPE_EXT) {
-          ...
-          ret = btf_prepare_func_args(env, subprog);
-          if (ret)
-                  goto out;            /* <- error propagated */
-  } else {
-          if (env->prog->aux->func_info_aux) {
-                  ret = btf_prepare_func_args(env, 0);
-                  if (ret || sub->arg_cnt != 1 || ...) {
-                          env->prog->aux->func_info_aux[0].unreliable = true;
-                          ...
-                  }
-          }
-          ...
-  }
-  ret = do_check(env);
+Thanks.
 
-The main-program arm (subprog 0 of a non-EXT program) uses the return
-value only to set func_info_aux[0].unreliable, then unconditionally
-overwrites ret with do_check(env). The -EOPNOTSUPP from
-btf_validate_return_type() is therefore discarded.
-
-Concretely: a program whose entry function returns a pointer-containing
-struct like 'struct { void *p; }' (size 8) now takes the new struct
-branch, fails __btf_type_is_scalar_struct(), but the resulting error is
-silently dropped. The program continues to be verified.
-
-No memory-safety hole results: check_return_code() still refuses a pointer
-in R0 at exit ('R0 leaks addr as return value'), so the pointer-laundering
-scenario the comment worries about does not actually occur for the main
-program. The issue is that the comment states an enforcement mechanism that
-does not exist.
-
-Should the comment drop "and for the main program" and point at the
-BPF_EXIT check instead?
-
-Also: "btf_check_subprog_call() drops any error other than -EFAULT" is
-slightly inaccurate. btf_check_subprog_call() actually returns the error
-and marks the BTF unreliable; its callers, check_func_call() and
-push_callback_call(), do 'if (err == -EFAULT) return err;' and otherwise
-continue.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31446101762
---===============3004884587713306637==--
+> +					ctx) ?: ret;
+> +		}
+>   
+>   		if (ret)
+>   			return ret;
