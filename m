@@ -1,119 +1,130 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927A836B93F
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 14:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C5D367B84;
+	Tue, 11 Aug 2026 14:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786458156; cv=none; b=kEsR8asIe1IRySwZYkp7pGxvo1lP+KK1Ohea5oH+0foXZYWi+/G2IsxMrnXrsCgRQIFdTUCAGLQql9XCVZFFcq7/7XVVb/2eGJRtIY4avfpOULnsx1Pq4JKuFvJXnL9QIO6Uhi4n2/mdhZi1qKaENuPOcv+e8F/EkZp/gL4Alis=
+	t=1786458396; cv=none; b=mAKlczyTuv1KUDB1PNuT7jO/F9FA1ZfYDY18zOTkKdROtz8o1wpJQ4kd2LWBIaUaJKddyiiVCbOGkirqBQsiEjjGN60sBlzmaGOEcapFdOXp4s9JXIpXxgTURGwPAw49kNc3vXur/9Zrqv+O5H2S55GsWRVnNEWFCr65Fq+2H0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786458156; c=relaxed/simple;
-	bh=nD2ZiDJtQsFCRpD1CX4m5JEumUvjwleLhSwPZM95u28=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=Uvimzpaw0ip2YLSfvL58/uSfd8mc4+vU8o+L04Pu28fjWDVMtvCeqy3eQK6gNrqvL3pXyBmCqvYc3EK1r0NqpGpaFq4FTFexZSK8IK8CtI8vY7Q20X3bzS+u01ELQclPcxfr9x2ke2GwWlvzDLxKB2Us+l0UHIFw0o5kXlbvqlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bHrxhT3g; arc=none smtp.client-ip=74.125.225.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786458396; c=relaxed/simple;
+	bh=zXNrmr/h0+aN+aJKm6hUkbXp5UPtBJs2i/R7sTjzWHw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GjAkGzXTyE5Dltt/cLdDyTzG4phL4fP6+fxseeEmek3KCcuwK4hn7OoM8cKxr5Oc4i8Ye7Kh2nzIn4dK9pW2b8FelA0erZMntd6+HD/AHGj/EbKd9O8dncLkFuuYjUb8SHLEMjULI0YKQ5UV6+ytuFy5ApPGJiKa/zBvTkMatwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eVNOQGeu; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bHrxhT3g"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so11597335e9.0
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 07:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786458153; x=1787062953; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=yP++X0pXYzpQN6HJ157j1zYNVbC+m82XWMtDMMQ31/s=;
-        b=bHrxhT3grp/nreL+gf/2+IoLc8RirYCt9SnYnIgx/Ka0EkgGlXzshWOXtDfdE70YMr
-         72iveKrXhYTqzK41+BIcvIWX+zL+SWeUgQGGtZ9VMv1/IiaycJTMdSdgpL8L/hX92ugm
-         21ymzXy0i5ITDHBOkaHqjZPff4uoswAYb2Z+X5SLM/5MvNIBQfEsyorKWTN90GgFD0p0
-         S/hrR2uVANCLSIGLvEvhDUq1PIz0/hGxfP6S6hKE0jmra2UXdiaTPtp94rcgarp1SA5K
-         2sKHa0u3V23QfAnsn33eH0wHmJixidMvFZvDk8blI+zkHlhPJMjcCByNym82GcojDkAJ
-         d9nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786458153; x=1787062953;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yP++X0pXYzpQN6HJ157j1zYNVbC+m82XWMtDMMQ31/s=;
-        b=qQ1QvUvQNHtMcl3fzKcpt/yFfYbhXwJly8hXaA0hrJTrbe7bR2z0Nri/ol6+6eusBQ
-         v9i4GB7nUnsAso1OYB/KZkWmMeryvpgulqnViKZTlzpK4PBOjPObQZSYgOHyfsIxeHuD
-         7Gd1PpE2S5IV/gC7TzNTjNhy80e7FoDDr9NK6t+tFwTXIMKnAZ3nwK6+vkUy+SED3cha
-         SRBc0Wy1QFPa25WiFWN/RDCNdT3MjH5n1rbcavhrPv2gk5jVcOmKrVocn/fhJpZqsq3X
-         Dvl/jePK4clvPp3kxTP00Q9tqaKhzVvkMiqdelqYm3eNZhmAG9K+NZBGFzJgA8Xj2LZ6
-         YCGw==
-X-Forwarded-Encrypted: i=1; AHgh+RqGxX1zqc9YjJSmsprJTcpe7VP808bzqDVU/zC0qKU+gBQUHd+cXgZMmoWEfB6/+OdXTEQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6yTB2w06phc5keWa1n4/2x8hVHgYv4WPl/7d/47TEQHxN2SQz
-	3OArMdkTNjuep7KLVzqMAypzpnT4AuKk1X4Sxe7y04T23PmYKoW8gEM1
-X-Gm-Gg: AR+sD13vXYygE0uQZ95tc/d6S1vQ5RZ85/hK2gmiSHLBSdchi58ecN5yu3oq8UZDQMg
-	pxtQD81fJ0GbyKLEuWGzFpuGQZnnjNWYROAmelUaSs3L4YDmJePa15D7hd7587s4C+kr61Ejs/P
-	icdIUK9ZFqm2bpShnjMn+YIVbDGiXpRHoqULl3ff8mITJHTcbV5JOtXmywvI9PluViEv7sleUny
-	WryCyu+tAEVXqxh+L80sOI+uewHDMhUVE31mya+O+xNMFlhfP5pkgBm0KLEvOZED1JqoTzkW3ZW
-	Wk0Bs6b42KvU+3yVCpo4avrg0mogG5wVPyHtEWa2e/oIYme1y05tAJOm1vin+EPsTZaRLLau1We
-	Ef0OckZZblA0UzFxqR1vcBcmRRmybPP58zibh4ArMxzPeO8K50Ni74nJeOctPzX7Vy39s5u+006
-	C/kQg3dYu4yRmmOsxnXnSqphMv4vOSKpuo34sVd8inFCnLop2RknfHvoGiHrQjEJzqyjQ9e2Xrg
-	re/yVDRNSJwFqJuG9QOwmsKNLlUoptBnpQU2cUbU9HC9jthO0ihxJ870b9sPVkgNvyeY/Pjph8H
-	pRYPfNt/h7d+oAoeg6cPNOCnyikBsWM11gyQ8Q==
-X-Received: by 2002:a05:600c:138b:b0:499:5c3c:41a5 with SMTP id 5b1f17b1804b1-499783b0a4bmr57469525e9.0.1786458152621;
-        Tue, 11 Aug 2026 07:22:32 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499788f13cbsm59767885e9.9.2026.08.11.07.22.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Aug 2026 07:22:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eVNOQGeu"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 387904E410F8;
+	Tue, 11 Aug 2026 14:26:31 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 0A73E6033C;
+	Tue, 11 Aug 2026 14:26:31 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1020311C48D19;
+	Tue, 11 Aug 2026 16:26:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1786458386; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=cXUxedOIBssKclFtEsdMAk4+uoxwahPc9iX1cU90uIw=;
+	b=eVNOQGeuHl2w1zL8FbCDX2EQcr8K6irtZ2V3UoVcW7rQZEufxPvFAI7uLNdqGn4lSh8UeG
+	I4ME/U8zJ9IVB7v0H8iAYiNzyxWNUHb1Lx0mYZ/KethPbDE1ILQsTwpdgLDSsy1+d+66Q8
+	DwIoc4DiP/QhPWMxC3zhDNXcnRVF3dL08gz4iX8dRakkDB/vPU+7F4mQb+nIdkqBi7o9Ef
+	+v68et7OybK/KTQ6USyip6ojuOjN1LBSf2QP2fcDbtEeoF/kCbYVpN9UisQ2C3gRRnDyvO
+	fhWSV5fBaOCiBD9aMYzjhSYWN/dOwzmZ6ys/mASeuvctvsrzkiF7T4ookuLMWA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf v3 0/2] selftest/bpf: make test_tc_tunnel and
+ test_tc_edt more robust to CI load
+Date: Tue, 11 Aug 2026 16:26:11 +0200
+Message-Id: <20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 11 Aug 2026 16:22:31 +0200
-Message-Id: <DKM6K95EN9OF.3O9XNYWVLYHDE@gmail.com>
-To: <chenyuan_fl@163.com>, <bpf@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Yuan Chen" <chenyuan@kylinos.cn>
-Subject: Re: [PATCH bpf-next 0/2] bpf: Cancel special fields in resizable
- hashtab on recycle
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260811095531.3294167-1-chenyuan_fl@163.com>
-In-Reply-To: <20260811095531.3294167-1-chenyuan_fl@163.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XNTQ6CMBAF4KuYrq3pD1DqynsYQ1oYpIotoYVIC
+ HcX6sIY4/JN3nxvRh56Ax4ddzPqYTTeOLsGvt+hslH2CthUa0aMsIwISnAoizBYC21Rt+o+YSZ
+ AKiqprghH61fXQ22eUTwj3dXo8j76Qd+gDJu11Rrjg+unuDvSWP47MVJMccKU0imXUiXypJ0Lr
+ bGH0j2iP7KPkBP+K7BVyFKhWS6qWon0W1iW5QVVEOHMCQEAAA==
+X-Change-ID: 20260710-tc_tunnel_flaky-27e9a191bd03
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue Aug 11, 2026 at 11:55 AM CEST, chenyuan_fl wrote:
-> From: Yuan Chen <chenyuan@kylinos.cn>
->
-> The resizable hashtab (BPF_MAP_TYPE_RHASH) still eagerly calls
-> bpf_obj_free_fields() when an element is deleted or its value is
-> replaced, which runs kptr destructors in the caller's execution context.
-> This is unsafe for BPF programs running in NMI context (e.g. perf_event
-> programs attached to hardware PMU overflows), where referenced kptr
-> destructors may take locks or otherwise cannot run.
->
-> Commit a3a81d247651 ("bpf: Cancel special fields on map value recycle")
-> switched the hash map and array recycle paths to bpf_obj_cancel_fields(),
-> which only cancels NMI-safe fields (timer, workqueue, task_work), but it
-> missed the resizable hashtab. Patch 1 applies the same semantics to
-> rhtab; patch 2 adds a regression test.
->
-> Yuan Chen (2):
->   bpf: Cancel special fields in resizable hashtab on recycle
->   selftests/bpf: Test rhtab kptr recycle from NMI context
->
+Hello,
+this is the v3 of the series aiming to reduce the flakyness of
+tc_tunnel/tc_edt tests in CI. This revision handles Ihor's feedback
+about the need to conform to the timeout value passed in opts->timeout.
+The first commit has been reorganized a bit more than what was needed
+for this change, to make sure that the code can be followed easily.
+There's also now a second commit to make sure that test_tc_edt benefits
+from this new connect() handling.
 
-At least go through the mailing list before sending patches.
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v3:
+- set errno before logging errors
+- respect time budget set by
+- respect opts->timeout_ms when polling: only poll for the remaining
+  time not already consume by connect()
+- keep polling if poll returns with EINTR
+- reorder early returns and add intermediate variables to clarify code
+  flow
+- Link to v2: https://patch.msgid.link/20260803-tc_tunnel_flaky-v2-1-657b287dfa75@bootlin.com
 
-https://lore.kernel.org/bpf/DKEVG8ZVJDDQ.2G40FTOIZKU57@gmail.com
+Changes in v2:
+- drop unneeded initialization
+- add back error message for immediate connection failure, and slightly
+  reword the async connection failure error message
+- Link to v1: https://patch.msgid.link/20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com
 
-pw-bot: cr
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
->  kernel/bpf/hashtab.c                          |  28 +++--
->  .../selftests/bpf/prog_tests/rhtab_kptr.c     |  87 +++++++++++++++
->  .../testing/selftests/bpf/progs/rhtab_kptr.c  | 101 ++++++++++++++++++
->  3 files changed, 207 insertions(+), 9 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
->  create mode 100644 tools/testing/selftests/bpf/progs/rhtab_kptr.c
+---
+Alexis Lothoré (eBPF Foundation) (2):
+      selftests/bpf: keep polling connection that is still in progress
+      selftests/bpf: add connect timeout to test_tc_edt
+
+ tools/testing/selftests/bpf/network_helpers.c      | 70 ++++++++++++++++++++--
+ .../testing/selftests/bpf/prog_tests/test_tc_edt.c |  2 +-
+ tools/testing/selftests/bpf/testing_helpers.h      |  9 +++
+ 3 files changed, 75 insertions(+), 6 deletions(-)
+---
+base-commit: 53cc65185a51fa9dd288cd1137a21467eced2df4
+change-id: 20260710-tc_tunnel_flaky-27e9a191bd03
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
