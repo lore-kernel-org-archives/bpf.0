@@ -1,116 +1,295 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F4E21D5B0
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 01:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985183815E6
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 01:24:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786411483; cv=none; b=iICP7VQNfEk97Ifrp/oUEQHYbw755mU4bnTa6Cs/J4fWU+len9YhasxhlbZlQpetvM03TACF56pHTtT/8eSMg7JuHq1z6dO21Q6rk+2VRJ6YCs+rl9rUnWCAs6+YntTtri8g8Lm18B274clt4cQdGoT6CcumjY2XzwduH6k3XeQ=
+	t=1786411485; cv=none; b=dMW+M/1Ysy70fcKppanAmMTQ1mN8IgbjwOl6oC8mJx03n8gSty8QgG0NojvGLnh9GyaeZeiN6zoQ0yB+eoSeWdDKcwSxsG/FWgl9qrNtf/ZVdt54qIMaiUfbORDOBsbay0eLO57UM8oJxeR4iaSvsCeeCQi6xMNkhc1kfbufFwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786411483; c=relaxed/simple;
-	bh=C0dyFN/PAs84j4IMA7MtunsnijWTByjoWKfm+7iDtaU=;
+	s=arc-20240116; t=1786411485; c=relaxed/simple;
+	bh=4RZuKsyAw7f4OL30mIk5rwyF7JRRo+8BgeX2nirrh3E=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=O4L/KToRJ0aIpH3DfEMVbowjyjZQ9tcpAcKxmMViOZvMXZsuzbUkdJhU11Be4TnAzdPYQF4y7rb7zfDENCWhV+hE+M9TcpdBSbHDHXSLMwpSkUz+/AGzyduqXvo5AVwkaVB2P6DYBoW5gnmW0bTMU8EIjSlgfGtqcLgzbcPSV6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eE4/xeOY; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=bfNq8mMDsY66T1DLakxdG2Pi4fcdFX7cMcq/iJ+Eeia70E/QOUwaXStFoh4q3ggsz50WtW/4R5y236N+5hIw5nJAXlAoQ6bji4Q+CoPHy/thRdjvBta6sm83YtNHOEA450i1Dlx6nAsc7mpV58ZBaf/vORD5Z39zBIPIvXOlveo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhOYSkcn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eE4/xeOY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 296171F00A3A;
-	Tue, 11 Aug 2026 01:24:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhOYSkcn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E568C1F000E9;
+	Tue, 11 Aug 2026 01:24:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786411481;
-	bh=BbP7Yxk6ziN+XMy+dg6Q/PV3n5R72tRkH+umVE5AScQ=;
+	s=k20260515; t=1786411483;
+	bh=zUVhGbvuEx4K2e5wQoVEEZZF5OvO7OM9n5tdLHzoKXE=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eE4/xeOYCWDQ0rI5yWIy8n0o6UaHlMppiRsWFJ8RBArKHJV99ju/aybfr7wDQ01AD
-	 s1qTs8MykyghVo7n5t+t6u6fWSUphseEVlQD+LMb8Eg2UYnr7ZZoPUZjWCYDW2D++s
-	 DVI9n8Ogw8jvOBvYw7kvUNvEXAxlOjBAy5FC+WzgJlG+18tNgr/dVu5FQnE44eO+TB
-	 VEuyAurAoeod6umJtbeoQPtSCe1VRK+ioU6PpxCBj+l8GZlmhNUaMm2pUP3FHUlbdg
-	 p3cGz9xSOJ0hNfq8XU8NJ12UoZb+VDYJpZ3ADqGGjgUGlkKgh+yKXIZeqKIyjR+KQl
-	 jbwTxc6EBsCUw==
-Content-Type: multipart/mixed; boundary="===============3851755487865849214=="
+	b=GhOYSkcn7yA2Yct+njibipkGWMfN93ULYqXKXducaMtb3nhoAmR2A4NE9RiFFXuHK
+	 NvXTu70Qs/mFU7Jhld3zDhpSpGOXVnke6jCqOGI2pnyMFXFLvCleEkSZqPLontNvvd
+	 x3+jeL8MgnFAhrIMsvZ0QT6C2jczoqS0KA3zR5lGHPOVsUiRcPT9cWVf/SuVPjR/hV
+	 rpdPSTm9uCj4jLQBuvID2ka3WxQNPlyFPMKox7OXbpmo3nwnSC6+o8oEfU0biMXLus
+	 Yvson729SxZ59oH7M+YuzDlW0EvoPKyAgpW0YN80JYpHhp7OY7BkVVnspwOIDjf7qY
+	 tHGZZSiTdKIZQ==
+Content-Type: multipart/mixed; boundary="===============3822318507285033672=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b969b8d1045c704a50153c0947c5c47a35042e9755b592b4c38807daf64b23d3@mail.kernel.org>
-In-Reply-To: <20260811000927.2380571-1-yonghong.song@linux.dev>
-References: <20260811000927.2380571-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v4 03/13] bpf: Wire up JIT support for 16-byte kfunc returns
+Message-Id: <1401ba2c0512cfb3069383693bc55e1f977ad9bbf07dd9cca7e266bf517c571f@mail.kernel.org>
+In-Reply-To: <20260811001013.2385213-1-yonghong.song@linux.dev>
+References: <20260811001013.2385213-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v4 12/13] selftests/bpf: Add tests for callbacks returning more than 8 bytes
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 11 Aug 2026 01:24:41 +0000 (UTC)
+Date: Tue, 11 Aug 2026 01:24:42 +0000 (UTC)
 
---===============3851755487865849214==
+--===============3822318507285033672==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> LLVM 23 returns an __int128, or a struct/union larger than 8 bytes and no
-> larger than 16 bytes, in the BPF R0:R2 register pair. The previous patch
-> taught the verifier about that convention; wire up the JIT side so that the
-> second half of the return value actually lands in R2.
+> selftests/bpf: Add tests for callbacks returning more than 8 bytes
+>
+> Add two __failure tests covering the callback return-size checks:
+>
+>  - timer_ret_pair_fail: a bpf_timer callback declared to return more than
+>    8 bytes, rejected by check_ld_imm() where the callback's PTR_TO_FUNC is
+>    created, with "callback function with >8-byte return value is not
+>    supported".
+>
+>  - exceptions_ret_pair_fail: an exception callback declared to return more
+>    than 8 bytes, rejected by do_check_common() when the callback
+>    subprogram is verified, with "exception cb cannot return value larger
+>    than 8 bytes".
+>
+> Both callback bodies are written in inline asm so that the tests do not
+> depend on LLVM 23 R0:R2 codegen and run on any compiler. The verifier reads
+> the return type from BTF rather than from the instructions, so the >8 byte
+> return prototype is supplied through __btf_func_path(), pointing at a
+> companion btf__*.c program that exists only to carry that BTF.
 
-This isn't a bug, but should this say the previous patch added the shared
-R0:R2 helpers, rather than that it taught the verifier the convention?
-Looking at 882cac43a2cef ("bpf: Add helpers to describe the R0:R2 return
-register pair"), its changelog states "No functional change,
-bpf_ret_reg_pair() has no callers yet" and "Later patches teach the JIT,
-precision backtracking, live register analysis and the verifier itself
-about that convention." The verifier actually learns the convention in
-d280e9c973c59 ("bpf: Add verifier support for 16-byte returns in R0:R2"),
-two patches later.
+Does __btf_func_path() actually supply the return type? Looking at
+fixup_btf_from_path() in tools/testing/selftests/bpf/test_loader.c, it
+appears to keep the prog's return type and parameter types while
+substituting only parameter names:
 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 8dddb5d7af21b..01c34114c8502 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -2647,6 +2647,22 @@ st:			insn_off = insn->off;
->  				return -EINVAL;
->  			if (priv_frame_ptr)
->  				pop_r9(&prog);
-> +			if (src_reg == BPF_PSEUDO_KFUNC_CALL) {
-> +				const struct btf_func_model *fm;
+  ret_type_id = fp->type;                    /* fp is the prog FUNC_PROTO */
+  for (j = 0; j < vlen; j++)
+      prog_param_types[j] = params[j].type;  /* prog param types */
+  new_proto_id = btf__add_func_proto(prog_btf, ret_type_id);
+  ...
+  pname = btf__name_by_offset(custom_btf, custom_params[j].name_off);
+  err = btf__add_func_param(prog_btf, pname ?: "", prog_param_types[j]);
+
+The comment at the call site says "Fix up __naked subprog BTF using a
+separate file with named params", and the >8 byte return type already
+comes from each test object's own BTF: exceptions_ret_pair_fail.c
+declares 'unsigned __int128 exception_cb_bad_ret_type3(u64 cookie)' and
+timer_ret_pair_fail.c declares 'static unsigned __int128
+timer_cb_ret_pair(...)'.
+
+The companion btf__*.c objects supply parameter names, which are needed
+because clang emits anonymous parameters for __naked functions and
+btf_func_check() in kernel/bpf/btf.c rejects a BTF_KIND_FUNC whose
+FUNC_PROTO has a typed-but-unnamed argument, which would make the whole
+object's BTF fail to load.
+
+Could the explanation be more precise about what __btf_func_path()
+actually provides?
+
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> index 3588d6f97fd4e..71d00c568d802 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> @@ -5,6 +5,7 @@
+>  #include "exceptions.skel.h"
+>  #include "exceptions_ext.skel.h"
+>  #include "exceptions_fail.skel.h"
+> +#include "exceptions_ret_pair_fail.skel.h"
+>  #include "exceptions_assert.skel.h"
+>
+>  static char log_buf[1024 * 1024];
+> @@ -12,6 +13,7 @@ static char log_buf[1024 * 1024];
+>  static void test_exceptions_failure(void)
+>  {
+>  	RUN_TESTS(exceptions_fail);
+> +	RUN_TESTS(exceptions_ret_pair_fail);
+>  }
+>
+>  static void test_exceptions_success(void)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/timer.c b/tools/testing/selftests/bpf/prog_tests/timer.c
+> index 09ff21e1ad2f0..593e56d8964ea 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/timer.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/timer.c
+> @@ -6,6 +6,7 @@
+>  #include <sys/syscall.h>
+>  #include "timer.skel.h"
+>  #include "timer_failure.skel.h"
+> +#include "timer_ret_pair_fail.skel.h"
+>  #include "timer_interrupt.skel.h"
+>
+>  #define NUM_THR 8
+> @@ -285,6 +286,7 @@ void serial_test_timer(void)
+>  	test_timer(timer);
+>
+>  	RUN_TESTS(timer_failure);
+> +	RUN_TESTS(timer_ret_pair_fail);
+>  }
+>
+>  void serial_test_timer_stress(void)
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/exceptions_ret_pair_fail.c b/tools/testing/selftests/bpf/progs/exceptions_ret_pair_fail.c
+> new file mode 100644
+> index 0000000000000..842f86ad8659e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/exceptions_ret_pair_fail.c
+> @@ -0,0 +1,30 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <bpf/bpf_helpers.h>
 > +
-> +				/*
-> +				 * A kfunc returning a >8 byte aggregate hands the
-> +				 * second half back in RDX (the native ABI's second
-> +				 * return reg), but BPF expects it in R0:R2. BPF R0
-> +				 * is RAX (no move needed), while BPF R2 is RSI, so
-> +				 * copy RDX into RSI.
-> +				 */
+> +#include "bpf_misc.h"
+> +#include "bpf_experimental.h"
+> +
+> +__naked __noinline __used
+> +unsigned __int128 exception_cb_bad_ret_type3(u64 cookie)
+> +{
+> +	asm volatile (
+> +	"r0 = r1;"
+> +	"r2 = 0;"
+> +	"exit;"
+> +	::: __clobber_all);
+> +}
+> +
+> +SEC("?tc")
+> +__exception_cb(exception_cb_bad_ret_type3)
+> +__failure __msg("exception cb cannot return value larger than 8 bytes")
+> +__btf_func_path("btf__exceptions_ret_pair_fail.bpf.o")
+> +int reject_exception_cb_ret_pair(void *ctx)
+> +{
+> +	bpf_throw(0);
+> +	return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
 
-This isn't a bug, but since struct/union returns are still rejected by
-btf_distill_func_proto() at this point in the series (kernel/bpf/btf.c
-checks "if (ret < 0 || btf_type_is_struct(t))"), would "a kfunc
-returning more than 8 bytes" read more accurately here than ">8 byte
-aggregate"? Aggregates only become reachable later in b12c58bbc5e59
-("bpf: Enable aggregate return types up to 16 bytes"), so the only
-return type that can reach fm->ret_size > 8 at this commit is __int128.
+A subsystem pattern flags this as potentially concerning:
+exceptions_ret_pair_fail.c is a new prog file added for one narrow
+variant of behaviour tools/testing/selftests/bpf/progs/exceptions_fail.c
+already covers: rejected exception-callback return types.
 
-> +				fm = bpf_jit_find_kfunc_model(bpf_prog, insn);
-> +				if (!fm)
-> +					return -EFAULT;
-> +				if (fm->ret_size > 8)
-> +					emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_3);
-> +			}
->  			break;
->  		}
+exceptions_fail.c already holds exception_cb_bad_ret_type1(),
+exception_cb_bad_ret_type2() and the corresponding '__failure
+__msg("exception cb cannot return void")' case. The new callback is even
+named exception_cb_bad_ret_type3, continuing that file's numbering while
+living in a different file, so a reader grepping exceptions_fail.c for
+the series will not find it next to its siblings.
 
-This isn't a bug, but emit_kfunc_arena_args() already does this same
-bpf_jit_find_kfunc_model() lookup earlier in do_jit() and bails out on
-NULL. Looking at emit_kfunc_arena_args() in arch/x86/net/bpf_jit_comp.c:
+There is a concrete technical reason the exceptions case cannot simply
+be appended to exceptions_fail.c: __btf_func_path also sets
+bpf_object_open_opts.btf_custom_path, and libbpf uses that as the CO-RE
+target BTF for the whole object. exceptions_fail.c includes <vmlinux.h>,
+which applies preserve_access_index to all records, and it dereferences
+vmlinux structs (ctx->len, ctx->protocol, ctx->tstamp), so it does have
+CO-RE relocations that would then be resolved against the 10-line
+companion BTF. That makes the split legitimate here; the remaining point
+is only that the shared naming (exception_cb_bad_ret_type3) does not
+reflect the split.
 
-    fm = bpf_jit_find_kfunc_model(prog, insn);
-    if (!fm)
-        return -EINVAL;
+Is the naming pattern worth revisiting given that the test lives in a
+separate file?
 
-Since bpf_jit_find_kfunc_model() is a pure bsearch over an immutable
-table, if the first lookup succeeded the second cannot fail. Could the
-two BPF_PSEUDO_KFUNC_CALL blocks share one lookup, so the second bsearch
-and the unreachable "if (!fm)" guard go away? The two sites also disagree
-on the errno for the identical condition (-EINVAL vs -EFAULT).
+> diff --git a/tools/testing/selftests/bpf/progs/timer_ret_pair_fail.c b/tools/testing/selftests/bpf/progs/timer_ret_pair_fail.c
+> new file mode 100644
+> index 0000000000000..29fd294dfd49b
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/timer_ret_pair_fail.c
+> @@ -0,0 +1,49 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +
+> +#include <linux/bpf.h>
+> +#include <time.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include "bpf_misc.h"
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +struct elem {
+> +	struct bpf_timer t;
+> +};
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARRAY);
+> +	__uint(max_entries, 1);
+> +	__type(key, int);
+> +	__type(value, struct elem);
+> +} timer_map SEC(".maps");
+> +
+> +__naked __noinline __used
+> +static unsigned __int128 timer_cb_ret_pair(void *map, int *key, struct bpf_timer *timer)
+> +{
+> +	asm volatile (
+> +		"r0 = 0;"
+> +		"r2 = 0;"
+> +		"exit;"
+> +		::: __clobber_all
+> +	);
+> +}
+> +
+> +SEC("fentry/bpf_fentry_test1")
+> +__failure __msg("callback function with >8-byte return value is not supported")
+> +__btf_func_path("btf__timer_ret_pair_fail.bpf.o")
+> +long BPF_PROG2(test_bad_ret_pair, int, a)
+> +{
+> +	int key = 0;
+> +	struct bpf_timer *timer;
+> +
+> +	timer = bpf_map_lookup_elem(&timer_map, &key);
+> +	if (timer) {
+> +		bpf_timer_init(timer, &timer_map, CLOCK_BOOTTIME);
+> +		bpf_timer_set_callback(timer, timer_cb_ret_pair);
+> +	}
+> +
+> +	return 0;
+> +}
+
+A subsystem pattern flags this as potentially concerning:
+timer_ret_pair_fail.c is a new prog file added for one narrow variant (a
+callback whose declared return value is larger than 8 bytes) of
+behaviour that tools/testing/selftests/bpf/progs/timer_failure.c already
+covers more generally: bad bpf_timer callback return values.
+
+The two files are near-identical scaffolding - the same '#include
+<linux/bpf.h> / <time.h> / bpf_helpers.h / bpf_tracing.h / bpf_misc.h'
+set, the same 'struct elem { struct bpf_timer t; }', the same
+BPF_MAP_TYPE_ARRAY 'timer_map' with max_entries 1, the same
+SEC("fentry/bpf_fentry_test1") + BPF_PROG2 entry program, and the same
+'__naked __noinline __used static' callback idiom already used by
+timer_cb_ret_bad().
+
+The new program adds ~10 lines of actual test content on top of ~35
+lines of copied setup, plus a new skeleton, plus a companion
+btf__timer_ret_pair_fail.c, plus the RUN_TESTS()/#include churn in
+prog_tests/timer.c. Adding it as a third program inside timer_failure.c
+would reuse all of that. Since __btf_func_path is a per-program tag
+consumed per-subtest in run_subtest(), and timer_failure.c has no CO-RE
+relocations (it includes uapi <linux/bpf.h>, not <vmlinux.h>), the
+btf_custom_path side effect of the tag would not affect the existing
+subtests in that object.
+
+A separate file is defensible for symmetry with the exceptions half of
+the patch, where a separate file IS required due to CO-RE relocations.
+Should the new timer case be a new subtest in timer_failure.c, or does
+the symmetry with exceptions_ret_pair_fail.c make the separate file
+structure clearer?
 
 
 ---
@@ -118,4 +297,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31446101762
---===============3851755487865849214==--
+--===============3822318507285033672==--
