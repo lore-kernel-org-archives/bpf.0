@@ -1,218 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-189.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D01D445AF6
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 14:27:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5C33321A7
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 15:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786458458; cv=none; b=D8mzTivoLTZQhkE1ABAgnG/ti4Hfti5xp4dilm9tDZudeQSHUIPHnw0jEBg/0w9Yc7Fv28GdlTkTjQ0V/SAJDzxU16RPBymjB7mH79hqKNRIVz2+UJX4C6jLD++6FKjbaDcU9GA/WyAuRfWiRFgD8Nf/d13euoSnDDNW3wjf4Hc=
+	t=1786460749; cv=none; b=cNK57SntxCY5Vod56gYkyx3Q02osn+f6mQFeCQ6U+hPnVebrAPkxvoUVWHKKEWWKVtEGfWsz03XQhxRrRXfbIqVAjZY7epzJ3Nv71dq6f3z9l34Ybw1P9B63VFtbOEeds6q5tOTuPSj6IiXBYgsBGSaU0VGEbVPwS/2oINuBEL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786458458; c=relaxed/simple;
-	bh=nVIP073XaL21KA96wDPH6ToCvlyUgZEDN586BZmijpE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=oeP66FcU2EMPmGJfS/dZ0qb2pJRleNPto9pLopOD3/RQlx6Kk2XUrzUN6OJ2LEU1L09t6WhBKRJKA0p+mqXKov7UUynngt81q5Fd/7mHaCw25pmUgO1JoaSNKBD5SG+CCRsWLYMFz9IcaBTSxEBNcwjr7WZFzoXRX7NIVZXsoss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QPdPJ8Ob; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786460749; c=relaxed/simple;
+	bh=cMGGvcnuFFGukbZhID6mK5u1EMw6HEKElg6I010dBLw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GDolyLnhNsXbn1+gP5cF7e07YihHUP9HXOAh/ydBRw58EhudTERqATuBg3qexa12dZmDrCopC45IlBIGN1ha8h4NrtGFLTpveJd8Qd9rNu4qRSCqq96kvDuRlY8OKto2Wpb3gNVSAMW01C3n/T9IBlY4YtBT59xpOdVh09aHsKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qmjL1X6L; arc=none smtp.client-ip=37.59.57.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QPdPJ8Ob"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F2B71F00A3A;
-	Tue, 11 Aug 2026 14:27:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786458456;
-	bh=VBw5GOkdzYJ/gqiRRZ+oNJlGMjqxoRwVRpoU1gFmOO8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=QPdPJ8ObwfO6bDzBX4MdPCxt4XPc+PFE20a+VGMPVzQy97HEQiHkqsAPZywJaVXLj
-	 WChCfJqOOkyfOWR8rajsft8bMJZQLyPAI+Z9KSlUuIWlkxZiPpR7CEy0hw0PkGpnxf
-	 aOXal/ecsges9nNHYcKxXg/17TP6Oz4ZHa0gYbTDJu/oeClfLI2HjTHBjXSyliRYjt
-	 KV5DXLRwE2dsKmFM+Lonnee0yYAoOwseFKylofi1nTc0CFqsDH2pOs3RiViZOgH6+e
-	 Ho+O6eeZZpdZM2MSeKJniqnfGudn9C8uAVlS4kyjT/AAyyRcrveHb9Pz+vvjevfdQg
-	 2QJiLKbbeAymA==
-Content-Type: multipart/mixed; boundary="===============3082970254000212603=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qmjL1X6L"
+Message-ID: <75ec8417-4be5-4e7a-86c9-70a83b793580@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786460735;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PGFt9K8OWRTlwxZvRIzXVJQCG2LtAHLRfdvti+gu57o=;
+	b=qmjL1X6L231E6K1YuUbpjPxwJ8IrQ7DIdrWDq+SlJtPAmUnw0G6Wb4uLi9VX2nw7XgybOL
+	xXllF0zMid0H7jFSmpwJB8+mWTmS6BqOmDDeGkyJ5cYReoBo8w4aqoq1QP5DTcTwWV/FAp
+	J3ismvTmR4B8xi0fDYoCd2+ck4CYl80=
+Date: Tue, 11 Aug 2026 23:05:06 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <94cf180b432f9d5d15a198285273f2ad57426e16855ff584da1c40519a93c4cd@mail.kernel.org>
-In-Reply-To: <20260811131600.506721-6-daniel@iogearbox.net>
-References: <20260811131600.506721-6-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next v3 6/6] selftests/bpf: Add arena fault tests for atomics with fetch
-From: bot+bpf-ci@kernel.org
-To: daniel@iogearbox.net,memxor@gmail.com
-Cc: eddyz87@gmail.com,puranjay@kernel.org,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 11 Aug 2026 14:27:36 +0000 (UTC)
+Subject: Re: [PATCH bpf v3 1/2] selftests/bpf: keep polling connection that is
+ still in progress
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ebpf@linuxfoundation.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com>
+ <20260811-tc_tunnel_flaky-v3-1-876f4e0bc603@bootlin.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260811-tc_tunnel_flaky-v3-1-876f4e0bc603@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
---===============3082970254000212603==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/stream.c b/tools/testing/selftests/bpf/prog_tests/stream.c
-> --- a/tools/testing/selftests/bpf/prog_tests/stream.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/stream.c
-> @@ -105,6 +105,10 @@ void test_stream_arena_fault_address(void)
->  		test_address(skel->progs.stream_arena_write_fault, &skel->bss->fault_addr);
->  	if (test__start_subtest("load_acquire_fault"))
->  		test_address(skel->progs.stream_arena_load_acquire_fault, &skel->bss->fault_addr);
-> +	if (test__start_subtest("xchg_fault"))
-> +		test_address(skel->progs.stream_arena_xchg_fault, &skel->bss->fault_addr);
-> +	if (test__start_subtest("cmpxchg_fault"))
-> +		test_address(skel->progs.stream_arena_cmpxchg_fault, &skel->bss->fault_addr);
+On 8/11/26 10:26 PM, Alexis Lothoré (eBPF Foundation) wrote:
+> Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
+> following logs:
 >
->  	stream__destroy(skel);
->  }
-> diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
-> --- a/tools/testing/selftests/bpf/progs/stream.c
-> +++ b/tools/testing/selftests/bpf/progs/stream.c
-> @@ -229,6 +229,107 @@ int stream_arena_load_acquire_fault(void *ctx)
->  	return val;
->  }
+>    (network_helpers.c:309: errno: Operation now in progress) \
+>      Failed to connect to server
+>    send_and_test_data:FAIL:connect to server unexpected error: -115
 >
-> +SEC("syscall")
-> +__arch_x86_64
-> +__arch_arm64
-> +__success __retval(0)
-> +__stderr("ERROR: Arena WRITE access at unmapped address 0x{{.*}}")
-
-The series includes fixes for four JITs (x86, arm64, riscv, s390), but
-these new programs only cover two of them. Could __arch_riscv64 and
-__arch_s390x variants be added for the other half?
-
-The riscv64 and s390 JIT fixes exist in the same series:
-
-  a49d067b71354 bpf, riscv: Clear fetch destination on faulting arena atomic
-  e0de31f547978 bpf, s390:  Clear fetch destination on faulting arena atomic
-
-but the __arch gate provably excludes them from these tests.
-
-The __stderr() half unavoidably gates on x86_64 and arm64, since only
-those two JITs call bpf_prog_report_arena_violation(). Both the riscv
-and s390 changelogs state this explicitly.
-
-But the __retval(0) half does not depend on arena violation reporting.
-A variant tagged __arch_riscv64 __arch_s390x with __success __retval(0)
-and no __stderr() would exercise exactly the register-clear fix those two
-commits make, using the same poison-and-return mechanism. As written, two
-of the four fixed JITs ship with no test coverage.
-
-> +__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
-> +__stderr("Call trace:\n"
-> +"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
-> +"|[ \t]+[^\n]+\n)*}}")
-> +int stream_arena_xchg_fault(void *ctx)
-> +{
-> +	static const struct bpf_insn xchg_insn = {
-> +		.code	 = 0xc3,	/* BPF_STX | BPF_ATOMIC | BPF_W */
-> +		.dst_reg = 1,		/* BPF_REG_1 */
-> +		.src_reg = 2,		/* BPF_REG_2 */
-> +		.off	 = 0x7fff,
-> +		.imm	 = 0xe1,	/* BPF_XCHG */
-> +	};
-
-Does the misaligned .off = 0x7fff cause the test to validate a different
-fault path on arm64 than the commit message describes?
-
-user_vm_start is page aligned, so the effective address is
-user_vm_start + 0x7fff, which is 3 mod 4. The 4-byte BPF_W access also
-straddles the page boundary at 0x8000.
-
-For plain LDR/STR (stream_arena_read_fault, stream_arena_write_fault),
-this offset works as intended: arm64 permits unaligned access with
-SCTLR_EL1.A=0, so those really do take a translation fault on the unmapped
-page.
-
-But atomics require natural alignment. arm64 LSE CAS/SWP raise an EL1
-Alignment fault (ESR FSC 0b100001) when the access is misaligned or crosses
-a 16-byte granule, and that takes priority over the translation fault.
-
-The test still passes - fixup_exception() in arch/arm64/mm/fault.c runs
-before any die_kernel_fault path, so ex_handler_bpf() still clears the
-fetch register and still prints "Arena WRITE access at unmapped address".
-The fix under test is fault-type independent.
-
-But the arm64 arm of both new subtests validates the alignment-fault path
-rather than the unmapped-arena-page path, while x86-64 (where page fault
-is delivered ahead of split-lock alignment check) validates the intended
-one, so the two architectures end up testing different code paths.
-
-A 4-byte-aligned offset inside the unmapped page (e.g. 0x7ffc) would keep
-the fault a translation fault on both architectures. The pre-existing
-stream_arena_load_acquire_fault has the same property with its 0x7fff.
-
-[ ... ]
-
-> +	return val;
-> +}
-> +
-> +SEC("syscall")
-> +__arch_x86_64
-> +__arch_arm64
-
-A subsystem pattern flags this as potentially concerning: On arm64 these
-two programs only load on CPUs that implement LSE atomics, and nothing in
-the test gates on that.
-
-arch/arm64/net/bpf_jit_comp.c:bpf_jit_supports_insn() rejects arena RMW
-atomics without LSE:
-
-  bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
-  {
-  	if (!in_arena)
-  		return true;
-  	switch (insn->code) {
-  	case BPF_STX | BPF_ATOMIC | BPF_W:
-  	case BPF_STX | BPF_ATOMIC | BPF_DW:
-  		if (!bpf_atomic_is_load_store(insn) &&
-  		    !cpus_have_cap(ARM64_HAS_LSE_ATOMICS))
-  			return false;
-  	}
-  	return true;
-  }
-
-The verifier consults it for arena destinations in atomic_ptr_type_ok()
-and on failure rejects the program with "BPF_ATOMIC stores into R1 arena
-is not allowed". BPF_XCHG (0xe1) and BPF_CMPXCHG (0xf1) are not load-store
-forms, so bpf_atomic_is_load_store() returns false for both and the LSE
-check applies.
-
-This is new for this object. Before the patch the arena programs in
-progs/stream.c used plain BPF_LDX/BPF_STX and one BPF_LOAD_ACQ, and
-BPF_LOAD_ACQ is exempted by bpf_atomic_is_load_store(). progs/stream.c
-therefore had no CPU-feature dependency until now.
-
-On an ARMv8.0 core (Cortex-A53/A57/A72) the consequences reach beyond the
-two new subtests, because stream__open_and_load() is an all-or-nothing
-whole-object load:
-
-  - test_stream_arena_fault_address(): stream__open_and_load() returns
-    NULL, ASSERT_OK_PTR fails and the function returns, so read_fault,
-    write_fault and load_acquire_fault are lost too - three subtests
-    that pass today.
-  - test_stream_syscall(): same whole-object load, and this test is
-    otherwise entirely architecture-neutral.
-  - test_stream_success() (RUN_TESTS) loads programs individually
-    (bpf_program__set_autoload), so there the damage is limited to the
-    two new programs reporting load failure.
-
-Would a runtime LSE probe, or moving the two RMW programs into a separate
-object so a load failure cannot take down the unrelated subtests, contain
-this?
-
-progs/arena_atomics.c already does arena xchg/cmpxchg guarded only by
-compile-time checks, prog_tests/arena_atomics.c loads that whole object
-with arena_atomics__load(), and DENYLIST.aarch64 is empty - so the
-arena_atomics test presumably already fails on non-LSE arm64. This class
-of gap is pre-existing in the tree.
-
-> +__success __retval(0)
-> +__stderr("ERROR: Arena WRITE access at unmapped address 0x{{.*}}")
-
-[ ... ]
+> This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
+> socket (see settimeo() in client_socket()), allowing connect() to return
+> an error and to set errno to EINPROGRESS instead of blocking until
+> connection result is known. Increasing the timeout value for those tests
+> is likely not a good solution (and it has already been done by commit
+> 2790db208b44 ("selftests/bpf: Improve tc_tunnel test reliability")):
+> they involve subtests that expect the connection to fail, and so
+> increasing the timeout value would increase overall test execution
+> duration again (not only the connection, but any socket operation).
+>
+> Another solution, as documented in man 2 connect, is to poll the socket
+> for POLLOUT once connect has returned EINPROGRESS, and to get the actual
+> connection result through getsockopt: this allows to keep the overall
+> timeout values low for the general traffic, while letting a chance to
+> the connection to succeed even if CI runners are loaded.
+>
+> When connect() returns EINPROGRESS, poll the socket for POLLOUT and
+> check the connection result via getsockopt(SO_ERROR). This new handling
+> conforms to the configured timeout: the polling loop will only run for
+> the amount of time still available, accounting for the time used by the
+> initial connect() call.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+So IIUC this patch doesn't actually fix the flakiness: connect() on a 
+blocking socket only
+returns EINPROGRESS after SO_SNDTIMEO is fully consumed, so remaining_ms 
+is always ~0 and the
+overall time budget is still 1s, same as before. Am I missing something?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31496528509
---===============3082970254000212603==--
+
