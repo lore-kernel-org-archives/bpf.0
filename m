@@ -1,30 +1,32 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BD634AB01
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 02:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8B03BED79
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 02:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786416946; cv=none; b=jv18wnkIe+wBzYYBAo9W0PBV5hHmB0IN1577v1OwQv6Ez9UOuZQ09zXlY3yScDT7qDg6aTiL3NVlgKuVlX9zeIxcjMQm4jDw6Yx3nfM9hMjzUPRRkm/OMGtQ7ob09NFMHGX5ngJx7YPdBqtdeox5R2gkDsuJ5uUmd8ibg/eS9/A=
+	t=1786416950; cv=none; b=fSpdX4xn0dgqHtAT6S7XYvAMzGiQ59WER2Tmuozw8XPlM+Xf/prwAYrJT4kx3SAXL5TafRcjC4Jtd9iRvVr5oSPYqkPMLFpYHeRGlt2HoPxODg+LMXRjjc2NJdH9T3BKN6z71qArxF69rDjM39Iaz3UtEDOH6+ZVPPlOIuliAa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786416946; c=relaxed/simple;
-	bh=sLCRk6/uSism7PBL6YsWZlfNGp+Bcx2uJV7GEoytOEc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JWwBGxARlNu8pTQlbYadN8qCerWcdng6a6YJbSrmlXmccEgfZleqWkdHvtcusXGzkFfWAwInaYej19VYNjw6i4JH3fouQEHPekwLo9ihTuWYKZ53jdb+FeLktdHTmltuegot/IcAcvHZsXEjhGK+lis+FrJ8za8UwQtlUVjIpmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i9ygx0rk; arc=none smtp.client-ip=95.215.58.174
+	s=arc-20240116; t=1786416950; c=relaxed/simple;
+	bh=atw93eZi+ZmnIZz5hDFPYZTbYSbwZuvvn4mXuT+D05w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=moKRifS5QW2BB9RHTEioWaI4sGt5h8psGp/VPNxR53eIBRmw+8JO/ATAtR41B2EC3PzBhVip/fB0DBoqP7lKCCvyvB/d67m5JCDVjXA6xIvSCLTItbU/wJSIqMmXPa2v0rocgBMTtzT1TOwSuQp5desEd9xjViU5K187O0lG76Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nYLIXLdW; arc=none smtp.client-ip=95.215.58.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i9ygx0rk"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nYLIXLdW"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786416942;
+	t=1786416946;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=aG3L4pZ1FR2dyN32epn3qJmKPYriOUXFnmtM/oEMKSA=;
-	b=i9ygx0rkJo4eCEAnOxTzVmUSkuqJDS99pecALEmRr3rW8AGgGXtL2Lk9NZj8Melp02i6qd
-	MJYuMQXxfKtQCqsUqvj63xc8F2oHueS5wKKs6D9Rju5VAXSxkph/cvXNjB9JorVsOXGKWQ
-	/fTmlfJfx9MvAUdDbLfN5dgvOZeQNpw=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=z8Lta0Xvjzz9D9Pj/K6bIxUSS5eKZQ8RbqTcjjbZ+Fc=;
+	b=nYLIXLdWxQp1gvMi/+aka14A0004pJjkiW3TJ0j0YToVkhPWNWsGXhcSiWmZmeEOttIBpE
+	YOvN51MV2r9umRivgFp3ujeVdHeNN0MiVMVdAYX5mA6zjQTnfXbSHzzkFfbN0R9Ejc7b4X
+	yfkJK5FfQjjaHPl4UNJx5gpjEIIbyNw=
 From: "Hui Zhu" <hui.zhu@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -47,9 +49,11 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
 Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next v5 0/2] bpf: Fix trampoline image UAF on multi detach failure
-Date: Tue, 11 Aug 2026 10:46:18 +0800
-Message-ID: <cover.1786412280.git.zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v5 1/2] bpf: Fix UAF in bpf_trampoline_multi_attach_free on update failure
+Date: Tue, 11 Aug 2026 10:46:19 +0800
+Message-ID: <aaa3829e11e2e26bcd3bda9ee6df7a0101a718ac.1786412280.git.zhuhui@kylinos.cn>
+In-Reply-To: <cover.1786412280.git.zhuhui@kylinos.cn>
+References: <cover.1786412280.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,47 +65,42 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Hui Zhu <zhuhui@kylinos.cn>
 
-This series fixes a UAF in bpf_trampoline_multi_attach_free() where
-old_image is freed while ftrace still calls into it, and makes
-bpf_trampoline_multi_detach() return void as suggested by Jiri Olsa.
+When bpf_trampoline_update() fails before modify_fentry_multi()/
+unregister_fentry_multi() is called, cur_image is unchanged
+(cur_image == old_image) and ftrace still calls into it.  Freeing
+old_image in that case causes a UAF.
 
-Patch 1 fixes the UAF.  Patch 2 is an independent cleanup that
-changes the return type to void and drops the WARN_ON_ONCE at the
-call site.
+Only free old_image when it differs from cur_image.
 
-Changelog:
-v5:
-According to the comments of bot+bpf-ci, split the single patch into
-two: the bug fix and the return-type cleanup.
-v4:
-According to the comments of bot+bpf-ci, add Fixes: and update comments
-of bpf_trampoline_multi_attach_free.
-v3:
-According to the comments of Jiri Olsa, drop patches 2/3 and the
-prog-side machinery.
-keep only the simplified image-side fix in
-bpf_trampoline_multi_attach_free() and make
-bpf_trampoline_multi_detach() return void.
-v2:
-Folded v1's two detach patches into patch 1.
-According to the comments of Jiri Olsa, Pin the prog (pinned_prog) on
-cur_image so it stays alive while ftrace may still call into it.
-Make bpf_trampoline_multi_detach() return void.
-Fix the same UAF in standard (non-multi) trampolines.
-According to the comments of sashiko, Fix the prog UAF in
-bpf_trampoline_multi_attach() rollback.
-Leak the trampoline in bpf_trampoline_put() when cur_image is left
-by a rollback.
+Fixes: aef4dfa790b2 ("bpf: Add bpf_trampoline_multi_attach/detach functions")
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+---
+ kernel/bpf/trampoline.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-Hui Zhu (2):
-  bpf: Fix UAF in bpf_trampoline_multi_attach_free on update failure
-  bpf: Make bpf_trampoline_multi_detach return void
-
- include/linux/bpf.h      |  9 ++++-----
- kernel/bpf/trampoline.c  | 16 +++++++++++++---
- kernel/trace/bpf_trace.c |  2 +-
- 3 files changed, 18 insertions(+), 9 deletions(-)
-
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index ed7999ad6c66..ea4d3c62f289 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -1595,7 +1595,17 @@ static void bpf_trampoline_multi_attach_init(struct bpf_trampoline *tr)
+ 
+ static void bpf_trampoline_multi_attach_free(struct bpf_trampoline *tr)
+ {
+-	if (tr->multi_attach.old_image)
++	/*
++	 * Only free old_image if it is no longer the active image.
++	 * When bpf_trampoline_update() fails before modify_fentry_multi()/
++	 * unregister_fentry_multi() is called, cur_image is unchanged
++	 * (cur_image == old_image) and ftrace still points to it. Freeing
++	 * it would cause a UAF when ftrace calls into the freed memory.
++	 * On success, cur_image is either a new image or NULL, so
++	 * old_image != cur_image means the image is stale.
++	 */
++	if (tr->multi_attach.old_image &&
++	    tr->multi_attach.old_image != tr->cur_image)
+ 		bpf_tramp_image_put(tr->multi_attach.old_image);
+ 
+ 	tr->multi_attach.old_image = NULL;
 -- 
 2.53.0
 
