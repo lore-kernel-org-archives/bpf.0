@@ -1,157 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4179D417BFE;
-	Tue, 11 Aug 2026 12:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F10B442B34;
+	Tue, 11 Aug 2026 13:00:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786452015; cv=none; b=LYPcE0U6XZy44k0vhNhfx5zKiT6ni/pxX9Sbk7Xy380jvCVHYvEYznGY388B3x+3D6UKoL9SQJK5fhqOEZ97aNYVQWXyryQjHMGquthf+2RgAa+jVV/ucT7Lx+OiJvrobj5mHyxI/FbvuwWsHZV9oh54jnyIp4munpFF/kGzNYY=
+	t=1786453250; cv=none; b=YHNUtSGgtF29741L6wh69Sit6PxMmefgZR8XcEmj8VNKDhFmkE1P5lPYS37in354pHSyUGTz/ydXqJ0G21+hcffQNMFKNSLB9b41u2FhWMwiZLUj3aIoxsqMtaOt45RTWUKhjlhsHALzdl9el3MkGr17ZUltMU48MF9ump1UrsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786452015; c=relaxed/simple;
-	bh=vlDB+IT6HAFzvJ9h8+I4k38CjPjJSAOOjk9KMjP6z7o=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=trvDiUwdRK96TIU9ng76SsZr1EV4kWOd1WgnY4/A50P+uu+CPMMfE5rpLa90Txx7saoNeEu64oS8noKCsgrNJ3wYvdn/mNARNUZNWx8DW1TsiLAGqwrJln3v5zdspwf2ldFFf+J0AQFnZRQT+eQR3dv0l5hgTyQfODCPxOoa5yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KGt+2tWO; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KGt+2tWO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F374B1F000E9;
-	Tue, 11 Aug 2026 12:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786452013;
-	bh=d5KyEGK2gDTZnR9ONWdkjRYGPSDM1pP3aSec7OaL0No=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=KGt+2tWOShDWT53xguh5grN6IERZuI/BcSokJh/qo9xHrDHp71T2lTEV8vQI3kKH8
-	 sOujFReeKMeaVoSrS8UVExf60Ru+jd3nZucEoHFqgKlr3oD/x2eFor3QT9EDx/pSSG
-	 b7Gp+UNTJ9jd9tURmxMw6E92iQrsfM6GTEOr5vI6JAgRDOz3vUAmAF5UgRQOUY3DQv
-	 Eq7LdS74jTomov+Lqtp3eqg9I4dlCIxLq7zHhX+wOvYT7jkRzrvezC23saJp85LF4h
-	 il/alnH9MhPAE+csaCRah1/5UqNT05pglcNV7hD/nL/WJz1sSUlW4Z56sJTnG/R0ex
-	 UWmi9hh6E70KQ==
-Content-Type: multipart/mixed; boundary="===============4081865467468875899=="
+	s=arc-20240116; t=1786453250; c=relaxed/simple;
+	bh=Apz5MdpqWGuqLZGhHoqZ47sKF/ZCk0rrcWIR4RuSpUY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Yo5eCDO4mIAt8LifYtyJm69ACm1jQhmFbdktcYbxKmZCWJ/pLm4NqtxJwj6IW7jgQAw9iXC7AsEfvdzRbCigpmsxpy3RBLdmsNSTRtN5SBHDMLo8trufvliZLAsvtbdKunSoMeN0fGxinQzJWZfCs8d2tj05FChn9SjlyBloXI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hKBYl5hMWzKHMN4;
+	Tue, 11 Aug 2026 21:00:27 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id D57BE4056B;
+	Tue, 11 Aug 2026 21:00:43 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgCXhdH6HHtqRkC2Bw--.50134S2;
+	Tue, 11 Aug 2026 21:00:43 +0800 (CST)
+Message-ID: <02288f8a-3a23-4d3a-97f9-5d830b420e0e@huaweicloud.com>
+Date: Tue, 11 Aug 2026 21:00:42 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5c189189e30671eaac05435772319bfeec1c1bf5d8a21a4f7e4aa95f0e88910a@mail.kernel.org>
-In-Reply-To: <20260811112154.94053-3-tasos.papagiannnis@gmail.com>
-References: <20260811112154.94053-3-tasos.papagiannnis@gmail.com>
-Subject: Re: [PATCH bpf-next 2/5] bpf: Add user memory access kfuncs for mm_struct
-From: bot+bpf-ci@kernel.org
-To: tasos.papagiannnis@gmail.com,bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,linux-mm@kvack.org,akpm@linux-foundation.org,david@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,kpsingh@kernel.org,matt@bobrowski.net,song@kernel.org,tasos.papagiannnis@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 11 Aug 2026 12:40:12 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/2] bpf: Remove unnecessary dup/restore
+ subprog_starts and prog clone
+Content-Language: en-US
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Anton Protopopov <a.s.protopopov@gmail.com>
+References: <cover.1785240296.git.xukuohai@huawei.com>
+ <7e27df89f8d4e1c8790cd26b4bd30ffbd2926cf6.1785240296.git.xukuohai@huawei.com>
+ <855d8ae50086be9d792c5efdaedd01895c7e2f13.camel@gmail.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <855d8ae50086be9d792c5efdaedd01895c7e2f13.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgCXhdH6HHtqRkC2Bw--.50134S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AryUGFy5CF1xZF4UXrykuFg_yoW8GF15pF
+	yqy34DCr4qva129a47Ja18Ca4fXa4rKryfGFWrK3ySvF1aqr1kGF13WwsFvFZ0vr4kCr1a
+	vw10vr9F9ayxZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UAwI
+	DUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
---===============4081865467468875899==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 8/11/2026 5:27 AM, Eduard Zingerman wrote:
+> On Tue, 2026-07-28 at 20:25 +0000, Xu Kuohai wrote:
+> 
+> ...
+> 
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index 505d134cd264..ab5da3ff941a 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+>> @@ -1564,27 +1564,34 @@ void bpf_jit_prog_release_other(struct bpf_prog *fp, struct bpf_prog *fp_other)
+>>    * Now this function is used only to blind the main prog and must be invoked only when
+>>    * bpf_prog_need_blind() returns true.
+>>    */
+>> -struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog *prog)
+>> +int bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog **pprog,
+>> +			    bool clone_needed, bool *cloned)
+> 
+> Imo, the code is harder to understand after this change.
+> Maybe it would be simpler if clone_needed/cloned handling would moved
+> to the caller. In the current form I'm not convinced the change is warranted.
+> 
+> ...
 
-> Register both kfuncs with the common BPF_EVENTS kfunc set and mark them
+Yes, this is not an elegant cleanup. I think the cleanest way is to create
+a general JIT layer, then iterate through all the instructions and do the
+constant blinding and arch JIT for each one on the fly. This would eliminate
+the prog clone completely. However, since we have more than 10 arch JITs, I
+would like to explore whether it is actually feasible and drop the current
+patch for now.
 
-This isn't a bug, but could the changelog be more precise here? The
-kfuncs go into common_btf_ids, which is registered for
-BPF_PROG_TYPE_UNSPEC, so they are reachable from any sleepable program
-rather than from a tracing-specific set.
-
-Relatedly, was gating them on CONFIG_BPF_EVENTS intentional? Nothing in
-either function depends on tracing, and the analogous
-bpf_copy_from_user_task*() kfuncs in kernel/bpf/helpers.c are available
-unconditionally.
-
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 6388b6b23e490..9ba3362832cd0 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -4931,6 +4931,8 @@ BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
->  BTF_ID_FLAGS(func, bpf_local_irq_save)
->  BTF_ID_FLAGS(func, bpf_local_irq_restore)
->  #ifdef CONFIG_BPF_EVENTS
-> +BTF_ID_FLAGS(func, bpf_copy_from_user_mm, KF_SLEEPABLE)
-> +BTF_ID_FLAGS(func, bpf_copy_from_user_mm_str, KF_SLEEPABLE)
->  BTF_ID_FLAGS(func, bpf_probe_read_user_dynptr)
->  BTF_ID_FLAGS(func, bpf_probe_read_kernel_dynptr)
->  BTF_ID_FLAGS(func, bpf_probe_read_user_str_dynptr)
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 891897f8a1b35..8931b3b2fc9d7 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -24,6 +24,7 @@
->  #include <linux/key.h>
->  #include <linux/namei.h>
->  #include <linux/file.h>
-> +#include <linux/mm.h>
->
->  #include <net/bpf_sk_storage.h>
->
-
-[ ... ]
-
-> +__bpf_kfunc int bpf_copy_from_user_mm(void *dst, u32 dst__sz,
-> +				      const void __user *unsafe_ptr__ign,
-> +				      struct mm_struct *mm, u64 flags)
-> +{
-> +	int ret;
-> +
-> +	if (unlikely(flags))
-> +		return -EINVAL;
-> +
-> +	if (unlikely(!dst__sz))
-> +		return 0;
-> +
-> +	ret = access_remote_vm(mm, (unsigned long)unsafe_ptr__ign,
-> +			       dst, dst__sz, 0);
-> +	if (ret == dst__sz)
-> +		return 0;
-> +
-> +	memset(dst, 0, dst__sz);
-> +	return ret < 0 ? ret : -EFAULT;
-> +}
-
-[ ... ]
-
-> +__bpf_kfunc int bpf_copy_from_user_mm_str(void *dst, u32 dst__sz,
-> +					  const void __user *unsafe_ptr__ign,
-> +					  struct mm_struct *mm, u64 flags)
-> +{
-> +	int ret;
-> +
-> +	if (unlikely(flags & ~BPF_F_PAD_ZEROS))
-> +		return -EINVAL;
-> +
-> +	if (unlikely(!dst__sz))
-> +		return 0;
-> +
-> +	ret = copy_remote_mm_str(mm, (unsigned long)unsafe_ptr__ign,
-> +				 dst, dst__sz, 0);
-> +	if (ret < 0)
-> +		goto err;
-> +
-> +	if (flags & BPF_F_PAD_ZEROS)
-> +		memset(dst + ret, 0, dst__sz - ret);
-> +
-> +	return ret + 1;
-> +
-> +err:
-> +	if (flags & BPF_F_PAD_ZEROS)
-> +		memset(dst, 0, dst__sz);
-> +	return ret;
-> +}
-
-This isn't a bug, but since copy_remote_vm_str() in mm/memory.c is
-already just a get_task_mm()/mmput() wrapper around copy_remote_mm_str(),
-would it be cleaner to have bpf_copy_from_user_task_str() delegate to the
-new mm-based kfunc (or share a static helper) rather than keeping two
-near-identical copies of the flag/PAD_ZEROS/return-value logic in
-different files?
-
-The new copy also uses a 'goto err' where the existing one inlines the
-error path, so the two now diverge in style too.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31488001112
---===============4081865467468875899==--
