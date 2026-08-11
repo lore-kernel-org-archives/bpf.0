@@ -1,200 +1,122 @@
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9799A3DB339
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 21:38:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786484285; cv=pass; b=gVTP91575wLzqXUPoB/MPNBsfQN8vlWt7ryR25pzgcVteBPG01i2sOMFh074tIqDxsLhmydCE/wVB4zO+3yyOmBKWgqPW06seNlxWjnpCN9smK0vo7c+gmIxW5VlXjjk+f+WokAOxtxW6xoniPcAsMwHK2sinrtaPyzhZO/1KIM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786484285; c=relaxed/simple;
-	bh=kQJpZ2LxciOVgNsyG0oOcBBWpjuJ/RktW+iJUDTkurA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jj+3a5zRyYHsTCfrGlU476rnFhHk3N8uoEbIWWeBzn639db6OBiMpiI2oCmln5zMnorTvq8E64X60itdAXG5fb9wy4WZU21ZNu2QB2I2UiRhJ+yyud758376XCuTHdfJ+Vb74+ckqRpqV9ETtgvM6A9OQEZmD3b09espHBK5CTw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YBp5sN1Z; arc=pass smtp.client-ip=74.125.224.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77228352C34
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 21:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786484741; cv=none; b=LzKihsTqWE2fZziK8endcgylMEgj+Hr5vvPhutmSlwZgU3TdnTaFYkz+mU+assICtjDq47/Vr/JEW5+68Ga8ayTbMIsH/P5HE+YqGdYYtZqIpK39fNS2WpHhDH+B0dVOne8sPADZDr++PWNFzzD9x4rjbQaCLtGiqb7FeF9Yz8k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786484741; c=relaxed/simple;
+	bh=l2I4h2348rDh8x+jW2z2jdFqYjFPK6PNULZizwSUWV4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AawiumJ2rQ0FklD+smvs41K5wh7dTr+rFMZ83BW+pZoUO/e8v/aY2dEJDc8fDeZOrkQI96oeV0UZBoyHTvqruESB+G/P/y8SgzrBK9wIE7kngnFd0KLWwZGykIj88fbnpM8wYeCqWqcb0V0ZzOg2L3tresvto0HAgbYnId+Dxvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4lNfIIm; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YBp5sN1Z"
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-669944f60b3so246812d50.1
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 14:38:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786484282; cv=none;
-        d=google.com; s=arc-20260327;
-        b=lSb+8MIA12+6qjTZz7/3u2Nw8gHOYa0ihVNknmdqMGAsMqjOLBpT08Z/Odnb4RgES5
-         SjFmYhQJn6T73lrWy6J7SPWiqKJR9fFPzdmLMyxPH6jsG4v27BTe/IkbyV+1e38WbC/z
-         VyfIvRbzYJGcpwujGJEl46KT+JXiE7W1jW3HTGs4HTHr6yDLGZ9fZ0bpcpUi1F1HAQSz
-         xN9CYBLwnhCBAMyy9yOrCs3H9MipNHN+aVCcwN/RgrlbjHbPOfNgrsqLsNKonj4IfWPz
-         l98ryDNqgrwdEP/9bNpQL1nrXWIDxEKeAEBAl8J/oMGGvcNj00rVocxmXkoQt9S5Iyr/
-         D4pQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2IbqDq8BGgv2lk3IKTjhWJ3RsrCW4o60xvNtWDoJF08=;
-        fh=KFuCT+lsuCBthncmPgCKNp8gBFIheQk8cxGC6Wnibas=;
-        b=YtqiBo7RkE1yQuSxbM7hYqBJ34MvJkJ392G1+AQGmoAc4BlF1SsVbwB+tt9mkhLnc/
-         LKCghP3Fp5HQ/Aq5p36J9XEMR+tVNQ9UM/j4+yBJRe2d9Vf7T3V0mniSo4qE53QZnkuT
-         nEXlKhFPqPIiiry6hbK2m1LDLGligmXgYnN+g9I1VDPH+hYiGUBoVnuGhGla/ubKNs08
-         h++gV3k+OgNfJ3qUllTei7Kw/N0wTcKp2YkBD6RAJZHKJeP/hFA+UAh5oA116GspRGew
-         BxYmZdak5Kes9j/0oqoRqXVS0nMPGtKsjfxbvniRFrcHLblxwlpu3ZL58k/zwzly1PUY
-         IKqQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4lNfIIm"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-848761b5897so71780b3a.3
+        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 14:45:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786484282; x=1787089082; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2IbqDq8BGgv2lk3IKTjhWJ3RsrCW4o60xvNtWDoJF08=;
-        b=YBp5sN1ZaUKO8OEiIV13F39VrLUMVgE3YTX9Nbu+mvALWPqvlWO8bcrdB9pr1c8xAO
-         SwDD2SgRq+wITkOpShf9YCaB78S6LPlLBBYPJH4Ztgvy9CPPsBqGQL/tn2memdSMOW2Q
-         Hu6F189woZZswkkgMBPxebUj7reYpxrUFxLZ9nHDunYQEEv7XqyX2a4oYw3aLki/GVci
-         ZnpFpzKZ59qkYz3UwauwyzwKNIIaVCwp4NXozmQyMaeJwW6nVq9YA2juExqoezzx3Ntr
-         BeotFnyRwkNC7oyx7eBbITpJ6kJHrkuk8VSeg/1s9racsAQ1AopIl6woQYvxmNbKyQXj
-         CMew==
+        d=gmail.com; s=20251104; t=1786484740; x=1787089540; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=OM6BZ9DAYVfndX+5WTuWDzY9P3dZ9W+R+GxML11hZwE=;
+        b=D4lNfIImCilM60PC5usA1BfNKzfx37eg2+fGFNyDgic1bYNQyh70ZniatTVYTdccuY
+         Gwk4wWCGWugbl2BXnRiWeZ8/xzdlsxAgDd/h1bvkdDIyDgHBM959csdUZVngK8MV8DLp
+         dmWuDhwtYrkNKdZUNiejZqW6HHdXRaDy7cHU6x0CizWlkM25KJtsUt7Wkt1eV6TJmEus
+         gVBaw/gNhcUpxxXwwF42XaUFa5ppRonZOzjZMnBnfcviKC3cvRyIs2mt4jXFtuDvyKgZ
+         l9DVsb+hGgGYvnn2vz1pgyrVvfpdl3GVC74QHOlEsN0+n2Zw2Oco9HC6nAc4BKLYP0FE
+         /ymg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786484282; x=1787089082;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1786484740; x=1787089540;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2IbqDq8BGgv2lk3IKTjhWJ3RsrCW4o60xvNtWDoJF08=;
-        b=XICAA1TEDqrh9OHI/0nk22CcTsMZe/0LikpGOXWLccrTwbe3nxDN/3S5eLQJmGqOAg
-         NP5Jagz/Dn2ufzQJfyxSoWdBJaEB0FdTv6wbRc9/6ll5iFdBqtg7GHYIM4ZpdkWKz9Pj
-         yPSKuGrgpJMezpuF5/SJKP6TQ8YRTcMbDy/WrgyUbCR7jcDzadzJ/4bgeqcVuWdMZEyM
-         kN4w+oZtH+rGtJ4r2BXFOGq+Jooj3YPnB9W+l8zzsWl0bCWfn4qTKiFwfUtSWhOdbHCj
-         8AftrVU61qO/76e99H7JyEsAxaQEB6rTvzkgKdDTzww+vn3JItzHdGGgz14zi3PssNkg
-         mbjA==
-X-Gm-Message-State: AOJu0YzvB8ZTtsWBSfdNqt2o6djpBxdUuMTK2oGdckQENLJ3aY5Y5vco
-	Vv/Snn6IFnbUfEg9CTnz6nG2skwCrU09D6Dzag5dc4c0YQkbvBGN4AOZerRchCUYdc2XT9qTrrT
-	b9iCVdWu49OHYO3BqBujV8Kib3PgM2PI=
-X-Gm-Gg: AR+sD10OPpdMjmpkJHVSGln30O17cfE1yV+sbALb6DtnsWJtEHXDo4kezNBzRhl8bvx
-	LEE+Qs8k0oBndLlEDU/DQZlJ6G5vp87pLiELmGdYFUbgbkdpt3AUtCBF7+DVgk5nXn/XEgkRE2A
-	MQLFgh03H0cjE7BQid/2IRqpq2w+Ar6v4Vw2Eq4yv8Vfjr2aVFK+QBp1s3aEgWSOlAjtlXs2p4D
-	OSo4uLMLdHoUk5zVSUiSr2Lf978qIWqRWARBOEAb6+CGuO6mGuIRTp3jSzyXEBwwB0MyRa0n/VL
-	6jGMw/W/TxiJBcpB9/rj9q52R791cxceW677cy+iYzM9
-X-Received: by 2002:a53:c148:0:b0:668:d09:f354 with SMTP id
- 956f58d0204a3-66b345ba1d9mr99815d50.50.1786484282326; Tue, 11 Aug 2026
- 14:38:02 -0700 (PDT)
+        bh=OM6BZ9DAYVfndX+5WTuWDzY9P3dZ9W+R+GxML11hZwE=;
+        b=imfPDw7CnodnoYu+iU/E3FtF03oGPtMAOy5bSCLf8W6iS5OsaQP15rw8QEKl3eks78
+         tU1ie+sBhDaYD102BA93gz6dDqBo2897q5kZV5hOu1oyATkT8z4u17Yck+98mfaEPqSo
+         Mb3XFD5mSOrWQHoTj3GC2vGj+NYhk/aLES8if+NF8ab2Q1uc1JjTqM4fxm2pVAZ4f+zG
+         0ffF3NoN2UdwZBcfvVq1mkfJB9c72ybjnln6g9Zb9CgWQACuEC0iAib5qVhz1lAwEqdl
+         pIhliHw+cPUGqTH85/y6AeikhN0rbVJcxfTg9sVjbKBfa1xuWvOCvAJ4WcsQHWSR7dIP
+         wi7Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqNlUgpCn6H8OacukzfkdmKD1W3ss6dLSNceu3VyTPafeDqzt+bnFRPPB5NGp+JETL/EGQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKtA62ZaX6JDQzG+ayMZ9Np3xplyeCTIy0IZha9vxBmc1xNnCA
+	5PV1S653Yvy4t84i8QFln010dSN/j+mXKbAvClclS9MJhvwM4qenL9+W
+X-Gm-Gg: AR+sD11+BoWuxo9cCjh1PcTvqrKMCL0J5VxRYXJ9LAx3AxAuBWrA6mMLntKtIukoPBr
+	DO/jf8SsMh1R4Eq6su50EKU6JKCUQ3nBHm/clvinURYrFx5dvwz/6Nf8DFYRD+yxreBU01uKwd7
+	/ZxhWGmOsWMJWZB//S56L70rUStfj3RA6tnZX5FD5EyVHQ0xTR1OHHtaAPdS87aRgsBwdm97TE+
+	s93/GYRqtLvt1/3xlhaZM7TYvaTRYkhWxKruaeqVsK6PLeXpVvVyr3yBIMnFMrXFTFjG0EQtNQP
+	rVUUmedXoK62DYmdqUYtsEADhmpRal/mKA6cUl2KSrtXTX7eGIVR8ZBCiyWiv+5X+j7soF7THVh
+	4aTXsGlNlZ61VN6+7E4rNVC9US7dEqq5j+fvQejK4+wmSDm7iYboYn1mfKci3J2lE9qYV0e7vIH
+	4pWTBXjZGrFSNo7+1+/dmYRGdw+OxarFSBP0+ltg04SjbmwiqezyBzLfciCZ45Jg1bIjlNGe16K
+	sOASCamLHmcK8cRiC0iWrgFKGn0EsnnQGSXjsagTEHVNZ0WVtfqGqzhEw==
+X-Received: by 2002:a05:6a20:d80f:b0:3c3:a1ed:3c36 with SMTP id adf61e73a8af0-3cc37dba1camr3984039637.24.1786484739578;
+        Tue, 11 Aug 2026 14:45:39 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:cd18:dfe8:e39c:4123? ([2620:10d:c090:500::4:f345])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14124583ad0sm2618051c88.12.2026.08.11.14.45.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2026 14:45:39 -0700 (PDT)
+Message-ID: <ab558ace2c4806c58db4b82f5d35953cce1b548f.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/6] bpf: Derive the atomic load register in
+ one place
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>, memxor@gmail.com
+Cc: puranjay@kernel.org, bpf@vger.kernel.org
+Date: Tue, 11 Aug 2026 14:45:37 -0700
+In-Reply-To: <20260811131600.506721-1-daniel@iogearbox.net>
+References: <20260811131600.506721-1-daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260706171918.317102-1-ameryhung@gmail.com> <20260706171918.317102-9-ameryhung@gmail.com>
- <DJXS2O9LFN5T.8BCWIJOB6N4M@etsalapatis.com>
-In-Reply-To: <DJXS2O9LFN5T.8BCWIJOB6N4M@etsalapatis.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 11 Aug 2026 14:37:51 -0700
-X-Gm-Features: AUfX_my1PtitOvYVmAIz6f7TjlV4KeLtpQSene380p3dvpq5XY0TfBc2QnQqmZs
-Message-ID: <CAMB2axO0dhqd71m+PGo51RbjFHsztD3=0B7sxg-aCSKg9j1C6g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 08/15] bpf: Add a few bpf_cgroup_array_*
- helper functions
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	martin.lau@kernel.org, shakeel.butt@linux.dev, roman.gushchin@linux.dev, 
-	kuniyu@google.com, kerneljasonxing@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 13, 2026 at 2:57=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.c=
-om> wrote:
->
-> On Mon Jul 6, 2026 at 1:19 PM EDT, Amery Hung wrote:
-> > From: Martin KaFai Lau <martin.lau@kernel.org>
-> >
-> > In the upcoming patch, the array can store a struct_ops map.
-> > The array could have a cfi_stubs acting as a dummy instead of
-> > the dummy_bpf_prog. The array logic will need to skip the cfi_stubs
-> > also in order to support storing struct_ops map in the array.
-> >
-> > bpf_cgroup_array_length(), bpf_cgroup_array_copy_to_user(), and
-> > bpf_cgroup_array_delete_safe_at() are added as a preparation work
-> > to allow skipping the cfi_stubs in the upcoming patch. This patch
-> > only skips the dummy_bpf_prog which is the same as the existing behavio=
-r.
-> > The current bpf_prog_array_*() callers are changed to call the new
-> > bpf_cgroup_array_*(). This is a no-op change.
-> >
-> > Unlike bpf_prog_array_copy_to_user(), bpf_cgroup_array_copy_to_user()
-> > does not need a temporary buffer. The cgroup caller already holds
-> > cgroup_mutex and dereferences the effective array with
-> > rcu_dereference_protected(), so it does not copy to userspace
-> > from an RCU read-side critical section. Details in commit 0911287ce32b.
-> >
-> > Another addition is the bpf_cgroup_array_free(). This prepares
-> > the array to have a different rcu gp for the struct_ops use case,
-> > for example, a struct_ops could have mix of sleepable ops and
-> > non-sleepable ops. In this patch, bpf_cgroup_array_free() only
-> > goes through the regular rcu gp. This is a no-op change also.
-> >
-> > bpf_prog_dummy() is also added to return the global dummy_bpf_prog.
-> >
-> > bpf_cgroup_array_dummy() is added to decide the sentinel based on atype=
+On Tue, 2026-08-11 at 15:15 +0200, Daniel Borkmann wrote:
+> check_atomic_rmw() open codes the mapping from a BPF_ATOMIC to the regist=
+er
+> it reads the old value into, the BPF_STX case of insn_def_regno() open co=
+des
+> the very same mapping a second time, the const folding and the liveness
+> transfer functions a third and a fourth time, and BPF JITs need it as wel=
+l
+> to know which register a faulting BPF_PROBE_ATOMIC has to clear.
+>=20
+> Add a small helper so that all of them can share it. No functional change=
 .
-> > It now always returns bpf_prog_dummy(). In the upcoming patch,
-> > it can return a cfi_stubs if the atype belongs to a struct_ops.
-> >
-> > Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
->
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
->
-> One style issue below.
->
-> > ---
-> >  include/linux/bpf.h |  1 +
-> >  kernel/bpf/cgroup.c | 79 +++++++++++++++++++++++++++++++++++++++------
-> >  kernel/bpf/core.c   |  5 +++
-> >  3 files changed, 76 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index 047ffc029666..e371a4733135 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -2561,6 +2561,7 @@ int bpf_prog_array_copy(struct bpf_prog_array *ol=
-d_array,
-> >                       struct bpf_prog *include_prog,
-> >                       u64 bpf_cookie,
-> >                       struct bpf_prog_array **new_array);
-> > +struct bpf_prog *bpf_prog_dummy(void);
-> >
-> >  struct bpf_run_ctx {};
-> >
-> > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> > index 7abbe12e108f..081d81de1816 100644
-> > --- a/kernel/bpf/cgroup.c
-> > +++ b/kernel/bpf/cgroup.c
-> > @@ -319,6 +319,67 @@ static void bpf_cgroup_link_auto_detach(struct bpf=
-_cgroup_link *link)
-> >       link->cgroup =3D NULL;
-> >  }
-> >
-> > +static void bpf_cgroup_array_free(struct bpf_prog_array *array)
-> > +{
-> > +     if (!array || array =3D=3D &bpf_empty_prog_array)
-> > +             return;
-> > +     kfree_rcu(array, rcu);
-> > +}
-> > +
-> > +static void *bpf_cgroup_array_dummy(enum cgroup_bpf_attach_type atype)
-> > +{
-> > +     return bpf_prog_dummy();
-> > +}
-> > +
-> > +static int bpf_cgroup_array_length(struct bpf_prog_array *array,
-> > +                                enum cgroup_bpf_attach_type atype)
-> > +{
-> > +     struct bpf_prog_array_item *item;
-> > +     int cnt =3D 0;
-> > +
-> > +     for (item =3D array->items; item->prog; item++)
-> > +             if (item->prog !=3D bpf_cgroup_array_dummy(atype))
-> > +                     cnt++;
->
-> The outer parenthesis needs braces since its body is an if-statement.
+> The BPF_LOAD_ACQ case is there for the JITs, which do walk all instructio=
+n
+> classes. const_reg_xfer() loses its explicit BPF_ATOMIC mode test since t=
+he
+> helper checks class and mode itself; the BPF_PROBE_ATOMIC it additionally
+> accepts cannot be seen there as it is only set from bpf_do_misc_fixups(),
+> that is, after const folding has run. arg_track_xfer() keeps its mode tes=
+t
+> since that also guards the stack clearing next to it.
+>=20
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> ---
+>   v2 -> v3:
+>    - Also use the helper for const_fold and liveness (bpf ci)
+>    - Drop the return value comment in verifier since the helper
+>      comment already covers it (Jakub)
+>   v1 -> v2:
+>    - also convert insn_def_regno (Eduard, sashiko)
+>=20
+>  include/linux/filter.h  | 24 ++++++++++++++++++++++++
+>  kernel/bpf/const_fold.c | 11 +++--------
+>  kernel/bpf/fixups.c     | 11 +----------
+>  kernel/bpf/liveness.c   |  9 +++------
+>  kernel/bpf/verifier.c   | 13 ++-----------
+>  5 files changed, 33 insertions(+), 35 deletions(-)
 
-Ack. I will add the braces.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-[...]
+...
