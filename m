@@ -1,77 +1,77 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D5037E5DE
-	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 20:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D443E6DEC
+	for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 20:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786478514; cv=none; b=o9xWDEuaQN3CBLN7iPoLqreV1Xpyhpnf2K/Dz8bYh5fMhDUJyKsWJJx5S6zGY+SN785bZfxoSmH/5tpTjpPx7HHM8SvFCEyVydUTs6F5vOl8+qIFH/9gLo49zs0l2ZXMlJBVAuNS2r3cFQhhZTQSC2c30DUPaZNG3OxpMINB2vc=
+	t=1786478698; cv=none; b=pDn48xAdfGq5osFnN+cia8UVN1wq0mi9t0mRv4Lq6FA2alUrwJM3eTqpqi8RpPfD9kiIaY0AZsLX4Vu8k9fESUwFDwkUh6aNPZhe1uGaQdN7G376/mbHPN+2nsDySTXjvUHwcLhFNCR2CaBY2hK8Ca4nt8aodrR/ApzbUGGh1mM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786478514; c=relaxed/simple;
-	bh=7nvBXY617kWxW87qn9YVdwTtlhPjTygeazcOW9F2H0M=;
+	s=arc-20240116; t=1786478698; c=relaxed/simple;
+	bh=8+MQ3PAmrdM/T+sX9Uz5RIcAMFUVnrmwBf5vR1gGAVA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=sAQfWj290XO36YiUUUKkiH68/1Y8WrsET2UjlXNs/JL9iw9bAwDjJDqbOwwpXyL6AZ9algNkGudmAMEe0RaJG0qMljvQa9cDxRysEcc6NeJ3Z5zF5V49LUTwZ1RY4GQdC5JLNgYeHjMAdtNFRjTMNhGakp7SpEaGYvysTJd8J4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mT8WnYk8; arc=none smtp.client-ip=209.85.215.174
+	 Content-Type:MIME-Version; b=BxCjmjy73pbUwXIG3uweqrgbXznUsEOndfiE2V5pNz4NAYvNMf+XB2ATd9XJcPSK+SyP30eVc9N9XTmX/5M3IppCFnBREJj0E8utl0YWnc8uIXNThgABYY6r6DrF85f21qmuOGAqlFqHRuZE5+e1Vx/oM9P2+4ak8Z3F0RPJgqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ApDXSvbl; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mT8WnYk8"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cbe827e3cb4so135314a12.3
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 13:01:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApDXSvbl"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3811f512167so155048a91.3
+        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 13:04:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786478512; x=1787083312; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786478697; x=1787083497; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=kGN+yUXE1g3855+FAgBcVw1f2LdIet9ZF/eeLjWAkUo=;
-        b=mT8WnYk8ikPl18sr2ITNm1Re63C6VssP85r4ve96xY6HhN+5HOnAonFPM5KwAaH/Px
-         SwuJQXG1SiBtfw9tIiww8I+a1yIKtgpB538iFzWgpW96bRwxYNe0oR23sXgBsijbTHgt
-         FN5c1f3QVODtcqvW9oefyFlfhOjg1BTDMVQdBVo3exijNc8Xt2QthZX+EK4A4YtRYxBL
-         I3aj/548XmMTgEddicPgvwI0ed3pWlZ6FUxw5DDDLWePBIL0PE66f9IEFQBhDCdb7ZWI
-         umQcS5ko8oXRaMP8n5/4+FyczOVLqXsf0zLQFmARDHyyoId9q+b/4/oyH8++rQ34V/9+
-         mJKQ==
+        bh=vU3Qzb/zPA8rCksH7GNN+GT6sKZBOTFbFjwnJ2Ezlfw=;
+        b=ApDXSvbly2aMOh7c+Wk5/zgd6+EZkTMqsSLb+KFl5YutxLXG58uu81/54/2mTL+OUC
+         sbjvDweK3ecDzQHlvLa8HTKpqrq7QifWQXTntBRZA3q8yiOWC7mCGL8OqSMulKUYzCid
+         IVXuYcsWLH8Js5zpu4hYuBJmkNh6GuZUM4NbUOmUGWTDlPsR9CKJ3MWkZxlqDOeNAxOS
+         mm9GsOTG6LQIIv9d17QE5iB+iSED6EtTpKrZTHZp5DC8ERGCHCHC6YvS9vxIxa1Ts7I2
+         xXIkVs4N4j4XHXIME4gc6IwoUfvL7IET3pPWzlai2CdsKyRF7tLx3uZNu2oaiLMcGGfm
+         5dxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786478512; x=1787083312;
+        d=1e100.net; s=20251104; t=1786478697; x=1787083497;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=kGN+yUXE1g3855+FAgBcVw1f2LdIet9ZF/eeLjWAkUo=;
-        b=gXNBksQxTvDgEicYSR5aWH8OOLYUKi9FGNtWcxtGEkpHyTN44gnjUDhr5ABdjY+DAw
-         hZc1AaqA0UiydUqrPit3g5tTqpLM4oEfPc/kQ/AgBFY59qjennWuMru/KIYAvOLLBZ58
-         nwwBAd5mteG6ta93ELi7pJ0XfCjHfLiEbPsT7YGBAhKo+fmy7z+4WCvNpds5FOFXmxIf
-         s48wyhDOPjr07Q2WXWbrY8MxllbE72pnPX7QxDQFaPyZkU16yVk70VtMLJDROm9xTQHg
-         UXZbXPpEwJt5KAzZbJgVc0wacxBdWFdK/VP1o4e5WekeqMzKhcL42TMMDWWTVt/4pWhn
-         nlUQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpnQyQp/SsyKjBeReFSDLkrqToz4ZxdbQXJ5auMVy8J4y/8+WQrQyntfBGudcoVVG/jYG4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNI3NylO18jUl4L53WPu/zu+fDBtvxu/KejJr+faMfdrdFa2Am
-	5D/SD46cGk/BGzzp9izHAP0ZBaefcQx3l7zbw243vNvO8Pgef1yzBHrrf5YztBxI
-X-Gm-Gg: AR+sD137IcWauAJlcEakFd+0xR3bKxV4vQ9GOaOSQoYrqA+z2a52+OyKaUB83PV+EpB
-	o9Y9wEB1ui4H88l05v+MIGJHQZ6JhbOB6bOgEFZRcuY1dXgArWf7cPmGIm/+LCNMdoi59LrMA2C
-	8h+ytP8965tnXu5FNBNTS4hKXLoJ6JhxAuxoyQdFhIy3lmfhbD4y2C200o4goWHiGX4jkjP5RPH
-	hb8W+NoTwDxeM9NqOC8E/3X/Bnezimt9d4tcCfZq9I9hc/jWPJtUfEFrpkylWJXLH7gQd9U3jxM
-	0/kiupo703rOQYdo7U/gPXvWYfy5fo9oTSlvRHL6R8JfuN7nMDb1UVkbyTxnuXGrGHbKuSW4h7S
-	mwemG+9ZaA7KA40VB9Yud6u9Dwe4eInSWfmbtD5gmJUk/Q9UiCkTYMCv3n/O/0mGfX08EDy9tez
-	XAXJy4P2QIAmSimVmSva2ZKcaY8/9PJ9n9bEtCXTBWbAnIsl7jnydb7i1YJnXlw5NmqRkLsOH6K
-	HoTKD+oZ/WOBdVH/ALG/+spqBJp+nPZGHvbXRG6Oxvthg==
-X-Received: by 2002:a05:6a20:430c:b0:3b4:7e2d:a3c2 with SMTP id adf61e73a8af0-3cc2ba56a3dmr6261220637.18.1786478512462;
-        Tue, 11 Aug 2026 13:01:52 -0700 (PDT)
+        bh=vU3Qzb/zPA8rCksH7GNN+GT6sKZBOTFbFjwnJ2Ezlfw=;
+        b=d9fsoGGPq0DiAcK+Y30Ar0xyYFAk6cc7rYyo+Hqf1NT1KJrA63eMldOAoQKyOlP7sh
+         jEYDkjiB3txtePy/TNsJIXaeh3HMbE8SDMi5ZrFMeDQhFnpHCFbIEWox9ECqDEbNOWmq
+         Y8fdtKpZGp4R1NF8G8qwEhPQnp9bKrJX7dYOGuhwoRiAccVVTzqDA7X0dyjf3qz22gyj
+         6338AbhC6R1Sk7ftpCJ/7BQX+ijQhLKp+DgkbOU9Tz8c580w65WeYPbOhRlKUtCSrhDF
+         hFLGFw6PB/FGgJ4c+zt5YwOCZ3UqZPab3v8GqyKwEQZbcmyFhzb5bkjdhDL6JZsQsg86
+         lXuQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqWmiRcN18UcefUt8RrhSO946o2YN4neWVNjBXV71YsOvFr0Kd9+KfPx5KylPi+Yc+6IHg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2CSalu38+MhRhry3gOJU5u8+Y3M++0Bs8/0o9ggkRAEyDb3YA
+	LGULwUW+3mgXx14/nX9Oj2aOYmB3DurA3w3v/Dea7jEOT7kM5fATs06t
+X-Gm-Gg: AR+sD10mL1+AvImCMRNM7nyT7Y7T68qFdv2pIabdIhoYZvj88ymRq2j3v2lLF5IACxJ
+	E2+wMVe2Wjr8liOvJDuOgccr498HpTkU7S6mrm+/hpfSUx3eIXwF4IEGHz7u/dQH8tovtaBnAUx
+	9YVWngtGin4OKnd9q9stOw+ANKSpwIOZmZ7M9kF6nComCMJTiyL+W8o4G7SddfQXCd1L8tQk26M
+	mqSSH/g2Q1xNS9gRfknb0aMJzYIoKxUNiDsbb0GOSf68MjJ2kX79gtq3NMi5xx23wDBVFbwBeT6
+	Vd/EhPrqjc7xMpEA3g1dttlPTu4glUMr0/bk7M+dExfx0cfCrIGE2JhS5uEYtYWSKDPAEi8fzjM
+	2VgdXxrmd//jUYLztJeeH7VvhEpTPCarJhvuoeGjw8/yjYTz1b3AI+flN8pApJPNc2j7VPbSW7M
+	VbPL1fmNssUkJXUcjwjhbEdD3vRJ6y3nXd929W4V+0CBKv5n//7cRfBV4aRbotaPFSlXzilYDpQ
+	ENtxdudLeFdJ6KlZ2GAsQ5G93ciyCyxwa6c5LK2cfS3ZA==
+X-Received: by 2002:a17:90b:3fc4:b0:38e:6d4c:14e6 with SMTP id 98e67ed59e1d1-392ec2fbc12mr6892265a91.3.1786478696496;
+        Tue, 11 Aug 2026 13:04:56 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:cd18:dfe8:e39c:4123? ([2620:10d:c090:500::4:f345])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31d39e5ebe8sm418744eec.21.2026.08.11.13.01.51
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1412458a390sm2133196c88.14.2026.08.11.13.04.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 13:01:52 -0700 (PDT)
-Message-ID: <9e61dc3e5a979d6defeb6cddd4cfdcc2ffcbdf45.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v7 2/6] bpf: Attribute async callback
- instructions to verification roots
+        Tue, 11 Aug 2026 13:04:56 -0700 (PDT)
+Message-ID: <58931262ff528992ebcf900a3b45708b20939be2.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v7 3/6] bpf: Show more useful info in stack
+ depth stats
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Tue, 11 Aug 2026 13:01:50 -0700
-In-Reply-To: <20260808062601.1070988-3-memxor@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil Tsalapatis
+ <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Tue, 11 Aug 2026 13:04:54 -0700
+In-Reply-To: <20260808062601.1070988-4-memxor@gmail.com>
 References: <20260808062601.1070988-1-memxor@gmail.com>
-	 <20260808062601.1070988-3-memxor@gmail.com>
+	 <20260808062601.1070988-4-memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
@@ -83,62 +83,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Sat, 2026-08-08 at 08:25 +0200, Kumar Kartikeya Dwivedi wrote:
+> Stack depth statistics list captured depths in subprogram-number order,
+> while per-verification instruction counts are reported separately. Since
+> libbpf determines subprogram numbers, it is hard to associate either
+> statistic with its subprogram name or see where verifier work is spent.
+>=20
+> Now that self and inclusive instruction counts are available for every
+> subprogram, keep the combined maximum stack depth on its own line and pri=
+nt
+> one uniform record for each subprogram. Represent the main program as
+> subprog 0, then classify each record as main, global, or static before
+> reporting insns_self, insns_total, and stack depth.
+>=20
+> The aggregate processed count is the sum of all self counts, while each
+> total shows verifier work rooted at that subprogram.
+>=20
+> When no subprogram name is available, print <unknown>. Keep the existing
+> aggregate "processed ... insns" record unchanged for compatibility.
+>=20
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
 ...
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 855f245e7468..9b76851dcf54 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -18762,6 +18762,7 @@ static int do_check_subprogs(struct bpf_verifier_=
-env *env)
->  	struct bpf_prog_aux *aux =3D env->prog->aux;
->  	struct bpf_func_info_aux *sub_aux;
->  	int i, ret, new_cnt;
-> +	u32 insn_processed;
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_basic_stack.c b/t=
+ools/testing/selftests/bpf/progs/verifier_basic_stack.c
+> index d3df7a9f1d8c..3a9ee8b55fbd 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
+> @@ -27,7 +27,9 @@ __naked void stack_out_of_bounds(void)
 > =20
->  	if (!aux->func_info)
->  		return 0;
-> @@ -18780,9 +18781,11 @@ static int do_check_subprogs(struct bpf_verifier=
-_env *env)
->  		if (!sub_aux->called || sub_aux->verified)
->  			continue;
-> =20
-> +		insn_processed =3D env->insn_processed;
->  		env->insn_idx =3D env->subprog_info[i].start;
->  		WARN_ON_ONCE(env->insn_idx =3D=3D 0);
->  		ret =3D do_check_common(env, i);
-> +		env->subprog_info[i].insns_total =3D env->insn_processed - insn_proces=
-sed;
->  		if (ret) {
->  			return ret;
->  		} else if (env->log.level & BPF_LOG_LEVEL) {
-> @@ -18809,10 +18812,12 @@ static int do_check_subprogs(struct bpf_verifie=
-r_env *env)
-> =20
->  static int do_check_main(struct bpf_verifier_env *env)
->  {
-> +	u32 insn_processed =3D env->insn_processed;
->  	int ret;
-> =20
->  	env->insn_idx =3D 0;
->  	ret =3D do_check_common(env, 0);
-> +	env->subprog_info[0].insns_total =3D env->insn_processed - insn_process=
-ed;
+>  SEC("socket")
+>  __description("uninitialized stack1")
+> -__success __log_level(4) __msg("stack depth 8")
+> +__success __log_level(4)
+> +__msg("subprog 0 (uninitialized_stack1) main insns_self {{[0-9]+}} "
+> +      "insns_total {{[0-9]+}} stack 8")
 
-Let's move this accounting inside do_check_common().
-Also, having a comment like:
+Nit: let's avoid splitting these literals, also the following would do:
 
-/*
- * The override is needed to account for async subprograms,
- * which are verified with their own set of stack frames and
- * thus are not accounted as callees by account_current_path().
- * Accumulate their total counts as total counts of the main
- * or global subprog hosting the async call.
- */
+     __msg("subprog 0 (uninitialized_stack1) main {{.*}} stack 8").
 
-would be helpful.
-
->  	if (!ret)
->  		env->prog->aux->stack_depth =3D env->subprog_info[0].stack_depth;
->  	return ret;
+...
