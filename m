@@ -1,169 +1,284 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48BD1F4CB3;
-	Wed, 12 Aug 2026 00:08:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD5F238D52;
+	Wed, 12 Aug 2026 00:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786493340; cv=none; b=XglYis5lQJt19jlZNpfYsBl4RNOzGV7yfCND5t9Psc6WTN60eKECsvpMZOFZF2wgIPbBOzATd0Tz+2qLFGmlWxtjvUbcFEKjOFfVT7o5iqVhOkZnlYwCkanMOJtLOy7T3LCGj1Qpr3gpwtEGJm3BKWIMmLxJaxlPSmVIrnuTfbE=
+	t=1786493436; cv=none; b=en1X2ZNBGlsiFwG7ceJU49taXnYDIqAHDsoCkD8p+veeQ6I+/Yt1gB6oJtwaxIuxzRzmh8N4SOMY35cbrwYj28fdW+P9ylk2kUQYsF1YzrwDugn8NSB1+LUWVZE56uFB7wVSFiMgKBqKGleWTAl1nIOeDeLE37ttrZHICFPScDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786493340; c=relaxed/simple;
-	bh=02LXLtOohRtNzDLZC8jHZ4zJXKCY2Mr/fq8f6DK+7Bg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Zv0XtxdftHwXaUKrMRqvvr+SY76H63iUtzmhhKVvGCCQRRgXwDrnP1gIeJATGKB0t5YkkBwtsiUsA24WDizLUmPHhCcWRCEa5dNK2XiRRtbQux9b6nLdDN6HX1iFCRYMPyK1Kk5uGj3VwP1Nj5Gf2Q7VeZ8043TdH+7aCqzwH7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1pQ4w6q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786493436; c=relaxed/simple;
+	bh=t6olm83AotBRKPZq7ry71okX+xBIJg32O5iui99BuR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o7SetjavDjs6fVNRBTQlv02hXWhMEkCEwGSj/ZhKVOP1mP+psf1Sdwmv9KCjvI6/1ktz16W7uCI43UmY9IFjkRP/oMEEG+HAhL80kKNi4XXitUC9AlqRYeTeIZ0pzsgRoIohhW3pqqXLSgwYCYxiv8WsJZqRsTudazGGu0SnHew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XpMB4VYZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1pQ4w6q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 654FC1F00A3A;
-	Wed, 12 Aug 2026 00:08:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XpMB4VYZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8401F00A3A;
+	Wed, 12 Aug 2026 00:10:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786493339;
-	bh=OMUGuca1IXTejWpojw+yltOhbTqG7NWSohLYzyaOFX8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=P1pQ4w6quPP74tX2lPUkmAzFb1zbiIgzFbB6AfQSwQJ96CVrrl6KgpCSWQ3pgocAz
-	 +oQUQ4yBTvuj98yTuoBOOwFegX6vO2lVIhgTaa9HeZARRs5/Sz/dKwneG5INAVbxQC
-	 nsYR7RzMOZOSd4chT+zCxi28mflZ0ocOOTFcP9Llyvw1FFM2jXlK8BDLJAbXJ42INx
-	 v6vq+I8Y0wB/oANj9KeUy+fe13CJl3HuuC4b+8ghK0tvtwmnOARDqniViVU3ME2lE5
-	 08lvRXFIodVmj3ddyHzcR0mSbeq9ZDOYl0wKSjvYOak5XYe7huYn/fCP+NwNYFlY6R
-	 3Me1S45JEkQJg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] perf/bpf: Fix data race in __perf_event_overflow
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Deepanshu Kartikey" <kartikey406@gmail.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260811235331.10044-1-kartikey406@gmail.com>
-References: <20260811235331.10044-1-kartikey406@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 12 Aug 2026 00:08:58 +0000
-Message-Id: <20260812000859.654FC1F00A3A@smtp.kernel.org>
+	s=k20260515; t=1786493434;
+	bh=uiSanArbz97BB7m2KdtVGOj8KN8QmAhB/TclJFCCfoQ=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=XpMB4VYZJfBoQZvALZxLl9rgbh0yLcWvJlhYnIkI3SLNpMZqanYlUxC8IUAc4dd4I
+	 ExovMldQlsBsnWZhFO5IWCXh/so0l5yLw0klPTY99iS3hXXmQ6vv6877paNKli+2ep
+	 x1oXoUdjz/42g1QN1iyAANS0Yh5kjNqaUhH9OV5e5P82wS3gpWnDdUD5F7htFyln2C
+	 Xf8Er03lVyaovpL6B1BBTQgKahgr/3cGgKyv9RDaxRFmy8slhZM5HR1Yw/PJ5WTJ/4
+	 hzJqOGYJQobvwtGSzPDMaHaTojjlhZFXzgo+utEjc6d+jSd7MlC15Q0TGUVIotJKUm
+	 gSdQ3ljsFLaoQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 1341DCE17BD; Tue, 11 Aug 2026 17:10:34 -0700 (PDT)
+Date: Tue, 11 Aug 2026 17:10:34 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Matt Fleming <mfleming@cloudflare.com>,
+	"Harry Yoo (Oracle)" <harry@kernel.org>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v4 0/6] rcu,srcu: Make call_rcu()/call_srcu() safe from
+ any context
+Message-ID: <21c5a596-fab8-4c08-a69b-81f020e65307@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260810122758.183765-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260810122758.183765-1-puranjay@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+On Mon, Aug 10, 2026 at 05:27:49AM -0700, Puranjay Mohan wrote:
+> call_rcu() and call_srcu() only ever touch their per-CPU callback lists
+> with interrupts disabled: the enqueue runs under local_irq_save() (and the
+> nocb locks when offloaded), and so do callback invocation and grace-period
+> work.  That is fine as long as call_rcu() itself is invoked with
+> interrupts enabled, but it is not always.  An NMI handler can call
+> call_rcu(), and instrumentation can reenter it.  The case that prompted
+> this is a BPF program attached to rcu_segcblist_enqueue() that frees an
+> object: the free reaches call_rcu_tasks_trace(), which is call_srcu()
+> under the hood, back on the same CPU with the srcu_data lock already held,
+> and it deadlocks on that lock.  Either way, enqueuing directly can corrupt
+> the list or deadlock.
 
-Pre-existing issues:
-- [High] Lockless TOCTOU race in perf_event_alloc() causes NULL pointer der=
-eference or Use-After-Free during BPF program inheritance.
-- [Medium] Incomplete fix for data races and missing memory barriers in BPF=
- attach/detach paths.
-- [Medium] Time-of-Check to Time-of-Use (TOCTOU) race drops valid perf even=
-ts during concurrent BPF detach.
---
+Queued for testing and further review, thank you!
 
---- Patch [1]: [PATCH] perf/bpf: Fix data race in __perf_event_overflow ---
-commit f63a2be5ceb79a2a8bb0263ba6723f7bf4ae763d
-Author: Deepanshu Kartikey <kartikey406@gmail.com>
+							Thanx, Paul
 
-perf/bpf: Fix data race in __perf_event_overflow
-
-This patch addresses a data race where __perf_event_overflow() concurrently
-reads event->prog without lock protection while perf_event_detach_bpf_prog()
-writes it to NULL. It fixes the race by introducing READ_ONCE() and
-WRITE_ONCE() in the respective read and write paths.
-
-Reported-by: syzbot+651d2774bd1d8395595f@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=3D651d2774bd1d8395595f
-Fixes: f11f10bfa1ca ("perf/bpf: Call BPF handler directly, not through over=
-flow machinery")
-Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
-
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-
-[ ... ]
-
-> @@ -10766,7 +10767,8 @@ static int __perf_event_overflow(struct perf_even=
-t *event,
->  	if (event->attr.aux_pause)
->  		perf_event_aux_pause(event->aux_event, true);
-> =20
-> -	if (event->prog && event->prog->type =3D=3D BPF_PROG_TYPE_PERF_EVENT &&
-> +	prog =3D READ_ONCE(event->prog);
-> +	if (prog && prog->type =3D=3D BPF_PROG_TYPE_PERF_EVENT &&
->  	    !bpf_overflow_handler(event, data, regs))
->  		goto out;
-
-[Severity: Medium]
-This isn't a bug introduced by this patch, but does the independent second
-read in bpf_overflow_handler() create a time-of-check to time-of-use race?
-
-If a concurrent detach sets event->prog to NULL between the READ_ONCE() here
-in __perf_event_overflow() and the second READ_ONCE() inside
-bpf_overflow_handler():
-
-bpf_overflow_handler() {
-    prog =3D READ_ONCE(event->prog);
-    if (prog) {
-        ...
-    }
-    return 0;
-}
-
-Wouldn't bpf_overflow_handler() evaluate prog as NULL and return 0? The
-caller __perf_event_overflow() evaluates !0 as true and executes goto out,
-which unconditionally drops the perf sample.
-
-Should the already-validated prog pointer be passed directly to
-bpf_overflow_handler()?
-
-
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2018,7 +2018,7 @@ void perf_event_detach_bpf_prog(struct perf_event *=
-event)
-> =20
->  put:
->  	prog =3D event->prog;
-> -	event->prog =3D NULL;
-> +	WRITE_ONCE(event->prog, NULL);
-> =20
->  unlock:
-
-[Severity: Medium]
-This is a pre-existing issue, but does this incomplete fix leave other data
-races in the attach and detach paths?
-
-Other functions like perf_event_set_bpf_handler(),
-perf_event_free_bpf_handler(), and perf_event_attach_bpf_prog() still
-perform plain writes to event->prog without WRITE_ONCE().
-
-Additionally, does this need release and acquire semantics? If the writes to
-event->prog and event->bpf_cookie in the attach paths are reordered by the
-CPU, could the NMI handler read a valid event->prog but a stale or
-uninitialized event->bpf_cookie?
-
-[Severity: High]
-This is also a pre-existing issue, but does the lockless access in
-perf_event_alloc() create a use-after-free or NULL pointer dereference
-during BPF program inheritance?
-
-During fork, perf_event_alloc() inherits the BPF program:
-
-perf_event_alloc() {
-    ...
-    if (parent_event->prog) {
-        struct bpf_prog *prog =3D parent_event->prog;
-        bpf_prog_inc(prog);
-        ...
-    }
-}
-
-Since this accesses parent_event->prog locklessly, can a concurrent
-bpf_perf_link_release() clear the pointer? If the compiler reloads the
-pointer after the check, bpf_prog_inc() would dereference NULL.
-
-Even if it is optimized to a single read, perf_event_alloc() is not inside
-an RCU read-side critical section. Could a concurrent detach finish its RCU
-grace period and free the BPF program, causing bpf_prog_inc() to write to
-freed memory?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260811235331.1004=
-4-1-kartikey406@gmail.com?part=3D1
+> Rather than scatter context checks through the enqueue, make it defer
+> whenever interrupts are disabled: stage the callback on a per-CPU lockless
+> list and re-issue it from an irq_work once interrupts are back on, going
+> straight to the enqueue helper so the re-issue cannot defer again.  Only
+> the drain side takes a lock; the staging is a bare llist_add() and stays
+> safe from NMI.  This is behind a new hidden CONFIG_RCU_DEFER, which is set
+> wherever a reentrant enqueue is possible (HAVE_NMI, KPROBES,
+> FUNCTION_TRACER or TRACEPOINTS); without it call_rcu() enqueues exactly as
+> before.  The gate is bare irqs_disabled(), so callers that merely hold
+> interrupts off are deferred too and pay one irq_work hop.
+> 
+> CPU offline is the awkward part.  A callback can be deferred very late in
+> the outgoing CPU's teardown -- from do_idle() or cpuhp_ap_report_dead(),
+> past the CPUHP_AP_SMPCFD_DYING flush that would otherwise run the irq_work
+> -- so the irq_work can no longer run there to re-issue it.  rcu_barrier()
+> and srcu_barrier() therefore drain every CPU's deferred list themselves
+> before they wait.  They drain rather than wait the irq_work out because
+> irq_work_sync() parks on an rcuwait, which holds a single waiter, so two
+> concurrent barriers would clobber each other's wakeup.
+> rcutree_migrate_callbacks() drains the outgoing CPU's list
+> too, so a late deferral still lands on a callback list even when nobody
+> calls a barrier.  To keep those drainers from stepping on each other, the
+> drain holds a per-CPU raw lock across the llist_del_all() and the
+> re-issue, so a drainer never returns having pulled callbacks off the
+> deferred list but not yet put them on a callback list.  Every lock the
+> re-issue touches (nocb, rcu_node, srcu_data) is already raw, so the
+> nesting is fine.
+> 
+> The drain re-issues with interrupts disabled, so instrumentation on the
+> enqueue path can re-enter call_rcu()/call_srcu() from inside it, stage
+> another callback, re-raise the irq_work, and the drain never finishes.  A
+> per-CPU flag catches that: a deferral that arrives while that CPU is
+> inside its own irq_work drain, and is not from an NMI, is dropped rather
+> than staged, with a WARN_ONCE() under CONFIG_PROVE_RCU whose backtrace
+> names the instrumentation responsible.  Dropping leaks that callback, and
+> can strand state its caller tied to it, but the alternative is a CPU that
+> never leaves the drain, and the producer is a BPF program that emits one
+> callback per enqueue, so there is nothing finite to wait for.  Only the
+> irq_work drain sets the flag: a direct drain from a barrier or from
+> CPU-offline re-issues onto the current CPU, so anything staged during it
+> is picked up by that CPU's own irq_work rather than feeding the drain in
+> progress, and no legitimate callback is dropped. Instrumenting the
+> irq_work machinery itself can still loop, as it can for any irq_work user,
+> and is not something this series can fix.
+> 
+> The irq_work is IRQ_WORK_INIT_HARD in all four flavors.  It is not needed
+> for correctness, but a non-HARD irq_work runs from a kthread on
+> PREEMPT_RT and can be delayed under load, letting deferred callbacks pile
+> up; running the re-issue in hard-irq context keeps that from turning into
+> an OOM.
+> 
+> Patches 1 and 2 do Tree and Tiny RCU, 3 and 4 Tree and Tiny SRCU.  Patch 5
+> teaches rcutorture to issue ->call() from a perf-overflow NMI -- the
+> nmi_calls parameter, on by default -- on the flavors that advertise it,
+> and checks that every callback issued from NMI is later invoked.  Patch 6
+> adds the BPF reentry reproducer described above.
+> 
+> Changelog:
+> v3: https://lore.kernel.org/rcu/20260805122346.269445-1-puranjay@kernel.org/
+> Changes in v4:
+> - rcu_barrier() and srcu_barrier() no longer skip a CPU whose deferred
+>   list looks empty.  The lockless llist_empty() test added in v3 skipped
+>   the lock that makes a drain conclusive: a concurrent drainer can already
+>   have emptied the list without having re-issued yet, so the barrier could
+>   return before those callbacks reached a callback list.
+> - Tree SRCU: drain before cleanup_srcu_struct()'s "just leak it" early
+>   returns, and in srcu_module_going() before it frees any ->sda.  Deferral
+>   skips check_init_srcu_struct(), so srcu_module_going() could skip
+>   cleanup_srcu_struct() and free ->sda with a staged srcu_data still
+>   chained on a per-CPU list.
+> - Dropped ->defer_exp: a deferred expedited call_srcu() now completes as a
+>   normal grace period.  The flag lived on the srcu_data rather than on the
+>   callback, so it expedited whole batches; only srcu_expedite_current()
+>   with interrupts already disabled can reach this, so the downgrade costs
+>   a delay and nothing else.
+> - rcutorture: use a fixed perf sample period rather than .freq, which sets
+>   TICK_DEP_BIT_PERF_EVENTS for every CPU and pinned the tick for whole
+>   runs of TREE04 and TREE07.  Also document nmi_calls, and say on the
+>   console when there is no PMU, since the issued==invoked check then
+>   compares zero to zero.
+> - kasan_record_aux_stack() moved to __call_rcu_common(), so a
+>   use-after-free report names the caller rather than the irq_work.
+> - Known gap, documented in patch 1: a callback deferred past the
+>   CPUHP_AP_SMPCFD_DYING flush leaves ->defer_work claimed with its
+>   self-IPI lost.  rcutree_migrate_callbacks() still re-issues the
+>   callback, but the first deferral after that CPU comes back raises no IPI
+>   and waits for the next irq_work there, or for rcu_barrier().
+> 
+> v2: https://lore.kernel.org/rcu/20260803134839.2103051-1-puranjay@kernel.org/
+> Changes in v3:
+> - Barriers no longer call irq_work_sync() on an online CPU's ->defer_work.
+>   irq_work_sync() waits on an rcuwait, which holds exactly one task, so two
+>   concurrent rcu_barrier()s syncing the same per-CPU irq_work could lose a
+>   wakeup and hang.  Both flushes now drain every CPU directly, guarded by a
+>   lockless llist_empty() test so the no-deferrals case stays cheap.
+> - The re-entry guard is now set only by the irq_work drain, which always
+>   runs on the CPU owning the list it drains.  In v2 a barrier draining a
+>   remote CPU set the flag on the draining CPU, so an unrelated irqs-off
+>   call_rcu() there was dropped and leaked even though it could not have fed
+>   the drain.
+> - The drain clears ->next before re-issuing.  A double call_rcu() on a head
+>   that is already debug-object-active makes llist_add() self-link it, and
+>   rcu_do_enqueue()'s double-free path returns without clearing ->next, so
+>   the drain span looped forever with interrupts disabled.
+> - An expedited call_srcu() is no longer silently downgraded: ->defer_exp
+>   records it per srcu_data and the batch is re-issued expedited.  Only
+>   srcu_expedite_current() is affected, __synchronize_srcu() sleeps and so
+>   is never deferred.
+> - The drop is now WARN_ONCE() under CONFIG_PROVE_RCU rather than an
+>   unconditional WARN, so instrumentation cannot reboot a panic_on_warn
+>   kernel; the backtrace is what identifies the offending program.
+> - Tiny RCU and Tiny SRCU use IRQ_WORK_INIT_HARD like the Tree flavors, and
+>   READ_ONCE()/WRITE_ONCE() on their draining flags.  TINY_SRCU is
+>   "default y if !SMP" with no PREEMPT_RT dependency, so it really can be
+>   built on RT where a non-HARD irq_work waits on the irq_workd kthread.
+> - Tiny SRCU: cleanup_srcu_struct() drains *and* irq_work_sync()s
+>   ->defer_iw.  That irq_work is embedded in the srcu_struct the caller is
+>   about to free, unlike the Tree flavors' static per-CPU ones.
+> - rcutorture: drive the perf counters from CPU-hotplug callbacks.  The
+>   one-shot for_each_online_cpu() loop lost them at the first CPU offline,
+>   after which the end-of-test issued==invoked check compared 0 == 0.
+> - rcutorture: per-CPU rcu_head instead of one global, so several CPUs can
+>   race the drain; count the call before issuing it so mid-run stats cannot
+>   show nmi-cbs > nmi-calls; release the perf events on the
+>   torture_cleanup_begin() early-return path; print nmi_calls in the module
+>   banner; report when nmi_calls is set but no NMI ->call() ever happened;
+>   and drop sample_freq to 100, since 1000 made perf lower the system-wide
+>   perf_event_max_sample_rate tenfold.
+> - selftests/bpf: the old ASSERT_EQ(reentered, 1) could not fail, and an
+>   atomic allocation failure in the nested task-storage delete made the test
+>   pass without ever re-entering call_srcu().  It now records and asserts
+>   the helper return values, probes for rcu_segcblist_enqueue() up front so
+>   a Tiny kernel skips instead of failing, and restores the CPU affinity it
+>   changes.
+> 
+> Testing: rcutorture rcu/srcu/srcud/tasks-tracing with nmi_calls, hotplug,
+> barriers and nocb toggling issued ~81000 callbacks from NMI with none lost,
+> under PROVE_LOCKING, PROVE_RAW_LOCK_NESTING, DEBUG_OBJECTS_RCU_HEAD and
+> RCU_LAZY, with no lockdep reports; SRCU-T, SRCU-U, TINY01 and TINY02 pass;
+> the BPF reproducer passes.
+> 
+> v1: https://lore.kernel.org/all/20260729162207.1567770-1-puranjay@kernel.org/
+> Changes in v2:
+> - Fixed the re-entry livelock Zqiang spotted: a BPF program on the enqueue
+>   path re-enters call_srcu() from inside srcu_defer_drain(), stages another
+>   callback and re-raises the irq_work, so the drain never finishes.  A
+>   per-CPU flag now drops such a deferral, with a warning, unless it comes
+>   from an NMI.
+> - cleanup_srcu_struct(): drain the deferred callbacks before syncing
+>   ->irq_work rather than after, since re-issuing one can start a grace
+>   period and re-queue that irq_work (Zqiang).
+> - Tiny SRCU: sync ->defer_iw in cleanup_srcu_struct() as well, so a
+>   deferred callback is re-issued onto ->srcu_cb_head where the leak checks
+>   can see it instead of being stranded on a soon-to-be-freed srcu_struct.
+> - Added Kumar's ack to the BPF selftest patch.
+> 
+> Testing: rcutorture rcu, srcu, srcud and tasks-tracing, each with
+> nmi_calls, CPU hotplug and barriers, and nocb toggling for rcu, all
+> End of test: SUCCESS with the count issued from NMI equal to the count
+> invoked (17987, 2924, 2661 and 4412 respectively) and clean consoles,
+> under PROVE_LOCKING, PROVE_RAW_LOCK_NESTING and DEBUG_OBJECTS_RCU_HEAD;
+> SRCU-T, SRCU-U, TINY01 and TINY02 pass; the BPF reproducer passes.
+> Build-tested x86_64 with TREE_RCU+TREE_SRCU, TINY_RCU+TINY_SRCU and
+> TREE_RCU+TINY_SRCU, each with CONFIG_RCU_DEFER=y and =n, plus arm64
+> TREE_RCU+TREE_SRCU with RCU_NOCB_CPU and RCU_LAZY.
+> 
+> Puranjay Mohan (6):
+>   rcu: Make call_rcu() safe to call from any context
+>   rcu: Make Tiny call_rcu() safe to call from any context
+>   srcu: Make call_srcu() safe to call from any context
+>   srcu: Make Tiny call_srcu() safe to call from any context
+>   rcutorture: Exercise ->call() from NMI context
+>   selftests/bpf: Add a call_srcu() re-entry reproducer
+> 
+>  .../admin-guide/kernel-parameters.txt         |   7 +
+>  include/linux/srcutiny.h                      |  12 +-
+>  include/linux/srcutree.h                      |   4 +
+>  kernel/rcu/Kconfig                            |   6 +
+>  kernel/rcu/rcu.h                              |  14 ++
+>  kernel/rcu/rcutorture.c                       | 150 +++++++++++++++-
+>  kernel/rcu/srcutiny.c                         |  93 +++++++++-
+>  kernel/rcu/srcutree.c                         | 170 +++++++++++++++++-
+>  kernel/rcu/tiny.c                             | 127 ++++++++++---
+>  kernel/rcu/tree.c                             | 133 ++++++++++++--
+>  kernel/rcu/tree.h                             |   6 +
+>  .../selftests/bpf/prog_tests/rcu_reentry.c    |  93 ++++++++++
+>  .../testing/selftests/bpf/progs/rcu_reentry.c |  51 ++++++
+>  13 files changed, 818 insertions(+), 48 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/rcu_reentry.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/rcu_reentry.c
+> 
+> base-commit: 9dc303e69bcd49f9668ca090ae45325269531fbb
+> -- 
+> 2.53.0-Meta
+> 
