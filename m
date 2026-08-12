@@ -1,77 +1,77 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8ACC388E4D
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 21:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD6A3FF1B4
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 21:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786569382; cv=none; b=eT5ZnelDqBWzKGkxZ/CvnfegrrxZTZyeOxzugX8aKAbo+r7VJIe6V/MxosiVxixuqwcmFGMpm38ZJndZLBD+r7NmjADrivQOCGfQbGk2NCMg+LPt0j2ddE+1EVLitTBnmuUZO/RkNwQIZbwTmBpdo8BOqZCg0bdAq1v4AJ15fxA=
+	t=1786569671; cv=none; b=Na7o/WZJOtmY8JD+MInJqyWW0Cf5X+9sLKHnmHQ/t9OdGRPrMii/zV8vn2TvniNBqIR+SZtihf7ONqk7cB/NAOP3x2IBYwN4jMjI9pDyin4Qubm+mjvflq27CgGYtGVS9Lez8ul4hX4SXgFjtIh0nwcvrNQlSQ3wWXG7NoVYTRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786569382; c=relaxed/simple;
-	bh=+iP89Ru77srU8zGS6ukoLla/uMXYHFAQCtQHOqmV468=;
+	s=arc-20240116; t=1786569671; c=relaxed/simple;
+	bh=Ko3e4fbCJMaQNJ8ibHn7NvV02W3ad28tB2YRq45uyrI=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QI3/fnZFuTiHkhRQwQ8Dgvo0n6jel63Am3tjouY44odT3bCZMgVTnn1xtOkrZXijPjb9qsq9qay2WOkJ/YXl8B9Z97MB7UKDRmLnxdmwU3l/Z5aJStwQ3C/hjB3oFLb1dD93YdnGRnw7G3MV1+IdXEvjRueVXeDQ2VCJgsAvIhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kOmwk16H; arc=none smtp.client-ip=209.85.214.181
+	 Content-Type:MIME-Version; b=KdGgv/c6cQX9CwadFWzOeu8eyMKxDImkDIVJkbQcECuYDcZdvLL/p4tZyH9/HZmBsgy0dMkHKP95QNRpXoSi71a++BCgn0pXfnM0/eAuGe+6l5CiDw1Wr0TPBe8CjgwW2YI56RBbyas2+zCvKBqqeYK9EUUkEnB/fOu/gHnKNyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j6M8TQn2; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kOmwk16H"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cc73e322dbso1045025ad.1
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 14:16:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j6M8TQn2"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38125cebfdaso2438711a91.1
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 14:21:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786569380; x=1787174180; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786569669; x=1787174469; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=waPavddOxs4ONK4hJG43C6PjtafrQg1J5yve0ys5Dvs=;
-        b=kOmwk16HEA9bE5pXom20Y0bSAknNthzTNU2WzKL9hPKq24ylOA/8vq2gMqlrqPSGmk
-         CUgE38ICC7jJAa10GxADRA/jscajfHyL3OCE8HNRN1/WZ9Iu9+XuuzN7eGncOdvAd4JA
-         zEYM5IdoQL/vAaSMTebwVgEn4XHkTowjCbk7AaPsoAgIsyEv3IOIsMctkWt6oM5DY3+x
-         jhhvrT26SR+wyzm8DcpOmAhWPmjhzcOcU8hCk0hkc13Rrn3ttUbARnaMCR+9MUzs8li1
-         4FDJCXZWyGgQ041JNDXl/yki6nHq+yZmMhy/hvZjaGO6Fb6dHGhcEG1s6JdD0fUptPSO
-         OR+A==
+        bh=7jblAko4TIElX4GrxgpB7RG/riVFgh6VtIwHLxYN80M=;
+        b=j6M8TQn2W1lKy3guuasPhgUlzBB2sqnh45MrZ4EwTE7xOxn0YpSiHixToOg1/dP1Hs
+         LLiOqquBMcYDZF1yCe4iy5v1jngmQLPPloH7fzefmk+z7cjNDQdqebUmOaBVLRHPiMIe
+         VGkd/MoE+ByNTBcJLS2MXza19yO7nRMITGVqakC1U9ZBUVzKkJMAn9cZRWUx8g/rVcix
+         lnuIi9hrc6IWlLM60gEgLChw5PiT8C0Cl0Q+o3WaqnAtW6TXaOGD43Qm/yjORiQr+zWY
+         xNH/jjc5H1TPNX02H5jAq+xZjdfwhtzwH3KJgD10SWzwjyESaJw27sih4H0/Xn7kRpoW
+         S/XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786569380; x=1787174180;
+        d=1e100.net; s=20251104; t=1786569669; x=1787174469;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=waPavddOxs4ONK4hJG43C6PjtafrQg1J5yve0ys5Dvs=;
-        b=Ula162GqnKt3htSl92sZtTQwlvyrJglqqamrpD/QoEGsCGB5Aezikxd7sJJ/4vLza2
-         AnXeX6pr+CNBGLnyFZvDtxkFrMOX6UK9qNYZcM79lmjTskJBeVolSzcvOhbn90oNCN9g
-         ojFcrPxpqlGysQjrZ3wyS5iqmcrwK8UhA99bhg2NPvqfOKFodmRhjQ2Vx4NQrrlFvLhL
-         IxPGvkyhPOAz8ziFzRv3XPA14yIDJdaPBT6NQF4ZcWYmOao625Dr45zd7KggZgX569WS
-         CR5wWudJV+0X/A9ejq5xai9T+LMtpnsMHCOolGgG0pvDeGHWhOVbOrUz9mos0WG14x+I
-         X2Sw==
-X-Forwarded-Encrypted: i=1; AHgh+RoNW5OM3UUJERSMUA7npzoPupc4aD+Rkk/ay/yr93pvgGuw7s5ek9EDMNkHZP6WdTdwdFs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9Wz/zOViJ/Zix6I9wlZ/aSFSHkuNJnFA0MC866yDsWAZy8sXp
-	JqtlGSNU9YxeiYA2B9Zafh7L8UFyDl6/JQoES6SjYM7fz20suK0b8Lj+upiLLW7u
-X-Gm-Gg: AR+sD12xWfvK83rqyh2MOQRv6l9pdhT7i7cTS4wITBMcV1dswQBph/qAGjoHEQawWpK
-	4g2PVYXl8Jx7N5OUsY1vZwCEmml9OlONq6xhQX7Ic5aCf09Qp5DBoEKMG149TD6vdN4Ix9NJv9s
-	n8uJPAldJLf82ut0SkhbInuElae/WLR2nKWScaOW+sQIpu6hXWWfYbr1HMDFP6XeNm0IGd0ovoY
-	0Z+AeglojVnlq1D7a00BxrBR3YqVd1oXzPom/G3MCxMBduePwb1aIc950BcOmBJS2cjRoL7qHt6
-	ktdPMI/Ob3yOWR6KOtgbq/Y3YbeTBHgnwBMZmFTAROG3vwplWxu3K3M/DxaGWz4HbKIajoAKpEk
-	7cSyB6Uy6lpzisrTCxZ4cKggIUMcRIr2S773+0hyGV+faDEUzufCHc1PWGuP7RVHfHDjmk+Z8Mc
-	01sBfN1/+Ut8xHaqiqtIAMFGtGew5XC+76Gc5ZxRX3MzZtodxTqB755cUQzwWneiMvTZNAwmcOI
-	+kz2bm834N+fbaRWkZoj9b77cY=
-X-Received: by 2002:a17:902:ea0b:b0:2ca:e3f:6a4a with SMTP id d9443c01a7336-2d37e9ae53fmr9963005ad.21.1786569379648;
-        Wed, 12 Aug 2026 14:16:19 -0700 (PDT)
+        bh=7jblAko4TIElX4GrxgpB7RG/riVFgh6VtIwHLxYN80M=;
+        b=szaBJlqfkrglkePl5FWqg4X8/g38tuL+72d4uA1LKw0WyCRQ1KyqfygAI+TQXIrrCG
+         /CLJJBRSrIh3zLWG0TikfQ/fuVoeoVjHEumYofLBJ+4ryOyOCFZrZtRi9fCRaB6Znvm7
+         kI17FOj2DBxePBqiDzleIqHMLowKNQI6dpm8bspNBccHAAs/UFEuU1954CIU0afgVDGn
+         PoMI+Mq5KbCTAL+zE3tdiTVrDD95DiB9ShUJitsGBVEY3vRqepdxAD2Zsm3+cKXfk7st
+         qLubEV1lk8hwzSh9eyRXjL0CYUnigo2bX+DGtgmP/2Uo9ySI5Y5NtPJqYOzCoNodePx8
+         i2TA==
+X-Forwarded-Encrypted: i=1; AHgh+RrNMz8FtEvWzh20ZnrvBeySyzh/TqYO68T5nS7ZyXAAz0nA6JcfxBT+b8LKUI4cXzulX0w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yya+8d6CPmxUfvnKfCzBbsKXTbfOdDE7Mt0M3ohfJaIsmZdwMm1
+	3Y+bj0sKMeS+/vqjJbf208bRQ17Wi7ODKZ0kto33zyyI9D1crLiG3jqZ
+X-Gm-Gg: AR+sD13QmGoZhPubi3C7UZRPqbcBggPP3lbdthALRz2HviGaYGgiRLfMbt8z/037FIm
+	T538ROBOBSp5lgnzpWHbuAndzLSmigLV0ZIwYKxAg7vFuFPiHKZLwlBzkiZ3R04d70w9wQva/dK
+	WbaHaqy5y0p/qTk9r8mZV89o5cYkXUfkq6zdTD1JrHhAPKIIGPvtKIA5yhpL0ZH05MgA5IVA0Yu
+	Prp5JO2r60PfRVvd0teuFDL6ehzw/ySlO0y1ZOx+rtFFm0iADZBPhFAiY6q9R6LnxG3Wyib1u1y
+	4k1Z9B/3E1DBYAkcBp55Kb/SoW9wOmxghKc3s7r34OAKYWVAgswChAr9CtisAbM/t4MCI7afV4E
+	lni5J5ycIDMk3cWmBuRYhnQH9QBx4cb0Xv2djt6oftaf1WGo+kZmuFn6Cqt1mqU8J/lCKmOP6SG
+	q8mEmZ2eZhEUO4c5hJz283CbBaLlGxGq3CpnfOs1x8LKlEZPV2EGvZjm8TxM075sZgoUtqgz8VP
+	hNTu+IrjH+51bPH
+X-Received: by 2002:a17:90a:ec8e:b0:380:fead:448d with SMTP id 98e67ed59e1d1-3931e26f714mr1407372a91.13.1786569669157;
+        Wed, 12 Aug 2026 14:21:09 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d37c40d73bsm1522795ad.42.2026.08.12.14.16.18
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3931cd46314sm864632a91.6.2026.08.12.14.21.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 14:16:19 -0700 (PDT)
-Message-ID: <6e48cbadf7fb90cce2da403266e4a962928b7c88.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 04/13] bpf: Track R2 of register-pair
- returns in precision backtracking
+        Wed, 12 Aug 2026 14:21:08 -0700 (PDT)
+Message-ID: <f98b37e8dfd115063150a7f3caea873451295771.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 05/13] bpf: Account R2 of register-pair
+ returns in live register analysis
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
  <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
  kernel-team@fb.com
-Date: Wed, 12 Aug 2026 14:16:16 -0700
-In-Reply-To: <20260811000932.2381351-1-yonghong.song@linux.dev>
+Date: Wed, 12 Aug 2026 14:21:05 -0700
+In-Reply-To: <20260811000937.2381528-1-yonghong.song@linux.dev>
 References: <20260811000911.2378679-1-yonghong.song@linux.dev>
-	 <20260811000932.2381351-1-yonghong.song@linux.dev>
+	 <20260811000937.2381528-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -83,112 +83,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Mon, 2026-08-10 at 17:09 -0700, Yonghong Song wrote:
+> A BPF_EXIT of a subprogram returning a value larger than 8 bytes (a
+> struct/union or an __int128) reads R2 as well as R0, since the second hal=
+f
+> of the return value is passed back in R2. compute_insn_live_regs() only
+> marked R0 used at exit, so a callee's R2 could be considered dead and
+> cleaned from checkpointed states, which would allow unsound state pruning=
+.
+>=20
+> Mark R2 as read at the BPF_EXIT of a subprogram that does return a regist=
+er
+> pair. bpf_compute_live_registers() walks the instructions in order and
+> env->subprog_info[] is sorted by subprogram start, so the containing
+> subprogram is tracked with a running index and its return convention is
+> queried once per subprogram through bpf_ret_reg_pair().
+>=20
+> Marking R2 at every exit instead would be simpler, but R2 would then stay
+> live backwards across any call that is not followed by a write to R2, whi=
+ch
+> is nearly every program, and would needlessly hurt state pruning.
+>=20
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
 
-...
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 79680f3b4c74..911d57ce2488 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -1447,6 +1447,8 @@ int bpf_jmp_offset(struct bpf_insn *insn);
-> =C2=A0struct bpf_iarray *bpf_insn_successors(struct bpf_verifier_env *env=
-, u32 idx);
-> =C2=A0void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask);
-> =C2=A0bool bpf_subprog_is_global(const struct bpf_verifier_env *env, int =
-subprog);
-> +int bpf_get_kfunc_ret_size(const struct bpf_prog *prog, u32 func_id,
-> +			=C2=A0=C2=A0 u16 btf_fd_idx, u8 *ret_size);
+> =C2=A0kernel/bpf/liveness.c | 25 ++++++++++++++++++-------
+> =C2=A01 file changed, 18 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> index ef9a5a922887..451edd74fa6f 100644
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
+> @@ -2062,10 +2062,15 @@ static inline u32 mask_widen(u32 m) { return m | =
+(m << 16); }
+> =C2=A0static inline u16 mask_lo(u32 m) { return (u16)m; }
+> =C2=A0static inline u16 mask_hi(u32 m) { return (u16)(m >> 16); }
 > =C2=A0
-> =C2=A0int bpf_find_subprog(struct bpf_verifier_env *env, int off);
-> =C2=A0bool bpf_is_throw_kfunc(struct bpf_insn *insn);
-> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-> index 40bd04421a99..fc8ecad6f01b 100644
-> --- a/kernel/bpf/backtrack.c
-> +++ b/kernel/bpf/backtrack.c
-> @@ -425,6 +425,15 @@ static int backtrack_insn(struct bpf_verifier_env *e=
-nv, int idx, int subseq_idx,
-> =C2=A0				 */
-> =C2=A0				verifier_bug_if(idx + 1 !=3D subseq_idx, env,
-> =C2=A0						"extra insn from subprog");
-> +				/*
-> +				 * a global subprog returning more than 8 bytes
-> +				 * sets R2 as well. R2 is part of the args mask
-> +				 * checked just below, so it has to be cleared
-> +				 * here rather than next to R0.
-> +				 */
-> +				if (bt_is_reg_set(bt, BPF_REG_2) &&
-> +				=C2=A0=C2=A0=C2=A0 bpf_ret_reg_pair(env, subprog))
-> +					bt_clear_reg(bt, BPF_REG_2);
+> -/* Compute info->{use,def} fields for the instruction */
+> +/*
+> + * Compute info->{use,def} fields for the instruction. @ret_reg_pair tel=
+ls
+> + * whether the subprogram containing @insn returns its value in the R0:R=
+2
+> + * register pair, which matters for BPF_EXIT.
+> + */
 
-Nit: Tbh, I don't see a need in the bpf_ret_reg_pair() check.
-     I'd call bt_clear_reg(r2) unconditionally.
-     Don't find verifier_bug() justification all that compelling.
+Nit: this comment change is unnecessary.
 
-> =C2=A0				/* r1-r5 are invalidated after subprog call,
-> =C2=A0				 * so for global func call it shouldn't be set
-> =C2=A0				 * anymore
-> @@ -508,6 +517,19 @@ static int backtrack_insn(struct bpf_verifier_env *e=
-nv, int idx, int subseq_idx,
-> =C2=A0				return -ENOTSUPP;
-> =C2=A0			/* regular helper call sets R0 */
-> =C2=A0			bt_clear_reg(bt, BPF_REG_0);
-> +			/* a kfunc returning more than 8 bytes also sets R2 */
-> +			if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL &&
-> +			=C2=A0=C2=A0=C2=A0 bt_is_reg_set(bt, BPF_REG_2)) {
-> +				u8 ret_size;
-> +				int err;
-> +
-> +				err =3D bpf_get_kfunc_ret_size(env->prog, insn->imm, insn->off,
-> +							=C2=A0=C2=A0=C2=A0=C2=A0 &ret_size);
-> +				if (verifier_bug_if(err, env, "no kfunc desc for insn %d", idx))
-> +					return -EFAULT;
-> +				if (ret_size > 8)
-> +					bt_clear_reg(bt, BPF_REG_2);
-> +			}
+> =C2=A0static void compute_insn_live_regs(struct bpf_verifier_env *env,
+> =C2=A0				=C2=A0=C2=A0 struct bpf_insn *insn,
+> -				=C2=A0=C2=A0 struct insn_live_regs *info)
+> +				=C2=A0=C2=A0 struct insn_live_regs *info,
+> +				=C2=A0=C2=A0 bool ret_reg_pair)
+> =C2=A0{
+> =C2=A0	struct bpf_call_summary cs;
+> =C2=A0	const u8 class =3D BPF_CLASS(insn->code);
+> @@ -2196,7 +2201,7 @@ static void compute_insn_live_regs(struct bpf_verif=
+ier_env *env,
+> =C2=A0			break;
+> =C2=A0		case BPF_EXIT:
+> =C2=A0			def =3D 0;
+> -			use =3D r0;
+> +			use =3D ret_reg_pair ? (r0 | reg64_mask(BPF_REG_2)) : r0;
 
-And same here, too much code for bug detection that fired once or
-twice in my memory.
+Nit: let's add an r2 variable.
 
-> =C2=A0			if (bt_reg_mask(bt) & BPF_REGMASK_ARGS) {
-> =C2=A0				/* if backtracking was looking for registers R1-R5
-> =C2=A0				 * they should have been found already.
-> @@ -522,7 +544,30 @@ static int backtrack_insn(struct bpf_verifier_env *e=
-nv, int idx, int subseq_idx,
-> =C2=A0					return -EFAULT;
-> =C2=A0			}
-> =C2=A0		} else if (opcode =3D=3D BPF_EXIT) {
-> -			bool r0_precise;
-> +			bool from_subprog_call, r0_precise, r2_precise =3D false;
-> +
-> +			/*
-> +			 * BPF_EXIT in subprog or callback always returns
-> +			 * right after the call instruction, so by checking
-> +			 * whether the instruction at subseq_idx-1 is subprog
-> +			 * call or not we can distinguish actual exit from
-> +			 * *subprog* from exit from *callback*. In the former
-> +			 * case, we need to propagate the precision of the
-> +			 * return registers, if necessary. In the latter we
-> +			 * never do that.
-> +			 */
-> +			from_subprog_call =3D subseq_idx - 1 >=3D 0 &&
-> +					=C2=A0=C2=A0=C2=A0 bpf_pseudo_call(&env->prog->insnsi[subseq_idx - =
-1]);
-> +			if (from_subprog_call && bt_is_reg_set(bt, BPF_REG_2)) {
-> +				struct bpf_subprog_info *callee;
-> +
-> +				/* 'idx' is the exit insn, so it is in the callee */
-> +				callee =3D bpf_find_containing_subprog(env, idx);
-> +				if (verifier_bug_if(!callee, env,
-> +						=C2=A0=C2=A0=C2=A0 "no subprog contains exit insn %d", idx))
-> +					return -EFAULT;
-> +				r2_precise =3D bpf_ret_reg_pair(env, callee - env->subprog_info);
-> +			}
-
-And here, if the verifier_bug check is ignored r0/r2 can be handled togethe=
-r.
-
-> =C2=A0
-> =C2=A0			/* Backtracking to a nested function call, 'idx' is a part of
-> =C2=A0			 * the inner frame 'subseq_idx' is a part of the outer frame.
+> =C2=A0			break;
+> =C2=A0		case BPF_CALL:
+> =C2=A0			def =3D ALL_CALLER_SAVED_REGS;
 
 ...
