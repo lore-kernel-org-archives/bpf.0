@@ -1,110 +1,147 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA4139A047
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 23:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0099142AF9E
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 23:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786578615; cv=none; b=fjWSq+88pfGmxjMj4G0wfOTSJLbx8ieAPExaNNbtwZbFv1qskeqduFCGIpFrPiXS0kOcHgeCNzzdUaklQ15wVaN5G7jEAVfNw2EutA8UVLrzePOYc/dTIE3Q6+TXaVn6SlQtuVsvSDG1P8d6p0NRWlAYSIXLeUK6W6O9VnpvEUo=
+	t=1786578834; cv=none; b=n8yvVv4wb9W/9phNyftwECKK5k1GhXIkCHwpmQ3hEHWCBnarFKoPPxyOuskQ4sJ9gWEr6jGjP+b6I8eryzf5FctfF4fYi9zH31PUO+5+4NDehA6mrHmgJoPdOVag6cgDgH7b5b0i8/R1z87NdZp0CQgOfh+O9rNnfyq+Jaeza0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786578615; c=relaxed/simple;
-	bh=rMyxTMIrx9BRSNRs//okHjjPDwmSPV3B2p+iIsA539Y=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=AgRIG2/mYdRyVsIGKOYkIbQXQv3p77wIWJeGNHUvnD7erNgaTxagfKyb3wCWSb8M1a7JBOFlw9rp7tA3RRvr3E77+Zoqg9Lj+ni8YQfxaE21OlIS2YbAWxrCPwQX4xgcZf683VyMSfkLwDqoofIcNv16Dmc+Uqjzkdp8jIq+MAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kYkaQtpP; arc=none smtp.client-ip=74.125.225.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786578834; c=relaxed/simple;
+	bh=6QzBJF4E4ebUZgqacqYt1fwiFr+AQbcYqvu7J6LJxUM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ePpJ1ZS3kUMcvKxMwvwvZrlvvuqWzlOfsjGQnsuhqypJwuE9DOU3cwUXSY+/TPS0FK5dKc+MZ1w26LltkqCio0jZEsyf9UPSD0X3kkcGHf2NPCoHl98/GqAuaz1AqeIS49yeEccPMIDMjWLRWuQDZEiMGoKc4tnlpeOACQVDhKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SzOgM/oT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kYkaQtpP"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-481512c85ffso599218f8f.1
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 16:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786578612; x=1787183412; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=rMyxTMIrx9BRSNRs//okHjjPDwmSPV3B2p+iIsA539Y=;
-        b=kYkaQtpPLKR7Kbx+bQe2UXQBhYteN2NgX6t6yWbs6hAxwZHVrBXeZQiN4BhpNE2eCx
-         Db0nBvOOYA87vA8ZoghdUKi+DbApM7aXw6Fas6xr2lH8mVTdqt/L/1zVh4fihbiZMDxM
-         Vil2FyUh610t3eqgxptH2JWffxgAa/0F7IhKXj5o4PXu8aGHxbrlmkEX7v1ch7TYMBUw
-         pPGasU4bvRgBHL7eDunewkksQDZmRuPVfViPRf6TJZ2ZJ8/jHwFBaKOoVf/J3Ylw2hwD
-         l7WJtfFEL0teYuAQIgvoPaJIyl6ZAZLu8+lr5QnSsBbk1xfaArV0IoAmzlz255dTkHsG
-         /Hhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786578612; x=1787183412;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rMyxTMIrx9BRSNRs//okHjjPDwmSPV3B2p+iIsA539Y=;
-        b=r7T1EHwYhtihUGwExGgesIr3x4jfd0Od7lv7TPinv+t5V4mrOyORND27ObAil1R0tS
-         oIuvhXgKKW8aQjv+GErIVAh5bteLMLoZzMFXD5Du0RQ8tIdCOeLJTQf+cYEzK2X87kcv
-         jpEylQx/Olu0xMyRTSAQn4Xs1++ao4cL8weqxK6yoyYmSv90H4IR8vT2UIeN+2RnEF5b
-         /fA9PQT2feJ+1Vn2Zm7elmgZjobzoKXOgzY3WkW1suFgA1KQXiDlDH5vPzZEZnmJB0TX
-         lakJuQ7At9rZGydwvymPxgdAKy/J6VfIZAxdKH97bqveby0PYSf8Sz5jKnbJFS5ltBKM
-         CoVw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro4VsUkRTJeQ/8mWsD3hm/CEs2R2qtVY8egwXfXhG+OZVdvYkyKen9I34tZLCcj5iInD2s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywcf2ieHMPRvxzp8ej0Xg6LV4CXm7674PXGDyMNsAtkStd4UgnO
-	Gx4pKDdbhGLT3s+OA6d787O3WAOW4Qa0Pg0RqfBjtdelhqhYmON6ideV
-X-Gm-Gg: AR+sD11T0UeJ3oKMJ6tBOcyDWWcKr76CqsOMOZJc/E6Qxc8nSLrw3nN3hgp69karHLN
-	dzBBozc3xd4QF2tG0+IDK8T9WcxpyPIhZsS9pYlHyfAEi8coxrXAZKtTFZ7eUPJ2yosmSbpYXWY
-	gjK5fd05h8+gAWnOwh5WRgvGVVq7RDeRtnCDwyemhsQ+3ezttUvnpzYrI3rTHOT/Cnv2TMiQF9F
-	cH8zJKzCdy82iNpJeyGV5oxO36Uhgz+v/MnUinT+OyVMfAI1+R/13Oj6KtYMSgz67aad/2gUiGY
-	+sWUVLuzA93rovPoi+BlTukOgO/L7IGaOffAOkLy6t60UX6ttD5qPX/D92n8Zj6x7MOLq9q7ETr
-	5GycxuO2lHUXDC23M7YnxBFXwkyM6eRYQGCbmXeGeiqBeNWUAeOKWmCtephZ5DX7Bzv1YowNqNn
-	/0BwoM+ZgIujkRAB2Abu0NkKes9/UE89IlRLvY0jp/qih9XNxDG2CuApGN/vyl8UX68BFCo6SnV
-	ER7xC+lvbdETI4mq2AaclNpkbQY8LIHxYd6u3TDXeAb0V2Y4FBUQ7f+6QgDcEs0kwDwZ70PDQUK
-	48zHHI6qi6ce31WVcmxTwhHM4sE=
-X-Received: by 2002:a05:6000:186d:b0:47f:f1ab:9075 with SMTP id ffacd0b85a97d-48159fede51mr2098519f8f.20.1786578611707;
-        Wed, 12 Aug 2026 16:50:11 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815a5b6c2dsm1213562f8f.26.2026.08.12.16.50.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Aug 2026 16:50:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SzOgM/oT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A40161F00A3D;
+	Wed, 12 Aug 2026 23:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786578832;
+	bh=ghxA5zXr9qqLeZYnxBxpZ9XrKc0qjDjLHxoY3kdjH4g=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=SzOgM/oTNzikEAYvaoEP/OKY5liT3WRX9XLLDzNpRuCg0SH2Yw9WgFlQYSoamiMRF
+	 TpXCNUTWXsChKJakQVHbS44rYnmsEp/noMFZ8/2Nipf6zZBmmX51vAE7Zhq0yR6TDl
+	 uPKC5CcW0VzqRgYZRmeWWAIV+DgphAwhLZKF4VypdvBtEopWXwFunJv2VnzUAVvDtZ
+	 XR1NkbaM+kaVeouVIGr4XV+IlG5U+Yl16qaSNdBhZLjWmpmycQoLZAPNPQYG20xI4R
+	 duap+YE8OqAJP6FOAYF8h91nyPdvtnYPhmEhoUHiXzlKwQvH/iSkJn3HNJs8C3rrvq
+	 wSmRiq0Y9pJvA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 05/16] bpf: Track verifier register
+ diagnostic events
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260812233326.3575958-6-memxor@gmail.com>
+References: <20260812233326.3575958-1-memxor@gmail.com>
+ <20260812233326.3575958-6-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 12 Aug 2026 23:53:52 +0000
+Message-Id: <20260812235352.A40161F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 13 Aug 2026 01:50:10 +0200
-Message-Id: <DKND9FBAR1JE.3713OP933LYT3@gmail.com>
-To: "Puranjay Mohan" <puranjay@kernel.org>, <bpf@vger.kernel.org>, "Xu
- Kuohai" <xukuohai@huaweicloud.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "Mark Rutland" <mark.rutland@arm.com>, "Will Deacon" <will@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>
-Subject: Re: [PATCH bpf-next 0/7] bpf, arm64: __arena kfunc and struct_ops
- arguments
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260810190922.3408757-1-puranjay@kernel.org>
-In-Reply-To: <20260810190922.3408757-1-puranjay@kernel.org>
 
-On Mon Aug 10, 2026 at 9:09 PM CEST, Puranjay Mohan wrote:
-> The x86-64 JIT recently gained support for the __arena and
-> __arena__nullable argument suffixes on kfuncs and struct_ops stubs. This
-> adds the arm64 side and flips bpf_jit_supports_arena_args() on, so the
-> verifier stops rejecting these programs on arm64.
->
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Missing diagnostic event tracking for BPF_LD_IMM64 and BPF_ATOMI=
+C (with BPF_FETCH) operations.
+--
 
-Hi Xu,
+--- Patch [5]: [PATCH bpf-next v4 05/16] bpf: Track verifier register diagn=
+ostic events ---
+commit 7db736a554444e8ded5ae93ab09a9f7f17a9c87b
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-If you have cycles this week, could you take a look at these changes and le=
-t us
-know they make sense?
+    bpf: Track verifier register diagnostic events
 
-It would allow us to close both x86 support (already landed) and arm64 supp=
-ort
-for arena arguments for next merge window (next week). No worries if you ne=
-ed
-more time to go through these though. Just bumping the thread.
+This commit introduces verifier register diagnostic events to track how a
+value reached its current state. It records register modifications, stack
+spills, reference invalidations, and other events in the diagnostic history.
 
-Thanks!
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2e915292265b0..ed8a239a964d9 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-> [...]
+[ ... ]
+
+> @@ -6391,15 +6421,19 @@ static int check_load_mem(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn,
+> =20
+>  	src_reg_type =3D regs[insn->src_reg].type;
+> =20
+> -	/* Check if (src_reg + off) is readable. The state of dst_reg will be
+> -	 * updated by this call.
+> +	/*
+> +	 * check_stack_read_fixed_off() may refine the modification's origin to
+> +	 * the source stack slot.
+>  	 */
+> +	bpf_diag_mod_begin(env, &regs[insn->dst_reg], NULL, BPF_DIAG_MOD_WRITE);
+>  	err =3D check_mem_access(env, env->insn_idx, regs + insn->src_reg, argn=
+o_from_reg(insn->src_reg), insn->off,
+>  			       BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
+>  			       strict_alignment_once, is_ldsx);
+>  	err =3D err ?: save_aux_ptr_type(env, src_reg_type,
+>  				       allow_trust_mismatch);
+>  	err =3D err ?: reg_bounds_sanity_check(env, &regs[insn->dst_reg], ctx);
+> +	if (!err)
+> +		bpf_diag_mod_end(env);
+> =20
+>  	return err;
+>  }
+
+[Severity: Medium]
+Are we missing similar diagnostic event tracking for BPF_LD_IMM64 and
+BPF_ATOMIC (with BPF_FETCH) operations?
+
+For example, in check_ld_imm(), we directly modify the destination register
+without calling bpf_diag_mod_begin() or bpf_diag_mod_end(), which prevents
+the origin of the value from being recorded:
+
+	dst_reg =3D &regs[insn->dst_reg];
+	if (insn->src_reg =3D=3D 0) {
+		u64 imm =3D ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
+
+		dst_reg->type =3D SCALAR_VALUE;
+		__mark_reg_known(&regs[insn->dst_reg], imm);
+		return 0;
+	}
+
+Additionally, in check_atomic_rmw(), we modify load_reg but lack diagnostic
+event tracing. If stack memory is fetched, check_stack_read_fixed_off() cal=
+ls
+bpf_diag_mod_begin(), but bpf_diag_mod_end() is never called afterwards.=20
+
+	load_reg =3D bpf_atomic_load_reg(insn);
+	if (load_reg >=3D 0) {
+		/* check and record load of old value */
+		err =3D check_reg_arg(env, load_reg, DST_OP);
+		if (err)
+			return err;
+	}
+
+	dst_reg =3D cur_regs(env) + insn->dst_reg;
+
+	/* Check whether we can read the memory, with second call for fetch
+	 * case to simulate the register fill.
+	 */
+	err =3D check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn-=
+>dst_reg), insn->off,
+			       BPF_SIZE(insn->code), BPF_READ, -1, true, false);
+	if (!err && load_reg >=3D 0)
+		err =3D check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn=
+->dst_reg),
+				       insn->off, BPF_SIZE(insn->code),
+				       BPF_READ, load_reg, true, false);
+
+Does this leak the active modification state and cause the stack fetch event
+to be permanently lost? Should these paths also be instrumented to track
+value origins correctly?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260812233326.3575=
+958-1-memxor@gmail.com?part=3D5
