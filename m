@@ -1,179 +1,125 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C420E41D105
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 10:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9461541D10C
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 10:26:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786530343; cv=none; b=DT8U5e3sXKlmsnI6cgqA6OlHZ+tYKgfuVW99sLy3bWVb5U1rJYc3MvXo8NPP/LJzs0mCzSQQH6fssCYroNVCjP0AGX/P9zxmuACRnOFWVPEA44eBzKS9hlcc9vxMdCVsv3DvrYkEOgyU1f5nb2IQSKub1a+6Eg8KiKcU9i70yIE=
+	t=1786530386; cv=none; b=YyPP8lV3+Z/P071n95X19gltm9lz82Rr4pZ0jCQnaLfC9hQQ4gtQfv+4rkFERWtpQ34LIMAri2XnmziCOwJeT3HQxjSBltvsvjYCH5TBxM2TMK392i9pxJjkVtFM7seC0WvFwUqryhTM277mITX/UcfC0XuVAX8rKI/qsCKDn2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786530343; c=relaxed/simple;
-	bh=i3Z0c1eG4C8OKKyeR1gk2MEKerI8zwHefe/oxp0onkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uh8xQ3QdL4+BA77ALGPAORJ/crJf6kARujOIebNRhbLdQRTCvPfTB1t0ZeuUX5ukk8dJ4Ad56S8CW7ZMoJbs6Dn2VwMF0zcj7IlXo4HYbyghZcAvGnYGFZiDeCvKPFTNNQy+MypkfNIqU0xSnkQT9KuT2JgRmIurKL+7RN+mObc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h9Joyu9d; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786530386; c=relaxed/simple;
+	bh=nMHSwZySg7AbyzZptNhS4P9ElwQhi0VI4AfTBsYeCCE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=JMXAGhyktfYRPUekQ9rQi9Bc7OKxyWpgRXeSUEcrvpZuXvTa9CMts9o10JKmAV1bPehv9MUTC+NNFQVTc9KMUs0m6iDUsKqSx0e27GH9m9sPDLdPj/TFK2qwFvDkdUmw4e/qHqMYl6HiWOn2b/EnQo0o9ZqOYQ0oyld6NKC8/lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XEPcmxhc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h9Joyu9d"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4996f1ee4a4so4626455e9.2
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 03:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786530339; x=1787135139; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oe8dRxLTv2e7yq5ZrL4Bpp0DEMKWFxsHcdUWwRLEBqs=;
-        b=h9Joyu9dOcAIUxpygvdwu2JC7m2/HgavgRCSGskufZGwxymLFZdrtjXP+t8kW7Ac37
-         0Le06jc8LA44+JEgj/KLfzxEeQA3+/IWMad4r2rGM40fNb7o4nXzdEq4pqdm+QADIMrE
-         3KULxaiy7rdl1c1YyDbzhG8mmoGiFYVJpicBCyzXM6W06CNB8PWRnsohQaTH/cUpw8UM
-         PTW71mGl8ecat+iyuZ1n7AmitmqIac8PvM74Ir2Tk8vocSgJr4RKw8O1gJ86dmM9Bx7L
-         XopDiVCi1hXoRPmhBkELajgwj/gtT1LcYXg5x+jBN/myrztqHmIyfPhTc9avDCmXtxgj
-         XKEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786530339; x=1787135139;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=oe8dRxLTv2e7yq5ZrL4Bpp0DEMKWFxsHcdUWwRLEBqs=;
-        b=lm28EC6UQYP4MOkJKEtgB3+ZMC/9w90tCShm2kCYikbEsNvxBNLs+vxj2l04RQhnLZ
-         Ec2r76xt90S1gXBZIu7M7qIbu1BH652Eayvn4xI2npuqV7mcKl2SRcimihBU5wBrWiBQ
-         pC7GQCUKftgh+T5f9cqYf8VXJ+nrktEFDhzLe/oj+Cnui/if5RAdpl38AWqYEWy5MdbV
-         geMJVAPJ8eyVoMf4hKjYgnGPPmYSvcCIMMiMUIsLmceShkBS8fnqdO+f2snVKJFNlirt
-         eTwXDZx7MUQALFVaeXlaQ8AtidOW7VhEVJuJ12MxoadNF/AdudRMD8C31mQjT6/d2ge6
-         0EGg==
-X-Gm-Message-State: AOJu0Yy/UPr47MSEXMp3S9RjV3CHex2kpXecdtxsUipKY0h3+GMlMTo5
-	H5m0j8TdjZ9d8YVhCgkwbyBU1kIGo3NNsVmyW4Jqw5iIF48FoBStnAwu
-X-Gm-Gg: AR+sD11LuitDjr9AP3Xd0gOdvqSCEfTALrlEmUZApUGTPGL/jGeXI0FiIrLmFStEAyR
-	gFOKPHZyu268+DAROv6Rt0IKmU6EZTCR3h63jx7DaWqiSK2bKd/rE2ZrCDaT0puPpO8wuSY0lUi
-	gJ6SRjb6kqhGO0qPIGEjS5k0gllmwIke4I7n2vycvEyw8SpB5clxUQAoLRKNuHLhhyPy1SZgJ80
-	rAGRHCGZGj6MCdLofiKnwH6BerAQDKgWRNg8H4/cR75e8Zvsnq27TP/RPGOhaCZSs+NUR/IMmcn
-	NP6jkcKpwvoxB8VUB9MRTSLkljE6JgjSgL/i40g6DjZKM+ORCaBcNvQLwJIKy+GU9hqNpWU4TiX
-	OjjEgtg4VgKrNfX5MhUC8DBZ8lqmcFw6sxhTxHWJo2ibXH7ovTxuO+5heMZqYBG/i1z/lwHQgdr
-	hOhs4HiRa1c4++xhu/FxiaS9hNZeevYqhfETrRwxMzxW49fkd1D97WYaw8punA4tHKBazWPYwA+
-	0cOhZ+/98aakXyVsPJ7
-X-Received: by 2002:a05:600c:5020:b0:496:bffb:fb7b with SMTP id 5b1f17b1804b1-4997c13420bmr54782195e9.10.1786530338799;
-        Wed, 12 Aug 2026 03:25:38 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48150bf412dsm6829626f8f.6.2026.08.12.03.25.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 03:25:38 -0700 (PDT)
-Date: Wed, 12 Aug 2026 12:25:36 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
-	kuba@kernel.org, liamwisehart@meta.com, martin.lau@linux.dev,
-	pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org,
-	sdf.kernel@gmail.com, ameryhung@gmail.com, memxor@gmail.com,
-	jiayuan.chen@linux.dev
-Subject: Re: [PATCH bpf-next v5 1/5] net: Add connect_socket() helper
-Message-ID: <anxKICgNbziTLtsy@gmail.com>
-References: <20260807171532.125149-1-mahe.tardy@gmail.com>
- <20260807171532.125149-2-mahe.tardy@gmail.com>
- <CAAVpQUDcckytw4Y9S4mK8T75DniD+_=stL9BOo7Sp70OFAOjgA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XEPcmxhc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC391F000E9;
+	Wed, 12 Aug 2026 10:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786530385;
+	bh=eNYlagLbcRuWk0lTikQIFknMaa6MjxANqaEUCen5Kno=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=XEPcmxhcPcmI0odUzh6e71PnvZQKtAPBzmziUW7LFe8p58I3zl8eQmurkBRhK11Jz
+	 V1/n95lmFYDCM0OqZL41v75QtcaI1kNStnco3CYSPWuTPqT127fB6/hlG46dWXKxGW
+	 xs3XOD2r1e0oZ0n5DAw+yNfcLN8ZcQ/n2FTWiwtvGNJDNz2N7DbabpMmjHYzbwoIyo
+	 OTwXj1LjWEp8HOKS+z7MVKhRlgfqwVlJOfUF88uPCpCYkKAVcK0rJBJt5KjucU2xwD
+	 9/YEJ3vNWvmY9siVXC+oIvglnZBjdvkxkFXFI6uyhVajk2Ww+5peIUXd4vfbKtUBAp
+	 vdCwt3U8vt0Hw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v7 5/6] bpf: clear decap state on
+ skb_adjust_room shrink path
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Nick Hudson" <nhudson@akamai.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260812083115.73100-6-nhudson@akamai.com>
+References: <20260812083115.73100-1-nhudson@akamai.com>
+ <20260812083115.73100-6-nhudson@akamai.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 12 Aug 2026 10:26:24 +0000
+Message-Id: <20260812102624.BFC391F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAVpQUDcckytw4Y9S4mK8T75DniD+_=stL9BOo7Sp70OFAOjgA@mail.gmail.com>
 
-On Mon, Aug 10, 2026 at 09:01:18PM -0700, Kuniyuki Iwashima wrote:
-> On Fri, Aug 7, 2026 at 10:15 AM Mahe Tardy <mahe.tardy@gmail.com> wrote:
-> >
-> > Add a helper that connects an existing socket while invoking the LSM
-> > hook. Reuse it in __sys_connect_file() to avoid duplicating the connect
-> > logic. Other socket operations have equivalent helpers that trigger the
-> > appropriate LSM hooks that can be reused, this one was the only one
-> > missing.
-> >
-> > Acked-by: Song Liu <song@kernel.org>
-> > Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
-> > ---
-> >  include/linux/socket.h |  2 ++
-> >  net/socket.c           | 32 ++++++++++++++++++--------------
-> >  2 files changed, 20 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/include/linux/socket.h b/include/linux/socket.h
-> > index 2a8d7b14f1d1..5a5eb1250103 100644
-> > --- a/include/linux/socket.h
-> > +++ b/include/linux/socket.h
-> > @@ -461,6 +461,8 @@ extern struct file *__sys_socket_file(int family, int type, int protocol);
-> >  extern int __sys_bind(int fd, struct sockaddr __user *umyaddr, int addrlen);
-> >  extern int __sys_bind_socket(struct socket *sock, struct sockaddr_storage *address,
-> >                              int addrlen);
-> > +int connect_socket(struct socket *sock, struct sockaddr_storage *addr,
-> > +                  int addrlen, int flags);
-> >  extern int __sys_connect_file(struct file *file, struct sockaddr_storage *addr,
-> >                               int addrlen, int file_flags);
-> >  extern int __sys_connect(int fd, struct sockaddr __user *uservaddr,
-> > diff --git a/net/socket.c b/net/socket.c
-> > index 63c69a0fa74e..8f18f124d92a 100644
-> > --- a/net/socket.c
-> > +++ b/net/socket.c
-> > @@ -2103,6 +2103,20 @@ SYSCALL_DEFINE3(accept, int, fd, struct sockaddr __user *, upeer_sockaddr,
-> >         return __sys_accept4(fd, upeer_sockaddr, upeer_addrlen, 0);
-> >  }
-> >
-> > +int connect_socket(struct socket *sock, struct sockaddr_storage *address,
-> > +                  int addrlen, int flags)
-> > +{
-> > +       int err;
-> > +
-> > +       err = security_socket_connect(sock, (struct sockaddr *)address, addrlen);
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       return READ_ONCE(sock->ops)->connect(sock,
-> > +                                   (struct sockaddr_unsized *)address,
-> > +                                   addrlen, flags);
-> 
-> nit: indentation is weird, and
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf_skb_net_shrink() leaves SKB_GSO_PARTIAL and SKB_GSO_TUNNEL_REM=
+CSUM dangling in shinfo->gso_type after removing a tunnel.
+--
 
-agree, ran clang-format on it, should be better in the next revision.
+--- Patch [5]: [PATCH bpf-next v7 5/6] bpf: clear decap state on skb_adjust=
+_room shrink path ---
+commit 672aa1a359079a58d5e4d80fc47569e00a437a80
+Author: Nick Hudson <nhudson@akamai.com>
+bpf: clear decap state on skb_adjust_room shrink path
 
-> 
-> > +}
-> > +
-> >  /*
-> >   *     Attempt to connect to a socket with the server address.  The address
-> >   *     is in user space so we verify it is OK and move it to kernel space.
-> > @@ -2119,23 +2133,13 @@ int __sys_connect_file(struct file *file, struct sockaddr_storage *address,
-> >                        int addrlen, int file_flags)
-> >  {
-> >         struct socket *sock;
-> > -       int err;
-> >
-> >         sock = sock_from_file(file);
-> > -       if (!sock) {
-> > -               err = -ENOTSOCK;
-> > -               goto out;
-> > -       }
-> > -
-> > -       err =
-> > -           security_socket_connect(sock, (struct sockaddr *)address, addrlen);
-> > -       if (err)
-> > -               goto out;
-> > +       if (!sock)
-> > +               return -ENOTSOCK;
-> >
-> > -       err = READ_ONCE(sock->ops)->connect(sock, (struct sockaddr_unsized *)address,
-> > -                                           addrlen, sock->file->f_flags | file_flags);
-> > -out:
-> > -       return err;
-> > +       return connect_socket(sock, address, addrlen,
-> > +                                   sock->file->f_flags | file_flags);
-> 
-> same here, otherwise looks good.
+This commit updates bpf_skb_adjust_room() on the shrink path to conditional=
+ly
+clear decapsulation state updates based on BPF_F_ADJ_ROOM_DECAP_* flags. For
+GSO skbs, it selectively clears tunnel gso_type bits and encapsulation, whi=
+le
+for non-GSO skbs it directly clears the encapsulation flag.
 
-same answer.
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 981b75941e7f7..89effff3bc525 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -3754,9 +3754,48 @@ static int bpf_skb_net_shrink(struct sk_buff *skb,=
+ u32 off, u32 len_diff,
+>  		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
+>  			skb_increase_gso_size(shinfo, len_diff);
+> =20
+> +		/* Selective GSO flag clearing based on decap type.
+> +		 * Only clear the flags for the tunnel layer being removed.
+> +		 */
+> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
+> +		    (shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
+> +					 SKB_GSO_UDP_TUNNEL_CSUM)))
+> +			shinfo->gso_type &=3D ~(SKB_GSO_UDP_TUNNEL |
+> +					      SKB_GSO_UDP_TUNNEL_CSUM);
 
-> 
-> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+[Severity: High]
+Does this leave SKB_GSO_PARTIAL and SKB_GSO_TUNNEL_REMCSUM dangling in
+shinfo->gso_type after removing a tunnel?
+
+If an SKB acquires SKB_GSO_PARTIAL or SKB_GSO_TUNNEL_REMCSUM (for example,
+via software partial segmentation across a veth pair or GRO) and a BPF prog=
+ram
+uses bpf_skb_adjust_room() to shrink the SKB, it seems the base tunnel flags
+are cleared but the modifier flags remain.
+
+Hardware drivers like ixgbe or fbnic use SKB_GSO_PARTIAL to identify packets
+requiring partial GSO offload or special tunnel logic. Could leaving this f=
+lag
+on a decapsulated, non-tunnel SKB cause drivers to misinterpret the packet
+structure and corrupt the packet on transmit?
+
+[ ... ]
+
+> +		/* Clear encapsulation flag only when no tunnel GSO flags remain */
+> +		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
+> +			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
+> +			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
+> +						  SKB_GSO_UDP_TUNNEL_CSUM |
+> +						  SKB_GSO_GRE |
+> +						  SKB_GSO_GRE_CSUM |
+> +						  SKB_GSO_IPXIP4 |
+> +						  SKB_GSO_IPXIP6 |
+> +						  SKB_GSO_ESP)))
+> +				if (skb->encapsulation)
+> +					skb->encapsulation =3D 0;
+> +		}
+
+[Severity: High]
+If all base tunnel flags are cleared and encapsulation is set to 0, which
+confirms the packet is no longer a tunnel, is it expected that SKB_GSO_PART=
+IAL
+and SKB_GSO_TUNNEL_REMCSUM might still be set in gso_type?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260812083115.7310=
+0-1-nhudson@akamai.com?part=3D5
