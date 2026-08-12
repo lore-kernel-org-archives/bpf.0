@@ -1,126 +1,113 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFFF2494A18
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 23:15:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0A0345CDD
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 23:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786576511; cv=none; b=N4hb6yJoZ4AGoP160GkLhBOnYqkstWb/dV+yGFmL26ZHAwvBUmd9CF3/p1Aw05JRudc83gH1fOTgBiyXDhyUs/goJbAdPOyigOwF9NfDZ5rOgZl5z7O/oa3YKzwqnugGiBWibA1Z/OGsLME7/BOVqoq8vRe4eh0PVZ/K5FVM+sA=
+	t=1786576530; cv=none; b=SdDUq5Bpgn9a85GvMWJohkcCFqipbDVO4PWc1oZjuG18ytMbqhxDUW4EOKe9fHsTDnnlDCbUXqHdVTw+QDGEmQHY25sK6NJ97RV7lwxSBVGeKLYEVOUgj41EzeXKy6TxbEbGcMDGDuxYfE3VELpf5yK6QN95/pqtkxnDXptAvHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786576511; c=relaxed/simple;
-	bh=hq+l3Wi6nBu66fux9G2Qmg0ztbqBkzpKo8+DAjG2j9c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fa65gTQ8nRiqZTtUEvo1ORCIKiz5pFeMLJ6jT5rnXJa2pkyUUytsRarIb2Nw4exVaBYbPgpGwsK2kGoPIu2JPIc6esSdZj4fHAW25wfgcKJWGrQL4slvXWoX4g5S5676ehLdDKhBPgxIJOW8CTZ1IOUmqdhTcw493za7yvN7DL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NQ0v3NGw; arc=none smtp.client-ip=74.125.225.137
+	s=arc-20240116; t=1786576530; c=relaxed/simple;
+	bh=4KziLVdftB86fKOQP1B92MnBpbEYOU6LAI1xnpNioNA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=usrJssaXa121v/u3gshADRwIuFU17NMDd1i9cgMozlAX7UIkt9Nsb+NP+CjJXpICE22aCYNtk5AfKb1jmdgVrsHTE63X5B4iQJMNT/Ei+ZoeCF0nFMbfwqD076jWDsyamzeaUEDnpNw1XkqldsBz0BuIr7PYCtp3Soz4rV2FK1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=janTHmfs; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NQ0v3NGw"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-4955674321eso2512975e9.0
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 16:15:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="janTHmfs"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so2052896a91.0
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 16:15:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786576508; x=1787181308; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GzwLFUZ6n9eF7AgZHBGlUmg004VwQL/U1OuHwZiXoSE=;
-        b=NQ0v3NGwy7XYyhGU3nF5Zgpn6peNGCvZB7Gn29Wt1ZUlwN7akaoXj0q0k5RtIA9puM
-         3OqShgHrqdPbmZkHplt1n1sqzg+b6H0GEeGEvsyBPU4+ZUa0sm0xrOjidY+96pnzSlLx
-         ufc+HrFL9LVCwE1vvjfvooWWakjDQkoa/LhbWeUAC7nWech7Sw3JrhJmchZ7VR8SkFV5
-         JQwfMAt4LQ+Vj5NGhspSw28vpkO7dgFT2SVLZSQ4WU62kr6LFJqnQ3pkTwj5radCPRlP
-         +RwFqrdRcwFWOFwCQO8wCZo3S60kDUH59egyGQXhOI3x2+XDAwsRbwNqrnDAb6iXzC9k
-         z74w==
+        d=gmail.com; s=20251104; t=1786576528; x=1787181328; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Dqzd0lRPowE5CsT2lu8GH8pmTTOX/Z+QVxqTQGC9umk=;
+        b=janTHmfsCevCKQCAcIv0s3yLjyHH58GRYwXTx1P4zvSb93titmughHf+kHdE/9KVL4
+         se25y17pJqRLD7m/eG0oq25e+vrT9AXsC5d3SCfGnD7DcVsybwE0JXvaqxwIM+PHMRh4
+         W14Ymmpv2okbv3Cji3syDAyfzEhfIX4bhKFOwgAziVQYV3OArf5Azo57TaIddes5nagN
+         IKXKMTSKk8TYTamCKbpVfhMijnn3a5xnNLdWRb2UmGIf2vF0mlb7mOe7EXsoDuKgpqkO
+         BrCQN5Zo4L2kw1le4xwbHXSaQ3TbF69sCGWQIZCl35HodKL4u281f5oNelxHxHPbkKRc
+         6DmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786576508; x=1787181308;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GzwLFUZ6n9eF7AgZHBGlUmg004VwQL/U1OuHwZiXoSE=;
-        b=X1hUNbuj5tZXlweUuYSBkvf8xGbov9bWuat1HP6PEl/2/7ye75epJEOViJet51y42S
-         /+8qfaMdqLR0KSPfjVgPsTDCqSCJVl4AhI4v+71bwJeoJdBTVJWrQI/oocClLnVXayGX
-         nzs5AmdO4hc8uGs17E/6H4vlInb2QwlVYaDxAFcYicg5o5SwZ9sN/AnBTkEqnLiB6iov
-         ZFmADtPW6fNXItRjz8FctMKyvtOJLrnnzMTEOE+IRuMnU+r9ofHlydW99OxTDz9fl0Al
-         xNByHNwoXFjMwt9rj/KFJMEo8lHduz+SGgF8ugutXAV0BEDUS7rtF1/bmUQGUS0q7XoI
-         XvlQ==
-X-Gm-Message-State: AOJu0YxkzMLyUirRXDXWwvoTX2JHmmcjeyTRVSI8nKz1380rGBNq6rcG
-	d0IzhhgOrjHhtb5277Iem1sF2KCHDYWyW16LoBCZrJy6Le1Cdl3pfMH6kYwqPQf/
-X-Gm-Gg: AR+sD10x/+mWhfgLvWtr/1pbTwgeA10oEvBhsGesYeayWh0K5NQ1vivoxeZ6zWoqAwB
-	3R2ldhII0g0s+G4WjkU5n00/eXslvAD7nbOKYiHePBdV7dcq4+kVZhr/rFA4/aYru7R8MjUndCi
-	8mgIEJkyn+XNu70ex1zWQuIFYuiWXvV/wQTB02DTWtQwxd/SONsZjvcxZeSOE82hIgDvXX/jhcv
-	INhlvGNQzvSDzfNUJwMrQ/OA7NKIrCGQcWe1zzBs0akp29yhv5eXqO+395BGrBtxEMWsJCYIGaC
-	qcyfZv+i+btF04zlyopNGMhijXHFFNTFm69buS4KWsj2PwtU+bo33NOjG9hIO2LoL/McMXB25q6
-	Klfboem5diLpBdrn0Fz8eHznhZtenvK/ZG+Tt0o0wSQAnRwnxdZrim5cKbSBBgOTR+bIrRfVuuL
-	waq0kav+t1ndjAMvhzW2nhPirq2nOss0+KeDKmaVNAPqUz5jcTdOAV/ipsyQcf8Ti7W4tB7p1WB
-	FXkxoBMmXA1jlH0jPerQDrG29rw0FLTymVsuhAbpX+zXeAH6JdeQpx5/DRpphMJk/LKVRVFoSwn
-	kfp9/qbTtCxeinlRgLcGFNenIaM=
-X-Received: by 2002:a05:600c:3b05:b0:498:519:e660 with SMTP id 5b1f17b1804b1-4998217bbe9mr12940465e9.4.1786576507884;
-        Wed, 12 Aug 2026 16:15:07 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499820c2897sm26637265e9.0.2026.08.12.16.15.07
+        d=1e100.net; s=20251104; t=1786576528; x=1787181328;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Dqzd0lRPowE5CsT2lu8GH8pmTTOX/Z+QVxqTQGC9umk=;
+        b=QD9NhwTVkpw92XOQe+zSsbsSxcqPEZa29aecyjThuEf+uLvQkZiSxQVy8ozTGU0++T
+         a29/eMjQLE+giu5sBfyFhpjd9KJnT/KcuI4hbKjTGjMcHMgOpjgmj8fe6EBhwKmHdTAL
+         cM+OG/dfsAg4cXxOHT+qeaE8pQMUPzxbd4mOnJrR9bjleGQk3j55r28OHH8LTCF6Y2R9
+         kP8wv2hciwOmSZAjB68OFcrWTK9g0/5aIqI5CizvciivzaqxXTpBubxqT8OX57F2Eium
+         300vsXBfpG/iibpl4c2vF+CkLWoBU9oZCbLQmgRt1wfHtpBhCRuOHLFsnWawD9OQjQwm
+         P8fA==
+X-Forwarded-Encrypted: i=1; AHgh+RrizGbLNXWTuT8hmqV4pEjf8eByOuMEZoKT3BwP/EcrMYUcXvCggF6vBO4jBqoBhAfmZM0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWNMwCCUBL1jDfV3iILVvyoHaGlHSuQf2grpKt/CfK6Ne4sk8K
+	0sLPcXirl7qns7w0jb7EpldNhJHv7Ri5m0DR8Bq3qBykAR9K6EOTGd7lO8ooqt4/
+X-Gm-Gg: AR+sD10F7mZp+xlHnTyOC1Hrpv3DXj9YQc/GmJgsqqmnAfHs25ZW7rWJPs3/CXORhrR
+	cQfDNvuqUWivuV3rY80VH+gtE2x5+igZ82LtaaB5SYMr7Mj29bWFquHv4qot6DIUkpFk4Fl471T
+	0CYfZ5PuFJR8QkRATXHAfbJ2Soi2OBbPV+jSZ8xuieop8M0gBDNqMIXFRAxh9Z3V+vWsR2Zonix
+	L6iltpDswQVUXFEcXrKoNKUrvprfpDIuO+ZjXK0WyyaUBRdE/hw9zrCAp0VxnVOCL1AYW8sOXOq
+	PTH/tCIPo9HpXKr9Hloz4W5aJ/1GfGV9JCw18/s9TpvNt9Vv2BgfH0CfYA5SnpVfO43ADn7xcVT
+	1Rb65VnOA1AckW5ldiCiQ0R6GrpOwXYTgRxtWE6QoTmMEVqJw7kFQaFq7HT0+mVfvdq6TtPFetw
+	eD4O59JvBr99FeMg/W+SCxrdOUQv2cXm5AETNRFkXddkPSUUIwCkZGziEzz79Tu/Vim1M0h3s6E
+	eGddqmGc7X9JHct
+X-Received: by 2002:a17:90b:2751:b0:381:152b:d596 with SMTP id 98e67ed59e1d1-3931e235fe5mr2024630a91.11.1786576528110;
+        Wed, 12 Aug 2026 16:15:28 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3931dadc0f4sm321223a91.2.2026.08.12.16.15.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 16:15:07 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Sashiko <sashiko-bot@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1] bpf: Fix func_info_aux desync after dead code elimination
-Date: Thu, 13 Aug 2026 01:15:05 +0200
-Message-ID: <20260812231506.3558128-1-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        Wed, 12 Aug 2026 16:15:27 -0700 (PDT)
+Message-ID: <ed7cb5e74fa401e9d2061c8a30baa8e6d1d64776.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 10/13] selftests/bpf: Add C tests for
+ 16-byte returns in R0:R2
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com
+Date: Wed, 12 Aug 2026 16:15:24 -0700
+In-Reply-To: <20260811001002.2383554-1-yonghong.song@linux.dev>
+References: <20260811000911.2378679-1-yonghong.song@linux.dev>
+	 <20260811001002.2383554-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1609; i=memxor@gmail.com; h=from:subject; bh=8drCH+ILjhzZC3RjcY2l5ZIGJSzth4UYGqBU0Bz+A2c=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavm+9Y0roefr/lf3l15+sjvn3bnY21aRb7M3t+1InVZ1 UbFBZ7zOkpZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRo10M/z0MQmuWWZ3lY7h3 yEdsQe5qvWa3IvGeFQ8i0u4ulPVWr2FkOL3QTO+MO8PW2990V9cy19TP5jmlLX9Tj1WuOFjy1qL /jAA=
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
 
-The verifier keeps per-subprogram metadata in three parallel arrays:
-subprog_info, func_info, and func_info_aux. Dead code elimination can
-remove whole subprograms, and adjust_subprog_starts_after_remove()
-shifts subprog_info and func_info to close the gap, but leaves
-func_info_aux in place. From that point on, func_info_aux[i] no longer
-describes subprogram i.
+On Mon, 2026-08-10 at 17:10 -0700, Yonghong Song wrote:
 
-Shift func_info_aux together with func_info so the three arrays stay
-aligned after subprogram removal.
+...
 
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Link: https://lore.kernel.org/bpf/20260808064523.DE3E71F000E9@smtp.kernel.org
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- kernel/bpf/fixups.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c b/too=
+ls/testing/selftests/bpf/prog_tests
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index c4bd70befbb5..37ea85e974f1 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -401,13 +401,17 @@ static int adjust_subprog_starts_after_remove(struct bpf_verifier_env *env,
- 			sizeof(*env->subprog_info) * move);
- 		env->subprog_cnt -= j - i;
+...
 
--		/* remove func_info */
-+		/* remove func_info and its aux */
- 		if (aux->func_info) {
- 			move = aux->func_info_cnt - j;
+> +static void run_subtest(const char *name, struct bpf_program *prog, bool=
+ supported)
+> +{
+> +	if (!test__start_subtest(name))
+> +		return;
+> +
+> +	if (!supported) {
+> +		test__skip();
+> +		return;
+> +	}
+> +
+> +	run_prog(prog);
+> +}
+> +
+> +static void test_int128_c(void)
 
- 			memmove(aux->func_info + i,
- 				aux->func_info + j,
- 				sizeof(*aux->func_info) * move);
-+			if (aux->func_info_aux)
-+				memmove(aux->func_info_aux + i,
-+					aux->func_info_aux + j,
-+					sizeof(*aux->func_info_aux) * move);
- 			aux->func_info_cnt -= j - i;
- 			/* func_info->insn_off is set after all code rewrites,
- 			 * in adjust_btf_func() - no need to adjust
---
-2.53.0
+Can this set of runner functions be replaced with RUN_TEST() macro and
+__retval() annotations on the BPF side?
 
+...
