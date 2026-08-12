@@ -1,236 +1,248 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C8737F727
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 18:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786560096; cv=pass; b=O817DEDEMcXkynL+m65PFVUg0kCoHblrJT/5ZFymRFI6jpuJIfkwAWGjBMGEuzcMzVsRovxcHOLyx2idhksh2vMcsyEE56C2xJS7pipzLxBhTBgw45odnvWu3kMs4xTW6ZKM0z9oJWGCQSgg87b3xbScSJfnIHngmR+XFDlYrRA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786560096; c=relaxed/simple;
-	bh=SZ72OMOSDg/pXKNqUQ++FGeZW4FDZPa1n6ff1kIFZhs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rhJJL7iRy9QhR6Gwz1S6vhDwUUfiXoxXfJDbGxkTuE5jA5OuJ1pbIWUPUQF7i/huL745L/Ug0Sye/76jUErEYFVKO98yHnsO3yBOLSyMdYC5bY39wfIxBnU66grOURfOptKvxCaqM6OFJNu03kBxF7MxGw4MD3i4aMhlfwnl29U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=noTzNo4T; arc=pass smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D6E38F929
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 18:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786560168; cv=none; b=rl5O++wvzTsAiA9TotSqcJy0tsrDJKd0VscsJFGlWIH6dBJWd0x8dssg64sQmtbiORqwVMXLn8+FE6M+d8EsW1fB/5q6Zy1yMhb+N//Hqpn0IBcONELFX+SGUkMh+NSGDUV6OInme5j1fUKoeLhAZAAa0m2zDI1lCyspmBDdqe8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786560168; c=relaxed/simple;
+	bh=8ui2i8X9X+ttiVH9C2u7PSYuxw+exyfP5CSHL6zWTqs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ihl1hwpB5FAj+JMJif4PmhYUGJy/ICB/SJrGHg6qDYkavq67lEjqvdBLXU7/pneNqjGPdr85qmbvqCXEzRuKG6hjcVSP4BtQFYvnAHVfhgQbkoJDLuLMJC4McLvBp0Z/h9ZOXF5mlKDM1z54mdgManCMSfPjMPlTLBGeORilC5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mashl4kY; arc=none smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="noTzNo4T"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-6682259cb3dso377401d50.1
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 11:41:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786560094; cv=none;
-        d=google.com; s=arc-20260327;
-        b=WrJlPWUPjjUlejCKkGx5s65Y1TBvEWOm0P1SDEv0qdWpDt7OrewJvFsNm1BafuZozT
-         7R9J7hsuk3QdGmGXIhsopsrwQ5vtD+zzgprJyDcffa7OyX3H2c0v2Bj1eVLG+UyvT14O
-         9RdTMg+t53OWY0TWZAjS5GNEWcpYioP+dwdbhewa4OAvQ9iawhu66lplrzQBDgvR5D/5
-         sO7rIkJAronfZUj+pygOGYg7qi4fynCTVz0mmRtCEnXlWwTauuoeqYZAQCrjTL64Jp2i
-         dMVwp0mKn6Dvy3L9rZwjpsg6uppS5PXvbLvpCUF/oxV7d6WZalmMHyMNMeRopOsGO4M5
-         qqEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=geRcQ8q8DxhXUSx4CcoJ+DNkzH/qfpyx1RGqpkdUYqs=;
-        fh=KFuCT+lsuCBthncmPgCKNp8gBFIheQk8cxGC6Wnibas=;
-        b=M1vWoUTEbgsJ2ZjngePXaoIafPCfK1aLU5cfVn7xbLECc0o3u34+gQ64w/Nv9fAaFc
-         EdlFxIfdvPAO5yj3xyGUrZ9vzQMMFSh7/JS7PIW+3otR2oIrrCunVVffZDRUkg0dkqpb
-         flYPst4ieo5LHWBWgU5qaRneZKNDcTphz0iE4b9bj5MpGzFP4VDuklFBJu8JMC0PuZYR
-         M5SsuTEZ8SgpJowudahIsGChskx0Dsb0Nm/sUzDrVeJNLOLRwDKgcnV0Bk9KQbCCyn0g
-         6iGYqauaeel1W99ZTOtpEsyds4jbW0vSfa8VmO+GXQ7QdC8hKZsLHRanZGh7nrP7EEU2
-         /hxw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mashl4kY"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-8200ca16f26so19660627b3.3
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 11:42:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786560094; x=1787164894; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1786560166; x=1787164966; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=geRcQ8q8DxhXUSx4CcoJ+DNkzH/qfpyx1RGqpkdUYqs=;
-        b=noTzNo4TnfjtoBRtddFxS4rIcm3J7tSguDo0REKgYMYy7ODpyjCRfHeHSRD39wIdXY
-         6AsV58JJE6iZNdxAArYkt1l86WQYq3hhS/jW51WrCNWHRhm6L/B1pE9Y6/dOP+ruDcw2
-         47AJDN6WG2K46h54TGu9Os0lLZQ85SCavx0X/evQ6Q4ao8hugg4+1Kto343JQV4V6KtZ
-         KoExHZ3pZayg6sJ1v7ZrQKp3sernUAKTl30Gncg8CvUkM2vg1RWNbzkAD0PwGWafK3Qk
-         sK5vgtj7O0wPULkYNO+rf428QwjZ+cU1TXtbMUHad+jtABll1FJEV2vqTj4Wa/uNY/ll
-         xjrA==
+        bh=NJq4BeRPMu0DvX0JybLuJRAOSyVWG0mjimxTrgQADmI=;
+        b=Mashl4kYz2KKl1mfTCwPj0ljoFUPk+mDXjSeE5XzkrgVWnaR8VeGwRQ7tyHYRj5h66
+         tVeuMf0ho/Js3Jr4mh8ytMGyem9l+8NQu3e57Kp5W7DKXvSgO73/T6KjiuUUN8W5w6wJ
+         mcZOm6hnP7+0p9arJoDiDdz/ubmrQ/PgEUSHYNyothKyQz1AZw7k2wwC69nBTXTF+pj4
+         O4LR5f+q6XlGCDJn4oDNihtGeSQ2VfMLdHvn20eSBbEgcjdi2K/eC4D4ErubCfA97XYi
+         lsNHl0Q7yYbwj/0F523i6wmyVdwtu5Z4SDy+N4rubDT1RXb/2Li/uRqoiPfsrtWiGccj
+         6gNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786560094; x=1787164894;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1786560166; x=1787164966;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=geRcQ8q8DxhXUSx4CcoJ+DNkzH/qfpyx1RGqpkdUYqs=;
-        b=sm94K2ouABpJv3z7SwZZHZ42JXMwMiiqyjpcI7kYqVv1MVqK2IJjqXLxpw0x6k3G+B
-         NBqopyQNK10cRE/Th3C8hUG4xzUWRmmdySkoRAEcbXbJ9weVtR7r0TjAYegLQeYjwccW
-         C4RBxu6+GFh62IFdZ7EOtghc476UCXNrMJEkL1e95HAipXDEooL2tqzNXtzEZjbposhA
-         f/1rqFqa4OJPckdBLY+3mmeh2IO1f9nfHsoWcx7wiMB6sMe+A/0vbJEKxXWwZ5IrNHRF
-         WTe4Y8ar3nw5sUo+NH2/nWgxB9LsmC6a94XNRHV6kzIEHsqXPmdedgfLGHbUwBoWwR71
-         VThg==
-X-Gm-Message-State: AOJu0Yz28nkY0NceCPsegTUoROnhuGE+ZUpB6DwIg4tnSwkcj3lYpDJn
-	RT4eWFnWed8WmDGHzNYvLlU4Wz0uxdA+TVfv6YcEWSsisMCXb1xG86B+X4Zal7L5AcU1fKxZPoB
-	3t9O5v7geAk6Z1g8pCJeMvqH9HURBPGo=
-X-Gm-Gg: AR+sD11ejj0lptE/tkxVOdm27ISUKDb0rxWFsd9Cu9Yv8QbI2OO9WrV9bR5+aausH9j
-	Bj4DhOytZXI64qV078WmDJHcBNJYqKIb11aizR0qB+K5saGZYSfB/4OsxBzgOru8zi4Vh4CR2ay
-	ZSV2K9PY9/q4FgVsyd+gZ1txuAbsN3f6PmSELsu4C2bOAqQY954+I1IgDWa8l5kJjc3cSA7yRn5
-	yFWf83dnC7WXyq28D/jn38o/XkhXeJdVLOwBwrjNw86cW5G/PHgUWQtmEYVGeSEFFBlYZqImisw
-	Kvrbvf9nYyK/Lz0+TarQ3MOLbCTU/3T/08vTWU1VlcZR
-X-Received: by 2002:a05:690e:809:20b0:668:13:14e with SMTP id
- 956f58d0204a3-66c4fabe86cmr380484d50.18.1786560093904; Wed, 12 Aug 2026
- 11:41:33 -0700 (PDT)
+        bh=NJq4BeRPMu0DvX0JybLuJRAOSyVWG0mjimxTrgQADmI=;
+        b=mjsbmycFBtviRQDJys4HGJyo81+fHWRvuQeuN4AEX/OhIaudLp5Id8h8Y66HfJTIZH
+         Lbad5E8F0CKO7wjWeNwWZr+23IaDwccCWym1HZZR6+j+1K0C0w4/wBxa5pbHiZ+BcoZA
+         H7mfSInopP10iV+d7s6T9vSSUtGLRPGCNeRrIznHTbfxCpm8VjuciVOBCnO8LZtBTL7Z
+         P+e/MCmsu9ZYdthOGv96DlM6cl+nVppjTEUv2YCCyZf8/jd8Pt8Ya3B5Qa/22x/DuzSw
+         xJrjl0tSJndI45vwBlHnw5k9LdcUiFjNvL2STcxCCLAyLqzGwwmBqMbKTf6N+XLbRWhp
+         lnhw==
+X-Gm-Message-State: AOJu0YwSbed2/NSjK8L7kA8kvbJfCMEFJ3jxpBs9ia5C4sqdIrrZzcNB
+	/JUpK/GH2N0WMN/m8QtXpEkH/WggR+uWK6wRqORXlUZOs65VhFa6Cjaw
+X-Gm-Gg: AR+sD11IVHso+GAx5xtDPDKyY3k9NebKwEg52sWIt2AHm1pKgt7PBiK1TaHhdl2Y1Xq
+	pLevVEvGu2E2iICWfNWHQcyZFzv7v/Dy9awTt4iC678rjnMnq6hJ76N6YVUNzuoriylAjhPjfnh
+	DASunujXhpdIsY4XweI72bjvqJFlhVWUTxes04tPbTetmsTT+L6WYZA2QOoEG0Kv3NKJmZI4sfp
+	x4jCJWiqQu+SJFH01YjIpcXoEhder+eHCIRZHuTXRAR9OlEDlgEkvOmktC9EpITVrVIfMGUyTs4
+	zKm1pvjXK5aHE0RsCYzqKr7jq/R/51nyz/C44a6Uq2ZbAx1ueWfnPlfL1TJ6uCwufzO67iPM1xA
+	UrsCYi687GZ9mytYdWvTbAFNLXnIW+3+TGluPVGUGuF9bDREP/17TlEfEiFTo5/PWqW+hi+FHb3
+	5Ar/jb9sR7x0umD6tg/eNK/2VBzzUxzMoCEerL16AnT/VDmaB/NPQcwxE/XUuzp3+4PBFhXVWX2
+	aa6L17lOrWM6LR1CClMfw==
+X-Received: by 2002:a05:690c:6610:b0:81c:8005:9104 with SMTP id 00721157ae682-83109926bc4mr35751497b3.30.1786560165845;
+        Wed, 12 Aug 2026 11:42:45 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:3077:a5d:da73:f5b4])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8346e1a954dsm167657b3.41.2026.08.12.11.42.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Aug 2026 11:42:45 -0700 (PDT)
+Date: Wed, 12 Aug 2026 14:42:44 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	akpm@linux-foundation.org, david@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, kpsingh@kernel.org, 
+	matt@bobrowski.net, song@kernel.org
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Test linux_binprm user
+ memory kfuncs
+Message-ID: <any-GrHSwE5suq33@zenbox>
+References: <20260812111140.7762-1-tasos.papagiannnis@gmail.com>
+ <20260812111140.7762-4-tasos.papagiannnis@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260706171918.317102-1-ameryhung@gmail.com> <20260706171918.317102-12-ameryhung@gmail.com>
- <DKD2DNYT38YH.2GNNCMCEA1OKH@etsalapatis.com>
-In-Reply-To: <DKD2DNYT38YH.2GNNCMCEA1OKH@etsalapatis.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 12 Aug 2026 11:41:23 -0700
-X-Gm-Features: AUfX_mw9dVsZ9buvYJf00d92wxmscH-LXq-E8Q5dr9Szza6TBwGrC14yCzGYxSg
-Message-ID: <CAMB2axNmd8m4hp5Vti4pzxhbufr63dKzFSpN6szH6wXDLPTLDw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 11/15] bpf: tcp: Support selected sock_ops
- callbacks as struct_ops
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	martin.lau@kernel.org, shakeel.butt@linux.dev, roman.gushchin@linux.dev, 
-	kuniyu@google.com, kerneljasonxing@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260812111140.7762-4-tasos.papagiannnis@gmail.com>
 
-On Fri, Jul 31, 2026 at 2:11=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.c=
-om> wrote:
->
-> On Mon Jul 6, 2026 at 1:19 PM EDT, Amery Hung wrote:
-> > In LSFMMBPF 2025, I have talked about moving the BPF_PROG_TYPE_SOCK_OPS
-> > to a struct_ops interface [1].
-> >
-> > The BPF_SOCK_OPS_*_CB enum interface has grown over time as new TCP
-> > callback points were added. A BPF_PROG_TYPE_SOCK_OPS program now
-> > commonly needs a large switch on sock_ops->op, and the shared
-> > bpf_sock_ops_kern context has become harder to extend because different
-> > callbacks have different locking, argument, skb, and helper
-> > requirements. The existing 'union { u32 args[4]; u32 replylong[4]; }' i=
-s
-> > also not reliable in passing args to bpf prog when there are multiple
-> > progs attached to a cgroup.
-> >
-> > The above has already been solved in struct_ops. Add a TCP-specific
-> > struct_ops type, bpf_tcp_ops, and support attaching it to cgroups.
-> > This allows each callback have its own func signature and allows
-> > the verifier to select kfuncs/helpers based on the specific
-> > struct_ops member being implemented.
-> >
-> > This patch wires up the following existing sock_ops callbacks:
-> > - BPF_SOCK_OPS_TIMEOUT_INIT
-> > - BPF_SOCK_OPS_RWND_INIT
-> > - BPF_SOCK_OPS_RTT_CB
-> > - BPF_SOCK_OPS_STATE_CB
-> > - BPF_SOCK_OPS_RETRANS_CB
-> > - BPF_SOCK_OPS_TCP_CONNECT_CB
-> > - BPF_SOCK_OPS_TCP_LISTEN_CB
-> > - BPF_SOCK_OPS_RTO_CB
-> > - BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB
-> > - BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB
-> >
-> > BASE_RTT is ignored as it is not particularly useful. NEEDS_ECN should
-> > be done in bpf-tcp-cc instead. The tstamp ones should be a separate
-> > struct_ops (e.g. "bpf_sock_ops") that can work in both TCP and UDP.
-> >
-> > timeout_init and rwnd_init could have a request_sock pointer. This patc=
-h
-> > tries a different API and direclty passes the request_sock pointer as
-> > an arg.
-> >
-> > Two other approaches were considered before settling on having
-> > bpf_get_retval() read the dispatcher's run_ctx via saved_run_ctx. The
-> > first was to inherit the retval in the trampoline itself: add a helper
-> > in the four __bpf_prog_enter*() paths that, for struct_ops programs,
-> > copies the chained value from the caller's run_ctx (now saved_run_ctx)
-> > into the program's own run_ctx. It works but puts a per-enter
-> > program-type check on the generic trampoline fast path, taxing all
-> > fentry/fexit/lsm callers for a cgroup-struct_ops-only feature. The
-> > second was to do that same inherit only for the int-returning members
-> > via a gen_prologue that emits a hidden kfunc at the start of
-> > timeout_init/rwnd_init; this keeps the cost off the generic path and
-> > scoped to bpf_tcp_ops, but needs a kfunc + BTF_ID + prologue-emission
-> > machinery. The chosen approach avoids both: it touches neither the
-> > trampoline nor the program, since saved_run_ctx already points at the
-> > dispatcher's run_ctx that carries the value.
-> >
-> > [1], page 13: https://drive.google.com/file/d/1wjKZth6T0llLJ_ONPAL_6Q_j=
-bxbAjByp/view?usp=3Dsharing
-> >
-> > Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
->
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
->
-> Two nits below.
->
-> > ---
-> >  include/linux/bpf.h    |   1 +
-> >  include/net/tcp.h      | 113 ++++++++++++++++++++++++-
-> >  net/ipv4/Makefile      |   1 +
-> >  net/ipv4/af_inet.c     |   1 +
-> >  net/ipv4/bpf_tcp_ops.c | 188 +++++++++++++++++++++++++++++++++++++++++
-> >  net/ipv4/tcp.c         |   1 +
-> >  net/ipv4/tcp_input.c   |   4 +
-> >  net/ipv4/tcp_output.c  |   2 +
-> >  net/ipv4/tcp_timer.c   |   1 +
-> >  9 files changed, 310 insertions(+), 2 deletions(-)
-> >  create mode 100644 net/ipv4/bpf_tcp_ops.c
-> >
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index df95ae690da5..91024d2da4ea 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -2597,6 +2597,7 @@ struct bpf_trace_run_ctx {
-> >  struct bpf_tramp_run_ctx {
-> >       struct bpf_run_ctx run_ctx;
-> >       u64 bpf_cookie;
-> > +     int retval;
-> >       struct bpf_run_ctx *saved_run_ctx;
-> >  };
-> >
->
-> <SNIP>
->
-> The retval is in bpf_tramp_run_ctx is generic, so maybe we can make the
-> helper for retrieving it generic, too. Should we at least rename it to
-> make this obvious?
+On Wed, Aug 12, 2026 at 02:11:40PM +0300, Anastasios Papagiannis wrote:
+> This patch adds a sleepable BPF LSM program attached to
+> bprm_check_security to test bpf_copy_from_user_bprm() and
+> bpf_copy_from_user_bprm_str().
+> 
+> Starting at bprm->p, verify that bpf_copy_from_user_bprm() can copy the
+> contiguous NUL-separated argument data. Then use
+> bpf_copy_from_user_bprm_str() to read each argument separately,
+> by advancing the offset based on the returned length.
+> 
+Can you test reading environment strings as well?
 
-The helper cannot easily be made generic: the chaining is done in
-bpf_tcp_ops_call_int(), which is bpf_tcp_ops specific, and the helper
-reads the retval out of that dispatcher's run_ctx via saved_run_ctx. A
-bpf_cgroup_struct_ops_ name would over-promise for now. I would rather
-keep bpf_tcp_ops_get_retval() and rename it if and when a second user
-shows up (it likely will follow the same convention).
+It would be nice to have an example on how to do that.
 
-The commit message describes two other approaches that would make it
-generic: 1) inheriting the retval in __bpf_prog_enter*(), and 2) a
-gen_prologue-emitted kfunc, and why neither was chosen.
-
->
-> > +{
-> > +     struct bpf_tramp_run_ctx *ctx =3D
-> > +             container_of(current->bpf_ctx, struct bpf_tramp_run_ctx, =
-run_ctx);
-> > +
-> > +     /* bpf_get_retval() is only exposed to timeout_init/rwnd_init, wh=
-ich
-> > +      * always run via bpf_tcp_ops_call_int(). Its run_ctx carries the=
- int
-> > +      * return value chained across the bpf_tcp_ops attached to the cg=
-roup
-> > +      * and is this program's saved_run_ctx.
-> > +      */
-> > +     if (WARN_ON_ONCE(!ctx->saved_run_ctx))
-> > +             return 0;
-> > +
-> > +     return container_of(ctx->saved_run_ctx, struct bpf_tramp_run_ctx,
-> > +                         run_ctx)->retval;
-> > +}
-> > +
->
-> <SNIP>
+Justin
+> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+> ---
+>  .../bpf/prog_tests/copy_from_user_bprm.c      | 52 +++++++++++++
+>  .../selftests/bpf/progs/copy_from_user_bprm.c | 74 +++++++++++++++++++
+>  2 files changed, 126 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c b/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
+> new file mode 100644
+> index 000000000000..3d5080a3975e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
+> @@ -0,0 +1,52 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <errno.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +
+> +#include <test_progs.h>
+> +
+> +#include "copy_from_user_bprm.skel.h"
+> +
+> +void test_copy_from_user_bprm(void)
+> +{
+> +	struct copy_from_user_bprm *skel;
+> +	pid_t child;
+> +	int status;
+> +
+> +	skel = copy_from_user_bprm__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +
+> +	if (!ASSERT_OK(copy_from_user_bprm__attach(skel), "attach"))
+> +		goto out;
+> +
+> +	child = fork();
+> +	if (!ASSERT_GE(child, 0, "fork"))
+> +		goto out;
+> +
+> +	if (!child) {
+> +		char *const argv[] = { "first", "second-argument", NULL };
+> +
+> +		skel->bss->monitored_pid = getpid();
+> +		execv("/bin/true", argv);
+> +		_exit(errno);
+> +	}
+> +
+> +	if (!ASSERT_EQ(waitpid(child, &status, 0), child, "waitpid"))
+> +		goto out;
+> +
+> +	if (ASSERT_TRUE(WIFEXITED(status), "child_exited"))
+> +		ASSERT_EQ(WEXITSTATUS(status), EPERM, "exec_errno");
+> +
+> +	ASSERT_EQ(skel->bss->bprm_argc, 2, "bprm_argc");
+> +	ASSERT_EQ(skel->bss->invalid_flags_ret, -EINVAL, "invalid_flags_ret");
+> +	ASSERT_EQ(skel->bss->copy_ret, 0, "copy_ret");
+> +	ASSERT_EQ(skel->bss->str_arg0_ret, 6, "str_arg0_ret");
+> +	ASSERT_EQ(skel->bss->str_arg1_ret, 16, "str_arg1_ret");
+> +	ASSERT_EQ(skel->bss->args_match, 1, "args_match");
+> +	ASSERT_EQ(skel->bss->str_args_match, 1, "str_args_match");
+> +
+> +out:
+> +	copy_from_user_bprm__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
+> new file mode 100644
+> index 000000000000..679363811edc
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
+> @@ -0,0 +1,74 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include "vmlinux.h"
+> +
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <errno.h>
+> +#include "bpf_misc.h"
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +static const char expected_args[] = "first\0second-argument";
+> +static const char expected_arg0[] = "first";
+> +static const char expected_arg1[] = "second-argument";
+> +
+> +int monitored_pid;
+> +int bprm_argc;
+> +int invalid_flags_ret;
+> +int copy_ret;
+> +int str_arg0_ret;
+> +int str_arg1_ret;
+> +int args_match;
+> +int str_args_match;
+> +
+> +extern int bpf_copy_from_user_bprm(void *dst, u32 dst__sz,
+> +				   const void *unsafe_ptr__ign,
+> +					   const struct linux_binprm *bprm,
+> +					   u64 flags) __ksym;
+> +
+> +extern int bpf_copy_from_user_bprm_str(void *dst, u32 dst__sz,
+> +				       const void *unsafe_ptr__ign,
+> +					       const struct linux_binprm *bprm,
+> +					       u64 flags) __ksym;
+> +
+> +SEC("lsm.s/bprm_check_security")
+> +int BPF_PROG(check_exec_args, struct linux_binprm *bprm, int ret)
+> +{
+> +	u32 pid = bpf_get_current_pid_tgid() >> 32;
+> +	char args[sizeof(expected_args)];
+> +	char arg0[32];
+> +	char arg1[32];
+> +
+> +	if (ret || pid != monitored_pid)
+> +		return ret;
+> +
+> +	bprm_argc = bprm->argc;
+> +
+> +	invalid_flags_ret = bpf_copy_from_user_bprm(args, sizeof(args),
+> +						    (void *)bprm->p, bprm, 1);
+> +
+> +	copy_ret = bpf_copy_from_user_bprm(args, sizeof(args),
+> +					   (void *)bprm->p, bprm, 0);
+> +	if (copy_ret)
+> +		return 0;
+> +
+> +	args_match = !__builtin_memcmp(args, expected_args, sizeof(expected_args));
+> +
+> +	str_arg0_ret = bpf_copy_from_user_bprm_str(arg0, sizeof(arg0),
+> +						   (void *)bprm->p, bprm,
+> +						BPF_F_PAD_ZEROS);
+> +	if (str_arg0_ret != sizeof(expected_arg0))
+> +		return 0;
+> +
+> +	str_arg1_ret = bpf_copy_from_user_bprm_str(arg1, sizeof(arg1),
+> +						   (void *)(bprm->p + str_arg0_ret),
+> +						bprm, BPF_F_PAD_ZEROS);
+> +	if (str_arg1_ret != sizeof(expected_arg1))
+> +		return 0;
+> +
+> +	str_args_match = !__builtin_memcmp(arg0, expected_arg0, sizeof(expected_arg0)) &&
+> +			!__builtin_memcmp(arg1, expected_arg1, sizeof(expected_arg1));
+> +
+> +	return args_match && str_args_match ? -EPERM : 0;
+> +}
+> -- 
+> 2.55.0
+> 
