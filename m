@@ -1,64 +1,64 @@
 Received: from mail-wm2-f1.google.com (mail-wm2-f1.google.com [74.125.225.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CC7218592
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 22:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294D0372B3B
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 22:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786573175; cv=none; b=Seki58xgS/R5OK0sJireK7jrz2OFg+QCgyKl6eXdmH2Q1LxG38zyen7pBUfLFNc8Vs3LIt1EKVJ3MUzZLEVZbQRh/o6v9yOTIg9AprMEIo0Q5OapEPYGTCu/IkecPAiV8NfazHjqVf2vIZN6wu7UOyc0SxBj7tcS/ZX3So1ds0Y=
+	t=1786573176; cv=none; b=Ebpd+1GkZVMVJ9ll9yrCJYupR8LRPUCgHQtKX3Ay9R9haNiSb6JHz2KhiBkNHk89Q8yeyMdWPkIaMqr5AyrSF/GlN8NyTnHqCqckovfvOE8vVCoa7LOt/QGbn+NLpxHJRh0G1otCoCkJWjpy3+kzmJ7ARx9Io/3e8yfKv4YKG7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786573175; c=relaxed/simple;
-	bh=9smPsmNWpLngNejUStT/lpLcMumQouPbVsyd0jNRLYg=;
+	s=arc-20240116; t=1786573176; c=relaxed/simple;
+	bh=oC3oj89S5rz3VULZPDD6OGI8LYHJH+btcybMuzsJ/nQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B25Mbi4TG3W9FcQTAPPS+HSiDTQIIKmDaVbXkcRGa9cHnq3eiTcmJbOGqvFBidmnpbt+CgNoZuuDjiE/S9dUOYF9bxjEsA9HFhUB+G2xO3c7ONY2OXvhACxWOlg/gOIVyT29lQ8w/7QgTm6iJw6gQj9rkgt0W1KJayGtHzxUlYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GofyDYp9; arc=none smtp.client-ip=74.125.225.129
+	 MIME-Version; b=kv520IysPGr8HYELWb9cxOUN0033v/3+QHrLA/2nbiIVOxXnCx/3z4nwKQuOaIf/50BQi9NNQ+NPO77RmqXw4rgxY9hpM04OYQ/3BXRGuk1ddMt8o2oSWdYNWMjC1TpoFqXPWK8H4w40HKNyCcuJ6s4S1F4TszaWRyovGd1gee4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dXgaechn; arc=none smtp.client-ip=74.125.225.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GofyDYp9"
-Received: by mail-wm2-f1.google.com with SMTP id 5b1f17b1804b1-492367f3094so325585e9.0
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 15:19:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dXgaechn"
+Received: by mail-wm2-f1.google.com with SMTP id 5b1f17b1804b1-492367f3094so325685e9.0
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 15:19:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786573172; x=1787177972; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786573173; x=1787177973; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=F0w+DXeHQ+/vxKh8Nma+f/5//oo6s7YwLb7+GH8VJEk=;
-        b=GofyDYp99UIzckg/XX0wdzgzxu9Ih09tsDONB9ZUtRhzMh+Wu3+4Mr5uDW0FOg4utE
-         UsN7vjJnJec+ThtwyZUG9vv0RegCdElbRTsPtsCXKp/cMmLWrDSzsb0Y3nRY69OQ5IWl
-         r8nrBaF/j1vbBI+GgTUDKiYxFbpQTPSYZhJ2eZ8gE5ZzGdcO9veogsXIedtFp/tiwHu+
-         5gZUx+PCck8nkwUrcPnUgQ+gc0dtHtca/ScfVkoBmIl0P9GePXToqsXlkdBrDfUklHNB
-         dCCSO2NqTSZoBLJEJ/aGvchQoQIJdXY9pb8oRS65LxTgeVyyX8ax4Uv5kYcbCezvIMA1
-         rQtA==
+        bh=cqNO7pWcTxS2NOlR8WGw0D5OtB349JOCD8RyTarEmd8=;
+        b=dXgaechnup6UjEtH78gigjrEja4CBUyrbxPbQJxhFup8HWCvqH9ZkpZozJqidi21le
+         uD1MCLlrPGE3+VMHkSdn3dt+Jc+L7xB1OptQS1Za7N2jHQzNBr3LIyIV6vY2QJbL1Nem
+         DgtGyg0t3EfeWQoZyrZMJFavR/EdK6rVrfVdy9UlSROWXpw/i0ahwGMUo1JCzBAz8/21
+         lhGPDFHfZwj9uEwYS9UY/s9izWhU3bNZsthC0US2QIhLqtise05R3MPvjh0XSub/7M7U
+         5J+KjPE2cPD5Yf81iKpbAdjnMxXVJTchSfL++XbJ4B5q4wxAE5vzJLIBK3nwkJCqu9W/
+         hoqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786573172; x=1787177972;
+        d=1e100.net; s=20251104; t=1786573173; x=1787177973;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=F0w+DXeHQ+/vxKh8Nma+f/5//oo6s7YwLb7+GH8VJEk=;
-        b=l/lpKMqt2x1zQfLrAXJSac2DxwHxK/KcP0CNkJwx9wrRF8YMjzjgJdZoglUTHHWk1K
-         2YZbaR1lTrvzbOf6wz8MQeEmIvjWnijzbLW9zvpnyZ0hqgWC3QN1OAJfxG84zqwYcJ+F
-         wJ4nx9dlOx+8Yl9Luc9R492UisGAifO41bgfwDAkEyyMx+Kz+G+8nvRxaQai8PQfqRGN
-         W1pwZNTc2N/FKP18WLY/va6dWte7R2r6N1hlu/dxn2wJFgQttY7wi+sGjCkXIXBfl0BL
-         uWpRi2rr+7pXIZis6pxmoVjUGB9MeA5vYcmffkxZz5lBvsqkvTy1hJaKcHT+NPxcPX/I
-         rFPg==
-X-Gm-Message-State: AOJu0Yy28A0hUhdoQktsmk11NIir+DkSjJqcbl5HeH1xmu62pG6OrL6I
-	P/rV6RA6vRUirZ6GXIC5kG8gA+M+l9UrMhVPPwFdUsqTVJhEB3xPcHBfeAZCplmE
-X-Gm-Gg: AR+sD12ondmjKwli6OPOj9JafkUivlynChHv1wmkgSD+tYnhWnCZry7Z9xIvgcgwmG9
-	vO3A18Ilvi+FpM/NJcXufqD0KRyneQr95DZmYkdxj2dS++UG7D/pqwLVstSvsVYTul9+COrR2TV
-	+7v6Pr3LIBv734QqFjcQVxAyfOD7JLQvVQWfD1kXihawRZIp/NU7bhlEJ5qL2Rwe/du6AJa65Wo
-	tChY/UUYH8fMI4C13k4IjFwgqivU2RFH3v03Px5wfMR8O5nu1jKMV5BXPjiOUngTT/rCkYDkMmw
-	0eWgAg+9aBQGF7uTGDM1GhcNLhHsZAla0b6JxQOg76VVwQC24n8qJMccMPBMua6InZe3NgNvTsi
-	8GLyknywQPPb1YZhEOlI204ha/RkyvnNL4sL9lnWLvuFNE+A912T48JQH1QZtJXRjeGbB21afcc
-	lP1VyavPVq2t8Lt+34YtBdTeF9BruzfMc/X/EQKVtqv/A1Ltyq/lDYFiRXcxetdcCfIQUpBqWzZ
-	KSRWVrKuJ5AwsIPMUhZMASb7JmjVIY2FyH5DFSKIcM5OnJv+lLju5fzxHFNuSeozGQo/dTURgAi
-	b9Y3JfTkX6UIjJyMdPKNVR4BZPQ=
-X-Received: by 2002:a05:600c:6287:b0:495:4689:1e98 with SMTP id 5b1f17b1804b1-499821845d2mr9562385e9.10.1786573171638;
-        Wed, 12 Aug 2026 15:19:31 -0700 (PDT)
+        bh=cqNO7pWcTxS2NOlR8WGw0D5OtB349JOCD8RyTarEmd8=;
+        b=GDFK3glU3Rp7GBmZxldNmUNMLCI4K19xqt+n9vr5O7V+bVzghxHcUeKhhXkFiLnVSw
+         BtCo7TZBfk30pKZzDTFVufi4mUJBCVsyG7wk9o3BtlXKVtj8eLeXAnSe62hnN3uqHaDm
+         PtcNQtu9Q2pLErsT0qh5IakK/v0MRZrvc9v2yHAhkhg/WqAPW6rUUnMdTWtWqIFBU0mf
+         D9vlXoN9Cxs5A7GePR6DM3I2Rki6jYEPpQ0f/Tj9Qq8MJKx8roA7uQHMW5991Xn78xmV
+         iHXtDBWiPtZUKFlzmOx9N/JhoiSonXJOXFsxETTKb6hEmfPMBFBonJKrIz1LrBwXh6Vb
+         OX6Q==
+X-Gm-Message-State: AOJu0YyMQBIqZXR/F6hB1sfQXjlYdbrycIJEAzQAGW9GYRK7OTh4XKyJ
+	PjLLqs1jWTsKsGn4d0F4cVTj1O3qIKE7H2KMR51KTLAVM1SMHQ/aPOy6mtPsISOk
+X-Gm-Gg: AR+sD117r3DxD8KEnlMjKIaJGav7P9YsSBLhqZRHBqKzgbXaOkSRPD0FsUm/l0Ha1yz
+	KJolkg4X6GEJ9oEKtO3UbouKLTf0NlGvrT22Wl0Ymw5xps9sjtoMU+GBz+xX7WVe/xXbgRFgrcT
+	nGgJm6zO8yqqSOtV5tXk8SFp9JBaEFJmTDFPCGhyVwkoh4kKEVk9TmoUmmhbN6tvNrdZ8VKOnH2
+	gXloDMWpO0uE90xqIaEK781+PuPUw4q5rC2HuHz/e4t1RnGqxA1o/gCZUmwLoPH0GtpoXGjSuLo
+	AS4IBPGp8/q27brBUQlpfLSGhC/OCsKgqs+Lhp6zLb/2WQbb6zpqGh1B21etDJyb/EREH3L1iMJ
+	YS1jC03nlrngF+WpM5uQTjeX2hu749kBtkqFZal7RMmcjtnkysEvb8IPqMe0i6tG+qZrDlwG7XS
+	QVWFihXBuVWDcO7Mj1GcLbYJHh4sRQawCCKr+1JSCUilGYDrcg6ynV0I0cn8akg5d7rB0lYhjY8
+	a45koSdOxlsNCk9ni8t1IJPBitXE9aqIoQSvuIKzzCY9ZLO0tURkZzfbgOh4sOzVt4P1pyFwiNL
+	Qn0Rt8nhyflh/V2IJV8pgm0mM30=
+X-Received: by 2002:a05:600c:3105:b0:496:c1f3:e8f8 with SMTP id 5b1f17b1804b1-4998215e3b4mr11427655e9.7.1786573173344;
+        Wed, 12 Aug 2026 15:19:33 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49981de6a05sm26543055e9.1.2026.08.12.15.19.31
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49981b62894sm16117395e9.13.2026.08.12.15.19.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 15:19:31 -0700 (PDT)
+        Wed, 12 Aug 2026 15:19:32 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Eduard Zingerman <eddyz87@gmail.com>,
@@ -68,9 +68,9 @@ Cc: Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v8 4/6] selftests/bpf: Adjust veristat stack depth parsing
-Date: Thu, 13 Aug 2026 00:19:21 +0200
-Message-ID: <20260812221925.3358041-5-memxor@gmail.com>
+Subject: [PATCH bpf-next v8 5/6] selftests/bpf: Test stack depth stats without BTF subprog names
+Date: Thu, 13 Aug 2026 00:19:22 +0200
+Message-ID: <20260812221925.3358041-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260812221925.3358041-1-memxor@gmail.com>
 References: <20260812221925.3358041-1-memxor@gmail.com>
@@ -80,82 +80,60 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2922; i=memxor@gmail.com; h=from:subject; bh=9smPsmNWpLngNejUStT/lpLcMumQouPbVsyd0jNRLYg=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavmw88nyaW/pOyYgzilD7G+fmD6RTv2xtsAd/afJXYXw 69cUX/YUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgImIbmdkeHN12vFUmY3dl3fH FB013MK4ZK7gjPKCO/fP7K4I/zft9BOGfzbNnmIa7z8p9Ll1L+Tf0Wk53STs15x7c3Yds7fOt59 RwwsA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2033; i=memxor@gmail.com; h=from:subject; bh=oC3oj89S5rz3VULZPDD6OGI8LYHJH+btcybMuzsJ/nQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavmwy/zbKF/dUm3HX26DumkLVIMy/x+M6hvTe6pyJXVD FkLFX52lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCJL8hgZfsqyHNBwPBjnpDV9 0ioBHuu0PcmW92f+ETjVW7iVWeZqNiPDwn+836x1F/2zOvlGjc12amZRSP0jwXUHdvsrmc1oXPO UHQA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The verifier now reports instruction and stack depth statistics using
-uniform "subprog <id> (<name>) <kind>" records. Subprogram 0 is classified
-as main, while other records are global or static. Each record carries
-insns_self, insns_total, and stack depth.
+Test the per-program insns_self, insns_total, and stack depth statistics
+emitted when BTF function info does not provide subprogram names. Check that
+the subprog 0 main record and static-subprogram records use <unknown>.
 
-Teach veristat to parse the new records while retaining support for the
-legacy one-line stack depth format used by older kernels. Skip both
-instruction counts and match only through the stack value so fields can
-still be appended without breaking parsing.
-
-Increase the bounded backward scan so it can include all 256 per-subprogram
-records.
-
-Zero-initialize the legacy stack buffer because logs using the new format do
-not populate it before the trailing tokenizer loop. This makes the loop see
-an empty string instead of reading uninitialized data.
+Make VERBOSE_ACCEPT request verifier statistics so the raw-insn test can
+validate the output without a test-specific log level.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/testing/selftests/bpf/veristat.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/test_verifier.c  |  2 +-
+ tools/testing/selftests/bpf/verifier/calls.c | 12 +++++++++++-
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index c9c257784ee3..5c0ec3edce72 100644
---- a/tools/testing/selftests/bpf/veristat.c
-+++ b/tools/testing/selftests/bpf/veristat.c
-@@ -993,13 +993,15 @@ static void free_verif_stats(struct verif_stats *stats, size_t stat_cnt)
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index a8ae03c57bba..bffb7360434c 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -1560,7 +1560,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
  
- static char verif_log_buf[64 * 1024];
- 
--#define MAX_PARSED_LOG_LINES 100
-+/* Keep room for all 256 subprogram records and trailing statistics. */
-+#define MAX_PARSED_LOG_LINES 300
- 
- static int parse_verif_log(char * const buf, size_t buf_sz, struct verif_stats *s)
+ 	opts.expected_attach_type = test->expected_attach_type;
+ 	if (expected_ret == VERBOSE_ACCEPT)
+-		opts.log_level = 2;
++		opts.log_level = 2 | 4;
+ 	else if (verbose)
+ 		opts.log_level = verif_log_level | 4; /* force stats */
+ 	else
+diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
+index 8cd626e04551..eb6e3baef412 100644
+--- a/tools/testing/selftests/bpf/verifier/calls.c
++++ b/tools/testing/selftests/bpf/verifier/calls.c
+@@ -1091,7 +1091,17 @@
+ 	/* stack_main=32, stack_A=256, stack_B=64
+ 	 * and max(main+A, main+A+B) < 512
+ 	 */
+-	.result = ACCEPT,
++	.result = VERBOSE_ACCEPT,
++	.errstr = "stack depth max 352\t"
++		  "subprog 0 (<unknown>) main insns_self \t"
++		  " insns_total \t"
++		  " stack 32\t"
++		  "subprog 1 (<unknown>) static insns_self \t"
++		  " insns_total \t"
++		  " stack 256\t"
++		  "subprog 2 (<unknown>) static insns_self \t"
++		  " insns_total \t"
++		  " stack 64",
+ },
  {
- 	const char *cur;
--	int pos, lines, sub_stack, cnt = 0;
--	char *state = NULL, *token, stack[512];
-+	long sub_stack;
-+	int pos, lines, cnt = 0;
-+	char *state = NULL, *token, stack[512] = {};
- 
- 	buf[buf_sz - 1] = '\0';
- 
-@@ -1025,11 +1027,24 @@ static int parse_verif_log(char * const buf, size_t buf_sz, struct verif_stats *
- 				&s->stats[MARK_READ_MAX_LEN]))
- 			continue;
- 
-+		/*
-+		 * New kernels emit one "subprog <id> (<name>) <kind>" record
-+		 * per subprogram with the stack depth at the end, while old
-+		 * kernels emit a single "stack depth <a+...+n> max <max>"
-+		 * line. Match both formats so veristat works against either
-+		 * kernel.
-+		 */
-+		if (sscanf(cur, "stack depth max %ld", &s->stats[MAX_STACK]) == 1)
-+			continue;
-+		if (sscanf(cur, "subprog %*d %*s %*s insns_self %*d insns_total %*d stack %ld", &sub_stack) == 1) {
-+			s->stats[STACK] += sub_stack;
-+			continue;
-+		}
- 		if (2 == sscanf(cur, "stack depth %511s max %ld", stack, &s->stats[MAX_STACK]))
- 			continue;
- 	}
- 	while ((token = strtok_r(cnt++ ? NULL : stack, "+", &state))) {
--		if (sscanf(token, "%d", &sub_stack) == 0)
-+		if (sscanf(token, "%ld", &sub_stack) == 0)
- 			break;
- 		s->stats[STACK] += sub_stack;
- 	}
+ 	"calls: stack depth check using three frames. test2",
 -- 
 2.53.0
 
