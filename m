@@ -1,85 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B396B246768;
-	Wed, 12 Aug 2026 00:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F9334E777;
+	Wed, 12 Aug 2026 00:30:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786493450; cv=none; b=MOWCiQayTiodeX+9hrYOUDhXzgoQI8F7xLDlPTerVs0ku7EoYofcG8zHjpfysQcUge0thnvCqox3T9g2PDZZTHktxd/eFWLj9sgu/9/TjeKVLytfj74bs6upbTHmK7PtR2KmnjsIWNEZdP5RHOaz5dD2PxeXoGPDzFDO3earPwE=
+	t=1786494621; cv=none; b=s+pVa3V9WCtKefYak7nGyA0KpRIqfm1yQOGJ105kUjwomdHtXdZnQIZfxtJ/P5cm3yF161uO9nO4Sokhplcv9JHXF9bLcaU/hyplaVR6D6bqIYwHzYs/A7FTpXgipimibKRfBdVHGaCgYlfIc69yQu+BNM8DscTq1qE+BNJeiPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786493450; c=relaxed/simple;
-	bh=6+Rvy+q5ni6toJ10ZjKsY/p3TsIFcJy3cyoJ8NjC6vU=;
+	s=arc-20240116; t=1786494621; c=relaxed/simple;
+	bh=okRGTHj9xe02E3+2vllt76mrLoc9xeWeOr/WI/Hs9ss=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OZ/jGfIwxMwB9MSWnZyc7ME+p43SgbTF3og9lDjM4EvJLayQQgx6A9aD9EFA7piqXnDYy4YIBGTI7R5fvio/nIyFzKARb4QOWOkfLWr25mkbpGw5WNJUfDxm0IA5AQSacoXfPlk2pSlbGACFoNAo/BhUgTzeAVo1CKkMkpf188w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y5vTaPOz; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=ExCpzWAtIAlxN/bZwBtcZwkyd5wvZJ4as2tXJxfc0u9R3s5ThS5INnUvU8Kg16diYHsCh7i9t6hK6qZmmQAGy9QsX8kWDhki2RnbbhAzL9abWVLnZp2rgjC8iNlp6gKpa752VD22fWF3MOieWqNIPbCQqAiyIZk+dg6umuIGRM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PF29UAPz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y5vTaPOz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4EF81F000E9;
-	Wed, 12 Aug 2026 00:10:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PF29UAPz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 571271F00A3A;
+	Wed, 12 Aug 2026 00:30:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786493449;
-	bh=6DysOza7wvf5cqsIf14GiOVeOVqvMPonzUY+hG6xibI=;
+	s=k20260515; t=1786494619;
+	bh=vBGCSWHaGMmkmmP6yi4Nc/OgFCtfvJsC1RNn5pkjCgg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Y5vTaPOzPqRPSrFEV4X+VOZjhulTnkZHiHT9+N8TXRjLvasvr4PKjI0J6jA6DSjjP
-	 3N3FDHbRIMQ4fvzof+d2yMrBMr1MVAey2e0vJ51veffII+A6hb42QkbxeyhgysSBlX
-	 KLZQHet6rbZaf7BsMo43vs6Qsn6R3al8JnnREMSsvBCqnXUv/JiQA1G7GJVzVHKGsz
-	 2SBLcdYDZhvJP1ilrLYR75Vqw4XyFE9dmK999SzKx/MQFIuiwMBRy3apHV/GRiFA3A
-	 WIhjmn+KG+++Yp4uqlIwT5rkk9Z/RqTL++ipB0o3V7n15otpJf/S4iNo6DD94y34o2
-	 /GdA44YfBqqDQ==
-Date: Tue, 11 Aug 2026 17:10:47 -0700
+	b=PF29UAPzPh1648sUupk3yfPPS8lvAWVb7VDO27PVC7jtt/EnlHV64lWDGwg63V+WH
+	 yqBRc68+AeMKJWQLroLC4SHU9+h+OX4ZTBEUyI3EltWHfKaewCsksOGHkSyLoViRKW
+	 NnjBcWG3lJtPbw5n0wJcmnK7TbT4rM5u+fePCjZ7Dfa/snQDKLyGJSsskGu3i2cVxj
+	 Ttcv88MMLW3zbve6ZLK1xt9kR0klDNwUkpjmM5YJ78dNaZB1XbRUPxRQQs0qnil/Ce
+	 BQn4ez36ahFzEjrSvabfgx7pTkVnTG4ogTiD664GAusBj75WoszJwN1kHZlM35OLst
+	 D+gDoE7aisySg==
+Date: Tue, 11 Aug 2026 17:30:17 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jesper Dangaard
- Brouer <hawk@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan
- <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu
- <liuhangbin@gmail.com>, Krishna Kumar <krikku@gmail.com>, Samiullah Khawaja
- <skhawaja@google.com>, Martin Karsten <mkarsten@uwaterloo.ca>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v4 2/3] bpf, xdp: move offload check into
- dev_xdp_install()
-Message-ID: <20260811171047.4e6a409c@kernel.org>
-In-Reply-To: <cf8655ff-4e45-40ab-898e-aff2aa7145c5@linux.dev>
-References: <20260810050621.82035-1-jiayuan.chen@linux.dev>
-	<20260810050621.82035-3-jiayuan.chen@linux.dev>
-	<20260810114958.64e6a83d@kernel.org>
-	<cf8655ff-4e45-40ab-898e-aff2aa7145c5@linux.dev>
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: shaojijie@huawei.com, shenjian15@huawei.com, linux-rdma@vger.kernel.org,
+ eperezma@redhat.com, jasowang@redhat.com, virtualization@lists.linux.dev,
+ mst@redhat.com, xuanzhuo@linux.alibaba.com, pabeni@redhat.com,
+ edumazet@google.com, linux-doc@vger.kernel.org, corbet@lwn.net,
+ horms@kernel.org, dsahern@kernel.org, kuniyu@google.com,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com,
+ jhs@mojatatu.com, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
+ donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com, Parav Pandit
+ <parav@nvidia.com>
+Subject: Re: [PATCH v5 net-next 1/2] net: update comments for
+ SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN
+Message-ID: <20260811173017.3d18dfdc@kernel.org>
+In-Reply-To: <20260804213510.673084-2-chia-yu.chang@nokia-bell-labs.com>
+References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
+	<20260804213510.673084-2-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 11 Aug 2026 11:06:34 +0800 Jiayuan Chen wrote:
-> > It may be better to split the series and send this patch to net,
-> > the netdev CI has a netdevsim test for the prog offload, would be
-> > good to run that. =20
->=20
-> Though for now bpf_xdp_link_update() already does:
->=20
->  =C2=A0 =C2=A0 if (old_prog->type !=3D new_prog->type ||
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 old_prog->expected_attach_type !=3D new_prog=
-->expected_attach_type) {
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 err =3D -EINVAL;
->  =C2=A0 =C2=A0 =C2=A0 =C2=A0 goto out_unlock;
->  =C2=A0 =C2=A0 }
->=20
-> so the other checks can't be triggered on the update path even without=20
-> them in dev_xdp_install().
->=20
-> So I'm thinking this patch works as a standalone fix (good for=20
-> backport), and the cleanup goes as a followup (if necessary)?
+On Tue,  4 Aug 2026 23:35:09 +0200 chia-yu.chang@nokia-bell-labs.com
+wrote:
+> This corresponds to discussions in virtio mailing list:
+> https://lore.kernel.org/all/20250814120118.81787-1-chia-yu.chang@nokia-bell-labs.com/
+> And it was suggested to clarify SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN.
 
-Just do it right please. Feels like we are promised a follow up to
-every single patch these days :/
+> -	/* This indicates the tcp segment has CWR set. */
+> +	/* For TX, this indicates that the first TCP segment has CWR set, and
+> +	 * any subsequent segment in the same skb has CWR cleared. This flag
+> +	 * must not be used in RX, because the connection to which the segment
+> +	 * belongs is not tracked to use RFC3168 or AccECN. Using RFC3168 ECN
+> +	 * offload may clear CWR and corrupt ACE signal (CWR is part of it).
+> +	 * Instead, SKB_GSO_TCP_ACCECN shall be used to avoid CWR corruption.
+> +	 */
+
+I still can't wrap my head around this TBH.
+
+SKB_GSO_TCP_ECN means RFC3168
+SKB_GSO_TCP_ACCECN means AccECN
+
+If the HW can correctly detect cwr on first frame and then no cwr 
+and report that as ECN/RFC3168 - what's the problem? TSO will produce
+the exact expected segment sequence.
+
+Is the program that if we re-GRO that frame in SW we end up with
+ECN+ACCECN on the same skb?
