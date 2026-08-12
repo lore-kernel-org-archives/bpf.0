@@ -1,52 +1,51 @@
-Received: from mta0.migadu.com (out-223.mta0.migadu.com [91.218.175.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65ACE43B3D1
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 16:48:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.223
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A08474267;
+	Wed, 12 Aug 2026 17:19:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786553337; cv=none; b=WCNzvpNUhsVv72yeQNQS/Kf3jeX0a/OIWw1yGHgwWA9GXOnu2k8QDbHJHRCF8N1h1fYIqJQnAMRf1lP9Rt1QU4O/OIlzY4LiNIg8DPLBY90U7VGQqg3sZoRvBdiiZrZ8RXcbgb9nwW5V7ggRmsw4d3DfkiUMbhUkQ4bSN0US4CQ=
+	t=1786555193; cv=none; b=ZKTGJs2+lNTqddXvNkVPsETkgFoUGvQIn/0sTXWN0MKEfetQKYPQkQpyq0b5NlQVGlKpH5vgm02ArhAaK+hyd4c5FbstwMRuM0F+DIcicbfr47SwfPapc7cRtv2CjzDogcIkZ8npyxUH/kBdiZ+4LgbwtbZSUVRqSWfQCrDXUEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786553337; c=relaxed/simple;
-	bh=9Zz695qFcJN6tT5kWEDZG+5dsGqvgRv6vroaGOeo9KI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q6m0G77ZjqPeDHgA0l477vgef0Mit3RTK0DdydeETARprXLG8l66HrOX5hy6seR8eFSeuBq4+fjaKUYg710ARFENZwK6jXBfvkRtFQDOpy8Op3vdXeePTRcjha4X61zARyOGXA0K+t0PJ5ypLs/h9wCYDysko94eY35jeRhjuzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xw03RYoh; arc=none smtp.client-ip=91.218.175.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786555193; c=relaxed/simple;
+	bh=i5iDbk7xspyU9JtWPxQanLp+P+TxFksfKMvwWQ0GNmU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sFeLzVGt1F3s0rYcq2QvnVIt00CKjdehz4Y2RTB4aVAD3aNaEuSn1aW4Lh4iYfEFVVnzyRDjUFRMVGIevhOZWUUXo4iVmCJS+BJh1tHS14un6GJbz///yve3Iynb5vGuaWg238A2J7ABmXrNzWHHf0OJoFCaptOOGOsSk68Pdwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=M6DHFVir; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xw03RYoh"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9Zz695qFcJN6tT5kWEDZG+5dsGqvgRv6vroaGOeo9KI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786553331; v=1; x=1787158131;
- b=xw03RYohMMD1hSX/b4T958tX4iP8fjfsTUrIYEr1+hx6idCGKt7PgfwGPWAFDjDfnTjVRrDK
- ywFtNJkdWAuCxUJ7qoqm+AtgZAbifhIXPIcr/T2IuQgdMqskdeC3jRmYpTFT/1AAPWZehR7Kow4
- mHdPPYrktN7vqOpQLnJ2Qv9I=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from .linux.dev (117.20.149.103)
-	by smtp.migadu.com with ESMTPS id e0a4c1ed99434c8d;
-	Wed, 12 Aug 2026 16:48:51 +0000
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="M6DHFVir"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D295B1596;
+	Wed, 12 Aug 2026 10:19:46 -0700 (PDT)
+Received: from fedora (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B287F3F66F;
+	Wed, 12 Aug 2026 10:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1786555190; bh=i5iDbk7xspyU9JtWPxQanLp+P+TxFksfKMvwWQ0GNmU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=M6DHFVir0DQKQ3p3jdphqsuM/XS1GejEM6rjemttLZzudXUBL/Q6p8XmzkocZadC5
+	 lPG8BN6/JCURoSKcrafIKBQCV9s59NrO7cokSBI5IOb3WKRC1cFftcEAAjTqmxoOkH
+	 f2dUbhJ6hcKKz7fl1NmgIRagL2bNzPvap5MRpakA=
+From: Bill Roberts <bill.roberts@arm.com>
+To: "H. Peter Anvin" <hpa@zytor.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <pjw@kernel.org>,
+	rick.p.edgecombe@intel.com,
+	Shuah Khan <shuah@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	x86@kernel.org
+Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next] bpf: Trim special_kfunc_list in verifier
-Date: Thu, 13 Aug 2026 00:48:43 +0800
-Message-ID: <20260812164843.55601-1-leon.hwang@linux.dev>
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Bill Roberts <bill.roberts@arm.com>
+Subject: [PATCH v2 1/2] x86/shstk: support via prctl
+Date: Wed, 12 Aug 2026 12:19:39 -0500
+Message-ID: <20260812171940.1046116-1-bill.roberts@arm.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -56,51 +55,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The commit 7619a0ee9340 ("bpf: Mark existing lock-safe kfuncs with KF_SPINLOCK_SAFE")
-dropped some helpers in verifier, which also eliminated the use of the
-following kfuncs from the special_kfunc_list:
+Historically, managing the user-space shadow stack state on x86 has
+been handled exclusively through the arch_prctl() interface via the
+ARCH_SHSTK_* operations. However, other architectures (such as arm64 and
+riscv) do not implement arch_prctl() and instead utilize the newer,
+arch-agnostic, prctl() interface (i.e. PR_GET_SHADOW_STACK_STATUS and
+PR_SET_SHADOW_STACK_STATUS).
 
-* bpf_arena_reserve_pages
-* bpf_stream_vprintk
-* bpf_stream_print_stack
+To provide language runtimes, toolchains, and libc implementations with a
+consistent, cross-architecture interface for managing control-flow
+integrity, wire up the generic shadow stack prctl handlers for x86.
 
-So, drop them from the special_kfunc_list.
+Map the generic PR_SHADOW_STACK_ENABLE, PR_SHADOW_STACK_DISABLE, and
+PR_SHADOW_STACK_LOCK operations onto the underlying x86 internal CET helper
+routines. This allows portable userspace applications to toggle or query
+shadow stack states without relying on architecture-specific system calls,
+while maintaining backward compatibility with existing arch_prctl() calls.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: Bill Roberts <bill.roberts@arm.com>
 ---
- kernel/bpf/verifier.c | 6 ------
- 1 file changed, 6 deletions(-)
+ arch/x86/kernel/shstk.c | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index add3affc5703..8797ae08f232 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11092,10 +11092,7 @@ enum special_kfunc_type {
- 	KF_bpf_task_work_schedule_resume,
- 	KF_bpf_arena_alloc_pages,
- 	KF_bpf_arena_free_pages,
--	KF_bpf_arena_reserve_pages,
- 	KF_bpf_session_is_return,
--	KF_bpf_stream_vprintk,
--	KF_bpf_stream_print_stack,
- };
- 
- BTF_ID_LIST(special_kfunc_list)
-@@ -11185,14 +11182,11 @@ BTF_ID(func, bpf_task_work_schedule_signal)
- BTF_ID(func, bpf_task_work_schedule_resume)
- BTF_ID(func, bpf_arena_alloc_pages)
- BTF_ID(func, bpf_arena_free_pages)
--BTF_ID(func, bpf_arena_reserve_pages)
- #ifdef CONFIG_BPF_EVENTS
- BTF_ID(func, bpf_session_is_return)
- #else
- BTF_ID_UNUSED
- #endif
--BTF_ID(func, bpf_stream_vprintk)
--BTF_ID(func, bpf_stream_print_stack)
- 
- static bool is_bpf_obj_new_kfunc(u32 func_id)
+diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+index 0ca64900192f..c34ba3701dd0 100644
+--- a/arch/x86/kernel/shstk.c
++++ b/arch/x86/kernel/shstk.c
+@@ -18,6 +18,7 @@
+ #include <linux/sizes.h>
+ #include <linux/user.h>
+ #include <linux/syscalls.h>
++#include <linux/prctl.h>
+ #include <asm/msr.h>
+ #include <asm/fpu/xstate.h>
+ #include <asm/fpu/types.h>
+@@ -630,3 +631,39 @@ bool shstk_is_enabled(void)
  {
+ 	return features_enabled(ARCH_SHSTK_SHSTK);
+ }
++
++#define PR_SHADOW_STACK_SUPPORTED_STATUS_MASK \
++		(PR_SHADOW_STACK_ENABLE | PR_SHADOW_STACK_WRITE | PR_SHADOW_STACK_PUSH)
++
++/* Handles the generic prctl interface for PR_SET_SHADOW_STACK_STATUS and its feature bits */
++int arch_set_shadow_stack_status(struct task_struct *t, unsigned long status)
++{
++	int rc;
++
++	if (status & ~PR_SHADOW_STACK_SUPPORTED_STATUS_MASK)
++		return -EINVAL;
++
++	/* x86 arch_prctl is single bit at a time, so handle these one at time */
++	if (!status & PR_SHADOW_STACK_ENABLE)
++		return shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
++
++	rc = shstk_prctl(t, ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK);
++	if (rc)
++		return rc;
++
++	if (status & PR_SHADOW_STACK_WRITE)
++		return shstk_prctl(t, ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS);
++
++	return shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_WRSS);
++}
++
++/* Handles the generic prctl interface for PR_LOCK_SHADOW_STACK_STATUS and its feature bits */
++int arch_lock_shadow_stack_status(struct task_struct *t, unsigned long status)
++{
++	return shstk_prctl(t, ARCH_SHSTK_LOCK, status);
++}
++
++int arch_get_shadow_stack_status(struct task_struct *t, unsigned long __user *status)
++{
++	return shstk_prctl(t, ARCH_SHSTK_STATUS, (unsigned long)status);
++}
 -- 
 2.55.0
 
