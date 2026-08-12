@@ -1,225 +1,179 @@
-Received: from mta0.migadu.com (out-100.mta0.migadu.com [91.218.175.100])
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ADB725DB0D
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 18:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.100
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786560420; cv=none; b=ED966PH6SdnzOc3N47OFly5TIf25qYIt5x5obBg6N/BXUNre0PZBPUp/CQvyIInDN1bUC713GrCmlEr0LC29dhIVLdhOnQy0SxzQh5GK7xEWnddgZcJJ83hVoX7/3l9u+UTuaAdomusPT/kRydWiijGuSk95sdNu28VXkqeePDc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786560420; c=relaxed/simple;
-	bh=P15uc+v2QH+iKpzpb5A5Mh7dmRI8QIJxQCb9OSawzdk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ipi7s5FzFhbFiCoiPiREG2l/cMSjDiCv8SSfswAmTol/dqYXD/azATw6YX6p4MbbZd2uau0R/w6mfW1FmnyIcSguKNccnFaqFSwahA+MqdISDYx2azWnoTlWTynDDfwJJgduWWrtep9C0u2EfcZrHBbsikMcnJpx9vowrpnniQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qGXtY5V0; arc=none smtp.client-ip=91.218.175.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D5A32D0F5
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 18:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786561147; cv=pass; b=mihvoq76Q2ll1zmEZbTG4/ShMxUxL87nkIzq9wfP+/DXWtuv/yB2gcTHRE4XkPyeDY4138KOFwZXrpf3/tApKGQDiMBYoT3dhGxuQGFgb64icdjFxdeXizAq8K6FP20NYC/kI1F0mvf6DVIgQm/bOfem3HbCcbBbgZxu7hbGE9Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786561147; c=relaxed/simple;
+	bh=Cf62AHvquiW1wPVHoLRVB//an84/OTXj2Xh68mCFV7A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QpG2FUoahgdvkBAwmWopTYJ50AqxujRSkruRVIKDPzUNqBuj5h5F2ap4TMOzBMVjbYQJcpK6aXcG9ebCoGPU8JsRNTnr3N454+FMTwf/bUY3oI+O/BmV0+duJrWq9BwnnLTEVQ74cDh+LVnwMByJN+NBax7Ynj4Un1hYzNICAio=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fXB3OdGZ; arc=pass smtp.client-ip=74.125.224.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qGXtY5V0"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=P15uc+v2QH+iKpzpb5A5Mh7dmRI8QIJxQCb9OSawzdk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786560416; v=1; x=1787165216;
- b=qGXtY5V03+kL2GO/xvRC8kZXN1mr+bb49dXYbjXCK7lDXgvl5afZsAVggc+nba6BBsMql2lo
- ZZSUi85wk9UwqDoCTPURy+FtYU1ACx3LjHIHBrMCVPKRAmXtCy93iMSMf62tYqTnYUaoqhDQSYH
- 9dwAhWYjUPauO5LOcoRMaUGs=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2a03:83e0:125c:1:c4d4:5d0:c3b3:cab6] (2620:10d:c090:500::5:f7a3)
-	by smtp.migadu.com with ESMTPS id 20a21b4d86a645e6;
-	Wed, 12 Aug 2026 18:46:38 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d92da576-4930-4b10-b8bd-ea1158ec08bc@linux.dev>
-Date: Wed, 12 Aug 2026 11:46:32 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fXB3OdGZ"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-66804667af2so1390826d50.0
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 11:59:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786561144; cv=none;
+        d=google.com; s=arc-20260327;
+        b=kUNv+mP8RBn7YcqlV00tuyvCY2OUS+bxKfx7Kws5FM2HtaA2JvTd8UW0YXPrQ5H+Gt
+         4nbkGXxBzfpF+kowPmLLwNeT+XqeeT8RlUAlFh/L2Zr37l380ZfYw3RvvBbEk4e3w5FR
+         +MTPzSdPtRA4LP+2+EEVkULyGjlrrlJAR8Fk0vMHMlZESHYbhJxzpJFLJDgRAblMcrdn
+         9fTH+/Uc6HkqHdGQh/MWyfwoCij+tIVCZr5VVK8k8Ttarbsn+m+ovHHlsmsd1l67VbYX
+         //7J48sYcI9ivIcdWvjoFGg5Cgx8FEueD/Dv0byjQnjd2g5DedVEAyJvUYr2zWStUJae
+         sPoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=FVIxEE4O6vcmWKuih3FAEgHtBXNG2E3LNfEc3X8cwwA=;
+        fh=KFuCT+lsuCBthncmPgCKNp8gBFIheQk8cxGC6Wnibas=;
+        b=ATj2nNBZN+V6Ar7P3O9VWN7+8C/qeWWQ8F9hZ3P+zIFs8EHxIsJXtnZo+AKChWxvKp
+         5gucibbYInt6dlbyiO3Dtefi2K6khkAptCvDcWlQd9TDX4B+7DVPaAfjQJXmuTe/QNP9
+         NXSh1xicla1A9RQhdf3nXteNDIA1QcdJw9KGqncp6cBWRmnPsaffSABs1poNjQXI/2nX
+         Shn2uQshY1PK2OfS1xgO8Ls9pYjyv989+7fU8yLRMDlmYHok3k8HcwBYDQJynQnLg3/A
+         /RiWK5gAdRWehBvmedT9VCWE96LHXmXyxeGP9BNxYXGQtG9xF0euMxJYHheBtmYGvmlz
+         GIMA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786561144; x=1787165944; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=FVIxEE4O6vcmWKuih3FAEgHtBXNG2E3LNfEc3X8cwwA=;
+        b=fXB3OdGZAev40d+COszkXk7CSVP0MhbKh7Br6wqzN3eN9a6201N70MU2R3KAMNeh9Q
+         gKq11Gcmy1c7pxyvL/ZgXVpj72P+bI5HPK+4upRa5tOYnSwX0SfejO/yPjKCD3Mg6eUV
+         qID50FT9BFochjEr9MAUc+oWamy+hyI431fGw0NoYzivJyrxnVeb1LugjASgYS8iE4dC
+         dqW1RZY++FnfC3LZBvLVjuhMLQ9ar7jmdZkDf+fYIFOvEVc1vFCeOIRobHwVl6tReciK
+         zs84N/CDdZeXJlL2VO6QbKg3MKdoq63OGueHVzlZdUJILBaIcUMj1TurZj2OcimAf6fj
+         6Njw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786561144; x=1787165944;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=FVIxEE4O6vcmWKuih3FAEgHtBXNG2E3LNfEc3X8cwwA=;
+        b=fs2ipSC/FZrVWMS0mjuSWGM8YZACkWqL6rbQjcgPuSA9cJiP5M+4JloHWN/Y8WKZeM
+         Q9fzq8YLvEU1gTu40RefYc1ZlwX6AIYFdY9+3bC+86pBhKwqoSRG2uOirAjD8ncnOtGz
+         Tr4+A168mFCkubME0ecQHo74hOceyP3MITLL8vFgCEs4pbjD8bRfQj5UwSJg5sM6eUU0
+         zduPCbUE3duPJLiE0s7DJ7pvUPbdcyYZJqse0iif2F9DUqt2M4Gq9tY/l8xkm2NAAyXK
+         Fmpk7245sgarCt9v1bmRZAobV7rW53wY78YX2uVkyZhcjtph76Ldm7iZ9/pUQrMAKxKC
+         qkkw==
+X-Gm-Message-State: AOJu0Yz61saXiO10tYxL9y6SADwQUztno7pbk66TfiH6JJkn9xBIKwEW
+	wIAXdb0/17fbBe3q7bAHdZXbGH1S6r2vFWee9Q/7cBAQCNexOIgKvJ3x9T1EP12Q2FuxKhCibN/
+	SfnU/Rp3BQThBjYBXLGlVckDpx0xn6tY=
+X-Gm-Gg: AR+sD13DkNHzPVu7gv652IC4cMcUIwLL8bOUpuo6ZeFdWv0HVKZV+fIJrh2WSdRHTmD
+	gI/MHbnkYgAvPcxt4KrBUe8M0Kf86nDd1uFUWMPZOCk7PSw0NnHhKXe1FClr7FO0GZ7Nj0NVMI0
+	Evr3U4SLR6PPD/X4btSj+py2FuksddCIXq+ZEPFsiN7dz3cDV75IvpdqdzVsID0DiyrQOc24ys0
+	5GkGCnVJjEexWmWrPRAhL3CrpuSt8UzWzC4GDHwIPlrkP8erQkp/1Kls9Bl+KOQLIINeNJioLWI
+	NcTjpAL6IQLnERtfh+mDQxXIPzykcUQqEcI6KgSLz/cN
+X-Received: by 2002:a05:690e:11c2:b0:667:b72c:8120 with SMTP id
+ 956f58d0204a3-66c513a08e2mr268067d50.5.1786561144090; Wed, 12 Aug 2026
+ 11:59:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 1/2] selftests/bpf: keep polling connection that is
- still in progress
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- Jiayuan Chen <jiayuan.chen@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com>
- <20260811-tc_tunnel_flaky-v3-1-876f4e0bc603@bootlin.com>
- <75ec8417-4be5-4e7a-86c9-70a83b793580@linux.dev>
- <DKM96LSV880C.1QEALTH06N0GI@bootlin.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <DKM96LSV880C.1QEALTH06N0GI@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260706171918.317102-1-ameryhung@gmail.com> <20260706171918.317102-13-ameryhung@gmail.com>
+ <DKD3TPJVVM4G.2N5G3FVGL6V73@etsalapatis.com>
+In-Reply-To: <DKD3TPJVVM4G.2N5G3FVGL6V73@etsalapatis.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Wed, 12 Aug 2026 11:58:52 -0700
+X-Gm-Features: AUfX_my-PInsN-P1EfS3zOiGkbRIRYLHBXB_ez0mpmKnPqr-Yr1YA81_1UAsAvA
+Message-ID: <CAMB2axPqGPjo-NOVgU+H0q8HhtT3NJr=q_C8d8=_1g7Ed3YmxQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 12/15] bpf: tcp: Support parse/len/write
+ header option hooks in bpf_tcp_ops
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
+	andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
+	martin.lau@kernel.org, shakeel.butt@linux.dev, roman.gushchin@linux.dev, 
+	kuniyu@google.com, kerneljasonxing@gmail.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/11/26 9:25 AM, Alexis Lothoré wrote:
-> On Tue Aug 11, 2026 at 5:05 PM CEST, Jiayuan Chen wrote:
->>
->> On 8/11/26 10:26 PM, Alexis Lothoré (eBPF Foundation) wrote:
->>> Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
->>> following logs:
->>>
->>>    (network_helpers.c:309: errno: Operation now in progress) \
->>>      Failed to connect to server
->>>    send_and_test_data:FAIL:connect to server unexpected error: -115
->>>
->>> This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
->>> socket (see settimeo() in client_socket()), allowing connect() to return
->>> an error and to set errno to EINPROGRESS instead of blocking until
->>> connection result is known. Increasing the timeout value for those tests
->>> is likely not a good solution (and it has already been done by commit
->>> 2790db208b44 ("selftests/bpf: Improve tc_tunnel test reliability")):
->>> they involve subtests that expect the connection to fail, and so
->>> increasing the timeout value would increase overall test execution
->>> duration again (not only the connection, but any socket operation).
->>>
->>> Another solution, as documented in man 2 connect, is to poll the socket
->>> for POLLOUT once connect has returned EINPROGRESS, and to get the actual
->>> connection result through getsockopt: this allows to keep the overall
->>> timeout values low for the general traffic, while letting a chance to
->>> the connection to succeed even if CI runners are loaded.
->>>
->>> When connect() returns EINPROGRESS, poll the socket for POLLOUT and
->>> check the connection result via getsockopt(SO_ERROR). This new handling
->>> conforms to the configured timeout: the polling loop will only run for
->>> the amount of time still available, accounting for the time used by the
->>> initial connect() call.
->>
->>
->> So IIUC this patch doesn't actually fix the flakiness: connect() on a 
->> blocking socket only
->> returns EINPROGRESS after SO_SNDTIMEO is fully consumed, so remaining_ms 
->> is always ~0 and the
->> overall time budget is still 1s, same as before. Am I missing something?
-> 
-> Hmmm, I have been assuming that this EINPROGRESS could be returned
-> _before_ the configured timeout depletion, but I may have been mistaken,
-> it indeed happens only  the socket is O_NONBLOCK, which is not the case
-> here. So indeed, it does not fix anything for the blocking case, as the
-> budget is already depleted when getting EINPROGRESS...
-> 
-> I added this budget mechanism to follow up on Ihor's suggestion, so I
-> either got it wrong, or it can not work.
+On Fri, Jul 31, 2026 at 3:19=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.c=
+om> wrote:
+>
+> On Mon Jul 6, 2026 at 1:19 PM EDT, Amery Hung wrote:
+> > Add the TCP header option callbacks to the bpf_tcp_ops struct_ops type:
+> >
+> >   parse_hdr     - parse the options of an incoming skb on an establishe=
+d
+> >                   connection
+> >   hdr_opt_len   - reserve space in the TCP header for bpf options
+> >   write_hdr_opt - write the reserved bpf options
+> >
+> > These mirror the BPF_SOCK_OPS_PARSE_HDR_OPT_CB, _HDR_OPT_LEN_CB and
+> > _WRITE_HDR_OPT_CB legacy sockops callbacks, but are exposed as struct_o=
+ps
+> > members so a program can implement them with normal function signatures
+> > and per-member helper sets.
+> >
+> > The reserved header window is shared between the legacy sockops and
+> > bpf_tcp_ops paths. tcp_{syn,synack,established}_options() first run the
+> > legacy BPF_SOCK_OPS_HDR_OPT_LEN_CB and then call hdr_opt_len, so both
+> > sources accumulate into opts->bpf_opt_len; at write time the legacy
+> > options are emitted first and bpf_tcp_ops writes after them.
+> >
+> > API design
+> >
+> > bpf_tcp_ops overloads the sock_ops header-option helpers rather than
+> > introducing a new API: bpf_reserve_hdr_opt(), bpf_store_hdr_opt() and
+> > bpf_load_hdr_opt() are exposed per-member (reserve for hdr_opt_len,
+> > store/load for write_hdr_opt, load for parse_hdr) and share the existin=
+g
+> > kernel option-walking core via _bpf_sock_ops{store,load}hdr_opt(), with
+> > the bpf_tcp_ops wrappers synthesizing a temporary bpf_sock_ops_kern fro=
+m
+> > the program ctx. This keeps a port from the legacy
+> > BPF_SOCK_OPS*_HDR_OPT_CB callbacks mechanical (same helper calls) and
+> > adds no new UAPI helper/kfunc surface.
+> >
+> > An alternative considered was to drop the option helpers entirely: have
+> > hdr_opt_len reserve space purely through its return value, and introduc=
+e
+> > a dedicated TCP-header-option dynptr used for both reading and writing.
+> > That is a cleaner, more self-contained interface, but it is a larger
+> > change and does not reuse the legacy helpers, making a port from sockop=
+s
+> > less mechanical. It can be pursued as a follow-up; the helper-based
+> > interface here keeps this series focused on moving the hooks to
+> > struct_ops.
+> >
+> > The hdr_opt_len fast path in tcp_established_options() is gated by
+> > cgroup_bpf_enabled(CGROUP_TCP_SOCK_OPS). Note this is a global,
+> > per-attach-type static branch: it is enabled whenever any bpf_tcp_ops i=
+s
+> > attached, even one that does not implement hdr_opt_len or that is attac=
+hed
+> > to a different cgroup. In those cases the block still runs but
+> > bpf_tcp_ops_hdr_opt_len() no-ops via the per-member check in the dispat=
+ch
+> > macro. A per-member/per-cgroup gate could be added later if the extra
+> > fast-path work proves measurable.
+> >
+> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
+>
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+>
+> One question I've had both for this and the previous patch: Why are we
+> defining new functionality as helpers and not kfuncs? Is it that we can
+> allowlist with helpers and not with kfuncs?
 
-Hi Alexis,
+These are not new functionality. bpf_reserve_hdr_opt(),
+bpf_store_hdr_opt() and bpf_load_hdr_opt() already exist for sock_ops;
+the patch only exposes them to bpf_tcp_ops per member and shares the
+same option-walking core. I think we have been overloading helpers in
+a few places. Adding kfunc equivalents would create a second API for
+the same thing and make porting from the legacy
+BPF_SOCK_OPS*_HDR_OPT_CB callbacks less mechanical.
 
-Looks like my suggestion was bad, sorry. Jiayuan is right. I didn't
-realize what -EINPROGRESS actually means here.
-
-See __inet_stream_connect() in net/ipv4/af_inet.c:697
-
-	err = -EINPROGRESS;
-	...
-	timeo = sock_sndtimeo(sk, flags & O_NONBLOCK);
-	...
-	if (!timeo || !inet_wait_for_connect(sk, timeo, writebias))
-		goto out;
-
--EINPROGRESS is a default that reaches userspace only when the wait
-expires. Every other exit sets a different error code. So on a
-blocking socket -EINPROGRESS does not mean "connection started", it
-means "waited the whole budget, gave up in SYN_SENT". On a nonblocking
-socket it means the opposite, and man 2 connect seems to only document
-the nonblocking case.
-
-> An intermediate solution could
-> be to exceptionally raise the budget by 1s when getting EINPROGRESS.
-
-I believe you're right that the flakiness can be addressed with bigger
-timeout, which is why v2 fixed it for you. But +1s may not be enough.
-
-IIUC the way the helpers are written cause -EINPROGRESS instead of
--ETIMEDOUT. If SO_SNDTIMEO is not set before connect(), the kernel
-reports plain ETIMEDOUT, but it is set in settimeo().
-
-I vibe-coded a userspace repro: loopback listener with a full accept
-queue drained at t=1500ms, so the handshake completes at ~2040ms.
-Caller asks for timeout_ms=1000, like tc_tunnel:
-
-  mainline (blocking)                     budget 1000   FAIL at 1016ms
-  v3 (blocking + leftover poll)           budget 1000   FAIL at 1015ms # my suggestion
-  O_NONBLOCK + poll(timeout_ms)           budget 1000   FAIL at 1001ms # Jiayuan's suggestion
-  O_NONBLOCK + poll(3500)                 budget 3500   OK   at 2031ms
-  blocking, SO_SNDTIMEO raised to 3500    budget 3500   OK   at 2040ms
-  v2 (blocking 1000 + fixed 3000 grace)   budget 4046   OK   at 2067ms
-
-Everything that gave the handshake more than ~2040ms passed. Blocking
-vs nonblocking makes no difference, poll() vs no poll() makes no
-difference. We just need to increase the budget for connect().
-
-I don't think swtiching to O_NONBLOCK makes sense. Apparently, it was
-nonblocking in the past, see 99126abec5e5 ("bpf: selftests: A few
-improvements to network_helpers.c")
-
-So I think we can introduce a separate connect() budget, similar to
-your v2. And then use opts->timeout_ms for everything after. Something
-like this:
-
-	#define CONNECT_TIMEOUT_MS	5000
-
-	static int connect_timeout_ms(const struct network_helper_opts *opts)
-	{
-		/* don't shorten what the caller asked for: tc_redirect
-		 * and xdp_synproxy pass 10000
-		 */
-		return MAX(opts->timeout_ms, CONNECT_TIMEOUT_MS);
-	}
-
-and in connect_to_addr():
-
-	fd = client_socket(addr->ss_family, type, opts);
-	if (fd < 0) {
-		log_err("Failed to create client socket");
-		return -1;
-	}
-
-	/* SO_SNDTIMEO is a ceiling, not a sleep: a wider handshake
-	 * budget costs nothing on connections that succeed.
-	 */
-	if (settimeo(fd, connect_timeout_ms(opts)))
-		goto close;
-
-	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
-		log_err("Failed to connect to server");
-		goto close;
-	}
-
-	if (settimeo(fd, opts->timeout_ms))	/* data I/O budget */
-		goto close;
-
-	return fd;
-
-close:
-	save_errno_close(fd);
-	return -1;
-
-This is simpler than poll() and retry loops.
-
-
-An entirely different alternative that Eduard brought up in an
-off-list discussion, is to drop all the timeout machinery from
-network_helpers.c altogether, and rely solely on the test_progs
-watchdog to kill the subtest processes: d9d4d127e813 ("selftests/bpf:
-watchdog timer for test_progs")
-
-I am not convinced it's a good idea, because I don't know what will
-happen with all the tc_* tests if there is no connection timeouts. If
-you're interested, you could try it and see.
-
-
-> That potentially brings back part of the issues he has been mentioning
-> with selftests duration possibly increasing by a non negligeable amount,
-> but maybe 1s is a better compromise, compared to my initial 3s proposal
-> ?
-> 
-
+Note that allowlisting is not the reason. kfuncs can be filtered per
+program too, via btf_kfunc_id_set.filter.
