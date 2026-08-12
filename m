@@ -1,165 +1,71 @@
-Received: from out-186.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720DF394E93;
-	Wed, 12 Aug 2026 06:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51CED399377
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 06:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786516623; cv=none; b=ILHx2eN7hxUUEDTiNw4XHoWVDCoB5xsl4bkn0zkQoHTySaI7Vtrm/29LnskB15RooC/h2EAuIVTmlN41Hk2oxj/3LPnEI+BJbAPgPmWFMQcnUY4LeoUe5hwXxM50Gy9Ivr/qn2BfoY8bnMmvdnT0osCnIM6u6YMncwumbbxBtE0=
+	t=1786516701; cv=none; b=TW2j6mLUBZcCj50mOZnMBP1RRID1aSuQlghjavgBe0jQK7oYSAzEDKD4kS83G4nTv7zsb9nESrCFeOPwVRE8gOcqQD4r2mQqSVnKE1XBsBoaBJOQHNPfCZZ53ueo816gkBkfUtJSNMiSZIhxinvc3/+w+OSuIHnVhDhL4BzeuaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786516623; c=relaxed/simple;
-	bh=S/ogqjfH9HkhtyosQmf4eBX/uyaoq7fUtJXIrZet7KI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kw5HDWhIunb6bgQOjgghZBziaRkzbuDLwUDWW32dLGZ3DTm4XkbsE7az6xBSlwdqapi6LvmDTQ1UHvYG0kcE+my0MW7HBwJRpRsobGXqYZZ5IrP6WZa9LgQ+LH8UY1pu9gu5aJi9OihnMkTVYxAkFrW6aS/1VTdp9iV2kP+yftY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BySwdubc; arc=none smtp.client-ip=37.59.57.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786516701; c=relaxed/simple;
+	bh=lVxznVhkrCbkHdlT2FVZX+i2M7vpn8tN1TYulKsNnpE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=j13cRAUyKwdR19UXeqjHH39jqhJm1bWBIkAEh3gGnFyighLswhzvyDjA1Zu6itLDTgXHVyl0wDsufIMRo1AyBIm7pnYiZlRrVG1NUSO1YNM1cdKJnlZZeLY2jqa+aPiDJh5bem2M30lbA+3nDIvz5Z8FdqoCJ87hz9bvl3UFVGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e8fD5qa8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BySwdubc"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786516619;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XORy7Jxpl+KLfcRHZ/pgPte3W64H0FUxLIs7h+b7rRQ=;
-	b=BySwdubc7h3YY9TvXzHifOX+2JjhFZKNaiS2J++FYbI5/Vlp2Zvl6y/NpcGFLIwE26V+HL
-	T/xYX1olAOgRb7daq+7YW8xzaY/dm5w9MzTOdzNNMcLCdUQkIoxHFV9Dkn75kYLudRQhxm
-	Yo08o17rCEvU5IMKj7v+M1UBa6RRLzI=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Krishna Kumar <krikku@gmail.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Andrii Nakryiko <andriin@fb.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] bpf, xdp: move offload check into dev_xdp_install()
-Date: Wed, 12 Aug 2026 14:36:11 +0800
-Message-ID: <20260812063616.364817-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e8fD5qa8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577311F000E9;
+	Wed, 12 Aug 2026 06:38:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786516700;
+	bh=+irEMEqb4QZCbxsGwwnmMv9ctJsiLxPIErcLCS74hl0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=e8fD5qa8K6M+SDaUZjp5w+whfSllmSGx1Y6oBM4R0ZwtS+/ZMfzw5eClU3bJD0u9v
+	 UjeyYq9FeuuCHpP6Gvrl0UsMbxWFFDiA7HnnwUNhR0B5OAWpvD7uLNYYkQDXwI5G9Y
+	 w8Q/UukKiXZdB/XD/58IBCRJxLntKCknUBDPkJXL5SA0IVzklUORDHa2QmA0aUsQJu
+	 bduuC9L82I7TvWfJyYlwVrs5A79CWeHqb7+CtbwyDtYxJ14qiSg0i5odeQYiB1goIF
+	 XVS81hlJPAMh8wDOIWKZfQNPOHhzPF9rZUUKrCNyKEj8c9RWMkBo5fN+EngvcARNVq
+	 g0REawSgZ8ksg==
+Content-Type: multipart/mixed; boundary="===============1139615389914824238=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <ec185c8e45f1b63372288201a550c1f921d3ce86ccad25cc52cbda221620499e@mail.kernel.org>
+In-Reply-To: <20260811-veristat-filter-fix-v2-1-6c234c4cd6ef@gmail.com>
+References: <20260811-veristat-filter-fix-v2-1-6c234c4cd6ef@gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] selftests/bpf: fix for veristat file/prog filters processing
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
+Cc: andrii@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 12 Aug 2026 06:38:19 +0000 (UTC)
 
-bpf_xdp_link_update() calls dev_xdp_install() directly and skips
-dev_xdp_attach(), so the checks in dev_xdp_attach() do not run. A user can
-make an XDP link with a normal program and then swap in an offloaded or
-device-bound program with BPF_LINK_UPDATE, which puts it on the software
-path.
+--===============1139615389914824238==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-dev_xdp_install() is the one place all three paths go through:
-"ip link set xdp" and BPF_LINK_CREATE reach it via dev_xdp_attach(), and
-BPF_LINK_UPDATE calls it directly. So move the program checks (offloaded,
-bound to another device, device-bound in generic mode, native vs generic,
-DEVMAP and CPUMAP) there, and keep only the netlink-flag check
-(XDP_FLAGS_UPDATE_IF_NOEXIST) in dev_xdp_attach().
+> selftests/bpf: fix for veristat file/prog filters processing
+>
+> At the moment veristat filtering behaves unexpectedly for the
+> following filter expression:
+>
+>   -f !file/prog
+>
+> The expression rejects all programs with name 'prog', and all programs
+> in a file with name 'file'. This commit fixes the expression to
+> exclude only a program 'prog' from a file 'file'. Additionally,
+> the commit makes empty filters like '-f ""' or '-f "/"' and error.
 
-Fixes: 026a4c28e1db3 ("bpf, xdp: Implement LINK_UPDATE for BPF XDP link")
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+This isn't a bug, but should "and error" here read "an error"? It's the
+sentence that documents the new -EINVAL for empty filters.
+
+
 ---
-1. Previous topic: https://lore.kernel.org/netdev/20260811171047.4e6a409c@kernel.org/
-2. Tested with tools/testing/selftests/net/bpf_offload.py and the BPF CI; both pass.
----
- net/core/dev.c | 59 ++++++++++++++++++++++++++------------------------
- 1 file changed, 31 insertions(+), 28 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index fd0b445f5d38..b390c2edfb33 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10360,6 +10360,37 @@ static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
- 
- 	netdev_assert_locked_ops_compat(dev);
- 
-+	if (prog) {
-+		enum bpf_xdp_mode other_mode = mode == XDP_MODE_SKB
-+					       ? XDP_MODE_DRV : XDP_MODE_SKB;
-+		bool offload = mode == XDP_MODE_HW;
-+
-+		if (!offload && dev_xdp_prog(dev, other_mode)) {
-+			NL_SET_ERR_MSG(extack, "Native and generic XDP can't be active at the same time");
-+			return -EEXIST;
-+		}
-+		if (!offload && bpf_prog_is_offloaded(prog->aux)) {
-+			NL_SET_ERR_MSG(extack, "Using offloaded program without HW_MODE flag is not supported");
-+			return -EINVAL;
-+		}
-+		if (bpf_prog_is_dev_bound(prog->aux) && !bpf_offload_dev_match(prog, dev)) {
-+			NL_SET_ERR_MSG(extack, "Program bound to different device");
-+			return -EINVAL;
-+		}
-+		if (bpf_prog_is_dev_bound(prog->aux) && mode == XDP_MODE_SKB) {
-+			NL_SET_ERR_MSG(extack, "Can't attach device-bound programs in generic mode");
-+			return -EINVAL;
-+		}
-+		if (prog->expected_attach_type == BPF_XDP_DEVMAP) {
-+			NL_SET_ERR_MSG(extack, "BPF_XDP_DEVMAP programs can not be attached to a device");
-+			return -EINVAL;
-+		}
-+		if (prog->expected_attach_type == BPF_XDP_CPUMAP) {
-+			NL_SET_ERR_MSG(extack, "BPF_XDP_CPUMAP programs can not be attached to a device");
-+			return -EINVAL;
-+		}
-+	}
-+
- 	if (dev->cfg->hds_config == ETHTOOL_TCP_DATA_SPLIT_ENABLED &&
- 	    prog && !prog->aux->xdp_has_frags) {
- 		NL_SET_ERR_MSG(extack, "unable to install XDP to device using tcp-data-split");
-@@ -10499,38 +10530,10 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
- 		new_prog = link->link.prog;
- 
- 	if (new_prog) {
--		bool offload = mode == XDP_MODE_HW;
--		enum bpf_xdp_mode other_mode = mode == XDP_MODE_SKB
--					       ? XDP_MODE_DRV : XDP_MODE_SKB;
--
- 		if ((flags & XDP_FLAGS_UPDATE_IF_NOEXIST) && cur_prog) {
- 			NL_SET_ERR_MSG(extack, "XDP program already attached");
- 			return -EBUSY;
- 		}
--		if (!offload && dev_xdp_prog(dev, other_mode)) {
--			NL_SET_ERR_MSG(extack, "Native and generic XDP can't be active at the same time");
--			return -EEXIST;
--		}
--		if (!offload && bpf_prog_is_offloaded(new_prog->aux)) {
--			NL_SET_ERR_MSG(extack, "Using offloaded program without HW_MODE flag is not supported");
--			return -EINVAL;
--		}
--		if (bpf_prog_is_dev_bound(new_prog->aux) && !bpf_offload_dev_match(new_prog, dev)) {
--			NL_SET_ERR_MSG(extack, "Program bound to different device");
--			return -EINVAL;
--		}
--		if (bpf_prog_is_dev_bound(new_prog->aux) && mode == XDP_MODE_SKB) {
--			NL_SET_ERR_MSG(extack, "Can't attach device-bound programs in generic mode");
--			return -EINVAL;
--		}
--		if (new_prog->expected_attach_type == BPF_XDP_DEVMAP) {
--			NL_SET_ERR_MSG(extack, "BPF_XDP_DEVMAP programs can not be attached to a device");
--			return -EINVAL;
--		}
--		if (new_prog->expected_attach_type == BPF_XDP_CPUMAP) {
--			NL_SET_ERR_MSG(extack, "BPF_XDP_CPUMAP programs can not be attached to a device");
--			return -EINVAL;
--		}
- 	}
- 
- 	/* don't call drivers if the effective program didn't change */
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31569226955
+--===============1139615389914824238==--
