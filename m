@@ -1,127 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-186.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60C73655E7
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 06:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720DF394E93;
+	Wed, 12 Aug 2026 06:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786516119; cv=none; b=IeTcyLnNztDbKczLPLsgzifl/nAlTkUQon5/BLSp2xM/cuqoxmuNFjsh9tsTPS97uA8Y7lFQZ22ItiegL7IOzH35H2ZsJoqvoMIphC6GOWI8xQBgsfZpor5yoMdSv5ruHuouvfiQf7CeWGxMf0rb3R5A1eipt5f23r76BbEk+Po=
+	t=1786516623; cv=none; b=ILHx2eN7hxUUEDTiNw4XHoWVDCoB5xsl4bkn0zkQoHTySaI7Vtrm/29LnskB15RooC/h2EAuIVTmlN41Hk2oxj/3LPnEI+BJbAPgPmWFMQcnUY4LeoUe5hwXxM50Gy9Ivr/qn2BfoY8bnMmvdnT0osCnIM6u6YMncwumbbxBtE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786516119; c=relaxed/simple;
-	bh=o8O2WarKtVCPbMow7pn0vtEsCtzs65qc/kjLMtkc120=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qJwwbMGXEqYpmUx3MAYES97kjDl3iTWcqJpqEchQaookEMFfmbugdZc6QdAydNPRe3CoEOFbCdL22ICUIPQB5qbaEwcJVlR/4GMDY0sM8IiAEwuWy27QTtrlH+R5p7DkKuKKXvlZb5GNTISCBKUWLHr5VMLF/3Kl/eukhoUJMg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bew2D3fw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786516623; c=relaxed/simple;
+	bh=S/ogqjfH9HkhtyosQmf4eBX/uyaoq7fUtJXIrZet7KI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kw5HDWhIunb6bgQOjgghZBziaRkzbuDLwUDWW32dLGZ3DTm4XkbsE7az6xBSlwdqapi6LvmDTQ1UHvYG0kcE+my0MW7HBwJRpRsobGXqYZZ5IrP6WZa9LgQ+LH8UY1pu9gu5aJi9OihnMkTVYxAkFrW6aS/1VTdp9iV2kP+yftY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BySwdubc; arc=none smtp.client-ip=37.59.57.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bew2D3fw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A8AE1F000E9;
-	Wed, 12 Aug 2026 06:28:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786516117;
-	bh=JoDWaynUTghTTdMCI7he14BJUroKAA3TcoAG66RY7k8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Bew2D3fwWZwOxjoXeN8+K008AfKcHiQJfn0MXSqVupElUnAxqCGvUjWSeYPjsukpy
-	 4BiQaDASvEuntZlxX3zc77BUQjKBSASJRLEkHTOL2VthovpQ3JEc3LYkAA6WW1Iz51
-	 mUsqztV7ulId9dSV6rHNuZu9Rx1M5/8c2jREsR4omRZhR5PSdTllBnZtOfxaglE5cr
-	 Ec2rLf3pWy2mUpVCEGzPFAFJ9qm8hQlybNloh+ZU2elauSPJRcE2su1Uy0oGwG36Tl
-	 WiBDi+cG9NHMRkxAnaFKaD23dfd4tQ+DAypRXSB9Xo1btFogzzjgIMIyTK9N9wmbB/
-	 QJMf4X50Aidxw==
-From: sashiko-bot@kernel.org
-Subject: Re: [bpf-next PATCH 1/2] bpf, riscv: Add BPF stack arguments
- support for RV64 JIT
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Feng Jiang" <jiangfeng@kylinos.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260812-bpf-riscv-stack-args-v1-1-67b246806e59@kylinos.cn>
-References: <20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn>
- <20260812-bpf-riscv-stack-args-v1-1-67b246806e59@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 12 Aug 2026 06:28:36 +0000
-Message-Id: <20260812062837.4A8AE1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BySwdubc"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786516619;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XORy7Jxpl+KLfcRHZ/pgPte3W64H0FUxLIs7h+b7rRQ=;
+	b=BySwdubc7h3YY9TvXzHifOX+2JjhFZKNaiS2J++FYbI5/Vlp2Zvl6y/NpcGFLIwE26V+HL
+	T/xYX1olAOgRb7daq+7YW8xzaY/dm5w9MzTOdzNNMcLCdUQkIoxHFV9Dkn75kYLudRQhxm
+	Yo08o17rCEvU5IMKj7v+M1UBa6RRLzI=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Krishna Kumar <krikku@gmail.com>,
+	Martin Karsten <mkarsten@uwaterloo.ca>,
+	Andrii Nakryiko <andriin@fb.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] bpf, xdp: move offload check into dev_xdp_install()
+Date: Wed, 12 Aug 2026 14:36:11 +0800
+Message-ID: <20260812063616.364817-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Missing sign-extension for 32-bit kfunc arguments passed on the st=
-ack
---
+bpf_xdp_link_update() calls dev_xdp_install() directly and skips
+dev_xdp_attach(), so the checks in dev_xdp_attach() do not run. A user can
+make an XDP link with a normal program and then swap in an offloaded or
+device-bound program with BPF_LINK_UPDATE, which puts it on the software
+path.
 
---- Patch [1]: [bpf-next PATCH 1/2] bpf, riscv: Add BPF stack arguments sup=
-port for RV64 JIT ---
-commit c291f39756942d05aeab1b370b77119f4235a7f8
-Author: Feng Jiang <jiangfeng@kylinos.cn>
+dev_xdp_install() is the one place all three paths go through:
+"ip link set xdp" and BPF_LINK_CREATE reach it via dev_xdp_attach(), and
+BPF_LINK_UPDATE calls it directly. So move the program checks (offloaded,
+bound to another device, device-bound in generic mode, native vs generic,
+DEVMAP and CPUMAP) there, and keep only the netlink-flag check
+(XDP_FLAGS_UPDATE_IF_NOEXIST) in dev_xdp_attach().
 
-bpf, riscv: Add BPF stack arguments support for RV64 JIT
+Fixes: 026a4c28e1db3 ("bpf, xdp: Implement LINK_UPDATE for BPF XDP link")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+1. Previous topic: https://lore.kernel.org/netdev/20260811171047.4e6a409c@kernel.org/
+2. Tested with tools/testing/selftests/net/bpf_offload.py and the BPF CI; both pass.
+---
+ net/core/dev.c | 59 ++++++++++++++++++++++++++------------------------
+ 1 file changed, 31 insertions(+), 28 deletions(-)
 
-This commit adds support for passing BPF stack arguments to BPF subprograms
-and kfuncs in the RV64 JIT. It implements the RISC-V ABI requirement of
-putting arguments 6-8 in registers A5-A7 and arguments 9+ on the stack.
+diff --git a/net/core/dev.c b/net/core/dev.c
+index fd0b445f5d38..b390c2edfb33 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -10360,6 +10360,37 @@ static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
+ 
+ 	netdev_assert_locked_ops_compat(dev);
+ 
++	if (prog) {
++		enum bpf_xdp_mode other_mode = mode == XDP_MODE_SKB
++					       ? XDP_MODE_DRV : XDP_MODE_SKB;
++		bool offload = mode == XDP_MODE_HW;
++
++		if (!offload && dev_xdp_prog(dev, other_mode)) {
++			NL_SET_ERR_MSG(extack, "Native and generic XDP can't be active at the same time");
++			return -EEXIST;
++		}
++		if (!offload && bpf_prog_is_offloaded(prog->aux)) {
++			NL_SET_ERR_MSG(extack, "Using offloaded program without HW_MODE flag is not supported");
++			return -EINVAL;
++		}
++		if (bpf_prog_is_dev_bound(prog->aux) && !bpf_offload_dev_match(prog, dev)) {
++			NL_SET_ERR_MSG(extack, "Program bound to different device");
++			return -EINVAL;
++		}
++		if (bpf_prog_is_dev_bound(prog->aux) && mode == XDP_MODE_SKB) {
++			NL_SET_ERR_MSG(extack, "Can't attach device-bound programs in generic mode");
++			return -EINVAL;
++		}
++		if (prog->expected_attach_type == BPF_XDP_DEVMAP) {
++			NL_SET_ERR_MSG(extack, "BPF_XDP_DEVMAP programs can not be attached to a device");
++			return -EINVAL;
++		}
++		if (prog->expected_attach_type == BPF_XDP_CPUMAP) {
++			NL_SET_ERR_MSG(extack, "BPF_XDP_CPUMAP programs can not be attached to a device");
++			return -EINVAL;
++		}
++	}
++
+ 	if (dev->cfg->hds_config == ETHTOOL_TCP_DATA_SPLIT_ENABLED &&
+ 	    prog && !prog->aux->xdp_has_frags) {
+ 		NL_SET_ERR_MSG(extack, "unable to install XDP to device using tcp-data-split");
+@@ -10499,38 +10530,10 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+ 		new_prog = link->link.prog;
+ 
+ 	if (new_prog) {
+-		bool offload = mode == XDP_MODE_HW;
+-		enum bpf_xdp_mode other_mode = mode == XDP_MODE_SKB
+-					       ? XDP_MODE_DRV : XDP_MODE_SKB;
+-
+ 		if ((flags & XDP_FLAGS_UPDATE_IF_NOEXIST) && cur_prog) {
+ 			NL_SET_ERR_MSG(extack, "XDP program already attached");
+ 			return -EBUSY;
+ 		}
+-		if (!offload && dev_xdp_prog(dev, other_mode)) {
+-			NL_SET_ERR_MSG(extack, "Native and generic XDP can't be active at the same time");
+-			return -EEXIST;
+-		}
+-		if (!offload && bpf_prog_is_offloaded(new_prog->aux)) {
+-			NL_SET_ERR_MSG(extack, "Using offloaded program without HW_MODE flag is not supported");
+-			return -EINVAL;
+-		}
+-		if (bpf_prog_is_dev_bound(new_prog->aux) && !bpf_offload_dev_match(new_prog, dev)) {
+-			NL_SET_ERR_MSG(extack, "Program bound to different device");
+-			return -EINVAL;
+-		}
+-		if (bpf_prog_is_dev_bound(new_prog->aux) && mode == XDP_MODE_SKB) {
+-			NL_SET_ERR_MSG(extack, "Can't attach device-bound programs in generic mode");
+-			return -EINVAL;
+-		}
+-		if (new_prog->expected_attach_type == BPF_XDP_DEVMAP) {
+-			NL_SET_ERR_MSG(extack, "BPF_XDP_DEVMAP programs can not be attached to a device");
+-			return -EINVAL;
+-		}
+-		if (new_prog->expected_attach_type == BPF_XDP_CPUMAP) {
+-			NL_SET_ERR_MSG(extack, "BPF_XDP_CPUMAP programs can not be attached to a device");
+-			return -EINVAL;
+-		}
+ 	}
+ 
+ 	/* don't call drivers if the effective program didn't change */
+-- 
+2.43.0
 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
-p64.c
-> index 6b9972b07c1b0..b3f4bf9e1e7f2 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-[ ... ]
-> @@ -1815,18 +1815,39 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn=
-, struct rv_jit_context *ctx,
-[ ... ]
->  		if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
->  			const struct btf_func_model *fm;
-> -			int idx;
-> +			int idx, nargs;
-> =20
->  			fm =3D bpf_jit_find_kfunc_model(ctx->prog, insn);
->  			if (!fm)
->  				return -EINVAL;
-> =20
-> -			for (idx =3D 0; idx < fm->nr_args; idx++) {
-> +			nargs =3D min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS);
-> +			for (idx =3D 0; idx < nargs; idx++) {
->  				u8 reg =3D bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
-> =20
->  				if (fm->arg_size[idx] =3D=3D sizeof(int))
->  					emit_sextw(reg, reg, ctx);
->  			}
-> +
-> +			/* BPF stack args -> RISC-V ABI: args 6-8 in A5-A7, 9+ at SP+0 */
-> +			if (fm->nr_args > MAX_BPF_FUNC_REG_ARGS) {
-> +				int n_stack =3D fm->nr_args - MAX_BPF_FUNC_REG_ARGS;
-> +				int n_reg =3D min_t(int, n_stack,
-> +						  RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS);
-> +
-> +				for (idx =3D 0; idx < n_reg; idx++) {
-> +					int sz =3D fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
-> +
-> +					emit_ld(RV_REG_A5 + idx, idx * 8, RV_REG_SP, ctx);
-> +					if (sz =3D=3D sizeof(int))
-> +						emit_sextw(RV_REG_A5 + idx, RV_REG_A5 + idx, ctx);
-> +				}
-> +
-> +				for (idx =3D 0; idx < n_stack - n_reg; idx++) {
-> +					emit_ld(RV_REG_T1, (n_reg + idx) * 8, RV_REG_SP, ctx);
-> +					emit_sd(RV_REG_SP, idx * 8, RV_REG_T1, ctx);
-> +				}
-
-[Severity: High]
-Does this loop need to sign-extend 32-bit integer arguments passed on the
-stack?
-
-The RISC-V RV64 C ABI requires scalars narrower than 64 bits to be
-sign-extended to 64 bits when passed on the stack. BPF ALU32 operations
-zero-extend values, so if a negative 32-bit integer is passed on the stack
-(argument 9 or above), its upper 32 bits will be zero instead of ones.
-
-The preceding loops for register arguments (both BPF_REG_1-5 and A5-A7)
-check fm->arg_size[idx] =3D=3D sizeof(int) and use emit_sextw(). Is a simil=
-ar
-check needed here before writing the argument to the stack?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260812-bpf-riscv-=
-stack-args-v1-0-67b246806e59@kylinos.cn?part=3D1
