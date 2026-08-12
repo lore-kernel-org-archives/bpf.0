@@ -1,55 +1,78 @@
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBF53ECBE3;
-	Wed, 12 Aug 2026 09:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC03440244F
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 09:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786526161; cv=none; b=L4LnLuJfuKPS0JLMvqEG9mP2EJ8P9LmYW1lBB7hLIOa/5USphKlibQx1bV49KjnycGx3ut54LOFymiNJZl3DKSIiLPg+QUV8S7KUsRbwQERhaHFREBFi9rjJWjWFpO5cFwhD2lEzBKgbNSmm08VJNbtgRa0Hm8tT/kgWzm1y1XY=
+	t=1786526245; cv=none; b=kQDya1kvwf0V9PSq3RisFgVsE4eGX/VFjvkypei8IQ3VvK6APCuQdZ1P5VGi4Uq27ocBu54oMmd5/PUXzUoMWCGtymknzeGo8PBrZ8gpheekR5gISxIQ01taftBfYRasUqjq8kJ9wdXTWXBH8j/76qyhGn8u4R/ZHj0MMBN0gzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786526161; c=relaxed/simple;
-	bh=j/Gf7eG2L4EQepA6SKCL4ijYtNRQpB5EftU7kryKkC0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tea/0JR5nsD0XgnTc9uCeJrQGNuVERHWH+ivjLfax1ougHUyrU55hgLH9eMaDy1z53pwfqCaPh/bAbeneNquMyw2N0MUrmTOORh0hQsokLw/ynMcNKjMQjF0PDdr/zPtYq/8GVAHEQDL0J6KNS3to3HpxY1Upl1d5le8FX7vMZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=L/EFvqst; arc=none smtp.client-ip=67.231.149.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=akamai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
+	s=arc-20240116; t=1786526245; c=relaxed/simple;
+	bh=3pDy7ZawyB/PDbJyqWDUosIh8hYLV9i7c1SKIQGytFY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q5/wXHyG7B1UWjBXSRqdPLwCVy7Axh8zCusI3eMeUhx3uX8xhL8+lPZ9vUDWFXJDWWZOz9gS5MPfKPu+VFdCHCcMUQxu+Pvc/sErBpIFwA9437W6V0CGmngacvQl0Bt2KSaFS+D9Yr9BqffkepLd/19U4mzIfiQoxXCGWoHm18k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h3BADMQs; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="L/EFvqst"
-Received: from pps.filterd (m0409409.ppops.net [127.0.0.1])
-	by m0409409.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 67C63ohU1886961;
-	Wed, 12 Aug 2026 09:31:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=apr2026.eng; bh=cbQQ4iEE+b4gAkybCIk+iiJ6KTlvNOVX7
-	RGoObD0EVE=; b=L/EFvqsts8cDhRNl8Hbi5XCZGKgXtNyKORNELr0A7HNSBQIU/
-	ACvV6Wz9g8jxeZ/BX/H9bWbImNmdJw+LipQcYGYDb755xJqKJP1G6ILyAMoMxQ5w
-	BpU/oCFkS744ghCvb+cGemQ4sEGdyJJOcC2th7uCTZfV09dQEqGbfqup+KZ+/nsm
-	OoibWCjjB1Lw4ri0NxrUPYPKiQmNQATpmN17hxFJ/P6bF1dRaj3eTkM04ARx+vC9
-	IlHUXvG6bNtbERX64ZJmZTE2S/CTh8gPzk4ihj9Aj/GrILhNljFlTRlBdXnsHosT
-	T4Vh1OqDwaJF2Lmfe1X/w42uxYPmuTVcPShww==
-Received: from prod-mail-ppoint2 (prod-mail-ppoint2.akamai.com [184.51.33.19])
-	by m0409409.ppops.net-00190b01. (PPS) with ESMTPS id 4g067ps048-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 12 Aug 2026 09:31:24 +0100 (BST)
-Received: from pps.filterd (prod-mail-ppoint2.akamai.com [127.0.0.1])
-	by prod-mail-ppoint2.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 67C8JfXH028034;
-	Wed, 12 Aug 2026 04:31:22 -0400
-Received: from prod-mail-relay01.akamai.com ([172.27.118.31])
-	by prod-mail-ppoint2.akamai.com (PPS) with ESMTP id 4fwyswxv82-1;
-	Wed, 12 Aug 2026 04:31:22 -0400 (EDT)
-Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
-	by prod-mail-relay01.akamai.com (Postfix) with ESMTP id C6BC680;
-	Wed, 12 Aug 2026 08:31:21 +0000 (UTC)
-From: Nick Hudson <nhudson@akamai.com>
-To: bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
-        Anna Glasgall <aglasgal@akamai.com>
-Subject: [PATCH bpf-next v7 0/6] bpf: decap flags and GSO state updates
-Date: Wed, 12 Aug 2026 09:31:09 +0100
-Message-Id: <20260812083115.73100-1-nhudson@akamai.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h3BADMQs"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-ca97d139d5fso579119a12.0
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 02:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786526243; x=1787131043; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xULuiWh1KrpeQHM+3Drt9WpY27igzO1L4lGjE3eeQTI=;
+        b=h3BADMQsChU2gNuYoGFgsZzzwhvvUFXV01zu78D0LCZW+lD3b5taCt+UWmIM1YGD6P
+         k4RT5j5ayZct/+XO9BFCwhBp3dY5OmlH12TVen/+A7cDQneSJzSmewQBGWTJnq/hthQ9
+         lSeLr2Nba12R4P4TOkMES0tLxFXV9e0UTiM7WqjjUJHviytC0Ad2M5rTN7cq6ZT3hPjF
+         8wkFaqZlp2IOC9vP9mESNbXL/uljbhCG+pGl2GB2XY2wGMI1k7EM/hhv8prBbOdwZIQt
+         7VZAv8xA0fcxgx3lud8DV1qs4X+4LWPrSotQpSAW19NS0Wh2AHZByD7DApPa1c4UYKR6
+         m3mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786526243; x=1787131043;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xULuiWh1KrpeQHM+3Drt9WpY27igzO1L4lGjE3eeQTI=;
+        b=M0gs+KWCIS2mIVGjQwze86pxF/gqtS9kq1THdBJE45sL9LcpuMwSucASj95ERF/mGW
+         nu70TeJpm67QcxKr3Pt6GYevgKBlsWupA9vPBkhpBfecucr9vYh1rkmgUdeKdrMHO8v2
+         0rrDCjMTL92WevfaK0CDcRZ/YY0lPgjUFyx0d1ukz3dU3Y6XwoLFnOtvzyIK/V/Uwlh3
+         JsIbzIsFgC7qxhZN5OAtzAeYc4daR8pfelj26ueMwwKH+9GnzG1dUjM+X4mJ2huebA3C
+         jqyItY0iFenLG7R6KK2Xtx4Ioelg4ZI16IFWgpkuMydicVYdputLiPNO5xZn2x0nxKn8
+         Yf0g==
+X-Forwarded-Encrypted: i=1; AHgh+Rq/7IUGK/NqLyh6VsflXLgs2QJ4lGU8j48P6pvbXfrtOdaEy2cc2XdefIuESwdfNLv6+jc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3NaxG+mp2WqPlaJPm3GJoS2/xGXqCUEPIHgwXPJdMJRc5dubA
+	yvqUDeINA6ucTRl1LiYOHcGLaBWp6lrbLO4WLS/qMPT6LvIPp0QBlMj+
+X-Gm-Gg: AR+sD12DEUMOHKOMeomFLApoF0ghLAaUK5SnkHlUu/rj+4fJ/krwgU73ncTjCewrRtE
+	3NitI+AjCimlgfK1Hy9FXiT0Yy0+lYhuzau7RZOXcL0rDKoQm2zO/oKTt21VuQZ5gbQdVFHJM0g
+	dwWwstkE1slK3klPJjux5dd+HCO0o4ZhVPhnKfyIMzbVp8bQlu/sx7hWkMwn8PZnBjMAEhzWany
+	NuROVf/OWzHLgqXL357+0/mVtNhKQ3VekqsYbBz+SAetOnKgzUPNW+kMtR7PJo7iUvhyQlhw9Dn
+	ntrDzKa1K8zaV74hzWoMd8k9GVwJysaeGkpOiBsjRWiIFWs5XcHyKkZXGf4/kSNafCFfMzBrGKx
+	xt1Lvl3T55pq5enzRkm8C564msmNKdSZ26bek4E+IuwREN9DSz/ItjMO3DyPMgh0z6c9+anZZq1
+	bFZQ9WiT2vC4KJNvAHyLXwv73gsQ6ROKDf53ZPeYLzsnYOgXMhs3MDoA==
+X-Received: by 2002:a05:6a21:4603:b0:3c3:7f50:fc3a with SMTP id adf61e73a8af0-3cc3f821173mr4351966637.33.1786526243132;
+        Wed, 12 Aug 2026 02:17:23 -0700 (PDT)
+Received: from omen-arch ([147.47.133.73])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbee797c623sm383086a12.3.2026.08.12.02.17.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Aug 2026 02:17:22 -0700 (PDT)
+From: Junseo Lim <zirajs7@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Daan De Meyer <daan.j.demeyer@gmail.com>
+Subject: [PATCH bpf] bpf: Disallow bpf_{g,s}etsockopt() in cgroup UNIX getname hooks
+Date: Wed, 12 Aug 2026 18:16:54 +0900
+Message-ID: <20260812091654.244752-1-zirajs7@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,123 +80,86 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-12_02,2026-08-10_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- adultscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2606160000
- definitions=main-2608120066
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODEyMDA2NyBTYWx0ZWRfX5xeDKDvRlmSZ
- wGhON4KswJZf9iZKmA1Ru/ktmy/3Tv4XgU3CRL0Y7mY3msw7UiWGBtVYvBywlspvZyam15zc8oz
- 3wy+0+kkXXRUHwap7vSXJxl66Ned3diWabV0gopXJeJww/7RXjDRlqxnM2mnwcWx2addymHfsWj
- Fsm3Qu8e0qdKi+vbuHsODvziwiUwE0w7u1XhTtf3TbIhQM8GGb8ZXFUyzjYJteFgzqLULyku0Hr
- v3VYOAoavwt9Hxo85Mg8Ar1l2GB+zsolFec3S0FXKS7ulKNvNaqVDRfsJl54+yc24mKICr5sVOH
- FJVJdA9Dz7CKYQU4BrMmDSrcB7+I2DiuwoGk8ogpGX2l7xXO0vJrDnqNGlyCpmEYJgcm5Mrrv2L
- wmQn/fIEmf9yfUFDjhl0gq6Q1kj9/Ka4IkmBcBii+g6+74bFA8reG7aFRGSIPWulvcONZnMO/m+
- De3H5g1Q0tpPVEYwRzg==
-X-Authority-Analysis: v=2.4 cv=eYYNubEH c=1 sm=1 tr=0 ts=6a7c2f5c cx=c_pps
- a=BpD+HMUBsFIkYY1OQe22Yw==:117 a=BpD+HMUBsFIkYY1OQe22Yw==:17
- a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
- a=TTBIr9FR-UdC54aaq7Eb:22 a=X7Ea-ya5AAAA:8 a=g1FTZKP8ERfPk9Mz4Y4A:9
-X-Proofpoint-GUID: fyKw3vLDRcQ20Rr-VCLvZ_QdygPNn7vN
-X-Proofpoint-ORIG-GUID: fyKw3vLDRcQ20Rr-VCLvZ_QdygPNn7vN
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODEyMDA2NyBTYWx0ZWRfX9Qp8Wghq+eMk
- NsxAB9+dcSOv3S7BMka+SOrSF75bfph5yr5RdudpXuolOVZOzZ69ngIDPPl5yT4C+OjqfF0XlMs
- 88v/uVQhi1FET+T1NvRCfetPIi523zw=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-12_02,2026-08-10_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 spamscore=0 priorityscore=1501
- clxscore=1011 malwarescore=0 impostorscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606160001 definitions=main-2608120067
 
-This series extends bpf_skb_adjust_room() with decapsulation-specific
-flags and tunnel GSO state updates for decap use cases.
+_bpf_setsockopt() and _bpf_getsockopt() call sock_owned_by_me() for
+full sockets, so these helpers expect the socket lock to be held.
 
-Motivation
-----------
+BPF_CGROUP_UNIX_GETPEERNAME and BPF_CGROUP_UNIX_GETSOCKNAME run BPF
+programs without acquiring the socket lock. A program attached to
+either hook can therefore trigger the sock_owned_by_me() warning by
+calling bpf_setsockopt() or bpf_getsockopt().
 
-When BPF decapsulates tunneled packets, skb GSO state needs to be
-updated to match the removed tunnel layer. This includes clearing the
-corresponding tunnel GSO type bits and resetting encapsulation state
-once no tunnel GSO flags remain.
+Disallow bpf_setsockopt() and bpf_getsockopt() for CGROUP_UNIX_GETPEERNAME
+and CGROUP_UNIX_GETSOCKNAME.
 
-Series Overview
----------------
+Fixes: 859051dd165e ("bpf: Implement cgroup sockaddr hooks for unix sockets")
+Reported-by: Sechang Lim <rhkrqnwk98@gmail.com>
+Signed-off-by: Junseo Lim <zirajs7@gmail.com>
+---
+BPF_CGROUP_RUN_SA_PROG_LOCK() acquires the socket lock around the BPF
+program invocation:
 
-- Name the adjust_room flag enum for CO-RE lookups.
-- Refactor adjust_room helper masks for maintainable validation logic.
-- Add new DECAP flags to UAPI.
-- Add guard rails for incompatible/invalid decap flag combinations.
-- Implement decap GSO state clearing on shrink.
-- Add selftests to validate decap GSO and encapsulation state.
+#define BPF_CGROUP_RUN_PROG_UNIX_CONNECT_LOCK(sk, uaddr, uaddrlen)		\
+	BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, CGROUP_UNIX_CONNECT, NULL)
 
-Changes v6 -> v7:
-- Resend only for formatting/threading fixes (no functional changes).
-- Rebase onto current bpf-next/master (d114bb989367).
+In contrast, the UNIX getname hooks use BPF_CGROUP_RUN_SA_PROG():
 
-Changes v5 -> v6:
-- Patch 5: extend decap-state handling for the new L4/IPXIP decap
-  flags to non-GSO packets as well: when decapsulation is requested
-  on a non-GSO skb, clear skb->encapsulation directly so behavior is
-  consistent with the GSO path.
-- Patch 6: broaden tc_tunnel coverage to exercise and validate both
-  GSO and non-GSO decapsulation paths. This includes selecting
-  IPXIP decap flags from the outer tunnel header family, adding
-  explicit post-decap encapsulation checks for non-GSO packets,
-  and removing forced TSO disable so GSO cases are exercised in
-  the test harness.
+		if (peer)
+			BPF_CGROUP_RUN_SA_PROG(sk, uaddr, &err,
+					       CGROUP_UNIX_GETPEERNAME);
+		else
+			BPF_CGROUP_RUN_SA_PROG(sk, uaddr, &err,
+					       CGROUP_UNIX_GETSOCKNAME);
 
-Changes v4 -> v5:
-- Patch 5: Remove explicit clearing of encap_hdr_csum and
-  remcsum_offload on UDP decap, per review feedback.
-- Patch 6: Remove SKB_GSO_TUNNEL_REMCSUM from SKB_GSO_UDP_TUNNEL_MASK
-  in selftests, and minor test improvements.
+So, another possible patch is to take the lock at these call sites,
+but I am unsure about the locking semantics in AF_UNIX.
 
-Changes v3 -> v4:
-- Patch 5: drop SKB_GSO_TUNNEL_REMCSUM handling from this series.
-- Patch 5: clear encap_hdr_csum and remcsum_offload directly on UDP
-  decap.
+Below is an excerpt of the warning:
 
-Changes v2 -> v3:
-- Add a new selftests patch to validate decap GSO state behavior.
-- Reorder the series so helper-mask refactoring precedes UAPI DECAP
-  flag additions.
-- Refresh patch 2 and patch 3 split to keep refactoring
-  behavior-neutral.
-- Patch 5: add decap tunnel GSO-state checks in "bpf: clear decap
-  tunnel GSO state in skb_adjust_room" (per Gemini/sashiko).
+	WARNING: ./include/net/sock.h:1799 at bpf_sock_addr_setsockopt+0x12f/0x160, CPU#0: syz.5.18/253
+	Call Trace:
+	<TASK>
+	bpf_prog_55ed9fb09f700adf+0xc0/0xd3
+	__cgroup_bpf_run_filter_sock_addr+0x464/0xc80
+	unix_getname+0x35e/0x510
+	do_getsockname+0x122/0x1c0
+	__sys_getsockname+0xc0/0x140
+	__x64_sys_getsockname+0x74/0xb0
+	do_syscall_64+0xae/0x5e0
+	entry_SYSCALL_64_after_hwframe+0x76/0x7e
 
-Changes v1 -> v2:
-- Patch 3: decap flag acceptance intentionally remains L3-only while
-  adding helper masks.
-- Patch 4: decap with L4/IPXIP support enabled with guard rails.
+This issue was found by a custom fuzzer developed by
+Sechang Lim <rhkrqnwk98@gmail.com>.
 
-Co-developed-by: Max Tottenham <mtottenh@akamai.com>
-Signed-off-by: Max Tottenham <mtottenh@akamai.com>
-Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Nick Hudson <nhudson@akamai.com>
+ net/core/filter.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Nick Hudson (6):
-  bpf: name the enum for BPF_FUNC_skb_adjust_room flags
-  bpf: refactor masks for ADJ_ROOM flags and encap validation
-  bpf: add BPF_F_ADJ_ROOM_DECAP_* flags for tunnel decapsulation
-  bpf: allow new DECAP flags and add guard rails
-  bpf: clear decap state on skb_adjust_room shrink path
-  selftests/bpf: tc_tunnel - validate decap GSO and encapsulation state
-
- include/uapi/linux/bpf.h                      |  36 +++++-
- net/core/filter.c                             | 119 +++++++++++++++---
- tools/include/uapi/linux/bpf.h                |  36 +++++-
- .../selftests/bpf/prog_tests/test_tc_tunnel.c |   1 -
- .../selftests/bpf/progs/test_tc_tunnel.c      |  91 ++++++++++++--
- 5 files changed, 252 insertions(+), 31 deletions(-)
-
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 16845987b244..1e80a52ef86d 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8350,10 +8350,8 @@ sock_addr_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		case BPF_CGROUP_UNIX_SENDMSG:
+ 		case BPF_CGROUP_INET4_GETPEERNAME:
+ 		case BPF_CGROUP_INET6_GETPEERNAME:
+-		case BPF_CGROUP_UNIX_GETPEERNAME:
+ 		case BPF_CGROUP_INET4_GETSOCKNAME:
+ 		case BPF_CGROUP_INET6_GETSOCKNAME:
+-		case BPF_CGROUP_UNIX_GETSOCKNAME:
+ 			return &bpf_sock_addr_setsockopt_proto;
+ 		default:
+ 			return NULL;
+@@ -8373,10 +8371,8 @@ sock_addr_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		case BPF_CGROUP_UNIX_SENDMSG:
+ 		case BPF_CGROUP_INET4_GETPEERNAME:
+ 		case BPF_CGROUP_INET6_GETPEERNAME:
+-		case BPF_CGROUP_UNIX_GETPEERNAME:
+ 		case BPF_CGROUP_INET4_GETSOCKNAME:
+ 		case BPF_CGROUP_INET6_GETSOCKNAME:
+-		case BPF_CGROUP_UNIX_GETSOCKNAME:
+ 			return &bpf_sock_addr_getsockopt_proto;
+ 		default:
+ 			return NULL;
 -- 
-2.34.1
+2.55.0
 
