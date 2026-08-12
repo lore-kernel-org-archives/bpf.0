@@ -1,274 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F79D3B9DA1;
-	Wed, 12 Aug 2026 08:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F653E7633;
+	Wed, 12 Aug 2026 08:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786523359; cv=none; b=SUWRhg+icv22TS1lQ4DGsVJvziukoR/qTGf7EQ+b2mc3eIwO9U/bJMmiB6xY7WJ7b+n6uzRgK+QRl9y8oSQAgwGAZ6uUmHWL5fa0+2ZsFT9ZNz0flpGAd3ghFfiUb8OESdipzteBZduJOKuJS0FBH4TQjepPc3ZUpWo84uaiO5s=
+	t=1786523515; cv=none; b=TDjvq+fMwo2ftZUSiaExbHRX8xL2xMZMrBg5TXgg0kVI/HWjZLbjFm0ED81CjsKNs0l8AEmM6ZmYCidX7OVu4xLuyh3MGMIIwCZOCTpAe0X7e1dbaRrq8viubeOlX0Wv26IEDfjZ4ksXNDYVbCRGj/QK2YJ1sI9u/SYc1hYCqYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786523359; c=relaxed/simple;
-	bh=mgzAf0nuQkhfg/k1OzYUFfLQEPPFuytuTMat2tNqldY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BRNRwAnUCSvjZ7ei9XArc0siBGONJBLXZLKldwXK81KlLUBJnZartgzZCwpU7NL/2BsvlIjhyS85THslzkUEaRhPbhbSft3XufAK2Uql/DMRHFmgS+lSvmQp+5Crd+l3DpMtE81ef1q+mmXWBPMRd1dCddNHce3pVbvDw0nbSBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l4G7JOIi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1786523515; c=relaxed/simple;
+	bh=PsfhrFDLY9xwoWfUdxuAhyLzmbDTm66vmPfuG23iXuE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=W+pSBWjUtjW9JlhWFU404ix6PJ7wf41Go/9NIch1H/kGP4TRlcUK6g/v1NgLYSPZYNIn1yRBxjyF7z6guihTlVqkbfz+pcunuJbxBz4OePXNeUyvbV/PIqIyI+8K5hJ/I92KlIuFbMPsWBfBruXM/KC2cQ0oG6qxhB88/plTRJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=eDCzdobk; arc=none smtp.client-ip=67.231.149.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=akamai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l4G7JOIi"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BAFCFC2BCB9;
-	Wed, 12 Aug 2026 08:29:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1786523358;
-	bh=mgzAf0nuQkhfg/k1OzYUFfLQEPPFuytuTMat2tNqldY=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=l4G7JOIi9TXTsJNNpY9lOff/8sfbqVcRPtHeOknEmR2AKyT8n1x4VGk48q/bJZFSU
-	 8lMbhrVrz6DXwHaGGCu32whKuhafjY5XMxYes5mSpzY3ScPjuh2WE7by75F15O6S1e
-	 MzI/GoxR/WatZfVmO22RJXpLcEeJDTDrlQ6b6WDI6OpcdMbdcIQr9tad8YYCCvrSdf
-	 M9A6FQpCEplFcx/+sHLyOWtH7R8dHjQ+AZ1VLmBtlWAmEjdz4rYT8rvoQGQXKtitIQ
-	 /hKa9kgpAmSqE4gGqYM8zyZOpAapNZWQFs28siqkLPY8OoqXWTP/V4UCUK8STZ+Axm
-	 h3Hpc7NNfYBUw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 979D5C5CFDB;
-	Wed, 12 Aug 2026 08:29:18 +0000 (UTC)
-From: Bochao Cao via B4 Relay <devnull+bochaolucky.gmail.com@kernel.org>
-Date: Wed, 12 Aug 2026 16:28:58 +0800
-Subject: [PATCH bpf-next v2] selftests/bpf: Track test_xdp_features DUT
- processes
+	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="eDCzdobk"
+Received: from pps.filterd (m0409408.ppops.net [127.0.0.1])
+	by m0409408.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 67C63Y1A1517117;
+	Wed, 12 Aug 2026 09:31:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=apr2026.eng; bh=O8Lfb5vjd
+	auA/ufKBxdAkqZqNcMbJVqP8KK2nMEoyTc=; b=eDCzdobkVDHVP6h40T58t2XMR
+	v6V8lVRynZYTfgAjOQTgukvgi2DepmUpwldFQAzFirFI6V2pikXa8rTisrfT0CwE
+	eeQXU6T7GdbDL8d6E3WJjmChdIZudosGFDfbJsDZ/sluWDVi770jB3bfKMg65NYo
+	/+IrJYmew0SrICk94n2ouz4ZYxu/SRUuW5vWBFGq3EWtIlnxmhazFfbgdi4SZfC3
+	zofeHH8V/Gyd/8t4dirG1VEPs1GD0YvJcVwZk0jokOy/qbVs4pY+rkZ0XJG1/BX2
+	OBR40fJwlxm/1q1W/opBouH/BM5WImUHCfEtRc51hYhEiyRAYYt10VLElvYfg==
+Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18])
+	by m0409408.ppops.net-00190b01. (PPS) with ESMTPS id 4fxfc80v18-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Aug 2026 09:31:25 +0100 (BST)
+Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
+	by prod-mail-ppoint1.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 67C8KFVN032028;
+	Wed, 12 Aug 2026 04:31:24 -0400
+Received: from prod-mail-relay01.akamai.com ([172.27.118.31])
+	by prod-mail-ppoint1.akamai.com (PPS) with ESMTP id 4fwysw70fq-1;
+	Wed, 12 Aug 2026 04:31:24 -0400 (EDT)
+Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
+	by prod-mail-relay01.akamai.com (Postfix) with ESMTP id 216A584;
+	Wed, 12 Aug 2026 08:31:23 +0000 (UTC)
+From: Nick Hudson <nhudson@akamai.com>
+To: bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
+        Anna Glasgall <aglasgal@akamai.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v7 1/6] bpf: name the enum for BPF_FUNC_skb_adjust_room flags
+Date: Wed, 12 Aug 2026 09:31:10 +0100
+Message-Id: <20260812083115.73100-2-nhudson@akamai.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260812083115.73100-1-nhudson@akamai.com>
+References: <20260812083115.73100-1-nhudson@akamai.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260812-xdp-dut-process-lifecycle-gmail-v2-1-b03ef2aa1b97@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAMoufGoC/42OQQ6DIBBFr9LMutMAUaNd9R6NC4VBaVQIoNEY7
- 16lF+jyzfw/b3YI5A0FeN528LSYYOx0grjfQPbN1BEadTIIJgpWshxX5VDNEZ23kkLAwWiSmxw
- Iu7ExAxaqYK0ulVSaw3nFedJmTYY3tE7jRGuE+rcJc/shGS/Ble1NiNZv6ZmFp8bf3oUjxyyvy
- kyddlHlrzR/SDtCfRzHF7hPg/HqAAAA
-X-Change-ID: 20260805-xdp-dut-process-lifecycle-gmail-6d60bf8dcdf1
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Jiayuan Chen <jiayuan.chen@linux.dev>, 
- Lorenzo Bianconi <lorenzo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Bochao Cao <bochaolucky@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786523357; l=6026;
- i=bochaolucky@gmail.com; s=20260805; h=from:subject:message-id;
- bh=pnFTax/Yu2UV2jh6eNQ9vvm+LoTOT+3qy7HlP2VL2dQ=;
- b=yooaFasxTq0Yi1a20cpTr61x200gih6rk2OrmxxSihec40KiqUM5goKCyXzw3uL2oFQoK6jn3
- 79q0Rn6BaRBDhz93vamJePCUkg7Cy3bvl1YlGPSiiHGW1NdSVEZ1s25
-X-Developer-Key: i=bochaolucky@gmail.com; a=ed25519;
- pk=ZYp7O2eXSIrJ9YmKrl0iHDoulPYSG+1lzICsicAvld0=
-X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/20260805 with
- auth_id=920
-X-Original-From: Bochao Cao <bochaolucky@gmail.com>
-Reply-To: bochaolucky@gmail.com
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-12_02,2026-08-10_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ malwarescore=0 adultscore=0 lowpriorityscore=0 spamscore=0 phishscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2606160000
+ definitions=main-2608120066
+X-Authority-Analysis: v=2.4 cv=U4Ciy+ru c=1 sm=1 tr=0 ts=6a7c2f5e cx=c_pps
+ a=StLZT/nZ0R8Xs+spdojYmg==:117 a=StLZT/nZ0R8Xs+spdojYmg==:17
+ a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
+ a=BYUV7c42er6_Rx9bq0XK:22 a=X7Ea-ya5AAAA:8 a=1XWaLZrsAAAA:8
+ a=TMHggaePV_XZxh6C_gsA:9
+X-Proofpoint-ORIG-GUID: 3Gq3of29eKVNhulM0U9geq8OG40DFdgX
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODEyMDA2NyBTYWx0ZWRfX2HyntjKOsJVe
+ oWRD9ZPRqid8QfgKCJQKy0Pjdwol6gF+mxzLB1JByhC2Pp7JDOBWgkORcniRdMhCS47fsnA8XGR
+ mbOPV0tR9aQaLW5a6hsPwLCdooOGorE=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODEyMDA2NyBTYWx0ZWRfXxvSkEbRQ0kEq
+ UHjI1qz3P9sqW6SgzbVKq5zDA7Jx9Gt7RjFFoO71s8Qb8oJ2gZpSSyFIUXpKJ+6HzWB3v/uUHhN
+ vzRfedjzreq/1E+59nXl71j3mRm4TPbWi+NFmP7Lfj532+dAAeyKLldcZp+vw/sEr2gEdEXW5j0
+ yhq9u0TMVRBdWlVkmYabkCrru04ubv+cvztKTrrVZiPdBIry8VTeqqR/EASW7GzTq646H5bbzRB
+ HH9pvccdYZg586LhLM09gmYfr4qx1XT0wot63Qn7KbPLA2t0DFpsfGacTiPGSTTN+MN+jBjwqGh
+ HUmAGMAzhWB9NVJrxyZfIKBrPfTMd1cqjxiktdx/hKj2c2N5QO/buPqBssVF9Z4iaZJS/vMfL5M
+ nCqTiUyjpgBSzK1UjCtoIomrs2sSXyPJDYBIBnZD6zJsfX1JeWGHinp0S2brTuUsC0SOTDce3+S
+ RBpRf9QX2oWKSK/bPqA==
+X-Proofpoint-GUID: 3Gq3of29eKVNhulM0U9geq8OG40DFdgX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-12_02,2026-08-10_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ adultscore=0 malwarescore=0 spamscore=0 impostorscore=0 clxscore=1011
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606160001 definitions=main-2608120067
 
-From: Bochao Cao <bochaolucky@gmail.com>
+The existing anonymous enum for BPF_FUNC_skb_adjust_room flags is
+named to enum bpf_adj_room_flags to enable CO-RE (Compile Once -
+Run Everywhere) lookups in BPF programs.
 
-test_xdp_features.sh waits for any xdp_features listener to appear and
-uses pidof during cleanup. A concurrent test can therefore make another
-test proceed before its own DUT is ready, and cleanup kills every
-xdp_features process on the host. The readiness loop also has no timeout,
-so a DUT that exits before listening leaves the test hung indefinitely.
-
-Track one active DUT at a time, wait for ss to report that exact PID with
-a bounded retry loop, and reap it after each test. Consult the shell job
-table before signaling the DUT so a stale PID cannot target an unrelated
-process. On failure, terminate the shell job with SIGKILL and reap it so
-blocked I/O cannot hang cleanup. Install an EXIT trap and signal handlers
-so failure paths also remove network setup.
-
-Fixes: 4dba3e7852b7 ("selftests/bpf: introduce XDP compliance test tool")
-Closes: https://bugs.debian.org/1136522
-Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
+Co-developed-by: Max Tottenham <mtottenh@akamai.com>
+Signed-off-by: Max Tottenham <mtottenh@akamai.com>
+Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
+Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
+Signed-off-by: Nick Hudson <nhudson@akamai.com>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 ---
-Tests:
-- bash -n tools/testing/selftests/bpf/test_xdp_features.sh
-- make -C tools/testing/selftests/bpf xdp_features
-- sudo tools/testing/selftests/bpf/test_xdp_features.sh
-- verified cleanup terminates a blocked DUT without affecting an unrelated process
----
-Changes in v2:
-- Clarify that avoiding name-wide process matching, rather than dropping a dependency, is the motivation.
-- Track and reap one active DUT at a time instead of retaining historical PIDs.
-- Address PID reuse by signaling only the current Bash job during cleanup.
-- Use SIGKILL on failure cleanup so blocked DUT I/O cannot hang wait indefinitely.
-- Link to v1: https://patch.msgid.link/20260805-xdp-dut-process-lifecycle-gmail-v1-1-45984df8d295@gmail.com
----
- tools/testing/selftests/bpf/test_xdp_features.sh | 82 ++++++++++++++++++------
- 1 file changed, 62 insertions(+), 20 deletions(-)
+ include/uapi/linux/bpf.h       | 2 +-
+ tools/include/uapi/linux/bpf.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
-index 0aa71c4455c0..35ce0d4e2418 100755
---- a/tools/testing/selftests/bpf/test_xdp_features.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_features.sh
-@@ -8,6 +8,7 @@ readonly V0_IP6=2001:db8::11
- readonly V1_IP6=2001:db8::1
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index ffd96e8b920b..f6c9dc856858 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -6283,7 +6283,7 @@ enum {
+ };
  
- ret=1
-+dut_pid=""
+ /* BPF_FUNC_skb_adjust_room flags. */
+-enum {
++enum bpf_adj_room_flags {
+ 	BPF_F_ADJ_ROOM_FIXED_GSO	= (1ULL << 0),
+ 	BPF_F_ADJ_ROOM_ENCAP_L3_IPV4	= (1ULL << 1),
+ 	BPF_F_ADJ_ROOM_ENCAP_L3_IPV6	= (1ULL << 2),
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index ffd96e8b920b..f6c9dc856858 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -6283,7 +6283,7 @@ enum {
+ };
  
- setup() {
- 	{
-@@ -30,77 +31,118 @@ setup() {
- 	} > /dev/null 2>&1
- }
- 
-+terminate_dut_server() {
-+	[ -z "$dut_pid" ] && return
-+
-+	# Use the shell job instead of a PID which may have been reused.
-+	if [ "$(jobs -pr %% 2> /dev/null)" = "$dut_pid" ]; then
-+		kill -KILL %% 2> /dev/null || true
-+	fi
-+
-+	wait "$dut_pid" 2> /dev/null || true
-+	dut_pid=""
-+}
-+
- cleanup() {
--	ip link del v1 2> /dev/null
--	ip netns del ${NS} 2> /dev/null
--	[ "$(pidof xdp_features)" = "" ] || kill $(pidof xdp_features) 2> /dev/null
-+	terminate_dut_server
-+	ip link del v1 2> /dev/null || true
-+	ip netns del "${NS}" 2> /dev/null || true
- }
- 
- wait_for_dut_server() {
--	while sleep 1; do
--		ss -tlp | grep -q xdp_features
--		[ $? -eq 0 ] && break
-+	local i
-+
-+	for ((i = 0; i < 10; i++)); do
-+		if [ "$(jobs -pr %% 2> /dev/null)" != "$dut_pid" ]; then
-+			echo "xdp_features server $dut_pid exited before accepting connections" >&2
-+			return 1
-+		fi
-+
-+		if ss -tlp 2> /dev/null | grep -q "pid=$dut_pid,"; then
-+			return 0
-+		fi
-+
-+		sleep 1
- 	done
-+
-+	echo "Timed out waiting for xdp_features server $dut_pid" >&2
-+	return 1
-+}
-+
-+start_dut_server() {
-+	./xdp_features "$@" &
-+	dut_pid=$!
-+	wait_for_dut_server
-+}
-+
-+reap_dut_server() {
-+	local status=0
-+
-+	wait "$dut_pid" || status=$?
-+	dut_pid=""
-+	return "$status"
- }
- 
- test_xdp_features() {
- 	setup
- 
- 	## XDP_PASS
--	./xdp_features -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_PASS \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_DROP
--	./xdp_features -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_DROP \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
- 					   -T ::ffff:$V0_IP4 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_ABORTED
--	./xdp_features -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_ABORTED \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_TX
--	./xdp_features -f XDP_TX -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_TX -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_TX \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
- 					   -T ::ffff:$V0_IP4 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_REDIRECT
--	./xdp_features -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_REDIRECT \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_NDO_XMIT
--	./xdp_features -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_NDO_XMIT \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
- 					   -T ::ffff:$V0_IP4 v0
- 	ret=$?
--	cleanup
-+	reap_dut_server
- }
- 
- set -e
--trap cleanup 2 3 6 9
-+trap cleanup EXIT
-+trap 'exit 129' HUP
-+trap 'exit 130' INT
-+trap 'exit 143' TERM
- 
- test_xdp_features
- 
-
----
-base-commit: 07cb86aa50816b070b99c89bf948762ef035a1f2
-change-id: 20260805-xdp-dut-process-lifecycle-gmail-6d60bf8dcdf1
-
-Best regards,
---  
-Bochao Cao <bochaolucky@gmail.com>
-
+ /* BPF_FUNC_skb_adjust_room flags. */
+-enum {
++enum bpf_adj_room_flags {
+ 	BPF_F_ADJ_ROOM_FIXED_GSO	= (1ULL << 0),
+ 	BPF_F_ADJ_ROOM_ENCAP_L3_IPV4	= (1ULL << 1),
+ 	BPF_F_ADJ_ROOM_ENCAP_L3_IPV6	= (1ULL << 2),
+-- 
+2.34.1
 
