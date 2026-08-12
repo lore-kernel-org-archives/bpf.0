@@ -1,64 +1,64 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A25630569B
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 06:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9CD31ED80
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 06:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786514760; cv=none; b=MiM2DquY4GIlYG8gHCwkS0YyWVzGvj74MI0E5FeDSWR/oa1fkRafeigUU5H1sYYLsUNHglR9zRJdIcyEDtVKkBs/B2iWco4n4j0SgWjmYeaOC9vYJIgvYNB3hmJ4zTUkbeN4mfxmuINWChwbb3aMHY8dLC1vH2hhFoUsTlahciA=
+	t=1786514761; cv=none; b=eDEV+mByIheSe1HSZg5YbhwbqfOOo2+gj5BHIm1XpP0thr9kfC0TsQjm0UACozgVgoOekOR8/gKkqD4/ej/921Um+QP1/o90/knx2Whm+i1W9vvrAC3P1dOSteXm2H5vdiSzLSKwRpIXFqhz7BHtwgGVEm35g10VmtdhVu7kpLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786514760; c=relaxed/simple;
-	bh=vLjoCWE8xawxyjA3Ri+8LtlrwzclLJrjRM9+xcl7HiQ=;
+	s=arc-20240116; t=1786514761; c=relaxed/simple;
+	bh=aNeuXNvXQjh2cAMesuKXs6cZfUoES8RuztBB2ygYqF4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=j8xu59eyC8ZgPHX73HxiMLm6IIRrKal4XizW72+eF2y+vNqX6dDPyn9GwAQG6B+XxtGSAl1Mqs9dt79X4Z92O0wgw9962eUIXLs+h1p6/rlODZF1YfopVqGT6FBjo9h8UpgMCg713+jyfHQEHDArA+JsOyEwRjegmikc+8UQhPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ee2ng0aG; arc=none smtp.client-ip=209.85.215.180
+	 MIME-Version:Content-Type; b=SsZWgFzdBIlyyICLu6P/i3ZxPdSlYGKaE942NX1x18IDKHAWD5Euxz2hty1reaxHmk/zVzhJxbuorFr6NJ9oLs80qLBqGLFu7Ng2K/W/vjGB3Ua38DzkyKZ8PXl7WxpBwyf4Yz3zWbJ7Yj/rHdLJIVuTZUa8XrJU5XibiVR5QLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UOUSzDSY; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ee2ng0aG"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cbee3777e1cso378552a12.3
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 23:05:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UOUSzDSY"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2d049069377so6688335ad.0
+        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 23:06:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786514759; x=1787119559; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786514760; x=1787119560; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=/LAT2FjzJIpFHBoeoXnbjchpZKPkgrHr8uhuX1Wl3Ts=;
-        b=ee2ng0aGXBK1WU0ZnL5I7qqvG60mdb5sXgW1bM7qsJ9nFSGkK7LkyBZ/FPGFzkRu35
-         xtsSOTm2Utbiga7RYeMCW/71ho4gP4CW/DMFhoEg+2Z8PXa2etDejbM84KrL8sFLpB+G
-         r0BNi3UFaQ0T0Cc6omWwNf7696yuIGUY0pcnigMdFTqwYHdhqBMUI762swAe7hFNhSZz
-         cjel88ZP1DafC5jsHlC1cKl7XLHDzalvYB4MoNeEHY1Jh/XayRavEJzJdSNmymJ7euj/
-         SrMZRCLBoA6gtccuTNCy8Uo8I+EWSIjpz0SZxYbLqCKfkYjRLPIacfCo9RpVmyIopc0u
-         7D0Q==
+        bh=s4f/kxvA4eKSxyhI6Q8ptv/aEyxRkGH33MqPUVeFTF8=;
+        b=UOUSzDSY1vXqtEh/zqCUmEnLXdNtaqDbzCP9kHuSX/glK84lNjAUTso9W2AZnhQqFt
+         oqfG8l5didp5Jm3AfGUMQOhxzw8zVTDV46NSoUb/evePTx4b0g4eI3AlIRCF9UTqGgqr
+         0vfuIfkEC1vepAHqaSLhTEqKRH//LNuh/pL4/Dxi9oxKDc88UG+qIzsZFAU5+1W0xbsb
+         XWQA1k48B+c3NSxUPmnCcHoQg+F+MoCNy2WSVRsNxOe8FOYWATnu0/w2D2BMRtXQULBG
+         YuTBEz3mQdr+83eExinon554gtdIFJDGlBcLUebPPkMBesC/tTuxDfxxoXYV18OHOhlz
+         +kSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786514759; x=1787119559;
+        d=1e100.net; s=20251104; t=1786514760; x=1787119560;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/LAT2FjzJIpFHBoeoXnbjchpZKPkgrHr8uhuX1Wl3Ts=;
-        b=tRtcKZO7oA3m8lBnmqHAgRce6QocafZVZf7u/QRND6x/Uu/7u7NQg50DMj3zLJIdBg
-         v5+XKTtEF652LBD6B/HlXkBf4rxhQhfCZgFY8ErVxIQC7WOWlQOJH1XqOga8wavstPUr
-         cDMQiqvvN14o/KftD79ck0K7VYwcf5EtivX3dsNYYxu1KZiZmGpGEsc4TvR611Inl2Xf
-         nNpY0VFR+k/qchDIbiT/VdgEnJGPPJsgp51At2IKsyzez8Li7BtsZJyJN3QH5XFW2Yth
-         /0wGM0Z8EZaLn8PUS1R+VBh1+nVtiSzA/GTMZviwg79M1H6ve/xQrc9lCOg9z9Q9xtsp
-         6h2g==
-X-Gm-Message-State: AOJu0Yz2RqzlmhEUD6ITrZODXF6thd5ECVWEiZcc01sB8mwAu7YePe6G
-	t1QV9YQDKgMaMN1bHYGupasTO04bRXN8vBvfA1R3M9qunhBwWoybodYIriHwCnE+
-X-Gm-Gg: AR+sD10dYM3NeN2LVr43UDEWnCoUwMp12/zDhnNN/9bgNCaLLECGLYzFcIgkPHNhvF2
-	9fIflrTuplkiaPyW7xdaAAfGAhgNMMMqq8Oyei9/BGJX4+gHciD7ReSf1f2ugvuzbn389uYe48Y
-	NGxKyx8PcdhwWqEiruJkedLDn1wFpjWK2pwMh9cX8hjfZK2SqCAm+IW8a3/cvL/kW/Bu57wnc7K
-	lc49HOjNW3LEtZBYxP4ULuXTzX6c+5bgo0RHoJ3WQxdAah4AxCga3LjCfO3XgPojYRZRWL5BAgb
-	v3efGHyDq0vlSRG3v2191MvweXW9u3BITSLs3WLvNIgFYSrzL3LX+6+bfux7NnCa22RvMdWx4Ro
-	j9EHJHQjYWRaZ8K1Dg5Ch45y/p5JnmvVvd3/el7wKstpfUidVDtjgHPR32MFB0TZlQpFx1pGW+3
-	ncXkYxre3gByTpBXJNNDi+duzSNwHRuD4PggtSYUPXJd6RX0ljvYuyjfd8ypwGpZGbqSi7CEtXb
-	ixHvQ==
-X-Received: by 2002:a17:90b:38d1:b0:380:21b7:e727 with SMTP id 98e67ed59e1d1-393014cac5dmr2570968a91.14.1786514758487;
-        Tue, 11 Aug 2026 23:05:58 -0700 (PDT)
+        bh=s4f/kxvA4eKSxyhI6Q8ptv/aEyxRkGH33MqPUVeFTF8=;
+        b=gOejXQhlsInS1xTJ8bgiX040u5URNr7gvvD2lKiaPrXdz9Bl20qCSuKxft7HGKrDFA
+         XjapGoOeOMqNnzQqdm0V0xVB4FnP43EJYrYOzav8SAaz/lzvjmvZqGS7l6yWMiqmoSTz
+         igU/lsNeZolTbFr60kpJewOkIU6de9+5yQMcwaaKWXoQ0k7yg73tSwc1MbB8f8dTN8qn
+         Vw58dXi7W68odLPOutwbxu544TBUqU6d4SBHCKijpi5owPYiufIQMbXNPGopSDX8cK1i
+         uX+B6mtxcXYz3HMOAQDdnf+Q6+Z++bj02q3CxgTVQwFfS0NHQoAGvRSMd7VjlvJSXvhC
+         +CPQ==
+X-Gm-Message-State: AOJu0YxI3yUs4SSdSjNMj0qQsaGMNCwD7R5y7NwXXDQOpRozxgEDc5fl
+	15QyCVrGPb9HxR7APQXO46hzyMoutz/BGfij39C1a/wAAaBNS09HiEVNkYUv7bE2
+X-Gm-Gg: AR+sD13IZnsuqOYFfxT4/vjhBFSpNXweFxUjyv4KfcyXNRLvpRKDrvmLMzX3vDsBvo9
+	xMOfcvofCx6+yIAhrakKVFtBhU6mYTwhvLLYQTeqCRCPN5fEu/XQGHtZ3i4JoPrJprZI4fWMKFy
+	1I/q92q85B/1xjKJMSnxIQJYRAPxbkkxJ9K+nStBSPD5VdZmQa/ceQP5y7a6pyPm02k+qEjR1fN
+	J6neC9Ew21VE8xcSj6MU84keL92l209B4TWoD8vpRBdZtbRNwszdhZ2L4XUZH/BpgRi7i0nzymD
+	taVaNBXsKU+Iw0FTk1/d7miP6dxZ4CCf4pa+IK7nxwdoZOIouaNM77+H5wZMuLXsaL4Q17jpIlQ
+	XGS5xvgdU+lmXKZtd1HHgLYrBaZ/GynVUkhHdq1ul06tzsVBB+wweqjn9s/n+XSVLYSqelSqkXV
+	KDKXMwLOgdvD47ms1yia9A6h/6FxTrW5a44AAYIcMQxBxzrpJH/fPlPo3MMNeq+1TuKCg+3KD+J
+	JEjUQ==
+X-Received: by 2002:a17:90b:5443:b0:381:528a:808c with SMTP id 98e67ed59e1d1-393014fde42mr2870551a91.12.1786514759531;
+        Tue, 11 Aug 2026 23:05:59 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392f88d1e8csm2314520a91.5.2026.08.11.23.05.57
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392f88d1e8csm2314520a91.5.2026.08.11.23.05.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 23:05:57 -0700 (PDT)
+        Tue, 11 Aug 2026 23:05:58 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -68,9 +68,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 1/3] selftests/bpf: fix for veristat file/prog filters processing
-Date: Tue, 11 Aug 2026 23:05:42 -0700
-Message-ID: <20260811-veristat-filter-fix-v2-1-6c234c4cd6ef@gmail.com>
+Subject: [PATCH bpf-next v2 2/3] selftests/bpf: exercise veristat filtering logic in a selftest
+Date: Tue, 11 Aug 2026 23:05:43 -0700
+Message-ID: <20260811-veristat-filter-fix-v2-2-6c234c4cd6ef@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260811-veristat-filter-fix-v2-0-6c234c4cd6ef@gmail.com>
 References: <20260811-veristat-filter-fix-v2-0-6c234c4cd6ef@gmail.com>
@@ -83,160 +83,190 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-At the moment veristat filtering behaves unexpectedly for the
-following filter expression:
+Test cases for veristat file/prog name filtering logic.
+Check various formulations for any (*foo*), file (*foo*/),
+prog (/bar) and file/prog (*foo*/bar) filters, alongside
+erroneous filters and mixed allow/deny filter expressions.
 
-  -f !file/prog
-
-The expression rejects all programs with name 'prog', and all programs
-in a file with name 'file'. This commit fixes the expression to
-exclude only a program 'prog' from a file 'file'. Additionally,
-the commit makes empty filters like '-f ""' or '-f "/"' and error.
-Here is the filtering behaviour compared old versus new:
-
-| filter   | file | prog | old verdict | new verdict |
-|----------+------+------+-------------+-------------|
-| !foo     | foo  | bar  | skipped     | skipped     |
-| !foo     | bar  | foo  | skipped     | skipped     |
-| !foo     | bar  | bar  | processed   | processed   |
-| !foo/bar | foo  | bar  | skipped     | skipped     |
-| !foo/bar | foo  | buz  | skipped     | processed   | (!)
-| !foo/bar | bar  | bar  | skipped     | processed   | (!)
-| !foo/    | foo  | bar  | skipped     | skipped     |
-| !foo/    | bar  | bar  | processed   | processed   |
-| !/bar    | foo  | bar  | skipped     | skipped     |
-| !/bar    | foo  | foo  | processed   | processed   |
-| !/       | foo  | bar  | processed   | error       | (!)
-| !        | foo  | bar  | processed   | error       | (!)
-|----------+------+------+-------------+-------------|
-| foo      | foo  | bar  | processed   | processed   |
-| foo      | bar  | foo  | processed   | processed   |
-| foo      | bar  | bar  | skipped     | skipped     |
-| foo/bar  | foo  | bar  | processed   | processed   |
-| foo/bar  | foo  | buz  | skipped     | skipped     |
-| foo/bar  | bar  | bar  | skipped     | skipped     |
-| foo/     | foo  | bar  | processed   | processed   |
-| foo/     | bar  | bar  | skipped     | skipped     |
-| /bar     | foo  | bar  | processed   | processed   |
-| /bar     | foo  | foo  | skipped     | skipped     |
-| /        | foo  | bar  | processed   | error       | (!)
-|          | foo  | bar  | skipped     | error       | (!)
-
-Fixes: 10b1b3f3e56a ("selftests/bpf: consolidate and improve file/prog filtering in veristat")
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/veristat.c | 76 ++++++++++++++++++++++------------
- 1 file changed, 49 insertions(+), 27 deletions(-)
+ .../selftests/bpf/prog_tests/test_veristat.c       | 101 +++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/veristat_bar.c   |   3 +
+ tools/testing/selftests/bpf/progs/veristat_foo.c   |  31 +++++++
+ 3 files changed, 135 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index c9c257784ee3..6aaa06790daa 100644
---- a/tools/testing/selftests/bpf/veristat.c
-+++ b/tools/testing/selftests/bpf/veristat.c
-@@ -514,6 +514,40 @@ static bool is_bpf_obj_file(const char *path) {
- 	return err == 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_veristat.c b/tools/testing/selftests/bpf/prog_tests/test_veristat.c
+index 9aff08ac55c0..4cd41080eed3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_veristat.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_veristat.c
+@@ -37,6 +37,14 @@ static struct fixture *init_fixture(void)
+ 	return fix;
  }
  
-+/* Exact filter match */
-+static bool name_filter_matches(struct filter *f, const char *filename, const char *prog_name)
++static void read_output(struct fixture *fix)
 +{
-+	if (f->any_glob)
-+		return glob_matches(filename, f->any_glob) ||
-+		       (prog_name && glob_matches(prog_name, f->any_glob));
-+	if (f->file_glob && f->prog_glob)
-+		return prog_name &&
-+		       glob_matches(filename, f->file_glob) &&
-+		       glob_matches(prog_name, f->prog_glob);
-+	if (f->file_glob)
-+		return glob_matches(filename, f->file_glob);
-+	if (f->prog_glob)
-+		return prog_name && glob_matches(prog_name, f->prog_glob);
-+	return false;
++	ssize_t len = pread(fix->fd, fix->output, fix->sz - 1, 0);
++
++	fix->output[len < 0 ? 0 : len] = 0;
++	ASSERT_GE(len, 0, "pread");
 +}
 +
-+/* Check if the filter does not outright reject the file name */
-+static bool name_filter_may_match(struct filter *f, const char *filename)
-+{
-+	if (f->file_glob)
-+		return glob_matches(filename, f->file_glob);
-+	/*
-+	 * If we don't know program name yet, any_glob filter
-+	 * has to assume that current BPF object file might be
-+	 * relevant; we'll check again later on after opening
-+	 * BPF object file, at which point program name will
-+	 * be known finally.
-+	 */
-+	if (f->any_glob || f->prog_glob)
-+		return true;
-+	return false;
-+}
-+
- static bool should_process_file_prog(const char *filename, const char *prog_name)
+ static void teardown_fixture(struct fixture *fix)
  {
- 	struct filter *f;
-@@ -521,16 +555,7 @@ static bool should_process_file_prog(const char *filename, const char *prog_name
+ 	free(fix->output);
+@@ -230,6 +238,97 @@ static void test_no_array_index_for_array(void)
+ 	teardown_fixture(fix);
+ }
  
- 	for (i = 0; i < env.deny_filter_cnt; i++) {
- 		f = &env.deny_filters[i];
--		if (f->kind != FILTER_NAME)
--			continue;
--
--		if (f->any_glob && glob_matches(filename, f->any_glob))
--			return false;
--		if (f->any_glob && prog_name && glob_matches(prog_name, f->any_glob))
--			return false;
--		if (f->file_glob && glob_matches(filename, f->file_glob))
--			return false;
--		if (f->prog_glob && prog_name && glob_matches(prog_name, f->prog_glob))
-+		if (f->kind == FILTER_NAME && name_filter_matches(f, filename, prog_name))
- 			return false;
- 	}
- 
-@@ -540,24 +565,15 @@ static bool should_process_file_prog(const char *filename, const char *prog_name
- 			continue;
- 
- 		allow_cnt++;
--		if (f->any_glob) {
--			if (glob_matches(filename, f->any_glob))
--				return true;
--			/* If we don't know program name yet, any_glob filter
--			 * has to assume that current BPF object file might be
--			 * relevant; we'll check again later on after opening
--			 * BPF object file, at which point program name will
--			 * be known finally.
--			 */
--			if (!prog_name || glob_matches(prog_name, f->any_glob))
--				return true;
--		} else {
--			if (f->file_glob && !glob_matches(filename, f->file_glob))
--				continue;
--			if (f->prog_glob && prog_name && !glob_matches(prog_name, f->prog_glob))
--				continue;
-+		if (prog_name && name_filter_matches(f, filename, prog_name))
-+			return true;
-+		/*
-+		 * If there is no prog_name and the file name is not blocked by
-+		 * the filter, allow to open the file. Afterwards there would be
-+		 * a second refining query with prog_name set.
-+		 */
-+		if (!prog_name && name_filter_may_match(f, filename))
- 			return true;
--		}
- 	}
- 
- 	/* if there are no file/prog name allow filters, allow all progs,
-@@ -703,6 +719,12 @@ static int append_filter(struct filter **filters, int *cnt, const char *str)
- 		}
- 	}
- 
-+	if ((!f->any_glob && !f->file_glob && !f->prog_glob) ||
-+	    (f->any_glob && strcmp(f->any_glob, "") == 0)) {
-+		fprintf(stderr, "Invalid filter: '%s'\n", str);
-+		return -EINVAL;
++/*
++ * Name filter tests below run veristat on veristat_foo.bpf.o and
++ * veristat_bar.bpf.o, both defining programs 'foo', 'bar' and 'buz'.
++ * Every entry describes a single (filters, file, prog) combination and
++ * tells whether that program is expected in the veristat output:
++ * 'true' if it is, 'false' if it is not and -1 if veristat is expected
++ * to reject the filter.
++ */
++#define FILTER_OBJS "veristat_foo.bpf.o veristat_bar.bpf.o"
++
++static const struct name_filter_case {
++	const char *filters;
++	const char *file;
++	const char *prog;
++	int included;
++} name_filter_cases[] = {
++	/* no filters, every program is processed */
++	{ "",			"foo", "foo", true  },
++	{ "",			"foo", "bar", true  },
++	{ "",			"foo", "buz", true  },
++	{ "",			"bar", "foo", true  },
++	{ "",			"bar", "bar", true  },
++	{ "",			"bar", "buz", true  },
++	/* deny filters */
++	{ "-f '!*foo*'",	"foo", "bar", false },
++	{ "-f '!*foo*'",	"bar", "foo", false },
++	{ "-f '!*foo*'",	"bar", "bar", true  },
++	{ "-f '!*foo*/bar'",	"foo", "bar", false },
++	{ "-f '!*foo*/bar'",	"foo", "buz", true  },
++	{ "-f '!*foo*/bar'",	"bar", "bar", true  },
++	{ "-f '!*foo*/'",	"foo", "bar", false },
++	{ "-f '!*foo*/'",	"bar", "bar", true  },
++	{ "-f '!/bar'",		"foo", "bar", false },
++	{ "-f '!/bar'",		"foo", "foo", true  },
++	{ "-f '!/'",		"foo", "bar", -1    },
++	{ "-f '!'",		"foo", "bar", -1    },
++	/* allow filters */
++	{ "-f '*foo*'",		"foo", "bar", true  },
++	{ "-f '*foo*'",		"bar", "foo", true  },
++	{ "-f '*foo*'",		"bar", "bar", false },
++	{ "-f '*foo*/bar'",	"foo", "bar", true  },
++	{ "-f '*foo*/bar'",	"foo", "buz", false },
++	{ "-f '*foo*/bar'",	"bar", "bar", false },
++	{ "-f '*foo*/'",	"foo", "bar", true  },
++	{ "-f '*foo*/'",	"bar", "bar", false },
++	{ "-f '/bar'",		"foo", "bar", true  },
++	{ "-f '/bar'",		"foo", "foo", false },
++	{ "-f '/'",		"foo", "bar", -1    },
++	{ "-f ''",		"foo", "bar", -1    },
++	/* allow and deny filters combined */
++	{ "-f '*foo*/' -f '!/bar'", "foo", "foo", true  },
++	{ "-f '*foo*/' -f '!/bar'", "foo", "bar", false },
++	{ "-f '*foo*/' -f '!/bar'", "bar", "foo", false },
++};
++
++static void test_name_filters(void)
++{
++	struct fixture *fix = init_fixture();
++	const struct name_filter_case *t;
++	char cmd[512], row[64], name[128];
++	int i, err;
++
++	for (i = 0; i < ARRAY_SIZE(name_filter_cases); i++) {
++		t = &name_filter_cases[i];
++		/* stderr is merged with stdout in order to catch error messages */
++		snprintf(cmd, sizeof(cmd), "%s " FILTER_OBJS " -q -o csv -e file,prog %s > %s 2>&1",
++			 fix->veristat, t->filters, fix->tmpfile);
++		err = system(cmd);
++		read_output(fix);
++
++		snprintf(row, sizeof(row), "veristat_%s.bpf.o,%s", t->file, t->prog);
++		snprintf(name, sizeof(name), "veristat %s: %s", t->filters, row);
++		switch (t->included) {
++		case true:
++			ASSERT_OK(err, name);
++			ASSERT_HAS_SUBSTR(fix->output, row, name);
++			break;
++		case false:
++			ASSERT_OK(err, name);
++			ASSERT_FALSE(!!strstr(fix->output, row), name);
++			break;
++		case -1:
++			ASSERT_NEQ(err, 0, name);
++			ASSERT_HAS_SUBSTR(fix->output, "Invalid filter", name);
++			break;
++		}
 +	}
 +
- 	*cnt += 1;
- 	return 0;
++	teardown_fixture(fix);
++}
++
+ void test_veristat(void)
+ {
+ 	if (test__start_subtest("set_global_vars_succeeds"))
+@@ -256,6 +355,8 @@ void test_veristat(void)
+ 	if (test__start_subtest("test_no_array_index_for_array"))
+ 		test_no_array_index_for_array();
+ 
++	if (test__start_subtest("name_filters"))
++		test_name_filters();
  }
+ 
+ #undef __CHECK_STR
+diff --git a/tools/testing/selftests/bpf/progs/veristat_bar.c b/tools/testing/selftests/bpf/progs/veristat_bar.c
+new file mode 100644
+index 000000000000..83d2a2a1dfc9
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/veristat_bar.c
+@@ -0,0 +1,3 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include "veristat_foo.c"
+diff --git a/tools/testing/selftests/bpf/progs/veristat_foo.c b/tools/testing/selftests/bpf/progs/veristat_foo.c
+new file mode 100644
+index 000000000000..bd24b97664b4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/veristat_foo.c
+@@ -0,0 +1,31 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++/*
++ * Programs below exist only to exercise veristat's -f name filters,
++ * their bodies are irrelevant, only the names matter.
++ * This file is also included by veristat_bar.c, so that the same set of
++ * program names is available in two differently named object files.
++ */
++
++SEC("socket")
++int foo(void *ctx)
++{
++	return 0;
++}
++
++SEC("socket")
++int bar(void *ctx)
++{
++	return 0;
++}
++
++SEC("socket")
++int buz(void *ctx)
++{
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 
 -- 
 2.53.0
