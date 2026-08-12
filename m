@@ -1,184 +1,274 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC54138655D
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 07:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F79D3B9DA1;
+	Wed, 12 Aug 2026 08:29:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786518240; cv=none; b=HWX6thac5/8zgdPgG6bBzREMRb/VDtM4mjmmvg9EiB39sqkxju5DUIVmxKp0X9eTTv5ORRJ4SBacI6LBVUYpcp/DSnfMaxk4DNBD8NOyx/siTBxWaHoibZ0MIv0UpC3abWkJ8TKTP7ZGjDZ1CBE9FSfJLPg1rmLZfbFfV0+IUfM=
+	t=1786523359; cv=none; b=SUWRhg+icv22TS1lQ4DGsVJvziukoR/qTGf7EQ+b2mc3eIwO9U/bJMmiB6xY7WJ7b+n6uzRgK+QRl9y8oSQAgwGAZ6uUmHWL5fa0+2ZsFT9ZNz0flpGAd3ghFfiUb8OESdipzteBZduJOKuJS0FBH4TQjepPc3ZUpWo84uaiO5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786518240; c=relaxed/simple;
-	bh=GCkBXddSbeHCDvY1GzromperE2nmzYP3jL1SLw1+JJI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hwqCi03mN49bfxgWAGleInTAmsQ9fUEvQUjjRHnHf3Gt80j2bL+HItb1O1S3b6dw5jkWCqmFr88V6wpg56YR7tFMHTIQkItw+cupmWu1PcXsv7cEjRPO+7PX+rkungxnng5lhLGXoDgx5xjvUu0dyrK5ic0lI7Jtusb2BOQioLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dJ9GMl3/; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ev1dWeJD; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786523359; c=relaxed/simple;
+	bh=mgzAf0nuQkhfg/k1OzYUFfLQEPPFuytuTMat2tNqldY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BRNRwAnUCSvjZ7ei9XArc0siBGONJBLXZLKldwXK81KlLUBJnZartgzZCwpU7NL/2BsvlIjhyS85THslzkUEaRhPbhbSft3XufAK2Uql/DMRHFmgS+lSvmQp+5Crd+l3DpMtE81ef1q+mmXWBPMRd1dCddNHce3pVbvDw0nbSBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l4G7JOIi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dJ9GMl3/";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ev1dWeJD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786518237;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GMSQFwJ3Pn8MGM6lOdOzrV1KHdix97IWR2KeUG/GEeU=;
-	b=dJ9GMl3/q+lOjSrPSP/628DaZlKb4RMp45tzJpd0SzYLkwAvemugIqBG5RzBM22sSRsWYv
-	9bmVfM4uavVQJZbNiGNMcq5dHZpz17tk1ZPflq358EXtfAb20TgvMJTXpyHlRep+cWB5YZ
-	HzPyZI0w8ejT5MyFV39CCIy9YQ0X2e4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-19-lhdICoMnMiO31PReUsf4ng-1; Wed, 12 Aug 2026 03:03:50 -0400
-X-MC-Unique: lhdICoMnMiO31PReUsf4ng-1
-X-Mimecast-MFC-AGG-ID: lhdICoMnMiO31PReUsf4ng_1786518230
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4954fd771baso9045545e9.0
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 00:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1786518230; x=1787123030; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GMSQFwJ3Pn8MGM6lOdOzrV1KHdix97IWR2KeUG/GEeU=;
-        b=Ev1dWeJDxFoaQNmhLYJbp9fsbGub+dt+mEuTBmgw5FJw5eqynqKQW23zUK51Mn8H0h
-         ckqLCQWkjx35JcE8pMug04kGM9hD4J65b2zorGV7GpkP0CSco7/R27sNzQ0S1pnX9jUB
-         SudS4vZBWg/EtGmV7OOoeEHnxU+tFN5Spb3CqedePFrAnK7FTPk7ADnYRGxZoAyU0yH6
-         JA1ZBugPcZEPuPVEElN78/G1fXcYhHdDg5sd6XP4LMfFScKKvHa+4iVks7YLQLwXUrPt
-         muyMR6dwi8ditKDQAbAhcTupYAOIFQgYJ1v956xnLMGGl2EH5Vl83SDY3P6I7m8l2m2W
-         sNzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786518230; x=1787123030;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GMSQFwJ3Pn8MGM6lOdOzrV1KHdix97IWR2KeUG/GEeU=;
-        b=d9yPlYWc/z7myHldJ0hc4xdVegKEzWcg9Ve+qXmYPZDpaEe64grRl+Df+EmyukK3+k
-         WXZHYwxO8MAF7PrTnrRnL6wZckz/BOlOAFn7zmhOL6SKc20FKkNyGLA3h1Yjr7+OnJrv
-         bAH4u4FwPRBEc09BxTaCfOSlp1EBKa6/TMlWEXWGGAHS90OCNDLly/KtZugHs2Mff4Bm
-         sXHy9/icg28mGPtrMIl8vLDmDzzR4ScOAff7NRugM7gyYf8Rurj3w4L1tM2cwzHV8+Jt
-         8Nwbk1nYi9SmiimxZ2STr3h982rBs9MtI6wIFwP22W3Grmff5ZCc7ix1LawiIzYJ+/gz
-         Px8w==
-X-Forwarded-Encrypted: i=1; AHgh+RqUOcxhH/L/WHVMb97UBS3f9u6eIbrY8/M8BYp9YAp3TRnc4b7D20kAXzaEDqLc9mvuZYE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpXQO8jL3FEM9nJJvZedEWxvdSkZbggXgvMb9+q7JIIJBORpHQ
-	noVI6nSqCVWZ80KQX+2ijY3G1xi8FAKp5kZb75C9TguTKPeBKi1PSCtocRcVXyoIiRLl2cfGRw8
-	X4zQezZ7CB9eP5C389E9GSiB7okybCLrl6kVLiTF5kKffNbHdobMW
-X-Gm-Gg: AR+sD10amjG0HVAyP0D7Jq9wwhVwomCjx6vL3jI1Zjj7KlWyl+zRlIh41ZfnLYxgEmG
-	b4JLeUIML/WUwkuVPUbMRMszpXw1OdXIQnfouaIIXD+4nbdiUdBjFuxl2BBmLQx7qBYMtL3DCDb
-	WPTxhGv9bYSy1zqti29roTmC9d8vB2Yg8iLmF7IQ33LOEKDnbneZ+FOWog/4PL0a+C4vVAI2+2O
-	XCGtGdXPNPexygemV/qatkYJUulcjzvvu2x6Jswf4GNQte/AZnHvvHuCWygV7PzvGhIw7PLMI4V
-	gb1ROd1cf8qSruXfvi87exbjM5XTDFnelvOMGDsaagNgPln6yBWFZJVJQ84TslDk5bjsCt5ATu7
-	5LXh7OSow8P+nJxaEqFFukgBpG0ujfuMCQsQ=
-X-Received: by 2002:a05:600c:138b:b0:495:5d6d:9cc1 with SMTP id 5b1f17b1804b1-4997c30b80fmr29456665e9.0.1786518229765;
-        Wed, 12 Aug 2026 00:03:49 -0700 (PDT)
-X-Received: by 2002:a05:600c:138b:b0:495:5d6d:9cc1 with SMTP id 5b1f17b1804b1-4997c30b80fmr29455945e9.0.1786518229435;
-        Wed, 12 Aug 2026 00:03:49 -0700 (PDT)
-Received: from [192.168.0.135] (185-219-167-205-static.vivo.cz. [185.219.167.205])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4997ada79a3sm46337885e9.1.2026.08.12.00.03.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Aug 2026 00:03:48 -0700 (PDT)
-Message-ID: <02ce6b65-7670-4dac-ac9c-8875867d6ad3@redhat.com>
-Date: Wed, 12 Aug 2026 09:03:47 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l4G7JOIi"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BAFCFC2BCB9;
+	Wed, 12 Aug 2026 08:29:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1786523358;
+	bh=mgzAf0nuQkhfg/k1OzYUFfLQEPPFuytuTMat2tNqldY=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=l4G7JOIi9TXTsJNNpY9lOff/8sfbqVcRPtHeOknEmR2AKyT8n1x4VGk48q/bJZFSU
+	 8lMbhrVrz6DXwHaGGCu32whKuhafjY5XMxYes5mSpzY3ScPjuh2WE7by75F15O6S1e
+	 MzI/GoxR/WatZfVmO22RJXpLcEeJDTDrlQ6b6WDI6OpcdMbdcIQr9tad8YYCCvrSdf
+	 M9A6FQpCEplFcx/+sHLyOWtH7R8dHjQ+AZ1VLmBtlWAmEjdz4rYT8rvoQGQXKtitIQ
+	 /hKa9kgpAmSqE4gGqYM8zyZOpAapNZWQFs28siqkLPY8OoqXWTP/V4UCUK8STZ+Axm
+	 h3Hpc7NNfYBUw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 979D5C5CFDB;
+	Wed, 12 Aug 2026 08:29:18 +0000 (UTC)
+From: Bochao Cao via B4 Relay <devnull+bochaolucky.gmail.com@kernel.org>
+Date: Wed, 12 Aug 2026 16:28:58 +0800
+Subject: [PATCH bpf-next v2] selftests/bpf: Track test_xdp_features DUT
+ processes
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] selftests: add shared lib.bpf.mk to build BPF
- progs and skeletons
-To: Ziyang Men <ziyang.meme@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jiri Kosina <jikos@kernel.org>,
- Benjamin Tissoires <bentiss@kernel.org>, David Vernet <void@manifault.com>,
- Eduard Zingerman <eddyz87@gmail.com>, Andrea Righi <arighi@nvidia.com>,
- Changwoo Min <changwoo@igalia.com>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, JP Kobryn
- <inwardvessel@gmail.com>, Mykola Lysenko <mykolal@meta.com>,
- Nathan Chancellor <nathan@kernel.org>, linux-kselftest@vger.kernel.org,
- cgroups@vger.kernel.org, linux-input@vger.kernel.org,
- sched-ext@lists.linux.dev, linux-mm@kvack.org, kernel-team@meta.com,
- bpf@vger.kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20260721174833.1232771-1-ziyang.meme@gmail.com>
- <20260721174833.1232771-2-ziyang.meme@gmail.com>
- <f2a0db3b-ac66-4b29-9dff-a691d9464123@redhat.com>
- <anTlFSsr5FqQt+o8@devvm16600.scu0.facebook.com>
-From: Viktor Malik <vmalik@redhat.com>
-Content-Language: en-US
-In-Reply-To: <anTlFSsr5FqQt+o8@devvm16600.scu0.facebook.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260812-xdp-dut-process-lifecycle-gmail-v2-1-b03ef2aa1b97@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAMoufGoC/42OQQ6DIBBFr9LMutMAUaNd9R6NC4VBaVQIoNEY7
+ 16lF+jyzfw/b3YI5A0FeN528LSYYOx0grjfQPbN1BEadTIIJgpWshxX5VDNEZ23kkLAwWiSmxw
+ Iu7ExAxaqYK0ulVSaw3nFedJmTYY3tE7jRGuE+rcJc/shGS/Ble1NiNZv6ZmFp8bf3oUjxyyvy
+ kyddlHlrzR/SDtCfRzHF7hPg/HqAAAA
+X-Change-ID: 20260805-xdp-dut-process-lifecycle-gmail-6d60bf8dcdf1
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Jiayuan Chen <jiayuan.chen@linux.dev>, 
+ Lorenzo Bianconi <lorenzo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ bpf@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Bochao Cao <bochaolucky@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786523357; l=6026;
+ i=bochaolucky@gmail.com; s=20260805; h=from:subject:message-id;
+ bh=pnFTax/Yu2UV2jh6eNQ9vvm+LoTOT+3qy7HlP2VL2dQ=;
+ b=yooaFasxTq0Yi1a20cpTr61x200gih6rk2OrmxxSihec40KiqUM5goKCyXzw3uL2oFQoK6jn3
+ 79q0Rn6BaRBDhz93vamJePCUkg7Cy3bvl1YlGPSiiHGW1NdSVEZ1s25
+X-Developer-Key: i=bochaolucky@gmail.com; a=ed25519;
+ pk=ZYp7O2eXSIrJ9YmKrl0iHDoulPYSG+1lzICsicAvld0=
+X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/20260805 with
+ auth_id=920
+X-Original-From: Bochao Cao <bochaolucky@gmail.com>
+Reply-To: bochaolucky@gmail.com
 
-On 8/6/26 21:48, Ziyang Men wrote:
-> On Wed, Jul 22, 2026 at 08:50:06AM +0200, Viktor Malik wrote:
+From: Bochao Cao <bochaolucky@gmail.com>
 
-[...]
+test_xdp_features.sh waits for any xdp_features listener to appear and
+uses pidof during cleanup. A concurrent test can therefore make another
+test proceed before its own DUT is ready, and cleanup kills every
+xdp_features process on the host. The readiness loop also has no timeout,
+so a DUT that exits before listening leaves the test hung indefinitely.
 
-> Hi Viktor, 
-> 
-> Thanks for your suggestions!
->>
->> Looking at the same line in tools/testing/selftests/bpf/Makefile:
->>
->>            EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)' \
->>
->> is there a reason why this is not respected and -O0 and -fPIC are
->> hard-coded?
-> Yes it is true that there is no good reason. I will fix it in the next version.
-> 
->> What if someone wants to build selftests (including libbpf)
->> with -O2 and some additional flags?
-> I will add a flag such as OPT_FLAGS ?= $(if $(RELEASE),-O2,O0), which follows
-> the pattern in the bpf/Makefile:37. So if we run 
-> $ make -> -g -O0 -fPIC (taget libbpf) and -g -O0 (host bpftool)
-> $ make RELEASE=1 -> -g -O2 -fPIC (taget libbpf) and -g -O2 (host bpftool)
-> 
->> Is that possible with the new
->> lib.bpf.mk? It would be nice if it used at least EXTRA_CFLAGS or
->> USERCFLAGS defined in lib.mk.
-> Good idea. I will add the EXTRA_CFLAGS for target libbpf, host libbpf and host
-> bpgtool. Such that: 
-> $ make OPT_FLAGS=-O2 EXTRA_CFLAGS=-DFOO -> -g -O2 -fPIC -DFOO (for target
-> libbpf) and -g -O2 -DFOO (for host bpftool)
+Track one active DUT at a time, wait for ss to report that exact PID with
+a bounded retry loop, and reap it after each test. Consult the shell job
+table before signaling the DUT so a stale PID cannot target an unrelated
+process. On failure, terminate the shell job with SIGKILL and reap it so
+blocked I/O cannot hang cleanup. Install an EXIT trap and signal handlers
+so failure paths also remove network setup.
 
-I'm wondering if we could use USERCFLAGS (and USERLDFLAGS) instead.
-These seem to be the preferred way for all selftests, per
-tools/testing/selftests/lib.mk:
+Fixes: 4dba3e7852b7 ("selftests/bpf: introduce XDP compliance test tool")
+Closes: https://bugs.debian.org/1136522
+Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
+---
+Tests:
+- bash -n tools/testing/selftests/bpf/test_xdp_features.sh
+- make -C tools/testing/selftests/bpf xdp_features
+- sudo tools/testing/selftests/bpf/test_xdp_features.sh
+- verified cleanup terminates a blocked DUT without affecting an unrelated process
+---
+Changes in v2:
+- Clarify that avoiding name-wide process matching, rather than dropping a dependency, is the motivation.
+- Track and reap one active DUT at a time instead of retaining historical PIDs.
+- Address PID reuse by signaling only the current Bash job during cleanup.
+- Use SIGKILL on failure cleanup so blocked DUT I/O cannot hang wait indefinitely.
+- Link to v1: https://patch.msgid.link/20260805-xdp-dut-process-lifecycle-gmail-v1-1-45984df8d295@gmail.com
+---
+ tools/testing/selftests/bpf/test_xdp_features.sh | 82 ++++++++++++++++++------
+ 1 file changed, 62 insertions(+), 20 deletions(-)
 
-    # Enables to extend CFLAGS and LDFLAGS from command line, e.g.
-    # make USERCFLAGS=-Werror USERLDFLAGS=-static
-    CFLAGS += $(USERCFLAGS)
-    LDFLAGS += $(USERLDFLAGS)
+diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
+index 0aa71c4455c0..35ce0d4e2418 100755
+--- a/tools/testing/selftests/bpf/test_xdp_features.sh
++++ b/tools/testing/selftests/bpf/test_xdp_features.sh
+@@ -8,6 +8,7 @@ readonly V0_IP6=2001:db8::11
+ readonly V1_IP6=2001:db8::1
+ 
+ ret=1
++dut_pid=""
+ 
+ setup() {
+ 	{
+@@ -30,77 +31,118 @@ setup() {
+ 	} > /dev/null 2>&1
+ }
+ 
++terminate_dut_server() {
++	[ -z "$dut_pid" ] && return
++
++	# Use the shell job instead of a PID which may have been reused.
++	if [ "$(jobs -pr %% 2> /dev/null)" = "$dut_pid" ]; then
++		kill -KILL %% 2> /dev/null || true
++	fi
++
++	wait "$dut_pid" 2> /dev/null || true
++	dut_pid=""
++}
++
+ cleanup() {
+-	ip link del v1 2> /dev/null
+-	ip netns del ${NS} 2> /dev/null
+-	[ "$(pidof xdp_features)" = "" ] || kill $(pidof xdp_features) 2> /dev/null
++	terminate_dut_server
++	ip link del v1 2> /dev/null || true
++	ip netns del "${NS}" 2> /dev/null || true
+ }
+ 
+ wait_for_dut_server() {
+-	while sleep 1; do
+-		ss -tlp | grep -q xdp_features
+-		[ $? -eq 0 ] && break
++	local i
++
++	for ((i = 0; i < 10; i++)); do
++		if [ "$(jobs -pr %% 2> /dev/null)" != "$dut_pid" ]; then
++			echo "xdp_features server $dut_pid exited before accepting connections" >&2
++			return 1
++		fi
++
++		if ss -tlp 2> /dev/null | grep -q "pid=$dut_pid,"; then
++			return 0
++		fi
++
++		sleep 1
+ 	done
++
++	echo "Timed out waiting for xdp_features server $dut_pid" >&2
++	return 1
++}
++
++start_dut_server() {
++	./xdp_features "$@" &
++	dut_pid=$!
++	wait_for_dut_server
++}
++
++reap_dut_server() {
++	local status=0
++
++	wait "$dut_pid" || status=$?
++	dut_pid=""
++	return "$status"
+ }
+ 
+ test_xdp_features() {
+ 	setup
+ 
+ 	## XDP_PASS
+-	./xdp_features -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1 &
+-	wait_for_dut_server
++	start_dut_server -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1
+ 	ip netns exec ${NS} ./xdp_features -t -f XDP_PASS \
+ 					   -D $V1_IP6 -C $V1_IP6 \
+ 					   -T $V0_IP6 v0
+ 	[ $? -ne 0 ] && exit
++	reap_dut_server
+ 
+ 	## XDP_DROP
+-	./xdp_features -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
+-	wait_for_dut_server
++	start_dut_server -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
+ 	ip netns exec ${NS} ./xdp_features -t -f XDP_DROP \
+ 					   -D ::ffff:$V1_IP4 \
+ 					   -C ::ffff:$V1_IP4 \
+ 					   -T ::ffff:$V0_IP4 v0
+ 	[ $? -ne 0 ] && exit
++	reap_dut_server
+ 
+ 	## XDP_ABORTED
+-	./xdp_features -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1 &
+-	wait_for_dut_server
++	start_dut_server -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1
+ 	ip netns exec ${NS} ./xdp_features -t -f XDP_ABORTED \
+ 					   -D $V1_IP6 -C $V1_IP6 \
+ 					   -T $V0_IP6 v0
+ 	[ $? -ne 0 ] && exit
++	reap_dut_server
+ 
+ 	## XDP_TX
+-	./xdp_features -f XDP_TX -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
+-	wait_for_dut_server
++	start_dut_server -f XDP_TX -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
+ 	ip netns exec ${NS} ./xdp_features -t -f XDP_TX \
+ 					   -D ::ffff:$V1_IP4 \
+ 					   -C ::ffff:$V1_IP4 \
+ 					   -T ::ffff:$V0_IP4 v0
+ 	[ $? -ne 0 ] && exit
++	reap_dut_server
+ 
+ 	## XDP_REDIRECT
+-	./xdp_features -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1 &
+-	wait_for_dut_server
++	start_dut_server -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1
+ 	ip netns exec ${NS} ./xdp_features -t -f XDP_REDIRECT \
+ 					   -D $V1_IP6 -C $V1_IP6 \
+ 					   -T $V0_IP6 v0
+ 	[ $? -ne 0 ] && exit
++	reap_dut_server
+ 
+ 	## XDP_NDO_XMIT
+-	./xdp_features -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
+-	wait_for_dut_server
++	start_dut_server -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
+ 	ip netns exec ${NS} ./xdp_features -t -f XDP_NDO_XMIT \
+ 					   -D ::ffff:$V1_IP4 \
+ 					   -C ::ffff:$V1_IP4 \
+ 					   -T ::ffff:$V0_IP4 v0
+ 	ret=$?
+-	cleanup
++	reap_dut_server
+ }
+ 
+ set -e
+-trap cleanup 2 3 6 9
++trap cleanup EXIT
++trap 'exit 129' HUP
++trap 'exit 130' INT
++trap 'exit 143' TERM
+ 
+ test_xdp_features
+ 
 
-At the time I was adding the extra flags to libbpf/bpftool sub-makes, I
-wasn't aware of USER*FLAGS so I used EXTRA_*FLAGS instead. But now, when
-someone wants to build multiple selftest collections with extra flags,
-they need to define both. For instance, building with PIE requires:
+---
+base-commit: 07cb86aa50816b070b99c89bf948762ef035a1f2
+change-id: 20260805-xdp-dut-process-lifecycle-gmail-6d60bf8dcdf1
 
-    make -C tools/testing/selftests TARGETS="bpf ..." \
-        USERCFLAGS=-fpie EXTRA_CFLAGS=-fpie \
-        USERLDFLAGS=-pie EXTRA_LDFLAGS=-pie \
+Best regards,
+--  
+Bochao Cao <bochaolucky@gmail.com>
 
-Switching to USER*FLAGS for bpf selftests would simplify things a bit.
-
-Viktor
-
-> 
->>
->> Same questions would apply to other rules for libbpf and bpftool below.
-> I would check it them as as well in next version.
-> 
->> Thanks!
->> Viktor
->>
->>
-> Thanks for your time and reviewing. Please let me know your concerns. Thanks!
-> 
-> Best,
-> Ziyang
 
