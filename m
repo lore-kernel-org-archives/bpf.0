@@ -1,866 +1,2626 @@
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010063.outbound.protection.outlook.com [52.101.69.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D43357CFC
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 18:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786557835; cv=pass; b=ND11aiZrvzBZ6JX0d6HM7uSwplVHVqnm8zrtNQfja0WIdk+Th7ahnkKtltwZ5lu5JZmGyYL9byBplbzEODmD6K3a3vxhcxStoUZb5LOw012DdQ7mnIEVQkcydV9yzau6E2P14veRDhOcdFaEdGAViDspq5ifIg+prXp43fFmyVg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786557835; c=relaxed/simple;
-	bh=vMBqYA3Oao/qwl9109IYFIB6zYQ2CzD4vUL8EX97KuQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FK5rP3x2yhwy1gj3LctTFHtWzVua2IFjB7xXveSpkmp6f8hkpbn2gRFS6QWRU/zBkm63M9noC1bWYf9C/du8F4p2ieFVnfwFJT9utIzmrktRxDeTtmqxWwUn3S14bAvmYjuTZyl0vx86GZScE0tJSV71LngXmTjPziqKRytoGu4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KTDpNRWh; arc=pass smtp.client-ip=74.125.224.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68A8314B95;
+	Wed, 12 Aug 2026 18:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.63
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786557857; cv=fail; b=sfle6CiR6RamNjoJnVY+mag+P0CWaSZuvHp6TloXz5wLhPA4sXqK6ROwYdI36uZHhh+8QeiT0gkom/Q9Sn1aEbFCVY1dEeTHVHFETiKUitwEZtkwfgy2umelKGsHs+ACwE+SyLvhc906kH7ZgiPtwIvov0i/FFRXWWeK9PHU1vQ=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786557857; c=relaxed/simple;
+	bh=O/xm7Dj0KyHCNCyYtqmptowmwe6iGdDK/dv6ZMIfBAw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=OKYtIGZlLS3dC2uXqPDI1rINF5MaXODiKxqmL0ryHQqNw7rDUxWMR/7Q/uth95BIU1fSX5QL12R94bO+Cbv3iBz65qcj7a5x1a/qOMAmRJBz4ePmLmDBLOkBIo8OVTgbJU8uvP/Vg08/YpEr6OCMHdkOPi5vTMuYmzbkjackqxA=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BPMOe1lF; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BPMOe1lF; arc=fail smtp.client-ip=52.101.69.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KTDpNRWh"
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-66771ded50aso1895565d50.1
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 11:03:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786557831; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Iq8ni0e7RFJN7JyWNgHPBERVAy6XxsoZ/hOAYja400nHuCXZZQPEiQeAcc1De4w+Uf
-         7oxsqzne9z0O8DeeftFhzm9w828OfiQy/aYGDJmSe3/oIpiyrSDzY6AoSkHiIwpM4p+y
-         DjLqDM9+tIhvh0+CQoTfbukzxlRGipGNb3ecXaWJn7rRJJvYG7mpQrxY15XMozNPUTcA
-         Rv38Feh1LY4VhTid4qpBRk7paisTi+PyfxxjHIyqglDpvO5gckvpJSzqQ8gmXZ60WIyn
-         Orwe/Q8kIXpWxynnSjBCYj1ZUKtZHOSN4UF/OqvcKZMM1N38shHgTEZbJ+mw8GuEvrsr
-         dYdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=P7XVgnowewWWodMJST6arhy1oa6jdr7HK7v90K5tB4E=;
-        fh=KFuCT+lsuCBthncmPgCKNp8gBFIheQk8cxGC6Wnibas=;
-        b=I92mfiEdzOmTkn76d+wN/Zt1Pp5v1bTTjzfNlHjtxipqG/a3tnVCHcnWF5/9rtiowK
-         r1EaIcaWVGWpUiF8fK5rSrg5TsgiwmJZ2885QZ4QGDW6mBPBwv0DL+ieMvz+fQVfL1p7
-         FYato5EgOhS8wA4m4MBYckyIw/Ur3rV9H+R+FRBdvNhudFbtxZVsuVItn+5fSNB85N0j
-         R9A+8DWPgikZ8dGzp9vTkuAdmQvdtZAONjrTalk/BeuUi91T4qDBmUF6juTa0PmDpFwa
-         1vzOxlczuNJbjpeAnrgeaYuDwwDf5syzyrXPC1gMqpCC03Q9nOBJPWzX5UwhGK9G975R
-         Hbhg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786557831; x=1787162631; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=P7XVgnowewWWodMJST6arhy1oa6jdr7HK7v90K5tB4E=;
-        b=KTDpNRWhvkvX1RTM1O0Gyo6bVKrKobf0NMyNwTdc9J6qdg1yreGY/ntlB7jQRO4rSl
-         2Fyk9zEjQviOjCZBU9aTSPntX6YgIOSYV70JTgO+n3eXRHbIW+HYGjyCaf6C0zK4e96u
-         BT5RKseEgFu/IuYw5nrgpTSC2t3f3ssPoEqBc6JAVjbf/SetIx5O9DRuRMOGV7laWCGT
-         PbVVNej7gvnyyJQn7b8WU8T+QoRn70LXxZkTBtSb3b8ig1UB3HK3fD6AQw2UmkG1DpWP
-         0kNbflv0IZYSFKnKtpOBPikTpV2s5j7bGrBUGWomW3/fIrH1ER/6vweIE5Db10oJEGvh
-         UCGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786557831; x=1787162631;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=P7XVgnowewWWodMJST6arhy1oa6jdr7HK7v90K5tB4E=;
-        b=bNS3Y/wR9BRAyA455nqj5ZD68050zqYJFS7aEz33TGd1pZLv65r1hINtXByHeSZNGC
-         7qO8ldq4JsWFxkoWga9jXVnwbozX0luXAdtUoiSsC6q09fBl9gtuxVrv6Awm7PByw8WU
-         rK7OKO1+WxCK+Az3Kmgdxz+BPHhAlhsy2+vfo0/Kpy+yezVpYfBaT+3TRwNPu5cZKasz
-         3n4sPSHjEb/E9zS0vZA54v3Hwhr2ykSDnaicFzBybZV38tN4LFk/w/Mrxa2CfIKTD5Yn
-         6DjJnqzBMkN4O99LQwzPmWXIazKqIiHF/Lg37LvlvNCKcdb5EIMK6oLsOri+hYEhW54p
-         UiDg==
-X-Gm-Message-State: AOJu0YxdyNBW7bBVbWoiP8+du9mquovf+RtjyZnLlGi/QVvsUdbbOfK5
-	vmr1m/7KKxbHu4iD+8giyd7K8GeYymbv2mghTZRER8Moz65klPvQ94C8QsNXxawcK3M9BA4YD88
-	TMp+1+FCzew0QR/lW2eFup9STzyQwy04=
-X-Gm-Gg: AR+sD115UpekaAs1yS1Mi86Hl1FW23k/ZusEfLMLe5G3cIlIKiJYq3bd9Fs+wvV47kX
-	EaB4ULs7ViLsFjdNJjC2FRGNFUwy9JO2JC5lop2UJ2vfKmqyGuyd5Au7QzSLV34Sj0/uG7oHlJY
-	39Y8yKM0BWwOUI2eURV7iMiryxOUGq5SULIdODsauB3rtisyVo3N40XG6dAmDBv4H7ldl8V4KJV
-	sfS29iBv4SrGirt6L1GLeXpRJk5qp+MNH44mlkBHwBuV0lefPCHh96XMX4l2lwOsdQ16FXRjWqR
-	1wa/tGOXt/nfjMeXH7qA1caMz4T5JlPND1MzhgzWIyaF
-X-Received: by 2002:a53:acd9:0:20b0:668:2553:a194 with SMTP id
- 956f58d0204a3-66c517f0122mr73148d50.45.1786557830590; Wed, 12 Aug 2026
- 11:03:50 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BPMOe1lF";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BPMOe1lF"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=joA70AsCRkKCql/AnU1CBSwAjsbMc/oh0lx8FhZpvkGvCoQjLTNUGYQ9cZcU4SptZQWTf3hMaUeJNaN9u9r+LPW9ine3FnJwIzjWD+D8tMNWoobrX1Knqq+g01/u1RjgTMF7Yyp37Nhnv/uvDXVmjLXLb7AR55LRUmu79LOMnp1euoB8XH9PNfEk/+ChAnnDQK/O+XfCjtMFujf2GNvTnhy3kcqGW0AYxSNKZ54ZeDxKK64rqF9M17TYONBuuVZkRE6M0oZ3VE0y0cxfVxP4tLJ3fwYZc7wZQWUXa94WIaumicohEPKCEnr86SH+HbJlXklskKrkAtPpR7dbAgi0Aw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pv7qGV++GXHWyXHG3fRsyy1Hv7/uvBsba1r+FvdOrO0=;
+ b=tceXR6UTJ4GmZs+7Cpff9BTnC9qD3oczadQmVevylmqvLAWm4BJSrE32bzRo8hKxL1pchESNYFVsuJuHM+pv1d489ab3meI6FsocoVTsf9qEU48GcaA4by0l02ML6WcV2LeL4RxXKc15hf/4QR3cKIMxcUctAhbMyiu+QxUNcxWeq6Tjbh2wI3Mr3WXmXaoJ0M8QrRHUsrMcPggu/oAy6Z9kFyc1Ku+asfc6t7N8/RVi/ZbZpIRCiCLbQYwM18sN9Nlm8fsH8+LdiMEFsPSZ+EBpYmGdvbSBY4D8Kme9hhGN+6cURtM0wx0KbafH8U3o0kQa5HiYnXm/e66bMAk4yw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=zytor.com smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pv7qGV++GXHWyXHG3fRsyy1Hv7/uvBsba1r+FvdOrO0=;
+ b=BPMOe1lF6tX//sCkI9Me0loNVjZBmi3mxCXyExeF5eZwP3veUd/nUiYCk0SvlyGe7CzMaUuRPV0ET3amjMi86Vo3SRp6HBA4ZoVE6jvOQu7O+9R+GbEZEQmN+9MJyEZbeFvWL/dSUtASxl8GnxoJN9DXBbN4vUhnh9wkSjjEfjQ=
+Received: from AM9P195CA0027.EURP195.PROD.OUTLOOK.COM (2603:10a6:20b:21f::32)
+ by DU5PR08MB10399.eurprd08.prod.outlook.com (2603:10a6:10:520::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.11; Wed, 12 Aug
+ 2026 18:04:00 +0000
+Received: from AM4PEPF00027A64.eurprd04.prod.outlook.com
+ (2603:10a6:20b:21f:cafe::57) by AM9P195CA0027.outlook.office365.com
+ (2603:10a6:20b:21f::32) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.13 via Frontend Transport; Wed,
+ 12 Aug 2026 18:04:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AM4PEPF00027A64.mail.protection.outlook.com (10.167.16.75) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.6
+ via Frontend Transport; Wed, 12 Aug 2026 18:03:59 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WVfPDgaKhGQlaY8yO2lK2w9+Bee8+z46k8rgJM0RWRY36S86PxD5OrvNZiyXnUvMv2o3IAeAjuPQw1tNUgfXCf7PGyBEd2qm/oQPYRpZYTNNEcXxlSl1mWALqD2bs1SO4+A4JURRTzJV8rth2Osl9mTkuCAAfFXM/BZr5WGcKakyEf1l77anDikG10MOnk4yOYrsJbTswNk+icvnZ+FxwJOtroS9OjIpLzZDiropAEx7Uc1+aSeot1W6aTyxMdOi2dUhe4qe2uAYetloxVqA3o6xFMUgZMJKKIMPCHo07W0ez0q+MCWl5qmnU15RhKL2DjVrAI+dP0NyVdsHGQtQ4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pv7qGV++GXHWyXHG3fRsyy1Hv7/uvBsba1r+FvdOrO0=;
+ b=m68/4fLC6Vp81UfaC/n50cYDFv1UYO8nCPZIF4yrbmeXqXSUC0KXqv4OOoY4rNjmD1WaigDmjDYkm/W8z1eOojwPWhqmGD588bBo/LSMfw7lIoysMPkHJ4MGD8FymgJc/c27+PEs3UKWF4wMaBjKOmLUHS+IJ+fhlmrwxOirUfUjz0FQcbLlm7srADgaPvVsiKjNNnsXaV0Q/TaPhC6l7BZpq2h/BZ13s6AoP+mHgqXaAq2Fbc6g/8sJBWz/I0zgqjGEUMXRpsjtN3584/3nJReo2Tava85tR5HTj6Fmq2HNPK8NAw2fKH0mGaO/KAiWk4EBzyzRuzLsBxtnq2CUgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pv7qGV++GXHWyXHG3fRsyy1Hv7/uvBsba1r+FvdOrO0=;
+ b=BPMOe1lF6tX//sCkI9Me0loNVjZBmi3mxCXyExeF5eZwP3veUd/nUiYCk0SvlyGe7CzMaUuRPV0ET3amjMi86Vo3SRp6HBA4ZoVE6jvOQu7O+9R+GbEZEQmN+9MJyEZbeFvWL/dSUtASxl8GnxoJN9DXBbN4vUhnh9wkSjjEfjQ=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from PAWPR08MB9829.eurprd08.prod.outlook.com (2603:10a6:102:2e6::10)
+ by AS4PR08MB7758.eurprd08.prod.outlook.com (2603:10a6:20b:515::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.11; Wed, 12 Aug
+ 2026 18:03:27 +0000
+Received: from PAWPR08MB9829.eurprd08.prod.outlook.com
+ ([fe80::5cca:dab9:827e:c7bc]) by PAWPR08MB9829.eurprd08.prod.outlook.com
+ ([fe80::5cca:dab9:827e:c7bc%5]) with mapi id 15.21.0315.008; Wed, 12 Aug 2026
+ 18:03:26 +0000
+Message-ID: <c5d5c26c-eaa3-4fd3-891b-808b6efe3c25@arm.com>
+Date: Wed, 12 Aug 2026 13:03:20 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] selftests/x86: add generic prctl shadow stack test
+To: "H. Peter Anvin" <hpa@zytor.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Ingo Molnar <mingo@redhat.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
+ rick.p.edgecombe@intel.com, Shuah Khan <shuah@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, x86@kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20260812171940.1046116-1-bill.roberts@arm.com>
+ <20260812171940.1046116-2-bill.roberts@arm.com>
+Content-Language: en-US
+From: Bill Roberts <bill.roberts@arm.com>
+In-Reply-To: <20260812171940.1046116-2-bill.roberts@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA0PR11CA0066.namprd11.prod.outlook.com
+ (2603:10b6:806:d2::11) To PAWPR08MB9829.eurprd08.prod.outlook.com
+ (2603:10a6:102:2e6::10)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260706171918.317102-1-ameryhung@gmail.com> <20260706171918.317102-10-ameryhung@gmail.com>
- <DJY2SPXTF9HL.10SSKCT9OMMBV@etsalapatis.com>
-In-Reply-To: <DJY2SPXTF9HL.10SSKCT9OMMBV@etsalapatis.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 12 Aug 2026 11:03:38 -0700
-X-Gm-Features: AUfX_mwPheRiXTpmAlfGZw460NaxLoOP7uc_z26cGgqtCmoF8EfkfUj3WI8Vtlw
-Message-ID: <CAMB2axPVwvHZDkfgCmkY9K0fuzYv9Vq7ZZF565Qtx+FPEnGJeQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 09/15] bpf: Add infrastructure to support
- attaching struct_ops to cgroups
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	martin.lau@kernel.org, shakeel.butt@linux.dev, roman.gushchin@linux.dev, 
-	kuniyu@google.com, kerneljasonxing@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-TrafficTypeDiagnostic:
+	PAWPR08MB9829:EE_|AS4PR08MB7758:EE_|AM4PEPF00027A64:EE_|DU5PR08MB10399:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2383e70d-e473-4684-d2d3-08def89c15cc
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|366016|7416014|376014|1800799024|23010399003|11063799006|56012099006|10067099003|6133799003|22082099003|18002099003|3023799007|4143699003|921020;
+X-Microsoft-Antispam-Message-Info-Original:
+ FyerMpnfmTa+Dzql5WJwaVy2krAo9u0M9j5O9NajYU5pazGSy2f9ENrUwTiAgQKPkmqZYO+5IeqRhwYViPfmA4Wikbc5kan4vWlOFUBALlhiKiyEFgIa4ghR1WjUoHqCQkrVYHcC3w1+LRfTvMOLdCNVBGrDivaFUWkw+UiXhwQIYedE1qG/eL7DvHH7+ngSLAUXOTiyywhRJUibumf1TWjhzRJPOdaEVBbb9fzp5MUeQy6COdH5RZwePKWvNionxmfBnCn2s2X60IpZoiGP655RforKfBU9A4ZIrc0iNlEbVHleU8NgSCidthpraerpX+9zHLFeHWRe2/vGH6z6XdLAiv1GazAkfY9HLOrL92wt6DLdDdufw9WJyErNonRqD4XavS+U6Mn55dtwOQbaBzCifrUIsM+cbqKKVuUE+KcpECeqJhJlcHsXusti75XCYyeIsxAc1XJC8MyNWiGwWAUuoaBQZwVr4zGsETiRzb3TFC34I7a6QBOEKOFpVeotjco04zAqlqDMifvEHVTdF+Ap+tCDC1KflpJjBFX1b57eXIAoidaAxOSZF3nhLNA01QSwceF3OQU0PokFQE013pczdrA9BsZz2CcAsUoH3vCxz5aNoG5iP2nEwRi0QZu0qYgJ339Uz9YInn6pAWT8X2MFq47mFGmoGq45lZYRwONI5g8jnQ9SmwLGMVM4Bts9SkI42tjdHld6hYO/D3Gn7Q==
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAWPR08MB9829.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(23010399003)(11063799006)(56012099006)(10067099003)(6133799003)(22082099003)(18002099003)(3023799007)(4143699003)(921020);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ bWesGscY0jsUbX0IJCAip9pxvEDD7GMNn2xwJepZ3L55egtCe7AX2KMn8Bq/PzJtgBmiCWvmLt3/82dDvhbR+munk5YLBUj9RF4NCPQyjD81YqDYLGN7sPmd1hspZxt25AkMVVDmwyD88fBMZGHGAo9INUoF8nhg1SaqBkofgASwoPcGzyGgZX3MKAjHpUxF9o7+OHliWC4v28O1J2ThMl7i8t5/P0RVZQBAslHy3D1Od1e8iRNVXjUunVa9jeeu/f7IMXrOxfvi+7iCgb+hhmcSLzj2GsygjkC/m3J6aBojxGhHw6Bi0FPPZZ3lh4OsD/MdDVIDHaIizCh5BMeM2Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR08MB7758
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AM4PEPF00027A64.eurprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	78512980-66ad-409d-f647-08def89c01ff
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|23010399003|36860700016|35042699022|82310400026|14060799003|921020|6133799003|3023799007|10067099003|56012099006|11063799006|4143699003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	Kci2ElpRTJp9wC25iTDwYFOk2P6p4r30ifeRFxkUSfNw5a4DHXOpR0e9Iegl7z9FAw3SV7Y9aHhRCxua4B5f8wBYAY1Ocf4I4uhwd+/O2cbFGKE7ItX338Awm0f/nxAtU74eDKzUoUq4gnxPqUtQCB8vVvPCUntq9m8uKU8ZiXE7yW3XijBqU0sj5fTiawS/OXoFVfHA72gqsy43q6D6b8omukrn1pzQ/b9jiYvWqsGmPdHl9qqt3co2G0Dn4R3hppvoLCGf3GlJvJwrFOs8eu1Meii0ACrrcKoTHrM2vWtKXu9K2LFsHNuZKcO696Dlzn7ZhW1h8YHEU34xIVtM/pAbpKzsG5iGtc1DlBSGG/toq4o/jF/uRSNpzjf9XAcuBSULtPZqHm4kBja3rqDARDnLzTVZY/UV6CpD1DWoxi7ROafezTPALWhlNconOptZ8UiaqmETp9WKABBgQXIbcEBoNplomOwr105yUs0CwNy3d9a/MHI3XC9yfFN74fIOjMndUCvoVpGVPBJrj9VF/R1CVGxKHCYdO+UrjoujO2L056gdzyWfqh/v7gqLBRCTyUMfpU6LADHiM+aI2AHsnnIN93g8wdaFFvOF6lzUA4+mgu5ps5uNb28W5aUmxcYngjFS/3Xj11gx0lkjwxfLboetVGnACH7FdkFQEn8xPe2F0/jp5ftYOso0n628SMECoC3iA+cKzGYyeTg941k4EWbmQmHpCtEmHVKiprzS+FO4/N7nP9Yah1NCQnBGaHTo
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(23010399003)(36860700016)(35042699022)(82310400026)(14060799003)(921020)(6133799003)(3023799007)(10067099003)(56012099006)(11063799006)(4143699003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	xt8R4xyrXXUiI/ljd1rQmV5p/snWJ3PQu0IK292octjic4mffA1Xqje6P1GcObxMdDP8qDzY9bAwuhqD/JVLYuMAw6L0XPygYj3JesIbw73dBrNevOCX70JhrY5BpYtSAgcEJRThJ/mTSj3SrmqVjAvZHcFH229IvoYlOdReQVbov7KtaTi2iV90RuWdEy3cHt7AgxAtJmlbovGfzZSQkLmWXJh9l8At1gsYh6J6/A4/uGb61fdWWhh+u4mWMM5hTDSS7KmRbi2lvocBzU3AFwsE9nY/E3notkTgZjJdQnZ+3vMPU/UKtWGQoSRzRjtKMzbustWwFK+Ns9lJnFvVCGAEZCfF9wxpiHmFPsT5+eN9cYZ7qRJIz/sJzDn8k4H6vjJf5z0LM++xAUrYwuYJ1rgkUORAP0TwhfEoEklhbp1jks6jiIPFgRGvc+wRFK6X
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2026 18:03:59.6561
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2383e70d-e473-4684-d2d3-08def89c15cc
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM4PEPF00027A64.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU5PR08MB10399
 
-On Mon, Jul 13, 2026 at 11:21=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.=
-com> wrote:
+On 8/12/26 12:19 PM, Bill Roberts wrote:
+> Run the same test suite for arch_prctl, against prctl, to ensure
+> consisteny and correctness between the interfaces.
 >
-> On Mon Jul 6, 2026 at 1:19 PM EDT, Amery Hung wrote:
-> > From: Martin KaFai Lau <martin.lau@kernel.org>
-> >
-> > This patch adds necessary infrastructure to attach a struct_ops
-> > map to a cgroup. The initial need was to support migrating
-> > the legacy BPF_PROG_TYPE_SOCK_OPS to a struct_ops.
-> > Recently, there are other struct_ops use cases that
-> > need to attach struct_ops to a cgroup. For example,
-> > the recent BPF OOM and memcg discussion in LSFMMBPF 2026.
-> >
-> > The motivation is to create a consistent expectation
-> > for attaching struct_ops to cgroup instead of each subsystem
-> > creating its own infrastructure. This logic includes
-> > hierarchy expectation, ordering expectation,
-> > attachment API, and rcu gp.
-> >
-> > There is already an existing implementation for attaching
-> > multiple bpf progs to a cgroup. There are also tools
-> > built around it for querying. Attaching a struct_ops map
-> > (which is a group of bpf programs) could also adhere to
-> > a similar API and potentially reuse most of the existing
-> > implementation.
-> >
-> > A couple of ideas have been tried. One of them
-> > is to use mprog.c. In terms of the amount of changes,
-> > I eventually came to the same conclusion as in
-> > commit 120933984460 ("bpf: Implement mprog API on top of existing cgrou=
-p progs").
-> > I then shifted the focus to reusing the current
-> > {update,compute,activate,purge}_effective_progs() which has
-> > the main logic that implements the mprog API.
-> >
-> > Since then, I tried to add a 'struct cgroup *cgroup' member
-> > to the existing 'struct bpf_struct_ops_link' and link_create
-> > will create a 'struct bpf_struct_ops_link' object to be stored
-> > in the pl->link. This turns out to have more changes on
-> > both cgroup.c and bpf_struct_ops.c than I like.
-> >
-> > This patch directly reuses the 'struct bpf_cgroup_link' which
-> > cgroup.c already understands. Add 'struct bpf_map *map'
-> > to 'struct bpf_cgroup_link'. In the future, as more subsystems
-> > are extended by struct_ops, we may consider to make
-> > 'struct bpf_map *map' as a primary citizen of a link
-> > like 'struct bpf_prog *prog' and directly add
-> > 'struct bpf_map *map' to the generic 'struct bpf_link'.
-> >
-> > The pl->link could be the traditional 'prog' link or the
-> > new 'map' link. The places that need to handle them differently
-> > have already been refactored into the new prog_list_*() added in
-> > the earlier patch. In those new prog_list_*(), this patch will
-> > check "pl->link && pl->link->map", learn that it is a 'map' link
-> > and handle it correctly.
-> >
-> > The bpf_prog_array also needs to handle that its item can store
-> > the traditional 'prog' or it can store a struct_ops map.
-> > The places that need to handle them differently have also
-> > been refactored into the new bpf_cgroup_array_*() added
-> > in the earlier patch. The two differences are:
-> >   - different sentinel (dummy_bpf_prog in prog vs cfi_stub in struct_op=
-s)
-> >   - the array for struct_ops may need to go through different
-> >     rcu gp.
-> > The bpf_cgroup_array_*() functions use the cgroup_bpf_attach_type (ie a=
-type)
-> > to distinguish the array is storing prog or storing struct_ops map.
-> >
-> > This patch also implements a separate struct bpf_link_ops
-> > "cgroup_struct_ops_link_ops" to have a separate link_ops implementation
-> > that only handles the cgroup's struct_ops link.
-> >
-> > Questions:
-> > - Although this patch did not change it, it is not obvious to me how
-> >   the replace_effective_progs() and purge_effective_progs() handle
-> >   cases when there are existing BPF_F_PREORDER progs attached
-> >   in the hlist.
-> >
-> > Misc notes:
-> > - CGROUP_TCP_SOCK_OPS is added to the 'enum cgroup_bpf_attach_type'.
-> >   The actual implementation of the tcp_bpf_ops (a struct_ops)
-> >   will be added in the next patch.
-> >
-> > - free_after_mult_rcu_gp is added to 'struct bpf_struct_ops' such that
-> >   the bpf_prog_array can have a mix of sleepable and
-> >   non-sleepable prog in a struct_ops. This can tell
-> >   how the bpf_prog_array should be freed.
-> >
-> > - For a struct_ops that supports cgroup attachment, it does not need to
-> >   implement its own reg/unreg function. reg/unreg to a cgroup is
-> >   done by the common infrastructure added in this patch.
-> >
-> > - The cgroup's struct_ops link only supports BPF_F_ALLOW_MULTI.
-> >   This is enforced internally in cgroup_bpf_struct_ops_attach.
-> >   This should be consistent with the current prog's link
-> >   behavior in cgroup_bpf_link_attach.
-> >
-> >   In the future, we may allow each subsystem to choose differently.
-> >
-> > - A cgroup_atype member is added to 'struct bpf_struct_ops'.
-> >   When a subsystem struct_ops needs to support cgroup attachment,
-> >   it needs to add a value to 'enum cgroup_bpf_attach_type'
-> >   and then assign it to the newly added cgroup_atype member
-> >   in the bpf_struct_ops.
-> >
-> > - During LINK_CREATE in syscall, the patch uses the same
-> >   BPF_STRUCT_OPS (in attr->link_create.attach_type).
-> >   The bpf_struct_ops_link_create learns the map and
-> >   from the map it learns the st_ops. If the st_ops->cgroup_atype
-> >   is not 0, it will create a cgroup's link.
-> >
-> > - When a subsystem registers a struct_ops that supports cgroup
-> >   attachment, the struct_ops infrastructure will also ask the
-> >   cgroup infrastructure to remember a few things. This is done
-> >   by calling cgroup_bpf_struct_ops_register().
-> >
-> > Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> Signed-off-by: Bill Roberts <bill.roberts@arm.com>
+> ---
+>   tools/testing/selftests/x86/Makefile          |    5 +-
+>   tools/testing/selftests/x86/shadow_stack.c    | 1205 +++++++++++++++++
+>   tools/testing/selftests/x86/shadow_stack.h    |   14 +
+>   .../testing/selftests/x86/test_shadow_stack.c | 1167 +---------------
+>   .../selftests/x86/test_shadow_stack_prctl.c   |   12 +
+>   5 files changed, 1242 insertions(+), 1161 deletions(-)
+>   create mode 100644 tools/testing/selftests/x86/shadow_stack.c
+>   create mode 100644 tools/testing/selftests/x86/shadow_stack.h
+>   create mode 100644 tools/testing/selftests/x86/test_shadow_stack_prctl.c
 >
-> Hi Amery,
+> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+> index 434065215d12..8748e2f4a915 100644
+> --- a/tools/testing/selftests/x86/Makefile
+> +++ b/tools/testing/selftests/x86/Makefile
+> @@ -19,7 +19,8 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+>   			test_FCMOV test_FCOMI test_FISTTP \
+>   			vdso_restorer
+>   TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
+> -			corrupt_xstate_header amx lam test_shadow_stack avx apx
+> +			corrupt_xstate_header amx lam test_shadow_stack avx apx \
+> +			test_shadow_stack_prctl
+>   # Some selftests require 32bit support enabled also on 64bit systems
+>   TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
+>   
+> @@ -138,3 +139,5 @@ $(OUTPUT)/avx_64: CFLAGS += -mno-avx -mno-avx512f
+>   $(OUTPUT)/amx_64: EXTRA_FILES += xstate.c
+>   $(OUTPUT)/avx_64: EXTRA_FILES += xstate.c
+>   $(OUTPUT)/apx_64: EXTRA_FILES += xstate.c
+> +$(OUTPUT)/test_shadow_stack_64: EXTRA_FILES += shadow_stack.c
+> +$(OUTPUT)/test_shadow_stack_prctl_64: EXTRA_FILES += shadow_stack.c
+> diff --git a/tools/testing/selftests/x86/shadow_stack.c b/tools/testing/selftests/x86/shadow_stack.c
+> new file mode 100644
+> index 000000000000..a375c4ff7a6a
+> --- /dev/null
+> +++ b/tools/testing/selftests/x86/shadow_stack.c
+> @@ -0,0 +1,1205 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#define _GNU_SOURCE
+> +
+> +#include <sys/syscall.h>
+> +#include <asm/mman.h>
+> +#include <sys/mman.h>
+> +#include <sys/stat.h>
+> +#include <sys/wait.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <fcntl.h>
+> +#include <unistd.h>
+> +#include <string.h>
+> +#include <errno.h>
+> +#include <stdbool.h>
+> +#include <x86intrin.h>
+> +#include <asm/prctl.h>
+> +#include <sys/prctl.h>
+> +#include <stdint.h>
+> +#include <signal.h>
+> +#include <pthread.h>
+> +#include <sys/ioctl.h>
+> +#include <linux/userfaultfd.h>
+> +#include <setjmp.h>
+> +#include <sys/ptrace.h>
+> +#include <sys/signal.h>
+> +#include <linux/elf.h>
+> +#include <linux/perf_event.h>
+> +
+> +#include "shadow_stack.h"
+> +
+> +/*
+> + * Define the ABI defines if needed, so people can run the tests
+> + * without building the headers.
+> + */
+> +#ifndef __NR_map_shadow_stack
+> +#define __NR_map_shadow_stack	453
+> +
+> +#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)
+> +
+> +#define ARCH_SHSTK_ENABLE	0x5001
+> +#define ARCH_SHSTK_DISABLE	0x5002
+> +#define ARCH_SHSTK_LOCK		0x5003
+> +#define ARCH_SHSTK_UNLOCK	0x5004
+> +#define ARCH_SHSTK_STATUS	0x5005
+> +
+> +#define ARCH_SHSTK_SHSTK	(1ULL <<  0)
+> +#define ARCH_SHSTK_WRSS		(1ULL <<  1)
+> +
+> +#define NT_X86_SHSTK	0x204
+> +#endif
+> +
+> +#define SS_SIZE 0x200000
+> +#define PAGE_SIZE 0x1000
+> +
+> +void write_shstk(unsigned long *addr, unsigned long val)
+> +{
+> +	asm volatile("wrssq %[val], (%[addr])\n"
+> +		     : "=m" (addr)
+> +		     : [addr] "r" (addr), [val] "r" (val));
+> +}
+> +
+> +static inline unsigned long __attribute__((always_inline)) get_ssp(void)
+> +{
+> +	unsigned long ret = 0;
+> +
+> +	asm volatile("xor %0, %0; rdsspq %0" : "=r" (ret));
+> +	return ret;
+> +}
+> +
+> +/*
+> + * For use in inline enablement of shadow stack.
+> + *
+> + * The program can't return from the point where shadow stack gets enabled
+> + * because there will be no address on the shadow stack. So it can't use
+> + * syscall() for enablement, since it is a function.
+> + *
+> + * Based on code from nolibc.h. Keep a copy here because this can't pull in all
+> + * of nolibc.h.
+> + */
+> +#define ARCH_PRCTL(arg1, arg2)					\
+> +({								\
+> +	long _ret;						\
+> +	register long _num  asm("eax") = __NR_arch_prctl;	\
+> +	register long _arg1 asm("rdi") = (long)(arg1);		\
+> +	register long _arg2 asm("rsi") = (long)(arg2);		\
+> +								\
+> +	asm volatile (						\
+> +		"syscall\n"					\
+> +		: "=a"(_ret)					\
+> +		: "r"(_arg1), "r"(_arg2),			\
+> +		  "0"(_num)					\
+> +		: "rcx", "r11", "memory", "cc"			\
+> +	);							\
+> +	_ret;							\
+> +})
+> +
+> +#define PRCTL(option, arg2, arg3, arg4, arg5)             \
+> +({                                                        \
+> +	long _ret;                                        \
+> +	register long _num  asm("rax") = __NR_prctl;      \
+> +	register long _arg1 asm("rdi") = (long)(option);  \
+> +	register long _arg2 asm("rsi") = (long)(arg2);    \
+> +	register long _arg3 asm("rdx") = (long)(arg3);    \
+> +	register long _arg4 asm("r10") = (long)(arg4);    \
+> +	register long _arg5 asm("r8")  = (long)(arg5);    \
+> +							  \
+> +	asm volatile (                                    \
+> +		"syscall"                                 \
+> +		: "=a"(_ret)                              \
+> +		: "0"(_num),                              \
+> +		  "r"(_arg1), "r"(_arg2), "r"(_arg3),     \
+> +		  "r"(_arg4), "r"(_arg5)                  \
+> +		: "rcx", "r11", "memory", "cc"            \
+> +	);                                                \
+> +	_ret;                                             \
+> +})
+> +
+> +#define SHADOW_STACK_DISABLE(which_test)                           \
+> +	((which_test) == SHADOW_STACK_TEST_ARCH_PRCTL ?            \
+> +		ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK) : \
+> +		PRCTL(PR_SET_SHADOW_STACK_STATUS, 0, 0, 0, 0))
+> +
+> +#define SHADOW_STACK_ENABLE(which_test)                                             \
+> +	((which_test) == SHADOW_STACK_TEST_ARCH_PRCTL ?                             \
+> +		ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK) :                   \
+> +		PRCTL(PR_SET_SHADOW_STACK_STATUS, PR_SHADOW_STACK_ENABLE, 0, 0, 0))
+> +
+> +#define SHADOW_STACK_ENABLE_WRITE(which_test)                                   \
+> +	((which_test) == SHADOW_STACK_TEST_ARCH_PRCTL ?                          \
+> +		ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS) :                \
+> +		PRCTL(PR_SET_SHADOW_STACK_STATUS,                               \
+> +			PR_SHADOW_STACK_ENABLE|PR_SHADOW_STACK_WRITE, 0, 0, 0))
+> +
+> +void *create_shstk(void *addr)
+> +{
+> +	return (void *)syscall(__NR_map_shadow_stack, addr, SS_SIZE, SHADOW_STACK_SET_TOKEN);
+> +}
+> +
+> +void *create_normal_mem(void *addr)
+> +{
+> +	return mmap(addr, SS_SIZE, PROT_READ | PROT_WRITE,
+> +		    MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
+> +}
+> +
+> +void free_shstk(void *shstk)
+> +{
+> +	munmap(shstk, SS_SIZE);
+> +}
+> +
+> +int reset_shstk(void *shstk)
+> +{
+> +	return madvise(shstk, SS_SIZE, MADV_DONTNEED);
+> +}
+> +
+> +void try_shstk(unsigned long new_ssp)
+> +{
+> +	unsigned long ssp;
+> +
+> +	printf("[INFO]\tnew_ssp = %lx, *new_ssp = %lx\n",
+> +	       new_ssp, *((unsigned long *)new_ssp));
+> +
+> +	ssp = get_ssp();
+> +	printf("[INFO]\tchanging ssp from %lx to %lx\n", ssp, new_ssp);
+> +
+> +	asm volatile("rstorssp (%0)\n":: "r" (new_ssp));
+> +	asm volatile("saveprevssp");
+> +	printf("[INFO]\tssp is now %lx\n", get_ssp());
+> +
+> +	/* Switch back to original shadow stack */
+> +	ssp -= 8;
+> +	asm volatile("rstorssp (%0)\n":: "r" (ssp));
+> +	asm volatile("saveprevssp");
+> +}
+> +
+> +int test_shstk_pivot(void)
+> +{
+> +	void *shstk = create_shstk(0);
+> +
+> +	if (shstk == MAP_FAILED) {
+> +		printf("[FAIL]\tError creating shadow stack: %d\n", errno);
+> +		return 1;
+> +	}
+> +	try_shstk((unsigned long)shstk + SS_SIZE - 8);
+> +	free_shstk(shstk);
+> +
+> +	printf("[OK]\tShadow stack pivot\n");
+> +	return 0;
+> +}
+> +
+> +int test_shstk_faults(void)
+> +{
+> +	unsigned long *shstk = create_shstk(0);
+> +
+> +	/* Read shadow stack, test if it's zero to not get read optimized out */
+> +	if (*shstk != 0)
+> +		goto err;
+> +
+> +	/* Wrss memory that was already read. */
+> +	write_shstk(shstk, 1);
+> +	if (*shstk != 1)
+> +		goto err;
+> +
+> +	/* Page out memory, so we can wrss it again. */
+> +	if (reset_shstk((void *)shstk))
+> +		goto err;
+> +
+> +	write_shstk(shstk, 1);
+> +	if (*shstk != 1)
+> +		goto err;
+> +
+> +	printf("[OK]\tShadow stack faults\n");
+> +	return 0;
+> +
+> +err:
+> +	return 1;
+> +}
+> +
+> +unsigned long saved_ssp;
+> +unsigned long saved_ssp_val;
+> +volatile bool segv_triggered;
+> +
+> +void __attribute__((noinline)) violate_ss(void)
+> +{
+> +	saved_ssp = get_ssp();
+> +	saved_ssp_val = *(unsigned long *)saved_ssp;
+> +
+> +	/* Corrupt shadow stack */
+> +	printf("[INFO]\tCorrupting shadow stack\n");
+> +	write_shstk((void *)saved_ssp, 0);
+> +}
+> +
+> +void segv_handler(int signum, siginfo_t *si, void *uc)
+> +{
+> +	printf("[INFO]\tGenerated shadow stack violation successfully\n");
+> +
+> +	segv_triggered = true;
+> +
+> +	/* Fix shadow stack */
+> +	write_shstk((void *)saved_ssp, saved_ssp_val);
+> +}
+> +
+> +int test_shstk_violation(void)
+> +{
+> +	struct sigaction sa = {};
+> +
+> +	sa.sa_sigaction = segv_handler;
+> +	sa.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGSEGV, &sa, NULL))
+> +		return 1;
+> +
+> +	segv_triggered = false;
+> +
+> +	/* Make sure segv_triggered is set before violate_ss() */
+> +	asm volatile("" : : : "memory");
+> +
+> +	violate_ss();
+> +
+> +	signal(SIGSEGV, SIG_DFL);
+> +
+> +	printf("[OK]\tShadow stack violation test\n");
+> +
+> +	return !segv_triggered;
+> +}
+> +
+> +/* Gup test state */
+> +#define MAGIC_VAL 0x12345678
+> +bool is_shstk_access;
+> +void *shstk_ptr;
+> +int fd;
+> +
+> +void reset_test_shstk(void *addr)
+> +{
+> +	if (shstk_ptr)
+> +		free_shstk(shstk_ptr);
+> +	shstk_ptr = create_shstk(addr);
+> +}
+> +
+> +void test_access_fix_handler(int signum, siginfo_t *si, void *uc)
+> +{
+> +	printf("[INFO]\tViolation from %s\n", is_shstk_access ? "shstk access" : "normal write");
+> +
+> +	segv_triggered = true;
+> +
+> +	/* Fix shadow stack */
+> +	if (is_shstk_access) {
+> +		reset_test_shstk(shstk_ptr);
+> +		return;
+> +	}
+> +
+> +	free_shstk(shstk_ptr);
+> +	create_normal_mem(shstk_ptr);
+> +}
+> +
+> +bool test_shstk_access(void *ptr)
+> +{
+> +	is_shstk_access = true;
+> +	segv_triggered = false;
+> +	write_shstk(ptr, MAGIC_VAL);
+> +
+> +	asm volatile("" : : : "memory");
+> +
+> +	return segv_triggered;
+> +}
+> +
+> +bool test_write_access(void *ptr)
+> +{
+> +	is_shstk_access = false;
+> +	segv_triggered = false;
+> +	*(unsigned long *)ptr = MAGIC_VAL;
+> +
+> +	asm volatile("" : : : "memory");
+> +
+> +	return segv_triggered;
+> +}
+> +
+> +bool gup_write(void *ptr)
+> +{
+> +	unsigned long val;
+> +
+> +	lseek(fd, (unsigned long)ptr, SEEK_SET);
+> +	if (write(fd, &val, sizeof(val)) < 0)
+> +		return 1;
+> +
+> +	return 0;
+> +}
+> +
+> +bool gup_read(void *ptr)
+> +{
+> +	unsigned long val;
+> +
+> +	lseek(fd, (unsigned long)ptr, SEEK_SET);
+> +	if (read(fd, &val, sizeof(val)) < 0)
+> +		return 1;
+> +
+> +	return 0;
+> +}
+> +
+> +int test_gup(void)
+> +{
+> +	struct sigaction sa = {};
+> +	int status;
+> +	pid_t pid;
+> +
+> +	sa.sa_sigaction = test_access_fix_handler;
+> +	sa.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGSEGV, &sa, NULL))
+> +		return 1;
+> +
+> +	segv_triggered = false;
+> +
+> +	fd = open("/proc/self/mem", O_RDWR);
+> +	if (fd == -1)
+> +		return 1;
+> +
+> +	reset_test_shstk(0);
+> +	if (gup_read(shstk_ptr))
+> +		return 1;
+> +	if (test_shstk_access(shstk_ptr))
+> +		return 1;
+> +	printf("[INFO]\tGup read -> shstk access success\n");
+> +
+> +	reset_test_shstk(0);
+> +	if (gup_write(shstk_ptr))
+> +		return 1;
+> +	if (test_shstk_access(shstk_ptr))
+> +		return 1;
+> +	printf("[INFO]\tGup write -> shstk access success\n");
+> +
+> +	reset_test_shstk(0);
+> +	if (gup_read(shstk_ptr))
+> +		return 1;
+> +	if (!test_write_access(shstk_ptr))
+> +		return 1;
+> +	printf("[INFO]\tGup read -> write access success\n");
+> +
+> +	reset_test_shstk(0);
+> +	if (gup_write(shstk_ptr))
+> +		return 1;
+> +	if (!test_write_access(shstk_ptr))
+> +		return 1;
+> +	printf("[INFO]\tGup write -> write access success\n");
+> +
+> +	close(fd);
+> +
+> +	/* COW/gup test */
+> +	reset_test_shstk(0);
+> +	pid = fork();
+> +	if (!pid) {
+> +		fd = open("/proc/self/mem", O_RDWR);
+> +		if (fd == -1)
+> +			exit(1);
+> +
+> +		if (gup_write(shstk_ptr)) {
+> +			close(fd);
+> +			exit(1);
+> +		}
+> +		close(fd);
+> +		exit(0);
+> +	}
+> +	waitpid(pid, &status, 0);
+> +	if (WEXITSTATUS(status)) {
+> +		printf("[FAIL]\tWrite in child failed\n");
+> +		return 1;
+> +	}
+> +	if (*(unsigned long *)shstk_ptr == MAGIC_VAL) {
+> +		printf("[FAIL]\tWrite in child wrote through to shared memory\n");
+> +		return 1;
+> +	}
+> +
+> +	printf("[INFO]\tCow gup write -> write access success\n");
+> +
+> +	free_shstk(shstk_ptr);
+> +
+> +	signal(SIGSEGV, SIG_DFL);
+> +
+> +	printf("[OK]\tShadow gup test\n");
+> +
+> +	return 0;
+> +}
+> +
+> +int test_mprotect(void)
+> +{
+> +	struct sigaction sa = {};
+> +
+> +	sa.sa_sigaction = test_access_fix_handler;
+> +	sa.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGSEGV, &sa, NULL))
+> +		return 1;
+> +
+> +	segv_triggered = false;
+> +
+> +	/* mprotect a shadow stack as read only */
+> +	reset_test_shstk(0);
+> +	if (mprotect(shstk_ptr, SS_SIZE, PROT_READ) < 0) {
+> +		printf("[FAIL]\tmprotect(PROT_READ) failed\n");
+> +		return 1;
+> +	}
+> +
+> +	/* try to wrss it and fail */
+> +	if (!test_shstk_access(shstk_ptr)) {
+> +		printf("[FAIL]\tShadow stack access to read-only memory succeeded\n");
+> +		return 1;
+> +	}
+> +
+> +	/*
+> +	 * The shadow stack was reset above to resolve the fault, make the new one
+> +	 * read-only.
+> +	 */
+> +	if (mprotect(shstk_ptr, SS_SIZE, PROT_READ) < 0) {
+> +		printf("[FAIL]\tmprotect(PROT_READ) failed\n");
+> +		return 1;
+> +	}
+> +
+> +	/* then back to writable */
+> +	if (mprotect(shstk_ptr, SS_SIZE, PROT_WRITE | PROT_READ) < 0) {
+> +		printf("[FAIL]\tmprotect(PROT_WRITE) failed\n");
+> +		return 1;
+> +	}
+> +
+> +	/* then wrss to it and succeed */
+> +	if (test_shstk_access(shstk_ptr)) {
+> +		printf("[FAIL]\tShadow stack access to mprotect() writable memory failed\n");
+> +		return 1;
+> +	}
+> +
+> +	free_shstk(shstk_ptr);
+> +
+> +	signal(SIGSEGV, SIG_DFL);
+> +
+> +	printf("[OK]\tmprotect() test\n");
+> +
+> +	return 0;
+> +}
+> +
+> +char zero[4096];
+> +
+> +static void *uffd_thread(void *arg)
+> +{
+> +	struct uffdio_copy req;
+> +	int uffd = *(int *)arg;
+> +	struct uffd_msg msg;
+> +	int ret;
+> +
+> +	while (1) {
+> +		ret = read(uffd, &msg, sizeof(msg));
+> +		if (ret > 0)
+> +			break;
+> +		else if (errno == EAGAIN)
+> +			continue;
+> +		return (void *)1;
+> +	}
+> +
+> +	req.dst = msg.arg.pagefault.address;
+> +	req.src = (__u64)zero;
+> +	req.len = 4096;
+> +	req.mode = 0;
+> +
+> +	if (ioctl(uffd, UFFDIO_COPY, &req))
+> +		return (void *)1;
+> +
+> +	return (void *)0;
+> +}
+> +
+> +int test_userfaultfd(void)
+> +{
+> +	struct uffdio_register uffdio_register;
+> +	struct uffdio_api uffdio_api;
+> +	struct sigaction sa = {};
+> +	pthread_t thread;
+> +	void *res;
+> +	int uffd;
+> +
+> +	sa.sa_sigaction = test_access_fix_handler;
+> +	sa.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGSEGV, &sa, NULL))
+> +		return 1;
+> +
+> +	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+> +	if (uffd < 0) {
+> +		printf("[SKIP]\tUserfaultfd unavailable.\n");
+> +		return 0;
+> +	}
+> +
+> +	reset_test_shstk(0);
+> +
+> +	uffdio_api.api = UFFD_API;
+> +	uffdio_api.features = 0;
+> +	if (ioctl(uffd, UFFDIO_API, &uffdio_api))
+> +		goto err;
+> +
+> +	uffdio_register.range.start = (__u64)shstk_ptr;
+> +	uffdio_register.range.len = 4096;
+> +	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+> +	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
+> +		goto err;
+> +
+> +	if (pthread_create(&thread, NULL, &uffd_thread, &uffd))
+> +		goto err;
+> +
+> +	reset_shstk(shstk_ptr);
+> +	test_shstk_access(shstk_ptr);
+> +
+> +	if (pthread_join(thread, &res))
+> +		goto err;
+> +
+> +	if (test_shstk_access(shstk_ptr))
+> +		goto err;
+> +
+> +	free_shstk(shstk_ptr);
+> +
+> +	signal(SIGSEGV, SIG_DFL);
+> +
+> +	if (!res)
+> +		printf("[OK]\tUserfaultfd test\n");
+> +	return !!res;
+> +err:
+> +	free_shstk(shstk_ptr);
+> +	close(uffd);
+> +	signal(SIGSEGV, SIG_DFL);
+> +	return 1;
+> +}
+> +
+> +/* Simple linked list for keeping track of mappings in test_guard_gap() */
+> +struct node {
+> +	struct node *next;
+> +	void *mapping;
+> +};
+> +
+> +/*
+> + * This tests whether mmap will place other mappings in a shadow stack's guard
+> + * gap. The steps are:
+> + *   1. Finds an empty place by mapping and unmapping something.
+> + *   2. Map a shadow stack in the middle of the known empty area.
+> + *   3. Map a bunch of PAGE_SIZE mappings. These will use the search down
+> + *      direction, filling any gaps until it encounters the shadow stack's
+> + *      guard gap.
+> + *   4. When a mapping lands below the shadow stack from step 2, then all
+> + *      of the above gaps are filled. The search down algorithm will have
+> + *      looked at the shadow stack gaps.
+> + *   5. See if it landed in the gap.
+> + */
+> +int test_guard_gap_other_gaps(void)
+> +{
+> +	void *free_area, *shstk, *test_map = (void *)0xFFFFFFFFFFFFFFFF;
+> +	struct node *head = NULL, *cur;
+> +
+> +	free_area = mmap(0, SS_SIZE * 3, PROT_READ | PROT_WRITE,
+> +			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	munmap(free_area, SS_SIZE * 3);
+> +
+> +	shstk = create_shstk(free_area + SS_SIZE);
+> +	if (shstk == MAP_FAILED)
+> +		return 1;
+> +
+> +	while (test_map > shstk) {
+> +		test_map = mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE,
+> +				MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +		if (test_map == MAP_FAILED)
+> +			return 1;
+> +		cur = malloc(sizeof(*cur));
+> +		cur->mapping = test_map;
+> +
+> +		cur->next = head;
+> +		head = cur;
+> +	}
+> +
+> +	while (head) {
+> +		cur = head;
+> +		head = cur->next;
+> +		munmap(cur->mapping, PAGE_SIZE);
+> +		free(cur);
+> +	}
+> +
+> +	free_shstk(shstk);
+> +
+> +	if (shstk - test_map - PAGE_SIZE != PAGE_SIZE)
+> +		return 1;
+> +
+> +	printf("[OK]\tGuard gap test, other mapping's gaps\n");
+> +
+> +	return 0;
+> +}
+> +
+> +/* Tests respecting the guard gap of the mapping getting placed */
+> +int test_guard_gap_new_mappings_gaps(void)
+> +{
+> +	void *free_area, *shstk_start, *test_map = (void *)0xFFFFFFFFFFFFFFFF;
+> +	struct node *head = NULL, *cur;
+> +	int ret = 0;
+> +
+> +	free_area = mmap(0, PAGE_SIZE * 4, PROT_READ | PROT_WRITE,
+> +			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	munmap(free_area, PAGE_SIZE * 4);
+> +
+> +	/* Test letting map_shadow_stack find a free space */
+> +	shstk_start = mmap(free_area, PAGE_SIZE, PROT_READ | PROT_WRITE,
+> +			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (shstk_start == MAP_FAILED || shstk_start != free_area)
+> +		return 1;
+> +
+> +	while (test_map > shstk_start) {
+> +		test_map = (void *)syscall(__NR_map_shadow_stack, 0, PAGE_SIZE, 0);
+> +		if (test_map == MAP_FAILED) {
+> +			printf("[INFO]\tmap_shadow_stack MAP_FAILED\n");
+> +			ret = 1;
+> +			break;
+> +		}
+> +
+> +		cur = malloc(sizeof(*cur));
+> +		cur->mapping = test_map;
+> +
+> +		cur->next = head;
+> +		head = cur;
+> +
+> +		if (test_map == free_area + PAGE_SIZE) {
+> +			printf("[INFO]\tNew mapping has other mapping in guard gap!\n");
+> +			ret = 1;
+> +			break;
+> +		}
+> +	}
+> +
+> +	while (head) {
+> +		cur = head;
+> +		head = cur->next;
+> +		munmap(cur->mapping, PAGE_SIZE);
+> +		free(cur);
+> +	}
+> +
+> +	munmap(shstk_start, PAGE_SIZE);
+> +
+> +	if (!ret)
+> +		printf("[OK]\tGuard gap test, placement mapping's gaps\n");
+> +
+> +	return ret;
+> +}
+> +
+> +/*
+> + * Too complicated to pull it out of the 32 bit header, but also get the
+> + * 64 bit one needed above. Just define a copy here.
+> + */
+> +#define __NR_compat_sigaction 67
+> +
+> +/*
+> + * Call 32 bit signal handler to get 32 bit signals ABI. Make sure
+> + * to push the registers that will get clobbered.
+> + */
+> +int sigaction32(int signum, const struct sigaction *restrict act,
+> +		struct sigaction *restrict oldact)
+> +{
+> +	register long syscall_reg asm("eax") = __NR_compat_sigaction;
+> +	register long signum_reg asm("ebx") = signum;
+> +	register long act_reg asm("ecx") = (long)act;
+> +	register long oldact_reg asm("edx") = (long)oldact;
+> +	int ret = 0;
+> +
+> +	asm volatile ("int $0x80;"
+> +		      : "=a"(ret), "=m"(oldact)
+> +		      : "r"(syscall_reg), "r"(signum_reg), "r"(act_reg),
+> +			"r"(oldact_reg)
+> +		      : "r8", "r9", "r10", "r11"
+> +		     );
+> +
+> +	return ret;
+> +}
+> +
+> +sigjmp_buf jmp_buffer;
+> +enum shadow_stack_test _which_test;
+> +void segv_gp_handler(int signum, siginfo_t *si, void *uc)
+> +{
+> +	segv_triggered = true;
+> +
+> +	/*
+> +	 * To work with old glibc, this can't rely on siglongjmp working with
+> +	 * shadow stack enabled, so disable shadow stack before siglongjmp().
+> +	 */
+> +	SHADOW_STACK_DISABLE(_which_test);
+> +	siglongjmp(jmp_buffer, -1);
+> +}
+> +
+> +/*
+> + * Transition to 32 bit mode and check that a #GP triggers a segfault.
+> + */
+> +int test_32bit(void)
+> +{
+> +	struct sigaction sa = {};
+> +	struct sigaction *sa32;
+> +
+> +	/* Create sigaction in 32 bit address range */
+> +	sa32 = mmap(0, 4096, PROT_READ | PROT_WRITE,
+> +		    MAP_32BIT | MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
+> +	sa32->sa_flags = SA_SIGINFO;
+> +
+> +	sa.sa_sigaction = segv_gp_handler;
+> +	sa.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGSEGV, &sa, NULL))
+> +		return 1;
+> +
+> +
+> +	segv_triggered = false;
+> +
+> +	/* Make sure segv_triggered is set before triggering the #GP */
+> +	asm volatile("" : : : "memory");
+> +
+> +	/*
+> +	 * Set handler to somewhere in 32 bit address space
+> +	 */
+> +	sa32->sa_handler = (void *)sa32;
+> +	if (sigaction32(SIGUSR1, sa32, NULL))
+> +		return 1;
+> +
+> +	if (!sigsetjmp(jmp_buffer, 1))
+> +		raise(SIGUSR1);
+> +
+> +	if (segv_triggered)
+> +		printf("[OK]\t32 bit test\n");
+> +
+> +	return !segv_triggered;
+> +}
+> +
+> +static int parse_uint_from_file(const char *file, const char *fmt)
+> +{
+> +	int err, ret;
+> +	FILE *f;
+> +
+> +	f = fopen(file, "re");
+> +	if (!f) {
+> +		err = -errno;
+> +		printf("failed to open '%s': %d\n", file, err);
+> +		return err;
+> +	}
+> +	err = fscanf(f, fmt, &ret);
+> +	if (err != 1) {
+> +		err = err == EOF ? -EIO : -errno;
+> +		printf("failed to parse '%s': %d\n", file, err);
+> +		fclose(f);
+> +		return err;
+> +	}
+> +	fclose(f);
+> +	return ret;
+> +}
+> +
+> +static int determine_uprobe_perf_type(void)
+> +{
+> +	const char *file = "/sys/bus/event_source/devices/uprobe/type";
+> +
+> +	return parse_uint_from_file(file, "%d\n");
+> +}
+> +
+> +static int determine_uprobe_retprobe_bit(void)
+> +{
+> +	const char *file = "/sys/bus/event_source/devices/uprobe/format/retprobe";
+> +
+> +	return parse_uint_from_file(file, "config:%d\n");
+> +}
+> +
+> +static ssize_t get_uprobe_offset(const void *addr)
+> +{
+> +	size_t start, end, base;
+> +	char buf[256];
+> +	bool found = false;
+> +	FILE *f;
+> +
+> +	f = fopen("/proc/self/maps", "r");
+> +	if (!f)
+> +		return -errno;
+> +
+> +	while (fscanf(f, "%zx-%zx %s %zx %*[^\n]\n", &start, &end, buf, &base) == 4) {
+> +		if (buf[2] == 'x' && (uintptr_t)addr >= start && (uintptr_t)addr < end) {
+> +			found = true;
+> +			break;
+> +		}
+> +	}
+> +
+> +	fclose(f);
+> +
+> +	if (!found)
+> +		return -ESRCH;
+> +
+> +	return (uintptr_t)addr - start + base;
+> +}
+> +
+> +static __attribute__((noinline)) void uretprobe_trigger(void)
+> +{
+> +	asm volatile ("");
+> +}
+> +
+> +/*
+> + * This test setups return uprobe, which is sensitive to shadow stack
+> + * (crashes without extra fix). After executing the uretprobe we fail
+> + * the test if we receive SIGSEGV, no crash means we're good.
+> + *
+> + * Helper functions above borrowed from bpf selftests.
+> + */
+> +static int test_uretprobe(enum shadow_stack_test which_test)
+> +{
+> +	const size_t attr_sz = sizeof(struct perf_event_attr);
+> +	const char *file = "/proc/self/exe";
+> +	int bit, fd = 0, type, err = 1;
+> +	struct perf_event_attr attr;
+> +	struct sigaction sa = {};
+> +	ssize_t offset;
+> +
+> +	type = determine_uprobe_perf_type();
+> +	if (type < 0) {
+> +		if (type == -ENOENT)
+> +			printf("[SKIP]\tUretprobe test, uprobes are not available\n");
+> +		return 0;
+> +	}
+> +
+> +	offset = get_uprobe_offset(uretprobe_trigger);
+> +	if (offset < 0)
+> +		return 1;
+> +
+> +	bit = determine_uprobe_retprobe_bit();
+> +	if (bit < 0)
+> +		return 1;
+> +
+> +	sa.sa_sigaction = segv_gp_handler;
+> +	sa.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGSEGV, &sa, NULL))
+> +		return 1;
+> +
+> +	/* Setup return uprobe through perf event interface. */
+> +	memset(&attr, 0, attr_sz);
+> +	attr.size = attr_sz;
+> +	attr.type = type;
+> +	attr.config = 1 << bit;
+> +	attr.config1 = (__u64) (unsigned long) file;
+> +	attr.config2 = offset;
+> +
+> +	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
+> +		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
+> +	if (fd < 0)
+> +		goto out;
+> +
+> +	if (sigsetjmp(jmp_buffer, 1))
+> +		goto out;
+> +
+> +	SHADOW_STACK_ENABLE(which_test);
+> +
+> +	/*
+> +	 * This either segfaults and goes through sigsetjmp above
+> +	 * or succeeds and we're good.
+> +	 */
+> +	uretprobe_trigger();
+> +
+> +	printf("[OK]\tUretprobe test\n");
+> +	err = 0;
+> +
+> +out:
+> +	SHADOW_STACK_DISABLE(which_test);
+> +	signal(SIGSEGV, SIG_DFL);
+> +	if (fd)
+> +		close(fd);
+> +	return err;
+> +}
+> +
+> +/* Keep the CALL first so the function address is exactly the probed CALL. */
+> +extern void uprobe_call_trigger(void);
+> +asm (".pushsection .text\n"
+> +	".global uprobe_call_target\n"
+> +	".type uprobe_call_target, @function\n"
+> +	"uprobe_call_target:\n"
+> +	"	ret\n"
+> +	".size uprobe_call_target, .-uprobe_call_target\n"
+> +
+> +	".global uprobe_call_trigger\n"
+> +	".type uprobe_call_trigger, @function\n"
+> +	"uprobe_call_trigger:\n"
+> +	"	call uprobe_call_target\n"
+> +	"	ret\n"
+> +	".size uprobe_call_trigger, .-uprobe_call_trigger\n"
+> +	".popsection\n"
+> +);
+> +
+> +/* If CALL emulation misses the shadow stack update, this exits via SIGSEGV. */
+> +static int test_uprobe_call(enum shadow_stack_test which_test)
+> +{
+> +	const size_t attr_sz = sizeof(struct perf_event_attr);
+> +	const char *file = "/proc/self/exe";
+> +	int fd = -1, type, err = 1;
+> +	struct perf_event_attr attr;
+> +	struct sigaction sa = {};
+> +	ssize_t offset;
+> +
+> +	type = determine_uprobe_perf_type();
+> +	if (type < 0) {
+> +		if (type == -ENOENT)
+> +			printf("[SKIP]\tUprobe on CALL test, uprobes are not available\n");
+> +		return 0;
+> +	}
+> +
+> +	offset = get_uprobe_offset(uprobe_call_trigger);
+> +	if (offset < 0)
+> +		return 1;
+> +
+> +	sa.sa_sigaction = segv_gp_handler;
+> +	sa.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGSEGV, &sa, NULL))
+> +		return 1;
+> +
+> +	/* Setup entry uprobe through perf event interface. */
+> +	memset(&attr, 0, attr_sz);
+> +	attr.size = attr_sz;
+> +	attr.type = type;
+> +	attr.config = 0;
+> +	attr.config1 = (__u64)(unsigned long)file;
+> +	attr.config2 = offset;
+> +
+> +	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
+> +		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
+> +	if (fd < 0)
+> +		goto out;
+> +
+> +	if (sigsetjmp(jmp_buffer, 1))
+> +		goto out;
+> +
+> +	if (SHADOW_STACK_ENABLE(which_test))
+> +		goto out;
+> +
+> +	/*
+> +	 * This either segfaults and goes through sigsetjmp above
+> +	 * or succeeds and we're good.
+> +	 */
+> +	uprobe_call_trigger();
+> +
+> +	printf("[OK]\tUprobe on CALL test\n");
+> +	err = 0;
+> +
+> +out:
+> +	SHADOW_STACK_DISABLE(which_test);
+> +	signal(SIGSEGV, SIG_DFL);
+> +	if (fd >= 0)
+> +		close(fd);
+> +	return err;
+> +}
+> +
+> +void segv_handler_ptrace(int signum, siginfo_t *si, void *uc)
+> +{
+> +	/* The SSP adjustment caused a segfault. */
+> +	exit(0);
+> +}
+> +
+> +int test_ptrace(void)
+> +{
+> +	unsigned long saved_ssp, ssp = 0;
+> +	struct sigaction sa = {};
+> +	struct iovec iov;
+> +	int status;
+> +	int pid;
+> +
+> +	iov.iov_base = &ssp;
+> +	iov.iov_len = sizeof(ssp);
+> +
+> +	pid = fork();
+> +	if (!pid) {
+> +		ssp = get_ssp();
+> +
+> +		sa.sa_sigaction = segv_handler_ptrace;
+> +		sa.sa_flags = SA_SIGINFO;
+> +		if (sigaction(SIGSEGV, &sa, NULL))
+> +			return 1;
+> +
+> +		ptrace(PTRACE_TRACEME, NULL, NULL, NULL);
+> +		/*
+> +		 * The parent will tweak the SSP and return from this function
+> +		 * will #CP.
+> +		 */
+> +		raise(SIGTRAP);
+> +
+> +		exit(1);
+> +	}
+> +
+> +	while (waitpid(pid, &status, 0) != -1 && WSTOPSIG(status) != SIGTRAP);
+> +
+> +	if (ptrace(PTRACE_GETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> +		printf("[INFO]\tFailed to PTRACE_GETREGS\n");
+> +		goto out_kill;
+> +	}
+> +
+> +	if (!ssp) {
+> +		printf("[INFO]\tPtrace child SSP was 0\n");
+> +		goto out_kill;
+> +	}
+> +
+> +	saved_ssp = ssp;
+> +
+> +	iov.iov_len = 0;
+> +	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> +		printf("[INFO]\tToo small size accepted via PTRACE_SETREGS\n");
+> +		goto out_kill;
+> +	}
+> +
+> +	iov.iov_len = sizeof(ssp) + 1;
+> +	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> +		printf("[INFO]\tToo large size accepted via PTRACE_SETREGS\n");
+> +		goto out_kill;
+> +	}
+> +
+> +	ssp += 1;
+> +	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> +		printf("[INFO]\tUnaligned SSP written via PTRACE_SETREGS\n");
+> +		goto out_kill;
+> +	}
+> +
+> +	ssp = 0xFFFFFFFFFFFF0000;
+> +	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> +		printf("[INFO]\tKernel range SSP written via PTRACE_SETREGS\n");
+> +		goto out_kill;
+> +	}
+> +
+> +	/*
+> +	 * Tweak the SSP so the child with #CP when it resumes and returns
+> +	 * from raise()
+> +	 */
+> +	ssp = saved_ssp + 8;
+> +	iov.iov_len = sizeof(ssp);
+> +	if (ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> +		printf("[INFO]\tFailed to PTRACE_SETREGS\n");
+> +		goto out_kill;
+> +	}
+> +
+> +	if (ptrace(PTRACE_DETACH, pid, NULL, NULL)) {
+> +		printf("[INFO]\tFailed to PTRACE_DETACH\n");
+> +		goto out_kill;
+> +	}
+> +
+> +	waitpid(pid, &status, 0);
+> +	if (WEXITSTATUS(status))
+> +		return 1;
+> +
+> +	printf("[OK]\tPtrace test\n");
+> +	return 0;
+> +
+> +out_kill:
+> +	kill(pid, SIGKILL);
+> +	return 1;
+> +}
+> +
+> +#if (__GNUC__ < 8) || (__GNUC__ == 8 && __GNUC_MINOR__ < 5)
+> +int shadow_stack_run_tests(enum shadow_stack_test unused)
+> +{
+> +	printf("[SKIP]\tCompiler does not support CET.\n");
+> +	return 0;
+> +}
+> +#else
+> +int shadow_stack_run_tests(enum shadow_stack_test which_test)
+> +{
+> +	int ret = 0;
+> +
+> +	if (SHADOW_STACK_ENABLE(which_test)) {
+> +		printf("[SKIP]\tCould not enable Shadow stack\n");
+> +		return 1;
+> +	}
+> +
+> +	if (SHADOW_STACK_DISABLE(which_test)) {
+> +		ret = 1;
+> +		printf("[FAIL]\tDisabling shadow stack failed\n");
+> +	}
+> +
+> +	if (SHADOW_STACK_ENABLE(which_test)) {
+> +		printf("[SKIP]\tCould not re-enable Shadow stack\n");
+> +		return 1;
+> +	}
+> +
+> +	if (SHADOW_STACK_ENABLE_WRITE(which_test)) {
+> +		printf("[SKIP]\tCould not enable WRSS\n");
+> +		ret = 1;
+> +		goto out;
+> +	}
+> +
+> +	/* Should have succeeded if here, but this is a test, so double check. */
+> +	if (!get_ssp()) {
+> +		printf("[FAIL]\tShadow stack disabled\n");
+> +		return 1;
+> +	}
+> +
+> +	if (test_shstk_pivot()) {
+> +		ret = 1;
+> +		printf("[FAIL]\tShadow stack pivot\n");
+> +		goto out;
+> +	}
+> +
+> +	if (test_shstk_faults()) {
+> +		ret = 1;
+> +		printf("[FAIL]\tShadow stack fault test\n");
+> +		goto out;
+> +	}
+> +
+> +	if (test_shstk_violation()) {
+> +		ret = 1;
+> +		printf("[FAIL]\tShadow stack violation test\n");
+> +		goto out;
+> +	}
+> +
+> +	if (test_gup()) {
+> +		ret = 1;
+> +		printf("[FAIL]\tShadow shadow stack gup\n");
+> +		goto out;
+> +	}
+> +
+> +	if (test_mprotect()) {
+> +		ret = 1;
+> +		printf("[FAIL]\tShadow shadow mprotect test\n");
+> +		goto out;
+> +	}
+> +
+> +	if (test_userfaultfd()) {
+> +		ret = 1;
+> +		printf("[FAIL]\tUserfaultfd test\n");
+> +		goto out;
+> +	}
+> +
+> +	if (test_guard_gap_other_gaps()) {
+> +		ret = 1;
+> +		printf("[FAIL]\tGuard gap test, other mappings' gaps\n");
+> +		goto out;
+> +	}
+> +
+> +	if (test_guard_gap_new_mappings_gaps()) {
+> +		ret = 1;
+> +		printf("[FAIL]\tGuard gap test, placement mapping's gaps\n");
+> +		goto out;
+> +	}
+> +
+> +	if (test_ptrace()) {
+> +		ret = 1;
+> +		printf("[FAIL]\tptrace test\n");
+> +	}
+> +
+> +	if (test_32bit()) {
+> +		ret = 1;
+> +		printf("[FAIL]\t32 bit test\n");
+> +		goto out;
+> +	}
+> +
+> +	if (test_uretprobe(which_test)) {
+> +		ret = 1;
+> +		printf("[FAIL]\turetprobe test\n");
+> +		goto out;
+> +	}
+> +
+> +	if (test_uprobe_call(which_test)) {
+> +		ret = 1;
+> +		printf("[FAIL]\tuprobe on CALL test\n");
+> +		goto out;
+> +	}
+> +
+> +	return ret;
+> +
+> +out:
+> +	/*
+> +	 * Disable shadow stack before the function returns, or there will be a
+> +	 * shadow stack violation.
+> +	 */
+> +	if (SHADOW_STACK_DISABLE(which_test)) {
+> +		ret = 1;
+> +		printf("[FAIL]\tDisabling shadow stack failed\n");
+> +	}
+> +
+> +	return ret;
+> +}
+> +#endif
+> diff --git a/tools/testing/selftests/x86/shadow_stack.h b/tools/testing/selftests/x86/shadow_stack.h
+> new file mode 100644
+> index 000000000000..d36a44df7387
+> --- /dev/null
+> +++ b/tools/testing/selftests/x86/shadow_stack.h
+> @@ -0,0 +1,14 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#ifndef TOOLS_TESTING_SELFTESTS_X86_SHADOW_STACK_H_
+> +#define TOOLS_TESTING_SELFTESTS_X86_SHADOW_STACK_H_
+> +
+> +enum shadow_stack_test {
+> +	SHADOW_STACK_TEST_ARCH_PRCTL,
+> +	SHADOW_STACK_TEST_PRCTL,
+> +	SHADOW_STACK_TEST_COUNT,
+> +};
+> +
+> +int shadow_stack_run_tests(enum shadow_stack_test which_test);
+> +
+> +#endif /* TOOLS_TESTING_SELFTESTS_X86_SHADOW_STACK_H_ */
+> diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
+> index 3d6ca33edba4..d89c04623001 100644
+> --- a/tools/testing/selftests/x86/test_shadow_stack.c
+> +++ b/tools/testing/selftests/x86/test_shadow_stack.c
+> @@ -1,1174 +1,21 @@
+>   // SPDX-License-Identifier: GPL-2.0
+> +
+>   /*
+>    * This program test's basic kernel shadow stack support. It enables shadow
+>    * stack manual via the arch_prctl(), instead of relying on glibc. It's
+>    * Makefile doesn't compile with shadow stack support, so it doesn't rely on
+>    * any particular glibc. As a result it can't do any operations that require
+>    * special glibc shadow stack support (longjmp(), swapcontext(), etc). Just
+> - * stick to the basics and hope the compiler doesn't do anything strange.
+> + * stick to the basics and hope the compiler doesn't do anything strange. It
+> + * uses the x86 specific interface for ARCH_PCTL, whereas
+> + * test_shadow_stack_prctl.c uses the generic PRCTL interface mixed with x86
+> + * specific code.
+>    */
+> -
+>   #define _GNU_SOURCE
+>   
+> -#include <sys/syscall.h>
+> -#include <asm/mman.h>
+> -#include <sys/mman.h>
+> -#include <sys/stat.h>
+> -#include <sys/wait.h>
+> -#include <stdio.h>
+> -#include <stdlib.h>
+> -#include <fcntl.h>
+> -#include <unistd.h>
+> -#include <string.h>
+> -#include <errno.h>
+> -#include <stdbool.h>
+> -#include <x86intrin.h>
+> -#include <asm/prctl.h>
+> -#include <sys/prctl.h>
+> -#include <stdint.h>
+> -#include <signal.h>
+> -#include <pthread.h>
+> -#include <sys/ioctl.h>
+> -#include <linux/userfaultfd.h>
+> -#include <setjmp.h>
+> -#include <sys/ptrace.h>
+> -#include <sys/signal.h>
+> -#include <linux/elf.h>
+> -#include <linux/perf_event.h>
+> -
+> -/*
+> - * Define the ABI defines if needed, so people can run the tests
+> - * without building the headers.
+> - */
+> -#ifndef __NR_map_shadow_stack
+> -#define __NR_map_shadow_stack	453
+> -
+> -#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)
+> -
+> -#define ARCH_SHSTK_ENABLE	0x5001
+> -#define ARCH_SHSTK_DISABLE	0x5002
+> -#define ARCH_SHSTK_LOCK		0x5003
+> -#define ARCH_SHSTK_UNLOCK	0x5004
+> -#define ARCH_SHSTK_STATUS	0x5005
+> -
+> -#define ARCH_SHSTK_SHSTK	(1ULL <<  0)
+> -#define ARCH_SHSTK_WRSS		(1ULL <<  1)
+> -
+> -#define NT_X86_SHSTK	0x204
+> -#endif
+> -
+> -#define SS_SIZE 0x200000
+> -#define PAGE_SIZE 0x1000
+> -
+> -#if (__GNUC__ < 8) || (__GNUC__ == 8 && __GNUC_MINOR__ < 5)
+> -int main(int argc, char *argv[])
+> -{
+> -	printf("[SKIP]\tCompiler does not support CET.\n");
+> -	return 0;
+> -}
+> -#else
+> -void write_shstk(unsigned long *addr, unsigned long val)
+> -{
+> -	asm volatile("wrssq %[val], (%[addr])\n"
+> -		     : "=m" (addr)
+> -		     : [addr] "r" (addr), [val] "r" (val));
+> -}
+> -
+> -static inline unsigned long __attribute__((always_inline)) get_ssp(void)
+> -{
+> -	unsigned long ret = 0;
+> -
+> -	asm volatile("xor %0, %0; rdsspq %0" : "=r" (ret));
+> -	return ret;
+> -}
+> -
+> -/*
+> - * For use in inline enablement of shadow stack.
+> - *
+> - * The program can't return from the point where shadow stack gets enabled
+> - * because there will be no address on the shadow stack. So it can't use
+> - * syscall() for enablement, since it is a function.
+> - *
+> - * Based on code from nolibc.h. Keep a copy here because this can't pull in all
+> - * of nolibc.h.
+> - */
+> -#define ARCH_PRCTL(arg1, arg2)					\
+> -({								\
+> -	long _ret;						\
+> -	register long _num  asm("eax") = __NR_arch_prctl;	\
+> -	register long _arg1 asm("rdi") = (long)(arg1);		\
+> -	register long _arg2 asm("rsi") = (long)(arg2);		\
+> -								\
+> -	asm volatile (						\
+> -		"syscall\n"					\
+> -		: "=a"(_ret)					\
+> -		: "r"(_arg1), "r"(_arg2),			\
+> -		  "0"(_num)					\
+> -		: "rcx", "r11", "memory", "cc"			\
+> -	);							\
+> -	_ret;							\
+> -})
+> -
+> -void *create_shstk(void *addr)
+> -{
+> -	return (void *)syscall(__NR_map_shadow_stack, addr, SS_SIZE, SHADOW_STACK_SET_TOKEN);
+> -}
+> -
+> -void *create_normal_mem(void *addr)
+> -{
+> -	return mmap(addr, SS_SIZE, PROT_READ | PROT_WRITE,
+> -		    MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
+> -}
+> -
+> -void free_shstk(void *shstk)
+> -{
+> -	munmap(shstk, SS_SIZE);
+> -}
+> -
+> -int reset_shstk(void *shstk)
+> -{
+> -	return madvise(shstk, SS_SIZE, MADV_DONTNEED);
+> -}
+> -
+> -void try_shstk(unsigned long new_ssp)
+> -{
+> -	unsigned long ssp;
+> -
+> -	printf("[INFO]\tnew_ssp = %lx, *new_ssp = %lx\n",
+> -	       new_ssp, *((unsigned long *)new_ssp));
+> -
+> -	ssp = get_ssp();
+> -	printf("[INFO]\tchanging ssp from %lx to %lx\n", ssp, new_ssp);
+> -
+> -	asm volatile("rstorssp (%0)\n":: "r" (new_ssp));
+> -	asm volatile("saveprevssp");
+> -	printf("[INFO]\tssp is now %lx\n", get_ssp());
+> -
+> -	/* Switch back to original shadow stack */
+> -	ssp -= 8;
+> -	asm volatile("rstorssp (%0)\n":: "r" (ssp));
+> -	asm volatile("saveprevssp");
+> -}
+> -
+> -int test_shstk_pivot(void)
+> -{
+> -	void *shstk = create_shstk(0);
+> -
+> -	if (shstk == MAP_FAILED) {
+> -		printf("[FAIL]\tError creating shadow stack: %d\n", errno);
+> -		return 1;
+> -	}
+> -	try_shstk((unsigned long)shstk + SS_SIZE - 8);
+> -	free_shstk(shstk);
+> -
+> -	printf("[OK]\tShadow stack pivot\n");
+> -	return 0;
+> -}
+> -
+> -int test_shstk_faults(void)
+> -{
+> -	unsigned long *shstk = create_shstk(0);
+> -
+> -	/* Read shadow stack, test if it's zero to not get read optimized out */
+> -	if (*shstk != 0)
+> -		goto err;
+> -
+> -	/* Wrss memory that was already read. */
+> -	write_shstk(shstk, 1);
+> -	if (*shstk != 1)
+> -		goto err;
+> -
+> -	/* Page out memory, so we can wrss it again. */
+> -	if (reset_shstk((void *)shstk))
+> -		goto err;
+> -
+> -	write_shstk(shstk, 1);
+> -	if (*shstk != 1)
+> -		goto err;
+> -
+> -	printf("[OK]\tShadow stack faults\n");
+> -	return 0;
+> -
+> -err:
+> -	return 1;
+> -}
+> -
+> -unsigned long saved_ssp;
+> -unsigned long saved_ssp_val;
+> -volatile bool segv_triggered;
+> -
+> -void __attribute__((noinline)) violate_ss(void)
+> -{
+> -	saved_ssp = get_ssp();
+> -	saved_ssp_val = *(unsigned long *)saved_ssp;
+> -
+> -	/* Corrupt shadow stack */
+> -	printf("[INFO]\tCorrupting shadow stack\n");
+> -	write_shstk((void *)saved_ssp, 0);
+> -}
+> -
+> -void segv_handler(int signum, siginfo_t *si, void *uc)
+> -{
+> -	printf("[INFO]\tGenerated shadow stack violation successfully\n");
+> -
+> -	segv_triggered = true;
+> -
+> -	/* Fix shadow stack */
+> -	write_shstk((void *)saved_ssp, saved_ssp_val);
+> -}
+> -
+> -int test_shstk_violation(void)
+> -{
+> -	struct sigaction sa = {};
+> -
+> -	sa.sa_sigaction = segv_handler;
+> -	sa.sa_flags = SA_SIGINFO;
+> -	if (sigaction(SIGSEGV, &sa, NULL))
+> -		return 1;
+> -
+> -	segv_triggered = false;
+> -
+> -	/* Make sure segv_triggered is set before violate_ss() */
+> -	asm volatile("" : : : "memory");
+> -
+> -	violate_ss();
+> -
+> -	signal(SIGSEGV, SIG_DFL);
+> -
+> -	printf("[OK]\tShadow stack violation test\n");
+> -
+> -	return !segv_triggered;
+> -}
+> -
+> -/* Gup test state */
+> -#define MAGIC_VAL 0x12345678
+> -bool is_shstk_access;
+> -void *shstk_ptr;
+> -int fd;
+> -
+> -void reset_test_shstk(void *addr)
+> -{
+> -	if (shstk_ptr)
+> -		free_shstk(shstk_ptr);
+> -	shstk_ptr = create_shstk(addr);
+> -}
+> -
+> -void test_access_fix_handler(int signum, siginfo_t *si, void *uc)
+> -{
+> -	printf("[INFO]\tViolation from %s\n", is_shstk_access ? "shstk access" : "normal write");
+> -
+> -	segv_triggered = true;
+> -
+> -	/* Fix shadow stack */
+> -	if (is_shstk_access) {
+> -		reset_test_shstk(shstk_ptr);
+> -		return;
+> -	}
+> -
+> -	free_shstk(shstk_ptr);
+> -	create_normal_mem(shstk_ptr);
+> -}
+> -
+> -bool test_shstk_access(void *ptr)
+> -{
+> -	is_shstk_access = true;
+> -	segv_triggered = false;
+> -	write_shstk(ptr, MAGIC_VAL);
+> -
+> -	asm volatile("" : : : "memory");
+> -
+> -	return segv_triggered;
+> -}
+> -
+> -bool test_write_access(void *ptr)
+> -{
+> -	is_shstk_access = false;
+> -	segv_triggered = false;
+> -	*(unsigned long *)ptr = MAGIC_VAL;
+> -
+> -	asm volatile("" : : : "memory");
+> -
+> -	return segv_triggered;
+> -}
+> -
+> -bool gup_write(void *ptr)
+> -{
+> -	unsigned long val;
+> -
+> -	lseek(fd, (unsigned long)ptr, SEEK_SET);
+> -	if (write(fd, &val, sizeof(val)) < 0)
+> -		return 1;
+> -
+> -	return 0;
+> -}
+> -
+> -bool gup_read(void *ptr)
+> -{
+> -	unsigned long val;
+> -
+> -	lseek(fd, (unsigned long)ptr, SEEK_SET);
+> -	if (read(fd, &val, sizeof(val)) < 0)
+> -		return 1;
+> -
+> -	return 0;
+> -}
+> -
+> -int test_gup(void)
+> -{
+> -	struct sigaction sa = {};
+> -	int status;
+> -	pid_t pid;
+> -
+> -	sa.sa_sigaction = test_access_fix_handler;
+> -	sa.sa_flags = SA_SIGINFO;
+> -	if (sigaction(SIGSEGV, &sa, NULL))
+> -		return 1;
+> -
+> -	segv_triggered = false;
+> -
+> -	fd = open("/proc/self/mem", O_RDWR);
+> -	if (fd == -1)
+> -		return 1;
+> -
+> -	reset_test_shstk(0);
+> -	if (gup_read(shstk_ptr))
+> -		return 1;
+> -	if (test_shstk_access(shstk_ptr))
+> -		return 1;
+> -	printf("[INFO]\tGup read -> shstk access success\n");
+> -
+> -	reset_test_shstk(0);
+> -	if (gup_write(shstk_ptr))
+> -		return 1;
+> -	if (test_shstk_access(shstk_ptr))
+> -		return 1;
+> -	printf("[INFO]\tGup write -> shstk access success\n");
+> -
+> -	reset_test_shstk(0);
+> -	if (gup_read(shstk_ptr))
+> -		return 1;
+> -	if (!test_write_access(shstk_ptr))
+> -		return 1;
+> -	printf("[INFO]\tGup read -> write access success\n");
+> -
+> -	reset_test_shstk(0);
+> -	if (gup_write(shstk_ptr))
+> -		return 1;
+> -	if (!test_write_access(shstk_ptr))
+> -		return 1;
+> -	printf("[INFO]\tGup write -> write access success\n");
+> -
+> -	close(fd);
+> -
+> -	/* COW/gup test */
+> -	reset_test_shstk(0);
+> -	pid = fork();
+> -	if (!pid) {
+> -		fd = open("/proc/self/mem", O_RDWR);
+> -		if (fd == -1)
+> -			exit(1);
+> -
+> -		if (gup_write(shstk_ptr)) {
+> -			close(fd);
+> -			exit(1);
+> -		}
+> -		close(fd);
+> -		exit(0);
+> -	}
+> -	waitpid(pid, &status, 0);
+> -	if (WEXITSTATUS(status)) {
+> -		printf("[FAIL]\tWrite in child failed\n");
+> -		return 1;
+> -	}
+> -	if (*(unsigned long *)shstk_ptr == MAGIC_VAL) {
+> -		printf("[FAIL]\tWrite in child wrote through to shared memory\n");
+> -		return 1;
+> -	}
+> -
+> -	printf("[INFO]\tCow gup write -> write access success\n");
+> -
+> -	free_shstk(shstk_ptr);
+> -
+> -	signal(SIGSEGV, SIG_DFL);
+> -
+> -	printf("[OK]\tShadow gup test\n");
+> -
+> -	return 0;
+> -}
+> -
+> -int test_mprotect(void)
+> -{
+> -	struct sigaction sa = {};
+> -
+> -	sa.sa_sigaction = test_access_fix_handler;
+> -	sa.sa_flags = SA_SIGINFO;
+> -	if (sigaction(SIGSEGV, &sa, NULL))
+> -		return 1;
+> -
+> -	segv_triggered = false;
+> -
+> -	/* mprotect a shadow stack as read only */
+> -	reset_test_shstk(0);
+> -	if (mprotect(shstk_ptr, SS_SIZE, PROT_READ) < 0) {
+> -		printf("[FAIL]\tmprotect(PROT_READ) failed\n");
+> -		return 1;
+> -	}
+> -
+> -	/* try to wrss it and fail */
+> -	if (!test_shstk_access(shstk_ptr)) {
+> -		printf("[FAIL]\tShadow stack access to read-only memory succeeded\n");
+> -		return 1;
+> -	}
+> -
+> -	/*
+> -	 * The shadow stack was reset above to resolve the fault, make the new one
+> -	 * read-only.
+> -	 */
+> -	if (mprotect(shstk_ptr, SS_SIZE, PROT_READ) < 0) {
+> -		printf("[FAIL]\tmprotect(PROT_READ) failed\n");
+> -		return 1;
+> -	}
+> -
+> -	/* then back to writable */
+> -	if (mprotect(shstk_ptr, SS_SIZE, PROT_WRITE | PROT_READ) < 0) {
+> -		printf("[FAIL]\tmprotect(PROT_WRITE) failed\n");
+> -		return 1;
+> -	}
+> -
+> -	/* then wrss to it and succeed */
+> -	if (test_shstk_access(shstk_ptr)) {
+> -		printf("[FAIL]\tShadow stack access to mprotect() writable memory failed\n");
+> -		return 1;
+> -	}
+> -
+> -	free_shstk(shstk_ptr);
+> -
+> -	signal(SIGSEGV, SIG_DFL);
+> -
+> -	printf("[OK]\tmprotect() test\n");
+> -
+> -	return 0;
+> -}
+> -
+> -char zero[4096];
+> -
+> -static void *uffd_thread(void *arg)
+> -{
+> -	struct uffdio_copy req;
+> -	int uffd = *(int *)arg;
+> -	struct uffd_msg msg;
+> -	int ret;
+> -
+> -	while (1) {
+> -		ret = read(uffd, &msg, sizeof(msg));
+> -		if (ret > 0)
+> -			break;
+> -		else if (errno == EAGAIN)
+> -			continue;
+> -		return (void *)1;
+> -	}
+> -
+> -	req.dst = msg.arg.pagefault.address;
+> -	req.src = (__u64)zero;
+> -	req.len = 4096;
+> -	req.mode = 0;
+> -
+> -	if (ioctl(uffd, UFFDIO_COPY, &req))
+> -		return (void *)1;
+> -
+> -	return (void *)0;
+> -}
+> -
+> -int test_userfaultfd(void)
+> -{
+> -	struct uffdio_register uffdio_register;
+> -	struct uffdio_api uffdio_api;
+> -	struct sigaction sa = {};
+> -	pthread_t thread;
+> -	void *res;
+> -	int uffd;
+> -
+> -	sa.sa_sigaction = test_access_fix_handler;
+> -	sa.sa_flags = SA_SIGINFO;
+> -	if (sigaction(SIGSEGV, &sa, NULL))
+> -		return 1;
+> -
+> -	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+> -	if (uffd < 0) {
+> -		printf("[SKIP]\tUserfaultfd unavailable.\n");
+> -		return 0;
+> -	}
+> -
+> -	reset_test_shstk(0);
+> -
+> -	uffdio_api.api = UFFD_API;
+> -	uffdio_api.features = 0;
+> -	if (ioctl(uffd, UFFDIO_API, &uffdio_api))
+> -		goto err;
+> -
+> -	uffdio_register.range.start = (__u64)shstk_ptr;
+> -	uffdio_register.range.len = 4096;
+> -	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+> -	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
+> -		goto err;
+> -
+> -	if (pthread_create(&thread, NULL, &uffd_thread, &uffd))
+> -		goto err;
+> -
+> -	reset_shstk(shstk_ptr);
+> -	test_shstk_access(shstk_ptr);
+> -
+> -	if (pthread_join(thread, &res))
+> -		goto err;
+> -
+> -	if (test_shstk_access(shstk_ptr))
+> -		goto err;
+> -
+> -	free_shstk(shstk_ptr);
+> -
+> -	signal(SIGSEGV, SIG_DFL);
+> -
+> -	if (!res)
+> -		printf("[OK]\tUserfaultfd test\n");
+> -	return !!res;
+> -err:
+> -	free_shstk(shstk_ptr);
+> -	close(uffd);
+> -	signal(SIGSEGV, SIG_DFL);
+> -	return 1;
+> -}
+> -
+> -/* Simple linked list for keeping track of mappings in test_guard_gap() */
+> -struct node {
+> -	struct node *next;
+> -	void *mapping;
+> -};
+> -
+> -/*
+> - * This tests whether mmap will place other mappings in a shadow stack's guard
+> - * gap. The steps are:
+> - *   1. Finds an empty place by mapping and unmapping something.
+> - *   2. Map a shadow stack in the middle of the known empty area.
+> - *   3. Map a bunch of PAGE_SIZE mappings. These will use the search down
+> - *      direction, filling any gaps until it encounters the shadow stack's
+> - *      guard gap.
+> - *   4. When a mapping lands below the shadow stack from step 2, then all
+> - *      of the above gaps are filled. The search down algorithm will have
+> - *      looked at the shadow stack gaps.
+> - *   5. See if it landed in the gap.
+> - */
+> -int test_guard_gap_other_gaps(void)
+> -{
+> -	void *free_area, *shstk, *test_map = (void *)0xFFFFFFFFFFFFFFFF;
+> -	struct node *head = NULL, *cur;
+> -
+> -	free_area = mmap(0, SS_SIZE * 3, PROT_READ | PROT_WRITE,
+> -			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> -	munmap(free_area, SS_SIZE * 3);
+> -
+> -	shstk = create_shstk(free_area + SS_SIZE);
+> -	if (shstk == MAP_FAILED)
+> -		return 1;
+> -
+> -	while (test_map > shstk) {
+> -		test_map = mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE,
+> -				MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> -		if (test_map == MAP_FAILED)
+> -			return 1;
+> -		cur = malloc(sizeof(*cur));
+> -		cur->mapping = test_map;
+> -
+> -		cur->next = head;
+> -		head = cur;
+> -	}
+> -
+> -	while (head) {
+> -		cur = head;
+> -		head = cur->next;
+> -		munmap(cur->mapping, PAGE_SIZE);
+> -		free(cur);
+> -	}
+> -
+> -	free_shstk(shstk);
+> -
+> -	if (shstk - test_map - PAGE_SIZE != PAGE_SIZE)
+> -		return 1;
+> -
+> -	printf("[OK]\tGuard gap test, other mapping's gaps\n");
+> -
+> -	return 0;
+> -}
+> -
+> -/* Tests respecting the guard gap of the mapping getting placed */
+> -int test_guard_gap_new_mappings_gaps(void)
+> -{
+> -	void *free_area, *shstk_start, *test_map = (void *)0xFFFFFFFFFFFFFFFF;
+> -	struct node *head = NULL, *cur;
+> -	int ret = 0;
+> -
+> -	free_area = mmap(0, PAGE_SIZE * 4, PROT_READ | PROT_WRITE,
+> -			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> -	munmap(free_area, PAGE_SIZE * 4);
+> -
+> -	/* Test letting map_shadow_stack find a free space */
+> -	shstk_start = mmap(free_area, PAGE_SIZE, PROT_READ | PROT_WRITE,
+> -			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> -	if (shstk_start == MAP_FAILED || shstk_start != free_area)
+> -		return 1;
+> -
+> -	while (test_map > shstk_start) {
+> -		test_map = (void *)syscall(__NR_map_shadow_stack, 0, PAGE_SIZE, 0);
+> -		if (test_map == MAP_FAILED) {
+> -			printf("[INFO]\tmap_shadow_stack MAP_FAILED\n");
+> -			ret = 1;
+> -			break;
+> -		}
+> -
+> -		cur = malloc(sizeof(*cur));
+> -		cur->mapping = test_map;
+> -
+> -		cur->next = head;
+> -		head = cur;
+> -
+> -		if (test_map == free_area + PAGE_SIZE) {
+> -			printf("[INFO]\tNew mapping has other mapping in guard gap!\n");
+> -			ret = 1;
+> -			break;
+> -		}
+> -	}
+> -
+> -	while (head) {
+> -		cur = head;
+> -		head = cur->next;
+> -		munmap(cur->mapping, PAGE_SIZE);
+> -		free(cur);
+> -	}
+> -
+> -	munmap(shstk_start, PAGE_SIZE);
+> -
+> -	if (!ret)
+> -		printf("[OK]\tGuard gap test, placement mapping's gaps\n");
+> -
+> -	return ret;
+> -}
+> -
+> -/*
+> - * Too complicated to pull it out of the 32 bit header, but also get the
+> - * 64 bit one needed above. Just define a copy here.
+> - */
+> -#define __NR_compat_sigaction 67
+> -
+> -/*
+> - * Call 32 bit signal handler to get 32 bit signals ABI. Make sure
+> - * to push the registers that will get clobbered.
+> - */
+> -int sigaction32(int signum, const struct sigaction *restrict act,
+> -		struct sigaction *restrict oldact)
+> -{
+> -	register long syscall_reg asm("eax") = __NR_compat_sigaction;
+> -	register long signum_reg asm("ebx") = signum;
+> -	register long act_reg asm("ecx") = (long)act;
+> -	register long oldact_reg asm("edx") = (long)oldact;
+> -	int ret = 0;
+> -
+> -	asm volatile ("int $0x80;"
+> -		      : "=a"(ret), "=m"(oldact)
+> -		      : "r"(syscall_reg), "r"(signum_reg), "r"(act_reg),
+> -			"r"(oldact_reg)
+> -		      : "r8", "r9", "r10", "r11"
+> -		     );
+> -
+> -	return ret;
+> -}
+> -
+> -sigjmp_buf jmp_buffer;
+> -
+> -void segv_gp_handler(int signum, siginfo_t *si, void *uc)
+> -{
+> -	segv_triggered = true;
+> -
+> -	/*
+> -	 * To work with old glibc, this can't rely on siglongjmp working with
+> -	 * shadow stack enabled, so disable shadow stack before siglongjmp().
+> -	 */
+> -	ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
+> -	siglongjmp(jmp_buffer, -1);
+> -}
+> -
+> -/*
+> - * Transition to 32 bit mode and check that a #GP triggers a segfault.
+> - */
+> -int test_32bit(void)
+> -{
+> -	struct sigaction sa = {};
+> -	struct sigaction *sa32;
+> -
+> -	/* Create sigaction in 32 bit address range */
+> -	sa32 = mmap(0, 4096, PROT_READ | PROT_WRITE,
+> -		    MAP_32BIT | MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
+> -	sa32->sa_flags = SA_SIGINFO;
+> -
+> -	sa.sa_sigaction = segv_gp_handler;
+> -	sa.sa_flags = SA_SIGINFO;
+> -	if (sigaction(SIGSEGV, &sa, NULL))
+> -		return 1;
+> -
+> -
+> -	segv_triggered = false;
+> -
+> -	/* Make sure segv_triggered is set before triggering the #GP */
+> -	asm volatile("" : : : "memory");
+> -
+> -	/*
+> -	 * Set handler to somewhere in 32 bit address space
+> -	 */
+> -	sa32->sa_handler = (void *)sa32;
+> -	if (sigaction32(SIGUSR1, sa32, NULL))
+> -		return 1;
+> -
+> -	if (!sigsetjmp(jmp_buffer, 1))
+> -		raise(SIGUSR1);
+> -
+> -	if (segv_triggered)
+> -		printf("[OK]\t32 bit test\n");
+> -
+> -	return !segv_triggered;
+> -}
+> -
+> -static int parse_uint_from_file(const char *file, const char *fmt)
+> -{
+> -	int err, ret;
+> -	FILE *f;
+> -
+> -	f = fopen(file, "re");
+> -	if (!f) {
+> -		err = -errno;
+> -		printf("failed to open '%s': %d\n", file, err);
+> -		return err;
+> -	}
+> -	err = fscanf(f, fmt, &ret);
+> -	if (err != 1) {
+> -		err = err == EOF ? -EIO : -errno;
+> -		printf("failed to parse '%s': %d\n", file, err);
+> -		fclose(f);
+> -		return err;
+> -	}
+> -	fclose(f);
+> -	return ret;
+> -}
+> -
+> -static int determine_uprobe_perf_type(void)
+> -{
+> -	const char *file = "/sys/bus/event_source/devices/uprobe/type";
+> -
+> -	return parse_uint_from_file(file, "%d\n");
+> -}
+> -
+> -static int determine_uprobe_retprobe_bit(void)
+> -{
+> -	const char *file = "/sys/bus/event_source/devices/uprobe/format/retprobe";
+> -
+> -	return parse_uint_from_file(file, "config:%d\n");
+> -}
+> -
+> -static ssize_t get_uprobe_offset(const void *addr)
+> -{
+> -	size_t start, end, base;
+> -	char buf[256];
+> -	bool found = false;
+> -	FILE *f;
+> -
+> -	f = fopen("/proc/self/maps", "r");
+> -	if (!f)
+> -		return -errno;
+> -
+> -	while (fscanf(f, "%zx-%zx %s %zx %*[^\n]\n", &start, &end, buf, &base) == 4) {
+> -		if (buf[2] == 'x' && (uintptr_t)addr >= start && (uintptr_t)addr < end) {
+> -			found = true;
+> -			break;
+> -		}
+> -	}
+> -
+> -	fclose(f);
+> -
+> -	if (!found)
+> -		return -ESRCH;
+> -
+> -	return (uintptr_t)addr - start + base;
+> -}
+> -
+> -static __attribute__((noinline)) void uretprobe_trigger(void)
+> -{
+> -	asm volatile ("");
+> -}
+> -
+> -/*
+> - * This test setups return uprobe, which is sensitive to shadow stack
+> - * (crashes without extra fix). After executing the uretprobe we fail
+> - * the test if we receive SIGSEGV, no crash means we're good.
+> - *
+> - * Helper functions above borrowed from bpf selftests.
+> - */
+> -static int test_uretprobe(void)
+> -{
+> -	const size_t attr_sz = sizeof(struct perf_event_attr);
+> -	const char *file = "/proc/self/exe";
+> -	int bit, fd = 0, type, err = 1;
+> -	struct perf_event_attr attr;
+> -	struct sigaction sa = {};
+> -	ssize_t offset;
+> -
+> -	type = determine_uprobe_perf_type();
+> -	if (type < 0) {
+> -		if (type == -ENOENT)
+> -			printf("[SKIP]\tUretprobe test, uprobes are not available\n");
+> -		return 0;
+> -	}
+> -
+> -	offset = get_uprobe_offset(uretprobe_trigger);
+> -	if (offset < 0)
+> -		return 1;
+> -
+> -	bit = determine_uprobe_retprobe_bit();
+> -	if (bit < 0)
+> -		return 1;
+> -
+> -	sa.sa_sigaction = segv_gp_handler;
+> -	sa.sa_flags = SA_SIGINFO;
+> -	if (sigaction(SIGSEGV, &sa, NULL))
+> -		return 1;
+> -
+> -	/* Setup return uprobe through perf event interface. */
+> -	memset(&attr, 0, attr_sz);
+> -	attr.size = attr_sz;
+> -	attr.type = type;
+> -	attr.config = 1 << bit;
+> -	attr.config1 = (__u64) (unsigned long) file;
+> -	attr.config2 = offset;
+> -
+> -	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
+> -		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
+> -	if (fd < 0)
+> -		goto out;
+> -
+> -	if (sigsetjmp(jmp_buffer, 1))
+> -		goto out;
+> -
+> -	ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK);
+> -
+> -	/*
+> -	 * This either segfaults and goes through sigsetjmp above
+> -	 * or succeeds and we're good.
+> -	 */
+> -	uretprobe_trigger();
+> -
+> -	printf("[OK]\tUretprobe test\n");
+> -	err = 0;
+> -
+> -out:
+> -	ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
+> -	signal(SIGSEGV, SIG_DFL);
+> -	if (fd)
+> -		close(fd);
+> -	return err;
+> -}
+> -
+> -/* Keep the CALL first so the function address is exactly the probed CALL. */
+> -extern void uprobe_call_trigger(void);
+> -asm (".pushsection .text\n"
+> -	".global uprobe_call_target\n"
+> -	".type uprobe_call_target, @function\n"
+> -	"uprobe_call_target:\n"
+> -	"	ret\n"
+> -	".size uprobe_call_target, .-uprobe_call_target\n"
+> -
+> -	".global uprobe_call_trigger\n"
+> -	".type uprobe_call_trigger, @function\n"
+> -	"uprobe_call_trigger:\n"
+> -	"	call uprobe_call_target\n"
+> -	"	ret\n"
+> -	".size uprobe_call_trigger, .-uprobe_call_trigger\n"
+> -	".popsection\n"
+> -);
+> -
+> -/* If CALL emulation misses the shadow stack update, this exits via SIGSEGV. */
+> -static int test_uprobe_call(void)
+> -{
+> -	const size_t attr_sz = sizeof(struct perf_event_attr);
+> -	const char *file = "/proc/self/exe";
+> -	int fd = -1, type, err = 1;
+> -	struct perf_event_attr attr;
+> -	struct sigaction sa = {};
+> -	ssize_t offset;
+> -
+> -	type = determine_uprobe_perf_type();
+> -	if (type < 0) {
+> -		if (type == -ENOENT)
+> -			printf("[SKIP]\tUprobe on CALL test, uprobes are not available\n");
+> -		return 0;
+> -	}
+> -
+> -	offset = get_uprobe_offset(uprobe_call_trigger);
+> -	if (offset < 0)
+> -		return 1;
+> -
+> -	sa.sa_sigaction = segv_gp_handler;
+> -	sa.sa_flags = SA_SIGINFO;
+> -	if (sigaction(SIGSEGV, &sa, NULL))
+> -		return 1;
+> -
+> -	/* Setup entry uprobe through perf event interface. */
+> -	memset(&attr, 0, attr_sz);
+> -	attr.size = attr_sz;
+> -	attr.type = type;
+> -	attr.config = 0;
+> -	attr.config1 = (__u64)(unsigned long)file;
+> -	attr.config2 = offset;
+> -
+> -	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
+> -		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
+> -	if (fd < 0)
+> -		goto out;
+> -
+> -	if (sigsetjmp(jmp_buffer, 1))
+> -		goto out;
+> -
+> -	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK))
+> -		goto out;
+> -
+> -	/*
+> -	 * This either segfaults and goes through sigsetjmp above
+> -	 * or succeeds and we're good.
+> -	 */
+> -	uprobe_call_trigger();
+> -
+> -	printf("[OK]\tUprobe on CALL test\n");
+> -	err = 0;
+> -
+> -out:
+> -	ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
+> -	signal(SIGSEGV, SIG_DFL);
+> -	if (fd >= 0)
+> -		close(fd);
+> -	return err;
+> -}
+> -
+> -void segv_handler_ptrace(int signum, siginfo_t *si, void *uc)
+> -{
+> -	/* The SSP adjustment caused a segfault. */
+> -	exit(0);
+> -}
+> -
+> -int test_ptrace(void)
+> -{
+> -	unsigned long saved_ssp, ssp = 0;
+> -	struct sigaction sa= {};
+> -	struct iovec iov;
+> -	int status;
+> -	int pid;
+> -
+> -	iov.iov_base = &ssp;
+> -	iov.iov_len = sizeof(ssp);
+> -
+> -	pid = fork();
+> -	if (!pid) {
+> -		ssp = get_ssp();
+> -
+> -		sa.sa_sigaction = segv_handler_ptrace;
+> -		sa.sa_flags = SA_SIGINFO;
+> -		if (sigaction(SIGSEGV, &sa, NULL))
+> -			return 1;
+> -
+> -		ptrace(PTRACE_TRACEME, NULL, NULL, NULL);
+> -		/*
+> -		 * The parent will tweak the SSP and return from this function
+> -		 * will #CP.
+> -		 */
+> -		raise(SIGTRAP);
+> -
+> -		exit(1);
+> -	}
+> -
+> -	while (waitpid(pid, &status, 0) != -1 && WSTOPSIG(status) != SIGTRAP);
+> -
+> -	if (ptrace(PTRACE_GETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> -		printf("[INFO]\tFailed to PTRACE_GETREGS\n");
+> -		goto out_kill;
+> -	}
+> -
+> -	if (!ssp) {
+> -		printf("[INFO]\tPtrace child SSP was 0\n");
+> -		goto out_kill;
+> -	}
+> -
+> -	saved_ssp = ssp;
+> -
+> -	iov.iov_len = 0;
+> -	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> -		printf("[INFO]\tToo small size accepted via PTRACE_SETREGS\n");
+> -		goto out_kill;
+> -	}
+> -
+> -	iov.iov_len = sizeof(ssp) + 1;
+> -	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> -		printf("[INFO]\tToo large size accepted via PTRACE_SETREGS\n");
+> -		goto out_kill;
+> -	}
+> -
+> -	ssp += 1;
+> -	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> -		printf("[INFO]\tUnaligned SSP written via PTRACE_SETREGS\n");
+> -		goto out_kill;
+> -	}
+> -
+> -	ssp = 0xFFFFFFFFFFFF0000;
+> -	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> -		printf("[INFO]\tKernel range SSP written via PTRACE_SETREGS\n");
+> -		goto out_kill;
+> -	}
+> -
+> -	/*
+> -	 * Tweak the SSP so the child with #CP when it resumes and returns
+> -	 * from raise()
+> -	 */
+> -	ssp = saved_ssp + 8;
+> -	iov.iov_len = sizeof(ssp);
+> -	if (ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
+> -		printf("[INFO]\tFailed to PTRACE_SETREGS\n");
+> -		goto out_kill;
+> -	}
+> -
+> -	if (ptrace(PTRACE_DETACH, pid, NULL, NULL)) {
+> -		printf("[INFO]\tFailed to PTRACE_DETACH\n");
+> -		goto out_kill;
+> -	}
+> -
+> -	waitpid(pid, &status, 0);
+> -	if (WEXITSTATUS(status))
+> -		return 1;
+> -
+> -	printf("[OK]\tPtrace test\n");
+> -	return 0;
+> -
+> -out_kill:
+> -	kill(pid, SIGKILL);
+> -	return 1;
+> -}
+> +#include "shadow_stack.h"
+>   
+>   int main(int argc, char *argv[])
+>   {
+> -	int ret = 0;
+> -
+> -	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
+> -		printf("[SKIP]\tCould not enable Shadow stack\n");
+> -		return 1;
+> -	}
+> -
+> -	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
+> -		ret = 1;
+> -		printf("[FAIL]\tDisabling shadow stack failed\n");
+> -	}
+> -
+> -	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
+> -		printf("[SKIP]\tCould not re-enable Shadow stack\n");
+> -		return 1;
+> -	}
+> -
+> -	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
+> -		printf("[SKIP]\tCould not enable WRSS\n");
+> -		ret = 1;
+> -		goto out;
+> -	}
+> -
+> -	/* Should have succeeded if here, but this is a test, so double check. */
+> -	if (!get_ssp()) {
+> -		printf("[FAIL]\tShadow stack disabled\n");
+> -		return 1;
+> -	}
+> -
+> -	if (test_shstk_pivot()) {
+> -		ret = 1;
+> -		printf("[FAIL]\tShadow stack pivot\n");
+> -		goto out;
+> -	}
+> -
+> -	if (test_shstk_faults()) {
+> -		ret = 1;
+> -		printf("[FAIL]\tShadow stack fault test\n");
+> -		goto out;
+> -	}
+> -
+> -	if (test_shstk_violation()) {
+> -		ret = 1;
+> -		printf("[FAIL]\tShadow stack violation test\n");
+> -		goto out;
+> -	}
+> -
+> -	if (test_gup()) {
+> -		ret = 1;
+> -		printf("[FAIL]\tShadow shadow stack gup\n");
+> -		goto out;
+> -	}
+> -
+> -	if (test_mprotect()) {
+> -		ret = 1;
+> -		printf("[FAIL]\tShadow shadow mprotect test\n");
+> -		goto out;
+> -	}
+> -
+> -	if (test_userfaultfd()) {
+> -		ret = 1;
+> -		printf("[FAIL]\tUserfaultfd test\n");
+> -		goto out;
+> -	}
+> -
+> -	if (test_guard_gap_other_gaps()) {
+> -		ret = 1;
+> -		printf("[FAIL]\tGuard gap test, other mappings' gaps\n");
+> -		goto out;
+> -	}
+> -
+> -	if (test_guard_gap_new_mappings_gaps()) {
+> -		ret = 1;
+> -		printf("[FAIL]\tGuard gap test, placement mapping's gaps\n");
+> -		goto out;
+> -	}
+> -
+> -	if (test_ptrace()) {
+> -		ret = 1;
+> -		printf("[FAIL]\tptrace test\n");
+> -	}
+> -
+> -	if (test_32bit()) {
+> -		ret = 1;
+> -		printf("[FAIL]\t32 bit test\n");
+> -		goto out;
+> -	}
+> -
+> -	if (test_uretprobe()) {
+> -		ret = 1;
+> -		printf("[FAIL]\turetprobe test\n");
+> -		goto out;
+> -	}
+> -
+> -	if (test_uprobe_call()) {
+> -		ret = 1;
+> -		printf("[FAIL]\tuprobe on CALL test\n");
+> -		goto out;
+> -	}
+> -
+> -	return ret;
+> -
+> -out:
+> -	/*
+> -	 * Disable shadow stack before the function returns, or there will be a
+> -	 * shadow stack violation.
+> -	 */
+> -	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
+> -		ret = 1;
+> -		printf("[FAIL]\tDisabling shadow stack failed\n");
+> -	}
+> -
+> -	return ret;
+> +	return shadow_stack_run_tests(SHADOW_STACK_TEST_ARCH_PRCTL);
+>   }
+> -#endif
+> diff --git a/tools/testing/selftests/x86/test_shadow_stack_prctl.c b/tools/testing/selftests/x86/test_shadow_stack_prctl.c
+> new file mode 100644
+> index 000000000000..4641a3b1ca03
+> --- /dev/null
+> +++ b/tools/testing/selftests/x86/test_shadow_stack_prctl.c
+> @@ -0,0 +1,12 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * Same as test_shadow_stack.c but uses the PRCTL interface
+> + * instead of ARCH_PRCTL.
+> + */
+> +#include "shadow_stack.h"
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	return shadow_stack_run_tests(SHADOW_STACK_TEST_PRCTL);
+> +}
 >
-> > ---
-> >  include/linux/bpf-cgroup-defs.h |   1 +
-> >  include/linux/bpf-cgroup.h      |  28 +++
-> >  include/linux/bpf.h             |  19 +-
-> >  include/uapi/linux/bpf.h        |   4 +-
-> >  kernel/bpf/bpf_struct_ops.c     |  29 +++
-> >  kernel/bpf/btf.c                |  23 +-
-> >  kernel/bpf/cgroup.c             | 375 ++++++++++++++++++++++++++++++--
-> >  kernel/bpf/syscall.c            |   1 +
-> >  tools/include/uapi/linux/bpf.h  |   4 +-
-> >  9 files changed, 463 insertions(+), 21 deletions(-)
-> >
-> > diff --git a/include/linux/bpf-cgroup-defs.h b/include/linux/bpf-cgroup=
--defs.h
-> > index c9e6b26abab6..0147b8bec973 100644
-> > --- a/include/linux/bpf-cgroup-defs.h
-> > +++ b/include/linux/bpf-cgroup-defs.h
-> > @@ -47,6 +47,7 @@ enum cgroup_bpf_attach_type {
-> >       CGROUP_INET6_GETSOCKNAME,
-> >       CGROUP_UNIX_GETSOCKNAME,
-> >       CGROUP_INET_SOCK_RELEASE,
-> > +     CGROUP_TCP_SOCK_OPS,
-> >       CGROUP_LSM_START,
-> >       CGROUP_LSM_END =3D CGROUP_LSM_START + CGROUP_LSM_NUM - 1,
-> >       MAX_CGROUP_BPF_ATTACH_TYPE
-> > diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> > index 4d0cc65976a1..8a75a6cd7309 100644
-> > --- a/include/linux/bpf-cgroup.h
-> > +++ b/include/linux/bpf-cgroup.h
-> > @@ -100,6 +100,8 @@ struct bpf_cgroup_storage {
-> >  struct bpf_cgroup_link {
-> >       struct bpf_link link;
-> >       struct cgroup *cgroup;
-> > +     struct bpf_map *map;
-> > +     wait_queue_head_t wait_hup;
-> >  };
-> >
-> >  struct bpf_prog_list {
-> > @@ -110,6 +112,18 @@ struct bpf_prog_list {
-> >       u32 flags;
-> >  };
-> >
-> > +#define bpf_cgroup_struct_ops_foreach(var, item, cgrp, atype)         =
-       \
-> > +     for (item =3D rcu_dereference((cgrp)->bpf.effective[atype])->item=
-s;\
-> > +          ((var) =3D READ_ONCE(item->kdata));                         =
- \
-> > +          item++)
-> > +
-> > +static inline bool cgroup_bpf_is_struct_ops_atype(enum cgroup_bpf_atta=
-ch_type atype)
-> > +{
-> > +     return atype =3D=3D CGROUP_TCP_SOCK_OPS;
-> > +}
-> > +void cgroup_bpf_struct_ops_register(int atype, u32 type_id, void *cfi_=
-stubs, bool mult_trace);
-> > +int cgroup_bpf_struct_ops_attach(struct bpf_map *map, const union bpf_=
-attr *attr);
-> > +
-> >  void __init cgroup_bpf_lifetime_notifier_init(void);
-> >
-> >  int __cgroup_bpf_run_filter_skb(struct sock *sk,
-> > @@ -479,6 +493,20 @@ static inline int bpf_percpu_cgroup_storage_update=
-(struct bpf_map *map,
-> >       return 0;
-> >  }
-> >
-> > +static inline bool cgroup_bpf_is_struct_ops_atype(int atype)
-> > +{
-> > +     return false;
-> > +}
-> > +static inline void cgroup_bpf_struct_ops_register(int atype, u32 type_=
-id, void *cfi_stubs,
-> > +                                               bool mult_trace)
-> > +{
-> > +}
-> > +static inline int cgroup_bpf_struct_ops_attach(struct bpf_map *map,
-> > +                                            const union bpf_attr *attr=
-)
-> > +{
-> > +     return -EOPNOTSUPP;
-> > +}
-> > +
-> >  #define cgroup_bpf_enabled(atype) (0)
-> >  #define BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, uaddrlen, atype, t_ctx)=
- ({ 0; })
-> >  #define BPF_CGROUP_RUN_SA_PROG(sk, uaddr, uaddrlen, atype) ({ 0; })
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index e371a4733135..df95ae690da5 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -2100,11 +2100,18 @@ struct btf_member;
-> >   *      unloaded while in use.
-> >   * @name: The name of the struct bpf_struct_ops object.
-> >   * @func_models: Func models
-> > + * @cgroup_atype: A value in enum cgroup_bpf_attach_type for cgroup at=
-tachment.
-> > + *             0 means the struct_ops type does not support cgroup att=
-achment.
-> > + *             If cgroup_atype is non-zero, the @reg and @unreg must b=
-e NULL
-> > + *             because the attachment/detachment will be handled by th=
-e bpf core.
-> >   * @free_after_tasks_rcu_gp: Set to true if it needs the bpf core to w=
-ait for
-> >   *                           a tasks_rcu gp before freeing the struct_=
-ops map
-> >   *                           and its progs. It is unnecessary if the @=
-unreg
-> >   *                           has waited for the correct rcu gp or the =
-@unreg
-> >   *                           has ensured all struct_ops prog has finis=
-hed running.
-> > + * @free_after_mult_rcu_gp: Same as @free_after_tasks_rcu_gp but waiti=
-ng for
-> > + *                          both tasks_trace_rcu and regular rcu grace=
- period.
-> > + *                          It is usually needed if the struct_ops has=
- sleepable prog.
-> >   */
-> >  struct bpf_struct_ops {
-> >       const struct bpf_verifier_ops *verifier_ops;
-> > @@ -2123,7 +2130,9 @@ struct bpf_struct_ops {
-> >       struct module *owner;
-> >       const char *name;
-> >       struct btf_func_model func_models[BPF_STRUCT_OPS_MAX_NR_MEMBERS];
-> > +     int cgroup_atype;
-> >       bool free_after_tasks_rcu_gp;
-> > +     bool free_after_mult_rcu_gp;
-> >  };
-> >
-> >  /* Every member of a struct_ops type has an instance even a member is =
-not
-> > @@ -2258,6 +2267,7 @@ void *bpf_struct_ops_map_cfi_stubs(struct bpf_map=
- *map);
-> >  bool bpf_struct_ops_valid_to_reg(struct bpf_map *map);
-> >  int bpf_struct_ops_link_update_check(struct bpf_map *new_map, struct b=
-pf_map *old_map,
-> >                                    struct bpf_map *expected_old_map);
-> > +int bpf_struct_ops_map_cgroup_atype(struct bpf_map *map);
-> >
-> >  #ifdef CONFIG_NET
-> >  /* Define it here to avoid the use of forward declaration */
-> > @@ -2330,6 +2340,10 @@ static inline u32 bpf_struct_ops_kdata_map_id(vo=
-id *kdata)
-> >  {
-> >       return 0;
-> >  }
-> > +static inline int bpf_struct_ops_map_cgroup_atype(struct bpf_map *map)
-> > +{
-> > +     return 0;
-> > +}
-> >  static inline void *bpf_struct_ops_map_cfi_stubs(struct bpf_map *map)
-> >  {
-> >       return NULL;
-> > @@ -2519,7 +2533,10 @@ u64 bpf_event_output(struct bpf_map *map, u64 fl=
-ags, void *meta, u64 meta_size,
-> >   * since other cpus are walking the array of pointers in parallel.
-> >   */
-> >  struct bpf_prog_array_item {
-> > -     struct bpf_prog *prog;
-> > +     union {
-> > +             struct bpf_prog *prog;
-> > +             void *kdata;
-> > +     };
-> >       union {
-> >               struct bpf_cgroup_storage *cgroup_storage[MAX_BPF_CGROUP_=
-STORAGE_TYPE];
-> >               u64 bpf_cookie;
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index c91b5a4bda03..c982801ec7db 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -1756,7 +1756,7 @@ union bpf_attr {
-> >                       __u32   prog_cnt;
-> >                       __u32   count;
-> >               };
-> > -             __u32           :32;
-> > +             __u32           type_id;
-> >               /* output: per-program attach_flags.
-> >                * not allowed to be set during effective query.
-> >                */
-> > @@ -6818,6 +6818,8 @@ struct bpf_link_info {
-> >               } xdp;
-> >               struct {
-> >                       __u32 map_id;
-> > +                     __u32 :32;
-> > +                     __u64 cgroup_id;
-> >               } struct_ops;
-> >               struct {
-> >                       __u32 pf;
-> > diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> > index 3d650a7e9f68..06d72cdca601 100644
-> > --- a/kernel/bpf/bpf_struct_ops.c
-> > +++ b/kernel/bpf/bpf_struct_ops.c
-> > @@ -13,6 +13,7 @@
-> >  #include <linux/btf_ids.h>
-> >  #include <linux/rcupdate_wait.h>
-> >  #include <linux/poll.h>
-> > +#include <linux/bpf-cgroup.h>
-> >
-> >  struct bpf_struct_ops_value {
-> >       struct bpf_struct_ops_common_value common;
-> > @@ -1076,6 +1077,11 @@ static struct bpf_map *bpf_struct_ops_map_alloc(=
-union bpf_attr *attr)
-> >               goto errout;
-> >       }
-> >
-> > +     if (st_ops_desc->st_ops->cgroup_atype && !(attr->map_flags & BPF_=
-F_LINK)) {
-> > +             ret =3D -EOPNOTSUPP;
-> > +             goto errout;
-> > +     }
-> > +
-> >       vt =3D st_ops_desc->value_type;
-> >       if (attr->value_size !=3D vt->size) {
-> >               ret =3D -EINVAL;
-> > @@ -1116,6 +1122,7 @@ static struct bpf_map *bpf_struct_ops_map_alloc(u=
-nion bpf_attr *attr)
-> >
-> >       mutex_init(&st_map->lock);
-> >       bpf_map_init_from_attr(map, attr);
-> > +     map->free_after_mult_rcu_gp =3D st_ops_desc->st_ops->free_after_m=
-ult_rcu_gp;
-> >       map->free_after_rcu_gp =3D true;
-> >
-> >       return map;
-> > @@ -1244,6 +1251,14 @@ void *bpf_struct_ops_map_kdata(struct bpf_map *m=
-ap)
-> >       return st_map->kvalue.data;
-> >  }
-> >
-> > +int bpf_struct_ops_map_cgroup_atype(struct bpf_map *map)
-> > +{
-> > +     struct bpf_struct_ops_map *st_map;
-> > +
-> > +     st_map =3D container_of(map, struct bpf_struct_ops_map, map);
-> > +     return st_map->st_ops_desc->st_ops->cgroup_atype;
-> > +}
-> > +
-> >  void *bpf_struct_ops_map_cfi_stubs(struct bpf_map *map)
-> >  {
-> >       struct bpf_struct_ops_map *st_map;
-> > @@ -1419,6 +1434,7 @@ int bpf_struct_ops_link_create(union bpf_attr *at=
-tr)
-> >       struct bpf_link_primer link_primer;
-> >       struct bpf_struct_ops_map *st_map;
-> >       struct bpf_map *map;
-> > +     int cgroup_atype;
-> >       int err;
-> >
-> >       map =3D bpf_map_get(attr->link_create.map_fd);
-> > @@ -1432,6 +1448,19 @@ int bpf_struct_ops_link_create(union bpf_attr *a=
-ttr)
-> >               goto err_out;
-> >       }
-> >
-> > +     cgroup_atype =3D st_map->st_ops_desc->st_ops->cgroup_atype;
-> > +     if (cgroup_atype) {
-> > +             err =3D cgroup_bpf_struct_ops_attach(map, attr);
-> > +             bpf_map_put(map);
-> > +             return err;
-> > +     }
-> > +
-> > +     if (memchr_inv(&attr->link_create.cgroup, 0, sizeof(attr->link_cr=
-eate.cgroup)) ||
-> > +         attr->link_create.target_fd) {
-> > +             err =3D -EINVAL;
-> > +             goto err_out;
-> > +     }
-> > +
-> >       link =3D kzalloc_obj(*link, GFP_USER);
-> >       if (!link) {
-> >               err =3D -ENOMEM;
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index 64572f85edc8..d591f306ace5 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
-> > @@ -20,6 +20,7 @@
-> >  #include <linux/btf.h>
-> >  #include <linux/btf_ids.h>
-> >  #include <linux/bpf.h>
-> > +#include <linux/bpf-cgroup.h>
-> >  #include <linux/bpf_lsm.h>
-> >  #include <linux/skmsg.h>
-> >  #include <linux/perf_event.h>
-> > @@ -9836,6 +9837,7 @@ btf_add_struct_ops(struct btf *btf, struct bpf_st=
-ruct_ops *st_ops,
-> >                  struct bpf_verifier_log *log)
-> >  {
-> >       struct btf_struct_ops_tab *tab, *new_tab;
-> > +     int cgroup_atype;
-> >       int i, err;
-> >
-> >       tab =3D btf->struct_ops_tab;
-> > @@ -9847,8 +9849,10 @@ btf_add_struct_ops(struct btf *btf, struct bpf_s=
-truct_ops *st_ops,
-> >               btf->struct_ops_tab =3D tab;
-> >       }
-> >
-> > +     cgroup_atype =3D st_ops->cgroup_atype;
-> >       for (i =3D 0; i < tab->cnt; i++)
-> > -             if (tab->ops[i].st_ops =3D=3D st_ops)
-> > +             if (tab->ops[i].st_ops =3D=3D st_ops ||
-> > +                 (cgroup_atype && cgroup_atype =3D=3D tab->ops[i].st_o=
-ps->cgroup_atype))
-> >                       return -EEXIST;
-> >
-> >       if (tab->cnt =3D=3D tab->capacity) {
-> > @@ -9868,6 +9872,23 @@ btf_add_struct_ops(struct btf *btf, struct bpf_s=
-truct_ops *st_ops,
-> >       if (err)
-> >               return err;
-> >
-> > +     if (cgroup_atype) {
-> > +             if (!cgroup_bpf_is_struct_ops_atype(cgroup_atype) ||
 >
-> Can we add a comment here as to why free_after_tasks_rcu_gp is always
-> invalid here (which IIUC is because it's
-> free_after_mult_rcu_gp)?
-
-This is because the dispatching macro,
-bpf_cgroup_struct_ops_foreach(), requires the caller to be in an RCU
-read-side critical section. Unlike bpf-tcp-cc, where rcu_read_lock()
-is taken inside the trampoline by __bpf_prog_enter() and the trailing
-trampoline insns run outside it, here the critical section encloses
-the whole trampoline call. Therefore a vanilla rcu gp is enough for
-both the kdata and the trampoline image.
-
->
-> > +                 st_ops->reg || st_ops->unreg || st_ops->free_after_ta=
-sks_rcu_gp) {
-> > +                     bpf_struct_ops_desc_release(&tab->ops[btf->struct=
-_ops_tab->cnt]);
-> > +                     return -EINVAL;
-> > +             }
-> > +
-> > +             /* There is no need to unregister from cgroup when the
-> > +              * btf_free(). No struct_ops map and its cgroup link
-> > +              * can be created once its btf is gone.
-> > +              */
->
-> Network-style comment, should be regular kernel-style.
-
-Ack.
-
->
-> In terms of the content: What happens if the struct_ops are in a module,
-> then we load/unload/reload? IIUC even if the signatures are identical,
-> the btf_id could be different so it's not like we can always reuse the
-> previous cgroup registration.
-
-The information in struct_ops_{type_id, cfi_stubs, mult_rcu} is never
-reused across registration. Every load calls
-cgroup_bpf_struct_ops_register() and overwrites all three, so a reload
-always installs the new type_id and cfi_stubs.
-
-Note that there was a bug in an earlier version where stale cfi_stubs
-could be dereferenced during query. It is fixed by the
-!cgroup_bpf_enabled(atype) check in __cgroup_bpf_query(), which
-returns before walking the effective array when nothing is attached.
-
->
-> > +             cgroup_bpf_struct_ops_register(cgroup_atype,
-> > +                                            tab->ops[btf->struct_ops_t=
-ab->cnt].type_id,
-> > +                                            st_ops->cfi_stubs,
-> > +                                            st_ops->free_after_mult_rc=
-u_gp);
-> > +     }
-> > +
-> >       btf->struct_ops_tab->cnt++;
-> >
-> >       return 0;
-> > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> > index 081d81de1816..745e826c9f61 100644
-> > --- a/kernel/bpf/cgroup.c
-> > +++ b/kernel/bpf/cgroup.c
-> > @@ -24,6 +24,29 @@
-> >  DEFINE_STATIC_KEY_ARRAY_FALSE(cgroup_bpf_enabled_key, MAX_CGROUP_BPF_A=
-TTACH_TYPE);
-> >  EXPORT_SYMBOL(cgroup_bpf_enabled_key);
-> >
-> > +static u32 struct_ops_type_id[MAX_CGROUP_BPF_ATTACH_TYPE];
-> > +static void *struct_ops_cfi_stubs[MAX_CGROUP_BPF_ATTACH_TYPE];
-> > +static bool struct_ops_mult_rcu[MAX_CGROUP_BPF_ATTACH_TYPE];
->
->
-> Can we make a struct out of those? Right now we're carrying them loose
-> into the module even though every index corresponds to a single
-> registered struct_oips.
-
-Sure, will do in v4.
-
->
-> > +
-> > +void cgroup_bpf_struct_ops_register(int atype, u32 type_id, void *cfi_=
-stubs, bool mult_rcu)
-> > +{
-> > +     struct_ops_type_id[atype] =3D type_id;
-> > +     struct_ops_cfi_stubs[atype] =3D cfi_stubs;
-> > +     struct_ops_mult_rcu[atype] =3D mult_rcu;
-> > +}
-> > +
-> > +static enum cgroup_bpf_attach_type find_atype_by_struct_ops_id(u32 typ=
-e_id)
-> > +{
-> > +     enum cgroup_bpf_attach_type atype;
-> > +
-> > +     for (atype =3D 0; atype < MAX_CGROUP_BPF_ATTACH_TYPE; atype++) {
-> > +             if (cgroup_bpf_is_struct_ops_atype(atype) &&
-> > +                 struct_ops_type_id[atype] =3D=3D type_id)
-> > +                     return atype;
-> > +     }
-> > +     return CGROUP_BPF_ATTACH_TYPE_INVALID;
-> > +}
-> > +
-> >  /*
-> >   * cgroup bpf destruction makes heavy use of work items and there can =
-be a lot
-> >   * of concurrent destructions.  Use a separate workqueue so that cgrou=
-p bpf
-> > @@ -306,6 +329,19 @@ static void bpf_cgroup_storages_link(struct bpf_cg=
-roup_storage *storages[],
-> >               bpf_cgroup_storage_link(storages[stype], cgrp, attach_typ=
-e);
-> >  }
-> >
-> > +static void cgroup_struct_ops_link_detach_wake(struct bpf_cgroup_link =
-*link, bool wake_poll)
-> > +{
-> > +     cgroup_put(link->cgroup);
-> > +     link->cgroup =3D NULL;
-> > +
-> > +     bpf_map_put(link->map);
-> > +     /* READ_ONCE in cgroup_struct_ops_link_poll */
-> > +     WRITE_ONCE(link->map, NULL);
-> > +
-> > +     if (wake_poll)
-> > +             wake_up_interruptible_poll(&link->wait_hup, EPOLLHUP);
-> > +}
-> > +
-> >  /* Called when bpf_cgroup_link is auto-detached from dying cgroup.
-> >   * It drops cgroup and bpf_prog refcounts, and marks bpf_link as defun=
-ct. It
-> >   * doesn't free link memory, which will eventually be done by bpf_link=
-'s
-> > @@ -313,21 +349,37 @@ static void bpf_cgroup_storages_link(struct bpf_c=
-group_storage *storages[],
-> >   */
-> >  static void bpf_cgroup_link_auto_detach(struct bpf_cgroup_link *link)
-> >  {
-> > -     if (link->link.prog->expected_attach_type =3D=3D BPF_LSM_CGROUP)
-> > -             bpf_trampoline_unlink_cgroup_shim(link->link.prog);
-> > -     cgroup_put(link->cgroup);
-> > -     link->cgroup =3D NULL;
-> > +     if (link->map) {
-> > +             cgroup_struct_ops_link_detach_wake(link, true);
-> > +     } else {
-> > +             if (link->link.prog->expected_attach_type =3D=3D BPF_LSM_=
-CGROUP)
-> > +                     bpf_trampoline_unlink_cgroup_shim(link->link.prog=
-);
-> > +             cgroup_put(link->cgroup);
-> > +             link->cgroup =3D NULL;
-> > +     }
->
-> Nit: If we write this as:
->         if (link->map) {
->                 cgroup_struct_ops_link_detach_wake(link, true);
->                 return
->         }
->
-> it's slightly less churn.
-
-Will do.
-
->
-> > +}
-> > +
-> > +static void bpf_cgroup_array_free_rcu(struct rcu_head *rcu)
-> > +{
-> > +     kfree(container_of(rcu, struct bpf_prog_array, rcu));
-> >  }
-> >
-> > -static void bpf_cgroup_array_free(struct bpf_prog_array *array)
-> > +static void bpf_cgroup_array_free(struct bpf_prog_array *array,
-> > +                               enum cgroup_bpf_attach_type atype)
-> >  {
-> >       if (!array || array =3D=3D &bpf_empty_prog_array)
-> >               return;
-> > -     kfree_rcu(array, rcu);
-> > +     if (struct_ops_mult_rcu[atype])
-> > +             /* RCU tasks trace grace period implies RCU grace period.=
- */
-> > +             call_rcu_tasks_trace(&array->rcu, bpf_cgroup_array_free_r=
-cu);
-> > +     else
-> > +             kfree_rcu(array, rcu);
-> >  }
-> >
-> >  static void *bpf_cgroup_array_dummy(enum cgroup_bpf_attach_type atype)
-> >  {
-> > +     if (cgroup_bpf_is_struct_ops_atype(atype))
-> > +             return struct_ops_cfi_stubs[atype];
-> >       return bpf_prog_dummy();
-> >  }
-> >
-> > @@ -355,7 +407,12 @@ static int bpf_cgroup_array_copy_to_user(struct bp=
-f_prog_array *array,
-> >       for (item =3D array->items; item->prog && i < cnt; item++) {
-> >               if (item->prog =3D=3D bpf_cgroup_array_dummy(atype))
->
-> Retroactive nit for bpf_cgroup_array_dummy: The name is pretty confusing,=
- something
-> that explain that this is really a tombstone value would be nicer.
-> Especially since we're repurposing the cfi_stubs for per-attach type
-> tombstones.
-
-The value is not just a tombstone. bpf_cgroup_array_dummy is the same
-concept as bpf_prog_dummy. It actually runs instead of skipping. Let's
-not change the _dummy name to keep things consistent.
-
->
-> >                       continue;
-> > -             id =3D item->prog->aux->id;
-> > +
-> > +             if (cgroup_bpf_is_struct_ops_atype(atype))
-> > +                     id =3D bpf_struct_ops_id(item->kdata);
-> > +             else
-> > +                     id =3D item->prog->aux->id;
-> > +
-> >               if (copy_to_user(prog_ids + i, &id, sizeof(id)))
-> >                       return -EFAULT;
-> >               i++;
-> > @@ -417,7 +474,7 @@ static void cgroup_bpf_release(struct work_struct *=
-work)
-> >               old_array =3D rcu_dereference_protected(
-> >                               cgrp->bpf.effective[atype],
-> >                               lockdep_is_held(&cgroup_mutex));
-> > -             bpf_cgroup_array_free(old_array);
-> > +             bpf_cgroup_array_free(old_array, atype);
-> >       }
-> >
-> >       list_for_each_entry_safe(storage, stmp, storages, list_cg) {
-> > @@ -461,17 +518,26 @@ static struct bpf_prog *prog_list_prog(struct bpf=
-_prog_list *pl)
-> >
-> >  static void prog_list_init_item(struct bpf_prog_list *pl, struct bpf_p=
-rog_array_item *item)
-> >  {
-> > -     item->prog =3D prog_list_prog(pl);
-> > -     bpf_cgroup_storages_assign(item->cgroup_storage, pl->storage);
-> > +     if (pl->link && pl->link->map) {
-> > +             item->kdata =3D bpf_struct_ops_map_kdata(pl->link->map);
-> > +     } else {
-> > +             item->prog =3D prog_list_prog(pl);
-> > +             bpf_cgroup_storages_assign(item->cgroup_storage, pl->stor=
-age);
-> > +     }
->
-> Same nit as above, an if-return avoid reformatting existing code.
-
-Ack.
-
->
-> >  }
-> >
-> >  static void prog_list_replace_item(struct bpf_prog_list *pl, struct bp=
-f_prog_array_item *item)
-> >  {
-> > -     WRITE_ONCE(item->prog, pl->link->link.prog);
-> > +     if (pl->link && pl->link->map)
->
-> Can we somehow encapsulate the pl->link && pl->link->map to give it a
-> more descriptive name? It's mentioned in previous commit descriptions
-> what it is for, but as it stands it takes some thought to realize it's
-> checking if this is a struct_ops item or a regular prog.
-
-Sure. Will add prog_list_is_struct_ops().
-
->
-> > +             WRITE_ONCE(item->kdata, bpf_struct_ops_map_kdata(pl->link=
-->map));
-> > +     else
-> > +             WRITE_ONCE(item->prog, pl->link->link.prog);
-> >  }
-> >
-> >  static u32 prog_list_id(struct bpf_prog_list *pl)
-> >  {
-> > +     if (pl->link && pl->link->map)
->
-> Ditto.
->
-> > +             return pl->link->map->id;
-> >       return prog_list_prog(pl)->aux->id;
-> >  }
-
-[...]
-
-> >
-> > +static int __cgroup_struct_ops_link_detach(struct bpf_link *link, bool=
- wake_poll)
-> > +{
-> > +     struct bpf_cgroup_link *cg_link =3D container_of(link, struct bpf=
-_cgroup_link, link);
-> > +     enum cgroup_bpf_attach_type atype;
-> > +     struct bpf_prog_list *pl;
-> > +     struct bpf_map *map;
-> > +     struct cgroup *cgrp;
-> > +
-> > +     cgroup_lock();
-> > +
-> > +     cgrp =3D cg_link->cgroup;
-> > +     if (!cgrp) {
-> > +             cgroup_unlock();
-> > +             return 0;
-> > +     }
-> > +
-> > +     map =3D cg_link->map;
-> > +     atype =3D bpf_struct_ops_map_cgroup_atype(map);
-> > +
-> > +     hlist_for_each_entry(pl, &cgrp->bpf.progs[atype], node) {
-> > +             if (pl->link =3D=3D cg_link)
-> > +                     break;
-> > +     }
->
-> What happens if the link isn't found here? Update deals this with
-> -ENOENT. Even though it's only possible if there's a bug I think
-> we should at least have a warning.
-
-Yes, this is indeed unreachable. Will still add WARN_ON_ONCE(!pl) and
-return -ENOENT defensively.
-
->
-> > +
-> > +     /* mark deleted so compute_effective_progs() skips it */
-> > +     pl->link =3D NULL;
-> > +     if (update_effective_progs(cgrp, atype)) {
-> > +             pl->link =3D cg_link;
-> > +             purge_effective_progs(cgrp, pl, atype);
-> > +     }
-> > +
+> Nack'ing my own patch, Sashiko found a few useful things to fix.
