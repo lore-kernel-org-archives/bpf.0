@@ -1,147 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0099142AF9E
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 23:53:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B28335F60A
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 23:59:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786578834; cv=none; b=n8yvVv4wb9W/9phNyftwECKK5k1GhXIkCHwpmQ3hEHWCBnarFKoPPxyOuskQ4sJ9gWEr6jGjP+b6I8eryzf5FctfF4fYi9zH31PUO+5+4NDehA6mrHmgJoPdOVag6cgDgH7b5b0i8/R1z87NdZp0CQgOfh+O9rNnfyq+Jaeza0o=
+	t=1786579142; cv=none; b=vF9/Eh9ldvhLzNczkD2dseb3eMm/b1g71eUNp4CSrWMl3UagDNrbb9JMNgItsr9R7Wu3B2NmO3PjB8BLDuT1ECDOkzMzDwbCis9PDnvQaKw+hbdEpAH1QQOWMXuCfofETyfg+wGIec8GcpfpYf/RyIykYj/B4Ew3hIbNZvoIbXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786578834; c=relaxed/simple;
-	bh=6QzBJF4E4ebUZgqacqYt1fwiFr+AQbcYqvu7J6LJxUM=;
+	s=arc-20240116; t=1786579142; c=relaxed/simple;
+	bh=0B9Yc0naEnKFqRoL4pnnFhzNouoecAmSP1aOMpY+kzU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ePpJ1ZS3kUMcvKxMwvwvZrlvvuqWzlOfsjGQnsuhqypJwuE9DOU3cwUXSY+/TPS0FK5dKc+MZ1w26LltkqCio0jZEsyf9UPSD0X3kkcGHf2NPCoHl98/GqAuaz1AqeIS49yeEccPMIDMjWLRWuQDZEiMGoKc4tnlpeOACQVDhKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SzOgM/oT; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ZqZPcaA8HC/HXQefEM33q1HUlRziQd0uVh8rD/6tlk6Akc1d9FiRIZ0r3a4vRqnV8bGqNcvsNJ2Uo5n+qF3Ro3Q0ijUEuD0UVzZyzKYLgm1dqhONhrlOlw7j6XFnfcWUnKD+8nF85LCkN3JB3xbLtdjdK2pT3Px2V3Fgo92RSK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TmHBB8/3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SzOgM/oT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A40161F00A3D;
-	Wed, 12 Aug 2026 23:53:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TmHBB8/3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 789091F000E9;
+	Wed, 12 Aug 2026 23:59:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786578832;
-	bh=ghxA5zXr9qqLeZYnxBxpZ9XrKc0qjDjLHxoY3kdjH4g=;
+	s=k20260515; t=1786579140;
+	bh=2ONvILSBqjNkEA0FOegzObgafJzi5n23zEjvz6oWdOg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SzOgM/oTNzikEAYvaoEP/OKY5liT3WRX9XLLDzNpRuCg0SH2Yw9WgFlQYSoamiMRF
-	 TpXCNUTWXsChKJakQVHbS44rYnmsEp/noMFZ8/2Nipf6zZBmmX51vAE7Zhq0yR6TDl
-	 uPKC5CcW0VzqRgYZRmeWWAIV+DgphAwhLZKF4VypdvBtEopWXwFunJv2VnzUAVvDtZ
-	 XR1NkbaM+kaVeouVIGr4XV+IlG5U+Yl16qaSNdBhZLjWmpmycQoLZAPNPQYG20xI4R
-	 duap+YE8OqAJP6FOAYF8h91nyPdvtnYPhmEhoUHiXzlKwQvH/iSkJn3HNJs8C3rrvq
-	 wSmRiq0Y9pJvA==
+	b=TmHBB8/36Vf5LDw8yEKR+L7VugS4vYD+W2JYhq7TYzK8Q3gxC+Zh+6YJZD/uzbJPi
+	 vzDbMC7fgSrO5fQE4dYM/GCoHSZnuc4T0DTiXfrJu8XqnhJPJP7IJDuWpKaeAH5fIG
+	 KECQPdPEpCLlYHS91TGyfX7yR4csZcSiwi0yg7zAhyNVaMpkQbPrQp0n39pQiIP0fJ
+	 izuCHPBqLIheEZH7fXKqk8JRG6fzsRQIekxLiP5OY+xgU6wf5EGLcI1vVKEkHe6Lmw
+	 EVQz7gfVQkUli3hp4raRto5DUTmMyFSZPDPHumZZ1oln1rs8XeqjPKbDWkUEjF8iZV
+	 N18CokARnkLMg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 05/16] bpf: Track verifier register
- diagnostic events
+Subject: Re: [PATCH bpf-next v4 11/16] bpf: Report Call Type Safety argument
+ errors
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260812233326.3575958-6-memxor@gmail.com>
+In-Reply-To: <20260812233326.3575958-12-memxor@gmail.com>
 References: <20260812233326.3575958-1-memxor@gmail.com>
- <20260812233326.3575958-6-memxor@gmail.com>
+ <20260812233326.3575958-12-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 12 Aug 2026 23:53:52 +0000
-Message-Id: <20260812235352.A40161F00A3D@smtp.kernel.org>
+Date: Wed, 12 Aug 2026 23:58:59 +0000
+Message-Id: <20260812235900.789091F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Missing diagnostic event tracking for BPF_LD_IMM64 and BPF_ATOMI=
-C (with BPF_FETCH) operations.
+- [Medium] Uninitialized variable `ref_id` used in `check_kfunc_args` for n=
+on-pointer release kfunc arguments.
+- [Low] Incorrect diagnostic message for kfunc fixed-size memory arguments =
+failing bounds checks.
 --
 
---- Patch [5]: [PATCH bpf-next v4 05/16] bpf: Track verifier register diagn=
-ostic events ---
-commit 7db736a554444e8ded5ae93ab09a9f7f17a9c87b
+--- Patch [11]: [PATCH bpf-next v4 11/16] bpf: Report Call Type Safety argu=
+ment errors ---
+commit ea19a04c0e142c86cd13b8e8524d76e024167249
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-    bpf: Track verifier register diagnostic events
+bpf: Report Call Type Safety argument errors
 
-This commit introduces verifier register diagnostic events to track how a
-value reached its current state. It records register modifications, stack
-spills, reference invalidations, and other events in the diagnostic history.
+Augment selected helper and kfunc argument-contract failures with Call Type
+Safety reports. Keep the existing terse verifier messages and add reason,
+source context, causal register or stack-argument history, and targeted
+suggestions.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2e915292265b0..ed8a239a964d9 100644
+> index 24ae3cb38f6d8..7e28f4d9f5c4d 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
+> @@ -12361,29 +12437,43 @@ static int check_kfunc_args(struct bpf_verifier=
+_env *env, struct bpf_call_arg_me
+> =20
+>  		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
+> =20
+> -		if (btf_type_is_ptr(t) && (bpf_register_is_null(reg) || type_may_be_nu=
+ll(reg->type)) &&
+> +		if (btf_type_is_ptr(t)) {
+> +			ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
+> +			ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
+> +		}
+> +
+> +		if (btf_type_is_ptr(t) &&
+> +		    (bpf_register_is_null(reg) || type_may_be_null(reg->type)) &&
+>  		    !type_may_be_null(kf_arg_type)) {
 
 [ ... ]
 
-> @@ -6391,15 +6421,19 @@ static int check_load_mem(struct bpf_verifier_env=
- *env, struct bpf_insn *insn,
+>  		}
 > =20
->  	src_reg_type =3D regs[insn->src_reg].type;
-> =20
-> -	/* Check if (src_reg + off) is readable. The state of dst_reg will be
-> -	 * updated by this call.
-> +	/*
-> +	 * check_stack_read_fixed_off() may refine the modification's origin to
-> +	 * the source stack slot.
->  	 */
-> +	bpf_diag_mod_begin(env, &regs[insn->dst_reg], NULL, BPF_DIAG_MOD_WRITE);
->  	err =3D check_mem_access(env, env->insn_idx, regs + insn->src_reg, argn=
-o_from_reg(insn->src_reg), insn->off,
->  			       BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
->  			       strict_alignment_once, is_ldsx);
->  	err =3D err ?: save_aux_ptr_type(env, src_reg_type,
->  				       allow_trust_mismatch);
->  	err =3D err ?: reg_bounds_sanity_check(env, &regs[insn->dst_reg], ctx);
-> +	if (!err)
-> +		bpf_diag_mod_end(env);
-> =20
->  	return err;
->  }
+>  		if (regno =3D=3D meta->release_regno && !is_kfunc_arg_dynptr(meta->btf=
+, &args[i]) &&
+>  		    !reg_is_referenced(env, reg) && !bpf_register_is_null(reg)) {
+> +			const char *expected_type;
+> +
+> +			expected_type =3D diag_btf_type_name(env, btf, ref_id);
 
 [Severity: Medium]
-Are we missing similar diagnostic event tracking for BPF_LD_IMM64 and
-BPF_ATOMIC (with BPF_FETCH) operations?
+Could this result in using an uninitialized ref_id? If a module registers a
+kfunc with KF_RELEASE that takes a non-pointer argument, btf_type_is_ptr(t)
+would be false, skipping the initialization of ref_id.
 
-For example, in check_ld_imm(), we directly modify the destination register
-without calling bpf_diag_mod_begin() or bpf_diag_mod_end(), which prevents
-the origin of the value from being recorded:
+Then, on the release argument mismatch path here, diag_btf_type_name() would
+read uninitialized stack memory from ref_id, which might lead to out-of-bou=
+nds
+reads in btf_type_by_id() or leak stack contents into the verifier log.
 
-	dst_reg =3D &regs[insn->dst_reg];
-	if (insn->src_reg =3D=3D 0) {
-		u64 imm =3D ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
+[ ... ]
 
-		dst_reg->type =3D SCALAR_VALUE;
-		__mark_reg_known(&regs[insn->dst_reg], imm);
-		return 0;
-	}
+> @@ -12706,8 +12863,17 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_call_arg_me
+>  					return -EINVAL;
+>  				}
+>  				ret =3D check_mem_reg(env, reg, argno, type_size, BPF_READ | BPF_WRI=
+TE, meta);
+> -				if (ret < 0)
+> +				if (ret < 0) {
+> +					const char *expected_type;
+> +
+> +					expected_type =3D diag_btf_type_name(env, btf, ref_id);
+> +					diag_call_arg_fmt(env, insn_idx, argno, func_name,
+> +							  "Pass stack, map, context, or other verifier-known memory of th=
+e expected type and size, not an integer cast to a pointer.",
+> +							  "the kfunc expects %u bytes of memory for %s, but it is %s and =
+not verifier-known memory",
+> +							  type_size, expected_type,
+> +							  bpf_diag_reg_type_plain(env, reg->type));
 
-Additionally, in check_atomic_rmw(), we modify load_reg but lack diagnostic
-event tracing. If stack memory is fetched, check_stack_read_fixed_off() cal=
-ls
-bpf_diag_mod_begin(), but bpf_diag_mod_end() is never called afterwards.=20
+[Severity: Low]
+Does this emit a misleading diagnostic when the bounds check fails? If a kf=
+unc
+takes a fixed-size memory argument and the BPF program passes a valid
+verifier-known memory pointer (like PTR_TO_STACK) but the buffer is too sma=
+ll,
+check_mem_reg() returns an error.
 
-	load_reg =3D bpf_atomic_load_reg(insn);
-	if (load_reg >=3D 0) {
-		/* check and record load of old value */
-		err =3D check_reg_arg(env, load_reg, DST_OP);
-		if (err)
-			return err;
-	}
+This diagnostic would then unconditionally claim the argument is "not
+verifier-known memory" and advise not to pass an "integer cast to a pointer=
+",
+which obscures the actual bounds-check issue.
 
-	dst_reg =3D cur_regs(env) + insn->dst_reg;
-
-	/* Check whether we can read the memory, with second call for fetch
-	 * case to simulate the register fill.
-	 */
-	err =3D check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn-=
->dst_reg), insn->off,
-			       BPF_SIZE(insn->code), BPF_READ, -1, true, false);
-	if (!err && load_reg >=3D 0)
-		err =3D check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn=
-->dst_reg),
-				       insn->off, BPF_SIZE(insn->code),
-				       BPF_READ, load_reg, true, false);
-
-Does this leak the active modification state and cause the stack fetch event
-to be permanently lost? Should these paths also be instrumented to track
-value origins correctly?
+>  					return ret;
+> +				}
+>  			}
+>  			break;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260812233326.3575=
-958-1-memxor@gmail.com?part=3D5
+958-1-memxor@gmail.com?part=3D11
