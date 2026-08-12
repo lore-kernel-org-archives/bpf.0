@@ -1,76 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B81230DEA6;
-	Wed, 12 Aug 2026 01:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C85A37E5EE;
+	Wed, 12 Aug 2026 02:28:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786497601; cv=none; b=eqVpuUnPF0oGuYWGJPJcOxVebV9rgXydIAgMFOWBFrJqmPcq7xx+1yagi7weWMEGQdWRdBXc6XA/Cj79JMaXnJQiRUhA6l1ZGTWaptuZsyWQOFNKLHMETlJww4FQ2Gqwd70H5/27/HqFAUMfXRW969N7anfpcgDz6AnobBensbM=
+	t=1786501733; cv=none; b=KD+kZVXwiLMZK0Qrv1tKxNDSSs73x9bxnoywJ6B/wYexzgTfOiF03nd3KI6lARElTuAVppPfpXE/1Za/dm17fAKYZs2e/jdd6vlox8jzD7jFS60Bgojt+EnCKIkcY++0jajOFrgdpT48I0D+mIpTztn1jPAyWFai5M41ldaWKbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786497601; c=relaxed/simple;
-	bh=fyZiAx4RwT4ghqHa8ZYliTS1dyMnLcl5lS9FIw9KQQw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l1ZUzTuAVehrtlM3VpLB6nlIBUympJSXTg87/2Xr3Y1+EqLV6gaEoiabhC7xkFYLiN977PVzKwpxFvvIya25g4asoR6vlquTgQpW/Ugj+SNZK5pgMTdjpstG/me1oBDa/Pz5ek58gdNZGjSOpTOYHwImZGN/8f6vEuugMusW/vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tvt6oQXn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786501733; c=relaxed/simple;
+	bh=BYlFI8df0nk/XmspxA12XeiWyhM+rWeH69p6jDMG/WM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=UxhYB+GReaDfPdYsPOOtX9bmVHosmCEugO3UdERYUAvKQKCCnt1F7erRb8qNum9GfKrS+D1toYuiKTPbqlwtpTSF4fXubIZDo5R2rnHQE6+u8BkxcGLiAhaBXXpQcrtz/07faWYoleSXWB9p7eYHdJE30BX0/1i5LT/t6/MbHr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DhwHCJxV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tvt6oQXn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C791F000E9;
-	Wed, 12 Aug 2026 01:19:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DhwHCJxV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55641F000E9;
+	Wed, 12 Aug 2026 02:28:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786497599;
-	bh=qKuvoCOYFhowNNJHWa8pQE/WbDav5JFa+G9x/LjmbYc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Tvt6oQXnKHbb4kMWUgEn0Fp5HaWkaU7hlbSxRF+cbM118FD/B/JYf+3KUjN5XrWwA
-	 LIDAbXj3HowUbgUdNqZ1gzkniXJgEKS6eu72YpVxJiMorrP+PMXSIiA9M5Cs4yzPTF
-	 TqBJ8E2W5itaF0NaC6edbNuNzXRRRVS/fUhuPjWZEsJPIOJGzL5ywKJBhbzMqOlfB1
-	 Kwnqrtmof4vpW4dM+zxv8cBBolOHuRWS0gx4sZprfwy67Us86r4yAt7fkrb0dDZkED
-	 MjnN//P2hF1tcR2YhuoyWBo8YfUUCYOEueugTRBQ1OltmefZUsm3bqOrTjk7FO9ogM
-	 49BrigioXVgtA==
-Date: Tue, 11 Aug 2026 18:19:58 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Victor Nogueira <victor@mojatatu.com>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- jhs@mojatatu.com, jiri@resnulli.us, daniel@iogearbox.net,
- john.fastabend@gmail.com, sdf@fomichev.me, martin.lau@linux.dev,
- ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, jolsa@kernel.org, emil@etsalapatis.com, horms@kernel.org,
- vega@nebusec.ai, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] net/sched: add get_fill_size callbacks for actions
- missing them
-Message-ID: <20260811181958.04b42aba@kernel.org>
-In-Reply-To: <20260810164357.1653956-1-victor@mojatatu.com>
-References: <20260810164357.1653956-1-victor@mojatatu.com>
+	s=k20260515; t=1786501731;
+	bh=1SVdmcxEwCKrMZ0Idfbx3Dp++1/rG7Dqk1HcJd6ez5g=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=DhwHCJxVud0c+QTwqAo+zI/cSAp5KeRJbuUNH3ygdfs312DXwk0vZCOKm0pLQVqQe
+	 P+ExKgLvYsRryp/sXn7mskjX1KCXcbaoTH/wMy0zZ0m5pvdVrSTNje3W/Qigdp7IDc
+	 wqrQc9Ui9JcpN7ji7XM5unpGPeJyG0Lp+ZD5Sfk/v+LUk4b9JYI3Wbby+OsOP5/lc7
+	 eEBXY8PK64JDkYryJTD1jRMtUz+koertSl2JGgAk3aoD8/aez2dIDDKmwGiByL5j/L
+	 /gIRn8mmQRyPZCpvgguh90SMcS2B+wYD1IuAEfkoEzzEIPw0FH+EB/j/8GZMj2jYSX
+	 Zx1J5WeXT0yKA==
+Content-Type: multipart/mixed; boundary="===============1841659783378056855=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <1a2ae9d8a6c2ddae7f910225c821cbc06838bb7689c39c6606970f03f2c469f4@mail.kernel.org>
+In-Reply-To: <20260807134209.3794735-6-tushar.vyavahare@intel.com>
+References: <20260807134209.3794735-6-tushar.vyavahare@intel.com>
+Subject: Re: [PATCH net-next 5/5] selftests/xsk: make pkt_stream_even_odd_sequence rollback-safe
+From: bot+bpf-ci@kernel.org
+To: tushar.vyavahare@intel.com,netdev@vger.kernel.org,magnus.karlsson@intel.com,maciej.fijalkowski@intel.com,stfomichev@gmail.com,kernelxing@tencent.com,davem@davemloft.net,kuba@kernel.org,pabeni@redhat.com,ast@kernel.org,daniel@iogearbox.net,tirthendu.sarkar@intel.com,tushar.vyavahare@intel.com,andrii@kernel.org
+Cc: bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 12 Aug 2026 02:28:50 +0000 (UTC)
+
+--===============1841659783378056855==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Mon, 10 Aug 2026 13:43:57 -0300 Victor Nogueira wrote:
-> When an RTM_NEWACTION request with NLM_F_ECHO (or an RTNLGRP_TC
-> listener) creates several actions, tcf_add_notify_msg() allocates the
-> echo skb from this underestimated size. act_bpf is the clearest case:
-> TCA_ACT_BPF_OPS alone reaches 32KB per action (BPF_MAXINSNS), so two
-> actions are enough to overrun the allocation. act_pedit overruns with
-> 32 actions of four munge keys each,
+> If __pkt_stream_generate() fails midway through building per-socket
+> streams, the original code overwrites xsk_arr[i].pkt_stream with a
+> partial or NULL pointer before all allocations complete.
+>
+> Allocate all TX and RX streams into temporary arrays first and only
+> assign them to xsk_arr after every allocation succeeds.  On any failure
+> free the already-allocated temporaries and return -ENOMEM with no
+> xsk_arr pointers modified.
 
-"overruns" makes it sounds like we overflow a buffer.
-AFAICT we'd at worse hit a WARN somewhere due to EMSGSIZE?
+Does the commit message accurately describe the problem being fixed?
 
-> act_police with 32 policers once the
-> optional rate/peakrate/result/avrate attributes are present, and
-> act_tunnel_key with a single action carrying a maximum-sized geneve
-> option blob, whose 63 class/type/data attribute triplets expand to about
-> 1.2KB. tca_get_fill() then fails and the request returns -EINVAL, but
-> tcf_action_init() has already committed the actions via
-> tcf_idr_insert_many(), so they stay installed even though userspace is
-> told the request failed.
+The pre-patch code NULL-checked the allocation before assigning it to
+xsk_arr[i].pkt_stream:
 
-Please TAL at Clashiko review. 
+    pkt_stream = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
+                                       pkt_stream->pkts[0].len, i, 2);
+    if (!pkt_stream)
+            return -ENOMEM;
+    test->ifobj_tx->xsk_arr[i].pkt_stream = pkt_stream;
 
-One thing that'd be good to clarify is which WARN gets hit (if my
-assumption is correct that it's a WARN) and that the path where it
-hits has a lock covering the get_size and the rest of the operation.
+so xsk_arr[i].pkt_stream would never hold a NULL pointer from a failed
+allocation. __pkt_stream_generate() either returns a fully initialized
+stream or NULL (it frees any partial allocations on failure), so no
+"partial" pointer can exist either.
+
+The actual bug appears to be different: when an allocation for socket i
+fails, sockets 0..i-1 already have new streams installed in xsk_arr,
+and both callers (testapp_xdp_shared_umem() and run_shared_umem_test())
+return immediately on error without calling release_even_odd_sequence().
+This leaks the already-published streams and leaves xsk_arr with a
+half-replaced stream set.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31554903166
+--===============1841659783378056855==--
