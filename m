@@ -1,58 +1,58 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680E0288505
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 05:01:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B96D35C69F
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 05:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786510922; cv=none; b=kY5aPPjcgKsiNMblOf8yZmPWWx4EG1jeUx8gg5gST+m777+pGfZbbL9l43KL+wMETVRYJGcknJaCh3CQ7+oR47Lscc+vVt7a+XbNqdCSUGCNuPuPl3yl0KzeTNg25T2hjd3IY41ndeZeY400WH4wctYMEvRu1+Vd909jfCU6l3U=
+	t=1786511299; cv=none; b=RmQPzXEwLcDFe6kuRwGmsqO4tK6hfuu8nUfWuMu/ZikyMzgnsT5M+wViZVe1TEVEizjmX21xVAuOhPGZEzOx4KQJiaFJANtJey7uW+dYH46OfJYY9b8v5DEAHb3E+jM3IsSM98FxclxjT37HCEUWU4OagYXSG1Tq0HlK5jcK/WQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786510922; c=relaxed/simple;
-	bh=AwdGNDHK4sE6S0LTqGxSFi9rN4HSnfvPmIEOOp1ZtHg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Cc7u0+7GOYokm1Fi19VTFkiNZil2E8nNtHq3tGiZ7xI4SlrUYOEAtUVKrZX5sX3sqa3ObUOF/K82zUQ5dxJIJCwY8R17f5loX857CLafz4qhiDT0CzT216sK3l8J7tBeY2XZq2+mnLhT6OGXcEUYUEBxHRyBClAtykTzA4ynB3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr; spf=pass smtp.mailfrom=snu.ac.kr; dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b=D2u1MGdd; arc=none smtp.client-ip=209.85.216.44
+	s=arc-20240116; t=1786511299; c=relaxed/simple;
+	bh=uhc6wBwrNS9vfoVczwdeSLBZJ2E1HCq++cw6w9Sb3R0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BshNr/io/SmK5t9dscTHp9jw9saesPcgG6zb4hp/Vh1/a6mcm/ridB2nF7wm3vNanUqKebb1YU6osQrSIw6rkNdjIFevDi0l/pGav67U05QwR8bpg9DnU1o4K8rWNirdCyhcBSJK3f3vmKa/cI1MtcqiTklOMksM5uPwd++REQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr; spf=pass smtp.mailfrom=snu.ac.kr; dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b=FgdAByvJ; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=snu.ac.kr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b="D2u1MGdd"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38759bcd877so807856a91.2
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 22:01:59 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b="FgdAByvJ"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-38e3efab7e0so498324a91.0
+        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 22:08:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=snu.ac.kr; s=google; t=1786510919; x=1787115719; darn=vger.kernel.org;
+        d=snu.ac.kr; s=google; t=1786511296; x=1787116096; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=waGO7W7vIGNoZfGpyZ1AmQiCYt6p+ShqYaoREcQ4Cqo=;
-        b=D2u1MGddSayVhGLR1xqJ+rYjugRbwwIWhFkmu9aaorQ/YuSvGbtRd+DEx3GcRjNbVH
-         TsWC1/O3Oib47C2EYcM7st0Z3usuk/Qh4RaerdKO5WejcEA7jY9fvu4NGYfNrRd7wJur
-         cGDo8ifQPV612fJmSWEsTtT8uH1iWowVz2jj4=
+        bh=1yuGBq7G0Bev3VP+vTDYTvYJPw7Cn0tNgdTp90qDuqk=;
+        b=FgdAByvJQWkwjZ6d5fezqSAl1+zX6JeyNdKhYzwM1LITDlPCZMt1YC8R/deUacrsla
+         P5T25Pnd1Xi3tLshGeUx689UchGjgQF2Dddn6XRASQ2KB2LhPYOyS4UuOAQlT39eRWDs
+         ebxxw5L9D0LbXmpYWXvsSKbxD60uXHAlC946s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786510919; x=1787115719;
+        d=1e100.net; s=20251104; t=1786511296; x=1787116096;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=waGO7W7vIGNoZfGpyZ1AmQiCYt6p+ShqYaoREcQ4Cqo=;
-        b=bysoWN3dOaATzwHM0GR9Yl9RR9NyOzv2eXnEW47Xm3X4lnF7fT4cTKHZ7nV5shxQNJ
-         /pBwRAzxJXD49ZTJijgVZk1Zw5i47YKd2Wc63528NdoMoiKAUXn/i4X0cz7GuulGoTcq
-         dtcecBwhhn/Kj5Cecnxz2AyTEebtBYOHvD1zlAcHfgeERrTTRGX5GtvX6yK7OiAJRFDC
-         jBMQc1V5+9QE/wnvewRC1GSiroQM4eWhX2W8GTljENNknLx4+hOAyMAEyIV3qYuBmgM4
-         kOJ8jQs+rDzn4bmZ/w6Y95oQJ/9EXbVXA9inD3o+rguU4WoXe13WajRfvyQjvUzL7aNP
-         TO8A==
-X-Gm-Message-State: AOJu0YwTTBUiv9RFlsscCqjjmJW0vENlrQ4bq6eYxplqrjNOa9iDA4gf
-	3gh7z+Ta4OveOX3vDqOQe5jMxJzLSJCHqeei+dmhy85mJVBX5D1OpswUsMm+3zgkthcO/wCQ5Au
-	Nnp5xxwAItQ==
-X-Gm-Gg: AR+sD12WZ13rfTw+Iwootm+CKr73CeJ0WMD6eWL6nXP+Kj4G5uKv9sZ7EDPkPOYQK7B
-	AndKYmtWvjpqHCgCg/ZLkjW6eTDXrUCuVoXCpxGSW0g57WldMwQnVdVqg3izSEhW/0etbGf7wqo
-	MgumBYxI6e7LaX1ZOg21r+M5JfCOxe8LUOCJgpKAbP5TOnp9jE4I3n5SBtAuA6PXNEfmff4N4aB
-	io8fUGYnoUeq51pg3RWZBfifynHLNiC2Q2K5FysIbNHCZhCU9rryX897lvkLfj3l2TvRXf93fbJ
-	Yckkh8PiTo6O9XPVCixthqebnWzENIkjcexJaOCSeKnagYH1yVNtFfzkL3fs0EJE2l4Kg5zN+h3
-	nfdv0iQRgLbCC14ZWbv6tJV9oARL/1Cw+nWmjAlApcyurI+7wpU3TpULoSanHpqDlaMawHMgZh2
-	ncg6HQR7QYhIS/qvd2Yvsjcghoi27X3279nzyEOQo5IulV0xTeGv7HqdQTuMfUdA056IxoXQ==
-X-Received: by 2002:a17:90b:4a89:b0:381:26f:8f05 with SMTP id 98e67ed59e1d1-393011de88fmr2675133a91.3.1786510918649;
-        Tue, 11 Aug 2026 22:01:58 -0700 (PDT)
+        bh=1yuGBq7G0Bev3VP+vTDYTvYJPw7Cn0tNgdTp90qDuqk=;
+        b=Wqov3x768L8GatE6riJwXoDXnv85f4rC3hjqd7H0stoGRA+50hqsHrdEPqdFYpxqIi
+         JLMubwsFU3K29W4sKIMZFZ5YF1kuA7/DolAkrcdzGYr+v531EzsRlgs7AEagJ8UgFyXC
+         ua0gpVhw20Sw68kcV6tb7hEK0spfzHcM7JDfJnCn+33CEMHXhVhHCjNXU8KeX9bgNkcr
+         m9uqgSVstZyFLKvRmwis81lH5OwHg808LTisD/w0j0ZEx0F7+btXZHmgFJ9axJy11Ot+
+         3ADEghGSIMaLN9i2Ikzb+Ou9/NYK4IBO7HxOPdCWSzmFP1a1dGZnY3rSRH5tQ6bbA2pu
+         dX5Q==
+X-Gm-Message-State: AOJu0YxiQgFGRUlSSxicxS6XXfgZYXUi5kfS4yut3jfKVQarsQgl1hhN
+	e191/uf0p24kO+aNuapYcb1WudtDavZ53WLd7feyWIcIlKVwu/H+63wwWo7hix3XQoxTzlUUQIc
+	M7fpTEThi0A==
+X-Gm-Gg: AR+sD13kB99VlVw1noTZJkx8qxEhvHqPaFf32swA3S4Wy/UmwhLA+Q0w7nmL2kg/SMR
+	T76YD5gE5oJleVZ9223XR7adYGrfr1Y4jrrI6dEMHttlZBy7vIcYb49nG7jSwFX/sEUgPIUH+6z
+	7XSCDTerUKqCXfilvHDFnnM3Bsj2CSnmiVM1ExVrYn9XXLVRBOYWHvTmsP0VsYhJQ1fdM2KK0JR
+	i6gNrzlFXauoD1xXdbU2tV3hm9H/C2lVyfdvc0UGKwFqfPuxGbWoZF80xCSwIQiGJSZdF5sM+ap
+	5ifz33UCIIBOomAw4CRLHd/K3tb7Nu0lYpEpLZj2JtrAwwPlf7+HV7xlxmsr82g2wIemvcYNNut
+	XluqSvODARybfCY0Pnc2Qq5nWIDwwPZmMTtlHuurCnT9hQpL1sWD4Wix/Op7VI5nLgnJ9Z71OYd
+	KHGC7R5NIwM/nKSEjsscDXn1nsU9ClIO++I6Fx3o3IWOFHF9jjScIIcgD+/QaJG17s
+X-Received: by 2002:a17:90b:5103:b0:38e:7297:a92e with SMTP id 98e67ed59e1d1-39302a39179mr898876a91.9.1786511295576;
+        Tue, 11 Aug 2026 22:08:15 -0700 (PDT)
 Received: from desktop ([147.46.174.226])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392f8893709sm2053403a91.4.2026.08.11.22.01.54
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392f8e7a68fsm2038658a91.17.2026.08.11.22.08.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 22:01:58 -0700 (PDT)
+        Tue, 11 Aug 2026 22:08:15 -0700 (PDT)
 From: Kenneth Lee <kennethbwlee@snu.ac.kr>
 To: bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -68,9 +68,9 @@ Cc: linux-kernel@vger.kernel.org,
 	sdf@fomichev.me,
 	yonghong.song@linux.dev,
 	rhkrqnwk98@gmail.com
-Subject: BUG: bpf: task hung in tcx_link_release
-Date: Wed, 12 Aug 2026 14:01:38 +0900
-Message-ID: <20260812050138.812504-1-kennethbwlee@snu.ac.kr>
+Subject: BUG: bpf: task hung in lock_sock_nested during sockmap free
+Date: Wed, 12 Aug 2026 14:07:58 +0900
+Message-ID: <20260812050758.813489-1-kennethbwlee@snu.ac.kr>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -85,7 +85,7 @@ Hi,
 The following hung task was found by a custom fuzzer developed
 by Sechang Lim <rhkrqnwk98@gmail.com>:
 
-  INFO: task syz.0.604:4415 blocked for more than 123 seconds.
+  INFO: task kworker/u8:19:1912 blocked for more than 122 seconds.
 
 Unfortunately, we haven't found a reproducer for the hang yet. We'll
 inform you if we have any update on the hang.
@@ -100,41 +100,59 @@ Kenneth Lee
 7.1.0-rc6
 
 - Crash Report:
-INFO: task syz.0.604:4415 blocked for more than 123 seconds.
+INFO: task kworker/u8:19:1912 blocked for more than 122 seconds.
       Not tainted 7.1.0-rc6-dirty #34
 "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz.0.604       state:D stack:27816 pid:4415  tgid:4415  ppid:2655   task_flags:0x400040 flags:0x00080002
+task:kworker/u8:19   state:D stack:24296 pid:1912  tgid:1912  ppid:2      task_flags:0x4208060 flags:0x00080000
+Workqueue: events_unbound bpf_map_free_deferred
 Call Trace:
  <TASK>
  context_switch kernel/sched/core.c:5388 [inline]
  __schedule+0x1f31/0x2e80 kernel/sched/core.c:7189
  __schedule_loop kernel/sched/core.c:7268 [inline]
  schedule+0x167/0x360 kernel/sched/core.c:7283
- schedule_preempt_disabled+0x15/0x30 kernel/sched/core.c:7340
- __mutex_lock_common kernel/locking/mutex.c:726 [inline]
- __mutex_lock+0x60a/0x1380 kernel/locking/mutex.c:820
- tcx_link_release+0x6e/0x4b0 kernel/bpf/tcx.c:177
- bpf_link_free+0xec/0x4a0 kernel/bpf/syscall.c:3273
- bpf_link_put_direct kernel/bpf/syscall.c:3326 [inline]
- bpf_link_release+0x7d/0x90 kernel/bpf/syscall.c:3333
- __fput+0x454/0xa70 fs/file_table.c:510
- task_work_run+0x197/0x210 kernel/task_work.c:233
- resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
- __exit_to_user_mode_loop kernel/entry/common.c:67 [inline]
- exit_to_user_mode_loop+0x10f/0x550 kernel/entry/common.c:98
- __exit_to_user_mode_prepare include/linux/irq-entry-common.h:207 [inline]
- syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:230 [inline]
- syscall_exit_to_user_mode include/linux/entry-common.h:318 [inline]
- do_syscall_64+0x306/0x480 arch/x86/entry/syscall_64.c:100
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x551c0d
-RSP: 002b:00007ffec2926448 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
-RAX: 0000000000000000 RBX: 00000000007d7da0 RCX: 0000000000551c0d
-RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
-RBP: 00000000007d7da0 R08: 0000000000000009 R09: 0000000000000001
-R10: 00000000003fd15c R11: 0000000000000246 R12: 000000000002e6bb
-R13: ffffffffffffffff R14: 00000000007d5fa0 R15: 00000000007d5fac
+ __lock_sock+0xf5/0x210 net/core/sock.c:3191
+ lock_sock_nested+0xca/0x100 net/core/sock.c:3804
+ lock_sock include/net/sock.h:1713 [inline]
+ sock_map_free+0x120/0x3c0 net/core/sock_map.c:356
+ bpf_map_free+0x197/0x3c0 kernel/bpf/syscall.c:892
+ process_one_work kernel/workqueue.c:3314 [inline]
+ process_scheduled_works+0xa98/0x1690 kernel/workqueue.c:3397
+ worker_thread+0x8a5/0xd90 kernel/workqueue.c:3478
+ kthread+0x397/0x480 kernel/kthread.c:436
+ ret_from_fork+0x397/0x810 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
  </TASK>
-INFO: task syz.0.604:4415 is blocked on a mutex likely owned by task kworker/u8:42:1561.
-task:kworker/u8:42   state:R  running task     stack:27016 pid:1561  tgid:1561  ppid:2      task_flags:0x4208060 flags:0x00080000
-Workqueue: netns cleanup_net
+
+Showing all locks held in the system:
+1 lock held by khungtaskd/34:
+ #0: ffffffffa4905880 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:300 [inline]
+ #0: ffffffffa4905880 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:838 [inline]
+ #0: ffffffffa4905880 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x2e/0x180 kernel/locking/lockdep.c:6775
+3 locks held by systemd-journal/120:
+1 lock held by syz-executor/327:
+3 locks held by kworker/u8:19/1912:
+ #0: ffff8881000ac140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3289 [inline]
+ #0: ffff8881000ac140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_scheduled_works+0x9af/0x1690 kernel/workqueue.c:3397
+ #1: ffffc9001279fd20 ((work_completion)(&map->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3290 [inline]
+ #1: ffffc9001279fd20 ((work_completion)(&map->work)){+.+.}-{0:0}, at: process_scheduled_works+0x9d6/0x1690 kernel/workqueue.c:3397
+ #2: ffff888118685d58 (sk_lock-AF_INET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1713 [inline]
+ #2: ffff888118685d58 (sk_lock-AF_INET){+.+.}-{0:0}, at: sock_map_free+0x120/0x3c0 net/core/sock_map.c:356
+2 locks held by syz.0.944/7410:
+4 locks held by syz-executor/7721:
+ #0: ffff88811a93a8a0 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested kernel/sched/core.c:652 [inline]
+ #0: ffff88811a93a8a0 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock kernel/sched/sched.h:1624 [inline]
+ #0: ffff88811a93a8a0 (&rq->__lock){-.-.}-{2:2}, at: rq_lock kernel/sched/sched.h:1968 [inline]
+ #0: ffff88811a93a8a0 (&rq->__lock){-.-.}-{2:2}, at: __schedule+0x305/0x2e80 kernel/sched/core.c:7064
+ #1: ffffffffa87c6018 (&obj_hash[i].lock){-.-.}-{2:2}, at: debug_object_activate+0x87/0x540 lib/debugobjects.c:845
+ #2: ffffffffa87ef238 (&obj_hash[i].lock){-.-.}-{2:2}, at: debug_object_activate+0x87/0x540 lib/debugobjects.c:845
+ #3: ffff88811a934228 (lock#3){+.+.}-{3:3}, at: local_lock_acquire include/linux/local_lock_internal.h:46 [inline]
+ #3: ffff88811a934228 (lock#3){+.+.}-{3:3}, at: __folio_batch_add_and_move+0x93/0x810 mm/swap.c:192
+1 lock held by (udev-worker)/8332:
+2 locks held by kworker/u8:9/11248:
+ #0: ffff8881000ac140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3289 [inline]
+ #0: ffff8881000ac140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_scheduled_works+0x9af/0x1690 kernel/workqueue.c:3397
+ #1: ffffc9000f397d20 ((work_completion)(&map->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3290 [inline]
+ #1: ffffc9000f397d20 ((work_completion)(&map->work)){+.+.}-{0:0}, at: process_scheduled_works+0x9d6/0x1690 kernel/workqueue.c:3397
+1 lock held by syz.3.2068/11361:
+ #0: ffffffffa50cd460 (rtnl_mutex){+.+.}-{4:4}, at: tcx_link_release+0x6e/0x4b0 kernel/bpf/tcx.c:177
