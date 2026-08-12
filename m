@@ -1,266 +1,135 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973B033E34B;
-	Wed, 12 Aug 2026 06:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00453392C27;
+	Wed, 12 Aug 2026 06:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786515349; cv=none; b=XK+7EYkM1HO7u2+0WfB+YQqzQGTzFfgyQ2EzeRWbWKG+/ZF+oAX4fG25kN2+iiCRgHSBlPMbjDzW1J6GMht3JYonxm6gvKtmd90Cfd6eL91jqKsocoomf4XQVpn0r+wf9af2t9etU9hRWEmegZhG4DUWkc3vbJqLTFF4FmGpuDc=
+	t=1786515904; cv=none; b=r3cxLJih17gHQhSZR6Tn8FhJdvDsXLR+1G2AKA7auOmdVO7QyokoY4i99aq2xH/CsSXf4MDIo3La7xhWBchd7voF3Gm5uNiXIuBsPShh6TIx8Zv6gt+enQmtXyCgvBvq1cHt41eSYqdB3CXY4QqWzNptlWGRbgVKlIAEJJjBZOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786515349; c=relaxed/simple;
-	bh=0Ce85bV5lT5lMzieQ5ba5sEhxcRoCubiNNv0bA4qfXk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YFRKNDgiv1EYfxNGUpO43/V812dOMEC0jFNp1X8QmLAzJKQr/JMi/huFwBL95VCcGn9kx+6gx/RrD8f26v3iHIk2B1S3G5Z6HsvDxs96XnJrcQPaM2f/xM3yDb1nF37T0c0EktiJEoWHLxf50KOGcFNmkkga6RxgCe5gopwT9QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3bd2dc94961511f1aa26b74ffac11d73-20260812
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:102c2356-60fb-4d33-8beb-edca2ad902b1,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:c4e4363d59d2d4125f9f078fc1ff61bd,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|136|850|865|898,TC:nil,Content
-	:0|15|50,EDM:-3|-100,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,
-	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3bd2dc94961511f1aa26b74ffac11d73-20260812
-X-User: jiangfeng@kylinos.cn
-Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1487058221; Wed, 12 Aug 2026 14:15:36 +0800
-From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Wed, 12 Aug 2026 06:15:32 +0000
-Subject: [bpf-next PATCH 1/2] bpf, riscv: Add BPF stack arguments support
- for RV64 JIT
+	s=arc-20240116; t=1786515904; c=relaxed/simple;
+	bh=GcgOzyvq+rgW0Zel1dmFqyIjGKgWRa+jwmV30bcOcpQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=da6hl006C6oK6bCbo/llIcZZbNwePJsX+L/slha0yklQXHVgC/g6/UhxcA9qGer8F6J0SjtuL3GFddtNq4GvjiLpm0UCcKIioa+cJRyw8CO3KYH1d6b56/UzdJ2t0YqYYwIrxPCAqHj7ErC+00aDaVss+G1BbXPVHeOlyjz8Iy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hQ5PSVXC; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hQ5PSVXC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3411E1F000E9;
+	Wed, 12 Aug 2026 06:24:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786515899;
+	bh=DQ/BTrQU4EqQQ8+h94Z+NBR8sj5syN4BZZhG22m1K64=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hQ5PSVXC6TaKCJRqgBNJIr+TOdu+VXULM1Q2XS8bzFFD3F7LGh8HxXjVnAl9u13yH
+	 wnSYy7dLjFioSoGoxAc66lCEJ0Z2DEJNxpFozvFhM8CCiszTUa+CZnaiH+q4aLEOYV
+	 FBv7SBSEbasZwx6lS/MwiGKZz8CCrJpR/NIRVAQEyVMy7d0+2VgIhSPFMSleGAtt+l
+	 AuGVe5PAHHNtrRFVBqH9LOcReCfFh2g90J2+tCXZwSrm0C78B65w88bidSUp6gRWmv
+	 DMNLCa5zwf9EP26MIunV/uRs41PLlYzgPHtVtda+LCn43ddaYZJjTznCtYgeXPoVyK
+	 kG1CYa6qpp0zw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] sched_ext: Gate cid kfuncs behind the SCX struct_ops
+ check
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Qiurong Fang" <fangqiurong@kylinos.cn>
+Cc: bpf@vger.kernel.org, sched-ext@lists.linux.dev
+In-Reply-To: <20260812061116.2691443-1-fangqiurong@kylinos.cn>
+References: <20260812061116.2691443-1-fangqiurong@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 12 Aug 2026 06:24:58 +0000
+Message-Id: <20260812062459.3411E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260812-bpf-riscv-stack-args-v1-1-67b246806e59@kylinos.cn>
-References: <20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn>
-In-Reply-To: <20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- llvm@lists.linux.dev, Feng Jiang <jiangfeng@kylinos.cn>
-X-Mailer: b4 0.14.3
 
-Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
-and kfuncs can receive more than 5 arguments via the stack
-(BPF_REG_PARAMS / r11).
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-For BPF-to-BPF calls the caller writes outgoing arguments at the
-bottom of its frame (SP-relative). The callee reads them with
-FP-relative loads. Its FP is set to the caller SP in the prologue,
-so the offsets match.
+Pre-existing issues:
+- [High] Missing negative bounds checks in memory cgroup kfuncs (`bpf_mem_c=
+group_memory_events` and `bpf_mem_cgroup_vm_events`) allow out-of-bounds ar=
+ray access.
+--
 
-The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
-SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
-area into A5-A7 and copy any remaining arguments down so argument 9
-lands at SP+0.
+--- Patch [1]: [PATCH] sched_ext: Gate cid kfuncs behind the SCX struct_ops=
+ check ---
+commit 44e99221673a68d8565292bb70385d8d0629f96c
+Author: fangqiurong <fangqiurong@kylinos.cn>
+sched_ext: Gate cid kfuncs behind the SCX struct_ops check
 
-A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
-live before a call, TCC is backed up on the stack, and A7 is unused
-by the JIT.
+This commit updates scx_kfunc_context_filter() to recognize scx_kfunc_ids_c=
+id.
+It ensures that cid kfuncs are properly restricted and cannot be called from
+arbitrary struct_ops programs.
 
-Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
-iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
-corrupts callee-saved registers.
+[ ... ]
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
----
- arch/riscv/net/bpf_jit.h        |  1 +
- arch/riscv/net/bpf_jit_comp64.c | 75 +++++++++++++++++++++++++++++++++++++++--
- arch/riscv/net/bpf_jit_core.c   |  4 +++
- 3 files changed, 77 insertions(+), 3 deletions(-)
+While reviewing this, I noticed a pre-existing issue in the BPF memory
+cgroup kfuncs.
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index 419b9d795f2a..9eb4e149505d 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -82,6 +82,7 @@ struct rv_jit_context {
- 	unsigned long flags;
- 	int stack_size;
- 	int tcc_offset;
-+	u16 stack_arg_size;
- 	u64 arena_vm_start;
- 	u64 user_vm_start;
- };
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 6b9972b07c1b..b3f4bf9e1e7f 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1815,18 +1815,39 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 
- 		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
- 			const struct btf_func_model *fm;
--			int idx;
-+			int idx, nargs;
- 
- 			fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
- 			if (!fm)
- 				return -EINVAL;
- 
--			for (idx = 0; idx < fm->nr_args; idx++) {
-+			nargs = min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS);
-+			for (idx = 0; idx < nargs; idx++) {
- 				u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
- 
- 				if (fm->arg_size[idx] == sizeof(int))
- 					emit_sextw(reg, reg, ctx);
- 			}
-+
-+			/* BPF stack args -> RISC-V ABI: args 6-8 in A5-A7, 9+ at SP+0 */
-+			if (fm->nr_args > MAX_BPF_FUNC_REG_ARGS) {
-+				int n_stack = fm->nr_args - MAX_BPF_FUNC_REG_ARGS;
-+				int n_reg = min_t(int, n_stack,
-+						  RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS);
-+
-+				for (idx = 0; idx < n_reg; idx++) {
-+					int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
-+
-+					emit_ld(RV_REG_A5 + idx, idx * 8, RV_REG_SP, ctx);
-+					if (sz == sizeof(int))
-+						emit_sextw(RV_REG_A5 + idx, RV_REG_A5 + idx, ctx);
-+				}
-+
-+				for (idx = 0; idx < n_stack - n_reg; idx++) {
-+					emit_ld(RV_REG_T1, (n_reg + idx) * 8, RV_REG_SP, ctx);
-+					emit_sd(RV_REG_SP, idx * 8, RV_REG_T1, ctx);
-+				}
-+			}
- 		}
- 
- 		/* restore TCC to RV_REG_TCC before bpf2bpf call */
-@@ -1891,6 +1912,21 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_LDX | BPF_MEM | BPF_H:
- 	case BPF_LDX | BPF_MEM | BPF_W:
- 	case BPF_LDX | BPF_MEM | BPF_DW:
-+		if (insn->src_reg == BPF_REG_PARAMS) {
-+			int idx = off / 8 - 1;
-+
-+			if (is_12b_int(idx * 8)) {
-+				emit_ldx_insn(rd, idx * 8, RV_REG_FP, BPF_SIZE(code), false, ctx);
-+			} else {
-+				emit_imm(RV_REG_T1, idx * 8, ctx);
-+				emit_add(RV_REG_T1, RV_REG_T1, RV_REG_FP, ctx);
-+				emit_ldx_insn(rd, 0, RV_REG_T1, BPF_SIZE(code), false, ctx);
-+			}
-+			if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
-+				return 1;
-+			break;
-+		}
-+		fallthrough;
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_B:
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
-@@ -1938,6 +1974,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ST | BPF_MEM | BPF_H:
- 	case BPF_ST | BPF_MEM | BPF_W:
- 	case BPF_ST | BPF_MEM | BPF_DW:
-+		if (insn->dst_reg == BPF_REG_PARAMS) {
-+			int idx = -off / 8 - 1;
-+
-+			emit_imm(RV_REG_T1, imm, ctx);
-+			if (is_12b_int(idx * 8)) {
-+				emit_stx_insn(RV_REG_SP, idx * 8, RV_REG_T1, BPF_SIZE(code), ctx);
-+			} else {
-+				emit_imm(RV_REG_T2, idx * 8, ctx);
-+				emit_add(RV_REG_T2, RV_REG_SP, RV_REG_T2, ctx);
-+				emit_stx_insn(RV_REG_T2, 0, RV_REG_T1, BPF_SIZE(code), ctx);
-+			}
-+			break;
-+		}
-+		fallthrough;
- 	/* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
-@@ -1960,6 +2010,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_STX | BPF_MEM | BPF_H:
- 	case BPF_STX | BPF_MEM | BPF_W:
- 	case BPF_STX | BPF_MEM | BPF_DW:
-+		if (insn->dst_reg == BPF_REG_PARAMS) {
-+			int idx = -off / 8 - 1;
-+
-+			if (is_12b_int(idx * 8)) {
-+				emit_stx_insn(RV_REG_SP, idx * 8, rs, BPF_SIZE(code), ctx);
-+			} else {
-+				emit_imm(RV_REG_T1, idx * 8, ctx);
-+				emit_add(RV_REG_T1, RV_REG_SP, RV_REG_T1, ctx);
-+				emit_stx_insn(RV_REG_T1, 0, rs, BPF_SIZE(code), ctx);
-+			}
-+			break;
-+		}
-+		fallthrough;
- 	/* STX | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = src */
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
-@@ -2036,6 +2099,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- 
- 	stack_adjust = round_up(stack_adjust, STACK_ALIGN);
- 	stack_adjust += bpf_stack_adjust;
-+	stack_adjust += ctx->stack_arg_size;
- 
- 	store_offset = stack_adjust - 8;
- 
-@@ -2093,7 +2157,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- 	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
- 
- 	if (bpf_stack_adjust)
--		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
-+		emit_addi(RV_REG_S5, RV_REG_SP, ctx->stack_arg_size + bpf_stack_adjust, ctx);
- 
- 	ctx->stack_size = stack_adjust;
- 
-@@ -2171,3 +2235,8 @@ bool bpf_jit_supports_timed_may_goto(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_stack_args(void)
-+{
-+	return true;
-+}
-diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-index cbfcd287ea16..844a0f3e0fa9 100644
---- a/arch/riscv/net/bpf_jit_core.c
-+++ b/arch/riscv/net/bpf_jit_core.c
-@@ -72,6 +72,10 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	ctx->arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
- 	ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
- 	ctx->prog = prog;
-+
-+	ctx->stack_arg_size = round_up(bpf_out_stack_arg_cnt(env, prog) *
-+				       sizeof(u64), STACK_ALIGN);
-+
- 	ctx->offset = kvzalloc_objs(int, prog->len);
- 	if (!ctx->offset)
- 		goto out_offset;
+In mm/bpf_memcontrol.c:
 
--- 
-2.53.0
+> __bpf_kfunc unsigned long bpf_mem_cgroup_memory_events(struct mem_cgroup =
+*memcg,
+> 						       enum memcg_memory_event event)
+> {
+> 	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
+> 		return (unsigned long)-1;
+>=20
+> 	return atomic_long_read(&memcg->memory_events[event]);
+> }
 
+[Severity: High]
+This is a pre-existing issue, but can a negative enum value bypass this bou=
+nds
+check?
+
+If a BPF program passes a negative integer for the event argument, the BPF
+verifier does not enforce enum ranges, allowing the negative value to reach
+the kfunc.
+
+Because the check event >=3D MEMCG_NR_MEMORY_EVENTS performs a signed compa=
+rison,
+would it evaluate to false for negative values and lead to an out-of-bounds
+read of memcg->memory_events[event]?
+
+In mm/memcontrol.c:
+
+> bool memcg_vm_event_item_valid(enum vm_event_item idx)
+> {
+> 	if (idx >=3D NR_VM_EVENT_ITEMS)
+> 		return false;
+>=20
+> 	return !BAD_STAT_IDX(memcg_events_index(idx));
+> }
+
+And in mm/bpf_memcontrol.c:
+
+> __bpf_kfunc unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *mem=
+cg,
+> 						   enum vm_event_item event)
+> {
+> 	if (unlikely(!memcg_vm_event_item_valid(event)))
+> 		return (unsigned long)-1;
+>=20
+> 	return memcg_events(memcg, event);
+> }
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does memcg_vm_event_item_val=
+id()
+also miss negative enum values?
+
+Since the bounds check uses a signed comparison, a negative idx evaluates to
+false for idx >=3D NR_VM_EVENT_ITEMS.
+
+When bpf_mem_cgroup_vm_events() passes an unfiltered enum to this helper, c=
+ould
+this result in an out-of-bounds read in memcg_events_index(idx) or
+memcg_events()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260812061116.2691=
+443-1-fangqiurong@kylinos.cn?part=3D1
