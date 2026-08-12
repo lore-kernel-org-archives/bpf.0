@@ -1,378 +1,289 @@
-Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [67.231.157.127])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4812439F60;
-	Wed, 12 Aug 2026 12:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.157.127
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5389E43B4B6
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 12:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786536838; cv=fail; b=AkUFWjWOBP18oKChbQYR5OuBZ62OA1WaAl0kSgzkfjSFDwBH+xSr6AD8lO9WvHgLzY+CUS1WBHYzRSBNh3GpWEC6UwycAl+Sq4UnIOPWR/roXZeBLwWw6442ya0wXNJmCbhMSkrk+lUY2ncaBFmmEG8RTerkFzejniZ0m6xKxTw=
+	t=1786537106; cv=pass; b=ediDNdtKk36YxeIECb52Ne0WLC6ZrjHmQ6dldcSbxpWBey8mnR1KCbiEpDRIyR2AbGiNf91RpAPF6Md6yyi5FGdzYQPRZAn+ql71DoXSJlqgzvMpmVR0ykEJrwG/MwYOHT1AOsOIFYn1wC9deeePZ5gkrRQjQrgM/R2qN7aRJlg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786536838; c=relaxed/simple;
-	bh=ONTL1CHHwEM5PXM/+Yeiz37jgI9J5by3rJKVe6Jxd0o=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=hLPGYwg3t4xzAGAlIi6mwN0vroNksgwlN/7MbIoDzHuCRRL7/+tbka1x/uq/tiWpNJtQfIhk+0YCEZMsHNoVvDUUkddq+joprHYYDlFdxyCCPtUm61pAZuHwASeaxlsnL4nBqox4orCf/Lc2XiW954r7/W5Kf8b/7WoC0pEqhBk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=h/NhRrQ8; arc=fail smtp.client-ip=67.231.157.127
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=akamai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
+	s=arc-20240116; t=1786537106; c=relaxed/simple;
+	bh=Ucbh7feqO9tBYQURvOJaE1VnWwkVpKZgD62/TIZIVMk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b1PMIvouY9mjjtfZNxStq0r71V2HgJGQXS9EbB6awat9hqgqja/W3U4tBYu2PpzE+pDc1eout4oQEzDgN2J9VvKeqFPsFIHYnq6JafA5a97mgUJfvyRomssThMESErDeI02Y5xpafng4vIULqiac1746a7SJelYQg9YUF7MQJyI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zf3Wtq5C; arc=pass smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="h/NhRrQ8"
-Received: from pps.filterd (m0409410.ppops.net [127.0.0.1])
-	by m0409410.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 67CB4H9D676467;
-	Wed, 12 Aug 2026 13:13:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=apr2026.eng; bh=poJRfDx/SDDGFHLfzth4R+
-	BCkptZRoeN/0+lIMmHuz8=; b=h/NhRrQ8sYWsGOPlWLq/reaR3TUFwc97N4jYO/
-	BJi6YA/4IZHyI5T1CtjsnXhOHFrATJ0SBCOdxLStvT8OP9APdeXiGj05l2VgmU4t
-	bQsZIBMPgOOikp1IKCVdD60unuau5FaPfQ1ZAJKC1v1+DdxO2ApyC61ioTdQEJ1w
-	koVHdYvJnJndbGkW9kxGHLS5/oEdFl70wjKAj6ng4Sf7v1XIxfhR+s12kd1UA3a6
-	8S/SBmnVb1T5VJquTdzI6W0TidRLjz9Xex/+Ceb1tEgOD9fWpYuKkXyzxNe90r0l
-	n8mvCFZ+gt82nB7W09VOpCpCyXbFOZfif3o3r/LRRhQJGu8Q==
-Received: from prod-mail-ppoint3 (a72-247-45-31.deploy.static.akamaitechnologies.com [72.247.45.31] (may be forged))
-	by m0409410.ppops.net-00190b01. (PPS) with ESMTPS id 4fxfc7nqy6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 12 Aug 2026 13:13:50 +0100 (BST)
-Received: from pps.filterd (prod-mail-ppoint3.akamai.com [127.0.0.1])
-	by prod-mail-ppoint3.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 67CC4YRS015469;
-	Wed, 12 Aug 2026 08:13:50 -0400
-Received: from email.msg.corp.akamai.com ([172.27.50.220])
-	by prod-mail-ppoint3.akamai.com (PPS) with ESMTPS id 4fwysumtss-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 12 Aug 2026 08:13:48 -0400 (EDT)
-Received: from ustx2ex-exedge4.msg.corp.akamai.com (172.27.50.215) by
- ustx2ex-dag5mb3.msg.corp.akamai.com (172.27.50.220) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43; Wed, 12 Aug 2026 05:13:48 -0700
-Received: from CY3PR08CU001.outbound.protection.outlook.com (72.247.45.132) by
- ustx2ex-exedge4.msg.corp.akamai.com (172.27.50.215) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43 via Frontend Transport; Wed, 12 Aug 2026 05:13:48 -0700
-Received: from SJ0PR17MB4711.namprd17.prod.outlook.com (2603:10b6:a03:378::6)
- by PH7PR17MB5929.namprd17.prod.outlook.com (2603:10b6:510:158::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.25; Wed, 12 Aug
- 2026 12:13:46 +0000
-Received: from SJ0PR17MB4711.namprd17.prod.outlook.com
- ([fe80::bc8:ae55:d179:ebac]) by SJ0PR17MB4711.namprd17.prod.outlook.com
- ([fe80::bc8:ae55:d179:ebac%4]) with mapi id 15.21.0315.011; Wed, 12 Aug 2026
- 12:13:46 +0000
-From: "Hudson, Nick" <nhudson@akamai.com>
-To: "sashiko-reviews@lists.linux.dev" <sashiko-reviews@lists.linux.dev>
-CC: "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v7 4/6] bpf: allow new DECAP flags and add guard
- rails
-Thread-Topic: [PATCH bpf-next v7 4/6] bpf: allow new DECAP flags and add guard
- rails
-Thread-Index: AQHdKjUQBXO5p3MatkCjvRVLjog1I7aaNK6AgAAe54A=
-Date: Wed, 12 Aug 2026 12:13:46 +0000
-Message-ID: <C1FBF256-7BA8-4F29-A63B-93703339B188@akamai.com>
-References: <20260812083115.73100-1-nhudson@akamai.com>
- <20260812083115.73100-5-nhudson@akamai.com>
- <20260812102300.0BF711F000E9@smtp.kernel.org>
-In-Reply-To: <20260812102300.0BF711F000E9@smtp.kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR17MB4711:EE_|PH7PR17MB5929:EE_
-x-ms-office365-filtering-correlation-id: 11e8486b-db40-419e-d134-08def86b28c8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|10070799003|6049299003|376014|1800799024|366016|23010399003|6133799003|4053099003|38070700021|10067099003|4143699003|56012099006|18002099003|22082099003|3023799007;
-x-microsoft-antispam-message-info: /3XhC96+FdhG51arN2OpdmOUvOCTxjuYqRBG3F6nfl4I7REuCRsBQhyCJSJPQfkfeU3nR6x71ZkNOVcOyQTnvcsw8TO7ybme5hyGpEgNMkaiFWSlcFsEGe3QEcW0wemqnE4rH8ltgMYypYCi8daB1mD8K/xpLg8B+4afJioRd3kybGoWHr3q8gqGrMpUPeqskUmKGAYR9H1E89NwjPTOtOuo0VP5YWbNqdIwWS0gMawUzrGdHfLbQhs2X11Be6ZwcUn239X5XDMjUCd+TJNkzou6LC93mepfhF8dpOaH6pgy32NVQHBEnpOFvlvRH5euk254ZokmT9DbP/NrBbPkfCeglQDjerGG98hdiw+tPStQrJg5JH/Ifbjg2lAd5HDoApEq9OZBPCJV2I1cSbedfGRJuz4fnE9poy+WZm8W7H461aOaE2sVP+gwRMt6SYc9+029CN0LLnJFc3SnnOx1MHRKxZBz+rCF4ipiU9bAFN3yLtc0T5LDvobGnHxcg7+2exeq4ECgE9WkP2dDbeEJjrVNrh/SxtTG+i5uKA+K77/sFqAob0YsczPI8DXOoAMyoWZMCCh7GEC0cT1qXu5cdCmL9JlR3Pq4vtj3vAZnTRusmUsw1s7CeB5KX5bC4R+g1PUWh6h8bpfPvnOHcUjFr2Cu6qZZleQuErTUWKuLPScrgsT+NOr2JC9IFD3Pp4AWnlaud0B3vP0VfWtxlsqKJiYJN2ONDcITNKs+FGpSMPM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR17MB4711.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(6049299003)(376014)(1800799024)(366016)(23010399003)(6133799003)(4053099003)(38070700021)(10067099003)(4143699003)(56012099006)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dGtNdytLL2RiQ2VpT0l0SmlLZ2Q4U05JZU1YK3BYNlZQSnVoY2lmQXNRR1Ft?=
- =?utf-8?B?QXIxRWR1dHZsckZKU3dTTWJMcEdtQnM3eWV6cm9tOE1FS1ZWcjdTZjRqY2pS?=
- =?utf-8?B?Tm9UeURWSHYrQWNncjMvbWw4Tzc5MnZKUExPZnl6QmJyT3ROak85NW8wa2xC?=
- =?utf-8?B?M2JLSlV6QUsxOWhHWHZUL1FVZ0dXM20zWEliY2NDUFEzdlRsTlErNUlkbTho?=
- =?utf-8?B?bFdyb3VickFSTTd4dU5iYUtWazBXbUlJS0YxVVJnQkJOeVJzMi9DK2dZdi8y?=
- =?utf-8?B?WkZxUDZ6cVBlYllIMUxiNkc3SEk4bmVKUHFkS0U1OC83Y0d0aHBlQkE1VVcw?=
- =?utf-8?B?d2V6K3VEdEFoQlpsRDBiV3ZsaTNpWHloc2RQbWJNYUJOSEZySGhIWEtQTWV3?=
- =?utf-8?B?alZ5WEVQNWlmUjI5bE9DUFc5M3F6TjZCOU45WFc0bG8xU3I3c1ArcmNwR2g3?=
- =?utf-8?B?a01TOGw2akZ2a2R5eXRPd3ZJWVBBTzFCV0gweXl2Lyt5aDFRRXcwL0NVZFUv?=
- =?utf-8?B?ZDJNS2FLMkhTZTdJajRKMGpKV0JtZzhhZ3UxNWhKYmxYbWlocWFQRFB5NlNi?=
- =?utf-8?B?ZGdNQjJkZjdBaE5qRmtIMFdDTVZwSktyWlcxVlU1WFlDKzlXYUl0M2dKYzYr?=
- =?utf-8?B?cTlnY0NuaTI5M2Q1a2dVSWFNa3FST1BpdDg5V0FXVzEveEJ2N2xDKzZlbG1y?=
- =?utf-8?B?cDFjRHdZdWVKcW9zdnF5cEd3UUNRaUVzRllvTEFBYXc4VFVOYXZkbjJFWExj?=
- =?utf-8?B?bWRqSzBYOFNQdm1LdlcxSERJUmhkbUt6SGxhcEtVbElMbVVuMVFTTnd0M012?=
- =?utf-8?B?N04wVVdWdGNCUDBUelRlVE1JQzVXZmJaK3lwNDI0VU4yZ3gzSUkwOTRxS01Q?=
- =?utf-8?B?aFAyVVJwWndlM1I3VlpBV1p3NzArUHloZkU2Q25nY2trbHo4UGZ1dDdoZito?=
- =?utf-8?B?aWVXaS9HejhkSjV1L1hYYVM4WnkvVDE3V2V5aDRSVFhoa3M4T2NmYjlQVlFQ?=
- =?utf-8?B?VkVhQ1pET2dOdEZjbzNEZi9Gd1huUUw2VWNqWTN0NHliUzBUOW90SWZkMDR2?=
- =?utf-8?B?TTNmbTVuc2VqT3MveC80Q21qRTBxeXljNGRiZzJOYTRYQzVuMXIzb25tcjh2?=
- =?utf-8?B?dzM3b3pudXQ5SVMvQTg4Z0c5djMxS0tZRE02Nnp5WTJza1czVEMyQ3lTcU1U?=
- =?utf-8?B?UWYyajVMREhLR21Ma3RCN2RsZTlZWVhJcXZ3bFNWSWQyL2NlN3RJcGRudEtM?=
- =?utf-8?B?cXpESVEvSTV5b0JUYUE2a1NRSHc5Qy9KTXZaM3drMWNva01ONWRoNTJzOVRC?=
- =?utf-8?B?dDFkUmF3WkkyVzE4OVlLTHlIRFFvaldvRElIc2pEN2NpQ2RLb0JRMjhwRkx1?=
- =?utf-8?B?OVg5VEcyTHZnU3FqUCtUT3VCb0o2ZU1pbzNwbVFyNUU1bUtJaXRMRVdTZUVN?=
- =?utf-8?B?UkN5aGYyakR0RWg2djZpOEJFWjlDUUR2allwdjBLNjBMVWFGdjdZTVNyVUVa?=
- =?utf-8?B?amtKRU4yRFFiRDFVMmsyNzV5RXUyYVcxeDR6NGlUUHBES2o1ZUo0dVdPK0hY?=
- =?utf-8?B?djlMT0hHSVdDTktXeU5LWHdITTBldFF6T3kxYXQ2V3ZmMThTbnEvZ2Zlc1RL?=
- =?utf-8?B?UDRuSTA3aWZBRW1hRS9ZSnl1cmhsL01VUWJHNG5SZXN5UWQxbDMvL1MyRWZG?=
- =?utf-8?B?Y2RscU9GN0gxQndJN1BHeElzR0d5eEVqOURzZnVSZXVkWWNhS0lDTXRjSCsv?=
- =?utf-8?B?VStrbzAxTHBNRU9JbWUzTk5ZTzIzcTdLZWJqT2VzVkUzL2tLdFFUYmNZbU9U?=
- =?utf-8?B?K2NjbTVWTmwyR0tpbEhzVzZrR2Z5QTRjTlJqTDM2S0FUSHpqMEw0dDg5UWVr?=
- =?utf-8?B?UG50Q01uNmRCU3dIS1FtUWJUdzByY2VUaUZ4a1plKzR5bHYwY0dLQ002cGlM?=
- =?utf-8?B?aDBPSlQ0V0hFeS81RjhtdDNVdnh6bG5VQWdkZmZJVGhpRkZKZXpwR2ovSThT?=
- =?utf-8?B?TDNBZGs1b2ROclF2T0tSMktZSFA4T2EzaFBxcGxQbGVkV3VqdWVWaGhUbXFo?=
- =?utf-8?B?aldoNHNPSElIVkRTR3dscm13VG82V1o3QitIaUN0VkxHcmZRci9MdkNKL2dM?=
- =?utf-8?B?UFhOeXQxYzM3SURCMFVjQWZjeExMWktzL0ZLOXFwVjZHVk9ONG9vYU9KTXph?=
- =?utf-8?B?bEl2QnUzVmh0NFlhd283VFNsMVRYdzc0aGExb1VWZlpFNXNSTHVhWmZsbDlU?=
- =?utf-8?B?MFIxY1RFUFVFSkkzdjZibDRaRXJCV01mL3FWekFTR1RWN3UzU29xcFdLUlBa?=
- =?utf-8?B?NmRvclJZOWlMRWN0Vy93R1JFUkZGNkVHQzlpZU95bGJzeWZXSnB5a0tLOVQ0?=
- =?utf-8?Q?csl4Ysuv8qYkrGf1pauPRpI/2BDoEm+IJC0VgHz7PD3iR?=
-x-ms-exchange-antispam-messagedata-1: PV9avBSADZfe5w==
-arc-seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lBEtHeVgm037eIpR1BK3XBgxkQPH1GKJc4SExRqaSWh0r8MfNJlGn4MvjdZQyN8+2nLsddB1+Emyidkvybhb37Ee3atkA8gBnLOYfzSFgVv7tzsyxSavnBe0jiHPUquH4r2VlZdVfB/BgiGJdzGCx4rlI8Wok+UyfVKjUCsJ5bSI3B0b8+SL7GYS97x7XpKPuZM93ilWpWJbEq4UJATj5m5dOQqACexvogzEftn0ju1Z07pqKsJChqK58hDrZ2Qi8tYkjkybRDb9qxs/B5sG1rzWDziOBxROjEe4DdmkCq0wp3v2yvKoLuJ31gBzxhjnUoEmvQz5vBah3kaZSQsOQA==
-arc-message-signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gWf6FUlOG5sZgN9txQoTwmtF7OCPkSM2sJMNevXuDog=;
- b=b5bhc5a3NMM0sTgtWbSi4wTbms07P5OkQwF1/90PSZ4RtxSO9Knya9WTxkqSh7Ul5NBdS7zFGpl+NQ0wchES9/5YDIwmiWDW90Dv6q7Fa9bkvVpL9KncV5kvFIppjHYyNJDR6V+iVL5rFyExpishxw8kDwAA+FBI+Jz23w7aM8gxZ+K8Ix/2+YjECrfJLj9b5rGjv5Kb8GtVjatGMYYnzuAXggFHkBO6iQGmhCtIjsiq5v6ZfatfYZ/9FAIi49jR0qj8eKtYrJoVQPFgf4FV4bGIxRTdTJ50llVJCXRJ8UWnafujX20mVHGdlqNooOKTf6uXXftPBQklLlqxDeNgPg==
-arc-authentication-results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=akamai.com; dmarc=pass action=none header.from=akamai.com;
- dkim=pass header.d=akamai.com; arc=none
-x-exchange-routingpolicychecked: Kw6F73EQPracWgyH7Sn8FGEFYrJNTK+UQY1PzMo5AN4Tb+2AkTbNETqE8/+I9T8OFRe/8uzSkeqA24FWWjcmtv3OhBB2okqZIB71SJHNAp4FW00yjCV7e2g7ps7SJjyYIkrBXs6OTf1hbQEtPe96OonEOdltZpcD/X6UtHHjvb56iNA3y/aEt/U92o54cv2ChAvjKfXS3bD4fMkVA7ZxlhoCRXCarVh6nrv8rW1isoQMA8k23KeN0wixhHjBDpw2Au+hdBL5OBhYkEtwzFVfHNKEWedsRN1y39g4ytd5al2gWhfaIfcz/j+5K0uW5NbHT0YjHVXS0iK5Hq2SLiCqyQ==
-x-ms-exchange-crosstenant-authas: Internal
-x-ms-exchange-crosstenant-authsource: SJ0PR17MB4711.namprd17.prod.outlook.com
-x-ms-exchange-crosstenant-network-message-id: 11e8486b-db40-419e-d134-08def86b28c8
-x-ms-exchange-crosstenant-originalarrivaltime: 12 Aug 2026 12:13:46.2148 (UTC)
-x-ms-exchange-crosstenant-fromentityheader: Hosted
-x-ms-exchange-crosstenant-id: 514876bd-5965-4b40-b0c8-e336cf72c743
-x-ms-exchange-crosstenant-mailboxtype: HOSTED
-x-ms-exchange-crosstenant-userprincipalname: UlHM3IV3F8iNntPEz9IpP4ngEeSa5EoygIbVN0dPkR89nJEACt5ZJHLcsfeRJkSc8eCqE06x55SpycV+g/IOMA==
-x-ms-exchange-transport-crosstenantheadersstamped: PH7PR17MB5929
-x-originatororg: akamai.com
-Content-Type: multipart/signed;
-	boundary="Apple-Mail=_50F30C6D-FC58-45B5-89D2-AA7BBB336A00";
-	protocol="application/pkcs7-signature"; micalg=sha-256
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zf3Wtq5C"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c1f758014b8so67762566b.3
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 05:18:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786537102; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UZ+2IVf35MtY1yuJ5ch3NUcF0XXBOYhhfreyiP5XnUQhVQp9RbzIKwmxglmtdRxP5Y
+         Vqsr5fGD+SW21pn7HvJVWhL/zrSkClFb8seUU+8oR8eGXbw2dI10LqTfGvcsl+yEqubj
+         fPil8sHdqwpy2cxHzhzJoI3EDbV2SjDUSuE8fnDI2WZqWd01v8w/x+eB4+sZDV65XGCb
+         z/LZhdjwAJKqsft0Tm3NyWgAGFXqywMjLZBpdH4Rc0K9U+3OMt6ARnajkNhGzL4vR61U
+         bLx+HQZL8F2zqyd8q5w+wv741lY2CnNJdXohz64kaNJClZfVBH4V6n5TtuVlgEl2YMVz
+         aFDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=JaXNom14mQzrN0edwAHx0e++DK52RVpAn1AQzdy5/90=;
+        fh=kCSSO/6G9VJwcHyHoQMnlPG3uw+QHgxJqGMGI6kxY/4=;
+        b=dVPx3yYmow0wJnjhQ+ExiMzhjumLCcPDrvhnNXxb//fisZTlFRILYYJP2sDmA6/WdD
+         wPLW2irUMsb7SiDn/hKOtO1AtH2sVz4GJtp2SCGyXYy6+UljnIpXDeaipRckqRtoVDwW
+         EkCqFbTD5W6ca7ncE0OtO7RJ5sDwtQKCUJN6H0mzQ7YKDTwLUXlstQ65l6UDL69sLclg
+         86z5dEdX3myL2wSLSK3skg9msHF92slq4NVPQlo/uTt/xBGffKkQvAmrVqNwUVOWXW29
+         Rqv79m8Q68YTNp8cWrkxL0j+trjsBeMexZS2MVWuF2uObSvqMRbrTRZ/aXkbSVMpJg1j
+         ZidQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786537102; x=1787141902; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JaXNom14mQzrN0edwAHx0e++DK52RVpAn1AQzdy5/90=;
+        b=Zf3Wtq5Cs8ZEPjV5fRi1NApKK57QzMCTBhXphmmD08kQt/bxjGlKPbMgE7PdO7KRGF
+         hdycbFsbx0bpSxOngI5/Qn5O9OE4O3sOjF2TwBfmW8hpVJBIyziok/Ox5+glU/FqcznZ
+         i3mPl/S1998dVVBfn3+1J5p/PcBZIEl2I+11xFGI2kiwzzO42GP774FlT3Rf6s1O5iYi
+         I1fXp19gJiJEj8FPZSMKEls4ZpaPn9Z+Jz9GlR1YokG25rrHnMBlIzh2PYFV2rB70ZRz
+         iAnDr80fNr/W9ZwD8CdCGmYLr8jGFBwAVhAM5xLUDfyrHhcxpHKg6jYLo7hE8x7p7ghV
+         ZWhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786537102; x=1787141902;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JaXNom14mQzrN0edwAHx0e++DK52RVpAn1AQzdy5/90=;
+        b=lvzaFvr+MVsCvBFmLl3zac1gMJnGOEb76e4RKYDMx4obcmnaMp9SC79Auv5D5YnGkE
+         whcfRYCXmcWYOLq55jWTdseaMi4kOMGXg8y4fMJ3GoqQNuyyGs5cxNi+xkm5rm34+Pg3
+         0yWZqLIHeKNkhLWDbsQde8Dj18MmRgdj3VtsotXqJmqcORf/K3PA9esxfXEvlH9e7rzT
+         XGGnpSB1ke6yfwAyvT34yQ0ZvIOcSrXg83U1VgntYk8d1D+KuWZ9I68Vatcjd956iaYf
+         NGOn1C5JNl2/mGrvHHQavD/uD5nnIhBzHsDfsZCEmBtdrZqdgDmF41mWTzMyoPxgLvew
+         /EOw==
+X-Forwarded-Encrypted: i=1; AHgh+RrReDTJd8E38+wxOCBDWMKOIrhEG+KkgU+JpgnJrxbw2KMv5BqDYHXKp0/ONbYRNRh3reo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfwoPx4K5Du4IJm++awILgowLinCNB/+RZhcNedaeeFiwyrEcv
+	K9B8VB7arsHp4Gbot31A+XsGQNIPazCQ0nqatAK65piC+q4VY6aLpxF3/DaFi8b055nF8LOsPbz
+	GpNnXhFzYuRnscISJ49/FQwFm19QVywMsBqAR/My/qQ==
+X-Gm-Gg: AR+sD12ikOqO3rKK5Le56opkgasiNnsT+kRydaEOlC6kVPohBZrIpW6XKAx43xbzI2H
+	7lhRJGMWxVuEgkZHl9ihA3uEu71YlYolzHnxmFgTYoJ0oEMKF2AAZmxbUDMs7qWj8TEFrTcld98
+	MdFuPGWsSbA5R3PGjtueC0kTn1bgpQZlaDXo2J24tuxc5xsNh051HN8BO3XOWOqgFjCVcBTx1bu
+	AGqKDiiWhzzwploVulCjnzWmXorZ2YlvI2PC8FvjiSX7H2LMtPXH1qqlRg22ZGNHQQjWGbsQ1YM
+	sPtYmX7Znh3ap7qHHwMgB15ZhCNxYggk8tchIOiLpLc5SLCHkoYsAdTuQn65
+X-Received: by 2002:a17:907:80c:b0:c16:12ff:dc93 with SMTP id
+ a640c23a62f3a-c20f2fa0f37mr224948066b.18.1786537102209; Wed, 12 Aug 2026
+ 05:18:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-12_03,2026-08-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- adultscore=0 spamscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2606160000
- definitions=main-2608120098
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODEyMDA5OSBTYWx0ZWRfX0bOsJci5AGhW
- 4FD1YY9jgiaTRYpyNw6YnF7wPhTIvMB+7eGaOTmNAQHLtbQwCy4+naJVjwrIIuh8V2Rg4a2AgMh
- exW1Yo6zpwKUkrQ63tULnSy8jbCLKec=
-X-Proofpoint-GUID: J5AL7yTChWbuSibfBagkZmIxl-RqQ7kv
-X-Authority-Analysis: v=2.4 cv=Cf84Irrl c=1 sm=1 tr=0 ts=6a7c637f cx=c_pps
- a=x6EWYSa6xQJ7sIVSrxzgOQ==:117 a=x6EWYSa6xQJ7sIVSrxzgOQ==:17
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=Sv0fKeRqtYgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22 a=KDzEjHMMTas96-nIEKpj:22
- a=VwQbUJbxAAAA:8 a=X7Ea-ya5AAAA:8 a=Jns5T0zSJ4wvgkbfMZAA:9 a=QEXdDO2ut3YA:10
- a=HUI2YWsAF9AzphKFq_4A:9 a=ZVk8-NSrHBgA:10 a=30ssDGKg3p0A:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODEyMDA5OSBTYWx0ZWRfXzdLDBNjAmJys
- 0X1e46RXCwH6HKH3Kgjjqxdd6/UznHPsCfkx7BPEznX6S0C6UZ3dgSyhAHegtSfOOUlU9hMrmb9
- 7U1AHXkx386o91ADeqA5/hrrtsxwwaYA9Wruose1eIgnjvu1d3sjSJzdpe/dM148uRi+247m+CA
- w5q4g675wOcuqVbDIK8nPY6yU04DvzZvvBMK3ZcCc035nYvV7/z+f6M5clKGX8xbnoRtfyXoVlR
- 9Mmt8PtEEAzLVSE3iRTbsD/gwY641LZxsA4y8S+W57r/8LB+N22AVMglkfFWs/h2yYSr6SVefPS
- bfoKn4oFwNbLL49rVmfhkARkUecc+AxTZZWT2yduX8VvLuFgLczjTRwEWXJKa4aX0AzcGzEe+yZ
- /win2H4rpTLdzL+b6VxRZwLL9bGLIRGK8zIKOCOfbu48FzyPxVj9jLMr7BxPetb/g7bfd8bLKcd
- SRobJtzHclMDpjVYd8g==
-X-Proofpoint-ORIG-GUID: J5AL7yTChWbuSibfBagkZmIxl-RqQ7kv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-12_03,2026-08-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 clxscore=1011
- malwarescore=0 adultscore=0 suspectscore=0 phishscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606160001 definitions=main-2608120099
-
---Apple-Mail=_50F30C6D-FC58-45B5-89D2-AA7BBB336A00
+References: <20260811131600.506721-1-daniel@iogearbox.net> <20260811131600.506721-4-daniel@iogearbox.net>
+In-Reply-To: <20260811131600.506721-4-daniel@iogearbox.net>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Wed, 12 Aug 2026 13:18:07 +0100
+X-Gm-Features: AUfX_mzYk68PKq8i_5htNe96LzLz1vjjEW6mnMsaXAGaTXG_ftkCWTLka4gaaek
+Message-ID: <CANk7y0hhfK+eeD7eWd_HKwcGN1nD2SSU6tSU5pTGpUd_1Tp0dQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/6] bpf, arm64: Clear fetch destination on
+ faulting arena atomic
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: memxor@gmail.com, eddyz87@gmail.com, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
 
-
-
-> On Aug 12, 2026, at 11:22=E2=80=AFAM, sashiko-bot@kernel.org wrote:
->=20
-> !-------------------------------------------------------------------|
->  This Message Is =46rom an External Sender
->  This message came from outside your organization.
-> |-------------------------------------------------------------------!
->=20
-> Thank you for your contribution! Sashiko AI review found 2 potential =
-issue(s) to consider:
-> - [High] The patch exposes new decapsulation flags without =
-implementing the required kernel side effects to clear tunnel-specific =
-GSO flags and `skb->encapsulation` status, leading to stale tunnel =
-metadata on decapsulated packets.
-> - [High] The `decap` flag check in `bpf_skb_net_shrink()` was not =
-updated to include the new L4 and IPXIP decapsulation masks, causing =
-critical packet state updates (like dropping the outer `dst_entry`) to =
-be skipped.
+On Tue, Aug 11, 2026 at 2:16=E2=80=AFPM Daniel Borkmann <daniel@iogearbox.n=
+et> wrote:
+>
+> Same problem as on x86-64: add_exception_handler() folds "there is no
+> destination register to clear" and "this is a store" into one DONT_CLEAR
+> value ...
+>
+>   if (BPF_CLASS(insn->code) !=3D BPF_LDX && !bpf_atomic_is_load_acq(insn)=
+)
+>           dst_reg =3D DONT_CLEAR;
+>
+> ... which ex_handler_bpf() then reads back as the access direction:
+>
+>   bool is_write =3D (dst_reg =3D=3D DONT_CLEAR);
+>
+> A RMW carrying BPF_FETCH is both. emit_lse_atomic() reads the old value
+> into src_reg for BPF_{ADD,AND,OR,XOR} | BPF_FETCH and BPF_XCHG, and into
+> r0 for BPF_CMPXCHG, so a fault over an unmapped arena page is correctly
+> reported as a WRITE but leaves that register holding a stale value instea=
+d
+> of the 0 that every other BPF_PROBE_* access delivers. Same as on x86-64,
+> add a separate ARENA_WRITE bit for the direction.
+>
+> FIXUP_REG is now filled in by the callers of add_exception_handler(), the
+> BPF_PROBE_ATOMIC one deriving it from bpf_atomic_load_reg(), so that the
+> helper only has to determine the direction. This is how the riscv64 JIT
+> already does it, and it stops the two store callers from handing in a
+> dst_reg that was only going to be overwritten with DONT_CLEAR anyway.
+>
+> Fixes: e612b5c1d3ee ("bpf, arm64: Add support for lse atomics in bpf_aren=
+a")
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Puranjay Mohan <puranjay@kernel.org>
+> ---
+>  v1 -> v2:
+>    - move bpf_atomic_load_reg into build_insn (Eduard)
+>
+>  arch/arm64/net/bpf_jit_comp.c | 44 ++++++++++++++++++++++++-----------
+>  1 file changed, 30 insertions(+), 14 deletions(-)
+>
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
+c
+> index d14d297ebb96..74b4083791da 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -1082,23 +1082,27 @@ static void build_epilogue(struct jit_ctx *ctx, b=
+ool was_classic)
+>   *
+>   * Bit layout of `fixup` (32-bit):
+>   *
+> - * +-----------+--------+-----------+-----------+----------+
+> - * |   31-27   | 26-22  |     21    |   20-16   |   15-0   |
+> - * |           |        |           |           |          |
+> - * | FIXUP_REG | Unused | ARENA_ACC | ARENA_REG |  OFFSET  |
+> - * +-----------+--------+-----------+-----------+----------+
+> + * +-----------+--------+-------------+-----------+-----------+---------=
+-+
+> + * |   31-27   | 26-23  |      22     |     21    |   20-16   |   15-0  =
+ |
+> + * |           |        |             |           |           |         =
+ |
+> + * | FIXUP_REG | Unused | ARENA_WRITE | ARENA_ACC | ARENA_REG |  OFFSET =
+ |
+> + * +-----------+--------+-------------+-----------+-----------+---------=
+-+
+>   *
+>   * - OFFSET (16 bits): Offset used to compute address for Load/Store ins=
+truction.
+>   * - ARENA_REG (5 bits): Register that is used to calculate the address =
+for load/store when
+>   *                       accessing the arena region.
+>   * - ARENA_ACCESS (1 bit): This bit is set when the faulting instruction=
+ accessed the arena region.
+> + * - ARENA_WRITE (1 bit): This bit is set when the faulting instruction =
+wrote to the arena region.
+> + *                        It is independent of FIXUP_REG, since a read-m=
+odify-write both writes to
+> + *                        memory and reads the old value into a register=
+.
+>   * - FIXUP_REG (5 bits): Destination register for the load instruction (=
+cleared on fault) or set to
+> - *                       DONT_CLEAR if it is a store instruction.
+> + *                       DONT_CLEAR if the instruction does not read int=
+o a register.
+>   */
+>
+>  #define BPF_FIXUP_OFFSET_MASK      GENMASK(15, 0)
+>  #define BPF_FIXUP_ARENA_REG_MASK   GENMASK(20, 16)
+>  #define BPF_ARENA_ACCESS           BIT(21)
+> +#define BPF_ARENA_WRITE            BIT(22)
+>  #define BPF_FIXUP_REG_MASK     GENMASK(31, 27)
+>  #define DONT_CLEAR 5 /* Unused ARM64 register from BPF's POV */
+>
+> @@ -1109,7 +1113,7 @@ bool ex_handler_bpf(const struct exception_table_en=
+try *ex,
+>         s16 off =3D FIELD_GET(BPF_FIXUP_OFFSET_MASK, ex->fixup);
+>         int arena_reg =3D FIELD_GET(BPF_FIXUP_ARENA_REG_MASK, ex->fixup);
+>         bool is_arena =3D !!(ex->fixup & BPF_ARENA_ACCESS);
+> -       bool is_write =3D (dst_reg =3D=3D DONT_CLEAR);
+> +       bool is_write =3D !!(ex->fixup & BPF_ARENA_WRITE);
+>         unsigned long addr;
+>
+>         if (is_arena) {
+> @@ -1132,7 +1136,7 @@ static int add_exception_handler(const struct bpf_i=
+nsn *insn,
+>  {
+>         off_t ins_offset;
+>         s16 off =3D insn->off;
+> -       bool is_arena;
+> +       bool is_arena, is_write;
+>         int arena_reg;
+>         unsigned long pc;
+>         struct exception_table_entry *ex;
+> @@ -1181,15 +1185,18 @@ static int add_exception_handler(const struct bpf=
+_insn *insn,
+>         /*
+>          * A load-acquire is of BPF_STX class, but reads from src_reg int=
+o
+>          * dst_reg like a BPF_LDX does, hence it must not be treated as a=
+ store
+> -        * here.
+> +        * here. A read-modify-write carrying BPF_FETCH is reported as a =
+write
+> +        * even though it does have a register to clear, see the callers.
+>          */
+> -       if (BPF_CLASS(insn->code) !=3D BPF_LDX && !bpf_atomic_is_load_acq=
+(insn))
+> -               dst_reg =3D DONT_CLEAR;
+> +       is_write =3D BPF_CLASS(insn->code) !=3D BPF_LDX &&
+> +                  !bpf_atomic_is_load_acq(insn);
+>
+>         ex->fixup =3D FIELD_PREP(BPF_FIXUP_REG_MASK, dst_reg);
+>
+>         if (is_arena) {
+>                 ex->fixup |=3D BPF_ARENA_ACCESS;
+> +               if (is_write)
+> +                       ex->fixup |=3D BPF_ARENA_WRITE;
+>                 /*
+>                  * insn->src_reg/dst_reg holds the address in the arena r=
+egion with upper 32-bits
+>                  * being zero because of a preceding addr_space_cast(r<n>=
+, 0x0, 0x1) instruction.
+> @@ -1889,7 +1896,7 @@ static int build_insn(const struct bpf_verifier_env=
+ *env, const struct bpf_insn
+>                         break;
+>                 }
+>
+> -               ret =3D add_exception_handler(insn, ctx, dst);
+> +               ret =3D add_exception_handler(insn, ctx, DONT_CLEAR);
+>                 if (ret)
+>                         return ret;
+>                 break;
+> @@ -1956,7 +1963,7 @@ static int build_insn(const struct bpf_verifier_env=
+ *env, const struct bpf_insn
+>                         break;
+>                 }
+>
+> -               ret =3D add_exception_handler(insn, ctx, dst);
+> +               ret =3D add_exception_handler(insn, ctx, DONT_CLEAR);
+>                 if (ret)
+>                         return ret;
+>                 break;
+> @@ -1979,7 +1986,16 @@ static int build_insn(const struct bpf_verifier_en=
+v *env, const struct bpf_insn
+>                         return ret;
+>
+>                 if (BPF_MODE(insn->code) =3D=3D BPF_PROBE_ATOMIC) {
+> -                       ret =3D add_exception_handler(insn, ctx, dst);
+> +                       /*
+> +                        * A load-acquire reads into dst_reg, and a read-=
+modify-write
+> +                        * carrying BPF_FETCH reads the old value into sr=
+c_reg, or into
+> +                        * r0 for a BPF_CMPXCHG. Clear that register on f=
+ault, the
+> +                        * remaining atomics have no destination register=
+.
+> +                        */
+> +                       int load_reg =3D bpf_atomic_load_reg(insn);
+> +
+> +                       ret =3D add_exception_handler(insn, ctx, load_reg=
+ < 0 ?
+> +                                                   DONT_CLEAR : bpf2a64[=
+load_reg]);
+>                         if (ret)
+>                                 return ret;
+>                 }
 > --
->=20
-> --- Patch [4]: [PATCH bpf-next v7 4/6] bpf: allow new DECAP flags and =
-add guard rails ---
-> commit cdd433d824d20f40752fca9cc2db82451d364a2c
-> Author: Nick Hudson <nhudson@akamai.com>
->=20
-> bpf: allow new DECAP flags and add guard rails
->=20
-> Add checks to require shrink-only decap, reject conflicting decap flag
-> combinations, and verify removed length is sufficient for claimed =
-header
-> decapsulation.
->=20
->> diff --git a/net/core/filter.c b/net/core/filter.c
->> index 89e516049c852..981b75941e7f7 100644
->> --- a/net/core/filter.c
->> +++ b/net/core/filter.c
-> [ ... ]
->> @@ -3579,7 +3586,9 @@ static u32 bpf_skb_net_base_len(const struct =
-sk_buff *skb)
->> BPF_F_ADJ_ROOM_ENCAP_L2( \
->>  BPF_ADJ_ROOM_ENCAP_L2_MASK))
->>=20
->> -#define BPF_F_ADJ_ROOM_DECAP_MASK (BPF_F_ADJ_ROOM_DECAP_L3_MASK)
->> +#define BPF_F_ADJ_ROOM_DECAP_MASK (BPF_F_ADJ_ROOM_DECAP_L3_MASK | \
->> + BPF_F_ADJ_ROOM_DECAP_L4_MASK | \
->> + BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)
->=20
-> [Severity: High]
-> Does this mask update also need to be reflected in the decap check in
-> bpf_skb_net_shrink()?
->=20
-> Currently, bpf_skb_net_shrink() evaluates decap based only on the L3 =
-mask:
->=20
-> net/core/filter.c:bpf_skb_net_shrink() {
-> bool decap =3D flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK;
-> ...
-> if (decap) {
-> ...
-> if (skb_valid_dst(skb))
-> skb_dst_drop(skb);
-> }
-> ...
-> }
->=20
-> If a BPF program uses BPF_F_ADJ_ROOM_DECAP_L4_UDP to decapsulate an L4 =
-or
-> IPXIP tunnel but does not provide BPF_F_ADJ_ROOM_DECAP_L3_MASK, decap
-> evaluates to false.
->=20
-> As a result, skb_dst_drop(skb) is skipped, causing the inner packet to
-> incorrectly inherit the outer tunnel's routing cache. This can route =
-the
-> inner packet to the tunnel endpoint instead of its true destination.
+> 2.43.0
+>
 
-
-This exact dst-drop gating question was already discussed on-list:
-
-https://lore.kernel.org/all/20250604210604.257036-1-kuba@kernel.org/
-
-Keeping L3-gated behavior in this series is intentional. Any broader =
-change will be a separate follow-up.
-
->=20
-> [Severity: High]
-> Does this code miss clearing tunnel-specific GSO flags and =
-skb->encapsulation
-> status?
->=20
-> The UAPI documentation promises that using BPF_F_ADJ_ROOM_DECAP_L4_UDP =
-will
-> clear UDP tunnel GSO flags (SKB_GSO_UDP_TUNNEL and =
-SKB_GSO_UDP_TUNNEL_CSUM)
-> when decapsulating a UDP tunnel.
->=20
-> However, bpf_skb_net_shrink() omits the logic to do this:
->=20
-> net/core/filter.c:bpf_skb_net_shrink() {
-> ...
-> ret =3D bpf_skb_net_hdr_pop(skb, off, len_diff);
-> if (unlikely(ret < 0))
-> return ret;
->=20
-> if (decap) {
-> /* Match skb->protocol to new outer l3 protocol */
-> ...
-> }
->=20
-> Leaving stale tunnel metadata on the packet can cause downstream =
-drivers to
-> parse incorrect header offsets, resulting in skb_over_panic or
-> skb_under_panic.
-
-This is done in patch 5 of the series.
-
-
-
-
-
---Apple-Mail=_50F30C6D-FC58-45B5-89D2-AA7BBB336A00
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCCc8w
-ggShMIIESKADAgECAhMxAAAAIa0XYPGypwcKAAAAAAAhMAoGCCqGSM49BAMCMD8xITAfBgNVBAoT
-GEFrYW1haSBUZWNobm9sb2dpZXMgSW5jLjEaMBgGA1UEAxMRQWthbWFpQ29ycFJvb3QtRzEwHhcN
-MjQxMTIxMTgzNzUyWhcNMzQxMTIxMTg0NzUyWjA8MSEwHwYDVQQKExhBa2FtYWkgVGVjaG5vbG9n
-aWVzIEluYy4xFzAVBgNVBAMTDkFrYW1haUNsaWVudENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcD
-QgAEjkdeMHsSTytADJ7eJ+O+5mpBfm9hVC6Cg9Wf+ER8HXid3E68IHjcCTNFSiezqYclAnIalS1I
-cl6hRFZiacQkd6OCAyQwggMgMBIGCSsGAQQBgjcVAQQFAgMBAAEwIwYJKwYBBAGCNxUCBBYEFOa0
-4dX2BYnqjkbEVEwLgf7BQJ7ZMB0GA1UdDgQWBBS2N+ieDVUAjPmykf1ahsljEXmtXDCBrwYDVR0g
-BIGnMIGkMIGhBgsqAwSPTgEJCQgBATCBkTBYBggrBgEFBQcCAjBMHkoAQQBrAGEAbQBhAGkAIABD
-AGUAcgB0AGkAZgBpAGMAYQB0AGUAIABQAHIAYQBjAHQAaQBjAGUAIABTAHQAYQB0AGUAbQBlAG4A
-dDA1BggrBgEFBQcCARYpaHR0cDovL2FrYW1haWNybC5ha2FtYWkuY29tL0FrYW1haUNQUy5wZGYw
-bAYDVR0lBGUwYwYIKwYBBQUHAwIGCCsGAQUFBwMEBgorBgEEAYI3FAICBgorBgEEAYI3CgMEBgor
-BgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAwkGCSsGAQQBgjcVBQYKKwYBBAGCNxQCATAZBgkr
-BgEEAYI3FAIEDB4KAFMAdQBiAEMAQTALBgNVHQ8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAfBgNV
-HSMEGDAWgBStAYfq3FmusRM5lU0PV6Akhot7vTCBgAYDVR0fBHkwdzB1oHOgcYYxaHR0cDovL2Fr
-YW1haWNybC5ha2FtYWkuY29tL0FrYW1haUNvcnBSb290LUcxLmNybIY8aHR0cDovL2FrYW1haWNy
-bC5kZncwMS5jb3JwLmFrYW1haS5jb20vQWthbWFpQ29ycFJvb3QtRzEuY3JsMIHIBggrBgEFBQcB
-AQSBuzCBuDA9BggrBgEFBQcwAoYxaHR0cDovL2FrYW1haWNybC5ha2FtYWkuY29tL0FrYW1haUNv
-cnBSb290LUcxLmNydDBIBggrBgEFBQcwAoY8aHR0cDovL2FrYW1haWNybC5kZncwMS5jb3JwLmFr
-YW1haS5jb20vQWthbWFpQ29ycFJvb3QtRzEuY3J0MC0GCCsGAQUFBzABhiFodHRwOi8vYWthbWFp
-b2NzcC5ha2FtYWkuY29tL29jc3AwCgYIKoZIzj0EAwIDRwAwRAIgaUoJ7eBk/qNcBVTJW5NC4NsO
-6j4/6zQoKeKgOpeiXQUCIGkbSN83n1mMURZIK92KFRtn2X1nrZ7rcNuAQD5bvH1bMIIFJjCCBMyg
-AwIBAgITFwALeewU5YRKbvcMWwABAAt57DAKBggqhkjOPQQDAjA8MSEwHwYDVQQKExhBa2FtYWkg
-VGVjaG5vbG9naWVzIEluYy4xFzAVBgNVBAMTDkFrYW1haUNsaWVudENBMB4XDTI2MDMyMDEzNDgw
-MloXDTI4MDMxOTEzNDgwMlowUDEZMBcGA1UECxMQTWFjQm9vayBQcm8tM1FIVDEQMA4GA1UEAxMH
-bmh1ZHNvbjEhMB8GCSqGSIb3DQEJARYSbmh1ZHNvbkBha2FtYWkuY29tMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAx+gvYqVaQAmc/yNlMv3t5CK6FN7++3ZChJpOElnFyZWj3h+VwSqN
-5WD4VQn5DL515KovgCiv63DeQ1NuXNu3XKKeakHyssixhIL2hqjlPFnsrwXJ2R9B9hAGIiOBy2rK
-Var+w87AFUZ70jsZlI70IBnJOYsPYnZRmXBytTxVWk9V7Nnh10RuUfkZE2Ry+P18Z7glHYoQeksi
-hz/9uqRUEqt23qDYBR1J7bB+SSW5A3LmoTEugWYzayxb9iM0vVleEHqeuN5nihGn8Y7nIrs5sIo8
-6AG2Bjl0O2VgWWVfqhl9IMQlx1ZxHAicuMvDN49LD1yMkqx+LeBLboiFQQ0MVQIDAQABo4ICzDCC
-AsgwCwYDVR0PBAQDAgeAMCkGA1UdJQQiMCAGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNwoD
-BDAdBgNVHQ4EFgQUD8PIZa7GFc+oX4RLtUq8oUrOL/IwRgYDVR0RBD8wPaAnBgorBgEEAYI3FAID
-oBkMF25odWRzb25AY29ycC5ha2FtYWkuY29tgRJuaHVkc29uQGFrYW1haS5jb20wHwYDVR0jBBgw
-FoAUtjfong1VAIz5spH9WobJYxF5rVwwgYAGA1UdHwR5MHcwdaBzoHGGMWh0dHA6Ly9ha2FtYWlj
-cmwuYWthbWFpLmNvbS9Ba2FtYWlDbGllbnRDQSgxKS5jcmyGPGh0dHA6Ly9ha2FtYWljcmwuZGZ3
-MDEuY29ycC5ha2FtYWkuY29tL0FrYW1haUNsaWVudENBKDEpLmNybDCByAYIKwYBBQUHAQEEgbsw
-gbgwPQYIKwYBBQUHMAKGMWh0dHA6Ly9ha2FtYWljcmwuYWthbWFpLmNvbS9Ba2FtYWlDbGllbnRD
-QSgxKS5jcnQwSAYIKwYBBQUHMAKGPGh0dHA6Ly9ha2FtYWljcmwuZGZ3MDEuY29ycC5ha2FtYWku
-Y29tL0FrYW1haUNsaWVudENBKDEpLmNydDAtBggrBgEFBQcwAYYhaHR0cDovL2FrYW1haW9jc3Au
-YWthbWFpLmNvbS9vY3NwMDsGCSsGAQQBgjcVBwQuMCwGJCsGAQQBgjcVCILO5TqHuNQtgYWLB6Lj
-IYbSD4FJhaXDEJrVfwIBZAIBUzA1BgkrBgEEAYI3FQoEKDAmMAoGCCsGAQUFBwMCMAoGCCsGAQUF
-BwMEMAwGCisGAQQBgjcKAwQwRAYJKoZIhvcNAQkPBDcwNTAOBggqhkiG9w0DAgICAIAwDgYIKoZI
-hvcNAwQCAgCAMAcGBSsOAwIHMAoGCCqGSIb3DQMHMAoGCCqGSM49BAMCA0gAMEUCIBZ79THtRc/r
-DXpg8rSeL4tPy9/eLjXnJvYW5Ek2SUJ8AiEA5j0Wa0K9P2Vumn7N4F5MpbHW2t/kxsdwUu2Vzp6S
-5BUxggHpMIIB5QIBATBTMDwxITAfBgNVBAoTGEFrYW1haSBUZWNobm9sb2dpZXMgSW5jLjEXMBUG
-A1UEAxMOQWthbWFpQ2xpZW50Q0ECExcAC3nsFOWESm73DFsAAQALeewwDQYJYIZIAWUDBAIBBQCg
-aTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yNjA4MTIxMjEzMzVa
-MC8GCSqGSIb3DQEJBDEiBCDx0aeAYriMSbEz9EyGIWlearil1JglMMc83EvjESygqTANBgkqhkiG
-9w0BAQsFAASCAQAl0bAkIIEesFldCTEIZxKk5Z9jTkHpAUM9q3nSGfrZj71XT1PRHuRLex6dbPiT
-cPY+huTLW3DmfyKnce6cVWtN8JF4eMfISbkRTfqdcFxQBtyJ0yp5thiIL3IPeBbiVDPyd0tn6snv
-FWarnTwvE1hSfJV258Q3uqF0dQmeROzealhtDajH/3lJXayJaTA1vTJqaVXs5nLufXAFLZrgY1kf
-BQeX0AtkZl9iwJEOkxtj3Aed9Qe6AAuqNKS6mSKVRznyqsOU3BjwY7iRWoNVnQJfOqa/tXhTZdl9
-8rHggQDrCJtvoepaxS4X2PWQqNbfVuWL5Hvm293u8ZYrAzxn2oDeAAAAAAAA
-
---Apple-Mail=_50F30C6D-FC58-45B5-89D2-AA7BBB336A00--
+Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
