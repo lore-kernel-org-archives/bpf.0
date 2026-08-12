@@ -1,76 +1,76 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+Received: from mail-wm2-f1.google.com (mail-wm2-f1.google.com [74.125.225.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248E0372B3B
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 22:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CC7218592
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 22:19:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786573174; cv=none; b=pL35j/VRDC8BepI3+IL0OTTwU0YYgoR1Vkdq31yZl4kHa9J9dXPceJBeFwizZ0bRGWpgfLTUDvqotU6YtCDhdSabGWi20kLN/IMW6Dgx9yQBzkmt3FZyvmfqs7YE2rUlB6GY9UbT5MEJttlnkmBMN7bgsHUdF7tuV5/bh37OkVE=
+	t=1786573175; cv=none; b=Seki58xgS/R5OK0sJireK7jrz2OFg+QCgyKl6eXdmH2Q1LxG38zyen7pBUfLFNc8Vs3LIt1EKVJ3MUzZLEVZbQRh/o6v9yOTIg9AprMEIo0Q5OapEPYGTCu/IkecPAiV8NfazHjqVf2vIZN6wu7UOyc0SxBj7tcS/ZX3So1ds0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786573174; c=relaxed/simple;
-	bh=XxUNAgowF8ncwp0863RxOhjMbJ6XReo1vVtgNU40eF8=;
+	s=arc-20240116; t=1786573175; c=relaxed/simple;
+	bh=9smPsmNWpLngNejUStT/lpLcMumQouPbVsyd0jNRLYg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lu6AkeiewBcFRU4F3jIFa5rmKI1c1XWKVXpPxoUJ4ruvwJK3oveRKkLZpac5tmQ80Tvl5V5qVsuQG4tLFFi3afU4CYq2Cqsx+kzbzUPyZ3HpTa7Uam2u1BP6o2pBLp3j/m2fz/azolFn8yczsnKGjAlhsEsGDJOG73z+JPlHXRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BUt0GGE4; arc=none smtp.client-ip=74.125.225.65
+	 MIME-Version; b=B25Mbi4TG3W9FcQTAPPS+HSiDTQIIKmDaVbXkcRGa9cHnq3eiTcmJbOGqvFBidmnpbt+CgNoZuuDjiE/S9dUOYF9bxjEsA9HFhUB+G2xO3c7ONY2OXvhACxWOlg/gOIVyT29lQ8w/7QgTm6iJw6gQj9rkgt0W1KJayGtHzxUlYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GofyDYp9; arc=none smtp.client-ip=74.125.225.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BUt0GGE4"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47fad256d40so520462f8f.0
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 15:19:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GofyDYp9"
+Received: by mail-wm2-f1.google.com with SMTP id 5b1f17b1804b1-492367f3094so325585e9.0
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 15:19:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786573170; x=1787177970; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786573172; x=1787177972; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Nz03UfOhxlihLfJsdZ17dr7ntITVIG3kz2lk9wuDLg8=;
-        b=BUt0GGE4SdaOw5zkpK277PPaRN6R82OpUwiWDirAjY61xYcRbkn22TG8VV0TqEyayr
-         eP/+ER5ezR9lJ7kdIO0w2bBSFr8EtJ7G6XEi//KqkCSE8ePGgXa3c59Zg3aErjfooKGz
-         YKVgadDltOff0A2wFIPWfylf6u20nop6ZeFlj9sfDlOAfOGgQ/AySokTdg7nV/PqQImA
-         K+Wcc+hf0VBQ8k/0JOvznYslU4ycry4VGKyrnTzFchE74KBz48mVtUzAizFdQ8rDHdgG
-         Sq4goi07rP054c1lWBTp5gqef00lCUzKQSeaXnG1V1qHCObciEkP4pMLhtnQPOcfwEv7
-         noiw==
+        bh=F0w+DXeHQ+/vxKh8Nma+f/5//oo6s7YwLb7+GH8VJEk=;
+        b=GofyDYp99UIzckg/XX0wdzgzxu9Ih09tsDONB9ZUtRhzMh+Wu3+4Mr5uDW0FOg4utE
+         UsN7vjJnJec+ThtwyZUG9vv0RegCdElbRTsPtsCXKp/cMmLWrDSzsb0Y3nRY69OQ5IWl
+         r8nrBaF/j1vbBI+GgTUDKiYxFbpQTPSYZhJ2eZ8gE5ZzGdcO9veogsXIedtFp/tiwHu+
+         5gZUx+PCck8nkwUrcPnUgQ+gc0dtHtca/ScfVkoBmIl0P9GePXToqsXlkdBrDfUklHNB
+         dCCSO2NqTSZoBLJEJ/aGvchQoQIJdXY9pb8oRS65LxTgeVyyX8ax4Uv5kYcbCezvIMA1
+         rQtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786573170; x=1787177970;
+        d=1e100.net; s=20251104; t=1786573172; x=1787177972;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Nz03UfOhxlihLfJsdZ17dr7ntITVIG3kz2lk9wuDLg8=;
-        b=Xc6VR4+1SsqpslPDi2OwgocJvNsLmahTLuGa4usYOn0BudcVnl4m/+RzMbQo1UvBIB
-         uCywV5plU6AmqaZtG0ZpyZeQncO6fnUSKPOjnCdACkaE7QKiozM5SgzvN60Vmuvvi2QE
-         xGIBE2wAB/HlVEK68r6kziibN9cf+Dt8GiNctDnK0A561AC68Mqc+p/W6kKJXjB1SAPi
-         tRC8WUFNz4E64VnrcsVRj1Ov+pkzpHqadWtU6TVMMGfeJ3dWz91xufcEFDBu2ju+KVvq
-         +uMK8v/NYtBAaPAjepKnXrQpvN5ZStdTDFh7bU652TPNYxi6kB8OXRlO6SHxhjBVO3zP
-         r6/Q==
-X-Gm-Message-State: AOJu0YynAZEbjUvx30KgXsW7DI7CmVjO9r8Xpc8pcpa5cIKcKtrTnwZ/
-	WYKovXoFIT09rCWpJnTqx7m71cctm1pNm3w7ziPx65xVzTuSp7B51zfEKgjJD7Gk
-X-Gm-Gg: AR+sD11FmCtJ7QU/JEC+qP6lCHXkIArrFc6vcCB8S8xaDp/ARWE6In3VfWUe84/29M5
-	eidrlgKXHIJ+JU2AzH1rKb9ezEtdqympIx3Gkt1lA6KOTn/UP2Ipl4GgErBP7WSxkSO1D5VyfRH
-	/sBKmlQy5SEFs/2H+M6xVjlz2tDEEsuLK/hibKAhQu9+r/R94xQ7wcXseLw/xowJ5RzN1Hy8eGC
-	96wegPZ4IOFtQA4p+JcdWypjViyKCGVTIRBlMWOtircaxGzcq68fECDiTJpR7EwGUoZfRue5olt
-	9t/osxHVJLvbAD9iisS1el7+5CEb0LTNkRrHRNAmOOwf9NSaq85VTH5rtQTRBfxJvIeQI3RrK2R
-	kiRQO4+kfNVu8FnzX2Wd4/uXI9T9hkASU2hSATySQp+t0wL0cMhSEzJJ390Pgx4B4uKSpNaCVIk
-	xJ4I+8908wWL8IqBJzqJ9WBbCS4ov+FlKHJ3SZufBeQ029RFICYIS46hDBQdn70mhS5gV2V/zmV
-	sxSaYSGACS+47fcROw2Di1//tfInLFCPMHuL92DSFknTqHIZfggaoBy9v2QFb8i0NA0y/dubOFF
-	f7aDOqEBvT3TvOl58sSFWlVOLMw=
-X-Received: by 2002:a05:6000:46d7:b0:47f:34ba:2d0d with SMTP id ffacd0b85a97d-48159caf1edmr1041013f8f.8.1786573170313;
-        Wed, 12 Aug 2026 15:19:30 -0700 (PDT)
+        bh=F0w+DXeHQ+/vxKh8Nma+f/5//oo6s7YwLb7+GH8VJEk=;
+        b=l/lpKMqt2x1zQfLrAXJSac2DxwHxK/KcP0CNkJwx9wrRF8YMjzjgJdZoglUTHHWk1K
+         2YZbaR1lTrvzbOf6wz8MQeEmIvjWnijzbLW9zvpnyZ0hqgWC3QN1OAJfxG84zqwYcJ+F
+         wJ4nx9dlOx+8Yl9Luc9R492UisGAifO41bgfwDAkEyyMx+Kz+G+8nvRxaQai8PQfqRGN
+         W1pwZNTc2N/FKP18WLY/va6dWte7R2r6N1hlu/dxn2wJFgQttY7wi+sGjCkXIXBfl0BL
+         uWpRi2rr+7pXIZis6pxmoVjUGB9MeA5vYcmffkxZz5lBvsqkvTy1hJaKcHT+NPxcPX/I
+         rFPg==
+X-Gm-Message-State: AOJu0Yy28A0hUhdoQktsmk11NIir+DkSjJqcbl5HeH1xmu62pG6OrL6I
+	P/rV6RA6vRUirZ6GXIC5kG8gA+M+l9UrMhVPPwFdUsqTVJhEB3xPcHBfeAZCplmE
+X-Gm-Gg: AR+sD12ondmjKwli6OPOj9JafkUivlynChHv1wmkgSD+tYnhWnCZry7Z9xIvgcgwmG9
+	vO3A18Ilvi+FpM/NJcXufqD0KRyneQr95DZmYkdxj2dS++UG7D/pqwLVstSvsVYTul9+COrR2TV
+	+7v6Pr3LIBv734QqFjcQVxAyfOD7JLQvVQWfD1kXihawRZIp/NU7bhlEJ5qL2Rwe/du6AJa65Wo
+	tChY/UUYH8fMI4C13k4IjFwgqivU2RFH3v03Px5wfMR8O5nu1jKMV5BXPjiOUngTT/rCkYDkMmw
+	0eWgAg+9aBQGF7uTGDM1GhcNLhHsZAla0b6JxQOg76VVwQC24n8qJMccMPBMua6InZe3NgNvTsi
+	8GLyknywQPPb1YZhEOlI204ha/RkyvnNL4sL9lnWLvuFNE+A912T48JQH1QZtJXRjeGbB21afcc
+	lP1VyavPVq2t8Lt+34YtBdTeF9BruzfMc/X/EQKVtqv/A1Ltyq/lDYFiRXcxetdcCfIQUpBqWzZ
+	KSRWVrKuJ5AwsIPMUhZMASb7JmjVIY2FyH5DFSKIcM5OnJv+lLju5fzxHFNuSeozGQo/dTURgAi
+	b9Y3JfTkX6UIjJyMdPKNVR4BZPQ=
+X-Received: by 2002:a05:600c:6287:b0:495:4689:1e98 with SMTP id 5b1f17b1804b1-499821845d2mr9562385e9.10.1786573171638;
+        Wed, 12 Aug 2026 15:19:31 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815a5b6e3asm838904f8f.28.2026.08.12.15.19.29
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49981de6a05sm26543055e9.1.2026.08.12.15.19.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 15:19:29 -0700 (PDT)
+        Wed, 12 Aug 2026 15:19:31 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v8 3/6] bpf: Show more useful info in stack depth stats
-Date: Thu, 13 Aug 2026 00:19:20 +0200
-Message-ID: <20260812221925.3358041-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v8 4/6] selftests/bpf: Adjust veristat stack depth parsing
+Date: Thu, 13 Aug 2026 00:19:21 +0200
+Message-ID: <20260812221925.3358041-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260812221925.3358041-1-memxor@gmail.com>
 References: <20260812221925.3358041-1-memxor@gmail.com>
@@ -80,265 +80,82 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11309; i=memxor@gmail.com; h=from:subject; bh=XxUNAgowF8ncwp0863RxOhjMbJ6XReo1vVtgNU40eF8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavmw889Hft+n+DcWnrs8vsY1fAotex578LbYp5yCa9oP 3F2T8SKjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEwk4RYjw1ttnSbTgKUcOmn8 56z+OQTsunYqQac2TWTu5gjzFP37Gxl+MX3i8Qmf92JhaKoEj9T5RwfE1kfq3P++UfyBoXLcDyY VTgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2922; i=memxor@gmail.com; h=from:subject; bh=9smPsmNWpLngNejUStT/lpLcMumQouPbVsyd0jNRLYg=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavmw88nyaW/pOyYgzilD7G+fmD6RTv2xtsAd/afJXYXw 69cUX/YUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgImIbmdkeHN12vFUmY3dl3fH FB013MK4ZK7gjPKCO/fP7K4I/zft9BOGfzbNnmIa7z8p9Ll1L+Tf0Wk53STs15x7c3Yds7fOt59 RwwsA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Stack depth statistics list captured depths in subprogram-number order,
-while per-verification instruction counts are reported separately. Since
-libbpf determines subprogram numbers, it is hard to associate either
-statistic with its subprogram name or see where verifier work is spent.
+The verifier now reports instruction and stack depth statistics using
+uniform "subprog <id> (<name>) <kind>" records. Subprogram 0 is classified
+as main, while other records are global or static. Each record carries
+insns_self, insns_total, and stack depth.
 
-Now that self and inclusive instruction counts are available for every
-subprogram, keep the combined maximum stack depth on its own line and print
-one uniform record for each subprogram. Represent the main program as
-subprog 0, then classify each record as main, global, or static before
-reporting insns_self, insns_total, and stack depth.
+Teach veristat to parse the new records while retaining support for the
+legacy one-line stack depth format used by older kernels. Skip both
+instruction counts and match only through the stack value so fields can
+still be appended without breaking parsing.
 
-The aggregate processed count is the sum of all self counts, while each
-total shows verifier work rooted at that subprogram.
+Increase the bounded backward scan so it can include all 256 per-subprogram
+records.
 
-When no subprogram name is available, print <unknown>. Keep the existing
-aggregate "processed ... insns" record unchanged for compatibility.
+Zero-initialize the legacy stack buffer because logs using the new format do
+not populate it before the trailing tokenizer loop. This makes the loop see
+an empty string instead of reading uninitialized data.
 
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c                         | 23 +++++++++------
- .../bpf/progs/verifier_basic_stack.c          |  6 ++--
- .../bpf/progs/verifier_bpf_fastcall.c         | 28 +++++++++++++------
- .../bpf/progs/verifier_global_subprogs.c      |  5 +++-
- .../bpf/progs/verifier_private_stack.c        | 15 ++++++++--
- .../selftests/bpf/progs/verifier_var_off.c    |  6 ++--
- 6 files changed, 58 insertions(+), 25 deletions(-)
+ tools/testing/selftests/bpf/veristat.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fced21ec2304..73d6cd563cdf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18693,15 +18693,20 @@ static void print_verification_stats(struct bpf_verifier_env *env)
- 	if (env->log.level & BPF_LOG_STATS) {
- 		verbose(env, "verification time %lld usec\n",
- 			div_u64(env->verification_time, 1000));
--		verbose(env, "stack depth %d", env->subprog_info[0].stack_depth);
--		for (i = 1; i < subprog_cnt; i++)
--			verbose(env, "+%d", env->subprog_info[i].stack_depth);
--		verbose(env, " max %d\n", env->max_stack_depth);
--		verbose(env, "insns processed %d", env->subprog_info[0].insns_total);
--		for (i = 1; i < subprog_cnt; i++)
--			if (bpf_subprog_is_global(env, i))
--				verbose(env, "+%d", env->subprog_info[i].insns_total);
--		verbose(env, "\n");
-+		verbose(env, "stack depth max %d\n", env->max_stack_depth);
-+		for (i = 0; i < subprog_cnt; i++) {
-+			const char *name = env->subprog_info[i].name;
-+			const char *kind;
-+
-+			if (!name || !name[0])
-+				name = "<unknown>";
-+			kind = i == 0 ? "main" :
-+			       bpf_subprog_is_global(env, i) ? "global" : "static";
-+			verbose(env, "subprog %d (%s) %s insns_self %d insns_total %d stack %d\n",
-+				i, name, kind, env->subprog_info[i].insns_self,
-+				env->subprog_info[i].insns_total,
-+				env->subprog_info[i].stack_depth);
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index c9c257784ee3..5c0ec3edce72 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -993,13 +993,15 @@ static void free_verif_stats(struct verif_stats *stats, size_t stat_cnt)
+ 
+ static char verif_log_buf[64 * 1024];
+ 
+-#define MAX_PARSED_LOG_LINES 100
++/* Keep room for all 256 subprogram records and trailing statistics. */
++#define MAX_PARSED_LOG_LINES 300
+ 
+ static int parse_verif_log(char * const buf, size_t buf_sz, struct verif_stats *s)
+ {
+ 	const char *cur;
+-	int pos, lines, sub_stack, cnt = 0;
+-	char *state = NULL, *token, stack[512];
++	long sub_stack;
++	int pos, lines, cnt = 0;
++	char *state = NULL, *token, stack[512] = {};
+ 
+ 	buf[buf_sz - 1] = '\0';
+ 
+@@ -1025,11 +1027,24 @@ static int parse_verif_log(char * const buf, size_t buf_sz, struct verif_stats *
+ 				&s->stats[MARK_READ_MAX_LEN]))
+ 			continue;
+ 
++		/*
++		 * New kernels emit one "subprog <id> (<name>) <kind>" record
++		 * per subprogram with the stack depth at the end, while old
++		 * kernels emit a single "stack depth <a+...+n> max <max>"
++		 * line. Match both formats so veristat works against either
++		 * kernel.
++		 */
++		if (sscanf(cur, "stack depth max %ld", &s->stats[MAX_STACK]) == 1)
++			continue;
++		if (sscanf(cur, "subprog %*d %*s %*s insns_self %*d insns_total %*d stack %ld", &sub_stack) == 1) {
++			s->stats[STACK] += sub_stack;
++			continue;
 +		}
+ 		if (2 == sscanf(cur, "stack depth %511s max %ld", stack, &s->stats[MAX_STACK]))
+ 			continue;
  	}
- 	verbose(env, "processed %d insns (limit %d) max_states_per_insn %d "
- 		"total_states %d peak_states %d mark_read %d\n",
-diff --git a/tools/testing/selftests/bpf/progs/verifier_basic_stack.c b/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
-index d3df7a9f1d8c..0eb495ce85c1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
-@@ -27,7 +27,8 @@ __naked void stack_out_of_bounds(void)
- 
- SEC("socket")
- __description("uninitialized stack1")
--__success __log_level(4) __msg("stack depth 8")
-+__success __log_level(4)
-+__msg("subprog 0 (uninitialized_stack1) main {{.*}} stack 8")
- __failure_unpriv __msg_unpriv("invalid read from stack")
- __naked void uninitialized_stack1(void)
- {
-@@ -45,7 +46,8 @@ __naked void uninitialized_stack1(void)
- 
- SEC("socket")
- __description("uninitialized stack2")
--__success __log_level(4) __msg("stack depth 8")
-+__success __log_level(4)
-+__msg("subprog 0 (uninitialized_stack2) main insns_self {{[0-9]+}} insns_total {{[0-9]+}} stack 8")
- __failure_unpriv __msg_unpriv("invalid read from stack")
- __naked void uninitialized_stack2(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-index 83707faea049..4cfaa6b4ab40 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-@@ -10,7 +10,8 @@
- 
- SEC("raw_tp")
- __arch_x86_64
--__log_level(4) __msg("stack depth 8")
-+__log_level(4)
-+__msg("subprog 0 (simple) main insns_self {{[0-9]+}} insns_total {{[0-9]+}} stack 8")
- __xlated("4: r5 = 5")
- __xlated("5: r0 = ")
- __xlated("6: r0 = &(void __percpu *)(r0)")
-@@ -96,7 +97,8 @@ __naked void canary_zero_spills(void)
- 
- SEC("raw_tp")
- __arch_x86_64
--__log_level(4) __msg("stack depth 16")
-+__log_level(4)
-+__msg("subprog 0 (wrong_reg_in_pattern1) main {{.*}} stack 16")
- __xlated("1: *(u64 *)(r10 -16) = r1")
- __xlated("...")
- __xlated("3: r0 = &(void __percpu *)(r0)")
-@@ -598,7 +600,8 @@ __naked static void subprogs_use_independent_offsets_aux(void)
- 
- SEC("raw_tp")
- __arch_x86_64
--__log_level(4) __msg("stack depth 8")
-+__log_level(4)
-+__msg("subprog 0 (helper_call_does_not_prevent_bpf_fastcall) main {{.*}} stack 8")
- __xlated("2: r0 = &(void __percpu *)(r0)")
- __success
- __naked void helper_call_does_not_prevent_bpf_fastcall(void)
-@@ -620,7 +623,8 @@ __naked void helper_call_does_not_prevent_bpf_fastcall(void)
- 
- SEC("raw_tp")
- __arch_x86_64
--__log_level(4) __msg("stack depth 24")
-+__log_level(4)
-+__msg("subprog 0 (may_goto_interaction_x86_64) main {{.*}} stack 24")
- /* may_goto counter at -24 */
- __xlated("0: *(u64 *)(r10 -24) =")
- /* may_goto timestamp at -16 */
-@@ -661,7 +665,8 @@ __naked void may_goto_interaction_x86_64(void)
- SEC("raw_tp")
- __arch_arm64
- __arch_riscv64
--__log_level(4) __msg("stack depth 24")
-+__log_level(4)
-+__msg("subprog 0 (may_goto_interaction) main {{.*}} stack 24")
- /* may_goto counter at -24 */
- __xlated("0: *(u64 *)(r10 -24) =")
- /* may_goto timestamp at -16 */
-@@ -708,7 +713,9 @@ __naked static void dummy_loop_callback(void)
- 
- SEC("raw_tp")
- __arch_x86_64
--__log_level(4) __msg("stack depth 32+0")
-+__log_level(4)
-+__msg("subprog 0 (bpf_loop_interaction1) main {{.*}} stack 32")
-+__msg("subprog 1 (dummy_loop_callback) static {{.*}} stack 0")
- __xlated("2: r1 = 1")
- __xlated("3: r0 =")
- __xlated("4: r0 = &(void __percpu *)(r0)")
-@@ -756,7 +763,9 @@ __naked int bpf_loop_interaction1(void)
- 
- SEC("raw_tp")
- __arch_x86_64
--__log_level(4) __msg("stack depth 40+0")
-+__log_level(4)
-+__msg("subprog 0 (bpf_loop_interaction2) main {{.*}} stack 40")
-+__msg("subprog 1 (dummy_loop_callback) static {{.*}} stack 0")
- /* call bpf_get_smp_processor_id */
- __xlated("2: r1 = 42")
- __xlated("3: r0 =")
-@@ -800,7 +809,10 @@ __naked int bpf_loop_interaction2(void)
- 
- SEC("raw_tp")
- __arch_x86_64
--__log_level(4) __msg("stack depth 512+0 max 512")
-+__log_level(4)
-+__msg("stack depth max 512")
-+__msg("subprog 0 (cumulative_stack_depth) main {{.*}} stack 512")
-+__msg("subprog 1 (cumulative_stack_depth_subprog) static {{.*}} stack 0")
- /* just to print xlated version when debugging */
- __xlated("r0 = &(void __percpu *)(r0)")
- __success
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index 67dc352addfd..7b65eea97ebc 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -52,7 +52,10 @@ __msg("('global_calls_good_only') is global and assumed valid.")
- /* eventually global_good() is transitively validated as well */
- __msg("Validating global_good() func")
- __msg("('global_good') is safe for any args that match its prototype")
--__msg("insns processed {{[0-9]+\\+[0-9]+\\+[0-9]+$}}")
-+__msg("subprog 0 (chained_global_func_calls_success) main insns_self 7 insns_total 7 stack")
-+__msg("subprog {{[0-9]+}} (global_calls_good_only) global insns_self 2 insns_total 2 stack")
-+__msg("subprog {{[0-9]+}} (global_good) global insns_self 5 insns_total 5 stack")
-+__msg("processed 14 insns")
- int chained_global_func_calls_success(void)
- {
- 	int sum = 0;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-index bb8206e10880..ea0a7e73331d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-@@ -86,7 +86,9 @@ __naked static void cumulative_stack_depth_subprog(void)
- SEC("kprobe")
- __description("Private stack, subtree > MAX_BPF_STACK")
- __success
--__log_level(4) __msg("stack depth 512+32 max 512")
-+__log_level(4) __msg("stack depth max 512")
-+__msg("subprog 0 (private_stack_nested_1) main {{.*}} stack 512")
-+__msg("subprog 1 (cumulative_stack_depth_subprog) static {{.*}} stack 32")
- __arch_x86_64
- /* private stack fp for the main prog */
- __jited("	movabsq	$0x{{.*}}, %r9")
-@@ -331,7 +333,11 @@ SEC("fentry/bpf_fentry_test9")
- __description("Private stack, async callback, potential nesting")
- __success __retval(0)
- __load_if_JITed()
--__log_level(4) __msg("stack depth 8+0+256+0 max 272")
-+__log_level(4) __msg("stack depth max 272")
-+__msg("subprog 0 (private_stack_async_callback_2) main {{.*}} stack 8")
-+__msg("subprog 1 (timer_cb1) static {{.*}} stack 0")
-+__msg("subprog 2 (subprog1) static {{.*}} stack 256")
-+__msg("subprog 3 (subprog2) static {{.*}} stack 0")
- __arch_x86_64
- __jited("	subq	$0x100, %rsp")
- __arch_arm64
-@@ -355,7 +361,10 @@ int private_stack_async_callback_2(void)
- SEC("fentry/bpf_fentry_test9")
- __description("private stack, max stack depth is private stack")
- __success
--__log_level(4) __msg("stack depth 8+256+0 max 256")
-+__log_level(4) __msg("stack depth max 256")
-+__msg("subprog 0 (private_stack_max_depth) main {{.*}} stack 8")
-+__msg("subprog 1 (subprog1) static insns_self {{[0-9]+}} insns_total {{[0-9]+}} stack 256")
-+__msg("subprog 2 (subprog2) static insns_self {{[0-9]+}} insns_total {{[0-9]+}} stack 0")
- int private_stack_max_depth(void)
- {
- 	int x = 0;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_var_off.c b/tools/testing/selftests/bpf/progs/verifier_var_off.c
-index 24cd0a763673..a63e33675091 100644
---- a/tools/testing/selftests/bpf/progs/verifier_var_off.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_var_off.c
-@@ -198,7 +198,8 @@ __success
- /* Check that the maximum stack depth is correctly maintained according to the
-  * maximum possible variable offset.
-  */
--__log_level(4) __msg("stack depth 16")
-+__log_level(4)
-+__msg("subprog 0 (stack_write_priv_vs_unpriv) main {{.*}} stack 16")
- __failure_unpriv
- /* Variable stack access is rejected for unprivileged.
-  */
-@@ -238,7 +239,8 @@ __success
- /* Check that the maximum stack depth is correctly maintained according to the
-  * maximum possible variable offset.
-  */
--__log_level(4) __msg("stack depth 16")
-+__log_level(4)
-+__msg("subprog 0 (stack_write_followed_by_read) main {{.*}} stack 16")
- __failure_unpriv
- __msg_unpriv("R2 variable stack access prohibited for !root")
- __retval(0)
+ 	while ((token = strtok_r(cnt++ ? NULL : stack, "+", &state))) {
+-		if (sscanf(token, "%d", &sub_stack) == 0)
++		if (sscanf(token, "%ld", &sub_stack) == 0)
+ 			break;
+ 		s->stats[STACK] += sub_stack;
+ 	}
 -- 
 2.53.0
 
