@@ -1,156 +1,187 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E773409121;
-	Wed, 12 Aug 2026 10:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC3940EBA8
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 10:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786531689; cv=none; b=qBIi7oQDCGpH5UVWTM5MUoVq+mAnnJ03jqivjbRmK9wlAth+mIQJqR9ZcNnVRDqq2YEAH8NdZ3nuGFmHK2tDAMTIY3Ie4Nze1xvnUqE2O+yUThjdfT3yVTmZAnpBWZdmohfb/8kypUc0tPUYw5PkvFy+jTxQEqsaOfioA8VGU+k=
+	t=1786532102; cv=none; b=P83QKG7KEUkZ2+U/Ne4+n5kiJSvUxNWKga5Kj0qHX1/rztD+gheEuC4ur7Wjs+KSGvf47OLxAqjaTp99brHvbQH8agfSh+pgYuAu9cAHyMCtWwQ5Y1ytZo3lmOB2TqMaSgr/VzKPJbGH2NlUyrtLIJN2IPMqsn7e0gBRdSg8NQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786531689; c=relaxed/simple;
-	bh=ircjVui5fcPLKosfW2Lj0j3Pndydm4YkSSiBAvTtEgU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=umBppHhbfJZuB16BDuO3fQtqCsMUwje/qNzgt7IT0gIHKm+ccVASEPwTXrm2hIEdnp5Oc0iuSidcRr54MDhckz+AR0ENhqPf7qUSgnURV8qajn/yGBJiCspmf57z1Sb9iBZHz+PoI+TsvQU+8WKKJLX83884ncmQcx40TkE4sJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZtbQw40v; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786532102; c=relaxed/simple;
+	bh=mkEMYvOBUBP9mf6ujt+QKJ5QLBLaIUpjlgZ/Ors3prw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fs/9iwIJ4UsjKGcqwn4yu32Mdtpy2exZDtlC3G7hE/ogri1LhKoEZp8JJLRKfN9ftHrceVLzaO2S8NTbOSGaXHe77FaIFAU+6L4X6AQKVviZ8bADKY2Bp7b6zln1FixaT9b/pVQDjbGLAR9XE4vQGr3sS/sw1HCGLubo+CJMSSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yjso+IZh; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZtbQw40v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E7E1F000E9;
-	Wed, 12 Aug 2026 10:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786531687;
-	bh=BrlyDxdNLZr5aTCv0a4NOp4cia3qj3dIK3fGQrfnoxk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ZtbQw40vcDU9NGt6kIAdnhT2s9kR3Q2bhVvOagMSRHXhRe+OPRMFxRoSbdIMouobL
-	 7WA2LUFkby5W13xwDFiAKVDLNZMySTq8BDSQdqLVYOdxfCWUZXuP7r8ophCfMLD14X
-	 v9oaOhgoHsFiJEU3/RhWicPExV6xOutccsneGy7f9aIO8U83YjjL+/5eNK/kFBMgRU
-	 b/rjs25YJTpkZWwmhBqhFo+DlkReh0BrOZLP4vpPLhSjJqj1uWEGvgYDdzsRVH2c3w
-	 LWBVUlT5b2APpigPGgmt7Or8xVFe8JS21fa++pXTt6YoxyQ/3im/x9LpKBfnJE9BnW
-	 LQwxLcqgXfTXw==
-Content-Type: multipart/mixed; boundary="===============5263543539982007423=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yjso+IZh"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4956242332dso7145365e9.2
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 03:55:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786532099; x=1787136899; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=TaYIQ7M4HH4um0m6rcSdrPMZwoKevqKb8one0oMaoa4=;
+        b=Yjso+IZhIFy+sY5mZynvoyBe1fN7/1wgxreJnAfd14UUXF1rfO+D6wJb3Hh/rizC1g
+         hgNDc0pUkWwAH7q3cgHcE7DTb/pC1F71O/aPdUQHgCJai1Kcegi6zCRFPCK3JwLxwz6n
+         gM1PVv1j0YyNexRyWOAVrOKcu0wmxTa5R6FPy5ATvnWPb2d9dDw00S88njf739HK3Rot
+         7SPxErqGp1A1dzqFjUYkmiEzgkPThPinILBspkPDCAEREW6sFAEcLbaPzD0io5eyLI97
+         xSwfI8CEbRY3E39qtKB2DGsy0YUmAeSr4+q0NiMBZRP0FBZlL5MA7NdRm6sLe0I69Dwf
+         eg3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786532099; x=1787136899;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=TaYIQ7M4HH4um0m6rcSdrPMZwoKevqKb8one0oMaoa4=;
+        b=iFQNeigJP2XT5YpCRPDvrwq/RoUzEYwD20MPc9fBLcpUOD7ZJz1LfRN0McC7HhN1JK
+         deKvYX55avEvRD3sPN2TW1/KuqnHk4N2XrdiKIUoGfa8E6OLXNqG7WLtl5nbOYHod9Yx
+         h2VDqtIFWJOV0R+iwC5vTx3pR9cXS/R9kyBTZ743x2RzivtR+qlsITUcD4Yo6HdijfBI
+         JCEaGSCFkkTuyy5gb8B1gf6qY91llW76puLnRYcYUgJZliqC7Jkqttad9Zx9wIqRRbWu
+         LzTPsAnLd72DC7F9TO1264tSal3nIUKNyt+VChYg1ahyLubf/yp2FVFkPT6XBA0ufJ87
+         6GPQ==
+X-Gm-Message-State: AOJu0YzyaIquUVgkquSlzKtvuMwA4VgcZq+mQZKPJ/T8RpxZln4oFLkN
+	d03odsxrvTZOjmwXGrV3q9I/DdlQJM2GeR/t26nWoJsdzZtnoO9zyVcw
+X-Gm-Gg: AR+sD13eeodJ4Q4ppsti+vd7rQ09vZ7w2XbcfSPhaF4qJLiWk7lg37sI90rQr5qNtqF
+	jiHgHkma4/QN9RLmVYOzHC5Aa4flGMwcrCyO+oNDngIn8R0He7XoE4glFW6umY1AZg7j5onHYR7
+	5vbvUyA0NdMoLUoEya9VL4kmJOUuC1/4eOmMI3UD4cJCDHSk0hiXEYP8LYpy7UUOh7hR+iJPjd1
+	ObSxjILI12tBh7AuSDmF4Yw+Uu3J31b2DMa37+fbUjVYWZjLY8YmmouYyB+N1KOx6d7TD0MKNVJ
+	2O7GI1kx8+fNrrDKLuAEMXcDXjNvIyZzXdZ54Y78g3sOznN3cBaiCjtGMg8FLBtquBszG4Gfyv7
+	ywcuegSarxASy0AGWPc5/8BtKlvgUY0BwBuaUuuYpG1e5EyqwRPlqMonxK5gh20TdcEkEHztmaM
+	qkt2HZW7vdUge2n81LvdhmAu1pxs/b36KWvrLQKs4v/8ovySOBiBGIJYBJgiu+OFE4OsDewKYTb
+	L9yGq8mJ8XqFPGM6b0zxDhHz45GmuQ=
+X-Received: by 2002:a05:600c:470d:b0:499:4d4d:822a with SMTP id 5b1f17b1804b1-4997c16007cmr42417015e9.17.1786532099258;
+        Wed, 12 Aug 2026 03:54:59 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48150d72141sm6559541f8f.36.2026.08.12.03.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Aug 2026 03:54:58 -0700 (PDT)
+Date: Wed, 12 Aug 2026 12:54:56 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
+	kuba@kernel.org, liamwisehart@meta.com, martin.lau@linux.dev,
+	pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org,
+	sdf.kernel@gmail.com, ameryhung@gmail.com, memxor@gmail.com,
+	jiayuan.chen@linux.dev
+Subject: Re: [PATCH bpf-next v5 2/5] bpf: Add ksock kfuncs
+Message-ID: <anxRAIXU5lLOIo7O@gmail.com>
+References: <20260807171532.125149-1-mahe.tardy@gmail.com>
+ <20260807171532.125149-3-mahe.tardy@gmail.com>
+ <CAAVpQUDeiDOQa6i03juWO64vyz0TnFH6mqB_vNo0ZeqA0-otxw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <96ae36f751c60c798d9a5912c09dc3e0392618561588959c9fdc33faed92c039@mail.kernel.org>
-In-Reply-To: <20260812083115.73100-7-nhudson@akamai.com>
-References: <20260812083115.73100-7-nhudson@akamai.com>
-Subject: Re: [PATCH bpf-next v7 6/6] selftests/bpf: tc_tunnel - validate decap GSO and encapsulation state
-From: bot+bpf-ci@kernel.org
-To: nhudson@akamai.com,bpf@vger.kernel.org,netdev@vger.kernel.org,willemb@google.com,martin.lau@linux.dev
-Cc: nhudson@akamai.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 12 Aug 2026 10:48:07 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAVpQUDeiDOQa6i03juWO64vyz0TnFH6mqB_vNo0ZeqA0-otxw@mail.gmail.com>
 
---===============5263543539982007423==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Aug 10, 2026 at 09:24:38PM -0700, Kuniyuki Iwashima wrote:
+> On Fri, Aug 7, 2026 at 10:15 AM Mahe Tardy <mahe.tardy@gmail.com> wrote:
+> >
+> > Add BPF kfuncs that allow BPF LSM programs to create and use sockets for
+> > sending data. This provides a mechanism for BPF programs to emit
+> > telemetry. For this first patch set, it's restricted to SOCK_DGRAM
+> > socket types with IPPROTO_UDP protocol but could be easily extended to
+> > SOCK_STREAM and IPPROTO_TCP in the future.
+> >
+> > The API consists of five kfuncs:
+> >
+> >   bpf_ksock_create()   - Create a socket (sleepable)
+> >   bpf_ksock_connect()  - Connect socket to remote address (sleepable)
+> >   bpf_ksock_send()     - Send data through the socket (sleepable)
+> >   bpf_ksock_acquire()  - Acquire a reference to a socket context
+> >   bpf_ksock_release()  - Release a reference (cleanup via
+> >                          queue_rcu_work since sock_release sleeps)
+> >
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-> index 1aa7c9463980b..67ba27d693474 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-> @@ -438,7 +438,6 @@ static int setup(void)
->  	SYS(fail_close_ns_client, "ip link add %s type veth peer name %s",
->  	    "veth1 mtu 1500 netns " CLIENT_NS " address " MAC_ADDR_VETH1,
->  	    "veth2 mtu 1500 netns " SERVER_NS " address " MAC_ADDR_VETH2);
-> -	SYS(fail_close_ns_client, "ethtool -K veth1 tso off");
->  	SYS(fail_close_ns_client, "ip link set veth1 up");
+[...]
 
-Dropping the TSO-off setting here changes what the encap side of the test
-exercises. With TSO off, veth1's xmit path had to software-segment the
-BPF-encapsulated GSO skb, which validated the encap-side GSO metadata
-(inner_protocol, inner_protocol_type, inner header offsets, gso_type,
-csum_start) written by BPF_F_ADJ_ROOM_ENCAP_* through gre_gso_segment()
-and UDP-tunnel GSO. With TSO on, veth advertises NETIF_F_GSO_SOFTWARE and
-NETIF_F_GSO_ENCAP_ALL, so the encapsulated GSO super-packet is forwarded
-to veth2 intact and no tunnel GSO segmentation happens anywhere in the
-path for any of the 12 `.test_gso = true` subtests.
+> > +
+> > +/**
+> > + * struct bpf_ksock - refcounted BPF kernel socket context
+> > + * @sock:      The underlying kernel socket.
+> > + * @usage:     Reference counter.
+> > + * @rwork:     RCU work for deferred cleanup (sock_release may sleep).
+> > + */
+> > +struct bpf_ksock {
+> > +       struct socket *sock;
+> > +       refcount_t usage;
+> > +       struct rcu_work rwork;
+> > +};
+> > +
+> > +static void ksock_release_work_fn(struct work_struct *work)
+> > +{
+> > +       struct bpf_ksock *ks =
+> > +               container_of(to_rcu_work(work), struct bpf_ksock, rwork);
+> 
+> nit: if you need respin:
+> 
+> struct bpf_ksock *ks;
+> 
+> ks = container_of(to_rcu_work(work), struct bpf_ksock, rwork);
 
-It also changes what the kernel-decap leg sees: a GSO super-packet through
-gre_rcv()/fou_udp_recv() -> iptunnel_pull_offloads() instead of a stream
-of segmented packets.
+sure!
 
-Is it intentional to remove the encap-side segmentation coverage, or should
-both modes be preserved?
+> 
+> > +
+> > +       sock_release(ks->sock);
+> > +       kfree(ks);
+> > +}
+> > +
 
-> diff --git a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
-> index 7376df405a6be..853bca9629103 100644
-> --- a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+[...]
 
-[ ... ]
+> > +__bpf_kfunc struct bpf_ksock *
+> > +bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
+> > +                int *err__uninit)
+> > +{
+> > +       struct bpf_ksock_create_opts opts_copy;
+> > +       struct bpf_ksock *ks;
+> > +       int err;
+> > +
+> > +       /*
+> > +        * sock_create() derives the network namespace, credentials, and cgroup
+> > +        * from current. Kernel threads, including BPF workqueue callbacks, do
+> > +        * not carry the context of the task that invoked the BPF program.
+> > +        */
+> > +       if (!bpf_ksock_has_user_task_context()) {
+> > +               err = -EOPNOTSUPP;
+> > +               goto err_out;
+> > +       }
+> > +
+> > +       if (!opts || opts__sz != sizeof(struct bpf_ksock_create_opts)) {
+> > +               err = -EINVAL;
+> > +               goto err_out;
+> > +       }
+> > +
+> > +       opts_copy = (struct bpf_ksock_create_opts){
+> > +               .family = READ_ONCE(opts->family),
+> 
+> I'm not sure if we really want to care about such an arch, but
+> since you mentioned unaligned access in bpf_ksock_connect(),
+> is READ_OCNE() safe here ?
 
-> @@ -655,6 +688,40 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
->  	if (bpf_skb_adjust_room(skb, -olen, BPF_ADJ_ROOM_MAC, flags))
->  		return TC_ACT_SHOT;
->
-> +	kskb = bpf_cast_to_kern_ctx(skb);
-> +	shinfo = bpf_core_cast(kskb->head + kskb->end, struct skb_shared_info);
-> +	if (shinfo->gso_size) {
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-> +		    (shinfo->gso_type & SKB_GSO_UDP_TUNNEL_MASK))
-> +			return TC_ACT_SHOT;
-> +
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
-> +		    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
-> +			return TC_ACT_SHOT;
-> +
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
-> +		    (shinfo->gso_type & SKB_GSO_IPXIP4))
-> +			return TC_ACT_SHOT;
-> +
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
-> +		    (shinfo->gso_type & SKB_GSO_IPXIP6))
-> +			return TC_ACT_SHOT;
-> +
-> +		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-> +			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
-> +			if ((shinfo->gso_type & SKB_GSO_TUNNEL_MASK) &&
-> +			    !kskb->encapsulation)
-> +				return TC_ACT_SHOT;
-> +			if (!(shinfo->gso_type & SKB_GSO_TUNNEL_MASK) &&
-> +			    kskb->encapsulation)
-> +				return TC_ACT_SHOT;
-> +		}
-> +	} else if ((flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-> +			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) &&
-> +		   kskb->encapsulation) {
-> +		return TC_ACT_SHOT;
-> +	}
-> +
+To my understanding, there's no issue regarding alignement here since
+these four fields are __u8. The READ_ONCE is only used so that the
+compiler does not do smart things like moving load or reloading a field
+between time of check and time of use.
 
-All of the new GSO assertions sit under `if (shinfo->gso_size)`. If the
-packet reaching veth2 ingress is not a GSO skb, this entire block is
-skipped, the program returns TC_ACT_OK, and the subtest reports PASS.
+> 
+> 
+> > +               .type = READ_ONCE(opts->type),
+> > +               .protocol = READ_ONCE(opts->protocol),
+> > +               .reserved = READ_ONCE(opts->reserved),
+> > +       };
+> > +
 
-Whether a GSO skb reaches the BPF decap program at all depends on emergent
-path behavior: TCP builds a GSO skb because sk_setup_caps() forces
-NETIF_F_GSO|NETIF_F_GSO_SOFTWARE for TCP sockets, and veth1 does not
-segment it because VETH_FEATURES includes NETIF_F_GSO_SOFTWARE and
-NETIF_F_GSO_ENCAP_ALL.
-
-Nothing in the test verifies that assumption held. There is no counter or
-flag exported to user space saying "a GSO skb was seen and validated". If
-a future change to veth features, to sk_route_caps, to the send size, or
-to the MTU clamping stops producing GSO skbs on that path, the newly added
-assertions become silent no-ops and the test keeps passing green - a false
-pass of precisely the kind selftests.md warns about under "Test the
-Interface.../negative-test tautologies".
-
-The sibling test progs/decap_sanity.c shows the pattern that avoids this:
-record state in a global (init_csum_partial, etc.) and ASSERT_* on it from
-the prog_tests side, so "the check never ran" is distinguishable from "the
-check passed".
-
-Should this test export a flag or counter indicating that the GSO
-validation actually executed?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31584739682
---===============5263543539982007423==--
+[...]
