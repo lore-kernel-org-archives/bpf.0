@@ -1,85 +1,53 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mta0.migadu.com (out-223.mta0.migadu.com [91.218.175.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5204138D419
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 16:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65ACE43B3D1
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 16:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786552620; cv=none; b=qyenTCO9SqHNx8kvU44ip2NDU9gzBcjmQxIlciEFp0jssCiXv/u3m5hncOLYiPmiXDn/x8rFLipmGQ3VrAEOgcQu55eW/wdLRhsmVgY8ohDS3hZllM+KUYVzyVaALg8+Inm6JOADAKnvrW+3v6OpNPz0J7yqFk0/3UOGcYkVsxU=
+	t=1786553337; cv=none; b=WCNzvpNUhsVv72yeQNQS/Kf3jeX0a/OIWw1yGHgwWA9GXOnu2k8QDbHJHRCF8N1h1fYIqJQnAMRf1lP9Rt1QU4O/OIlzY4LiNIg8DPLBY90U7VGQqg3sZoRvBdiiZrZ8RXcbgb9nwW5V7ggRmsw4d3DfkiUMbhUkQ4bSN0US4CQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786552620; c=relaxed/simple;
-	bh=qFJTd1Pohw19wep66XSQur8wBgQEbrCcoIQrmJ2RYwg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cs4zMrKjMdNu0FNuewW3rxRV+7+nA9fOOu8oIRJhQQPuPb577s5ubHyOfmPowShr3Yo1H3u+ybXW1b8aA9xhnvEpZGQ3Ty6u6dm6+8Bq8e2Q6na4hFRrfutWXVhkwYCvz1brMtlZ2JYyozR2wOlVMRIyFgqmsdFIDg+P1K42ssw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai; spf=pass smtp.mailfrom=nebusec.ai; dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b=rNghMlrm; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
+	s=arc-20240116; t=1786553337; c=relaxed/simple;
+	bh=9Zz695qFcJN6tT5kWEDZG+5dsGqvgRv6vroaGOeo9KI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q6m0G77ZjqPeDHgA0l477vgef0Mit3RTK0DdydeETARprXLG8l66HrOX5hy6seR8eFSeuBq4+fjaKUYg710ARFENZwK6jXBfvkRtFQDOpy8Op3vdXeePTRcjha4X61zARyOGXA0K+t0PJ5ypLs/h9wCYDysko94eY35jeRhjuzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xw03RYoh; arc=none smtp.client-ip=91.218.175.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b="rNghMlrm"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3811f512167so1464174a91.3
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 09:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nebusec.ai; s=google; t=1786552619; x=1787157419; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=S12B33otl+xs9aLy7HZkleNzMtJjJA/J8Sk9AZrxsWM=;
-        b=rNghMlrmo5RBAg1o3dhWY+CcoVj996S+6akPZ8h+HzbO4t2LwC0hzzt6Z9a5KdliKo
-         LK/3lty7rlcn2D0eJi750cFXC1c7RcfYFzBQmMcoDXq/a6Lxu0fxScyXzxmrOJG3R6J/
-         bvM7wU+y4MWxqDN4aaAFddt8lsPqPxAv86jGKGeLzMefu2fRFVCEkql/SGXqpCItcQCS
-         /lJUsXJ5smSnx2Wikdk6eF1a/byknFi/A8+Zh9B1te16pz346GZ/WlHwzlBhjdfWnh1I
-         9N5sDW+rvNiMr2m3F9D/6kertnIvKYxJWM9iL+kfNYpDJ22QZf+917XhD4I4oBp5M/IQ
-         7QuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786552619; x=1787157419;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=S12B33otl+xs9aLy7HZkleNzMtJjJA/J8Sk9AZrxsWM=;
-        b=PTU6p+tNxk3qtRg8q5n9jXsIZ3QMCcILrS2+UBGxzjLcGd8gMQnn6d0QrKEVWfwmIj
-         R68x69NsKR7g/p059fFD9KQWfvQbYJGN29wxByMmNMdSOVjt21LbTUJU2tr8Q3Gzh4Xl
-         2U5FpDNZ85BtBsh5Kk82K8zIRVxafsQMy0G6xqXCkvUEPTj8IglgH0jgCnU54wwKfa28
-         b7uv8uusDideMv0El4bykVnTlZGfsBaDEx13A1SN9mz+N+7DsADverC0YqQfsLUUr0NN
-         aQBW5J9GEp6780cs6nJjpkU1PPCAtO/uRep5LI/SqlewHaCBx0kV9QHJMr7OlheltMit
-         ze2A==
-X-Forwarded-Encrypted: i=1; AHgh+RqczHhzyl1lOBfSxtYDhzN2fgHTXTVBLyWVHbbp3Ix00btiIIzifU3p9NxVtalw3oQfc4s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzabp8f3Uniq9h8iQLqBRdnEe3SwcYLYocQDkRY65A42BjZFhqt
-	pR04q1gJb0sLCDtouBXi00Ze4f7Hj9HW7nfiGSKldxzDqaRE5XRI1AKykJbs1DbVU6em
-X-Gm-Gg: AR+sD133Vq8q7rt3OOzw/W/l9fbs/9l3u8I29IUhSCN4OaQH8KIKhd1XNZkww88zlly
-	HqMRqi72zkS/9sA4mX+1sNwXKjbDfLaE+unqBDt95qhISPnGRZwdBzveXsYUCLuLTejDAExIUGb
-	CeCV/Cn/f9YakZgTTKluLmuJ+sZP71BUFQ/T/2+7fmEXY3Nk2c4Tiy+3Ua12yd9KgHSQ9xmwhqq
-	MQ+zokoOvUAhNyog5+x2D7i7tUk5vfthm0KgiUhQur6REnCO2GgmHfChrtIlX2W4onVDBlGa0v5
-	/4rjos2wkEJZ/d0nBZ1PnfoGVwWk2EQ8RsdTeytfvYyfpPeNDMcIL0KD8PtGwQR7OEpYfTrHzVb
-	EQNcKPTFPY7gS23iCKmlgnBpf6RdNXA5zQ9hZ3Gc2CB/7ulGMj6aAjBP2QkWp5cdOJM2BY/KSGS
-	OjK0+p03o2eBQC+SOicPH4xRk/92jAiuOt67kuYRGXnDwcR8qiyok3JheNbHg9a1f6OZ1yzjQnE
-	uXV
-X-Received: by 2002:a17:90b:1dc6:b0:392:ca3b:370a with SMTP id 98e67ed59e1d1-393013c4248mr8969661a91.2.1786552618585;
-        Wed, 12 Aug 2026 09:36:58 -0700 (PDT)
-Received: from Roxy.localdomain ([203.175.14.54])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3931cd46314sm47499a91.6.2026.08.12.09.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 09:36:57 -0700 (PDT)
-From: Zhiling Zou <zhilinz@nebusec.ai>
-To: idosch@nvidia.com,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: dsahern@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	ast@kernel.org,
-	kafai@fb.com,
-	joe@wand.net.nz,
-	vega@nebusec.ai,
-	zhilinz@nebusec.ai
-Subject: [PATCH net v3 1/1] ip: orphan prefetched skbs before multicast forwarding
-Date: Thu, 13 Aug 2026 00:36:38 +0800
-Message-ID: <0c52eb3d7532aaf8bccf37e0f7c922143c639735.1786552223.git.zhilinz@nebusec.ai>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1786552223.git.zhilinz@nebusec.ai>
-References: <cover.1786552223.git.zhilinz@nebusec.ai>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xw03RYoh"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=9Zz695qFcJN6tT5kWEDZG+5dsGqvgRv6vroaGOeo9KI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786553331; v=1; x=1787158131;
+ b=xw03RYohMMD1hSX/b4T958tX4iP8fjfsTUrIYEr1+hx6idCGKt7PgfwGPWAFDjDfnTjVRrDK
+ ywFtNJkdWAuCxUJ7qoqm+AtgZAbifhIXPIcr/T2IuQgdMqskdeC3jRmYpTFT/1AAPWZehR7Kow4
+ mHdPPYrktN7vqOpQLnJ2Qv9I=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from .linux.dev (117.20.149.103)
+	by smtp.migadu.com with ESMTPS id e0a4c1ed99434c8d;
+	Wed, 12 Aug 2026 16:48:51 +0000
+X-Migadu-Flow: FLOW_OUT
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH bpf-next] bpf: Trim special_kfunc_list in verifier
+Date: Thu, 13 Aug 2026 00:48:43 +0800
+Message-ID: <20260812164843.55601-1-leon.hwang@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -88,73 +56,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-IPv4 and IPv6 input preserve an skb->sk association installed by
-bpf_sk_assign() so that local delivery can use the selected socket under
-RCU. Both address families can also prefetch a socket in UDP early demux.
-In both paths (BPF and UDP early demux) a reference is not guaranteed to
-be held on the socket.
+The commit 7619a0ee9340 ("bpf: Mark existing lock-safe kfuncs with KF_SPINLOCK_SAFE")
+dropped some helpers in verifier, which also eliminated the use of the
+following kfuncs from the special_kfunc_list:
 
-When a multicast packet is not locally deliverable, IPv6 hands the
-original skb to ip6_mr_input(). IPv4's ip_mr_input() similarly keeps the
-original skb when local delivery is not needed. Either path can put the
-skb on an unresolved multicast route queue or forward it after the
-receive-side RCU section ends.
+* bpf_arena_reserve_pages
+* bpf_stream_vprintk
+* bpf_stream_print_stack
 
-After the prefetched socket is destroyed, a later skb free invokes
-sock_pfree() and dereferences the stale skb->sk. Orphan the skb before
-each non-local multicast forwarding path. Local delivery retains the
-original skb; the existing skb_clone() calls provide multicast forwarding
-with a socket-free clone.
+So, drop them from the special_kfunc_list.
 
-Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
-Fixes: 08842c43d016 ("udp: no longer touch sk->sk_refcnt in early demux")
-Cc: stable@vger.kernel.org
-Reported-by: Vega <vega@nebusec.ai>
-Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
-changes in v3:
-- Describe UDP early demux consistently for both IPv4 and IPv6.
-- Drop the IPv6-specific unicast-MAC discussion from the commit message.
-- Leave the BPF-only TC redirect and bridge paths for a separate patchset.
-- v2 Link: https://lore.kernel.org/all/f968f497251dedbd1263c322a7c4e3e1a727161d.1786023177.git.zhilinz@nebusec.ai/
+ kernel/bpf/verifier.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-changes in v2:
-- Cover the IPv4 multicast forwarding path.
-- Correct the IPv6 early-demux ordering and document the unicast-MAC
-  PACKET_HOST condition used by the reproducer.
-- Add the BPF socket-assignment and UDP early-demux Fixes tags.
-- v1 Link: https://lore.kernel.org/all/02db4590d0161e31a789dcdfa8d1be1a3212ec2e.1785724784.git.zhilinz@nebusec.ai/
-
- net/ipv4/ipmr.c      | 3 +++
- net/ipv6/ip6_input.c | 1 +
- 2 files changed, 4 insertions(+)
-
-diff --git a/net/ipv4/ipmr.c b/net/ipv4/ipmr.c
-index 1d9a4ac14fcef..e5f2b1c6150d2 100644
---- a/net/ipv4/ipmr.c
-+++ b/net/ipv4/ipmr.c
-@@ -2213,6 +2213,9 @@ int ip_mr_input(struct sk_buff *skb)
- 	if (IPCB(skb)->flags & IPSKB_FORWARDED)
- 		goto dont_forward;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index add3affc5703..8797ae08f232 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11092,10 +11092,7 @@ enum special_kfunc_type {
+ 	KF_bpf_task_work_schedule_resume,
+ 	KF_bpf_arena_alloc_pages,
+ 	KF_bpf_arena_free_pages,
+-	KF_bpf_arena_reserve_pages,
+ 	KF_bpf_session_is_return,
+-	KF_bpf_stream_vprintk,
+-	KF_bpf_stream_print_stack,
+ };
  
-+	if (!local)
-+		skb_orphan(skb);
-+
- 	mrt = ipmr_rt_fib_lookup(net, skb);
- 	if (IS_ERR(mrt)) {
- 		kfree_skb(skb);
-diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
-index 8972863c93ee5..d332ec60f9150 100644
---- a/net/ipv6/ip6_input.c
-+++ b/net/ipv6/ip6_input.c
-@@ -622,6 +622,7 @@ int ip6_mc_input(struct sk_buff *skb)
- 		if (deliver) {
- 			skb2 = skb_clone(skb, GFP_ATOMIC);
- 		} else {
-+			skb_orphan(skb);
- 			skb2 = skb;
- 			skb = NULL;
- 		}
+ BTF_ID_LIST(special_kfunc_list)
+@@ -11185,14 +11182,11 @@ BTF_ID(func, bpf_task_work_schedule_signal)
+ BTF_ID(func, bpf_task_work_schedule_resume)
+ BTF_ID(func, bpf_arena_alloc_pages)
+ BTF_ID(func, bpf_arena_free_pages)
+-BTF_ID(func, bpf_arena_reserve_pages)
+ #ifdef CONFIG_BPF_EVENTS
+ BTF_ID(func, bpf_session_is_return)
+ #else
+ BTF_ID_UNUSED
+ #endif
+-BTF_ID(func, bpf_stream_vprintk)
+-BTF_ID(func, bpf_stream_print_stack)
+ 
+ static bool is_bpf_obj_new_kfunc(u32 func_id)
+ {
 -- 
-2.43.0
+2.55.0
 
