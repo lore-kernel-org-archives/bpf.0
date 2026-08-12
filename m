@@ -1,156 +1,126 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61ED1322B6D
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 06:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAF327603F;
+	Wed, 12 Aug 2026 06:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786514762; cv=none; b=Yjgo0oou3aDidrp59dEoKN2w6dlcu8vpxj0TMNmHnZUcthmg2Xf2IJFp99TFPCotSQOk74wbB3uU0ZfTn3ycydNekH1Qp29FYqH/oFagN+lxJ5AC17ReYFRK8q++tx4SsFREkT0ltluokCwowdklZRnr1cf2T+2PdnomDGJ8sew=
+	t=1786515096; cv=none; b=sQwJIZGVHWN83oDVZAlVL4bxBA2faiGPek6/in5tzN1tW91aq05Bl63G1YEYV+6AgmfKQ+vFRZQPJOadUgOxOQLDffEywLgDep4P1Jat+IMVzDMoxLPx2FUXjO+zs9dX0JzUbJI15jdvXsejXPJlbFXnTRtQzCqG2JDUohx2h5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786514762; c=relaxed/simple;
-	bh=/OGyHYiEy27ihFxfypwGxZjaS8SVArNiKX0qtOaJ6/M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g242Uxr1OBe0EBUsSK5fez4hwITpcNZyB4htXpJER88wWJP6OR4JtHx0D0KrISd2HAcxj1PsXOhLaMEwVBepwegOlH41QghTf5+3FGIZ+HYGD9AFJmQCeAmQGftmydzSCRjb6heOwlFXTGlt2j19SZuFShhqYAY0HPZYfQt+Fp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nFHZbYgi; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nFHZbYgi"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38101f85591so1763061a91.1
-        for <bpf@vger.kernel.org>; Tue, 11 Aug 2026 23:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786514761; x=1787119561; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Uu/u+XgdVM2vnLf3P+xre46c5wIQQBHvhzkrb5tnjRw=;
-        b=nFHZbYgiFleydGpCWjVtehrbEAesMZg/XewFQU7AzD1GbST+2FFcB6Lk32edJbkOMa
-         ZNs4Iurg01b9F52PNGgc7GbJirlf8oPYNUTyrXuizdclvReq4f20fphazYl4oOJrf/Qt
-         4rrQQhQ1Z4DX19Zruik9htbTIrXzEG3LH3YwX5LYzD1R8+UJpoiQq6UuOF/AuWo+rk+P
-         T0xycEqpxXrPF+DIXe74q41kEEV6U9dmMTioh+YB4lTS6MakVYzubrzzeWujdos2pfCU
-         0sM+I82xQnzyGXWUEn7yLHttTUxEx1uEL0oaEbJOCZTVSCWq1G3Vnvw21Bpb4wTuOUIJ
-         Ks7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786514761; x=1787119561;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Uu/u+XgdVM2vnLf3P+xre46c5wIQQBHvhzkrb5tnjRw=;
-        b=r5Cyx7PUlYto8Eicn4QyRHiqDhdTJ3qF0NmzK19xOmGRP0ASRD72/mHFwGMhXibmd2
-         BsxjIgsGrAcO5uMG45lE1sOy2SGf63jnh9JXPfP4zeFIvmE2sv2kwCjXze5oDClsLjIF
-         cP7/WvF/616mOa3W1/A/REOd/oCYd9teLmb4301dpUcUAetcUsBvjEuFjOuJikNyC6fH
-         kOWuYJ2BNC1t8ARwg7FgRT65L2LAN4GDw2XrXivTkejBBHJIbHfQRCKK4+Dliq0OcLGg
-         jf3L6DMoe4moSmyDO2OGKFtt0cpU56Lbh0MC7MQzOBB0Ky5UWYrrmkcgjWmFMzBxRFdu
-         nURA==
-X-Gm-Message-State: AOJu0Yz5JrTtr6GNEucnrrFBCSIqC0/ltq1dTwCa17OPuRg4uFLNpG07
-	0HDRrsn7BTtpGwaXAcbGkTOT1LnuiAzIuW+9TNbuCZ3lNre5j8XvOf5VTFDt3qhn
-X-Gm-Gg: AR+sD12cG+n2UKfShcPZiZcvGnv7nVMz1V839VRPL3s6v4YlEca/49hBb9MmmfMp9AZ
-	3zCcVaSYA7WnBnO6n8O0dqZs+UD7vtHBHcLf6dTdBmwKsp/1NesntLqaDagr7b6TNR2aJIQ8AwG
-	kXmhHuiDjzqAWK8gYVj83Ir6Dm0XbSZBdyLf6epH3g8b+Xi5Xlzn0qAzFVHp+uPfK6amFYcuo8A
-	8pOrzTMyqKvZYfm/pWCcZd0FTPPSXGiWjPhVH1hI/TowXS3OUQRf7TrdMBLX1XodEHDXwhGQski
-	1zdUWpzp+8WjIbstw0rG+vklkqfEU73jwFmuzjTKRTa0MmZ8DXIxWc4nuuGG86ObD99YSOl10fU
-	/ChAmhz9Z/99Es1xlF9qD2QhAFHhflYA2Hd8xEOD2WJFbRqhxiwH8UGLv62yeU3I6Y9ebTRjqsE
-	SQBEoiXZRiL4+Dd4bDNroDZbddSIdVF5M1oD+ayQwQT4lH+yNwwAhp3UO1Ei1pfhcUoLAHzdJj1
-	ep/eA==
-X-Received: by 2002:a17:90b:6cd:b0:390:b3c5:e2c9 with SMTP id 98e67ed59e1d1-39302bce9e4mr1036270a91.17.1786514760538;
-        Tue, 11 Aug 2026 23:06:00 -0700 (PDT)
-Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392f88d1e8csm2314520a91.5.2026.08.11.23.05.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 23:06:00 -0700 (PDT)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: guarantee zero termination for veristat test buffers
-Date: Tue, 11 Aug 2026 23:05:44 -0700
-Message-ID: <20260811-veristat-filter-fix-v2-3-6c234c4cd6ef@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260811-veristat-filter-fix-v2-0-6c234c4cd6ef@gmail.com>
-References: <20260811-veristat-filter-fix-v2-0-6c234c4cd6ef@gmail.com>
+	s=arc-20240116; t=1786515096; c=relaxed/simple;
+	bh=bVq5fn8Pgvq29u10W+ZmmqdI2VXod7THLvIJ8ciJYSk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JZeaDROy5pDP92/ecbB1REVMIn4zFf+fbHPhHYaSwR4Pt/ovoW85/zdZoahHVxBbaH5Ez+jqS+mNQF3b0/g07P9ZePCz4hi/bsaB5uUlf0leoUucdpnV3wWCByCsh26KF6yqLo5ClXX9feZv5D18Q8CGTP28QxyJ1KF/mVR0uRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: a860608a961411f1aa26b74ffac11d73-20260812
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:53642249-9248-48a9-acce-cfe0ddf9c193,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:-45
+X-CID-META: VersionHash:e7bac3a,CLOUDID:fead38b70cf8c30bc96a2de978754f45,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|865|898,TC:nil,Content:0|15|50,E
+	DM:1|-100,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
+	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: a860608a961411f1aa26b74ffac11d73-20260812
+X-User: fangqiurong@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <fangqiurong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 305795612; Wed, 12 Aug 2026 14:11:29 +0800
+From: Qiurong Fang <fangqiurong@kylinos.cn>
+To: tj@kernel.org
+Cc: void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	fangqiurong <fangqiurong@kylinos.cn>
+Subject: [PATCH] sched_ext: Gate cid kfuncs behind the SCX struct_ops check
+Date: Wed, 12 Aug 2026 14:11:16 +0800
+Message-Id: <20260812061116.2691443-1-fangqiurong@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-In veristat tests replace direct read() calls with calls to
-read_output() utility function, which:
-- guarantees that the input buffer is zero terminated;
-- asserts that read operation succeeded.
+From: fangqiurong <fangqiurong@kylinos.cn>
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+scx_bpf_cid_to_cpu(), scx_bpf_cpu_to_cid() and scx_bpf_cid_topo() live in
+the scx_kfunc_ids_cid set, but scx_kfunc_context_filter() doesn't check
+that set. The filter's first test treats any kfunc outside its known sets
+as non-SCX and allows it, so these three kfuncs can be called from any
+struct_ops program - e.g. a TCP congestion control program.
+
+Add scx_kfunc_ids_cid to the filter's known sets, matching how in_any and
+in_idle are handled.
+
+Fixes: e9b55af47edf ("sched_ext: Add topological CPU IDs (cids)")
+Assisted-by: Z.ai:glm-5.2
+Signed-off-by: fangqiurong <fangqiurong@kylinos.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/test_veristat.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ kernel/sched/ext/cid.h | 1 +
+ kernel/sched/ext/ext.c | 9 +++++----
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_veristat.c b/tools/testing/selftests/bpf/prog_tests/test_veristat.c
-index 4cd41080eed3..11f3de2b66ad 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_veristat.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_veristat.c
-@@ -82,7 +82,7 @@ static void test_set_global_vars_succeeds(void)
- 	    " -G \"struct11 [ 7 ] [ 5 ] .struct2[0][1].u.mat[3][0] = 175\" " \
- 	    " -vl2 > %s", fix->veristat, fix->tmpfile);
+diff --git a/kernel/sched/ext/cid.h b/kernel/sched/ext/cid.h
+index 1f74d1f331f5..2fe2311a0f99 100644
+--- a/kernel/sched/ext/cid.h
++++ b/kernel/sched/ext/cid.h
+@@ -67,6 +67,7 @@ extern s32 __rcu *scx_shard_node;
+ extern struct scx_cid_shard __rcu *scx_cid_shard_ranges;
+ extern struct scx_cid_topo __rcu *scx_cid_topo;
+ extern struct btf_id_set8 scx_kfunc_ids_init_cids;
++extern struct btf_id_set8 scx_kfunc_ids_cid;
  
--	read(fix->fd, fix->output, fix->sz);
-+	read_output(fix);
- 	__CHECK_STR("=0xf000000000000001 ", "var_s64 = 0xf000000000000001");
- 	__CHECK_STR("=0xfedcba9876543210 ", "var_u64 = 0xfedcba9876543210");
- 	__CHECK_STR("=0x80000000 ", "var_s32 = -0x80000000");
-@@ -124,7 +124,7 @@ static void test_set_global_vars_from_file_succeeds(void)
- 	syncfs(fd);
- 	SYS(out, "%s set_global_vars.bpf.o -G \"@%s\" -vl2 > %s",
- 	    fix->veristat, input_file, fix->tmpfile);
--	read(fix->fd, fix->output, fix->sz);
-+	read_output(fix);
- 	__CHECK_STR("=0x8000 ", "var_s16 = -32768");
- 	__CHECK_STR("=0xecec ", "var_u16 = 60652");
+ void scx_cmask_clear(struct scx_cmask *m);
+ void scx_cmask_fill(struct scx_cmask *m);
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index f9631e66a9fc..317eb0110c64 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -10762,19 +10762,20 @@ int scx_kfunc_context_filter(const struct bpf_prog *prog, u32 kfunc_id)
+ 	bool in_idle = btf_id_set8_contains(&scx_kfunc_ids_idle, kfunc_id);
+ 	bool in_any = btf_id_set8_contains(&scx_kfunc_ids_any, kfunc_id);
+ 	bool in_cpu_only = btf_id_set8_contains(&scx_kfunc_ids_cpu_only, kfunc_id);
++	bool in_cid = btf_id_set8_contains(&scx_kfunc_ids_cid, kfunc_id);
+ 	u32 moff, flags;
  
-@@ -142,7 +142,7 @@ static void test_set_global_vars_out_of_range(void)
- 		 "%s set_global_vars.bpf.o -G \"var_s32 = 2147483648\" -vl2 2> %s",
- 		 fix->veristat, fix->tmpfile);
+ 	/* Not an SCX kfunc - allow. */
+ 	if (!(in_unlocked || in_init_cids || in_select_cpu || in_enqueue || in_dispatch ||
+-	      in_cpu_release || in_idle || in_any))
++	      in_cpu_release || in_idle || in_any || in_cid))
+ 		return 0;
  
--	read(fix->fd, fix->output, fix->sz);
-+	read_output(fix);
- 	__CHECK_STR("is out of range [-2147483648; 2147483647]", "out of range");
+ 	/* SYSCALL progs (e.g. BPF test_run()) may call unlocked and select_cpu kfuncs. */
+ 	if (prog->type == BPF_PROG_TYPE_SYSCALL)
+-		return (in_unlocked || in_select_cpu || in_idle || in_any) ? 0 : -EACCES;
++		return (in_unlocked || in_select_cpu || in_idle || in_any || in_cid) ? 0 : -EACCES;
  
- out:
-@@ -157,7 +157,7 @@ static void test_unsupported_ptr_array_type(void)
- 		 "%s set_global_vars.bpf.o -G \"ptr_arr[0] = 0\" -vl2 2> %s",
- 		 fix->veristat, fix->tmpfile);
+ 	if (prog->type != BPF_PROG_TYPE_STRUCT_OPS)
+-		return (in_any || in_idle) ? 0 : -EACCES;
++		return (in_any || in_idle || in_cid) ? 0 : -EACCES;
  
--	read(fix->fd, fix->output, fix->sz);
-+	read_output(fix);
- 	__CHECK_STR("Can't set ptr_arr[0]. Only ints and enums are supported", "ptr_arr");
+ 	/*
+ 	 * add_subprog_and_kfunc() collects all kfunc calls, including dead code
+@@ -10809,7 +10810,7 @@ int scx_kfunc_context_filter(const struct bpf_prog *prog, u32 kfunc_id)
+ 		return -EACCES;
  
- out:
-@@ -172,7 +172,7 @@ static void test_array_out_of_bounds(void)
- 		 "%s set_global_vars.bpf.o -G \"arr[99] = 0\" -vl2 2> %s",
- 		 fix->veristat, fix->tmpfile);
+ 	/* SCX struct_ops: check the per-op allow list. */
+-	if (in_any || in_idle)
++	if (in_any || in_idle || in_cid)
+ 		return 0;
  
--	read(fix->fd, fix->output, fix->sz);
-+	read_output(fix);
- 	__CHECK_STR("Array index 99 is out of bounds", "arr[99]");
- 
- out:
-@@ -187,7 +187,7 @@ static void test_array_index_not_found(void)
- 		 "%s set_global_vars.bpf.o -G \"arr[EG2] = 0\" -vl2 2> %s",
- 		 fix->veristat, fix->tmpfile);
- 
--	read(fix->fd, fix->output, fix->sz);
-+	read_output(fix);
- 	__CHECK_STR("Can't resolve enum value EG2", "arr[EG2]");
- 
- out:
-
+ 	moff = prog->aux->attach_st_ops_member_off;
 -- 
-2.53.0
+2.43.0
+
