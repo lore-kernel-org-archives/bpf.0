@@ -1,211 +1,209 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011034.outbound.protection.outlook.com [40.107.130.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40294279E0
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 10:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786530914; cv=none; b=KKDKEpkit9tNsExu+DVbHNRNslifN7EAl27wrByRMO03FV1Uo8jdv8CDqmoWaeB/Q4oVdg0J0U4sS/0ChNs1ItOEdXHp1WPb7JQ4ksACup46p/W6g2UFgVt8EgyoZPjZONCPiMvqTEIRH5+0TKEdLLOG9ByreCgQRdevlYvoTkE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786530914; c=relaxed/simple;
-	bh=F8DUy8234kAgoD9DGMyKqrWBOur2Vit+0eofYS+10W4=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZMmLRZxf9wjZNeqSS3p3WEDhENdskgtxgqnKqfk2wrAp9MNs9mmuBOd8xwTO5gk+wGe015h3a3mZhL8ZrF8+o38EvJkF7IyvFOeATsusQ4WyUeuEat7s0AuOM5cyfJjMbCpT5MNmfPhIKV6I1Rl0IuoCGcd+cokOsQXcpDSJHcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pfC8xZLs; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02BD426EB9;
+	Wed, 12 Aug 2026 10:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.34
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786530933; cv=fail; b=MVERAIdzT/Hoo/IwipRTjjhWTNtS66zCEobZKP4Ds408uxnT4Snk6betFthoGBYGbeHlxzZOmJJRm6kSTiRXIzK2MkuXuIaf9ryPm6is3AZdIHlXOjT+nj1MY+yj0LhXFTr9G5a1sWeknuzNuQttIXQ9bAJbOaCNGchqlzK5GKo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786530933; c=relaxed/simple;
+	bh=xW1dmafwFGVmdYYvEEOA8XGld9gqUe5hK4HeX6wiZGU=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=c1sdUp1dajPdktoKoLwi11Lu9Va3DLtOxspL4HOuyWEGrvAT7oE/1XtV5GsShDLd3cedWbtkffnqTl+ZguoK8wraCpRo98d5W+yGVhyqXXWmbZhoGQLs+1wC89+HpWTyMvW4zDSFJbexLEfIeDbcRv6eADCOCPDcsJTVpegJ7Co=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=F5Xef8M6; arc=fail smtp.client-ip=40.107.130.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pfC8xZLs"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-47362928f65so599847f8f.2
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 03:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786530911; x=1787135711; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=o3+xm+C1lqkauiE9SqCgUxPet+r2BY3i5/9ftLHHYjI=;
-        b=pfC8xZLsgFuPDcxwiY0zjMQDmdVPcgC8O42+3PB+gSvW88WyA7qwMaXnk+qgFPWGbO
-         wR+8+KtRrq2UXdGz+UShPT9qsVyQJjgcb7enLSodOEn2zTMcRLX3w7TpWuIJLDdI2sG8
-         exQTERoCk6jIkSwI7L4O8eMz9alI6r5SUrWwAW12wVy88/iVZl7RY2OB6WDfXbhqaC0T
-         BWdAlC9O23bBl8NB7nY3LjqvARWAB1U3nDpa/dJWJwbzxYUQKjQsYM1uE+6Qp7s2gOo6
-         KQDQo93VnSfDmQdwUedZJzmPSK8gMY0+s8IecXPZ8d0OVWNSBgmo7E+fmopb/dp1vThr
-         WtqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786530911; x=1787135711;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=o3+xm+C1lqkauiE9SqCgUxPet+r2BY3i5/9ftLHHYjI=;
-        b=NCNI9KUFTlwt5R5VvzPoj56xSJtlNuheH0Adnkaxley2qRIC+EjORfpNgILTNCNSXU
-         yRF8XUyhWIq0fQp3BZcLzcF9GcolvIxEV99ec7xY2igJM2HzWyCwvN+RaZIQTubd7wTH
-         KiS9BtkBOjdEBfriyVjNH5UrDNZt4/bSQT3Yf7c2eK6Z9bfGsIUSYFOlvnHYl5CoZ/mb
-         4Chvg2q/Y9qwxx1txMeRxPamP6c3NKSD6Ascp6yGipfTEZhmtIVMevexzn2T8tJo7j0P
-         B+WfV8/6fETFqGoSsnkNILYjf3Z659B20EzpN9n1elhh/nPEdUVLl/OHOjbKqgh/RX0e
-         zJ0Q==
-X-Forwarded-Encrypted: i=1; AHgh+RrTDEtktVXXgRjSqhnEWVrmN3ERx96DNNQmjgpG6JnEJkEfWHhMaX8Bdvu/2NDUgisapLg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMZzeHVDzsNCikvba25R6uNoo1IaXfRrzK+z/DwWvOQFFuG4OF
-	Tp4v0Oj90cAXQIheEIHDV9FMEbL0tsrEzPhXXgGqfzzJxp3r9XNdBn5I
-X-Gm-Gg: AR+sD121yOKtknAGBtkgEGzRt29IgieUbiReeZG4S4PT6Zxdi6VUEIia8UNukbFKXRE
-	oRK80N71snnR3PVqgkkDEA1UxCaXbsvgSq2lYKmp1BO0S7AezSo1dx//T8m6t0MQmDwBG/AwqYT
-	y3lCMjSDeF2XnanYgZ9uOS54sSMed/e9WBIHXMYXyBDzV1nTUBZfeQUbEvf90/ZTAEmZtoxP3fK
-	BsIY2sfSHJd8wta1Q/pP0Nl0igFheLvYfrOgnaMvf/vzVxryaf/qFKH6/ZIhHqSBXl8dpRGgKJy
-	MKSRvgZHo6AXH87AzWk1zpeWbonEFjKfyo68WAbbzxLdjy3z6GgO8z9d+z/3+NJHzwoFtDLc0+c
-	suBpWvfW7Wf9bzIgVsjGoLepp3WnW6bxMlARg0AjQstbO+K46G/U0ZKTwvIp0cORUneC/mZjbrd
-	5qeP4fInw1TTDoDfnuW/fjy7oZK7ljQYUNyqvfkcyW/0mEAJDp
-X-Received: by 2002:a05:6000:2405:b0:47f:f3fe:1ebf with SMTP id ffacd0b85a97d-481529012f0mr4963683f8f.20.1786530910808;
-        Wed, 12 Aug 2026 03:35:10 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48150bf5f0esm6004421f8f.4.2026.08.12.03.35.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 03:35:10 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 12 Aug 2026 12:35:08 +0200
-To: sashiko-reviews@lists.linux.dev
-Cc: Deepanshu Kartikey <kartikey406@gmail.com>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] perf/bpf: Fix data race in __perf_event_overflow
-Message-ID: <anxMXBwCX0HCYgxr@krava>
-References: <20260811235331.10044-1-kartikey406@gmail.com>
- <20260812000859.654FC1F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="F5Xef8M6"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=PzA0mghvRfPKeMH+S3RKJOPRa06e1SOl5kEZgez0fZOkNLBiTzyXZvPGsmHVEa9DTAVF7lO+/afWHoGov2BnfkzJLD3IDoPUXvmYgiL9x9f6Q3pgSAKXzvJfdwm3zvCmtfOp/0JmZAG6USYZ1bmBjPzoXvkho/4zdlTyMiMh6/rt9Kw/80ID7cfY1krtAREkw+jS6chS/9Te/j0DVCKqH1yrkQ+UuXWqoKO402JKfj+Y3GkWkiKG28jm7lTrWjrR/E3wJ1Vr3NQvWE3hqhRvxQqbb5k2ttvhR9fHIemOjHoWwv4yLdvMYkqjZVkkPf3vl6e/Z5tVxAiQVoSCFosA+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xW1dmafwFGVmdYYvEEOA8XGld9gqUe5hK4HeX6wiZGU=;
+ b=EXrV3a7mc1QPPLBXBrbDFW6h7uq1KIw8G7/ZIMJwuOrlYGjcvyeTrZ4LuDuIHJ1OrioMSKJHsqlVL2jvlAsk28mrrhygQ+FIeH/4MNMGAZe0m9tlm14q50ZdVeasUYVgVMw8XJBg0n956qcmYt70/CYR9fZwawCpHem5T3HILsyGjeTEeAFXUKIaT8uQHYFZgPMVDYp53imXF9vMdTB6sFzMhb0N1U0XhjVQnNj5r0q4+DGlzdtQrfkreKGS7GBLaH72i+DLZCs+nAaeaCdycx+MBKQJgXB6q/WBQlQ/2BUru3+X1lu6D3RlYMcbdnrVJZRrkCOLlfBy+n235OF6Iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xW1dmafwFGVmdYYvEEOA8XGld9gqUe5hK4HeX6wiZGU=;
+ b=F5Xef8M64TgEM31Ea2AfQC2Ijd2NyCrJ0IbD0/2BeHAtZ9ECA/wbAT17dQSumDIEsfBlI+NIahcyP7RXVONHD4juPJ5FhWU7R3T05xs1Gzd9ldYKHAvWFUW/XbJcnX+io/PtXlQYtTWYesIWn2MdnnYgt8zcaoZzJEYXTlOmmYgxW8SijPILhoQXk97ZK2V7dppx7bGK+PMNwMxDlqcBC2bCuyXoEjZtzDVB2/s04HdJoUKgyrNLXivlsVl/wiHhAPPecVQR9baxmDpdLRPBim2Q4WbS2ZXb8MnKP8F3peo/FHwTIX7fCPtqvLQQRMIqgLNBtbAHg2zEuuoRZgxBqw==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by AS8PR07MB7733.eurprd07.prod.outlook.com (2603:10a6:20b:350::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.13; Wed, 12 Aug
+ 2026 10:35:25 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::f708:4bd3:9987:b9e5]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::f708:4bd3:9987:b9e5%2]) with mapi id 15.21.0339.001; Wed, 12 Aug 2026
+ 10:35:25 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Jijie Shao <shaojijie@huawei.com>, "shenjian15@huawei.com"
+	<shenjian15@huawei.com>, "linux-rdma@vger.kernel.org"
+	<linux-rdma@vger.kernel.org>, "eperezma@redhat.com" <eperezma@redhat.com>,
+	"jasowang@redhat.com" <jasowang@redhat.com>, "virtualization@lists.linux.dev"
+	<virtualization@lists.linux.dev>, "mst@redhat.com" <mst@redhat.com>,
+	"xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "edumazet@google.com"
+	<edumazet@google.com>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
+	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
+	<dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
+	"jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"stephen@networkplumber.org" <stephen@networkplumber.org>,
+	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
+	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
+	<donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
+	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
+	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
+Subject: RE: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in
+ the RX path
+Thread-Topic: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in
+ the RX path
+Thread-Index: AQHdJFknwofVPz0NnEuqy57Qt9muFbaY4t2AgAFg0yA=
+Date: Wed, 12 Aug 2026 10:35:25 +0000
+Message-ID:
+ <PAXPR07MB79842CC27C2F5CF9BD40E007A3DC2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
+ <61721708-0d77-4f59-aa08-02562af282bb@huawei.com>
+In-Reply-To: <61721708-0d77-4f59-aa08-02562af282bb@huawei.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|AS8PR07MB7733:EE_
+x-ms-office365-filtering-correlation-id: f35c2a3a-c0fb-4010-1bad-08def85d6b72
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|23010399003|7416014|376014|366016|1800799024|38070700021|921020|6133799003|10067099003|4143699003|11063799006|56012099006|22082099003|18002099003|3023799007;
+x-microsoft-antispam-message-info:
+ LaNIgpcfIXAxYhGwiJVJzpzGl1q6Lu0kXieQ7emi6iCM2H9VDMZpDsDS5oLPEP0jy1QjmafqoFcOrZqvxfPa0P9NmBgiYBSWReaPRVVuDFWH8W5yov1rIbJG4QHC41SBAYHxdsHt0tndJYvK+mKm4c6Hbjb518y/hQaVFIOIq0JaDfpN/B3BGZxhivBTFtpWI+U7uiDNekDt569dLuWDs0zk2sMGMxlcEcTpnV5PYDbrrXeZzPTWHBR85ujP9MQzwzXQtTmsaF1BtZ1kyoqpU8xnIIlaraiRc2BSWs2b5v8iV2g+Wjz/xUM388LuHA9ZloTSp1ilsYeZvLHfXO1apX5l+KpVzqM6rjiBV8TYbCkkrtDQc3PHWT8H8LeAQoVVbk9o6Rwsv5V7Ck9aMFb9XY4VgKKp280vbLmMHgI5DzcICQsD9GdK+dCoGcz8OCKa6BV6BCDJpS/BU5pOazRDbWwi2WAB2OkfG2QUsA+8PYhg/H0SJolhnhMWiENmlPkAk5+kgEJsCFN7I7nBeFzviystyAO0ogevzikfmz35vr8zrc8chOtTs+LtHRwHg+KMXqORwdJc70gn9RaXs6lDihxgojC2Nc9XnClSX9F0mp4810gOmuKKTOliSpUZ+kQRePOM9SIG+77Hk+A28wLpGi3p/JWP8a7vFlPGR/5VNjQCfFHmSgYpO6PpmCutF7duvMHDrG+XGcw4QAWFFcaWOnmNArIdyaAKvzK3UEKa+Gk=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(366016)(1800799024)(38070700021)(921020)(6133799003)(10067099003)(4143699003)(11063799006)(56012099006)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?WnRYZVVOU2RpbWkxZDR4ZEl3KzBUazZNQkljNEorb3lVMGZzNC9rNkxVWVpZ?=
+ =?utf-8?B?Slc5TGRtOVUxNXB4WlRzUUdJS2pRV0FGUWFKMnNYNVR2TFhtY20yS21MaDJ0?=
+ =?utf-8?B?eU5Zd2wydEtaRzBoWXlsckIvQWhqUXpRQXlRRXU0RDJzL0NIT011TmJJM1ky?=
+ =?utf-8?B?bzk4b1M3SENzbGl5Q3dzbVV2b0FocEFJVUI3YjdXVy9qZ3lVNC93NTdoUWNO?=
+ =?utf-8?B?SFpOYUtHWUkyZUo4S2RFQ1RiaVFVLzlMU2FGeE1xSEpkSzF2RisvSXEwTHVU?=
+ =?utf-8?B?K1J0YjFDdkVKZGlJeFQ2SVF4K0RQaTBTOTFxWllQMG9qa0tKdDZKSWpXeWQx?=
+ =?utf-8?B?WjhXNHU3RGIzSjhqS0RMKzdtd3p6YUNTUVluUGU0N3oySXZ2dUNneFhMSmJx?=
+ =?utf-8?B?bm5oanlvVkE3WHRzekRibmlVOXI5VzBqRTR5R2xrWlpmNnd0Snp2bHhZYzg0?=
+ =?utf-8?B?Mi9LeFBnV0NXSVFkRDRtVTRjeTJtZUsrTjB4cDh1Yk1YSXd1TnZsRTVoNTdn?=
+ =?utf-8?B?SS9naC9id3hxNS8zMjFzUGNPMGNnM3VGR1EyUWFtbmt4VGxnNnpwYVVZWFNs?=
+ =?utf-8?B?clVMc1d5VmxUOUpKcFpPYWpoVkdWMmF3bUZZcG41TzlPZ2I3U3N4bTB4bHFO?=
+ =?utf-8?B?YUhpcWJYa1NuWlVwNndOY25hczQzRm5kNzlvdVFoQWlEMzg0UXNlalBaNjVT?=
+ =?utf-8?B?TmNGeEN4S3AxVzBhUmNBYlgxVmZ1ZTlxdWZFeVVrWlY0UTUxY2xQRkxGVEd5?=
+ =?utf-8?B?Q2tSa25halZPZERrRjJmN3haUHVCdkZaRzE2V2RCZkwvdVhmZmtGSDB1T2JX?=
+ =?utf-8?B?K0RBR2diRjJOUURQT2ZmSk1CUXc3YmNRSmpOd05NakxGaVlVbEw2eTNnV09k?=
+ =?utf-8?B?VGdONHAzTDh5ZnJ2UmRRRmhvM3BBWlVJYThRdCt2RTloWUEvN0tJdGdydWdM?=
+ =?utf-8?B?YThHU0Y4bkwvcnNyTUppRW9HY1VXM1Brazhna1VyaGExVFdkZTJHRWN5SEpD?=
+ =?utf-8?B?NW8xYmVEeHVPQ0MrZ01NUy9FVEhoci9HdzllcFFTNXhEMUZteSs1dEI1MG1P?=
+ =?utf-8?B?VFVZT2wza2dib1pNODdPc0FTL1hRY081UkRQOFU4MVZLYW9FOFk4bEdWQmQv?=
+ =?utf-8?B?OXVpQTdnc0RVaVVOTG9wNDRSaStjdU9TeGFZUnBFVFQ2RGwxa0hnMERCVy9a?=
+ =?utf-8?B?c2dNNnAzWEx2ZnhpWUVpaWJEditod1JIbkZNRk9ZNGlxcTN3ZS9xMWRueGVB?=
+ =?utf-8?B?bmpTNzY5UEUvRmFZbWZSV3NIV0Z4dURzRzBjYVRaVXM5a1B0ODZpMTNSWUk1?=
+ =?utf-8?B?bmdhTi9oYzcwT0I0cHJpZVZoeFE1NGxvM0Y0TStPSWlHNnRiNkdYMGI1VUlo?=
+ =?utf-8?B?eS9ockgrSkpSd2tyOUdabHJPZ1hSY0JWVTc5dFVNYXJ1dGk2Nmw4ZWMwZjht?=
+ =?utf-8?B?VU9wK2Z5UHJnaW5tbmtUUnQ5RUY3bVFBdEtzajhIa3FQMGRPcEdZYXFvdi9q?=
+ =?utf-8?B?c2VUcFNmZENrL0U0TkdZaVVRVDFDZXlBVVMySGVLTTZiMTVYSHlDc1M3MUxv?=
+ =?utf-8?B?OUdTOUZobFZLa3FwcGVubzNjeVgvL0kwdEdSREJSZm1PZnp5QnZZZzBpd29p?=
+ =?utf-8?B?M1ZQcC9IeTNOWmJoajA1RUJtdkZBaGJaWStvT1pQS0N3cUQ3V2d4eDRoUCtY?=
+ =?utf-8?B?WXQyU21hVDVRb2QrSHFLU09Bc0FWMUI2SXkyWGdzc09sMjRkcGNCWjZjbDVQ?=
+ =?utf-8?B?NlkzOGFkWXoxUGpJVVI2bHJIWTE0ckl6OTFjeDcrTFFNOWxrRnZFTGFzaDhC?=
+ =?utf-8?B?WEw2QzIveE9Jc2d0QkdmaWFCSEtOYTR0ZjVUbG43MEFBUjd6NitKWFhaeUlu?=
+ =?utf-8?B?RWQ2OVdnZ2dGMFVNNGc5R1pkdEkvcDM1WSs2UGhaNXgzbXpwRTNya0VTMUNF?=
+ =?utf-8?B?S2dPWnpOS3hTR1dSY002M3pBWmZWNk9od0pKODk5OEZtSFQ4djJLd2hRQ2xm?=
+ =?utf-8?B?aUwwa2lQbUFpdm1YbVR2cWlJWXptQTdFVzcxU3lORVB0MTVabDRYMjhuRnNL?=
+ =?utf-8?B?Qzh5RzlwUXAwa2lYN1JCbjZ6T2N3dk5ubnJFZmRTK3BUbjJhSm5uNlBWdHVN?=
+ =?utf-8?B?SVdRSmt6dXJWTTNnOFNoOWt1bE5GcEdJaUgzUHdZVXJwVmsrZ0ZPc0RzRTla?=
+ =?utf-8?B?b2RKK1I3Vkd1SmlKUUo3Q1dJeUtLYkZMbHVzV29uNVZWSlhwUzBlQlFub2k3?=
+ =?utf-8?B?bTBKTDgySjc3WXBjQ3FBYWhHZVBWbGZNanBaeHdNVGl0bGVzSlhUU2srMG1H?=
+ =?utf-8?B?YkhBN2cySWZ5c0FhUzhQWFJzNkdXbG9mTHVOV1hGbFRlNXFsN3B4cWgzNVJM?=
+ =?utf-8?Q?filCFZPJS6HXydsU=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260812000859.654FC1F00A3A@smtp.kernel.org>
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f35c2a3a-c0fb-4010-1bad-08def85d6b72
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Aug 2026 10:35:25.1460
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iaQJ5LIHMuVava7qD+g94/bvH+Zf4a0XDhnkve97EUlFPbbMb5EytDhM3Rl9Bx2wYyv7l/q6+D38CAchOijeaK1hNtf2an59Xw+piTLLMs9CWkzN/G9KKfSMWWrt3Ygj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB7733
 
-On Wed, Aug 12, 2026 at 12:08:58AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [High] Lockless TOCTOU race in perf_event_alloc() causes NULL pointer dereference or Use-After-Free during BPF program inheritance.
-> - [Medium] Incomplete fix for data races and missing memory barriers in BPF attach/detach paths.
-> - [Medium] Time-of-Check to Time-of-Use (TOCTOU) race drops valid perf events during concurrent BPF detach.
-> --
-> 
-> --- Patch [1]: [PATCH] perf/bpf: Fix data race in __perf_event_overflow ---
-> commit f63a2be5ceb79a2a8bb0263ba6723f7bf4ae763d
-> Author: Deepanshu Kartikey <kartikey406@gmail.com>
-> 
-> perf/bpf: Fix data race in __perf_event_overflow
-> 
-> This patch addresses a data race where __perf_event_overflow() concurrently
-> reads event->prog without lock protection while perf_event_detach_bpf_prog()
-> writes it to NULL. It fixes the race by introducing READ_ONCE() and
-> WRITE_ONCE() in the respective read and write paths.
-> 
-> Reported-by: syzbot+651d2774bd1d8395595f@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=651d2774bd1d8395595f
-> Fixes: f11f10bfa1ca ("perf/bpf: Call BPF handler directly, not through overflow machinery")
-> Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
-> 
-> > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> 
-> [ ... ]
-> 
-> > @@ -10766,7 +10767,8 @@ static int __perf_event_overflow(struct perf_event *event,
-> >  	if (event->attr.aux_pause)
-> >  		perf_event_aux_pause(event->aux_event, true);
-> >  
-> > -	if (event->prog && event->prog->type == BPF_PROG_TYPE_PERF_EVENT &&
-> > +	prog = READ_ONCE(event->prog);
-> > +	if (prog && prog->type == BPF_PROG_TYPE_PERF_EVENT &&
-> >  	    !bpf_overflow_handler(event, data, regs))
-> >  		goto out;
-> 
-> [Severity: Medium]
-> This isn't a bug introduced by this patch, but does the independent second
-> read in bpf_overflow_handler() create a time-of-check to time-of-use race?
-> 
-> If a concurrent detach sets event->prog to NULL between the READ_ONCE() here
-> in __perf_event_overflow() and the second READ_ONCE() inside
-> bpf_overflow_handler():
-> 
-> bpf_overflow_handler() {
->     prog = READ_ONCE(event->prog);
->     if (prog) {
->         ...
->     }
->     return 0;
-> }
-> 
-> Wouldn't bpf_overflow_handler() evaluate prog as NULL and return 0? The
-> caller __perf_event_overflow() evaluates !0 as true and executes goto out,
-> which unconditionally drops the perf sample.
-> 
-> Should the already-validated prog pointer be passed directly to
-> bpf_overflow_handler()?
-
-seems legit
-
-> 
-> 
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -2018,7 +2018,7 @@ void perf_event_detach_bpf_prog(struct perf_event *event)
-> >  
-> >  put:
-> >  	prog = event->prog;
-> > -	event->prog = NULL;
-> > +	WRITE_ONCE(event->prog, NULL);
-> >  
-> >  unlock:
-> 
-> [Severity: Medium]
-> This is a pre-existing issue, but does this incomplete fix leave other data
-> races in the attach and detach paths?
-> 
-> Other functions like perf_event_set_bpf_handler(),
-> perf_event_free_bpf_handler(), and perf_event_attach_bpf_prog() still
-> perform plain writes to event->prog without WRITE_ONCE().
-
-was wondering the same, the perf_event_detach_bpf_prog is called for
-tracing events (tracepoint/kprobe/uprobe) the perf event release goes
-through perf_event_free_bpf_handler, check perf_event_free_bpf_prog
-
-jirka
-
-> 
-> Additionally, does this need release and acquire semantics? If the writes to
-> event->prog and event->bpf_cookie in the attach paths are reordered by the
-> CPU, could the NMI handler read a valid event->prog but a stale or
-> uninitialized event->bpf_cookie?
-> 
-> [Severity: High]
-> This is also a pre-existing issue, but does the lockless access in
-> perf_event_alloc() create a use-after-free or NULL pointer dereference
-> during BPF program inheritance?
-> 
-> During fork, perf_event_alloc() inherits the BPF program:
-> 
-> perf_event_alloc() {
->     ...
->     if (parent_event->prog) {
->         struct bpf_prog *prog = parent_event->prog;
->         bpf_prog_inc(prog);
->         ...
->     }
-> }
-> 
-> Since this accesses parent_event->prog locklessly, can a concurrent
-> bpf_perf_link_release() clear the pointer? If the compiler reloads the
-> pointer after the check, bpf_prog_inc() would dereference NULL.
-> 
-> Even if it is optimized to a single read, perf_event_alloc() is not inside
-> an RCU read-side critical section. Could a concurrent detach finish its RCU
-> grace period and free the BPF program, causing bpf_prog_inc() to write to
-> freed memory?
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260811235331.10044-1-kartikey406@gmail.com?part=1
-> 
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBKaWppZSBTaGFvIDxzaGFvamlq
+aWVAaHVhd2VpLmNvbT4gDQo+IFNlbnQ6IFR1ZXNkYXksIEF1Z3VzdCAxMSwgMjAyNiAzOjMyIFBN
+DQo+IFRvOiBDaGlhLVl1IENoYW5nIChOb2tpYSkgPGNoaWEteXUuY2hhbmdAbm9raWEtYmVsbC1s
+YWJzLmNvbT47IHNoZW5qaWFuMTVAaHVhd2VpLmNvbTsgbGludXgtcmRtYUB2Z2VyLmtlcm5lbC5v
+cmc7IGVwZXJlem1hQHJlZGhhdC5jb207IGphc293YW5nQHJlZGhhdC5jb207IHZpcnR1YWxpemF0
+aW9uQGxpc3RzLmxpbnV4LmRldjsgbXN0QHJlZGhhdC5jb207IHh1YW56aHVvQGxpbnV4LmFsaWJh
+YmEuY29tOyBwYWJlbmlAcmVkaGF0LmNvbTsgZWR1bWF6ZXRAZ29vZ2xlLmNvbTsgbGludXgtZG9j
+QHZnZXIua2VybmVsLm9yZzsgY29yYmV0QGx3bi5uZXQ7IGhvcm1zQGtlcm5lbC5vcmc7IGRzYWhl
+cm5Aa2VybmVsLm9yZzsga3VuaXl1QGdvb2dsZS5jb207IGJwZkB2Z2VyLmtlcm5lbC5vcmc7IG5l
+dGRldkB2Z2VyLmtlcm5lbC5vcmc7IGRhdmUudGFodEBnbWFpbC5jb207IGpoc0Btb2phdGF0dS5j
+b207IGt1YmFAa2VybmVsLm9yZzsgc3RlcGhlbkBuZXR3b3JrcGx1bWJlci5vcmc7IHhpeW91Lndh
+bmdjb25nQGdtYWlsLmNvbTsgamlyaUByZXNudWxsaS51czsgZGF2ZW1AZGF2ZW1sb2Z0Lm5ldDsg
+YW5kcmV3K25ldGRldkBsdW5uLmNoOyBkb25hbGQuaHVudGVyQGdtYWlsLmNvbTsgYXN0QGZpYmVy
+YnkubmV0OyBsaXVoYW5nYmluQGdtYWlsLmNvbTsgc2h1YWhAa2VybmVsLm9yZzsgbGludXgta3Nl
+bGZ0ZXN0QHZnZXIua2VybmVsLm9yZzsgaWpAa2VybmVsLm9yZzsgbmNhcmR3ZWxsQGdvb2dsZS5j
+b207IEtvZW4gRGUgU2NoZXBwZXIgKE5va2lhKSA8a29lbi5kZV9zY2hlcHBlckBub2tpYS1iZWxs
+LWxhYnMuY29tPjsgZy53aGl0ZUBjYWJsZWxhYnMuY29tOyBpbmdlbWFyLnMuam9oYW5zc29uQGVy
+aWNzc29uLmNvbTsgbWlyamEua3VlaGxld2luZEBlcmljc3Nvbi5jb207IGNoZXNoaXJlQGFwcGxl
+LmNvbTsgcnMuaWV0ZkBnbXguYXQ7IEphc29uX0xpdmluZ29vZEBjb21jYXN0LmNvbTsgdmlkaGlf
+Z29lbEBhcHBsZS5jb20NCj4gQ2M6IHNoYW9qaWppZUBodWF3ZWkuY29tDQo+IFN1YmplY3Q6IFJl
+OiBbUEFUQ0ggdjUgbmV0LW5leHQgMi8yXSBuZXQ6IGhuczM6IGZpeCBHU09fRUNOIGZsYWcgc2V0
+dGluZyBpbiB0aGUgUlggcGF0aA0KPiANCj4gDQo+IG9uIDIwMjYvOC81IDU6MzUsIGNoaWEteXUu
+Y2hhbmdAbm9raWEtYmVsbC1sYWJzLmNvbSB3cm90ZToNCj4gPiBGcm9tOiBDaGlhLVl1IENoYW5n
+IDxjaGlhLXl1LmNoYW5nQG5va2lhLWJlbGwtbGFicy5jb20+DQo+ID4NCj4gPiBDdXJyZW50bHks
+IHRoZSBobnMzIFJ4IHBhdGggc2V0cyB0aGUgU0tCX0dTT19UQ1BfRUNOIGZsYWcgd2hlbiBhIFRD
+UCANCj4gPiBzZWdtZW50IHdpdGggdGhlIENXUiBmbGFnIHNldCBpcyByZWNlaXZlZC4gVGhpcyBp
+cyBpbmNvcnJlY3QgYmVjYXVzZSANCj4gPiB0aGUgaG5zMyBoYXJkd2FyZSBHUk8gcmVzZXRzIHRo
+ZSBJUCBUb1MgYnl0ZSB0byAwIGR1cmluZyBwYWNrZXQgDQo+ID4gYWdncmVnYXRpb24uIENvbnNl
+cXVlbnRseSwgbm8gdmFsaWQgRUNOIHNpZ25hbHMgYXJlIGNhcnJlaWQsIG1lYW5pbmcgDQo+ID4g
+dGhhdCBpdCBjYW5ub3Qgc3VwcG9ydCBSRkMzMTY4IEVDTiBvciBBY2N1cmF0ZSBFQ04gcHJvdG9j
+b2xzLiBTZXR0aW5nIA0KPiA+IFNLQl9HU09fVENQX0VDTiBvciBTS0JfR1NPX1RDUF9BQ0NFQ04g
+dW5kZXIgdGhlc2UgY29uZGl0aW9ucyBtaXNsZWFkcyANCj4gPiB0aGUgdXBwZXIgbmV0d29yayBz
+dGFjay4NCj4gPg0KPiA+IEZpeCB0aGlzIGJ5IHJlbW92aW5nIHRoZSBpbmNvcnJlY3QgU0tCX0dT
+T19UQ1BfRUNOIGZsYWcgYXNzaWdubWVudCBpbiANCj4gPiBobnMzX2dyb19jb21wbGV0ZSgpLg0K
+PiANCj4gDQo+IFRlc3RlZCBvbiBobnMzIEhXICgyeCAxMDBHLCBkaXJlY3QgY2FibGUsIG9wZW5F
+dWxlciAyNC4wMywga2VybmVsIDcuMi4wLXJjNikuDQo+IA0KPiB0Y3BkdW1wIGNvbmZpcm1zIEhX
+IEdSTyB6ZXJvZXMgSVAgVG9TOiBhZ2dyZWdhdGVkICg+TVRVKSBwYWNrZXRzIGNhcnJ5IHRvcyAw
+eDAsIHdoaWxlIG5vbi1hZ2dyZWdhdGVkIHBhY2tldHMga2VlcCB0aGVpciBUb1MvRUNOIG1hcmtz
+IOKAlCBzbyB0aGUgemVyb2luZyBpcyBkb25lIGJ5IEhXIEdSTywgbm90IHRoZSBzZW5kZXIuIEJl
+Zm9yZSBwYXRjaCwgQ1dSIHBhY2tldHMgaGFkIFNLQl9HU09fVENQX0VDTiBzZXQgKDB4NSA9IFNL
+Ql9HU09fVENQVjQgfCBTS0JfR1NPX1RDUF9FQ04pLiBBZnRlciBwYXRjaCwgYWxsIEdSTyBldmVu
+dHMgZ3NvX3R5cGU9MHgxIChTS0JfR1NPX1RDUFY0IG9ubHkpLCBubyAweDUgb2JzZXJ2ZWQuDQo+
+IA0KPiBUZXN0ZWQtYnk6IEppamllIFNoYW8gPHNoYW9qaWppZUBodWF3ZWkuY29tPg0KDQpUaGFu
+a3MgSmlqaWUgZm9yIGNvbmZpcm1hdGlvbiwgSSB3aWxsIHN1Ym1pdCB0byBuZXQgaW4gdGhlIG5l
+eHQgcm91bmQuDQo=
