@@ -1,227 +1,226 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CDD175A79
-	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 22:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF9125DB0D
+	for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 22:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786574827; cv=none; b=doWJS6TcWtJpvkxj+jMKraoiczrrcqK4ZTD8pFhIEf13oqactmV0ppJWuZ9q91sMq5hoOWrKRtKsBHU1/dYcMB0vg/d4nkyf2vzETzOUIVNxOLfAw2P2Xh9iB9TvR5JFFcF1g1SDuZkpxQhI73Dsz+HOA2iY/CoFsW6pSy2hJPU=
+	t=1786575116; cv=none; b=Gogx5bPYNsTF2+ieN8Km7DnBfp9w6MLWBG0fctnSNLWgozgbz49lyU/b6r6c/HBilL8rYxtOlvBc+X8gNjqgM9YUINcqKSQA1we/UVb4vEpquRxGORf3e5fMod6xhGwUdsWUkE5vZy7dONCql30j1atnNzftQCspH+MfZ/fEaYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786574827; c=relaxed/simple;
-	bh=HkNPfs3/wfKa3oTl3hxHFoZ4z62pLeEWtRVWphx6VrA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OD/dy7e5ERwgb5A387rGWtaI8PfK+ztBA38BNEGnaaA0I1xs7MRWPPKjcx/jrXFg3tJdkNtkdR41vs6NmFpXaJOh3FwhOsPGWYqB//dTH9eDQxIeZAvwi01u/lTEqfsOW32l51xFZVLGmbpHmqpsaUSC8kNotRnV3RamZOVnWcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LUeYKrks; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786575116; c=relaxed/simple;
+	bh=RuKEzixFlaoAwG5SW9tRrZjzS3+E4VQKKrK920EH9x0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a2lLIjKi4Jgb/RqesFvonNCmAjW0RklloIJSC5gF8svGpcVf6Fyh65i19sE2hb22cA2nS4NDkJ/bnVQ3+VgMj8Zbg0z17F4V1QOPUeSbcZcoDYVMir8aJxppSI440+opHba7c3WWlZ99ePvR4rqC/5lMEsWf/wiB9i4pqTnGbRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Ugd6s0QY; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LUeYKrks"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38e58034d05so1529108a91.2
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 15:47:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786574825; x=1787179625; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=8xjbogRaV6Z0jkiyIDgjLOg1GDv22OCE53W1CPvrezk=;
-        b=LUeYKrksw2AQBoF4vhHUMWSThF5iaqTpzfJQ9zsDhPtiqqHkKYiDpnaHMJudtjNzXi
-         7ObpGTONFpkNcvQzXWTWYZVmfQZUyB3E4zs7k5i34DlXXZK483V6X/XdxkadGeLpscq7
-         IAsT0hJM5PRX2WzZd2V1ifYdJMy1Jc2shmvcpMiZZRIwv8RZZ5sFquOByCYHqLk1LBSS
-         +NVDqhRGnvG+U89/3pKpjWgdVdH6pj0+SSikvjsXc4q4YSpckBTLr7gVQPMSwRzlfGIt
-         hPutlb3IjE4KqkwJZw/o0tKLu/pCIbCA9RTofTXBclHOHoGSeQVIqaKtgg0W1psmFoXE
-         Uu8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786574825; x=1787179625;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8xjbogRaV6Z0jkiyIDgjLOg1GDv22OCE53W1CPvrezk=;
-        b=RClsmcvXnumo4UOO6ZBjwzTctkNPUAjWVXRyWWukEtrpOgGJM/QHQnku5Uf3qgz6FM
-         0dSzCF/Zabqq+OS6jySLwYP2hLX5JvpyORH3I95htdDIhxX1VjnIUFCgKY/stFPhmeGZ
-         BoaTVgQB4jj9kUxqHMOOxUoFim77H4D7c+v9y0K9NTwpBZ2ep2m41z0G6fGnv5NMCFYE
-         JkGkMgc65fe9K7z3tZSMhNEomX8J3O9502h2WNPnSS6iD6vI0AX/xI+fquiqo6cfgXcs
-         loHMr2L7VFG9kjDGYHb+kG9qjOJvWXyKmgQC21SYoB9xg/8L/TYVuxQnek9Vty5x8WAp
-         sx1g==
-X-Forwarded-Encrypted: i=1; AHgh+RrTGkcrFj/VLcQ8IPqpu49dEu8xtl5oxRwCh8lvT8OD1KJrgL60w//rZf8B5y51KnZ5Rxw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuVDVBm5dTCCurtbFaMSTcaSOgdRZ37Sti6zbrfcP/ZtOkb9w0
-	9M4cVrlaug9tN6BtgimAh/FzXZG/LW6xUIqrDstA6/fQJaWWvcRMAQRRjAkzXE4F
-X-Gm-Gg: AR+sD10cgJ0lCdeF64bqezaGKW6GZXf44Vupex3N62fvjy/4Ppt1NfAf4HKS7ar+pp4
-	fE7E9LCnoFrvrq415bBBSBMQ8EzNSjOGGSI1iATbALSUlZN/c1JxhTKCVpyr1adgMdSQvi3wUEx
-	/Gv2uC9rFHSV3fqu6PdkubX3wzhYpUI5SLcRbnHdA3WVMnd+XLkrKizcRUsdPiM2HpM5Hgk7ZXe
-	nAowMOzmMVqCP4q9Wa50rpsU2TTnKJ4a785CP2NEbH/bfJUcYzx2mug36DWGsVm0/XXqk6N3boN
-	hS5qn92We26bzdnK+ptcm7KkX36QRIJG7FfHEhTfrmt4T039/zHltF94b9qrHaRpFoW3rd2fs+y
-	tZN8f3X1dgySv+HYsGYyUJ91jqGz+i5jFv56IS5BnYAq4lfYhICn1v+V721keNDVhzeH5MmdIwS
-	ThBRqDVrlqPAe5U1sjBYrIf5ILwi+u/NjPi0Ht3e8PLdstUUELH8cbHtivMDtWEaAwl/+GEMJhH
-	hO2S1ScuXGY06XX7eB0xUR7Uv+DvJho
-X-Received: by 2002:a17:90b:3d86:b0:37f:fb1d:63fa with SMTP id 98e67ed59e1d1-3931e237c28mr1912503a91.15.1786574825450;
-        Wed, 12 Aug 2026 15:47:05 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3931f2a7d9bsm511232a91.8.2026.08.12.15.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 15:47:05 -0700 (PDT)
-Message-ID: <09a1229f680ad7b6e2d44aea142f76df94a69be7.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 09/13] bpf: Enable aggregate return types up
- to 16 bytes
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Wed, 12 Aug 2026 15:47:02 -0700
-In-Reply-To: <20260811000957.2382783-1-yonghong.song@linux.dev>
-References: <20260811000911.2378679-1-yonghong.song@linux.dev>
-	 <20260811000957.2382783-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ugd6s0QY"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67CK3ps9324935;
+	Wed, 12 Aug 2026 22:51:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=U3tOD8
+	q5RI1uHak6D1qOaVskkdAri+gjC/+RYzA9pZQ=; b=Ugd6s0QY0YN4ig6vYYxf/Y
+	UDlTNh6CpEtDKC7G/qnYwOb8fKGPn3Y9/z0qT8/dx+hHNxUdzZEhE9vuxpyEoELg
+	gCVNTqzszp6NaXBoyg/i3Cj1ZYjoeVo6/WdW8RKNod0UeyWLWosTphBU+x8Xow4o
+	FBkhsjO5eDqkd8eEGECU1TPCA5jvnCq2Obi560uNUOrNr/CpkQWhCXru/Xg7NgXu
+	4o0OVrFcJfsnlrAn+pE0upoFqTD3bfVwVqZ31Ngy7ZbXCHX7k3pXFIiUrRdVDKol
+	RBqS55Ygat00zOXndFO1RwoUpnkRvjaZ1W0dVQ6MuyPZw6LU51ddLQHroZ82KRrw
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fwvnwc80e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Aug 2026 22:51:36 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 67CMfHZe018079;
+	Wed, 12 Aug 2026 22:51:35 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fxh0ggaqh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Aug 2026 22:51:35 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 67CMpXT449217990
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 12 Aug 2026 22:51:34 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B3F8258056;
+	Wed, 12 Aug 2026 22:51:33 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C336F58052;
+	Wed, 12 Aug 2026 22:51:31 +0000 (GMT)
+Received: from [9.111.33.7] (unknown [9.111.33.7])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 12 Aug 2026 22:51:31 +0000 (GMT)
+Message-ID: <ede5833e-59f1-40db-b72d-bef247a16f9e@linux.ibm.com>
+Date: Thu, 13 Aug 2026 00:51:30 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix flaky refcount asserts in
+ map_kptr_race
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+References: <20260723114042.559926-2-max@linux.ibm.com>
+ <DK63HA8KEYWH.1W1W2IJEWEVRD@gmail.com>
+Content-Language: en-US
+From: Maxim Khmelevskii <max@linux.ibm.com>
+In-Reply-To: <DK63HA8KEYWH.1W1W2IJEWEVRD@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=RsP16imK c=1 sm=1 tr=0 ts=6a7cf8f8 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8
+ a=UfM60PG_Xhx9u9UDEuAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: PTBWOMxqv0weWRkiNNTOB6LjzEtdrJxx
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODEyMDE4MiBTYWx0ZWRfXzk85vA1tV+Bd
+ RKYFnAN365rabPIlEQYOOzG5uIZFmftFyPU8QuX5FBI2Hq2WBOMuYRQzFmK2K/qA+irpYGhQg1P
+ oBJhu5o4bMTDMOQkui5GNueG0F4srazFhPoyB03TFtEG0NzKxLl0FwDKF2EGO7kV48MQ1NIkE4y
+ HQggsE9WmHLsjZHe9lUJNS8uQ2/AwXt5hdgEwnTNp7EqjuBRNSB3zeryP5ONtT0aiAZJvKTGQsI
+ B12gxc81B+/eqw1iJC9lPOVwn2IsHlo5LcGuCbLOZ0aijujCUdnNz+QXC/AdbHdemqRqq4/NtbN
+ lHCQCBu+60Zqe/AVuEwxXFUJ4ffZ8Ubpxo6ystUxK7T6Cc7ziZ/MCbsIHYji0WpjtLsp1QQSLkC
+ QOSMup6kkE9qxZusiA+b1F8YakaL1Cx+vZHDz8WKCtT5AakQtWcF+AAJDiWghSvEHoPtfJ0sb0Z
+ uSVa8DMt7FVgZb4VHGg==
+X-Proofpoint-ORIG-GUID: KpycWfHrI3UMw44UFQw7k2IgrH1JIyJY
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODEyMDE4MiBTYWx0ZWRfXwdz6BCQ/YY+z
+ 4afmK6/L6j79Mo2gB58+lBhrXO8mnz8s0ke42y/s+niSMESladPxzFqwZ+6NoL75gmLAOwHefjj
+ tBje0Ab8j7KmTcegNufUGFqqLEU8La8=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-12_06,2026-08-12_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 impostorscore=0 suspectscore=0 clxscore=1015 malwarescore=0
+ phishscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608120182
 
-On Mon, 2026-08-10 at 17:09 -0700, Yonghong Song wrote:
-> Relax btf_distill_func_proto() to accept a by-value struct or union that
-> the R0:R2 convention added in earlier patches can carry:
->=20
-> =C2=A0- a struct or union larger than 8 and up to 16 bytes, returned in t=
-he
-> =C2=A0=C2=A0 R0:R2 register pair, matching what LLVM emits for the BPF ta=
-rget;
-> =C2=A0- a struct or union up to 8 bytes, returned in R0 alone.
->=20
-> A >8 byte scalar (__int128) was already accepted and is unchanged.
-> Everything else stays rejected: a return type larger than 16 bytes, and a=
-ny
-> type that __get_type_size() cannot return in registers at all (e.g. an
-> array), which it already reports as ret < 0.
->=20
-> btf_distill_func_proto() also builds the trampoline (fentry/fexit/fmod_re=
-t)
-> and struct_ops function models, so relaxing it widens what those can atta=
-ch
-> to. A >8 byte return stays rejected on every path that reads the target's
-> return value: commit c48796aa6c39 ("bpf: Reject >8 byte return values on
-> return-reading trampoline paths") covers fexit, fmod_ret and fsession plu=
-s
-> their _multi variants, and struct_ops, and an fentry-only trampoline neve=
-r
-> sets BPF_TRAMP_F_CALL_ORIG so it does not touch the return value at all. =
-A
-> struct or union of 8 bytes or less is newly accepted for those paths; its
-> single eightbyte is returned in R0 like any other scalar.
->=20
-> btf_validate_return_type() is relaxed as well, so that it accepts a
-> by-value struct or union up to 16 bytes in addition to void and scalars.
->=20
-> With btf_distill_func_proto() and btf_validate_return_type() relaxed, the
-> verifier, JIT, precision-backtracking and live-register support from the
-> earlier patches becomes reachable: this final patch enables <=3D16 byte
-> aggregate return values end to end.
->=20
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
+On 23/07/2026 18:34, Kumar Kartikeya Dwivedi wrote:
+> On Thu Jul 23, 2026 at 1:40 PM CEST, Maxim Khmelevskii wrote:
+>> bpf_testmod shares objects across tests; prog_test_struct that holds
+>> cnt.refs.counter is one of them. Refcounter release is deferred behind
+>> an RCU grace period, so it may still be pending when this test asserts.
+>> wait_for_refs prevents flaky failures when other tests have contaminated
+>> the refcount.
+>>
+>> Fixed tests:
+>>   - test_htab_leak
+>>   - test_percpu_htab_leak
+>>   - test_sk_ls_leak
+>>
+>> Reported-by: Ilya Leoshkevich <iii@linux.ibm.com>
+>> Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com>
+>> Signed-off-by: Maxim Khmelevskii <max@linux.ibm.com>
+>> ---
+> Wouldn't this still be flaky? Could we order these tests and wait for a RCU gp
+> to pass before finishing each one? We have kern_sync_rcu(). Either way, I don't
+> think the current approach is the right way forward.
+>
+> pw-bot: cr
+>
+>>   .../testing/selftests/bpf/prog_tests/map_kptr_race.c | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c b/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+>> index 506ed55e8528..5a543b3465a8 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+>> @@ -28,6 +28,15 @@ static int read_refs(struct map_kptr_race *skel)
+>>   	return skel->bss->num_of_refs;
+>>   }
+>>
+>> +static void wait_for_refs(struct map_kptr_race *skel)
+>> +{
+>> +	for (int i = 0; i < 500; i++) {
+>> +		if (read_refs(skel) == 2)
+>> +			return;
+>> +		usleep(10 * 1000);
+>> +	}
+>> +}
+>> +
+>>   static void test_htab_leak(void)
+>>   {
+>>   	LIBBPF_OPTS(bpf_test_run_opts, opts,
+>> @@ -73,6 +82,7 @@ static void test_htab_leak(void)
+>>   		sched_yield();
+>>
+>>   	ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
+>> +	wait_for_refs(watcher);
+>>   	ASSERT_EQ(read_refs(watcher), 2, "htab refcount");
+>>
+>>   out_watcher:
+>> @@ -134,6 +144,7 @@ static void test_percpu_htab_leak(void)
+>>   		sched_yield();
+>>
+>>   	ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
+>> +	wait_for_refs(watcher);
+>>   	ASSERT_EQ(read_refs(watcher), 2, "percpu_htab refcount");
+>>
+>>   out_watcher:
+>> @@ -195,6 +206,7 @@ static void test_sk_ls_leak(void)
+>>   		sched_yield();
+>>
+>>   	ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
+>> +	wait_for_refs(watcher);
+>>   	ASSERT_EQ(read_refs(watcher), 2, "sk_ls refcount");
+>>
+>>   out_watcher:
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+ > Wouldn't this still be flaky?
 
+Yes, but it seems like the best solution to me.
+
+ > Could we order these tests and wait for a RCU gp
+to pass before finishing each one?
+
+I don't think so, because an RCU gp does not guarantee that htab dtor 
+was called.
+
+
+Let me try to explain these points and please correct me if they are wrong.
+
+That is how htab frees memory:
+
+const struct bpf_map_ops htab_map_ops = {
+...
+     .map_free = htab_map_free,
 ...
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 6606187ed4f4..5551abcea1d3 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -7592,7 +7592,12 @@ int btf_distill_func_proto(struct bpf_verifier_log=
- *log,
-> =C2=A0		return -EINVAL;
-> =C2=A0	}
-> =C2=A0	ret =3D __get_type_size(btf, func->type, &t);
-> -	if (ret < 0 || btf_type_is_struct(t)) {
-> +	/*
-> +	 * __get_type_size() already restricts a non-negative ret to void, a
-> +	 * pointer, an int, an enum or a struct/union, so only the size is chec=
-ked
-> +	 * here.
-> +	 */
+static void htab_map_free(struct bpf_map *map)
+|-> void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma)
+     wait for bpf_mem_refill
 
-Nit: I'd drop this comment.
+static void bpf_mem_refill(struct irq_work *work)
+|-> static void free_bulk(struct bpf_mem_cache *c)
+     |-> static void do_call_rcu_ttrace(struct bpf_mem_cache *c)
+         |-> static inline void call_rcu_tasks_trace(struct rcu_head 
+*rhp, rcu_callback_t func)
+             register callback __free_rcu
 
-> +	if (ret < 0 || ret > 16) {
-> =C2=A0		bpf_log(log,
-> =C2=A0			"The function %s return type %s is unsupported.\n",
-> =C2=A0			tname, btf_type_str(t));
+static void __free_rcu(struct rcu_head *head)
+|-> static int free_all(struct bpf_mem_cache *c, struct llist_node 
+*llnode, bool percpu)
+        here the htab destructor is called
 
-...
+If this is correct, htab free happens after RCU gp and task RCU gp, 
+which makes the option with waiting for the RCU gp after each test 
+pointless. What kind of guarantees kern_sync_rcu gives right now?
 
-> @@ -7988,6 +7993,35 @@ static int btf_validate_return_type(struct bpf_ver=
-ifier_env *env, struct btf *bt
-> =C2=A0	if (btf_type_is_void(t) || btf_type_is_int(t) || btf_is_any_enum(t=
-))
-> =C2=A0		return 0;
-> =C2=A0
-> +	if (btf_type_is_struct(t) && t->size <=3D 16) {
-> +		/*
-> +		 * A >8 byte struct/union is returned in the R0:R2 register pair.
-> +		 * A global function is verified in isolation, so its caller models
-> +		 * the return as an opaque R0:R2 scalar pair; it must therefore
-> +		 * contain only scalars, otherwise a pointer field would be
-> +		 * laundered into a scalar and escape provenance and reference
-> +		 * tracking. That requirement is enforced here: do_check_common()
-> +		 * propagates the error for global functions and for the main
-> +		 * program.
-> +		 *
-> +		 * A local (static) function is verified inline and its R0:R2 are
-> +		 * copied as precise register state (with the JIT forced on when
-> +		 * the pair is consumed), so a pointer field stays tracked and needs
-> +		 * no such restriction. Accepting it here is not by itself what
-> +		 * makes it legal: btf_check_subprog_call() drops any error other
-> +		 * than -EFAULT. What it avoids is needlessly marking the
-> +		 * subprogram's BTF unreliable.
-> +		 *
-> +		 * The main program (subprog 0) takes the scalar-only path as well,
-> +		 * but its return value is the program's exit code, so a >8 byte
-> +		 * return is rejected separately at BPF_EXIT.
-> +		 */
+Polling on refs seems better because it improves chances for the test to 
+pass without introducing major changes and it works with any RCU flavor, 
+also the same hack is used already in bpf_testmod_exit.
 
-Nit: the comment is way too long, I'd drop the justification.
-     Especially given that at the moment btf_validate_return_type()
-     would only be called from main/global subprograms/callback subprograms=
-.
+Considering all of this, what do you think is the way forward?
 
-> +		bool local_func =3D subprog && !is_global;
-> +
-> +		if (local_func || __btf_type_is_scalar_struct(env, btf, t, 0))
-> +			return 0;
-> +	}
-> +
-> =C2=A0	return -EOPNOTSUPP;
-> =C2=A0}
-> =C2=A0
-
-...
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8f0c4aed0781..f8294359c85d 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11088,9 +11088,9 @@ static bool is_kfunc_arg_implicit(const struct bp=
-f_call_arg_meta *meta, u32 arg_
-> =C2=A0}
-> =C2=A0
-> =C2=A0/* Returns true if struct is composed of scalars, 4 levels of nesti=
-ng allowed */
-> -static bool __btf_type_is_scalar_struct(struct bpf_verifier_env *env,
-> -					const struct btf *btf,
-> -					const struct btf_type *t, int rec)
-> +bool __btf_type_is_scalar_struct(struct bpf_verifier_env *env,
-> +				 const struct btf *btf,
-> +				 const struct btf_type *t, int rec)
-
-Nit: since this function is now exported, let's drop the '__' prefix.
-
-> =C2=A0{
-> =C2=A0	const struct btf_type *member_type;
-> =C2=A0	const struct btf_member *member;
-
-...
