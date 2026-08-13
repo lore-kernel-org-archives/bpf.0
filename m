@@ -1,192 +1,223 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7F642E013
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 20:40:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87F836C582
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 20:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786653640; cv=none; b=LMsHWFoCZoO2II7/M5vgWya55pFp68Cwd4pCoKUTqHiXZCTxFvxjdIai3uOqbzCdNsEhDS7Nxz2ibMem5FTOzqvYqZ1VoEQ2b8AvRLHFPtwpbDHxA2b8TSldhtptUmY4sVocWf+4vTgryriq21bnSveN/OkQW4lH2ct4EOS47J4=
+	t=1786654182; cv=none; b=jGVjjeOxHJ80nzxn5n/LsmRcemvoai5YxI7ZZ8OGdsY+8TvXha/6WsaWAlk+UbFuvQWCR82/4E8Ay6u4AnZucNmLrwI+xL8sfQkdBq4tTdyk9O6FJLfvlXhYZXEbtUIXoucW0ZkflEMrMHq29IHIO7ZHKERBt4kKkAM35D6MS+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786653640; c=relaxed/simple;
-	bh=QkfCUT8hcrBF0UtCHmQqZtzvvsUZX5JFMb/1M6lLP4o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rqGtRYbzBgF+8FPhOE3HnXLa37jM3+JjU9kDUEKtXXMh0/qD9tOSGMfgCsjm+0jSCispHTrwVo4MrYhrMZPW9Dafc7OR31DbA+aT87rMlZNz9IRTD92oNuEFrTJv1kfeFCxQXVdyUgMvuhLulqXoR4VhKqi+rjlEuyfUEYGvqvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=XayzTciI; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1786654182; c=relaxed/simple;
+	bh=fU4jTUm7f7GbpLmI6nxAUFnWyIdY3gQ9PcTBiO4sNag=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=hHzsaz70hanUi3b1WPnyP1XMtzodATn54Fo/FgNNovSCqOepYIA2o6i6ESt4TbqRs5Uqf9NA8hZjoNILitZFhVx3zUUFex/v0c4h5Eavhy3Btr+yNV2Ln83sleFK9xOF4sdPIBKJ/wUu3z2pxqwiNdhk/i3K9F3tLxdjOJJR1xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GycLV5oB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="XayzTciI"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=1UhkXaL82imVzq7QaP+KR2LhIy74eSdmB078FUmMPZk=; b=XayzTciITRup9dHLDiSK6a9Dfg
-	SPmraTHcfR+ZXAtWNBPLiBrVFBAyS3T7EE+CiP5L9LNYFhK9phHIXQ2ZY9ycZRtModeuDWVYaEh7V
-	GOg5faRcLRNc8IUG57DJslqm26CEJ9fRqGuU+J7r8BCNTOKnrTtBPkNlKPNp8yqmwclXqH7wj96TU
-	tYg6ymzc5hXTswFuKmQf7fktDi/YBSkOJ1rO30ydW/zHht48iFVa0tNnGwerfTpRU2h22VQvFUs6l
-	rg+6RWBbdPyQVt2As7LPaBhm5KmmDhykyihYfvMj///UfJJ6n9RZxaipto17bYbk6KMOn/FfQGqFP
-	O+6KEufg==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wucE5-0009uC-1S;
-	Thu, 13 Aug 2026 22:40:33 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: eddyz87@gmail.com
-Cc: memxor@gmail.com,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next 1/4] bpf: Keep fault protection when merging pointer types
-Date: Thu, 13 Aug 2026 22:40:29 +0200
-Message-ID: <20260813204032.644949-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GycLV5oB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB111F000E9;
+	Thu, 13 Aug 2026 20:49:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786654180;
+	bh=XxxnrGMI3R3BCp/Ki1qVwsRzhn4ISM6Vsy84AhQZqOg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=GycLV5oBv6XCQEyIVDagi5BTjdzHosyfXERpHC4oiDrKpOBMWiRdm1gIR9mIixyOA
+	 +eOJeZS3yUdD/nu7kr9O3zKoX+UpLI8Yo5qIvR17BkvfxcmL2PY1NI1h3CBy1Y/alz
+	 N05Y3fcBgBiDImwK/6RhX0xpEIrxneSf4bKltuW6qPoamrP8rTk0ngBrEXNqV5W0vh
+	 D+9ALdbO3cXM+OU/476rHwVW093hvhosOGC3sxqneAX9Brs+j0fMhjM9piYWu0ZlZw
+	 QDSBVal6t20l3d6I+rLxee6nzIPPNRBVZSXVIWCTTFy2kKVPzrtLdtFQUtOG7Yui/g
+	 is32F1qgkHcGg==
+Content-Type: multipart/mixed; boundary="===============3699071233609079603=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28091/Thu Aug 13 08:25:54 2026)
+Message-Id: <1ce46a68f49276d02c4085b05dedb72549b0cdebf33ff4576d670b5bd1e6069f@mail.kernel.org>
+In-Reply-To: <20260813200250.1996395-1-yonghong.song@linux.dev>
+References: <20260813200250.1996395-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v5 08/11] bpf: Reject register-pair returns when the subprog BTF is unreliable
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 20:49:39 +0000 (UTC)
 
-When the same BPF_LDX instruction is reached through paths that yield
-different pointer types, save_aux_ptr_type() merges them into a single
-type which is later used by bpf_convert_ctx_accesses() to decide whether
-the load has to be rewritten into a BPF_PROBE_MEM one.
+--===============3699071233609079603==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Before commit f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
-the merge only accepted two PTR_TO_BTF_ID pointers and unconditionally
-fell back to PTR_TO_BTF_ID | PTR_UNTRUSTED, so the merged type was always
-one that gets the BPF_PROBE_MEM rewrite. However, the mentioned commit
-widened the merge to also cover a PTR_TO_MEM base and replaced the
-fallback by a union of the PTR_UNTRUSTED and MEM_RDONLY flags.
+> btf_check_subprog_call() can decide, at a call site, that this BTF is not
+> to be trusted and mark the subprogram unreliable, which happens when
+> compiler optimizations remove arguments from a static function or when a
+> mismatched type is passed to a global one. Verification carries on, but
+> the prototype the return convention was read from is one the verifier has
+> already declared not to describe the compiled code.
+>
+> Rather than keep tracking R2 on the strength of a discarded signature,
+> reject a return value larger than 8 bytes as soon as the prototype it was
+> derived from becomes unreliable. Add subprog_ret_pair_unreliable() and
+> test it in check_func_call() on the path to a static subprogram, which is
+> where the flag can be observed while the call still proceeds. For a static
+> callee this only triggers on a genuine argument mismatch, since the
+> previous patch stopped btf_validate_return_type() from marking a local
+> function unreliable for returning an aggregate.
+>
+> No check is needed anywhere else:
+>  - a global subprogram is already rejected by the existing "Caller passes
+>    invalid args into func#N" path, because btf_check_subprog_call()
+>    returns an error both when it marks the BTF unreliable and on every
+>    later call;
+>  - the main program does not use the convention at all: its return value
+>    is the program's exit code, read out of R0, so nothing looks at R2
+>    there;
 
-The union can produce types which bpf_convert_ctx_accesses() does not
-rewrite, and the load then stays a plain one without an exception table
-entry, e.g.:
+Does this enumeration cover all call sites? btf_check_subprog_call() has
+two callers: check_func_call() and push_callback_call() in verifier.c.
 
-  - PTR_TO_MEM merged with PTR_TO_BTF_ID | PTR_UNTRUSTED
-   => PTR_TO_MEM | PTR_UNTRUSTED but only the MEM_RDONLY variant is valid
-  - PTR_TO_MEM merged with a plain PTR_TO_BTF_ID
-   => PTR_TO_MEM dropping the rewrite the latter type would have gotten
-  - PTR_TO_MEM | MEM_RDONLY merged with a plain PTR_TO_BTF_ID
-   => PTR_TO_MEM | MEM_RDONLY which is not rewritten either since only
-    its PTR_UNTRUSTED variant is
+push_callback_call() also swallows every non-EFAULT error:
 
-In all three cases a program can take the unsafe path at runtime with a
-NULL or otherwise bad pointer and panic the kernel on the faulting load.
-Fix it by normalizing the merged type: if either side needs the rewrite,
-pick the one rewritten form the merged base type has.
+    err = btf_check_subprog_call(env, subprog, caller->regs);
+    if (err == -EFAULT)
+            return err;
 
-Reuse the may_fault_on_deref() helper in is_load_acq_unsafe() as well to
-avoid open coding, and trim the overly verbose comment which is more of
-implementation detail of bpf_convert_ctx_accesses() anyway.
+so a callback subprogram's BTF can be marked unreliable while the call
+still proceeds, exactly the situation described above for the static
+check_func_call() path. The two bullets given (global subprogram, main
+program) do not cover it.
 
-Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+It interacts with the sticky nature of the flag: a subprogram marked
+unreliable by a callback call site will subsequently be rejected by the
+new check at an unrelated direct call site whose own arguments were fine,
+since btf_check_subprog_call() returns -EINVAL for every later call once
+the flag is set (the early return in btf_check_subprog_call()).
+
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b23be0fa95af..0ffb3bed1649 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -441,6 +441,23 @@ static void bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
+>  	}
+>  }
+>
+> +/*
+> + * A >8 byte BPF return changes the calling convention to R0:R2, and the
+> + * verifier derives that convention from the subprogram's BTF prototype
+> + * alone. Once that prototype is marked unreliable it is known not to
+> + * describe the compiled code, so the convention read from it cannot be
+> + * trusted either: reject the call rather than keep tracking R2 on the
+> + * strength of a signature the verifier has already discarded.
+> + */
+> +static bool subprog_ret_pair_unreliable(struct bpf_verifier_env *env, int subprog)
+> +{
+> +	struct bpf_prog_aux *aux = env->prog->aux;
+> +
+> +	return bpf_ret_reg_pair(env, subprog) &&
+> +	       aux->func_info_aux &&
+> +	       aux->func_info_aux[subprog].unreliable;
+> +}
+> +
+[ ... ]
+> @@ -9527,6 +9544,12 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  		return 0;
+>  	}
+>
+> +	if (subprog_ret_pair_unreliable(env, subprog)) {
+> +		verbose(env, "Func#%d ('%s') returns >8 bytes, which requires reliable BTF\n",
+> +			subprog, subprog_name(env, subprog));
+> +		return -EINVAL;
+> +	}
+> +
+
+Can this gate reject valid programs? For a static callee, func_info_aux[]
+.unreliable is set for reasons that have nothing to do with an argument
+mismatch.
+
+The path is: do_check_insn() calls check_func_call(), which calls
+btf_check_subprog_call(), which calls btf_check_func_arg_match().
+
+btf_check_func_arg_match() in kernel/bpf/verifier.c starts with:
+
+    ret = btf_prepare_func_args(env, subprog);
+    if (ret) {
+            if (bpf_in_stack_arg_cnt(sub) > 0) ...
+            return ret;
+    }
+
+Then btf_check_subprog_call() does unconditionally on any non-zero err:
+
+    if (err)
+            prog->aux->func_info_aux[subprog].unreliable = true;
+
+btf_prepare_func_args() returns -EINVAL for a non-global subprogram in the
+ordinary case of an untagged pointer argument. In the argument loop
+(kernel/bpf/btf.c), a pointer arg that is not the prog ctx type, not a
+dynptr, and carries no __arg_trusted/__arg_untrusted/__arg_arena tag skips
+the generic-user-data-pointer branch and falls through to:
+
+  skip_pointer:
+        if (tags) { ... return -EINVAL; }
+        if (btf_type_is_int(t) || btf_is_any_enum(t)) { ... }
+        if (!is_global)
+                return -EINVAL;
+
+A by-value struct argument takes the same exit. This is expected,
+documented behaviour for static callees since btf_prepare_func_args() even
+comments "not fatal for static funcs" at kernel/bpf/btf.c, because a
+static subprogram is verified inline so the verifier never needs a usable
+BTF argument model for it.
+
+Concrete example that verifies fine at the parent commit but is now
+rejected:
+
+    struct pair { __u64 a, b; };
+
+    static __noinline struct pair make_pair(__u64 *p)
+    {
+            struct pair r = { *p, 1 };
+            return r;
+    }
+
+    SEC("tc") int prog(struct __sk_buff *ctx)
+    {
+            __u64 v = 1;
+            struct pair p = make_pair(&v);
+            return p.a + p.b;
+    }
+
+This program is rejected: "Func#1 ('make_pair') returns >8 bytes, which
+requires reliable BTF".
+
+The flow is: bpf_compute_subprog_ret_regs() sees struct pair, size 16,
+and sets ret_reg_pair = true. btf_validate_return_type() accepts it via
+the local_func path. The argument loop then returns -EINVAL for __u64 *p,
+setting unreliable = true. The new check fires.
+
+The rejection is also unnecessary for soundness on this path: a static
+callee is verified inline, so prepare_func_exit() copies the callee's
+actual tracked R0 and R2 into the caller. R2 tracking does not rest on the
+BTF prototype the way it does for a global callee.
+
+The commit message premise appears incorrect: "For a static callee this
+only triggers on a genuine argument mismatch, since the previous patch
+stopped btf_validate_return_type() from marking a local function
+unreliable for returning an aggregate." Relaxing btf_validate_return_type()
+removed only one of two independent -EINVAL exits inside
+btf_prepare_func_args(); the argument-conversion exit at kernel/bpf/btf.c
+is untouched and is the common one. The new comment in verifier.c encodes
+the same premise: "Once that prototype is marked unreliable it is known
+not to describe the compiled code" - but the flag also means merely "the
+verifier cannot express these argument types".
+
+Should the gate be restricted to cases where the return convention itself
+is untrustworthy, rather than whenever any argument cannot be expressed in
+BTF?
+
+
 ---
- kernel/bpf/verifier.c | 61 +++++++++++++++++++++++++------------------
- 1 file changed, 35 insertions(+), 26 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 61ef43325c6f..0d3b76d7820e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4819,6 +4819,18 @@ static bool is_arena_reg(struct bpf_verifier_env *env, int regno)
- 	return reg->type == PTR_TO_ARENA;
- }
- 
-+static bool may_fault_on_deref(enum bpf_reg_type type)
-+{
-+	/*
-+	 * The pointer types which must not be dereferenced without fault
-+	 * protection, that is, the ones bpf_convert_ctx_accesses() has to
-+	 * turn a BPF_LDX into a BPF_PROBE_MEM one for. Slightly wider than
-+	 * the list matched there, which relies on an untrusted PTR_TO_MEM
-+	 * always carrying MEM_RDONLY as well.
-+	 */
-+	return type == PTR_TO_BTF_ID || (type_flag(type) & PTR_UNTRUSTED);
-+}
-+
- static bool is_load_acq_unsafe(struct bpf_verifier_env *env, int regno,
- 			       struct bpf_insn *insn)
- {
-@@ -4828,19 +4840,11 @@ static bool is_load_acq_unsafe(struct bpf_verifier_env *env, int regno,
- 	 * A BPF_LOAD_ACQ is not rewritten to a BPF_PROBE_MEM load by the
- 	 * verifier, unlike a regular BPF_LDX. The JIT would emit a plain load
- 	 * with no exception table entry, so a fault (e.g. NULL deref) crashes
--	 * the kernel instead of being handled.
--	 *
--	 * Reject the source pointer types that a BPF_LDX would have had that
--	 * fault protection applied to, i.e. the ones bpf_convert_ctx_accesses()
--	 * turns into BPF_PROBE_MEM: a bare PTR_TO_BTF_ID and any PTR_UNTRUSTED
--	 * pointer (untrusted btf ids, untrusted MEM_ALLOC, rdonly untrusted
--	 * memory). A PTR_TRUSTED pointer is not among them, is not converted,
--	 * and stays allowed. Same for the other flagged PTR_TO_BTF_ID variants
--	 * (MEM_ALLOC, MEM_RCU, ...), hence the exact match on the base type.
-+	 * the kernel instead of being handled. Reject the source pointer types
-+	 * that would have needed that protection, the remaining ones stay
-+	 * allowed.
- 	 */
--	return insn->imm == BPF_LOAD_ACQ &&
--	       (reg->type == PTR_TO_BTF_ID ||
--		(type_flag(reg->type) & PTR_UNTRUSTED));
-+	return insn->imm == BPF_LOAD_ACQ && may_fault_on_deref(reg->type);
- }
- 
- /* Return false if @regno contains a pointer whose type isn't supported for
-@@ -17021,11 +17025,24 @@ static bool is_ptr_to_mem(enum bpf_reg_type type)
- 	return base_type(type) == PTR_TO_MEM;
- }
- 
-+static enum bpf_reg_type merge_ptr_types(enum bpf_reg_type type_a,
-+					 enum bpf_reg_type type_b)
-+{
-+	bool to_mem = is_ptr_to_mem(type_a) || is_ptr_to_mem(type_b);
-+	enum bpf_reg_type type_merged = to_mem ? PTR_TO_MEM : PTR_TO_BTF_ID;
-+
-+	if (may_fault_on_deref(type_a) || may_fault_on_deref(type_b))
-+		type_merged |= to_mem ? MEM_RDONLY | PTR_UNTRUSTED :
-+					PTR_UNTRUSTED;
-+	else
-+		type_merged |= ((type_a | type_b) & MEM_RDONLY);
-+	return type_merged;
-+}
-+
- static int save_aux_ptr_type(struct bpf_verifier_env *env, enum bpf_reg_type type,
- 			     bool allow_trust_mismatch)
- {
- 	enum bpf_reg_type *prev_type = &env->insn_aux_data[env->insn_idx].ptr_type;
--	enum bpf_reg_type merged_type;
- 
- 	if (*prev_type == NOT_INIT) {
- 		/* Saw a valid insn
-@@ -17046,20 +17063,12 @@ static int save_aux_ptr_type(struct bpf_verifier_env *env, enum bpf_reg_type typ
- 		    is_ptr_to_mem_or_btf_id(*prev_type)) {
- 			/*
- 			 * Have to support a use case when one path through
--			 * the program yields TRUSTED pointer while another
--			 * is UNTRUSTED. Fallback to UNTRUSTED to generate
--			 * BPF_PROBE_MEM/BPF_PROBE_MEMSX.
--			 * Same behavior of MEM_RDONLY flag.
-+			 * the program yields a TRUSTED pointer while another
-+			 * is UNTRUSTED. Merge them into a type which keeps
-+			 * the BPF_PROBE_MEM/BPF_PROBE_MEMSX rewrite when
-+			 * either side needs it.
- 			 */
--			if (is_ptr_to_mem(type) || is_ptr_to_mem(*prev_type))
--				merged_type = PTR_TO_MEM;
--			else
--				merged_type = PTR_TO_BTF_ID;
--			if ((type & PTR_UNTRUSTED) || (*prev_type & PTR_UNTRUSTED))
--				merged_type |= PTR_UNTRUSTED;
--			if ((type & MEM_RDONLY) || (*prev_type & MEM_RDONLY))
--				merged_type |= MEM_RDONLY;
--			*prev_type = merged_type;
-+			*prev_type = merge_ptr_types(type, *prev_type);
- 		} else {
- 			verbose(env, "same insn cannot be used with different pointers\n");
- 			return -EINVAL;
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31740414277
+--===============3699071233609079603==--
