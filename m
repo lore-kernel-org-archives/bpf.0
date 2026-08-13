@@ -1,134 +1,132 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E44F380FEC
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 16:50:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786639813; cv=pass; b=la4I2ar/fYojWPhJRXR1P4H5hG/Qm7M438DtZ8E3Y4GZJkh18tBOCwZjPbaiDJv2n+hDoqUOghmlw22G6h3MLqxtBmeKg4bAXTK+9hYhdWzh5R+IbVWIFE5PDb9+wAtn5ScbEYM09UlAARmrv3lJTCXW6lxlvGfkS71G4cjcsdw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786639813; c=relaxed/simple;
-	bh=oaN8qNDUF6Nlckse8FYwHQNkU35MZWBZmsmZoB0ZJlE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gk0PDJxSYmXwSsBLKnRewB++g58ALBcO9F1PlImVTjAl8iUF6BF73aqga6IrLc/htQd8/TCF7Fl1Wwf0xm0hbEo2sVWp4aGSdsxJ0azdAsUlKpgK2szeMS3OzM73TdPZWI0MAte6MUBwpeALQnKeO+IxUdA+i4AXKR3il4Z/RTE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EBnwO0M5; arc=pass smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BBB34D38B;
+	Thu, 13 Aug 2026 16:59:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786640351; cv=none; b=UdiDT4AD6o9XAwu4tLTNASwyuVzMYhIK/HeXIKMR0OaRQyqhm1HrzpdZ3vXcnBk/GRu0Naaugq6Fsj7PwfPKWKpnx7CLongho2NZRz+BfGPA3bFI3dTE2cz+zI/MDfWrSojujuOMmORBMxdLCNCdm4J1DtjSBSn3NZMo5SVYGxY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786640351; c=relaxed/simple;
+	bh=GoPukQW4A/wZ7dMKq+X+GW7rm/rCYafEuDVC+FmxvBo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ay6RzBWt58UH0RIg7HrVIwi0jtGCxxnqWlIPEHjHZvjYh1DuII6NwfSD0taI1eq1ZJIC8+8cqpXdZWfY2O6ISgVKIPjUX8xjP6G3mMdKjqjftgHg+NxA/wLA4RgA4HSnzPYcEjur4sGmlTpHjco9qNaQkT7XMVAERpsAHj9a/gE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nHaLTJsQ; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EBnwO0M5"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-495509b08ebso55125e9.1
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 09:50:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786639810; cv=none;
-        d=google.com; s=arc-20260327;
-        b=o27NAnDBHD2tbrDepCZGDK6ryi9nrnIpWwQzv9UCNmTX18/0B4Dxyj96B6NHFV0HLo
-         ISEV4cOLJqxRE556Cz5DfV9NIbHbzY4kE9CODGmZvpNGKyBvZPNUpf5TX0nH+btoMLG4
-         B47QLDw1U9MK99FfkkNcRPzfReOpjnPvuEDPIx6ho8XUYR7jgGvmNPH/X/mPEwXn9Wof
-         bDRk9+OksItw6bc6a9LKEjTb4D7BZ3YuZe6TLbA+fHh++2xm04a/PfJ0QsrYmtLiq5Gj
-         mnSvGhPhYTE3dkRlV6o0UwBzZxrvbJyzJr1VRwgcdzUhkCHOV7lSxsp+BbkiOQJLoI7y
-         XEpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=siX4jg06PuSVWSRYm7rNOXX7XdZKpaX5rlaVBPQYN1s=;
-        fh=0jve080+Ut2WOEk9/h46neenJ5p8lT+1hgmfYRvUP5E=;
-        b=VKyMUmbSq3l7pjixLV3j2z/5YLcOokxWX/Sy5f0XW7DsQ5OFoLWodGkrgAgvpZUCPB
-         vTRREHJA4anLYzsy9eBG41i3pb7sqHcBN4gR8O7PlRZRyjHMdVcOsOT/HaUmnyV/JT8x
-         8vLcZvxroORcbXbvTGCMXQF+xcDIn9J22Pq38Do9ToD0A6WphI+1yb7mDB+VBgKZIDZ/
-         sKb2VVZOI859O4Wkql2lMQF2sfI9q02UB1MRG4TAk0oAzK43NLfJruFFCJp3NNs6Cv48
-         ocZGwuIHjcYO/FJ/sct+gp1NbSdmfzWQ5rHATJHIkZuAuggHjX9i0+GRAeB2ssvq6ukt
-         1rTw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786639810; x=1787244610; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=siX4jg06PuSVWSRYm7rNOXX7XdZKpaX5rlaVBPQYN1s=;
-        b=EBnwO0M5YdQ8qPV6HLxQ2IicPKt5tpSsgouSZ4krZ3cd8Va3gIwxn2K7tATg/01Pfl
-         dQY4imL2r+zO7ljWdlg/VOde2yjfZErFsnnn4TJZ2VDjR8sFEgfld9tdmFVYBvNvDG5y
-         VS2cS3nr5RiCJC8V5T6PJkEFJJsaKwkdrd8MICujcxPGZ6jqcZw0HQkQaNGam9dWdKHU
-         AB9IiQEtt9tnCdYQWlSD7bhs7KfVxxJ5vrzuIWH8ynsW4zori1/B/DznZIjj5F+jSxDy
-         C7N8ggmpGq68S1552DgK1Be9vAZd0liBvEL4OqHFYhUwzNXtadMeiKT/eLTd8FtR6u2x
-         Jj+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786639810; x=1787244610;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=siX4jg06PuSVWSRYm7rNOXX7XdZKpaX5rlaVBPQYN1s=;
-        b=pwOZJFSTupWG4L4UkdIpcWnHIAeqivN5xXWa+BMuDCaAlfRxJay5VhXGKzpEbkGne0
-         /MUjO1R7gmIntOopHbbDQgNx6OCE71GRVTALvTEcMS6PQ/kk6nyVnner0xRA1x1xg+I0
-         DABOmz64k3Xb+/HPof+Epb50OP/86qDgvZqYhXcf+gIl5CCwJIIZIWmnHagq6cRLOYn9
-         EsGhdhuDBZaWsercrlxEBEYxyaY3YsJO580QkgG1leddT9/gYcbSOgEVa67EUESfke2s
-         4xn8Pbulc7OdGyh5J4rWcMaYUwbUE7freIfwoLdT4dX2WM5dfv9nqCGdY7z0ApJgn00J
-         rAQg==
-X-Forwarded-Encrypted: i=1; AHgh+Rp7OD+bIbusR6vu8sI4/XfeLHmlsjDdD43Xgk75tc8II6ktv2mk+OILEpJ/9/x/3a12D30=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbravmRxk3VBdt+LjpX1gycJnylsf4Ih1slxq2vkXN+bOY2k96
-	wi6JUMNUWc+Nv/GYqbbYsjh+Qg4nZmi2mFVjd0dxthaUCmH+DnrxjtUX3shIjqVJiIWj/SwyxF3
-	LcphoAK/OnAKt6kb566ewSMcpugmJMz6THZJtQHdM
-X-Gm-Gg: AR+sD110Nko+8K3hUlM/nMI7l+6b4G8VYu4INlBKsT+EBizcQ+qAfFzuX27rob4eRsi
-	F7vR2oOsm+J3btoZmfMjE9R7qy2MT4xBqmzYKxO4tlz3L7ub4OUZWdlv7r8YVfgmARWVvSF08Rw
-	s4kmnGl/ejcuK6eCkKcWrlUcB7LKS2cVndYCRu0MD4eoaw5wtAU9fp58F0HU9/f3kS4gyE6/5Ut
-	Huz/M/jblPH/RfseyDQROMpAH3IiuybeaPq7FmYgosm8buryjcLaS0YbrTNNcqYiMjPKqOZegrW
-	AczVDA4coA+a8KWDyrionsvQT5vwTuQuVqZyf8G4+0wiJqi1uXGGET010wyjvVlUOQJ36HjGcKU
-	aRZHCKnfhHSRhWJ3Qt7nGlRzzL0bCsG8=
-X-Received: by 2002:a05:600c:3494:b0:499:5ea5:e493 with SMTP id
- 5b1f17b1804b1-4998273ac1cmr1772695e9.6.1786639810018; Thu, 13 Aug 2026
- 09:50:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nHaLTJsQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786640349; x=1818176349;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GoPukQW4A/wZ7dMKq+X+GW7rm/rCYafEuDVC+FmxvBo=;
+  b=nHaLTJsQcfnEiwRYff1BRH1GKsHEAXv+2UNSjmccuR/0eMmcvAzSjWk3
+   83C6JuMhBR/aArclkWHanL2gmCBHdwVNMyfSU7RlVRC+FfMSz1PrOtRIX
+   7MB1XxQVKEqPE+OkZcgNs/d2IFhkzQZIApG3yR9U+qqVCvh+z/Jlv5gtT
+   hd8J1pLJrfLuLH6IK+EGLYunulPvso+ubImhx0igGtnTJZw9kzlk+fCR5
+   KXsS/+7vU7axxlILWjF+IGQBw17CmyZKpQ8RpvFViIUA+phGJEaXtmhqR
+   tpUTyehnaVlOFywkhASqhKR9pLbkiTRro9vklHOkG41rotFiOgm4AxjCZ
+   Q==;
+X-CSE-ConnectionGUID: lfnpxgd6T2yzB8awJr5oTQ==
+X-CSE-MsgGUID: +A6I1bAmQ6ClWmojv9/IRQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11874"; a="87104054"
+X-IronPort-AV: E=Sophos;i="6.25,221,1779174000"; 
+   d="scan'208";a="87104054"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2026 09:59:08 -0700
+X-CSE-ConnectionGUID: Z4N5aDB+T2iBuHAPO/7iGA==
+X-CSE-MsgGUID: 0tyDqDAUS2qK9iyIQfr1Ug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,221,1779174000"; 
+   d="scan'208";a="268265215"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 13 Aug 2026 09:59:05 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wuYlh-00000000Vug-228x;
+	Thu, 13 Aug 2026 16:59:01 +0000
+Date: Fri, 14 Aug 2026 00:58:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Sanghyun Park <sanghyun.park.cnu@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5] bpf: Fix use-after-free on mm_struct in
+ bpf_find_vma()
+Message-ID: <202608140002.MOWNZYuj-lkp@intel.com>
+References: <20260630023443.3026627-2-sanghyun.park.cnu@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260812231905.2956588-3-tjmercier@google.com> <0694ce653e21157306a453397ed8233b81a958a1880abffbb0ad4cb5b7504e1d@mail.kernel.org>
-In-Reply-To: <0694ce653e21157306a453397ed8233b81a958a1880abffbb0ad4cb5b7504e1d@mail.kernel.org>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Thu, 13 Aug 2026 09:49:57 -0700
-X-Gm-Features: AUfX_mwg0szKdTycaOAHojHpiM6MA7kb59rdpr7NssE09M7xtXcQN_fYWchql0Q
-Message-ID: <CABdmKX24rd0F_U9TkPrrbj=4buj7UbrMseTf_RaEk0bXS=VVyw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/2] bpf: htab: Reduce elem_size by 8 bytes
- for small key sizes
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	mykyta.yatsenko5@gmail.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260630023443.3026627-2-sanghyun.park.cnu@gmail.com>
 
-On Wed, Aug 12, 2026 at 5:22=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> > index fed4b1db8b78b..720766121ea2b 100644
-> > --- a/kernel/bpf/hashtab.c
-> > +++ b/kernel/bpf/hashtab.c
->
-> [ ... ]
->
-> > diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/t=
-esting/selftests/bpf/progs/map_ptr_kern.c
-> > index 373c8d17ea557..6bd4cb68c20c1 100644
-> > --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> > +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> > @@ -114,7 +114,7 @@ static inline int check_hash(void)
-> >       VERIFY(check_default_noinline(&hash->map, map));
-> >
-> >       VERIFY(hash->n_buckets =3D=3D MAX_ENTRIES);
-> > -     VERIFY(hash->elem_size =3D=3D 64);
-> > +     VERIFY(hash->elem_size =3D=3D 32);
-> >
-> >       VERIFY(hash->count.counter =3D=3D 0);
-> >       VERIFY(bpf_map_sum_elem_count(map) =3D=3D 0);
->
-> Should this expectation change have been split across two commits for
-> bisectability? The preceding commit 1066507e33e67 dropped the
-> freelist/lru union from struct htab_elem, which moves elem_size to 40,
-> but that commit leaves the selftest checking for 64. This means the
-> map_ptr selftest fails at 1066507e33e67 and only passes again here
-> where elem_size becomes 32.
+Hi Sanghyun,
 
-Yes, it should be 40 in the last patch, and 32 here.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf-next/net]
+[also build test ERROR on bpf/master linus/master v7.2-rc7]
+[cannot apply to bpf-next/master next-20260812]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sanghyun-Park/bpf-Fix-use-after-free-on-mm_struct-in-bpf_find_vma/20260813-193715
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
+patch link:    https://lore.kernel.org/r/20260630023443.3026627-2-sanghyun.park.cnu%40gmail.com
+patch subject: [PATCH bpf-next v5] bpf: Fix use-after-free on mm_struct in bpf_find_vma()
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20260814/202608140002.MOWNZYuj-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 16.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260814/202608140002.MOWNZYuj-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608140002.MOWNZYuj-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   kernel/bpf/task_iter.c: In function 'bpf_iter_task_vma_destroy':
+>> kernel/bpf/task_iter.c:1017:17: error: implicit declaration of function 'bpf_iter_mmput_async' [-Wimplicit-function-declaration]
+    1017 |                 bpf_iter_mmput_async(kit->data->mm);
+         |                 ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +/bpf_iter_mmput_async +1017 kernel/bpf/task_iter.c
+
+4ac454682158473 Dave Marchevsky 2023-10-13  1009  
+4ac454682158473 Dave Marchevsky 2023-10-13  1010  __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
+4ac454682158473 Dave Marchevsky 2023-10-13  1011  {
+4ac454682158473 Dave Marchevsky 2023-10-13  1012  	struct bpf_iter_task_vma_kern *kit = (void *)it;
+4ac454682158473 Dave Marchevsky 2023-10-13  1013  
+4ac454682158473 Dave Marchevsky 2023-10-13  1014  	if (kit->data) {
+4cbee026db54cad Puranjay Mohan  2026-04-08  1015  		bpf_iter_task_vma_snapshot_reset(&kit->data->snapshot);
+4ac454682158473 Dave Marchevsky 2023-10-13  1016  		put_task_struct(kit->data->task);
+d8e27d2d22b6e2d Puranjay Mohan  2026-04-08 @1017  		bpf_iter_mmput_async(kit->data->mm);
+4ac454682158473 Dave Marchevsky 2023-10-13  1018  		bpf_mem_free(&bpf_global_ma, kit->data);
+4ac454682158473 Dave Marchevsky 2023-10-13  1019  	}
+4ac454682158473 Dave Marchevsky 2023-10-13  1020  }
+4ac454682158473 Dave Marchevsky 2023-10-13  1021  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
