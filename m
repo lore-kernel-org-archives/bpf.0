@@ -1,33 +1,33 @@
-Received: from tsinghua.edu.cn (smtp47.tsinghua.edu.cn [101.6.4.71])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C07373C5526;
+Received: from tsinghua.edu.cn (smtp46.tsinghua.edu.cn [101.6.4.70])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C51FF416852;
 	Thu, 13 Aug 2026 12:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.6.4.71
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.6.4.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786622793; cv=none; b=azyXc1Dq2K3+OOjBXbI31EE9/nLytbTp3u5itIj7KBRk09KMlUjD3049jnnVuTlc+oFxD3vzHaxmN5DMMeZ1Ks7eN16jmkcvD7Mo8H9e4bl5b/5L60izXMIu2pNsgzP+EPYCmsIgpHrLQcLqj5/lBwIm1zq+vCHJ+zuK+GU1TBI=
+	t=1786622794; cv=none; b=LyX14F4X7dy8O+3IUx9FMQzuVo99aOUOHI2amX1CDs9PcFosIij8Tg9BiKYkQF5zBih0bpDAmaJwtyoyGURpwuGnMzi/ODiN2BcNBvYgbqr+EQPXPY2hpUpqvNCFIhz+gbn2cku0kbqlGlhnLv8oFXM61llhd/EuAY8T7D6mAy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786622793; c=relaxed/simple;
-	bh=ZB1u8jji+0VL7AvM+I75o7mMwE0wZChFD7mjV+N8mVo=;
+	s=arc-20240116; t=1786622794; c=relaxed/simple;
+	bh=olDO4MoiCEtiR0uFNeRK/O6KsrYTRFrgyDMjbSvo1T4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jKosuURYO/gfyTslnCcmrky4mW6rN/tbb+5WK+wMBwpYHAZbq/WIEEGKFFKC37vVnTpPtT6gHyubNEz4CY8N43RLpL/D1oWmritfaP5puLvj+9DCBLnFInUfl52zIZBMAxAzY521DTmK/LGVS8QjLsV3zMI+YUWZw4te/XX9Bho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=gOWqM2F6; arc=none smtp.client-ip=101.6.4.71
+	 In-Reply-To:To:Cc; b=ngSs6EHB9SVD6ouEPbO6kblX912urZyx0uxox0zB1jKpL+Vl7Wj4W2hy8MR8VM9iErvMrTbE/jkFuLh/E3Eje9FGAoduTx0iUVR0FsRj47jpV61SVB6AFPwo3A71+zsdBTZ1rWcruaTvYj3O9tXoFl468Fa+/p/fSlQhYPHfzQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Y75g8JKR; arc=none smtp.client-ip=101.6.4.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="gOWqM2F6"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Y75g8JKR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
 	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=6DzfoD2xT+MsQwO/csAq5sVs/v+Tek+
-	uBFzuHy9rXCo=; b=gOWqM2F683AH59uQVcZH0NvV1n3blJ6f9BClk7A5NlktBRr
-	11pp6UGBumlFErBVxf2mP25URb0ZiPlXQpTy5FiJWLeSL6FzLXkHRKjXhaCCgEir
-	qbcotipLwvMpSWgAGEYEsSpxdPEj0U0XVCtEStCGc6FpAHTRCs8IwwYzUEvI=
+	References:In-Reply-To:To:Cc; bh=zMY4svxhvDYYbHsdLL+c3C46FNIu/6K
+	FTsVb2L65vKQ=; b=Y75g8JKRtHZKRgRcolU/q43eapRXnYCxf6omdhDE2FzvXIl
+	kKH/zw5XcG1qNAeKGAqOB6H7stVPZDOdl9T8JahyrmywVgFiYNjrxX94Bw/cGLXa
+	RyjIozn3Sr8iORl3HAkw+0KV7r4gb4GnlkN8Vn6WZpZztvQ6xUwJTCuMzIWk=
 Received: from [172.17.0.4] (unknown [101.6.30.195])
-	by web2 (Coremail) with SMTP id yQQGZQCXlLYLsn1qPyv_AA--.41218S3;
-	Thu, 13 Aug 2026 20:01:20 +0800 (CST)
+	by web2 (Coremail) with SMTP id yQQGZQCXlLYLsn1qPyv_AA--.41218S4;
+	Thu, 13 Aug 2026 20:01:23 +0800 (CST)
 From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-Date: Thu, 13 Aug 2026 12:01:03 +0000
-Subject: [PATCH bpf-next 1/2] bpf: Check pointer type for all atomic RMW
- paths
+Date: Thu, 13 Aug 2026 12:01:04 +0000
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover mixed arena and
+ map-value atomics
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,7 +36,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260813-bpf-next-038-mixed-atomic-v1-v1-1-e79aadb46a8a@mails.tsinghua.edu.cn>
+Message-Id: <20260813-bpf-next-038-mixed-atomic-v1-v1-2-e79aadb46a8a@mails.tsinghua.edu.cn>
 References: <20260813-bpf-next-038-mixed-atomic-v1-v1-0-e79aadb46a8a@mails.tsinghua.edu.cn>
 In-Reply-To: <20260813-bpf-next-038-mixed-atomic-v1-v1-0-e79aadb46a8a@mails.tsinghua.edu.cn>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -52,67 +52,103 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786622482; l=1466;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786622482; l=2205;
  i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
- bh=ZB1u8jji+0VL7AvM+I75o7mMwE0wZChFD7mjV+N8mVo=;
- b=LAyWXd2FHhTujPf2ZRvj7Yh7lcWtqcup3JwYE7t/ChTUvzin/7VLQXCAvK6TMQtUa98VIis3c
- sN1by8UOT/YBFWpf6/KMyiswNb123UkyNcZ8KA81OR3e8E0Uo76u6X/
+ bh=olDO4MoiCEtiR0uFNeRK/O6KsrYTRFrgyDMjbSvo1T4=;
+ b=uA1Vvj/z8/7Z6pEkYOaav/8dUVzhuujMR9NEXVNUHoysYGgrMR6kauzIK/vZeTvchFatpHOWF
+ euQUkxljW84C0irqrb61Sl1cnaF9KHJ19FeWxcYe+67RDQoO6q3LU9N
 X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
  pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
-X-CM-TRANSID:yQQGZQCXlLYLsn1qPyv_AA--.41218S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw43Cr1fAryUWF15tw13Arb_yoW8Xr45pr
-	48tF90q3yvv3W7uwnrAF48Zry5Ga1rt3y7GF1jvw1ftF1YqFs0qFW8K3W3Za4Ykr4vg342
-	vFWYvrsY9a4UuFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9G1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+X-CM-TRANSID:yQQGZQCXlLYLsn1qPyv_AA--.41218S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF4fZF1rZr4xXry5Jw1xGrg_yoW8uFyfpr
+	97CasxJFWrXF1Uu3s3Jay8uFyakrs2vryUAw48J34xZF1UJr97XFs7KFy3Jr13Cr1fuw4F
+	kF1Iva4UWw4UAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9C1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
 	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2
-	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
-	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
-	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
-	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Av
-	z4vE14v_Xr1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
-	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-	JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-	v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8I
-	cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r
-	4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VU1eWlPUUUUU==
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl
+	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
+	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
+	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
+	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xS
+	Y4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
+	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+	6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+	AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v2
+	0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxV
+	W8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUG_M-UUUUU=
 X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Atomic RMW verification records an instruction pointer type only when the
-current destination is PTR_TO_ARENA. A second path can therefore reach the
-same instruction with an ordinary pointer without comparing it against the
-saved arena type.
+Add a verifier test with one atomic RMW instruction reached through
+PTR_TO_ARENA and PTR_TO_MAP_VALUE paths. The verifier must reject the
+shared instruction with the existing incompatible-pointer diagnostic.
 
-The post-verification fixup uses the saved type to rewrite the instruction
-to BPF_PROBE_ATOMIC for every path. Record the actual destination type for
-all atomic RMW paths so the existing mismatch check rejects incompatible
-uses of one instruction.
-
-Fixes: d503a04f8bc0 ("bpf: Add support for certain atomics in bpf_arena to x86 JIT")
 Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 ---
- kernel/bpf/verifier.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/progs/verifier_arena.c | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 164d16c243ca6..3d672f6665bec 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6509,11 +6509,9 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
- 	if (err)
- 		return err;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+index b241bbcf54a8a..2e43da188194b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+@@ -25,6 +25,15 @@ struct {
+ 	__ulong(map_extra, ARENA_VM_START); /* start of mmap() region */
+ } arena SEC(".maps");
  
--	if (is_arena_reg(env, insn->dst_reg)) {
--		err = save_aux_ptr_type(env, PTR_TO_ARENA, false);
--		if (err)
--			return err;
--	}
-+	err = save_aux_ptr_type(env, dst_reg->type, false);
-+	if (err)
-+		return err;
- 	/* Check whether we can write into the same memory. */
- 	err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg), insn->off,
- 			       BPF_SIZE(insn->code), BPF_WRITE, -1, true, false);
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} atomic_map SEC(".maps");
++
++static __u64 arena_atomic_target SEC(".addr_space.1");
++
+ SEC("socket")
+ __success __retval(0)
+ int basic_alloc1_nosleep(void *ctx)
+@@ -637,6 +646,41 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
+ 
+ #endif
+ 
++SEC("socket")
++__description("arena and map value atomic at the same instruction")
++__failure __msg("same insn cannot be used with different pointers")
++__arch_x86_64
++__load_if_JITed()
++__naked void mixed_arena_map_value_atomic(void)
++{
++	asm volatile ("					\
++	r1 = 0;					\
++	*(u32 *)(r10 - 4) = r1;			\
++	r2 = r10;					\
++	r2 += -4;					\
++	r1 = %[atomic_map] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto 1f;				\
++	r6 = r0;					\
++	r7 = %[arena_atomic_target] ll;			\
++	.byte 0xbf; .byte 0x77; .short 1; .long 1;	\
++	call %[bpf_get_prandom_u32];			\
++	if w0 != 0 goto 2f;				\
++	r8 = r6;					\
++	goto 3f;					\
++2:	r8 = r7;					\
++3:	r9 = 1;					\
++	lock *(u64 *)(r8 + 0) += r9;			\
++1:	r0 = 0;					\
++	exit;						\
++"	:
++	: __imm_addr(atomic_map),
++	  __imm_addr(arena_atomic_target),
++	  __imm(bpf_map_lookup_elem),
++	  __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ static __noinline
+ u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg)
+ {
 
 -- 
 2.43.0
