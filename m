@@ -1,65 +1,65 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC4041D23E
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 10:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE62444C657
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 11:00:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786618739; cv=none; b=ECn0BAKrXVY7SH6Jr6HVTvrY3yZ5OicqQLFuEI8XAJ/xYkNI3cjqcI0jCxlyrSLoBaV89bC3E/RYqMn+98JzpyxuhcdjYLGOluXx1tNL1eiuyPqXMW0mgRzuxuWpnrHX8HdJLgZx6NBrGW+pns1T7QCxG98//xXamff3wnaGWho=
+	t=1786618803; cv=none; b=h1YRNI2kku+v47xVZWXHtAW8UtQJhshnWeHCdITUzHK55HThXdQhKOFXt8BTb4E6cWqBpFNUUX4GI+IJgD8p8N7ZnjVq5PkP0jbpSCZ1tLa1bog925/Oh8HqqImEOfViuKHtz936o4R024kcsq7wil5l7CQs5xD1kBAD6uRJ8YM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786618739; c=relaxed/simple;
-	bh=Fqzrf0c2oHZqHvAErMmb00W5PvWM9c8tM/DAUJZyZLQ=;
+	s=arc-20240116; t=1786618803; c=relaxed/simple;
+	bh=9XJazPGW57FRRlIcZ+PDty0gQb2K86aLEuWT2m7Zwhg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d55TDJCvNQn09dL53hMsx0cqArKejFphjf/Z45DRAazGdzkf/vDIFwonVyrw0mb8fRlo+W6D8ImxrU3eLk15h7f/oQBjvJ5NUPJYGz9W0ACvOGq7r0IwACxFS9KMU3jjVNk4E1PKDSwi+yoa35mstnhMuibqoy2dTpvQqXtR7x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OuQVPvsY; arc=none smtp.client-ip=209.85.128.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=e3KuZdKBvhiOXAj5S0Euc3mx9cafqjywDqUzV2F56YK4eGnmfc+Z/8wr7AinHNFCSeEcnjb1wEzuOo1WR+vcCpPCmPshPzy5YwyV+HdRyXPdVWCxcoBUDEwr5Pc9Kagbsq+R/zj9AYDWWUElaDWfeTnoJbYlBiY2IgKms2q5D7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4BxWcIk; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OuQVPvsY"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4954dff6536so14333225e9.0
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 03:58:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4BxWcIk"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-47de008b020so485164f8f.1
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 04:00:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786618734; x=1787223534; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786618798; x=1787223598; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=zF7uWzlZDW/sG73C3vYL1MwLDbuHk+pWvcN9523/eB4=;
-        b=OuQVPvsYNIbhqIxi522jJye2vTZeggGfPO/WH2NrvCfEwIojPFHh9UUSTDpvny50ae
-         f0IWbsrDwbnuNOUZIF+WL0YTNpF6Ehf0zpIbRipH/q/hG+LCB9KwFSm+k8nkeq8b+O6Z
-         ujC7H78x2LO+am3kTjfdLAQ9Mlh5rQamAceM5y+eg3ciEZ8RW0khAK0pbkbJXFkKetuR
-         RrxqKclC005qEI6yGiXM/g6yUZShuAv1yNMW4idpWpdP7LDCTulXdVAY+YX9WrflGDN2
-         M9MuTuvAXdUKAHETFJqrK4WJGkQDZXcc17K26Bu4pxaU/J/pvuUi7vKbdIgo12vK3Wbc
-         cEHg==
+        bh=s+pxb2YLlm32O+smzeiqgo5X03klezdNOrEJBa+gI0Q=;
+        b=D4BxWcIkw7voPUwZkYokuShXZI5UUUDXHqahb8FdbIqfw6CeRBL9+hABu6LIvgJ8la
+         wgVIlmw5XDFOKumEDDIXRmeeSH6wITR9tRPMDsOgISJSIdYWBZEfHVOLDGV1p70jb+/u
+         UPLR/fvj6N3ZmiaVDlwBkSapQUSuYbEn7fXOrBeJ2V+tij6IeUSGG5uqtPo+L6Cc7F09
+         8nvoJLxpGamY9P6R8pMsQQD6KQJMXiLrP44aX9B12wYyXpA4B4pqYZAL/kfH5EgJVOZM
+         Ajv8jtyheit0QRY3gI4zH4KHhZV2tSuFdFVO8T5twO0Gn2fj2nOhNMD/d6A88sMB7gEj
+         vakQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786618734; x=1787223534;
+        d=1e100.net; s=20251104; t=1786618798; x=1787223598;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zF7uWzlZDW/sG73C3vYL1MwLDbuHk+pWvcN9523/eB4=;
-        b=dU90fOLymK5x7S58MLzesS9HzKgocGArK49npaoYv6Hw630SMfzE9Ym/7mwLqxRoFW
-         6GPgsesM+0+uza1B7gigSy3QzQh4HXSOHVRP/C41EMa6vifABD+1WIx1DmVuUU8HmCcn
-         TVI4ihnmzTxW3fIW17AzSvAf1+PMEsmPx0XoQXgZncfO/MqsXD7vhD4LP2zukDugM30f
-         ZBvvtTUMZQ4hzEGlfLyeseHsiH1x/Y0ynu9xv0PHKdRBoRnvrWd5bXh/8TMkWeHLQQsx
-         ekvgu40h2Ns6N1tzrtQWYhqXuVYXGiyq7yLjMBf4CANES2DNZ3+GkRnnSCYeBiXLmSpZ
-         CvUw==
-X-Gm-Message-State: AOJu0YwUPr4kqd5qPv36dYai+P1y2pgHWkTL9U0T34P46xsPEzAilUNY
-	LZwC2SDxBFTUyQPfHBF41F7gYnZF21Ej8zwlkjN2O5nVe9sWO0pnx8pIr2kO8xofGFZQQg==
-X-Gm-Gg: AR+sD11iEFB39j+aZQ9kdVTED6lqMrfXYBfMzN1P827sysBA8sYvDfJz72Sz6zsjkLK
-	a9+nRQ98Qxm0aRJDnkqgT0EPtu7G35LIf4OCn5wpFU4oIWdAC+GfVUbDgHV0b4kJjBRr8ZN2JSc
-	w6xs56UFyYF5M5ayvp5reOUUM9I1ytAFFf3XSKXsE0WoepGQZy90b9UdYqOHwRubOq0+NpNEk3N
-	DTCgkZbYqaRZ4Foq5WKWhfhTgPsEDovRUXnx86EdAScyEPgyzU/X4J+HeysK+88tz4IKejTLoqp
-	HVgPSRC5ez3o8IyOk035xQJw3oEUuLZAd4foA0jhwhwJ++Ovk+tE32ZiKKXRas6vqe74qoGOF15
-	9V1QB/PAP6IG7oYfIc1gTyZf6AwMkrN0bfF4mRNvC6vEN+Nob2jWFiYFvW9/1hO7nJI6S/hvw+f
-	jB/VqvVI9b3m0S6jlMauWdy874xjCh/hnNZC0w56PBVANYvCtBVGBKHa1hzSO/7oytwSu38lT8W
-	E/sKWRDT8bc0Ic4qkIe
-X-Received: by 2002:a05:600c:46ce:b0:495:779a:ed33 with SMTP id 5b1f17b1804b1-49982193132mr46948415e9.7.1786618733847;
-        Thu, 13 Aug 2026 03:58:53 -0700 (PDT)
+        bh=s+pxb2YLlm32O+smzeiqgo5X03klezdNOrEJBa+gI0Q=;
+        b=kLkxt3WffDxSsXjPkxq9sztawRc1ibLWN5HnVaBqh+H4z7RM5HhcIkAehpl0OFaVXB
+         Q0UDsKQyUTPxP5r7oT5T26oprYQ+1DeiSDyMuH6/oxgX812FrlZw5RC4xep6LDQMc90G
+         eKSv3lqnDp768lttTL6Sllf9PuXVkIyu2GCQLvGbpJGE1pUVlruk/6i0Pu3qV0l7pdti
+         3GcrlLc2d4WYH01evVpdZr5NdZdhO77AMsBGBagS5PA/wZAJ9BGeIvNPHmbM+k35yEi9
+         SAUX+UH6FTlPYbZuzHrh++XmnV/v1RaZK9DQoBX1gMITY1gU5EN57qe6/DJLOLDZ0RvZ
+         L/cA==
+X-Gm-Message-State: AOJu0YyiQIlpenB2ajzeDT7XDK+TDxKUSNtlSt2b1AHarnW02i+wzir0
+	kmcxwPjARAnV7BDhwaV57pw7Tm0R8x3gCROJTUDLblpPh5KP22KaZIYD
+X-Gm-Gg: AR+sD13xlpGp/UC2z4eE2Lwxa83fs1lSigjBTKbGR/yOu1sPxeov138nrlKextDKE6q
+	o0wmX5jFhPqN5VKrFKgm0s391Wc7ZvK3H9ZfTqhWPYEshky4+WVCF27puue4S7jUzJ1yTTssgZ/
+	2dtHfQkSDZFE0LDCF/aOOD7/5G4FeTdQwpp8fKRrztPZ0J29oI1gKz1QXZThiFaJFTOt3r2TS86
+	T9UjrVWQe01Zn/Y01h+OBAYbPptw4AvKOwolodzBZ3ttJ+FPbXMoXR5P1wCVEJ2/J1PAZsOgqGc
+	ovS6QqY51/xCmqjMI+PwO0sqyGe3Jeb+13DQ64pxeSVgqs06EXTAqFjPoytSQBDbUKrDk/bo8tx
+	iFepNXr5TKJ2wRqp9mmQk3keeCzMZnMUmzLy8jApErjyVs2KILui+aY/42s5um/zNwrbRXH8oF6
+	+RmQFkSgAsBAkQRXZ2daZnCw5vqJZVR7uPa9+y5p2O8+EmUsRSG0Gi4/0Faiwg+cKhcB2BJhF58
+	/gwj4vzupOMFjKXO6qo
+X-Received: by 2002:a05:6000:41e4:b0:47f:9158:5924 with SMTP id ffacd0b85a97d-4815a5c91e2mr6047841f8f.9.1786618797838;
+        Thu, 13 Aug 2026 03:59:57 -0700 (PDT)
 Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49981b1063esm67637475e9.6.2026.08.13.03.58.52
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815a561296sm5821100f8f.4.2026.08.13.03.59.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 03:58:53 -0700 (PDT)
-Date: Thu, 13 Aug 2026 12:58:51 +0200
+        Thu, 13 Aug 2026 03:59:57 -0700 (PDT)
+Date: Thu, 13 Aug 2026 12:59:55 +0200
 From: Mahe Tardy <mahe.tardy@gmail.com>
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
@@ -71,10 +71,10 @@ Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
 	memxor@gmail.com, jiayuan.chen@linux.dev, sdf@fomichev.me,
 	martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com,
 	ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next v6 3/5] selftests/bpf: Add ksock kfunc test
-Message-ID: <an2ja1m_Bn09XpqC@gmail.com>
-References: <20260812154328.72834-4-mahe.tardy@gmail.com>
- <389d7d5984e3995303dc4ac505c8629e5d486bef420ffa47d5ee2edf3761cec6@mail.kernel.org>
+Subject: Re: [PATCH bpf-next v6 2/5] bpf: Add ksock kfuncs
+Message-ID: <an2jqx36_iYFbVqm@gmail.com>
+References: <20260812154328.72834-3-mahe.tardy@gmail.com>
+ <bfa71c9ba8543efcd226101c79e3de51aa6531f56ca0874c7239f1567e1f457b@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,119 +83,149 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <389d7d5984e3995303dc4ac505c8629e5d486bef420ffa47d5ee2edf3761cec6@mail.kernel.org>
+In-Reply-To: <bfa71c9ba8543efcd226101c79e3de51aa6531f56ca0874c7239f1567e1f457b@mail.kernel.org>
 
-On Wed, Aug 12, 2026 at 05:25:42PM +0000, bot+bpf-ci@kernel.org wrote:
-> > Add a selftest that exercises the ksock kfuncs end-to-end. One syscall
-> > bpf setup program creates a ksock context and connects the socket.
-> > Another LSM sleepable bpf program looks up the context and send test
-> > data. The userspace harness creates a network namespace and a new socket
-> > on loopback, run the setup and send syscall bpf progs then check that
-> > the userspace socket received the data from bpf.
+On Wed, Aug 12, 2026 at 05:39:05PM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/net/core/Makefile b/net/core/Makefile
+> > index b3fdcb4e355fa..a9295b7859010 100644
+> > --- a/net/core/Makefile
+> > +++ b/net/core/Makefile
+> > @@ -44,6 +44,9 @@ obj-$(CONFIG_FAILOVER) += failover.o
+> >  obj-$(CONFIG_NET_SOCK_MSG) += skmsg.o
+> >  obj-$(CONFIG_BPF_SYSCALL) += sock_map.o
+> >  obj-$(CONFIG_BPF_SYSCALL) += bpf_sk_storage.o
+> > +ifneq ($(CONFIG_INET),)
+> > +obj-$(CONFIG_BPF_SYSCALL) += bpf_ksock.o
+> > +endif
+> >  obj-$(CONFIG_OF)	+= of_net.o
+> >  obj-$(CONFIG_NET_TEST) += net_test.o
+> >  obj-$(CONFIG_NET_DEVMEM) += devmem.o
 > 
-> The description says "run the setup and send syscall bpf progs" but the
-> test adds only one SEC("syscall") program, ksock_setup:
-> 
-> tools/testing/selftests/bpf/progs/ksock_lsm.c:
->     SEC("syscall")
->     int ksock_setup(void *ctx)
->     { ... }
-> 
-> which the harness runs once:
-> 
->     err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.ksock_setup), &opts);
-> 
-> The send doesn't happen in a syscall program at all. It happens in the
-> sleepable LSM program ksock_socket_bind (SEC("lsm.s/socket_bind")), which
-> the harness triggers indirectly:
-> 
->     skel->links.ksock_socket_bind = bpf_program__attach_lsm(skel->progs.ksock_socket_bind);
->     ...
->     skel->bss->target_pid = getpid();
->     err = bind(tfd, (struct sockaddr *)&trigger_addr, sizeof(trigger_addr));
-> 
-> This also contradicts the preceding sentence which correctly states the
-> sender is "Another LSM sleepable bpf program". Should this say "run the
-> setup syscall bpf prog and trigger the LSM send hook" or similar?
-> 
-> Also in the same sentences: "looks up the context and send test data"
-> (sends) and "The userspace harness ... run the setup" (runs).
+> This isn't a bug, but would 'ifdef CONFIG_INET' be preferable here to
+> match the rest of net/? There are zero occurrences of 'ifneq
+> ($(CONFIG_...),)' and fourteen occurrences of 'ifdef CONFIG_...' across
+> net/**/Makefile, and this is the only conditional block in
+> net/core/Makefile.
 
-Yeah this is from a earlier version of this, will fix it.
+whatever is fine by me.
 
 > 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/ksock.c b/tools/testing/selftests/bpf/prog_tests/ksock.c
+> > diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
 > > new file mode 100644
-> > index 0000000000000..30e89d34d388f
+> > index 0000000000000..d65200679b65d
 > > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/ksock.c
-> > @@ -0,0 +1,127 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2026 Isovalent */
-> > +
-> > +#include <arpa/inet.h>
-> > +
-> > +#include "test_progs.h"
-> > +#include "network_helpers.h"
-> > +#include "ksock_lsm.skel.h"
-> > +
-> > +#define NS_TEST "ksock_lsm_ns"
-> > +#define RECV_PORT 7777
-> > +#define RECV_TIMEOUT_SEC 5
-> > +
-> > +struct ksock_test_env {
-> > +	bool netns_created;
-> > +	struct nstoken *nstoken;
-> > +	int rfd;
-> > +};
-> > +
-> > +static bool ksock_test_env_setup(struct ksock_test_env *env)
+> > +++ b/net/core/bpf_ksock.c
+> 
+> [ ... ]
+> 
+> > +/**
+> > + * bpf_ksock_connect() - Connect a BPF kernel socket to a remote address.
+> > + * @ks:		The BPF kernel socket context.
+> > + * @addr:	Pointer to an IPv4 or IPv6 socket address.
+> > + * @addr__sz:	Size of the address union.
+> > + *
+> > + * Connects the socket to the specified remote address and port.
+> > + *
+> > + * This function may sleep while connecting the socket, so it can only be used
+> > + * in sleepable BPF programs (SYSCALL).
+> > + *
+> > + * Return: 0 on success, negative errno on error.
+> > + */
+> > +__bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
+> > +				  const union bpf_ksock_addr *addr,
+> > +				  u32 addr__sz)
 > > +{
+> > +	struct sockaddr_storage sa;
+> > +	int addrlen;
+> > +
+> > +	if (!bpf_ksock_has_user_task_context())
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	if (!addr || addr__sz != sizeof(*addr))
+> > +		return -EINVAL;
+> > +
+> > +	/* Kfunc memory arguments may be unaligned. */
+> > +	memcpy(&sa, addr, sizeof(*addr));
+> > +
+> > +	switch (sa.ss_family) {
+> > +	case AF_INET:
+> > +		addrlen = sizeof(struct sockaddr_in);
+> > +		break;
+> > +#if IS_ENABLED(CONFIG_IPV6)
+> > +	case AF_INET6:
+> > +		addrlen = sizeof(struct sockaddr_in6);
+> > +		break;
+> > +#endif
+> > +	default:
+> > +		return -EAFNOSUPPORT;
+> > +	}
+> > +
+> > +	return connect_socket(ks->sock, &sa, addrlen, 0);
+> > +}
+> 
+> This isn't a bug, but could the #if IS_ENABLED(CONFIG_IPV6) guard be
+> dropped? struct sockaddr_in6 is defined unconditionally in
+> include/uapi/linux/in6.h, and union bpf_ksock_addr in the new header
+> already references it without a guard. bpf_ksock_create() accepts
+> opts_copy.family == AF_INET6 unconditionally and relies on sock_create()
+> to return -EAFNOSUPPORT when IPv6 is not built. With CONFIG_IPV6=n, the
+> net effect is identical (-EAFNOSUPPORT either way), so dropping the guard
+> would make bpf_ksock_connect() and bpf_ksock_create() validate families
+> the same way.
+
+Yep let's drop this if unecessary.
+
 > 
 > [ ... ]
 > 
-> > +	memset(env, 0, sizeof(*env));
-> > +	env->rfd = -1;
+> > +/**
+> > + * bpf_ksock_send() - Send data through a BPF kernel socket.
+> > + * @ks:		The BPF kernel socket context. Must be an acquired reference.
+> > + * @data:	Pointer to the data to send.
+> > + * @data__sz:	Size of the data to send (max 65535 bytes).
+> > + *
+> > + * Sends data on a connected socket, best-effort and nonblocking. This may sleep
+> > + * (kernel_sendmsg), so it can only be called from sleepable BPF programs.
+> > + *
+> > + * Return: Number of bytes sent on success, negative errno on error.
+> > + */
+> > +__bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
+> > +			       u32 data__sz)
+> > +{
+> > +	struct msghdr msg = {
+> > +		.msg_flags = MSG_DONTWAIT,
+> > +	};
+> > +	struct kvec iov = {
+> > +		.iov_base = (void *)data,
+> > +		.iov_len = data__sz,
+> > +	};
+> > +	int ret;
 > > +
-> > +	SYS(fail, "ip netns add %s", NS_TEST);
-> > +	env->netns_created = true;
-> > +	SYS(fail, "ip -net %s link set lo up", NS_TEST);
-> 
-> This isn't a bug, but the test hand-rolls network namespace setup that
-> network_helpers.h (already included at the top) provides verbatim. Could
-> ksock_test_env_setup() use make_netns() here?
-> 
-> make_netns() in tools/testing/selftests/bpf/network_helpers.c runs exactly
-> those two commands:
-> 
->     r = asprintf(&cmd, "ip netns add %s", name);
->     ...
->     r = asprintf(&cmd, "ip -n %s link set lo up", name);
-> 
-> and it also unwinds the namespace if bringing lo up fails, which the
-> open-coded version does not do. The current path leaves the netns to be
-> cleaned up by the caller's fail: label instead.
-> 
-> The teardown at the end of test_ksock_lsm():
-> 
->     SYS_NOFAIL("ip netns del %s >/dev/null 2>&1", NS_TEST);
-> 
-> is also what remove_netns() does, and SYS_NOFAIL() already appends
-> " >/dev/null 2>&1" (test_progs.h), so the explicit redirection is applied
-> twice and the command ends up as
-> "ip netns del ksock_lsm_ns >/dev/null 2>&1 >/dev/null 2>&1".
-> 
-> Using make_netns()/remove_netns() would remove the duplicated redirection,
-> drop the env->netns_created bookkeeping field, and inherit the shared
-> helper's teardown-on-partial-failure behaviour.
-
-Good point.
-
-> 
+> > +	if (!bpf_ksock_has_user_task_context())
+> > +		return -EOPNOTSUPP;
 > > +
-> > +	env->nstoken = open_netns(NS_TEST);
+> > +	/* Early check for UDP. Exact limits enforced by kernel_sendmsg(). */
+> > +	if (data__sz > IP_MAX_MTU)
+> > +		return -EMSGSIZE;
+> > +
+> > +	ret = kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
+> > +
+> > +	return ret;
+> > +}
 > 
-> [ ... ]
+> This isn't a bug, but is the 64K cap intentional for AF_INET6 sockets?
+> The early size check uses IP_MAX_MTU, an IPv4-specific constant (0xFFFF),
+> even though bpf_ksock_create() also accepts AF_INET6. udp_sendmsg()
+> rejects len > 0xFFFF so the bound matches exactly for IPv4, but
+> udpv6_sendmsg() allows up to INT_MAX - sizeof(struct udphdr), so AF_INET6
+> sockets are silently capped at 64K by this kfunc rather than by the
+> protocol. Also, should the comment say udp_sendmsg()/udpv6_sendmsg()
+> instead of kernel_sendmsg()? kernel_sendmsg() performs no length
+> validation - the limits come from udp_sendmsg()/udpv6_sendmsg() and
+> ip_append_data().
+
+I think we can just remove this check for now.
+
 > 
 > 
 > ---
