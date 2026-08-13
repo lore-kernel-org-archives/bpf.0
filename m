@@ -1,149 +1,123 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1590348465
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 21:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=67.231.153.30
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786657110; cv=pass; b=KLzUFQjE16OdWbM7XQdGbupgbwqKL8ekw6uhSVqMPM0UaHEMO6t5NUulDRrcIQQOkGdoZ9RFhyBTha+0R0E45QJ6nuZC/CwPu0pumLslZNKxP5ee15Y1L789gBDL9lXviF31U1J1nDIQmWOWh8anQPE9gjAXl6LVdO1cop9NFXo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786657110; c=relaxed/simple;
-	bh=zqgl3pbskrbkTozrwxgbvswniY/xOjGwupQZXrSWh/k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uravNANm+PHbK6xV087dx+SepoDk8Kz15d/J4MEFMNF5iWJnmsfLQHyQ90Hekf5CHIeCP8S0wVdJAlK2gdiBbVskVZX8WzsG49ANPjhdlggN8CFP4ds6vbRVn88TmkYQMtDC+UMpAf806stsZ9L6IpYAv0YBiCeJ8Ka5tfKzCkc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=RM/h7CWX; arc=pass smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405323C3F54
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 21:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786657377; cv=none; b=RTwV6OaQMK7cQrELFpspXyS0XYg9bNrzgFqX3buaQUDbyZLl4qOCvlpq+t2HvQn8GgSOCgdWh58zDHJOSn0Jop5IfVSEvRS9tVWr5Y/saEuyAxpDyWn/1w+pA9N5UAqx6KUXexT2bGBU5oQc3dHKcD4osHkIh8THdZZIqKBhsBo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786657377; c=relaxed/simple;
+	bh=huyJMFlfQJ3dOAsamBtnzGlfdRqKt9nhuuxDEDmUYRs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kdl5Zf0HXouwaEM+Pc8tV4SmSQttuouU+7T2Kq+8tFcm+CNSsYFCixXbzV9a80yMsSmQOfDzn+r3x+3RC7lXcczXP+7ZJQRhUDRu6/PlX+NiHnIc/uSFWg+71rDNBT19l8In0kVAnP5gfnPZd5XloL8tsgIrdIscCVVzeK/+ysw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PYRDP2o2; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="RM/h7CWX"
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67DLZemq2788527
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 14:38:26 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=VlrbFOJxXjmsZIn+Tcg7ufa9fCfKXuFTRewOf
-	qyQ8t4=; b=RM/h7CWXJtpjCk2kbZ0aNHz0VqUMl7VJxjgjFBuzDeODqQLk7Ye03
-	2lxjq9tqjaOKYEknF6g/fRSq2nQrJMrfKA65qYQKJjva5kzSAr5qLEI3usaQNCQg
-	C7zQzsaFch66oFB0WmTO9yVz3wpCWYmE6Ux+lIltRYAh54rv57SgEWUdJSzsfQga
-	vVnoQXSKbrl/lMF52OU4q9IfzjsGfHWV71SmRjhIRMjD/AK8wuzGsGIA86XXWb7O
-	VCvhvLhh7+33uDHrX5ztuAjIOtYCWrHr5PR5iBFxVjr+4aOAMnnalWQJ4jowzoLy
-	A35yWiB3+aR3R9xiE2aGXaBwNp7mnClyw==
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com [209.85.208.200])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4g0a3p0aey-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 14:38:26 -0700 (PDT)
-Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-39fb3a7fed6so6705841fa.1
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 14:38:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786657105; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RDUkkE9qV71xG9DnE1MnNdTFP8r8ZLvubZiOpmO4Oi+HvgHcrT/hMaWzMjyzJ3abtt
-         GQvJAvfz3n25wWYCzGA491RRlV0o37fri56SRIMVwsBhBy7Ydljbh6UsQ0bFtWhrLGdL
-         N7q4ZxN2iuGSbBT2ge5RLzOwtcylwMAeF0sa9gaDsJa2ioDaF7vx0SvijcgDIz0agW8x
-         sQssh38UVBOQAksnSa2uhiNAxR7PwLCRErHGqoQ23C0Ixb8KcWZPASWpauGDF6c3mrdR
-         Fao+bUFB68RUK+OrdXQ6b7qcOXNC+lX1Arhqf7m4S0vltIsq67gMCCNxli/CPeSatP0f
-         ds1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version;
-        bh=VlrbFOJxXjmsZIn+Tcg7ufa9fCfKXuFTRewOfqyQ8t4=;
-        fh=k336HQotrnb8u3jG04Td6bq5IYFgudF12exdaVzSn/0=;
-        b=b0m7rQ+QTDFKxZt8RmvvYKQefcwIyTK24qkYzDKpNZ2reGXlslox12WnVRro0QUOgE
-         /ThdRFxJoSusPmwcbH1AoEGSqDOdzwWWDc1s+PKubzTXU/0F/+eHA1Y8NdBqW32a2o9s
-         6keBnco1ECJ+ZabL8iLRWfOILQ9Lnsl0Xviu8DOsz6rGXLtLNzI3Cq0gJN6qvWrvcNFc
-         bV8FtkHsxm1Uy75MpAIJEXvXdTNx2GU4VI+gKkMV7nFvMNRDFeysCLrCzpE4meFhGUi/
-         6PsuhfBg0pLGSc+635Mp0Wv8orI94nvUH/6VCGv6mL3n7Jcu/pv+E7uiLYYfdfqR5gKO
-         OsKA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PYRDP2o2"
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-836cbcd0a48so5692097b3.1
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 14:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786657375; x=1787262175; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=huyJMFlfQJ3dOAsamBtnzGlfdRqKt9nhuuxDEDmUYRs=;
+        b=PYRDP2o2CWjoB9buT3ASd6aSVMT8akCCHeSR/6oxwwaRcmcIApCKhk8WohvrnhZtsm
+         RvfpFAwaCTD1apwh8y0G8Yd0aZi/zezyLLug7YTucKkNqEAq4YagSFTZEzpWy62CqBJ5
+         eOCswou4YvRJlsKDMNmWKZrTN6R5LRPOdEm0/ZPvNsuk1MaC5TeNQHNoLcruGjVBRb7E
+         8ltvbH49n0xNcpHVRru7W9C+4KD32jSlz+75DOfq4J1xkiMY12fuM/ROc9NFZWM+MzC7
+         Eiadv8JLY8eQm9roU1uUuHZ+xm76J/u0lzDHUq2qUg496bciEy/BCQF3CbJYuJESo4ck
+         x0Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786657105; x=1787261905;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VlrbFOJxXjmsZIn+Tcg7ufa9fCfKXuFTRewOfqyQ8t4=;
-        b=QaTqvoC1lMiXBiYoYkPictCHVaJouR7mpVaBe9xMJaOM8Em/cCyrQVFnIYVJ1c1v6a
-         bskJACWRduslGPRQwQBZObfWt2JC0ReTjypHrC6YD2FklY1hlMNZuUgLFHn0ZyGpGhiZ
-         ICNBHp+ajHf2eiCVL1kbdUU3GGVp+Bjykr84rPpiNwd0UbMUhC0Eb8pKva7oMIEkqkD1
-         KTeblkvBiu4O+1T1LxuoKZMRVsVtu6h8B+n1HammbQQDLwws5dr3CUgpcTbgKn/ImWkf
-         9QuaVe09Dar6JGp27nNWGmA7gFNoG1uc2ncTy9B6u2JI5IaE8oOojPZtmjaIsh/TVb6V
-         OXQA==
-X-Gm-Message-State: AOJu0YymkkFcRdlpEmTeTJB4qA8WQNTeFXLwuu2rS7JC8avDNDrsE3eb
-	Fn3sK9C4XAmGG+mXKtz5sFk81a3fHUD5tjEi1IBgh0ngfhOhKNfHK1KbBIC5kxxDbhhm7aDlJR3
-	vgEtBUTkgtSuZVspioBSwJDQ3POUyEfRlVx7Whwv+TGAWcKgleOHe8a8qpbiMZbKGhATp2IRCtG
-	U53pNJkp3szHdpL8bryt1T/Z+IhVc=
-X-Gm-Gg: AR+sD11B27SIUB6q0gBWrb4xOcBXkGvTHXeFMKpwGODHN23HoXI2girHCTf/Pwroo46
-	KG1QqjziINOaDo8Ls0CYmbcNtsTKK2qm9YkbVyKlEmgrytRxg5TdubStt60rafJUNp5/qV/+lPm
-	+fCCFxj6j866s74NPBAoB4O2TZyCz+X9sjdw9xStalE83xhD/rw+ctnyVlbiZLL76ZCmEr+NN8
-X-Received: by 2002:a05:651c:1501:b0:39e:bcf4:419a with SMTP id 38308e7fff4ca-3a11b965fc2mr12557551fa.5.1786657104735;
-        Thu, 13 Aug 2026 14:38:24 -0700 (PDT)
-X-Received: by 2002:a05:651c:1501:b0:39e:bcf4:419a with SMTP id
- 38308e7fff4ca-3a11b965fc2mr12557521fa.5.1786657104344; Thu, 13 Aug 2026
- 14:38:24 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1786657375; x=1787262175;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=huyJMFlfQJ3dOAsamBtnzGlfdRqKt9nhuuxDEDmUYRs=;
+        b=rKCJUE2h+5iKe/Xksp/lAFVZ1bA6Xi437dG8NgpU4waIS5h+gmNfpCnw7kI/gfMDV+
+         djzPZoPh0W1i42emEbY9RPBZBG8IlMWZXoN2JkmRDHUS+DyH5kvsO5yI/0283Ta7027d
+         +z++01YKScr2zWXT9CmEnRJ9g9Sqs1GC10+J5LErmvK64xV1MfNQo8+gEeioD0M4nCtw
+         ivhSCQNSn1nxG/njIEREgAAhnjqC7mPu9ItXnn6+FC+cD5DBmvs7wKSrjtIi0yO0zXyA
+         hhHCxF6kIrXxeb04jjR9pXUuutI9in/6lluEhIM2INlWHg2gOJfdCMuc65pcqUSVX/ko
+         fCtg==
+X-Forwarded-Encrypted: i=1; AHgh+RrBF7jaViJNXBlrAJl2WbUllJMw8Hgq/XLJIgd8SqLs2eBTe6KuSdhPodCn8x0oRQqNQxs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YybchLi/2PS1ZuwPWaj8vGCPV/NkmRYjHmukZsPS8vzL+HASh7h
+	y+c3FqzNixxgKCkYZl1IDdZWkAJZQSR7hAmqpApXvK1n4eAW54j6FAXk
+X-Gm-Gg: AR+sD13Lh8Ab6/38jKRIKaBrCmK7w17ZEy2w7G52ogp32OSYsv0eb5WI4ctevbKMoCP
+	JMa3xRp0UtNnxDMuEA3ecFU3QE5G6s5uHKgpwpr/IfnPuVr96CDdHS4N6VnEf0w/me20RyUqhEH
+	X735k53/qv/2z7Pybx81lo+VASQm3JwkXl3jw/pcsGniPp/pfU9SoQA3sGwZ5hORQo3+lkPnjzO
+	bPaMIuLocpyF1k+GZFKfV4Wvy0UwrUnFs4q656BSg4wdxt7BQ+x7zsurfyzPfWw80OzZqdbbM2o
+	ufARBcNsGjGacKMGdg4t5mP3aSwi2joOCytgI1m+ridfft4DxSAkyGc64J7MJyghECKD6kJFTK4
+	Ij8ZHVewvKjrJROZNw5CxrWkzu0RLuPDecKJ5RCpXOTHRPlJTLIR2gATJ0CoHoatZswyaXJ2oGE
+	FoVYFpHhScUnDiadUSgKVPgSuDTHXc7NyMI9PNQXF5D7rrfpPHgpiQF0tY4GQqq15pCTjaA+RC6
+	rdShA==
+X-Received: by 2002:a05:690c:e5d5:b0:814:7a54:3a93 with SMTP id 00721157ae682-83711836371mr5686327b3.23.1786657375206;
+        Thu, 13 Aug 2026 14:42:55 -0700 (PDT)
+Received: from mac.lan ([136.55.173.105])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-836bb3ed2b5sm5069637b3.6.2026.08.13.14.42.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Aug 2026 14:42:54 -0700 (PDT)
+From: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
+To: horms@kernel.org
+Cc: AutonomousCodeSecurity@microsoft.com,
+	blbllhy@gmail.com,
+	bpf@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kerneljasonxing@gmail.com,
+	kuba@kernel.org,
+	kys@microsoft.com,
+	linux-kernel@vger.kernel.org,
+	maciej.fijalkowski@intel.com,
+	magnus.karlsson@intel.com,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	sdf@fomichev.me,
+	tgopinath@linux.microsoft.com
+Subject: Re: [PATCH net v3] xsk: fix NULL pointer dereference in __xsk_rcv()
+Date: Thu, 13 Aug 2026 17:42:40 -0400
+Message-ID: <20260813214240.96466-1-blbllhy@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260810132505.769431-1-horms@kernel.org>
+References: <20260810132505.769431-1-horms@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260813213558.3103179-1-andrii@kernel.org>
-In-Reply-To: <20260813213558.3103179-1-andrii@kernel.org>
-From: Song Liu <songliubraving@meta.com>
-Date: Thu, 13 Aug 2026 14:38:13 -0700
-X-Gm-Features: AUfX_myaXLXF7I1e1-nwnAp5mBzZDyLMTyOJCZbJqOTPm9GhtjCjY642z4U5XNo
-Message-ID: <CAAeYb7=dJ5XzNJWdSUr33z2XKF2SgEyGACFC0+LDy9PkD2LZLA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Use ping_command() for IPv6 pings
- in lwt_ip_encap
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODEzMDE1NyBTYWx0ZWRfX5pSDF8q0/EMw
- khbwLzL/WM2PD9EOSh7DjhXZqc5yX0NRZd8RQ9CXQKKSqX7IffkS8vAvrnHqkjKcdqIKYW3DyNO
- Amas1duWH+U3fQZZtp57XAl9cXPUj9A=
-X-Authority-Analysis: v=2.4 cv=SPJykuvH c=1 sm=1 tr=0 ts=6a7e3952 cx=c_pps
- a=SnYHy3I4CegsE2y0OFdo8g==:117 a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=JnKecZnUtZousrUlYMGU:22
- a=VabnemYjAAAA:8 a=VwQbUJbxAAAA:8 a=Q6Sk7xOH9uQNSF0G_qUA:9 a=QEXdDO2ut3YA:10
- a=bxEOM3YTG7yY-q-zGZQo:22 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: mAkHbL0wPrNuym32ZSHs5QVbV_OAy3w1
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODEzMDE1NyBTYWx0ZWRfXwb3ZzgnELf5I
- Gj/uyVg6QWRn2v0E2rxbbnsRI5Dk/mw02l/zJpTWSEN3vtzPGy8v12PzFPv1XhMDgtV+xSMr5zK
- CA6FFale8LkijYl5wJek2ERUQAH2lQye4QgbHEjlx5RA8w4iQORHatLjUrGUzGhHKxha0HoTNSo
- k1ubvc9Ivs8QHKIz2efJmtwiz317GlWpM54No0HFRjVpWq7qSoND95Fd/7+0qP12mSxdFMXsRoV
- 24xb+03Mo+yYS2hONDx4CJPgJQw7KwDZ4eIowvlCnlplhUCDEJhgq5jFZg1dY8mwSgAfP7LEyZT
- FNa9F+8rGoLJQczwgDmY5+At855wpMvVMKa/ha1EUwJ1coqZz81QCNMWm15lBDiPMRVdAxOWvO4
- YK1uCUH0/DXF8rKe7PI7CKWZ4+ta2cJhvoGUMo/yKJ3eKMJxa/HQgHWuN58JgqMmExP1O6Toohq
- k23WrbSMBtoWLvCo10Q==
-X-Proofpoint-GUID: mAkHbL0wPrNuym32ZSHs5QVbV_OAy3w1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-13_07,2026-08-12_01,2025-10-01_01
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 13, 2026 at 2:36=E2=80=AFPM 'Andrii Nakryiko' via Kernel Team
-<kernel-team@meta.com> wrote:
->
-> lwt_ip_encap hardcodes the ping6 binary for its IPv6 pings. iputils
-> merged ping6 into ping long ago and distros have started dropping the
-> compat symlink -- Arch's iputils 20250605 ships only arping, clockdiff,
-> ping and tracepath. There, every lwt_ip_encap subtest fails:
->
->   check_ping_ok:FAIL:ip netns exec ns-lwt-ip-encap-1-0101330 ping6 -c 1 \
->     -W1 -I veth1 fb04::1 > /dev/null unexpected error: 256 (errno 2)
->   #217/1   lwt_ip_encap_ipv4/egress:FAIL
->
-> The IPv4 subtests fail too, because check_ping_ok() pings both families.
-> SYS() runs the command through system(), so a missing binary is
-> indistinguishable from an unreachable peer.
->
-> network_helpers.c has had ping_command() for exactly this since commit
-> 372642ea83ff ("selftests/bpf: Move netcnt test under test_progs"): it
-> falls back to "ping -6" when ping6 is not present. lwt_ip_encap.c is the
-> last hardcoded ping6 user. Fix that.
->
-> Fixes: f5e288943e2c ("selftests/bpf: Move test_lwt_ip_encap to test_progs=
-")
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Hi Simon,
 
-Acked-by: Song Liu <song@kernel.org>
+Thanks for the comments.
+
+Given the extra complexity of reusing the pool-global xskb_list here,
+including the locking/concurrency issues and the hidden implementation
+assumptions needed to reuse the existing frag helpers, I would prefer to
+go back to the v2 local-list implementation, which is correct, logically
+simpler, and easier to maintain.
+
+@Jason, regarding your v2 memory leak concern:
+
+> It will cause a memory leak because the current xsk_xdp that is not
+> added to the local list will miss the chance to get freed? And the
+> empty list_node cannot be easily freed by xp_free()...
+
+IIUC, it would not leak. The !list_empty(&xskb->list_node) case can only
+happen when fresh aligned-mode allocation returns the same xskb for a
+duplicated user Fill Ring address. In that case, the xskb has already
+been added to the local staging list by an earlier iteration, so the
+error path will walk that list, do list_del_init(), and then
+xsk_buff_free() can recycle it. For buffers returned from the free_list,
+in either aligned or unaligned mode, xsk_buff_alloc() already did
+list_del_init(). For fresh unaligned-mode allocations, xskb metadata
+comes from free_heads, so duplicated user addresses should not return the
+same in-list xskb.
+
+I'll prepare v4 based on the v2 local-list approach shortly.
+
+Thanks,
+Cen
