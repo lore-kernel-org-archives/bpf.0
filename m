@@ -1,152 +1,232 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D022AD00
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 07:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4086A34DCC8;
+	Thu, 13 Aug 2026 07:29:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786605836; cv=none; b=X35dtoeWaSn6tBoY023ZZNdlM4leRAHlFzKla6Fn28eyx/pycNTnti4eDU/Svc8Ws1lOGBS8VBumtoJJz5AHLv8tcf8pXt2gRMh/fknl299vjWh2y4rV+/0/o/7B0cr6blLMwkLcpNK222qj0lyqagsyu1s0xx+Q6UkUuV/1LnU=
+	t=1786606167; cv=none; b=TONzw1LtaQmXzEUWbHi2FTsELciiZA3tP5JZh+ETqpfUl3gGaHGuXn0mBt9ff1dw9eKLBywhxgt7SR+P0HlFAksKj3bzxEre0KQVayHDpgSSJT68IhR9ObDtRclAcwgH/sSFinRSWYCXm27Pg1p0J7HpUZHyOl5PH/zQ+bRRyXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786605836; c=relaxed/simple;
-	bh=aqRz+kPP3qjzjRfTNdDtBwlQF/9uHWyPBbr63dwVqjo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cM6gjuVIuUbkWMlGluRcPOk/rQ0fU8ZY4xr9TvHD0G6lQRRd2/Dq9f6DAs2SXNtI4/3n7HGTD93sp9Yj0nzvcyNBlIM39PHESSe64IFKw47IjSU4wleyUffJMuB275HHwir/SI06Wugohxy+gtZhU9pTMzqx8pFO5ue90HuMXeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr; spf=pass smtp.mailfrom=snu.ac.kr; dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b=sJ4KIPpq; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=snu.ac.kr
+	s=arc-20240116; t=1786606167; c=relaxed/simple;
+	bh=S/VAShHcevrViJB8wQhNtkhVJSComrICQ4y7x9+Ze1s=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
+	 References:In-Reply-To; b=I9YT8ZcVUWbMikmneLagLvDCa/Mk6O9o3KrhZ/TOexQhxbnglW1QbePZXEfzvTlxDsv0WFUDtKBE39eSp7TBrYyEmP+ApLIqucjI87zz4X0DuJW6KT1RekzpTm08sGhq1JwAHpA+Dr8Wak1ieFHvi5iR6S2laaVXE0je/wYW2T0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=xXGXcOcV; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b="sJ4KIPpq"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cfff5f88dbso23282355ad.3
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 00:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=snu.ac.kr; s=google; t=1786605832; x=1787210632; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=v9lKO3+xyZ4hhyjwwtug2ynRmplAxGz3tAcmomQ/8nk=;
-        b=sJ4KIPpqC+IzmVLCrZyb7Y9vCpq/l1BtBMWBmSsTzR+VSl5BTrcI33V03VAdDyomra
-         +x7vSF5UBnQzQOOFDZCHJME8jp6kaSfXaWsRqtuotfC5fPOoODy6SyxNKCUaJbeyy5aW
-         v1/dxR0YEA4d9U8jsUrts9XIVWn8L9ldO9G2w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786605832; x=1787210632;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=v9lKO3+xyZ4hhyjwwtug2ynRmplAxGz3tAcmomQ/8nk=;
-        b=TeIGxJtnS+urAH6fRxho6qmQZieBWR20/kaRe5MJastuGSfRD8yv0LNAcbVElT4Z9Z
-         Hr+zB/lrDpJqw8ru3lH02fzL263ZGJOR6ygKgXyGVw4jNq/pZ5IUuXjbS8J7iS7RT/Ww
-         c261WqSH10FO/ZYbpotnwHutG9bd68nZJUGWtxRA8M3fDgSztx+6Xphd5Ss/ztyDe1Aa
-         SgNKEdtElCba3DRKdAiwui6erYLkOIrerc8OVmnaaPAB10XaE+kAQQ0328C0Fjgy2cVq
-         KS/LTLmulSj0Dh3nFl2DWl6Njtri2IPHiw8cKHodZZZCeYwvqF8XyCyFup6oWGKqZiSS
-         FhXg==
-X-Forwarded-Encrypted: i=1; AHgh+RqYOd6kDDZaixAEusTQyvclfM6fxlXKatktma9RJJzo7OI84L+7+FRLaqIlt/znDJXjM9o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKpMySje8/3jJvurXLvvCdWey/mn+69AhtbDy313JmFYi3Zwfz
-	VH2Dd1eRyBbDl6uFGOu3GAwW4d85jJc3by4/2T3zRyNZoU3rqu2ILVruR+Cc5fptbLU=
-X-Gm-Gg: AR+sD13vSYuhzyoJqgSqcj4z4ZwlBJ1Zm+FyDtYrhJHbF8rFXWyDD31164HELka8YYd
-	4PzU77kL8yicMQmh9BdVMY2i38ezqL0mpIv4+jCFlxLbrfyHLCuAXoTvyR0V1gA8+Wx8ppeb2AE
-	kxkIHZK5zKzXF6WBjxgD6/Y5Zyb0PLS4BF2V6xTgc1h1Mpt+Qec3dT95eGLxIGXNy3NiQ0ijreP
-	WGy1K8cZvdPLSLEDyy4N8aUbkWNcEtJWqtTcRwMo98MXrZnqNno2GgaQre1IMXHM29khPAGuKyK
-	l5QssR5SHC5KEY/vNqvceoqsQI26gEsCpWax83u9kshBh/60GnyGYWPgk1I5cYv6+uoVBimdhWc
-	icHNftzePUmBh5yABCzu1UA6TLBvCqy1WjJ7GNLHW+PQb01xPEevRHJR/ASQoWEY4JxOaJvh999
-	ClXJedIWd69ZlQq4Nb6HmGt7Mz7r/PsjNcI4jb+1r4c1bw22/ytXaFHbdAf97dyCBAQd+EXA==
-X-Received: by 2002:a17:902:fc8f:b0:2d1:1a28:10d with SMTP id d9443c01a7336-2d37e9b040dmr49290675ad.18.1786605831858;
-        Thu, 13 Aug 2026 00:23:51 -0700 (PDT)
-Received: from desktop ([147.46.174.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d37c4d4354sm5288505ad.81.2026.08.13.00.23.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 00:23:51 -0700 (PDT)
-From: Kenneth Lee <kennethbwlee@snu.ac.kr>
-To: jiayuan.chen@linux.dev
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kennethbwlee@snu.ac.kr,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	rhkrqnwk98@gmail.com,
-	sdf@fomichev.me,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: Re: BUG: bpf: WARNING in skb_vlan_push from TC BPF action
-Date: Thu, 13 Aug 2026 16:23:28 +0900
-Message-ID: <20260813072328.984189-1-kennethbwlee@snu.ac.kr>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <9e2313ac-ea90-4911-9fc3-9581ec44bafd@linux.dev>
-References: <9e2313ac-ea90-4911-9fc3-9581ec44bafd@linux.dev>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="xXGXcOcV"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id AED2B1A15DD;
+	Thu, 13 Aug 2026 07:29:23 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 7FB23602B8;
+	Thu, 13 Aug 2026 07:29:23 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9755911C4DA21;
+	Thu, 13 Aug 2026 09:29:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1786606158; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=L4ojeu33ip8jl3mLzSpKehc1PAPxLG2vivjYcXSyHZ8=;
+	b=xXGXcOcVfWUha/cSmkh4IgRV6/SWTLYdLNbgw2VX7k2k2IlXTyqH4L6FqQX8LmWWvRD7zj
+	gJ6f4RToyCtqP/hqhDH326qPjN7fZmLlHEa/eDKbTRaGyz0EFfy7E84x+zLbH+z72fl//t
+	yqgY5ldqLopa+9OopMNcZnsOfGhxTYiSJqkLFIcbvQA9GLhpEzjZpggXp519Wrmcw11ntb
+	MQb/gssJtipdCIjONsZdIGlHrTKtqCO5jvBtSksvpoLkIdvde0P7SrTD+kRB8H4vovBjXD
+	bBuKo7b/HPXjbYZ0G3BIY8Ugd5V/zPBFRUiAkeJt6OeHvUR1bRIfb5571joBxw==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 13 Aug 2026 09:29:14 +0200
+Message-Id: <DKNN0WMD9XW8.MCJAMGS5NPYR@bootlin.com>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Jiayuan
+ Chen" <jiayuan.chen@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>
+Subject: Re: [PATCH bpf v3 1/2] selftests/bpf: keep polling connection that
+ is still in progress
+Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com>
+ <20260811-tc_tunnel_flaky-v3-1-876f4e0bc603@bootlin.com>
+ <75ec8417-4be5-4e7a-86c9-70a83b793580@linux.dev>
+ <DKM96LSV880C.1QEALTH06N0GI@bootlin.com>
+ <d92da576-4930-4b10-b8bd-ea1158ec08bc@linux.dev>
+In-Reply-To: <d92da576-4930-4b10-b8bd-ea1158ec08bc@linux.dev>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Jiayuan,
+Hi Ihor,
+thanks for the extensive investigation
 
-> Could you check whether the fuzzing log contains any XDP-related operations?
+On Wed Aug 12, 2026 at 8:46 PM CEST, Ihor Solodrai wrote:
+> On 8/11/26 9:25 AM, Alexis Lothor=C3=A9 wrote:
+>> On Tue Aug 11, 2026 at 5:05 PM CEST, Jiayuan Chen wrote:
+>>>
+>>> On 8/11/26 10:26 PM, Alexis Lothor=C3=A9 (eBPF Foundation) wrote:
 
-Your analysis was correct. The fuzzing path did include XDP-related operations.
-I've managed to create a C reproducer to run on v7.2-rc4-102-g4539944e5151.
-The reproducer
+[...]
 
-- attaches generic XDP to the L3 device sit0
-- calls bpf_xdp_adjust_head(-14) and changes the Ethernet destination
-- uses bpf_clone_redirect(..., sit0, BPF_F_INGRESS)
-- attaches a TC BPF action that calls bpf_skb_vlan_push().
+>>> So IIUC this patch doesn't actually fix the flakiness: connect() on a=
+=20
+>>> blocking socket only
+>>> returns EINPROGRESS after SO_SNDTIMEO is fully consumed, so remaining_m=
+s=20
+>>> is always ~0 and the
+>>> overall time budget is still 1s, same as before. Am I missing something=
+?
+>>=20
+>> Hmmm, I have been assuming that this EINPROGRESS could be returned
+>> _before_ the configured timeout depletion, but I may have been mistaken,
+>> it indeed happens only  the socket is O_NONBLOCK, which is not the case
+>> here. So indeed, it does not fix anything for the blocking case, as the
+>> budget is already depleted when getting EINPROGRESS...
+>>=20
+>> I added this budget mechanism to follow up on Ihor's suggestion, so I
+>> either got it wrong, or it can not work.
+>
+> Hi Alexis,
+>
+> Looks like my suggestion was bad, sorry. Jiayuan is right. I didn't
+> realize what -EINPROGRESS actually means here.
+>
+> See __inet_stream_connect() in net/ipv4/af_inet.c:697
+>
+> 	err =3D -EINPROGRESS;
+> 	...
+> 	timeo =3D sock_sndtimeo(sk, flags & O_NONBLOCK);
+> 	...
+> 	if (!timeo || !inet_wait_for_connect(sk, timeo, writebias))
+> 		goto out;
+>
+> -EINPROGRESS is a default that reaches userspace only when the wait
+> expires. Every other exit sets a different error code. So on a
+> blocking socket -EINPROGRESS does not mean "connection started", it
+> means "waited the whole budget, gave up in SYN_SENT". On a nonblocking
+> socket it means the opposite, and man 2 connect seems to only document
+> the nonblocking case.
+>
+>> An intermediate solution could
+>> be to exceptionally raise the budget by 1s when getting EINPROGRESS.
+>
+> I believe you're right that the flakiness can be addressed with bigger
+> timeout, which is why v2 fixed it for you. But +1s may not be enough.
+>
+> IIUC the way the helpers are written cause -EINPROGRESS instead of
+> -ETIMEDOUT. If SO_SNDTIMEO is not set before connect(), the kernel
+> reports plain ETIMEDOUT, but it is set in settimeo().
+>
+> I vibe-coded a userspace repro: loopback listener with a full accept
+> queue drained at t=3D1500ms, so the handshake completes at ~2040ms.
+> Caller asks for timeout_ms=3D1000, like tc_tunnel:
+>
+>   mainline (blocking)                     budget 1000   FAIL at 1016ms
+>   v3 (blocking + leftover poll)           budget 1000   FAIL at 1015ms # =
+my suggestion
+>   O_NONBLOCK + poll(timeout_ms)           budget 1000   FAIL at 1001ms # =
+Jiayuan's suggestion
+>   O_NONBLOCK + poll(3500)                 budget 3500   OK   at 2031ms
+>   blocking, SO_SNDTIMEO raised to 3500    budget 3500   OK   at 2040ms
+>   v2 (blocking 1000 + fixed 3000 grace)   budget 4046   OK   at 2067ms
+>
+> Everything that gave the handshake more than ~2040ms passed. Blocking
+> vs nonblocking makes no difference, poll() vs no poll() makes no
+> difference. We just need to increase the budget for connect().
 
-The relevant state transition showed as:
+Ok, so indeed the poll() loop complexifies the connection helpers
+without much gain.
 
-  after redirect to sit0:  skb->mac_len = 0, skb_vlan_tag_present = 1
-  after generic XDP:      skb->data - skb_mac_header(skb) = 14.
-                          skb->mac_len = 0
-  in the TC BPF action:   skb_vlan_push() reports offset 14
+> I don't think swtiching to O_NONBLOCK makes sense. Apparently, it was
+> nonblocking in the past, see 99126abec5e5 ("bpf: selftests: A few
+> improvements to network_helpers.c")
+>
+> So I think we can introduce a separate connect() budget, similar to
+> your v2. And then use opts->timeout_ms for everything after. Something
+> like this:
+>
+> 	#define CONNECT_TIMEOUT_MS	5000
+>
+> 	static int connect_timeout_ms(const struct network_helper_opts *opts)
+> 	{
+> 		/* don't shorten what the caller asked for: tc_redirect
+> 		 * and xdp_synproxy pass 10000
+> 		 */
+> 		return MAX(opts->timeout_ms, CONNECT_TIMEOUT_MS);
+> 	}
+>
+> and in connect_to_addr():
+>
+> 	fd =3D client_socket(addr->ss_family, type, opts);
+> 	if (fd < 0) {
+> 		log_err("Failed to create client socket");
+> 		return -1;
+> 	}
+>
+> 	/* SO_SNDTIMEO is a ceiling, not a sleep: a wider handshake
+> 	 * budget costs nothing on connections that succeed.
+> 	 */
+> 	if (settimeo(fd, connect_timeout_ms(opts)))
+> 		goto close;
+>
+> 	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+> 		log_err("Failed to connect to server");
+> 		goto close;
+> 	}
+>
+> 	if (settimeo(fd, opts->timeout_ms))	/* data I/O budget */
+> 		goto close;
+>
+> 	return fd;
+>
+> close:
+> 	save_errno_close(fd);
+> 	return -1;
+>
+> This is simpler than poll() and retry loops.
 
-And thus the following warning appeared:
+Ok, I'll give it a try with this simpler connect-only-extended-budget,
+without the poll loop
 
-  skb_vlan_push got skb with skb->data not at mac header (offset 14)
-  WARNING: net/core/skbuff.c:6477 at skb_vlan_push+0x51c/0x7c0
+> An entirely different alternative that Eduard brought up in an
+> off-list discussion, is to drop all the timeout machinery from
+> network_helpers.c altogether, and rely solely on the test_progs
+> watchdog to kill the subtest processes: d9d4d127e813 ("selftests/bpf:
+> watchdog timer for test_progs")
+>
+> I am not convinced it's a good idea, because I don't know what will
+> happen with all the tc_* tests if there is no connection timeouts. If
+> you're interested, you could try it and see.
 
-I've included a short log excerpt below.
+Hmmm, I'm not very familiar with this mechanism, but aside from the
+potential issues you are mentioning, wouldn't it make us loose a bit of
+info here, when the watchdog kicks the runner out ? We may know from the
+stacktrace that the subtest was in connect(), but we would loose any
+formal error/errno on connection timeout I guess, and I am not sure how
+confident we can get about any watchdog kick being a connect timeout.
 
-Thanks,
-Kenneth Lee
----
-Reproducer output on Linux v7.2-rc4-102-g4539944e5151:
+>> That potentially brings back part of the issues he has been mentioning
+>> with selftests duration possibly increasing by a non negligeable amount,
+>> but maybe 1s is a better compromise, compared to my initial 3s proposal
+>> ?
+>>=20
 
-[vlan-c-repro] BPF_PROG_LOAD xdp adjust_head=-14 mutate_eth=1 fd=3 errno=0 (ok)
-[vlan-c-repro] BPF_PROG_LOAD clone_redirect ifindex=5 flags=0x1 fd=5 errno=0 (ok)
-[vlan-c-repro] attached; sending packets from veth0_tag
 
-skb_vlan_push got skb with skb->data not at mac header (offset 14)
-WARNING: net/core/skbuff.c:6477 at skb_vlan_push+0x51c/0x7c0
 
-Call Trace:
-  bpf_skb_vlan_push
-  tcf_bpf_act
-  tcf_action_exec
-  cls_bpf_classify
-  tcf_classify
-  tc_run
-  __netif_receive_skb_core
 
-Debug lines from local kernel instrumentation:
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-__bpf_redirect_no_mac(): after skb_reset_mac_len():
-  offset=0, mac_len=0, vlan tag present
-
-__netif_receive_skb_core(): after do_xdp_generic():
-  offset=14, mac_len=0, vlan tag present
-
-tc_run(): before tcf_classify():
-  offset=14, mac_len=0, vlan tag present
-
-tcf_bpf_act(): before __skb_push(skb, skb->mac_len):
-  offset=14, mac_len=0
-
-bpf_skb_vlan_push(): before skb_vlan_push():
-  offset=14, mac_len=0
