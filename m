@@ -1,124 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CBDE374A11;
-	Thu, 13 Aug 2026 16:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256CD48EBC5
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 16:29:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786638421; cv=none; b=YZTUXfw9NktZvY9xVzcnQLT3c6S2CtdZkNP2dXQL37C8eEECcnfZE6N11kssvA2H2tCExNw8RtEc3hUtg7ZIZiA3kPQn/pjhopTIgqjDBJRDLZm9LihWAr+NbudgfzA3i9Ded88ceW+K02DTItVD7qyYM0kLpVT33JFKSVAHgzY=
+	t=1786638577; cv=none; b=XATNMWPmWiNBNZxMgInrNr24tpnoakD6k6PLuuN61KUZcY0hlxCDqn9PWQ16ZlCvc2YiA71gbMeFUY2v7pjRtp113W91PXoINtSrMt7/tu9OFVT85cjFLjQw3DM9q31jvQNeVSpVzplFmvb8LatcOJ+YLvshl/WVkv74e0YWsuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786638421; c=relaxed/simple;
-	bh=+5iiwb/IqfhB0c5XVuKMEg8R6UG2DurfE0mqD/r2BlY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fLXhxoQSimzJnqgc/A1rZ+9Smhd02G4sVx0rgcVkcOJq1zcJfgIeOVlnEY2IkLTqP5G9uuAkve6RDOFo8xDOP1qvu6JiJ+ko8WplkXWq17iNkzQx8vfRmvZVocoPvlGI9TeLdC1B7nFdVHzU0JeyljzIu8WipjqsjFbSh/6CcLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dnfgSPHE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786638577; c=relaxed/simple;
+	bh=IDT5NZ9C1Lu//rmHleMgcANKAlBE4fkCI6NBOcNcjFg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=RzlddY9cIe89NRza0hFRD1WyBkoxxtAByzZZEvRBXIKSGNE2ueYb3g3o94KxybGjMrY7SedS0jYhg2BtVJMGy+LNUiEi9DSqAyUQACOz0QiYPXd4SJm0qDTrDoQH28pjJB2ZBR8cZsKL7OawtAK6vJkNp0plIvqqXimol1dkNOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eijyH8I+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dnfgSPHE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12AF91F000E9;
-	Thu, 13 Aug 2026 16:26:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eijyH8I+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 823CA1F00A3A;
+	Thu, 13 Aug 2026 16:29:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786638420;
-	bh=FDwPBMmTjt/n1XIHuKyA87/9hlxKHgTWN8Vn9wykej4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=dnfgSPHE9LMP1JGthnqGt4uSLV52B3mtSKr7UFPxEs1vFI18b3LGkw+pge+UZg52z
-	 vKqTjvC9d/o3KtIMpC2YaqscCTbbL2VsK+v++XJFomq8YgFIf22rJfO4rmOuJlcdd1
-	 qKHQPw9tOoxIhq2dqxddBTRmJuyi6+yh+qdo2shvBCETJ6I7Mv1sDt4hDfhlOXRKSj
-	 AQqh8VwzzqDDvQV1ooaZFuR9vk96nytFbpP7Tv4Djqy3nxBMq+yUFoXNCPRwZI6mvJ
-	 vfHvwtIFf8k8sLuxgEV/wcr7yv8d3VtbNqb4CFaP0kllxkyxdoZQMa6MsfpEoSQ33K
-	 aZFWJNtfjz7DA==
-Content-Type: multipart/mixed; boundary="===============3118981536321115134=="
+	s=k20260515; t=1786638575;
+	bh=zespKEhgS8MicJpiR3MJ038HGLI2xLnFbHvSNX6aFwI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=eijyH8I+UTlCo9E2MG1/J1lS+po9il0BcXIxPPlRmCmOwtf6g1ylAzaSitnnHZ0/v
+	 htUx6DQ3zplhs1ltLPUDpduwXLcd2vnJGI0fpKIncaO4x4rmvW6eNhhQ1zLHPq9KCg
+	 lgJBYh35Lws8VSveDSrYAwpRiP7fOq6MExTu6/RMHshKHPCHwkFMmO/mVlVR4iWNrm
+	 0ArpdhV8uDwqRF7TNYgCC3Z6m2Qv67Jp+EDnzATVa7/R8SVCK2pRzZHyw5/F9uCWEz
+	 czI6y8FtnmIGhM1xhsuLsT8KW82CSpLekGb/rNZfejhCJr5F65BJl7zw+9IPA9rQoM
+	 gBDt5LyKYVgKA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2] bpf: fix BPF_F_CPU validation for sparse CPU IDs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hui Su" <sh_def@163.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260813160858.1042834-3-sh_def@163.com>
+References: <20260813160858.1042834-3-sh_def@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 13 Aug 2026 16:29:35 +0000
+Message-Id: <20260813162935.823CA1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <0ffc09de1b26ea2a7bf3015a63307a134259c376347b778b71706b9830dcd185@mail.kernel.org>
-In-Reply-To: <20260813152324.97937-8-leon.hwang@linux.dev>
-References: <20260813152324.97937-8-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v12 07/10] selftests/bpf: Add tests to verify global percpu data
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 16:26:59 +0000 (UTC)
 
---===============3118981536321115134==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> index 8466332d7406f..06d163a022dcc 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+Pre-existing issues:
+- [High] Updating a per-CPU map without BPF_F_CPU or BPF_F_ALL_CPUS reads o=
+ut-of-bounds from the user-provided buffer when CPU IDs are sparse, leading=
+ to a kernel memory leak into the map.
+- [High] The BPF helper bpf_map_lookup_percpu_elem() lacks a check for impo=
+ssible CPU IDs, allowing BPF programs to trigger a kernel panic.
+--
 
-[ ... ]
+--- Patch [1]: [PATCH bpf v2] bpf: fix BPF_F_CPU validation for sparse CPU =
+IDs ---
+commit a52d0045a4c161f0602130ac0b1b17e4a87469ee
+Author: Hui Su <sh_def@163.com>
 
-> @@ -60,3 +63,188 @@ void test_global_data_init(void)
->  	free(newval);
->  	bpf_object__close(obj);
->  }
-> +
-> +static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_fd, int *runp)
-> +{
-> +	struct test_global_percpu_data__percpu *data = NULL;
-> +	int i, err, key = 0, num_online, run = 0;
-> +	__u64 args[2] = {0x1234ULL, 0x5678ULL};
-> +	size_t data_sz;
-> +	bool *online;
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts,
-> +		    .ctx_in = args,
-> +		    .ctx_size_in = sizeof(args),
-> +		    .flags = BPF_F_TEST_RUN_ON_CPU,
-> +	);
+bpf: fix BPF_F_CPU validation for sparse CPU IDs
 
-This isn't a bug, but does the raw_tp ctx need to be passed here, given
-the program ignores it?
+This commit updates BPF_F_CPU validation to check the CPU ID against
+nr_cpu_ids and cpu_possible() instead of num_possible_cpus(). This fixes an
+issue on systems with sparse CPU IDs where valid CPUs were rejected and
+invalid CPUs could trigger an out-of-bounds access.
 
-[ ... ]
+Link: https://lore.kernel.org/lkml/20260813101229.680523-3-sh_def@163.com/
 
-> +static void test_global_percpu_data_init(void)
-> +{
-> +	struct test_global_percpu_data__percpu init_value = {};
-> +	struct test_global_percpu_data__percpu *init_data;
-> +	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE);
-> +	struct test_global_percpu_data *skel = NULL;
-> +	size_t init_data_sz;
-> +	struct bpf_map *map;
-> +	int prog_fd, err;
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index f4e8d372253ac..0ac809800a855 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -4200,7 +4200,7 @@ static inline int bpf_map_check_op_flags(struct bpf=
+_map *map, u64 flags, u64 all
+>  			return -EINVAL;
+> =20
+>  		cpu =3D flags >> 32;
+> -		if ((flags & BPF_F_CPU) && cpu >=3D num_possible_cpus())
+> +		if ((flags & BPF_F_CPU) && (cpu >=3D nr_cpu_ids || !cpu_possible(cpu)))
 
-[ ... ]
+[Severity: High]
+This is a pre-existing issue, but while looking at this fix for sparse
+CPU IDs, is there an out-of-bounds read in the per-CPU map update paths?
 
-> +	map = skel->maps.percpu;
-> +	if (!ASSERT_EQ(bpf_map__type(map), BPF_MAP_TYPE_PERCPU_ARRAY, "bpf_map__type"))
-> +		goto out;
-> +
-> +	init_value.data = 2;
-> +	init_value.nums[6] = -1;
-> +	init_value.struct_data.i = 2;
-> +	init_value.struct_data.nums[6] = -1;
-> +	err = bpf_map__set_initial_value(map, &init_value, sizeof(init_value));
-> +	if (!ASSERT_OK(err, "bpf_map__set_initial_value"))
-> +		goto out;
-> +
-> +	init_data = bpf_map__initial_value(map, &init_data_sz);
-> +	if (!ASSERT_OK_PTR(init_data, "bpf_map__initial_value"))
-> +		goto out;
-> +
-> +	ASSERT_EQ(init_data->data, init_value.data, "init_value data");
-> +	ASSERT_EQ(init_data->set, init_value.set, "init_value set");
-> +	ASSERT_EQ(init_data->struct_data.i, init_value.struct_data.i, "init_value struct_data.i");
-> +	ASSERT_EQ(init_data->struct_data.nums[6], init_value.struct_data.nums[6],
-> +		  "init_value struct_data.nums[6]");
+In kernel/bpf/syscall.c:bpf_map_value_size(), the buffer is sized using
+num_possible_cpus():
 
-This isn't a bug, but should init_value.set be given a non-zero value,
-and nums[6] checked, so these assertions can actually distinguish a broken
-copy?
+    return round_up(map->value_size, 8) * num_possible_cpus();
 
+But in kernel/bpf/arraymap.c:bpf_percpu_array_update(), the read offset
+uses the physical CPU ID:
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+    val =3D (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
+    copy_map_value(map, ptr, val);
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31716447858
---===============3118981536321115134==--
+If there is a hole in the CPU mask, a physical CPU ID can be greater than
+or equal to num_possible_cpus(). Does this allow the copy to read past
+the end of the allocated buffer and leak memory into the map? Similar
+logic exists in kernel/bpf/hashtab.c:pcpu_copy_value() and
+kernel/bpf/local_storage.c:bpf_percpu_cgroup_storage_update().
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does the BPF helper
+bpf_map_lookup_percpu_elem() also need this cpu_possible() check?
+
+In kernel/bpf/arraymap.c:percpu_array_map_lookup_percpu_elem() (and
+similar hash and LRU functions), there is only a check for nr_cpu_ids:
+
+    if (cpu >=3D nr_cpu_ids)
+        return NULL;
+
+If a BPF program passes an impossible CPU ID that falls within a device
+tree hole, could per_cpu_ptr() use an unmapped or uninitialized
+__per_cpu_offset, leading to a kernel panic when the BPF program
+dereferences it?
+
+>  			return -ERANGE;
+>  	}
+>
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813160858.1042=
+834-3-sh_def@163.com?part=3D1
