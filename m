@@ -1,171 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C252383C97;
-	Thu, 13 Aug 2026 04:22:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453DD35E94E
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 04:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786594940; cv=none; b=iKJDKUGj23UNZzxLXy88/Nk1pNA7BWTV/JF0PJyQym/Wzi6swHStlfTFCFYy/rr+OBMz11SO4qrzkHStdeJN0iYANgRyDKu5WgoGnozM/Dxcf80+aWM939ELUcbjOeMOn5TuzpYOPfAXrGwSML7854bpxQ7ogDLh3Hi1P4Zvq0U=
+	t=1786595940; cv=none; b=QQKeQHI8d3WyXa2yFMs+dIoMzRzE4Qfm6C0RWzkOntqjhAnjwRdYCD/l1z/0Yp/5tbnjj41iWKd7hxU2m1f12oMkLdocoRffs01c3eORO/etXrF/i5cpu4ro6QU5DqjB7pS9l6LMGp/cpU5fdBs5Z2NBdwobON0eQBZqIlsEu68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786594940; c=relaxed/simple;
-	bh=p/R6Rksy9mw5WhdGbJ6g9Ba0X7+fAQ55QJNizdmCYE0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=jWwJu3xHMeANuluF6zZ0qGhSUaVcxx0LcESpI7hgl5lW7VC5QXr1a56czgVvAcWTFzHvgEnDM6fRZxhgBm8CBLXndjCB9xGy7T8ndpp4oxAl+Y2kU1Vd+RaqoE9g36DY0ByFJ43FSsrmEVdc3FUCNO6vbaiz6+NpZ1r4S35M9rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=etmbhg/m; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786595940; c=relaxed/simple;
+	bh=ZP+YmiMqjne+BIOHGU+qADJTqbtfWsS0k9JYL/OigHc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=jHBxKeoKaAE2g6BHbOKSSge+vQf7vD+9Nrtia+FYJQw5DQBoEBId4L0tqnQIFy+KbW3d1QN/lmKcolZ3G8i9Q44nr+xPlc8JSX1OeHKkdbwQh8zOlP7cD0AqLOIJrLr2MzF4jBFPZXXFmzarqO5nflzzFymqXeRGOMuZ1Lryo6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I8wH5v1i; arc=none smtp.client-ip=74.125.225.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="etmbhg/m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36BB91F00A3A;
-	Thu, 13 Aug 2026 04:22:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786594939;
-	bh=81MKgV5Hg/YoeiwbP4Ktu/0WGpHcnmIQb9HWLpZfU9U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=etmbhg/mz+UaAiDeqTfoVH7L38lqnbkg+YDWh9H66jaBCSGdvRJHnwj5wM6ZfoKFA
-	 vHXuNV6MDzXwQ3IduiGNdSVhcYBrgf42tmCny7+8eKx2dLh9UnwnlDgAP+WwJn/soU
-	 gIgTYvjf/hxcv4HYdJCYU2sMwlvJUlWy5R0OoBKGA1C1QKV4U7I9T9b4xaTyAUs3Km
-	 0OWBc+UbeTKpe/jf1JM84US3qBRf65IyLxeZ+Dr83QyZXGh39ym0ZRT6W3N40nd0pE
-	 Owrj2Q2OomVKKJqbH0IRXI9UMRlGk88iY0oRifxRBSGTJMc4CGeP4q0KxsBu/XhM1b
-	 s9TKrKvE0EmIA==
-Content-Type: multipart/mixed; boundary="===============3800696815030016696=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I8wH5v1i"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so6781945e9.0
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 21:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786595935; x=1787200735; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=GAZ+x7z6BZhFTzywSoAUTFEoxQswSZuOueFTYMsV3yc=;
+        b=I8wH5v1ipf6jTzf73Skb6EHOHlwIuVrP9/aKf1nPZPfErp3694i96FbuBa4CaPgnG5
+         euuzpDWKP6LZt/vDumbKB4jYBPn+sNHH0a1K1fkPsQ/EYjm50Ij5lWaO3v8JW7CuNZp9
+         v6lqk7Cr+2XzGmxYTCXRM+2nr0YR+xfXLD1aKX2Q8HTqfubflWXi/YH/JqAHJiStN1K4
+         b6Ozvw+gOSvFyWwK3iZtONVF+fi19GJFuVjV2eHunCDqhjdpLqdc8quZtGnwhS8dWpQf
+         QT7KFwRHRI91ywlDV7DJcpIIRPlyf+tWJK9JN3cnLIBExVjl9R7bEHtop/eDAgF7Ndcs
+         wEJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786595935; x=1787200735;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GAZ+x7z6BZhFTzywSoAUTFEoxQswSZuOueFTYMsV3yc=;
+        b=oCJcLLJAgv0AvzfEVOzuwqoa1QOOhqqMVTFflH7m5XoYcNwdjADQ9Bq2LB2nY8egwT
+         xH08ZRwUeRchEdP22y5TnMbU1BnWGLXGnZtfDeFnc1s+/2rZNUjRCyYSVYcigOKfFyuQ
+         RKSC9xsWeglPL0+LXhHU1wqlI7Je3hEDIMiZEXvNrNxszzcrUVtSjUiy/0lbyHjKi8/b
+         1E8KYZDg+SK7znOvNGc1Crh/j9lhWlXqE+hGl1vozR27MKK48nvCG8yo9yUp6j0qd9H6
+         SZOHkmzXPTjfH3n3J6lB1M79jPvhDRPdr6ca18Vx0QvjFLQryKQxYaGqR8Gw1RSHbyiS
+         24HA==
+X-Forwarded-Encrypted: i=1; AHgh+RouONzNHzn1S0DTKttDwAtyA4ilKM8f3WMQK5uhic9JItN+kNa++lNZKwin1zqd6Z/tmCo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPQG/xe1MrRR8fh347YEqtdYHr1Xy+aqIdau9mCZvqX5h6qxo4
+	oGCvL1UqKlHmrrPBBDM4weiOZauXyvxtZFndvNhSSJYHata6gV2mcRFK
+X-Gm-Gg: AR+sD125NGTunBpdVUyMU5YlZ3+wm+HcMXi5BiR3KGMaWK5bLG6ItLGLBXuzKDg6zJc
+	KW12iZvQ9g7MHLHp4+H1hA4tq/cRd9bv5xFC9nscsmh0o3+7znOMP43wfPEBYLeILUfKPCGjvQw
+	VLo9ZS+frzAl1AtzXJA5eQkvPclt5mTSvzRoBVTB1fd7d8bHPfHQQPrDsG6ATXr6KMKVkn3GJ1J
+	ZthsdTpOgN878UYbRi466A1bcre89V0foWonoiO7UdXZyp1qUQ5fv4mZRo2f8fmZ7DJH/CY7WAi
+	utwMkKz0sLjIh6vAv49u0veqiVwuIcLl0IxkW8PVz8FEM8BDt5KnHTN0GYkLBsDEufgeltLbnif
+	T/d91/xlOeg6hp9j1UhZJasGnTLyO6mjSoJjYNoBMdkKD/2ZChdLnJiPhFdNtUzPtH1ypMjmHS0
+	E1bsmQzV8fDZcgN57YTNn9RWPH5CVLWKsQX90ZR9TzH6Eq1/FGVRJWaeOQlnXqyjbreIVycldBk
+	M1YUh24NvmuzPJTXoNHEj5Hp2L5X4lE0Qj5SSpOLnn2QUZbqxPJhsy6EQKaQc+vijJEiDUJFqet
+	n5i+JkwYiI7WGNclTzlTeGSLiGA=
+X-Received: by 2002:a05:600c:310e:b0:499:51f0:a9b2 with SMTP id 5b1f17b1804b1-499821881d3mr26179715e9.1.1786595935294;
+        Wed, 12 Aug 2026 21:38:55 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499820f5d26sm23033735e9.1.2026.08.12.21.38.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Aug 2026 21:38:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <f368863dfa10ec5402f0a45feaa11f6bcddccc87385a4dde88a8ce8b478598b1@mail.kernel.org>
-In-Reply-To: <20260813032613.2755-2-zhaofuyu@vivo.com>
-References: <20260813032613.2755-2-zhaofuyu@vivo.com>
-Subject: Re: [RFC PATCH bpf-next v2 1/2] libbpf: support selective kernel module BTF loading via .kmod_btfs section
-From: bot+bpf-ci@kernel.org
-To: zhaofuyu@vivo.com,bpf@vger.kernel.org,andrii@kernel.org,alan.maguire@oracle.com
-Cc: ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,yatsenko@meta.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,zhaofuyu@vivo.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 04:22:18 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 13 Aug 2026 06:38:54 +0200
+Message-Id: <DKNJEHJWIC8Y.2QH6JE3N590FS@gmail.com>
+Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ <bpf@vger.kernel.org>, <sched-ext@lists.linux.dev>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <kernel-dev@igalia.com>
+Subject: Re: [PATCH] selftests/bpf: Remove duplicate copies of the arena
+ spinlock qnodes
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Changwoo Min" <changwoo@igalia.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Shuah Khan" <shuah@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>
+X-Mailer: aerc 0.21.0
+References: <20260803001807.646357-1-changwoo@igalia.com>
+In-Reply-To: <20260803001807.646357-1-changwoo@igalia.com>
 
---===============3800696815030016696==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-> index 9d160b5b9c0ee..171ea055cd323 100644
-> --- a/tools/lib/bpf/bpf_helpers.h
-> +++ b/tools/lib/bpf/bpf_helpers.h
-> @@ -188,6 +188,20 @@ enum libbpf_tristate {
->  	TRI_MODULE = 2,
->  };
+On Mon Aug 3, 2026 at 2:18 AM CEST, Changwoo Min wrote:
+> bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
+> every translation unit including it emits a copy. __weak makes them all
+> resolve to one instance, but bpftool gen object merges only the symbols
+> and concatenates each input's .addr_space.1 bytes, leaving the surplus
+> copies unreferenced in the linked object.
 >
-> +/* Helper typedef for declaring kernel module names that need BTF loading.
-> + *
-> + * Usage: define an array in the ".kmod_btfs" ELF section to specify
-> + * which modules need BTF loading:
-> + *
-> + *   DEFINE_KMOD_BTFS(_needed_kmods)= { "module1", "module2", ... };
-> + *
-> + * This avoids unnecessary BTF loading and speeds up the BPF program
-> + * load process.
+> libarena links ten such units, so nine copies were dead weight (bytes):
+>
+>   object                             before       after
+>   -----------------------------------------------------
+>   .addr_space.1 in libarena.bpf.o    676200       86376
+>   libarena.skel.h                   2100123      892371
+>   libarena_asan.skel.h              2641124     1466477
+>
+> Declare qnodes in the header and let each program define it once:
+> libarena in src/common.bpf.c, and the arena_spin_lock test beside the
+> lock it guards.
+>
+> Tested with test_progs -t arena_spin_lock and -t libarena.
+>
+> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+> ---
+
+This seems ok to me. I don't have better ideas. Emil, any thoughts?
+
+>  .../selftests/bpf/libarena/include/bpf_arena_spin_lock.h   | 7 +------
+>  tools/testing/selftests/bpf/libarena/src/common.bpf.c      | 7 +++++++
+>  tools/testing/selftests/bpf/progs/arena_spin_lock.c        | 7 +++++++
+>  3 files changed, 15 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_=
+lock.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
+> index ae6b72d15bb6..71d9db610263 100644
+> --- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
+> +++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
+> @@ -103,12 +103,7 @@ struct arena_qnode {
+>  #define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
+>  #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
+>
+> -/*
+> - * The qnodes are marked __weak so we can define them in the header
+> - * while still ensuring all compilation units use the same struct
+> - * instance.
+> - */
+> -struct arena_qnode __weak __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NO=
+DES];
+> +extern struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NO=
+DES];
+>
+>  static inline u32 encode_tail(int cpu, int idx)
+>  {
+> diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tool=
+s/testing/selftests/bpf/libarena/src/common.bpf.c
+> index 50be57213dfb..06481f2a2892 100644
+> --- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
+> @@ -8,6 +8,13 @@ const volatile u32 zero =3D 0;
+>
+>  struct buddy __arena buddy;
+>
+> +/*
+> + * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each p=
+rogram
+> + * linking the arena spinlock provides exactly one definition, so that t=
+he array
+> + * is emitted once rather than once per translation unit.
 > + */
-> +#define KMOD_NAME_LEN 64
-> +#define DEFINE_KMOD_BTFS(name) \
-> +	SEC(".kmod_btfs") char name[][KMOD_NAME_LEN]
-
-KMOD_NAME_LEN establishes the on-disk record size for the .kmod_btfs section
-format, yet it's duplicated in two files with only a prose comment connecting
-them:
-
-  tools/lib/bpf/bpf_helpers.h:201   #define KMOD_NAME_LEN 64
-  tools/lib/bpf/libbpf.c:707-708    /* Should match the definition in ... */
-                                    #define KMOD_NAME_LEN 64
-
-If the two ever diverge, bpf_object__collect_kmod_btf_names() will silently
-mis-slice the section. The d_size % KMOD_NAME_LEN check only catches
-non-multiples, not a mismatch between the two values. Could this use a shared
-header or a static assert to ensure they stay in sync?
-
-Also, the new macro has no #ifndef guard. This header is included by nearly
-every BPF program alongside vmlinux.h and user headers. Other unprefixed
-names this header exports (NULL at lines 78-80, KERNEL_VERSION at 82-84) all
-have #ifndef wrappers. Should KMOD_NAME_LEN follow that pattern?
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 514e4e9daa825..9fe8a653e8b6b 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -5803,6 +5888,11 @@ int bpf_core_add_cands(struct bpf_core_cand *local_cand,
->  	return 0;
->  }
->
-> +static bool is_kmod_btf_needed(struct bpf_object *obj, const char *name)
-> +{
-> +	return hashmap_find(obj->kmod_btfs->hashmap, (long)name, NULL);
-> +}
-
-This calls the raw hashmap_find() with a manual (long) cast, rather than
-the hashmap__find() wrapper that hashmap.h provides:
-
-  hashmap.h:159
-  #define hashmap__find(map, key, value) \
-      hashmap_find((map), (long)(key), hashmap_cast_ptr(value))
-
-The header comments at lines 50 and 54 say the intent is to use the wrapper
-("behind auxiliary macros") so that the _Static_assert on the value pointer
-runs. Bypassing the macro also bypasses that check.
-
-This is the only direct caller of the unversioned function in the whole
-library. The other function added by this same patch does use the wrapper
-(bpf_object__collect_kmod_btf_names at libbpf.c:964 uses hashmap__find), so
-the two halves of the change are inconsistent. Should this use the wrapper
-too?
-
-[ ... ]
-
-> @@ -9030,6 +9130,12 @@ static void bpf_object_cleanup_btf(struct bpf_object *obj)
->  	/* clean up vmlinux BTF */
->  	btf__free(obj->btf_vmlinux);
->  	obj->btf_vmlinux = NULL;
+> +struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
 > +
-> +	if (obj->kmod_btfs) {
-> +		hashmap__free(obj->kmod_btfs->hashmap);
-> +		zfree(&obj->kmod_btfs->data);
-> +		zfree(&obj->kmod_btfs);
-> +	}
->  }
+>  int arena_fls(__u64 word)
+>  {
+>  	if (!word)
+> diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools/=
+testing/selftests/bpf/progs/arena_spin_lock.c
+> index cf7cda79c16c..92e75ec3844c 100644
+> --- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
+> +++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
+> @@ -23,6 +23,13 @@ int cs_count;
+>  #if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CA=
+ST)
+>  arena_spinlock_t __arena lock;
+>  int test_skip =3D 1;
+> +
+> +/*
+> + * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each p=
+rogram
+> + * linking the arena spinlock provides exactly one definition; libarena'=
+s lives
+> + * in libarena/src/common.bpf.c.
+> + */
+> +struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
+>  #else
+>  int test_skip =3D 2;
+>  #endif
 
-The .kmod_btfs filter list is ELF open-time data, but it's freed from
-bpf_object_cleanup_btf(), which runs while the bpf_object is still alive and
-load_module_btfs() can still be called. The filter therefore stops applying
-part-way through the object's lifetime. Concrete path:
-
-  bpf_object_load()                       libbpf.c:9182
-    ... -> bpf_object_post_load_cleanup() libbpf.c:9229
-             -> bpf_object_cleanup_btf()  libbpf.c:9147
-                  obj->btf_modules_loaded = false;   (libbpf.c:9128)
-                  zfree(&obj->kmod_btfs);            (libbpf.c:9137)
-
-  bpf_program__attach_tracing_multi()     libbpf.c:12791
-    -> collect_func_ids_by_glob()         libbpf.c:12752
-         -> find_attach_module()          libbpf.c:7877
-              -> load_module_btfs()       libbpf.c:5896
-
-At this second entry into load_module_btfs(), btf_modules_loaded is false so
-the full scan re-runs, but obj->kmod_btfs is NULL. The filter at
-libbpf.c:5960 is skipped and every module BTF in the system is loaded,
-exactly what the section is supposed to prevent. collect_func_ids_by_glob()
-also calls bpf_object_cleanup_btf(obj) unconditionally at its cleanup: label
-(libbpf.c:12786), so the list is destroyed again on every attach.
-
-The other open-time members with the same lifetime (obj->jumptables_data,
-obj->arena_data, obj->kconfig) are freed in bpf_object__close()
-(libbpf.c:9720-9733), not in the BTF cleanup helper. Should obj->kmod_btfs
-be freed there instead?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31664172915
---===============3800696815030016696==--
