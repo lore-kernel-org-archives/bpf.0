@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-248.mta1.migadu.com [95.215.58.248])
+Received: from mta0.migadu.com (out-129.mta0.migadu.com [91.218.175.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFBB483802
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 14:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC04483BF7
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 15:01:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786632258; cv=none; b=HskFl8U7tJ6uKo0eZa+URIGz3lFySuyfjt5htZ8B/UchR1JiyTHr+1ouut2ZvQBQqwf5AHIdXKotO7LWiYF4MIcpSydB6FtayG5LwnFYLE8JvIzSMJsIgqfmh1sTbSg80p3sbnHplWJlD7n9B3uK8nKdiEVJWllsRCF/iGIBwFQ=
+	t=1786633275; cv=none; b=dvbYA4B5yawGh9MC/KR+of5VIi8rMsjN3dL+RY0jp7ewvEIX/f4oyeook92IMGyRtq1uQvmAi8y35sphHxcmxpDusNraxDiHeZuMi3+BHdn4qmoFm3pKFueJcGAwK/9G84GgChsA3NYnDS0UNim2k+iMAM63ZXZp2yk7N5rn7Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786632258; c=relaxed/simple;
-	bh=8fVIx7G6mHExdyJvBnMZanXKXlszThoCe1xwtW73Qyw=;
+	s=arc-20240116; t=1786633275; c=relaxed/simple;
+	bh=kjQCGgpsYPUeNoy8VC501KK4ntDE5I7q0H01tiCcS7k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SCQRgzecHf1YzcXNDsx9+PVXE6KaMeH+bEdReHgj6K0p6wyTSqz4Ck6dr/EPjU/w/x00SJTlxrmViJPnbk6C1slXBHstPMD/kCrld34z+LoDhlXO6dFQsAy068tJmxjvQPEtKTsEN18C3WVit3/JYrASIcy5bHsqC+XZM4GRSms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lkxYwXZj; arc=none smtp.client-ip=95.215.58.248
+	 In-Reply-To:Content-Type; b=T+/1Dw53YVDjZPnlWr/z1V5/B5VfhhHdu8/WInZzl/LOc8izStKNFDwbUtJc3rTbXqiUVkQSTjRxfONQqzRIvwPDIk2+Td/yfCMYn4ex+HU6yMt4TD9tdXdcqibbq0MPlRzkVrgjYU/wX8GgbaJDSVP/weSKVudYCdsxCOKm+kE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=niYvM0fh; arc=none smtp.client-ip=91.218.175.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lkxYwXZj"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="niYvM0fh"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=8fVIx7G6mHExdyJvBnMZanXKXlszThoCe1xwtW73Qyw=;
+DKIM-Signature: a=rsa-sha256; bh=kjQCGgpsYPUeNoy8VC501KK4ntDE5I7q0H01tiCcS7k=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786632253; v=1; x=1787237053;
- b=lkxYwXZjET8OnFj479lYLdwfbKpsp51ep/i6lQq1G9PuU+0d3kyGwBmKX9e3FsWsDtojoyX2
- VHAMdVxA5YcQNDcirsUaT0OVeUJ0mAl+mAS/ELKK3Wfzx9YiWlx22ZDKEsN4FqjWnactSrypWse
- gb3bs2yYU6ypGcbQUmaWvqCY=
+ t=1786633268; v=1; x=1787238068;
+ b=niYvM0fhq4QRfdtgz+RjiGqJYRRU+5JFvhnzTc4Rm2tvSKgYkDA9/e/5pr1HyoqzP0Ribk1m
+ sUCRzcnvvusKSwC9jO54iB3b06f2f0SShCjS45JK814+mjMSRhbpK25rNdKfvxI0oFER/XwAgXg
+ QiQOKVKi2javLicFmvodVLbM=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from [172.20.10.7] (117.20.149.103)
-	by smtp.migadu.com with ESMTPS id 44444fa5db3f0b38;
-	Thu, 13 Aug 2026 14:44:13 +0000
+	by smtp.migadu.com with ESMTPS id bb8ba90ab4d9734f;
+	Thu, 13 Aug 2026 15:01:08 +0000
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <56ff2d90-5943-4e9b-afc8-18dcaef2f893@linux.dev>
-Date: Thu, 13 Aug 2026 22:44:04 +0800
+Message-ID: <e3ff24e6-f0e0-415a-acfa-4f541796d109@linux.dev>
+Date: Thu, 13 Aug 2026 23:00:56 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,82 +38,70 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: fix BPF_F_CPU validation for sparse CPU IDs
-To: Hui Su <sh_def@163.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260813101229.680523-3-sh_def@163.com>
+Subject: Re: [PATCH bpf] bpf: fix percpu map update indexing with sparse CPU
+ IDs
+To: Hui Su <sh_def@163.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, sashiko-bot@kernel.org
+References: <20260813120250.796934-4-sh_def@163.com>
 Content-Language: en-US
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260813101229.680523-3-sh_def@163.com>
+In-Reply-To: <20260813120250.796934-4-sh_def@163.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 Hi Hui,
 
-On 2026/8/13 18:12, Hui Su wrote:
-> BPF_F_CPU stores the target CPU ID in the upper 32 bits of the map
-> operation flags. bpf_map_check_op_flags() currently compares that ID
-> with num_possible_cpus(), which is the number of possible CPUs rather
-> than a bound on CPU IDs.
-> 
-> On an arm64 QEMU guest with a CPU device-tree hole, the possible CPU
+Thanks for the further fixes.
 
-TIL about the possible CPU hole.
+On 2026/8/13 20:02, Hui Su wrote:
+> Per-CPU array, hash, and cgroup storage map updates without BPF_F_CPU
+> or BPF_F_ALL_CPUS use a value buffer whose per-CPU slots are packed in
+> possible-CPU order. The buffer is sized as:
+> 
+>   round_up(value_size, 8) * num_possible_cpus()
+> 
+> The update paths iterate over possible CPUs, but use the logical CPU ID
+> to calculate the source offset:
+> 
+>   value + size * cpu
+> 
+> This only works when possible CPU IDs are contiguous starting at zero.
+> 
+> For example, with a possible CPU mask of 0,2-3, the buffer contains
+> three slots corresponding to CPUs 0, 2, and 3. CPU2 is therefore
+> expected to use slot 1 and CPU3 slot 2. Instead, the current code uses
+> slots 2 and 3 respectively, causing incorrect per-CPU values and an
+> out-of-bounds read from the update buffer for CPU3.
+> 
+> The corresponding lookup paths already use a dense offset while
+> iterating over possible CPUs. Do the same for the array, hash, and
+> cgroup storage update paths, advancing the source offset once for each
+> possible CPU. BPF_F_ALL_CPUS continues to use the same value for every
+> CPU.
+> 
+> Fixes: 8eb76cb03f0f ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array maps")
 
-> mask was 0,2-3. A userspace program using raw bpf() syscalls creates
-> a BPF_MAP_TYPE_PERCPU_ARRAY and performs update and lookup operations
-> for each CPU by setting BPF_F_CPU and the CPU ID in the flags.
-> 
-> With the old check, CPU 1 is incorrectly accepted while valid CPU 3 is
-> rejected with -ERANGE. The CPU 1 update then reaches the per-CPU map
-> access path and triggers:
-> 
->   Unable to handle kernel paging request at virtual address ...
->   pc : __pi_memcpy_generic+0x5c/0x22c
->   lr : bpf_percpu_array_update+0x2dc/0x2e8
->   Call trace:
->     __pi_memcpy_generic
->     bpf_map_update_value
->     map_update_elem
->     __sys_bpf
-> 
-> Check the CPU ID against nr_cpu_ids and cpu_possible() instead. This
-> rejects CPU IDs outside the valid range and CPUs absent from the
-> possible mask, while allowing valid sparse CPU IDs.
-> 
-> Fixes: 2b421662c788 ("bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags")
+The ci bot got the point about the missing Fixes:
+
+Fixes: c6936161fd55 ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags
+support for percpu_hash and lru_percpu_hash maps")
+Fixes: 47c79f05aa0d ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags
+support for percpu_cgroup_storage maps")
+
+> Reported-by: sashiko-bot@kernel.org
+
+This Reported-by is unnecessary, because Sashiko would review most LKML
+patches.
+
 > Signed-off-by: Hui Su <sh_def@163.com>
-> ---
->  include/linux/bpf.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 7719f6528445..282f7022d984 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -4202,7 +4202,8 @@ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 all
->  			return -EINVAL;
->  
->  		cpu = flags >> 32;
-> -		if ((flags & BPF_F_CPU) && cpu >= num_possible_cpus())
-> +		if ((flags & BPF_F_CPU) &&
-> +		    (cpu >= nr_cpu_ids || !cpu_possible(cpu)))
-
-NIT: no need to put the cpu check on a new line, as 100 chars per line
-are allowed.
-
-Other than the NIT,
 
 Acked-by: Leon Hwang <leon.hwang@linux.dev>
 
->  			return -ERANGE;
->  	}
->  
+Thanks,
+Leon
 
+> ---
