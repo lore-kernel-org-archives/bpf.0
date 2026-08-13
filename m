@@ -1,440 +1,228 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B196A328B7B;
-	Thu, 13 Aug 2026 01:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786584324; cv=none; b=NfrwPUfWoQC4tlcxTBpl47kPYXIFApnZnt3k0J+mjcK3seWsEm+C0eCnWYIRpK7LHZnx4OJm62jNdPKkcGZ11tpViPOvzkVcF98EbQaQA+W9rgj29byD1LErCGVLDo1wBp5uZ6QwjXRK35rdYmNkXfzO3DV5vPQk9YcX7aclHgQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786584324; c=relaxed/simple;
-	bh=V8QjiYyjZJSJPtDMTJIF3lAgXLrjnyq0YJac8qpTtP0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=iFNv5Zst+iJsM830rVOTTBNvF7Di4M2ZW/HW6Fc7/SNTpf3sN9ixTmODcOg9Hy01ygKJ7QpFKFYcMwTzF4p2GD14vExVnL6sX3ipjOs3xU+SgHzpl8QBqrxrhCyION6dHK+w7ZIciN3Muk8mFeKJAxRtWikfxGr6T/H/XSEV3ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZIdPjNQL; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94455179A3
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 01:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786584635; cv=pass; b=l/+z15FGcsSkRAUqjzOOrk/xVcFu5eQpFD7rJjCk4X1S4lw6KDGyIhRas1z80rrv2iOsBtMcblIh+A+Fjmkq5vsquomH+s8Ziz8VjTEYTiHOIgzhTjauiQMcK3q8PaU/XuEwZTmW5j0Lyw0fJPoL4LkWl/8nAwjKa+78qIhrPlY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786584635; c=relaxed/simple;
+	bh=RnSnamcaI+bj5vuqbp+NPmDqVJvFSlWWUEcwkCegY7U=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=EQys4Nu9d6F/IhwPNzPPHxDoLGN/kNOGp+zjF6/NpIe5HuNBIkP9qNFtRlu5QCMChMvvbdHG48jEkYJp2sIThDwJgrZ3as0SJl5TuschcZ/PYirqld2nj/P4jI6d88Jm+eNlJMun03IwAKkydgQ2J6q+IpzFh+vrCpPDkUpRDnY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AD12XrXG; arc=pass smtp.client-ip=74.125.224.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZIdPjNQL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F24B1F000E9;
-	Thu, 13 Aug 2026 01:25:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786584322;
-	bh=zwn+VeHDfLFGdLX/+Sf8Stf93zux/4iZdFx/CRW3xjA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ZIdPjNQLLcpayx/WHsDYiZCfIfb0AWV3xFH7nXLDK9cF4rcNpdfcXJCA08pmy2vm9
-	 oeuH/gKrhdXz6uN5lZu1GKE3Zb5KynH7KEInRFRKkuAp8ldqf3LD3mNrevISAAhC/y
-	 Xxr9RrbmqLLyS4ZxbtBQQGK+HsWM23BEpgPuTakfoZpajBJ3OXNi9V39AY3EBF8eWc
-	 UlONoyp0lB0rGCgCxKkyaJfMh7UKxdbZLrpN+CO8sA+k5B7J6gWzhbgtLKhAFShaI3
-	 VEseK8FPdwYEK9MFnRcLJlodn71N/xsDfGdkLpCKXbIA52COpZ7xSEl/T3uM5qzoSH
-	 7aLies0sv6JLw==
-Content-Type: multipart/mixed; boundary="===============8749948781067238914=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AD12XrXG"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-6626b5ace23so779223d50.0
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 18:30:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786584632; cv=none;
+        d=google.com; s=arc-20260327;
+        b=YNWwTd+eUpSle2wZRJNNmiWaDERzH6M7yZacaaLp4ScF1kkYV6aPmN5tIDMC6ZrCN0
+         KZueaTjdMYfhnYdGeV/1AJ4s0kac5Ynz7EcKsPb5NpLuapgEcQAZUStWqYaFe84GZqo/
+         m2fnJH/tWFKqMgS+U661XDZLTzB/ZcxPf4S+eKRe8+ECkWsvL4ChRPfNSmrT0ovbEAf+
+         JWDfJweTdk/HIobWi5Vrgd1SUKAtXsT9KOo3/fwqG9aIkwTDwrtR41e9pxztceS4MPq7
+         tLhLCxGlDK/yEZaizVKLyGKcqVluYH+3lBLLSLE9BIoXpVfjXnMexlh/yuvtqNZlQOXY
+         aT9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=O3u+n04R7Rl+yYfS9fbTXmhf7vD//meRN13d/ftSIjk=;
+        fh=DpiJV4lj8uuCA8eLc8ufjfXLe7KIFgBH6vu2Lzsc2tU=;
+        b=PTXFmANwYu702f436eIzuwJY8LeTm3uzMCyDpRbdsF1ypWm/ut6nv4PHXruAky75uM
+         GMjz6F9raVR1bVmBT7j/xGsZGK09qgaeaiZY6sCQngAUIWe/fA5l946koHf6DmeCW/ha
+         ElywXCYWzW2UeXi94qQIF77hH1inu5ysvJvXa962yg6PP/8MB+9KExpFEt3h/EbAgYKT
+         BkUJyFa82B3Mir8kQSi779jRSgkRzak2615ePzaHTDSGb63NLk3ZvkxiDSDcrVr3iMBP
+         p+GglC2VGgxj3jMW4Su9wxZEDkAyBDhRez9XOHgcT/Ez8EwaSUref/Yx0Tpuux1ykKrD
+         ChFA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786584632; x=1787189432; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=O3u+n04R7Rl+yYfS9fbTXmhf7vD//meRN13d/ftSIjk=;
+        b=AD12XrXGx1W5CeYeXz6DOZK2aIld6ziLnddYEJLiQCtZqabPPjIOiSC9X98WY1r9jd
+         /0nsCRFgGpAmpo13csTnIaLoX+onS9LQ9KZktp5gwhUeSD1OPOASq4USCknLbKlZSGIu
+         vDLNkrnoUp+AIT6Tj8hVpoi8ZN+Qsa8ejL1yTo2Ixlbp4iuAgEK+LKt9im3r0AfcS/+2
+         phYHoTTgIuz5qzG9TSmS3uttMN47PxwiCTZmjSbA11XuT1qfzVz1F1oUVcKe+rVZ8DGX
+         PxNnNCVRnTsj/xyHajMXbaIoZkazptabWevgZWkv7vAshkMBGTeAiu9WirfVjuerxdWm
+         S+3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786584632; x=1787189432;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=O3u+n04R7Rl+yYfS9fbTXmhf7vD//meRN13d/ftSIjk=;
+        b=pVX876AaCXzkt+DGGpmOiEYQjQcwqWERgzscGavb+0y5lJ/MN1bMuvq1At0Ja2+HAp
+         orbOHk+JV0MAm1m3tMJCX8ABq0v6SO/SiJQCJNeVZ9VxtFXDE/6mc4rFYQoxzPrUXFGc
+         hpfHRKIbdEl4T4w2VvQbvVDTaORi6iEs/0rjAownhkBLPeuT9NZ4HgKyJEeq0rcR7LK4
+         QMp6VosglIqcLk/CHCQp5pncD2AqK5BS/yiAWhqAfxlG3NwRSQN1xvcMJuu40V2g2bQA
+         7M6lFHr0dSKNTb2CFIhLFHT9kAPdPEIkbpe9bHGxbFNt1SbArB03zyvmKA2ugGd6B6Jf
+         LfZw==
+X-Gm-Message-State: AOJu0Yx3RfwzOrgf9HreQV5RHsbM3aQzpF9iLRtoUntpYeQQrZKD/Mus
+	vlE8J//K54RpEgPEu0sAuc5wPW3FA+9jKT96eSZuKd382yYSnU7Wbkz/Zvtt/5tfWV/LjFt0lZz
+	ARqtddxZQyTcR1n6lNC3Du+bsCnhBbqk=
+X-Gm-Gg: AR+sD11YlRTeJhNvIydNBAE0w22TpqWDWGxcXxaPV4FdTLMqLaywWBNwujiU+RRK4on
+	C9F1hOnYYVcgyjGkmAMIbeFALwWBZk5RcC0SjxqV8f8cRIbo/WE3wJ2Z0n9etHK8hwJfplNHVU7
+	DCD4Sga1lNrXCyJxSEBLxIHJJk9NSAyXlJBT7b/6aEUNEStyR+rMbKLdNAlttE0J1bdg0VLnRSS
+	oGFJd3TB+kimFhIRr/rPStXE+DwMQALAyUdCZBL9zo1t4effagvKbF0cKZ4GffF4Oe31391PCKZ
+	nmzsjuJ3yRnMhBeY9jQvr9Gc1pe6Q62gy8/n/Rmhuv4CBqFUP599xgtc7sX+lRp8RxfHh0ycG/k
+	/mA==
+X-Received: by 2002:a05:690e:480d:b0:668:b2a7:a1f1 with SMTP id
+ 956f58d0204a3-66c55567517mr540957d50.22.1786584632246; Wed, 12 Aug 2026
+ 18:30:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b8b60c3d613617b1053002d7cd5f0bbbc2d1a18f195ddd8bfdb239b3770cdf84@mail.kernel.org>
-In-Reply-To: <20260813002618.3755631-6-tweek@google.com>
-References: <20260813002618.3755631-6-tweek@google.com>
-Subject: Re: [PATCH bpf-next 5/5] selftests/bpf: add loader_load_fd tests
-From: bot+bpf-ci@kernel.org
-To: tweek@google.com,paul@paul-moore.com,stephen.smalley.work@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,jeffv@google.com
-Cc: tweek@google.com,omosnace@redhat.com,ericsu@linux.microsoft.com,bboscaccy@linux.microsoft.com,sidnayyar@google.com,nkapron@google.com,ebiggers@google.com,gregkh@linuxfoundation.org,kpsingh@kernel.org,bpf@vger.kernel.org,selinux@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 01:25:21 +0000 (UTC)
+From: Mingpei CAO <caomingpei@gmail.com>
+Date: Thu, 13 Aug 2026 09:30:20 +0800
+X-Gm-Features: AUfX_mx0DrtvWHaGZp0iuXEF0L5CX4DibgAOJDDw99QtYCGnF7Sf6aw8zerga10
+Message-ID: <CABzjXVyUkn+_1QNM6WmMeuNUbAcQEUtL=feABs6wWooRs2--5Q@mail.gmail.com>
+Subject: [BUG] libbpf: OOB access when relocating a terminal LDIMM64
+To: andrii@kernel.org, eddyz87@gmail.com
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---===============8749948781067238914==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello,
 
-> diff --git a/tools/testing/selftests/bpf/loader_setup.sh b/tools/testing/selftests/bpf/loader_setup.sh
-> new file mode 100755
-> index 0000000000000..f86651b0718f6
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/loader_setup.sh
-> @@ -0,0 +1,68 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (c) 2026 Google LLC
-> +#
-> +# loader_setup.sh - Light skeleton data extraction helper for selftests/bpf
-> +#
-> +# This script parses an autogenerated light skeleton header (.lskel.h) produced
-> +# by bpftool ('bpftool gen skeleton -L'). It extracts the embedded loader data
-> +# ('opts_data') and loader BPF instructions ('opts_insn') string literals and
-> +# generates a C header file containing:
-> +#   - loader_test_opts_data[]: Data for the '__loader.map' section.
-> +#   - loader_test_opts_data_sz: Size of opts_data.
-> +#   - loader_test_opts_insn[]: Instructions for the '__loader.prog' section.
-> +#   - loader_test_opts_insn_sz: Size of opts_insn.
+Resending as plain text because the previous message was rejected
+by the bpf mailing list due to an HTML MIME part.
 
-The comment documents loader_test_opts_data[], loader_test_opts_data_sz,
-loader_test_opts_insn[], and loader_test_opts_insn_sz, but the awk body
-below emits test_loader_opts_data, test_loader_opts_data_sz,
-test_loader_opts_insn and test_loader_opts_insn_sz. Could the comment use
-the actual symbol names?
+I found an out-of-bounds access in libbpf's CO-RE relocation handling. A
+malformed BPF ELF object can place the first half of an LDIMM64 instruction
+in the program's final instruction slot and direct a CO-RE relocation to
+it. libbpf validates the relocation's starting instruction index, but does
+not verify that the required second LDIMM64 slot exists before accessing
+insn[1].
 
-[ ... ]
+The affected path is:
+    bpf_object__relocate_core() -> bpf_core_patch_insn()
+This affects both normal relocation and relocation poisoning.
 
-> +/opts_data\[\]/ {
-> +	in_data = 1
-> +	sub(/^.*opts_data\[\][^="]*=\s*"/, "")
-> +	printf "static const char test_loader_opts_data[] __attribute__((__aligned__(8))) = \""
-> +}
+AI assistance was used in preparing this report. I independently reviewed
+the source, traced the affected versions, and reproduced both the
+out-of-bounds read and write with AddressSanitizer. Reproducer files are
+available on request.
 
-Does the awk sub() regex work with mawk or busybox awk? mawk is the
-default awk on Debian and Ubuntu, and Documentation/process/changes.rst
-lists GNU awk as optional. The \s escape (here and again below in the
-opts_insn block) is a GNU awk extension that mawk does not implement.
+Affected versions
+-----------------
 
-In mawk, \s matches a literal 's', so the regex =\s*" cannot match
-bpftool's output = ", and the sub() fails silently. When the prefix is
-not stripped, the emitted line becomes two adjacent string literals
-followed by a bare hex-escape token outside any string:
+The poisoning write is present starting in libbpf v0.2. The normal
+out-of-bounds read is present starting in v0.5, and both remain present
+through v1.7.0 and current master:
+    f7081a6baf3f54949aacb8c2fc11bb30783b83e9
+Commit f81dbd3475c4 removed the previous check for:
+    insn_idx + 1 >= prog->insns_cnt
+which made the normal LDIMM64 relocation path susceptible to the
+out-of-bounds read.
+Thus, the normal read path is affected from v0.5 onward, while the
+poisoning write path predates it.
 
-  static const char test_loader_opts_data[] = "<TAB>static const char opts_data[] = "\
-  \x7f\x45\x4c\x46...";"
+Related public discussion
+-------------------------
 
-That is not valid C. This breaks the entire `make -C
-tools/testing/selftests/bpf` build because Makefile:580 adds
-test_loader_processed.lskel.h to TRUNNER_EXTRA_HDRS for every runner, not
-just the loader_load_fd test.
+I found a related 2021 fix:
+https://lore.kernel.org/bpf/20211025224531.1088894-2-andrii@kernel.org/
+That change corrected the CO-RE relocation index check from '>' to '>=',
+but it validates only the first instruction slot. It does not reject a
+terminal LDIMM64 instruction whose required second slot is missing.
 
-The portable form used across the kernel tree is [[:space:]] - see
-scripts/syscallnr.sh, scripts/syscalltbl.sh, scripts/headers_install.sh,
-and scripts/tags.sh. Code that genuinely needs GNU awk calls gawk
-explicitly.
+I therefore do not believe this issue is a duplicate.
 
-> +/opts_insn\[\]/ {
-> +	in_insn = 1
-> +	sub(/^.*opts_insn\[\][^="]*=\s*"/, "")
-> +	printf "static const char test_loader_opts_insn[] __attribute__((__aligned__(8))) = \""
-> +}
+Trigger conditions
+------------------
 
-Same \s issue here.
+A malformed BPF ELF object must contain a program whose final eight-byte
+instruction slot starts an LDIMM64 instruction but has no second slot. A
+.BTF.ext CO-RE relocation must target that instruction.
+The invalid access occurs during user-space relocation, before the
+malformed program reaches the kernel.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/loader_load_fd.c b/tools/testing/selftests/bpf/prog_tests/loader_load_fd.c
-> new file mode 100644
-> index 0000000000000..ab971662dd047
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/loader_load_fd.c
+Root cause
+----------
 
-[ ... ]
+bpf_object__init_prog() allocates exactly the size of the instruction
+section at src/libbpf.c:892.
 
-> +static int create_loader_elf(const void *insns, size_t insns_sz,
-> +			     const void *map_data, size_t map_data_sz,
-> +			     const char *license, size_t license_sz,
-> +			     bool omit_prog, bool omit_map, bool omit_license)
-> +{
+bpf_object__relocate_core() validates only:
+    if (insn_idx >= prog->insns_cnt)
+        return -EINVAL;
+It then passes:
+    &prog->insns[insn_idx]
+to bpf_core_patch_insn().
 
-[ ... ]
+For LDIMM64, the normal relocation path reads insn[1] at
+src/relo_core.c:1136 and may write insn[1].imm at line 1153.
 
-> +	ehdr->e_ident[EI_MAG0] = ELFMAG0;
-> +	ehdr->e_ident[EI_MAG1] = ELFMAG1;
-> +	ehdr->e_ident[EI_MAG2] = ELFMAG2;
-> +	ehdr->e_ident[EI_MAG3] = ELFMAG3;
-> +	ehdr->e_ident[EI_CLASS] = ELFCLASS64;
-> +	ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
-> +	ehdr->e_ident[EI_VERSION] = EV_CURRENT;
-> +	ehdr->e_machine = EM_BPF;
-> +	ehdr->e_type = ET_REL;
+The poisoning path passes insn + 1 to bpf_core_poison_insn() at
+src/relo_core.c:1056, which writes through that pointer at line 991.
 
-Does hardcoding ELFDATA2LSB work on big-endian hosts?
+Neither path verifies that:
+    insn_idx + 1 < prog->insns_cnt
 
-libelf converts the in-memory structures to the encoding named in
-e_ident[EI_DATA] when elf_update() writes the file. With EI_DATA forced
-to ELFDATA2LSB, a big-endian host emits byte-swapped headers.
+Observed results
+----------------
 
-The kernel side parses those headers with native loads and never inspects
-e_ident[EI_DATA]:
+Using GCC 13 and ASan on current libbpf in an Ubuntu 24.04 ARM64
+container, with an exact 64-byte instruction allocation, the normal
+relocation input produced:
 
-  static int bpf_elf_validity_ehdr(const struct elf_info *info)
-  {
-          ...
-          if (info->hdr->e_type != ET_REL) {
-                  pr_err("Invalid ELF header type: %u != %u\n", ...);
-                  return -ENOEXEC;
-          }
+    ERROR: AddressSanitizer: heap-buffer-overflow
+    READ of size 4
+        #0 bpf_core_patch_insn src/relo_core.c:1136
+        #1 bpf_object__relocate_core src/libbpf.c:6178
+    0 bytes after 64-byte region
+    allocated by bpf_object__init_prog src/libbpf.c:892
 
-On s390x, ET_REL (1) stored little-endian reads back as 0x0100 == 256, so
-loader_load_fd() returns -ENOEXEC. The missing_prog_sec and
-missing_map_sec subtests assert EINVAL (not ENOEXEC), so they would fail
-against a correct kernel on big-endian hardware.
+The relocation-poisoning input produced:
 
-The section payloads are handed to elf_newdata() as ELF_T_BYTE and copied
-in host order, while the headers around them get swapped to LSB. Since the
-kernel consumes the file in host byte order, does EI_DATA need to come
-from __BYTE_ORDER__? tools/lib/bpf/linker.c and usdt.c use this pattern:
+    ERROR: AddressSanitizer: heap-buffer-overflow
+    WRITE of size 1
+        #0 bpf_core_poison_insn src/relo_core.c:991
+        #1 bpf_core_patch_insn src/relo_core.c:1056
+        #2 bpf_object__relocate_core src/libbpf.c:6178
+    0 bytes after 64-byte region
+    allocated by bpf_object__init_prog src/libbpf.c:892
 
-  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-          const unsigned char host_byteorder = ELFDATA2LSB;
-  #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-          const unsigned char host_byteorder = ELFDATA2MSB;
-  #else
-  #error "Unknown __BYTE_ORDER__"
-  #endif
+As controls, current cilium/ebpf rejects the normal relocation input with:
+    64bit immediate is missing second half
+while current Aya returns:
+    InvalidInstructionIndex
 
-[ ... ]
+Impact
+------
 
-> +static void test_loader_load_fd_oversized_ctx(void)
-> +{
-> +	struct bpf_insn insns[] = {
-> +		BPF_MOV64_IMM(BPF_REG_0, 0),
-> +		BPF_EXIT_INSN(),
-> +	};
-> +	char map_data[] = "data";
-> +	char license[] = "GPL";
-> +	struct bpf_loader_ctx ctx = {};
-> +	int elf_fd, err;
-> +
-> +	elf_fd = create_loader_elf(insns, sizeof(insns),
-> +				   map_data, sizeof(map_data),
-> +				   license, sizeof(license),
-> +				   false, false, false);
-> +
-> +	if (!ASSERT_GE(elf_fd, 0, "create_loader_elf"))
-> +		return;
-> +
-> +	err = sys_bpf_loader_load_fd(elf_fd, &ctx, 65536U);
-> +	ASSERT_EQ(err, -1, "oversized ctx sys_bpf return");
-> +	ASSERT_EQ(errno, EINVAL, "oversized ctx errno");
+The confirmed impact is a heap out-of-bounds read on the normal relocation
+path and a heap out-of-bounds write on the poisoning path.
 
-A subsystem pattern flags this as potentially concerning: the subtest
-asserts EINVAL for ctx_size == 65536, targeting loader_load_fd()'s guard
+ASan aborts on the first invalid access. I have not demonstrated
+exploitation in a production build, memory disclosure, code execution,
+privilege escalation, or kernel compromise.
 
-  if (attr->load_fd.ctx_size > U16_MAX)
-          return -EINVAL;
+Proposed fix
+------------
 
-but EINVAL is also produced further down the same path. With the guard
-removed, the request reaches bpf_prog_test_run_syscall(), which
-independently rejects the same value:
+Reject an LDIMM64 instruction when its second slot lies outside the
+program, for example:
 
-  if (ctx_size_in < prog->aux->max_ctx_offset ||
-      ctx_size_in > U16_MAX)
-          return -EINVAL;
+    if (is_ldimm64_insn(insn) &&
+        insn_idx + 1 >= prog->insns_cnt)
+        return -EINVAL;
 
-errno is EINVAL either way, so the subtest passes whether or not
-loader_load_fd() validates ctx_size. Could the test assert on a value that
-only loader_load_fd() rejects, or check the ordering explicitly (e.g. pass
-an oversized ctx_size together with an invalid loader_fd and confirm
-EINVAL still comes back before any ELF is read)?
+The check should cover both normal relocation and relocation poisoning.
 
-Also: ctx is a 24-byte struct on the stack, and ctx_size is 65536.
-loader_load_fd() copies ctx_size bytes back on success:
+I applied this guard to the assessed commit and reran both ASan
+reproducers. Both completed without sanitizer findings.
 
-  if (copy_to_user((void *) attr->load_fd.ctx, kctx, ctx_sz) != 0)
-          err = -EFAULT;
+A regression test should cover both malformed inputs, together with a
+valid two-slot LDIMM64 control.
 
-The only thing standing between this and a 64 KiB stack overwrite is the
-check the subtest is meant to verify. If that check regresses, the
-subtest's failure mode is stack corruption in test_progs instead of a
-clean assertion failure. Would a 65536-byte heap buffer make the bad-kernel
-case report cleanly?
+I can provide the ELF files, full ASan logs, or help test an upstream
+patch.
 
-> +static void test_loader_load_fd_invalid_elf(void)
-> +{
-> +	char garbage[] = "not_an_elf_file_content";
-> +	struct bpf_loader_ctx ctx = {};
-> +	int fd, err;
-> +
-> +	fd = memfd_create("garbage_file", 0);
-> +	if (!ASSERT_GE(fd, 0, "memfd_create"))
-> +		return;
-> +
-> +	if (!ASSERT_EQ(write(fd, garbage, sizeof(garbage)), sizeof(garbage), "write garbage")) {
-> +		close(fd);
-> +		return;
-> +	}
-> +	lseek(fd, 0, SEEK_SET);
-> +
-> +	err = sys_bpf_loader_load_fd(fd, &ctx, sizeof(ctx));
-> +	ASSERT_EQ(err, -1, "invalid elf sys_bpf return");
-> +	ASSERT_EQ(errno, ENOEXEC, "invalid elf errno");
-
-A subsystem pattern flags this as potentially concerning: the subtest
-writes 24 bytes and asserts ENOEXEC, but that input never reaches the
-magic-number check it appears to target. bpf_elf_validity_ehdr() bails out
-on the length test first:
-
-  if (info->len < sizeof(*(info->hdr))) {
-          pr_err("Invalid ELF header len %lu\n", info->len);
-          return -ENOEXEC;
-  }
-  if (memcmp(info->hdr->e_ident, ELFMAG, SELFMAG) != 0) {
-          pr_err("Invalid ELF header magic: != %s\n", ELFMAG);
-          return -ENOEXEC;
-  }
-
-sizeof(Elf64_Ehdr) is 64, so with 24 bytes the memcmp() is unreachable.
-Would padding the input to at least 64 bytes make the subtest exercise the
-magic check as its name implies?
-
-> +static void test_loader_load_fd_missing_license_sec(void)
-> +{
-> +	struct bpf_insn insns[] = {
-> +		BPF_MOV64_IMM(BPF_REG_0, 0),
-> +		BPF_EXIT_INSN(),
-> +	};
-> +	char map_data[] = "data";
-> +	char license[] = "GPL";
-> +	struct bpf_loader_ctx ctx = {};
-> +	int elf_fd, err;
-> +
-> +	elf_fd = create_loader_elf(insns, sizeof(insns),
-> +				   map_data, sizeof(map_data),
-> +				   license, sizeof(license),
-> +				   false, false, true);
-> +	if (!ASSERT_GE(elf_fd, 0, "create_loader_elf"))
-> +		return;
-> +
-> +	err = sys_bpf_loader_load_fd(elf_fd, &ctx, sizeof(ctx));
-> +	ASSERT_EQ(err, -1, "missing license sec sys_bpf return");
-> +	ASSERT_EQ(errno, EINVAL, "missing license sec errno");
-
-A subsystem pattern flags this as potentially concerning: the subtest
-asserts errno == EINVAL for an ELF that has no license section. EINVAL is
-also what the bpf(2) syscall returns for a command it does not know - in
-__sys_bpf() the switch ends with `default: err = -EINVAL;`. So this
-assertion is satisfied both by a kernel that correctly rejects the
-malformed loader ELF and by a kernel that has never heard of
-BPF_LOADER_LOAD_FD at all.
-
-The same is true of invalid_fd, oversized_ctx, missing_prog_sec, and
-missing_map_sec, so 5 of the 8 subtests pass unchanged on a kernel without
-this patch series. Only invalid_elf (ENOEXEC) and lskel genuinely
-discriminate. Could a feature probe up front (e.g. issue one
-BPF_LOADER_LOAD_FD call that must not fail with EINVAL-for-unknown-command,
-or test__skip() when the well-formed lskel path returns EINVAL) keep
-unknown-command kernels from silently passing?
-
-> +static void test_loader_load_fd_loader_failure(void)
-> +{
-> +	struct bpf_insn insns[] = {
-> +		BPF_MOV64_IMM(BPF_REG_0, -EPERM),
-> +		BPF_EXIT_INSN(),
-> +	};
-> +	char map_data[] = "data";
-> +	char license[] = "GPL";
-> +	struct bpf_loader_ctx ctx = {};
-> +	int elf_fd, err;
-> +
-> +	elf_fd = create_loader_elf(insns, sizeof(insns),
-> +				   map_data, sizeof(map_data),
-> +				   license, sizeof(license),
-> +				   false, false, false);
-> +	if (!ASSERT_GE(elf_fd, 0, "create_loader_elf"))
-> +		return;
-> +
-> +	err = sys_bpf_loader_load_fd(elf_fd, &ctx, sizeof(ctx));
-> +	ASSERT_EQ(err, -1, "loader failure sys_bpf return");
-> +	ASSERT_EQ(errno, EPERM, "loader failure errno");
-
-A subsystem pattern flags this as potentially concerning: the subtest
-builds a loader program that returns -EPERM and asserts errno == EPERM to
-prove that loader_load_fd() propagates the loader program's return value.
-But EPERM is also the first thing loader_load_fd() can return:
-
-  if (!capable(CAP_BPF))
-          return -EPERM;
-
-That fires before the fd is even resolved. So the assertion is equally
-satisfied by a kernel that never ran the loader program at all. Would using
-a distinctive errno for the loader's return value (e.g. -E2BIG or
--EBADMSG, something loader_load_fd() itself never produces) make the check
-discriminating?
-
-[ ... ]
-
-> +struct test_loader_lskel {
-> +	struct bpf_loader_ctx ctx;
-> +	struct {
-> +		struct bpf_map_desc test_map;
-> +	} maps;
-> +	struct {
-> +		struct bpf_prog_desc probe;
-> +	} progs;
-> +	struct {
-> +		int probe_fd;
-> +	} links;
-> +};
-> +
-> +static void test_loader_load_fd_lskel(void)
-> +{
-> +	struct test_loader_lskel skel = {};
-> +	int elf_fd, err;
-> +
-> +	skel.ctx.sz = (char *)&skel.links - (char *)&skel;
-> +
-> +	/* Build fake ELF using extracted opts_insn (__loader.prog) and opts_data (__loader.map) */
-> +	elf_fd = create_loader_elf(test_loader_opts_insn, test_loader_opts_insn_sz,
-> +				   test_loader_opts_data, test_loader_opts_data_sz,
-> +				   "GPL", sizeof("GPL"),
-> +				   false, false, false);
-> +	if (!ASSERT_GE(elf_fd, 0, "create_loader_elf_lskel"))
-> +		return;
-> +
-> +	err = sys_bpf_loader_load_fd(elf_fd, &skel.ctx, skel.ctx.sz);
-> +	ASSERT_OK(err, "sys_bpf_loader_load_fd lskel");
-
-Does this cover loader context copy-in?
-
-progs/test_loader.c is the only BPF object the lskel subtest exercises,
-and it is deliberately minimal: one ARRAY map with a compile-time
-max_entries and no global variables, so the generated object has no
-.rodata/.data/.bss map.
-
-That makes the subtest blind to the place where the kernel-side
-loader_load_fd() diverges from userspace bpf_load_and_run(): the kernel
-does not copy the caller's loader context in, it allocates a fresh zeroed
-one:
-
-  kctx = kzalloc(ctx_sz, GFP_KERNEL);
-  ...
-  sattr.test.ctx_in = (unsigned long) kctx;
-
-There is no copy_from_user() of attr->load_fd.ctx. The generated loader
-program reads two caller-supplied ctx inputs per map via move_ctx2blob():
-struct bpf_map_desc::max_entries and struct bpf_map_desc::initial_value.
-With a zeroed ctx, initial_value is 0 and the copy is silently skipped, so
-any real light skeleton with global/const data would come up with an
-all-zero .rodata/.data map instead of its initialised contents. Because
-test_loader.c has no such map, the subtest passes either way.
-
-Would adding a global variable to progs/test_loader.c (e.g. const volatile
-__u64 expected = 0x1234; plus a check on it) turn this into a covered case?
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_loader.c b/tools/testing/selftests/bpf/progs/test_loader.c
-> new file mode 100644
-> index 0000000000000..515e15ca042ec
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_loader.c
-> @@ -0,0 +1,21 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__uint(max_entries, 4);
-> +	__type(key, __u32);
-> +	__type(value, __u64);
-> +} test_map SEC(".maps");
-> +
-> +SEC("socket")
-> +int probe(void *ctx)
-> +{
-> +	__u32 key = 0;
-> +	__u64 *val = bpf_map_lookup_elem(&test_map, &key);
-> +
-> +	return val ? (int)*val : 0;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31655295294
---===============8749948781067238914==--
+Regards,
+Mingpei
