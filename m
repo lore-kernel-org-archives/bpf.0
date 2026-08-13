@@ -1,192 +1,245 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D5C3B6BE3
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 22:41:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8691B36A03F
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 22:41:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786660887; cv=none; b=gm+n+gPapYSWtxMvlpDnlhwd8eC2fiOk82F6GjjwuqF9EFznnlmktkY3ON1rE1XAMtEvOqE4A5XWsvzilmlPRRhmM1acxxqIFGoUsfVn8Fl7crNqCcl/pTvrkbHnLb1sjkqW/YMwaUH3hzuqhZO3rkSFYKucOUYBVoQyaRmKcsU=
+	t=1786660906; cv=none; b=mqR8v/0afs4ll36409SVRJBh1ZSNVXf1DiBupe95qBvtl/bLRMwm+YRpYCt9IJpnmlE9B2LTB5uG6Dmq73Mx9IC8Xd/haRUjAbqLefnkSoZ1JWN1Xv89MYsFWhLz+7yCkdy9C+cFt+cJHS5Qj8wuo+h6QaNu/KZUuElYTKeRo60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786660887; c=relaxed/simple;
-	bh=R2eBjJd7XGE4LSwt6ozZWk2pu8uqmNJJje5iQLPkgT4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HfkGQf9df5d42pEWWwLF6k4hozAQLkH3Ng0jH3+4BT0eoDwF9D1v5KJQuF6FQ6AP1Tcc/hpfXaZ2EyDqVCTltG3RfEiuRyj9NS5/s27GC6vgDYSRtHJrLl+/Uc1m9bCVvBGbhfPfMRRdgw2JokNU7uu402WoyosfTdKSl+0hZ9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PQXwO/sU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786660906; c=relaxed/simple;
+	bh=tFtwmtN7Fzb4AN0l+iSwfeMFlRd7ZMEYSx6kJ7/aYuQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=PGiXy9rEWKCgalFiy8yQRZ/8ezqXc6VsdQLextnSv2710Y3UbT66Y127lXMgy68dYRcuGcAuc/RWov0xrnUDm9SWE1R24WzFWl8cT8lp4siP8IRPfIlLS7aw8snN4cgupKxqdxeNpxTruhd+bb/Hrs4o0FgPyFY++knuBVN+goU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJOKXJIG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PQXwO/sU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FBF71F000E9;
-	Thu, 13 Aug 2026 22:41:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJOKXJIG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BC51F000E9;
+	Thu, 13 Aug 2026 22:41:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786660885;
-	bh=kygdAYZiEQicm9Zt5ImGwMMq7ARBGLelpb9fl4oeufo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=PQXwO/sU7Re6waR6TTd91hctHQV2SnKbPM2QPLV7SPSiLFsOTVsdDgG9QXlsT9Psx
-	 a3lWWwQYwvenBiZYNTaE+x2rP1N+qIEEhwyj1UlEUKmCyDoEylf0r6y0iBcygqIhmX
-	 Vxhr0sm7mga+ntAzAcy1vs5K/Q+UiUCRP8jLv+fJC2dYj3fFprtHuTPhIh15f8oisy
-	 I62gSQymqhWxeb5aZz++r+2x5DehySclqy+Ttm5P2NaJVQaTaevyv7f1MZhRKa4Pad
-	 kHcwkbhTJV8ieFRnP2yjZt+4YsPB8oZnnpaTgNqobB1JUnXy5J3ktelv+PkSTJQJCN
-	 9GgcubPUEhgRw==
-Content-Type: multipart/mixed; boundary="===============3707216507657304471=="
+	s=k20260515; t=1786660905;
+	bh=KWjNmgiJhk29RAO4vQbvjt8CszZPrl3kCZKY7HhjpzI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=TJOKXJIGfR2SnD3cjf8OFHcFk2kh/ZYbysN0FibwZ5pMB/i3U4t4BTRzJy3FhcuYH
+	 5OCM3cx6q5pLKUDOSAmOdjsPYfvR3XE2wUlnCtqQdJr8nwpR+hNcUpDrDXE/0QI6iv
+	 KDiULeq6z3R0iDhhapHKAbzbCVg8H9N3o3ldaDKMHA+zTPzRqNYh9WjHpU1vBoRyfr
+	 +KCnHYnUb3lh4BuvSj/Nuxc7ov2ip20OqaGIeYmuqZqs6stU7CsFM/cjPhamEBiSQJ
+	 G9hHbFVdf/RWqohYoV7KzmUgsRlGp/O5GKq7G6822G8NoeM/3rtYEQCAarX1K8N23O
+	 QdI9I6kJ78clw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv7 12/13] tools/kexec: Introduce a bpf-prog to handle UKI
+ image
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pingfan Liu" <piliu@redhat.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260322014402.8815-13-piliu@redhat.com>
+References: <20260322014402.8815-13-piliu@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 13 Aug 2026 22:41:33 +0000
+Message-Id: <20260813224145.42BC51F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <ebb663cb6d9f7ca359febac62c335a7ca04ab8dd4bde7592b7968c9f5723e1b4@mail.kernel.org>
-In-Reply-To: <20260813213701.3116369-1-andrii@kernel.org>
-References: <20260813213701.3116369-1-andrii@kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Retry stat generation in cgroup_iter_memcg
-From: bot+bpf-ci@kernel.org
-To: andrii@kernel.org,bpf@vger.kernel.org
-Cc: andrii@kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 22:41:25 +0000 (UTC)
 
---===============3707216507657304471==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 6 potential issue(=
+s) to consider:
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> index b7c18d590b993..37e2cf249be8a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> @@ -10,6 +10,17 @@
->  #include "cgroup_iter_memcg.h"
->  #include "cgroup_iter_memcg.skel.h"
->
-> +/*
-> + * memcg stats are cached per-cpu and only become visible once the periodic
-> + * flusher runs (FLUSH_TIME, 2s), or once pending updates cross
-> + * MEMCG_CHARGE_BATCH * num_online_cpus(). That threshold grows with the CPU
-> + * count, so on a large machine a single pass does not reach it and
-> + * bpf_mem_cgroup_flush_stats() returns without flushing anything. Retry for
-> + * long enough to cover a flusher cycle.
-> + */
-> +#define MEMCG_STAT_RETRIES		16
-> +#define MEMCG_STAT_RETRY_DELAY_US	(250 * 1000)
-> +
->  static int read_stats(struct bpf_link *link)
->  {
->  	int fd, ret = 0;
-> @@ -35,11 +46,13 @@ static int read_stats(struct bpf_link *link)
->
->  static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
->  {
-> +	int retries = 0;
->  	void *map;
->  	size_t len;
->
->  	len = sysconf(_SC_PAGESIZE) * 1024;
->
-> +retry:
->  	/*
->  	 * Increase memcg anon usage by mapping and writing
->  	 * to a new anon region.
-> @@ -53,6 +66,12 @@ static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
->  	if (!ASSERT_OK(read_stats(link), "read stats"))
->  		goto cleanup;
->
-> +	if (!memcg_query->nr_anon_mapped && ++retries < MEMCG_STAT_RETRIES) {
-> +		munmap(map, len);
-> +		usleep(MEMCG_STAT_RETRY_DELAY_US);
-> +		goto retry;
-> +	}
-> +
+New issues:
+- [High] Integer overflow in PE section bounds checks allows out-of-bounds =
+kernel memory reads.
+- [High] BPF Verifier rejection and runtime failure due to out-of-bounds st=
+ack read in section name comparison.
+- [High] MAX_RECORD_SIZE rigidly restricts UKI size, erroneously rejecting =
+almost all valid real-world UKI binaries.
+- [Medium] Missing error handling for bpf_probe_read_kernel allows silent p=
+ropagation of empty payloads.
+- [Medium] PE parsing uses native endianness, breaking kexec UKI support on=
+ Big Endian architectures.
 
-Does unmapping before the sleep undermine the retry mechanism for gauge
-counters?
+Pre-existing issues:
+- [High] The bpf_buffer_parser kfunc lacks the required __sz annotation, ca=
+using verifier rejection.
+--
 
-Looking at NR_ANON_MAPPED behavior: page_remove_rmap() posts -1024 when
-munmap() runs, cancelling the +1024 from the memset. Any flush that lands
-during the 250 ms sleep sees 0 mapped pages. The region is only mapped for
-the brief mmap+memset+read_stats window but unmapped for the full sleep.
+--- Patch [12]: [PATCHv7 12/13] tools/kexec: Introduce a bpf-prog to handle=
+ UKI image ---
+commit 0509f42d83cdb5ef64ae7388052bbc638cf2e7d6
+Author: Pingfan Liu <piliu@redhat.com>
 
-The commit message says "sleeping in between, so that a flusher cycle is
-always covered." But if the 2s periodic flusher fires while the region is
-unmapped, won't mem_cgroup_stat_aggregate() fold the net zero into
-memcg->vmstats->state and reset stats_updates to 0?
+tools/kexec: Introduce a bpf-prog to handle UKI image
 
-That would leave only the threshold path (stats_updates >
-MEMCG_CHARGE_BATCH * num_online_cpus()), which relies on memcg_rstat_updated()
-accumulating abs(val). Each pass contributes ~2048 (1024 for faults + 1024
-for unmap), bounded by the 2s flush interval: ~8 passes = ~16k, versus a
-threshold of 64 * num_online_cpus(). Could this still read 0 at 256+ CPUs?
+This commit adds a BPF program to parse Unified Kernel Image (UKI) PE files
+for kexec. It extracts the .linux, .initrd, and .cmdline sections from the =
+PE
+file and passes them as commands to the kexec parser pipeline.
 
-Would keeping the mapping alive across the sleep and unmapping once at
-cleanup ensure the periodic flusher sees +1024 instead?
+> diff --git a/tools/kexec/uki_parser_bpf.c b/tools/kexec/uki_parser_bpf.c
+> new file mode 100644
+> index 0000000000000..1eb542d8acd4c
+> --- /dev/null
+> +++ b/tools/kexec/uki_parser_bpf.c
+> @@ -0,0 +1,235 @@
+[ ... ]
+> +/* ringbuf 2,3,4 are useless */
+> +#define MIN_BUF_SIZE 1
+> +#define MAX_RECORD_SIZE (IMAGE_SIZE + 40960)
 
+[Severity: High]
+Does this 40KB margin over IMAGE_SIZE reject valid UKI images that contain
+standard initramfs payloads?
 
->  	ASSERT_GT(memcg_query->nr_anon_mapped, 0, "final anon mapped val");
->
->  cleanup:
-> @@ -61,6 +80,7 @@ static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
->
->  static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
->  {
-> +	int retries = 0;
->  	void *map;
->  	size_t len;
->  	char *path;
-> @@ -76,6 +96,7 @@ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
->  	fd = open(path, O_CREAT | O_RDWR, 0644);
->  	if (!ASSERT_OK_FD(fd, "open fd"))
->  		return;
-> +retry:
->  	if (!ASSERT_OK(ftruncate(fd, len), "ftruncate"))
->  		goto cleanup_fd;
->
-> @@ -88,6 +109,13 @@ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
->  	if (!ASSERT_OK(read_stats(link), "read stats"))
->  		goto cleanup_map;
->
-> +	if (!memcg_query->nr_file_pages && !memcg_query->nr_file_mapped &&
-> +	    ++retries < MEMCG_STAT_RETRIES) {
-> +		munmap(map, len);
-> +		usleep(MEMCG_STAT_RETRY_DELAY_US);
-> +		goto retry;
-> +	}
-> +
-
-Does this retry condition allow early exit when only one counter is flushed?
-
-The loop retries while BOTH nr_file_pages AND nr_file_mapped are zero, but
-the assertions below expect BOTH to be non-zero. The two counters have
-different lifetimes:
-
-When munmap() runs, NR_FILE_MAPPED drops back to 0 (rmap gauge) but the
-pages stay in the page cache so NR_FILE_PAGES keeps its +1024.
-
-If the 2s periodic flusher fires during the 250 ms sleep between passes:
-
-  mem_cgroup_stat_aggregate() folds the net per-cpu deltas
-  -> memcg->vmstats->state: NR_FILE_PAGES = 1024, NR_FILE_MAPPED = 0
-  -> stats_updates reset to 0
-
-Then pass 2 does ftruncate at the same length (no-op), mmap+memset of
-already-cached pages -> only NR_FILE_MAPPED +1024 pending, still below the
-8192 threshold at 128 CPUs.
-
-So memcg_page_state() returns nr_file_pages = 1024 (non-zero) and
-nr_file_mapped = 0. The predicate `!nr_file_pages && !nr_file_mapped` is
-false, loop exits, and ASSERT_GT(memcg_query->nr_file_mapped, 0) fails.
-
-Since the unmapped window is 250 ms while the mapped window is just
-mmap+memset+read_stats, won't the flusher land in the unmapped state with
-high probability? Should this use || instead of && to retry while either
-counter is zero?
-
-
->  	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
->  	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
->
+If a typical initramfs is 10MB to 50MB, will checking the file size or sect=
+ion
+size against MAX_RECORD_SIZE prevent almost all real-world UKI files from
+loading?
 
 [ ... ]
+> +static int fill_cmd(char *buf, __u32 cmd_word, __u32 pipeline_flag,
+> +			const char *src, __u32 data_len)
+> +{
+[ ... ]
+> +	if (!src || !data_len)
+> +		return sizeof(*hdr);
+> +	if (data_len > MAX_RECORD_SIZE - sizeof(struct cmd_hdr))
+> +		return -EINVAL;
+> +	bpf_probe_read_kernel(payload, data_len, src);
 
+[Severity: Medium]
+What happens if bpf_probe_read_kernel fails due to an unmapped page?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Since the return value is ignored, will it silently pass a zero-filled buff=
+er
+as a successful payload instead of failing explicitly?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31747930892
---===============3707216507657304471==--
+> +
+> +	return sizeof(*hdr) + data_len;
+> +}
+> +
+> +static int process_uki_pe(const char *pe_buf, __u32 pe_sz, char *scratch,
+> +			  struct bpf_parser_context *bpf_ctx)
+> +{
+> +	__u32 pe_offset, pe_sig, section_table_off;
+> +	__u16 dos_magic, num_sections, opt_hdr_sz;
+> +	__u16 pipeline_flag =3D 0;
+> +	int i, ret;
+> +
+> +	if (pe_sz < 64)
+> +		return -EINVAL;
+> +	if (pe_sz > MAX_RECORD_SIZE)
+> +		return -EINVAL;
+
+[Severity: High]
+This check uses the same MAX_RECORD_SIZE that may reject valid UKI images
+containing typical initramfs sizes.
+
+> +
+> +	if (bpf_probe_read_kernel(&dos_magic, sizeof(dos_magic), pe_buf) < 0)
+> +		return -EIO;
+> +	if (dos_magic !=3D 0x5A4D)
+
+[Severity: Medium]
+Will this endian-specific comparison fail on Big Endian machines?
+
+Since the PE format is strictly Little Endian, should this use an endianness
+conversion helper to avoid rejecting valid PE files on Big Endian
+architectures?
+
+> +		return -EINVAL;
+> +
+> +	if (bpf_probe_read_kernel(&pe_offset, sizeof(pe_offset),
+> +				  pe_buf + 0x3c) < 0)
+> +		return -EIO;
+> +	if (pe_offset + 24 > pe_sz)
+
+[Severity: High]
+Is it possible for pe_offset + 24 to overflow 32-bit math?
+
+If a maliciously crafted UKI provides a very large pe_offset, could the
+addition wrap around and bypass the pe_sz boundary check, allowing
+out-of-bounds kernel memory reads?
+
+> +		return -EINVAL;
+> +
+> +	if (bpf_probe_read_kernel(&pe_sig, sizeof(pe_sig),
+> +				  pe_buf + pe_offset) < 0)
+> +		return -EIO;
+[ ... ]
+> +		pipeline_flag =3D 0;
+> +		if (__builtin_memcmp(sec_name, linux_sect_name, sizeof(linux_sect_name=
+)) =3D=3D 0) {
+> +			subcmd =3D KEXEC_BPF_SUBCMD_KERNEL;
+> +			/*
+> +			 * .linux section may contain different format kernel, which should be
+> +			 * passed to the next stage to handle
+> +			 */
+> +			pipeline_flag =3D KEXEC_BPF_PIPELINE_FILL;
+> +		}
+> +		else if (__builtin_memcmp(sec_name, initrd_sect_name, sizeof(initrd_se=
+ct_name)) =3D=3D 0)
+> +			subcmd =3D KEXEC_BPF_SUBCMD_INITRD;
+> +		else if (__builtin_memcmp(sec_name, cmdline_sect_name, sizeof(cmdline_=
+sect_name)) =3D=3D 0)
+
+[Severity: High]
+Does this force a 9-byte read from the 8-byte sec_name array?
+
+Since cmdline_sect_name is a null-terminated string, its sizeof is 9 bytes.
+However, sec_name is allocated as an 8-byte array on the stack. Will this
+cause the BPF verifier to reject the program due to an out-of-bounds stack
+read?
+
+Also, the .cmdline section name in a valid PE file is exactly 8 bytes and
+lacks a null terminator, so would this comparison always fail at runtime?
+
+> +			subcmd =3D KEXEC_BPF_SUBCMD_CMDLINE;
+> +		else
+> +			continue;
+> +
+> +		if (bpf_probe_read_kernel(&raw_size, sizeof(raw_size),
+> +					  pe_buf + shdr_off + 16) < 0)
+> +			continue;
+> +		if (bpf_probe_read_kernel(&raw_off, sizeof(raw_off),
+> +					  pe_buf + shdr_off + 20) < 0)
+> +			continue;
+> +
+> +		if (!raw_size || raw_off + raw_size > pe_sz)
+
+[Severity: High]
+Is it possible for raw_off + raw_size to overflow 32-bit math?
+
+Similar to pe_offset above, if raw_off is huge and raw_size is small,
+could it wrap around, bypass the > pe_sz check, and result in an arbitrary
+out-of-bounds kernel memory read in fill_cmd?
+
+> +			continue;
+> +
+> +		ret =3D fill_cmd(scratch,
+> +				MAKE_CMD(KEXEC_BPF_CMD_COPY, subcmd),
+> +				pipeline_flag,
+> +				pe_buf + raw_off,
+> +				raw_size);
+> +		ret =3D bpf_buffer_parser(scratch, ret, bpf_ctx);
+
+[Severity: High]
+This is a pre-existing issue, but does the bpf_buffer_parser kfunc need its
+size argument renamed to buf__sz to satisfy the BPF verifier?
+
+The bpf_buffer_parser kfunc is defined with the argument name buf_sz.
+The verifier strictly requires memory buffer size arguments to end in __sz.
+Because it is named buf_sz, will the verifier fail to grant KF_ARG_PTR_TO_M=
+EM
+semantics and reject the ringbuf memory passed here?
+
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260322014402.8815=
+-1-piliu@redhat.com?part=3D12
