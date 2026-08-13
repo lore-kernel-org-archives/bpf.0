@@ -1,57 +1,57 @@
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1669B2EEE6C
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 00:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5272DF144
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 00:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786580809; cv=none; b=qVHX3D1UQhbjSucA0krlDaMF0AiqkSmxcUoEwvislInGHbWUm8tXx44AIIM1mo7lnug7IvbDaMO90W34/MUGXAaX5I9QNjB/upPrFKMepm2AKRB0/PB1u7Kg/l6u3LaX6tDRDBD3NZ++oq3AzTCCszvqoQoR7kanETJNJN1PtE4=
+	t=1786580812; cv=none; b=s7ccEPOt9J1i964FXntMYa/5KIguKWWywINtI1HnlsgYmwJra9hN5KUp8n/OGHcrJhrtlXA6CO388VfCKjAZxYjZRLX9xOIslB6sDK6R1sRXkp1EOvocoWcbo9/LS2fzpwowsXZARXpzdpyUyIhBgtGrrruxvF8yKAAkoIuA+5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786580809; c=relaxed/simple;
-	bh=5se711kePA411xaoz5RodsO+PLdGel9RlS6q8G/sC4I=;
+	s=arc-20240116; t=1786580812; c=relaxed/simple;
+	bh=veTqDKWVWhuIMMVDuiWZUa0YQ97OCY9TCpyTNIzkWzs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bFkuQFW6m8fBH6Fvt82mpeQNoLph/w0aU1rAuVoAe9q1I22KEL8JgmBlchOx3VBmUbccJTqcRiAE9ktapC4Lcb/83BfJz3COEmWFW/ZdhDbmNcnObKAdvSizk5OKnCkPmPF1gw0vWOgTgNbGpZkgYj2j3h3PeQ4UgyBytDwKx5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PLPeZ39k; arc=none smtp.client-ip=209.85.210.197
+	 To:Cc:Content-Type; b=VPxd2A/rtQ0lzey4zpHElzvjXQaERlRqDdw6AwsXd02xL/l+QMyyYBLBEXJdCpyQ/Tq2LG2ExtF/ad8Q1Dj/br3Ix7NwOnPz29t9+Cxs9c8HYDLCjzI1xR+8anjzjrmajSxOoQoHOvKVRCa3cAq276FJHq6VZ6d8rm5jMehjnhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BpGa6Uw+; arc=none smtp.client-ip=209.85.215.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PLPeZ39k"
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-84f7002f9afso1561901b3a.3
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 17:26:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BpGa6Uw+"
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-ca8aee88725so2185828a12.3
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 17:26:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786580807; x=1787185607; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1786580811; x=1787185611; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:from:subject
          :message-id:references:mime-version:in-reply-to:date:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Qkjz+h+zNCGoWltKJetL2Y2JT1Z7HAkSp1FmTaM3CtU=;
-        b=PLPeZ39kIdPQ9wekhs0NzjRWi0g5wU9Prl+htO8xBcFkU3JCSA1SE+liU26MJMGsE5
-         ByhTiXnyRWgD59RcAct4IrEAjcZoPU7NR2PqLOLU8tlCk4OOIG/1EBit6OoqTy1GFSFm
-         H2OcpN+BH4NmrPKnvdV88+SKddhxHQkku6jYjGkny99+NX2knla7Q0mmxyARdUr6oBM6
-         E7jWGqVo7QBmfMo3FBp+I8LOM8XjJG3eIN8tFwTNCc1CD95G1GYCIEbsxN0gzpF3kS20
-         9ippzqsPZ2zOFqmAs8+5bVijVypsJbv8Vhx7af4d049+yxa3orpHGPpG0zuUakufFLSD
-         CHng==
+        bh=MCduZZ2cuHkGfG92sUop8F3LbOgQDBWvf7V8w/75FyY=;
+        b=BpGa6Uw+JcqlAX/GhW4ZSNPN+9v2CEFpjqNXk0pGEXz6J+uuTcwqCHg9/ElHQpJi3c
+         GDG0+IVoRU4qrKKjrdWPaS3Wr36fe0kQVL3ULLZ3B4yfDVy1I2ZZonLpi61GfG4HmzcW
+         kDSf0+91GW1oa3JydlwgbtsqPPqjhZT+gQwf0aBFyFq1Z7+23zziJ49UN0+8+wB0C/t8
+         RZ/Cjr/lPP5IYsWAjpZEKu5t09Y2xlNU0Y3MHJ2W0X1c1RUOXx8oJobQL6nshOX+c65w
+         xnFHAfGZNi9iUw1iLx6MhEJAm5BZALdEIiVU45+yf5vq6onxhjjKbATpT4UMXxgrT9wX
+         G45g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786580807; x=1787185607;
+        d=1e100.net; s=20251104; t=1786580811; x=1787185611;
         h=content-transfer-encoding:content-type:cc:to:from:subject
          :message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Qkjz+h+zNCGoWltKJetL2Y2JT1Z7HAkSp1FmTaM3CtU=;
-        b=EFHQpmBHgT88ptCg1RaayJQbyigfQWExLlXJeuatb0JdErQQXmCn0Vj3DcIvAo37L4
-         DixsgNqR5aa7YJ1sYFjqyVR1dxiaue7TT3v8z1Brgg80j1aiXxQCTpmGl3AyB1SDLuKS
-         WbwW8dbwSW9Wugd8a/pG2CY+0ZdZh1Uqz0J92UVxSN/yYbtjjdIUx1ecjRQp5MMH0c6I
-         dkNQISpltKqYWTzR73KjpRMXr0D5HZH/mXeEfS6zR8zvjUUExzlBt1V72yEir16u+cZk
-         VXODLU3TEW2e1lw8cX9piGDKSblsBa0fo2yo/zkFGTH1AdHzlG4u2g97i3qsPJFpE719
-         CKkw==
-X-Forwarded-Encrypted: i=1; AHgh+RoaauDwJg5QGD4tAdmD7CpHtW8TpPjdbter2CZyNFe3FZPT1mUG9xMe1J5DNWNqAhwlpq0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzmqe63wJ0YgiUoo5lBmt44aIrQZxrlDUHk9N2kfVFhjYvmhX+0
-	k+sXxOXIvzvgxqFcFtKKilGCPXSUudWV7o6PFF0YjYMHYDa1ZgAAiRUI/lf57xuejYiMQ7jCOr+
-	LXA==
-X-Received: from pfx22.prod.google.com ([2002:a05:6a00:a456:b0:84b:50b5:d431])
- (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:44cb:b0:848:4080:afe8
- with SMTP id d2e1a72fcca58-84fc751547fmr1831794b3a.22.1786580807349; Wed, 12
- Aug 2026 17:26:47 -0700 (PDT)
-Date: Thu, 13 Aug 2026 10:26:16 +1000
+        bh=MCduZZ2cuHkGfG92sUop8F3LbOgQDBWvf7V8w/75FyY=;
+        b=BzoMtpneZYdul0CB/5JLLWt7uKp0F90tF4Kq7k2crHzf1xQte0WRcjiT3ecvYQ2ZyB
+         8m7YjDlVQYC3wyeocNCLIIupm3pWmHD0qUYz1Q8xY4qnRGkiEgbSZ3j/tLO54tg2aLfn
+         hAbo6wagMFnZc2Lz5cRKB+Va6ql1mhdTG2SxphhY2Wqn7Unr1+klqHNB+9A5Wkhim3HC
+         meVbkBzluel9iAQThg96GIw9VTXzM6eWawrdlPP0/6EETaN1lfoTiwMuzi7crXv+7Plf
+         7o8EovVsuPxes7ngp7vrgWc/BZB6b/HGlVUpH6JcEpB8290/y1u4DKVzMVu6e+a8UZuu
+         3i0Q==
+X-Forwarded-Encrypted: i=1; AHgh+RpmFpDoyVnfn81IqYokGYmj6b028lCQ1P3lGYW4wl/wkhz/0ZBquSxN1eTGFRs59PkDpPE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygY8jO3MDF+4+/ltSNCx768zQ9iZUXn3KBldequeNKxLRG0siI
+	Q4O5a1o13lZLNTN6ZjgPs/X/woEm0AIoEPVdSnQdfk7Fx+wdfj+nDiGt+UH/pWFiLwQx4wIxV+Q
+	hHg==
+X-Received: from dyw11.prod.google.com ([2002:a05:7300:880b:b0:313:afba:b76])
+ (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:9211:b0:3c4:397a:69b8
+ with SMTP id adf61e73a8af0-3cc5539bfb4mr3469072637.21.1786580810724; Wed, 12
+ Aug 2026 17:26:50 -0700 (PDT)
+Date: Thu, 13 Aug 2026 10:26:17 +1000
 In-Reply-To: <20260813002618.3755631-1-tweek@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -61,8 +61,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260813002618.3755631-1-tweek@google.com>
 X-Mailer: git-send-email 2.55.0.691.gc56d675ccc-goog
-Message-ID: <20260813002618.3755631-4-tweek@google.com>
-Subject: [PATCH bpf-next 3/5] selinux: use kernel sid in security_bpf_*
+Message-ID: <20260813002618.3755631-5-tweek@google.com>
+Subject: [PATCH bpf-next 4/5] selinux: Add BPF_LOADER_LOAD_FD syscall permission
 From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
 To: Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -76,51 +76,46 @@ Cc: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, Ondrej Mosnacek <
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-The security_bpf hooks provides a boolean to indicate if the call is
-coming from within the kernel or not. If true, use the kernel SID
-instead of relying on the current process SID.
-
-For the token-aware functions, the kernel sid is used to decide on the
-access, but the caller remains owner of the object (program or map).
+Add the BPF_LOADER_LOAD_FD permission to gate the bpf syscall command of
+the same name.
 
 Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
 ---
- security/selinux/hooks.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ security/selinux/hooks.c            | 4 ++++
+ security/selinux/include/classmap.h | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index f197cf476190..e7c5993f6954 100644
+index e7c5993f6954..b4ff5ea5306d 100644
 --- a/security/selinux/hooks.c
 +++ b/security/selinux/hooks.c
-@@ -7181,7 +7181,7 @@ static int selinux_ib_alloc_security(void *ib_sec)
- static int selinux_bpf(int cmd, union bpf_attr *attr,
- 		       unsigned int size, bool kernel)
- {
--	u32 sid =3D current_sid();
-+	u32 sid =3D kernel ? SECINITSID_KERNEL : current_sid();
- 	int ret;
-=20
- 	if (selinux_policycap_bpf_token_perms())
-@@ -7296,7 +7296,7 @@ static int selinux_bpf_map_create(struct bpf_map *map=
-, union bpf_attr *attr,
- 	bpfsec->sid =3D current_sid();
-=20
- 	if (!token)
--		ssid =3D bpfsec->sid;
-+		ssid =3D kernel ? SECINITSID_KERNEL : bpfsec->sid;
- 	else
- 		ssid =3D selinux_bpffs_creator_sid(attr->map_token_fd);
-=20
-@@ -7314,7 +7314,7 @@ static int selinux_bpf_prog_load(struct bpf_prog *pro=
-g, union bpf_attr *attr,
- 	bpfsec->sid =3D current_sid();
-=20
- 	if (!token)
--		ssid =3D bpfsec->sid;
-+		ssid =3D kernel ? SECINITSID_KERNEL : bpfsec->sid;
- 	else
- 		ssid =3D selinux_bpffs_creator_sid(attr->prog_token_fd);
-=20
+@@ -7196,6 +7196,10 @@ static int selinux_bpf(int cmd, union bpf_attr *attr=
+,
+ 		ret =3D avc_has_perm(sid, sid, SECCLASS_BPF, BPF__PROG_LOAD,
+ 				   NULL);
+ 		break;
++	case BPF_LOADER_LOAD_FD:
++		ret =3D avc_has_perm(sid, sid, SECCLASS_BPF, BPF__LOADER_LOAD_FD,
++				   NULL);
++		break;
+ 	default:
+ 		ret =3D 0;
+ 		break;
+diff --git a/security/selinux/include/classmap.h b/security/selinux/include=
+/classmap.h
+index 453522ca87df..4c6cc71b233c 100644
+--- a/security/selinux/include/classmap.h
++++ b/security/selinux/include/classmap.h
+@@ -171,7 +171,7 @@ const struct security_class_mapping secclass_map[] =3D =
+{
+ 	{ "infiniband_endport", { "manage_subnet", NULL } },
+ 	{ "bpf",
+ 	  { "map_create", "map_read", "map_write", "prog_load", "prog_run",
+-	    "map_create_as", "prog_load_as", NULL } },
++	    "map_create_as", "prog_load_as", "loader_load_fd", NULL } },
+ 	{ "xdp_socket", { COMMON_SOCK_PERMS, NULL } },
+ 	{ "mctp_socket", { COMMON_SOCK_PERMS, NULL } },
+ 	{ "perf_event",
 --=20
 2.55.0.691.gc56d675ccc-goog
 
