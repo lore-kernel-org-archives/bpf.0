@@ -1,138 +1,170 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DC836C582
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 20:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0B943B3CE;
+	Thu, 13 Aug 2026 21:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786654184; cv=none; b=U/bCD0cqSnq4FF1p4kIQD5MrE33B2rIFRN1/upsEpjIbDz7AXyVbfzlvoxPLE5F0SA7Dos5Vli/hN0oWPqBmDJ8sy/5QJyHcT1lFk+tkVzl8hf058zICiNuUBcUHebNGKmamngUl+nOLG22bqq1t9QyYq0fq8mqH1X4+CSMmNz4=
+	t=1786655332; cv=none; b=grhnJKmFH0JWxiJ5XkLtRpllxwVL73E37QeHyO6zxhfgs2OUDTa+CkHdRC4v+CB2e2mLpJf5Ib9KNwgwNBba/XfCPuaNvpmvCaBt2Rkkw5O5FYfuL1jyBYgWX3dQGJB+2clQneaKiYxko+8lwbsoQERY2U8foZmbqxeN4VM8Gwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786654184; c=relaxed/simple;
-	bh=5A96z7IyDLoVX8UzDiNMSXIsFBxN0D9oXn++sYR/5Fg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fPjbFfykPPcDfSUgy3lFThGVaN6B7fjOC5Lvi7+zDnKfFGMv7S48r6HwzBuRsry51ObJan0GX2r3HNc+N8rWzurqHMMh9du5H9FTtmjfkYAVAKg1/4bSz1ohOnkAyPIGJzVRSLhzippfJLydDpGsiyyaDBA2Xp4YOJXzGXPyG3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UqnYEeEL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786655332; c=relaxed/simple;
+	bh=c/xVJaenqiH3+kv6cPVc5oy77RKGIT3baebVFmLyRJw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=HDpeurHBNNnesv8Isixf4YtPJWjCoKoDiv65RvcvEbkedLKqiQEjGSgc2QbEBcW3nKR5Ca/AX887yAfTSiVtgFU0qcctJAnY09z5rc/JFPfJAt5Qm+h3tlrCTRtQm8H6E4+qUuCzDiCzrmXo64ZvCpa0LU+N0qtuzjXiNejtpjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Q4YQfrcK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UqnYEeEL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073B71F00A3E;
-	Thu, 13 Aug 2026 20:49:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786654182;
-	bh=yoRxWCnU2EFl6uBXpkgAucPKctO54ZVhOICTi+3yG/M=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=UqnYEeELXiDfYntiLEfrxVjH2J1gs2WGdAxfyjyLkp18vJsq6UGXxA7vvradkMKHC
-	 GmCm31vEjwV5DhfiJ6saYcsdsLZSzplGxSSkmA1f76ChwpeWN0cFYRs5WikXi2Z2WP
-	 cxsbr1bhuM2qZds0wLX7ma4q8gaWCwiGsd82bjT8FUq92BC6jaxAdGaANoc4Venc0t
-	 a6esjMtgSs/h6UdxKR/25t3QUYdShTwoCBJ70yKaAc0KLbxc6qjfNO4bouPYZBIdIg
-	 nybYUUocxM3tTVcmarPxkC4rRhEIjK95GIKvjpDE0e6pN57gT9jPZd9OW9ugkMYfQ3
-	 ESmVWe4V7h/xA==
-Content-Type: multipart/mixed; boundary="===============1118018191073038897=="
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Q4YQfrcK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C101F000E9;
+	Thu, 13 Aug 2026 21:08:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1786655330;
+	bh=+rfmKpCwzQzpk+tikICt/qpBa2ZKmVy8r8vWJfuUcCg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Q4YQfrcKimnxgsOB73ScRTbpcKxqS9TXj9swB6nrtcGomsUhyWVAhPxunMAJam5/i
+	 VM/fWzBtR5hmqR7PyhdkKbBQAsZKXRjIBN0HcX2dIobevXbwutiOHCYZ4gootTZ5y8
+	 8/Tx2eQfhk2wSP+Pj7O6ZXUKORtKrFHinU03XLRE=
+Date: Thu, 13 Aug 2026 14:08:49 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: syzbot <syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com>
+Cc: hannes@cmpxchg.org, jackmanb@google.com, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, mhocko@suse.com, surenb@google.com,
+ syzkaller-bugs@googlegroups.com, vbabka@kernel.org, ziy@nvidia.com, Amery
+ Hung <ameryhung@gmail.com>, Martin KaFai Lau <martin.lau@kernel.org>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [syzbot] [mm?] BUG: Bad page state in corrupted
+Message-Id: <20260813140849.b8cb508d473a4d47ffed0afb@linux-foundation.org>
+In-Reply-To: <6a7d0b01.3668565d.e8814.0017.GAE@google.com>
+References: <6a7d0b01.3668565d.e8814.0017.GAE@google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <5e43d273b5933f72fb0d45f3dcd67c149a371860391837680739df6555477e77@mail.kernel.org>
-In-Reply-To: <20260813200230.1995389-1-yonghong.song@linux.dev>
-References: <20260813200230.1995389-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v5 04/11] bpf: Track R2 of register-pair returns in precision backtracking
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 20:49:41 +0000 (UTC)
-
---===============1118018191073038897==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-> index a2b18a9f1694..0c8e05a7e175 100644
-> --- a/kernel/bpf/backtrack.c
-> +++ b/kernel/bpf/backtrack.c
-> @@ -423,6 +423,16 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
->  				 */
->  				verifier_bug_if(idx + 1 != subseq_idx, env,
->  						"extra insn from subprog");
-> +				/* a global subprog returning more than 8 bytes
-> +				 * sets R2 as well. R2 is part of the args mask
-> +				 * checked just below, so clear it here rather
-> +				 * than next to R0. Only a subprog that does
-> +				 * return a pair defines R2, so leave the mask
-> +				 * alone otherwise and let the check below catch
-> +				 * an R2 that has no business being set.
-> +				 */
-> +				if (bpf_ret_reg_pair(env, subprog))
-> +					bt_clear_reg(bt, BPF_REG_2);
+On Wed, 12 Aug 2026 17:08:33 -0700 syzbot <syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com> wrote:
 
-[ ... ]
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    ba5cc80fd326 Merge branch 'for-next/core' into for-kernelci
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14db42c6580000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=ccf4bea59f67007
+> dashboard link: https://syzkaller.appspot.com/bug?extid=237bbeed8dfe0699b7f5
+> compiler:       Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
+> userspace arch: arm64
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1690bfb9580000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17fc0149580000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/959ad5f4e730/disk-ba5cc80f.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/0787d25f251e/vmlinux-ba5cc80f.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/2e85c36fabac/Image-ba5cc80f.gz.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com
+> 
+> BUG: Bad page state in process syz-executor210  pfn:112724
 
-> @@ -506,6 +516,17 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
->  				return -ENOTSUPP;
->  			/* regular helper call sets R0 */
->  			bt_clear_reg(bt, BPF_REG_0);
-> +			/* a kfunc returning more than 8 bytes also sets R2.
-> +			 * R2 is part of the args mask checked just below, so
-> +			 * clear it here rather than next to R0. The prototype
-> +			 * lookup is only worth doing when R2 is requested at
-> +			 * all; any other call leaves R2 uninitialized, so a
-> +			 * request for it is caught by the check below.
-> +			 */
-> +			if (bt_is_reg_set(bt, BPF_REG_2) &&
-> +			    insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
-> +			    bpf_kfunc_ret_reg_pair(env, insn))
-> +				bt_clear_reg(bt, BPF_REG_2);
+(cc's added)
 
-[ ... ]
+Thanks.  I asked gemini to triage this and it suggested that
+bpf_xdp_shrink_data()'s callee is freeing a page directly via
+page_frag_free(), whereas it should have used the page_pool APIs.
 
-> @@ -520,7 +541,41 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
->  					return -EFAULT;
->  			}
->  		} else if (opcode == BPF_EXIT) {
+	https://gemini.google.com/app/5fde6de04c8e128f
 
-[ ... ]
-
-> +			r0_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_0);
-> +			r2_precise = false;
-> +			if (from_subprog_call && bt_is_reg_set(bt, BPF_REG_2)) {
-> +				call = &env->prog->insnsi[subseq_idx - 1];
-> +				subprog = bpf_find_subprog(env, subseq_idx + call->imm);
-> +				if (subprog < 0)
-> +					return -EFAULT;
-> +				/* Only a callee that does return a pair defines
-> +				 * R2. Leave the mask alone otherwise, so that
-> +				 * the check below still catches an R2 that has
-> +				 * no business being set.
-> +				 */
-> +				r2_precise = bpf_ret_reg_pair(env, subprog);
-> +			}
-
-[ ... ]
-
-> @@ -533,30 +588,27 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
->  			if (subseq_idx >= 0 && bpf_calls_callback(env, subseq_idx))
->  				for (i = BPF_REG_1; i <= BPF_REG_5; i++)
->  					bt_clear_reg(bt, i);
-> +
-> +			/* a callee returning more than 8 bytes sets R2 as well;
-> +			 * R2 is part of the args mask checked just below, so
-> +			 * clear it here rather than next to R0.
-> +			 */
-> +			if (r2_precise)
-> +				bt_clear_reg(bt, BPF_REG_2);
-
-This isn't a bug, but the "R2 is part of the args mask checked just
-below, so clear it here rather than next to R0" rationale appears at
-each of the three call boundaries (global subprog, kfunc, and BPF_EXIT).
-Would stating it once - say at the first site, or in a note above the
-BPF_EXIT block - and keeping the other two to a one-liner read more
-easily?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31740414277
---===============1118018191073038897==--
+> page: refcount:0 mapcount:0 mapping:0000000000000000 index:0xffff0000d2724480 pfn:0x112724
+> flags: 0x5ffc00000000000(node=0|zone=2|lastcpupid=0x7ff)
+> raw: 05ffc00000000000 dead000000000040 ffff0000c30e0000 0000000000000000
+> raw: ffff0000d2724480 3fffffffffffffff 00000000ffffffff 0000000000000000
+> page dumped because: page_pool leak
+> Modules linked in:
+> CPU: 1 UID: 0 PID: 4718 Comm: syz-executor210 Not tainted syzkaller #0 PREEMPT 
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/02/2026
+> Call trace:
+>  show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:499 (C)
+>  __dump_stack+0x30/0x40 lib/dump_stack.c:94
+>  dump_stack_lvl+0xd8/0x12c lib/dump_stack.c:120
+>  dump_stack+0x1c/0x28 lib/dump_stack.c:129
+>  bad_page+0x194/0x1d0 mm/page_alloc.c:643
+>  free_page_is_bad mm/page_alloc.c:1078 [inline]
+>  __free_pages_prepare mm/page_alloc.c:1397 [inline]
+>  __free_frozen_pages+0xb68/0xbb8 mm/page_alloc.c:2950
+>  free_frozen_pages+0x14/0x20 mm/page_alloc.c:2988
+>  page_frag_free+0x18c/0x1e0 mm/page_frag_cache.c:169
+>  __xdp_return+0x200/0x738 net/core/xdp.c:448
+>  bpf_xdp_shrink_data+0x288/0x348 net/core/filter.c:4294
+>  bpf_xdp_frags_shrink_tail+0x1c0/0x424 net/core/filter.c:4318
+>  ____bpf_xdp_adjust_tail net/core/filter.c:4340 [inline]
+>  bpf_xdp_adjust_tail+0x198/0x1dc net/core/filter.c:4333
+>  bpf_prog_5d7dc57dfd7f985a+0x38/0x58
+>  bpf_dispatcher_xdp_func+0x30/0x44 net/core/filter.c:12027
+>  __bpf_prog_run include/linux/filter.h:724 [inline]
+>  bpf_prog_run_xdp include/net/xdp.h:696 [inline]
+>  bpf_prog_run_generic_xdp+0x4a4/0x11e0 net/core/dev.c:5498
+>  netif_receive_generic_xdp net/core/dev.c:5614 [inline]
+>  do_xdp_generic+0x97c/0x11e0 net/core/dev.c:5676
+>  tun_get_user+0x1e24/0x364c drivers/net/tun.c:1874
+>  tun_chr_write_iter+0xfc/0x168 drivers/net/tun.c:2001
+>  new_sync_write fs/read_write.c:595 [inline]
+>  vfs_write+0x51c/0xa0c fs/read_write.c:687
+>  ksys_write+0x12c/0x228 fs/read_write.c:739
+>  __do_sys_write fs/read_write.c:750 [inline]
+>  __se_sys_write fs/read_write.c:747 [inline]
+>  __arm64_sys_write+0x84/0x98 fs/read_write.c:747
+>  __invoke_syscall arch/arm64/kernel/syscall.c:35 [inline]
+>  invoke_syscall+0x98/0x244 arch/arm64/kernel/syscall.c:49
+>  el0_svc_common+0xec/0x23c arch/arm64/kernel/syscall.c:121
+>  do_el0_svc+0x4c/0x5c arch/arm64/kernel/syscall.c:140
+>  el0_svc+0x64/0x260 arch/arm64/kernel/entry-common.c:738
+>  el0t_64_sync_handler+0x48/0x148 arch/arm64/kernel/entry-common.c:757
+>  el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:590
+> BUG: Bad page state in process syz-executor210  pfn:113883
+> page: refcount:0 mapcount:0 mapping:0000000000000000 index:0xffff0000d3883c00 pfn:0x113883
+> flags: 0x5ffc00000000000(node=0|zone=2|lastcpupid=0x7ff)
+> raw: 05ffc00000000000 dead000000000040 ffff0000c30e0000 0000000000000000
+> raw: ffff0000d3883c00 0000000000000001 00000000ffffffff 0000000000000000
+> page dumped because: page_pool leak
+> Modules linked in:
+> CPU: 1 UID: 0 PID: 4718 Comm: syz-executor210 Tainted: G    B               syzkaller #0 PREEMPT 
+> Tainted: [B]=BAD_PAGE
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/02/2026
+> Call trace:
+>  show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:499 (C)
+>  __dump_stack+0x30/0x40 lib/dump_stack.c:94
+>  dump_stack_lvl+0xd8/0x12c lib/dump_stack.c:120
+>  dump_stack+0x1c/0x28 lib/dump_stack.c:129
+>  bad_page+0x194/0x1d0 mm/page_alloc.c:643
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
+> If the report is already addressed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+> 
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+> 
+> If you want to overwrite report's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+> 
+> If the report is a duplicate of another one, reply with:
+> #syz dup: exact-subject-of-another-report
+> 
+> If you want to undo deduplication, reply with:
+> #syz undup
