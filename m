@@ -1,314 +1,224 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9404A3B9D84
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 20:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754DD374731;
+	Thu, 13 Aug 2026 20:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786651976; cv=none; b=g6nMPRIL2gd6VRsBwzUdNeJYO53L8RyRrhIEw7WEhKE8acNo+LnnLm1ib1xTl0wJDSbiVZzSQ9IvilZ/1NOdUf4Jqfy3RU+nclC/JVMdoebKc5NTl/Z9nDB7o8x+0McMQxHCe3kcVhfv5aBRnOkGnDrULeEIFZdzYF8O0QQUTEY=
+	t=1786652640; cv=none; b=g8Q9Uf1jeHsCfSsiUhyEoeZbmrWR4EIc4ndMyvCjD/iNC65+tSqN6tXbgHbaGRYDkDeu5E4FLiMnS4VsDEp40gI86JVjZCQ8EJU4JZO8bqsKZWTwUMVz3udhJTpsXpyMs5uHeEQQvue+3YP8IDhxqXwYGVxD9iQ7tR/fT2VS6Rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786651976; c=relaxed/simple;
-	bh=Tzo0/k0WkV47M6YjkgSuvw/3N5e5j57t1VF8EzhgTvc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=krD7NbPoUpHwrVT5KrBiwyi11ygqBhVfLUoJNXnG5Qx3Z/N51HmBjcS5ucuUjIHY0X1vckzYb63vXF3WYN3+LNErRsuEGIHxlcAFo+dt466J+4WOGV+4KMJnMaUJFy0T2DFBrvy8s3t7DupNL/CR38d/UYoWew4pEfsWVs7Jbek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HAbBEcUM; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786652640; c=relaxed/simple;
+	bh=T5wAEzJv4iF1/SGKTvp5KP2qRQHsCm/z6niOhLL5f/U=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=oOXkXMd4QRBftozdmcAwN6Bgv3weVCRHgcjn7vrdiHAItwFvHlM2/DILrBbrGLlZUp+HPKTCIv+bcvhl1G4cGvZy1Ef9pV74f7ZfPqy8Mnt51cyO18N4mM3tGsUBYdbwg7B8tW7kzTMZJFXddZ2yNLpyqWrlA8gAdjJl5aPJhm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QTLojp5h; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HAbBEcUM"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cbf0dc8c871so5976a12.1
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 13:12:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786651974; x=1787256774; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=QftxtEWJ91qdgUOtKz6xGR/ogD3RRKOkcAYhSfKw7o4=;
-        b=HAbBEcUMJnSC0pj5ftAl2aekM6QwXsxOSse16FgzxnIF22rKtWMuGxCahiDVq6BiNO
-         IZru+vkxKygA4q7/+95M8MRTv9OizaJnk/pP04C7CYLCsV1PEOf/zasyICoCGTNhgQAD
-         CSpuW74ayskSiXpqxkVY+P5vnKAMVqOlS0GxrauARlHCJCtS8UOBBy/e7ao0ksucLCJG
-         4gtwT++a29SB7T1RU+8CBfmGe9W+QLqY7EIAP/hS8pa+EYovNAdHGKwbd1tBCheAn/RN
-         7t2O3LeuIRmVgQBJUW7AMPGHW2Wk3YzRO/ssSzxOOY7CRkZoTVfGyjbBoyiDBr4txHLN
-         dNIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786651974; x=1787256774;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QftxtEWJ91qdgUOtKz6xGR/ogD3RRKOkcAYhSfKw7o4=;
-        b=PXsMpD/KPVFpfDF5VZQHvPmMLF5iNL+cdRXyE5kzBNKQzJJKSBF9y/bALrCzyR3TXi
-         Zx06iV0og1rE0BqC3bxO0V+LDaIA0tyvnqAOh9HAPKFKpRoOFkWCcdHM1HW1sxImQnjM
-         C/T8/kcLrNtM5N5orwCIhg6Ke+KR2mCz6mVGapfJyGmwBwRaA+WTVy+SmabUb6YbtjN4
-         JNPEkDYQzJQGGuFkL6nqI3TpJwBOBqY0pRzmQ40LvSzkDMTgvTpo8uozA8hXX/zrOHAJ
-         q2ulYlXuMODic56ZJ2fJvG8xIV08hlAC0sLYlhJm5EvGtrn5yZgyjBDFPegkdynW92WR
-         doHA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqg9mgS6L8JR9eQ/lctLMxwYIHlHB4MRW2bA38g1ziL8fMJV4BUU8oVLbxXE3oqXYdILBM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5zlVg8iqeYI4mgZftYnexGexhrGpa/Ft7d3oZYEAhEW8sDwRm
-	O9xUAN2AWY0K6hRJFZULysStf8htftBD8AckNoSgmIglaCsW8nwhMsdtUi8xfeNl
-X-Gm-Gg: AR+sD116uGIhEXT7yH35AKhatcHzUomoI5LIVutFr0VDnpwYMyNswZaqk6RO7JaP/+z
-	laRHaPbIkM/Sf6U7ZBDNvVE40jIK8oinbM6YXVdIlsrua7Iu3Dn7mgEqaH9DN9pprrqGqXcPYVs
-	hzsfpuvSVNVrggcA+eM/ReZKeNrnsSt8PUaGFYCxN+joLJv/EJtb3mTZ1k4hhDdDk/s8hbQU+jU
-	e88f9HtYPpre8TP3Tp9ZbUhpUIyM/trQL9BtPIDWNI7QmuUteXQdBJtzSCD3gAB8EojTfZBX46d
-	0j+pIxFRMBoxd14795HLgLMkZyV76tofBTaWNV8I8fovLhBvYFFEHU6lOQsurEipyHpl6yNRUGl
-	p+dkikudYwBP6yxhKAXP9oTkcbKh5FCOeuoo6uaWB92W/a8oT5SALR3ZSH/pZWWwckrHZ1dlzFi
-	6xQAeEVx5MxaxmnJIr1pGOu6Vdk5IJZPTzu6kx1YlaY/aGCk9ReLau/86FuXsTwiKCLVuInVLkG
-	bsT8RerYVELIS/G18/Kwbqag94lEfhvp/cs8mU0joJSOg==
-X-Received: by 2002:a05:6a20:7346:b0:3bf:6ac8:8d29 with SMTP id adf61e73a8af0-3cc71c95248mr331709637.21.1786651973743;
-        Thu, 13 Aug 2026 13:12:53 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:2cae:4c28:2903:b6f9? ([2620:10d:c090:500::7:1c5e])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141388b2554sm1495782c88.14.2026.08.13.13.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 13:12:53 -0700 (PDT)
-Message-ID: <c00f047ad3ac99f0e09516da24b39cd4e6a8c771.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 12/16] bpf: Report Execution Context Safety
- errors
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Thu, 13 Aug 2026 13:12:51 -0700
-In-Reply-To: <20260812233326.3575958-13-memxor@gmail.com>
-References: <20260812233326.3575958-1-memxor@gmail.com>
-	 <20260812233326.3575958-13-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QTLojp5h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544171F000E9;
+	Thu, 13 Aug 2026 20:23:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786652639;
+	bh=M14rrKfhDsQztqpTGHq4c1dYRfUU9YM2XR8j0uQKwg4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=QTLojp5hk2vqjR5FsoYu1GgtW4tEy1toa7tRDRMOxawYVEnUanoBXMWzzQJfQkLzs
+	 /9ZGXHUk21tuXnfCFluFBAI1pC/a34rfaqhegRNBqRrxRiWRCJlFMr2dZVypFaERIA
+	 UKtQ8rGUdUcomBDzfdvm3qmnp6Rggg2klOq10LWCaW9xBlVtQUyfq54E6fn6njfDfm
+	 /k17EwEyMIQXM0JHERiz3MK0XUKa7MItVoa8LszaRSjlIFuL26Ffo9HCERdhrSIjkD
+	 1MLx/Mpe7Cd2Wn9w+4koU/tXjuL1By4xa1RF3NMCux7h2zmHn4tacbj051Vj/w0EXu
+	 1l9a7TesvCeyA==
+Content-Type: multipart/mixed; boundary="===============2688683995907960340=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <da2e8c67481a53545b3170ad5ca0f8a0f05c40e08a3a158a20e58c828d627fd5@mail.kernel.org>
+In-Reply-To: <20260813185846.1216892-3-ziyang.meme@gmail.com>
+References: <20260813185846.1216892-3-ziyang.meme@gmail.com>
+Subject: Re: [PATCH 2/2] selftests/bpf: add cgroup_iter_cpu test for cpu cgroup kfuncs
+From: bot+bpf-ci@kernel.org
+To: ziyang.meme@gmail.com,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,mingo@redhat.com,peterz@infradead.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: bsegall@google.com,juri.lelli@redhat.com,vincent.guittot@linaro.org,dietmar.eggemann@arm.com,rostedt@goodmis.org,mgorman@suse.de,vschneid@redhat.com,kprateek.nayak@amd.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,inwardvessel@gmail.com,mykolal@meta.com,ziyang.meme@gmail.com,kernel-team@meta.com,bpf@vger.kernel.org,cgroups@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 20:23:57 +0000 (UTC)
 
-On Thu, 2026-08-13 at 01:33 +0200, Kumar Kartikeya Dwivedi wrote:
+--===============2688683995907960340==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-...
+> The userspace side runs a CPU hog in a test cgroup with cpu.max settled
+> then:
+>   - checks the CPU-time and throttling counters are nonzero,
+>   - compares whether all values the program read are same as those
+>     reading from cgroup file.
 
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+This isn't a bug, but could these two sentences be reworded? The phrase
+"with cpu.max settled" is a bit unclear (the test writes a quota to
+cpu.max), and "compares whether all values the program read are same as
+those reading from cgroup file" has an article/verb agreement issue.
+Perhaps "with a quota set in cpu.max" and "compares the values the program
+read against those read from the cgroup files"?
 
-...
+Also, the test has to wait for cpu.stat to stop moving before it can
+compare the two sources - would it be worth mentioning that retry loop
+since it's the least obvious part of the test?
 
-+void bpf_diag_ctx(struct bpf_verifier_env *env, enum bpf_diag_ctx_report r=
-eport, u32 insn_idx,
-+		  const char *operation, enum bpf_diag_context_kind ctx_kind, const char=
- *context,
-+		  const char *suggestion)
+> CONFIG_CGROUP_SCHED, CONFIG_FAIR_GROUP_SCHED and CONFIG_CFS_BANDWIDTH
+> are added to the test config.
+>
+> Tests passed on v7.2-rc5.
+>
+> Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
+> Assisted-by: Claude:claude-opus-5
+> Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
 
-Nit: expose diag_ctx_{forbidden,active,underflow} and drop this function an=
-d enum?
+> diff --git a/tools/testing/selftests/bpf/cgroup_iter_cpu.h b/tools/testing/selftests/bpf/cgroup_iter_cpu.h
+> new file mode 100644
+> index 0000000000000..74599a5c0e4d9
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/cgroup_iter_cpu.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
+> +#ifndef __CGROUP_ITER_CPU_H
 
-+{
-+	switch (report) {
-+	case BPF_DIAG_CTX_FORBIDDEN:
-+		diag_ctx_forbidden(env, insn_idx, operation, ctx_kind, context,
-+				   diag_context_constraint(ctx_kind), suggestion);
-+		return;
-+	case BPF_DIAG_CTX_ACTIVE:
-+		diag_ctx_active(env, insn_idx, operation, ctx_kind, context, suggestion)=
-;
-+		return;
-+	case BPF_DIAG_CTX_UNDERFLOW:
-+		diag_ctx_underflow(env, insn_idx, operation, ctx_kind, suggestion);
-+		return;
-+	}
-+}
+This isn't a bug, but the copyright line here matches cgroup_iter_memcg.h
+exactly - is the Meta Platforms attribution (and the 2025 year) the
+intended one for these new files, or did it come along with the template?
+The same line appears in all three new files (cgroup_iter_cpu.h,
+prog_tests/cgroup_iter_cpu.c, progs/cgroup_iter_cpu.c), but the assigned
+entity doesn't match the Signed-off-by address, and the year predates the
+commit date (Aug 2026).
 
-...
+[ ... ]
 
-> @@ -2005,23 +2174,6 @@ static void diag_print_ref_event(struct bpf_verifi=
-er_env *env,
->  			       event->ref.ref_id);
->  }
-> =20
-> -static const char *diag_context_name(enum bpf_diag_context_kind kind)
-> -{
-> -	switch (kind) {
-> -	case BPF_DIAG_CONTEXT_RCU:
-> -		return "RCU read lock region";
-> -	case BPF_DIAG_CONTEXT_PREEMPT:
-> -		return "non-preemptible region";
-> -	case BPF_DIAG_CONTEXT_IRQ:
-> -		return "IRQ-disabled region";
-> -	case BPF_DIAG_CONTEXT_LOCK:
-> -		return "lock region";
-> -	case BPF_DIAG_CONTEXT_NONE:
-> -	default:
-> -		return "context";
-> -	}
-> -}
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_cpu.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_cpu.c
+> new file mode 100644
 
-Nit: the move is churn.
+[ ... ]
 
-...
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7e28f4d9f5c4..71893c36ecce 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-...
-
-> @@ -1104,9 +1106,7 @@ static int unmark_stack_slot_irq_flag(struct bpf_ve=
-rifier_env *env, struct bpf_r
->  	st =3D &slot->spilled_ptr;
-> =20
->  	if (st->irq.kfunc_class !=3D kfunc_class) {
-> -		const char *fmt =3D "This IRQ flag was saved by %s IRQ kfuncs, but the=
- restore call "
-> -				  "belongs to the %s IRQ kfunc family. Save and restore operations "
-> -				  "must use the same family.";
-> +		const char *fmt =3D "This IRQ flag was saved by %s IRQ kfuncs, but the=
- restore call belongs to the %s IRQ kfunc family. Save and restore operatio=
-ns must use the same family.";
-
-Churn.
-
->  		const char *flag_kfunc =3D st->irq.kfunc_class =3D=3D IRQ_NATIVE_KFUNC=
- ? "native" :
->  										   "lock";
->  		const char *used_kfunc =3D kfunc_class =3D=3D IRQ_NATIVE_KFUNC ? "nati=
-ve" : "lock";
-> @@ -1115,10 +1115,10 @@ static int unmark_stack_slot_irq_flag(struct bpf_=
-verifier_env *env, struct bpf_r
->  		verbose(env, "irq flag acquired by %s kfuncs cannot be restored with %=
-s kfuncs\n",
->  			flag_kfunc, used_kfunc);
->  		reason =3D bpf_diag_fmt(env, fmt, flag_kfunc, used_kfunc);
-> -		bpf_diag_irq(env, env->insn_idx, "IRQ flag restore mismatch", reason,
-> -			     "Restore the flag with the matching IRQ restore kfunc for the sa=
-ve "
-> -			     "operation that created it.",
-> -			     bpf_diag_irq_depth(env->cur_state));
-> +		bpf_diag_irq(
-> +			env, env->insn_idx, "IRQ flag restore mismatch", reason,
-> +			"Restore the flag with the matching IRQ restore kfunc for the save op=
-eration that created it.",
-> +			bpf_diag_irq_depth(env->cur_state));
-
-Churn.
-
->  		return -EINVAL;
->  	}
-> =20
-> @@ -1136,11 +1136,11 @@ static int unmark_stack_slot_irq_flag(struct bpf_=
-verifier_env *env, struct bpf_r
-> =20
->  		verbose(env, "cannot restore irq state out of order, expected id=3D%d =
-acquired at insn_idx=3D%d\n",
->  			env->cur_state->active_irq_id, insn_idx);
-> -		bpf_diag_irq(env, env->insn_idx, "IRQ flag restore out of order",
-> -			     "IRQ-disabled regions must be restored in last-in, first-out ord=
-er, "
-> -			     "but this restore does not match the currently active IRQ flag."=
-,
-> -			     "Restore nested IRQ flags in the reverse order they were saved."=
-,
-> -			     bpf_diag_irq_depth(env->cur_state));
-> +		bpf_diag_irq(
-> +			env, env->insn_idx, "IRQ flag restore out of order",
-> +			"IRQ-disabled regions must be restored in last-in, first-out order, b=
-ut this restore does not match the currently active IRQ flag.",
-> +			"Restore nested IRQ flags in the reverse order they were saved.",
-> +			bpf_diag_irq_depth(env->cur_state));
->  		return err;
-
-Churn.
-
->  	}
-> =20
-
-...
-
-> @@ -10551,6 +10578,36 @@ static const char *non_sleepable_context_descrip=
-tion(struct bpf_verifier_env *en
->  	return "non-sleepable prog";
->  }
-> =20
-> +static enum bpf_diag_context_kind non_sleepable_context_kind(struct bpf_=
-verifier_env *env)
+> +static int read_stats(struct bpf_link *link)
 > +{
-> +	if (env->cur_state->active_rcu_locks)
-> +		return BPF_DIAG_CONTEXT_RCU;
-> +	if (env->cur_state->active_preempt_locks)
-> +		return BPF_DIAG_CONTEXT_PREEMPT;
-> +	if (env->cur_state->active_irq_id)
-> +		return BPF_DIAG_CONTEXT_IRQ;
-> +	if (env->cur_state->active_locks)
-> +		return BPF_DIAG_CONTEXT_LOCK;
-> +	return BPF_DIAG_CONTEXT_NONE;
-> +}
+> +	int fd, ret = 0;
+> +	ssize_t bytes;
 > +
-> +static const char *non_sleepable_context_diag_description(struct bpf_ver=
-ifier_env *env)
+> +	fd = bpf_iter_create(bpf_link__fd(link));
+> +	if (!ASSERT_OK_FD(fd, "bpf_iter_create"))
+> +		return 1;
+> +
+> +	bytes = read(fd, NULL, 0);
+> +	if (!ASSERT_EQ(bytes, 0, "read fd"))
+> +		ret = 1;
+> +
+> +	close(fd);
+> +	return ret;
+> +}
 
-Drop the BPF_DIAG_CONTEXT_RCU & Co and use `const char *`?
+This isn't a bug, but read_stats() looks identical to the one in
+cgroup_iter_memcg.c - would it be worth sharing it (and the comment
+explaining the read(fd, NULL, 0) idiom) so the next .data.query-style
+iter test can reuse it? The memcg version documents why read(fd, NULL, 0)
+is the right way to run the iterator, whereas here a reader is left to
+work out why reading zero bytes triggers the program.
 
-> +{
-> +	switch (non_sleepable_context_kind(env)) {
-> +	case BPF_DIAG_CONTEXT_RCU:
-> +		return "RCU read lock region";
-> +	case BPF_DIAG_CONTEXT_PREEMPT:
-> +		return "non-preemptible region";
-> +	case BPF_DIAG_CONTEXT_IRQ:
-> +		return "IRQ-disabled region";
-> +	case BPF_DIAG_CONTEXT_LOCK:
-> +		return "lock region";
-> +	case BPF_DIAG_CONTEXT_NONE:
-> +	default:
-> +		return "non-sleepable program";
+[ ... ]
+
+> +/* Parse the "cpu.stat" file into @out. */
+> +static int parse_cpu_stat(int cgroup_fd, struct cpu_query *out)
+
+[ ... ]
+
+> +/*
+> + * Parse the "cpu.stat.local" file into @out.
+> + */
+> +static int parse_cpu_stat_local(int cgroup_fd, struct cpu_query *out)
+
+[ ... ]
+
+> +/* Read file value the bpf program reads. */
+> +static int parse_stats(int cgroup_fd, struct cpu_query *out, bool have_bw)
+
+[ ... ]
+
+> +/*
+> + * Check whether this kernel accounts CFS bandwidth.
+> + */
+> +static bool cgroup_has_bw_stat(int cgroup_fd)
+
+This isn't a bug, but would it read more consistently to use the
+single-line comment form for the one-line banners on
+parse_cpu_stat_local()/cgroup_has_bw_stat()? The file uses two different
+forms for equally short one-sentence comments: single-line /* ... */ for
+read_cgroup_file, parse_cpu_stat and parse_stats, but a three-line block
+for parse_cpu_stat_local and cgroup_has_bw_stat.
+
+Also, the parse_stats() comment "Read file value the bpf program reads" is
+hard to parse and says nothing about the have_bw parameter, which is the
+only thing about that function that isn't obvious from its body. And
+"Check whether this kernel accounts CFS bandwidth" describes
+cgroup_has_bw_stat() slightly more broadly than it acts, since reading
+'nr_periods ' out of cpu.stat also depends on the cpu controller being
+enabled for the cgroup, not only on the kernel config.
+
+[ ... ]
+
+> +	if (test__start_subtest("cgroup_iter_cpu__throttling")) {
+> +		if (!have_bw) {
+> +			test__skip();
+
+A subsystem pattern flags this as potentially concerning: the
+cgroup_iter_cpu__throttling subtest skips with a bare test__skip() and
+prints nothing, so the log records a skip with no indication of which
+prerequisite was absent. have_bw is the conjunction of two quite different
+conditions -- wrote_max (the write to cpu.max succeeded) and
+cgroup_has_bw_stat() (cpu.stat contains 'nr_periods ', i.e. the kernel was
+built with CONFIG_CFS_BANDWIDTH) -- and the skip collapses both into no
+output.
+
+Could a printf("%s:SKIP:...", __func__) naming the missing prerequisite be
+added before test__skip()? That would make the skip self-describing for
+someone reading a CI log who can't tell whether the kernel lacks
+CONFIG_CFS_BANDWIDTH, the cpu controller was not delegated, or the cpu.max
+write failed for some other reason.
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_cpu.c b/tools/testing/selftests/bpf/progs/cgroup_iter_cpu.c
+> new file mode 100644
+
+[ ... ]
+
+> +	bpf_rcu_read_lock();
+> +	css = cgrp->subsys[cpu_cgrp_id];
+> +	tg = (struct task_group *)css;
+> +	if (tg && bpf_core_field_exists(tg->cfs_bandwidth.nr_periods)) {
+> +		cpu_query.nr_periods =
+> +			(__u32)BPF_CORE_READ(tg, cfs_bandwidth.nr_periods);
+> +		cpu_query.nr_throttled =
+> +			(__u32)BPF_CORE_READ(tg, cfs_bandwidth.nr_throttled);
+> +		cpu_query.throttled_usec =
+> +			BPF_CORE_READ(tg, cfs_bandwidth.throttled_time) / 1000;
+> +		cpu_query.nr_bursts =
+> +			(__u32)BPF_CORE_READ(tg, cfs_bandwidth.nr_burst);
+> +		cpu_query.burst_usec =
+> +			BPF_CORE_READ(tg, cfs_bandwidth.burst_time) / 1000;
 > +	}
-> +}
-> +
->  static int release_reg(struct bpf_verifier_env *env, struct bpf_reg_stat=
-e *reg,
->  		       bool convert_rcu, bool release_dynptr)
->  {
+> +	bpf_rcu_read_unlock();
 
-...
+This isn't a bug, but would it read more consistently to fetch the
+cpu_cgrp_id index with bpf_core_enum_value(enum cgroup_subsys_id,
+cpu_cgrp_id), the way cgroup_iter_memcg.c and profiler.inc.h do? The
+struct field chain right below is accessed CO-RE style (with
+bpf_core_field_exists and BPF_CORE_READ), but the array index cpu_cgrp_id
+is compiled in as a plain enum constant from vmlinux.h with no relocation.
+enum cgroup_subsys_id's numbering shifts with the set of enabled
+controllers, so the two halves of this access are hardened differently.
 
-> @@ -11919,12 +11983,10 @@ static int process_irq_flag(struct bpf_verifier=
-_env *env, struct bpf_reg_state *
->  		if (!is_irq_flag_reg_valid_uninit(env, reg)) {
->  			verbose(env, "expected uninitialized irq flag as %s\n",
->  				reg_arg_name(env, argno));
-> -			bpf_diag_res(env, env->insn_idx, "IRQ flag is already initialized",
-> -				     "Saving IRQ state requires an uninitialized stack slot for "
-> -				     "the IRQ flag, but this slot already contains tracked IRQ "
-> -				     "flag state.",
-> -				     "Use a fresh stack slot for this save operation, or restore "
-> -				     "the existing IRQ flag before reusing the slot.");
-> +			bpf_diag_res(
-> +				env, env->insn_idx, "IRQ flag is already initialized",
-> +				"Saving IRQ state requires an uninitialized stack slot for the IRQ f=
-lag, but this slot already contains tracked IRQ flag state.",
-> +				"Use a fresh stack slot for this save operation, or restore the exis=
-ting IRQ flag before reusing the slot.");
 
-Churn.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
->  			return -EINVAL;
->  		}
-> =20
-> @@ -11941,11 +12003,10 @@ static int process_irq_flag(struct bpf_verifier=
-_env *env, struct bpf_reg_state *
->  		if (err) {
->  			verbose(env, "expected an initialized irq flag as %s\n",
->  				reg_arg_name(env, argno));
-> -			bpf_diag_res(env, env->insn_idx, "uninitialized IRQ flag restore",
-> -				     "Restoring IRQ state requires a stack slot that was "
-> -				     "initialized by a matching IRQ save operation on this path.",
-> -				     "Pass the same stack slot that was previously initialized by "
-> -				     "the matching IRQ save kfunc.");
-> +			bpf_diag_res(
-> +				env, env->insn_idx, "uninitialized IRQ flag restore",
-> +				"Restoring IRQ state requires a stack slot that was initialized by a=
- matching IRQ save operation on this path.",
-> +				"Pass the same stack slot that was previously initialized by the mat=
-ching IRQ save kfunc.");
->  			return err;
-
-Churn.
-
-...
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31735302699
+--===============2688683995907960340==--
