@@ -1,172 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8D84749E8
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 21:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC75432E88
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 21:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786655469; cv=none; b=Kee64a51X51kGCN1fyp+U0wlAOmbf3GYZyE6EiQ+KhVQv4QmbeuEp2Fw4gF5yIBJFEAF9vmT0U1trJvjlrOyuDKnEf1H5lmnNT9xtxiNi0aXyjuO+DH5aUfFIS+raAH2dBjcOhwOgK/TZuIT1HG/8bG04Do49Wx6pi0q+Q1C/CQ=
+	t=1786655794; cv=none; b=Ndj4sz0ijZj5m55KurOFJS2+K2ImzwcOG9aYQf2pubcBgMiVDFEpnC3T0uwuT4y1nOm8gykSsDK5JMO52MtQyki88HuMCiMtTG8cNr/BGoJPWhWweCBkKpuqhVtqioaKp8vXx2AJICJIrftdo5cUwPFqN0wLUvcaP/BCJTolp3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786655469; c=relaxed/simple;
-	bh=39PztjpHaHCK7T2oFlVTslqbFJ7+t5QsZiodLeR7Jrs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=AbwwokSRABjLeI0oIHlzS8CYSOgAN7U2O1/QEh58Ptnsp67W8HFEka48YLDwKZIvzTFL++y+HvjM/Y/zS+YxQG40fKULP+M/stn72ulNcC0b10vlirayUt8ePBiqXN6889IGsZZ5CXEYKmz2FlcN82bNB/OX6FeRpB5JnpE2hVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h9XT3Ov/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786655794; c=relaxed/simple;
+	bh=pG3IomqbApnIbnas9uW8fDdWBloAGqTfkUEnpb8TTrI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iqnEjXwumGW17Xf2ped0InLvU7j524kRfXgb4FgSs+MD9C8pFFRJ4vKVGyfcjEB5CBJXu5+qXyns1xfNOhrgwRI3RkraXS1XTKrW6yN1fClvoCzJ07og9l9Bzt4nhTKCaQNt85iyoHMJwHFQzhLvsPNfkXMgNmcR0n5yH8BP9bA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=coOgrmui; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h9XT3Ov/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D2E61F00A3A;
-	Thu, 13 Aug 2026 21:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786655467;
-	bh=j9aSXpm9pVBb79BHRmxlhA1PebeHP+wwtLS/ojqi+gk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=h9XT3Ov/P4dwMpYZMM5bKI6RyzgTZN5kstQEC5frmFBs+diMEFrGMYJaLRU/C4QXx
-	 MaM0n3+EgTWzQX44hq8WY0HROaOpXk+sl3Cnryj5OtzN7CL2ZUD7GpY7kIUfQj6o4b
-	 uCPAyQuHh8B1IEUcsTjBAuP43aEcAcLcr9PVbHyJ5iUUKWm/doWdtVxePKJKJdQBex
-	 NcsN/Ziws1U7fL1KFTBzLEfDMXxnCF8BpnwbZ8Fqv9+52zg2uj85DztABC3PGup4Fj
-	 8xr0ugWqyI6Rwoyb/QwFrdV8egZkWwRCoOcdk+0Mhz0S+khsjqDYg6Hj2t3dKIOskj
-	 jfMcwWa3dzM2w==
-Content-Type: multipart/mixed; boundary="===============3391158677554721720=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="coOgrmui"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-383b4a3755fso326659a91.3
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 14:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786655786; x=1787260586; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=0nDqSX/SUxikuWjkdXFvi7qzKerpOf9Z5D5KaNNsVhg=;
+        b=coOgrmui8WuaHF9prqIdWz0bc2TZrX8bcPYoRd3eoAhbQLGhPVQ9LDUvVAXoynEbIN
+         8nF2TAEyzPNABRNgPdZT5qJ4Tjca29Eba96iNbd9QzwSS3ncUie0xqVifvF1nQA41r0G
+         SkTxUVNnsawMKbUixZWP6Mezz4rYPrtWPnARe1KDqHld7pas34ZCHI5wmF3iU3YKqCE9
+         vHn/h4QIbQeILa51mCSgQceKlw8R8mT9vSEYB06Rh0p9gvJL8N1SAtso/trr1suradju
+         Cqqe+jg1sIsbzrv+PMxl5lbMkF9bwlI3j53DCu+ZYppVlk4/h6fXwQ8+5OWjrtlXJKJj
+         1U6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786655786; x=1787260586;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=0nDqSX/SUxikuWjkdXFvi7qzKerpOf9Z5D5KaNNsVhg=;
+        b=soWRQqCoSOjy4jYrJ5pX3fjjiDJ8TQ+RoEHvc89kMj6Ba4/+HPzHO9PMir3bThcR9D
+         S9GepWaZhTZetG4NoGNCilygPxb4r9qSsjkpOEGhgvh2g6nXdUFPB7nEJlG7zUNL+9H+
+         N9T7JWbUGYWYMgQI7HzLO/wlOt2QUpT+zbIJFYKSzOWdPjMyF3gAXNjWmyyO6ljQhVAP
+         lZG/NYaFs/FVeErk6/dsMO6sDXah5zSvMuIMhrb0EgTuxkbOgs/YS/mHwMpZz35S8s5y
+         hjABTmLqBaJmxBLEZlPUOQK1tQs7WyY2G1jPttZu9cKSdGghRzCVKHgqga/g27n+oVzD
+         2r2Q==
+X-Gm-Message-State: AOJu0YxjKcfy2/vM1Y63ahVSY0l0Ggt5hbTtbliTB4bZ5de4YaR7B+2m
+	4FWjNQQcxVaBuPpLIogWZ9LG/H1FWJparHAd1/LS/VJ9MTiORBEdOO+uOWzt4A==
+X-Gm-Gg: AR+sD10YaMc9WdfvSB5kzs7b6wmKvRdpbo0Xt61wPkMKEeI99TdNVca1jlEqVkvtCgc
+	cH/4UMpZ+3Y6wbfNYEjupvU8qw4ZMLIoBIc2LezuojZJ+pgU7RGp2fPKQHTzLaHMeJtw4TiNzRa
+	0KyDIpsBt+NOWyZvUwAxUj/Y2nb/AdQQVLc9ez4C5OiPf8xPi+gJ4vLLfDnGADg6X0U3ujwBWtK
+	Ka6i5kZMU2M86aM1PSVrhiU+ePS9oJitWxuSFo53x2UlL27gexvLWrB48yRTX2VlcBOmtZgTBxV
+	tAgMnweLZJGsqL3n4LJteLXfZOhOMqZxS43Hmg0XSocZaHlS1RrY8zJQaCmzG9lCN7hsg2Kr7xH
+	IgbYOdri4McU2tMNh3l9ZIE9paILTP/1j57Vb90vlX9wi6BIp8ZpJ0MGEnhwIjbywRLRgYWeIgr
+	PudPevlB6Ivn6+3VJYfD9NuPY3UIYd/bXlJkrDo5SUFHcDrVH+NWMYTWyzAxTFQBQ7zkLumpkTR
+	oKcEJtaIlvq4rT2
+X-Received: by 2002:a17:90b:5101:b0:36d:b424:4f17 with SMTP id 98e67ed59e1d1-3933b6d0deamr1054102a91.1.1786655786058;
+        Thu, 13 Aug 2026 14:16:26 -0700 (PDT)
+Received: from patterson.cs.ubc.ca (patterson.cs.ubc.ca. [198.162.52.65])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3933a03e288sm853985a91.17.2026.08.13.14.16.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Aug 2026 14:16:25 -0700 (PDT)
+From: Ning Ding <dingning04@gmail.com>
+To: bpf@vger.kernel.org
+Cc: memxor@gmail.com,
+	greg@kroah.com,
+	dingning04@gmail.com
+Subject: [PATCH bpf-next v4 0/4] bpf: Fix refcount_acquire handling for borrowed kptrs
+Date: Thu, 13 Aug 2026 14:15:22 -0700
+Message-ID: <20260813211533.290256-1-dingning04@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3cb3f15f328c59186cf442c7fda68e83849dc9db3aee638a82bfeb47917b9266@mail.kernel.org>
-In-Reply-To: <20260813200240.1995795-1-yonghong.song@linux.dev>
-References: <20260813200240.1995795-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v5 06/11] bpf: Add verifier support for 16-byte returns in R0:R2
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 21:11:07 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============3391158677554721720==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Fix two verifier bugs involving bpf_refcount_acquire() and map kptrs.
 
-> bpf: Add verifier support for 16-byte returns in R0:R2
->
-> LLVM 23 added support for returning a value in two registers for an
-> __int128, or a struct/union whose size is greater than 8 but not more than
-> 16 bytes. See LLVM patches [1] and [2].
->
-> Before LLVM 23 the BPF backend could not return these values at all. A
-> by-value struct or union return (of any size) was rejected at compile time
-> with:
->
->   error: aggregate returns are not supported
->
-> and an __int128 return failed later in the backend with:
->
->   fatal error: error in backend: unable to allocate function return #1
->
-> Both are resolved in LLVM 23, which lowers such returns into the R0:R2
-> register pair.
->
-> This patch models that pair at calls to global and static BPF subprograms
-> and at kfunc calls: R2 is marked alongside R0 at the call, propagated out
-> of a callee at its exit, and held to the same scalar-only and no-stack-
-> pointer rules that R0 already is.
+First, the verifier can mistake an RCU-loaded map kptr for an owned
+reference and assume bpf_refcount_acquire() cannot return NULL. The kfunc
+can return NULL after the last reference is dropped, so passing an
+unchecked result to bpf_obj_drop() can crash the kernel.
 
-This isn't a bug, but could the changelog be reworded in imperative mood
-to match Documentation/process/submitting-patches.rst? The other commits
-in this series follow that convention, so this one reads inconsistently.
+Second, type_is_ptr_alloc_obj() accepts PTR_UNTRUSTED pointers. This lets a
+pointer that is no longer protected by RCU reach bpf_refcount_acquire(). If
+the object was freed and its address reused, the verifier may acquire a
+reference through stale memory.
 
-> @@ -9858,11 +9867,15 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
->  	struct bpf_func_state *caller, *callee;
->  	struct bpf_reg_state *r0;
->  	bool in_callback_fn;
-> +	u32 i, nregs;
->  	int err;
->
->  	callee = state->frame[state->curframe];
->  	r0 = &callee->regs[BPF_REG_0];
-> -	if (r0->type == PTR_TO_STACK) {
-> +	nregs = bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
-> +	for (i = 0; i < nregs; i++) {
-> +		if (callee->regs[ret_regs[i]].type != PTR_TO_STACK)
-> +			continue;
->  		/* technically it's ok to return caller's stack pointer
->  		 * (or caller's caller's pointer) back to the caller,
->  		 * since these pointers are valid. Only current stack
+Patches 1 and 2 fix and test the return-value nullability. Patches 3 and 4
+reject untrusted allocated-object pointers while keeping safe
+BPF_PROBE_MEM reads accepted.
 
-The new R0:R2 return-register loop is placed before the
-'if (callee->in_callback_fn)' branch, so it runs for callback frames as
-well. A callback follows bpf_callback_t (return value in R0 only) and R2
-holds an incoming argument: set_loop_callback_state() and
-set_user_ringbuf_callback_state() both do
-'callee->regs[BPF_REG_2] = caller->regs[BPF_REG_3]', i.e. the
-callback_ctx, which is PTR_TO_STACK for the common
-'bpf_loop(n, cb, &local_var, 0)' idiom.
+The series is based on bpf-next commit 806c1a185215
+("Merge branch 'bpf-introduce-global-percpu-data'").
 
-bpf_compute_subprog_ret_regs() sets ret_reg_pair purely from the
-subprog's BTF return type and iterates every subprog, with no exclusion
-for subprogs used as callbacks. So a static subprog whose BTF declares a
-9..16 byte return and which is passed to bpf_loop() or
-bpf_user_ringbuf_drain() gets ret_reg_pair = true, and at its BPF_EXIT
-the still-live callback_ctx in R2 is inspected as if it were the upper
-half of a return value.
+Testing used a fresh virtme-ng KVM boot with KASAN enabled:
 
-Consequence: the callback exit is rejected with 'cannot return stack
-pointer to the caller', a diagnostic that points at a register holding an
-argument rather than a return value, and it fires before the
-in_callback_fn R0 checks that would otherwise produce the accurate
-message. Impact is limited (any such program is already ill-typed with
-respect to bpf_callback_t, and compiler-generated code for a 16-byte
-return does write R2), so this is a misleading-rejection /
-modelling-scope defect rather than a memory-safety bug.
-
-Would it make sense to compute nregs after the in_callback_fn branch, or
-force nregs = 1 when callee->in_callback_fn, since a callback frame has
-no R0:R2 return convention?
-
-> @@ -9897,8 +9910,12 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
->  			return -EFAULT;
->  		}
->  	} else {
-> -		/* return to the caller whatever r0 had in the callee */
-> -		caller->regs[BPF_REG_0] = *r0;
-> +		/*
-> +		 * return to the caller whatever the callee had in the
-> +		 * return register(s)
-> +		 */
-> +		for (i = 0; i < nregs; i++)
-> +			caller->regs[ret_regs[i]] = callee->regs[ret_regs[i]];
->  	}
-
-prepare_func_exit() has three call sites, and only the real BPF_EXIT one
-(process_bpf_exit_full()) establishes the callee's return registers. The
-other two are synthetic exits that explicitly set up R0 but not R2,
-because R1-R5 were already reset to NOT_INIT above them:
-
-In check_helper_call(), BPF_FUNC_tail_call inside a subprog: the
-caller-saved reset loop sets R1-R5 to NOT_INIT, then only
-'mark_reg_unknown(env, regs, BPF_REG_0)' runs before
-'prepare_func_exit(env, &env->insn_idx)'.
-
-In check_ld_abs() hidden BPF_EXIT inside a subprog: reset loop, then only
-'mark_reg_known_zero(env, regs, BPF_REG_0)' before prepare_func_exit().
-
-For a static subprog with ret_reg_pair set, the new copy loop therefore
-propagates a NOT_INIT R2 into caller->regs[BPF_REG_2] on those paths.
-This is fail-safe (no uninitialised value is treated as readable), but it
-means a caller that reads the upper half of the 16-byte return is
-rejected on that path with an opaque 'R2 !read_ok', so a subprog with a
->8 byte return that contains a bpf_tail_call() or LD_ABS is unverifiable,
-and only R0 gets the conservative unknown-scalar treatment the commit
-message describes.
-
-Would symmetric handling be to mark R2 unknown next to R0 at both sites
-(the tail-called program only defines R0, so R2 is genuinely undefined
-there), or to reject the combination with an explicit message?
-
+  full test_progs:           757/6685 passed, 7858 skipped, 0/0 failed
+  KASAN/Oops/panic markers:  none
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+v4:
+  - Rebase and retarget the series onto bpf-next.
+  - Change only the affected verifier test program sections from ?tc to
+    sleepable ?syscall, as suggested by Kumar Kartikeya Dwivedi; leave the
+    test logic unchanged.
+  - Drop Cc: stable@vger.kernel.org.
+  - Rerun the full unfiltered test_progs suite.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31740414277
---===============3391158677554721720==--
+v3:
+  - Make type_is_ptr_alloc_obj() reject PTR_UNTRUSTED, as suggested by
+    Kumar Kartikeya Dwivedi.
+  - Add a separate helper for the BPF_PROBE_MEM read path.
+  - Add read, refcount-acquire, and direct-write verifier tests.
+  - Add Cc: stable@vger.kernel.org to both fixes, as requested by Greg
+    Kroah-Hartman.
+  - Split each fix from its selftests.
+
+v3: https://lore.kernel.org/r/20260803112218.3361213-1-dingning04@gmail.com
+v2: https://lore.kernel.org/r/20260726235030.1152542-1-dingning04@gmail.com
+v1: https://lore.kernel.org/r/20260726015330.705259-1-dingning04@gmail.com
+
+Ning Ding (4):
+  bpf: Keep refcount_acquire nullable for borrowed RCU kptrs
+  selftests/bpf: Test refcount_acquire return nullability
+  bpf: Reject untrusted allocated-object pointers
+  selftests/bpf: Test untrusted allocated-object pointers
+
+ include/linux/bpf_verifier.h                  |  11 +-
+ kernel/bpf/verifier.c                         |  10 +-
+ .../selftests/bpf/progs/refcounted_kptr.c     | 161 ++++++++++++++++++
+ .../bpf/progs/refcounted_kptr_fail.c          |  74 ++++++++
+ 4 files changed, 253 insertions(+), 3 deletions(-)
+
+
+base-commit: 806c1a185215382fab5a7fafc74e30070b2fb043
+-- 
+2.43.0
