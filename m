@@ -1,119 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFEC375F69;
-	Thu, 13 Aug 2026 08:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 278D4378823;
+	Thu, 13 Aug 2026 08:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786608715; cv=none; b=Gk9yx0HUjMjhdTsEeP5uX1lI5eaKbLh9M3hvABX2mYGYJ0pejpa7crMLem8UQfc5vd+kT+MASVvBbFz9L95S4MQnHtlNqpL4J4ehHHKjKsk21vw98HIOQzm7CuJQgizIez3HDsz9G1IzihHCcOnaNG+T4EKkZWpW9CLvcAlK9l4=
+	t=1786609453; cv=none; b=u9iQU+sK6TnINM3C+YAjqqnOh406UmlKkDD/rqx3aQ9FBIS6H+reJvOMKfsdWb3RT/O5pF3XXX6X+3IBKdPM+BFiyZQAB2xxwLTKQCtOQBqitqZxSv67JMCaieuuvVYHEZsa3Qt2KB6YnpAPCeJImcLSp4kK8F8bqS4wm4cF9kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786608715; c=relaxed/simple;
-	bh=qttu4fYmUDRy3FTNeF98wM3nW+uEUBnjwzf+ufmYzfc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=uOrQU/JxpCQVCpXhBSUHRE6nZ7PETK5divD3qSrTZyti/LbxSDCxExpb58uSfzH1mn2ZsYZj90CQS0JwWZ6NTdoLaIIg+iwAPzIIQ7FQ7dMF4a9WrLnn2JA3u9/o5FDamg2sZvH81ZSS7+xAQKW1MAWb7b6DwefEakzrzvT3/dI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kl1S1oS2; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kl1S1oS2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03161F000E9;
-	Thu, 13 Aug 2026 08:11:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786608701;
-	bh=oi6YfmylgiaRy6lZ9IbknTEinfCK3Vqt0CBXZSOgL1o=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=kl1S1oS26DfJC0qlVQi5CkPWT3JiLVwo5SRTC3qlChKX0AJZT2yiN70mfw6bIa4IQ
-	 LXkPo2d96kO7zbiPPiVMdT9SR5iENs/SQqaFEqn5KmDoWtU8rXJx8AFq4fKBojnKN2
-	 nQEd8QX0eDrJ9QYSa7GCjQhTvE2WMx6r40VIlLW8JaV8Mp/0u0YupODNX+wJOYBHVs
-	 d3HJR4A5QjssDhqAzkA17r0ayG9Da3zc4/zupPDoK/zxJOSlvDuhZuCJj4FItSAzZ2
-	 X5yUtOl5do5VeWiCrG8JdSUAzRDRNqR32g9cfLaXSakYypL2fLM3LacRP59by0s0xy
-	 saBAtFnYGp7Ng==
-Content-Type: multipart/mixed; boundary="===============9171113939442554113=="
+	s=arc-20240116; t=1786609453; c=relaxed/simple;
+	bh=RSICgLmtm1xRZiiIp0/AoqJMWfn4igydVeZCt0+fC+Q=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=uy71hegyRH7NFbCd22tRSNt43f0Zcm1YkRZtVufh+WkMquYisQ46EOL/l3dPPN1mQt1KGRe1/FtRWrUG+Y5haUfU1rXHpQ6PFu7y4Y73QGd8N1B98XRsQJiyVrJ5F/vvbj7eMitd5TNEwYUkdcc+zc7jE1Cvtip7lHqfQfq82OA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8Cx_9Iof31qNdgAAA--.2670S3;
+	Thu, 13 Aug 2026 16:24:08 +0800 (CST)
+Received: from [10.130.40.83] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJDxTs8lf31qQSADAA--.21057S2;
+	Thu, 13 Aug 2026 16:24:06 +0800 (CST)
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Enable timed may_goto tests
+ for LoongArch
+To: bot+bpf-ci@kernel.org, chenhuacai@kernel.org, hengqi.chen@gmail.com,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com
+Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+ yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260813070906.5164-1-yangtiezhu@loongson.cn>
+ <6a9f7ec666d4f36867e91cf21a36d7f8ef6a3872ac694f1eb468aa5278372ce3@mail.kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <69daa817-a3cc-370e-dbb4-33450ab2cb43@loongson.cn>
+Date: Thu, 13 Aug 2026 16:24:03 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1dfa8001d720a33be0d34916414f80a04349057cd35e62ba71a8d0ef8528db69@mail.kernel.org>
-In-Reply-To: <20260813-bpf-riscv-stack-args-v2-2-efea8f9b3fe1@kylinos.cn>
-References: <20260813-bpf-riscv-stack-args-v2-2-efea8f9b3fe1@kylinos.cn>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Enable stack argument tests for RV64
-From: bot+bpf-ci@kernel.org
-To: jiangfeng@kylinos.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,luke.r.nels@gmail.com,xi.wang@gmail.com,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,shuah@kernel.org,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,jiangfeng@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 08:11:39 +0000 (UTC)
+In-Reply-To: <6a9f7ec666d4f36867e91cf21a36d7f8ef6a3872ac694f1eb468aa5278372ce3@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxTs8lf31qQSADAA--.21057S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxAr48Wr4UXF43XrW5trWrJFc_yoW5KFW7pw
+	n29FZFqrn5Jan5G39Fy3WjvFyYvFyxJw43G3WxtrW5JF1Fq3ZrKFy8K3ZruFWFvF1UCw1r
+	tw45Za4UX3WUAFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jwnYwUUU
+	UU=
 
---===============9171113939442554113==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 2026/8/13 下午4:11, bot+bpf-ci@kernel.org wrote:
+>> selftests/bpf: Enable timed may_goto tests for LoongArch
+>>
+>> Enable stream_cond_break, may_goto_interaction, and verifier_may_goto_1
+>> tests for LoongArch, aligning with recent architectural infrastructure
+>> support (timed may_goto and arch_bpf_stack_walk JIT).
+> 
+> The changelog states the tests are enabled "aligning with recent
+> architectural infrastructure support (timed may_goto and arch_bpf_stack_walk
+> JIT)". Does LoongArch have this infrastructure at this commit?
+> 
+> Looking at the tree, bpf_jit_supports_timed_may_goto() is not implemented for
+> LoongArch (only the __weak false stub in kernel/bpf/core.c:3379 exists).
+> arch/loongarch/net/Makefile builds only bpf_jit.o -- there is no
+> bpf_timed_may_goto.S file, unlike arm64, riscv, s390, powerpc, and x86. Also,
+> arch_bpf_stack_walk() is not implemented for LoongArch (only arch_stack_walk()
+> exists in arch/loongarch/kernel/stacktrace.c, but not the BPF-specific
+> variant).
+> 
+> If the enabling JIT work is in a separate series or a different tree, should
+> the changelog name it and state the dependency? As applied, this patch makes
+> three previously-skipped subtests fail on LoongArch.
 
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testing/selftests/bpf/progs/exceptions.c
-> index c8d716fbd4191..bae20f0f247eb 100644
-> --- a/tools/testing/selftests/bpf/progs/exceptions.c
-> +++ b/tools/testing/selftests/bpf/progs/exceptions.c
-> @@ -379,8 +379,9 @@ int exception_bad_assert_range_with(struct __sk_buff *ctx)
->  	return 1;
->  }
->
-> -#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) \
-> -	&& defined(__BPF_FEATURE_STACK_ARGUMENT)
-> +#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-> +	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
-> +	defined(__BPF_FEATURE_STACK_ARGUMENT)
->
->  const volatile bool has_stack_arg = true;
+Please see the additional comments after the --- marker line:
 
-Can the code following this guard actually run on RV64?
+"This patch is based on the latest bpf-next tree, it depends on the
+following two patches:
 
-The block enabled by this guard contains four bpf_throw()-based programs
-(exception_throw_stack_arg, exception_throw_after_stack_arg,
-exception_throw_subprog_stack_arg, exception_throw_subprog_after_stack_arg)
-plus the has_stack_arg flag. bpf_throw is only accepted by the verifier
-when the target JIT supports exceptions:
+LoongArch: BPF: Add timed may_goto support
+https://lore.kernel.org/loongarch/20260804153938.16129-3-dongtai.guo@linux.dev/
 
-kernel/bpf/verifier.c
-    if (!bpf_jit_supports_exceptions()) {
+LoongArch: BPF: Implement arch_bpf_stack_walk()
+https://lore.kernel.org/loongarch/20260813045306.21571-1-yangtiezhu@loongson.cn/
 
-RISC-V implements neither bpf_jit_supports_exceptions() nor
-arch_bpf_stack_walk() (only arch/x86, arm64, s390 and powerpc do), so both
-fall back to the __weak definitions in kernel/bpf/core.c:
+They are expected to be merged into v7.3-rc1 during the upcoming merge
+window through the loongarch-next tree."
 
-    bool __weak bpf_jit_supports_exceptions(void) { return false; }
-    void __weak arch_bpf_stack_walk(...) { }
+Here are the test results:
 
-Consequently exceptions.bpf.o cannot be loaded at all on RV64 - the rest
-of exceptions.c is full of bpf_throw() outside this guard - and the test
-is already excluded from RV64 runs:
+Before:
+$ sudo ./test_progs -a stream_success/stream_cond_break
+#466/2   stream_success/stream_cond_break:SKIP
+#466     stream_success:OK (SKIP: 1/14)
+Summary: 1/0 PASSED, 1 SKIPPED, 0/0 FAILED
+$ sudo ./test_progs -a verifier_bpf_fastcall/may_goto_interaction
+#580/24  verifier_bpf_fastcall/may_goto_interaction:SKIP
+#580     verifier_bpf_fastcall:OK (SKIP: 1/29)
+Summary: 1/0 PASSED, 1 SKIPPED, 0/0 FAILED
+$ sudo ./test_progs -a verifier_may_goto_1
+#635/1   verifier_may_goto_1/may_goto 0:SKIP
+#635/2   verifier_may_goto_1/batch 2 of may_goto 0:SKIP
+#635/3   verifier_may_goto_1/may_goto batch with offsets 2/1/0:SKIP
+#635/4   verifier_may_goto_1/may_goto batch with offsets 2/0:SKIP
+#635/5   verifier_may_goto_1/timed may_goto preserves R0-R5:SKIP
+#635     verifier_may_goto_1:SKIP
+Summary: 1/0 PASSED, 5 SKIPPED, 0/0 FAILED
 
-tools/testing/selftests/bpf/DENYLIST.riscv64
-    # riscv64 deny list for BPF CI and local vmtest
-    exceptions                     # JIT does not support exceptions
+After:
+$ sudo ./test_progs -a stream_success/stream_cond_break
+#466/2   stream_success/stream_cond_break:OK
+#466     stream_success:OK
+Summary: 1/1 PASSED, 0 SKIPPED, 0/0 FAILED
+$ sudo ./test_progs -a verifier_bpf_fastcall/may_goto_interaction
+#580/24  verifier_bpf_fastcall/may_goto_interaction:OK
+#580     verifier_bpf_fastcall:OK
+Summary: 1/1 PASSED, 0 SKIPPED, 0/0 FAILED
+$ sudo ./test_progs -a verifier_may_goto_1
+#635/1   verifier_may_goto_1/may_goto 0:OK
+#635/2   verifier_may_goto_1/batch 2 of may_goto 0:OK
+#635/3   verifier_may_goto_1/may_goto batch with offsets 2/1/0:OK
+#635/4   verifier_may_goto_1/may_goto batch with offsets 2/0:OK
+#635/5   verifier_may_goto_1/timed may_goto preserves R0-R5:OK
+#635     verifier_may_goto_1:OK
+Summary: 1/5 PASSED, 0 SKIPPED, 0/0 FAILED
 
-prog_tests/exceptions.c only consumes has_stack_arg after
-exceptions__load() succeeds:
+Thanks,
+Tiezhu
 
-    ret = exceptions__load(skel);
-    if (!ASSERT_OK(ret, "exceptions__load"))
-            goto done;
-    ...
-    if (skel->rodata->has_stack_arg) {
-            RUN_SUCCESS(exception_throw_stack_arg, 56);
-
-so on RV64 the flag is never read. The hunk therefore changes nothing
-observable on riscv64 and cannot have been validated there, which
-conflicts with the commit subject 'Enable the stack argument selftests for
-RV64'. The other seven hunks are genuinely effective; only this one is
-not.
-
-Either drop the exceptions.c hunk from this patch (and add it when the
-RV64 JIT gains arch_bpf_stack_walk()/bpf_jit_supports_exceptions()), or
-state in the changelog that it is deliberately pre-enabled for a future
-RV64 exception implementation and remains untested for now.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31677823910
---===============9171113939442554113==--
