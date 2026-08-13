@@ -1,111 +1,250 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1307340B6D4
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 06:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE54A263F5D;
+	Thu, 13 Aug 2026 06:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786601793; cv=none; b=tUURO0DuxDI6YwFLrk2QAqJ7PIp9JdwT/IH4fUGTjaLoO62z+Qv9QgpQSP24EcYK6Tia9x2GMkNItxypsdJE48tJloGpOr0uh6zrljLIWvfMmTxZjD9+CpZyEY+mt90kL4OMhXAhxj1MEGDHi8Dp57ueEYZPApcDISFBFiCYvqY=
+	t=1786602139; cv=none; b=XVNoOgZ8L2pctJNE8PKH0m/KfLFCjt+qG85tuc4I1e/eUks70ZUR/E/Ap64L1dWF1J5Og16Dab471/7mGF8Yhpp8K2ENB026ULgXLtUh5UE4iNehPF41AfsfE0xnWxv2X+X4jUTywQ+gkye4wFjDqs54lJSHCCI2UQZAsR+csMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786601793; c=relaxed/simple;
-	bh=C5r6FUXnK85JITcdf5+hrKsZ0/zeo/xBEREjhDG91f8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TigAR6Es2W6vFMmiba1sEYewcH9vkZodJaquToZ9EmisIeo+SQYl93TNRyNj1QgbMyTkOStPXQGiyxsMH3ZpyB2Bhf4MgiNm795pIfw3/kskD8A5QkcsKC5jexEYy9kie5XCNaBnkdiZsbuZ45RKOkm65KBkFMzzOY2ISSS6CzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JbDhaq7J; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786602139; c=relaxed/simple;
+	bh=+5D3p7sScaegm1VIyeqCpLf42CdpIop97jVtqGW3CuU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=R8IBjyIs9/rSjEMHTWNsgJcLN36hcJi4VPgAiBFLNUUrwj/kWrsOfAlhsvoQHix0jxD/buSHYVq7BVyxSM8d7qLLAHtJZY12SU9xB0fhvzSnOT0OumVrd2w2WqPX4TvLp+GybeEfwiapjh636aJzEuo17Ql9JBixv9RqtuXw7PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W6wiVsus; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JbDhaq7J"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2caf228a910so3252125ad.2
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 23:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786601791; x=1787206591; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=C5r6FUXnK85JITcdf5+hrKsZ0/zeo/xBEREjhDG91f8=;
-        b=JbDhaq7JDTzwS2vChkEXGloCUmZHjkilJFgOa9EpIqwyGWpN7higB725+oXByt7wLu
-         UD6E5vRVotgadjh1fJmsf5QG3hIunBpvgVwqhouMpqAuMfenQ3Aoplz+s+8dnTlx1xAi
-         GdOHpyaTdJfdDF323qcNoUB2h5t4ty87x4z/mZ5q0/mu9XxlP8haFaU76yDYEtthKjJ+
-         ykQhQI+7lnZ77pg3Vup5qp1JuRgj22FIeHglSDxmLygJ2UFYmnzENsWAIegeJnz4o8x2
-         0MoDvQipj3xOWr6JWmYE2SCTfpb3iTIjN7XWkYExFJM4NCKvKNzbYTVv4UoL3EIta6CC
-         gzlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786601791; x=1787206591;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=C5r6FUXnK85JITcdf5+hrKsZ0/zeo/xBEREjhDG91f8=;
-        b=JgJb777aHaOwq7HJgFebkyaSKIOEBsRUSTrnJwwyAjwQ7FMySt3v3jCmuS2zq+Klnu
-         tRAnz0XZ/xdSfdvFT/zJGxHIRrPgQ8XM88Bnl0ZakvR+3Naw2sMcAbssKt4c2uBOIdA7
-         L8VoffLpKQbYYLv4+28RTNVT2W8RnN1fA+L9LulflnSpscmfCxJD3TWIiJQVJC4qIqgH
-         5pNZpA1+105x72Ipftza+/0Tmn4N/MbwCKnfTCTWYsAeulTbJKptwdgNtuDzEHtfmnqW
-         1gIOu5Sit+gYJgIo0Z/qaTx7A3WKQ6e7Otgc0JnP+4CuYKMd4Rx7DlG7EgY11OnoMoBA
-         SjDw==
-X-Forwarded-Encrypted: i=1; AHgh+RpDhTVR/EIM37u2q3ttEBOfn5X/stO9ySRxGHTzm4pX7yvdxePAqSYXwgsq8zCK9ht5cEM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSGRrdP/YudJqK4auBvQYRpb6qhClFLB+KXBaSfQzvXa1AlRxp
-	MgkDK+wSOQdeN7o3TcFKkBBPZs2fK5nrqRceLIf1wy2CaXqG2hM0PCjW
-X-Gm-Gg: AR+sD108wunTiEL4w8QUCAu9HOdTTYuL47JNAPpWbNRVOcxbP4jz99qQClMWdKQdftq
-	x2rbvXt+00tCkhtzrceT7K/BfwMxjYISoqAdbFTuJhEiahFM/pqxHa+fUt0q6eyk4LiLKh6BQDH
-	oLlJH36Y3pVwGFf1jqM3QQw5ELOxqwyqGpJL+EBHEBwteEGvWbj5auGpIOlcsnKKqP/93L/E92z
-	NLAeITAqjTaoIChWlxypnvQb1sBtzm/f9KHMnnOFz2Ygl4FDJ++zTp9eVg5Uob2hD6DVudFn+O0
-	Bdi5HaXibwtFn0qnUffGuQJ9BZ5es07S0bPRrheyE/KuBs0PB+HI0ZDivDPHXREnNMQOgiR4Pgr
-	gbYgVnODfj4JuE/hMXWoN+ZoIYY1e01gApyqWXy+h1RUjmS7+ZExDmM5IFYB1MaG4QFcWdpWhDV
-	sRoq6RZlfix4peMoUtJZLccpEntRfmu49wJ+mE2T8nMt+6Rv25xhFGhAB6nclyMQFCGX/4LLlpL
-	/aaUt3V+/pwKfb7/BfHGd1XC08zpKqtadZltXA8Rw0h81Q/5VWw
-X-Received: by 2002:a17:902:cece:b0:2d1:1a18:4d0a with SMTP id d9443c01a7336-2d37d695848mr29190495ad.9.1786601791006;
-        Wed, 12 Aug 2026 23:16:31 -0700 (PDT)
-Received: from secrnd-cstp.tailb7f510.ts.net ([125.131.91.97])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d37c41403asm4648715ad.46.2026.08.12.23.16.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 23:16:30 -0700 (PDT)
-From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-To: Pu Lehui <pulehui@huawei.com>
-Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] bpf: Fix stack out-of-bounds write in cgroup link update
-Date: Thu, 13 Aug 2026 15:15:58 +0900
-Message-ID: <20260813061558.2577010-2-sanghyun.park.cnu@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <916b5920-a2f4-4b05-b86e-6a29e599ffad@huawei.com>
-References: 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W6wiVsus"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 279721F000E9;
+	Thu, 13 Aug 2026 06:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786602137;
+	bh=Rlj1vBayaDgp+9Da8eEHI6cd9R9vw9wihbVfkn1bs7k=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=W6wiVsusoSR1wDQPEvTaTVdyDoIazlFyoA9h4w1trf8gj08kgGvoahxYZrnOUdxWg
+	 Diqg+RW3Mc0GkhQpkkDilFEyatnLAFn2+seZ4b7WqUYlXPIzZicaWQ+lhb/NAIup4y
+	 nOf5+FcdSO3QbRDpAFDcWigtDKd/dc2xghF9w8FDmch8YjrGv7jGKRr6p15+e5IXgx
+	 qBbLRmHcIos0IpTVyhNs40SnzJL845WsNK/eo/wUaiGbQxHq9AldgUq/t06GJ/KK5E
+	 IuhbKsqn8TSCcX3VlsFb5mAQyQT9fT3vW/95FCy9AMGk8gm2v3l/rOTZx5pDGVbSC2
+	 RUTyCLwBGKokA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2] perf/bpf: Fix data races in BPF perf event handling
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Deepanshu Kartikey" <kartikey406@gmail.com>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+In-Reply-To: <20260813060528.365959-1-kartikey406@gmail.com>
+References: <20260813060528.365959-1-kartikey406@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 13 Aug 2026 06:22:16 +0000
+Message-Id: <20260813062217.279721F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Hello Lehui,
+Thank you for your contribution! Sashiko AI review found 6 potential issue(=
+s) to consider:
 
-Thank you for the review.
+New issues:
+- [High] Unconditional use of `bpf_event_mutex` in `kernel/events/core.c` c=
+auses a linker error in valid Kconfig combinations where `CONFIG_BPF_EVENTS=
+` is disabled.
 
-> not only BPF_PROG_TYPE_CGROUP_SOCK_ADDR, but also
-> BPF_PROG_TYPE_CGROUP_SKB, BPF_PROG_TYPE_CGROUP_SOCK, etc. I think we can
-> make it general.
+Pre-existing issues:
+- [High] The fix for the data race in `perf_event_alloc()` is incomplete be=
+cause `bpf_event_mutex` is not held during the detachment of non-tracing BP=
+F programs, leaving the use-after-free race unfixed.
+- [High] Dereferencing prog->type without rcu_read_lock_trace() exposes sle=
+epable BPF programs to Use-After-Free.
+- [Medium] The patch misses a plain write to event->prog in perf_event_atta=
+ch_bpf_prog(), leaving a data race with READ_ONCE(event->prog) unfixed.
+- [Medium] `perf_event_free_bpf_handler()` still contains a plain read of `=
+event->prog` which can race with a concurrent `WRITE_ONCE()` in `perf_event=
+_set_bpf_handler()`.
+- [Medium] Missing release barrier in perf_event_set_bpf_handler() allows B=
+PF programs to observe uninitialized or stale bpf_cookie values.
+--
 
-Yes, it seems we should cover the other cgroup programs too.
+--- Patch [1]: [PATCH v2] perf/bpf: Fix data races in BPF perf event handli=
+ng ---
+commit f4518a73c55a1297eca26073838ec515d34cb05a
+Author: Deepanshu Kartikey <kartikey406@gmail.com>
+perf/bpf: Fix data races in BPF perf event handling
 
-> use link->link.prog->expected_attach_type
+This commit attempts to fix data races around the event->prog field
+by introducing READ_ONCE and WRITE_ONCE in various handlers, and acquiring
+bpf_event_mutex during fork() in perf_event_alloc().
 
-AFAIK, for CGROUP_SKB, the current program's expected_attach_type is not always
-the link's actual attach type. Non-enforcing ingress and egress programs are
-intentionally interchangeable for backward compatibility (ref: commit
-5cf1e9145630).
+Link: https://lore.kernel.org/all/20260811235331.10044-1-kartikey406@gmail.=
+com/T/
 
-I think we should validate the new program against link->attach_type while
-preserving the existing compatibility rules. Let me send a v2 with a new
-approach.
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index 48d851fbd8ea5..5c6dabb6dccb1 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -2136,4 +2136,6 @@ static inline void perf_lopwr_cb(bool mode)
+>  }
+>  #endif
+> =20
+> +extern struct mutex bpf_event_mutex;
+> +
+
+[Severity: High]
+Will this extern declaration lead to a linker error in valid Kconfig
+combinations where CONFIG_BPF_EVENTS is disabled?
+
+The bpf_event_mutex is defined in kernel/trace/bpf_trace.c, which is
+only compiled when CONFIG_BPF_EVENTS=3Dy. If a kernel is configured with
+CONFIG_BPF_SYSCALL=3Dy and CONFIG_EVENT_TRACING=3Dy, but kprobe and uprobe
+events are disabled, this might result in an unresolved external symbol.
+
+>  #endif /* _LINUX_PERF_EVENT_H */
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index ba5bd6a78fe7b..1416066ef460e 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+
+[ ... ]
+
+> @@ -10708,7 +10707,7 @@ static inline int perf_event_set_bpf_handler(stru=
+ct perf_event *event,
+>  		return -EPROTO;
+>  	}
+> =20
+> -	event->prog =3D prog;
+> +	WRITE_ONCE(event->prog, prog);
+>  	event->bpf_cookie =3D bpf_cookie;
+>  	return 0;
+>  }
+
+[Severity: Medium]
+This is a pre-existing issue, but does publishing event->prog without a
+release barrier allow concurrent readers in __perf_event_overflow() to
+observe an uninitialized or stale bpf_cookie?
+
+Without smp_store_release() or similar ordering, the CPU can reorder the
+event->prog write and the plain store to event->bpf_cookie. Since the reader
+uses READ_ONCE(), which lacks acquire semantics, a BPF program might read
+the uninitialized cookie.
+
+> @@ -10720,7 +10719,7 @@ static inline void perf_event_free_bpf_handler(st=
+ruct perf_event *event)
+>  	if (!prog)
+>  		return;
+> =20
+> -	event->prog =3D NULL;
+> +	WRITE_ONCE(event->prog, NULL);
+>  	bpf_prog_put(prog);
+>  }
+
+[Severity: Medium]
+This is a pre-existing issue, but does perf_event_free_bpf_handler() still
+contain a plain read of event->prog?
+
+At the beginning of this function:
+	struct bpf_prog *prog =3D event->prog;
+
+Could this read race with a concurrent WRITE_ONCE() from
+perf_event_set_bpf_handler() during ioctl(PERF_EVENT_IOC_SET_BPF)?
+
+[Severity: High]
+This is a pre-existing issue, but does perf_event_free_bpf_handler() need to
+acquire bpf_event_mutex to safely detach non-tracing BPF programs?
+
+Because this function clears event->prog and drops the program reference
+locklessly, a concurrent fork() calling perf_event_alloc() could acquire the
+mutex, read the program, and increment a zero-refcount object.
+
+>  #else
+> @@ -10753,6 +10752,7 @@ static int __perf_event_overflow(struct perf_even=
+t *event,
+>  {
+>  	int events =3D atomic_read(&event->event_limit);
+>  	int ret =3D 0;
+> +	struct bpf_prog *prog;
+> =20
+>  	/*
+>  	 * Non-sampling counters might still use the PMI to fold short
+> @@ -10766,8 +10766,9 @@ static int __perf_event_overflow(struct perf_even=
+t *event,
+>  	if (event->attr.aux_pause)
+>  		perf_event_aux_pause(event->aux_event, true);
+> =20
+> -	if (event->prog && event->prog->type =3D=3D BPF_PROG_TYPE_PERF_EVENT &&
+> -	    !bpf_overflow_handler(event, data, regs))
+> +	prog =3D READ_ONCE(event->prog);
+> +	if (prog && prog->type =3D=3D BPF_PROG_TYPE_PERF_EVENT &&
+> +	    !bpf_overflow_handler(event, data, regs, prog))
+
+[Severity: High]
+This is a pre-existing issue, but does dereferencing prog->type here
+without rcu_read_lock_trace() expose sleepable BPF programs to a
+use-after-free?
+
+RCU Tasks Trace grace periods do not wait for NMIs or preemption-disabled
+sections (Classic RCU context). If a sleepable program is detached and freed
+via call_rcu_tasks_trace(), couldn't it be freed while __perf_event_overflo=
+w()
+is still executing and evaluating prog->type?
+
+>  		goto out;
+> =20
+>  	/*
+> @@ -13433,12 +13434,15 @@ perf_event_alloc(struct perf_event_attr *attr, =
+int cpu,
+>  		overflow_handler =3D parent_event->overflow_handler;
+>  		context =3D parent_event->overflow_handler_context;
+>  #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_EVENT_TRACING)
+> -		if (parent_event->prog) {
+> -			struct bpf_prog *prog =3D parent_event->prog;
+> =20
+> +		struct bpf_prog *prog;
+> =20
+> +		mutex_lock(&bpf_event_mutex);
+> +		prog =3D parent_event->prog;
+> +		if (prog) {
+>  			bpf_prog_inc(prog);
+>  			event->prog =3D prog;
+>  		}
+> +		mutex_unlock(&bpf_event_mutex);
+>  #endif
+
+[Severity: High]
+As mentioned above, since bpf_event_mutex is only compiled when
+CONFIG_BPF_EVENTS=3Dy, will unconditionally locking it here cause a build
+failure on kernels where that configuration is disabled?
+
+>  	}
+> =20
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 75495a5c35079..026b5c4921158 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+
+[ ... ]
+
+> @@ -2018,7 +2018,7 @@ void perf_event_detach_bpf_prog(struct perf_event *=
+event)
+> =20
+>  put:
+>  	prog =3D event->prog;
+> -	event->prog =3D NULL;
+> +	WRITE_ONCE(event->prog, NULL);
+> =20
+>  unlock:
+>  	mutex_unlock(&bpf_event_mutex);
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but doesn't
+perf_event_attach_bpf_prog() still contain a plain write to event->prog?
+
+Since this patch fixes data races against the READ_ONCE() in the fast
+path, should the plain write:
+    event->prog =3D prog;
+
+in the attach path also be converted to a WRITE_ONCE()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813060528.3659=
+59-1-kartikey406@gmail.com?part=3D1
