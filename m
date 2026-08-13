@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A2828315D;
-	Thu, 13 Aug 2026 17:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5594ADD8D;
+	Thu, 13 Aug 2026 17:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786641646; cv=none; b=Cy8LAeC+R/w76JX78DuhNXjL4E+LuV2iGIBT+MRMwWTFMcUNa9bs8oJ/PBfWs1+GN8xUlE7PLta+/8bXJd2J8Hpnasb2gVO5hH9C8tveZJbmSw98FCmbV2vFC2aW1EYJEo2hYhR7VE2tUqLIP0BOe48aMfEfB/oLrVN4PHsJX1Y=
+	t=1786641661; cv=none; b=NVS7ipCDA0EXDVLSjLyz23TGvBFUPRIyPCZg6KvUGy6wn6rYGuahTPhJdymCgTzcFx8/TSu5mNGI0hEDaYwzuV4yhbe4YZ1i3+saiNXdNoRUgEzymbMqnP+binNv/kvn0VVeudJfIvnkeZAPDLJzJsHhJI1UhKmBMj5MgZJ9pm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786641646; c=relaxed/simple;
-	bh=ma69b+aEaUj7BVaPkjMa/qMGfwITL3yFjvbQfoaGWiY=;
+	s=arc-20240116; t=1786641661; c=relaxed/simple;
+	bh=+rNPzFCtvy0QTn2OIrQRcW0IPld72hZc/rYjes1jUIM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Qeq5q6UKqmRSTTM84Ltmvvo1qyUzfTVVhpuloGbT3g4tiGOvee0AEaaanRWCL5h+d6fkfKV+E3t/WtPKKl2QxLVyZYjFCoAPk31M+KZrrKURvxP/zog48gvKg8y5PXCW2rhqNfhcPkfR3JmBSckjV2bKTfpAevSQ1PsnXUlrYJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WOX9fWAv; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=tSzlsxzKpbWwsp1eT+2n9Rp3wJTUfT2o/IbbkjRlNLs3I/5GGHHu11DOiubNA7xNuzItKvOXUuL85Q3kG0Zvl1WP3khh3RXevGc7rr1CLccatBi7jQikYLnpgqdF02MQG7pivTlqbSKIbvfQBZ+pj7K+Hv8EU6IkfvQ+WZkPilM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FaqTliV6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WOX9fWAv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A671F00A3A;
-	Thu, 13 Aug 2026 17:20:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FaqTliV6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A97BC1F00A3A;
+	Thu, 13 Aug 2026 17:20:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786641643;
-	bh=uAO+Z6qTUsCJ5uWbICTxHhcSMnCFo3BAVpLsSvcXSsA=;
+	s=k20260515; t=1786641657;
+	bh=FBC9AyJT8d6DENUBqbnfjRiibVpAOo+YbnSxmFvFwUk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WOX9fWAvcQbk2hVlJsmgKijEuNOOzkYWc77ZeMpe3nkSbHWUkRuLOfhsA1znSSIb6
-	 8XQUXfTz4O5yK0KQEMxfDzZEuFSaNiAQc4pN2QCSGTVRYZRaJLe1KRTywsN/bqtRta
-	 N05mf5KA4dLjfhjsE6X+lZMwU8tk7GHbnNiwyWqb7bjgVV1Hv1RgFsVUE2RF/hHCbD
-	 s6Xpecjs+08HZQhCEHozcMtlduK2TSHlyWEkDMiVmsP3WP0ueBTsSYHzL0eDlwZKhj
-	 NNPiz6Ykt0KqzLUA2gGJRzshrwgu91lnFtcnrlrq15z2m9SA+N+73q2FHjWITCIFPa
-	 jASji1wTWXxTQ==
+	b=FaqTliV655Ucs3H1E4deKfq21/+lfptdSleuc8aaqFUZSJ0fpR0rgRlSRvYkiS5fA
+	 RkEB5MGbpMLIxpdo7rr+d4QuYifN559oFFcFDmqDJ/HYf6w4bvcYqwxPl9LRdGp85d
+	 RxkTCrJ6s5j50yOfG4mUPlx0CRcBOzrkqbUVQyjOc80tJxpUtKI7Pg0GpZgL89+wHv
+	 qPUykZWYBIsO7n8awlXQDaqNxic2Xt/JYcuEwldCyO29qy8i9jDUPaHmAVxcf4sd6y
+	 ICgVEL+TkdEe4+65LkUqksQIRgUab9L8dNvY8oElglGwFVkfI5vojZH2hPi+cmR0Qf
+	 Qzd3efDl5XZ/A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 08/13] openrisc: pass all six syscall args to
+Subject: Re: [PATCH 03/13] arm: pass all six syscall args to
  audit_syscall_entry()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ricardo Robaina" <rrobaina@redhat.com>
 Cc: bpf@vger.kernel.org, audit@vger.kernel.org
-In-Reply-To: <1616198d0cfa9434b36fc1ac6055064ae8c08057.1786626275.git.rrobaina@redhat.com>
+In-Reply-To: <4f787a0c2a27eb919c481875b61a7467ef8ce547.1786626275.git.rrobaina@redhat.com>
 References: <cover.1786626275.git.rrobaina@redhat.com>
- <1616198d0cfa9434b36fc1ac6055064ae8c08057.1786626275.git.rrobaina@redhat.com>
+ <4f787a0c2a27eb919c481875b61a7467ef8ce547.1786626275.git.rrobaina@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 17:20:42 +0000
-Message-Id: <20260813172043.37A671F00A3A@smtp.kernel.org>
+Date: Thu, 13 Aug 2026 17:20:57 +0000
+Message-Id: <20260813172057.A97BC1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,73 +49,95 @@ Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
 New issues:
-- [Low] The patch series breaks git bisectability by changing a core functi=
-on signature before updating all architecture callers.
+- [High] The patch series changes the signature of `audit_syscall_entry()` =
+globally but fails to update numerous architectures, breaking their builds.
 
 Pre-existing issues:
-- [High] The return value of `do_syscall_trace_enter()` is ignored, breakin=
-g ptrace syscall abortion (e.g., PTRACE_SYSEMU).
+- [High] A tracer can bypass seccomp filters on ARM by modifying `ARM_r0` v=
+ia ptrace, as seccomp incorrectly evaluates the unmodified `ARM_ORIG_r0`.
 --
 
---- Patch [8]: [PATCH 08/13] openrisc: pass all six syscall args to audit_s=
-yscall_entry() ---
-commit 9ca4bd79e1e00767e994486accfe2484de6f3a04
+--- Patch [3]: [PATCH 03/13] arm: pass all six syscall args to audit_syscal=
+l_entry() ---
+commit 5e37711667e9af11aeb7334ef9ee7ed66cadd89d
 Author: Ricardo Robaina <rrobaina@redhat.com>
 
-openrisc: pass all six syscall args to audit_syscall_entry()
+arm: pass all six syscall args to audit_syscall_entry()
+   =20
+Update the audit_syscall_entry() call to forward the 5th and 6th
+syscall arguments (ARM_r4, ARM_r5) now that the audit core logs
+all six.
 
-Update the audit_syscall_entry() call to forward the 5th and 6th syscall
-arguments (gpr[7], gpr[8]) now that the audit core logs all six.
-
-> diff --git a/arch/openrisc/kernel/ptrace.c b/arch/openrisc/kernel/ptrace.c
-> index 552489b24855c..197a616d6c65c 100644
-> --- a/arch/openrisc/kernel/ptrace.c
-> +++ b/arch/openrisc/kernel/ptrace.c
-> @@ -302,7 +302,8 @@ asmlinkage long do_syscall_trace_enter(struct pt_regs=
- *regs)
->  		ret =3D -1L;
-> =20
->  	audit_syscall_entry(regs->gpr[11], regs->gpr[3], regs->gpr[4],
-> -			    regs->gpr[5], regs->gpr[6]);
-> +			    regs->gpr[5], regs->gpr[6],
-> +			    regs->gpr[7], regs->gpr[8]);
-
-[Severity: Low]
-Will this change cause a git bisectability regression if architecture
-callers are updated in subsequent commits?
-
-If the core function signature of audit_syscall_entry() was changed in a
-previous commit, intermediate commits checked out between the core change
-and this architecture update will fail to compile on OpenRISC with a
-"too few arguments to function" error.
-
-> =20
->  	return ret ? : regs->gpr[11];
->  }
+> diff --git a/arch/arm/kernel/ptrace.c b/arch/arm/kernel/ptrace.c
+> index 7951b2c06fec6..ace74207738d0 100644
+> --- a/arch/arm/kernel/ptrace.c
+> +++ b/arch/arm/kernel/ptrace.c
+> @@ -869,7 +869,7 @@ asmlinkage int syscall_trace_enter(struct pt_regs *re=
+gs)
 
 [Severity: High]
-This isn't a bug introduced by this patch, but is the return value ignored
-by the assembly caller, potentially breaking ptrace syscall abortion?
+This is a pre-existing issue, but can a tracer bypass seccomp filters here?
 
-If tracing decides a syscall should not happen (e.g., via PTRACE_SYSEMU)
-and ptrace_report_syscall_entry() returns non-zero, this function attempts
-to abort the syscall by returning -1L in r11.
+The ptrace intercept occurs before seccomp:
 
-However, the caller in arch/openrisc/kernel/entry.S unconditionally
-reloads the original syscall number into r11, discarding the return value:
-
-arch/openrisc/kernel/entry.S:_syscall_trace_enter()
+arch/arm/kernel/ptrace.c:syscall_trace_enter() {
     ...
-    l.jal   do_syscall_trace_enter
-     l.addi r3,r1,0
+    if (test_thread_flag(TIF_SYSCALL_TRACE))
+        report_syscall(regs, PTRACE_SYSCALL_ENTER);
 
-    /* Restore arguments ... */
-    l.lwz   r11,PT_GPR11(r1)
+#ifdef CONFIG_HAVE_ARCH_SECCOMP_FILTER
+    if (secure_computing() =3D=3D -1)
+        return -1;
     ...
+}
 
-Can this allow the original syscall to execute regardless of the tracer's
-abort request?
+If the tracer modifies the tracee's first syscall argument (ARM_r0) via
+ptrace, does seccomp evaluate the unmodified ARM_ORIG_r0 instead?
+
+arch/arm/include/asm/syscall.h:syscall_get_arguments() {
+    ...
+    args[0] =3D regs->ARM_ORIG_r0;
+    ...
+}
+
+Could this allow restricted system calls to be executed with arbitrary first
+arguments?
+
+>  		trace_sys_enter(regs, scno);
+> =20
+>  	audit_syscall_entry(scno, regs->ARM_r0, regs->ARM_r1, regs->ARM_r2,
+> -			    regs->ARM_r3);
+> +			    regs->ARM_r3, regs->ARM_r4, regs->ARM_r5);
+
+[Severity: High]
+Does this patch series break the build for other architectures?
+
+The series changes the signature of audit_syscall_entry() globally to requi=
+re
+7 arguments instead of 5:
+
+include/linux/audit.h:
+static inline void audit_syscall_entry(int major, unsigned long a0,
+                                       unsigned long a1, unsigned long a2,
+                                       unsigned long a3, unsigned long a4,
+                                       unsigned long a5)
+
+Are other architectures like arm64 still calling it with 5 arguments?
+
+arch/arm64/kernel/ptrace.c:syscall_trace_enter() {
+    ...
+    audit_syscall_entry(regs->syscallno, regs->orig_x0, regs->regs[1],
+                        regs->regs[2], regs->regs[3]);
+    ...
+}
+
+Will this result in too few arguments to function compiler errors for
+architectures that do not use generic entry?
+
+> =20
+>  	return scno;
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786626275.gi=
-t.rrobaina@redhat.com?part=3D8
+t.rrobaina@redhat.com?part=3D3
